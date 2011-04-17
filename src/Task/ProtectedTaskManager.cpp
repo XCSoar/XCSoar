@@ -384,26 +384,27 @@ ReachIntersectionTest::intersects(const AGeoPoint& destination)
 {
   if (!route)
     return false;
-  short h;
-  route->find_positive_arrival(destination, h);
+  short h, h_dummy;
+  route->find_positive_arrival(destination, h, h_dummy);
   // we use find_positive_arrival here instead of is_inside, because may use
   // arrival height for sorting later
   return (h< destination.altitude);
 }
 
 void
-ProtectedTaskManager::solve_reach(const AGeoPoint& origin)
+ProtectedTaskManager::solve_reach(const AGeoPoint& origin, const bool do_solve)
 {
   ExclusiveLease lease(*this);
-  m_route.solve_reach(origin);
+  m_route.solve_reach(origin, do_solve);
 }
 
 bool
 ProtectedTaskManager::find_positive_arrival(const AGeoPoint& dest,
-                                            short& arrival_height) const
+                                            short& arrival_height_reach,
+                                            short& arrival_height_direct) const
 {
   Lease lease(*this);
-  return m_route.find_positive_arrival(dest, arrival_height);
+  return m_route.find_positive_arrival(dest, arrival_height_reach, arrival_height_direct);
 }
 
 void

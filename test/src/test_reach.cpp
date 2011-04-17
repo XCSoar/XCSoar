@@ -75,8 +75,8 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
                    origin.Latitude+Angle::degrees(fixed(0.6)*fy));
         short h = map.GetInterpolatedHeight(x);
         AGeoPoint adest(x, h);
-        short ha;
-        route.find_positive_arrival(adest, ha);
+        short ha, hd;
+        route.find_positive_arrival(adest, ha, hd);
         if ((i % 5 == 0) && (j % 5 == 0)) {
           AGeoPoint ao2(x, h+1000);
           route.solve_reach(ao2);

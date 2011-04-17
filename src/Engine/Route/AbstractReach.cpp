@@ -27,7 +27,8 @@
 bool
 AbstractReach::solve(const AGeoPoint origin,
                      const RoutePolars &rpolars,
-                     const RasterMap* terrain)
+                     const RasterMap* terrain,
+                     const bool do_solve)
 {
   if (terrain) {
     // immediate exit if starts below terrain

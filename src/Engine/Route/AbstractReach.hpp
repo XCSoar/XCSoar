@@ -50,12 +50,14 @@ public:
    * @param origin 3d location to check
    * @param rpolars RoutePolars performance model
    * @param terrain Terrain map of obstacles
+   * @param do_solve actually solve or just perform minimal calculations
    *
    * @return True if solution successful
    */
   virtual bool solve(const AGeoPoint origin,
                      const RoutePolars &rpolars,
-                     const RasterMap* terrain);
+                     const RasterMap* terrain,
+                     const bool do_solve=true);
 
   /**
    * Determine whether a point is within the reach.
@@ -76,13 +78,16 @@ public:
    *
    * @param dest Destination location
    * @param rpolars RoutePolars performance model
-   * @param arrival_height height at arrival or -1 if out of reach
+   * @param arrival_height_reach height at arrival (terrain reach) or -1 if out of reach
+   * @param arrival_height_direct height at arrival (pure glide reach) or -1 if out of reach
    *
    * @return true if check was successful
    */
   virtual bool find_positive_arrival(const AGeoPoint dest,
                                      const RoutePolars &rpolars,
-                                     short& arrival_height) const = 0;
+                                     short& arrival_height_reach,
+                                     short& arrival_height_direct) const = 0;
+
   /**
    * Find base terrain height in reachable area.
    * 

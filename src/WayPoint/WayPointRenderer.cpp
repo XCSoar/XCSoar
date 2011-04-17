@@ -174,27 +174,15 @@ public:
 
   void
   CalculateReachability(const Waypoint &way_point,
-                        int &arrival_height_glide,
-                        int &arrival_height_terrain)
+                        short &arrival_height_glide,
+                        short &arrival_height_terrain)
   {
     const UnorderedTaskPoint t(way_point, task_behaviour);
-    const GlideResult r =
-      TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
-
-    arrival_height_glide = r.AltitudeDifference;
-
-    if (arrival_height_glide <= 0)
-      return; // no point continuing
-
-    // reachable according to height, now check terrain intersection
     const AGeoPoint p_dest (t.get_location(), t.get_elevation());
-    short h_turning = 0;
-    if (task.find_positive_arrival(p_dest, h_turning)) {
+    if (task.find_positive_arrival(p_dest, arrival_height_terrain, arrival_height_glide)) {
       const short h_base = iround(t.get_elevation() + task_behaviour.safety_height_arrival);
-      h_turning -= h_base;
-
-      if (h_turning > 0)
-        arrival_height_terrain = std::min((int)h_turning, arrival_height_glide);
+      arrival_height_terrain -= h_base;
+      arrival_height_glide -= h_base;
     }
   }
 
@@ -232,8 +220,8 @@ public:
 
     bool reachable_glide = false;
     bool reachable_terrain = false;
-    int arrival_height_glide = 0;
-    int arrival_height_terrain = 0;
+    short arrival_height_glide = 0;
+    short arrival_height_terrain = 0;
     bool watchedWaypoint = way_point.Flags.Watched;
 
     if (way_point.is_landable() || watchedWaypoint) {

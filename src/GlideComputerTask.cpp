@@ -93,6 +93,7 @@ GlideComputerTask::ProcessMoreTask()
   m_task.route_update_polar(Calculated().wind);
   SetCalculated().glide_polar_reach = m_task.get_reach_polar();
 
+  Reach();
   TerrainWarning();
 
   if (SettingsComputer().EnableBlockSTF)
@@ -110,10 +111,14 @@ void
 GlideComputerTask::ProcessIdle()
 {
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
-  {
-    ProtectedTaskManager::ExclusiveLease task(m_task);
-    task->update_idle(as);
-  }
+  ProtectedTaskManager::ExclusiveLease task(m_task);
+  task->update_idle(as);
+}
+
+void
+GlideComputerTask::TerrainWarning()
+{
+  const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
 
   const GlideResult& sol = Calculated().task_stats.current_leg.solution_remaining;
   const AGeoPoint start (as.get_location(), as.NavAltitude);
@@ -154,22 +159,18 @@ GlideComputerTask::ProcessIdle()
 }
 
 void
-GlideComputerTask::TerrainWarning()
+GlideComputerTask::Reach()
 {
-  if (SettingsComputer().FinalGlideTerrain != SETTINGS_COMPUTER::FGT_OFF &&
-      terrain != NULL) {
-    // @todo: update TerrainBase in new footprint calculations,
-    // remove TerrainFootprint function from GlideComputerAirData
+  const bool do_solve = (SettingsComputer().FinalGlideTerrain != SETTINGS_COMPUTER::FGT_OFF &&
+                         terrain != NULL);
 
-    const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
-    const AGeoPoint start (state.get_location(), state.NavAltitude);
-    if (reach_clock.check_advance(Basic().Time)) {
-      m_task.solve_reach(start);
-      SetCalculated().TerrainBase = fixed(m_task.get_terrain_base());
-    }
-  } else {
-    // fallback to current terrain altitude
-    SetCalculated().TerrainBase = Calculated().TerrainAlt;
+  const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
+  const AGeoPoint start (state.get_location(), state.NavAltitude);
+  if (reach_clock.check_advance(Basic().Time)) {
+    m_task.solve_reach(start, do_solve);
+
+    SetCalculated().TerrainBase =
+      do_solve? fixed(m_task.get_terrain_base()) : Calculated().TerrainAlt;
   }
 }
 

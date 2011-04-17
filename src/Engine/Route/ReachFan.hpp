@@ -121,6 +121,8 @@ public:
 
   void update_terrain_base(const FlatGeoPoint& origin, 
                            ReachFanParms& parms);
+
+  short direct_arrival(const FlatGeoPoint& dest, const ReachFanParms& parms) const;
 };
 
 class TriangleFanVisitor {
@@ -148,11 +150,13 @@ public:
 
   virtual bool solve(const AGeoPoint origin,
                      const RoutePolars &rpolars,
-                     const RasterMap* terrain);
+                     const RasterMap* terrain,
+                     const bool do_solve=true);
 
   virtual bool find_positive_arrival(const AGeoPoint dest,
                                      const RoutePolars &rpolars,
-                                     short& arrival_height) const;
+                                     short& arrival_height_reach,
+                                     short& arrival_height_direct) const;
 
   virtual bool is_inside(const GeoPoint origin, const bool turning=true) const;
 

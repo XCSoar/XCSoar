@@ -152,10 +152,11 @@ public:
    * Solve reach footprint
    *
    * @param origin The start of the search (current aircraft location)
+   * @param do_solve actually solve or just perform minimal calculations
    *
    * @return True if reach was scanned
    */
-  bool solve_reach(const AGeoPoint& origin);
+  bool solve_reach(const AGeoPoint& origin, const bool do_solve=true);
 
   /**
    * Visit reach
@@ -212,13 +213,16 @@ public:
    * Requires solve_reach() to have been called for positive results.
    *
    * @param dest Destination location
-   * @param arrival_height height at arrival or -1 if out of reach
+   * @param arrival_height_reach height at arrival (terrain reach) or -1 if out of reach
+   * @param arrival_height_direct height at arrival (pure glide reach) or -1 if out of reach
    *
    * @return true if check was successful
    */
   bool find_positive_arrival(const AGeoPoint& dest,
-                             short& arrival_height) const {
-    return reach.find_positive_arrival(dest, rpolars_reach, arrival_height);
+                             short& arrival_height_reach,
+                             short& arrival_height_direct) const {
+    return reach.find_positive_arrival(dest, rpolars_reach, arrival_height_reach,
+                                       arrival_height_direct);
   }
 
   const GlidePolar& get_reach_polar() const {

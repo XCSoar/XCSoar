@@ -270,13 +270,14 @@ public:
                     const AGeoPoint& destination,
                     GeoPoint& intx) const;
 
-  void solve_reach(const AGeoPoint& origin);
+  void solve_reach(const AGeoPoint& origin, const bool do_solve);
 
   void accept_in_range(const GeoBounds& bounds,
                        TriangleFanVisitor& visitor) const;
 
   bool find_positive_arrival(const AGeoPoint& dest,
-                             short& arrival_height) const;
+                             short& arrival_height_reach,
+                             short& arrival_height_direct) const;
 
   short get_terrain_base() const;
 };

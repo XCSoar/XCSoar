@@ -59,19 +59,20 @@ RoutePlannerGlue::solve(const AGeoPoint& origin,
 }
 
 void
-RoutePlannerGlue::solve_reach(const AGeoPoint& origin)
+RoutePlannerGlue::solve_reach(const AGeoPoint& origin, const bool do_solve)
 {
   if (!terrain)
     return;
   RasterTerrain::ExclusiveLease lease(*terrain);
-  m_planner.solve_reach(origin);
+  m_planner.solve_reach(origin, do_solve);
 }
 
 bool
 RoutePlannerGlue::find_positive_arrival(const AGeoPoint& dest,
-                                        short& arrival_height) const
+                                        short& arrival_height_reach,
+                                        short& arrival_height_direct) const
 {
-  return m_planner.find_positive_arrival(dest, arrival_height);
+  return m_planner.find_positive_arrival(dest, arrival_height_reach, arrival_height_direct);
 }
 
 void

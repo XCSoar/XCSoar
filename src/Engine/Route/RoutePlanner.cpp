@@ -64,9 +64,9 @@ RoutePlanner::get_solution(Route& route) const
 }
 
 bool
-RoutePlanner::solve_reach(const AGeoPoint& origin)
+RoutePlanner::solve_reach(const AGeoPoint& origin, const bool do_solve)
 {
-  return reach.solve(origin, rpolars_reach, terrain);
+  return reach.solve(origin, rpolars_reach, terrain, do_solve);
 }
 
 bool

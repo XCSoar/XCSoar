@@ -55,6 +55,7 @@ protected:
 
 private:
   void TerrainWarning();
+  void Reach();
 
 protected:
   virtual void ProcessIdle();

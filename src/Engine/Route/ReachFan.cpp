@@ -158,6 +158,7 @@ void
 FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
                                 ReachFanParms& parms) {
   gaps_filled = false;
+
   fill_reach(origin, 0, ROUTEPOLAR_POINTS+1, parms);
 
   for (parms.set_depth=0; parms.set_depth< REACH_MAX_DEPTH; ++parms.set_depth) {
@@ -336,7 +337,8 @@ void ReachFan::reset() {
 
 bool ReachFan::solve(const AGeoPoint origin,
                      const RoutePolars &rpolars,
-                     const RasterMap* terrain) {
+                     const RasterMap* terrain,
+                     const bool do_solve) {
   reset();
 
   if (!AbstractReach::solve(origin, rpolars, terrain))
@@ -352,7 +354,13 @@ bool ReachFan::solve(const AGeoPoint origin,
   ReachFanParms parms(rpolars, task_proj, terrain_base, terrain);
   const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
 
-  root.fill_reach(ao, parms);
+  if (do_solve) {
+    root.fill_reach(ao, parms);
+  } else {
+    root.add_point(ao);
+    root.calc_bb();
+  }
+
   fan_size = parms.fan_counter;
 
   if (!RasterBuffer::is_invalid(h)) {
@@ -379,23 +387,47 @@ ReachFan::is_inside(const GeoPoint origin, const bool turning) const
   return root.is_inside_tree(p, turning);
 }
 
+short
+FlatTriangleFanTree::direct_arrival(const FlatGeoPoint& dest, const ReachFanParms& parms) const
+{
+  assert(!vs.empty());
+  const AFlatGeoPoint n (vs[0], height);
+  return parms.rpolars.calc_glide_arrival(n, dest, parms.task_proj);
+}
+
 
 bool
 ReachFan::find_positive_arrival(const AGeoPoint dest,
                                 const RoutePolars &rpolars,
-                                short& arrival_height) const
+                                short& arrival_height_reach,
+                                short& arrival_height_direct) const
 {
-  if (root.empty() || dest.altitude >= root.get_height()) {
-    arrival_height = -1;
+  arrival_height_reach = -1;
+  arrival_height_direct = -1;
+
+  if (root.empty() || dest.altitude >= root.get_height())
+    return true;
+
+  const FlatGeoPoint d (task_proj.project(dest));
+  const ReachFanParms parms(rpolars, task_proj, terrain_base);
+
+  // first calculate direct (terrain-independent height)
+
+  arrival_height_direct = root.direct_arrival(d, parms);
+
+  // if can't reach even with no terrain, exit early
+  if (arrival_height_direct < dest.altitude) {
+    arrival_height_direct = -1;
     return true;
   }
 
-  const FlatGeoPoint d (task_proj.project(dest));
-  arrival_height = dest.altitude-1;
-  ReachFanParms parms(rpolars, task_proj, terrain_base);
-  root.find_positive_arrival(d, parms, arrival_height);
-  if (arrival_height < dest.altitude)
-    arrival_height = -1;
+  // now calculate turning solution
+
+  arrival_height_reach = dest.altitude-1;
+  root.find_positive_arrival(d, parms, arrival_height_reach);
+  if (arrival_height_reach < dest.altitude)
+    arrival_height_reach = -1;
+
   return true;
 }
 
