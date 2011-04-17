@@ -466,8 +466,8 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
 void
 GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 {
-  if (!Basic().gps.Simulator && !(Calculated().AirspeedAvailable &&
-                                  Basic().TotalEnergyVarioAvailable))
+  if (!Calculated().AirspeedAvailable ||
+      !Basic().TotalEnergyVarioAvailable)
     return;
 
   static fixed lastVdiff;
