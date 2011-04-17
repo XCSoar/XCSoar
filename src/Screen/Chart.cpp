@@ -398,7 +398,7 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
 }
 
 void
-Chart::DrawXGrid(const fixed tic_step, const fixed zero, Pen &pen,
+Chart::DrawXGrid(fixed tic_step, const fixed zero, Pen &pen,
                  const fixed unit_step, bool draw_units)
 {
   if (!positive(tic_step))
@@ -411,6 +411,10 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, Pen &pen,
   /** the minimum next position of the text, to avoid overlapping */
   int next_text = rc.left;
 
+  /* increase tic step so graph not too crowded */
+  while ((x_max-x_min)/tic_step > fixed_ten) {
+    tic_step *= fixed_two;
+  }
   //  bool do_units = ((x_max-zero)/tic_step)<10;
 
   ymin = rc.top;
@@ -476,7 +480,7 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
 }
 
 void
-Chart::DrawYGrid(const fixed tic_step, const fixed zero, Pen &pen,
+Chart::DrawYGrid(fixed tic_step, const fixed zero, Pen &pen,
                  const fixed unit_step, bool draw_units)
 {
   if (!positive(tic_step))
@@ -485,6 +489,11 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, Pen &pen,
   RasterPoint line[2];
 
   int xmin, ymin, xmax, ymax;
+
+  /* increase tic step so graph not too crowded */
+  while ((y_max-y_min)/tic_step > fixed_ten) {
+    tic_step *= fixed_two;
+  }
 
   xmin = rc.left;
   xmax = rc.right;
