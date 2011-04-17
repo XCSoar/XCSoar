@@ -238,8 +238,8 @@ Graphics::Initialise()
 
   hbWind.set(Color::GRAY);
 
-  hBmpMapScaleLeft.load_big(IDB_MAPSCALE_LEFT, 0, false);
-  hBmpMapScaleRight.load_big(IDB_MAPSCALE_RIGHT, 0, false);
+  hBmpMapScaleLeft.load_big(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
+  hBmpMapScaleRight.load_big(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
 
   hBmpTabTask.load((Layout::scale > 1) ? IDB_TASK_HD : IDB_TASK);
   hBmpTabFolder.load((Layout::scale > 1) ? IDB_FOLDER_HD : IDB_FOLDER);

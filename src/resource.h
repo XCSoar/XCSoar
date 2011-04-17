@@ -97,6 +97,8 @@
 #define IDB_TITLE_HD                    339
 #define IDB_MAPSCALE_LEFT               340
 #define IDB_MAPSCALE_RIGHT              341
+#define IDB_MAPSCALE_LEFT_HD           5340
+#define IDB_MAPSCALE_RIGHT_HD          5341
 #define IDB_DIALOGTITLE                 342
 #define IDB_MOUNTAIN_TOP                343
 #define IDB_MOUNTAIN_TOP_HD            5343

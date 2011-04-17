@@ -78,6 +78,8 @@ IDB_LOGGEROFF           BITMAP  DISCARDABLE     "../output/data/icons/icon_loggi
 IDB_LOGGEROFF_HD        BITMAP  DISCARDABLE     "../output/data/icons/icon_logging_off_160.bmp"
 IDB_MAPSCALE_LEFT       BITMAP  DISCARDABLE     "../output/data/icons/scalearrow_left.bmp"
 IDB_MAPSCALE_RIGHT      BITMAP  DISCARDABLE     "../output/data/icons/scalearrow_right.bmp"
+IDB_MAPSCALE_LEFT_HD    BITMAP  DISCARDABLE     "../output/data/icons/scalearrow_left_160.bmp"
+IDB_MAPSCALE_RIGHT_HD   BITMAP  DISCARDABLE     "../output/data/icons/scalearrow_right_160.bmp"
 IDB_MARK                BITMAP  DISCARDABLE     "../output/data/icons/map_flag.bmp"
 IDB_MARK_HD             BITMAP  DISCARDABLE     "../output/data/icons/map_flag_160.bmp"
 IDB_OUTFIELD_REACHABLE  BITMAP  DISCARDABLE     "../output/data/icons/alt_reachable_field.bmp"
