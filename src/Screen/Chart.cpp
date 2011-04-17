@@ -413,15 +413,16 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, Pen &pen,
 
   //  bool do_units = ((x_max-zero)/tic_step)<10;
 
+  ymin = rc.top;
+  ymax = rc.bottom;
+  line[0].y = ymin;
+  line[1].y = ymax - PaddingBottom;
+
   for (fixed xval = zero; xval <= x_max; xval += tic_step) {
     xmin = (int)((xval - x_min) * xscale) + rc.left + PaddingLeft;
-    ymin = rc.top;
     xmax = xmin;
-    ymax = rc.bottom;
     line[0].x = xmin;
-    line[0].y = ymin;
     line[1].x = xmax;
-    line[1].y = ymax - PaddingBottom;
 
     // STYLE_THINDASHPAPER
     if ((xval < x_max) && (xmin >= rc.left + PaddingLeft) && (xmin <= rc.right)) {
@@ -439,15 +440,16 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, Pen &pen,
     }
   }
 
+  ymin = rc.top;
+  ymax = rc.bottom;
+  line[0].y = ymin;
+  line[1].y = ymax - PaddingBottom;
+
   for (fixed xval = zero - tic_step; xval >= x_min; xval -= tic_step) {
     xmin = (int)((xval - x_min) * xscale) + rc.left + PaddingLeft;
-    ymin = rc.top;
     xmax = xmin;
-    ymax = rc.bottom;
     line[0].x = xmin;
-    line[0].y = ymin;
     line[1].x = xmax;
-    line[1].y = ymax - PaddingBottom;
 
     // STYLE_THINDASHPAPER
 
@@ -484,14 +486,15 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, Pen &pen,
 
   int xmin, ymin, xmax, ymax;
 
+  xmin = rc.left;
+  xmax = rc.right;
+  line[0].x = xmin + PaddingLeft;
+  line[1].x = xmax;
+
   for (fixed yval = zero; yval <= y_max; yval += tic_step) {
-    xmin = rc.left;
     ymin = (int)((y_max - yval) * yscale) + rc.top;
-    xmax = rc.right;
     ymax = ymin;
-    line[0].x = xmin + PaddingLeft;
     line[0].y = ymin;
-    line[1].x = xmax;
     line[1].y = ymax;
 
     // STYLE_THINDASHPAPER
@@ -508,14 +511,15 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, Pen &pen,
     }
   }
 
+  xmin = rc.left;
+  xmax = rc.right;
+  line[0].x = xmin + PaddingLeft;
+  line[1].x = xmax;
+
   for (fixed yval = zero - tic_step; yval >= y_min; yval -= tic_step) {
-    xmin = rc.left;
     ymin = (int)((y_max - yval) * yscale) + rc.top;
-    xmax = rc.right;
     ymax = ymin;
-    line[0].x = xmin + PaddingLeft;
     line[0].y = ymin;
-    line[1].x = xmax;
     line[1].y = ymax;
 
     // STYLE_THINDASHPAPER
