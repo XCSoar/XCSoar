@@ -10,23 +10,23 @@
   <Label Name="prpTitleWindowFont" Caption="InfoBox titles" X="2" Y="27" Width="180" Height="22"/>
   <Button Name="cmdTitleWindowFont" Caption="Edit" X="185" Y="27" Width="50" Height="22" OnClick="OnEditTitleWindowFontClicked" />
 
-  <Label Name="prpInfoWindowFont" Caption="InfoBox values" X="2" Y="52" Width="180" Height="22"/>
+  <Label Name="prpInfoWindowFont" Caption="InfoBox values, normal" X="2" Y="52" Width="180" Height="22"/>
   <Button Name="cmdInfoWindowFont" Caption="Edit" X="185" Y="52" Width="50" Height="22" OnClick="OnEditInfoWindowFontClicked" />
 
-  <Label Name="prpMapWindowFont" Caption="Map waypoints" X="2" Y="77" Width="180" Height="22"/>
-  <Button Name="cmdMapWindowFont" Caption="Edit" X="185" Y="77" Width="50" Height="22" OnClick="OnEditMapWindowFontClicked" />
+  <Label Name="prpTitleSmallWindowFont" Caption="InfoBox values, small" X="2" Y="77" Width="180" Height="22"/>
+  <Button Name="cmdTitleSmallWindowFont" Caption="Edit" X="185" Y="77" Width="50" Height="22" OnClick="OnEditTitleSmallWindowFontClicked" />
 
-  <Label Name="prpMapLabelFont" Caption="Topography labels" X="2" Y="102" Width="180" Height="22"/>
-  <Button Name="cmdMapLabelFont" Caption="Edit" X="185" Y="102" Width="50" Height="22" OnClick="OnEditMapLabelFontClicked" />
+  <Label Name="prpMapWindowFont" Caption="Waypoint labels" X="2" Y="102" Width="180" Height="22"/>
+  <Button Name="cmdMapWindowFont" Caption="Edit" X="185" Y="102" Width="50" Height="22" OnClick="OnEditMapWindowFontClicked" />
 
-  <Label Name="prpMapLabelImportantFont" Caption="Important topography labels" X="2" Y="127" Width="180" Height="22"/>
-  <Button Name="cmdMapLabelImportantFont" Caption="Edit" X="185" Y="127" Width="50" Height="22" OnClick="OnEditMapLabelImportantFontClicked" />
+  <Label Name="prpMapLabelFont" Caption="Topography labels, normal" X="2" Y="127" Width="180" Height="22"/>
+  <Button Name="cmdMapLabelFont" Caption="Edit" X="185" Y="127" Width="50" Height="22" OnClick="OnEditMapLabelFontClicked" />
 
-  <Label Name="prpMapWindowBoldFont" Caption="Dialog boxes" X="2" Y="152" Width="180" Height="22"/>
-  <Button Name="cmdMapWindowBoldFont" Caption="Edit" X="185" Y="152" Width="50" Height="22" OnClick="OnEditMapWindowBoldFontClicked" />
+  <Label Name="prpMapLabelImportantFont" Caption="Topography labels, important" X="2" Y="152" Width="180" Height="22"/>
+  <Button Name="cmdMapLabelImportantFont" Caption="Edit" X="185" Y="152" Width="50" Height="22" OnClick="OnEditMapLabelImportantFontClicked" />
 
-  <Label Name="prpTitleSmallWindowFont" Caption="Small InfoBox values" X="2" Y="177" Width="180" Height="22"/>
-  <Button Name="cmdTitleSmallWindowFont" Caption="Edit" X="185" Y="177" Width="50" Height="22" OnClick="OnEditTitleSmallWindowFontClicked" />
+  <Label Name="prpMapWindowBoldFont" Caption="Dialog text" X="2" Y="177" Width="180" Height="22"/>
+  <Button Name="cmdMapWindowBoldFont" Caption="Edit" X="185" Y="177" Width="50" Height="22" OnClick="OnEditMapWindowBoldFontClicked" />
 
   <Label Name="prpCDIWindowFont" Caption="Gauges" X="2" Y="202" Width="180" Height="22"/>
   <Button Name="cmdCDIWindowFont" Caption="Edit" X="185" Y="202" Width="50" Height="22" OnClick="OnEditCDIWindowFontClicked" />
