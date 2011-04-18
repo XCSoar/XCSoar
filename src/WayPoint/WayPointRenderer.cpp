@@ -180,7 +180,7 @@ public:
     const UnorderedTaskPoint t(way_point, task_behaviour);
     const AGeoPoint p_dest (t.get_location(), t.get_elevation());
     if (task.find_positive_arrival(p_dest, arrival_height_terrain, arrival_height_glide)) {
-      const short h_base = iround(t.get_elevation() + task_behaviour.safety_height_arrival);
+      const short h_base = iround(t.get_elevation());
       arrival_height_terrain -= h_base;
       arrival_height_glide -= h_base;
     }
