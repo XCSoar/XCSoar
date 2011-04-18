@@ -59,7 +59,7 @@ TEST_NAMES = \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
 	TestValidity TestUTM \
 	TestRadixTree TestGeoBounds TestGeoClip \
-	TestLogger TestDriver \
+	TestLogger TestDriver TestClimbAvCalc \
 	TestWayPointFile TestThermalBase \
 	test_load_task \
 	TestColorRamp TestGeoPoint TestDiffFilter \
@@ -226,6 +226,16 @@ TEST_GEO_CLIP_SOURCES = \
 TEST_GEO_CLIP_OBJS = $(call SRC_TO_OBJ,$(TEST_GEO_CLIP_SOURCES))
 TEST_GEO_CLIP_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestGeoClip$(TARGET_EXEEXT): $(TEST_GEO_CLIP_OBJS) $(TEST_GEO_CLIP_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_CLIMB_AV_CALC_SOURCES = \
+	$(SRC)/ClimbAverageCalculator.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestClimbAvCalc.cpp
+TEST_CLIMB_AV_CALC_OBJS = $(call SRC_TO_OBJ,$(TEST_CLIMB_AV_CALC_SOURCES))
+TEST_CLIMB_AV_CALC_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestClimbAvCalc$(TARGET_EXEEXT): $(TEST_CLIMB_AV_CALC_OBJS) $(TEST_CLIMB_AV_CALC_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
