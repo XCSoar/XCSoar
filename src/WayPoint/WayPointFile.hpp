@@ -45,14 +45,17 @@ protected:
                bool _compressed = false);
 
 public:
+  typedef void (*StatusCallback)(unsigned percent);
+
   /**
    * Parses the waypoint file provided by SetFile() into the given waypoint list
    * @param way_points The waypoint list to fill
    * @param terrain RasterTerrain (for automatic waypoint height)
    * @return True if the waypoint file parsing was okay, False otherwise
    */
-  bool Parse(Waypoints &way_points);
-  void Parse(Waypoints &way_points, TLineReader &reader);
+  bool Parse(Waypoints &way_points, StatusCallback callback = NULL);
+  void Parse(Waypoints &way_points, TLineReader &reader,
+             StatusCallback callback = NULL);
 
   void SetTerrain(const RasterTerrain* _terrain) {
     terrain = _terrain;

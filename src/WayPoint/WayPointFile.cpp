@@ -26,7 +26,6 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "ProgressGlue.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ZipLineReader.hpp"
 
@@ -155,10 +154,9 @@ WayPointFile::check_altitude(Waypoint &new_waypoint)
 }
 
 void
-WayPointFile::Parse(Waypoints &way_points, TLineReader &reader)
+WayPointFile::Parse(Waypoints &way_points, TLineReader &reader,
+                    StatusCallback callback)
 {
-  ProgressGlue::SetRange(25);
-
   double filesize = std::max(reader.size(), 1l);
 
   // Read through the lines of the file
@@ -168,14 +166,15 @@ WayPointFile::Parse(Waypoints &way_points, TLineReader &reader)
     parseLine(line, i, way_points);
 
     if ((i & 0x3f) == 0) {
-      unsigned status = reader.tell() * 25 / filesize;
-      ProgressGlue::SetValue(status);
+      unsigned status = reader.tell() * 100 / filesize;
+      if (callback != NULL)
+        callback(status);
     }
   }
 }
 
 bool
-WayPointFile::Parse(Waypoints &way_points)
+WayPointFile::Parse(Waypoints &way_points, StatusCallback callback)
 {
   // If no file loaded yet -> return false
   if (file[0] == 0)
@@ -187,14 +186,14 @@ WayPointFile::Parse(Waypoints &way_points)
     if (reader.error())
       return false;
 
-    Parse(way_points, reader);
+    Parse(way_points, reader, callback);
   } else {
     // convert path to ascii
     ZipLineReader reader(file);
     if (reader.error())
       return false;
 
-    Parse(way_points, reader);
+    Parse(way_points, reader, callback);
   }
 
   return true;

@@ -38,6 +38,7 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "IO/TextWriter.hpp"
 #include "WayPoint/WaypointWriter.hpp"
+#include "ProgressGlue.hpp"
 
 #include <windef.h> /* for MAX_PATH */
 
@@ -159,7 +160,9 @@ WayPointGlue::LoadWaypointFile(int num, Waypoints &way_points,
   if (!reader.Error()) {
     // parse the file
     reader.SetTerrain(terrain);
-    if (reader.Parse(way_points))
+
+    ProgressGlue::SetRange(100);
+    if (reader.Parse(way_points, ProgressGlue::SetValue))
       return true;
 
     LogStartUp(_T("Parse error in waypoint file %d"), num);

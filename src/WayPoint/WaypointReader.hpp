@@ -25,11 +25,12 @@ Copyright_License {
 #ifndef WAYPOINT_READER_HPP
 #define WAYPOINT_READER_HPP
 
+#include "WayPointFile.hpp"
+
 #include <tchar.h>
 
 class Waypoints;
 class RasterTerrain;
-class WayPointFile;
 
 class WaypointReader
 {
@@ -44,7 +45,7 @@ public:
 
   void SetTerrain(const RasterTerrain* _terrain);
 
-  bool Parse(Waypoints &way_points);
+  bool Parse(Waypoints &way_points, WayPointFile::StatusCallback callback = NULL);
 
   bool Error() const {
     return file == NULL;

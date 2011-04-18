@@ -35,12 +35,12 @@ Copyright_License {
 #include "IO/ZipSource.hpp"
 
 bool
-WaypointReader::Parse(Waypoints &way_points)
+WaypointReader::Parse(Waypoints &way_points, WayPointFile::StatusCallback callback)
 {
   if (file == NULL)
     return false;
 
-  return file->Parse(way_points);
+  return file->Parse(way_points, callback);
 }
 
 void
