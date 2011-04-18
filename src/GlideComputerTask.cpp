@@ -25,8 +25,6 @@ Copyright_License {
 #include "GlideComputerTask.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "Airspace/Airspaces.hpp"
-#include "Airspace/AirspaceVisibility.hpp"
 #include "NMEA/Aircraft.hpp"
 
 #include <algorithm>
