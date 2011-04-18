@@ -33,7 +33,11 @@ ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_tim
 
   int bestHistory;
 
-  newestValIndex = newestValIndex < MAX_HISTORY - 1 ? newestValIndex + 1 : 0;
+  // Don't update newestValIndex if the time didn't move forward
+  if (newestValIndex < 0 ||
+      !history[newestValIndex].valid ||
+      time > history[newestValIndex].time)
+    newestValIndex = newestValIndex < MAX_HISTORY - 1 ? newestValIndex + 1 : 0;
 
   // add the new sample
   history[newestValIndex].valid = true;
