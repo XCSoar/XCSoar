@@ -732,7 +732,8 @@ GlideComputerAirData::AirspaceWarning()
   airspace_database.set_activity(day);
 
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
-  if (m_airspace.update_warning(as, Calculated().Circling))
+  assert(positive(time_delta()));
+  if (m_airspace.update_warning(as, Calculated().Circling, (unsigned)time_delta()))
     airspaceWarningEvent.trigger();
 }
 

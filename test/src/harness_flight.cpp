@@ -266,7 +266,7 @@ bool run_flight(TaskManager &task_manager,
     if (airspace_warnings) {
       if (verbose > 1) {
         bool warnings_updated = airspace_warnings->update(aircraft.get_state(),
-                                                          false);
+                                                          false, 1);
         if (warnings_updated) {
           printf("# airspace warnings updated, size %d\n",
                  (int)airspace_warnings->size());

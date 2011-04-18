@@ -87,10 +87,11 @@ public:
  * 
  * @param state Current aircraft state
  * @param circling Whether aircraft is circling
+ * @param dt Time step since last update
  * 
  * @return True if warnings changed
  */
-  bool update(const AIRCRAFT_STATE &state, const bool circling);
+  bool update(const AIRCRAFT_STATE &state, const bool circling, const unsigned dt);
 
 /** 
  * Adjust time of glide predictor

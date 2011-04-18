@@ -128,7 +128,8 @@ AirspaceWarningManager::get_warning_index(const AbstractAirspace& airspace) cons
 
 bool 
 AirspaceWarningManager::update(const AIRCRAFT_STATE& state,
-                               const bool circling)
+                               const bool circling,
+                               const unsigned dt)
 {
   bool changed = false;
 
@@ -156,7 +157,7 @@ AirspaceWarningManager::update(const AIRCRAFT_STATE& state,
   // action changes
   for (AirspaceWarningList::iterator it = m_warnings.begin();
        it != m_warnings.end(); ) {
-    if (it->warning_live(config.AcknowledgementTime)) {
+    if (it->warning_live(config.AcknowledgementTime, dt)) {
       if (it->changed_state())
         changed = true;
 

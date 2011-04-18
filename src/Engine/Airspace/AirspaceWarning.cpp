@@ -60,7 +60,7 @@ AirspaceWarning::update_solution(const AirspaceWarningState state,
 
 
 bool
-AirspaceWarning::warning_live(const unsigned ack_time)
+AirspaceWarning::warning_live(const unsigned ack_time, const unsigned dt)
 {
   // propagate settings from manager
   if (m_acktime_warning == null_acktime)
@@ -75,14 +75,20 @@ AirspaceWarning::warning_live(const unsigned ack_time)
     // if inside was acknowledged, consider warning to be acknowledged
     m_acktime_warning = max(m_acktime_warning, m_acktime_inside);
 
-  if (m_acktime_warning)
-    m_acktime_warning--;
+  if (m_acktime_warning > dt)
+    m_acktime_warning-= dt;
+  else
+    m_acktime_warning = 0;
 
-  if (m_acktime_inside)
-    m_acktime_inside--;
+  if (m_acktime_inside > dt)
+    m_acktime_inside-= dt;
+  else
+    m_acktime_inside = 0;
 
-  if (m_debouncetime)
-    m_debouncetime--;
+  if (m_debouncetime > dt)
+    m_debouncetime-= dt;
+  else
+    m_debouncetime = 0;
 
   m_expired = get_ack_expired();
 

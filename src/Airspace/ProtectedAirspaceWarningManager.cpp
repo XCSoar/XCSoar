@@ -105,8 +105,9 @@ ProtectedAirspaceWarningManager::reset_warning(const AIRCRAFT_STATE &as)
 
 bool
 ProtectedAirspaceWarningManager::update_warning(const AIRCRAFT_STATE &as,
-                                                const bool circling)
+                                                const bool circling,
+                                                const unsigned dt)
 {
   ExclusiveLease lease(*this);
-  return lease->update(as, circling);
+  return lease->update(as, circling, dt);
 }

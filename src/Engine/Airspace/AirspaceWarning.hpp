@@ -112,10 +112,11 @@ public:
    * have warnings managed.
    *
    * @param ack_time Lifetime of acknowledgements
+   * @param dt time step (seconds)
    *
    * @return True if warning is still active
    */
-  bool warning_live(const unsigned ack_time);
+  bool warning_live(const unsigned ack_time, const unsigned dt);
 
   /**
    * Determine if airspace warning was a dummy one created for testing but otherwise
