@@ -32,7 +32,7 @@ class Waypoints;
 class RasterTerrain;
 class TLineReader;
 
-class WayPointFile 
+class WayPointReaderBase 
 {
 protected:
   TCHAR file[255];
@@ -41,7 +41,7 @@ protected:
   bool compressed;
 
 protected:
-  WayPointFile(const TCHAR* file_name, const int _file_num,
+  WayPointReaderBase(const TCHAR* file_name, const int _file_num,
                bool _compressed = false);
 
 public:

@@ -21,14 +21,14 @@ Copyright_License {
 }
 */
 
-#include "WayPointFileSeeYou.hpp"
+#include "WaypointReaderSeeYou.hpp"
 #include "Units/Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 
 #include <stdio.h>
 
 bool
-WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
+WaypointReaderSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
                               Waypoints &way_points)
 {
   TCHAR ctemp[255];
@@ -153,7 +153,7 @@ WayPointFileSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   * @param seperator character (default: ' ')
   */
 void
-WayPointFileSeeYou::appendStringWithSeperator(tstring &dest,
+WaypointReaderSeeYou::appendStringWithSeperator(tstring &dest,
                                               const TCHAR* src,
                                               const TCHAR seperator)
 {
@@ -165,7 +165,7 @@ WayPointFileSeeYou::appendStringWithSeperator(tstring &dest,
 }
 
 bool
-WayPointFileSeeYou::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
+WaypointReaderSeeYou::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
   TCHAR *endptr;
 
@@ -199,7 +199,7 @@ WayPointFileSeeYou::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 bool
-WayPointFileSeeYou::parseAltitude(const TCHAR* src, fixed& dest)
+WaypointReaderSeeYou::parseAltitude(const TCHAR* src, fixed& dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -219,7 +219,7 @@ WayPointFileSeeYou::parseAltitude(const TCHAR* src, fixed& dest)
 }
 
 bool
-WayPointFileSeeYou::parseDistance(const TCHAR* src, fixed& dest)
+WaypointReaderSeeYou::parseDistance(const TCHAR* src, fixed& dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -241,7 +241,7 @@ WayPointFileSeeYou::parseDistance(const TCHAR* src, fixed& dest)
 }
 
 bool
-WayPointFileSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
+WaypointReaderSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
 {
   // 1 - Normal
   // 2 - AirfieldGrass

@@ -60,7 +60,7 @@ TEST_NAMES = \
 	TestValidity TestUTM \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestDriver TestClimbAvCalc \
-	TestWayPointFile TestThermalBase \
+	TestWaypointReader TestThermalBase \
 	test_load_task \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine \
@@ -489,12 +489,12 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Geo/UTM.cpp \
-	$(SRC)/WayPoint/WayPointFile.cpp \
+	$(SRC)/WayPoint/WaypointReaderBase.cpp \
 	$(SRC)/WayPoint/WaypointReader.cpp \
-	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
-	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
-	$(SRC)/WayPoint/WayPointFileZander.cpp \
-	$(SRC)/WayPoint/WayPointFileFS.cpp \
+	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/WayPoint/WaypointReaderZander.cpp \
+	$(SRC)/WayPoint/WaypointReaderFS.cpp \
 	$(SRC)/WayPoint/WaypointWriter.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
@@ -505,10 +505,10 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/TestWayPointFile.cpp
+	$(TEST_SRC_DIR)/TestWaypointReader.cpp
 TEST_WAY_POINT_FILE_OBJS = $(call SRC_TO_OBJ,$(TEST_WAY_POINT_FILE_SOURCES))
 TEST_WAY_POINT_FILE_LDADD = $(UTIL_LIBS) $(MATH_LIBS) $(IO_LIBS) $(ZZIP_LIBS)
-$(TARGET_BIN_DIR)/TestWayPointFile$(TARGET_EXEEXT): $(TEST_WAY_POINT_FILE_OBJS) $(TEST_WAY_POINT_FILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+$(TARGET_BIN_DIR)/TestWaypointReader$(TARGET_EXEEXT): $(TEST_WAY_POINT_FILE_OBJS) $(TEST_WAY_POINT_FILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) -o $@
 
@@ -891,12 +891,12 @@ $(TARGET_BIN_DIR)/RunInputParser$(TARGET_EXEEXT): $(RUN_INPUT_PARSER_OBJS) $(RUN
 
 RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/Geo/UTM.cpp \
-	$(SRC)/WayPoint/WayPointFile.cpp \
+	$(SRC)/WayPoint/WaypointReaderBase.cpp \
 	$(SRC)/WayPoint/WaypointReader.cpp \
-	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
-	$(SRC)/WayPoint/WayPointFileFS.cpp \
-	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
-	$(SRC)/WayPoint/WayPointFileZander.cpp \
+	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/WayPoint/WaypointReaderFS.cpp \
+	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/WayPoint/WaypointReaderZander.cpp \
 	$(SRC)/WayPoint/WaypointWriter.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -1212,11 +1212,11 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
 	$(SRC)/WayPoint/WaypointReader.cpp \
-	$(SRC)/WayPoint/WayPointFile.cpp \
-	$(SRC)/WayPoint/WayPointFileFS.cpp \
-	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
-	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
-	$(SRC)/WayPoint/WayPointFileZander.cpp \
+	$(SRC)/WayPoint/WaypointReaderBase.cpp \
+	$(SRC)/WayPoint/WaypointReaderFS.cpp \
+	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/WayPoint/WaypointReaderZander.cpp \
 	$(SRC)/WayPoint/WayPointRenderer.cpp \
 	$(SRC)/WayPoint/WaypointWriter.cpp \
 	$(SRC)/Compatibility/fmode.c \
@@ -1557,12 +1557,12 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
-	$(SRC)/WayPoint/WayPointFile.cpp \
+	$(SRC)/WayPoint/WaypointReaderBase.cpp \
 	$(SRC)/WayPoint/WaypointReader.cpp \
-	$(SRC)/WayPoint/WayPointFileFS.cpp \
-	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
-	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
-	$(SRC)/WayPoint/WayPointFileZander.cpp \
+	$(SRC)/WayPoint/WaypointReaderFS.cpp \
+	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/WayPoint/WaypointReaderZander.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \

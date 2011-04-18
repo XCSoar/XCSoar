@@ -21,28 +21,33 @@ Copyright_License {
 }
 */
 
-#ifndef WAYPOINTFILEFS_HPP
-#define WAYPOINTFILEFS_HPP
+#ifndef WAYPOINTFILEZANDER_HPP
+#define WAYPOINTFILEZANDER_HPP
 
-#include "WayPointFile.hpp"
+#include "WaypointReaderBase.hpp"
 #include "Math/fixed.hpp"
 #include "tstring.hpp"
 
 class Angle;
 
-class WayPointFileFS:
-  public WayPointFile 
+class WaypointReaderZander: 
+  public WayPointReaderBase 
 {
-  bool is_utm;
-
 public:
-  WayPointFileFS(const TCHAR* file_name, const int _file_num,
-                 bool _compressed = false)
-    :WayPointFile(file_name, _file_num, _compressed), is_utm(false) {}
+  WaypointReaderZander(const TCHAR* file_name, const int _file_num,
+                     bool _compressed = false)
+    :WayPointReaderBase(file_name, _file_num, _compressed) {}
 
 protected:
   bool parseLine(const TCHAR* line, const unsigned linenum,
                  Waypoints &way_points);
+
+private:
+  static bool parseString(const TCHAR* src, tstring& dest, unsigned len);
+  static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
+  static bool parseAltitude(const TCHAR* src, fixed& dest);
+  static bool parseFlags(const TCHAR* src, Waypoint &dest);
+  static bool parseFlagsFromDescription(const TCHAR* src, Waypoint &dest);
 };
 
 #endif

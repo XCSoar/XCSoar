@@ -25,7 +25,7 @@ Copyright_License {
 #ifndef WAYPOINT_READER_HPP
 #define WAYPOINT_READER_HPP
 
-#include "WayPointFile.hpp"
+#include "WaypointReaderBase.hpp"
 
 #include <tchar.h>
 
@@ -34,7 +34,7 @@ class RasterTerrain;
 
 class WaypointReader
 {
-  WayPointFile* file;
+  WayPointReaderBase* file;
 
 public:
   WaypointReader();
@@ -45,7 +45,7 @@ public:
 
   void SetTerrain(const RasterTerrain* _terrain);
 
-  bool Parse(Waypoints &way_points, WayPointFile::StatusCallback callback = NULL);
+  bool Parse(Waypoints &way_points, WayPointReaderBase::StatusCallback callback = NULL);
 
   bool Error() const {
     return file == NULL;

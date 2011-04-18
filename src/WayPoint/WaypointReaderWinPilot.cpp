@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WayPointFileWinPilot.hpp"
+#include "WaypointReaderWinPilot.hpp"
 #include "Units/Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "IO/TextWriter.hpp"
@@ -29,7 +29,7 @@ Copyright_License {
 #include <stdlib.h>
 
 bool
-WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
+WaypointReaderWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
                                 Waypoints &way_points)
 {
   TCHAR ctemp[255];
@@ -103,7 +103,7 @@ WayPointFileWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
 }
 
 bool
-WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
+WaypointReaderWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
   // Two format variants:
   // 51:47.841N (DD:MM.mmm // the usual)
@@ -158,7 +158,7 @@ WayPointFileWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 bool
-WayPointFileWinPilot::parseRunwayDirection(const TCHAR* src, Angle& dest)
+WaypointReaderWinPilot::parseRunwayDirection(const TCHAR* src, Angle& dest)
 {
   // WELT2000 written files contain a 4-digit runway direction specification
   // at the end of the comment, e.g. "123.50 0927"
@@ -196,7 +196,7 @@ WayPointFileWinPilot::parseRunwayDirection(const TCHAR* src, Angle& dest)
 }
 
 bool
-WayPointFileWinPilot::parseAltitude(const TCHAR* src, fixed& dest)
+WaypointReaderWinPilot::parseAltitude(const TCHAR* src, fixed& dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -216,7 +216,7 @@ WayPointFileWinPilot::parseAltitude(const TCHAR* src, fixed& dest)
 }
 
 bool
-WayPointFileWinPilot::parseFlags(const TCHAR* src, Waypoint &dest)
+WaypointReaderWinPilot::parseFlags(const TCHAR* src, Waypoint &dest)
 {
   // A = Airport
   // T = Turnpoint

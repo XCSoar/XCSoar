@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WayPointFileFS.hpp"
+#include "WaypointReaderFS.hpp"
 #include "Units/Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/UTM.hpp"
@@ -145,7 +145,7 @@ ParseString(const TCHAR *src, tstring &dest, unsigned len = 0)
 }
 
 bool
-WayPointFileFS::parseLine(const TCHAR* line, const unsigned linenum,
+WaypointReaderFS::parseLine(const TCHAR* line, const unsigned linenum,
                               Waypoints &way_points)
 {
   //$FormatGEO

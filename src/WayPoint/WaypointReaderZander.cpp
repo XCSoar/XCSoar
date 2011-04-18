@@ -21,14 +21,14 @@ Copyright_License {
 }
 */
 
-#include "WayPointFileZander.hpp"
+#include "WaypointReaderZander.hpp"
 #include "Units/Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 
 #include <stdio.h>
 
 bool
-WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
+WaypointReaderZander::parseLine(const TCHAR* line, const unsigned linenum,
                               Waypoints &way_points)
 {
   // If (end-of-file or comment)
@@ -84,7 +84,7 @@ WayPointFileZander::parseLine(const TCHAR* line, const unsigned linenum,
 
 
 bool
-WayPointFileZander::parseString(const TCHAR* src, tstring& dest, unsigned len)
+WaypointReaderZander::parseString(const TCHAR* src, tstring& dest, unsigned len)
 {
   if (src[0] == 0)
     return true;
@@ -102,7 +102,7 @@ WayPointFileZander::parseString(const TCHAR* src, tstring& dest, unsigned len)
 }
 
 bool
-WayPointFileZander::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
+WaypointReaderZander::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 {
   TCHAR *endptr;
 
@@ -135,7 +135,7 @@ WayPointFileZander::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
 }
 
 bool
-WayPointFileZander::parseAltitude(const TCHAR* src, fixed& dest)
+WaypointReaderZander::parseAltitude(const TCHAR* src, fixed& dest)
 {
   // Parse string
   TCHAR *endptr;
@@ -149,7 +149,7 @@ WayPointFileZander::parseAltitude(const TCHAR* src, fixed& dest)
 }
 
 bool
-WayPointFileZander::parseFlags(const TCHAR* src, Waypoint &dest)
+WaypointReaderZander::parseFlags(const TCHAR* src, Waypoint &dest)
 {
   // WP = Waypoint
   // HA = Home Field
@@ -189,7 +189,7 @@ WayPointFileZander::parseFlags(const TCHAR* src, Waypoint &dest)
 }
 
 bool
-WayPointFileZander::parseFlagsFromDescription(const TCHAR* src,
+WaypointReaderZander::parseFlagsFromDescription(const TCHAR* src,
                                               Waypoint &dest)
 {
   // If the description starts with 1 the waypoint is an airport

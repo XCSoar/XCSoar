@@ -21,33 +21,40 @@ Copyright_License {
 }
 */
 
-#ifndef WAYPOINTFILEZANDER_HPP
-#define WAYPOINTFILEZANDER_HPP
 
-#include "WayPointFile.hpp"
+#ifndef WAYPOINTFILESEEYOU_HPP
+#define WAYPOINTFILESEEYOU_HPP
+
+#include "WaypointReaderBase.hpp"
 #include "Math/fixed.hpp"
 #include "tstring.hpp"
 
 class Angle;
 
-class WayPointFileZander: 
-  public WayPointFile 
+class WaypointReaderSeeYou: 
+  public WayPointReaderBase 
 {
 public:
-  WayPointFileZander(const TCHAR* file_name, const int _file_num,
+  WaypointReaderSeeYou(const TCHAR* file_name, const int _file_num,
                      bool _compressed = false)
-    :WayPointFile(file_name, _file_num, _compressed) {}
+    :WayPointReaderBase(file_name, _file_num, _compressed) {}
 
 protected:
+  /**
+   * Parses a SeeYou waypoint file line
+   * @see parseLine()
+   * @see http://data.naviter.si/docs/cup_format.pdf
+   */
   bool parseLine(const TCHAR* line, const unsigned linenum,
                  Waypoints &way_points);
 
 private:
-  static bool parseString(const TCHAR* src, tstring& dest, unsigned len);
+  static void appendStringWithSeperator(tstring &dest, const TCHAR *src,
+                                        const TCHAR seperator=' ');
   static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   static bool parseAltitude(const TCHAR* src, fixed& dest);
-  static bool parseFlags(const TCHAR* src, Waypoint &dest);
-  static bool parseFlagsFromDescription(const TCHAR* src, Waypoint &dest);
+  static bool parseDistance(const TCHAR* src, fixed& dest);
+  static bool parseStyle(const TCHAR* src, Waypoint &dest);
 };
 
 #endif

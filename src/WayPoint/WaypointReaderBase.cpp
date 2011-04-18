@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WayPointFile.hpp"
+#include "WaypointReaderBase.hpp"
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoint.hpp"
@@ -31,7 +31,7 @@ Copyright_License {
 
 #include <assert.h>
 
-WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num,
+WayPointReaderBase::WayPointReaderBase(const TCHAR* file_name, const int _file_num,
                            bool _compressed):
   file_num(_file_num),
   terrain(NULL),
@@ -55,7 +55,7 @@ static bool is_closing_quote_char(TCHAR const *s) {
 }
 
 size_t
-WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
+WayPointReaderBase::extractParameters(const TCHAR *src, TCHAR *dst,
                                 const TCHAR **arr, size_t sz,
                                 const bool trim, const TCHAR quote_char)
 {
@@ -139,7 +139,7 @@ WayPointFile::extractParameters(const TCHAR *src, TCHAR *dst,
 }
 
 void
-WayPointFile::check_altitude(Waypoint &new_waypoint)
+WayPointReaderBase::check_altitude(Waypoint &new_waypoint)
 {
   if (terrain == NULL)
     return;
@@ -154,7 +154,7 @@ WayPointFile::check_altitude(Waypoint &new_waypoint)
 }
 
 void
-WayPointFile::Parse(Waypoints &way_points, TLineReader &reader,
+WayPointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
                     StatusCallback callback)
 {
   double filesize = std::max(reader.size(), 1l);
@@ -174,7 +174,7 @@ WayPointFile::Parse(Waypoints &way_points, TLineReader &reader,
 }
 
 bool
-WayPointFile::Parse(Waypoints &way_points, StatusCallback callback)
+WayPointReaderBase::Parse(Waypoints &way_points, StatusCallback callback)
 {
   // If no file loaded yet -> return false
   if (file[0] == 0)
