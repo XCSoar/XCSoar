@@ -242,10 +242,10 @@ WndProperty::UpdateLayout()
   const PixelSize size = get_size();
 
   if (mCaptionWidth != 0) {
-    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)
+    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)*2
         - mBitmapSize;
     mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
-    mEditPos.x = mCaptionWidth;
+    mEditPos.x = mCaptionWidth + (DEFAULTBORDERPENWIDTH + 1);
     mEditPos.y = (DEFAULTBORDERPENWIDTH + 1);
   } else {
     mEditSize.x = size.cx - 2 * (DEFAULTBORDERPENWIDTH + 1 + mBitmapSize);
