@@ -29,6 +29,8 @@ ClimbAverageCalculator::ClimbAverageCalculator():
 fixed
 ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_time)
 {
+  assert(average_time <= fixed(MAX_HISTORY));
+
   int bestHistory;
 
   newestValIndex = newestValIndex < MAX_HISTORY - 1 ? newestValIndex + 1 : 0;
