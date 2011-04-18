@@ -175,6 +175,10 @@ GlideComputerTask::Reach()
 void 
 GlideComputerTask::OnTakeoff()
 {
+  if (Calculated().AltitudeAGLValid &&
+      Calculated().AltitudeAGL > fixed(500))
+    return;
+
   ProtectedTaskManager::ExclusiveLease task(m_task);
   task->takeoff_autotask(Basic().Location, Calculated().TerrainAlt);
 }
