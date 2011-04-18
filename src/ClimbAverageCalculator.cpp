@@ -26,6 +26,14 @@ Copyright_License {
 ClimbAverageCalculator::ClimbAverageCalculator():
   newestValIndex(-1) {}
 
+void
+ClimbAverageCalculator::Reset()
+{
+  newestValIndex = -1;
+  for (int i = 0; i < MAX_HISTORY; i++)
+    history[i].valid = false;
+}
+
 fixed
 ClimbAverageCalculator::GetAverage(fixed time, fixed altitude, fixed average_time)
 {
