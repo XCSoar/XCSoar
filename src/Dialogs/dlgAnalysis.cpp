@@ -440,11 +440,6 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgAnalysisShowModal(SingleWindow &parent, int _page)
 {
-  wf = NULL;
-  wGrid = NULL;
-  wInfo = NULL;
-  wCalc = NULL;
-
   wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ? _T("IDR_XML_ANALYSIS_L") :
                                       _T("IDR_XML_ANALYSIS"));
