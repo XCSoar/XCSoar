@@ -593,7 +593,8 @@ DEBUG_PROGRAM_NAMES = \
 	RunRenderOZ \
 	RunProgressWindow \
 	RunAnalysis \
-	RunAirspaceWarningDialog
+	RunAirspaceWarningDialog \
+	DumpDPI
 
 ifeq ($(TARGET),UNIX)
 DEBUG_PROGRAM_NAMES += FeedNMEA
@@ -633,6 +634,16 @@ DUMP_TEXT_ZIP_LDADD = \
 	$(IO_LIBS) \
 	$(ZZIP_LIBS)
 $(TARGET_BIN_DIR)/DumpTextZip$(TARGET_EXEEXT): $(DUMP_TEXT_ZIP_OBJS) $(DUMP_TEXT_ZIP_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) -o $@
+
+DUMP_DPI_SOURCES = \
+	$(SRC)/Hardware/Display.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/DumpDPI.cpp
+DUMP_DPI_OBJS = $(call SRC_TO_OBJ,$(DUMP_DPI_SOURCES))
+DUMP_DPI_LDADD = $(IO_LIBS) 
+$(TARGET_BIN_DIR)/DumpDPI$(TARGET_EXEEXT): $(DUMP_DPI_OBJS) $(DUMP_DPI_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) -o $@
 
