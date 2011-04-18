@@ -259,7 +259,8 @@ DeviceBlackboard::ProcessFLARM()
   if (!flarm.available || flarm.traffic.empty())
     return;
 
-  // calculate relative east and north projection to lat/lon
+  // Precalculate relative east and north projection to lat/lon
+  // for Location calculations of each target
   Angle delta_lat = Angle::degrees(fixed(0.01));
   Angle delta_lon = Angle::degrees(fixed(0.01));
 
@@ -283,28 +284,27 @@ DeviceBlackboard::ProcessFLARM()
   for (unsigned i = 0; i < flarm.traffic.size(); i++) {
     FLARM_TRAFFIC &traffic = flarm.traffic[i];
 
-    // if (traffic[flarm_slot] has data)
-    // and if (Target currently without name)
+    // if we don't know the target's name yet
     if (!traffic.HasName()) {
-      // need to lookup name for this target
+      // lookup the name of this target's id
       const TCHAR *fname = FlarmDetails::LookupCallsign(traffic.ID);
       if (fname != NULL)
         traffic.Name = fname;
     }
 
-    // 1 relativenorth, meters
+    // Calculate Location
     traffic.Location.Latitude =
         Angle::degrees(traffic.RelativeNorth * FLARM_NorthingToLatitude) +
         basic.Location.Latitude;
 
-    // 2 relativeeast, meters
     traffic.Location.Longitude =
         Angle::degrees(traffic.RelativeEast * FLARM_EastingToLongitude) +
         basic.Location.Longitude;
 
-    // alt
+    // Calculate absolute altitude
     traffic.Altitude = traffic.RelativeAltitude + basic.GPSAltitude;
 
+    // Calculate average climb rate
     traffic.Average30s =
         flarmCalculations.Average30s(traffic.ID, basic.Time, traffic.Altitude);
 
