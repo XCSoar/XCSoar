@@ -253,6 +253,7 @@ DeviceBlackboard::ProcessFLARM()
 {
   const NMEA_INFO &basic = Basic();
   FLARM_STATE &flarm = SetBasic().flarm;
+  const FLARM_STATE &last_flarm = LastBasic().flarm;
 
   // if (FLARM data is available)
   if (!flarm.available)
@@ -306,6 +307,43 @@ DeviceBlackboard::ProcessFLARM()
 
     traffic.Average30s =
         flarmCalculations.Average30s(traffic.ID, basic.Time, traffic.Altitude);
+
+    // The following calculations are only relevant for stealth targets
+    if (!traffic.Stealth)
+      continue;
+
+    // Check if the target has been seen before in the last seconds
+    const FLARM_TRAFFIC *last_traffic = last_flarm.FindTraffic(traffic.ID);
+    if (last_traffic == NULL || !last_traffic->Valid)
+      continue;
+
+    // Calculate the time difference between now and the last contact
+    fixed dt = traffic.Valid.get_time_difference(last_traffic->Valid);
+    if (positive(dt)) {
+      // Calculate the GeoVector between now and the last contact
+      GeoVector vec = last_traffic->Location.distance_bearing(traffic.Location);
+
+      traffic.TrackBearing = vec.Bearing;
+
+      // Calculate the turn rate
+      traffic.TurnRate =
+          (traffic.TrackBearing - last_traffic->TrackBearing).
+          as_delta().value_degrees() / dt;
+
+      // Calculate the immediate climb rate
+      traffic.ClimbRate =
+          (traffic.RelativeAltitude - last_traffic->RelativeAltitude) / dt;
+
+      // Calculate the speed [m/s]
+      traffic.Speed = vec.Distance / dt;
+    } else {
+      // Since the time difference is zero (or negative)
+      // we can just copy the old values
+      traffic.TrackBearing = last_traffic->TrackBearing;
+      traffic.TurnRate = last_traffic->TurnRate;
+      traffic.ClimbRate = last_traffic->ClimbRate;
+      traffic.Speed = last_traffic->Speed;
+    }
   }
 }
 
