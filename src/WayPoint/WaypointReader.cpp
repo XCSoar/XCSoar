@@ -35,12 +35,12 @@ Copyright_License {
 #include "IO/ZipSource.hpp"
 
 bool
-WaypointReader::Parse(Waypoints &way_points, bool compressed)
+WaypointReader::Parse(Waypoints &way_points)
 {
   if (file == NULL)
     return false;
 
-  return file->Parse(way_points, compressed);
+  return file->Parse(way_points);
 }
 
 void
@@ -61,7 +61,9 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
     return;
 
   // Test if file exists
+  bool compressed = false;
   if (!File::Exists(filename)) {
+    compressed = true;
     // Test if file exists in zip archive
     ZipSource zip(filename);
     if (zip.error())
@@ -72,19 +74,19 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
   // If WinPilot waypoint file -> save type and return true
   if (MatchesExtension(filename, _T(".dat")) ||
       MatchesExtension(filename, _T(".xcw")))
-    file = new WayPointFileWinPilot(filename, the_filenum);
+    file = new WayPointFileWinPilot(filename, the_filenum, compressed);
 
   // If SeeYou waypoint file -> save type and return true
   else if (MatchesExtension(filename, _T(".cup")))
-    file = new WayPointFileSeeYou(filename, the_filenum);
+    file = new WayPointFileSeeYou(filename, the_filenum, compressed);
 
   // If Zander waypoint file -> save type and return true
   else if (MatchesExtension(filename, _T(".wpz")))
-    file = new WayPointFileZander(filename, the_filenum);
+    file = new WayPointFileZander(filename, the_filenum, compressed);
 
   // If FS waypoint file -> save type and return true
   else if (MatchesExtension(filename, _T(".wpt")))
-    file = new WayPointFileFS(filename, the_filenum);
+    file = new WayPointFileFS(filename, the_filenum, compressed);
 }
 
 WaypointReader::WaypointReader()

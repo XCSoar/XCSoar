@@ -427,7 +427,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   Waypoints file_waypoints;
   {
     WayPointFileSeeYou waypoint_file(path, 0);
-    if (!waypoint_file.Parse(file_waypoints, NULL))
+    if (!waypoint_file.Parse(file_waypoints))
       return NULL;
   }
   file_waypoints.optimise();

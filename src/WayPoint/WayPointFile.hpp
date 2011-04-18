@@ -37,11 +37,12 @@ class WayPointFile
 protected:
   TCHAR file[255];
   const int file_num;
-
   const RasterTerrain* terrain;
+  bool compressed;
 
 protected:
-  WayPointFile(const TCHAR* file_name, const int _file_num);
+  WayPointFile(const TCHAR* file_name, const int _file_num,
+               bool _compressed = false);
 
 public:
   /**
@@ -50,7 +51,7 @@ public:
    * @param terrain RasterTerrain (for automatic waypoint height)
    * @return True if the waypoint file parsing was okay, False otherwise
    */
-  bool Parse(Waypoints &way_points, bool compressed = false);
+  bool Parse(Waypoints &way_points);
   void Parse(Waypoints &way_points, TLineReader &reader);
 
   void SetTerrain(const RasterTerrain* _terrain) {

@@ -32,11 +32,12 @@ Copyright_License {
 
 #include <assert.h>
 
-WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num):
+WayPointFile::WayPointFile(const TCHAR* file_name, const int _file_num,
+                           bool _compressed):
   file_num(_file_num),
-  terrain(NULL)
+  terrain(NULL),
+  compressed(_compressed)
 {
-
   _tcscpy(file, file_name);
 }
 
@@ -174,7 +175,7 @@ WayPointFile::Parse(Waypoints &way_points, TLineReader &reader)
 }
 
 bool
-WayPointFile::Parse(Waypoints &way_points, bool compressed)
+WayPointFile::Parse(Waypoints &way_points)
 {
   // If no file loaded yet -> return false
   if (file[0] == 0)

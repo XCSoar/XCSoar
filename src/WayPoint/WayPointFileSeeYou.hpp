@@ -35,8 +35,9 @@ class WayPointFileSeeYou:
   public WayPointFile 
 {
 public:
-  WayPointFileSeeYou(const TCHAR* file_name, const int _file_num):
-    WayPointFile(file_name, _file_num) {}
+  WayPointFileSeeYou(const TCHAR* file_name, const int _file_num,
+                     bool _compressed = false)
+    :WayPointFile(file_name, _file_num, _compressed) {}
 
 protected:
   /**

@@ -36,8 +36,9 @@ class WayPointFileFS:
   bool is_utm;
 
 public:
-  WayPointFileFS(const TCHAR* file_name, const int _file_num):
-    WayPointFile(file_name, _file_num), is_utm(false) {}
+  WayPointFileFS(const TCHAR* file_name, const int _file_num,
+                 bool _compressed = false)
+    :WayPointFile(file_name, _file_num, _compressed), is_utm(false) {}
 
 protected:
   bool parseLine(const TCHAR* line, const unsigned linenum,

@@ -44,7 +44,7 @@ public:
 
   void SetTerrain(const RasterTerrain* _terrain);
 
-  bool Parse(Waypoints &way_points, bool compressed = false);
+  bool Parse(Waypoints &way_points);
 
   bool Error() const {
     return file == NULL;

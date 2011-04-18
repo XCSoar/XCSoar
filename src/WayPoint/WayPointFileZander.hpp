@@ -34,8 +34,9 @@ class WayPointFileZander:
   public WayPointFile 
 {
 public:
-  WayPointFileZander(const TCHAR* file_name, const int _file_num):
-    WayPointFile(file_name, _file_num) {}
+  WayPointFileZander(const TCHAR* file_name, const int _file_num,
+                     bool _compressed = false)
+    :WayPointFile(file_name, _file_num, _compressed) {}
 
 protected:
   bool parseLine(const TCHAR* line, const unsigned linenum,

@@ -197,7 +197,7 @@ WayPointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
   if (!reader.Error()) {
     // parse the file
     reader.SetTerrain(terrain);
-    if (reader.Parse(way_points, true))
+    if (reader.Parse(way_points))
       return true;
 
     LogStartUp(_T("Parse error in map waypoint file"));
