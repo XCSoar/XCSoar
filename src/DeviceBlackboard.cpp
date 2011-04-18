@@ -256,7 +256,7 @@ DeviceBlackboard::ProcessFLARM()
   const FLARM_STATE &last_flarm = LastBasic().flarm;
 
   // if (FLARM data is available)
-  if (!flarm.available)
+  if (!flarm.available || flarm.traffic.empty())
     return;
 
   // calculate relative east and north projection to lat/lon
