@@ -28,7 +28,7 @@ Copyright_License {
 #include <stdio.h>
 
 bool
-WaypointReaderSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
+WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
                               Waypoints &way_points)
 {
   TCHAR ctemp[255];
@@ -68,7 +68,7 @@ WaypointReaderSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
     return true;
 
   // Get fields
-  n_params = extractParameters(line, ctemp, params, max_params, true, _T('"'));
+  n_params = ExtractParameters(line, ctemp, params, max_params, true, _T('"'));
 
   // Check if the basic fields are provided
   if (iName >= n_params)
@@ -103,7 +103,7 @@ WaypointReaderSeeYou::parseLine(const TCHAR* line, const unsigned linenum,
   /// @todo configurable behaviour
   if (iElevation >= n_params ||
       !parseAltitude(params[iElevation], new_waypoint.Altitude))
-    check_altitude(new_waypoint);
+    CheckAltitude(new_waypoint);
 
   // Style (e.g. 5)
   /// @todo include peaks with peak symbols etc.

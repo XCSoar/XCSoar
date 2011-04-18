@@ -45,7 +45,7 @@ protected:
    * @see parseLine()
    * @see http://data.naviter.si/docs/cup_format.pdf
    */
-  bool parseLine(const TCHAR* line, const unsigned linenum,
+  bool ParseLine(const TCHAR* line, const unsigned linenum,
                  Waypoints &way_points);
 
 private:

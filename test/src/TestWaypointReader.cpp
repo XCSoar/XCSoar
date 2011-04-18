@@ -39,30 +39,30 @@ TestExtractParameters()
 
   // test basic functionality
 
-  n = WayPointReaderBase::extractParameters(_T(""), buffer, params, 64);
+  n = WayPointReaderBase::ExtractParameters(_T(""), buffer, params, 64);
   ok1(n == 1);
   ok1(_tcscmp(params[0], _T("")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("foo"), buffer, params, 64);
+  n = WayPointReaderBase::ExtractParameters(_T("foo"), buffer, params, 64);
   ok1(n == 1);
   ok1(_tcscmp(params[0], _T("foo")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("foo,bar"), buffer, params, 64);
+  n = WayPointReaderBase::ExtractParameters(_T("foo,bar"), buffer, params, 64);
   ok1(n == 2);
   ok1(_tcscmp(params[0], _T("foo")) == 0);
   ok1(_tcscmp(params[1], _T("bar")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("foo,bar"), buffer, params, 1);
+  n = WayPointReaderBase::ExtractParameters(_T("foo,bar"), buffer, params, 1);
   ok1(n == 1);
   ok1(_tcscmp(params[0], _T("foo")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("foo,bar,"), buffer, params, 64);
+  n = WayPointReaderBase::ExtractParameters(_T("foo,bar,"), buffer, params, 64);
   ok1(n == 3);
   ok1(_tcscmp(params[0], _T("foo")) == 0);
   ok1(_tcscmp(params[1], _T("bar")) == 0);
   ok1(_tcscmp(params[2], _T("")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("foo,bar,,"), buffer, params, 64);
+  n = WayPointReaderBase::ExtractParameters(_T("foo,bar,,"), buffer, params, 64);
   ok1(n == 4);
   ok1(_tcscmp(params[0], _T("foo")) == 0);
   ok1(_tcscmp(params[1], _T("bar")) == 0);
@@ -72,7 +72,7 @@ TestExtractParameters()
 
   // with qoutes but no quote handling
 
-  n = WayPointReaderBase::extractParameters(_T("\"foo,comma\",\"bar\""),
+  n = WayPointReaderBase::ExtractParameters(_T("\"foo,comma\",\"bar\""),
                                       buffer, params, 64);
   ok1(n == 3);
   ok1(_tcscmp(params[0], _T("\"foo")) == 0);
@@ -82,22 +82,22 @@ TestExtractParameters()
 
   // quote handling
 
-  n = WayPointReaderBase::extractParameters(_T("\"\""),
+  n = WayPointReaderBase::ExtractParameters(_T("\"\""),
                                       buffer, params, 64, false, _T('"'));
   ok1(n == 1);
   ok1(_tcscmp(params[0], _T("")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("\"\"\""),
+  n = WayPointReaderBase::ExtractParameters(_T("\"\"\""),
                                       buffer, params, 64, false, _T('"'));
   ok1(n == 1);
   ok1(_tcscmp(params[0], _T("\"")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("\"\"\"\""),
+  n = WayPointReaderBase::ExtractParameters(_T("\"\"\"\""),
                                       buffer, params, 64, false, _T('"'));
   ok1(n == 1);
   ok1(_tcscmp(params[0], _T("\"")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("\"foo,comma\",\"bar\""),
+  n = WayPointReaderBase::ExtractParameters(_T("\"foo,comma\",\"bar\""),
                                       buffer, params, 64, false, _T('"'));
   ok1(n == 2);
   ok1(_tcscmp(params[0], _T("foo,comma")) == 0);
@@ -106,26 +106,26 @@ TestExtractParameters()
 
   // no quotes, whitespace removal
 
-  n = WayPointReaderBase::extractParameters(_T("foo bar"),
+  n = WayPointReaderBase::ExtractParameters(_T("foo bar"),
                                       buffer, params, 64, true);
   ok1(n == 1);
   ok1(_tcscmp(params[0], _T("foo bar")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("foo , bar, baz"),
+  n = WayPointReaderBase::ExtractParameters(_T("foo , bar, baz"),
                                       buffer, params, 64, true);
   ok1(n == 3);
   ok1(_tcscmp(params[0], _T("foo")) == 0);
   ok1(_tcscmp(params[1], _T("bar")) == 0);
   ok1(_tcscmp(params[2], _T("baz")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T(" foo  ,  bar  , baz "),
+  n = WayPointReaderBase::ExtractParameters(_T(" foo  ,  bar  , baz "),
                                       buffer, params, 64, true);
   ok1(n == 3);
   ok1(_tcscmp(params[0], _T("foo")) == 0);
   ok1(_tcscmp(params[1], _T("bar")) == 0);
   ok1(_tcscmp(params[2], _T("baz")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T(" foo\"  , \" bar \"  , \"baz "),
+  n = WayPointReaderBase::ExtractParameters(_T(" foo\"  , \" bar \"  , \"baz "),
                                       buffer, params, 64, true);
   ok1(n == 3);
   ok1(_tcscmp(params[0], _T("foo\"")) == 0);
@@ -134,14 +134,14 @@ TestExtractParameters()
 
   // quote handling, whitespace removal
 
-  n = WayPointReaderBase::extractParameters(_T("\"foo \" , \" bar\", \" baz\""),
+  n = WayPointReaderBase::ExtractParameters(_T("\"foo \" , \" bar\", \" baz\""),
                                       buffer, params, 64, true, _T('"'));
   ok1(n == 3);
   ok1(_tcscmp(params[0], _T("foo ")) == 0);
   ok1(_tcscmp(params[1], _T(" bar")) == 0);
   ok1(_tcscmp(params[2], _T(" baz")) == 0);
 
-  n = WayPointReaderBase::extractParameters(
+  n = WayPointReaderBase::ExtractParameters(
                             _T(" \" foo  \"  ,  \"  bar  \"  , \" baz \" "),
                             buffer, params, 64, true, _T('"'));
   ok1(n == 3);
@@ -149,7 +149,7 @@ TestExtractParameters()
   ok1(_tcscmp(params[1], _T("  bar  ")) == 0);
   ok1(_tcscmp(params[2], _T(" baz ")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("\"foo\",\"\",\"bar\""),
+  n = WayPointReaderBase::ExtractParameters(_T("\"foo\",\"\",\"bar\""),
                                       buffer, params, 64, true, _T('"'));
   ok1(n == 3);
   ok1(_tcscmp(params[0], _T("foo")) == 0);
@@ -157,18 +157,18 @@ TestExtractParameters()
   ok1(_tcscmp(params[2], _T("bar")) == 0);
 
   // missing end quote
-  n = WayPointReaderBase::extractParameters(_T("\"foo, bar"),
+  n = WayPointReaderBase::ExtractParameters(_T("\"foo, bar"),
                                       buffer, params, 64, true, _T('"'));
   ok1(n == 1);
   ok1(_tcscmp(params[0], _T("foo, bar")) == 0);
 
   // embedded quotes and commas
-  n = WayPointReaderBase::extractParameters(_T("\"foo, \"bar\"\""),
+  n = WayPointReaderBase::ExtractParameters(_T("\"foo, \"bar\"\""),
                                       buffer, params, 64, true, _T('"'));
   ok1(n == 1);
   ok1(_tcscmp(params[0], _T("foo, \"bar\"")) == 0);
 
-  n = WayPointReaderBase::extractParameters(_T("\"foo, \"\"bar\"\"\""),
+  n = WayPointReaderBase::ExtractParameters(_T("\"foo, \"\"bar\"\"\""),
                                       buffer, params, 64, true, _T('"'));
   ok1(n == 1);
   ok1(_tcscmp(params[0], _T("foo, \"bar\"")) == 0);

@@ -145,7 +145,7 @@ ParseString(const TCHAR *src, tstring &dest, unsigned len = 0)
 }
 
 bool
-WaypointReaderFS::parseLine(const TCHAR* line, const unsigned linenum,
+WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
                               Waypoints &way_points)
 {
   //$FormatGEO
@@ -193,7 +193,7 @@ WaypointReaderFS::parseLine(const TCHAR* line, const unsigned linenum,
     return false;
 
   if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.Altitude))
-    check_altitude(new_waypoint);
+    CheckAltitude(new_waypoint);
 
   // Description (Characters 35-44)
   if (len > (is_utm ? 38 : 47))

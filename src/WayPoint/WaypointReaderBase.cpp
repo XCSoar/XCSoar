@@ -55,7 +55,7 @@ static bool is_closing_quote_char(TCHAR const *s) {
 }
 
 size_t
-WayPointReaderBase::extractParameters(const TCHAR *src, TCHAR *dst,
+WayPointReaderBase::ExtractParameters(const TCHAR *src, TCHAR *dst,
                                 const TCHAR **arr, size_t sz,
                                 const bool trim, const TCHAR quote_char)
 {
@@ -139,7 +139,7 @@ WayPointReaderBase::extractParameters(const TCHAR *src, TCHAR *dst,
 }
 
 void
-WayPointReaderBase::check_altitude(Waypoint &new_waypoint)
+WayPointReaderBase::CheckAltitude(Waypoint &new_waypoint)
 {
   if (terrain == NULL)
     return;
@@ -163,7 +163,7 @@ WayPointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
   TCHAR *line;
   for (unsigned i = 0; (line = reader.read()) != NULL; i++) {
     // and parse them
-    parseLine(line, i, way_points);
+    ParseLine(line, i, way_points);
 
     if ((i & 0x3f) == 0) {
       unsigned status = reader.tell() * 100 / filesize;

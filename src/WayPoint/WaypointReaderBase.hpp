@@ -62,7 +62,7 @@ public:
   }
 
 protected:
-  void check_altitude(Waypoint &new_waypoint);
+  void CheckAltitude(Waypoint &new_waypoint);
 
   /**
    * Parse a file line
@@ -73,7 +73,7 @@ protected:
    * @return True if the line was parsed correctly or ignored, False if
    * parsing error occured
    */
-  virtual bool parseLine(const TCHAR* line, unsigned linenum,
+  virtual bool ParseLine(const TCHAR* line, unsigned linenum,
                          Waypoints &way_points) = 0;
 
 public:
@@ -93,7 +93,7 @@ public:
    * @return number of fields returned. Note: an empty src returns 1 for
    * for consistency (i.e. "" -> 1, "," -> 2)
    */
-  static size_t extractParameters(const TCHAR *src, TCHAR *dst,
+  static size_t ExtractParameters(const TCHAR *src, TCHAR *dst,
                                   const TCHAR **arr, size_t sz,
                                   const bool trim = false,
                                   const TCHAR quote_char = _T('\0'));

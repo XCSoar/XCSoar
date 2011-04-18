@@ -29,7 +29,7 @@ Copyright_License {
 #include <stdlib.h>
 
 bool
-WaypointReaderWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
+WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
                                 Waypoints &way_points)
 {
   TCHAR ctemp[255];
@@ -61,7 +61,7 @@ WaypointReaderWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   GeoPoint location;
 
   // Get fields
-  n_params = extractParameters(line, ctemp, params, max_params, true);
+  n_params = ExtractParameters(line, ctemp, params, max_params, true);
   if (n_params < 6)
     return false;
 
@@ -86,7 +86,7 @@ WaypointReaderWinPilot::parseLine(const TCHAR* line, const unsigned linenum,
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
   if (!parseAltitude(params[3], new_waypoint.Altitude))
-    check_altitude(new_waypoint);
+    CheckAltitude(new_waypoint);
 
   if (n_params > 6) {
     // Description (e.g. 119.750 Airport)

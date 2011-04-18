@@ -28,7 +28,7 @@ Copyright_License {
 #include <stdio.h>
 
 bool
-WaypointReaderZander::parseLine(const TCHAR* line, const unsigned linenum,
+WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
                               Waypoints &way_points)
 {
   // If (end-of-file or comment)
@@ -67,7 +67,7 @@ WaypointReaderZander::parseLine(const TCHAR* line, const unsigned linenum,
   // Altitude (Characters 30-34 // e.g. 1561 (in meters))
   /// @todo configurable behaviour
   if (!parseAltitude(line + 30, new_waypoint.Altitude))
-    check_altitude(new_waypoint);
+    CheckAltitude(new_waypoint);
 
   // Description (Characters 35-44)
   if (len > 35)

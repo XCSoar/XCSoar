@@ -210,7 +210,7 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
   while ((line = reader.read()) != NULL &&
          line[0] != _T('\"') && line[0] != _T(',')) {
     const size_t n_params = WayPointReaderBase::
-        extractParameters(line, params_buffer, params, max_params, true);
+        ExtractParameters(line, params_buffer, params, max_params, true);
 
     if (_tcscmp(params[0], _T("Options")) == 0) {
       // Options line found
@@ -445,7 +445,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   TCHAR waypoints_buffer[1024];
   const TCHAR *wps[30];
   size_t n_waypoints = WayPointReaderBase::
-      extractParameters(line, waypoints_buffer, wps, 30, true, _T('"')) - 3;
+      ExtractParameters(line, waypoints_buffer, wps, 30, true, _T('"')) - 3;
 
   SeeYouTaskInformation task_info;
   SeeYouTurnpointInformation turnpoint_infos[30];
