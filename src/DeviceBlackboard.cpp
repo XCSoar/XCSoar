@@ -344,6 +344,8 @@ DeviceBlackboard::Merge()
 
   computer.Fill(SetBasic(), SettingsComputer());
 
+  ProcessFLARM();
+
   if (last_location_available != Basic().LocationAvailable) {
     last_location_available = Basic().LocationAvailable;
     TriggerGPSUpdate();
@@ -361,8 +363,6 @@ void
 DeviceBlackboard::tick()
 {
   SetBasic().expire();
-
-  ProcessFLARM();
 
   // calculate fast data to complete aircraft state
 
