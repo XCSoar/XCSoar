@@ -81,6 +81,18 @@ public:
   }
 
   /**
+   * This function calculates the time difference of the two Validity objects
+   * @param other The second Validity object
+   * @return The time difference in seconds
+   */
+  fixed get_time_difference(const Validity &other) const {
+    assert(positive(last));
+    assert(positive(other.last));
+
+    return last - other.last;
+  }
+
+  /**
    * Was the value modified since the time the "other" object was
    * taken?
    */
