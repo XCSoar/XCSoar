@@ -64,13 +64,13 @@ SiteConfigPanel::Init(WndForm *_wf)
   InitFileField(*wf, _T("prpAdditionalAirspaceFile"),
                 szProfileAdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
   InitFileField(*wf, _T("prpWaypointFile"),
-                szProfileWayPointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
+                szProfileWayPointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
   InitFileField(*wf, _T("prpAdditionalWaypointFile"),
                 szProfileAdditionalWayPointFile,
-                _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
+                _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
   InitFileField(*wf, _T("prpWatchedWaypointFile"),
                 szProfileWatchedWayPointFile,
-                _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
+                _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
   InitFileField(*wf, _T("prpMapFile"),
                 szProfileMapFile, _T("*.xcm\0*.lkm\0"));
   InitFileField(*wf, _T("prpTerrainFile"),

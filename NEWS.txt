@@ -61,6 +61,7 @@ Version 6.1 - not yet released
   - terrain ramp auto-scaling disabled
 * data files
   - support for SeeYou .CUP task files in the task manager
+  - support for GPSDump/FS FormatGEO and FormatUTM waypoint files (.wpt)
   - wing area field is read from extended polar files if available
   - zander files: description field is used for additional airport detection
   - added frequency parsing for airspace files
