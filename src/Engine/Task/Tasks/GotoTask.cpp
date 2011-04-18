@@ -117,9 +117,6 @@ GotoTask::takeoff_autotask(const GeoPoint& location, const fixed terrain_alt)
   const Waypoint* wp = waypoints.lookup_location(location, fixed(3000));
   if (wp)
     return do_goto(*wp);
-  else {
-    do_goto(waypoints.generate_takeoff_point(location, terrain_alt));
-  }
 
-  return false;
+  return do_goto(waypoints.generate_takeoff_point(location, terrain_alt));
 }
