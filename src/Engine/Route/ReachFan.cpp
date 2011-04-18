@@ -405,7 +405,7 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
   arrival_height_reach = -1;
   arrival_height_direct = -1;
 
-  if (root.empty() || dest.altitude >= root.get_height())
+  if (root.empty())
     return true;
 
   const FlatGeoPoint d (task_proj.project(dest));
@@ -416,8 +416,9 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
   arrival_height_direct = root.direct_arrival(d, parms);
 
   // if can't reach even with no terrain, exit early
-  if (arrival_height_direct < dest.altitude) {
-    arrival_height_direct = -1;
+
+  if (std::min(root.get_height(), arrival_height_direct) < dest.altitude) {
+    arrival_height_reach = arrival_height_direct;
     return true;
   }
 
@@ -425,8 +426,6 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
 
   arrival_height_reach = dest.altitude-1;
   root.find_positive_arrival(d, parms, arrival_height_reach);
-  if (arrival_height_reach < dest.altitude)
-    arrival_height_reach = -1;
 
   return true;
 }
