@@ -113,7 +113,6 @@ extern const TCHAR szProfileAppGaugeVarioMc[];
 extern const TCHAR szProfileAppGaugeVarioBugs[];
 extern const TCHAR szProfileAppGaugeVarioBallast[];
 extern const TCHAR szProfileAppGaugeVarioGross[];
-extern const TCHAR szProfileNorthArrow[];
 extern const TCHAR szProfileAppStatusMessageAlignment[];
 extern const TCHAR szProfileAppTextInputStyle[];
 extern const TCHAR szProfileAppDialogTabStyle[];

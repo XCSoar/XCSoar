@@ -185,7 +185,6 @@ const TCHAR szProfileAppGaugeVarioMc[] = _T("AppGaugeVarioMc");
 const TCHAR szProfileAppGaugeVarioBugs[] = _T("AppGaugeVarioBugs");
 const TCHAR szProfileAppGaugeVarioBallast[] = _T("AppGaugeVarioBallast");
 const TCHAR szProfileAppGaugeVarioGross[] = _T("AppGaugeVarioGross");
-const TCHAR szProfileNorthArrow[] = _T("NorthArrow");
 const TCHAR szProfileAppStatusMessageAlignment[] = _T("AppStatusMessageAlignment");
 const TCHAR szProfileAppTextInputStyle[] = _T("AppTextInputStyle");
 const TCHAR szProfileAppDialogTabStyle[] = _T("AppDialogTabStyle");
