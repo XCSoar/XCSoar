@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WayPointFile.hpp"
+#include "WayPoint/WaypointReader.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "OS/PathName.hpp"
@@ -49,20 +49,17 @@ int main(int argc, char **argv)
 
   Waypoints way_points;
 
-  WayPointFile* parser = NULL;
   PathName path(argv[1]);
-  parser = WayPointFile::create(path, 0);
-  if (!parser) {
+  WaypointReader parser(path, 0);
+  if (parser.Error()) {
     fprintf(stderr, "WayPointParser::SetFile() has failed\n");
     return 1;
   }
 
-  if (!parser->Parse(way_points)) {
+  if (!parser.Parse(way_points)) {
     fprintf(stderr, "WayPointParser::Parse() has failed\n");
     return 1;
   }
-
-  delete parser;
 
   way_points.optimise();
   printf("Size %d\n", way_points.size());

@@ -259,6 +259,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ThermalLocator.cpp \
 	$(SRC)/ThermalBase.cpp \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
+	$(SRC)/WayPoint/WaypointReader.cpp \
 	$(SRC)/WayPoint/WayPointFile.cpp \
 	$(SRC)/WayPoint/WayPointFileFS.cpp \
 	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \

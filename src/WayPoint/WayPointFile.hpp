@@ -45,15 +45,6 @@ protected:
 
 public:
   /**
-   * Creates a file according to the extension
-   * @param filename The filename (will be converted to filepath later)
-   * @param filenum Index of file
-   * @return File type if extension is known to XCSoar
-   */
-  static WayPointFile* create(const TCHAR* filename,
-                              int filenum=0);
-
-  /**
    * Parses the waypoint file provided by SetFile() into the given waypoint list
    * @param way_points The waypoint list to fill
    * @param terrain RasterTerrain (for automatic waypoint height)

@@ -30,7 +30,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "WayPointFile.hpp"
+#include "WaypointReader.hpp"
 #include "Language.hpp"
 #include "ProgressGlue.hpp"
 #include "Components.hpp"
@@ -148,28 +148,25 @@ bool
 WayPointGlue::LoadWaypointFile(int num, Waypoints &way_points,
                                const RasterTerrain *terrain)
 {
-  WayPointFile *wpfile = NULL;
-
   // Get waypoint filename
   TCHAR szFile[MAX_PATH];
-  if (GetPath(num, szFile))
-    wpfile = WayPointFile::create(szFile, num);
+  if (!GetPath(num, szFile))
+    return false;
+
+  WaypointReader reader(szFile, num);
 
   // If waypoint file exists
-  if (wpfile != NULL) {
+  if (!reader.Error()) {
     // parse the file
-    wpfile->SetTerrain(terrain);
-    if (wpfile->Parse(way_points)) {
-      delete wpfile;
+    reader.SetTerrain(terrain);
+    if (reader.Parse(way_points))
       return true;
-    }
 
     LogStartUp(_T("Parse error in waypoint file %d"), num);
   } else {
     LogStartUp(_T("No waypoint file %d"), num);
   }
 
-  delete wpfile;
   return false;
 }
 
@@ -177,7 +174,6 @@ bool
 WayPointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
                                    Waypoints &way_points, const RasterTerrain *terrain)
 {
-  WayPointFile *wpfile = NULL;
   TCHAR szFile[MAX_PATH];
 
   // Get the map filename
@@ -185,33 +181,30 @@ WayPointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
   _tcscat(szFile, _T("/"));
   _tcscat(szFile, _T("waypoints.xcw"));
 
-  wpfile = WayPointFile::create(szFile, num);
+  WaypointReader reader(szFile, num);
 
   // Test if waypoints.xcw can be loaded, otherwise try waypoints.cup
-  if (wpfile == NULL) {
+  if (reader.Error()) {
     // Get the map filename
     Profile::GetPath(key, szFile);
     _tcscat(szFile, _T("/"));
     _tcscat(szFile, _T("waypoints.cup"));
 
-    wpfile = WayPointFile::create(szFile, num);
+    reader.Open(szFile, num);
   }
 
   // If waypoint file inside map file exists
-  if (wpfile != NULL) {
+  if (!reader.Error()) {
     // parse the file
-    wpfile->SetTerrain(terrain);
-    if (wpfile->Parse(way_points, true)) {
-      delete wpfile;
+    reader.SetTerrain(terrain);
+    if (reader.Parse(way_points, true))
       return true;
-    }
 
     LogStartUp(_T("Parse error in map waypoint file"));
   } else {
     LogStartUp(_T("No waypoint file in the map file"));
   }
 
-  delete wpfile;
   return false;
 }
 

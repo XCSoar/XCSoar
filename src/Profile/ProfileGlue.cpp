@@ -30,7 +30,6 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "Screen/Fonts.hpp"
 #include "Dialogs/XML.hpp"
-#include "WayPointFile.hpp"
 #include "Interface.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"

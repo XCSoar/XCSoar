@@ -20,6 +20,7 @@
 }
 */
 
+#include "WayPoint/WaypointReader.hpp"
 #include "WayPoint/WayPointFile.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Terrain/RasterMap.hpp"
@@ -178,18 +179,16 @@ typedef std::vector<Waypoint> wp_vector;
 static bool
 TestWayPointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
 {
-  WayPointFile *f = WayPointFile::create(filename, 0);
-  if (!ok1(f != NULL)) {
+  WaypointReader f(filename, 0);
+  if (!ok1(!f.Error())) {
     skip(3, 0, "opening waypoint file failed");
     return false;
   }
 
-  if(!ok1(f->Parse(way_points))) {
-    delete f;
+  if(!ok1(f.Parse(way_points))) {
     skip(2, 0, "parsing waypoint file failed");
+    return false;
   }
-
-  delete f;
 
   way_points.optimise();
 
