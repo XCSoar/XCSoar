@@ -443,8 +443,7 @@ dlgAnalysisShowModal(SingleWindow &parent, int _page)
   wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ? _T("IDR_XML_ANALYSIS_L") :
                                       _T("IDR_XML_ANALYSIS"));
-  if (!wf)
-    return;
+  assert(wf != NULL);
 
   wf->SetKeyDownNotify(FormKeyDown);
 
