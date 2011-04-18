@@ -1555,12 +1555,12 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Geo/UTM.cpp \
-	$(SRC)/WayPointGlue.cpp \
-	$(SRC)/WayPointFile.cpp \
+	$(SRC)/WayPoint/WayPointGlue.cpp \
+	$(SRC)/WayPoint/WayPointFile.cpp \
 	$(SRC)/WayPoint/WayPointFileFS.cpp \
-	$(SRC)/WayPointFileWinPilot.cpp \
-	$(SRC)/WayPointFileSeeYou.cpp \
-	$(SRC)/WayPointFileZander.cpp \
+	$(SRC)/WayPoint/WayPointFileWinPilot.cpp \
+	$(SRC)/WayPoint/WayPointFileSeeYou.cpp \
+	$(SRC)/WayPoint/WayPointFileZander.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
