@@ -33,19 +33,22 @@ enum { ComboPopupITEMMAX = 100 };
 void
 DataField::Special(void)
 {
-  (mOnDataAccess)(this, daSpecial);
+  if (mOnDataAccess != NULL)
+    mOnDataAccess(this, daSpecial);
 }
 
 void
 DataField::Inc(void)
 {
-  (mOnDataAccess)(this, daInc);
+  if (mOnDataAccess != NULL)
+    mOnDataAccess(this, daInc);
 }
 
 void
 DataField::Dec(void)
 {
-  (mOnDataAccess)(this, daDec);
+  if (mOnDataAccess != NULL)
+    mOnDataAccess(this, daDec);
 }
 
 int
@@ -78,16 +81,9 @@ DataField::SetAsString(const TCHAR *Value)
   (void)Value;
 }
 
-static void
-__Dummy(DataField *Sender, DataField::DataAccessKind_t Mode)
-{
-  (void)Sender;
-  (void)Mode;
-}
-
 DataField::DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                      DataAccessCallback_t OnDataAccess)
-  :mOnDataAccess(OnDataAccess != NULL ? OnDataAccess : __Dummy),
+  :mOnDataAccess(OnDataAccess),
    mItemHelp(false), mUsageCounter(0), mDisableSpeedup(false), mDetachGUI(false)
 {
   _tcscpy(mEditFormat, EditFormat);
