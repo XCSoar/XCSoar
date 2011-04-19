@@ -31,6 +31,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Units/Units.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -173,28 +174,21 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 //#include "Audio/VarioSound.h"
 
 static bool
-PDAAV(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+PDAAV(NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 {
-  (void)GPS_INFO;
-
-  unsigned short beepfrequency = line.read(0);
-  unsigned short soundfrequency = line.read(0);
-  unsigned char soundtype = line.read(0);
+  gcc_unused unsigned short beepfrequency = line.read(0);
+  gcc_unused unsigned short soundfrequency = line.read(0);
+  gcc_unused unsigned char soundtype = line.read(0);
 
   // Temporarily commented out - function as yet undefined
   //  audio_setconfig(beepfrequency, soundfrequency, soundtype);
-  (void)beepfrequency;
-  (void)soundfrequency;
-  (void)soundtype;
 
   return true;
 }
 
 static bool
-PDVSC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+PDVSC(NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 {
-  (void)GPS_INFO;
-
   char responsetype[10];
   line.read(responsetype, 10);
 
@@ -292,10 +286,8 @@ PDVVT(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
 // PDTSM,duration_ms,"free text"
 static bool
-PDTSM(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+PDTSM(NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 {
-  (void)GPS_INFO;
-
   /*
   int duration = (int)strtol(String, NULL, 10);
   */
@@ -390,8 +382,6 @@ bool
 VegaDevice::PutQNH(const AtmosphericPressure& pres,
                    const DERIVED_INFO &calculated)
 {
-  (void)pres;
-
   qnh = pres;
 
   VarioWriteSettings(calculated);

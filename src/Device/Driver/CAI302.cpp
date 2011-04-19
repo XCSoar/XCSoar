@@ -35,6 +35,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 #include "Math/FastMath.h"
 #include "Operation.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 #include <stdlib.h>
@@ -151,10 +152,8 @@ $PCAIB,<1>,<2>,<CR><LF>
 <2> Destination Navpoint attribute word, format XXXXX (leading zeros will be transmitted)
 */
 static bool
-cai_PCAIB(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+cai_PCAIB(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 {
-  (void)line;
-  (void)GPS_INFO;
   return true;
 }
 
@@ -243,7 +242,7 @@ CAI302Device::PutBallast(fixed Ballast)
 }
 
 bool
-CAI302Device::Open(OperationEnvironment &env)
+CAI302Device::Open(gcc_unused OperationEnvironment &env)
 {
   port->Write('\x03');
   port->Write("LOG 0\r");
@@ -332,7 +331,7 @@ ReadBlock(Port &port, void *dest, size_t max_length, size_t length)
 
 static bool
 DeclareInner(Port *port, const Declaration *decl,
-             OperationEnvironment &env)
+             gcc_unused OperationEnvironment &env)
 {
   port->SetRxTimeout(500);
 

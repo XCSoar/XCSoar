@@ -29,6 +29,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 #include "Operation.hpp"
+#include "Compiler.h"
 
 #include <stdlib.h>
 
@@ -203,7 +204,7 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 static bool
-LXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+LXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 {
   /*
    * $LXWP1,
@@ -213,7 +214,6 @@ LXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
    * hardware version,
    * license string
    */
-  (void)GPS_INFO;
   return true;
 }
 
@@ -473,7 +473,7 @@ LXDevice::WriteTask()
 }
 
 void
-LXDevice::LoadContestClass(const Declaration *decl)
+LXDevice::LoadContestClass(gcc_unused const Declaration *decl)
 {
   copy_space_padded(lxDevice_ContestClass.contest_class, _T(""),
                     sizeof(lxDevice_ContestClass.contest_class));
@@ -488,7 +488,7 @@ LXDevice::WriteContestClass()
 }
 
 bool
-LXDevice::DeclareInner(const Declaration *decl, OperationEnvironment &env)
+LXDevice::DeclareInner(const Declaration *decl, gcc_unused OperationEnvironment &env)
 {
   if (!port->SetRxTimeout(2000))
     return false;

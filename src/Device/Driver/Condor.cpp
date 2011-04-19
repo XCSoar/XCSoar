@@ -27,6 +27,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "Compiler.h"
 
 #include <stdlib.h>
 
@@ -101,16 +102,14 @@ cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 static bool
-cLXWP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+cLXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 {
-  (void)GPS_INFO;
   return true;
 }
 
 static bool
-cLXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+cLXWP2(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 {
-  (void)GPS_INFO;
   return true;
 }
 
@@ -134,7 +133,7 @@ CondorDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 }
 
 static Device *
-CondorCreateOnPort(Port *com_port)
+CondorCreateOnPort(gcc_unused Port *com_port)
 {
   return new CondorDevice();
 }
