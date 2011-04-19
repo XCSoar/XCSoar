@@ -597,14 +597,14 @@ mode=Display2
 type=key
 data=8
 event=TerrainTopography terrain toggle
-label=Terrain $(TerrainToggleActionName)
+label=Terrain\n$(TerrainToggleActionName)
 location=7
 
 mode=Display2
 type=key
 data=9
 event=TerrainTopography topography toggle
-label=Topography $(TopographyToggleActionName)
+label=Topo.\n$(TopographyToggleActionName)
 location=8
 
 mode=Display2
