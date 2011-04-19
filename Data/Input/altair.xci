@@ -313,8 +313,9 @@ location=8
 mode=Nav1
 type=key
 data=0
-event=FlarmTraffic
-label=FLARM Radar$(CheckFLARM)
+event=Setup Alternates
+event=Mode default
+label=Alternates$(CheckWaypointFile)
 location=9
 
 # -------------
@@ -355,9 +356,8 @@ location=7
 mode=Nav2
 type=key
 data=9
-event=Setup Alternates
-event=Mode default
-label=Alternates$(CheckWaypointFile)
+event=FlarmTraffic
+label=FLARM Radar$(CheckFLARM)
 location=8
 
 mode=Nav2
