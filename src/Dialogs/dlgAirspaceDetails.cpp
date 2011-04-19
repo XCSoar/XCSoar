@@ -82,59 +82,50 @@ SetValues(void)
   WndProperty* wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpName"));
-  if (wp) {
-    wp->SetText(airspace->get_name_text(true).c_str());
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  wp->SetText(airspace->get_name_text(true).c_str());
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpRadio"));
-  if (wp) {
-    wp->SetText(airspace->get_radio_text().c_str());
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  wp->SetText(airspace->get_radio_text().c_str());
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpType"));
-  if (wp) {
-    wp->SetText(airspace->get_type_text());
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  wp->SetText(airspace->get_type_text());
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpTop"));
-  if (wp) {
-    wp->SetText(airspace->get_top_text().c_str());
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  wp->SetText(airspace->get_top_text().c_str());
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpBase"));
-  if (wp) {
-    wp->SetText(airspace->get_base_text().c_str());
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  wp->SetText(airspace->get_base_text().c_str());
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
-  if (wp) {
-    const GeoPoint &ac_loc = XCSoarInterface::Basic().Location;
-    const GeoPoint closest_loc = airspace->closest_point(ac_loc);
-    const GeoVector vec(ac_loc, closest_loc);
-    TCHAR buf[80];
-    _stprintf(buf, _T("%d%s"),
-              (int)Units::ToUserDistance(vec.Distance),
-              Units::GetDistanceName());
-    wp->SetText(buf);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  const GeoPoint &ac_loc = XCSoarInterface::Basic().Location;
+  const GeoPoint closest_loc = airspace->closest_point(ac_loc);
+  const GeoVector vec(ac_loc, closest_loc);
+  TCHAR buf[80];
+  _stprintf(buf, _T("%d%s"), (int)Units::ToUserDistance(vec.Distance),
+            Units::GetDistanceName());
+  wp->SetText(buf);
+  wp->RefreshDisplay();
 }
-
 
 void
 dlgAirspaceDetails(const AbstractAirspace& the_airspace)
 {
   airspace = &the_airspace;
 
-  wf = LoadDialog(CallBackTable,
-                      XCSoarInterface::main_window,
-                      _T("IDR_XML_AIRSPACEDETAILS"));
-  if (!wf) return;
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  _T("IDR_XML_AIRSPACEDETAILS"));
+  assert(wf != NULL);
 
   SetValues();
 
