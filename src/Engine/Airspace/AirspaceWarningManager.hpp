@@ -210,6 +210,13 @@ public:
   void acknowledge_day(const AbstractAirspace& airspace,
                        const bool set=true);
 
+  /**
+   * Returns whether the given airspace is acknowledged for the whole day
+   *
+   * @param airspace The airspace subject
+   */
+  bool get_ack_day(const AbstractAirspace& airspace);
+
 private:
   const Airspaces& m_airspaces;
 

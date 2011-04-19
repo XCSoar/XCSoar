@@ -44,6 +44,7 @@ public:
   // warning manager
   void visit_warnings(AirspaceWarningVisitor& visitor) const;
 
+  bool get_ack_day(const AbstractAirspace& airspace);
   void acknowledge_day(const AbstractAirspace& airspace,
                        const bool set=true);
   void acknowledge_warning(const AbstractAirspace& airspace,

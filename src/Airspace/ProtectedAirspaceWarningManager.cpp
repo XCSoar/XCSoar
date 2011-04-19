@@ -72,6 +72,13 @@ ProtectedAirspaceWarningManager::get_warning_index(const AbstractAirspace& airsp
   return lease->get_warning_index(airspace);
 }
 
+bool
+ProtectedAirspaceWarningManager::get_ack_day(const AbstractAirspace& airspace)
+{
+  ExclusiveLease lease(*this);
+  return lease->get_ack_day(airspace);
+}
+
 void
 ProtectedAirspaceWarningManager::acknowledge_day(const AbstractAirspace& airspace,
                                                  const bool set)

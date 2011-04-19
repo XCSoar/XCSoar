@@ -442,6 +442,13 @@ AirspaceWarningManager::acknowledge_day(const AbstractAirspace& airspace,
   get_warning(airspace).acknowledge_day(set);
 }
 
+bool
+AirspaceWarningManager::get_ack_day(const AbstractAirspace& airspace)
+{
+  AirspaceWarning* warning = get_warning_ptr(airspace);
+  return (warning != NULL ? warning->get_ack_day() : false);
+}
+
 
 void 
 AirspaceWarningManager::acknowledge_all()
