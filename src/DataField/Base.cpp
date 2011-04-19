@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DataField/Base.hpp"
+#include "Compiler.h"
 
 #include <math.h>
 #include <algorithm>
@@ -70,15 +71,13 @@ DataField::GetAsDisplayString() const
 }
 
 void
-DataField::SetAsInteger(int Value)
+DataField::SetAsInteger(gcc_unused int Value)
 {
-  (void)Value;
 }
 
 void
-DataField::SetAsString(const TCHAR *Value)
+DataField::SetAsString(gcc_unused const TCHAR *Value)
 {
-  (void)Value;
 }
 
 DataField::DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
