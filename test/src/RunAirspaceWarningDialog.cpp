@@ -57,6 +57,8 @@ static AirspaceWarningManager airspace_warning(airspace_database,
 
 ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
+void dlgAirspaceDetails(const AbstractAirspace& the_airspace) {}
+
 static void
 LoadFiles()
 {

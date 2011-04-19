@@ -64,7 +64,12 @@ AirspaceWarningCursorCallback(unsigned i)
 static void
 OnAirspaceListEnter(unsigned i)
 {
-  FocusAirspace = CursorAirspace;
+  if (!has_pointer())
+    /* on platforms without a pointing device (e.g. ALTAIR), allow
+       "focusing" an airspace by pressing enter */
+    FocusAirspace = CursorAirspace;
+  else
+    dlgAirspaceDetails(*CursorAirspace);
 }
 
 static const AbstractAirspace *
@@ -463,11 +468,7 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
   assert(wAirspaceList != NULL);
   wAirspaceList->SetPaintItemCallback(OnAirspaceListItemPaint);
   wAirspaceList->SetCursorCallback(AirspaceWarningCursorCallback);
-
-  if (!has_pointer())
-    /* on platforms without a pointing device (e.g. ALTAIR), allow
-       "focusing" an airspace by pressing enter */
-    wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
+  wAirspaceList->SetActivateCallback(OnAirspaceListEnter);
 
   AutoClose = auto_close;
   update_list();
