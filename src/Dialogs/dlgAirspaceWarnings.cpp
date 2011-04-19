@@ -31,6 +31,8 @@ Copyright_License {
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
 
+#include "Compiler.h"
+
 #include <assert.h>
 #include <stdlib.h>
 #include <stdio.h>
@@ -62,7 +64,7 @@ AirspaceWarningCursorCallback(unsigned i)
 }
 
 static void
-OnAirspaceListEnter(unsigned i)
+OnAirspaceListEnter(gcc_unused unsigned i)
 {
   if (!has_pointer())
     /* on platforms without a pointing device (e.g. ALTAIR), allow
@@ -121,9 +123,8 @@ Ack()
 }
 
 static void
-OnAckClicked(WndButton &Sender)
+OnAckClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   Ack();
 }
 
@@ -140,9 +141,8 @@ Ack1()
 }
 
 static void
-OnAck1Clicked(WndButton &Sender)
+OnAck1Clicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   Ack1();
 }
 
@@ -159,9 +159,8 @@ Ack2()
 }
 
 static void
-OnAck2Clicked(WndButton &Sender)
+OnAck2Clicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   Ack2();
 }
 
@@ -179,21 +178,19 @@ Enable()
 }
 
 static void
-OnEnableClicked(WndButton &Sender)
+OnEnableClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   Enable();
 }
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   Hide();
 }
 
 static bool
-OnKeyDown(WndForm &Sender, unsigned key_code)
+OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code){
     case VK_ESCAPE:
@@ -226,7 +223,6 @@ OnKeyDown(WndForm &Sender, unsigned key_code)
     return false;
   }
 }
-
 
 static void
 OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
@@ -417,7 +413,7 @@ update_list()
 }
 
 static void
-OnTimer(WndForm &Sender)
+OnTimer(gcc_unused WndForm &Sender)
 {
   update_list();
 }
