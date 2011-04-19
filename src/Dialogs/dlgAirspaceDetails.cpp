@@ -132,5 +132,4 @@ dlgAirspaceDetails(const AbstractAirspace& the_airspace)
   wf->ShowModal();
 
   delete wf;
-  wf = NULL;
 }
