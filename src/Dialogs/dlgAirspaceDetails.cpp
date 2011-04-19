@@ -49,10 +49,9 @@ OnAcknowledgeClicked(gcc_unused WndButton &Sender)
   if (airspace_warnings == NULL)
     return;
 
-  int answer;
-  answer = MessageBoxX(airspace->get_name_text(true).c_str(), 
-                       _("Acknowledge for day?"),
-                       MB_YESNOCANCEL | MB_ICONQUESTION);
+  int answer = MessageBoxX(airspace->get_name_text(true).c_str(),
+                           _("Acknowledge for day?"),
+                           MB_YESNOCANCEL | MB_ICONQUESTION);
 
   if (answer == IDYES) {
     airspace_warnings->acknowledge_day(*airspace, true);
