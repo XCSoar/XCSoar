@@ -33,6 +33,8 @@ Copyright_License {
 #include "Components.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
+#include "Compiler.h"
+
 #include <assert.h>
 #include <stdio.h>
 
@@ -40,10 +42,8 @@ static const AbstractAirspace* airspace;
 static WndForm *wf = NULL;
 
 static void
-OnAcknowledgeClicked(WndButton &Sender)
+OnAcknowledgeClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
   assert(airspace);
 
   if (airspace_warnings == NULL)
@@ -64,9 +64,8 @@ OnAcknowledgeClicked(WndButton &Sender)
 }
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
