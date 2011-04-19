@@ -208,7 +208,7 @@ GetWayPoint(const Waypoint org_wp, const Waypoints &way_points)
   }
   if(!ok1(wp->Location.distance(org_wp.Location) <= fixed(1000)))
     printf("%f %f\n", (double)wp->Location.Latitude.value_degrees(), (double)wp->Location.Longitude.value_degrees());
-  ok1(equals(wp->Altitude, org_wp.Altitude));
+  ok1(fabs(wp->Altitude - org_wp.Altitude) < fixed_half);
 
   return wp;
 }
