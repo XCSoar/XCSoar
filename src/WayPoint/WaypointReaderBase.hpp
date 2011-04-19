@@ -67,7 +67,7 @@ public:
   }
 
 protected:
-  void CheckAltitude(Waypoint &new_waypoint);
+  void CheckAltitude(Waypoint &new_waypoint) const;
 
   /**
    * Parse a file line

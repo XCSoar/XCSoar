@@ -139,7 +139,7 @@ WayPointReaderBase::ExtractParameters(const TCHAR *src, TCHAR *dst,
 }
 
 void
-WayPointReaderBase::CheckAltitude(Waypoint &new_waypoint)
+WayPointReaderBase::CheckAltitude(Waypoint &new_waypoint) const
 {
   if (terrain == NULL)
     return;
