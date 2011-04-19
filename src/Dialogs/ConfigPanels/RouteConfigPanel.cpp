@@ -70,8 +70,16 @@ RouteConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
                    settings_computer.route_planner.use_ceiling);
 
-  LoadFormProperty(*wf, _T("prpTurningReach"),
-                   settings_computer.route_planner.turning_reach);
+  wp = (WndProperty*)wf->FindByName(_T("prpTurningReach"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("Off"));
+    dfe->addEnumText(_("Straight"));
+    dfe->addEnumText(_("Turning"));
+    dfe->Set(settings_computer.route_planner.reach_calc_mode);
+    wp->RefreshDisplay();
+  }
 
   wp = (WndProperty*)wf->FindByName(_T("prpReachPolarMode"));
   if (wp) {
@@ -127,8 +135,17 @@ RouteConfigPanel::Save()
                               szProfileRoutePlannerUseCeiling,
                               settings_computer.route_planner.use_ceiling);
 
-  changed |= SaveFormProperty(*wf, _T("prpTurningReach"),
-                              szProfileTurningReach,
-                              settings_computer.route_planner.turning_reach);
+  wp = (WndProperty*)wf->FindByName(_T("prpTurningReach"));
+  if (wp) {
+    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
+    if ((int)settings_computer.route_planner.reach_calc_mode != df.GetAsInteger()) {
+      settings_computer.route_planner.reach_calc_mode =
+        (RoutePlannerConfig::ReachMode)df.GetAsInteger();
+      Profile::Set(szProfileTurningReach,
+                   (unsigned)settings_computer.route_planner.reach_calc_mode);
+      changed = true;
+    }
+  }
+
   return changed;
 }

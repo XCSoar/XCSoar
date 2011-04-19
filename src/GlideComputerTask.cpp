@@ -159,7 +159,7 @@ GlideComputerTask::TerrainWarning()
 void
 GlideComputerTask::Reach()
 {
-  const bool do_solve = (SettingsComputer().FinalGlideTerrain != SETTINGS_COMPUTER::FGT_OFF &&
+  const bool do_solve = (SettingsComputer().route_planner.reach_enabled() &&
                          terrain != NULL);
 
   const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());

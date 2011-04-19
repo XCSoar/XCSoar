@@ -423,8 +423,8 @@ Profile::Use()
   Get(szProfileRoutePlannerUseCeiling,
       settings_computer.route_planner.use_ceiling);
 
-  Get(szProfileTurningReach,
-      settings_computer.route_planner.turning_reach);
+  GetEnum(szProfileTurningReach,
+          settings_computer.route_planner.reach_calc_mode);
 
   GetEnum(szProfileReachPolarMode,
           settings_computer.route_planner.reach_polar_mode);

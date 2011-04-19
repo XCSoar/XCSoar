@@ -413,7 +413,7 @@ public:
    * @return True if allow turns, otherwise straight
    */
   bool turning_reach() const {
-    return config.turning_reach;
+    return config.reach_calc_mode == RoutePlannerConfig::rmTurning;
   }
 
   /**
