@@ -415,8 +415,9 @@ location=8
 mode=Display1
 type=key
 data=0
-event=ScreenModes cycle
-label=$(NextPageName)
+event=Pan show
+event=Pan supertoggle
+label=Pan\nOn
 location=9
 
 # -------------
@@ -464,9 +465,8 @@ location=8
 mode=Display2
 type=key
 data=0
-event=Pan show
-event=Pan supertoggle
-label=Pan\nOn
+event=ScreenModes cycle
+label=$(NextPageName)
 location=9
 
 # -------------
