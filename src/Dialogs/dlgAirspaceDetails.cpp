@@ -49,15 +49,14 @@ OnAcknowledgeClicked(gcc_unused WndButton &Sender)
   if (airspace_warnings == NULL)
     return;
 
-  int answer = MessageBoxX(airspace->get_name_text(true).c_str(),
-                           _("Acknowledge for day?"),
-                           MB_YESNOCANCEL | MB_ICONQUESTION);
+  bool acked = airspace_warnings->get_ack_day(*airspace);
+
+  int answer = MessageBoxX(airspace->get_name_text(true).c_str(), acked ?
+                           _("Enable airspace again?") : _("Acknowledge for day?"),
+                           MB_YESNO | MB_ICONQUESTION);
 
   if (answer == IDYES) {
-    airspace_warnings->acknowledge_day(*airspace, true);
-    wf->SetModalResult(mrOK);
-  } else if (answer == IDNO) {
-    airspace_warnings->acknowledge_day(*airspace, false);
+    airspace_warnings->acknowledge_day(*airspace, !acked);
     wf->SetModalResult(mrOK);
   }
 }
@@ -73,6 +72,20 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
+
+static void
+UpdateAckButton()
+{
+  assert(airspace);
+
+  if (airspace_warnings == NULL)
+    return;
+
+  WndButton* ack = (WndButton*)wf->FindByName(_T("cmdAcknowledge"));
+  assert(ack != NULL);
+  ack->SetCaption(airspace_warnings->get_ack_day(*airspace) ?
+                  _("Enable") : _("Ack Day"));
+}
 
 static void
 SetValues(void)
@@ -128,6 +141,7 @@ dlgAirspaceDetails(const AbstractAirspace& the_airspace)
   assert(wf != NULL);
 
   SetValues();
+  UpdateAckButton();
 
   wf->ShowModal();
 
