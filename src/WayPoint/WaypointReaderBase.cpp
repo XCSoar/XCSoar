@@ -198,3 +198,27 @@ WayPointReaderBase::Parse(Waypoints &way_points, StatusCallback callback)
 
   return true;
 }
+
+bool
+WayPointReaderBase::VerifyFormat() const
+{
+  // If no file loaded yet -> return false
+  if (file[0] == 0)
+    return false;
+
+  if (!compressed) {
+    // Try to open waypoint file
+    FileLineReader reader(file);
+    if (reader.error())
+      return false;
+
+    return VerifyFormat(reader);
+  } else {
+    // convert path to ascii
+    ZipLineReader reader(file);
+    if (reader.error())
+      return false;
+
+    return VerifyFormat(reader);
+  }
+}

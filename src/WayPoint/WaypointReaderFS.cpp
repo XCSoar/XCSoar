@@ -25,6 +25,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Geo/UTM.hpp"
+#include "IO/LineReader.hpp"
 
 #include <stdio.h>
 
@@ -201,4 +202,15 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
 
   way_points.append(new_waypoint);
   return true;
+}
+
+bool
+WaypointReaderFS::VerifyFormat(TLineReader &reader) const
+{
+  TCHAR* line = reader.read();
+  if (line == NULL)
+    return false;
+
+  return (_tcsstr(line, _T("$FormatUTM")) == line ||
+          _tcsstr(line, _T("$FormatGEO")) == line);
 }

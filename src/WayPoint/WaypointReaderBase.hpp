@@ -57,6 +57,11 @@ public:
   void Parse(Waypoints &way_points, TLineReader &reader,
              StatusCallback callback = NULL);
 
+  bool VerifyFormat() const;
+  virtual bool VerifyFormat(TLineReader &reader) const {
+    return true;
+  }
+
   void SetTerrain(const RasterTerrain* _terrain) {
     terrain = _terrain;
   }

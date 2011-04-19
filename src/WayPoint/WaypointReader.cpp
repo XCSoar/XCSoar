@@ -85,8 +85,14 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
     file = new WaypointReaderZander(filename, the_filenum, compressed);
 
   // If FS waypoint file -> save type and return true
-  else if (MatchesExtension(filename, _T(".wpt")))
+  else if (MatchesExtension(filename, _T(".wpt"))) {
     file = new WaypointReaderFS(filename, the_filenum, compressed);
+    if (file->VerifyFormat())
+      return;
+
+    delete file;
+    file = NULL;
+  }
 }
 
 WaypointReader::WaypointReader()
