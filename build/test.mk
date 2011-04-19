@@ -495,6 +495,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/WayPoint/WaypointReaderZander.cpp \
 	$(SRC)/WayPoint/WaypointReaderFS.cpp \
+	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
 	$(SRC)/WayPoint/WaypointWriter.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
@@ -895,6 +896,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/WayPoint/WaypointReader.cpp \
 	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
 	$(SRC)/WayPoint/WaypointReaderFS.cpp \
+	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
 	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/WayPoint/WaypointReaderZander.cpp \
 	$(SRC)/WayPoint/WaypointWriter.cpp \
@@ -1213,6 +1215,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
 	$(SRC)/WayPoint/WaypointReader.cpp \
 	$(SRC)/WayPoint/WaypointReaderBase.cpp \
+	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
 	$(SRC)/WayPoint/WaypointReaderFS.cpp \
 	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
 	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
@@ -1559,6 +1562,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
 	$(SRC)/WayPoint/WaypointReaderBase.cpp \
 	$(SRC)/WayPoint/WaypointReader.cpp \
+	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
 	$(SRC)/WayPoint/WaypointReaderFS.cpp \
 	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
 	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \

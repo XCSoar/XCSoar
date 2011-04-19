@@ -1,0 +1,9 @@
+OziExplorer Waypoint File Version 1.0
+WGS 84
+Reserved 2
+Reserved 3
+   1,Aconcagua, -32.653333, -70.011667,40652.2883218,0, 1, 3, 0, 65535,Aconcagua                               , 0, 0, 0, 22841
+   2,Bergneustadt,  51.051950,   7.706117,40652.2883218,0, 1, 3, 0, 65535,Bergneustadt                            , 0, 0, 0, 1601
+   3,Golden Gate Bridge,  37.817500,-122.478333,40652.2883218,0, 1, 3, 0, 65535,Golden Gate Bridge                      , 0, 0, 0, 745
+   4,Red Square,  55.754167,  37.620000,40652.2883218,0, 1, 3, 0, 65535,Red Square                              , 0, 0, 0, 404
+   5,Sydney Opera, -33.856950, 151.215267,40652.2883218,0, 1, 3, 0, 65535,Sydney Opera                            , 0, 0, 0, 16

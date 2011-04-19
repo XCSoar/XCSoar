@@ -261,6 +261,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/WayPoint/WayPointGlue.cpp \
 	$(SRC)/WayPoint/WaypointReader.cpp \
 	$(SRC)/WayPoint/WaypointReaderBase.cpp \
+	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
 	$(SRC)/WayPoint/WaypointReaderFS.cpp \
 	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
 	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \

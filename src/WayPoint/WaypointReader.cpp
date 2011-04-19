@@ -27,6 +27,7 @@ Copyright_License {
 #include "WaypointReaderSeeYou.hpp"
 #include "WaypointReaderWinPilot.hpp"
 #include "WaypointReaderFS.hpp"
+#include "WaypointReaderOzi.hpp"
 
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -87,6 +88,11 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
   // If FS waypoint file -> save type and return true
   else if (MatchesExtension(filename, _T(".wpt"))) {
     file = new WaypointReaderFS(filename, the_filenum, compressed);
+    if (file->VerifyFormat())
+      return;
+
+    delete file;
+    file = new WaypointReaderOzi(filename, the_filenum, compressed);
     if (file->VerifyFormat())
       return;
 
