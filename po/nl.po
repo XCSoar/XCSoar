@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-12 09:33+0200\n"
-"PO-Revision-Date: 2011-04-05 08:09+0000\n"
-"Last-Translator: Quint Segers <Unknown>\n"
+"PO-Revision-Date: 2011-04-16 18:19+0000\n"
+"Last-Translator: Rob Hazes <Unknown>\n"
 "Language-Team: Dutch <nl@li.org>\n"
 "Language: nl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-07 08:38+0000\n"
-"X-Generator: Launchpad (build 12757)\n"
+"X-Launchpad-Export-Date: 2011-04-20 07:04+0000\n"
+"X-Generator: Launchpad (build 12847)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1394 src/Dialogs/dlgAnalysis.cpp:268
@@ -894,9 +894,9 @@ msgid ""
 msgstr "Overgebleven venstertijd. Kleurt rood wanneer verstreken."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AA max. distance "
-msgstr "AAT max afstand"
+msgstr "AAT max afstand "
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
@@ -2855,7 +2855,7 @@ msgstr "Infokader plakken"
 #: Data/Dialogs/dlgConfiguration.xml:370
 #: Data/Dialogs/dlgConfiguration_L.xml:371
 msgid "Invalid"
-msgstr ""
+msgstr "Ongeldig"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:225 src/Dialogs/dlgWaypointEdit.cpp:53
 #: Data/Dialogs/dlgAirspaceDetails.xml:8 Data/Dialogs/dlgAirspaceSelect.xml:6
@@ -2870,7 +2870,7 @@ msgstr "Naam"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:322
 msgid "Content"
-msgstr ""
+msgstr "Inhoud"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:346 src/Dialogs/dlgInfoBoxAccess.cpp:98
 #: Data/Dialogs/dlgAirspace.xml:4 Data/Dialogs/dlgAirspaceColours.xml:4
@@ -2908,7 +2908,7 @@ msgstr ""
 #: Data/Dialogs/dlgWaypointEdit_L.xml:4 Data/Dialogs/dlgWeather.xml:4
 #: Data/Dialogs/dlgWeather_L.xml:4 Data/Dialogs/dlgWindSettings.xml:21
 msgid "Close"
-msgstr "Sluit"
+msgstr "Sluiten"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:351
 msgid "Copy"
@@ -3578,9 +3578,8 @@ msgid "Task has been modified"
 msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
-#, fuzzy
 msgid "Task unchanged"
-msgstr "Opdracht ingelezen"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:96
 msgid "Clear task?"
@@ -7639,18 +7638,6 @@ msgstr ""
 msgid "Landing"
 msgstr ""
 
-#~ msgid "None "
-#~ msgstr "Geen "
-
-#~ msgid "Flarm Iinterface"
-#~ msgstr "FLARM interface"
-
-#~ msgid "Waypoint not editable"
-#~ msgstr "Keerpunt niet te wijzigen"
-
-#~ msgid "Cruise"
-#~ msgstr "Kruisvlucht"
-
 #~ msgid ""
 #~ "Terrain\n"
 #~ "Off"
@@ -7981,6 +7968,9 @@ msgstr ""
 
 #~ msgid "Experimental features"
 #~ msgstr "Experimentele opties"
+
+#~ msgid "Waypoint not editable"
+#~ msgstr "Keerpunt niet te wijzigen"
 
 #~ msgid "Waypoints excluded, save anyway?"
 #~ msgstr "Keerpunten uitgesloten, toch bewaren?"
@@ -9278,6 +9268,9 @@ msgstr ""
 #~ msgid "Site"
 #~ msgstr "Bestanden"
 
+#~ msgid "Cruise"
+#~ msgstr "Kruisvlucht"
+
 #~ msgid "File browser"
 #~ msgstr "Bestandsbrowser"
 
@@ -9325,6 +9318,12 @@ msgstr ""
 
 #~ msgid "Final Glide Through Terrain"
 #~ msgstr "Final Glide door terrein"
+
+#~ msgid "None "
+#~ msgstr "Geen "
+
+#~ msgid "Flarm Iinterface"
+#~ msgstr "FLARM interface"
 
 #~ msgid "Trail width"
 #~ msgstr "Spoorbreedte"
