@@ -73,18 +73,14 @@ static CrossSectionWindow *csw = NULL;
 static void
 SetCalcVisibility(const bool visible)
 {
-  if (!wCalc)
-    return;
-
+  assert(wCalc != NULL);
   wCalc->set_visible(visible);
 }
 
 static void
 SetCalcCaption(const TCHAR* caption)
 {
-  if (!wCalc)
-    return;
-
+  assert(wCalc != NULL);
   wCalc->SetCaption(caption);
   SetCalcVisibility(!string_is_empty(caption));
 }
@@ -186,6 +182,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 static void
 UpdateCrossSection()
 {
+  assert(csw != NULL);
   csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
                       XCSoarInterface::SettingsMap());
   csw->set_direction(XCSoarInterface::Basic().TrackBearing);
@@ -197,6 +194,10 @@ Update(void)
 {
   TCHAR sTmp[1000];
 
+  assert(wf != NULL);
+  assert(wInfo != NULL);
+  assert(wGrid != NULL);
+  assert(csw != NULL);
   assert(glide_computer != NULL);
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
@@ -347,6 +348,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 static bool
 FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
+  assert(wf != NULL);
 
   switch (key_code) {
   case VK_LEFT:
@@ -373,6 +375,8 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static void
 OnCalcClicked(gcc_unused WndButton &Sender)
 {
+  assert(wf != NULL);
+
   if (page == ANALYSIS_PAGE_BAROGRAPH)
     dlgBasicSettingsShowModal();
 
