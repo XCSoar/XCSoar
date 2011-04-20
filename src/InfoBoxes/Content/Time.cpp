@@ -26,6 +26,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
 #include "LocalTime.hpp"
+#include "Units/UnitsFormatter.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -69,34 +70,16 @@ InfoBoxContentTimeUTC::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTimeFlight::Update(InfoBoxWindow &infobox)
 {
-  TCHAR sTmp[32];
-
   if (!positive(CommonInterface::Calculated().flight.FlightTime)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  int dd = abs((int)CommonInterface::Calculated().flight.FlightTime) % (3600 * 24);
-  int hours = (dd / 3600);
-  int mins = (dd / 60 - hours * 60);
-  int seconds = (dd - mins * 60 - hours * 3600);
-  hours = hours % 24;
+  TCHAR value[32], comment[32];
+  Units::TimeToTextSmart(value, comment,
+                         (int)XCSoarInterface::Calculated().flight.FlightTime);
 
-  if (hours > 0) { // hh:mm, ss
-    // Set Value
-    _stprintf(sTmp, _T("%02d:%02d"), hours, mins);
-    infobox.SetValue(sTmp);
-
-    // Set Comment
-    _stprintf(sTmp, _T("%02d"), seconds);
-    infobox.SetComment(sTmp);
-  } else { // mm:ss
-    // Set Value
-    _stprintf(sTmp, _T("%02d:%02d"), mins, seconds);
-    infobox.SetValue(sTmp);
-
-    // Set Comment
-    infobox.SetComment(_T(""));
-  }
+  infobox.SetValue(value);
+  infobox.SetComment(comment);
 }
