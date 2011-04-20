@@ -987,7 +987,7 @@ GlideComputerAirData::ThermalSources()
   THERMAL_LOCATOR_INFO &thermal_locator = SetCalculated().thermal_locator;
 
   if (!thermal_locator.estimate_valid ||
-      !positive(calculated.LastThermalAverage))
+      !calculated.LastThermalAvailable())
     return;
 
   if (calculated.wind.norm / calculated.LastThermalAverage > fixed(10.0)) {

@@ -29,7 +29,6 @@ CLIMB_INFO::ClearPartial()
 {
   // If you load persistent values, you need at least these reset:
   LastThermalAverage = fixed_zero;
-  LastThermalAverageSmooth = fixed_zero;
   ThermalGain = fixed_zero;
 }
 

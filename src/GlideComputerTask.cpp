@@ -64,7 +64,8 @@ GlideComputerTask::ProcessBasicTask()
 
   task->set_task_behaviour(SettingsComputer());
 
-  if (basic.Time != LastBasic().Time && basic.LocationAvailable) {
+  if (basic.Time != LastBasic().Time && basic.LocationAvailable &&
+      Calculated().LastThermalAvailable()) {
     const AIRCRAFT_STATE current_as = ToAircraftState(basic, Calculated());
     const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic(),
                                                    LastCalculated());

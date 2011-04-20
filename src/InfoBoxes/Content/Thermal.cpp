@@ -67,15 +67,29 @@ InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalLastAvg::Update(InfoBoxWindow &infobox)
 {
-  SetVSpeed(infobox, XCSoarInterface::Calculated().LastThermalAverage);
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+
+  if (!calculated.LastThermalAvailable()) {
+    infobox.SetInvalid();
+    return;
+  }
+
+  SetVSpeed(infobox, calculated.LastThermalAverage);
 }
 
 void
 InfoBoxContentThermalLastGain::Update(InfoBoxWindow &infobox)
 {
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+
+  if (!calculated.LastThermalAvailable()) {
+    infobox.SetInvalid();
+    return;
+  }
+
   // Set Value
   TCHAR sTmp[32];
-  Units::FormatUserAltitude(XCSoarInterface::Calculated().LastThermalGain,
+  Units::FormatUserAltitude(calculated.LastThermalGain,
                             sTmp, 32, false);
   infobox.SetValue(sTmp);
 
@@ -86,11 +100,18 @@ InfoBoxContentThermalLastGain::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalLastTime::Update(InfoBoxWindow &infobox)
 {
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+
+  if (!calculated.LastThermalAvailable()) {
+    infobox.SetInvalid();
+    return;
+  }
+
   // Set Value
 
   TCHAR value[32], comment[32];
   Units::TimeToTextSmart(value, comment,
-                         (int)XCSoarInterface::Calculated().LastThermalTime);
+                         (int)calculated.LastThermalTime);
 
   infobox.SetValue(value);
   infobox.SetComment(comment);

@@ -50,6 +50,14 @@ struct CLIMB_INFO
   /** Average vertical speed in the last thermals smoothed by low-pass-filter */
   fixed LastThermalAverageSmooth;
 
+  /**
+   * Specifies whether the LastThermal attributes contain real values.
+   * If false, then the LastThermal attributes must not be accessed.
+   */
+  bool LastThermalAvailable() const {
+    return positive(LastThermalAverage);
+  }
+
   void ClearPartial();
   void Clear();
 };
