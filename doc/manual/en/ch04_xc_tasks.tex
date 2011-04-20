@@ -320,45 +320,36 @@ The altitude required to complete the task is calculated from the
 glider's position to the active waypoint through to the final
 waypoint.
 
-Changing the active waypoint is performed automatically by default in the following ways.
-\begin{description}
-\item[Auto advance mode]
-Once the aircraft enters the turn point observation zone (OZ) and satisfies
-the turn point rules, the software will automatically select the next
-task turn point. This is the default behavior for almost every task waypoint.
-An exceptions is the AAT task.
+Changing the active waypoint is performed automatically, or may be performed manually.
+The start point of racing tasks, and AAT task points, are special cases that require
+the task point to be `armed' before the system will automatically advance to the next
+task point once that point has been achieved.  All other task points will automatically
+advance to the next point as soon as the point has been achieved.
 
-The active waypoint is advanced through the list of waypoints in the
-task automatically: the start waypoint is advanced when the starting
-conditions are met (such as flying through a start line or leaving a
-start cylinder); intermediate waypoints are advanced when the glider
-enters the observation zone.
+For non-racing tasks therefore, no user interaction is required to
+advance through the task --- the system will automatically advance as
+each task point is achieved.  The user may still manually advance or retreat the active
+task point by selecting the menu items \bmenu{Nav}\blink\bmenu{Previous turnpoint} and
+\bmenu{Nav}\blink\bmenu{Next turnpoint} respectively.
 
-\item[Manually arm mode]
-This is quite similar to the Auto method, but it requires the pilot to manually
-interact and arm a trigger.  Therefore, if the advancement conditions are met
-but the trigger is not armed, the waypoint is not advanced.  The `Arm' button can be 
-used to arm the trigger.  It is accessed via the menu
-\begin{quote}
-\bmenu{Nav}\blink\bmenu{Arm Start/Turn}
-\end{quote}
-This is used for all waypoints with an variable target like the AAT observation
-zone with an obtimised target point, so that the minimum task time
-conditaion will be meet.
-\end{description}  
+The menu items \bmenu{Nav}\blink\bmenu{Previous turnpoint} and
+\bmenu{Nav}\blink\bmenu{Next turnpoint} have dynamic labels that
+indicate the action that will be performed upon selecting the item.
 
-Status messages are given in manually arm mode when inside the observation
-sector, as reminders to press arm when the pilot is ready to advance to the next
-waypoint. For starting, a warning is given that the glider is in the start
-cylinder or behind the start line, as a reminder to ``arm'' if necessary.
+For task points requiring arming, \bmenu{Nav}\blink\bmenu{Next
+  turnpoint} becomes \bmenu{Arm turn} if the turn is not armed; if it
+is armed, then it becomes \bmenu{Next Turnpoint} allowing manual
+advance.   \bmenu{Nav}\blink\bmenu{Previous
+  turnpoint} becomes \bmenu{Disarm turn} if the turn is armed; if it
+is not armed, then it becomes \bmenu{Previous Turnpoint} allowing manual
+retreat.  Similarly, for racing tasks, these menu items update for arming
+start points. 
 
-In any times, the pilot can override the current waypoint
-with the buttons:
-
-\begin{quote}
-\bmenu{Nav}\blink\bmenu{Previous turnpoint} and
-\bmenu{Nav}\blink\bmenu{Next turnpoint }
-\end{quote}
+Status messages are given for task points requiring arming, when
+inside the observation sector, as reminders to arm the turn when the
+pilot is ready to advance to the next waypoint. For starting, a
+warning is given that the glider is in the start cylinder or behind
+the start line, as a reminder to ``arm'' if necessary.
 
 For PC and Pocket PC with touchscreen versions only, the user may
 manually cycle through the waypoints by highlighting the waypoint
