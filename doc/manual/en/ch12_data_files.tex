@@ -404,22 +404,22 @@ according to the long naming convention described in the FAI
 document {\em Technical Specification for IGC-Approved GNSS Flight Recorders}.  
 These files can be imported into other programs for analysis after flight.
 
-\todonum[inline]{Describe use of FPLT to add events to the replay.}
-The flight logs replay facility allows the files to include 
-embedded commands to control XCSoar as if the user was interacting
-with the program.  It does this by defining a special use for the
-general-purpose `pilot event' IGC sentence:
-\begin{quote}
-LPLT event=StatusMessage Hello everybody
-\end{quote}
-This command will bring up a status message with the text ``Hello everybody''
-when the line is reached during replay.
-
-A future version of the flight logger will allow all input events to
-be stored in the IGC file in this fashion, thus replaying the flight
-will give a very faithful reproduction of the actual flight and how
-the software was used.  This is expected to be useful for training and
-coaching purposes.
+%\todonum[inline]{Describe use of FPLT to add events to the replay.}
+%The flight logs replay facility allows the files to include 
+%embedded commands to control XCSoar as if the user was interacting
+%with the program.  It does this by defining a special use for the
+%general-purpose `pilot event' IGC sentence:
+%\begin{quote}
+%LPLT event=StatusMessage Hello everybody
+%\end{quote}
+%This command will bring up a status message with the text ``Hello everybody''
+%when the line is reached during replay.
+%
+%A future version of the flight logger will allow all input events to
+%be stored in the IGC file in this fashion, thus replaying the flight
+%will give a very faithful reproduction of the actual flight and how
+%the software was used.  This is expected to be useful for training and
+%coaching purposes.
 
 The internal software logger has adjustable time steps, separate for
 cruise and circling modes, via parameters in the configuration
