@@ -63,12 +63,31 @@ enum analysis_page {
   ANALYSIS_PAGE_COUNT
 };
 
+class ChartControl;
+
 static enum analysis_page page = ANALYSIS_PAGE_BAROGRAPH;
 static WndForm *wf = NULL;
-static WndOwnerDrawFrame *wGrid = NULL;
+static ChartControl *wGrid = NULL;
 static WndFrame *wInfo;
 static WndButton *wCalc = NULL;
 static CrossSectionWindow *csw = NULL;
+
+class ChartControl: public PaintWindow
+{
+public:
+  ChartControl(ContainerWindow &parent, int X, int Y, int Width, int Height,
+               const WindowStyle style);
+
+protected:
+  virtual void on_paint(Canvas &canvas);
+};
+
+ChartControl::ChartControl(ContainerWindow &parent, int X, int Y,
+                           int Width, int Height, const WindowStyle style)
+  :PaintWindow()
+{
+  set(parent, X, Y, Width, Height, style);
+}
 
 static void
 SetCalcVisibility(const bool visible)
@@ -85,8 +104,8 @@ SetCalcCaption(const TCHAR* caption)
   SetCalcVisibility(!string_is_empty(caption));
 }
 
-static void
-OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+void
+ChartControl::on_paint(Canvas &canvas)
 {
   assert(glide_computer != NULL);
 
@@ -101,7 +120,7 @@ OnAnalysisPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   canvas.set_text_color(Color::BLACK);
   canvas.select(Fonts::Map);
 
-  PixelRect rcgfx = Sender->get_client_rect();
+  PixelRect rcgfx = get_client_rect();
 
   // background is painted in the base-class
 
@@ -422,6 +441,14 @@ OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
   return csw;
 }
 
+static Window *
+OnCreateChartControl(ContainerWindow &parent, int left, int top,
+                     unsigned width, unsigned height,
+                     const WindowStyle style)
+{
+  return new ChartControl(parent, left, top, width, height, style);
+}
+
 static void
 OnTimer(WndForm &Sender)
 {
@@ -430,7 +457,7 @@ OnTimer(WndForm &Sender)
 
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateCrossSectionWindow),
-  DeclareCallBackEntry(OnAnalysisPaint),
+  DeclareCallBackEntry(OnCreateChartControl),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(OnCalcClicked),
@@ -447,7 +474,7 @@ dlgAnalysisShowModal(SingleWindow &parent, int _page)
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
+  wGrid = (ChartControl*)wf->FindByName(_T("frmGrid"));
   wInfo = (WndFrame *)wf->FindByName(_T("frmInfo"));
   wCalc = (WndButton *)wf->FindByName(_T("cmdCalc"));
 
