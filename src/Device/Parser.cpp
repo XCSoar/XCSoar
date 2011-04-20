@@ -238,7 +238,8 @@ NMEAParser::ReadAltitude(NMEAInputLine &line, fixed &value_r)
  * @return Seconds-based FixTime
  */
 fixed
-NMEAParser::TimeModify(fixed FixTime, BrokenDateTime &date_time)
+NMEAParser::TimeModify(fixed FixTime, BrokenDateTime &date_time,
+                       bool date_available)
 {
   fixed hours, mins, secs;
 
@@ -259,7 +260,7 @@ NMEAParser::TimeModify(fixed FixTime, BrokenDateTime &date_time)
   FixTime = secs + fixed(date_time.minute * 60 + date_time.hour * 3600);
 
   // If (StartDay not yet set and available) set StartDate;
-  if ((StartDay == -1) && (date_time.day != 0))
+  if (StartDay == -1 && date_available)
     StartDay = date_time.day;
 
   if (StartDay != -1) {
@@ -363,7 +364,8 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime);
+  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime,
+                              GPS_INFO->DateAvailable);
 
   gpsValid = !NAVWarn(line.read_first_char());
 
@@ -466,7 +468,8 @@ ReadDate(NMEAInputLine &line, BrokenDate &date)
 bool
 NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime);
+  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime,
+                              GPS_INFO->DateAvailable);
 
   gpsValid = !NAVWarn(line.read_first_char());
 
@@ -483,7 +486,8 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   bool TrackBearingAvailable = line.read_checked(TrackBearing);
 
   // JMW get date info first so TimeModify is accurate
-  ReadDate(line, GPS_INFO->DateTime);
+  if (ReadDate(line, GPS_INFO->DateTime))
+    GPS_INFO->DateAvailable = true;
 
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return true;
@@ -570,7 +574,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   GGAAvailable = true;
 
-  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime);
+  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime,
+                              GPS_INFO->DateAvailable);
 
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);

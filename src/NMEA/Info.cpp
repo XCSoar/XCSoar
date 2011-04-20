@@ -93,11 +93,11 @@ NMEA_INFO::reset()
   PressureAltitudeAvailable.Clear();
   PressureAltitude = fixed_zero;
 
+  DateAvailable = false;
+
   NavAltitude = fixed_zero;
 
   Time = fixed_zero;
-  DateTime.year = DateTime.month = DateTime.day = 0;
-  DateTime.day_of_week = 0;
   DateTime.hour = DateTime.minute = DateTime.second = 0;
 
   TotalEnergyVarioAvailable.Clear();

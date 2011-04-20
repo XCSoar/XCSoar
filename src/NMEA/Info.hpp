@@ -268,6 +268,11 @@ struct NMEA_INFO {
   /** GPS date and time (UTC) */
   BrokenDateTime DateTime;
 
+  /**
+   * Is the BrokenDate part of DateTime available?
+   */
+  bool DateAvailable;
+
   //###########
   //   Vario
   //###########

@@ -71,7 +71,8 @@ public:
 private:
 
   bool TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO);
-  static fixed TimeModify(fixed FixTime, BrokenDateTime &date_time);
+  static fixed TimeModify(fixed FixTime, BrokenDateTime &date_time,
+                          bool date_available);
 
   bool GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
   bool GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
