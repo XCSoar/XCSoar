@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-12 09:33+0200\n"
-"PO-Revision-Date: 2011-04-08 09:12+0000\n"
+"PO-Revision-Date: 2011-04-14 23:57+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-09 07:04+0000\n"
-"X-Generator: Launchpad (build 12757)\n"
+"X-Launchpad-Export-Date: 2011-04-20 07:04+0000\n"
+"X-Generator: Launchpad (build 12847)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -920,9 +920,9 @@ msgstr ""
 "verstrichen ist."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AA max. distance "
-msgstr "AAT - max. Distanz"
+msgstr "AAT - max. Distanz "
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
@@ -2627,22 +2627,22 @@ msgstr "Programm beenden?"
 #: src/Units/UnitsStore.cpp:36
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "Europäisch"
 
 #: src/Units/UnitsStore.cpp:45
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "Britisch"
 
 #: src/Units/UnitsStore.cpp:54
 #, no-c-format
 msgid "American"
-msgstr ""
+msgstr "Amerikanisch"
 
 #: src/Units/UnitsStore.cpp:63
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "Australisch"
 
 #. Read the terrain file
 #: src/UtilsSettings.cpp:117 src/Components.cpp:327
@@ -3700,12 +3700,11 @@ msgstr "Aufgaben Verwaltung"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
-msgstr ""
+msgstr "Aufgabe wurde verändert"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
-#, fuzzy
 msgid "Task unchanged"
-msgstr "Aufgaben Verwaltung"
+msgstr "Aufgabe ist unverändert"
 
 #: src/Dialogs/pnlTaskEdit.cpp:96
 msgid "Clear task?"
@@ -3889,15 +3888,15 @@ msgstr "Aufgabe ist leer (%s)"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:183
 msgid "max."
-msgstr ""
+msgstr "max."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:187
 msgid "min."
-msgstr ""
+msgstr "min."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:195
 msgid "dist."
-msgstr ""
+msgstr "Dist."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:210 src/Dialogs/dlgTaskHelpers.cpp:463
 msgid "FAI quadrant"
@@ -7378,6 +7377,8 @@ msgid ""
 "When enabled and Mc is positive, route planning allows climbs between the "
 "aircraft location and destination."
 msgstr ""
+"Wenn dies aktiviert und MC größer Null, dann erlaubt der Routenplaner "
+"Steigphasen zwischen der aktuellen Position und dem Ziel."
 
 #: Data/Dialogs/dlgConfiguration.xml:763
 #: Data/Dialogs/dlgConfiguration_L.xml:764
@@ -8197,24 +8198,6 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Gelandet"
-
-#~ msgid "None "
-#~ msgstr "Keine "
-
-#~ msgid "Flarm Iinterface"
-#~ msgstr "Flarmverbindung"
-
-#~ msgid "Speed Remaining Help"
-#~ msgstr "Hilfe Verbleibende Geschwindigkeit"
-
-#~ msgid "Speed remaining Help"
-#~ msgstr "Hilfe für: Verbleibende Geschwindigkeit."
-
-#~ msgid "InfoBox Layout"
-#~ msgstr "InfoBox Anordnung"
-
-#~ msgid "Waypoint not editable"
-#~ msgstr "Wegpunkt nicht änderbar"
 
 #~ msgid "Ignore checksum*"
 #~ msgstr "Prüfsumme ignorieren*"
@@ -9194,6 +9177,9 @@ msgstr "Gelandet"
 
 #~ msgid "Pages"
 #~ msgstr "Seiten"
+
+#~ msgid "Waypoint not editable"
+#~ msgstr "Wegpunkt nicht änderbar"
 
 #~ msgid "Waypoints outside terrain"
 #~ msgstr "Wegpunkte außerhalb des Terrains"
@@ -10962,6 +10948,9 @@ msgstr "Gelandet"
 #~ msgid "NO"
 #~ msgstr "Nein"
 
+#~ msgid "None "
+#~ msgstr "Keine "
+
 #~ msgid "Colored InfoBoxes*"
 #~ msgstr "Infobox Farbe*"
 
@@ -11108,6 +11097,9 @@ msgstr "Gelandet"
 #~ msgid "Scale runway length*"
 #~ msgstr "Skaliere die Bahnlänge"
 
+#~ msgid "Flarm Iinterface"
+#~ msgstr "Flarmverbindung"
+
 #~ msgid "Optimisation margin*"
 #~ msgstr "Optimierungsband*"
 
@@ -11116,6 +11108,9 @@ msgstr "Gelandet"
 
 #~ msgid "Watched waypoints*"
 #~ msgstr "Beobachtete Wegpunkt*"
+
+#~ msgid "Speed Remaining Help"
+#~ msgstr "Hilfe Verbleibende Geschwindigkeit"
 
 #~ msgid "Status message*"
 #~ msgstr "Status Meldung*"
@@ -11136,11 +11131,17 @@ msgstr "Gelandet"
 #~ msgid "Label selection"
 #~ msgstr "Beschriftungs Auswahl"
 
+#~ msgid "Speed remaining Help"
+#~ msgstr "Hilfe für: Verbleibende Geschwindigkeit."
+
 #~ msgid "Aircraft symbol*"
 #~ msgstr "Flugzeugsymbol*"
 
 #~ msgid "Max. Auto-Zoom distance*"
 #~ msgstr "Max. Auto-Zoom Distanz*"
+
+#~ msgid "FAI start/ finish rules"
+#~ msgstr "FAI Start-/Zielregeln"
 
 #~ msgid "Airspace transparency*"
 #~ msgstr "Luftraumanzeige"
@@ -11159,3 +11160,6 @@ msgstr "Gelandet"
 
 #~ msgid "Auxiliary-5"
 #~ msgstr "Zusätzlich-5"
+
+#~ msgid "InfoBox Layout"
+#~ msgstr "InfoBox Anordnung"
