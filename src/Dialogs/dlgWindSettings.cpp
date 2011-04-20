@@ -123,7 +123,7 @@ dlgWindSettingsShowModal(void)
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       XCSoarInterface::SetSettingsComputer().ManualWind.norm =
         Units::ToSysWindSpeed(df.GetAsFixed());
-      XCSoarInterface::SetSettingsComputer().ManualWindAvailable.update(XCSoarInterface::Basic().Time);
+      XCSoarInterface::SetSettingsComputer().ManualWindAvailable.Update(XCSoarInterface::Basic().Time);
     }
 
     wp = (WndProperty*)wf->FindByName(_T("prpDirection"));
@@ -131,7 +131,7 @@ dlgWindSettingsShowModal(void)
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
         Angle::degrees(df.GetAsFixed());
-      XCSoarInterface::SetSettingsComputer().ManualWindAvailable.update(XCSoarInterface::Basic().Time);
+      XCSoarInterface::SetSettingsComputer().ManualWindAvailable.Update(XCSoarInterface::Basic().Time);
     }
 
     SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,

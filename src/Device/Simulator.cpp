@@ -96,7 +96,7 @@ Simulator::Process(NMEA_INFO &basic)
   if (!is_simulator())
     return;
 
-  basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+  basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
   basic.gps.SatellitesUsed = 6;
   basic.gps.Simulator = true;
   basic.gps.real = false;
@@ -108,10 +108,10 @@ Simulator::Process(NMEA_INFO &basic)
 
   basic.Location = FindLatitudeLongitude(basic.Location, basic.TrackBearing,
                                          basic.GroundSpeed);
-  basic.LocationAvailable.update(basic.Time);
-  basic.GPSAltitudeAvailable.update(basic.Time);
-  basic.TrackBearingAvailable.update(basic.Time);
-  basic.GroundSpeedAvailable.update(basic.Time);
+  basic.LocationAvailable.Update(basic.Time);
+  basic.GPSAltitudeAvailable.Update(basic.Time);
+  basic.TrackBearingAvailable.Update(basic.Time);
+  basic.GroundSpeedAvailable.Update(basic.Time);
 
   basic.Time += fixed_one;
   long tsec = (long)basic.Time;
@@ -125,5 +125,5 @@ Simulator::Process(NMEA_INFO &basic)
     GenerateFLARMTraffic(basic);
 
   // clear Airspeed as it is not available in simulation mode
-  basic.AirspeedAvailable.clear();
+  basic.AirspeedAvailable.Clear();
 }

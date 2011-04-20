@@ -177,7 +177,7 @@ cai_PCAID(NMEAInputLine &line, NMEA_INFO &data)
   unsigned enl;
   if (line.read_checked(enl)) {
     data.engine_noise_level = enl;
-    data.engine_noise_level_available.update(data.Time);
+    data.engine_noise_level_available.Update(data.Time);
   }
 
   return true;

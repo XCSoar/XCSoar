@@ -74,7 +74,7 @@ GlideComputerTask::ProcessBasicTask()
                              std::max(Calculated().LastThermalAverageSmooth,
                                       fixed_zero))) {
       derived.auto_mac_cready = task->get_glide_polar().get_mc();
-      derived.auto_mac_cready_available.update(basic.Time);
+      derived.auto_mac_cready_available.Update(basic.Time);
     }
   }
 

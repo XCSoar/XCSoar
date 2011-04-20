@@ -103,9 +103,9 @@ int main(int argc, char **argv)
   i.DateTime.minute = 22;
   i.DateTime.second = 33;
   i.Location = home;
-  i.LocationAvailable.update(i.Time);
+  i.LocationAvailable.Update(i.Time);
   i.GPSAltitude = fixed(487);
-  i.GPSAltitudeAvailable.update(i.Time);
+  i.GPSAltitudeAvailable.Update(i.Time);
   i.ProvideBaroAltitudeTrue(fixed(490));
 
   IGCWriter writer(path, i);

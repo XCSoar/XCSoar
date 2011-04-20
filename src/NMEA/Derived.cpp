@@ -36,25 +36,25 @@ void
 DERIVED_INFO::reset()
 {
   Heading = Angle::native(fixed_zero);
-  pressure_available.clear();
-  AirspeedAvailable.clear();
-  estimated_wind_available.clear();
+  pressure_available.Clear();
+  AirspeedAvailable.Clear();
+  estimated_wind_available.Clear();
   task_stats.reset();
   common_stats.reset();
 
-  auto_mac_cready_available.clear();
+  auto_mac_cready_available.Clear();
 }
 
 void
 DERIVED_INFO::expire(fixed Time)
 {
   /* the estimated wind remains valid for an hour */
-  estimated_wind_available.expire(Time, fixed(3600));
-  wind_available.expire(Time, fixed(600));
+  estimated_wind_available.Expire(Time, fixed(3600));
+  wind_available.Expire(Time, fixed(600));
   /* the calculated airspeed expires after 5 seconds */
-  AirspeedAvailable.expire(Time, fixed(5));
+  AirspeedAvailable.Expire(Time, fixed(5));
 
-  auto_mac_cready_available.expire(Time, fixed(300));
+  auto_mac_cready_available.Expire(Time, fixed(300));
 }
 
 void
@@ -71,10 +71,10 @@ DERIVED_INFO::ResetFlight(bool full)
     CIRCLING_INFO::ClearPartial();
   }
 
-  pressure_available.clear();
-  AirspeedAvailable.clear();
-  estimated_wind_available.clear();
-  wind_available.clear();
+  pressure_available.Clear();
+  AirspeedAvailable.Clear();
+  estimated_wind_available.Clear();
+  wind_available.Clear();
 
   flight.flying_state_reset();
 
@@ -82,7 +82,7 @@ DERIVED_INFO::ResetFlight(bool full)
 
   thermal_locator.Clear();
 
-  auto_mac_cready_available.clear();
+  auto_mac_cready_available.Clear();
 
   TERRAIN_ALT_INFO::Clear();
 }

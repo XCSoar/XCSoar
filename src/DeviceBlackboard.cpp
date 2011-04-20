@@ -53,9 +53,9 @@ DeviceBlackboard::Initialise()
 {
   ScopeLock protect(mutexBlackboard);
 
-  last_location_available.clear();
-  last_te_vario_available.clear();
-  last_netto_vario_available.clear();
+  last_location_available.Clear();
+  last_te_vario_available.Clear();
+  last_netto_vario_available.Clear();
 
   // Clear the gps_info and calculated_info
   gps_info.reset();
@@ -119,24 +119,24 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   ScopeLock protect(mutexBlackboard);
   NMEA_INFO &basic = SetReplayState();
 
-  basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+  basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
   basic.gps.SatellitesUsed = 6;
   basic.acceleration.Available = false;
   basic.Location = loc;
-  basic.LocationAvailable.update(t);
+  basic.LocationAvailable.Update(t);
   basic.GroundSpeed = speed;
-  basic.GroundSpeedAvailable.update(t);
-  basic.AirspeedAvailable.clear(); // Clear airspeed as it is not given by any value.
+  basic.GroundSpeedAvailable.Update(t);
+  basic.AirspeedAvailable.Clear(); // Clear airspeed as it is not given by any value.
   basic.TrackBearing = bearing;
-  basic.TrackBearingAvailable.update(t);
+  basic.TrackBearingAvailable.Update(t);
   basic.GPSAltitude = alt;
-  basic.GPSAltitudeAvailable.update(t);
+  basic.GPSAltitudeAvailable.Update(t);
   basic.ProvidePressureAltitude(baroalt);
   basic.ProvideBaroAltitudeTrue(baroalt);
   basic.Time = t;
-  basic.TotalEnergyVarioAvailable.clear();
-  basic.NettoVarioAvailable.clear();
-  basic.ExternalWindAvailable.clear();
+  basic.TotalEnergyVarioAvailable.Clear();
+  basic.NettoVarioAvailable.Clear();
+  basic.ExternalWindAvailable.Clear();
   basic.gps.real = false;
   basic.gps.Replay = true;
   basic.gps.Simulator = false;
@@ -150,7 +150,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
 void DeviceBlackboard::StopReplay() {
   ScopeLock protect(mutexBlackboard);
 
-  replay_data.Connected.clear();
+  replay_data.Connected.Clear();
 
   Merge();
 }
@@ -318,7 +318,7 @@ DeviceBlackboard::ProcessFLARM()
       continue;
 
     // Calculate the time difference between now and the last contact
-    fixed dt = traffic.Valid.get_time_difference(last_traffic->Valid);
+    fixed dt = traffic.Valid.GetTimeDifference(last_traffic->Valid);
     if (positive(dt)) {
       // Calculate the GeoVector between now and the last contact
       GeoVector vec = last_traffic->Location.distance_bearing(traffic.Location);

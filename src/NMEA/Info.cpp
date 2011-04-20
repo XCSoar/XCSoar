@@ -68,29 +68,29 @@ ACCELERATION_STATE::complement(const ACCELERATION_STATE &add)
 void
 NMEA_INFO::reset()
 {
-  Connected.clear();
+  Connected.Clear();
 
   gps.reset();
   acceleration.reset();
 
-  LocationAvailable.clear();
+  LocationAvailable.Clear();
 
   TrackBearing = Angle::native(fixed_zero);
-  TrackBearingAvailable.clear();
+  TrackBearingAvailable.Clear();
 
-  GroundSpeedAvailable.clear();
-  AirspeedAvailable.clear();
+  GroundSpeedAvailable.Clear();
+  AirspeedAvailable.Clear();
   GroundSpeed = TrueAirspeed = IndicatedAirspeed = fixed_zero;
 
-  GPSAltitudeAvailable.clear();
+  GPSAltitudeAvailable.Clear();
   GPSAltitude = fixed_zero;
 
-  static_pressure_available.clear();
+  static_pressure_available.Clear();
 
-  BaroAltitudeAvailable.clear();
+  BaroAltitudeAvailable.Clear();
   BaroAltitude = fixed_zero;
 
-  PressureAltitudeAvailable.clear();
+  PressureAltitudeAvailable.Clear();
   PressureAltitude = fixed_zero;
 
   NavAltitude = fixed_zero;
@@ -100,24 +100,24 @@ NMEA_INFO::reset()
   DateTime.day_of_week = 0;
   DateTime.hour = DateTime.minute = DateTime.second = 0;
 
-  TotalEnergyVarioAvailable.clear();
-  NettoVarioAvailable.clear();
+  TotalEnergyVarioAvailable.Clear();
+  NettoVarioAvailable.Clear();
 
   settings.Clear();
 
-  ExternalWindAvailable.clear();
+  ExternalWindAvailable.Clear();
 
   TemperatureAvailable = false;
   HumidityAvailable = false;
 
-  engine_noise_level_available.clear();
+  engine_noise_level_available.Clear();
 
-  SupplyBatteryVoltageAvailable.clear();
+  SupplyBatteryVoltageAvailable.Clear();
 
   SwitchStateAvailable = false;
   SwitchState.reset();
 
-  StallRatioAvailable.clear();
+  StallRatioAvailable.Clear();
 
   // XXX StallRatio
 
@@ -129,7 +129,7 @@ NMEA_INFO::ResetFlight(bool full)
 {
   if (full) {
     Time = fixed_zero;
-    BaroAltitudeAvailable.clear();
+    BaroAltitudeAvailable.Clear();
   }
 }
 
@@ -143,7 +143,7 @@ NMEA_INFO::expire_wall_clock()
 #endif
 
   const fixed monotonic = fixed(MonotonicClockMS()) / 1000;
-  Connected.expire(monotonic, fixed(10));
+  Connected.Expire(monotonic, fixed(10));
   if (!Connected) {
     gps.reset();
     flarm.clear();
@@ -153,20 +153,20 @@ NMEA_INFO::expire_wall_clock()
 void
 NMEA_INFO::expire()
 {
-  LocationAvailable.expire(Time, fixed(10));
-  TrackBearingAvailable.expire(Time, fixed(10));
-  GroundSpeedAvailable.expire(Time, fixed(10));
-  AirspeedAvailable.expire(Time, fixed(30));
-  GPSAltitudeAvailable.expire(Time, fixed(30));
-  static_pressure_available.expire(Time, fixed(30));
-  BaroAltitudeAvailable.expire(Time, fixed(30));
-  PressureAltitudeAvailable.expire(Time, fixed(30));
-  TotalEnergyVarioAvailable.expire(Time, fixed(5));
-  NettoVarioAvailable.expire(Time, fixed(5));
+  LocationAvailable.Expire(Time, fixed(10));
+  TrackBearingAvailable.Expire(Time, fixed(10));
+  GroundSpeedAvailable.Expire(Time, fixed(10));
+  AirspeedAvailable.Expire(Time, fixed(30));
+  GPSAltitudeAvailable.Expire(Time, fixed(30));
+  static_pressure_available.Expire(Time, fixed(30));
+  BaroAltitudeAvailable.Expire(Time, fixed(30));
+  PressureAltitudeAvailable.Expire(Time, fixed(30));
+  TotalEnergyVarioAvailable.Expire(Time, fixed(5));
+  NettoVarioAvailable.Expire(Time, fixed(5));
   settings.Expire(Time);
-  ExternalWindAvailable.expire(Time, fixed(600));
-  engine_noise_level_available.expire(Time, fixed(30));
-    SupplyBatteryVoltageAvailable.expire(Time, fixed(300));
+  ExternalWindAvailable.Expire(Time, fixed(600));
+  engine_noise_level_available.Expire(Time, fixed(30));
+    SupplyBatteryVoltageAvailable.Expire(Time, fixed(300));
   flarm.Refresh(Time);
 }
 
@@ -184,45 +184,45 @@ NMEA_INFO::complement(const NMEA_INFO &add)
     DateTime = add.DateTime;
   }
 
-  Connected.complement(add.Connected);
+  Connected.Complement(add.Connected);
 
   acceleration.complement(add.acceleration);
 
-  if (LocationAvailable.complement(add.LocationAvailable))
+  if (LocationAvailable.Complement(add.LocationAvailable))
     Location = add.Location;
 
-  if (TrackBearingAvailable.complement(add.TrackBearingAvailable))
+  if (TrackBearingAvailable.Complement(add.TrackBearingAvailable))
     TrackBearing = add.TrackBearing;
 
-  if (GroundSpeedAvailable.complement(add.GroundSpeedAvailable))
+  if (GroundSpeedAvailable.Complement(add.GroundSpeedAvailable))
     GroundSpeed = add.GroundSpeed;
 
-  if (AirspeedAvailable.complement(add.AirspeedAvailable)) {
+  if (AirspeedAvailable.Complement(add.AirspeedAvailable)) {
     TrueAirspeed = add.TrueAirspeed;
     IndicatedAirspeed = add.IndicatedAirspeed;
   }
 
-  if (GPSAltitudeAvailable.complement(add.GPSAltitudeAvailable))
+  if (GPSAltitudeAvailable.Complement(add.GPSAltitudeAvailable))
     GPSAltitude = add.GPSAltitude;
 
-  if (static_pressure_available.complement(add.static_pressure_available))
+  if (static_pressure_available.Complement(add.static_pressure_available))
     static_pressure = add.static_pressure;
 
-  if (BaroAltitudeAvailable.complement(add.BaroAltitudeAvailable))
+  if (BaroAltitudeAvailable.Complement(add.BaroAltitudeAvailable))
     BaroAltitude = add.BaroAltitude;
 
-  if (PressureAltitudeAvailable.complement(add.PressureAltitudeAvailable))
+  if (PressureAltitudeAvailable.Complement(add.PressureAltitudeAvailable))
     PressureAltitude = add.PressureAltitude;
 
-  if (TotalEnergyVarioAvailable.complement(add.TotalEnergyVarioAvailable))
+  if (TotalEnergyVarioAvailable.Complement(add.TotalEnergyVarioAvailable))
     TotalEnergyVario = add.TotalEnergyVario;
 
-  if (NettoVarioAvailable.complement(add.NettoVarioAvailable))
+  if (NettoVarioAvailable.Complement(add.NettoVarioAvailable))
     NettoVario = add.NettoVario;
 
   settings.Complement(add.settings);
 
-  if (ExternalWindAvailable.complement(add.ExternalWindAvailable))
+  if (ExternalWindAvailable.Complement(add.ExternalWindAvailable))
     ExternalWind = add.ExternalWind;
 
   if (!TemperatureAvailable && add.TemperatureAvailable) {
@@ -235,7 +235,7 @@ NMEA_INFO::complement(const NMEA_INFO &add)
     HumidityAvailable = add.HumidityAvailable;
   }
 
-  if (SupplyBatteryVoltageAvailable.complement(add.SupplyBatteryVoltageAvailable))
+  if (SupplyBatteryVoltageAvailable.Complement(add.SupplyBatteryVoltageAvailable))
     SupplyBatteryVoltage = add.SupplyBatteryVoltage;
 
   if (!SwitchStateAvailable && add.SwitchStateAvailable)

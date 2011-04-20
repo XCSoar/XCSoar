@@ -49,7 +49,7 @@ public:
   /**
    * Clears the time stamp, marking the referenced value "invalid".
    */
-  void clear() {
+  void Clear() {
     last = fixed_zero;
   }
 
@@ -59,7 +59,7 @@ public:
    *
    * @param now the current time stamp in seconds
    */
-  void update(fixed now) {
+  void Update(fixed now) {
     last = now;
   }
 
@@ -69,14 +69,14 @@ public:
    * @param now the current time stamp in seconds
    * @param max_age the maximum age in seconds
    */
-  void expire(fixed now, fixed max_age) {
+  void Expire(fixed now, fixed max_age) {
     if (positive(last) &&
         (now < last || /* time warp? */
          now > last + max_age)) /* expired? */
-      clear();
+      Clear();
   }
 
-  bool valid() const {
+  bool IsValid() const {
     return positive(last);
   }
 
@@ -85,7 +85,7 @@ public:
    * @param other The second Validity object
    * @return The time difference in seconds
    */
-  fixed get_time_difference(const Validity &other) const {
+  fixed GetTimeDifference(const Validity &other) const {
     assert(positive(last));
     assert(positive(other.last));
 
@@ -96,7 +96,7 @@ public:
    * Was the value modified since the time the "other" object was
    * taken?
    */
-  bool modified(const Validity &other) const {
+  bool Modified(const Validity &other) const {
     return last > other.last;
   }
 
@@ -108,8 +108,8 @@ public:
     return last != other.last;
   }
 
-  bool complement(const Validity &other) {
-    if (!valid() && other.valid()) {
+  bool Complement(const Validity &other) {
+    if (!IsValid() && other.IsValid()) {
       *this = other;
       return true;
     } else
@@ -117,7 +117,7 @@ public:
   }
 
   operator bool() const {
-    return valid();
+    return IsValid();
   }
 };
 

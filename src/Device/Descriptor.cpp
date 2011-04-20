@@ -161,13 +161,13 @@ DeviceDescriptor::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
   assert(GPS_INFO != NULL);
 
   if (device != NULL && device->ParseNMEA(String, GPS_INFO)) {
-    GPS_INFO->Connected.update(fixed(MonotonicClockMS()) / 1000);
+    GPS_INFO->Connected.Update(fixed(MonotonicClockMS()) / 1000);
     return true;
   }
 
   // Additional "if" to find GPS strings
   if (parser.ParseNMEAString_Internal(String, GPS_INFO)) {
-    GPS_INFO->Connected.update(fixed(MonotonicClockMS()) / 1000);
+    GPS_INFO->Connected.Update(fixed(MonotonicClockMS()) / 1000);
     return true;
   }
 

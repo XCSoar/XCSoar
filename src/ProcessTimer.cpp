@@ -145,12 +145,12 @@ QNHProcessTimer()
   const NMEA_INFO &basic = CommonInterface::Basic();
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
 
-  if (basic.settings.qnh_available.modified(settings_computer.pressure_available)) {
+  if (basic.settings.qnh_available.Modified(settings_computer.pressure_available)) {
     settings_computer.pressure = basic.settings.qnh;
     settings_computer.pressure_available = basic.settings.qnh_available;
   }
 
-  if (calculated.pressure_available.modified(settings_computer.pressure_available)) {
+  if (calculated.pressure_available.Modified(settings_computer.pressure_available)) {
     settings_computer.pressure = calculated.pressure;
     settings_computer.pressure_available = calculated.pressure_available;
 
@@ -169,11 +169,11 @@ MacCreadyProcessTimer()
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
   GlidePolar &glide_polar = settings_computer.glide_polar_task;
 
-  if (basic.settings.mac_cready_available.modified(last_external_settings.mac_cready_available)) {
+  if (basic.settings.mac_cready_available.Modified(last_external_settings.mac_cready_available)) {
     glide_polar.set_mc(basic.settings.mac_cready);
     if (protected_task_manager != NULL)
       protected_task_manager->set_glide_polar(glide_polar);
-  } else if (calculated.auto_mac_cready_available.modified(last_auto_mac_cready)) {
+  } else if (calculated.auto_mac_cready_available.Modified(last_auto_mac_cready)) {
     last_auto_mac_cready = calculated.auto_mac_cready_available;
     glide_polar.set_mc(calculated.auto_mac_cready);
     device_blackboard.SetMC(calculated.auto_mac_cready);

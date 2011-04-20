@@ -90,7 +90,7 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info)
 
   if (line.read_checked(i)) {
     info.SupplyBatteryVoltage = fixed(i) / 10;
-    info.SupplyBatteryVoltageAvailable.update(info.Time);
+    info.SupplyBatteryVoltageAvailable.Update(info.Time);
   }
 
   if (line.read_checked(i)) {

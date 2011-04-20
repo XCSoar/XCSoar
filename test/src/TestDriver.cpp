@@ -101,7 +101,7 @@ TestGeneric()
   NMEA_INFO nmea_info;
   nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
-  nmea_info.Connected.update(nmea_info.Time);
+  nmea_info.Connected.Update(nmea_info.Time);
 
   /* no GPS reception */
   parser.ParseNMEAString_Internal("$GPRMC,082310,V,,,,,230610*3f",

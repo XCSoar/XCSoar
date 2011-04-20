@@ -58,10 +58,10 @@ AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
 
     if (next_wp && next_wp->is_airport()) {
       calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, next_wp->Altitude));
-      calculated.pressure_available.update(basic.Time);
+      calculated.pressure_available.Update(basic.Time);
     } else if (calculated.TerrainValid) {
       calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, calculated.TerrainAlt));
-      calculated.pressure_available.update(basic.Time);
+      calculated.pressure_available.Update(basic.Time);
     } else
       return;
 

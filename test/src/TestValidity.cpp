@@ -29,7 +29,7 @@ static Validity
 invalid()
 {
   Validity v;
-  v.clear();
+  v.Clear();
   return v;
 }
 
@@ -38,26 +38,26 @@ int main(int argc, char **argv)
   plan_tests(11);
 
   Validity v;
-  v.clear();
-  ok1(!v.valid());
-  v.update(fixed(100));
-  ok1(v.valid());
-  v.expire(fixed(101), fixed(5));
-  ok1(v.valid());
-  v.expire(fixed(105), fixed(5));
-  ok1(v.valid());
-  v.expire(fixed(106), fixed(5));
-  ok1(!v.valid());
+  v.Clear();
+  ok1(!v.IsValid());
+  v.Update(fixed(100));
+  ok1(v.IsValid());
+  v.Expire(fixed(101), fixed(5));
+  ok1(v.IsValid());
+  v.Expire(fixed(105), fixed(5));
+  ok1(v.IsValid());
+  v.Expire(fixed(106), fixed(5));
+  ok1(!v.IsValid());
 
-  v.update(fixed(100));
-  ok1(v.modified(Validity(fixed(99))));
-  ok1(!v.modified(Validity(fixed(100))));
-  ok1(!v.modified(Validity(fixed(101))));
-  ok1(!v.complement(Validity(fixed(1))));
+  v.Update(fixed(100));
+  ok1(v.Modified(Validity(fixed(99))));
+  ok1(!v.Modified(Validity(fixed(100))));
+  ok1(!v.Modified(Validity(fixed(101))));
+  ok1(!v.Complement(Validity(fixed(1))));
 
-  v.clear();
-  ok1(!v.complement(invalid()));
-  ok1(v.complement(Validity(fixed(1))));
+  v.Clear();
+  ok1(!v.Complement(invalid()));
+  ok1(v.Complement(Validity(fixed(1))));
 
   return exit_status();
 }

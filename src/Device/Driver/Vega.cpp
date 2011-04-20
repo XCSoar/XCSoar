@@ -96,7 +96,7 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   if (line.read_checked(value)) {
     GPS_INFO->SupplyBatteryVoltage = value / 10;
-    GPS_INFO->SupplyBatteryVoltageAvailable.update(GPS_INFO->Time);
+    GPS_INFO->SupplyBatteryVoltageAvailable.Update(GPS_INFO->Time);
   }
 
   GPS_INFO->SwitchStateAvailable = true;
@@ -260,7 +260,7 @@ PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   line.skip();
 
   GPS_INFO->StallRatio = line.read(fixed_zero);
-  GPS_INFO->StallRatioAvailable.update(GPS_INFO->Time);
+  GPS_INFO->StallRatioAvailable.Update(GPS_INFO->Time);
 
   fixed value;
   if (line.read_checked(value))

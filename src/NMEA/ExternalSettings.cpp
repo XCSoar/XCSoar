@@ -26,10 +26,10 @@ Copyright_License {
 void
 ExternalSettings::Clear()
 {
-  mac_cready_available.clear();
-  ballast_available.clear();
-  bugs_available.clear();
-  qnh_available.clear();
+  mac_cready_available.Clear();
+  ballast_available.Clear();
+  bugs_available.Clear();
+  qnh_available.Clear();
 }
 
 void
@@ -42,22 +42,22 @@ ExternalSettings::Expire(fixed time)
 void
 ExternalSettings::Complement(const ExternalSettings &add)
 {
-  if (add.mac_cready_available.modified(mac_cready_available)) {
+  if (add.mac_cready_available.Modified(mac_cready_available)) {
     mac_cready = add.mac_cready;
     mac_cready_available = add.mac_cready_available;
   }
 
-  if (add.ballast_available.modified(ballast_available)) {
+  if (add.ballast_available.Modified(ballast_available)) {
     ballast = add.ballast;
     ballast_available = add.ballast_available;
   }
 
-  if (add.bugs_available.modified(bugs_available)) {
+  if (add.bugs_available.Modified(bugs_available)) {
     bugs = add.bugs;
     bugs_available = add.bugs_available;
   }
 
-  if (add.qnh_available.modified(qnh_available)) {
+  if (add.qnh_available.Modified(qnh_available)) {
     qnh = add.qnh;
     qnh_available = add.qnh_available;
   }
@@ -70,7 +70,7 @@ ExternalSettings::ProvideMacCready(fixed value, fixed time)
     return false;
 
   mac_cready = value;
-  mac_cready_available.update(time);
+  mac_cready_available.Update(time);
   return true;
 }
 
@@ -81,7 +81,7 @@ ExternalSettings::ProvideBallast(fixed value, fixed time)
     return false;
 
   ballast = value;
-  ballast_available.update(time);
+  ballast_available.Update(time);
   return true;
 }
 
@@ -92,7 +92,7 @@ ExternalSettings::ProvideBugs(fixed value, fixed time)
     return false;
 
   bugs = value;
-  bugs_available.update(time);
+  bugs_available.Update(time);
   return true;
 }
 
@@ -103,6 +103,6 @@ ExternalSettings::ProvideQNH(fixed value, fixed time)
     return false;
 
   qnh = value;
-  qnh_available.update(time);
+  qnh_available.Update(time);
   return true;
 }

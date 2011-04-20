@@ -373,9 +373,9 @@ struct NMEA_INFO {
    */
   void SetFakeLocation(const GeoPoint &_location, const fixed _altitude) {
     Location = _location;
-    LocationAvailable.clear();
+    LocationAvailable.Clear();
     GPSAltitude = _altitude;
-    GPSAltitudeAvailable.clear();
+    GPSAltitudeAvailable.Clear();
   }
 
   /**
@@ -384,7 +384,7 @@ struct NMEA_INFO {
    */
   void ProvideBaroAltitudeTrue(fixed value) {
     BaroAltitude = value;
-    BaroAltitudeAvailable.update(Time);
+    BaroAltitudeAvailable.Update(Time);
   }
 
   /**
@@ -393,7 +393,7 @@ struct NMEA_INFO {
    */
   void ProvidePressureAltitude(fixed value) {
     PressureAltitude = value;
-    PressureAltitudeAvailable.update(Time);
+    PressureAltitudeAvailable.Update(Time);
   }
 
   /**
@@ -403,7 +403,7 @@ struct NMEA_INFO {
    */
   void ProvideStaticPressure(fixed value) {
     static_pressure = value;
-    static_pressure_available.update(Time);
+    static_pressure_available.Update(Time);
   }
 
   /**
@@ -423,7 +423,7 @@ struct NMEA_INFO {
    */
   void ProvideBothAirspeeds(fixed as) {
     IndicatedAirspeed = TrueAirspeed = as;
-    AirspeedAvailable.update(Time);
+    AirspeedAvailable.Update(Time);
   }
 
   /**
@@ -433,7 +433,7 @@ struct NMEA_INFO {
   void ProvideBothAirspeeds(fixed ias, fixed tas) {
     IndicatedAirspeed = ias;
     TrueAirspeed = tas;
-    AirspeedAvailable.update(Time);
+    AirspeedAvailable.Update(Time);
   }
 
   /**
@@ -444,7 +444,7 @@ struct NMEA_INFO {
     TrueAirspeed = tas;
     IndicatedAirspeed = TrueAirspeed /
       AtmosphericPressure::AirDensityRatio(altitude);
-    AirspeedAvailable.update(Time);
+    AirspeedAvailable.Update(Time);
   }
 
   /**
@@ -460,7 +460,7 @@ struct NMEA_INFO {
    */
   void ProvideTotalEnergyVario(fixed value) {
     TotalEnergyVario = value;
-    TotalEnergyVarioAvailable.update(Time);
+    TotalEnergyVarioAvailable.Update(Time);
   }
 
   /**
@@ -468,7 +468,7 @@ struct NMEA_INFO {
    */
   void ProvideNettoVario(fixed value) {
     NettoVario = value;
-    NettoVarioAvailable.update(Time);
+    NettoVarioAvailable.Update(Time);
   }
 
   /**
@@ -476,7 +476,7 @@ struct NMEA_INFO {
    */
   void ProvideExternalWind(const SpeedVector &value) {
     ExternalWind = value;
-    ExternalWindAvailable.update(Time);
+    ExternalWindAvailable.Update(Time);
   }
 
   /**

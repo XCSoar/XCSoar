@@ -166,9 +166,9 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
     tmp_info.Time = src.Time;
 
     if (src.NAVWarning)
-      tmp_info.LocationAvailable.clear();
+      tmp_info.LocationAvailable.Clear();
     else
-      tmp_info.LocationAvailable.update(tmp_info.Time);
+      tmp_info.LocationAvailable.Update(tmp_info.Time);
     tmp_info.gps.FixQuality = src.FixQuality;
     tmp_info.gps.SatellitesUsed = src.SatellitesUsed;
     tmp_info.gps.HDOP = src.HDOP;

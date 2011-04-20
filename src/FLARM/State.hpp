@@ -182,7 +182,7 @@ public:
   }
 
   void Refresh(fixed Time) {
-    available.expire(Time, fixed(10));
+    available.Expire(Time, fixed(10));
     if (!available)
       traffic.clear();
 

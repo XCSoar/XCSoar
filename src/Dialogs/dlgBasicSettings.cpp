@@ -141,7 +141,7 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
   switch (Mode) {
   case DataField::daChange:
     settings_computer.pressure.set_QNH(Sender->GetAsFixed());
-    settings_computer.pressure_available.update(basic.Time);
+    settings_computer.pressure_available.Update(basic.Time);
     device_blackboard.SetQNH(Sender->GetAsFixed());
     RefreshAltitudeControl();
     break;

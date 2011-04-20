@@ -393,7 +393,7 @@ InfoBoxManager::ProcessTimer()
 {
   static Validity last;
 
-  if (XCSoarInterface::Basic().Connected.modified(last)) {
+  if (XCSoarInterface::Basic().Connected.Modified(last)) {
     SetDirty();
     last = XCSoarInterface::Basic().Connected;
   }

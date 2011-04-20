@@ -328,7 +328,7 @@ NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   line.skip();
 
   if (line.read(0) == 1)
-    GPS_INFO->LocationAvailable.clear();
+    GPS_INFO->LocationAvailable.Clear();
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
   for (unsigned i = 0; i < GPS_STATE::MAXSATELLITES; i++)
@@ -371,9 +371,9 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     return true;
 
   if (!gpsValid)
-    GPS_INFO->LocationAvailable.clear();
+    GPS_INFO->LocationAvailable.Clear();
   else if (valid_location)
-    GPS_INFO->LocationAvailable.update(GPS_INFO->Time);
+    GPS_INFO->LocationAvailable.Update(GPS_INFO->Time);
 
   if (valid_location)
     GPS_INFO->Location = location;
@@ -478,22 +478,22 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     return true;
 
   if (!gpsValid)
-    GPS_INFO->LocationAvailable.clear();
+    GPS_INFO->LocationAvailable.Clear();
   else if (valid_location)
-    GPS_INFO->LocationAvailable.update(GPS_INFO->Time);
+    GPS_INFO->LocationAvailable.Update(GPS_INFO->Time);
 
   if (valid_location)
     GPS_INFO->Location = location;
 
   if (GroundSpeedAvailable) {
     GPS_INFO->GroundSpeed = Units::ToSysUnit(speed, unKnots);
-    GPS_INFO->GroundSpeedAvailable.update(GPS_INFO->Time);
+    GPS_INFO->GroundSpeedAvailable.Update(GPS_INFO->Time);
   }
 
   if (TrackBearingAvailable && gps.MovementDetected) {
     // JMW don't update bearing unless we're moving
     GPS_INFO->TrackBearing = Angle::degrees(TrackBearing).as_bearing();
-    GPS_INFO->TrackBearingAvailable.update(GPS_INFO->Time);
+    GPS_INFO->TrackBearingAvailable.Update(GPS_INFO->Time);
   }
 
   if (!GGAAvailable) {
@@ -578,9 +578,9 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     return true;
 
   if (!gpsValid)
-    GPS_INFO->LocationAvailable.clear();
+    GPS_INFO->LocationAvailable.Clear();
   else if (valid_location)
-    GPS_INFO->LocationAvailable.update(GPS_INFO->Time);
+    GPS_INFO->LocationAvailable.Update(GPS_INFO->Time);
 
   if (valid_location)
     GPS_INFO->Location = location;
@@ -597,10 +597,10 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   bool altitude_available = ReadAltitude(line, GPS_INFO->GPSAltitude);
   if (altitude_available)
-    GPS_INFO->GPSAltitudeAvailable.update(GPS_INFO->Time);
+    GPS_INFO->GPSAltitudeAvailable.Update(GPS_INFO->Time);
   else {
     GPS_INFO->GPSAltitude = fixed_zero;
-    GPS_INFO->GPSAltitudeAvailable.clear();
+    GPS_INFO->GPSAltitudeAvailable.Clear();
   }
 
   fixed GeoidSeparation;
@@ -613,7 +613,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
          severely bugged, and report the GPS altitude in the Geoid
          column.  That sucks! */
       GPS_INFO->GPSAltitude = GeoidSeparation;
-      GPS_INFO->GPSAltitudeAvailable.update(GPS_INFO->Time);
+      GPS_INFO->GPSAltitudeAvailable.Update(GPS_INFO->Time);
     }
   } else {
     // need to estimate Geoid Separation internally (optional)
@@ -721,7 +721,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 bool
 NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
 {
-  flarm.available.update(Time);
+  flarm.available.Update(Time);
   isFlarm = true;
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
@@ -832,7 +832,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   }
 
   // set time of fix to current time
-  flarm_slot->Valid.update(GPS_INFO->Time);
+  flarm_slot->Valid.Update(GPS_INFO->Time);
 
   flarm_slot->Update(traffic);
 

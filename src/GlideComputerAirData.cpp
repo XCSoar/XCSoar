@@ -191,14 +191,14 @@ GlideComputerAirData::SelectWind()
   } else if (SettingsComputer().ManualWindAvailable && SettingsComputer().AutoWindMode == 0) {
     // manual wind only if available and desired
     calculated.wind = SettingsComputer().ManualWind;
-    calculated.wind_available.update(basic.Time);
+    calculated.wind_available.Update(basic.Time);
 
-  } else if (Calculated().estimated_wind_available.modified(SettingsComputer().ManualWindAvailable)
+  } else if (Calculated().estimated_wind_available.Modified(SettingsComputer().ManualWindAvailable)
              && SettingsComputer().AutoWindMode) {
     // auto wind when available and newer than manual wind
     calculated.wind = Calculated().estimated_wind;
     calculated.wind_available = Calculated().estimated_wind_available;
-    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.clear(); // unset manual wind
+    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.Clear(); // unset manual wind
 
   } else if (SettingsComputer().ManualWindAvailable
              && SettingsComputer().AutoWindMode) {
@@ -208,7 +208,7 @@ GlideComputerAirData::SelectWind()
 
   } else
    // no wind available
-   calculated.wind_available.clear();
+   calculated.wind_available.Clear();
 }
 
 void
@@ -253,7 +253,7 @@ GlideComputerAirData::Airspeed()
   if (!basic.AirspeedAvailable) {
 
     if (!calculated.wind_available) {
-      calculated.AirspeedAvailable.clear();
+      calculated.AirspeedAvailable.Clear();
       return;
     }
 
@@ -270,7 +270,7 @@ GlideComputerAirData::Airspeed()
     calculated.TrueAirspeed = TrueAirspeedEstimated;
     calculated.IndicatedAirspeed = TrueAirspeedEstimated
       / AtmosphericPressure::AirDensityRatio(basic.GetAltitudeBaroPreferred());
-    calculated.AirspeedAvailable.update(basic.Time);
+    calculated.AirspeedAvailable.Update(basic.Time);
 
   } else {
     calculated.TrueAirspeed = basic.TrueAirspeed;

@@ -74,18 +74,18 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
 
   switch (connected) {
   case 0: /* not connected */
-    basic.Connected.clear();
-    basic.LocationAvailable.clear();
+    basic.Connected.Clear();
+    basic.LocationAvailable.Clear();
     break;
 
   case 1: /* waiting for fix */
-    basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+    basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
     basic.gps.AndroidInternalGPS = true;
-    basic.LocationAvailable.clear();
+    basic.LocationAvailable.Clear();
     break;
 
   case 2: /* connected */
-    basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+    basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
     basic.gps.AndroidInternalGPS = true;
     break;
   }
@@ -111,7 +111,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   mutexBlackboard.Lock();
 
   NMEA_INFO &basic = device_blackboard.SetRealState(index);
-  basic.Connected.update(fixed(MonotonicClockMS()) / 1000);
+  basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
 
   BrokenDateTime date_time = BrokenDateTime::FromUnixTimeUTC(time / 1000);
   fixed second_of_day = fixed(date_time.GetSecondOfDay()) +
@@ -132,26 +132,26 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));
   if (n_satellites > 0)
-    basic.LocationAvailable.update(basic.Time);
+    basic.LocationAvailable.Update(basic.Time);
   else
-    basic.LocationAvailable.clear();
+    basic.LocationAvailable.Clear();
 
   if (hasAltitude) {
     fixed GeoidSeparation = LookupGeoidSeparation(basic.Location);
     basic.GPSAltitude = fixed(altitude) - GeoidSeparation;
-    basic.GPSAltitudeAvailable.update(basic.Time);
+    basic.GPSAltitudeAvailable.Update(basic.Time);
   } else
-    basic.GPSAltitudeAvailable.clear();
+    basic.GPSAltitudeAvailable.Clear();
 
   if (hasBearing) {
     basic.TrackBearing = Angle::degrees(fixed(bearing));
-    basic.TrackBearingAvailable.update(basic.Time);
+    basic.TrackBearingAvailable.Update(basic.Time);
   } else
-    basic.TrackBearingAvailable.clear();
+    basic.TrackBearingAvailable.Clear();
 
   if (hasSpeed) {
     basic.GroundSpeed = fixed(speed);
-    basic.GroundSpeedAvailable.update(basic.Time);
+    basic.GroundSpeedAvailable.Update(basic.Time);
   }
 
   if (hasAccuracy)

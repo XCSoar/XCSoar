@@ -119,7 +119,7 @@ struct FLARM_TRAFFIC {
   }
 
   void Clear() {
-    Valid.clear();
+    Valid.Clear();
     Name.clear();
   }
 
@@ -129,7 +129,7 @@ struct FLARM_TRAFFIC {
    * @return true if the object is still valid
    */
   bool Refresh(fixed Time) {
-    Valid.expire(Time, fixed_two);
+    Valid.Expire(Time, fixed_two);
     return Valid;
   }
 

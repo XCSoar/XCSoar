@@ -26,7 +26,7 @@ Copyright_License {
 void
 FLARM_STATE::clear()
 {
-  available.clear();
+  available.Clear();
   traffic.clear();
   NewTraffic = false;
 }
