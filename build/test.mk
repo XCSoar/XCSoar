@@ -1370,6 +1370,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/GestureManager.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Task/ProtectedTaskManager.cpp \
 	$(SRC)/Task/RoutePlannerGlue.cpp \

@@ -71,6 +71,15 @@ static ChartControl *wGrid = NULL;
 static WndFrame *wInfo;
 static WndButton *wCalc = NULL;
 static CrossSectionWindow *csw = NULL;
+static GestureManager gestures;
+
+class CrossSectionControl: public CrossSectionWindow
+{
+protected:
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_up(int x, int y);
+};
 
 class ChartControl: public PaintWindow
 {
@@ -79,6 +88,10 @@ public:
                const WindowStyle style);
 
 protected:
+  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_up(int x, int y);
+
   virtual void on_paint(Canvas &canvas);
 };
 
@@ -347,6 +360,84 @@ NextPage(int Step)
 }
 
 static void
+OnGesture(const TCHAR* gesture)
+{
+  if (!XCSoarInterface::SettingsComputer().EnableGestures)
+    return;
+
+  if (_tcscmp(gesture, _T("L")) == 0)
+    NextPage(-1);
+  else if (_tcscmp(gesture, _T("R")) == 0)
+    NextPage(+1);
+}
+
+bool
+ChartControl::on_mouse_down(int x, int y)
+{
+  if (!XCSoarInterface::SettingsComputer().EnableGestures)
+    return false;
+
+  gestures.Start(x, y, Layout::Scale(20));
+  return true;
+}
+
+bool
+ChartControl::on_mouse_move(int x, int y, unsigned keys)
+{
+  if (!XCSoarInterface::SettingsComputer().EnableGestures)
+    return false;
+
+  gestures.Update(x, y);
+  return true;
+}
+
+bool
+ChartControl::on_mouse_up(int x, int y)
+{
+  if (!XCSoarInterface::SettingsComputer().EnableGestures)
+    return false;
+
+  const TCHAR* gesture = gestures.Finish();
+  if (gesture != NULL)
+    OnGesture(gesture);
+
+  return true;
+}
+
+bool
+CrossSectionControl::on_mouse_down(int x, int y)
+{
+  if (!XCSoarInterface::SettingsComputer().EnableGestures)
+    return false;
+
+  gestures.Start(x, y, Layout::Scale(20));
+  return true;
+}
+
+bool
+CrossSectionControl::on_mouse_move(int x, int y, unsigned keys)
+{
+  if (!XCSoarInterface::SettingsComputer().EnableGestures)
+    return false;
+
+  gestures.Update(x, y);
+  return true;
+}
+
+bool
+CrossSectionControl::on_mouse_up(int x, int y)
+{
+  if (!XCSoarInterface::SettingsComputer().EnableGestures)
+    return false;
+
+  const TCHAR* gesture = gestures.Finish();
+  if (gesture != NULL)
+    OnGesture(gesture);
+
+  return true;
+}
+
+static void
 OnNextClicked(gcc_unused WndButton &Sender)
 {
   NextPage(+1);
@@ -427,11 +518,11 @@ OnCalcClicked(gcc_unused WndButton &Sender)
 }
 
 static Window *
-OnCreateCrossSectionWindow(ContainerWindow &parent, int left, int top,
-                           unsigned width, unsigned height,
-                           const WindowStyle style)
+OnCreateCrossSectionControl(ContainerWindow &parent, int left, int top,
+                            unsigned width, unsigned height,
+                            const WindowStyle style)
 {
-  csw = new CrossSectionWindow();
+  csw = new CrossSectionControl();
   csw->set(parent, left, top, width, height, style);
   csw->set_airspaces(&airspace_database);
   csw->set_terrain(terrain);
@@ -456,7 +547,7 @@ OnTimer(WndForm &Sender)
 }
 
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnCreateCrossSectionWindow),
+  DeclareCallBackEntry(OnCreateCrossSectionControl),
   DeclareCallBackEntry(OnCreateChartControl),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
