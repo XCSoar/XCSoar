@@ -80,16 +80,6 @@ LookupGeoidSeparation(const GeoPoint pt)
 }
 
 /*
- * Fake InputEvents.cpp
- */
-
-bool
-InputEvents::processGlideComputer(unsigned gce_id)
-{
-  return true;
-}
-
-/*
  * Unit tests
  */
 

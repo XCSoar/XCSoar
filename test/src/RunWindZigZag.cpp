@@ -70,12 +70,6 @@ LookupGeoidSeparation(const GeoPoint pt)
  */
 
 bool
-InputEvents::processGlideComputer(unsigned gce_id)
-{
-  return true;
-}
-
-bool
 InputEvents::processNmea(unsigned key)
 {
   return true;
