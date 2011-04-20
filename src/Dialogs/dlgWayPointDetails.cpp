@@ -296,12 +296,15 @@ OnNewHomeClicked(gcc_unused WndButton &button)
 {
   assert(selected_waypoint != NULL);
 
-  XCSoarInterface::SetSettingsComputer().SetHome(*selected_waypoint);
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+
+  settings_computer.SetHome(*selected_waypoint);
 
   {
     ScopeSuspendAllThreads suspend;
     WayPointGlue::SetHome(way_points, terrain,
-                          XCSoarInterface::SetSettingsComputer(),
+                          settings_computer,
                           false);
   }
 
@@ -602,8 +605,10 @@ OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 static void
 OnActivatePanClicked(gcc_unused WndButton &button)
 {
-  XCSoarInterface::SetSettingsMap().PanLocation = selected_waypoint->Location;
-  XCSoarInterface::SetSettingsMap().EnablePan = true;
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
+  settings_map.PanLocation = selected_waypoint->Location;
+  settings_map.EnablePan = true;
   XCSoarInterface::SendSettingsMap();
   XCSoarInterface::main_window.SetFullScreen(true);
   InputEvents::setMode(InputEvents::MODE_PAN);
@@ -633,6 +638,11 @@ void
 dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
                             bool allow_navigation)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SettingsComputer();
+
   selected_waypoint = &way_point;
 
   wf = LoadDialog(CallBackTable, parent,
@@ -678,7 +688,7 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
   SunEphemeris sun;
   sun.CalcSunTimes(selected_waypoint->Location,
-                   XCSoarInterface::Basic().DateTime,
+                   basic.DateTime,
                    fixed(GetUTCOffset()) / 3600);
 
   int sunsethours = (int)sun.TimeOfSunSet;
@@ -687,8 +697,7 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   _stprintf(sTmp, _T("%02d:%02d"), sunsethours, sunsetmins);
   ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);
 
-  GeoVector gv = XCSoarInterface::Basic().Location.
-                 distance_bearing(selected_waypoint->Location);
+  GeoVector gv = basic.Location.distance_bearing(selected_waypoint->Location);
 
   TCHAR DistanceText[MAX_PATH];
   Units::FormatUserDistance(gv.Distance, DistanceText, 10);
@@ -698,16 +707,15 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   ((WndProperty *)wf->FindByName(_T("prpBearing"))) ->SetText(sTmp);
 
   if (protected_task_manager != NULL) {
-    GlidePolar glide_polar = CommonInterface::SettingsComputer().glide_polar_task;
-    const GlidePolar &safety_polar = XCSoarInterface::Calculated().glide_polar_safety;
+    GlidePolar glide_polar = settings_computer.glide_polar_task;
+    const GlidePolar &safety_polar = calculated.glide_polar_safety;
 
-    UnorderedTaskPoint t(way_point, XCSoarInterface::SettingsComputer());
+    UnorderedTaskPoint t(way_point, settings_computer);
     GlideResult r;
 
     // alt reqd at current mc
 
-    const AIRCRAFT_STATE aircraft_state =
-      ToAircraftState(CommonInterface::Basic(), CommonInterface::Calculated());
+    const AIRCRAFT_STATE aircraft_state = ToAircraftState(basic, calculated);
     r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
     wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
     if (wp) {
