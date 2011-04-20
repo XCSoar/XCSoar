@@ -475,8 +475,7 @@ ReadDate(NMEAInputLine &line, BrokenDate &date)
 bool
 NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 {
-  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime,
-                              GPS_INFO->DateAvailable);
+  fixed ThisTime = line.read(fixed_zero);
 
   gpsValid = !NAVWarn(line.read_first_char());
 
@@ -495,6 +494,8 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // JMW get date info first so TimeModify is accurate
   if (ReadDate(line, GPS_INFO->DateTime))
     GPS_INFO->DateAvailable = true;
+
+  ThisTime = TimeModify(ThisTime, GPS_INFO->DateTime, GPS_INFO->DateAvailable);
 
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return true;
