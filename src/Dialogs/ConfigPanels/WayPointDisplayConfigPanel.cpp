@@ -102,9 +102,13 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Purple Circle"));
-    dfe->addEnumText(_("B/W"));
-    dfe->addEnumText(_("Orange"));
+    dfe->EnableItemHelp(true);
+    dfe->addEnumText(_("Purple Circle"), wpLandableWinPilot,
+                     _("Airports and outlanding fields are displayed as purple circles. If the waypoint is reachable a bigger green circle is added behind the purple one. If the waypoint is blocked by a mountain the green circle will be red instead."));
+    dfe->addEnumText(_("B/W"), wpLandableAltA,
+                     _("Airports and outlanding fields are displayed in white/grey. If the waypoint is reachable the color is changed to green. If the waypoint is blocked by a mountain the color is changed to red instead."));
+    dfe->addEnumText(_("Orange"), wpLandableAltB,
+                     _("Airports and outlanding fields are displayed in orange. If the waypoint is reachable the color is changed to green. If the waypoint is blocked by a mountain the color is changed to red instead."));
     dfe->Set(Appearance.IndLandable);
     wp->RefreshDisplay();
   }
