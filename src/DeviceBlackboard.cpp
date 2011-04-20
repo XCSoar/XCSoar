@@ -63,9 +63,7 @@ DeviceBlackboard::Initialise()
 
   // Set GPS assumed time to system time
   gps_info.DateTime = BrokenDateTime::NowUTC();
-  gps_info.Time = fixed(gps_info.DateTime.hour * 3600 +
-                        gps_info.DateTime.minute * 60 +
-                        gps_info.DateTime.second);
+  gps_info.Time = gps_info.DateTime.GetSecondOfDay();
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     per_device_data[i] = gps_info;
