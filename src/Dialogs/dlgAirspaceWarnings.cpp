@@ -70,7 +70,7 @@ OnAirspaceListEnter(gcc_unused unsigned i)
     /* on platforms without a pointing device (e.g. ALTAIR), allow
        "focusing" an airspace by pressing enter */
     FocusAirspace = CursorAirspace;
-  else
+  else if (CursorAirspace != NULL)
     dlgAirspaceDetails(*CursorAirspace);
 }
 
