@@ -189,20 +189,17 @@ InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
   }
 
   TCHAR tmp[32];
-  int dd = abs((int)(XCSoarInterface::Calculated().task_stats.current_leg.
-      solution_remaining.TimeElapsed +
-      fixed(DetectCurrentTime(&XCSoarInterface::Basic())))) % (3600 * 24);
-  int hours = (dd / 3600);
-  int mins = (dd / 60 - hours * 60);
-  int seconds = (dd - mins * 60 - hours * 3600);
-  hours = hours % 24;
+  int dd = (int)(XCSoarInterface::Calculated().task_stats.current_leg.
+                 solution_remaining.TimeElapsed) +
+    DetectCurrentTime(&XCSoarInterface::Basic());
+  const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value
-  _stprintf(tmp, _T("%02d:%02d"), hours, mins);
+  _stprintf(tmp, _T("%02u:%02u"), t.hour, t.minute);
   infobox.SetValue(tmp);
 
   // Set Comment
-  _stprintf(tmp, _T("%02d"), seconds);
+  _stprintf(tmp, _T("%02u"), t.second);
   infobox.SetComment(tmp);
 }
 
@@ -346,19 +343,16 @@ InfoBoxContentFinalETA::Update(InfoBoxWindow &infobox)
   }
 
   TCHAR tmp[32];
-  int dd = abs((int)(task_stats.total.solution_remaining.TimeElapsed +
-      fixed(DetectCurrentTime(&XCSoarInterface::Basic())))) % (3600 * 24);
-  int hours = (dd / 3600);
-  int mins = (dd / 60 - hours * 60);
-  int seconds = (dd - mins * 60 - hours * 3600);
-  hours = hours % 24;
+  int dd = (int)task_stats.total.solution_remaining.TimeElapsed +
+    DetectCurrentTime(&XCSoarInterface::Basic());
+  const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value
-  _stprintf(tmp, _T("%02d:%02d"), hours, mins);
+  _stprintf(tmp, _T("%02u:%02u"), t.hour, t.minute);
   infobox.SetValue(tmp);
 
   // Set Comment
-  _stprintf(tmp, _T("%02d"), seconds);
+  _stprintf(tmp, _T("%02u"), t.second);
   infobox.SetComment(tmp);
 }
 

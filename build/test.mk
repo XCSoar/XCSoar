@@ -1124,6 +1124,7 @@ $(RUN_CANVAS_BIN): $(RUN_CANVAS_OBJS) $(RUN_CANVAS_LDADD) | $(TARGET_BIN_DIR)/di
 RUN_MAP_WINDOW_SOURCES = \
 	$(IO_SRC_DIR)/DataFile.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/NMEA/Info.cpp \

@@ -37,18 +37,15 @@ InfoBoxContentTimeLocal::Update(InfoBoxWindow &infobox)
   TCHAR sTmp[32];
 
   // Set Value
-  int dd = abs((int)DetectCurrentTime(&XCSoarInterface::Basic())) % (3600 * 24);
-  int hours = (dd / 3600);
-  int mins = (dd / 60 - hours * 60);
-  int seconds = (dd - mins * 60 - hours * 3600);
-  hours = hours % 24;
+  int dd = DetectCurrentTime(&XCSoarInterface::Basic());
+  const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value
-  _stprintf(sTmp, _T("%02d:%02d"), hours, mins);
+  _stprintf(sTmp, _T("%02u:%02u"), t.hour, t.minute);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  _stprintf(sTmp, _T("%02d"), seconds);
+  _stprintf(sTmp, _T("%02u"), t.second);
   infobox.SetComment(sTmp);
 }
 

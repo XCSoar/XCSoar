@@ -109,6 +109,22 @@ struct BrokenTime {
   unsigned GetSecondOfDay() const {
     return hour * 3600u + minute * 60u + second;
   }
+
+  /**
+   * Construct a BrokenTime object from the specified number of
+   * seconds which have passed on this day.
+   *
+   * @param second_of_day 0 .. 3600*24-1
+   */
+  gcc_const
+  static BrokenTime FromSecondOfDay(unsigned second_of_day);
+
+  /**
+   * A wrapper for FromSecondOfDay() which allows values bigger than
+   * or equal to 3600*24.
+   */
+  gcc_const
+  static BrokenTime FromSecondOfDayChecked(unsigned second_of_day);
 };
 
 /**

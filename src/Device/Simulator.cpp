@@ -114,11 +114,8 @@ Simulator::Process(NMEA_INFO &basic)
   basic.GroundSpeedAvailable.Update(basic.Time);
 
   basic.Time += fixed_one;
-  long tsec = (long)basic.Time;
-  basic.DateTime.hour = tsec / 3600;
-  basic.DateTime.minute = (tsec - basic.DateTime.hour * 3600) / 60;
-  basic.DateTime.second = tsec - basic.DateTime.hour * 3600
-    - basic.DateTime.minute * 60;
+  (BrokenTime &)basic.DateTime =
+    BrokenTime::FromSecondOfDayChecked((unsigned)basic.Time);
 
   // use this to test FLARM parsing/display
   if (is_debug() && !is_altair())

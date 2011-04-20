@@ -23,11 +23,29 @@ Copyright_License {
 
 #include "DateTime.hpp"
 
+#include <assert.h>
+
 #ifdef HAVE_POSIX
 #include <time.h>
 #else
 #include <windows.h>
 #endif
+
+BrokenTime
+BrokenTime::FromSecondOfDay(unsigned second_of_day)
+{
+  assert(second_of_day < 3600u * 24u);
+
+  unsigned hour = second_of_day / 3600u;
+  unsigned second_of_hour = second_of_day % 3600u;
+  return BrokenTime(hour, second_of_hour / 60u, second_of_hour % 60u);
+}
+
+BrokenTime
+BrokenTime::FromSecondOfDayChecked(unsigned second_of_day)
+{
+  return FromSecondOfDay(second_of_day % (3600u * 24u));
+}
 
 #ifdef HAVE_POSIX
 
