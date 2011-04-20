@@ -255,7 +255,8 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Calculated().flight.Flying || HaveCondorDevice() ||
+    if (!cmp.Basic().LocationAvailable ||
+        !cmp.Calculated().flight.Flying || HaveCondorDevice() ||
         !cmp.Calculated().task_stats.task_valid)
       return false;
   
