@@ -130,3 +130,36 @@ tr (Turkish):
  'zeugma'
 
 *Contributions attributed to the LK8000 project (http://www.lk8000.it/)
+
+Libraries and code segments are included from the following projects:
+ JasPer
+ http://www.ece.uvic.ca/~mdadams/jasper/
+
+ libkdtree++
+ http://libkdtree.alioth.debian.org/
+
+ zziplib
+ http://zziplib.sourceforge.net/
+
+ shapelib
+ http://shapelib.maptools.org/
+
+ Flightgear
+ http://www.flightgear.org/~curt
+
+ Polygon interior code
+ http://softsurfer.com/Archive/algorithm_0103/algorithm_0103.htm
+
+ Volkslogger code by Garrecht Ingenieurgesellschaft
+
+ Algorithms from Aviation Formulary
+ http://williams.best.vwh.net/avform.htm
+
+ Brent's univariate minimizer and zero finder.
+ http://www.netlib.org/c/brent.shar
+
+ Dijkstra
+ http://en.giswiki.net/wiki/Dijkstra's_algorithm
+
+ Graham Scan convex hull code
+ http://marknelson.us/2007/08/22/convex/
