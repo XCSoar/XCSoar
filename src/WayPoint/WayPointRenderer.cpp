@@ -227,7 +227,8 @@ public:
     if (way_point.is_landable() || watchedWaypoint) {
       CalculateReachability(way_point, arrival_height_glide, arrival_height_terrain);
       reachable_glide = arrival_height_glide > 0;
-      reachable_terrain = arrival_height_terrain > 0;
+      reachable_terrain = !task_behaviour.route_planner.reach_enabled() ||
+                          arrival_height_terrain > 0;
     }
 
     if (way_point.is_landable()) {
