@@ -113,6 +113,12 @@ public:
   void ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
                 short *buffer, unsigned size, bool interpolate) const;
 
+  /**
+   * Wrapper for ScanLine() with basic range checks.
+   */
+  void ScanLineChecked(unsigned ax, unsigned ay, unsigned bx, unsigned by,
+                       short *buffer, unsigned size, bool interpolate) const;
+
   gcc_pure
   short get_max() const;
 };

@@ -892,10 +892,14 @@ RasterTileCache::ScanTileLine(GridLocation start, GridLocation end,
                   buffer + start.index, end.index - start.index,
                   interpolate);
   else
-    Overview.ScanLine(start.x >> OVERVIEW_BITS, start.y >> OVERVIEW_BITS,
-                      end.x >> OVERVIEW_BITS, end.y >> OVERVIEW_BITS,
-                      buffer + start.index, end.index - start.index,
-                      interpolate);
+    /* need range checking in the overview buffer because its size may
+       be rounded down, and then the "fine" location may exceed its
+       bounds */
+    Overview.ScanLineChecked(start.x >> OVERVIEW_BITS,
+                             start.y >> OVERVIEW_BITS,
+                             end.x >> OVERVIEW_BITS, end.y >> OVERVIEW_BITS,
+                             buffer + start.index, end.index - start.index,
+                             interpolate);
 }
 
 void

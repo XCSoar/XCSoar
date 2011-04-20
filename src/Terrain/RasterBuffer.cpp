@@ -216,6 +216,27 @@ RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
   }
 }
 
+void
+RasterBuffer::ScanLineChecked(unsigned ax, unsigned ay,
+                              unsigned bx, unsigned by,
+                              short *buffer, unsigned size,
+                              bool interpolate) const
+{
+  if (ax >= get_width() << 8)
+    ax = (get_width() << 8) - 1;
+
+  if (ay >= get_height() << 8)
+    ay = (get_height() << 8) - 1;
+
+  if (bx >= get_width() << 8)
+    bx = (get_width() << 8) - 1;
+
+  if (by >= get_height() << 8)
+    by = (get_height() << 8) - 1;
+
+  ScanLine(ax, ay, bx, by, buffer, size, interpolate);
+}
+
 short
 RasterBuffer::get_max() const
 {
