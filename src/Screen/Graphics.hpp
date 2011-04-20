@@ -152,6 +152,7 @@ namespace Graphics {
   extern Brush hbWhite;
   extern Brush hbMagenta;
   extern Brush hbOrange;
+  extern Brush hbRed;
   extern Brush hbLightGray;
   extern Brush hbNotReachableTerrain;
   extern Brush hbGround;

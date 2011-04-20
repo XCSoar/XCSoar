@@ -121,6 +121,7 @@ Brush Graphics::hbGreen;
 Brush Graphics::hbWhite;
 Brush Graphics::hbMagenta;
 Brush Graphics::hbOrange;
+Brush Graphics::hbRed;
 Brush Graphics::hbLightGray;
 Brush Graphics::hbNotReachableTerrain;
 Brush Graphics::hbGround;
@@ -298,6 +299,7 @@ Graphics::Initialise()
   hbWhite.set(Color::WHITE);
   hbMagenta.set(Color::MAGENTA);
   hbOrange.set(Color::ORANGE);
+  hbRed.set(Color::RED);
   hbLightGray.set(Color::LIGHT_GRAY);
   hbNotReachableTerrain.set(Color(224, 64, 64));
 
@@ -465,6 +467,7 @@ Graphics::Deinitialise()
   hbWhite.reset();
   hbMagenta.reset();
   hbOrange.reset();
+  hbRed.reset();
   hbLightGray.reset();
   hbNotReachableTerrain.reset();
 
