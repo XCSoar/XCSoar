@@ -420,17 +420,22 @@ NMEAParser::RMB(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
   return true;
 }
 
-static void
+static bool
 ReadDate(NMEAInputLine &line, BrokenDate &date)
 {
   char buffer[9];
   line.read(buffer, 9);
+
+  if (strlen(buffer) != 6)
+    return false;
 
   date.year = atoi(buffer + 4) + 2000;
   buffer[4] = '\0';
   date.month = atoi(buffer + 2);
   buffer[2] = '\0';
   date.day = atoi(buffer);
+
+  return true;
 }
 
 /**
