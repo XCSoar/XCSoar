@@ -112,11 +112,12 @@ trigger_redraw()
 void
 InputEvents::eventMarkLocation(const TCHAR *misc)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+
   if (_tcscmp(misc, _T("reset")) == 0) {
     marks->Reset();
   } else {
-    marks->MarkLocation(XCSoarInterface::Basic().Location,
-                        XCSoarInterface::Basic().DateTime);
+    marks->MarkLocation(basic.Location, basic.DateTime);
 
     if (XCSoarInterface::SettingsComputer().EnableSoundModes)
       PlayResource(_T("IDR_WAV_CLEAR"));
@@ -128,17 +129,18 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
 void
 InputEvents::eventSounds(const TCHAR *misc)
 {
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
  // bool OldEnableSoundVario = EnableSoundVario;
 
   if (_tcscmp(misc, _T("toggle")) == 0)
-    XCSoarInterface::SetSettingsComputer().EnableSoundVario =
-        !XCSoarInterface::SettingsComputer().EnableSoundVario;
+    settings_computer.EnableSoundVario = !settings_computer.EnableSoundVario;
   else if (_tcscmp(misc, _T("on")) == 0)
-    XCSoarInterface::SetSettingsComputer().EnableSoundVario = true;
+    settings_computer.EnableSoundVario = true;
   else if (_tcscmp(misc, _T("off")) == 0)
-    XCSoarInterface::SetSettingsComputer().EnableSoundVario = false;
+    settings_computer.EnableSoundVario = false;
   else if (_tcscmp(misc, _T("show")) == 0) {
-    if (XCSoarInterface::SettingsComputer().EnableSoundVario)
+    if (settings_computer.EnableSoundVario)
       Message::AddMessage(_("Vario sounds on"));
     else
       Message::AddMessage(_("Vario sounds off"));
@@ -153,27 +155,29 @@ InputEvents::eventSounds(const TCHAR *misc)
 void
 InputEvents::eventSnailTrail(const TCHAR *misc)
 {
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
   if (_tcscmp(misc, _T("toggle")) == 0) {
-    XCSoarInterface::SetSettingsMap().TrailActive =
-        XCSoarInterface::SettingsMap().TrailActive + 1;
-    if (XCSoarInterface::SettingsMap().TrailActive > 3)
-      XCSoarInterface::SetSettingsMap().TrailActive = 0;
+    settings_map.TrailActive =
+        settings_map.TrailActive + 1;
+    if (settings_map.TrailActive > 3)
+      settings_map.TrailActive = 0;
   } else if (_tcscmp(misc, _T("off")) == 0)
-    XCSoarInterface::SetSettingsMap().TrailActive = 0;
+    settings_map.TrailActive = 0;
   else if (_tcscmp(misc, _T("long")) == 0)
-    XCSoarInterface::SetSettingsMap().TrailActive = 1;
+    settings_map.TrailActive = 1;
   else if (_tcscmp(misc, _T("short")) == 0)
-    XCSoarInterface::SetSettingsMap().TrailActive = 2;
+    settings_map.TrailActive = 2;
   else if (_tcscmp(misc, _T("full")) == 0)
-    XCSoarInterface::SetSettingsMap().TrailActive = 3;
+    settings_map.TrailActive = 3;
   else if (_tcscmp(misc, _T("show")) == 0) {
-    if (XCSoarInterface::SettingsMap().TrailActive == 0)
+    if (settings_map.TrailActive == 0)
       Message::AddMessage(_("Snail trail off"));
-    if (XCSoarInterface::SettingsMap().TrailActive == 1)
+    if (settings_map.TrailActive == 1)
       Message::AddMessage(_("Long snail trail"));
-    if (XCSoarInterface::SettingsMap().TrailActive == 2)
+    if (settings_map.TrailActive == 2)
       Message::AddMessage(_("Short snail trail"));
-    if (XCSoarInterface::SettingsMap().TrailActive == 3)
+    if (settings_map.TrailActive == 3)
       Message::AddMessage(_("Full snail trail"));
   }
 
@@ -194,17 +198,18 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
 void
 InputEvents::eventAirSpace(const TCHAR *misc)
 {
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
   if (_tcscmp(misc, _T("toggle")) == 0)
-    XCSoarInterface::SetSettingsMap().EnableAirspace =
-        !XCSoarInterface::SettingsMap().EnableAirspace;
+    settings_map.EnableAirspace = !settings_map.EnableAirspace;
   else if (_tcscmp(misc, _T("off")) == 0)
-    XCSoarInterface::SetSettingsMap().EnableAirspace = false;
+    settings_map.EnableAirspace = false;
   else if (_tcscmp(misc, _T("on")) == 0)
-    XCSoarInterface::SetSettingsMap().EnableAirspace = true;
+    settings_map.EnableAirspace = true;
   else if (_tcscmp(misc, _T("show")) == 0) {
-    if (!XCSoarInterface::SetSettingsMap().EnableAirspace)
+    if (!settings_map.EnableAirspace)
       Message::AddMessage(_("Show airspace off"));
-    if (XCSoarInterface::SetSettingsMap().EnableAirspace)
+    if (settings_map.EnableAirspace)
       Message::AddMessage(_("Show airspace on"));
   }
 
@@ -279,6 +284,8 @@ InputEvents::eventZoom(const TCHAR* misc)
   // 0 means off
   // 1 means on
 
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
   if (_tcscmp(misc, _T("auto toggle")) == 0)
     sub_AutoZoom(-1);
   else if (_tcscmp(misc, _T("auto on")) == 0)
@@ -286,7 +293,7 @@ InputEvents::eventZoom(const TCHAR* misc)
   else if (_tcscmp(misc, _T("auto off")) == 0)
     sub_AutoZoom(0);
   else if (_tcscmp(misc, _T("auto show")) == 0) {
-    if (XCSoarInterface::SettingsMap().AutoZoom)
+    if (settings_map.AutoZoom)
       Message::AddMessage(_("Auto. zoom on"));
     else
       Message::AddMessage(_("Auto. zoom off"));
@@ -307,14 +314,13 @@ InputEvents::eventZoom(const TCHAR* misc)
   else if (_tcscmp(misc, _T("++")) == 0)
     sub_ScaleZoom(2);
   else if (_tcscmp(misc, _T("circlezoom toggle")) == 0) {
-    XCSoarInterface::SetSettingsMap().CircleZoom =
-        !XCSoarInterface::SettingsMap().CircleZoom;
+    settings_map.CircleZoom = !settings_map.CircleZoom;
   } else if (_tcscmp(misc, _T("circlezoom on")) == 0) {
-    XCSoarInterface::SetSettingsMap().CircleZoom = true;
+    settings_map.CircleZoom = true;
   } else if (_tcscmp(misc, _T("circlezoom off")) == 0) {
-    XCSoarInterface::SetSettingsMap().CircleZoom = false;
+    settings_map.CircleZoom = false;
   } else if (_tcscmp(misc, _T("circlezoom show")) == 0) {
-    if (XCSoarInterface::SettingsMap().CircleZoom)
+    if (settings_map.CircleZoom)
       Message::AddMessage(_("Circling zoom on"));
     else
       Message::AddMessage(_("Circling zoom off"));
@@ -669,6 +675,7 @@ InputEvents::eventAnalysis(const TCHAR *misc)
 void
 InputEvents::eventWaypointDetails(const TCHAR *misc)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
   const Waypoint* wp = NULL;
 
   if (_tcscmp(misc, _T("current")) == 0) {
@@ -681,8 +688,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
       return;
     }
   } else if (_tcscmp(misc, _T("select")) == 0) {
-    wp = dlgWayPointSelect(XCSoarInterface::main_window,
-                           XCSoarInterface::Basic().Location);
+    wp = dlgWayPointSelect(XCSoarInterface::main_window, basic.Location);
   }
   if (wp)
     dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
@@ -691,11 +697,13 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 void
 InputEvents::eventGotoLookup(const TCHAR *misc)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+
   if (protected_task_manager == NULL)
     return;
 
   const Waypoint* wp = dlgWayPointSelect(XCSoarInterface::main_window,
-                                         XCSoarInterface::Basic().Location);
+                                         basic.Location);
   if (wp != NULL) {
     protected_task_manager->do_goto(*wp);
     trigger_redraw();
@@ -726,10 +734,13 @@ InputEvents::eventPlaySound(const TCHAR *misc)
 void
 InputEvents::eventMacCready(const TCHAR *misc)
 {
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+
   if (protected_task_manager == NULL)
     return;
 
-  GlidePolar &polar = CommonInterface::SetSettingsComputer().glide_polar_task;
+  GlidePolar &polar = settings_computer.glide_polar_task;
   fixed mc = polar.get_mc();
 
   if (_tcscmp(misc, _T("up")) == 0) {
@@ -745,14 +756,13 @@ InputEvents::eventMacCready(const TCHAR *misc)
     device_blackboard.SetMC(mc);
     InfoBoxManager::SetDirty();
   } else if (_tcscmp(misc, _T("auto toggle")) == 0) {
-    XCSoarInterface::SetSettingsComputer().auto_mc =
-        !XCSoarInterface::SettingsComputer().auto_mc;
+    settings_computer.auto_mc = !settings_computer.auto_mc;
   } else if (_tcscmp(misc, _T("auto on")) == 0) {
-    XCSoarInterface::SetSettingsComputer().auto_mc = true;
+    settings_computer.auto_mc = true;
   } else if (_tcscmp(misc, _T("auto off")) == 0) {
-    XCSoarInterface::SetSettingsComputer().auto_mc = false;
+    settings_computer.auto_mc = false;
   } else if (_tcscmp(misc, _T("auto show")) == 0) {
-    if (XCSoarInterface::SettingsComputer().auto_mc) {
+    if (settings_computer.auto_mc) {
       Message::AddMessage(_("Auto. MacCready on"));
     } else {
       Message::AddMessage(_("Auto. MacCready off"));
@@ -905,14 +915,17 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
 void
 InputEvents::eventAudioDeadband(const TCHAR *misc)
 {
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+
   if (_tcscmp(misc, _T("+"))) {
-    XCSoarInterface::SetSettingsComputer().SoundDeadband++;
+    settings_computer.SoundDeadband++;
   }
   if (_tcscmp(misc, _T("-"))) {
-    XCSoarInterface::SetSettingsComputer().SoundDeadband--;
+    settings_computer.SoundDeadband--;
   }
-  XCSoarInterface::SetSettingsComputer().SoundDeadband =
-      min(40, max(XCSoarInterface::SettingsComputer().SoundDeadband,0));
+  settings_computer.SoundDeadband =
+      min(40, max(settings_computer.SoundDeadband, 0));
 
   /*
   VarioSound_SetVdead(SoundDeadband);
@@ -1117,25 +1130,25 @@ InputEvents::eventLogger(const TCHAR *misc)
   // TODO feature: start logger without requiring feedback
   // start stop toggle addnote
 
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SettingsComputer();
+
   if (_tcscmp(misc, _T("start ask")) == 0)
-    logger.guiStartLogger(XCSoarInterface::Basic(),
-                          XCSoarInterface::SettingsComputer(),
+    logger.guiStartLogger(basic, settings_computer,
                           *protected_task_manager);
   else if (_tcscmp(misc, _T("start")) == 0)
-    logger.guiStartLogger(XCSoarInterface::Basic(),
-                          XCSoarInterface::SettingsComputer(),
+    logger.guiStartLogger(basic, settings_computer,
                           *protected_task_manager, true);
   else if (_tcscmp(misc, _T("stop ask")) == 0)
-    logger.guiStopLogger(XCSoarInterface::Basic());
+    logger.guiStopLogger(basic);
   else if (_tcscmp(misc, _T("stop")) == 0)
-    logger.guiStopLogger(XCSoarInterface::Basic(), true);
+    logger.guiStopLogger(basic, true);
   else if (_tcscmp(misc, _T("toggle ask")) == 0)
-    logger.guiToggleLogger(XCSoarInterface::Basic(),
-                           XCSoarInterface::SettingsComputer(),
+    logger.guiToggleLogger(basic, settings_computer,
                            *protected_task_manager);
   else if (_tcscmp(misc, _T("toggle")) == 0)
-    logger.guiToggleLogger(XCSoarInterface::Basic(),
-                           XCSoarInterface::SettingsComputer(),
+    logger.guiToggleLogger(basic, settings_computer,
                            *protected_task_manager, true);
   else if (_tcscmp(misc, _T("nmea")) == 0) {
     EnableLogNMEA = !EnableLogNMEA;
@@ -1177,6 +1190,11 @@ InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
 void 
 InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) 
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SettingsComputer();
+
   (void)misc;
 
   if (!airspace_warnings->warning_empty()) {
@@ -1188,9 +1206,9 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
   }
 
   const AIRCRAFT_STATE aircraft_state =
-    ToAircraftState(CommonInterface::Basic(), CommonInterface::Calculated());
-  AirspaceVisible visible(XCSoarInterface::SettingsComputer(), aircraft_state);
-  GlidePolar polar = CommonInterface::SettingsComputer().glide_polar_task;
+    ToAircraftState(basic, calculated);
+  AirspaceVisible visible(settings_computer, aircraft_state);
+  GlidePolar polar = settings_computer.glide_polar_task;
   polar.set_mc(max(polar.get_mc(),fixed_one));
   AirspaceAircraftPerformanceGlide perf(polar);
   AirspaceSoonestSort ans(aircraft_state, perf, fixed(1800), visible);
@@ -1217,9 +1235,11 @@ InputEvents::eventNearestAirspaceDetails(const TCHAR *misc)
 void
 InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+
   if (_tcscmp(misc, _T("aircraft")) == 0)
     // big range..
-    PopupNearestWaypointDetails(way_points, XCSoarInterface::Basic().Location,
+    PopupNearestWaypointDetails(way_points, basic.Location,
                                 1.0e5);
   else if (_tcscmp(misc, _T("pan")) == 0)
     // big range..
@@ -1444,14 +1464,16 @@ InputEvents::eventExit(const TCHAR *misc)
 void
 InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
 {
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
   if (_tcscmp(misc, _T("unforce")) == 0)
-    XCSoarInterface::SetSettingsMap().UserForceDisplayMode = dmNone;
+    settings_map.UserForceDisplayMode = dmNone;
   else if (_tcscmp(misc, _T("forceclimb")) == 0)
-    XCSoarInterface::SetSettingsMap().UserForceDisplayMode = dmCircling;
+    settings_map.UserForceDisplayMode = dmCircling;
   else if (_tcscmp(misc, _T("forcecruise")) == 0)
-    XCSoarInterface::SetSettingsMap().UserForceDisplayMode = dmCruise;
+    settings_map.UserForceDisplayMode = dmCruise;
   else if (_tcscmp(misc, _T("forcefinal")) == 0)
-    XCSoarInterface::SetSettingsMap().UserForceDisplayMode = dmFinalGlide;
+    settings_map.UserForceDisplayMode = dmFinalGlide;
   else if (_tcscmp(misc, _T("show")) == 0)
     Message::AddMessage(_("Map labels on"));
 
@@ -1461,16 +1483,19 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
 void
 InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
 {
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+
   if (_tcscmp(misc, _T("all")) == 0)
-    XCSoarInterface::SetSettingsComputer().AltitudeMode = ALLON;
+    settings_computer.AltitudeMode = ALLON;
   else if (_tcscmp(misc, _T("clip")) == 0)
-    XCSoarInterface::SetSettingsComputer().AltitudeMode = CLIP;
+    settings_computer.AltitudeMode = CLIP;
   else if (_tcscmp(misc, _T("auto")) == 0)
-    XCSoarInterface::SetSettingsComputer().AltitudeMode = AUTO;
+    settings_computer.AltitudeMode = AUTO;
   else if (_tcscmp(misc, _T("below")) == 0)
-    XCSoarInterface::SetSettingsComputer().AltitudeMode = ALLBELOW;
+    settings_computer.AltitudeMode = ALLBELOW;
   else if (_tcscmp(misc, _T("off")) == 0)
-    XCSoarInterface::SetSettingsComputer().AltitudeMode = ALLOFF;
+    settings_computer.AltitudeMode = ALLOFF;
 
   trigger_redraw();
 }
@@ -1478,13 +1503,15 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
 void
 InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+
   if (_tcscmp(misc, _T("takeoff")) == 0) {
     ScopeSuspendAllThreads suspend;
-    way_points.add_takeoff_point(XCSoarInterface::Basic().Location,
-                                 XCSoarInterface::Calculated().TerrainAlt);
+    way_points.add_takeoff_point(basic.Location, calculated.TerrainAlt);
   } else {
-    Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
-    edit_waypoint.Altitude = XCSoarInterface::Calculated().TerrainAlt;
+    Waypoint edit_waypoint = way_points.create(basic.Location);
+    edit_waypoint.Altitude = calculated.TerrainAlt;
     if (!dlgWaypointEditShowModal(edit_waypoint) || edit_waypoint.Name.empty()) {
       trigger_redraw();
       return;
@@ -1502,21 +1529,23 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
 void
 InputEvents::eventOrientation(const TCHAR *misc)
 {
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
   if (_tcscmp(misc, _T("northup")) == 0) {
-    XCSoarInterface::SetSettingsMap().OrientationCruise = NORTHUP;
-    XCSoarInterface::SetSettingsMap().OrientationCircling = NORTHUP;
+    settings_map.OrientationCruise = NORTHUP;
+    settings_map.OrientationCircling = NORTHUP;
   } else if (_tcscmp(misc, _T("northcircle")) == 0) {
-    XCSoarInterface::SetSettingsMap().OrientationCruise = TRACKUP;
-    XCSoarInterface::SetSettingsMap().OrientationCircling = NORTHUP;
+    settings_map.OrientationCruise = TRACKUP;
+    settings_map.OrientationCircling = NORTHUP;
   } else if (_tcscmp(misc, _T("trackcircle")) == 0) {
-    XCSoarInterface::SetSettingsMap().OrientationCruise = NORTHUP;
-    XCSoarInterface::SetSettingsMap().OrientationCircling = TRACKUP;
+    settings_map.OrientationCruise = NORTHUP;
+    settings_map.OrientationCircling = TRACKUP;
   } else if (_tcscmp(misc, _T("trackup")) == 0) {
-    XCSoarInterface::SetSettingsMap().OrientationCruise = TRACKUP;
-    XCSoarInterface::SetSettingsMap().OrientationCircling = TRACKUP;
+    settings_map.OrientationCruise = TRACKUP;
+    settings_map.OrientationCircling = TRACKUP;
   } else if (_tcscmp(misc, _T("northtrack")) == 0) {
-    XCSoarInterface::SetSettingsMap().OrientationCruise = TRACKUP;
-    XCSoarInterface::SetSettingsMap().OrientationCircling = TARGETUP;
+    settings_map.OrientationCruise = TRACKUP;
+    settings_map.OrientationCircling = TARGETUP;
   }
 
   ActionInterface::SendSettingsMap(true);
@@ -1577,52 +1606,52 @@ eventSounds			- Include Task and Modes sounds along with Vario
 void
 InputEvents::sub_TerrainTopography(int vswitch)
 {
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
   if (vswitch == -1) {
     // toggle through 4 possible options
     char val = 0;
 
-    if (XCSoarInterface::SettingsMap().EnableTopography)
+    if (settings_map.EnableTopography)
       val++;
-    if (XCSoarInterface::SettingsMap().EnableTerrain)
+    if (settings_map.EnableTerrain)
       val += (char)2;
 
     val++;
     if (val > 3)
       val = 0;
 
-    XCSoarInterface::SetSettingsMap().EnableTopography = ((val & 0x01) == 0x01);
-    XCSoarInterface::SetSettingsMap().EnableTerrain = ((val & 0x02) == 0x02);
+    settings_map.EnableTopography = ((val & 0x01) == 0x01);
+    settings_map.EnableTerrain = ((val & 0x02) == 0x02);
   } else if (vswitch == -2)
     // toggle terrain
-    XCSoarInterface::SetSettingsMap().EnableTerrain =
-        !XCSoarInterface::SettingsMap().EnableTerrain;
+    settings_map.EnableTerrain = !settings_map.EnableTerrain;
   else if (vswitch == -3)
     // toggle topography
-    XCSoarInterface::SetSettingsMap().EnableTopography =
-        !XCSoarInterface::SettingsMap().EnableTopography;
+    settings_map.EnableTopography = !settings_map.EnableTopography;
   else if (vswitch == 1)
     // Turn on topography
-    XCSoarInterface::SetSettingsMap().EnableTopography = true;
+    settings_map.EnableTopography = true;
   else if (vswitch == 2)
     // Turn off topography
-    XCSoarInterface::SetSettingsMap().EnableTopography = false;
+    settings_map.EnableTopography = false;
   else if (vswitch == 3)
     // Turn on terrain
-    XCSoarInterface::SetSettingsMap().EnableTerrain = true;
+    settings_map.EnableTerrain = true;
   else if (vswitch == 4)
     // Turn off terrain
-    XCSoarInterface::SetSettingsMap().EnableTerrain = false;
+    settings_map.EnableTerrain = false;
   else if (vswitch == 0) {
     // Show terrain/topography
     // ARH Let user know what's happening
     TCHAR buf[128];
 
-    if (XCSoarInterface::SettingsMap().EnableTopography)
+    if (settings_map.EnableTopography)
       _stprintf(buf, _T("\r\n%s / "), _("On"));
     else
       _stprintf(buf, _T("\r\n%s / "), _("Off"));
 
-    _tcscat(buf, XCSoarInterface::SettingsMap().EnableTerrain
+    _tcscat(buf, settings_map.EnableTerrain
             ? _("On") : _("Off"));
 
     Message::AddMessage(_("Topography/Terrain"), buf);
@@ -1631,9 +1660,9 @@ InputEvents::sub_TerrainTopography(int vswitch)
 
   /* save new values to profile */
   Profile::Set(szProfileDrawTopography,
-               XCSoarInterface::SettingsMap().EnableTopography);
+               settings_map.EnableTopography);
   Profile::Set(szProfileDrawTerrain,
-               XCSoarInterface::SettingsMap().EnableTerrain);
+               settings_map.EnableTerrain);
 
   XCSoarInterface::SendSettingsMap(true);
 }
@@ -1650,26 +1679,25 @@ InputEvents::sub_TerrainTopography(int vswitch)
 void
 InputEvents::sub_Pan(int vswitch)
 {
-  bool oldPan = XCSoarInterface::SettingsMap().EnablePan;
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  bool oldPan = settings_map.EnablePan;
 
   if (vswitch == -2) {
     // supertoogle, toogle pan mode and fullscreen
-    XCSoarInterface::SetSettingsMap().EnablePan =
-        !XCSoarInterface::SettingsMap().EnablePan;
+    settings_map.EnablePan = !settings_map.EnablePan;
     XCSoarInterface::main_window.SetFullScreen(true);
   } else if (vswitch == -1)
     // toogle, toogle pan mode only
-    XCSoarInterface::SetSettingsMap().EnablePan =
-        !XCSoarInterface::SettingsMap().EnablePan;
+    settings_map.EnablePan = !settings_map.EnablePan;
   else
     // 1 = enable pan mode
     // 0 = disable pan mode
-    XCSoarInterface::SetSettingsMap().EnablePan = (vswitch !=0);
+    settings_map.EnablePan = (vswitch !=0);
 
-  if (XCSoarInterface::SettingsMap().EnablePan != oldPan) {
-    if (XCSoarInterface::SettingsMap().EnablePan) {
-      XCSoarInterface::SetSettingsMap().PanLocation =
-          XCSoarInterface::Basic().Location;
+  if (settings_map.EnablePan != oldPan) {
+    if (settings_map.EnablePan) {
+      settings_map.PanLocation = basic.Location;
       setMode(MODE_PAN);
     } else {
       setMode(MODE_DEFAULT);
@@ -1683,7 +1711,9 @@ InputEvents::sub_Pan(int vswitch)
 void
 InputEvents::sub_PanCursor(int dx, int dy)
 {
-  if (!XCSoarInterface::SettingsMap().EnablePan)
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
+  if (!settings_map.EnablePan)
     return;
 
   const WindowProjection &projection =
@@ -1692,9 +1722,9 @@ InputEvents::sub_PanCursor(int dx, int dy)
   RasterPoint pt = projection.GetScreenOrigin();
   pt.x -= dx * projection.GetScreenWidth() / 4;
   pt.y -= dy * projection.GetScreenHeight() / 4;
-  XCSoarInterface::SetSettingsMap().PanLocation = projection.ScreenToGeo(pt);
+  settings_map.PanLocation = projection.ScreenToGeo(pt);
 
-  XCSoarInterface::main_window.map.QuickRedraw(XCSoarInterface::SettingsMap());
+  XCSoarInterface::main_window.map.QuickRedraw(settings_map);
   XCSoarInterface::SendSettingsMap(true);
 }
 
@@ -1702,17 +1732,17 @@ InputEvents::sub_PanCursor(int dx, int dy)
 void
 InputEvents::sub_AutoZoom(int vswitch)
 {
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
   if (vswitch == -1)
-    XCSoarInterface::SetSettingsMap().AutoZoom =
-        !XCSoarInterface::SettingsMap().AutoZoom;
+    settings_map.AutoZoom = !settings_map.AutoZoom;
   else
-    XCSoarInterface::SetSettingsMap().AutoZoom = (vswitch != 0); // 0 off, 1 on
+    settings_map.AutoZoom = (vswitch != 0); // 0 off, 1 on
 
-  Profile::Set(szProfileAutoZoom, XCSoarInterface::SettingsMap().AutoZoom);
+  Profile::Set(szProfileAutoZoom, settings_map.AutoZoom);
 
-  if (XCSoarInterface::SettingsMap().AutoZoom &&
-      XCSoarInterface::SettingsMap().EnablePan)
-    XCSoarInterface::SetSettingsMap().EnablePan = false;
+  if (settings_map.AutoZoom && settings_map.EnablePan)
+    settings_map.EnablePan = false;
 
   ActionInterface::SendSettingsMap(true);
 }
@@ -1720,11 +1750,13 @@ InputEvents::sub_AutoZoom(int vswitch)
 void
 InputEvents::sub_SetZoom(fixed value)
 {
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+
   DisplayMode_t displayMode = XCSoarInterface::main_window.map.GetDisplayMode();
-  if (XCSoarInterface::SettingsMap().AutoZoom &&
-      !(displayMode == dmCircling && XCSoarInterface::SettingsMap().CircleZoom) &&
-      !XCSoarInterface::SettingsMap().EnablePan) {
-    XCSoarInterface::SetSettingsMap().AutoZoom = false;  // disable autozoom if user manually changes zoom
+  if (settings_map.AutoZoom &&
+      !(displayMode == dmCircling && settings_map.CircleZoom) &&
+      !settings_map.EnablePan) {
+    settings_map.AutoZoom = false;  // disable autozoom if user manually changes zoom
     Profile::Set(szProfileAutoZoom, false);
     Message::AddMessage(_("Auto. zoom off"));
   }
@@ -1739,7 +1771,7 @@ InputEvents::sub_SetZoom(fixed value)
   value = max(minreasonable, min(scale_1600km, value));
   XCSoarInterface::main_window.map.SetMapScale(value);
 
-  XCSoarInterface::main_window.map.QuickRedraw(XCSoarInterface::SettingsMap());
+  XCSoarInterface::main_window.map.QuickRedraw(settings_map);
   XCSoarInterface::SendSettingsMap(true);
 }
 
