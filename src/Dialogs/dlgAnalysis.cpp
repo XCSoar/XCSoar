@@ -327,16 +327,14 @@ NextPage(int Step)
 }
 
 static void
-OnNextClicked(WndButton &Sender)
+OnNextClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   NextPage(+1);
 }
 
 static void
-OnPrevClicked(WndButton &Sender)
+OnPrevClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   NextPage(-1);
 }
 
@@ -347,9 +345,8 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
-  (void)Sender;
 
   switch (key_code) {
   case VK_LEFT:
@@ -374,9 +371,8 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 }
 
 static void
-OnCalcClicked(WndButton &Sender)
+OnCalcClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   if (page == ANALYSIS_PAGE_BAROGRAPH)
     dlgBasicSettingsShowModal();
 
