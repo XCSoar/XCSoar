@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-12 09:33+0200\n"
-"PO-Revision-Date: 2011-04-08 15:20+0000\n"
-"Last-Translator: Gabor LIPTAK <Unknown>\n"
+"PO-Revision-Date: 2011-04-13 21:43+0000\n"
+"Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-09 07:04+0000\n"
-"X-Generator: Launchpad (build 12757)\n"
+"X-Launchpad-Export-Date: 2011-04-20 07:04+0000\n"
+"X-Generator: Launchpad (build 12847)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1394 src/Dialogs/dlgAnalysis.cpp:268
@@ -908,9 +908,9 @@ msgstr ""
 "Hátralevő idő területi szabad távrepülésen. Vörösre vált ha az idő lejárt."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AA max. distance "
-msgstr "TS távolság max"
+msgstr "TS távolság max "
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
@@ -2613,22 +2613,22 @@ msgstr "Kilép a programból?"
 #: src/Units/UnitsStore.cpp:36
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "Európai"
 
 #: src/Units/UnitsStore.cpp:45
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "Brit"
 
 #: src/Units/UnitsStore.cpp:54
 #, no-c-format
 msgid "American"
-msgstr ""
+msgstr "Amerikai"
 
 #: src/Units/UnitsStore.cpp:63
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "Ausztrál"
 
 #. Read the terrain file
 #: src/UtilsSettings.cpp:117 src/Components.cpp:327
@@ -3679,12 +3679,11 @@ msgstr "Feladatkezelő"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
-msgstr ""
+msgstr "A feladat módosult"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
-#, fuzzy
 msgid "Task unchanged"
-msgstr "Feladatkezelő"
+msgstr "A feladat nem változott meg"
 
 #: src/Dialogs/pnlTaskEdit.cpp:96
 msgid "Clear task?"
@@ -3872,15 +3871,15 @@ msgstr "A feladat üres (%s)"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:183
 msgid "max."
-msgstr ""
+msgstr "max."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:187
 msgid "min."
-msgstr ""
+msgstr "min."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:195
 msgid "dist."
-msgstr ""
+msgstr "táv"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:210 src/Dialogs/dlgTaskHelpers.cpp:463
 msgid "FAI quadrant"
@@ -8180,30 +8179,6 @@ msgstr ""
 msgid "Landing"
 msgstr "Leszállás"
 
-#~ msgid "None "
-#~ msgstr "Nincs "
-
-#~ msgid "Flarm Iinterface"
-#~ msgstr "FLARM kezelőfelület"
-
-#~ msgid "Speed Remaining Help"
-#~ msgstr "Sebesség a maradékon"
-
-#~ msgid "Speed remaining Help"
-#~ msgstr "Segesség a maradékon Súgó"
-
-#~ msgid "InfoBox Layout"
-#~ msgstr "Kijelzők elrendezése"
-
-#~ msgid "Waypoint not editable"
-#~ msgstr "Nem szerkeszthető fordulópont"
-
-#~ msgid "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
-#~ msgstr "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
-
-#~ msgid "%s%sdist. %.0f %s (%s)"
-#~ msgstr "%s%stáv %.0f %s (%s)"
-
 #~ msgid "Previous turnpoint"
 #~ msgstr "Előző fordulópont"
 
@@ -8591,6 +8566,9 @@ msgstr "Leszállás"
 #~ msgid "Topology"
 #~ msgstr "Topológia"
 
+#~ msgid "None "
+#~ msgstr "Nincs "
+
 #~ msgid "Polar:"
 #~ msgstr "Polár:"
 
@@ -8621,6 +8599,9 @@ msgstr "Leszállás"
 #~ msgid "Pages"
 #~ msgstr "Oldalak"
 
+#~ msgid "Waypoint not editable"
+#~ msgstr "Nem szerkeszthető fordulópont"
+
 #~ msgid "Rel. Alt.:"
 #~ msgstr "Rel. mag.:"
 
@@ -8630,11 +8611,17 @@ msgstr "Leszállás"
 #~ msgid "Distance:"
 #~ msgstr "Távolság:"
 
+#~ msgid "Flarm Iinterface"
+#~ msgstr "FLARM kezelőfelület"
+
 #~ msgid "Auxiliary-1"
 #~ msgstr "Külső-1"
 
 #~ msgid "Auxiliary-2"
 #~ msgstr "Külső-2"
+
+#~ msgid "FAI start/ finish rules"
+#~ msgstr "FAI start/cél szabályok"
 
 #~ msgid "Auxiliary-3"
 #~ msgstr "Külső-3"
@@ -8664,3 +8651,18 @@ msgstr "Leszállás"
 
 #~ msgid "Aux-%u"
 #~ msgstr "Külső-%u"
+
+#~ msgid "%s%sdist. %.0f %s (%s)"
+#~ msgstr "%s%stáv %.0f %s (%s)"
+
+#~ msgid "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
+#~ msgstr "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
+
+#~ msgid "Speed remaining Help"
+#~ msgstr "Segesség a maradékon Súgó"
+
+#~ msgid "Speed Remaining Help"
+#~ msgstr "Sebesség a maradékon"
+
+#~ msgid "InfoBox Layout"
+#~ msgstr "Kijelzők elrendezése"
