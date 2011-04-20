@@ -209,7 +209,7 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
   const unsigned int max_params = sizeof(params) / sizeof(params[0]);
   while ((line = reader.read()) != NULL &&
          line[0] != _T('\"') && line[0] != _T(',')) {
-    const size_t n_params = WayPointReaderBase::
+    const size_t n_params = WaypointReaderBase::
         ExtractParameters(line, params_buffer, params, max_params, true);
 
     if (_tcscmp(params[0], _T("Options")) == 0) {
@@ -444,7 +444,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   //       TASK NAME              , TAKEOFF, START  , TP1    , TP2    , FINISH ,  LANDING
   TCHAR waypoints_buffer[1024];
   const TCHAR *wps[30];
-  size_t n_waypoints = WayPointReaderBase::
+  size_t n_waypoints = WaypointReaderBase::
       ExtractParameters(line, waypoints_buffer, wps, 30, true, _T('"')) - 3;
 
   SeeYouTaskInformation task_info;

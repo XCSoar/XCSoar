@@ -31,14 +31,14 @@ Copyright_License {
 class Angle;
 
 class WaypointReaderFS:
-  public WayPointReaderBase 
+  public WaypointReaderBase 
 {
   bool is_utm;
 
 public:
   WaypointReaderFS(const TCHAR* file_name, const int _file_num,
                  bool _compressed = false)
-    :WayPointReaderBase(file_name, _file_num, _compressed), is_utm(false) {}
+    :WaypointReaderBase(file_name, _file_num, _compressed), is_utm(false) {}
 
   bool VerifyFormat(TLineReader &reader) const;
 

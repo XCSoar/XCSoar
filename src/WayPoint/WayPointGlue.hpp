@@ -30,7 +30,7 @@ class Waypoints;
 class RasterTerrain;
 struct SETTINGS_COMPUTER;
 
-class WayPointReaderBase;
+class WaypointReaderBase;
 
 /**
  * This class is used to parse different waypoint files

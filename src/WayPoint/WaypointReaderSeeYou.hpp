@@ -32,12 +32,12 @@ Copyright_License {
 class Angle;
 
 class WaypointReaderSeeYou: 
-  public WayPointReaderBase 
+  public WaypointReaderBase 
 {
 public:
   WaypointReaderSeeYou(const TCHAR* file_name, const int _file_num,
                      bool _compressed = false)
-    :WayPointReaderBase(file_name, _file_num, _compressed) {}
+    :WaypointReaderBase(file_name, _file_num, _compressed) {}
 
 protected:
   /**
