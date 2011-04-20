@@ -175,9 +175,6 @@ struct SETTINGS_FEATURES {
 
   /** Navigate by baro altitude instead of GPS altitude */
   bool EnableNavBaroAltitude;
-
-  /** Use Gestures */
-  bool EnableGestures;
 };
 
 

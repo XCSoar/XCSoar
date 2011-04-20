@@ -362,9 +362,6 @@ NextPage(int Step)
 static void
 OnGesture(const TCHAR* gesture)
 {
-  if (!XCSoarInterface::SettingsComputer().EnableGestures)
-    return;
-
   if (_tcscmp(gesture, _T("L")) == 0)
     NextPage(-1);
   else if (_tcscmp(gesture, _T("R")) == 0)
@@ -374,9 +371,6 @@ OnGesture(const TCHAR* gesture)
 bool
 ChartControl::on_mouse_down(int x, int y)
 {
-  if (!XCSoarInterface::SettingsComputer().EnableGestures)
-    return false;
-
   gestures.Start(x, y, Layout::Scale(20));
   return true;
 }
@@ -384,9 +378,6 @@ ChartControl::on_mouse_down(int x, int y)
 bool
 ChartControl::on_mouse_move(int x, int y, unsigned keys)
 {
-  if (!XCSoarInterface::SettingsComputer().EnableGestures)
-    return false;
-
   gestures.Update(x, y);
   return true;
 }
@@ -394,9 +385,6 @@ ChartControl::on_mouse_move(int x, int y, unsigned keys)
 bool
 ChartControl::on_mouse_up(int x, int y)
 {
-  if (!XCSoarInterface::SettingsComputer().EnableGestures)
-    return false;
-
   const TCHAR* gesture = gestures.Finish();
   if (gesture != NULL)
     OnGesture(gesture);
@@ -407,9 +395,6 @@ ChartControl::on_mouse_up(int x, int y)
 bool
 CrossSectionControl::on_mouse_down(int x, int y)
 {
-  if (!XCSoarInterface::SettingsComputer().EnableGestures)
-    return false;
-
   gestures.Start(x, y, Layout::Scale(20));
   return true;
 }
@@ -417,9 +402,6 @@ CrossSectionControl::on_mouse_down(int x, int y)
 bool
 CrossSectionControl::on_mouse_move(int x, int y, unsigned keys)
 {
-  if (!XCSoarInterface::SettingsComputer().EnableGestures)
-    return false;
-
   gestures.Update(x, y);
   return true;
 }
@@ -427,9 +409,6 @@ CrossSectionControl::on_mouse_move(int x, int y, unsigned keys)
 bool
 CrossSectionControl::on_mouse_up(int x, int y)
 {
-  if (!XCSoarInterface::SettingsComputer().EnableGestures)
-    return false;
-
   const TCHAR* gesture = gestures.Finish();
   if (gesture != NULL)
     OnGesture(gesture);

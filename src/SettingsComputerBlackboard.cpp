@@ -39,7 +39,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.SoundVolume = 80;
   settings_computer.SoundDeadband = 5;
   settings_computer.EnableNavBaroAltitude=false;
-  settings_computer.EnableGestures = true;
   settings_computer.EnableExternalTriggerCruise=false;
   settings_computer.LoggerTimeStepCruise=5;
   settings_computer.LoggerTimeStepCircling=1;

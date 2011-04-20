@@ -168,7 +168,6 @@ const TCHAR szProfileNettoSpeed[] = _T("NettoSpeed");
 const TCHAR szProfileAccelerometerZero[] = _T("AccelerometerZero");
 
 const TCHAR szProfileAutoBlank[] = _T("AutoBlank");
-const TCHAR szProfileGestures[] = _T("Gestures");
 const TCHAR szProfileAverEffTime[] = _T("AverEffTime");
 const TCHAR szProfileVarioGauge[] = _T("VarioGauge");
 

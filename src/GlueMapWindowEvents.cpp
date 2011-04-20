@@ -141,8 +141,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
                         visible_projection.GetScreenOrigin().y - y,
                         Layout::Scale(30)) != 1)
         drag_mode = DRAG_SIMULATOR;
-  if (XCSoarInterface::SettingsComputer().EnableGestures &&
-      drag_mode == DRAG_NONE ) {
+  if (drag_mode == DRAG_NONE ) {
     gestures.Start(x, y, Layout::Scale(20));
     drag_mode = DRAG_GESTURE;
   }
@@ -264,9 +263,6 @@ GlueMapWindow::on_mouse_wheel(int delta)
 bool
 GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
 {
-  if (!XCSoarInterface::SettingsComputer().EnableGestures)
-    return false;
-
   return InputEvents::processGesture(gesture);
 }
 

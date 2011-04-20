@@ -694,10 +694,6 @@
         Help="This determines whether to blank the display after a long period of inactivity when operating on internal battery power.">
         <DataField DataType="boolean" />
       </Edit>
-  
-      <Edit Name="prpGestures" Caption="Gestures" X="2" Width="-2" Height="22" CaptionWidth="150">
-        <DataField DataType="boolean" />
-      </Edit>
     
       <Edit Name="prpInputFile" Caption="Events" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices.">

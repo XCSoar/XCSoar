@@ -97,7 +97,6 @@ extern const TCHAR szProfileSoundTask[];
 extern const TCHAR szProfileSoundModes[];
 extern const TCHAR szProfileNettoSpeed[];
 extern const TCHAR szProfileAutoBlank[];
-extern const TCHAR szProfileGestures[];
 extern const TCHAR szProfileAverEffTime[]; // VENTA6
 extern const TCHAR szProfileVarioGauge[];
 extern const TCHAR szProfileDebounceTimeout[];

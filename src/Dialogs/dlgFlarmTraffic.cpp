@@ -543,8 +543,7 @@ OnTimerNotify(WndForm &Sender)
 bool
 FlarmTrafficControl::on_mouse_move(int x, int y, unsigned keys)
 {
-  if (XCSoarInterface::SettingsComputer().EnableGestures)
-    gestures.Update(x, y);
+  gestures.Update(x, y);
 
   return true;
 }
@@ -552,8 +551,7 @@ FlarmTrafficControl::on_mouse_move(int x, int y, unsigned keys)
 bool
 FlarmTrafficControl::on_mouse_down(int x, int y)
 {
-  if (XCSoarInterface::SettingsComputer().EnableGestures)
-    gestures.Start(x, y, Layout::Scale(20));
+  gestures.Start(x, y, Layout::Scale(20));
 
   return true;
 }
@@ -561,11 +559,9 @@ FlarmTrafficControl::on_mouse_down(int x, int y)
 bool
 FlarmTrafficControl::on_mouse_up(int x, int y)
 {
-  if (XCSoarInterface::SettingsComputer().EnableGestures) {
-    const TCHAR* gesture = gestures.Finish();
-    if (gesture && on_mouse_gesture(gesture))
-      return true;
-  }
+  const TCHAR *gesture = gestures.Finish();
+  if (gesture && on_mouse_gesture(gesture))
+    return true;
 
   if (!WarningMode())
     SelectNearTarget(x, y, Layout::Scale(15));
@@ -576,9 +572,6 @@ FlarmTrafficControl::on_mouse_up(int x, int y)
 bool
 FlarmTrafficControl::on_mouse_gesture(const TCHAR* gesture)
 {
-  if (!XCSoarInterface::SettingsComputer().EnableGestures)
-    return false;
-
   if (_tcscmp(gesture, _T("U")) == 0) {
     ZoomIn();
     return true;

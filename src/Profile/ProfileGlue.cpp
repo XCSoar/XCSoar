@@ -295,9 +295,6 @@ Profile::Use()
       settings_map.EnableAutoBlank);
 #endif
 
-  Get(szProfileGestures,
-      settings_computer.EnableGestures);
-
   if (Get(szProfileAverEffTime, Temp))
     settings_computer.AverEffTime = Temp;
 

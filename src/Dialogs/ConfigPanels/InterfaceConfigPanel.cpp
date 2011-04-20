@@ -69,7 +69,6 @@ InterfaceConfigPanel::Init(WndForm *_wf)
   assert(_wf != NULL);
   wf = _wf;
   WndProperty *wp;
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
   buttonFonts = ((WndButton *)wf->FindByName(_T("cmdFonts")));
   if (buttonFonts)
@@ -82,17 +81,6 @@ InterfaceConfigPanel::Init(WndForm *_wf)
     DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
     df->Set(XCSoarInterface::SettingsMap().EnableAutoBlank);
     wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpGestures"));
-  if (wp) {
-    if (has_pointer()) {
-      DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
-      df.Set(settings_computer.EnableGestures);
-      wp->RefreshDisplay();
-    } else {
-      wp->hide();
-    }
   }
 
   InitFileField(*wf, _T("prpInputFile"), szProfileInputFile, _T("*.xci\0"));
@@ -170,17 +158,12 @@ InterfaceConfigPanel::Save(bool &requirerestart)
 {
   bool changed = false;
   WndProperty *wp;
-  SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
-
 
 #ifdef HAVE_BLANK
   changed |= SaveFormProperty(*wf, _T("prpAutoBlank"),
                               szProfileAutoBlank,
                               XCSoarInterface::SetSettingsMap().EnableAutoBlank);
 #endif
-
-  changed |= SaveFormProperty(*wf, _T("prpGestures"), szProfileGestures,
-                              settings_computer.EnableGestures);
 
   if (FinishFileField(*wf, _T("prpInputFile"), szProfileInputFile)) {
     changed = true;
