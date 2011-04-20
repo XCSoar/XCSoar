@@ -76,6 +76,8 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
             settings_computer.DisplayAirspaces + AIRSPACECLASSCOUNT,
             true);
 
+  settings_computer.DisplayAirspaces[CLASSG] = false;
+
   settings_computer.SafetySpeed = fixed(70);
   settings_computer.BallastSecsToEmpty  = 120;
   settings_computer.BallastTimerActive = false;
