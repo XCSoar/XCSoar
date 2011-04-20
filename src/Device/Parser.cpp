@@ -420,6 +420,19 @@ NMEAParser::RMB(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
   return true;
 }
 
+static void
+ReadDate(NMEAInputLine &line, BrokenDate &date)
+{
+  char buffer[9];
+  line.read(buffer, 9);
+
+  date.year = atoi(buffer + 4) + 2000;
+  buffer[4] = '\0';
+  date.month = atoi(buffer + 2);
+  buffer[2] = '\0';
+  date.day = atoi(buffer);
+}
+
 /**
  * Parses a RMC sentence
  *
@@ -465,14 +478,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   bool TrackBearingAvailable = line.read_checked(TrackBearing);
 
   // JMW get date info first so TimeModify is accurate
-  char date_buffer[9];
-  line.read(date_buffer, 9);
-
-  GPS_INFO->DateTime.year = atoi(&date_buffer[4]) + 2000;
-  date_buffer[4] = '\0';
-  GPS_INFO->DateTime.month = atoi(&date_buffer[2]);
-  date_buffer[2] = '\0';
-  GPS_INFO->DateTime.day = atoi(&date_buffer[0]);
+  ReadDate(line, GPS_INFO->DateTime);
 
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return true;
