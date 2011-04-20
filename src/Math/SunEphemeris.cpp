@@ -132,8 +132,7 @@ static Angle
 CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
                  const fixed TimeZone, const Angle dec)
 {
-  fixed T = fixed(time.hour) + fixed(time.minute) / 60 +
-            fixed(time.second) / 3600 - fixed(12) + TimeZone;
+  fixed T = fixed(time.GetSecondOfDay()) / 3600 - fixed(12) + TimeZone;
   Angle t = Angle::degrees(fixed(15)) * T;
 
   return Angle::radians(-atan2(dec.cos() * t.sin(),
