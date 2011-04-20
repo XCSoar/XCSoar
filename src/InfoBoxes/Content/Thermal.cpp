@@ -87,22 +87,13 @@ void
 InfoBoxContentThermalLastTime::Update(InfoBoxWindow &infobox)
 {
   // Set Value
-  TCHAR sTmp[32];
-  int dd = abs((int)XCSoarInterface::Calculated().LastThermalTime) % (3600 * 24);
-  int hours = dd / 3600;
-  int mins = dd / 60 - hours * 60;
-  int seconds = dd - mins * 60 - hours * 3600;
 
-  if (hours > 0) { // hh:mm, ss
-    _stprintf(sTmp, _T("%02d:%02d"), hours, mins);
-    infobox.SetValue(sTmp);
-    _stprintf(sTmp, _T("%02d"), seconds);
-    infobox.SetComment(sTmp);
-  } else { // mm:ss
-    _stprintf(sTmp, _T("%02d:%02d"), mins, seconds);
-    infobox.SetValue(sTmp);
-    infobox.SetComment(_T(""));
-  }
+  TCHAR value[32], comment[32];
+  Units::TimeToTextSmart(value, comment,
+                         (int)XCSoarInterface::Calculated().LastThermalTime);
+
+  infobox.SetValue(value);
+  infobox.SetComment(comment);
 }
 
 void
