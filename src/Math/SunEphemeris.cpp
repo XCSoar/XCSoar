@@ -48,6 +48,8 @@ Copyright_License {
 fixed
 SunEphemeris::FNday(const BrokenDateTime &date_time)
 {
+  assert(date_time.Plausible());
+
   long int luku = -7 * (date_time.year + (date_time.month + 9) / 12) / 4 +
                   275 * date_time.month / 9 + date_time.day +
                   (long int)date_time.year * 367;
@@ -132,6 +134,8 @@ static Angle
 CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
                  const fixed TimeZone, const Angle dec)
 {
+  assert(time.Plausible());
+
   fixed T = fixed(time.GetSecondOfDay()) / 3600 - fixed(12) + TimeZone;
   Angle t = Angle::degrees(fixed(15)) * T;
 
@@ -154,6 +158,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
                            const BrokenDateTime &date_time,
                            const fixed TimeZone)
 {
+  assert(date_time.Plausible());
+
   fixed DaysToJ2000 = FNday(date_time);
 
   Angle L = GetMeanSunLongitude(DaysToJ2000);

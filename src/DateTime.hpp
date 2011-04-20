@@ -69,6 +69,15 @@ struct BrokenDate {
       (year == other.year && (month > other.month ||
                               (month == other.month && day > other.day)));
   }
+
+  /**
+   * Does this object contain plausible values?
+   */
+  bool Plausible() const {
+    return year >= 1800 && year <= 2500 &&
+      month >= 1 && month <= 12 &&
+      day >= 1 && day <= 31;
+  }
 };
 
 /**
@@ -101,6 +110,13 @@ struct BrokenTime {
   bool operator==(const BrokenTime &other) const {
     return hour == other.hour && minute == other.minute &&
       second == other.second;
+  }
+
+  /**
+   * Does this object contain plausible values?
+   */
+  bool Plausible() const {
+    return hour < 24 && minute < 60 && second < 60;
   }
 
   /**
@@ -146,6 +162,13 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   bool operator==(const BrokenDateTime &other) const {
     return (const BrokenDate &)*this == (const BrokenDate &)other &&
       (const BrokenTime &)*this == (const BrokenTime &)other;
+  }
+
+  /**
+   * Does this object contain plausible values?
+   */
+  bool Plausible() const {
+    return BrokenDate::Plausible() && BrokenTime::Plausible();
   }
 
 #ifdef HAVE_POSIX

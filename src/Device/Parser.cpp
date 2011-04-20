@@ -241,6 +241,8 @@ fixed
 NMEAParser::TimeModify(fixed FixTime, BrokenDateTime &date_time,
                        bool date_available)
 {
+  assert(!date_available || BrokenDate(date_time).Plausible());
+
   fixed hours, mins, secs;
 
   // Calculate Hour
@@ -431,12 +433,17 @@ ReadDate(NMEAInputLine &line, BrokenDate &date)
   if (strlen(buffer) != 6)
     return false;
 
-  date.year = atoi(buffer + 4) + 2000;
+  BrokenDate new_value;
+  new_value.year = atoi(buffer + 4) + 2000;
   buffer[4] = '\0';
-  date.month = atoi(buffer + 2);
+  new_value.month = atoi(buffer + 2);
   buffer[2] = '\0';
-  date.day = atoi(buffer);
+  new_value.day = atoi(buffer);
 
+  if (!new_value.Plausible())
+    return false;
+
+  date = new_value;
   return true;
 }
 

@@ -44,6 +44,7 @@ RawLoggerStart()
     return true;
 
   BrokenDateTime dt = XCSoarInterface::Basic().DateTime;
+  assert(dt.Plausible());
 
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("logs"));

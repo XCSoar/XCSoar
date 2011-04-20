@@ -59,6 +59,8 @@ void
 Marks::MarkLocation(const GeoPoint &loc,
                     const BrokenDateTime &time)
 {
+  assert(time.Plausible());
+
   Poco::ScopedRWLock protect(lock, true);
 
   marker_store.push_back(loc);

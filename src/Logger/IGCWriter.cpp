@@ -182,6 +182,8 @@ IGCWriter::header(const BrokenDateTime &DateTime,
                   const TCHAR *aircraft_registration,
                   const TCHAR *strAssetNumber, const TCHAR *driver_name)
 {
+  assert(DateTime.Plausible());
+
   char datum[] = "HFDTM100Datum: WGS-84";
   char temp[100];
 
@@ -214,6 +216,8 @@ IGCWriter::header(const BrokenDateTime &DateTime,
 void
 IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime, const int ntp)
 {
+  assert(FirstDateTime.Plausible());
+
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
   char start[] = "C0000000N00000000ETAKEOFF";
