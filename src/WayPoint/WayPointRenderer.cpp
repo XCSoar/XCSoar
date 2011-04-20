@@ -459,6 +459,9 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     if (reachable_glide && reachable_terrain)
       icon = way_point.is_airport() ? &Graphics::AirportReachableIcon :
                                       &Graphics::FieldReachableIcon;
+    else if (reachable_glide && !reachable_terrain)
+      icon = way_point.is_airport() ? &Graphics::AirportMarginalIcon:
+                                      &Graphics::FieldMarginalIcon;
     else
       icon = way_point.is_airport() ? &Graphics::AirportUnreachableIcon :
                                       &Graphics::FieldUnreachableIcon;

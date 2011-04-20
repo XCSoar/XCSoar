@@ -98,6 +98,7 @@ MaskedIcon Graphics::SmallIcon, Graphics::TurnPointIcon;
 MaskedIcon Graphics::MountainTopIcon, Graphics::BridgeIcon, Graphics::TunnelIcon;
 MaskedIcon Graphics::TowerIcon, Graphics::PowerPlantIcon;
 MaskedIcon Graphics::AirportReachableIcon, Graphics::AirportUnreachableIcon;
+MaskedIcon Graphics::AirportMarginalIcon, Graphics::FieldMarginalIcon;
 MaskedIcon Graphics::FieldReachableIcon, Graphics::FieldUnreachableIcon;
 MaskedIcon Graphics::hBmpThermalSource;
 MaskedIcon Graphics::hBmpTarget;
@@ -368,25 +369,35 @@ Graphics::InitLandableIcons()
 {
   if (Appearance.IndLandable == wpLandableWinPilot) {
     AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
+    AirportMarginalIcon.load_big(IDB_MARGINAL, IDB_MARGINAL_HD);
     AirportUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_HD);
     FieldReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
+    FieldMarginalIcon.load_big(IDB_MARGINAL, IDB_MARGINAL_HD);
     FieldUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_HD);
   } else if (Appearance.IndLandable == wpLandableAltA) {
     AirportReachableIcon.load_big(IDB_AIRPORT_REACHABLE,
                                   IDB_AIRPORT_REACHABLE_HD);
+    AirportMarginalIcon.load_big(IDB_AIRPORT_MARGINAL,
+                                 IDB_AIRPORT_MARGINAL_HD);
     AirportUnreachableIcon.load_big(IDB_AIRPORT_UNREACHABLE,
                                     IDB_AIRPORT_UNREACHABLE_HD);
     FieldReachableIcon.load_big(IDB_OUTFIELD_REACHABLE,
                                 IDB_OUTFIELD_REACHABLE_HD);
+    FieldMarginalIcon.load_big(IDB_OUTFIELD_MARGINAL,
+                               IDB_OUTFIELD_MARGINAL_HD);
     FieldUnreachableIcon.load_big(IDB_OUTFIELD_UNREACHABLE,
                                   IDB_OUTFIELD_UNREACHABLE_HD);
   } else if (Appearance.IndLandable == wpLandableAltB) {
     AirportReachableIcon.load_big(IDB_AIRPORT_REACHABLE,
                                   IDB_AIRPORT_REACHABLE_HD);
+    AirportMarginalIcon.load_big(IDB_AIRPORT_MARGINAL2,
+                                 IDB_AIRPORT_MARGINAL2_HD);
     AirportUnreachableIcon.load_big(IDB_AIRPORT_UNREACHABLE2,
                                     IDB_AIRPORT_UNREACHABLE2_HD);
     FieldReachableIcon.load_big(IDB_OUTFIELD_REACHABLE,
                                 IDB_OUTFIELD_REACHABLE_HD);
+    FieldMarginalIcon.load_big(IDB_OUTFIELD_MARGINAL2,
+                               IDB_OUTFIELD_MARGINAL2_HD);
     FieldUnreachableIcon.load_big(IDB_OUTFIELD_UNREACHABLE2,
                                   IDB_OUTFIELD_UNREACHABLE2_HD);
   }
@@ -449,6 +460,8 @@ Graphics::Deinitialise()
   PowerPlantIcon.reset();
   AirportReachableIcon.reset();
   AirportUnreachableIcon.reset();
+  AirportMarginalIcon.reset();
+  FieldMarginalIcon.reset();
   FieldReachableIcon.reset();
   FieldUnreachableIcon.reset();
   hBmpThermalSource.reset();

@@ -13,8 +13,8 @@
    width="19"
    height="19"
    id="svg2816"
-   inkscape:version="0.47 r22583"
-   sodipodi:docname="marginal.svg">
+   inkscape:version="0.48.1 "
+   sodipodi:docname="winpilot_marginal.svg">
   <metadata
      id="metadata11">
     <rdf:RDF>
@@ -35,17 +35,17 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1280"
-     inkscape:window-height="774"
+     inkscape:window-width="1424"
+     inkscape:window-height="988"
      id="namedview9"
      showgrid="false"
      inkscape:zoom="11.8"
-     inkscape:cx="10"
+     inkscape:cx="-6.2288136"
      inkscape:cy="10"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:window-x="-8"
+     inkscape:window-y="-8"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer1" />
+     inkscape:current-layer="layer1-7" />
   <defs
      id="defs2818">
     <inkscape:perspective
@@ -79,7 +79,7 @@
          d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
          transform="matrix(0.85,0,0,0.85,1,-2)"
          id="path2830-4"
-         style="opacity:0.98999999;fill:#ffff00;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+         style="opacity:0.98999999000000005;fill:#e04040;fill-opacity:1;fill-rule:evenodd;stroke:none" />
       <path
          d="M 20,10 A 10,10 0 1 1 0,10 10,10 0 1 1 20,10 z"
          transform="matrix(0.55,0,0,0.55,4,1)"

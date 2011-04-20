@@ -118,6 +118,17 @@
 #define IDB_TASK_HD                    5350
 #define IDB_CALCULATOR                  351
 #define IDB_CALCULATOR_HD              5351
+#define IDB_AIRPORT_MARGINAL            352
+#define IDB_AIRPORT_MARGINAL_HD        5352
+#define IDB_OUTFIELD_MARGINAL           353
+#define IDB_OUTFIELD_MARGINAL_HD       5353
+#define IDB_AIRPORT_MARGINAL2           354
+#define IDB_AIRPORT_MARGINAL2_HD       5354
+#define IDB_OUTFIELD_MARGINAL2          355
+#define IDB_OUTFIELD_MARGINAL2_HD      5355
+#define IDB_MARGINAL                    356
+#define IDB_MARGINAL_HD                5356
+
 // Next default values for new objects
 //
 #ifdef APSTUDIO_INVOKED
