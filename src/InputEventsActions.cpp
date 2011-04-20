@@ -116,8 +116,10 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
     marks->Reset();
   } else {
     marks->MarkLocation(XCSoarInterface::Basic().Location,
-                        XCSoarInterface::Basic().DateTime,
-                        XCSoarInterface::SettingsComputer().EnableSoundModes);
+                        XCSoarInterface::Basic().DateTime);
+
+    if (XCSoarInterface::SettingsComputer().EnableSoundModes)
+      PlayResource(_T("IDR_WAV_CLEAR"));
   }
 
   trigger_redraw();

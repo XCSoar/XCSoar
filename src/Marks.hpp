@@ -43,8 +43,7 @@ public:
   void Reset();
   void Draw(Canvas &canvas, const WindowProjection &projection);
   void MarkLocation(const GeoPoint &loc,
-                    const BrokenDateTime &time,
-                    bool play_sound);
+                    const BrokenDateTime &time);
 
 private:
   MaskedIcon icon;

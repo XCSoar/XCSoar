@@ -24,7 +24,6 @@ Copyright_License {
 #include "Marks.hpp"
 #include "Compatibility/string.h"
 #include "LocalPath.hpp"
-#include "Audio/Sound.hpp"
 #include "LogFile.hpp"
 #include "resource.h"
 #include "IO/TextWriter.hpp"
@@ -58,13 +57,9 @@ Marks::~Marks()
 
 void
 Marks::MarkLocation(const GeoPoint &loc,
-                    const BrokenDateTime &time,
-                    bool play_sound)
+                    const BrokenDateTime &time)
 {
   Poco::ScopedRWLock protect(lock, true);
-
-  if (play_sound)
-    PlayResource(_T("IDR_WAV_CLEAR"));
 
   marker_store.push_back(loc);
 
