@@ -21,6 +21,7 @@ enum AirspaceClass_t {
   CLASSE,
   CLASSF,
   TMZ,
+  CLASSG,
   AIRSPACECLASSCOUNT
 };
 

@@ -39,6 +39,7 @@ const TCHAR *szProfileColour[] = {
   _T("Colour12"),
   _T("Colour13"),
   _T("Colour14"),
+  _T("Colour15"),
 }; // pL
 
 const TCHAR *szProfileBrush[] = {
@@ -57,6 +58,7 @@ const TCHAR *szProfileBrush[] = {
   _T("Brush12"),
   _T("Brush13"),
   _T("Brush14"),
+  _T("Brush15"),
 }; // pL
 
 const TCHAR *szProfileAirspaceMode[] = {
@@ -75,6 +77,7 @@ const TCHAR *szProfileAirspaceMode[] = {
   _T("AirspaceMode12"),
   _T("AirspaceMode13"),
   _T("AirspaceMode14"),
+  _T("AirspaceMode15"),
 }; // pL
 
 const TCHAR szProfileAirspaceWarning[] = _T("AirspaceWarn");

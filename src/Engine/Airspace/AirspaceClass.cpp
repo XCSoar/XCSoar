@@ -60,6 +60,12 @@ airspace_class_as_text(const AirspaceClass_t item,
     } else {
       return _T("F");
     }
+  case CLASSG:
+    if (!concise) {
+      return _T("Class G");
+    } else {
+      return _T("G");
+    }
   case NOGLIDER:
     if (!concise) {
       return _T("No Glider");

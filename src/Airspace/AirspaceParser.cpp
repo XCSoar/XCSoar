@@ -49,7 +49,7 @@ enum asFileType {
   ftTNP
 };
 
-static const int k_nAreaCount = 13;
+static const int k_nAreaCount = 14;
 static const TCHAR* k_strAreaStart[k_nAreaCount] = {
   _T("R"),
   _T("Q"),
@@ -63,7 +63,8 @@ static const TCHAR* k_strAreaStart[k_nAreaCount] = {
   _T("W"),
   _T("E"),
   _T("F"),
-  _T("TMZ")
+  _T("TMZ"),
+  _T("G"),
 };
 
 static const int k_nAreaType[k_nAreaCount] = {
@@ -79,7 +80,8 @@ static const int k_nAreaType[k_nAreaCount] = {
   WAVE,
   CLASSE,
   CLASSF,
-  TMZ
+  TMZ,
+  CLASSG,
 };
 
 // this can now be called multiple times to load several airspaces.
@@ -593,6 +595,9 @@ ParseClassTNP(const TCHAR* text)
 
   if (text[0] == _T('F'))
     return CLASSF;
+
+  if (text[0] == _T('G'))
+    return CLASSG;
 
   return OTHER;
 }
