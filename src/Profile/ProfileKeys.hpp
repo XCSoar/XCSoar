@@ -72,7 +72,6 @@ extern const TCHAR szProfileSlopeShadingType[];
 extern const TCHAR szProfileFinalGlideTerrain[];
 extern const TCHAR szProfileAutoWind[];
 extern const TCHAR szProfileExternalWind[];
-extern const TCHAR *szProfileAirspacePriority[];
 extern const TCHAR szProfileAirspaceWarning[];
 extern const TCHAR szProfileAirspaceBlackOutline[];
 extern const TCHAR szProfileAirspaceTransparency[];

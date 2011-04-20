@@ -37,10 +37,6 @@ Profile::LoadAirspaceConfig()
     XCSoarInterface::SetSettingsComputer();
 
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++) {
-#ifdef OLD_TASK // airspace priority
-    Get(szProfileAirspacePriority[i], AirspacePriority[i]);
-#endif
-
     if (Get(szProfileAirspaceMode[i], Temp)) {
       settings_computer.DisplayAirspaces[i] = (Temp & 0x1) != 0;
       settings_computer.airspace_warnings.class_warnings[i] = (Temp & 0x2) != 0;

@@ -77,24 +77,6 @@ const TCHAR *szProfileAirspaceMode[] = {
   _T("AirspaceMode14"),
 }; // pL
 
-const TCHAR *szProfileAirspacePriority[] = {
-  _T("AirspacePriority0"),
-  _T("AirspacePriority1"),
-  _T("AirspacePriority2"),
-  _T("AirspacePriority3"),
-  _T("AirspacePriority4"),
-  _T("AirspacePriority5"),
-  _T("AirspacePriority6"),
-  _T("AirspacePriority7"),
-  _T("AirspacePriority8"),
-  _T("AirspacePriority9"),
-  _T("AirspacePriority10"),
-  _T("AirspacePriority11"),
-  _T("AirspacePriority12"),
-  _T("AirspacePriority13"),
-  _T("AirspacePriority14"),
-}; // pL
-
 const TCHAR szProfileAirspaceWarning[] = _T("AirspaceWarn");
 const TCHAR szProfileAirspaceBlackOutline[] = _T("AirspaceBlackOutline");
 const TCHAR szProfileAirspaceTransparency[] = _T("AirspaceTransparency");
