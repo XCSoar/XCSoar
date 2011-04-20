@@ -483,9 +483,9 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     canvas.select(Graphics::hbMagenta);
   } else if (Appearance.IndLandable == wpLandableAltB) {
     if (reachable_glide)
-      canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbNotReachableTerrain);
+      canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbOrange);
     else
-      canvas.select(Graphics::hbOrange);
+      canvas.select(Graphics::hbRed);
   } else {
     if (reachable_glide)
       canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbNotReachableTerrain);

@@ -107,8 +107,8 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
                      _("Airports and outlanding fields are displayed as purple circles. If the waypoint is reachable a bigger green circle is added behind the purple one. If the waypoint is blocked by a mountain the green circle will be red instead."));
     dfe->addEnumText(_("B/W"), wpLandableAltA,
                      _("Airports and outlanding fields are displayed in white/grey. If the waypoint is reachable the color is changed to green. If the waypoint is blocked by a mountain the color is changed to red instead."));
-    dfe->addEnumText(_("Orange"), wpLandableAltB,
-                     _("Airports and outlanding fields are displayed in orange. If the waypoint is reachable the color is changed to green. If the waypoint is blocked by a mountain the color is changed to red instead."));
+    dfe->addEnumText(_("Traffic Lights"), wpLandableAltB,
+                     _("Airports and outlanding fields are displayed in the colors of a traffic light. Green if reachable, Orange if blocked by mountain and red if not reachable at all."));
     dfe->Set(Appearance.IndLandable);
     wp->RefreshDisplay();
   }
