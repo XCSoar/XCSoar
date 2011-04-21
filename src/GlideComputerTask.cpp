@@ -64,18 +64,19 @@ GlideComputerTask::ProcessBasicTask()
 
   task->set_task_behaviour(SettingsComputer());
 
-  if (basic.Time != LastBasic().Time && basic.LocationAvailable &&
-      Calculated().LastThermalAvailable()) {
+  if (basic.Time != LastBasic().Time && basic.LocationAvailable) {
     const AIRCRAFT_STATE current_as = ToAircraftState(basic, Calculated());
     const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic(),
                                                    LastCalculated());
 
     task->update(current_as, last_as);
-    if (task->update_auto_mc(current_as,
-                             std::max(Calculated().LastThermalAverageSmooth,
-                                      fixed_zero))) {
-      derived.auto_mac_cready = task->get_glide_polar().get_mc();
-      derived.auto_mac_cready_available.Update(basic.Time);
+
+    if (Calculated().LastThermalAvailable()) {
+      if (task->update_auto_mc(current_as, std::max(fixed_zero, 
+                                                    Calculated().LastThermalAverageSmooth))) {
+        derived.auto_mac_cready = task->get_glide_polar().get_mc();
+        derived.auto_mac_cready_available.Update(basic.Time);
+      }
     }
   }
 
