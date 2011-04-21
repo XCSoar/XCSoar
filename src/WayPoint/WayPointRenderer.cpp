@@ -263,12 +263,14 @@ public:
     if (reachable_glide && way_point.is_landable()) {
       text_mode.Mode = settings_map.LandableRenderMode;
       text_mode.Bold = true;
+      text_mode.MoveInView = true;
     } else if (in_task) {
       text_mode.Mode = OutlinedInverted;
       text_mode.Bold = true;
     } else if (watchedWaypoint) {
       text_mode.Mode = Outlined;
       text_mode.Bold = false;
+      text_mode.MoveInView = true;
     }
 
     TCHAR Buffer[NAME_SIZE+1];

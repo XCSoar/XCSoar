@@ -119,9 +119,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
   brect.top = y;
   brect.bottom = y + tsize.cy + 1;
 
-  if (Mode.Mode == RoundedBlack ||
-      Mode.Mode == RoundedWhite ||
-      Mode.Mode == Filled) {
+  if (Mode.MoveInView) {
     RasterPoint offset = TextInBoxMoveInView(brect, MapRect);
     x += offset.x;
     y += offset.y;
