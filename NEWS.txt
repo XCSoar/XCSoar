@@ -112,6 +112,7 @@ Version 6.1 - not yet released
   - Airspace warning dialog only shows buttons suitable for the respective airspace item, 
 
 Version 6.0.10 - not yet released
+* fix crash in flarm teammate setting
 * Android
   - fix crash bug on sound effect
 

@@ -215,7 +215,7 @@ OnTeamClicked(WndButton &Sender)
       XCSoarInterface::Basic().flarm.FindTraffic(target_id);
 
   // Set the Teammate callsign
-  if (!target->HasName()) {
+  if (target == NULL || !target->HasName()) {
     XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
   } else {
     // copy the 3 first chars from the name
@@ -226,7 +226,7 @@ OnTeamClicked(WndButton &Sender)
   }
 
   // Start tracking
-  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = target->ID;
+  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = target_id;
   XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
   XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
 
