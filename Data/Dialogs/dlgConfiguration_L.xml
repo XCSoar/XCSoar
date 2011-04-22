@@ -312,7 +312,7 @@
       </Edit>
 
       <Edit Name="prpAbortTaskMode" Caption="Alternates mode" X="2" Width="-2" Height="22" CaptionWidth="150" 
-        Help="If set to &quot;Simple&quot;, the alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height. If set to &quot;Task&quot; the sorting will also take the current task direction into account. If set to &quot;Home&quot; the sorting will try to find landing options in the current direction to the configured home waypoint.">
+        Help="Determines sorting of alternates in the alternates dialog and in abort mode:&#10;[Simple] The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height. &#10;[Task] The sorting will also take the current task direction into account.&#10;[Home] The sorting will try to find landing options in the current direction to the configured home waypoint.">
         <DataField DataType="enum" />
       </Edit>
     
