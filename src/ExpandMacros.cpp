@@ -176,10 +176,11 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                           _("Previous Landpoint"), Size);
     }
 
-  } else {
+  } else { // ordered task mode
 
     const bool next_is_final = task->validTaskPoint(1) && !task->validTaskPoint(2);
     const bool previous_is_start = task->validTaskPoint(-1) && !task->validTaskPoint(-2);
+    const bool has_optional_starts = calculated.common_stats.ordered_has_optional_starts;
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       // Waypoint\nNext
@@ -191,16 +192,22 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                           _T("$(WaypointNext)"),
                           _("Finish Turnpoint"),
                           _("Next Turnpoint"), Size);
-
+      
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
-      if (!task->validTaskPoint(-1))
-        invalid = true;
 
-      CondReplaceInString(previous_is_start,
-                          OutBuffer,
-                          _T("$(WaypointPrevious)"),
-                          _("Start Turnpoint"),
-                          _("Previous Turnpoint"), Size);
+      if (has_optional_starts && !task->validTaskPoint(-1)) {
+        ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"), _("Next Startpoint"), Size);
+      } else {
+
+        CondReplaceInString(previous_is_start,
+                            OutBuffer,
+                            _T("$(WaypointPrevious)"),
+                            _("Start Turnpoint"),
+                            _("Previous Turnpoint"), Size);
+
+        if (!task->validTaskPoint(-1))
+          invalid = true;
+      }
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
       // Waypoint\nNext
@@ -233,13 +240,21 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       case TaskAdvance::AUTO:
       case TaskAdvance::START_DISARMED:
       case TaskAdvance::TURN_DISARMED:
-        CondReplaceInString(previous_is_start,
-                            OutBuffer,
-                            _T("$(WaypointPreviousArm)"),
-                            _("Start Turnpoint"),
-                            _("Previous Turnpoint"), Size);
-        if (!task->validTaskPoint(-1))
-          invalid = true;
+
+        if (has_optional_starts && !task->validTaskPoint(-1)) {
+          ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Next Startpoint"), Size);
+        } else {
+
+          CondReplaceInString(previous_is_start,
+                              OutBuffer,
+                              _T("$(WaypointPreviousArm)"),
+                              _("Start Turnpoint"),
+                              _("Previous Turnpoint"), Size);
+
+          if (!task->validTaskPoint(-1))
+            invalid = true;
+        }
+
         break;
       case TaskAdvance::START_ARMED:
         ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Disarm start"), Size);
@@ -249,21 +264,6 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
         break;
       }
     } 
-#ifdef OLD_TASK // multiple start points
-    else if (task.getSettings().EnableMultipleStartPoints) {
-      invalid |= !task.ValidTaskPoint(0);
-      CondReplaceInString((task.getActiveIndex()==0),
-                          OutBuffer,
-                          _T("$(WaypointPrevious)"),
-                          _("Start point cycle"), _("Previous Waypoint"),
-                          Size);
-    } 
-    else {
-      invalid |= !calculated.common_stats.active_has_previous;
-      ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"),
-                      _("Previous Waypoint"), Size);
-    }
-#endif
   }
 
   if (_tcsstr(OutBuffer, _T("$(AdvanceArmed)"))) {
