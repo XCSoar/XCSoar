@@ -95,7 +95,10 @@ TaskManager::incrementActiveTaskPoint(int offset)
   if (active_task) {
     unsigned i = getActiveTaskPointIndex();
     if ((int)i+offset<0) { // prevent wrap-around
-      setActiveTaskPoint(0);
+      if (mode == MODE_ORDERED)
+        task_ordered.rotateOptionalStarts();
+      else
+        setActiveTaskPoint(0);
     } else {
       setActiveTaskPoint(i+offset);
     }
