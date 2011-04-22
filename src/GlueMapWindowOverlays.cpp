@@ -268,6 +268,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
     TextInBoxMode_t TextInBoxMode;
     TextInBoxMode.Mode = RoundedBlack;
     TextInBoxMode.Bold = true;
+    TextInBoxMode.MoveInView = true;
     TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
   }
 }

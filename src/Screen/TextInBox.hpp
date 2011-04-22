@@ -57,9 +57,10 @@ struct TextInBoxMode_t
   RenderMode Mode;
   TextAlign Align;
   bool Bold;
+  bool MoveInView;
 
   TextInBoxMode_t() :
-    Mode(Simple), Align(Left), Bold(false) {}
+    Mode(Simple), Align(Left), Bold(false), MoveInView(false) {}
 };
 
 bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
