@@ -218,6 +218,11 @@ public:
   void rotateOptionalStarts();
 
   /**
+   * Return number of optional start points
+   */
+  unsigned optional_starts_size() const;
+
+  /**
    * Insert taskpoint before specified index in task.  May fail if the candidate
    * is the wrong type (e.g. if it is a StartPoint and the task already
    * has one).

@@ -82,6 +82,8 @@ public:
   bool ordered_valid;
   /** Whether ordered task has AAT areas */
   bool ordered_has_targets;
+  /** Whether ordered task has optional starts */
+  bool ordered_has_optional_starts;
 
   /** Is there a tp after this */
   bool active_has_next;

@@ -1404,3 +1404,7 @@ OrderedTask::update_summary(TaskSummary& ordered_summary) const
                          stats.total.planned.get_distance());
 }
 
+unsigned 
+OrderedTask::optional_starts_size() const {
+  return optional_start_points.size();
+}

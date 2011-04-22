@@ -201,6 +201,12 @@ TaskManager::update_common_stats_task(const AIRCRAFT_STATE &state)
 
   common_stats.ordered_valid = task_ordered.check_task();
 
+  if (common_stats.ordered_valid) {
+    common_stats.ordered_has_optional_starts = task_ordered.optional_starts_size()>0;
+  } else {
+    common_stats.ordered_has_optional_starts = false;
+  }
+
   if (active_task && active_task->get_stats().task_valid) {
     common_stats.active_has_next = active_task->validTaskPoint(1);
     common_stats.active_has_previous = active_task->validTaskPoint(-1);

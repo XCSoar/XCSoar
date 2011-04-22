@@ -25,6 +25,7 @@ CommonStats::reset_task()
   mode_ordered = false;
   ordered_valid = false;
   ordered_has_targets = false;
+  ordered_has_optional_starts = false;
 
   active_has_next = false;
   active_has_previous = false;
