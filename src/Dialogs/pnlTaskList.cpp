@@ -56,13 +56,28 @@ get_cursor_index()
   return wTasks->GetCursorIndex();
 }
 
+/**
+ * used for browsing saved tasks
+ * must be valid (2 task points)
+ * @return NULL if no valid task at cursor, else pointer to task;
+ */
 static OrderedTask*
 get_cursor_task()
 {
   if (get_cursor_index() >= task_store.size())
     return NULL;
 
-  return task_store.get_task(get_cursor_index());
+  OrderedTask * ordered_task = task_store.get_task(get_cursor_index());
+
+  if (!ordered_task)
+    return NULL;
+
+  if (!ordered_task->check_task()) {
+    delete ordered_task;
+    ordered_task = NULL;
+  }
+
+  return ordered_task;
 }
 
 static const TCHAR *
@@ -74,16 +89,22 @@ get_cursor_name()
   return task_store.get_name(get_cursor_index());
 }
 
+static OrderedTask*
+get_task_to_display()
+{
+  return (browse_tabbed->GetCurrentPage() == 0) ?
+          *active_task :
+          get_cursor_task();
+}
+
 void
 pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   PixelRect rc = Sender->get_client_rect();
 
-  OrderedTask* ordered_task = (browse_tabbed->GetCurrentPage() == 0) ?
-                              *active_task :
-                              get_cursor_task();
+  OrderedTask* ordered_task = get_task_to_display();
 
-  if (ordered_task == NULL || !ordered_task->check_task()) {
+  if (ordered_task == NULL) {
     canvas.clear_white();
     return;
   }
@@ -112,9 +133,7 @@ RefreshView()
   WndFrame* wSummary = (WndFrame*)wf->FindByName(_T("frmSummary1"));
   assert(wSummary != NULL);
 
-  OrderedTask* ordered_task = (browse_tabbed->GetCurrentPage() == 0) ?
-                              *active_task :
-                              get_cursor_task();
+  OrderedTask* ordered_task = get_task_to_display();
 
   if (ordered_task == NULL) {
     wSummary->SetCaption(_T(""));
