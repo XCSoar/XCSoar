@@ -88,15 +88,16 @@ pnlTaskEdit::RefreshView()
 }
 
 void
-pnlTaskEdit::OnNewClicked(WndButton &Sender)
+pnlTaskEdit::OnClearAllClicked(WndButton &Sender)
 {
   (void)Sender;
 
   if ((ordered_task->task_size() < 2) ||
-      (MessageBoxX(_("Clear task?"), _("Task edit"),
+      (MessageBoxX(_("Clear all points?"), _("Task edit"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
-    ordered_task->clear();
-    ordered_task->set_factory(XCSoarInterface::SettingsComputer().task_type_default);
+    while (ordered_task->task_size())
+      ordered_task->remove(0);
+
     *task_modified = true;
     RefreshView();
   }

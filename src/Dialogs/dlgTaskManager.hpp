@@ -111,12 +111,12 @@ public:
                       WndForm* wf, OrderedTask** task, bool* _task_modified);
 
   /**
-   * clears task points and properties
-   * creates a new task of type=default type from preferences
+   * clears task points
+   * leaves task properies unchanged
    * prompts if task has points already
    * @param Sender
    */
-  static void OnNewClicked(WndButton &Sender);
+  static void OnClearAllClicked(WndButton &Sender);
   static void OnEditTurnpointClicked(WndButton &Sender);
 
   static void OnMoveUpClicked(WndButton &Sender);

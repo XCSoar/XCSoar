@@ -181,7 +181,7 @@ CallBackTableEntry dlgTaskManager::CallBackTable[] = {
   DeclareCallBackEntry(pnlTaskEdit::OnMoveUpClicked),
   DeclareCallBackEntry(pnlTaskEdit::OnMoveDownClicked),
   DeclareCallBackEntry(pnlTaskEdit::OnEditTurnpointClicked),
-  DeclareCallBackEntry(pnlTaskEdit::OnNewClicked),
+  DeclareCallBackEntry(pnlTaskEdit::OnClearAllClicked),
   DeclareCallBackEntry(pnlTaskEdit::OnTabPreShow),
 
   DeclareCallBackEntry(pnlTaskProperties::OnTaskTypeData),

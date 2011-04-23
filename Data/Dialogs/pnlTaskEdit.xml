@@ -9,7 +9,7 @@
     <Button Name="cmdMakeFinish" Caption="Make Finish" X="62" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnMakeFinish"/>
     <SymbolButton Name="cmdDown" Caption="v" X="62" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnMoveDownClicked"/>
     <SymbolButton Name="cmdUp" Caption="^" X="121" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnMoveUpClicked"/>
-    <Button Name="cmdNew" Caption="Clear Task" X="180" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnNewClicked"/>
+    <Button Name="cmdNew" Caption="Clear All" X="180" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnClearAllClicked"/>
 
     <Label Name="frmSummary" X="0" Y="168" Width="240" Height="65" Border="0"/>
   </Panel>
