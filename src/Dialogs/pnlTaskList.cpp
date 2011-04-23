@@ -56,34 +56,22 @@ get_cursor_index()
   return wTasks->GetCursorIndex();
 }
 
-static bool
-cursor_at_active_task()
-{
-  return (wTasks->GetCursorIndex() == 0);
-}
-
 static OrderedTask*
 get_cursor_task()
 {
-  if (cursor_at_active_task())
-    return *active_task;
-
-  if (get_cursor_index() > task_store.size())
+  if (get_cursor_index() >= task_store.size())
     return NULL;
 
-  return task_store.get_task(get_cursor_index() - 1);
+  return task_store.get_task(get_cursor_index());
 }
 
 static const TCHAR *
 get_cursor_name()
 {
-  if (cursor_at_active_task())
-    return _T("(Active Task)");
-
-  if (get_cursor_index() > task_store.size())
+  if (get_cursor_index() >= task_store.size())
     return _T("");
 
-  return task_store.get_name(get_cursor_index() - 1);
+  return task_store.get_name(get_cursor_index());
 }
 
 void
@@ -109,11 +97,7 @@ pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 {
   assert(DrawListIndex <= task_store.size());
 
-  const TCHAR *name;
-  if (DrawListIndex == 0)
-    name = _T("(Active Task)");
-  else
-    name = task_store.get_name(DrawListIndex-1);
+  const TCHAR *name = task_store.get_name(DrawListIndex);
 
   canvas.text(rc.left + Layout::FastScale(2),
               rc.top + Layout::FastScale(2), name);
@@ -122,7 +106,7 @@ pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 static void
 RefreshView()
 {
-  wTasks->SetLength(task_store.size() + 1);
+  wTasks->SetLength(task_store.size());
   wTaskView->invalidate();
 
   WndFrame* wSummary = (WndFrame*)wf->FindByName(_T("frmSummary1"));
@@ -145,9 +129,6 @@ RefreshView()
 static void
 SaveTask()
 {
-  if (!cursor_at_active_task())
-    return;
-
   (*active_task)->get_factory().CheckAddFinish();
 
   if (((*active_task)->task_size() > 1) && (*active_task)->check_task()) {
@@ -166,9 +147,6 @@ SaveTask()
 static void
 LoadTask()
 {
-  if (cursor_at_active_task())
-    return;
-
   const OrderedTask* orig = get_cursor_task();
   if (orig == NULL)
     return;
@@ -196,9 +174,6 @@ LoadTask()
 static void
 DeleteTask()
 {
-  if (cursor_at_active_task())
-    return;
-
   const TCHAR *fname = get_cursor_name();
   tstring upperstring = fname;
   std::transform(upperstring.begin(), upperstring.end(), upperstring.begin(),
@@ -231,9 +206,6 @@ DeleteTask()
 static void
 RenameTask()
 {
-  if (cursor_at_active_task())
-    return;
-
   const TCHAR *oldname = get_cursor_name();
   tstring newname = oldname;
   tstring upperstring = newname;
@@ -263,20 +235,6 @@ RenameTask()
 
   task_store.scan();
   RefreshView();
-}
-
-static void
-UpdateButtons()
-{
-  bool at_active_task = cursor_at_active_task();
-
-  WndButton* wbDelete = (WndButton*)wf->FindByName(_T("cmdDelete"));
-  assert(wbDelete != NULL);
-  wbDelete->set_enabled(!at_active_task);
-
-  WndButton* wbRename = (WndButton*)wf->FindByName(_T("cmdRename"));
-  assert(wbRename != NULL);
-  wbRename->set_enabled(!at_active_task);
 }
 
 void
@@ -338,14 +296,12 @@ pnlTaskList::OnRenameClicked(WndButton &Sender)
 void
 pnlTaskList::OnTaskListEnter(unsigned ItemIndex)
 {
-  if (!cursor_at_active_task())
-    LoadTask();
+  LoadTask();
 }
 
 void
 pnlTaskList::OnTaskCursorCallback(unsigned i)
 {
-  UpdateButtons();
   RefreshView();
 }
 
@@ -386,7 +342,6 @@ pnlTaskList::OnTabPreShow(TabBarControl::EventType EventType)
   }
   browse_tabbed->SetCurrentPage(0);
   wTasks->SetCursorIndex(0); // so Save & Declare are always available
-  UpdateButtons();
   dlgTaskManager::TaskViewRestore(wTaskView);
   RefreshView();
   return true;
