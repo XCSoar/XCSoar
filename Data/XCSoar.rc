@@ -58,6 +58,8 @@ IDB_TASK                BITMAP  DISCARDABLE     "../output/data/icons/task.bmp"
 IDB_TASK_HD             BITMAP  DISCARDABLE     "../output/data/icons/task_160.bmp"
 IDB_CALCULATOR          BITMAP  DISCARDABLE     "../output/data/icons/calculator.bmp"
 IDB_CALCULATOR_HD       BITMAP  DISCARDABLE     "../output/data/icons/calculator_160.bmp"
+IDB_WRENCH              BITMAP  DISCARDABLE     "../output/data/icons/wrench.bmp"
+IDB_WRENCH_HD           BITMAP  DISCARDABLE     "../output/data/icons/wrench_160.bmp"
 
 #ifdef EYE_CANDY
 IDB_DIALOGTITLE         BITMAP  DISCARDABLE     "bitmaps/dialog_title.bmp"

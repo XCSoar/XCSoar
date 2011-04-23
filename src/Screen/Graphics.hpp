@@ -139,7 +139,7 @@ namespace Graphics {
   extern MaskedIcon hBmpMapScaleRight;
 
   extern Bitmap hBmpTabTask;
-  extern Bitmap hBmpTabFolder;
+  extern Bitmap hBmpTabWrench;
   extern Bitmap hBmpTabSettings;
   extern Bitmap hBmpTabCalculator;
 

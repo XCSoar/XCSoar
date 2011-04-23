@@ -86,6 +86,13 @@ public:
    */
   static unsigned GetTurnpointTab();
 
+  /**
+   * different for landscape and for portrait mode
+   * Used by TaskList after new task
+   * @return Tab index that shows task properties
+   */
+  static unsigned GetPropertiesTab();
+
   static void SetTitle();
 };
 
@@ -229,7 +236,11 @@ public:
   static void OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas);
   static void OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                                   unsigned DrawListIndex);
-  static void OnLoadSaveClicked(WndButton &Sender);
+  static void OnManageClicked(WndButton &Sender);
+  static void OnBrowseClicked(WndButton &Sender);
+  static void OnNewTaskClicked(WndButton &Sender);
+  static void OnSaveClicked(WndButton &Sender);
+  static void OnLoadClicked(WndButton &Sender);
   static bool OnDeclareClicked(WndButton &Sender);
   static bool OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y);
   static void OnDeleteClicked(WndButton &Sender);

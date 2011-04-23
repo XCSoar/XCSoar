@@ -51,11 +51,18 @@ static bool task_modified = false;
 static bool fullscreen;
 static PixelRect TaskViewRect;
 static unsigned TurnpointTab = 0;
+static unsigned PropertiesTab = 0;
 
 unsigned
 dlgTaskManager::GetTurnpointTab()
 {
   return TurnpointTab;
+}
+
+unsigned
+dlgTaskManager::GetPropertiesTab()
+{
+  return PropertiesTab;
 }
 
 void
@@ -179,7 +186,11 @@ CallBackTableEntry dlgTaskManager::CallBackTable[] = {
 
   DeclareCallBackEntry(pnlTaskProperties::OnTaskTypeData),
 
-  DeclareCallBackEntry(pnlTaskList::OnLoadSaveClicked),
+  DeclareCallBackEntry(pnlTaskList::OnBrowseClicked),
+  DeclareCallBackEntry(pnlTaskList::OnNewTaskClicked),
+  DeclareCallBackEntry(pnlTaskList::OnSaveClicked),
+  DeclareCallBackEntry(pnlTaskList::OnManageClicked),
+  DeclareCallBackEntry(pnlTaskList::OnLoadClicked),
   DeclareCallBackEntry(pnlTaskList::OnDeleteClicked),
   DeclareCallBackEntry(pnlTaskList::OnDeclareClicked),
   DeclareCallBackEntry(pnlTaskList::OnRenameClicked),
@@ -274,7 +285,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
   const Bitmap *TurnPointIcon = ((IconsStyle == dtIcon) ?
                                   &Graphics::hBmpTabTask : NULL);
   const Bitmap *BrowseIcon = ((IconsStyle == dtIcon) ?
-                               &Graphics::hBmpTabFolder : NULL);
+                               &Graphics::hBmpTabWrench : NULL);
   const Bitmap *PropertiesIcon = ((IconsStyle == dtIcon) ?
                                    &Graphics::hBmpTabSettings : NULL);
 
@@ -287,7 +298,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                        pnlTaskEdit::OnTabReClick);
     TurnpointTab = 1;
 
-    wTabBar->AddClient(wLst, _T("Browse"), false, BrowseIcon, NULL,
+    wTabBar->AddClient(wLst, _T("Manage"), false, BrowseIcon, NULL,
                        pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskList::OnTabReClick);
 
@@ -295,6 +306,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                        pnlTaskProperties::OnTabPreHide,
                        pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskProperties::OnTabReClick);
+    PropertiesTab = 3;
 
     wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,
                        pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
@@ -314,7 +326,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                        pnlTaskEdit::OnTabReClick);
     TurnpointTab = 2;
 
-    wTabBar->AddClient(wLst, _T("Browse"), false, BrowseIcon, NULL,
+    wTabBar->AddClient(wLst, _T("Manage"), false, BrowseIcon, NULL,
                        pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskList::OnTabReClick);
 
@@ -322,6 +334,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                        pnlTaskProperties::OnTabPreHide,
                        pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskProperties::OnTabReClick);
+    PropertiesTab = 4;
 
     wTabBar->SetCurrentPage(0);
   }
