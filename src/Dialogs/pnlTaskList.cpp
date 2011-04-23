@@ -150,7 +150,7 @@ SaveTask()
 {
   (*active_task)->get_factory().CheckAddFinish();
 
-  if (((*active_task)->task_size() > 1) && (*active_task)->check_task()) {
+  if ((*active_task)->check_task()) {
     if (!OrderedTaskSave(**active_task))
       return;
 
