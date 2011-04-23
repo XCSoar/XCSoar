@@ -33,6 +33,8 @@ Copyright_License {
 #include "Engine/Task/TaskManager.hpp"
 #include "Task/Tasks/AbstractTask.hpp"
 #include "Units/Units.hpp"
+#include "Form/SymbolButton.hpp"
+#include "Asset.hpp"
 
 #include <stdio.h>
 
@@ -41,6 +43,7 @@ using std::max;
 
 static WndForm *wf = NULL;
 static WndButton *btnIsLocked = NULL;
+static WndSymbolButton *btnNext = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
 static unsigned TaskSize = 0;
 
@@ -57,6 +60,7 @@ OnOKClicked(WndButton &Sender)
 }
 
 static void InitTargetPoints();
+static void RefreshTargetPoint(void);
 
 static void
 MoveTarget(double adjust_angle)
@@ -297,6 +301,20 @@ OnIsLockedClicked(WndButton &Sender)
 }
 
 static void
+OnNextClicked(WndButton &Sender)
+{
+  if (target_point < (TaskSize - 1))
+    target_point++;
+  else
+    target_point = 0;
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
+  DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->Set(target_point);
+  RefreshTargetPoint();
+  wp->RefreshDisplay();
+}
+
+static void
 OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
@@ -423,6 +441,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnRadialData),
   DeclareCallBackEntry(OnOKClicked),
   DeclareCallBackEntry(OnIsLockedClicked),
+  DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -479,6 +498,27 @@ InitTargetPoints()
   wp->RefreshDisplay();
 }
 
+static void
+drawBtnNext()
+{
+  btnNext = (WndSymbolButton*)wf->FindByName(_T("btnNext"));
+  assert(btnNext != NULL);
+
+  WndProperty * wpTaskPoint = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
+  assert(wpTaskPoint != NULL);
+
+  if (is_altair()) { // altair already has < and > buttons on WndProperty
+    btnNext->set_visible(false);
+  } else {
+    const PixelRect rcP = wpTaskPoint->get_position();
+    wpTaskPoint->move(rcP.left, rcP.top,
+                      rcP.right - rcP.left - btnNext->get_width() - 1,
+                      rcP.bottom - rcP.top);
+    const PixelRect rcB = btnNext->get_position();
+    btnNext->move(wpTaskPoint->get_right() + 1, rcB.top);
+  }
+}
+
 void
 dlgTargetShowModal(int TargetPoint)
 {
@@ -501,8 +541,9 @@ dlgTargetShowModal(int TargetPoint)
   InitTargetPoints();
 
   btnIsLocked = (WndButton*)wf->FindByName(_T("btnIsLocked"));
-
   assert(btnIsLocked != NULL);
+
+  drawBtnNext();
 
   wf->SetKeyDownNotify(FormKeyDown);
 

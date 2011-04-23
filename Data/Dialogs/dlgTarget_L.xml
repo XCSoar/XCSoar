@@ -5,6 +5,7 @@
     Help="This sets the task point for review.">
     <DataField DataType="enum" OnDataAccess="OnTaskPointData"/>
   </Edit>
+  <SymbolButton Name="btnNext" Caption=">" X="0" Y="2" Width="29" Height="29" OnClick="OnNextClicked" />
 
   <Button Name="btnIsLocked" Caption="Locked" X="2" Y="35" Width="-2" Height="32" OnClick="OnIsLockedClicked" />
 
