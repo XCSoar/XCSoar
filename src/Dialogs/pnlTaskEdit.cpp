@@ -170,9 +170,6 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
 
     OrderedTaskPoint* point = NULL;
     AbstractTaskFactory &factory = ordered_task->get_factory();
-    // get global default values and update default for current task;
-    ordered_task->get_ordered_task_behaviour() =
-        XCSoarInterface::SetSettingsComputer().ordered_defaults;
     const Waypoint* way_point =
       dlgWayPointSelect(wf->GetMainWindow(),
                         ordered_task->task_size() > 0 ?
