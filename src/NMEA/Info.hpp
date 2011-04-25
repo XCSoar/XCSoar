@@ -178,6 +178,10 @@ struct NMEA_INFO {
 
   Validity LocationAvailable;
 
+  bool ConnectedAndHasFix() const {
+    return Connected && LocationAvailable && (gps.SatellitesUsed>0);
+  }
+
   /** location of aircraft */
   GeoPoint Location;
 

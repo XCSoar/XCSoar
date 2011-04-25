@@ -331,6 +331,9 @@ InfoBoxManager::ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode)
   InputEvents::HideMenu();
 
   SetDirty();
+  // emulate update to trigger calculations
+  if (!XCSoarInterface::Basic().ConnectedAndHasFix())
+    TriggerGPSUpdate();
 
   ResetDisplayTimeOut();
 }
@@ -358,8 +361,11 @@ InfoBoxManager::ProcessQuickAccess(const int id, const TCHAR *Value)
     InfoBoxes[id]->HandleQuickAccess(Value);
 
   SetDirty();
+
   // emulate update to trigger calculations
-  TriggerGPSUpdate();
+  if (!XCSoarInterface::Basic().ConnectedAndHasFix())
+    TriggerGPSUpdate();
+
   ResetDisplayTimeOut();
 }
 
