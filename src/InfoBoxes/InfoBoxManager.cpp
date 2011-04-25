@@ -521,7 +521,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout)
   info_box_look.background_brush.set(Appearance.InverseInfoBox
                                      ? Color::BLACK : Color::WHITE);
 
-  Color border_color = Appearance.InverseInfoBox ? Color(64, 64, 64) : Color(191, 191, 191);
+  Color border_color = Color(128, 128, 128);
   info_box_look.border_pen.set(InfoBoxWindow::BORDER_WIDTH, border_color);
   info_box_look.selector_pen.set(IBLSCALE(1) + 2,
                                  info_box_look.value.fg_color);
