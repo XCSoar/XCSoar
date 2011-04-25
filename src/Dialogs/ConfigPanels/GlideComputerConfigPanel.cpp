@@ -60,7 +60,7 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Final glide"));
-    dfe->addEnumText(_("Trending Average climb"));
+    dfe->addEnumText(_("Trending average climb"));
     dfe->addEnumText(_("Both"));
     dfe->Set((int)settings_computer.auto_mc_mode);
     wp->RefreshDisplay();

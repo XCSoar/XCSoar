@@ -47,10 +47,10 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Full Name"), DISPLAYNAME, _("The full name of each waypoint is displayed."));
-    dfe->addEnumText(_("First Word of Name"), DISPLAYUNTILSPACE, _("The first word of the waypoint name is displayed."));
-    dfe->addEnumText(_("First 3 Letters"), DISPLAYFIRSTTHREE, _("The first 3 letters of the waypoint name are displayed."));
-    dfe->addEnumText(_("First 5 Letters"), DISPLAYFIRSTFIVE, _("The first 5 letters of the waypoint name are displayed."));
+    dfe->addEnumText(_("Full name"), DISPLAYNAME, _("The full name of each waypoint is displayed."));
+    dfe->addEnumText(_("First word of name"), DISPLAYUNTILSPACE, _("The first word of the waypoint name is displayed."));
+    dfe->addEnumText(_("First 3 letters"), DISPLAYFIRSTTHREE, _("The first 3 letters of the waypoint name are displayed."));
+    dfe->addEnumText(_("First 5 letters"), DISPLAYFIRSTFIVE, _("The first 5 letters of the waypoint name are displayed."));
     dfe->addEnumText(_("None"), DISPLAYNONE, _("No waypoint name is displayed."));
     dfe->Set(XCSoarInterface::SettingsMap().DisplayTextType);
     wp->RefreshDisplay();
@@ -64,7 +64,7 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("None"), WP_ARRIVAL_HEIGHT_NONE, _("No arrival height is displayed."));
     dfe->addEnumText(_("Straight glide"), WP_ARRIVAL_HEIGHT_GLIDE, _("Straight glide arrival height (no terrain is considered)."));
     dfe->addEnumText(_("Terrain avoidance glide"), WP_ARRIVAL_HEIGHT_TERRAIN, _("Arrival height considering terrain avoidance"));
-    dfe->addEnumText(_("Straight & Terrain glide"), WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN, _("Both arrival heights are displayed."));
+    dfe->addEnumText(_("Straight & terrain glide"), WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN, _("Both arrival heights are displayed."));
     dfe->Set(XCSoarInterface::SettingsMap().WaypointArrivalHeightDisplay);
     wp->RefreshDisplay();
   }
@@ -73,7 +73,7 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Rounded Rectangle"), RoundedBlack);
+    dfe->addEnumText(_("Rounded rectangle"), RoundedBlack);
     dfe->addEnumText(_("Outlined"), OutlinedInverted);
     dfe->Set(XCSoarInterface::SettingsMap().LandableRenderMode);
     wp->RefreshDisplay();
@@ -87,10 +87,10 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
     dfe->EnableItemHelp(true);
     dfe->addEnumText(_("All"), wlsAllWayPoints,
                      _("All waypoint labels will be displayed."));
-    dfe->addEnumText(_("Task Waypoints & Landables"),
+    dfe->addEnumText(_("Task waypoints & landables"),
                      wlsTaskAndLandableWayPoints,
                      _("All waypoints part of a task and all landables will be displayed."));
-    dfe->addEnumText(_("Task Waypoints"), wlsTaskWayPoints,
+    dfe->addEnumText(_("Task waypoints"), wlsTaskWayPoints,
                      _("All waypoints part of a task will be displayed."));
     dfe->addEnumText(_("None"), wlsNoWayPoints,
                      _("No waypoint labels will be displayed."));
@@ -103,11 +103,11 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Purple Circle"), wpLandableWinPilot,
+    dfe->addEnumText(_("Purple circle"), wpLandableWinPilot,
                      _("Airports and outlanding fields are displayed as purple circles. If the waypoint is reachable a bigger green circle is added behind the purple one. If the waypoint is blocked by a mountain the green circle will be red instead."));
     dfe->addEnumText(_("B/W"), wpLandableAltA,
                      _("Airports and outlanding fields are displayed in white/grey. If the waypoint is reachable the color is changed to green. If the waypoint is blocked by a mountain the color is changed to red instead."));
-    dfe->addEnumText(_("Traffic Lights"), wpLandableAltB,
+    dfe->addEnumText(_("Traffic lights"), wpLandableAltB,
                      _("Airports and outlanding fields are displayed in the colors of a traffic light. Green if reachable, Orange if blocked by mountain and red if not reachable at all."));
     dfe->Set(Appearance.IndLandable);
     wp->RefreshDisplay();
