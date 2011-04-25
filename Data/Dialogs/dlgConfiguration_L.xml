@@ -60,13 +60,11 @@
     </Panel>
   
     <Panel Name="frmDisplay">
-      <Edit Name="prpOrientationCruise" Caption="Cruise orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Determines how the screen is rotated with the glider:&#10;[North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.&#10;[Track up] The moving map display will be rotated so the glider's track is oriented up.&#10;[Target up] The moving map display will be rotated so the navigation target is oriented up.">
+      <Edit Name="prpOrientationCruise" Caption="Cruise orientation" X="2" Width="-2" Height="22" CaptionWidth="150">
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpOrientationCircling" Caption="Circling orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Determines how the screen is rotated with the glider:&#10;[North up] The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.&#10;[Track up] The moving map display will be rotated so the glider's track is oriented up.&#10;[Target up] The moving map display will be rotated so the navigation target is oriented up.">
+      <Edit Name="prpOrientationCircling" Caption="Circling orientation" X="2" Width="-2" Height="22" CaptionWidth="150">
         <DataField DataType="enum" />
       </Edit>
 
@@ -75,8 +73,7 @@
         <DataField DataType="boolean"/>
       </Edit>
 
-      <Edit Name="prpMapShiftBias" Caption="Map shift reference" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Determines what is used to shift the glider from the map center:&#10;[None] Disable adjustments.&#10;[Track] Use a recent average of the ground track as basis.&#10;[Target]Use the current target waypoint as basis">
+      <Edit Name="prpMapShiftBias" Caption="Map shift reference" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150">
         <DataField DataType="enum" />
       </Edit>
 
@@ -140,11 +137,11 @@
     </Panel>
 
     <Panel Name="frmWaypoints">
-      <Edit Name="prpWaypointLabels" Caption="Label format" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines how labels are displayed with each waypoint:&#10;[Full Name] The full name of each waypoint is displayed.&#10;[First Word of Name] The first word of the waypoint name is displayed.&#10;[First 3 Letters] The first 3 letters of the waypoint name are displayed.&#10;[First 5 Letters] The first 5 letters of the waypoint name are displayed.&#10;[None] No waypoint name is displayed.">
+      <Edit Name="prpWaypointLabels" Caption="Label format" X="2" Width="-2" Height="22" CaptionWidth="100">
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpWaypointArrivalHeightDisplay" Caption="Arrival height" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines how arrival height is displayed in waypoint labels:&#10;[None] No arrival height is displayed.&#10;[Straight glide] Only glide performance is considered for arrival height.&#10;[Terrain avoidance glide] Glide performance and possible detours around terrain are considered for arrival height.&#10;[Straight &amp; Terrain avoidance glide] Arrival height for straight in glide and (if available) arrival height considering detours around terrain is displayed.">
+      <Edit Name="prpWaypointArrivalHeightDisplay" Caption="Arrival height" X="2" Width="-2" Height="22" CaptionWidth="100">
         <DataField DataType="enum" />
       </Edit>
 
