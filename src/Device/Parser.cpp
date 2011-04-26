@@ -740,7 +740,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
  * @param nparams Number of parameters
  * @param GPS_INFO GPS_INFO struct to parse into
  * @return Parsing success
- * @see http://flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
+ * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 bool
 NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
@@ -767,7 +767,7 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
  * @param nparams Number of parameters
  * @param GPS_INFO GPS_INFO struct to parse into
  * @return Parsing success
- * @see http://flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
+ * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 bool
 NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
