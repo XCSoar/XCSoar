@@ -124,6 +124,55 @@ TestGeneric()
 }
 
 static void
+TestFLARM()
+{
+  NMEAParser parser;
+
+  NMEA_INFO nmea_info;
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  ok1(parser.ParseNMEAString_Internal("$PFLAU,3,1,1,1,0*50",
+                                      &nmea_info));
+  ok1(nmea_info.flarm.rx == 3);
+  ok1(nmea_info.flarm.tx == 1);
+  ok1(nmea_info.flarm.gps == 1);
+  ok1(nmea_info.flarm.alarm_level == 0);
+  ok1(nmea_info.flarm.GetActiveTrafficCount() == 0);
+  ok1(!nmea_info.flarm.NewTraffic);
+
+  ok1(parser.ParseNMEAString_Internal("$PFLAA,0,100,-150,10,2,DDA85C,123,13,24,1.4,2*7f",
+                                      &nmea_info));
+  ok1(nmea_info.flarm.NewTraffic);
+  ok1(nmea_info.flarm.GetActiveTrafficCount() == 1);
+
+  FlarmId id;
+  id.parse("DDA85C", NULL);
+
+  FLARM_TRAFFIC *traffic = nmea_info.flarm.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->Valid);
+    ok1(traffic->AlarmLevel == 0);
+    ok1(equals(traffic->RelativeNorth, 100));
+    ok1(equals(traffic->RelativeEast, -150));
+    ok1(equals(traffic->RelativeAltitude, 10));
+    ok1(traffic->IDType == 2);
+    ok1(equals(traffic->TrackBearing, 123));
+    ok1(traffic->track_received);
+    ok1(equals(traffic->TurnRate, 13));
+    ok1(traffic->turn_rate_received);
+    ok1(equals(traffic->Speed, 24));
+    ok1(traffic->speed_received);
+    ok1(equals(traffic->ClimbRate, 1.4));
+    ok1(traffic->climb_rate_received);
+    ok1(traffic->Type == FLARM_TRAFFIC::acTowPlane);
+    ok1(!traffic->Stealth);
+  } else {
+    skip(16, 0, "traffic == NULL");
+  }
+}
+
+static void
 TestBorgeltB50()
 {
   Device *device = b50Device.CreateOnPort(NULL);
@@ -472,9 +521,10 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(207);
+  plan_tests(235);
 
   TestGeneric();
+  TestFLARM();
   TestBorgeltB50();
   TestCAI302();
   TestFlymasterF1();
