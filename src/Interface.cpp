@@ -173,14 +173,10 @@ ActionInterface::DisplayModes()
 {
   bool full_screen = main_window.GetFullScreen();
 
-  // Determine whether the vario gauge should be drawn
-  SetSettingsMap().EnableVarioGauge = vario_visible() && !full_screen;
-
   if (main_window.vario) {
-    if (!SettingsMap().ScreenBlanked && SettingsMap().EnableVarioGauge)
-      main_window.vario->show();
-    else
-      main_window.vario->hide();
+    // Determine whether the vario gauge should be drawn
+    main_window.vario->set_visible(!full_screen && vario_visible() &&
+                                   !SettingsMap().ScreenBlanked);
   }
 
   if (Basic().flarm.NewTraffic) {

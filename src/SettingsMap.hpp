@@ -195,8 +195,6 @@ struct SETTINGS_MAP {
   bool EnableFLARMMap;
   bool ScreenBlanked;
   bool EnableAutoBlank;
-  /** Show vario gauge */
-  bool  EnableVarioGauge;
   /** Update system time from GPS time */
   bool SetSystemTimeFromGPS;
 
