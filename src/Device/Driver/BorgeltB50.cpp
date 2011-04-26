@@ -125,7 +125,7 @@ PBB50(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (GPS_INFO->TemperatureAvailable)
     GPS_INFO->OutsideAirTemperature = Units::ToSysUnit(value, unGradCelcius);
 
-  return false;
+  return true;
 }
 
 bool
