@@ -170,6 +170,29 @@ TestFLARM()
   } else {
     skip(16, 0, "traffic == NULL");
   }
+
+  ok1(parser.ParseNMEAString_Internal("$PFLAA,2,20,10,24,2,DEADFF,,,,,1*46",
+                                      &nmea_info));
+  ok1(nmea_info.flarm.GetActiveTrafficCount() == 2);
+
+  id.parse("DEADFF", NULL);
+  traffic = nmea_info.flarm.FindTraffic(id);
+  if (ok1(traffic != NULL)) {
+    ok1(traffic->Valid);
+    ok1(traffic->AlarmLevel == 2);
+    ok1(equals(traffic->RelativeNorth, 20));
+    ok1(equals(traffic->RelativeEast, 10));
+    ok1(equals(traffic->RelativeAltitude, 24));
+    ok1(traffic->IDType == 2);
+    ok1(!traffic->track_received);
+    ok1(!traffic->turn_rate_received);
+    ok1(!traffic->speed_received);
+    ok1(!traffic->climb_rate_received);
+    ok1(traffic->Type == FLARM_TRAFFIC::acGlider);
+    ok1(traffic->Stealth);
+  } else {
+    skip(12, 0, "traffic == NULL");
+  }
 }
 
 static void
@@ -521,7 +544,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(235);
+  plan_tests(249);
 
   TestGeneric();
   TestFLARM();
