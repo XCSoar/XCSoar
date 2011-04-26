@@ -819,7 +819,6 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   if (!line.read_checked(value)) {
     // Field is empty in stealth mode
-    stealth = true;
     traffic.TurnRate = fixed_zero;
   } else
     traffic.TurnRate = value;
