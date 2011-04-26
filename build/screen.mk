@@ -3,6 +3,7 @@
 SCREEN_SRC_DIR = $(SRC)/Screen
 
 SCREEN_SOURCES = \
+	$(SCREEN_SRC_DIR)/Debug.cpp \
 	$(SCREEN_SRC_DIR)/ProgressBar.cpp \
 	$(SCREEN_SRC_DIR)/RawBitmap.cpp \
 	$(SCREEN_SRC_DIR)/Util.cpp \

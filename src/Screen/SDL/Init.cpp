@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Init.hpp"
+#include "Screen/Debug.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Cache.hpp"
@@ -56,6 +57,8 @@ ScreenGlobalInit::ScreenGlobalInit()
     fprintf(stderr, "TTF_Init() has failed\n");
     exit(EXIT_FAILURE);
   }
+
+  ScreenInitialized();
 }
 
 ScreenGlobalInit::~ScreenGlobalInit()
@@ -66,4 +69,6 @@ ScreenGlobalInit::~ScreenGlobalInit()
 
   ::TTF_Quit();
   ::SDL_Quit();
+
+  ScreenDeinitialized();
 }

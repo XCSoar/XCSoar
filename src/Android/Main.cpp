@@ -24,6 +24,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/SoundUtil.hpp"
+#include "Screen/Debug.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Android/Event.hpp"
@@ -69,6 +70,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   sound_util = new SoundUtil(env);
 
+  ScreenInitialized();
   return XCSoarInterface::Startup(NULL);
 }
 
@@ -91,6 +93,8 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   delete sound_util;
   delete event_queue;
   delete native_view;
+
+  ScreenDeinitialized();
 }
 
 JNIEXPORT void JNICALL

@@ -22,14 +22,15 @@ Copyright_License {
 */
 
 #include "Screen/Font.hpp"
+#include "Screen/Debug.hpp"
+
+#include <assert.h>
 
 #ifdef ANDROID
 #include "Java/Global.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"
 #include "Android/TextUtil.hpp"
-
-#include <assert.h>
 
 bool
 Font::set(const LOGFONT &log)
@@ -45,6 +46,8 @@ Font::set(const LOGFONT &log)
 bool
 Font::set(const TCHAR *facename, int height, bool bold, bool italic)
 {
+  assert(IsScreenInitialized());
+
   delete textUtilObject;
   textUtilObject = TextUtil::create(facename, height, bold, italic);
   if (!textUtilObject)
@@ -62,6 +65,8 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
 void
 Font::reset()
 {
+  assert(!defined() || IsScreenInitialized());
+
   delete textUtilObject;
   textUtilObject = NULL;
 }
@@ -103,6 +108,8 @@ Font::text_texture_gl(const TCHAR *text, PixelSize &size,
 bool
 Font::_set(const char *file, int ptsize, bool bold, bool italic)
 {
+  assert(IsScreenInitialized());
+
   reset();
 
   font = TTF_OpenFont(file, ptsize);
@@ -134,6 +141,8 @@ Font::set(const TCHAR *facename, int height, bool bold, bool italic)
 bool
 Font::set(const LOGFONT &log_font)
 {
+  assert(IsScreenInitialized());
+
   // XXX hard coded path
   const char *dejavu_ttf =
     "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf";
@@ -162,7 +171,11 @@ Font::calculate_heights()
 void
 Font::reset()
 {
+  assert(!defined() || IsScreenInitialized());
+
   if (font != NULL) {
+    assert(IsScreenInitialized());
+
     TTF_CloseFont(font);
     font = NULL;
   }
@@ -194,6 +207,8 @@ Font::set(const TCHAR* facename, int height, bool bold, bool italic)
 bool
 Font::set(const LOGFONT &log_font)
 {
+  assert(IsScreenInitialized());
+
   reset();
 
   font = ::CreateFontIndirect(&log_font);
@@ -264,6 +279,8 @@ void
 Font::reset()
 {
   if (font != NULL) {
+    assert(IsScreenInitialized());
+
     ::DeleteObject(font);
     font = NULL;
   }

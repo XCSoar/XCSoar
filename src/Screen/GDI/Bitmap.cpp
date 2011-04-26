@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Bitmap.hpp"
+#include "Screen/Debug.hpp"
 #include "ResourceLoader.hpp"
 #include "OS/PathName.hpp"
 
@@ -176,6 +177,8 @@ void
 Bitmap::reset()
 {
   if (bitmap != NULL) {
+    assert(IsScreenInitialized());
+
     DeleteObject(bitmap);
     bitmap = NULL;
   }

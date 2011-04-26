@@ -21,48 +21,46 @@ Copyright_License {
 }
 */
 
-#include "Screen/Brush.hpp"
-#include "Screen/Bitmap.hpp"
 #include "Screen/Debug.hpp"
+
+#ifndef NDEBUG
 
 #include <assert.h>
 
-void
-Brush::set(const Color c)
-{
-  assert(IsScreenInitialized());
+static bool screen_initialized = false;
 
-  #ifdef ENABLE_SDL
-  hollow = false;
-  color = c;
-  #else
-  reset();
-  brush = ::CreateSolidBrush(c);
-  #endif
+void
+ScreenInitialized()
+{
+  assert(!screen_initialized);
+  screen_initialized = true;
 }
 
-#ifndef ENABLE_SDL
-
 void
-Brush::set(const Bitmap &bitmap)
+ScreenDeinitialized()
 {
-  reset();
-  brush = ::CreatePatternBrush(bitmap.native());
+  assert(screen_initialized);
+  screen_initialized = false;
+}
+
+bool
+IsScreenInitialized()
+{
+  return screen_initialized;
 }
 
 #endif
 
-void
-Brush::reset()
-{
-  assert(!defined() || IsScreenInitialized());
+#ifndef XCSOAR_SCREEN_DEBUG_HPP
+#define XCSOAR_SCREEN_DEBUG_HPP
 
-  #ifdef ENABLE_SDL
-  hollow = true;
-  #else
-  if (brush != NULL) {
-    ::DeleteObject(brush);
-    brush = NULL;
-  }
-  #endif
-}
+#ifdef NDEBUG
+
+static inline void ScreenInitialized() {}
+static inline void ScreenDeinitialized() {}
+
+#else
+
+#endif
+
+#endif

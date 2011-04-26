@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Debug.hpp"
 
 #ifdef ANDROID
 #include "Screen/Android/Event.hpp"
@@ -64,6 +65,7 @@ Window::reset()
   if (!defined())
     return;
 
+  assert(IsScreenInitialized());
   assert_thread();
 
 #ifdef ENABLE_SDL

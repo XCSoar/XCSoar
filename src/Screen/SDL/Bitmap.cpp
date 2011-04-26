@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Bitmap.hpp"
+#include "Screen/Debug.hpp"
 #include "ResourceLoader.hpp"
 #include "OS/PathName.hpp"
 
@@ -43,6 +44,7 @@ Copyright_License {
 bool
 Bitmap::load(SDL_Surface *_surface)
 {
+  assert(IsScreenInitialized());
   assert(_surface != NULL);
 
 #ifdef ENABLE_OPENGL
@@ -66,6 +68,8 @@ Bitmap::load(SDL_Surface *_surface)
 bool
 Bitmap::load(unsigned id)
 {
+  assert(IsScreenInitialized());
+
   reset();
 
   ResourceLoader::Data data = ResourceLoader::Load(id);
@@ -137,6 +141,8 @@ Bitmap::load_file(const TCHAR *path)
 void
 Bitmap::reset()
 {
+  assert(!defined() || IsScreenInitialized());
+
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
 

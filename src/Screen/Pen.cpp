@@ -22,12 +22,17 @@ Copyright_License {
 */
 
 #include "Screen/Pen.hpp"
+#include "Screen/Debug.hpp"
+
+#include <assert.h>
 
 #ifdef ENABLE_SDL
 
 void
 Pen::set(enum style style, unsigned _width, const Color c)
 {
+  assert(IsScreenInitialized());
+
   width = _width;
   color = c;
 }
@@ -41,6 +46,11 @@ Pen::set(unsigned width, const Color c)
 void
 Pen::reset()
 {
+  assert(!defined() || IsScreenInitialized());
+
+#ifndef NDEBUG
+  width = 0;
+#endif
 }
 
 #else /* !ENABLE_SDL */
@@ -48,6 +58,8 @@ Pen::reset()
 void
 Pen::set(enum style style, unsigned width, const Color c)
 {
+  assert(IsScreenInitialized());
+
   reset();
   pen = ::CreatePen(style, width, c);
 }
@@ -61,6 +73,8 @@ Pen::set(unsigned width, const Color c)
 void
 Pen::reset()
 {
+  assert(!defined() || IsScreenInitialized());
+
   if (pen != NULL) {
     ::DeleteObject(pen);
     pen = NULL;

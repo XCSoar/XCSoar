@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/Init.hpp"
+#include "Screen/Debug.hpp"
 #include "Screen/GDI/AlphaBlend.hpp"
 
 #include <windows.h>
@@ -34,6 +35,8 @@ ScreenGlobalInit::ScreenGlobalInit()
 #ifdef HAVE_DYNAMIC_ALPHA_BLEND
   AlphaBlendInit();
 #endif
+
+  ScreenInitialized();
 }
 
 ScreenGlobalInit::~ScreenGlobalInit()
@@ -41,4 +44,6 @@ ScreenGlobalInit::~ScreenGlobalInit()
 #ifdef HAVE_DYNAMIC_ALPHA_BLEND
   AlphaBlendDeinit();
 #endif
+
+  ScreenDeinitialized();
 }

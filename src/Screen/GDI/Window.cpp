@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Screen/Debug.hpp"
 #include "Screen/Blank.hpp"
 #include "Screen/GDI/Event.hpp"
 #include "Screen/GDI/PaintCanvas.hpp"
@@ -36,6 +37,7 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
             int left, int top, unsigned width, unsigned height,
             const WindowStyle window_style)
 {
+  assert(IsScreenInitialized());
   assert(width > 0);
   assert(width < 0x1000000);
   assert(height > 0);
