@@ -119,7 +119,7 @@ MainWindow::InitialiseConfigured()
   LogStartUp(_T("Create button labels"));
   ButtonLabel::CreateButtonLabels(*this);
   ButtonLabel::SetLabelText(0,_T("MODE"));
-  ButtonLabel::SetFont(Fonts::Map);
+  ButtonLabel::SetFont(Fonts::MapBold);
 
   WindowStyle hidden;
   hidden.hide();
@@ -269,7 +269,7 @@ MainWindow::on_resize(unsigned width, unsigned height)
 
     ButtonLabel::Destroy();
     ButtonLabel::CreateButtonLabels(*this);
-    ButtonLabel::SetFont(Fonts::Map);
+    ButtonLabel::SetFont(Fonts::MapBold);
 
     map.BringToBottom();
   }
