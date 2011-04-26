@@ -1,0 +1,13 @@
+Those files are meant to use with the eclipse IDE version 3.5 and 3.6.
+
+Just move them into the main project directory, e.g. on Linux issue
+
+mv .cproject .project ../../.
+
+in this directory. On Windows those "dot" files are visible in the file explorer and
+you easily drag them to the main project directory.
+
+The templates are set up for developing XCSoar with eclipse on Windows.
+If you like to use them on Linux change the make arguments from WINHOST=y to WINHOST=n. You most likely also want to change the TARGET to something different from PC, but that depends on your intent.
+
+Have fun

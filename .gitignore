@@ -38,3 +38,5 @@ callgrind.out.*
 tmp/
 .gdbinit
 test/data/private
+./.project
+./.cproject
