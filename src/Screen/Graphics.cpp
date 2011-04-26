@@ -420,17 +420,20 @@ Graphics::Deinitialise()
   WarningBrush.reset();
   TrafficBrush.reset();
 
-  hAirspaceInterceptBitmap.reset();
-  hTerrainWarning.reset();
   hFLARMTraffic.reset();
+  hTerrainWarning.reset();
+  hGPSStatus1.reset();
+  hGPSStatus2.reset();
   hLogger.reset();
   hLoggerOff.reset();
+  hBmpTeammatePosition.reset();
+
   hCruise.reset();
   hClimb.reset();
   hFinalGlide.reset();
   hAbort.reset();
-  hGPSStatus1.reset();
-  hGPSStatus2.reset();
+
+  hAirspaceInterceptBitmap.reset();
 
 #ifndef ENABLE_SDL
   for (unsigned i = 0; i < NUMAIRSPACEBRUSHES; i++) {
@@ -451,22 +454,7 @@ Graphics::Deinitialise()
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
     hAirspacePens[i].reset();
 
-  SmallIcon.reset();
-  TurnPointIcon.reset();
-  MountainTopIcon.reset();
-  BridgeIcon.reset();
-  TunnelIcon.reset();
-  TowerIcon.reset();
-  PowerPlantIcon.reset();
-  AirportReachableIcon.reset();
-  AirportUnreachableIcon.reset();
-  AirportMarginalIcon.reset();
-  FieldMarginalIcon.reset();
-  FieldReachableIcon.reset();
-  FieldUnreachableIcon.reset();
-  hBmpThermalSource.reset();
-  hBmpTarget.reset();
-  hBmpTeammatePosition.reset();
+  hbWind.reset();
 
   hBmpMapScaleLeft.reset();
   hBmpMapScaleRight.reset();
@@ -476,6 +464,52 @@ Graphics::Deinitialise()
   hBmpTabSettings.reset();
   hBmpTabCalculator.reset();
 
+  hBmpThermalSource.reset();
+  hBmpTarget.reset();
+
+  hbCompass.reset();
+
+  hbThermalBand.reset();
+  hbBestCruiseTrack.reset();
+  hbFinalGlideBelow.reset();
+  hbFinalGlideBelowLandable.reset();
+  hbFinalGlideAbove.reset();
+
+  hpWind.reset();
+
+  hpBearing.reset();
+  hpBestCruiseTrack.reset();
+  hpCompass.reset();
+  hpThermalBand.reset();
+  hpThermalBandGlider.reset();
+
+  hpFinalGlideBelow.reset();
+  hpFinalGlideBelowLandable.reset();
+  hpFinalGlideAbove.reset();
+
+  hpMapScale.reset();
+  hpTerrainLine.reset();
+  hpTerrainLineThick.reset();
+
+  TracePen.reset();
+  ContestPen[0].reset();
+  ContestPen[1].reset();
+  ContestPen[2].reset();
+
+  SmallIcon.reset();
+  TurnPointIcon.reset();
+  MountainTopIcon.reset();
+  BridgeIcon.reset();
+  TunnelIcon.reset();
+  TowerIcon.reset();
+  PowerPlantIcon.reset();
+
+  hpAircraft.reset();
+  hpAircraftSimple1.reset();
+  hpAircraftSimple2.reset();
+  hpCanopy.reset();
+  hbCanopy.reset();
+
   hbGreen.reset();
   hbWhite.reset();
   hbMagenta.reset();
@@ -484,12 +518,21 @@ Graphics::Deinitialise()
   hbLightGray.reset();
   hbNotReachableTerrain.reset();
 
+  hbGround.reset();
+
   hpTrackBearingLine.reset();
 
   for (unsigned i = 0; i < NUMSNAILCOLORS; i++) {
     hpSnail[i].reset();
     hpSnailVario[i].reset();
   }
+
+  AirportReachableIcon.reset();
+  AirportUnreachableIcon.reset();
+  AirportMarginalIcon.reset();
+  FieldMarginalIcon.reset();
+  FieldReachableIcon.reset();
+  FieldUnreachableIcon.reset();
 }
 
 static void
