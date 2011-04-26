@@ -163,7 +163,7 @@
         <DataField DataType="boolean" />
       </Edit>
 
-      <Edit Name="prpAppLandableRenderingScale" Caption="Landable rendering size" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppLandableRenderingScale" Caption="Landable size" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="A percentage to select the size landables are displayed on the map.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="50" Max="200" Step="10" />
       </Edit>

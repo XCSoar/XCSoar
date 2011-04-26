@@ -377,28 +377,16 @@ TabDisplay::on_key_check(unsigned key_code) const
     return true;
 
   case VK_LEFT:
-    if (Layout::landscape ^ flipOrientation)
-      return false;
-    else
-      return (theTabBar.GetCurrentPage() > 0);
+    return (theTabBar.GetCurrentPage() > 0);
 
   case VK_RIGHT:
-    if (Layout::landscape ^ flipOrientation)
-      return false;
-    else
-      return theTabBar.GetCurrentPage() < theTabBar.GetTabCount() - 1;
+    return theTabBar.GetCurrentPage() < theTabBar.GetTabCount() - 1;
 
   case VK_DOWN:
-    if (Layout::landscape ^ flipOrientation)
-      return theTabBar.GetCurrentPage() < theTabBar.GetTabCount() - 1;
-    else
-      return false;
+    return false;
 
   case VK_UP:
-    if (Layout::landscape ^ flipOrientation)
-      return (theTabBar.GetCurrentPage() > 0);
-    else
-      return false;
+    return false;
 
   default:
     return false;
@@ -441,16 +429,19 @@ TabDisplay::on_key_down(unsigned key_code)
     return true;
 
   case VK_DOWN:
+    break;
+
   case VK_RIGHT:
     theTabBar.NextPage(TabBarControl::NextPreviousKey);
     return true;
 
   case VK_UP:
+    break;
+
   case VK_LEFT:
     theTabBar.PreviousPage(TabBarControl::NextPreviousKey);
     return true;
   }
-
   return PaintWindow::on_key_down(key_code);
 }
 
