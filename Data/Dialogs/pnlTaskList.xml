@@ -1,18 +1,26 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmBrowse" Border="0">
-  <Panel Name="TaskListTabOffset" Border="0" X="0" Y="76">
-  
-    <List Name="frmTasks" X="2" Y="0" Width="236" Height="129" ItemHeight="18"/>
-   
-    <Button Name="cmdLoadSave" Caption="Load" X="1" Y="131" Width="53" Height="35" OnClick="pnlTaskList::OnLoadSaveClicked"/>
-    <Button Name="cmdDeclare" Caption="Declare" X="54" Y="131" Width="61" Height="35" OnClick="pnlTaskList::OnDeclareClicked"/>
-    <Button Name="cmdRename" Caption="Rename" X="115" Y="131" Width="66" Height="35" OnClick="pnlTaskList::OnRenameClicked"/>
-    <Button Name="cmdDelete" Caption="Delete" X="181" Y="131" Width="57" Height="35" OnClick="pnlTaskList::OnDeleteClicked"/>
-
-    <Label Name="frmSummary1" X="0" Y="168" Width="240" Height="65" Border="0"/>
-
-  </Panel>
   <Canvas Name="frmTaskView1" X="0" Y="0" Width="61" Height="71" Border="0" OnPaint="pnlTaskList::OnTaskPaint" />
+  <Label Name="frmSummary1" X="0" Y="244" Width="240" Height="65" Border="0"/>
 
+  <Tabbed Name="tabbedManage" X="0" Y="76">
+  
+    <Panel Name="frmManageSub">
+     <Button Name="cmdNewTask" Caption="New Task" X="31" Y="12" Width="84" Height="60"  OnClick="pnlTaskList::OnNewTaskClicked"/>
+     <Button Name="cmdDeclare" Caption="Declare" X="125" Y="12" Width="84" Height="60"  OnClick="pnlTaskList::OnDeclareClicked"/>
+     <Button Name="cmdBrowse" Caption="Browse" X="31" Y="81" Width="84" Height="60"  OnClick="pnlTaskList::OnBrowseClicked"/>
+     <Button Name="cmdSave" Caption="Save" X="125" Y="81" Width="84" Height="60"  OnClick="pnlTaskList::OnSaveClicked"/>
+    </Panel>
+
+    <Panel Name="frmBrowseSub">
+     <List Name="frmTasks" X="2" Y="0" Width="236" Height="129" ItemHeight="18"/>
+   
+     <Button Name="cmdLoad" Caption="Load" X="1" Y="131" Width="53" Height="35" OnClick="pnlTaskList::OnLoadClicked"/>
+     <Button Name="cmdRename" Caption="Rename" X="54" Y="131" Width="66" Height="35" OnClick="pnlTaskList::OnRenameClicked"/>
+     <Button Name="cmdDelete" Caption="Delete" X="121" Y="131" Width="57" Height="35" OnClick="pnlTaskList::OnDeleteClicked"/>
+     <Button Name="cmdManage" Caption="Back" X="179" Y="131" Width="57" Height="35" OnClick="pnlTaskList::OnManageClicked"/>
+    </Panel>
+
+  </Tabbed>
 </Panel>

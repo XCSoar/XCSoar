@@ -88,15 +88,16 @@ pnlTaskEdit::RefreshView()
 }
 
 void
-pnlTaskEdit::OnNewClicked(WndButton &Sender)
+pnlTaskEdit::OnClearAllClicked(WndButton &Sender)
 {
   (void)Sender;
 
   if ((ordered_task->task_size() < 2) ||
-      (MessageBoxX(_("Clear task?"), _("Task edit"),
+      (MessageBoxX(_("Clear all points?"), _("Task edit"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
-    ordered_task->clear();
-    ordered_task->set_factory(XCSoarInterface::SettingsComputer().task_type_default);
+    while (ordered_task->task_size())
+      ordered_task->remove(0);
+
     *task_modified = true;
     RefreshView();
   }
@@ -169,9 +170,6 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
 
     OrderedTaskPoint* point = NULL;
     AbstractTaskFactory &factory = ordered_task->get_factory();
-    // get global default values and update default for current task;
-    ordered_task->get_ordered_task_behaviour() =
-        XCSoarInterface::SetSettingsComputer().ordered_defaults;
     const Waypoint* way_point =
       dlgWayPointSelect(wf->GetMainWindow(),
                         ordered_task->task_size() > 0 ?

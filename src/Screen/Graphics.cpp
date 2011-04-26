@@ -108,7 +108,7 @@ MaskedIcon Graphics::hBmpMapScaleLeft;
 MaskedIcon Graphics::hBmpMapScaleRight;
 
 Bitmap Graphics::hBmpTabTask;
-Bitmap Graphics::hBmpTabFolder;
+Bitmap Graphics::hBmpTabWrench;
 Bitmap Graphics::hBmpTabSettings;
 Bitmap Graphics::hBmpTabCalculator;
 
@@ -244,7 +244,7 @@ Graphics::Initialise()
   hBmpMapScaleRight.load_big(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
 
   hBmpTabTask.load((Layout::scale > 1) ? IDB_TASK_HD : IDB_TASK);
-  hBmpTabFolder.load((Layout::scale > 1) ? IDB_FOLDER_HD : IDB_FOLDER);
+  hBmpTabWrench.load((Layout::scale > 1) ? IDB_WRENCH_HD : IDB_WRENCH);
   hBmpTabSettings.load((Layout::scale > 1) ? IDB_SETTINGS_HD : IDB_SETTINGS);
   hBmpTabCalculator.load((Layout::scale > 1) ? IDB_CALCULATOR_HD : IDB_CALCULATOR);
 
@@ -472,7 +472,7 @@ Graphics::Deinitialise()
   hBmpMapScaleRight.reset();
 
   hBmpTabTask.reset();
-  hBmpTabFolder.reset();
+  hBmpTabWrench.reset();
   hBmpTabSettings.reset();
   hBmpTabCalculator.reset();
 

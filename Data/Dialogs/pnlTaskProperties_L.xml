@@ -4,8 +4,8 @@
 
   <Panel Name="frmProperties" X="100" Y="0">
 
-  <Edit Name="prpMinTime" Caption="AAT min. time" X="2" Width="-2" Height="22" CaptionWidth="140" ReadOnly="0" min="0" max="600" step="10" Help="Minimum AAT task time in minutes.">
-    <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f"/>
+  <Edit Name="prpMinTime" Caption="AAT min. time" X="2" Width="-2" Height="22" CaptionWidth="140" ReadOnly="0" Help="Minimum AAT task time in minutes.">
+    <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" Min="0" Max="600" Step="1"/>
   </Edit>
 
   <Edit Name="prpStartMaxSpeed" Caption="Start max. speed" X="2" Width="-2" Height="22" CaptionWidth="140"

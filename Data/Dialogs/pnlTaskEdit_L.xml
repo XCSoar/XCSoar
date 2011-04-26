@@ -7,7 +7,7 @@
   <Button Name="cmdMakeFinish" Caption="Make Finish" X="142" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnMakeFinish"/>
   <SymbolButton Name="cmdDown" Caption="v" X="142" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnMoveDownClicked"/>
   <SymbolButton Name="cmdUp" Caption="^" X="202" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnMoveUpClicked"/>
-  <Button Name="cmdNew" Caption="Clear Task" X="262" Y="188" Width="57" Height="35" OnClick="pnlTaskEdit::OnNewClicked"/>
+  <Button Name="cmdNew" Caption="Clear All" X="262" Y="188" Width="57" Height="35" OnClick="pnlTaskEdit::OnClearAllClicked"/>
 
   <Label Name="frmSummary" X="80" Y="150" Width="243" Height="38" Border="0"/>
   <Canvas Name="frmTaskView" X="0" Y="0" Width="80" Height="53" Border="0" OnPaint="dlgTaskManager::OnTaskPaint" />

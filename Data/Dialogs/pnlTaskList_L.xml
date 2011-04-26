@@ -1,14 +1,28 @@
 <?xml version="1.0"?>
 
+
 <Panel Name="frmBrowse" Border="0">
-  <List Name="frmTasks" X="80" Y="0" Width="240" Height="148" ItemHeight="18"/>
-
-  <Button Name="cmdLoadSave" Caption="Load" X="82" Y="188" Width="58" Height="35"  OnClick="pnlTaskList::OnLoadSaveClicked"/>
-  <Button Name="cmdDeclare" Caption="Declare" X="142" Y="188" Width="58" Height="35"  OnClick="pnlTaskList::OnDeclareClicked"/>
-  <Button Name="cmdRename" Caption="Rename" X="202" Y="188" Width="58" Height="35" OnClick="pnlTaskList::OnRenameClicked"/>
-  <Button Name="cmdDelete" Caption="Delete" X="262" Y="188" Width="57" Height="35" OnClick="pnlTaskList::OnDeleteClicked"/>
-
   <Label Name="frmSummary1" X="80" Y="150" Width="243" Height="38" Border="0"/>
   <Canvas Name="frmTaskView1" X="0" Y="0" Width="80" Height="53" Border="0" OnPaint="pnlTaskList::OnTaskPaint" />
+  
+  <Tabbed Name="tabbedManage" X="80" Y="0">
 
+    <Panel Name="frmManageSub">
+     <Button Name="cmdNewTask" Caption="New Task" X="31" Y="12" Width="84" Height="60"  OnClick="pnlTaskList::OnNewTaskClicked"/>
+     <Button Name="cmdDeclare" Caption="Declare" X="125" Y="12" Width="84" Height="60"  OnClick="pnlTaskList::OnDeclareClicked"/>
+     <Button Name="cmdBrowse" Caption="Browse" X="31" Y="81" Width="84" Height="60"  OnClick="pnlTaskList::OnBrowseClicked"/>
+     <Button Name="cmdSave" Caption="Save" X="125" Y="81" Width="84" Height="60"  OnClick="pnlTaskList::OnSaveClicked"/>
+    </Panel>
+
+    <Panel Name="frmBrowseSub">
+     <List Name="frmTasks" X="0" Y="0" Width="240" Height="148" ItemHeight="18"/>
+
+     <Button Name="cmdLoad" Caption="Load" X="2" Y="188" Width="58" Height="35"  OnClick="pnlTaskList::OnLoadClicked"/>
+     <Button Name="cmdRename" Caption="Rename" X="62" Y="188" Width="58" Height="35" OnClick="pnlTaskList::OnRenameClicked"/>
+     <Button Name="cmdDelete" Caption="Delete" X="122" Y="188" Width="57" Height="35" OnClick="pnlTaskList::OnDeleteClicked"/>
+     <Button Name="cmdManage" Caption="Back" X="182" Y="188" Width="57" Height="35" OnClick="pnlTaskList::OnManageClicked"/>
+    </Panel>
+
+  </Tabbed>
 </Panel>
+  

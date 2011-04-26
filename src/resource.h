@@ -128,6 +128,8 @@
 #define IDB_OUTFIELD_MARGINAL2_HD      5355
 #define IDB_MARGINAL                    356
 #define IDB_MARGINAL_HD                5356
+#define IDB_WRENCH                      357
+#define IDB_WRENCH_HD                  5357
 
 // Next default values for new objects
 //
