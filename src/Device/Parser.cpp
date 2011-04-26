@@ -810,27 +810,31 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   line.read(id_string, 16);
   traffic.ID.parse(id_string, NULL);
 
-  if (!line.read_checked(value)) {
+  traffic.track_received = line.read_checked(value);
+  if (!traffic.track_received) {
     // Field is empty in stealth mode
     stealth = true;
     traffic.TrackBearing = Angle::native(fixed_zero);
   } else
     traffic.TrackBearing = Angle::degrees(value);
 
-  if (!line.read_checked(value)) {
+  traffic.turn_rate_received = line.read_checked(value);
+  if (!traffic.turn_rate_received) {
     // Field is empty in stealth mode
     traffic.TurnRate = fixed_zero;
   } else
     traffic.TurnRate = value;
 
-  if (!line.read_checked(value)) {
+  traffic.speed_received = line.read_checked(value);
+  if (!traffic.speed_received) {
     // Field is empty in stealth mode
     stealth = true;
     traffic.Speed = fixed_zero;
   } else
     traffic.Speed = value;
 
-  if (!line.read_checked(value)) {
+  traffic.climb_rate_received = line.read_checked(value);
+  if (!traffic.climb_rate_received) {
     // Field is empty in stealth mode
     stealth = true;
     traffic.ClimbRate = fixed_zero;

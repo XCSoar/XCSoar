@@ -68,14 +68,22 @@ struct FLARM_TRAFFIC {
 
   /** TrackBearing of the FLARM target */
   Angle TrackBearing;
+  bool track_received;
+
   /** Speed of the FLARM target */
   fixed Speed;
+  bool speed_received;
+
   /** Altitude of the FLARM target */
   fixed Altitude;
   /** Turnrate of the FLARM target */
   fixed TurnRate;
+  bool turn_rate_received;
+
   /** Climbrate of the FLARM target */
   fixed ClimbRate;
+  bool climb_rate_received;
+
   /** Latitude-based distance of the FLARM target */
   fixed RelativeNorth;
   /** Longitude-based distance of the FLARM target */

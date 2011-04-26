@@ -47,9 +47,13 @@ FLARM_TRAFFIC::Update(const FLARM_TRAFFIC &other)
   RelativeAltitude = other.RelativeAltitude;
   IDType = other.IDType;
   TrackBearing = other.TrackBearing;
+  track_received = other.track_received;
   TurnRate = other.TurnRate;
+  turn_rate_received = other.turn_rate_received;
   Speed = other.Speed;
+  speed_received = other.speed_received;
   ClimbRate = other.ClimbRate;
+  climb_rate_received = other.climb_rate_received;
   Stealth = other.Stealth;
   Type = other.Type;
 }
