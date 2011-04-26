@@ -80,7 +80,7 @@ InfoBoxWindow *InfoBoxes[InfoBoxPanelConfig::MAX_INFOBOXES];
 
 InfoBoxManagerConfig infoBoxManagerConfig;
 
-static InfoBoxLook info_box_look;
+static InfoBoxLook *info_box_look;
 
 void
 InfoBoxFullWindow::on_paint(Canvas &canvas)
@@ -508,12 +508,9 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
   return border;
 }
 
-void
-InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout)
+static void
+InfoBoxLookDefaults(InfoBoxLook &info_box_look)
 {
-  first = true;
-  layout = _layout;
-
   info_box_look.value.fg_color
     = info_box_look.title.fg_color
     = info_box_look.comment.fg_color
@@ -542,6 +539,16 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout)
     ? Graphics::inv_yellowColor : Color::YELLOW;
   info_box_look.colors[5] = Appearance.InverseInfoBox
     ? Graphics::inv_magentaColor : Color::MAGENTA;
+}
+
+void
+InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout)
+{
+  first = true;
+  layout = _layout;
+
+  info_box_look = new InfoBoxLook;
+  InfoBoxLookDefaults(*info_box_look);
 
   WindowStyle style;
   style.hide();
@@ -556,7 +563,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout)
     InfoBoxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
                                      rc.left, rc.top,
                                      rc.right - rc.left, rc.bottom - rc.top,
-                                     Border, info_box_look);
+                                     Border, *info_box_look);
   }
 
   SetDirty();
@@ -569,6 +576,8 @@ InfoBoxManager::Destroy()
     delete (InfoBoxes[i]);
 
   full_window.reset();
+
+  delete info_box_look;
 }
 
 static const ComboList *info_box_combo_list;
