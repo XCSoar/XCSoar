@@ -44,6 +44,15 @@ public:
 private:
   GeoPoint center;
 
+  unsigned _parameter;
+  unsigned _weather_time;
+  bool reload;
+  RasterMap *weather_map;
+
+  mutable Poco::RWLock lock;
+
+  bool weather_available[MAX_WEATHER_TIMES];
+
 public:
   /** 
    * Default constructor
@@ -90,11 +99,6 @@ public:
   static int IndexToTime(int index);
 
 private:
-  unsigned _parameter;
-  unsigned _weather_time;
-  bool reload;
-  RasterMap *weather_map;
-
   static void NarrowWeatherFilename(char *filename, const TCHAR *name,
                                     unsigned time_index);
 
@@ -107,9 +111,6 @@ private:
   bool ExistsItem(struct zzip_dir *dir, const TCHAR* name,
                   unsigned time_index) const;
 
-  bool weather_available[MAX_WEATHER_TIMES];
-
-  mutable Poco::RWLock lock;
   void _Close();
 };
 
