@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   FlarmId id;
   id.parse("DDA85C", NULL);
 
-  const FlarmNetRecord *record = db.Find(id);
+  const FlarmNetRecord *record = db.FindRecordById(id);
   ok1(record != NULL);
 
   ok1(_tcscmp(record->id, _T("DDA85C")) == 0);
@@ -47,7 +47,7 @@ int main(int argc, char **argv)
   ok1(_tcscmp(record->frequency, _T("130.625")) == 0);
 
   const FlarmNetRecord *array[3];
-  ok1(db.Find(_T("TH"), array, 3) == 2);
+  ok1(db.FindRecordsByCallSign(_T("TH"), array, 3) == 2);
 
   bool found4449 = false, found5799 = false;
   for (unsigned i = 0; i < 2; i++) {

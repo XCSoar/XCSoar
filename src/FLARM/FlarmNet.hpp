@@ -74,15 +74,16 @@ public:
    * @param id FLARM id
    * @return FLARMNetRecord object
    */
-  const FlarmNetRecord *Find(FlarmId id) const;
+  const FlarmNetRecord *FindRecordById(FlarmId id) const;
 
   /**
    * Finds a FLARMNetRecord object based on the given Callsign
    * @param cn Callsign
    * @return FLARMNetRecord object
    */
-  const FlarmNetRecord *FindFirst(const TCHAR *cn) const;
-  unsigned Find(const TCHAR *cn, const FlarmNetRecord *array[], unsigned size) const;
+  const FlarmNetRecord *FindFirstRecordByCallSign(const TCHAR *cn) const;
+  unsigned FindRecordsByCallSign(const TCHAR *cn, const FlarmNetRecord *array[],
+                                 unsigned size) const;
 };
 
 #endif

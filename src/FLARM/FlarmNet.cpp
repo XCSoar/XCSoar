@@ -127,7 +127,7 @@ FlarmNetDatabase::LoadFile(const TCHAR *path)
 }
 
 const FlarmNetRecord *
-FlarmNetDatabase::Find(FlarmId id) const
+FlarmNetDatabase::FindRecordById(FlarmId id) const
 {
   RecordMap::const_iterator i = record_map.find(id);
   if (i != record_map.end())
@@ -137,7 +137,7 @@ FlarmNetDatabase::Find(FlarmId id) const
 }
 
 const FlarmNetRecord *
-FlarmNetDatabase::FindFirst(const TCHAR *cn) const
+FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
 {
   RecordMap::const_iterator i = record_map.begin();
   while (i != record_map.end()) {
@@ -152,7 +152,7 @@ FlarmNetDatabase::FindFirst(const TCHAR *cn) const
 }
 
 unsigned
-FlarmNetDatabase::Find(const TCHAR *cn, const FlarmNetRecord *array[], unsigned size) const
+FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn, const FlarmNetRecord *array[], unsigned size) const
 {
   unsigned count = 0;
 

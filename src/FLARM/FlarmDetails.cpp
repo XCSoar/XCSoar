@@ -138,7 +138,7 @@ const FlarmNetRecord *
 FlarmDetails::LookupRecord(FlarmId id)
 {
   // try to find flarm from FlarmNet.org File
-  const FlarmNetRecord *record = flarm_net.Find(id);
+  const FlarmNetRecord *record = flarm_net.FindRecordById(id);
   if (record != NULL)
     return record;
 
@@ -154,7 +154,7 @@ FlarmDetails::LookupCallsign(FlarmId id)
     return FLARM_Names[index].Name;
 
   // try to find flarm from FlarmNet.org File
-  const FlarmNetRecord *record = flarm_net.Find(id);
+  const FlarmNetRecord *record = flarm_net.FindRecordById(id);
   if (record != NULL)
     return record->callsign;
 
@@ -170,7 +170,7 @@ FlarmDetails::LookupId(const TCHAR *cn)
     return FLARM_Names[index].ID;
 
   // try to find flarm from FlarmNet.org File
-  const FlarmNetRecord *record = flarm_net.FindFirst(cn);
+  const FlarmNetRecord *record = flarm_net.FindFirstRecordByCallSign(cn);
   if (record != NULL)
     return record->GetId();
 
