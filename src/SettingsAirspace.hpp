@@ -28,7 +28,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceWarningConfig.hpp"
 
 /** Airspace display modes */
-typedef enum
+enum AirspaceDisplayMode_t
 {
   ALLON = 0,
   CLIP,
@@ -36,7 +36,7 @@ typedef enum
   ALLBELOW,
   INSIDE,
   ALLOFF
-} AirspaceDisplayMode_t;
+};
 
 
 /**
