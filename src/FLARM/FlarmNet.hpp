@@ -34,9 +34,8 @@ class NLineReader;
 /**
  * FlarmNet.org file entry
  */
-class FlarmNetRecord
+struct FlarmNetRecord
 {
-public:
   TCHAR id[7];          /**< FLARM id 6 bytes */
   TCHAR name[22];       /**< Name 15 bytes */
   TCHAR airfield[22];   /**< Airfield 4 bytes */
