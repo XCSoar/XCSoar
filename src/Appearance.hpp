@@ -24,18 +24,18 @@ Copyright_License {
 #ifndef APPEARANCE_H
 #define APPEARANCE_H
 
-typedef enum {
+enum IndLandable_t {
   wpLandableWinPilot = 0,
   wpLandableAltA,
   wpLandableAltB,
-} IndLandable_t;
+};
 
-typedef enum {
+enum StateMessageAlign_t {
   smAlignCenter = 0,
   smAlignTopLeft,
-} StateMessageAlign_t;
+};
 
-typedef enum {
+enum TextInputStyle_t {
   /**
    * Use the platform default - i.e. keyboard if the device has a
    * pointing device.
@@ -43,22 +43,22 @@ typedef enum {
   tiDefault,
   tiKeyboard,
   tiHighScore,
-} TextInputStyle_t;
+};
 
-typedef enum {
+enum DialogTabStyle_t {
   dtText,
   dtIcon,
-} DialogTabStyle_t;
+};
 
-typedef enum {
+enum InfoBoxBorderAppearance_t {
   apIbBox = 0,
   apIbTab
-} InfoBoxBorderAppearance_t;
+};
 
-typedef enum {
+enum AircraftSymbol_t {
   acSimple = 0,
   acDetailed,
-} AircraftSymbol_t;
+};
 
 struct Appearance {
   IndLandable_t IndLandable;
