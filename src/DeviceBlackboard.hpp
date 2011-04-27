@@ -99,7 +99,7 @@ public:
                    const fixed alt, const fixed baroalt, const fixed t);
   void ProcessSimulation();
   void StopReplay();
-  void SetTrackBearing(Angle val);
+  void SetTrack(Angle val);
   void SetSpeed(fixed val);
   void SetAltitude(fixed alt);
   void SetQNH(fixed qnh);

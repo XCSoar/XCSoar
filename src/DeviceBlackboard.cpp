@@ -190,7 +190,7 @@ DeviceBlackboard::SetSpeed(fixed val)
  * @param val New TrackBearing
  */
 void
-DeviceBlackboard::SetTrackBearing(Angle val)
+DeviceBlackboard::SetTrack(Angle val)
 {
   ScopeLock protect(mutexBlackboard);
   simulator_data.track = val.as_bearing();
