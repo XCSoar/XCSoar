@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FLARM/FlarmDetails.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StaticArray.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
 #include "FLARM/FlarmNet.hpp"
@@ -33,8 +34,6 @@ Copyright_License {
 
 static FlarmNetDatabase flarm_net;
 
-static int NumberOfFLARMNames = 0;
-
 struct FLARM_Names_t
 {
   FlarmId ID;
@@ -43,7 +42,7 @@ struct FLARM_Names_t
 
 #define MAXFLARMNAMES 200
 
-static FLARM_Names_t FLARM_Names[MAXFLARMNAMES];
+static StaticArray<FLARM_Names_t, MAXFLARMNAMES> FLARM_Names;
 
 void
 FlarmDetails::Load()
@@ -71,7 +70,7 @@ FlarmDetails::LoadFLARMnet()
 void
 FlarmDetails::Reset()
 {
-  NumberOfFLARMNames = 0;
+  FLARM_Names.clear();
 }
 
 static void
@@ -97,7 +96,7 @@ FlarmDetails::LoadSecondary()
   LogStartUp(_T("OpenFLARMDetails"));
 
   // if (FLARM Details already there) delete them;
-  if (NumberOfFLARMNames)
+  if (!FLARM_Names.empty())
     Reset();
 
   TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
@@ -115,9 +114,10 @@ FlarmDetails::SaveSecondary()
     return;
 
   TCHAR id[16];
-  for (int z = 0; z < NumberOfFLARMNames; z++)
+
+  for (unsigned i = 0; i < FLARM_Names.size(); i++)
     writer->printfln(_T("%s=%s"),
-                     FLARM_Names[z].ID.format(id), FLARM_Names[z].Name);
+                     FLARM_Names[i].ID.format(id), FLARM_Names[i].Name);
 
   delete writer;
 }
@@ -125,7 +125,7 @@ FlarmDetails::SaveSecondary()
 int
 FlarmDetails::LookupSecondaryIndex(FlarmId id)
 {
-  for (int i = 0; i < NumberOfFLARMNames; i++)
+  for (unsigned i = 0; i < FLARM_Names.size(); i++)
     if (FLARM_Names[i].ID == id)
       return i;
 
@@ -135,7 +135,7 @@ FlarmDetails::LookupSecondaryIndex(FlarmId id)
 int
 FlarmDetails::LookupSecondaryIndex(const TCHAR *cn)
 {
-  for (int i = 0; i < NumberOfFLARMNames; i++)
+  for (unsigned i = 0; i < FLARM_Names.size(); i++)
     if (_tcscmp(FLARM_Names[i].Name, cn) == 0)
       return i;
 
@@ -199,13 +199,14 @@ FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
     return true;
   }
 
-  if (NumberOfFLARMNames >= MAXFLARMNAMES - 1)
+  if (FLARM_Names.full())
     return false;
 
   // create new record
-  FLARM_Names[NumberOfFLARMNames].ID = id;
-  _tcsncpy(FLARM_Names[NumberOfFLARMNames].Name, name, 20);
-  FLARM_Names[NumberOfFLARMNames].Name[20] = 0;
-  NumberOfFLARMNames++;
+  FLARM_Names_t &item = FLARM_Names.append();
+  item.ID = id;
+  _tcsncpy(item.Name, name, 20);
+  item.Name[20] = 0;
+
   return true;
 }
