@@ -133,10 +133,10 @@ static int NMEA_Queue[MAX_NMEA_QUEUE];
 bool InitONCE = false;
 
 // Mapping text names of events to the real thing
-typedef struct {
+struct Text2EventSTRUCT {
   const TCHAR *text;
   pt2Event event;
-} Text2EventSTRUCT;
+};
 
 static const Text2EventSTRUCT Text2Event[] = {
 #include "InputEvents_Text2Event.cpp"
