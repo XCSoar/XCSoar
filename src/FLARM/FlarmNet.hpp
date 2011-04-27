@@ -81,7 +81,7 @@ public:
    * @param cn Callsign
    * @return FLARMNetRecord object
    */
-  const FlarmNetRecord *Find(const TCHAR *cn) const;
+  const FlarmNetRecord *FindFirst(const TCHAR *cn) const;
   unsigned Find(const TCHAR *cn, const FlarmNetRecord *array[], unsigned size) const;
 };
 

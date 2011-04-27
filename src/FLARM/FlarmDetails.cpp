@@ -178,7 +178,7 @@ FlarmDetails::LookupId(const TCHAR *cn)
     return FLARM_Names[index].ID;
 
   // try to find flarm from FlarmNet.org File
-  const FlarmNetRecord *record = flarm_net.Find(cn);
+  const FlarmNetRecord *record = flarm_net.FindFirst(cn);
   if (record != NULL)
     return record->GetId();
 

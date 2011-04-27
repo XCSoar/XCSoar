@@ -137,7 +137,7 @@ FlarmNetDatabase::Find(FlarmId id) const
 }
 
 const FlarmNetRecord *
-FlarmNetDatabase::Find(const TCHAR *cn) const
+FlarmNetDatabase::FindFirst(const TCHAR *cn) const
 {
   RecordMap::const_iterator i = record_map.begin();
   while (i != record_map.end()) {
