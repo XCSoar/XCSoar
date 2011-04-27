@@ -33,7 +33,7 @@ class InfoBoxContent;
 
 namespace InfoBoxFactory
 {
-  typedef enum e_InfoBox {
+  enum t_InfoBox {
     /* 0..9 */
     e_HeightGPS, /* This is the height above mean sea level reported by the GPS. Touchscreen/PC only: in simulation mode, this value is adjustable with the up/down arrow keys and the right/left arrow keys also cause the glider to turn */
     e_HeightAGL, /* This is the navigation altitude minus the terrain height obtained from the terrain file. The value is coloured red when the glider is below the terrain safety clearance height */
@@ -132,7 +132,7 @@ namespace InfoBoxFactory
     e_Fin_ETE_VMG,
     e_WP_ETE_VMG,
     e_NUM_TYPES /* Last item */
-  }t_InfoBox;
+  };
 
   struct InfoBoxMetaData {
     const TCHAR *name;
