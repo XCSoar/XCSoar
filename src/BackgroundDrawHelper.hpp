@@ -44,6 +44,11 @@ class LabelBlock;
  */
 class BackgroundDrawHelper 
 {
+  TerrainRenderer* m_rend;
+  const RasterTerrain *m_terrain;
+  const RasterWeather *m_weather;
+  Angle m_sun_azimuth;
+
 public:
   BackgroundDrawHelper();
   ~BackgroundDrawHelper();
@@ -65,12 +70,6 @@ public:
 private:
   static void DrawSpotHeight(Canvas &canvas,  LabelBlock &block,
                              const TCHAR *Buffer, RasterPoint pt);
-
-private:
-  TerrainRenderer* m_rend;
-  const RasterTerrain *m_terrain;
-  const RasterWeather *m_weather;
-  Angle m_sun_azimuth;
 };
 
 #endif
