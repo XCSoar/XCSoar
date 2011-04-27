@@ -33,13 +33,13 @@ class TLineReader;
 /**
  * Struct used to store status message items
  */
-typedef struct {
+struct StatusMessageSTRUCT {
 	const TCHAR *key;		/* English key */
 	const TCHAR *sound;		/* What sound entry to play */
 	bool doStatus;
 	bool doSound;
 	int delay_ms;		/* Delay for DoStatusMessage */
-} StatusMessageSTRUCT;
+};
 
 /**
  * Class to manage a list of active and recent status messages
