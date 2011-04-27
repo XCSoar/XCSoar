@@ -36,12 +36,12 @@
 #include <windows.h>
 #endif
 
-typedef enum {
+enum STATUS_t {
   eValidationFailed,
   eValidationPassed,
   eValidationFileNotFound,
   eValidationFileRead,
-} STATUS_t;
+};
 
 static const char szPass[] = "Validation check passed, data indicated as correct";
 static const char szFail[] = "Validation check failed.  G Record is invalid";
