@@ -104,8 +104,7 @@ RasterWeather::RasterWeather()
     reload(true),
     weather_map(NULL)
 {
-  for (unsigned i = 0; i < MAX_WEATHER_TIMES; i++)
-    weather_available[i] = false;
+  std::fill(weather_available, weather_available + MAX_WEATHER_TIMES, false);
 }
 
 RasterWeather::~RasterWeather() 
