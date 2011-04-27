@@ -257,7 +257,7 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
   return false;
 }
 
-typedef struct VEGA_SCHEME_t
+struct VEGA_SCHEME
 {
   long ToneClimbComparisonType;
   long ToneLiftComparisonType;
@@ -298,7 +298,7 @@ typedef struct VEGA_SCHEME_t
   long ToneCirclingDescendingPeriodScheme;
   long ToneCirclingDescendingPeriodScale;
 
-} VEGA_SCHEME;
+};
 
 // Value used for comparison in climb tone
 #define  X_NONE 0
