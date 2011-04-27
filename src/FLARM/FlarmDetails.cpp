@@ -34,13 +34,13 @@ Copyright_License {
 
 static FlarmNetDatabase flarm_net;
 
-struct FLARM_Names_t
+struct FlarmIdNameCouple
 {
   FlarmId ID;
   TCHAR Name[21];
 };
 
-static StaticArray<FLARM_Names_t, 200> FLARM_Names;
+static StaticArray<FlarmIdNameCouple, 200> FLARM_Names;
 
 void
 FlarmDetails::Load()
@@ -201,7 +201,7 @@ FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
     return false;
 
   // create new record
-  FLARM_Names_t &item = FLARM_Names.append();
+  FlarmIdNameCouple &item = FLARM_Names.append();
   item.ID = id;
   _tcsncpy(item.Name, name, 20);
   item.Name[20] = 0;
