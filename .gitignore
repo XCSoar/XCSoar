@@ -1,3 +1,4 @@
+
 results/res-*
 results/terrain.txt
 .stgit*
@@ -38,5 +39,5 @@ callgrind.out.*
 tmp/
 .gdbinit
 test/data/private
-./.project
-./.cproject
+/.project
+/.cproject
