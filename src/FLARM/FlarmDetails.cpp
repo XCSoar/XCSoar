@@ -35,10 +35,11 @@ static FLARMNetDatabase flarm_net;
 
 static int NumberOfFLARMNames = 0;
 
-typedef struct {
+struct FLARM_Names_t
+{
   FlarmId ID;
   TCHAR Name[21];
-} FLARM_Names_t;
+};
 
 #define MAXFLARMNAMES 200
 
