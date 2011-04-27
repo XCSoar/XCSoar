@@ -29,18 +29,18 @@ Copyright_License {
 #define SETPOWERMANAGEMENT   6147
 #define GETPOWERMANAGEMENT   6148
 
-typedef enum _VIDEO_POWER_STATE {
+enum VIDEO_POWER_STATE {
   VideoPowerOn = 1,
   VideoPowerStandBy,
   VideoPowerSuspend,
   VideoPowerOff
-} VIDEO_POWER_STATE, *PVIDEO_POWER_STATE;
+};
 
-typedef struct _VIDEO_POWER_MANAGEMENT {
+struct VIDEO_POWER_MANAGEMENT {
   ULONG Length;
   ULONG DPMSVersion;
   ULONG PowerState;
-} VIDEO_POWER_MANAGEMENT, *PVIDEO_POWER_MANAGEMENT;
+};
 
 #endif
 
