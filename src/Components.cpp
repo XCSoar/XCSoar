@@ -555,9 +555,6 @@ XCSoarInterface::Shutdown(void)
   delete protected_task_manager;
   delete task_manager;
 
-  // Clear the FLARM database
-  FlarmDetails::Reset();
-
   // Kill windows
   LogStartUp(_T("Destroy Info Boxes"));
   InfoBoxManager::Destroy();

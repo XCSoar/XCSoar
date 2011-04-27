@@ -65,12 +65,6 @@ FlarmDetails::LoadFLARMnet()
     LogStartUp(_T("%u FLARMnet ids found"), num_records);
 }
 
-void
-FlarmDetails::Reset()
-{
-  FLARM_Names.clear();
-}
-
 static void
 LoadSecondaryFile(TLineReader &reader)
 {
@@ -95,7 +89,7 @@ FlarmDetails::LoadSecondary()
 
   // if (FLARM Details already there) delete them;
   if (!FLARM_Names.empty())
-    Reset();
+    FLARM_Names.clear();
 
   TLineReader *reader = OpenDataTextFile(_T("xcsoar-flarm.txt"));
   if (reader != NULL) {

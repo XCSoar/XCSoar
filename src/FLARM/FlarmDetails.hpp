@@ -51,12 +51,6 @@ namespace FlarmDetails
   LoadSecondary();
 
   /**
-   * Deletes all known FLARM names
-   */
-  void
-  Reset();
-
-  /**
    * Saves XCSoars own FLARM details into the
    * corresponding file (xcsoar-flarm.txt)
    */
