@@ -316,7 +316,7 @@ GlideComputer::FLARM_ScanTraffic()
     return;
 
   // Set Teammate location to FLARM contact location
-  SetCalculated().TeammateLocation = traffic->Location;
+  SetCalculated().TeammateLocation = traffic->location;
 
   // Calculate distance and bearing from teammate to reference waypoint
 

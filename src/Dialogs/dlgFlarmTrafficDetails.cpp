@@ -65,7 +65,7 @@ UpdateChanging()
     return;
 
   GeoVector gv =
-      XCSoarInterface::Basic().Location.distance_bearing(target->Location);
+      XCSoarInterface::Basic().Location.distance_bearing(target->location);
 
   // Fill distance field
   Units::FormatUserDistance(gv.Distance, tmp, 20);
@@ -83,11 +83,11 @@ UpdateChanging()
   ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
 
   // Fill altitude field
-  Units::FormatUserAltitude(target->Altitude, tmp, 20);
+  Units::FormatUserAltitude(target->altitude, tmp, 20);
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
 
   // Fill vertical direction field
-  Angle dir = Angle::radians((fixed)atan2(target->RelativeAltitude,
+  Angle dir = Angle::radians((fixed)atan2(target->relative_altitude,
                                           gv.Distance)).as_delta();
   if (dir.magnitude_degrees() > fixed_one)
     _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value_degrees());
@@ -96,7 +96,7 @@ UpdateChanging()
   ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);
 
   // Fill climb speed field
-  Units::FormatUserVSpeed(target->Average30s, tmp, 20);
+  Units::FormatUserVSpeed(target->climb_rate_avg30s, tmp, 20);
   ((WndProperty *)wf->FindByName(_T("prpVSpeed")))->SetText(tmp);
 }
 
@@ -150,7 +150,7 @@ Update()
 
     const TCHAR* actype;
     if (target == NULL ||
-        (actype = FLARM_TRAFFIC::GetTypeString(target->Type)) == NULL)
+        (actype = FLARM_TRAFFIC::GetTypeString(target->type)) == NULL)
       actype = _T("--");
 
     ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(actype);

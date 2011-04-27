@@ -285,62 +285,62 @@ DeviceBlackboard::ProcessFLARM()
     // if we don't know the target's name yet
     if (!traffic.HasName()) {
       // lookup the name of this target's id
-      const TCHAR *fname = FlarmDetails::LookupCallsign(traffic.ID);
+      const TCHAR *fname = FlarmDetails::LookupCallsign(traffic.id);
       if (fname != NULL)
-        traffic.Name = fname;
+        traffic.name = fname;
     }
 
     // Calculate Location
-    traffic.Location.Latitude =
-        Angle::degrees(traffic.RelativeNorth * FLARM_NorthingToLatitude) +
+    traffic.location.Latitude =
+        Angle::degrees(traffic.relative_north * FLARM_NorthingToLatitude) +
         basic.Location.Latitude;
 
-    traffic.Location.Longitude =
-        Angle::degrees(traffic.RelativeEast * FLARM_EastingToLongitude) +
+    traffic.location.Longitude =
+        Angle::degrees(traffic.relative_east * FLARM_EastingToLongitude) +
         basic.Location.Longitude;
 
     // Calculate absolute altitude
-    traffic.Altitude = traffic.RelativeAltitude + basic.GPSAltitude;
+    traffic.altitude = traffic.relative_altitude + basic.GPSAltitude;
 
     // Calculate average climb rate
-    traffic.Average30s =
-        flarmCalculations.Average30s(traffic.ID, basic.Time, traffic.Altitude);
+    traffic.climb_rate_avg30s =
+        flarmCalculations.Average30s(traffic.id, basic.Time, traffic.altitude);
 
     // The following calculations are only relevant for stealth targets
-    if (!traffic.Stealth)
+    if (!traffic.stealth)
       continue;
 
     // Check if the target has been seen before in the last seconds
-    const FLARM_TRAFFIC *last_traffic = last_flarm.FindTraffic(traffic.ID);
-    if (last_traffic == NULL || !last_traffic->Valid)
+    const FLARM_TRAFFIC *last_traffic = last_flarm.FindTraffic(traffic.id);
+    if (last_traffic == NULL || !last_traffic->valid)
       continue;
 
     // Calculate the time difference between now and the last contact
-    fixed dt = traffic.Valid.GetTimeDifference(last_traffic->Valid);
+    fixed dt = traffic.valid.GetTimeDifference(last_traffic->valid);
     if (positive(dt)) {
       // Calculate the GeoVector between now and the last contact
-      GeoVector vec = last_traffic->Location.distance_bearing(traffic.Location);
+      GeoVector vec = last_traffic->location.distance_bearing(traffic.location);
 
-      traffic.TrackBearing = vec.Bearing;
+      traffic.track = vec.Bearing;
 
       // Calculate the turn rate
-      traffic.TurnRate =
-          (traffic.TrackBearing - last_traffic->TrackBearing).
+      traffic.turn_rate =
+          (traffic.track - last_traffic->track).
           as_delta().value_degrees() / dt;
 
       // Calculate the immediate climb rate
-      traffic.ClimbRate =
-          (traffic.RelativeAltitude - last_traffic->RelativeAltitude) / dt;
+      traffic.climb_rate =
+          (traffic.relative_altitude - last_traffic->relative_altitude) / dt;
 
       // Calculate the speed [m/s]
-      traffic.Speed = vec.Distance / dt;
+      traffic.speed = vec.Distance / dt;
     } else {
       // Since the time difference is zero (or negative)
       // we can just copy the old values
-      traffic.TrackBearing = last_traffic->TrackBearing;
-      traffic.TurnRate = last_traffic->TurnRate;
-      traffic.ClimbRate = last_traffic->ClimbRate;
-      traffic.Speed = last_traffic->Speed;
+      traffic.track = last_traffic->track;
+      traffic.turn_rate = last_traffic->turn_rate;
+      traffic.climb_rate = last_traffic->climb_rate;
+      traffic.speed = last_traffic->speed;
     }
   }
 }

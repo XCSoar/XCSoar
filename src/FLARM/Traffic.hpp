@@ -58,57 +58,63 @@ struct FLARM_TRAFFIC {
   /**
    * Is this object valid, or has it expired already?
    */
-  Validity Valid;
+  Validity valid;
 
   /** Location of the FLARM target */
-  GeoPoint Location;
+  GeoPoint location;
 
   /** Is the target in stealth mode */
-  bool Stealth;
+  bool stealth;
 
   /** TrackBearing of the FLARM target */
-  Angle TrackBearing;
+  Angle track;
   bool track_received;
 
   /** Speed of the FLARM target */
-  fixed Speed;
+  fixed speed;
   bool speed_received;
 
   /** Altitude of the FLARM target */
-  fixed Altitude;
+  fixed altitude;
+
   /** Turnrate of the FLARM target */
-  fixed TurnRate;
+  fixed turn_rate;
   bool turn_rate_received;
 
   /** Climbrate of the FLARM target */
-  fixed ClimbRate;
+  fixed climb_rate;
   bool climb_rate_received;
 
   /** Latitude-based distance of the FLARM target */
-  fixed RelativeNorth;
+  fixed relative_north;
+
   /** Longitude-based distance of the FLARM target */
-  fixed RelativeEast;
+  fixed relative_east;
+
   /** Altidude-based distance of the FLARM target */
-  fixed RelativeAltitude;
+  fixed relative_altitude;
+
   /** FLARM id of the FLARM target */
-  FlarmId ID;
+  FlarmId id;
+
   /** (if exists) Name of the FLARM target */
-  StaticString<10> Name;
-  unsigned short IDType;
-  unsigned short AlarmLevel;
-  AircraftType Type;
-  fixed Average30s;
+  StaticString<10> name;
+
+  unsigned short id_type;
+  unsigned short alarm_level;
+  AircraftType type;
+  fixed climb_rate_avg30s;
 
   bool defined() const {
-    return Valid;
+    return valid;
   }
 
   bool HasAlarm() const {
-    return (AlarmLevel > 0 && AlarmLevel < 4);
+    return (alarm_level > 0 && alarm_level < 4);
   }
 
   bool HasName() const {
-    return !Name.empty();
+    return !name.empty();
   }
 
   /**
@@ -117,9 +123,9 @@ struct FLARM_TRAFFIC {
    * has no effect on the result.
    */
   fixed SquareDistance() const {
-    return RelativeAltitude * RelativeAltitude +
-      RelativeEast * RelativeEast +
-      RelativeNorth * RelativeNorth;
+    return relative_altitude * relative_altitude +
+      relative_east * relative_east +
+      relative_north * relative_north;
   }
 
   fixed Distance() const {
@@ -127,8 +133,8 @@ struct FLARM_TRAFFIC {
   }
 
   void Clear() {
-    Valid.Clear();
-    Name.clear();
+    valid.Clear();
+    name.clear();
   }
 
   /**
@@ -137,8 +143,8 @@ struct FLARM_TRAFFIC {
    * @return true if the object is still valid
    */
   bool Refresh(fixed Time) {
-    Valid.Expire(Time, fixed_two);
-    return Valid;
+    valid.Expire(Time, fixed_two);
+    return valid;
   }
 
   static const TCHAR* GetTypeString(AircraftType type);

@@ -779,7 +779,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
   FLARM_TRAFFIC traffic;
-  traffic.AlarmLevel = line.read(0);
+  traffic.alarm_level = line.read(0);
 
   fixed value;
   bool stealth = false;
@@ -787,61 +787,61 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (!line.read_checked(value))
     // Relative North is required !
     return true;
-  traffic.RelativeNorth = value;
+  traffic.relative_north = value;
 
   if (!line.read_checked(value))
     // Relative East is required !
     return true;
-  traffic.RelativeEast = value;
+  traffic.relative_east = value;
 
   if (!line.read_checked(value))
     // Relative Altitude is required !
     return true;
-  traffic.RelativeAltitude = value;
+  traffic.relative_altitude = value;
 
-  traffic.IDType = line.read(0);
+  traffic.id_type = line.read(0);
 
   // 5 id, 6 digit hex
   char id_string[16];
   line.read(id_string, 16);
-  traffic.ID.parse(id_string, NULL);
+  traffic.id.parse(id_string, NULL);
 
   traffic.track_received = line.read_checked(value);
   if (!traffic.track_received) {
     // Field is empty in stealth mode
     stealth = true;
-    traffic.TrackBearing = Angle::native(fixed_zero);
+    traffic.track = Angle::native(fixed_zero);
   } else
-    traffic.TrackBearing = Angle::degrees(value);
+    traffic.track = Angle::degrees(value);
 
   traffic.turn_rate_received = line.read_checked(value);
   if (!traffic.turn_rate_received) {
     // Field is empty in stealth mode
-    traffic.TurnRate = fixed_zero;
+    traffic.turn_rate = fixed_zero;
   } else
-    traffic.TurnRate = value;
+    traffic.turn_rate = value;
 
   traffic.speed_received = line.read_checked(value);
   if (!traffic.speed_received) {
     // Field is empty in stealth mode
     stealth = true;
-    traffic.Speed = fixed_zero;
+    traffic.speed = fixed_zero;
   } else
-    traffic.Speed = value;
+    traffic.speed = value;
 
   traffic.climb_rate_received = line.read_checked(value);
   if (!traffic.climb_rate_received) {
     // Field is empty in stealth mode
     stealth = true;
-    traffic.ClimbRate = fixed_zero;
+    traffic.climb_rate = fixed_zero;
   } else
-    traffic.ClimbRate = value;
+    traffic.climb_rate = value;
 
-  traffic.Stealth = stealth;
+  traffic.stealth = stealth;
 
-  traffic.Type = (FLARM_TRAFFIC::AircraftType)line.read(0);
+  traffic.type = (FLARM_TRAFFIC::AircraftType)line.read(0);
 
-  FLARM_TRAFFIC *flarm_slot = flarm.FindTraffic(traffic.ID);
+  FLARM_TRAFFIC *flarm_slot = flarm.FindTraffic(traffic.id);
   if (flarm_slot == NULL) {
     flarm_slot = flarm.AllocateTraffic();
     if (flarm_slot == NULL)
@@ -849,13 +849,13 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
       return true;
 
     flarm_slot->Clear();
-    flarm_slot->ID = traffic.ID;
+    flarm_slot->id = traffic.id;
 
     flarm.NewTraffic = true;
   }
 
   // set time of fix to current time
-  flarm_slot->Valid.Update(GPS_INFO->Time);
+  flarm_slot->valid.Update(GPS_INFO->Time);
 
   flarm_slot->Update(traffic);
 

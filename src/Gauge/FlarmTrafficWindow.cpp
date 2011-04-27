@@ -225,7 +225,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
   FlarmId selection_id;
   RasterPoint pt;
   if (!small && data.available && selection >= 0) {
-    selection_id = data.traffic[selection].ID;
+    selection_id = data.traffic[selection].id;
     pt = sc[selection];
   } else {
     selection_id.clear();
@@ -284,8 +284,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 {
   // Save relative East/North
   fixed x, y;
-  x = traffic.RelativeEast;
-  y = -traffic.RelativeNorth;
+  x = traffic.relative_east;
+  y = -traffic.relative_north;
 
   // Calculate the distance in meters
   fixed d = hypot(x, y);
@@ -318,7 +318,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   sc[i].y = radar_mid.y + iround(y * scale);
 
   // Set the arrow color depending on alarm level
-  switch (traffic.AlarmLevel) {
+  switch (traffic.alarm_level) {
   case 1:
     canvas.hollow_brush();
     canvas.select(hpWarning);
@@ -340,7 +340,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       canvas.select(hpPassive);
     } else {
       if (settings.TeamFlarmTracking &&
-          traffic.ID == settings.TeamFlarmIdTarget) {
+          traffic.id == settings.TeamFlarmIdTarget) {
         canvas.hollow_brush();
         canvas.select(hpTeam);
         canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
@@ -350,10 +350,10 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
         canvas.select(hbSelection);
       } else {
         canvas.hollow_brush();
-        if ((traffic.Type != FLARM_TRAFFIC::acGlider &&
-             traffic.Type != FLARM_TRAFFIC::acHangGlider &&
-             traffic.Type != FLARM_TRAFFIC::acParaGlider) ||
-            traffic.Speed < fixed_four)
+        if ((traffic.type != FLARM_TRAFFIC::acGlider &&
+             traffic.type != FLARM_TRAFFIC::acHangGlider &&
+             traffic.type != FLARM_TRAFFIC::acParaGlider) ||
+            traffic.speed < fixed_four)
           canvas.select(hpPassive);
         else
           canvas.select(hpStandard);
@@ -390,7 +390,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Rotate and shift the arrow
   PolygonRotateShift(Arrow, 5, sc[i].x, sc[i].y,
-                     traffic.TrackBearing - (enable_north_up ?
+                     traffic.track - (enable_north_up ?
                                              Angle::native(fixed_zero) : heading));
 
   // Draw the polygon
@@ -401,7 +401,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       return;
 
     const short relalt =
-        iround(Units::ToUserAltitude(traffic.RelativeAltitude / 100));
+        iround(Units::ToUserAltitude(traffic.relative_altitude / 100));
 
     // if (relative altitude is other than zero)
     if (relalt == 0)
@@ -466,10 +466,10 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     return;
 
   // if vertical speed to small or negative -> skip this one
-  if (side_display_type == 1 && (traffic.Average30s < fixed(0.5)
-        || (traffic.Type != FLARM_TRAFFIC::acGlider
-            && traffic.Type != FLARM_TRAFFIC::acHangGlider
-            && traffic.Type != FLARM_TRAFFIC::acParaGlider)))
+  if (side_display_type == 1 && (traffic.climb_rate_avg30s < fixed(0.5)
+        || (traffic.type != FLARM_TRAFFIC::acGlider
+            && traffic.type != FLARM_TRAFFIC::acHangGlider
+            && traffic.type != FLARM_TRAFFIC::acParaGlider)))
       return;
 
   // Select font
@@ -480,9 +480,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   TCHAR tmp[10];
 
   if (side_display_type == 1)
-    Units::FormatUserVSpeed(traffic.Average30s, tmp, 10, false);
+    Units::FormatUserVSpeed(traffic.climb_rate_avg30s, tmp, 10, false);
   else
-    Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 10, true);
+    Units::FormatUserArrival(traffic.relative_altitude, tmp, 10, true);
 
   PixelSize sz = canvas.text_size(tmp);
 

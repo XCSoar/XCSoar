@@ -151,22 +151,22 @@ TestFLARM()
 
   FLARM_TRAFFIC *traffic = nmea_info.flarm.FindTraffic(id);
   if (ok1(traffic != NULL)) {
-    ok1(traffic->Valid);
-    ok1(traffic->AlarmLevel == 0);
-    ok1(equals(traffic->RelativeNorth, 100));
-    ok1(equals(traffic->RelativeEast, -150));
-    ok1(equals(traffic->RelativeAltitude, 10));
-    ok1(traffic->IDType == 2);
-    ok1(equals(traffic->TrackBearing, 123));
+    ok1(traffic->valid);
+    ok1(traffic->alarm_level == 0);
+    ok1(equals(traffic->relative_north, 100));
+    ok1(equals(traffic->relative_east, -150));
+    ok1(equals(traffic->relative_altitude, 10));
+    ok1(traffic->id_type == 2);
+    ok1(equals(traffic->track, 123));
     ok1(traffic->track_received);
-    ok1(equals(traffic->TurnRate, 13));
+    ok1(equals(traffic->turn_rate, 13));
     ok1(traffic->turn_rate_received);
-    ok1(equals(traffic->Speed, 24));
+    ok1(equals(traffic->speed, 24));
     ok1(traffic->speed_received);
-    ok1(equals(traffic->ClimbRate, 1.4));
+    ok1(equals(traffic->climb_rate, 1.4));
     ok1(traffic->climb_rate_received);
-    ok1(traffic->Type == FLARM_TRAFFIC::acTowPlane);
-    ok1(!traffic->Stealth);
+    ok1(traffic->type == FLARM_TRAFFIC::acTowPlane);
+    ok1(!traffic->stealth);
   } else {
     skip(16, 0, "traffic == NULL");
   }
@@ -178,18 +178,18 @@ TestFLARM()
   id.parse("DEADFF", NULL);
   traffic = nmea_info.flarm.FindTraffic(id);
   if (ok1(traffic != NULL)) {
-    ok1(traffic->Valid);
-    ok1(traffic->AlarmLevel == 2);
-    ok1(equals(traffic->RelativeNorth, 20));
-    ok1(equals(traffic->RelativeEast, 10));
-    ok1(equals(traffic->RelativeAltitude, 24));
-    ok1(traffic->IDType == 2);
+    ok1(traffic->valid);
+    ok1(traffic->alarm_level == 2);
+    ok1(equals(traffic->relative_north, 20));
+    ok1(equals(traffic->relative_east, 10));
+    ok1(equals(traffic->relative_altitude, 24));
+    ok1(traffic->id_type == 2);
     ok1(!traffic->track_received);
     ok1(!traffic->turn_rate_received);
     ok1(!traffic->speed_received);
     ok1(!traffic->climb_rate_received);
-    ok1(traffic->Type == FLARM_TRAFFIC::acGlider);
-    ok1(traffic->Stealth);
+    ok1(traffic->type == FLARM_TRAFFIC::acGlider);
+    ok1(traffic->stealth);
   } else {
     skip(12, 0, "traffic == NULL");
   }

@@ -169,8 +169,8 @@ FlarmTrafficControl::CalcAutoZoom()
     if (warning_mode && !data.traffic[i].HasAlarm())
       continue;
 
-    fixed dist = data.traffic[i].RelativeNorth * data.traffic[i].RelativeNorth
-      + data.traffic[i].RelativeEast * data.traffic[i].RelativeEast;
+    fixed dist = data.traffic[i].relative_north * data.traffic[i].relative_north
+      + data.traffic[i].relative_east * data.traffic[i].relative_east;
 
     zoom_dist = max(dist, zoom_dist);
   }
@@ -291,7 +291,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   rc.bottom = canvas.get_height() - padding;
 
   // Set the text color and background
-  switch (traffic.AlarmLevel) {
+  switch (traffic.alarm_level) {
   case 1:
     canvas.set_text_color(hcWarning);
     break;
@@ -309,7 +309,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 
   // Climb Rate
   if (!WarningMode()) {
-    Units::FormatUserVSpeed(traffic.Average30s, tmp, 20);
+    Units::FormatUserVSpeed(traffic.climb_rate_avg30s, tmp, 20);
     canvas.select(hfInfoValues);
     sz = canvas.text_size(tmp);
     canvas.text(rc.right - sz.cx, rc.top + hfInfoLabels.get_height(), tmp);
@@ -320,7 +320,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   }
 
   // Distance
-  Units::FormatUserDistance(hypot(traffic.RelativeEast, traffic.RelativeNorth),
+  Units::FormatUserDistance(hypot(traffic.relative_east, traffic.relative_north),
                             tmp, 20);
   canvas.select(hfInfoValues);
   sz = canvas.text_size(tmp);
@@ -332,7 +332,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
               _("Distance"));
 
   // Relative Height
-  Units::FormatUserArrival(traffic.RelativeAltitude, tmp, 20);
+  Units::FormatUserArrival(traffic.relative_altitude, tmp, 20);
   canvas.select(hfInfoValues);
   sz = canvas.text_size(tmp);
   canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);
@@ -348,14 +348,14 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     canvas.select(hfCallSign);
     if (!traffic.HasAlarm()) {
       if (settings.TeamFlarmTracking &&
-          traffic.ID == settings.TeamFlarmIdTarget)
+          traffic.id == settings.TeamFlarmIdTarget)
         canvas.set_text_color(hcTeam);
       else
         canvas.set_text_color(hcSelection);
     }
-    _tcscpy(tmp, traffic.Name);
+    _tcscpy(tmp, traffic.name);
   } else {
-    traffic.ID.format(tmp);
+    traffic.id.format(tmp);
   }
   canvas.text(rc.left, rc.top, tmp);
 }
@@ -383,7 +383,7 @@ OpenDetails()
     return;
 
   // Show the details dialog
-  dlgFlarmTrafficDetailsShowModal(traffic->ID);
+  dlgFlarmTrafficDetailsShowModal(traffic->id);
 }
 
 /**

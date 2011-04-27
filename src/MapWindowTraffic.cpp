@@ -62,7 +62,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     const FLARM_TRAFFIC &traffic = flarm.traffic[i];
 
     // Save the location of the FLARM target
-    GeoPoint target_loc = traffic.Location;
+    GeoPoint target_loc = traffic.location;
 
     // Points for the screen coordinates for the icon, name and average climb
     RasterPoint sc, sc_name, sc_av;
@@ -90,20 +90,20 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     // only draw labels if not close to aircraft
     if (dx * dx + dy * dy > Layout::Scale(30 * 30)) {
       // If FLARM callsign/name available draw it to the canvas
-      if (traffic.HasName() && !string_is_empty(traffic.Name))
-        TextInBox(canvas, traffic.Name, sc_name.x, sc_name.y,
+      if (traffic.HasName() && !string_is_empty(traffic.name))
+        TextInBox(canvas, traffic.name, sc_name.x, sc_name.y,
                   mode, get_client_rect());
 
-      if (traffic.Average30s >= fixed(0.1)) {
+      if (traffic.climb_rate_avg30s >= fixed(0.1)) {
         // If average climb data available draw it to the canvas
         TCHAR label_avg[100];
-        Units::FormatUserVSpeed(traffic.Average30s, label_avg, 100, false);
+        Units::FormatUserVSpeed(traffic.climb_rate_avg30s, label_avg, 100, false);
         TextInBox(canvas, label_avg, sc_av.x, sc_av.y, mode, get_client_rect());
       }
     }
 
     // If FLARM alarm draw alarm icon below corresponding target
-    if ((traffic.AlarmLevel > 0) && (traffic.AlarmLevel < 4))
+    if ((traffic.alarm_level > 0) && (traffic.alarm_level < 4))
       Graphics::hFLARMTraffic.draw(canvas, sc);
 
     // Fill the Arrow array with a normal arrow pointing north
@@ -119,7 +119,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     Arrow[4].y = 5;
 
     // Select brush depending on AlarmLevel
-    switch (traffic.AlarmLevel) {
+    switch (traffic.alarm_level) {
     case 1:
       canvas.select(Graphics::WarningBrush);
       break;
@@ -138,7 +138,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // Rotate and shift the arrow to the right position and angle
     PolygonRotateShift(Arrow, 5, sc.x, sc.y,
-                       traffic.TrackBearing - projection.GetScreenAngle());
+                       traffic.track - projection.GetScreenAngle());
 
     // Draw the arrow
     canvas.polygon(Arrow, 5);

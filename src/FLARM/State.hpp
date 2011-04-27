@@ -80,7 +80,7 @@ public:
    */
   FLARM_TRAFFIC *FindTraffic(FlarmId id) {
     for (unsigned i = 0; i < traffic.size(); i++)
-      if (traffic[i].ID == id)
+      if (traffic[i].id == id)
         return &traffic[i];
 
     return NULL;
@@ -94,7 +94,7 @@ public:
    */
   const FLARM_TRAFFIC *FindTraffic(FlarmId id) const {
     for (unsigned i = 0; i < traffic.size(); i++)
-      if (traffic[i].ID == id)
+      if (traffic[i].id == id)
         return &traffic[i];
 
     return NULL;
@@ -108,7 +108,7 @@ public:
    */
   FLARM_TRAFFIC *FindTraffic(const TCHAR *name) {
     for (unsigned i = 0; i < traffic.size(); i++)
-      if (traffic[i].Name.equals(name))
+      if (traffic[i].name.equals(name))
         return &traffic[i];
 
     return NULL;
@@ -122,7 +122,7 @@ public:
    */
   const FLARM_TRAFFIC *FindTraffic(const TCHAR *name) const {
     for (unsigned i = 0; i < traffic.size(); i++)
-      if (traffic[i].Name.equals(name))
+      if (traffic[i].name.equals(name))
         return &traffic[i];
 
     return NULL;

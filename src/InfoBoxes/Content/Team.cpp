@@ -76,12 +76,12 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
     return false;
 
   if (traffic != NULL) {
-    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = traffic->ID;
+    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = traffic->id;
 
     if (traffic->HasName()) {
       // copy the 3 first chars from the name to TeamFlarmCNTarget
       _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget,
-               traffic->Name, 3);
+               traffic->name, 3);
       XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
     } else {
       XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;

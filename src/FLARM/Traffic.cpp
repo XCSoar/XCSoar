@@ -41,19 +41,19 @@ FLARM_TRAFFIC::GetTypeString(AircraftType Type)
 void
 FLARM_TRAFFIC::Update(const FLARM_TRAFFIC &other)
 {
-  AlarmLevel = other.AlarmLevel;
-  RelativeNorth = other.RelativeNorth;
-  RelativeEast = other.RelativeEast;
-  RelativeAltitude = other.RelativeAltitude;
-  IDType = other.IDType;
-  TrackBearing = other.TrackBearing;
+  alarm_level = other.alarm_level;
+  relative_north = other.relative_north;
+  relative_east = other.relative_east;
+  relative_altitude = other.relative_altitude;
+  id_type = other.id_type;
+  track = other.track;
   track_received = other.track_received;
-  TurnRate = other.TurnRate;
+  turn_rate = other.turn_rate;
   turn_rate_received = other.turn_rate_received;
-  Speed = other.Speed;
+  speed = other.speed;
   speed_received = other.speed_received;
-  ClimbRate = other.ClimbRate;
+  climb_rate = other.climb_rate;
   climb_rate_received = other.climb_rate_received;
-  Stealth = other.Stealth;
-  Type = other.Type;
+  stealth = other.stealth;
+  type = other.type;
 }
