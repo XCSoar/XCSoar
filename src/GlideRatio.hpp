@@ -30,14 +30,14 @@ Copyright_License {
 
 struct SETTINGS_COMPUTER;
 
-typedef enum {
+enum AverEffTime_t {
   ae15seconds,
   ae30seconds,
   ae60seconds,
   ae90seconds,
   ae2minutes,
   ae3minutes,
-} AverEffTime_t;
+};
 
 class GlideRatioCalculator : private NonCopyable {
   struct record {
