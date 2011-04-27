@@ -48,11 +48,12 @@ LoadString(const char *bytes, int charCount, TCHAR *res)
   int bytesToRead = charCount * 2;
 
   TCHAR *curChar = res;
+
+  char tmp[3];
+  tmp[2] = 0;
   for (int z = 0; z < bytesToRead; z += 2) {
-    char tmp[3];
     tmp[0] = bytes[z];
     tmp[1] = bytes[z+1];
-    tmp[2] = 0;
 
     *curChar = (unsigned char)strtoul(tmp, NULL, 16);
     curChar++;
