@@ -48,7 +48,7 @@ class Waypoint;
 // these values
 
 /** AutoWindMode (not in use) */
-typedef enum
+enum AutoWindModeBits_t
 {
   /** 0: Manual */
   D_AUTOWIND_NONE = 0,
@@ -57,7 +57,7 @@ typedef enum
   /** 2: ZigZag */
   D_AUTOWIND_ZIGZAG
   /** 3: Both */
-} AutoWindModeBits_t;
+};
 
 /**
  * Wind calculator settings
