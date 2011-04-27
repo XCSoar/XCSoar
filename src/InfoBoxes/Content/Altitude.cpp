@@ -351,12 +351,12 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
 
   case ibkLeft:
     device_blackboard.SetTrackBearing(
-        basic.TrackBearing - a5);
+        basic.track - a5);
     return true;
 
   case ibkRight:
     device_blackboard.SetTrackBearing(
-        basic.TrackBearing + a5);
+        basic.track + a5);
     return true;
 
   case ibkEnter:

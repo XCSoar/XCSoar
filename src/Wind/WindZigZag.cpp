@@ -434,13 +434,13 @@ public:
     }
 
     // is this point able to be added?
-    if (!do_append(basic.Time, basic.TrackBearing))
+    if (!do_append(basic.Time, basic.track))
       return 0;
 
     // ok to add a point
 
     append(ZZObs(basic.Time,
-                 basic.GroundSpeed, basic.TrackBearing,
+                 basic.GroundSpeed, basic.track,
                  basic.TrueAirspeed));
 
     //

@@ -55,7 +55,7 @@ GaugeFLARM::Update(bool enable, const NMEA_INFO &gps_info,
   bool visible = ForceVisible ||
     (!gps_info.flarm.traffic.empty() && enable && !Suppress);
   if (visible) {
-    FlarmTrafficWindow::Update(gps_info.TrackBearing, gps_info.flarm,
+    FlarmTrafficWindow::Update(gps_info.track, gps_info.flarm,
                                settings);
     show();
   } else

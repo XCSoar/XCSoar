@@ -125,8 +125,8 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.GroundSpeed = speed;
   basic.GroundSpeedAvailable.Update(t);
   basic.AirspeedAvailable.Clear(); // Clear airspeed as it is not given by any value.
-  basic.TrackBearing = bearing;
-  basic.TrackBearingAvailable.Update(t);
+  basic.track = bearing;
+  basic.track_available.Update(t);
   basic.GPSAltitude = alt;
   basic.GPSAltitudeAvailable.Update(t);
   basic.ProvidePressureAltitude(baroalt);
@@ -193,7 +193,7 @@ void
 DeviceBlackboard::SetTrackBearing(Angle val)
 {
   ScopeLock protect(mutexBlackboard);
-  simulator_data.TrackBearing = val.as_bearing();
+  simulator_data.track = val.as_bearing();
 
   Merge();
 }

@@ -131,8 +131,8 @@ Dump(const NMEA_INFO &basic)
     printf("\n");
   }
 
-  if (basic.TrackBearingAvailable)
-    printf("TrackBearing=%d\n", (int)basic.TrackBearing.value_degrees());
+  if (basic.track_available)
+    printf("TrackBearing=%d\n", (int)basic.track.value_degrees());
 
   if (basic.GroundSpeedAvailable)
     printf("GroundSpeed=%d\n", (int)basic.GroundSpeed);

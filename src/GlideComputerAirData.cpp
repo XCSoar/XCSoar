@@ -231,14 +231,14 @@ GlideComputerAirData::Heading()
   const SpeedVector wind = calculated.wind;
 
   if ((positive(basic.GroundSpeed) || wind.is_non_zero()) && Calculated().flight.Flying) {
-    fixed x0 = basic.TrackBearing.fastsine() * basic.GroundSpeed;
-    fixed y0 = basic.TrackBearing.fastcosine() * basic.GroundSpeed;
+    fixed x0 = basic.track.fastsine() * basic.GroundSpeed;
+    fixed y0 = basic.track.fastcosine() * basic.GroundSpeed;
     x0 += wind.bearing.fastsine() * wind.norm;
     y0 += wind.bearing.fastcosine() * wind.norm;
 
     calculated.Heading = Angle::radians(atan2(x0, y0)).as_bearing();
   } else {
-    calculated.Heading = basic.TrackBearing;
+    calculated.Heading = basic.track;
   }
 }
 
@@ -259,8 +259,8 @@ GlideComputerAirData::Airspeed()
 
     const SpeedVector wind = calculated.wind;
     if (positive(basic.GroundSpeed) || wind.is_non_zero()) {
-      fixed x0 = basic.TrackBearing.fastsine() * basic.GroundSpeed;
-      fixed y0 = basic.TrackBearing.fastcosine() * basic.GroundSpeed;
+      fixed x0 = basic.track.fastsine() * basic.GroundSpeed;
+      fixed y0 = basic.track.fastcosine() * basic.GroundSpeed;
       x0 += wind.bearing.fastsine() * wind.norm;
       y0 += wind.bearing.fastcosine() * wind.norm;
 
@@ -813,7 +813,7 @@ GlideComputerAirData::TurnRate()
   }
 
   calculated.TurnRate =
-    (basic.TrackBearing - LastBasic().TrackBearing).as_delta().value_degrees() / dT;
+    (basic.track - LastBasic().track).as_delta().value_degrees() / dT;
   calculated.TurnRateWind =
     (calculated.Heading - LastCalculated().Heading).as_delta().value_degrees() / dT;
 }

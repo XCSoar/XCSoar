@@ -75,8 +75,8 @@ NMEA_INFO::reset()
 
   LocationAvailable.Clear();
 
-  TrackBearing = Angle::native(fixed_zero);
-  TrackBearingAvailable.Clear();
+  track = Angle::native(fixed_zero);
+  track_available.Clear();
 
   GroundSpeedAvailable.Clear();
   AirspeedAvailable.Clear();
@@ -154,7 +154,7 @@ void
 NMEA_INFO::expire()
 {
   LocationAvailable.Expire(Time, fixed(10));
-  TrackBearingAvailable.Expire(Time, fixed(10));
+  track_available.Expire(Time, fixed(10));
   GroundSpeedAvailable.Expire(Time, fixed(10));
   AirspeedAvailable.Expire(Time, fixed(30));
   GPSAltitudeAvailable.Expire(Time, fixed(30));
@@ -191,8 +191,8 @@ NMEA_INFO::complement(const NMEA_INFO &add)
   if (LocationAvailable.Complement(add.LocationAvailable))
     Location = add.Location;
 
-  if (TrackBearingAvailable.Complement(add.TrackBearingAvailable))
-    TrackBearing = add.TrackBearing;
+  if (track_available.Complement(add.track_available))
+    track = add.track;
 
   if (GroundSpeedAvailable.Complement(add.GroundSpeedAvailable))
     GroundSpeed = add.GroundSpeed;

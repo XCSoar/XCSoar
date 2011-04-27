@@ -78,12 +78,12 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 
   case ibkLeft:
     device_blackboard.SetTrackBearing(
-        XCSoarInterface::Basic().TrackBearing - a5);
+        XCSoarInterface::Basic().track - a5);
     return true;
 
   case ibkRight:
     device_blackboard.SetTrackBearing(
-        XCSoarInterface::Basic().TrackBearing + a5);
+        XCSoarInterface::Basic().track + a5);
     return true;
 
   case ibkEnter:

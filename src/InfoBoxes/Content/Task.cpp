@@ -66,7 +66,7 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
 
   // Set Value
   Angle Value =
-    solution_remaining.Vector.Bearing - XCSoarInterface::Basic().TrackBearing;
+    solution_remaining.Vector.Bearing - XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);
 }
@@ -101,7 +101,7 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
 
   // Set Value
   Angle Value =
-    solution_remaining.Vector.Bearing - XCSoarInterface::Basic().TrackBearing;
+    solution_remaining.Vector.Bearing - XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);
 

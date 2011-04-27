@@ -74,7 +74,7 @@ MapWindow::DrawTask(Canvas &canvas)
 
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,
    but we can still draw targets */
-  bool draw_bearing = Basic().TrackBearingAvailable;
+  bool draw_bearing = Basic().track_available;
   bool draw_route = draw_bearing;
 
   const Route& route = Calculated().common_stats.planned_route;
@@ -130,7 +130,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
 {
   if (Calculated().Circling 
       || !Basic().LocationAvailable
-      || !Basic().TrackBearingAvailable
+      || !Basic().track_available
       || !SettingsMap().EnableDetourCostMarker
       || (task == NULL)) 
     return;
@@ -146,7 +146,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   GeoPoint target = tp->get_location_remaining();
   GeoVector vec(Basic().Location, target);
 
-  if ((Basic().TrackBearing - vec.Bearing).as_delta().magnitude_degrees() < fixed(10))
+  if ((Basic().track - vec.Bearing).as_delta().magnitude_degrees() < fixed(10))
     // insignificant error
     return;
 
@@ -166,7 +166,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   GeoPoint dloc;
   int ilast = 0;
   for (fixed d = fixed_one / 4; d <= fixed_one; d += fixed_one / 4) {
-    dloc = FindLatitudeLongitude(start, Basic().TrackBearing, distance_max * d);
+    dloc = FindLatitudeLongitude(start, Basic().track, distance_max * d);
     
     fixed distance0 = Distance(start, dloc);
     fixed distance1 = Distance(dloc, target);

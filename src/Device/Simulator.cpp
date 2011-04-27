@@ -106,11 +106,11 @@ Simulator::Process(NMEA_INFO &basic)
   basic.gps.AndroidInternalGPS = false;
 #endif
 
-  basic.Location = FindLatitudeLongitude(basic.Location, basic.TrackBearing,
+  basic.Location = FindLatitudeLongitude(basic.Location, basic.track,
                                          basic.GroundSpeed);
   basic.LocationAvailable.Update(basic.Time);
   basic.GPSAltitudeAvailable.Update(basic.Time);
-  basic.TrackBearingAvailable.Update(basic.Time);
+  basic.track_available.Update(basic.Time);
   basic.GroundSpeedAvailable.Update(basic.Time);
 
   basic.Time += fixed_one;

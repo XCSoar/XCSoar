@@ -195,7 +195,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
       double distance = hypot(drag_start.x - x, drag_start.y - y);
 
       // This drag moves the aircraft (changes speed and direction)
-      const Angle oldbearing = Basic().TrackBearing;
+      const Angle oldbearing = Basic().track;
       const fixed minspeed = fixed(1.1) *
         SettingsComputer().glide_polar_task.get_Vmin();
       const Angle newbearing = Bearing(drag_start_geopoint, G);

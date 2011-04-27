@@ -144,10 +144,10 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
     basic.GPSAltitudeAvailable.Clear();
 
   if (hasBearing) {
-    basic.TrackBearing = Angle::degrees(fixed(bearing));
-    basic.TrackBearingAvailable.Update(basic.Time);
+    basic.track = Angle::degrees(fixed(bearing));
+    basic.track_available.Update(basic.Time);
   } else
-    basic.TrackBearingAvailable.Clear();
+    basic.track_available.Clear();
 
   if (hasSpeed) {
     basic.GroundSpeed = fixed(speed);

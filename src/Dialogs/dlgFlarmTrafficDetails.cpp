@@ -72,7 +72,7 @@ UpdateChanging()
   ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
 
   // Fill horizontal direction field
-  gv.Bearing -= XCSoarInterface::Basic().TrackBearing;
+  gv.Bearing -= XCSoarInterface::Basic().track;
   gv.Bearing = gv.Bearing.as_delta();
   if (gv.Bearing.value_degrees() > fixed_one)
     _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)gv.Bearing.value_degrees());

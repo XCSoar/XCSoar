@@ -519,7 +519,7 @@ Update()
        XCSoarInterface::Basic().flarm.GetActiveTrafficCount() == 0))
     wf->SetModalResult(mrOK);
 
-  wdf->Update(XCSoarInterface::Basic().TrackBearing,
+  wdf->Update(XCSoarInterface::Basic().track,
               XCSoarInterface::Basic().flarm,
               XCSoarInterface::SettingsComputer());
 

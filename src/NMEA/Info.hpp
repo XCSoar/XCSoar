@@ -181,10 +181,10 @@ struct NMEA_INFO {
   /** location of aircraft */
   GeoPoint Location;
 
-  Validity TrackBearingAvailable;
+  Validity track_available;
 
   /** track angle in degrees true */
-  Angle TrackBearing;
+  Angle track;
 
   //############
   //   Speeds

@@ -139,7 +139,7 @@ int main(int argc, char **argv)
              (double)speed,
              (double)data.GroundSpeed,
              (double)data.TrueAirspeed,
-             (int)data.TrackBearing.value_degrees());
+             (int)data.track.value_degrees());
   }
 }
 

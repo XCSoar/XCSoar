@@ -63,7 +63,7 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
 
   // Set Value
   Angle Value = solution.Vector.Bearing -
-    XCSoarInterface::Basic().TrackBearing;
+    XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);
 

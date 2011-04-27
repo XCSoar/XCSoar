@@ -207,8 +207,8 @@ GenerateBlackboard(MapWindow &map)
   nmea_info.Location.Latitude = Angle::degrees(fixed(51.2));
   nmea_info.Location.Longitude = Angle::degrees(fixed(7.7));
   nmea_info.LocationAvailable.Update(nmea_info.Time);
-  nmea_info.TrackBearing = Angle::degrees(fixed_90);
-  nmea_info.TrackBearingAvailable.Update(nmea_info.Time);
+  nmea_info.track = Angle::degrees(fixed_90);
+  nmea_info.track_available.Update(nmea_info.Time);
   nmea_info.GroundSpeed = fixed(50);
   nmea_info.GroundSpeedAvailable.Update(nmea_info.Time);
   nmea_info.GPSAltitude = fixed(1500);

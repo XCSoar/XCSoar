@@ -48,7 +48,7 @@ Update()
   double teammateRange = XCSoarInterface::Calculated().TeammateRange;
 
   if (XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint >= 0) {
-    double Value = (teammateBearing - XCSoarInterface::Basic().TrackBearing).
+    double Value = (teammateBearing - XCSoarInterface::Basic().track).
       as_delta().value_degrees();
 
     if (Value > 1)

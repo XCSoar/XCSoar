@@ -35,11 +35,11 @@ Copyright_License {
 void
 InfoBoxContentTrack::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::Basic().TrackBearingAvailable) {
+  if (!XCSoarInterface::Basic().track_available) {
     infobox.SetInvalid();
     return;
   }
-  infobox.SetValue(XCSoarInterface::Basic().TrackBearing, _T("T"));
+  infobox.SetValue(XCSoarInterface::Basic().track, _T("T"));
 }
 
 bool
@@ -54,12 +54,12 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkUp:
     device_blackboard.SetTrackBearing(
-        XCSoarInterface::Basic().TrackBearing + a5);
+        XCSoarInterface::Basic().track + a5);
     return true;
 
   case ibkDown:
     device_blackboard.SetTrackBearing(
-        XCSoarInterface::Basic().TrackBearing - a5);
+        XCSoarInterface::Basic().track - a5);
     return true;
 
   case ibkLeft:
