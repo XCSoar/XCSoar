@@ -422,6 +422,6 @@ void
 DeviceBlackboard::SetMC(fixed mc)
 {
   AllDevicesPutMacCready(mc);
-  if (!Basic().ConnectedAndHasFix())
+  if (!Basic().LocationAvailable)
     TriggerGPSUpdate();
 }

@@ -100,7 +100,7 @@ using std::max;
 static void
 trigger_redraw()
 {
-  if (!XCSoarInterface::Basic().ConnectedAndHasFix())
+  if (!XCSoarInterface::Basic().LocationAvailable)
     TriggerGPSUpdate();
   CommonInterface::main_window.full_redraw();
 }
