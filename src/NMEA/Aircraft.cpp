@@ -51,7 +51,7 @@ ToAircraftState(const NMEA_INFO &info, const DERIVED_INFO &calculated)
   /* AIRCRAFT_STATE */
   aircraft.Time = info.Time;
   aircraft.Location = info.Location;
-  aircraft.TrackBearing = info.track;
+  aircraft.track = info.track;
   aircraft.Gload = info.acceleration.Gload;
   aircraft.wind = calculated.wind;
 

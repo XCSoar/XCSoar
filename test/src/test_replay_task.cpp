@@ -65,7 +65,7 @@ protected:
 
     state.Location = loc;
     state.Speed = speed;
-    state.TrackBearing = bearing;
+    state.track = bearing;
     state.NavAltitude = alt;
     state.Time = t;
     if (positive(t)) {

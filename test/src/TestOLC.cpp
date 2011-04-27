@@ -59,7 +59,7 @@ on_advance(const GeoPoint &loc, const fixed speed,
   new_state.Location = loc;
   new_state.Speed = speed;
   new_state.NavAltitude = alt;
-  new_state.TrackBearing = bearing;
+  new_state.track = bearing;
   new_state.Time = t;
   new_state.AltitudeAGL = alt;
 

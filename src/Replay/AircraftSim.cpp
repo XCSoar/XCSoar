@@ -69,7 +69,7 @@ void
 AircraftSim::integrate(const Angle& heading, const fixed timestep)
 {
   GeoPoint v = endpoint(heading, timestep);
-  state.TrackBearing = state.Location.bearing(v);
+  state.track = state.Location.bearing(v);
   state.Speed = v.distance(state.Location)/timestep;
   state.Location = v;
   state.NavAltitude += state.Vario*timestep;

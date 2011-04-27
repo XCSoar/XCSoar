@@ -109,7 +109,7 @@ protected:
 
     state.Location = loc;
     state.Speed = speed;
-    state.TrackBearing = bearing;
+    state.track = bearing;
     state.NavAltitude = alt;
     state.NettoVario = fixed_zero;
     state.Vario = fixed_zero;

@@ -186,7 +186,7 @@ struct AIRCRAFT_STATE:
 
   GeoPoint Location; /**< location of aircraft */
 
-  Angle TrackBearing; /**< track angle in degrees true */
+  Angle track; /**< track angle in degrees true */
 
   //##################
   //   Acceleration
