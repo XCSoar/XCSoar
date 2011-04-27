@@ -85,7 +85,7 @@ LoadSecondaryFile(TLineReader &reader)
     if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
       TCHAR *Name = endptr + 1;
       TrimRight(Name);
-      if (!FlarmDetails::AddSecondaryItem(id, Name, false))
+      if (!FlarmDetails::AddSecondaryItem(id, Name))
         break; // cant add anymore items !
     }
   }
@@ -188,7 +188,7 @@ FlarmDetails::LookupId(const TCHAR *cn)
 }
 
 bool
-FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name, bool saveFile)
+FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
 {
   int index = LookupSecondaryIndex(id);
   if (index != -1) {
@@ -196,9 +196,6 @@ FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name, bool saveFile)
     FLARM_Names[index].ID = id;
     _tcsncpy(FLARM_Names[index].Name, name, 20);
     FLARM_Names[index].Name[20] = 0;
-    if (saveFile)
-      SaveSecondary();
-
     return true;
   }
 
@@ -210,8 +207,5 @@ FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name, bool saveFile)
   _tcsncpy(FLARM_Names[NumberOfFLARMNames].Name, name, 20);
   FLARM_Names[NumberOfFLARMNames].Name[20] = 0;
   NumberOfFLARMNames++;
-  if (saveFile)
-    SaveSecondary();
-
   return true;
 }

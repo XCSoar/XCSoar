@@ -92,15 +92,13 @@ namespace FlarmDetails
 
   /**
    * Adds a FLARM details couple (callsign + FLARM id)
-   * to the FLARM details array and saves it to the
-   * user file (if necessary)
+   * to the FLARM details array
    * @param id FLARM id
    * @param name Callsign
-   * @param saveFile True = FLARM details file is saved after update
    * @return True if successfully added, False otherwise
    */
   bool
-  AddSecondaryItem(FlarmId id, const TCHAR *name, bool saveFile);
+  AddSecondaryItem(FlarmId id, const TCHAR *name);
 
   /**
    * Looks up the FLARM callsign in the FLARM details array
