@@ -7,7 +7,12 @@
 class AtmosphericPressure;
 struct ALTITUDE_STATE;
 
-typedef enum {abUndef, abMSL, abAGL, abFL} AirspaceAltBase_t;
+enum AirspaceAltBase_t {
+  abUndef,
+  abMSL,
+  abAGL,
+  abFL
+};
 
 /**
  *  Structure to hold airspace altitude boundary data
