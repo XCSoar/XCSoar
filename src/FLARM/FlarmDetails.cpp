@@ -40,9 +40,7 @@ struct FLARM_Names_t
   TCHAR Name[21];
 };
 
-#define MAXFLARMNAMES 200
-
-static StaticArray<FLARM_Names_t, MAXFLARMNAMES> FLARM_Names;
+static StaticArray<FLARM_Names_t, 200> FLARM_Names;
 
 void
 FlarmDetails::Load()
