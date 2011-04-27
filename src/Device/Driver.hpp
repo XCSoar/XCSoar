@@ -99,12 +99,12 @@ public:
                            const DERIVED_INFO &calculated);
 };
 
-typedef enum {
+enum DeviceFlags_t {
   dfLogger,
   dfBaroAlt,
   dfNmeaOut,
   dfRadio,
-} DeviceFlags_t;
+};
 
 #define drfLogger	(1l << dfLogger)
 #define drfBaroAlt	(1l << dfBaroAlt)
