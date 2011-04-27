@@ -61,7 +61,7 @@ TEST_NAMES = \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestDriver TestClimbAvCalc \
 	TestWaypointReader TestThermalBase \
-	test_load_task \
+	test_load_task TestFlarmNet \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
@@ -216,6 +216,18 @@ TEST_GEO_BOUNDS_SOURCES = \
 TEST_GEO_BOUNDS_OBJS = $(call SRC_TO_OBJ,$(TEST_GEO_BOUNDS_SOURCES))
 TEST_GEO_BOUNDS_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestGeoBounds$(TARGET_EXEEXT): $(TEST_GEO_BOUNDS_OBJS) $(TEST_GEO_BOUNDS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_FLARM_NET_SOURCES = \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/FLARM/FLARMNet.cpp \
+	$(SRC)/FLARM/FlarmId.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestFlarmNet.cpp
+TEST_FLARM_NET_OBJS = $(call SRC_TO_OBJ,$(TEST_FLARM_NET_SOURCES))
+TEST_FLARM_NET_LDADD = $(MATH_LIBS) $(IO_LIBS)
+$(TARGET_BIN_DIR)/TestFlarmNet$(TARGET_EXEEXT): $(TEST_FLARM_NET_OBJS) $(TEST_FLARM_NET_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
