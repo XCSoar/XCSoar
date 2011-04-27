@@ -31,12 +31,12 @@ Copyright_License {
  * Enumeration for cruise/circling mode detection
  * 
  */
-typedef enum {
-  CRUISE= 0,                    /**< Established cruise mode */
+enum CirclingMode_t {
+  CRUISE = 0,                    /**< Established cruise mode */
   WAITCLIMB,                    /**< In cruise, pending transition to climb */
   CLIMB,                        /**< Established climb mode */
-  WAITCRUISE                    /**< In climb, pending transition to cruise */
-} CirclingMode_t;
+  WAITCRUISE,                    /**< In climb, pending transition to cruise */
+};
 
 /**
  * Data for tracking of climb/cruise mode and transition points
