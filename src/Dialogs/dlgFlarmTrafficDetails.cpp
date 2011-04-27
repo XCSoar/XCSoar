@@ -125,11 +125,11 @@ Update()
   const FlarmNetRecord *record = FlarmDetails::LookupRecord(target_id);
   if (record) {
     // Fill the pilot name field
-    _tcscpy(tmp, record->name);
+    _tcscpy(tmp, record->pilot);
     ((WndProperty *)wf->FindByName(_T("prpPilot")))->SetText(tmp);
 
     // Fill the frequency field
-    _tcscpy(tmp, record->freq);
+    _tcscpy(tmp, record->frequency);
     _tcscat(tmp, _T("MHz"));
     ((WndProperty *)wf->FindByName(_T("prpFrequency")))->SetText(tmp);
 
@@ -138,7 +138,7 @@ Update()
     ((WndProperty *)wf->FindByName(_T("prpAirport")))->SetText(tmp);
 
     // Fill the plane type field
-    _tcscpy(tmp, record->type);
+    _tcscpy(tmp, record->plane_type);
     ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(tmp);
   } else {
     // Fill the pilot name field
@@ -166,7 +166,7 @@ Update()
     _tcscpy(tmp, cs);
     if (record) {
       _tcscat(tmp, _T(" ("));
-      _tcscat(tmp, record->reg);
+      _tcscat(tmp, record->registration);
       _tcscat(tmp, _T(")"));
     }
   } else

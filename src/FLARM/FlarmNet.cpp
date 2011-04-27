@@ -77,18 +77,18 @@ LoadRecord(const char *line, FlarmNetRecord *record)
     return;
 
   LoadString(line, 6, record->id);
-  LoadString(line + 12, 21, record->name);
+  LoadString(line + 12, 21, record->pilot);
   LoadString(line + 54, 21, record->airfield);
-  LoadString(line + 96, 21, record->type);
-  LoadString(line + 138, 7, record->reg);
-  LoadString(line + 152, 3, record->cn);
-  LoadString(line + 158, 7, record->freq);
+  LoadString(line + 96, 21, record->plane_type);
+  LoadString(line + 138, 7, record->registration);
+  LoadString(line + 152, 3, record->callsign);
+  LoadString(line + 158, 7, record->frequency);
 
   int i = 0;
-  int maxSize = sizeof(record->cn) / sizeof(TCHAR);
-  while(record->cn[i] != 0 && i < maxSize) {
-    if (record->cn[i] == 32)
-      record->cn[i] = 0;
+  int maxSize = sizeof(record->callsign) / sizeof(TCHAR);
+  while(record->callsign[i] != 0 && i < maxSize) {
+    if (record->callsign[i] == 32)
+      record->callsign[i] = 0;
 
     i++;
   }
@@ -158,7 +158,7 @@ FlarmNetDatabase::Find(const TCHAR *cn) const
   const_iterator i = begin();
   while (i != end()) {
     const FlarmNetRecord *record = (const FlarmNetRecord *)(i->second);
-    if (_tcscmp(record->cn, cn) == 0)
+    if (_tcscmp(record->callsign, cn) == 0)
       return record;
 
     i++;
@@ -175,7 +175,7 @@ FlarmNetDatabase::Find(const TCHAR *cn, const FlarmNetRecord *array[], unsigned 
   const_iterator i = begin();
   while (i != end() && count < size) {
     const FlarmNetRecord *record = (const FlarmNetRecord *)(i->second);
-    if (_tcscmp(record->cn, cn) == 0) {
+    if (_tcscmp(record->callsign, cn) == 0) {
       array[count] = record;
       count++;
     }

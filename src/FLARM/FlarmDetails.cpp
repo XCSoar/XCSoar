@@ -164,7 +164,7 @@ FlarmDetails::LookupCallsign(FlarmId id)
   // try to find flarm from FlarmNet.org File
   const FlarmNetRecord *record = flarm_net.Find(id);
   if (record != NULL)
-    return record->cn;
+    return record->callsign;
 
   return NULL;
 }

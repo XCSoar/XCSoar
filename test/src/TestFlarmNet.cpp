@@ -39,12 +39,12 @@ int main(int argc, char **argv)
   ok1(record != NULL);
 
   ok1(_tcscmp(record->id, _T("DDA85C")) == 0);
-  ok1(_tcscmp(record->name, _T("Tobias Bieniek")) == 0);
+  ok1(_tcscmp(record->pilot, _T("Tobias Bieniek")) == 0);
   ok1(_tcscmp(record->airfield, _T("AACHEN")) == 0);
-  ok1(_tcscmp(record->type, _T("Hornet")) == 0);
-  ok1(_tcscmp(record->reg, _T("D-4449")) == 0);
-  ok1(_tcscmp(record->cn, _T("TH")) == 0);
-  ok1(_tcscmp(record->freq, _T("130.625")) == 0);
+  ok1(_tcscmp(record->plane_type, _T("Hornet")) == 0);
+  ok1(_tcscmp(record->registration, _T("D-4449")) == 0);
+  ok1(_tcscmp(record->callsign, _T("TH")) == 0);
+  ok1(_tcscmp(record->frequency, _T("130.625")) == 0);
 
   const FlarmNetRecord *array[3];
   ok1(db.Find(_T("TH"), array, 3) == 2);
@@ -52,9 +52,9 @@ int main(int argc, char **argv)
   bool found4449 = false, found5799 = false;
   for (unsigned i = 0; i < 2; i++) {
     record = array[i];
-    if (_tcscmp(record->reg, _T("D-4449")) == 0)
+    if (_tcscmp(record->registration, _T("D-4449")) == 0)
       found4449 = true;
-    if (_tcscmp(record->reg, _T("D-5799")) == 0)
+    if (_tcscmp(record->registration, _T("D-5799")) == 0)
       found5799 = true;
   }
   ok1(found4449);

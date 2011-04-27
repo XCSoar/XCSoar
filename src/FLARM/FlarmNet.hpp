@@ -36,13 +36,13 @@ class NLineReader;
  */
 struct FlarmNetRecord
 {
-  TCHAR id[7];          /**< FLARM id 6 bytes */
-  TCHAR name[22];       /**< Name 15 bytes */
-  TCHAR airfield[22];   /**< Airfield 4 bytes */
-  TCHAR type[22];       /**< Aircraft type 1 byte */
-  TCHAR reg[8];         /**< Registration 7 bytes */
-  TCHAR cn[4];          /**< Callsign 3 bytes */
-  TCHAR freq[8];        /**< Radio frequency 6 bytes */
+  TCHAR id[7];           /**< FLARM id 6 bytes */
+  TCHAR pilot[22];       /**< Name 15 bytes */
+  TCHAR airfield[22];    /**< Airfield 4 bytes */
+  TCHAR plane_type[22];  /**< Aircraft type 1 byte */
+  TCHAR registration[8]; /**< Registration 7 bytes */
+  TCHAR callsign[4];     /**< Callsign 3 bytes */
+  TCHAR frequency[8];    /**< Radio frequency 6 bytes */
 
   FlarmId GetId() const;
 };
