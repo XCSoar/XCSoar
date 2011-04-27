@@ -34,10 +34,10 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 
 BackgroundDrawHelper::BackgroundDrawHelper():
-  m_rend(NULL),
-  m_terrain(NULL),
-  m_weather(NULL),
-  m_sun_azimuth(Angle::degrees(fixed(45)))
+  terrain(NULL),
+  weather(NULL),
+  renderer(NULL),
+  sun_azimuth(Angle::degrees(fixed(45)))
 {
 }
 
@@ -49,22 +49,22 @@ BackgroundDrawHelper::~BackgroundDrawHelper()
 void
 BackgroundDrawHelper::reset()
 {
-  delete m_rend;
-  m_rend = NULL;
+  delete renderer;
+  renderer = NULL;
 }
 
 
 void 
-BackgroundDrawHelper::set_terrain(const RasterTerrain *terrain)
+BackgroundDrawHelper::set_terrain(const RasterTerrain *_terrain)
 {
-  m_terrain = terrain;
+  terrain = _terrain;
   reset();
 }
 
 void 
-BackgroundDrawHelper::set_weather(const RasterWeather *weather)
+BackgroundDrawHelper::set_weather(const RasterWeather *_weather)
 {
-  m_weather = weather;
+  weather = _weather;
   reset();
 }
 
@@ -73,7 +73,7 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
                            const WindowProjection& proj,
                            const SETTINGS_MAP& settings_map)
 {
-  if (m_terrain == NULL) {
+  if (terrain == NULL) {
     // terrain may have been re-set, so may need new renderer
     reset();
     canvas.clear_white();
@@ -84,23 +84,23 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
     return;
   }
 
-  if (!m_rend) {
+  if (!renderer) {
     // defer creation until first draw because
     // the buffer size, smoothing etc is set by the
     // loaded terrain properties
-    if (m_weather) {
-      m_rend = new WeatherTerrainRenderer(m_terrain, m_weather);
+    if (weather) {
+      renderer = new WeatherTerrainRenderer(terrain, weather);
     } else {
-      m_rend = new TerrainRenderer(m_terrain);
+      renderer = new TerrainRenderer(terrain);
     }
   }
 
-  m_rend->SetSettings(settings_map.SlopeShadingType != sstOff,
-                      settings_map.TerrainRamp,
-                      settings_map.TerrainContrast,
-                      settings_map.TerrainBrightness);
-  m_rend->Draw(canvas, proj,
-               m_sun_azimuth);
+  renderer->SetSettings(settings_map.SlopeShadingType != sstOff,
+                        settings_map.TerrainRamp,
+                        settings_map.TerrainContrast,
+                        settings_map.TerrainBrightness);
+  renderer->Draw(canvas, proj,
+                 sun_azimuth);
 }
 
 void
@@ -118,7 +118,7 @@ void
 BackgroundDrawHelper::set_sun_angle(const WindowProjection& projection,
                                     const Angle& angle)
 {
-  m_sun_azimuth = projection.GetScreenAngle() + angle;
+  sun_azimuth = projection.GetScreenAngle() + angle;
 }
 
 void
@@ -148,8 +148,8 @@ bool
 BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas, 
                                       LabelBlock& block)
 {
-  if (m_weather == NULL || m_weather->GetParameter() == 0 ||
-      m_rend == NULL)
+  if (weather == NULL || weather->GetParameter() == 0 ||
+      renderer == NULL)
     return false;
 
   canvas.select(Fonts::Title);
@@ -157,10 +157,10 @@ BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas,
   canvas.background_transparent();
 
   TCHAR Buffer[20];
-  m_weather->ValueToText(Buffer, m_rend->spot_max_val);
-  DrawSpotHeight(canvas, block, Buffer, m_rend->spot_max_pt);
+  weather->ValueToText(Buffer, renderer->spot_max_val);
+  DrawSpotHeight(canvas, block, Buffer, renderer->spot_max_pt);
 
-  m_weather->ValueToText(Buffer, m_rend->spot_min_val);
-  DrawSpotHeight(canvas, block, Buffer, m_rend->spot_min_pt);
+  weather->ValueToText(Buffer, renderer->spot_min_val);
+  DrawSpotHeight(canvas, block, Buffer, renderer->spot_min_pt);
   return true;
 }

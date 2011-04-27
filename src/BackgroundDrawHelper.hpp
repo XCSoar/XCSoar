@@ -44,10 +44,10 @@ class LabelBlock;
  */
 class BackgroundDrawHelper 
 {
-  TerrainRenderer* m_rend;
-  const RasterTerrain *m_terrain;
-  const RasterWeather *m_weather;
-  Angle m_sun_azimuth;
+  const RasterTerrain *terrain;
+  const RasterWeather *weather;
+  TerrainRenderer *renderer;
+  Angle sun_azimuth;
 
 public:
   BackgroundDrawHelper();
