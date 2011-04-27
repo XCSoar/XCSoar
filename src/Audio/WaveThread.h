@@ -31,20 +31,20 @@ Copyright_License {
                                           //  INTERNAL_WAVEOUT_BUFFER_COUNT * 20ms
 
 // Used for waveIn callback function
-typedef enum _WAVE_IN_EVENT
+enum WAVE_IN_EVENT
 {
    WAVE_IN_EVENT_NONE         = 0,
    WAVE_IN_EVENT_NEW_BUFFER   = 1,
    WAVE_IN_EVENT_BUFFER_FULL  = 2,
-} WAVE_IN_EVENT;
+};
 
 // Used for waveOut callback function
-typedef enum _WAVE_OUT_EVENT
+enum WAVE_OUT_EVENT
 {
    WAVE_OUT_EVENT_NONE           = 0,
    WAVE_OUT_EVENT_BUFFER_PLAYED  = 1,
    WAVE_OUT_EVENT_BUFFER_EMPTY   = 2,
-} WAVE_OUT_EVENT;
+};
 
 // Declaration of used callback functions
 typedef void (CALLBACK* cbWaveIn)(WAVE_IN_EVENT);
