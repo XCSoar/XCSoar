@@ -40,6 +40,7 @@
 #include "MainWindow.hpp"
 #include "Components.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <math.h>
 #include <stdio.h>
@@ -211,16 +212,14 @@ OnTeamClicked(WndButton &Sender)
       _T("new teammate?"), _T("New Teammate"), MB_YESNO) != IDYES)
     return;
 
-  const FLARM_TRAFFIC* target =
-      XCSoarInterface::Basic().flarm.FindTraffic(target_id);
-
   // Set the Teammate callsign
-  if (target == NULL || !target->HasName()) {
+  const TCHAR *callsign = FlarmDetails::LookupCallsign(target_id);
+  if (callsign == NULL || !string_is_empty(callsign)) {
     XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
   } else {
     // copy the 3 first chars from the name
     _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget,
-             target->Name, 3);
+             callsign, 3);
 
     XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
   }
