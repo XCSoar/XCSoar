@@ -288,7 +288,7 @@ GlueMapWindow::UpdateProjection()
   else if (GetDisplayMode() == dmCircling &&
            Calculated().thermal_locator.estimate_valid &&
            Calculated().thermal_locator.estimate_location.distance(Basic().Location)
-                  < visible_projection.GetMapScale() * fixed_four)
+                  < visible_projection.GetMapScale() * fixed_two)
     SetLocation(Calculated().thermal_locator.estimate_location);
   else
     // Pan is off
