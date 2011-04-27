@@ -214,7 +214,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/State.cpp \
-	$(SRC)/FLARM/FLARMNet.cpp \
+	$(SRC)/FLARM/FlarmNet.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/GlideComputer.cpp \

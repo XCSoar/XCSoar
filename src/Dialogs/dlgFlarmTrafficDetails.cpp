@@ -31,7 +31,7 @@
 
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
-#include "FLARM/FLARMNet.hpp"
+#include "FLARM/FlarmNet.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "Screen/Layout.hpp"
@@ -122,7 +122,7 @@ Update()
 
   // Try to find the target in the FLARMnet database
   /// @todo: make this code a little more usable
-  const FLARMNetRecord *record = FlarmDetails::LookupRecord(target_id);
+  const FlarmNetRecord *record = FlarmDetails::LookupRecord(target_id);
   if (record) {
     // Fill the pilot name field
     _tcscpy(tmp, record->name);

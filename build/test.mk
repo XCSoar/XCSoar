@@ -221,7 +221,7 @@ $(TARGET_BIN_DIR)/TestGeoBounds$(TARGET_EXEEXT): $(TEST_GEO_BOUNDS_OBJS) $(TEST_
 
 TEST_FLARM_NET_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/FLARM/FLARMNet.cpp \
+	$(SRC)/FLARM/FlarmNet.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestFlarmNet.cpp

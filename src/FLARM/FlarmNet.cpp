@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "FLARM/FLARMNet.hpp"
+#include "FLARM/FlarmNet.hpp"
 #include "Util/StringUtil.hpp"
 #include "IO/LineReader.hpp"
 #include "IO/FileLineReader.hpp"
@@ -29,14 +29,14 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
-FLARMNetDatabase::~FLARMNetDatabase()
+FlarmNetDatabase::~FlarmNetDatabase()
 {
   for (iterator i = begin(); i != end(); ++i)
     delete i->second;
 }
 
 /**
- * Decodes the FLARMnet.org file and puts the wanted
+ * Decodes the FlarmNet.org file and puts the wanted
  * characters into the res pointer
  * @param file File handle
  * @param charCount Number of character to decode
@@ -65,13 +65,13 @@ LoadString(const char *bytes, int charCount, TCHAR *res)
 }
 
 /**
- * Reads next FLARMnet.org file entry and saves it
+ * Reads next FlarmNet.org file entry and saves it
  * into the given record
  * @param file File handle
  * @param record Pointer to the FLARMNetRecord to be filled
  */
 static void
-LoadRecord(const char *line, FLARMNetRecord *record)
+LoadRecord(const char *line, FlarmNetRecord *record)
 {
   if (strlen(line) < 172)
     return;
@@ -95,7 +95,7 @@ LoadRecord(const char *line, FLARMNetRecord *record)
 }
 
 unsigned
-FLARMNetDatabase::LoadFile(NLineReader &reader)
+FlarmNetDatabase::LoadFile(NLineReader &reader)
 {
   /* skip first line */
   const char *line = reader.read();
@@ -104,7 +104,7 @@ FLARMNetDatabase::LoadFile(NLineReader &reader)
 
   int itemCount = 0;
   while ((line = reader.read()) != NULL) {
-    FLARMNetRecord *record = new FLARMNetRecord;
+    FlarmNetRecord *record = new FlarmNetRecord;
 
     LoadRecord(line, record);
 
@@ -117,13 +117,13 @@ FLARMNetDatabase::LoadFile(NLineReader &reader)
 }
 
 /**
- * Reads the FLARMnet.org file and fills the map
+ * Reads the FlarmNet.org file and fills the map
  *
  * @param path the path of the file
  * @return the number of records read from the file
  */
 unsigned
-FLARMNetDatabase::LoadFile(const TCHAR *path)
+FlarmNetDatabase::LoadFile(const TCHAR *path)
 {
   FileLineReaderA file(path);
   if (file.error())
@@ -137,8 +137,8 @@ FLARMNetDatabase::LoadFile(const TCHAR *path)
  * @param id FLARM id
  * @return FLARMNetRecord object
  */
-const FLARMNetRecord *
-FLARMNetDatabase::Find(FlarmId id) const
+const FlarmNetRecord *
+FlarmNetDatabase::Find(FlarmId id) const
 {
   const_iterator i = find(id);
   if (i != end())
@@ -152,12 +152,12 @@ FLARMNetDatabase::Find(FlarmId id) const
  * @param cn Callsign
  * @return FLARMNetRecord object
  */
-const FLARMNetRecord *
-FLARMNetDatabase::Find(const TCHAR *cn) const
+const FlarmNetRecord *
+FlarmNetDatabase::Find(const TCHAR *cn) const
 {
   const_iterator i = begin();
   while (i != end()) {
-    const FLARMNetRecord *record = (const FLARMNetRecord *)(i->second);
+    const FlarmNetRecord *record = (const FlarmNetRecord *)(i->second);
     if (_tcscmp(record->cn, cn) == 0)
       return record;
 
@@ -168,13 +168,13 @@ FLARMNetDatabase::Find(const TCHAR *cn) const
 }
 
 unsigned
-FLARMNetDatabase::Find(const TCHAR *cn, const FLARMNetRecord *array[], unsigned size) const
+FlarmNetDatabase::Find(const TCHAR *cn, const FlarmNetRecord *array[], unsigned size) const
 {
   unsigned count = 0;
 
   const_iterator i = begin();
   while (i != end() && count < size) {
-    const FLARMNetRecord *record = (const FLARMNetRecord *)(i->second);
+    const FlarmNetRecord *record = (const FlarmNetRecord *)(i->second);
     if (_tcscmp(record->cn, cn) == 0) {
       array[count] = record;
       count++;
@@ -187,7 +187,7 @@ FLARMNetDatabase::Find(const TCHAR *cn, const FLARMNetRecord *array[], unsigned 
 }
 
 FlarmId
-FLARMNetRecord::GetId() const
+FlarmNetRecord::GetId() const
 {
   FlarmId id;
   id.parse(this->id, NULL);

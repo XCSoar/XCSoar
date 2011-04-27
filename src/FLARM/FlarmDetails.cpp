@@ -25,13 +25,13 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
-#include "FLARM/FLARMNet.hpp"
+#include "FLARM/FlarmNet.hpp"
 #include "IO/DataFile.hpp"
 #include "IO/TextWriter.hpp"
 
 #include <stdlib.h>
 
-static FLARMNetDatabase flarm_net;
+static FlarmNetDatabase flarm_net;
 
 static int NumberOfFLARMNames = 0;
 
@@ -142,11 +142,11 @@ FlarmDetails::LookupSecondaryIndex(const TCHAR *cn)
   return -1;
 }
 
-const FLARMNetRecord *
+const FlarmNetRecord *
 FlarmDetails::LookupRecord(FlarmId id)
 {
-  // try to find flarm from FLARMNet.org File
-  const FLARMNetRecord *record = flarm_net.Find(id);
+  // try to find flarm from FlarmNet.org File
+  const FlarmNetRecord *record = flarm_net.Find(id);
   if (record != NULL)
     return record;
 
@@ -161,8 +161,8 @@ FlarmDetails::LookupCallsign(FlarmId id)
   if (index != -1)
     return FLARM_Names[index].Name;
 
-  // try to find flarm from FLARMNet.org File
-  const FLARMNetRecord *record = flarm_net.Find(id);
+  // try to find flarm from FlarmNet.org File
+  const FlarmNetRecord *record = flarm_net.Find(id);
   if (record != NULL)
     return record->cn;
 
@@ -177,8 +177,8 @@ FlarmDetails::LookupId(const TCHAR *cn)
   if (index != -1)
     return FLARM_Names[index].ID;
 
-  // try to find flarm from FLARMNet.org File
-  const FLARMNetRecord *record = flarm_net.Find(cn);
+  // try to find flarm from FlarmNet.org File
+  const FlarmNetRecord *record = flarm_net.Find(cn);
   if (record != NULL)
     return record->GetId();
 

@@ -32,9 +32,9 @@ Copyright_License {
 class NLineReader;
 
 /**
- * FLARMnet.org file entry
+ * FlarmNet.org file entry
  */
-class FLARMNetRecord
+class FlarmNetRecord
 {
 public:
   TCHAR id[7];          /**< FLARM id 6 bytes */
@@ -49,20 +49,20 @@ public:
 };
 
 /**
- * Handles the FLARMnet.org file
+ * Handles the FlarmNet.org file
  */
-class FLARMNetDatabase
-  : protected std::map<FlarmId, FLARMNetRecord*>
+class FlarmNetDatabase
+  : protected std::map<FlarmId, FlarmNetRecord*>
 {
 public:
-  ~FLARMNetDatabase();
+  ~FlarmNetDatabase();
 
   unsigned LoadFile(NLineReader &reader);
   unsigned LoadFile(const TCHAR *path);
 
-  const FLARMNetRecord *Find(FlarmId id) const;
-  const FLARMNetRecord *Find(const TCHAR *cn) const;
-  unsigned Find(const TCHAR *cn, const FLARMNetRecord *array[], unsigned size) const;
+  const FlarmNetRecord *Find(FlarmId id) const;
+  const FlarmNetRecord *Find(const TCHAR *cn) const;
+  unsigned Find(const TCHAR *cn, const FlarmNetRecord *array[], unsigned size) const;
 };
 
 #endif

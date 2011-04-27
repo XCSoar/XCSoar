@@ -20,7 +20,7 @@
 }
 */
 
-#include "FLARM/FLARMNet.hpp"
+#include "FLARM/FlarmNet.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "TestUtil.hpp"
 
@@ -28,14 +28,14 @@ int main(int argc, char **argv)
 {
   plan_tests(12);
 
-  FLARMNetDatabase db;
+  FlarmNetDatabase db;
   int count = db.LoadFile(_T("test/data/flarmnet/data.fln"));
   ok1(count == 6);
 
   FlarmId id;
   id.parse("DDA85C", NULL);
 
-  const FLARMNetRecord *record = db.Find(id);
+  const FlarmNetRecord *record = db.Find(id);
   ok1(record != NULL);
 
   ok1(_tcscmp(record->id, _T("DDA85C")) == 0);
@@ -46,7 +46,7 @@ int main(int argc, char **argv)
   ok1(_tcscmp(record->cn, _T("TH")) == 0);
   ok1(_tcscmp(record->freq, _T("130.625")) == 0);
 
-  const FLARMNetRecord *array[3];
+  const FlarmNetRecord *array[3];
   ok1(db.Find(_T("TH"), array, 3) == 2);
 
   bool found4449 = false, found5799 = false;
