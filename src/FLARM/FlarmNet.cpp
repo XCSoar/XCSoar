@@ -86,14 +86,10 @@ LoadRecord(const char *line)
   LoadString(line + 152, 3, record->callsign);
   LoadString(line + 158, 7, record->frequency);
 
-  int i = 0;
   int maxSize = sizeof(record->callsign) / sizeof(TCHAR);
-  while(record->callsign[i] != 0 && i < maxSize) {
+  for (int i = 0; record->callsign[i] != 0 && i < maxSize; i++)
     if (record->callsign[i] == 32)
       record->callsign[i] = 0;
-
-    i++;
-  }
 
   return record;
 }
