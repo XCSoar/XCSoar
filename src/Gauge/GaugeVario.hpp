@@ -32,14 +32,14 @@ Copyright_License {
 class ContainerWindow;
 class UnitSymbol;
 
-typedef struct {
+struct DrawInfo_t {
   bool    InitDone;
   PixelRect recBkg;
   RasterPoint orgText;
   fixed lastValue;
   TCHAR   lastText[32];
   const UnitSymbol *last_unit_symbol;
-} DrawInfo_t;
+};
 
 class GaugeVario:
   public BufferWindow,
