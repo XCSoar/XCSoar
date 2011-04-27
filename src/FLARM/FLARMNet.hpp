@@ -62,6 +62,7 @@ public:
 
   const FLARMNetRecord *Find(FlarmId id) const;
   const FLARMNetRecord *Find(const TCHAR *cn) const;
+  unsigned Find(const TCHAR *cn, const FLARMNetRecord *array[], unsigned size) const;
 };
 
 #endif

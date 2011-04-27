@@ -26,7 +26,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(9);
+  plan_tests(12);
 
   FLARMNetDatabase db;
   int count = db.LoadFile(_T("test/data/flarmnet/data.fln"));
@@ -45,6 +45,20 @@ int main(int argc, char **argv)
   ok1(_tcscmp(record->reg, _T("D-4449")) == 0);
   ok1(_tcscmp(record->cn, _T("TH")) == 0);
   ok1(_tcscmp(record->freq, _T("130.625")) == 0);
+
+  const FLARMNetRecord *array[3];
+  ok1(db.Find(_T("TH"), array, 3) == 2);
+
+  bool found4449 = false, found5799 = false;
+  for (unsigned i = 0; i < 2; i++) {
+    record = array[i];
+    if (_tcscmp(record->reg, _T("D-4449")) == 0)
+      found4449 = true;
+    if (_tcscmp(record->reg, _T("D-5799")) == 0)
+      found5799 = true;
+  }
+  ok1(found4449);
+  ok1(found5799);
 
   return exit_status();
 }

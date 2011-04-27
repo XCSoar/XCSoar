@@ -167,6 +167,25 @@ FLARMNetDatabase::Find(const TCHAR *cn) const
   return NULL;
 }
 
+unsigned
+FLARMNetDatabase::Find(const TCHAR *cn, const FLARMNetRecord *array[], unsigned size) const
+{
+  unsigned count = 0;
+
+  const_iterator i = begin();
+  while (i != end() && count < size) {
+    const FLARMNetRecord *record = (const FLARMNetRecord *)(i->second);
+    if (_tcscmp(record->cn, cn) == 0) {
+      array[count] = record;
+      count++;
+    }
+
+    i++;
+  }
+
+  return count;
+}
+
 FlarmId
 FLARMNetRecord::GetId() const
 {
