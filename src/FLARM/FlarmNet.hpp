@@ -51,8 +51,11 @@ struct FlarmNetRecord
  * Handles the FlarmNet.org file
  */
 class FlarmNetDatabase
-  : protected std::map<FlarmId, FlarmNetRecord*>
 {
+protected:
+  typedef std::map<FlarmId, FlarmNetRecord*> RecordMap;
+  RecordMap record_map;
+
 public:
   ~FlarmNetDatabase();
 

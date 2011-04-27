@@ -31,7 +31,7 @@ Copyright_License {
 
 FlarmNetDatabase::~FlarmNetDatabase()
 {
-  for (iterator i = begin(); i != end(); ++i)
+  for (RecordMap::iterator i = record_map.begin(); i != record_map.end(); ++i)
     delete i->second;
 }
 
@@ -108,7 +108,7 @@ FlarmNetDatabase::LoadFile(NLineReader &reader)
 
     LoadRecord(line, record);
 
-    insert(value_type(record->GetId(), record));
+    record_map[record->GetId()] = record;
 
     itemCount++;
   };
@@ -140,8 +140,8 @@ FlarmNetDatabase::LoadFile(const TCHAR *path)
 const FlarmNetRecord *
 FlarmNetDatabase::Find(FlarmId id) const
 {
-  const_iterator i = find(id);
-  if (i != end())
+  RecordMap::const_iterator i = record_map.find(id);
+  if (i != record_map.end())
     return i->second;
 
   return NULL;
@@ -155,8 +155,8 @@ FlarmNetDatabase::Find(FlarmId id) const
 const FlarmNetRecord *
 FlarmNetDatabase::Find(const TCHAR *cn) const
 {
-  const_iterator i = begin();
-  while (i != end()) {
+  RecordMap::const_iterator i = record_map.begin();
+  while (i != record_map.end()) {
     const FlarmNetRecord *record = (const FlarmNetRecord *)(i->second);
     if (_tcscmp(record->callsign, cn) == 0)
       return record;
@@ -172,8 +172,8 @@ FlarmNetDatabase::Find(const TCHAR *cn, const FlarmNetRecord *array[], unsigned 
 {
   unsigned count = 0;
 
-  const_iterator i = begin();
-  while (i != end() && count < size) {
+  RecordMap::const_iterator i = record_map.begin();
+  while (i != record_map.end() && count < size) {
     const FlarmNetRecord *record = (const FlarmNetRecord *)(i->second);
     if (_tcscmp(record->callsign, cn) == 0) {
       array[count] = record;
