@@ -41,6 +41,7 @@
 #include "Components.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Util/StringUtil.hpp"
+#include "Compiler.h"
 
 #include <math.h>
 #include <stdio.h>
@@ -179,9 +180,8 @@ Update()
  * update of the variable fields of the dialog
  */
 static void
-OnTimerNotify(WndForm &Sender)
+OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  (void)Sender;
   UpdateChanging();
 }
 
@@ -189,9 +189,8 @@ OnTimerNotify(WndForm &Sender)
  * This event handler is called when the "Close" button is pressed
  */
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -199,10 +198,8 @@ OnCloseClicked(WndButton &Sender)
  * This event handler is called when the "Team" button is pressed
  */
 static void
-OnTeamClicked(WndButton &Sender)
+OnTeamClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
   // Ask for confirmation
   if (MessageBoxX(_T("Do you want to set this FLARM contact as your ")
       _T("new teammate?"), _T("New Teammate"), MB_YESNO) != IDYES)
@@ -233,10 +230,8 @@ OnTeamClicked(WndButton &Sender)
  * This event handler is called when the "Change Callsign" button is pressed
  */
 static void
-OnCallsignClicked(WndButton &Sender)
+OnCallsignClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
   TCHAR newName[21];
   newName[0] = 0;
   if (dlgTextEntryShowModal(newName, 4) &&
