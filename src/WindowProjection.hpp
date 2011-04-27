@@ -33,6 +33,14 @@ class WindowProjection:
 {
   unsigned screen_width, screen_height;
 
+  /**
+   * Geographical representation of the screen boundaries.
+   *
+   * This is a cached member that has to be updated manually by
+   * calling UpdateScreenBounds()
+   */
+  GeoBounds screenbounds_latlon;
+
 public:
   /**
    * Converts a geographical location to a screen coordinate if the
@@ -130,15 +138,6 @@ public:
 
   /** Updates the cached screenbounds_latlon member */
   void UpdateScreenBounds();
-
-private:
-  /**
-   * Geographical representation of the screen boundaries.
-   *
-   * This is a cached member that has to be updated manually by
-   * calling UpdateScreenBounds()
-   */
-  GeoBounds screenbounds_latlon;
 };
 
 #endif

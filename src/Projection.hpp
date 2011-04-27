@@ -52,6 +52,29 @@ Copyright_License {
  * conversions can be set.
  */
 class Projection {
+  /** This is the geographical location that the ScreenOrigin is mapped to */
+  GeoPoint GeoLocation;
+
+  /**
+   * This is the point that the ScreenRotation will rotate around.
+   * It is also the point that the GeoLocation points to.
+   */
+  RasterPoint ScreenOrigin;
+
+  /**
+   * FastIntegerRotation instance for fast
+   * rotation in the conversion functions
+   */
+  FastIntegerRotation ScreenRotation;
+
+  /** The earth's radius in screen coordinates (px) */
+  fixed DrawScale;
+  /** Inverted value of DrawScale for faster calculations */
+  fixed InvDrawScale;
+
+  /** This is the scaling factor in px/m */
+  fixed scale;
+
 public:
   Projection();
 
@@ -186,30 +209,6 @@ public:
 protected:
   gcc_const
   static int GetMapResolutionFactor();
-
-private:
-  /** This is the geographical location that the ScreenOrigin is mapped to */
-  GeoPoint GeoLocation;
-
-  /**
-   * This is the point that the ScreenRotation will rotate around.
-   * It is also the point that the GeoLocation points to.
-   */
-  RasterPoint ScreenOrigin;
-
-  /**
-   * FastIntegerRotation instance for fast
-   * rotation in the conversion functions
-   */
-  FastIntegerRotation ScreenRotation;
-
-  /** The earth's radius in screen coordinates (px) */
-  fixed DrawScale;
-  /** Inverted value of DrawScale for faster calculations */
-  fixed InvDrawScale;
-
-  /** This is the scaling factor in px/m */
-  fixed scale;
 };
 
 #endif
