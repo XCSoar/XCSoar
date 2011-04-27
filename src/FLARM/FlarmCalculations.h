@@ -34,14 +34,14 @@ struct FLARM_STATE;
 
 class FlarmCalculations
 {
+private:
+  typedef std::map<FlarmId, ClimbAverageCalculator*> AverageCalculatorMap;
+  AverageCalculatorMap averageCalculatorMap;
+
 public:
   ~FlarmCalculations();
 
   fixed Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude);
-
-private:
-  typedef std::map<FlarmId, ClimbAverageCalculator*> AverageCalculatorMap;
-  AverageCalculatorMap averageCalculatorMap;
 };
 
 #endif
