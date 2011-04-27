@@ -108,17 +108,9 @@ static void
 Update()
 {
   TCHAR tmp[200], tmp_id[7];
-  const FLARM_TRAFFIC* target =
-      XCSoarInterface::Basic().flarm.FindTraffic(target_id);
-
-  // If target is out of range
-  if (target == NULL) {
-    wf->SetModalResult(mrCancel);
-    return;
-  }
 
   // Set the dialog caption
-  _stprintf(tmp, _T("FLARM Traffic Details (%s)"), target->ID.format(tmp_id));
+  _stprintf(tmp, _T("FLARM Traffic Details (%s)"), target_id.format(tmp_id));
   wf->SetCaption(tmp);
 
   // Try to find the target in the FLARMnet database
@@ -152,11 +144,15 @@ Update()
     ((WndProperty *)wf->FindByName(_T("prpAirport")))->SetText(_T("--"));
 
     // Fill the plane type field
-    const TCHAR* actype = FLARM_TRAFFIC::GetTypeString(target->Type);
-    if (!actype)
-      ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(_T("--"));
-    else
-      ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(actype);
+    const FLARM_TRAFFIC* target =
+        XCSoarInterface::Basic().flarm.FindTraffic(target_id);
+
+    const TCHAR* actype;
+    if (target == NULL ||
+        (actype = FLARM_TRAFFIC::GetTypeString(target->Type)) == NULL)
+      actype = _T("--");
+
+    ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(actype);
   }
 
   // Fill the callsign field (+ registration)
