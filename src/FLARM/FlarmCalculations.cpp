@@ -38,7 +38,7 @@ FlarmCalculations::Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude)
   AverageCalculatorMap::iterator iterFind = averageCalculatorMap.find(flarmId);
 
   if (iterFind != averageCalculatorMap.end()) {
-    itemTemp = averageCalculatorMap[flarmId];
+    itemTemp = (ClimbAverageCalculator*)iterFind->second;
   } else {
     itemTemp = new ClimbAverageCalculator();
     averageCalculatorMap[flarmId] = itemTemp;
