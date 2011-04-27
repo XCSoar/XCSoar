@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "FLARM/FlarmNet.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/CharUtil.hpp"
 #include "IO/LineReader.hpp"
 #include "IO/FileLineReader.hpp"
 
@@ -86,9 +87,10 @@ LoadRecord(const char *line)
   LoadString(line + 152, 3, record->callsign);
   LoadString(line + 158, 7, record->frequency);
 
+  // Terminate callsign string on first whitespace
   int maxSize = sizeof(record->callsign) / sizeof(TCHAR);
   for (int i = 0; record->callsign[i] != 0 && i < maxSize; i++)
-    if (record->callsign[i] == 32)
+    if (IsWhitespaceOrNull(record->callsign[i]))
       record->callsign[i] = 0;
 
   return record;
