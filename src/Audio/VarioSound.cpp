@@ -187,12 +187,12 @@ unsigned char audio_sound_loud(unsigned short i, bool beep) {
 // other types may be added later to implement hurry-up sounds etc.
 
 
-typedef struct{
+struct AudioSoundStatic_t {
   unsigned Index:16;
   unsigned Last:1;
   unsigned WaitZerroCross:1;
   unsigned Advance:1;
-}AudioSoundStatic_t;
+};
 
 static AudioSoundStatic_t BeepData = {0,0,0,0};
 
