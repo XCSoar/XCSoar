@@ -60,9 +60,27 @@ public:
   ~FlarmNetDatabase();
 
   unsigned LoadFile(NLineReader &reader);
+
+  /**
+   * Reads the FlarmNet.org file and fills the map
+   *
+   * @param path the path of the file
+   * @return the number of records read from the file
+   */
   unsigned LoadFile(const TCHAR *path);
 
+  /**
+   * Finds a FLARMNetRecord object based on the given FLARM id
+   * @param id FLARM id
+   * @return FLARMNetRecord object
+   */
   const FlarmNetRecord *Find(FlarmId id) const;
+
+  /**
+   * Finds a FLARMNetRecord object based on the given Callsign
+   * @param cn Callsign
+   * @return FLARMNetRecord object
+   */
   const FlarmNetRecord *Find(const TCHAR *cn) const;
   unsigned Find(const TCHAR *cn, const FlarmNetRecord *array[], unsigned size) const;
 };
