@@ -29,13 +29,13 @@ Copyright_License {
 #include "Screen/PaintWindow.hpp"
 #include "PeriodClock.hpp"
 
-typedef enum {
+enum BorderKind_t {
   bkNone,
   bkTop,
   bkRight,
   bkBottom,
   bkLeft
-} BorderKind_t;
+};
 
 #define BORDERTOP    (1<<bkTop)
 #define BORDERRIGHT  (1<<bkRight)
