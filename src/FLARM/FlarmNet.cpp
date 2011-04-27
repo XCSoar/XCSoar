@@ -66,17 +66,18 @@ LoadString(const char *bytes, int charCount, TCHAR *res)
 }
 
 /**
- * Reads next FlarmNet.org file entry and saves it
- * into the given record
- * @param file File handle
- * @param record Pointer to the FLARMNetRecord to be filled
+ * Reads next FlarmNet.org file entry and returns the pointer to
+ * a new FlarmNetRecord instance or NULL on error.
+ *
+ * The caller is responsible for deleting the object again!
  */
-static void
-LoadRecord(const char *line, FlarmNetRecord *record)
+static FlarmNetRecord *
+LoadRecord(const char *line)
 {
   if (strlen(line) < 172)
-    return;
+    return NULL;
 
+  FlarmNetRecord *record = new FlarmNetRecord;
   LoadString(line, 6, record->id);
   LoadString(line + 12, 21, record->pilot);
   LoadString(line + 54, 21, record->airfield);
@@ -93,6 +94,8 @@ LoadRecord(const char *line, FlarmNetRecord *record)
 
     i++;
   }
+
+  return record;
 }
 
 unsigned
@@ -105,14 +108,12 @@ FlarmNetDatabase::LoadFile(NLineReader &reader)
 
   int itemCount = 0;
   while ((line = reader.read()) != NULL) {
-    FlarmNetRecord *record = new FlarmNetRecord;
-
-    LoadRecord(line, record);
-
-    record_map[record->GetId()] = record;
-
-    itemCount++;
-  };
+    FlarmNetRecord *record = LoadRecord(line);
+    if (record != NULL) {
+      record_map[record->GetId()] = record;
+      itemCount++;
+    }
+  }
 
   return itemCount;
 }
