@@ -80,6 +80,8 @@ namespace FlarmNet
   const Record *FindFirstRecordByCallSign(const TCHAR *cn);
   unsigned FindRecordsByCallSign(const TCHAR *cn, const Record *array[],
                                  unsigned size);
+  unsigned FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[],
+                             unsigned size);
 };
 
 #endif

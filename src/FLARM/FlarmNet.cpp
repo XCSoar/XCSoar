@@ -180,6 +180,25 @@ FlarmNet::FindRecordsByCallSign(const TCHAR *cn, const Record *array[], unsigned
   return count;
 }
 
+unsigned
+FlarmNet::FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[], unsigned size)
+{
+  unsigned count = 0;
+
+  RecordMap::const_iterator i = record_map.begin();
+  while (i != record_map.end() && count < size) {
+    const Record *record = (const Record *)(i->second);
+    if (_tcscmp(record->callsign, cn) == 0) {
+      array[count] = (const FlarmId *)(&(i->first));
+      count++;
+    }
+
+    i++;
+  }
+
+  return count;
+}
+
 FlarmId
 FlarmNet::Record::GetId() const
 {
