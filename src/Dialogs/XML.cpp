@@ -330,7 +330,7 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
 #ifdef _UNICODE
   int length = data.second;
   TCHAR *buffer2 = new TCHAR[length + 1];
-  length = MultiByteToWideChar(CP_ACP, MB_PRECOMPOSED, buffer, length,
+  length = MultiByteToWideChar(CP_UTF8, 0, buffer, length,
                                buffer2, length);
   buffer2[length] = _T('\0');
 #else

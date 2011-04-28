@@ -13,7 +13,7 @@
     <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" ReadOnly="1" />
   </Edit>
   <Edit Name="prpBearing" Caption="Bearing" X="70"  Width="200" Height="22" CaptionWidth="100" ReadOnly="1">
-    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" ReadOnly="1" />
+    <DataField DataType="double" DisplayFormat="%.0fÂ°" EditFormat="%.0f" ReadOnly="1" />
   </Edit>
   <Edit Name="prpRelBearing" Caption="Rel. bearing" X="70"  Width="200" Height="22" CaptionWidth="100" ReadOnly="1" />
   <Edit Name="prpFlarmLock" Caption="Flarm lock" X="70"  Width="200" Height="22" CaptionWidth="100" ReadOnly="1" />

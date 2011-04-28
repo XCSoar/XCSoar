@@ -38,11 +38,11 @@
         </Edit>
 
         <Edit Name="prpOZSectorStartRadial" Caption="Start radial" Height="25" CaptionWidth="80" Help="Start radial of the OZ area">
-          <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="360" Step="1" OnDataAccess="OnOZSectorStartRadialData"/>
+          <DataField DataType="double" DisplayFormat="%.0fÂ°" EditFormat="%.0f" Min="0" Max="360" Step="1" OnDataAccess="OnOZSectorStartRadialData"/>
         </Edit>
 
         <Edit Name="prpOZSectorFinishRadial" Caption="Finish radial" Height="25" CaptionWidth="80" Help="Finish radial of the OZ area">
-          <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="360" Step="1" OnDataAccess="OnOZSectorFinishRadialData"/>
+          <DataField DataType="double" DisplayFormat="%.0fÂ°" EditFormat="%.0f" Min="0" Max="360" Step="1" OnDataAccess="OnOZSectorFinishRadialData"/>
         </Edit>
 
         <Edit Name="prpOZSectorInnerRadius" Caption="Inner radius" Height="25" CaptionWidth="80" Help="Inner radius of the OZ sector.">

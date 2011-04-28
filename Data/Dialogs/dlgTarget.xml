@@ -26,7 +26,7 @@
 
   <Edit Name="prpRadial" Caption="Radial" X="90" Y="-26" Width="86" Height="27" CaptionWidth="35"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
-    <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-92" Max="92" Step="5" OnDataAccess="OnRadialData"/>
+    <DataField DataType="double" DisplayFormat="%.0fÂ°" EditFormat="%.0f" Min="-92" Max="92" Step="5" OnDataAccess="OnRadialData"/>
   </Edit>
 
   <Button Name="btnIsLocked" Caption="Locked" X="-62" Y="-44" Width="60" Height="43" OnClick="OnIsLockedClicked" />
