@@ -549,6 +549,10 @@ TestZander()
   ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,V,V*42", &nmea_info));
   ok1(!nmea_info.ExternalWindAvailable);
 
+  ok1(device->ParseNMEA("$PZAN4,1.5,+,20,39,45*15", &nmea_info));
+  ok1(nmea_info.settings.mac_cready_available);
+  ok1(equals(nmea_info.settings.mac_cready, 1.5));
+
   delete device;
 }
 
@@ -594,7 +598,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(275);
+  plan_tests(278);
 
   TestGeneric();
   TestFLARM();

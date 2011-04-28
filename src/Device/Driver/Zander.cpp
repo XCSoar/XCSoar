@@ -96,6 +96,18 @@ PZAN3(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   return true;
 }
 
+static bool
+PZAN4(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+{
+  // $PZAN4,1.5,+,20,39,45*cc
+
+  fixed mc;
+  if (line.read_checked(mc))
+    GPS_INFO->settings.ProvideMacCready(mc, GPS_INFO->Time);
+
+  return true;
+}
+
 bool
 ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
@@ -114,6 +126,9 @@ ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 
   if (strcmp(type, "$PZAN3") == 0)
     return PZAN3(line, GPS_INFO);
+
+  if (strcmp(type, "$PZAN4") == 0)
+    return PZAN4(line, GPS_INFO);
 
   return false;
 }
