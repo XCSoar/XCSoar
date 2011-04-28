@@ -171,6 +171,7 @@ extern const TCHAR szProfileLoggerTimeStepCircling[];
 extern const TCHAR szProfileSafetyMacCready[];
 extern const TCHAR szProfileAbortTaskMode[];
 extern const TCHAR szProfileAutoMcMode[];
+extern const TCHAR szProfileAutoMc[];
 extern const TCHAR szProfileEnableExternalTriggerCruise[];
 extern const TCHAR szProfileOLCRules[];
 extern const TCHAR szProfileHandicap[];

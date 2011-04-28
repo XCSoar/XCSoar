@@ -759,10 +759,13 @@ InputEvents::eventMacCready(const TCHAR *misc)
     InfoBoxManager::SetDirty();
   } else if (_tcscmp(misc, _T("auto toggle")) == 0) {
     settings_computer.auto_mc = !settings_computer.auto_mc;
+    Profile::Set(szProfileAutoMc, settings_computer.auto_mc);
   } else if (_tcscmp(misc, _T("auto on")) == 0) {
     settings_computer.auto_mc = true;
+    Profile::Set(szProfileAutoMc, true);
   } else if (_tcscmp(misc, _T("auto off")) == 0) {
     settings_computer.auto_mc = false;
+    Profile::Set(szProfileAutoMc, false);
   } else if (_tcscmp(misc, _T("auto show")) == 0) {
     if (settings_computer.auto_mc) {
       Message::AddMessage(_("Auto. MacCready on"));

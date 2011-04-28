@@ -334,6 +334,7 @@ Profile::Use()
   Get(szProfileAppInfoBoxColors,
 		  Appearance.InfoBoxColors);
 
+  Get(szProfileAutoMc, settings_computer.auto_mc);
   GetEnum(szProfileAutoMcMode, settings_computer.auto_mc_mode);
 
   if (GetEnum(szProfileOLCRules, settings_computer.contest))

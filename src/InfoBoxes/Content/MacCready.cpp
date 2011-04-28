@@ -35,6 +35,7 @@ Copyright_License {
 
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Screen/Layout.hpp"
+#include "Profile/Profile.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -249,15 +250,18 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
 
   case ibkLeft:
     XCSoarInterface::SetSettingsComputer().auto_mc = false;
+    Profile::Set(szProfileAutoMc, false);
     return true;
 
   case ibkRight:
     XCSoarInterface::SetSettingsComputer().auto_mc = true;
+    Profile::Set(szProfileAutoMc, true);
     return true;
 
   case ibkEnter:
     XCSoarInterface::SetSettingsComputer().auto_mc =
         !XCSoarInterface::SettingsComputer().auto_mc;
+    Profile::Set(szProfileAutoMc, XCSoarInterface::SettingsComputer().auto_mc);
     return true;
   }
   return false;
