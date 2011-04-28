@@ -7,7 +7,7 @@ Version 6.0.10 - not yet released
 * user interface
   - enable gestures by default
 * Android
-  - fix crash bug on sound effect
+  - fix two crash bugs on sound effect
 
 Version 6.0.9 - 2011-04-06
 * devices
