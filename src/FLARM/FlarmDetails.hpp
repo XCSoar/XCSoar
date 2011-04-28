@@ -26,7 +26,10 @@ Copyright_License {
 #include <tchar.h>
 
 class FlarmId;
-class FlarmNetRecord;
+
+namespace FlarmNet {
+  struct FlarmNetRecord;
+}
 
 namespace FlarmDetails
 {
@@ -63,7 +66,7 @@ namespace FlarmDetails
    * @param id FLARM id
    * @return The corresponding FLARMNet Record if found, otherwise NULL
    */
-  const FlarmNetRecord *
+  const FlarmNet::FlarmNetRecord *
   LookupRecord(FlarmId id);
 
   /**

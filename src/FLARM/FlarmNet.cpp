@@ -30,7 +30,14 @@ Copyright_License {
 #include <stdio.h>
 #include <stdlib.h>
 
-FlarmNetDatabase::~FlarmNetDatabase()
+namespace FlarmNet
+{
+  typedef std::map<FlarmId, FlarmNetRecord*> RecordMap;
+  RecordMap record_map;
+}
+
+void
+FlarmNet::Destroy()
 {
   for (RecordMap::iterator i = record_map.begin(); i != record_map.end(); ++i)
     delete i->second;
@@ -72,13 +79,13 @@ LoadString(const char *bytes, int charCount, TCHAR *res)
  *
  * The caller is responsible for deleting the object again!
  */
-static FlarmNetRecord *
+static FlarmNet::FlarmNetRecord *
 LoadRecord(const char *line)
 {
   if (strlen(line) < 172)
     return NULL;
 
-  FlarmNetRecord *record = new FlarmNetRecord;
+  FlarmNet::FlarmNetRecord *record = new FlarmNet::FlarmNetRecord;
   LoadString(line, 6, record->id);
   LoadString(line + 12, 21, record->pilot);
   LoadString(line + 54, 21, record->airfield);
@@ -97,7 +104,7 @@ LoadRecord(const char *line)
 }
 
 unsigned
-FlarmNetDatabase::LoadFile(NLineReader &reader)
+FlarmNet::LoadFile(NLineReader &reader)
 {
   /* skip first line */
   const char *line = reader.read();
@@ -106,7 +113,7 @@ FlarmNetDatabase::LoadFile(NLineReader &reader)
 
   int itemCount = 0;
   while ((line = reader.read()) != NULL) {
-    FlarmNetRecord *record = LoadRecord(line);
+    FlarmNet::FlarmNetRecord *record = LoadRecord(line);
     if (record != NULL) {
       record_map[record->GetId()] = record;
       itemCount++;
@@ -117,7 +124,7 @@ FlarmNetDatabase::LoadFile(NLineReader &reader)
 }
 
 unsigned
-FlarmNetDatabase::LoadFile(const TCHAR *path)
+FlarmNet::LoadFile(const TCHAR *path)
 {
   FileLineReaderA file(path);
   if (file.error())
@@ -126,8 +133,8 @@ FlarmNetDatabase::LoadFile(const TCHAR *path)
   return LoadFile(file);
 }
 
-const FlarmNetRecord *
-FlarmNetDatabase::FindRecordById(FlarmId id) const
+const FlarmNet::FlarmNetRecord *
+FlarmNet::FindRecordById(FlarmId id)
 {
   RecordMap::const_iterator i = record_map.find(id);
   if (i != record_map.end())
@@ -136,8 +143,8 @@ FlarmNetDatabase::FindRecordById(FlarmId id) const
   return NULL;
 }
 
-const FlarmNetRecord *
-FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
+const FlarmNet::FlarmNetRecord *
+FlarmNet::FindFirstRecordByCallSign(const TCHAR *cn)
 {
   RecordMap::const_iterator i = record_map.begin();
   while (i != record_map.end()) {
@@ -152,7 +159,7 @@ FlarmNetDatabase::FindFirstRecordByCallSign(const TCHAR *cn) const
 }
 
 unsigned
-FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn, const FlarmNetRecord *array[], unsigned size) const
+FlarmNet::FindRecordsByCallSign(const TCHAR *cn, const FlarmNetRecord *array[], unsigned size)
 {
   unsigned count = 0;
 
@@ -171,7 +178,7 @@ FlarmNetDatabase::FindRecordsByCallSign(const TCHAR *cn, const FlarmNetRecord *a
 }
 
 FlarmId
-FlarmNetRecord::GetId() const
+FlarmNet::FlarmNetRecord::GetId() const
 {
   FlarmId id;
   id.parse(this->id, NULL);

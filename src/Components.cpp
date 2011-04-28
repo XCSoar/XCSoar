@@ -44,6 +44,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "UtilsSystem.hpp"
 #include "FLARM/FlarmDetails.hpp"
+#include "FLARM/FlarmNet.hpp"
 #include "SettingsMap.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
@@ -578,6 +579,9 @@ XCSoarInterface::Shutdown(void)
 
   delete airspace_warnings;
   delete airspace_warning;
+
+  // Destroy FlarmNet records
+  FlarmNet::Destroy();
 
   delete file_cache;
 

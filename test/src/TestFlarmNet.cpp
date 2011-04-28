@@ -28,14 +28,13 @@ int main(int argc, char **argv)
 {
   plan_tests(12);
 
-  FlarmNetDatabase db;
-  int count = db.LoadFile(_T("test/data/flarmnet/data.fln"));
+  int count = FlarmNet::LoadFile(_T("test/data/flarmnet/data.fln"));
   ok1(count == 6);
 
   FlarmId id;
   id.parse("DDA85C", NULL);
 
-  const FlarmNetRecord *record = db.FindRecordById(id);
+  const FlarmNet::FlarmNetRecord *record = FlarmNet::FindRecordById(id);
   ok1(record != NULL);
 
   ok1(_tcscmp(record->id, _T("DDA85C")) == 0);
@@ -46,8 +45,8 @@ int main(int argc, char **argv)
   ok1(_tcscmp(record->callsign, _T("TH")) == 0);
   ok1(_tcscmp(record->frequency, _T("130.625")) == 0);
 
-  const FlarmNetRecord *array[3];
-  ok1(db.FindRecordsByCallSign(_T("TH"), array, 3) == 2);
+  const FlarmNet::FlarmNetRecord *array[3];
+  ok1(FlarmNet::FindRecordsByCallSign(_T("TH"), array, 3) == 2);
 
   bool found4449 = false, found5799 = false;
   for (unsigned i = 0; i < 2; i++) {
@@ -59,6 +58,8 @@ int main(int argc, char **argv)
   }
   ok1(found4449);
   ok1(found5799);
+
+  FlarmNet::Destroy();
 
   return exit_status();
 }

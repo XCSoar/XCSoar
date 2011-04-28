@@ -116,7 +116,7 @@ Update()
 
   // Try to find the target in the FLARMnet database
   /// @todo: make this code a little more usable
-  const FlarmNetRecord *record = FlarmDetails::LookupRecord(target_id);
+  const FlarmNet::FlarmNetRecord *record = FlarmDetails::LookupRecord(target_id);
   if (record) {
     // Fill the pilot name field
     _tcscpy(tmp, record->pilot);

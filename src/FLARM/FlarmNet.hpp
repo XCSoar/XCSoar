@@ -32,32 +32,28 @@ Copyright_License {
 class NLineReader;
 
 /**
- * FlarmNet.org file entry
- */
-struct FlarmNetRecord
-{
-  TCHAR id[7];           /**< FLARM id 6 bytes */
-  TCHAR pilot[22];       /**< Name 15 bytes */
-  TCHAR airfield[22];    /**< Airfield 4 bytes */
-  TCHAR plane_type[22];  /**< Aircraft type 1 byte */
-  TCHAR registration[8]; /**< Registration 7 bytes */
-  TCHAR callsign[4];     /**< Callsign 3 bytes */
-  TCHAR frequency[8];    /**< Radio frequency 6 bytes */
-
-  FlarmId GetId() const;
-};
-
-/**
  * Handles the FlarmNet.org file
  */
-class FlarmNetDatabase
+namespace FlarmNet
 {
-protected:
-  typedef std::map<FlarmId, FlarmNetRecord*> RecordMap;
-  RecordMap record_map;
 
-public:
-  ~FlarmNetDatabase();
+  /**
+   * FlarmNet.org file entry
+   */
+  struct FlarmNetRecord
+  {
+    TCHAR id[7];           /**< FLARM id 6 bytes */
+    TCHAR pilot[22];       /**< Name 15 bytes */
+    TCHAR airfield[22];    /**< Airfield 4 bytes */
+    TCHAR plane_type[22];  /**< Aircraft type 1 byte */
+    TCHAR registration[8]; /**< Registration 7 bytes */
+    TCHAR callsign[4];     /**< Callsign 3 bytes */
+    TCHAR frequency[8];    /**< Radio frequency 6 bytes */
+
+    FlarmId GetId() const;
+  };
+
+  void Destroy();
 
   unsigned LoadFile(NLineReader &reader);
 
@@ -74,16 +70,16 @@ public:
    * @param id FLARM id
    * @return FLARMNetRecord object
    */
-  const FlarmNetRecord *FindRecordById(FlarmId id) const;
+  const FlarmNetRecord *FindRecordById(FlarmId id);
 
   /**
    * Finds a FLARMNetRecord object based on the given Callsign
    * @param cn Callsign
    * @return FLARMNetRecord object
    */
-  const FlarmNetRecord *FindFirstRecordByCallSign(const TCHAR *cn) const;
+  const FlarmNetRecord *FindFirstRecordByCallSign(const TCHAR *cn);
   unsigned FindRecordsByCallSign(const TCHAR *cn, const FlarmNetRecord *array[],
-                                 unsigned size) const;
+                                 unsigned size);
 };
 
 #endif

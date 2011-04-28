@@ -32,8 +32,6 @@ Copyright_License {
 
 #include <stdlib.h>
 
-static FlarmNetDatabase flarm_net;
-
 struct FlarmIdNameCouple
 {
   FlarmId ID;
@@ -58,7 +56,7 @@ FlarmDetails::LoadFLARMnet()
   if (reader == NULL)
     return;
 
-  unsigned num_records = flarm_net.LoadFile(*reader);
+  unsigned num_records = FlarmNet::LoadFile(*reader);
   delete reader;
 
   if (num_records > 0)
@@ -134,11 +132,11 @@ FlarmDetails::LookupSecondaryIndex(const TCHAR *cn)
   return -1;
 }
 
-const FlarmNetRecord *
+const FlarmNet::FlarmNetRecord *
 FlarmDetails::LookupRecord(FlarmId id)
 {
   // try to find flarm from FlarmNet.org File
-  const FlarmNetRecord *record = flarm_net.FindRecordById(id);
+  const FlarmNet::FlarmNetRecord *record = FlarmNet::FindRecordById(id);
   if (record != NULL)
     return record;
 
@@ -154,7 +152,7 @@ FlarmDetails::LookupCallsign(FlarmId id)
     return FLARM_Names[index].Name;
 
   // try to find flarm from FlarmNet.org File
-  const FlarmNetRecord *record = flarm_net.FindRecordById(id);
+  const FlarmNet::FlarmNetRecord *record = FlarmNet::FindRecordById(id);
   if (record != NULL)
     return record->callsign;
 
@@ -170,7 +168,7 @@ FlarmDetails::LookupId(const TCHAR *cn)
     return FLARM_Names[index].ID;
 
   // try to find flarm from FlarmNet.org File
-  const FlarmNetRecord *record = flarm_net.FindFirstRecordByCallSign(cn);
+  const FlarmNet::FlarmNetRecord *record = FlarmNet::FindFirstRecordByCallSign(cn);
   if (record != NULL)
     return record->GetId();
 
