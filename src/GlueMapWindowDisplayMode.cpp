@@ -286,11 +286,17 @@ GlueMapWindow::UpdateProjection()
   if (settings_map.EnablePan)
     SetLocation(settings_map.PanLocation);
   else if (GetDisplayMode() == dmCircling &&
-           Calculated().thermal_locator.estimate_valid &&
-           Calculated().thermal_locator.estimate_location.distance(Basic().Location)
-                  < visible_projection.GetMapScale() * fixed_two)
-    SetLocation(Calculated().thermal_locator.estimate_location);
-  else
+           Calculated().thermal_locator.estimate_valid) {
+    const fixed d_t = Calculated().thermal_locator.estimate_location.distance(Basic().Location);
+    if (!positive(d_t)) {
+      SetLocation(Basic().Location);
+    } else {
+      const fixed d_max = visible_projection.GetMapScale() * fixed_two;
+      const fixed t = std::min(d_t, d_max)/d_t;
+      SetLocation(Basic().Location.interpolate(Calculated().thermal_locator.estimate_location,
+                                               t));
+    }
+  } else
     // Pan is off
     SetLocation(Basic().Location);
 
