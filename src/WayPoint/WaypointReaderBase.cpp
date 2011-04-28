@@ -157,7 +157,7 @@ void
 WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
                     StatusCallback callback)
 {
-  double filesize = std::max(reader.size(), 1l);
+  long filesize = std::max(reader.size(), 1l);
 
   // Read through the lines of the file
   TCHAR *line;
