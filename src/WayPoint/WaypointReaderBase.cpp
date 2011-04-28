@@ -166,9 +166,8 @@ WaypointReaderBase::Parse(Waypoints &way_points, TLineReader &reader,
     ParseLine(line, i, way_points);
 
     if ((i & 0x3f) == 0) {
-      unsigned status = reader.tell() * 100 / filesize;
       if (callback != NULL)
-        callback(status);
+        callback(reader.tell() * 100 / filesize);
     }
   }
 }
