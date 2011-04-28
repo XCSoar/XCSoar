@@ -553,6 +553,25 @@ TestZander()
   ok1(nmea_info.settings.mac_cready_available);
   ok1(equals(nmea_info.settings.mac_cready, 1.5));
 
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(!device->ParseNMEA("$PZAN5,,MUEHL,123.4,KM,T,234*24", &nmea_info));
+  ok1(!nmea_info.SwitchStateAvailable);
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(device->ParseNMEA("$PZAN5,SF,MUEHL,123.4,KM,T,234*31", &nmea_info));
+  ok1(nmea_info.SwitchStateAvailable);
+  ok1(nmea_info.SwitchState.FlightMode == SWITCH_INFO::MODE_CRUISE);
+  ok1(nmea_info.SwitchState.SpeedCommand);
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(device->ParseNMEA("$PZAN5,VA,MUEHL,123.4,KM,T,234*33", &nmea_info));
+  ok1(nmea_info.SwitchStateAvailable);
+  ok1(nmea_info.SwitchState.FlightMode == SWITCH_INFO::MODE_CIRCLING);
+  ok1(!nmea_info.SwitchState.SpeedCommand);
+
   delete device;
 }
 
@@ -598,7 +617,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(278);
+  plan_tests(288);
 
   TestGeneric();
   TestFLARM();

@@ -108,6 +108,27 @@ PZAN4(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   return true;
 }
 
+static bool
+PZAN5(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+{
+  // $PZAN5,VA,MUEHL,123.4,KM,T,234*cc
+
+  char state[3];
+  line.read(state, 3);
+
+  if (strcmp(state, "SF") == 0) {
+    GPS_INFO->SwitchState.FlightMode = SWITCH_INFO::MODE_CRUISE;
+    GPS_INFO->SwitchState.SpeedCommand = true;
+  } else if (strcmp(state, "VA") == 0) {
+    GPS_INFO->SwitchState.FlightMode = SWITCH_INFO::MODE_CIRCLING;
+    GPS_INFO->SwitchState.SpeedCommand = false;
+  } else
+    return false;
+
+  GPS_INFO->SwitchStateAvailable = true;
+  return true;
+}
+
 bool
 ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
@@ -129,6 +150,9 @@ ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 
   if (strcmp(type, "$PZAN4") == 0)
     return PZAN4(line, GPS_INFO);
+
+  if (strcmp(type, "$PZAN5") == 0)
+    return PZAN5(line, GPS_INFO);
 
   return false;
 }
