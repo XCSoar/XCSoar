@@ -40,7 +40,7 @@ namespace FlarmNet
   /**
    * FlarmNet.org file entry
    */
-  struct FlarmNetRecord
+  struct Record
   {
     TCHAR id[7];           /**< FLARM id 6 bytes */
     TCHAR pilot[22];       /**< Name 15 bytes */
@@ -70,15 +70,15 @@ namespace FlarmNet
    * @param id FLARM id
    * @return FLARMNetRecord object
    */
-  const FlarmNetRecord *FindRecordById(FlarmId id);
+  const Record *FindRecordById(FlarmId id);
 
   /**
    * Finds a FLARMNetRecord object based on the given Callsign
    * @param cn Callsign
    * @return FLARMNetRecord object
    */
-  const FlarmNetRecord *FindFirstRecordByCallSign(const TCHAR *cn);
-  unsigned FindRecordsByCallSign(const TCHAR *cn, const FlarmNetRecord *array[],
+  const Record *FindFirstRecordByCallSign(const TCHAR *cn);
+  unsigned FindRecordsByCallSign(const TCHAR *cn, const Record *array[],
                                  unsigned size);
 };
 

@@ -34,7 +34,7 @@ int main(int argc, char **argv)
   FlarmId id;
   id.parse("DDA85C", NULL);
 
-  const FlarmNet::FlarmNetRecord *record = FlarmNet::FindRecordById(id);
+  const FlarmNet::Record *record = FlarmNet::FindRecordById(id);
   ok1(record != NULL);
 
   ok1(_tcscmp(record->id, _T("DDA85C")) == 0);
@@ -45,7 +45,7 @@ int main(int argc, char **argv)
   ok1(_tcscmp(record->callsign, _T("TH")) == 0);
   ok1(_tcscmp(record->frequency, _T("130.625")) == 0);
 
-  const FlarmNet::FlarmNetRecord *array[3];
+  const FlarmNet::Record *array[3];
   ok1(FlarmNet::FindRecordsByCallSign(_T("TH"), array, 3) == 2);
 
   bool found4449 = false, found5799 = false;
