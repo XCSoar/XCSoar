@@ -63,6 +63,39 @@ PZAN2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   return true;
 }
 
+static bool
+PZAN3(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+{
+  // old: $PZAN3,+,026,V,321,035,A,321,035,V*cc
+  // new: $PZAN3,+,026,A,321,035,V[,A]*cc
+
+  line.skip(3);
+
+  int direction, speed;
+  if (!line.read_checked(direction) || !line.read_checked(speed))
+    return false;
+
+  char okay = line.read_first_char();
+  if (okay == 'V') {
+    okay = line.read_first_char();
+    if (okay == 'V')
+      return true;
+
+    if (okay != 'A') {
+      line.skip();
+      okay = line.read_first_char();
+    }
+  }
+
+  if (okay == 'A') {
+    SpeedVector wind(Angle::degrees(fixed(direction)),
+                     Units::ToSysUnit(fixed(speed), unKiloMeterPerHour));
+    GPS_INFO->ProvideExternalWind(wind);
+  }
+
+  return true;
+}
+
 bool
 ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
@@ -78,6 +111,9 @@ ZanderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 
   if (strcmp(type, "$PZAN2") == 0)
     return PZAN2(line, GPS_INFO);
+
+  if (strcmp(type, "$PZAN3") == 0)
+    return PZAN3(line, GPS_INFO);
 
   return false;
 }

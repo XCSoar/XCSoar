@@ -499,6 +499,56 @@ TestZander()
   ok1(nmea_info.TotalEnergyVarioAvailable);
   ok1(equals(nmea_info.TotalEnergyVario, fixed(-1.5)));
 
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(device->ParseNMEA("$PZAN3,+,026,V,321,035,A,321,035,V*44", &nmea_info));
+  ok1(nmea_info.ExternalWindAvailable);
+  ok1(equals(nmea_info.ExternalWind.bearing, 321));
+  ok1(equals(nmea_info.ExternalWind.norm, 9.72222));
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(device->ParseNMEA("$PZAN3,+,026,V,321,035,V,321,035,V*53", &nmea_info));
+  ok1(!nmea_info.ExternalWindAvailable);
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,A*2f", &nmea_info));
+  ok1(nmea_info.ExternalWindAvailable);
+  ok1(equals(nmea_info.ExternalWind.bearing, 321));
+  ok1(equals(nmea_info.ExternalWind.norm, 9.72222));
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,A,V*55", &nmea_info));
+  ok1(nmea_info.ExternalWindAvailable);
+  ok1(equals(nmea_info.ExternalWind.bearing, 321));
+  ok1(equals(nmea_info.ExternalWind.norm, 9.72222));
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,V,A*55", &nmea_info));
+  ok1(nmea_info.ExternalWindAvailable);
+  ok1(equals(nmea_info.ExternalWind.bearing, 321));
+  ok1(equals(nmea_info.ExternalWind.norm, 9.72222));
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,A,A*42", &nmea_info));
+  ok1(nmea_info.ExternalWindAvailable);
+  ok1(equals(nmea_info.ExternalWind.bearing, 321));
+  ok1(equals(nmea_info.ExternalWind.norm, 9.72222));
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,V*38", &nmea_info));
+  ok1(!nmea_info.ExternalWindAvailable);
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+  ok1(device->ParseNMEA("$PZAN3,+,026,A,321,035,V,V*42", &nmea_info));
+  ok1(!nmea_info.ExternalWindAvailable);
+
   delete device;
 }
 
@@ -544,7 +594,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(249);
+  plan_tests(275);
 
   TestGeneric();
   TestFLARM();
