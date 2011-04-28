@@ -106,6 +106,9 @@ LoadRecord(const char *line)
 unsigned
 FlarmNet::LoadFile(NLineReader &reader)
 {
+  // Clear database before adding new entries
+  Destroy();
+
   /* skip first line */
   const char *line = reader.read();
   if (line == NULL)
