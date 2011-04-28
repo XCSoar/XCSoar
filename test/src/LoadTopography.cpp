@@ -98,7 +98,7 @@ int main(int argc, char **argv)
   }
 
   TopographyStore topography;
-  topography.Load(reader, NULL, dir);
+  topography.Load(reader, NULL, NULL, dir);
   zzip_dir_close(dir);
 
   TestProjection projection;

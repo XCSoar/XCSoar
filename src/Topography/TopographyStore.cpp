@@ -57,8 +57,8 @@ TopographyStore::~TopographyStore()
 }
 
 void
-TopographyStore::Load(NLineReader &reader, const TCHAR *Directory,
-                    struct zzip_dir *zdir)
+TopographyStore::Load(NLineReader &reader, StatusCallback callback,
+                      const TCHAR *Directory, struct zzip_dir *zdir)
 {
   Reset();
 
@@ -75,11 +75,14 @@ TopographyStore::Load(NLineReader &reader, const TCHAR *Directory,
 
   char *ShapeFilenameEnd = ShapeFilename + strlen(ShapeFilename);
 
+  long filesize = std::max(reader.size(), 1l);
+
   char *line;
   while (!files.full() && (line = reader.read()) != NULL) {
     // Look For Comment
     if (string_is_empty(line) || line[0] == '*')
       continue;
+
 
     BYTE red, green, blue;
     // filename,range,icon,field
@@ -148,6 +151,9 @@ TopographyStore::Load(NLineReader &reader, const TCHAR *Directory,
                                   Color(red, green, blue),
                                   ShapeField, ShapeIcon,
                                   pen_width));
+
+    if (callback != NULL)
+      callback((reader.tell() * 100) / filesize);
   }
 }
 

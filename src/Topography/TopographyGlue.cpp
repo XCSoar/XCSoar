@@ -59,7 +59,7 @@ LoadConfiguredTopographyFile(TopographyStore &store)
   if (directory == NULL)
     return false;
 
-  store.Load(reader, directory);
+  store.Load(reader, ProgressGlue::SetValue, directory);
   return true;
 }
 
@@ -84,7 +84,7 @@ LoadConfiguredTopographyZip(TopographyStore &store)
     return false;
   }
 
-  store.Load(reader, NULL, dir);
+  store.Load(reader, ProgressGlue::SetValue, NULL, dir);
   zzip_dir_close(dir);
   return true;
 }
@@ -94,6 +94,7 @@ LoadConfiguredTopography(TopographyStore &store)
 {
   LogStartUp(_T("Loading Topography File..."));
   ProgressGlue::Create(_("Loading Topography File..."));
+  ProgressGlue::SetRange(100);
 
   return LoadConfiguredTopographyFile(store) ||
     LoadConfiguredTopographyZip(store);

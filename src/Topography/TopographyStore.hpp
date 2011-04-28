@@ -66,8 +66,10 @@ public:
   unsigned ScanVisibility(const WindowProjection &m_projection,
                           unsigned max_update=1024);
 
-  void Load(NLineReader &reader, const TCHAR *Directory,
-            struct zzip_dir *zdir=NULL);
+  typedef void (*StatusCallback)(unsigned percent);
+
+  void Load(NLineReader &reader, StatusCallback callback,
+            const TCHAR *Directory, struct zzip_dir *zdir = NULL);
   void Reset();
 };
 
