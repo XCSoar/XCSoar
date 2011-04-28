@@ -17,6 +17,29 @@ class Airspaces;
  */
 class AirspaceNearestSort
 {
+  typedef std::pair<AirspaceInterceptSolution, Airspace> AirspaceSolutionItem;
+  typedef std::pair<fixed, AirspaceSolutionItem> Item;
+
+  /**
+   * Function object used to rank intercepts by vector parameter t(0,1)
+   */
+  struct Rank : public std::binary_function<Item, Item, bool> {
+    bool operator()(const Item& x, const Item& y) const {
+      return x.first > y.first;
+    }
+  };
+
+  typedef std::priority_queue<Item, std::vector<Item>, Rank> Queue;
+
+protected:
+  const GeoPoint m_location; /**< Location of observer for queries */
+  const AirspacePredicate &m_condition; /**< Condition to be applied to queries */
+
+private:
+  Queue m_q;
+
+  bool m_reverse;
+
 public:
 /** 
  * Constructor
@@ -82,34 +105,10 @@ public:
     m_reverse = set;
   }
 
-protected:
-
-  const GeoPoint m_location; /**< Location of observer for queries */
-  const AirspacePredicate &m_condition; /**< Condition to be applied to queries */
-
 private:
 
   void populate_queue(const Airspaces &airspaces,
                       const fixed range);
-
-  typedef std::pair<AirspaceInterceptSolution, Airspace> AirspaceSolutionItem;
-  typedef std::pair<fixed, AirspaceSolutionItem> Item;
-
-  /**
-   * Function object used to rank intercepts by vector parameter t(0,1)
-   */
-  struct Rank : public std::binary_function<Item, Item, bool> {
-    bool operator()(const Item& x, const Item& y) const {
-      return x.first > y.first;
-    }
-  };
-
-  typedef std::priority_queue<Item, std::vector<Item>, Rank> Queue;
-
-  Queue m_q;
-
-  bool m_reverse;
-
 };
 
 

@@ -31,6 +31,8 @@ typedef std::vector<AirspaceSelectInfo> AirspaceSelectInfoVector;
 
 class AirspaceSorter
 {
+  AirspaceSelectInfoVector m_airspaces_all;
+
 public:
 /** 
  * Constructor.  Sorts master list of waypoints by name 
@@ -96,9 +98,6 @@ public:
  * @param vec List of airspaces to sort (read-write)
  */
   void sort_name(AirspaceSelectInfoVector& vec) const;
-
-private:
-  AirspaceSelectInfoVector m_airspaces_all;
 };
 
 #endif

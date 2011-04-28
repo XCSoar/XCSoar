@@ -12,6 +12,10 @@ class AirspaceAircraftPerformance;
 class AirspaceSoonestSort:
   public AirspaceNearestSort
 {
+  const AIRCRAFT_STATE &m_state;
+  const AirspaceAircraftPerformance &m_perf;
+  const fixed m_max_time;
+
 public:
 /** 
  * Constructor
@@ -60,13 +64,6 @@ public:
  * @return Soonest arrival time airspace
  */
   const AbstractAirspace* find_nearest(const Airspaces &airspaces);
-
-protected:
-
-private:
-  const AIRCRAFT_STATE &m_state;
-  const AirspaceAircraftPerformance &m_perf;
-  const fixed m_max_time;
 };
 
 

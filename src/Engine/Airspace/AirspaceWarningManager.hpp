@@ -50,6 +50,25 @@ class AirspaceWarningManager:
 {
   AirspaceWarningConfig config;
 
+  const Airspaces& m_airspaces;
+
+  fixed m_prediction_time_glide;
+  fixed m_prediction_time_filter;
+
+  AirspaceAircraftPerformanceGlide m_perf_glide;
+  AircraftStateFilter m_cruise_filter;
+  AircraftStateFilter m_circling_filter;
+  AirspaceAircraftPerformanceStateFilter m_perf_cruise;  
+  AirspaceAircraftPerformanceStateFilter m_perf_circling;  
+
+  const TaskManager& m_task;
+
+  const GlidePolar& m_glide_polar;
+
+  typedef std::list<AirspaceWarning> AirspaceWarningList;
+
+  AirspaceWarningList m_warnings;
+
 public:
   /** 
    * Default constructor
@@ -218,21 +237,6 @@ public:
   bool get_ack_day(const AbstractAirspace& airspace);
 
 private:
-  const Airspaces& m_airspaces;
-
-  fixed m_prediction_time_glide;
-  fixed m_prediction_time_filter;
-
-  AirspaceAircraftPerformanceGlide m_perf_glide;
-  AircraftStateFilter m_cruise_filter;
-  AircraftStateFilter m_circling_filter;
-  AirspaceAircraftPerformanceStateFilter m_perf_cruise;  
-  AirspaceAircraftPerformanceStateFilter m_perf_circling;  
-
-  const TaskManager& m_task;
-
-  const GlidePolar& m_glide_polar;
-
   bool update_task(const AIRCRAFT_STATE& state);
   bool update_filter(const AIRCRAFT_STATE& state, const bool circling);
   bool update_glide(const AIRCRAFT_STATE& state);
@@ -243,11 +247,6 @@ private:
                         const AirspaceAircraftPerformance &perf,
                         const AirspaceWarning::AirspaceWarningState& warning_state,
                         const fixed max_time);
-
-  typedef std::list<AirspaceWarning> AirspaceWarningList;
-
-  AirspaceWarningList m_warnings;
-
 };
 
 #endif

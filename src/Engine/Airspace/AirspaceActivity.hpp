@@ -23,6 +23,23 @@
 #define AIRSPACE_ACTIVITY_HPP
 
 class AirspaceActivity {
+  struct days
+  {
+    unsigned sunday:1;
+    unsigned monday:1;
+    unsigned tuesday:1;
+    unsigned wednesday:1;
+    unsigned thursday:1;
+    unsigned friday:1;
+    unsigned saturday:1;
+  };
+
+  union untype
+  {
+    days un_bitstruct;
+    unsigned char bits;
+  } v;
+
 public:
   AirspaceActivity() {
     set_all();
@@ -84,24 +101,6 @@ public:
   bool matches(AirspaceActivity mask) const {
     return (v.bits) && (mask.v.bits);
   }
-
-private:
-  struct days
-  {
-    unsigned sunday:1;
-    unsigned monday:1;
-    unsigned tuesday:1;
-    unsigned wednesday:1;
-    unsigned thursday:1;
-    unsigned friday:1;
-    unsigned saturday:1;
-  };
-
-  union untype
-  {
-    days un_bitstruct;
-    unsigned char bits;
-  } v;
 };
 
 #endif

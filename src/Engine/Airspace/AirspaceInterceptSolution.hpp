@@ -10,6 +10,11 @@
  *
  */
 struct AirspaceInterceptSolution {
+  GeoPoint location; /**< Location of intercept point */
+  fixed distance;  /**< Distance from observer to intercept point (m) */
+  fixed altitude; /**< Altitude AMSL (m) of intercept point */
+  fixed elapsed_time; /**< Estimated time (s) for observer to reach intercept point */
+
   /**
    *  Constructor, initialises to invalid solution
    */
@@ -26,11 +31,6 @@ struct AirspaceInterceptSolution {
   bool valid() const {
     return !negative(elapsed_time);
   };
-
-  GeoPoint location; /**< Location of intercept point */
-  fixed distance;  /**< Distance from observer to intercept point (m) */
-  fixed altitude; /**< Altitude AMSL (m) of intercept point */
-  fixed elapsed_time; /**< Estimated time (s) for observer to reach intercept point */
 };
 
 #endif

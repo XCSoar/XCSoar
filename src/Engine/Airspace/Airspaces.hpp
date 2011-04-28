@@ -65,6 +65,16 @@ class Airspaces:
   public AirspacesInterface,
   private NonCopyable
 {
+  fixed m_QNH;
+  AirspaceActivity m_day;
+
+  bool m_owner;
+
+  AirspaceTree airspace_tree;
+  TaskProjection task_projection;
+
+  std::deque< AbstractAirspace* > tmp_as;
+
 public:
   /** 
    * Constructor.
@@ -279,19 +289,6 @@ public:
    * Make a copy of the airspaces metadata
    */
   Airspaces(const Airspaces& master, bool is_master);
-
-private:
-
-  fixed m_QNH;
-  AirspaceActivity m_day;
-
-  bool m_owner;
-
-  AirspaceTree airspace_tree;
-  TaskProjection task_projection;
-
-  std::deque< AbstractAirspace* > tmp_as;
-
 };
 
 #endif

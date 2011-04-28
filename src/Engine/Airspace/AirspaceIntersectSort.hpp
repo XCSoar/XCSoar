@@ -10,6 +10,23 @@
  * Utility class to sort airspaces in ascending order of vector parameter (0,1)
  */
 class AirspaceIntersectSort {
+  typedef std::pair<fixed,GeoPoint> Intersection;
+
+  /**
+   * Function object used to rank intercepts by vector parameter t(0,1)
+   */
+  struct Rank : public std::binary_function<Intersection, Intersection, bool> {
+    bool operator()(const Intersection& x, const Intersection& y) const {
+      return x.first > y.first;
+    }
+  };
+
+  std::priority_queue<Intersection, std::vector<Intersection>, Rank> m_q;
+
+  const GeoPoint& m_start;
+  const GeoPoint& m_end;
+  const AbstractAirspace *m_airspace;
+
 public:
   /**
    * Constructor
@@ -52,24 +69,6 @@ public:
    * @return vector
    */
   AirspaceIntersectionVector all();
-
-private:
-  typedef std::pair<fixed,GeoPoint> Intersection;
-
-  /**
-   * Function object used to rank intercepts by vector parameter t(0,1)
-   */
-  struct Rank : public std::binary_function<Intersection, Intersection, bool> {
-    bool operator()(const Intersection& x, const Intersection& y) const {
-      return x.first > y.first;
-    }
-  };
-
-  std::priority_queue<Intersection, std::vector<Intersection>, Rank> m_q;
-
-  const GeoPoint& m_start;
-  const GeoPoint& m_end;
-  const AbstractAirspace *m_airspace;
 };
 
 #endif

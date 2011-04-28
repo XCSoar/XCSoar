@@ -50,6 +50,8 @@ typedef std::vector< std::pair<GeoPoint,GeoPoint> > AirspaceIntersectionVector;
 class Airspace: 
   public FlatBoundingBox
 {
+  mutable AbstractAirspace *pimpl_airspace;
+
 public:
 
   /** 
@@ -193,10 +195,6 @@ public:
   bool operator==(Airspace const& a) const {
     return (get_airspace() == a.get_airspace());
   }
-
-private:
-
-  mutable AbstractAirspace *pimpl_airspace;
 
 public:
 #ifdef DO_PRINT

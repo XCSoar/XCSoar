@@ -60,6 +60,20 @@ public:
 
   const enum shape shape;
 
+protected:
+  AIRSPACE_ALT m_base; /**< Base of airspace */
+  AIRSPACE_ALT m_top; /**< Top of airspace */
+  tstring Name; /**< Airspace name (identifier) */
+  tstring Radio; /**< Radio frequency (optional) */
+  AirspaceClass_t Type; /**< Airspace class */
+  const TaskProjection* m_task_projection; /**< Task projection (owned by container) that can be used for query speedups */
+  SearchPointVector m_border; /**< Actual border */
+  mutable SearchPointVector m_clearance; /**< Convex clearance border */
+  bool m_is_convex;
+  mutable bool active;
+  AirspaceActivity days_of_operation;
+
+public:
   AbstractAirspace(enum shape _shape):shape(_shape), active(true) {}
   virtual ~AbstractAirspace();
 
@@ -365,18 +379,6 @@ public:
   };
 
 protected:
-  AIRSPACE_ALT m_base; /**< Base of airspace */
-  AIRSPACE_ALT m_top; /**< Top of airspace */
-  tstring Name; /**< Airspace name (identifier) */
-  tstring Radio; /**< Radio frequency (optional) */
-  AirspaceClass_t Type; /**< Airspace class */
-  const TaskProjection* m_task_projection; /**< Task projection (owned by container) that can be used for query speedups */
-  SearchPointVector m_border; /**< Actual border */
-  mutable SearchPointVector m_clearance; /**< Convex clearance border */
-  bool m_is_convex;
-  mutable bool active;
-  AirspaceActivity days_of_operation;
-
 /**
  * Project border.
  */

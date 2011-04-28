@@ -73,6 +73,8 @@ public:
  */
 class AirspacePredicateAircraftInside: public AirspacePredicate
 {
+  const AIRCRAFT_STATE& m_state;
+
 public:
   /**
    * Constructor
@@ -84,9 +86,6 @@ public:
   AirspacePredicateAircraftInside(const AIRCRAFT_STATE& state);
 
   bool operator()(const AbstractAirspace& t) const;
-
-private:
-  const AIRCRAFT_STATE& m_state;
 };
 
 /**
@@ -94,6 +93,9 @@ private:
  */
 class AirspacePredicateHeightRange: public AirspacePredicate
 {
+  const short h_min;
+  const short h_max;
+
 public:
   /**
    * Constructor
@@ -111,9 +113,6 @@ public:
   }
 protected:
   bool check_height(const AbstractAirspace& t) const;
-private:
-  const short h_min;
-  const short h_max;
 };
 
 /**
@@ -122,6 +121,9 @@ private:
  */
 class AirspacePredicateHeightRangeExcludeTwo: public AirspacePredicateHeightRange
 {
+  const AGeoPoint p1;
+  const AGeoPoint p2;
+
 public:
   /**
    * Constructor
@@ -136,9 +138,6 @@ public:
     AirspacePredicateHeightRange(_h_min, _h_max), p1(_p1), p2(_p2) {};
 
   bool operator()( const AbstractAirspace& t ) const;
-private:
-  const AGeoPoint p1;
-  const AGeoPoint p2;
 };
 
 #endif

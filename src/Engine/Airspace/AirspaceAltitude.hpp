@@ -19,6 +19,11 @@ enum AirspaceAltBase_t {
  */
 struct AIRSPACE_ALT
 {
+  fixed Altitude; /**< Altitude AMSL (m) resolved from type */
+  fixed FL; /**< Flight level (100ft) for FL-referenced boundary */
+  fixed AGL; /**< Height above terrain (m) for ground-referenced boundary */
+  AirspaceAltBase_t Base; /**< Type of airspace boundary */
+
   /** 
    * Constructor.  Initialises to zero.
    * 
@@ -28,11 +33,6 @@ struct AIRSPACE_ALT
                  FL(fixed_zero),
                  AGL(fixed_zero),
                  Base(abUndef) {};
-
-  fixed Altitude; /**< Altitude AMSL (m) resolved from type */
-  fixed FL; /**< Flight level (100ft) for FL-referenced boundary */
-  fixed AGL; /**< Height above terrain (m) for ground-referenced boundary */
-  AirspaceAltBase_t Base; /**< Type of airspace boundary */
 
   /**
    * Get Altitude AMSL (m) resolved from type.  For AGL types, this assumes the terrain height

@@ -11,6 +11,9 @@
  *  of aircraft speed as a function of glide slope.
  */
 class AirspaceAircraftPerformance {
+protected:
+  fixed m_tolerance_vertical; /**< Tolerance in vertical max speeds (m/s) */
+
 public:
 
 /** 
@@ -117,9 +120,6 @@ public:
                             const fixed& h,
                             fixed& intercept_distance) const;
 
-protected:
-  fixed m_tolerance_vertical; /**< Tolerance in vertical max speeds (m/s) */
-
 private:
   gcc_pure
   virtual bool solution_exists(const fixed& distance_min,
@@ -137,6 +137,11 @@ private:
 class AirspaceAircraftPerformanceSimple:
   public AirspaceAircraftPerformance 
 {
+  fixed v_ld;
+  fixed s_ld;
+  fixed climb_rate;
+  fixed descent_rate;
+
 /** 
  * Constructor.  Initialises current to experimental values.
  * Intended to be specialised for a real aircraft performance model.
@@ -168,12 +173,6 @@ public:
   virtual fixed get_max_speed() const {
     return v_ld;
   }
-
-private:
-  fixed v_ld;
-  fixed s_ld;
-  fixed climb_rate;
-  fixed descent_rate;
 };
 
 /**
@@ -233,6 +232,8 @@ protected:
 class AirspaceAircraftPerformanceStateFilter: 
   public AirspaceAircraftPerformance
 {
+  const AircraftStateFilter &m_state_filter;
+
 public:
 /** 
  * Constructor.
@@ -266,9 +267,6 @@ public:
   virtual fixed get_max_speed() const {
     return m_state_filter.get_speed();
   }
-
-private:
-  const AircraftStateFilter &m_state_filter;
 };
 
 
@@ -285,6 +283,11 @@ class TaskManager;
 class AirspaceAircraftPerformanceTask: 
   public AirspaceAircraftPerformance
 {
+  fixed m_v;
+  fixed m_cruise_descent;
+  fixed m_max_descent;
+  fixed m_climb_rate;
+
 public:
 /** 
  * Constructor.
@@ -308,12 +311,6 @@ public:
   fixed get_descent_rate() const;
 
   fixed get_max_speed() const;
-
-private:
-  fixed m_v;
-  fixed m_cruise_descent;
-  fixed m_max_descent;
-  fixed m_climb_rate;
 };
 
 

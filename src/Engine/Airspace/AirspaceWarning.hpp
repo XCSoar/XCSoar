@@ -49,6 +49,22 @@ public:
     WARNING_INSIDE /**< Warning that aircraft is currently inside airspace */
   };
 
+private:
+  const AbstractAirspace& m_airspace;
+  AirspaceWarningState m_state;
+  AirspaceWarningState m_state_last;
+  AirspaceInterceptSolution m_solution;
+
+  unsigned m_acktime_warning;
+  unsigned m_acktime_inside;
+  unsigned m_debouncetime;
+  bool m_ack_day;
+  bool m_expired;
+  bool m_expired_last;
+
+  static const unsigned null_acktime;
+
+public:
   /**
    * Constructor.  All warnings uniquely refer to an airspace.
    *
@@ -180,21 +196,6 @@ public:
    */
   gcc_pure
   bool operator<(const AirspaceWarning &that) const;
-
-private:
-  const AbstractAirspace& m_airspace;
-  AirspaceWarningState m_state;
-  AirspaceWarningState m_state_last;
-  AirspaceInterceptSolution m_solution;
-
-  unsigned m_acktime_warning;
-  unsigned m_acktime_inside;
-  unsigned m_debouncetime;
-  bool m_ack_day;
-  bool m_expired;
-  bool m_expired_last;
-
-  static const unsigned null_acktime;
 
 #ifdef DO_PRINT
 public:

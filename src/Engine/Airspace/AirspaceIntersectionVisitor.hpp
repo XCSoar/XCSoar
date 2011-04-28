@@ -35,6 +35,9 @@ class AirspaceAircraftPerformance;
 class AirspaceIntersectionVisitor:
   public AirspaceVisitor
 {
+protected:
+  AirspaceIntersectionVector m_intersections; /**< Vector of accumulated intersection pairs */ 
+
 public:
 /** 
  * Called by Airspaces prior to visiting the airspace to
@@ -49,8 +52,6 @@ public:
     return !m_intersections.empty();
   }
 protected:
-  AirspaceIntersectionVector m_intersections; /**< Vector of accumulated intersection pairs */ 
-
 /** 
  * Find intercept solution of intersections
  * 

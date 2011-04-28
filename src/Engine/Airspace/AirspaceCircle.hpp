@@ -35,6 +35,9 @@
 class AirspaceCircle: 
     public AbstractAirspace 
 {
+  const GeoPoint m_center;
+  const fixed m_radius;
+
 public:
 
   /** 
@@ -97,10 +100,6 @@ public:
   const fixed& get_radius() const {
     return m_radius;
   }
-
-private:
-  const GeoPoint m_center;
-  const fixed m_radius;
 
 public:
 #ifdef DO_PRINT
