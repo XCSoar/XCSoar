@@ -39,7 +39,7 @@ AutoQNH::Process(const NMEA_INFO &basic, DERIVED_INFO &calculated,
         const SETTINGS_COMPUTER &settings_computer, const Waypoints &way_points)
 {
   if (!calculated.flight.OnGround // must be on ground
-      || !countdown_autoqnh    // only do it once
+      || IsFinished()    // only do it once
       || !basic.gps.real // never in replay mode / simulator
       || !basic.LocationAvailable // Reject if no valid GPS fix
       || !basic.PressureAltitudeAvailable // Reject if no pressure altitude
