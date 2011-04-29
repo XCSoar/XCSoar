@@ -314,7 +314,7 @@ public:
 #endif
 
   static Angle from_xy(const fixed& x, const fixed& y) {
-    return Angle::native(atan2(y,x));
+    return Angle::radians(atan2(y,x));
   }
 
 private:
