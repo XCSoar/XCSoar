@@ -1100,6 +1100,11 @@ setVariables()
   InitFileField(*wf, _T("prpAdditionalWaypointFile"),
                 szProfileAdditionalWayPointFile,
                 _T("*.dat\0*.xcw\0*.cup\0*.wpz\0"));
+
+  wp = (WndProperty *)wf->FindByName(_T("prpDataPath"));
+  wp->set_enabled(false);
+  wp->SetText(GetPrimaryDataPath());
+
   InitFileField(*wf, _T("prpMapFile"),
                 szProfileMapFile, _T("*.xcm\0*.lkm\0"));
   InitFileField(*wf, _T("prpTerrainFile"),
