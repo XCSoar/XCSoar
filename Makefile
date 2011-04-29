@@ -115,6 +115,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgAirspaceSelect.cpp \
 	$(SRC)/Dialogs/dlgAirspaceWarnings.cpp \
 	$(SRC)/Dialogs/dlgAlternatesList.cpp \
+	$(SRC)/Dialogs/dlgFlarmDetailsList.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \
 	$(SRC)/Dialogs/dlgBasicSettings.cpp \
 	$(SRC)/Dialogs/dlgBrightness.cpp \

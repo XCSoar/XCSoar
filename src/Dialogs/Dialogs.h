@@ -138,6 +138,10 @@ void dlgFlarmTrafficDetailsShowModal(FlarmId id);
 
 void dlgCreditsShowModal(SingleWindow &parent);
 
+const FlarmId *
+dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
+                             const FlarmId *_array[], unsigned count);
+
 bool PopupNearestWaypointDetails(const Waypoints &way_points,
     const GeoPoint &location, double range, bool scalefilter = false);
 
