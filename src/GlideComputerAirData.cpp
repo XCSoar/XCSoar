@@ -110,7 +110,7 @@ GlideComputerAirData::ProcessVertical()
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
-  AutoQNH(basic, calculated, SettingsComputer());
+  AutoQNH(basic, calculated, SettingsComputer(), way_points);
 
   TurnRate();
   Turning();

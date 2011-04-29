@@ -25,12 +25,11 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
-#include "Components.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
 void
 AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
-        const SETTINGS_COMPUTER &settings_computer)
+        const SETTINGS_COMPUTER &settings_computer, const Waypoints &way_points)
 {
   #define QNH_TIME 10
 
