@@ -356,8 +356,9 @@ location=7
 mode=Nav2
 type=key
 data=9
-event=FlarmTraffic
-label=FLARM Radar$(CheckFLARM)
+event=WaypointDetails current
+event=Mode default
+label=Waypoint\nDetails$(CheckTask)
 location=8
 
 mode=Nav2
@@ -687,9 +688,8 @@ location=4
 mode=Info1
 type=key
 data=6
-event=WaypointDetails current
-event=Mode default
-label=Waypoint\nDetails$(CheckTask)
+event=FlarmTraffic
+label=FLARM Radar$(CheckFLARM)
 location=5
 
 mode=Info1
