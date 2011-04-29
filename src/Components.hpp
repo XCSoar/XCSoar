@@ -36,7 +36,6 @@ class Waypoints;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;
-class TaskBehaviour;
 class Replay;
 class AltairControl;
 class Logger;
