@@ -318,8 +318,10 @@ DeviceBlackboard::ProcessFLARM()
       traffic.climb_rate_avg30s =
         flarmCalculations.Average30s(traffic.id, basic.Time, traffic.altitude);
 
-    // The following calculations are only relevant for stealth targets
-    if (!traffic.stealth)
+    // The following calculations are only relevant for targets
+    // where information is missing
+    if (traffic.track_received || traffic.turn_rate_received ||
+        traffic.speed_received || traffic.climb_rate_received)
       continue;
 
     // Check if the target has been seen before in the last seconds
@@ -333,26 +335,36 @@ DeviceBlackboard::ProcessFLARM()
       // Calculate the GeoVector between now and the last contact
       GeoVector vec = last_traffic->location.distance_bearing(traffic.location);
 
-      traffic.track = vec.Bearing;
+      if (!traffic.track_received)
+        traffic.track = vec.Bearing;
 
       // Calculate the turn rate
-      traffic.turn_rate =
-          (traffic.track - last_traffic->track).
-          as_delta().value_degrees() / dt;
+      if (!traffic.turn_rate_received)
+        traffic.turn_rate =
+          (traffic.track - last_traffic->track).as_delta().value_degrees() / dt;
 
       // Calculate the immediate climb rate
-      traffic.climb_rate =
+      if (!traffic.climb_rate_received)
+        traffic.climb_rate =
           (traffic.relative_altitude - last_traffic->relative_altitude) / dt;
 
       // Calculate the speed [m/s]
-      traffic.speed = vec.Distance / dt;
+      if (!traffic.speed_received)
+        traffic.speed = vec.Distance / dt;
     } else {
       // Since the time difference is zero (or negative)
       // we can just copy the old values
-      traffic.track = last_traffic->track;
-      traffic.turn_rate = last_traffic->turn_rate;
-      traffic.climb_rate = last_traffic->climb_rate;
-      traffic.speed = last_traffic->speed;
+      if (!traffic.track_received)
+        traffic.track = last_traffic->track;
+
+      if (!traffic.turn_rate_received)
+        traffic.turn_rate = last_traffic->turn_rate;
+
+      if (!traffic.climb_rate_received)
+        traffic.climb_rate = last_traffic->climb_rate;
+
+      if (!traffic.speed_received)
+        traffic.speed = last_traffic->speed;
     }
   }
 }
