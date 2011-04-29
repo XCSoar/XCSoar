@@ -85,7 +85,7 @@ namespace Java {
       assert(env != NULL);
       assert(value != NULL);
 
-      env->NewGlobalRef(value);
+      value = (T)env->NewGlobalRef(value);
     }
 
     ~GlobalRef() {
