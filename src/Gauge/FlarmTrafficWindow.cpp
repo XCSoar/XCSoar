@@ -50,7 +50,7 @@ FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding, bool _small)
    heading(Angle::radians(fixed_zero)),
    side_display_type(1)
 {
-  memset(&data, 0, sizeof(data));
+  memset((void *)&data, 0, sizeof(data));
 }
 
 bool
