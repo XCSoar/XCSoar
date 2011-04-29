@@ -364,9 +364,6 @@ location=8
 mode=Nav2
 type=key
 data=0
-event=ThermalAssistant
-event=Mode default
-label=Thermal Assistant
 location=9
 
 # -------------
@@ -730,7 +727,7 @@ location=9
 mode=Info2
 type=key
 data=APP4
-event=Mode default
+event=Mode Info3
 label=Info
 location=4
 
@@ -769,7 +766,46 @@ location=8
 mode=Info2
 type=key
 data=0
+event=ThermalAssistant
+event=Mode default
+label=Thermal Assistant
+location=9
+
+# -------------
+# mode=Info3
+# -------------
+mode=Info3
+type=key
+data=APP4
+event=Mode default
+label=Info
+location=4
+
+
+mode=Info3
+type=key
+data=6
 event=Credits
 event=Mode default
 label=Credits
+location=5
+
+mode=Info3
+type=key
+data=7
+location=6
+
+mode=Info3
+type=key
+data=8
+location=7
+
+mode=Info3
+type=key
+data=9
+location=8
+
+mode=Info3
+type=key
+data=0
 location=9
