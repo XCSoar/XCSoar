@@ -45,13 +45,13 @@ AutoQNH::Process(const NMEA_INFO &basic, DERIVED_INFO &calculated,
       || !basic.PressureAltitudeAvailable // Reject if no pressure altitude
       || settings_computer.pressure_available // Reject if QNH already known
     ) {
-    if (countdown_autoqnh<= QNH_TIME)
+    if (!IsFinished())
       Reset(); // restart if havent performed
 
     return;
   }
 
-  if (countdown_autoqnh<= QNH_TIME)
+  if (!IsFinished())
     countdown_autoqnh--;
 
   if (!countdown_autoqnh) {
@@ -66,6 +66,12 @@ void
 AutoQNH::Reset()
 {
   countdown_autoqnh = QNH_TIME;
+}
+
+bool
+AutoQNH::IsFinished()
+{
+  return countdown_autoqnh > QNH_TIME;
 }
 
 bool
