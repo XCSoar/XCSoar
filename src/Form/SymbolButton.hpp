@@ -38,6 +38,7 @@ class WndSymbolButton : public WndButton {
     return style;
   }
 
+  Brush disabled_brush;
 #ifdef HAVE_CLIPPING
   Brush background_brush;
 #endif
@@ -60,7 +61,8 @@ public:
                   Color background_color,
                   ClickNotifyCallback_t Function = NULL)
     :WndButton(Parent, Caption, X, Y, Width, Height,
-               custom_painting(style), Function)
+               custom_painting(style), Function),
+               disabled_brush(Color::GRAY)
 #ifdef HAVE_CLIPPING
     , background_brush(background_color)
 #endif

@@ -58,7 +58,10 @@ WndSymbolButton::on_paint(Canvas &canvas)
     OffsetRect(&rc, 1, 1);
 
   canvas.null_pen();
-  canvas.black_brush();
+  if (is_enabled())
+    canvas.black_brush();
+  else
+    canvas.select(disabled_brush);
 
   const char ch = (char)caption[0];
 
