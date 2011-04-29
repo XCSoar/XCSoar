@@ -53,4 +53,9 @@ Copyright_License {
  */
 Color light_color(Color c);
 
+/**
+ * Returns a darker version of the specified color.
+ */
+Color dark_color(Color c);
+
 #endif

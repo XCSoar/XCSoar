@@ -31,3 +31,12 @@ Color light_color(Color c) {
   return Color(light_color(c.red()), light_color(c.green()),
                light_color(c.blue()));
 }
+
+static unsigned char dark_color(unsigned char c) {
+  return (c >> 1);
+}
+
+Color dark_color(Color c) {
+  return Color(dark_color(c.red()), dark_color(c.green()),
+               dark_color(c.blue()));
+}
