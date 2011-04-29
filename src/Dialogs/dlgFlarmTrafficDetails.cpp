@@ -68,7 +68,7 @@ UpdateChanging()
       XCSoarInterface::Basic().Location.distance_bearing(target->location);
 
   // Fill distance field
-  Units::FormatUserDistance(gv.Distance, tmp, 20);
+  Units::FormatUserDistance(target->distance, tmp, 20);
   ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
 
   // Fill horizontal direction field
@@ -88,7 +88,7 @@ UpdateChanging()
 
   // Fill vertical direction field
   Angle dir = Angle::radians((fixed)atan2(target->relative_altitude,
-                                          gv.Distance)).as_delta();
+                                          target->distance)).as_delta();
   if (dir.magnitude_degrees() > fixed_one)
     _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value_degrees());
   else

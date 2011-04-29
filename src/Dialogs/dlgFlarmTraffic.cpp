@@ -169,15 +169,11 @@ FlarmTrafficControl::CalcAutoZoom()
     if (warning_mode && !data.traffic[i].HasAlarm())
       continue;
 
-    fixed dist = data.traffic[i].relative_north * data.traffic[i].relative_north
-      + data.traffic[i].relative_east * data.traffic[i].relative_east;
-
-    zoom_dist = max(dist, zoom_dist);
+    zoom_dist = max(data.traffic[i].distance, zoom_dist);
   }
 
   for (unsigned i = 0; i <= 4; i++) {
-    if (i == 4 ||
-        fixed(GetZoomDistance(i) * GetZoomDistance(i)) >= zoom_dist) {
+    if (i == 4 || fixed(GetZoomDistance(i)) >= zoom_dist) {
       SetZoom(i);
       break;
     }
@@ -320,8 +316,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   }
 
   // Distance
-  Units::FormatUserDistance(hypot(traffic.relative_east, traffic.relative_north),
-                            tmp, 20);
+  Units::FormatUserDistance(traffic.distance, tmp, 20);
   canvas.select(hfInfoValues);
   sz = canvas.text_size(tmp);
   canvas.text(rc.left, rc.bottom - sz.cy, tmp);

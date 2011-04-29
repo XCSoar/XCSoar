@@ -292,6 +292,9 @@ DeviceBlackboard::ProcessFLARM()
         traffic.name = fname;
     }
 
+    // Calculate distance
+    traffic.distance = hypot(traffic.relative_north, traffic.relative_east);
+
     // Calculate Location
     traffic.location_available = basic.LocationAvailable;
     if (traffic.location_available) {

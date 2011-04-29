@@ -64,6 +64,9 @@ struct FLARM_TRAFFIC {
   GeoPoint location;
   bool location_available;
 
+  /** Distance from our plane to the FLARM target */
+  fixed distance;
+
   /** Is the target in stealth mode */
   bool stealth;
 
