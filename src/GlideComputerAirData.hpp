@@ -44,21 +44,29 @@ class TaskClientCalc;
 
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
-  GlideComputerAirData(ProtectedAirspaceWarningManager &_awm,
-                       ProtectedTaskManager &_task);
-
-  GlideRatioCalculator rotaryLD;
-  virtual void ProcessIdle();
-
-  void SetWindEstimate(fixed wind_speed, Angle wind_bearing,
-		       const int quality=3); // JMW check
   WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
+  GlideRatioCalculator rotaryLD;
 
-private:
-  ThermalLocator thermallocator;
 protected:
   ProtectedAirspaceWarningManager &m_airspace;
 
+private:
+  ThermalLocator thermallocator;
+  GPSClock airspace_clock;
+
+  WindowFilter<30> vario_30s_filter;
+  WindowFilter<30> netto_30s_filter;
+
+public:
+  GlideComputerAirData(ProtectedAirspaceWarningManager &_awm,
+                       ProtectedTaskManager &_task);
+
+  virtual void ProcessIdle();
+
+  void SetWindEstimate(fixed wind_speed, Angle wind_bearing,
+                       const int quality = 3); // JMW check
+
+protected:
   void ResetFlight(const bool full=true);
   void ProcessBasic();
   void ProcessVertical();
@@ -69,6 +77,7 @@ protected:
   virtual void OnSwitchClimbMode(bool isclimb, bool left);
 
   bool FlightTimes();
+
 private:
   void Heading();
   void Airspeed();
@@ -118,10 +127,6 @@ private:
   void TurnRate();
   void Turning();
   void ProcessSun();
-  GPSClock airspace_clock;
-
-  WindowFilter<30> vario_30s_filter;
-  WindowFilter<30> netto_30s_filter;
 };
 
 #endif
