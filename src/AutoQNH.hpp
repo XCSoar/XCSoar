@@ -36,6 +36,10 @@ namespace AutoQNH
                const Waypoints &way_points);
 
   void Reset();
+
+  bool CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+                    const SETTINGS_COMPUTER &settings_computer,
+                    const Waypoints &way_points);
 }
 
 #endif

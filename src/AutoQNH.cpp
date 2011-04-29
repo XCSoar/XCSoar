@@ -55,16 +55,7 @@ AutoQNH::Process(const NMEA_INFO &basic, DERIVED_INFO &calculated,
     countdown_autoqnh--;
 
   if (!countdown_autoqnh) {
-    const Waypoint *next_wp;
-    next_wp = way_points.lookup_location(basic.Location, fixed(1000));
-
-    if (next_wp && next_wp->is_airport()) {
-      calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, next_wp->Altitude));
-      calculated.pressure_available.Update(basic.Time);
-    } else if (calculated.TerrainValid) {
-      calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, calculated.TerrainAlt));
-      calculated.pressure_available.Update(basic.Time);
-    } else
+    if (!CalculateQNH(basic, calculated, settings_computer, way_points))
       return;
 
     countdown_autoqnh = UINT_MAX; // disable after performing once
@@ -75,4 +66,24 @@ void
 AutoQNH::Reset()
 {
   countdown_autoqnh = QNH_TIME;
+}
+
+bool
+AutoQNH::CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+                      const SETTINGS_COMPUTER &settings_computer,
+                      const Waypoints &way_points)
+{
+  const Waypoint *next_wp;
+  next_wp = way_points.lookup_location(basic.Location, fixed(1000));
+
+  if (next_wp && next_wp->is_airport()) {
+    calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, next_wp->Altitude));
+    calculated.pressure_available.Update(basic.Time);
+  } else if (calculated.TerrainValid) {
+    calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, calculated.TerrainAlt));
+    calculated.pressure_available.Update(basic.Time);
+  } else
+    return false;
+
+  return true;
 }
