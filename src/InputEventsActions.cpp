@@ -88,6 +88,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Airspace/AirspaceSoonestSort.hpp"
 #include "LocalTime.hpp"
 #include "NMEA/Aircraft.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 #include <ctype.h>
@@ -436,10 +437,8 @@ InputEvents::eventTerrainTopography(const TCHAR *misc)
 
 // Do clear warnings IF NONE Toggle Terrain/Topography
 void
-InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
+InputEvents::eventClearWarningsOrTerrainTopology(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
-
   if (airspace_warnings != NULL && !airspace_warnings->warning_empty()) {
     airspace_warnings->clear_warnings();
     return;
@@ -453,7 +452,7 @@ InputEvents::eventClearWarningsOrTerrainTopology(const TCHAR *misc)
 // ClearAirspaceWarnings
 // Clears airspace warnings for the selected airspace
 void
-InputEvents::eventClearAirspaceWarnings(const TCHAR *misc)
+InputEvents::eventClearAirspaceWarnings(gcc_unused const TCHAR *misc)
 {
   if (airspace_warnings != NULL)
     airspace_warnings->clear_warnings();
@@ -462,19 +461,15 @@ InputEvents::eventClearAirspaceWarnings(const TCHAR *misc)
 // ClearStatusMessages
 // Do Clear Event Warnings
 void
-InputEvents::eventClearStatusMessages(const TCHAR *misc)
+InputEvents::eventClearStatusMessages(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
   // TODO enhancement: allow selection of specific messages (here we are acknowledging all)
   XCSoarInterface::main_window.popup.Acknowledge(0);
 }
 
 void
-InputEvents::eventFLARMRadar(const TCHAR *misc)
+InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
-  // if (_tcscmp(misc, _T("on")) == 0) {
-
   GaugeFLARM *gauge_flarm = XCSoarInterface::main_window.flarm;
   if (gauge_flarm == NULL)
     return;
@@ -489,9 +484,8 @@ InputEvents::eventFLARMRadar(const TCHAR *misc)
 }
 
 void
-InputEvents::eventThermalAssistant(const TCHAR *misc)
+InputEvents::eventThermalAssistant(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
   dlgThermalAssistantShowModal();
 }
 
@@ -600,9 +594,8 @@ InputEvents::eventMode(const TCHAR *misc)
 
 // Don't think we need this.
 void
-InputEvents::eventMainMenu(const TCHAR *misc)
+InputEvents::eventMainMenu(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
   // todo: popup main menu
 }
 
@@ -610,9 +603,8 @@ InputEvents::eventMainMenu(const TCHAR *misc)
 // Displays the checklist dialog
 //  See the checklist dialog section of the reference manual for more info.
 void
-InputEvents::eventChecklist(const TCHAR *misc)
+InputEvents::eventChecklist(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
   dlgChecklistShowModal();
 }
 
@@ -620,18 +612,15 @@ InputEvents::eventChecklist(const TCHAR *misc)
 // Displays the FLARM traffic dialog
 //  See the checklist dialog section of the reference manual for more info.
 void
-InputEvents::eventFlarmTraffic(const TCHAR *misc)
+InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
   if (XCSoarInterface::Basic().flarm.available)
     dlgFlarmTrafficShowModal();
 }
 
 void
-InputEvents::eventCalculator(const TCHAR *misc)
+InputEvents::eventCalculator(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
-
   dlgTaskManagerShowModal(XCSoarInterface::main_window);
 }
 
@@ -661,9 +650,8 @@ InputEvents::eventStatus(const TCHAR *misc)
 //  See the analysis dialog section of the reference manual
 // for more info.
 void
-InputEvents::eventAnalysis(const TCHAR *misc)
+InputEvents::eventAnalysis(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
   dlgAnalysisShowModal(XCSoarInterface::main_window);
 }
 
@@ -697,7 +685,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 }
 
 void
-InputEvents::eventGotoLookup(const TCHAR *misc)
+InputEvents::eventGotoLookup(gcc_unused const TCHAR *misc)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
 
@@ -792,7 +780,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
 // TODO feature: Increase wind by larger amounts ? Set wind to specific amount ?
 //	(may sound silly - but future may get SMS event that then sets wind)
 void
-InputEvents::eventWind(const TCHAR *misc)
+InputEvents::eventWind(gcc_unused const TCHAR *misc)
 {
 }
 
@@ -1177,9 +1165,8 @@ InputEvents::eventLogger(const TCHAR *misc)
 // Repeats the last status message.  If pressed repeatedly, will
 // repeat previous status messages
 void
-InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
+InputEvents::eventRepeatStatusMessage(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
   // new interface
   // TODO enhancement: display only by type specified in misc field
   XCSoarInterface::main_window.popup.Repeat(0);
@@ -1193,14 +1180,12 @@ InputEvents::eventRepeatStatusMessage(const TCHAR *misc)
 // to the nearest exit to the airspace.
 
 void 
-InputEvents::eventNearestAirspaceDetails(const TCHAR *misc) 
+InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
-
-  (void)misc;
 
   if (!airspace_warnings->warning_empty()) {
     // Prevent the dialog from closing itself without active warning
@@ -1257,9 +1242,8 @@ InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
 // The null event does nothing.  This can be used to override
 // default functionality
 void
-InputEvents::eventNull(const TCHAR *misc)
+InputEvents::eventNull(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
   // do nothing
 }
 
@@ -1325,7 +1309,7 @@ InputEvents::eventProfileSave(const TCHAR *misc)
 }
 
 void
-InputEvents::eventBeep(const TCHAR *misc)
+InputEvents::eventBeep(gcc_unused const TCHAR *misc)
 {
   #ifndef DISABLEAUDIO
   MessageBeep(MB_ICONEXCLAMATION);
@@ -1395,7 +1379,7 @@ InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
 }
 
 void
-InputEvents::eventCredits(const TCHAR *misc)
+InputEvents::eventCredits(gcc_unused const TCHAR *misc)
 {
   dlgCreditsShowModal(XCSoarInterface::main_window);
 }
@@ -1451,18 +1435,14 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
 }
 
 void
-InputEvents::eventBrightness(const TCHAR *misc)
+InputEvents::eventBrightness(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
-
   dlgBrightnessShowModal();
 }
 
 void
-InputEvents::eventExit(const TCHAR *misc)
+InputEvents::eventExit(gcc_unused const TCHAR *misc)
 {
-  (void)misc;
-
   XCSoarInterface::SignalShutdown(false);
 }
 
