@@ -236,7 +236,7 @@ FlarmTrafficControl::ZoomIn()
 void
 FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 {
-  if (task_direction.value_degrees() < fixed_zero)
+  if (negative(task_direction.value_degrees()))
     return;
 
   canvas.select(hpRadar);
