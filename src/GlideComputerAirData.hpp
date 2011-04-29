@@ -29,7 +29,6 @@ Copyright_License {
 #include "ThermalLocator.hpp"
 #include "Wind/WindAnalyser.hpp"
 #include "GPSClock.hpp"
-#include "Math/SunEphemeris.hpp"
 #include "Util/WindowFilter.hpp"
 
 class GlidePolar;

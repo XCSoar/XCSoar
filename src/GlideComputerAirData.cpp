@@ -48,6 +48,7 @@ Copyright_License {
 #include "Defines.h"
 #include "NMEA/Aircraft.hpp"
 #include "AutoQNH.hpp"
+#include "Math/SunEphemeris.hpp"
 
 #include <algorithm>
 
