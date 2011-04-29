@@ -61,7 +61,7 @@ UpdateChanging()
       XCSoarInterface::Basic().flarm.FindTraffic(target_id);
 
   // If target moved out of range -> return
-  if (!target || !target->defined())
+  if (!target || !target->IsDefined())
     return;
 
   // Fill distance field

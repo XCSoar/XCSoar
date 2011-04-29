@@ -114,7 +114,7 @@ struct FLARM_TRAFFIC {
 
   fixed climb_rate_avg30s;
 
-  bool defined() const {
+  bool IsDefined() const {
     return valid;
   }
 

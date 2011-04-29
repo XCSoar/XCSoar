@@ -273,7 +273,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 
   // Shortcut to the selected traffic
   FLARM_TRAFFIC traffic = data.traffic[WarningMode() ? warning : selection];
-  assert(traffic.defined());
+  assert(traffic.IsDefined());
 
   // Temporary string
   TCHAR tmp[20];

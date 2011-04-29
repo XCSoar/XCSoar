@@ -57,7 +57,7 @@ bool
 FlarmTrafficWindow::WarningMode() const
 {
   assert(warning < (int)data.traffic.size());
-  assert(warning < 0 || data.traffic[warning].defined());
+  assert(warning < 0 || data.traffic[warning].IsDefined());
   assert(warning < 0 || data.traffic[warning].HasAlarm());
 
   return warning >= 0;
@@ -123,7 +123,7 @@ void
 FlarmTrafficWindow::SetTarget(int i)
 {
   assert(i < (int)data.traffic.size());
-  assert(i < 0 || data.traffic[i].defined());
+  assert(i < 0 || data.traffic[i].IsDefined());
 
   if (selection == i)
     return;
@@ -686,9 +686,9 @@ void
 FlarmTrafficWindow::Paint(Canvas &canvas)
 {
   assert(selection < (int)data.traffic.size());
-  assert(selection < 0 || data.traffic[selection].defined());
+  assert(selection < 0 || data.traffic[selection].IsDefined());
   assert(warning < (int)data.traffic.size());
-  assert(warning < 0 || data.traffic[warning].defined());
+  assert(warning < 0 || data.traffic[warning].IsDefined());
   assert(warning < 0 || data.traffic[warning].HasAlarm());
 
   PaintRadarBackground(canvas);
@@ -714,7 +714,7 @@ FlarmTrafficWindow::SelectNearTarget(int x, int y, int max_distance)
 
   for (unsigned i = 0; i < data.traffic.size(); ++i) {
     // If FLARM target does not exist -> next one
-    if (!data.traffic[i].defined())
+    if (!data.traffic[i].IsDefined())
       continue;
 
     int distance_sq = (x - sc[i].x) * (x - sc[i].x) +
