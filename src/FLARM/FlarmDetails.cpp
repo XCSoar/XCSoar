@@ -202,7 +202,7 @@ unsigned
 FlarmDetails::FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[],
                                 unsigned size)
 {
-  unsigned count = FlarmDetails::FindIdsByCallSign(cn, array, size);
+  unsigned count = FlarmNet::FindIdsByCallSign(cn, array, size);
 
   for (unsigned i = 0; i < FLARM_Names.size() && count < size; i++) {
     if (_tcscmp(FLARM_Names[i].Name, cn) == 0) {
