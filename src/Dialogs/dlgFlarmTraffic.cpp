@@ -507,6 +507,17 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 }
 
 static void
+SetButtonsEnabled(bool enabled)
+{
+  ((WndButton *)wf->FindByName(_T("cmdSwitchData")))->set_enabled(enabled);
+  ((WndButton *)wf->FindByName(_T("cmdDetails")))->set_enabled(enabled);
+  ((WndButton *)wf->FindByName(_T("cmdZoomIn")))->set_enabled(enabled);
+  ((WndButton *)wf->FindByName(_T("cmdZoomOut")))->set_enabled(enabled);
+  ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_enabled(enabled);
+  ((WndButton *)wf->FindByName(_T("cmdNext")))->set_enabled(enabled);
+}
+
+static void
 Update()
 {
   if (XCSoarInterface::SettingsMap().AutoCloseFlarmDialog &&
@@ -522,6 +533,8 @@ Update()
                            XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.defined(),
                            XCSoarInterface::Calculated().task_stats.
                            current_leg.solution_remaining.CruiseTrackBearing);
+
+  SetButtonsEnabled(!wdf->WarningMode());
 }
 
 /**
