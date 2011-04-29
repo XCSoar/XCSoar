@@ -29,8 +29,11 @@ struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
 class Waypoints;
 
-void
-AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
-        const SETTINGS_COMPUTER &settings_computer, const Waypoints &way_points);
+namespace AutoQNH
+{
+  void Process(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+               const SETTINGS_COMPUTER &settings_computer,
+               const Waypoints &way_points);
+}
 
 #endif

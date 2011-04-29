@@ -27,14 +27,17 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
+#define QNH_TIME 10
+
+namespace AutoQNH
+{
+  unsigned countdown_autoqnh = QNH_TIME;
+}
+
 void
-AutoQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+AutoQNH::Process(const NMEA_INFO &basic, DERIVED_INFO &calculated,
         const SETTINGS_COMPUTER &settings_computer, const Waypoints &way_points)
 {
-  #define QNH_TIME 10
-
-  static unsigned countdown_autoqnh = QNH_TIME;
-
   if (!calculated.flight.OnGround // must be on ground
       || !countdown_autoqnh    // only do it once
       || !basic.gps.real // never in replay mode / simulator
