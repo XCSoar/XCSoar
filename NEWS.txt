@@ -6,6 +6,8 @@ Version 6.0.10 - not yet released
 * fix crash in flarm teammate setting
 * user interface
   - enable gestures by default
+* calculations
+  - fix wind direction on glide terrain line
 * Android
   - fix two crash bugs on sound effect
 
