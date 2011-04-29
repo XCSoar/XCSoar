@@ -124,21 +124,6 @@ struct FLARM_TRAFFIC {
     return !name.empty();
   }
 
-  /**
-   * Returns the squared distance.  When comparing distances, not
-   * taking the square root saves a good amount of CPU cycles, and
-   * has no effect on the result.
-   */
-  fixed SquareDistance() const {
-    return relative_altitude * relative_altitude +
-      relative_east * relative_east +
-      relative_north * relative_north;
-  }
-
-  fixed Distance() const {
-    return sqrt(SquareDistance());
-  }
-
   void Clear() {
     valid.Clear();
     name.clear();
