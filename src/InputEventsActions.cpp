@@ -55,6 +55,8 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "SettingsMap.hpp"
 #include "Math/FastMath.h"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/TextEntry.hpp"
+#include "Dialogs/Message.hpp"
 #include "Message.hpp"
 #include "Marks.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
@@ -88,6 +90,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Airspace/AirspaceSoonestSort.hpp"
 #include "LocalTime.hpp"
 #include "NMEA/Aircraft.hpp"
+#include "FLARM/FlarmDetails.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -616,6 +619,28 @@ InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
 {
   if (XCSoarInterface::Basic().flarm.available)
     dlgFlarmTrafficShowModal();
+}
+
+void
+InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
+{
+  TCHAR callsign[4] = _T("");
+  if (!dlgTextEntryShowModal(callsign, 4))
+    return;
+
+  const FlarmId *ids[30];
+  unsigned count = FlarmDetails::FindIdsByCallSign(callsign, ids, 30);
+
+  if (count > 0) {
+    const FlarmId *id = dlgFlarmDetailsListShowModal(
+        XCSoarInterface::main_window, _("Show details:"), ids, count);
+
+    if (id != NULL && id->defined())
+      dlgFlarmTrafficDetailsShowModal(*id);
+  } else {
+    MessageBoxX(_("Unknown Competition Number"),
+                _("Not Found"), MB_OK | MB_ICONINFORMATION);
+  }
 }
 
 void
