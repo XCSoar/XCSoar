@@ -55,10 +55,10 @@ AutoQNH::Process(const NMEA_INFO &basic, DERIVED_INFO &calculated,
     countdown_autoqnh--;
 
   if (!countdown_autoqnh) {
-    if (!CalculateQNH(basic, calculated, settings_computer, way_points))
-      return;
-
-    countdown_autoqnh = UINT_MAX; // disable after performing once
+    if (CalculateQNH(basic, calculated, settings_computer, way_points))
+      countdown_autoqnh = UINT_MAX; // disable after performing once
+    else
+      Reset();
   }
 }
 
