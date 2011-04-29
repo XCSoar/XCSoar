@@ -6,8 +6,8 @@ Data files used by XCSoar fall into two categories:
 the aircraft type, airspace and maps, waypoints etc.  These are the
 files that are most likely to be modified or set by normal users.
 \item[Program data files]  These files contain data relating to
-the `look and feel' of the program, including language translations, 
-button assignments, input events, dialog layouts.
+the `look and feel' of the program,
+button assignments, input events.
 \end{description}
 This chapter focuses on flight data files; see the {\em XCSoar
 Advanced Configuration Guide} for details on program data files.
@@ -47,51 +47,16 @@ IPAQ File Store/XCSoarData
 
 \todonum[inline]{Explain where files are generated to and search paths.}
 
-Note that due to limitations in the Pocket PC and Windows Mobile
-operating system, additional subdirectories under ``My
-Documents/XCSoarData'' are not allowed.
-
-\section{Composed Mapfile}
-
-\todonum[inline]{What is the new xcm file format capable, and what does it
-replace}
-
-\section{Terrain}
-
-The terrain file (extension \verb|.dat|) is a raster digital elevation
-model represented as an array of elevations in meters on a
-latitude/longitude grid.  The format used is unique to XCSoar as it
-contains a header containing the grid geometry followed by the raster
-array.
-\todonum{xcm impact?}
-
-Terrain files for various regions can be obtained from the XCSoar website.
-Additional terrain files can be produced upon request.
-
-\section{Topology}
-
-The topology file (extension \verb|.tpl|) is a text file containing a
-series of entries each of which define a layer of topology.  Typical
-layers include roads, railway lines, large built-up areas (cities),
-miscellaneous populated areas (towns and villages), lakes and rivers.
-
-The topology file defines which features are to be displayed, their
-colour, maximum zoom visibility, icons, and labelling.  This file can
-be customised, for example to add or remove specific layers.  Details
-on the file format will be provided in a separate document.  The
-topology data itself uses ERSI Shape files which are generated from the
-freely available VMAP0 database.
-\todonum{xcm impact?}
-
-Topology files for various regions can be obtained from the XCSoar
-website.  Additional topology files can be produced upon request.
-
 \section{Waypoints}
 
-XCSoar uses waypoint files written in the format designed by Cambridge
-Aero Instruments for their C302 instrument.  The file extension should
-be \verb|.dat|.
-\todonum{add new waypoint formats}
+XCSoar understands the following waypoint file formats:
+
+\begin{itemize}
+\item WinPilot (\verb|.dat|)
+\item SeeYou (\verb|.cup|)
+\item Zander (\verb|.wpz|)
+\end{itemize}
+
 Files are available from the Soaring Turn-points section of the
 Soaring Server\footnote{Mirrors to this website exist, google search
 for ``worldwide soaring turnpoint exchange'' if the main server is
@@ -124,21 +89,26 @@ types will be drawn as type ``Other''.
 
 \section{Map}\label{sec:map}
 
-The map file (extension \verb|.xcm|) contains terrain, topology and
-optionally waypoints and airspace information.  The use of map files
-reduces the number of files the user needs to manage and to specify in
-the configuration settings.  For backward compatibility, though, the
-previous methods of using individual terrain, topology, and waypoint
-files has been retained.
+A map file (extension \verb|.xcm|) contains both terrain and
+topography.
 
-Map files can be generated from the online terrain/map file generator
-available from the xcsoar website.  This allows users to generate
-their own map files for their region, incorporating their own waypoint
-files or by specifying the bounds of the region of interest.
+Terrain is a raster digital elevation model represented as an array of
+elevations in meters on a latitude/longitude grid.  The internal file
+format is GeoJPEG2000.
 
-Map files are superior to individual terrain/topology files because
-they incorporate compression of the data, thereby allowing much larger
-areas and higher resolution terrain to be used.
+The topography is vector data such as roads, railway lines, large
+built-up areas (cities), miscellaneous populated areas (towns and
+villages), lakes and rivers.  The topography is stored in ERSI Shape
+files which are generated from OpenStreetMap.
+
+Map files can be downloaded from the XCSoar web site:
+
+\url{http://www.xcsoar.org/download/maps/}
+
+To generate a custom map file with different settings and bounds, you
+may use the map generator:
+
+\url{http://mapgen.xcsoar.org/}
 
 \section{Airfield details}
 
@@ -286,13 +256,8 @@ Remove tape from wings and tail
 
 %%%%%%%%%%%%%% advanced stuff below..
 \section{Tasks}
-Task files (extension \verb|.tsk|) are currently in a special binary
-format and cannot be easily edited other than in XCSoar or XCSoarPC.
-However they are transferable between devices.
 
-Work is under way to produce a text format that will make it easier
-for users to edit the files or to export/import them for use with other
-programs.
+Task files (extension \verb|.tsk|) are stored in the XML format.
 
 \section{Flight logs}
 
@@ -300,23 +265,6 @@ The software flight logger generates IGC files (extension \verb|.igc|)
 according to the long naming convention described in the FAI 
 document {\em Technical Specification for IGC-Approved GNSS Flight Recorders}.  
 These files can be imported into other programs for analysis after flight.
-
-\todonum[inline]{Describe use of FPLT to add events to the replay.}
-The flight logs replay facility allows the files to include 
-embedded commands to control XCSoar as if the user was interacting
-with the program.  It does this by defining a special use for the
-general-purpose `pilot event' IGC sentence:
-\begin{quote}
-LPLT event=StatusMessage Hello everybody
-\end{quote}
-This command will bring up a status message with the text ``Hello everybody''
-when the line is reached during replay.
-
-A future version of the flight logger will allow all input events to
-be stored in the IGC file in this fashion, thus replaying the flight
-will give a very faithful reproduction of the actual flight and how
-the software was used.  This is expected to be useful for training and
-coaching purposes.
 
 The internal software logger has adjustable time steps, separate for
 cruise and circling modes, via parameters in the configuration
@@ -343,28 +291,6 @@ Some reasons why you might like to use xci:
 \end{itemize}
 For more information on editing or writing or your own input event
 file, see the {\em XCSoar Advanced Configuration Manual}.
-
-\section{Language}
-The language file (extension \verb|.xcl|) is a plain text file
-designed to provide translations between English and other languages,
-for messages and text displayed by XCSoar.
-
-The format is quite simple, it is a list of text lines that XCSoar uses,
-followed by an equals sign and the translation, thus:
-\begin{verbatim}
-[English text]=[Translated text]
-\end{verbatim}
-
-An example is provided below:
-\begin{verbatim}
-Hello=Hallo
-\end{verbatim}
-
-Several language files are available from the XCSoar website.
-
-Upon startup, if the language file ``default.xcl'' is present and no
-language file is specified in the configuration settings, then this
-file will be loaded.
 
 \section{Status}\label{sec:status}
 
@@ -416,16 +342,3 @@ DA8B06=Chuck Yeager
 \end{verbatim}
 
 Currently this file is limited to a maximum of 200 entries.
-
-\section{Dialog files}\label{sec:dialog-files}
-
-These files describe the layout of dialogs, including font size,
-button size, and other aspects of the layout of the widgets within
-the dialogs.  The files are written in an XML data format.
-
-Users may want to edit these files, or use replacements prepared by
-others, in order to change the layout of dialogs to suit their
-preferences.  In particular, it is possible to hide configuration
-settings or other data fields that the user is not interested in.
-
-Refer to the {\em XCSoar Advanced Configuration Guide} for more details.
