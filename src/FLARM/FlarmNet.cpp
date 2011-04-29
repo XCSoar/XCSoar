@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "FLARM/FlarmNet.hpp"
+#include "FLARM/FlarmId.hpp"
 #include "Util/StringUtil.hpp"
 #include "Util/CharUtil.hpp"
 #include "IO/LineReader.hpp"

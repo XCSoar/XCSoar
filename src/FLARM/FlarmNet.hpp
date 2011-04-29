@@ -24,12 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_NET_HPP
 #define XCSOAR_FLARM_NET_HPP
 
-#include "FLARM/Traffic.hpp"
-
 #include <map>
 #include <tchar.h>
 
 class NLineReader;
+class FlarmId;
 
 /**
  * Handles the FlarmNet.org file
