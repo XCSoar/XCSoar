@@ -759,8 +759,8 @@ location=7
 mode=Info2
 type=key
 data=9
-event=RepeatStatusMessage
-label=Message\nRepeat
+event=FlarmDetails
+label=FLARM\nDetails
 location=8
 
 mode=Info2
@@ -808,4 +808,6 @@ location=8
 mode=Info3
 type=key
 data=0
+event=RepeatStatusMessage
+label=Message\nRepeat
 location=9
