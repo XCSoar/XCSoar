@@ -61,6 +61,9 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   for (unsigned i = 0; i < flarm.traffic.size(); i++) {
     const FLARM_TRAFFIC &traffic = flarm.traffic[i];
 
+    if (!traffic.location_available)
+      continue;
+
     // Save the location of the FLARM target
     GeoPoint target_loc = traffic.location;
 
