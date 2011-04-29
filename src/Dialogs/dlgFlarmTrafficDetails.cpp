@@ -96,7 +96,10 @@ UpdateChanging()
   ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);
 
   // Fill climb speed field
-  Units::FormatUserVSpeed(target->climb_rate_avg30s, tmp, 20);
+  if (target->climb_rate_avg30s_available)
+    Units::FormatUserVSpeed(target->climb_rate_avg30s, tmp, 20);
+  else
+    _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpVSpeed")))->SetText(tmp);
 }
 
