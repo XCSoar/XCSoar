@@ -62,6 +62,7 @@ struct FLARM_TRAFFIC {
 
   /** Location of the FLARM target */
   GeoPoint location;
+  bool location_available;
 
   /** Is the target in stealth mode */
   bool stealth;
@@ -76,6 +77,7 @@ struct FLARM_TRAFFIC {
 
   /** Altitude of the FLARM target */
   fixed altitude;
+  bool altitude_available;
 
   /** Turnrate of the FLARM target */
   fixed turn_rate;
@@ -103,7 +105,9 @@ struct FLARM_TRAFFIC {
   unsigned short id_type;
   unsigned short alarm_level;
   AircraftType type;
+
   fixed climb_rate_avg30s;
+  bool climb_rate_avg30s_available;
 
   bool defined() const {
     return valid;

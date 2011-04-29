@@ -291,19 +291,26 @@ DeviceBlackboard::ProcessFLARM()
     }
 
     // Calculate Location
-    traffic.location.Latitude =
-        Angle::degrees(traffic.relative_north * FLARM_NorthingToLatitude) +
-        basic.Location.Latitude;
+    traffic.location_available = basic.LocationAvailable;
+    if (traffic.location_available) {
+      traffic.location.Latitude =
+          Angle::degrees(traffic.relative_north * FLARM_NorthingToLatitude) +
+          basic.Location.Latitude;
 
-    traffic.location.Longitude =
-        Angle::degrees(traffic.relative_east * FLARM_EastingToLongitude) +
-        basic.Location.Longitude;
+      traffic.location.Longitude =
+          Angle::degrees(traffic.relative_east * FLARM_EastingToLongitude) +
+          basic.Location.Longitude;
+    }
 
     // Calculate absolute altitude
-    traffic.altitude = traffic.relative_altitude + basic.GPSAltitude;
+    traffic.altitude_available = basic.GPSAltitudeAvailable;
+    if (traffic.altitude_available)
+      traffic.altitude = traffic.relative_altitude + basic.GPSAltitude;
 
     // Calculate average climb rate
-    traffic.climb_rate_avg30s =
+    traffic.climb_rate_avg30s_available = traffic.altitude_available;
+    if (traffic.climb_rate_avg30s_available)
+      traffic.climb_rate_avg30s =
         flarmCalculations.Average30s(traffic.id, basic.Time, traffic.altitude);
 
     // The following calculations are only relevant for stealth targets
