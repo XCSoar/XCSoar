@@ -332,6 +332,20 @@ DeviceBlackboard::ProcessFLARM()
     // Calculate the time difference between now and the last contact
     fixed dt = traffic.valid.GetTimeDifference(last_traffic->valid);
     if (positive(dt)) {
+      // Calculate the immediate climb rate
+      if (!traffic.climb_rate_received)
+        traffic.climb_rate =
+          (traffic.relative_altitude - last_traffic->relative_altitude) / dt;
+    } else {
+      // Since the time difference is zero (or negative)
+      // we can just copy the old values
+      if (!traffic.climb_rate_received)
+        traffic.climb_rate = last_traffic->climb_rate;
+    }
+
+    if (positive(dt) &&
+        traffic.location_available &&
+        last_traffic->location_available) {
       // Calculate the GeoVector between now and the last contact
       GeoVector vec = last_traffic->location.distance_bearing(traffic.location);
 
@@ -342,11 +356,6 @@ DeviceBlackboard::ProcessFLARM()
       if (!traffic.turn_rate_received)
         traffic.turn_rate =
           (traffic.track - last_traffic->track).as_delta().value_degrees() / dt;
-
-      // Calculate the immediate climb rate
-      if (!traffic.climb_rate_received)
-        traffic.climb_rate =
-          (traffic.relative_altitude - last_traffic->relative_altitude) / dt;
 
       // Calculate the speed [m/s]
       if (!traffic.speed_received)
@@ -359,9 +368,6 @@ DeviceBlackboard::ProcessFLARM()
 
       if (!traffic.turn_rate_received)
         traffic.turn_rate = last_traffic->turn_rate;
-
-      if (!traffic.climb_rate_received)
-        traffic.climb_rate = last_traffic->climb_rate;
 
       if (!traffic.speed_received)
         traffic.speed = last_traffic->speed;
