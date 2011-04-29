@@ -257,25 +257,27 @@ DeviceBlackboard::ProcessFLARM()
   if (!flarm.available || flarm.traffic.empty())
     return;
 
-  // Precalculate relative east and north projection to lat/lon
-  // for Location calculations of each target
-  Angle delta_lat = Angle::degrees(fixed(0.01));
-  Angle delta_lon = Angle::degrees(fixed(0.01));
-
-  GeoPoint plat = basic.Location;
-  plat.Latitude += delta_lat;
-  GeoPoint plon = basic.Location;
-  plon.Longitude += delta_lon;
-
-  fixed dlat = Distance(basic.Location, plat);
-  fixed dlon = Distance(basic.Location, plon);
-
   fixed FLARM_NorthingToLatitude(0);
   fixed FLARM_EastingToLongitude(0);
 
-  if (positive(fabs(dlat)) && positive(fabs(dlon))) {
-    FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
-    FLARM_EastingToLongitude = delta_lon.value_degrees() / dlon;
+  if (basic.LocationAvailable) {
+    // Precalculate relative east and north projection to lat/lon
+    // for Location calculations of each target
+    Angle delta_lat = Angle::degrees(fixed(0.01));
+    Angle delta_lon = Angle::degrees(fixed(0.01));
+
+    GeoPoint plat = basic.Location;
+    plat.Latitude += delta_lat;
+    GeoPoint plon = basic.Location;
+    plon.Longitude += delta_lon;
+
+    fixed dlat = Distance(basic.Location, plat);
+    fixed dlon = Distance(basic.Location, plon);
+
+    if (positive(fabs(dlat)) && positive(fabs(dlon))) {
+      FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
+      FLARM_EastingToLongitude = delta_lon.value_degrees() / dlon;
+    }
   }
 
   // for each item in traffic
