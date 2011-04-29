@@ -99,7 +99,7 @@ namespace Java {
     void set(JNIEnv *env, T _value) {
       assert(_value != NULL);
 
-      value = env->NewGlobalRef(_value);
+      value = (T)env->NewGlobalRef(_value);
     }
 
     T get() const {
