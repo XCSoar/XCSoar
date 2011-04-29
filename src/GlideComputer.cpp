@@ -312,7 +312,7 @@ GlideComputer::FLARM_ScanTraffic()
   const FLARM_TRAFFIC *traffic =
       Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget);
 
-  if (!traffic)
+  if (!traffic || !traffic->location_available)
     return;
 
   // Set Teammate location to FLARM contact location
