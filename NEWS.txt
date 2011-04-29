@@ -12,6 +12,8 @@ Version 6.0.10 - not yet released
   - enable warnings for GND airspaces when AGL altitude is negative
 * Android
   - fix two crash bugs on sound effect
+* Altair
+  - correct key handling behaviour in Lists
 
 Version 6.0.9 - 2011-04-06
 * devices
