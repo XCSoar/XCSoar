@@ -16,6 +16,8 @@
 
   <Tabbed Name="tabbed" X="70" Y="0" Width="0" Height="222">
     <Panel Name="frmSite">
+      <Edit Name="prpDataPath" Caption="Data path" X="2" Width="-2" Height="22" CaptionWidth="100"/>
+
       <Edit Name="prpMapFile" Caption="Map database" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The name of the file (.xcm) containing terrain, topography, and optionally waypoints, their details and airspaces.">
         <DataField DataType="filereader" />

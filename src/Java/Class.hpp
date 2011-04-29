@@ -44,6 +44,21 @@ namespace Java {
     Class(JNIEnv *env, const char *name)
       :LocalRef<jclass>(env, env->FindClass(name)) {}
   };
+
+  /**
+   * Wrapper for a global "jclass" reference.
+   */
+  class GlobalClass : public Java::GlobalRef<jclass> {
+  public:
+    GlobalClass(JNIEnv *env, jclass cls)
+      :GlobalRef<jclass>(env, cls) {}
+
+    GlobalClass(JNIEnv *env, const char *name) {
+      jclass tmp = env->FindClass(name);
+      set(env, tmp);
+      env->DeleteLocalRef(tmp);
+    }
+  };
 }
 
 #endif

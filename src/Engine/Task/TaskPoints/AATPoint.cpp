@@ -116,7 +116,7 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
   // target must be moved if d(p_last,t)+d(t,p_next) 
   //    < d(p_last,state)+d(state,p_next)
 
-  if (close_to_target(state)) {
+  if (double_leg_distance(state.Location)>= double_leg_distance(m_target_location)) {
     const fixed d_to_max = state.Location.distance(get_location_max());
     if (d_to_max <= fixed_zero) {
       // no improvement available

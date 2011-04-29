@@ -28,7 +28,7 @@ Copyright_License {
 #include "Compiler.h"
 
 class SoundUtil {
-  Java::Class cls;
+  Java::GlobalClass cls;
   jmethodID mid_play;
 
 public:

@@ -24,6 +24,8 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Form/Edit.hpp"
+#include "LocalPath.hpp"
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"
 #include "SiteConfigPanel.hpp"
@@ -71,6 +73,11 @@ SiteConfigPanel::Init(WndForm *_wf)
   InitFileField(*wf, _T("prpWatchedWaypointFile"),
                 szProfileWatchedWayPointFile,
                 _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+
+  WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpDataPath"));
+  wp->set_enabled(false);
+  wp->SetText(GetPrimaryDataPath());
+
   InitFileField(*wf, _T("prpMapFile"),
                 szProfileMapFile, _T("*.xcm\0*.lkm\0"));
   InitFileField(*wf, _T("prpTerrainFile"),

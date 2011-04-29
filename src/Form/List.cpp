@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
 #include "Screen/Point.hpp"
+#include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
@@ -281,17 +282,25 @@ WndListFrame::on_key_check(unsigned key_code) const
   case VK_RETURN:
     return ActivateCallback != NULL;
 
+  case VK_UP:
   case VK_LEFT:
-    return true;
-
-  case VK_RIGHT:
-    return true;
+    if (!has_pointer() ^ (key_code == VK_LEFT)) {
+      if (origin == 0 || length <= items_visible)
+        return false;
+      return true;
+    } else {
+      return GetCursorIndex() > 0;
+    }
 
   case VK_DOWN:
-    return GetCursorIndex() + 1 < length;
-
-  case VK_UP:
-    return GetCursorIndex() > 0;
+  case VK_RIGHT:
+    if (!has_pointer() ^ (key_code == VK_RIGHT)) {
+      if (cursor >= length || length <= items_visible)
+        return false;
+      return true;
+    } else {
+      return GetCursorIndex() + 1 < length;
+    }
 
   default:
     return false;
@@ -316,38 +325,45 @@ WndListFrame::on_key_down(unsigned key_code)
       ActivateCallback(GetCursorIndex());
     return true;
 
+  case VK_UP:
   case VK_LEFT:
-    if (origin == 0 || length <= items_visible)
-      break;
-
-    SetOrigin(origin - items_visible);
-    SetCursorIndex(cursor >= items_visible ? cursor - items_visible : 0);
-    return true;
-
-  case VK_RIGHT:
-    if (cursor >= length || length <= items_visible)
-      break;
-
-    SetOrigin(origin + items_visible);
-    SetCursorIndex(cursor + items_visible < length ?
-                   cursor + items_visible : length - 1);
-    return true;
+    if (!has_pointer() ^ (key_code == VK_LEFT)) {
+      // page up
+      if (origin == 0 || length <= items_visible)
+        break;
+      
+      SetOrigin(origin - items_visible);
+      SetCursorIndex(cursor >= items_visible ? cursor - items_visible : 0);
+      return true;
+    } else {
+      // previous item
+      if (GetCursorIndex() <= 0)
+        break;
+      
+      SetCursorIndex(GetCursorIndex() - 1);
+      return true;
+    }
 
   case VK_DOWN:
-    if (GetCursorIndex() + 1 >= length)
-      break;
-
-    SetCursorIndex(GetCursorIndex() + 1);
-    return true;
-
-  case VK_UP:
-    if (GetCursorIndex() <= 0)
-      break;
-
-    SetCursorIndex(GetCursorIndex() - 1);
-    return true;
+  case VK_RIGHT:
+    if (!has_pointer() ^ (key_code == VK_RIGHT)) {
+      // page down
+      if (cursor >= length || length <= items_visible)
+        break;
+      
+      SetOrigin(origin + items_visible);
+      SetCursorIndex(cursor + items_visible < length ?
+                     cursor + items_visible : length - 1);
+      return true;
+    } else {
+      // next item
+      if (GetCursorIndex() +1 >= length)
+        break;
+      
+      SetCursorIndex(GetCursorIndex() + 1);
+      return true;
+    }
   }
-
   return PaintWindow::on_key_down(key_code);
 }
 

@@ -41,6 +41,11 @@ Copyright_License {
 void
 InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
 {
+  if (!XCSoarInterface::Basic().HumidityAvailable) {
+    infobox.SetInvalid();
+    return;
+  }
+
   // Set Value
   TCHAR tmp[32];
   _stprintf(tmp, _T("%d"), (int)XCSoarInterface::Basic().RelativeHumidity);

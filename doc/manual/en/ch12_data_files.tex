@@ -6,8 +6,8 @@ Data files used by XCSoar fall into two categories:
 the aircraft type, airspace and maps, waypoints etc.  These are the
 files that are most likely to be modified or set by normal users.
 \item[Program data files]  These files contain data relating to
-the `look and feel' of the program, including language translations, 
-button assignments, input events, dialog layouts.
+the `look and feel' of the program,
+button assignments, input events.
 \end{description}
 This chapter focuses on flight data files; see the {\em XCSoar
 Advanced Configuration Guide} for details on program data files.
@@ -47,51 +47,16 @@ IPAQ File Store/XCSoarData
 
 \todonum[inline]{Explain where files are generated to and search paths.}
 
-Note that due to limitations in the Pocket PC and Windows Mobile
-operating system, additional subdirectories under ``My
-Documents/XCSoarData'' are not allowed.
-
-\section{Composed Mapfile}
-
-\todonum[inline]{What is the new xcm file format capable, and what does it
-replace}
-
-\section{Terrain}
-
-The terrain file (extension \verb|.dat|) is a raster digital elevation
-model represented as an array of elevations in meters on a
-latitude/longitude grid.  The format used is unique to XCSoar as it
-contains a header containing the grid geometry followed by the raster
-array.
-\todonum{xcm impact?}
-
-Terrain files for various regions can be obtained from the XCSoar website.
-Additional terrain files can be produced upon request.
-
-\section{Topology}
-
-The topology file (extension \verb|.tpl|) is a text file containing a
-series of entries each of which define a layer of topology.  Typical
-layers include roads, railway lines, large built-up areas (cities),
-miscellaneous populated areas (towns and villages), lakes and rivers.
-
-The topology file defines which features are to be displayed, their
-colour, maximum zoom visibility, icons, and labelling.  This file can
-be customised, for example to add or remove specific layers.  Details
-on the file format will be provided in a separate document.  The
-topology data itself uses ERSI Shape files which are generated from the
-freely available VMAP0 database.
-\todonum{xcm impact?}
-
-Topology files for various regions can be obtained from the XCSoar
-website.  Additional topology files can be produced upon request.
-
 \section{Waypoints}
 
-XCSoar uses waypoint files written in the format designed by Cambridge
-Aero Instruments for their C302 instrument.  The file extension should
-be \verb|.dat|.
-\todonum{add new waypoint formats}
+XCSoar understands the following waypoint file formats:
+
+\begin{itemize}
+\item WinPilot (\verb|.dat|)
+\item SeeYou (\verb|.cup|)
+\item Zander (\verb|.wpz|)
+\end{itemize}
+
 Files are available from the Soaring Turn-points section of the
 Soaring Server\footnote{Mirrors to this website exist, google search
 for ``worldwide soaring turnpoint exchange'' if the main server is
@@ -124,21 +89,26 @@ types will be drawn as type ``Other''.
 
 \section{Map}\label{sec:map}
 
-The map file (extension \verb|.xcm|) contains terrain, topology and
-optionally waypoints and airspace information.  The use of map files
-reduces the number of files the user needs to manage and to specify in
-the configuration settings.  For backward compatibility, though, the
-previous methods of using individual terrain, topology, and waypoint
-files has been retained.
+A map file (extension \verb|.xcm|) contains both terrain and
+topography.
 
-Map files can be generated from the online terrain/map file generator
-available from the xcsoar website.  This allows users to generate
-their own map files for their region, incorporating their own waypoint
-files or by specifying the bounds of the region of interest.
+Terrain is a raster digital elevation model represented as an array of
+elevations in meters on a latitude/longitude grid.  The internal file
+format is GeoJPEG2000.
 
-Map files are superior to individual terrain/topology files because
-they incorporate compression of the data, thereby allowing much larger
-areas and higher resolution terrain to be used.
+The topography is vector data such as roads, railway lines, large
+built-up areas (cities), miscellaneous populated areas (towns and
+villages), lakes and rivers.  The topography is stored in ERSI Shape
+files which are generated from OpenStreetMap.
+
+Map files can be downloaded from the XCSoar web site:
+
+\url{http://www.xcsoar.org/download/maps/}
+
+To generate a custom map file with different settings and bounds, you
+may use the map generator:
+
+\url{http://mapgen.xcsoar.org/}
 
 \section{Airfield details}
 
@@ -189,7 +159,9 @@ Blah blah blah blah
 
 \section{Glide polar}
 
-The WinPilot format is used for glide polar files (extension \verb|.plr|).
+Many polars of common gliders are built into XCSoar.  If your glider
+model is not listed, you can use a polar file in the WinPilot polar
+format (extension \verb|.plr|).
 
 The WinPilot and XCSoar websites provide several glide polar files.
 Files for other gliders may be created upon request to the XCSoar
@@ -222,111 +194,6 @@ An example, for the LS-3 glider, is given below:
 \tip Don't be too optimistic when entering your polar data. It is all too
 easy to set your LD too high and you will rapidly see yourself
 undershooting on final glide.
-
-The polars built in to XCSoar are documented in the table below.
-
-\begin{maxipage}
-\begin{small}
-\begin{longtable}{l l l l l l l l l}
-\toprule
-Name & Empty & Ballast & V1 & W1 & V2 & W2 & V3 & W3 \\
-     & mass       & mass         &  &  &  &  &  &  \\
-     & (kg)       & (kg)         & (kph) & (m/s) & (kph) & (m/s) & (kph) & (m/s) \\
-\midrule
-1-26E & 315 & 0 & 82.3 & -1.04 & 117.73 & -1.88 & 156.86 & -3.8 \\
-1-34 & 354 & 0 & 89.82 & -0.8 & 143.71 & -2.1 & 179.64 & -3.8 \\
-1-35A & 381 & 179 & 98.68 & -0.74 & 151.82 & -1.8 & 202.87 & -3.9 \\
-1-36 Sprite & 322 & 0 & 75.98 & -0.68 & 132.96 & -2 & 170.95 & -4.1 \\
-604 & 570 & 100 & 112.97 & 0.72 & 150.64 & -1.42 & 207.13 & -4.1 \\
-ASH-25M 2 & 750 & 121 & 130.01 & -0.78 & 169.96 & -1.4 & 219.94 & -2.6 \\
-ASH-25M 1 & 660 & 121 & 121.3 & -0.73 & 159.35 & -1.31 & 206.22 & -2.4 \\
-ASH-25 (25m, PAS) & 693 & 120 & 105.67 & -0.56 & 163.25 & -1.34 & 211.26 & -2.5 \\
-ASH-25 (25m, PIL) & 602 & 120 & 98.5 & -0.52 & 152.18 & -1.25 & 196.93 & -2.3 \\
-AstirCS & 330 & 90 & 75.0 & -0.7 & 93.0 & -0.74 & 185.00 & -3.1 \\
-ASW-12 & 948 & 189 & 95 & -0.57 & 148 & -1.48 & 183.09 & -2.6 \\
-ASW-15 & 349 & 91 & 97.56 & -0.77 & 156.12 & -1.9 & 195.15 & -3.4 \\
-ASW-17 & 522 & 151 & 114.5 & -0.7 & 169.05 & -1.68 & 206.5 & -2.9 \\
-ASW-19 & 363 & 125 & 97.47 & -0.74 & 155.96 & -1.64 & 194.96 & -3.1 \\
-ASW-20 & 377 & 159 & 116.2 & -0.77 & 174.3 & -1.89 & 213.04 & -3.3 \\
-ASW-24 & 350 & 159 & 108.82 & -0.73 & 142.25 & -1.21 & 167.41 & -1.8 \\
-ASW-27 Wnglts & 357 & 165 & 108.8 & -0.64 & 156.4 & -1.18 & 211.13 & -2.5 \\
-Std Cirrus & 337 & 80 & 93.23 & -0.74 & 149.17 & -1.71 & 205.1 & -4.2 \\
-Cobra & 350 & 30 & 70.8 & -0.60 & 94.5 & -0.69 & 148.1 & -1.83 \\
-DG-400 (15m) & 440 & 90 & 115 & -0.76 & 160.53 & -1.22 & 210.22 & -2.3 \\
-DG-400 (17m) & 444 & 90 & 118.28 & -0.68 & 163.77 & -1.15 & 198.35 & -1.8 \\
-DG-500M PAS & 750 & 100 & 121.6 & -0.75 & 162.12 & -1.37 & 202.66 & -2.5 \\
-DG-500M PIL & 659 & 100 & 115.4 & -0.71 & 152.01 & -1.28 & 190.02 & -2.3 \\
-DG-500 PAS & 660 & 160 & 115.5 & -0.72 & 152.16 & -1.28 & 190.22 & -2.3 \\
-DG-500 PIL & 570 & 160 & 107.5 & -0.66 & 141.33 & -1.19 & 176.66 & -2.1 \\
-DG-800 15m & 468 & 120 & 133.9 & -0.88 & 178.87 & -1.53 & 223.59 & -2.5 \\
-DG-800 18m Wnglts & 472 & 120 & 106 & -0.62 & 171.75 & -1.47 & 214.83 & -2.4 \\
-Discus A & 350 & 182 & 103.77 & -0.72 & 155.65 & -1.55 & 190.24 & -3.1 \\
-Duo Discus (PAS) & 628 & 201 & 106.5 & -0.79 & 168.11 & -1.54 & 201.31 & -2.9 \\
-Duo Discus (PIL) & 537 & 201 & 94.06 & -0.72 & 155.49 & -1.43 & 188.21 & -2.7 \\
-Genesis II & 374 & 151 & 94 & -0.61 & 141.05 & -1.18 & 172.4 & -2.0 \\
-Grob G-103 Twin II (PAS) & 580 & 0 & 99 & -0.8 & 175.01 & -1.95 & 225.02 & -3.8 \\
-Grob G-103 Twin II (PIL) & 494 & 0 & 90.75 & -0.74 & 161.42 & -1.8 & 207.54 & -3.5 \\
-H-201 Std Libelle & 304 & 50 & 97 & -0.79 & 152.43 & -1.91 & 190.54 & -3.3 \\
-H-301 Libelle & 300 & 50 & 94 & -0.68 & 147.71 & -2.03 & 184.64 & -4.1 \\
-IS-29D2 Lark & 360 & 0 & 100 & -0.82 & 135.67 & -1.55 & 184.12 & -3.3 \\
-Jantar 2 (SZD-42A) & 482 & 191 & 109.5 & -0.66 & 157.14 & -1.47 & 196.42 & -2.7 \\
-Janus B (18.2m PAS) & 603 & 170 & 115.5 & -0.76 & 171.79 & -1.98 & 209.96 & -4.0 \\
-Janus B (18.2m PIL) & 508 & 170 & 105.7 & -0.7 & 157.65 & -1.82 & 192.68 & -3.6 \\
-Ka-6CR & 310 & 0 & 87.35 & -0.81 & 141.92 & -2.03 & 174.68 & -3.5 \\
-L-33 SOLO & 330 & 0 & 87.2 & -0.8 & 135.64 & -1.73 & 174.4 & -3.4 \\
-LS-1C & 350 & 91 & 115.87 & -1.02 & 154.49 & -1.84 & 193.12 & -3.3 \\
-\bottomrule
-\end{longtable}
-\end{small}
-\end{maxipage}
-
-\begin{maxipage}
-\begin{small}
-\begin{longtable}{l l l l l l l l l}
-\toprule
-Name & Empty & Ballast & V1 & W1 & V2 & W2 & V3 & W3 \\
-     & mass       & mass         &  &  &  &  &  &  \\
-     & (kg)       & (kg)         & (kph) & (m/s) & (kph) & (m/s) & (kph) & (m/s) \\
-\midrule
-LS-3 & 383 & 121 & 115.03 & -0.86 & 174.04 & -1.76 & 212.72 & -3.4 \\
-LS-4a & 361 & 121 & 114.87 & -0.8 & 172.3 & -2.33 & 210.59 & -4.5 \\
-LS7wl & 350 & 150 & 103.77 & -0.73 & 155.65 & -1.47 & 180.00 & -2.66 \\
-Nimbus 2 (20.3m) & 493 & 159 & 119.83 & -0.75 & 179.75 & -2.14 & 219.69 & -3.8 \\
-Nimbus 3DM (24.6m PAS) & 820 & 168 & 114.97 & -0.57 & 157.42 & -0.98 & 222.24 & -2.3 \\
-Nimbus 3D (24.6m PAS) & 712 & 168 & 93.64 & -0.46 & 175.42 & -1.48 & 218.69 & -2.5 \\
-Nimbus 3D (24.6m PIL) & 621 & 168 & 87.47 & -0.43 & 163.86 & -1.38 & 204.27 & -2.3 \\
-Nimbus 3 (24.6m) & 527 & 159 & 116.18 & -0.67 & 174.28 & -1.81 & 232.37 & -3.8 \\
-Nimbus 3T & 577 & 310 & 141.7 & -0.99 & 182.35 & -1.89 & 243.13 & -4.0 \\
-Nimbus 4DM (26m PAS) & 820 & 168 & 100.01 & -0.48 & 150.01 & -0.87 & 190.76 & -1.6 \\
-Nimbus 4DM (26m PIL) & 729 & 168 & 94.31 & -0.46 & 141.47 & -0.82 & 179.9 & -1.5 \\
-Nimbus 4D PAS & 743 & 303 & 107.5 & -0.5 & 142.74 & -0.83 & 181.51 & -1.6 \\
-Nimbus 4D PIL & 652 & 303 & 99 & -0.46 & 133.73 & -0.78 & 170.07 & -1.5 \\
-Nimbus 4 (26.4m) & 597 & 303 & 85.1 & -0.41 & 127.98 & -0.75 & 162.74 & -1.4 \\
-PIK-20B & 354 & 144 & 102.5 & -0.69 & 157.76 & -1.59 & 216.91 & -3.6 \\
-PIK-20D & 348 & 144 & 100 & -0.69 & 156.54 & -1.78 & 215.24 & -4.2 \\
-PIK-20E & 437 & 80 & 109.61 & -0.83 & 166.68 & -2 & 241.15 & -4.7 \\
-PIK-30M & 460 & 0 & 123.6 & -0.78 & 152.04 & -1.12 & 200.22 & -2.2 \\
-PW-5 Smyk & 300 & 0 & 99.5 & -0.95 & 158.48 & -2.85 & 198.1 & -5.1 \\
-Russia AC-4 (12.6m) & 250 & 0 & 99.3 & -0.92 & 140.01 & -1.8 & 170.01 & -2.9 \\
-Stemme S-10 PAS & 850 & 0 & 133.47 & -0.83 & 167.75 & -1.41 & 205.03 & -2.3 \\
-Stemme S-10 PIL & 759 & 0 & 125.8 & -0.82 & 158.51 & -1.33 & 193.74 & -2.2 \\
-SZD-55-1 & 336 & 201 & 98.3 & -0.67 & 176.76 & -2.27 & 216.04 & -4.3 \\
-Ventus A/B (16.6m) & 358 & 151 & 100.17 & -0.64 & 159.69 & -1.47 & 239.54 & -4.3 \\
-Ventus B (15m) & 341 & 151 & 97.69 & -0.68 & 156.3 & -1.46 & 234.45 & -3.9 \\
-Ventus 2C (18m) & 385 & 180 & 80.0 & -0.5 & 120.0 & -0.73 & 180.0 & -2.0 \\
-Ventus 2Cx (18m) & 385 & 215 & 80.0 & -0.5 & 120.0 & -0.73 & 180.0 & -2.0 \\
-Zuni II & 358 & 182 & 110 & -0.88 & 167 & -2.21 & 203.72 & -3.6 \\
-Speed Astir & 351 &  90 &  90 & -0.63 & 105 & -0.72 & 157 & -2.0 \\
-LS-6-18W &   330 & 140 &  90 & -0.51 & 100 & -0.57 & 183 & -2.0 \\
-LS-8-15 &    325 & 185 &  70 & -0.51 & 115 & -0.85 & 173 & -2.0 \\
-LS-8-18 &    325 & 185 &  80 & -0.51 &  94 & -0.56 & 173 & -2.0 \\
-ASH-26E &    435 &  90 &  90 & -0.51 &  96 & -0.53 & 185 & -2.0 \\
-ASG29-18 &   355 & 225 &  85 & -0.47 &  90 & -0.48 & 185 & -2.0 \\
-ASW28-18 &   345 & 190 &  65 & -0.47 & 107 & -0.67 & 165 & -2.0 \\
-\bottomrule
-\end{longtable}
-\end{small}
-\end{maxipage}
 
 \section{Profiles}
 
@@ -389,13 +256,8 @@ Remove tape from wings and tail
 
 %%%%%%%%%%%%%% advanced stuff below..
 \section{Tasks}
-Task files (extension \verb|.tsk|) are currently in a special binary
-format and cannot be easily edited other than in XCSoar or XCSoarPC.
-However they are transferable between devices.
 
-Work is under way to produce a text format that will make it easier
-for users to edit the files or to export/import them for use with other
-programs.
+Task files (extension \verb|.tsk|) are stored in the XML format.
 
 \section{Flight logs}
 
@@ -403,23 +265,6 @@ The software flight logger generates IGC files (extension \verb|.igc|)
 according to the long naming convention described in the FAI 
 document {\em Technical Specification for IGC-Approved GNSS Flight Recorders}.  
 These files can be imported into other programs for analysis after flight.
-
-%\todonum[inline]{Describe use of FPLT to add events to the replay.}
-%The flight logs replay facility allows the files to include 
-%embedded commands to control XCSoar as if the user was interacting
-%with the program.  It does this by defining a special use for the
-%general-purpose `pilot event' IGC sentence:
-%\begin{quote}
-%LPLT event=StatusMessage Hello everybody
-%\end{quote}
-%This command will bring up a status message with the text ``Hello everybody''
-%when the line is reached during replay.
-%
-%A future version of the flight logger will allow all input events to
-%be stored in the IGC file in this fashion, thus replaying the flight
-%will give a very faithful reproduction of the actual flight and how
-%the software was used.  This is expected to be useful for training and
-%coaching purposes.
 
 The internal software logger has adjustable time steps, separate for
 cruise and circling modes, via parameters in the configuration
@@ -446,28 +291,6 @@ Some reasons why you might like to use xci:
 \end{itemize}
 For more information on editing or writing or your own input event
 file, see the {\em XCSoar Advanced Configuration Manual}.
-
-\section{Language}
-The language file (extension \verb|.xcl|) is a plain text file
-designed to provide translations between English and other languages,
-for messages and text displayed by XCSoar.
-
-The format is quite simple, it is a list of text lines that XCSoar uses,
-followed by an equals sign and the translation, thus:
-\begin{verbatim}
-[English text]=[Translated text]
-\end{verbatim}
-
-An example is provided below:
-\begin{verbatim}
-Hello=Hallo
-\end{verbatim}
-
-Several language files are available from the XCSoar website.
-
-Upon startup, if the language file ``default.xcl'' is present and no
-language file is specified in the configuration settings, then this
-file will be loaded.
 
 \section{Status}\label{sec:status}
 
@@ -519,16 +342,3 @@ DA8B06=Chuck Yeager
 \end{verbatim}
 
 Currently this file is limited to a maximum of 200 entries.
-
-\section{Dialog files}\label{sec:dialog-files}
-
-These files describe the layout of dialogs, including font size,
-button size, and other aspects of the layout of the widgets within
-the dialogs.  The files are written in an XML data format.
-
-Users may want to edit these files, or use replacements prepared by
-others, in order to change the layout of dialogs to suit their
-preferences.  In particular, it is possible to hide configuration
-settings or other data fields that the user is not interested in.
-
-Refer to the {\em XCSoar Advanced Configuration Guide} for more details.
