@@ -137,11 +137,7 @@ const FlarmNet::Record *
 FlarmDetails::LookupRecord(FlarmId id)
 {
   // try to find flarm from FlarmNet.org File
-  const FlarmNet::Record *record = FlarmNet::FindRecordById(id);
-  if (record != NULL)
-    return record;
-
-  return NULL;
+  return FlarmNet::FindRecordById(id);
 }
 
 const TCHAR *
