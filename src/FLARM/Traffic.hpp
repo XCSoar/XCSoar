@@ -55,6 +55,17 @@ struct FLARM_TRAFFIC {
     acStaticObject = 15    //!< static object
   };
 
+  /** Is the target in stealth mode */
+  bool stealth;
+
+  bool location_available;
+  bool track_received;
+  bool speed_received;
+  bool altitude_available;
+  bool turn_rate_received;
+  bool climb_rate_received;
+  bool climb_rate_avg30s_available;
+
   /**
    * Is this object valid, or has it expired already?
    */
@@ -62,33 +73,25 @@ struct FLARM_TRAFFIC {
 
   /** Location of the FLARM target */
   GeoPoint location;
-  bool location_available;
 
   /** Distance from our plane to the FLARM target */
   fixed distance;
 
-  /** Is the target in stealth mode */
-  bool stealth;
 
   /** TrackBearing of the FLARM target */
   Angle track;
-  bool track_received;
 
   /** Speed of the FLARM target */
   fixed speed;
-  bool speed_received;
 
   /** Altitude of the FLARM target */
   fixed altitude;
-  bool altitude_available;
 
   /** Turnrate of the FLARM target */
   fixed turn_rate;
-  bool turn_rate_received;
 
   /** Climbrate of the FLARM target */
   fixed climb_rate;
-  bool climb_rate_received;
 
   /** Latitude-based distance of the FLARM target */
   fixed relative_north;
@@ -110,7 +113,6 @@ struct FLARM_TRAFFIC {
   AircraftType type;
 
   fixed climb_rate_avg30s;
-  bool climb_rate_avg30s_available;
 
   bool defined() const {
     return valid;
