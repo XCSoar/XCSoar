@@ -129,6 +129,10 @@ struct FLARM_TRAFFIC {
     name.clear();
   }
 
+  Angle Bearing() const {
+    return Angle::from_xy(relative_north, relative_east);
+  }
+
   /**
    * Clear this object if its data has expired.
    *

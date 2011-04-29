@@ -64,20 +64,16 @@ UpdateChanging()
   if (!target || !target->defined())
     return;
 
-  GeoVector gv =
-      XCSoarInterface::Basic().Location.distance_bearing(target->location);
-
   // Fill distance field
   Units::FormatUserDistance(target->distance, tmp, 20);
   ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
 
   // Fill horizontal direction field
-  gv.Bearing -= XCSoarInterface::Basic().track;
-  gv.Bearing = gv.Bearing.as_delta();
-  if (gv.Bearing.value_degrees() > fixed_one)
-    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)gv.Bearing.value_degrees());
-  else if (gv.Bearing.value_degrees() < fixed_minus_one)
-    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-gv.Bearing.value_degrees());
+  Angle bearing = (target->Bearing() - XCSoarInterface::Basic().track).as_delta();
+  if (bearing.value_degrees() > fixed_one)
+    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)bearing.value_degrees());
+  else if (bearing.value_degrees() < fixed_minus_one)
+    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-bearing.value_degrees());
   else
     _tcscpy(tmp, _T("«»"));
   ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
