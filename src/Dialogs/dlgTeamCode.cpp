@@ -161,20 +161,27 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
     return;
   }
 
-  FlarmId flarmId = FlarmDetails::LookupId(
-      XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
+  const FlarmId *ids[30];
+  unsigned count = FlarmDetails::FindIdsByCallSign(
+      XCSoarInterface::SettingsComputer().TeamFlarmCNTarget, ids, 30);
 
-  if (!flarmId.defined()) {
+  if (count > 0) {
+    const FlarmId *id = dlgFlarmDetailsListShowModal(
+        XCSoarInterface::main_window, _("Set new teammate:"), ids, count);
+
+    if (id != NULL && id->defined()) {
+      XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = *id;
+      XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
+      return;
+    }
+  } else {
     MessageBoxX(_("Unknown Competition Number"),
                 _("Not Found"), MB_OK | MB_ICONINFORMATION);
-
-    XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
-    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget.clear();
-    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
-  } else {
-    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = flarmId;
-    XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
   }
+
+  XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
+  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget.clear();
+  XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
 }
 
 static void
