@@ -304,7 +304,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   canvas.background_transparent();
 
   // Climb Rate
-  if (!WarningMode()) {
+  if (!WarningMode() && traffic.climb_rate_avg30s_available) {
     Units::FormatUserVSpeed(traffic.climb_rate_avg30s, tmp, 20);
     canvas.select(hfInfoValues);
     sz = canvas.text_size(tmp);
