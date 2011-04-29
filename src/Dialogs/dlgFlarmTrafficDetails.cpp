@@ -83,7 +83,10 @@ UpdateChanging()
   ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
 
   // Fill altitude field
-  Units::FormatUserAltitude(target->altitude, tmp, 20);
+  if (target->altitude_available)
+    Units::FormatUserAltitude(target->altitude, tmp, 20);
+  else
+    _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
 
   // Fill vertical direction field
