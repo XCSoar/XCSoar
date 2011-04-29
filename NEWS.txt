@@ -8,6 +8,7 @@ Version 6.0.10 - not yet released
   - enable gestures by default
 * calculations
   - fix wind direction on glide terrain line
+  - enable warnings for GND airspaces when AGL altitude is negative
 * Android
   - fix two crash bugs on sound effect
 
