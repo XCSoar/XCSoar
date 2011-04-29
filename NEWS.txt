@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.0.10 - not yet released
+Version 6.0.10 - 2011-04-29
 * fix crash in flarm teammate setting
 * user interface
   - enable gestures by default
