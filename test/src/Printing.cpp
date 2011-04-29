@@ -181,7 +181,7 @@ PrintHelper::abstracttask_print(AbstractTask& task, const AIRCRAFT_STATE &state)
 
   if (first) {
     first = false;
-    f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc task_vario effective_mc v_pirker\n";
+    f6 << "# Time atp mc_best d_tot_rem_eff d_tot_rem ceff v_tot_rem v_tot_rem_inc v_tot_eff v_tot_eff_inc task_vario effective_mc v_pirker alt_diff\n";
   }
 
   if (positive(task.stats.Time)) {
@@ -198,6 +198,7 @@ PrintHelper::abstracttask_print(AbstractTask& task, const AIRCRAFT_STATE &state)
        << " " << task.stats.total.vario.get_value() 
        << " " << task.stats.effective_mc
        << " " << task.stats.get_pirker_speed()
+       << " " << task.stats.total.solution_remaining.AltitudeDifference
        << "\n";
     f6.flush();
   } else {

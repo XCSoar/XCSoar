@@ -70,3 +70,10 @@ plot \
 
 unset multiplot
 
+set output 'results/plotres-4.png'
+set ylabel "Alt difference (m)"
+set autoscale
+set grid
+plot \
+     'results/res-stats.txt' using 1:14 with lines title "Alt difference"
+

@@ -62,3 +62,10 @@ plot \
      'results/res-stats.txt' using 1:12 with lines title "Effective mc", \
      'results/res-stats.txt' using 1:3 with lines title "Auto mc"
 pause -1
+
+set ylabel "Alt difference (m)"
+set autoscale
+plot \
+     'results/res-stats.txt' using 1:14 with lines title "Alt difference"
+pause -1
+
