@@ -28,6 +28,7 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "ThermalLocator.hpp"
 #include "Wind/WindAnalyser.hpp"
+#include "Wind/WindZigZag.hpp"
 #include "GPSClock.hpp"
 #include "Util/WindowFilter.hpp"
 
@@ -51,6 +52,7 @@ protected:
 
 private:
   ThermalLocator thermallocator;
+  WindZigZagGlue wind_zig_zag;
   GPSClock airspace_clock;
 
   WindowFilter<30> vario_30s_filter;
