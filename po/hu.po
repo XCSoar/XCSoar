@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-20 09:17+0200\n"
-"PO-Revision-Date: 2011-04-13 21:43+0000\n"
+"PO-Revision-Date: 2011-04-20 23:14+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-20 07:04+0000\n"
-"X-Generator: Launchpad (build 12847)\n"
+"X-Launchpad-Export-Date: 2011-05-02 15:20+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1400 src/Dialogs/dlgAnalysis.cpp:269
@@ -443,8 +443,8 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
-"A következő fordulópont valódi mágneses irányszöge. TS feladat esetén ez az "
-"irány a célponthoz a TS szektorban."
+"A következő fordulópont valódi mágneses irányszöge. HT feladat esetén ez az "
+"irány a célponthoz a HT szektorban."
 
 #: src/InfoBoxes/Content/Factory.cpp:97
 #, no-c-format
@@ -613,12 +613,11 @@ msgid "WP AltD"
 msgstr "FP többlet"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
 msgstr ""
-"A következő fordulópontba érkezés magassága a biztonságos érkezési "
-"magassághoz képest."
+"A következő fordulópontba érkezés magassága a biztonsági magassághoz képest."
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
@@ -669,12 +668,12 @@ msgid "Fin AltD"
 msgstr "Vs m tbl"
 
 #: src/InfoBoxes/Content/Factory.cpp:198
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
-"Az utolsó fordulópontba érkezés magassága a biztonságos érkezési magassághoz "
+"A feladat utolsó fordulópontjába érkezés magassága a biztonsági magassághoz "
 "képest."
 
 #: src/InfoBoxes/Content/Factory.cpp:205
@@ -736,7 +735,7 @@ msgid "Fin LD"
 msgstr "Vs sklsz"
 
 #: src/InfoBoxes/Content/Factory.cpp:234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The required glide ratio to finish the task, given by the distance to go "
 "divided by the height required to arrive at the safety arrival height. "
@@ -746,13 +745,12 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
-"A feladat befejezéséhez szükséges siklószám, a hátralevő távolság és a "
-"biztonságos érkezési magasság feletti magasság hányadosa. Negatív érték "
-"esetén a befejezéshez további emelkedés szükséges. Nullához közeli érték "
-"esetén '---' kerül kijelzésre. Figyelem, ez esetleg optimista számítás "
-"lehet, mert a gép helyzeti energiájának megfelelően csökkenti a befejezéshez "
-"szükséges magasságot, ha a gép sebessége nagyobb a MacCready- vagy az "
-"optimális sebességnél."
+"A feladat befejezéséhez szükséges siklószám, amit a hátralevő távolság és a "
+"biztonsági szint feletti magasság hányadosa ad. Negatív érték az emelkedés "
+"szükségességére utal. Nullához közeli értékek helyett '---' kerül "
+"kijelzésre. Ez a számítás optimistának bizonyulhat, mert a szükséges "
+"emelkedés mértékét csökkenti a gép helyzeti energiájának megfelelően, ha a "
+"gép sebessége a MacCreadynél és az optimális sebességnél nagyobb."
 
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
@@ -893,12 +891,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:304
 #, no-c-format
 msgid "AA time"
-msgstr "TS idő"
+msgstr "HT idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:305
 #, no-c-format
 msgid "AA Time"
-msgstr "TS idő"
+msgstr "HT idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:306
 #, no-c-format
@@ -910,44 +908,46 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:313
 #, no-c-format
 msgid "AA max. distance "
-msgstr "TS távolság max "
+msgstr "HT távolság max "
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
 msgid "AA Dmax"
-msgstr "TS táv max"
+msgstr "HT táv max"
 
 #: src/InfoBoxes/Content/Factory.cpp:315
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
 msgstr ""
-"Maximális lehetséges távolság területi szabad távrepülés hátralevő részére."
+"Maximális lehetséges távolság a hozzárendelt területes (HT) feladat "
+"hátralevő részére."
 
 #: src/InfoBoxes/Content/Factory.cpp:322
 #, no-c-format
 msgid "AA min. distance"
-msgstr "TS távolság min"
+msgstr "HT távolság min"
 
 #: src/InfoBoxes/Content/Factory.cpp:323
 #, no-c-format
 msgid "AA Dmin"
-msgstr "TS táv min"
+msgstr "HT táv min"
 
 #: src/InfoBoxes/Content/Factory.cpp:324
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
 msgstr ""
-"Minimális lehetséges távolság területi szabad távrepülés hátralevő részére."
+"Minimális lehetséges távolság hozzárendelt területes (HT) feladat hátralevő "
+"részére."
 
 #: src/InfoBoxes/Content/Factory.cpp:331
 #, no-c-format
 msgid "AA speed max. distance"
-msgstr "TS sebesség max"
+msgstr "HT sebesség max"
 
 #: src/InfoBoxes/Content/Factory.cpp:332
 #, no-c-format
 msgid "AA Vmax"
-msgstr "TS seb max"
+msgstr "HT seb max"
 
 #: src/InfoBoxes/Content/Factory.cpp:333
 #, no-c-format
@@ -955,18 +955,18 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"Területi szabad távrepülésen elérhető átlagsebesség, ha a maximális "
-"lehetséges hátralevő távolságot a minimális TS idő alatt repüljük."
+"Hozzárendelt területes (HT) feladaton elérhető átlagsebesség, ha a maximális "
+"lehetséges hátralevő távolságot a minimális HT idő alatt repüljük."
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
 msgid "AA speed min. distance"
-msgstr "TS sebesség min"
+msgstr "HT sebesség min"
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
 msgid "AA Vmin"
-msgstr "TS seb min"
+msgstr "HT seb min"
 
 #: src/InfoBoxes/Content/Factory.cpp:342
 #, no-c-format
@@ -974,8 +974,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
-"A területi szabad távrepülés elérhető átlagsebessége, ha a lehető "
-"legrövidebb távon repülünk a minimális TS idő alatt."
+"A hozzárendelt területes (HT) feladat elérhető átlagsebessége, ha a lehető "
+"legrövidebb távon repülünk a minimális HT idő alatt."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -1097,7 +1097,7 @@ msgid "WP LD"
 msgstr "FP sklsz"
 
 #: src/InfoBoxes/Content/Factory.cpp:405
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The required glide ratio to reach the next waypoint, given by the distance "
 "to next waypoint divided by the height required to arrive at the safety "
@@ -1107,13 +1107,12 @@ msgid ""
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
-"A következő fordulópont eléréséhez szükséges siklószám, ami a fordulópont "
-"távolságának és a biztonsági magasság feletti magasságnak a hányadosa. "
-"Negatív érték a fordulópont eléréséhez szükséges további emelkedésre utal. A "
-"szükséges magasság közelében '---' kerül kijelzésre. A számítás esetleg "
-"optimistának bizonyulhat, mert a fordulópont eléréséhez szükséges "
-"magasságból levonja a gép többletenergiáját, ha a levegőhöz viszonyított "
-"sebesség a MacCready-nél vagy az optimális sebességnél nagyobb."
+"A következő fordulópont eléréséhez szükséges siklószám, amit a hátralevő "
+"távolság és a biztonsági szint feletti magasság hányadosa ad. Negatív érték "
+"az emelkedés szükségességére utal. Nullához közeli értékek helyett '---' "
+"kerül kijelzésre. Ez a számítás optimistának bizonyulhat, mert a szükséges "
+"emelkedés mértékét csökkenti a gép helyzeti energiájának megfelelően, ha a "
+"gép sebessége a MacCreadynél és az optimális sebességnél nagyobb."
 
 #: src/InfoBoxes/Content/Factory.cpp:412
 #, no-c-format
@@ -1361,29 +1360,29 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
 msgid "AA distance around target"
-msgstr "TS távolság cél"
+msgstr "HT távolság cél"
 
 #: src/InfoBoxes/Content/Factory.cpp:521
 #, no-c-format
 msgid "AA Dtgt"
-msgstr "TS táv cél"
+msgstr "HT táv cél"
 
 #: src/InfoBoxes/Content/Factory.cpp:522
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
 msgstr ""
-"Területi szabad távrepülésen a feladat hátralevő részének a célok "
+"Hozzárendelt területes (HT) feladaton a feladat hátralevő részének a célok "
 "megkerülésével számított távolsága ."
 
 #: src/InfoBoxes/Content/Factory.cpp:529
 #, no-c-format
 msgid "AA speed around target"
-msgstr "TS sebesség cél"
+msgstr "HT sebesség cél"
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
 msgid "AA Vtgt"
-msgstr "TS seb cél"
+msgstr "HT seb cél"
 
 #: src/InfoBoxes/Content/Factory.cpp:531
 #, no-c-format
@@ -1391,8 +1390,8 @@ msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
 msgstr ""
-"Területi szabad távrepülésen elérhető átlagsebesség a célok körül, a minimum "
-"időnek megfelelően."
+"Hozzárendelt területes (HT) feladaton elérhető átlagsebesség a célok körül, "
+"a minimum időnek megfelelően."
 
 #: src/InfoBoxes/Content/Factory.cpp:538
 #, no-c-format
@@ -1557,12 +1556,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:619
 #, no-c-format
 msgid "AA delta time"
-msgstr "TS delta idő"
+msgstr "HT delta idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:620
 #, no-c-format
 msgid "AA dT"
-msgstr "TS d.idő"
+msgstr "HT d.idő"
 
 #: src/InfoBoxes/Content/Factory.cpp:621
 #, no-c-format
@@ -1571,9 +1570,10 @@ msgid ""
 "negative (expected arrival too early), or blue if in sector and can turn now "
 "with estimated arrival time greater than AAT time plus 5 minutes."
 msgstr ""
-"Az eltelt idő és a területi szabad távrepülés minimum tartamának különbsége. "
-"Vörös ha negatív (túl korai érkezés), kék ha a szektorban vagyunk és "
-"fordulhatunk, mert a becsült érkezés öt perccel meghaladja a TS időtartamot."
+"Az eltelt idő és a hozzárendelt területes (HT) feladat minimum tartamának "
+"különbsége. Vörös ha negatív (túl korai érkezés), kék ha a szektorban "
+"vagyunk és fordulhatunk, mert a becsült érkezés öt perccel meghaladja a HT "
+"időtartamot."
 
 #: src/InfoBoxes/Content/Factory.cpp:628
 #, no-c-format
@@ -2283,9 +2283,8 @@ msgid "In sector, arm advance when ready"
 msgstr "Szektorban, élesítsd az előlépést ha kész vagy"
 
 #: src/Pages.cpp:181
-#, fuzzy
 msgid "Info Hide"
-msgstr "Infó rejtése"
+msgstr "Kijelzők rejtve"
 
 #: src/Pages.cpp:183
 msgid "Map (Full screen)"
@@ -2300,9 +2299,8 @@ msgid "Map and InfoBoxes "
 msgstr "Térkép és kijelzők "
 
 #: src/Pages.cpp:198
-#, fuzzy
 msgid "Info Auto"
-msgstr "Infó auto"
+msgstr "Kijelzők változnak"
 
 #: src/Pages.cpp:200
 msgid "Map and InfoBoxes (Auto)"
@@ -2717,17 +2715,17 @@ msgstr "Leállás, feladat mentése..."
 
 #: src/Device/TCPPort.cpp:82
 msgid "Failed to create TCP socket"
-msgstr ""
+msgstr "TCP socket létrehozása sikertelen"
 
 #: src/Device/TCPPort.cpp:103
 #, c-format
 msgid "Failed to bind to TCP port %u"
-msgstr ""
+msgstr "%u TCP port csatlakozása sikertelen"
 
 #: src/Device/TCPPort.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to listen on TCP port %u"
-msgstr "A %s port megnyitása sikertelen."
+msgstr "%u TCP port megfigyelése sikertelen"
 
 #: src/Dialogs/Message.cpp:130
 msgid "OK"
@@ -2779,9 +2777,8 @@ msgid "Configuration saved"
 msgstr "Beállítások elmentve."
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:55
-#, fuzzy
 msgid "Enable airspace again?"
-msgstr "Engedélyezi vagy letiltja az összes légtér-riasztást."
+msgstr "Újra engedélyezi a légteret?"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:55
 msgid "Acknowledge for day?"
@@ -3199,7 +3196,7 @@ msgstr "Szélek kitöltése"
 #: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:53
 #, no-c-format
 msgid "Disabled"
-msgstr ""
+msgstr "Tiltva"
 
 #: src/Dialogs/ConfigPanels/DevicesConfigPanel.cpp:55
 #, no-c-format
@@ -3441,14 +3438,12 @@ msgid "Shade"
 msgstr "Árnyék"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:78
-#, fuzzy
 msgid "Straight"
-msgstr "Egyenes siklás"
+msgstr "Egyenesen"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:79
-#, fuzzy
 msgid "Turning"
-msgstr "Figyelmeztetés"
+msgstr "Kerülőkkel"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:89
 #: Data/Dialogs/dlgConfiguration.xml:318
@@ -3556,7 +3551,7 @@ msgstr "csomó"
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:203
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:230
 msgid "km/h"
-msgstr "kilométer/óra"
+msgstr "km/óra"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:238
 msgid "sm"
@@ -3568,7 +3563,7 @@ msgstr "tengeri mérföld"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:240
 msgid "km"
-msgstr "kilométer"
+msgstr "km"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:248
 msgid "foot"
@@ -3588,7 +3583,7 @@ msgstr "Fahrenheit"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:267
 msgid "m/s"
-msgstr "méter/másodperc"
+msgstr "méter/mp"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:268
 msgid "ft/min"
@@ -3812,7 +3807,7 @@ msgstr "FAI céltáv"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:59
 msgid "AAT"
-msgstr "Területi szabad távrepülés (TS)"
+msgstr "Hozzárendelt területes (HT) feladat"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:61
 msgid "Mixed"
@@ -4469,9 +4464,9 @@ msgid ""
 "the AAT sectors.  Positive values rotate the range line clockwise, negative "
 "values rotate the range line counterclockwise."
 msgstr ""
-"Területi szabad távrepülés (TS) esetén ezzel lehet beállítani a célpontokat "
-"a szektoron belül. Pozitív számok óra szerint, negatívak ellentétesen "
-"forgatják a vonalat."
+"Hozzárendelt területes (HT) feladat esetén ezzel lehet beállítani a "
+"célpontokat a szektoron belül. Pozitív számok óra szerint, negatívak "
+"ellentétesen forgatják a vonalat."
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:15
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:15
@@ -4569,7 +4564,7 @@ msgstr "Domborzat"
 
 #: Data/Dialogs/pnlTaskProperties.xml:6 Data/Dialogs/pnlTaskProperties_L.xml:7
 msgid "Minimum AAT task time in minutes."
-msgstr "TS feladat minimális ideje percben."
+msgstr "HT feladat minimális ideje percben."
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid "File"
@@ -4670,9 +4665,10 @@ msgid ""
 "indicates the minimum AAT distance.  0% is the nominal AAT distance.  +100% "
 "is maximum AAT distance."
 msgstr ""
-"A területi szabad távokon (TS) ez az érték megmutatja, hogy a lehetséges "
-"minimum és maximum távhoz képest milyen távot jelölt ki a célpontokkal. "
-"-100% a minimum, 0% a névleges, +100% a maximum TS távot jelenti."
+"A hozzárendelt területes (HT) feladatokban ez az érték megmutatja, hogy a "
+"lehetséges minimum és maximum távhoz képest milyen távot jelölt ki a "
+"célpontokkal. -100% a minimum, 0% a névleges, +100% a maximum HT távot "
+"jelenti."
 
 #: Data/Dialogs/dlgConfiguration.xml:332
 #: Data/Dialogs/dlgConfiguration_L.xml:333
@@ -4734,9 +4730,8 @@ msgstr "Az aktuális feladatban követendő szabályok."
 
 #: Data/Dialogs/dlgConfiguration.xml:350
 #: Data/Dialogs/dlgConfiguration_L.xml:351
-#, fuzzy
 msgid "Reach mode"
-msgstr "Útvonaltervezés módja"
+msgstr "Elérhető"
 
 #: Data/Dialogs/dlgConfiguration.xml:189
 #: Data/Dialogs/dlgConfiguration_L.xml:189
@@ -4835,9 +4830,8 @@ msgid "Clean"
 msgstr "Szárnyak tisztasága"
 
 #: Data/Dialogs/dlgConfigFonts.xml:28 Data/Dialogs/dlgConfigFonts_L.xml:28
-#, fuzzy
 msgid "Dialog text"
-msgstr "Párbeszédablak stílusa"
+msgstr "Párbeszédablakok"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:45
 #: Data/Dialogs/pnlTaskCalculator_L.xml:45
@@ -4959,6 +4953,10 @@ msgid ""
 "[Straight] The reach is from straight line paths from the glider.\n"
 "[Turning] The reach is calculated allowing turns around terrain obstacles."
 msgstr ""
+"Az elérhető terület kiszámításának módja.\n"
+"[KI] Számítások letiltva.\n"
+"[EGYENESEN] Az egyenes vonalú repülésben elérhető terület.\n"
+"[KERÜLŐKKEL] A terepakadályok megkerülésével elérhető terület."
 
 #: Data/Dialogs/dlgConfiguration.xml:490
 #: Data/Dialogs/dlgConfiguration_L.xml:491
@@ -4974,17 +4972,16 @@ msgstr "Start pont"
 
 #: Data/Dialogs/dlgConfiguration.xml:355
 #: Data/Dialogs/dlgConfiguration_L.xml:356
-#, fuzzy
 msgid ""
 "This determines whether the glide reach is drawn as a line on the map area:\n"
 "[Off] Disables display\n"
 "[Line] Draws a dashed line at the glide reach\n"
 "[Shade] Shades terrain outside glide reach"
 msgstr ""
-"A siklásban elérhető terület kirajzolásának módját határozza meg:\n"
-"[KI] nem kerül kirajzolásra\n"
-"[VONAL] a terület peremét szaggatott vonal jelzi\n"
-"[ÁRNYÉK] a területen kívüli terep árnyékolva lesz"
+"A siklásban elérhető terület kirajzolásának módja.\n"
+"[KI] Kirajzolás letiltva\n"
+"[VONAL] A terület peremét szaggatott vonal jelzi.\n"
+"[ÁRNYÉK] A területen kívüli terep árnyékolva lesz."
 
 #: Data/Dialogs/dlgVario.xml:66 Data/Dialogs/dlgVario_L.xml:67
 msgid "TE dynamic cal."
@@ -5063,9 +5060,8 @@ msgid "Height"
 msgstr "Magasság"
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
-#, fuzzy
 msgid "InfoBox values, normal"
-msgstr "Info box érték pici"
+msgstr "Kijelzők számjegyei"
 
 #: Data/Dialogs/dlgConfiguration.xml:233
 #: Data/Dialogs/dlgConfiguration_L.xml:233
@@ -5109,9 +5105,9 @@ msgid ""
 "Safety margin for AAT task optimisation.  Optimisation seeks to complete the "
 "task at the minimum time plus this margin time."
 msgstr ""
-"Biztonsági időtartalék a területi szabad távrepülések (TS) optimizálásához. "
-"Az optimumszámítás a legrövidebb időnek ezzel a tartalékkal megnövelt "
-"értékéhez igazítja a feladat végrehajtását."
+"Biztonsági időtartalék a hozzárendelt területes (HT) feladatok "
+"optimizálásához. Az optimumszámítás a legrövidebb időnek ezzel a tartalékkal "
+"megnövelt értékéhez igazítja a feladat végrehajtását."
 
 #: Data/Dialogs/dlgStatus.xml:26 Data/Dialogs/dlgStatusSystem.xml:10
 msgid "Supply voltage"
@@ -5132,9 +5128,9 @@ msgid ""
 "task distances, smaller values move the target points to produce smaller "
 "task distances."
 msgstr ""
-"Területi szabad távrepülésen (TS) ezzel lehet állítani a szektoron belül a "
-"célpontot. A nagyobb értékek nagyobb távolságra, a kisebbek közelebb viszik "
-"a célpontot, kisebb távot eredményezve a feladatra."
+"Hozzárendelt területes (HT) feladaton ezzel lehet állítani a szektoron belül "
+"a célpontot. A nagyobb értékek nagyobb távolságra, a kisebbek közelebb "
+"viszik a célpontot, kisebb távot eredményezve a feladatra."
 
 #: Data/Dialogs/dlgVario.xml:20 Data/Dialogs/dlgVario_L.xml:21
 msgid "Whether the Static port is connected."
@@ -5393,9 +5389,8 @@ msgid "Clear"
 msgstr "Törlés"
 
 #: Data/Dialogs/dlgConfigFonts.xml:22 Data/Dialogs/dlgConfigFonts_L.xml:22
-#, fuzzy
 msgid "Topography labels, normal"
-msgstr "Térképjel címkék"
+msgstr "Topográfiai címkék"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:22
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
@@ -5629,7 +5624,7 @@ msgstr "Hozzárendelt feladat idő"
 #: Data/Dialogs/dlgConfiguration_L.xml:574
 #: Data/Dialogs/dlgConfiguration_L.xml:593
 msgid "Driver"
-msgstr ""
+msgstr "Illesztőprogram"
 
 #: Data/Dialogs/dlgVario.xml:96 Data/Dialogs/dlgVario_L.xml:97
 msgid "Adjustment to base frequency of tones in all modes."
@@ -5723,7 +5718,7 @@ msgstr "Semleges ívelőlap"
 
 #: Data/Dialogs/dlgTarget_L.xml:21
 msgid "AAT Est Remaining Help"
-msgstr "TS Becs.Marad"
+msgstr "HT Becs.Marad"
 
 #: Data/Dialogs/dlgConfiguration.xml:480
 #: Data/Dialogs/dlgConfiguration_L.xml:481
@@ -5809,13 +5804,12 @@ msgstr "Feladat sebességéhez használt mértékegységek."
 
 #: Data/Dialogs/dlgConfiguration.xml:337
 #: Data/Dialogs/dlgConfiguration_L.xml:338
-#, fuzzy
 msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
 msgstr ""
 "Ha bekapcsoljuk és az MC érték pozitív, az útvonaltervező emelésekkel számol "
-"a gép helye és az úticél között."
+"a gép helyzete és az úticél között."
 
 #: Data/Dialogs/dlgTarget.xml:26 Data/Dialogs/dlgTarget_L.xml:16
 msgid "Radial"
@@ -5997,7 +5991,7 @@ msgid ""
 "AA Speed - Assigned Area Task average speed achievable around target points "
 "remaining in minimum AAT time."
 msgstr ""
-"TS seb - területi szabad távrepülésen (TS) a maradék minimumTS időben a "
+"HT seb - hozzárendelt területes feladatban a maradék minimum HT időben a "
 "pontok körberepülésével elérhető átlagsebesség."
 
 #: Data/Dialogs/dlgAnalysis.xml:9 Data/Dialogs/dlgAnalysis_L.xml:9
@@ -6127,7 +6121,7 @@ msgstr "Társ kód"
 #: Data/Dialogs/dlgConfiguration_L.xml:548
 #: Data/Dialogs/pnlTaskProperties.xml:6 Data/Dialogs/pnlTaskProperties_L.xml:7
 msgid "AAT min. time"
-msgstr "TS min idő"
+msgstr "HT min idő"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:14
 msgid "Top"
@@ -6518,9 +6512,8 @@ msgid "V manoeuvering"
 msgstr "Manőverezési határsebesség"
 
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
-#, fuzzy
 msgid "Topography labels, important"
-msgstr "Térképjel címkék"
+msgstr "Fontos topográfiai címkék"
 
 #: Data/Dialogs/dlgSwitches.xml:27
 msgid "Acknowledge"
@@ -6578,9 +6571,8 @@ msgid "Whether to show the bugs percentage."
 msgstr "Bogárpiszok kijelzése"
 
 #: Data/Dialogs/dlgConfigFonts.xml:16 Data/Dialogs/dlgConfigFonts_L.xml:16
-#, fuzzy
 msgid "InfoBox values, small"
-msgstr "Info box érték pici"
+msgstr "Kicsi kijelző számjegyek"
 
 #: Data/Dialogs/dlgVario.xml:24 Data/Dialogs/dlgVario_L.xml:25
 msgid "Stall port"
@@ -6893,10 +6885,10 @@ msgid ""
 "and can turn now with estimated arrival time greater than AAT time plus 5 "
 "minutes."
 msgstr ""
-"TS delta idő - a TS minimumidő és a becsült időigény különbsége. Vörösre "
-"vált, ha negatív (várhatóan túl korai érkezés), kékre ha a szektorban "
-"vagyunk és az azonnali fordulással a becsült érkezési idő TS idő plusz öt "
-"perc."
+"HT delta idő - hozzárendelt területes (HT) feladatokon a HT minimumidő és a "
+"becsült időigény különbsége. Vörösre vált, ha negatív (várhatóan túl korai "
+"érkezés), kékre ha a szektorban vagyunk és az azonnali fordulással a becsült "
+"érkezési idő HT idő plusz öt perc."
 
 #: Data/Dialogs/dlgConfiguration.xml:253
 #: Data/Dialogs/dlgConfiguration_L.xml:253
@@ -6992,7 +6984,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgCredits_L.xml:3
 msgid "XCSoar"
-msgstr ""
+msgstr "XCSoar"
 
 #: Data/Dialogs/dlgConfiguration.xml:662
 #: Data/Dialogs/dlgConfiguration_L.xml:663
@@ -7288,7 +7280,7 @@ msgstr "Negatív ívelőlap"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:10
 msgid "AAT time"
-msgstr "TS idő"
+msgstr "HT idő"
 
 #: Data/Dialogs/dlgStatus.xml:13
 msgid "Max. height gain"
@@ -7513,7 +7505,7 @@ msgstr "Lejtők árnyalása"
 #: Data/Dialogs/pnlTaskCalculator.xml:28
 #: Data/Dialogs/pnlTaskCalculator_L.xml:28
 msgid "AAT range"
-msgstr "TS táv"
+msgstr "HT táv"
 
 #: Data/Dialogs/dlgStatus.xml:41 Data/Dialogs/dlgStatusTask.xml:7
 msgid "Start time"
@@ -7775,9 +7767,8 @@ msgstr "Varió"
 
 #: Data/Dialogs/dlgConfiguration.xml:355
 #: Data/Dialogs/dlgConfiguration_L.xml:356
-#, fuzzy
 msgid "Reach display"
-msgstr "Elérhető táv polárisa"
+msgstr "Elérhető terület"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
@@ -7907,9 +7898,8 @@ msgstr ""
 "+"
 
 #: Data/Input/default.xci:608
-#, fuzzy
 msgid "Topo."
-msgstr "Topológia"
+msgstr "Topo."
 
 #: Data/Input/default.xci:457
 msgid ""
@@ -8150,7 +8140,7 @@ msgstr "EEPROMban tárolva"
 
 #: Data/Input/default.xci:925
 msgid "Credits"
-msgstr ""
+msgstr "Névjegy"
 
 #: Data/Input/default.xci:778
 msgid "Accel"
@@ -8224,53 +8214,6 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Leszállás"
-
-#~ msgid "True"
-#~ msgstr "IGEN"
-
-#~ msgid "False"
-#~ msgstr "NEM"
-
-#~ msgid "Alternate"
-#~ msgstr "Alternatív"
-
-#~ msgid "Final glide bar"
-#~ msgstr "Végsiklás szintjelző"
-
-#~ msgid "Map waypoints"
-#~ msgstr "Térkép fordulópontok"
-
-#~ msgid "Important topography labels"
-#~ msgstr "Fontos térképjel címkék"
-
-#~ msgid "Set speed remaining"
-#~ msgstr "Sebesség a maradék távon"
-
-#~ msgid "InfoBox values"
-#~ msgstr "Kijelzők értékei"
-
-#~ msgid "Small InfoBox values"
-#~ msgstr "Kijelzők számjegyei"
-
-#~ msgid "Dialog boxes"
-#~ msgstr "Dialógus ablakok"
-
-#~ msgid ""
-#~ "When enabled, the glide terrain range is calculated with turning around "
-#~ "terrain obstacles.  If disabled, the range is from straight line paths "
-#~ "from the glider."
-#~ msgstr ""
-#~ "Bekapcsolva az elérhető terület a terepakadályok megkerülésével kerül "
-#~ "kiszámításra. Kikapcsolva az egyenes siklás szerint kerül kiszámításra."
-
-#~ msgid "Turning reach"
-#~ msgstr "Elérhető táv terepen"
-
-#~ msgid "Glide terrain line"
-#~ msgstr "Elérhető táv vonala"
-
-#~ msgid "Topography"
-#~ msgstr "Térképjelek"
 
 #~ msgid "Previous turnpoint"
 #~ msgstr "Előző fordulópont"
@@ -8506,6 +8449,9 @@ msgstr "Leszállás"
 #~ msgid "White outline"
 #~ msgstr "Fehér körvonal"
 
+#~ msgid "Alternate"
+#~ msgstr "Alternatív"
+
 #~ msgid "Changes to configuration saved."
 #~ msgstr "A beállítások változásai elmentve."
 
@@ -8557,6 +8503,9 @@ msgstr "Leszállás"
 #~ msgid "Online contest"
 #~ msgstr "Online verseny"
 
+#~ msgid "Map waypoints"
+#~ msgstr "Térkép fordulópontok"
+
 #~ msgid "Lat/Lon"
 #~ msgstr "Szél/Hossz"
 
@@ -8599,6 +8548,9 @@ msgstr "Leszállás"
 #~ msgid "Select pattern"
 #~ msgstr "Válassz mintát"
 
+#~ msgid "Dialog boxes"
+#~ msgstr "Dialógus ablakok"
+
 #~ msgid "Topology labels"
 #~ msgstr "Topológia cimkék"
 
@@ -8614,6 +8566,9 @@ msgstr "Leszállás"
 #~ msgid "Start height ref"
 #~ msgstr "Start mag. bázisa"
 
+#~ msgid "Glide terrain line"
+#~ msgstr "Elérhető táv vonala"
+
 #~ msgid "Safety lock"
 #~ msgstr "Biztonsági zár"
 
@@ -8628,6 +8583,9 @@ msgstr "Leszállás"
 
 #~ msgid "Task Calculator"
 #~ msgstr "Feladat számító"
+
+#~ msgid "Info box values small"
+#~ msgstr "Info box érték pici"
 
 #~ msgid "Glider position"
 #~ msgstr "Gép poziciója"
@@ -8650,6 +8608,58 @@ msgstr "Leszállás"
 #~ msgid "Final Glide Through Terrain"
 #~ msgstr "Végsiklás terepen át"
 
+#~ msgid "Topology"
+#~ msgstr "Topológia"
+
+#~ msgid ""
+#~ "Arrival altitude at the final task turn point relative to the safety "
+#~ "arrival altitude."
+#~ msgstr ""
+#~ "Az utolsó fordulópontba érkezés magassága a biztonságos érkezési "
+#~ "magassághoz képest."
+
+#~ msgid ""
+#~ "Arrival altitude at the next waypoint relative to the safety arrival "
+#~ "altitude."
+#~ msgstr ""
+#~ "A következő fordulópontba érkezés magassága a biztonságos érkezési "
+#~ "magassághoz képest."
+
+#~ msgid ""
+#~ "The required glide ratio to finish the task, given by the distance to go "
+#~ "divided by the height required to arrive at the safety arrival altitude. "
+#~ "Negative values indicate a climb is necessary to finish. If the height "
+#~ "required is close to zero, the displayed value is '---'. Note that this "
+#~ "calculation may be optimistic because it reduces the height required to "
+#~ "finish by the excess energy height of the glider if its true airspeed is "
+#~ "greater than the MacCready and best LD speeds."
+#~ msgstr ""
+#~ "A feladat befejezéséhez szükséges siklószám, a hátralevő távolság és a "
+#~ "biztonságos érkezési magasság feletti magasság hányadosa. Negatív érték "
+#~ "esetén a befejezéshez további emelkedés szükséges. Nullához közeli érték "
+#~ "esetén '---' kerül kijelzésre. Figyelem, ez esetleg optimista számítás "
+#~ "lehet, mert a gép helyzeti energiájának megfelelően csökkenti a "
+#~ "befejezéshez szükséges magasságot, ha a gép sebessége nagyobb a "
+#~ "MacCready- vagy az optimális sebességnél."
+
+#~ msgid ""
+#~ "The required glide ratio to reach the next waypoint, given by the "
+#~ "distance to next waypoint divided by the height required to arrive at the "
+#~ "safety arrival altitude. Negative values indicate a climb is necessary to "
+#~ "reach the waypoint. If the height required is close to zero, the "
+#~ "displayed value is '---'.   Note that this calculation may be optimistic "
+#~ "because it reduces the height required to reach the waypoint by the "
+#~ "excess energy height of the glider if its true airspeed is greater than "
+#~ "the MacCready and best LD speeds."
+#~ msgstr ""
+#~ "A következő fordulópont eléréséhez szükséges siklószám, ami a fordulópont "
+#~ "távolságának és a biztonsági magasság feletti magasságnak a hányadosa. "
+#~ "Negatív érték a fordulópont eléréséhez szükséges további emelkedésre "
+#~ "utal. A szükséges magasság közelében '---' kerül kijelzésre. A számítás "
+#~ "esetleg optimistának bizonyulhat, mert a fordulópont eléréséhez szükséges "
+#~ "magasságból levonja a gép többletenergiáját, ha a levegőhöz viszonyított "
+#~ "sebesség a MacCready-nél vagy az optimális sebességnél nagyobb."
+
 #~ msgid "None "
 #~ msgstr "Nincs "
 
@@ -8659,8 +8669,14 @@ msgstr "Leszállás"
 #~ msgid "Final Glide"
 #~ msgstr "Végsiklás"
 
+#~ msgid "Info hide"
+#~ msgstr "Infó rejtése"
+
 #~ msgid "---"
 #~ msgstr "---"
+
+#~ msgid "Info auto"
+#~ msgstr "Infó auto"
 
 #~ msgid "Thermal band"
 #~ msgstr "Termiksáv"
@@ -8692,14 +8708,41 @@ msgstr "Leszállás"
 #~ msgid "Distance:"
 #~ msgstr "Távolság:"
 
+#~ msgid "True"
+#~ msgstr "IGEN"
+
+#~ msgid "False"
+#~ msgstr "NEM"
+
+#~ msgid "Important topography labels"
+#~ msgstr "Fontos térképjel címkék"
+
+#~ msgid "Topography labels"
+#~ msgstr "Térképjel címkék"
+
 #~ msgid "Flarm Iinterface"
 #~ msgstr "FLARM kezelőfelület"
 
 #~ msgid "Auxiliary-1"
 #~ msgstr "Külső-1"
 
+#~ msgid ""
+#~ "This determines whether the glide terrain range is calculated and drawn "
+#~ "as a line on the map area:\n"
+#~ "[Off] Disables display\n"
+#~ "[Line] Draws a dashed line at the glide range\n"
+#~ "[Shade] Shades terrain outside glide range"
+#~ msgstr ""
+#~ "A siklásban elérhető terület kirajzolásának módját határozza meg:\n"
+#~ "[KI] nem kerül kirajzolásra\n"
+#~ "[VONAL] a terület peremét szaggatott vonal jelzi\n"
+#~ "[ÁRNYÉK] a területen kívüli terep árnyékolva lesz"
+
 #~ msgid "Auxiliary-2"
 #~ msgstr "Külső-2"
+
+#~ msgid "InfoBox values"
+#~ msgstr "Kijelzők értékei"
 
 #~ msgid "FAI start/ finish rules"
 #~ msgstr "FAI start/cél szabályok"
@@ -8707,14 +8750,31 @@ msgstr "Leszállás"
 #~ msgid "Auxiliary-3"
 #~ msgstr "Külső-3"
 
+#~ msgid ""
+#~ "When enabled, the glide terrain range is calculated with turning around "
+#~ "terrain obstacles.  If disabled, the range is from straight line paths "
+#~ "from the glider."
+#~ msgstr ""
+#~ "Bekapcsolva az elérhető terület a terepakadályok megkerülésével kerül "
+#~ "kiszámításra. Kikapcsolva az egyenes siklás szerint kerül kiszámításra."
+
 #~ msgid "Auxiliary-5"
 #~ msgstr "Külső-5"
 
 #~ msgid "Auxiliary-4"
 #~ msgstr "Külső-4"
 
+#~ msgid "Topography"
+#~ msgstr "Térképjelek"
+
 #~ msgid "Heading"
 #~ msgstr "Orrirány"
+
+#~ msgid "Set speed remaining"
+#~ msgstr "Sebesség a maradék távon"
+
+#~ msgid "Small InfoBox values"
+#~ msgstr "Kijelzők számjegyei"
 
 #~ msgid ""
 #~ "Determines what is used to shift the glider from the map center:\n"
@@ -8739,11 +8799,24 @@ msgstr "Leszállás"
 #~ msgid "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
 #~ msgstr "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
 
+#~ msgid "Final glide bar"
+#~ msgstr "Végsiklás szintjelző"
+
 #~ msgid "Speed remaining Help"
 #~ msgstr "Segesség a maradékon Súgó"
 
 #~ msgid "Speed Remaining Help"
 #~ msgstr "Sebesség a maradékon"
 
+#~ msgid "Turning reach"
+#~ msgstr "Elérhető táv terepen"
+
 #~ msgid "InfoBox Layout"
 #~ msgstr "Kijelzők elrendezése"
+
+#~ msgid ""
+#~ "When enabled and Mc is positive, route planning allows climbs between the "
+#~ "aircraft location and destination."
+#~ msgstr ""
+#~ "Ha bekapcsoljuk és az MC érték pozitív, az útvonaltervező emelésekkel "
+#~ "számol a gép helye és az úticél között."
