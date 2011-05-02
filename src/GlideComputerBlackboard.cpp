@@ -37,13 +37,6 @@ GlideComputerBlackboard::GlideComputerBlackboard(ProtectedTaskManager &task):
 }
 
 /**
- * Initializes the GlideComputerBlackboard
- */
-void GlideComputerBlackboard::Initialise()
-{
-}
-
-/**
  * Resets the GlideComputerBlackboard
  * @param full Reset all data?
  */

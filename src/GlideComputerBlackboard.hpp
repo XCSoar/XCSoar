@@ -80,7 +80,6 @@ protected:
 
   void ResetFlight(const bool full=true);
   void StartTask();
-  void Initialise();
   void SaveFinish();
   void RestoreFinish();
 

@@ -79,7 +79,6 @@ GlideComputer::ResetFlight(const bool full)
 void
 GlideComputer::Initialise()
 {
-  GlideComputerBlackboard::Initialise();
   GlideComputerTask::Initialise();
   ResetFlight(true);
 
