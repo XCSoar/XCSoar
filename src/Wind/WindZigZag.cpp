@@ -208,7 +208,7 @@ protected:
    * Add observation (dropping out oldest if necessary), and reset
    * blackout timer.
    */
-  void append(ZZObs o);
+  void append(const ZZObs &o);
 
 private:
   unsigned size() const {
@@ -515,7 +515,7 @@ WindZigZag::blackout(const unsigned time)
 }
 
 void
-WindZigZag::append(ZZObs o)
+WindZigZag::append(const ZZObs &o)
 {
   if (full())
     obs.pop_front();
