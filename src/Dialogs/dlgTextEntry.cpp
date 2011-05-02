@@ -140,32 +140,35 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
   (void)Sender;
 
   switch (key_code) {
-  case VK_LEFT:
-    if (cursor < 1)
-      return true; // min width
-
-    cursor--;
-    MoveCursor();
-    return true;
-
-  case VK_RIGHT:
-    if ((int)cursor >= (max_width - 2))
-      return true; // max width
-
-    cursor++;
-    MoveCursor();
-    return true;
-
   case VK_UP:
-    lettercursor--;
-    UpdateCursor();
-    return true;
+  case VK_LEFT:
+    if ((key_code == VK_LEFT) ^ is_altair()) {
+      if (cursor < 1)
+        return true; // min width
+
+      cursor--;
+      MoveCursor();
+      return true;
+    } else {
+      lettercursor--;
+      UpdateCursor();
+      return true;
+    }
 
   case VK_DOWN:
-    lettercursor++;
-    UpdateCursor();
-    return true;
+  case VK_RIGHT:
+    if ((key_code == VK_RIGHT) ^ is_altair()) {
+      if ((int)cursor >= (max_width - 2))
+        return true; // max width
 
+      cursor++;
+      MoveCursor();
+      return true;
+    } else {
+      lettercursor++;
+      UpdateCursor();
+      return true;
+    }
   case VK_RETURN:
     wf->SetModalResult(mrOK);
     return true;
@@ -178,25 +181,25 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 static void
 OnLeftClicked(WndButton &button)
 {
-  FormKeyDown(*wf, VK_LEFT);
+  FormKeyDown(*wf, is_altair()? VK_UP : VK_LEFT);
 }
 
 static void
 OnRightClicked(WndButton &button)
 {
-  FormKeyDown(*wf, VK_RIGHT);
+  FormKeyDown(*wf, is_altair()? VK_DOWN : VK_RIGHT);
 }
 
 static void
 OnUpClicked(WndButton &button)
 {
-  FormKeyDown(*wf, VK_UP);
+  FormKeyDown(*wf, !is_altair()? VK_UP : VK_LEFT);
 }
 
 static void
 OnDownClicked(WndButton &button)
 {
-  FormKeyDown(*wf, VK_DOWN);
+  FormKeyDown(*wf, !is_altair()? VK_DOWN : VK_RIGHT);
 }
 
 static CallBackTableEntry CallBackTable[] = {
