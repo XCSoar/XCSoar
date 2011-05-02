@@ -55,7 +55,7 @@ AutoQNH::Process(const NMEA_INFO &basic, DERIVED_INFO &calculated,
     countdown_autoqnh--;
 
   if (!countdown_autoqnh) {
-    if (CalculateQNH(basic, calculated, settings_computer, way_points))
+    if (CalculateQNH(basic, calculated, settings_computer.pressure, way_points))
       countdown_autoqnh = UINT_MAX; // disable after performing once
     else
       Reset();
@@ -76,16 +76,16 @@ AutoQNH::IsFinished()
 
 bool
 AutoQNH::CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
-                      const SETTINGS_COMPUTER &settings_computer,
+                      const AtmosphericPressure &pressure,
                       const Waypoints &way_points)
 {
   const Waypoint *next_wp;
   next_wp = way_points.lookup_location(basic.Location, fixed(1000));
 
   if (next_wp && next_wp->is_airport())
-    CalculateQNH(basic, calculated, settings_computer, next_wp->Altitude);
+    CalculateQNH(basic, calculated, pressure, next_wp->Altitude);
   else if (calculated.TerrainValid)
-    CalculateQNH(basic, calculated, settings_computer, calculated.TerrainAlt);
+    CalculateQNH(basic, calculated, pressure, calculated.TerrainAlt);
   else
     return false;
 
@@ -94,9 +94,9 @@ AutoQNH::CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
 
 void
 AutoQNH::CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
-                      const SETTINGS_COMPUTER &settings_computer,
+                      const AtmosphericPressure &pressure,
                       fixed altitude)
 {
-  calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, altitude));
+  calculated.pressure.set_QNH(pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, altitude));
   calculated.pressure_available.Update(basic.Time);
 }
