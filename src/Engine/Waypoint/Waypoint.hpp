@@ -32,31 +32,6 @@
 
 class TaskProjection;
 
-/** 
- * Bitfield structure for Waypoint capabilities
- * Several of these capabilities are not used by XCSoar, but are
- * present for compatibility
- */
-struct WaypointFlags {
-  /** If waypoint can be used as a turnpoint */
-  bool TurnPoint:1;
-  /** If waypoint is to be used as home */
-  bool Home:1;
-  /** If waypoint is marked as a potential start point */
-  bool StartPoint:1;
-  /** If waypoint is marked as a potential finish point */
-  bool FinishPoint:1;
-  /** If waypoint is watched, i.e. displayed with arrival height in map */
-  bool Watched:1;
-
-  /**
-   * Set default flags (all off except turnpoint)
-   *
-   * @param turnpoint Whether the waypoint is a turnpoint
-   */
-  void setDefaultFlags(bool turnpoint);
-};
-
 /**
  * Class for waypoints.  
  * This is small enough currently to be used with local copies (e.g. in a TaskWayPoint),
@@ -79,6 +54,31 @@ public:
     wtTunnel,
     wtTower,
     wtPowerPlant,
+  };
+
+  /**
+   * Bitfield structure for Waypoint capabilities
+   * Several of these capabilities are not used by XCSoar, but are
+   * present for compatibility
+   */
+  struct Flags {
+    /** If waypoint can be used as a turnpoint */
+    bool TurnPoint:1;
+    /** If waypoint is to be used as home */
+    bool Home:1;
+    /** If waypoint is marked as a potential start point */
+    bool StartPoint:1;
+    /** If waypoint is marked as a potential finish point */
+    bool FinishPoint:1;
+    /** If waypoint is watched, i.e. displayed with arrival height in map */
+    bool Watched:1;
+
+    /**
+     * Set default flags (all off except turnpoint)
+     *
+     * @param turnpoint Whether the waypoint is a turnpoint
+     */
+    void setDefaultFlags(bool turnpoint);
   };
 
   /**
@@ -108,7 +108,7 @@ public:
   /** Type of the waypoint */
   enum Type Type;
   /** Flag types of this waypoint */
-  WaypointFlags Flags;
+  struct Flags Flags;
   /** File number to store waypoint in (0,1), -1 to delete/ignore */
   int FileNum;
   /** Name of waypoint */

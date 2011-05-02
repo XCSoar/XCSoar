@@ -23,7 +23,7 @@
 #include "Waypoint.hpp"
 
 void
-WaypointFlags::setDefaultFlags(bool turnpoint)
+Waypoint::Flags::setDefaultFlags(bool turnpoint)
 {
   TurnPoint = turnpoint;
   Home = false;
