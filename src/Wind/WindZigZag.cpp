@@ -246,7 +246,7 @@ private:
   /**
    * Find error
    */
-  fixed relative_error(const ZZBeta& beta) const;
+  fixed relative_error_squared(const ZZBeta& beta) const;
 
   /**
    * Calculate quality of fit of wind estimate beta in
@@ -381,7 +381,7 @@ WindZigZag::prune_worst(const ZZBeta &beta)
     // all new points, ending up with a very old data set.
     obs.pop_front();
 
-  while (size() > 5 && relative_error(beta) > fixed(0.05))
+  while (size() > 5 && relative_error_squared(beta) > fixed(0.0025))
     remove_worst(beta);
 }
 
@@ -441,15 +441,15 @@ WindZigZag::remove_worst(const ZZBeta& beta)
 }
 
 fixed
-WindZigZag::relative_error(const ZZBeta& beta) const
+WindZigZag::relative_error_squared(const ZZBeta& beta) const
 {
-  return sqrt(fmin(beta));
+  return fmin(beta);
 }
 
 int
 WindZigZag::quality(const ZZBeta& beta, const bool circling) const
 {
-  const fixed v = relative_error(beta);
+  const fixed v = sqrt(relative_error_squared(beta));
   const int quality = min(fixed(5.0), max(fixed(1.0), -log(v)));
   if (circling)
     return max(1, quality / 2); // de-value updates in circling mode
