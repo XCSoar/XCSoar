@@ -129,14 +129,14 @@ public:
   };
 
   struct ZZObs {
-    ZZObs(const unsigned _time, const fixed gps_mag, const Angle _gps_ang,
-          const fixed tas)
-      :time(_time), x(gps_mag, _gps_ang), y(tas), gps_ang(_gps_ang) {}
+    ZZObs(const unsigned _time, const fixed _speed, const Angle _track,
+          const fixed _tas)
+      :time(_time), x(_speed, _track), y(_tas), track(_track) {}
 
     const unsigned time;
     const ZZX x;
     const ZZY y;
-    const Angle gps_ang;
+    const Angle track;
 
     fixed Phi(const ZZBeta& beta) const {
       return sqrt(sqr(x.gps_north + beta.north) + sqr(x.gps_east + beta.east));
@@ -501,7 +501,7 @@ WindZigZag::do_append(const unsigned time, const Angle &ang) const
     return false;
 
   // don't add if no angle spread
-  if ((ang - obs.back().gps_ang).as_delta().magnitude_degrees() < fixed(10))
+  if ((ang - obs.back().track).as_delta().magnitude_degrees() < fixed(10))
     return false;
 
   // okay to add
