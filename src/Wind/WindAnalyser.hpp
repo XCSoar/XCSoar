@@ -27,9 +27,8 @@
  * for windspeed and direction.
  * @author André Somers
  */
-class WindSample
+struct WindSample
 {
-public:
   Vector v;
   fixed t;
   fixed mag;
