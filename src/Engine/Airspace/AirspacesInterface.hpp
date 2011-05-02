@@ -22,6 +22,7 @@
 #ifndef AIRSPACESINTERFACE_HPP
 #define AIRSPACESINTERFACE_HPP
 
+#include "Util/SliceAllocator.hpp"
 #include "Airspace.hpp"
 
 #include <kdtree++/kdtree.hpp>
@@ -41,7 +42,9 @@ public:
   typedef KDTree::KDTree<4, 
                          Airspace, 
                          FlatBoundingBox::kd_get_bounds,
-                         FlatBoundingBox::kd_distance
+                         FlatBoundingBox::kd_distance,
+                         std::less<FlatBoundingBox::kd_get_bounds::result_type>,
+                         SliceAllocator<KDTree::_Node<Airspace>, 256>
                          > AirspaceTree;
 };
 
