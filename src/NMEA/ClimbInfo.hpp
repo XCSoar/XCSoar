@@ -34,8 +34,6 @@ struct CLIMB_INFO
 {
   /** Average vertical speed in the thermal */
   fixed ThermalAverage;
-  /** Average vertical speed in the thermal (minimum 0.0) */
-  fixed ThermalAverageAdjusted;
 
   /** Altitude gained while in the thermal */
   fixed ThermalGain;
