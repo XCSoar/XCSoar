@@ -266,6 +266,7 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
 #ifndef DISABLEAUDIO
       MessageBeep(MB_ICONEXCLAMATION);
 #endif
+      TriggerGPSUpdate(); // ensure screen gets updated
     }
   } else if (connected_now) {
     // !navwarning
