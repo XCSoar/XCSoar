@@ -193,15 +193,15 @@ public:
       return Graphics::SmallIcon;
 
     switch (wp.Type) {
-    case wtMountainTop:
+    case Waypoint::wtMountainTop:
       return Graphics::MountainTopIcon;
-    case wtBridge:
+    case Waypoint::wtBridge:
       return Graphics::BridgeIcon;
-    case wtTunnel:
+    case Waypoint::wtTunnel:
       return Graphics::TunnelIcon;
-    case wtTower:
+    case Waypoint::wtTower:
       return Graphics::TowerIcon;
-    case wtPowerPlant:
+    case Waypoint::wtPowerPlant:
       return Graphics::PowerPlantIcon;
     default:
       return Graphics::TurnPointIcon;

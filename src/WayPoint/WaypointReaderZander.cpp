@@ -167,19 +167,19 @@ WaypointReaderZander::parseFlags(const TCHAR* src, Waypoint &dest)
     dest.Flags.TurnPoint = true;
   } else if ((src[0] == 'H' || src[0] == 'h') &&
              (src[1] == 'A' || src[1] == 'a')) {
-    dest.Type = wtAirfield;
+    dest.Type = Waypoint::wtAirfield;
     dest.Flags.TurnPoint = true;
     dest.Flags.Home = true;
   } else if ((src[0] == 'W' || src[0] == 'w') &&
              (src[1] == 'A' || src[1] == 'a')) {
-    dest.Type = wtAirfield;
+    dest.Type = Waypoint::wtAirfield;
     dest.Flags.TurnPoint = true;
   } else if ((src[0] == 'L' || src[0] == 'l') &&
              (src[1] == 'F' || src[1] == 'f')) {
-    dest.Type = wtOutlanding;
+    dest.Type = Waypoint::wtOutlanding;
   } else if ((src[0] == 'W' || src[0] == 'w') &&
              (src[1] == 'L' || src[1] == 'l')) {
-    dest.Type = wtOutlanding;
+    dest.Type = Waypoint::wtOutlanding;
     dest.Flags.TurnPoint = true;
   } else {
     return false;
@@ -196,7 +196,7 @@ WaypointReaderZander::parseFlagsFromDescription(const TCHAR* src,
   // (usually the description of an airport is the frequency)
 
   if (src[0] == '1') {
-    dest.Type = wtAirfield;
+    dest.Type = Waypoint::wtAirfield;
     dest.Flags.TurnPoint = true;
     return true;
   }

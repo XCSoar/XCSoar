@@ -258,30 +258,30 @@ WaypointReaderSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
   // Update flags
   switch (style) {
   case 3:
-    dest.Type = wtOutlanding;
+    dest.Type = Waypoint::wtOutlanding;
     break;
   case 2:
   case 4:
   case 5:
-    dest.Type = wtAirfield;
+    dest.Type = Waypoint::wtAirfield;
     break;
   case 6:
   case 7:
-    dest.Type = wtMountainTop;
+    dest.Type = Waypoint::wtMountainTop;
     break;
   case 8:
   case 11:
   case 16:
-    dest.Type = wtTower;
+    dest.Type = Waypoint::wtTower;
     break;
   case 13:
-    dest.Type = wtTunnel;
+    dest.Type = Waypoint::wtTunnel;
     break;
   case 14:
-    dest.Type = wtBridge;
+    dest.Type = Waypoint::wtBridge;
     break;
   case 15:
-    dest.Type = wtPowerPlant;
+    dest.Type = Waypoint::wtPowerPlant;
     break;
   }
 

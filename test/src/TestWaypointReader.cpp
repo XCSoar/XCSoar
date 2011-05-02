@@ -221,7 +221,7 @@ TestWinPilotWayPoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Type == ((!org_wp.is_landable()) ? wtNormal : org_wp.Type));
+  ok1(wp->Type == ((!org_wp.is_landable()) ? Waypoint::wtNormal : org_wp.Type));
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
@@ -290,7 +290,7 @@ TestZanderWayPoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Type == ((!org_wp.is_landable()) ? wtNormal : org_wp.Type));
+  ok1(wp->Type == ((!org_wp.is_landable()) ? Waypoint::wtNormal : org_wp.Type));
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
@@ -390,7 +390,7 @@ CreateOriginalWaypoints()
   wp.RunwayDirection = Angle::degrees(fixed(40));
   wp.RunwayLength = 590;
 
-  wp.Type = wtAirfield;
+  wp.Type = Waypoint::wtAirfield;
   wp.Flags.TurnPoint = true;
   wp.Flags.Home = true;
   wp.Flags.StartPoint = false;
@@ -408,7 +408,7 @@ CreateOriginalWaypoints()
   wp2.RunwayDirection = Angle::degrees(fixed(-1));
   wp2.RunwayLength = 0;
 
-  wp2.Type = wtMountainTop;
+  wp2.Type = Waypoint::wtMountainTop;
   wp2.Flags.TurnPoint = true;
   wp2.Flags.Home = false;
   wp2.Flags.StartPoint = false;
@@ -426,7 +426,7 @@ CreateOriginalWaypoints()
   wp3.RunwayDirection = Angle::degrees(fixed(-1));
   wp3.RunwayLength = 0;
 
-  wp3.Type = wtBridge;
+  wp3.Type = Waypoint::wtBridge;
   wp3.Flags.TurnPoint = true;
   wp3.Flags.Home = false;
   wp3.Flags.StartPoint = false;
@@ -444,7 +444,7 @@ CreateOriginalWaypoints()
   wp4.RunwayDirection = Angle::degrees(fixed(90));
   wp4.RunwayLength = Units::ToSysUnit(fixed(0.01), unStatuteMiles);
 
-  wp4.Type = wtOutlanding;
+  wp4.Type = Waypoint::wtOutlanding;
   wp4.Flags.TurnPoint = true;
   wp4.Flags.Home = false;
   wp4.Flags.StartPoint = false;
@@ -462,7 +462,7 @@ CreateOriginalWaypoints()
   wp5.RunwayDirection = Angle::degrees(fixed(-1));
   wp5.RunwayLength = 0;
 
-  wp5.Type = wtNormal;
+  wp5.Type = Waypoint::wtNormal;
   wp5.Flags.TurnPoint = true;
   wp5.Flags.Home = false;
   wp5.Flags.StartPoint = false;

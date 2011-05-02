@@ -57,17 +57,6 @@ struct WaypointFlags {
   void setDefaultFlags(bool turnpoint);
 };
 
-enum WaypointType {
-  wtNormal,
-  wtAirfield,
-  wtOutlanding,
-  wtMountainTop,
-  wtBridge,
-  wtTunnel,
-  wtTower,
-  wtPowerPlant,
-};
-
 /**
  * Class for waypoints.  
  * This is small enough currently to be used with local copies (e.g. in a TaskWayPoint),
@@ -80,6 +69,17 @@ enum WaypointType {
 class Waypoint {
 public:
   friend class Serialiser;
+
+  enum Type {
+    wtNormal,
+    wtAirfield,
+    wtOutlanding,
+    wtMountainTop,
+    wtBridge,
+    wtTunnel,
+    wtTower,
+    wtPowerPlant,
+  };
 
   /**
    * Constructor for real waypoints
@@ -106,7 +106,7 @@ public:
   /** Main runway length in m (0 for unknown) */
   int RunwayLength;
   /** Type of the waypoint */
-  WaypointType Type;
+  enum Type Type;
   /** Flag types of this waypoint */
   WaypointFlags Flags;
   /** File number to store waypoint in (0,1), -1 to delete/ignore */

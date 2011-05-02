@@ -327,13 +327,13 @@ GetValues()
   switch(wp->GetDataField()->GetAsInteger()) {
   case 1:
     global_wpt->Flags.TurnPoint = true;
-    global_wpt->Type = wtAirfield;
+    global_wpt->Type = Waypoint::wtAirfield;
     break;
   case 2:
-    global_wpt->Type = wtOutlanding;
+    global_wpt->Type = Waypoint::wtOutlanding;
     break;
   default:
-    global_wpt->Type = wtNormal;
+    global_wpt->Type = Waypoint::wtNormal;
     global_wpt->Flags.TurnPoint = true;
   };
 }
