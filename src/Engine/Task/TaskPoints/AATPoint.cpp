@@ -87,7 +87,7 @@ AATPoint::update_sample_far(const AIRCRAFT_STATE& state,
 bool
 AATPoint::check_target(const AIRCRAFT_STATE& state, const bool known_outside) 
 {
-  if ((getActiveState() == CURRENT_ACTIVE) && (!m_target_locked)) {
+  if ((getActiveState() == CURRENT_ACTIVE) && (m_target_locked)) {
     return false;
   }
   bool moved = false;
@@ -106,8 +106,9 @@ AATPoint::close_to_target(const AIRCRAFT_STATE& state, const fixed threshold) co
   if (!valid())
     return false;
 
-  return (double_leg_distance(m_target_location)-double_leg_distance(state.Location)
-          <= threshold);
+  return (double_leg_distance(state.Location)
+          -double_leg_distance(m_target_location)
+          > -threshold);
 }
 
 bool
@@ -116,9 +117,9 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
   // target must be moved if d(p_last,t)+d(t,p_next) 
   //    < d(p_last,state)+d(state,p_next)
 
-  if (double_leg_distance(state.Location)>= double_leg_distance(m_target_location)) {
-    const fixed d_to_max = state.Location.distance(get_location_max());
-    if (d_to_max <= fixed_zero) {
+  if (close_to_target(state)) {
+    if (positive(double_leg_distance(state.Location)
+                 -double_leg_distance(get_location_max()))) {
       // no improvement available
       return false;
     } else {
