@@ -82,14 +82,21 @@ AutoQNH::CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
   const Waypoint *next_wp;
   next_wp = way_points.lookup_location(basic.Location, fixed(1000));
 
-  if (next_wp && next_wp->is_airport()) {
-    calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, next_wp->Altitude));
-    calculated.pressure_available.Update(basic.Time);
-  } else if (calculated.TerrainValid) {
-    calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, calculated.TerrainAlt));
-    calculated.pressure_available.Update(basic.Time);
-  } else
+  if (next_wp && next_wp->is_airport())
+    CalculateQNH(basic, calculated, settings_computer, next_wp->Altitude);
+  else if (calculated.TerrainValid)
+    CalculateQNH(basic, calculated, settings_computer, calculated.TerrainAlt);
+  else
     return false;
 
   return true;
+}
+
+void
+AutoQNH::CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+                      const SETTINGS_COMPUTER &settings_computer,
+                      fixed altitude)
+{
+  calculated.pressure.set_QNH(settings_computer.pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, altitude));
+  calculated.pressure_available.Update(basic.Time);
 }

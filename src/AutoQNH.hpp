@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_AUTO_QNH_HPP
 #define XCSOAR_AUTO_QNH_HPP
 
+#include "fixed.hpp"
+
 struct NMEA_INFO;
 struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
@@ -41,6 +43,8 @@ namespace AutoQNH
   bool CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
                     const SETTINGS_COMPUTER &settings_computer,
                     const Waypoints &way_points);
+  void CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+                    const SETTINGS_COMPUTER &settings_computer, fixed altitude);
 }
 
 #endif
