@@ -718,7 +718,7 @@ type=key
 data=0
 event=Analysis
 event=Mode default
-label=Analysis\nShow
+label=Analysis
 location=9
 
 # -------------
