@@ -381,7 +381,9 @@ WindZigZag::prune_worst(const ZZBeta &beta)
     // all new points, ending up with a very old data set.
     obs.pop_front();
 
-  while (size() > 5 && relative_error_squared(beta) > fixed(0.0025))
+  fixed relative_error_sqr = relative_error_squared(beta);
+
+  while (size() > 5 && relative_error_sqr > fixed(0.0025))
     remove_worst(beta);
 }
 
