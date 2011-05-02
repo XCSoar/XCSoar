@@ -23,6 +23,7 @@
 #define TRACE_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/SliceAllocator.hpp"
 #include <kdtree++/kdtree.hpp>
 #include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
@@ -110,7 +111,11 @@ class Trace: private NonCopyable
   /**
    * Type of KD-tree data structure for trace container
    */
-  typedef KDTree::KDTree<2, TracePoint, TracePoint::kd_get_location> TraceTree;
+  typedef KDTree::KDTree<2, TracePoint, TracePoint::kd_get_location,
+                         KDTree::squared_difference<TracePoint::kd_get_location::result_type,
+                                                    TracePoint::kd_get_location::result_type>,
+                         std::less<TracePoint::kd_get_location::result_type>,
+                         SliceAllocator<KDTree::_Node<TracePoint>, 256> > TraceTree;
 
   struct TraceDelta {
     /**
