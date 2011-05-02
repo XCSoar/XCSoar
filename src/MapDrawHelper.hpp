@@ -49,14 +49,6 @@ class MapDrawHelper
   AllocatedArray<GeoPoint> geo_points;
 
 public:
-  MapDrawHelper(Canvas &_canvas,
-                Canvas &_buffer,
-                Canvas &_stencil,
-                const WindowProjection &_proj,
-                const SETTINGS_MAP& settings_map);
-
-  MapDrawHelper(MapDrawHelper &_that);
-
   Canvas &m_canvas;
   Canvas &m_buffer;
   Canvas &m_stencil;
@@ -65,6 +57,15 @@ public:
   bool m_use_stencil;
 
   const SETTINGS_MAP& m_settings_map;
+
+public:
+  MapDrawHelper(Canvas &_canvas,
+                Canvas &_buffer,
+                Canvas &_stencil,
+                const WindowProjection &_proj,
+                const SETTINGS_MAP& settings_map);
+
+  MapDrawHelper(MapDrawHelper &_that);
 
 protected:
   void draw_search_point_vector(Canvas& the_canvas,
