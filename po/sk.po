@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-20 09:17+0200\n"
-"PO-Revision-Date: 2011-04-06 13:09+0000\n"
+"PO-Revision-Date: 2011-04-28 06:39+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
 "Language: sk\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-07 08:38+0000\n"
-"X-Generator: Launchpad (build 12757)\n"
+"X-Launchpad-Export-Date: 2011-05-02 15:20+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1400 src/Dialogs/dlgAnalysis.cpp:269
@@ -616,7 +616,7 @@ msgid "WP AltD"
 msgstr "Výšk.roz.OB"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
 msgstr ""
@@ -671,12 +671,12 @@ msgid "Fin AltD"
 msgstr "Ciel vyskR"
 
 #: src/InfoBoxes/Content/Factory.cpp:198
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
-"Príletová výška do cieľového otočného bodu relatívna k bezpečnej príletovej "
+"Príletová výška na posledný otočný bod relatívna k bezpečnej príletovej "
 "výške."
 
 #: src/InfoBoxes/Content/Factory.cpp:205
@@ -737,7 +737,7 @@ msgid "Fin LD"
 msgstr "Klz ciel"
 
 #: src/InfoBoxes/Content/Factory.cpp:234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The required glide ratio to finish the task, given by the distance to go "
 "divided by the height required to arrive at the safety arrival height. "
@@ -747,12 +747,6 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
-"Kĺzavosť potrebná k dokončeniu úlohy, daná podielom zostávajúcej "
-"vzdialenosti k potrebnej bezpečnej príletovej výške. Negatívne hodnoty "
-"signalizujú potrebu stúpať. Ak je potrebná výška blízko k nule zobrazí sa "
-"hodnota '---'. Poznámka: tento výpočet môže byť optimistický lebo redukuje "
-"výšku potrebnú do cieľa o nadbytočnú výškovú energiu vetroňa ak TAS je "
-"väčšia ako rýchlosť MC a rýchlosť najlepšej kĺzavosti."
 
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
@@ -907,9 +901,9 @@ msgid ""
 msgstr "Zostávajúci čas pre AAT úlohu. Sčervená ak čas vypršal."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AA max. distance "
-msgstr "AA Max vzdialenosť"
+msgstr "AA Max vzdialenosť "
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
@@ -1094,7 +1088,7 @@ msgid "WP LD"
 msgstr "OtB Klz"
 
 #: src/InfoBoxes/Content/Factory.cpp:405
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The required glide ratio to reach the next waypoint, given by the distance "
 "to next waypoint divided by the height required to arrive at the safety "
@@ -1104,13 +1098,6 @@ msgid ""
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
-"Potrebná kĺzavosť na dosiahnutie ďalšieho otočného bodu, daná podielom "
-"vzdialenosti k otočnému bodu a potrebnou výškou na prílet v bezpečnej výške. "
-"Negatívne hodnoty signalizujú potrebu stúpania na dosiahnutie otočného bodu. "
-"Ak je potrebná výška blízko nule zobrazí sa hodnota '---'. Poznámka: tento "
-"výpočet môže byť optimistický lebo redukuje potrebnú výšku na dosiahnutie "
-"otočného bodu o prebytočnú výškovú energiu vetroňa ak je jeho skutočná "
-"rýchlosť väčšia ako MacCready a rýchlosť najlepšej kĺzavosti."
 
 #: src/InfoBoxes/Content/Factory.cpp:412
 #, no-c-format
@@ -2273,9 +2260,8 @@ msgid "In sector, arm advance when ready"
 msgstr "Si v sektore, povol postup v úlohe (štart) ak si pripravený"
 
 #: src/Pages.cpp:181
-#, fuzzy
 msgid "Info Hide"
-msgstr "Schovaj info"
+msgstr ""
 
 #: src/Pages.cpp:183
 msgid "Map (Full screen)"
@@ -2290,9 +2276,8 @@ msgid "Map and InfoBoxes "
 msgstr "Mapa a Info-okná "
 
 #: src/Pages.cpp:198
-#, fuzzy
 msgid "Info Auto"
-msgstr "Info auto"
+msgstr ""
 
 #: src/Pages.cpp:200
 msgid "Map and InfoBoxes (Auto)"
@@ -2570,22 +2555,22 @@ msgstr "Ukončiť program?"
 #: src/Units/UnitsStore.cpp:36
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "Európske"
 
 #: src/Units/UnitsStore.cpp:45
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "Britské"
 
 #: src/Units/UnitsStore.cpp:54
 #, no-c-format
 msgid "American"
-msgstr ""
+msgstr "Americké"
 
 #: src/Units/UnitsStore.cpp:63
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "Austrálske"
 
 #. Read the terrain file
 #: src/UtilsSettings.cpp:117 src/Components.cpp:327
@@ -2678,9 +2663,9 @@ msgid "Failed to bind to TCP port %u"
 msgstr ""
 
 #: src/Device/TCPPort.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to listen on TCP port %u"
-msgstr "Nemožno otvoriť port %s"
+msgstr ""
 
 #: src/Dialogs/Message.cpp:130
 msgid "OK"
@@ -2732,9 +2717,8 @@ msgid "Configuration saved"
 msgstr "Nastavenie uložené"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:55
-#, fuzzy
 msgid "Enable airspace again?"
-msgstr "Povoliť/zakázať všetky varovania vzdušných priestorov."
+msgstr ""
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:55
 msgid "Acknowledge for day?"
@@ -3241,9 +3225,8 @@ msgid "12 Right (Landscape)"
 msgstr "12 Vpravo (na šírku)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:83
-#, fuzzy
 msgid "12 Bottom (Portrait)"
-msgstr "8 Dole (na výšku)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
 msgid "24 Right (Landscape)"
@@ -3399,14 +3382,12 @@ msgid "Shade"
 msgstr "Tieňovať"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:78
-#, fuzzy
 msgid "Straight"
-msgstr "Jas"
+msgstr "Priamo"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:79
-#, fuzzy
 msgid "Turning"
-msgstr "Varovanie"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:89
 #: Data/Dialogs/dlgConfiguration.xml:318
@@ -3503,7 +3484,7 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:201
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:228
 msgid "mph"
-msgstr ""
+msgstr "míla/hod"
 
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:202
 #: src/Dialogs/ConfigPanels/UnitsConfigPanel.cpp:229
@@ -3558,39 +3539,39 @@ msgstr "Celé meno"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
 msgid "The full name of each waypoint is displayed."
-msgstr ""
+msgstr "Zobrazí sa celé meno každého otočného bodu."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
 msgid "First Word of Name"
-msgstr ""
+msgstr "Prvé slovo z mena"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
 msgid "The first word of the waypoint name is displayed."
-msgstr ""
+msgstr "Zobrazí sa prvé slovo z názvu otočného bodu."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
 msgid "First 3 Letters"
-msgstr ""
+msgstr "Prvé 3 písmená"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
 msgid "The first 3 letters of the waypoint name are displayed."
-msgstr ""
+msgstr "Zobrazia sa prvé tri písmená z názvu otočného bodu."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
 msgid "First 5 Letters"
-msgstr ""
+msgstr "Prvých 5 písmen"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
 msgid "The first 5 letters of the waypoint name are displayed."
-msgstr ""
+msgstr "Zobrazia sa prvých päť písmen z názvu otočného bodu."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:54
 msgid "No waypoint name is displayed."
-msgstr ""
+msgstr "Nezobrazia sa žiadne názvy otočnćh bodov."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:64
 msgid "No arrival height is displayed."
-msgstr ""
+msgstr "Nezobrazí sa príetová výška."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:65
 msgid "Straight glide"
@@ -3654,7 +3635,7 @@ msgstr "Purpurový kruh"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:106
 msgid "B/W"
-msgstr ""
+msgstr "Č/B"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
 msgid "Orange"
@@ -3679,12 +3660,11 @@ msgstr "Správca úlohy"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
-msgstr ""
+msgstr "Úloha bola zmenená"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
-#, fuzzy
 msgid "Task unchanged"
-msgstr "Správca úlohy"
+msgstr "Úloha nebola zmenená"
 
 #: src/Dialogs/pnlTaskEdit.cpp:96
 msgid "Clear task?"
@@ -3700,7 +3680,7 @@ msgstr "Pridať traťový bod"
 
 #: src/Dialogs/pnlTaskList.cpp:154
 msgid "Task not saved"
-msgstr ""
+msgstr "Úloha nebola uložená"
 
 #: src/Dialogs/pnlTaskList.cpp:169
 msgid "Load the selected task?"
@@ -3712,7 +3692,7 @@ msgstr "Prechádzať úlohy"
 
 #: src/Dialogs/pnlTaskList.cpp:210
 msgid "Delete Error"
-msgstr ""
+msgstr "Chyba pri mazaní"
 
 #: src/Dialogs/pnlTaskList.cpp:216
 msgid "Delete the selected task?"
@@ -3720,7 +3700,7 @@ msgstr "Zmazať zvolenú úlohu?"
 
 #: src/Dialogs/pnlTaskList.cpp:246
 msgid "Rename Error"
-msgstr ""
+msgstr "Chyba pri premenovaní"
 
 #: src/Dialogs/pnlTaskList.cpp:277 Data/Dialogs/dlgConfigWaypoints.xml:8
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:8 Data/Dialogs/dlgVario.xml:8
@@ -3735,11 +3715,11 @@ msgstr "Načítať"
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:70
 msgid "(Add Alternate Start)"
-msgstr ""
+msgstr "(Pridaj alternatívny štart)"
 
 #: src/Dialogs/dlgTaskPoint.cpp:440
 msgid "Remove task point?"
-msgstr ""
+msgstr "Odstrániť otočný bod?"
 
 #: src/Dialogs/dlgTaskPoint.cpp:441 src/Dialogs/dlgTaskPointType.cpp:106
 msgid "Task Point"
@@ -3825,11 +3805,11 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:112
 msgid "Unknown"
-msgstr ""
+msgstr "Neznámy"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:116
 msgid "Goal"
-msgstr ""
+msgstr "Cieľ"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:123
 msgid "Out and return"
@@ -3859,11 +3839,11 @@ msgstr "Úloha je prázdna (%s)"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:183
 msgid "max."
-msgstr ""
+msgstr "max."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:187
 msgid "min."
-msgstr ""
+msgstr "min."
 
 #: src/Dialogs/dlgTaskHelpers.cpp:195
 msgid "dist."
@@ -4629,9 +4609,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:350
 #: Data/Dialogs/dlgConfiguration_L.xml:351
-#, fuzzy
 msgid "Reach mode"
-msgstr "Model zariadenia"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:189
 #: Data/Dialogs/dlgConfiguration_L.xml:189
@@ -4732,9 +4711,8 @@ msgid "Clean"
 msgstr "Čistota krídiel"
 
 #: Data/Dialogs/dlgConfigFonts.xml:28 Data/Dialogs/dlgConfigFonts_L.xml:28
-#, fuzzy
 msgid "Dialog text"
-msgstr "Dialógové okno"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:45
 #: Data/Dialogs/pnlTaskCalculator_L.xml:45
@@ -4947,9 +4925,8 @@ msgid "Height"
 msgstr "Výška"
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
-#, fuzzy
 msgid "InfoBox values, normal"
-msgstr "Hodnoty v info-oknách malé"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:233
 #: Data/Dialogs/dlgConfiguration_L.xml:233
@@ -5252,9 +5229,8 @@ msgid "Clear"
 msgstr "Vymaž"
 
 #: Data/Dialogs/dlgConfigFonts.xml:22 Data/Dialogs/dlgConfigFonts_L.xml:22
-#, fuzzy
 msgid "Topography labels, normal"
-msgstr "Popisky topológie"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:22
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
@@ -6319,9 +6295,8 @@ msgid "V manoeuvering"
 msgstr "Manévrovacia rýchl."
 
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
-#, fuzzy
 msgid "Topography labels, important"
-msgstr "Topografia/Terén"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:27
 msgid "Acknowledge"
@@ -6378,9 +6353,8 @@ msgid "Whether to show the bugs percentage."
 msgstr "Určuje, či sa má zobrazovať znečistenie krídel."
 
 #: Data/Dialogs/dlgConfigFonts.xml:16 Data/Dialogs/dlgConfigFonts_L.xml:16
-#, fuzzy
 msgid "InfoBox values, small"
-msgstr "Hodnoty v info-oknách malé"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:24 Data/Dialogs/dlgVario_L.xml:25
 msgid "Stall port"
@@ -7490,9 +7464,8 @@ msgstr "Vário"
 
 #: Data/Dialogs/dlgConfiguration.xml:355
 #: Data/Dialogs/dlgConfiguration_L.xml:356
-#, fuzzy
 msgid "Reach display"
-msgstr "Zobrazenie terénu"
+msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
@@ -7614,9 +7587,8 @@ msgstr ""
 "+"
 
 #: Data/Input/default.xci:608
-#, fuzzy
 msgid "Topo."
-msgstr "Topológia"
+msgstr ""
 
 #: Data/Input/default.xci:457
 msgid ""
@@ -7908,52 +7880,6 @@ msgstr ""
 msgid "Landing"
 msgstr "Pristánie"
 
-#~ msgid "True"
-#~ msgstr "Pravda"
-
-#~ msgid "False"
-#~ msgstr "Nepravda"
-
-#~ msgid "Alternate"
-#~ msgstr "Alternatívne"
-
-#~ msgid "Final glide bar"
-#~ msgstr "Ukazovateľ doklzu"
-
-#~ msgid "Map waypoints"
-#~ msgstr "Mapové otočné body"
-
-#~ msgid "InfoBox values"
-#~ msgstr "Hodnoty info-okien"
-
-#~ msgid "Dialog boxes"
-#~ msgstr "Dialógové okná"
-
-#~ msgid "Glide terrain line"
-#~ msgstr "Hranica doletu"
-
-#~ msgid "None "
-#~ msgstr "Žiadne "
-
-#~ msgid "Flarm Iinterface"
-#~ msgstr "Rozhranie Flarmu"
-
-#, fuzzy
-#~ msgid "InfoBox Layout"
-#~ msgstr "Vlož informačné okná"
-
-#~ msgid "Waypoint not editable"
-#~ msgstr "Otočný bod sa nedá upraviť"
-
-#~ msgid "Layout"
-#~ msgstr "Rozmiestnenie"
-
-#~ msgid "Heading"
-#~ msgstr "Kurz"
-
-#~ msgid "Final Glide"
-#~ msgstr "Doklz"
-
 #~ msgid "Last Thermal Gain"
 #~ msgstr "Zisk posledného stupáku"
 
@@ -8199,6 +8125,9 @@ msgstr "Pristánie"
 #~ msgid "Default task rules"
 #~ msgstr "Východzie pravidlá úlohy"
 
+#~ msgid "Waypoint not editable"
+#~ msgstr "Otočný bod sa nedá upraviť"
+
 #~ msgid "Experimental features"
 #~ msgstr "Experimentálne funkcie"
 
@@ -8440,6 +8369,9 @@ msgstr "Pristánie"
 #~ msgid "Default map zoom*"
 #~ msgstr "Prednastavený zoom mapy*"
 
+#~ msgid "Dialog boxes"
+#~ msgstr "Dialógové okná"
+
 #~ msgid "Climb Rate"
 #~ msgstr "Rýchlosť stúpania"
 
@@ -8463,6 +8395,9 @@ msgstr "Pristánie"
 
 #~ msgid "Auto zoom"
 #~ msgstr "Automatický zoom"
+
+#~ msgid "Topology labels"
+#~ msgstr "Popisky topológie"
 
 #~ msgid "Trail width*"
 #~ msgstr "Šírka stopy*"
@@ -8548,6 +8483,9 @@ msgstr "Pristánie"
 #~ msgid "Waypoints excluded, save anyway?"
 #~ msgstr "Otočné body nezahrnuté, uložiť napriek tomu?"
 
+#~ msgid "Map waypoints"
+#~ msgstr "Mapové otočné body"
+
 #~ msgid "Auto logger*"
 #~ msgstr "Automatický logger*"
 
@@ -8610,6 +8548,9 @@ msgstr "Pristánie"
 #~ msgid "Av climb"
 #~ msgstr "Priem. stúpanie"
 
+#~ msgid "Alternate"
+#~ msgstr "Alternatívne"
+
 #~ msgid "Green/Orange"
 #~ msgstr "Zelené/Oranžové"
 
@@ -8621,6 +8562,9 @@ msgstr "Pristánie"
 
 #~ msgid "FALSE"
 #~ msgstr "NEPLATÍ"
+
+#~ msgid "Final glide bar"
+#~ msgstr "Ukazovateľ doklzu"
 
 #~ msgid "Radio com max delay"
 #~ msgstr "Max. odmlka rádiokomunikácie"
@@ -8721,6 +8665,9 @@ msgstr "Pristánie"
 #~ msgid "Competition Id: "
 #~ msgstr "Súťažný znak: "
 
+#~ msgid "Info box values small"
+#~ msgstr "Hodnoty v info-oknách malé"
+
 #~ msgid "Statue"
 #~ msgstr "Anglické míly"
 
@@ -8819,6 +8766,9 @@ msgstr "Pristánie"
 
 #~ msgid "Block speed to fly*"
 #~ msgstr "Stála rýchlosť na preskoku"
+
+#~ msgid "Glide terrain line"
+#~ msgstr "Hranica doletu"
 
 #~ msgid "Polar file"
 #~ msgstr "Dáta poláry"
@@ -9125,6 +9075,13 @@ msgstr "Pristánie"
 #~ "nastaviť klávesami hore/dole."
 
 #~ msgid ""
+#~ "Arrival altitude at the next waypoint relative to the safety arrival "
+#~ "altitude."
+#~ msgstr ""
+#~ "Príletová výška na ďalší otočný bod relatívna k bezpečnej príletovej "
+#~ "výške."
+
+#~ msgid ""
 #~ "The name of the currently selected turn point. When this infobox is "
 #~ "active, using the up/down cursor keys selects the next/previous waypoint "
 #~ "in the task. (Touchscreen/PC only) Pressing the enter cursor key brings "
@@ -9138,6 +9095,13 @@ msgstr "Pristánie"
 #~ msgid "Altitude required to finish the task."
 #~ msgstr "Výška potrebná na dokončenie úlohy."
 
+#~ msgid ""
+#~ "Arrival altitude at the final task turn point relative to the safety "
+#~ "arrival altitude."
+#~ msgstr ""
+#~ "Príletová výška do cieľového otočného bodu relatívna k bezpečnej "
+#~ "príletovej výške."
+
 #~ msgid "Fin Dis"
 #~ msgstr "Ciel Vzdial"
 
@@ -9145,6 +9109,22 @@ msgstr "Pristánie"
 #~ "Average cross country speed while on current task, compensated for "
 #~ "altitude."
 #~ msgstr "Priemerná rýchlosť momentálnej úlohy, kompenzovaná pre výšku."
+
+#~ msgid ""
+#~ "The required glide ratio to finish the task, given by the distance to go "
+#~ "divided by the height required to arrive at the safety arrival altitude. "
+#~ "Negative values indicate a climb is necessary to finish. If the height "
+#~ "required is close to zero, the displayed value is '---'. Note that this "
+#~ "calculation may be optimistic because it reduces the height required to "
+#~ "finish by the excess energy height of the glider if its true airspeed is "
+#~ "greater than the MacCready and best LD speeds."
+#~ msgstr ""
+#~ "Kĺzavosť potrebná k dokončeniu úlohy, daná podielom zostávajúcej "
+#~ "vzdialenosti k potrebnej bezpečnej príletovej výške. Negatívne hodnoty "
+#~ "signalizujú potrebu stúpať. Ak je potrebná výška blízko k nule zobrazí sa "
+#~ "hodnota '---'. Poznámka: tento výpočet môže byť optimistický lebo "
+#~ "redukuje výšku potrebnú do cieľa o nadbytočnú výškovú energiu vetroňa ak "
+#~ "TAS je väčšia ako rýchlosť MC a rýchlosť najlepšej kĺzavosti."
 
 #~ msgid ""
 #~ "The instantaneous MacCready speed-to-fly, making use of Netto vario "
@@ -9204,6 +9184,9 @@ msgstr "Pristánie"
 
 #~ msgid "Alt diff Mc current"
 #~ msgstr "Výškový rozdiel MC akt."
+
+#~ msgid "Bright"
+#~ msgstr "Jas"
 
 #~ msgid "Menu"
 #~ msgstr "Menu"
@@ -9287,6 +9270,9 @@ msgstr "Pristánie"
 #~ msgid "BestAltn"
 #~ msgstr "NajAlt"
 
+#~ msgid "Layout"
+#~ msgstr "Rozmiestnenie"
+
 #~ msgid "Shutdown, saving Profile/Profile..."
 #~ msgstr "Vypínam, ukladám profil..."
 
@@ -9322,6 +9308,25 @@ msgstr "Pristánie"
 
 #~ msgid "Enter number"
 #~ msgstr "Vlož číslo"
+
+#~ msgid ""
+#~ "The required glide ratio to reach the next waypoint, given by the "
+#~ "distance to next waypoint divided by the height required to arrive at the "
+#~ "safety arrival altitude. Negative values indicate a climb is necessary to "
+#~ "reach the waypoint. If the height required is close to zero, the "
+#~ "displayed value is '---'.   Note that this calculation may be optimistic "
+#~ "because it reduces the height required to reach the waypoint by the "
+#~ "excess energy height of the glider if its true airspeed is greater than "
+#~ "the MacCready and best LD speeds."
+#~ msgstr ""
+#~ "Potrebná kĺzavosť na dosiahnutie ďalšieho otočného bodu, daná podielom "
+#~ "vzdialenosti k otočnému bodu a potrebnou výškou na prílet v bezpečnej "
+#~ "výške. Negatívne hodnoty signalizujú potrebu stúpania na dosiahnutie "
+#~ "otočného bodu. Ak je potrebná výška blízko nule zobrazí sa hodnota '---'. "
+#~ "Poznámka: tento výpočet môže byť optimistický lebo redukuje potrebnú "
+#~ "výšku na dosiahnutie otočného bodu o prebytočnú výškovú energiu vetroňa "
+#~ "ak je jeho skutočná rýchlosť väčšia ako MacCready a rýchlosť najlepšej "
+#~ "kĺzavosti."
 
 #~ msgid "This is the time interval between logged points when circling. "
 #~ msgstr "Toto je časový interval zápisu GPS bodov v móde krúženia. "
@@ -9766,6 +9771,9 @@ msgstr "Pristánie"
 #~ "Nastavenie MacCready používané v móde prerušenej úlohy pre odhad výšky "
 #~ "príletu na letiská."
 
+#~ msgid "Topology"
+#~ msgstr "Topológia"
+
 #~ msgid "Abort use current MC*"
 #~ msgstr "Po prerušení posledné MC*"
 
@@ -9897,6 +9905,18 @@ msgstr "Pristánie"
 #~ "Kalkulátor\n"
 #~ "úlohy"
 
+#~ msgid "None "
+#~ msgstr "Žiadne "
+
+#~ msgid "Flarm Iinterface"
+#~ msgstr "Rozhranie Flarmu"
+
+#~ msgid "InfoBox values"
+#~ msgstr "Hodnoty info-okien"
+
+#~ msgid "Final Glide"
+#~ msgstr "Doklz"
+
 #~ msgid "Show Airspace OFF"
 #~ msgstr "Zobrazenie vzdušných priestorov vypnuté"
 
@@ -9938,3 +9958,18 @@ msgstr "Pristánie"
 
 #~ msgid "What do you want to do"
 #~ msgstr "Čo chceš urobiť"
+
+#~ msgid "Info hide"
+#~ msgstr "Schovaj info"
+
+#~ msgid "Info auto"
+#~ msgstr "Info auto"
+
+#~ msgid "True"
+#~ msgstr "Pravda"
+
+#~ msgid "False"
+#~ msgstr "Nepravda"
+
+#~ msgid "Heading"
+#~ msgstr "Kurz"
