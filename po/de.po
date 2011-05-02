@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-04-20 09:17+0200\n"
-"PO-Revision-Date: 2011-04-14 23:57+0000\n"
+"PO-Revision-Date: 2011-04-27 21:48+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-20 07:04+0000\n"
-"X-Generator: Launchpad (build 12847)\n"
+"X-Launchpad-Export-Date: 2011-05-02 15:20+0000\n"
+"X-Generator: Launchpad (build 12915)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -379,7 +379,7 @@ msgstr "Keine"
 #: src/InfoBoxes/Content/Factory.cpp:61
 #, no-c-format
 msgid "Height GPS"
-msgstr "Höhe - ü. MSL (GPS)"
+msgstr "Höhe - über MSL (GPS)"
 
 #: src/InfoBoxes/Content/Factory.cpp:62
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:4
@@ -401,7 +401,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:70
 #, no-c-format
 msgid "Height AGL"
-msgstr "Höhe - ü. Grund"
+msgstr "Höhe - über Grund"
 
 #: src/InfoBoxes/Content/Factory.cpp:71
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:7
@@ -560,7 +560,7 @@ msgstr "Gesamter Höhengewinn in der letzten Thermik."
 #: src/InfoBoxes/Content/Factory.cpp:142
 #, no-c-format
 msgid "Last thermal time"
-msgstr "Letzte Thermik - Dauer"
+msgstr "Letzte Thermik - Zeit im Steigflug"
 
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
@@ -602,7 +602,7 @@ msgstr "Nächster Wegpunkt - Distanz"
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
 msgid "WP Dist"
-msgstr "WP Dist"
+msgstr "WP Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:162
 #, no-c-format
@@ -621,10 +621,10 @@ msgstr "Nächster Wegpunkt - relative Ankunftshöhe"
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "WP AltD"
-msgstr "WP HöheD"
+msgstr "WP rel. Ank. Höhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
 msgstr ""
@@ -638,7 +638,7 @@ msgstr "Nächster Wegpunkt - benötigte Endanflughöhe"
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
 msgid "WP AltR"
-msgstr "WP HöheR"
+msgstr "WP ben. Höhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
@@ -676,10 +676,10 @@ msgstr "Endanflug - Höhenreserve"
 #: src/InfoBoxes/Content/Factory.cpp:197
 #, no-c-format
 msgid "Fin AltD"
-msgstr "EA HöheD"
+msgstr "EA Höhe Diff."
 
 #: src/InfoBoxes/Content/Factory.cpp:198
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
@@ -695,7 +695,7 @@ msgstr "Endanflug - benötigte Endanflughöhe"
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
 msgid "Fin AltR"
-msgstr "EA HöheR"
+msgstr "EA ben. Höhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
@@ -727,7 +727,7 @@ msgstr "Endanflug - Distanz"
 #: src/InfoBoxes/Content/Factory.cpp:224
 #, no-c-format
 msgid "Fin Dist"
-msgstr "EA Dist"
+msgstr "EA Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:225
 #, no-c-format
@@ -745,7 +745,7 @@ msgid "Fin LD"
 msgstr "EA GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The required glide ratio to finish the task, given by the distance to go "
 "divided by the height required to arrive at the safety arrival height. "
@@ -822,7 +822,7 @@ msgstr "Der Höhengewinn (oder Verlust) im aktuellen Bart."
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:79
 #, no-c-format
 msgid "Track"
-msgstr "Flugweg"
+msgstr "Kurs"
 
 #: src/InfoBoxes/Content/Factory.cpp:270
 #, no-c-format
@@ -952,7 +952,7 @@ msgstr "Minimal mögliche Strecke für die verbleibende AA Aufgabe."
 #: src/InfoBoxes/Content/Factory.cpp:331
 #, no-c-format
 msgid "AA speed max. distance"
-msgstr "AAT - max. Distanz"
+msgstr "AAT - max. Geschwindigkeit"
 
 #: src/InfoBoxes/Content/Factory.cpp:332
 #, no-c-format
@@ -1106,7 +1106,7 @@ msgid "WP LD"
 msgstr "WP GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:405
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The required glide ratio to reach the next waypoint, given by the distance "
 "to next waypoint divided by the height required to arrive at the safety "
@@ -1287,7 +1287,7 @@ msgstr "Nächster Wegpunkt - Kursdifferenz"
 #: src/InfoBoxes/Content/Factory.cpp:485
 #, no-c-format
 msgid "Brng D"
-msgstr "WP KursD"
+msgstr "WP Kursdiff."
 
 #: src/InfoBoxes/Content/Factory.cpp:486
 #, no-c-format
@@ -1479,7 +1479,7 @@ msgstr "Team - Kursdifferenz"
 #: src/InfoBoxes/Content/Factory.cpp:575
 #, no-c-format
 msgid "Team Bd"
-msgstr "Tm KursD"
+msgstr "Tm Kursdiff."
 
 #: src/InfoBoxes/Content/Factory.cpp:576
 #, no-c-format
@@ -1496,7 +1496,7 @@ msgstr "Team - Distanz"
 #: src/InfoBoxes/Content/Factory.cpp:584
 #, no-c-format
 msgid "Team Dis"
-msgstr "Tm Dist."
+msgstr "Tm Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:585
 #, no-c-format
@@ -1511,7 +1511,7 @@ msgstr "Aufgabe - aktuelle m. Geschwindigkeit"
 #: src/InfoBoxes/Content/Factory.cpp:593
 #, no-c-format
 msgid "V Tsk Ins"
-msgstr "V Aufg."
+msgstr "V Aufg. aktuell"
 
 #: src/InfoBoxes/Content/Factory.cpp:594
 #, no-c-format
@@ -1530,7 +1530,7 @@ msgstr "Heimdistanz"
 #: src/InfoBoxes/Content/Factory.cpp:602
 #, no-c-format
 msgid "Home Dis"
-msgstr "Heimat Dist"
+msgstr "Heim Distanz"
 
 #: src/InfoBoxes/Content/Factory.cpp:603
 #, no-c-format
@@ -1586,7 +1586,7 @@ msgstr "Thermik - gesamt Durchschnitt"
 #: src/InfoBoxes/Content/Factory.cpp:629
 #, no-c-format
 msgid "TC All"
-msgstr "mSt. insg."
+msgstr "mitl. St. insg."
 
 #: src/InfoBoxes/Content/Factory.cpp:630
 #, no-c-format
@@ -1615,7 +1615,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:647
 #, no-c-format
 msgid "Battery percent"
-msgstr "Batterieprozent"
+msgstr "Batterie Ladezustand"
 
 #: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
@@ -1821,7 +1821,7 @@ msgstr "Nächster Wegpunkt - Ankunftshöhe (MSL)"
 #: src/InfoBoxes/Content/Factory.cpp:750
 #, no-c-format
 msgid "WP AltA"
-msgstr "WP HöheA"
+msgstr "WP Ank. Höhe"
 
 #: src/InfoBoxes/Content/Factory.cpp:751
 #, no-c-format
@@ -1870,7 +1870,7 @@ msgstr "Spur der Flughöhe während des Flugs"
 #: src/InfoBoxes/Content/Factory.cpp:785
 #, no-c-format
 msgid "Vario trace"
-msgstr "Variospur"
+msgstr "Spur - Vario"
 
 #: src/InfoBoxes/Content/Factory.cpp:787
 #, no-c-format
@@ -1929,7 +1929,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:821
 #, no-c-format
 msgid "Task progress"
-msgstr "Fortschritt der Aufgabe"
+msgstr "Aufgabe - Fortschritt"
 
 #: src/InfoBoxes/Content/Factory.cpp:822
 #, no-c-format
@@ -1985,7 +1985,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:846
 #, no-c-format
 msgid "Next time to go (gnd spd)"
-msgstr "Nächster Wendepunkt - benötigte Zeit (Geschw. ü. Gnd. )"
+msgstr "Nächster Wegpunkt - benötigte Zeit (Geschw. ü. Gnd.)"
 
 #: src/InfoBoxes/Content/Factory.cpp:847
 #, no-c-format
@@ -2166,11 +2166,11 @@ msgstr "Auto. Zoom aus"
 
 #: src/InputEventsActions.cpp:316
 msgid "Circling zoom on"
-msgstr "Kreisflug Zoom ein"
+msgstr "Steigflug Zoom ein"
 
 #: src/InputEventsActions.cpp:318
 msgid "Circling zoom off"
-msgstr "Kreisflug Zoom aus"
+msgstr "Steigflug Zoom aus"
 
 #: src/InputEventsActions.cpp:383
 msgid "Pan mode on"
@@ -2287,10 +2287,9 @@ msgstr "Aufgabenende"
 
 #: src/InputEventsActions.cpp:1800
 msgid "In sector, arm advance when ready"
-msgstr "Im Sektor, Fortschritt aktivieren wenn bereit"
+msgstr "Im Sektor, Weiter aktivieren wenn bereit"
 
 #: src/Pages.cpp:181
-#, fuzzy
 msgid "Info Hide"
 msgstr "Info ausblenden"
 
@@ -2307,9 +2306,8 @@ msgid "Map and InfoBoxes "
 msgstr "Karte und InfoBoxen "
 
 #: src/Pages.cpp:198
-#, fuzzy
 msgid "Info Auto"
-msgstr "Info auto."
+msgstr "Info Auto"
 
 #: src/Pages.cpp:200
 msgid "Map and InfoBoxes (Auto)"
@@ -2731,17 +2729,17 @@ msgstr "Abstellvorgang, speichere Aufgabe..."
 
 #: src/Device/TCPPort.cpp:82
 msgid "Failed to create TCP socket"
-msgstr ""
+msgstr "Kann keinen TCP Endpunkt erzeugen"
 
 #: src/Device/TCPPort.cpp:103
 #, c-format
 msgid "Failed to bind to TCP port %u"
-msgstr ""
+msgstr "Kann den TCP Anschluss %u nicht verbinden"
 
 #: src/Device/TCPPort.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to listen on TCP port %u"
-msgstr "Kann Port nicht öffnen %s"
+msgstr "Kann nicht am TCP Anschluss %u lauschen"
 
 #: src/Dialogs/Message.cpp:130
 msgid "OK"
@@ -2793,9 +2791,8 @@ msgid "Configuration saved"
 msgstr "Einstellungen gespeichert"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:55
-#, fuzzy
 msgid "Enable airspace again?"
-msgstr "Aktivieren/Abschalten der Luftraumwarnungen."
+msgstr "Luftraum wieder aktivieren?"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:55
 msgid "Acknowledge for day?"
@@ -3460,14 +3457,12 @@ msgid "Shade"
 msgstr "Schattiert"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:78
-#, fuzzy
 msgid "Straight"
-msgstr "Geradliniger Gleitpfad"
+msgstr "Direkt"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:79
-#, fuzzy
 msgid "Turning"
-msgstr "Warnung"
+msgstr "Mit Umweg"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:89
 #: Data/Dialogs/dlgConfiguration.xml:318
@@ -4754,9 +4749,8 @@ msgstr "Betimmt das Verhalten der aktuellen Aufgabe."
 
 #: Data/Dialogs/dlgConfiguration.xml:350
 #: Data/Dialogs/dlgConfiguration_L.xml:351
-#, fuzzy
 msgid "Reach mode"
-msgstr "Rutenplaner Modus"
+msgstr "Erreichbar Modus"
 
 #: Data/Dialogs/dlgConfiguration.xml:189
 #: Data/Dialogs/dlgConfiguration_L.xml:189
@@ -4858,9 +4852,8 @@ msgid "Clean"
 msgstr "Sauber"
 
 #: Data/Dialogs/dlgConfigFonts.xml:28 Data/Dialogs/dlgConfigFonts_L.xml:28
-#, fuzzy
 msgid "Dialog text"
-msgstr "Dialogstil"
+msgstr "Dialog Text"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:45
 #: Data/Dialogs/pnlTaskCalculator_L.xml:45
@@ -4999,7 +4992,6 @@ msgstr "Startpunkt"
 
 #: Data/Dialogs/dlgConfiguration.xml:355
 #: Data/Dialogs/dlgConfiguration_L.xml:356
-#, fuzzy
 msgid ""
 "This determines whether the glide reach is drawn as a line on the map area:\n"
 "[Off] Disables display\n"
@@ -5089,9 +5081,8 @@ msgid "Height"
 msgstr "Höhe"
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
-#, fuzzy
 msgid "InfoBox values, normal"
-msgstr "infoBox Werte klein"
+msgstr "InfoBox Werte, normal"
 
 #: Data/Dialogs/dlgConfiguration.xml:233
 #: Data/Dialogs/dlgConfiguration_L.xml:233
@@ -5221,7 +5212,7 @@ msgstr "Max. tolerierte Abflugüberhöhung"
 
 #: Data/Dialogs/dlgVario.xml:114 Data/Dialogs/dlgVario_L.xml:115
 msgid "Circling deadband type"
-msgstr "Kreisflug Totbandtyp"
+msgstr "Steigflug Totbandtyp"
 
 #: Data/Dialogs/dlgWayPointDetails.xml:28
 #: Data/Dialogs/dlgWayPointDetails_L.xml:28
@@ -5230,7 +5221,7 @@ msgstr "In Aufgabe einfügen"
 
 #: Data/Dialogs/dlgConfiguration.xml:73 Data/Dialogs/dlgConfiguration_L.xml:73
 msgid "Circling zoom"
-msgstr "Kreisflug Zoom"
+msgstr "Steigflug Zoom"
 
 #: Data/Dialogs/dlgConfiguration.xml:754
 #: Data/Dialogs/dlgConfiguration_L.xml:755
@@ -5414,7 +5405,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:421 Data/Dialogs/dlgVario_L.xml:422
 msgid "V flap"
-msgstr ""
+msgstr "V Wölbklappe"
 
 #: Data/Dialogs/dlgStartPoint.xml:6 Data/Dialogs/dlgStartPoint_L.xml:6
 #: Data/Dialogs/dlgTextEntry_Keyboard.xml:9
@@ -5423,9 +5414,8 @@ msgid "Clear"
 msgstr "Löschen"
 
 #: Data/Dialogs/dlgConfigFonts.xml:22 Data/Dialogs/dlgConfigFonts_L.xml:22
-#, fuzzy
 msgid "Topography labels, normal"
-msgstr "Topographie Beschriftungen"
+msgstr "Topographie Beschriftung, normal"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:22
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
@@ -5658,7 +5648,7 @@ msgstr "Zugeteilte Aufgabenzeit"
 #: Data/Dialogs/dlgConfiguration_L.xml:574
 #: Data/Dialogs/dlgConfiguration_L.xml:593
 msgid "Driver"
-msgstr ""
+msgstr "Treiber"
 
 #: Data/Dialogs/dlgVario.xml:96 Data/Dialogs/dlgVario_L.xml:97
 msgid "Adjustment to base frequency of tones in all modes."
@@ -5836,7 +5826,6 @@ msgstr "Einheiten für die Geschwindigkeiten bei einer Aufgabe."
 
 #: Data/Dialogs/dlgConfiguration.xml:337
 #: Data/Dialogs/dlgConfiguration_L.xml:338
-#, fuzzy
 msgid ""
 "When enabled and MC is positive, route planning allows climbs between the "
 "aircraft location and destination."
@@ -6219,6 +6208,9 @@ msgid ""
 "[Simple] Simplified line graphics.\n"
 "[Detailed] Rendered aircraft graphics."
 msgstr ""
+"Wahl des Flugzeugsymbols.\n"
+"[Einfach] Eine einfache Liniengrafik.\n"
+"[Detailiert] Aufwendigere Flugzeug Darstellung."
 
 #: Data/Dialogs/dlgStatusAircraft.xml:3
 msgid "Aircraft Status"
@@ -6290,7 +6282,7 @@ msgstr "Vega Spracherweiterung"
 
 #: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "High limit of circling dead band"
-msgstr "Obergrenze der Tonausblendung im Kreisflug"
+msgstr "Obergrenze der Tonausblendung im Steigflug"
 
 #: Data/Dialogs/dlgVario.xml:290 Data/Dialogs/dlgVario_L.xml:291
 msgid "Mute vario on radio"
@@ -6537,9 +6529,8 @@ msgid "V manoeuvering"
 msgstr "Manövergeschwindigkeit"
 
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
-#, fuzzy
 msgid "Topography labels, important"
-msgstr "Topographie Beschriftungen"
+msgstr "Topographie Beschriftung, wichtig"
 
 #: Data/Dialogs/dlgSwitches.xml:27
 msgid "Acknowledge"
@@ -6597,9 +6588,8 @@ msgid "Whether to show the bugs percentage."
 msgstr "Ob die Profilsauberkeit in Prozent angezeigt werden soll."
 
 #: Data/Dialogs/dlgConfigFonts.xml:16 Data/Dialogs/dlgConfigFonts_L.xml:16
-#, fuzzy
 msgid "InfoBox values, small"
-msgstr "infoBox Werte klein"
+msgstr "InfoBox Werte, klein"
 
 #: Data/Dialogs/dlgVario.xml:24 Data/Dialogs/dlgVario_L.xml:25
 msgid "Stall port"
@@ -7016,7 +7006,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgCredits_L.xml:3
 msgid "XCSoar"
-msgstr ""
+msgstr "XCSoar"
 
 #: Data/Dialogs/dlgConfiguration.xml:662
 #: Data/Dialogs/dlgConfiguration_L.xml:663
@@ -7179,7 +7169,7 @@ msgstr "Vega"
 #: Data/Dialogs/dlgConfiguration.xml:360
 #: Data/Dialogs/dlgConfiguration_L.xml:361
 msgid "Reach polar"
-msgstr "Erreichen Polare"
+msgstr "Erreichbar Polare"
 
 #: Data/Dialogs/dlgConfiguration.xml:434
 #: Data/Dialogs/dlgConfiguration_L.xml:435
@@ -7555,7 +7545,7 @@ msgstr "Standard Zieltyp für neu angelegte Aufgaben."
 
 #: Data/Dialogs/dlgVario.xml:88 Data/Dialogs/dlgVario_L.xml:89
 msgid "Mean volume level in circling modes."
-msgstr "Mittlere Lautstärke im Kreisflug."
+msgstr "Mittlere Lautstärke im Steigflug."
 
 #: Data/Dialogs/dlgStatus.xml:35
 msgid "Speed estimated"
@@ -7787,9 +7777,8 @@ msgstr "Variometer"
 
 #: Data/Dialogs/dlgConfiguration.xml:355
 #: Data/Dialogs/dlgConfiguration_L.xml:356
-#, fuzzy
 msgid "Reach display"
-msgstr "Erreichen Polare"
+msgstr "Erreichbar Anzeige"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
@@ -7922,9 +7911,8 @@ msgstr ""
 "+"
 
 #: Data/Input/default.xci:608
-#, fuzzy
 msgid "Topo."
-msgstr "Topologie"
+msgstr "Topo."
 
 #: Data/Input/default.xci:457
 msgid ""
@@ -8165,7 +8153,7 @@ msgstr "Ins EEPROM gespeichert"
 
 #: Data/Input/default.xci:925
 msgid "Credits"
-msgstr ""
+msgstr "Mitwirkende"
 
 #: Data/Input/default.xci:778
 msgid "Accel"
@@ -8243,54 +8231,6 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Gelandet"
-
-#~ msgid "True"
-#~ msgstr "Wahr"
-
-#~ msgid "False"
-#~ msgstr "Falsch"
-
-#~ msgid "Alternate"
-#~ msgstr "Alternative"
-
-#~ msgid "Final glide bar"
-#~ msgstr "Endanflug Linie"
-
-#~ msgid "Map waypoints"
-#~ msgstr "Wegpunkte der Karte"
-
-#~ msgid "Important topography labels"
-#~ msgstr "Wichtige topographische Beschriftungen"
-
-#~ msgid "Set speed remaining"
-#~ msgstr "Benötigte Geschwindigkeit"
-
-#~ msgid "InfoBox values"
-#~ msgstr "InfoBox Werte"
-
-#~ msgid "Small InfoBox values"
-#~ msgstr "Kleine InfoBox Werte"
-
-#~ msgid "Dialog boxes"
-#~ msgstr "Dialogboxen"
-
-#~ msgid ""
-#~ "When enabled, the glide terrain range is calculated with turning around "
-#~ "terrain obstacles.  If disabled, the range is from straight line paths "
-#~ "from the glider."
-#~ msgstr ""
-#~ "Aktiviert, wird der Gleitbereich unter Berücksichtigung berechnet, das "
-#~ "Hindernisse umflogen werden können. Sonst wird der Gleitbereich aus "
-#~ "geradlienigen Pfaden vom Segler aus berechnet."
-
-#~ msgid "Turning reach"
-#~ msgstr "Erreichbarkeit mit Umwegen"
-
-#~ msgid "Glide terrain line"
-#~ msgstr "Gleitflugbereich als"
-
-#~ msgid "Topography"
-#~ msgstr "Topographie"
 
 #~ msgid "Ignore checksum*"
 #~ msgstr "Prüfsumme ignorieren*"
@@ -8680,6 +8620,9 @@ msgstr "Gelandet"
 #~ msgid "Set range"
 #~ msgstr "Setze Reichweite"
 
+#~ msgid "Info box values small"
+#~ msgstr "infoBox Werte klein"
+
 #~ msgid "Auto Blank"
 #~ msgstr "Auto Blank"
 
@@ -8815,6 +8758,9 @@ msgstr "Gelandet"
 
 #~ msgid "Comms with Volkslogger"
 #~ msgstr "Verbindung mit Volkslogger"
+
+#~ msgid "Final glide bar"
+#~ msgstr "Endanflug Linie"
 
 #~ msgid "Radio com max delay"
 #~ msgstr "Funkverbindung maximale Verzögerung"
@@ -9173,8 +9119,22 @@ msgstr "Gelandet"
 #~ "Simulationsmodus um mit dem Hoch- Runterpfeil die Geschwindigkeit und mit "
 #~ "dem Links- Rechtspfeil die Richtung zu ändern."
 
+#~ msgid ""
+#~ "Arrival altitude at the next waypoint relative to the safety arrival "
+#~ "altitude."
+#~ msgstr ""
+#~ "Ankunftshöhe am nächsten Wegpunkt, relativ zur eingestellten "
+#~ "Sicherheitshöhe."
+
 #~ msgid "Altitude required to reach the next turn point."
 #~ msgstr "Benötigte Höhe um den nächsten Wendepunkt zu erreichen."
+
+#~ msgid ""
+#~ "Arrival altitude at the final task turn point relative to the safety "
+#~ "arrival altitude."
+#~ msgstr ""
+#~ "Ankunftshöhe am letzten Wendepunkt der Aufgabe, relativ zur eingestellten "
+#~ "Sicherheitshöhe."
 
 #~ msgid "Pitch Scale"
 #~ msgstr "Änderung"
@@ -9228,6 +9188,43 @@ msgstr "Gelandet"
 
 #~ msgid "Map"
 #~ msgstr "Karte"
+
+#~ msgid ""
+#~ "The required glide ratio to finish the task, given by the distance to go "
+#~ "divided by the height required to arrive at the safety arrival altitude. "
+#~ "Negative values indicate a climb is necessary to finish. If the height "
+#~ "required is close to zero, the displayed value is '---'. Note that this "
+#~ "calculation may be optimistic because it reduces the height required to "
+#~ "finish by the excess energy height of the glider if its true airspeed is "
+#~ "greater than the MacCready and best LD speeds."
+#~ msgstr ""
+#~ "Erforderliche Gleitzahl um die Aufgabe zu beenden, berechnet über die "
+#~ "verbleibende Strecke geteilt durch die benötigte Höhe um in "
+#~ "Sicherheitshöhe anzukommen. Bei negativen Werten ist ein Steigflug zum "
+#~ "Beenden notwendig. Ist die benötigte Höhe nahe Null wird '---' angezeigt. "
+#~ "Die Berechnung kann zu optimistisch sein, da die benötigte Höhe durch den "
+#~ "Überschuss aus der Energiehöhe des Segler reduziert wird, wenn die wahre "
+#~ "Geschwindigkeit gegenüber Luft größer als die MacCready Geschwindigkeit "
+#~ "und die Geschwindigkeit des besten Gleitens ist."
+
+#~ msgid ""
+#~ "The required glide ratio to reach the next waypoint, given by the "
+#~ "distance to next waypoint divided by the height required to arrive at the "
+#~ "safety arrival altitude. Negative values indicate a climb is necessary to "
+#~ "reach the waypoint. If the height required is close to zero, the "
+#~ "displayed value is '---'.   Note that this calculation may be optimistic "
+#~ "because it reduces the height required to reach the waypoint by the "
+#~ "excess energy height of the glider if its true airspeed is greater than "
+#~ "the MacCready and best LD speeds."
+#~ msgstr ""
+#~ "Erforderliche Gleitzahl um den nächsten Wegpunkt zu erreichen, berechnet "
+#~ "über die Strecke zum Wegpunkt geteilt durch die benötigte Höhe um in "
+#~ "Sicherheitshöhe anzukommen. Bei negativen Werten ist ein Steigflug nötig. "
+#~ "Ist die benötigte Höhe nahe Null wird '---' angezeigt. Die Berechnung "
+#~ "kann zu optimistisch sein, da die benötigte Höhe durch den Überschuss aus "
+#~ "der Energiehöhe des Segler reduziert wird, wenn die wahre Geschwindigkeit "
+#~ "gegenüber Luft größer als die MacCready Geschwindigkeit und die "
+#~ "Geschwindigkeit des besten Gleitens ist."
 
 #~ msgid ""
 #~ "The current MacCready setting. This infobox also shows whether MacCready "
@@ -9286,6 +9283,9 @@ msgstr "Gelandet"
 #~ msgid "Online contest"
 #~ msgstr "Online Contest"
 
+#~ msgid "Map waypoints"
+#~ msgstr "Wegpunkte der Karte"
+
 #~ msgid "Warning time*"
 #~ msgstr "Vorwarnzeit*"
 
@@ -9297,6 +9297,9 @@ msgstr "Gelandet"
 
 #~ msgid "Task scoring"
 #~ msgstr "Aufgaben Bewertung"
+
+#~ msgid "Glide terrain line"
+#~ msgstr "Gleitflugbereich als"
 
 #~ msgid "Terrain file*"
 #~ msgstr "Gelände*"
@@ -9816,6 +9819,9 @@ msgstr "Gelandet"
 
 #~ msgid "Bearing:"
 #~ msgstr "Peilung:"
+
+#~ msgid "Alternate"
+#~ msgstr "Alternative"
 
 #~ msgid ""
 #~ "This allows switching on or off the automatic wind algorithm.  When the "
@@ -10884,6 +10890,9 @@ msgstr "Gelandet"
 #~ msgid "Aux Info"
 #~ msgstr "Zus. Info"
 
+#~ msgid "Topology"
+#~ msgstr "Topologie"
+
 #~ msgid "Full Scrn"
 #~ msgstr "Ganzer Bildsch."
 
@@ -11053,6 +11062,9 @@ msgstr "Gelandet"
 #~ msgid "Text input style*"
 #~ msgstr "Texteingabestil*"
 
+#~ msgid "InfoBox values"
+#~ msgstr "InfoBox Werte"
+
 #~ msgid "InfoBox border*"
 #~ msgstr "Infobox Rahmen*"
 
@@ -11076,6 +11088,9 @@ msgstr "Gelandet"
 
 #~ msgid "Msg. window*"
 #~ msgstr "Nachrichten Fenster*"
+
+#~ msgid "Topography"
+#~ msgstr "Topographie"
 
 #~ msgid "Msg window"
 #~ msgstr "Nachrichten Fenster"
@@ -11149,11 +11164,23 @@ msgstr "Gelandet"
 #~ msgid "Abort use current MC"
 #~ msgstr "Behalte MC Wert bei Abbruch"
 
+#~ msgid "Info hide"
+#~ msgstr "Info ausblenden"
+
+#~ msgid "Info auto"
+#~ msgstr "Info auto."
+
 #~ msgid "Aux-%u"
 #~ msgstr "Extra-%u"
 
 #~ msgid "Thermal band"
 #~ msgstr "Thermik Profil"
+
+#~ msgid "True"
+#~ msgstr "Wahr"
+
+#~ msgid "False"
+#~ msgstr "Falsch"
 
 #~ msgid "Heading"
 #~ msgstr "Kurs"
@@ -11200,6 +11227,21 @@ msgstr "Gelandet"
 #~ "Zeige topographische Strukturen (Straßen, Flüsse, Seen usw.) auf der "
 #~ "Karte. Es muss eine Topographiedatei angegeben werden."
 
+#~ msgid ""
+#~ "This determines whether the glide terrain range is calculated and drawn "
+#~ "as a line on the map area:\n"
+#~ "[Off] Disables display\n"
+#~ "[Line] Draws a dashed line at the glide range\n"
+#~ "[Shade] Shades terrain outside glide range"
+#~ msgstr ""
+#~ "Bestimmt ob der Gleitflugbereich berechnet und dargetellt wird.\n"
+#~ "[Aus] schaltet die Darstellung aus,\n"
+#~ "[Grenzlinie] zeichnet eine gestrichelte Linie um den Bereich,\n"
+#~ "[Schattiert] verdunkelt das Gelände außerhalb des Gleitflugbereichs."
+
+#~ msgid "Set speed remaining"
+#~ msgstr "Benötigte Geschwindigkeit"
+
 #~ msgid "Trail scaled*"
 #~ msgstr "Skalierte Spur*"
 
@@ -11212,14 +11254,23 @@ msgstr "Gelandet"
 #~ msgid "Speed remaining Help"
 #~ msgstr "Hilfe für: Verbleibende Geschwindigkeit."
 
+#~ msgid "Small InfoBox values"
+#~ msgstr "Kleine InfoBox Werte"
+
 #~ msgid "Aircraft symbol*"
 #~ msgstr "Flugzeugsymbol*"
 
 #~ msgid "Max. Auto-Zoom distance*"
 #~ msgstr "Max. Auto-Zoom Distanz*"
 
+#~ msgid "Dialog boxes"
+#~ msgstr "Dialogboxen"
+
 #~ msgid "FAI start/ finish rules"
 #~ msgstr "FAI Start-/Zielregeln"
+
+#~ msgid "Turning reach"
+#~ msgstr "Erreichbarkeit mit Umwegen"
 
 #~ msgid "Airspace transparency*"
 #~ msgstr "Luftraumanzeige"
@@ -11236,8 +11287,30 @@ msgstr "Gelandet"
 #~ msgid "Auxiliary-3"
 #~ msgstr "Zusätzlich-3"
 
+#~ msgid ""
+#~ "When enabled, the glide terrain range is calculated with turning around "
+#~ "terrain obstacles.  If disabled, the range is from straight line paths "
+#~ "from the glider."
+#~ msgstr ""
+#~ "Aktiviert, wird der Gleitbereich unter Berücksichtigung berechnet, das "
+#~ "Hindernisse umflogen werden können. Sonst wird der Gleitbereich aus "
+#~ "geradlienigen Pfaden vom Segler aus berechnet."
+
 #~ msgid "Auxiliary-5"
 #~ msgstr "Zusätzlich-5"
 
+#~ msgid "Important topography labels"
+#~ msgstr "Wichtige topographische Beschriftungen"
+
+#~ msgid "Topography labels"
+#~ msgstr "Topographie Beschriftungen"
+
 #~ msgid "InfoBox Layout"
 #~ msgstr "InfoBox Anordnung"
+
+#~ msgid ""
+#~ "When enabled and Mc is positive, route planning allows climbs between the "
+#~ "aircraft location and destination."
+#~ msgstr ""
+#~ "Wenn dies aktiviert und MC größer Null, dann erlaubt der Routenplaner "
+#~ "Steigphasen zwischen der aktuellen Position und dem Ziel."
