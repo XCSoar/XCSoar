@@ -131,12 +131,12 @@ public:
   };
 
   struct ZZY {
-    ZZY(const fixed _tas): tas(_tas) {};
+    ZZY(const fixed _tas): tas(_tas) {}
     const fixed tas;
   };
 
   struct ZZBeta {
-    ZZBeta(fixed _north, fixed _east):north(_north),east(_east) {};
+    ZZBeta(fixed _north, fixed _east):north(_north),east(_east) {}
     const fixed north;
     const fixed east;
   };
@@ -154,10 +154,12 @@ public:
 
     fixed Phi(const ZZBeta& beta) const {
       return sqrt(sqr(x.gps_north+beta.north)+sqr(x.gps_east+beta.east));
-    };
+    }
+
     fixed f(const ZZBeta& beta) const {
       return y.tas-Phi(beta);
-    };
+    }
+
     fixed mag() const {
       return y.tas;
     }
