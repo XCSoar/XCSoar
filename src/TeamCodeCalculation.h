@@ -33,6 +33,9 @@ class Angle;
 
 class TeamCode
 {
+  /** The team code */
+  TCHAR code[10];
+
 public:
   TeamCode() {
     code[0] = 0;
@@ -77,10 +80,6 @@ public:
    * @param _code The new team code
    */
   void Update(const TCHAR* _code);
-
-private:
-  /** The team code */
-  TCHAR code[10];
 };
 
 #endif
