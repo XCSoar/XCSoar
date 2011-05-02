@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Screen/Font.hpp"
 #include "Screen/Fonts.hpp"
+#include "Screen/Key.h"
 #include "ResourceLoader.hpp"
 #include "Version.hpp"
 #include "resource.h"
@@ -45,6 +46,30 @@ static void
 OnPrev(gcc_unused WndButton &button)
 {
   tab->PreviousPage();
+}
+
+static bool
+FormKeyDown(WndForm &Sender, unsigned key_code)
+{
+  (void)Sender;
+  switch (key_code) {
+  case VK_LEFT:
+#ifdef GNAV
+  case '6':
+#endif
+    tab->PreviousPage();
+    return true;
+
+  case VK_RIGHT:
+#ifdef GNAV
+  case '7':
+#endif
+    tab->NextPage();
+    return true;
+
+  default:
+    return false;
+  }
 }
 
 static void
@@ -159,6 +184,8 @@ dlgCreditsShowModal(SingleWindow &parent)
 
   tab = ((TabbedControl *)wf->FindByName(_T("tab")));
   assert(tab != NULL);
+
+  wf->SetKeyDownNotify(FormKeyDown);
 
   LoadTextFromResource(_T("LICENSE"), _T("prpLicense"));
   LoadTextFromResource(_T("AUTHORS"), _T("prpAuthors"));
