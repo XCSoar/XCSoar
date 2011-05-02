@@ -458,12 +458,7 @@ public:
   };
 };
 
-
-
-/////////////////////////////////////////////
-
 static WindZigZagGlue wind_zig_zag;
-
 
 int
 WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
