@@ -74,20 +74,17 @@ GlideComputerStats::DoLogging()
     FastLogNum--;
   }
 
-  if (log_clock.check_advance(Basic().Time)) {
-    if (logger != NULL)
+  if (log_clock.check_advance(Basic().Time) && logger != NULL)
       logger->LogPoint(Basic());
-  }
 
-  if (Calculated().flight.Flying) {
-    if (stats_clock.check_advance(Basic().Time)) {
-      flightstats.AddAltitudeTerrain(Calculated().flight.FlightTime,
-                                     Calculated().TerrainAlt);
-      flightstats.AddAltitude(Calculated().flight.FlightTime,
-                              Basic().NavAltitude);
-      flightstats.AddTaskSpeed(Calculated().flight.FlightTime,
-                               Calculated().task_stats.get_pirker_speed());
-    }
+  if (Calculated().flight.Flying &&
+      stats_clock.check_advance(Basic().Time)) {
+    flightstats.AddAltitudeTerrain(Calculated().flight.FlightTime,
+                                   Calculated().TerrainAlt);
+    flightstats.AddAltitude(Calculated().flight.FlightTime,
+                            Basic().NavAltitude);
+    flightstats.AddTaskSpeed(Calculated().flight.FlightTime,
+                             Calculated().task_stats.get_pirker_speed());
   }
 
   return true;
