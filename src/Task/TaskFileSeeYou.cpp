@@ -285,7 +285,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
   const Waypoint *wp = wps[pos];
 
   if (!turnpoint_infos.Valid)
-    oz = NULL;
+    return NULL;
 
   if (factType == TaskBehaviour::FACTORY_RT &&
       isIntermediate && isKeyhole(turnpoint_infos))
