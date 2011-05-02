@@ -107,19 +107,6 @@ using std::max;
  */
 class WindZigZag {
 public:
-
-  WindZigZag() {
-    reset();
-  }
-
-  /**
-   * Clear as if never used
-   */
-  void reset() {
-    obs.clear();
-    time_blackout = (unsigned)-1;
-  }
-
   struct ZZX {
     ZZX(const fixed mag, const Angle ang) {
       ang.sin_cos(gps_east, gps_north);
@@ -165,6 +152,26 @@ public:
     }
   };
 
+private:
+  typedef std::list<ZZObs> ObsList;
+
+  ObsList obs;
+  unsigned time_blackout;
+
+public:
+
+  WindZigZag() {
+    reset();
+  }
+
+  /**
+   * Clear as if never used
+   */
+  void reset() {
+    obs.clear();
+    time_blackout = (unsigned)-1;
+  }
+
   /**
    * Find optimal value
    */
@@ -205,12 +212,6 @@ protected:
   void append(ZZObs o);
 
 private:
-
-  typedef std::list<ZZObs> ObsList;
-
-  ObsList obs;
-  unsigned time_blackout;
-
   unsigned size() const {
     return obs.size();
   }
