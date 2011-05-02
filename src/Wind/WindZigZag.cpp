@@ -408,7 +408,7 @@ public:
   };
 
   int Update(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-             fixed &zzwindspeed, Angle &zzwindbearing) {
+             SpeedVector &wind) {
 
     // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 
@@ -448,12 +448,7 @@ public:
       return 0;
 
     int quality;
-    const SpeedVector wind = optimises(quality, derived.wind,
-                                       derived.Circling);
-    if (quality) {
-      zzwindspeed = wind.norm;
-      zzwindbearing = wind.bearing;
-    }
+    wind = optimises(quality, derived.wind, derived.Circling);
     return quality;
   };
 };
@@ -462,7 +457,7 @@ static WindZigZagGlue wind_zig_zag;
 
 int
 WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-                 fixed &zzwindspeed, Angle &zzwindbearing)
+                 SpeedVector &wind)
 {
-  return wind_zig_zag.Update(basic, derived, zzwindspeed, zzwindbearing);
+  return wind_zig_zag.Update(basic, derived, wind);
 }

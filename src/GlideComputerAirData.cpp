@@ -166,14 +166,12 @@ GlideComputerAirData::Wind()
   // update zigzag wind
   if ((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG)
       && Basic().TrueAirspeed > SettingsComputer().glide_polar_task.get_Vtakeoff()) {
-    fixed zz_wind_speed;
-    Angle zz_wind_bearing;
+    SpeedVector wind;
     int quality;
-    quality = WindZigZagUpdate(Basic(), calculated,
-                               zz_wind_speed, zz_wind_bearing);
+    quality = WindZigZagUpdate(Basic(), calculated, wind);
 
     if (quality > 0)
-      SetWindEstimate(zz_wind_speed, zz_wind_bearing, quality);
+      SetWindEstimate(wind.norm, wind.bearing, quality);
   }
 }
 

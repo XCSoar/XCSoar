@@ -24,14 +24,12 @@ Copyright_License {
 #ifndef WINDZIGZAG_HPP
 #define WINDZIGZAG_HPP
 
-#include "Math/fixed.hpp"
-
 struct NMEA_INFO;
 struct DERIVED_INFO;
-class Angle;
+struct SpeedVector;
 
 int
 WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-                 fixed &zzwindspeed, Angle &zzwindbearing);
+                 SpeedVector &wind);
 
 #endif
