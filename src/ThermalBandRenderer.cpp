@@ -54,6 +54,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
                                      const SETTINGS_COMPUTER &settings_computer,
                                      Chart &chart, 
                                      const TaskBehaviour& task_props,
+                                     const bool is_infobox,
                                      const OrderedTaskBehaviour* ordered_props)
 {
   const ThermalBandInfo &thermal_band = calculated.thermal_band;
@@ -129,7 +130,8 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
   }
 
   // position of thermal band
-  Pen pen(2, Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK);
+  Pen pen(2, (!is_infobox || Appearance.InverseInfoBox)?
+          COLOR_WHITE: COLOR_BLACK);
   chart.DrawLine(fixed_zero, h, 
                  settings_computer.glide_polar_task.get_mc(), h, pen);
 
@@ -173,7 +175,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
   Chart chart(canvas, rc);
   scale_chart(calculated, settings_computer, chart);
   DrawThermalBand(basic, calculated, settings_computer,
-                  chart, task_props, ordered_props);
+                  chart, task_props, false, ordered_props);
 
   chart.DrawXGrid(Units::ToSysVSpeed(fixed_one), fixed_zero,
                   Chart::STYLE_THINDASHPAPER, fixed_one, true);
@@ -198,5 +200,5 @@ ThermalBandRenderer::DrawThermalBandSpark(const NMEA_INFO& basic,
   chart.PaddingLeft = IBLSCALE(3);
   scale_chart(calculated, settings_computer, chart);
   DrawThermalBand(basic, calculated, settings_computer,
-                  chart, task_props, NULL);
+                  chart, task_props, true, NULL);
 }

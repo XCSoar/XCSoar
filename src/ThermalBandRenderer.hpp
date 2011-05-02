@@ -58,6 +58,7 @@ protected:
                               const SETTINGS_COMPUTER &settings_computer,
                               Chart &chart,
                               const TaskBehaviour& task_props,
+                              const bool is_infobox,
                               const OrderedTaskBehaviour* ordered_props);
 
   static void scale_chart(const DERIVED_INFO &calculated,
