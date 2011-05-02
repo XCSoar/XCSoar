@@ -393,10 +393,8 @@ WindZigZag::correlation(const ZZBeta& beta) const
 
   unsigned n = 0;
   for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
-    fixed x = it->Phi(beta);
-    fixed y = it->mag();
-    x_av += x;
-    y_av += y;
+    x_av += it->Phi(beta);
+    y_av += it->mag();
     n++;
   }
 
