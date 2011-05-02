@@ -139,7 +139,7 @@ public:
     const Angle track;
 
     fixed Phi(const ZZBeta& beta) const {
-      return sqrt(sqr(x.gps_north + beta.north) + sqr(x.gps_east + beta.east));
+      return hypot(x.gps_north + beta.north, x.gps_east + beta.east);
     }
 
     fixed f(const ZZBeta& beta) const {
