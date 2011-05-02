@@ -164,7 +164,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   for (AlternateVector::iterator v = approx_waypoints.begin();
        v != approx_waypoints.end();) {
 
-    if (only_airfield && !v->first.is_airport()) {
+    if (only_airfield && !v->first.IsAirport()) {
       ++v;
       continue;
     }
@@ -230,7 +230,7 @@ public:
    * @param wp Waypoint that is visited
    */
   void Visit(const Waypoint& wp) {
-    if (wp.is_landable())
+    if (wp.IsLandable())
       vector.push_back(std::make_pair(wp, GlideResult()));
   }
 

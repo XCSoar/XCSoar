@@ -112,7 +112,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
 
   // Frequency & runway direction/length (for airports and landables)
   // and description (e.g. "Some Description")
-  if (new_waypoint.is_landable()) {
+  if (new_waypoint.IsLandable()) {
     if (iFrequency < n_params)
       appendStringWithSeperator(new_waypoint.Comment, params[iFrequency]);
 

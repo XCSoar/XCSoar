@@ -104,7 +104,7 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
     /* fall back to HomeLocation, try to find it in the waypoint
        database */
     wp = way_points.lookup_location(settings.HomeLocation, fixed(100));
-    if (wp != NULL && wp->is_airport())
+    if (wp != NULL && wp->IsAirport())
       settings.SetHome(*wp);
   }
 

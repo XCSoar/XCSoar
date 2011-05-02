@@ -464,19 +464,19 @@ private:
       return true;
 
     case tfAirport:
-      return wp.is_airport();
+      return wp.IsAirport();
 
     case tfLandable:
-      return wp.is_landable();
+      return wp.IsLandable();
 
     case tfTurnpoint:
-      return wp.is_turnpoint();
+      return wp.IsTurnpoint();
 
     case tfStart:
-      return wp.is_startpoint();
+      return wp.IsStartpoint();
 
     case tfFinish:
-      return wp.is_finishpoint();
+      return wp.IsFinishpoint();
 
     case tfFAITriangleLeft:
       return FAITriPtVali->isFAITrianglePoint(wp, fixed(-1));
@@ -748,9 +748,9 @@ PaintWaypoint(Canvas &canvas, const PixelRect rc,
 
   if (way_point.Flags.Home)
     buffer[0] = 'H';
-  else if (way_point.is_airport())
+  else if (way_point.IsAirport())
     buffer[0] = 'A';
-  else if (way_point.is_landable())
+  else if (way_point.IsLandable())
     buffer[0] = 'L';
 
   if (way_point.Flags.TurnPoint) {

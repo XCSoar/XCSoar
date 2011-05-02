@@ -221,7 +221,7 @@ TestWinPilotWayPoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Type == ((!org_wp.is_landable()) ? Waypoint::wtNormal : org_wp.Type));
+  ok1(wp->Type == ((!org_wp.IsLandable()) ? Waypoint::wtNormal : org_wp.Type));
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
@@ -290,7 +290,7 @@ TestZanderWayPoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Type == ((!org_wp.is_landable()) ? Waypoint::wtNormal : org_wp.Type));
+  ok1(wp->Type == ((!org_wp.IsLandable()) ? Waypoint::wtNormal : org_wp.Type));
   ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);

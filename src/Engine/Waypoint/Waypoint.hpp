@@ -78,7 +78,7 @@ public:
      *
      * @param turnpoint Whether the waypoint is a turnpoint
      */
-    void setDefaultFlags(bool turnpoint);
+    void SetDefaultFlags(bool turnpoint);
   };
 
   /**
@@ -124,7 +124,7 @@ public:
    * @return True if waypoint is landable
    */
   bool
-  is_landable() const
+  IsLandable() const
   {
     return (Type == wtAirfield || Type == wtOutlanding);
   }
@@ -135,7 +135,7 @@ public:
    * @return True if waypoint is landable
    */
   bool
-  is_airport() const
+  IsAirport() const
   {
     return Type == wtAirfield;
   }
@@ -146,7 +146,7 @@ public:
    * @return True if waypoint is landable
    */
   bool
-  is_turnpoint() const
+  IsTurnpoint() const
   {
     return Flags.TurnPoint;
   }
@@ -157,7 +157,7 @@ public:
    * @return True if waypoint is start
    */
   bool
-  is_startpoint() const
+  IsStartpoint() const
   {
     return Flags.StartPoint;
   }
@@ -168,7 +168,7 @@ public:
    * @return True if waypoint is finish
    */
   bool
-  is_finishpoint() const
+  IsFinishpoint() const
   {
     return Flags.FinishPoint;
   }
@@ -196,7 +196,7 @@ public:
    * @return True if close to reference location
    */
   bool
-  is_close_to(const GeoPoint &location, const fixed range) const;
+  IsCloseTo(const GeoPoint &location, const fixed range) const;
 
 public:
 #ifdef DO_PRINT

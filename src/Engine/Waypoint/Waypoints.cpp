@@ -182,7 +182,7 @@ Waypoints::lookup_location(const GeoPoint &loc, const fixed range) const
     const Waypoint* wp = &(found.first)->get_waypoint();
     if (wp->Location == loc)
       return wp;
-    else if (positive(range) && (wp->is_close_to(loc, range)))
+    else if (positive(range) && (wp->IsCloseTo(loc, range)))
       return wp;
   }
 
@@ -426,7 +426,7 @@ bool
 Waypoints::check_exists_or_append(Waypoint& waypoint)
 {
   const Waypoint* found = lookup_name(waypoint.Name);
-  if (found && found->is_close_to(waypoint.Location, fixed(100))) {
+  if (found && found->IsCloseTo(waypoint.Location, fixed(100))) {
     waypoint = *found;
     return true;
   }

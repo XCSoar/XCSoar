@@ -246,9 +246,9 @@ SetValues()
   dfe->addEnumText(_T("Airport"));
   dfe->addEnumText(_T("Landpoint"));
 
-  if (global_wpt->is_airport())
+  if (global_wpt->IsAirport())
     dfe->Set(1);
-  else if (global_wpt->is_landable())
+  else if (global_wpt->IsLandable())
     dfe->Set(2);
   else
     dfe->Set(0);

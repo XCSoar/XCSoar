@@ -23,7 +23,7 @@
 #include "Waypoint.hpp"
 
 void
-Waypoint::Flags::setDefaultFlags(bool turnpoint)
+Waypoint::Flags::SetDefaultFlags(bool turnpoint)
 {
   TurnPoint = turnpoint;
   Home = false;
@@ -36,11 +36,11 @@ Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
   Location(_location), RunwayDirection(Angle::degrees(fixed_minus_one)),
   RunwayLength(0), Type(wtNormal)
 {
-  Flags.setDefaultFlags(is_turnpoint);
+  Flags.SetDefaultFlags(is_turnpoint);
 }
 
 bool
-Waypoint::is_close_to(const GeoPoint &location, const fixed range) const
+Waypoint::IsCloseTo(const GeoPoint &location, const fixed range) const
 {
   return Location.distance(location) <= range;
 }

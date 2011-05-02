@@ -102,11 +102,11 @@ WaypointWriter::WriteAltitude(TextWriter &writer, fixed altitude)
 void
 WaypointWriter::WriteFlags(TextWriter &writer, const Waypoint &wp)
 {
-  if (wp.is_airport())
+  if (wp.IsAirport())
     writer.write('A');
   if (wp.Flags.TurnPoint)
     writer.write('T');
-  if (wp.is_landable())
+  if (wp.IsLandable())
     writer.write('L');
   if (wp.Flags.Home)
     writer.write('H');
@@ -117,7 +117,7 @@ WaypointWriter::WriteFlags(TextWriter &writer, const Waypoint &wp)
 
   // set as turnpoint by default if nothing else
   if (!wp.Flags.TurnPoint &&
-      !wp.is_landable() &&
+      !wp.IsLandable() &&
       !wp.Flags.Home &&
       !wp.Flags.StartPoint &&
       !wp.Flags.FinishPoint)

@@ -133,7 +133,7 @@ public:
   {
     FormatTitle(buffer, way_point);
 
-    if (!way_point.is_landable() && !way_point.Flags.Watched)
+    if (!way_point.IsLandable() && !way_point.Flags.Watched)
       return;
 
     if (arrival_height_glide <= 0 && !way_point.Flags.Watched)
@@ -224,14 +224,14 @@ public:
     short arrival_height_terrain = 0;
     bool watchedWaypoint = way_point.Flags.Watched;
 
-    if (way_point.is_landable() || watchedWaypoint) {
+    if (way_point.IsLandable() || watchedWaypoint) {
       CalculateReachability(way_point, arrival_height_glide, arrival_height_terrain);
       reachable_glide = arrival_height_glide > 0;
       reachable_terrain = !task_behaviour.route_planner.reach_enabled() ||
                           arrival_height_terrain > 0;
     }
 
-    if (way_point.is_landable()) {
+    if (way_point.IsLandable()) {
       WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable_glide,
                                            reachable_terrain, way_point,
                                            projection.GetScreenAngle());
@@ -251,7 +251,7 @@ public:
       break;
 
     case wlsTaskAndLandableWayPoints:
-      if (!in_task && task_valid && !watchedWaypoint && !way_point.is_landable())
+      if (!in_task && task_valid && !watchedWaypoint && !way_point.IsLandable())
         return;
       break;
 
@@ -260,7 +260,7 @@ public:
     }
 
     TextInBoxMode_t text_mode;
-    if (reachable_glide && way_point.is_landable()) {
+    if (reachable_glide && way_point.IsLandable()) {
       text_mode.Mode = settings_map.LandableRenderMode;
       text_mode.Bold = true;
       text_mode.MoveInView = true;
@@ -282,7 +282,7 @@ public:
       sc.x += 5;
 
     labels.Add(Buffer, sc.x + 5, sc.y, text_mode, arrival_height_glide,
-               in_task, way_point.is_landable(), way_point.is_airport(),
+               in_task, way_point.IsLandable(), way_point.IsAirport(),
                watchedWaypoint);
   }
 
@@ -459,13 +459,13 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     const MaskedIcon *icon;
 
     if (reachable_glide && reachable_terrain)
-      icon = way_point.is_airport() ? &Graphics::AirportReachableIcon :
+      icon = way_point.IsAirport() ? &Graphics::AirportReachableIcon :
                                       &Graphics::FieldReachableIcon;
     else if (reachable_glide && !reachable_terrain)
-      icon = way_point.is_airport() ? &Graphics::AirportMarginalIcon:
+      icon = way_point.IsAirport() ? &Graphics::AirportMarginalIcon:
                                       &Graphics::FieldMarginalIcon;
     else
-      icon = way_point.is_airport() ? &Graphics::AirportUnreachableIcon :
+      icon = way_point.IsAirport() ? &Graphics::AirportUnreachableIcon :
                                       &Graphics::FieldUnreachableIcon;
 
     icon->draw(canvas, pt);
@@ -482,7 +482,7 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     // Render landable with reachable state
     if (reachable_glide) {
       canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbNotReachableTerrain);
-      DrawLandableBase(canvas, pt, way_point.is_airport(),
+      DrawLandableBase(canvas, pt, way_point.IsAirport(),
                        radius + radius / fixed_two);
     }
     canvas.select(Graphics::hbMagenta);
@@ -494,12 +494,12 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
   } else {
     if (reachable_glide)
       canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbNotReachableTerrain);
-    else if (way_point.is_airport())
+    else if (way_point.IsAirport())
       canvas.select(Graphics::hbWhite);
     else
       canvas.select(Graphics::hbLightGray);
   }
-  DrawLandableBase(canvas, pt, way_point.is_airport(), radius);
+  DrawLandableBase(canvas, pt, way_point.IsAirport(), radius);
 
   // Render runway indication
   if (way_point.RunwayDirection.value_degrees() >= fixed_zero) {
