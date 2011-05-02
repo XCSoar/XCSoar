@@ -399,7 +399,7 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
 
 void
 Chart::DrawXGrid(fixed tic_step, const fixed zero, Pen &pen,
-                 const fixed unit_step, bool draw_units)
+                 fixed unit_step, bool draw_units)
 {
   if (!positive(tic_step))
     return;
@@ -414,6 +414,7 @@ Chart::DrawXGrid(fixed tic_step, const fixed zero, Pen &pen,
   /* increase tic step so graph not too crowded */
   while ((x_max-x_min)/tic_step > fixed_ten) {
     tic_step *= fixed_two;
+    unit_step *= fixed_two;
   }
   //  bool do_units = ((x_max-zero)/tic_step)<10;
 
@@ -481,7 +482,7 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
 
 void
 Chart::DrawYGrid(fixed tic_step, const fixed zero, Pen &pen,
-                 const fixed unit_step, bool draw_units)
+                 fixed unit_step, bool draw_units)
 {
   if (!positive(tic_step))
     return;
@@ -493,6 +494,7 @@ Chart::DrawYGrid(fixed tic_step, const fixed zero, Pen &pen,
   /* increase tic step so graph not too crowded */
   while ((y_max-y_min)/tic_step > fixed_ten) {
     tic_step *= fixed_two;
+    unit_step *= fixed_two;
   }
 
   xmin = rc.left;

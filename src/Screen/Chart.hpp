@@ -91,11 +91,11 @@ public:
 
   static void FormatTicText(TCHAR *text, const fixed val, const fixed step);
   void DrawXGrid(fixed tic_step, const fixed zero, Pen &pen,
-                 const fixed unit_step, bool draw_units = false);
+                 fixed unit_step, bool draw_units = false);
   void DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
                  const fixed unit_step, bool draw_units = false);
   void DrawYGrid(fixed tic_step, const fixed zero, Pen &pen,
-                 const fixed unit_step, bool draw_units = false);
+                 fixed unit_step, bool draw_units = false);
   void DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
                  const fixed unit_step, bool draw_units = false);
 
