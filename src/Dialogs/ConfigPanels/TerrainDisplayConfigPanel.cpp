@@ -38,12 +38,14 @@ static WndForm* wf = NULL;
 void
 TerrainDisplayConfigPanel::Init(WndForm *_wf)
 {
+  const TerrainRendererSettings &terrain =
+    CommonInterface::SettingsMap().terrain;
+
   assert(_wf != NULL);
   wf = _wf;
   WndProperty *wp;
 
-  LoadFormProperty(*wf, _T("prpEnableTerrain"),
-                   XCSoarInterface::SettingsMap().EnableTerrain);
+  LoadFormProperty(*wf, _T("prpEnableTerrain"), terrain.enable);
 
   LoadFormProperty(*wf, _T("prpEnableTopography"),
                    XCSoarInterface::SettingsMap().EnableTopography);
@@ -56,15 +58,15 @@ TerrainDisplayConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("Fixed"));
     dfe->addEnumText(_("Sun"));
     dfe->addEnumText(_("Wind"));
-    dfe->Set(XCSoarInterface::SettingsMap().SlopeShadingType);
+    dfe->Set(terrain.slope_shading);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpTerrainContrast"),
-                   XCSoarInterface::SettingsMap().TerrainContrast * 100 / 255);
+                   terrain.contrast * 100 / 255);
 
   LoadFormProperty(*wf, _T("prpTerrainBrightness"),
-                   XCSoarInterface::SettingsMap().TerrainBrightness * 100 / 255);
+                   terrain.brightness * 100 / 255);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainRamp"));
   if (wp) {
@@ -78,7 +80,7 @@ TerrainDisplayConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("Imhof Atlas"));
     dfe->addEnumText(_("ICAO"));
     dfe->addEnumText(_("Grey"));
-    dfe->Set(XCSoarInterface::SettingsMap().TerrainRamp);
+    dfe->Set(terrain.ramp);
     wp->RefreshDisplay();
   }
 }
@@ -87,12 +89,15 @@ TerrainDisplayConfigPanel::Init(WndForm *_wf)
 bool
 TerrainDisplayConfigPanel::Save()
 {
+  TerrainRendererSettings &terrain =
+    CommonInterface::SetSettingsMap().terrain;
+
   bool changed = false;
   WndProperty *wp;
 
   changed |= SaveFormProperty(*wf, _T("prpEnableTerrain"),
                               szProfileDrawTerrain,
-                              XCSoarInterface::SetSettingsMap().EnableTerrain);
+                              terrain.enable);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableTopography"),
                               szProfileDrawTopography,
@@ -100,39 +105,34 @@ TerrainDisplayConfigPanel::Save()
 
   wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
   if (wp) {
-    if (XCSoarInterface::SettingsMap().SlopeShadingType !=
-        wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().SlopeShadingType =
-          (SlopeShadingType_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSlopeShadingType,
-                   XCSoarInterface::SettingsMap().SlopeShadingType);
+    if (terrain.slope_shading != wp->GetDataField()->GetAsInteger()) {
+      terrain.slope_shading =
+        (SlopeShadingType_t)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileSlopeShadingType, terrain.slope_shading);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainContrast"));
   if (wp) {
-    if (XCSoarInterface::SettingsMap().TerrainContrast * 100 / 255 !=
-        wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().TerrainContrast = (short)(wp->GetDataField()->GetAsInteger() * 255 / 100);
-      Profile::Set(szProfileTerrainContrast,XCSoarInterface::SettingsMap().TerrainContrast);
+    if (terrain.contrast * 100 / 255 != wp->GetDataField()->GetAsInteger()) {
+      terrain.contrast = (short)(wp->GetDataField()->GetAsInteger() * 255 / 100);
+      Profile::Set(szProfileTerrainContrast, terrain.contrast);
       changed = true;
     }
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpTerrainBrightness"));
   if (wp) {
-    if (XCSoarInterface::SettingsMap().TerrainBrightness * 100 / 255 !=
-        wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().TerrainBrightness = (short)(wp->GetDataField()->GetAsInteger() * 255 / 100);
-      Profile::Set(szProfileTerrainBrightness,
-                    XCSoarInterface::SettingsMap().TerrainBrightness);
+    if (terrain.brightness * 100 / 255 != wp->GetDataField()->GetAsInteger()) {
+      terrain.brightness = (short)(wp->GetDataField()->GetAsInteger() * 255 / 100);
+      Profile::Set(szProfileTerrainBrightness, terrain.brightness);
       changed = true;
     }
   }
 
   changed |= SaveFormProperty(*wf, _T("prpTerrainRamp"), szProfileTerrainRamp,
-                              XCSoarInterface::SetSettingsMap().TerrainRamp);
+                              terrain.ramp);
 
   return changed;
 }

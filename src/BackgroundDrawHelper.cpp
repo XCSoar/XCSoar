@@ -71,7 +71,7 @@ BackgroundDrawHelper::set_weather(const RasterWeather *_weather)
 void 
 BackgroundDrawHelper::Draw(Canvas& canvas,
                            const WindowProjection& proj,
-                           const SETTINGS_MAP& settings_map)
+                           const TerrainRendererSettings &terrain_settings)
 {
   if (terrain == NULL) {
     // terrain may have been re-set, so may need new renderer
@@ -79,7 +79,7 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
     canvas.clear_white();
     return;
   }
-  if (!settings_map.EnableTerrain) {
+  if (!terrain_settings.enable) {
     canvas.clear_white();
     return;
   }
@@ -95,10 +95,7 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
     }
   }
 
-  renderer->SetSettings(settings_map.SlopeShadingType != sstOff,
-                        settings_map.TerrainRamp,
-                        settings_map.TerrainContrast,
-                        settings_map.TerrainBrightness);
+  renderer->SetSettings(terrain_settings);
   renderer->Draw(canvas, proj,
                  sun_azimuth);
 }

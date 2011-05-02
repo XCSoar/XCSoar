@@ -29,6 +29,7 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "SettingsAirspace.hpp"
 #include "Screen/TextInBox.hpp"
+#include "Terrain/TerrainSettings.hpp"
 
 enum DisplayOrientation_t {
   TRACKUP = 0,
@@ -79,13 +80,6 @@ enum SnailType_t {
   stAltitude,
 };
 
-enum SlopeShadingType_t {
-  sstOff,
-  sstFixed,
-  sstSun,
-  sstWind,
-};
-
 enum DisplayTrackBearing_t {
   dtbOff,
   dtbOn,
@@ -105,15 +99,10 @@ struct SETTINGS_MAP {
   fixed MaxAutoZoomDistance;
   /** Map will show topography */
   bool EnableTopography;
-  /** Map will show terrain */
-  bool EnableTerrain;
 
   bool NorthArrow;
 
-  /**
-   * Apply slope shading to the terrain?
-   */
-  SlopeShadingType_t SlopeShadingType;
+  TerrainRendererSettings terrain;
 
   /** Snailtrail wind drifting in circling mode */
   bool EnableTrailDrift;
@@ -172,11 +161,6 @@ struct SETTINGS_MAP {
   /** The bias for map shifting (Heading, Target, etc.) */
   MapShiftBias_t MapShiftBias;
 
-  /** Terrain contrast percentage */
-  short TerrainContrast;
-  /** Terrain brightness percentage */
-  short TerrainBrightness;
-  short TerrainRamp;
   bool EnableAirspace;
   bool EnableAuxiliaryInfo;
   unsigned AuxiliaryInfoBoxPanel;

@@ -573,7 +573,7 @@ DrawDetailedAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
     const unsigned AIRCRAFT_POINTS = sizeof(Aircraft) / sizeof(Aircraft[0]);
     RasterPoint buffer[2 * AIRCRAFT_POINTS];
 
-    if (settings_map.EnableTerrain) {
+    if (settings_map.terrain.enable) {
       canvas.white_brush();
       canvas.select(Graphics::hpAircraft);
     } else {

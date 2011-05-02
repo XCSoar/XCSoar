@@ -1624,7 +1624,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
 
     if (settings_map.EnableTopography)
       val++;
-    if (settings_map.EnableTerrain)
+    if (settings_map.terrain.enable)
       val += (char)2;
 
     val++;
@@ -1632,10 +1632,10 @@ InputEvents::sub_TerrainTopography(int vswitch)
       val = 0;
 
     settings_map.EnableTopography = ((val & 0x01) == 0x01);
-    settings_map.EnableTerrain = ((val & 0x02) == 0x02);
+    settings_map.terrain.enable = ((val & 0x02) == 0x02);
   } else if (vswitch == -2)
     // toggle terrain
-    settings_map.EnableTerrain = !settings_map.EnableTerrain;
+    settings_map.terrain.enable = !settings_map.terrain.enable;
   else if (vswitch == -3)
     // toggle topography
     settings_map.EnableTopography = !settings_map.EnableTopography;
@@ -1647,10 +1647,10 @@ InputEvents::sub_TerrainTopography(int vswitch)
     settings_map.EnableTopography = false;
   else if (vswitch == 3)
     // Turn on terrain
-    settings_map.EnableTerrain = true;
+    settings_map.terrain.enable = true;
   else if (vswitch == 4)
     // Turn off terrain
-    settings_map.EnableTerrain = false;
+    settings_map.terrain.enable = false;
   else if (vswitch == 0) {
     // Show terrain/topography
     // ARH Let user know what's happening
@@ -1661,7 +1661,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
     else
       _stprintf(buf, _T("\r\n%s / "), _("Off"));
 
-    _tcscat(buf, settings_map.EnableTerrain
+    _tcscat(buf, settings_map.terrain.enable
             ? _("On") : _("Off"));
 
     Message::AddMessage(_("Topography/Terrain"), buf);
@@ -1672,7 +1672,7 @@ InputEvents::sub_TerrainTopography(int vswitch)
   Profile::Set(szProfileDrawTopography,
                settings_map.EnableTopography);
   Profile::Set(szProfileDrawTerrain,
-               settings_map.EnableTerrain);
+               settings_map.terrain.enable);
 
   XCSoarInterface::SendSettingsMap(true);
 }

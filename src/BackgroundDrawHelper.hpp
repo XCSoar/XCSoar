@@ -28,7 +28,7 @@ Copyright_License {
 
 class Canvas;
 class WindowProjection;
-struct SETTINGS_MAP;
+struct TerrainRendererSettings;
 class TerrainRenderer;
 struct SpeedVector;
 class RasterTerrain;
@@ -55,7 +55,7 @@ public:
 
   void Draw(Canvas& canvas,
             const WindowProjection& proj,
-            const SETTINGS_MAP& settings_map);
+            const TerrainRendererSettings &terrain_settings);
 
   bool DrawSpotHeights(Canvas& canvas, LabelBlock& block);
 

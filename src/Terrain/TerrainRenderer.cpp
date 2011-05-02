@@ -167,10 +167,6 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain) :
   terrain(_terrain)
 {
   assert(terrain != NULL);
-
-  TerrainContrast = 150;
-  TerrainBrightness = 36;
-  TerrainRamp = 0;
 }
 
 void
@@ -235,9 +231,9 @@ TerrainRenderer::Draw(Canvas &canvas,
   const unsigned height_scale = 4;
   const int interp_levels = 2;
   const bool is_terrain = true;
-  const bool do_shading = is_terrain && SlopeShading;
+  const bool do_shading = is_terrain && settings.slope_shading != sstOff;
 
-  const ColorRamp *const color_ramp = &terrain_colors[TerrainRamp][0];
+  const ColorRamp *const color_ramp = &terrain_colors[settings.ramp][0];
   if (color_ramp != last_color_ramp) {
     raster_renderer.ColorTable(color_ramp, do_water,
                                height_scale, interp_levels);
@@ -250,7 +246,7 @@ TerrainRenderer::Draw(Canvas &canvas,
   }
 
   raster_renderer.GenerateImage(do_shading, height_scale,
-                                TerrainContrast, TerrainBrightness,
+                                settings.contrast, settings.brightness,
                                 sunazimuth);
 
   CopyTo(canvas, map_projection.GetScreenWidth(),

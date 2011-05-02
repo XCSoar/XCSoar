@@ -1185,6 +1185,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/HeightMatrix.cpp \
 	$(SRC)/Terrain/RasterRenderer.cpp \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
+	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Profile/Writer.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
@@ -1418,6 +1419,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Terrain/RasterTile.cpp \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/RasterTerrain.cpp \
+	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/dlgAnalysis.cpp \

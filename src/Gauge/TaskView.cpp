@@ -30,6 +30,7 @@
 #include "RenderTask.hpp"
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "Engine/Task/Tasks/OrderedTask.hpp"
+#include "SettingsMap.hpp"
 
 static void
 PaintTask(Canvas &canvas, const WindowProjection &projection,
@@ -39,7 +40,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
 {
   BackgroundDrawHelper background;
   background.set_terrain(terrain);
-  background.Draw(canvas, projection, settings_map);
+  background.Draw(canvas, projection, settings_map.terrain);
 
   RenderObservationZone ozv;
   RenderTaskPoint tpv(canvas, NULL, projection, settings_map,

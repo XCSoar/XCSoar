@@ -446,7 +446,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     char val = 0;
     if (SettingsMap().EnableTopography)
       val++;
-    if (SettingsMap().EnableTerrain)
+    if (SettingsMap().terrain.enable)
       val += (char)2;
     switch (val) {
     case 0:
@@ -472,7 +472,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     char val = 0;
     if (SettingsMap().EnableTopography)
       val++;
-    if (SettingsMap().EnableTerrain)
+    if (SettingsMap().terrain.enable)
       val += (char)2;
     switch (val) {
     case 0:
@@ -506,7 +506,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   CondReplaceInString(SettingsMap().EnableTopography, OutBuffer,
                       _T("$(TopographyToggleActionName)"),
                       _("Off"), _("On"), Size);
-  CondReplaceInString(SettingsMap().EnableTerrain, OutBuffer,
+  CondReplaceInString(SettingsMap().terrain.enable, OutBuffer,
                       _T("$(TerrainToggleActionName)"),
                       _("Off"), _("On"), Size);
 

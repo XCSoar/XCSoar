@@ -213,7 +213,7 @@ WeatherTerrainRenderer::Draw(Canvas &canvas,
   raster_renderer.ScanMap(*map, projection);
 
   raster_renderer.GenerateImage(do_shading, height_scale,
-                                TerrainContrast, TerrainBrightness,
+                                settings.contrast, settings.brightness,
                                 sunazimuth);
 
   CopyTo(canvas, projection.GetScreenWidth(), projection.GetScreenHeight());

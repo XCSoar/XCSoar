@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "RasterRenderer.hpp"
 #include "Util/NonCopyable.hpp"
+#include "Terrain/TerrainSettings.hpp"
 
 class Canvas;
 class WindowProjection;
@@ -52,10 +53,7 @@ private:
   const RasterTerrain *terrain;
 
 protected:
-  bool SlopeShading;
-  short TerrainRamp;
-  short TerrainContrast;
-  short TerrainBrightness;
+  struct TerrainRendererSettings settings;
 
   void ScanSpotHeights();
 
@@ -64,15 +62,8 @@ protected:
   virtual bool do_scan_spot();
 
 public:
-  void
-  SetSettings(bool _SlopeShading,
-              short _TerrainRamp, short _TerrainContrast,
-              short _TerrainBrightness)
-  {
-    SlopeShading = _SlopeShading;
-    TerrainRamp = _TerrainRamp;
-    TerrainContrast = _TerrainContrast;
-    TerrainBrightness = _TerrainBrightness;
+  void SetSettings(const TerrainRendererSettings &_settings) {
+    settings = _settings;
   }
 
   virtual void Draw(Canvas &canvas, const WindowProjection &map_projection,

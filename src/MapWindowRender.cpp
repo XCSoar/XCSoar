@@ -31,15 +31,15 @@ Copyright_License {
 void
 MapWindow::RenderTerrain(Canvas &canvas)
 {
-  if (SettingsMap().SlopeShadingType == sstWind)
+  if (SettingsMap().terrain.slope_shading == sstWind)
     m_background.sun_from_wind(render_projection, Calculated().wind);
   else
     m_background.set_sun_angle(render_projection,
-                               SettingsMap().SlopeShadingType == sstSun ?
+                               SettingsMap().terrain.slope_shading == sstSun ?
                                Calculated().SunAzimuth :
                                Angle::degrees(fixed(-45.0)));
 
-  m_background.Draw(canvas, render_projection, SettingsMap());
+  m_background.Draw(canvas, render_projection, SettingsMap().terrain);
 }
 
 void

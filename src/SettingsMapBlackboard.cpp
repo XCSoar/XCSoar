@@ -29,9 +29,8 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.CircleZoom = false;
   settings_map.MaxAutoZoomDistance = fixed(10000); /* 100 km */
   settings_map.EnableTopography = true;
-  settings_map.EnableTerrain = true;
   settings_map.NorthArrow = true;
-  settings_map.SlopeShadingType = sstWind;
+  settings_map.terrain.SetDefaults();
   settings_map.EnableTrailDrift = false;
   settings_map.EnableDetourCostMarker = false;
   settings_map.DisplayTrackBearing = dtbAuto;
@@ -51,9 +50,6 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.GliderScreenPosition = 20; // 20% from bottom
   settings_map.OrientationCircling = TRACKUP;
   settings_map.OrientationCruise = TRACKUP;
-  settings_map.TerrainContrast = 150;
-  settings_map.TerrainBrightness = 36;
-  settings_map.TerrainRamp = 0;
   settings_map.EnableAirspace = true;
   settings_map.EnableAuxiliaryInfo = true;
   settings_map.AuxiliaryInfoBoxPanel = 0;

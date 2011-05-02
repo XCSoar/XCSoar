@@ -167,8 +167,9 @@ public:
     settings_map.OrientationCircling = NORTHUP;
     settings_map.DisplayTextType = DISPLAYNAME;
     settings_map.EnableTopography = true;
-    settings_map.EnableTerrain = true;
-    settings_map.SlopeShadingType = sstFixed;
+    settings_map.terrain.SetDefaults();
+    settings_map.terrain.enable = true;
+    settings_map.terrain.slope_shading = sstFixed;
   }
 };
 

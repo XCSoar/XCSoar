@@ -25,6 +25,7 @@ Copyright_License {
 #include "Profile/UnitsConfig.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/AirspaceConfig.hpp"
+#include "Profile/TerrainConfig.hpp"
 #include "LogFile.hpp"
 #include "Appearance.hpp"
 #include "GlideRatio.hpp"
@@ -225,17 +226,7 @@ Profile::Use()
   Get(szProfileDrawTopography,
       settings_map.EnableTopography);
 
-  Get(szProfileDrawTerrain,
-      settings_map.EnableTerrain);
-
-  Temp = settings_map.SlopeShadingType;
-  if (!Get(szProfileSlopeShadingType, Temp)) {
-    bool old_profile_setting = true;
-    if (Get(szProfileSlopeShading, old_profile_setting))
-      // 0: OFF, 3: Wind
-      Temp = old_profile_setting ? 3 : 0;
-  }
-  settings_map.SlopeShadingType = (SlopeShadingType_t)Temp;
+  LoadTerrainRendererSettings(settings_map.terrain);
 
   GetEnum(szProfileFinalGlideTerrain,
           settings_computer.FinalGlideTerrain);
@@ -369,12 +360,6 @@ Profile::Use()
       settings_map.AutoCloseFlarmDialog);
   Get(szProfileEnableTAGauge,
       settings_map.EnableTAGauge);
-  Get(szProfileTerrainContrast,
-      settings_map.TerrainContrast);
-  Get(szProfileTerrainBrightness,
-      settings_map.TerrainBrightness);
-  Get(szProfileTerrainRamp,
-      settings_map.TerrainRamp);
 
   Get(szProfileGliderScreenPosition,
       settings_map.GliderScreenPosition);

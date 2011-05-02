@@ -380,6 +380,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Terrain/RasterRenderer.cpp \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
+	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Marks.cpp \
 	\
 	$(SRC)/Persist.cpp \
@@ -429,6 +430,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Profile/InfoBoxConfig.cpp \
 	$(SRC)/Profile/AirspaceConfig.cpp \
 	$(SRC)/Profile/DeclarationConfig.cpp \
+	$(SRC)/Profile/TerrainConfig.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
