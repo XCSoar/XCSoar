@@ -340,9 +340,13 @@ WindZigZag::ZZBeta
 WindZigZag::optimise(int &res_quality, const SpeedVector start,
                      const bool circling)
 {
+
+  fixed sin, cos;
+  start.bearing.sin_cos(sin, cos);
+
   double x[] = {
-      start.bearing.sin() * start.norm,
-      start.bearing.cos() * start.norm
+      sin * start.norm,
+      cos * start.norm
   };
   min_newuoa<double, WindZigZag>(2, x, *this, 100.0, 0.0001, 100);
 
