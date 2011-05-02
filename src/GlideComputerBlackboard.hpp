@@ -39,6 +39,14 @@ class GlideComputerBlackboard:
 {
   fixed ScreenDistanceMeters;
 
+  DERIVED_INFO Finish_Derived_Info;
+  NMEA_INFO     last_gps_info;
+  DERIVED_INFO last_calculated_info;
+  bool _time_retreated;
+
+protected:
+  ProtectedTaskManager &m_task;
+
 public:
   GlideComputerBlackboard(ProtectedTaskManager &task);
 
@@ -56,8 +64,6 @@ public:
   }
 
 protected:
-  ProtectedTaskManager &m_task;
-
   bool time_advanced() const {
     return time_delta() > fixed_zero;
   }
@@ -85,11 +91,6 @@ protected:
 
   // only the glide computer can write to calculated
   DERIVED_INFO& SetCalculated() { return calculated_info; }
-private:
-  DERIVED_INFO Finish_Derived_Info;
-  NMEA_INFO     last_gps_info;
-  DERIVED_INFO last_calculated_info;
-  bool _time_retreated;
 };
 
 #endif
