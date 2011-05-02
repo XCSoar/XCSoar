@@ -130,9 +130,8 @@ public:
 
   struct ZZObs {
     ZZObs(const unsigned _time, const fixed gps_mag, const Angle _gps_ang,
-          const fixed tas):
-      time(_time), x(gps_mag, _gps_ang), y(tas), gps_ang(_gps_ang)
-      {}
+          const fixed tas)
+      :time(_time), x(gps_mag, _gps_ang), y(tas), gps_ang(_gps_ang) {}
 
     const unsigned time;
     const ZZX x;
@@ -140,11 +139,11 @@ public:
     const Angle gps_ang;
 
     fixed Phi(const ZZBeta& beta) const {
-      return sqrt(sqr(x.gps_north+beta.north)+sqr(x.gps_east+beta.east));
+      return sqrt(sqr(x.gps_north + beta.north) + sqr(x.gps_east + beta.east));
     }
 
     fixed f(const ZZBeta& beta) const {
-      return y.tas-Phi(beta);
+      return y.tas - Phi(beta);
     }
 
     fixed mag() const {
@@ -339,7 +338,8 @@ WindZigZagGlue::Update(const NMEA_INFO &basic, const DERIVED_INFO &derived,
  */
 WindZigZag::ZZBeta
 WindZigZag::optimise(int &res_quality, const SpeedVector start,
-                     const bool circling) {
+                     const bool circling)
+{
   double x[] = {
       start.bearing.sin() * start.norm,
       start.bearing.cos() * start.norm
@@ -369,22 +369,25 @@ WindZigZag::optimise(int &res_quality, const SpeedVector start,
  * On average, more outliers than useful values are likely to be removed
  * by this algorithm.
  */
-void WindZigZag::prune_worst(const ZZBeta &beta) {
-  if (!obs.empty()) {
+void
+WindZigZag::prune_worst(const ZZBeta &beta)
+{
+  if (!obs.empty())
     // always remove one old point, otherwise we may end up rejecting
     // all new points, ending up with a very old data set.
     obs.pop_front();
-  }
-  while ((size()>5)
-         && ((relative_error(beta)) >fixed(0.05))) {
+
+  while (size() > 5 && relative_error(beta) > fixed(0.05))
     remove_worst(beta);
-  }
 }
 
-std::pair<fixed, fixed> WindZigZag::correlation(const ZZBeta& beta) const {
+std::pair<fixed, fixed>
+WindZigZag::correlation(const ZZBeta& beta) const
+{
   fixed x_av(0);
   fixed y_av(0);
-  unsigned n=0;
+
+  unsigned n = 0;
   for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
     fixed x = it->Phi(beta);
     fixed y = it->mag();
@@ -392,6 +395,7 @@ std::pair<fixed, fixed> WindZigZag::correlation(const ZZBeta& beta) const {
     y_av += y;
     n++;
   }
+
   if (!n)
     return std::make_pair(fixed_zero, fixed_one);
 
@@ -402,16 +406,16 @@ std::pair<fixed, fixed> WindZigZag::correlation(const ZZBeta& beta) const {
   fixed acc_xx(0);
   fixed acc_yy(0);
   for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
-    fixed xd = it->Phi(beta)-y_av;
-    fixed yd = it->mag()-x_av;
-    acc_xy += xd*yd;
-    acc_xx += xd*xd;
-    acc_yy += yd*yd;
+    fixed xd = it->Phi(beta) - y_av;
+    fixed yd = it->mag() - x_av;
+    acc_xy += xd * yd;
+    acc_xx += xd * xd;
+    acc_yy += yd * yd;
   }
   if (!positive(acc_xx) || !positive(acc_yy))
     return std::make_pair(fixed_zero, fixed_one);
-  fixed r = acc_xy/(sqrt(acc_xx)*sqrt(acc_yy));
-  fixed slope = y_av/x_av;
+  fixed r = acc_xy / (sqrt(acc_xx) * sqrt(acc_yy));
+  fixed slope = y_av / x_av;
 
   return std::make_pair(r, slope);
 }
@@ -420,9 +424,9 @@ fixed
 WindZigZag::fmin(const ZZBeta& beta) const
 {
   fixed acc(0);
-  for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
-    acc += sqr(it->f(beta)/it->mag());
-  }
+  for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it)
+    acc += sqr(it->f(beta) / it->mag());
+
   return acc;
 }
 
@@ -430,9 +434,8 @@ void
 WindZigZag::remove_worst(const ZZBeta& beta)
 {
   ObsList::iterator i_worst = find_worst(beta);
-  if (i_worst != obs.end()) {
+  if (i_worst != obs.end())
     obs.erase(i_worst);
-  }
 }
 
 fixed
@@ -445,7 +448,7 @@ int
 WindZigZag::quality(const ZZBeta& beta, const bool circling) const
 {
   const fixed v = relative_error(beta);
-  const int quality = min(fixed(5.0),max(fixed(1.0),-log(v)));
+  const int quality = min(fixed(5.0), max(fixed(1.0), -log(v)));
   if (circling)
     return max(1, quality / 2); // de-value updates in circling mode
   else
@@ -459,7 +462,7 @@ WindZigZag::find_worst(const ZZBeta& beta)
 
   ObsList::iterator i_worst = obs.end();
   for (ObsList::iterator it = obs.begin(); it != obs.end(); ++it) {
-    fixed fthis = sqr(it->f(beta)/it->mag());
+    fixed fthis = sqr(it->f(beta) / it->mag());
     if (fthis > worst) {
       i_worst = it;
       worst = fthis;
@@ -498,7 +501,7 @@ WindZigZag::do_append(const unsigned time, const Angle &ang) const
     return false;
 
   // don't add if no angle spread
-  if ((ang-obs.back().gps_ang).as_delta().magnitude_degrees() < fixed(10))
+  if ((ang - obs.back().gps_ang).as_delta().magnitude_degrees() < fixed(10))
     return false;
 
   // okay to add
