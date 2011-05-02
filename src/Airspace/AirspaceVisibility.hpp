@@ -9,6 +9,10 @@ struct ALTITUDE_STATE;
 
 class AirspaceVisible: public AirspacePredicate
 {
+protected:
+  const SETTINGS_COMPUTER &m_settings;
+  const ALTITUDE_STATE& m_state;
+
 public:
   AirspaceVisible(const SETTINGS_COMPUTER& _settings,
                   const ALTITUDE_STATE& _state):
@@ -41,10 +45,6 @@ public:
  * @return True if visible
  */
   bool type_visible(const AbstractAirspace& airspace) const;
-
-protected:
-  const SETTINGS_COMPUTER &m_settings;
-  const ALTITUDE_STATE& m_state;
 };
 
 
