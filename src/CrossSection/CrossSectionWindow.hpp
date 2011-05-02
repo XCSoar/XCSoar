@@ -40,6 +40,27 @@ class CrossSectionWindow :
   public BaseBlackboard,
   public SettingsMapBlackboard
 {
+protected:
+  /** Brush used to draw the terrain polygon */
+  Brush terrain_brush;
+  /** Pen used to draw the grid */
+  Pen grid_pen;
+
+  /** Pointer to a RasterTerrain instance or NULL */
+  RasterTerrain *terrain;
+  /** Pointer to an airspace database instance or NULL */
+  Airspaces *airspace_database;
+
+  /** Left side of the CrossSectionWindow */
+  GeoPoint start;
+  /** Range and direction of the CrossSection */
+  GeoVector vec;
+
+  /** Background color */
+  Color background_color;
+  /** Text color */
+  Color text_color;
+
 public:
   /**
    * Constructor. Initializes most class members.
@@ -138,26 +159,6 @@ protected:
    * @param canvas Canvas to draw to
    */
   virtual void on_paint(Canvas &canvas);
-
-  /** Brush used to draw the terrain polygon */
-  Brush terrain_brush;
-  /** Pen used to draw the grid */
-  Pen grid_pen;
-
-  /** Pointer to a RasterTerrain instance or NULL */
-  RasterTerrain *terrain;
-  /** Pointer to an airspace database instance or NULL */
-  Airspaces *airspace_database;
-
-  /** Left side of the CrossSectionWindow */
-  GeoPoint start;
-  /** Range and direction of the CrossSection */
-  GeoVector vec;
-
-  /** Background color */
-  Color background_color;
-  /** Text color */
-  Color text_color;
 };
 
 #endif

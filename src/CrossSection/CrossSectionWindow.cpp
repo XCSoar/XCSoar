@@ -48,6 +48,17 @@
  */
 class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
 {
+  /** Canvas to draw on */
+  Canvas& canvas;
+  /** Chart for scaling the airspace CrossSection */
+  Chart& chart;
+  /** SettingsMap for reading airspace colors, pen and brushes */
+  const SETTINGS_MAP& settings_map;
+  /** GeoPoint at the left of the CrossSection */
+  const GeoPoint start;
+  /** AltitudeState instance used for AGL-based airspaces */
+  const ALTITUDE_STATE& state;
+
 public:
   /**
    * Constructor of the AirspaceIntersectionVisitorSlice class
@@ -207,18 +218,6 @@ public:
   {
     Render(as);
   }
-
-private:
-  /** Canvas to draw on */
-  Canvas& canvas;
-  /** Chart for scaling the airspace CrossSection */
-  Chart& chart;
-  /** SettingsMap for reading airspace colors, pen and brushes */
-  const SETTINGS_MAP& settings_map;
-  /** GeoPoint at the left of the CrossSection */
-  const GeoPoint start;
-  /** AltitudeState instance used for AGL-based airspaces */
-  const ALTITUDE_STATE& state;
 };
 
 CrossSectionWindow::CrossSectionWindow() :
