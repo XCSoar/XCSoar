@@ -92,8 +92,6 @@ private:
   bool pastHalfway;
   Vector minVector;
   Vector maxVector;
-  int satCnt;
-  int minSatCnt;
   bool curModeOK;
   bool first;
   int startcircle;

@@ -91,7 +91,6 @@ WindAnalyser::WindAnalyser()
    circleDeg(0),
    lastHeading(Angle::native(fixed_zero)),
    pastHalfway(false),
-   minSatCnt(1), // JMW conf->getWindMinSatCount();
    curModeOK(false)
 {
 }
