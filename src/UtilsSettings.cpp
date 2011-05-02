@@ -36,7 +36,7 @@ Copyright_License {
 #include "Polar/PolarGlue.hpp"
 #include "Components.hpp"
 #include "Interface.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "LogFile.hpp"
 #include "Simulator.hpp"
 #include "DrawThread.hpp"
@@ -47,7 +47,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "WayPoint/WayPointGlue.hpp"
 #include "GlideComputer.hpp"
-#include "LanguageGlue.hpp"
+#include "Language/LanguageGlue.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug
   #include "Waypoint/Waypoints.hpp"

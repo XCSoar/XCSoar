@@ -25,7 +25,7 @@
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"

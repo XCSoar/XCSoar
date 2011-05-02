@@ -34,7 +34,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "StringUtil.hpp"
 #include "LoggerConfigPanel.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 static WndForm* wf = NULL;
 static WndButton *buttonPilotName = NULL;

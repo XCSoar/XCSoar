@@ -24,7 +24,7 @@
 #include "Replay/IgcReplayGlue.hpp"
 #include "Logger/Logger.hpp"
 #include "Dialogs/Message.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Device/Port.hpp"
 #include "Math/Earth.hpp"
 #include "LogFile.hpp"

@@ -27,7 +27,7 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "Units/Units.hpp"
 #include "Dialogs/Message.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
 #include "Math/Earth.hpp"
 #include "IO/LineReader.hpp"

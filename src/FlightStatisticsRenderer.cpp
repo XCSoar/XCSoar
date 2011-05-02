@@ -35,7 +35,7 @@ Copyright_License {
 #include "Units/UnitsFormatter.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "Wind/WindStore.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Atmosphere/CuSonde.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"

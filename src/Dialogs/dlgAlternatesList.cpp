@@ -32,7 +32,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "MainWindow.hpp"
 #include "WayPointRenderer.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 #include <stdio.h>
 

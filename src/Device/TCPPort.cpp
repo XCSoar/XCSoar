@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Device/TCPPort.hpp"
 #include "Dialogs/Message.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Message.hpp"
 
 #include <unistd.h>

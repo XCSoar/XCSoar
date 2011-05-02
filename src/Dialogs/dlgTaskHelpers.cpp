@@ -24,7 +24,7 @@ Copyright_License {
 #include "dlgTaskHelpers.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Message.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"

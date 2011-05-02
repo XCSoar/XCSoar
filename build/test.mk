@@ -688,7 +688,7 @@ $(TARGET_BIN_DIR)/RunXMLParser$(TARGET_EXEEXT): $(RUN_XML_PARSER_OBJS) $(RUN_XML
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 READ_MO_SOURCES = \
-	$(SRC)/MOFile.cpp \
+	$(SRC)/Language/MOFile.cpp \
 	$(SRC)/OS/FileMapping.cpp \
 	$(TEST_SRC_DIR)/ReadMO.cpp
 READ_MO_OBJS = $(call SRC_TO_OBJ,$(READ_MO_SOURCES))

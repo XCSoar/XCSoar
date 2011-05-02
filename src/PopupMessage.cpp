@@ -35,7 +35,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "SettingsComputer.hpp"
 #include "Appearance.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "StatusMessage.hpp"
 
 #include <tchar.h>

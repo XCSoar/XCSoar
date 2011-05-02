@@ -27,7 +27,7 @@
 #include "Screen/Fonts.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Math/Screen.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 #include <assert.h>
 #include <stdio.h>

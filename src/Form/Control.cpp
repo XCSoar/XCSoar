@@ -29,7 +29,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "PeriodClock.hpp"
 #include "Util/StringUtil.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 #include <stdlib.h>
 

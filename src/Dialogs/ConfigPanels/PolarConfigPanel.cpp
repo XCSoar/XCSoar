@@ -48,7 +48,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "MainWindow.hpp"
 #include "OS/FileUtil.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 #include <cstdio>
 

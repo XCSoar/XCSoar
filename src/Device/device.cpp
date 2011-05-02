@@ -35,7 +35,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Dialogs/Message.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Asset.hpp"
 #include "../Simulator.hpp"
 #include "Profile/Profile.hpp"

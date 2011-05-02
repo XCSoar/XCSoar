@@ -40,7 +40,7 @@
 #include "Profile/Profile.hpp"
 #include "Compiler.h"
 #include "Gauge/FlarmTrafficWindow.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "GestureManager.hpp"
 #include "Units/UnitsFormatter.hpp"
 

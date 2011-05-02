@@ -29,7 +29,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
 #include "LocalPath.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 #include <cstdio>
 #include <algorithm>

@@ -37,7 +37,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Protection.hpp"
 #include "DevicesConfigPanel.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"

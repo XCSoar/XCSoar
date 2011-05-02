@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Message.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Form/Button.hpp"
 #include "Form/Form.hpp"
 #include "Form/Frame.hpp"

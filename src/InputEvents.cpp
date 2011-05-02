@@ -62,7 +62,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Screen/Key.h"
 #include "MapWindowProjection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 #include <algorithm>
 #include <assert.h>

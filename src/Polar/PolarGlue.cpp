@@ -28,7 +28,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Dialogs/Message.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "SettingsComputer.hpp"
 
 namespace PolarGlue

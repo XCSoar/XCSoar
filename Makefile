@@ -391,9 +391,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Asset.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Hardware/Display.cpp \
-	$(SRC)/MOFile.cpp \
-	$(SRC)/Language.cpp \
-	$(SRC)/LanguageGlue.cpp \
+	$(SRC)/Language/MOFile.cpp \
+	$(SRC)/Language/Language.cpp \
+	$(SRC)/Language/LanguageGlue.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Interface.cpp \
 	$(SRC)/ProgressGlue.cpp \

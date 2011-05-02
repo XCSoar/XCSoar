@@ -35,7 +35,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "LogFile.hpp"
 #include "Screen/Graphics.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Dialogs/XML.hpp"
 
 static WndForm* wf = NULL;

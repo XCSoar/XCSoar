@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/Profile.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 
 InfoBoxPanelConfig::InfoBoxPanelConfig() : modified(false)

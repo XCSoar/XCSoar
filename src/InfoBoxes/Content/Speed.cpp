@@ -29,7 +29,7 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Message.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Units/UnitsFormatter.hpp"
 
 #include <tchar.h>

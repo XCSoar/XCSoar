@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Math/FastMath.h"
 #include "Math/FastRotation.hpp"
 #include "Asset.hpp"

@@ -24,7 +24,7 @@
 #include "Logger/ExternalLogger.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Dialogs/Message.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Device/device.hpp"
 #include "Device/Declaration.hpp"
 #include "Device/Descriptor.hpp"

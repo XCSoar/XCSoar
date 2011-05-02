@@ -23,7 +23,7 @@ Copyright_License {
 */
 
 #include "LanguageGlue.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "LocalPath.hpp"
 #include "OS/PathName.hpp"
 #include "LogFile.hpp"

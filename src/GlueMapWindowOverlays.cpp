@@ -24,7 +24,7 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 
 #include "Screen/Icon.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Logger/Logger.hpp"

@@ -31,7 +31,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "WaypointReader.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "ProgressGlue.hpp"
 #include "Components.hpp"
 #include "NMEA/Aircraft.hpp"

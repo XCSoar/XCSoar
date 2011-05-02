@@ -32,7 +32,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "Message.hpp"
 #include "Simulator.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Sizes.h"
 
 int DisplayTimeOut = 0;

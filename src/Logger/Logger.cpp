@@ -25,7 +25,7 @@
 #include "Logger/ExternalLogger.hpp"
 #include "Device/Declaration.hpp"
 #include "NMEA/Info.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
 #include "LogFile.hpp"
 #include "Task/ProtectedTaskManager.hpp"

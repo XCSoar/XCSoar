@@ -43,7 +43,7 @@ Copyright_License {
 #include "Form/Tabbed.hpp"
 #include "Form/TabBar.hpp"
 #include "Form/Util.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Interface.hpp"
 
 bool

@@ -29,7 +29,7 @@ Copyright_License {
 #include "FLARM/FlarmNet.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "Util/StringUtil.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "MainWindow.hpp"
 
 #include <stdio.h>

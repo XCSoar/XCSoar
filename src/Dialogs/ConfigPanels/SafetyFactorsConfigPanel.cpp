@@ -29,7 +29,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
 #include "Interface.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 static WndForm* wf = NULL;
 

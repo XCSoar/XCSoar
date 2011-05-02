@@ -32,7 +32,7 @@ Copyright_License {
 #include "SettingsAirspace.hpp"
 #include "Interface.hpp"
 #include "AirspaceConfigPanel.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 static WndForm* wf = NULL;
 

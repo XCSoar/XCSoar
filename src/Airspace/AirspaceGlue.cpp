@@ -27,7 +27,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "ProgressGlue.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "LogFile.hpp"
 #include "IO/ConfiguredFile.hpp"
 

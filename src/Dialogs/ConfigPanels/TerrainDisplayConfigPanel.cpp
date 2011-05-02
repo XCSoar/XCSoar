@@ -30,7 +30,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Appearance.hpp"
 #include "Screen/Graphics.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 static WndForm* wf = NULL;
 

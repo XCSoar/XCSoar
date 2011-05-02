@@ -29,7 +29,7 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 
 #include <tchar.h>
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "fixed.hpp"
 
 class InfoBoxWindow;

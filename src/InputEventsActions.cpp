@@ -73,7 +73,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Audio/Sound.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Logger/Logger.hpp"
 #include "Asset.hpp"
 #include "Logger/NMEALogger.hpp"

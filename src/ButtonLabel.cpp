@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "ButtonLabel.hpp"
 #include "MenuBar.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
 
 #include <algorithm>

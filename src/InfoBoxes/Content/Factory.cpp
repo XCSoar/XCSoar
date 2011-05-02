@@ -38,7 +38,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Trace.hpp"
 #include "InfoBoxes/Content/Weather.hpp"
 
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 #include <stddef.h>
 

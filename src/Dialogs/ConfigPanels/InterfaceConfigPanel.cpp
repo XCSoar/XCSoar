@@ -32,7 +32,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Util/StringUtil.hpp"
 #include "Interface.hpp"
-#include "LanguageGlue.hpp"
+#include "Language/LanguageGlue.hpp"
 #include "Asset.hpp"
 #include "Appearance.hpp"
 #include "LocalPath.hpp"
@@ -40,7 +40,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "ConfigPanel.hpp"
 #include "InterfaceConfigPanel.hpp"
-#include "Language.hpp"
+#include "Language/Language.hpp"
 
 static WndForm* wf = NULL;
 static WndButton *buttonFonts = NULL;
