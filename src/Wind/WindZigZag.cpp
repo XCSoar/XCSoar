@@ -167,30 +167,7 @@ public:
    * Find optimal value
    */
   ZZBeta optimise(int &res_quality, const SpeedVector start,
-                  const bool circling) {
-    double x[] = {start.bearing.sin()*start.norm, start.bearing.cos()*start.norm};
-    min_newuoa<double, WindZigZag>(2, x, *this, 100.0, 0.0001, 100);
-
-    const ZZBeta beta((fixed)x[0], (fixed)x[1]);
-    res_quality = quality(beta, circling);
-
-    std::pair<fixed, fixed> c = correlation(beta);
-    prune_worst(beta);
-
-    /*
-       if linear correlation coefficient is low, then TAS does not fit est TAS
-       across the samples, so fit is poor and should be rejected due to bad
-       estimate or bad samples.
-    */
-    if (c.first < fixed(0.9)) {
-      res_quality = 0;
-    } else {
-      if (res_quality>0) {
-//        std::cerr << c.first << " " << c.second << "\n";
-      }
-    }
-    return beta;
-  };
+                  const bool circling);
 
   /**
    * Operator used by newuoa optimiser to evaluate function to be
@@ -206,63 +183,24 @@ protected:
     return obs.size()== NUM_SAMPLES;
   }
 
-  /**
-   *
-   */
-  bool back_in_time(const unsigned time) {
-    if (obs.empty()) {
-      return false;
-    }
-    if (time < obs.back().time) {
-      reset();
-      return true;
-    }
-    return false;
-  }
+  bool back_in_time(const unsigned time);
 
   /**
    * Determine whether the time and angle satisfy criterion for
    * adding it to the list
    */
-  bool do_append(const unsigned time, const Angle &ang) const {
-    // never add if during manoeuvering blackout
-    if (time < time_blackout + BLACKOUT_TIME) {
-      return false;
-    }
-    // add if empty
-    if (!size()) {
-      return true;
-    }
-    // dont add if same time
-    if (time == obs.back().time) {
-      return false;
-    }
-    // dont add if no angle spread
-    if ((ang-obs.back().gps_ang).as_delta().magnitude_degrees() < fixed(10)) {
-      return false;
-    }
-    // ok to add
-    return true;
-  }
+  bool do_append(const unsigned time, const Angle &ang) const;
 
   /**
    * Set blackout timer
    */
-  void blackout(const unsigned time) {
-    time_blackout = time;
-  }
+  void blackout(const unsigned time);
 
   /**
    * Add observation (dropping out oldest if necessary), and reset
    * blackout timer.
    */
-  void append(ZZObs o) {
-    if (full()) {
-      obs.pop_front();
-    }
-    obs.push_back(o);
-    time_blackout = (unsigned)-1;
-  }
+  void append(ZZObs o);
 
 private:
 
@@ -281,52 +219,9 @@ private:
    * On average, more outliers than useful values are likely to be removed
    * by this algorithm.
    */
-  void prune_worst(const ZZBeta &beta) {
-    if (!obs.empty()) {
-      // always remove one old point, otherwise we may end up rejecting
-      // all new points, ending up with a very old data set.
-      obs.pop_front();
-    }
-    while ((size()>5)
-           && ((relative_error(beta)) >fixed(0.05))) {
-      remove_worst(beta);
-    }
-  }
+  void prune_worst(const ZZBeta &beta);
 
-  std::pair<fixed, fixed> correlation(const ZZBeta& beta) const {
-    fixed x_av(0);
-    fixed y_av(0);
-    unsigned n=0;
-    for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
-      fixed x = it->Phi(beta);
-      fixed y = it->mag();
-      x_av += x;
-      y_av += y;
-      n++;
-    }
-    if (!n)
-      return std::make_pair(fixed_zero, fixed_one);
-
-    x_av /= n;
-    y_av /= n;
-
-    fixed acc_xy(0);
-    fixed acc_xx(0);
-    fixed acc_yy(0);
-    for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
-      fixed xd = it->Phi(beta)-y_av;
-      fixed yd = it->mag()-x_av;
-      acc_xy += xd*yd;
-      acc_xx += xd*xd;
-      acc_yy += yd*yd;
-    }
-    if (!positive(acc_xx) || !positive(acc_yy))
-      return std::make_pair(fixed_zero, fixed_one);
-    fixed r = acc_xy/(sqrt(acc_xx)*sqrt(acc_yy));
-    fixed slope = y_av/x_av;
-
-    return std::make_pair(r, slope);
-  }
+  std::pair<fixed, fixed> correlation(const ZZBeta& beta) const;
 
   /**
    * Convenience routine, return squared value
@@ -339,117 +234,38 @@ private:
    * Function to be optimised (minimised)
    * This is the sum of squared errors between TAS and estimated TAS
    */
-  fixed fmin(const ZZBeta& beta) const {
-    fixed acc(0);
-    for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
-      acc += sqr(it->f(beta)/it->mag());
-    }
-    return acc;
-  }
+  fixed fmin(const ZZBeta& beta) const;
 
   /**
    * Remove item which has worst error.
    */
-  void remove_worst(const ZZBeta& beta) {
-    ObsList::iterator i_worst = find_worst(beta);
-    if (i_worst != obs.end()) {
-      obs.erase(i_worst);
-    }
-  }
+  void remove_worst(const ZZBeta& beta);
 
   /**
    * Find error
    */
-  fixed relative_error(const ZZBeta& beta) const {
-    return sqrt(fmin(beta));
-  }
+  fixed relative_error(const ZZBeta& beta) const;
 
   /**
    * Calculate quality of fit of wind estimate beta in
    * XCSoar's wind quality measure (0-5)
    */
-  int quality(const ZZBeta& beta, const bool circling) const {
-    const fixed v = relative_error(beta);
-    const int quality = min(fixed(5.0),max(fixed(1.0),-log(v)));
-    if (circling)
-      return max(1, quality / 2); // de-value updates in circling mode
-    else
-      return quality;
-  }
+  int quality(const ZZBeta& beta, const bool circling) const;
 
   /**
    * Find item in list with worst squared error
    */
-  ObsList::iterator find_worst(const ZZBeta& beta) {
-    fixed worst(0);
-
-    ObsList::iterator i_worst = obs.end();
-    for (ObsList::iterator it = obs.begin(); it != obs.end(); ++it) {
-      fixed fthis = sqr(it->f(beta)/it->mag());
-      if (fthis > worst) {
-        i_worst = it;
-        worst = fthis;
-      }
-    }
-    return i_worst;
-  }
+  ObsList::iterator find_worst(const ZZBeta& beta);
 };
 
 class WindZigZagGlue: public WindZigZag
 {
 public:
-
   SpeedVector optimises(int &res_quality, const SpeedVector start,
-                        const bool circling) {
-    const ZZBeta beta = optimise(res_quality, start, circling);
-    SpeedVector wind(beta.east, beta.north);
-    return wind;
-  };
+                        const bool circling);
 
   int Update(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-             SpeedVector &wind) {
-
-    // @todo accuracy: correct TAS for vertical speed if dynamic pullup
-
-    // reset if flight hasnt started or airspeed instrument not available
-    if (!derived.flight.Flying ||
-        !basic.AirspeedAvailable) {
-
-      reset();
-      return 0;
-    }
-
-    // ensure system is reset if time retreats
-    if (back_in_time(basic.Time)) {
-      return 0;
-    }
-
-    // temporary manoeuvering, dont append this point
-    if ((fabs(derived.TurnRate) > fixed(20)) ||
-        (fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3))) {
-
-      blackout(basic.Time);
-      return 0;
-    }
-
-    // is this point able to be added?
-    if (!do_append(basic.Time, basic.track))
-      return 0;
-
-    // ok to add a point
-
-    append(ZZObs(basic.Time,
-                 basic.GroundSpeed, basic.track,
-                 basic.TrueAirspeed));
-
-    //
-    if (!full())
-      return 0;
-
-    int quality;
-    wind = optimises(quality, derived.wind, derived.Circling);
-    return quality;
-  };
+             SpeedVector &wind);
 };
 
 static WindZigZagGlue wind_zig_zag;
@@ -459,4 +275,245 @@ WindZigZagUpdate(const NMEA_INFO &basic, const DERIVED_INFO &derived,
                  SpeedVector &wind)
 {
   return wind_zig_zag.Update(basic, derived, wind);
+}
+
+SpeedVector
+WindZigZagGlue::optimises(int &res_quality, const SpeedVector start,
+                          const bool circling)
+{
+  const ZZBeta beta = optimise(res_quality, start, circling);
+  SpeedVector wind(beta.east, beta.north);
+  return wind;
+}
+
+int
+WindZigZagGlue::Update(const NMEA_INFO &basic, const DERIVED_INFO &derived,
+                       SpeedVector &wind)
+{
+  // @todo accuracy: correct TAS for vertical speed if dynamic pullup
+
+  // reset if flight hasnt started or airspeed instrument not available
+  if (!derived.flight.Flying ||
+      !basic.AirspeedAvailable) {
+    reset();
+    return 0;
+  }
+
+  // ensure system is reset if time retreats
+  if (back_in_time(basic.Time)) {
+    return 0;
+  }
+
+  // temporary manoeuvering, dont append this point
+  if ((fabs(derived.TurnRate) > fixed(20)) ||
+      (fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3))) {
+
+    blackout(basic.Time);
+    return 0;
+  }
+
+  // is this point able to be added?
+  if (!do_append(basic.Time, basic.track))
+    return 0;
+
+  // ok to add a point
+
+  append(ZZObs(basic.Time,
+               basic.GroundSpeed, basic.track,
+               basic.TrueAirspeed));
+
+  //
+  if (!full())
+    return 0;
+
+  int quality;
+  wind = optimises(quality, derived.wind, derived.Circling);
+  return quality;
+}
+
+/**
+ * Find optimal value
+ */
+WindZigZag::ZZBeta
+WindZigZag::optimise(int &res_quality, const SpeedVector start,
+                     const bool circling) {
+  double x[] = {
+      start.bearing.sin() * start.norm,
+      start.bearing.cos() * start.norm
+  };
+  min_newuoa<double, WindZigZag>(2, x, *this, 100.0, 0.0001, 100);
+
+  const ZZBeta beta((fixed)x[0], (fixed)x[1]);
+  res_quality = quality(beta, circling);
+
+  std::pair<fixed, fixed> c = correlation(beta);
+  prune_worst(beta);
+
+  /*
+  if linear correlation coefficient is low, then TAS does not fit est TAS
+  across the samples, so fit is poor and should be rejected due to bad
+  estimate or bad samples.
+  */
+  if (c.first < fixed(0.9))
+    res_quality = 0;
+
+  return beta;
+}
+
+/**
+ * Remove items which have high relative error (leaving at least some items).
+ * This is to remove outliers which are likely to be caused by manoeuvering.
+ * On average, more outliers than useful values are likely to be removed
+ * by this algorithm.
+ */
+void WindZigZag::prune_worst(const ZZBeta &beta) {
+  if (!obs.empty()) {
+    // always remove one old point, otherwise we may end up rejecting
+    // all new points, ending up with a very old data set.
+    obs.pop_front();
+  }
+  while ((size()>5)
+         && ((relative_error(beta)) >fixed(0.05))) {
+    remove_worst(beta);
+  }
+}
+
+std::pair<fixed, fixed> WindZigZag::correlation(const ZZBeta& beta) const {
+  fixed x_av(0);
+  fixed y_av(0);
+  unsigned n=0;
+  for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
+    fixed x = it->Phi(beta);
+    fixed y = it->mag();
+    x_av += x;
+    y_av += y;
+    n++;
+  }
+  if (!n)
+    return std::make_pair(fixed_zero, fixed_one);
+
+  x_av /= n;
+  y_av /= n;
+
+  fixed acc_xy(0);
+  fixed acc_xx(0);
+  fixed acc_yy(0);
+  for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
+    fixed xd = it->Phi(beta)-y_av;
+    fixed yd = it->mag()-x_av;
+    acc_xy += xd*yd;
+    acc_xx += xd*xd;
+    acc_yy += yd*yd;
+  }
+  if (!positive(acc_xx) || !positive(acc_yy))
+    return std::make_pair(fixed_zero, fixed_one);
+  fixed r = acc_xy/(sqrt(acc_xx)*sqrt(acc_yy));
+  fixed slope = y_av/x_av;
+
+  return std::make_pair(r, slope);
+}
+
+fixed
+WindZigZag::fmin(const ZZBeta& beta) const
+{
+  fixed acc(0);
+  for (ObsList::const_iterator it = obs.begin(); it != obs.end(); ++it) {
+    acc += sqr(it->f(beta)/it->mag());
+  }
+  return acc;
+}
+
+void
+WindZigZag::remove_worst(const ZZBeta& beta)
+{
+  ObsList::iterator i_worst = find_worst(beta);
+  if (i_worst != obs.end()) {
+    obs.erase(i_worst);
+  }
+}
+
+fixed
+WindZigZag::relative_error(const ZZBeta& beta) const
+{
+  return sqrt(fmin(beta));
+}
+
+int
+WindZigZag::quality(const ZZBeta& beta, const bool circling) const
+{
+  const fixed v = relative_error(beta);
+  const int quality = min(fixed(5.0),max(fixed(1.0),-log(v)));
+  if (circling)
+    return max(1, quality / 2); // de-value updates in circling mode
+  else
+    return quality;
+}
+
+WindZigZag::ObsList::iterator
+WindZigZag::find_worst(const ZZBeta& beta)
+{
+  fixed worst(0);
+
+  ObsList::iterator i_worst = obs.end();
+  for (ObsList::iterator it = obs.begin(); it != obs.end(); ++it) {
+    fixed fthis = sqr(it->f(beta)/it->mag());
+    if (fthis > worst) {
+      i_worst = it;
+      worst = fthis;
+    }
+  }
+  return i_worst;
+}
+
+bool
+WindZigZag::back_in_time(const unsigned time)
+{
+  if (obs.empty())
+    return false;
+
+  if (time < obs.back().time) {
+    reset();
+    return true;
+  }
+
+  return false;
+}
+
+bool
+WindZigZag::do_append(const unsigned time, const Angle &ang) const
+{
+  // never add if during maneuvering blackout
+  if (time < time_blackout + BLACKOUT_TIME)
+    return false;
+
+  // add if empty
+  if (!size())
+    return true;
+
+  // don't add if same time
+  if (time == obs.back().time)
+    return false;
+
+  // don't add if no angle spread
+  if ((ang-obs.back().gps_ang).as_delta().magnitude_degrees() < fixed(10))
+    return false;
+
+  // okay to add
+  return true;
+}
+
+void
+WindZigZag::blackout(const unsigned time)
+{
+  time_blackout = time;
+}
+
+void
+WindZigZag::append(ZZObs o)
+{
+  if (full())
+    obs.pop_front();
+
+  obs.push_back(o);
+  time_blackout = (unsigned)-1;
 }
