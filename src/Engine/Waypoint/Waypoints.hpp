@@ -23,6 +23,7 @@
 #define WAYPOINTS_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/SliceAllocator.hpp"
 #include "Util/RadixTree.hpp"
 #include <kdtree++/kdtree.hpp>
 #include "WaypointEnvelope.hpp"
@@ -242,7 +243,11 @@ public:
    */
   typedef KDTree::KDTree<2, 
                          WaypointEnvelope, 
-                         WaypointEnvelope::kd_get_location
+                         WaypointEnvelope::kd_get_location,
+                         KDTree::squared_difference<WaypointEnvelope::kd_get_location::result_type,
+                                                    WaypointEnvelope::kd_get_location::result_type>,
+                         std::less<WaypointEnvelope::kd_get_location::result_type>,
+                         SliceAllocator<KDTree::_Node<WaypointEnvelope>, 1024>
                          > WaypointTree;
 
   typedef RadixTree<const Waypoint*> WaypointNameTree;
