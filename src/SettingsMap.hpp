@@ -27,7 +27,7 @@ Copyright_License {
 // not expected to be used by other threads
 
 #include "Navigation/GeoPoint.hpp"
-#include "SettingsAirspace.hpp"
+#include "Airspace/AirspaceClass.hpp"
 #include "Screen/TextInBox.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
