@@ -42,15 +42,10 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.WaypointArrivalHeightDisplay = WP_ARRIVAL_HEIGHT_GLIDE;
   settings_map.LandableRenderMode = RoundedBlack;
   settings_map.TrailActive = 1;
-  settings_map.bAirspaceBlackOutline = false;
-#ifndef ENABLE_OPENGL
-  settings_map.airspace_transparency = false;
-  settings_map.AirspaceFillMode = SETTINGS_MAP::AS_FILL_DEFAULT;
-#endif
+  settings_map.airspace.SetDefaults();
   settings_map.GliderScreenPosition = 20; // 20% from bottom
   settings_map.OrientationCircling = TRACKUP;
   settings_map.OrientationCruise = TRACKUP;
-  settings_map.EnableAirspace = true;
   settings_map.EnableAuxiliaryInfo = true;
   settings_map.AuxiliaryInfoBoxPanel = 0;
   settings_map.UserForceDisplayMode = dmNone;
@@ -67,33 +62,4 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.EnableAutoBlank = false;
 
   settings_map.SetSystemTimeFromGPS = is_altair() && is_embedded();
-  settings_map.iAirspaceBrush[0]=2;
-  settings_map.iAirspaceBrush[1]=0;
-  settings_map.iAirspaceBrush[2]=0;
-  settings_map.iAirspaceBrush[3]=0;
-  settings_map.iAirspaceBrush[4]=3;
-  settings_map.iAirspaceBrush[5]=3;
-  settings_map.iAirspaceBrush[6]=3;
-  settings_map.iAirspaceBrush[7]=3;
-  settings_map.iAirspaceBrush[8]=0;
-  settings_map.iAirspaceBrush[9]=3;
-  settings_map.iAirspaceBrush[10]=2;
-  settings_map.iAirspaceBrush[11]=3;
-  settings_map.iAirspaceBrush[12]=3;
-  settings_map.iAirspaceBrush[13]=3;
-
-  settings_map.iAirspaceColour[ 0]= 5;
-  settings_map.iAirspaceColour[ 1]= 0;
-  settings_map.iAirspaceColour[ 2]= 0;
-  settings_map.iAirspaceColour[ 3]= 10;
-  settings_map.iAirspaceColour[ 4]= 0;
-  settings_map.iAirspaceColour[ 5]= 0;
-  settings_map.iAirspaceColour[ 6]= 10;
-  settings_map.iAirspaceColour[ 7]= 2;
-  settings_map.iAirspaceColour[ 8]= 0;
-  settings_map.iAirspaceColour[ 9]= 10;
-  settings_map.iAirspaceColour[10]= 9;
-  settings_map.iAirspaceColour[11]= 3;
-  settings_map.iAirspaceColour[12]= 7;
-  settings_map.iAirspaceColour[13]= 7;
 }

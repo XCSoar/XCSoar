@@ -207,6 +207,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Airspace/AirspaceGlue.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
+	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
+	$(SRC)/Airspace/AirspaceRendererSettings.cpp \
 	\
 	$(SRC)/Operation.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \

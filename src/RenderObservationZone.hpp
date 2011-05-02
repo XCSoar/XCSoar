@@ -30,7 +30,7 @@ Copyright_License {
 
 class Canvas;
 class Projection;
-struct SETTINGS_MAP;
+struct AirspaceRendererSettings;
 class ObservationZonePoint;
 class CylinderZone;
 class SectorZone;
@@ -72,7 +72,7 @@ public:
    * means it is a "past" task point
    * @return false if nothing is to be drawn in this layer
    */
-  bool draw_style(Canvas &canvas, const SETTINGS_MAP &settings_map,
+  bool draw_style(Canvas &canvas, const AirspaceRendererSettings &settings,
                   int offset) const;
 
   /**

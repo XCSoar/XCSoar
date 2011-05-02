@@ -439,7 +439,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
   if (_tcsstr(OutBuffer, _T("$(AirSpaceToggleName)"))) {
     ReplaceInString(OutBuffer, _T("$(AirSpaceToggleName)"),
-                    SettingsMap().EnableAirspace ? _("Off") : _("On"), Size);
+                    SettingsMap().airspace.enable ? _("Off") : _("On"), Size);
   }
 
   if (_tcsstr(OutBuffer, _T("$(TerrainTopologyToggleName)"))) {
@@ -541,19 +541,19 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(DispModeFinalShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(SettingsComputer().AltitudeMode == ALLON,
+  CondReplaceInString(SettingsMap().airspace.altitude_mode == ALLON,
                       OutBuffer, _T("$(AirspaceModeAllShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsComputer().AltitudeMode == CLIP,
+  CondReplaceInString(SettingsMap().airspace.altitude_mode == CLIP,
                       OutBuffer, _T("$(AirspaceModeClipShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsComputer().AltitudeMode == AUTO,
+  CondReplaceInString(SettingsMap().airspace.altitude_mode == AUTO,
                       OutBuffer, _T("$(AirspaceModeAutoShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsComputer().AltitudeMode == ALLBELOW,
+  CondReplaceInString(SettingsMap().airspace.altitude_mode == ALLBELOW,
                       OutBuffer, _T("$(AirspaceModeBelowShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsComputer().AltitudeMode == ALLOFF,
+  CondReplaceInString(SettingsMap().airspace.altitude_mode == ALLOFF,
                       OutBuffer, _T("$(AirspaceModeAllOffIndicator)"),
                       _T("(*)"), _T(""), Size);
 
@@ -570,10 +570,10 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(SnailTrailFullShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(!SettingsMap().EnableAirspace,
+  CondReplaceInString(!SettingsMap().airspace.enable,
                       OutBuffer, _T("$(AirSpaceOffShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().EnableAirspace,
+  CondReplaceInString(SettingsMap().airspace.enable,
                       OutBuffer, _T("$(AirSpaceOnShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 

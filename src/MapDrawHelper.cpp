@@ -26,12 +26,12 @@ Copyright_License {
 #include "MapDrawHelper.hpp"
 #include "Screen/Canvas.hpp"
 #include "WindowProjection.hpp"
-#include "SettingsMap.hpp"
+#include "Airspace/AirspaceRendererSettings.hpp"
 #include "MapCanvas.hpp"
 
 MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
                              const WindowProjection &_proj,
-                             const SETTINGS_MAP& settings_map)
+                             const AirspaceRendererSettings &_settings)
   :clip(_proj.GetScreenBounds().scale(fixed(1.1))),
    m_canvas(_canvas),
    m_buffer(_buffer),
@@ -39,7 +39,7 @@ MapDrawHelper::MapDrawHelper(Canvas &_canvas, Canvas &_buffer, Canvas &_stencil,
    m_proj(_proj),
    m_buffer_drawn(false),
    m_use_stencil(false),
-   m_settings_map(settings_map)
+   settings(_settings)
 {
 }
 
@@ -51,7 +51,7 @@ MapDrawHelper::MapDrawHelper(MapDrawHelper &_that)
    m_proj(_that.m_proj),
    m_buffer_drawn(_that.m_buffer_drawn),
    m_use_stencil(_that.m_use_stencil),
-   m_settings_map(_that.m_settings_map)
+   settings(_that.settings)
 {
 }
 
@@ -107,7 +107,7 @@ MapDrawHelper::buffer_render_finish()
       m_buffer.copy_transparent_black(m_stencil);
 
 #ifdef HAVE_ALPHA_BLEND
-    if (m_settings_map.airspace_transparency && AlphaBlendAvailable())
+    if (settings.transparency && AlphaBlendAvailable())
       m_canvas.alpha_blend(0, 0, m_canvas.get_width(), m_canvas.get_height(),
                            m_buffer,
                            0, 0, m_buffer.get_width(), m_buffer.get_height(),

@@ -1146,6 +1146,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
+	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
+	$(SRC)/Airspace/AirspaceRendererSettings.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -1315,6 +1317,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Airspace/AirspaceRendererSettings.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
@@ -1448,6 +1451,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Airspace/AirspaceGlue.cpp \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
+	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
+	$(SRC)/Airspace/AirspaceRendererSettings.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/IO/ConfiguredFile.cpp \

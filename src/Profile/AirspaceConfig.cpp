@@ -32,35 +32,52 @@ Profile::LoadAirspaceConfig()
 {
   unsigned Temp = 0;
 
-  SETTINGS_MAP &settings_map = XCSoarInterface::SetSettingsMap();
-  SETTINGS_COMPUTER &settings_computer =
-    XCSoarInterface::SetSettingsComputer();
+  AirspaceComputerSettings &computer =
+    CommonInterface::SetSettingsComputer().airspace;
+  AirspaceRendererSettings &renderer =
+    CommonInterface::SetSettingsMap().airspace;
+
+  Get(szProfileAirspaceWarning, computer.enable_warnings);
+  Get(szProfileAltMargin, computer.warnings.AltWarningMargin);
+  Get(szProfileWarningTime, computer.warnings.WarningTime);
+  Get(szProfileAcknowledgementTime, computer.warnings.AcknowledgementTime);
+
+  Get(szProfileAirspaceBlackOutline, renderer.black_outline);
+  GetEnum(szProfileAltMode, renderer.altitude_mode);
+  Get(szProfileClipAlt, renderer.clip_altitude);
+
+#ifndef ENABLE_OPENGL
+  Get(szProfileAirspaceTransparency, renderer.transparency);
+  GetEnum(szProfileAirspaceFillMode, renderer.fill_mode);
+#endif
 
   for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++) {
     if (Get(szProfileAirspaceMode[i], Temp)) {
-      settings_computer.DisplayAirspaces[i] = (Temp & 0x1) != 0;
-      settings_computer.airspace_warnings.class_warnings[i] = (Temp & 0x2) != 0;
+      renderer.display[i] = (Temp & 0x1) != 0;
+      computer.warnings.class_warnings[i] = (Temp & 0x2) != 0;
     }
 
-    Get(szProfileBrush[i], settings_map.iAirspaceBrush[i]);
-    Get(szProfileColour[i], settings_map.iAirspaceColour[i]);
-    if (settings_map.iAirspaceColour[i] >= NUMAIRSPACECOLORS)
-      settings_map.iAirspaceColour[i] = 0;
-    if (settings_map.iAirspaceBrush[i] >= NUMAIRSPACEBRUSHES)
-      settings_map.iAirspaceBrush[i] = 0;
+    Get(szProfileBrush[i], renderer.brushes[i]);
+    Get(szProfileColour[i], renderer.colours[i]);
+    if (renderer.colours[i] >= NUMAIRSPACECOLORS)
+      renderer.colours[i] = 0;
+    if (renderer.brushes[i] >= NUMAIRSPACEBRUSHES)
+      renderer.brushes[i] = 0;
   }
 }
 
 void
 Profile::SetAirspaceMode(int i)
 {
-  const SETTINGS_AIRSPACE &settings_airspace =
-    XCSoarInterface::SettingsComputer();
+  const AirspaceComputerSettings &computer =
+    CommonInterface::SettingsComputer().airspace;
+  const AirspaceRendererSettings &renderer =
+    CommonInterface::SettingsMap().airspace;
 
   int val = 0;
-  if (settings_airspace.DisplayAirspaces[i])
+  if (renderer.display[i])
     val |= 0x1;
-  if (settings_airspace.airspace_warnings.class_warnings[i])
+  if (computer.warnings.class_warnings[i])
     val |= 0x2;
 
   Set(szProfileAirspaceMode[i], val);

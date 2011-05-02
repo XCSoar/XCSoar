@@ -77,10 +77,11 @@ private:
 class AirspaceMapVisible: public AirspaceVisible
 {
 public:
-  AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
+  AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
+                     const AirspaceRendererSettings &_renderer_settings,
                      const AIRCRAFT_STATE& _state, const bool& _border,
                      const AirspaceWarningCopy2 &warnings):
-    AirspaceVisible(_settings, _state),
+    AirspaceVisible(_computer_settings, _renderer_settings, _state),
     m_border(_border),
     m_warnings(warnings) {}
 
@@ -216,7 +217,8 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
 
   AirspaceDetailsDialogVisitor airspace_copy_popup(*(SingleWindow *)get_root_owner(),
                                                    location);
-  const AirspaceMapVisible visible(SettingsComputer(),
+  const AirspaceMapVisible visible(SettingsComputer().airspace,
+                                   SettingsMap().airspace,
                                    ToAircraftState(Basic(), Calculated()),
                                    false, awc);
 

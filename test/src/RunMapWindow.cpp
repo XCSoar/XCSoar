@@ -227,13 +227,7 @@ GenerateBlackboard(MapWindow &map)
     } while (lease->IsDirty());
   }
 
-  std::fill(settings_computer.DisplayAirspaces,
-            settings_computer.DisplayAirspaces + AIRSPACECLASSCOUNT,
-            true);
-
-  std::fill(settings_computer.airspace_warnings.class_warnings,
-            settings_computer.airspace_warnings.class_warnings + AIRSPACECLASSCOUNT,
-            true);
+  settings_computer.airspace.SetDefaults();
 
   map.ReadBlackboard(nmea_info, derived_info, settings_computer,
                      blackboard.SettingsMap());

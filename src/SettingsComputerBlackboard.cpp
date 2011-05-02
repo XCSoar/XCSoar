@@ -63,20 +63,11 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.EnableVoiceInSector = false;
   settings_computer.EnableVoiceAirspace = false;
 
-  settings_computer.EnableAirspaceWarnings = true;
-
-  settings_computer.AltitudeMode = ALLON;
-  settings_computer.ClipAltitude = 1000;
+  settings_computer.airspace.SetDefaults();
 
   settings_computer.EnableSoundVario = true;
   settings_computer.EnableSoundModes = true;
   settings_computer.EnableSoundTask = true;
-
-  std::fill(settings_computer.DisplayAirspaces,
-            settings_computer.DisplayAirspaces + AIRSPACECLASSCOUNT,
-            true);
-
-  settings_computer.DisplayAirspaces[CLASSG] = false;
 
   settings_computer.SafetySpeed = fixed(70);
   settings_computer.BallastSecsToEmpty  = 120;

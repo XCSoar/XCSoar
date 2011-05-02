@@ -34,7 +34,7 @@ Copyright_License {
 class Canvas;
 class Projection;
 class WindowProjection;
-struct SETTINGS_MAP;
+struct AirspaceRendererSettings;
 
 /**
  * Utility class to draw multilayer items on a canvas with stencil masking
@@ -56,14 +56,14 @@ public:
   bool m_buffer_drawn;
   bool m_use_stencil;
 
-  const SETTINGS_MAP& m_settings_map;
+  const AirspaceRendererSettings &settings;
 
 public:
   MapDrawHelper(Canvas &_canvas,
                 Canvas &_buffer,
                 Canvas &_stencil,
                 const WindowProjection &_proj,
-                const SETTINGS_MAP& settings_map);
+                const AirspaceRendererSettings &_settings);
 
   MapDrawHelper(MapDrawHelper &_that);
 

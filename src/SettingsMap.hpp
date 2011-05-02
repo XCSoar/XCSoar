@@ -28,6 +28,7 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "Airspace/AirspaceClass.hpp"
+#include "Airspace/AirspaceRendererSettings.hpp"
 #include "Screen/TextInBox.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
@@ -127,31 +128,8 @@ struct SETTINGS_MAP {
   RenderMode LandableRenderMode;
 
   int TrailActive;
-  /** Airspaces are drawn with black border (otherwise in airspace color) */
-  bool bAirspaceBlackOutline;
 
-#ifndef ENABLE_OPENGL
-  /**
-   * Should the airspace be rendered with a transparent brush instead
-   * of a pattern brush?
-   */
-  bool airspace_transparency;
-
-  /**
-   * What portion of the airspace area should be filled with the
-   * airspace brush?
-   */
-  enum AirspaceFillMode {
-    /** the platform specific default is used */
-    AS_FILL_DEFAULT,
-
-    /** fill all of the area */
-    AS_FILL_ALL,
-
-    /** fill only a thick padding (like on ICAO maps) */
-    AS_FILL_PADDING,
-  } AirspaceFillMode;
-#endif
+  AirspaceRendererSettings airspace;
 
   int GliderScreenPosition;
   /** Orientation of the map (North up, Track up, etc.) */
@@ -161,7 +139,6 @@ struct SETTINGS_MAP {
   /** The bias for map shifting (Heading, Target, etc.) */
   MapShiftBias_t MapShiftBias;
 
-  bool EnableAirspace;
   bool EnableAuxiliaryInfo;
   unsigned AuxiliaryInfoBoxPanel;
   DisplayMode_t UserForceDisplayMode;
@@ -181,9 +158,6 @@ struct SETTINGS_MAP {
   bool EnableAutoBlank;
   /** Update system time from GPS time */
   bool SetSystemTimeFromGPS;
-
-  int iAirspaceBrush[AIRSPACECLASSCOUNT];
-  int iAirspaceColour[AIRSPACECLASSCOUNT];
 };
 
 #endif

@@ -659,7 +659,7 @@ void
 GlideComputerAirData::ProcessIdle()
 {
   if (airspace_clock.check_advance(Basic().Time)
-      && SettingsComputer().EnableAirspaceWarnings)
+      && SettingsComputer().airspace.enable_warnings)
     AirspaceWarning();
 }
 

@@ -29,7 +29,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
-#include "SettingsAirspace.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
@@ -47,6 +46,11 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < AIRSPACECLASSCOUNT);
 
+  const AirspaceComputerSettings &computer =
+    CommonInterface::SettingsComputer().airspace;
+  const AirspaceRendererSettings &renderer =
+    CommonInterface::SettingsMap().airspace;
+
   int w1, w2, x0;
   int w0 = rc.right - rc.left - Layout::FastScale(4);
 
@@ -57,25 +61,20 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   if (colormode) {
     canvas.white_pen();
 #ifdef ENABLE_SDL
-    canvas.select(Brush(Graphics::Colours[XCSoarInterface::SettingsMap().iAirspaceColour[i]]));
+    canvas.select(Brush(Graphics::Colours[renderer.colours[i]]));
 #else
-    canvas.set_text_color(Graphics::GetAirspaceColourByClass(i,
-        XCSoarInterface::SettingsMap()));
+    canvas.set_text_color(Graphics::GetAirspaceColourByClass(i, renderer));
     canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
-    canvas.select(Graphics::GetAirspaceBrushByClass(i,
-        XCSoarInterface::SettingsMap()));
+    canvas.select(Graphics::GetAirspaceBrushByClass(i, renderer));
 #endif
     canvas.rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
         rc.right - Layout::FastScale(2), rc.bottom - Layout::FastScale(2));
   } else {
-    const SETTINGS_AIRSPACE &settings_airspace =
-      XCSoarInterface::SettingsComputer();
-
-    if (settings_airspace.airspace_warnings.class_warnings[i])
+    if (computer.warnings.class_warnings[i])
       canvas.text(rc.left + w0 - w1 - w2, rc.top + Layout::FastScale(2),
                   _("Warn"));
 
-    if (settings_airspace.DisplayAirspaces[i])
+    if (renderer.display[i])
       canvas.text(rc.left + w0 - w2, rc.top + Layout::FastScale(2),
                   _("Display"));
   }
@@ -92,36 +91,35 @@ OnAirspaceListEnter(unsigned ItemIndex)
 {
   assert(ItemIndex < AIRSPACECLASSCOUNT);
 
+  AirspaceComputerSettings &computer =
+    CommonInterface::SetSettingsComputer().airspace;
+  AirspaceRendererSettings &renderer =
+    CommonInterface::SetSettingsMap().airspace;
+
   if (colormode) {
     int c = dlgAirspaceColoursShowModal();
     if (c >= 0) {
-      XCSoarInterface::SetSettingsMap().iAirspaceColour[ItemIndex] = c;
+      renderer.colours[ItemIndex] = c;
       ActionInterface::SendSettingsMap();
-      Profile::SetAirspaceColor(ItemIndex,
-          XCSoarInterface::SettingsMap().iAirspaceColour[ItemIndex]);
+      Profile::SetAirspaceColor(ItemIndex, renderer.colours[ItemIndex]);
       changed = true;
-      Graphics::InitAirspacePens(XCSoarInterface::SettingsMap());
+      Graphics::InitAirspacePens(renderer);
     }
 
 #ifndef ENABLE_SDL
     int p = dlgAirspacePatternsShowModal();
     if (p >= 0) {
-      XCSoarInterface::SetSettingsMap().iAirspaceBrush[ItemIndex] = p;
+      renderer.brushes[ItemIndex] = p;
       ActionInterface::SendSettingsMap();
-      Profile::SetAirspaceBrush(ItemIndex,
-          XCSoarInterface::SettingsMap().iAirspaceBrush[ItemIndex]);
+      Profile::SetAirspaceBrush(ItemIndex, renderer.brushes[ItemIndex]);
       changed = true;
     }
 #endif
   } else {
-    SETTINGS_AIRSPACE &settings_airspace =
-      XCSoarInterface::SetSettingsComputer();
-
-    settings_airspace.DisplayAirspaces[ItemIndex] =
-        !settings_airspace.DisplayAirspaces[ItemIndex];
-    if (!settings_airspace.DisplayAirspaces[ItemIndex])
-      settings_airspace.airspace_warnings.class_warnings[ItemIndex] =
-        !settings_airspace.airspace_warnings.class_warnings[ItemIndex];
+    renderer.display[ItemIndex] = !renderer.display[ItemIndex];
+    if (!renderer.display[ItemIndex])
+      computer.warnings.class_warnings[ItemIndex] =
+        !computer.warnings.class_warnings[ItemIndex];
 
     Profile::SetAirspaceMode(ItemIndex);
     changed = true;
@@ -176,7 +174,7 @@ dlgAirspaceShowModal(bool coloredit)
   if (changed) {
     if (!colormode && airspace_warnings != NULL) {
       ProtectedAirspaceWarningManager::ExclusiveLease awm(*airspace_warnings);
-      awm->set_config(XCSoarInterface::SetSettingsComputer().airspace_warnings);
+      awm->set_config(CommonInterface::SetSettingsComputer().airspace.warnings);
     }
 
     Profile::Save();

@@ -190,27 +190,12 @@ Profile::Use()
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
 
-  GetEnum(szProfileAltMode, settings_computer.AltitudeMode);
-
-  Get(szProfileClipAlt,
-      settings_computer.ClipAltitude);
-  Get(szProfileAltMargin,
-      settings_computer.airspace_warnings.AltWarningMargin);
-
   Get(szProfileSafetyAltitudeArrival,
       settings_computer.safety_height_arrival);
   Get(szProfileSafetyAltitudeTerrain,
       settings_computer.route_planner.safety_height_terrain);
 
   LoadAirspaceConfig();
-
-  Get(szProfileAirspaceBlackOutline,
-      settings_map.bAirspaceBlackOutline);
-
-#ifndef ENABLE_OPENGL
-  Get(szProfileAirspaceTransparency, settings_map.airspace_transparency);
-  GetEnum(szProfileAirspaceFillMode, settings_map.AirspaceFillMode);
-#endif
 
   Get(szProfileSnailTrail,
       settings_map.TrailActive);
@@ -256,15 +241,6 @@ Profile::Use()
 
   Get(szProfileTeamcodeRefWaypoint,
       settings_computer.TeamCodeRefWaypoint);
-
-  Get(szProfileAirspaceWarning,
-      settings_computer.EnableAirspaceWarnings);
-
-  Get(szProfileWarningTime,
-      settings_computer.airspace_warnings.WarningTime);
-
-  Get(szProfileAcknowledgementTime,
-      settings_computer.airspace_warnings.AcknowledgementTime);
 
   Get(szProfileSoundVolume,
       settings_computer.SoundVolume);

@@ -36,6 +36,7 @@ struct Color;
 class Pen;
 
 struct SETTINGS_MAP;
+struct AirspaceRendererSettings;
 class LabelBlock;
 
 class Canvas;
@@ -48,7 +49,7 @@ namespace Graphics {
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
   void InitSnailTrail(const SETTINGS_MAP &settings_map);
   void InitLandableIcons();
-  void InitAirspacePens(const SETTINGS_MAP &settings_map);
+  void InitAirspacePens(const AirspaceRendererSettings &settings);
   void Deinitialise();
   void DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
                     const Angle angle, const RasterPoint aircraft_pos);
@@ -60,10 +61,12 @@ namespace Graphics {
   const Brush &GetAirspaceBrush(const int i);
 #endif
 
-  const Color GetAirspaceColourByClass(const int i, const SETTINGS_MAP &settings);
+  const Color GetAirspaceColourByClass(const int i,
+                                       const AirspaceRendererSettings &settings);
 
 #ifndef ENABLE_SDL
-  const Brush &GetAirspaceBrushByClass(const int i, const SETTINGS_MAP &settings);
+  const Brush &GetAirspaceBrushByClass(const int i,
+                                       const AirspaceRendererSettings &settings);
 #endif
 
   extern Pen hAirspacePens[AIRSPACECLASSCOUNT];

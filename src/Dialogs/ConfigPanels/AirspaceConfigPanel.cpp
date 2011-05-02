@@ -29,7 +29,6 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "SettingsAirspace.hpp"
 #include "Interface.hpp"
 #include "AirspaceConfigPanel.hpp"
 #include "Language/Language.hpp"
@@ -58,8 +57,10 @@ AirspaceConfigPanel::Init(WndForm *_wf)
   wf = _wf;
   WndProperty *wp;
 
-  const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
-  const SETTINGS_MAP &settings_map = XCSoarInterface::SettingsMap();
+  const AirspaceComputerSettings &computer =
+    CommonInterface::SettingsComputer().airspace;
+  const AirspaceRendererSettings &renderer =
+    CommonInterface::SettingsMap().airspace;
 
   wp = (WndProperty*)wf->FindByName(_T("prpAirspaceDisplay"));
   if (wp) {
@@ -69,27 +70,22 @@ AirspaceConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("Clip"));
     dfe->addEnumText(_("Auto"));
     dfe->addEnumText(_("All below"));
-    dfe->Set(settings_computer.AltitudeMode);
+    dfe->Set(renderer.altitude_mode);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
-                   settings_computer.ClipAltitude);
+                   renderer.clip_altitude);
 
   LoadFormProperty(*wf, _T("prpAltWarningMargin"), ugAltitude,
-                   settings_computer.airspace_warnings.AltWarningMargin);
+                   computer.warnings.AltWarningMargin);
 
-  LoadFormProperty(*wf, _T("prpAirspaceWarnings"),
-                   settings_computer.EnableAirspaceWarnings);
-
-  LoadFormProperty(*wf, _T("prpWarningTime"),
-                   settings_computer.airspace_warnings.WarningTime);
-
+  LoadFormProperty(*wf, _T("prpAirspaceWarnings"), computer.enable_warnings);
+  LoadFormProperty(*wf, _T("prpWarningTime"), computer.warnings.WarningTime);
   LoadFormProperty(*wf, _T("prpAcknowledgementTime"),
-                   settings_computer.airspace_warnings.AcknowledgementTime);
+                   computer.warnings.AcknowledgementTime);
 
-  LoadFormProperty(*wf, _T("prpAirspaceOutline"),
-                   settings_map.bAirspaceBlackOutline);
+  LoadFormProperty(*wf, _T("prpAirspaceOutline"), renderer.black_outline);
 
   wp = (WndProperty *)wf->FindByName(_T("prpAirspaceFillMode"));
   {
@@ -98,10 +94,11 @@ AirspaceConfigPanel::Init(WndForm *_wf)
     wf->RemoveExpert(wp);  // prevent unhiding with expert-switch
 #else
     DataFieldEnum &dfe = *(DataFieldEnum *)wp->GetDataField();
-    dfe.addEnumText(_("Default"), SETTINGS_MAP::AS_FILL_DEFAULT);
-    dfe.addEnumText(_("Fill all"), SETTINGS_MAP::AS_FILL_ALL);
-    dfe.addEnumText(_("Fill padding"), SETTINGS_MAP::AS_FILL_PADDING);
-    dfe.Set(settings_map.AirspaceFillMode);
+    dfe.addEnumText(_("Default"), AirspaceRendererSettings::AS_FILL_DEFAULT);
+    dfe.addEnumText(_("Fill all"), AirspaceRendererSettings::AS_FILL_ALL);
+    dfe.addEnumText(_("Fill padding"),
+                    AirspaceRendererSettings::AS_FILL_PADDING);
+    dfe.Set(renderer.fill_mode);
     wp->RefreshDisplay();
 #endif
   }
@@ -109,7 +106,7 @@ AirspaceConfigPanel::Init(WndForm *_wf)
 #if !defined(ENABLE_OPENGL) && defined(HAVE_ALPHA_BLEND)
   if (AlphaBlendAvailable())
     LoadFormProperty(*wf, _T("prpAirspaceTransparency"),
-                     settings_map.airspace_transparency);
+                     renderer.transparency);
   else
 #endif
   {
@@ -124,55 +121,58 @@ bool
 AirspaceConfigPanel::Save(bool &requirerestart)
 {
   bool changed = false;
-  SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
 
-  short tmp = settings_computer.AltitudeMode;
+  AirspaceComputerSettings &computer =
+    CommonInterface::SetSettingsComputer().airspace;
+  AirspaceRendererSettings &renderer =
+    CommonInterface::SetSettingsMap().airspace;
+
+  short tmp = renderer.altitude_mode;
   changed |= SaveFormProperty(*wf, _T("prpAirspaceDisplay"),
                               szProfileAltMode, tmp);
-  settings_computer.AltitudeMode = (AirspaceDisplayMode_t)tmp;
+  renderer.altitude_mode = (AirspaceDisplayMode_t)tmp;
 
   changed |= SaveFormProperty(*wf, _T("prpClipAltitude"), ugAltitude,
-                              settings_computer.ClipAltitude,
+                              renderer.clip_altitude,
                               szProfileClipAlt);
 
   changed |= SaveFormProperty(*wf, _T("prpAltWarningMargin"),
-                              ugAltitude, settings_computer.airspace_warnings.AltWarningMargin,
+                              ugAltitude, computer.warnings.AltWarningMargin,
                               szProfileAltMargin);
 
   changed |= SaveFormProperty(*wf, _T("prpAirspaceWarnings"),
                               szProfileAirspaceWarning,
-                              settings_computer.EnableAirspaceWarnings);
+                              computer.enable_warnings);
 
   if (SaveFormProperty(*wf, _T("prpWarningTime"),
                        szProfileWarningTime,
-                       settings_computer.airspace_warnings.WarningTime)) {
+                       computer.warnings.WarningTime)) {
     changed = true;
     requirerestart = true;
   }
 
   if (SaveFormProperty(*wf, _T("prpAcknowledgementTime"),
                        szProfileAcknowledgementTime,
-                       settings_computer.airspace_warnings.AcknowledgementTime)) {
+                       computer.warnings.AcknowledgementTime)) {
     changed = true;
     requirerestart = true;
   }
 
   changed |= SaveFormProperty(*wf, _T("prpAirspaceOutline"),
                               szProfileAirspaceBlackOutline,
-                              XCSoarInterface::SetSettingsMap().bAirspaceBlackOutline);
+                              renderer.black_outline);
 
 #ifndef ENABLE_OPENGL
-  SETTINGS_MAP &settings_map = XCSoarInterface::SetSettingsMap();
-  tmp = settings_map.AirspaceFillMode;
+  tmp = renderer.fill_mode;
   changed |= SaveFormProperty(*wf, _T("prpAirspaceFillMode"),
                               szProfileAirspaceFillMode, tmp);
-  settings_map.AirspaceFillMode = (enum SETTINGS_MAP::AirspaceFillMode)tmp;
+  renderer.fill_mode = (enum AirspaceRendererSettings::AirspaceFillMode)tmp;
 
 #ifdef HAVE_ALPHA_BLEND
   if (AlphaBlendAvailable())
     changed |= SaveFormProperty(*wf, _T("prpAirspaceTransparency"),
                                 szProfileAirspaceTransparency,
-                                settings_map.airspace_transparency);
+                                renderer.transparency);
 #endif
 #endif /* !OpenGL */
 

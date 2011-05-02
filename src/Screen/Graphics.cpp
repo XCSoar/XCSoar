@@ -143,16 +143,18 @@ Graphics::GetAirspaceBrush(const int i)
 #endif
 
 const Color
-Graphics::GetAirspaceColourByClass(const int i, const SETTINGS_MAP &settings)
+Graphics::GetAirspaceColourByClass(const int i,
+                                   const AirspaceRendererSettings &settings)
 {
-  return GetAirspaceColour(settings.iAirspaceColour[i]);
+  return GetAirspaceColour(settings.colours[i]);
 }
 
 #ifndef ENABLE_SDL
 const Brush &
-Graphics::GetAirspaceBrushByClass(const int i, const SETTINGS_MAP &settings)
+Graphics::GetAirspaceBrushByClass(const int i,
+                                  const AirspaceRendererSettings &settings)
 {
-  return GetAirspaceBrush(settings.iAirspaceBrush[i]);
+  return GetAirspaceBrush(settings.brushes[i]);
 }
 #endif
 
@@ -314,7 +316,7 @@ Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 {
   InitSnailTrail(settings_map);
   InitLandableIcons();
-  InitAirspacePens(settings_map);
+  InitAirspacePens(settings_map.airspace);
 }
 
 void
@@ -404,11 +406,11 @@ Graphics::InitLandableIcons()
 }
 
 void
-Graphics::InitAirspacePens(const SETTINGS_MAP &settings_map)
+Graphics::InitAirspacePens(const AirspaceRendererSettings &settings)
 {
   for (int i = 0; i < AIRSPACECLASSCOUNT; i++)
     hAirspacePens[i].set(Layout::Scale(2),
-                         GetAirspaceColourByClass(i, settings_map));
+                         GetAirspaceColourByClass(i, settings));
 }
 
 void

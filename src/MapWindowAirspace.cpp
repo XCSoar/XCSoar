@@ -101,10 +101,11 @@ private:
   const AirspaceWarningCopy& m_warnings;
 
 public:
-  AirspaceMapVisible(const SETTINGS_COMPUTER& _settings, 
+  AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
+                     const AirspaceRendererSettings &_renderer_settings,
                      const AIRCRAFT_STATE& _state, const bool& _border,
                      const AirspaceWarningCopy& warnings)
-    :AirspaceVisible(_settings, _state),
+    :AirspaceVisible(_computer_settings, _renderer_settings, _state),
      m_border(_border),
      m_warnings(warnings) {}
 
@@ -124,21 +125,18 @@ public:
 class AirspaceRenderer : public AirspaceVisitor, protected MapCanvas
 {
 private:
-  bool black;
   const AirspaceWarningCopy& m_warnings;
-  const SETTINGS_MAP& m_settings_map;
+  const AirspaceRendererSettings &settings;
   Pen pen_thick;
 
 public:
   AirspaceRenderer(Canvas &_canvas, const WindowProjection &_projection,
                    const AirspaceWarningCopy& warnings,
-                   const SETTINGS_MAP& settings_map,
-                   bool _black)
+                   const AirspaceRendererSettings &_settings)
     :MapCanvas(_canvas, _projection,
                _projection.GetScreenBounds().scale(fixed(1.1))),
-     black(_black),
      m_warnings(warnings),
-     m_settings_map(settings_map),
+     settings(_settings),
      pen_thick(IBLSCALE(10), Color(0x00, 0x00, 0x00))
   {
     glStencilMask(0xff);
@@ -166,7 +164,7 @@ public:
         canvas.circle(screen_center.x, screen_center.y, screen_radius);
       } else {
         // draw a ring inside the circle
-        Color color = Graphics::Colours[m_settings_map.iAirspaceColour[airspace.get_type()]];
+        Color color = Graphics::Colours[settings.colours[airspace.get_type()]];
         Pen pen_donut(pen_thick.get_width()/2, color.with_alpha(90));
         canvas.hollow_brush();
         canvas.select(pen_donut);
@@ -222,7 +220,7 @@ private:
     glStencilMask(2);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    if (black)
+    if (settings.black_outline)
       canvas.black_pen();
     else
       canvas.select(Graphics::hAirspacePens[airspace.get_type()]);
@@ -239,7 +237,7 @@ private:
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-    Color color = Graphics::Colours[m_settings_map.iAirspaceColour[airspace.get_type()]];
+    Color color = Graphics::Colours[settings.colours[airspace.get_type()]];
     canvas.select(Brush(color.with_alpha(90)));
     canvas.null_pen();
   }
@@ -281,22 +279,22 @@ class AirspaceVisitorMap:
 public:
   AirspaceVisitorMap(MapDrawHelper &_helper,
                      const AirspaceWarningCopy& warnings,
-                     const SETTINGS_MAP &settings_map)
+                     const AirspaceRendererSettings &_settings)
     :MapDrawHelper(_helper),
      m_warnings(warnings),
      pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
      pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00))
   {
-    switch (settings_map.AirspaceFillMode) {
-    case SETTINGS_MAP::AS_FILL_DEFAULT:
+    switch (settings.fill_mode) {
+    case AirspaceRendererSettings::AS_FILL_DEFAULT:
       m_use_stencil = !is_ancient_hardware();
       break;
 
-    case SETTINGS_MAP::AS_FILL_ALL:
+    case AirspaceRendererSettings::AS_FILL_ALL:
       m_use_stencil = false;
       break;
 
-    case SETTINGS_MAP::AS_FILL_PADDING:
+    case AirspaceRendererSettings::AS_FILL_PADDING:
       m_use_stencil = true;
       break;
     }
@@ -329,8 +327,7 @@ public:
 
 private:
   void set_buffer_pens(const AbstractAirspace &airspace) {
-    const unsigned color_index =
-      m_settings_map.iAirspaceColour[airspace.get_type()];
+    const unsigned color_index = settings.colours[airspace.get_type()];
 
 #ifdef ENABLE_SDL
     Color color = Graphics::Colours[color_index];
@@ -338,7 +335,7 @@ private:
 #else /* !SDL */
 
 #ifdef HAVE_ALPHA_BLEND
-    if (m_settings_map.airspace_transparency && AlphaBlendAvailable()) {
+    if (settings.transparency && AlphaBlendAvailable()) {
       m_buffer.select(Graphics::solid_airspace_brushes[color_index]);
     } else {
 #endif
@@ -346,8 +343,7 @@ private:
       m_buffer.set_text_color(light_color(Graphics::Colours[color_index]));
 
       // get brush, can be solid or a 1bpp bitmap
-      m_buffer.select(Graphics::hAirspaceBrushes[m_settings_map.
-                                                 iAirspaceBrush[airspace.get_type()]]);
+      m_buffer.select(Graphics::hAirspaceBrushes[settings.brushes[airspace.get_type()]]);
 
       m_buffer.background_opaque();
       m_buffer.set_background_color(Color::WHITE);
@@ -435,20 +431,21 @@ MapWindow::DrawAirspace(Canvas &canvas)
   if (airspace_warnings != NULL)
     airspace_warnings->visit_warnings(awc);
 
-  const AirspaceMapVisible visible(SettingsComputer(),
+  const AirspaceMapVisible visible(SettingsComputer().airspace,
+                                   SettingsMap().airspace,
                                    ToAircraftState(Basic(), Calculated()),
                                    false, awc);
 
 #ifdef ENABLE_OPENGL
-  AirspaceRenderer renderer(canvas, render_projection, awc, SettingsMap(),
-                            SettingsMap().bAirspaceBlackOutline);
+  AirspaceRenderer renderer(canvas, render_projection, awc,
+                            SettingsMap().airspace);
   airspace_database->visit_within_range(render_projection.GetGeoScreenCenter(),
                                         render_projection.GetScreenDistanceMeters(),
                                         renderer, visible);
 #else
   MapDrawHelper helper(canvas, buffer_canvas, stencil_canvas, render_projection,
-                       SettingsMap());
-  AirspaceVisitorMap v(helper, awc, SettingsMap());
+                       SettingsMap().airspace);
+  AirspaceVisitorMap v(helper, awc, SettingsMap().airspace);
 
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
@@ -463,7 +460,7 @@ MapWindow::DrawAirspace(Canvas &canvas)
   v.draw_intercepts();
 
   AirspaceOutlineRenderer outline_renderer(canvas, render_projection,
-                                           SettingsMap().bAirspaceBlackOutline);
+                                           SettingsMap().airspace.black_outline);
   airspace_database->visit_within_range(render_projection.GetGeoScreenCenter(),
                                         render_projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);

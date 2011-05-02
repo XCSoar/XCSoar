@@ -35,7 +35,7 @@ Copyright_License {
 #include "Engine/Navigation/SpeedVector.hpp"
 #include "NMEA/Validity.hpp"
 
-#include "SettingsAirspace.hpp"
+#include "Airspace/AirspaceComputerSettings.hpp"
 #include "TeamCodeCalculation.h"
 
 class Waypoint;
@@ -179,7 +179,6 @@ struct SETTINGS_FEATURES {
 
 
 struct SETTINGS_COMPUTER: 
-  public SETTINGS_AIRSPACE,
   public SETTINGS_WIND,
   public SETTINGS_LOGGER,
   public SETTINGS_POLAR,
@@ -205,6 +204,8 @@ struct SETTINGS_COMPUTER:
 
   /** Glide polar used for task calculations */
   GlidePolar glide_polar_task;
+
+  AirspaceComputerSettings airspace;
 };
 
 #endif

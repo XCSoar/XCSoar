@@ -21,11 +21,10 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_SETTINGS_AIRSPACE_H)
-#define XCSOAR_SETTINGS_AIRSPACE_H
+#ifndef XCSOAR_AIRSPACE_RENDERER_SETTINGS_HPP
+#define XCSOAR_AIRSPACE_RENDERER_SETTINGS_HPP
 
 #include "Airspace/AirspaceClass.hpp"
-#include "Engine/Airspace/AirspaceWarningConfig.hpp"
 
 /** Airspace display modes */
 enum AirspaceDisplayMode_t
@@ -42,19 +41,48 @@ enum AirspaceDisplayMode_t
 /**
  * Settings for airspace options
  */
-struct SETTINGS_AIRSPACE
-{
-  /** Airspace warnings enabled (true/false) */
-  bool EnableAirspaceWarnings;
+struct AirspaceRendererSettings {
+  bool enable;
 
-  AirspaceDisplayMode_t AltitudeMode; /**< Mode controlling how airspaces are filtered for display */
-  unsigned ClipAltitude;        /**< Altitude (m) above which airspace is not drawn for clip mode */
+  /** Airspaces are drawn with black border (otherwise in airspace color) */
+  bool black_outline;
+
+  /** Mode controlling how airspaces are filtered for display */
+  AirspaceDisplayMode_t altitude_mode;
+
+  /**< Altitude (m) above which airspace is not drawn for clip mode */
+  unsigned clip_altitude;
 
   /** Class-specific display flags */
-  bool DisplayAirspaces[AIRSPACECLASSCOUNT];
+  bool display[AIRSPACECLASSCOUNT];
 
-  AirspaceWarningConfig airspace_warnings;
+#ifndef ENABLE_OPENGL
+  /**
+   * Should the airspace be rendered with a transparent brush instead
+   * of a pattern brush?
+   */
+  bool transparency;
+
+  /**
+   * What portion of the airspace area should be filled with the
+   * airspace brush?
+   */
+  enum AirspaceFillMode {
+    /** the platform specific default is used */
+    AS_FILL_DEFAULT,
+
+    /** fill all of the area */
+    AS_FILL_ALL,
+
+    /** fill only a thick padding (like on ICAO maps) */
+    AS_FILL_PADDING,
+  } fill_mode;
+#endif
+
+  int brushes[AIRSPACECLASSCOUNT];
+  int colours[AIRSPACECLASSCOUNT];
+
+  void SetDefaults();
 };
-
 
 #endif

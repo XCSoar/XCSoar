@@ -204,18 +204,19 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
 void
 InputEvents::eventAirSpace(const TCHAR *misc)
 {
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  AirspaceRendererSettings &settings =
+    CommonInterface::SetSettingsMap().airspace;
 
   if (_tcscmp(misc, _T("toggle")) == 0)
-    settings_map.EnableAirspace = !settings_map.EnableAirspace;
+    settings.enable = !settings.enable;
   else if (_tcscmp(misc, _T("off")) == 0)
-    settings_map.EnableAirspace = false;
+    settings.enable = false;
   else if (_tcscmp(misc, _T("on")) == 0)
-    settings_map.EnableAirspace = true;
+    settings.enable = true;
   else if (_tcscmp(misc, _T("show")) == 0) {
-    if (!settings_map.EnableAirspace)
+    if (!settings.enable)
       Message::AddMessage(_("Show airspace off"));
-    if (settings_map.EnableAirspace)
+    if (settings.enable)
       Message::AddMessage(_("Show airspace on"));
   }
 
@@ -1222,7 +1223,9 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
 
   const AIRCRAFT_STATE aircraft_state =
     ToAircraftState(basic, calculated);
-  AirspaceVisible visible(settings_computer, aircraft_state);
+  AirspaceVisible visible(settings_computer.airspace,
+                          CommonInterface::SettingsMap().airspace,
+                          aircraft_state);
   GlidePolar polar = settings_computer.glide_polar_task;
   polar.set_mc(max(polar.get_mc(),fixed_one));
   AirspaceAircraftPerformanceGlide perf(polar);
@@ -1493,19 +1496,19 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
 void
 InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
 {
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
+  AirspaceRendererSettings &settings =
+    CommonInterface::SetSettingsMap().airspace;
 
   if (_tcscmp(misc, _T("all")) == 0)
-    settings_computer.AltitudeMode = ALLON;
+    settings.altitude_mode = ALLON;
   else if (_tcscmp(misc, _T("clip")) == 0)
-    settings_computer.AltitudeMode = CLIP;
+    settings.altitude_mode = CLIP;
   else if (_tcscmp(misc, _T("auto")) == 0)
-    settings_computer.AltitudeMode = AUTO;
+    settings.altitude_mode = AUTO;
   else if (_tcscmp(misc, _T("below")) == 0)
-    settings_computer.AltitudeMode = ALLBELOW;
+    settings.altitude_mode = ALLBELOW;
   else if (_tcscmp(misc, _T("off")) == 0)
-    settings_computer.AltitudeMode = ALLOFF;
+    settings.altitude_mode = ALLOFF;
 
   trigger_redraw();
 }

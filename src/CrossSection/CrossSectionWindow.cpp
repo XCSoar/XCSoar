@@ -53,7 +53,7 @@ class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
   /** Chart for scaling the airspace CrossSection */
   Chart& chart;
   /** SettingsMap for reading airspace colors, pen and brushes */
-  const SETTINGS_MAP& settings_map;
+  const AirspaceRendererSettings &settings;
   /** GeoPoint at the left of the CrossSection */
   const GeoPoint start;
   /** AltitudeState instance used for AGL-based airspaces */
@@ -64,15 +64,15 @@ public:
    * Constructor of the AirspaceIntersectionVisitorSlice class
    * @param _canvas The canvas to draw to
    * @param _chart Chart instance for scaling coordinates
-   * @param _settings_map SettingsMap for colors, pens and brushes
+   * @param _settings settings for colors, pens and brushes
    * @param _start GeoPoint at the left of the CrossSection
    * @param _state AltitudeState instance used for AGL-based airspaces
    */
   AirspaceIntersectionVisitorSlice(Canvas &_canvas, Chart &_chart,
-                                   const SETTINGS_MAP &_settings_map,
+                                   const AirspaceRendererSettings &_settings,
                                    const GeoPoint _start,
                                    const ALTITUDE_STATE& _state) :
-    canvas(_canvas), chart(_chart), settings_map(_settings_map),
+    canvas(_canvas), chart(_chart), settings(_settings),
     start(_start), state(_state) {}
 
   /**
@@ -158,15 +158,14 @@ public:
     // Select pens and brushes
 #ifdef ENABLE_SDL
     Color color =
-      Graphics::GetAirspaceColour(settings_map.iAirspaceColour[type]);
+      Graphics::GetAirspaceColour(settings.colours[type]);
 #ifdef ENABLE_OPENGL
     color = color.with_alpha(48);
 #endif
     Brush brush(color);
 #else
-    const Brush &brush = Graphics::GetAirspaceBrushByClass(type, settings_map);
-    canvas.set_text_color(light_color(
-        Graphics::GetAirspaceColourByClass(type, settings_map)));
+    const Brush &brush = Graphics::GetAirspaceBrushByClass(type, settings);
+    canvas.set_text_color(light_color(Graphics::GetAirspaceColourByClass(type, settings)));
 #endif
 
     PixelRect rcd;
@@ -195,7 +194,7 @@ public:
       }
 
       // Draw the airspace
-      RenderBox(rcd, brush, settings_map.bAirspaceBlackOutline, type);
+      RenderBox(rcd, brush, settings.black_outline, type);
     }
   }
 
@@ -266,7 +265,8 @@ CrossSectionWindow::PaintAirspaces(Canvas &canvas, Chart &chart)
     return;
 
   // Create IntersectionVisitor to render to the canvas
-  AirspaceIntersectionVisitorSlice ivisitor(canvas, chart, settings_map,
+  AirspaceIntersectionVisitorSlice ivisitor(canvas, chart,
+                                            settings_map.airspace,
                                             start,
                                             ToAircraftState(Basic(),
                                                             Calculated()));

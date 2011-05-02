@@ -45,7 +45,7 @@ RenderObservationZone::RenderObservationZone()
 
 bool 
 RenderObservationZone::draw_style(Canvas &canvas,
-                                  const SETTINGS_MAP &settings_map,
+                                  const AirspaceRendererSettings &settings,
                                   int offset) const
 {
   if (layer == LAYER_SHADE) {
@@ -57,20 +57,18 @@ RenderObservationZone::draw_style(Canvas &canvas,
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Color color = Graphics::Colours[settings_map.iAirspaceColour[AATASK]];
+    Color color = Graphics::Colours[settings.colours[AATASK]];
     canvas.select(Brush(color.with_alpha(64)));
 #elif defined(ENABLE_SDL)
-    Color color = Graphics::Colours[settings_map.iAirspaceColour[AATASK]];
+    Color color = Graphics::Colours[settings.colours[AATASK]];
     canvas.select(Brush(color));
 #else /* !SDL */
     canvas.mix_mask();
 
     // this color is used as the black bit
-    canvas.set_text_color(Graphics::Colours[settings_map.
-                                           iAirspaceColour[AATASK]]);
+    canvas.set_text_color(Graphics::Colours[settings.colours[AATASK]]);
     // get brush, can be solid or a 1bpp bitmap
-    canvas.select(Graphics::hAirspaceBrushes[settings_map.
-                                            iAirspaceBrush[AATASK]]);
+    canvas.select(Graphics::hAirspaceBrushes[settings.brushes[AATASK]]);
 #endif /* !SDL */
 
     canvas.null_pen();

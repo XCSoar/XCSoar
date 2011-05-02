@@ -169,19 +169,19 @@ OZWindow::on_paint(Canvas &canvas)
   const int offset = 0;
 
   roz.set_layer(RenderObservationZone::LAYER_SHADE);
-  if (roz.draw_style(canvas, settings_map, offset)) {
+  if (roz.draw_style(canvas, settings_map.airspace, offset)) {
     roz.Draw(canvas, projection, *oz);
     roz.un_draw_style(canvas);
   }
 
   roz.set_layer(RenderObservationZone::LAYER_INACTIVE);
-  if (roz.draw_style(canvas, settings_map, offset)) {
+  if (roz.draw_style(canvas, settings_map.airspace, offset)) {
     roz.Draw(canvas, projection, *oz);
     roz.un_draw_style(canvas);
   }
 
   roz.set_layer(RenderObservationZone::LAYER_ACTIVE);
-  if (roz.draw_style(canvas, settings_map, offset)) {
+  if (roz.draw_style(canvas, settings_map.airspace, offset)) {
     roz.Draw(canvas, projection, *oz);
     roz.un_draw_style(canvas);
   }
@@ -294,8 +294,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 {
   ScreenGlobalInit screen_init;
 
-  settings_map.iAirspaceBrush[AATASK] = 3;
-  settings_map.iAirspaceColour[AATASK] = 3;
+  settings_map.airspace.SetDefaults();
 
 #ifndef ENABLE_SDL
   ResourceLoader::Init(hInstance);

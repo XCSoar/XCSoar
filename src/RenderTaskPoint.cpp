@@ -300,7 +300,7 @@ RenderTaskPoint::draw_oz_background(Canvas &canvas, const OrderedTaskPoint& tp)
 {
   ozv.set_layer(RenderObservationZone::LAYER_SHADE);
 
-  if (ozv.draw_style(canvas, m_settings_map, m_index - m_active_index)) {
+  if (ozv.draw_style(canvas, m_settings_map.airspace, m_index - m_active_index)) {
     ozv.Draw(canvas, m_proj, *tp.get_oz());
     ozv.un_draw_style(canvas);
   }
@@ -314,13 +314,13 @@ RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp)
     offset = -1; // render optional starts as deactivated
   }
   ozv.set_layer(RenderObservationZone::LAYER_INACTIVE);
-  if (ozv.draw_style(canvas, m_settings_map, offset)) {
+  if (ozv.draw_style(canvas, m_settings_map.airspace, offset)) {
     ozv.Draw(canvas, m_proj, *tp.get_oz());
     ozv.un_draw_style(canvas);
   }
 
   ozv.set_layer(RenderObservationZone::LAYER_ACTIVE);
-  if (ozv.draw_style(canvas, m_settings_map, offset)) {
+  if (ozv.draw_style(canvas, m_settings_map.airspace, offset)) {
     ozv.Draw(canvas, m_proj, *tp.get_oz());
     ozv.un_draw_style(canvas);
   }
