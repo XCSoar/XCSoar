@@ -60,7 +60,7 @@ public:
    */
   void NewWind(const NMEA_INFO &info, DERIVED_INFO &derived, Vector& wind);
 
-  const Vector GetWind(fixed Time, fixed h, bool *found) const;
+  const Vector GetWind(fixed Time, fixed h, bool &found) const;
 
   /**
    * Clear as if never flown

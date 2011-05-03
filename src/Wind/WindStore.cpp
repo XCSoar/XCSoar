@@ -103,7 +103,7 @@ WindStore::SlotAltitude(const NMEA_INFO &info, DERIVED_INFO &derived)
 }
 
 const Vector
-WindStore::GetWind(fixed Time, fixed h, bool *found) const
+WindStore::GetWind(fixed Time, fixed h, bool &found) const
 {
   return windlist->getWind(Time, h, found);
 }
@@ -115,7 +115,7 @@ void
 WindStore::recalculateWind(const NMEA_INFO &info, DERIVED_INFO &derived)
 {
   bool found;
-  Vector CurWind = windlist->getWind(info.Time, info.NavAltitude, &found);
+  Vector CurWind = windlist->getWind(info.Time, info.NavAltitude, found);
 
   if (found) {
     if ((fabs(CurWind.x - _lastWind.x) > fixed_one)

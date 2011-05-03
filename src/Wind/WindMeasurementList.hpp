@@ -59,7 +59,7 @@ public:
    * if no valid vector could be calculated (for instance: too little or
    * too low quality data).
    */
-  const Vector getWind(fixed Time, fixed alt, bool *found) const;
+  const Vector getWind(fixed Time, fixed alt, bool &found) const;
 
   /** Adds the windvector vector with quality quality to the list. */
   void addMeasurement(fixed Time, Vector vector, fixed alt, int quality);

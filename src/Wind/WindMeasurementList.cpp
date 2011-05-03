@@ -53,7 +53,7 @@ using std::min;
  * too low quality data).
  */
 const Vector
-WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
+WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
 {
   //relative weight for each factor
   #define REL_FACTOR_QUALITY 100
@@ -73,7 +73,7 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
   fixed altdiff = fixed_zero;
   fixed timediff = fixed_zero;
 
-  *found = false;
+  found = false;
 
   fixed override_time(1.1);
   bool overridden = false;
@@ -133,7 +133,7 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
   }
 
   if (total_quality > 0) {
-    *found = true;
+    found = true;
     result = Vector(result.x / (int)total_quality,
                     result.y / (int)total_quality);
   }
