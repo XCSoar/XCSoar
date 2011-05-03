@@ -64,8 +64,7 @@ public:
 
   virtual void ProcessIdle();
 
-  void SetWindEstimate(fixed wind_speed, Angle wind_bearing,
-                       const int quality = 3); // JMW check
+  void SetWindEstimate(const SpeedVector wind, const int quality = 3); // JMW check
 
 protected:
   void ResetFlight(const bool full=true);

@@ -171,7 +171,7 @@ GlideComputerAirData::Wind()
     int quality = wind_zig_zag.Update(Basic(), calculated, wind);
 
     if (quality > 0)
-      SetWindEstimate(wind.norm, wind.bearing, quality);
+      SetWindEstimate(wind, quality);
   }
 }
 
@@ -210,11 +210,10 @@ GlideComputerAirData::SelectWind()
 }
 
 void
-GlideComputerAirData::SetWindEstimate(fixed wind_speed, Angle wind_bearing,
+GlideComputerAirData::SetWindEstimate(const SpeedVector wind,
                                       const int quality)
 {
-  Vector v_wind = Vector(SpeedVector(wind_bearing, wind_speed));
-
+  Vector v_wind = Vector(wind);
   windanalyser.slot_newEstimate(Basic(), SetCalculated(), v_wind, quality);
 }
 
