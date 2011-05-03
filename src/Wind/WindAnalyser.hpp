@@ -41,10 +41,34 @@ struct WindSample
  */
 class WindAnalyser
 {
-public:
-  WindAnalyser();
+  //we are counting the number of circles, the first onces are probably not very round
+  int circleCount;
+  //true=left, false=right
+  bool circleLeft;
+  //active is set to true or false by the slot_newFlightMode slot
+  bool active;
+  int startmarker;
+  int circleDeg;
+  Angle lastHeading;
+  bool pastHalfway;
+  Vector minVector;
+  Vector maxVector;
+  bool curModeOK;
+  bool first;
+  int startcircle;
 
+  GeoPoint climbstartpos;
+  GeoPoint climbendpos;
+  fixed climbstarttime;
+  fixed climbendtime;
+
+  WindSample windsamples[MAXWINDSAMPLES];
+  int numwindsamples;
+
+public:
   WindStore windstore;
+
+  WindAnalyser();
 
   /**
    * Clear as if never flown
@@ -77,31 +101,6 @@ public:
       Vector v, int quality);
 
   //void calcThermalDrift();
-
-private:
-  //we are counting the number of circles, the first onces are probably not very round
-  int circleCount;
-  //true=left, false=right
-  bool circleLeft;
-  //active is set to true or false by the slot_newFlightMode slot
-  bool active;
-  int startmarker;
-  int circleDeg;
-  Angle lastHeading;
-  bool pastHalfway;
-  Vector minVector;
-  Vector maxVector;
-  bool curModeOK;
-  bool first;
-  int startcircle;
-
-  GeoPoint climbstartpos;
-  GeoPoint climbendpos;
-  fixed climbstarttime;
-  fixed climbendtime;
-
-  WindSample windsamples[MAXWINDSAMPLES];
-  int numwindsamples;
 
 private:
   void _calcWind(const NMEA_INFO &info, DERIVED_INFO &derived);
