@@ -150,7 +150,7 @@ public:
 protected:
 
   bool full() const;
-  bool back_in_time(const unsigned time);
+  bool back_in_time(const unsigned time) const;
 
   /**
    * Determine whether the time and angle satisfy criterion for

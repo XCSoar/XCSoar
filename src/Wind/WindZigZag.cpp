@@ -94,6 +94,7 @@ WindZigZagGlue::Update(const NMEA_INFO &basic, const DERIVED_INFO &derived,
 
   // ensure system is reset if time retreats
   if (back_in_time(basic.Time)) {
+    reset();
     return 0;
   }
 
@@ -267,15 +268,13 @@ WindZigZag::find_worst(const ZZBeta& beta)
 }
 
 bool
-WindZigZag::back_in_time(const unsigned time)
+WindZigZag::back_in_time(const unsigned time) const
 {
   if (obs.empty())
     return false;
 
-  if (time < obs.back().time) {
-    reset();
+  if (time < obs.back().time)
     return true;
-  }
 
   return false;
 }
