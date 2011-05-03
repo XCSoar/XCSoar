@@ -203,7 +203,7 @@ RenderTaskPoint::draw_bearing(const TaskPoint &tp)
     return;
 
   canvas.select(Graphics::hpBearing);
-  map_canvas.line(m_location, tp.get_location_remaining());
+  map_canvas.offset_line(m_location, tp.get_location_remaining());
 }
 
 void 

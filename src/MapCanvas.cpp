@@ -25,6 +25,8 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "WindowProjection.hpp"
 #include "Asset.hpp"
+#include "Screen/Layout.hpp"
+#include "Math/Screen.hpp"
 
 void
 MapCanvas::line(GeoPoint a, GeoPoint b)
@@ -38,6 +40,20 @@ MapCanvas::line(GeoPoint a, GeoPoint b)
 
   canvas.line(pts[0], pts[1]);
 }
+
+void
+MapCanvas::offset_line(GeoPoint a, GeoPoint b)
+{
+  if (!clip.clip_line(a, b))
+    return;
+
+  RasterPoint pts[3];
+  pts[0] = projection.GeoToScreen(a);
+  pts[1] = projection.GeoToScreen(b);
+  ScreenClosestPoint(pts[0], pts[1], pts[0], &pts[2], IBLSCALE(20));
+  canvas.line(pts[2], pts[1]);
+}
+
 
 void
 MapCanvas::circle(const GeoPoint &center, fixed radius)

@@ -30,6 +30,8 @@ Copyright_License {
 #include "RenderTask.hpp"
 #include "RenderTaskPoint.hpp"
 #include "RenderObservationZone.hpp"
+#include "Screen/Layout.hpp"
+#include "Math/Screen.hpp"
 
 #include <stdio.h>
 #include <math.h>
@@ -114,13 +116,14 @@ MapWindow::DrawTask(Canvas &canvas)
 
   if (draw_route) {
     canvas.select(Graphics::hpBearing);
-    RasterPoint p[route.size()];
+    const int r_size = route.size();
+    RasterPoint p[r_size];
     RasterPoint* pp = &p[0];
     for (Route::const_iterator i = route.begin(); i!= route.end(); ++i, ++pp) {
       *pp = render_projection.GeoToScreen(*i);
     }
-    p[route.size()-1] = render_projection.GeoToScreen(Basic().Location);
-    canvas.polyline(p, route.size());
+    ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], &p[r_size-1], IBLSCALE(20));
+    canvas.polyline(p, r_size);
   }
 }
 

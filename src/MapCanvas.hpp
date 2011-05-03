@@ -62,6 +62,7 @@ public:
     :canvas(_canvas), projection(_projection), clip(_clip) {}
 
   void line(GeoPoint a, GeoPoint b);
+  void offset_line(GeoPoint a, GeoPoint b);
   void circle(const GeoPoint &center, fixed radius);
 
   /**
