@@ -210,13 +210,3 @@ WindMeasurementList::getLeastImportantItem(fixed Time)
 
   return founditem;
 }
-
-/*
-int
-WindMeasurementList::compareItems(QCollection::Item s1, QCollection::Item s2)
-{
-  //return the difference between the altitudes in item 1 and item 2
-  return (int)(((WindMeasurement*)s1)->altitude
-      - ((WindMeasurement*)s2)->altitude).getMeters();
-}
-*/
