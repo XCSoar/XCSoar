@@ -37,7 +37,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   PixelRect rc = parent.get_client_rect();
   WindowStyle style;
   style.hide();
-  set(parent, rc.left, rc.top, rc.right, rc.bottom, style);
+  set(parent, rc, style);
 
   unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
 
