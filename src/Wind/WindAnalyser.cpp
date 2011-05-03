@@ -242,9 +242,6 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
 void
 WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
 {
-  unsigned i;
-  fixed av = fixed_zero;
-
   if (windsamples.empty())
     return;
 
@@ -253,30 +250,29 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
     return;
 
   // find average
-  for (i = 0; i < windsamples.size(); i++)
+  fixed av = fixed_zero;
+  for (unsigned i = 0; i < windsamples.size(); i++)
     av += windsamples[i].mag;
 
   av /= windsamples.size();
 
   // find zero time for times above average
   fixed rthisp;
-  unsigned j;
   int ithis = 0;
   fixed rthismax = fixed_zero;
   fixed rthismin = fixed_zero;
   int jmax = -1;
   int jmin = -1;
-  unsigned idiff;
 
-  for (j = 0; j < windsamples.size(); j++) {
+  for (unsigned j = 0; j < windsamples.size(); j++) {
     rthisp = fixed_zero;
 
-    for (i = 0; i < windsamples.size(); i++) {
+    for (unsigned i = 0; i < windsamples.size(); i++) {
       if (i == j)
         continue;
 
       ithis = (i + j) % windsamples.size();
-      idiff = i;
+      unsigned idiff = i;
 
       if (idiff > windsamples.size() / 2)
         idiff = windsamples.size() - idiff;
@@ -304,15 +300,14 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
   // attempt to fit cycloid
 
   fixed mag = half(windsamples[jmax].mag - windsamples[jmin].mag);
-  fixed wx, wy;
-  fixed cmag;
   fixed rthis = fixed_zero;
 
-  for (i = 0; i < windsamples.size(); i++) {
+  for (unsigned i = 0; i < windsamples.size(); i++) {
+    fixed wx, wy;
     ::sin_cos(((i + jmax) % windsamples.size()) * fixed_two_pi / windsamples.size(), &wy, &wx);
     wx = wx * av + mag;
     wy *= av;
-    cmag = hypot(wx, wy) - windsamples[i].mag;
+    fixed cmag = hypot(wx, wy) - windsamples[i].mag;
     rthis += cmag * cmag;
   }
 
