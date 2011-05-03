@@ -25,6 +25,8 @@ package org.xcsoar;
 import android.os.Handler;
 import android.os.Bundle;
 import android.content.Context;
+import android.content.Intent;
+import android.provider.Settings;
 import android.location.GpsSatellite;
 import android.location.GpsStatus;
 import android.location.Location;
@@ -72,6 +74,11 @@ public class InternalGPS
     index = _index;
 
     locationManager = (LocationManager)context.getSystemService(Context.LOCATION_SERVICE);
+    if (!locationManager.isProviderEnabled(LocationManager.GPS_PROVIDER)) {
+      // Let user turn on GPS, XCSoar is not allowed to.
+      Intent myIntent = new Intent(Settings.ACTION_SECURITY_SETTINGS);
+      context.startActivity(myIntent);
+    }
 
     windowManager = (WindowManager) context.getSystemService(Context.WINDOW_SERVICE);
     sensorManager = (SensorManager) context.getSystemService(Context.SENSOR_SERVICE);
