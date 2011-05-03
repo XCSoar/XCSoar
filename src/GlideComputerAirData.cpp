@@ -23,8 +23,6 @@ Copyright_License {
 */
 
 #include "GlideComputerAirData.hpp"
-#include "Wind/WindZigZag.hpp"
-#include "Wind/WindAnalyser.hpp"
 #include "GlideComputer.hpp"
 #include "Protection.hpp"
 #include "SettingsComputer.hpp"
