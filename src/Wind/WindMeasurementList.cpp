@@ -152,8 +152,7 @@ WindMeasurementList::addMeasurement(fixed Time, Vector vector, fixed alt,
       measurements.full() ? measurements[getLeastImportantItem(Time)] :
                             measurements.append();
 
-  wind.vector.x = vector.x;
-  wind.vector.y = vector.y;
+  wind.vector = vector;
   wind.quality = quality;
   wind.altitude = alt;
   wind.time = (long)Time;
