@@ -142,7 +142,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
     WindSample &sample = windsamples.append();
     sample.v = curVector;
     sample.t = info.Time;
-    sample.mag = curVector.Magnitude();
+    sample.mag = info.GroundSpeed;
   } else {
     // TODO code: give error, too many wind samples
     // or use circular buffer
