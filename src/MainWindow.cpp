@@ -188,6 +188,8 @@ MainWindow::ReinitialiseLayout()
   InfoBoxManager::Create(rc, ib_layout);
   map_rect = ib_layout.remaining;
 
+  popup.set(rc);
+
   if (vario != NULL)
     vario->move(rc.right - ib_layout.control_width, 0,
                 ib_layout.control_width,
