@@ -47,11 +47,6 @@ Copyright_License {
 
 using std::min;
 
-WindMeasurementList::WindMeasurementList()
-{
-  nummeasurementlist = 0;
-}
-
 /**
  * Returns the weighted mean windvector over the stored values, or 0
  * if no valid vector could be calculated (for instance: too little or
@@ -83,8 +78,8 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
   fixed override_time(1.1);
   bool overridden = false;
 
-  for (unsigned i = 0; i < nummeasurementlist; i++) {
-    m = measurementlist[i];
+  for (unsigned i = 0; i < measurements.size(); i++) {
+    m = measurements[i];
     altdiff = (alt - m.altitude) / altRange;
     timediff = fabs(fixed(now - m.time) / timeRange);
 
@@ -153,24 +148,15 @@ void
 WindMeasurementList::addMeasurement(fixed Time, Vector vector, fixed alt,
     int quality)
 {
-  unsigned index;
-
-  if (nummeasurementlist == MAX_MEASUREMENTS) {
-    index = getLeastImportantItem(Time);
-    nummeasurementlist--;
-  } else {
-    index = nummeasurementlist;
-  }
-
-  WindMeasurement &wind = measurementlist[index];
+  WindMeasurement &wind =
+      measurements.full() ? measurements[getLeastImportantItem(Time)] :
+                            measurements.append();
 
   wind.vector.x = vector.x;
   wind.vector.y = vector.y;
   wind.quality = quality;
   wind.altitude = alt;
   wind.time = (long)Time;
-
-  nummeasurementlist++;
 }
 
 /**
@@ -182,7 +168,7 @@ WindMeasurementList::getLeastImportantItem(fixed Time)
 {
   int maxscore = 0;
   int score = 0;
-  unsigned int founditem = nummeasurementlist - 1;
+  unsigned int founditem = measurements.size() - 1;
 
   for (int i = founditem; i >= 0; i--) {
     //Calculate the score of this item. The item with the highest
@@ -190,8 +176,8 @@ WindMeasurementList::getLeastImportantItem(fixed Time)
     //proportion of the quality and the elapsed time. Currently, one
     //quality-point (scale: 1 to 5) is equal to 10 minutes.
 
-    score = 600 * (6 - measurementlist[i].quality);
-    score += (long)Time - measurementlist[i].time;
+    score = 600 * (6 - measurements[i].quality);
+    score += (long)Time - measurements[i].time;
     if (score > maxscore) {
       maxscore = score;
       founditem = i;

@@ -18,6 +18,7 @@
 #ifndef WINDMEASUREMENTLIST_H
 #define WINDMEASUREMENTLIST_H
 
+#include "Util/StaticArray.hpp"
 #include "Vector.hpp"
 
 /**
@@ -42,12 +43,9 @@ struct WindMeasurement
 class WindMeasurementList
 {
 protected:
-  WindMeasurement measurementlist[MAX_MEASUREMENTS];
-  unsigned int nummeasurementlist;
+  StaticArray<WindMeasurement, MAX_MEASUREMENTS> measurements;
 
 public:
-  WindMeasurementList();
-
   /**
    * Returns the weighted mean windvector over the stored values, or 0
    * if no valid vector could be calculated (for instance: too little or
