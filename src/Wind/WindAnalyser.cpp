@@ -348,14 +348,8 @@ WindAnalyser::slot_newEstimate(const NMEA_INFO &info,
                                Vector a, int quality)
 {
   #ifdef DEBUG_WIND
-  const char *type;
-
-  if (quality >= 6)
-    type = "external wind";
-  else
-    type = "wind circling";
-
-  LogDebug(_T("%f %f %d # %s"), (double)a.x, (double)a.y, quality, type);
+  LogDebug(_T("%f %f %d # %s"), (double)a.x, (double)a.y, quality,
+           quality >= 6 ? "external wind" : "wind circling");
   #endif
 
   windstore.SlotMeasurement(info, derived, a, quality);
