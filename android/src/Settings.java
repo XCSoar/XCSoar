@@ -1,5 +1,5 @@
 package org.xcsoar;
 
 class Settings {
-    public static native void nativeSetMouseUsed();
+  public static native void nativeSetMouseUsed();
 }
