@@ -322,16 +322,15 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
 
   // attempt to fit cycloid
 
-  fixed phase;
   fixed mag = half(windsamples[jmax].mag - windsamples[jmin].mag);
   fixed wx, wy;
   fixed cmag;
   fixed rthis = fixed_zero;
 
   for (i = 0; i < numwindsamples; i++) {
-    phase = ((i + jmax) % numwindsamples) * fixed_two_pi / numwindsamples;
-    wx = cos(phase) * av + mag;
-    wy = sin(phase) * av;
+    ::sin_cos(((i + jmax) % numwindsamples) * fixed_two_pi / numwindsamples, &wy, &wx);
+    wx = wx * av + mag;
+    wy *= av;
     cmag = hypot(wx, wy) - windsamples[i].mag;
     rthis += cmag * cmag;
   }
