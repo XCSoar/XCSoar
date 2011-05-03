@@ -6,18 +6,8 @@
 #include "UtilsText.hpp"
 #include <fstream>
 
-// #include "Wind/WindAnalyser.hpp"
-
 #include "Util/Deserialiser.hpp"
 #include "Util/DataNodeXML.hpp"
-
-/*
-
-    windanalyser.slot_newSample(Basic(), SetCalculated());
-    windanalyser.slot_Altitude(Basic(), SetCalculated());
-
-
-*/
 
 static OrderedTask* task_load(OrderedTask* task) {
   TCHAR szFilename[MAX_PATH];
