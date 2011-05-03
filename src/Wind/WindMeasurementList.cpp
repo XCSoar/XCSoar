@@ -64,14 +64,12 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
   int altRange = 1000; //conf->getWindAltitudeRange();
   int timeRange = TIME_RANGE * 100; //conf->getWindTimeRange();
 
+  fixed k(0.0025);
+
   unsigned int total_quality = 0;
-  unsigned int quality = 0, q_quality = 0, a_quality = 0, t_quality = 0;
 
   Vector result(fixed_zero, fixed_zero);
-  WindMeasurement m;
   int now = (int)(Time);
-  fixed altdiff = fixed_zero;
-  fixed timediff = fixed_zero;
 
   found = false;
 
@@ -79,23 +77,23 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
   bool overridden = false;
 
   for (unsigned i = 0; i < measurements.size(); i++) {
-    m = measurements[i];
-    altdiff = (alt - m.altitude) / altRange;
-    timediff = fabs(fixed(now - m.time) / timeRange);
+    const WindMeasurement &m = measurements[i];
+    fixed altdiff = (alt - m.altitude) / altRange;
+    fixed timediff = fabs(fixed(now - m.time) / timeRange);
 
     if ((fabs(altdiff) < fixed_one) && (timediff < fixed_one)) {
       // measurement quality
-      q_quality = min(5,m.quality) * REL_FACTOR_QUALITY / 5;
+      unsigned int q_quality = min(5,m.quality) * REL_FACTOR_QUALITY / 5;
 
       // factor in altitude difference between current altitude and
       // measurement.  Maximum alt difference is 1000 m.
-      a_quality = iround(((fixed_two / (altdiff * altdiff + fixed_one)) - fixed_one)
+      unsigned int a_quality =
+          iround(((fixed_two / (altdiff * altdiff + fixed_one)) - fixed_one)
           * REL_FACTOR_ALTITUDE);
 
-      fixed k(0.0025);
-
       // factor in timedifference. Maximum difference is 1 hours.
-      t_quality = iround(k * (fixed_one - timediff) / (timediff * timediff + k)
+      unsigned int t_quality =
+          iround(k * (fixed_one - timediff) / (timediff * timediff + k)
           * REL_FACTOR_TIME);
 
       if (m.quality == 6) {
@@ -125,7 +123,7 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool &found) const
         }
       }
 
-      quality = q_quality * (a_quality * t_quality);
+      unsigned int quality = q_quality * (a_quality * t_quality);
       result.x += m.vector.x * quality;
       result.y += m.vector.y * quality;
       total_quality += quality;
