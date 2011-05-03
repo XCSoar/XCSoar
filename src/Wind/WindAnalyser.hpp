@@ -50,7 +50,7 @@ class WindAnalyser
   bool active;
   int startmarker;
   int circleDeg;
-  Angle lastHeading;
+  Angle last_track;
   bool pastHalfway;
   Vector minVector;
   Vector maxVector;

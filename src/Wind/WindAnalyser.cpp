@@ -89,7 +89,7 @@ WindAnalyser::WindAnalyser()
    active(false),
    startmarker(0),
    circleDeg(0),
-   lastHeading(Angle::native(fixed_zero)),
+   last_track(Angle::native(fixed_zero)),
    pastHalfway(false),
    curModeOK(false)
 {
@@ -103,7 +103,7 @@ WindAnalyser::reset()
   active = false;
   startmarker = 0;
   circleDeg = 0;
-  lastHeading = Angle::native(fixed_zero);
+  last_track = Angle::native(fixed_zero);
   pastHalfway = false;
   curModeOK = false;
   windstore.reset();
@@ -131,9 +131,9 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
   bool fullCircle = false;
 
   // Circle detection
-  int diff = (int)(info.track - lastHeading).as_delta().magnitude_degrees();
+  int diff = (int)(info.track - last_track).as_delta().magnitude_degrees();
   circleDeg += diff;
-  lastHeading = info.track;
+  last_track = info.track;
 
   if (circleDeg >= 360) {
     //full circle made!
