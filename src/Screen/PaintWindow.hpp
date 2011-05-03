@@ -48,11 +48,7 @@ public:
   static bool register_class(HINSTANCE hInstance);
 
 #ifdef ENABLE_SDL
-  void set(ContainerWindow *parent,
-           int left, int top, unsigned width, unsigned height,
-           const WindowStyle style=WindowStyle()) {
-    Window::set(parent, left, top, width, height, style);
-  }
+  using Window::set;
 
   void set(ContainerWindow &parent,
            int left, int top, unsigned width, unsigned height,
