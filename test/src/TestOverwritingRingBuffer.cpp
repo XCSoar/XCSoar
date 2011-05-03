@@ -23,8 +23,6 @@
 #include "Util/OverwritingRingBuffer.hpp"
 #include "TestUtil.hpp"
 
-#include <stdio.h>
-
 int main(int argc, char **argv)
 {
   plan_tests(14);
