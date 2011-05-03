@@ -258,7 +258,7 @@ WindZigZag::find_worst(const ZZBeta& beta)
 
   ObsList::iterator i_worst = obs.end();
   for (ObsList::iterator it = obs.begin(); it != obs.end(); ++it) {
-    fixed fthis = sqr(it->f(beta) / it->mag());
+    fixed fthis = it->f(beta) / it->mag();
     if (fthis > worst) {
       i_worst = it;
       worst = fthis;
