@@ -226,29 +226,17 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
   // number of turns in this thermal only.
   circleCount = 0;
 
-  startcircle = 3; // ignore first two circles in thermal drift calcs
+  // ignore first two circles in thermal drift calcs
+  startcircle = 3;
 
   circleDeg = 0;
-  if (derived.Circling) {
-    if (left) {
-      circleLeft = true;
-      curModeOK = true;
-    } else {
-      circleLeft = false;
-      curModeOK = true;
-    }
-  } else {
-    // end circling?
-    if (curModeOK) {
-      //calcThermalDrift();
-    }
-    curModeOK = false;
+  curModeOK = derived.Circling;
 
-    return; //ok, so we are not circling. Exit function.
-  }
+  // we are not circling? Exit function!
+  if (!curModeOK)
+    return;
 
-  // do we have enough satelites in view?
-  //if (satCnt<minSatCnt) return;
+  circleLeft = left;
 
   // initialize analyser-parameters
   startmarker = marker;
