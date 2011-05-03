@@ -230,9 +230,6 @@ public:
     Result(int _quality):quality(_quality) {}
   };
 
-  SpeedVector optimises(int &res_quality, const SpeedVector start,
-                        const bool circling);
-
   Result Update(const NMEA_INFO &basic, const DERIVED_INFO &derived);
 };
 

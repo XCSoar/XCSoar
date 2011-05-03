@@ -70,15 +70,6 @@ using std::max;
 
 #include "Math/newuoa.hh"
 
-SpeedVector
-WindZigZagGlue::optimises(int &res_quality, const SpeedVector start,
-                          const bool circling)
-{
-  const ZZBeta beta = optimise(res_quality, start, circling);
-  SpeedVector wind(beta.east, beta.north);
-  return wind;
-}
-
 WindZigZagGlue::Result
 WindZigZagGlue::Update(const NMEA_INFO &basic, const DERIVED_INFO &derived)
 {
@@ -118,7 +109,8 @@ WindZigZagGlue::Update(const NMEA_INFO &basic, const DERIVED_INFO &derived)
     return Result(0);
 
   Result res;
-  res.wind = optimises(res.quality, derived.wind, derived.Circling);
+  const ZZBeta beta = optimise(res.quality, derived.wind, derived.Circling);
+  res.wind = SpeedVector(beta.east, beta.north);
   return res;
 }
 
