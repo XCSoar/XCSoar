@@ -38,6 +38,10 @@ struct Vector {
   Vector(const SpeedVector speed)
     :x(speed.norm * speed.bearing.cos()),
      y(speed.norm * speed.bearing.sin()) {}
+
+  fixed Magnitude() {
+    return hypot(x, y);
+  }
 };
 
 #endif
