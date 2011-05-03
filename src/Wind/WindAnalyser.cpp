@@ -108,12 +108,6 @@ WindAnalyser::reset()
   first = true;
 }
 
-static fixed
-Magnitude(Vector v)
-{
-  return hypot(v.x, v.y);
-}
-
 /**
  * Called if a new sample is available in the samplelist.
  */
@@ -148,16 +142,16 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
     WindSample &sample = windsamples.append();
     sample.v = curVector;
     sample.t = info.Time;
-    sample.mag = Magnitude(curVector);
+    sample.mag = curVector.Magnitude();
   } else {
     // TODO code: give error, too many wind samples
     // or use circular buffer
   }
 
-  if (first || (info.GroundSpeed < Magnitude(minVector)))
+  if (first || (info.GroundSpeed < minVector.Magnitude()))
     minVector = curVector;
 
-  if (first || (info.GroundSpeed > Magnitude(maxVector)))
+  if (first || (info.GroundSpeed > maxVector.Magnitude()))
     maxVector = curVector;
 
   if (fullCircle) { //we have completed a full circle!
