@@ -40,8 +40,6 @@ class ProtectedTaskManager;
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
 
-class TaskClientCalc;
-
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
 public:
   WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
