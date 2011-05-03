@@ -41,6 +41,10 @@ struct WindMeasurement
  */
 class WindMeasurementList
 {
+protected:
+  WindMeasurement *measurementlist[MAX_MEASUREMENTS];
+  unsigned int nummeasurementlist;
+
 public:
   WindMeasurementList();
   ~WindMeasurementList();
@@ -56,9 +60,6 @@ public:
   void addMeasurement(fixed Time, Vector vector, fixed alt, int quality);
 
 protected:
-  WindMeasurement *measurementlist[MAX_MEASUREMENTS];
-  unsigned int nummeasurementlist;
-
   /**
    * getLeastImportantItem is called to identify the item that should be
    * removed if the list is too full. Reimplemented from LimitedList.
