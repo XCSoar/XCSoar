@@ -64,9 +64,7 @@ protected:
    * getLeastImportantItem is called to identify the item that should be
    * removed if the list is too full. Reimplemented from LimitedList.
    */
-  virtual unsigned int getLeastImportantItem(fixed Time);
-
- private:
+  unsigned int getLeastImportantItem(fixed Time);
 };
 
 #endif
