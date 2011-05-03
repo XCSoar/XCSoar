@@ -329,10 +329,23 @@ public:
   void set(ContainerWindow *parent,
            int left, int top, unsigned width, unsigned height,
            const WindowStyle window_style=WindowStyle());
+
+  void set(ContainerWindow *parent, const PixelRect rc,
+           const WindowStyle window_style=WindowStyle()) {
+    set(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+        window_style);
+  }
 #else
   void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
            const WindowStyle window_style=WindowStyle());
+
+  void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
+           const PixelRect rc, const WindowStyle window_style=WindowStyle()) {
+    set(parent, cls, text, rc.left, rc.top,
+        rc.right - rc.left, rc.bottom - rc.top,
+        window_style);
+  }
 
   /**
    * Create a message-only window.
@@ -380,6 +393,10 @@ public:
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
 #endif
+  }
+
+  void move(const PixelRect rc) {
+    move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
   }
 
   /**

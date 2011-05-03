@@ -48,6 +48,12 @@ public:
            int left, int top, unsigned width, unsigned height,
            const ProgressBarStyle style=ProgressBarStyle());
 
+  void set(ContainerWindow &parent, const PixelRect rc,
+           const ProgressBarStyle style=ProgressBarStyle()) {
+    set(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+        style);
+  }
+
   void set_range(unsigned min_value, unsigned max_value);
   void set_position(unsigned value);
   void set_step(unsigned size);

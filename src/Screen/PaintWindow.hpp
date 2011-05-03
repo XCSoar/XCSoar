@@ -76,6 +76,12 @@ public:
   }
 #endif /* USE_GDI */
 
+  void set(ContainerWindow &parent, PixelRect rc,
+           const WindowStyle window_style=WindowStyle()) {
+    set(parent, rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top,
+        window_style);
+  }
+
   int get_left() const {
     return 0;
   }
