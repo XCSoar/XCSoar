@@ -95,10 +95,6 @@ WindAnalyser::WindAnalyser()
 {
 }
 
-WindAnalyser::~WindAnalyser()
-{
-}
-
 void
 WindAnalyser::reset()
 {

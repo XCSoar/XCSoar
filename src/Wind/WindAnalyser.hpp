@@ -43,7 +43,6 @@ class WindAnalyser
 {
 public:
   WindAnalyser();
-  ~WindAnalyser();
 
   WindStore windstore;
 
