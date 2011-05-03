@@ -130,10 +130,16 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
   }
 
   // position of thermal band
-  Pen pen(2, (!is_infobox || Appearance.InverseInfoBox)?
+  Pen pen(2, (is_infobox && Appearance.InverseInfoBox)?
           COLOR_WHITE: COLOR_BLACK);
-  chart.DrawLine(fixed_zero, h, 
+  chart.DrawLine(fixed_zero, h,
                  settings_computer.glide_polar_task.get_mc(), h, pen);
+
+  if (is_infobox && Appearance.InverseInfoBox)
+    chart.get_canvas().white_brush();
+  else
+    chart.get_canvas().black_brush();
+  chart.DrawDot(settings_computer.glide_polar_task.get_mc(), h, IBLSCALE(2));
 
   /*
   RasterPoint GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
