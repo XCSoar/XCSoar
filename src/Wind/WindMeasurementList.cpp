@@ -166,17 +166,10 @@ unsigned
 WindMeasurementList::getLeastImportantItem(fixed Time)
 {
   int maxscore = 0;
-  int score = 0;
   unsigned int founditem = measurements.size() - 1;
 
   for (int i = founditem; i >= 0; i--) {
-    //Calculate the score of this item. The item with the highest
-    //score is the least important one.  We may need to adjust the
-    //proportion of the quality and the elapsed time. Currently, one
-    //quality-point (scale: 1 to 5) is equal to 10 minutes.
-
-    score = 600 * (6 - measurements[i].quality);
-    score += (long)Time - measurements[i].time;
+    int score = measurements[i].Score((long)Time);
     if (score > maxscore) {
       maxscore = score;
       founditem = i;

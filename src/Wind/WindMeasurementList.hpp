@@ -30,6 +30,14 @@ struct WindMeasurement
   int quality;                  /**< Quality of fit */
   long time;                    /**< Time of fix */
   fixed altitude;               /**< Altitude of fix */
+
+  int Score(long _time) const {
+    // Calculate the score of this item. The item with the highest
+    // score is the least important one.  We may need to adjust the
+    // proportion of the quality and the elapsed time. Currently, one
+    // quality-point (scale: 1 to 5) is equal to 10 minutes.
+    return 600 * (6 - quality) + (_time - time);
+  }
 };
 
 /** maximum number of windmeasurements in the list. */
