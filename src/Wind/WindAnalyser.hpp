@@ -48,7 +48,6 @@ class WindAnalyser
   bool circleLeft;
   //active is set to true or false by the slot_newFlightMode slot
   bool active;
-  int startmarker;
   int circleDeg;
   Angle last_track;
   bool pastHalfway;

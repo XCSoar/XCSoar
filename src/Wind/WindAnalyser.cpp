@@ -87,7 +87,6 @@ a number of windmeasurements and calculates a weighted average based on quality.
 WindAnalyser::WindAnalyser()
   :circleCount(0), circleLeft(false),
    active(false),
-   startmarker(0),
    circleDeg(0),
    last_track(Angle::native(fixed_zero)),
    pastHalfway(false),
@@ -101,7 +100,6 @@ WindAnalyser::reset()
   circleCount = 0;
   circleLeft = false;
   active = false;
-  startmarker = 0;
   circleDeg = 0;
   last_track = Angle::native(fixed_zero);
   pastHalfway = false;
@@ -233,7 +231,6 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
   circleLeft = left;
 
   // initialize analyser-parameters
-  startmarker = marker;
   active = true;
   first = true;
   windsamples.clear();
