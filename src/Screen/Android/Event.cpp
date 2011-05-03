@@ -74,13 +74,12 @@ void
 EventQueue::purge(bool (*match)(const Event &event, void *ctx), void *ctx)
 {
   ScopeLock protect(mutex);
-  std::queue<Event> tmp;
-  while (!events.empty()) {
+  size_t n = events.size();
+  while (n-- > 0) {
     if (!match(events.front(), ctx))
-      tmp.push(events.front());
+      events.push(events.front());
     events.pop();
   }
-  events = tmp;
 }
 
 static bool
