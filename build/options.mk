@@ -1,5 +1,4 @@
 RADIANS ?= y
-GREEN_MENU ?= y
 
 FIXED ?= $(call bool_not,$(HAVE_FPU))
 ifeq ($(FIXED),y)
@@ -8,11 +7,6 @@ endif
 
 ifeq ($(RADIANS),y)
 TARGET_CPPFLAGS += -DRADIANS
-endif
-
-# shall menu buttons be painted with green background?
-ifeq ($(GREEN_MENU),y)
-TARGET_CPPFLAGS += -DGREEN_MENU
 endif
 
 # shall we paint with some eye candy?

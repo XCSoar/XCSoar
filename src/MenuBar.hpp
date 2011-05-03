@@ -44,11 +44,6 @@ protected:
   class Button : public ButtonWindow {
     unsigned index;
 
-#ifdef GREEN_MENU
-  protected:
-    virtual void on_paint(Canvas &canvas);
-#endif
-
   public:
     virtual bool on_clicked();
 
@@ -57,9 +52,6 @@ protected:
              int left, int top, unsigned width, unsigned height,
              ButtonWindowStyle style=ButtonWindowStyle()) {
       index = _index;
-#ifdef GREEN_MENU
-      style.enable_custom_painting();
-#endif
 
       ButtonWindow::set(parent, text, left, top, width, height, style);
     }

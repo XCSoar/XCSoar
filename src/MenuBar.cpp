@@ -28,12 +28,6 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef GREEN_MENU
-static const Color menu_button_bk_normal(0xa0, 0xe0, 0xa0);
-static const Color menu_button_bk_down(0x80, 0xc0, 0x80);
-static const Color menu_button_bk_disabled(0xb0, 0xc0, 0xb0);
-#endif
-
 static void
 GetButtonPosition(unsigned i, PixelRect rc, int *x, int *y, int *sizex, int *sizey)
 {
@@ -100,45 +94,6 @@ GetButtonPosition(unsigned i, PixelRect rc, int *x, int *y, int *sizex, int *siz
     }
   }
 }
-
-#ifdef GREEN_MENU
-
-static Color
-menu_button_bk_color(bool enabled, bool down)
-{
-  if (!enabled)
-    return menu_button_bk_disabled;
-
-  return down
-    ? menu_button_bk_down
-    : menu_button_bk_normal;
-}
-
-void
-MenuBar::Button::on_paint(Canvas &canvas)
-{
-  canvas.fill_rectangle(0, 0, canvas.get_width(), canvas.get_height(),
-                        menu_button_bk_color(is_enabled(), is_down()));
-
-  canvas.set_text_color(is_enabled() ? COLOR_BLACK : COLOR_GRAY);
-  canvas.background_transparent();
-
-#ifndef ENABLE_SDL
-  HFONT font = (HFONT)::SendMessage(hWnd, WM_GETFONT, 0, 0);
-  if (font != NULL)
-    ::SelectObject(canvas, font);
-#endif
-
-  PixelRect rc = get_client_rect();
-  canvas.formatted_text(&rc, get_text().c_str(),
-#ifdef ENABLE_SDL
-                        DT_VCENTER |
-#endif
-                        DT_NOPREFIX | DT_CENTER |
-                        DT_NOCLIP | DT_WORDBREAK);
-}
-
-#endif /* GREEN_MENU */
 
 bool
 MenuBar::Button::on_clicked()
