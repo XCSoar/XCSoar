@@ -21,6 +21,7 @@
 #include "Vector.hpp"
 #include "Wind/WindStore.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "Util/StaticArray.hpp"
 
 /**
  * The windanalyser analyses the list of flightsamples looking
@@ -62,8 +63,7 @@ class WindAnalyser
   fixed climbstarttime;
   fixed climbendtime;
 
-  WindSample windsamples[MAXWINDSAMPLES];
-  int numwindsamples;
+  StaticArray<WindSample, MAXWINDSAMPLES> windsamples;
 
 public:
   WindStore windstore;

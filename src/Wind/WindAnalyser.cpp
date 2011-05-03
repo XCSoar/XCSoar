@@ -107,7 +107,6 @@ WindAnalyser::reset()
   pastHalfway = false;
   curModeOK = false;
   windstore.reset();
-  numwindsamples = 0;
   first = true;
 }
 
@@ -147,12 +146,11 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
 
   curVector = Vector(SpeedVector(info.track, info.GroundSpeed));
 
-  windsamples[numwindsamples].v = curVector;
-  windsamples[numwindsamples].t = info.Time;
-  windsamples[numwindsamples].mag = Magnitude(curVector);
-
-  if (numwindsamples < MAXWINDSAMPLES - 1) {
-    numwindsamples++;
+  if (!windsamples.full()) {
+    WindSample &sample = windsamples.append();
+    sample.v = curVector;
+    sample.t = info.Time;
+    sample.mag = Magnitude(curVector);
   } else {
     // TODO code: give error, too many wind samples
     // or use circular buffer
@@ -165,7 +163,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
     maxVector = curVector;
 
   if (fullCircle) { //we have completed a full circle!
-    if (numwindsamples < MAXWINDSAMPLES - 1)
+    if (!windsamples.full())
       // calculate the wind for this circle, only if it is valid
       _calcWind(info, derived);
 
@@ -177,7 +175,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
                                    (maxVector.y - minVector.y) / 2);
 
     first = true;
-    numwindsamples = 0;
+    windsamples.clear();
 
     if (startcircle > 1)
       startcircle--;
@@ -238,51 +236,50 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
   startmarker = marker;
   active = true;
   first = true;
-  numwindsamples = 0;
+  windsamples.clear();
 }
 
 void
 WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
 {
-  int i;
+  unsigned i;
   fixed av = fixed_zero;
 
-  if (!numwindsamples)
+  if (windsamples.empty())
     return;
 
   // reject if average time step greater than 2.0 seconds
-  if ((windsamples[numwindsamples - 1].t - windsamples[0].t)
-      / (numwindsamples - 1) > fixed_two)
+  if ((windsamples.last().t - windsamples[0].t) / (windsamples.size() - 1) > fixed_two)
     return;
 
   // find average
-  for (i = 0; i < numwindsamples; i++) {
+  for (i = 0; i < windsamples.size(); i++)
     av += windsamples[i].mag;
-  }
-  av /= numwindsamples;
+
+  av /= windsamples.size();
 
   // find zero time for times above average
   fixed rthisp;
-  int j;
+  unsigned j;
   int ithis = 0;
   fixed rthismax = fixed_zero;
   fixed rthismin = fixed_zero;
   int jmax = -1;
   int jmin = -1;
-  int idiff;
+  unsigned idiff;
 
-  for (j = 0; j < numwindsamples; j++) {
+  for (j = 0; j < windsamples.size(); j++) {
     rthisp = fixed_zero;
 
-    for (i = 0; i < numwindsamples; i++) {
+    for (i = 0; i < windsamples.size(); i++) {
       if (i == j)
         continue;
 
-      ithis = (i + j) % numwindsamples;
+      ithis = (i + j) % windsamples.size();
       idiff = i;
 
-      if (idiff > numwindsamples / 2)
-        idiff = numwindsamples - idiff;
+      if (idiff > windsamples.size() / 2)
+        idiff = windsamples.size() - idiff;
 
       rthisp += (windsamples[ithis].mag) * idiff;
     }
@@ -311,15 +308,15 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
   fixed cmag;
   fixed rthis = fixed_zero;
 
-  for (i = 0; i < numwindsamples; i++) {
-    ::sin_cos(((i + jmax) % numwindsamples) * fixed_two_pi / numwindsamples, &wy, &wx);
+  for (i = 0; i < windsamples.size(); i++) {
+    ::sin_cos(((i + jmax) % windsamples.size()) * fixed_two_pi / windsamples.size(), &wy, &wx);
     wx = wx * av + mag;
     wy *= av;
     cmag = hypot(wx, wy) - windsamples[i].mag;
     rthis += cmag * cmag;
   }
 
-  rthis /= numwindsamples;
+  rthis /= windsamples.size();
   rthis = sqrt(rthis);
 
   int quality;
