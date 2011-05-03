@@ -18,12 +18,6 @@
 #ifndef WINDMEASUREMENTLIST_H
 #define WINDMEASUREMENTLIST_H
 
-/**
- * The WindMeasurementList is a list that can contain and
- * process windmeasurements.
- * @author André Somers
- */
-
 #include "Vector.hpp"
 
 /**
@@ -40,6 +34,11 @@ struct WindMeasurement
 /** maximum number of windmeasurements in the list. */
 #define MAX_MEASUREMENTS 200
 
+/**
+ * The WindMeasurementList is a list that can contain and
+ * process windmeasurements.
+ * @author André Somers
+ */
 class WindMeasurementList
 {
 public:
