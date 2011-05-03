@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef WINDZIGZAG_HPP
 #define WINDZIGZAG_HPP
 
+#include "Engine/Navigation/SpeedVector.hpp"
 #include "Angle.hpp"
 #include "fixed.hpp"
 
@@ -31,7 +32,6 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
-struct SpeedVector;
 
 /**
  * This class provides a mechanism to estimate the wind speed and bearing
@@ -222,11 +222,18 @@ private:
 class WindZigZagGlue: public WindZigZag
 {
 public:
+  struct Result {
+    SpeedVector wind;
+    int quality;
+
+    Result() {}
+    Result(int _quality):quality(_quality) {}
+  };
+
   SpeedVector optimises(int &res_quality, const SpeedVector start,
                         const bool circling);
 
-  int Update(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-             SpeedVector &wind);
+  Result Update(const NMEA_INFO &basic, const DERIVED_INFO &derived);
 };
 
 #endif

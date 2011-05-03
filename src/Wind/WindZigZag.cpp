@@ -79,9 +79,8 @@ WindZigZagGlue::optimises(int &res_quality, const SpeedVector start,
   return wind;
 }
 
-int
-WindZigZagGlue::Update(const NMEA_INFO &basic, const DERIVED_INFO &derived,
-                       SpeedVector &wind)
+WindZigZagGlue::Result
+WindZigZagGlue::Update(const NMEA_INFO &basic, const DERIVED_INFO &derived)
 {
   // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 
@@ -89,13 +88,13 @@ WindZigZagGlue::Update(const NMEA_INFO &basic, const DERIVED_INFO &derived,
   if (!derived.flight.Flying ||
       !basic.AirspeedAvailable) {
     reset();
-    return 0;
+    return Result(0);
   }
 
   // ensure system is reset if time retreats
   if (back_in_time(basic.Time)) {
     reset();
-    return 0;
+    return Result(0);
   }
 
   // temporary manoeuvering, dont append this point
@@ -103,26 +102,24 @@ WindZigZagGlue::Update(const NMEA_INFO &basic, const DERIVED_INFO &derived,
       (fabs(basic.acceleration.Gload - fixed_one) > fixed(0.3))) {
 
     blackout(basic.Time);
-    return 0;
+    return Result(0);
   }
 
   // is this point able to be added?
   if (!do_append(basic.Time, basic.track))
-    return 0;
+    return Result(0);
 
   // ok to add a point
-
   append(ZZObs(basic.Time,
                basic.GroundSpeed, basic.track,
                basic.TrueAirspeed));
 
-  //
   if (!full())
-    return 0;
+    return Result(0);
 
-  int quality;
-  wind = optimises(quality, derived.wind, derived.Circling);
-  return quality;
+  Result res;
+  res.wind = optimises(res.quality, derived.wind, derived.Circling);
+  return res;
 }
 
 /**

@@ -117,7 +117,6 @@ int main(int argc, char **argv)
   printf("# time quality wind_bearing (deg) wind_speed (m/s) grndspeed (m/s) tas (m/s) bearing (deg)\n");
   char buffer[1024];
 
-  SpeedVector wind;
   WindZigZagGlue wind_zig_zag;
 
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
@@ -131,11 +130,11 @@ int main(int argc, char **argv)
     computer.Compute(data, last, calculated, settings_computer);
     calculated.flight.flying_state_moving(data.Time);
 
-    int quality = wind_zig_zag.Update(data, calculated, wind);
-    if (quality > 0)
-      printf("%d %d %d %g %g %g %d\n", (int)data.Time, quality,
-             (int)wind.bearing.value_degrees(),
-             (double)wind.norm,
+    WindZigZagGlue::Result result = wind_zig_zag.Update(data, calculated);
+    if (result.quality > 0)
+      printf("%d %d %d %g %g %g %d\n", (int)data.Time, result.quality,
+             (int)result.wind.bearing.value_degrees(),
+             (double)result.wind.norm,
              (double)data.GroundSpeed,
              (double)data.TrueAirspeed,
              (int)data.track.value_degrees());
