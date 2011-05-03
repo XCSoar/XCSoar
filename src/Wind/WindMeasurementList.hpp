@@ -42,12 +42,11 @@ struct WindMeasurement
 class WindMeasurementList
 {
 protected:
-  WindMeasurement *measurementlist[MAX_MEASUREMENTS];
+  WindMeasurement measurementlist[MAX_MEASUREMENTS];
   unsigned int nummeasurementlist;
 
 public:
   WindMeasurementList();
-  ~WindMeasurementList();
 
   /**
    * Returns the weighted mean windvector over the stored values, or 0

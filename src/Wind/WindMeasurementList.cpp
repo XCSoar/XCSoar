@@ -52,13 +52,6 @@ WindMeasurementList::WindMeasurementList()
   nummeasurementlist = 0;
 }
 
-WindMeasurementList::~WindMeasurementList()
-{
-  for (unsigned int i = 0; i < nummeasurementlist; i++) {
-    delete measurementlist[i];
-  }
-}
-
 /**
  * Returns the weighted mean windvector over the stored values, or 0
  * if no valid vector could be calculated (for instance: too little or
@@ -80,7 +73,7 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
   unsigned int quality = 0, q_quality = 0, a_quality = 0, t_quality = 0;
 
   Vector result(fixed_zero, fixed_zero);
-  WindMeasurement * m;
+  WindMeasurement m;
   int now = (int)(Time);
   fixed altdiff = fixed_zero;
   fixed timediff = fixed_zero;
@@ -92,12 +85,12 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
 
   for (unsigned i = 0; i < nummeasurementlist; i++) {
     m = measurementlist[i];
-    altdiff = (alt - m->altitude) / altRange;
-    timediff = fabs(fixed(now - m->time) / timeRange);
+    altdiff = (alt - m.altitude) / altRange;
+    timediff = fabs(fixed(now - m.time) / timeRange);
 
     if ((fabs(altdiff) < fixed_one) && (timediff < fixed_one)) {
       // measurement quality
-      q_quality = min(5,m->quality) * REL_FACTOR_QUALITY / 5;
+      q_quality = min(5,m.quality) * REL_FACTOR_QUALITY / 5;
 
       // factor in altitude difference between current altitude and
       // measurement.  Maximum alt difference is 1000 m.
@@ -110,7 +103,7 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
       t_quality = iround(k * (fixed_one - timediff) / (timediff * timediff + k)
           * REL_FACTOR_TIME);
 
-      if (m->quality == 6) {
+      if (m.quality == 6) {
         if (timediff < override_time) {
           // over-ride happened, so re-set accumulator
           override_time = timediff;
@@ -138,8 +131,8 @@ WindMeasurementList::getWind(fixed Time, fixed alt, bool *found) const
       }
 
       quality = q_quality * (a_quality * t_quality);
-      result.x += m->vector.x * quality;
-      result.y += m->vector.y * quality;
+      result.x += m.vector.x * quality;
+      result.y += m.vector.y * quality;
       total_quality += quality;
     }
   }
@@ -164,21 +157,18 @@ WindMeasurementList::addMeasurement(fixed Time, Vector vector, fixed alt,
 
   if (nummeasurementlist == MAX_MEASUREMENTS) {
     index = getLeastImportantItem(Time);
-    delete measurementlist[index];
     nummeasurementlist--;
   } else {
     index = nummeasurementlist;
   }
 
-  WindMeasurement * wind = new WindMeasurement;
+  WindMeasurement &wind = measurementlist[index];
 
-  wind->vector.x = vector.x;
-  wind->vector.y = vector.y;
-  wind->quality = quality;
-  wind->altitude = alt;
-  wind->time = (long)Time;
-
-  measurementlist[index] = wind;
+  wind.vector.x = vector.x;
+  wind.vector.y = vector.y;
+  wind.quality = quality;
+  wind.altitude = alt;
+  wind.time = (long)Time;
 
   nummeasurementlist++;
 }
@@ -200,8 +190,8 @@ WindMeasurementList::getLeastImportantItem(fixed Time)
     //proportion of the quality and the elapsed time. Currently, one
     //quality-point (scale: 1 to 5) is equal to 10 minutes.
 
-    score = 600 * (6 - measurementlist[i]->quality);
-    score += (long)Time - measurementlist[i]->time;
+    score = 600 * (6 - measurementlist[i].quality);
+    score += (long)Time - measurementlist[i].time;
     if (score > maxscore) {
       maxscore = score;
       founditem = i;
