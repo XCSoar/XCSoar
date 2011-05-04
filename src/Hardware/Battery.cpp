@@ -25,6 +25,8 @@ Copyright_License {
 
 #ifdef HAVE_BATTERY
 
+#include <windows.h>
+
 namespace Power
 {
   namespace Battery{
@@ -38,9 +40,6 @@ namespace Power
     externalstatus Status = UNKNOWN;
   };
 };
-
-/** Warning time before battery is empty */
-DWORD BatteryWarningTime = 0;
 
 void
 UpdateBatteryInfo(void)

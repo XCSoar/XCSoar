@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_BATTERY_TIMER_HPP
 #define XCSOAR_BATTERY_TIMER_HPP
 
+#include "PeriodClock.hpp"
+
 class BatteryTimer {
   // Battery status for SIMULATOR mode
   // 30% reminder, 20% exit, 30 second reminders on warnings
@@ -31,6 +33,8 @@ class BatteryTimer {
   static const unsigned BATTERY_WARNING = 30;
   static const unsigned BATTERY_EXIT = 20;
   static const unsigned BATTERY_REMINDER = 30000;
+
+  PeriodClock last_warning;
 
 public:
   void Process();

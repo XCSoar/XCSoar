@@ -54,19 +54,14 @@ BatteryTimer::Process()
       // TODO feature: Warning message on battery shutdown
       XCSoarInterface::SignalShutdown(true);
     } else {
-#ifdef WIN32
       if (Power::Battery::RemainingPercentValid &&
           Power::Battery::RemainingPercent < BATTERY_WARNING) {
-        DWORD LocalWarningTime = ::GetTickCount();
-        if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
-          BatteryWarningTime = LocalWarningTime;
+        if (last_warning.check_update(BATTERY_REMINDER))
           // TODO feature: Show the user what the batt status is.
           Message::AddMessage(_("Organiser Battery Low"));
-        }
       } else {
-        BatteryWarningTime = 0;
+        last_warning.reset();
       }
-#endif
     }
   }
 #endif /* HAVE_BATTERY */

@@ -68,10 +68,6 @@ UpdateBatteryInfo()
 
 #else /* _WIN32_WCE */
 
-#include <windows.h>
-
-extern DWORD BatteryWarningTime;
-
 void
 UpdateBatteryInfo(void);
 
