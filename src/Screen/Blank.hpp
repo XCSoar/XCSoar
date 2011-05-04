@@ -29,8 +29,6 @@ Copyright_License {
 
 extern unsigned DisplayTimeOut;
 
-void BlankDisplay(bool doblank);
-
 static inline  bool
 DisplayTimeOutIsFresh()
 {

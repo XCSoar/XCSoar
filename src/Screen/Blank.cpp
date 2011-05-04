@@ -34,7 +34,7 @@ static const unsigned DISPLAYTIMEOUTMAX = 60 * 4;
 
 unsigned DisplayTimeOut = 0;
 
-void
+static void
 BlankDisplay(bool doblank)
 {
   static bool oldblank = false;
