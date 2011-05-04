@@ -113,7 +113,7 @@ SystemClockTimer()
     sysTime.wMinute = (unsigned short)basic.DateTime.minute;
     sysTime.wSecond = (unsigned short)basic.DateTime.second;
     sysTime.wMilliseconds = 0;
-    sysTimeInitialised = (::SetSystemTime(&sysTime)==true);
+    ::SetSystemTime(&sysTime);
 
 #if defined(_WIN32_WCE) && defined(GNAV)
     TIME_ZONE_INFORMATION tzi;
