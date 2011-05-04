@@ -27,7 +27,7 @@ Copyright_License {
 #if defined(_WIN32_WCE) && !defined(GNAV)
 #define HAVE_BLANK
 
-extern int DisplayTimeOut;
+extern unsigned DisplayTimeOut;
 
 void BlankDisplay(bool doblank);
 

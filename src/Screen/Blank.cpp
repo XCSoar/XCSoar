@@ -31,7 +31,7 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Sizes.h"
 
-int DisplayTimeOut = 0;
+unsigned DisplayTimeOut = 0;
 
 void
 BlankDisplay(bool doblank)

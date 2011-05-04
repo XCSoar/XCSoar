@@ -24,5 +24,5 @@ Copyright_License {
 #include "Screen/Blank.hpp"
 
 #ifdef HAVE_BLANK
-int DisplayTimeOut;
+unsigned DisplayTimeOut;
 #endif
