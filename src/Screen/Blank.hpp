@@ -29,12 +29,6 @@ Copyright_License {
 
 extern unsigned DisplayTimeOut;
 
-static inline  bool
-DisplayTimeOutIsFresh()
-{
-  return DisplayTimeOut == 0;
-}
-
 static inline  void
 ResetDisplayTimeOut()
 {
@@ -48,12 +42,6 @@ void CheckDisplayTimeOut(bool sticky);
 enum {
   EnableAutoBlank = false,
 };
-
-static inline  bool
-DisplayTimeOutIsFresh()
-{
-  return true;
-}
 
 static inline  void
 ResetDisplayTimeOut() {}
