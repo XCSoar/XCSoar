@@ -96,7 +96,7 @@ BlankDisplay(bool doblank)
     } else {
       ResetDisplayTimeOut();
     }
-  } else if (oldblank) {
+  } else {
     // was blanked
     // Power on the display
     Display::Blank(false);
