@@ -58,7 +58,7 @@ BatteryTimer::Process()
           Power::Battery::RemainingPercent < BATTERY_WARNING) {
         if (last_warning.check_update(BATTERY_REMINDER))
           // TODO feature: Show the user what the batt status is.
-          Message::AddMessage(_("Organiser Battery Low"));
+          Message::AddMessage(_("Battery low"));
       } else {
         last_warning.reset();
       }
