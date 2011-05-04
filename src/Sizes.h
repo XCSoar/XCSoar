@@ -16,9 +16,6 @@
 
 #define MAX_LOADSTRING 100
 
-// timeout of display/battery mode in quarter seconds
-#define DISPLAYTIMEOUTMAX 60*4
-
 #define NUMAIRSPACECOLORS 16
 #define NUMAIRSPACEBRUSHES 8
 

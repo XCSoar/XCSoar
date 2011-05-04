@@ -28,8 +28,9 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Hardware/Battery.hpp"
 #include "Hardware/Display.hpp"
-#include "Dialogs/Dialogs.h"
-#include "Sizes.h"
+
+/** timeout of display/battery mode in quarter seconds */
+static const unsigned DISPLAYTIMEOUTMAX = 60 * 4;
 
 unsigned DisplayTimeOut = 0;
 
