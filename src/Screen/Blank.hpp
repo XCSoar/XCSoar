@@ -28,7 +28,6 @@ Copyright_License {
 #define HAVE_BLANK
 
 extern int DisplayTimeOut;
-extern bool ForceShutdown;
 
 void BlankDisplay(bool doblank);
 
@@ -50,8 +49,6 @@ void CheckDisplayTimeOut(bool sticky);
 
 enum {
   EnableAutoBlank = false,
-  ScreenBlanked = false,
-  ForceShutdown = false,
 };
 
 static inline  bool
