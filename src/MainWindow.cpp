@@ -311,6 +311,8 @@ MainWindow::on_timer(timer_t id)
     return SingleWindow::on_timer(id);
 
   if (globalRunningEvent.test()) {
+    battery_timer.Process();
+
     ProcessTimer::Process();
 
     if (flarm != NULL)

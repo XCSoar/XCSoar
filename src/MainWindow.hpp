@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
+#include "BatteryTimer.hpp"
 
 class GlueGaugeVario;
 class GaugeFLARM;
@@ -46,6 +47,8 @@ public:
 
 private:
   timer_t timer_id;
+
+  BatteryTimer battery_timer;
 
   PixelRect map_rect;
   bool FullScreen;

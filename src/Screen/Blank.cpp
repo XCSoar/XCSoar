@@ -29,10 +29,6 @@ Copyright_License {
 #include "Hardware/Battery.hpp"
 #include "Hardware/Display.hpp"
 #include "Dialogs/Dialogs.h"
-#include "LogFile.hpp"
-#include "Message.hpp"
-#include "Simulator.hpp"
-#include "Language/Language.hpp"
 #include "Sizes.h"
 
 int DisplayTimeOut = 0;
@@ -41,8 +37,6 @@ void
 BlankDisplay(bool doblank)
 {
   static bool oldblank = false;
-
-  UpdateBatteryInfo();
 
   if (!XCSoarInterface::SettingsMap().EnableAutoBlank)
     return;
@@ -54,40 +48,7 @@ BlankDisplay(bool doblank)
     // can't do it, not supported
     return;
 
-  // TODO feature: Trigger a GCE (Glide Computer Event) when
-  // switching to battery mode This can be used to warn users that
-  // power has been lost and you are now on battery power - ie:
-  // something else is wrong
-
   if (doblank) {
-    /* Battery status - simulator only - for safety of battery data
-       note: Simulator only - more important to keep running in your plane
-    */
-
-    // JMW, maybe this should be active always...
-    // we don't want the PDA to be completely depleted.
-
-    if (Power::External::Status == Power::External::OFF) {
-      if (is_simulator() && Power::Battery::RemainingPercentValid &&
-          Power::Battery::RemainingPercent < BATTERY_EXIT) {
-        LogStartUp(TEXT("Battery low exit..."));
-        // TODO feature: Warning message on battery shutdown
-        XCSoarInterface::SignalShutdown(true);
-      } else {
-        if (Power::Battery::RemainingPercentValid &&
-            Power::Battery::RemainingPercent < BATTERY_WARNING) {
-          DWORD LocalWarningTime = ::GetTickCount();
-          if ((LocalWarningTime - BatteryWarningTime) > BATTERY_REMINDER) {
-            BatteryWarningTime = LocalWarningTime;
-            // TODO feature: Show the user what the batt status is.
-            Message::AddMessage(_("Organiser Battery Low"));
-          }
-        } else {
-          BatteryWarningTime = 0;
-        }
-      }
-    }
-
     if (Power::External::Status == Power::External::OFF) {
       // Power off the display
       Display::Blank(true);

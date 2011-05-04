@@ -462,6 +462,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Blackboard.cpp \
 	$(SRC)/Protection.cpp \
+	$(SRC)/BatteryTimer.cpp \
 	$(SRC)/ProcessTimer.cpp \
 	$(SRC)/MainWindow.cpp \
 	$(SRC)/Components.cpp \

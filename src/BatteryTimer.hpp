@@ -21,62 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_HARDWARE_BATTERY_H
-#define XCSOAR_HARDWARE_BATTERY_H
+#ifndef XCSOAR_BATTERY_TIMER_HPP
+#define XCSOAR_BATTERY_TIMER_HPP
 
-#if defined(ANDROID) || (defined(_WIN32_WCE) && !defined(GNAV))
-#define HAVE_BATTERY
+class BatteryTimer {
+  // Battery status for SIMULATOR mode
+  // 30% reminder, 20% exit, 30 second reminders on warnings
 
-#include <stdbool.h>
+  static const unsigned BATTERY_WARNING = 30;
+  static const unsigned BATTERY_EXIT = 20;
+  static const unsigned BATTERY_REMINDER = 30000;
 
-namespace Power
-{
-  namespace Battery{
-    enum batterystatus {
-      LOW,
-      HIGH,
-      CRITICAL,
-      CHARGING,
-      NOBATTERY,
-      UNKNOWN
-    };
-
-    extern unsigned Temperature;
-    extern unsigned RemainingPercent;
-    extern bool RemainingPercentValid;
-    extern batterystatus Status;
-  };
-  namespace External{
-    enum externalstatus{
-      OFF,
-      ON,
-      UNKNOWN
-    };
-
-    extern externalstatus Status;
-  };
-
-}
-
-#ifdef ANDROID
-
-static inline void
-UpdateBatteryInfo()
-{
-  /* nothing to do, this is updated by Android callbacks */
-}
-
-#else /* _WIN32_WCE */
-
-#include <windows.h>
-
-extern DWORD BatteryWarningTime;
-
-void
-UpdateBatteryInfo(void);
-
-#endif /* _WIN32_WCE */
-
-#endif /* !HAVE_BATTERY */
+public:
+  void Process();
+};
 
 #endif
