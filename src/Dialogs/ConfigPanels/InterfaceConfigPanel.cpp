@@ -76,11 +76,13 @@ InterfaceConfigPanel::Init(WndForm *_wf)
 
   wp = (WndProperty*)wf->FindByName(_T("prpAutoBlank"));
   if (wp) {
-    if (is_altair() || !is_embedded())
-      wp->hide();
+#ifdef HAVE_BLANK
     DataFieldBoolean *df = (DataFieldBoolean *)wp->GetDataField();
     df->Set(XCSoarInterface::SettingsMap().EnableAutoBlank);
     wp->RefreshDisplay();
+#else
+    wp->hide();
+#endif
   }
 
   InitFileField(*wf, _T("prpInputFile"), szProfileInputFile, _T("*.xci\0"));
