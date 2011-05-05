@@ -54,13 +54,13 @@ key=Dropped marker
 sound=IDR_WAV_BEEPBWEEP
 delay=1500
 
-key=Waiting for GPS Connection
+key=Waiting for GPS connection
 delay=1500
 
-key=Restarting Comm Ports
+key=Restarting comm. ports
 delay=1500
 
-key=Waiting for GPS Fix
+key=Waiting for GPS fix
 delay=1500
 
 key=XCI Error
@@ -78,7 +78,7 @@ key=Auto MacCready OFF
 sound=IDR_REMOVE
 delay=1500
 
-key=Task Aborted
+key=Task aborted
 sound=IDR_REMOVE
 delay=1500
 
@@ -86,46 +86,28 @@ key=Task Resume
 sound=IDR_REMOVE
 delay=1500
 
-key=Bugs Performance
+key=Bugs performance
 delay=5000
 
 key=Ballast %
 delay=5000
 
-key=Logger ON
+key=Logger ok
 sound=IDR_INSERT
 delay=1500
 
-key=Logger OFF
+key=Logger off
 sound=IDR_REMOVE
 delay=1500
-
-key=Airspace Query
-delay=7000
-sound=IDR_FAIL
-
-key=Toppology / Terrain
-delay=2500
-sound=IDR_INSERT
 
 key=Status
 delay=60000
 
-key=Organiser Battery Low
+key=Battery low
 delay=5000
 sound=IDR_FAIL
 
-key=Organiser Lost External Power
-delay=10000
-sound=IDR_FAIL
-
 key=Screen Mode Full
-delay=1000
-
-key=Screen Mode Auxiliary
-delay=1000
-
-key=Screen Mode Normal
 delay=1000
 
 # Always leave dummy entry for now (work around issue in parser)
