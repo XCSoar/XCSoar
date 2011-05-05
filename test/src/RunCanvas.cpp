@@ -100,7 +100,7 @@ private:
     canvas.hollow_brush();
     canvas.black_pen();
 
-    Brush red_brush(Color::RED);
+    Brush red_brush(COLOR_RED);
 
     RasterPoint p1[3] = {
       { -100, get_vmiddle() },

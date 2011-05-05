@@ -93,8 +93,8 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
     theredColor = Graphics::inv_redColor;
     thegreenColor = Graphics::inv_blueColor;
   } else {
-    theredColor = Color::RED;
-    thegreenColor = Color::GREEN;
+    theredColor = COLOR_RED;
+    thegreenColor = COLOR_GREEN;
   }
 
   redBrush.set(theredColor);
@@ -105,13 +105,13 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   greenThickPen.set(Layout::Scale(5), thegreenColor);
 
   if (Appearance.InverseInfoBox) {
-    colText = Color::WHITE;
-    colTextBackgnd = Color::BLACK;
+    colText = COLOR_WHITE;
+    colTextBackgnd = COLOR_BLACK;
     colTextGray = Color(0xa0, 0xa0, 0xa0);
     hBitmapClimb.load(IDB_CLIMBSMALLINV);
   } else {
-    colText = Color::BLACK;
-    colTextBackgnd = Color::WHITE;
+    colText = COLOR_BLACK;
+    colTextBackgnd = COLOR_WHITE;
     colTextGray = Color((uint8_t)~0xa0, (uint8_t)~0xa0, (uint8_t)~0xa0);
     hBitmapClimb.load(IDB_CLIMBSMALL);
   }
@@ -284,7 +284,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
   else if (is_persistent())
     canvas.fill_rectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
                           Appearance.InverseInfoBox
-                          ? Color::BLACK : Color::WHITE);
+                          ? COLOR_BLACK : COLOR_WHITE);
 }
 
 void
@@ -499,7 +499,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
     if (is_persistent()) {
       Color background_color = Appearance.InverseInfoBox
-        ? Color::BLACK : Color::WHITE;
+        ? COLOR_BLACK : COLOR_WHITE;
 
       // bottom (too slow)
       canvas.fill_rectangle(x, ybottom + YOFFSET,

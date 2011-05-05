@@ -44,10 +44,10 @@ EditWindow::on_paint(Canvas &canvas)
       canvas.clear(Color(0xe0, 0xe0, 0xe0));
     else
       canvas.clear_white();
-    canvas.set_text_color(Color::BLACK);
+    canvas.set_text_color(COLOR_BLACK);
   } else {
-    canvas.clear(Color::LIGHT_GRAY);
-    canvas.set_text_color(Color::DARK_GRAY);
+    canvas.clear(COLOR_LIGHT_GRAY);
+    canvas.set_text_color(COLOR_DARK_GRAY);
   }
 
   canvas.background_transparent();

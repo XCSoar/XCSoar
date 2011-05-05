@@ -62,7 +62,7 @@ public:
                   ClickNotifyCallback_t Function = NULL)
     :WndButton(Parent, Caption, X, Y, Width, Height,
                custom_painting(style), Function),
-               disabled_brush(Color::GRAY)
+               disabled_brush(COLOR_GRAY)
 #ifdef HAVE_CLIPPING
     , background_brush(background_color)
 #endif

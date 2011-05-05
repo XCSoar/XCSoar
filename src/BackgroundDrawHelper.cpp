@@ -150,7 +150,7 @@ BackgroundDrawHelper::DrawSpotHeights(Canvas &canvas,
     return false;
 
   canvas.select(Fonts::Title);
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(COLOR_BLACK);
   canvas.background_transparent();
 
   TCHAR Buffer[20];

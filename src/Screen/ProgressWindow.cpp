@@ -30,7 +30,7 @@ Copyright_License {
 using std::min;
 
 ProgressWindow::ProgressWindow(ContainerWindow &parent)
-  :background_color(Color::WHITE),
+  :background_color(COLOR_WHITE),
    background_brush(background_color),
    position(0)
 {
@@ -154,7 +154,7 @@ ProgressWindow::on_paint(Canvas &canvas)
 Brush *
 ProgressWindow::on_color(Window &window, Canvas &canvas)
 {
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(COLOR_BLACK);
   canvas.set_background_color(background_color);
   return &background_brush;
 }

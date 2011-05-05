@@ -346,7 +346,7 @@ private:
       m_buffer.select(Graphics::hAirspaceBrushes[settings.brushes[airspace.get_type()]]);
 
       m_buffer.background_opaque();
-      m_buffer.set_background_color(Color::WHITE);
+      m_buffer.set_background_color(COLOR_WHITE);
 #ifdef HAVE_ALPHA_BLEND
     }
 #endif

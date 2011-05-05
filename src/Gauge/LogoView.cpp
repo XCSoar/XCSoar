@@ -93,7 +93,7 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   canvas.select(font);
 #endif
 
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(COLOR_BLACK);
   canvas.background_transparent();
   canvas.text(2, 2, XCSoar_ProductToken);
 }

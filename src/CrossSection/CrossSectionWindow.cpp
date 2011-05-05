@@ -225,7 +225,7 @@ CrossSectionWindow::CrossSectionWindow() :
   terrain(NULL), airspace_database(NULL),
   start(Angle::native(fixed_zero), Angle::native(fixed_zero)),
   vec(fixed(50000), Angle::native(fixed_zero)),
-  background_color(Color::WHITE), text_color(Color::BLACK) {}
+  background_color(COLOR_WHITE), text_color(COLOR_BLACK) {}
 
 void
 CrossSectionWindow::ReadBlackboard(const NMEA_INFO &_gps_info,

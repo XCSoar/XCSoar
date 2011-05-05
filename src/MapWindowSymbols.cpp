@@ -94,14 +94,14 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
     PolygonRotateShift(Tail, 2, Start.x, Start.y, angle);
 
     // optionally draw dashed line
-    Pen dash_pen(Pen::DASH, 1, Color::BLACK);
+    Pen dash_pen(Pen::DASH, 1, COLOR_BLACK);
     canvas.select(dash_pen);
     canvas.line(Tail[0], Tail[1]);
   }
 
   _stprintf(sTmp, _T("%i"), iround(Units::ToUserWindSpeed(wind.norm)));
 
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(COLOR_BLACK);
 
   TextInBoxMode_t TextInBoxMode;
   TextInBoxMode.Align = Center;

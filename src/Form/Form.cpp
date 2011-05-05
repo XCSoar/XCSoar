@@ -69,7 +69,7 @@ WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
     return ContainerWindow::on_color(window, canvas);
 #endif
 
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(COLOR_BLACK);
   canvas.set_background_color(background_color);
   return &background_brush;
 }
@@ -527,7 +527,7 @@ WndForm::on_paint(Canvas &canvas)
   canvas.raised_edge(rcClient);
 
   // Set the colors
-  canvas.set_text_color(Color::WHITE);
+  canvas.set_text_color(COLOR_WHITE);
 
   // Set the titlebar font and font-size
   canvas.select(*mhTitleFont);

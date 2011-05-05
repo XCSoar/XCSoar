@@ -113,7 +113,7 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
   int texture_id = font->text_texture_gl(text, size, text_color, background_color);
   RenderedText *rt = new RenderedText(key, texture_id, size.cx, size.cy);
 #else
-  SDL_Surface *surface = ::TTF_RenderUTF8_Solid(font, text, Color::BLACK);
+  SDL_Surface *surface = ::TTF_RenderUTF8_Solid(font, text, COLOR_BLACK);
   if (surface == NULL)
     return NULL;
 

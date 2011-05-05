@@ -99,9 +99,9 @@ WndListFrame::on_killfocus()
 void
 WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 {
-  const Color text_color = Color::BLACK;
-  const Color background_color = Color::WHITE;
-  const Color selected_background_color = Color::LIGHT_GRAY;
+  const Color text_color = COLOR_BLACK;
+  const Color background_color = COLOR_WHITE;
+  const Color selected_background_color = COLOR_LIGHT_GRAY;
 
   PixelRect rc = item_rect(start);
 

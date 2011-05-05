@@ -277,9 +277,9 @@ pnlTaskCalculator::OnWarningPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     const MaskedIcon *bmp = &Graphics::hAirspaceInterceptBitmap;
     const int offsetx = bmp->get_size().cx;
     const int offsety = canvas.get_height() - bmp->get_size().cy;
-    canvas.clear(Color::YELLOW);
+    canvas.clear(COLOR_YELLOW);
     bmp->draw(canvas, offsetx, offsety);
-    canvas.set_background_color(Color::YELLOW);
+    canvas.set_background_color(COLOR_YELLOW);
 
     canvas.text(offsetx * 2 + Layout::Scale(2),
                 (int)(canvas.get_height() - textheight) / 2,

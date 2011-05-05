@@ -262,8 +262,8 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
     else
       Offset = GlideBar[2].y + Offset - IBLSCALE(15);
 
-    canvas.set_text_color(Color::BLACK);
-    canvas.set_background_color(Color::WHITE);
+    canvas.set_text_color(COLOR_BLACK);
+    canvas.set_background_color(COLOR_WHITE);
 
     TextInBoxMode_t TextInBoxMode;
     TextInBoxMode.Mode = RoundedBlack;
@@ -295,10 +295,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   canvas.fill_rectangle(IBLSCALE(4), rc.bottom - Height,
                         TextSize.cx + IBLSCALE(16), rc.bottom,
-                        Color::WHITE);
+                        COLOR_WHITE);
 
   canvas.background_transparent();
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(COLOR_BLACK);
 
   canvas.text(IBLSCALE(7),
               rc.bottom - Fonts::MapBold.get_ascent_height() - IBLSCALE(1),
@@ -351,7 +351,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
     canvas.select(Fonts::Title);
     canvas.background_opaque();
-    canvas.set_background_color(Color::WHITE);
+    canvas.set_background_color(COLOR_WHITE);
 
     TextSize = canvas.text_size(ScaleInfo);
     y-= TextSize.cy;

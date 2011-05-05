@@ -155,15 +155,15 @@ CheckBox::on_cancel_mode()
 void
 CheckBox::on_paint(Canvas &canvas)
 {
-  Brush brush(pressed ? Color::GRAY : Color::WHITE);
+  Brush brush(pressed ? COLOR_GRAY : COLOR_WHITE);
   canvas.select(brush);
 
   if (has_focus())
-    canvas.select(Pen(Layout::Scale(1) + 1, Color::BLACK));
+    canvas.select(Pen(Layout::Scale(1) + 1, COLOR_BLACK));
   else if (is_enabled())
     canvas.black_pen();
   else
-    canvas.select(Pen(1, Color::GRAY));
+    canvas.select(Pen(1, COLOR_GRAY));
   canvas.rectangle(2, 2, canvas.get_height() - 4, canvas.get_height() - 4);
 
   if (checked) {
@@ -171,7 +171,7 @@ CheckBox::on_paint(Canvas &canvas)
     canvas.line(canvas.get_height() - 8, 4, 4, canvas.get_height() - 8);
   }
 
-  canvas.set_text_color(is_enabled() ? Color::BLACK : Color::GRAY);
+  canvas.set_text_color(is_enabled() ? COLOR_BLACK : COLOR_GRAY);
   canvas.background_transparent();
   canvas.text(canvas.get_height() + 2, 2, text.c_str());
 

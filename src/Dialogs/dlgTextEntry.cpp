@@ -93,7 +93,7 @@ OnTextPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   canvas.polyline(p + 1, 4);
 
   canvas.background_transparent();
-  canvas.set_text_color(Color::WHITE);
+  canvas.set_text_color(COLOR_WHITE);
   canvas.text(p[0].x, p[0].y, edittext);
 }
 

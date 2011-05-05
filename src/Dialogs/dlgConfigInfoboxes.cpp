@@ -170,7 +170,7 @@ InfoBoxPreview::on_paint(Canvas &canvas)
   const bool is_current = i == current_preview;
 
   if (is_current)
-    canvas.clear(Color::BLACK);
+    canvas.clear(COLOR_BLACK);
   else
     canvas.clear_white();
 
@@ -187,7 +187,7 @@ InfoBoxPreview::on_paint(Canvas &canvas)
 
   canvas.select(Fonts::Title);
   canvas.background_transparent();
-  canvas.set_text_color(is_current ? Color::WHITE : Color::BLACK);
+  canvas.set_text_color(is_current ? COLOR_WHITE : COLOR_BLACK);
   canvas.text(2, 2, caption);
 }
 

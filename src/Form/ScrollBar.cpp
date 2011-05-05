@@ -192,9 +192,9 @@ ScrollBar::paint(Canvas &canvas) const
 
   // fill the rest with darker gray
   canvas.fill_rectangle(rc.left + 1, up_arrow_rect.bottom + 1,
-                        rc.right, rc_slider.top, Color::GRAY);
+                        rc.right, rc_slider.top, COLOR_GRAY);
   canvas.fill_rectangle(rc.left + 1, rc_slider.bottom,
-                        rc.right, down_arrow_rect.top, Color::GRAY);
+                        rc.right, down_arrow_rect.top, COLOR_GRAY);
 }
 
 void

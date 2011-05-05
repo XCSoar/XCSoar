@@ -241,11 +241,11 @@ Font::calculate_heights()
     // JMW: don't know why we need this in GNAV, but we do.
 
     BufferCanvas buffer(canvas, tm.tmAveCharWidth, tm.tmHeight);
-    const HWColor white = buffer.map(Color::WHITE);
+    const HWColor white = buffer.map(COLOR_WHITE);
 
     buffer.background_opaque();
-    buffer.set_background_color(Color::WHITE);
-    buffer.set_text_color(Color::BLACK);
+    buffer.set_background_color(COLOR_WHITE);
+    buffer.set_text_color(COLOR_BLACK);
     buffer.select(*this);
 
     RECT rec;

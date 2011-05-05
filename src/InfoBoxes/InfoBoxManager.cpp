@@ -514,9 +514,9 @@ InfoBoxLookDefaults(InfoBoxLook &info_box_look)
   info_box_look.value.fg_color
     = info_box_look.title.fg_color
     = info_box_look.comment.fg_color
-    = Appearance.InverseInfoBox ? Color::WHITE : Color::BLACK;
+    = Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK;
   info_box_look.background_brush.set(Appearance.InverseInfoBox
-                                     ? Color::BLACK : Color::WHITE);
+                                     ? COLOR_BLACK : COLOR_WHITE);
 
   Color border_color = Color(128, 128, 128);
   info_box_look.border_pen.set(InfoBoxWindow::BORDER_WIDTH, border_color);
@@ -530,15 +530,15 @@ InfoBoxLookDefaults(InfoBoxLook &info_box_look)
 
   info_box_look.colors[0] = border_color;
   info_box_look.colors[1] = Appearance.InverseInfoBox
-    ? Graphics::inv_redColor : Color::RED;
+    ? Graphics::inv_redColor : COLOR_RED;
   info_box_look.colors[2] = Appearance.InverseInfoBox
-    ? Graphics::inv_blueColor : Color::BLUE;
+    ? Graphics::inv_blueColor : COLOR_BLUE;
   info_box_look.colors[3] = Appearance.InverseInfoBox
-    ? Graphics::inv_greenColor : Color::GREEN;
+    ? Graphics::inv_greenColor : COLOR_GREEN;
   info_box_look.colors[4] = Appearance.InverseInfoBox
-    ? Graphics::inv_yellowColor : Color::YELLOW;
+    ? Graphics::inv_yellowColor : COLOR_YELLOW;
   info_box_look.colors[5] = Appearance.InverseInfoBox
-    ? Graphics::inv_magentaColor : Color::MAGENTA;
+    ? Graphics::inv_magentaColor : COLOR_MAGENTA;
 }
 
 void

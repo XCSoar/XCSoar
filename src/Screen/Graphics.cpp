@@ -160,29 +160,29 @@ Graphics::GetAirspaceBrushByClass(const int i,
 
 const Color Graphics::inv_redColor = Color(0xff, 0x70, 0x70);
 const Color Graphics::inv_blueColor = Color(0x90, 0x90, 0xff);
-const Color Graphics::inv_yellowColor = Color::YELLOW;
-const Color Graphics::inv_greenColor = Color::GREEN;
-const Color Graphics::inv_magentaColor = Color::MAGENTA;
+const Color Graphics::inv_yellowColor = COLOR_YELLOW;
+const Color Graphics::inv_greenColor = COLOR_GREEN;
+const Color Graphics::inv_magentaColor = COLOR_MAGENTA;
 const Color Graphics::GroundColor = Color(157, 101, 60);
 const Color Graphics::TaskColor = Color(0, 120, 0);
 
 const Color Graphics::Colours[] = {
-  Color::RED,
-  Color::GREEN,
-  Color::BLUE,
-  Color::YELLOW,
-  Color::MAGENTA,
-  Color::CYAN,
+  COLOR_RED,
+  COLOR_GREEN,
+  COLOR_BLUE,
+  COLOR_YELLOW,
+  COLOR_MAGENTA,
+  COLOR_CYAN,
   Color(0x7F, 0x00, 0x00),
   Color(0x00, 0x7F, 0x00),
   Color(0x00, 0x00, 0x7F),
   Color(0x7F, 0x7F, 0x00),
   Color(0x7F, 0x00, 0x7F),
   Color(0x00, 0x7F, 0x7F),
-  Color::WHITE,
+  COLOR_WHITE,
   Color(0xC0, 0xC0, 0xC0),
   Color(0x7F, 0x7F, 0x7F),
-  Color::BLACK,
+  COLOR_BLACK,
 };
 
 void
@@ -194,9 +194,9 @@ Graphics::Initialise()
 
   LoadUnitSymbols();
 
-  AlarmBrush.set(Color::RED);
+  AlarmBrush.set(COLOR_RED);
   WarningBrush.set(Color(0xFF, 0xA2, 0x00));
-  TrafficBrush.set(Color::GREEN);
+  TrafficBrush.set(COLOR_GREEN);
 
   hFLARMTraffic.load_big(IDB_FLARMTRAFFIC, IDB_FLARMTRAFFIC_HD);
   hTerrainWarning.load_big(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
@@ -240,7 +240,7 @@ Graphics::Initialise()
       solid_airspace_brushes[i].set(Colours[i]);
 #endif
 
-  hbWind.set(Color::GRAY);
+  hbWind.set(COLOR_GRAY);
 
   hBmpMapScaleLeft.load_big(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
   hBmpMapScaleRight.load_big(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
@@ -256,15 +256,15 @@ Graphics::Initialise()
   hbCompass.set(Color(207, 207, 207));
 
   hbThermalBand.set(Color(0x80, 0x80, 0xFF));
-  hbBestCruiseTrack.set(Color::BLUE);
-  hbFinalGlideBelow.set(Color::RED);
+  hbBestCruiseTrack.set(COLOR_BLUE);
+  hbFinalGlideBelow.set(COLOR_RED);
   hbFinalGlideBelowLandable.set(Color(0xFF, 180, 0x00));
-  hbFinalGlideAbove.set(Color::GREEN);
+  hbFinalGlideAbove.set(COLOR_GREEN);
 
-  hpWind.set(Layout::Scale(2), Color::BLACK);
+  hpWind.set(Layout::Scale(2), COLOR_BLACK);
 
-  hpBearing.set(Layout::Scale(2), Color::BLACK);
-  hpBestCruiseTrack.set(Layout::Scale(1), Color::BLUE);
+  hpBearing.set(Layout::Scale(2), COLOR_BLACK);
+  hpBestCruiseTrack.set(Layout::Scale(1), COLOR_BLUE);
   hpCompass.set(Layout::Scale(1), Color(109, 109, 109));
   hpThermalBand.set(Layout::Scale(2), Color(0x40, 0x40, 0xFF));
   hpThermalBandGlider.set(Layout::Scale(2), Color(0x00, 0x00, 0x30));
@@ -274,14 +274,14 @@ Graphics::Initialise()
 
   hpFinalGlideAbove.set(Layout::Scale(1), Color(0xA0, 0xFF, 0xA0));
 
-  hpMapScale.set(Layout::Scale(1), Color::BLACK);
+  hpMapScale.set(Layout::Scale(1), COLOR_BLACK);
   hpTerrainLine.set(Pen::DASH, Layout::Scale(1), Color(0x30, 0x30, 0x30));
   hpTerrainLineThick.set(Pen::DASH, Layout::Scale(2), Color(0x30, 0x30, 0x30));
 
   TracePen.set(2, Color(50, 243, 45));
-  ContestPen[0].set(Layout::Scale(1)+2, Color::RED);
-  ContestPen[1].set(Layout::Scale(1)+1, Color::ORANGE);
-  ContestPen[2].set(Layout::Scale(1), Color::BLUE);
+  ContestPen[0].set(Layout::Scale(1)+2, COLOR_RED);
+  ContestPen[1].set(Layout::Scale(1)+1, COLOR_ORANGE);
+  ContestPen[2].set(Layout::Scale(1), COLOR_BLUE);
 
   SmallIcon.load_big(IDB_SMALL, IDB_SMALL_HD);
   TurnPointIcon.load_big(IDB_TURNPOINT, IDB_TURNPOINT_HD);
@@ -291,24 +291,24 @@ Graphics::Initialise()
   TowerIcon.load_big(IDB_TOWER, IDB_TOWER_HD);
   PowerPlantIcon.load_big(IDB_POWER_PLANT, IDB_POWER_PLANT_HD);
 
-  hpAircraft.set(1, Color::DARK_GRAY);
-  hpAircraftSimple1.set(Layout::Scale(1), Color::BLACK);
-  hpAircraftSimple2.set(Layout::Scale(3), Color::WHITE);
+  hpAircraft.set(1, COLOR_DARK_GRAY);
+  hpAircraftSimple1.set(Layout::Scale(1), COLOR_BLACK);
+  hpAircraftSimple2.set(Layout::Scale(3), COLOR_WHITE);
   hpCanopy.set(1, Color(0x00,0x90,0x90));
   hbCanopy.set(Color(0x00,0x90,0x90));
 
     // used for landable rendering
-  hbGreen.set(Color::GREEN);
-  hbWhite.set(Color::WHITE);
-  hbMagenta.set(Color::MAGENTA);
-  hbOrange.set(Color::ORANGE);
-  hbRed.set(Color::RED);
-  hbLightGray.set(Color::LIGHT_GRAY);
+  hbGreen.set(COLOR_GREEN);
+  hbWhite.set(COLOR_WHITE);
+  hbMagenta.set(COLOR_MAGENTA);
+  hbOrange.set(COLOR_ORANGE);
+  hbRed.set(COLOR_RED);
+  hbLightGray.set(COLOR_LIGHT_GRAY);
   hbNotReachableTerrain.set(Color(224, 64, 64));
 
   hbGround.set(GroundColor);
 
-  hpTrackBearingLine.set(3, Color::GRAY);
+  hpTrackBearingLine.set(3, COLOR_GRAY);
 }
 
 void

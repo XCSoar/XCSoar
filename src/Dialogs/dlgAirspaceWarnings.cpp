@@ -281,7 +281,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     
     Color old_text_color = canvas.get_text_color();
     if (!warning.get_ack_expired())
-      canvas.set_text_color(Color::GRAY);
+      canvas.set_text_color(COLOR_GRAY);
     
     { // name, altitude info
       _stprintf(sTmp, _T("%-20s"), sName.c_str());

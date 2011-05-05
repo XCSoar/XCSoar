@@ -129,7 +129,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
   }
 
   // position of thermal band
-  Pen pen(2, Appearance.InverseInfoBox? Color::WHITE: Color::BLACK);
+  Pen pen(2, Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK);
   chart.DrawLine(fixed_zero, h, 
                  settings_computer.glide_polar_task.get_mc(), h, pen);
 

@@ -206,7 +206,7 @@ Canvas::text(int x, int y, const TCHAR *text)
 #ifdef UNICODE
   s = ::TTF_RenderUNICODE_Solid(font, (const Uint16 *)text, text_color);
 #else
-  s = ::TTF_RenderUTF8_Solid(font, text, Color::BLACK);
+  s = ::TTF_RenderUTF8_Solid(font, text, COLOR_BLACK);
 #endif
   if (s == NULL)
     return;
@@ -235,7 +235,7 @@ Canvas::text_transparent(int x, int y, const TCHAR *text)
 #ifdef UNICODE
   s = ::TTF_RenderUNICODE_Solid(font, (const Uint16 *)text, text_color);
 #else
-  s = ::TTF_RenderUTF8_Solid(font, text, Color::BLACK);
+  s = ::TTF_RenderUTF8_Solid(font, text, COLOR_BLACK);
 #endif
   if (s == NULL)
     return;
@@ -403,7 +403,7 @@ Canvas::copy_transparent_white(const Canvas &src)
 {
   assert(src.surface != NULL);
 
-  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(Color::WHITE));
+  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(COLOR_WHITE));
   copy(src);
   ::SDL_SetColorKey(src.surface, 0, 0);
 }
@@ -413,7 +413,7 @@ Canvas::copy_transparent_black(const Canvas &src)
 {
   assert(src.surface != NULL);
 
-  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(Color::BLACK));
+  ::SDL_SetColorKey(src.surface, SDL_SRCCOLORKEY, src.map(COLOR_BLACK));
   copy(src);
   ::SDL_SetColorKey(src.surface, 0, 0);
 }

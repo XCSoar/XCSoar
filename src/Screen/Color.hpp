@@ -34,6 +34,19 @@ Copyright_License {
 #include "Screen/GDI/Color.hpp"
 #endif /* !SDL */
 
+#define COLOR_WHITE Color(0xff, 0xff, 0xff)
+#define COLOR_BLACK Color(0x00, 0x00, 0x00)
+#define COLOR_GRAY Color(0x80, 0x80, 0x80)
+#define COLOR_LIGHT_GRAY Color(0xc0, 0xc0, 0xc0)
+#define COLOR_DARK_GRAY Color(0x4, 0x40, 0x40)
+#define COLOR_RED Color(0xff, 0x00, 0x00)
+#define COLOR_GREEN Color(0x00, 0xff, 0x00)
+#define COLOR_BLUE Color(0x00, 0x00, 0xff)
+#define COLOR_YELLOW Color(0xff, 0xff, 0x00)
+#define COLOR_CYAN Color(0x00, 0xff, 0xff)
+#define COLOR_MAGENTA Color(0xff, 0x00, 0xff)
+#define COLOR_ORANGE Color(0xff, 0xa2, 0x00)
+
 /**
  * Returns a lighter version of the specified color, adequate for
  * SRCAND filtering.

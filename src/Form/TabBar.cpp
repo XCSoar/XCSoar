@@ -265,7 +265,7 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar,
 void
 TabDisplay::on_paint(Canvas &canvas)
 {
-  canvas.clear(Color::BLACK);
+  canvas.clear(COLOR_BLACK);
   canvas.select(Fonts::MapBold);
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
@@ -273,21 +273,21 @@ TabDisplay::on_paint(Canvas &canvas)
   for (unsigned i = 0; i < theTabBar.GetTabCount(); i++) {
     bool inverse = false;
     if (((int)i == downindex) && (dragoffbutton == false)) {
-      canvas.set_text_color(Color::BLACK);
-      canvas.set_background_color(Color::YELLOW);
+      canvas.set_text_color(COLOR_BLACK);
+      canvas.set_background_color(COLOR_YELLOW);
 
     } else if (i == theTabBar.GetCurrentPage()) {
-        canvas.set_text_color(Color::WHITE);
+        canvas.set_text_color(COLOR_WHITE);
         if (has_focus() && !has_pointer()) {
-          canvas.set_background_color(Color::GRAY.highlight());
+          canvas.set_background_color(COLOR_GRAY.highlight());
         } else {
-          canvas.set_background_color(Color::BLACK);
+          canvas.set_background_color(COLOR_BLACK);
         }
         inverse = true;
 
     } else {
-      canvas.set_text_color(Color::BLACK);
-      canvas.set_background_color(Color::WHITE);
+      canvas.set_text_color(COLOR_BLACK);
+      canvas.set_background_color(COLOR_WHITE);
     }
     const PixelRect &rc = theTabBar.GetButtonSize(i);
 

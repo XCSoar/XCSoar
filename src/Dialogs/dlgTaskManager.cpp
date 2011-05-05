@@ -115,7 +115,7 @@ dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 void
 dlgTaskManager::OnBlackBarPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  canvas.clear(Color::BLACK);
+  canvas.clear(COLOR_BLACK);
   if (wTabBar->has_focus()) {
     PixelRect rcFocus;
     rcFocus.top = rcFocus.left = 0;

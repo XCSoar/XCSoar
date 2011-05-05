@@ -137,7 +137,7 @@ ProgressBar::on_paint(Canvas &canvas)
     position = (value - min_value) * get_width() / (max_value - min_value);
   }
 
-  canvas.fill_rectangle(0, 0, position, get_height(), Color::GREEN);
-  canvas.fill_rectangle(position, 0, get_width(), get_height(), Color::WHITE);
+  canvas.fill_rectangle(0, 0, position, get_height(), COLOR_GREEN);
+  canvas.fill_rectangle(position, 0, get_width(), get_height(), COLOR_WHITE);
 }
 #endif

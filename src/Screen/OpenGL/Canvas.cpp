@@ -298,7 +298,7 @@ Canvas::keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
 void
 Canvas::draw_focus(PixelRect rc)
 {
-  Pen pen(1, Color::DARK_GRAY);
+  Pen pen(1, COLOR_DARK_GRAY);
   select(pen);
   outline_rectangle(rc.left, rc.top, rc.right, rc.bottom);
 }
@@ -314,7 +314,7 @@ Canvas::text(int x, int y, const TCHAR *text)
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::get(font, Color::BLACK, Color::WHITE, text);
+  GLTexture *texture = TextCache::get(font, COLOR_BLACK, COLOR_WHITE, text);
   if (texture == NULL)
     return;
 
@@ -327,13 +327,13 @@ Canvas::text(int x, int y, const TCHAR *text)
   texture->bind();
   GLLogicOp logic_op(GL_AND_INVERTED);
 
-  if (background_mode != OPAQUE || background_color != Color::BLACK) {
+  if (background_mode != OPAQUE || background_color != COLOR_BLACK) {
     /* cut out the shape in black */
     glColor4f(1.0, 1.0, 1.0, 1.0);
     texture->draw(x, y);
   }
 
-  if (text_color != Color::BLACK) {
+  if (text_color != COLOR_BLACK) {
     /* draw the text color on top */
     logic_op.set(GL_OR);
     text_color.set();
@@ -352,7 +352,7 @@ Canvas::text_transparent(int x, int y, const TCHAR *text)
   if (font == NULL)
     return;
 
-  GLTexture *texture = TextCache::get(font, Color::BLACK, Color::WHITE, text);
+  GLTexture *texture = TextCache::get(font, COLOR_BLACK, COLOR_WHITE, text);
   if (texture == NULL)
     return;
 
@@ -364,7 +364,7 @@ Canvas::text_transparent(int x, int y, const TCHAR *text)
   glColor4f(1.0, 1.0, 1.0, 1.0);
   texture->draw(x, y);
 
-  if (text_color != Color::BLACK) {
+  if (text_color != COLOR_BLACK) {
     /* draw the text color on top */
     logic_op.set(GL_OR);
     text_color.set();

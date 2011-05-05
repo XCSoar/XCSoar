@@ -55,7 +55,7 @@ TextWindow::on_paint(Canvas &canvas)
 {
   canvas.clear_white();
 
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(COLOR_BLACK);
   canvas.background_transparent();
   canvas.text(1, 1, text.c_str());
 }

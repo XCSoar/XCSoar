@@ -78,13 +78,13 @@ RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y,
 {
   canvas.background_transparent();
 
-  canvas.set_text_color(inverted ? Color::BLACK : Color::WHITE);
+  canvas.set_text_color(inverted ? COLOR_BLACK : COLOR_WHITE);
   canvas.text(x + Layout::FastScale(1), y, text);
   canvas.text(x - Layout::FastScale(1), y, text);
   canvas.text(x, y + 1, text);
   canvas.text(x, y - 1, text);
 
-  canvas.set_text_color(inverted ? Color::WHITE : Color::BLACK);
+  canvas.set_text_color(inverted ? COLOR_WHITE : COLOR_BLACK);
   canvas.text(x, y, text);
 }
 
@@ -139,12 +139,12 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
                            Layout::Scale(8), Layout::Scale(8));
 
     canvas.background_transparent();
-    canvas.set_text_color(Color::BLACK);
+    canvas.set_text_color(COLOR_BLACK);
     canvas.text(x, y, Value);
     canvas.background_opaque();
   } else if (Mode.Mode == Filled) {
-    canvas.set_background_color(Color::WHITE);
-    canvas.set_text_color(Color::BLACK);
+    canvas.set_background_color(COLOR_WHITE);
+    canvas.set_text_color(COLOR_BLACK);
     canvas.text_opaque(x, y, brect, Value);
   } else if (Mode.Mode == Outlined) {
     RenderShadowedText(canvas, Value, x, y, false);
@@ -152,7 +152,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
     RenderShadowedText(canvas, Value, x, y, true);
   } else {
     canvas.background_transparent();
-    canvas.set_text_color(Color::BLACK);
+    canvas.set_text_color(COLOR_BLACK);
     canvas.text(x, y, Value);
     canvas.background_opaque();
   }

@@ -43,7 +43,7 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   Color color = Graphics::GetAirspaceColour(i);
   canvas.select(Brush(color));
 #else
-  canvas.set_background_color(Color::WHITE);
+  canvas.set_background_color(COLOR_WHITE);
   canvas.select(Graphics::GetAirspaceBrush(1)); // this is the solid brush
   canvas.set_text_color(Graphics::GetAirspaceColour(i));
 #endif

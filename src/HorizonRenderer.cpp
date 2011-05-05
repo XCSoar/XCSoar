@@ -74,7 +74,7 @@ DrawHorizon(Canvas &canvas, const PixelRect &rc)
 
   canvas.segment(Start.x, Start.y, radius, alpha1, alpha2, true);
 
-  Pen dash_pen(Pen::DASH, 2, Color::BLACK);
+  Pen dash_pen(Pen::DASH, 2, COLOR_BLACK);
   canvas.select(dash_pen);
 
   canvas.line(Start.x + radius / 2, Start.y, Start.x - radius / 2, Start.y);

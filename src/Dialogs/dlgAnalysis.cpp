@@ -129,8 +129,8 @@ ChartControl::on_paint(Canvas &canvas)
                     canvas.get_width(), canvas.get_height());
 #endif
 
-  canvas.clear(Color::WHITE);
-  canvas.set_text_color(Color::BLACK);
+  canvas.clear(COLOR_WHITE);
+  canvas.set_text_color(COLOR_BLACK);
   canvas.select(Fonts::Map);
 
   PixelRect rcgfx = get_client_rect();
@@ -505,8 +505,8 @@ OnCreateCrossSectionControl(ContainerWindow &parent, int left, int top,
   csw->set(parent, left, top, width, height, style);
   csw->set_airspaces(&airspace_database);
   csw->set_terrain(terrain);
-  csw->set_background_color(Color::WHITE);
-  csw->set_text_color(Color::BLACK);
+  csw->set_background_color(COLOR_WHITE);
+  csw->set_text_color(COLOR_BLACK);
   UpdateCrossSection();
   return csw;
 }

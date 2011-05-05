@@ -368,7 +368,7 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
   if (task) {
 
-    canvas.set_text_color(Color::BLACK);
+    canvas.set_text_color(COLOR_BLACK);
 
     WaypointVisitorMap v(projection, settings_map, task_behaviour,
                          aircraft_state,

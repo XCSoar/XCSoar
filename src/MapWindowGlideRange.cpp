@@ -160,7 +160,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
     // Set the pattern colors
     buffer.background_opaque();
-    buffer.set_background_color(Color::WHITE);
+    buffer.set_background_color(COLOR_WHITE);
     buffer.set_text_color(Color(0xf0, 0xf0, 0xf0));
 
     // Paint the whole buffer canvas with a pattern brush (small dots)
@@ -204,7 +204,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     canvas.hollow_brush();
     canvas.select(Graphics::hpTerrainLine);
     canvas.background_opaque();
-    canvas.set_background_color(Color::WHITE);
+    canvas.set_background_color(COLOR_WHITE);
 
     // Draw the TerrainLine polygon
 

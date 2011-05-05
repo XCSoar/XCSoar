@@ -122,9 +122,9 @@ WndSymbolButton::on_paint(Canvas &canvas)
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
     canvas.clear_white();
     if (is_down())
-      canvas.invert_stretch_transparent(launcher1_bitmap, Color::YELLOW);
+      canvas.invert_stretch_transparent(launcher1_bitmap, COLOR_YELLOW);
     else
-      canvas.stretch_transparent(launcher1_bitmap, Color::BLUE);
+      canvas.stretch_transparent(launcher1_bitmap, COLOR_BLUE);
   }
 
   // Draw Simulator bitmap
@@ -132,9 +132,9 @@ WndSymbolButton::on_paint(Canvas &canvas)
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
     canvas.clear_white();
     if (is_down())
-      canvas.invert_stretch_transparent(launcher2_bitmap, Color::YELLOW);
+      canvas.invert_stretch_transparent(launcher2_bitmap, COLOR_YELLOW);
     else
-      canvas.stretch_transparent(launcher2_bitmap, Color::BLUE);
+      canvas.stretch_transparent(launcher2_bitmap, COLOR_BLUE);
   }
 
 }

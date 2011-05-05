@@ -62,7 +62,7 @@ void
 TraceHistoryRenderer::render_axis(Chart &chart,
                                   const TraceVariableHistory& var)
 {
-  Pen pen0(1, Color::GRAY);
+  Pen pen0(1, COLOR_GRAY);
   chart.DrawLine(fixed_zero, fixed_zero, 
                  fixed(var.capacity()-1), fixed_zero, 
                  pen0);
@@ -73,7 +73,7 @@ void
 TraceHistoryRenderer::render_line(Chart &chart,
                                   const TraceVariableHistory& var)
 {
-  Pen pen(2, Appearance.InverseInfoBox? Color::WHITE: Color::BLACK);
+  Pen pen(2, Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK);
 
   fixed x_last, y_last;
   unsigned i=0;
@@ -100,8 +100,10 @@ void
 TraceHistoryRenderer::render_filled_posneg(Chart &chart,
                                            const TraceVariableHistory& var)
 {
-  Color c_pos(Appearance.InverseInfoBox? Graphics::inv_blueColor: Color::BLUE);
-  Color c_neg(Appearance.InverseInfoBox? Graphics::inv_redColor: Color::RED);
+  Color c_pos(Appearance.InverseInfoBox
+              ? Graphics::inv_blueColor : COLOR_BLUE);
+  Color c_neg(Appearance.InverseInfoBox
+              ? Graphics::inv_redColor : COLOR_RED);
 
   fixed x_last(fixed_zero), y_last(fixed_zero);
   unsigned i=0;

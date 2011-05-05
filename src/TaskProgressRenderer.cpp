@@ -41,7 +41,7 @@ TaskProgressRenderer::DrawTaskProgress(const TaskSummary& summary,
   center.y = (rc.bottom+rc.top)/2;
 
   const fixed sweep = fixed_two_pi*fixed(0.9);
-  Pen pen_f(1, Appearance.InverseInfoBox? Color::WHITE: Color::BLACK);
+  Pen pen_f(1, Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK);
 
   if (summary.p_remaining<fixed(0.99)) {
     canvas.select(Graphics::hbWind);

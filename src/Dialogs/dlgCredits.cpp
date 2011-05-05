@@ -73,7 +73,7 @@ OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   Font font;
   font.set(Fonts::GetStandardFontFace(), Layout::FastScale(16));
   canvas.select(font);
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(COLOR_BLACK);
   canvas.background_transparent();
 
   canvas.text(x, y, _T("version: "));

@@ -120,7 +120,7 @@ MenuBar::Button::on_paint(Canvas &canvas)
   canvas.fill_rectangle(0, 0, canvas.get_width(), canvas.get_height(),
                         menu_button_bk_color(is_enabled(), is_down()));
 
-  canvas.set_text_color(is_enabled() ? Color::BLACK : Color::GRAY);
+  canvas.set_text_color(is_enabled() ? COLOR_BLACK : COLOR_GRAY);
   canvas.background_transparent();
 
 #ifndef ENABLE_SDL

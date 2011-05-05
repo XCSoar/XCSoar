@@ -39,9 +39,9 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
   assert(i < NUMAIRSPACECOLORS);
 
   canvas.black_pen();
-  canvas.set_background_color(Color::WHITE);
+  canvas.set_background_color(COLOR_WHITE);
   canvas.select(Graphics::GetAirspaceBrush(i));
-  canvas.set_text_color(Color::BLACK);
+  canvas.set_text_color(COLOR_BLACK);
   canvas.rectangle(rc.left + Layout::FastScale(2),
                    rc.top + Layout::FastScale(2),
                    rc.right - Layout::FastScale(2),

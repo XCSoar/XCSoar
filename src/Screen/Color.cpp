@@ -23,20 +23,6 @@ Copyright_License {
 
 #include "Screen/Color.hpp"
 
-const Color
-  Color::WHITE(0xff, 0xff, 0xff),
-  Color::BLACK(0, 0, 0),
-  Color::GRAY(0x80, 0x80, 0x80),
-  Color::LIGHT_GRAY(0xc0, 0xc0, 0xc0),
-  Color::DARK_GRAY(0x40, 0x40, 0x40),
-  Color::RED(0xff, 0, 0),
-  Color::GREEN(0, 0xff, 0),
-  Color::BLUE(0, 0, 0xff),
-  Color::YELLOW(0xff, 0xff, 0),
-  Color::CYAN(0, 0xff, 0xff),
-  Color::MAGENTA(0xff, 0, 0xff),
-  Color::ORANGE(0xff, 0xa2, 0);
-
 static unsigned char light_color(unsigned char c) {
   return ((c ^ 0xff) >> 1) ^ 0xff;
 }

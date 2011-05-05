@@ -414,7 +414,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     // Select font
     canvas.background_transparent();
     canvas.select(hfSideInfo);
-    canvas.set_text_color(Color::BLACK);
+    canvas.set_text_color(COLOR_BLACK);
 
     // Calculate size of the output string
     PixelSize tsize = canvas.text_size(Buffer);
@@ -489,7 +489,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   PixelSize sz = canvas.text_size(tmp);
 
   // Draw vertical speed shadow
-  canvas.set_text_color(Color::WHITE);
+  canvas.set_text_color(COLOR_WHITE);
   canvas.text(sc[i].x + Layout::FastScale(11) + 1,
               sc[i].y - sz.cy / 2 + 1, tmp);
   canvas.text(sc[i].x + Layout::FastScale(11) - 1,
@@ -622,7 +622,7 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
     y = p.second;
   }
 
-  canvas.set_text_color(Color::WHITE);
+  canvas.set_text_color(COLOR_WHITE);
   canvas.select(hpRadar);
   canvas.select(hbRadar);
   canvas.background_transparent();

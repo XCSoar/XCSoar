@@ -125,15 +125,15 @@ public:
   }
 
   void null_pen() {
-    pen = Pen(0, Color::BLACK);
+    pen = Pen(0, COLOR_BLACK);
   }
 
   void white_pen() {
-    pen = Pen(1, Color::WHITE);
+    pen = Pen(1, COLOR_WHITE);
   }
 
   void black_pen() {
-    pen = Pen(1, Color::BLACK);
+    pen = Pen(1, COLOR_BLACK);
   }
 
   void hollow_brush() {
@@ -141,11 +141,11 @@ public:
   }
 
   void white_brush() {
-    brush = Brush(Color::WHITE);
+    brush = Brush(COLOR_WHITE);
   }
 
   void black_brush() {
-    brush = Brush(Color::BLACK);
+    brush = Brush(COLOR_BLACK);
   }
 
   void select(const Pen &_pen) {
@@ -254,7 +254,7 @@ public:
   }
 
   void clear_white() {
-    clear(Color::WHITE);
+    clear(COLOR_WHITE);
   }
 
   void round_rectangle(int left, int top, int right, int bottom,
@@ -332,7 +332,7 @@ public:
 
   void draw_focus(PixelRect rc) {
     outline_rectangle(rc.left, rc.top, rc.right, rc.bottom,
-                      Color::DARK_GRAY);
+                      COLOR_DARK_GRAY);
   }
 
   void draw_button(PixelRect rc, bool down);

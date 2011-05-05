@@ -148,7 +148,7 @@ FlightStatisticsRenderer::RenderBarographSpark(
 
   chart.DrawFilledLineGraph(fs.Altitude_Terrain);
 
-  Pen pen(2, Appearance.InverseInfoBox? Color::WHITE: Color::BLACK);
+  Pen pen(2, Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK);
   chart.DrawLineGraph(fs.Altitude, pen);
 }
 
@@ -273,7 +273,7 @@ FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
 {
   int i;
   Chart chart(canvas, rc);
-  Pen blue_pen(2, Color::BLUE);
+  Pen blue_pen(2, COLOR_BLUE);
 
   chart.ScaleYFromValue(fixed_zero);
   chart.ScaleYFromValue(-glide_polar.get_Smax() * fixed(1.1));
