@@ -41,7 +41,7 @@ struct RoutePlannerConfig {
     allow_climb(true),
     use_ceiling(false),
     safety_height_terrain(150.0),
-    reach_calc_mode(rmTurning),
+    reach_calc_mode(rmStraight),
     reach_polar_mode(rpmSafety) {}
 
   enum Mode {
