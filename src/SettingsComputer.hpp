@@ -43,10 +43,6 @@ class Waypoint;
 // control of calculations, these only changed by user interface
 // but are used read-only by calculations
 
-// All of these should be protected by LockFlightData() when setting
-// from outside calculation thread; calculation thread should not set
-// these values
-
 /** AutoWindMode (not in use) */
 enum AutoWindModeBits_t
 {
