@@ -48,9 +48,9 @@ DrawHorizon(Canvas &canvas, const PixelRect &rc)
   Start.y = IBLSCALE(55) + rc.top;
   Start.x = rc.right - IBLSCALE(19);
 
-  Pen hpHorizonSky(IBLSCALE(1), Color(0x40, 0x40, 0xff));
-  Brush hbHorizonSky(Color(0xA0, 0xA0, 0xff));
-  Pen hpHorizonGround(IBLSCALE(1), Color(106, 55, 12));
+  Pen hpHorizonSky(IBLSCALE(1), dark_color(Graphics::skyColor));
+  Brush hbHorizonSky(Graphics::skyColor);
+  Pen hpHorizonGround(IBLSCALE(1), Graphics::GroundColor);
 
 #define fixed_div fixed(1.0 / 50.0)
 #define fixed_89 fixed_int_constant(89)
