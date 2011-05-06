@@ -41,7 +41,7 @@ Copyright_License {
 void
 GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 {
-  Pen dash_pen(Pen::DASH, 1, Color(50, 50, 50));
+  Pen dash_pen(Pen::DASH, 1, COLOR_DARK_GRAY);
   canvas.select(dash_pen);
 
   const RasterPoint Orig_Screen = render_projection.GetScreenOrigin();
