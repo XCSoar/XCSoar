@@ -34,6 +34,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Compiler.h"
 
 #include <math.h>
 
@@ -56,9 +57,8 @@ SetButtons()
 }
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -84,10 +84,8 @@ SetBallastTimer(bool active)
 }
 
 static void
-OnBallastDump(WndButton &Sender)
+OnBallastDump(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
   SetBallastTimer(!XCSoarInterface::SettingsComputer().BallastTimerActive);
 }
 
@@ -197,10 +195,8 @@ SetBallast(void)
  * input due to the dump function.
  */
 static void
-OnTimerNotify(WndForm &Sender)
+OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  (void)Sender;
-
   if (protected_task_manager != NULL &&
       XCSoarInterface::SettingsComputer().BallastTimerActive && !changed) {
     /* get new GlidePolar values */

@@ -472,10 +472,8 @@ OnNorthUp(CheckBoxControl &control)
  * @return True if the event was handled, False otherwise
  */
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
-  (void)Sender;
-
   switch (key_code) {
   case VK_UP:
     if (!has_pointer())
@@ -542,14 +540,13 @@ Update()
  * repainting of the radar
  */
 static void
-OnTimerNotify(WndForm &Sender)
+OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  (void)Sender;
   Update();
 }
 
 bool
-FlarmTrafficControl::on_mouse_move(int x, int y, unsigned keys)
+FlarmTrafficControl::on_mouse_move(int x, int y, gcc_unused unsigned keys)
 {
   gestures.Update(x, y);
 

@@ -39,9 +39,8 @@ static bool RealStartExists = false;
 static AbstractTaskFactory::LegalPointVector point_types;
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -131,17 +130,15 @@ OnOptionalStartListEnter(unsigned ItemIndex)
 }
 
 static void
-OnRelocateClicked(WndButton &Sender)
+OnRelocateClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   OnOptionalStartListEnter(wOptionalStartPoints->GetCursorIndex());
   RefreshView();
 }
 
 static void
-OnRemoveClicked(WndButton &Sender)
+OnRemoveClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   const unsigned index_optional_starts = wOptionalStartPoints->GetCursorIndex()
       - (RealStartExists ? 1 : 0);
   if (ordered_task->remove_optional_start(index_optional_starts)) {

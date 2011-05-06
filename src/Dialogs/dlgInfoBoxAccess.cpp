@@ -122,9 +122,8 @@ dlgInfoBoxAccess::OnClose()
 // panel close
 
 void
-dlgInfoBoxAccess::pnlCloseOnCloseClicked(WndButton &Sender)
+dlgInfoBoxAccess::pnlCloseOnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   dlgInfoBoxAccess::OnClose();
 }
 
@@ -145,7 +144,7 @@ dlgInfoBoxAccess::pnlCloseOnTabPreShow(TabBarControl::EventType EventType)
 }
 
 Window*
-dlgInfoBoxAccess::pnlCloseLoad(SingleWindow &parent, TabBarControl* wTabBar,
+dlgInfoBoxAccess::pnlCloseLoad(gcc_unused SingleWindow &parent, TabBarControl* wTabBar,
                             WndForm* _wf, CallBackTableEntry* CallBackTable)
 {
   assert(wTabBar);

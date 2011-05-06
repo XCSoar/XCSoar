@@ -185,16 +185,14 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnTimerNotify(WndForm &Sender)
+OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  (void)Sender;
   Update();
 }
 

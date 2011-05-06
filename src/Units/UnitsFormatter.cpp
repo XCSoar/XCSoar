@@ -30,9 +30,8 @@ Copyright_License {
 #include <tchar.h>
 
 bool
-Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, size_t size)
+Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
 {
-  (void)size;
   TCHAR EW[] = _T("WEE");
   int dd, mm, ss;
 
@@ -98,9 +97,8 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, size_t size)
 }
 
 bool
-Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size)
+Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
 {
-  (void)size;
   TCHAR EW[] = _T("SNN");
   int dd, mm, ss;
 

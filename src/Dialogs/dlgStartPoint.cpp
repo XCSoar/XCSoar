@@ -82,13 +82,15 @@ OnStartPointListEnter(unsigned ItemIndex) {
   }
 }
 
-static void OnCloseClicked(WndButton &Sender){
-	(void)Sender;
+static void
+OnCloseClicked(gcc_unused WndButton &Sender)
+{
   wf->SetModalResult(mrOK);
 }
 
-static void OnClearClicked(WndButton &Sender){
-  (void)Sender;
+static void
+OnClearClicked(gcc_unused WndButton &Sender)
+{
   task.ClearStartPoints();
   changed = true;
 

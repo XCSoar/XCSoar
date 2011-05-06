@@ -92,9 +92,8 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
-  (void)Sender;
   switch (key_code) {
   case VK_LEFT:
 #ifdef GNAV
@@ -118,16 +117,14 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 }
 
 static void
-OnNextClicked(WndButton &Sender)
+OnNextClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   NextPage();
 }
 
 static void
-OnPrevClicked(WndButton &Sender)
+OnPrevClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   PrevPage();
 }
 
@@ -517,9 +514,8 @@ UpdateValuesTask(void)
 }
 
 static void
-OnTimerNotify(WndForm &Sender)
+OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  (void)Sender;
   UpdateValuesSystem();
 }
 

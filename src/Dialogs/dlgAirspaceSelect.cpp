@@ -373,9 +373,8 @@ OnWPSCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnTimerNotify(WndForm &Sender)
+OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  (void)Sender;
   if (DirectionFilterIdx == 1){
     int a;
     a = (lastHeading - iround(CommonInterface::Calculated().Heading.value_degrees()));

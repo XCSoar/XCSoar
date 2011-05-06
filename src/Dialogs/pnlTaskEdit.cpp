@@ -88,10 +88,8 @@ pnlTaskEdit::RefreshView()
 }
 
 void
-pnlTaskEdit::OnClearAllClicked(WndButton &Sender)
+pnlTaskEdit::OnClearAllClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
   if ((ordered_task->task_size() < 2) ||
       (MessageBoxX(_("Clear all points?"), _("Task edit"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
@@ -153,7 +151,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 }
 
 void
-pnlTaskEdit::OnEditTurnpointClicked(WndButton &Sender)
+pnlTaskEdit::OnEditTurnpointClicked(gcc_unused WndButton &Sender)
 {
   OnTaskListEnter(wTaskPoints->GetCursorIndex());
 }
@@ -198,12 +196,12 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
 }
 
 void
-pnlTaskEdit::OnTaskCursorCallback(unsigned i)
+pnlTaskEdit::OnTaskCursorCallback(gcc_unused unsigned i)
 {
   UpdateButtons();
 }
 void
-pnlTaskEdit::OnMakeFinish(WndButton &Sender)
+pnlTaskEdit::OnMakeFinish(gcc_unused WndButton &Sender)
 {
   ordered_task->get_factory().CheckAddFinish();
   RefreshView();
@@ -228,7 +226,7 @@ MoveUp()
 }
 
 void
-pnlTaskEdit::OnMoveUpClicked(WndButton &Sender)
+pnlTaskEdit::OnMoveUpClicked(gcc_unused WndButton &Sender)
 {
   MoveUp();
 }
@@ -252,13 +250,13 @@ MoveDown()
 }
 
 void
-pnlTaskEdit::OnMoveDownClicked(WndButton &Sender)
+pnlTaskEdit::OnMoveDownClicked(gcc_unused WndButton &Sender)
 {
   MoveDown();
 }
 
 bool
-pnlTaskEdit::OnKeyDown(WndForm &Sender, unsigned key_code)
+pnlTaskEdit::OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code){
   case VK_ESCAPE:
@@ -288,7 +286,7 @@ pnlTaskEdit::OnKeyDown(WndForm &Sender, unsigned key_code)
 }
 
 bool
-pnlTaskEdit::OnTabPreShow(TabBarControl::EventType EventType)
+pnlTaskEdit::OnTabPreShow(gcc_unused TabBarControl::EventType EventType)
 {
   if (ordered_task != *ordered_task_pointer) {
     ordered_task = *ordered_task_pointer;

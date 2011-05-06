@@ -39,10 +39,8 @@ static WndListFrame *list_control;
 static ItemHelpCallback_t itemhelp_callback;
 
 static void
-OnHelpClicked(WndButton &button)
+OnHelpClicked(gcc_unused WndButton &button)
 {
-  (void)button;
-
   assert(help_callback != NULL);
 
   unsigned i = list_control->GetCursorIndex();
@@ -51,31 +49,26 @@ OnHelpClicked(WndButton &button)
 }
 
 static void
-OnCloseClicked(WndButton &Sender)
-{
-  (void)Sender;
-
-  wf->SetModalResult(mrOK);
-}
-
-static void
-OnComboPopupListEnter(unsigned i)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnCancelClicked(WndButton &Sender)
+OnComboPopupListEnter(gcc_unused unsigned i)
 {
-  (void)Sender;
+  wf->SetModalResult(mrOK);
+}
 
+static void
+OnCancelClicked(gcc_unused WndButton &Sender)
+{
   wf->SetModalResult(mrCancel);
 }
 
 static void
-OnTimerNotify(WndForm &Sender)
+OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  (void)Sender;
   list_control->invalidate();
 }
 

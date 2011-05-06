@@ -41,9 +41,8 @@ static const Waypoint* way_point = NULL;
 
 static AbstractTaskFactory::LegalPointVector point_types;
 
-static void OnCloseClicked(WndButton &Sender)
+static void OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -160,19 +159,19 @@ OnSelect()
 }
 
 static void 
-OnSelectClicked(WndButton &Sender)
+OnSelectClicked(gcc_unused WndButton &Sender)
 {
   OnSelect();
 }
 
 static void
-OnPointListEnter(unsigned ItemIndex)
+OnPointListEnter(gcc_unused unsigned ItemIndex)
 {
   OnSelect();
 }
 
 static void
-OnPointCursorCallback(unsigned i)
+OnPointCursorCallback(gcc_unused unsigned i)
 {
   RefreshView();
 }

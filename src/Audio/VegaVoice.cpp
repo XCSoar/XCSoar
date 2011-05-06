@@ -270,9 +270,9 @@ bool VegaVoiceMessage::TimeReady(double time) {
 }
 
 
-void VegaVoiceMessage::DoSend(double time, TCHAR *text) {
-  (void)time;
-
+void
+VegaVoiceMessage::DoSend(gcc_unused double time, TCHAR *text)
+{
   /*
 
   // this ensures that if a repeated message is played,

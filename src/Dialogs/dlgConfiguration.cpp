@@ -152,10 +152,8 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
-  (void)Sender;
-
   switch (key_code) {
   case VK_LEFT:
 #ifdef GNAV

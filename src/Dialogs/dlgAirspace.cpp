@@ -131,16 +131,14 @@ OnAirspaceListEnter(unsigned ItemIndex)
 }
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnLookupClicked(WndButton &Sender)
+OnLookupClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   dlgAirspaceSelect();
 }
 

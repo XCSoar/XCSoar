@@ -48,16 +48,14 @@ RefreshStatus()
 }
 
 void
-pnlTaskManagerClose::OnCloseClicked(WndButton &Sender)
+pnlTaskManagerClose::OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   dlgTaskManager::OnClose();
 }
 
 void
-pnlTaskManagerClose::OnRevertClicked(WndButton &Sender)
+pnlTaskManagerClose::OnRevertClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   dlgTaskManager::RevertTask();
   RefreshStatus();
 }

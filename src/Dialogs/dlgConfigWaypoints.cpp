@@ -44,10 +44,8 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnWaypointNewClicked(WndButton &Sender)
+OnWaypointNewClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
   Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
   edit_waypoint.Altitude = XCSoarInterface::Calculated().TerrainValid
     ? XCSoarInterface::Calculated().TerrainAlt
@@ -61,10 +59,8 @@ OnWaypointNewClicked(WndButton &Sender)
 }
 
 static void
-OnWaypointEditClicked(WndButton &Sender)
+OnWaypointEditClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
   const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::main_window,
                                                 XCSoarInterface::Basic().Location);
   if (way_point) {
@@ -89,16 +85,14 @@ SaveWaypoints()
 }
 
 static void
-OnWaypointSaveClicked(WndButton &Sender)
+OnWaypointSaveClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   SaveWaypoints();
 }
 
 static void
-OnWaypointDeleteClicked(WndButton &Sender)
+OnWaypointDeleteClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
 #ifdef OLD_TASK
   int res;
   res = dlgWayPointSelect(XCSoarInterface::Basic().Location);

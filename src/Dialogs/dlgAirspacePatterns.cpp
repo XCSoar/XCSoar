@@ -49,15 +49,14 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 }
 
 static void
-OnAirspacePatternsListEnter(unsigned i)
+OnAirspacePatternsListEnter(gcc_unused unsigned i)
 {
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrCancel);
 }
 

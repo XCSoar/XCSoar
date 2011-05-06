@@ -39,17 +39,16 @@ void CheckDisplayTimeOut(bool sticky);
 
 #else /* !HAVE_BLANK */
 
+#include "Compiler.h"
+
 enum {
   EnableAutoBlank = false,
 };
 
-static inline  void
+static inline void
 ResetDisplayTimeOut() {}
 
-static inline void CheckDisplayTimeOut(bool sticky)
-{
-  (void)sticky;
-}
+static inline void CheckDisplayTimeOut(gcc_unused bool sticky) {}
 
 #endif /* !HAVE_BLANK */
 

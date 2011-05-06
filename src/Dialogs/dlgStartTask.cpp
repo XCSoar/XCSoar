@@ -30,8 +30,9 @@ static WndForm *wf=NULL;
 
 bool startIsValid = false;
 
-static void OnCloseClicked(WndButton &Sender){
-	(void)Sender;
+static void
+OnCloseClicked(gcc_unused WndButton &Sender)
+{
   wf->SetModalResult(mrOK);
 }
 
@@ -40,9 +41,10 @@ static void StartTaskAnyway(bool valid) {
 }
 
 
-static void OnStartTaskAnywayClicked(WndButton &Sender){
-	(void)Sender;
-        StartTaskAnyway(true);
+static void
+OnStartTaskAnywayClicked(gcc_unused WndButton &Sender)
+{
+  StartTaskAnyway(true);
   wf->SetModalResult(mrOK);
 }
 

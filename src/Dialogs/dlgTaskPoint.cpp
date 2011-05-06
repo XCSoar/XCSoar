@@ -39,6 +39,7 @@ Copyright_License {
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Gauge/TaskView.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
 #include <stdio.h>
@@ -54,9 +55,8 @@ static int next_previous = 0;
 static bool Refreshing = false;
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -66,7 +66,7 @@ class TPLabelObservationZone:
 {
 public:
   void
-  Visit(const FAISectorZone& oz)
+  Visit(gcc_unused const FAISectorZone& oz)
   {
     hide_all();
     WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZFAISector")));
@@ -74,7 +74,7 @@ public:
       wp->show();
   }
   void
-  Visit(const KeyholeZone& oz)
+  Visit(gcc_unused const KeyholeZone& oz)
   {
     hide_all();
     WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZKeyhole")));
@@ -83,7 +83,7 @@ public:
   }
 
   void
-  Visit(const BGAFixedCourseZone& oz)
+  Visit(gcc_unused const BGAFixedCourseZone& oz)
   {
     hide_all();
     WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAFixedCourse")));
@@ -92,7 +92,7 @@ public:
   }
 
   void
-  Visit(const BGAEnhancedOptionZone& oz)
+  Visit(gcc_unused const BGAEnhancedOptionZone& oz)
   {
     hide_all();
     WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAEnhancedOption")));
@@ -101,7 +101,7 @@ public:
   }
 
   void
-  Visit(const BGAStartSectorZone& oz)
+  Visit(gcc_unused const BGAStartSectorZone& oz)
   {
     hide_all();
     WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAStartSector")));
@@ -214,23 +214,23 @@ class TPReadObservationZone:
 {
 public:
   void
-  Visit(FAISectorZone& oz)
+  Visit(gcc_unused FAISectorZone& oz)
   {
   }
   void
-  Visit(KeyholeZone& oz)
+  Visit(gcc_unused KeyholeZone& oz)
   {
   }
   void
-  Visit(BGAFixedCourseZone& oz)
+  Visit(gcc_unused BGAFixedCourseZone& oz)
   {
   }
   void
-  Visit(BGAEnhancedOptionZone& oz)
+  Visit(gcc_unused BGAEnhancedOptionZone& oz)
   {
   }
   void
-  Visit(BGAStartSectorZone& oz)
+  Visit(gcc_unused BGAStartSectorZone& oz)
   {
   }
   void
@@ -433,13 +433,11 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 static void 
-OnRemoveClicked(WndButton &Sender) 
+OnRemoveClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
-    if (MessageBoxX(_("Remove task point?"),
-                          _("Task Point"), MB_YESNO | MB_ICONQUESTION) != IDYES)
-      return;
+  if (MessageBoxX(_("Remove task point?"),
+                        _("Task Point"), MB_YESNO | MB_ICONQUESTION) != IDYES)
+    return;
 
   if (!ordered_task->get_factory().remove(active_index))
     return;
@@ -449,7 +447,7 @@ OnRemoveClicked(WndButton &Sender)
 }
 
 static void
-OnDetailsClicked(WndButton &Sender)
+OnDetailsClicked(gcc_unused WndButton &Sender)
 {
   OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
   if (task_point)
@@ -457,7 +455,7 @@ OnDetailsClicked(WndButton &Sender)
 }
 
 static void
-OnRelocateClicked(WndButton &Sender)
+OnRelocateClicked(gcc_unused WndButton &Sender)
 {
   const GeoPoint &gpBearing = (active_index ?
                                ordered_task->get_tp(active_index - 1)->get_location() :
@@ -475,7 +473,7 @@ OnRelocateClicked(WndButton &Sender)
 }
 
 static void
-OnTypeClicked(WndButton &Sender)
+OnTypeClicked(gcc_unused WndButton &Sender)
 {
   if (dlgTaskPointType(wf->GetMainWindow(), &ordered_task, active_index)) {
     task_modified = true;
@@ -484,9 +482,8 @@ OnTypeClicked(WndButton &Sender)
 }
 
 static void
-OnPreviousClicked(WndButton &Sender)
+OnPreviousClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   if (active_index > 0) {
     next_previous=-1;
     wf->SetModalResult(mrOK);
@@ -494,9 +491,8 @@ OnPreviousClicked(WndButton &Sender)
 }
 
 static void
-OnNextClicked(WndButton &Sender)
+OnNextClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   if (active_index < (ordered_task->task_size() - 1)) {
     next_previous=1;
     wf->SetModalResult(mrOK);
@@ -508,7 +504,7 @@ OnNextClicked(WndButton &Sender)
  * @param Sender
  */
 static void
-OnOptionalStartsClicked(WndButton &Sender)
+OnOptionalStartsClicked(gcc_unused WndButton &Sender)
 {
   if (dlgTaskOptionalStarts(wf->GetMainWindow(), &ordered_task)) {
     task_modified =true;
@@ -517,7 +513,7 @@ OnOptionalStartsClicked(WndButton &Sender)
 }
 
 static void
-OnOZLineLengthData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnOZLineLengthData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
 {
   if (!Refreshing)
     ReadValues();
@@ -525,7 +521,7 @@ OnOZLineLengthData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnOZCylinderRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnOZCylinderRadiusData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
 {
   if (!Refreshing)
     ReadValues();
@@ -533,7 +529,7 @@ OnOZCylinderRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnOZSectorRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnOZSectorRadiusData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
 {
   if (!Refreshing)
     ReadValues();
@@ -541,7 +537,7 @@ OnOZSectorRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnOZSectorInnerRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnOZSectorInnerRadiusData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
 {
   if (!Refreshing)
     ReadValues();
@@ -549,7 +545,7 @@ OnOZSectorInnerRadiusData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnOZSectorStartRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnOZSectorStartRadialData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
 {
   if (!Refreshing)
     ReadValues();
@@ -557,7 +553,7 @@ OnOZSectorStartRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-OnOZSectorFinishRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnOZSectorFinishRadialData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
 {
   if (!Refreshing)
     ReadValues();

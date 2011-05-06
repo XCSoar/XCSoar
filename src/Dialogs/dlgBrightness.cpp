@@ -38,8 +38,9 @@ Copyright_License {
 
 static WndForm *wf=NULL;
 
-static void OnCloseClicked(WndButton &Sender){
-(void)Sender;
+static void
+OnCloseClicked(gcc_unused WndButton &Sender)
+{
 	wf->SetModalResult(mrOK);
 }
 

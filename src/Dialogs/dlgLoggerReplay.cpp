@@ -32,16 +32,14 @@ Copyright_License {
 static WndForm *wf = NULL;
 
 static void
-OnStopClicked(WndButton &Sender)
+OnStopClicked(gcc_unused WndButton &Sender)
 {
-	(void)Sender;
   replay->Stop();
 }
 
 static void
-OnStartClicked(WndButton &Sender)
+OnStartClicked(gcc_unused WndButton &Sender)
 {
-	(void)Sender;
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpFile"));
   if (wp) {
@@ -53,9 +51,8 @@ OnStartClicked(WndButton &Sender)
 }
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 

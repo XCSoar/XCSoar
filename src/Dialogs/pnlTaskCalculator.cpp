@@ -166,17 +166,16 @@ RefreshCalculator(void)
 }
 
 void
-pnlTaskCalculator::OnTargetClicked(WndButton &Sender)
+pnlTaskCalculator::OnTargetClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->hide();
   dlgTargetShowModal();
   wf->show();
 }
 
 void
-pnlTaskCalculator::OnTimerNotify(WndForm &Sender) {
-  (void)Sender;
+pnlTaskCalculator::OnTimerNotify(gcc_unused WndForm &Sender)
+{
   RefreshCalculator();
 }
 
@@ -242,7 +241,7 @@ pnlTaskCalculator::OnCruiseEfficiencyData(DataField *Sender, DataField::DataAcce
 }
 
 bool
-pnlTaskCalculator::OnTabPreShow(TabBarControl::EventType EventType)
+pnlTaskCalculator::OnTabPreShow(gcc_unused TabBarControl::EventType EventType)
 {
   if (!lazy_loaded) {
     lazy_loaded = true;
@@ -267,7 +266,7 @@ pnlTaskCalculator::OnTabPreShow(TabBarControl::EventType EventType)
 }
 
 void
-pnlTaskCalculator::OnWarningPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+pnlTaskCalculator::OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   if (*task_modified) {
     const TCHAR* message = _T("Calculator excludes unsaved task changes!");
@@ -291,7 +290,7 @@ pnlTaskCalculator::OnWarningPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 }
 
 Window*
-pnlTaskCalculator::Load(SingleWindow &parent, TabBarControl* _wTabBar,
+pnlTaskCalculator::Load(gcc_unused SingleWindow &parent, TabBarControl* _wTabBar,
     WndForm* _wf, bool* _task_modified)
 {
   if (protected_task_manager == NULL)

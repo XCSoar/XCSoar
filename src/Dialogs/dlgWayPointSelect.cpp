@@ -794,7 +794,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 }
 
 static void
-OnWaypointListEnter(unsigned i)
+OnWaypointListEnter(gcc_unused unsigned i)
 {
   if (WayPointSelectInfo.size() > 0)
     wf->SetModalResult(mrOK);
@@ -815,9 +815,8 @@ OnWPSCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnTimerNotify(WndForm &Sender)
+OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  (void)Sender;
   if (filter_data.direction_index == 1 && !XCSoarInterface::Calculated().Circling) {
     Angle a = last_heading - CommonInterface::Calculated().Heading;
     if (a.as_delta().magnitude_degrees() >= fixed(60)) {

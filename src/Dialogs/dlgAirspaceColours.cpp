@@ -54,15 +54,14 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 }
 
 static void
-OnAirspaceColoursListEnter(unsigned i)
+OnAirspaceColoursListEnter(gcc_unused unsigned i)
 {
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   ItemIndex = -1;
   wf->SetModalResult(mrOK);
 }

@@ -37,9 +37,8 @@ static fixed VegaDemoV = fixed_zero;
 static bool VegaDemoAudioClimb = true;
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 

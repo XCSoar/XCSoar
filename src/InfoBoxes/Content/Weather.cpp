@@ -146,9 +146,8 @@ InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
 }
 
 void
-InfoBoxContentWind::PnlEditOnWindSpeed(DataFieldFloat &Sender) {
-  (void)Sender;
-
+InfoBoxContentWind::PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
+{
   const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
     XCSoarInterface::SettingsComputer().ExternalWind;
 
@@ -160,9 +159,8 @@ InfoBoxContentWind::PnlEditOnWindSpeed(DataFieldFloat &Sender) {
 }
 
 void
-InfoBoxContentWind::PnlEditOnWindDirection(DataFieldFloat &Sender) {
-  (void)Sender;
-
+InfoBoxContentWind::PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
+{
   const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
     XCSoarInterface::SettingsComputer().ExternalWind;
 
@@ -246,8 +244,8 @@ InfoBoxContentWind::PnlSetupOnTabPreHide()
 }
 
 void
-InfoBoxContentWind::PnlSetupOnSetup(WndButton &Sender) {
-  (void)Sender;
+InfoBoxContentWind::PnlSetupOnSetup(gcc_unused WndButton &Sender)
+{
   InfoBoxManager::SetupFocused(InfoBoxID);
   dlgInfoBoxAccess::OnClose();
 }

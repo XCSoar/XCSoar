@@ -53,9 +53,8 @@ static unsigned target_point = 0;
 static bool IsLocked = true;
 
 static void
-OnOKClicked(WndButton &Sender)
+OnOKClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
@@ -63,7 +62,7 @@ static void InitTargetPoints();
 static void RefreshTargetPoint(void);
 
 static void
-MoveTarget(double adjust_angle)
+MoveTarget(gcc_unused double adjust_angle)
 {
   /*
   if (!task.getSettings().AATEnabled) return;
@@ -149,9 +148,8 @@ MoveTarget(double adjust_angle)
 }
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
-  (void)Sender;
   switch (key_code) {
   case '2':
   case VK_F2:
@@ -285,23 +283,21 @@ RefreshCalculator()
 }
 
 static void
-OnTimerNotify(WndForm &Sender)
+OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  (void)Sender;
   RefreshCalculator();
 }
 
 static void
-OnIsLockedClicked(WndButton &Sender)
+OnIsLockedClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   IsLocked = !IsLocked;
   protected_task_manager->target_lock(target_point, IsLocked);
   RefreshCalculator();
 }
 
 static void
-OnNextClicked(WndButton &Sender)
+OnNextClicked(gcc_unused WndButton &Sender)
 {
   if (target_point < (TaskSize - 1))
     target_point++;

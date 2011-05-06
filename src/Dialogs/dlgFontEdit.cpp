@@ -26,6 +26,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"
 #include "MainWindow.hpp"
+#include "Compiler.h"
 
 #include <stdio.h>
 
@@ -39,24 +40,20 @@ static bool locked;
 static void LoadGUI();
 
 static void
-OnCloseClicked(WndButton &Sender)
+OnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrOK);
 }
 
 static void
-OnCancelClicked(WndButton &Sender)
+OnCancelClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   wf->SetModalResult(mrCancel);
 }
 
 static void
-OnResetClicked(WndButton &Sender)
+OnResetClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
   NewLogFont = resetLogFont;
   LoadGUI();
 }
@@ -94,7 +91,7 @@ static void RedrawSampleFont(void)
 }
 
 static void
-OnData(DataField *Sender, DataField::DataAccessKind_t Mode)
+OnData(gcc_unused DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   if (!locked && Mode == DataField::daChange)
     RedrawSampleFont();

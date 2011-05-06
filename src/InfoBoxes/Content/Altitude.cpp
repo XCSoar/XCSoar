@@ -73,10 +73,8 @@ InfoBoxContentAltitude::PnlInfoLoad(SingleWindow &parent, TabBarControl* wTabBar
 }
 
 void
-InfoBoxContentAltitude::OnTimerNotify(WndForm &Sender)
+InfoBoxContentAltitude::OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  (void)Sender;
-
   PnlInfoUpdate();
 }
 
@@ -161,9 +159,8 @@ InfoBoxContentAltitude::PnlSimulatorLoad(SingleWindow &parent,
 }
 
 void
-InfoBoxContentAltitude::PnlSimulatorOnPlusBig(WndButton &Sender) {
-  (void)Sender;
-
+InfoBoxContentAltitude::PnlSimulatorOnPlusBig(gcc_unused WndButton &Sender)
+{
   if (!is_simulator())
     return;
 
@@ -171,9 +168,8 @@ InfoBoxContentAltitude::PnlSimulatorOnPlusBig(WndButton &Sender) {
 }
 
 void
-InfoBoxContentAltitude::PnlSimulatorOnPlusSmall(WndButton &Sender) {
-  (void)Sender;
-
+InfoBoxContentAltitude::PnlSimulatorOnPlusSmall(gcc_unused WndButton &Sender)
+{
   if (!is_simulator())
     return;
 
@@ -181,9 +177,8 @@ InfoBoxContentAltitude::PnlSimulatorOnPlusSmall(WndButton &Sender) {
 }
 
 void
-InfoBoxContentAltitude::PnlSimulatorOnMinusSmall(WndButton &Sender) {
-  (void)Sender;
-
+InfoBoxContentAltitude::PnlSimulatorOnMinusSmall(gcc_unused WndButton &Sender)
+{
   if (!is_simulator())
     return;
 
@@ -191,9 +186,8 @@ InfoBoxContentAltitude::PnlSimulatorOnMinusSmall(WndButton &Sender) {
 }
 
 void
-InfoBoxContentAltitude::PnlSimulatorOnMinusBig(WndButton &Sender) {
-  (void)Sender;
-
+InfoBoxContentAltitude::PnlSimulatorOnMinusBig(gcc_unused WndButton &Sender)
+{
   if (!is_simulator())
     return;
 
@@ -255,8 +249,8 @@ InfoBoxContentAltitude::PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessK
 }
 
 void
-InfoBoxContentAltitude::PnlSetupOnSetup(WndButton &Sender) {
-  (void)Sender;
+InfoBoxContentAltitude::PnlSetupOnSetup(gcc_unused WndButton &Sender)
+{
   InfoBoxManager::SetupFocused(InfoBoxID);
   dlgInfoBoxAccess::OnClose();
 }

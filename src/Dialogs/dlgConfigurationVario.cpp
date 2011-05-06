@@ -613,17 +613,15 @@ PageSwitched()
 }
 
 static void
-OnNextClicked(WndButton &Sender)
+OnNextClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   tabbed->NextPage();
   PageSwitched();
 }
 
 static void
-OnPrevClicked(WndButton &Sender)
+OnPrevClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   tabbed->PreviousPage();
   PageSwitched();
 }
@@ -637,9 +635,8 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnSaveClicked(WndButton &Sender)
+OnSaveClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   UpdateParameters(false);
   // make sure changes are sent to device
   VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
@@ -649,44 +646,39 @@ OnSaveClicked(WndButton &Sender)
 }
 
 static void
-OnDemoClicked(WndButton &Sender)
+OnDemoClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   // retrieve changes from form
   UpdateParameters(false);
   dlgVegaDemoShowModal();
 }
 
 static void
-OnSchemeVegaClicked(WndButton &Sender)
+OnSchemeVegaClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   SetParametersScheme(0);
 }
 
 static void
-OnSchemeBorgeltClicked(WndButton &Sender)
+OnSchemeBorgeltClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   SetParametersScheme(1);
 }
 
 static void
-OnSchemeCambridgeClicked(WndButton &Sender)
+OnSchemeCambridgeClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   SetParametersScheme(2);
 }
 
 static void
-OnSchemeZanderClicked(WndButton &Sender)
+OnSchemeZanderClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   SetParametersScheme(3);
 }
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
   switch (key_code) {
   case VK_LEFT:

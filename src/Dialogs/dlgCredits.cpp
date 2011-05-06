@@ -49,9 +49,8 @@ OnPrev(gcc_unused WndButton &button)
 }
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
-  (void)Sender;
   switch (key_code) {
   case VK_LEFT:
 #ifdef GNAV
@@ -79,7 +78,7 @@ OnClose(gcc_unused WndButton &button)
 }
 
 static void
-OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   const unsigned width = canvas.get_width();
   unsigned x = Layout::FastScale(10), y = x;

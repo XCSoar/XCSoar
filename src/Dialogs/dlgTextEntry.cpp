@@ -62,7 +62,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnTextPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
+OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   canvas.clear(Color(0x40, 0x40, 0x00));
 
@@ -135,10 +135,8 @@ MoveCursor(void)
 }
 
 static bool
-FormKeyDown(WndForm &Sender, unsigned key_code)
+FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 {
-  (void)Sender;
-
   switch (key_code) {
   case VK_UP:
   case VK_LEFT:
@@ -179,25 +177,25 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 }
 
 static void
-OnLeftClicked(WndButton &button)
+OnLeftClicked(gcc_unused WndButton &button)
 {
   FormKeyDown(*wf, is_altair()? VK_UP : VK_LEFT);
 }
 
 static void
-OnRightClicked(WndButton &button)
+OnRightClicked(gcc_unused WndButton &button)
 {
   FormKeyDown(*wf, is_altair()? VK_DOWN : VK_RIGHT);
 }
 
 static void
-OnUpClicked(WndButton &button)
+OnUpClicked(gcc_unused WndButton &button)
 {
   FormKeyDown(*wf, !is_altair()? VK_UP : VK_LEFT);
 }
 
 static void
-OnDownClicked(WndButton &button)
+OnDownClicked(gcc_unused WndButton &button)
 {
   FormKeyDown(*wf, !is_altair()? VK_DOWN : VK_RIGHT);
 }

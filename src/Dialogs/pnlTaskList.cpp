@@ -257,7 +257,7 @@ RenameTask()
 }
 
 void
-pnlTaskList::OnManageClicked(WndButton &Sender)
+pnlTaskList::OnManageClicked(gcc_unused WndButton &Sender)
 {
   dlgTaskManager::TaskViewRestore(wTaskView);
   browse_tabbed->SetCurrentPage(0);
@@ -265,7 +265,7 @@ pnlTaskList::OnManageClicked(WndButton &Sender)
 }
 
 void
-pnlTaskList::OnBrowseClicked(WndButton &Sender)
+pnlTaskList::OnBrowseClicked(gcc_unused WndButton &Sender)
 {
   dlgTaskManager::TaskViewRestore(wTaskView);
   browse_tabbed->SetCurrentPage(1);
@@ -273,10 +273,8 @@ pnlTaskList::OnBrowseClicked(WndButton &Sender)
 }
 
 void
-pnlTaskList::OnNewTaskClicked(WndButton &Sender)
+pnlTaskList::OnNewTaskClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
   if (((*active_task)->task_size() < 2) ||
       (MessageBoxX(_("Create new task?"), _("Task New"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
@@ -289,50 +287,51 @@ pnlTaskList::OnNewTaskClicked(WndButton &Sender)
 }
 
 void
-pnlTaskList::OnSaveClicked(WndButton &Sender)
+pnlTaskList::OnSaveClicked(gcc_unused WndButton &Sender)
 {
   SaveTask();
 }
 
 void
-pnlTaskList::OnLoadClicked(WndButton &Sender)
+pnlTaskList::OnLoadClicked(gcc_unused WndButton &Sender)
 {
   LoadTask();
 }
 
 void
-pnlTaskList::OnDeleteClicked(WndButton &Sender)
+pnlTaskList::OnDeleteClicked(gcc_unused WndButton &Sender)
 {
   DeleteTask();
 }
 
 void
-pnlTaskList::OnRenameClicked(WndButton &Sender)
+pnlTaskList::OnRenameClicked(gcc_unused WndButton &Sender)
 {
   RenameTask();
 }
 
 void
-pnlTaskList::OnTaskListEnter(unsigned ItemIndex)
+pnlTaskList::OnTaskListEnter(gcc_unused unsigned ItemIndex)
 {
   LoadTask();
 }
 
 void
-pnlTaskList::OnTaskCursorCallback(unsigned i)
+pnlTaskList::OnTaskCursorCallback(gcc_unused unsigned i)
 {
   RefreshView();
 }
 
 bool
-pnlTaskList::OnDeclareClicked(WndButton &Sender)
+pnlTaskList::OnDeclareClicked(gcc_unused WndButton &Sender)
 {
   logger.LoggerDeviceDeclare(**active_task);
   return false;
 }
 
 bool
-pnlTaskList::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
+pnlTaskList::OnTaskViewClick(gcc_unused WndOwnerDrawFrame *Sender,
+                             gcc_unused int x, gcc_unused int y)
 {
   if (!fullscreen) {
     const unsigned xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
@@ -352,7 +351,7 @@ pnlTaskList::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
 }
 
 bool
-pnlTaskList::OnTabPreShow(TabBarControl::EventType EventType)
+pnlTaskList::OnTabPreShow(gcc_unused TabBarControl::EventType EventType)
 {
   if (!lazy_loaded) {
     lazy_loaded = true;

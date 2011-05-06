@@ -24,6 +24,7 @@
 #include "IO/FileLineReader.hpp"
 #include "OS/FileUtil.hpp"
 #include "Util/StaticString.hpp"
+#include "Compiler.h"
 
 #include <cstdio>
 
@@ -152,11 +153,8 @@ IGCFileVisitor::Visit(const TCHAR *path, const TCHAR *filename)
   flight.finish();
 }
 
-int main(int argc, char **argv)
+int main(gcc_unused int argc, gcc_unused char **argv)
 {
-  (void)argc;
-  (void)argv;
-
   IGCFileVisitor visitor;
   Directory::VisitSpecificFiles(_T("."), _T("*.igc"), visitor);
   return 0;

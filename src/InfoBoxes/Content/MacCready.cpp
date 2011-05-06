@@ -75,37 +75,32 @@ InfoBoxContentMacCready::PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBa
 }
 
 void
-InfoBoxContentMacCready::PnlEditOnCloseClicked(WndButton &Sender)
+InfoBoxContentMacCready::PnlEditOnCloseClicked(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   dlgInfoBoxAccess::OnClose();
 }
 
 void
-InfoBoxContentMacCready::PnlEditOnPlusSmall(WndButton &Sender)
+InfoBoxContentMacCready::PnlEditOnPlusSmall(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("+0.1"));
 }
 
 void
-InfoBoxContentMacCready::PnlEditOnPlusBig(WndButton &Sender)
+InfoBoxContentMacCready::PnlEditOnPlusBig(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("+0.5"));
 }
 
 void
-InfoBoxContentMacCready::PnlEditOnMinusSmall(WndButton &Sender)
+InfoBoxContentMacCready::PnlEditOnMinusSmall(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("-0.1"));
 }
 
 void
-InfoBoxContentMacCready::PnlEditOnMinusBig(WndButton &Sender)
+InfoBoxContentMacCready::PnlEditOnMinusBig(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
   InfoBoxManager::ProcessQuickAccess(InfoBoxID, _T("-0.5"));
 }
 
@@ -143,17 +138,14 @@ InfoBoxContentMacCready::PnlSetupPreShow(TabBarControl::EventType EventType)
 }
 
 void
-InfoBoxContentMacCready::PnlSetupOnSetup(WndButton &Sender) {
-  (void)Sender;
+InfoBoxContentMacCready::PnlSetupOnSetup(gcc_unused WndButton &Sender) {
   InfoBoxManager::SetupFocused(InfoBoxID);
   dlgInfoBoxAccess::OnClose();
 }
 
 void
-InfoBoxContentMacCready::PnlSetupOnMode(WndButton &Sender)
+InfoBoxContentMacCready::PnlSetupOnMode(gcc_unused WndButton &Sender)
 {
-  (void)Sender;
-
   if (XCSoarInterface::SettingsComputer().auto_mc)
     Sender.SetCaption(_("AUTO"));
   else
