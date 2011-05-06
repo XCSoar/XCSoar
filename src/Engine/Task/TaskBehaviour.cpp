@@ -36,7 +36,7 @@ TaskBehaviour::TaskBehaviour():
     enable_olc(false),
     contest(OLC_Plus),
     contest_handicap(100),
-    safety_mc(fixed_one),
+    safety_mc(fixed_half),
     safety_height_arrival(300.0),
     start_max_speed_margin(0.0),
     start_max_height_margin(0),
