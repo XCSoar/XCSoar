@@ -38,6 +38,8 @@ MapWindow::on_resize(unsigned width, unsigned height)
 #ifndef ENABLE_OPENGL
   ++ui_generation;
 
+  // We only grow() the buffer here because resizing it everytime has
+  // a huge negative effect on the heap fragmentation
   buffer_canvas.grow(width, height);
   stencil_canvas.grow(width, height);
 #endif
