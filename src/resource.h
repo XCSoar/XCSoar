@@ -130,6 +130,14 @@
 #define IDB_MARGINAL_HD                5356
 #define IDB_WRENCH                      357
 #define IDB_WRENCH_HD                  5357
+#define IDB_GLOBE                       358
+#define IDB_GLOBE_HD                   5358
+#define IDB_DEVICE                      359
+#define IDB_DEVICE_HD                  5359
+#define IDB_RULES                       360
+#define IDB_RULES_HD                   5360
+#define IDB_CLOCK                       361
+#define IDB_CLOCK_HD                   5361
 
 // Next default values for new objects
 //

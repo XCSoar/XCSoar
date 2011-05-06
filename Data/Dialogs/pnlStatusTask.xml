@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+    <Panel Name="frmStatusTask">
+      <Edit Name="prpTaskTime" Caption="Assigned task time" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpETETime" Caption="Estimated task time" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpRemainingTime" Caption="Remaining time" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpTaskDistance" Caption="Task distance" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpRemainingDistance" Caption="Remaining distance" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpEstimatedSpeed" Caption="Speed estimated" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+      <Edit Name="prpAverageSpeed" Caption="Speed average" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    </Panel>

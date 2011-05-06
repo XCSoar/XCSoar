@@ -115,6 +115,11 @@ Bitmap Graphics::hBmpTabWrench;
 Bitmap Graphics::hBmpTabSettings;
 Bitmap Graphics::hBmpTabCalculator;
 
+Bitmap Graphics::hBmpTabFlight;
+Bitmap Graphics::hBmpTabSystem;
+Bitmap Graphics::hBmpTabRules;
+Bitmap Graphics::hBmpTabTimes;
+
 // used for flarm
 Brush Graphics::AlarmBrush;
 Brush Graphics::WarningBrush;
@@ -278,6 +283,11 @@ Graphics::Initialise()
   hBmpTabWrench.load((Layout::scale > 1) ? IDB_WRENCH_HD : IDB_WRENCH);
   hBmpTabSettings.load((Layout::scale > 1) ? IDB_SETTINGS_HD : IDB_SETTINGS);
   hBmpTabCalculator.load((Layout::scale > 1) ? IDB_CALCULATOR_HD : IDB_CALCULATOR);
+
+  hBmpTabFlight.load((Layout::scale > 1) ? IDB_GLOBE_HD : IDB_GLOBE);
+  hBmpTabSystem.load((Layout::scale > 1) ? IDB_DEVICE_HD : IDB_DEVICE);
+  hBmpTabRules.load((Layout::scale > 1) ? IDB_RULES_HD : IDB_RULES);
+  hBmpTabTimes.load((Layout::scale > 1) ? IDB_CLOCK_HD : IDB_CLOCK);
 
   hBmpThermalSource.load_big(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
   hBmpTarget.load_big(IDB_TARGET, IDB_TARGET_HD);
@@ -496,6 +506,11 @@ Graphics::Deinitialise()
   hBmpTabWrench.reset();
   hBmpTabSettings.reset();
   hBmpTabCalculator.reset();
+
+  hBmpTabFlight.reset();
+  hBmpTabSystem.reset();
+  hBmpTabRules.reset();
+  hBmpTabTimes.reset();
 
   hBmpThermalSource.reset();
   hBmpTarget.reset();

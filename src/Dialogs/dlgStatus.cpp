@@ -39,6 +39,11 @@ Copyright_License {
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Compiler.h"
 
+#include "Form/TabBar.hpp"
+#include "Appearance.hpp"
+#include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
+
 #include <assert.h>
 #include <stdio.h>
 
@@ -47,42 +52,16 @@ Copyright_License {
 using std::min;
 using std::max;
 
-static const TCHAR *const captions[] = {
-  N_("Flight"),
-  N_("System"),
-  N_("Task"),
-  N_("Task Rules"),
-  N_("Times"),
-};
-
 static WndForm *wf = NULL;
-static TabbedControl *tabbed;
+static TabBarControl *wTabBar;
 static int status_page = 0;
 
 static void
-SetCaption()
+SetTitle()
 {
-  static unsigned status_page;
-  TCHAR caption[64];
-
-  status_page = tabbed->GetCurrentPage();
-  _sntprintf(caption, 64, _T("%u %s"),
-             status_page + 1, gettext(captions[status_page]));
-  wf->SetCaption(caption);
-}
-
-static void
-NextPage()
-{
-  tabbed->NextPage();
-  SetCaption();
-}
-
-static void
-PrevPage()
-{
-  tabbed->PreviousPage();
-  SetCaption();
+  TCHAR title[99];
+  _stprintf(title, _T("Status: %s"), wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
+  wf->SetCaption(title);
 }
 
 static void
@@ -91,46 +70,7 @@ OnCloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-static bool
-FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
-{
-  switch (key_code) {
-  case VK_LEFT:
-#ifdef GNAV
-  case '6':
-#endif
-    ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-    PrevPage();
-    return true;
-
-  case VK_RIGHT:
-#ifdef GNAV
-  case '7':
-#endif
-    ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-    NextPage();
-    return true;
-
-  default:
-    return false;
-  }
-}
-
-static void
-OnNextClicked(gcc_unused WndButton &Sender)
-{
-  NextPage();
-}
-
-static void
-OnPrevClicked(gcc_unused WndButton &Sender)
-{
-  PrevPage();
-}
-
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnNextClicked),
-  DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -519,50 +459,108 @@ OnTimerNotify(gcc_unused WndForm &Sender)
   UpdateValuesSystem();
 }
 
-void
-dlgStatusShowModal(int start_page)
+static bool
+OnTabUpdate(TabBarControl::EventType EventType)
 {
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
-                  _T("IDR_XML_STATUS"));
-  assert(wf);
-
-  wf->SetKeyDownNotify(FormKeyDown);
-  wf->SetTimerNotify(OnTimerNotify);
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
-
-  tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
-  assert(tabbed != NULL);
-
-  if (start_page != -1) {
-    status_page = start_page;
-
-    WndButton *wb;
-    wb = ((WndButton *)wf->FindByName(_T("cmdNext")));
-    assert(wb != NULL);
-    wb->hide();
-
-    wb = ((WndButton *)wf->FindByName(_T("cmdPrev")));
-    assert(wb != NULL);
-    wb->hide();
-  }
-
-  /* restore previous page */
-  tabbed->SetCurrentPage(status_page);
-
-  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location);
-
   UpdateValuesSystem();
   UpdateValuesFlight();
   UpdateValuesTask();
   UpdateValuesRules();
   UpdateValuesTimes();
-  SetCaption();
+
+  return true;
+}
+
+void
+dlgStatusShowModal(int start_page)
+{
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  Layout::landscape ?
+                  _T("IDR_XML_STATUS_L") : _T("IDR_XML_STATUS"));
+  assert(wf);
+
+  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
+
+  wTabBar = ((TabBarControl *)wf->FindByName(_T("TabBar")));
+  assert(wTabBar != NULL);
+
+  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location);
+
+  /* setup tabs */
+
+  const DialogTabStyle_t IconsStyle = Appearance.DialogTabStyle;
+
+  const Bitmap *FlightIcon = ((IconsStyle == dtIcon) ?
+                              &Graphics::hBmpTabFlight : NULL);
+  const Bitmap *SystemIcon = ((IconsStyle == dtIcon) ?
+                               &Graphics::hBmpTabSystem : NULL);
+  const Bitmap *TaskIcon = ((IconsStyle == dtIcon) ?
+                              &Graphics::hBmpTabTask : NULL);
+  const Bitmap *RulesIcon = ((IconsStyle == dtIcon) ?
+                             &Graphics::hBmpTabRules : NULL);
+  const Bitmap *TimesIcon = ((IconsStyle == dtIcon) ?
+                             &Graphics::hBmpTabTimes : NULL);
+
+  Window* wFlight = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_FLIGHT"));
+  assert(wFlight);
+
+  const unsigned xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
+  const unsigned yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
+
+  Window* wSystem = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_SYSTEM"));
+  assert(wSystem);
+
+  Window* wTask = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_TASK"));
+  assert(wTask);
+
+  Window* wRules = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_RULES"));
+  assert(wRules);
+
+  Window* wTimes = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_TIMES"));
+  assert(wTimes);
+
+  wTabBar->AddClient(wFlight, _T("Flight"), false, FlightIcon, NULL,
+                     OnTabUpdate, SetTitle);
+
+  wTabBar->AddClient(wSystem, _T("System"), false, SystemIcon, NULL,
+                     OnTabUpdate, SetTitle);
+
+  wTabBar->AddClient(wTask, _T("Task"), false, TaskIcon, NULL,
+                     OnTabUpdate, SetTitle);
+
+  wTabBar->AddClient(wRules, _T("Rules"), false, RulesIcon, NULL,
+                     OnTabUpdate, SetTitle);
+
+  wTabBar->AddClient(wTimes, _T("Times"), false, TimesIcon, NULL,
+                     OnTabUpdate, SetTitle);
+
+  wFlight->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
+                wf->GetClientAreaWindow().get_height() - yoffset);
+  wSystem->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
+                wf->GetClientAreaWindow().get_height() - yoffset);
+  wTask->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
+                wf->GetClientAreaWindow().get_height() - yoffset);
+  wRules->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
+                wf->GetClientAreaWindow().get_height() - yoffset);
+  wTimes->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
+                wf->GetClientAreaWindow().get_height() - yoffset);
+
+  /* restore previous page */
+
+  if (start_page != -1) {
+    status_page = start_page;
+  }
+
+  wTabBar->SetCurrentPage(status_page);
+
+  wf->SetTimerNotify(OnTimerNotify);
+
+  SetTitle();
 
   wf->ShowModal();
 
   /* save page number for next time this dialog is opened */
-  status_page = tabbed->GetCurrentPage();
+  status_page = wTabBar->GetCurrentPage();
 
   delete wf;
 }

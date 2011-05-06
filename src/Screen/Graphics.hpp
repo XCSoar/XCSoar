@@ -144,10 +144,17 @@ namespace Graphics {
   extern MaskedIcon hBmpMapScaleLeft;
   extern MaskedIcon hBmpMapScaleRight;
 
+  // task dialog
   extern Bitmap hBmpTabTask;
   extern Bitmap hBmpTabWrench;
   extern Bitmap hBmpTabSettings;
   extern Bitmap hBmpTabCalculator;
+
+  // status dialog
+  extern Bitmap hBmpTabFlight;
+  extern Bitmap hBmpTabSystem;
+  extern Bitmap hBmpTabRules;
+  extern Bitmap hBmpTabTimes;
 
   // used for flarm
   extern Brush AlarmBrush;

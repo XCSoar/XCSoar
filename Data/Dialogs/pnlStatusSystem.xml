@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+    <Panel Name="frmStatusSystem">
+      <Edit Name="prpGPS" Caption="GPS lock" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpNumSat" Caption="Satellites in view" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpVario" Caption="Variometer" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpFLARM" Caption="FLARM" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpLogger" Caption="Logger" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpDeclared" Caption="Declared" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
+      <Edit Name="prpBattery" Caption="Supply voltage" X="2" Height="22" CaptionWidth="120" ReadOnly="1" />
+    </Panel>
