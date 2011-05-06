@@ -32,9 +32,12 @@ private:
   static void CommonProcessTimer();
   static int ConnectionProcessTimer(int itimeout);
   static void SystemProcessTimer();
-  static void HeapCompact();
   static void MessageProcessTimer();
   static void AirspaceProcessTimer();
+
+#ifdef _WIN32_WCE
+  static void HeapCompact();
+#endif
 };
 
 #endif

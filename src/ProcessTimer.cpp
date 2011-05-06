@@ -42,6 +42,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "GPSClock.hpp"
 
+#ifdef _WIN32_WCE
 void
 ProcessTimer::HeapCompact()
 {
@@ -53,11 +54,14 @@ ProcessTimer::HeapCompact()
     iheapcompact = 0;
   }
 }
+#endif
 
 void
 ProcessTimer::SystemProcessTimer()
 {
+#ifdef _WIN32_WCE
   HeapCompact();
+#endif
 }
 
 void

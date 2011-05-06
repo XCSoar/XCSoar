@@ -27,7 +27,11 @@ Copyright_License {
 
 #include <tchar.h>
 
+
+#ifdef _WIN32_WCE
 void MyCompactHeaps();
+#endif
+
 unsigned long FindFreeSpace(const TCHAR *path);
 void CreateDirectoryIfAbsent(const TCHAR *filename);
 

@@ -44,11 +44,11 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+#ifdef _WIN32_WCE
 // This is necessary to be called periodically to get rid of
 // memory defragmentation, since on pocket pc platforms there is no
 // automatic defragmentation.
 void MyCompactHeaps() {
-#ifdef _WIN32_WCE
 #if defined(GNAV) && !defined(__GNUC__)
   HeapCompact(GetProcessHeap(), 0);
 #else
@@ -64,8 +64,8 @@ void MyCompactHeaps() {
   if (CompactAllHeaps)
     CompactAllHeaps();
 #endif
-#endif /* WIN32 */
 }
+#endif /* _WIN32_WCE */
 
 /**
  * Calculates the free disk space for the given path
