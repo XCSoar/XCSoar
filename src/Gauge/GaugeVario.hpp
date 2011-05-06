@@ -76,12 +76,12 @@ private:
   Color colText;
   Color colTextBackgnd;
 
-  Brush redBrush;
-  Brush greenBrush;
-  Pen redPen;
-  Pen greenPen;
-  Pen redThickPen;
-  Pen greenThickPen;
+  Brush sinkBrush;
+  Brush liftBrush;
+  Pen sinkPen;
+  Pen liftPen;
+  Pen sinkThickPen;
+  Pen liftThickPen;
   Pen blankThickPen;
 
   Bitmap hBitmapClimb;

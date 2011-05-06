@@ -86,23 +86,23 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   hDrawBitMap.load(Units::GetUserVerticalSpeedUnit() == unKnots ?
                    IDB_VARIOSCALEC : IDB_VARIOSCALEA);
 
-  Color theredColor;
-  Color thegreenColor;
+  Color thesinkColor;
+  Color theliftColor;
 
   if (Appearance.InverseInfoBox) {
-    theredColor = Graphics::inv_redColor;
-    thegreenColor = Graphics::inv_blueColor;
+    thesinkColor = Graphics::inv_sinkColor;
+    theliftColor = Graphics::inv_liftColor;
   } else {
-    theredColor = COLOR_RED;
-    thegreenColor = COLOR_GREEN;
+    thesinkColor = Graphics::sinkColor;
+    theliftColor = Graphics::liftColor;
   }
 
-  redBrush.set(theredColor);
-  greenBrush.set(thegreenColor);
-  redPen.set(1, theredColor);
-  greenPen.set(1, thegreenColor);
-  redThickPen.set(Layout::Scale(5), theredColor);
-  greenThickPen.set(Layout::Scale(5), thegreenColor);
+  sinkBrush.set(thesinkColor);
+  liftBrush.set(theliftColor);
+  sinkPen.set(1, thesinkColor);
+  liftPen.set(1, theliftColor);
+  sinkThickPen.set(Layout::Scale(5), thesinkColor);
+  liftThickPen.set(Layout::Scale(5), theliftColor);
 
   if (Appearance.InverseInfoBox) {
     colText = COLOR_WHITE;
@@ -322,7 +322,7 @@ GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink, bool clear)
     return;
 
   canvas.select(clear ? blankThickPen :
-                        (i > sink ? greenThickPen: redThickPen));
+                        (i > sink ? liftThickPen: sinkThickPen));
 
   if (i > sink)
     canvas.polyline(lines + gmax + sink, i - sink);
@@ -523,9 +523,9 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
     if (Appearance.InfoBoxColors) {
       if (positive(vdiff)) {
         // too slow
-        canvas.select(redBrush);
+        canvas.select(sinkBrush);
       } else {
-        canvas.select(greenBrush);
+        canvas.select(liftBrush);
       }
     } else {
       if (Appearance.InverseInfoBox)
