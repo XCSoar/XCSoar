@@ -102,31 +102,31 @@ event=Pan right
 
 mode=pan
 type=key
-data=6
+data=APP1
 event=Pan supertoggle
 label=Pan\nOff
-location=5
+location=1
 
 mode=pan
 type=key
-data=7
+data=APP2
 event=Zoom in
 label=Zoom\nin
-location=6
+location=2
 
 mode=pan
 type=key
-data=8
+data=APP3
 event=Zoom out
 label=Zoom\nout
-location=7
+location=3
 
 mode=pan
 type=key
-data=9
+data=APP4
 event=NearestWaypointDetails pan
 label=Nearest\nWaypoint
-location=8
+location=4
 
 ##################
 
