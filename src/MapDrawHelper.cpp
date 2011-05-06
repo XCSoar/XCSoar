@@ -110,7 +110,7 @@ MapDrawHelper::buffer_render_finish()
     if (settings.transparency && AlphaBlendAvailable())
       m_canvas.alpha_blend(0, 0, m_canvas.get_width(), m_canvas.get_height(),
                            m_buffer,
-                           0, 0, m_buffer.get_width(), m_buffer.get_height(),
+                           0, 0, m_canvas.get_width(), m_canvas.get_height(),
                            60);
     else
 #endif
