@@ -100,10 +100,8 @@ void
 TraceHistoryRenderer::render_filled_posneg(Chart &chart,
                                            const TraceVariableHistory& var)
 {
-  Color c_pos(Appearance.InverseInfoBox
-              ? Graphics::inv_blueColor : COLOR_BLUE);
-  Color c_neg(Appearance.InverseInfoBox
-              ? Graphics::inv_redColor : COLOR_RED);
+  Color c_pos(Appearance.InverseInfoBox? Graphics::inv_liftColor: Graphics::liftColor);
+  Color c_neg(Appearance.InverseInfoBox? Graphics::inv_sinkColor: Graphics::sinkColor);
 
   fixed x_last(fixed_zero), y_last(fixed_zero);
   unsigned i=0;
