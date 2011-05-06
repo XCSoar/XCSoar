@@ -25,7 +25,7 @@
 
 OrderedTaskBehaviour::OrderedTaskBehaviour():
   task_scored(true),
-  aat_min_time(3600 * 5.35),
+  aat_min_time(3600 * 3),
   start_max_speed(60.0),
   start_max_height(0),
   start_max_height_ref(0),
