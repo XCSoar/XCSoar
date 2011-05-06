@@ -28,18 +28,19 @@
 #include "Units/UnitsFormatter.hpp"
 #include "Math/Screen.hpp"
 #include "Language/Language.hpp"
+#include "Screen/Graphics.hpp"
 
 #include <assert.h>
 #include <stdio.h>
 
-const Color FlarmTrafficWindow::hcWarning(0xFF, 0xA2, 0x00);
-const Color FlarmTrafficWindow::hcAlarm(0xFF, 0x00, 0x00);
-const Color FlarmTrafficWindow::hcStandard(0x00, 0x00, 0x00);
-const Color FlarmTrafficWindow::hcPassive(0x99, 0x99, 0x99);
-const Color FlarmTrafficWindow::hcSelection(0x00, 0x00, 0xFF);
-const Color FlarmTrafficWindow::hcTeam(0x74, 0xFF, 0x00);
-const Color FlarmTrafficWindow::hcBackground(0xFF, 0xFF, 0xFF);
-const Color FlarmTrafficWindow::hcRadar(0xB0, 0xB0, 0xB0);
+const Color FlarmTrafficWindow::hcPassive(Graphics::cAlertSafe);
+const Color FlarmTrafficWindow::hcWarning(Graphics::cAlertWarning);
+const Color FlarmTrafficWindow::hcAlarm(Graphics::cAlertAlarm);
+const Color FlarmTrafficWindow::hcStandard(COLOR_BLACK);
+const Color FlarmTrafficWindow::hcSelection(COLOR_BLUE);
+const Color FlarmTrafficWindow::hcTeam(COLOR_YELLOW);
+const Color FlarmTrafficWindow::hcBackground(COLOR_WHITE);
+const Color FlarmTrafficWindow::hcRadar(COLOR_LIGHT_GRAY);
 
 FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding, bool _small)
   :distance(2000),
@@ -73,12 +74,13 @@ FlarmTrafficWindow::on_create()
   hbSelection.set(hcSelection);
   hbTeam.set(hcTeam);
   hbRadar.set(hcRadar);
+  hbPassive.set(hcPassive);
 
   int width = Layout::FastScale(small ? 1 : 2);
   hpWarning.set(width, hcWarning);
   hpAlarm.set(width, hcAlarm);
   hpStandard.set(width, hcStandard);
-  hpPassive.set(width, hcPassive);
+  hpPassive.set(width, COLOR_BLACK);
   hpSelection.set(width, hcSelection);
   hpTeam.set(width, hcTeam);
 
@@ -355,8 +357,11 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
              traffic.type != FLARM_TRAFFIC::acParaGlider) ||
             traffic.speed < fixed_four)
           canvas.select(hpPassive);
-        else
+        else {
+          if (small)
+            canvas.select(hbPassive);
           canvas.select(hpStandard);
+        }
       }
     }
     break;
