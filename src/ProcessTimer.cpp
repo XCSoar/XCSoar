@@ -347,28 +347,3 @@ ProcessTimer::Process(void)
     }
   }
 }
-
-/*
-#include "Waypoint/Waypoints.hpp"
-  // if transition to flight, ensure there is a temporary waypoint available
-  // at this location for general use.
-  if (Calculated().Flight.Flying && !LastCalculated().Flight.Flying && (Basic().Time> LastBasic().Time)) {
-    const AIRCRAFT_STATE current_as = ToAircraftState(basic, Calculated());
-    const GeoPoint& location = current_as.get_location();
-    const Waypoint *from_database = way_points.lookup_location(location, fixed(3000));
-    // threshold must be large enough for runway takeoff length!
-
-      if (from_database == NULL) {
-        // need to create one
-        Waypoint wp(location);
-        wp.Name = _T("(takeoff)");
-        if (Calculated().TerrainValid) {
-          wp.Altitude = Calculated().TerrainAlt;
-        } else {
-          wp.Altitude = Basic().NavAltitude;
-        }
-        way_points.append(wp);
-        way_points.optimise();
-      }
-    }
-*/
