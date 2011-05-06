@@ -161,7 +161,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     // Set the pattern colors
     buffer.background_opaque();
     buffer.set_background_color(COLOR_WHITE);
-    buffer.set_text_color(Color(0xf0, 0xf0, 0xf0));
+    buffer.set_text_color(Color(0xd0, 0xd0, 0xd0));
 
     // Paint the whole buffer canvas with a pattern brush (small dots)
     buffer.clear(Graphics::hAboveTerrainBrush);
