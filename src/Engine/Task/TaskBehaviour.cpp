@@ -42,7 +42,7 @@ TaskBehaviour::TaskBehaviour():
     start_max_height_margin(0),
     task_type_default(FACTORY_RT),
     enable_trace(true),
-    abort_task_mode(atmTask) {}
+    abort_task_mode(atmSimple) {}
 
 void
 TaskBehaviour::all_off()
