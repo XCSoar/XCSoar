@@ -31,7 +31,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.EnableTopography = true;
   settings_map.NorthArrow = true;
   settings_map.terrain.SetDefaults();
-  settings_map.EnableTrailDrift = false;
+  settings_map.EnableTrailDrift = true;
   settings_map.EnableDetourCostMarker = false;
   settings_map.DisplayTrackBearing = dtbAuto;
   settings_map.AutoZoom = false;
