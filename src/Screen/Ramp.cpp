@@ -48,13 +48,17 @@ ColorRampLookup(const short h,
     assert(ramp_colors[i].h < ramp_colors[i + 1].h);
 
     if (h >= ramp_colors[i].h) {
-      f = (unsigned short)(h - ramp_colors[i].h) * is
+      if (interp_levels) {
+        f = (unsigned short)(h - ramp_colors[i].h) * is
           / (unsigned short)(ramp_colors[i + 1].h - ramp_colors[i].h);
-      of = is - f;
+        of = is - f;
 
-      return Color((f * ramp_colors[i + 1].r + of * ramp_colors[i].r) >> interp_levels,
-                   (f * ramp_colors[i + 1].g + of * ramp_colors[i].g) >> interp_levels,
-                   (f * ramp_colors[i + 1].b + of * ramp_colors[i].b) >> interp_levels);
+        return Color((f * ramp_colors[i + 1].r + of * ramp_colors[i].r) >> interp_levels,
+                     (f * ramp_colors[i + 1].g + of * ramp_colors[i].g) >> interp_levels,
+                     (f * ramp_colors[i + 1].b + of * ramp_colors[i].b) >> interp_levels);
+      } else {
+        return Color(ramp_colors[i].r, ramp_colors[i].g, ramp_colors[i].b);
+      }
     }
   }
 
