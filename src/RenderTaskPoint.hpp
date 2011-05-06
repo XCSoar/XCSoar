@@ -131,10 +131,6 @@ protected:
   void draw_oz_background(Canvas &canvas, const OrderedTaskPoint& tp);
   void draw_oz_foreground(const OrderedTaskPoint& tp);
   const bool m_draw_bearing;
-  const Pen pen_leg_active;
-  const Pen pen_leg_inactive;
-  const Pen pen_leg_arrow;
-  const Pen pen_isoline;
   GeoPoint m_last_point;
   unsigned m_index;
   RenderObservationZone &ozv;

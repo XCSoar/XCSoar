@@ -39,7 +39,7 @@ RenderObservationZone::RenderObservationZone()
   :layer(LAYER_SHADE),
    pen_boundary_current(Pen::SOLID, Layout::SmallScale(2), Graphics::TaskColor),
    pen_boundary_active(Pen::SOLID, Layout::SmallScale(1), Graphics::TaskColor),
-   pen_boundary_inactive(Pen::SOLID, Layout::SmallScale(1), Color(127, 127, 127))
+   pen_boundary_inactive(Pen::SOLID, Layout::SmallScale(1), dark_color(Graphics::TaskColor))
 {
 }
 
@@ -53,20 +53,19 @@ RenderObservationZone::draw_style(Canvas &canvas,
       /* past task point */
       return false;
 
+    Color color = Graphics::TaskColor;
 #ifdef ENABLE_OPENGL
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
-    Color color = Graphics::Colours[settings.colours[AATASK]];
     canvas.select(Brush(color.with_alpha(64)));
 #elif defined(ENABLE_SDL)
-    Color color = Graphics::Colours[settings.colours[AATASK]];
     canvas.select(Brush(color));
 #else /* !SDL */
     canvas.mix_mask();
 
     // this color is used as the black bit
-    canvas.set_text_color(Graphics::Colours[settings.colours[AATASK]]);
+    canvas.set_text_color(color);
     // get brush, can be solid or a 1bpp bitmap
     canvas.select(Graphics::hAirspaceBrushes[settings.brushes[AATASK]]);
 #endif /* !SDL */

@@ -51,10 +51,6 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
    m_settings_map(_settings_map),
    task_projection(_task_projection),
    m_draw_bearing(draw_bearing),
-   pen_leg_active(Pen::DASH, IBLSCALE(2), Graphics::TaskColor),
-   pen_leg_inactive(Pen::DASH, IBLSCALE(1), Graphics::TaskColor),
-   pen_leg_arrow(Pen::SOLID, IBLSCALE(1), Graphics::TaskColor),
-   pen_isoline(Pen::SOLID, IBLSCALE(2), Color(0,0,255)), 
    m_index(0),
    ozv(_ozv),
    m_active_index(0),
@@ -216,7 +212,7 @@ RenderTaskPoint::draw_target(const TaskPoint &tp)
 void 
 RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end) 
 {
-  canvas.select(leg_active() ? pen_leg_active : pen_leg_inactive);
+  canvas.select(leg_active() ? Graphics::hpTaskActive : Graphics::hpTaskInactive);
   canvas.background_transparent();
   map_canvas.line(start, end);
   canvas.background_opaque();
@@ -236,7 +232,7 @@ RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end)
   Arrow[2] = Arrow[1];
   Arrow[1] = p_p;
   
-  canvas.select(pen_leg_arrow);
+  canvas.select(Graphics::hpTaskArrow);
   canvas.polyline(Arrow, 3);
 }
 
@@ -263,8 +259,10 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
       screen[i] = m_proj.GeoToScreen(ga);
     }
 
-    canvas.select(pen_isoline);
+    canvas.select(Graphics::hpIsoline);
+    canvas.background_transparent();
     canvas.polyline(screen, 20);
+    canvas.background_opaque();
   }
 }
 
