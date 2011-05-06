@@ -155,7 +155,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
   GliderBand[4].x = GliderBand[1].x - IBLSCALE(4);
   GliderBand[4].y = GliderBand[0].y + IBLSCALE(4);
 
-  canvas.select(Graphics::hpThermalBandGlider);
+  canvas.select(Graphics::hpThermalBand);
 
   canvas.polyline(GliderBand, 2);
   canvas.polyline(GliderBand + 2, 3); // arrow head

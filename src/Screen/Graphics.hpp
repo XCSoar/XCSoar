@@ -105,12 +105,14 @@ namespace Graphics {
   extern Brush hbCanopy;
   extern Pen hpCanopy;
 
+  extern Pen hpTaskActive;
+  extern Pen hpTaskInactive;
+  extern Pen hpTaskArrow;
+  extern Pen hpIsoline;
   extern Pen hpWind;
   extern Pen hpBearing;
   extern Pen hpBestCruiseTrack;
   extern Pen hpCompass;
-  extern Pen hpThermalBand;
-  extern Pen hpThermalBandGlider;
   extern Pen hpFinalGlideAbove;
   extern Pen hpFinalGlideBelow;
   extern Pen hpFinalGlideBelowLandable;
@@ -163,6 +165,8 @@ namespace Graphics {
 
   // misc
   extern const Color TaskColor;
+  extern const Color IsolineColor;
+  extern const Color BearingColor;
   extern const Color Colours[NUMAIRSPACECOLORS];
 
   // used by infobox and gauges
@@ -175,6 +179,15 @@ namespace Graphics {
 
   extern const Color GroundColor;
 
+  extern const Color cAlertSafe;
+  extern const Color cAlertWarning;
+  extern const Color cAlertAlarm;
+  extern const Color inv_sinkColor;
+  extern const Color inv_liftColor;
+  extern const Color sinkColor;
+  extern const Color liftColor;
+  extern const Color skyColor;
+  extern const Color seaColor;
 };
 
 #endif
