@@ -144,6 +144,9 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
       < fixed(0.010))
     return;
 
+  if (Calculated().TurnMode == CLIMB)
+    return;
+
   canvas.select(Graphics::hpBestCruiseTrack);
   canvas.select(Graphics::hbBestCruiseTrack);
 
