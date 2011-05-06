@@ -54,6 +54,13 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
   const MapWindowProjection &projection = render_projection;
 
+  // if zoomed in too far out, dont draw traffic since it will be too close to
+  // the glider and so will be meaningless (serves only to clutter, cant help
+  // the pilot)
+  if ((projection.GetMapScale()> fixed_int_constant(7300)) && (flarm.GetActiveTrafficCount()>0)) {
+    return;
+  }
+
   // Create point array that will form that arrow polygon
   RasterPoint Arrow[5];
 
