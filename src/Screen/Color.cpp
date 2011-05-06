@@ -40,3 +40,10 @@ Color dark_color(Color c) {
   return Color(dark_color(c.red()), dark_color(c.green()),
                dark_color(c.blue()));
 }
+
+Color desaturate(Color c) {
+  int a = (c.red()+c.green()+c.blue())/3;
+  return Color((c.red()+a)/2,
+               (c.green()+a)/2,
+               (c.blue()+a)/2);
+}
