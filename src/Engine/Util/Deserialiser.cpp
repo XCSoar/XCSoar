@@ -185,9 +185,10 @@ Deserialiser::deserialise_waypoint()
 
   if (waypoints != NULL) {
     /* try to merge with existing waypoint from database */
-    const Waypoint *from_database = waypoints->lookup_location(loc, fixed(100));
+    const Waypoint *from_database = waypoints->get_nearest(loc);
     // XXX narrow down search by comparing the name?
-    if (from_database != NULL)
+    if (from_database != NULL &&
+        from_database->Location.distance(loc) <= fixed(100))
       /* found it, clone it for the caller to consume */
       return new Waypoint(*from_database);
   }

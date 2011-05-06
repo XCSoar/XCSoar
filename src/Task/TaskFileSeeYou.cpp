@@ -474,8 +474,8 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     if (file_wp == NULL)
       return NULL;
 
-    const Waypoint* wp = waypoints->lookup_location(file_wp->Location, fixed(100));
-    if (wp == NULL)
+    const Waypoint* wp = waypoints->get_nearest(file_wp->Location);
+    if (wp == NULL || wp->Location.distance(file_wp->Location) > fixed(100))
       wp = file_wp;
 
     wpsInTask[i] = wp;
