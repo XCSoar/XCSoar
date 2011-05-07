@@ -59,12 +59,21 @@ void
 CalculationThread::tick()
 {
   bool gps_updated;
+  bool vario_updated;
+  unsigned last_vario_counter = 0;
 
   // update and transfer master info to glide computer
   {
     ScopeLock protect(mutexBlackboard);
 
     gps_updated = device_blackboard.Basic().LocationAvailable.Modified(glide_computer.Basic().LocationAvailable);
+
+    if (device_blackboard.Basic().TotalEnergyVarioAvailable) {
+      vario_updated = last_vario_counter != device_blackboard.Basic().VarioCounter;
+    } else {
+      vario_updated = gps_updated;
+    }
+    last_vario_counter = device_blackboard.Basic().VarioCounter;
 
     // if (new GPS data available)
     if (gps_updated)
@@ -84,10 +93,15 @@ CalculationThread::tick()
 
   glide_computer.Expire();
 
-  // if (time advanced and slow calculations need to be updated)
-  if (gps_updated && glide_computer.ProcessGPS())
-    // do slow calculations
-    glide_computer.ProcessIdle();
+  bool do_idle = false;
+
+  if (gps_updated) {
+    // perform idle call if time advanced and slow calculations need to be updated
+    do_idle |= glide_computer.ProcessGPS();
+  } else if (vario_updated) {
+    // if time not advanced, update must have come from vario
+    glide_computer.ProcessFast();
+  }
 
   // values changed, so copy them back now: ONLY CALCULATED INFO
   // should be changed in DoCalculations, so we only need to write
@@ -98,13 +112,19 @@ CalculationThread::tick()
     mutexBlackboard.Unlock();
   }
 
+  // trigger updates of vario gauge
+  if (vario_updated) {
+    TriggerVarioUpdate();
+  }
+
   // if (new GPS data)
   if (gps_updated) {
     // inform map new data is ready
     CommonInterface::main_window.full_redraw();
+  }
 
-    if (!glide_computer.Basic().TotalEnergyVarioAvailable)
-      // emulate vario update
-      TriggerVarioUpdate();
+  if (do_idle) {
+    // do slow calculations last, to minimise latency
+    glide_computer.ProcessIdle();
   }
 }
