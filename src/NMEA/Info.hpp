@@ -301,6 +301,11 @@ struct NMEA_INFO {
    */
   fixed NettoVario;
 
+  /**
+   * Step counter for fast vario updates
+   */
+  unsigned VarioCounter;
+
   //##############
   //   Settings
   //##############
@@ -466,6 +471,7 @@ struct NMEA_INFO {
   void ProvideTotalEnergyVario(fixed value) {
     TotalEnergyVario = value;
     TotalEnergyVarioAvailable.Update(Time);
+    VarioCounter++;
   }
 
   /**
