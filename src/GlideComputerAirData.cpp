@@ -90,6 +90,19 @@ GlideComputerAirData::ResetFlight(const bool full)
 }
 
 /**
+ * these calculations do not require time to have been advanced
+ * they should be quick -- may be called from fast vario data
+ */
+void
+GlideComputerAirData::ProcessFast()
+{
+  Airspeed();
+  EnergyHeight();
+  BruttoVario();
+  NettoVario();
+}
+
+/**
  * Calculates some basic values
  */
 void
@@ -97,6 +110,12 @@ GlideComputerAirData::ProcessBasic()
 {
   TerrainHeight();
   ProcessSun();
+
+  Airspeed();
+  EnergyHeight();
+  GPSVario(); // <-- note inserted here, as depends on energy height
+  BruttoVario();
+  NettoVario();
 }
 
 /**
@@ -110,15 +129,12 @@ GlideComputerAirData::ProcessVertical()
 
   AutoQNH::Process(basic, calculated, SettingsComputer(), way_points);
 
+  Heading();
   TurnRate();
   Turning();
+
   Wind();
   SelectWind();
-  Heading();
-  Airspeed();
-  EnergyHeight();
-  BruttoVario();
-  NettoVario();
 
   thermallocator.Process(calculated.Circling,
                          basic.Time, basic.Location,
@@ -295,11 +311,11 @@ GlideComputerAirData::EnergyHeight()
 }
 
 /**
- * 1. Calculates the vario values for gps vario, gps total energy vario and distance vario
- * 2. Sets Vario to GPSVario or received Vario data from instrument
+ * Calculates the vario values for gps vario, gps total energy vario
+ * Sets Vario to GPSVario or received Vario data from instrument
  */
 void
-GlideComputerAirData::BruttoVario()
+GlideComputerAirData::GPSVario()
 {
   const NMEA_INFO &basic = Basic();
   const DERIVED_INFO &calculated = Calculated();
@@ -316,6 +332,13 @@ GlideComputerAirData::BruttoVario()
     vario.GPSVario = Gain / dT;
     vario.GPSVarioTE = GainTE / dT;
   }
+}
+
+void
+GlideComputerAirData::BruttoVario()
+{
+  const NMEA_INFO &basic = Basic();
+  VARIO_INFO &vario = SetCalculated();
 
   vario.BruttoVario = basic.TotalEnergyVarioAvailable
     ? basic.TotalEnergyVario

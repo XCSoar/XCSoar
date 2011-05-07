@@ -64,6 +64,8 @@ public:
 
   void SetWindEstimate(const SpeedVector wind, const int quality = 3); // JMW check
 
+  void ProcessFast();
+
 protected:
   void ResetFlight(const bool full=true);
   void ProcessBasic();
@@ -80,6 +82,7 @@ private:
   void Heading();
   void Airspeed();
   void EnergyHeight();
+  void GPSVario();
   void BruttoVario();
   void NettoVario();
   void AverageClimbRate();
