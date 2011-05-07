@@ -133,6 +133,9 @@ Waypoints::get_nearest(const GeoPoint &loc) const
 Waypoints::WaypointTree::const_iterator
 Waypoints::find_nearest(const GeoPoint &loc) const
 {
+  if (empty())
+    return waypoint_tree.end();
+
   WaypointEnvelope bb_target(loc, task_projection);
   std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
       waypoint_tree.find_nearest(bb_target);
@@ -260,10 +263,13 @@ Waypoints::find_id(const unsigned id) const
 std::vector<WaypointEnvelope>
 Waypoints::find_within_range(const GeoPoint &loc, const fixed range) const
 {
+  std::vector<WaypointEnvelope> vectors;
+  if (empty())
+    return vectors; // nothing to do
+
   WaypointEnvelope bb_target(loc, task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
 
-  std::vector<WaypointEnvelope> vectors;
   waypoint_tree.find_within_range(bb_target, mrange, std::back_inserter(vectors));
 
 #ifdef INSTRUMENT_TASK
