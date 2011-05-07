@@ -200,7 +200,7 @@ private:
   /**
    * Remove item which has worst error.
    */
-  void remove_worst(const ZZBeta& beta);
+  bool remove_worst(const ZZBeta& beta);
 
   /**
    * Find error

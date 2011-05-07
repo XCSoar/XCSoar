@@ -164,8 +164,8 @@ WindZigZag::prune_worst(const ZZBeta &beta)
 
   fixed relative_error_sqr = relative_error_squared(beta);
 
-  while (size() > 5 && relative_error_sqr > fixed(0.0025))
-    remove_worst(beta);
+  while (size() > 5 && relative_error_sqr > fixed(0.0025) &&
+         remove_worst(beta)) {}
 }
 
 std::pair<fixed, fixed>
@@ -215,12 +215,15 @@ WindZigZag::fmin(const ZZBeta& beta) const
   return acc;
 }
 
-void
+bool
 WindZigZag::remove_worst(const ZZBeta& beta)
 {
   ObsList::iterator i_worst = find_worst(beta);
-  if (i_worst != obs.end())
+  if (i_worst != obs.end()) {
     obs.erase(i_worst);
+    return true;
+  } else
+    return false;
 }
 
 fixed
