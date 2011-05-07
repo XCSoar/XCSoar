@@ -43,8 +43,6 @@ void
 GlueGaugeVario::on_paint_buffer(Canvas &canvas)
 {
   if (!blackboard_valid) {
-    blackboard_valid = true;
-
     const ScopeLock protect(mutexBlackboard);
     ReadBlackboardBasic(device_blackboard.Basic());
     ReadBlackboardCalculated(device_blackboard.Calculated());
@@ -52,4 +50,9 @@ GlueGaugeVario::on_paint_buffer(Canvas &canvas)
   }
 
   GaugeVario::on_paint_buffer(canvas);
+
+  // wait until finish drawing until we declare we've drawn this frame.
+  // This allows frames for the vario gauge to be dropped if the update
+  // rate is too high for the load.
+  blackboard_valid = true;
 }
