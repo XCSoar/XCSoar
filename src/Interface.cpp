@@ -57,14 +57,13 @@ unsigned ActionInterface::MenuTimeoutMax = 8 * 4;
 void
 XCSoarInterface::ExchangeBlackboard()
 {
-  ScopeLock protect(mutexBlackboard);
-  ReceiveBlackboard();
+  ExchangeDeviceBlackboard();
   SendSettingsComputer();
   SendSettingsMap();
 }
 
 void
-XCSoarInterface::ReceiveBlackboard()
+XCSoarInterface::ExchangeDeviceBlackboard()
 {
   ScopeLock protect(mutexBlackboard);
   ReadBlackboardBasic(device_blackboard.Basic());
@@ -74,6 +73,8 @@ XCSoarInterface::ReceiveBlackboard()
     real.gps.MovementDetected;
 
   ReadBlackboardCalculated(device_blackboard.Calculated());
+
+  device_blackboard.ReadSettingsComputer(SettingsComputer());
 }
 
 void
@@ -84,13 +85,6 @@ ActionInterface::SendSettingsComputer()
   main_window.map.SetSettingsComputer(SettingsComputer());
   calculation_thread->SetSettingsComputer(SettingsComputer());
   calculation_thread->SetScreenDistanceMeters(main_window.map.VisibleProjection().GetScreenDistanceMeters());
-
-  ScopeLock protect(mutexBlackboard);
-  // send computer settings to the device because we know
-  // that it won't be reading from them if we lock it, and
-  // then others can retrieve from it at their convenience.
-  device_blackboard.ReadSettingsComputer(SettingsComputer());
-  // TODO: trigger refresh if the settings are changed
 }
 
 /**

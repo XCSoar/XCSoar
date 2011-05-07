@@ -157,7 +157,11 @@ public:
   static bool Startup(HINSTANCE);
 
   static void ExchangeBlackboard();
-  static void ReceiveBlackboard();
+
+  /**
+   * Copy data from and to the DeviceBlackboard.
+   */
+  static void ExchangeDeviceBlackboard();
 
 private:
   static bool LoadProfile();
