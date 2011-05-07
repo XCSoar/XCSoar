@@ -36,7 +36,7 @@ Copyright_License {
  * @param _glide_computer The GlideComputer used for the CalculationThread
  */
 CalculationThread::CalculationThread(GlideComputer &_glide_computer)
-  :WorkerThread(180, 50), glide_computer(_glide_computer) {}
+  :WorkerThread(150, 50), glide_computer(_glide_computer) {}
 
 void
 CalculationThread::SetSettingsComputer(const SETTINGS_COMPUTER &new_value)
