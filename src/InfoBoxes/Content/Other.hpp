@@ -62,4 +62,11 @@ public:
   virtual void Update(InfoBoxWindow &infobox);
 };
 
+class InfoBoxContentHorizon : public InfoBoxContent
+{
+public:
+  virtual void Update(InfoBoxWindow &infobox);
+  virtual void on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas);
+};
+
 #endif

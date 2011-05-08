@@ -38,7 +38,6 @@ Copyright_License {
 #include "Compiler.h"
 #include "Interface.hpp"
 #include "Screen/Fonts.hpp"
-#include "HorizonRenderer.hpp"
 
 #include <algorithm>
 

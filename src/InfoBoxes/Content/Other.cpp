@@ -25,6 +25,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
+#include "HorizonRenderer.hpp"
 #include "Hardware/Battery.hpp"
 #include "OS/SystemLoad.hpp"
 #include "OS/MemInfo.hpp"
@@ -159,4 +160,25 @@ InfoBoxContentFreeRAM::Update(InfoBoxWindow &infobox)
     unit = _T('B');
   _stprintf(tmp, _T("%.1f%c"), f, unit);
   infobox.SetValue(tmp);
+}
+
+void
+InfoBoxContentHorizon::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
+{
+  if (CommonInterface::Basic().acceleration.Available) {
+    DrawHorizon(canvas, infobox.get_value_and_comment_rect(),
+                CommonInterface::Basic());
+  }
+}
+
+void
+InfoBoxContentHorizon::Update(InfoBoxWindow &infobox)
+{
+  infobox.SetComment(_T(""));
+  if (!CommonInterface::Basic().acceleration.Available) {
+    infobox.SetInvalid();
+    return;
+  }
+  infobox.SetValue(_T(""));
+  infobox.invalidate();
 }
