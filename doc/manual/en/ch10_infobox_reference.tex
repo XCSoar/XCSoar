@@ -32,6 +32,8 @@ sea level obtained from the terrain file at the current GPS location.}
 GPS equipped with pressure sensor or a supported external intelligent vario.}
 \ibi{QFE GPS}{QFE GPS}{This is the height above the home airfield calculated
 by subtracting the airfield elevation from the altitude reported by the GPS.}
+\ibi{Flight level}{Flight Level}{Pressure Altitude given as Flight Level. Only available if barometric altitude available and correct QNH set.}
+\ibi{Barogram}{Barogram}{Trace of altitude during flight.}
 
 \section{Aircraft state} %3,6,23,32,37,47,54
 
@@ -57,6 +59,7 @@ glider's course made good is pointing directly at the next waypoint.  This
 bearing takes into account the curvature of the Earth.}
 \ibi{Airspeed TAS}{V TAS}{True Airspeed reported by a supported external 
 intelligent vario.}
+\ibi{Attitude indicator}{Horizon}{Attitude indicator (artifical horizon) display calculated from flightpath, supplemented with acceleration and variometer data if available.}
 
 \section{Glide ratio} % 4,5,19,66,38,53,71
 
@@ -113,6 +116,10 @@ intelligent vario total energy vario value if connected to one.}
 vario value less the glider's estimated sink rate. Best used if airspeed,
 accelerometers and vario are connected, otherwise calculations are based on GPS
 measurements and wind estimates.}
+\ibi{Vario trace}{Vario}{Trace of vertical speed, as reported by the GPS, or the intelligent vario total energy vario value if connected to one.}
+\ibi{Netto vario trace}{Netto}{Trace of vertical speed of air-mass, equal to vario value less the glider's estimated sink rate.}
+\ibi{Thermal circling trace}{TC Circling}{Trace of average climb rate each turn in circling, based of the reported GPS altitude, or vario if available.}
+\ibi{Climb band}{Climb band}{Graph of average circling climb rate (horizontal axis) as a function of height (vertical axis).}
 
 \section{Atmosphere} % 25,26,48,49,50
 
@@ -169,11 +176,11 @@ turn point relative to the safety arrival altitude.}
 \ibi{Final Altitude Required}{Fin AltR}{Altitude required to finish the task.}
 \ibi{Speed Task Average}{V Task Av}{Average cross country speed while on
 current task, compensated for altitude.}
-\ibi{Speed Task Instantaneous}{V Task Ins}{Instantaneous cross country speed
-while on current task, compensated for altitude.}
-\ibi{Speed Task Achieved}{V Tsk Ach}{Achieved cross country speed while on
+\ibi{Speed task instantaneous}{V Task Ins}{Instantaneous cross country speed
+while on current task, compensated for altitude.  Equivalent to instantaneous Pirker cross-country speed.}
+\ibi{Speed task achieved}{V Tsk Ach}{Achieved cross country speed while on
 current task, compensated for altitude.}
-\ibi{Final Distance}{Fin Dis}{Distance to finish around remaining turn points.}
+\ibi{Final distance}{Fin Dis}{Distance to finish around remaining turn points.}
 \ibi{AA Time}{AA Time}{ Assigned Area Task time remaining.}
 \ibi{AA Distance Max}{AA Dmax}{ Assigned Area Task maximum distance possible for
 remainder of task.}
@@ -187,9 +194,10 @@ flying minimum possible distance remaining in minimum AAT time.}
 for remainder of task.}
 \ibi{AA Speed Tgt}{AA Vtgt}{Assigned Area Task average speed achievable around
 target points remaining in minimum AAT time.}
-\ibi{Distance Home}{Home Dis}{Distance to the home waypoint (if defined).}
+\ibi{Distance home}{Home Dis}{Distance to the home waypoint (if defined).}
 \ibi{Online Contest Distance}{OLC}{Instantaneous evaluation of the flown
 distance according to the configured Online-Contest rule set.}
+\ibi{Task progress}{Progress}{Clock-like display of distance remaining along task, showing achieved taskpoints.}
 
 \section{Waypoint} % 14,36,39,40,41,42,45,46,64
 
@@ -210,28 +218,34 @@ completion, assuming performance of ideal MacCready cruise/climb cycle.}
 assuming performance of ideal MacCready cruise/climb cycle.}
 \ibi{Task Req. Total Height Trend}{RH Trend}{Trend (or neg. of the variation) of
 the total required height to complete the task.}
+\ibi{Next altitude arrival}{WP AltA}{Absolute arrival altitude at the next waypoint in final glide.}
+\ibi{Time under max. start height}{Start Height}{The contiguous period the ship has been below the task start max. height.}
+\ibi{Task time to go (gnd spd)}{Fin ETE VMG}{Estimated time required to complete task, assuming current ground speed is maintained.}
+\ibi{Next time to go (gnd spd)}{WP ETE VMG}{Estimated time required to reach next waypoint, assuming current ground speed is maintained.}
 
 \section{Team code} % 55,56,57,58
 
-\ibi{Own Team Code}{TeamCode}{The current Team code for this aircraft. Use this
+\ibi{Team code}{TeamCode}{The current Team code for this aircraft. Use this
 to report to other team members.}
-\ibi{Team Bearing}{Team Brng}{The bearing to the team aircraft location at the
+\ibi{Team bearing}{Tm Brng}{The bearing to the team aircraft location at the
 last team code report.}
-\ibi{Team Bearing Diff}{Team B D}{The relative bearing to the team aircraft
+\ibi{Team bearing difference}{Team Bd}{The relative bearing to the team aircraft
 location at the last reported team code.}
 \ibi{Team range}{Team Dis}{The range to the team aircraft location at the last
 reported team code.}
 
-\section{Navigation gadget} % 65,75
+\section{Device status} % 65,75
 
-\ibi{Battery Voltage}{Battery}{Displays percentage of device battery remaining
+\ibi{Battery voltage/percent}{Battery}{Displays percentage of device battery remaining
 (where applicable) and status/voltage of external power supply.}
+\ibi{CPU load}{CPU}{CPU load consumed by XCSoar averaged over 5 seconds.}
+\ibi{Free RAM}{Free RAM}{Free RAM as reported by the operating system.}
 
 \section{Alternates} % 67,68,69
 
-\ibi{Alternate1 name}{Altrn 1}{Displays name and bearing to the best alternate
+\ibi{Alternate 1 name}{Altrn 1}{Displays name and bearing to the best alternate
 landing location.}
-\ibi{Alternate2 name}{Altrn 2}{Displays name and bearing to the second alternate
+\ibi{Alternate 2 name}{Altrn 2}{Displays name and bearing to the second alternate
 landing location.}
-\ibi{Alternate1 GR}{Altrn1 GR}{Geometric gradient to the arrival height above
+\ibi{Alternate 1 GR}{Altrn1 GR}{Geometric gradient to the arrival height above
 the best alternate. This is not adjusted for total energy.}
