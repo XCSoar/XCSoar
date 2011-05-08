@@ -347,6 +347,122 @@ There are objects which are too expensive to copy.  Normal locking
 applies to them.  We have a template class called \texttt{Guard} to
 enforce proper read/write locking.  Example: the task.
 
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+\chapter{User interface guidelines}
+
+\section{General}
+
+\begin{itemize}
+\item Minimise the number of colours, and re-use colour groups already defined.
+\item Too much use of colour where it is not required serves only to reduce the effectiveness of bright colours for important items.
+\item High colour saturation elements should be reserved for high importance items
+\item High contrast against background should be reserved for high importance items
+\item Attempt to adopt colours that are intuitive based the function of the item
+\item Minimise the clutter where possible --- readibility is essential for use in flight
+\item Use colours defined in \verb|Graphics| according to functional name, not their actual colour.
+\item Try to maintain consistent use of colours in all uses of that function, such as dialog graphics as well as map overlays and infoboxes.
+\item Text should always be monochrome.
+\end{itemize}
+
+Use aviation conventions or adopt best aviation human factors
+standards where possible, in particular:
+\begin{itemize}
+\item ICAO Internation Standards and Recommended Practices, Annex 4 to the Convention on International Civil Aviation (Aeronautical Charts).
+\item NASA Colour Usage recommendations and design guidelines: \verb|http://colorusage.arc.nasa.gov/|
+\end{itemize}
+
+Check for performance with respect to colour blindness.
+This site has a useful tool that can be used to convert screenshots
+to how they would look to a person with common color blindness:
+\verb|http://www.etre.com/tools/colourcheck/|.
+
+{\bf For safety purposes, avoid use of elements that may encourage or require the user to stare at the screen continuously.}
+
+\subsection{General colour conventions}
+Colour conventions generally in use throughout the program:
+\begin{itemize}
+\item Red for indicator of warning
+\item Orange for indicator of caution
+\item Green for positive indicator of safety
+\item Blue for neutral indicator of safety
+\end{itemize}
+
+\section{Dialogs and menu buttons}
+
+\subsection{Colors}
+Colour conventions in use are:
+\begin{itemize}
+\item Grey for buttons
+\item Buttons and other widgets rendered with an evenly shaded border
+\item Yellow for clicked items
+\item Light blue for the key focused item
+\item Medium blue for dialog title bar
+\item Text is black if the item is enabled
+\item Text is greyed out (but still visible) if the item is disabled
+\end{itemize}
+
+\subsection{Usability}
+\begin{itemize}
+\item Minimum size of buttons should be X by Y mm
+\item Ensure all dialogs are navigable using cursor keys only
+\item Ensure the focussed item is clearly identified.  The rectangle
+  of the widget on the canvas may be drawn using the \verb|fill_focus| method
+  of \verb|Canvas|.
+\end{itemize}
+
+\section{Main graphics}
+
+\subsection{Colors}
+Colour conventions in use, in order of priority, are:
+\begin{itemize}
+\item Aircraft black and white, for neutrality but clear identification
+\item Traffic (FLARM) use alarm green, orange, and red.
+\item Lift is vibrant green, sink is copper orange.
+\item Aircraft navigation (route, best cruise track) is (ICAO) dark purple-blue
+\item Task navigation lines and areas are (ICAO) magenta.
+\item Updraft sources and other updraft derived data is sky blue.
+\end{itemize}
+
+(Todo) airspace alert colours
+
+Map culture (topography) and terrain rendering should conform to ICAO
+Annex 4 where appropriate.  Note that some modifications are
+reasonable for electronic use given that Annex 4 deals with paper
+charts.  Nevertheless, the colour conventions are useful to adopt as they are
+likely to be intuitive and are designed for aviation use.
+
+\subsection{Pen styles}
+
+\begin{itemize}
+\item Map culture should be rendered with a thin pen
+\item Thicker pens used for important (e.g.\ task, navigational, airspace) lines
+\item Dashed lines are used to increase perceptual priority
+\end{itemize}
+
+\subsection{Map overlays}
+Elements on the map that are not part of the map layer, such as additional
+informational widgets (final glide bar, wind, north arrow) should be rendered
+so as to help those elements be visually separated from the map:
+
+\begin{itemize}
+\item Generally adopt higher contrast (higher colour saturation or darker shade) than the background map layer elements.
+
+\item For elements covering an area (non line), draw the entire element or a border
+with a luminosity contrasting pen, of width \verb|IBLSCALE(1)|.
+
+\item Consider whether the widget is required in all flying states and display modes.
+if it does not serve a direct functional purpose in some states/modes, do not
+render it.
+
+\item Avoid locating widgets at the aircraft symbol (ownship symbol).
+It is important to keep this area clear so the aircraft symbol can be easily found.
+
+\end{itemize}
+
+Elements that may be rendered over each other should be organised in order of
+priority, particularly with alert warning items above caution items above non-alert items.
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \appendix
 
 \chapter{GNU General Public License}\label{cha:gnu-general-public}
