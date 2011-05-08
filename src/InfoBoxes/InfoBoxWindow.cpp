@@ -468,6 +468,9 @@ InfoBoxWindow::on_resize(unsigned width, unsigned height)
   recValue.top = recTitle.bottom;
   recValue.bottom = recComment.top;
 
+  recValueAndComment = recValue;
+  recValueAndComment.bottom = recComment.bottom;
+
   return true;
 }
 

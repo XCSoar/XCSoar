@@ -113,6 +113,7 @@ private:
   PixelRect recTitle;
   PixelRect recValue;
   PixelRect recComment;
+  PixelRect recValueAndComment;
 
   int colorValue;
   int colorComment;
@@ -246,6 +247,9 @@ public:
 
   const PixelRect get_value_rect() const {
     return recValue;
+  }
+  const PixelRect get_value_and_comment_rect() const {
+    return recValueAndComment;
   }
 
 protected:
