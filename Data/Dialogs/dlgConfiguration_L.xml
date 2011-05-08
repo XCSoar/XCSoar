@@ -51,7 +51,7 @@
         <DataField DataType="filereader"/>
       </Edit>
     
-      <Edit Name="prpTopographyFile" Caption="Topography file" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Specifies the file defining the topological features.">
+      <Edit Name="prpTopographyFile" Caption="Topography file" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Specifies the file defining the topographical features.">
         <DataField DataType="filereader"/>
       </Edit>
     
