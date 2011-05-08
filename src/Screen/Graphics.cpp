@@ -172,7 +172,7 @@ const Color Graphics::inv_yellowColor = COLOR_YELLOW;
 const Color Graphics::inv_greenColor = COLOR_GREEN;
 const Color Graphics::inv_magentaColor = COLOR_MAGENTA;
 
-const Color Graphics::cAlertSafe = Color(0x29,0xb2,0x14);
+const Color Graphics::cAlertSafe = Color(0x1d,0x9b,0xc5);
 const Color Graphics::cAlertWarning = Color(0xfe,0x84,0x38);
 const Color Graphics::cAlertAlarm = Color(0xfb,0x35,0x2f);
 
