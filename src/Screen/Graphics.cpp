@@ -177,7 +177,7 @@ const Color Graphics::cAlertWarning = Color(0xfe,0x84,0x38);
 const Color Graphics::cAlertAlarm = Color(0xfb,0x35,0x2f);
 
 static Color clrSepia(0x78,0x31,0x18);
-const Color Graphics::GroundColor = COLOR_BROWN;
+const Color Graphics::GroundColor = Color(0x80,0x45,0x15);
 const Color Graphics::skyColor = Color(0x0a,0xb9,0xf3);
 const Color Graphics::seaColor = Color(0xbd,0xc5,0xd5); // ICAO open water area
 
