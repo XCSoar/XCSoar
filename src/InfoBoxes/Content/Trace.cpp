@@ -161,7 +161,8 @@ InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canva
   ThermalBandRenderer::DrawThermalBandSpark(CommonInterface::Basic(),
                                             CommonInterface::Calculated(),
                                             CommonInterface::SettingsComputer(),
-                                            canvas, get_spark_rect(infobox), 
+                                            canvas,
+                                            infobox.get_value_and_comment_rect(),
                                             XCSoarInterface::SettingsComputer());
 }
 
@@ -179,7 +180,7 @@ InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canv
 {
   TaskProgressRenderer::DrawTaskProgress(CommonInterface::Calculated().common_stats.
                                          ordered_summary,
-                                         canvas, get_spark_rect(infobox));
+                                         canvas, infobox.get_value_and_comment_rect());
 }
 
 void
