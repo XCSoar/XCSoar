@@ -135,6 +135,13 @@ struct FLARM_TRAFFIC {
     return Angle::from_xy(relative_north, relative_east);
   }
 
+  bool is_passive() const {
+    return ((type != acGlider &&
+             type != acHangGlider &&
+             type != acParaGlider) ||
+            speed < fixed_four);
+  }
+
   /**
    * Clear this object if its data has expired.
    *

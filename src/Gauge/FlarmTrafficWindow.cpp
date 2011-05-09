@@ -352,14 +352,10 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
         canvas.select(hbSelection);
       } else {
         canvas.hollow_brush();
-        if ((traffic.type != FLARM_TRAFFIC::acGlider &&
-             traffic.type != FLARM_TRAFFIC::acHangGlider &&
-             traffic.type != FLARM_TRAFFIC::acParaGlider) ||
-            traffic.speed < fixed_four)
+        if (traffic.is_passive())
           canvas.select(hpPassive);
-        else {
+        else
           canvas.select(hpStandard);
-        }
       }
     }
     break;
