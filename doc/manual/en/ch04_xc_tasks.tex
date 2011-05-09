@@ -6,6 +6,35 @@ flying, modified during flight.  Waypoints are advanced automatically
 or may be cycled through manually.  This chapter also describes the
 use of IGC loggers with XCSoar.
 
+There are three task modes available:
+\begin{description}
+\item[Ordered task] This is the natural cross-country task type,
+in which the task consists of a start point, zero or more waypoints,
+and a finish point.  The task points are to be flown in order.
+\item[Goto task] Flight to a single destination.
+\item[Abort task] Provides options to fly to the nearest landing points.
+\end{description}
+
+Note that in goto and abort modes, the ordered task is retained an may be resumed
+later, preserving any statistics about achievement in the task.
+
+\section{Goto tasks}
+
+Goto tasks may be established by selecting a waypoint from the map,
+the waypoint list, or any other mechanism (e.g.\ alternate dialog),
+and select ``Goto''.  In goto task mode, selecting
+\bmenu{Nav}\blink\bmenu{Task resume} resumes the ordered task (if
+any).
+
+\subsection{Automatic goto}
+
+If no ordered task is defined, then on takeoff, a goto task is automatically
+established with the takeoff point as the destination, or the nearest airfield
+if it was close to the takeoff point.
+
+Whether or not a task is defined, the takeoff point is always
+generated and appears in the waypoint list for later reference or use.
+
 \section{Editing tasks}
 
 You can edit tasks in several ways.  Some methods are more useful for
