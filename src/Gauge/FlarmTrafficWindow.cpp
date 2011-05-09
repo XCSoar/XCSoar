@@ -358,8 +358,6 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
             traffic.speed < fixed_four)
           canvas.select(hpPassive);
         else {
-          if (small)
-            canvas.select(hbPassive);
           canvas.select(hpStandard);
         }
       }
