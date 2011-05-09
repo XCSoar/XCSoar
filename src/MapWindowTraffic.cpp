@@ -111,15 +111,15 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // Fill the Arrow array with a normal arrow pointing north
     Arrow[0].x = -4;
-    Arrow[0].y = 5;
+    Arrow[0].y = 6;
     Arrow[1].x = 0;
-    Arrow[1].y = -6;
+    Arrow[1].y = -8;
     Arrow[2].x = 4;
-    Arrow[2].y = 5;
+    Arrow[2].y = 6;
     Arrow[3].x = 0;
-    Arrow[3].y = 2;
+    Arrow[3].y = 3;
     Arrow[4].x = -4;
-    Arrow[4].y = 5;
+    Arrow[4].y = 6;
 
     // Select brush depending on AlarmLevel
     switch (traffic.alarm_level) {
