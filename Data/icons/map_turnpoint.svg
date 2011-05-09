@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -9,12 +8,14 @@
    xmlns="http://www.w3.org/2000/svg"
    xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
    xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
-   version="1.1"
-   width="5"
-   height="5"
+   version="1.0"
+   width="7"
+   height="7"
    id="svg2816"
-   inkscape:version="0.47 r22583"
-   sodipodi:docname="turnpoint.svg">
+   inkscape:version="0.46"
+   sodipodi:docname="map_turnpoint.svg"
+   sodipodi:version="0.32"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <metadata
      id="metadata9">
     <rdf:RDF>
@@ -40,13 +41,14 @@
      inkscape:window-height="774"
      id="namedview7"
      showgrid="true"
-     inkscape:zoom="11.313708"
-     inkscape:cx="-3.7728639"
-     inkscape:cy="-0.29647437"
-     inkscape:window-x="-4"
-     inkscape:window-y="-4"
+     inkscape:zoom="31.999999"
+     inkscape:cx="0.051117835"
+     inkscape:cy="3.1249997"
+     inkscape:window-x="314"
+     inkscape:window-y="43"
      inkscape:window-maximized="1"
-     inkscape:current-layer="layer5">
+     inkscape:current-layer="layer5"
+     inkscape:snap-global="false">
     <inkscape:grid
        type="xygrid"
        id="grid4698"
@@ -158,8 +160,20 @@
      inkscape:label="NOAA_Image"
      transform="translate(0,-14)">
     <path
-       style="fill:#000000;fill-opacity:1;stroke:none"
-       d="M 2.5,14 C 1.1192881,14 0,15.119288 0,16.5 0,17.880712 1.1192881,19 2.5,19 3.880712,19 5,17.880712 5,16.5 5,15.119288 3.880712,14 2.5,14 z m 0,1 C 3.328427,15 4,15.671573 4,16.5 4,17.328427 3.328427,18 2.5,18 1.6715729,18 1,17.328427 1,16.5 1,15.671573 1.6715729,15 2.5,15 z"
-       id="path4770-1" />
+       sodipodi:type="star"
+       style="opacity:1;fill:none;fill-opacity:1;fill-rule:evenodd;stroke:#624e90;stroke-width:1;stroke-linecap:round;stroke-linejoin:miter;stroke-miterlimit:2;stroke-dasharray:none;stroke-dashoffset:0;stroke-opacity:1"
+       id="path2394"
+       sodipodi:sides="4"
+       sodipodi:cx="2"
+       sodipodi:cy="1"
+       sodipodi:r1="3.3126474"
+       sodipodi:r2="1.35"
+       sodipodi:arg1="1.5613626"
+       sodipodi:arg2="2.3467608"
+       inkscape:flatsided="false"
+       inkscape:rounded="0"
+       inkscape:randomized="0"
+       d="M 2.0312501,4.3124999 L 1.0544535,1.9635569 L -1.3124999,1.0312501 L 1.0364431,0.054453517 L 1.9687499,-2.3124999 L 2.9455465,0.036443093 L 5.3124999,0.96874985 L 2.9635569,1.9455465 L 2.0312501,4.3124999 z"
+       transform="translate(1.5,16.5)" />
   </g>
 </svg>
