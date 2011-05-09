@@ -636,7 +636,7 @@ Chart::DrawArrow(const fixed x, const fixed y, const fixed mag,
 
 void 
 Chart::DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, 
-                   const Brush &brush)
+                   const Brush &brush, const Pen* pen)
 {
   if (vals.size()<2)
     return;
@@ -653,7 +653,11 @@ Chart::DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals,
   line[1].y = line[2].y;
   
   canvas.select(brush);
-  canvas.null_pen();
+  if (pen == NULL) {
+    canvas.null_pen();
+  } else {
+    canvas.select(*pen);
+  }
   canvas.polygon(line, fsize);
 }
 

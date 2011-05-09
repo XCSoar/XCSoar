@@ -75,7 +75,8 @@ public:
                 const fixed xmax, const fixed ymax, enum Style Style);
   void DrawFilledLine(const fixed xmin, const fixed ymin,
                 const fixed xmax, const fixed ymax, Color &colour);
-  void DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, const Brush &brush);
+  void DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, const Brush &brush,
+                   const Pen* pen= NULL);
   void DrawDot(const fixed x, const fixed y, const int width);
 
   void ScaleYFromData(const LeastSquares &lsdata);
