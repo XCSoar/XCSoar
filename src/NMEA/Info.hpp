@@ -256,6 +256,14 @@ struct NMEA_INFO {
   fixed PressureAltitude;
   Validity PressureAltitudeAvailable;
 
+  /**
+   * Is the pressure altitude given by a "weak" source?  This is used
+   * to choose vendor-specific NMEA sentences over a semi-generic one
+   * like PGRMZ.  Needed when Vega is improperly muxed with FLARM, to
+   * use Vega's pressure altitude instead of alternating between both.
+   */
+  bool PressureAltitudeWeak;
+
   /** Altitude used for navigation (GPS or Baro) */
   fixed NavAltitude;
 
@@ -403,6 +411,21 @@ struct NMEA_INFO {
    */
   void ProvidePressureAltitude(fixed value) {
     PressureAltitude = value;
+    PressureAltitudeWeak = false;
+    PressureAltitudeAvailable.Update(Time);
+  }
+
+  /**
+   * Same as ProvidePressureAltitude(), but don't overwrite a "strong"
+   * value.
+   */
+  void ProvideWeakPressureAltitude(fixed value) {
+    if (PressureAltitudeAvailable && !PressureAltitudeWeak)
+      /* don't overwrite "strong" value */
+      return;
+
+    PressureAltitude = value;
+    PressureAltitudeWeak = true;
     PressureAltitudeAvailable.Update(Time);
   }
 

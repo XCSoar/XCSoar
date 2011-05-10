@@ -680,7 +680,7 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
          altitude above 1013.25 hPa - since the don't have a "FLARM"
          device driver, we use the auto-detected "isFlarm" flag
          here */
-      GPS_INFO->ProvidePressureAltitude(value);
+      GPS_INFO->ProvideWeakPressureAltitude(value);
     else
       GPS_INFO->ProvideBaroAltitudeTrue(value);
   }

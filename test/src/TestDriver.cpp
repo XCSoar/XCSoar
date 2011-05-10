@@ -461,6 +461,14 @@ TestVega()
   nmea_info.reset();
   nmea_info.Time = fixed(1297230000);
 
+  /* enable FLARM mode (switches the $PGRMZ parser to pressure
+     altitude) */
+  NMEAParser parser;
+  ok1(parser.ParseNMEAString_Internal("$PFLAU,0,0,0,1,0,,0,,*63", &nmea_info));
+  ok1(parser.ParseNMEAString_Internal("$PGRMZ,2447,F,2*0F", &nmea_info));
+  ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(equals(nmea_info.PressureAltitude, 745.845));
+
   ok1(device->ParseNMEA("$PDSWC,0,1002000,100,115*54", &nmea_info));
   ok1(nmea_info.settings.mac_cready_available);
   ok1(equals(nmea_info.settings.mac_cready, 0));
@@ -476,6 +484,11 @@ TestVega()
   ok1(equals(nmea_info.IndicatedAirspeed, 0));
   ok1(!nmea_info.static_pressure_available);
   ok1(!nmea_info.BaroAltitudeAvailable);
+  ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(equals(nmea_info.PressureAltitude, 762));
+
+  /* parse $PGRMZ again, it should be ignored */
+  ok1(parser.ParseNMEAString_Internal("$PGRMZ,2447,F,2*0F", &nmea_info));
   ok1(nmea_info.PressureAltitudeAvailable);
   ok1(equals(nmea_info.PressureAltitude, 762));
 
@@ -654,7 +667,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(305);
+  plan_tests(312);
 
   TestGeneric();
   TestFLARM();
