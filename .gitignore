@@ -19,7 +19,6 @@ results/terrain.txt
 *.gcda.info
 app_*.info
 Doc/html/*
-Doc/cloc.txt
 output
 perf.data
 perf.data.old
