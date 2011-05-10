@@ -58,17 +58,28 @@ struct FLARM_TRAFFIC {
   /** Is the target in stealth mode */
   bool stealth;
 
+  /** Has the geographical location been calculated yet? */
   bool location_available;
+
+  /** Was the direction of the target received from the flarm or calculated? */
   bool track_received;
+
+  /** Was the speed of the target received from the flarm or calculated? */
   bool speed_received;
+
+  /** Has the absolute altitude of the target been calculated yet? */
   bool altitude_available;
+
+  /** Was the turn rate of the target received from the flarm or calculated? */
   bool turn_rate_received;
+
+  /** Was the climb_rate of the target received from the flarm or calculated? */
   bool climb_rate_received;
+
+  /** Has the averaged climb rate of the target been calculated yet? */
   bool climb_rate_avg30s_available;
 
-  /**
-   * Is this object valid, or has it expired already?
-   */
+  /** Is this object valid, or has it expired already? */
   Validity valid;
 
   /** Location of the FLARM target */
@@ -76,7 +87,6 @@ struct FLARM_TRAFFIC {
 
   /** Distance from our plane to the FLARM target */
   fixed distance;
-
 
   /** TrackBearing of the FLARM target */
   Angle track;
@@ -110,8 +120,11 @@ struct FLARM_TRAFFIC {
 
   unsigned short id_type;
   unsigned short alarm_level;
+
+  /** Type of the aircraft */
   AircraftType type;
 
+  /** Average climb rate over 30s */
   fixed climb_rate_avg30s;
 
   bool IsDefined() const {
@@ -122,6 +135,10 @@ struct FLARM_TRAFFIC {
     return (alarm_level > 0 && alarm_level < 4);
   }
 
+  /**
+   * Does the target have a name?
+   * @return True if a name has been assigned to the target
+   */
   bool HasName() const {
     return !name.empty();
   }
