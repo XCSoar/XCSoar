@@ -68,12 +68,17 @@ public:
    *
    * @param now the current time stamp in seconds
    * @param max_age the maximum age in seconds
+   * @return true if the value is expired
    */
-  void Expire(fixed now, fixed max_age) {
+  bool Expire(fixed now, fixed max_age) {
     if (positive(last) &&
         (now < last || /* time warp? */
-         now > last + max_age)) /* expired? */
+         now > last + max_age)) { /* expired? */
       Clear();
+      return true;
+    } else
+      /* not expired */
+      return false;
   }
 
   bool IsValid() const {
