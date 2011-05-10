@@ -13,10 +13,6 @@ results/terrain.txt
 *.log
 *.dmp
 *.so
-*.gcno
-*.gcno.info
-*.gcda
-*.gcda.info
 app_*.info
 Doc/html/*
 output

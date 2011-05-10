@@ -10,7 +10,7 @@ endif
 #COVSTART = geninfo -q --no-checksum -b $(topdir) -i $(topdir)/src
 #COVEND = geninfo -q --no-checksum -b $(topdir) $(topdir)/src
 
-LCOVOPTS = --no-checksum -q -b $(topdir) -d $(topdir)/src
+LCOVOPTS = --no-checksum -q -b $(topdir) -d $(TARGET_OUTPUT_DIR)/src
 
 COVSTART = lcov -c -i $(LCOVOPTS) -o app_base.info
 COVEND = lcov -c $(LCOVOPTS) -o app_test.info

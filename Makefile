@@ -609,23 +609,10 @@ $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJ
 
 $(TARGET_OUTPUT_DIR)/$(SRC)/Version.o: $(topdir)/VERSION.txt
 
-IGNORE	:= \( -name .svn -o -name CVS -o -name .git \) -prune -o
-
-clean: cleancov FORCE
+clean: FORCE
 	@$(NQ)echo "cleaning all"
 	$(Q)rm -rf output
 	$(RM) $(BUILDTESTS)
-
-cleancov: FORCE
-	@$(NQ)echo "cleaning cov"
-	$(Q)find ./ $(IGNORE) \( \
-		   -name '*.bb' \
-		-o -name '*.bbg' \
-		-o -name '*.gcda' \
-		-o -name '*.gcda.info' \
-		-o -name '*.gcno' \
-		-o -name '*.gcno.info' \
-	\) -type f -print | xargs -r $(RM)
 
 .PHONY: FORCE
 
