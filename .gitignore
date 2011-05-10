@@ -13,7 +13,6 @@ results/terrain.txt
 *.log
 *.dmp
 *.so
-app_*.info
 Doc/html/*
 output
 perf.data
