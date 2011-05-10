@@ -1,7 +1,9 @@
 ifeq ($(COVERAGE),y)
 FLAGS_COVERAGE := --coverage -g
+COVERAGE_LDLIBS := --coverage
 else
 FLAGS_COVERAGE :=
+COVERAGE_LDLIBS :=
 endif
 
 # uses lcov
