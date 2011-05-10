@@ -56,6 +56,7 @@ DeviceBlackboard::Initialise()
   last_location_available.Clear();
   last_te_vario_available.Clear();
   last_netto_vario_available.Clear();
+  last_vario_counter = 0;
 
   // Clear the gps_info and calculated_info
   gps_info.reset();
@@ -414,6 +415,9 @@ DeviceBlackboard::Merge()
 
   if (last_location_available != Basic().LocationAvailable) {
     last_location_available = Basic().LocationAvailable;
+    TriggerGPSUpdate();
+  } else if (last_vario_counter != Basic().VarioCounter) {
+    last_vario_counter = Basic().VarioCounter;
     TriggerGPSUpdate();
   }
 
