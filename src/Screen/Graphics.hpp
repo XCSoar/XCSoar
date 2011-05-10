@@ -139,6 +139,9 @@ namespace Graphics {
   extern MaskedIcon FieldReachableIcon, FieldUnreachableIcon;
   extern MaskedIcon hBmpThermalSource;
   extern MaskedIcon hBmpTarget;
+  extern MaskedIcon hBmpTrafficSafe;
+  extern MaskedIcon hBmpTrafficWarning;
+  extern MaskedIcon hBmpTrafficAlarm;
   extern MaskedIcon hBmpTeammatePosition;
 
   extern MaskedIcon hBmpMapScaleLeft;

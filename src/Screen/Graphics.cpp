@@ -64,6 +64,7 @@ MaskedIcon Graphics::hLogger, Graphics::hLoggerOff;
 MaskedIcon Graphics::hCruise, Graphics::hClimb,
            Graphics::hFinalGlide, Graphics::hAbort;
 MaskedIcon Graphics::hGPSStatus1, Graphics::hGPSStatus2;
+MaskedIcon Graphics::hBmpTrafficSafe, Graphics::hBmpTrafficWarning, Graphics::hBmpTrafficAlarm;
 
 Pen Graphics::hpAircraft;
 Pen Graphics::hpAircraftSimple1;
@@ -292,6 +293,10 @@ Graphics::Initialise()
   hBmpThermalSource.load_big(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
   hBmpTarget.load_big(IDB_TARGET, IDB_TARGET_HD);
 
+  hBmpTrafficSafe.load_big(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
+  hBmpTrafficWarning.load_big(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
+  hBmpTrafficAlarm.load_big(IDB_TRAFFIC_ALARM, IDB_TRAFFIC_ALARM_HD, false);
+
   hbCompass.set(Color(207, 207, 207));
 
   hbThermalBand.set(skyColor);
@@ -514,6 +519,10 @@ Graphics::Deinitialise()
 
   hBmpThermalSource.reset();
   hBmpTarget.reset();
+
+  hBmpTrafficSafe.reset();
+  hBmpTrafficWarning.reset();
+  hBmpTrafficAlarm.reset();
 
   hbCompass.reset();
 
