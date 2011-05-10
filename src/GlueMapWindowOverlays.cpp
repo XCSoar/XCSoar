@@ -89,6 +89,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 {
   int offset = 0;
 
+  // draw logger status
   if (logger != NULL && logger->isLoggerActive()) {
     bool flip = (Basic().DateTime.second % 2) == 0;
     MaskedIcon &icon = flip ? Graphics::hLogger : Graphics::hLoggerOff;
@@ -96,6 +97,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
     icon.draw(canvas, rc.right - offset, rc.bottom - icon.get_size().cy);
   }
 
+  // draw flight mode
   MaskedIcon *bmp;
 
   if (task != NULL && (task->get_mode() == TaskManager::MODE_ABORT))
@@ -111,6 +113,28 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 
   bmp->draw(canvas, rc.right - offset,
             rc.bottom - bmp->get_size().cy - Layout::Scale(4));
+
+  // draw flarm status
+  const FLARM_STATE &flarm = Basic().flarm;
+  if (!flarm.available || (flarm.GetActiveTrafficCount()==0))
+    return;
+  switch (flarm.alarm_level) {
+  case 0:
+    bmp = &Graphics::hBmpTrafficSafe;
+    break;
+  case 1:
+    bmp = &Graphics::hBmpTrafficWarning;
+    break;
+  case 2:
+  case 3:
+    bmp = &Graphics::hBmpTrafficAlarm;
+    break;
+  };
+
+  offset += bmp->get_size().cx + Layout::Scale(6);
+
+  bmp->draw(canvas, rc.right - offset,
+            rc.bottom - bmp->get_size().cy - Layout::Scale(2));
 }
 
 void
