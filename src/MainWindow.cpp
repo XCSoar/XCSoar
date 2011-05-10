@@ -188,6 +188,7 @@ MainWindow::ReinitialiseLayout()
   InfoBoxManager::Create(rc, ib_layout);
   map_rect = ib_layout.remaining;
 
+  popup.reset();
   popup.set(rc);
 
   if (vario != NULL)
