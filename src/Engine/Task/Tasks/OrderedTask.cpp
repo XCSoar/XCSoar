@@ -388,6 +388,9 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
       && (task_behaviour.optimise_targets_range)
       && (get_ordered_task_behaviour().aat_min_time > fixed_zero)) {
 
+    calc_min_target(state, 
+                    get_ordered_task_behaviour().aat_min_time + fixed(task_behaviour.optimise_targets_margin));
+
     if (task_behaviour.optimise_targets_bearing) {
       if (task_points[activeTaskPoint]->type == TaskPoint::AAT) {
         AATPoint *ap = (AATPoint *)task_points[activeTaskPoint];
