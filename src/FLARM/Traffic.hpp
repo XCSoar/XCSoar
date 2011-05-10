@@ -135,11 +135,12 @@ struct FLARM_TRAFFIC {
     return Angle::from_xy(relative_north, relative_east);
   }
 
+  bool IsPowered() const {
+    return type != acGlider && type != acHangGlider && type != acParaGlider;
+  }
+
   bool is_passive() const {
-    return ((type != acGlider &&
-             type != acHangGlider &&
-             type != acParaGlider) ||
-            speed < fixed_four);
+    return IsPowered() || speed < fixed_four;
   }
 
   /**
