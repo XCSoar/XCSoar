@@ -231,7 +231,7 @@ private:
   void DrawCrossHairs(Canvas &canvas) const;
   void DrawThermalBand(Canvas &canvas, const PixelRect &rc) const;
   void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const;
-  void DrawHorizon(Canvas &canvas, const PixelRect &rc) const;
+  void DrawStallRatio(Canvas &canvas, const PixelRect &rc) const;
   virtual void DrawThermalEstimate(Canvas &canvas) const;
   virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
 

@@ -435,3 +435,16 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
                                          true);
   }
 }
+
+void
+GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
+{
+  if (Basic().StallRatioAvailable) {
+    // JMW experimental, display stall sensor
+    fixed s = max(fixed_zero, min(fixed_one, Basic().StallRatio));
+    long m = (long)((rc.bottom - rc.top) * s * s);
+
+    canvas.black_pen();
+    canvas.line(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
+  }
+}

@@ -311,24 +311,6 @@ GlueMapWindow::on_paint(Canvas &canvas)
   // Draw center screen cross hair in pan mode
   if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
     DrawCrossHairs(canvas);
-
-#if 0
-  /*
-  FEATURE TEMPORARILY DISABLED DUE TO USE OF XCSOAR IN FAI COMPETITIONS
-
-  This feature of having a backup artificial horizon based on inferred
-  orientation from GPS and vario data is useful, and reasonably well
-  tested, but has the issue of potentially invalidating use of XCSoar in
-  FAI contests due to rule ref Annex A to Section 3 (2010 Edition) 4.1.2
-  "No instruments permitting pilots to fly without visual reference to
-  the ground may be carried on board, even if made unserviceable."  The
-  quality of XCSoar's pseudo-AH is arguably good enough that this
-  violates the rule.  We need to seek clarificat ion as to whether this
-  is the case or not.
-  */
-  if (EnableAuxiliaryInfo)
-    DrawHorizon(canvas, get_client_rect());
-#endif
 }
 
 void
@@ -353,6 +335,7 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   if (!settings_map.EnablePan) {
     DrawThermalBand(canvas, rc);
+    DrawStallRatio(canvas, rc);
     DrawFlightMode(canvas, rc);
     DrawFinalGlide(canvas, rc);
     DrawGPSStatus(canvas, rc, Basic());

@@ -25,11 +25,16 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Graphics.hpp"
-#include "Interface.hpp"
 
 void
-DrawHorizon(Canvas &canvas, const PixelRect &rc)
+DrawHorizon(Canvas &canvas, const PixelRect &rc,
+            const NMEA_INFO &Basic)
 {
+  RasterPoint center;
+  center.y = (rc.top+rc.bottom)/2;
+  center.x = (rc.left+rc.right)/2;
+  const int radius = min(rc.right-rc.left,rc.bottom-rc.top)/2-IBLSCALE(1);
+
   /*
   FEATURE TEMPORARILY DISABLED DUE TO USE OF XCSOAR IN FAI COMPETITIONS
 
@@ -44,55 +49,40 @@ DrawHorizon(Canvas &canvas, const PixelRect &rc)
   is the case or not.
   */
 
-  RasterPoint Start;
-  Start.y = IBLSCALE(55) + rc.top;
-  Start.x = rc.right - IBLSCALE(19);
-
   Pen hpHorizonSky(IBLSCALE(1), dark_color(Graphics::skyColor));
   Brush hbHorizonSky(Graphics::skyColor);
-  Pen hpHorizonGround(IBLSCALE(1), Graphics::GroundColor);
+  Pen hpHorizonGround(IBLSCALE(1), dark_color(Graphics::GroundColor));
 
 #define fixed_div fixed(1.0 / 50.0)
 #define fixed_89 fixed_int_constant(89)
 
-  int radius = IBLSCALE(17);
   fixed phi = max(-fixed_89, min(fixed_89,
-      XCSoarInterface::Basic().acceleration.BankAngle.value_degrees()));
+      Basic.acceleration.BankAngle.value_degrees()));
   fixed alpha = fixed_rad_to_deg * acos(max(-fixed_one, min(fixed_one,
-      XCSoarInterface::Basic().acceleration.PitchAngle.value_degrees() * fixed_div)));
+      Basic.acceleration.PitchAngle.value_degrees() * fixed_div)));
   fixed sphi = fixed_180 - phi;
   Angle alpha1 = Angle::degrees(sphi - alpha);
   Angle alpha2 = Angle::degrees(sphi + alpha);
 
+  // draw sky part
   canvas.select(hpHorizonSky);
   canvas.select(hbHorizonSky);
+  canvas.segment(center.x, center.y, radius, alpha2, alpha1, true);
 
-  canvas.segment(Start.x, Start.y, radius, alpha2, alpha1, true);
-
+  // draw ground part
   canvas.select(hpHorizonGround);
   canvas.select(Graphics::hbGround);
+  canvas.segment(center.x, center.y, radius, alpha1, alpha2, true);
 
-  canvas.segment(Start.x, Start.y, radius, alpha1, alpha2, true);
+  // draw aircraft symbol
+  Pen aircraft_pen(IBLSCALE(2), COLOR_BLACK);
+  canvas.select(aircraft_pen);
+  canvas.line(center.x + radius / 2, center.y, center.x - radius / 2, center.y);
+  canvas.line(center.x, center.y - radius / 4, center.x, center.y);
 
-  Pen dash_pen(Pen::DASH, 2, COLOR_BLACK);
-  canvas.select(dash_pen);
-
-  canvas.line(Start.x + radius / 2, Start.y, Start.x - radius / 2, Start.y);
-  canvas.line(Start.x, Start.y - radius / 4, Start.x - radius / 2, Start.y);
-
-  unsigned rr2p = uround(radius * fixed_sqrt_half) + IBLSCALE(1);
-  unsigned rr2n = uround(radius * fixed_sqrt_half);
-
-  canvas.black_pen();
-  canvas.line(Start.x + rr2p, Start.y - rr2p, Start.x + rr2n, Start.y - rr2n);
-  canvas.line(Start.x - rr2p, Start.y - rr2p, Start.x - rr2n, Start.y - rr2n);
-
-  if (XCSoarInterface::Basic().StallRatioAvailable) {
-    // JMW experimental, display stall sensor
-    fixed s = max(fixed_zero, min(fixed_one, XCSoarInterface::Basic().StallRatio));
-    long m = (long)((rc.bottom - rc.top) * s * s);
-
-    canvas.black_pen();
-    canvas.line(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);
-  }
+  // draw 45 degree dash marks
+  const unsigned rr2p = uround(radius * fixed_sqrt_half) + IBLSCALE(1);
+  const unsigned rr2n = rr2p - IBLSCALE(2);
+  canvas.line(center.x + rr2p, center.y - rr2p, center.x + rr2n, center.y - rr2n);
+  canvas.line(center.x - rr2p, center.y - rr2p, center.x - rr2n, center.y - rr2n);
 }
