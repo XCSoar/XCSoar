@@ -745,7 +745,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
       _stprintf(Temp, _T("%d%%"), (int)((fixed_one - BUGS) * 100));
 
     canvas.set_text_color(colText);
-    canvas.text_opaque(orgLabel.x, orgLabel.y, recValueBk, Temp);
+    canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
 
     lastBugs = BUGS;
   }
