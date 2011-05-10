@@ -788,7 +788,7 @@ OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft, fixed& val) const
 
 fixed
 OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft, 
-                             const fixed t_target) const
+                             const fixed t_target) 
 {
   if (stats.distance_max > stats.distance_min) {
     // only perform scan if modification is possible

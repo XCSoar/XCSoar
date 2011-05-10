@@ -695,7 +695,7 @@ protected:
    * @return Target range parameter (0-1)
    */
   fixed calc_min_target(const AIRCRAFT_STATE &state_now, 
-                        const fixed t_target) const;
+                        const fixed t_target);
 
   /**
    * Calculate angle from aircraft to remainder of task (minimum of leg
