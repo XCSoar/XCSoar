@@ -26,6 +26,7 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/FlymasterF1.cpp \
 	$(DRIVER_SRC_DIR)/Flytec.cpp \
 	$(DRIVER_SRC_DIR)/Generic.cpp \
+	$(DRIVER_SRC_DIR)/IMI.cpp \
 	$(DRIVER_SRC_DIR)/LX.cpp \
 	$(DRIVER_SRC_DIR)/Leonardo.cpp \
 	$(DRIVER_SRC_DIR)/NmeaOut.cpp \

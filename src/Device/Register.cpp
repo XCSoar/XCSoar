@@ -35,6 +35,7 @@ Copyright_License {
 #include "Device/Driver/Volkslogger.hpp"
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/LX.hpp"
+#include "Device/Driver/IMI.hpp"
 #include "Device/Driver/Zander.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/XCOM760.hpp"
@@ -67,6 +68,7 @@ static const struct DeviceRegister *const DeviceRegister[] = {
   &flytec_device_driver,
   &ilec_device_driver,
   &westerboer_device_driver,
+  &imi_device_driver,
   NULL
 };
 
