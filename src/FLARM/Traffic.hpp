@@ -139,7 +139,7 @@ struct FLARM_TRAFFIC {
     return type != acGlider && type != acHangGlider && type != acParaGlider;
   }
 
-  bool is_passive() const {
+  bool IsPassive() const {
     return IsPowered() || speed < fixed_four;
   }
 

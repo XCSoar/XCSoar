@@ -352,7 +352,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
         canvas.select(hbSelection);
       } else {
         canvas.hollow_brush();
-        if (traffic.is_passive())
+        if (traffic.IsPassive())
           canvas.select(hpPassive);
         else
           canvas.select(hpStandard);
