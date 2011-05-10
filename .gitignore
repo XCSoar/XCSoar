@@ -6,9 +6,6 @@ results/terrain.txt
 *.gcov
 *~
 *.IGC
-*.dbf
-*.shp
-*.shx
 \#*#
 .#*
 *.orig
@@ -31,7 +28,6 @@ debian/stamp-*
 debian/tmp
 debian/*.substvars
 debian/xcsoar
-*.pyc
 rasp/data
 .#*
 callgrind.out.*
