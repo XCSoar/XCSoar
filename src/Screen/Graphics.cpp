@@ -98,7 +98,7 @@ Brush Graphics::hbFinalGlideBelowLandable;
 Brush Graphics::hbFinalGlideAbove;
 Brush Graphics::hbWind;
 
-MaskedIcon Graphics::SmallIcon, Graphics::TurnPointIcon;
+MaskedIcon Graphics::SmallIcon, Graphics::TurnPointIcon, Graphics::TaskTurnPointIcon;
 MaskedIcon Graphics::MountainTopIcon, Graphics::BridgeIcon, Graphics::TunnelIcon;
 MaskedIcon Graphics::TowerIcon, Graphics::PowerPlantIcon;
 MaskedIcon Graphics::AirportReachableIcon, Graphics::AirportUnreachableIcon;
@@ -329,6 +329,7 @@ Graphics::Initialise()
 
   SmallIcon.load_big(IDB_SMALL, IDB_SMALL_HD);
   TurnPointIcon.load_big(IDB_TURNPOINT, IDB_TURNPOINT_HD);
+  TaskTurnPointIcon.load_big(IDB_TASKTURNPOINT, IDB_TASKTURNPOINT_HD);
   MountainTopIcon.load_big(IDB_MOUNTAIN_TOP, IDB_MOUNTAIN_TOP_HD);
   BridgeIcon.load_big(IDB_BRIDGE, IDB_BRIDGE_HD);
   TunnelIcon.load_big(IDB_TUNNEL, IDB_TUNNEL_HD);
@@ -559,6 +560,7 @@ Graphics::Deinitialise()
 
   SmallIcon.reset();
   TurnPointIcon.reset();
+  TaskTurnPointIcon.reset();
   MountainTopIcon.reset();
   BridgeIcon.reset();
   TunnelIcon.reset();

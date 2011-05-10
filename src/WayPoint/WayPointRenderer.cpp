@@ -52,9 +52,9 @@ Copyright_License {
 
 gcc_pure
 static const MaskedIcon &
-GetWaypointIcon(const Waypoint &wp, const Projection &projection)
+GetWaypointIcon(const Waypoint &wp, const Projection &projection, const bool in_task)
 {
-  if (projection.GetMapScale() > fixed(4000))
+  if ((projection.GetMapScale() > fixed(4000)) && !in_task)
     return Graphics::SmallIcon;
 
   switch (wp.Type) {
@@ -69,7 +69,11 @@ GetWaypointIcon(const Waypoint &wp, const Projection &projection)
   case Waypoint::wtPowerPlant:
     return Graphics::PowerPlantIcon;
   default:
-    return Graphics::TurnPointIcon;
+    if (in_task) {
+      return Graphics::TaskTurnPointIcon;
+    } else {
+      return Graphics::TurnPointIcon;
+    }
   }
 }
 
@@ -123,7 +127,7 @@ struct VisibleWaypoint {
                                            projection.GetScreenAngle());
     } else {
       // non landable turnpoint
-      GetWaypointIcon(*waypoint, projection).draw(canvas, point);
+      GetWaypointIcon(*waypoint, projection, in_task).draw(canvas, point);
     }
   }
 };

@@ -133,6 +133,8 @@ IDB_TOWN                BITMAP  DISCARDABLE     "../output/data/icons/map_town.b
 IDB_TOWN_HD             BITMAP  DISCARDABLE     "../output/data/icons/map_town_160.bmp"
 IDB_TURNPOINT           BITMAP  DISCARDABLE     "../output/data/icons/map_turnpoint.bmp"
 IDB_TURNPOINT_HD        BITMAP  DISCARDABLE     "../output/data/icons/map_turnpoint_160.bmp"
+IDB_TASKTURNPOINT       BITMAP  DISCARDABLE     "../output/data/icons/map_taskturnpoint.bmp"
+IDB_TASKTURNPOINT_HD    BITMAP  DISCARDABLE     "../output/data/icons/map_taskturnpoint_160.bmp"
 IDB_MOUNTAIN_TOP        BITMAP  DISCARDABLE     "../output/data/icons/map_mountain_top.bmp"
 IDB_MOUNTAIN_TOP_HD     BITMAP  DISCARDABLE     "../output/data/icons/map_mountain_top_160.bmp"
 IDB_BRIDGE              BITMAP  DISCARDABLE     "../output/data/icons/map_bridge.bmp"

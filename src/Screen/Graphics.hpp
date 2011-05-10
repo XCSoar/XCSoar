@@ -132,7 +132,7 @@ namespace Graphics {
   extern Brush hbFinalGlideAbove;
   extern Brush hbWind;
 
-  extern MaskedIcon SmallIcon, TurnPointIcon, MountainTopIcon, BridgeIcon;
+  extern MaskedIcon SmallIcon, TurnPointIcon, TaskTurnPointIcon, MountainTopIcon, BridgeIcon;
   extern MaskedIcon TowerIcon, PowerPlantIcon, TunnelIcon;
   extern MaskedIcon AirportReachableIcon, AirportUnreachableIcon;
   extern MaskedIcon AirportMarginalIcon, FieldMarginalIcon;
