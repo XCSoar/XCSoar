@@ -352,6 +352,7 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
   MapWindow::Render(canvas, rc);
 
   if (!settings_map.EnablePan) {
+    DrawThermalBand(canvas, rc);
     DrawFlightMode(canvas, rc);
     DrawFinalGlide(canvas, rc);
     DrawGPSStatus(canvas, rc, Basic());

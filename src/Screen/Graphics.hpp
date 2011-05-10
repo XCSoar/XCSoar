@@ -122,6 +122,7 @@ namespace Graphics {
   extern Pen hpTrackBearingLine;
   extern Pen TracePen;
   extern Pen ContestPen[3];
+  extern Pen hpThermalBand;
 
   extern Brush hbCompass;
   extern Brush hbThermalBand;

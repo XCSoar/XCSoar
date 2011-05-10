@@ -158,6 +158,7 @@ ChartControl::on_paint(Canvas &canvas)
                                          CommonInterface::SettingsComputer(),
                                          canvas, rcgfx, 
                                          XCSoarInterface::SettingsComputer(),
+                                         false,
                                          &otb);
   }
     break;

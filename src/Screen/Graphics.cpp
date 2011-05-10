@@ -86,6 +86,7 @@ Pen Graphics::hpTerrainLineThick;
 Pen Graphics::hpTrackBearingLine;
 Pen Graphics::TracePen;
 Pen Graphics::ContestPen[3];
+Pen Graphics::hpThermalBand;
 
 Brush Graphics::hbCanopy;
 Brush Graphics::hbCompass;
@@ -282,6 +283,7 @@ Graphics::Initialise()
   hbCompass.set(Color(207, 207, 207));
 
   hbThermalBand.set(skyColor);
+  hpThermalBand.set(Layout::Scale(1), dark_color(skyColor));
 
   hbFinalGlideBelow.set(COLOR_RED);
   hpFinalGlideBelow.set(Layout::Scale(1), dark_color(COLOR_RED));
@@ -496,6 +498,7 @@ Graphics::Deinitialise()
 
   hbCompass.reset();
 
+  hpThermalBand.reset();
   hbThermalBand.reset();
   hbBestCruiseTrack.reset();
   hbFinalGlideBelow.reset();

@@ -43,6 +43,7 @@ public:
                               Canvas &canvas, 
                               const PixelRect &rc,
                               const TaskBehaviour& task_props,
+                              const bool is_map,
                               const OrderedTaskBehaviour* ordered_props=NULL);
 
   static void DrawThermalBandSpark(const NMEA_INFO& basic,
@@ -53,13 +54,13 @@ public:
                                    const TaskBehaviour& task_props);
 
 protected:
-  static void DrawThermalBand(const NMEA_INFO& basic,
-                              const DERIVED_INFO& calculated,
-                              const SETTINGS_COMPUTER &settings_computer,
-                              Chart &chart,
-                              const TaskBehaviour& task_props,
-                              const bool is_infobox,
-                              const OrderedTaskBehaviour* ordered_props);
+  static void _DrawThermalBand(const NMEA_INFO& basic,
+                               const DERIVED_INFO& calculated,
+                               const SETTINGS_COMPUTER &settings_computer,
+                               Chart &chart,
+                               const TaskBehaviour& task_props,
+                               const bool is_infobox,
+                               const OrderedTaskBehaviour* ordered_props);
 
   static void scale_chart(const DERIVED_INFO &calculated,
                           const SETTINGS_COMPUTER &settings_computer,

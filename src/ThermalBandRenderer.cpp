@@ -49,13 +49,13 @@ ThermalBandRenderer::scale_chart(const DERIVED_INFO &calculated,
 
 
 void
-ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
-                                     const DERIVED_INFO& calculated,
-                                     const SETTINGS_COMPUTER &settings_computer,
-                                     Chart &chart, 
-                                     const TaskBehaviour& task_props,
-                                     const bool is_infobox,
-                                     const OrderedTaskBehaviour* ordered_props)
+ThermalBandRenderer::_DrawThermalBand(const NMEA_INFO& basic,
+                                      const DERIVED_INFO& calculated,
+                                      const SETTINGS_COMPUTER &settings_computer,
+                                      Chart &chart,
+                                      const TaskBehaviour& task_props,
+                                      const bool is_infobox,
+                                      const OrderedTaskBehaviour* ordered_props)
 {
   const ThermalBandInfo &thermal_band = calculated.thermal_band;
 
@@ -120,13 +120,15 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
     // but do draw if start height needs to be drawn
     return;
 
+  const Pen *fpen = is_infobox? NULL: &Graphics::hpThermalBand;
+
   // position of thermal band
   if (numtherm > 1) {
     std::vector< std::pair<fixed, fixed> > ThermalProfile; 
     for (int i = 0; i < numtherm; ++i) {
       ThermalProfile.push_back(std::make_pair(Wt[i], ht[i]));
     }
-    chart.DrawFilledY(ThermalProfile, Graphics::hbThermalBand);
+    chart.DrawFilledY(ThermalProfile, Graphics::hbThermalBand, fpen);
   }
 
   // position of thermal band
@@ -176,21 +178,28 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
                                      Canvas &canvas, 
                                      const PixelRect &rc,
                                      const TaskBehaviour& task_props,
+                                     const bool is_map,
                                      const OrderedTaskBehaviour* ordered_props)
 {
   Chart chart(canvas, rc);
+  if (is_map) {
+    chart.PaddingBottom = 0;
+    chart.PaddingLeft = 0;
+  }
   scale_chart(calculated, settings_computer, chart);
-  DrawThermalBand(basic, calculated, settings_computer,
-                  chart, task_props, false, ordered_props);
+  _DrawThermalBand(basic, calculated, settings_computer,
+                   chart, task_props, false, ordered_props);
 
-  chart.DrawXGrid(Units::ToSysVSpeed(fixed_one), fixed_zero,
-                  Chart::STYLE_THINDASHPAPER, fixed_one, true);
-  chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
-                  fixed_zero, 
-                  Chart::STYLE_THINDASHPAPER, 
-                  fixed(1000), true);
-  chart.DrawXLabel(_T("w"));
-  chart.DrawYLabel(_T("h AGL"));
+  if (!is_map) {
+    chart.DrawXGrid(Units::ToSysVSpeed(fixed_one), fixed_zero,
+                    Chart::STYLE_THINDASHPAPER, fixed_one, true);
+    chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
+                    fixed_zero,
+                    Chart::STYLE_THINDASHPAPER,
+                    fixed(1000), true);
+    chart.DrawXLabel(_T("w"));
+    chart.DrawYLabel(_T("h AGL"));
+  }
 }
 
 void 
@@ -205,6 +214,6 @@ ThermalBandRenderer::DrawThermalBandSpark(const NMEA_INFO& basic,
   chart.PaddingBottom = 0;
   chart.PaddingLeft = IBLSCALE(3);
   scale_chart(calculated, settings_computer, chart);
-  DrawThermalBand(basic, calculated, settings_computer,
-                  chart, task_props, true, NULL);
+  _DrawThermalBand(basic, calculated, settings_computer,
+                   chart, task_props, true, NULL);
 }

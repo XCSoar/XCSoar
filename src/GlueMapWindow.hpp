@@ -229,6 +229,7 @@ private:
   void DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
                      const NMEA_INFO &info) const;
   void DrawCrossHairs(Canvas &canvas) const;
+  void DrawThermalBand(Canvas &canvas, const PixelRect &rc) const;
   void DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const;
   void DrawHorizon(Canvas &canvas, const PixelRect &rc) const;
   virtual void DrawThermalEstimate(Canvas &canvas) const;

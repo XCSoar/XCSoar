@@ -36,6 +36,7 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "ThermalBandRenderer.hpp"
 #include <stdio.h>
 
 void
@@ -399,4 +400,38 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
 
   DrawTrail(canvas, aircraft_pos, min_time,
             SettingsMap().EnableTrailDrift && GetDisplayMode() == dmCircling);
+}
+
+void
+GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
+{
+  if (Calculated().task_stats.total.solution_remaining.defined() &&
+      Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50)
+      && GetDisplayMode() == dmFinalGlide)
+    return;
+
+  PixelRect tb_rect;
+  tb_rect.left = rc.left;
+  tb_rect.right = rc.left+IBLSCALE(20);
+  tb_rect.top = IBLSCALE(4);
+  tb_rect.bottom = tb_rect.top+(rc.bottom-rc.top)/2-IBLSCALE(30);
+  if (task != NULL) {
+    ProtectedTaskManager::Lease task_manager(*task);
+    ThermalBandRenderer::DrawThermalBand(Basic(),
+                                         Calculated(),
+                                         SettingsComputer(),
+                                         canvas,
+                                         tb_rect,
+                                         SettingsComputer(),
+                                         true,
+                                         &task_manager->get_ordered_task_behaviour());
+  } else {
+    ThermalBandRenderer::DrawThermalBand(Basic(),
+                                         Calculated(),
+                                         SettingsComputer(),
+                                         canvas,
+                                         tb_rect,
+                                         SettingsComputer(),
+                                         true);
+  }
 }
