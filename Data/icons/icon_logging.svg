@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="UTF-8" standalone="no"?>
 <!-- Created with Inkscape (http://www.inkscape.org/) -->
-
 <svg
    xmlns:dc="http://purl.org/dc/elements/1.1/"
    xmlns:cc="http://creativecommons.org/ns#"
@@ -13,8 +12,10 @@
    width="7"
    height="7"
    id="svg2816"
-   inkscape:version="0.47 r22583"
-   sodipodi:docname="icon_logging.svg">
+   inkscape:version="0.46"
+   sodipodi:docname="icon_logging.svg"
+   sodipodi:version="0.32"
+   inkscape:output_extension="org.inkscape.output.svg.inkscape">
   <metadata
      id="metadata9">
     <rdf:RDF>
@@ -43,10 +44,10 @@
      inkscape:zoom="27.842105"
      inkscape:cx="-5.4975408"
      inkscape:cy="9.5"
-     inkscape:window-x="-8"
-     inkscape:window-y="-8"
+     inkscape:window-x="50"
+     inkscape:window-y="25"
      inkscape:window-maximized="1"
-     inkscape:current-layer="svg2816" />
+     inkscape:current-layer="layer3" />
   <defs
      id="defs2818">
     <inkscape:perspective
@@ -146,11 +147,11 @@
     <path
        d="m 6,15.5 a 2.5,2.5 0 0 1 -5,0 2.5,2.5 0 1 1 5,0 z"
        id="path2830-4-5"
-       style="fill:#ff0000;fill-opacity:1;fill-rule:evenodd;stroke:none" />
+       style="fill:#00ff00;fill-opacity:1;fill-rule:evenodd;stroke:none" />
     <path
        d="M 4.8926991,14.1122 C 5.2617994,14.480768 5.5,14.980046 5.5,15.502888 5.5,16.548574 4.5471975,17.5 3.5,17.5 c -1.0471975,0 -2,-0.951426 -2,-1.997112"
        id="path2830-4-5-4"
-       style="fill:none;stroke:#800000;stroke-width:1"
+       style="fill:none;stroke:#008000;stroke-width:1;stroke-opacity:1"
        sodipodi:nodetypes="ccsc" />
   </g>
 </svg>
