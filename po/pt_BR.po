@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-11 20:35+0200\n"
-"PO-Revision-Date: 2011-04-19 03:43+0000\n"
-"Last-Translator: Luis Fernando Rigato Vasconcellos <Unknown>\n"
+"PO-Revision-Date: 2011-05-07 23:32+0000\n"
+"Last-Translator: Júlio Cezar Santos Pires <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-20 07:04+0000\n"
-"X-Generator: Launchpad (build 12847)\n"
+"X-Launchpad-Export-Date: 2011-05-08 08:41+0000\n"
+"X-Generator: Launchpad (build 12981)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1439 src/Dialogs/dlgAnalysis.cpp:303
@@ -187,9 +187,8 @@ msgid "Finish Turnpoint"
 msgstr "Pto. virada final"
 
 #: src/ExpandMacros.cpp:199 src/ExpandMacros.cpp:245
-#, fuzzy
 msgid "Next Startpoint"
-msgstr "Próximo ponto de virada"
+msgstr ""
 
 #: src/ExpandMacros.cpp:205 src/ExpandMacros.cpp:251
 msgid "Start Turnpoint"
@@ -614,12 +613,10 @@ msgid "WP AltD"
 msgstr "WP AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
 msgstr ""
-"Altitude de chegada no próximo ponto de virada relativo a altitude de "
-"segurança."
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
@@ -671,13 +668,11 @@ msgid "Fin AltD"
 msgstr "Fin AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:198
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
-"Altitude de chegada no último ponto da prova relativo a altitude de "
-"segurança."
 
 #: src/InfoBoxes/Content/Factory.cpp:205
 #, no-c-format
@@ -737,7 +732,7 @@ msgid "Fin LD"
 msgstr "Fin LD"
 
 #: src/InfoBoxes/Content/Factory.cpp:234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The required glide ratio to finish the task, given by the distance to go "
 "divided by the height required to arrive at the safety arrival height. "
@@ -747,13 +742,6 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
-"Razão de planeio necessária para completar a prova. É a distância restante "
-"dividida pela altura necessária para completar a prova, descontada a altura "
-"de segurança. Valores negativos indicam que é necessário subir para terminar "
-"a prova. Se a altura requerida for próxima de zero, o valor mostrado será "
-"'---'. Esse cálculo pode ser otimista porque compensa a altura requerida "
-"para completar a prova pelo excesso de energia do planador se a velocidade "
-"verdadeira for maior que as velocidades de MacCready e de melhor planeio."
 
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
@@ -1096,7 +1084,7 @@ msgid "WP LD"
 msgstr "WP LD"
 
 #: src/InfoBoxes/Content/Factory.cpp:405
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The required glide ratio to reach the next waypoint, given by the distance "
 "to next waypoint divided by the height required to arrive at the safety "
@@ -1106,13 +1094,6 @@ msgid ""
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
-"Razão de planeio necessária para alcançar o próximo ponto de virada. É a "
-"distância para o próximo ponto dividida pela altura requerida, descontada a "
-"altura de segurança. Valores negativos indicam que é necessário subir. Se a "
-"altura requerida for próxima de zero o valor mostrado será '---'. O cálculo "
-"pode ser otimista porque reduz a altura requerida pela energia do planador "
-"se a velocidade verdadeira for maior que as velocidades de MacCready e de "
-"melhor planeio."
 
 #: src/InfoBoxes/Content/Factory.cpp:412
 #, no-c-format
@@ -2196,17 +2177,17 @@ msgid "Hold turn"
 msgstr "Esperar virada"
 
 #: src/InputEventsActions.cpp:637
-#, fuzzy
 msgid "Show details:"
-msgstr "Detalhes"
+msgstr "Mostrar detalhes:"
 
 #: src/InputEventsActions.cpp:642
 msgid "Unknown competition number"
 msgstr ""
 
 #: src/InputEventsActions.cpp:643
+#, fuzzy
 msgid "Not found"
-msgstr ""
+msgstr "Não encontrado"
 
 #: src/InputEventsActions.cpp:703
 msgid "No active waypoint!"
@@ -2294,9 +2275,8 @@ msgid "In sector, arm advance when ready"
 msgstr "No setor, arme o avanço quando pronto"
 
 #: src/Pages.cpp:181
-#, fuzzy
 msgid "Info Hide"
-msgstr "Esconder Info"
+msgstr ""
 
 #: src/Pages.cpp:183
 msgid "Map (Full screen)"
@@ -2311,9 +2291,8 @@ msgid "Map and InfoBoxes "
 msgstr "Mapa e InfoBoxes "
 
 #: src/Pages.cpp:198
-#, fuzzy
 msgid "Info Auto"
-msgstr "Auto Info"
+msgstr ""
 
 #: src/Pages.cpp:200
 msgid "Map and InfoBoxes (Auto)"
@@ -2616,9 +2595,9 @@ msgid "Cruise"
 msgstr "Planeio"
 
 #: src/Profile/InfoBoxConfig.cpp:62
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "FinalGlide"
-msgstr "Planeio Final"
+msgstr ""
 
 #: src/Screen/Chart.cpp:179
 msgid "No data"
@@ -2697,9 +2676,9 @@ msgid "Failed to bind to TCP port %u"
 msgstr ""
 
 #: src/Device/TCPPort.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to listen on TCP port %u"
-msgstr "Não é possível abrir a porta %s"
+msgstr ""
 
 #: src/Dialogs/Message.cpp:130
 msgid "OK"
@@ -3195,9 +3174,8 @@ msgid "Final glide"
 msgstr "Planeio Final"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
-#, fuzzy
 msgid "Trending average climb"
-msgstr "Tend média subida"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:80
 msgid "Flap"
@@ -3418,14 +3396,12 @@ msgid "Shade"
 msgstr "Sombra"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:78
-#, fuzzy
 msgid "Straight"
-msgstr "Planeio direto"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:79
-#, fuzzy
 msgid "Turning"
-msgstr "Aviso"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:89
 #: Data/Dialogs/dlgConfiguration.xml:317
@@ -3572,36 +3548,32 @@ msgid "ft/min"
 msgstr "pés/min"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
-#, fuzzy
 msgid "Full name"
-msgstr "Nome Completo"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
 msgid "The full name of each waypoint is displayed."
 msgstr "Nome completo de cada pto. virada é mostrado."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
-#, fuzzy
 msgid "First word of name"
-msgstr "Primeira letra do nome"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
 msgid "The first word of the waypoint name is displayed."
 msgstr "Primeira letra do nome do pto de virada é mostrada."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
-#, fuzzy
 msgid "First 3 letters"
-msgstr "3 Primeiras Letras"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
 msgid "The first 3 letters of the waypoint name are displayed."
 msgstr "3 primeiras letras do nome do pto. de virada serão mostradas."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
-#, fuzzy
 msgid "First 5 letters"
-msgstr "5 Primeiras Letras"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
 msgid "The first 5 letters of the waypoint name are displayed."
@@ -3632,18 +3604,16 @@ msgid "Arrival height considering terrain avoidance"
 msgstr "Altura de chegada considerando terreno"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
-#, fuzzy
 msgid "Straight & terrain glide"
-msgstr "Planeio Direto & Terreno"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "Both arrival heights are displayed."
 msgstr "Ambas alturas de chegada são mostradas."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:76
-#, fuzzy
 msgid "Rounded rectangle"
-msgstr "Retângulo Arredondado"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:77
 msgid "Outlined"
@@ -3654,18 +3624,16 @@ msgid "All waypoint labels will be displayed."
 msgstr "Todos rótulos de ptos. virada serão mostrados."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:90
-#, fuzzy
 msgid "Task waypoints & landables"
-msgstr "Ptos. virada da prova & ptos. pouso"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:92
 msgid "All waypoints part of a task and all landables will be displayed."
 msgstr "Todos ptos. virada da prova e todos ptos. pouso serão mostrados."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:93
-#, fuzzy
 msgid "Task waypoints"
-msgstr "Ptos. virada prova"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:94
 msgid "All waypoints part of a task will be displayed."
@@ -3676,9 +3644,8 @@ msgid "No waypoint labels will be displayed."
 msgstr "Rótulos ptos. virada não serão mostrados."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:106
-#, fuzzy
 msgid "Purple circle"
-msgstr "Círculo púrpura"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
 msgid ""
@@ -3700,9 +3667,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:110
-#, fuzzy
 msgid "Traffic lights"
-msgstr "Altura sobre terr"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:111
 msgid ""
@@ -3737,9 +3703,8 @@ msgid "Task unchanged"
 msgstr "Prova inalterada"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
-#, fuzzy
 msgid "Clear all points?"
-msgstr "Limpar prova?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Task edit"
@@ -3774,14 +3739,12 @@ msgid "Rename Error"
 msgstr "Erro de renomeação"
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Create new task?"
-msgstr "Limpar prova?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Task New"
-msgstr "Editar prova"
+msgstr ""
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
 msgid "(Add Alternate Start)"
@@ -4163,7 +4126,7 @@ msgstr ""
 
 #: src/Dialogs/dlgTeamCode.cpp:179
 msgid "Not Found"
-msgstr ""
+msgstr "Não encontrado"
 
 #: src/Dialogs/dlgWeather.cpp:49
 msgid "Weather parameters"
@@ -4661,9 +4624,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:349
 #: Data/Dialogs/dlgConfiguration_L.xml:350
-#, fuzzy
 msgid "Reach mode"
-msgstr "Modelo dispositivo"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:188
 #: Data/Dialogs/dlgConfiguration_L.xml:188
@@ -4758,9 +4720,8 @@ msgid "Clean"
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:28 Data/Dialogs/dlgConfigFonts_L.xml:28
-#, fuzzy
 msgid "Dialog text"
-msgstr "Caixas diálogo"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:45
 #: Data/Dialogs/pnlTaskCalculator_L.xml:45
@@ -4963,9 +4924,8 @@ msgid "Height"
 msgstr "Altura"
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
-#, fuzzy
 msgid "InfoBox values, normal"
-msgstr "Vals pequ Caixas Info"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:232
 #: Data/Dialogs/dlgConfiguration_L.xml:232
@@ -5260,9 +5220,8 @@ msgid "Clear"
 msgstr "Limpar"
 
 #: Data/Dialogs/dlgConfigFonts.xml:22 Data/Dialogs/dlgConfigFonts_L.xml:22
-#, fuzzy
 msgid "Topography labels, normal"
-msgstr "Rótulos topologia"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:22
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
@@ -6251,9 +6210,8 @@ msgid "V manoeuvering"
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
-#, fuzzy
 msgid "Topography labels, important"
-msgstr "Topografia/Terreno"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:27
 msgid "Acknowledge"
@@ -6309,9 +6267,8 @@ msgid "Whether to show the bugs percentage."
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:16 Data/Dialogs/dlgConfigFonts_L.xml:16
-#, fuzzy
 msgid "InfoBox values, small"
-msgstr "Vals pequ Caixas Info"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:24 Data/Dialogs/dlgVario_L.xml:25
 msgid "Stall port"
@@ -6517,9 +6474,8 @@ msgid "Aircraft symbol"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
-#, fuzzy
 msgid "Clear All"
-msgstr "Limpar"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -6696,14 +6652,12 @@ msgid "Waypoint distance"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:12 Data/Dialogs/pnlTaskList_L.xml:13
-#, fuzzy
 msgid "Browse"
-msgstr "Procurar Prova"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:10 Data/Dialogs/pnlTaskList_L.xml:11
-#, fuzzy
 msgid "New Task"
-msgstr "Nenhuma prova"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:696
 #: Data/Dialogs/dlgConfiguration_L.xml:697
@@ -7112,9 +7066,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:168
 #: Data/Dialogs/dlgConfiguration_L.xml:168
-#, fuzzy
 msgid "Landable size"
-msgstr "Prova e locais de pouso"
+msgstr ""
 
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:4
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4 Data/Dialogs/dlgTaskPoint.xml:15
@@ -7398,9 +7351,8 @@ msgstr "Vario"
 
 #: Data/Dialogs/dlgConfiguration.xml:354
 #: Data/Dialogs/dlgConfiguration_L.xml:355
-#, fuzzy
 msgid "Reach display"
-msgstr "Exibição terreno"
+msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
@@ -7514,9 +7466,8 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:598
-#, fuzzy
 msgid "Topo."
-msgstr "Topologia"
+msgstr ""
 
 #: Data/Input/default.xci:449
 msgid ""
@@ -7736,11 +7687,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:906
-#, fuzzy
 msgid ""
 "FLARM\n"
 "Details"
-msgstr "Detalhes"
+msgstr ""
 
 #: Data/Input/default.xci:219 Data/Input/default.xci:524
 msgid ""
@@ -7789,36 +7739,6 @@ msgstr "Pouso"
 
 #~ msgid "Marks cleared"
 #~ msgstr "Marcadores apagados"
-
-#~ msgid "Previous Waypoint"
-#~ msgstr "Pto. virada anterior"
-
-#~ msgid "Orange"
-#~ msgstr "Laranja"
-
-#~ msgid "Clear Task"
-#~ msgstr "Limpar prova"
-
-#~ msgid "True"
-#~ msgstr "VERDAD"
-
-#~ msgid "False"
-#~ msgstr "FALSO"
-
-#~ msgid "Alternate"
-#~ msgstr "Alternativo"
-
-#~ msgid "Map waypoints"
-#~ msgstr "Pontos do mapa"
-
-#~ msgid "Set speed remaining"
-#~ msgstr "Veloc ajust restante"
-
-#~ msgid "InfoBox values"
-#~ msgstr "Vals Cxs Info"
-
-#~ msgid "Glide terrain line"
-#~ msgstr "Indic alcance plan"
 
 #~ msgid ""
 #~ "Error occured,\r\n"
@@ -7900,6 +7820,13 @@ msgstr "Pouso"
 #~ msgstr "Diferença de altitude do próximo ponto de virada"
 
 #~ msgid ""
+#~ "Arrival altitude at the next waypoint relative to the safety arrival "
+#~ "altitude."
+#~ msgstr ""
+#~ "Altitude de chegada no próximo ponto de virada relativo a altitude de "
+#~ "segurança."
+
+#~ msgid ""
 #~ "The current MacCready setting. This infobox also shows whether MacCready "
 #~ "is manual or auto. (Touchscreen/PC only) Also used to adjust the "
 #~ "MacCready Setting if the infobox is active, by using the up/down cursor "
@@ -7923,6 +7850,13 @@ msgstr "Pouso"
 
 #~ msgid "Altitude required to reach the next turn point."
 #~ msgstr "Altitude requerida para alcançar o próximo ponto de virada"
+
+#~ msgid ""
+#~ "Arrival altitude at the final task turn point relative to the safety "
+#~ "arrival altitude."
+#~ msgstr ""
+#~ "Altitude de chegada no último ponto da prova relativo a altitude de "
+#~ "segurança."
 
 #~ msgid "Next Waypoint"
 #~ msgstr "Próximo ponto de virada"
@@ -8009,6 +7943,24 @@ msgstr "Pouso"
 #~ msgid "AA Distance Max"
 #~ msgstr "Máxima distância AA"
 
+#~ msgid ""
+#~ "The required glide ratio to finish the task, given by the distance to go "
+#~ "divided by the height required to arrive at the safety arrival altitude. "
+#~ "Negative values indicate a climb is necessary to finish. If the height "
+#~ "required is close to zero, the displayed value is '---'. Note that this "
+#~ "calculation may be optimistic because it reduces the height required to "
+#~ "finish by the excess energy height of the glider if its true airspeed is "
+#~ "greater than the MacCready and best LD speeds."
+#~ msgstr ""
+#~ "Razão de planeio necessária para completar a prova. É a distância "
+#~ "restante dividida pela altura necessária para completar a prova, "
+#~ "descontada a altura de segurança. Valores negativos indicam que é "
+#~ "necessário subir para terminar a prova. Se a altura requerida for próxima "
+#~ "de zero, o valor mostrado será '---'. Esse cálculo pode ser otimista "
+#~ "porque compensa a altura requerida para completar a prova pelo excesso de "
+#~ "energia do planador se a velocidade verdadeira for maior que as "
+#~ "velocidades de MacCready e de melhor planeio."
+
 #~ msgid "Pressure Altitude"
 #~ msgstr "Altitude de pressão"
 
@@ -8020,6 +7972,24 @@ msgstr "Pouso"
 
 #~ msgid "V Mc"
 #~ msgstr "V Mc"
+
+#~ msgid ""
+#~ "The required glide ratio to reach the next waypoint, given by the "
+#~ "distance to next waypoint divided by the height required to arrive at the "
+#~ "safety arrival altitude. Negative values indicate a climb is necessary to "
+#~ "reach the waypoint. If the height required is close to zero, the "
+#~ "displayed value is '---'.   Note that this calculation may be optimistic "
+#~ "because it reduces the height required to reach the waypoint by the "
+#~ "excess energy height of the glider if its true airspeed is greater than "
+#~ "the MacCready and best LD speeds."
+#~ msgstr ""
+#~ "Razão de planeio necessária para alcançar o próximo ponto de virada. É a "
+#~ "distância para o próximo ponto dividida pela altura requerida, descontada "
+#~ "a altura de segurança. Valores negativos indicam que é necessário subir. "
+#~ "Se a altura requerida for próxima de zero o valor mostrado será '---'. O "
+#~ "cálculo pode ser otimista porque reduz a altura requerida pela energia do "
+#~ "planador se a velocidade verdadeira for maior que as velocidades de "
+#~ "MacCready e de melhor planeio."
 
 #~ msgid "Netto Vario"
 #~ msgstr "Vario Netto"
@@ -8238,6 +8208,9 @@ msgstr "Pouso"
 #~ msgid "Range:"
 #~ msgstr "Alcance"
 
+#~ msgid "Topology"
+#~ msgstr "Topologia"
+
 #~ msgid "SnailTrail OFF"
 #~ msgstr "Trilha DESLIGADA"
 
@@ -8276,6 +8249,9 @@ msgstr "Pouso"
 
 #~ msgid "Auto MacCready OFF"
 #~ msgstr "MacCready autom DESLIGADO"
+
+#~ msgid "No Task"
+#~ msgstr "Nenhuma prova"
 
 #~ msgid "NMEA Log ON"
 #~ msgstr "Registrador NMEA LIGADO"
@@ -8337,6 +8313,9 @@ msgstr "Pouso"
 #~ msgid "White outline"
 #~ msgstr "Contorno branco"
 
+#~ msgid "Alternate"
+#~ msgstr "Alternativo"
+
 #~ msgid "Changes to configuration saved."
 #~ msgstr "Alterações na configuração salvas."
 
@@ -8385,6 +8364,9 @@ msgstr "Pouso"
 #~ msgid "UTC Offset"
 #~ msgstr "Fuso horário"
 
+#~ msgid "Map waypoints"
+#~ msgstr "Pontos do mapa"
+
 #~ msgid "New Waypoint"
 #~ msgstr "Novo Ponto"
 
@@ -8396,6 +8378,9 @@ msgstr "Pouso"
 
 #~ msgid "Achieved Speed"
 #~ msgstr "Veloc Atingida"
+
+#~ msgid "Set speed remaining"
+#~ msgstr "Veloc ajust restante"
 
 #~ msgid "Finish min height"
 #~ msgstr "Altura mín chegada"
@@ -8421,6 +8406,12 @@ msgstr "Pouso"
 #~ msgid "Select pattern"
 #~ msgstr "Selecionar padrão"
 
+#~ msgid "Dialog boxes"
+#~ msgstr "Caixas diálogo"
+
+#~ msgid "Topology labels"
+#~ msgstr "Rótulos topologia"
+
 #~ msgid "Insert in task"
 #~ msgstr "Inserir na prova"
 
@@ -8432,6 +8423,9 @@ msgstr "Pouso"
 
 #~ msgid "Start height ref"
 #~ msgstr "Ref altura largada"
+
+#~ msgid "Glide terrain line"
+#~ msgstr "Indic alcance plan"
 
 #~ msgid "Safety lock"
 #~ msgstr "Trava de segurança"
@@ -8447,6 +8441,9 @@ msgstr "Pouso"
 
 #~ msgid "Task Calculator"
 #~ msgstr "Calculadora de Prova"
+
+#~ msgid "Info box values small"
+#~ msgstr "Vals pequ Caixas Info"
 
 #~ msgid "Glider position"
 #~ msgstr "Posição planador"
@@ -8471,3 +8468,60 @@ msgstr "Pouso"
 
 #~ msgid "None "
 #~ msgstr "Nenhum "
+
+#~ msgid "InfoBox values"
+#~ msgstr "Vals Cxs Info"
+
+#~ msgid "True"
+#~ msgstr "VERDAD"
+
+#~ msgid "False"
+#~ msgstr "FALSO"
+
+#~ msgid "Orange"
+#~ msgstr "Laranja"
+
+#~ msgid "Clear Task"
+#~ msgstr "Limpar prova"
+
+#~ msgid "Info hide"
+#~ msgstr "Esconder Info"
+
+#~ msgid "Info auto"
+#~ msgstr "Auto Info"
+
+#~ msgid "Trending Average climb"
+#~ msgstr "Tend média subida"
+
+#~ msgid "First Word of Name"
+#~ msgstr "Primeira letra do nome"
+
+#~ msgid "Full Name"
+#~ msgstr "Nome Completo"
+
+#~ msgid "First 3 Letters"
+#~ msgstr "3 Primeiras Letras"
+
+#~ msgid "First 5 Letters"
+#~ msgstr "5 Primeiras Letras"
+
+#~ msgid "Straight & Terrain glide"
+#~ msgstr "Planeio Direto & Terreno"
+
+#~ msgid "Task Waypoints"
+#~ msgstr "Ptos. virada prova"
+
+#~ msgid "Rounded Rectangle"
+#~ msgstr "Retângulo Arredondado"
+
+#~ msgid "Task Waypoints & Landables"
+#~ msgstr "Ptos. virada da prova & ptos. pouso"
+
+#~ msgid "Purple Circle"
+#~ msgstr "Círculo púrpura"
+
+#~ msgid "Clear task?"
+#~ msgstr "Limpar prova?"
+
+#~ msgid "Previous Waypoint"
+#~ msgstr "Pto. virada anterior"
