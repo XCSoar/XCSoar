@@ -96,21 +96,6 @@ Thread::join(unsigned timeout_ms)
 #endif
 }
 
-void
-Thread::terminate()
-{
-#ifdef HAVE_POSIX
-  assert(m_defined);
-
-  // XXX implement this properly
-  pthread_kill(handle, SIGTERM);
-#else
-  assert(handle != NULL);
-
-  TerminateThread(handle, 0);
-#endif
-}
-
 #ifdef HAVE_POSIX
 
 void *
