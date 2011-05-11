@@ -70,6 +70,13 @@ Waypoints::Waypoints():
 {
 }
 
+class LandablePredicate {
+public:
+  bool operator()(const WaypointEnvelope& as) const {
+    return as.get_waypoint().IsLandable();
+  }
+};
+
 void
 Waypoints::optimise()
 {
@@ -138,6 +145,25 @@ Waypoints::get_nearest(const GeoPoint &loc) const
   return &found.first->get_waypoint();
 }
 
+const Waypoint*
+Waypoints::get_nearest_landable(const GeoPoint &loc, unsigned long range) const
+{
+  if (empty())
+    return NULL;
+
+  WaypointEnvelope bb_target(loc, task_projection);
+  std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
+      waypoint_tree.find_nearest_if(bb_target, range, LandablePredicate());
+
+#ifdef INSTRUMENT_TASK
+  n_queries++;
+#endif
+
+  if (found.first == waypoint_tree.end())
+    return NULL;
+
+  return &found.first->get_waypoint();
+}
 void
 Waypoints::set_details(const Waypoint& wp, const tstring& Details)
 {

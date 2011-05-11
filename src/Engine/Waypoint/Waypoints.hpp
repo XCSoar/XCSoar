@@ -264,6 +264,19 @@ public:
   const Waypoint* get_nearest(const GeoPoint &loc) const;
 
   /**
+   * Looks up nearest landable waypoint to the
+   * search location within the given range.
+   * Performs search according to flat-earth internal representation,
+   * so is approximate.
+   *
+   * @param loc Location from which to search
+   *
+   * @return Null if none found, otherwise pointer to nearest
+   */
+  const Waypoint* get_nearest_landable(const GeoPoint &loc,
+                                       unsigned long range) const;
+
+  /**
    * Look up waypoint by ID.
    *
    * @param id Id of waypoint to find in internal tree

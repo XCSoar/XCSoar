@@ -102,6 +102,17 @@ test_nearest(const Waypoints& waypoints)
   return r->id == 3;
 }
 
+static bool
+test_nearest_landable(const Waypoints& waypoints)
+{
+  const Waypoint *r = waypoints.get_nearest_landable(
+      GeoPoint(Angle::degrees(fixed(0.99)), Angle::degrees(fixed(1.1))), 50000);
+  if (!r)
+    return false;
+
+  return r->id == 3;
+}
+
 static unsigned
 test_copy(Waypoints& waypoints)
 {
@@ -176,7 +187,7 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(15);
+  plan_tests(16);
 
   Waypoints waypoints;
 
@@ -187,6 +198,7 @@ int main(int argc, char** argv)
   ok(test_lookup(waypoints,3),"waypoint lookup",0);
   ok(!test_lookup(waypoints,5000),"waypoint bad lookup",0);
   ok(test_nearest(waypoints),"waypoint nearest",0);
+  ok(test_nearest_landable(waypoints),"waypoint nearest landable",0);
   ok(test_location(waypoints,true),"waypoint location good",0);
   ok(test_location(waypoints,false),"waypoint location bad",0);
   ok(test_range(waypoints,100)==1,"waypoint visit range 100m",0);
