@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-11 20:35+0200\n"
-"PO-Revision-Date: 2011-04-20 23:14+0000\n"
+"PO-Revision-Date: 2011-05-06 12:43+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-02 15:20+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-05-08 08:41+0000\n"
+"X-Generator: Launchpad (build 12981)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1439 src/Dialogs/dlgAnalysis.cpp:303
@@ -189,9 +189,8 @@ msgid "Finish Turnpoint"
 msgstr "Utolsó FP"
 
 #: src/ExpandMacros.cpp:199 src/ExpandMacros.cpp:245
-#, fuzzy
 msgid "Next Startpoint"
-msgstr "Következő FP"
+msgstr "Másik start"
 
 #: src/ExpandMacros.cpp:205 src/ExpandMacros.cpp:251
 msgid "Start Turnpoint"
@@ -2199,9 +2198,8 @@ msgid "Hold turn"
 msgstr "Fordulásra vár"
 
 #: src/InputEventsActions.cpp:637
-#, fuzzy
 msgid "Show details:"
-msgstr "Ballaszt kijelzése"
+msgstr "Részletek:"
 
 #: src/InputEventsActions.cpp:642
 #, fuzzy
@@ -2824,7 +2822,7 @@ msgstr "Kitérők"
 
 #: src/Dialogs/dlgFlarmDetailsList.cpp:99
 msgid "No further information"
-msgstr ""
+msgstr "Nincs további információ"
 
 #: src/Dialogs/dlgAnalysis.cpp:240 src/Dialogs/dlgAnalysis.cpp:249
 #: src/Dialogs/dlgAnalysis.cpp:258 src/Dialogs/dlgAnalysis.cpp:267
@@ -3238,9 +3236,8 @@ msgid "Final glide"
 msgstr "Végsiklás"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
-#, fuzzy
 msgid "Trending average climb"
-msgstr "Termikátlag követése"
+msgstr "Emelések görgetett átlaga"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:80
 msgid "Flap"
@@ -3612,7 +3609,6 @@ msgid "ft/min"
 msgstr "láb/perc"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
-#, fuzzy
 msgid "Full name"
 msgstr "Teljes név"
 
@@ -3621,27 +3617,24 @@ msgid "The full name of each waypoint is displayed."
 msgstr "Minden fordulópont teljes neve megjelenik."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
-#, fuzzy
 msgid "First word of name"
-msgstr "Első szó"
+msgstr "Név első szava"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
 msgid "The first word of the waypoint name is displayed."
 msgstr "Minden fordulópont nevének első szava jelenik meg."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
-#, fuzzy
 msgid "First 3 letters"
-msgstr "3 betű"
+msgstr "Első 3 betű"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
 msgid "The first 3 letters of the waypoint name are displayed."
 msgstr "Minden fordulópont nevének első 3 betűje jelenik meg."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
-#, fuzzy
 msgid "First 5 letters"
-msgstr "5 betű"
+msgstr "Első 5 betű"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
 msgid "The first 5 letters of the waypoint name are displayed."
@@ -3672,16 +3665,14 @@ msgid "Arrival height considering terrain avoidance"
 msgstr "Érkezési magasság a terep elkerülésével."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
-#, fuzzy
 msgid "Straight & terrain glide"
-msgstr "Egyenes & Terepkerülő siklás"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "Both arrival heights are displayed."
 msgstr "Mindkét érkezési magasság megjelenik."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:76
-#, fuzzy
 msgid "Rounded rectangle"
 msgstr "Lekerekített téglalap"
 
@@ -3694,18 +3685,16 @@ msgid "All waypoint labels will be displayed."
 msgstr "Minden fordulópont cimke megjelenik."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:90
-#, fuzzy
 msgid "Task waypoints & landables"
-msgstr "Feladat FP & Leszállók"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:92
 msgid "All waypoints part of a task and all landables will be displayed."
 msgstr "A feladat részét képező fordulópontok és a leszállóhelyek megjelennek."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:93
-#, fuzzy
 msgid "Task waypoints"
-msgstr "Feladat FP"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:94
 msgid "All waypoints part of a task will be displayed."
@@ -3716,9 +3705,8 @@ msgid "No waypoint labels will be displayed."
 msgstr "Semmilyen fordulópont, címke nem jelenik meg."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:106
-#, fuzzy
 msgid "Purple circle"
-msgstr "Lila kör"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
 msgid ""
@@ -3740,9 +3728,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:110
-#, fuzzy
 msgid "Traffic lights"
-msgstr "Terep feletti bizt. mag."
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:111
 msgid ""
@@ -3777,9 +3764,8 @@ msgid "Task unchanged"
 msgstr "A feladat nem változott meg"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
-#, fuzzy
 msgid "Clear all points?"
-msgstr "Töröljem a feladatot?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Task edit"
@@ -3814,14 +3800,12 @@ msgid "Rename Error"
 msgstr "Átnevezési hiba"
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Create new task?"
-msgstr "Töröljem a feladatot?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Task New"
-msgstr "Feladat szerkesztés"
+msgstr ""
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
 msgid "(Add Alternate Start)"
@@ -6707,13 +6691,10 @@ msgid "Arrival height"
 msgstr "Érkezési magasság"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
-#, fuzzy
 msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
 msgstr ""
-"A visszajátszandó fájl neve. Lehet IGC fájl, NMEA naplófájl, ha üresen "
-"hagyjuk, lejátsza a demót."
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
@@ -6825,9 +6806,8 @@ msgid "Aircraft symbol"
 msgstr "Repülőgép szimbólum"
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
-#, fuzzy
 msgid "Clear All"
-msgstr "Törlés"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -7020,14 +7000,12 @@ msgid "Waypoint distance"
 msgstr "Fordulópont távolsága"
 
 #: Data/Dialogs/pnlTaskList.xml:12 Data/Dialogs/pnlTaskList_L.xml:13
-#, fuzzy
 msgid "Browse"
-msgstr "Feladatböngésző"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:10 Data/Dialogs/pnlTaskList_L.xml:11
-#, fuzzy
 msgid "New Task"
-msgstr "Nincs feladat"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:696
 #: Data/Dialogs/dlgConfiguration_L.xml:697
@@ -7478,9 +7456,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:168
 #: Data/Dialogs/dlgConfiguration_L.xml:168
-#, fuzzy
 msgid "Landable size"
-msgstr "Leszállók mérete"
+msgstr ""
 
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:4
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4 Data/Dialogs/dlgTaskPoint.xml:15
@@ -7694,7 +7671,6 @@ msgstr "Műholdak"
 
 #: Data/Dialogs/dlgConfiguration.xml:312
 #: Data/Dialogs/dlgConfiguration_L.xml:313
-#, fuzzy
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort "
 "mode:\n"
@@ -7704,10 +7680,6 @@ msgid ""
 "[Home] The sorting will try to find landing options in the current direction "
 "to the configured home waypoint."
 msgstr ""
-"Kitérők felsorolásának rendezési elve. [EGYSZERŰ] a kitérők csak a típusuk "
-"(reptér/terep) és érkezési magasságuk alapján kerülnek rendezésre [FELADAT] "
-"a rendezés figyelembe veszi az aktuális feladat pontjait [BÁZISRA] a "
-"rendezés a bázisrepülőtér irányában fog keresni leszállóhelyet."
 
 #: Data/Dialogs/dlgTeamCode.xml:5 Data/Dialogs/dlgTeamCode_L.xml:7
 msgid "Flarm Lock"
@@ -8175,11 +8147,10 @@ msgstr ""
 "ismét"
 
 #: Data/Input/default.xci:906
-#, fuzzy
 msgid ""
 "FLARM\n"
 "Details"
-msgstr "FLARM forgalom részletei"
+msgstr ""
 
 #: Data/Input/default.xci:219 Data/Input/default.xci:524
 msgid ""
@@ -8230,6 +8201,9 @@ msgstr "Leszállás"
 #~ msgid "Task Declared!"
 #~ msgstr "Feladat deklarálva!"
 
+#~ msgid "Organiser Battery Low"
+#~ msgstr "A telep lemerült"
+
 #~ msgid ""
 #~ "Marks\n"
 #~ "Clear"
@@ -8239,88 +8213,6 @@ msgstr "Leszállás"
 
 #~ msgid "Marks cleared"
 #~ msgstr "Jelölők törölve"
-
-#~ msgid "Start point cycle"
-#~ msgstr "Körözés kezdőpontja"
-
-#~ msgid "Previous Waypoint"
-#~ msgstr "Előző fordulópont"
-
-#~ msgid "Organiser Battery Low"
-#~ msgstr "A telep lemerült"
-
-#~ msgid "Orange"
-#~ msgstr "Narancssárga ikon"
-
-#~ msgid "Clear Task"
-#~ msgstr "Feladat törlése"
-
-#~ msgid ""
-#~ "Determines what is used to shift the glider from the map center:\n"
-#~ "[None] Disable adjustments.\n"
-#~ "[Track] Use a recent average of the ground track as basis.\n"
-#~ "[Target]Use the current target waypoint as basis"
-#~ msgstr ""
-#~ "Milyen szempont szerint kerül áthelyezésre a gépecske a térkép "
-#~ "közepéről:\n"
-#~ "[Nincs] áthelyezés letiltva.\n"
-#~ "[REPIRÁNY] A repirány görgetett átlaga szerint.\n"
-#~ "[ÚTIRÁNY] A pillanatnyi útirány szerint."
-
-#~ msgid ""
-#~ "Determines how the screen is rotated with the glider:\n"
-#~ "[North up] The moving map display will always be orientated north to "
-#~ "south and the glider icon will be rotated to show its course.\n"
-#~ "[Track up] The moving map display will be rotated so the glider's track "
-#~ "is oriented up.\n"
-#~ "[Target up] The moving map display will be rotated so the navigation "
-#~ "target is oriented up."
-#~ msgstr ""
-#~ "A képernyőnek a vitorlához képesti forgatását szabályozza:\n"
-#~ "[ÉSZAK] A mozgó térkép mindig észak-déli tájolású és a gépecske lesz "
-#~ "forgatva az orriránynak megfelelően.\n"
-#~ "[REPIRÁNY] A mozgó térkép mindig a gép haladási iránya szerint lesz "
-#~ "tájolva.\n"
-#~ "[ÚTIRÁNY] A mozgó térkép mindig az útvonal iránya szerint lesz tájolva."
-
-#~ msgid ""
-#~ "Determines how arrival height is displayed in waypoint labels:\n"
-#~ "[None] No arrival height is displayed.\n"
-#~ "[Straight glide] Only glide performance is considered for arrival "
-#~ "height.\n"
-#~ "[Terrain avoidance glide] Glide performance and possible detours around "
-#~ "terrain are considered for arrival height.\n"
-#~ "[Straight & Terrain avoidance glide] Arrival height for straight in glide "
-#~ "and (if available) arrival height considering detours around terrain is "
-#~ "displayed."
-#~ msgstr ""
-#~ "Az érkezési magasság kijelzését szabályozza a fordulópontok címkéiben:\n"
-#~ "[NINCS] Nincs megjelenítve.\n"
-#~ "[EGYENES] A gép képességei szerinti magasság.\n"
-#~ "[TEREPET ELKERÜLŐ] A gép képességei és a terep miatt szükséges kerülők "
-#~ "szerinti magasság.\n"
-#~ "[EGYENES+TEREPKERÜLŐ] Az egyenes siklás szerinti és (ha van) a kerülővel "
-#~ "számított magasság kerül kijelzésre."
-
-#~ msgid "Gestures"
-#~ msgstr "Gesztusok"
-
-#~ msgid ""
-#~ "Determines how labels are displayed with each waypoint:\n"
-#~ "[Full Name] The full name of each waypoint is displayed.\n"
-#~ "[First Word of Name] The first word of the waypoint name is displayed.\n"
-#~ "[First 3 Letters] The first 3 letters of the waypoint name are "
-#~ "displayed.\n"
-#~ "[First 5 Letters] The first 5 letters of the waypoint name are "
-#~ "displayed.\n"
-#~ "[None] No waypoint name is displayed."
-#~ msgstr ""
-#~ "A fordulópont címkék megjelenítését határozza meg:\n"
-#~ "[TELJES NÉV] A fordulópont teljes neve megjelenik.\n"
-#~ "[ELSŐ SZÓ] A név első szava jelenik meg.\n"
-#~ "[3 BETŰ] A név első három betűje jelenik meg.\n"
-#~ "[5 BETŰ] A név első öt betűje jelenik meg.\n"
-#~ "[NINCS] Nem jelenik meg a név."
 
 #~ msgid "Previous turnpoint"
 #~ msgstr "Előző fordulópont"
@@ -8342,6 +8234,9 @@ msgstr "Leszállás"
 
 #~ msgid "Start turnpoint"
 #~ msgstr "Kezdő fordulópont"
+
+#~ msgid "Start point cycle"
+#~ msgstr "Körözés kezdőpontja"
 
 #~ msgid "Previous waypoint"
 #~ msgstr "Előző fordulópont"
@@ -8444,6 +8339,9 @@ msgstr "Leszállás"
 
 #~ msgid "Auto MacCready OFF"
 #~ msgstr "Auto McCready KI"
+
+#~ msgid "No Task"
+#~ msgstr "Nincs feladat"
 
 #~ msgid "NMEA Log ON"
 #~ msgstr "NMEA Logger BE"
@@ -8715,6 +8613,9 @@ msgstr "Leszállás"
 #~ msgid "Topology"
 #~ msgstr "Topológia"
 
+#~ msgid "Previous Waypoint"
+#~ msgstr "Előző fordulópont"
+
 #~ msgid ""
 #~ "Arrival altitude at the final task turn point relative to the safety "
 #~ "arrival altitude."
@@ -8818,6 +8719,30 @@ msgstr "Leszállás"
 #~ msgid "False"
 #~ msgstr "NEM"
 
+#~ msgid "Trending Average climb"
+#~ msgstr "Termikátlag követése"
+
+#~ msgid "Full Name"
+#~ msgstr "Teljes név"
+
+#~ msgid "Straight & Terrain glide"
+#~ msgstr "Egyenes & Terepkerülő siklás"
+
+#~ msgid "Rounded Rectangle"
+#~ msgstr "Lekerekített téglalap"
+
+#~ msgid "Orange"
+#~ msgstr "Narancssárga ikon"
+
+#~ msgid "Purple Circle"
+#~ msgstr "Lila kör"
+
+#~ msgid "Clear task?"
+#~ msgstr "Töröljem a feladatot?"
+
+#~ msgid "Clear Task"
+#~ msgstr "Feladat törlése"
+
 #~ msgid "Important topography labels"
 #~ msgstr "Fontos térképjel címkék"
 
@@ -8854,6 +8779,9 @@ msgstr "Leszállás"
 #~ msgid "Auxiliary-3"
 #~ msgstr "Külső-3"
 
+#~ msgid "Gestures"
+#~ msgstr "Gesztusok"
+
 #~ msgid ""
 #~ "When enabled, the glide terrain range is calculated with turning around "
 #~ "terrain obstacles.  If disabled, the range is from straight line paths "
@@ -8868,11 +8796,34 @@ msgstr "Leszállás"
 #~ msgid "Auxiliary-4"
 #~ msgstr "Külső-4"
 
+#~ msgid ""
+#~ "Name of file to replay.  Can be an IGC file, a raw NMEA log file, or if "
+#~ "blank, runs the demo."
+#~ msgstr ""
+#~ "A visszajátszandó fájl neve. Lehet IGC fájl, NMEA naplófájl, ha üresen "
+#~ "hagyjuk, lejátsza a demót."
+
 #~ msgid "Topography"
 #~ msgstr "Térképjelek"
 
 #~ msgid "Heading"
 #~ msgstr "Orrirány"
+
+#~ msgid ""
+#~ "Determines how the screen is rotated with the glider:\n"
+#~ "[North up] The moving map display will always be orientated north to "
+#~ "south and the glider icon will be rotated to show its course.\n"
+#~ "[Track up] The moving map display will be rotated so the glider's track "
+#~ "is oriented up.\n"
+#~ "[Target up] The moving map display will be rotated so the navigation "
+#~ "target is oriented up."
+#~ msgstr ""
+#~ "A képernyőnek a vitorlához képesti forgatását szabályozza:\n"
+#~ "[ÉSZAK] A mozgó térkép mindig észak-déli tájolású és a gépecske lesz "
+#~ "forgatva az orriránynak megfelelően.\n"
+#~ "[REPIRÁNY] A mozgó térkép mindig a gép haladási iránya szerint lesz "
+#~ "tájolva.\n"
+#~ "[ÚTIRÁNY] A mozgó térkép mindig az útvonal iránya szerint lesz tájolva."
 
 #~ msgid "Set speed remaining"
 #~ msgstr "Sebesség a maradék távon"
@@ -8893,6 +8844,32 @@ msgstr "Leszállás"
 
 #~ msgid "Use a recent average of the flown heading as basis."
 #~ msgstr "Az orrirány görgetett átlaga"
+
+#~ msgid "First Word of Name"
+#~ msgstr "Első szó"
+
+#~ msgid "First 3 Letters"
+#~ msgstr "3 betű"
+
+#~ msgid "First 5 Letters"
+#~ msgstr "5 betű"
+
+#~ msgid ""
+#~ "Determines how labels are displayed with each waypoint:\n"
+#~ "[Full Name] The full name of each waypoint is displayed.\n"
+#~ "[First Word of Name] The first word of the waypoint name is displayed.\n"
+#~ "[First 3 Letters] The first 3 letters of the waypoint name are "
+#~ "displayed.\n"
+#~ "[First 5 Letters] The first 5 letters of the waypoint name are "
+#~ "displayed.\n"
+#~ "[None] No waypoint name is displayed."
+#~ msgstr ""
+#~ "A fordulópont címkék megjelenítését határozza meg:\n"
+#~ "[TELJES NÉV] A fordulópont teljes neve megjelenik.\n"
+#~ "[ELSŐ SZÓ] A név első szava jelenik meg.\n"
+#~ "[3 BETŰ] A név első három betűje jelenik meg.\n"
+#~ "[5 BETŰ] A név első öt betűje jelenik meg.\n"
+#~ "[NINCS] Nem jelenik meg a név."
 
 #~ msgid "Aux-%u"
 #~ msgstr "Külső-%u"
@@ -8917,6 +8894,59 @@ msgstr "Leszállás"
 
 #~ msgid "InfoBox Layout"
 #~ msgstr "Kijelzők elrendezése"
+
+#~ msgid ""
+#~ "Determines what is used to shift the glider from the map center:\n"
+#~ "[None] Disable adjustments.\n"
+#~ "[Track] Use a recent average of the ground track as basis.\n"
+#~ "[Target]Use the current target waypoint as basis"
+#~ msgstr ""
+#~ "Milyen szempont szerint kerül áthelyezésre a gépecske a térkép "
+#~ "közepéről:\n"
+#~ "[Nincs] áthelyezés letiltva.\n"
+#~ "[REPIRÁNY] A repirány görgetett átlaga szerint.\n"
+#~ "[ÚTIRÁNY] A pillanatnyi útirány szerint."
+
+#~ msgid ""
+#~ "Determines how arrival height is displayed in waypoint labels:\n"
+#~ "[None] No arrival height is displayed.\n"
+#~ "[Straight glide] Only glide performance is considered for arrival "
+#~ "height.\n"
+#~ "[Terrain avoidance glide] Glide performance and possible detours around "
+#~ "terrain are considered for arrival height.\n"
+#~ "[Straight & Terrain avoidance glide] Arrival height for straight in glide "
+#~ "and (if available) arrival height considering detours around terrain is "
+#~ "displayed."
+#~ msgstr ""
+#~ "Az érkezési magasság kijelzését szabályozza a fordulópontok címkéiben:\n"
+#~ "[NINCS] Nincs megjelenítve.\n"
+#~ "[EGYENES] A gép képességei szerinti magasság.\n"
+#~ "[TEREPET ELKERÜLŐ] A gép képességei és a terep miatt szükséges kerülők "
+#~ "szerinti magasság.\n"
+#~ "[EGYENES+TEREPKERÜLŐ] Az egyenes siklás szerinti és (ha van) a kerülővel "
+#~ "számított magasság kerül kijelzésre."
+
+#~ msgid "Task Waypoints & Landables"
+#~ msgstr "Feladat FP & Leszállók"
+
+#~ msgid "Task Waypoints"
+#~ msgstr "Feladat FP"
+
+#~ msgid "Landable rendering size"
+#~ msgstr "Leszállók mérete"
+
+#~ msgid ""
+#~ "If set to \"Simple\", the alternates will only be sorted by waypoint type "
+#~ "(airport/outlanding field) and arrival height. If set to \"Task\" the "
+#~ "sorting will also take the current task direction into account. If set to "
+#~ "\"Home\" the sorting will try to find landing options in the current "
+#~ "direction to the configured home waypoint."
+#~ msgstr ""
+#~ "Kitérők felsorolásának rendezési elve. [EGYSZERŰ] a kitérők csak a "
+#~ "típusuk (reptér/terep) és érkezési magasságuk alapján kerülnek rendezésre "
+#~ "[FELADAT] a rendezés figyelembe veszi az aktuális feladat pontjait "
+#~ "[BÁZISRA] a rendezés a bázisrepülőtér irányában fog keresni "
+#~ "leszállóhelyet."
 
 #~ msgid ""
 #~ "When enabled and Mc is positive, route planning allows climbs between the "
