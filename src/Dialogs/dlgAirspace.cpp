@@ -63,9 +63,17 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 #ifdef ENABLE_SDL
     canvas.select(Graphics::solid_airspace_brushes[renderer.colours[i]]);
 #else
-    canvas.set_text_color(Graphics::GetAirspaceColourByClass(i, renderer));
-    canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
-    canvas.select(Graphics::GetAirspaceBrushByClass(i, renderer));
+#ifdef HAVE_ALPHA_BLEND
+    if (renderer.transparency && AlphaBlendAvailable()) {
+      canvas.select(Graphics::solid_airspace_brushes[renderer.colours[i]]);
+    } else {
+#endif
+      canvas.set_text_color(Graphics::GetAirspaceColourByClass(i, renderer));
+      canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
+      canvas.select(Graphics::GetAirspaceBrushByClass(i, renderer));
+#ifdef HAVE_ALPHA_BLEND
+    }
+#endif
 #endif
     canvas.rectangle(rc.left + x0, rc.top + Layout::FastScale(2),
         rc.right - Layout::FastScale(2), rc.bottom - Layout::FastScale(2));
@@ -107,13 +115,19 @@ OnAirspaceListEnter(unsigned ItemIndex)
     }
 
 #ifndef ENABLE_SDL
-    int p = dlgAirspacePatternsShowModal();
-    if (p >= 0) {
-      renderer.brushes[ItemIndex] = p;
-      ActionInterface::SendSettingsMap();
-      Profile::SetAirspaceBrush(ItemIndex, renderer.brushes[ItemIndex]);
-      changed = true;
+#ifdef HAVE_ALPHA_BLEND
+    if (!renderer.transparency || !AlphaBlendAvailable()) {
+#endif
+      int p = dlgAirspacePatternsShowModal();
+      if (p >= 0) {
+        renderer.brushes[ItemIndex] = p;
+        ActionInterface::SendSettingsMap();
+        Profile::SetAirspaceBrush(ItemIndex, renderer.brushes[ItemIndex]);
+        changed = true;
+      }
+#ifdef HAVE_ALPHA_BLEND
     }
+#endif
 #endif
   } else {
     renderer.display[ItemIndex] = !renderer.display[ItemIndex];
