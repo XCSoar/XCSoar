@@ -71,6 +71,6 @@ FlymasterF1CreateOnPort(Port *com_port)
 
 const struct DeviceRegister flymasterf1Device = {
   _T("FlymasterF1"),
-  drfBaroAlt,
+  0,
   FlymasterF1CreateOnPort,
 };

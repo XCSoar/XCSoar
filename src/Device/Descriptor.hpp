@@ -98,8 +98,6 @@ public:
   bool IsDriver(const TCHAR *name) const;
 
   bool IsLogger() const;
-  bool IsBaroSource() const;
-  bool IsRadio() const;
 
   bool IsCondor() const {
     return IsDriver(_T("Condor"));

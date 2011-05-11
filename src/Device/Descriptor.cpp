@@ -141,20 +141,6 @@ DeviceDescriptor::IsLogger() const
 }
 
 bool
-DeviceDescriptor::IsBaroSource() const
-{
-  return Driver != NULL &&
-    ((Driver->Flags & drfBaroAlt) != 0 ||
-     (device != NULL && device->IsBaroSource()));
-}
-
-bool
-DeviceDescriptor::IsRadio() const
-{
-  return Driver != NULL && (Driver->Flags & drfRadio) != 0;
-}
-
-bool
 DeviceDescriptor::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
 {
   assert(String != NULL);

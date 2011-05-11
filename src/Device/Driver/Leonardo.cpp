@@ -176,6 +176,6 @@ LeonardoCreateOnPort(Port *com_port)
 
 const struct DeviceRegister leonardo_device_driver = {
   _T("Leonardo"),
-  drfBaroAlt,
+  0,
   LeonardoCreateOnPort,
 };

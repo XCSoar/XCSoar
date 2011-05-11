@@ -416,6 +416,6 @@ VegaCreateOnPort(Port *com_port)
 
 const struct DeviceRegister vgaDevice = {
   _T("Vega"),
-  drfBaroAlt,
+  0,
   VegaCreateOnPort,
 };

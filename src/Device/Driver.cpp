@@ -43,12 +43,6 @@ AbstractDevice::IsLogger()
 }
 
 bool
-AbstractDevice::IsBaroSource()
-{
-  return false;
-}
-
-bool
 AbstractDevice::ParseNMEA(const char *line, struct NMEA_INFO *info)
 {
   return false;

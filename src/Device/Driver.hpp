@@ -46,7 +46,6 @@ public:
   virtual void LinkTimeout() = 0;
 
   virtual bool IsLogger() = 0;
-  virtual bool IsBaroSource() = 0;
 
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info) = 0;
 
@@ -78,7 +77,6 @@ public:
   virtual void LinkTimeout();
 
   virtual bool IsLogger();
-  virtual bool IsBaroSource();
 
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 
@@ -101,15 +99,11 @@ public:
 
 enum DeviceFlags_t {
   dfLogger,
-  dfBaroAlt,
   dfNmeaOut,
-  dfRadio,
 };
 
 #define drfLogger	(1l << dfLogger)
-#define drfBaroAlt	(1l << dfBaroAlt)
 #define drfNmeaOut	(1l << dfNmeaOut)
-#define drfRadio	(1l << dfRadio)
 
 /**
  * This is the structure exported by a device driver.

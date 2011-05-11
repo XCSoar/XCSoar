@@ -75,7 +75,7 @@ XCOM760CreateOnPort(Port *com_port)
 
 const struct DeviceRegister xcom760Device = {
   _T("XCOM760"),
-  drfRadio,
+  0,
   XCOM760CreateOnPort,
 };
 

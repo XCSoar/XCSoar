@@ -496,7 +496,7 @@ CAI302CreateOnPort(Port *com_port)
 
 const struct DeviceRegister cai302Device = {
   _T("CAI 302"),
-  drfBaroAlt | drfLogger,
+  drfLogger,
   CAI302CreateOnPort,
 };
 
