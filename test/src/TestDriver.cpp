@@ -55,6 +55,12 @@ HaveCondorDevice()
   return false;
 }
 
+bool
+InputEvents::processNmea(unsigned ne_id)
+{
+  return false;
+}
+
 /*
  * Fake Waypoints
  */
@@ -446,6 +452,37 @@ TestILEC()
 }
 
 static void
+TestVega()
+{
+  Device *device = vgaDevice.CreateOnPort(NULL);
+  ok1(device != NULL);
+
+  NMEA_INFO nmea_info;
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  ok1(device->ParseNMEA("$PDSWC,0,1002000,100,115*54", &nmea_info));
+  ok1(nmea_info.settings.mac_cready_available);
+  ok1(equals(nmea_info.settings.mac_cready, 0));
+  ok1(nmea_info.SwitchStateAvailable);
+  ok1(nmea_info.SupplyBatteryVoltageAvailable);
+  ok1(equals(nmea_info.SupplyBatteryVoltage, 11.5));
+
+  ok1(device->ParseNMEA("$PDVDV,1,0,1062,762,9252,0*5B", &nmea_info));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, 0.1));
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 0));
+  ok1(equals(nmea_info.IndicatedAirspeed, 0));
+  ok1(!nmea_info.static_pressure_available);
+  ok1(!nmea_info.BaroAltitudeAvailable);
+  ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(equals(nmea_info.PressureAltitude, 762));
+
+  delete device;
+}
+
+static void
 TestWesterboer()
 {
   Device *device = westerboer_device_driver.CreateOnPort(NULL);
@@ -617,7 +654,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(288);
+  plan_tests(305);
 
   TestGeneric();
   TestFLARM();
@@ -628,6 +665,7 @@ int main(int argc, char **argv)
   TestLX(lxDevice);
   TestLX(condorDevice, true);
   TestILEC();
+  TestVega();
   TestWesterboer();
   TestZander();
 

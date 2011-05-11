@@ -446,6 +446,7 @@ $(TARGET_BIN_DIR)/TestLogger$(TARGET_EXEEXT): $(TEST_LOGGER_OBJS) $(TEST_LOGGER_
 TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/NullPort.cpp \
 	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Driver/BorgeltB50.cpp \
 	$(SRC)/Device/Driver/CAI302.cpp \
@@ -458,6 +459,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/ILEC.cpp \
 	$(SRC)/Device/Driver/Westerboer.cpp \
 	$(SRC)/Device/Driver/PosiGraph.cpp \
+	$(SRC)/Device/Driver/Vega.cpp \
 	$(SRC)/Device/Driver/Volkslogger.cpp \
 	$(SRC)/Device/Driver/Zander.cpp \
 	$(VOLKSLOGGER_SOURCES) \
@@ -484,6 +486,8 @@ TEST_DRIVER_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeProgressGlue.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
 TEST_DRIVER_OBJS = $(call SRC_TO_OBJ,$(TEST_DRIVER_SOURCES))
 $(TARGET_BIN_DIR)/TestDriver$(TARGET_EXEEXT): $(TEST_DRIVER_OBJS) $(TEST_DRIVER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
