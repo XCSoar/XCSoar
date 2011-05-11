@@ -75,7 +75,7 @@ namespace Graphics {
   extern Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 #endif
 
-#ifdef HAVE_ALPHA_BLEND
+#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
   /**
    * Non-pattern brushes used for transparent
    */

@@ -45,7 +45,7 @@ Brush Graphics::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
 Bitmap Graphics::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
 #endif
 
-#ifdef HAVE_ALPHA_BLEND
+#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
 Brush Graphics::solid_airspace_brushes[NUMAIRSPACECOLORS];
 #endif
 
@@ -256,6 +256,8 @@ Graphics::Initialise()
 
 #ifdef HAVE_ALPHA_BLEND
   if (AlphaBlendAvailable())
+#endif
+#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
     for (unsigned i = 0; i < NUMAIRSPACECOLORS; ++i)
       solid_airspace_brushes[i].set(Colours[i]);
 #endif
@@ -476,6 +478,8 @@ Graphics::Deinitialise()
 
 #ifdef HAVE_ALPHA_BLEND
   if (AlphaBlendAvailable())
+#endif
+#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
     for (unsigned i = 0; i < NUMAIRSPACECOLORS; ++i)
       solid_airspace_brushes[i].reset();
 #endif

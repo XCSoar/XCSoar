@@ -61,7 +61,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   if (colormode) {
     canvas.white_pen();
 #ifdef ENABLE_SDL
-    canvas.select(Brush(Graphics::Colours[renderer.colours[i]]));
+    canvas.select(Graphics::solid_airspace_brushes[renderer.colours[i]]);
 #else
     canvas.set_text_color(Graphics::GetAirspaceColourByClass(i, renderer));
     canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));

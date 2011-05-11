@@ -330,8 +330,7 @@ private:
     const unsigned color_index = settings.colours[airspace.get_type()];
 
 #ifdef ENABLE_SDL
-    Color color = Graphics::Colours[color_index];
-    m_buffer.select(Brush(color));
+    m_buffer.select(Graphics::solid_airspace_brushes[color_index]);
 #else /* !SDL */
 
 #ifdef HAVE_ALPHA_BLEND
