@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-11 20:35+0200\n"
-"PO-Revision-Date: 2011-04-27 21:48+0000\n"
+"PO-Revision-Date: 2011-05-06 21:39+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-02 15:20+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-05-08 08:41+0000\n"
+"X-Generator: Launchpad (build 12981)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -191,9 +191,8 @@ msgid "Finish Turnpoint"
 msgstr "Zielpunkt"
 
 #: src/ExpandMacros.cpp:199 src/ExpandMacros.cpp:245
-#, fuzzy
 msgid "Next Startpoint"
-msgstr "Nächster Wendepunkt"
+msgstr "Nächster Startpunkt"
 
 #: src/ExpandMacros.cpp:205 src/ExpandMacros.cpp:251
 msgid "Start Turnpoint"
@@ -2206,9 +2205,8 @@ msgid "Hold turn"
 msgstr "Mit dem Wenden warten"
 
 #: src/InputEventsActions.cpp:637
-#, fuzzy
 msgid "Show details:"
-msgstr "Zeige Ballast"
+msgstr "Zeige Details:"
 
 #: src/InputEventsActions.cpp:642
 #, fuzzy
@@ -2838,7 +2836,7 @@ msgstr "Alternativen"
 
 #: src/Dialogs/dlgFlarmDetailsList.cpp:99
 msgid "No further information"
-msgstr ""
+msgstr "Keine weitere Information"
 
 #: src/Dialogs/dlgAnalysis.cpp:240 src/Dialogs/dlgAnalysis.cpp:249
 #: src/Dialogs/dlgAnalysis.cpp:258 src/Dialogs/dlgAnalysis.cpp:267
@@ -3254,7 +3252,6 @@ msgid "Final glide"
 msgstr "Endanflug"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
-#, fuzzy
 msgid "Trending average climb"
 msgstr "Erwartetes mittleres Steigen"
 
@@ -3631,16 +3628,14 @@ msgid "ft/min"
 msgstr "Fuss/min"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
-#, fuzzy
 msgid "Full name"
-msgstr "Ganzer Name"
+msgstr "Vollständiger Name"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
 msgid "The full name of each waypoint is displayed."
 msgstr "Der ganze Name des Wegpunkts wird angezeigt."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
-#, fuzzy
 msgid "First word of name"
 msgstr "Erstes Wort aus Namen"
 
@@ -3649,7 +3644,6 @@ msgid "The first word of the waypoint name is displayed."
 msgstr "Das erste Wort aus dem Namen wird angezeigt."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
-#, fuzzy
 msgid "First 3 letters"
 msgstr "Ersten 3 Buchstaben"
 
@@ -3658,7 +3652,6 @@ msgid "The first 3 letters of the waypoint name are displayed."
 msgstr "Die ersten drei Buchstaben des Namen werden angezeigt."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
-#, fuzzy
 msgid "First 5 letters"
 msgstr "Ersten 5 Buchstaben"
 
@@ -3693,7 +3686,6 @@ msgid "Arrival height considering terrain avoidance"
 msgstr "Ankunftshöhe unter Beachtung des Geländes"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
-#, fuzzy
 msgid "Straight & terrain glide"
 msgstr "Geraden & Gelände Gleitpfad"
 
@@ -3702,7 +3694,6 @@ msgid "Both arrival heights are displayed."
 msgstr "Beide Ankunftshöhen werden angezeigt."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:76
-#, fuzzy
 msgid "Rounded rectangle"
 msgstr "Abgerundetes Rechteck"
 
@@ -3715,7 +3706,6 @@ msgid "All waypoint labels will be displayed."
 msgstr "Alle Wegpunktbeschriftungen werden angezeigt."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:90
-#, fuzzy
 msgid "Task waypoints & landables"
 msgstr "Aufgabenwegpunkte & Landbare"
 
@@ -3724,7 +3714,6 @@ msgid "All waypoints part of a task and all landables will be displayed."
 msgstr "Alle Wegpunkte aus der Aufgabe und alle Landbaren werden angezeigt."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:93
-#, fuzzy
 msgid "Task waypoints"
 msgstr "Aufgabenwegpunkte"
 
@@ -3737,7 +3726,6 @@ msgid "No waypoint labels will be displayed."
 msgstr "Keine Wegpunktbeschriftung anzeigen."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:106
-#, fuzzy
 msgid "Purple circle"
 msgstr "Lila Punkt"
 
@@ -3761,9 +3749,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:110
-#, fuzzy
 msgid "Traffic lights"
-msgstr "Geländefreiheit"
+msgstr "Verkehrsampel"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:111
 msgid ""
@@ -3798,9 +3785,8 @@ msgid "Task unchanged"
 msgstr "Aufgabe ist unverändert"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
-#, fuzzy
 msgid "Clear all points?"
-msgstr "Aufgabe löschen?"
+msgstr "Alle Punkte löschen?"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Task edit"
@@ -3835,14 +3821,12 @@ msgid "Rename Error"
 msgstr "Fehler beim Umbenennen"
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Create new task?"
-msgstr "Aufgabe löschen?"
+msgstr "Erzeuge neue Aufgabe?"
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Task New"
-msgstr "Aufgabe editieren"
+msgstr "Neue Aufgabe"
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
 msgid "(Add Alternate Start)"
@@ -4235,9 +4219,8 @@ msgid "non-FAI turn points"
 msgstr "Nicht-FAI Wendepunkte"
 
 #: src/Dialogs/dlgTeamCode.cpp:170
-#, fuzzy
 msgid "Set new teammate:"
-msgstr "Setze als neuer Heimatplatz"
+msgstr "Lege neuen Teamkollegen fest:"
 
 #: src/Dialogs/dlgTeamCode.cpp:178
 msgid "Unknown Competition Number"
@@ -6286,7 +6269,7 @@ msgstr "Manuelle Eingabe der Windgeschwindigkeit."
 #: Data/Dialogs/dlgConfiguration.xml:502
 #: Data/Dialogs/dlgConfiguration_L.xml:503
 msgid "Default start type for new tasks you create."
-msgstr "Standard Ablugtyp for Aufgaben."
+msgstr "Standard Abflugtyp für Aufgaben."
 
 #: Data/Dialogs/dlgLoggerReplay.xml:14
 msgid ""
@@ -6733,13 +6716,12 @@ msgid "Arrival height"
 msgstr "Ankunftshöhe"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
-#, fuzzy
 msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
 msgstr ""
-"Angabe der Datei zur Wiedergabe. Es kann eine IGC Datei, oder ein Roh-NMEA "
-"Logschrieb sein. Ohne Angabe wird das Demo abgespielt."
+"Angabe der Datei zur Wiedergabe. Es kann eine IGC Datei (.igc), oder ein Roh-"
+"NMEA Logschrieb (.nmea) sein. Ohne Angabe wird das Demo abgespielt."
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
@@ -6851,9 +6833,8 @@ msgid "Aircraft symbol"
 msgstr "Flugzeugsymbol"
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
-#, fuzzy
 msgid "Clear All"
-msgstr "Löschen"
+msgstr "Alle löschen"
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -7055,9 +7036,8 @@ msgid "Browse"
 msgstr "Durchsuchen"
 
 #: Data/Dialogs/pnlTaskList.xml:10 Data/Dialogs/pnlTaskList_L.xml:11
-#, fuzzy
 msgid "New Task"
-msgstr "Keine Aufgabe"
+msgstr "Neue Aufgabe"
 
 #: Data/Dialogs/dlgConfiguration.xml:696
 #: Data/Dialogs/dlgConfiguration_L.xml:697
@@ -7463,7 +7443,7 @@ msgstr "Temperatur"
 
 #: Data/Dialogs/pnlTaskList.xml:22 Data/Dialogs/pnlTaskList_L.xml:23
 msgid "Back"
-msgstr ""
+msgstr "Zurück"
 
 #: Data/Dialogs/dlgConfiguration.xml:599
 #: Data/Dialogs/dlgConfiguration_L.xml:600
@@ -7502,9 +7482,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:168
 #: Data/Dialogs/dlgConfiguration_L.xml:168
-#, fuzzy
 msgid "Landable size"
-msgstr "Landbare Felder"
+msgstr "Größe für Landbare"
 
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:4
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4 Data/Dialogs/dlgTaskPoint.xml:15
@@ -8197,11 +8176,12 @@ msgstr ""
 "Meldung"
 
 #: Data/Input/default.xci:906
-#, fuzzy
 msgid ""
 "FLARM\n"
 "Details"
-msgstr "FLARM Flugverkehr Details"
+msgstr ""
+"FLARM\n"
+"Details"
 
 #: Data/Input/default.xci:219 Data/Input/default.xci:524
 msgid ""
@@ -8248,11 +8228,24 @@ msgstr ""
 msgid "Landing"
 msgstr "Gelandet"
 
+#~ msgid "Ignore checksum*"
+#~ msgstr "Prüfsumme ignorieren*"
+
+#~ msgid ""
+#~ "When External Polar File is the polar type, this is the name of the file "
+#~ "containing the glide polar data (in WinPilot format)."
+#~ msgstr ""
+#~ "Wenn \"Externe Polare\" als Polarentyp ausgewählt ist, muss hier die "
+#~ "Datei mit der Polare ausgewählt werden (im WinPilot Format)."
+
 #~ msgid "Declare Task?"
 #~ msgstr "Aufgabe deklarieren?"
 
 #~ msgid "Task Declared!"
 #~ msgstr "Aufgabe deklariert!"
+
+#~ msgid "Organiser Battery Low"
+#~ msgstr "Batteriestand niedrig"
 
 #~ msgid ""
 #~ "Marks\n"
@@ -8263,73 +8256,6 @@ msgstr "Gelandet"
 
 #~ msgid "Marks cleared"
 #~ msgstr "Marken gelöscht"
-
-#~ msgid "Start point cycle"
-#~ msgstr "Abflugpunkt Auswahl"
-
-#~ msgid "Previous Waypoint"
-#~ msgstr "Vorheriger Wegpunkt"
-
-#~ msgid "Organiser Battery Low"
-#~ msgstr "Batteriestand niedrig"
-
-#~ msgid "Orange"
-#~ msgstr "Orange"
-
-#~ msgid "Clear Task"
-#~ msgstr "Aufgabe löschen"
-
-#~ msgid ""
-#~ "Determines how the screen is rotated with the glider:\n"
-#~ "[North up] The moving map display will always be orientated north to "
-#~ "south and the glider icon will be rotated to show its course.\n"
-#~ "[Track up] The moving map display will be rotated so the glider's track "
-#~ "is oriented up.\n"
-#~ "[Target up] The moving map display will be rotated so the navigation "
-#~ "target is oriented up."
-#~ msgstr ""
-#~ "Bestimmt, wie die Anzeige zum Segler ausgerichtet ist:\n"
-#~ "[Norden oben] Die Karte ist immer nach Norden ausgerichtet und das "
-#~ "Selgersymbol dreht sich entsprechend dem Kurs.\n"
-#~ "[Kurs nach oben] Die Kartendarstellung dreht sich unter dem Seglersymbol, "
-#~ "sodass der Kurs immer nach oben gerichtet ist.\n"
-#~ "[Ziel nach oben] zeigt die Karte so, dass das nächste Ziel nach oben "
-#~ "gerichtet ist."
-
-#~ msgid "Landable rendering size"
-#~ msgstr "Darstellungsgröße für Landbare"
-
-#~ msgid "Gestures"
-#~ msgstr "Gesten"
-
-#~ msgid ""
-#~ "Determines how labels are displayed with each waypoint:\n"
-#~ "[Full Name] The full name of each waypoint is displayed.\n"
-#~ "[First Word of Name] The first word of the waypoint name is displayed.\n"
-#~ "[First 3 Letters] The first 3 letters of the waypoint name are "
-#~ "displayed.\n"
-#~ "[First 5 Letters] The first 5 letters of the waypoint name are "
-#~ "displayed.\n"
-#~ "[None] No waypoint name is displayed."
-#~ msgstr ""
-#~ "Bestimmt wie die Beschriftung auf der Karte dargestellt wird:\n"
-#~ "[Namen] Der volle Namen von jedem Wegpunkt wird angezeigt.\n"
-#~ "[Erstes Wort] Nur das erste Wort aus dem Wegpunktname wird angezeigt.\n"
-#~ "[Namen aus Aufgabe] Nur die Wegpunkte aus der Aufgabe und der Heimatplatz "
-#~ "werden angezeigt.\n"
-#~ "[Ersten 3] Die ersten drei Buchstaben des Wegpunkts werden angezeigt.\n"
-#~ "[Ersten 5] Entsprechend mit fünf Buchstaben.\n"
-#~ "[None] Die Beschriftung der Wegpunkte wird weggelassen."
-
-#~ msgid "Ignore checksum*"
-#~ msgstr "Prüfsumme ignorieren*"
-
-#~ msgid ""
-#~ "When External Polar File is the polar type, this is the name of the file "
-#~ "containing the glide polar data (in WinPilot format)."
-#~ msgstr ""
-#~ "Wenn \"Externe Polare\" als Polarentyp ausgewählt ist, muss hier die "
-#~ "Datei mit der Polare ausgewählt werden (im WinPilot Format)."
 
 #~ msgid ""
 #~ "Terrain\n"
@@ -8389,6 +8315,9 @@ msgstr "Gelandet"
 
 #~ msgid "No Active Waypoint!"
 #~ msgstr "Kein Wegpunkt ausgewählt!"
+
+#~ msgid "No Task"
+#~ msgstr "Keine Aufgabe"
 
 #~ msgid "NMEA Log OFF"
 #~ msgstr "NEMA Log OFF"
@@ -8571,6 +8500,9 @@ msgstr "Gelandet"
 #~ msgid "Optimise"
 #~ msgstr "Optimiere"
 
+#~ msgid "Landable fields"
+#~ msgstr "Landbare Felder"
+
 #~ msgid "FAI finish height"
 #~ msgstr "FAI Zielhöhe"
 
@@ -8609,6 +8541,9 @@ msgstr "Gelandet"
 
 #~ msgid "Dialog Style*"
 #~ msgstr "Dialogstil*"
+
+#~ msgid "Gestures"
+#~ msgstr "Gesten"
 
 #~ msgid "Orientation"
 #~ msgstr "Ausrichtung"
@@ -8829,6 +8764,9 @@ msgstr "Gelandet"
 
 #~ msgid "Task not valid. Changes will be lost."
 #~ msgstr "Aufgabe ungültig. Änderungen gehen verloren."
+
+#~ msgid "Clear task?"
+#~ msgstr "Aufgabe löschen?"
 
 #~ msgid "Task invalid.  Not saved."
 #~ msgstr "Aufgabe ungültig. Nicht gespeichert."
@@ -9813,6 +9751,9 @@ msgstr "Gelandet"
 #~ msgid "Set maximum sound volume automatically."
 #~ msgstr "Automatische Einstellung der maximalen Lautstärke."
 
+#~ msgid "Start point cycle"
+#~ msgstr "Abflugpunkt Auswahl"
+
 #~ msgid ""
 #~ "If enabled, this option requires the minimum height above ground for "
 #~ "finish to be greater than 1000m below the start height."
@@ -9963,6 +9904,9 @@ msgstr "Gelandet"
 
 #~ msgid "Set as Alternate 1"
 #~ msgstr "Als Alternative 1 setzen"
+
+#~ msgid "Set as new home"
+#~ msgstr "Setze als neuer Heimatplatz"
 
 #~ msgid "This is the time interval between logged points when circling. "
 #~ msgstr ""
@@ -10277,6 +10221,9 @@ msgstr "Gelandet"
 #~ "Auswählen mittels ENTER von \"Beste Alternative\" über die Infobox (auch "
 #~ "mit einem virtuellen Taste) kommt man auf die Detailseite, auf welcher "
 #~ "man Optionen wie \"goto\", \"In Aufgabe einfügen\" usw. wählen kann."
+
+#~ msgid "Trending Average climb"
+#~ msgstr "Erwartetes mittleres Steigen"
 
 #~ msgid ""
 #~ "Comparison method used to detect climb states (HIGH/LOW). [NONE]: State "
@@ -10644,6 +10591,13 @@ msgstr "Gelandet"
 #~ msgid "Above Final Glide"
 #~ msgstr "Über dem Gleitpfad"
 
+#~ msgid ""
+#~ "Name of file to replay.  Can be an IGC file, a raw NMEA log file, or if "
+#~ "blank, runs the demo."
+#~ msgstr ""
+#~ "Angabe der Datei zur Wiedergabe. Es kann eine IGC Datei, oder ein Roh-"
+#~ "NMEA Logschrieb sein. Ohne Angabe wird das Demo abgespielt."
+
 #~ msgid "Restarting Comm Ports"
 #~ msgstr "Neuladen der Schnittstellen"
 
@@ -10677,6 +10631,9 @@ msgstr "Gelandet"
 
 #~ msgid "Orange Icon"
 #~ msgstr "Orange Symbol"
+
+#~ msgid "Purple Circle"
+#~ msgstr "Lila Punkt"
 
 #~ msgid "RT"
 #~ msgstr "RT"
@@ -10829,6 +10786,23 @@ msgstr "Gelandet"
 #~ msgstr ""
 #~ "(Britische Regeln) Jeder Punkt innerhalb 0,5km vom Zentrum, oder 10km in "
 #~ "einem 180° Sektor."
+
+#~ msgid ""
+#~ "Determines how the screen is rotated with the glider:\n"
+#~ "[North up] The moving map display will always be orientated north to "
+#~ "south and the glider icon will be rotated to show its course.\n"
+#~ "[Track up] The moving map display will be rotated so the glider's track "
+#~ "is oriented up.\n"
+#~ "[Target up] The moving map display will be rotated so the navigation "
+#~ "target is oriented up."
+#~ msgstr ""
+#~ "Bestimmt, wie die Anzeige zum Segler ausgerichtet ist:\n"
+#~ "[Norden oben] Die Karte ist immer nach Norden ausgerichtet und das "
+#~ "Selgersymbol dreht sich entsprechend dem Kurs.\n"
+#~ "[Kurs nach oben] Die Kartendarstellung dreht sich unter dem Seglersymbol, "
+#~ "sodass der Kurs immer nach oben gerichtet ist.\n"
+#~ "[Ziel nach oben] zeigt die Karte so, dass das nächste Ziel nach oben "
+#~ "gerichtet ist."
 
 #~ msgid ""
 #~ "This determines whether the the glide terrain range is calculated and "
@@ -11088,6 +11062,9 @@ msgstr "Gelandet"
 #~ msgid "Airspace fill mode*"
 #~ msgstr "Luftraum Füllmodus*"
 
+#~ msgid "Previous Waypoint"
+#~ msgstr "Vorheriger Wegpunkt"
+
 #~ msgid "OFF"
 #~ msgstr "Aus"
 
@@ -11117,6 +11094,9 @@ msgstr "Gelandet"
 
 #~ msgid "Colored InfoBoxes*"
 #~ msgstr "Infobox Farbe*"
+
+#~ msgid "Clear Task"
+#~ msgstr "Aufgabe löschen"
 
 #~ msgid "Slope shading*"
 #~ msgstr "Hangschattierung*"
@@ -11265,16 +11245,43 @@ msgstr "Gelandet"
 #~ msgid "Use a recent average of the flown heading as basis."
 #~ msgstr "Nehme eine aktuelles Mittel aus dem geflogenen Kurs als Basis."
 
+#~ msgid "Full Name"
+#~ msgstr "Ganzer Name"
+
+#~ msgid "First Word of Name"
+#~ msgstr "Erstes Wort aus Namen"
+
+#~ msgid "First 3 Letters"
+#~ msgstr "Ersten 3 Buchstaben"
+
+#~ msgid "First 5 Letters"
+#~ msgstr "Ersten 5 Buchstaben"
+
+#~ msgid "Straight & Terrain glide"
+#~ msgstr "Geraden & Gelände Gleitpfad"
+
+#~ msgid "Rounded Rectangle"
+#~ msgstr "Abgerundetes Rechteck"
+
 #~ msgid "All waypoints labels will displayed."
 #~ msgstr "Alle Wegpunkt Beschriftungen werden angezeigt."
+
+#~ msgid "Task Waypoints & Landables"
+#~ msgstr "Aufgabenwegpunkte & Landbare"
 
 #~ msgid ""
 #~ "All waypoints labels part of a task and all landables will be displayed."
 #~ msgstr ""
 #~ "Alle Beschriftungen aus der Aufgabe und alle Landbaren werden angezeigt."
 
+#~ msgid "Task Waypoints"
+#~ msgstr "Aufgabenwegpunkte"
+
 #~ msgid "All waypoints labels part of a task will be displayed."
 #~ msgstr "Alle Beschriftungen aus der Aufgabe werden angezeigt."
+
+#~ msgid "Orange"
+#~ msgstr "Orange"
 
 #~ msgid "Scale runway length*"
 #~ msgstr "Skaliere die Bahnlänge"
@@ -11319,6 +11326,9 @@ msgstr "Gelandet"
 #~ msgid "Set speed remaining"
 #~ msgstr "Benötigte Geschwindigkeit"
 
+#~ msgid "Landable rendering size"
+#~ msgstr "Darstellungsgröße für Landbare"
+
 #~ msgid "Trail scaled*"
 #~ msgstr "Skalierte Spur*"
 
@@ -11345,6 +11355,25 @@ msgstr "Gelandet"
 
 #~ msgid "FAI start/ finish rules"
 #~ msgstr "FAI Start-/Zielregeln"
+
+#~ msgid ""
+#~ "Determines how labels are displayed with each waypoint:\n"
+#~ "[Full Name] The full name of each waypoint is displayed.\n"
+#~ "[First Word of Name] The first word of the waypoint name is displayed.\n"
+#~ "[First 3 Letters] The first 3 letters of the waypoint name are "
+#~ "displayed.\n"
+#~ "[First 5 Letters] The first 5 letters of the waypoint name are "
+#~ "displayed.\n"
+#~ "[None] No waypoint name is displayed."
+#~ msgstr ""
+#~ "Bestimmt wie die Beschriftung auf der Karte dargestellt wird:\n"
+#~ "[Namen] Der volle Namen von jedem Wegpunkt wird angezeigt.\n"
+#~ "[Erstes Wort] Nur das erste Wort aus dem Wegpunktname wird angezeigt.\n"
+#~ "[Namen aus Aufgabe] Nur die Wegpunkte aus der Aufgabe und der Heimatplatz "
+#~ "werden angezeigt.\n"
+#~ "[Ersten 3] Die ersten drei Buchstaben des Wegpunkts werden angezeigt.\n"
+#~ "[Ersten 5] Entsprechend mit fünf Buchstaben.\n"
+#~ "[None] Die Beschriftung der Wegpunkte wird weggelassen."
 
 #~ msgid "Turning reach"
 #~ msgstr "Erreichbarkeit mit Umwegen"
