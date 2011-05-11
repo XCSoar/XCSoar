@@ -136,7 +136,7 @@ InitialiseLogFonts()
   }
 
 #ifdef ENABLE_SDL
-  int FontHeight = Layout::SmallScale(24);
+  int FontHeight = Layout::SmallScale(is_android() ? 30 : 24);
 #else
   int FontHeight = Layout::SmallScale(35);
 #endif
