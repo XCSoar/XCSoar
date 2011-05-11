@@ -177,7 +177,7 @@ SerialPort::run()
   if (is_widcomm)
     SetRxTimeout(180);
   else
-    ::SetCommMask(hPort, EV_RXCHAR & EV_BREAK);
+    ::SetCommMask(hPort, EV_RXCHAR);
 
   while (!is_stopped()) {
     if (is_widcomm) {
