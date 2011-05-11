@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-11 20:35+0200\n"
-"PO-Revision-Date: 2011-05-06 21:39+0000\n"
+"PO-Revision-Date: 2011-05-10 21:08+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-08 08:41+0000\n"
-"X-Generator: Launchpad (build 12981)\n"
+"X-Launchpad-Export-Date: 2011-05-11 18:39+0000\n"
+"X-Generator: Launchpad (build 13014)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -98,23 +98,20 @@ msgid "Stop Logger"
 msgstr "Logger stoppen"
 
 #: src/Logger/ExternalLogger.cpp:48
-#, fuzzy
 msgid "Declare task?"
-msgstr "Aufgabe deklarieren"
+msgstr "Aufgabe anmelden?"
 
 #: src/Logger/ExternalLogger.cpp:51
-#, fuzzy
 msgid "Task declared!"
-msgstr "Aufgabe deklariert"
+msgstr "Aufgabe angemeldet!"
 
 #: src/Logger/ExternalLogger.cpp:55
-#, fuzzy
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
 "Fehler aufgetreten,\n"
-"Aufgabe NICHT deklariert!"
+"Aufgabe NICHT angemeldet!"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -445,7 +442,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails_L.xml:18
 #, no-c-format
 msgid "Bearing"
-msgstr "Nächster Wegpunkt - Kurs"
+msgstr "Nächster Wegpunkt - Peilung"
 
 #: src/InfoBoxes/Content/Factory.cpp:90
 #, no-c-format
@@ -1102,7 +1099,7 @@ msgstr "Nächster Wegpunkt - benötigte Gleitzahl"
 #: src/InfoBoxes/Content/Factory.cpp:404
 #, no-c-format
 msgid "WP LD"
-msgstr "WP GZ"
+msgstr "WP ben. GZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:405
 #, no-c-format
@@ -1281,12 +1278,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:484
 #, no-c-format
 msgid "Bearing difference"
-msgstr "Nächster Wegpunkt - Kursdifferenz"
+msgstr "Nächster Wegpunkt - Peildifferenz"
 
 #: src/InfoBoxes/Content/Factory.cpp:485
 #, no-c-format
 msgid "Brng D"
-msgstr "WP Kursdiff."
+msgstr "WP Peildiff."
 
 #: src/InfoBoxes/Content/Factory.cpp:486
 #, no-c-format
@@ -1332,7 +1329,7 @@ msgstr "Relative Luftfeuchtigkeit"
 #: src/InfoBoxes/Content/Factory.cpp:503
 #, no-c-format
 msgid "Rel Hum"
-msgstr "Rel.Feucht"
+msgstr "Rel. Feuchte"
 
 #: src/InfoBoxes/Content/Factory.cpp:504
 #, no-c-format
@@ -1458,12 +1455,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:565
 #, no-c-format
 msgid "Team bearing"
-msgstr "Team - Kurs"
+msgstr "Team - Peilung"
 
 #: src/InfoBoxes/Content/Factory.cpp:566
 #, no-c-format
 msgid "Tm Brng"
-msgstr "Tm Kurs"
+msgstr "Tm Peilung"
 
 #: src/InfoBoxes/Content/Factory.cpp:567
 #, no-c-format
@@ -1473,12 +1470,12 @@ msgstr "Peilung zum Teamkollegen der letzten Teamkode Meldung."
 #: src/InfoBoxes/Content/Factory.cpp:574
 #, no-c-format
 msgid "Team bearing difference"
-msgstr "Team - Kursdifferenz"
+msgstr "Team - Peildifferenz"
 
 #: src/InfoBoxes/Content/Factory.cpp:575
 #, no-c-format
 msgid "Team Bd"
-msgstr "Tm Kursdiff."
+msgstr "Tm Peildiff."
 
 #: src/InfoBoxes/Content/Factory.cpp:576
 #, no-c-format
@@ -2209,12 +2206,10 @@ msgid "Show details:"
 msgstr "Zeige Details:"
 
 #: src/InputEventsActions.cpp:642
-#, fuzzy
 msgid "Unknown competition number"
 msgstr "Unbekannte Wettbewerbskennung"
 
 #: src/InputEventsActions.cpp:643
-#, fuzzy
 msgid "Not found"
 msgstr "Nicht gefunden"
 
@@ -2693,9 +2688,8 @@ msgstr "Warnung"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
-#, fuzzy
 msgid "Battery low"
-msgstr "Batterie leer Verzögerung"
+msgstr "Batteriestand niedrig"
 
 #: src/Components.cpp:268
 msgid "Initialising"
@@ -3736,6 +3730,9 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
+"Flugplätze und Außenlandefelder werden als lila Kreis angezeigt. Wenn der "
+"Wegpunkt erreichbar ist wird ein grüner Ring hinterlegt. Ist der Wegpunkt "
+"durch ein Berg versperrt wird der Ring rot gezeigt."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:108
 msgid "B/W"
@@ -3747,6 +3744,9 @@ msgid ""
 "is reachable the color is changed to green. If the waypoint is blocked by a "
 "mountain the color is changed to red instead."
 msgstr ""
+"Flugplätze und Außenlandefelder werden weiß/grau angezeigt. Ist der Wegpunkt "
+"erreichbar wird er grüne. Ist der Wegpunkt durch ein Berg versperrt wird er "
+"rot gezeigt."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:110
 msgid "Traffic lights"
@@ -3758,6 +3758,9 @@ msgid ""
 "light. Green if reachable, Orange if blocked by mountain and red if not "
 "reachable at all."
 msgstr ""
+"Flugplätze und Außenlandefelder werden in der Farben einer Verkehrsampel "
+"angezeigt. Grün, wenn der Wegpunkt erreichbar ist; orange, wenn er durch ein "
+"Berg versperrt wird; rot, wenn er überhaupt nicht erreichbar ist."
 
 #: src/Dialogs/dlgTaskManager.cpp:153
 msgid "Validation Errors"
@@ -5769,6 +5772,9 @@ msgid ""
 "for waypoints like known reliable thermal sources (e.g. powerplants) or "
 "mountain passes."
 msgstr ""
+"Wegpunktdatei für spezielle Punkte, für welche zusätzliche Berechnungen wie "
+"z.B. die Ankunftshöhe auf der Karte immer aktualisiert werden. Das ist "
+"praktisch für verlässliche Thermikquellen (z.B. Kraftwerke) oder Bergpässe."
 
 #: Data/Dialogs/dlgSwitches.xml:15
 msgid "Flap neutral"
@@ -6128,9 +6134,8 @@ msgid ""
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:54 Data/Dialogs/dlgConfiguration_L.xml:54
-#, fuzzy
 msgid "Specifies the file defining the topographical features."
-msgstr "Die Datei mit den topologischen Angaben."
+msgstr "Die Datei mit den topografischen Angaben."
 
 #: Data/Dialogs/dlgTeamCode.xml:10 Data/Dialogs/dlgTeamCode_L.xml:11
 msgid "Mate code"
@@ -7204,6 +7209,9 @@ msgid ""
 "greater of current aircraft altitude plus 500 m and the thermal ceiling.  If "
 "disabled, climbs are unlimited."
 msgstr ""
+"Wenn aktiviert wird bei der Routenplanung  das Steigen durch die Wolkenbasis "
+"begrenzt. Sie wird mit 500 m über der momentanen Flugzeughöhe und der "
+"Thermikhöhe angenommen. Deaktiviert wird mit unbegrenztem Steigen geplant."
 
 #: Data/Dialogs/dlgTaskPoint.xml:5 Data/Dialogs/dlgTaskPoint_L.xml:4
 msgid "Previous"
@@ -7221,6 +7229,11 @@ msgid ""
 "[Task] Uses task glide polar\n"
 "[Safety MC] Uses safety MacCready value"
 msgstr ""
+"Hiermit wird festgelegt welche Flugleistung für die Berechnung der "
+"Reichweite, Erreichbarkeit der Landefelder, beim Abbruch und der "
+"Alternativen angenommen wird:\n"
+"[Aufgabe] Verwendet die Polare aus der Aufgabe.\n"
+"[Sicherheits MC] Verwendet den Sicherheits-MacCready-Wert."
 
 #: Data/Dialogs/dlgVario.xml:386 Data/Dialogs/dlgVario_L.xml:387
 msgid "Battery empty delay"
@@ -8238,24 +8251,11 @@ msgstr "Gelandet"
 #~ "Wenn \"Externe Polare\" als Polarentyp ausgewählt ist, muss hier die "
 #~ "Datei mit der Polare ausgewählt werden (im WinPilot Format)."
 
-#~ msgid "Declare Task?"
-#~ msgstr "Aufgabe deklarieren?"
-
 #~ msgid "Task Declared!"
 #~ msgstr "Aufgabe deklariert!"
 
-#~ msgid "Organiser Battery Low"
-#~ msgstr "Batteriestand niedrig"
-
-#~ msgid ""
-#~ "Marks\n"
-#~ "Clear"
-#~ msgstr ""
-#~ "Marken\n"
-#~ "Löschen"
-
-#~ msgid "Marks cleared"
-#~ msgstr "Marken gelöscht"
+#~ msgid "Declare Task?"
+#~ msgstr "Aufgabe deklarieren?"
 
 #~ msgid ""
 #~ "Terrain\n"
@@ -8878,6 +8878,9 @@ msgstr "Gelandet"
 #~ msgid "Flarm lock:"
 #~ msgstr "FLARM Sperrung:"
 
+#~ msgid "Organiser Battery Low"
+#~ msgstr "Batteriestand niedrig"
+
 #~ msgid "Clear Alternates"
 #~ msgstr "Lösche Alternativen"
 
@@ -9254,6 +9257,13 @@ msgstr "Gelandet"
 #~ "MacCready-Wert automatisch, oder manuell gesetzt wurde. Aktiviere die "
 #~ "Infobox und verändere den MacCready-Wert mit dem Hoch- Runterpfeil "
 #~ "(Touchscreen/PC)."
+
+#~ msgid ""
+#~ "Error occured,\n"
+#~ "Task NOT Declared!"
+#~ msgstr ""
+#~ "Fehler aufgetreten,\n"
+#~ "Aufgabe NICHT deklariert!"
 
 #~ msgid "%% Climb"
 #~ msgstr "%% Steigen"
@@ -9744,6 +9754,9 @@ msgstr "Gelandet"
 
 #~ msgid "V rem"
 #~ msgstr "V verb."
+
+#~ msgid "Specifies the file defining the topological features."
+#~ msgstr "Die Datei mit den topologischen Angaben."
 
 #~ msgid "Select pattern"
 #~ msgstr "Wähle ein Muster"
@@ -10601,6 +10614,9 @@ msgstr "Gelandet"
 #~ msgid "Restarting Comm Ports"
 #~ msgstr "Neuladen der Schnittstellen"
 
+#~ msgid "Marks cleared"
+#~ msgstr "Marken gelöscht"
+
 #~ msgid "Final Glide Through Terrain"
 #~ msgstr "Endanflug würde durchs Gelände führen"
 
@@ -11145,6 +11161,13 @@ msgstr "Gelandet"
 
 #~ msgid "Msg. window*"
 #~ msgstr "Nachrichten Fenster*"
+
+#~ msgid ""
+#~ "Marks\n"
+#~ "Clear"
+#~ msgstr ""
+#~ "Marken\n"
+#~ "Löschen"
 
 #~ msgid "Topography"
 #~ msgstr "Topographie"
