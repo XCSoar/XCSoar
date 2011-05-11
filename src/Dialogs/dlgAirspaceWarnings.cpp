@@ -482,4 +482,9 @@ dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close)
 
   // Needed for dlgAirspaceWarningVisible()
   wf = NULL;
+
+  hBrushInsideBk.reset();
+  hBrushNearBk.reset();
+  hBrushInsideAckBk.reset();
+  hBrushNearAckBk.reset();
 }

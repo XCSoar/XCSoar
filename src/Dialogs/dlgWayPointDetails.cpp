@@ -826,4 +826,7 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   wf->ShowModal();
 
   delete wf;
+
+  jpgimage1.reset();
+  jpgimage2.reset();
 }
