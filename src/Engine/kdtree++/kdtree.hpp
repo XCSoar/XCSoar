@@ -511,7 +511,7 @@ namespace KDTree
 	if (_M_get_root())
 	  {
 	    std::pair<const _Node<_Val>*,
-	      std::pair<size_type, typename _Dist::distance_type> > // JMW bugfix
+	      std::pair<size_type, distance_type> > // JMW bugfix
               // JMW dist, sqrt, predicate
 	      best = _S_node_nearest (__K, 0, __val,
 				      _M_get_root(), &_M_header, _M_get_root(),
