@@ -15,8 +15,8 @@ msgstr ""
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-08 08:41+0000\n"
-"X-Generator: Launchpad (build 12981)\n"
+"X-Launchpad-Export-Date: 2011-05-11 18:39+0000\n"
+"X-Generator: Launchpad (build 13014)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1439 src/Dialogs/dlgAnalysis.cpp:303
@@ -96,21 +96,18 @@ msgid "Stop Logger"
 msgstr "Parar logger"
 
 #: src/Logger/ExternalLogger.cpp:48
-#, fuzzy
 msgid "Declare task?"
-msgstr "Declarar prova"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:51
-#, fuzzy
 msgid "Task declared!"
-msgstr "Prova declarada"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:55
-#, fuzzy
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
-msgstr "Erro, prova NÃO declarada!"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -2185,9 +2182,8 @@ msgid "Unknown competition number"
 msgstr ""
 
 #: src/InputEventsActions.cpp:643
-#, fuzzy
 msgid "Not found"
-msgstr "Não encontrado"
+msgstr ""
 
 #: src/InputEventsActions.cpp:703
 msgid "No active waypoint!"
@@ -2617,9 +2613,8 @@ msgstr "Aviso"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
-#, fuzzy
 msgid "Battery low"
-msgstr "Bateria"
+msgstr ""
 
 #: src/Components.cpp:268
 msgid "Initialising"
@@ -7734,16 +7729,13 @@ msgstr "Pouso"
 #~ msgid "Declare Task?"
 #~ msgstr "Declarar prova?"
 
-#~ msgid "Task Declared!"
-#~ msgstr "Prova declarada!"
-
-#~ msgid "Marks cleared"
-#~ msgstr "Marcadores apagados"
-
 #~ msgid ""
 #~ "Error occured,\r\n"
 #~ "Task NOT Declared!"
 #~ msgstr "Erro, prova NÃO declarada!"
+
+#~ msgid "Task Declared!"
+#~ msgstr "Prova declarada!"
 
 #~ msgid "Thermal last 30 sec"
 #~ msgstr "Térmica nos últimos 30 seg"
@@ -8029,6 +8021,11 @@ msgstr "Pouso"
 
 #~ msgid "Forecast Temperature"
 #~ msgstr "Temperatura Prevista"
+
+#~ msgid ""
+#~ "Error occured,\n"
+#~ "Task NOT Declared!"
+#~ msgstr "Erro, prova NÃO declarada!"
 
 #~ msgid "ON"
 #~ msgstr "Ligado"
@@ -8459,6 +8456,9 @@ msgstr "Pouso"
 
 #~ msgid "Restarting Comm Ports"
 #~ msgstr "Reiniciando portas Com"
+
+#~ msgid "Marks cleared"
+#~ msgstr "Marcadores apagados"
 
 #~ msgid "Waiting for GPS Fix"
 #~ msgstr "Aguardando Fixo GPS"
