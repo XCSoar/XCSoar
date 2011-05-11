@@ -21,51 +21,25 @@ Copyright_License {
 }
 */
 
-#include "Screen/Init.hpp"
-#include "Screen/Debug.hpp"
+#ifndef XCSOAR_SCREEN_OPENGL_INIT_HPP
+#define XCSOAR_SCREEN_OPENGL_INIT_HPP
 
-#ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Init.hpp"
+namespace OpenGL {
+  /**
+   * Initialize our OpenGL library.  Call when XCSoar starts.
+   */
+  void Initialise();
+
+  /**
+   * Set up our OpenGL library.  Call after the video mode and the
+   * OpenGL context have been set up.
+   */
+  void SetupContext(unsigned width, unsigned height);
+
+  /**
+   * Deinitialize our OpenGL library.  Call before shutdown.
+   */
+  void Deinitialise();
+};
+
 #endif
-
-#include <SDL.h>
-#include <SDL_ttf.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-
-ScreenGlobalInit::ScreenGlobalInit()
-{
-  if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) != 0) {
-    fprintf(stderr, "SDL_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  ::SDL_EnableKeyRepeat(250, 50);
-
-#if defined(ENABLE_OPENGL)
-  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
-
-  OpenGL::Initialise();
-#endif
-
-  if (::TTF_Init() != 0) {
-    fprintf(stderr, "TTF_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  ScreenInitialized();
-}
-
-ScreenGlobalInit::~ScreenGlobalInit()
-{
-#ifdef ENABLE_OPENGL
-  OpenGL::Deinitialise();
-#endif
-
-  ::TTF_Quit();
-  ::SDL_Quit();
-
-  ScreenDeinitialized();
-}

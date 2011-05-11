@@ -21,51 +21,28 @@ Copyright_License {
 }
 */
 
-#include "Screen/Init.hpp"
-#include "Screen/Debug.hpp"
-
-#ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Init.hpp"
-#endif
+#include "Screen/OpenGL/Debug.hpp"
+#include "Screen/OpenGL/Cache.hpp"
+#include "Screen/OpenGL/Globals.hpp"
 
-#include <SDL.h>
-#include <SDL_ttf.h>
-
-#include <stdio.h>
-#include <stdlib.h>
-
-ScreenGlobalInit::ScreenGlobalInit()
+void
+OpenGL::Initialise()
 {
-  if (::SDL_Init(SDL_INIT_VIDEO|SDL_INIT_TIMER) != 0) {
-    fprintf(stderr, "SDL_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  ::SDL_EnableKeyRepeat(250, 50);
-
-#if defined(ENABLE_OPENGL)
-  ::SDL_GL_SetAttribute(SDL_GL_DOUBLEBUFFER, 1);
-  ::SDL_GL_SetAttribute(SDL_GL_STENCIL_SIZE, 1);
-
-  OpenGL::Initialise();
+#ifndef NDEBUG
+  thread = pthread_self();
 #endif
-
-  if (::TTF_Init() != 0) {
-    fprintf(stderr, "TTF_Init() has failed\n");
-    exit(EXIT_FAILURE);
-  }
-
-  ScreenInitialized();
 }
 
-ScreenGlobalInit::~ScreenGlobalInit()
+void
+OpenGL::SetupContext(unsigned width, unsigned height)
 {
-#ifdef ENABLE_OPENGL
-  OpenGL::Deinitialise();
-#endif
+  screen_width = width;
+  screen_height = height;
+}
 
-  ::TTF_Quit();
-  ::SDL_Quit();
-
-  ScreenDeinitialized();
+void
+OpenGL::Deinitialise()
+{
+  TextCache::flush();
 }

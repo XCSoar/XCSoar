@@ -25,8 +25,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Globals.hpp"
-#include "Screen/OpenGL/Surface.hpp"
+#include "Screen/OpenGL/Init.hpp"
 #endif
 
 #ifdef ANDROID
@@ -92,8 +91,7 @@ TopCanvas::set()
 #ifndef ANDROID
   ::SDL_SetVideoMode(width, height, 0, flags);
 #endif
-  OpenGL::screen_width = width;
-  OpenGL::screen_height = height;
+  OpenGL::SetupContext(width, height);
   Canvas::set(width, height);
 #else
   Canvas::set(::SDL_SetVideoMode(width, height, 0, flags));
