@@ -277,7 +277,7 @@ protected:
  */
   gcc_pure
   virtual fixed calc_min_target(const AIRCRAFT_STATE &state_now, 
-                                const fixed t_target) const {
+                                const fixed t_target) {
     return fixed_zero;
   };
 
