@@ -37,6 +37,12 @@ Copyright_License {
 
 namespace OpenGL {
   /**
+   * Is the extension ARB_texture_non_power_of_two present?  If yes,
+   * then textures can have any size, not just power of two.
+   */
+  extern bool texture_non_power_of_two;
+
+  /**
    * The dimensions of the screen in pixels.
    */
   extern unsigned screen_width, screen_height;

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/OpenGL/Debug.hpp"
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/Globals.hpp"
+#include "Screen/OpenGL/Extension.hpp"
 
 void
 OpenGL::Initialise()
@@ -39,6 +40,9 @@ OpenGL::SetupContext(unsigned width, unsigned height)
 {
   screen_width = width;
   screen_height = height;
+
+  texture_non_power_of_two =
+    IsExtensionSupported("GL_ARB_texture_non_power_of_two");
 }
 
 void

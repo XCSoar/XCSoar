@@ -36,16 +36,6 @@ Copyright_License {
 unsigned num_textures;
 #endif
 
-static inline bool
-allow_unaligned_textures()
-{
-#ifdef ANDROID
-  return false;
-#else
-  return true;
-#endif
-}
-
 gcc_const gcc_unused
 static GLsizei
 next_power_of_two(GLsizei i)
@@ -60,7 +50,7 @@ gcc_const
 static inline GLsizei
 validate_texture_size(GLsizei i)
 {
-  return allow_unaligned_textures() ? i : next_power_of_two(i);
+  return OpenGL::texture_non_power_of_two ? i : next_power_of_two(i);
 }
 
 #ifndef ANDROID

@@ -25,6 +25,8 @@ Copyright_License {
 #include "Screen/OpenGL/Debug.hpp"
 
 namespace OpenGL {
+  bool texture_non_power_of_two;
+
   unsigned screen_width, screen_height;
 
   int translate_x, translate_y;
