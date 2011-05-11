@@ -92,15 +92,14 @@ static bool
 test_nearest(const Waypoints& waypoints)
 {
   const Waypoint *r = waypoints.lookup_id(3);
-  if (r) {
-    Waypoints::WaypointTree::const_iterator it = waypoints.find_nearest(r->Location);
-    if (it != waypoints.end()) {
-      return true;
-    } else {
-      return false;
-    }
-  }
-  return false;
+  if (!r)
+    return false;
+
+  r = waypoints.get_nearest(r->Location);
+  if (!r)
+    return false;
+
+  return r->id == 3;
 }
 
 static unsigned
