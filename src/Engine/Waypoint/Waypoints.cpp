@@ -118,23 +118,11 @@ Waypoints::append(Waypoint& wp)
   tmp_wps.push_back(WaypointEnvelope(wp));
 }
 
-
 const Waypoint*
 Waypoints::get_nearest(const GeoPoint &loc) const 
 {
-  WaypointTree::const_iterator it = find_nearest(loc);
-
-  if (it != waypoint_tree.end())
-    return &it->get_waypoint();
-
-  return NULL;
-}
-
-Waypoints::WaypointTree::const_iterator
-Waypoints::find_nearest(const GeoPoint &loc) const
-{
   if (empty())
-    return waypoint_tree.end();
+    return NULL;
 
   WaypointEnvelope bb_target(loc, task_projection);
   std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
@@ -144,7 +132,10 @@ Waypoints::find_nearest(const GeoPoint &loc) const
   n_queries++;
 #endif
 
-  return found.first;
+  if (found.first == waypoint_tree.end())
+    return NULL;
+
+  return &found.first->get_waypoint();
 }
 
 void

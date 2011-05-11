@@ -264,17 +264,6 @@ public:
   const Waypoint* get_nearest(const GeoPoint &loc) const;
 
   /**
-   * Looks up nearest waypoint to the search location.
-   * Performs search according to flat-earth internal representation,
-   * so is approximate.
-   *
-   * @param loc Location from which to search
-   *
-   * @return Iterator to absolute nearest waypoint
-   */
-  WaypointTree::const_iterator find_nearest(const GeoPoint &loc) const;
-
-  /**
    * Look up waypoint by ID.
    *
    * @param id Id of waypoint to find in internal tree
@@ -298,7 +287,6 @@ public:
   WaypointTree::const_iterator end() const;
 
 private:
-
   /**
    * Find waypoints within approximate range (square range box)
    * to search location.  Possible use by screen display functions.
