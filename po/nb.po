@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-11 20:35+0200\n"
-"PO-Revision-Date: 2011-04-25 23:51+0000\n"
-"Last-Translator: Rob Hazes <Unknown>\n"
+"PO-Revision-Date: 2011-05-11 16:12+0000\n"
+"Last-Translator: Thomas Amland <Unknown>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-02 15:20+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-05-11 18:39+0000\n"
+"X-Generator: Launchpad (build 13014)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1439 src/Dialogs/dlgAnalysis.cpp:303
@@ -53,7 +53,7 @@ msgstr "Luftrom"
 
 #: src/Airspace/AirspaceParser.cpp:882
 msgid "Unknown Filetype."
-msgstr "Ukjent filtype"
+msgstr "Ukjent filtype."
 
 #: src/ConditionMonitor.cpp:162
 msgid "Significant wind change"
@@ -96,23 +96,18 @@ msgid "Stop Logger"
 msgstr "Stopp Logger"
 
 #: src/Logger/ExternalLogger.cpp:48
-#, fuzzy
 msgid "Declare task?"
-msgstr "Deklarer oppgave"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:51
-#, fuzzy
 msgid "Task declared!"
-msgstr "Oppgave deklarert"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:55
-#, fuzzy
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
-"En Feil har oppstått,\n"
-"Oppgaven IKKE Deklarert!"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -178,7 +173,7 @@ msgstr "Neste Landingsområde"
 
 #: src/ExpandMacros.cpp:155 src/ExpandMacros.cpp:175
 msgid "Closest Landpoint"
-msgstr "Nærmeste Landingsområde"
+msgstr "Landingsområde Nærmest"
 
 #: src/ExpandMacros.cpp:156 src/ExpandMacros.cpp:176
 msgid "Previous Landpoint"
@@ -189,9 +184,8 @@ msgid "Finish Turnpoint"
 msgstr "Målpunkt"
 
 #: src/ExpandMacros.cpp:199 src/ExpandMacros.cpp:245
-#, fuzzy
 msgid "Next Startpoint"
-msgstr "Neste vendepunkt"
+msgstr ""
 
 #: src/ExpandMacros.cpp:205 src/ExpandMacros.cpp:251
 msgid "Start Turnpoint"
@@ -199,11 +193,11 @@ msgstr "Startpunkt"
 
 #: src/ExpandMacros.cpp:229
 msgid "Arm start"
-msgstr "Armér start"
+msgstr "Armer start"
 
 #: src/ExpandMacros.cpp:232
 msgid "Arm turn"
-msgstr "Armér sving"
+msgstr "Armer sving"
 
 #: src/ExpandMacros.cpp:260
 msgid "Disarm start"
@@ -242,7 +236,7 @@ msgid ""
 "Arm\n"
 "Start"
 msgstr ""
-"Armér\n"
+"Armer\n"
 "Start"
 
 #: src/ExpandMacros.cpp:293
@@ -258,7 +252,7 @@ msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
-"Armér\n"
+"Armer\n"
 "Sving"
 
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
@@ -289,7 +283,7 @@ msgstr "Kort"
 
 #: src/ExpandMacros.cpp:431 src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:62
 msgid "Full"
-msgstr "Fullstendig"
+msgstr "Alt"
 
 #: src/ExpandMacros.cpp:435 src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499
 #: src/ExpandMacros.cpp:505 src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511
@@ -353,7 +347,7 @@ msgstr "Alt"
 #: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1438
 #, no-c-format
 msgid "Task & Landables"
-msgstr "Oppgave & Mulige landinger"
+msgstr "Oppg./Land."
 
 #: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1440
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:94
@@ -498,7 +492,7 @@ msgstr "Bakkehastighet"
 #: src/InfoBoxes/Content/Factory.cpp:116
 #, no-c-format
 msgid "V Gnd"
-msgstr "V Gnd"
+msgstr "V Terreng"
 
 #: src/InfoBoxes/Content/Factory.cpp:117
 #, no-c-format
@@ -1992,7 +1986,7 @@ msgstr "Info"
 #: src/InfoBoxes/Content/MacCready.cpp:169
 #: src/InfoBoxes/Content/Weather.cpp:265
 msgid "Setup"
-msgstr "Oppsett"
+msgstr "Konfig."
 
 #: src/InfoBoxes/Content/Altitude.cpp:402
 #: src/InfoBoxes/Content/Altitude.cpp:494
@@ -2095,15 +2089,15 @@ msgstr "Sporminne av"
 
 #: src/InputEventsActions.cpp:183
 msgid "Long snail trail"
-msgstr "Lang sporminne"
+msgstr "Sporminne Lang"
 
 #: src/InputEventsActions.cpp:185
 msgid "Short snail trail"
-msgstr "Kort sporminne"
+msgstr "Sporminne Kort"
 
 #: src/InputEventsActions.cpp:187
 msgid "Full snail trail"
-msgstr "Fullstendig sporminne"
+msgstr "Sporminne Alt"
 
 #: src/InputEventsActions.cpp:218
 msgid "Show airspace off"
@@ -2174,19 +2168,16 @@ msgid "Hold turn"
 msgstr "Vent med sving"
 
 #: src/InputEventsActions.cpp:637
-#, fuzzy
 msgid "Show details:"
-msgstr "Vis ballast"
+msgstr ""
 
 #: src/InputEventsActions.cpp:642
-#, fuzzy
 msgid "Unknown competition number"
-msgstr "Ukjent Konkurranse ID"
+msgstr ""
 
 #: src/InputEventsActions.cpp:643
-#, fuzzy
 msgid "Not found"
-msgstr "Ikke Funnet"
+msgstr ""
 
 #: src/InputEventsActions.cpp:703
 msgid "No active waypoint!"
@@ -2247,7 +2238,7 @@ msgstr "Logger av"
 #: src/InputEventsActions.cpp:1453 Data/Dialogs/dlgConfigFonts.xml:19
 #: Data/Dialogs/dlgConfigFonts_L.xml:19
 msgid "Waypoint labels"
-msgstr "Vendepunktnavn"
+msgstr "Vendepunkter"
 
 #: src/InputEventsActions.cpp:1491
 msgid "Map labels on"
@@ -2271,7 +2262,7 @@ msgstr "Oppgave gjennomført"
 
 #: src/InputEventsActions.cpp:1847
 msgid "In sector, arm advance when ready"
-msgstr "I sektor, armér neste hvis klar"
+msgstr "I sektor, armer neste hvis klar"
 
 #: src/Pages.cpp:181
 msgid "Info Hide"
@@ -2634,7 +2625,7 @@ msgstr "Strekkfl."
 #: src/Profile/InfoBoxConfig.cpp:62
 #, no-c-format
 msgid "FinalGlide"
-msgstr "MålStrekkfl."
+msgstr "MålStrekk"
 
 #: src/Screen/Chart.cpp:179
 msgid "No data"
@@ -2654,9 +2645,8 @@ msgstr "Advarsel"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
-#, fuzzy
 msgid "Battery low"
-msgstr "Batteri nesten tom forsinkelse"
+msgstr ""
 
 #: src/Components.cpp:268
 msgid "Initialising"
@@ -2750,7 +2740,7 @@ msgstr "Avbryt"
 
 #: src/Dialogs/Message.cpp:174
 msgid "Ignore"
-msgstr "Ignorér"
+msgstr "Ignorer"
 
 #: src/Dialogs/dlgAirspace.cpp:57 src/Dialogs/dlgAirspace.cpp:75
 msgid "Warn"
@@ -2777,7 +2767,7 @@ msgstr "Bekreft for denne dagen?"
 #: src/Dialogs/dlgAirspaceDetails.cpp:87
 #: Data/Dialogs/dlgAirspaceWarnings.xml:9
 msgid "Enable"
-msgstr "Aktivér"
+msgstr "Aktiver"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:87 Data/Dialogs/dlgAirspaceDetails.xml:6
 msgid "Ack Day"
@@ -2793,7 +2783,7 @@ msgstr "Ingen Varsler"
 
 #: src/Dialogs/dlgAlternatesList.cpp:90 Data/Input/default.xci:457
 msgid "Alternates"
-msgstr "Alternative landinger"
+msgstr "Altern. landinger"
 
 #: src/Dialogs/dlgFlarmDetailsList.cpp:99
 msgid "No further information"
@@ -2828,7 +2818,7 @@ msgstr "Oppgaveberegning"
 
 #: src/Dialogs/dlgAnalysis.cpp:259
 msgid "Thermal Band"
-msgstr "Terrmisk Belte"
+msgstr "Termisk Belte"
 
 #: src/Dialogs/dlgAnalysis.cpp:268
 msgid "Wind At Altitude"
@@ -3048,7 +3038,7 @@ msgstr "Lukk"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:351
 msgid "Copy"
-msgstr "Kopiér"
+msgstr "Kopier"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:356
 msgid "Paste"
@@ -3213,9 +3203,8 @@ msgid "Final glide"
 msgstr "Målglidning"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
-#, fuzzy
 msgid "Trending average climb"
-msgstr "Utvikling gjennomsnittstig"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:80
 msgid "Flap"
@@ -3587,36 +3576,32 @@ msgid "ft/min"
 msgstr "fot/min"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
-#, fuzzy
 msgid "Full name"
-msgstr "Fullt Navn"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
 msgid "The full name of each waypoint is displayed."
 msgstr "Hele navnet for vendepunktet vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
-#, fuzzy
 msgid "First word of name"
-msgstr "Navnets Første Ord"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
 msgid "The first word of the waypoint name is displayed."
 msgstr "Første ord i vendepunktets navn vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
-#, fuzzy
 msgid "First 3 letters"
-msgstr "Første 3 Bokstaver"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
 msgid "The first 3 letters of the waypoint name are displayed."
 msgstr "De første 3 bokstaver i vendepunktets navn vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
-#, fuzzy
 msgid "First 5 letters"
-msgstr "Første 5 Bokstaver"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
 msgid "The first 5 letters of the waypoint name are displayed."
@@ -3647,18 +3632,16 @@ msgid "Arrival height considering terrain avoidance"
 msgstr "Ankomsthøyde ved å ta hensyn til terrenget"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
-#, fuzzy
 msgid "Straight & terrain glide"
-msgstr "Direkte & Terreng glideflukt"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "Both arrival heights are displayed."
 msgstr "Begge ankomsthøyder vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:76
-#, fuzzy
 msgid "Rounded rectangle"
-msgstr "Avrundet rektangel"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:77
 msgid "Outlined"
@@ -3666,21 +3649,19 @@ msgstr "Omriss"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:89
 msgid "All waypoint labels will be displayed."
-msgstr "Alle vendepunktsetiketter vises."
+msgstr "Alle vendepunkter vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:90
-#, fuzzy
 msgid "Task waypoints & landables"
-msgstr "Oppgavevendepunkter & Landinger"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:92
 msgid "All waypoints part of a task and all landables will be displayed."
 msgstr "Alle vendepunkter som hører til oppgaven samt landingsområder vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:93
-#, fuzzy
 msgid "Task waypoints"
-msgstr "Oppgavevendepunkter"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:94
 msgid "All waypoints part of a task will be displayed."
@@ -3691,9 +3672,8 @@ msgid "No waypoint labels will be displayed."
 msgstr "Ingen vendepunktetiketter vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:106
-#, fuzzy
 msgid "Purple circle"
-msgstr "Lila Sirkel"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
 msgid ""
@@ -3715,9 +3695,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:110
-#, fuzzy
 msgid "Traffic lights"
-msgstr "Terrenghøyde"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:111
 msgid ""
@@ -3752,9 +3731,8 @@ msgid "Task unchanged"
 msgstr "Oppgaven uendret"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
-#, fuzzy
 msgid "Clear all points?"
-msgstr "Tømme oppgaven?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Task edit"
@@ -3789,14 +3767,12 @@ msgid "Rename Error"
 msgstr "Gi nytt navn Feil"
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Create new task?"
-msgstr "Tømme oppgaven?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Task New"
-msgstr "Endre oppgave"
+msgstr ""
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
 msgid "(Add Alternate Start)"
@@ -5237,7 +5213,7 @@ msgstr "Intervall; Varsel"
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:5
 #: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:12
 msgid "Setup InfoBox"
-msgstr "Oppsett InfoBoks"
+msgstr "InfoBoks Konfig."
 
 #: Data/Dialogs/dlgWayPointDetails.xml:32
 #: Data/Dialogs/dlgWayPointDetails_L.xml:32
@@ -5322,7 +5298,7 @@ msgstr "Viktig min. volum"
 
 #: Data/Dialogs/dlgConfiguration.xml:13 Data/Dialogs/dlgConfiguration_L.xml:10
 msgid "Import"
-msgstr "Importér"
+msgstr "Importer"
 
 #: Data/Dialogs/dlgConfiguration.xml:453
 #: Data/Dialogs/dlgConfiguration_L.xml:454
@@ -5428,7 +5404,7 @@ msgstr "Sett Kode"
 
 #: Data/Dialogs/dlgBasicSettings.xml:3
 msgid "Flight Setup"
-msgstr "Flytur Oppsett"
+msgstr "Flytur Konfig."
 
 #: Data/Dialogs/dlgConfiguration.xml:706
 #: Data/Dialogs/dlgConfiguration_L.xml:707
@@ -6091,17 +6067,16 @@ msgid ""
 "[Task Waypoints] All waypoints labels part of a task will be displayed.\n"
 "[None] No waypoint labels will be displayed."
 msgstr ""
-"Etiketter som skal vises for hvert vendepunkt (mellomrom tillatt):\n"
-"[Alle] Alle etiketter vises.\n"
-"[Oppgavevendepunkter og mulige landinger] Alle etiketter for "
-"Oppgavevendepunkter og mulige landinger vises.\n"
-"[Oppgavevendepunkter] Alle etiketter for Oppgavevendepunkter vises.\n"
-"[Ingen] Ingen etiketter vises."
+"Vendepunkter som skal vises på kartet (avhengig av tilgjengelig plass):\n"
+"[Alle] Alle vendepunkter vises.\n"
+"[Oppgave/Land.] Alle vendepunkter som hører til oppgaven samt mulige "
+"landinger vises.\n"
+"[Oppgave] Alle vendepunkter som hører til oppgaven vises.\n"
+"[Ingen] Ingen vendepunkter vises."
 
 #: Data/Dialogs/dlgConfiguration.xml:54 Data/Dialogs/dlgConfiguration_L.xml:54
-#, fuzzy
 msgid "Specifies the file defining the topographical features."
-msgstr "Filen med topografisk innhold."
+msgstr ""
 
 #: Data/Dialogs/dlgTeamCode.xml:10 Data/Dialogs/dlgTeamCode_L.xml:11
 msgid "Mate code"
@@ -6314,7 +6289,7 @@ msgstr "Rutemodus"
 
 #: Data/Dialogs/Infobox/pnlInfoBoxMacCreadySetup.xml:4
 msgid "Setup Mode"
-msgstr "Oppsett Modus"
+msgstr "Modus Konfig."
 
 #: Data/Dialogs/dlgConfiguration.xml:212
 #: Data/Dialogs/dlgConfiguration_L.xml:212
@@ -6504,7 +6479,7 @@ msgstr "Topografiske etiketter, viktig"
 
 #: Data/Dialogs/dlgSwitches.xml:27
 msgid "Acknowledge"
-msgstr "Kvittér"
+msgstr "Kvitter"
 
 #: Data/Dialogs/dlgConfiguration.xml:582
 #: Data/Dialogs/dlgConfiguration_L.xml:583
@@ -6675,13 +6650,10 @@ msgid "Arrival height"
 msgstr "Ankomsthøyde"
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
-#, fuzzy
 msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
 msgstr ""
-"Filen som skal avspilles. Kan være en IGC fil, en rå NMEA loggfil, eller "
-"hvis blank, kjøres demofilen."
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
@@ -6787,9 +6759,8 @@ msgid "Aircraft symbol"
 msgstr "Farkostsymbol"
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
-#, fuzzy
 msgid "Clear All"
-msgstr "Tøm"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -6882,7 +6853,7 @@ msgstr "Utstyr av forsinkelse"
 #: Data/Dialogs/dlgConfiguration.xml:280
 #: Data/Dialogs/dlgConfiguration_L.xml:281
 msgid "Block speed to fly"
-msgstr "Blokkér speed-to-fly"
+msgstr "Blokker speed-to-fly"
 
 #: Data/Dialogs/dlgStatus.xml:34 Data/Dialogs/dlgStatusTask.xml:9
 msgid "Remaining distance"
@@ -6982,14 +6953,12 @@ msgid "Waypoint distance"
 msgstr "Vendepunktsdistanse"
 
 #: Data/Dialogs/pnlTaskList.xml:12 Data/Dialogs/pnlTaskList_L.xml:13
-#, fuzzy
 msgid "Browse"
-msgstr "Oppgaveliste"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:10 Data/Dialogs/pnlTaskList_L.xml:11
-#, fuzzy
 msgid "New Task"
-msgstr "Tøm Oppgaven"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:696
 #: Data/Dialogs/dlgConfiguration_L.xml:697
@@ -7261,7 +7230,7 @@ msgstr "Dødbåndstype som brukes i strekkflygingsmodus."
 
 #: Data/Dialogs/dlgConfiguration.xml:14 Data/Dialogs/dlgConfiguration_L.xml:11
 msgid "Export"
-msgstr "Eksportér"
+msgstr "Eksporter"
 
 #: Data/Dialogs/dlgConfiguration.xml:792
 #: Data/Dialogs/dlgConfiguration_L.xml:793
@@ -7436,9 +7405,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:168
 #: Data/Dialogs/dlgConfiguration_L.xml:168
-#, fuzzy
 msgid "Landable size"
-msgstr "Visningsstørrelse landinger."
+msgstr ""
 
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:4
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4 Data/Dialogs/dlgTaskPoint.xml:15
@@ -7647,7 +7615,6 @@ msgstr "Synlige satelitter"
 
 #: Data/Dialogs/dlgConfiguration.xml:312
 #: Data/Dialogs/dlgConfiguration_L.xml:313
-#, fuzzy
 msgid ""
 "Determines sorting of alternates in the alternates dialog and in abort "
 "mode:\n"
@@ -7657,12 +7624,6 @@ msgid ""
 "[Home] The sorting will try to find landing options in the current direction "
 "to the configured home waypoint."
 msgstr ""
-"[Enkel] Alternative landinger sorteres etter vendepunktstype (flyplass/"
-"utelandning) og ankomsthøyde.\r\n"
-"[Oppgave] Sorteringen av alternative landinger tar også hensyn til gjeldende "
-"oppgave.\r\n"
-"[Hjem] Sorteringen av alternative landinger er i forhold til strekket fra "
-"nåværende posisjon til Hjemmeposisjon."
 
 #: Data/Dialogs/dlgTeamCode.xml:5 Data/Dialogs/dlgTeamCode_L.xml:7
 msgid "Flarm Lock"
@@ -7707,7 +7668,7 @@ msgstr "Side 5"
 
 #: Data/Dialogs/dlgVario.xml:104 Data/Dialogs/dlgVario_L.xml:105
 msgid "Filter cruise"
-msgstr "Filtrér strekkflyging"
+msgstr "Filtrer strekkflyging"
 
 #: Data/Dialogs/dlgConfiguration.xml:656
 #: Data/Dialogs/dlgConfiguration_L.xml:657
@@ -7876,7 +7837,7 @@ msgid ""
 "Waypoint\n"
 "List"
 msgstr ""
-"Vendepunkts\n"
+"Vendep.\n"
 "Liste"
 
 #: Data/Input/default.xci:615 Data/Input/default.xci:664
@@ -7945,8 +7906,8 @@ msgid ""
 "Setup\n"
 "Stall"
 msgstr ""
-"Oppsett\n"
-"Steil"
+"Steil\n"
+"Konfig."
 
 #: Data/Input/default.xci:857
 msgid ""
@@ -7981,8 +7942,8 @@ msgid ""
 "Setup\n"
 "Wind"
 msgstr ""
-"Oppsett\n"
-"Vind"
+"Vind\n"
+"Konfig."
 
 #: Data/Input/default.xci:740
 msgid ""
@@ -8009,8 +7970,8 @@ msgid ""
 "Nearest\n"
 "Airspace"
 msgstr ""
-"Nærmeste\n"
-"Luftrom"
+"Luftrom\n"
+"Nærmest"
 
 #: Data/Input/default.xci:646
 msgid ""
@@ -8018,19 +7979,19 @@ msgid ""
 "Setup"
 msgstr ""
 "Flytur\n"
-"Oppsett"
+"Konfig."
 
 #: Data/Input/default.xci:679
 msgid ""
 "Setup\n"
 "System"
 msgstr ""
-"Oppsett\n"
-"System"
+"System\n"
+"Konfig."
 
 #: Data/Input/default.xci:747
 msgid "Setup Audio"
-msgstr "Oppsett Lyd"
+msgstr "Lyd Konfig."
 
 #: Data/Input/default.xci:833
 msgid "FLARM Radar"
@@ -8080,7 +8041,7 @@ msgstr ""
 msgid ""
 "Mark\n"
 "Drop"
-msgstr "Markér"
+msgstr "Marker"
 
 #: Data/Input/default.xci:120
 msgid "Restarting comm. ports"
@@ -8091,8 +8052,8 @@ msgid ""
 "Nearest\n"
 "Waypoint"
 msgstr ""
-"Nærmeste\n"
-"Vendepunkt"
+"Vendep.\n"
+"Nærmest"
 
 #: Data/Input/default.xci:801
 msgid "Stored to EEPROM"
@@ -8104,7 +8065,7 @@ msgstr "Aksell."
 
 #: Data/Input/default.xci:933
 msgid "Credits"
-msgstr "Bidragsytere"
+msgstr "Bidratt"
 
 #: Data/Input/default.xci:226 Data/Input/default.xci:531
 msgid ""
@@ -8127,15 +8088,14 @@ msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
-"Gjenta\n"
+"Siste\n"
 "Beskjed"
 
 #: Data/Input/default.xci:906
-#, fuzzy
 msgid ""
 "FLARM\n"
 "Details"
-msgstr "FLARM Trafikkdetaljer"
+msgstr ""
 
 #: Data/Input/default.xci:219 Data/Input/default.xci:524
 msgid ""
@@ -8155,8 +8115,8 @@ msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
-"Oppsett\n"
-"Luftrom"
+"Luftrom\n"
+"Konfig."
 
 #: Data/Input/default.xci:802
 msgid "Store"
@@ -8182,98 +8142,18 @@ msgstr ""
 msgid "Landing"
 msgstr "Landing"
 
-#~ msgid "Declare Task?"
-#~ msgstr "Deklarere Oppgave?"
+#~ msgid ""
+#~ "Error occured,\n"
+#~ "Task NOT Declared!"
+#~ msgstr ""
+#~ "En Feil har oppstått,\n"
+#~ "Oppgaven IKKE Deklarert!"
 
 #~ msgid "Task Declared!"
 #~ msgstr "Oppgaven Deklarert!"
 
-#~ msgid ""
-#~ "Marks\n"
-#~ "Clear"
-#~ msgstr ""
-#~ "Slett\n"
-#~ "Markeringer"
-
-#~ msgid "Marks cleared"
-#~ msgstr "Markeringer slettet"
-
-#~ msgid "Start point cycle"
-#~ msgstr "Startpunkt syklus"
-
 #~ msgid "Previous Waypoint"
 #~ msgstr "Forrige Vendepunkt"
-
-#~ msgid "Organiser Battery Low"
-#~ msgstr "Batteri nesten utladet"
-
-#~ msgid "Orange"
-#~ msgstr "Oransje"
-
-#~ msgid ""
-#~ "Determines what is used to shift the glider from the map center:\n"
-#~ "[None] Disable adjustments.\n"
-#~ "[Track] Use a recent average of the ground track as basis.\n"
-#~ "[Target]Use the current target waypoint as basis"
-#~ msgstr ""
-#~ "Flytting av flyikonet vekk fra karteets senter.\n"
-#~ "[Ingen] Ingen flytting.\n"
-#~ "[Rute] Bruk en oppdatert snittverdi av bakkehastigheten.\n"
-#~ "[Målpunkt] Bruk gjeldende vendepunkt som utgangspunkt."
-
-#~ msgid ""
-#~ "Determines how the screen is rotated with the glider:\n"
-#~ "[North up] The moving map display will always be orientated north to "
-#~ "south and the glider icon will be rotated to show its course.\n"
-#~ "[Track up] The moving map display will be rotated so the glider's track "
-#~ "is oriented up.\n"
-#~ "[Target up] The moving map display will be rotated so the navigation "
-#~ "target is oriented up."
-#~ msgstr ""
-#~ "Kartets orientering.\n"
-#~ "[Nord opp] Det bevegelige kartet peker alltid med nord opp, flyikonet "
-#~ "roteres for å vise flyretning.\n"
-#~ "[Spor opp] Kartet roteres slik at flyikonet alltid peker oppover.\n"
-#~ "[Mål opp] Kartet roteres slik at retning mot neste vendepunkt er oppover."
-
-#~ msgid ""
-#~ "Determines how arrival height is displayed in waypoint labels:\n"
-#~ "[None] No arrival height is displayed.\n"
-#~ "[Straight glide] Only glide performance is considered for arrival "
-#~ "height.\n"
-#~ "[Terrain avoidance glide] Glide performance and possible detours around "
-#~ "terrain are considered for arrival height.\n"
-#~ "[Straight & Terrain avoidance glide] Arrival height for straight in glide "
-#~ "and (if available) arrival height considering detours around terrain is "
-#~ "displayed."
-#~ msgstr ""
-#~ "Ankomsthøydevisning i Vendepunktsetikettene.\n"
-#~ "[Ingen] Ikke vis ankomsthøyde.\n"
-#~ "[Rett glidestrekk] Vis ankomsthøyde hvor kun flyegenskapene brukes i "
-#~ "beregningen av den.\n"
-#~ "[Unngå terreng] Vis ankomsthøyde hvor flyegeenskapene og mulige omveier "
-#~ "pga. terrenget brukes i beregningen av den.\n"
-#~ "[Begge] Vis begge."
-
-#~ msgid "Gestures"
-#~ msgstr "Skjermberøringer"
-
-#~ msgid ""
-#~ "Determines how labels are displayed with each waypoint:\n"
-#~ "[Full Name] The full name of each waypoint is displayed.\n"
-#~ "[First Word of Name] The first word of the waypoint name is displayed.\n"
-#~ "[First 3 Letters] The first 3 letters of the waypoint name are "
-#~ "displayed.\n"
-#~ "[First 5 Letters] The first 5 letters of the waypoint name are "
-#~ "displayed.\n"
-#~ "[None] No waypoint name is displayed."
-#~ msgstr ""
-#~ "Visning av vendepunktsetiketter:\n"
-#~ "[Hele Navnet] Hele navnet vises.\n"
-#~ "[Første Ord] Første ord  vises.\n"
-#~ "[Første 3 Tegn] De 3 første tegn vises.\n"
-#~ "[Første 5 Tegn] De 5 første tegn vises.\n"
-#~ "[Ingen] Ingen navn vises."
 
 #~ msgid ""
 #~ "Arrival altitude at the final task turn point relative to the safety "
@@ -8323,14 +8203,50 @@ msgstr "Landing"
 #~ msgid "Info auto"
 #~ msgstr "Info auto"
 
+#~ msgid "Organiser Battery Low"
+#~ msgstr "Batteri nesten utladet"
+
 #~ msgid "False"
 #~ msgstr "Usann"
 
 #~ msgid "True"
 #~ msgstr "Sann"
 
+#~ msgid "Trending Average climb"
+#~ msgstr "Utvikling gjennomsnittstig"
+
 #~ msgid "Alternate"
 #~ msgstr "Alternative landinger"
+
+#~ msgid "First Word of Name"
+#~ msgstr "Navnets Første Ord"
+
+#~ msgid "Full Name"
+#~ msgstr "Fullt Navn"
+
+#~ msgid "First 3 Letters"
+#~ msgstr "Første 3 Bokstaver"
+
+#~ msgid "First 5 Letters"
+#~ msgstr "Første 5 Bokstaver"
+
+#~ msgid "Rounded Rectangle"
+#~ msgstr "Avrundet rektangel"
+
+#~ msgid "Task Waypoints"
+#~ msgstr "Oppgavevendepunkter"
+
+#~ msgid "Purple Circle"
+#~ msgstr "Lila Sirkel"
+
+#~ msgid "Orange"
+#~ msgstr "Oransje"
+
+#~ msgid "Clear task?"
+#~ msgstr "Tømme oppgaven?"
+
+#~ msgid "Clear Task"
+#~ msgstr "Tøm Oppgaven"
 
 #~ msgid "Important topography labels"
 #~ msgstr "viktige topografiske etiketter"
@@ -8360,6 +8276,9 @@ msgstr "Landing"
 #~ msgid "Dialog boxes"
 #~ msgstr "Dialogbokser"
 
+#~ msgid "Gestures"
+#~ msgstr "Skjermberøringer"
+
 #~ msgid ""
 #~ "When enabled, the glide terrain range is calculated with turning around "
 #~ "terrain obstacles.  If disabled, the range is from straight line paths "
@@ -8368,3 +8287,114 @@ msgstr "Landing"
 #~ "Ta hensyn till terrenget ved å beregne rekkevidde:\r\n"
 #~ "[På] Ved beregning av rekkevidden tas hensyn til terrenget.\r\n"
 #~ "[Av] Ved beregning av rekkevidden tas ikke nesyn til terrenget."
+
+#~ msgid ""
+#~ "Marks\n"
+#~ "Clear"
+#~ msgstr ""
+#~ "Slett\n"
+#~ "Markeringer"
+
+#~ msgid "Marks cleared"
+#~ msgstr "Markeringer slettet"
+
+#~ msgid "Start point cycle"
+#~ msgstr "Startpunkt syklus"
+
+#~ msgid "Declare Task?"
+#~ msgstr "Deklarere Oppgave?"
+
+#~ msgid "Straight & Terrain glide"
+#~ msgstr "Direkte & Terreng glideflukt"
+
+#~ msgid "Task Waypoints & Landables"
+#~ msgstr "Oppgavevendepunkter & Landinger"
+
+#~ msgid ""
+#~ "Determines what is used to shift the glider from the map center:\n"
+#~ "[None] Disable adjustments.\n"
+#~ "[Track] Use a recent average of the ground track as basis.\n"
+#~ "[Target]Use the current target waypoint as basis"
+#~ msgstr ""
+#~ "Flytting av flyikonet vekk fra karteets senter.\n"
+#~ "[Ingen] Ingen flytting.\n"
+#~ "[Rute] Bruk en oppdatert snittverdi av bakkehastigheten.\n"
+#~ "[Målpunkt] Bruk gjeldende vendepunkt som utgangspunkt."
+
+#~ msgid "Landable rendering size"
+#~ msgstr "Visningsstørrelse landinger."
+
+#~ msgid ""
+#~ "Determines how the screen is rotated with the glider:\n"
+#~ "[North up] The moving map display will always be orientated north to "
+#~ "south and the glider icon will be rotated to show its course.\n"
+#~ "[Track up] The moving map display will be rotated so the glider's track "
+#~ "is oriented up.\n"
+#~ "[Target up] The moving map display will be rotated so the navigation "
+#~ "target is oriented up."
+#~ msgstr ""
+#~ "Kartets orientering.\n"
+#~ "[Nord opp] Det bevegelige kartet peker alltid med nord opp, flyikonet "
+#~ "roteres for å vise flyretning.\n"
+#~ "[Spor opp] Kartet roteres slik at flyikonet alltid peker oppover.\n"
+#~ "[Mål opp] Kartet roteres slik at retning mot neste vendepunkt er oppover."
+
+#~ msgid "Specifies the file defining the topological features."
+#~ msgstr "Filen med topografisk innhold."
+
+#~ msgid ""
+#~ "Determines how arrival height is displayed in waypoint labels:\n"
+#~ "[None] No arrival height is displayed.\n"
+#~ "[Straight glide] Only glide performance is considered for arrival "
+#~ "height.\n"
+#~ "[Terrain avoidance glide] Glide performance and possible detours around "
+#~ "terrain are considered for arrival height.\n"
+#~ "[Straight & Terrain avoidance glide] Arrival height for straight in glide "
+#~ "and (if available) arrival height considering detours around terrain is "
+#~ "displayed."
+#~ msgstr ""
+#~ "Ankomsthøydevisning i Vendepunktsetikettene.\n"
+#~ "[Ingen] Ikke vis ankomsthøyde.\n"
+#~ "[Rett glidestrekk] Vis ankomsthøyde hvor kun flyegenskapene brukes i "
+#~ "beregningen av den.\n"
+#~ "[Unngå terreng] Vis ankomsthøyde hvor flyegeenskapene og mulige omveier "
+#~ "pga. terrenget brukes i beregningen av den.\n"
+#~ "[Begge] Vis begge."
+
+#~ msgid ""
+#~ "If set to \"Simple\", the alternates will only be sorted by waypoint type "
+#~ "(airport/outlanding field) and arrival height. If set to \"Task\" the "
+#~ "sorting will also take the current task direction into account. If set to "
+#~ "\"Home\" the sorting will try to find landing options in the current "
+#~ "direction to the configured home waypoint."
+#~ msgstr ""
+#~ "[Enkel] Alternative landinger sorteres etter vendepunktstype (flyplass/"
+#~ "utelandning) og ankomsthøyde.\r\n"
+#~ "[Oppgave] Sorteringen av alternative landinger tar også hensyn til "
+#~ "gjeldende oppgave.\r\n"
+#~ "[Hjem] Sorteringen av alternative landinger er i forhold til strekket fra "
+#~ "nåværende posisjon til Hjemmeposisjon."
+
+#~ msgid ""
+#~ "Name of file to replay.  Can be an IGC file, a raw NMEA log file, or if "
+#~ "blank, runs the demo."
+#~ msgstr ""
+#~ "Filen som skal avspilles. Kan være en IGC fil, en rå NMEA loggfil, eller "
+#~ "hvis blank, kjøres demofilen."
+
+#~ msgid ""
+#~ "Determines how labels are displayed with each waypoint:\n"
+#~ "[Full Name] The full name of each waypoint is displayed.\n"
+#~ "[First Word of Name] The first word of the waypoint name is displayed.\n"
+#~ "[First 3 Letters] The first 3 letters of the waypoint name are "
+#~ "displayed.\n"
+#~ "[First 5 Letters] The first 5 letters of the waypoint name are "
+#~ "displayed.\n"
+#~ "[None] No waypoint name is displayed."
+#~ msgstr ""
+#~ "Visning av vendepunktsnavn:\n"
+#~ "[Hele Navnet] Hele navnet vises.\n"
+#~ "[Første Ord] Første ord  vises.\n"
+#~ "[Første 3 Tegn] De 3 første tegn vises.\n"
+#~ "[Første 5 Tegn] De 5 første tegn vises.\n"
+#~ "[Ingen] Ingen navn vises."
