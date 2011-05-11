@@ -167,7 +167,7 @@ public:
   const Waypoint* lookup_id(const unsigned id) const;
 
   /**
-   * Look up waypoint by location (returns first match)
+   * Look up closest waypoint by location within range
    *
    * @param loc Location of waypoint to find in internal tree
    * @param range Threshold for range
