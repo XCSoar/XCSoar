@@ -170,24 +170,14 @@ Waypoints::lookup_name(const TCHAR *name) const
 const Waypoint*
 Waypoints::lookup_location(const GeoPoint &loc, const fixed range) const
 {
-  if (empty())
+  const Waypoint* wp = get_nearest(loc);
+  if (!wp)
     return NULL;
 
-  WaypointEnvelope bb_target(loc, task_projection);
-  std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
-      waypoint_tree.find_nearest(bb_target);
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
-
-  if (found.first != waypoint_tree.end()) {
-    const Waypoint* wp = &(found.first)->get_waypoint();
-    if (wp->Location == loc)
-      return wp;
-    else if (positive(range) && (wp->IsCloseTo(loc, range)))
-      return wp;
-  }
+  if (wp->Location == loc)
+    return wp;
+  else if (positive(range) && (wp->IsCloseTo(loc, range)))
+    return wp;
 
   return NULL;
 }
