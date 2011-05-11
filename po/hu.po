@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-11 20:35+0200\n"
-"PO-Revision-Date: 2011-05-06 12:43+0000\n"
+"PO-Revision-Date: 2011-05-10 15:30+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-08 08:41+0000\n"
-"X-Generator: Launchpad (build 12981)\n"
+"X-Launchpad-Export-Date: 2011-05-11 18:39+0000\n"
+"X-Generator: Launchpad (build 13014)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1439 src/Dialogs/dlgAnalysis.cpp:303
@@ -96,23 +96,20 @@ msgid "Stop Logger"
 msgstr "Loggert leállítsam?"
 
 #: src/Logger/ExternalLogger.cpp:48
-#, fuzzy
 msgid "Declare task?"
-msgstr "Feladat deklarálása"
+msgstr "Deklarálja a feladatot?"
 
 #: src/Logger/ExternalLogger.cpp:51
-#, fuzzy
 msgid "Task declared!"
-msgstr "Feladat deklarálva"
+msgstr "Feladat deklarálva!"
 
 #: src/Logger/ExternalLogger.cpp:55
-#, fuzzy
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
-"Hiba történt, a feladat\n"
-"NINCS deklarálva!"
+"Hiba történt,\n"
+"a feladat NINCS deklarálva!"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -598,8 +595,8 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
-"A következő fordulópont távolsága. Területi szabad távrepülés esetén a "
-"szektor célpontjának távolsága."
+"A következő fordulópont távolsága. Hozzárendelt területes (HT) feladat "
+"esetén a szektor célpontjának távolsága."
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
@@ -902,7 +899,8 @@ msgstr "HT idő"
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
-"Hátralevő idő területi szabad távrepülésen. Vörösre vált ha az idő lejárt."
+"Hátralevő idő hozzárendelt területes (HT) feladatban. Vörösre vált ha az idő "
+"lejárt."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
 #, no-c-format
@@ -1288,12 +1286,12 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
-"A gép nyomvonalának és a következő fordulópont, vagy területi szabad "
-"távrepülés esetén a következő szektor célpontjának iránya közötti különbség. "
-"A GPS navigáció a terepre vetített nyomvonalon alapul, és ennek az iránya "
-"eltérhet a gép irányától ha fúj a szél. A kettős nyilak mutatják, merre kell "
-"fordulni, hogy a nyomvonal a következő fordulópont irányába tartson. Ez az "
-"irány számításba veszi a Föld görbületét."
+"A gép nyomvonalának és a következő fordulópont, vagy hozzárendelt területes "
+"(HT) feladat esetén a következő szektor célpontjának iránya közötti "
+"különbség. A GPS navigáció a terepre vetített nyomvonalon alapul, és ennek "
+"az iránya eltérhet a gép irányától ha fúj a szél. A kettős nyilak mutatják, "
+"merre kell fordulni, hogy a nyomvonal a következő fordulópont irányába "
+"tartson. Ez az irány számításba veszi a Föld görbületét."
 
 #: src/InfoBoxes/Content/Factory.cpp:493
 #, no-c-format
@@ -2202,12 +2200,10 @@ msgid "Show details:"
 msgstr "Részletek:"
 
 #: src/InputEventsActions.cpp:642
-#, fuzzy
 msgid "Unknown competition number"
 msgstr "Ismeretlen farokjel"
 
 #: src/InputEventsActions.cpp:643
-#, fuzzy
 msgid "Not found"
 msgstr "Nem található"
 
@@ -2679,9 +2675,8 @@ msgstr "Figyelmeztetés"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
-#, fuzzy
 msgid "Battery low"
-msgstr "Telep kimerült késl."
+msgstr "Lemerült a telep"
 
 #: src/Components.cpp:268
 msgid "Initialising"
@@ -3666,7 +3661,7 @@ msgstr "Érkezési magasság a terep elkerülésével."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "Straight & terrain glide"
-msgstr ""
+msgstr "Egyenes és talajkerülő siklás"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "Both arrival heights are displayed."
@@ -3686,7 +3681,7 @@ msgstr "Minden fordulópont cimke megjelenik."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:90
 msgid "Task waypoints & landables"
-msgstr ""
+msgstr "Feladat pontjai és leszállók"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:92
 msgid "All waypoints part of a task and all landables will be displayed."
@@ -3694,7 +3689,7 @@ msgstr "A feladat részét képező fordulópontok és a leszállóhelyek megjel
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:93
 msgid "Task waypoints"
-msgstr ""
+msgstr "Feladat pontjai"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:94
 msgid "All waypoints part of a task will be displayed."
@@ -3706,7 +3701,7 @@ msgstr "Semmilyen fordulópont, címke nem jelenik meg."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:106
 msgid "Purple circle"
-msgstr ""
+msgstr "Lila kör"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
 msgid ""
@@ -3715,6 +3710,9 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
+"A repterek és a terepezhető mezők lila körrel kerülnek megjelenítésre. Ha a "
+"fordulópont elérhető, a lila kör mögött egy nagyobb zöld kör is megjelenik. "
+"Ha a fordulópont terep takarásában van, vörös jelenik meg a zöld helyett."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:108
 msgid "B/W"
@@ -3726,10 +3724,13 @@ msgid ""
 "is reachable the color is changed to green. If the waypoint is blocked by a "
 "mountain the color is changed to red instead."
 msgstr ""
+"A repterek és a terepezhető mezők fehér/szürke színnel kerülnek "
+"megjelenítésre. Ha a fordulópont elérhető, a szín zöldre vált.  Ha a "
+"fordulópont terep takarásában van, a szín vörösre vált."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:110
 msgid "Traffic lights"
-msgstr ""
+msgstr "Közlekedési lámpa"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:111
 msgid ""
@@ -3737,6 +3738,9 @@ msgid ""
 "light. Green if reachable, Orange if blocked by mountain and red if not "
 "reachable at all."
 msgstr ""
+"A repterek és a terepezhető mezők a közlekedési lámpa színeivel kerülnek "
+"megjelenítésre. Zöld, ha a fordulópont elérhető, sárga, ha terep takarásában "
+"van, és vörös ha elérhetetlen."
 
 #: src/Dialogs/dlgTaskManager.cpp:153
 msgid "Validation Errors"
@@ -3765,7 +3769,7 @@ msgstr "A feladat nem változott meg"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Clear all points?"
-msgstr ""
+msgstr "Törli az összes pontot?"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Task edit"
@@ -3801,11 +3805,11 @@ msgstr "Átnevezési hiba"
 
 #: src/Dialogs/pnlTaskList.cpp:279
 msgid "Create new task?"
-msgstr ""
+msgstr "Új feladatot hoz létre?"
 
 #: src/Dialogs/pnlTaskList.cpp:279
 msgid "Task New"
-msgstr ""
+msgstr "Új feladat"
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
 msgid "(Add Alternate Start)"
@@ -4206,7 +4210,7 @@ msgstr "nem FAI fordulópontok"
 
 #: src/Dialogs/dlgTeamCode.cpp:170
 msgid "Set new teammate:"
-msgstr ""
+msgstr "Az új csapattárs:"
 
 #: src/Dialogs/dlgTeamCode.cpp:178
 msgid "Unknown Competition Number"
@@ -5585,7 +5589,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:546
 #: Data/Dialogs/dlgConfiguration_L.xml:547
 msgid "Default AAT min. time for new AAT tasks."
-msgstr "Alap TS minimum idő, új területi szabad távrepülés feladatokhoz."
+msgstr "Alap HT minimum idő, új hozzárendelt területes (HT) feladatokhoz."
 
 #: Data/Dialogs/dlgConfiguration.xml:31 Data/Dialogs/dlgConfiguration_L.xml:31
 msgid "More waypoints"
@@ -6113,9 +6117,8 @@ msgstr ""
 "[NINCS] Semmilyen címke nem jelenik meg."
 
 #: Data/Dialogs/dlgConfiguration.xml:54 Data/Dialogs/dlgConfiguration_L.xml:54
-#, fuzzy
 msgid "Specifies the file defining the topographical features."
-msgstr "A térképjeleket tartalmazó fájl neve."
+msgstr "A topográfiai adatokat tartalmazó fájl."
 
 #: Data/Dialogs/dlgTeamCode.xml:10 Data/Dialogs/dlgTeamCode_L.xml:11
 msgid "Mate code"
@@ -6695,6 +6698,8 @@ msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
 msgstr ""
+"A lejátszandó fájl neve. Lehet IGC fájl (.igc), nyers NMEA naplófájl (.nmea) "
+"vagy üresen hagyható, ami a bemutató futását eredményezi."
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
@@ -6807,7 +6812,7 @@ msgstr "Repülőgép szimbólum"
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
 msgid "Clear All"
-msgstr ""
+msgstr "Az összes törlése"
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -7001,11 +7006,11 @@ msgstr "Fordulópont távolsága"
 
 #: Data/Dialogs/pnlTaskList.xml:12 Data/Dialogs/pnlTaskList_L.xml:13
 msgid "Browse"
-msgstr ""
+msgstr "Tallóz"
 
 #: Data/Dialogs/pnlTaskList.xml:10 Data/Dialogs/pnlTaskList_L.xml:11
 msgid "New Task"
-msgstr ""
+msgstr "Új feladat"
 
 #: Data/Dialogs/dlgConfiguration.xml:696
 #: Data/Dialogs/dlgConfiguration_L.xml:697
@@ -7417,7 +7422,7 @@ msgstr "Hőmérséklet"
 
 #: Data/Dialogs/pnlTaskList.xml:22 Data/Dialogs/pnlTaskList_L.xml:23
 msgid "Back"
-msgstr ""
+msgstr "Vissza"
 
 #: Data/Dialogs/dlgConfiguration.xml:599
 #: Data/Dialogs/dlgConfiguration_L.xml:600
@@ -7457,7 +7462,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:168
 #: Data/Dialogs/dlgConfiguration_L.xml:168
 msgid "Landable size"
-msgstr ""
+msgstr "Leszálló mérete"
 
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:4
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4 Data/Dialogs/dlgTaskPoint.xml:15
@@ -7680,6 +7685,12 @@ msgid ""
 "[Home] The sorting will try to find landing options in the current direction "
 "to the configured home waypoint."
 msgstr ""
+"A kitérő repterek rendezésének elve a kitérők párbeszédablakban vagy "
+"feladatmegszakítás során:\n"
+"[EGYSZERŰ] A kitérők a típusuk (reptér/terep) és érkezési magasságuk szerint "
+"rendezve.\n"
+"[FELADAT] A rendezés figyelembe veszi a feladat szerinti irányt is.\n"
+"[BÁZIS] A rendezés figyelembe veszi a beállított bázisreptér irányát."
 
 #: Data/Dialogs/dlgTeamCode.xml:5 Data/Dialogs/dlgTeamCode_L.xml:7
 msgid "Flarm Lock"
@@ -8151,6 +8162,8 @@ msgid ""
 "FLARM\n"
 "Details"
 msgstr ""
+"FLARM\n"
+"részletek"
 
 #: Data/Input/default.xci:219 Data/Input/default.xci:524
 msgid ""
@@ -8194,25 +8207,6 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Leszállás"
-
-#~ msgid "Declare Task?"
-#~ msgstr "Deklarálod a feladatot?"
-
-#~ msgid "Task Declared!"
-#~ msgstr "Feladat deklarálva!"
-
-#~ msgid "Organiser Battery Low"
-#~ msgstr "A telep lemerült"
-
-#~ msgid ""
-#~ "Marks\n"
-#~ "Clear"
-#~ msgstr ""
-#~ "Jelek\n"
-#~ "törlése"
-
-#~ msgid "Marks cleared"
-#~ msgstr "Jelölők törölve"
 
 #~ msgid "Previous turnpoint"
 #~ msgstr "Előző fordulópont"
@@ -8604,6 +8598,9 @@ msgstr "Leszállás"
 #~ msgid "Restarting Comm Ports"
 #~ msgstr "Kommunikációs portok újraindítása"
 
+#~ msgid "Marks cleared"
+#~ msgstr "Jelölők törölve"
+
 #~ msgid "Waiting for GPS Fix"
 #~ msgstr "GPS műholdakra vár"
 
@@ -8682,6 +8679,9 @@ msgstr "Leszállás"
 
 #~ msgid "Info auto"
 #~ msgstr "Infó auto"
+
+#~ msgid "Organiser Battery Low"
+#~ msgstr "A telep lemerült"
 
 #~ msgid "Thermal band"
 #~ msgstr "Termiksáv"
@@ -8806,6 +8806,13 @@ msgstr "Leszállás"
 #~ msgid "Topography"
 #~ msgstr "Térképjelek"
 
+#~ msgid ""
+#~ "Marks\n"
+#~ "Clear"
+#~ msgstr ""
+#~ "Jelek\n"
+#~ "törlése"
+
 #~ msgid "Heading"
 #~ msgstr "Orrirány"
 
@@ -8824,6 +8831,19 @@ msgstr "Leszállás"
 #~ "[REPIRÁNY] A mozgó térkép mindig a gép haladási iránya szerint lesz "
 #~ "tájolva.\n"
 #~ "[ÚTIRÁNY] A mozgó térkép mindig az útvonal iránya szerint lesz tájolva."
+
+#~ msgid ""
+#~ "Error occured,\n"
+#~ "Task NOT Declared!"
+#~ msgstr ""
+#~ "Hiba történt, a feladat\n"
+#~ "NINCS deklarálva!"
+
+#~ msgid "Declare Task?"
+#~ msgstr "Deklarálod a feladatot?"
+
+#~ msgid "Task Declared!"
+#~ msgstr "Feladat deklarálva!"
 
 #~ msgid "Set speed remaining"
 #~ msgstr "Sebesség a maradék távon"
@@ -8906,6 +8926,9 @@ msgstr "Leszállás"
 #~ "[Nincs] áthelyezés letiltva.\n"
 #~ "[REPIRÁNY] A repirány görgetett átlaga szerint.\n"
 #~ "[ÚTIRÁNY] A pillanatnyi útirány szerint."
+
+#~ msgid "Specifies the file defining the topological features."
+#~ msgstr "A térképjeleket tartalmazó fájl neve."
 
 #~ msgid ""
 #~ "Determines how arrival height is displayed in waypoint labels:\n"
