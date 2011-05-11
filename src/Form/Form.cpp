@@ -417,7 +417,7 @@ WndForm::ShowModal(Window *mouse_allowed)
   main_window.add_dialog(this);
 
 #ifdef ENABLE_SDL
-  update();
+  main_window.refresh();
 #endif
 
 #ifdef ANDROID
