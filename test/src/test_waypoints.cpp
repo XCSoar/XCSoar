@@ -88,7 +88,7 @@ test_radius(const Waypoints& waypoints, const double range)
   }
 }
 
-static unsigned
+static bool
 test_nearest(const Waypoints& waypoints)
 {
   const Waypoint *r = waypoints.lookup_id(3);
