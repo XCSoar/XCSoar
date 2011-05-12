@@ -1520,9 +1520,10 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
 
   if (_tcscmp(misc, _T("takeoff")) == 0) {
-    ScopeSuspendAllThreads suspend;
-    if (basic.LocationAvailable && calculated.TerrainValid)
+    if (basic.LocationAvailable && calculated.TerrainValid) {
+      ScopeSuspendAllThreads suspend;
       way_points.add_takeoff_point(basic.Location, calculated.TerrainAlt);
+    }
   } else {
     Waypoint edit_waypoint = way_points.create(basic.Location);
     edit_waypoint.Altitude = calculated.TerrainAlt;
