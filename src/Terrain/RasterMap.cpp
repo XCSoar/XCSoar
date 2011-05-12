@@ -133,9 +133,9 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
   }
 
   fixed clipped_start_distance =
-    std::max(clipped_start.projected_distance(start, end), fixed_zero);
+    std::max(clipped_start.distance(start), fixed_zero);
   fixed clipped_end_distance =
-    std::max(clipped_end.projected_distance(start, end), fixed_zero);
+    std::max(clipped_end.distance(start), fixed_zero);
 
   /* calculate the offsets of the clipped range within the buffer */
 
