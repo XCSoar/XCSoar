@@ -51,7 +51,7 @@ fixed earth_distance_function(const fixed a) {
 }
 
 static GeoPoint
-IntermediatePoint(GeoPoint loc1, GeoPoint loc2, fixed dthis, fixed dtotal)
+IntermediatePoint(const GeoPoint loc1, const GeoPoint loc2, fixed dthis, fixed dtotal)
 {
   if ((loc1.Longitude == loc2.Longitude) && 
       (loc1.Latitude == loc2.Latitude))
@@ -97,7 +97,7 @@ IntermediatePoint(GeoPoint loc1, GeoPoint loc2, fixed dthis, fixed dtotal)
 }
 
 GeoPoint
-IntermediatePoint(GeoPoint loc1, GeoPoint loc2, const fixed dthis)
+IntermediatePoint(const GeoPoint loc1, const GeoPoint loc2, const fixed dthis)
 {
   const fixed dtotal = ::Distance(loc1, loc2);
 
@@ -118,7 +118,8 @@ IntermediatePoint(GeoPoint loc1, GeoPoint loc2, const fixed dthis)
  * @param Bearing Pointer to the bearing variable
  */
 static void
-DistanceBearingS(GeoPoint loc1, GeoPoint loc2, Angle *Distance, Angle *Bearing)
+DistanceBearingS(const GeoPoint loc1, const GeoPoint loc2,
+                 Angle *Distance, Angle *Bearing)
 {
   fixed cos_lat1, sin_lat1;
   loc1.Latitude.sin_cos(sin_lat1, cos_lat1);
@@ -158,7 +159,8 @@ DistanceBearingS(GeoPoint loc1, GeoPoint loc2, Angle *Distance, Angle *Bearing)
 
 
 void
-DistanceBearing(GeoPoint loc1, GeoPoint loc2, fixed *Distance, Angle *Bearing)
+DistanceBearing(const GeoPoint loc1, const GeoPoint loc2,
+                fixed *Distance, Angle *Bearing)
 {
   if (Distance != NULL) {
     Angle distance_angle;
@@ -169,7 +171,8 @@ DistanceBearing(GeoPoint loc1, GeoPoint loc2, fixed *Distance, Angle *Bearing)
 }
 
 fixed
-CrossTrackError(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3, GeoPoint *loc4)
+CrossTrackError(const GeoPoint loc1, const GeoPoint loc2,
+                const GeoPoint loc3, GeoPoint *loc4)
 {
   Angle dist_AD; Angle crs_AD;
   DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
@@ -204,7 +207,7 @@ CrossTrackError(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3, GeoPoint *loc4)
 }
 
 fixed
-ProjectedDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3)
+ProjectedDistance(const GeoPoint loc1, const GeoPoint loc2, const GeoPoint loc3)
 {
   Angle dist_AD; Angle crs_AD;
   DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
@@ -241,7 +244,7 @@ ProjectedDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3)
 
 
 fixed
-DoubleDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3)
+DoubleDistance(const GeoPoint loc1, const GeoPoint loc2, const GeoPoint loc3)
 {
   const fixed cloc1Latitude = loc1.Latitude.cos();
   const fixed cloc2Latitude = loc2.Latitude.cos();
@@ -273,7 +276,7 @@ DoubleDistance(GeoPoint loc1, GeoPoint loc2, GeoPoint loc3)
  * @param loc_out Future location
  */
 GeoPoint
-FindLatitudeLongitude(GeoPoint loc, Angle Bearing, 
+FindLatitudeLongitude(const GeoPoint loc, const Angle Bearing,
                       fixed Distance)
 {
   assert(!negative(Distance));
@@ -321,7 +324,7 @@ FindLatitudeLongitude(GeoPoint loc, Angle Bearing,
  * @return The distance
  */
 fixed
-Distance(GeoPoint loc1, GeoPoint loc2)
+Distance(const GeoPoint loc1, const GeoPoint loc2)
 {
   fixed retval;
   DistanceBearing(loc1, loc2, &retval, NULL);
@@ -335,7 +338,7 @@ Distance(GeoPoint loc1, GeoPoint loc2)
  * @return The bearing
  */
 Angle
-Bearing(GeoPoint loc1, GeoPoint loc2)
+Bearing(const GeoPoint loc1, const GeoPoint loc2)
 {
   Angle retval;
   DistanceBearing(loc1, loc2, NULL, &retval);
