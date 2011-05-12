@@ -81,6 +81,7 @@ LayoutConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("5 Right (Square)"), InfoBoxLayout::ibSquare);
     dfe->addEnumText(_("12 Right (Landscape)"), InfoBoxLayout::ibRight12);
     dfe->addEnumText(_("12 Bottom (Portrait)"), InfoBoxLayout::ibBottom12);
+    dfe->addEnumText(_("12 Top (Portrait)"), InfoBoxLayout::ibTop12);
     dfe->addEnumText(_("24 Right (Landscape)"), InfoBoxLayout::ibRight24);
     dfe->Set(InfoBoxLayout::InfoBoxGeometry);
     wp->RefreshDisplay();

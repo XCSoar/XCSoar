@@ -32,6 +32,7 @@ Copyright_License {
 static const unsigned char geometry_counts[] = {
   8, 8, 8, 8, 8, 8,
   9, 5, 12, 24, 12,
+  12,
 };
 
 namespace InfoBoxLayout
@@ -188,6 +189,13 @@ InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
                               rc.left, rc.bottom);
     break;
 
+  case ibTop12:
+    assert(layout.count == 12);
+
+    rc.top = MakeTopRow(layout, layout.positions, 6, rc.left, rc.top);
+    rc.top = MakeTopRow(layout, layout.positions + 6, 6, rc.left, rc.top);
+    break;
+
   case ibRight24:
     assert(layout.count == 24);
 
@@ -253,6 +261,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
       break;
 
     case ibBottom12:
+    case ibTop12:
       return ibRight12;
     }
   } else if (width == height) {
@@ -266,6 +275,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
     case ibBottom8:
     case ibBottom12:
     case ibTop8:
+    case ibTop12:
       break;
 
     case ibLeft4Right4:
@@ -308,6 +318,7 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout,
   case ibBottom8:
   case ibBottom12:
   case ibTop8:
+  case ibTop12:
     // calculate control dimensions
     layout.control_width = 2 * (rc.right - rc.left) / layout.count;
     layout.control_height = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
