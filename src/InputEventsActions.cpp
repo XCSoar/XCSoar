@@ -795,21 +795,6 @@ InputEvents::eventMacCready(const TCHAR *misc)
   }
 }
 
-// Wind
-// Adjusts the wind magnitude and direction
-//     up: increases wind magnitude
-//   down: decreases wind magnitude
-//   left: rotates wind direction counterclockwise
-//  right: rotates wind direction clockwise
-//   save: saves wind value, so it is used at next startup
-//
-// TODO feature: Increase wind by larger amounts ? Set wind to specific amount ?
-//	(may sound silly - but future may get SMS event that then sets wind)
-void
-InputEvents::eventWind(gcc_unused const TCHAR *misc)
-{
-}
-
 // SendNMEA
 //  Sends a user-defined NMEA string to an external instrument.
 //   The string sent is prefixed with the start character '$'
