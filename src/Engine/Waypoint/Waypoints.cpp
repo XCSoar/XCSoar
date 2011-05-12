@@ -466,11 +466,15 @@ Waypoints::add_takeoff_point(const GeoPoint& location,
 {
   // remove old one first
   const Waypoint *old_takeoff_point = lookup_name(_T("(takeoff)"));
-  if (old_takeoff_point != NULL) {
+  if (old_takeoff_point != NULL)
     erase(*old_takeoff_point);
+
+  const Waypoint *nearest_landable = get_nearest_landable(location, 5000);
+  if (!nearest_landable) {
+    // now add new and update database
+    Waypoint new_waypoint = generate_takeoff_point(location, terrain_alt);
+    append(new_waypoint);
   }
-  // now add new and update database
-  Waypoint new_waypoint = generate_takeoff_point(location, terrain_alt);
-  append(new_waypoint);
+
   optimise();
 }
