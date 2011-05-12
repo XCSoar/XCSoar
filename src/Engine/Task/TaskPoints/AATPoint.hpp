@@ -272,5 +272,11 @@ private:
  * @return True if same WP, type and OZ
  */
   bool equals(const OrderedTaskPoint* other) const;
+
+  /**
+   * Calculates the deadzone. Complexity is O(n+m) where n is number of
+   * points in the boundary polygon, m is number of points in sample polygon
+   */
+  void update_deadzone(const TaskProjection &projection);
 };
 #endif

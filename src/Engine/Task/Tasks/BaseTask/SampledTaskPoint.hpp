@@ -169,6 +169,13 @@ protected:
   void set_search_min(const GeoPoint &location,
                       const TaskProjection &projection);
 
+  /**
+   * Retrieve boundary points polygon
+   */
+  const SearchPointVector& get_boundary_points() const {
+    return m_boundary_points;
+  }
+
 private:
 
   /**

@@ -49,21 +49,8 @@ AATPoint::update_sample_near(const AIRCRAFT_STATE& state,
   bool retval = OrderedTaskPoint::update_sample_near(state, task_events,
                                                      projection);
 
-  if (retval) {
-    // deadzone must be updated
-
-    assert(get_next());
-
-    // the deadzone is the convex hull formed from the sampled points
-    // with the inclusion of the destination of the next turnpoint.
-
-    m_deadzone = SearchPointVector(get_sample_points().begin(),
-                                   get_sample_points().end());
-    SearchPoint destination(get_next()->get_location_remaining(), 
-                            projection);
-    m_deadzone.push_back(destination);
-    prune_interior(m_deadzone);
-  }
+  if (retval)
+    update_deadzone(projection);
 
   retval |= check_target(state, false);
 
@@ -268,4 +255,50 @@ AATPoint::reset()
 {
   IntermediateTaskPoint::reset();
   m_deadzone.clear();
+}
+
+void
+AATPoint::update_deadzone(const TaskProjection &projection)
+{
+  // deadzone must be updated
+
+  assert(get_next());
+  assert(get_previous());
+  
+  // the deadzone is the convex hull formed from the sampled points
+  // with the inclusion of all points on the boundary closer than
+  // the max double distance to the sample polygon
+  
+  m_deadzone = SearchPointVector(get_sample_points().begin(),
+                                 get_sample_points().end());
+
+  // do nothing if no samples (could happen if not achieved properly)
+  if (m_deadzone.empty())
+    return;
+
+  // previous and next targets
+  const SearchPoint pnext(get_next()->get_location_remaining(),
+                          projection);
+  const SearchPoint pprevious(get_previous()->get_location_remaining(),
+                              projection);
+
+  // find max distance
+  unsigned dmax = 0;
+  for (SearchPointVector::const_iterator it = get_sample_points().begin();
+       it != get_sample_points().end(); ++it) {
+    unsigned dd = pnext.flat_distance(*it) + pprevious.flat_distance(*it);
+    dmax = std::max(dd, dmax);
+  }
+
+  // now add boundary points closer than dmax
+  const SearchPointVector& boundary = get_boundary_points();
+  for (SearchPointVector::const_iterator it = boundary.begin();
+       it != boundary.end(); ++it) {
+    unsigned dd = pnext.flat_distance(*it) + pprevious.flat_distance(*it);
+    if (dd< dmax)
+      m_deadzone.push_back(*it);
+  }
+
+  // convert to convex polygon
+  prune_interior(m_deadzone);
 }
