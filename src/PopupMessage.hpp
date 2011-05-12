@@ -127,7 +127,13 @@ public:
   /** returns true if messages have changed */
   bool Render();
 
+protected:
+  /**
+   * Caller must hold the lock.
+   */
   void AddMessage(int tshow, int type, const TCHAR *Text);
+
+public:
   void AddMessage(const TCHAR* text, const TCHAR *data=NULL);
 
   /**

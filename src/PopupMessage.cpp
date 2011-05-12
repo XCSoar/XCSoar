@@ -256,8 +256,6 @@ int PopupMessage::GetEmptySlot() {
 void
 PopupMessage::AddMessage(int tshow, int type, const TCHAR *Text)
 {
-  ScopeLock protect(mutex);
-
   int i;
   int fpsTime = clock.elapsed();
   i = GetEmptySlot();
