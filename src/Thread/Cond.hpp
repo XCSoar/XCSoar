@@ -56,6 +56,7 @@ public:
   }
 
   void wait(Mutex &mutex) {
+    TemporaryUnlock unlock(mutex);
     wait(mutex.mutex);
   }
 
@@ -76,6 +77,7 @@ public:
   }
 
   bool wait(Mutex &mutex, unsigned timeout_ms) {
+    TemporaryUnlock unlock(mutex);
     return wait(mutex.mutex, timeout_ms);
   }
 

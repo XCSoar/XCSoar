@@ -37,9 +37,17 @@ Copyright_License {
 #define XCSOAR_THREAD_MUTEX_HXX
 
 #include "Util/NonCopyable.hpp"
+
+#ifdef NDEBUG
 #include "Thread/RecursiveMutex.hpp"
+#else
+#include "Thread/FastMutex.hpp"
+#endif
+
+#include <assert.h>
 
 #ifndef NDEBUG
+#include "Thread/Handle.hpp"
 #include "Thread/Local.hpp"
 extern ThreadLocalInteger thread_locks_held;
 #endif
@@ -49,21 +57,38 @@ extern ThreadLocalInteger thread_locks_held;
  * thread can wait for, and another thread can wake it up.
  */
 class Mutex : private NonCopyable {
+#ifdef NDEBUG
+  /* use a recursive Mutex for the production build, so end users are
+     not affected by possible remaining bugs */
   RecursiveMutex mutex;
+#else
+  /* use a non-recursive Mutex for the debug build, to find code
+     places that assume a recursive Mutex */
+  FastMutex mutex;
+
+  bool locked;
+  ThreadHandle owner;
+#endif
 
   friend class Cond;
+  friend class TemporaryUnlock;
 
 public:
   /**
    * Initializes the Mutex
    */
-  Mutex() {
+  Mutex()
+#ifndef NDEBUG
+    :locked(false)
+#endif
+  {
   }
 
   /**
    * Deletes the Mutex
    */
   ~Mutex() {
+    assert(!locked);
   }
 
 public:
@@ -71,9 +96,17 @@ public:
    * Locks the Mutex
    */
   void Lock() {
+#ifdef NDEBUG
     mutex.Lock();
+#else
+    if (!mutex.TryLock()) {
+      assert(!owner.IsInside());
+      mutex.Lock();
+    }
 
-#ifndef NDEBUG
+    locked = true;
+    owner = ThreadHandle::GetCurrent();
+
     ++thread_locks_held;
 #endif
   };
@@ -82,10 +115,15 @@ public:
    * Tries to lock the Mutex
    */
   bool TryLock() {
-    if (!mutex.TryLock())
+    if (!mutex.TryLock()) {
+      assert(!owner.IsInside());
       return false;
+    }
 
 #ifndef NDEBUG
+    locked = true;
+    owner = ThreadHandle::GetCurrent();
+
     ++thread_locks_held;
 #endif
     return true;
@@ -95,6 +133,13 @@ public:
    * Unlocks the Mutex
    */
   void Unlock() {
+    assert(locked);
+    assert(owner.IsInside());
+
+#ifndef NDEBUG
+    locked = false;
+#endif
+
     mutex.Unlock();
 
 #ifndef NDEBUG
@@ -124,6 +169,23 @@ public:
   }
 private:
   Mutex &scope_mutex;
+};
+
+class TemporaryUnlock : private NonCopyable {
+  Mutex &mutex;
+
+public:
+  TemporaryUnlock(Mutex &_mutex):mutex(_mutex) {
+    assert(mutex.locked);
+    assert(mutex.owner.IsInside());
+    mutex.locked = false;
+  }
+
+  ~TemporaryUnlock() {
+    assert(!mutex.locked);
+    mutex.owner = ThreadHandle::GetCurrent();
+    mutex.locked = true;
+  }
 };
 
 #endif
