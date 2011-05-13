@@ -151,7 +151,7 @@
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpWayPointLabelSelection" Caption="Label visibility" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Determines what waypoint labels are displayed for each waypoint (space permitting):&#10;[All] All waypoints labels will displayed.&#10;[Task Waypoints &amp; Landables] All waypoints labels part of a task and all landables will be displayed.&#10;[Task Waypoints] All waypoints labels part of a task will be displayed.&#10;[None] No waypoint labels will be displayed.">
+      <Edit Name="prpWayPointLabelSelection" Caption="Label visibility" X="2" Width="-2" Height="22" CaptionWidth="100">
         <DataField DataType="enum" />
       </Edit>
 
