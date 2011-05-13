@@ -402,7 +402,10 @@ WndProperty::on_paint(Canvas &canvas)
 
   WindowControl::on_paint(canvas);
 
-  if (!mCaption.empty()) {
+  /* kludge: don't draw caption if width is too small (but not 0),
+     used by the polar configuration panel.  This concept needs to be
+     redesigned. */
+  if ((mCaptionWidth == 0 || mCaptionWidth >= 8) && !mCaption.empty()) {
     canvas.set_text_color(GetForeColor());
     canvas.background_transparent();
     canvas.select(*GetFont());
