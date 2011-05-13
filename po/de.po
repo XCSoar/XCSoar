@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-13 08:07+0200\n"
-"PO-Revision-Date: 2011-05-10 21:08+0000\n"
+"PO-Revision-Date: 2011-05-11 21:46+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-11 18:39+0000\n"
-"X-Generator: Launchpad (build 13014)\n"
+"X-Launchpad-Export-Date: 2011-05-13 06:01+0000\n"
+"X-Generator: Launchpad (build 13023)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -119,15 +119,15 @@ msgstr "Kein Logger verbunden"
 
 #: src/Logger/ExternalLogger.cpp:82
 msgid "Declare task"
-msgstr "Aufgabe deklarieren"
+msgstr "Aufgabe anmelden"
 
 #: src/Logger/ExternalLogger.cpp:97
 msgid "OK to invalidate declaration?"
-msgstr "Deklaration annulieren?"
+msgstr "Anmeldung annulieren?"
 
 #: src/Logger/ExternalLogger.cpp:98
 msgid "Task declared"
-msgstr "Aufgabe deklariert"
+msgstr "Aufgabe angemeldet"
 
 #: src/Replay/IgcReplayGlue.cpp:82
 msgid "Could not open IGC file!"
@@ -4887,7 +4887,7 @@ msgstr "Leermasse; max. Ballast"
 
 #: Data/Dialogs/pnlTaskList.xml:11 Data/Dialogs/pnlTaskList_L.xml:12
 msgid "Declare"
-msgstr "Deklaration"
+msgstr "Anmelden"
 
 #: Data/Dialogs/dlgVario.xml:7 Data/Dialogs/dlgVario_L.xml:8
 msgid "Demo"
@@ -5023,6 +5023,11 @@ msgid ""
 "[Straight] The reach is from straight line paths from the glider.\n"
 "[Turning] The reach is calculated allowing turns around terrain obstacles."
 msgstr ""
+"Wie die Berechnung der Reichweite des Segler bezogen auf das Gelände "
+"ausgeführt wird.\n"
+"[Aus] Die Reichweite wird nicht berechnet.\n"
+"[Direkt] In Reichweite gilt alles in geraden Flugweg vom Segler aus.\n"
+"[Mit Umweg] Die Reichweitenberechnung erlaubt Umwege um Hindernisse."
 
 #: Data/Dialogs/dlgConfiguration.xml:489
 #: Data/Dialogs/dlgConfiguration_L.xml:490
@@ -6040,7 +6045,7 @@ msgstr "Geschätzte Aufgabenzeit"
 
 #: Data/Dialogs/dlgStatus.xml:25 Data/Dialogs/dlgStatusSystem.xml:9
 msgid "Declared"
-msgstr "Deklariert"
+msgstr "Angemeldet"
 
 #: Data/Dialogs/dlgTarget_L.xml:37
 msgid ""
