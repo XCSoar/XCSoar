@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-11 20:35+0200\n"
+"POT-Creation-Date: 2011-05-13 08:07+0200\n"
 "PO-Revision-Date: 2011-03-31 22:53+0200\n"
 "Last-Translator: Max Kellermann <max@duempel.org>\n"
 "Language-Team: Spanish <es@li.org>\n"
@@ -19,7 +19,7 @@ msgstr ""
 "X-Generator: Launchpad (build 12351)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
-#: src/InputEventsActions.cpp:1439 src/Dialogs/dlgAnalysis.cpp:303
+#: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:303
 #: src/Dialogs/dlgStatus.cpp:53
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:88
 #: src/Dialogs/ConfigPanels/SafetyFactorsConfigPanel.cpp:56
@@ -300,7 +300,7 @@ msgstr "LLeno"
 #: src/ExpandMacros.cpp:435 src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499
 #: src/ExpandMacros.cpp:505 src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511
 #: src/ExpandMacros.cpp:529 src/ExpandMacros.cpp:582
-#: src/InputEventsActions.cpp:1665 src/InputEventsActions.cpp:1668
+#: src/InputEventsActions.cpp:1652 src/InputEventsActions.cpp:1655
 #: src/Dialogs/XML.cpp:598 src/Dialogs/dlgStatus.cpp:202
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:79
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:48
@@ -313,8 +313,8 @@ msgstr "Desactivado"
 
 #: src/ExpandMacros.cpp:442 src/ExpandMacros.cpp:499 src/ExpandMacros.cpp:505
 #: src/ExpandMacros.cpp:508 src/ExpandMacros.cpp:511 src/ExpandMacros.cpp:529
-#: src/ExpandMacros.cpp:582 src/InputEventsActions.cpp:1663
-#: src/InputEventsActions.cpp:1668 src/Dialogs/XML.cpp:598
+#: src/ExpandMacros.cpp:582 src/InputEventsActions.cpp:1650
+#: src/InputEventsActions.cpp:1655 src/Dialogs/XML.cpp:598
 #: src/Dialogs/dlgStatus.cpp:200
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:97
 msgid "On"
@@ -354,18 +354,18 @@ msgstr "A mano"
 msgid "Auto"
 msgstr "Automático"
 
-#: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1437
+#: src/ExpandMacros.cpp:514 src/InputEventsActions.cpp:1422
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:88
 #, fuzzy, no-c-format
 msgid "All"
 msgstr "Todos sobre"
 
-#: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1438
+#: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1423
 #, fuzzy, no-c-format
 msgid "Task & Landables"
 msgstr "Reglas de Manga"
 
-#: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1440
+#: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1425
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:94
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:78
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:59
@@ -1287,7 +1287,7 @@ msgstr ""
 "Porcentaje de humedad relatica del aire medida por una sonda si es soportado "
 "por la conexión de un variómetro inteligente."
 
-#: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1405
+#: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1390
 #, no-c-format
 msgid "Forecast temperature"
 msgstr ""
@@ -2003,13 +2003,13 @@ msgstr ""
 msgid "Both"
 msgstr "Ambos"
 
-#: src/InfoBoxes/InfoBoxManager.cpp:591 src/InfoBoxes/InfoBoxManager.cpp:633
+#: src/InfoBoxes/InfoBoxManager.cpp:598 src/InfoBoxes/InfoBoxManager.cpp:640
 #: src/Dialogs/dlgConfigInfoboxes.cpp:207
 #: src/Dialogs/dlgConfigInfoboxes.cpp:306
 msgid "InfoBox"
 msgstr "Panel Información"
 
-#: src/InfoBoxes/InfoBoxManager.cpp:598 src/Dialogs/dlgConfigInfoboxes.cpp:211
+#: src/InfoBoxes/InfoBoxManager.cpp:605 src/Dialogs/dlgConfigInfoboxes.cpp:211
 #: src/Dialogs/dlgWeather.cpp:58
 msgid "No help available on this item"
 msgstr "Ayuda no disponible para este elemento"
@@ -2066,7 +2066,7 @@ msgstr ""
 msgid "Auto. zoom on"
 msgstr ""
 
-#: src/InputEventsActions.cpp:306 src/InputEventsActions.cpp:1774
+#: src/InputEventsActions.cpp:306 src/InputEventsActions.cpp:1761
 msgid "Auto. zoom off"
 msgstr ""
 
@@ -2149,76 +2149,76 @@ msgstr "Fijar MacCready"
 msgid "MacCready "
 msgstr ""
 
-#: src/InputEventsActions.cpp:1007
+#: src/InputEventsActions.cpp:992
 #, fuzzy
 msgid "Task aborted"
 msgstr "Salida de Manga"
 
-#: src/InputEventsActions.cpp:1010
+#: src/InputEventsActions.cpp:995
 msgid "Go to target"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1013
+#: src/InputEventsActions.cpp:998
 #, fuzzy
 msgid "Ordered task"
 msgstr "Declarar tarea"
 
-#: src/InputEventsActions.cpp:1016 src/FlightStatisticsRenderer.cpp:753
+#: src/InputEventsActions.cpp:1001 src/FlightStatisticsRenderer.cpp:753
 msgid "No task"
 msgstr "No hay Manga"
 
-#: src/InputEventsActions.cpp:1075
+#: src/InputEventsActions.cpp:1060
 msgid "Bugs performance"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1116
+#: src/InputEventsActions.cpp:1101
 msgid "Ballast %"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1175
+#: src/InputEventsActions.cpp:1160
 msgid "NMEA log on"
 msgstr "Grabadora NMEA ON"
 
-#: src/InputEventsActions.cpp:1177
+#: src/InputEventsActions.cpp:1162
 msgid "NMEA log off"
 msgstr "Grabadora NMEA OFF"
 
-#: src/InputEventsActions.cpp:1181
+#: src/InputEventsActions.cpp:1166
 msgid "Logger on"
 msgstr "Grabadora ON"
 
-#: src/InputEventsActions.cpp:1183
+#: src/InputEventsActions.cpp:1168
 msgid "Logger off"
 msgstr "Grabadora OFF"
 
-#: src/InputEventsActions.cpp:1453 Data/Dialogs/dlgConfigFonts.xml:19
+#: src/InputEventsActions.cpp:1438 Data/Dialogs/dlgConfigFonts.xml:19
 #: Data/Dialogs/dlgConfigFonts_L.xml:19
 #, fuzzy
 msgid "Waypoint labels"
 msgstr "Waypoints"
 
-#: src/InputEventsActions.cpp:1491
+#: src/InputEventsActions.cpp:1476
 msgid "Map labels on"
 msgstr "Etiquetas de Mapa ON"
 
-#: src/InputEventsActions.cpp:1670
+#: src/InputEventsActions.cpp:1657
 msgid "Topography/Terrain"
 msgstr ""
 
-#: src/InputEventsActions.cpp:1841
+#: src/InputEventsActions.cpp:1828
 msgid "Task start"
 msgstr "Salida de Manga"
 
-#: src/InputEventsActions.cpp:1843
+#: src/InputEventsActions.cpp:1830
 msgid "Next turnpoint"
 msgstr "Siguiente punto de giro"
 
-#: src/InputEventsActions.cpp:1845
+#: src/InputEventsActions.cpp:1832
 #, fuzzy
 msgid "Task finished"
 msgstr "Manga Finalizada"
 
-#: src/InputEventsActions.cpp:1847
+#: src/InputEventsActions.cpp:1834
 msgid "In sector, arm advance when ready"
 msgstr "En el Sector, armar Inicio cuando listo"
 
@@ -2665,17 +2665,17 @@ msgstr "Cancelar"
 msgid "Ignore"
 msgstr "Ignorar"
 
-#: src/Dialogs/dlgAirspace.cpp:57 src/Dialogs/dlgAirspace.cpp:75
+#: src/Dialogs/dlgAirspace.cpp:57 src/Dialogs/dlgAirspace.cpp:83
 msgid "Warn"
 msgstr "Advertencia"
 
-#: src/Dialogs/dlgAirspace.cpp:58 src/Dialogs/dlgAirspace.cpp:79
+#: src/Dialogs/dlgAirspace.cpp:58 src/Dialogs/dlgAirspace.cpp:87
 #: Data/Input/default.xci:516 Data/Input/default.xci:568
 #: Data/Input/default.xci:973
 msgid "Display"
 msgstr "Pantalla"
 
-#: src/Dialogs/dlgAirspace.cpp:179
+#: src/Dialogs/dlgAirspace.cpp:193
 msgid "Configuration saved"
 msgstr "Configuración Salvada"
 
@@ -2984,8 +2984,8 @@ msgstr "Waypoints editados"
 #: src/Dialogs/dlgWayPointDetails.cpp:515
 #: src/Dialogs/dlgWayPointDetails.cpp:520
 #: src/Dialogs/dlgWayPointDetails.cpp:589
-#: src/Dialogs/dlgWayPointDetails.cpp:598 src/Device/SerialPort.cpp:135
-#: src/Device/SerialPort.cpp:342
+#: src/Dialogs/dlgWayPointDetails.cpp:598 src/Device/SerialPort.cpp:139
+#: src/Device/SerialPort.cpp:476
 msgid "Error"
 msgstr ""
 
@@ -3199,47 +3199,51 @@ msgid "12 Bottom (Portrait)"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
+msgid "12 Top (Portrait)"
+msgstr ""
+
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
 msgid "24 Right (Landscape)"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:93
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
 msgid "Center"
 msgstr "Centro"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:94
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:95
 msgid "Topleft"
 msgstr "superior Izquierda"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:103
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:104
 msgid "Full width"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:104
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:105
 msgid "Scaled"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:105
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:106
 msgid "Scaled centered"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:106
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:107
 #: src/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp:58
 msgid "Fixed"
 msgstr "Arreglado"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:120
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:121
 msgid "Box"
 msgstr "Cajón (Box)"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:121
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:122
 msgid "Tab"
 msgstr "Tabulador"
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:130
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:131
 msgid "Text"
 msgstr ""
 
-#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:131
+#: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:132
 msgid "Icons"
 msgstr ""
 
@@ -4169,17 +4173,17 @@ msgstr ""
 msgid "Edit Font"
 msgstr "Editar Fuentes"
 
-#: src/Device/SerialPort.cpp:97
+#: src/Device/SerialPort.cpp:101
 #, c-format
 msgid "Unable to open port %s"
 msgstr ""
 
-#: src/Device/SerialPort.cpp:136
+#: src/Device/SerialPort.cpp:140
 #, c-format
 msgid "Unable to change settings on port %s"
 msgstr ""
 
-#: src/Device/SerialPort.cpp:343
+#: src/Device/SerialPort.cpp:477
 #, c-format
 msgid "Unable to set serial port timers %s"
 msgstr ""
