@@ -38,6 +38,53 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
+#ifndef _WIN32_WCE
+class OverlappedEvent {
+  OVERLAPPED os;
+
+public:
+  enum WaitResult {
+    FINISHED,
+    TIMEOUT,
+    CANCELED,
+  };
+
+public:
+  OverlappedEvent()
+  {
+    os.Offset = os.OffsetHigh = 0;
+    os.Internal = os.InternalHigh = 0;
+
+    os.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
+  }
+
+  ~OverlappedEvent() {
+    ::CloseHandle(os.hEvent);
+  }
+
+  bool Defined() const {
+    return os.hEvent != NULL;
+  }
+
+  OVERLAPPED *GetPointer() {
+    return &os;
+  }
+
+  WaitResult Wait(unsigned timeout_ms) {
+    switch (::WaitForSingleObject(os.hEvent, timeout_ms)) {
+    case WAIT_OBJECT_0:
+      return FINISHED;
+
+    case WAIT_TIMEOUT:
+      return TIMEOUT;
+
+    default:
+      return CANCELED;
+    }
+  }
+};
+#endif
+
 static void
 SerialPort_StatusMessage(unsigned type, const TCHAR *caption,
                       const TCHAR *fmt, ...)
@@ -179,21 +226,11 @@ SerialPort::run()
 
 #ifndef _WIN32_WCE
   bool waiting_on_status = false, waiting_on_read = false;
-  OVERLAPPED osStatus = {0}, osReader = {0};
 
-  // Create event for WaitCommEvent()
-  osStatus.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-  if (osStatus.hEvent == NULL)
+  OverlappedEvent osStatus, osReader;
+  if (!osStatus.Defined() || !osReader.Defined())
      // error creating event; abort
      return;
-
-  // Create event for ReadFile()
-  osReader.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-  if (osReader.hEvent == NULL) {
-     // error creating event; abort
-    ::CloseHandle(osStatus.hEvent);
-     return;
-  }
 #endif
 
   // Specify a set of events to be monitored for the port.
@@ -208,7 +245,7 @@ SerialPort::run()
     // Not waiting for WaitCommEvent() to finish yet
     if (!waiting_on_status) {
       // Start listening for data
-      if (!::WaitCommEvent(hPort, &dwCommModemStatus, &osStatus)) {
+      if (!::WaitCommEvent(hPort, &dwCommModemStatus, osStatus.GetPointer())) {
         if (::GetLastError() == ERROR_IO_PENDING)
           // There is no data available yet
           waiting_on_status = true;
@@ -225,15 +262,15 @@ SerialPort::run()
     // Let's wait for WaitCommEvent() to finish
     if (waiting_on_status) {
       // Wait for max. 500ms an event to occur
-      switch (::WaitForSingleObject(osStatus.hEvent, 500)) {
-      case WAIT_OBJECT_0:
+      switch (osStatus.Wait(500)) {
+      case OverlappedEvent::FINISHED:
         // Event occurred -> reset waiting flag
         waiting_on_status = false;
 
         {
           // Get results
           DWORD dwOvRes;
-          if (!::GetOverlappedResult(hPort, &osStatus, &dwOvRes, FALSE))
+          if (!::GetOverlappedResult(hPort, osStatus.GetPointer(), &dwOvRes, FALSE))
             // Error occured while fetching results
             continue;
         }
@@ -245,13 +282,11 @@ SerialPort::run()
         // continue with reading the data in the next step
         break;
 
-      case WAIT_TIMEOUT:
+      case OverlappedEvent::TIMEOUT:
         // WaitCommEvent() has not yet finished
         continue;
 
       default:
-        ::CloseHandle(osStatus.hEvent);
-        ::CloseHandle(osReader.hEvent);
         return;
       }
     }
@@ -259,7 +294,7 @@ SerialPort::run()
     // Not waiting for ReadFile() to finish yet
     if (!waiting_on_read) {
       // Start reading data
-      if (!::ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, &osReader)) {
+      if (!::ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, osReader.GetPointer())) {
         if (!::GetLastError() != ERROR_IO_PENDING)
           // There is no data available yet
           waiting_on_read = true;
@@ -278,13 +313,13 @@ SerialPort::run()
     // Let's wait for ReadFile() to finish
     while (waiting_on_read) {
       // Wait for max. 500ms an event to occur
-      switch (::WaitForSingleObject(osReader.hEvent, 500)) {
-      case WAIT_OBJECT_0:
+      switch (osReader.Wait(500)) {
+      case OverlappedEvent::FINISHED:
         // Event occurred -> reset waiting flag
         waiting_on_read = false;
 
         // Get results
-        if (!::GetOverlappedResult(hPort, &osReader, &dwBytesTransferred, FALSE))
+        if (!::GetOverlappedResult(hPort, osReader.GetPointer(), &dwBytesTransferred, FALSE))
           // Error occured while fetching results
           continue;
 
@@ -294,13 +329,11 @@ SerialPort::run()
 
         break;
 
-      case WAIT_TIMEOUT:
+      case OverlappedEvent::TIMEOUT:
         // ReadFile() has not yet finished
         continue;
 
       default:
-        ::CloseHandle(osStatus.hEvent);
-        ::CloseHandle(osReader.hEvent);
         return;
       }
     }
@@ -337,11 +370,6 @@ SerialPort::run()
 #endif
 
   }
-
-#ifndef _WIN32_WCE
-  CloseHandle(osStatus.hEvent);
-  CloseHandle(osReader.hEvent);
-#endif
 
   Flush();
 }
