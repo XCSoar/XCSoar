@@ -37,12 +37,7 @@ Copyright_License {
 #define XCSOAR_THREAD_MUTEX_HXX
 
 #include "Util/NonCopyable.hpp"
-
-#ifdef HAVE_POSIX
-#include <pthread.h>
-#else
-#include <windows.h>
-#endif
+#include "Thread/RecursiveMutex.hpp"
 
 #ifndef NDEBUG
 #include "Thread/Local.hpp"
@@ -54,11 +49,7 @@ extern ThreadLocalInteger thread_locks_held;
  * thread can wait for, and another thread can wake it up.
  */
 class Mutex : private NonCopyable {
-#ifdef HAVE_POSIX
-  pthread_mutex_t mutex;
-#else
-  CRITICAL_SECTION handle;
-#endif
+  RecursiveMutex mutex;
 
   friend class Cond;
 
@@ -67,28 +58,12 @@ public:
    * Initializes the Mutex
    */
   Mutex() {
-#ifdef HAVE_POSIX
-    /* the XCSoar code assumes that recursive locking of a Mutex is
-       legal */
-    pthread_mutexattr_t recursive;
-    pthread_mutexattr_init(&recursive);
-    pthread_mutexattr_settype(&recursive, PTHREAD_MUTEX_RECURSIVE_NP);
-    pthread_mutex_init(&mutex, &recursive);
-    pthread_mutexattr_destroy(&recursive);
-#else
-    ::InitializeCriticalSection(&handle);
-#endif
   }
 
   /**
    * Deletes the Mutex
    */
   ~Mutex() {
-#ifdef HAVE_POSIX
-    pthread_mutex_destroy(&mutex);
-#else
-    ::DeleteCriticalSection(&handle);
-#endif
   }
 
 public:
@@ -96,11 +71,7 @@ public:
    * Locks the Mutex
    */
   void Lock() {
-#ifdef HAVE_POSIX
-    pthread_mutex_lock(&mutex);
-#else
-    EnterCriticalSection(&handle);
-#endif
+    mutex.Lock();
 
 #ifndef NDEBUG
     ++thread_locks_held;
@@ -111,13 +82,8 @@ public:
    * Tries to lock the Mutex
    */
   bool TryLock() {
-#ifdef HAVE_POSIX
-    if (pthread_mutex_trylock(&mutex) != 0)
+    if (!mutex.TryLock())
       return false;
-#else
-    if (TryEnterCriticalSection(&handle) == 0)
-      return false;
-#endif
 
 #ifndef NDEBUG
     ++thread_locks_held;
@@ -129,11 +95,7 @@ public:
    * Unlocks the Mutex
    */
   void Unlock() {
-#ifdef HAVE_POSIX
-    pthread_mutex_unlock(&mutex);
-#else
-    LeaveCriticalSection(&handle);
-#endif
+    mutex.Unlock();
 
 #ifndef NDEBUG
     --thread_locks_held;

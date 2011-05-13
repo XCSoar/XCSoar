@@ -51,8 +51,12 @@ public:
    * @param mutex a mutex which is already locked, which is unlocked
    * atomically while we wait
    */
-  void wait(Mutex &mutex) {
+  void wait(PosixMutex &mutex) {
     pthread_cond_wait(&cond, &mutex.mutex);
+  }
+
+  void wait(Mutex &mutex) {
+    wait(mutex.mutex);
   }
 
   /**
@@ -64,11 +68,15 @@ public:
    * @return true if this object was triggered, false if the timeout
    * has expired
    */
-  bool wait(Mutex &mutex, unsigned timeout_ms) {
+  bool wait(PosixMutex &mutex, unsigned timeout_ms) {
     struct timespec timeout;
     timeout.tv_sec = timeout_ms / 1000;
     timeout.tv_nsec = (timeout_ms % 1000) * 1000000;
     return pthread_cond_timedwait(&cond, &mutex.mutex, &timeout) == 0;
+  }
+
+  bool wait(Mutex &mutex, unsigned timeout_ms) {
+    return wait(mutex.mutex, timeout_ms);
   }
 
   void signal() {
