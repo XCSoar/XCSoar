@@ -328,7 +328,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; ++i) {
     const TCHAR *name = InfoBoxFactory::GetName(i);
     if (name != NULL)
-      dfe->addEnumText(name, i, InfoBoxFactory::GetDescription(i));
+      dfe->addEnumText(name, i);
   }
 
   dfe->Sort(0);
