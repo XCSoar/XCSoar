@@ -267,6 +267,12 @@ pnlTaskList::OnManageClicked(gcc_unused WndButton &Sender)
 void
 pnlTaskList::OnBrowseClicked(gcc_unused WndButton &Sender)
 {
+  if (!lazy_loaded) {
+    lazy_loaded = true;
+    // Scan XCSoarData for available tasks
+    task_store.scan();
+  }
+
   dlgTaskManager::TaskViewRestore(wTaskView);
   browse_tabbed->SetCurrentPage(1);
   RefreshView();
@@ -353,11 +359,6 @@ pnlTaskList::OnTaskViewClick(gcc_unused WndOwnerDrawFrame *Sender,
 bool
 pnlTaskList::OnTabPreShow(gcc_unused TabBarControl::EventType EventType)
 {
-  if (!lazy_loaded) {
-    lazy_loaded = true;
-    // Scan XCSoarData for available tasks
-    task_store.scan();
-  }
   browse_tabbed->SetCurrentPage(0);
   wTasks->SetCursorIndex(0); // so Save & Declare are always available
   dlgTaskManager::TaskViewRestore(wTaskView);
