@@ -29,7 +29,10 @@ WndFrame::WndFrame(ContainerWindow &parent,
                    int X, int Y, int Width, int Height,
                    Color _background_color,
                    const WindowStyle style)
-  :background_color(_background_color),
+  :
+#ifdef HAVE_CLIPPING
+   background_color(_background_color),
+#endif
    caption_color(COLOR_BLACK),
    font(&Fonts::Map),
    mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
@@ -74,7 +77,9 @@ WndFrame::GetTextHeight()
 void
 WndFrame::on_paint(Canvas &canvas)
 {
+#ifdef HAVE_CLIPPING
   canvas.clear(background_color);
+#endif
 
   canvas.set_text_color(caption_color);
   canvas.background_transparent();

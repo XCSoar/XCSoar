@@ -25,10 +25,14 @@ Copyright_License {
 #define XCSOAR_FORM_FRAME_HPP
 
 #include "Screen/PaintWindow.hpp"
+#include "Screen/Features.hpp"
 #include "Util/StaticString.hpp"
 
 class WndFrame : public PaintWindow {
+#ifdef HAVE_CLIPPING
   Color background_color;
+#endif
+
   Color caption_color;
   const Font *font;
   StaticString<256> text;
