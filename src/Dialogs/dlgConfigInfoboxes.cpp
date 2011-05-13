@@ -184,6 +184,8 @@ InfoBoxPreview::on_paint(Canvas &canvas)
     : NULL;
   if (caption == NULL)
     caption = _("Invalid");
+  else
+    caption = gettext(caption);
 
   canvas.select(Fonts::Title);
   canvas.background_transparent();
@@ -222,7 +224,8 @@ UpdatePanelName()
   const unsigned BUFFER_LENGTH = InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH + 32;
   TCHAR caption[BUFFER_LENGTH];
 
-  _sntprintf(caption, BUFFER_LENGTH, _T("%s: %s"), _("Name"), data.name);
+  _sntprintf(caption, BUFFER_LENGTH, _T("%s: %s"), _("Name"),
+             gettext(data.name));
   buttonPanelName->SetCaption(caption);
 }
 
@@ -328,7 +331,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; ++i) {
     const TCHAR *name = InfoBoxFactory::GetName(i);
     if (name != NULL)
-      dfe->addEnumText(name, i);
+      dfe->addEnumText(gettext(name), i);
   }
 
   dfe->Sort(0);
