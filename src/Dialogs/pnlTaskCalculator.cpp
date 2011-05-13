@@ -269,7 +269,7 @@ void
 pnlTaskCalculator::OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   if (*task_modified) {
-    const TCHAR* message = _T("Calculator excludes unsaved task changes!");
+    const TCHAR* message = _("Calculator excludes unsaved task changes!");
     canvas.select(Fonts::Title);
     const int textheight = canvas.text_height(message);
 

@@ -199,7 +199,7 @@ DeleteTask()
       ::toupper);
 
   if (upperstring.find(_T(".CUP")) != tstring::npos) {
-    MessageBoxX(_T("Can't delete .CUP files"), _("Delete Error"),
+    MessageBoxX(_("Can't delete .CUP files"), _("Delete Error"),
         MB_ICONEXCLAMATION);
     return;
   }
@@ -232,7 +232,7 @@ RenameTask()
       ::toupper);
 
   if (upperstring.find(_T(".CUP")) != tstring::npos) {
-    MessageBoxX(_T("Can't rename .CUP files"), _("Rename Error"),
+    MessageBoxX(_("Can't rename .CUP files"), _("Rename Error"),
         MB_ICONEXCLAMATION);
     return;
   }

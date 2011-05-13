@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-13 08:07+0200\n"
+"POT-Creation-Date: 2011-05-13 08:22+0200\n"
 "PO-Revision-Date: 2011-04-28 06:39+0000\n"
 "Last-Translator: Peter Brtko <Unknown>\n"
 "Language-Team: Slovak <sk@li.org>\n"
@@ -2973,6 +2973,7 @@ msgid "Content"
 msgstr "Obsah"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:346 src/Dialogs/dlgInfoBoxAccess.cpp:98
+#: src/Dialogs/dlgTaskManager.cpp:311 src/Dialogs/dlgTaskManager.cpp:320
 #: Data/Dialogs/dlgAirspace.xml:4 Data/Dialogs/dlgAirspaceColours.xml:4
 #: Data/Dialogs/dlgAirspaceColours_L.xml:4
 #: Data/Dialogs/dlgAirspaceDetails.xml:4
@@ -3699,6 +3700,11 @@ msgid ""
 "reachable at all."
 msgstr ""
 
+#: src/Dialogs/dlgTaskManager.cpp:73 src/Dialogs/dlgTaskManager.cpp:156
+#: Data/Dialogs/dlgTaskManager.xml:3 Data/Dialogs/dlgTaskManager_L.xml:3
+msgid "Task Manager"
+msgstr "Správca úlohy"
+
 #: src/Dialogs/dlgTaskManager.cpp:153
 msgid "Validation Errors"
 msgstr "Chyba validácie"
@@ -3711,10 +3717,25 @@ msgstr ""
 "Úloha nie je validná. Zmeny budú stratené.\n"
 "Pokračovať?"
 
-#: src/Dialogs/dlgTaskManager.cpp:156 Data/Dialogs/dlgTaskManager.xml:3
-#: Data/Dialogs/dlgTaskManager_L.xml:3
-msgid "Task Manager"
+#: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
+#, fuzzy
+msgid "Calculator"
+msgstr "Kalkulátor úlohy"
+
+#: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
+#, fuzzy
+msgid "Turn Points"
+msgstr "Otočný bod úlohy"
+
+#: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
+#, fuzzy
+msgid "Manage"
 msgstr "Správca úlohy"
+
+#: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
+#, fuzzy
+msgid "Rules"
+msgstr "Pravidlá úlohy"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -3750,12 +3771,20 @@ msgid "Task Browser"
 msgstr "Prechádzať úlohy"
 
 #: src/Dialogs/pnlTaskList.cpp:202
+msgid "Can't delete .CUP files"
+msgstr ""
+
+#: src/Dialogs/pnlTaskList.cpp:202
 msgid "Delete Error"
 msgstr "Chyba pri mazaní"
 
 #: src/Dialogs/pnlTaskList.cpp:208
 msgid "Delete the selected task?"
 msgstr "Zmazať zvolenú úlohu?"
+
+#: src/Dialogs/pnlTaskList.cpp:235
+msgid "Can't rename .CUP files"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:235
 msgid "Rename Error"
@@ -3770,6 +3799,10 @@ msgstr "Zrušiť úlohu?"
 #, fuzzy
 msgid "Task New"
 msgstr "Upraviť úlohu"
+
+#: src/Dialogs/pnlTaskCalculator.cpp:272
+msgid "Calculator excludes unsaved task changes!"
+msgstr ""
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
 msgid "(Add Alternate Start)"
@@ -9919,9 +9952,6 @@ msgstr "Pristánie"
 
 #~ msgid "Insert in task"
 #~ msgstr "Vložiť do úlohy"
-
-#~ msgid "Task Calculator"
-#~ msgstr "Kalkulátor úlohy"
 
 #~ msgid "A. Zoom"
 #~ msgstr "Aut. Zoom"

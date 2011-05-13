@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-13 08:07+0200\n"
+"POT-Creation-Date: 2011-05-13 08:22+0200\n"
 "PO-Revision-Date: 2011-05-11 21:46+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
@@ -3041,6 +3041,7 @@ msgid "Content"
 msgstr "Inhalt"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:346 src/Dialogs/dlgInfoBoxAccess.cpp:98
+#: src/Dialogs/dlgTaskManager.cpp:311 src/Dialogs/dlgTaskManager.cpp:320
 #: Data/Dialogs/dlgAirspace.xml:4 Data/Dialogs/dlgAirspaceColours.xml:4
 #: Data/Dialogs/dlgAirspaceColours_L.xml:4
 #: Data/Dialogs/dlgAirspaceDetails.xml:4
@@ -3767,6 +3768,11 @@ msgstr ""
 "angezeigt. Grün, wenn der Wegpunkt erreichbar ist; orange, wenn er durch ein "
 "Berg versperrt wird; rot, wenn er überhaupt nicht erreichbar ist."
 
+#: src/Dialogs/dlgTaskManager.cpp:73 src/Dialogs/dlgTaskManager.cpp:156
+#: Data/Dialogs/dlgTaskManager.xml:3 Data/Dialogs/dlgTaskManager_L.xml:3
+msgid "Task Manager"
+msgstr "Aufgaben Verwaltung"
+
 #: src/Dialogs/dlgTaskManager.cpp:153
 msgid "Validation Errors"
 msgstr "Validierungsfehler"
@@ -3779,10 +3785,25 @@ msgstr ""
 "Aufgabe ungültig. Änderungen gehen verloren.\n"
 "Weiter?"
 
-#: src/Dialogs/dlgTaskManager.cpp:156 Data/Dialogs/dlgTaskManager.xml:3
-#: Data/Dialogs/dlgTaskManager_L.xml:3
-msgid "Task Manager"
+#: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
+#, fuzzy
+msgid "Calculator"
+msgstr "Aufgaben-Rechner"
+
+#: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
+#, fuzzy
+msgid "Turn Points"
+msgstr "Wendepunkt"
+
+#: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
+#, fuzzy
+msgid "Manage"
 msgstr "Aufgaben Verwaltung"
+
+#: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
+#, fuzzy
+msgid "Rules"
+msgstr "Regeln"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -3817,12 +3838,20 @@ msgid "Task Browser"
 msgstr "Aufgaben Browser"
 
 #: src/Dialogs/pnlTaskList.cpp:202
+msgid "Can't delete .CUP files"
+msgstr ""
+
+#: src/Dialogs/pnlTaskList.cpp:202
 msgid "Delete Error"
 msgstr "Fehler beim Löschen"
 
 #: src/Dialogs/pnlTaskList.cpp:208
 msgid "Delete the selected task?"
 msgstr "Ausgewählte Aufgabe löschen?"
+
+#: src/Dialogs/pnlTaskList.cpp:235
+msgid "Can't rename .CUP files"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:235
 msgid "Rename Error"
@@ -3835,6 +3864,10 @@ msgstr "Erzeuge neue Aufgabe?"
 #: src/Dialogs/pnlTaskList.cpp:279
 msgid "Task New"
 msgstr "Neue Aufgabe"
+
+#: src/Dialogs/pnlTaskCalculator.cpp:272
+msgid "Calculator excludes unsaved task changes!"
+msgstr ""
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
 msgid "(Add Alternate Start)"
@@ -10142,9 +10175,6 @@ msgstr "Gelandet"
 #~ msgstr ""
 #~ " (Nur Altair) Aktiviert die automatische Hintergrundbeleuchtung, "
 #~ "entsprechend dem Lichtsensor."
-
-#~ msgid "Task Calculator"
-#~ msgstr "Aufgaben-Rechner"
 
 #~ msgid "Airfields file*"
 #~ msgstr "Flugplatzdetails*"

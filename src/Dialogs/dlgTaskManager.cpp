@@ -69,9 +69,9 @@ void
 dlgTaskManager::SetTitle()
 {
   TCHAR title[99];
-//  dlgTaskManager::SetTitleSuffix(wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
 
-  _stprintf(title, _T("Task Manager - %s"), wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
+  _stprintf(title, _T("%s - %s"), _("Task Manager"),
+            wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
   wf->SetCaption(title);
 }
 
@@ -290,47 +290,47 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
                                    &Graphics::hBmpTabSettings : NULL);
 
   if (Layout::landscape) {
-    wTabBar->AddClient(wCalculator, _T("Calculator"), false, CalcIcon, NULL,
+    wTabBar->AddClient(wCalculator, _("Calculator"), false, CalcIcon, NULL,
                        pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
 
-    wTabBar->AddClient(wEdit, _T("Turn Points"), false, TurnPointIcon, NULL,
+    wTabBar->AddClient(wEdit, _("Turn Points"), false, TurnPointIcon, NULL,
                        pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskEdit::OnTabReClick);
     TurnpointTab = 1;
 
-    wTabBar->AddClient(wLst, _T("Manage"), false, BrowseIcon, NULL,
+    wTabBar->AddClient(wLst, _("Manage"), false, BrowseIcon, NULL,
                        pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskList::OnTabReClick);
 
-    wTabBar->AddClient(wProps, _T("Rules"), false, PropertiesIcon,
+    wTabBar->AddClient(wProps, _("Rules"), false, PropertiesIcon,
                        pnlTaskProperties::OnTabPreHide,
                        pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskProperties::OnTabReClick);
     PropertiesTab = 3;
 
-    wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,
+    wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,
                        pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskManagerClose::OnTabReClick);
 
     wTabBar->SetCurrentPage(0);
   } else {
-    wTabBar->AddClient(wCalculator, _T("Calculator"), false, CalcIcon, NULL,
+    wTabBar->AddClient(wCalculator, _("Calculator"), false, CalcIcon, NULL,
                        pnlTaskCalculator::OnTabPreShow, dlgTaskManager::SetTitle);
 
-    wTabBar->AddClient(wClose, _T("Close"), false, NULL, NULL,
+    wTabBar->AddClient(wClose, _("Close"), false, NULL, NULL,
                        pnlTaskManagerClose::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskManagerClose::OnTabReClick);
 
-    wTabBar->AddClient(wEdit, _T("Turn Points"), false, TurnPointIcon, NULL,
+    wTabBar->AddClient(wEdit, _("Turn Points"), false, TurnPointIcon, NULL,
                        pnlTaskEdit::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskEdit::OnTabReClick);
     TurnpointTab = 2;
 
-    wTabBar->AddClient(wLst, _T("Manage"), false, BrowseIcon, NULL,
+    wTabBar->AddClient(wLst, _("Manage"), false, BrowseIcon, NULL,
                        pnlTaskList::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskList::OnTabReClick);
 
-    wTabBar->AddClient(wProps, _T("Rules"), false, PropertiesIcon,
+    wTabBar->AddClient(wProps, _("Rules"), false, PropertiesIcon,
                        pnlTaskProperties::OnTabPreHide,
                        pnlTaskProperties::OnTabPreShow, dlgTaskManager::SetTitle,
                        pnlTaskProperties::OnTabReClick);

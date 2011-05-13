@@ -7,7 +7,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-05-13 08:07+0200\n"
+"POT-Creation-Date: 2011-05-13 08:22+0200\n"
 "PO-Revision-Date: 2011-05-10 12:19+0000\n"
 "Last-Translator: briga <Unknown>\n"
 "Language-Team: none\n"
@@ -2793,6 +2793,7 @@ msgid "Content"
 msgstr ""
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:346 src/Dialogs/dlgInfoBoxAccess.cpp:98
+#: src/Dialogs/dlgTaskManager.cpp:311 src/Dialogs/dlgTaskManager.cpp:320
 #: Data/Dialogs/dlgAirspace.xml:4 Data/Dialogs/dlgAirspaceColours.xml:4
 #: Data/Dialogs/dlgAirspaceColours_L.xml:4
 #: Data/Dialogs/dlgAirspaceDetails.xml:4
@@ -3502,6 +3503,11 @@ msgid ""
 "reachable at all."
 msgstr ""
 
+#: src/Dialogs/dlgTaskManager.cpp:73 src/Dialogs/dlgTaskManager.cpp:156
+#: Data/Dialogs/dlgTaskManager.xml:3 Data/Dialogs/dlgTaskManager_L.xml:3
+msgid "Task Manager"
+msgstr ""
+
 #: src/Dialogs/dlgTaskManager.cpp:153
 msgid "Validation Errors"
 msgstr ""
@@ -3512,10 +3518,24 @@ msgid ""
 "Continue?"
 msgstr ""
 
-#: src/Dialogs/dlgTaskManager.cpp:156 Data/Dialogs/dlgTaskManager.xml:3
-#: Data/Dialogs/dlgTaskManager_L.xml:3
-msgid "Task Manager"
+#: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
+#, fuzzy
+msgid "Calculator"
+msgstr "Calcolo Tema"
+
+#: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
+#, fuzzy
+msgid "Turn Points"
+msgstr "Piloni Tema"
+
+#: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
+msgid "Manage"
 msgstr ""
+
+#: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
+#, fuzzy
+msgid "Rules"
+msgstr "Regole Tema"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -3550,11 +3570,19 @@ msgid "Task Browser"
 msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:202
+msgid "Can't delete .CUP files"
+msgstr ""
+
+#: src/Dialogs/pnlTaskList.cpp:202
 msgid "Delete Error"
 msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:208
 msgid "Delete the selected task?"
+msgstr ""
+
+#: src/Dialogs/pnlTaskList.cpp:235
+msgid "Can't rename .CUP files"
 msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:235
@@ -3567,6 +3595,10 @@ msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:279
 msgid "Task New"
+msgstr ""
+
+#: src/Dialogs/pnlTaskCalculator.cpp:272
+msgid "Calculator excludes unsaved task changes!"
 msgstr ""
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
@@ -7799,9 +7831,6 @@ msgstr "Atterraggio"
 
 #~ msgid "V ach"
 #~ msgstr "V ott"
-
-#~ msgid "Task Calculator"
-#~ msgstr "Calcolo Tema"
 
 #~ msgid "Info box values small"
 #~ msgstr "InfoBox valori piccoli"
