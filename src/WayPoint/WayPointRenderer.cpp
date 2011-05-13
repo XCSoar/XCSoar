@@ -57,6 +57,19 @@ class WaypointVisitorMap:
   const SETTINGS_MAP &settings_map;
   const TaskBehaviour &task_behaviour;
 
+  const AIRCRAFT_STATE aircraft_state;
+  const AGeoPoint p_start;
+  Canvas &canvas;
+  int pDisplayTextType;
+  TCHAR sAltUnit[4];
+  const GlidePolar glide_polar;
+  bool task_valid;
+  TaskProjection proj;
+  const ProtectedTaskManager& task;
+
+public:
+  WayPointLabelList labels;
+
 public:
   WaypointVisitorMap(const MapWindowProjection &_projection,
                      const SETTINGS_MAP &_settings_map,
@@ -322,22 +335,11 @@ public:
     DrawWaypoint(tp.get_waypoint(), true);
   }
 
-private:
-  const AIRCRAFT_STATE aircraft_state;
-  const AGeoPoint p_start;
-  Canvas &canvas;
-  int pDisplayTextType;
-  TCHAR sAltUnit[4];
-  const GlidePolar glide_polar;
-  bool task_valid;
-  TaskProjection proj;
-  const ProtectedTaskManager& task;
 
 public:
   void set_task_valid() {
     task_valid = true;
   }
-  WayPointLabelList labels;
 };
 
 static void
