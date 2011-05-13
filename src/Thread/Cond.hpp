@@ -36,7 +36,7 @@ class Cond : private NonCopyable {
   pthread_cond_t cond;
 
 public:
-  Cond(bool _manual_reset = true) {
+  Cond() {
     pthread_cond_init(&cond, NULL);
   }
 
