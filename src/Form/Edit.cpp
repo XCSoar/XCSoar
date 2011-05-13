@@ -160,7 +160,7 @@ WndProperty::WndProperty(ContainerWindow &parent,
    mOnClickUpNotify(NULL), mOnClickDownNotify(NULL),
    mDataField(NULL)
 {
-  _tcscpy(mCaption, Caption);
+  mCaption = Caption;
 
   set(parent, X, Y, Width, Height, style);
 
@@ -408,7 +408,7 @@ WndProperty::on_paint(Canvas &canvas)
   canvas.background_transparent();
   canvas.select(*GetFont());
 
-  PixelSize tsize = canvas.text_size(mCaption);
+  PixelSize tsize = canvas.text_size(mCaption.c_str());
 
   if (mCaptionWidth == 0) {
     org.x = mEditPos.x;
@@ -421,7 +421,7 @@ WndProperty::on_paint(Canvas &canvas)
   if (org.x < 1)
     org.x = 1;
 
-  canvas.text(org.x, org.y, mCaption);
+  canvas.text(org.x, org.y, mCaption.c_str());
 
   // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
   // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label

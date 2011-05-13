@@ -66,7 +66,7 @@ WindowControl::WindowControl() :
     mOnHelpCallback(NULL)
 {
   // Clear the caption
-  mCaption[0] = '\0';
+  mCaption.clear();
 }
 
 WindowControl::~WindowControl(void)
@@ -87,8 +87,8 @@ WindowControl::SetCaption(const TCHAR *Value)
   if (Value == NULL)
     Value = _T("");
 
-  if (_tcscmp(mCaption, Value) != 0) {
-    _tcscpy(mCaption, Value);
+  if (!mCaption.equals(Value)) {
+    mCaption = Value;
     invalidate();
   }
 }
@@ -151,7 +151,8 @@ WindowControl::OnHelp()
   return 0; // undefined. return 1 if defined
 #else
   if (mHelpText && !string_is_empty(mHelpText)) {
-    dlgHelpShowModal(*(SingleWindow *)get_root_owner(), gettext(mCaption), gettext(mHelpText));
+    dlgHelpShowModal(*(SingleWindow *)get_root_owner(),
+                     gettext(mCaption.c_str()), gettext(mHelpText));
     return 1;
   }
 

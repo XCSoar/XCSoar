@@ -101,7 +101,7 @@ WndForm::WndForm(SingleWindow &_main_window,
   mhTitleFont(&Fonts::MapBold),
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
-  _tcscpy(mCaption, Caption);
+  mCaption = Caption;
 
   set(main_window, X, Y, Width, Height, add_border(style));
 
@@ -119,7 +119,7 @@ WndForm::WndForm(SingleWindow &_main_window,
   client_area.SetBackColor(Color(0xe2, 0xdc, 0xbe));
 
 #if !defined(ENABLE_SDL) && !defined(NDEBUG)
-  ::SetWindowText(hWnd, mCaption);
+  ::SetWindowText(hWnd, mCaption.c_str());
 #endif
 }
 
@@ -153,7 +153,7 @@ WndForm::UpdateLayout()
 
   mTitleRect = rc;
   mTitleRect.bottom = rc.top +
-      (string_is_empty(mCaption) ? 0 : mhTitleFont->get_height());
+    (mCaption.empty() ? 0 : mhTitleFont->get_height());
 
   mClientRect = rc;
   mClientRect.top = mTitleRect.bottom;
@@ -542,11 +542,12 @@ WndForm::on_paint(Canvas &canvas)
                  bitmap_title);
 
   // Draw titlebar text
-  canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top, mCaption);
+  canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top,
+              mCaption.c_str());
 #else
   canvas.set_background_color(mColorTitle);
   canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
-                     mTitleRect.top, mTitleRect, mCaption);
+                     mTitleRect.top, mTitleRect, mCaption.c_str());
 #endif
 }
 
@@ -556,8 +557,8 @@ WndForm::SetCaption(const TCHAR *Value)
   if (Value == NULL)
     Value = _T("");
 
-  if (_tcscmp(mCaption, Value) != 0){
-    _tcscpy(mCaption, Value);
+  if (!mCaption.equals(Value)){
+    mCaption = Value;
     UpdateLayout();
     invalidate(mTitleRect);
   }

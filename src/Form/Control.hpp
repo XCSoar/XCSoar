@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/ContainerWindow.hpp"
+#include "Util/StaticString.hpp"
 
 #include <tchar.h>
 
@@ -143,7 +144,7 @@ public:
    * @return The Caption/Text of the Control
    */
   const TCHAR *GetCaption() const {
-    return mCaption;
+    return mCaption.c_str();
   }
 
   /**
@@ -160,7 +161,7 @@ public:
 
 protected:
   /** Caption/Text of the Control */
-  TCHAR mCaption[254];
+  StaticString<254> mCaption;
 
 public:
   /** Paints the "Selector" */

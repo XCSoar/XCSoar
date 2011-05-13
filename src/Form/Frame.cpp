@@ -34,7 +34,7 @@ WndFrame::WndFrame(ContainerWindow &parent,
    font(&Fonts::Map),
    mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
-  text[0] = _T('\0');
+  text.clear();
 
   set(parent, X, Y, Width, Height, style);
 }
@@ -50,7 +50,7 @@ WndFrame::SetAlignCenter()
 void
 WndFrame::SetText(const TCHAR *_text)
 {
-  _tcscpy(text, _text);
+  text = _text;
   invalidate();
 }
 
@@ -65,7 +65,7 @@ WndFrame::GetTextHeight()
 
   VirtualCanvas canvas(1, 1);
   canvas.select(*font);
-  canvas.formatted_text(&rc, text, mCaptionStyle | DT_CALCRECT);
+  canvas.formatted_text(&rc, text.c_str(), mCaptionStyle | DT_CALCRECT);
 
   return rc.bottom - rc.top;
 #endif /* !ENABLE_SDL */
@@ -84,5 +84,5 @@ WndFrame::on_paint(Canvas &canvas)
   PixelRect rc = get_client_rect();
   InflateRect(&rc, -2, -2); // todo border width
 
-  canvas.formatted_text(&rc, text, mCaptionStyle);
+  canvas.formatted_text(&rc, text.c_str(), mCaptionStyle);
 }

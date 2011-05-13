@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_FORM_FORM_HPP
 
 #include "Screen/ContainerWindow.hpp"
+#include "Util/StaticString.hpp"
 #include "Util/tstring.hpp"
 
 #ifdef EYE_CANDY
@@ -135,7 +136,7 @@ protected:
 
   timer_t cbTimerID;
 
-  TCHAR mCaption[256];
+  StaticString<256> mCaption;
 
 public:
   /**
@@ -244,7 +245,7 @@ public:
   int ShowModal(Window *mouse_allowed=NULL);
 
   const TCHAR *GetCaption() const {
-    return mCaption;
+    return mCaption.c_str();
   }
 
   /** Set the titlebar text */

@@ -25,12 +25,13 @@ Copyright_License {
 #define XCSOAR_FORM_FRAME_HPP
 
 #include "Screen/PaintWindow.hpp"
+#include "Util/StaticString.hpp"
 
 class WndFrame : public PaintWindow {
   Color background_color;
   Color caption_color;
   const Font *font;
-  TCHAR text[256];
+  StaticString<256> text;
 
 public:
   WndFrame(ContainerWindow &parent,
@@ -48,7 +49,7 @@ public:
   void SetText(const TCHAR *_text);
 
   const TCHAR *GetCaption() const {
-    return text;
+    return text.c_str();
   }
 
   void SetCaption(const TCHAR *_text) {
