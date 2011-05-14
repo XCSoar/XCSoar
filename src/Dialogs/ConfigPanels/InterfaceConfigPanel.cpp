@@ -91,7 +91,7 @@ InterfaceConfigPanel::Init(WndForm *_wf)
   if (wp != NULL) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
     df.addEnumText(_("Automatic"));
-    df.addEnumText(_("None"));
+    df.addEnumText(_("English"));
 
 #ifdef HAVE_BUILTIN_LANGUAGES
     for (const struct builtin_language *l = language_table;
