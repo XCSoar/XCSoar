@@ -155,8 +155,7 @@ XCSoarInterface::Debounce(void)
 static bool
 vario_visible()
 {
-  return Layout::landscape &&
-    InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibGNav;
+  return Layout::landscape && InfoBoxLayout::has_vario();
 }
 
 /**

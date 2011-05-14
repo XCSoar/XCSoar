@@ -78,6 +78,7 @@ LayoutConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("8 Left (Landscape)"), InfoBoxLayout::ibLeft8);
     dfe->addEnumText(_("8 Right (Landscape)"), InfoBoxLayout::ibRight8);
     dfe->addEnumText(_("9 Right + Vario (Landscape)"), InfoBoxLayout::ibGNav);
+    dfe->addEnumText(_("9 Left + Right (Landscape)"), InfoBoxLayout::ibGNav2);
     dfe->addEnumText(_("5 Right (Square)"), InfoBoxLayout::ibSquare);
     dfe->addEnumText(_("12 Right (Landscape)"), InfoBoxLayout::ibRight12);
     dfe->addEnumText(_("12 Bottom (Portrait)"), InfoBoxLayout::ibBottom12);

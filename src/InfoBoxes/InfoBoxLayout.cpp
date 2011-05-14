@@ -32,7 +32,7 @@ Copyright_License {
 static const unsigned char geometry_counts[] = {
   8, 8, 8, 8, 8, 8,
   9, 5, 12, 24, 12,
-  12,
+  12, 9,
 };
 
 namespace InfoBoxLayout
@@ -120,6 +120,7 @@ InfoBoxLayout::Layout
 InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
 {
   Layout layout;
+
   layout.count = geometry_counts[geometry];
   assert(layout.count <= InfoBoxPanelConfig::MAX_INFOBOXES);
 
@@ -155,6 +156,14 @@ InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
     rc.left = MakeLeftColumn(layout, layout.positions, 4, rc.left, rc.top);
     rc.right = MakeRightColumn(layout, layout.positions + 4, 4,
                                rc.right, rc.top);
+    break;
+
+  case ibGNav2:
+    assert(layout.count == 9);
+
+    rc.left = MakeLeftColumn(layout, layout.positions, 6, rc.left, rc.top);
+    rc.right = MakeRightColumn(layout, layout.positions + 6, 3, rc.right,
+                               rc.top + 3 * layout.control_height);
     break;
 
   case ibLeft8:
@@ -251,6 +260,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
     case ibLeft8:
     case ibRight8:
     case ibGNav:
+    case ibGNav2:
       break;
 
     case ibSquare:
@@ -286,6 +296,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
 
     case ibRight8:
     case ibGNav:
+    case ibGNav2:
     case ibSquare:
       return ibBottom8;
 
@@ -333,6 +344,7 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout,
     break;
 
   case ibGNav:
+  case ibGNav2:
   case ibRight12:
     // calculate control dimensions
     layout.control_height = (rc.bottom - rc.top) / 6;
@@ -351,4 +363,9 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout,
     layout.control_width = layout.control_height * 1.44;
     break;
   }
+}
+
+bool InfoBoxLayout::has_vario()
+{
+  return (InfoBoxGeometry == ibGNav) || (InfoBoxGeometry == ibGNav2);
 }

@@ -45,7 +45,7 @@ namespace InfoBoxLayout
     ibLeft8 = 4,
     // 5: infoboxes along right side
     ibRight8 = 5,
-    // 6: infoboxes GNAV
+    // 6: infoboxes GNAV (9 right + vario)
     ibGNav = 6,
     // 7: infoboxes (5) along right side (square screen)
     ibSquare = 7,
@@ -57,6 +57,8 @@ namespace InfoBoxLayout
     ibBottom12 = 10,
     // 11: 12 infoboxes along top
     ibTop12 = 11,
+    // 12: 6 left, 3 right + vario
+    ibGNav2 = 12,
   };
 
   struct Layout {
@@ -76,6 +78,8 @@ namespace InfoBoxLayout
   Calculate(PixelRect rc, Geometry geometry);
 
   void Init(PixelRect rc);
+
+  bool has_vario();
 };
 
 #endif

@@ -475,6 +475,15 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
       border |= BORDERLEFT;
     break;
 
+  case InfoBoxLayout::ibGNav2:
+    if ((i != 0) && (i != 6))
+      border |= BORDERTOP;
+    if (i < 6)
+      border |= BORDERRIGHT;
+    else
+      border |= BORDERLEFT;
+    break;
+
   case InfoBoxLayout::ibLeft8:
     if (i != 3 && i != 7)
       border |= BORDERBOTTOM;
