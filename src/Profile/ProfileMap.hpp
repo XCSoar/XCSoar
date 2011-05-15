@@ -35,18 +35,18 @@ class ProfileWriter;
 namespace ProfileMap {
   /**
    * Reads a value from the profile map
-   * @param szRegValue Name of the value that should be read
-   * @param pPos Pointer to the output buffer
-   * @param dwSize Maximum size of the output buffer
+   * @param key Name of the value that should be read
+   * @param value Pointer to the output buffer
+   * @param max_size Maximum size of the output buffer
    */
-  bool Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize);
+  bool Get(const TCHAR *key, TCHAR *value, size_t max_size);
 
   /**
    * Writes a value to the profile map
-   * @param szRegValue Name of the value that should be written
-   * @param Pos Value that should be written
+   * @param key Name of the value that should be written
+   * @param value Value that should be written
    */
-  bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
+  bool Set(const TCHAR *key, const TCHAR *value);
 
   static inline bool Get(const TCHAR *key, int &value)
   {

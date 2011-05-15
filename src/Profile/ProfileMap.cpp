@@ -35,22 +35,22 @@ namespace ProfileMap {
 }
 
 bool
-ProfileMap::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
+ProfileMap::Get(const TCHAR *key, TCHAR *value, size_t max_size)
 {
-  map_t::const_iterator it = map.find(szRegValue);
+  map_t::const_iterator it = map.find(key);
   if (it == map.end()) {
-    pPos[0] = _T('\0');
+    value[0] = _T('\0');
     return false;
   }
 
-  _tcsncpy(pPos, it->second.c_str(), dwSize);
+  _tcsncpy(value, it->second.c_str(), max_size);
   return true;
 }
 
 bool
-ProfileMap::Set(const TCHAR *szRegValue, const TCHAR *Pos)
+ProfileMap::Set(const TCHAR *key, const TCHAR *value)
 {
-  map[szRegValue] = Pos;
+  map[key] = value;
   return true;
 }
 
