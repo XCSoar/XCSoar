@@ -28,14 +28,6 @@ Copyright_License {
 #include <string.h>
 
 void
-ProfileWriter::write(const TCHAR *key, int value)
-{
-  assert(key != NULL);
-
-  writer.printfln(_T("%s=%d"), key, value);
-}
-
-void
 ProfileWriter::write(const TCHAR *key, const TCHAR *value)
 {
   assert(key != NULL);

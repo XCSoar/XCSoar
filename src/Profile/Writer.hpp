@@ -34,7 +34,6 @@ class ProfileWriter {
 public:
   ProfileWriter(TextWriter &_writer):writer(_writer) {}
 
-  void write(const TCHAR *key, int value);
   void write(const TCHAR *key, const TCHAR *value);
 };
 
