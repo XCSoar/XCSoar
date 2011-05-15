@@ -84,10 +84,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   // Perform application initialization and run loop
-  if (!XCSoarInterface::Startup(hInstance))
-    return 0;
+  int ret = EXIT_FAILURE;
+  if (XCSoarInterface::Startup(hInstance))
+    ret = CommonInterface::main_window.event_loop();
 
-  int ret = CommonInterface::main_window.event_loop();
   CommonInterface::main_window.reset();
 
   Fonts::Deinitialize();
