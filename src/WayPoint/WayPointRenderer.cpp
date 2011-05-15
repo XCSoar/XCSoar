@@ -45,8 +45,88 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
+#include "Util/StaticArray.hpp"
 
+#include <assert.h>
 #include <stdio.h>
+
+gcc_pure
+static const MaskedIcon &
+GetWaypointIcon(const Waypoint &wp, const Projection &projection)
+{
+  if (projection.GetMapScale() > fixed(4000))
+    return Graphics::SmallIcon;
+
+  switch (wp.Type) {
+  case Waypoint::wtMountainTop:
+    return Graphics::MountainTopIcon;
+  case Waypoint::wtBridge:
+    return Graphics::BridgeIcon;
+  case Waypoint::wtTunnel:
+    return Graphics::TunnelIcon;
+  case Waypoint::wtTower:
+    return Graphics::TowerIcon;
+  case Waypoint::wtPowerPlant:
+    return Graphics::PowerPlantIcon;
+  default:
+    return Graphics::TurnPointIcon;
+  }
+}
+
+/**
+ * Metadata for a Waypoint that is about to be drawn.
+ */
+struct VisibleWaypoint {
+  const Waypoint *waypoint;
+
+  RasterPoint point;
+
+  short arrival_height_glide;
+  short arrival_height_terrain;
+
+  bool reachable_glide;
+  bool reachable_terrain;
+
+  bool in_task;
+
+  void Set(const Waypoint &_waypoint, RasterPoint &_point,
+           bool _in_task) {
+    waypoint = &_waypoint;
+    point = _point;
+    arrival_height_glide = 0;
+    arrival_height_terrain = 0;
+    reachable_glide = reachable_terrain = false;
+    in_task = _in_task;
+  }
+
+  void CalculateReachability(const ProtectedTaskManager &task,
+                             const TaskBehaviour &task_behaviour)
+  {
+    const Waypoint &way_point = *waypoint;
+    const UnorderedTaskPoint t(way_point, task_behaviour);
+    const AGeoPoint p_dest (t.get_location(), t.get_elevation());
+    if (task.find_positive_arrival(p_dest, arrival_height_terrain, arrival_height_glide)) {
+      const short h_base = iround(t.get_elevation());
+      arrival_height_terrain -= h_base;
+      arrival_height_glide -= h_base;
+    }
+
+    reachable_glide = arrival_height_glide > 0;
+    reachable_terrain = !task_behaviour.route_planner.reach_enabled() ||
+      arrival_height_terrain > 0;
+  }
+
+  void DrawSymbol(Canvas &canvas, const Projection &projection) const {
+    if (waypoint->IsLandable()) {
+      WayPointRenderer::DrawLandableSymbol(canvas, point, reachable_glide,
+                                           reachable_terrain, *waypoint,
+                                           projection.GetScreenAngle());
+    } else {
+      // non landable turnpoint
+      GetWaypointIcon(*waypoint, projection).draw(canvas, point);
+    }
+  }
+};
 
 class WaypointVisitorMap: 
   public WaypointVisitor, 
@@ -56,11 +136,18 @@ class WaypointVisitorMap:
   const SETTINGS_MAP &settings_map;
   const TaskBehaviour &task_behaviour;
 
-  Canvas &canvas;
   int pDisplayTextType;
   TCHAR sAltUnit[4];
   bool task_valid;
-  const ProtectedTaskManager& task;
+
+  /**
+   * A list of waypoints that are going to be drawn.  This list is
+   * filled in the Visitor methods.  In the second stage, their
+   * reachability is calculated, and the third stage draws them.  This
+   * should ensure that the drawing methods don't need to hold a
+   * mutex.
+   */
+  StaticArray<VisibleWaypoint, 256> waypoints;
 
 public:
   WayPointLabelList labels;
@@ -68,14 +155,10 @@ public:
 public:
   WaypointVisitorMap(const MapWindowProjection &_projection,
                      const SETTINGS_MAP &_settings_map,
-                     const TaskBehaviour &_task_behaviour,
-                     Canvas &_canvas,
-                     const ProtectedTaskManager& _task):
+                     const TaskBehaviour &_task_behaviour):
     projection(_projection),
     settings_map(_settings_map), task_behaviour(_task_behaviour),
-    canvas(_canvas),
     task_valid(false),
-    task(_task),
     labels(projection.GetScreenWidth(), projection.GetScreenHeight())
   {
     // if pan mode, show full names
@@ -86,6 +169,7 @@ public:
     _tcscpy(sAltUnit, Units::GetAltitudeName());
   }
 
+protected:
   void
   FormatTitle(TCHAR* Buffer, const Waypoint &way_point)
   {
@@ -172,74 +256,13 @@ public:
     _stprintf(buffer + length, _T("%d%s"), uah_glide, sAltUnit);
   }
 
-
   void
-  CalculateReachability(const Waypoint &way_point,
-                        short &arrival_height_glide,
-                        short &arrival_height_terrain)
+  DrawWaypoint(Canvas &canvas, const VisibleWaypoint &vwp)
   {
-    const UnorderedTaskPoint t(way_point, task_behaviour);
-    const AGeoPoint p_dest (t.get_location(), t.get_elevation());
-    if (task.find_positive_arrival(p_dest, arrival_height_terrain, arrival_height_glide)) {
-      const short h_base = iround(t.get_elevation());
-      arrival_height_terrain -= h_base;
-      arrival_height_glide -= h_base;
-    }
-  }
-
-  const MaskedIcon&
-  GetWaypointIcon(const Waypoint &wp)
-  {
-    if (projection.GetMapScale() > fixed(4000))
-      return Graphics::SmallIcon;
-
-    switch (wp.Type) {
-    case Waypoint::wtMountainTop:
-      return Graphics::MountainTopIcon;
-    case Waypoint::wtBridge:
-      return Graphics::BridgeIcon;
-    case Waypoint::wtTunnel:
-      return Graphics::TunnelIcon;
-    case Waypoint::wtTower:
-      return Graphics::TowerIcon;
-    case Waypoint::wtPowerPlant:
-      return Graphics::PowerPlantIcon;
-    default:
-      return Graphics::TurnPointIcon;
-    }
-  }
-
-  void
-  DrawWaypoint(const Waypoint& way_point, bool in_task = false)
-  {
-    RasterPoint sc;
-    if (!projection.GeoToScreenIfVisible(way_point.Location, sc))
-      return;
-
-    if (!projection.WaypointInScaleFilter(way_point) && !in_task)
-      return;
-
-    bool reachable_glide = false;
-    bool reachable_terrain = false;
-    short arrival_height_glide = 0;
-    short arrival_height_terrain = 0;
+    const Waypoint &way_point = *vwp.waypoint;
     bool watchedWaypoint = way_point.Flags.Watched;
 
-    if (way_point.IsLandable() || watchedWaypoint) {
-      CalculateReachability(way_point, arrival_height_glide, arrival_height_terrain);
-      reachable_glide = arrival_height_glide > 0;
-      reachable_terrain = !task_behaviour.route_planner.reach_enabled() ||
-                          arrival_height_terrain > 0;
-    }
-
-    if (way_point.IsLandable()) {
-      WayPointRenderer::DrawLandableSymbol(canvas, sc, reachable_glide,
-                                           reachable_terrain, way_point,
-                                           projection.GetScreenAngle());
-    } else {
-      // non landable turnpoint
-      GetWaypointIcon(way_point).draw(canvas, sc);
-    }
+    vwp.DrawSymbol(canvas, projection);
 
     // Determine whether to draw the waypoint label or not
     switch (settings_map.WayPointLabelSelection) {
@@ -247,12 +270,13 @@ public:
       return;
 
     case wlsTaskWayPoints:
-      if (!in_task && task_valid && !watchedWaypoint)
+      if (!vwp.in_task && task_valid && !watchedWaypoint)
         return;
       break;
 
     case wlsTaskAndLandableWayPoints:
-      if (!in_task && task_valid && !watchedWaypoint && !way_point.IsLandable())
+      if (!vwp.in_task && task_valid && !watchedWaypoint &&
+          !way_point.IsLandable())
         return;
       break;
 
@@ -261,11 +285,11 @@ public:
     }
 
     TextInBoxMode_t text_mode;
-    if (reachable_glide && way_point.IsLandable()) {
+    if (vwp.reachable_glide && way_point.IsLandable()) {
       text_mode.Mode = settings_map.LandableRenderMode;
       text_mode.Bold = true;
       text_mode.MoveInView = true;
-    } else if (in_task) {
+    } else if (vwp.in_task) {
       text_mode.Mode = OutlinedInverted;
       text_mode.Bold = true;
     } else if (watchedWaypoint) {
@@ -275,58 +299,92 @@ public:
     }
 
     TCHAR Buffer[NAME_SIZE+1];
-    FormatLabel(Buffer, way_point, arrival_height_glide, arrival_height_terrain);
+    FormatLabel(Buffer, way_point,
+                vwp.arrival_height_glide, vwp.arrival_height_terrain);
 
-    if ((reachable_glide && Appearance.IndLandable == wpLandableWinPilot) ||
+    RasterPoint sc = vwp.point;
+    if ((vwp.reachable_glide &&
+         Appearance.IndLandable == wpLandableWinPilot) ||
         Appearance.UseSWLandablesRendering)
       // make space for the green circle
       sc.x += 5;
 
-    labels.Add(Buffer, sc.x + 5, sc.y, text_mode, arrival_height_glide,
-               in_task, way_point.IsLandable(), way_point.IsAirport(),
+    labels.Add(Buffer, sc.x + 5, sc.y, text_mode, vwp.arrival_height_glide,
+               vwp.in_task, way_point.IsLandable(), way_point.IsAirport(),
                watchedWaypoint);
   }
 
+  void AddWaypoint(const Waypoint &way_point, bool in_task) {
+    if (waypoints.full())
+      return;
+
+    if (!projection.WaypointInScaleFilter(way_point) && !in_task)
+      return;
+
+    RasterPoint sc;
+    if (!projection.GeoToScreenIfVisible(way_point.Location, sc))
+      return;
+
+    VisibleWaypoint &vwp = waypoints.append();
+    vwp.Set(way_point, sc, in_task);
+  }
+
+public:
   void
   Visit(const Waypoint& way_point)
   {
-    DrawWaypoint(way_point, false);
+    AddWaypoint(way_point, false);
   }
 
   void
   Visit(const UnorderedTaskPoint& tp)
   {
-    DrawWaypoint(tp.get_waypoint(), true);
+    AddWaypoint(tp.get_waypoint(), true);
   }
 
   void
   Visit(const StartPoint& tp)
   {
-    DrawWaypoint(tp.get_waypoint(), true);
+    AddWaypoint(tp.get_waypoint(), true);
   }
 
   void
   Visit(const FinishPoint& tp)
   {
-    DrawWaypoint(tp.get_waypoint(), true);
+    AddWaypoint(tp.get_waypoint(), true);
   }
 
   void
   Visit(const AATPoint& tp)
   {
-    DrawWaypoint(tp.get_waypoint(), true);
+    AddWaypoint(tp.get_waypoint(), true);
   }
 
   void
   Visit(const ASTPoint& tp)
   {
-    DrawWaypoint(tp.get_waypoint(), true);
+    AddWaypoint(tp.get_waypoint(), true);
   }
 
 
 public:
   void set_task_valid() {
     task_valid = true;
+  }
+
+  void Calculate(const ProtectedTaskManager &task) {
+    for (unsigned i = 0; i < waypoints.size(); ++i) {
+      VisibleWaypoint &vwp = waypoints[i];
+      const Waypoint &way_point = *vwp.waypoint;
+
+      if (way_point.IsLandable() || way_point.Flags.Watched)
+        vwp.CalculateReachability(task, task_behaviour);
+    }
+  }
+
+  void Draw(Canvas &canvas) {
+    for (unsigned i = 0; i < waypoints.size(); ++i)
+      DrawWaypoint(canvas, waypoints[i]);
   }
 };
 
@@ -358,9 +416,7 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
     canvas.set_text_color(COLOR_BLACK);
 
-    WaypointVisitorMap v(projection, settings_map, task_behaviour,
-                         canvas,
-                         *task);
+    WaypointVisitorMap v(projection, settings_map, task_behaviour);
 
     {
       ProtectedTaskManager::Lease task_manager(*task);
@@ -378,6 +434,9 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
     way_points->visit_within_range(projection.GetGeoScreenCenter(),
                                    projection.GetScreenDistanceMeters(), v);
+
+    v.Calculate(*task);
+    v.Draw(canvas);
 
     MapWaypointLabelRender(canvas,
                            projection.GetScreenWidth(),
