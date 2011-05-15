@@ -33,7 +33,19 @@ Copyright_License {
 class ProfileWriter;
 
 namespace ProfileMap {
+  /**
+   * Reads a value from the profile map
+   * @param szRegValue Name of the value that should be read
+   * @param pPos Pointer to the output buffer
+   * @param dwSize Maximum size of the output buffer
+   */
   bool Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize);
+
+  /**
+   * Writes a value to the profile map
+   * @param szRegValue Name of the value that should be written
+   * @param Pos Value that should be written
+   */
   bool Set(const TCHAR *szRegValue, const TCHAR *Pos);
 
   static inline bool Get(const TCHAR *key, int &value)

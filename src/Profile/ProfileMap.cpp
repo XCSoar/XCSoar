@@ -34,12 +34,6 @@ namespace ProfileMap {
   static map_t map;
 }
 
-/**
- * Reads a value from the profile map
- * @param szRegValue Name of the value that should be read
- * @param pPos Pointer to the output buffer
- * @param dwSize Maximum size of the output buffer
- */
 bool
 ProfileMap::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
 {
@@ -53,11 +47,6 @@ ProfileMap::Get(const TCHAR *szRegValue, TCHAR *pPos, size_t dwSize)
   return true;
 }
 
-/**
- * Writes a value to the profile map
- * @param szRegValue Name of the value that should be written
- * @param Pos Value that should be written
- */
 bool
 ProfileMap::Set(const TCHAR *szRegValue, const TCHAR *Pos)
 {
