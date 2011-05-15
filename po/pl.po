@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-13 08:22+0200\n"
-"PO-Revision-Date: 2011-04-26 18:50+0000\n"
-"Last-Translator: Michal Jezierski <Unknown>\n"
+"PO-Revision-Date: 2011-05-14 12:43+0000\n"
+"Last-Translator: Krzysztof Kajda <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-02 15:20+0000\n"
-"X-Generator: Launchpad (build 12915)\n"
+"X-Launchpad-Export-Date: 2011-05-15 08:36+0000\n"
+"X-Generator: Launchpad (build 13037)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:303
@@ -96,23 +96,18 @@ msgid "Stop Logger"
 msgstr "Zatrzymaj logger"
 
 #: src/Logger/ExternalLogger.cpp:48
-#, fuzzy
 msgid "Declare task?"
-msgstr "Zadeklaruj trasę"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:51
-#, fuzzy
 msgid "Task declared!"
-msgstr "Trasa została zadeklarowana"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:55
-#, fuzzy
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
-"Wystąpił błąd.\n"
-"Trasa NIE została zadeklarowana!"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -189,9 +184,8 @@ msgid "Finish Turnpoint"
 msgstr "Punkt mety"
 
 #: src/ExpandMacros.cpp:199 src/ExpandMacros.cpp:245
-#, fuzzy
 msgid "Next Startpoint"
-msgstr "Następny punkt"
+msgstr "Następny punkt startowy"
 
 #: src/ExpandMacros.cpp:205 src/ExpandMacros.cpp:251
 msgid "Start Turnpoint"
@@ -514,7 +508,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:124
 #, no-c-format
 msgid "Last thermal average"
-msgstr ""
+msgstr "Średnia ostatniego noszenia"
 
 #: src/InfoBoxes/Content/Factory.cpp:125
 #, no-c-format
@@ -548,7 +542,7 @@ msgstr "Łączne zwiększenie/utrata wysokości w ostatnim kominie."
 #: src/InfoBoxes/Content/Factory.cpp:142
 #, no-c-format
 msgid "Last thermal time"
-msgstr ""
+msgstr "Czas ostatniego noszenia"
 
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
@@ -994,7 +988,7 @@ msgstr ""
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:5
 #, no-c-format
 msgid "H Baro"
-msgstr ""
+msgstr "Wys. Baro"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
@@ -1026,7 +1020,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
 msgid "Percentage climb"
-msgstr ""
+msgstr "Procent wznoszenia"
 
 #: src/InfoBoxes/Content/Factory.cpp:377
 #, no-c-format
@@ -1050,7 +1044,7 @@ msgstr "Czas lotu"
 #: src/InfoBoxes/Content/Factory.cpp:386
 #, no-c-format
 msgid "Time Flt"
-msgstr ""
+msgstr "Czas lotu"
 
 #: src/InfoBoxes/Content/Factory.cpp:387
 #, no-c-format
@@ -1065,7 +1059,7 @@ msgstr "Przeciążenie"
 #: src/InfoBoxes/Content/Factory.cpp:395
 #, no-c-format
 msgid "G"
-msgstr ""
+msgstr "G"
 
 #: src/InfoBoxes/Content/Factory.cpp:396
 #, no-c-format
@@ -1077,7 +1071,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:403
 #, no-c-format
 msgid "Next L/D"
-msgstr ""
+msgstr "Następny L/D"
 
 #: src/InfoBoxes/Content/Factory.cpp:404
 #, no-c-format
@@ -1184,12 +1178,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:457
 #, no-c-format
 msgid "Netto vario"
-msgstr ""
+msgstr "Wario netto"
 
 #: src/InfoBoxes/Content/Factory.cpp:458 src/InfoBoxes/Content/Factory.cpp:795
 #, no-c-format
 msgid "Netto"
-msgstr ""
+msgstr "Netto"
 
 #: src/InfoBoxes/Content/Factory.cpp:459
 #, no-c-format
@@ -1272,7 +1266,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:493
 #, no-c-format
 msgid "Outside air temperature"
-msgstr ""
+msgstr "Temperatura zewnętrzna"
 
 #: src/InfoBoxes/Content/Factory.cpp:494
 #, no-c-format
@@ -1291,12 +1285,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:502
 #, no-c-format
 msgid "Relative humidity"
-msgstr ""
+msgstr "Wilgotność względna"
 
 #: src/InfoBoxes/Content/Factory.cpp:503
 #, no-c-format
 msgid "Rel Hum"
-msgstr ""
+msgstr "Wilg. wzgl."
 
 #: src/InfoBoxes/Content/Factory.cpp:504
 #, no-c-format
@@ -1359,12 +1353,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:538
 #, no-c-format
 msgid "L/D vario"
-msgstr ""
+msgstr "L/D wario"
 
 #: src/InfoBoxes/Content/Factory.cpp:539
 #, no-c-format
 msgid "LD Vario"
-msgstr ""
+msgstr "LD Wario"
 
 #: src/InfoBoxes/Content/Factory.cpp:540
 #, no-c-format
@@ -1388,7 +1382,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:549
 #, no-c-format
 msgid "True Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "Rzeczywista prędkość lotu wskazywana przez zewnętrzne wario."
 
 #: src/InfoBoxes/Content/Factory.cpp:556
 #, no-c-format
@@ -1556,17 +1550,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:647
 #, no-c-format
 msgid "Battery percent"
-msgstr ""
+msgstr "Naładowanie baterii"
 
 #: src/InfoBoxes/Content/Factory.cpp:649
 #, no-c-format
 msgid "Battery voltage"
-msgstr ""
+msgstr "Napięcie baterii"
 
 #: src/InfoBoxes/Content/Factory.cpp:651
 #, no-c-format
 msgid "Battery"
-msgstr ""
+msgstr "Bateria"
 
 #: src/InfoBoxes/Content/Factory.cpp:652
 #, no-c-format
@@ -1595,7 +1589,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:668
 #, no-c-format
 msgid "Alternate 1 name"
-msgstr ""
+msgstr "Alternatywna nazwa 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:669
 #, no-c-format
@@ -1610,7 +1604,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:677
 #, no-c-format
 msgid "Alternate 2 name"
-msgstr ""
+msgstr "Alternatywna nazwa 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:678
 #, no-c-format
@@ -1656,12 +1650,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:704
 #, no-c-format
 msgid "L/D average"
-msgstr ""
+msgstr "L/D średnia"
 
 #: src/InfoBoxes/Content/Factory.cpp:705
 #, no-c-format
 msgid "L/D Avg"
-msgstr ""
+msgstr "L/D śr."
 
 #: src/InfoBoxes/Content/Factory.cpp:706
 #, no-c-format
@@ -1680,7 +1674,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:713
 #, no-c-format
 msgid "Experimental 1"
-msgstr ""
+msgstr "Eksperymentalny 1"
 
 #: src/InfoBoxes/Content/Factory.cpp:714
 #, no-c-format
@@ -1707,7 +1701,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:731
 #, no-c-format
 msgid "Experimental 2"
-msgstr ""
+msgstr "Eksperymentalny 2"
 
 #: src/InfoBoxes/Content/Factory.cpp:732
 #, no-c-format
@@ -1717,17 +1711,17 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:740
 #, no-c-format
 msgid "CPU load"
-msgstr ""
+msgstr "Obciążenie CPU"
 
 #: src/InfoBoxes/Content/Factory.cpp:741
 #, no-c-format
 msgid "CPU"
-msgstr ""
+msgstr "CPU"
 
 #: src/InfoBoxes/Content/Factory.cpp:742
 #, no-c-format
 msgid "CPU load consumed by XCSoar averaged over 5 seconds."
-msgstr ""
+msgstr "Obciążenie procesora (CPU) przez XCSoar uśredniane po czasie 5 sekund."
 
 #: src/InfoBoxes/Content/Factory.cpp:749
 #, no-c-format
@@ -1842,7 +1836,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:822
 #, no-c-format
 msgid "Progress"
-msgstr ""
+msgstr "Postęp"
 
 #: src/InfoBoxes/Content/Factory.cpp:823
 #, no-c-format
@@ -1859,7 +1853,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:831
 #, no-c-format
 msgid "Start Height"
-msgstr ""
+msgstr "Wysokość startu"
 
 #: src/InfoBoxes/Content/Factory.cpp:832
 #, no-c-format
@@ -1906,7 +1900,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Altitude.cpp:115
 #: src/InfoBoxes/Content/Altitude.cpp:125
 msgid "N/A"
-msgstr ""
+msgstr "Brak"
 
 #: src/InfoBoxes/Content/Altitude.cpp:264 src/GlueMapWindowOverlays.cpp:333
 #: Data/Dialogs/dlgSimulatorPrompt.xml:6
@@ -1918,13 +1912,13 @@ msgstr "Symulator"
 #: Data/Input/default.xci:875 Data/Input/default.xci:924
 #: Data/Input/default.xci:987
 msgid "Info"
-msgstr ""
+msgstr "Info"
 
 #: src/InfoBoxes/Content/Altitude.cpp:274
 #: src/InfoBoxes/Content/MacCready.cpp:169
 #: src/InfoBoxes/Content/Weather.cpp:265
 msgid "Setup"
-msgstr ""
+msgstr "Ustawienia"
 
 #: src/InfoBoxes/Content/Altitude.cpp:402
 #: src/InfoBoxes/Content/Altitude.cpp:494
@@ -1941,7 +1935,7 @@ msgstr "Ręczny"
 #: src/InfoBoxes/Content/MacCready.cpp:150
 #: src/InfoBoxes/Content/MacCready.cpp:212
 msgid "AUTO"
-msgstr ""
+msgstr "AUTO"
 
 #: src/InfoBoxes/Content/MacCready.cpp:165
 #: src/InfoBoxes/Content/Weather.cpp:259 Data/Dialogs/dlgConfigFonts.xml:11
@@ -1979,7 +1973,7 @@ msgstr ""
 
 #: src/InfoBoxes/Content/Weather.cpp:200 src/Dialogs/dlgWindSettings.cpp:92
 msgid "External"
-msgstr ""
+msgstr "Zewnętrzny"
 
 #: src/InfoBoxes/Content/Weather.cpp:207 src/Profile/InfoBoxConfig.cpp:60
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:49
@@ -2011,15 +2005,15 @@ msgstr ""
 #: src/InfoBoxes/InfoBoxManager.cpp:605 src/Dialogs/dlgConfigInfoboxes.cpp:211
 #: src/Dialogs/dlgWeather.cpp:58
 msgid "No help available on this item"
-msgstr ""
+msgstr "Brak pomocy dla tego elementu"
 
 #: src/InputEventsActions.cpp:150
 msgid "Vario sounds on"
-msgstr ""
+msgstr "Dźwięk wario WŁ."
 
 #: src/InputEventsActions.cpp:152
 msgid "Vario sounds off"
-msgstr ""
+msgstr "Dźwięk wario WYŁ."
 
 #: src/InputEventsActions.cpp:181
 msgid "Snail trail off"
@@ -2091,7 +2085,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:549
 msgid "Ready to start"
-msgstr ""
+msgstr "Gotowy do startu"
 
 #: src/InputEventsActions.cpp:552
 msgid "Hold start"
@@ -2106,17 +2100,14 @@ msgid "Hold turn"
 msgstr ""
 
 #: src/InputEventsActions.cpp:637
-#, fuzzy
 msgid "Show details:"
-msgstr "Pokaż balast"
+msgstr "Pokaż szczegóły"
 
 #: src/InputEventsActions.cpp:642
-#, fuzzy
 msgid "Unknown competition number"
-msgstr "Nieznany numer boczny"
+msgstr ""
 
 #: src/InputEventsActions.cpp:643
-#, fuzzy
 msgid "Not found"
 msgstr "Nie znaleziono"
 
@@ -2126,11 +2117,11 @@ msgstr "Brak aktywnych PZ!"
 
 #: src/InputEventsActions.cpp:785
 msgid "Auto. MacCready on"
-msgstr ""
+msgstr "Auto. MacCready WŁ."
 
 #: src/InputEventsActions.cpp:787
 msgid "Auto. MacCready off"
-msgstr ""
+msgstr "Auto. MacCready WYŁ."
 
 #: src/InputEventsActions.cpp:794
 msgid "MacCready "
@@ -2142,7 +2133,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:995
 msgid "Go to target"
-msgstr ""
+msgstr "Idź do celu"
 
 #: src/InputEventsActions.cpp:998
 msgid "Ordered task"
@@ -2158,7 +2149,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:1101
 msgid "Ballast %"
-msgstr ""
+msgstr "Balast %"
 
 #: src/InputEventsActions.cpp:1160
 msgid "NMEA log on"
@@ -2187,7 +2178,7 @@ msgstr "Etykiety mapy: WŁ"
 
 #: src/InputEventsActions.cpp:1657
 msgid "Topography/Terrain"
-msgstr ""
+msgstr "Topografia/Teren"
 
 #: src/InputEventsActions.cpp:1828
 msgid "Task start"
@@ -2211,7 +2202,7 @@ msgstr ""
 
 #: src/Pages.cpp:183
 msgid "Map (Full screen)"
-msgstr ""
+msgstr "Mapa (Pełny ekran)"
 
 #: src/Pages.cpp:189
 msgid "Info "
@@ -2447,7 +2438,7 @@ msgstr "Trend puł."
 
 #: src/FlightStatisticsRenderer.cpp:703 src/FlightStatisticsRenderer.cpp:708
 msgid "Avg. climb"
-msgstr ""
+msgstr "Śr. wznoszenie"
 
 #: src/FlightStatisticsRenderer.cpp:711
 msgid "Climb trend"
@@ -2455,11 +2446,11 @@ msgstr "Trend wznoszenia"
 
 #: src/FlightStatisticsRenderer.cpp:723
 msgid "Best L/D"
-msgstr ""
+msgstr "Najlepszy L/D"
 
 #: src/FlightStatisticsRenderer.cpp:727
 msgid "Min. sink"
-msgstr ""
+msgstr "Min. opadanie"
 
 #: src/FlightStatisticsRenderer.cpp:738
 msgid "Thermal height"
@@ -2494,22 +2485,22 @@ msgstr "Zakończyć program?"
 #: src/Units/UnitsStore.cpp:36
 #, no-c-format
 msgid "European"
-msgstr ""
+msgstr "Europejski"
 
 #: src/Units/UnitsStore.cpp:45
 #, no-c-format
 msgid "British"
-msgstr ""
+msgstr "Brytyjski"
 
 #: src/Units/UnitsStore.cpp:54
 #, no-c-format
 msgid "American"
-msgstr ""
+msgstr "Amerykański"
 
 #: src/Units/UnitsStore.cpp:63
 #, no-c-format
 msgid "Australian"
-msgstr ""
+msgstr "Australijski"
 
 #. Read the terrain file
 #: src/UtilsSettings.cpp:117 src/Components.cpp:328
@@ -2542,9 +2533,8 @@ msgstr "Uwaga"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
-#, fuzzy
 msgid "Battery low"
-msgstr "Opóźnienie przy słabej baterii"
+msgstr "Bateria słaba"
 
 #: src/Components.cpp:268
 msgid "Initialising"
@@ -3101,9 +3091,8 @@ msgid "Final glide"
 msgstr "Dolot"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
-#, fuzzy
 msgid "Trending average climb"
-msgstr "Wznoszenie średnio"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:80
 msgid "Flap"
@@ -3174,9 +3163,8 @@ msgid "12 Bottom (Portrait)"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
-#, fuzzy
 msgid "12 Top (Portrait)"
-msgstr "8 na górze (pionowe)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
 msgid "24 Right (Landscape)"
@@ -3478,36 +3466,32 @@ msgid "ft/min"
 msgstr "stopy/min"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
-#, fuzzy
 msgid "Full name"
-msgstr "Imię i nazwisko pilota"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
 msgid "The full name of each waypoint is displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
-#, fuzzy
 msgid "First word of name"
-msgstr "Pierwsze słowo"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
 msgid "The first word of the waypoint name is displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
-#, fuzzy
 msgid "First 3 letters"
-msgstr "Pierwsze 3"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
 msgid "The first 3 letters of the waypoint name are displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
-#, fuzzy
 msgid "First 5 letters"
-msgstr "Pierwsze 5"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
 msgid "The first 5 letters of the waypoint name are displayed."
@@ -3538,9 +3522,8 @@ msgid "Arrival height considering terrain avoidance"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
-#, fuzzy
 msgid "Straight & terrain glide"
-msgstr "Wysokość nad terenem"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "Both arrival heights are displayed."
@@ -3567,9 +3550,8 @@ msgid "All waypoints part of a task and all landables will be displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:93
-#, fuzzy
 msgid "Task waypoints"
-msgstr "Punkty na mapie"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:94
 msgid "All waypoints part of a task will be displayed."
@@ -3603,9 +3585,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:110
-#, fuzzy
 msgid "Traffic lights"
-msgstr "Elewacja terenu"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:111
 msgid ""
@@ -3630,24 +3611,20 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
-#, fuzzy
 msgid "Calculator"
-msgstr "Symulator"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
-#, fuzzy
 msgid "Turn Points"
-msgstr "Punkt trasy"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
-#, fuzzy
 msgid "Manage"
-msgstr "Menedżer tras"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
-#, fuzzy
 msgid "Rules"
-msgstr "Reguły"
+msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -3658,9 +3635,8 @@ msgid "Task unchanged"
 msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
-#, fuzzy
 msgid "Clear all points?"
-msgstr "Skasować trasę?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Task edit"
@@ -3703,14 +3679,12 @@ msgid "Rename Error"
 msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Create new task?"
-msgstr "Skasować trasę?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Task New"
-msgstr "Edycja trasy"
+msgstr ""
 
 #: src/Dialogs/pnlTaskCalculator.cpp:272
 msgid "Calculator excludes unsaved task changes!"
@@ -4080,9 +4054,8 @@ msgid "non-FAI turn points"
 msgstr ""
 
 #: src/Dialogs/dlgTeamCode.cpp:170
-#, fuzzy
 msgid "Set new teammate:"
-msgstr "Ustaw nowe lotnisko bazowe"
+msgstr ""
 
 #: src/Dialogs/dlgTeamCode.cpp:178
 msgid "Unknown Competition Number"
@@ -6438,9 +6411,8 @@ msgid "Aircraft symbol"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
-#, fuzzy
 msgid "Clear All"
-msgstr "Wyczyść"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -6621,9 +6593,8 @@ msgid "Browse"
 msgstr "Przeglądaj"
 
 #: Data/Dialogs/pnlTaskList.xml:10 Data/Dialogs/pnlTaskList_L.xml:11
-#, fuzzy
 msgid "New Task"
-msgstr "Brak trasy"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:696
 #: Data/Dialogs/dlgConfiguration_L.xml:697
@@ -7032,9 +7003,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:168
 #: Data/Dialogs/dlgConfiguration_L.xml:168
-#, fuzzy
 msgid "Landable size"
-msgstr "Lądowiska"
+msgstr ""
 
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:4
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4 Data/Dialogs/dlgTaskPoint.xml:15
@@ -7654,11 +7624,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:906
-#, fuzzy
 msgid ""
 "FLARM\n"
 "Details"
-msgstr "Szczegóły"
+msgstr ""
 
 #: Data/Input/default.xci:219 Data/Input/default.xci:524
 msgid ""
@@ -7696,30 +7665,6 @@ msgstr ""
 #: Data/Input/default.xci:149
 msgid "Landing"
 msgstr "Lądowanie"
-
-#~ msgid "Declare Task?"
-#~ msgstr "Zadeklarować trasę?"
-
-#~ msgid "Task Declared!"
-#~ msgstr "Trasa została zadeklarowana!"
-
-#~ msgid "Marks cleared"
-#~ msgstr "Oznaczenia miejsc usunięte"
-
-#~ msgid "Previous Waypoint"
-#~ msgstr "Poprzedni PZ"
-
-#~ msgid "Organiser Battery Low"
-#~ msgstr "Niski poziom baterii"
-
-#~ msgid "Orange"
-#~ msgstr "Pomarańczowy"
-
-#~ msgid "Clear Task"
-#~ msgstr "Wyczyść zadanie"
-
-#~ msgid "Gestures"
-#~ msgstr "Gesty"
 
 #~ msgid ""
 #~ "Waypoint \"%s\" \r\n"
@@ -7944,6 +7889,9 @@ msgstr "Lądowanie"
 #~ "Błąd podczas ładowania pliku biegunowej!\r\n"
 #~ "Użyta zostanie biegunowa LS8."
 
+#~ msgid "Organiser Battery Low"
+#~ msgstr "Niski poziom baterii"
+
 #~ msgid "Settings locked in flight"
 #~ msgstr "Ustawienia zablokowane podczas lotu"
 
@@ -8013,8 +7961,17 @@ msgstr "Lądowanie"
 #~ msgid "North circling"
 #~ msgstr "Północ u góry w krążeniu"
 
+#~ msgid "First 5"
+#~ msgstr "Pierwsze 5"
+
 #~ msgid "Numbers"
 #~ msgstr "Numery"
+
+#~ msgid "First word"
+#~ msgstr "Pierwsze słowo"
+
+#~ msgid "First 3"
+#~ msgstr "Pierwsze 3"
 
 #~ msgid "Target circling"
 #~ msgstr "W kierunku celu w krążeniu"
@@ -8027,6 +7984,9 @@ msgstr "Lądowanie"
 
 #~ msgid "Feet"
 #~ msgstr "Stopy"
+
+#~ msgid "Average climb"
+#~ msgstr "Wznoszenie średnio"
 
 #~ msgid "Include"
 #~ msgstr "Dołącz"
@@ -8175,6 +8135,9 @@ msgstr "Lądowanie"
 #~ msgid "Task Aborted"
 #~ msgstr "Przerwano trasę"
 
+#~ msgid "No Task"
+#~ msgstr "Brak trasy"
+
 #~ msgid "Task Finish"
 #~ msgstr "Meta trasy"
 
@@ -8190,8 +8153,14 @@ msgstr "Lądowanie"
 #~ msgid "Task not valid. Changes will be lost."
 #~ msgstr "Nieprawidłowa trasa. Zmiany nie zostaną wprowadzone."
 
+#~ msgid "Clear task?"
+#~ msgstr "Skasować trasę?"
+
 #~ msgid "Task invalid.  Not saved."
 #~ msgstr "Nieprawidłowa trasa. Nie zostanie zapisana."
+
+#~ msgid "Declare Task?"
+#~ msgstr "Zadeklarować trasę?"
 
 #~ msgid "Change task type?"
 #~ msgstr "Zmienić typ trasy?"
@@ -8225,6 +8194,9 @@ msgstr "Lądowanie"
 
 #~ msgid "Optimise"
 #~ msgstr "Optymalizuj"
+
+#~ msgid "Landable fields"
+#~ msgstr "Lądowiska"
 
 #~ msgid "FAI finish height"
 #~ msgstr "Wysokość mety FAI"
@@ -8301,8 +8273,14 @@ msgstr "Lądowanie"
 #~ msgid "Infobox border*"
 #~ msgstr "Obramowanie pól*"
 
+#~ msgid "Map waypoints"
+#~ msgstr "Punkty na mapie"
+
 #~ msgid "Orientation"
 #~ msgstr "Orientacja"
+
+#~ msgid "Gestures"
+#~ msgstr "Gesty"
 
 #~ msgid "my sample"
 #~ msgstr "moja próbka"
@@ -8531,6 +8509,9 @@ msgstr "Lądowanie"
 #~ "Wystąpił błąd.\r\n"
 #~ "Trasa NIE została zadeklarowana!"
 
+#~ msgid "Task Declared!"
+#~ msgstr "Trasa została zadeklarowana!"
+
 #~ msgid "Final Altitude Difference"
 #~ msgstr "Różnica wysokości dolotu"
 
@@ -8560,6 +8541,9 @@ msgstr "Lądowanie"
 
 #~ msgid "Append to task"
 #~ msgstr "Dopisz do trasy"
+
+#~ msgid "Set as new home"
+#~ msgstr "Ustaw nowe lotnisko bazowe"
 
 #~ msgid "Airfields file*"
 #~ msgstr "Opisy lotnisk*"
@@ -8727,6 +8711,13 @@ msgstr "Lądowanie"
 #~ msgstr "Czas lotu"
 
 #~ msgid ""
+#~ "Error occured,\n"
+#~ "Task NOT Declared!"
+#~ msgstr ""
+#~ "Wystąpił błąd.\n"
+#~ "Trasa NIE została zadeklarowana!"
+
+#~ msgid ""
 #~ "Error loading Polar file!\n"
 #~ "Use LS8 Polar."
 #~ msgstr ""
@@ -8751,6 +8742,15 @@ msgstr "Lądowanie"
 #~ msgid "False"
 #~ msgstr "NIE"
 
+#~ msgid "Orange"
+#~ msgstr "Pomarańczowy"
+
+#~ msgid "Clear Task"
+#~ msgstr "Wyczyść zadanie"
+
+#~ msgid "Marks cleared"
+#~ msgstr "Oznaczenia miejsc usunięte"
+
 #~ msgid "Trail width"
 #~ msgstr "Szerokość śladu"
 
@@ -8774,3 +8774,6 @@ msgstr "Lądowanie"
 
 #~ msgid "Extended Visual Glide"
 #~ msgstr "Rozszerzony zasięg szybowania"
+
+#~ msgid "Previous Waypoint"
+#~ msgstr "Poprzedni PZ"
