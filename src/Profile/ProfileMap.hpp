@@ -184,9 +184,9 @@ namespace ProfileMap {
 
   template<unsigned max>
   static inline bool
-  Get(const TCHAR *name, StaticString<max> &value)
+  Get(const TCHAR *key, StaticString<max> &value)
   {
-    return Get(name, value.buffer(), value.MAX_SIZE);
+    return Get(key, value.buffer(), value.MAX_SIZE);
   }
 
   void Export(ProfileWriter &writer);
