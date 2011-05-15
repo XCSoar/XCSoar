@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-13 08:22+0200\n"
-"PO-Revision-Date: 2011-05-05 20:08+0000\n"
-"Last-Translator: Karel Srot <Unknown>\n"
+"PO-Revision-Date: 2011-05-13 18:11+0000\n"
+"Last-Translator: Mirek Jezek <Unknown>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-08 08:41+0000\n"
-"X-Generator: Launchpad (build 12981)\n"
+"X-Launchpad-Export-Date: 2011-05-15 08:36+0000\n"
+"X-Generator: Launchpad (build 13037)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:303
@@ -94,23 +94,18 @@ msgid "Stop Logger"
 msgstr "Záznam ukončen"
 
 #: src/Logger/ExternalLogger.cpp:48
-#, fuzzy
 msgid "Declare task?"
-msgstr "Deklarovat trať"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:51
-#, fuzzy
 msgid "Task declared!"
-msgstr "Trať deklarována"
+msgstr ""
 
 #: src/Logger/ExternalLogger.cpp:55
-#, fuzzy
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
-"Chyba!\n"
-"Trať není deklarována."
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -2465,9 +2460,8 @@ msgstr "Varování"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
-#, fuzzy
 msgid "Battery low"
-msgstr "Baterie"
+msgstr ""
 
 #: src/Components.cpp:268
 msgid "Initialising"
@@ -3543,23 +3537,20 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
-#, fuzzy
 msgid "Calculator"
-msgstr "Kalkulátor úlohy"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
-#, fuzzy
 msgid "Turn Points"
-msgstr "Bod úlohy"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
 msgid "Manage"
 msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
-#, fuzzy
 msgid "Rules"
-msgstr "Pravidla úlohy"
+msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -7500,7 +7491,7 @@ msgstr "Čekám na sigál GPS"
 
 #: Data/Input/default.xci:144
 msgid "Takeoff"
-msgstr "Vzet"
+msgstr "Vzlet"
 
 #: Data/Input/default.xci:165
 msgid "Final glide through terrain"
@@ -7618,9 +7609,6 @@ msgstr "Přistání"
 
 #~ msgid "Task Declared!"
 #~ msgstr "Trať deklarována."
-
-#~ msgid "Marks cleared"
-#~ msgstr "Značky odstraněny"
 
 #~ msgid "Previous turnpoint"
 #~ msgstr "Předchozí otočnák"
@@ -7935,6 +7923,9 @@ msgstr "Přistání"
 #~ msgid "AAT min time"
 #~ msgstr "AAT min čas"
 
+#~ msgid "Task Calculator"
+#~ msgstr "Kalkulátor úlohy"
+
 #~ msgid "Info box values small"
 #~ msgstr "InfoBox hodnoty malé"
 
@@ -7955,6 +7946,9 @@ msgstr "Přistání"
 
 #~ msgid "Restarting Comm Ports"
 #~ msgstr "Restartuji GPS comm"
+
+#~ msgid "Marks cleared"
+#~ msgstr "Značky odstraněny"
 
 #~ msgid "Waiting for GPS Fix"
 #~ msgstr "Čekám na sigál GPS"
@@ -7982,3 +7976,10 @@ msgstr "Přistání"
 
 #~ msgid "Clear Task"
 #~ msgstr "Vymazat úlohu"
+
+#~ msgid ""
+#~ "Error occured,\n"
+#~ "Task NOT Declared!"
+#~ msgstr ""
+#~ "Chyba!\n"
+#~ "Trať není deklarována."
