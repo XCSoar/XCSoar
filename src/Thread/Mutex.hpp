@@ -66,6 +66,11 @@ class Mutex : private NonCopyable {
      places that assume a recursive Mutex */
   FastMutex mutex;
 
+  /**
+   * Protect the attributes "locked" and "owner".
+   */
+  FastMutex debug_mutex;
+
   bool locked;
   ThreadHandle owner;
 #endif
@@ -100,12 +105,22 @@ public:
     mutex.Lock();
 #else
     if (!mutex.TryLock()) {
-      assert(!owner.IsInside());
+      /* locking has failed - at this point, "locked" and "owner" are
+         either not yet update, or "owner" is set to another thread */
+      debug_mutex.Lock();
+      assert(!locked || !owner.IsInside());
+      debug_mutex.Unlock();
+
       mutex.Lock();
     }
 
+    /* we have just obtained the mutex; the "locked" flag must not be
+       set */
+    debug_mutex.Lock();
+    assert(!locked);
     locked = true;
     owner = ThreadHandle::GetCurrent();
+    debug_mutex.Unlock();
 
     ++thread_locks_held;
 #endif
@@ -116,13 +131,20 @@ public:
    */
   bool TryLock() {
     if (!mutex.TryLock()) {
-      assert(!owner.IsInside());
+#ifndef NDEBUG
+      debug_mutex.Lock();
+      assert(!locked || !owner.IsInside());
+      debug_mutex.Unlock();
+#endif
       return false;
     }
 
 #ifndef NDEBUG
+    debug_mutex.Lock();
+    assert(!locked);
     locked = true;
     owner = ThreadHandle::GetCurrent();
+    debug_mutex.Unlock();
 
     ++thread_locks_held;
 #endif
@@ -133,11 +155,12 @@ public:
    * Unlocks the Mutex
    */
   void Unlock() {
+#ifndef NDEBUG
+    debug_mutex.Lock();
     assert(locked);
     assert(owner.IsInside());
-
-#ifndef NDEBUG
     locked = false;
+    debug_mutex.Unlock();
 #endif
 
     mutex.Unlock();
@@ -176,15 +199,23 @@ class TemporaryUnlock : private NonCopyable {
 
 public:
   TemporaryUnlock(Mutex &_mutex):mutex(_mutex) {
+#ifndef NDEBUG
+    mutex.debug_mutex.Lock();
     assert(mutex.locked);
     assert(mutex.owner.IsInside());
     mutex.locked = false;
+    mutex.debug_mutex.Unlock();
+#endif
   }
 
   ~TemporaryUnlock() {
+#ifndef NDEBUG
+    mutex.debug_mutex.Lock();
     assert(!mutex.locked);
     mutex.owner = ThreadHandle::GetCurrent();
     mutex.locked = true;
+    mutex.debug_mutex.Unlock();
+#endif
   }
 };
 
