@@ -57,7 +57,7 @@ TEST_NAMES = \
 	TestDateTime \
 	TestMathTables \
 	TestAngle TestUnits TestEarth TestSunEphemeris \
-	TestValidity TestUTM \
+	TestValidity TestUTM TestProfile \
 	TestRadixTree TestGeoBounds TestGeoClip \
 	TestLogger TestDriver TestClimbAvCalc \
 	TestWaypointReader TestThermalBase \
@@ -86,6 +86,17 @@ TEST_DATE_TIME_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestDateTime$(TARGET_EXEEXT): $(TEST_DATE_TIME_OBJS) $(TEST_DATE_TIME_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_PROFILE_SOURCES = \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Profile/ProfileMap.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestProfile.cpp
+TEST_PROFILE_OBJS = $(call SRC_TO_OBJ,$(TEST_PROFILE_SOURCES))
+TEST_PROFILE_LDADD = $(MATH_LIBS)
+$(TARGET_BIN_DIR)/TestProfile$(TARGET_EXEEXT): $(TEST_PROFILE_OBJS) $(TEST_PROFILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_TROUTE_SOURCES = \
 	$(SRC)/Engine/Util/DataNodeXML.cpp \
