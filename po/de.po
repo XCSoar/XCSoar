@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-13 08:22+0200\n"
-"PO-Revision-Date: 2011-05-11 21:46+0000\n"
+"PO-Revision-Date: 2011-05-13 23:05+0000\n"
 "Last-Translator: Helmut Rohs <Unknown>\n"
 "Language-Team: German <de@li.org>\n"
 "Language: de\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-13 06:01+0000\n"
-"X-Generator: Launchpad (build 13023)\n"
+"X-Launchpad-Export-Date: 2011-05-15 08:36+0000\n"
+"X-Generator: Launchpad (build 13037)\n"
 "X-Language: de_DE\n"
 "X-Source-Language: C\n"
 
@@ -3319,9 +3319,8 @@ msgid "12 Bottom (Portrait)"
 msgstr "12 Unten (Hochformat)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
-#, fuzzy
 msgid "12 Top (Portrait)"
-msgstr "8 Oben (Hochformat)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
 msgid "24 Right (Landscape)"
@@ -3786,24 +3785,20 @@ msgstr ""
 "Weiter?"
 
 #: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
-#, fuzzy
 msgid "Calculator"
-msgstr "Aufgaben-Rechner"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
-#, fuzzy
 msgid "Turn Points"
-msgstr "Wendepunkt"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
-#, fuzzy
 msgid "Manage"
-msgstr "Aufgaben Verwaltung"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
-#, fuzzy
 msgid "Rules"
-msgstr "Regeln"
+msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -6175,6 +6170,13 @@ msgid ""
 "[Task Waypoints] All waypoints labels part of a task will be displayed.\n"
 "[None] No waypoint labels will be displayed."
 msgstr ""
+"Bestimmt, welche Wegpunktbeschriftung für jeden Wegpunkt angezeigt wird "
+"(Leerzeichen erlaubt):\n"
+"[Alle] Alle Wegpunktbeschriftungen werden angezeigt.\n"
+"[Aufgaben & Landeplätze] Alle Wegpunkte aus den Aufgaben und alle "
+"Landeplätze werden angezeigt.\n"
+"[Aufgabe] Alle Wegpunkte aus den Aufgaben werden angezeigt.\n"
+"[Keine] Keine Wegpunktbeschriftung wird angezeigt."
 
 #: Data/Dialogs/dlgConfiguration.xml:54 Data/Dialogs/dlgConfiguration_L.xml:54
 msgid "Specifies the file defining the topographical features."
@@ -7760,6 +7762,14 @@ msgid ""
 "[Home] The sorting will try to find landing options in the current direction "
 "to the configured home waypoint."
 msgstr ""
+"Bestimmt die Sortierung der Alternativen im entsprechenden Dialog und beim "
+"Abbruch der Aufgabe:\n"
+"[Einfach] Alternativen werden nur nach Wegpunkt-Typ (Flugplatz/Landefeld) "
+"und Ankunftshöhe sortiert.\n"
+"[Aufgabe] Die Sortierung berücksichtigt zusätzlich die aktuelle Kursrichtung "
+"aus der Aufgabe.\n"
+"[Heimat] Die Sortierung sucht nach Landemöglichkeiten in Richtung der "
+"konfigurierten Heimat."
 
 #: Data/Dialogs/dlgTeamCode.xml:5 Data/Dialogs/dlgTeamCode_L.xml:7
 msgid "Flarm Lock"
@@ -10175,6 +10185,9 @@ msgstr "Gelandet"
 #~ msgstr ""
 #~ " (Nur Altair) Aktiviert die automatische Hintergrundbeleuchtung, "
 #~ "entsprechend dem Lichtsensor."
+
+#~ msgid "Task Calculator"
+#~ msgstr "Aufgaben-Rechner"
 
 #~ msgid "Airfields file*"
 #~ msgstr "Flugplatzdetails*"
