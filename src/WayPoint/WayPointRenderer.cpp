@@ -30,7 +30,6 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
-#include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/GlideSolvers/GlideResult.hpp"
 #include "Engine/Task/Tasks/OrderedTask.hpp"
 #include "Engine/Task/Tasks/AbortTask.hpp"
@@ -57,14 +56,10 @@ class WaypointVisitorMap:
   const SETTINGS_MAP &settings_map;
   const TaskBehaviour &task_behaviour;
 
-  const AIRCRAFT_STATE aircraft_state;
-  const AGeoPoint p_start;
   Canvas &canvas;
   int pDisplayTextType;
   TCHAR sAltUnit[4];
-  const GlidePolar glide_polar;
   bool task_valid;
-  TaskProjection proj;
   const ProtectedTaskManager& task;
 
 public:
@@ -74,15 +69,11 @@ public:
   WaypointVisitorMap(const MapWindowProjection &_projection,
                      const SETTINGS_MAP &_settings_map,
                      const TaskBehaviour &_task_behaviour,
-                     const AIRCRAFT_STATE &_aircraft_state, Canvas &_canvas,
-                     const GlidePolar &polar,
+                     Canvas &_canvas,
                      const ProtectedTaskManager& _task):
     projection(_projection),
     settings_map(_settings_map), task_behaviour(_task_behaviour),
-    aircraft_state(_aircraft_state),
-    p_start (aircraft_state.get_location(), aircraft_state.NavAltitude),
     canvas(_canvas),
-    glide_polar(polar),
     task_valid(false),
     task(_task),
     labels(projection.GetScreenWidth(), projection.GetScreenHeight())
@@ -93,9 +84,6 @@ public:
       pDisplayTextType = DISPLAYNAME;
 
     _tcscpy(sAltUnit, Units::GetAltitudeName());
-
-    proj.reset(aircraft_state.get_location());
-    proj.update_fast();
   }
 
   void
@@ -361,8 +349,6 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          const MapWindowProjection &projection,
                          const SETTINGS_MAP &settings_map,
                          const TaskBehaviour &task_behaviour,
-                         const GlidePolar &glide_polar,
-                         const AIRCRAFT_STATE &aircraft_state,
                          const ProtectedTaskManager *task)
 {
   if ((way_points == NULL) || way_points->empty())
@@ -373,8 +359,7 @@ WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
     canvas.set_text_color(COLOR_BLACK);
 
     WaypointVisitorMap v(projection, settings_map, task_behaviour,
-                         aircraft_state,
-                         canvas, glide_polar,
+                         canvas,
                          *task);
 
     {

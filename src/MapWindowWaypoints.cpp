@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "NMEA/Aircraft.hpp"
 
 void
 MapWindow::DrawWaypoints(Canvas &canvas)
@@ -31,7 +30,5 @@ MapWindow::DrawWaypoints(Canvas &canvas)
   way_point_renderer.render(canvas, label_block,
                             render_projection, SettingsMap(),
                             SettingsComputer(),
-                            Calculated().glide_polar_reach,
-                            ToAircraftState(Basic(), Calculated()),
                             task);
 }

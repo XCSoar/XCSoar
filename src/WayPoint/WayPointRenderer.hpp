@@ -31,7 +31,6 @@ Copyright_License {
 #include <stddef.h>
 
 struct SETTINGS_MAP;
-struct AIRCRAFT_STATE;
 class Canvas;
 class LabelBlock;
 class MapWindowProjection;
@@ -64,8 +63,6 @@ public:
               const MapWindowProjection &projection,
               const SETTINGS_MAP &settings_map,
               const TaskBehaviour &task_behaviour,
-              const GlidePolar &glide_polar,
-              const AIRCRAFT_STATE &aircraft_state,
               const ProtectedTaskManager *task);
 };
 
