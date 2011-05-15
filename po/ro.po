@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-13 08:22+0200\n"
-"PO-Revision-Date: 2011-05-10 15:13+0000\n"
+"PO-Revision-Date: 2011-05-13 14:31+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-11 18:44+0000\n"
-"X-Generator: Launchpad (build 13014)\n"
+"X-Launchpad-Export-Date: 2011-05-15 08:36+0000\n"
+"X-Generator: Launchpad (build 13037)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:303
@@ -141,7 +141,7 @@ msgstr "N-am putut să deschid fişierul NMEA!"
 
 #: src/WayPoint/WayPointGlue.cpp:219
 msgid "Loading Waypoints..."
-msgstr ""
+msgstr "Incărcarea punctelor de cotitură..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:256
 msgid "Not Circling"
@@ -149,7 +149,7 @@ msgstr ""
 
 #: src/Gauge/FlarmTrafficWindow.cpp:271
 msgid "No Traffic"
-msgstr ""
+msgstr "Nici un trafic"
 
 #: src/AirfieldDetails.cpp:143
 msgid "Loading Airfield Details File..."
@@ -158,12 +158,12 @@ msgstr ""
 #: src/ExpandMacros.cpp:118 src/ExpandMacros.cpp:128 src/ExpandMacros.cpp:194
 #: src/ExpandMacros.cpp:224
 msgid "Next Turnpoint"
-msgstr ""
+msgstr "Următorul punct de cotitură"
 
 #: src/ExpandMacros.cpp:123 src/ExpandMacros.cpp:133 src/ExpandMacros.cpp:206
 #: src/ExpandMacros.cpp:252
 msgid "Previous Turnpoint"
-msgstr "Punct de intoarcere precedent"
+msgstr "Punct de cotitură trecută"
 
 #: src/ExpandMacros.cpp:145 src/ExpandMacros.cpp:165
 msgid "Furthest Landpoint"
@@ -183,7 +183,7 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:193 src/ExpandMacros.cpp:223
 msgid "Finish Turnpoint"
-msgstr ""
+msgstr "Ultimul punct de cotitură"
 
 #: src/ExpandMacros.cpp:199 src/ExpandMacros.cpp:245
 msgid "Next Startpoint"
@@ -191,7 +191,7 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:205 src/ExpandMacros.cpp:251
 msgid "Start Turnpoint"
-msgstr ""
+msgstr "Primul punct de cotitură"
 
 #: src/ExpandMacros.cpp:229
 msgid "Arm start"
