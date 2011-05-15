@@ -73,13 +73,7 @@ Profile::LoadFile(const TCHAR *szFile)
     *p = _T('\0');
     TCHAR *value = p + 1;
 
-#ifdef PROFILE_KEY_PREFIX
-    TCHAR key[sizeof(PROFILE_KEY_PREFIX) + _tcslen(line)];
-    _tcscpy(key, PROFILE_KEY_PREFIX);
-    _tcscat(key, line);
-#else
     const TCHAR *key = line;
-#endif
 
     if (*value == _T('"')) {
       ++value;
