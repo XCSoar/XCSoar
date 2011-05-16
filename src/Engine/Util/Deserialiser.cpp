@@ -189,15 +189,26 @@ Deserialiser::deserialise_waypoint()
     return NULL;
 
   if (waypoints != NULL) {
-    /* try to merge with existing waypoint from database */
-    const Waypoint *from_database = waypoints->get_nearest(loc);
-    // XXX narrow down search by comparing the name?
+    // Try to find waypoint by name
+    const Waypoint *from_database = waypoints->lookup_name(name);
+
+    // If waypoint by name found and closer than 10m to the original
     if (from_database != NULL &&
-        from_database->Location.distance(loc) <= fixed(100))
-      /* found it, clone it for the caller to consume */
+        from_database->Location.distance(loc) <= fixed_ten)
+      // Use this waypoint for the task
+      return new Waypoint(*from_database);
+
+    // Try finding the closest waypoint to the original one
+    from_database = waypoints->get_nearest(loc);
+
+    // If closest waypoint found and closer than 10m to the original
+    if (from_database != NULL &&
+        from_database->Location.distance(loc) <= fixed_ten)
+      // Use this waypoint for the task
       return new Waypoint(*from_database);
   }
 
+  // Create a new waypoint from the original one
   Waypoint *wp = new Waypoint(loc);
   wp->Name = name;
   m_node.get_attribute(_T("id"), wp->id);
