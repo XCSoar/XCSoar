@@ -227,10 +227,11 @@ fgrep(const char *fname, const char *string)
 /**
  * Returns the location of XCSoarData in the user's home directory.
  *
+ * @param create true creates the path if it does not exist
  * @return a buffer which may be used to build the path
  */
 static const TCHAR *
-GetHomeDataPath(TCHAR *buffer)
+GetHomeDataPath(TCHAR *buffer, bool create=false)
 {
   if (is_android())
     /* hard-coded path for Android */
@@ -246,7 +247,7 @@ GetHomeDataPath(TCHAR *buffer)
   } else
     return _T("/etc/xcsoar");
 #else
-  if (!SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, false))
+  if (!SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, create))
     return NULL;
 
   _tcscat(buffer, _T(DIR_SEPARATOR_S));
@@ -299,7 +300,7 @@ FindDataPath()
 
   {
     TCHAR buffer[MAX_PATH];
-    const TCHAR *path = GetHomeDataPath(buffer);
+    const TCHAR *path = GetHomeDataPath(buffer, true);
     if (path != NULL)
       return _tcsdup(path);
   }
