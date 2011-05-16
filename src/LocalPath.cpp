@@ -351,17 +351,19 @@ VisitDataFiles(const TCHAR* filter, File::Visitor &visitor)
 #endif /* _WIN32_WCE && !GNAV*/
 }
 
-struct ScopePathGlobalInit {
-  ScopePathGlobalInit() {
-    data_path = FindDataPath();
-    assert(data_path != NULL);
+bool
+InitialiseDataPath()
+{
+  data_path = FindDataPath();
+  if (data_path == NULL)
+    return false;
 
-    data_path_length = _tcslen(data_path);
-  }
+  data_path_length = _tcslen(data_path);
+  return true;
+}
 
-  ~ScopePathGlobalInit() {
-    free(data_path);
-  }
-};
-
-static const ScopePathGlobalInit path_global_init;
+void
+DeinitialiseDataPath()
+{
+  free(data_path);
+}

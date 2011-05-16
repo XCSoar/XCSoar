@@ -51,6 +51,7 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Task/TaskFile.hpp"
+#include "LocalPath.hpp"
 
 /* fake symbols: */
 
@@ -149,6 +150,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  InitialiseDataPath();
   Profile::SetFiles(_T(""));
   Profile::Load();
 
@@ -188,6 +190,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   delete glide_computer;
   delete terrain;
   delete protected_task_manager;
+
+  DeinitialiseDataPath();
 
   return 0;
 }

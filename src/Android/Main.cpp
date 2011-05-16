@@ -24,6 +24,7 @@ Copyright_License {
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/SoundUtil.hpp"
+#include "LocalPath.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
@@ -55,6 +56,8 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
                                             jint width, jint height)
 {
   Java::Init(env);
+
+  InitialiseDataPath();
 
   OpenGL::Initialise();
 
@@ -92,6 +95,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
 
   OpenGL::Deinitialise();
   ScreenDeinitialized();
+  DeinitialiseDataPath();
 }
 
 JNIEXPORT void JNICALL

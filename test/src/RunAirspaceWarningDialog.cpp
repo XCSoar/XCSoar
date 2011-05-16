@@ -41,6 +41,7 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
+#include "LocalPath.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -84,6 +85,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  InitialiseDataPath();
   ScreenGlobalInit screen_init;
 
 #ifdef WIN32
@@ -116,6 +118,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   dlgAirspaceWarningsShowModal(main_window);
 
   Fonts::Deinitialize();
+  DeinitialiseDataPath();
 
   return 0;
 }

@@ -34,6 +34,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "UtilsSystem.hpp"
 #include "Profile/ProfileKeys.hpp"
+#include "LocalPath.hpp"
 #include "LocalTime.hpp"
 #include "WayPointGlue.hpp"
 #include "Device/device.hpp"
@@ -259,6 +260,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  InitialiseDataPath();
   Profile::SetFiles(_T(""));
   Profile::Load();
 
@@ -293,6 +295,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   delete terrain;
   delete topography;
+
+  DeinitialiseDataPath();
 
   return 0;
 }

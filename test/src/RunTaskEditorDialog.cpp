@@ -38,6 +38,7 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
+#include "LocalPath.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -155,6 +156,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  InitialiseDataPath();
   ScreenGlobalInit screen_init;
 
 #ifdef WIN32
@@ -177,6 +179,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   dlgTaskOverviewShowModal(main_window);
 
   Fonts::Deinitialize();
+  DeinitialiseDataPath();
 
   return 0;
 }

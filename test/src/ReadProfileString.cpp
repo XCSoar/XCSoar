@@ -21,6 +21,7 @@
 */
 
 #include "Profile/Profile.hpp"
+#include "LocalPath.hpp"
 
 #include <stdio.h>
 
@@ -43,8 +44,10 @@ int main(int argc, char **argv) {
   const char *name = argv[1];
 #endif
 
+  InitialiseDataPath();
   Profile::SetFiles(_T(""));
   Profile::Load();
+  DeinitialiseDataPath();
 
   TCHAR value[1024];
   if (Profile::Get(name, value, 1024)) {

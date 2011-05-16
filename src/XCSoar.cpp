@@ -27,6 +27,7 @@ Copyright_License {
  */
 
 #include "resource.h"
+#include "LocalPath.hpp"
 #include "Version.hpp"
 #include "Protection.hpp"
 #include "Components.hpp"
@@ -56,6 +57,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  InitialiseDataPath();
   InitAsset();
 
   // Write startup note + version to logfile
@@ -92,6 +94,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   Fonts::Deinitialize();
   Graphics::Deinitialise();
+
+  DeinitialiseDataPath();
 
   return ret;
 }

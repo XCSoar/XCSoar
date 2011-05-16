@@ -31,6 +31,20 @@ namespace File {
 }
 
 /**
+ * Determine the data path.
+ *
+ * @return true on success, false if no data path could be found
+ */
+bool
+InitialiseDataPath();
+
+/**
+ * Release resources obtained by InitialiseDataPath().
+ */
+void
+DeinitialiseDataPath();
+
+/**
  * Overrides the detected primary data path.
  */
 void
