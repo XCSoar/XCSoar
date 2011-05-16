@@ -224,6 +224,37 @@ fgrep(const char *fname, const char *string)
 
 #endif /* ANDROID */
 
+/**
+ * Returns the location of XCSoarData in the user's home directory.
+ *
+ * @return a buffer which may be used to build the path
+ */
+static const TCHAR *
+GetHomeDataPath(TCHAR *buffer)
+{
+  if (is_android())
+    /* hard-coded path for Android */
+    return NULL;
+
+#ifdef HAVE_POSIX
+  /* on Unix or WINE, use ~/.xcsoar */
+  const TCHAR *home = getenv("HOME");
+  if (home != NULL) {
+    _tcscpy(buffer, home);
+    _tcscat(buffer, _T("/.xcsoar"));
+    return buffer;
+  } else
+    return _T("/etc/xcsoar");
+#else
+  if (!SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, false))
+    return NULL;
+
+  _tcscat(buffer, _T(DIR_SEPARATOR_S));
+  _tcscat(buffer, XCSDATADIR);
+  return buffer;
+#endif
+}
+
 static TCHAR *
 FindDataPath()
 {
@@ -274,32 +305,6 @@ FindDataPath()
   }
 
   return NULL;
-}
-
-const TCHAR *
-GetHomeDataPath(TCHAR *buffer)
-{
-  if (is_android())
-    /* hard-coded path for Android */
-    return NULL;
-
-#ifdef HAVE_POSIX
-  /* on Unix or WINE, use ~/.xcsoar */
-  const TCHAR *home = getenv("HOME");
-  if (home != NULL) {
-    _tcscpy(buffer, home);
-    _tcscat(buffer, _T("/.xcsoar"));
-    return buffer;
-  } else
-    return _T("/etc/xcsoar");
-#else
-  if (!SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, false))
-    return NULL;
-
-  _tcscat(buffer, _T(DIR_SEPARATOR_S));
-  _tcscat(buffer, XCSDATADIR);
-  return buffer;
-#endif
 }
 
 void
