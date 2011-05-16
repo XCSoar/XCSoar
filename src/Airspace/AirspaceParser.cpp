@@ -284,31 +284,31 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
 
   // ToDo, add more error checking and making it more tolerant/robust
 
-  long deg = _tcstol(Text, &Stop, 10);
+  double deg = _tcstod(Text, &Stop);
   if ((Text == Stop) || (*Stop == '\0'))
     return false;
 
-  Stop++;
-  long min = _tcstol(Stop, &Stop, 10);
-  if (*Stop == '\0')
-    return false;
-
-  long sec = 0;
   if (*Stop == ':') {
     Stop++;
+
+    double min = _tcstod(Stop, &Stop);
     if (*Stop == '\0')
       return false;
 
-    sec = _tcstol(Stop, &Stop, 10);
-  } else if (*Stop == '.') {
-    Stop++;
-    if (*Stop == '\0')
-      return false;
+    deg += min / 60;
 
-    sec = (_tcstol(Stop, &Stop, 10) * 60) / 100;
+    if (*Stop == ':') {
+      Stop++;
+
+      double sec = _tcstod(Stop, &Stop);
+      if (*Stop == '\0')
+        return false;
+
+      deg += sec / 3600;
+    }
   }
 
-  point.Latitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
+  point.Latitude = Angle::degrees(fixed(deg));
 
   if (*Stop == ' ')
     Stop++;
@@ -323,24 +323,31 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
   if (*Stop == '\0')
     return false;
 
-  deg = _tcstol(Stop, &Stop, 10);
-  Stop++;
-  min = _tcstol(Stop, &Stop, 10);
+  deg = _tcstod(Stop, &Stop);
+  if ((Text == Stop) || (*Stop == '\0'))
+    return false;
+
   if (*Stop == ':') {
     Stop++;
+
+    double min = _tcstod(Stop, &Stop);
     if (*Stop == '\0')
       return false;
 
-    sec = _tcstol(Stop, &Stop, 10);
-  } else if (*Stop == '.') {
-    Stop++;
-    if (*Stop == '\0')
-      return false;
+    deg += min / 60;
 
-    sec = (_tcstol(Stop, &Stop, 10) * 60) / 100;
+    if (*Stop == ':') {
+      Stop++;
+
+      double sec = _tcstod(Stop, &Stop);
+      if (*Stop == '\0')
+        return false;
+
+      deg += sec / 3600;
+    }
   }
 
-  point.Longitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
+  point.Longitude = Angle::degrees(fixed(deg));
 
   if (*Stop == ' ')
     Stop++;
