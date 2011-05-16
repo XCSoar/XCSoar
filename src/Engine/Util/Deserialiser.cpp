@@ -183,6 +183,11 @@ Deserialiser::deserialise_waypoint()
   lser.deserialise(loc);
   delete loc_node;
 
+  tstring name;
+  if (!m_node.get_attribute(_T("name"), name))
+    // Turnpoints need names
+    return NULL;
+
   if (waypoints != NULL) {
     /* try to merge with existing waypoint from database */
     const Waypoint *from_database = waypoints->get_nearest(loc);
@@ -194,7 +199,7 @@ Deserialiser::deserialise_waypoint()
   }
 
   Waypoint *wp = new Waypoint(loc);
-  m_node.get_attribute(_T("name"), wp->Name);
+  wp->Name = name;
   m_node.get_attribute(_T("id"), wp->id);
   m_node.get_attribute(_T("comment"), wp->Comment);
   m_node.get_attribute(_T("altitude"), wp->Altitude);
