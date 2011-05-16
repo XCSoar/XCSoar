@@ -474,11 +474,30 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     if (file_wp == NULL)
       return NULL;
 
-    const Waypoint* wp = waypoints->get_nearest(file_wp->Location);
-    if (wp == NULL || wp->Location.distance(file_wp->Location) > fixed(100))
-      wp = file_wp;
+    // Try to find waypoint by name
+    const Waypoint* wp = waypoints->lookup_name(file_wp->Name);
 
-    wpsInTask[i] = wp;
+    // If waypoint by name found and closer than 10m to the original
+    if (wp != NULL &&
+        wp->Location.distance(file_wp->Location) <= fixed_ten) {
+      // Use this waypoint for the task
+      wpsInTask[i] = wp;
+      continue;
+    }
+
+    // Try finding the closest waypoint to the original one
+    wp = waypoints->get_nearest(file_wp->Location);
+
+    // If closest waypoint found and closer than 10m to the original
+    if (wp != NULL &&
+        wp->Location.distance(file_wp->Location) <= fixed_ten) {
+      // Use this waypoint for the task
+      wpsInTask[i] = wp;
+      continue;
+    }
+
+    // Use the original waypoint
+    wpsInTask[i] = file_wp;
   }
 
   //now create TPs and OZs
