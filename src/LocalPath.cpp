@@ -247,7 +247,20 @@ GetHomeDataPath(TCHAR *buffer, bool create=false)
   } else
     return _T("/etc/xcsoar");
 #else
-  if (!SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, create))
+  if (is_windows_ce())
+    /* clear the buffer, just in case we evaluate it after
+       SHGetSpecialFolderPath() failure, see below */
+    buffer[0] = _T('\0');
+
+  bool success = SHGetSpecialFolderPath(NULL, buffer, CSIDL_PERSONAL, create);
+  if (is_windows_ce() && !success && !string_is_empty(buffer))
+    /* MSDN: "If you are using the AYGShell extensions, then this
+       function returns FALSE even if successful. If the folder
+       represented by the CSIDL does not exist and is not created, a
+       NULL string is returned indicating that the directory does not
+       exist." */
+    success = true;
+  if (!success)
     return NULL;
 
   _tcscat(buffer, _T(DIR_SEPARATOR_S));
