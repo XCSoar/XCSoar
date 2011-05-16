@@ -30,8 +30,6 @@ namespace File {
   class Visitor;
 }
 
-#define XCSDATADIR _T("XCSoarData")
-
 /**
  * Overrides the detected primary data path.
  */

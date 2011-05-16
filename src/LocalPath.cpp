@@ -45,6 +45,8 @@ Copyright_License {
 #include <unistd.h>
 #endif
 
+#define XCSDATADIR _T("XCSoarData")
+
 /**
  * The absolute location of the XCSoarData directory.
  */
