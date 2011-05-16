@@ -41,7 +41,7 @@ class ThreadHandle {
 #ifdef HAVE_POSIX
   pthread_t handle;
 #else
-  HANDLE handle;
+  DWORD handle;
 #endif
 
 public:
@@ -53,22 +53,16 @@ public:
 #ifdef HAVE_POSIX
   ThreadHandle(pthread_t _handle):handle(_handle) {}
 #else
-  ThreadHandle(HANDLE _handle):handle(_handle) {}
+  ThreadHandle(DWORD _handle):handle(_handle) {}
 #endif
 
   static const ThreadHandle GetCurrent() {
 #ifdef HAVE_POSIX
     return pthread_self();
 #else
-    return ::GetCurrentThread();
+    return ::GetCurrentThreadId();
 #endif
   }
-
-#ifndef HAVE_POSIX
-  bool IsDefined() const {
-    return handle != NULL;
-  }
-#endif
 
   gcc_pure
   bool operator==(const ThreadHandle &other) const {
