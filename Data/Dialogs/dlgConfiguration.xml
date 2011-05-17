@@ -76,7 +76,7 @@
       </Edit>
 
       <Edit Name="prpMapShiftBias" Caption="Map shift reference" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150">
-        <DataField DataType="enum" />
+        <DataField DataType="enum" OnDataAccess="MapDisplayConfigPanel::OnShiftTypeData" />
       </Edit>
 
       <Edit Name="prpGliderScreenPosition" Caption="Glider position offset" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
