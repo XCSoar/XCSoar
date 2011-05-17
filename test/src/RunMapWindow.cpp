@@ -292,6 +292,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.reset();
 
   Fonts::Deinitialize();
+  Graphics::Deinitialise();
 
   delete terrain;
   delete topography;

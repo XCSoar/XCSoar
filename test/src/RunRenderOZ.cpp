@@ -313,6 +313,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.event_loop();
 
   Fonts::Deinitialize();
+  Graphics::Deinitialise();
 
   return 0;
 }

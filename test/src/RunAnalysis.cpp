@@ -186,6 +186,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   dlgAnalysisShowModal(main_window, -1);
 
   Fonts::Deinitialize();
+  Graphics::Deinitialise();
 
   delete glide_computer;
   delete terrain;
