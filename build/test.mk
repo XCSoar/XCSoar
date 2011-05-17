@@ -600,6 +600,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunHeightMatrix \
 	RunInputParser \
 	RunWayPointParser RunAirspaceParser \
+	ReadPort \
 	RunDeviceDriver RunDeclare \
 	RunIGCWriter \
 	RunWindZigZag \
@@ -951,6 +952,34 @@ RUN_AIRSPACE_PARSER_LDADD = \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
 $(TARGET_BIN_DIR)/RunAirspaceParser$(TARGET_EXEEXT): $(RUN_AIRSPACE_PARSER_OBJS) $(RUN_AIRSPACE_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+READ_PORT_SOURCES = \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/ReadPort.cpp
+ifeq ($(HAVE_POSIX),y)
+READ_PORT_SOURCES += \
+	$(SRC)/Device/TTYPort.cpp
+else
+READ_PORT_SOURCES += \
+	$(SRC)/Device/SerialPort.cpp
+endif
+ifeq ($(HAVE_CE),y)
+READ_PORT_SOURCES += \
+	$(SRC)/Device/Widcomm.cpp
+endif
+READ_PORT_OBJS = $(call SRC_TO_OBJ,$(READ_PORT_SOURCES))
+READ_PORT_LDADD =
+$(READ_PORT_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(TARGET_BIN_DIR)/ReadPort$(TARGET_EXEEXT): $(READ_PORT_OBJS) $(READ_PORT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
