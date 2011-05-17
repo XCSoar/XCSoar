@@ -41,46 +41,41 @@ MapDisplayConfigPanel::Init(WndForm *_wf)
   WndProperty *wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Track up"), TRACKUP,
-                     _("The moving map display will be rotated so the glider's track is oriented up."));
-    dfe->addEnumText(_("North up"), NORTHUP,
-                     _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
-    dfe->addEnumText(_("Target up"), TARGETUP,
-                     _("The moving map display will be rotated so the navigation target is oriented up."));
-    dfe->Set(XCSoarInterface::SettingsMap().OrientationCruise);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  DataFieldEnum* dfe;
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->EnableItemHelp(true);
+  dfe->addEnumText(_("Track up"), TRACKUP,
+                   _("The moving map display will be rotated so the glider's track is oriented up."));
+  dfe->addEnumText(_("North up"), NORTHUP,
+                   _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
+  dfe->addEnumText(_("Target up"), TARGETUP,
+                   _("The moving map display will be rotated so the navigation target is oriented up."));
+  dfe->Set(XCSoarInterface::SettingsMap().OrientationCruise);
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpOrientationCircling"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("Track up"), TRACKUP,
-                     _("The moving map display will be rotated so the glider's track is oriented up."));
-    dfe->addEnumText(_("North up"), NORTHUP,
-                     _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
-    dfe->addEnumText(_("Target up"), TARGETUP,
-                     _("The moving map display will be rotated so the navigation target is oriented up."));
-    dfe->Set(XCSoarInterface::SettingsMap().OrientationCircling);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->EnableItemHelp(true);
+  dfe->addEnumText(_("Track up"), TRACKUP,
+                   _("The moving map display will be rotated so the glider's track is oriented up."));
+  dfe->addEnumText(_("North up"), NORTHUP,
+                   _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
+  dfe->addEnumText(_("Target up"), TARGETUP,
+                   _("The moving map display will be rotated so the navigation target is oriented up."));
+  dfe->Set(XCSoarInterface::SettingsMap().OrientationCircling);
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("None"), MAP_SHIFT_BIAS_NONE, _("Disable adjustments."));
-    dfe->addEnumText(_("Track"), MAP_SHIFT_BIAS_TRACK, _("Use a recent average of the ground track as basis."));
-    dfe->addEnumText(_("Target"), MAP_SHIFT_BIAS_TARGET, _("Use the current target waypoint as basis."));
-    dfe->Set(XCSoarInterface::SettingsMap().MapShiftBias);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->EnableItemHelp(true);
+  dfe->addEnumText(_("None"), MAP_SHIFT_BIAS_NONE, _("Disable adjustments."));
+  dfe->addEnumText(_("Track"), MAP_SHIFT_BIAS_TRACK, _("Use a recent average of the ground track as basis."));
+  dfe->addEnumText(_("Target"), MAP_SHIFT_BIAS_TARGET, _("Use the current target waypoint as basis."));
+  dfe->Set(XCSoarInterface::SettingsMap().MapShiftBias);
+  wp->RefreshDisplay();
 
   LoadFormProperty(*wf, _T("prpGliderScreenPosition"),
                    XCSoarInterface::SettingsMap().GliderScreenPosition);
@@ -100,33 +95,30 @@ MapDisplayConfigPanel::Save()
   WndProperty *wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().OrientationCruise != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().OrientationCruise = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileOrientationCruise,
-                    XCSoarInterface::SettingsMap().OrientationCruise);
-      changed = true;
-    }
+  assert(wp != NULL);
+  if (XCSoarInterface::SettingsMap().OrientationCruise != wp->GetDataField()->GetAsInteger()) {
+    XCSoarInterface::SetSettingsMap().OrientationCruise = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
+    Profile::Set(szProfileOrientationCruise,
+                 XCSoarInterface::SettingsMap().OrientationCruise);
+    changed = true;
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpOrientationCircling"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().OrientationCircling != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().OrientationCircling = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileOrientationCircling,
-                    XCSoarInterface::SettingsMap().OrientationCircling);
-      changed = true;
-    }
+  assert(wp != NULL);
+  if (XCSoarInterface::SettingsMap().OrientationCircling != wp->GetDataField()->GetAsInteger()) {
+    XCSoarInterface::SetSettingsMap().OrientationCircling = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
+    Profile::Set(szProfileOrientationCircling,
+                 XCSoarInterface::SettingsMap().OrientationCircling);
+    changed = true;
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
-  if (wp) {
-    if (XCSoarInterface::SettingsMap().MapShiftBias != wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().MapShiftBias = (MapShiftBias_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileMapShiftBias,
-                   XCSoarInterface::SettingsMap().MapShiftBias);
-      changed = true;
-    }
+  assert(wp != NULL);
+  if (XCSoarInterface::SettingsMap().MapShiftBias != wp->GetDataField()->GetAsInteger()) {
+    XCSoarInterface::SetSettingsMap().MapShiftBias = (MapShiftBias_t)wp->GetDataField()->GetAsInteger();
+    Profile::Set(szProfileMapShiftBias,
+                 XCSoarInterface::SettingsMap().MapShiftBias);
+    changed = true;
   }
 
   changed |= SaveFormProperty(*wf, _T("prpGliderScreenPosition"),
