@@ -57,7 +57,7 @@ public:
     return &os;
   }
 
-  WaitResult Wait(unsigned timeout_ms) {
+  WaitResult Wait(unsigned timeout_ms=INFINITE) {
     switch (::WaitForSingleObject(os.hEvent, timeout_ms)) {
     case WAIT_OBJECT_0:
       return FINISHED;
