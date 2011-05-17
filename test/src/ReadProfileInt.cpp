@@ -43,6 +43,9 @@ int main(int argc, char **argv) {
   const char *name = argv[1];
 #endif
 
+  Profile::SetFiles(_T(""));
+  Profile::Load();
+
   int value;
   if (Profile::Get(name, value)) {
     printf("%d\n", value);

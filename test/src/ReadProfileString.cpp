@@ -43,6 +43,9 @@ int main(int argc, char **argv) {
   const char *name = argv[1];
 #endif
 
+  Profile::SetFiles(_T(""));
+  Profile::Load();
+
   TCHAR value[1024];
   if (Profile::Get(name, value, 1024)) {
     _putts(value);
