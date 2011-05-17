@@ -30,7 +30,7 @@ Copyright_License {
 namespace DevicesConfigPanel
 {
   void Init(WndForm *wf);
-  bool Save(bool &requirerestart);
+  bool Save();
 
   void OnSetupDeviceAClicked(WndButton &button);
   void OnSetupDeviceBClicked(WndButton &button);

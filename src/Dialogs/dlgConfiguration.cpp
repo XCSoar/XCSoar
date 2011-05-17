@@ -297,7 +297,7 @@ void dlgConfigurationShowModal(void)
   changed |= PagesConfigPanel::Save();
   changed |= PolarConfigPanel::Save();
   changed |= LoggerConfigPanel::Save();
-  changed |= DevicesConfigPanel::Save(requirerestart);
+  changed |= DevicesConfigPanel::Save();
   changed |= AirspaceConfigPanel::Save(requirerestart);
   changed |= SiteConfigPanel::Save();
   changed |= MapDisplayConfigPanel::Save();

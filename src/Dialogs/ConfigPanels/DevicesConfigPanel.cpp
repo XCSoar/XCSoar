@@ -403,7 +403,7 @@ DevicesConfigPanel::Init(WndForm *_wf)
 
 
 bool
-DevicesConfigPanel::Save(bool &requirerestart)
+DevicesConfigPanel::Save()
 {
   DevicePortChanged =
     FinishDeviceFields(device_config[0],
@@ -430,8 +430,6 @@ DevicesConfigPanel::Save(bool &requirerestart)
     changed = true;
     for (unsigned i = 0; i < NUMDEV; ++i)
       Profile::SetDeviceConfig(i, device_config[i]);
-    if (!is_embedded())
-      requirerestart = true;
   }
 
   return changed;
