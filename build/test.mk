@@ -600,7 +600,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunHeightMatrix \
 	RunInputParser \
 	RunWayPointParser RunAirspaceParser \
-	ReadPort \
+	ReadPort RunPortHandler \
 	RunDeviceDriver RunDeclare \
 	RunIGCWriter \
 	RunWindZigZag \
@@ -980,6 +980,34 @@ READ_PORT_OBJS = $(call SRC_TO_OBJ,$(READ_PORT_SOURCES))
 READ_PORT_LDADD =
 $(READ_PORT_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(TARGET_BIN_DIR)/ReadPort$(TARGET_EXEEXT): $(READ_PORT_OBJS) $(READ_PORT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_PORT_HANDLER_SOURCES = \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/RunPortHandler.cpp
+ifeq ($(HAVE_POSIX),y)
+RUN_PORT_HANDLER_SOURCES += \
+	$(SRC)/Device/TTYPort.cpp
+else
+RUN_PORT_HANDLER_SOURCES += \
+	$(SRC)/Device/SerialPort.cpp
+endif
+ifeq ($(HAVE_CE),y)
+RUN_PORT_HANDLER_SOURCES += \
+	$(SRC)/Device/Widcomm.cpp
+endif
+RUN_PORT_HANDLER_OBJS = $(call SRC_TO_OBJ,$(RUN_PORT_HANDLER_SOURCES))
+RUN_PORT_HANDLER_LDADD =
+$(RUN_PORT_HANDLER_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(TARGET_BIN_DIR)/RunPortHandler$(TARGET_EXEEXT): $(RUN_PORT_HANDLER_OBJS) $(RUN_PORT_HANDLER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
