@@ -34,6 +34,21 @@ Copyright_License {
 
 static WndForm* wf = NULL;
 
+static void
+UpdateVisibilities()
+{
+  WndProperty* wp = (WndProperty*)wf->FindByName(_T("prpAppUseSWLandablesRendering"));
+  assert(wp != NULL);
+  bool visible = (wp->GetDataField()->GetAsInteger() != 0);
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAppLandableRenderingScale"));
+  assert(wp != NULL);
+  wp->set_visible(visible);
+
+  wp = (WndProperty*)wf->FindByName(_T("prpAppScaleRunwayLength"));
+  assert(wp != NULL);
+  wp->set_visible(visible);
+}
 
 void
 WayPointDisplayConfigPanel::Init(WndForm *_wf)
@@ -121,8 +136,25 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
 
   LoadFormProperty(*wf, _T("prpAppScaleRunwayLength"),
                    Appearance.ScaleRunwayLength);
+
+  UpdateVisibilities();
 }
 
+void
+WayPointDisplayConfigPanel::OnRenderingTypeData(DataField *Sender,
+                                                DataField::DataAccessKind_t Mode)
+{
+  switch (Mode) {
+  case DataField::daInc:
+  case DataField::daDec:
+  case DataField::daChange: {
+    UpdateVisibilities();
+    break;
+  }
+  case DataField::daSpecial:
+    return;
+  }
+}
 
 bool
 WayPointDisplayConfigPanel::Save()

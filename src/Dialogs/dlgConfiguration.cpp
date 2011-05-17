@@ -213,6 +213,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(UnitsConfigPanel::OnLoadPreset),
   DeclareCallBackEntry(UnitsConfigPanel::OnFieldData),
   DeclareCallBackEntry(UnitsConfigPanel::OnUTCData),
+  DeclareCallBackEntry(WayPointDisplayConfigPanel::OnRenderingTypeData),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
