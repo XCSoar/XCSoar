@@ -42,26 +42,17 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "LocalPath.hpp"
+#include "Components.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
 
-static Waypoints way_points;
-static TaskBehaviour task_behaviour;
-static TaskEvents task_events;
-static TaskManager task_manager(task_events, way_points);
-
-static Airspaces airspace_database;
-static AIRCRAFT_STATE ac_state; // dummy
-static AirspaceWarningManager airspace_warning(airspace_database,
-                                               task_manager);
-
-ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
+ProtectedAirspaceWarningManager *airspace_warnings;
 
 void dlgAirspaceDetails(const AbstractAirspace& the_airspace) {}
 
 static void
-LoadFiles()
+LoadFiles(Airspaces &airspace_database)
 {
   TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile);
   if (reader != NULL) {
@@ -85,6 +76,14 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  Waypoints way_points;
+  TaskEvents task_events;
+  TaskManager task_manager(task_events, way_points);
+
+  Airspaces airspace_database;
+  AirspaceWarningManager airspace_warning(airspace_database, task_manager);
+  airspace_warnings = new ProtectedAirspaceWarningManager(airspace_warning);
+
   InitialiseDataPath();
   ScreenGlobalInit screen_init;
 
@@ -93,7 +92,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   PaintWindow::register_class(hInstance);
 #endif
 
-  LoadFiles();
+  LoadFiles(airspace_database);
 
   Fonts::Initialize();
 
@@ -119,6 +118,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   Fonts::Deinitialize();
   DeinitialiseDataPath();
+
+  delete airspace_warnings;
 
   return 0;
 }
