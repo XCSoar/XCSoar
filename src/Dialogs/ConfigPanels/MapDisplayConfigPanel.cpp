@@ -33,7 +33,7 @@ Copyright_License {
 static WndForm* wf = NULL;
 
 static void
-UpdateGliderPositionVisibility()
+UpdateVisibilities()
 {
   WndProperty* wp_shift = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
   assert(wp_shift != NULL);
@@ -95,7 +95,7 @@ MapDisplayConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpMaxAutoZoomDistance"), ugDistance,
                    XCSoarInterface::SettingsMap().MaxAutoZoomDistance);
 
-  UpdateGliderPositionVisibility();
+  UpdateVisibilities();
 }
 
 void
@@ -105,7 +105,7 @@ MapDisplayConfigPanel::OnShiftTypeData(DataField *Sender, DataField::DataAccessK
   case DataField::daInc:
   case DataField::daDec:
   case DataField::daChange: {
-    UpdateGliderPositionVisibility();
+    UpdateVisibilities();
     break;
   }
   case DataField::daSpecial:
