@@ -383,21 +383,15 @@ SerialPort::Write(const void *data, unsigned length)
     return;
 
   // Let's wait for ReadFile() to finish
-  while (true) {
-    // Wait for max. 500ms an event to occur
-    switch (osWriter.Wait(500)) {
-    case OverlappedEvent::FINISHED:
-      // Get results
-      ::GetOverlappedResult(hPort, osWriter.GetPointer(), &NumberOfBytesWritten, FALSE);
-       return;
+  // 1000ms like WriteTotalTimeoutConstant in SetRxTimeout()
+  switch (osWriter.Wait(1000)) {
+  case OverlappedEvent::FINISHED:
+    // Get results
+    ::GetOverlappedResult(hPort, osWriter.GetPointer(), &NumberOfBytesWritten, FALSE);
+     return;
 
-    case OverlappedEvent::TIMEOUT:
-      // ReadFile() has not yet finished
-      continue;
-
-    default:
-      return;
-    }
+  default:
+    return;
   }
 #endif
 }
