@@ -30,6 +30,8 @@ Copyright_License {
 
 #ifdef _WIN32_WCE
 #include "Device/Widcomm.hpp"
+#else
+#include "OS/OverlappedEvent.hpp"
 #endif
 
 #include <windows.h>
@@ -37,53 +39,6 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
-
-#ifndef _WIN32_WCE
-class OverlappedEvent {
-  OVERLAPPED os;
-
-public:
-  enum WaitResult {
-    FINISHED,
-    TIMEOUT,
-    CANCELED,
-  };
-
-public:
-  OverlappedEvent()
-  {
-    os.Offset = os.OffsetHigh = 0;
-    os.Internal = os.InternalHigh = 0;
-
-    os.hEvent = CreateEvent(NULL, TRUE, FALSE, NULL);
-  }
-
-  ~OverlappedEvent() {
-    ::CloseHandle(os.hEvent);
-  }
-
-  bool Defined() const {
-    return os.hEvent != NULL;
-  }
-
-  OVERLAPPED *GetPointer() {
-    return &os;
-  }
-
-  WaitResult Wait(unsigned timeout_ms) {
-    switch (::WaitForSingleObject(os.hEvent, timeout_ms)) {
-    case WAIT_OBJECT_0:
-      return FINISHED;
-
-    case WAIT_TIMEOUT:
-      return TIMEOUT;
-
-    default:
-      return CANCELED;
-    }
-  }
-};
-#endif
 
 static void
 SerialPort_StatusMessage(unsigned type, const TCHAR *caption,
