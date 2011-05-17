@@ -565,25 +565,18 @@ SerialPort::Read(void *Buffer, size_t Size)
   }
 
   // Let's wait for ReadFile() to finish
-  while (true) {
-    // Wait for max. 500ms an event to occur
-    switch (osReader.Wait(500)) {
-    case OverlappedEvent::FINISHED:
-      // Get results
-      if (!::GetOverlappedResult(hPort, osReader.GetPointer(), &dwBytesTransferred, FALSE))
-        // Error occured while fetching results
-        return -1;
-
-      // Process data that was read with a delay by ReadFile()
-      return dwBytesTransferred;
-
-    case OverlappedEvent::TIMEOUT:
-      // ReadFile() has not yet finished
-      continue;
-
-    default:
+  switch (osReader.Wait(GetRxTimeout())) {
+  case OverlappedEvent::FINISHED:
+    // Get results
+    if (!::GetOverlappedResult(hPort, osReader.GetPointer(), &dwBytesTransferred, FALSE))
+      // Error occured while fetching results
       return -1;
-    }
+
+    // Process data that was read with a delay by ReadFile()
+    return dwBytesTransferred;
+
+  default:
+    return -1;
   }
 #endif
 }
