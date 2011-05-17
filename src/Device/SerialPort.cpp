@@ -173,6 +173,55 @@ SerialPort::Flush(void)
   PurgeComm(hPort, PURGE_TXABORT | PURGE_RXABORT | PURGE_TXCLEAR | PURGE_RXCLEAR);
 }
 
+int
+SerialPort::GetDataPending() const
+{
+  if (hPort == INVALID_HANDLE_VALUE)
+    return -1;
+
+  COMSTAT com_stat;
+  DWORD errors;
+  return ::ClearCommError(hPort, &errors, &com_stat)
+    ? (int)com_stat.cbInQue
+    : -1;
+}
+
+#ifndef _WIN32_WCE
+
+int
+SerialPort::WaitDataPending(OverlappedEvent &overlapped,
+                            unsigned timeout_ms) const
+{
+  int nbytes = GetDataPending();
+  if (nbytes != 0)
+    return nbytes;
+
+  ::SetCommMask(hPort, EV_RXCHAR);
+
+  DWORD dwCommModemStatus;
+  if (!::WaitCommEvent(hPort, &dwCommModemStatus, overlapped.GetPointer())) {
+    if (::GetLastError() != ERROR_IO_PENDING)
+      return -1;
+
+    if (overlapped.Wait(timeout_ms) != OverlappedEvent::FINISHED) {
+      /* the operation may still be running, we have to cancel it */
+      ::CancelIo(hPort);
+      return -1;
+    }
+
+    DWORD result;
+    if (!::GetOverlappedResult(hPort, overlapped.GetPointer(), &result, FALSE))
+      return -1;
+  }
+
+  if ((dwCommModemStatus & EV_RXCHAR) == 0)
+    return -1;
+
+  return GetDataPending();
+}
+
+#endif
+
 void
 SerialPort::run()
 {

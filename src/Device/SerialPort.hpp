@@ -30,6 +30,10 @@ Copyright_License {
 
 #include <windef.h>
 
+#ifndef _WIN32_WCE
+class OverlappedEvent;
+#endif
+
 /**
  * Generic SerialPort thread handler class
  */
@@ -81,6 +85,22 @@ protected:
     return ::ClearCommError(hPort, &errors, &com_stat) &&
       com_stat.cbInQue > 0;
   }
+
+  /**
+   * Determine the number of bytes in the driver's receive buffer.
+   *
+   * @return the number of bytes, or -1 on error
+   */
+  int GetDataPending() const;
+
+#ifndef _WIN32_WCE
+  /**
+   * Wait until there is data in the driver's receive buffer.
+   *
+   * @return the number of bytes, or -1 on error
+   */
+  int WaitDataPending(OverlappedEvent &overlapped, unsigned timeout_ms) const;
+#endif
 
 public:
   virtual void Write(const void *data, unsigned length);
