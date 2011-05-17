@@ -135,6 +135,10 @@ static void
 OnNextClicked(gcc_unused WndButton &button)
 {
   configuration_tabbed->NextPage();
+  if ((!is_windows_ce() || is_altair()) &&
+      (config_page)configuration_tabbed->GetCurrentPage() == PAGE_EXPERIMENTAL)
+    configuration_tabbed->NextPage();
+
   PageSwitched();
 }
 
@@ -142,6 +146,10 @@ static void
 OnPrevClicked(gcc_unused WndButton &button)
 {
   configuration_tabbed->PreviousPage();
+  if ((!is_windows_ce() || is_altair()) &&
+      (config_page)configuration_tabbed->GetCurrentPage() == PAGE_EXPERIMENTAL)
+    configuration_tabbed->PreviousPage();
+
   PageSwitched();
 }
 
@@ -161,6 +169,10 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #endif
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
     configuration_tabbed->PreviousPage();
+    if ((!is_windows_ce() || is_altair()) &&
+        (config_page)configuration_tabbed->GetCurrentPage() == PAGE_EXPERIMENTAL)
+      configuration_tabbed->PreviousPage();
+
     PageSwitched();
     return true;
 
@@ -170,6 +182,10 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #endif
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
     configuration_tabbed->NextPage();
+    if ((!is_windows_ce() || is_altair()) &&
+        (config_page)configuration_tabbed->GetCurrentPage() == PAGE_EXPERIMENTAL)
+      configuration_tabbed->NextPage();
+
     PageSwitched();
     return true;
 
