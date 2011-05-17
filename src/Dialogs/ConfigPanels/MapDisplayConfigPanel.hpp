@@ -29,6 +29,7 @@ Copyright_License {
 namespace MapDisplayConfigPanel
 {
   void Init(WndForm *wf);
+  void UpdateVisibilities();
   void OnShiftTypeData(DataField *Sender, DataField::DataAccessKind_t Mode);
   bool Save();
 };

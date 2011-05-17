@@ -34,8 +34,8 @@ Copyright_License {
 
 static WndForm* wf = NULL;
 
-static void
-UpdateVisibilities()
+void
+WayPointDisplayConfigPanel::UpdateVisibilities()
 {
   WndProperty* wp = (WndProperty*)wf->FindByName(_T("prpAppUseSWLandablesRendering"));
   assert(wp != NULL);

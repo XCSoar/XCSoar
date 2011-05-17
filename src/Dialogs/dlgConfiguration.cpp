@@ -129,6 +129,8 @@ OnUserLevel(CheckBoxControl &control)
 {
   Profile::Set(szProfileUserLevel, control.get_checked());
   wf->FilterAdvanced(control.get_checked());
+  MapDisplayConfigPanel::UpdateVisibilities();
+  WayPointDisplayConfigPanel::UpdateVisibilities();
 }
 
 static void

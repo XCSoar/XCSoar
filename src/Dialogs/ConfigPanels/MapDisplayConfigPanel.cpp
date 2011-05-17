@@ -32,8 +32,8 @@ Copyright_License {
 
 static WndForm* wf = NULL;
 
-static void
-UpdateVisibilities()
+void
+MapDisplayConfigPanel::UpdateVisibilities()
 {
   WndProperty* wp_shift = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
   assert(wp_shift != NULL);
