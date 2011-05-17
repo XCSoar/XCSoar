@@ -101,7 +101,7 @@
         <DataField DataType="boolean"/>
       </Edit>
 
-      <Edit Name="prpTrail" Caption="Trail length" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpTrail" Caption="Trail length" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Determines whether and how long a snail trail is drawn behind the glider">
         <DataField DataType="enum" />
       </Edit>
@@ -143,15 +143,15 @@
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpWaypointArrivalHeightDisplay" Caption="Arrival height" X="2" Width="-2" Height="22" CaptionWidth="100">
+      <Edit Name="prpWaypointArrivalHeightDisplay" Expert="1" Caption="Arrival height" X="2" Width="-2" Height="22" CaptionWidth="100">
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpWaypointLabelStyle" Caption="Label style" X="2" Width="-2" Height="22" CaptionWidth="100">
+      <Edit Name="prpWaypointLabelStyle" Caption="Label style" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100">
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpWayPointLabelSelection" Caption="Label visibility" X="2" Width="-2" Height="22" CaptionWidth="100">
+      <Edit Name="prpWayPointLabelSelection" Caption="Label visibility" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100">
         <DataField DataType="enum" />
       </Edit>
 
@@ -160,7 +160,7 @@
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpAppUseSWLandablesRendering" Caption="Detailed landables" X="2" Width="-2" Height="22" CaptionWidth="100"
+      <Edit Name="prpAppUseSWLandablesRendering" Caption="Detailed landables" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="[Off] Display fixed icons for landables.&#10;[On] Show landables with variable information like runway length and heading.">
         <DataField DataType="boolean" />
       </Edit>
@@ -185,12 +185,12 @@
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpTerrainContrast" Caption="Terrain contrast" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpTerrainContrast" Caption="Terrain contrast" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5" />
       </Edit>
     
-      <Edit Name="prpTerrainBrightness" Caption="Terrain brightness" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpTerrainBrightness" Caption="Terrain brightness" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain.">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5" />
       </Edit>
@@ -214,7 +214,7 @@
         <DataField DataType="boolean" />
       </Edit>
       
-      <Edit Name="prpAutoCloseFlarmDialog" Caption="Auto. close FLARM" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAutoCloseFlarmDialog" Caption="Auto. close FLARM" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Setting this to &quot;ON&quot; will automatically close the FLARM dialog if there is no traffic. &quot;Off&quot; will keep the dialog open even without current traffic.">
         <DataField DataType="boolean"/>
       </Edit>
@@ -224,17 +224,17 @@
         <DataField DataType="boolean"/>
       </Edit>
 
-      <Edit Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Whether to show speed command arrows on the vario gauge.  When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpAppGaugeVarioAvgText" Caption="Show average" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAppGaugeVarioAvgText" Caption="Show average" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Whether to show the average climb rate.  In cruise mode, this switches to showing the average netto airmass rate.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpAppGaugeVarioMc" Caption="Show MacReady" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAppGaugeVarioMc" Caption="Show MacReady" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Whether to show the MacCready setting.">
         <DataField DataType="boolean" />
       </Edit>
@@ -370,49 +370,49 @@
         <Label Name="lblPolar" Caption="Polar" X="2" Y="2" Height="16" Width="-60" />
         <Label Name="lblPolarInvalid" Caption="Invalid" X="-50" Y="2" Height="16" CaptionColor="0xFF0000" />
 
-        <Edit Name="prpPolarV1" Caption="Polar V" X="2" Y="18" Width="130" Height="22" CaptionWidth="80">
+        <Edit Name="prpPolarV1" Caption="Polar V" Expert="1" X="2" Y="18" Width="130" Height="22" CaptionWidth="80">
           <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarV2" Caption=" " X="132" Y="18" Width="50" Height="22" CaptionWidth="1">
+        <Edit Name="prpPolarV2" Caption=" " Expert="1" X="132" Y="18" Width="50" Height="22" CaptionWidth="1">
           <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarV3" Caption=" " X="182" Y="18" Width="50" Height="22" CaptionWidth="1">
+        <Edit Name="prpPolarV3" Caption=" " Expert="1" X="182" Y="18" Width="50" Height="22" CaptionWidth="1">
           <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
 
-        <Edit Name="prpPolarW1" Caption="Polar W" X="2" Y="40" Width="130" Height="22" CaptionWidth="80">
+        <Edit Name="prpPolarW1" Caption="Polar W" Expert="1" X="2" Y="40" Width="130" Height="22" CaptionWidth="80">
           <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarW2" Caption=" " X="132" Y="40" Width="50" Height="22" CaptionWidth="1">
+        <Edit Name="prpPolarW2" Caption=" " Expert="1" X="132" Y="40" Width="50" Height="22" CaptionWidth="1">
           <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarW3" Caption=" " X="182" Y="40" Width="50" Height="22" CaptionWidth="1">
+        <Edit Name="prpPolarW3" Caption=" " Expert="1" X="182" Y="40" Width="50" Height="22" CaptionWidth="1">
           <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
 
-        <Edit Name="prpPolarMassDry" Caption="Dry mass; max. ballast" Y="62" Width="182" Height="22" CaptionWidth="133">
+        <Edit Name="prpPolarMassDry" Caption="Dry mass; max. ballast" Expert="1" Y="62" Width="182" Height="22" CaptionWidth="133">
           <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarMaxBallast" Caption="Max. ballast" X="182" Y="62" Width="50" Height="22" CaptionWidth="1">
+        <Edit Name="prpPolarMaxBallast" Caption="Max. ballast" Expert="1" X="182" Y="62" Width="50" Height="22" CaptionWidth="1">
           <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" Min="0" Max="500" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
 
-        <Edit Name="prpPolarWingArea" Caption="Wing area" Y="84" Width="232" Height="22" CaptionWidth="133">
+        <Edit Name="prpPolarWingArea" Caption="Wing area" Expert="1" Y="84" Width="232" Height="22" CaptionWidth="133">
           <DataField DataType="double" DisplayFormat="%.1f m^2" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
       </Panel>
 
-      <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5"/>
       </Edit>
 
-      <Edit Name="prpHandicap" Caption="Handicap" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpHandicap" Caption="Handicap" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The handicap factor used for On-Line Contest scoring.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="50" Max="150" Step="1"/>
       </Edit>
 
-      <Edit Name="prpBallastSecsToEmpty" Caption="Dump time" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpBallastSecsToEmpty" Caption="Dump time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The time in seconds to dump full ballast.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="300" Step="5"/>
       </Edit>
@@ -462,32 +462,32 @@
     </Panel>
 
     <Panel Name="frmTaskRules">
-      <Edit Name="prpStartMaxSpeed" Caption="Start max. speed" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpStartMaxSpeed" Caption="Start max. speed" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5" />
       </Edit>
     
-      <Edit Name="prpStartMaxSpeedMargin" Caption="Start max. speed margin" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpStartMaxSpeedMargin" Caption="Start max. speed margin" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5" />
       </Edit>
     
-      <Edit Name="prpStartMaxHeight" Caption="Start max. height" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpStartMaxHeight" Caption="Start max. height" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
          Help="Maximum height above ground while starting the task.  Set to 0 for no limit.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="50" />
       </Edit>
     
-      <Edit Name="prpStartMaxHeightMargin" Caption="Start max. height margin" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpStartMaxHeightMargin" Caption="Start max. height margin" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
          Help="Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="50" />
       </Edit>
     
-      <Edit Name="prpStartHeightRef" Caption="Start height ref." X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpStartHeightRef" Caption="Start height ref." Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Reference used for start max height rule&#10;[MSL] Reference is altitude above mean sea level&#10;[AGL] Reference is the height above the start point">
         <DataField DataType="enum" />
       </Edit>
   
-      <Edit Name="prpFinishMinHeight" Caption="Finish min. height" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpFinishMinHeight" Caption="Finish min. height" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Minimum height above ground while finishing the task.  Set to 0 for no limit.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="50" />
       </Edit>
@@ -597,7 +597,7 @@
         <Button Name="cmdSetupDeviceB" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="DevicesConfigPanel::OnSetupDeviceBClicked" />
       </Panel>
   
-      <Edit Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="option, if enabled sets the clock of the computer to the GPS time once a fix is set.  This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
         <DataField DataType="boolean" />
       </Edit>
@@ -627,9 +627,9 @@
     
       <Button Name="cmdCompetitionId" Caption="" X="2" Width="-2" Height="22"/>
     
-      <Button Name="cmdLoggerID" Caption="" X="2" Width="-2" Height="22"/>
+      <Button Name="cmdLoggerID" Caption="" Expert="1" X="2" Width="-2" Height="22"/>
     
-      <Edit Name="prpLoggerShortName" Caption="Short file name" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpLoggerShortName" Caption="Short file name" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This determines whether the logger uses the short IGC file name or the long IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).">
         <DataField DataType="boolean" />
       </Edit>
@@ -699,7 +699,7 @@
         <DataField DataType="filereader" />
       </Edit>
     
-      <Edit Name="prpLanguageFile" Caption="Language" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpLanguageFile" Caption="Language" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The language file defines translations for XCSoar text in English to other languages.  If this field is left blank, then XCSoar uses English.">
         <DataField DataType="enum"/>
       </Edit>
@@ -782,23 +782,23 @@
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout3" Caption="Page 4" X="2" Width="-2" Height="22" CaptionWidth="50"
+      <Edit Name="prpPageLayout3" Caption="Page 4" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout4" Caption="Page 5" X="2" Width="-2" Height="22" CaptionWidth="50"
+      <Edit Name="prpPageLayout4" Caption="Page 5" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout5" Caption="Page 6" X="2" Width="-2" Height="22" CaptionWidth="50"
+      <Edit Name="prpPageLayout5" Caption="Page 6" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout6" Caption="Page 7" X="2" Width="-2" Height="22" CaptionWidth="50"
+      <Edit Name="prpPageLayout6" Caption="Page 7" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
-      <Edit Name="prpPageLayout7" Caption="Page 8" X="2" Width="-2" Height="22" CaptionWidth="50"
+      <Edit Name="prpPageLayout7" Caption="Page 8" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="50"
          Help="Determines the information displayed on different screen pages.">
         <DataField DataType="enum" />
       </Edit>
