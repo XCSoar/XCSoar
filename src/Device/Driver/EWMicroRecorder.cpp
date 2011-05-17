@@ -132,7 +132,7 @@ EWMicroRecorderDevice::TryConnect()
     while ((i = port->GetChar()) != EOF && !clock.check(8000)) {
       char ch = (char)i;
 
-      if (!started && ch == _T('-'))
+      if (!started && ch == '-')
         started = true;
 
       if (started) {
