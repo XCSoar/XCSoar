@@ -242,9 +242,11 @@ SerialPort::run()
 
       case OverlappedEvent::TIMEOUT:
         // WaitCommEvent() has not yet finished
+        ::CancelIo(hPort);
         continue;
 
       default:
+        ::CancelIo(hPort);
         return;
       }
     }
@@ -289,9 +291,11 @@ SerialPort::run()
 
       case OverlappedEvent::TIMEOUT:
         // ReadFile() has not yet finished
+        ::CancelIo(hPort);
         continue;
 
       default:
+        ::CancelIo(hPort);
         return;
       }
     }
