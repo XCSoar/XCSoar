@@ -399,8 +399,12 @@ SerialPort::Close()
 void
 SerialPort::Write(const void *data, unsigned length)
 {
+  DWORD NumberOfBytesWritten;
+
   if (hPort == INVALID_HANDLE_VALUE)
     return;
+
+#ifdef _WIN32_WCE
 
   if (is_embedded())
     /* this is needed to work around a driver bug on the HP31x -
@@ -409,9 +413,38 @@ SerialPort::Write(const void *data, unsigned length)
        switch */
     Sleep(100);
 
-  DWORD NumberOfBytesWritten;
   // lpNumberOfBytesWritten : This parameter can be NULL only when the lpOverlapped parameter is not NULL.
   ::WriteFile(hPort, data, length, &NumberOfBytesWritten, NULL);
+
+#else
+
+  OverlappedEvent osWriter;
+
+  // Start reading data
+  if (::WriteFile(hPort, data, length, &NumberOfBytesWritten, osWriter.GetPointer()))
+    return;
+
+  if (::GetLastError() != ERROR_IO_PENDING)
+    return;
+
+  // Let's wait for ReadFile() to finish
+  while (true) {
+    // Wait for max. 500ms an event to occur
+    switch (osWriter.Wait(500)) {
+    case OverlappedEvent::FINISHED:
+      // Get results
+      ::GetOverlappedResult(hPort, osWriter.GetPointer(), &NumberOfBytesWritten, FALSE);
+       return;
+
+    case OverlappedEvent::TIMEOUT:
+      // ReadFile() has not yet finished
+      continue;
+
+    default:
+      return;
+    }
+  }
+#endif
 }
 
 bool
@@ -545,10 +578,47 @@ SerialPort::Read(void *Buffer, size_t Size)
   if (hPort == INVALID_HANDLE_VALUE)
     return -1;
 
+#ifdef _WIN32_WCE
+
   if (ReadFile(hPort, Buffer, Size, &dwBytesTransferred, (OVERLAPPED *)NULL))
     return dwBytesTransferred;
 
   return -1;
+
+#else
+  OverlappedEvent osReader;
+
+  // Start reading data
+  if (!::ReadFile(hPort, Buffer, Size, &dwBytesTransferred, osReader.GetPointer())) {
+    if (::GetLastError() != ERROR_IO_PENDING)
+      return -1;
+  } else {
+    // Process data that was directly read by ReadFile()
+    return dwBytesTransferred;
+  }
+
+  // Let's wait for ReadFile() to finish
+  while (true) {
+    // Wait for max. 500ms an event to occur
+    switch (osReader.Wait(500)) {
+    case OverlappedEvent::FINISHED:
+      // Get results
+      if (!::GetOverlappedResult(hPort, osReader.GetPointer(), &dwBytesTransferred, FALSE))
+        // Error occured while fetching results
+        return -1;
+
+      // Process data that was read with a delay by ReadFile()
+      return dwBytesTransferred;
+
+    case OverlappedEvent::TIMEOUT:
+      // ReadFile() has not yet finished
+      continue;
+
+    default:
+      return -1;
+    }
+  }
+#endif
 }
 
 void
