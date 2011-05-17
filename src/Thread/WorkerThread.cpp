@@ -26,9 +26,8 @@ Copyright_License {
 #include "PeriodClock.hpp"
 
 WorkerThread::WorkerThread(unsigned _period_min, unsigned _idle_min)
-  :event_trigger(false), running(true),
+  :event_trigger(false),
    period_min(_period_min), idle_min(_idle_min) {
-  running.Signal();
 }
 
 void
@@ -40,11 +39,8 @@ WorkerThread::Run()
     /* wait for work */
     event_trigger.Wait();
 
-    /* paused? */
-    running.Wait();
-
     /* got the "stop" trigger? */
-    if (CheckStopped())
+    if (CheckStoppedOrSuspended())
       break;
 
     /* do the actual work */
