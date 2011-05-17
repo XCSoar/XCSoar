@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DRAW_THREAD_HPP
 #define XCSOAR_DRAW_THREAD_HPP
 
-#include "Thread/StoppableThread.hpp"
+#include "Thread/SuspensibleThread.hpp"
 #include "Thread/Trigger.hpp"
 
 class GlueMapWindow;
@@ -39,15 +39,10 @@ class GaugeThermalAssistant;
  * why it is not handled by this thread.
  * 
  */
-class DrawThread : public StoppableThread {
+class DrawThread : public SuspensibleThread {
   enum {
     MIN_WAIT_TIME = 100,
   };
-
-  /**
-   * The drawing thread runs while this trigger is set.
-   */
-  Trigger running;
 
   /**
    * This triggers a redraw.
@@ -66,18 +61,20 @@ class DrawThread : public StoppableThread {
 public:
   DrawThread(GlueMapWindow &_map, GaugeFLARM *_flarm,
              GaugeThermalAssistant *_ta)
-    :running(true), trigger(true),
+    :trigger(true),
      map(_map), flarm(_flarm), ta(_ta) {
+    BeginSuspend();
   }
 
   /** Locks the Mutex and "pauses" the drawing thread */
-  void Suspend() {
-    running.Reset();
+  void BeginSuspend() {
+    SuspensibleThread::BeginSuspend();
+    TriggerRedraw();
   }
 
-  /** Releases the Mutex and "continues" the drawing thread */
-  void Resume() {
-    running.Signal();
+  void Suspend() {
+    BeginSuspend();
+    WaitUntilSuspended();
   }
 
   /**
@@ -99,9 +96,8 @@ public:
    * synchronously for the thread to exit.
    */
   void BeginStop() {
-    StoppableThread::BeginStop();
+    SuspensibleThread::BeginStop();
     TriggerRedraw();
-    Resume();
   }
 
 protected:

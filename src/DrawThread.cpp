@@ -43,7 +43,8 @@ DrawThread::Run()
   // to be run in the map.
 
   // wait until the startup is finished
-  running.Wait();
+  if (CheckStoppedOrSuspended())
+    return;
 
   // Get data from the DeviceBlackboard
   map.ExchangeBlackboard();
@@ -56,11 +57,8 @@ DrawThread::Run()
       trigger.Wait();
 
     if (!bounds_dirty || trigger.Wait(MIN_WAIT_TIME)) {
-      // take control (or wait for the resume())
-      running.Wait();
-
       /* got the "stop" trigger? */
-      if (CheckStopped())
+      if (CheckStoppedOrSuspended())
         break;
 
       trigger.Reset();
@@ -80,11 +78,8 @@ DrawThread::Run()
 
       bounds_dirty = map.Idle();
     } else if (bounds_dirty) {
-      // take control (or wait for the resume())
-      running.Wait();
-
       /* got the "stop" trigger? */
-      if (CheckStopped())
+      if (CheckStoppedOrSuspended())
         break;
 
       bounds_dirty = map.Idle();
