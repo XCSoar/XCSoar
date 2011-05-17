@@ -61,6 +61,9 @@ SerialPort::SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler
   :Port(_handler), baud_rate(_baud_rate),
    hPort(INVALID_HANDLE_VALUE),
    buffer(NMEA_BUF_SIZE)
+#ifndef _WIN32_WCE
+   , rx_timeout(0)
+#endif
 {
   assert(path != NULL);
 
@@ -488,7 +491,22 @@ SerialPort::SetRxTimeout(int Timeout)
     return false;
   }
 
+#ifndef _WIN32_WCE
+  rx_timeout = Timeout;
+#endif
+
   return true;
+}
+
+unsigned
+SerialPort::GetRxTimeout()
+{
+#ifdef _WIN32_WCE
+  COMMTIMEOUTS CommTimeouts;
+  return (::GetCommTimeouts(hPort, &CommTimeouts) ? CommTimeouts.ReadTotalTimeoutConstant : 0);
+#else
+  return rx_timeout;
+#endif
 }
 
 unsigned long

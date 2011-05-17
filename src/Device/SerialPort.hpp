@@ -53,6 +53,8 @@ class SerialPort : public Port, protected StoppableThread
   bool is_widcomm;
 #else
   static const bool is_widcomm = false;
+
+  unsigned rx_timeout;
 #endif
 
 public:
@@ -95,6 +97,7 @@ public:
    */
   bool Close();
 
+  unsigned GetRxTimeout();
   virtual bool SetRxTimeout(int Timeout);
   virtual unsigned long SetBaudrate(unsigned long BaudRate);
   virtual bool StopRxThread();
