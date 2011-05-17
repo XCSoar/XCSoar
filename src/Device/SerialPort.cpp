@@ -447,6 +447,7 @@ SerialPort::Write(const void *data, unsigned length)
      return;
 
   default:
+    ::CancelIo(hPort);
     return;
   }
 #endif
