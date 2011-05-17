@@ -56,7 +56,7 @@ CalculationThread::SetScreenDistanceMeters(fixed new_value)
  * Main loop of the CalculationThread
  */
 void
-CalculationThread::tick()
+CalculationThread::Tick()
 {
   bool gps_updated;
   bool vario_updated;

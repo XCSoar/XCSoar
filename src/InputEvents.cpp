@@ -377,7 +377,7 @@ InputEvents::setMode(const TCHAR *mode)
 void
 InputEvents::drawButtons(mode Mode)
 {
-  if (!globalRunningEvent.test())
+  if (!globalRunningEvent.Test())
     return;
 
   const Menu &menu = input_config.menus[Mode];
@@ -402,7 +402,7 @@ InputEvents::getModeID()
 bool
 InputEvents::processButton(unsigned bindex)
 {
-  if (!globalRunningEvent.test())
+  if (!globalRunningEvent.Test())
     return false;
 
   if (bindex >= Menu::MAX_ITEMS)
@@ -450,7 +450,7 @@ InputEvents::key_to_event(mode mode, unsigned key_code)
 bool
 InputEvents::processKey(unsigned dWord)
 {
-  if (!globalRunningEvent.test())
+  if (!globalRunningEvent.Test())
     return false;
 
   // get current mode
@@ -533,7 +533,7 @@ InputEvents::processNmea(unsigned ne_id)
 bool
 InputEvents::processNmea_real(unsigned ne_id)
 {
-  if (!globalRunningEvent.test())
+  if (!globalRunningEvent.Test())
     return false;
 
   int event_id = 0;
@@ -612,7 +612,7 @@ InputEvents::processGlideComputer(unsigned gce_id)
 bool
 InputEvents::processGlideComputer_real(unsigned gce_id)
 {
-  if (!globalRunningEvent.test())
+  if (!globalRunningEvent.Test())
     return false;
   int event_id = 0;
 
@@ -644,7 +644,7 @@ InputEvents::processGlideComputer_real(unsigned gce_id)
 void
 InputEvents::processGo(unsigned eventid)
 {
-  if (!globalRunningEvent.test())
+  if (!globalRunningEvent.Test())
     return;
 
   // TODO feature: event/macro recorder
@@ -723,7 +723,7 @@ InputEvents::ProcessMenuTimer()
 void
 InputEvents::ProcessTimer()
 {
-  if (globalRunningEvent.test()) {
+  if (globalRunningEvent.Test()) {
     DoQueuedEvents();
   }
   ProcessMenuTimer();

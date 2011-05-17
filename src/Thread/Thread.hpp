@@ -38,7 +38,7 @@ Copyright_License {
 class Thread : private NonCopyable {
 #ifdef HAVE_POSIX
   pthread_t handle;
-  bool m_defined;
+  bool defined;
 #else
   HANDLE handle;
   DWORD id;
@@ -46,15 +46,15 @@ class Thread : private NonCopyable {
 
 public:
 #ifdef HAVE_POSIX
-  Thread():m_defined(false) {}
+  Thread():defined(false) {}
 #else
   Thread():handle(NULL) {}
 #endif
   virtual ~Thread();
 
-  bool defined() const {
+  bool IsDefined() const {
 #ifdef HAVE_POSIX
-    return m_defined;
+    return defined;
 #else
     return handle != NULL;
 #endif
@@ -63,32 +63,32 @@ public:
   /**
    * Check if this thread is the current thread.
    */
-  bool inside() const {
+  bool IsInside() const {
 #ifdef HAVE_POSIX
-    return defined() && pthread_equal(pthread_self(), handle);
+    return IsDefined() && pthread_equal(pthread_self(), handle);
 #else
     return GetCurrentThreadId() == id;
 #endif
   }
 
-  void set_low_priority() {
+  void SetLowPriority() {
 #ifndef HAVE_POSIX
     ::SetThreadPriority(handle, THREAD_PRIORITY_BELOW_NORMAL);
 #endif
   }
 
-  bool start();
-  void join();
-  bool join(unsigned timeout_ms);
+  bool Start();
+  void Join();
+  bool Join(unsigned timeout_ms);
 
 protected:
-  virtual void run() = 0;
+  virtual void Run() = 0;
 
 private:
 #ifdef HAVE_POSIX
-  static void *thread_proc(void *lpParameter);
+  static void *ThreadProc(void *lpParameter);
 #else
-  static DWORD WINAPI thread_proc(LPVOID lpParameter);
+  static DWORD WINAPI ThreadProc(LPVOID lpParameter);
 #endif
 };
 

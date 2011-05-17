@@ -56,7 +56,7 @@ TopWindow::on_pause()
   paused_mutex.Lock();
   paused = true;
   resumed = false;
-  paused_cond.signal();
+  paused_cond.Signal();
   paused_mutex.Unlock();
 }
 
@@ -89,7 +89,7 @@ TopWindow::pause()
 
   paused_mutex.Lock();
   while (!paused)
-    paused_cond.wait(paused_mutex);
+    paused_cond.Wait(paused_mutex);
   paused_mutex.Unlock();
 }
 

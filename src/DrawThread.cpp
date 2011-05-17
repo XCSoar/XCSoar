@@ -34,16 +34,16 @@ Copyright_License {
  * Main loop of the DrawThread
  */
 void
-DrawThread::run()
+DrawThread::Run()
 {
-  set_low_priority();
+  SetLowPriority();
 
   // bounds_dirty maintains the status of whether the map
   // bounds have changed and there are pending idle calls
   // to be run in the map.
 
   // wait until the startup is finished
-  running.wait();
+  running.Wait();
 
   // Get data from the DeviceBlackboard
   map.ExchangeBlackboard();
@@ -53,17 +53,17 @@ DrawThread::run()
   // circle until application is closed
   while (true) {
     if (!bounds_dirty)
-      trigger.wait();
+      trigger.Wait();
 
-    if (!bounds_dirty || trigger.wait(MIN_WAIT_TIME)) {
+    if (!bounds_dirty || trigger.Wait(MIN_WAIT_TIME)) {
       // take control (or wait for the resume())
-      running.wait();
+      running.Wait();
 
       /* got the "stop" trigger? */
-      if (is_stopped())
+      if (CheckStopped())
         break;
 
-      trigger.reset();
+      trigger.Reset();
 
       // Get data from the DeviceBlackboard
       map.ExchangeBlackboard();
@@ -71,7 +71,7 @@ DrawThread::run()
       // Draw the moving map
       map.repaint();
 
-      if (trigger.test()) {
+      if (trigger.Test()) {
         // interrupt re-calculation of bounds if there was a 
         // request made.  Since we will re-enter, we know the remainder
         // of this code will be called anyway.
@@ -81,10 +81,10 @@ DrawThread::run()
       bounds_dirty = map.Idle();
     } else if (bounds_dirty) {
       // take control (or wait for the resume())
-      running.wait();
+      running.Wait();
 
       /* got the "stop" trigger? */
-      if (is_stopped())
+      if (CheckStopped())
         break;
 
       bounds_dirty = map.Idle();

@@ -49,11 +49,11 @@ public:
     ::pthread_key_delete(key);
   }
 
-  void *get() const {
+  void *Get() const {
     return ::pthread_getspecific(key);
   }
 
-  void set(void *value) {
+  void Set(void *value) {
     ::pthread_setspecific(key, value);
   }
 #else /* !HAVE_POSIX */
@@ -66,21 +66,21 @@ public:
     ::TlsFree(tls_index);
   }
 
-  void *get() const {
+  void *Get() const {
     return ::TlsGetValue(tls_index);
   }
 
-  void set(void *value) {
+  void Set(void *value) {
     ::TlsSetValue(tls_index, value);
   }
 #endif /* !HAVE_POSIX */
 
   operator void*() const {
-    return get();
+    return Get();
   }
 
   void *operator =(void *value) {
-    set(value);
+    Set(value);
     return value;
   }
 };
@@ -91,20 +91,20 @@ public:
 template<class T>
 class ThreadLocalObject : private ThreadLocal {
 public:
-  const T get() const {
-    return (T)(long)ThreadLocal::get();
+  const T Get() const {
+    return (T)(long)ThreadLocal::Get();
   }
 
-  void set(const T value) {
-    ThreadLocal::set((void *)(long)value);
+  void Set(const T value) {
+    ThreadLocal::Set((void *)(long)value);
   }
 
   operator T() const {
-    return get();
+    return Get();
   }
 
   const T operator =(const T value) {
-    set(value);
+    Set(value);
     return value;
   }
 };
@@ -115,14 +115,14 @@ public:
 class ThreadLocalInteger : public ThreadLocalObject<int> {
 public:
   int operator ++() {
-    int value = get();
-    set(++value);
+    int value = Get();
+    Set(++value);
     return value;
   }
 
   int operator --() {
-    int value = get();
-    set(--value);
+    int value = Get();
+    Set(--value);
     return value;
   }
 };

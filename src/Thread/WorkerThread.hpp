@@ -31,7 +31,7 @@ Copyright_License {
  * A thread which performs regular work in background.
  */
 class WorkerThread : public StoppableThread {
-  Trigger event_trigger, running;
+  ::Trigger event_trigger, running;
 
   unsigned period_min, idle_min;
 
@@ -49,41 +49,41 @@ public:
   /**
    * Wakes up the thread to do work, calls tick().
    */
-  void trigger() {
-    event_trigger.trigger();
+  void Trigger() {
+    event_trigger.Signal();
   }
 
   /**
    * Suspend execution until resume() is called.
    */
-  void suspend() {
-    running.reset();
+  void Suspend() {
+    running.Reset();
   }
 
   /**
    * Resume execution after suspend().
    */
-  void resume() {
-    running.trigger();
+  void Resume() {
+    running.Signal();
   }
 
   /**
    * Triggers thread shutdown.  Call join() after this to wait
    * synchronously for the thread to exit.
    */
-  void stop() {
-    StoppableThread::stop();
-    trigger();
-    resume();
+  void BeginStop() {
+    StoppableThread::BeginStop();
+    Trigger();
+    Resume();
   }
 
 protected:
-  virtual void run();
+  virtual void Run();
 
   /**
    * Implement this to do the actual work.
    */
-  virtual void tick() = 0;
+  virtual void Tick() = 0;
 };
 
 #endif

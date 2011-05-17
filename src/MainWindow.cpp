@@ -311,7 +311,7 @@ MainWindow::on_timer(timer_t id)
   if (id != timer_id)
     return SingleWindow::on_timer(id);
 
-  if (globalRunningEvent.test()) {
+  if (globalRunningEvent.Test()) {
     battery_timer.Process();
 
     ProcessTimer::Process();

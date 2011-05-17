@@ -32,7 +32,7 @@ EventQueue::push(const Event &event)
     return;
 
   events.push(event);
-  cond.signal();
+  cond.Signal();
 }
 
 bool
@@ -59,7 +59,7 @@ EventQueue::wait(Event &event)
     return false;
 
   while (events.empty())
-    cond.wait(mutex);
+    cond.Wait(mutex);
 
   event = events.front();
   events.pop();

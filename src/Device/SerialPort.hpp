@@ -130,7 +130,7 @@ protected:
   /**
    * Entry point for the receive thread
    */
-  virtual void run();
+  virtual void Run();
 };
 
 #endif

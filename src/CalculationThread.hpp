@@ -55,21 +55,16 @@ public:
   void SetSettingsComputer(const SETTINGS_COMPUTER &new_value);
   void SetScreenDistanceMeters(fixed new_value);
 
-  bool start() {
-    if (!WorkerThread::start())
+  bool Start() {
+    if (!WorkerThread::Start())
       return false;
 
-    set_low_priority();
+    SetLowPriority();
     return true;
   }
 
-  /** Triggers the data_trigger */
-  void trigger_data() {
-    trigger();
-  }
-
 protected:
-  virtual void tick();
+  virtual void Tick();
 };
 
 #endif

@@ -70,7 +70,7 @@ static void
 SettingsEnter()
 {
 #ifndef ENABLE_OPENGL
-  draw_thread->suspend();
+  draw_thread->Suspend();
 #endif
 
   // This prevents the map and calculation threads from doing anything
@@ -93,7 +93,7 @@ SettingsEnter()
 static void
 SettingsLeave()
 {
-  if (!globalRunningEvent.test())
+  if (!globalRunningEvent.Test())
     return;
 
   XCSoarInterface::main_window.map.set_focus();
@@ -168,7 +168,7 @@ SettingsLeave()
     ProgressGlue::Close();
     XCSoarInterface::main_window.map.set_focus();
 #ifndef ENABLE_OPENGL
-    draw_thread->trigger_redraw();
+    draw_thread->TriggerRedraw();
 #endif
   }
 

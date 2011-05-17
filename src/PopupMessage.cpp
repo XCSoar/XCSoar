@@ -181,7 +181,8 @@ void PopupMessage::Resize() {
 }
 
 bool PopupMessage::Render() {
-  if (!globalRunningEvent.test()) return false;
+  if (!globalRunningEvent.Test())
+    return false;
 
   mutex.Lock();
   if (parent.has_dialog()) {

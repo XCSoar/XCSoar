@@ -61,7 +61,7 @@ AndroidBluetoothPort::Flush(void)
 }
 
 void
-AndroidBluetoothPort::run()
+AndroidBluetoothPort::Run()
 {
   assert(helper != NULL);
 
@@ -69,7 +69,7 @@ AndroidBluetoothPort::run()
 
   JNIEnv *const env = Java::GetEnv();
 
-  while (!is_stopped()) {
+  while (!CheckStopped()) {
     int ch = helper->read(env);
     if (ch >= 0)
       ProcessChar(ch);
@@ -107,18 +107,18 @@ bool
 AndroidBluetoothPort::StopRxThread()
 {
   // Make sure the thread isn't terminating itself
-  assert(!Thread::inside());
+  assert(!Thread::IsInside());
 
   if (helper == NULL)
     return false;
 
   // If the thread is not running, cancel the rest of the function
-  if (!Thread::defined())
+  if (!Thread::IsDefined())
     return true;
 
-  stop();
+  BeginStop();
 
-  Thread::join();
+  Thread::Join();
 
   return true;
 }
@@ -127,14 +127,14 @@ bool
 AndroidBluetoothPort::StartRxThread(void)
 {
   // Make sure the thread isn't starting itself
-  assert(!Thread::inside());
+  assert(!Thread::IsInside());
 
   // Make sure the port was opened correctly
   if (helper == NULL)
     return false;
 
   // Start the receive thread
-  StoppableThread::start();
+  StoppableThread::Start();
   return true;
 }
 

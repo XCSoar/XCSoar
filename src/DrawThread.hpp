@@ -71,41 +71,41 @@ public:
   }
 
   /** Locks the Mutex and "pauses" the drawing thread */
-  void suspend() {
-    running.reset();
+  void Suspend() {
+    running.Reset();
   }
 
   /** Releases the Mutex and "continues" the drawing thread */
-  void resume() {
-    running.trigger();
+  void Resume() {
+    running.Signal();
   }
 
   /**
    * To be removed, only used by GlueMapWindow::Idle().
    */
-  bool is_triggered() {
-    return trigger.test();
+  bool IsTriggered() {
+    return trigger.Test();
   }
 
   /**
    * Triggers a redraw.
    */
-  void trigger_redraw() {
-    trigger.trigger();
+  void TriggerRedraw() {
+    trigger.Signal();
   }
 
   /**
    * Triggers thread shutdown.  Call join() after this to wait
    * synchronously for the thread to exit.
    */
-  void stop() {
-    StoppableThread::stop();
-    trigger_redraw();
-    resume();
+  void BeginStop() {
+    StoppableThread::BeginStop();
+    TriggerRedraw();
+    Resume();
   }
 
 protected:
-  virtual void run();
+  virtual void Run();
 };
 
 #endif

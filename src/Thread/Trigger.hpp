@@ -88,7 +88,7 @@ public:
    * @return true if this object was triggered, false if the timeout
    * has expired
    */
-  bool wait(unsigned timeout_ms) {
+  bool Wait(unsigned timeout_ms) {
 #ifdef HAVE_POSIX
     bool ret;
 
@@ -119,7 +119,7 @@ public:
    * Checks if this object is triggered.
    * @return true if this object was triggered, false if not
    */
-  bool test(void) {
+  bool Test(void) {
 #ifdef HAVE_POSIX
     bool ret;
 
@@ -140,7 +140,7 @@ public:
    * If this object is already triggered, this method returns
    * immediately.
    */
-  void wait() {
+  void Wait() {
 #ifdef HAVE_POSIX
     pthread_mutex_lock(&mutex);
 
@@ -152,7 +152,7 @@ public:
 
     pthread_mutex_unlock(&mutex);
 #else
-    wait(INFINITE);
+    Wait(INFINITE);
 #endif
   }
 
@@ -160,7 +160,7 @@ public:
    * Wakes up the thread waiting for the trigger.  The state of the
    * trigger is reset only if a thread was really woken up.
    */
-  void trigger() {
+  void Signal() {
 #ifdef HAVE_POSIX
     pthread_mutex_lock(&mutex);
 
@@ -185,7 +185,7 @@ public:
    * Wakes up the thread waiting for the trigger, and immediately
    * resets the state of the trigger.
    */
-  void pulse() {
+  void Pulse() {
 #ifdef HAVE_POSIX
     pthread_cond_broadcast(&cond);
 #else
@@ -196,7 +196,7 @@ public:
   /**
    * Resets the trigger
    */
-  void reset() {
+  void Reset() {
 #ifdef HAVE_POSIX
     pthread_mutex_lock(&mutex);
     value = false;

@@ -48,7 +48,7 @@ void TriggerGPSUpdate()
   if (calculation_thread == NULL)
     return;
 
-  calculation_thread->trigger_data();
+  calculation_thread->Trigger();
 }
 
 void TriggerVarioUpdate()
@@ -80,16 +80,16 @@ void
 SuspendAllThreads()
 {
 #ifndef ENABLE_OPENGL
-  draw_thread->suspend();
+  draw_thread->Suspend();
 #endif
-  calculation_thread->suspend();
+  calculation_thread->Suspend();
 }
 
 void
 ResumeAllThreads()
 {
-  calculation_thread->resume();
+  calculation_thread->Resume();
 #ifndef ENABLE_OPENGL
-  draw_thread->resume();
+  draw_thread->Resume();
 #endif
 }

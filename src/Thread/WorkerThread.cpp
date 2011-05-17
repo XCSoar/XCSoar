@@ -28,30 +28,30 @@ Copyright_License {
 WorkerThread::WorkerThread(unsigned _period_min, unsigned _idle_min)
   :event_trigger(false), running(true),
    period_min(_period_min), idle_min(_idle_min) {
-  running.trigger();
+  running.Signal();
 }
 
 void
-WorkerThread::run()
+WorkerThread::Run()
 {
   PeriodClock clock;
 
   while (true) {
     /* wait for work */
-    event_trigger.wait();
+    event_trigger.Wait();
 
     /* paused? */
-    running.wait();
+    running.Wait();
 
     /* got the "stop" trigger? */
-    if (is_stopped())
+    if (CheckStopped())
       break;
 
     /* do the actual work */
     if (period_min > 0)
       clock.update();
 
-    tick();
+    Tick();
 
     unsigned idle = idle_min;
     if (period_min > 0) {
@@ -60,7 +60,7 @@ WorkerThread::run()
         idle = period_min - elapsed;
     }
 
-    if (idle > 0 && wait_stopped(idle))
+    if (idle > 0 && WaitForStopped(idle))
       break;
   }
 }

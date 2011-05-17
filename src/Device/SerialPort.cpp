@@ -223,7 +223,7 @@ SerialPort::WaitDataPending(OverlappedEvent &overlapped,
 #endif
 
 void
-SerialPort::run()
+SerialPort::Run()
 {
   DWORD dwBytesTransferred;
   BYTE inbuf[1024];
@@ -244,7 +244,7 @@ SerialPort::run()
   else
     ::SetCommMask(hPort, EV_RXCHAR);
 
-  while (!is_stopped()) {
+  while (!CheckStopped()) {
 
 #ifndef _WIN32_WCE
 
@@ -390,17 +390,17 @@ bool
 SerialPort::StopRxThread()
 {
   // Make sure the thread isn't terminating itself
-  assert(!Thread::inside());
+  assert(!Thread::IsInside());
 
   // Make sure the port is still open
   if (hPort == INVALID_HANDLE_VALUE)
     return false;
 
   // If the thread is not running, cancel the rest of the function
-  if (!Thread::defined())
+  if (!Thread::IsDefined())
     return true;
 
-  stop();
+  BeginStop();
 
   Flush();
 
@@ -408,7 +408,7 @@ SerialPort::StopRxThread()
   if (!is_widcomm)
     ::SetCommMask(hPort, 0);
 
-  if (!Thread::join(2000)) {
+  if (!Thread::Join(2000)) {
     /* On Dell Axim x51v, the Bluetooth RFCOMM driver seems to be
        bugged: when the peer gets disconnected (e.g. switched off),
        the function WaitCommEvent() does not get cancelled by
@@ -418,7 +418,7 @@ SerialPort::StopRxThread()
     ::CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
 
-    Thread::join();
+    Thread::Join();
   }
 
   return true;
@@ -428,14 +428,14 @@ bool
 SerialPort::StartRxThread(void)
 {
   // Make sure the thread isn't starting itself
-  assert(!Thread::inside());
+  assert(!Thread::IsInside());
 
   // Make sure the port was opened correctly
   if (hPort == INVALID_HANDLE_VALUE)
     return false;
 
   // Start the receive thread
-  StoppableThread::start();
+  StoppableThread::Start();
   return true;
 }
 

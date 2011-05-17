@@ -422,7 +422,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   LogStartUp(_T("CreateDrawingThread"));
   draw_thread = new DrawThread(main_window.map, main_window.flarm,
                                main_window.ta);
-  draw_thread->start();
+  draw_thread->Start();
 #endif
 
   // Show the infoboxes
@@ -444,14 +444,14 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   Pages::LoadFromProfile();
 
   // Start calculation thread
-  calculation_thread->start();
+  calculation_thread->Start();
 
-  globalRunningEvent.trigger();
+  globalRunningEvent.Signal();
 
   AfterStartup();
 
 #ifndef ENABLE_OPENGL
-  draw_thread->resume();
+  draw_thread->Resume();
 #endif
 
   return true;
@@ -470,7 +470,7 @@ XCSoarInterface::Shutdown(void)
   StartupLogFreeRamAndStorage();
 
   // Turn off all displays
-  globalRunningEvent.reset();
+  globalRunningEvent.Reset();
 
   // Stop logger and save igc file
   ProgressGlue::Create(_("Shutdown, saving logs..."));
@@ -494,13 +494,13 @@ XCSoarInterface::Shutdown(void)
   // Stop threads
   LogStartUp(_T("Stop threads"));
 #ifndef ENABLE_OPENGL
-  draw_thread->stop();
+  draw_thread->BeginStop();
 #endif
-  calculation_thread->stop();
+  calculation_thread->BeginStop();
 
   // Wait for the calculations thread to finish
   LogStartUp(_T("Waiting for calculation thread"));
-  calculation_thread->join();
+  calculation_thread->Join();
   delete calculation_thread;
   calculation_thread = NULL;
 
@@ -508,7 +508,7 @@ XCSoarInterface::Shutdown(void)
 #ifndef ENABLE_OPENGL
   LogStartUp(_T("Waiting for draw thread"));
 
-  draw_thread->join();
+  draw_thread->Join();
   delete draw_thread;
 #endif
 

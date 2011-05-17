@@ -129,11 +129,11 @@ TCPPort::Flush(void)
 }
 
 void
-TCPPort::run()
+TCPPort::Run()
 {
   char buffer[1024];
 
-  while (!is_stopped()) {
+  while (!CheckStopped()) {
     assert(listener_fd >= 0);
 
     if (connection_fd < 0) {
@@ -220,19 +220,19 @@ bool
 TCPPort::StopRxThread()
 {
   // Make sure the thread isn't terminating itself
-  assert(!Thread::inside());
+  assert(!Thread::IsInside());
 
   // Make sure the port is still open
   if (listener_fd < 0)
     return false;
 
   // If the thread is not running, cancel the rest of the function
-  if (!Thread::defined())
+  if (!Thread::IsDefined())
     return true;
 
-  stop();
+  BeginStop();
 
-  Thread::join();
+  Thread::Join();
 
   return true;
 }
@@ -241,14 +241,14 @@ bool
 TCPPort::StartRxThread(void)
 {
   // Make sure the thread isn't starting itself
-  assert(!Thread::inside());
+  assert(!Thread::IsInside());
 
   // Make sure the port was opened correctly
   if (listener_fd < 0)
     return false;
 
   // Start the receive thread
-  StoppableThread::start();
+  StoppableThread::Start();
   return true;
 }
 

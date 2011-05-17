@@ -37,26 +37,34 @@ class StoppableThread : public Thread {
 public:
   StoppableThread();
 
-  bool start() {
-    stop_trigger.reset();
-    return Thread::start();
+  bool Start() {
+    stop_trigger.Reset();
+    return Thread::Start();
   }
 
   /**
    * Triggers thread shutdown.  Call join() after this to wait
    * synchronously for the thread to exit.
    */
-  void stop() {
-    stop_trigger.trigger();
+  void BeginStop() {
+    stop_trigger.Signal();
   }
 
 protected:
-  bool is_stopped() {
-    return stop_trigger.test();
+  /**
+   * Check this thread has received the "Stop" comand.
+   */
+  bool CheckStopped() {
+    return stop_trigger.Test();
   }
 
-  bool wait_stopped(unsigned timeout_ms) {
-    return stop_trigger.wait(timeout_ms);
+  /**
+   * Wait until the "Stop" command is received.
+   *
+   * @return true if the "Stop" command was received, false on timeout
+   */
+  bool WaitForStopped(unsigned timeout_ms) {
+    return stop_trigger.Wait(timeout_ms);
   }
 };
 

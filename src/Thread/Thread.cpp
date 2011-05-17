@@ -44,29 +44,29 @@ Thread::~Thread()
 }
 
 bool
-Thread::start()
+Thread::Start()
 {
 #ifdef HAVE_POSIX
-  assert(!m_defined);
+  assert(!defined);
 
-  return m_defined = pthread_create(&handle, NULL, thread_proc, this) == 0;
+  return defined = pthread_create(&handle, NULL, ThreadProc, this) == 0;
 #else
   assert(handle == NULL);
 
-  handle = ::CreateThread(NULL, 0, thread_proc, this, 0, &id);
+  handle = ::CreateThread(NULL, 0, ThreadProc, this, 0, &id);
 
   return handle != NULL;
 #endif
 }
 
 void
-Thread::join()
+Thread::Join()
 {
 #ifdef HAVE_POSIX
-  assert(m_defined);
+  assert(defined);
 
   pthread_join(handle, NULL);
-  m_defined = false;
+  defined = false;
 #else
   assert(handle != NULL);
 
@@ -77,11 +77,11 @@ Thread::join()
 }
 
 bool
-Thread::join(unsigned timeout_ms)
+Thread::Join(unsigned timeout_ms)
 {
 #ifdef HAVE_POSIX
   // XXX timeout not implemented with pthread
-  join();
+  Join();
   return true;
 #else
   assert(handle != NULL);
@@ -99,11 +99,11 @@ Thread::join(unsigned timeout_ms)
 #ifdef HAVE_POSIX
 
 void *
-Thread::thread_proc(void *p)
+Thread::ThreadProc(void *p)
 {
   Thread *thread = (Thread *)p;
 
-  thread->run();
+  thread->Run();
 
 #ifdef ANDROID
   Java::DetachCurrentThread();
@@ -115,11 +115,11 @@ Thread::thread_proc(void *p)
 #else /* !HAVE_POSIX */
 
 DWORD WINAPI
-Thread::thread_proc(LPVOID lpParameter)
+Thread::ThreadProc(LPVOID lpParameter)
 {
   Thread *thread = (Thread *)lpParameter;
 
-  thread->run();
+  thread->Run();
   return 0;
 }
 

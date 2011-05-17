@@ -99,7 +99,7 @@ GlueMapWindow::FullRedraw()
 #ifdef ENABLE_OPENGL
   invalidate();
 #else
-  draw_thread->trigger_redraw();
+  draw_thread->TriggerRedraw();
 #endif
 }
 
@@ -158,7 +158,7 @@ GlueMapWindow::Idle()
     still_dirty = terrain_dirty || topography_dirty || weather_dirty;
   } while (RenderTimeAvailable() &&
 #ifndef ENABLE_OPENGL
-           !draw_thread->is_triggered() &&
+           !draw_thread->IsTriggered() &&
 #endif
            still_dirty);
 

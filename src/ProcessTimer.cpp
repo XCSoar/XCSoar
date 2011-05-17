@@ -77,8 +77,8 @@ ProcessTimer::MessageProcessTimer()
 void
 ProcessTimer::AirspaceProcessTimer()
 {
-  if (airspaceWarningEvent.test()) {
-    airspaceWarningEvent.reset();
+  if (airspaceWarningEvent.Test()) {
+    airspaceWarningEvent.Reset();
     ResetDisplayTimeOut();
 #ifndef GNAV
     PlayResource(_T("IDR_WAV_BEEPBWEEP"));
