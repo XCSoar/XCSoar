@@ -41,6 +41,7 @@ class Thread : private NonCopyable {
   bool m_defined;
 #else
   HANDLE handle;
+  DWORD id;
 #endif
 
 public:
@@ -66,7 +67,7 @@ public:
 #ifdef HAVE_POSIX
     return defined() && pthread_equal(pthread_self(), handle);
 #else
-    return GetCurrentThread() == handle;
+    return GetCurrentThreadId() == id;
 #endif
   }
 

@@ -53,7 +53,7 @@ Thread::start()
 #else
   assert(handle == NULL);
 
-  handle = ::CreateThread(NULL, 0, thread_proc, this, 0, NULL);
+  handle = ::CreateThread(NULL, 0, thread_proc, this, 0, &id);
 
   return handle != NULL;
 #endif
