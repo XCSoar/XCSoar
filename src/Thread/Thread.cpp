@@ -46,13 +46,11 @@ Thread::~Thread()
 bool
 Thread::Start()
 {
-#ifdef HAVE_POSIX
-  assert(!defined);
+  assert(!IsDefined());
 
+#ifdef HAVE_POSIX
   return defined = pthread_create(&handle, NULL, ThreadProc, this) == 0;
 #else
-  assert(handle == NULL);
-
   handle = ::CreateThread(NULL, 0, ThreadProc, this, 0, &id);
 
   return handle != NULL;
@@ -62,14 +60,13 @@ Thread::Start()
 void
 Thread::Join()
 {
-#ifdef HAVE_POSIX
-  assert(defined);
+  assert(IsDefined());
+  assert(!IsInside());
 
+#ifdef HAVE_POSIX
   pthread_join(handle, NULL);
   defined = false;
 #else
-  assert(handle != NULL);
-
   ::WaitForSingleObject(handle, INFINITE);
   ::CloseHandle(handle);
   handle = NULL;
@@ -79,13 +76,14 @@ Thread::Join()
 bool
 Thread::Join(unsigned timeout_ms)
 {
+  assert(IsDefined());
+  assert(!IsInside());
+
 #ifdef HAVE_POSIX
   // XXX timeout not implemented with pthread
   Join();
   return true;
 #else
-  assert(handle != NULL);
-
   bool result = ::WaitForSingleObject(handle, timeout_ms) == WAIT_OBJECT_0;
   if (result) {
     ::CloseHandle(handle);
