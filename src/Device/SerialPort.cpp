@@ -225,15 +225,13 @@ SerialPort::WaitDataPending(OverlappedEvent &overlapped,
 void
 SerialPort::run()
 {
-  DWORD dwCommModemStatus, dwBytesTransferred;
+  DWORD dwBytesTransferred;
   BYTE inbuf[1024];
 
   // JMW added purging of port on open to prevent overflow
   Flush();
 
 #ifndef _WIN32_WCE
-  bool waiting_on_status = false, waiting_on_read = false;
-
   OverlappedEvent osStatus, osReader;
   if (!osStatus.Defined() || !osReader.Defined())
      // error creating event; abort
@@ -249,105 +247,39 @@ SerialPort::run()
   while (!is_stopped()) {
 
 #ifndef _WIN32_WCE
-    // Not waiting for WaitCommEvent() to finish yet
-    if (!waiting_on_status) {
-      // Start listening for data
-      if (!::WaitCommEvent(hPort, &dwCommModemStatus, osStatus.GetPointer())) {
-        if (::GetLastError() == ERROR_IO_PENDING)
-          // There is no data available yet
-          waiting_on_status = true;
-        else {
-          // Error in WaitCommEvent() occured
-          ::Sleep(100);
-          continue;
-        }
-      } else if ((dwCommModemStatus & EV_RXCHAR) == 0)
-        // there is no data available
+
+    int nbytes = WaitDataPending(osStatus, 500);
+    if (nbytes <= 0) {
+      ::Sleep(100);
+      continue;
+    }
+
+    // Start reading data
+
+    if ((size_t)nbytes > sizeof(inbuf))
+      nbytes = sizeof(inbuf);
+
+    if (!::ReadFile(hPort, inbuf, nbytes, &dwBytesTransferred,
+                    osReader.GetPointer())) {
+      if (::GetLastError() != ERROR_IO_PENDING) {
+        // Error in ReadFile() occured
+        ::Sleep(100);
+        continue;
+      }
+
+      if (osReader.Wait() != OverlappedEvent::FINISHED) {
+        ::CancelIo(hPort);
+        continue;
+      }
+
+      if (!::GetOverlappedResult(hPort, osReader.GetPointer(),
+                                 &dwBytesTransferred, FALSE))
         continue;
     }
 
-    // Let's wait for WaitCommEvent() to finish
-    if (waiting_on_status) {
-      // Wait for max. 500ms an event to occur
-      switch (osStatus.Wait(500)) {
-      case OverlappedEvent::FINISHED:
-        // Event occurred -> reset waiting flag
-        waiting_on_status = false;
-
-        {
-          // Get results
-          DWORD dwOvRes;
-          if (!::GetOverlappedResult(hPort, osStatus.GetPointer(), &dwOvRes, FALSE))
-            // Error occured while fetching results
-            continue;
-        }
-
-        if ((dwCommModemStatus & EV_RXCHAR) == 0)
-          // there is no data available
-          continue;
-
-        // continue with reading the data in the next step
-        break;
-
-      case OverlappedEvent::TIMEOUT:
-        // WaitCommEvent() has not yet finished
-        ::CancelIo(hPort);
-        continue;
-
-      default:
-        ::CancelIo(hPort);
-        return;
-      }
-    }
-
-    // Not waiting for ReadFile() to finish yet
-    if (!waiting_on_read) {
-      // Start reading data
-      if (!::ReadFile(hPort, inbuf, 1024, &dwBytesTransferred, osReader.GetPointer())) {
-        if (!::GetLastError() != ERROR_IO_PENDING)
-          // There is no data available yet
-          waiting_on_read = true;
-        else {
-          // Error in ReadFile() occured
-          ::Sleep(100);
-          continue;
-        }
-      } else {
-        // Process data that was directly read by ReadFile()
-        for (unsigned int j = 0; j < dwBytesTransferred; j++)
-          ProcessChar(inbuf[j]);
-      }
-    }
-
-    // Let's wait for ReadFile() to finish
-    while (waiting_on_read) {
-      // Wait for max. 500ms an event to occur
-      switch (osReader.Wait(500)) {
-      case OverlappedEvent::FINISHED:
-        // Event occurred -> reset waiting flag
-        waiting_on_read = false;
-
-        // Get results
-        if (!::GetOverlappedResult(hPort, osReader.GetPointer(), &dwBytesTransferred, FALSE))
-          // Error occured while fetching results
-          continue;
-
-        // Process data that was read with a delay by ReadFile()
-        for (unsigned int j = 0; j < dwBytesTransferred; j++)
-          ProcessChar(inbuf[j]);
-
-        break;
-
-      case OverlappedEvent::TIMEOUT:
-        // ReadFile() has not yet finished
-        ::CancelIo(hPort);
-        continue;
-
-      default:
-        ::CancelIo(hPort);
-        return;
-      }
-    }
+    // Process data that was directly read by ReadFile()
+    for (unsigned int j = 0; j < dwBytesTransferred; j++)
+      ProcessChar(inbuf[j]);
 
 #else
 
@@ -358,6 +290,7 @@ SerialPort::run()
          Observed on an iPaq hx4700 with WM6. */
     } else {
       // Wait for an event to occur for the port.
+      DWORD dwCommModemStatus;
       if (!::WaitCommEvent(hPort, &dwCommModemStatus, 0)) {
         // error reading from port
         Sleep(100);
