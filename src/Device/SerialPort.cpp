@@ -608,6 +608,16 @@ SerialPort::Read(void *Buffer, size_t Size)
 #else
   OverlappedEvent osReader;
 
+  int pending = WaitDataPending(osReader, rx_timeout);
+  if (pending < 0)
+    return -1;
+
+  if (Size > (size_t)pending)
+    /* don't request more bytes from the COMM buffer, because
+       otherwise ReadFile() would block until the buffer has been
+       filled completely */
+    Size = pending;
+
   // Start reading data
   if (!::ReadFile(hPort, Buffer, Size, &dwBytesTransferred, osReader.GetPointer())) {
     if (::GetLastError() != ERROR_IO_PENDING)
