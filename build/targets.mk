@@ -286,7 +286,7 @@ endif
 ifeq ($(HAVE_POSIX),y)
 ifneq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -lpthread
-  ifneq ($(TARGET),CYGWIN)
+  ifeq ($(shell uname -s),Linux)
   TARGET_LDFLAGS += -lrt # for clock_gettime()
   endif
 endif

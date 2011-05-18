@@ -25,6 +25,9 @@ Copyright_License {
 
 #if defined(HAVE_POSIX) && !defined(__CYGWIN__)
 #include <time.h>
+#ifndef __GLIBC__
+#include <sys/time.h>
+#endif
 #else /* !HAVE_POSIX */
 #include <windows.h>
 #endif /* !HAVE_POSIX */
@@ -33,9 +36,16 @@ unsigned
 MonotonicClockMS()
 {
 #if defined(HAVE_POSIX) && !defined(__CYGWIN__)
+#ifdef CLOCK_MONOTONIC
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);
   return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
+#else
+  /* we have no monotonic clock, fall back to gettimeofday() */
+  struct timeval tv;
+  gettimeofday(&tv, 0);
+  return tv.tv_sec * 1000 + tv.tv_usec / 1000;
+#endif
 #else /* !HAVE_POSIX */
   return ::GetTickCount();
 #endif /* !HAVE_POSIX */
