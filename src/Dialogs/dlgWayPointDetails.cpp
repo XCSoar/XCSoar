@@ -683,25 +683,29 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))
     ->SetText(sTmp);
 
-  SunEphemeris sun;
-  sun.CalcSunTimes(selected_waypoint->Location,
-                   basic.DateTime,
-                   fixed(GetUTCOffset()) / 3600);
+  if (basic.Connected) {
+    SunEphemeris sun;
+    sun.CalcSunTimes(selected_waypoint->Location,
+                     basic.DateTime,
+                     fixed(GetUTCOffset()) / 3600);
 
-  int sunsethours = (int)sun.TimeOfSunSet;
-  int sunsetmins = (int)((sun.TimeOfSunSet - fixed(sunsethours)) * 60);
+    int sunsethours = (int)sun.TimeOfSunSet;
+    int sunsetmins = (int)((sun.TimeOfSunSet - fixed(sunsethours)) * 60);
 
-  _stprintf(sTmp, _T("%02d:%02d"), sunsethours, sunsetmins);
-  ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);
+    _stprintf(sTmp, _T("%02d:%02d"), sunsethours, sunsetmins);
+    ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);
+  }
 
-  GeoVector gv = basic.Location.distance_bearing(selected_waypoint->Location);
+  if (basic.LocationAvailable) {
+    GeoVector gv = basic.Location.distance_bearing(selected_waypoint->Location);
 
-  TCHAR DistanceText[MAX_PATH];
-  Units::FormatUserDistance(gv.Distance, DistanceText, 10);
-  ((WndProperty *)wf->FindByName(_T("prpDistance"))) ->SetText(DistanceText);
+    TCHAR DistanceText[MAX_PATH];
+    Units::FormatUserDistance(gv.Distance, DistanceText, 10);
+    ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(DistanceText);
 
-  _stprintf(sTmp, _T("%d")_T(DEG), iround(gv.Bearing.value_degrees()));
-  ((WndProperty *)wf->FindByName(_T("prpBearing"))) ->SetText(sTmp);
+    _stprintf(sTmp, _T("%d")_T(DEG), iround(gv.Bearing.value_degrees()));
+    ((WndProperty *)wf->FindByName(_T("prpBearing")))->SetText(sTmp);
+  }
 
   if (protected_task_manager != NULL) {
     GlidePolar glide_polar = settings_computer.glide_polar_task;
