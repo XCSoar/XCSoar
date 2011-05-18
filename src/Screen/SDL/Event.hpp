@@ -52,7 +52,7 @@ class EventLoop : private NonCopyable {
 
 public:
   EventLoop(TopWindow &_top_window)
-    :top_window(_top_window), bulk(false) {}
+    :top_window(_top_window), bulk(true) {}
 
   bool get(SDL_Event &event);
   void dispatch(SDL_Event &event);

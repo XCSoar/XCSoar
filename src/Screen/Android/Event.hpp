@@ -136,7 +136,7 @@ class EventLoop : private NonCopyable {
 
 public:
   EventLoop(EventQueue &_queue, TopWindow &_top_window)
-    :queue(_queue), top_window(_top_window), bulk(false) {}
+    :queue(_queue), top_window(_top_window), bulk(true) {}
 
   bool get(Event &event);
   void dispatch(const Event &event);
