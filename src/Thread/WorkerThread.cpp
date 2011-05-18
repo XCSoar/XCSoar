@@ -26,8 +26,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 
 WorkerThread::WorkerThread(unsigned _period_min, unsigned _idle_min)
-  :event_trigger(false),
-   period_min(_period_min), idle_min(_idle_min) {
+  :period_min(_period_min), idle_min(_idle_min) {
 }
 
 void
@@ -42,6 +41,11 @@ WorkerThread::Run()
     /* got the "stop" trigger? */
     if (CheckStoppedOrSuspended())
       break;
+
+    /* reset the trigger here, because our client might have called
+       Trigger() a few more times while we were suspended in
+       CheckStoppedOrSuspended() */
+    event_trigger.Reset();
 
     /* do the actual work */
     if (period_min > 0)
