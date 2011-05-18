@@ -3,8 +3,8 @@ ENABLE_SDL ?= $(call bool_not,$(HAVE_WIN32))
 ifeq ($(ENABLE_SDL),y)
 ifeq ($(TARGET),UNIX)
 OPENGL ?= y
-SDL_CPPFLAGS := $(shell pkg-config --cflags sdl 2>/dev/null)
-SDL_LDLIBS := $(shell pkg-config --libs sdl 2>/dev/null)
+SDL_CPPFLAGS := $(shell $(PKG_CONFIG) --cflags sdl 2>/dev/null)
+SDL_LDLIBS := $(shell $(PKG_CONFIG) --libs sdl 2>/dev/null)
 else
 ifeq ($(TARGET),ANDROID)
 OPENGL = y
