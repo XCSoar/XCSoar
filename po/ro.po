@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-13 08:22+0200\n"
-"PO-Revision-Date: 2011-05-13 14:31+0000\n"
+"PO-Revision-Date: 2011-05-16 16:34+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Romanian <ro@li.org>\n"
 "Language: ro\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-15 08:36+0000\n"
-"X-Generator: Launchpad (build 13037)\n"
+"X-Launchpad-Export-Date: 2011-05-18 07:08+0000\n"
+"X-Generator: Launchpad (build 13067)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:303
@@ -247,7 +247,7 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 msgid "Resume"
-msgstr ""
+msgstr "Continua"
 
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 #: src/Dialogs/Message.cpp:168
@@ -2097,7 +2097,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:1830
 msgid "Next turnpoint"
-msgstr ""
+msgstr "Următorul punct de cotitură"
 
 #: src/InputEventsActions.cpp:1832
 msgid "Task finished"
@@ -3933,23 +3933,23 @@ msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:541
 msgid "All turnpoints not the same type.\n"
-msgstr ""
+msgstr "Punctele de cotitură nu sînt de acelaşi tip.\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:544
 msgid "Incorrect number of turnpoints.\n"
-msgstr ""
+msgstr "Numărul punctelor de cotitură este incorect.\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:547
 msgid "Too many turnpoints.\n"
-msgstr ""
+msgstr "Prea multe puncte de cotitură.\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:550
 msgid "Not enough turnpoints.\n"
-msgstr ""
+msgstr "Numărul punctelor de cotitură nu e suficient.\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:553
 msgid "Turnpoints not unique.\n"
-msgstr ""
+msgstr "Punctele de cotitură nu sînt unice.\n"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:556
 msgid "Invalid FAI triangle shape.\n"
@@ -5119,6 +5119,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:534
 msgid "Default radius of turnpoint cylinders and sectors in new tasks."
 msgstr ""
+"Rază implicată punctelor de cotitură tip cilindru şi sector in sarcini noi."
 
 #: Data/Dialogs/dlgTaskPoint.xml:36 Data/Dialogs/dlgTaskPoint_L.xml:35
 msgid "Radius of the OZ sector."

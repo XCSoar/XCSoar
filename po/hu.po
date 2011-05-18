@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-13 08:22+0200\n"
-"PO-Revision-Date: 2011-05-10 15:30+0000\n"
+"PO-Revision-Date: 2011-05-16 15:41+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-11 18:39+0000\n"
-"X-Generator: Launchpad (build 13014)\n"
+"X-Launchpad-Export-Date: 2011-05-18 07:08+0000\n"
+"X-Generator: Launchpad (build 13067)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:303
@@ -3304,9 +3304,8 @@ msgid "12 Bottom (Portrait)"
 msgstr "12 alul (Álló)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
-#, fuzzy
 msgid "12 Top (Portrait)"
-msgstr "8 fent (Álló)"
+msgstr "12 felül"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
 msgid "24 Right (Landscape)"
@@ -3766,24 +3765,20 @@ msgstr ""
 "Folytatja?"
 
 #: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
-#, fuzzy
 msgid "Calculator"
-msgstr "Feladat számító"
+msgstr "Számítások"
 
 #: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
-#, fuzzy
 msgid "Turn Points"
-msgstr "Fordulópont"
+msgstr "Fordulópontok"
 
 #: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
-#, fuzzy
 msgid "Manage"
-msgstr "Feladatkezelő"
+msgstr "Műveletek"
 
 #: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
-#, fuzzy
 msgid "Rules"
-msgstr "Feladat szabályok"
+msgstr "Szabályok"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -3819,7 +3814,7 @@ msgstr "Feladatböngésző"
 
 #: src/Dialogs/pnlTaskList.cpp:202
 msgid "Can't delete .CUP files"
-msgstr ""
+msgstr "A .CUP fájl nem törölhető."
 
 #: src/Dialogs/pnlTaskList.cpp:202
 msgid "Delete Error"
@@ -3831,7 +3826,7 @@ msgstr "Töröljem a kiválasztott feladatot?"
 
 #: src/Dialogs/pnlTaskList.cpp:235
 msgid "Can't rename .CUP files"
-msgstr ""
+msgstr "A .CUP fájl nem nevezhető át."
 
 #: src/Dialogs/pnlTaskList.cpp:235
 msgid "Rename Error"
@@ -3847,7 +3842,7 @@ msgstr "Új feladat"
 
 #: src/Dialogs/pnlTaskCalculator.cpp:272
 msgid "Calculator excludes unsaved task changes!"
-msgstr ""
+msgstr "A számítás a feladat el nem mentett változásait nem tartalmazza!"
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
 msgid "(Add Alternate Start)"
@@ -8614,6 +8609,9 @@ msgstr "Leszállás"
 
 #~ msgid "V ach"
 #~ msgstr "V elért"
+
+#~ msgid "Task Calculator"
+#~ msgstr "Feladat számító"
 
 #~ msgid "Info box values small"
 #~ msgstr "Info box érték pici"
