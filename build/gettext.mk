@@ -14,8 +14,8 @@ MO_FILES = $(patsubst po/%.po,$(OUT)/po/%.mo,$(PO_FILES))
 LINGUAS = $(patsubst po/%.po,%,$(PO_FILES))
 
 ifeq ($(TARGET),UNIX)
-ifneq ($(shell uname -s),Linux)
-GETTEXT_LDLIBS += -lintl
+ifeq ($(shell uname -s),Darwin)
+GETTEXT_LDLIBS = /opt/local/lib/libintl.a /opt/local/lib/libiconv.a
 endif
 endif
 
