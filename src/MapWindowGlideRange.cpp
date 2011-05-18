@@ -57,8 +57,18 @@ public:
   virtual void
   end_fan()
   {
+    // remove unnecessary inclusion of origin if next and last points are identical
+    unsigned start = 0;
+    const size_t gsize = g.size();
+    if (gsize > 2) {
+      if (g[gsize-1]==g[1]) 
+        start = 1;
+    }
+    if (gsize<start+3)
+      return;
+
     // Perform clipping on the GeoPointVector (Result: clipped)
-    unsigned size = clip.clip_polygon(clipped, g.raw(), g.size());
+    unsigned size = clip.clip_polygon(clipped, g.raw()+start, gsize-start);
     // With less than three points we can't draw a polygon
     if (size < 3)
       return;
@@ -205,6 +215,8 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     canvas.select(Graphics::hpTerrainLine);
     canvas.background_opaque();
     canvas.set_background_color(COLOR_WHITE);
+
+    // drop out extraneous line from origin
 
     // Draw the TerrainLine polygon
 
