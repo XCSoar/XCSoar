@@ -29,7 +29,17 @@ Copyright_License {
 #include <assert.h>
 
 static const char *const all_font_paths[] = {
+#ifdef __APPLE__
+  "/Library/Fonts/Tahoma.ttf",
+  "/Library/Fonts/Arial Narrow.ttf",
+#else
   "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
+  "/usr/share/fonts/truetype/ttf-droid/DroidSans.ttf",
+  "/usr/share/fonts/truetype/msttcorefonts/Arial.ttf",
+  "/usr/share/fonts/truetype/freefont/FreeSans.ttf",
+  "/usr/share/fonts/truetype/unifont/unifont.ttf",
+  "/usr/share/fonts/local/tahoma.ttf",
+#endif
   NULL
 };
 
