@@ -140,6 +140,12 @@ TopWindow::on_event(const Event &event)
     return on_mouse_up(event.x, event.y);
 
   case Event::RESIZE:
+    /* it seems the first page flip after a display orientation change
+       is ignored on Android (tested on a Dell Streak / Android
+       2.2.2); let's do one dummy call before we really draw
+       something */
+    screen.flip();
+
     resize(event.x, event.y);
     return true;
 
