@@ -31,6 +31,13 @@ else # !OPENGL
 SDL_LDLIBS += -lSDL_gfx
 endif # !OPENGL
 ifneq ($(TARGET),ANDROID)
+ifeq ($(shell uname -s),Darwin)
+# the pkg-config file on MacPorts is broken, we must filter out the
+# -lSDL flag manually
+SDL_LDLIBS := $(filter-out -l%,$(SDL_LDLIBS))
+SDL_LDLIBS += /opt/local/lib/libSDL_ttf.a /opt/local/lib/libfreetype.a
+else
 SDL_LDLIBS += -lSDL_ttf
+endif
 endif
 endif

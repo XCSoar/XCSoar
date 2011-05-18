@@ -5,6 +5,10 @@ ZLIB_LIBS =
 ZLIB_LDFLAGS = -lz
 ZLIB_INCLUDES =
 
+ifeq ($(shell uname -s),Darwin)
+ZLIB_LDFLAGS = /opt/local/lib/libz.a
+endif
+
 else
 
 ZLIB_SRC_DIR = $(SRC)/zlib

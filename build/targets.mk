@@ -290,6 +290,9 @@ ifneq ($(TARGET),ANDROID)
   TARGET_LDFLAGS += -lrt # for clock_gettime()
   endif
 endif
+  ifeq ($(shell uname -s),Darwin)
+    TARGET_LDFLAGS += -static-libgcc
+  endif
 endif
 
 ifeq ($(TARGET),ANDROID)
@@ -320,7 +323,11 @@ ifeq ($(HAVE_CE),y)
 endif
 
 ifeq ($(TARGET),UNIX)
+  ifeq ($(shell uname -s),Darwin)
+  TARGET_LDLIBS := $(shell $(CXX) -print-file-name=libstdc++.a)
+  else
   TARGET_LDLIBS := -lstdc++ -lm
+  endif
 endif
 
 ifeq ($(TARGET),ANDROID)
