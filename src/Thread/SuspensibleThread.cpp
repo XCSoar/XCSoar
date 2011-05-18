@@ -169,6 +169,12 @@ SuspensibleThread::WaitForStopped(unsigned timeout_ms)
   if (!stop_received)
     command_trigger.Wait(mutex, timeout_ms);
 
+  if (!stop_received && suspend_received) {
+    client_trigger.Signal();
+    while (!stop_received && suspend_received)
+      command_trigger.Wait(mutex);
+  }
+
   suspended = false;
   bool stop = stop_received;
   mutex.Unlock();
@@ -177,7 +183,14 @@ SuspensibleThread::WaitForStopped(unsigned timeout_ms)
   if (stop_trigger.Test())
     return true;
 
+  suspended.Signal();
+
   command_trigger.Wait(timeout_ms);
+  while (suspend_trigger.Test() && !stop_trigger.Test())
+    command_trigger.Wait();
+
+  suspended.Reset();
+
   return stop_trigger.Test();
 #endif
 }
