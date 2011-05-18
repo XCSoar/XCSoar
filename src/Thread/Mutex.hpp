@@ -38,7 +38,7 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 
-#ifdef NDEBUG
+#if defined(NDEBUG) && defined(__GLIBC__)
 #include "Thread/RecursiveMutex.hpp"
 #else
 #include "Thread/FastMutex.hpp"
@@ -58,9 +58,15 @@ extern ThreadLocalInteger thread_locks_held;
  */
 class Mutex : private NonCopyable {
 #ifdef NDEBUG
+#ifdef __GLIBC__
   /* use a recursive Mutex for the production build, so end users are
      not affected by possible remaining bugs */
   RecursiveMutex mutex;
+#else
+  /* use a "fast" Mutex on non-Linux platforms, because
+     PTHREAD_MUTEX_RECURSIVE_NP is not portable */
+  FastMutex mutex;
+#endif
 #else
   /* use a non-recursive Mutex for the debug build, to find code
      places that assume a recursive Mutex */
