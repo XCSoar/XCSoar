@@ -13,6 +13,12 @@ PO_FILES = $(wildcard po/*.po)
 MO_FILES = $(patsubst po/%.po,$(OUT)/po/%.mo,$(PO_FILES))
 LINGUAS = $(patsubst po/%.po,%,$(PO_FILES))
 
+ifeq ($(TARGET),UNIX)
+ifneq ($(shell uname -s),Linux)
+GETTEXT_LDLIBS += -lintl
+endif
+endif
+
 $(OUT)/po/cpp.pot: $(GETTEXT_SOURCES) | $(OUT)/po/dirstamp
 	@$(NQ)echo "  GEN     $@"
 	$(Q)$(XGETTEXT) --default-domain=$(GETTEXT_PACKAGE) \
