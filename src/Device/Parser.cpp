@@ -601,6 +601,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return true;
 
+  (void)valid_location;
+  /* JMW: note ignore location updates from GGA -- definitive frame is GPRMC sentence
   if (!gpsValid)
     GPS_INFO->LocationAvailable.Clear();
   else if (valid_location)
@@ -608,6 +610,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   if (valid_location)
     GPS_INFO->Location = location;
+  */
 
   GPS_INFO->gps.real = real;
 #ifdef ANDROID
