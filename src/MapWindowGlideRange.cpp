@@ -60,15 +60,14 @@ public:
     // remove unnecessary inclusion of origin if next and last points are identical
     unsigned start = 0;
     const size_t gsize = g.size();
-    if (gsize > 2) {
-      if (g[gsize-1]==g[1]) 
-        start = 1;
-    }
-    if (gsize<start+3)
+    if (gsize > 2 && g[gsize - 1] == g[1])
+      start = 1;
+
+    if (gsize < start + 3)
       return;
 
     // Perform clipping on the GeoPointVector (Result: clipped)
-    unsigned size = clip.clip_polygon(clipped, g.raw()+start, gsize-start);
+    unsigned size = clip.clip_polygon(clipped, g.raw() + start, gsize - start);
     // With less than three points we can't draw a polygon
     if (size < 3)
       return;
@@ -80,7 +79,7 @@ public:
     // Convert GeoPoints to RasterPoints
     for (unsigned i = 0; i < size; ++i)
       it->push_back(proj.GeoToScreen(clipped[i]));
-  };
+  }
 
   /** STL-Container of rasterized polygons */
   std::vector<RasterPointVector> fans;
