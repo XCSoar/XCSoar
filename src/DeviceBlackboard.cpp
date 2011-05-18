@@ -414,15 +414,19 @@ DeviceBlackboard::Merge()
   ProcessFLARM();
 
   if (last_location_available != Basic().LocationAvailable) {
+    // trigger update if gps has become available or dropped out
     last_location_available = Basic().LocationAvailable;
     TriggerGPSUpdate();
   } else if (last_vario_counter != Basic().VarioCounter) {
+    // trigger update if vario has updated with no change of gps status
     last_vario_counter = Basic().VarioCounter;
     TriggerGPSUpdate();
   }
 
-  if (last_te_vario_available != Basic().TotalEnergyVarioAvailable ||
-      last_netto_vario_available != Basic().NettoVarioAvailable) {
+  if (!Basic().LocationAvailable && (
+        last_te_vario_available != Basic().TotalEnergyVarioAvailable ||
+        last_netto_vario_available != Basic().NettoVarioAvailable)) {
+    // trigger update on change of vario connected status only if no gps connected
     last_te_vario_available = Basic().TotalEnergyVarioAvailable;
     last_netto_vario_available = Basic().NettoVarioAvailable;
     TriggerVarioUpdate();
