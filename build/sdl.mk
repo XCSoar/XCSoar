@@ -21,7 +21,11 @@ SDL_CPPFLAGS += -DENABLE_SDL
 ifeq ($(OPENGL),y)
 SDL_CPPFLAGS += -DENABLE_OPENGL
 ifneq ($(TARGET),ANDROID)
+ifeq ($(shell uname -s),Darwin)
+SDL_LDLIBS += -framework OpenGL
+else
 SDL_LDLIBS += -lGL
+endif
 endif
 else # !OPENGL
 SDL_LDLIBS += -lSDL_gfx
