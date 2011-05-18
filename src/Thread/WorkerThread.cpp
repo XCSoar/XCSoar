@@ -25,8 +25,9 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 #include "PeriodClock.hpp"
 
-WorkerThread::WorkerThread(unsigned _period_min, unsigned _idle_min)
-  :period_min(_period_min), idle_min(_idle_min) {
+WorkerThread::WorkerThread(unsigned _period_min, unsigned _idle_min,
+                           unsigned _delay)
+  :period_min(_period_min), idle_min(_idle_min), delay(_delay) {
 }
 
 void
@@ -39,7 +40,9 @@ WorkerThread::Run()
     event_trigger.Wait();
 
     /* got the "stop" trigger? */
-    if (CheckStoppedOrSuspended())
+    if (delay > 0
+        ? WaitForStopped(delay)
+        : CheckStoppedOrSuspended())
       break;
 
     /* reset the trigger here, because our client might have called

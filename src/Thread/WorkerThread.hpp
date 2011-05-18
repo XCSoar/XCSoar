@@ -33,7 +33,7 @@ Copyright_License {
 class WorkerThread : public SuspensibleThread {
   ::Trigger event_trigger;
 
-  unsigned period_min, idle_min;
+  unsigned period_min, idle_min, delay;
 
 public:
   /**
@@ -43,8 +43,11 @@ public:
    * @param idle_min the minimum sleep time after each tick().  This
    * can be used to reduce overload and lock contention on a very busy
    * and slow machine.
+   * @param delay an artificial delay between Trigger() and Tick(), to
+   * allow grouping consecutive Trigger() calls into one Tick()
    */
-  WorkerThread(unsigned period_min=0, unsigned idle_min=0);
+  WorkerThread(unsigned period_min=0, unsigned idle_min=0,
+               unsigned delay=0);
 
   /**
    * Wakes up the thread to do work, calls tick().
