@@ -292,13 +292,9 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 void
 MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
-  if (!Calculated().flight.Flying)
-    return;
-
-  if (!Calculated().TerrainWarning)
-    return;
-
-  if (Calculated().TerrainWarningLocation.distance(Basic().Location) < fixed(500.0))
+  if (!Calculated().flight.Flying ||
+      !Calculated().TerrainWarning ||
+      Calculated().TerrainWarningLocation.distance(Basic().Location) < fixed(500.0))
     return;
 
   RasterPoint sc;
