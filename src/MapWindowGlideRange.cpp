@@ -33,7 +33,19 @@ Copyright_License {
 typedef std::vector<RasterPoint> RasterPointVector;
 
 class TriangleCompound: public TriangleFanVisitor {
+  /** Temporary container for TriangleFan processing */
+  StaticArray<GeoPoint, ROUTEPOLAR_POINTS+2> g;
+  /** Temporary container for TriangleFan clipping */
+  GeoPoint clipped[(ROUTEPOLAR_POINTS+2) * 3];
+  /** Projection to use for GeoPoint -> RasterPoint conversion */
+  const MapWindowProjection &proj;
+  /** GeoClip instance used for TriangleFan clipping */
+  const GeoClip clip;
+
 public:
+  /** STL-Container of rasterized polygons */
+  std::vector<RasterPointVector> fans;
+
   TriangleCompound(const MapWindowProjection& _proj)
     :proj(_proj),
      clip(_proj.GetScreenBounds().scale(fixed(1.1)))
@@ -80,19 +92,6 @@ public:
     for (unsigned i = 0; i < size; ++i)
       it->push_back(proj.GeoToScreen(clipped[i]));
   }
-
-  /** STL-Container of rasterized polygons */
-  std::vector<RasterPointVector> fans;
-
-private:
-  /** Temporary container for TriangleFan processing */
-  StaticArray<GeoPoint, ROUTEPOLAR_POINTS+2> g;
-  /** Temporary container for TriangleFan clipping */
-  GeoPoint clipped[(ROUTEPOLAR_POINTS+2) * 3];
-  /** Projection to use for GeoPoint -> RasterPoint conversion */
-  const MapWindowProjection &proj;
-  /** GeoClip instance used for TriangleFan clipping */
-  const GeoClip clip;
 };
 
 /**
