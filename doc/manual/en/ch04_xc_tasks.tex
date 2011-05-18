@@ -820,9 +820,14 @@ To abort/resume the task, press
 
 Once aborted, whatever cross-country task was being flown is
 discarded.  The task waypoint list is then filled with nearby landing
-points, ordered by the estimated arrival altitude at best glide angle
-with the safety MacCready ring setting, adjusted for wind.  The
-first waypoint in the list is therefore the most reachable waypoint.
+points, ordered according to one of three `Alternates mode'\config{alternatesmode} configuration settings:
+\begin{description}
+\item[Simple] The estimated arrival altitude at best glide angle
+with the safety MacCready ring setting, adjusted for wind.    
+The first waypoint in the list is therefore the most reachable waypoint.
+\item[Task] The sorting will also take the current task direction into account, such that the sort order is according to minimum extra distance travelled to the respective field and onwards to the task.
+\item[Home] The sorting will try to find landing options in the current direction to the configured home waypoint.  Similar to `task' but with the home field as the desired destination.
+\end{description}
 
 The configuration option `Abort use current MC' determines whether
 waypoint arrival heights in abort mode uses the MacCready value prior
