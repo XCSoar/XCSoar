@@ -23,8 +23,34 @@ Copyright_License {
 
 #include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
+#include "OS/FileUtil.hpp"
+#include "Compiler.h"
 
 #include <assert.h>
+
+static const char *const all_font_paths[] = {
+  "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf",
+  NULL
+};
+
+static const char *font_path;
+
+gcc_const
+static const char *
+DetectFont()
+{
+  for (const char *const* i = all_font_paths; *i != NULL; ++i)
+    if (File::Exists(*i))
+      return *i;
+
+  return NULL;
+}
+
+void
+Font::Initialise()
+{
+  font_path = DetectFont();
+}
 
 bool
 Font::_set(const char *file, int ptsize, bool bold, bool italic)
@@ -64,15 +90,10 @@ Font::set(const LOGFONT &log_font)
 {
   assert(IsScreenInitialized());
 
-  // XXX hard coded path
-  const char *dejavu_ttf =
-    "/usr/share/fonts/truetype/ttf-dejavu/DejaVuSansCondensed.ttf";
+  if (font_path == NULL)
+    return false;
 
-#ifdef ANDROID
-  dejavu_ttf = "/system/fonts/DroidSans.ttf";
-#endif
-
-  return _set(dejavu_ttf, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
+  return _set(font_path, log_font.lfHeight > 0 ? log_font.lfHeight : 10,
               log_font.lfWeight >= 700,
               log_font.lfItalic);
 }

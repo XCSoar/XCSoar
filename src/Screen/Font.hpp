@@ -76,6 +76,11 @@ public:
   #endif
   ~Font() { reset(); }
 
+  /**
+   * Perform global font initialisation.
+   */
+  static void Initialise();
+
 public:
   bool
   defined() const {

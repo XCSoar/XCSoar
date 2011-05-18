@@ -800,6 +800,7 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/KeyCodeDumper.cpp
@@ -1180,6 +1181,7 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunCanvas.cpp
@@ -1379,6 +1381,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Airspace/AirspaceRendererSettings.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
@@ -1403,6 +1406,7 @@ $(RUN_RENDER_OZ_BIN): $(RUN_RENDER_OZ_OBJS) $(RUN_RENDER_OZ_LDADD) | $(TARGET_BI
 RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Init.hpp"
 #include "Screen/Debug.hpp"
+#include "Screen/Font.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Init.hpp"
@@ -54,6 +55,8 @@ ScreenGlobalInit::ScreenGlobalInit()
     fprintf(stderr, "TTF_Init() has failed\n");
     exit(EXIT_FAILURE);
   }
+
+  Font::Initialise();
 
   ScreenInitialized();
 }
