@@ -115,7 +115,7 @@ void
 BackgroundDrawHelper::set_sun_angle(const WindowProjection& projection,
                                     const Angle& angle)
 {
-  sun_azimuth = projection.GetScreenAngle() + angle;
+  sun_azimuth = angle - projection.GetScreenAngle();
 }
 
 void
