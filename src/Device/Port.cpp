@@ -39,6 +39,27 @@ Port::Write(const char *s)
   return Write(s, strlen(s));
 }
 
+bool
+Port::FullWrite(const void *buffer, size_t length, unsigned timeout_ms)
+{
+  PeriodClock timeout;
+  timeout.update();
+
+  const char *p = (const char *)buffer, *end = p + length;
+  while (p < end) {
+    if (timeout.check(timeout_ms))
+      return false;
+
+    size_t nbytes = Write(p, end - p);
+    if (nbytes == 0)
+      return false;
+
+    p += nbytes;
+  }
+
+  return true;
+}
+
 int
 Port::GetChar()
 {

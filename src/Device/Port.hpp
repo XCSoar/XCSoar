@@ -70,6 +70,17 @@ public:
   }
 
   /**
+   * Write data to the serial port, take care for partial writes.
+   *
+   * Note that this port's write timeout is still in effect for each
+   * individual write operation.
+   *
+   * @param timeout_ms give up after this number of milliseconds
+   * @return true on success
+   */
+  bool FullWrite(const void *buffer, size_t length, unsigned timeout_ms);
+
+  /**
    * Flushes the serial port buffers
    */
   virtual void Flush() = 0;

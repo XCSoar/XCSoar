@@ -95,6 +95,12 @@ Port::Write(const char *s)
   return Write(s, strlen(s));
 }
 
+bool
+Port::FullWrite(const void *buffer, size_t length, unsigned timeout_ms)
+{
+  return Write(buffer, length) == length;
+}
+
 int
 Port::GetChar()
 {
