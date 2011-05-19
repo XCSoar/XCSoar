@@ -61,10 +61,12 @@ RoutePlannerGlue::solve(const AGeoPoint& origin,
 void
 RoutePlannerGlue::solve_reach(const AGeoPoint& origin, const bool do_solve)
 {
-  if (!terrain)
-    return;
-  RasterTerrain::ExclusiveLease lease(*terrain);
-  m_planner.solve_reach(origin, do_solve);
+  if (terrain) {
+    RasterTerrain::ExclusiveLease lease(*terrain);
+    m_planner.solve_reach(origin, do_solve);
+  } else {
+    m_planner.solve_reach(origin, do_solve);
+  }
 }
 
 bool
