@@ -76,7 +76,7 @@ public:
    */
   bool Close();
 
-  virtual bool SetRxTimeout(int Timeout);
+  virtual bool SetRxTimeout(unsigned Timeout);
   virtual unsigned long SetBaudrate(unsigned long BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();

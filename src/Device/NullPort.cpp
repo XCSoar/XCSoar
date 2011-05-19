@@ -64,9 +64,9 @@ NullPort::GetChar(void)
 }
 
 bool
-NullPort::SetRxTimeout(int Timeout)
+NullPort::SetRxTimeout(unsigned Timeout)
 {
-  return Timeout;
+  return true;
 }
 
 unsigned long

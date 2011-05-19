@@ -172,7 +172,7 @@ TTYPort::StartRxThread(void)
 }
 
 bool
-TTYPort::SetRxTimeout(int Timeout)
+TTYPort::SetRxTimeout(unsigned Timeout)
 {
   rx_timeout = Timeout;
   return true;

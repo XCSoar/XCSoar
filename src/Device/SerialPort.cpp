@@ -440,7 +440,7 @@ SerialPort::StartRxThread(void)
 }
 
 bool
-SerialPort::SetRxTimeout(int Timeout)
+SerialPort::SetRxTimeout(unsigned Timeout)
 {
   COMMTIMEOUTS CommTimeouts;
 

@@ -139,7 +139,7 @@ AndroidBluetoothPort::StartRxThread(void)
 }
 
 bool
-AndroidBluetoothPort::SetRxTimeout(int Timeout)
+AndroidBluetoothPort::SetRxTimeout(unsigned Timeout)
 {
   if (helper == NULL)
     return false;

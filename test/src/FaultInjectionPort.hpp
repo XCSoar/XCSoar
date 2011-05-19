@@ -59,7 +59,7 @@ public:
     return EOF;
   }
 
-  bool SetRxTimeout(int _timeout) {
+  bool SetRxTimeout(unsigned _timeout) {
     timeout = _timeout;
     return true;
   }

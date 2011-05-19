@@ -253,7 +253,7 @@ TCPPort::StartRxThread(void)
 }
 
 bool
-TCPPort::SetRxTimeout(int Timeout)
+TCPPort::SetRxTimeout(unsigned Timeout)
 {
   rx_timeout = Timeout;
   return true;

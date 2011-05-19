@@ -77,7 +77,7 @@ public:
    * @param Timeout The receive timeout in ms
    * @return true on success, false on error
    */
-  virtual bool SetRxTimeout(int Timeout) = 0;
+  virtual bool SetRxTimeout(unsigned Timeout) = 0;
 
   /**
    * Sets the baud rate of the serial port to the given value
