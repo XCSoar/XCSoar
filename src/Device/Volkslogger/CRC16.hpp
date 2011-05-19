@@ -37,6 +37,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <stdint.h>
+#include <stddef.h>
 
 extern const uint16_t Crc16Table[256];
 
@@ -45,6 +46,16 @@ static inline uint16_t
 UpdateCRC(uint8_t Octet, uint16_t CRC)
 {
   return (CRC << 8) ^ Crc16Table[(CRC >> 8) ^ Octet];
+}
+
+gcc_pure
+static inline uint16_t
+UpdateCRC(const void *data, size_t length, uint16_t crc)
+{
+  const uint8_t *p = (const uint8_t *)data, *end = p + length;
+  while (p < end)
+    crc = UpdateCRC(*p++, crc);
+  return crc;
 }
 
 #endif
