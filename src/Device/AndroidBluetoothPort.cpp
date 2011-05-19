@@ -89,18 +89,23 @@ AndroidBluetoothPort::Close()
   return true;
 }
 
-void
-AndroidBluetoothPort::Write(const void *data, unsigned length)
+size_t
+AndroidBluetoothPort::Write(const void *data, size_t length)
 {
   if (helper == NULL)
-    return;
+    return 0;
 
   JNIEnv *env = Java::GetEnv();
 
+  size_t nbytes = 0;
   const uint8_t *bytes = (const uint8_t *)data;
-  for (unsigned i = 0; i < length; ++i)
+  for (size_t i = 0; i < length; ++i) {
     if (!helper->write(env, bytes[i]))
-      return;
+      break;
+    ++nbytes;
+  }
+
+  return nbytes;
 }
 
 bool

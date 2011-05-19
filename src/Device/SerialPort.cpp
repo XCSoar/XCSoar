@@ -340,13 +340,13 @@ SerialPort::Close()
   return false;
 }
 
-void
-SerialPort::Write(const void *data, unsigned length)
+size_t
+SerialPort::Write(const void *data, size_t length)
 {
   DWORD NumberOfBytesWritten;
 
   if (hPort == INVALID_HANDLE_VALUE)
-    return;
+    return 0;
 
 #ifdef _WIN32_WCE
 
@@ -358,7 +358,10 @@ SerialPort::Write(const void *data, unsigned length)
     Sleep(100);
 
   // lpNumberOfBytesWritten : This parameter can be NULL only when the lpOverlapped parameter is not NULL.
-  ::WriteFile(hPort, data, length, &NumberOfBytesWritten, NULL);
+  if (!::WriteFile(hPort, data, length, &NumberOfBytesWritten, NULL))
+    return 0;
+
+  return NumberOfBytesWritten;
 
 #else
 
@@ -366,10 +369,10 @@ SerialPort::Write(const void *data, unsigned length)
 
   // Start reading data
   if (::WriteFile(hPort, data, length, &NumberOfBytesWritten, osWriter.GetPointer()))
-    return;
+    return 0;
 
   if (::GetLastError() != ERROR_IO_PENDING)
-    return;
+    return 0;
 
   // Let's wait for ReadFile() to finish
   // 1000ms like WriteTotalTimeoutConstant in SetRxTimeout()
@@ -377,11 +380,11 @@ SerialPort::Write(const void *data, unsigned length)
   case OverlappedEvent::FINISHED:
     // Get results
     ::GetOverlappedResult(hPort, osWriter.GetPointer(), &NumberOfBytesWritten, FALSE);
-     return;
+    return NumberOfBytesWritten;
 
   default:
     ::CancelIo(hPort);
-    return;
+    return 0;
   }
 #endif
 }

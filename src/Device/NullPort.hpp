@@ -34,7 +34,7 @@ public:
   NullPort();
   NullPort(Port::Handler &_handler);
 
-  virtual void Write(const void *data, unsigned length);
+  virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
   virtual bool SetRxTimeout(unsigned Timeout);
   virtual unsigned long SetBaudrate(unsigned long BaudRate);

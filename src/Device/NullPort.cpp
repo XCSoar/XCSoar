@@ -40,9 +40,10 @@ NullPort::Flush(void)
 {
 }
 
-void
-NullPort::Write(const void *data, unsigned length)
+size_t
+NullPort::Write(const void *data, size_t length)
 {
+  return length;
 }
 
 bool

@@ -33,10 +33,10 @@ Port::Port(Handler &_handler)
 
 Port::~Port() {}
 
-void
+size_t
 Port::Write(const char *s)
 {
-  Write(s, strlen(s));
+  return Write(s, strlen(s));
 }
 
 int

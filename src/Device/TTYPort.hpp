@@ -62,7 +62,7 @@ public:
    */
   virtual ~TTYPort();
 
-  virtual void Write(const void *data, unsigned length);
+  virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
 
   /**

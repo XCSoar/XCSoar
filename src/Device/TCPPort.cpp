@@ -207,13 +207,14 @@ TCPPort::Close()
   return true;
 }
 
-void
-TCPPort::Write(const void *data, unsigned length)
+size_t
+TCPPort::Write(const void *data, size_t length)
 {
   if (connection_fd < 0)
-    return;
+    return 0;
 
-  send(connection_fd, (const char *)data, length, 0);
+  ssize_t nbytes = send(connection_fd, (const char *)data, length, 0);
+  return nbytes < 0 ? 0 : nbytes;
 }
 
 bool

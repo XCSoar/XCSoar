@@ -126,13 +126,14 @@ TTYPort::Close()
   return true;
 }
 
-void
-TTYPort::Write(const void *data, unsigned length)
+size_t
+TTYPort::Write(const void *data, size_t length)
 {
   if (fd < 0)
-    return;
+    return 0;
 
-  write(fd, data, length);
+  ssize_t nbytes = write(fd, data, length);
+  return nbytes < 0 ? 0 : nbytes;
 }
 
 bool

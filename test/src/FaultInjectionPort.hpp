@@ -42,7 +42,10 @@ public:
     :Port(_handler), running(true), timeout(0), baud_rate(DEFAULT_BAUD_RATE) {}
 
   void Flush() {}
-  void Write(const void *data, unsigned length) {}
+
+  size_t Write(const void *data, size_t length) {
+    return length;
+  }
 
   bool StopRxThread() {
     assert(running);
@@ -86,9 +89,10 @@ Port::Port(Handler &_handler)
 
 Port::~Port() {}
 
-void
+size_t
 Port::Write(const char *s)
 {
+  return Write(s, strlen(s));
 }
 
 int

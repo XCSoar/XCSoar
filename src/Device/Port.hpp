@@ -50,21 +50,23 @@ public:
    * Writes a string to the serial port
    * @param data Pointer to the first character
    * @param length Length of the string
+   * @return the number of bytes written, or 0 on error
    */
-  virtual void Write(const void *data, unsigned length) = 0;
+  virtual size_t Write(const void *data, size_t length) = 0;
 
   /**
    * Writes a null-terminated string to the serial port
    * @param s The string to write
+   * @return the number of bytes written, or 0 on error
    */
-  void Write(const char *s);
+  size_t Write(const char *s);
 
   /**
    * Writes a single byte to the serial port
    * @param ch Byte to write
    */
-  void Write(char ch) {
-    Write(&ch, sizeof(ch));
+  bool Write(char ch) {
+    return Write(&ch, sizeof(ch)) == sizeof(ch);
   }
 
   /**
