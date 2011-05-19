@@ -40,7 +40,8 @@ protected:
   }
 
 public:
-  ~TaskFile();
+  virtual ~TaskFile();
+
   /**
    * Creates a TaskFile instance according to the extension
    * @param filename The filepath
