@@ -243,6 +243,61 @@ OnNameAccess(WndButton &button)
   }
 }
 
+#ifdef _WIN32_WCE
+
+static bool
+OnKeyDown(WndForm &sender, unsigned key_code)
+{
+  DataFieldEnum *dfe;
+
+  /* map the Altair hardware buttons */
+  switch (key_code){
+  case VK_UP:
+    dfe = (DataFieldEnum *)edit_select->GetDataField();
+    dfe->Dec();
+    edit_select->RefreshDisplay();
+    return true;
+
+  case VK_DOWN:
+    dfe = (DataFieldEnum *)edit_select->GetDataField();
+    dfe->Inc();
+    edit_select->RefreshDisplay();
+    return true;
+
+  case VK_LEFT:
+    dfe = (DataFieldEnum *)edit_content->GetDataField();
+    dfe->Dec();
+    edit_content->RefreshDisplay();
+    return true;
+
+  case VK_RIGHT:
+    dfe = (DataFieldEnum *)edit_content->GetDataField();
+    dfe->Inc();
+    edit_content->RefreshDisplay();
+    return true;
+
+  case VK_APP1:
+    OnNameAccess(*buttonPaste);
+    return true;
+
+  case '6':
+    sender.SetModalResult(mrOK);
+    return true;
+
+  case '7':
+    OnCopy(*buttonPaste);
+    return true;
+
+  case '8':
+    OnPaste(*buttonPaste);
+    return true;
+
+  default:
+    return false;
+  }
+}
+
+#endif
 
 bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,
@@ -256,6 +311,11 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   PixelRect rc = parent.get_client_rect();
   wf = new WndForm(parent, rc.left, rc.top,
                    rc.right - rc.left, rc.bottom - rc.top);
+
+#ifdef _WIN32_WCE
+  if (is_altair())
+    wf->SetKeyDownNotify(OnKeyDown);
+#endif
 
   ContainerWindow &client_area = wf->GetClientAreaWindow();
   rc = client_area.get_client_rect();
