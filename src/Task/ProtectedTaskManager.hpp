@@ -35,7 +35,6 @@ class TaskStats;
 class CommonStats;
 class RasterTerrain;
 class Airspaces;
-class AbstractReach;
 
 class ReachIntersectionTest: public AbortIntersectionTest {
 public:

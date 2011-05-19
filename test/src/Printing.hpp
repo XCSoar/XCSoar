@@ -41,7 +41,6 @@ struct AIRCRAFT_STATE;
 struct GeoPoint;
 struct ContestResult;
 class RoutePlanner;
-class AbstractReach;
 class ReachFan;
 class FlatTriangleFanTree;
 class FlatTriangleFan;
@@ -76,7 +75,6 @@ public:
   static void trace_print(const Trace& trace, const GeoPoint &loc);
   static void print(const ContestResult& result);
   static void print_route(RoutePlanner& r);
-  static void print_reach_tree(const AbstractReach& r);
   static void print_reach_tree(const RoutePlanner& r);
   static void print(const ReachFan& r);
   static void print(const FlatTriangleFanTree& r);
