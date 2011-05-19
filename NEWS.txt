@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.1 - not yet released
+Version 6.1 - 2011/05/19
 * devices
   - CAI302: read QNH setting
   - Vega: send configured QNH to Vega
