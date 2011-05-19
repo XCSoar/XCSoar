@@ -23,7 +23,9 @@ Copyright_License {
 
 #include "OS/Clock.hpp"
 
-#if defined(HAVE_POSIX) && !defined(__CYGWIN__)
+#if defined(__APPLE__)
+#include <mach/mach_time.h>
+#elif defined(HAVE_POSIX) && !defined(__CYGWIN__)
 #include <time.h>
 #ifndef __GLIBC__
 #include <sys/time.h>
@@ -40,6 +42,8 @@ MonotonicClockMS()
   struct timespec ts;
   clock_gettime(CLOCK_MONOTONIC, &ts);
   return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
+#elif defined(__APPLE__) /* OS X does not define CLOCK_MONOTONIC */
+  return mach_absolute_time();
 #else
   /* we have no monotonic clock, fall back to gettimeofday() */
   struct timeval tv;
