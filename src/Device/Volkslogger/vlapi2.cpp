@@ -72,6 +72,21 @@ void VLA_XFR::set_databaud(int32 db) {
   }
 }
 
+bool
+VLA_XFR::SendWithCRC(const void *data, size_t length)
+{
+  uint16_t crc16 = 0;
+  const uint8_t *p = (const uint8_t *)data, *end = p + length;
+  while (p < end) {
+    serial_out(*p);
+    crc16 = UpdateCRC(*p++, crc16);
+  }
+
+  serial_out(crc16 >> 8);
+  serial_out(crc16 & 0xff);
+
+  return true;
+}
 
 // send command to VOLKSLOGGER
 //
@@ -79,7 +94,6 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   byte	        c=255;
   const int16   d = 2;  //Verzögerungszeit 2ms
   byte 		cmdarray[8];
-  word          crc16 = 0;
   // alte Zeichen verwerfen
   env.Sleep(100);
   serial_empty_io_buffers();
@@ -102,15 +116,12 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   // Kommando verschicken ( ENQ,Daten,CRC )
   serial_out(ENQ);
   env.Sleep(d);
-  for (unsigned i = 0; i < sizeof(cmdarray); i++) {
-    crc16 = UpdateCRC(cmdarray[i],crc16);
-    serial_out(cmdarray[i]);
-    env.Sleep(d);
+
+  if (!SendWithCRC(cmdarray, sizeof(cmdarray))) {
+    showwait(VLS_TXT_NOFR);
+    return -1;
   }
-  serial_out(crc16/256);
-  env.Sleep(d);
-  serial_out(crc16%256);
-  env.Sleep(d);
+
   // Kommandobestätigung abwarten, aber höchstens timeout Sekunden
   const unsigned timeout_ms = 4000;
   PeriodClock clock;
