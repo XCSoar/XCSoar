@@ -28,8 +28,7 @@
 #include "TaskSolvers/TaskSolution.hpp"
 #include "Task/TaskEvents.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
-
-#include <queue>
+#include "Util/queue.hpp"
 
 const unsigned AbortTask::max_abort = 10; 
 const fixed AbortTask::min_search_range(50000.0);
@@ -43,6 +42,7 @@ AbortTask::AbortTask(TaskEvents &te, const TaskBehaviour &tb,
   active_waypoint(0),
   polar_safety(gp)
 {
+  task_points.reserve(32);
 }
 
 AbortTask::~AbortTask()
@@ -160,7 +160,8 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
                            (short)state.NavAltitude);
 
   bool found_final_glide = false;
-  std::priority_queue<Alternate, AlternateVector, AbortRank> q;
+  reservable_priority_queue<Alternate, AlternateVector, AbortRank> q;
+  q.reserve(32);
   for (AlternateVector::iterator v = approx_waypoints.begin();
        v != approx_waypoints.end();) {
 
@@ -256,6 +257,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   activeTaskPoint = 0; // default to best result if can't find user-set one 
 
   AlternateVector approx_waypoints; 
+  approx_waypoints.reserve(128);
 
   WaypointVisitorVector wvv(approx_waypoints);
   waypoints.visit_within_radius(state.Location, abort_range(state), wvv);

@@ -25,9 +25,9 @@
 #include "BaseTask/TaskWayPoint.hpp"
 #include "Math/Earth.hpp"
 #include "Task/TaskEvents.hpp"
+#include "Util/queue.hpp"
 
 #include <limits.h>
-#include <queue>
 
 const unsigned AlternateTask::max_alternates = 6;
 
@@ -36,6 +36,7 @@ AlternateTask::AlternateTask(TaskEvents &te, const TaskBehaviour &tb,
   AbortTask(te, tb, gp, wps),
   best_alternate_id(UINT_MAX)
 {
+  alternates.reserve(64);
 }
 
 void
@@ -91,7 +92,9 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
   // before the unreachable ones, without the sort criteria affecting
   // the reachability.
 
-  std::priority_queue<Divert, DivertVector, AlternateRank> q;
+  reservable_priority_queue<Divert, DivertVector, AlternateRank> q;
+  q.reserve(task_points.size());
+
   const fixed dist_straight = state_now.get_location().distance(destination);
 
   for (AlternateTaskVector::const_iterator i = task_points.begin(); i != task_points.end(); ++i) {
