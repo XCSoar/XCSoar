@@ -102,11 +102,9 @@ struct VisibleWaypoint {
   void CalculateReachability(const ProtectedTaskManager &task,
                              const TaskBehaviour &task_behaviour)
   {
-    const Waypoint &way_point = *waypoint;
-    const UnorderedTaskPoint t(way_point, task_behaviour);
-    const AGeoPoint p_dest (t.get_location(), t.get_elevation());
+    const AGeoPoint p_dest (waypoint->Location, waypoint->Altitude);
     if (task.find_positive_arrival(p_dest, arrival_height_terrain, arrival_height_glide)) {
-      const short h_base = iround(t.get_elevation());
+      const short h_base = iround(waypoint->Altitude);
       arrival_height_terrain -= h_base;
       arrival_height_glide -= h_base;
     }
