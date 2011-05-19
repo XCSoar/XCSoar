@@ -19,6 +19,7 @@
 #include "Device/Volkslogger/dbbconv.h"
 #include "Device/Volkslogger/grecord.h"
 #include "Device/Volkslogger/utils.h"
+#include "Device/Port.hpp"
 #include "Util.hpp"
 #include "CRC16.hpp"
 #include "PeriodClock.hpp"
@@ -75,13 +76,10 @@ void VLA_XFR::set_databaud(int32 db) {
 bool
 VLA_XFR::SendWithCRC(const void *data, size_t length)
 {
-  uint16_t crc16 = 0;
-  const uint8_t *p = (const uint8_t *)data, *end = p + length;
-  while (p < end) {
-    serial_out(*p);
-    crc16 = UpdateCRC(*p++, crc16);
-  }
+  if (!port->FullWrite(data, length, 2000))
+    return false;
 
+  uint16_t crc16 = UpdateCRC(data, length, 0);
   serial_out(crc16 >> 8);
   serial_out(crc16 & 0xff);
 
@@ -303,9 +301,7 @@ int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
 VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   word crc16;
   byte c;
-  int32 i;
   int32 td = 1;
-  int32 step;
 
   // Schreibkommando geben
   serial_empty_io_buffers();
@@ -324,18 +320,25 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   // Schreiben der Datenbank
   env.Sleep(100);
   crc16 = 0;
-  step = dbbsize / 400;
 
-  for(i=0; i<dbbsize; i++) {
-    c = dbbbuffer[i];
-    crc16 = UpdateCRC(c,crc16);
-    serial_out(c);
-    if((i%step)==0)
-      progress_set(VLS_TXT_WDB);
+  const uint8_t *p = (const uint8_t *)dbbbuffer, *end = p + dbbsize;
+  while (p < end) {
+    size_t n = end - p;
+    if (n > 400)
+      n = 400;
+
+    n = port->Write(p, n);
+    if (n == 0)
+      return VLA_ERR_MISC;
+
+    crc16 = UpdateCRC(p, n, crc16);
+    p += n;
+
+    progress_set(VLS_TXT_WDB);
 
     /* throttle sending a bit, or the Volkslogger's receive buffer
        will overrun */
-    env.Sleep(td);
+    env.Sleep(td * 100);
   }
 
   serial_out(crc16/256);
