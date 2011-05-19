@@ -170,6 +170,13 @@ FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
   calc_bb();
 }
 
+void
+FlatTriangleFanTree::dummy_reach(const AFlatGeoPoint &ao)
+{
+  add_point(ao);
+  calc_bb();
+  height = ao.altitude;
+}
 
 bool
 FlatTriangleFanTree::fill_depth(const AFlatGeoPoint &origin,
@@ -360,8 +367,7 @@ bool ReachFan::solve(const AGeoPoint origin,
   if (do_solve) {
     root.fill_reach(ao, parms);
   } else {
-    root.add_point(ao);
-    root.calc_bb();
+    root.dummy_reach(ao);
   }
 
   fan_size = parms.fan_counter;

@@ -95,6 +95,7 @@ public:
   bool is_inside_tree(const FlatGeoPoint &p, const bool include_children=true) const;
 
   void fill_reach(const AFlatGeoPoint &origin, ReachFanParms& parms);
+  void dummy_reach(const AFlatGeoPoint &origin);
 
   void fill_reach(const AFlatGeoPoint &origin,
                   const int index_low, const int index_high,
