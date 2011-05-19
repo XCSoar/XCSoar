@@ -24,6 +24,7 @@
 #include "CRC16.hpp"
 #include "PeriodClock.hpp"
 #include "Operation.hpp"
+#include "ProgressGlue.hpp"
 
 #include <memory.h>
 #include <string.h>
@@ -321,6 +322,9 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   env.Sleep(100);
   crc16 = 0;
 
+  ProgressGlue::Create(_T("Sending task declaration to logger"));
+  ProgressGlue::SetRange(dbbsize);
+
   const uint8_t *p = (const uint8_t *)dbbbuffer, *end = p + dbbsize;
   while (p < end) {
     size_t n = end - p;
@@ -334,7 +338,7 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
     crc16 = UpdateCRC(p, n, crc16);
     p += n;
 
-    progress_set(VLS_TXT_WDB);
+    ProgressGlue::SetValue(p - (const uint8_t *)dbbbuffer);
 
     /* throttle sending a bit, or the Volkslogger's receive buffer
        will overrun */
