@@ -667,6 +667,10 @@ Chart::DrawDot(const fixed x, const fixed y, const int width)
   RasterPoint p;
   p.x = (int)((x - x_min) * xscale) + rc.left + PaddingLeft;
   p.y = (int)((y_max - y) * yscale) + rc.top;
+  RasterPoint line[4] = { {p.x, p.y-width},
+                          {p.x-width, p.y},
+                          {p.x, p.y+width},
+                          {p.x+width, p.y} };
   canvas.null_pen();
-  canvas.rectangle(p.x-width, p.y-width, p.x+width, p.y+width);
+  canvas.polygon(line, 4);
 }
