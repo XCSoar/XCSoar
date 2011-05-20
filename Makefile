@@ -304,6 +304,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Wind/WindMeasurementList.cpp \
 	$(SRC)/Wind/WindStore.cpp \
 	$(SRC)/Wind/WindZigZag.cpp \
+	$(SRC)/Wind/WindEKF.cpp \
 	\
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	\

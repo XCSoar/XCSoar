@@ -1834,6 +1834,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Wind/WindStore.cpp \
 	$(SRC)/Wind/WindMeasurementList.cpp \
 	$(SRC)/Wind/WindZigZag.cpp \
+	$(SRC)/Wind/WindEKF.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
 	$(SRC)/MapWindow/MapWindowProjection.cpp \
