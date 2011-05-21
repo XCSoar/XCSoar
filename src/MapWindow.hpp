@@ -131,7 +131,7 @@ protected:
 
 public:
   MapWindow();
-  ~MapWindow();
+  virtual ~MapWindow();
 
   virtual void set(ContainerWindow &parent, const PixelRect &rc);
 
