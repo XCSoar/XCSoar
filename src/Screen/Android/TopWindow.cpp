@@ -140,6 +140,19 @@ TopWindow::on_event(const Event &event)
     return on_mouse_up(event.x, event.y);
 
   case Event::RESIZE:
+    if (!surface_valid) {
+      /* postpone the resize if we're paused; the real resize will be
+         handled by TopWindow::refresh() as soon as XCSoar is
+         resumed */
+
+      paused_mutex.Lock();
+      resized = true;
+      new_width = event.x;
+      new_height = event.y;
+      paused_mutex.Unlock();
+      return true;
+    }
+
     /* it seems the first page flip after a display orientation change
        is ignored on Android (tested on a Dell Streak / Android
        2.2.2); let's do one dummy call before we really draw

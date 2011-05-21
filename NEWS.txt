@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.1.1 - not yet released
+* Android
+  - fix crash bug after orientation change and resume
 
 Version 6.1 - 2011/05/19
 * devices

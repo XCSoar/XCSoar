@@ -36,7 +36,7 @@ Copyright_License {
 TopWindow::TopWindow()
   :invalidated(false)
 #ifdef ANDROID
-  , paused(false), resumed(false)
+  , paused(false), resumed(false), resized(false)
 #endif
 {
 }
@@ -136,6 +136,11 @@ TopWindow::refresh()
     screen.set();
 
     SurfaceCreated();
+
+    if (resized) {
+      resized = false;
+      resize(new_width, new_height);
+    }
   }
 
   if (paused || !surface_valid)

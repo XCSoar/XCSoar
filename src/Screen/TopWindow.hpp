@@ -68,6 +68,14 @@ class TopWindow : public ContainerWindow {
    * TopWindow::expose() attempts to reinitialize the OpenGL surface.
    */
   bool resumed;
+
+  /**
+   * Was the application view resized while paused?  If true, then
+   * new_width and new_height contain the new display dimensions.
+   */
+  bool resized;
+
+  unsigned new_width, new_height;
 #endif
 
 #else /* !ENABLE_SDL */
