@@ -83,7 +83,6 @@ NMEA_INFO::reset()
   GroundSpeed = TrueAirspeed = IndicatedAirspeed = fixed_zero;
 
   GPSAltitudeAvailable.Clear();
-  GPSAltitude = fixed_zero;
 
   static_pressure_available.Clear();
 
