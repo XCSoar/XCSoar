@@ -158,6 +158,9 @@ struct SETTINGS_MAP {
   bool EnableAutoBlank;
   /** Update system time from GPS time */
   bool SetSystemTimeFromGPS;
+
+  /** Display climb band on map */
+  bool EnableThermalProfile;
 };
 
 #endif

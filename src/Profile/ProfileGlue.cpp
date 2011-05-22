@@ -336,6 +336,8 @@ Profile::Use()
       settings_map.AutoCloseFlarmDialog);
   Get(szProfileEnableTAGauge,
       settings_map.EnableTAGauge);
+  Get(szProfileEnableThermalProfile,
+      settings_map.EnableThermalProfile);
 
   Get(szProfileGliderScreenPosition,
       settings_map.GliderScreenPosition);

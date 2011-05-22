@@ -130,6 +130,7 @@ extern const TCHAR szProfileEnableFLARMMap[];
 extern const TCHAR szProfileEnableFLARMGauge[];
 extern const TCHAR szProfileAutoCloseFlarmDialog[];
 extern const TCHAR szProfileEnableTAGauge[];
+extern const TCHAR szProfileEnableThermalProfile[];
 extern const TCHAR szProfileSnailTrail[];
 extern const TCHAR szProfileTrailDrift[];
 extern const TCHAR szProfileDetourCostMarker[];

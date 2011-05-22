@@ -193,6 +193,7 @@ const TCHAR szProfileEnableFLARMMap[] = _T("EnableFLARMDisplay");
 const TCHAR szProfileEnableFLARMGauge[] = _T("EnableFLARMGauge");
 const TCHAR szProfileAutoCloseFlarmDialog[] = _T("AutoCloseFlarmDialog");
 const TCHAR szProfileEnableTAGauge[] = _T("EnableTAGauge");
+const TCHAR szProfileEnableThermalProfile[] = _T("EnableThermalProfile");
 const TCHAR szProfileFLARMGaugeBearing[] = _T("FLARMGaugeBearing");
 const TCHAR szProfileGliderScreenPosition[] = _T("GliderScreenPosition");
 const TCHAR szProfileSetSystemTimeFromGPS[] = _T("SetSystemTimeFromGPS");

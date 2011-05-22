@@ -47,6 +47,7 @@ Copyright_License {
 #include "ConfigPanels/InterfaceConfigPanel.hpp"
 #include "ConfigPanels/LayoutConfigPanel.hpp"
 #include "ConfigPanels/GaugesConfigPanel.hpp"
+#include "ConfigPanels/VarioConfigPanel.hpp"
 #include "ConfigPanels/TaskRulesConfigPanel.hpp"
 #include "ConfigPanels/TaskDefaultsConfigPanel.hpp"
 #include "ConfigPanels/InfoBoxesConfigPanel.hpp"
@@ -60,6 +61,7 @@ enum config_page {
   PAGE_MAP_ELEMENTS,
   PAGE_WAYPOINTS,
   PAGE_TERRAIN,
+  PAGE_GAUGES,
   PAGE_VARIO,
   PAGE_GLIDE_COMPUTER,
   PAGE_SAFETY_FACTORS,
@@ -85,6 +87,7 @@ static const TCHAR *const captions[] = {
   N_("Waypoint Display"),
   N_("Terrain Display"),
   N_("FLARM And Other Gauges"),
+  N_("Vario Gauge"),
   N_("Glide Computer"),
   N_("Safety Factors"),
   N_("Route"),
@@ -239,6 +242,7 @@ setVariables()
   InterfaceConfigPanel::Init(wf);
   LayoutConfigPanel::Init(wf);
   GaugesConfigPanel::Init(wf);
+  VarioConfigPanel::Init(wf);
   TaskRulesConfigPanel::Init(wf);
   TaskDefaultsConfigPanel::Init(wf);
   InfoBoxesConfigPanel::Init(wf);
@@ -310,6 +314,7 @@ void dlgConfigurationShowModal(void)
   changed |= InterfaceConfigPanel::Save(requirerestart);
   changed |= LayoutConfigPanel::Save(requirerestart);
   changed |= GaugesConfigPanel::Save();
+  changed |= VarioConfigPanel::Save();
   changed |= TaskRulesConfigPanel::Save();
   changed |= TaskDefaultsConfigPanel::Save();
   changed |= InfoBoxesConfigPanel::Save(requirerestart);

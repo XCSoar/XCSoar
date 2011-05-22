@@ -60,6 +60,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.EnableFLARMMap = true;
   settings_map.ScreenBlanked = false;
   settings_map.EnableAutoBlank = false;
+  settings_map.EnableThermalProfile = false;
 
   settings_map.SetSystemTimeFromGPS = is_altair() && is_embedded();
 }

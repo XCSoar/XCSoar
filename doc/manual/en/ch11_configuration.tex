@@ -630,7 +630,29 @@ centered or in the top left corner.
 %%%%%%%%%%
 
 \clearpage
-\section{FLARM and other gauges}\label{sec:vario-gauge}
+\section{FLARM and other gauges}\label{sec:other-gauge}
+
+\todonum[inline]{Update config dialog screenshots, check order}
+
+\label{conf:variogauge}
+\begin{description}
+\item[FLARM radar]  \label{conf:flarmdisplay} Enables the display of the FLARM
+radar gauge. The track bearing of the target relative to the track bearing of the aircraft
+is displayed as an arrow head.
+\item[Auto close FLARM]  This will close the FLARM radar view when all
+FLARM traffic has gone.
+\item[Thermal assistant] \label{conf:thermalassistant} Enables the display of the
+ThermalAssistant gauge.
+\item[Thermal band] \label{conf:thermalband} Enables the display of the
+thermal profile (climb band) overlay on the map.
+\end{description}
+
+In all FLARM environment, the colour of the target indicates the threat level.
+
+%%%%%%%%%%
+
+\clearpage
+\section{Vario gauge}\label{sec:vario-gauge}
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-othergauges.png}
@@ -647,16 +669,7 @@ netto airmass rate.
 \item[Show gross*]  Whether to show the gross vario value.
 \item[Averager needle*]  If true, the vario gauge will display a hollow averager
 needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.
-\item[FLARM radar]  \label{conf:flarmdisplay} Enables the display of the FLARM
-radar gauge. The track bearing of the target relative to the track bearing of the aircraft 
-is displayed as an arrow head.
-\item[Auto close FLARM]  This will close the FLARM radar view when all
-FLARM traffic has gone.
-\item[ThermalAssistant] \label{conf:thermalassistant} Enables the display of the
-ThermalAssistant gauge.
 \end{description}
-
-In all FLARM environment, the colour of the target indicates the threat level.
 
 %%%%%%%%%%
 

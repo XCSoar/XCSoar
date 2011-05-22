@@ -224,6 +224,15 @@
         <DataField DataType="boolean"/>
       </Edit>
 
+      <Edit Name="prpEnableThermalProfile" Caption="Thermal band" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="This enables the display of the thermal profile (climb band) display on the map.">
+        <DataField DataType="boolean"/>
+      </Edit>
+
+    </Panel>
+
+    <Panel Name="frmVarioAppearance">
+
       <Edit Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Whether to show speed command arrows on the vario gauge.  When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.">
         <DataField DataType="boolean" />

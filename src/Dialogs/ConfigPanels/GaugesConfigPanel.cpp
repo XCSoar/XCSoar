@@ -28,7 +28,6 @@ Copyright_License {
 //#include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
-#include "Gauge/GlueGaugeVario.hpp"
 #include "GaugesConfigPanel.hpp"
 
 static WndForm* wf = NULL;
@@ -40,27 +39,6 @@ GaugesConfigPanel::Init(WndForm *_wf)
   assert(_wf != NULL);
   wf = _wf;
 
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
-                   XCSoarInterface::main_window.vario->ShowSpeedToFly);
-
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
-                   XCSoarInterface::main_window.vario->ShowAvgText);
-
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioMc"),
-                   XCSoarInterface::main_window.vario->ShowMc);
-
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
-                   XCSoarInterface::main_window.vario->ShowBugs);
-
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
-                   XCSoarInterface::main_window.vario->ShowBallast);
-
-  LoadFormProperty(*wf, _T("prpAppGaugeVarioGross"),
-                   XCSoarInterface::main_window.vario->ShowGross);
-
-  LoadFormProperty(*wf, _T("prpAppAveNeedle"),
-                   XCSoarInterface::main_window.vario->ShowAveNeedle);
-
   LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
                    XCSoarInterface::SettingsMap().EnableFLARMGauge);
 
@@ -69,6 +47,9 @@ GaugesConfigPanel::Init(WndForm *_wf)
 
   LoadFormProperty(*wf, _T("prpEnableTAGauge"),
                    XCSoarInterface::SettingsMap().EnableTAGauge);
+
+  LoadFormProperty(*wf, _T("prpEnableThermalProfile"),
+                   XCSoarInterface::SettingsMap().EnableThermalProfile);
 }
 
 
@@ -76,33 +57,6 @@ bool
 GaugesConfigPanel::Save()
 {
   bool changed = false;
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioSpeedToFly"),
-                              szProfileAppGaugeVarioSpeedToFly,
-                              XCSoarInterface::main_window.vario->ShowSpeedToFly);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioAvgText"),
-                              szProfileAppGaugeVarioAvgText,
-                              XCSoarInterface::main_window.vario->ShowAvgText);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioMc"),
-                              szProfileAppGaugeVarioMc,
-                              XCSoarInterface::main_window.vario->ShowMc);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBugs"),
-                              szProfileAppGaugeVarioBugs,
-                              XCSoarInterface::main_window.vario->ShowBugs);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioBallast"),
-                              szProfileAppGaugeVarioBallast,
-                              XCSoarInterface::main_window.vario->ShowBallast);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppGaugeVarioGross"),
-                              szProfileAppGaugeVarioGross,
-                              XCSoarInterface::main_window.vario->ShowGross);
-
-  changed |= SaveFormProperty(*wf, _T("prpAppAveNeedle"), szProfileAppAveNeedle,
-                              XCSoarInterface::main_window.vario->ShowAveNeedle);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableFLARMGauge"),
                               szProfileEnableFLARMGauge,
@@ -115,6 +69,10 @@ GaugesConfigPanel::Save()
   changed |= SaveFormProperty(*wf, _T("prpEnableTAGauge"),
                               szProfileEnableTAGauge,
                               XCSoarInterface::SetSettingsMap().EnableTAGauge);
+
+  changed |= SaveFormProperty(*wf, _T("prpEnableThermalProfile"),
+                              szProfileEnableThermalProfile,
+                              XCSoarInterface::SetSettingsMap().EnableThermalProfile);
 
   return changed;
 }
