@@ -396,6 +396,7 @@ VegaDevice::OnSysTicker(const NMEA_INFO &basic,
   if (basic.TotalEnergyVarioAvailable)
     VarioWriteSettings(calculated);
 
+#ifdef UAV_APPLICATION
   const THERMAL_LOCATOR_INFO &t = calculated.thermal_locator;
   char tbuf[100];
   sprintf(tbuf, "PTLOC,%d,%3.5f,%3.5f,%g,%g",
@@ -406,6 +407,7 @@ VegaDevice::OnSysTicker(const NMEA_INFO &basic,
           (double)fixed_zero);
 
   PortWriteNMEA(port, tbuf);
+#endif
 }
 
 static Device *
