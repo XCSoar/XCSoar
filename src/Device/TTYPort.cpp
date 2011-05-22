@@ -179,6 +179,49 @@ TTYPort::SetRxTimeout(unsigned Timeout)
   return true;
 }
 
+static unsigned
+speed_t_to_baud_rate(speed_t speed)
+{
+  switch (speed) {
+  case B1200:
+    return 1200;
+
+  case B2400:
+    return 2400;
+
+  case B4800:
+    return 4800;
+
+  case B9600:
+    return 9600;
+
+  case B19200:
+    return 19200;
+
+  case B38400:
+    return 38400;
+
+  case B57600:
+    return 57600;
+
+  case B115200:
+    return 115200;
+
+  default:
+    return 0;
+  }
+}
+
+unsigned long
+TTYPort::GetBaudrate() const
+{
+  struct termios attr;
+  if (tcgetattr(fd, &attr) < 0)
+    return 0;
+
+  return speed_t_to_baud_rate(cfgetispeed(&attr));
+}
+
 /**
  * Convert a numeric baud rate to a termios.h constant (B*).  Returns
  * B0 on error.

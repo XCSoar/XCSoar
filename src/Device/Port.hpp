@@ -100,6 +100,12 @@ public:
   virtual unsigned long SetBaudrate(unsigned long BaudRate) = 0;
 
   /**
+   * Gets the current baud rate of the serial port
+   * @return The current baud rate or 0 on error
+   */
+  virtual unsigned long GetBaudrate() const = 0;
+
+  /**
    * Stops the receive thread
    * @return True on success, False on failure
    */

@@ -119,6 +119,7 @@ public:
 
   unsigned GetRxTimeout();
   virtual bool SetRxTimeout(unsigned Timeout);
+  virtual unsigned long GetBaudrate() const;
   virtual unsigned long SetBaudrate(unsigned long BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();

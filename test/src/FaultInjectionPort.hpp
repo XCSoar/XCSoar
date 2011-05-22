@@ -67,6 +67,10 @@ public:
     return true;
   }
 
+  unsigned long GetBaudrate() const {
+    return baud_rate;
+  }
+
   unsigned long SetBaudrate(unsigned long _baud_rate) {
     unsigned long old_value = baud_rate;
     baud_rate = _baud_rate;
