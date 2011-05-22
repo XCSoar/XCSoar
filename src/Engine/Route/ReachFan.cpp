@@ -355,14 +355,14 @@ bool ReachFan::solve(const AGeoPoint origin,
 
   fan_size = 0;
 
+  ReachFanParms parms(rpolars, task_proj, terrain_base, terrain);
+  const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
+
   if (terrain && (origin.altitude <= h + rpolars.safety_height())) {
     terrain_base = h;
+    root.dummy_reach(ao);
     return false;
   }
-
-  ReachFanParms parms(rpolars, task_proj, terrain_base, terrain);
-
-  const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
 
   if (do_solve) {
     root.fill_reach(ao, parms);
