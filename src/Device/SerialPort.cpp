@@ -350,7 +350,7 @@ SerialPort::Write(const void *data, size_t length)
 
 #ifdef _WIN32_WCE
 
-  if (is_embedded())
+  if (is_windows_ce() && !is_altair())
     /* this is needed to work around a driver bug on the HP31x -
        without it, the second consecutive write without a task switch
        will hang the whole PNA; this Sleep() call enforces a task

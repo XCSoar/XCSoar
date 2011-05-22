@@ -7,6 +7,8 @@ Version 6.1.1 - not yet released
   - fix arrival heights which are below the safety height
 * Android
   - fix crash bug after orientation change and resume
+* Altair
+  - fix UI lag
 
 Version 6.1 - 2011/05/19
 * devices
