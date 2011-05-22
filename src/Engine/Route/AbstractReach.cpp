@@ -30,13 +30,6 @@ AbstractReach::solve(const AGeoPoint origin,
                      const RasterMap* terrain,
                      const bool do_solve)
 {
-  if (terrain) {
-    // immediate exit if starts below terrain
-    const short terrain_height = terrain->GetHeight(origin);
-    if ((origin.altitude-rpolars.safety_height()) < terrain_height)
-      return false;
-  }
-
   // initialise task_proj
   task_proj.reset(origin);
   task_proj.update_fast();
