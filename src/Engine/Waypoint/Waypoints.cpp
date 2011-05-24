@@ -247,26 +247,6 @@ Waypoints::lookup_id(const unsigned id) const
   return NULL;
 }
 
-
-Waypoints::WaypointTree::const_iterator
-Waypoints::find_id(const unsigned id) const
-{
-  WaypointTree::const_iterator found = waypoint_tree.begin();
-
-  while (found != waypoint_tree.end()) {
-    if (found->get_waypoint().id == id) {
-      break;
-    }
-    ++found;
-  }
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
-
-  return found;
-}
-
 std::vector<WaypointEnvelope>
 Waypoints::find_within_range(const GeoPoint &loc, const fixed range) const
 {

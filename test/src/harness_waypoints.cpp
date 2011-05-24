@@ -89,10 +89,9 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
   if (verbose) {
     std::ofstream fin("results/res-wp-in.txt");
     for (unsigned i=1; i<=waypoints.size(); i++) {
-      Waypoints::WaypointTree::const_iterator it = waypoints.find_id(i);
-      if (it != waypoints.end()) {
-        fin << it->get_waypoint();
-      }
+      const Waypoint *wp = waypoints.lookup_id(i);
+      if (wp != NULL)
+        fin << *wp;
     }
   }
   return true;

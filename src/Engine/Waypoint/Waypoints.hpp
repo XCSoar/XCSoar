@@ -277,15 +277,6 @@ public:
                                        unsigned long range) const;
 
   /**
-   * Look up waypoint by ID.
-   *
-   * @param id Id of waypoint to find in internal tree
-   *
-   * @return Iterator to matching waypoint (or end if not found)
-   */
-  WaypointTree::const_iterator find_id(const unsigned id) const;
-
-  /**
    * Access first waypoint in store, for use in iterators.
    *
    * @return First waypoint in store
