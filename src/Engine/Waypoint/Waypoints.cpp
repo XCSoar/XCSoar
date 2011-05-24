@@ -102,8 +102,7 @@ Waypoints::optimise()
     /* rebuild the radix tree - we have to do this because the
        pointers to Waypoint objects in KDTree are not stable */
     name_tree.clear();
-    for (Waypoints::WaypointTree::const_iterator it = begin();
-         it != end(); ++it) {
+    for (const_iterator it = begin(); it != end(); ++it) {
       const Waypoint &wp = it->get_waypoint();
       TCHAR normalized_name[wp.Name.length() + 1];
       normalize_search_string(normalized_name, wp.Name.c_str());
@@ -205,7 +204,7 @@ Waypoints::find_home() const
   if (m_home && m_home->Flags.Home)
     return m_home;
 
-  for (WaypointTree::const_iterator found = waypoint_tree.begin();
+  for (const_iterator found = waypoint_tree.begin();
        found != waypoint_tree.end(); ++found) {
     const Waypoint* wp = &(*found).get_waypoint();
     if (wp->Flags.Home) {
@@ -239,7 +238,7 @@ Waypoints::set_home(const unsigned id)
 const Waypoint*
 Waypoints::lookup_id(const unsigned id) const
 {
-  for (WaypointTree::const_iterator found = waypoint_tree.begin();
+  for (const_iterator found = waypoint_tree.begin();
        found != waypoint_tree.end(); ++found)
     if (found->get_waypoint().id == id)
       return &found->get_waypoint();
@@ -347,13 +346,13 @@ Waypoints::visit_name_prefix(const TCHAR *prefix,
   name_tree.visit_prefix(normalized, adapter);
 }
 
-Waypoints::WaypointTree::const_iterator
+Waypoints::const_iterator
 Waypoints::begin() const
 {
   return waypoint_tree.begin();
 }
 
-Waypoints::WaypointTree::const_iterator
+Waypoints::const_iterator
 Waypoints::end() const
 {
   return waypoint_tree.end();

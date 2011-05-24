@@ -33,7 +33,7 @@ WaypointWriter::Save(TextWriter &writer)
   // Iterate through the waypoint list and save each waypoint with
   // the right file number to the TextWriter
   /// @todo JMW: iteration ordered by ID would be preferred
-  for (Waypoints::WaypointTree::const_iterator it = waypoints.begin();
+  for (Waypoints::const_iterator it = waypoints.begin();
        it != waypoints.end(); it++) {
     const Waypoint& wp = it->get_waypoint();
     if (wp.FileNum == file_number)

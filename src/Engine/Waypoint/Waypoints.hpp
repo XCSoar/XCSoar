@@ -238,6 +238,7 @@ public:
     return name_tree.suggest(prefix, dest, max_length);
   }
 
+protected:
   /**
    * Type of KD-tree data structure for waypoint container
    */
@@ -251,6 +252,9 @@ public:
                          > WaypointTree;
 
   typedef RadixTree<const Waypoint*> WaypointNameTree;
+
+public:
+  typedef WaypointTree::const_iterator const_iterator;
 
   /**
    * Looks up nearest waypoint to the search location.
@@ -281,14 +285,14 @@ public:
    *
    * @return First waypoint in store
    */
-  WaypointTree::const_iterator begin() const;
+  const_iterator begin() const;
 
   /**
    * Access end waypoint in store, for use in iterators as end point.
    *
    * @return End waypoint in store
    */
-  WaypointTree::const_iterator end() const;
+  const_iterator end() const;
 
 private:
   /**
