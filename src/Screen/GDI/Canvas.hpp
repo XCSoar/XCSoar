@@ -306,6 +306,10 @@ public:
     ::Polygon(dc, lppt, cPoints);
   }
 
+  void TriangleFan(const RasterPoint *points, unsigned num_points) {
+    polygon(points, num_points);
+  }
+
   void line(int ax, int ay, int bx, int by);
   void line(const RasterPoint a, const RasterPoint b) {
     line(a.x, a.y, b.x, b.y);

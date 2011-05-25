@@ -137,6 +137,36 @@ Canvas::polygon(const RasterPoint *points, unsigned num_points)
 }
 
 void
+Canvas::TriangleFan(const RasterPoint *points, unsigned num_points)
+{
+  if (brush.is_hollow() && !pen.defined())
+    return;
+
+  glVertexPointer(2, GL_VALUE, 0, points);
+
+  if (!brush.is_hollow() && num_points >= 3) {
+    brush.set();
+    glDrawArrays(GL_TRIANGLE_FAN, 0, num_points);
+  }
+
+  if (pen_over_brush()) {
+    pen.set();
+    if (pen.get_width() <= 2) {
+      glDrawArrays(GL_LINE_LOOP, 0, num_points);
+    } else {
+      vertex_buffer.grow_discard(2 * (num_points + 1));
+      unsigned vertices = line_to_triangle(points, num_points,
+                                           vertex_buffer.begin(),
+                                           pen.get_width(), true);
+      if (vertices > 0) {
+        glVertexPointer(2, GL_VALUE, 0, vertex_buffer.begin());
+        glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices);
+      }
+    }
+  }
+}
+
+void
 Canvas::line(int ax, int ay, int bx, int by)
 {
   pen.set();

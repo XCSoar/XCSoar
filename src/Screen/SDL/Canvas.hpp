@@ -282,6 +282,10 @@ public:
   void polyline(const RasterPoint *points, unsigned num_points);
   void polygon(const RasterPoint *points, unsigned num_points);
 
+  void TriangleFan(const RasterPoint *points, unsigned num_points) {
+    polygon(points, num_points);
+  }
+
   void line(int ax, int ay, int bx, int by) {
     ax += x_offset;
     bx += x_offset;

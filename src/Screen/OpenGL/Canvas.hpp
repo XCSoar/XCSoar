@@ -244,6 +244,12 @@ public:
 
   void polygon(const RasterPoint *points, unsigned num_points);
 
+  /**
+   * Draw a triangle fan (GL_TRIANGLE_FAN).  The first point is the
+   * origin of the fan.
+   */
+  void TriangleFan(const RasterPoint *points, unsigned num_points);
+
   void line(int ax, int ay, int bx, int by);
 
   void line(const RasterPoint a, const RasterPoint b) {
