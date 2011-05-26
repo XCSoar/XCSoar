@@ -87,6 +87,7 @@ public:
     // Work directly on the RasterPoints in the fans vector
     fans.push_back(RasterPointVector());
     RasterPointVector &points = fans.back();
+    points.reserve(size);
 
     // Convert GeoPoints to RasterPoints
     for (unsigned i = 0; i < size; ++i)
