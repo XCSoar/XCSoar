@@ -37,7 +37,6 @@
 #endif
 
 #define REACH_MIN_STEP 25
-#define REACH_MAX_FANS 300
 #define REACH_MAX_VERTICES 2000
 
 struct ReachFanParms {
@@ -359,8 +358,6 @@ bool ReachFan::solve(const AGeoPoint origin,
     : RasterBuffer::TERRAIN_INVALID;
   const short h2 = RasterBuffer::is_special(h) ? 0 : h;
 
-  fan_size = 0;
-
   ReachFanParms parms(rpolars, task_proj, terrain_base, terrain);
   const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
 
@@ -376,8 +373,6 @@ bool ReachFan::solve(const AGeoPoint origin,
   } else {
     root.dummy_reach(ao);
   }
-
-  fan_size = parms.fan_counter;
 
   if (!RasterBuffer::is_invalid(h)) {
     parms.terrain_base = h2;
@@ -506,6 +501,5 @@ ReachFan::accept_in_range(const GeoBounds& bounds,
     return;
 
   const FlatBoundingBox bb = task_proj.project(bounds);
-  visitor.allocate_fans(fan_size);
   root.accept_in_range(bb, task_proj, visitor);
 }

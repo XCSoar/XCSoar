@@ -69,6 +69,8 @@ class TriangleFanVisitor;
 
 class FlatTriangleFanTree: public FlatTriangleFan {
 public:
+  static const unsigned REACH_MAX_FANS = 300;
+
   typedef std::vector<FlatTriangleFanTree> LeafVector;
 protected:
   FlatBoundingBox bb_children;
@@ -131,7 +133,6 @@ public:
   virtual void start_fan() = 0;
   virtual void add_point(const GeoPoint& p) = 0;
   virtual void end_fan() = 0;
-  virtual void allocate_fans(const unsigned size) = 0;
 };
 
 #include "AbstractReach.hpp"
@@ -140,10 +141,9 @@ class ReachFan: public AbstractReach {
 protected:
   FlatTriangleFanTree root;
   short terrain_base;
-  unsigned fan_size;
 
 public:
-  ReachFan():AbstractReach(), terrain_base(0), fan_size(0) {};
+  ReachFan():AbstractReach(), terrain_base(0) {};
 
   friend class PrintHelper;
 

@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 
 typedef std::vector<RasterPoint> RasterPointVector;
-typedef std::vector<RasterPointVector> RasterPointVectorVector;
+typedef StaticArray<RasterPointVector, FlatTriangleFanTree::REACH_MAX_FANS> RasterPointVectorVector;
 
 class TriangleCompound: public TriangleFanVisitor {
   /** Temporary container for TriangleFan processing */
@@ -53,10 +53,6 @@ public:
   {
   }
 
-  virtual void allocate_fans(const unsigned size) {
-    fans.reserve(size);
-  }
-
   virtual void start_fan() {
     // Clear the GeoPointVector for the next TriangleFan
     g.clear();
@@ -70,6 +66,9 @@ public:
   virtual void
   end_fan()
   {
+    if (fans.full())
+      return;
+
     // remove unnecessary inclusion of origin if next and last points are identical
     unsigned start = 0;
     const size_t gsize = g.size();
