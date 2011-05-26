@@ -86,11 +86,11 @@ public:
 
     // Work directly on the RasterPoints in the fans vector
     fans.push_back(RasterPointVector());
-    std::vector<RasterPointVector>::reverse_iterator it = fans.rbegin();
+    RasterPointVector &points = fans.back();
 
     // Convert GeoPoints to RasterPoints
     for (unsigned i = 0; i < size; ++i)
-      it->push_back(proj.GeoToScreen(clipped[i]));
+      points.push_back(proj.GeoToScreen(clipped[i]));
   }
 };
 
