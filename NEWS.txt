@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.1.1 - not yet released
 * calculations
   - fix arrival heights which are below the safety height
+  - reduce memory usage
 * Android
   - fix crash bug after orientation change and resume
 * Altair

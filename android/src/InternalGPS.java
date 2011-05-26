@@ -100,12 +100,20 @@ public class InternalGPS
     sensorManager.unregisterListener(this);
 
     if (locationProvider != null) {
-      setConnected(1); // waiting for fix
+      try {
+        locationManager.requestLocationUpdates(locationProvider,
+                                               1000, 0, this);
+      } catch (IllegalArgumentException e) {
+        /* this exception was recorded on the Android Market, message
+           was: "provider=gps" - no idea what that means */
+        setConnected(0);
+        return;
+      }
 
-      locationManager.requestLocationUpdates(locationProvider,
-                                             1000, 0, this);
       sensorManager.registerListener(this, accelerometer,
                                      sensorManager.SENSOR_DELAY_NORMAL);
+
+      setConnected(1); // waiting for fix
     } else
       setConnected(0); // not connected
   }

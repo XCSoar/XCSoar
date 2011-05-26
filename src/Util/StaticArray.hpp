@@ -40,26 +40,27 @@
 template<class T, unsigned max>
 class StaticArray {
 public:
+  typedef unsigned size_type;
   typedef T *iterator;
   typedef const T *const_iterator;
 
 protected:
-  unsigned the_size;
+  size_type the_size;
   T data[max];
 
 public:
   StaticArray():the_size(0) {}
 
-  unsigned capacity() const { return max; }
+  size_type capacity() const { return max; }
 
   /**
    * Returns the number of allocated elements.
    */
-  unsigned size() const {
+  size_type size() const {
     return the_size;
   }
 
-  void shrink(unsigned _size) {
+  void shrink(size_type _size) {
     assert(_size <= the_size);
 
     the_size = _size;
@@ -83,7 +84,7 @@ public:
   /**
    * Returns one element.  No bounds checking.
    */
-  T &operator[](unsigned i) {
+  T &operator[](size_type i) {
     assert(i < size());
 
     return data[i];
@@ -92,7 +93,7 @@ public:
   /**
    * Returns one constant element.  No bounds checking.
    */
-  const T &operator[](unsigned i) const {
+  const T &operator[](size_type i) const {
     assert(i < size());
 
     return data[i];
@@ -172,13 +173,39 @@ public:
   /**
    * Remove an item by copying the last item over it.
    */
-  void quick_remove(unsigned i) {
+  void quick_remove(size_type i) {
     assert(i < size());
 
     if (i < size() - 1)
       data[i] = data[size() - 1];
 
     --the_size;
+  }
+
+  /* STL API emulation */
+
+  void push_back(const T &value) {
+    append(value);
+  }
+
+  T &front() {
+    assert(the_size > 0);
+
+    return data[0];
+  }
+
+  const T &front() const {
+    assert(the_size > 0);
+
+    return data[0];
+  }
+
+  T &back() {
+    return last();
+  }
+
+  const T &back() const {
+    return last();
   }
 };
 

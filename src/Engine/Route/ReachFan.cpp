@@ -37,7 +37,6 @@
 #endif
 
 #define REACH_MIN_STEP 25
-#define REACH_MAX_FANS 300
 #define REACH_MAX_VERTICES 2000
 
 struct ReachFanParms {
@@ -56,9 +55,9 @@ struct ReachFanParms {
   const TaskProjection& task_proj;
   const RasterMap* terrain;
   int terrain_base;
-  int terrain_counter;
-  int fan_counter;
-  int vertex_counter;
+  unsigned terrain_counter;
+  unsigned fan_counter;
+  unsigned vertex_counter;
   unsigned char set_depth;
 
   FlatGeoPoint reach_intercept(const int index,
@@ -262,7 +261,10 @@ FlatTriangleFanTree::update_terrain_base(const FlatGeoPoint& o, ReachFanParms& p
     const FlatGeoPoint av = (o+(*x))*fixed_half;
     const GeoPoint p = parms.task_proj.unproject(av);
     short h = parms.terrain->GetHeight(p);
-    if (!RasterBuffer::is_invalid(h)) {
+    if (RasterBuffer::is_water(h))
+      /* water: assume 0m MSL */
+      parms.terrain_counter++;
+    else if (!RasterBuffer::is_invalid(h)) {
       parms.terrain_counter++;
       parms.terrain_base+= h;
     }
@@ -351,15 +353,17 @@ bool ReachFan::solve(const AGeoPoint origin,
   if (!AbstractReach::solve(origin, rpolars, terrain))
     return false;
 
-  const short h = terrain? terrain->GetHeight(origin): 0;
-
-  fan_size = 0;
+  const short h = terrain
+    ? terrain->GetHeight(origin)
+    : RasterBuffer::TERRAIN_INVALID;
+  const short h2 = RasterBuffer::is_special(h) ? 0 : h;
 
   ReachFanParms parms(rpolars, task_proj, terrain_base, terrain);
   const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
 
-  if (terrain && (origin.altitude <= h + rpolars.safety_height())) {
-    terrain_base = h;
+  if (!RasterBuffer::is_invalid(h) &&
+      (origin.altitude <= h2 + rpolars.safety_height())) {
+    terrain_base = h2;
     root.dummy_reach(ao);
     return false;
   }
@@ -370,10 +374,8 @@ bool ReachFan::solve(const AGeoPoint origin,
     root.dummy_reach(ao);
   }
 
-  fan_size = parms.fan_counter;
-
   if (!RasterBuffer::is_invalid(h)) {
-    parms.terrain_base = h;
+    parms.terrain_base = h2;
     parms.terrain_counter = 1;
   } else {
     parms.terrain_base = 0;
@@ -499,6 +501,5 @@ ReachFan::accept_in_range(const GeoBounds& bounds,
     return;
 
   const FlatBoundingBox bb = task_proj.project(bounds);
-  visitor.allocate_fans(fan_size);
   root.accept_in_range(bb, task_proj, visitor);
 }
