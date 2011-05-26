@@ -31,7 +31,65 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 
 typedef std::vector<RasterPoint> RasterPointVector;
-typedef StaticArray<RasterPointVector, FlatTriangleFanTree::REACH_MAX_FANS> RasterPointVectorVector;
+
+struct ProjectedFan {
+  RasterPointVector points;
+
+  ProjectedFan() {}
+
+  ProjectedFan(unsigned n) {
+    points.reserve(n);
+  }
+
+  void Append(const RasterPoint &pt) {
+    points.push_back(pt);
+  }
+
+  void DrawFill(Canvas &canvas) const {
+    canvas.polygon(&points[0], points.size());
+  }
+
+  void DrawOutline(Canvas &canvas) const {
+    canvas.polygon(&points[0], points.size());
+  }
+};
+
+struct ProjectedFans {
+  typedef StaticArray<ProjectedFan, FlatTriangleFanTree::REACH_MAX_FANS> ProjectedFanVector;
+
+  ProjectedFanVector fans;
+
+  bool empty() const {
+    return fans.empty();
+  }
+
+  bool full() const {
+    return fans.full();
+  }
+
+  ProjectedFanVector::size_type size() const {
+    return fans.size();
+  }
+
+  ProjectedFan &Append(unsigned n) {
+    fans.push_back(ProjectedFan(n));
+    return fans.back();
+  }
+
+  void DrawFill(Canvas &canvas) const {
+    const ProjectedFanVector::const_iterator end = fans.end();
+    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i)
+      i->DrawFill(canvas);
+  }
+
+  void DrawOutline(Canvas &canvas) const {
+    const ProjectedFanVector::const_iterator end = fans.end();
+    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i)
+      i->DrawOutline(canvas);
+  }
+};
+
+typedef StaticArray<ProjectedFan, FlatTriangleFanTree::REACH_MAX_FANS> ProjectedFanVector;
 
 class TriangleCompound: public TriangleFanVisitor {
   /** Temporary container for TriangleFan processing */
@@ -45,7 +103,7 @@ class TriangleCompound: public TriangleFanVisitor {
 
 public:
   /** STL-Container of rasterized polygons */
-  RasterPointVectorVector fans;
+  ProjectedFans fans;
 
   TriangleCompound(const MapWindowProjection& _proj)
     :proj(_proj),
@@ -85,13 +143,11 @@ public:
       return;
 
     // Work directly on the RasterPoints in the fans vector
-    fans.push_back(RasterPointVector());
-    RasterPointVector &points = fans.back();
-    points.reserve(size);
+    ProjectedFan &fan = fans.Append(size);
 
     // Convert GeoPoints to RasterPoints
     for (unsigned i = 0; i < size; ++i)
-      points.push_back(proj.GeoToScreen(clipped[i]));
+      fan.Append(proj.GeoToScreen(clipped[i]));
   }
 };
 
@@ -146,9 +202,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
     canvas.null_pen();
     canvas.white_brush();
-    for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
-         i != visitor.fans.end(); ++i)
-      canvas.polygon(&(*i)[0], i->size());
+    visitor.fans.DrawFill(canvas);
 
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
     glStencilFunc(GL_NOTEQUAL, 1, 1);
@@ -181,9 +235,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     buffer.set_background_color(Color(0xf0, 0xf0, 0xf0));
 
     // Draw the TerrainLine polygons
-    for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
-         i != visitor.fans.end(); ++i)
-      buffer.polygon(&(*i)[0], i->size());
+    visitor.fans.DrawOutline(buffer);
 
     // Select a white brush (will later be transparent)
     buffer.null_pen();
@@ -191,9 +243,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
     // Draw the TerrainLine polygons to remove the
     // brush pattern from the polygon areas
-    for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
-         i != visitor.fans.end(); ++i)
-      buffer.polygon(&(*i)[0], i->size());
+    visitor.fans.DrawFill(buffer);
 
     // Copy everything non-white to the buffer
     canvas.copy_transparent_white(buffer);
@@ -219,8 +269,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
     // Draw the TerrainLine polygon
 
-    const RasterPointVector &fan = visitor.fans.front();
-    canvas.polygon(&fan[0], fan.size());
+    visitor.fans.DrawOutline(canvas);
   } else {
     /* more than one fan (turning reach enabled): we have to use a
        stencil to draw the outline, because the fans may overlap */
@@ -236,9 +285,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   canvas.null_pen();
   canvas.white_brush();
-  for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
-       i != visitor.fans.end(); ++i)
-    canvas.polygon(&(*i)[0], i->size());
+  visitor.fans.DrawFill(canvas);
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glStencilFunc(GL_NOTEQUAL, 1, 1);
@@ -246,9 +293,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   canvas.hollow_brush();
   canvas.select(Graphics::hpTerrainLineThick);
-  for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
-       i != visitor.fans.end(); ++i)
-    canvas.polygon(&(*i)[0], i->size());
+  visitor.fans.DrawOutline(canvas);
 
   glDisable(GL_STENCIL_TEST);
 
@@ -267,9 +312,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   buffer.set_background_color(Color(0xf0, 0xf0, 0xf0));
 
   // Draw the TerrainLine polygons
-  for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
-       i != visitor.fans.end(); ++i)
-    buffer.polygon(&(*i)[0], i->size());
+  visitor.fans.DrawOutline(buffer);
 
   // Select a white brush (will later be transparent)
   buffer.null_pen();
@@ -279,9 +322,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // the lines connecting all the polygons
   //
   // This removes half of the TerrainLine line width !!
-  for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
-       i != visitor.fans.end(); ++i)
-    buffer.polygon(&(*i)[0], i->size());
+  visitor.fans.DrawFill(buffer);
 
   // Copy everything non-white to the buffer
   canvas.copy_transparent_white(buffer);
