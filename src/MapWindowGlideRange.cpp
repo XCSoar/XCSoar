@@ -244,6 +244,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
+  canvas.hollow_brush();
   canvas.select(Graphics::hpTerrainLineThick);
   for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
        i != visitor.fans.end(); ++i)
