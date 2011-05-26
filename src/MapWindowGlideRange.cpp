@@ -33,24 +33,24 @@ Copyright_License {
 typedef std::vector<RasterPoint> RasterPointVector;
 
 struct ProjectedFan {
-  RasterPointVector points;
+  /**
+   * The number of points of the associated ReachFan.  The first
+   * ProjectedFan starts of ProjectedFans::points[0], followed by the
+   * second one at ProjectedFans::points[reach_fan0.size], etc.
+   */
+  unsigned size;
 
   ProjectedFan() {}
 
-  ProjectedFan(unsigned n) {
-    points.reserve(n);
+  ProjectedFan(unsigned n):size(n) {
   }
 
-  void Append(const RasterPoint &pt) {
-    points.push_back(pt);
+  void DrawFill(Canvas &canvas, const RasterPoint *points) const {
+    canvas.polygon(&points[0], size);
   }
 
-  void DrawFill(Canvas &canvas) const {
-    canvas.polygon(&points[0], points.size());
-  }
-
-  void DrawOutline(Canvas &canvas) const {
-    canvas.polygon(&points[0], points.size());
+  void DrawOutline(Canvas &canvas, const RasterPoint *points) const {
+    canvas.polygon(&points[0], size);
   }
 };
 
@@ -58,6 +58,26 @@ struct ProjectedFans {
   typedef StaticArray<ProjectedFan, FlatTriangleFanTree::REACH_MAX_FANS> ProjectedFanVector;
 
   ProjectedFanVector fans;
+
+  /**
+   * All points of all ProjectedFan objects.  The first one starts of
+   * points[0], followed by the second one at points[fans[0].size],
+   * etc.
+   */
+  RasterPointVector points;
+
+#ifndef NDEBUG
+  unsigned remaining;
+#endif
+
+  ProjectedFans()
+#ifndef NDEBUG
+    :remaining(0)
+#endif
+  {
+    /* try to guess the total number of vertices */
+    points.reserve(FlatTriangleFanTree::REACH_MAX_FANS * ROUTEPOLAR_POINTS / 10);
+  }
 
   bool empty() const {
     return fans.empty();
@@ -72,20 +92,46 @@ struct ProjectedFans {
   }
 
   ProjectedFan &Append(unsigned n) {
+#ifndef NDEBUG
+    assert(remaining == 0);
+    remaining = n;
+#endif
+
+    points.reserve(points.size() + n);
+
     fans.push_back(ProjectedFan(n));
     return fans.back();
   }
 
+  void Append(const RasterPoint &pt) {
+#ifndef NDEBUG
+    assert(remaining > 0);
+    --remaining;
+#endif
+
+    points.push_back(pt);
+  }
+
   void DrawFill(Canvas &canvas) const {
+    assert(remaining == 0);
+
+    const RasterPoint *points = &this->points[0];
     const ProjectedFanVector::const_iterator end = fans.end();
-    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i)
-      i->DrawFill(canvas);
+    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i) {
+      i->DrawFill(canvas, points);
+      points += i->size;
+    }
   }
 
   void DrawOutline(Canvas &canvas) const {
+    assert(remaining == 0);
+
+    const RasterPoint *points = &this->points[0];
     const ProjectedFanVector::const_iterator end = fans.end();
-    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i)
-      i->DrawOutline(canvas);
+    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i) {
+      i->DrawOutline(canvas, points);
+      points += i->size;
+    }
   }
 };
 
@@ -143,11 +189,11 @@ public:
       return;
 
     // Work directly on the RasterPoints in the fans vector
-    ProjectedFan &fan = fans.Append(size);
+    fans.Append(size);
 
     // Convert GeoPoints to RasterPoints
     for (unsigned i = 0; i < size; ++i)
-      fan.Append(proj.GeoToScreen(clipped[i]));
+      fans.Append(proj.GeoToScreen(clipped[i]));
   }
 };
 
