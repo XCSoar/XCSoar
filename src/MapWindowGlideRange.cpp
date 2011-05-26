@@ -31,6 +31,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 
 typedef std::vector<RasterPoint> RasterPointVector;
+typedef std::vector<RasterPointVector> RasterPointVectorVector;
 
 class TriangleCompound: public TriangleFanVisitor {
   /** Temporary container for TriangleFan processing */
@@ -44,7 +45,7 @@ class TriangleCompound: public TriangleFanVisitor {
 
 public:
   /** STL-Container of rasterized polygons */
-  std::vector<RasterPointVector> fans;
+  RasterPointVectorVector fans;
 
   TriangleCompound(const MapWindowProjection& _proj)
     :proj(_proj),
@@ -146,7 +147,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
     canvas.null_pen();
     canvas.white_brush();
-    for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+    for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
          i != visitor.fans.end(); ++i)
       canvas.polygon(&(*i)[0], i->size());
 
@@ -181,7 +182,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     buffer.set_background_color(Color(0xf0, 0xf0, 0xf0));
 
     // Draw the TerrainLine polygons
-    for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+    for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
          i != visitor.fans.end(); ++i)
       buffer.polygon(&(*i)[0], i->size());
 
@@ -191,7 +192,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
     // Draw the TerrainLine polygons to remove the
     // brush pattern from the polygon areas
-    for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+    for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
          i != visitor.fans.end(); ++i)
       buffer.polygon(&(*i)[0], i->size());
 
@@ -236,7 +237,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   canvas.null_pen();
   canvas.white_brush();
-  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+  for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
        i != visitor.fans.end(); ++i)
     canvas.polygon(&(*i)[0], i->size());
 
@@ -245,7 +246,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
   canvas.select(Graphics::hpTerrainLineThick);
-  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+  for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
        i != visitor.fans.end(); ++i)
     canvas.polygon(&(*i)[0], i->size());
 
@@ -266,7 +267,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   buffer.set_background_color(Color(0xf0, 0xf0, 0xf0));
 
   // Draw the TerrainLine polygons
-  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+  for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
        i != visitor.fans.end(); ++i)
     buffer.polygon(&(*i)[0], i->size());
 
@@ -278,7 +279,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // the lines connecting all the polygons
   //
   // This removes half of the TerrainLine line width !!
-  for (std::vector<RasterPointVector>::const_iterator i = visitor.fans.begin();
+  for (RasterPointVectorVector::const_iterator i = visitor.fans.begin();
        i != visitor.fans.end(); ++i)
     buffer.polygon(&(*i)[0], i->size());
 
