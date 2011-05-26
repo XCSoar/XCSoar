@@ -56,9 +56,9 @@ struct ReachFanParms {
   const TaskProjection& task_proj;
   const RasterMap* terrain;
   int terrain_base;
-  int terrain_counter;
-  int fan_counter;
-  int vertex_counter;
+  unsigned terrain_counter;
+  unsigned fan_counter;
+  unsigned vertex_counter;
   unsigned char set_depth;
 
   FlatGeoPoint reach_intercept(const int index,
