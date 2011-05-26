@@ -180,6 +180,32 @@ public:
 
     --the_size;
   }
+
+  /* STL API emulation */
+
+  void push_back(const T &value) {
+    append(value);
+  }
+
+  T &front() {
+    assert(the_size > 0);
+
+    return data[0];
+  }
+
+  const T &front() const {
+    assert(the_size > 0);
+
+    return data[0];
+  }
+
+  T &back() {
+    return last();
+  }
+
+  const T &back() const {
+    return last();
+  }
 };
 
 #endif
