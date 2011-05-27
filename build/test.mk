@@ -616,6 +616,10 @@ DEBUG_PROGRAM_NAMES += FeedNMEA \
 	FeedTCP
 endif
 
+ifeq ($(TARGET),PC)
+DEBUG_PROGRAM_NAMES += RunHTTPReader
+endif
+
 ifeq ($(HAVE_CE)$(findstring $(TARGET),ALTAIR),y)
 DEBUG_PROGRAM_NAMES += TodayInstall
 endif
@@ -680,6 +684,19 @@ RUN_TEXT_WRITER_LDADD = \
 	$(IO_LIBS) \
 	$(ZZIP_LIBS)
 $(TARGET_BIN_DIR)/RunTextWriter$(TARGET_EXEEXT): $(RUN_TEXT_WRITER_OBJS) $(RUN_TEXT_WRITER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_HTTP_READER_SOURCES = \
+	$(SRC)/Net/Session.cpp \
+	$(SRC)/Net/Connection.cpp \
+	$(SRC)/Net/Request.cpp \
+	$(TEST_SRC_DIR)/RunHTTPReader.cpp
+RUN_HTTP_READER_OBJS = $(call SRC_TO_OBJ,$(RUN_HTTP_READER_SOURCES))
+RUN_HTTP_READER_BIN = $(TARGET_BIN_DIR)/RunHTTPReader$(TARGET_EXEEXT)
+RUN_HTTP_READER_LDADD = $(IO_LIBS)
+$(RUN_HTTP_READER_BIN): LDLIBS += -lwininet
+$(RUN_HTTP_READER_BIN): $(RUN_HTTP_READER_OBJS) $(RUN_HTTP_READER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
