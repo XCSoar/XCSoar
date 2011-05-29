@@ -27,6 +27,10 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Triangulate.hpp"
+#endif
+
 #include <stdio.h>
 #include "Util/StaticArray.hpp"
 
@@ -45,6 +49,29 @@ struct ProjectedFan {
   ProjectedFan(unsigned n):size(n) {
   }
 
+#ifdef ENABLE_OPENGL
+  void DrawFill(const RasterPoint *points, unsigned start) const {
+    /* triangulate the polygon */
+    AllocatedArray<GLushort> triangle_buffer;
+    triangle_buffer.grow_discard(3 * (size - 2));
+
+    unsigned idx_count = polygon_to_triangle(points + start, size,
+                                             triangle_buffer.begin());
+    if (idx_count == 0)
+      return;
+
+    /* add offset to all vertex indices */
+    for (unsigned i = 0; i < idx_count; ++i)
+      triangle_buffer[i] += start;
+
+    glDrawElements(GL_TRIANGLES, idx_count, GL_UNSIGNED_SHORT,
+                   triangle_buffer.begin());
+  }
+
+  void DrawOutline(unsigned start) const {
+    glDrawArrays(GL_LINE_STRIP, start, size);
+  }
+#else
   void DrawFill(Canvas &canvas, const RasterPoint *points) const {
     canvas.polygon(&points[0], size);
   }
@@ -52,6 +79,7 @@ struct ProjectedFan {
   void DrawOutline(Canvas &canvas, const RasterPoint *points) const {
     canvas.polygon(&points[0], size);
   }
+#endif
 };
 
 struct ProjectedFans {
@@ -112,26 +140,51 @@ struct ProjectedFans {
     points.push_back(pt);
   }
 
+#ifdef ENABLE_OPENGL
+  void Prepare() {
+    glVertexPointer(2, GL_VALUE, 0, &points[0]);
+  }
+#endif
+
   void DrawFill(Canvas &canvas) const {
     assert(remaining == 0);
 
+#ifdef ENABLE_OPENGL
+    unsigned start = 0;
+    const RasterPoint *points = &this->points[0];
+    const ProjectedFanVector::const_iterator end = fans.end();
+    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i) {
+      i->DrawFill(points, start);
+      start += i->size;
+    }
+#else
     const RasterPoint *points = &this->points[0];
     const ProjectedFanVector::const_iterator end = fans.end();
     for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i) {
       i->DrawFill(canvas, points);
       points += i->size;
     }
+#endif
   }
 
   void DrawOutline(Canvas &canvas) const {
     assert(remaining == 0);
 
+#ifdef ENABLE_OPENGL
+    unsigned start = 0;
+    const ProjectedFanVector::const_iterator end = fans.end();
+    for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i) {
+      i->DrawOutline(start);
+      start += i->size;
+    }
+#else
     const RasterPoint *points = &this->points[0];
     const ProjectedFanVector::const_iterator end = fans.end();
     for (ProjectedFanVector::const_iterator i = fans.begin(); i != end; ++i) {
       i->DrawOutline(canvas, points);
       points += i->size;
     }
+#endif
   }
 };
 
@@ -238,6 +291,8 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
 #ifdef ENABLE_OPENGL
 
+    visitor.fans.Prepare();
+
     glEnable(GL_STENCIL_TEST);
     glClear(GL_STENCIL_BUFFER_BIT);
 
@@ -246,8 +301,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     glStencilFunc(GL_ALWAYS, 1, 1);
     glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-    canvas.null_pen();
-    canvas.white_brush();
+    COLOR_WHITE.set();
     visitor.fans.DrawFill(canvas);
 
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
@@ -305,6 +359,10 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   if (visitor.fans.size() == 1) {
     /* only one fan: we can draw a simple polygon */
 
+#ifdef ENABLE_OPENGL
+    visitor.fans.Prepare();
+    Graphics::hpTerrainLine.set();
+#else
     // Select the TerrainLine pen
     canvas.hollow_brush();
     canvas.select(Graphics::hpTerrainLine);
@@ -312,6 +370,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     canvas.set_background_color(COLOR_WHITE);
 
     // drop out extraneous line from origin
+#endif
 
     // Draw the TerrainLine polygon
 
@@ -321,6 +380,8 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
        stencil to draw the outline, because the fans may overlap */
 
 #ifdef ENABLE_OPENGL
+  visitor.fans.Prepare();
+
   glEnable(GL_STENCIL_TEST);
   glClear(GL_STENCIL_BUFFER_BIT);
 
@@ -329,16 +390,14 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   glStencilFunc(GL_ALWAYS, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_REPLACE);
 
-  canvas.null_pen();
-  canvas.white_brush();
+  COLOR_WHITE.set();
   visitor.fans.DrawFill(canvas);
 
   glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
   glStencilFunc(GL_NOTEQUAL, 1, 1);
   glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
 
-  canvas.hollow_brush();
-  canvas.select(Graphics::hpTerrainLineThick);
+  Graphics::hpTerrainLineThick.set();
   visitor.fans.DrawOutline(canvas);
 
   glDisable(GL_STENCIL_TEST);
