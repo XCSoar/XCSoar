@@ -35,7 +35,7 @@ Net::Request::Request(Connection &connection, const char *file,
 
   handle = HttpOpenRequestA(connection.handle, "GET", file, NULL, NULL, NULL,
                             INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE,
-                            (DWORD)&context);
+                            (DWORD_PTR)&context);
 
   if (handle == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the Request handle
@@ -82,7 +82,7 @@ Net::Request::Read(char *buffer, size_t buffer_size, unsigned long timeout)
   InetBuff.dwBufferLength = buffer_size - 1;
 
   // If InternetReadFileExA() failed or timeout occured in WaitForSingleObject()
-  if (!InternetReadFileExA(handle, &InetBuff, IRF_ASYNC, (DWORD)&context) &&
+  if (!InternetReadFileExA(handle, &InetBuff, IRF_ASYNC, (DWORD_PTR)&context) &&
       (GetLastError() != ERROR_IO_PENDING ||
        WaitForSingleObject(completed_event, timeout) != WAIT_OBJECT_0))
     // return "0 bytes read"

@@ -32,7 +32,7 @@ Net::Connection::Connection(Session &session, const char *server,
 
   handle = InternetConnectA(session.handle, server,
                             INTERNET_DEFAULT_HTTP_PORT, NULL, NULL,
-                            INTERNET_SERVICE_HTTP, 0, (DWORD)&context);
+                            INTERNET_SERVICE_HTTP, 0, (DWORD_PTR)&context);
 
   if (handle == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the connection handle
