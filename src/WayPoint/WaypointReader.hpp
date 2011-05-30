@@ -34,19 +34,41 @@ class RasterTerrain;
 
 class WaypointReader
 {
+  /** The internal reader implementation depending on the file format */
   WaypointReaderBase* reader;
 
 public:
+  /** Non-initializing constructor */
   WaypointReader();
+  /** Initializing constructor. Loads the specified waypoint file */
   WaypointReader(const TCHAR* filename, int filenum = 0);
+  /** Destroys the internal reader */
   ~WaypointReader();
 
+  /**
+   * Opens the given file, tries to guess the file format and
+   * initializes the internal reader
+   * @param filename The file that should be opened
+   * @param filenum The filenum parameter that is saved into the parsed waypoints
+   */
   void Open(const TCHAR* filename, int filenum = 0);
 
+  /** Sets the terrain that should be used for waypoint elevation detection */
   void SetTerrain(const RasterTerrain* _terrain);
 
+  /**
+   * Parses the waypoint file into the given Waypoints instance
+   * @param way_points A Waypoints instance that will hold the parsed waypoints
+   * @param callback An optional callback function
+   * @return True if the file was parsed successfully
+   */
   bool Parse(Waypoints &way_points, WaypointReaderBase::StatusCallback callback = NULL);
 
+  /**
+   * Returns whether there is a valid internal reader
+   * that can be used for parsing the waypoint file.
+   * @return True if Parse() can be used
+   */
   bool Error() const {
     return reader == NULL;
   }
