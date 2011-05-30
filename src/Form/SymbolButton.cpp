@@ -83,7 +83,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   }
 
   // Draw arrow symbols instead of v and ^
-  if (ch == '^' || ch == 'v') {
+  else if (ch == '^' || ch == 'v') {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
     RasterPoint Arrow[3];
@@ -102,7 +102,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   }
 
   // Draw symbols instead of + and -
-  if (ch == '+' || ch == '-') {
+  else if (ch == '+' || ch == '-') {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
     canvas.rectangle((rc.left + rc.right) / 2 - size,
@@ -118,7 +118,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   }
 
   // Draw Fly bitmap
-  if (caption == _T("Fly")) {
+  else if (caption == _T("Fly")) {
     Bitmap launcher1_bitmap(IDB_LAUNCHER1);
     canvas.clear_white();
     if (is_down())
@@ -128,7 +128,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
   }
 
   // Draw Simulator bitmap
-  if (caption == _T("Simulator")) {
+  else if (caption == _T("Simulator")) {
     Bitmap launcher2_bitmap(IDB_LAUNCHER2);
     canvas.clear_white();
     if (is_down())
