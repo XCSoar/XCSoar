@@ -218,6 +218,8 @@ FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
     if (too_close(x_mid, origin))
       return;
   }
+
+  assert(vs.empty());
   add_point(origin);
   for (int index= index_low; index< index_high; ++index) {
     const FlatGeoPoint x = parms.reach_intercept(index, ao);
