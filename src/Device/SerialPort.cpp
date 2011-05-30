@@ -78,6 +78,8 @@ SerialPort::~SerialPort()
 bool
 SerialPort::Open()
 {
+  assert(!Thread::IsInside());
+
 #ifdef _WIN32_WCE
   is_widcomm = IsWidcommDevice(sPortName);
 #endif
@@ -225,6 +227,8 @@ SerialPort::WaitDataPending(OverlappedEvent &overlapped,
 void
 SerialPort::Run()
 {
+  assert(Thread::IsInside());
+
   DWORD dwBytesTransferred;
   BYTE inbuf[1024];
 
@@ -542,6 +546,8 @@ SerialPort::SetBaudrate(unsigned BaudRate)
 int
 SerialPort::Read(void *Buffer, size_t Size)
 {
+  assert(!Thread::IsInside());
+
   DWORD dwBytesTransferred;
 
   if (hPort == INVALID_HANDLE_VALUE)
@@ -596,6 +602,8 @@ SerialPort::Read(void *Buffer, size_t Size)
 void
 SerialPort::ProcessChar(char c)
 {
+  assert(Thread::IsInside());
+
   FifoBuffer<char>::Range range = buffer.write();
   if (range.second == 0) {
     // overflow, so reset buffer
