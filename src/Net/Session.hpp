@@ -24,12 +24,13 @@ Copyright_License {
 #ifndef NET_SESSION_HPP
 #define NET_SESSION_HPP
 
-#include <wininet.h>
+#include "Net/WinINet.hpp"
 
 namespace Net {
   class Session {
     /** Internal session handle */
-    HINTERNET handle;
+    WinINet::SessionHandle handle;
+
     /** Was the callback installed successfully? */
     bool callback_installed;
 

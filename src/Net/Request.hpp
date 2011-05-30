@@ -26,9 +26,7 @@ Copyright_License {
 
 #include "Thread/Trigger.hpp"
 #include "Net/Context.hpp"
-
-#include <windows.h>
-#include <wininet.h>
+#include "Net/WinINet.hpp"
 
 namespace Net {
   class Connection;
@@ -36,7 +34,8 @@ namespace Net {
   class Request {
   public:
     /** Internal connection handle */
-    HINTERNET handle;
+    WinINet::HttpRequestHandle handle;
+
     /** Context for the callback function (holds a pointer to this) */
     Context context;
     /** Event handles that are triggered in certain situations */
@@ -53,9 +52,6 @@ namespace Net {
      */
     Request(Connection &connection, const char *file,
             unsigned long timeout = INFINITE);
-
-    /** Destroys the Request and unregisters the event handles */
-    ~Request();
 
     /**
      * Returns whether the Request has been created successfully.

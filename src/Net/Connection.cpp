@@ -29,24 +29,20 @@ Net::Connection::Connection(Session &session, const char *server,
   :context(Context::CONNECTION, this),
    event(false)
 {
-  handle = InternetConnectA(session.handle, server,
-                            INTERNET_DEFAULT_HTTP_PORT, NULL, NULL,
-                            INTERNET_SERVICE_HTTP, 0, (DWORD_PTR)&context);
+  HINTERNET h = session.handle.Connect(server,
+                                       INTERNET_DEFAULT_HTTP_PORT, NULL, NULL,
+                                       INTERNET_SERVICE_HTTP, 0,
+                                       (DWORD_PTR)&context);
 
-  if (handle == NULL && GetLastError() == ERROR_IO_PENDING)
+  if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the connection handle
     event.Wait(timeout);
-}
-
-Net::Connection::~Connection()
-{
-  InternetCloseHandle(handle);
 }
 
 bool
 Net::Connection::Connected() const
 {
-  return handle != NULL;
+  return handle.IsDefined();
 }
 
 void
@@ -54,7 +50,7 @@ Net::Connection::Callback(DWORD status, LPVOID info, DWORD info_length)
 {
   if (status == INTERNET_STATUS_HANDLE_CREATED) {
     INTERNET_ASYNC_RESULT *res = (INTERNET_ASYNC_RESULT *)info;
-    handle = (HINTERNET)res->dwResult;
+    handle.Set((HINTERNET)res->dwResult);
     event.Signal();
   }
 }

@@ -26,16 +26,15 @@ Copyright_License {
 
 #include "Thread/Trigger.hpp"
 #include "Net/Context.hpp"
-
-#include <windows.h>
-#include <wininet.h>
+#include "Net/WinINet.hpp"
 
 namespace Net {
   class Session;
 
   class Connection {
     /** Internal connection handle */
-    HINTERNET handle;
+    WinINet::HttpConnectionHandle handle;
+
     /** Context for the callback function (holds a pointer to this) */
     Context context;
     /**
@@ -54,9 +53,6 @@ namespace Net {
      * @param timeout Timeout used for creating the connection handle
      */
     Connection(Session &session, const char *server, unsigned long timeout = INFINITE);
-
-    /** Destroys the Connection and unregisters the event handle */
-    ~Connection();
 
     /**
      * Returns whether the Connection has been created successfully.

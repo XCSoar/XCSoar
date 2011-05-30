@@ -32,33 +32,28 @@ Net::Request::Request(Connection &connection, const char *file,
    opened_event(false), completed_event(false),
    last_error(0)
 {
-  handle = HttpOpenRequestA(connection.handle, "GET", file, NULL, NULL, NULL,
-                            INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE,
-                            (DWORD_PTR)&context);
+  HINTERNET h = connection.handle.OpenRequest("GET", file, NULL, NULL, NULL,
+                                              INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE,
+                                              (DWORD_PTR)&context);
 
-  if (handle == NULL && GetLastError() == ERROR_IO_PENDING)
+  if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the Request handle
     opened_event.Wait(timeout);
-}
-
-Net::Request::~Request()
-{
-  InternetCloseHandle(handle);
 }
 
 bool
 Net::Request::Created() const
 {
-  return handle != NULL;
+  return handle.IsDefined();
 }
 
 bool
 Net::Request::Send(unsigned long timeout)
 {
-  assert(handle != NULL);
+  assert(handle.IsDefined());
 
   // Send request
-  if (HttpSendRequestA(handle, NULL, 0, NULL, 0))
+  if (handle.SendRequest(NULL, 0, NULL, 0))
     return true;
 
   // If HttpSendRequestA() failed or timeout occured in WaitForSingleObject()
@@ -79,7 +74,7 @@ Net::Request::Read(char *buffer, size_t buffer_size, unsigned long timeout)
   InetBuff.dwBufferLength = buffer_size - 1;
 
   // If InternetReadFileExA() failed or timeout occured in WaitForSingleObject()
-  if (!InternetReadFileExA(handle, &InetBuff, IRF_ASYNC, (DWORD_PTR)&context) &&
+  if (!handle.Read(&InetBuff, IRF_ASYNC, (DWORD_PTR)&context) &&
       (GetLastError() != ERROR_IO_PENDING ||
        !completed_event.Wait(timeout)))
     // return "0 bytes read"
@@ -96,7 +91,7 @@ Net::Request::Callback(DWORD status, LPVOID info, DWORD info_length)
   switch (status) {
   case INTERNET_STATUS_HANDLE_CREATED: {
     INTERNET_ASYNC_RESULT *res = (INTERNET_ASYNC_RESULT *)info;
-    handle = (HINTERNET)res->dwResult;
+    handle.Set((HINTERNET)res->dwResult);
     opened_event.Signal();
     break;
   }
