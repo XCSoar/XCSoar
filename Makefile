@@ -62,6 +62,7 @@ include $(topdir)/build/manual.mk
 include $(topdir)/build/libutil.mk
 include $(topdir)/build/libmath.mk
 include $(topdir)/build/libprofile.mk
+include $(topdir)/build/libnet.mk
 include $(topdir)/build/zlib.mk
 include $(topdir)/build/zzip.mk
 include $(topdir)/build/jasper.mk
