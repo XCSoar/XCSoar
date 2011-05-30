@@ -34,7 +34,7 @@ class RasterTerrain;
 
 class WaypointReader
 {
-  WaypointReaderBase* file;
+  WaypointReaderBase* reader;
 
 public:
   WaypointReader();
@@ -48,7 +48,7 @@ public:
   bool Parse(Waypoints &way_points, WaypointReaderBase::StatusCallback callback = NULL);
 
   bool Error() const {
-    return file == NULL;
+    return reader == NULL;
   }
 };
 

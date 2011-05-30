@@ -38,24 +38,24 @@ Copyright_License {
 bool
 WaypointReader::Parse(Waypoints &way_points, WaypointReaderBase::StatusCallback callback)
 {
-  if (file == NULL)
+  if (reader == NULL)
     return false;
 
-  return file->Parse(way_points, callback);
+  return reader->Parse(way_points, callback);
 }
 
 void
 WaypointReader::SetTerrain(const RasterTerrain* _terrain)
 {
-  if (file != NULL)
-    file->SetTerrain(_terrain);
+  if (reader != NULL)
+    reader->SetTerrain(_terrain);
 }
 
 void
 WaypointReader::Open(const TCHAR* filename, int the_filenum)
 {
-  delete file;
-  file = NULL;
+  delete reader;
+  reader = NULL;
 
   // If filename is empty -> clear and return NULL pointer
   if (string_is_empty(filename))
@@ -75,42 +75,42 @@ WaypointReader::Open(const TCHAR* filename, int the_filenum)
   // If WinPilot waypoint file -> save type and return true
   if (MatchesExtension(filename, _T(".dat")) ||
       MatchesExtension(filename, _T(".xcw")))
-    file = new WaypointReaderWinPilot(filename, the_filenum, compressed);
+    reader = new WaypointReaderWinPilot(filename, the_filenum, compressed);
 
   // If SeeYou waypoint file -> save type and return true
   else if (MatchesExtension(filename, _T(".cup")))
-    file = new WaypointReaderSeeYou(filename, the_filenum, compressed);
+    reader = new WaypointReaderSeeYou(filename, the_filenum, compressed);
 
   // If Zander waypoint file -> save type and return true
   else if (MatchesExtension(filename, _T(".wpz")))
-    file = new WaypointReaderZander(filename, the_filenum, compressed);
+    reader = new WaypointReaderZander(filename, the_filenum, compressed);
 
   // If FS waypoint file -> save type and return true
   else if (MatchesExtension(filename, _T(".wpt"))) {
-    file = new WaypointReaderFS(filename, the_filenum, compressed);
-    if (file->VerifyFormat())
+    reader = new WaypointReaderFS(filename, the_filenum, compressed);
+    if (reader->VerifyFormat())
       return;
 
-    delete file;
-    file = new WaypointReaderOzi(filename, the_filenum, compressed);
-    if (file->VerifyFormat())
+    delete reader;
+    reader = new WaypointReaderOzi(filename, the_filenum, compressed);
+    if (reader->VerifyFormat())
       return;
 
-    delete file;
-    file = NULL;
+    delete reader;
+    reader = NULL;
   }
 }
 
 WaypointReader::WaypointReader()
-  :file(NULL) {}
+  :reader(NULL) {}
 
 WaypointReader::WaypointReader(const TCHAR* filename, int the_filenum)
-  :file(NULL)
+  :reader(NULL)
 {
   Open(filename, the_filenum);
 }
 
 WaypointReader::~WaypointReader()
 {
-  delete file;
+  delete reader;
 }
