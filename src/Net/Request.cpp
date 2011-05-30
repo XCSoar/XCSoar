@@ -28,24 +28,21 @@ Copyright_License {
 
 Net::Request::Request(Connection &connection, const char *file,
                       unsigned long timeout)
-  :context(Context::REQUEST, this), last_error(0)
+  :context(Context::REQUEST, this),
+   opened_event(false), completed_event(false),
+   last_error(0)
 {
-  opened_event = CreateEvent(NULL, FALSE, FALSE, NULL);
-  completed_event = CreateEvent(NULL, FALSE, FALSE, NULL);
-
   handle = HttpOpenRequestA(connection.handle, "GET", file, NULL, NULL, NULL,
                             INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE,
                             (DWORD_PTR)&context);
 
   if (handle == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the Request handle
-    WaitForSingleObject(opened_event, timeout);
+    opened_event.Wait(timeout);
 }
 
 Net::Request::~Request()
 {
-  CloseHandle(opened_event);
-  CloseHandle(completed_event);
   InternetCloseHandle(handle);
 }
 
@@ -66,7 +63,7 @@ Net::Request::Send(unsigned long timeout)
 
   // If HttpSendRequestA() failed or timeout occured in WaitForSingleObject()
   if (GetLastError() != ERROR_IO_PENDING ||
-      WaitForSingleObject(completed_event, timeout) != WAIT_OBJECT_0)
+      !completed_event.Wait(timeout))
     return false;
   else
     return last_error == 0;
@@ -84,7 +81,7 @@ Net::Request::Read(char *buffer, size_t buffer_size, unsigned long timeout)
   // If InternetReadFileExA() failed or timeout occured in WaitForSingleObject()
   if (!InternetReadFileExA(handle, &InetBuff, IRF_ASYNC, (DWORD_PTR)&context) &&
       (GetLastError() != ERROR_IO_PENDING ||
-       WaitForSingleObject(completed_event, timeout) != WAIT_OBJECT_0))
+       !completed_event.Wait(timeout)))
     // return "0 bytes read"
     return 0;
 
@@ -100,13 +97,13 @@ Net::Request::Callback(DWORD status, LPVOID info, DWORD info_length)
   case INTERNET_STATUS_HANDLE_CREATED: {
     INTERNET_ASYNC_RESULT *res = (INTERNET_ASYNC_RESULT *)info;
     handle = (HINTERNET)res->dwResult;
-    SetEvent(opened_event);
+    opened_event.Signal();
     break;
   }
   case INTERNET_STATUS_REQUEST_COMPLETE: {
     INTERNET_ASYNC_RESULT *res = (INTERNET_ASYNC_RESULT *)info;
     last_error = res->dwError;
-    SetEvent(completed_event);
+    completed_event.Signal();
     break;
   }
   }

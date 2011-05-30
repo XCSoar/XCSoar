@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef NET_REQUEST_HPP
 #define NET_REQUEST_HPP
 
+#include "Thread/Trigger.hpp"
 #include "Net/Context.hpp"
 
 #include <windows.h>
@@ -39,7 +40,7 @@ namespace Net {
     /** Context for the callback function (holds a pointer to this) */
     Context context;
     /** Event handles that are triggered in certain situations */
-    HANDLE opened_event, completed_event;
+    Trigger opened_event, completed_event;
     /** The last error code that was retrieved by the Callback() function */
     DWORD last_error;
 
