@@ -212,7 +212,7 @@ speed_t_to_baud_rate(speed_t speed)
   }
 }
 
-unsigned long
+unsigned
 TTYPort::GetBaudrate() const
 {
   struct termios attr;
@@ -259,8 +259,8 @@ baud_rate_to_speed_t(unsigned baud_rate)
   }
 }
 
-unsigned long
-TTYPort::SetBaudrate(unsigned long BaudRate)
+unsigned
+TTYPort::SetBaudrate(unsigned BaudRate)
 {
   if (fd < 0)
     return 0;

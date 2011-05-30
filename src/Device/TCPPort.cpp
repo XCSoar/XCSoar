@@ -260,14 +260,14 @@ TCPPort::SetRxTimeout(unsigned Timeout)
   return true;
 }
 
-unsigned long
+unsigned
 TCPPort::GetBaudrate() const
 {
   return 0;
 }
 
-unsigned long
-TCPPort::SetBaudrate(unsigned long BaudRate)
+unsigned
+TCPPort::SetBaudrate(unsigned BaudRate)
 {
   return 0;
 }

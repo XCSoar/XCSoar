@@ -37,8 +37,8 @@ public:
   virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
   virtual bool SetRxTimeout(unsigned Timeout);
-  virtual unsigned long GetBaudrate() const;
-  virtual unsigned long SetBaudrate(unsigned long BaudRate);
+  virtual unsigned GetBaudrate() const;
+  virtual unsigned SetBaudrate(unsigned BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();
   virtual int GetChar();

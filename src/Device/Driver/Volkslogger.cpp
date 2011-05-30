@@ -231,7 +231,7 @@ VolksloggerDevice::Declare(const Declaration *decl, OperationEnvironment &env)
   port->SetRxTimeout(500);
 
   // change to IO mode baud rate
-  unsigned long lLastBaudrate = port->SetBaudrate(9600L);
+  unsigned lLastBaudrate = port->SetBaudrate(9600L);
 
   ProgressGlue::SetStep(1);
 

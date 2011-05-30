@@ -97,13 +97,13 @@ public:
    * @param BaudRate The desired baudrate
    * @return The previous baud rate or 0 on error
    */
-  virtual unsigned long SetBaudrate(unsigned long BaudRate) = 0;
+  virtual unsigned SetBaudrate(unsigned BaudRate) = 0;
 
   /**
    * Gets the current baud rate of the serial port
    * @return The current baud rate or 0 on error
    */
-  virtual unsigned long GetBaudrate() const = 0;
+  virtual unsigned GetBaudrate() const = 0;
 
   /**
    * Stops the receive thread

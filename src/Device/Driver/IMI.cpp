@@ -622,7 +622,7 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &d, unsigned extraTimeout,
     expectedPayloadSize = COMM_MAX_PAYLOAD_SIZE;
 
   // set timeout
-  unsigned long baudrate = d.GetBaudrate();
+  unsigned baudrate = d.GetBaudrate();
   if (!baudrate)
     return NULL;
 
@@ -734,7 +734,7 @@ bool CDevIMI::Connect(Port &d)
   }
 
   // configure baudrate
-  unsigned long baudRate = d.GetBaudrate();
+  unsigned baudRate = d.GetBaudrate();
   if (!baudRate)
     return false;
 

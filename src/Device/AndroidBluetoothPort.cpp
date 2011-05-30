@@ -153,15 +153,15 @@ AndroidBluetoothPort::SetRxTimeout(unsigned Timeout)
   return true;
 }
 
-unsigned long
+unsigned
 AndroidBluetoothPort::GetBaudrate() const
 {
   // XXX implement K6-Bt commands?
   return 19200;
 }
 
-unsigned long
-AndroidBluetoothPort::SetBaudrate(unsigned long BaudRate)
+unsigned
+AndroidBluetoothPort::SetBaudrate(unsigned BaudRate)
 {
   // XXX implement K6-Bt commands?
   return BaudRate;

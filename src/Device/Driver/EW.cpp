@@ -47,7 +47,7 @@ Copyright_License {
 class EWDevice : public AbstractDevice {
 protected:
   Port *port;
-  unsigned long lLastBaudrate;
+  unsigned lLastBaudrate;
   int ewDecelTpIndex;
 
 public:

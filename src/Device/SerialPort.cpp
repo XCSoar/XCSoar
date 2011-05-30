@@ -499,7 +499,7 @@ SerialPort::GetRxTimeout()
 #endif
 }
 
-unsigned long
+unsigned
 SerialPort::GetBaudrate() const
 {
   if (hPort == INVALID_HANDLE_VALUE)
@@ -511,13 +511,13 @@ SerialPort::GetBaudrate() const
   return PortDCB.BaudRate;
 }
 
-unsigned long
-SerialPort::SetBaudrate(unsigned long BaudRate)
+unsigned
+SerialPort::SetBaudrate(unsigned BaudRate)
 {
   COMSTAT ComStat;
   DCB PortDCB;
   DWORD dwErrors;
-  unsigned long result = 0;
+  unsigned result = 0;
 
   if (hPort == INVALID_HANDLE_VALUE)
     return result;

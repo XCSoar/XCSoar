@@ -36,7 +36,7 @@ public:
 
   bool running;
   int timeout;
-  unsigned long baud_rate;
+  unsigned baud_rate;
 
   FaultInjectionPort(Handler &_handler)
     :Port(_handler), running(true), timeout(0), baud_rate(DEFAULT_BAUD_RATE) {}
@@ -67,12 +67,12 @@ public:
     return true;
   }
 
-  unsigned long GetBaudrate() const {
+  unsigned GetBaudrate() const {
     return baud_rate;
   }
 
-  unsigned long SetBaudrate(unsigned long _baud_rate) {
-    unsigned long old_value = baud_rate;
+  unsigned SetBaudrate(unsigned _baud_rate) {
+    unsigned old_value = baud_rate;
     baud_rate = _baud_rate;
     return old_value;
   }
