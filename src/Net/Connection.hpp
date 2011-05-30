@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef NET_CONNECTION_HPP
 #define NET_CONNECTION_HPP
 
+#include "Thread/Trigger.hpp"
 #include "Net/Context.hpp"
 
 #include <windows.h>
@@ -41,7 +42,7 @@ namespace Net {
      * Event handle that is triggered when the Connection
      * is established asynchronously
      */
-    HANDLE event;
+    Trigger event;
 
   public:
     friend class Request;

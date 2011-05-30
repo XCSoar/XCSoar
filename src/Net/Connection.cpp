@@ -26,22 +26,20 @@ Copyright_License {
 
 Net::Connection::Connection(Session &session, const char *server,
                             unsigned long timeout)
-  :context(Context::CONNECTION, this)
+  :context(Context::CONNECTION, this),
+   event(false)
 {
-  event = CreateEvent(NULL, FALSE, FALSE, NULL);
-
   handle = InternetConnectA(session.handle, server,
                             INTERNET_DEFAULT_HTTP_PORT, NULL, NULL,
                             INTERNET_SERVICE_HTTP, 0, (DWORD_PTR)&context);
 
   if (handle == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the connection handle
-    WaitForSingleObject(event, timeout);
+    event.Wait(timeout);
 }
 
 Net::Connection::~Connection()
 {
-  CloseHandle(event);
   InternetCloseHandle(handle);
 }
 
@@ -57,6 +55,6 @@ Net::Connection::Callback(DWORD status, LPVOID info, DWORD info_length)
   if (status == INTERNET_STATUS_HANDLE_CREATED) {
     INTERNET_ASYNC_RESULT *res = (INTERNET_ASYNC_RESULT *)info;
     handle = (HINTERNET)res->dwResult;
-    SetEvent(event);
+    event.Signal();
   }
 }
