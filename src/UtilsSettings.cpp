@@ -45,7 +45,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "ProgressGlue.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "WayPoint/WayPointGlue.hpp"
+#include "WayPoint/WaypointGlue.hpp"
 #include "GlideComputer.hpp"
 #include "Language/LanguageGlue.hpp"
 

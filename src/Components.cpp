@@ -76,7 +76,7 @@ Copyright_License {
 #include "Compiler.h"
 #include "NMEA/Aircraft.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "WayPoint/WayPointGlue.hpp"
+#include "WayPoint/WaypointGlue.hpp"
 
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Airspace/Airspaces.hpp"

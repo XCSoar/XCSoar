@@ -44,7 +44,7 @@ Copyright_License {
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "WayPoint/WayPointGlue.hpp"
+#include "WayPoint/WaypointGlue.hpp"
 #include "Compiler.h"
 #include "Compatibility/path.h"
 #include "InputEvents.hpp"

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WayPointGlue.hpp"
+#include "WaypointGlue.hpp"
 #include "SettingsComputer.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Profile/Profile.hpp"

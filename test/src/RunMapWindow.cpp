@@ -36,7 +36,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "LocalPath.hpp"
 #include "LocalTime.hpp"
-#include "WayPointGlue.hpp"
+#include "WaypointGlue.hpp"
 #include "Device/device.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"

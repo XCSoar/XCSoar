@@ -1285,7 +1285,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/Earth.cpp \
 	$(SRC)/Geo/UTM.cpp \
-	$(SRC)/WayPoint/WayPointGlue.cpp \
+	$(SRC)/WayPoint/WaypointGlue.cpp \
 	$(SRC)/WayPoint/WaypointReader.cpp \
 	$(SRC)/WayPoint/WaypointReaderBase.cpp \
 	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
@@ -1637,7 +1637,7 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Geo/UTM.cpp \
-	$(SRC)/WayPoint/WayPointGlue.cpp \
+	$(SRC)/WayPoint/WaypointGlue.cpp \
 	$(SRC)/WayPoint/WaypointReaderBase.cpp \
 	$(SRC)/WayPoint/WaypointReader.cpp \
 	$(SRC)/WayPoint/WaypointReaderOzi.cpp \

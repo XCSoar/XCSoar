@@ -29,7 +29,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Components.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "WayPoint/WayPointGlue.hpp"
+#include "WayPoint/WaypointGlue.hpp"
 #include "Compiler.h"
 
 #include <assert.h>

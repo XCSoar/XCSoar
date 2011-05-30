@@ -34,7 +34,7 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "WayPointGlue.hpp"
+#include "WaypointGlue.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Airspace/AirspaceParser.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
