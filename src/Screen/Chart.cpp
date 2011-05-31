@@ -289,7 +289,8 @@ Chart::DrawLine(const fixed xmin, const fixed ymin,
 
 void 
 Chart::DrawFilledLine(const fixed xmin, const fixed ymin,
-                      const fixed xmax, const fixed ymax, Color &color)
+                      const fixed xmax, const fixed ymax,
+                      const Brush &brush)
 {
   RasterPoint line[4];
 
@@ -302,7 +303,6 @@ Chart::DrawFilledLine(const fixed xmin, const fixed ymin,
   line[3].x = line[0].x;
   line[3].y = (int)((y_max) * yscale) + rc.top;
 
-  Brush brush(color);
   canvas.select(brush);
   canvas.null_pen();
   canvas.polygon(line, 4);

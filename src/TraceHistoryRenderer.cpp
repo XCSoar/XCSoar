@@ -100,8 +100,10 @@ void
 TraceHistoryRenderer::render_filled_posneg(Chart &chart,
                                            const TraceVariableHistory& var) const
 {
-  Color c_pos(Appearance.InverseInfoBox? Graphics::inv_liftColor: Graphics::liftColor);
-  Color c_neg(Appearance.InverseInfoBox? Graphics::inv_sinkColor: Graphics::sinkColor);
+  Brush lift_brush(Appearance.InverseInfoBox
+                   ? Graphics::inv_liftColor: Graphics::liftColor);
+  Brush sink_brush(Appearance.InverseInfoBox
+                   ? Graphics::inv_sinkColor: Graphics::sinkColor);
 
   fixed x_last(fixed_zero), y_last(fixed_zero);
   unsigned i=0;
@@ -112,18 +114,20 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
     if (i) {
       if (sgn(y)*sgn(y_last)<0) {
         if (positive(y_last))
-          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero, c_pos);
+          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero,
+                               lift_brush);
         else if (negative(y_last))
-          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero, c_neg);
+          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero,
+                               sink_brush);
         
         x_last = x-fixed_half;
         y_last = fixed_zero;
 
       }
       if (positive(y) || positive(y_last))
-        chart.DrawFilledLine(x_last, y_last, x, y, c_pos);
+        chart.DrawFilledLine(x_last, y_last, x, y, lift_brush);
       else if (negative(y) || negative(y_last))
-        chart.DrawFilledLine(x_last, y_last, x, y, c_neg);
+        chart.DrawFilledLine(x_last, y_last, x, y, sink_brush);
     }
     x_last = x;
     y_last = y;

@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
-#include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
 #include "Compiler.h"
@@ -74,7 +73,8 @@ public:
   void DrawLine(const fixed xmin, const fixed ymin,
                 const fixed xmax, const fixed ymax, enum Style Style);
   void DrawFilledLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, Color &colour);
+                      const fixed xmax, const fixed ymax,
+                      const Brush &brush);
   void DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, const Brush &brush,
                    const Pen* pen= NULL);
   void DrawDot(const fixed x, const fixed y, const int width);
