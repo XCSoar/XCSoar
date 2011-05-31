@@ -650,9 +650,28 @@ DrawDetailedAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
 
 static void
 DrawSimpleAircraft(Canvas &canvas, const Angle angle,
-                   const RasterPoint aircraft_pos)
+                   const RasterPoint aircraft_pos, bool large)
 {
-  static const RasterPoint Aircraft[] = {
+  static const RasterPoint AircraftLarge[] = {
+    {1, -7},
+    {1, -1},
+    {17, -1},
+    {17, 1},
+    {1, 1},
+    {1, 10},
+    {5, 10},
+    {5, 12},
+    {-5, 12},
+    {-5, 10},
+    {-1, 10},
+    {-1, 1},
+    {-17, 1},
+    {-17, -1},
+    {-1, -1},
+    {-1, -7},
+  };
+
+  static const RasterPoint AircraftSmall[] = {
     {1, -5},
     {1, 0},
     {14, 0},
@@ -669,18 +688,26 @@ DrawSimpleAircraft(Canvas &canvas, const Angle angle,
     {-13, 0},
     {0, 0},
     {0, -5},
-  };
-  const unsigned AIRCRAFT_POINTS = sizeof(Aircraft) / sizeof(Aircraft[0]);
+   };
 
-  RasterPoint aircraft[AIRCRAFT_POINTS];
-  std::copy(Aircraft, Aircraft + AIRCRAFT_POINTS, aircraft);
-  PolygonRotateShift(aircraft, AIRCRAFT_POINTS,
+  const unsigned AIRCRAFT_POINTS_LARGE =
+                            sizeof(AircraftLarge) / sizeof(AircraftLarge[0]);
+  const unsigned AIRCRAFT_POINTS_SMALL =
+                            sizeof(AircraftSmall) / sizeof(AircraftSmall[0]);
+
+  const RasterPoint *Aircraft = large ? AircraftLarge : AircraftSmall;
+  const unsigned AircraftPoints = large ?
+                                  AIRCRAFT_POINTS_LARGE : AIRCRAFT_POINTS_SMALL;
+
+  RasterPoint aircraft[std::max(AIRCRAFT_POINTS_LARGE, AIRCRAFT_POINTS_SMALL)];
+  std::copy(Aircraft, Aircraft + AircraftPoints, aircraft);
+  PolygonRotateShift(aircraft, AircraftPoints,
                      aircraft_pos.x, aircraft_pos.y, angle, true);
   canvas.select(Graphics::hpAircraftSimple2);
-  canvas.polygon(aircraft, AIRCRAFT_POINTS);
+  canvas.polygon(aircraft, AircraftPoints);
   canvas.black_brush();
   canvas.select(Graphics::hpAircraftSimple1);
-  canvas.polygon(aircraft, AIRCRAFT_POINTS);
+  canvas.polygon(aircraft, AircraftPoints);
 }
 
 
@@ -689,8 +716,16 @@ Graphics::DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
                        const Angle angle,
                        const RasterPoint aircraft_pos)
 {
-  if (Appearance.AircraftSymbol == acDetailed)
-    DrawDetailedAircraft(canvas, settings_map, angle, aircraft_pos);
-  else
-    DrawSimpleAircraft(canvas, angle, aircraft_pos);
+  switch (Appearance.AircraftSymbol) {
+    case acDetailed:
+      DrawDetailedAircraft(canvas, settings_map, angle, aircraft_pos);
+      break;
+    case acSimpleLarge:
+      DrawSimpleAircraft(canvas, angle, aircraft_pos, true);
+      break;
+    case acSimple:
+    default:
+      DrawSimpleAircraft(canvas, angle, aircraft_pos, false);
+      break;
+  }
 }
