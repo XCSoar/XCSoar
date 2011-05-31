@@ -39,10 +39,12 @@
 #include "MainWindow.hpp"
 #include "Profile/Profile.hpp"
 #include "Compiler.h"
+#include "Gauge/FlarmTrafficLook.hpp"
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language/Language.hpp"
 #include "GestureManager.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Screen/Graphics.hpp"
 
 /**
  * A Window which renders FLARM traffic, with user interaction.
@@ -51,13 +53,12 @@ class FlarmTrafficControl : public FlarmTrafficWindow {
 protected:
   bool enable_auto_zoom;
   unsigned zoom;
-  Font hfInfoValues, hfInfoLabels, hfCallSign;
   Angle task_direction;
   GestureManager gestures;
 
 public:
-  FlarmTrafficControl()
-    :FlarmTrafficWindow(Layout::Scale(10)),
+  FlarmTrafficControl(const FlarmTrafficLook &look)
+    :FlarmTrafficWindow(look, Layout::Scale(10)),
      enable_auto_zoom(true),
      zoom(2),
      task_direction(Angle::degrees(fixed_minus_one)) {}
@@ -113,10 +114,6 @@ bool
 FlarmTrafficControl::on_create()
 {
   FlarmTrafficWindow::on_create();
-
-  hfInfoLabels.set(Fonts::GetStandardFontFace(), Layout::FastScale(10), true);
-  hfInfoValues.set(Fonts::GetStandardFontFace(), Layout::FastScale(20));
-  hfCallSign.set(Fonts::GetStandardFontFace(), Layout::FastScale(28), true);
 
   Profile::Get(szProfileFlarmSideData, side_display_type);
   Profile::Get(szProfileFlarmAutoZoom, enable_auto_zoom);
@@ -239,7 +236,7 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
   if (negative(task_direction.value_degrees()))
     return;
 
-  canvas.select(hpRadar);
+  canvas.select(look.hpRadar);
   canvas.hollow_brush();
 
   RasterPoint triangle[4];
@@ -289,16 +286,16 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   // Set the text color and background
   switch (traffic.alarm_level) {
   case 1:
-    canvas.set_text_color(hcWarning);
+    canvas.set_text_color(look.hcWarning);
     break;
   case 2:
   case 3:
-    canvas.set_text_color(hcAlarm);
+    canvas.set_text_color(look.hcAlarm);
     break;
   case 4:
   case 0:
   default:
-    canvas.set_text_color(hcStandard);
+    canvas.set_text_color(look.hcStandard);
     break;
   }
   canvas.background_transparent();
@@ -306,47 +303,47 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   // Climb Rate
   if (!WarningMode() && traffic.climb_rate_avg30s_available) {
     Units::FormatUserVSpeed(traffic.climb_rate_avg30s, tmp, 20);
-    canvas.select(hfInfoValues);
+    canvas.select(look.hfInfoValues);
     sz = canvas.text_size(tmp);
-    canvas.text(rc.right - sz.cx, rc.top + hfInfoLabels.get_height(), tmp);
+    canvas.text(rc.right - sz.cx, rc.top + look.hfInfoLabels.get_height(), tmp);
 
-    canvas.select(hfInfoLabels);
+    canvas.select(look.hfInfoLabels);
     sz = canvas.text_size(_("Vario"));
     canvas.text(rc.right - sz.cx, rc.top, _("Vario"));
   }
 
   // Distance
   Units::FormatUserDistance(traffic.distance, tmp, 20);
-  canvas.select(hfInfoValues);
+  canvas.select(look.hfInfoValues);
   sz = canvas.text_size(tmp);
   canvas.text(rc.left, rc.bottom - sz.cy, tmp);
 
-  canvas.select(hfInfoLabels);
+  canvas.select(look.hfInfoLabels);
   canvas.text(rc.left,
-              rc.bottom - hfInfoValues.get_height() - hfInfoLabels.get_height(),
+              rc.bottom - look.hfInfoValues.get_height() - look.hfInfoLabels.get_height(),
               _("Distance"));
 
   // Relative Height
   Units::FormatUserArrival(traffic.relative_altitude, tmp, 20);
-  canvas.select(hfInfoValues);
+  canvas.select(look.hfInfoValues);
   sz = canvas.text_size(tmp);
   canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);
 
-  canvas.select(hfInfoLabels);
+  canvas.select(look.hfInfoLabels);
   sz = canvas.text_size(_("Rel. Alt."));
   canvas.text(rc.right - sz.cx,
-              rc.bottom - hfInfoValues.get_height() - hfInfoLabels.get_height(),
+              rc.bottom - look.hfInfoValues.get_height() - look.hfInfoLabels.get_height(),
               _("Rel. Alt."));
 
   // ID / Name
   if (traffic.HasName()) {
-    canvas.select(hfCallSign);
+    canvas.select(look.hfCallSign);
     if (!traffic.HasAlarm()) {
       if (settings.TeamFlarmTracking &&
           traffic.id == settings.TeamFlarmIdTarget)
-        canvas.set_text_color(hcTeam);
+        canvas.set_text_color(look.hcTeam);
       else
-        canvas.set_text_color(hcSelection);
+        canvas.set_text_color(look.hcSelection);
     }
     _tcscpy(tmp, traffic.name);
   } else {
@@ -614,7 +611,7 @@ OnCreateFlarmTrafficControl(ContainerWindow &parent, int left, int top,
                             unsigned width, unsigned height,
                             const WindowStyle style)
 {
-  wdf = new FlarmTrafficControl();
+  wdf = new FlarmTrafficControl(Graphics::flarm_dialog);
   wdf->set(parent, left, top, width, height, style);
 
   return wdf;

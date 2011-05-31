@@ -139,6 +139,7 @@ MainWindow::InitialiseConfigured()
                          rc.bottom - ib_layout.control_height * 2 + 1,
                          ib_layout.control_width * 2 - 1,
                          ib_layout.control_height * 2 - 1,
+                         Graphics::flarm_gauge,
                          hidden_border);
   flarm->bring_to_top();
 

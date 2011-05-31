@@ -1,5 +1,5 @@
 /*
-Copyright_License {
+  Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2011 The XCSoar Project
@@ -21,33 +21,43 @@ Copyright_License {
 }
 */
 
-#ifndef GAUGE_FLARM_HPP
-#define GAUGE_FLARM_HPP
+#ifndef FLARM_TRAFFIC_WINDOW_LOOK_HPP
+#define FLARM_TRAFFIC_WINDOW_LOOK_HPP
 
-#include "FlarmTrafficWindow.hpp"
+#include "Screen/Color.hpp"
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
+#include "Screen/Font.hpp"
 
-struct NMEA_INFO;
-struct SETTINGS_TEAMCODE;
-class ContainerWindow;
+struct FlarmTrafficLook {
+  Color hcWarning;
+  Color hcAlarm;
+  Color hcStandard;
+  Color hcPassive;
+  Color hcSelection;
+  Color hcTeam;
+  Color hcBackground;
+  Color hcRadar;
 
-/**
- * Widget to display a FLARM gauge
- */
-class GaugeFLARM : public FlarmTrafficWindow {
-public:
-  bool ForceVisible, Suppress;
+  Brush hbWarning;
+  Brush hbAlarm;
+  Brush hbSelection;
+  Brush hbRadar;
 
-public:
-  GaugeFLARM(ContainerWindow &parent,
-             int left, int top, unsigned width, unsigned height,
-             const FlarmTrafficLook &look,
-             const WindowStyle style=WindowStyle());
+  Pen hpWarning;
+  Pen hpAlarm;
+  Pen hpStandard;
+  Pen hpPassive;
+  Pen hpSelection;
+  Pen hpTeam;
 
-  void Update(bool enable, const NMEA_INFO &gps_info,
-              const SETTINGS_TEAMCODE &settings);
+  Pen hpPlane, hpRadar;
 
-protected:
-  bool on_mouse_down(int x, int y);
+  Font hfLabels, hfSideInfo, hfNoTraffic;
+  Font hfInfoValues, hfInfoLabels, hfCallSign;
+
+  void Initialise(bool small);
+  void Deinitialise();
 };
 
 #endif

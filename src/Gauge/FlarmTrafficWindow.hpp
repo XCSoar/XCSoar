@@ -28,36 +28,14 @@
 #include "FLARM/State.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/FastRotation.hpp"
+#include "FlarmTrafficLook.hpp"
 
 /**
  * A Window which renders FLARM traffic.
  */
 class FlarmTrafficWindow : public PaintWindow {
 protected:
-  static const Color hcWarning;
-  static const Color hcAlarm;
-  static const Color hcStandard;
-  static const Color hcPassive;
-  static const Color hcSelection;
-  static const Color hcTeam;
-  static const Color hcBackground;
-  static const Color hcRadar;
-
-  Brush hbWarning;
-  Brush hbAlarm;
-  Brush hbSelection;
-  Brush hbRadar;
-
-  Pen hpWarning;
-  Pen hpAlarm;
-  Pen hpStandard;
-  Pen hpPassive;
-  Pen hpSelection;
-  Pen hpTeam;
-
-  Pen hpPlane, hpRadar;
-
-  Font hfLabels, hfSideInfo, hfNoTraffic;
+  const FlarmTrafficLook &look;
 
   /**
    * The distance of the biggest circle in meters.
@@ -94,7 +72,8 @@ public:
   int side_display_type;
 
 public:
-  FlarmTrafficWindow(unsigned _padding, bool _small = false);
+  FlarmTrafficWindow(const FlarmTrafficLook &_look,
+                     unsigned _padding, bool _small = false);
 
 public:
   bool WarningMode() const;
@@ -142,8 +121,6 @@ protected:
   void PaintNorth(Canvas &canvas) const;
 
 protected:
-  virtual bool on_create();
-  virtual bool on_destroy();
   virtual bool on_resize(unsigned width, unsigned height);
   virtual void on_paint(Canvas &canvas);
 };

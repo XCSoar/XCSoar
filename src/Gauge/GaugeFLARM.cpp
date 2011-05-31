@@ -36,8 +36,9 @@ Copyright_License {
  */
 GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
                        int left, int top, unsigned width, unsigned height,
+                       const FlarmTrafficLook &look,
                        const WindowStyle style)
-  :FlarmTrafficWindow(1, true),
+  :FlarmTrafficWindow(look, 1, true),
    ForceVisible(false), Suppress(false)
 {
   set(parent, left, top, width, height, style);

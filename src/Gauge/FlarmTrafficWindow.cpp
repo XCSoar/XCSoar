@@ -33,17 +33,10 @@
 #include <assert.h>
 #include <stdio.h>
 
-const Color FlarmTrafficWindow::hcPassive(Color(0x99, 0x99, 0x99));
-const Color FlarmTrafficWindow::hcWarning(Graphics::cAlertWarning);
-const Color FlarmTrafficWindow::hcAlarm(Graphics::cAlertAlarm);
-const Color FlarmTrafficWindow::hcStandard(COLOR_BLACK);
-const Color FlarmTrafficWindow::hcSelection(COLOR_BLUE);
-const Color FlarmTrafficWindow::hcTeam(COLOR_YELLOW);
-const Color FlarmTrafficWindow::hcBackground(COLOR_WHITE);
-const Color FlarmTrafficWindow::hcRadar(COLOR_LIGHT_GRAY);
-
-FlarmTrafficWindow::FlarmTrafficWindow(unsigned _padding, bool _small)
-  :distance(2000),
+FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
+                                       unsigned _padding, bool _small)
+  :look(_look),
+   distance(2000),
    selection(-1), warning(-1),
    padding(_padding),
    small(_small),
@@ -62,48 +55,6 @@ FlarmTrafficWindow::WarningMode() const
   assert(warning < 0 || data.traffic[warning].HasAlarm());
 
   return warning >= 0;
-}
-
-bool
-FlarmTrafficWindow::on_create()
-{
-  PaintWindow::on_create();
-
-  hbWarning.set(hcWarning);
-  hbAlarm.set(hcAlarm);
-  hbSelection.set(hcSelection);
-  hbRadar.set(hcRadar);
-
-  int width = Layout::FastScale(small ? 1 : 2);
-  hpWarning.set(width, hcWarning);
-  hpAlarm.set(width, hcAlarm);
-  hpStandard.set(width, hcStandard);
-  hpPassive.set(width, hcPassive);
-  hpSelection.set(width, hcSelection);
-  hpTeam.set(width, hcTeam);
-
-  hpPlane.set(width, hcRadar);
-  hpRadar.set(1, hcRadar);
-
-  hfNoTraffic.set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
-  hfLabels.set(Fonts::GetStandardFontFace(), Layout::FastScale(14));
-  if (small)
-    hfSideInfo.set(Fonts::GetStandardFontFace(), Layout::FastScale(12), true);
-  else
-    hfSideInfo.set(Fonts::GetStandardFontFace(), Layout::FastScale(18), true);
-
-  return true;
-}
-
-bool
-FlarmTrafficWindow::on_destroy()
-{
-  hfNoTraffic.reset();
-  hfLabels.reset();
-  hfSideInfo.reset();
-
-  PaintWindow::on_destroy();
-  return true;
 }
 
 bool
@@ -267,9 +218,9 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
     return;
 
   const TCHAR* str = _("No Traffic");
-  canvas.select(hfNoTraffic);
+  canvas.select(look.hfNoTraffic);
   PixelSize ts = canvas.text_size(str);
-  canvas.set_text_color(hcStandard);
+  canvas.set_text_color(look.hcStandard);
   canvas.text(radar_mid.x - (ts.cx / 2), radar_mid.y - (radius / 2), str);
 }
 
@@ -321,39 +272,39 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   switch (traffic.alarm_level) {
   case 1:
     canvas.hollow_brush();
-    canvas.select(hpWarning);
+    canvas.select(look.hpWarning);
     canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
-    canvas.select(hbWarning);
+    canvas.select(look.hbWarning);
     break;
   case 2:
   case 3:
     canvas.hollow_brush();
-    canvas.select(hpAlarm);
+    canvas.select(look.hpAlarm);
     canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
     canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 10 : 19));
-    canvas.select(hbAlarm);
+    canvas.select(look.hbAlarm);
     break;
   case 0:
   case 4:
     if (WarningMode()) {
       canvas.hollow_brush();
-      canvas.select(hpPassive);
+      canvas.select(look.hpPassive);
     } else {
       if (settings.TeamFlarmTracking &&
           traffic.id == settings.TeamFlarmIdTarget) {
         canvas.hollow_brush();
-        canvas.select(hpTeam);
+        canvas.select(look.hpTeam);
         canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
       }
       if (!small && static_cast<unsigned> (selection) == i) {
-        canvas.select(hpSelection);
-        canvas.select(hbSelection);
+        canvas.select(look.hpSelection);
+        canvas.select(look.hbSelection);
       } else {
         canvas.hollow_brush();
         if (traffic.IsPassive())
-          canvas.select(hpPassive);
+          canvas.select(look.hpPassive);
         else
-          canvas.select(hpStandard);
+          canvas.select(look.hpStandard);
       }
     }
     break;
@@ -410,8 +361,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
     // Select font
     canvas.background_transparent();
-    canvas.select(hfSideInfo);
-    canvas.set_text_color(COLOR_BLACK);
+    canvas.select(look.hfSideInfo);
+    canvas.set_text_color(look.hcStandard);
 
     // Calculate size of the output string
     PixelSize tsize = canvas.text_size(Buffer);
@@ -473,7 +424,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Select font
   canvas.background_transparent();
-  canvas.select(hfSideInfo);
+  canvas.select(look.hfSideInfo);
 
   // Format string
   TCHAR tmp[10];
@@ -494,9 +445,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Select color
   if (static_cast<unsigned> (selection) == i)
-    canvas.set_text_color(hcSelection);
+    canvas.set_text_color(look.hcSelection);
   else
-    canvas.set_text_color(hcStandard);
+    canvas.set_text_color(look.hcStandard);
 
   // Draw vertical speed
   canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy / 2, tmp);
@@ -549,7 +500,7 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
 void
 FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 {
-  canvas.select(hpPlane);
+  canvas.select(look.hpPlane);
 
   int x1, y1, x2, y2;
 
@@ -619,11 +570,11 @@ FlarmTrafficWindow::PaintNorth(Canvas &canvas) const
     y = p.second;
   }
 
-  canvas.set_text_color(COLOR_WHITE);
-  canvas.select(hpRadar);
-  canvas.select(hbRadar);
+  canvas.set_text_color(look.hcBackground);
+  canvas.select(look.hpRadar);
+  canvas.select(look.hbRadar);
   canvas.background_transparent();
-  canvas.select(hfLabels);
+  canvas.select(look.hfLabels);
 
   PixelSize s = canvas.text_size(_T("N"));
   canvas.circle(radar_mid.x + iround(x * radius),
@@ -640,8 +591,8 @@ void
 FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 {
   canvas.hollow_brush();
-  canvas.select(hpRadar);
-  canvas.set_text_color(hcRadar);
+  canvas.select(look.hpRadar);
+  canvas.set_text_color(look.hcRadar);
 
   // Paint circles
   canvas.circle(radar_mid.x, radar_mid.y, radius);
@@ -653,9 +604,9 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
     return;
 
   // Paint zoom strings
-  canvas.select(hfLabels);
+  canvas.select(look.hfLabels);
   canvas.background_opaque();
-  canvas.set_background_color(hcBackground);
+  canvas.set_background_color(look.hcBackground);
 
   TCHAR distance_string[10];
   Units::FormatUserDistance(distance, distance_string,

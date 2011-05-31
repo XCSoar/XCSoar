@@ -138,6 +138,8 @@ ChartLook Graphics::chart;
 ThermalBandLook Graphics::thermal_band;
 TraceHistoryLook Graphics::trace_history;
 CrossSectionLook Graphics::cross_section;
+FlarmTrafficLook Graphics::flarm_dialog;
+FlarmTrafficLook Graphics::flarm_gauge;
 
 // airspace brushes/colours
 const Color
@@ -354,6 +356,9 @@ Graphics::Initialise()
   hbGround.set(GroundColor);
 
   hpTrackBearingLine.set(3, COLOR_GRAY);
+
+  flarm_dialog.Initialise(false);
+  flarm_gauge.Initialise(true);
 }
 
 void
@@ -604,6 +609,8 @@ Graphics::Deinitialise()
   thermal_band.Deinitialise();
   trace_history.Deinitialise();
   cross_section.Deinitialise();
+  flarm_dialog.Deinitialise();
+  flarm_gauge.Deinitialise();
 }
 
 static void
