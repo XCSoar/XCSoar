@@ -422,7 +422,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   LogStartUp(_T("CreateDrawingThread"));
   draw_thread = new DrawThread(main_window.map, main_window.flarm,
                                main_window.ta);
-  draw_thread->Start();
+  draw_thread->Start(true);
 #endif
 
   // Show the infoboxes
@@ -444,7 +444,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   Pages::LoadFromProfile();
 
   // Start calculation thread
-  calculation_thread->Start();
+  calculation_thread->Start(true);
 
   globalRunningEvent.Signal();
 

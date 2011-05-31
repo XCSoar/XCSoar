@@ -33,14 +33,17 @@ SuspensibleThread::SuspensibleThread()
 #endif
 
 bool
-SuspensibleThread::Start()
+SuspensibleThread::Start(bool _suspended)
 {
 #ifdef HAVE_POSIX
   stop_received = false;
-  suspend_received = false;
+  suspend_received = _suspended;
   suspended = false;
 #else
-  suspend_trigger.Reset();
+  if (_suspended)
+    suspend_trigger.Signal();
+  else
+    suspend_trigger.Reset();
   stop_trigger.Reset();
   command_trigger.Reset();
   suspended.Reset();

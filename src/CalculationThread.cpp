@@ -37,7 +37,6 @@ Copyright_License {
  */
 CalculationThread::CalculationThread(GlideComputer &_glide_computer)
   :WorkerThread(150, 50, 20), glide_computer(_glide_computer) {
-  BeginSuspend();
 }
 
 void

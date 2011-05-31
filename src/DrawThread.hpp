@@ -63,7 +63,6 @@ public:
              GaugeThermalAssistant *_ta)
     :trigger(true),
      map(_map), flarm(_flarm), ta(_ta) {
-    BeginSuspend();
   }
 
   /** Locks the Mutex and "pauses" the drawing thread */
