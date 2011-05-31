@@ -34,6 +34,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Graphics.hpp"
 #include "Protection.hpp"
 #include "MainWindow.hpp"
 #include "GlideComputer.hpp"
@@ -57,7 +58,7 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
   if (var.empty())
     return;
 
-  TraceHistoryRenderer renderer;
+  TraceHistoryRenderer renderer(Graphics::trace_history);
   renderer.RenderVario(canvas, get_spark_rect(infobox), var, center,
                        CommonInterface::SettingsComputer().glide_polar_task.get_mc());
 }

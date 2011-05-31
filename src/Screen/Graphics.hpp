@@ -28,6 +28,7 @@ Copyright_License {
 #include "Airspace/AirspaceClass.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Features.hpp"
+#include "Look/TraceHistoryLook.hpp"
 
 class Bitmap;
 class MaskedIcon;
@@ -189,6 +190,8 @@ namespace Graphics {
   extern const Color liftColor;
   extern const Color skyColor;
   extern const Color seaColor;
+
+  extern TraceHistoryLook trace_history;
 };
 
 #endif

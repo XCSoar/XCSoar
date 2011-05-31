@@ -130,6 +130,8 @@ Brush Graphics::hbLightGray;
 Brush Graphics::hbNotReachableTerrain;
 Brush Graphics::hbGround;
 
+TraceHistoryLook Graphics::trace_history;
+
 // airspace brushes/colours
 const Color
 Graphics::GetAirspaceColour(const int i)
@@ -346,6 +348,8 @@ Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
   InitSnailTrail(settings_map);
   InitLandableIcons();
   InitAirspacePens(settings_map.airspace);
+
+  trace_history.Initialise(Appearance.InverseInfoBox);
 }
 
 void
@@ -570,6 +574,8 @@ Graphics::Deinitialise()
   FieldMarginalIcon.reset();
   FieldReachableIcon.reset();
   FieldUnreachableIcon.reset();
+
+  trace_history.Deinitialise();
 }
 
 static void

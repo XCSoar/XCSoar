@@ -27,12 +27,18 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Math/fixed.hpp"
 
+struct TraceHistoryLook;
 class Chart;
 class Canvas;
 class TraceVariableHistory;
 
 class TraceHistoryRenderer {
+  const TraceHistoryLook &look;
+
 public:
+  TraceHistoryRenderer(const TraceHistoryLook &_look)
+    :look(_look) {}
+
   void RenderVario(Canvas& canvas,
                    const PixelRect rc,
                    const TraceVariableHistory& var,

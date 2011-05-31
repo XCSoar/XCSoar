@@ -25,8 +25,8 @@ Copyright_License {
 #include "Navigation/TraceHistory.hpp"
 #include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/TraceHistoryLook.hpp"
 #include "Appearance.hpp"
 #include <algorithm>
 
@@ -62,10 +62,9 @@ void
 TraceHistoryRenderer::render_axis(Chart &chart,
                                   const TraceVariableHistory& var) const
 {
-  Pen pen0(1, COLOR_GRAY);
   chart.DrawLine(fixed_zero, fixed_zero, 
                  fixed(var.capacity()-1), fixed_zero, 
-                 pen0);
+                 look.axis_pen);
 }
 
 
@@ -73,8 +72,6 @@ void
 TraceHistoryRenderer::render_line(Chart &chart,
                                   const TraceVariableHistory& var) const
 {
-  Pen pen(2, Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK);
-
   fixed x_last, y_last;
   unsigned i=0;
   for (TraceVariableHistory::const_iterator it = var.begin();
@@ -82,7 +79,7 @@ TraceHistoryRenderer::render_line(Chart &chart,
     fixed x= fixed(i);
     fixed y= *it;
     if (i)
-      chart.DrawLine(x_last, y_last, x, y, pen);
+      chart.DrawLine(x_last, y_last, x, y, look.line_pen);
     x_last = x;
     y_last = y;
   }
@@ -100,11 +97,6 @@ void
 TraceHistoryRenderer::render_filled_posneg(Chart &chart,
                                            const TraceVariableHistory& var) const
 {
-  Brush lift_brush(Appearance.InverseInfoBox
-                   ? Graphics::inv_liftColor: Graphics::liftColor);
-  Brush sink_brush(Appearance.InverseInfoBox
-                   ? Graphics::inv_sinkColor: Graphics::sinkColor);
-
   fixed x_last(fixed_zero), y_last(fixed_zero);
   unsigned i=0;
   for (TraceVariableHistory::const_iterator it = var.begin();
@@ -115,19 +107,19 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
       if (sgn(y)*sgn(y_last)<0) {
         if (positive(y_last))
           chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero,
-                               lift_brush);
+                               look.lift_brush);
         else if (negative(y_last))
           chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero,
-                               sink_brush);
+                               look.sink_brush);
         
         x_last = x-fixed_half;
         y_last = fixed_zero;
 
       }
       if (positive(y) || positive(y_last))
-        chart.DrawFilledLine(x_last, y_last, x, y, lift_brush);
+        chart.DrawFilledLine(x_last, y_last, x, y, look.lift_brush);
       else if (negative(y) || negative(y_last))
-        chart.DrawFilledLine(x_last, y_last, x, y, sink_brush);
+        chart.DrawFilledLine(x_last, y_last, x, y, look.sink_brush);
     }
     x_last = x;
     y_last = y;
