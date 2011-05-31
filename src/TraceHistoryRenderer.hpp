@@ -33,21 +33,25 @@ class TraceVariableHistory;
 
 class TraceHistoryRenderer {
 public:
-  static void RenderVario(Canvas& canvas,
-                          const PixelRect rc,
-                          const TraceVariableHistory& var,
-                          const bool centered = false,
-                          const fixed mc=fixed_zero);
+  void RenderVario(Canvas& canvas,
+                   const PixelRect rc,
+                   const TraceVariableHistory& var,
+                   const bool centered = false,
+                   const fixed mc=fixed_zero) const;
+
 private:
-  static void scale_chart(Chart &chart,
-                          const TraceVariableHistory& var,
-                          const bool centered);
-  static void render_axis(Chart &chart,
-                          const TraceVariableHistory& var);
-  static void render_line(Chart &chart,
-                          const TraceVariableHistory& var);
-  static void render_filled_posneg(Chart &chart,
-                                   const TraceVariableHistory& var);
+  void scale_chart(Chart &chart,
+                   const TraceVariableHistory& var,
+                   const bool centered) const;
+
+  void render_axis(Chart &chart,
+                   const TraceVariableHistory& var) const;
+
+  void render_line(Chart &chart,
+                   const TraceVariableHistory& var) const;
+
+  void render_filled_posneg(Chart &chart,
+                            const TraceVariableHistory& var) const;
 };
 
 #endif

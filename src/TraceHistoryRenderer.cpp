@@ -33,7 +33,7 @@ Copyright_License {
 void
 TraceHistoryRenderer::scale_chart(Chart &chart,
                                   const TraceVariableHistory& var,
-                                  const bool centered) 
+                                  const bool centered) const
 {
   chart.PaddingBottom = 0;
   chart.PaddingLeft = 0;
@@ -60,7 +60,7 @@ TraceHistoryRenderer::scale_chart(Chart &chart,
 
 void
 TraceHistoryRenderer::render_axis(Chart &chart,
-                                  const TraceVariableHistory& var)
+                                  const TraceVariableHistory& var) const
 {
   Pen pen0(1, COLOR_GRAY);
   chart.DrawLine(fixed_zero, fixed_zero, 
@@ -71,7 +71,7 @@ TraceHistoryRenderer::render_axis(Chart &chart,
 
 void 
 TraceHistoryRenderer::render_line(Chart &chart,
-                                  const TraceVariableHistory& var)
+                                  const TraceVariableHistory& var) const
 {
   Pen pen(2, Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK);
 
@@ -98,7 +98,7 @@ static int sgn(const fixed x) {
 
 void 
 TraceHistoryRenderer::render_filled_posneg(Chart &chart,
-                                           const TraceVariableHistory& var)
+                                           const TraceVariableHistory& var) const
 {
   Color c_pos(Appearance.InverseInfoBox? Graphics::inv_liftColor: Graphics::liftColor);
   Color c_neg(Appearance.InverseInfoBox? Graphics::inv_sinkColor: Graphics::sinkColor);
@@ -140,7 +140,7 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
                                   const PixelRect rc,
                                   const TraceVariableHistory& var,
                                   const bool centered,
-                                  const fixed mc)
+                                  const fixed mc) const
 {
   Chart chart(canvas, rc);
   scale_chart(chart, var, centered);
