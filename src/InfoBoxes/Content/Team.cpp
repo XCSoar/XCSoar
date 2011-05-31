@@ -34,7 +34,10 @@ Copyright_License {
 void
 InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint) {
+  const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
+  const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
+
+  if (!settings.TeamCodeRefWaypoint) {
     infobox.SetInvalid();
     return;
   }
@@ -43,12 +46,11 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
   infobox.SetValue(XCSoarInterface::Calculated().OwnTeamCode.GetCode());
 
   // Set Comment
-  if (XCSoarInterface::SettingsComputer().TeammateCodeValid == true){
-    infobox.SetComment(XCSoarInterface::SettingsComputer().TeammateCode.GetCode());
-    if (!XCSoarInterface::SettingsComputer().TeamFlarmTracking)
+  if (settings.TeammateCodeValid) {
+    infobox.SetComment(settings.TeammateCode.GetCode());
+    if (!settings.TeamFlarmTracking)
       infobox.SetColorBottom(0);
-    else if (XCSoarInterface::Basic().flarm.FindTraffic(
-        XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) != NULL)
+    else if (flarm.FindTraffic(settings.TeamFlarmIdTarget) != NULL)
       infobox.SetColorBottom(2);
     else
       infobox.SetColorBottom(1);
@@ -60,11 +62,12 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 bool
 InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 {
+  SETTINGS_TEAMCODE &settings = CommonInterface::SetSettingsComputer();
   const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
   const FLARM_TRAFFIC *traffic =
-      XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined() ?
-      flarm.FindTraffic(XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) :
-      NULL;
+    settings.TeamFlarmIdTarget.defined()
+    ? flarm.FindTraffic(settings.TeamFlarmIdTarget)
+    : NULL;
 
   if (keycode == ibkUp)
     traffic = (traffic == NULL ?
@@ -76,20 +79,19 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
     return false;
 
   if (traffic != NULL) {
-    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = traffic->id;
+    settings.TeamFlarmIdTarget = traffic->id;
 
     if (traffic->HasName()) {
       // copy the 3 first chars from the name to TeamFlarmCNTarget
-      _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget,
-               traffic->name, 3);
-      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
+      _tcsncpy(settings.TeamFlarmCNTarget, traffic->name, 3);
+      settings.TeamFlarmCNTarget[3] = 0;
     } else {
-      XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+      settings.TeamFlarmCNTarget[0] = 0;
     }
   } else {
     // no flarm traffic to select!
-    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget.clear();
-    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+    settings.TeamFlarmIdTarget.clear();
+    settings.TeamFlarmCNTarget[0] = 0;
   }
   return true;
 }
@@ -97,8 +99,10 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 {
-  if (XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined() ||
-      XCSoarInterface::SettingsComputer().TeammateCodeValid == true){
+  const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
+  const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
+
+  if (settings.TeamFlarmIdTarget.defined() || settings.TeammateCodeValid) {
     // Set Value
     infobox.SetValue(XCSoarInterface::Calculated().TeammateBearing,
                      _T("T"));
@@ -107,15 +111,14 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
     infobox.SetValueInvalid();
 
   // Set Comment
-  if (!XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined())
+  if (!settings.TeamFlarmIdTarget.defined())
     infobox.SetCommentInvalid();
-  else if (!string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget))
-    infobox.SetComment(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
+  else if (!string_is_empty(settings.TeamFlarmCNTarget))
+    infobox.SetComment(settings.TeamFlarmCNTarget);
   else
     infobox.SetComment(_T("???"));
 
-  if (XCSoarInterface::Basic().flarm.FindTraffic(
-      XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) != NULL)
+  if (flarm.FindTraffic(settings.TeamFlarmIdTarget) != NULL)
     infobox.SetColorBottom(2);
   else
     infobox.SetColorBottom(1);
@@ -124,13 +127,15 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
 {
+  const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
+  const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
+
 #ifndef OLD_TASK
   infobox.SetInvalid();
   return;
 #else
-  if (!way_points.verify_index(XCSoarInterface::SettingsComputer().
-      TeamCodeRefWaypoint)
-      || !XCSoarInterface::SettingsComputer().TeammateCodeValid) {
+  if (!way_points.verify_index(settings.TeamCodeRefWaypoint)
+      || !settings.TeammateCodeValid) {
     infobox.SetInvalid();
     return;
   }
@@ -143,15 +148,14 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
 #endif
 
   // Set Comment
-  if (!XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined())
+  if (!settings.TeamFlarmIdTarget.defined())
     infobox.SetCommentInvalid();
-  else if (!string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget))
-    infobox.SetComment(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
+  else if (!string_is_empty(settings.TeamFlarmCNTarget))
+    infobox.SetComment(settings.TeamFlarmCNTarget);
   else
     infobox.SetComment(_T("???"));
 
-  if (XCSoarInterface::Basic().flarm.FindTraffic(
-      XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) != NULL)
+  if (flarm.FindTraffic(settings.TeamFlarmIdTarget) != NULL)
     infobox.SetColorBottom(2);
   else
     infobox.SetColorBottom(1);
@@ -160,7 +164,10 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::SettingsComputer().TeammateCodeValid) {
+  const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
+  const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
+
+  if (!settings.TeammateCodeValid) {
     infobox.SetInvalid();
     return;
   }
@@ -175,15 +182,14 @@ InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
   infobox.SetValueUnit(Units::Current.DistanceUnit);
 
   // Set Comment
-  if (!XCSoarInterface::SettingsComputer().TeamFlarmIdTarget.defined())
+  if (!settings.TeamFlarmIdTarget.defined())
     infobox.SetCommentInvalid();
-  else if (!string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget))
-    infobox.SetComment(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget);
+  else if (!string_is_empty(settings.TeamFlarmCNTarget))
+    infobox.SetComment(settings.TeamFlarmCNTarget);
   else
     infobox.SetComment(_T("???"));
 
-  if (XCSoarInterface::Basic().flarm.FindTraffic(
-      XCSoarInterface::SettingsComputer().TeamFlarmIdTarget) != NULL)
+  if (flarm.FindTraffic(settings.TeamFlarmIdTarget) != NULL)
     infobox.SetColorBottom(2);
   else
     infobox.SetColorBottom(1);
