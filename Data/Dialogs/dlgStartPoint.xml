@@ -1,9 +1,0 @@
-<?xml version="1.0"?>
-
-<Form Name="frmStartPoint" Width="320" Height="240" Caption="Alternate Start Points">
-  <Button Name="cmdClose" Caption="Close" X="2" Y="2" Width="98" Height="22" OnClick="OnCloseClicked"/>
-
-  <Button Name="cmdClear" Caption="Clear" X="2" Width="98" Height="22" OnClick="OnClearClicked"/>
-
-  <List Name="frmStartPointList" X="102" Y="1" Width="-1" Height="-1" ItemHeight="18"/>
-</Form>

@@ -49,8 +49,6 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
 {
 }
 
-void dlgStartPointShowModal() {}
-
 Projection::Projection() {}
 
 SettingsComputerBlackboard::SettingsComputerBlackboard() {}

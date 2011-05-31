@@ -118,7 +118,6 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint,
                           bool allow_navigation = true);
 
 void dlgTeamCodeShowModal();
-void dlgStartPointShowModal();
 
 bool dlgWaypointEditShowModal(Waypoint &way_point);
 
