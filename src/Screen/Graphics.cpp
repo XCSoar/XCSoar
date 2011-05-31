@@ -131,6 +131,7 @@ Brush Graphics::hbGround;
 ChartLook Graphics::chart;
 ThermalBandLook Graphics::thermal_band;
 TraceHistoryLook Graphics::trace_history;
+CrossSectionLook Graphics::cross_section;
 
 // airspace brushes/colours
 const Color
@@ -349,6 +350,7 @@ Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
   chart.Initialise();
   thermal_band.Initialise();
   trace_history.Initialise(Appearance.InverseInfoBox);
+  cross_section.Initialise();
 }
 
 void
@@ -575,6 +577,7 @@ Graphics::Deinitialise()
   chart.Deinitialise();
   thermal_band.Deinitialise();
   trace_history.Deinitialise();
+  cross_section.Deinitialise();
 }
 
 static void

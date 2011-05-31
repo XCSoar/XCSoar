@@ -31,6 +31,7 @@ Copyright_License {
 #include "Look/ChartLook.hpp"
 #include "Look/ThermalBandLook.hpp"
 #include "Look/TraceHistoryLook.hpp"
+#include "Look/CrossSectionLook.hpp"
 
 class Bitmap;
 class MaskedIcon;
@@ -194,6 +195,7 @@ namespace Graphics {
   extern ChartLook chart;
   extern ThermalBandLook thermal_band;
   extern TraceHistoryLook trace_history;
+  extern CrossSectionLook cross_section;
 };
 
 #endif

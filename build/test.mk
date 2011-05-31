@@ -1265,6 +1265,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
+	$(SRC)/Look/CrossSectionLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputer.cpp \
@@ -1381,6 +1382,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
+	$(SRC)/Look/CrossSectionLook.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Appearance.cpp \
@@ -1486,6 +1488,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
+	$(SRC)/Look/CrossSectionLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Poco/RWLock.cpp \
