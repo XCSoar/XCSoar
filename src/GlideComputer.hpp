@@ -93,6 +93,7 @@ private:
   gcc_pure
   bool DetermineTeamCodeRefLocation();
 
+  void CheckTeammateRange();
   void CalculateTeammateBearingRange();
   void CalculateOwnTeamCode();
   void FLARM_ScanTraffic();

@@ -207,8 +207,6 @@ GlideComputer::CalculateOwnTeamCode()
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
-  static bool InTeamSector = false;
-
   // No reference waypoint for teamcode calculation chosen -> cancel
   if (!DetermineTeamCodeRefLocation())
     return;
@@ -225,16 +223,7 @@ GlideComputer::CalculateTeammateBearingRange()
     SetCalculated().TeammateBearing = team_vector.Bearing;
     SetCalculated().TeammateRange = team_vector.Distance;
 
-    // Hysteresis for GlideComputerEvent
-    // If (closer than 100m to the teammates last position and "event" not reset)
-    if (Calculated().TeammateRange < fixed(100) && InTeamSector == false) {
-      InTeamSector = true;
-      // Raise GCE_TEAM_POS_REACHED event
-      InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
-    } else if (Calculated().TeammateRange > fixed(300)) {
-      // Reset "event" when distance is greater than 300m again
-      InTeamSector = false;
-    }
+    CheckTeammateRange();
   } else {
     SetCalculated().TeammateBearing = Angle::degrees(fixed_zero);
     SetCalculated().TeammateRange = fixed_zero;
@@ -266,6 +255,23 @@ GlideComputer::CalculateTeammateBearingRange()
   XCSoarInterface::SetSettingsComputer().TeammateCode.Update(bearing, distance);
   XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
 
+}
+
+void
+GlideComputer::CheckTeammateRange()
+{
+  static bool InTeamSector = false;
+
+  // Hysteresis for GlideComputerEvent
+  // If (closer than 100m to the teammates last position and "event" not reset)
+  if (Calculated().TeammateRange < fixed(100) && InTeamSector == false) {
+    InTeamSector = true;
+    // Raise GCE_TEAM_POS_REACHED event
+    InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
+  } else if (Calculated().TeammateRange > fixed(300)) {
+    // Reset "event" when distance is greater than 300m again
+    InTeamSector = false;
+  }
 }
 
 void
