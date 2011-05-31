@@ -455,6 +455,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/EWMicroRecorder.cpp \
 	$(SRC)/Device/Driver/FlymasterF1.cpp \
 	$(SRC)/Device/Driver/Flytec.cpp \
+	$(SRC)/Device/Driver/Leonardo.cpp \
 	$(SRC)/Device/Driver/LX.cpp \
 	$(SRC)/Device/Driver/ILEC.cpp \
 	$(SRC)/Device/Driver/Westerboer.cpp \
