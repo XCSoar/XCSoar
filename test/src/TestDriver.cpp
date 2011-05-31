@@ -430,6 +430,8 @@ TestLeonardo()
   ok1(nmea_info.ExternalWindAvailable);
   ok1(equals(nmea_info.ExternalWind.bearing, 65));
   ok1(equals(nmea_info.ExternalWind.norm, 7.777777));
+  ok1(nmea_info.SupplyBatteryVoltageAvailable);
+  ok1(equals(nmea_info.SupplyBatteryVoltage, 3.82));
 
   delete device;
 }
@@ -727,7 +729,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(348);
+  plan_tests(350);
 
   TestGeneric();
   TestFLARM();

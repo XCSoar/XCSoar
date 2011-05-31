@@ -192,6 +192,11 @@ PDGFTL1(NMEAInputLine &line, NMEA_INFO &info)
     info.ProvideExternalWind(wind);
 
   //  Main Lithium Battery Voltage   382      0.01 volts   3,82 volts
+  if (line.read_checked(value)) {
+    info.SupplyBatteryVoltage = value / 100;
+    info.SupplyBatteryVoltageAvailable.Update(info.Time);
+  }
+
   //  Backup AA Battery Voltage      153      0.01 volts   1,53 volts
 
   return true;
