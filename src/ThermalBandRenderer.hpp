@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Math/fixed.hpp"
 
+struct ThermalBandLook;
 class Chart;
 class Canvas;
 struct NMEA_INFO;
@@ -36,7 +37,12 @@ class OrderedTaskBehaviour;
 class TaskBehaviour;
 
 class ThermalBandRenderer {
+  const ThermalBandLook &look;
+
 public:
+  ThermalBandRenderer(const ThermalBandLook &_look)
+    :look(_look) {}
+
   void DrawThermalBand(const NMEA_INFO& basic,
                        const DERIVED_INFO& calculated,
                        const SETTINGS_COMPUTER &settings_computer,

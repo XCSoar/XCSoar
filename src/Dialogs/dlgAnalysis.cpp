@@ -154,7 +154,7 @@ ChartControl::on_paint(Canvas &canvas)
       otb = protected_task_manager->get_ordered_task_behaviour();
     }
 
-    ThermalBandRenderer renderer;
+    ThermalBandRenderer renderer(Graphics::thermal_band);
     renderer.DrawThermalBand(XCSoarInterface::Basic(),
                              XCSoarInterface::Calculated(),
                              CommonInterface::SettingsComputer(),

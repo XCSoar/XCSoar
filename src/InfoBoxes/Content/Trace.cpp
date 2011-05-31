@@ -160,7 +160,7 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  ThermalBandRenderer renderer;
+  ThermalBandRenderer renderer(Graphics::thermal_band);
   renderer.DrawThermalBandSpark(CommonInterface::Basic(),
                                 CommonInterface::Calculated(),
                                 CommonInterface::SettingsComputer(),

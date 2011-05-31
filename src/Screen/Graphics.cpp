@@ -86,11 +86,9 @@ Pen Graphics::hpTerrainLineThick;
 Pen Graphics::hpTrackBearingLine;
 Pen Graphics::TracePen;
 Pen Graphics::ContestPen[3];
-Pen Graphics::hpThermalBand;
 
 Brush Graphics::hbCanopy;
 Brush Graphics::hbCompass;
-Brush Graphics::hbThermalBand;
 Brush Graphics::hbBestCruiseTrack;
 Brush Graphics::hbFinalGlideBelow;
 Brush Graphics::hbFinalGlideBelowLandable;
@@ -130,6 +128,7 @@ Brush Graphics::hbLightGray;
 Brush Graphics::hbNotReachableTerrain;
 Brush Graphics::hbGround;
 
+ThermalBandLook Graphics::thermal_band;
 TraceHistoryLook Graphics::trace_history;
 
 // airspace brushes/colours
@@ -286,9 +285,6 @@ Graphics::Initialise()
 
   hbCompass.set(Color(207, 207, 207));
 
-  hbThermalBand.set(skyColor);
-  hpThermalBand.set(Layout::Scale(1), dark_color(skyColor));
-
   hbFinalGlideBelow.set(COLOR_RED);
   hpFinalGlideBelow.set(Layout::Scale(1), dark_color(COLOR_RED));
 
@@ -349,6 +345,7 @@ Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
   InitLandableIcons();
   InitAirspacePens(settings_map.airspace);
 
+  thermal_band.Initialise();
   trace_history.Initialise(Appearance.InverseInfoBox);
 }
 
@@ -506,8 +503,6 @@ Graphics::Deinitialise()
 
   hbCompass.reset();
 
-  hpThermalBand.reset();
-  hbThermalBand.reset();
   hbBestCruiseTrack.reset();
   hbFinalGlideBelow.reset();
   hbFinalGlideBelowLandable.reset();
@@ -575,6 +570,7 @@ Graphics::Deinitialise()
   FieldReachableIcon.reset();
   FieldUnreachableIcon.reset();
 
+  thermal_band.Deinitialise();
   trace_history.Deinitialise();
 }
 

@@ -1262,6 +1262,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
+	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
@@ -1376,6 +1377,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Math/Screen.cpp \
@@ -1479,6 +1481,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/Util.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
+	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
