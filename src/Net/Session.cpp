@@ -22,51 +22,14 @@ Copyright_License {
 */
 
 #include "Net/Session.hpp"
-#include "Net/Context.hpp"
 #include "Net/Connection.hpp"
 #include "Net/Request.hpp"
-
-static void __stdcall
-Callback(HINTERNET hInternet, DWORD dwContext, DWORD dwInternetStatus,
-         LPVOID lpStatusInfo, DWORD dwStatusInfoLen)
-{
-  Net::Context *context = (Net::Context *)dwContext;
-
-  if (context->parent == NULL)
-    return;
-
-  if (context->type == Net::Context::CONNECTION)
-    ((Net::Connection *)context->parent)->
-    Callback(dwInternetStatus, lpStatusInfo, dwStatusInfoLen);
-  else if (context->type == Net::Context::REQUEST)
-    ((Net::Request *)context->parent)->
-    Callback(dwInternetStatus, lpStatusInfo, dwStatusInfoLen);
-}
 
 Net::Session::Session()
 {
   // Get session handle
   handle.Set(::InternetOpenA("XCSoar", INTERNET_OPEN_TYPE_PRECONFIG, NULL,
                              NULL, INTERNET_FLAG_ASYNC));
-
-  // If handle was retrieved
-  if (handle.IsDefined()) {
-    // Setup callback function
-    INTERNET_STATUS_CALLBACK callback_result =
-        handle.SetStatusCallback((INTERNET_STATUS_CALLBACK)&Callback);
-
-    // Save whether callback function was setup correctly
-    callback_installed = (callback_result != INTERNET_INVALID_STATUS_CALLBACK);
-  }
-}
-
-Net::Session::~Session()
-{
-  if (handle.IsDefined()) {
-    // Unregister callback function
-    if (callback_installed)
-      handle.SetStatusCallback(NULL);
-  }
 }
 
 bool
@@ -74,5 +37,5 @@ Net::Session::Error() const
 {
   // Error occured if either no handle was retrieved in the constructor
   // or if the callback wasn't setup correctly
-  return !handle.IsDefined() || callback_installed == false;
+  return !handle.IsDefined();
 }

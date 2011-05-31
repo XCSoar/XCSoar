@@ -21,7 +21,6 @@ Copyright_License {
 }
 */
 
-#include "Net/Context.hpp"
 #include "Net/Session.hpp"
 #include "Net/Request.hpp"
 #include "OS/PathName.hpp"

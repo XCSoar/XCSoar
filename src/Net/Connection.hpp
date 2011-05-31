@@ -25,7 +25,6 @@ Copyright_License {
 #define NET_CONNECTION_HPP
 
 #include "Thread/Trigger.hpp"
-#include "Net/Context.hpp"
 #include "Net/WinINet.hpp"
 
 namespace Net {
@@ -35,8 +34,6 @@ namespace Net {
     /** Internal connection handle */
     WinINet::HttpConnectionHandle handle;
 
-    /** Context for the callback function (holds a pointer to this) */
-    Context context;
     /**
      * Event handle that is triggered when the Connection
      * is established asynchronously

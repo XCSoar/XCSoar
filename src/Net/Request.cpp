@@ -27,38 +27,57 @@ Copyright_License {
 
 #include <assert.h>
 
+static void CALLBACK
+RequestCallback(HINTERNET hInternet,
+                DWORD_PTR dwContext,
+                DWORD dwInternetStatus,
+                LPVOID lpvStatusInformation,
+                DWORD dwStatusInformationLength)
+{
+  Net::Request *request = (Net::Request *)dwContext;
+
+  request->Callback(dwInternetStatus,
+                    lpvStatusInformation, dwStatusInformationLength);
+}
+
 Net::Request::Request(Session &session, const TCHAR *url,
                       unsigned long timeout)
-  :context(Context::REQUEST, this),
-   opened_event(false), completed_event(false),
+  :opened_event(false), completed_event(false),
    last_error(ERROR_SUCCESS)
 {
+  INTERNET_STATUS_CALLBACK old_callback =
+    session.handle.SetStatusCallback(RequestCallback);
   HINTERNET h = session.handle.OpenUrl(url, NULL, 0,
                                        INTERNET_FLAG_NO_AUTH |
                                        INTERNET_FLAG_NO_AUTO_REDIRECT |
                                        INTERNET_FLAG_NO_CACHE_WRITE |
                                        INTERNET_FLAG_NO_COOKIES |
                                        INTERNET_FLAG_NO_UI,
-                                       (DWORD_PTR)&context);
+                                       (DWORD_PTR)this);
 
   if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the Request handle
     completed_event.Wait(timeout);
+
+  session.handle.SetStatusCallback(old_callback);
 }
 
 Net::Request::Request(Connection &connection, const char *file,
                       unsigned long timeout)
-  :context(Context::REQUEST, this),
-   opened_event(false), completed_event(false),
+  :opened_event(false), completed_event(false),
    last_error(ERROR_SUCCESS)
 {
+  INTERNET_STATUS_CALLBACK old_callback =
+    connection.handle.SetStatusCallback(RequestCallback);
   HINTERNET h = connection.handle.OpenRequest("GET", file, NULL, NULL, NULL,
                                               INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE,
-                                              (DWORD_PTR)&context);
+                                              (DWORD_PTR)this);
 
   if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the Request handle
     opened_event.Wait(timeout);
+
+  connection.handle.SetStatusCallback(old_callback);
 }
 
 bool
@@ -94,7 +113,7 @@ Net::Request::Read(char *buffer, size_t buffer_size, unsigned long timeout)
   InetBuff.dwBufferLength = buffer_size - 1;
 
   // If InternetReadFileExA() failed or timeout occured in WaitForSingleObject()
-  if (!handle.Read(&InetBuff, IRF_ASYNC, (DWORD_PTR)&context) &&
+  if (!handle.Read(&InetBuff, IRF_ASYNC, (DWORD_PTR)this) &&
       (GetLastError() != ERROR_IO_PENDING ||
        !completed_event.Wait(timeout)))
     // return "0 bytes read"

@@ -31,9 +31,6 @@ namespace Net {
     /** Internal session handle */
     WinINet::SessionHandle handle;
 
-    /** Was the callback installed successfully? */
-    bool callback_installed;
-
   public:
     friend class Connection;
     friend class Request;
@@ -43,10 +40,6 @@ namespace Net {
      * connections and registers the necessary callback.
      */
     Session();
-    /**
-     * Destroys the session and unregisters the callback
-     */
-    ~Session();
 
     /**
      * Was the session created successfully

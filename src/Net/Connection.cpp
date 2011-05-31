@@ -24,15 +24,30 @@ Copyright_License {
 #include "Net/Connection.hpp"
 #include "Net/Session.hpp"
 
+static void CALLBACK
+ConnectionCallback(HINTERNET hInternet,
+                   DWORD_PTR dwContext,
+                   DWORD dwInternetStatus,
+                   LPVOID lpvStatusInformation,
+                   DWORD dwStatusInformationLength)
+{
+  Net::Connection *connection = (Net::Connection *)dwContext;
+
+  connection->Callback(dwInternetStatus,
+                       lpvStatusInformation, dwStatusInformationLength);
+}
+
 Net::Connection::Connection(Session &session, const char *server,
                             unsigned long timeout)
-  :context(Context::CONNECTION, this),
-   event(false)
+  :event(false)
 {
+  INTERNET_STATUS_CALLBACK old_callback =
+    session.handle.SetStatusCallback(ConnectionCallback);
   HINTERNET h = session.handle.Connect(server,
                                        INTERNET_DEFAULT_HTTP_PORT, NULL, NULL,
                                        INTERNET_SERVICE_HTTP, 0,
-                                       (DWORD_PTR)&context);
+                                       (DWORD_PTR)this);
+  session.handle.SetStatusCallback(old_callback);
 
   if (h == NULL && GetLastError() == ERROR_IO_PENDING)
     // Wait until we get the connection handle
