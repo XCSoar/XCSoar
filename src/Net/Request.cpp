@@ -30,7 +30,7 @@ Net::Request::Request(Connection &connection, const char *file,
                       unsigned long timeout)
   :context(Context::REQUEST, this),
    opened_event(false), completed_event(false),
-   last_error(0)
+   last_error(ERROR_SUCCESS)
 {
   HINTERNET h = connection.handle.OpenRequest("GET", file, NULL, NULL, NULL,
                                               INTERNET_FLAG_RELOAD | INTERNET_FLAG_NO_CACHE_WRITE,
@@ -61,7 +61,7 @@ Net::Request::Send(unsigned long timeout)
       !completed_event.Wait(timeout))
     return false;
   else
-    return last_error == 0;
+    return last_error == ERROR_SUCCESS;
 }
 
 size_t
