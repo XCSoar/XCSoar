@@ -252,6 +252,9 @@ GlideComputer::CalculateTeammateBearingRange()
 
   // Set Teammate location to FLARM contact location
   SetCalculated().TeammateLocation = traffic->location;
+  Basic().Location.distance_bearing(traffic->location,
+                                    SetCalculated().TeammateRange,
+                                    SetCalculated().TeammateBearing);
 
   // Calculate distance and bearing from teammate to reference waypoint
 
