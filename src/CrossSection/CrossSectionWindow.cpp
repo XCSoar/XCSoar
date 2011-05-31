@@ -337,9 +337,7 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
 {
   Brush brush(text_color);
   canvas.select(brush);
-
-  Pen pen(1, text_color);
-  canvas.select(pen);
+  canvas.null_pen();
 
   RasterPoint line[4];
   line[0].x = chart.screenX(fixed_zero);
