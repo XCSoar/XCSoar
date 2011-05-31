@@ -29,6 +29,7 @@
 #include "Device/Driver/EWMicroRecorder.hpp"
 #include "Device/Driver/FlymasterF1.hpp"
 #include "Device/Driver/Flytec.hpp"
+#include "Device/Driver/Leonardo.hpp"
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/PosiGraph.hpp"
@@ -375,6 +376,49 @@ TestFlytec()
 }
 
 static void
+TestLeonardo()
+{
+  Device *device = leonardo_device_driver.CreateOnPort(NULL);
+  ok1(device != NULL);
+
+  NMEA_INFO nmea_info;
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  ok1(device->ParseNMEA("$C,+2025,-7,+18,+25,+29,122,314,314,0,-356,+25,45,T*3D", &nmea_info));
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 2025));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, -0.7));
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 5));
+  ok1(nmea_info.NettoVarioAvailable);
+  ok1(equals(nmea_info.NettoVario, 2.5));
+
+  ok1(nmea_info.TemperatureAvailable);
+  ok1(equals(nmea_info.OutsideAirTemperature, 302.15));
+
+  ok1(nmea_info.ExternalWindAvailable);
+  ok1(equals(nmea_info.ExternalWind.bearing, 45));
+  ok1(equals(nmea_info.ExternalWind.norm, 6.94444444));
+
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  ok1(device->ParseNMEA("$D,+7,100554,+25,18,+31,,0,-356,+25,+11,115,96*6A", &nmea_info));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, 0.7));
+  ok1(nmea_info.NettoVarioAvailable);
+  ok1(equals(nmea_info.NettoVario, 2.5));
+  ok1(nmea_info.AirspeedAvailable);
+  ok1(equals(nmea_info.TrueAirspeed, 5));
+  ok1(nmea_info.TemperatureAvailable);
+  ok1(equals(nmea_info.OutsideAirTemperature, 304.15));
+
+  delete device;
+}
+
+static void
 TestLX(const struct DeviceRegister &driver, bool condor=false)
 {
   Device *device = driver.CreateOnPort(NULL);
@@ -667,7 +711,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(312);
+  plan_tests(336);
 
   TestGeneric();
   TestFLARM();
@@ -675,6 +719,7 @@ int main(int argc, char **argv)
   TestCAI302();
   TestFlymasterF1();
   TestFlytec();
+  TestLeonardo();
   TestLX(lxDevice);
   TestLX(condorDevice, true);
   TestILEC();

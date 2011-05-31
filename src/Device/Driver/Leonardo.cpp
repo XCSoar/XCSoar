@@ -47,8 +47,8 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
   fixed norm, bearing;
 
-  bool bearing_valid = line.read_checked(bearing);
   bool norm_valid = line.read_checked(norm);
+  bool bearing_valid = line.read_checked(bearing);
 
   if (bearing_valid && norm_valid) {
     value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
@@ -93,6 +93,8 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info)
   info.TemperatureAvailable = line.read_checked(oat);
   if (info.TemperatureAvailable)
     info.OutsideAirTemperature = Units::ToSysUnit(oat, unGradCelcius);
+
+  line.skip(5);
 
   // 10 = wind speed [km/h]
   // 11 = wind direction [degrees]
@@ -162,7 +164,7 @@ LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
 
   if (strcmp(type, "$C") == 0 || strcmp(type, "$c") == 0)
     return LeonardoParseC(line, *info);
-  else if (strcmp(type, "$D") == 0 || strcmp(type, "$D") == 0)
+  else if (strcmp(type, "$D") == 0 || strcmp(type, "$d") == 0)
     return LeonardoParseD(line, *info);
   else
     return false;
