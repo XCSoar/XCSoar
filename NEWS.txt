@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.2 - not yet released
 * devices
   - added task declaration support for the IMI ERIXX logger
+  - improved support for the Digifly Leonardo
 
 Version 6.1.1 - not yet released
 * calculations

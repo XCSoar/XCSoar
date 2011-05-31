@@ -155,6 +155,48 @@ LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
   return true;
 }
 
+/**
+ * Parse a "$PDGFTL1" sentence.
+ *
+ * Example: "$PDGFTL1,2025,2000,250,-14,45,134,28,65,382,153*3D"
+ */
+static bool
+PDGFTL1(NMEAInputLine &line, NMEA_INFO &info)
+{
+  fixed value;
+
+  //  Baro Altitude QNE(1013.25)     2025     meter        2025 mt
+  if (line.read_checked(value))
+    info.ProvidePressureAltitude(value);
+
+  //  Baro Altitude QNH  2000     meter        2000 mt
+  if (line.read_checked(value))
+    info.ProvideBaroAltitudeTrue(value);
+
+  //  Vario  250      cm/sec       +2,50 m/s
+  if (line.read_checked(value))
+    info.ProvideTotalEnergyVario(value / 100);
+
+  //  Netto Vario  -14      dm/sec       -1,40 m/s
+  if (line.read_checked(value))
+    info.ProvideNettoVario(value / 10);
+
+  //  Indicated Air Speed  45       km/h         45 km/h
+  //  Ground Efficiency  134      ratio        13,4 : 1
+  line.skip(2);
+
+  //  Wind Speed  28       km/h         28 km/h
+  //  Wind Direction  65       degree       65 degree
+  SpeedVector wind;
+  if (ReadSpeedVector(line, wind))
+    info.ProvideExternalWind(wind);
+
+  //  Main Lithium Battery Voltage   382      0.01 volts   3,82 volts
+  //  Backup AA Battery Voltage      153      0.01 volts   1,53 volts
+
+  return true;
+}
+
 bool
 LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
 {
@@ -166,6 +208,8 @@ LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
     return LeonardoParseC(line, *info);
   else if (strcmp(type, "$D") == 0 || strcmp(type, "$d") == 0)
     return LeonardoParseD(line, *info);
+  else if (strcmp(type, "$PDGFTL1") == 0)
+    return PDGFTL1(line, *info);
   else
     return false;
 }

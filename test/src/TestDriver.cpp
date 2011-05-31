@@ -415,6 +415,22 @@ TestLeonardo()
   ok1(nmea_info.TemperatureAvailable);
   ok1(equals(nmea_info.OutsideAirTemperature, 304.15));
 
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  ok1(device->ParseNMEA("$PDGFTL1,2025,2000,250,-14,45,134,28,65,382,153*3D", &nmea_info));
+  ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(equals(nmea_info.PressureAltitude, 2025));
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 2000));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, 2.5));
+  ok1(nmea_info.NettoVarioAvailable);
+  ok1(equals(nmea_info.NettoVario, -1.4));
+  ok1(nmea_info.ExternalWindAvailable);
+  ok1(equals(nmea_info.ExternalWind.bearing, 65));
+  ok1(equals(nmea_info.ExternalWind.norm, 7.777777));
+
   delete device;
 }
 
@@ -711,7 +727,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(336);
+  plan_tests(348);
 
   TestGeneric();
   TestFLARM();
