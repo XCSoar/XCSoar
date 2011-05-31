@@ -94,6 +94,8 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info)
   if (info.TemperatureAvailable)
     info.OutsideAirTemperature = Units::ToSysUnit(oat, unGradCelcius);
 
+  line.skip(5);
+
   // 10 = wind speed [km/h]
   // 11 = wind direction [degrees]
   SpeedVector wind;
