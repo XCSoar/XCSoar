@@ -6,6 +6,10 @@ Version 6.1.1 - not yet released
 * calculations
   - fix arrival heights which are below the safety height
   - reduce memory usage
+* map
+  - new option for large glider symbol
+* Windows
+  - workaround for PPC2000 bug that caused lockups
 * Android
   - fix crash bug after orientation change and resume
 * Altair
