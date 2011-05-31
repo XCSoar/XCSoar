@@ -213,7 +213,7 @@ LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
     return LeonardoParseC(line, *info);
   else if (strcmp(type, "$D") == 0 || strcmp(type, "$d") == 0)
     return LeonardoParseD(line, *info);
-  else if (strcmp(type, "$PDGFTL1") == 0)
+  else if (strcmp(type, "$PDGFTL1") == 0 || strcmp(type, "$PDGFTTL") == 0)
     return PDGFTL1(line, *info);
   else
     return false;

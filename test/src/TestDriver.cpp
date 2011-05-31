@@ -433,6 +433,19 @@ TestLeonardo()
   ok1(nmea_info.SupplyBatteryVoltageAvailable);
   ok1(equals(nmea_info.SupplyBatteryVoltage, 3.82));
 
+  nmea_info.reset();
+  nmea_info.Time = fixed(1297230000);
+
+  ok1(device->ParseNMEA("$PDGFTTL,2025,2000,250,-14*41", &nmea_info));
+  ok1(nmea_info.PressureAltitudeAvailable);
+  ok1(equals(nmea_info.PressureAltitude, 2025));
+  ok1(nmea_info.BaroAltitudeAvailable);
+  ok1(equals(nmea_info.BaroAltitude, 2000));
+  ok1(nmea_info.TotalEnergyVarioAvailable);
+  ok1(equals(nmea_info.TotalEnergyVario, 2.5));
+  ok1(nmea_info.NettoVarioAvailable);
+  ok1(equals(nmea_info.NettoVario, -1.4));
+
   delete device;
 }
 
@@ -729,7 +742,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(350);
+  plan_tests(359);
 
   TestGeneric();
   TestFLARM();
