@@ -138,7 +138,7 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
                                   const bool centered,
                                   const fixed mc) const
 {
-  Chart chart(canvas, rc);
+  Chart chart(chart_look, canvas, rc);
   scale_chart(chart, var, centered);
   chart.ScaleYFromValue(mc);
   // render_line(chart, var);
@@ -147,7 +147,7 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
     canvas.background_transparent();
     chart.DrawLine(fixed_zero, mc, 
                    fixed(var.capacity()-1), mc, 
-                   Chart::STYLE_DASHGREEN);
+                   ChartLook::STYLE_DASHGREEN);
   }
 
   render_filled_posneg(chart, var);

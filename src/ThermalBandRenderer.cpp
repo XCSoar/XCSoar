@@ -181,7 +181,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
                                      const bool is_map,
                                      const OrderedTaskBehaviour *ordered_props) const
 {
-  Chart chart(canvas, rc);
+  Chart chart(chart_look, canvas, rc);
   if (is_map) {
     chart.PaddingBottom = 0;
     chart.PaddingLeft = 0;
@@ -192,10 +192,10 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
 
   if (!is_map) {
     chart.DrawXGrid(Units::ToSysVSpeed(fixed_one), fixed_zero,
-                    Chart::STYLE_THINDASHPAPER, fixed_one, true);
+                    ChartLook::STYLE_THINDASHPAPER, fixed_one, true);
     chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)),
                     fixed_zero,
-                    Chart::STYLE_THINDASHPAPER,
+                    ChartLook::STYLE_THINDASHPAPER,
                     fixed(1000), true);
     chart.DrawXLabel(_T("w"));
     chart.DrawYLabel(_T("h AGL"));
@@ -210,7 +210,7 @@ ThermalBandRenderer::DrawThermalBandSpark(const NMEA_INFO& basic,
                                           const PixelRect &rc,
                                           const TaskBehaviour &task_props) const
 {
-  Chart chart(canvas, rc);
+  Chart chart(chart_look, canvas, rc);
   chart.PaddingBottom = 0;
   chart.PaddingLeft = IBLSCALE(3);
   scale_chart(calculated, settings_computer, chart);

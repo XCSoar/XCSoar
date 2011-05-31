@@ -243,7 +243,7 @@ CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc)
   fixed hmin = max(fixed_zero, gps_info.NavAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), gps_info.NavAltitude + fixed(1000));
 
-  Chart chart(canvas, rc);
+  Chart chart(Graphics::chart, canvas, rc);
   chart.ResetScale();
   chart.ScaleXFromValue(fixed_zero);
   chart.ScaleXFromValue(vec.Distance);
@@ -327,7 +327,7 @@ CrossSectionWindow::PaintGlide(Chart &chart)
     fixed t = vec.Distance / gps_info.GroundSpeed;
     chart.DrawLine(fixed_zero, gps_info.NavAltitude, vec.Distance,
                    gps_info.NavAltitude + calculated_info.Average30s * t,
-                   Chart::STYLE_BLUETHIN);
+                   ChartLook::STYLE_BLUETHIN);
   }
 }
 

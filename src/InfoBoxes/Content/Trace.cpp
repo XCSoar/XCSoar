@@ -58,7 +58,7 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
   if (var.empty())
     return;
 
-  TraceHistoryRenderer renderer(Graphics::trace_history);
+  TraceHistoryRenderer renderer(Graphics::trace_history, Graphics::chart);
   renderer.RenderVario(canvas, get_spark_rect(infobox), var, center,
                        CommonInterface::SettingsComputer().glide_polar_task.get_mc());
 }
@@ -160,7 +160,7 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  ThermalBandRenderer renderer(Graphics::thermal_band);
+  ThermalBandRenderer renderer(Graphics::thermal_band, Graphics::chart);
   renderer.DrawThermalBandSpark(CommonInterface::Basic(),
                                 CommonInterface::Calculated(),
                                 CommonInterface::SettingsComputer(),

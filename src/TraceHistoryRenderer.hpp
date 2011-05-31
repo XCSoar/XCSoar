@@ -28,16 +28,19 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 struct TraceHistoryLook;
+struct ChartLook;
 class Chart;
 class Canvas;
 class TraceVariableHistory;
 
 class TraceHistoryRenderer {
   const TraceHistoryLook &look;
+  const ChartLook &chart_look;
 
 public:
-  TraceHistoryRenderer(const TraceHistoryLook &_look)
-    :look(_look) {}
+  TraceHistoryRenderer(const TraceHistoryLook &_look,
+                       const ChartLook &_chart_look)
+    :look(_look), chart_look(_chart_look) {}
 
   void RenderVario(Canvas& canvas,
                    const PixelRect rc,

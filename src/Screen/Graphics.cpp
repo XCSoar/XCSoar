@@ -128,6 +128,7 @@ Brush Graphics::hbLightGray;
 Brush Graphics::hbNotReachableTerrain;
 Brush Graphics::hbGround;
 
+ChartLook Graphics::chart;
 ThermalBandLook Graphics::thermal_band;
 TraceHistoryLook Graphics::trace_history;
 
@@ -345,6 +346,7 @@ Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
   InitLandableIcons();
   InitAirspacePens(settings_map.airspace);
 
+  chart.Initialise();
   thermal_band.Initialise();
   trace_history.Initialise(Appearance.InverseInfoBox);
 }
@@ -570,6 +572,7 @@ Graphics::Deinitialise()
   FieldReachableIcon.reset();
   FieldUnreachableIcon.reset();
 
+  chart.Deinitialise();
   thermal_band.Deinitialise();
   trace_history.Deinitialise();
 }

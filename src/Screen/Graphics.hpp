@@ -28,6 +28,7 @@ Copyright_License {
 #include "Airspace/AirspaceClass.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Features.hpp"
+#include "Look/ChartLook.hpp"
 #include "Look/ThermalBandLook.hpp"
 #include "Look/TraceHistoryLook.hpp"
 
@@ -190,6 +191,7 @@ namespace Graphics {
   extern const Color skyColor;
   extern const Color seaColor;
 
+  extern ChartLook chart;
   extern ThermalBandLook thermal_band;
   extern TraceHistoryLook trace_history;
 };
