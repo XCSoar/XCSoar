@@ -153,13 +153,15 @@ ChartControl::on_paint(Canvas &canvas)
     if (protected_task_manager != NULL) {
       otb = protected_task_manager->get_ordered_task_behaviour();
     }
-    ThermalBandRenderer::DrawThermalBand(XCSoarInterface::Basic(),
-                                         XCSoarInterface::Calculated(),
-                                         CommonInterface::SettingsComputer(),
-                                         canvas, rcgfx, 
-                                         XCSoarInterface::SettingsComputer(),
-                                         false,
-                                         &otb);
+
+    ThermalBandRenderer renderer;
+    renderer.DrawThermalBand(XCSoarInterface::Basic(),
+                             XCSoarInterface::Calculated(),
+                             CommonInterface::SettingsComputer(),
+                             canvas, rcgfx,
+                             XCSoarInterface::SettingsComputer(),
+                             false,
+                             &otb);
   }
     break;
   case ANALYSIS_PAGE_WIND:

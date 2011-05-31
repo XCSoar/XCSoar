@@ -37,35 +37,34 @@ class TaskBehaviour;
 
 class ThermalBandRenderer {
 public:
-  static void DrawThermalBand(const NMEA_INFO& basic,
-                              const DERIVED_INFO& calculated,
-                              const SETTINGS_COMPUTER &settings_computer,
-                              Canvas &canvas, 
-                              const PixelRect &rc,
-                              const TaskBehaviour& task_props,
-                              const bool is_map,
-                              const OrderedTaskBehaviour* ordered_props=NULL);
+  void DrawThermalBand(const NMEA_INFO& basic,
+                       const DERIVED_INFO& calculated,
+                       const SETTINGS_COMPUTER &settings_computer,
+                       Canvas &canvas,
+                       const PixelRect &rc,
+                       const TaskBehaviour& task_props,
+                       const bool is_map,
+                       const OrderedTaskBehaviour* ordered_props=NULL) const;
 
-  static void DrawThermalBandSpark(const NMEA_INFO& basic,
-                                   const DERIVED_INFO& calculated,
-                                   const SETTINGS_COMPUTER &settings_computer,
-                                   Canvas &canvas, 
-                                   const PixelRect &rc,
-                                   const TaskBehaviour& task_props);
+  void DrawThermalBandSpark(const NMEA_INFO& basic,
+                            const DERIVED_INFO& calculated,
+                            const SETTINGS_COMPUTER &settings_computer,
+                            Canvas &canvas,
+                            const PixelRect &rc,
+                            const TaskBehaviour& task_props) const;
 
 protected:
-  static void _DrawThermalBand(const NMEA_INFO& basic,
-                               const DERIVED_INFO& calculated,
-                               const SETTINGS_COMPUTER &settings_computer,
-                               Chart &chart,
-                               const TaskBehaviour& task_props,
-                               const bool is_infobox,
-                               const OrderedTaskBehaviour* ordered_props);
+  void _DrawThermalBand(const NMEA_INFO& basic,
+                        const DERIVED_INFO& calculated,
+                        const SETTINGS_COMPUTER &settings_computer,
+                        Chart &chart,
+                        const TaskBehaviour& task_props,
+                        const bool is_infobox,
+                        const OrderedTaskBehaviour* ordered_props) const;
 
-  static void scale_chart(const DERIVED_INFO &calculated,
-                          const SETTINGS_COMPUTER &settings_computer,
-                          Chart &chart);
-
+  void scale_chart(const DERIVED_INFO &calculated,
+                   const SETTINGS_COMPUTER &settings_computer,
+                   Chart &chart) const;
 };
 
 #endif

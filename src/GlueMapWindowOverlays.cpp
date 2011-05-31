@@ -415,23 +415,25 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
   tb_rect.right = rc.left+IBLSCALE(20);
   tb_rect.top = IBLSCALE(4);
   tb_rect.bottom = tb_rect.top+(rc.bottom-rc.top)/2-IBLSCALE(30);
+
+  ThermalBandRenderer renderer;
   if (task != NULL) {
     ProtectedTaskManager::Lease task_manager(*task);
-    ThermalBandRenderer::DrawThermalBand(Basic(),
-                                         Calculated(),
-                                         SettingsComputer(),
-                                         canvas,
-                                         tb_rect,
-                                         SettingsComputer(),
-                                         true,
-                                         &task_manager->get_ordered_task_behaviour());
+    renderer.DrawThermalBand(Basic(),
+                             Calculated(),
+                             SettingsComputer(),
+                             canvas,
+                             tb_rect,
+                             SettingsComputer(),
+                             true,
+                             &task_manager->get_ordered_task_behaviour());
   } else {
-    ThermalBandRenderer::DrawThermalBand(Basic(),
-                                         Calculated(),
-                                         SettingsComputer(),
-                                         canvas,
-                                         tb_rect,
-                                         SettingsComputer(),
-                                         true);
+    renderer.DrawThermalBand(Basic(),
+                             Calculated(),
+                             SettingsComputer(),
+                             canvas,
+                             tb_rect,
+                             SettingsComputer(),
+                             true);
   }
 }

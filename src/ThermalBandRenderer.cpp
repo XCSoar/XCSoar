@@ -37,7 +37,7 @@ Copyright_License {
 void
 ThermalBandRenderer::scale_chart(const DERIVED_INFO &calculated,
                                  const SETTINGS_COMPUTER &settings_computer,
-                                 Chart &chart)
+                                 Chart &chart) const
 {
   chart.ScaleYFromValue(fixed_zero);
   chart.ScaleYFromValue(calculated.thermal_band.MaxThermalHeight);
@@ -55,7 +55,7 @@ ThermalBandRenderer::_DrawThermalBand(const NMEA_INFO& basic,
                                       Chart &chart,
                                       const TaskBehaviour& task_props,
                                       const bool is_infobox,
-                                      const OrderedTaskBehaviour* ordered_props)
+                                      const OrderedTaskBehaviour *ordered_props) const
 {
   const ThermalBandInfo &thermal_band = calculated.thermal_band;
 
@@ -179,7 +179,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
                                      const PixelRect &rc,
                                      const TaskBehaviour& task_props,
                                      const bool is_map,
-                                     const OrderedTaskBehaviour* ordered_props)
+                                     const OrderedTaskBehaviour *ordered_props) const
 {
   Chart chart(canvas, rc);
   if (is_map) {
@@ -208,7 +208,7 @@ ThermalBandRenderer::DrawThermalBandSpark(const NMEA_INFO& basic,
                                           const SETTINGS_COMPUTER &settings_computer,
                                           Canvas &canvas, 
                                           const PixelRect &rc,
-                                          const TaskBehaviour& task_props)
+                                          const TaskBehaviour &task_props) const
 {
   Chart chart(canvas, rc);
   chart.PaddingBottom = 0;
