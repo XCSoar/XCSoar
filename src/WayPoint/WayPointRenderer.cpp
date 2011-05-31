@@ -184,13 +184,11 @@ protected:
       break;
 
     case DISPLAYFIRSTFIVE:
-      _tcsncpy(Buffer, way_point.Name.c_str(), 5);
-      Buffer[5] = '\0';
+      CopyString(Buffer, way_point.Name.c_str(), 6);
       break;
 
     case DISPLAYFIRSTTHREE:
-      _tcsncpy(Buffer, way_point.Name.c_str(), 3);
-      Buffer[3] = '\0';
+      CopyString(Buffer, way_point.Name.c_str(), 4);
       break;
 
     case DISPLAYNONE:

@@ -27,6 +27,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 #include "Math/Angle.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <stdio.h>
 
@@ -40,18 +41,15 @@ void FillInfoBoxWaypointName(InfoBoxWindow& infobox, const Waypoint* way_point,
   } else {
     switch(XCSoarInterface::SettingsMap().DisplayTextType) {
     case DISPLAYFIRSTTHREE:
-      _tcsncpy(tmp, way_point->Name.c_str(), 3);
-      tmp[3] = '\0';
+      CopyString(tmp, way_point->Name.c_str(), 4);
       break;
 
     case DISPLAYFIRSTFIVE:
-      _tcsncpy(tmp, way_point->Name.c_str(), 5);
-      tmp[5] = '\0';
+      CopyString(tmp, way_point->Name.c_str(), 6);
       break;
 
     default:
-      _tcsncpy(tmp, way_point->Name.c_str(), (sizeof(tmp) / sizeof(TCHAR)) - 1);
-      tmp[(sizeof(tmp) / sizeof(TCHAR)) - 1] = '\0';
+      CopyString(tmp, way_point->Name.c_str(), sizeof(tmp) / sizeof(TCHAR));
       break;
     }
   }

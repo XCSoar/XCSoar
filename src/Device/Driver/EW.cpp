@@ -31,6 +31,7 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "NMEA/Checksum.hpp"
 #include "Operation.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -226,7 +227,7 @@ EWDevice::AddWayPoint(const Waypoint &way_point)
     return false;
   }
 
-  _tcsncpy(IDString, way_point.Name.c_str(), 6); // copy at least 6 chars
+  CopyString(IDString, way_point.Name.c_str(), 7); // copy at most 6 chars
 
   while (_tcslen(IDString) < 6)                   // fill up with spaces
     _tcscat(IDString, _T(" "));

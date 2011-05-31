@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DataField/Base.hpp"
+#include "Util/StringUtil.hpp"
 #include "Compiler.h"
 
 #include <math.h>
@@ -101,19 +102,9 @@ DataField::SetDisplayFormat(TCHAR *Value)
 void
 DataField::CopyString(TCHAR * szbuffOut, bool bFormatted)
 {
-  int iLen = 0;
-  if (!bFormatted) {
-    if (GetAsString() != NULL) {
-      // null leaves iLen=0
-      iLen = _tcslen(GetAsString());
-      _tcsncpy(szbuffOut, GetAsString(), min(iLen, ComboPopupITEMMAX - 1));
-    }
-  } else {
-    if (GetAsDisplayString() != NULL) {
-      iLen = _tcslen(GetAsDisplayString());
-      _tcsncpy(szbuffOut, GetAsDisplayString(),
-          min(iLen, ComboPopupITEMMAX - 1));
-    }
-  }
-  szbuffOut[min(iLen, ComboPopupITEMMAX - 1)] = '\0';
+  const TCHAR *src = bFormatted ? GetAsDisplayString() : GetAsString();
+  if (src == NULL)
+    src = _T("");
+
+  ::CopyString(szbuffOut, src, ComboPopupITEMMAX);
 }

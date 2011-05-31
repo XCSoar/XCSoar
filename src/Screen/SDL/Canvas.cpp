@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Canvas.hpp"
 #include "Screen/Bitmap.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -319,8 +320,7 @@ void
 Canvas::text(int x, int y, const TCHAR *_text, size_t length)
 {
   TCHAR copy[length + 1];
-  _tcsncpy(copy, _text, length);
-  copy[length] = _T('\0');
+  CopyString(copy, _text, length + 1);
   text(x, y, copy);
 }
 

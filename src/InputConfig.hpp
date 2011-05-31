@@ -27,6 +27,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "MenuData.hpp"
 #include "Util/RadixTree.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -111,8 +112,7 @@ struct InputConfig {
     if (mode_map_count >= MAX_MODE)
       return -1;
 
-    _tcsncpy(mode_map[mode_map_count], name, MAX_MODE_STRING - 1);
-    mode_map[mode_map_count][MAX_MODE_STRING - 1] = _T('\0');
+    CopyString(mode_map[mode_map_count], name, MAX_MODE_STRING);
 
     return mode_map_count++;
   }

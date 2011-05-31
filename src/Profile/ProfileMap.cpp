@@ -43,7 +43,8 @@ ProfileMap::Get(const TCHAR *key, TCHAR *value, size_t max_size)
     return false;
   }
 
-  _tcsncpy(value, it->second.c_str(), max_size);
+  const TCHAR *src = it->second.c_str();
+  CopyString(value, src, max_size);
   return true;
 }
 

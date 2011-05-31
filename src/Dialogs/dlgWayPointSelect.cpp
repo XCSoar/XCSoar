@@ -650,7 +650,7 @@ static void
 OnFilterNameButton(gcc_unused WndButton &button)
 {
   TCHAR newNameFilter[NAMEFILTERLEN + 1];
-  _tcsncpy(newNameFilter, filter_data.name, NAMEFILTERLEN);
+  CopyString(newNameFilter, filter_data.name, NAMEFILTERLEN + 1);
   dlgTextEntryShowModal(newNameFilter, NAMEFILTERLEN,
                         WaypointNameAllowedCharacters);
 
@@ -663,7 +663,7 @@ OnFilterNameButton(gcc_unused WndButton &button)
     i--;
   }
 
-  _tcsncpy(filter_data.name, newNameFilter, NAMEFILTERLEN);
+  CopyString(filter_data.name, newNameFilter, NAMEFILTERLEN + 1);
 
   if (wbName) {
     if (string_is_empty(filter_data.name))

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Units/UnitsFormatter.hpp"
 #include "Math/Angle.hpp"
 #include "DateTime.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <stdio.h>
 #include <stdlib.h>
@@ -182,8 +183,7 @@ Units::FormatUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
     _tcscpy(Buffer, sTmp);
     return true;
   } else {
-    _tcsncpy(Buffer, sTmp, size);
-    Buffer[size - 1] = '\0';
+    CopyString(Buffer, sTmp, size);
     return false;
   }
 }
@@ -228,8 +228,7 @@ Units::FormatUserArrival(fixed Altitude, TCHAR *Buffer, size_t size,
     _tcscpy(Buffer, sTmp);
     return true;
   } else {
-    _tcsncpy(Buffer, sTmp, size);
-    Buffer[size - 1] = '\0';
+    CopyString(Buffer, sTmp, size);
     return false;
   }
 }
@@ -282,8 +281,7 @@ Units::FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
     _tcscpy(Buffer, sTmp);
     return true;
   } else {
-    _tcsncpy(Buffer, sTmp, size);
-    Buffer[size - 1] = '\0';
+    CopyString(Buffer, sTmp, size);
     return false;
   }
 }
@@ -338,8 +336,7 @@ Units::FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
     _tcscpy(Buffer, sTmp);
     return true;
   } else {
-    _tcsncpy(Buffer, sTmp, size);
-    Buffer[size - 1] = '\0';
+    CopyString(Buffer, sTmp, size);
     return false;
   }
 }
@@ -367,8 +364,7 @@ Units::FormatUserSpeed(fixed Speed, TCHAR *Buffer, size_t size,
     _tcscpy(Buffer, sTmp);
     return true;
   } else {
-    _tcsncpy(Buffer, sTmp, size);
-    Buffer[size - 1] = '\0';
+    CopyString(Buffer, sTmp, size);
     return false;
   }
 }
@@ -391,8 +387,7 @@ Units::FormatUserVSpeed(fixed Speed, TCHAR *Buffer, size_t size,
     _tcscpy(Buffer, sTmp);
     return true;
   } else {
-    _tcsncpy(Buffer, sTmp, size);
-    Buffer[size - 1] = '\0';
+    CopyString(Buffer, sTmp, size);
     return false;
   }
 }

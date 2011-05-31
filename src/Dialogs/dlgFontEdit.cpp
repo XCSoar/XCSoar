@@ -26,6 +26,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Integer.hpp"
 #include "MainWindow.hpp"
+#include "Util/StringUtil.hpp"
 #include "Compiler.h"
 
 #include <stdio.h>
@@ -65,8 +66,8 @@ GetLogFont(LOGFONT &logfont)
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp)
-    _tcsncpy(logfont.lfFaceName,
-             wp->GetDataField()->GetAsString(), LF_FACESIZE - 1);
+    CopyString(logfont.lfFaceName,
+               wp->GetDataField()->GetAsString(), LF_FACESIZE);
 #endif
 
   logfont.lfHeight = GetFormValueInteger(*wf, _T("prpFontHeight"));

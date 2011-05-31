@@ -133,7 +133,7 @@ Profile::SetFiles(const TCHAR* override)
 
   // -> to the given filename (if exists)
   if (!string_is_empty(override))
-    _tcsncpy(startProfileFile, override, MAX_PATH - 1);
+    CopyString(startProfileFile, override, MAX_PATH);
 }
 
 bool

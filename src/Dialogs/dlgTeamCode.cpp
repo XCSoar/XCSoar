@@ -83,8 +83,7 @@ Update()
 
   wp = (WndProperty*)wf->FindByName(_T("prpOwnCode"));
   if (wp) {
-    _tcsncpy(Text, XCSoarInterface::Calculated().OwnTeamCode.GetCode(), 5);
-    Text[5] = '\0';
+    CopyString(Text, XCSoarInterface::Calculated().OwnTeamCode.GetCode(), 6);
     wp->SetText(Text);
     wp->RefreshDisplay();
   }
@@ -120,8 +119,8 @@ OnCodeClicked(gcc_unused WndButton &button)
 {
   TCHAR newTeammateCode[10];
 
-  _tcsncpy(newTeammateCode,
-           XCSoarInterface::SettingsComputer().TeammateCode.GetCode(), 10);
+  CopyString(newTeammateCode,
+             XCSoarInterface::SettingsComputer().TeammateCode.GetCode(), 10);
 
   if (!dlgTextEntryShowModal(newTeammateCode, 7))
     return;

@@ -443,8 +443,7 @@ UpdateValuesRules(void)
       ? task_manager->get_ordered_taskpoint_name(0)
       : NULL;
     if (name2 != NULL) {
-      _tcsncpy(name, name2, 63);
-      name[63] = _T('\0');
+      CopyString(name, name2, 64);
     } else
       name[0] = _T('\0');
   }

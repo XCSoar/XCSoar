@@ -164,8 +164,7 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
   TCHAR Text[128];
   bool fHasUnit = false;
 
-  _tcsncpy(Text, Text_, sizeof(Text) / sizeof(Text[0]));
-  Text[sizeof(Text) / sizeof(Text[0]) - 1] = '\0';
+  CopyString(Text, Text_, sizeof(Text) / sizeof(Text[0]));
 
   _tcsupr(Text);
 

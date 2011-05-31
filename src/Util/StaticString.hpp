@@ -30,6 +30,8 @@
 #ifndef XCSOAR_STATIC_STRING_HPP
 #define XCSOAR_STATIC_STRING_HPP
 
+#include "Util/StringUtil.hpp"
+
 #include <assert.h>
 #include <string.h>
 #include <tchar.h>
@@ -112,8 +114,7 @@ public:
   void set(const TCHAR *new_value) {
     assert(new_value != NULL);
 
-    _tcsncpy(data, new_value, MAX_SIZE - 1);
-    data[MAX_SIZE - 1] = SENTINEL;
+    CopyString(data, new_value, MAX_SIZE);
   }
 
   const TCHAR *c_str() const {

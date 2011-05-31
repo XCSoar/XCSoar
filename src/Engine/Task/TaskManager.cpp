@@ -24,6 +24,7 @@
 #include "Sizes.h"
 #include "Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Tasks/BaseTask/UnorderedTaskPoint.hpp"
+#include "Util/StringUtil.hpp"
 
 // uses delegate pattern
 
@@ -498,9 +499,8 @@ TaskManager::get_ordered_taskpoint_name(unsigned TPindex) const
    return buff;
 
  if (active_task == &task_ordered && TPindex < task_size())
-   _tcsncpy(buff, task_ordered.getTaskPoint(TPindex)->get_waypoint().Name.c_str(), NAME_SIZE);
-
- buff[NAME_SIZE] = '\0';
+   CopyString(buff, task_ordered.getTaskPoint(TPindex)->get_waypoint().Name.c_str(),
+              NAME_SIZE + 1);
 
  return buff;
 }

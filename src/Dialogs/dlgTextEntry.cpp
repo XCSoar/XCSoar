@@ -233,16 +233,14 @@ dlgTextEntryHighscoreType(TCHAR *text, int width)
   edittext[1] = 0;
   if (!string_is_empty(text)) {
     _tcsupr(text);
-    _tcsncpy(edittext, text, max_width - 1);
-    edittext[max_width - 1] = 0;
+    CopyString(edittext, text, max_width);
   }
   MoveCursor();
 
   wf->SetKeyDownNotify(FormKeyDown);
 
   if (wf->ShowModal() == mrOK) {
-    _tcsncpy(text, edittext, max_width);
-    text[max_width - 1] = 0;
+    CopyString(text, edittext, max_width);
 
     // strip trailing spaces
     int len = _tcslen(text) - 1;

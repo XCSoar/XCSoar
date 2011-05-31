@@ -29,6 +29,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Units/Units.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -261,8 +262,7 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
 
   if (waypoint != NULL){
 
-    _tcsncpy(Name, waypoint->Name.c_str(), dim(Name)-1);
-    Name[dim(Name)-1] = '\0';
+    CopyString(Name, waypoint->Name.c_str(), dim(Name));
 
     tmp = waypoint->Location.Latitude.value_degrees();
 

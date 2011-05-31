@@ -478,6 +478,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Util/StringUtil.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
@@ -798,6 +799,7 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
@@ -1181,6 +1183,7 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
@@ -1341,6 +1344,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
+	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -1388,6 +1392,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
@@ -1421,6 +1426,7 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/ProgressBar.cpp \
 	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \

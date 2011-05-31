@@ -201,8 +201,7 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width,
 
   if (!string_is_empty(text)) {
     _tcsupr(text);
-    _tcsncpy(edittext, text, max_width - 1);
-    edittext[max_width - 1] = 0;
+    CopyString(edittext, text, max_width);
     cursor = _tcslen(text);
   }
 
@@ -211,8 +210,7 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width,
   bool result = (wf->ShowModal() == mrOK);
 
   if (result) {
-    _tcsncpy(text, edittext, max_width);
-    text[max_width - 1] = 0;
+    CopyString(text, edittext, max_width);
   }
 
   delete wf;
