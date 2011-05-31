@@ -162,7 +162,7 @@ LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
 
   if (strcmp(type, "$C") == 0 || strcmp(type, "$c") == 0)
     return LeonardoParseC(line, *info);
-  else if (strcmp(type, "$D") == 0 || strcmp(type, "$D") == 0)
+  else if (strcmp(type, "$D") == 0 || strcmp(type, "$d") == 0)
     return LeonardoParseD(line, *info);
   else
     return false;
