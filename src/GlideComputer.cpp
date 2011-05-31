@@ -244,16 +244,6 @@ GlideComputer::CalculateTeammateBearingRange()
   if (!Basic().flarm.available || !SettingsComputer().TeamFlarmTracking)
     return;
 
-  if (SettingsComputer().TeamCodeRefWaypoint < 0)
-    return;
-
-  // Get bearing and distance to the reference waypoint
-  const Waypoint *wp =
-      way_points.lookup_id(SettingsComputer().TeamCodeRefWaypoint);
-
-  if (!wp)
-    return;
-
   const FLARM_TRAFFIC *traffic =
       Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget);
 
@@ -267,7 +257,7 @@ GlideComputer::CalculateTeammateBearingRange()
 
   Angle bearing;
   fixed distance;
-  wp->Location.distance_bearing(Basic().Location, distance, bearing);
+  TeamCodeRefLocation.distance_bearing(Basic().Location, distance, bearing);
 
   // Calculate TeamCode and save it in Calculated
   XCSoarInterface::SetSettingsComputer().TeammateCode.Update(bearing, distance);
