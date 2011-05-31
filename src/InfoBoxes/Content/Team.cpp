@@ -83,15 +83,14 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 
     if (traffic->HasName()) {
       // copy the 3 first chars from the name to TeamFlarmCNTarget
-      _tcsncpy(settings.TeamFlarmCNTarget, traffic->name, 3);
-      settings.TeamFlarmCNTarget[3] = 0;
+      settings.TeamFlarmCNTarget = traffic->name;
     } else {
-      settings.TeamFlarmCNTarget[0] = 0;
+      settings.TeamFlarmCNTarget.clear();
     }
   } else {
     // no flarm traffic to select!
     settings.TeamFlarmIdTarget.clear();
-    settings.TeamFlarmCNTarget[0] = 0;
+    settings.TeamFlarmCNTarget.clear();
   }
   return true;
 }
@@ -113,8 +112,8 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
   // Set Comment
   if (!settings.TeamFlarmIdTarget.defined())
     infobox.SetCommentInvalid();
-  else if (!string_is_empty(settings.TeamFlarmCNTarget))
-    infobox.SetComment(settings.TeamFlarmCNTarget);
+  else if (!settings.TeamFlarmCNTarget.empty())
+    infobox.SetComment(settings.TeamFlarmCNTarget.c_str());
   else
     infobox.SetComment(_T("???"));
 

@@ -33,7 +33,7 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
 
   settings_computer.TeamCodeRefWaypoint = -1;
   settings_computer.TeamFlarmTracking = false;
-  settings_computer.TeamFlarmCNTarget[0] = 0;
+  settings_computer.TeamFlarmCNTarget.clear();
 
   settings_computer.AverEffTime=0;
   settings_computer.SoundVolume = 80;

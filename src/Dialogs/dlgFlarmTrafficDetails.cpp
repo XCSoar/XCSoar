@@ -212,11 +212,10 @@ OnTeamClicked(gcc_unused WndButton &Sender)
   // Set the Teammate callsign
   const TCHAR *callsign = FlarmDetails::LookupCallsign(target_id);
   if (callsign == NULL || string_is_empty(callsign)) {
-    settings.TeamFlarmCNTarget[0] = 0;
+    settings.TeamFlarmCNTarget.clear();
   } else {
     // copy the 3 first chars from the name
-    _tcsncpy(settings.TeamFlarmCNTarget, callsign, 3);
-    settings.TeamFlarmCNTarget[3] = 0;
+    settings.TeamFlarmCNTarget = callsign;
   }
 
   // Start tracking

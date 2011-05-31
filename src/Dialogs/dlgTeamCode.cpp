@@ -98,7 +98,8 @@ Update()
   wp = (WndProperty*)wf->FindByName(_T("prpFlarmLock"));
   if (wp) {
     wp->SetText(XCSoarInterface::SettingsComputer().TeamFlarmTracking ?
-                XCSoarInterface::SettingsComputer().TeamFlarmCNTarget : _T(""));
+                XCSoarInterface::SettingsComputer().TeamFlarmCNTarget.c_str()
+                : _T(""));
     wp->RefreshDisplay();
   }
 }
@@ -145,13 +146,13 @@ static void
 OnFlarmLockClicked(gcc_unused WndButton &button)
 {
   SETTINGS_TEAMCODE &settings = CommonInterface::SetSettingsComputer();
-  TCHAR newTeamFlarmCNTarget[4];
-  _tcsncpy(newTeamFlarmCNTarget, settings.TeamFlarmCNTarget, 4);
+  TCHAR newTeamFlarmCNTarget[settings.TeamFlarmCNTarget.MAX_SIZE];
+  _tcscpy(newTeamFlarmCNTarget, settings.TeamFlarmCNTarget.c_str());
 
   if (!dlgTextEntryShowModal(newTeamFlarmCNTarget, 4))
     return;
 
-  _tcsncpy(settings.TeamFlarmCNTarget, newTeamFlarmCNTarget, 4);
+  settings.TeamFlarmCNTarget = newTeamFlarmCNTarget;
   settings.TeammateCodeValid = false;
 
   if (string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget)) {
@@ -180,7 +181,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
 
   settings.TeamFlarmTracking = false;
   settings.TeamFlarmIdTarget.clear();
-  settings.TeamFlarmCNTarget[0] = 0;
+  settings.TeamFlarmCNTarget.clear();
 }
 
 static void

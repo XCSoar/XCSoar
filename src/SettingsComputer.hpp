@@ -28,6 +28,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/Atmosphere/Pressure.hpp"
+#include "Util/StaticString.hpp"
 
 #include <tchar.h>
 
@@ -120,7 +121,7 @@ struct SETTINGS_TEAMCODE {
   int TeamCodeRefWaypoint;      /**< Reference waypoint id for code origin */
   bool TeamFlarmTracking;       /**< Whether to enable tracking by FLARM */
 
-  TCHAR TeamFlarmCNTarget[4];   /**< CN of the glider to track */
+  StaticString<4> TeamFlarmCNTarget;   /**< CN of the glider to track */
   TeamCode TeammateCode;       /**< auto-detected, see also in Info.h */
 
   bool TeammateCodeValid;       /**< Whether the teammate code is valid */  
