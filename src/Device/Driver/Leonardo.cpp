@@ -47,8 +47,8 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 {
   fixed norm, bearing;
 
-  bool bearing_valid = line.read_checked(bearing);
   bool norm_valid = line.read_checked(norm);
+  bool bearing_valid = line.read_checked(bearing);
 
   if (bearing_valid && norm_valid) {
     value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
