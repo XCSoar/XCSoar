@@ -9,6 +9,11 @@ EXE := $(findstring .exe,$(MAKE))
 AR = $(TCPATH)ar$(EXE)
 CXX = $(CCACHE) $(TCPATH)g++$(EXE)
 CC = $(CCACHE) $(TCPATH)gcc$(EXE)
+ifeq ($(WINHOST),y)
+  LINK = $(TCPATH)gcc$(EXE)
+else
+  LINK = $(CCACHE) $(TCPATH)gcc$(EXE)
+endif
 DLLTOOL = $(TCPATH)dlltool$(EXE)
 SIZE = $(TCPATH)size$(EXE)
 STRIP = $(TCPATH)strip$(EXE)
