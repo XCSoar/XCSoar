@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-13 08:22+0200\n"
-"PO-Revision-Date: 2011-04-10 17:56+0000\n"
+"PO-Revision-Date: 2011-05-31 17:28+0000\n"
 "Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-11 20:39+0000\n"
-"X-Generator: Launchpad (build 12792)\n"
+"X-Launchpad-Export-Date: 2011-05-31 18:48+0000\n"
+"X-Generator: Launchpad (build 13117)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:303
@@ -96,23 +96,20 @@ msgid "Stop Logger"
 msgstr "Arrêt enregistrement"
 
 #: src/Logger/ExternalLogger.cpp:48
-#, fuzzy
 msgid "Declare task?"
-msgstr "Déclarer circuit"
+msgstr "Déclarer le circuit?"
 
 #: src/Logger/ExternalLogger.cpp:51
-#, fuzzy
 msgid "Task declared!"
 msgstr "Circuit déclaré"
 
 #: src/Logger/ExternalLogger.cpp:55
-#, fuzzy
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
 "Une erreur est survenue,\n"
-"Circuit NON déclaré !"
+"Le circuit n'a pas été déclaré"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -170,11 +167,11 @@ msgstr "point de virage précédent"
 
 #: src/ExpandMacros.cpp:145 src/ExpandMacros.cpp:165
 msgid "Furthest Landpoint"
-msgstr ""
+msgstr "Point de poser le plus éloigné"
 
 #: src/ExpandMacros.cpp:146 src/ExpandMacros.cpp:166
 msgid "Next Landpoint"
-msgstr ""
+msgstr "Prochain point de posé"
 
 #: src/ExpandMacros.cpp:155 src/ExpandMacros.cpp:175
 msgid "Closest Landpoint"
@@ -182,16 +179,15 @@ msgstr ""
 
 #: src/ExpandMacros.cpp:156 src/ExpandMacros.cpp:176
 msgid "Previous Landpoint"
-msgstr ""
+msgstr "Point de poser précédent"
 
 #: src/ExpandMacros.cpp:193 src/ExpandMacros.cpp:223
 msgid "Finish Turnpoint"
 msgstr "point de virage d'arrivée"
 
 #: src/ExpandMacros.cpp:199 src/ExpandMacros.cpp:245
-#, fuzzy
 msgid "Next Startpoint"
-msgstr "prochain point de virage"
+msgstr "Prochain point de départ"
 
 #: src/ExpandMacros.cpp:205 src/ExpandMacros.cpp:251
 msgid "Start Turnpoint"
@@ -203,27 +199,31 @@ msgstr "Armer Départ"
 
 #: src/ExpandMacros.cpp:232
 msgid "Arm turn"
-msgstr ""
+msgstr "Prépare virage"
 
 #: src/ExpandMacros.cpp:260
 msgid "Disarm start"
-msgstr ""
+msgstr "Désarme le départ"
 
 #: src/ExpandMacros.cpp:263
 msgid "Disarm turn"
-msgstr ""
+msgstr "Désarme le virage"
 
 #: src/ExpandMacros.cpp:273
 msgid ""
 "Advance\n"
 "(manual)"
 msgstr ""
+"Avance\n"
+"(à la main)"
 
 #: src/ExpandMacros.cpp:278
 msgid ""
 "Advance\n"
 "(auto)"
 msgstr ""
+"Avance\n"
+"(auto)"
 
 #: src/ExpandMacros.cpp:283
 msgid ""
@@ -246,12 +246,16 @@ msgid ""
 "Abort\n"
 "Turn"
 msgstr ""
+"Annule\n"
+"Virage"
 
 #: src/ExpandMacros.cpp:298
 msgid ""
 "Arm\n"
 "Turn"
 msgstr ""
+"Arme\n"
+"Virage"
 
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 msgid "Resume"
@@ -345,7 +349,7 @@ msgstr "Tous"
 #: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1423
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Circuit et Terrains"
 
 #: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1425
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:94
@@ -367,7 +371,7 @@ msgstr "Altitude GPS"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:4
 #, no-c-format
 msgid "H GPS"
-msgstr ""
+msgstr "H GPS"
 
 #: src/InfoBoxes/Content/Factory.cpp:63
 #, no-c-format
@@ -389,7 +393,7 @@ msgstr "Altitude AGL"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:7
 #, no-c-format
 msgid "H AGL"
-msgstr ""
+msgstr "H SOL"
 
 #: src/InfoBoxes/Content/Factory.cpp:72
 #, no-c-format
@@ -436,6 +440,8 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"Relèvement du prochain waypoint. Pour les circuits AAT, il s'agit du "
+"relèvement du prochain point de virage dans le secteur AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:97
 #, no-c-format
@@ -574,6 +580,9 @@ msgid ""
 "The distance to the currently selected waypoint. For AAT tasks, this is the "
 "distance to the target within the AAT sector."
 msgstr ""
+"Distance au prochain point de virage actuellement sélectionné. Pour les "
+"circuits AAT, il s'agit de la distance à l'objectif contenu dans le secteur "
+"AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:169
 #, no-c-format
@@ -610,7 +619,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:187
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Prochain point de virage"
 
 #: src/InfoBoxes/Content/Factory.cpp:188 src/InfoBoxes/Content/Task.cpp:84
 #: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:5
@@ -626,6 +635,11 @@ msgid ""
 "task. (Touchscreen/PC only) Pressing the enter cursor key brings up the "
 "waypoint details."
 msgstr ""
+"Nom du point de virage actuellement sélectionné. Lorsque la fenêtre "
+"d'information est active, l'utilisation des flèches haut et bas permet de "
+"sélectionner le prochain ou précédent point de virage du circuit. Ecrans "
+"tactiles et PC : l'appui sur la touche entrée affiche les informations du "
+"points de virage."
 
 #: src/InfoBoxes/Content/Factory.cpp:196
 #, no-c-format
@@ -851,9 +865,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:313
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AA max. distance "
-msgstr "AA Distance Min"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
@@ -964,6 +978,9 @@ msgid ""
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
+"La vitesse MacCready à laquelle voler pour optimiser le vol jusqu'au "
+"prochain waypoint. En transition, cette vitesse est calculée de façon à "
+"maintenir l'altitude. En arrivée, elle est calculée en descente."
 
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
@@ -1094,6 +1111,8 @@ msgid ""
 "Estimated time required to reach next waypoint, assuming performance of "
 "ideal MacCready cruise/climb cycle."
 msgstr ""
+"Durée estimée pour rejoindre le prochin waypoint, en supposant la "
+"performance idéale des cycles transitions/ascendances du MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
@@ -1169,6 +1188,8 @@ msgid ""
 "Estimated arrival local time at next waypoint, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
+"Heure local d'arrivée au prochain waypoint estimée, en supposant la "
+"performance idéale des cycles transitions/ascendances du MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:484
 #, no-c-format
@@ -1192,6 +1213,13 @@ msgid ""
 "good is pointing directly at the next waypoint. This bearing takes into "
 "account the curvature of the Earth."
 msgstr ""
+"Différence entre la route instantanée du planeur et le relèvement du "
+"prochain point, ou bien pour les AAT le relèvement du point objectif dans le "
+"secteur AAT. La navigation au GPS est basée sur la route sol instantanée, et "
+"cette route peut être différente du cap du planeur en présence de vent. Des "
+"chevrons indiquent la direction dans laquelle le planeur doit adapter sa "
+"trajectoire afin de corriger la dérive, et se diriger directement vers le "
+"prochain waypoint. Cette indication prend en compte la courbure de la terre."
 
 #: src/InfoBoxes/Content/Factory.cpp:493
 #, no-c-format
@@ -2028,23 +2056,20 @@ msgid "Hold turn"
 msgstr ""
 
 #: src/InputEventsActions.cpp:637
-#, fuzzy
 msgid "Show details:"
-msgstr "Afficher ballast*"
+msgstr ""
 
 #: src/InputEventsActions.cpp:642
-#, fuzzy
 msgid "Unknown competition number"
-msgstr "N° de concours inconnu"
+msgstr ""
 
 #: src/InputEventsActions.cpp:643
-#, fuzzy
 msgid "Not found"
-msgstr "Non trouvé"
+msgstr ""
 
 #: src/InputEventsActions.cpp:703
 msgid "No active waypoint!"
-msgstr "Pas de Waypoint Actif!"
+msgstr "Pas de waypoint actif !"
 
 #: src/InputEventsActions.cpp:785
 msgid "Auto. MacCready on"
@@ -2101,7 +2126,7 @@ msgstr ""
 #: src/InputEventsActions.cpp:1438 Data/Dialogs/dlgConfigFonts.xml:19
 #: Data/Dialogs/dlgConfigFonts_L.xml:19
 msgid "Waypoint labels"
-msgstr ""
+msgstr "Noms des waypoints"
 
 #: src/InputEventsActions.cpp:1476
 msgid "Map labels on"
@@ -2144,9 +2169,8 @@ msgid "Map and InfoBoxes "
 msgstr ""
 
 #: src/Pages.cpp:198
-#, fuzzy
 msgid "Info Auto"
-msgstr "Auto"
+msgstr ""
 
 #: src/Pages.cpp:200
 msgid "Map and InfoBoxes (Auto)"
@@ -2445,9 +2469,9 @@ msgid "Cruise"
 msgstr "Transit."
 
 #: src/Profile/InfoBoxConfig.cpp:62
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "FinalGlide"
-msgstr "Plané Final"
+msgstr ""
 
 #: src/Screen/Chart.cpp:179
 msgid "No data"
@@ -2465,9 +2489,8 @@ msgstr "Attention"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
-#, fuzzy
 msgid "Battery low"
-msgstr "Tension de la batterie"
+msgstr ""
 
 #: src/Components.cpp:268
 msgid "Initialising"
@@ -2524,9 +2547,9 @@ msgid "Failed to bind to TCP port %u"
 msgstr ""
 
 #: src/Device/TCPPort.cpp:111
-#, fuzzy, c-format
+#, c-format
 msgid "Failed to listen on TCP port %u"
-msgstr "Impossible d'ouvrir le port %s"
+msgstr ""
 
 #: src/Dialogs/Message.cpp:130
 msgid "OK"
@@ -2697,7 +2720,7 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:85
 #, no-c-format
 msgid "Waypoint Display"
-msgstr ""
+msgstr "Affichage des waypoints"
 
 #: src/Dialogs/dlgConfiguration.cpp:86
 #, no-c-format
@@ -2866,7 +2889,7 @@ msgstr "Coller"
 
 #: src/Dialogs/dlgConfigWaypoints.cpp:80
 msgid "Waypoints not editable"
-msgstr ""
+msgstr "Waypoints non editables"
 
 #. TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
 #. gettext(), port added on new line
@@ -2887,7 +2910,7 @@ msgstr "Erreur"
 
 #: src/Dialogs/dlgConfigWaypoints.cpp:101
 msgid "Delete Waypoint?"
-msgstr "Effacer point de virage ?"
+msgstr "Effacer le waypoint ?"
 
 #: src/Dialogs/dlgConfigWaypoints.cpp:136
 msgid "Save changes to waypoint file?"
@@ -2895,7 +2918,7 @@ msgstr "Sauvegarder les modifications dans le fichier des points de virage ?"
 
 #: src/Dialogs/dlgConfigWaypoints.cpp:136
 msgid "Waypoints edited"
-msgstr "Waypoints édité"
+msgstr "Waypoints édités"
 
 #: src/Dialogs/dlgConfigurationVario.cpp:398
 msgid "Set new audio scheme?  Old values will be lost."
@@ -3225,7 +3248,7 @@ msgstr "Destination"
 
 #: src/Dialogs/ConfigPanels/MapDisplayConfigPanel.cpp:80
 msgid "Use the current target waypoint as basis."
-msgstr ""
+msgstr "Utiliser le waypoint cible actuel comme base."
 
 #. let the user select
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:175
@@ -3246,14 +3269,12 @@ msgid "Shade"
 msgstr "Ombre"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:78
-#, fuzzy
 msgid "Straight"
-msgstr "Altitude maxi départ"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:79
-#, fuzzy
 msgid "Turning"
-msgstr "Attention"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:89
 #: Data/Dialogs/dlgConfiguration.xml:317
@@ -3400,13 +3421,12 @@ msgid "ft/min"
 msgstr "pieds/min"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
-#, fuzzy
 msgid "Full name"
-msgstr "Nom du pilote"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:50
 msgid "The full name of each waypoint is displayed."
-msgstr ""
+msgstr "Le nom complet de chaque waypoint est affiché."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
 msgid "First word of name"
@@ -3414,29 +3434,27 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:51
 msgid "The first word of the waypoint name is displayed."
-msgstr ""
+msgstr "The premier mot du nom du waypoint est affiché."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
-#, fuzzy
 msgid "First 3 letters"
-msgstr "3 Lettres"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:52
 msgid "The first 3 letters of the waypoint name are displayed."
-msgstr ""
+msgstr "Les 3 premières lettres du nom du waypoint sont affichées."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
-#, fuzzy
 msgid "First 5 letters"
-msgstr "5 Lettres"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:53
 msgid "The first 5 letters of the waypoint name are displayed."
-msgstr ""
+msgstr "Les 5 premières lettres du nom du waypoint sont affichées."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:54
 msgid "No waypoint name is displayed."
-msgstr ""
+msgstr "Aucun nom de waypoint n'est affiché."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:64
 msgid "No arrival height is displayed."
@@ -3459,9 +3477,8 @@ msgid "Arrival height considering terrain avoidance"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
-#, fuzzy
 msgid "Straight & terrain glide"
-msgstr "Zone Local Planeur"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "Both arrival heights are displayed."
@@ -3477,7 +3494,7 @@ msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:89
 msgid "All waypoint labels will be displayed."
-msgstr ""
+msgstr "Tous les noms de waypoints sont affichés."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:90
 msgid "Task waypoints & landables"
@@ -3486,19 +3503,20 @@ msgstr ""
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:92
 msgid "All waypoints part of a task and all landables will be displayed."
 msgstr ""
+"Tous les points de virage du circuit et les terrains atterrissables sont "
+"affichés."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:93
-#, fuzzy
 msgid "Task waypoints"
-msgstr "Map Waypoints"
+msgstr "Point de virage du circuit"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:94
 msgid "All waypoints part of a task will be displayed."
-msgstr ""
+msgstr "Tous les points de virage d'un circuit sont affichés."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:96
 msgid "No waypoint labels will be displayed."
-msgstr ""
+msgstr "Aucun nom de waypoint n'est affiché."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:106
 msgid "Purple circle"
@@ -3511,6 +3529,10 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
+"Les aérodromes et zones atterrissables sont affichés sous forme de cercles "
+"violets. Si le waypoint est atteignable, alors un contour circulaire vert "
+"est ajouté. Si la trajectoire vers le waypoint est bloquée par une montagne, "
+"alors le contour sera rouge au lieu de vert."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:108
 msgid "B/W"
@@ -3524,9 +3546,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:110
-#, fuzzy
 msgid "Traffic lights"
-msgstr "Hauteur Sol"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:111
 msgid ""
@@ -3551,38 +3572,32 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
-#, fuzzy
 msgid "Calculator"
-msgstr "Calculs Circuit"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
-#, fuzzy
 msgid "Turn Points"
-msgstr "Attention"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
-#, fuzzy
 msgid "Manage"
-msgstr "Gestionnaire des circuits"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
-#, fuzzy
 msgid "Rules"
-msgstr "Règles"
+msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
 msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
-#, fuzzy
 msgid "Task unchanged"
-msgstr "Gestionnaire des circuits"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
-#, fuzzy
 msgid "Clear all points?"
-msgstr "Effacer le circuit ?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Task edit"
@@ -3590,7 +3605,7 @@ msgstr "Editer le circuit"
 
 #: src/Dialogs/pnlTaskEdit.cpp:114
 msgid "Add Waypoint"
-msgstr "Ajout waypoint"
+msgstr "Ajouter un waypoint"
 
 #: src/Dialogs/pnlTaskList.cpp:161
 msgid "Task not saved"
@@ -3625,14 +3640,12 @@ msgid "Rename Error"
 msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Create new task?"
-msgstr "Effacer le circuit ?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:279
-#, fuzzy
 msgid "Task New"
-msgstr "Editer le circuit"
+msgstr ""
 
 #: src/Dialogs/pnlTaskCalculator.cpp:272
 msgid "Calculator excludes unsaved task changes!"
@@ -4002,9 +4015,8 @@ msgid "non-FAI turn points"
 msgstr ""
 
 #: src/Dialogs/dlgTeamCode.cpp:170
-#, fuzzy
 msgid "Set new teammate:"
-msgstr "Définir comme nouvelle maison"
+msgstr ""
 
 #: src/Dialogs/dlgTeamCode.cpp:178
 msgid "Unknown Competition Number"
@@ -4203,7 +4215,7 @@ msgstr "Luminosité"
 #: Data/Dialogs/dlgWayPointDetails.xml:3
 #: Data/Dialogs/dlgWayPointDetails_L.xml:3
 msgid "Waypoint Info"
-msgstr "Info Waypoint"
+msgstr "Information du waypoint"
 
 #: Data/Dialogs/dlgVario.xml:50 Data/Dialogs/dlgVario_L.xml:51
 msgid "Calibration factor applied to total energy probe to obtain TE vario."
@@ -4326,7 +4338,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:26
 msgid "Enable voice announcement that the task waypoint has changed."
-msgstr ""
+msgstr "Activer l'annonce vocale de changement de point de virage du circuit"
 
 #: Data/Dialogs/dlgConfiguration.xml:494
 #: Data/Dialogs/dlgConfiguration_L.xml:495
@@ -4510,9 +4522,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:349
 #: Data/Dialogs/dlgConfiguration_L.xml:350
-#, fuzzy
 msgid "Reach mode"
-msgstr "Modèle GPS"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:188
 #: Data/Dialogs/dlgConfiguration_L.xml:188
@@ -4607,9 +4618,8 @@ msgid "Clean"
 msgstr "Effacer"
 
 #: Data/Dialogs/dlgConfigFonts.xml:28 Data/Dialogs/dlgConfigFonts_L.xml:28
-#, fuzzy
 msgid "Dialog text"
-msgstr "Boîtes de dialogue"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:45
 #: Data/Dialogs/pnlTaskCalculator_L.xml:45
@@ -4812,9 +4822,8 @@ msgid "Height"
 msgstr "Hauteur"
 
 #: Data/Dialogs/dlgConfigFonts.xml:13 Data/Dialogs/dlgConfigFonts_L.xml:13
-#, fuzzy
 msgid "InfoBox values, normal"
-msgstr "Valeurs Info Box Petite"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:232
 #: Data/Dialogs/dlgConfiguration_L.xml:232
@@ -5109,9 +5118,8 @@ msgid "Clear"
 msgstr "Effacer"
 
 #: Data/Dialogs/dlgConfigFonts.xml:22 Data/Dialogs/dlgConfigFonts_L.xml:22
-#, fuzzy
 msgid "Topography labels, normal"
-msgstr "Noms réseaux"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator.xml:22
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
@@ -6100,9 +6108,8 @@ msgid "V manoeuvering"
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:25 Data/Dialogs/dlgConfigFonts_L.xml:25
-#, fuzzy
 msgid "Topography labels, important"
-msgstr "Noms réseaux"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:27
 msgid "Acknowledge"
@@ -6158,9 +6165,8 @@ msgid "Whether to show the bugs percentage."
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:16 Data/Dialogs/dlgConfigFonts_L.xml:16
-#, fuzzy
 msgid "InfoBox values, small"
-msgstr "Valeurs Info Box Petite"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:24 Data/Dialogs/dlgVario_L.xml:25
 msgid "Stall port"
@@ -6366,9 +6372,8 @@ msgid "Aircraft symbol"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit.xml:12 Data/Dialogs/pnlTaskEdit_L.xml:10
-#, fuzzy
 msgid "Clear All"
-msgstr "Effacer"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
@@ -6549,9 +6554,8 @@ msgid "Browse"
 msgstr "Parcourir"
 
 #: Data/Dialogs/pnlTaskList.xml:10 Data/Dialogs/pnlTaskList_L.xml:11
-#, fuzzy
 msgid "New Task"
-msgstr "Aucun circuit"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:696
 #: Data/Dialogs/dlgConfiguration_L.xml:697
@@ -6960,9 +6964,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:168
 #: Data/Dialogs/dlgConfiguration_L.xml:168
-#, fuzzy
 msgid "Landable size"
-msgstr "Champs vachables"
+msgstr ""
 
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:4
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4 Data/Dialogs/dlgTaskPoint.xml:15
@@ -7246,9 +7249,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:354
 #: Data/Dialogs/dlgConfiguration_L.xml:355
-#, fuzzy
 msgid "Reach display"
-msgstr "Affichage relief"
+msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
@@ -7362,9 +7364,8 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:598
-#, fuzzy
 msgid "Topo."
-msgstr "Topologie"
+msgstr ""
 
 #: Data/Input/default.xci:449
 msgid ""
@@ -7584,11 +7585,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:906
-#, fuzzy
 msgid ""
 "FLARM\n"
 "Details"
-msgstr "Détails"
+msgstr ""
 
 #: Data/Input/default.xci:219 Data/Input/default.xci:524
 msgid ""
@@ -7630,33 +7630,15 @@ msgstr "Atterrissage"
 #~ msgid "Declare Task?"
 #~ msgstr "Déclarer circuit ?"
 
-#~ msgid "Task Declared!"
-#~ msgstr "Circuit déclaré !"
-
-#~ msgid "Marks cleared"
-#~ msgstr "Drapeaux effacés"
-
-#~ msgid "Organiser Battery Low"
-#~ msgstr "Batterie faible"
-
-#~ msgid "Clear Task"
-#~ msgstr "Eff. Circuit"
-
-#~ msgid "True"
-#~ msgstr "VRAI"
-
-#~ msgid "Alternate"
-#~ msgstr "Alternatif"
-
-#~ msgid "Waypoint not editable"
-#~ msgstr "Point de virage non modifiable"
-
 #~ msgid ""
 #~ "Error occured,\r\n"
 #~ "Task NOT Declared!"
 #~ msgstr ""
 #~ "Une erreur est survenue,\r\n"
 #~ "Circuit NON déclaré !"
+
+#~ msgid "Task Declared!"
+#~ msgstr "Circuit déclaré !"
 
 #~ msgid "Last Thermal Time"
 #~ msgstr "Temps dernière pompe"
@@ -7703,6 +7685,9 @@ msgstr "Atterrissage"
 #~ msgid "Distance Home"
 #~ msgstr "Distance maison"
 
+#~ msgid "Battery Voltage"
+#~ msgstr "Tension de la batterie"
+
 #~ msgid "Battery Percent"
 #~ msgstr "pourcentage batterie"
 
@@ -7736,6 +7721,9 @@ msgstr "Atterrissage"
 #~ msgid "No Active Waypoint!"
 #~ msgstr "Pas de point de virage actif"
 
+#~ msgid "No Task"
+#~ msgstr "Aucun circuit"
+
 #~ msgid "Map labels OFF"
 #~ msgstr "Etiquettes carte OFF"
 
@@ -7764,6 +7752,9 @@ msgstr "Atterrissage"
 #~ "Erreur lors du chargement du fichier de polaire :\r\n"
 #~ "Utilisation de celle du LS8."
 
+#~ msgid "Organiser Battery Low"
+#~ msgstr "Batterie faible"
+
 #~ msgid "Settings locked in flight"
 #~ msgstr "Paramètres verouillés en vol"
 
@@ -7778,6 +7769,9 @@ msgstr "Atterrissage"
 
 #~ msgid "Waypoint Edit"
 #~ msgstr "Edition point de virages"
+
+#~ msgid "Waypoint not editable"
+#~ msgstr "Point de virage non modifiable"
 
 #~ msgid "Names"
 #~ msgstr "Noms"
@@ -7884,6 +7878,9 @@ msgstr "Atterrissage"
 #~ msgid "Task saved"
 #~ msgstr "Circuit sauvegardé"
 
+#~ msgid "Clear task?"
+#~ msgstr "Effacer le circuit ?"
+
 #~ msgid "add waypoint"
 #~ msgstr "ajouter point de virage"
 
@@ -7908,6 +7905,9 @@ msgstr "Atterrissage"
 #~ msgid "Customize Fonts"
 #~ msgstr "Personaliser polices"
 
+#~ msgid "Start max height"
+#~ msgstr "Altitude maxi départ"
+
 #~ msgid "Start alt"
 #~ msgstr "altitude de départ"
 
@@ -7920,6 +7920,9 @@ msgstr "Atterrissage"
 #~ msgid "Optimise"
 #~ msgstr "Optimiser"
 
+#~ msgid "Landable fields"
+#~ msgstr "Champs vachables"
+
 #~ msgid "Polar file"
 #~ msgstr "Fichier de polaire"
 
@@ -7928,6 +7931,9 @@ msgstr "Atterrissage"
 
 #~ msgid "Waypoints 1"
 #~ msgstr "Point de virage 1"
+
+#~ msgid "Show ballast*"
+#~ msgstr "Afficher ballast*"
 
 #~ msgid "Start max speed"
 #~ msgstr "Vitesse maxi départ"
@@ -7949,6 +7955,9 @@ msgstr "Atterrissage"
 
 #~ msgid "Max height gain"
 #~ msgstr "Gain maxi altitude"
+
+#~ msgid "Dialog boxes"
+#~ msgstr "Boîtes de dialogue"
 
 #~ msgid "Orientation"
 #~ msgstr "Orientation"
@@ -8016,6 +8025,9 @@ msgstr "Atterrissage"
 #~ msgid "No All"
 #~ msgstr "non à tous"
 
+#~ msgid "Set as new home"
+#~ msgstr "Définir comme nouvelle maison"
+
 #~ msgid "Pilot name: "
 #~ msgstr "Nom du pilote : "
 
@@ -8060,6 +8072,9 @@ msgstr "Atterrissage"
 
 #~ msgid "AA Speed Min"
 #~ msgstr "AA Vitesse Min"
+
+#~ msgid "AA Distance Min"
+#~ msgstr "AA Distance Min"
 
 #~ msgid "AA Speed Max"
 #~ msgstr "AA Vitesse Max"
@@ -8165,11 +8180,21 @@ msgstr "Atterrissage"
 #~ msgstr "Point de virage Départ"
 
 #~ msgid ""
+#~ "Error occured,\n"
+#~ "Task NOT Declared!"
+#~ msgstr ""
+#~ "Une erreur est survenue,\n"
+#~ "Circuit NON déclaré !"
+
+#~ msgid ""
 #~ "Error loading Polar file!\n"
 #~ "Use LS8 Polar."
 #~ msgstr ""
 #~ "Erreur lors du chargement du fichier de polaire :\n"
 #~ "Utilisation de celle du LS8."
+
+#~ msgid "Topology"
+#~ msgstr "Topologie"
 
 #~ msgid "Circling Zoom ON"
 #~ msgstr "Zoom Thermique ON"
@@ -8207,11 +8232,20 @@ msgstr "Atterrissage"
 #~ msgid "ON/Scaled"
 #~ msgstr "ON/Ajusté"
 
+#~ msgid "First 5"
+#~ msgstr "5 Lettres"
+
+#~ msgid "First 3"
+#~ msgstr "3 Lettres"
+
 #~ msgid "Names in task"
 #~ msgstr "Nom si dans le Circuit"
 
 #~ msgid "Statute"
 #~ msgstr "Mph"
+
+#~ msgid "Alternate"
+#~ msgstr "Alternatif"
 
 #~ msgid "FAI Sector"
 #~ msgstr "Secteur FAI"
@@ -8234,6 +8268,9 @@ msgstr "Atterrissage"
 #~ msgid "Online contest"
 #~ msgstr "Online Contest"
 
+#~ msgid "Map waypoints"
+#~ msgstr "Map Waypoints"
+
 #~ msgid "Acknowledge time*"
 #~ msgstr "Durée d'Acquittement"
 
@@ -8252,6 +8289,9 @@ msgstr "Atterrissage"
 #~ msgid "Select pattern"
 #~ msgstr "Select. Modèle"
 
+#~ msgid "Topology labels"
+#~ msgstr "Noms réseaux"
+
 #~ msgid "Warning time*"
 #~ msgstr "Temps d'Alerte"
 
@@ -8264,6 +8304,9 @@ msgstr "Atterrissage"
 #~ msgid "Auto MC mode"
 #~ msgstr "Auto MC mode"
 
+#~ msgid "Glide terrain line"
+#~ msgstr "Zone Local Planeur"
+
 #~ msgid "Safety lock"
 #~ msgstr "Verrouillage"
 
@@ -8275,6 +8318,12 @@ msgstr "Atterrissage"
 
 #~ msgid "AAT min time"
 #~ msgstr "Temps Mini AAT"
+
+#~ msgid "Task Calculator"
+#~ msgstr "Calculs Circuit"
+
+#~ msgid "Info box values small"
+#~ msgstr "Valeurs Info Box Petite"
 
 #~ msgid "Glider position"
 #~ msgstr "Position Planeur"
@@ -8290,6 +8339,9 @@ msgstr "Atterrissage"
 
 #~ msgid "Restarting Comm Ports"
 #~ msgstr "Redémarrage Ports COM"
+
+#~ msgid "Marks cleared"
+#~ msgstr "Drapeaux effacés"
 
 #~ msgid "Waiting for GPS Fix"
 #~ msgstr "Attente Fix GPS"
@@ -8340,3 +8392,9 @@ msgstr "Atterrissage"
 #~ "ou automatique. (seulement pour écran tactile/PC). Aussi utilisé pour "
 #~ "ajuster le réglage MacCready si les infobox sont actives en utilisant les "
 #~ "touches Haut/Bas."
+
+#~ msgid "True"
+#~ msgstr "VRAI"
+
+#~ msgid "Clear Task"
+#~ msgstr "Eff. Circuit"
