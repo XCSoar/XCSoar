@@ -6,6 +6,7 @@ Version 6.1.1 - not yet released
 * calculations
   - fix arrival heights which are below the safety height
   - reduce memory usage
+  - re-enable the team bearing diff InfoBox
 * map
   - new option for large glider symbol
 * Windows

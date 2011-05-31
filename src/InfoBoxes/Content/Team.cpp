@@ -130,22 +130,14 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
   const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
 
-#ifndef OLD_TASK
-  infobox.SetInvalid();
-  return;
-#else
-  if (!way_points.verify_index(settings.TeamCodeRefWaypoint)
-      || !settings.TeammateCodeValid) {
-    infobox.SetInvalid();
-    return;
-  }
+  if (settings.TeamFlarmIdTarget.defined() || settings.TeammateCodeValid) {
+    // Set Value
+    Angle Value = XCSoarInterface::Calculated().TeammateBearing -
+                  XCSoarInterface::Basic().track;
 
-  // Set Value
-  Angle Value = XCSoarInterface::Calculated().TeammateBearing -
-                 XCSoarInterface::Basic().TrackBearing;
-
-  SetValueBearingDifference(infobox, Value);
-#endif
+    SetValueBearingDifference(infobox, Value);
+  } else
+    infobox.SetValueInvalid();
 
   // Set Comment
   if (!settings.TeamFlarmIdTarget.defined())
