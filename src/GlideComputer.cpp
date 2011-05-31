@@ -257,7 +257,7 @@ GlideComputer::CalculateTeammateBearingRange()
 
   Angle bearing;
   fixed distance;
-  TeamCodeRefLocation.distance_bearing(Basic().Location, distance, bearing);
+  TeamCodeRefLocation.distance_bearing(traffic->location, distance, bearing);
 
   // Calculate TeamCode and save it in Calculated
   XCSoarInterface::SetSettingsComputer().TeammateCode.Update(bearing, distance);
