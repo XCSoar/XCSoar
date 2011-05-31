@@ -211,7 +211,7 @@ OnTeamClicked(gcc_unused WndButton &Sender)
 
   // Set the Teammate callsign
   const TCHAR *callsign = FlarmDetails::LookupCallsign(target_id);
-  if (callsign == NULL || !string_is_empty(callsign)) {
+  if (callsign == NULL || string_is_empty(callsign)) {
     settings.TeamFlarmCNTarget[0] = 0;
   } else {
     // copy the 3 first chars from the name
