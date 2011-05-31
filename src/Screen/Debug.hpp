@@ -34,12 +34,22 @@ ScreenDeinitialized() {}
 
 #else
 
+/**
+ * Call this when the screen library has been initialized.
+ */
 void
 ScreenInitialized();
 
+/**
+ * Call this when the screen library has been deinitialized.
+ */
 void
 ScreenDeinitialized();
 
+/**
+ * Determine if the screen library has been initialized and is
+ * available.
+ */
 bool
 IsScreenInitialized();
 
