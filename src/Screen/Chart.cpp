@@ -154,7 +154,7 @@ Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, enum Style Style)
 }
 
 void
-Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, Pen &pen)
+Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, const Pen &pen)
 {
   assert(pen.defined());
   canvas.select(pen);
@@ -273,7 +273,7 @@ Chart::DrawTrendN(const LeastSquares &lsdata, enum Style Style)
 
 void
 Chart::DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, Pen &pen)
+                const fixed xmax, const fixed ymax, const Pen &pen)
 {
   if (unscaled_x || unscaled_y)
     return;
@@ -356,7 +356,7 @@ Chart::DrawFilledLineGraph(const LeastSquares &lsdata)
 }
 
 void
-Chart::DrawLineGraph(const LeastSquares &lsdata, Pen &pen)
+Chart::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
 {
   RasterPoint line[2];
 
@@ -398,7 +398,7 @@ Chart::DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
 }
 
 void
-Chart::DrawXGrid(fixed tic_step, const fixed zero, Pen &pen,
+Chart::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
                  fixed unit_step, bool draw_units)
 {
   if (!positive(tic_step))
@@ -481,7 +481,7 @@ Chart::DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
 }
 
 void
-Chart::DrawYGrid(fixed tic_step, const fixed zero, Pen &pen,
+Chart::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
                  fixed unit_step, bool draw_units)
 {
   if (!positive(tic_step))

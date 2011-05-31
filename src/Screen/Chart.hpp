@@ -65,12 +65,12 @@ public:
 
   void DrawBarChart(const LeastSquares &lsdata);
   void DrawFilledLineGraph(const LeastSquares &lsdata);
-  void DrawLineGraph(const LeastSquares &lsdata, Pen &pen);
+  void DrawLineGraph(const LeastSquares &lsdata, const Pen &pen);
   void DrawLineGraph(const LeastSquares &lsdata, enum Style Style);
   void DrawTrend(const LeastSquares &lsdata, enum Style Style);
   void DrawTrendN(const LeastSquares &lsdata, enum Style Style);
   void DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, Pen &pen);
+                const fixed xmax, const fixed ymax, const Pen &pen);
   void DrawLine(const fixed xmin, const fixed ymin,
                 const fixed xmax, const fixed ymax, enum Style Style);
   void DrawFilledLine(const fixed xmin, const fixed ymin,
@@ -85,17 +85,17 @@ public:
   void ScaleXFromValue(const fixed val);
   void ScaleMakeSquare();
 
-  void StyleLine(const RasterPoint l1, const RasterPoint l2, Pen &pen);
+  void StyleLine(const RasterPoint l1, const RasterPoint l2, const Pen &pen);
   void StyleLine(const RasterPoint l1, const RasterPoint l2, enum Style Style);
 
   void ResetScale();
 
   static void FormatTicText(TCHAR *text, const fixed val, const fixed step);
-  void DrawXGrid(fixed tic_step, const fixed zero, Pen &pen,
+  void DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
                  fixed unit_step, bool draw_units = false);
   void DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
                  const fixed unit_step, bool draw_units = false);
-  void DrawYGrid(fixed tic_step, const fixed zero, Pen &pen,
+  void DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
                  fixed unit_step, bool draw_units = false);
   void DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
                  const fixed unit_step, bool draw_units = false);
