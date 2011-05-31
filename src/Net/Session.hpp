@@ -36,6 +36,7 @@ namespace Net {
 
   public:
     friend class Connection;
+    friend class Request;
 
     /**
      * Opens a session that can be used for

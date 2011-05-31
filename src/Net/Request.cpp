@@ -22,9 +22,29 @@ Copyright_License {
 */
 
 #include "Net/Request.hpp"
+#include "Net/Session.hpp"
 #include "Net/Connection.hpp"
 
 #include <assert.h>
+
+Net::Request::Request(Session &session, const TCHAR *url,
+                      unsigned long timeout)
+  :context(Context::REQUEST, this),
+   opened_event(false), completed_event(false),
+   last_error(ERROR_SUCCESS)
+{
+  HINTERNET h = session.handle.OpenUrl(url, NULL, 0,
+                                       INTERNET_FLAG_NO_AUTH |
+                                       INTERNET_FLAG_NO_AUTO_REDIRECT |
+                                       INTERNET_FLAG_NO_CACHE_WRITE |
+                                       INTERNET_FLAG_NO_COOKIES |
+                                       INTERNET_FLAG_NO_UI,
+                                       (DWORD_PTR)&context);
+
+  if (h == NULL && GetLastError() == ERROR_IO_PENDING)
+    // Wait until we get the Request handle
+    completed_event.Wait(timeout);
+}
 
 Net::Request::Request(Connection &connection, const char *file,
                       unsigned long timeout)

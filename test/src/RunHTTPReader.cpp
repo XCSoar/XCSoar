@@ -23,14 +23,14 @@ Copyright_License {
 
 #include "Net/Context.hpp"
 #include "Net/Session.hpp"
-#include "Net/Connection.hpp"
 #include "Net/Request.hpp"
+#include "OS/PathName.hpp"
 
 #include <iostream>
 using namespace std;
 
 static bool
-TestConnection(const char *server, const char *url)
+TestConnection(const TCHAR *url)
 {
   cout << "Creating Session ... ";
   Net::Session session;
@@ -38,24 +38,11 @@ TestConnection(const char *server, const char *url)
   if (session.Error())
     return false;
 
-  cout << "Creating Connection ... ";
-  Net::Connection connection(session, server);
-  cout << (!connection.Connected() ? "failed" : "done") << endl;
-  if (!connection.Connected())
-    return false;
-
   cout << "Creating Request ... ";
-  Net::Request request(connection, url);
+  Net::Request request(session, url);
   cout << (!request.Created() ? "failed" : "done") << endl;
   if (!request.Created())
     return false;
-
-  cout << "Sending Request ... ";
-  if (!request.Send()) {
-    cout << "failed" << endl;
-    return false;
-  }
-  cout << "done" << endl;
 
   cout << "Reading Response:" << endl;
   cout << "-------------------------------------------------" << endl;
@@ -72,15 +59,15 @@ TestConnection(const char *server, const char *url)
 int
 main(int argc, char *argv[])
 {
-  if (argc != 3) {
-    cout << "Usage: " << argv[0] << " <server> <url>" << endl;
-    cout << "   <server> is the hostname of the http server" << endl;
-    cout << "   <url> is the url of the object you are requesting (without the hostname)" << endl << endl;
-    cout << "   Example: " << argv[0] << " www.domain.com /docs/readme.htm" << endl;
+  if (argc != 2) {
+    cout << "Usage: " << argv[0] << " <url>" << endl;
+    cout << "   <url> is the absolute url of the resource you are requesting" << endl << endl;
+    cout << "   Example: " << argv[0] << " http://www.domain.com/docs/readme.htm" << endl;
     return 1;
   }
 
-  TestConnection(argv[1], argv[2]);
+  PathName url(argv[1]);
+  TestConnection(url);
 
   return 0;
 }

@@ -29,6 +29,7 @@ Copyright_License {
 #include "Net/WinINet.hpp"
 
 namespace Net {
+  class Session;
   class Connection;
 
   class Request {
@@ -44,6 +45,15 @@ namespace Net {
     DWORD last_error;
 
   public:
+    /**
+     * Creates a Request that can be used to get data from a webserver.
+     * @param session Session instance that is used for creating this Request
+     * @param url the absolute URL of the request
+     * @param timeout Timeout used for creating this request
+     */
+    Request(Session &session, const TCHAR *url,
+            unsigned long timeout = INFINITE);
+
     /**
      * Creates a Request that can be used to get data from a webserver.
      * @param connection Connection instance that is used for creating this Request
