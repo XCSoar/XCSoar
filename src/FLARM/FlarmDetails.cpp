@@ -24,6 +24,7 @@ Copyright_License {
 #include "FLARM/FlarmDetails.hpp"
 #include "FLARM/FlarmId.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/StaticString.hpp"
 #include "Util/StaticArray.hpp"
 #include "LogFile.hpp"
 #include "LocalPath.hpp"
@@ -31,12 +32,11 @@ Copyright_License {
 #include "IO/DataFile.hpp"
 #include "IO/TextWriter.hpp"
 
-#include <stdlib.h>
-
 struct FlarmIdNameCouple
 {
   FlarmId ID;
-  TCHAR Name[21];
+
+  StaticString<21> Name;
 };
 
 static StaticArray<FlarmIdNameCouple, 200> FLARM_Names;
@@ -108,7 +108,8 @@ FlarmDetails::SaveSecondary()
 
   for (unsigned i = 0; i < FLARM_Names.size(); i++)
     writer->printfln(_T("%s=%s"),
-                     FLARM_Names[i].ID.format(id), FLARM_Names[i].Name);
+                     FLARM_Names[i].ID.format(id),
+                     FLARM_Names[i].Name.c_str());
 
   delete writer;
 }
@@ -127,7 +128,7 @@ int
 FlarmDetails::LookupSecondaryIndex(const TCHAR *cn)
 {
   for (unsigned i = 0; i < FLARM_Names.size(); i++)
-    if (_tcscmp(FLARM_Names[i].Name, cn) == 0)
+    if (FLARM_Names[i].Name.equals(cn))
       return i;
 
   return -1;
@@ -181,8 +182,7 @@ FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
   if (index != -1) {
     // modify existing record
     FLARM_Names[index].ID = id;
-    _tcsncpy(FLARM_Names[index].Name, name, 20);
-    FLARM_Names[index].Name[20] = 0;
+    FLARM_Names[index].Name = name;
     return true;
   }
 
@@ -192,8 +192,7 @@ FlarmDetails::AddSecondaryItem(FlarmId id, const TCHAR *name)
   // create new record
   FlarmIdNameCouple &item = FLARM_Names.append();
   item.ID = id;
-  _tcsncpy(item.Name, name, 20);
-  item.Name[20] = 0;
+  item.Name = name;
 
   return true;
 }
@@ -205,7 +204,7 @@ FlarmDetails::FindIdsByCallSign(const TCHAR *cn, const FlarmId *array[],
   unsigned count = FlarmNet::FindIdsByCallSign(cn, array, size);
 
   for (unsigned i = 0; i < FLARM_Names.size() && count < size; i++) {
-    if (_tcscmp(FLARM_Names[i].Name, cn) == 0) {
+    if (FLARM_Names[i].Name.equals(cn)) {
       array[count] = &FLARM_Names[i].ID;
       count++;
     }
