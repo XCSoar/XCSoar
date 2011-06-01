@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_HPP
 #define XCSOAR_INFO_BOX_HPP
 
+#include "Util/StaticString.hpp"
 #include "Units/Units.hpp"
 #include "InfoBoxes/Content/Base.hpp"
 #include "Screen/PaintWindow.hpp"
@@ -88,10 +89,6 @@ class InfoBoxWindow : public PaintWindow
 public:
   enum {
     BORDER_WIDTH = 1,
-
-    TITLESIZE = 32,
-    VALUESIZE = 32,
-    COMMENTSIZE = 32,
   };
 
 private:
@@ -101,9 +98,9 @@ private:
 
   int  mBorderKind;
 
-  TCHAR mTitle[TITLESIZE+1];
-  TCHAR mValue[VALUESIZE+1];
-  TCHAR mComment[COMMENTSIZE+1];
+  StaticString<32> mTitle;
+  StaticString<32> mValue;
+  StaticString<32> mComment;
   Units_t mValueUnit;
   int mID;
 

@@ -63,9 +63,9 @@ InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, 
 
   mValueUnit = unUndef;
 
-  _tcscpy(mTitle, _T(""));
-  _tcscpy(mValue, _T(""));
-  _tcscpy(mComment, _T(""));
+  mTitle.clear();
+  mValue.clear();
+  mComment.clear();
   mID = -1;
 }
 
@@ -88,8 +88,8 @@ InfoBoxWindow::SetID(const int id)
 void
 InfoBoxWindow::SetTitle(const TCHAR *Value)
 {
-  if (_tcscmp(mTitle, Value) != 0) {
-    _tcscpy(mTitle, Value);
+  if (!mTitle.equals(Value)) {
+    mTitle = Value;
     invalidate(recTitle);
   }
 }
@@ -97,9 +97,8 @@ InfoBoxWindow::SetTitle(const TCHAR *Value)
 void
 InfoBoxWindow::SetValue(const TCHAR *Value)
 {
-  if (_tcscmp(mValue, Value) != 0) {
-    _tcsncpy(mValue, Value, VALUESIZE);
-    mValue[VALUESIZE] = '\0';
+  if (!mValue.equals(Value)) {
+    mValue = Value;
     invalidate(recValue);
   }
 }
@@ -157,9 +156,8 @@ InfoBoxWindow::SetColorTop(int value)
 void
 InfoBoxWindow::SetComment(const TCHAR *Value)
 {
-  if (_tcscmp(mComment, Value) != 0) {
-    _tcsncpy(mComment, Value, COMMENTSIZE);
-    mComment[COMMENTSIZE] = '\0';
+  if (!mComment.equals(Value)) {
+    mComment = Value;
     invalidate(recComment);
   }
 }
@@ -208,7 +206,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   const Font &font = *look.title.font;
   canvas.select(font);
 
-  PixelSize tsize = canvas.text_size(mTitle);
+  PixelSize tsize = canvas.text_size(mTitle.c_str());
 
   halftextwidth = (recTitle.left + recTitle.right - tsize.cx) / 2;
 
@@ -216,7 +214,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   y = recTitle.top + 1 + font.get_capital_height() - font.get_ascent_height();
 
-  canvas.text(x, y, mTitle);
+  canvas.text(x, y, mTitle.c_str());
 
   if (Appearance.InfoBoxBorder == apIbTab && halftextwidth > IBLSCALE(3)) {
     int ytop = recTitle.top + font.get_capital_height() / 2;
@@ -252,12 +250,12 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   unsigned ascent_height = look.value.font->get_ascent_height();
   unsigned capital_height = look.value.font->get_capital_height();
 
-  PixelSize tsize = canvas.text_size(mValue);
+  PixelSize tsize = canvas.text_size(mValue.c_str());
   if (tsize.cx > recValue.right - recValue.left) {
     canvas.select(*look.small_font);
     ascent_height = look.small_font->get_ascent_height();
     capital_height = look.small_font->get_capital_height();
-    tsize = canvas.text_size(mValue);
+    tsize = canvas.text_size(mValue.c_str());
   }
 
   PixelSize unit_size;
@@ -275,7 +273,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   y = recValue.top + 1 - ascent_height +
     (recValue.bottom - recValue.top + capital_height) / 2;
 
-  canvas.text(x, y, mValue);
+  canvas.text(x, y, mValue.c_str());
 
   if (unit_symbol != NULL && colorValue >= 0) {
     RasterPoint origin = unit_symbol->get_origin(Appearance.InverseInfoBox
