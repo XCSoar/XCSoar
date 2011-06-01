@@ -33,7 +33,7 @@ RoutePlanner::RoutePlanner(const GlidePolar& polar,
   rpolars_route(polar, wind),
   rpolars_reach(polar, wind),
   terrain(NULL),
-  m_planner(),
+  m_planner(0),
   m_reach_polar_mode(RoutePlannerConfig::rpmTask)
 #ifndef PLANNER_SET
   , m_unique(50000)
@@ -317,6 +317,7 @@ RoutePlanner::link_cleared(const RouteLink &e)
     printf("# cleared\n");
   }
 
+  m_planner.reserve(ASTAR_QUEUE_SIZE);
   m_planner.link(e.second, e.first, v);
   return true;
 }
