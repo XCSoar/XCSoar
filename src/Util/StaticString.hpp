@@ -73,6 +73,18 @@ public:
     data[0] = SENTINEL;
   }
 
+  /**
+   * Truncate the string to the specified length.
+   *
+   * @param new_length the new length; must be equal or smaller than
+   * the current length
+   */
+  void Truncate(size_type new_length) {
+    assert(new_length <= length());
+
+    data[new_length] = SENTINEL;
+  }
+
   bool equals(const TCHAR *other) const {
     assert(other != NULL);
 
