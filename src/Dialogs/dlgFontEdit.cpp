@@ -113,9 +113,8 @@ InitGUI(const TCHAR * FontDescription)
   WndProperty* wp;
 
   TCHAR sTitle[FONTEDIT_GUI_MAX_TITLE];
-  _tcsncpy(sTitle, _("Edit Font"), FONTEDIT_GUI_MAX_TITLE);
-  _tcsncat(sTitle, _T(": "), FONTEDIT_GUI_MAX_TITLE);
-  _tcsncat(sTitle, FontDescription, FONTEDIT_GUI_MAX_TITLE);
+  _sntprintf(sTitle, FONTEDIT_GUI_MAX_TITLE,
+             _T("%s: %s"), _("Edit Font"), FontDescription);
   wf->SetCaption(sTitle);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
