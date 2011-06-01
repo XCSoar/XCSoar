@@ -53,8 +53,10 @@ OnWaypointNewClicked(gcc_unused WndButton &Sender)
 
   if (dlgWaypointEditShowModal(edit_waypoint) &&
       edit_waypoint.Name.size()) {
-    way_points.append(edit_waypoint);
     WaypointsNeedSave = true;
+
+    ScopeSuspendAllThreads suspend;
+    way_points.append(edit_waypoint);
   }
 }
 
@@ -67,6 +69,8 @@ OnWaypointEditClicked(gcc_unused WndButton &Sender)
     Waypoint wp_copy = *way_point;
     if (dlgWaypointEditShowModal(wp_copy)) {
       WaypointsNeedSave = true;
+
+      ScopeSuspendAllThreads suspend;
       way_points.replace(*way_point, wp_copy);
     }
   }
@@ -75,7 +79,10 @@ OnWaypointEditClicked(gcc_unused WndButton &Sender)
 static void
 SaveWaypoints()
 {
+  SuspendAllThreads();
   way_points.optimise();
+  ResumeAllThreads();
+
   if (!WayPointGlue::SaveWaypoints(way_points))
     MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
   else
