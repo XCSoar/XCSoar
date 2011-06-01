@@ -221,5 +221,7 @@ dlgFontEditShowModal(const TCHAR * FontDescription,
 
   delete wf;
 
+  NewFont.reset();
+
   return bRetVal;
 }
