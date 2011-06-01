@@ -55,7 +55,7 @@ public:
   void SetSettingsComputer(const SETTINGS_COMPUTER &new_value);
   void SetScreenDistanceMeters(fixed new_value);
 
-  bool Start(bool suspended) {
+  bool Start(bool suspended=false) {
     if (!WorkerThread::Start(suspended))
       return false;
 

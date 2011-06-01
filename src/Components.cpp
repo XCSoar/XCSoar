@@ -444,7 +444,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   Pages::LoadFromProfile();
 
   // Start calculation thread
-  calculation_thread->Start(true);
+  calculation_thread->Start();
 
   globalRunningEvent.Signal();
 
