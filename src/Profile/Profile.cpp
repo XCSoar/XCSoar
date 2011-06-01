@@ -29,6 +29,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <string.h>
 #include <windef.h> /* for MAX_PATH */
@@ -122,10 +123,14 @@ void
 Profile::SetFiles(const TCHAR* override)
 {
   // Set the default profile file
-  if (is_altair())
+  LocalPath(defaultProfileFile, _T(XCSPROFILE));
+
+  if (is_altair() && !File::Exists(defaultProfileFile)) {
+    /* backwards compatibility with old Altair firmware */
     LocalPath(defaultProfileFile, _T("config/")_T(XCSPROFILE));
-  else
-    LocalPath(defaultProfileFile, _T(XCSPROFILE));
+    if (!File::Exists(defaultProfileFile))
+      LocalPath(defaultProfileFile, _T(XCSPROFILE));
+  }
 
   // Set the profile file to load at startup
   // -> to the default file

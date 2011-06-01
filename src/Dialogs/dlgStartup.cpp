@@ -85,7 +85,7 @@ dlgStartupShowModal()
 
   ((WndButton *)wf->FindByName(_T("cmdQuit")))->SetOnClickNotify(OnQuit);
 
-  dfe->ScanDirectoryTop(is_altair() ? _T("config/*.prf") : _T("*.prf"));
+  dfe->ScanDirectoryTop(_T("*.prf"));
   dfe->Lookup(startProfileFile);
   wp->RefreshDisplay();
 
