@@ -72,8 +72,8 @@ ParseCommandLine(const TCHAR *CommandLine)
         pCe++;
     }
     if (pCe != NULL && pCe - 1 > pC) {
-      _tcsncpy(extrnProfileFile, pC, pCe - pC);
-      extrnProfileFile[pCe - pC] = '\0';
+      TCHAR *end = std::copy(pC, pCe, extrnProfileFile);
+      *end = _T('\0');
     }
   }
 
