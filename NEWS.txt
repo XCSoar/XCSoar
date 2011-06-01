@@ -17,6 +17,7 @@ Version 6.1.1 - not yet released
   - fix crash bug after orientation change and resume
 * Altair
   - fix UI lag
+  - fix default task on startup
 
 Version 6.1 - 2011/05/19
 * devices

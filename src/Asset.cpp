@@ -222,8 +222,5 @@ InitAsset()
   CreateDirectoryIfAbsent(_T("config"));
   CreateDirectoryIfAbsent(_T("cache"));
 
-  if (is_altair())
-    CreateDirectoryIfAbsent(_T("persist"));
-
   StartupLogFreeRamAndStorage();
 }

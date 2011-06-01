@@ -44,12 +44,12 @@ mode=default
 type=gce
 data=STARTUP_SIMULATOR
 event=StatusMessage Simulation\r\nnothing is real!
-event=TaskLoad persist/Default.tsk
+event=TaskLoad Default.tsk
 
 mode=default
 type=gce
 data=STARTUP_REAL
-event=TaskLoad persist/Default.tsk
+event=TaskLoad Default.tsk
 
 mode=default
 type=gce
