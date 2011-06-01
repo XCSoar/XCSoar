@@ -31,7 +31,7 @@
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "StringUtil.hpp"
-#include "TeamCodeCalculation.h"
+#include "TeamCodeCalculation.hpp"
 #include "Compiler.h"
 #include "Profile/Profile.hpp"
 

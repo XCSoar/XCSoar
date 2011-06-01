@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "TeamCodeCalculation.h"
+#include "TeamCodeCalculation.hpp"
 #include "Math/Constants.h"
 #include "Engine/Math/Earth.hpp"
 #include "Math/Angle.hpp"

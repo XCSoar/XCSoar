@@ -37,7 +37,7 @@ Copyright_License {
 #include "NMEA/Validity.hpp"
 
 #include "Airspace/AirspaceComputerSettings.hpp"
-#include "TeamCodeCalculation.h"
+#include "TeamCodeCalculation.hpp"
 
 class Waypoint;
 

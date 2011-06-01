@@ -21,9 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef	TEAMCALCULATION_H
-#define	TEAMCALCULATION_H
+#ifndef	XCSOAR_TEAM_CODE_CALCULATION_HPP
+#define	XCSOAR_TEAM_CODE_CALCULATION_HPP
 
+#include "Util/StaticString.hpp"
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 #include <tchar.h>
