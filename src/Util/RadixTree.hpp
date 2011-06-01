@@ -210,7 +210,7 @@ class RadixTree {
       node->leaves = leaves;
       leaves = NULL;
 
-      label.erase(length);
+      label.resize(length);
     }
 
     /**
