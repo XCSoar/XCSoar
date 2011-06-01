@@ -386,7 +386,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Marks.cpp \
 	\
-	$(SRC)/Persist.cpp \
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/FlightStatisticsRenderer.cpp \
 	\

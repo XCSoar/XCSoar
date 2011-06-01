@@ -26,7 +26,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "Persist.hpp"
 #include "ConditionMonitor.hpp"
 #include "TeamCodeCalculation.hpp"
 #include "PeriodClock.hpp"
@@ -81,13 +80,6 @@ GlideComputer::Initialise()
 {
   GlideComputerTask::Initialise();
   ResetFlight(true);
-
-  LoadCalculationsPersist(&SetCalculated(), protected_task_manager, *this);
-  DeleteCalculationsPersist();
-  // required to allow fail-safe operation
-  // if the persistent file is corrupt and causes a crash
-
-  ResetFlight(false);
 }
 
 /**

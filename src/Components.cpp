@@ -61,7 +61,6 @@ Copyright_License {
 #include "Screen/Busy.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Polar/Polar.hpp"
-#include "Persist.hpp"
 #include "MainWindow.hpp"
 #include "resource.h"
 #include "GlideComputer.hpp"
@@ -547,11 +546,6 @@ XCSoarInterface::Shutdown(void)
   RawLoggerShutdown();
 
   delete replay;
-
-  // Save everything in the persistent memory file
-  SaveCalculationsPersist(Basic(), Calculated(),
-                          *protected_task_manager, *glide_computer,
-                          logger);
 
   delete protected_task_manager;
   delete task_manager;
