@@ -46,6 +46,8 @@ public:
   static const unsigned MAX_SIZE = max;
   static const TCHAR SENTINEL = _T('\0');
 
+  typedef unsigned size_type;
+
 protected:
   TCHAR data[max];
 
@@ -55,7 +57,7 @@ public:
     set(value);
   }
 
-  unsigned length() const {
+  size_type length() const {
     return _tcslen(data);
   }
 
@@ -87,7 +89,7 @@ public:
   /**
    * Returns one character.  No bounds checking.
    */
-  TCHAR operator[](unsigned i) const {
+  TCHAR operator[](size_type i) const {
     assert(i <= length());
 
     return data[i];
