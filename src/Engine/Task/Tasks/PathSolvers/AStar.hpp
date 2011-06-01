@@ -40,7 +40,7 @@ extern long count_astar_links;
 
 #define ASTAR_MINMAX_OFFSET 134217727
 
-#define ASTAR_QUEUE_SIZE 50000
+#define ASTAR_QUEUE_SIZE 1024
 
 struct AStarPriorityValue {
   AStarPriorityValue(unsigned _g=0):g(_g),h(0) {
