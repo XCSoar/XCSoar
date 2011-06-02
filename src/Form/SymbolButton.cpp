@@ -137,4 +137,18 @@ WndSymbolButton::on_paint(Canvas &canvas)
       canvas.stretch_transparent(launcher2_bitmap, COLOR_BLUE);
   }
 
+  else if (caption == _T("Green")) {
+    InflateRect(&rc, -3, -3);
+    canvas.fill_rectangle(rc, COLOR_GREEN);
+  } else if (caption == _T("Blue")) {
+    InflateRect(&rc, -3, -3);
+    canvas.fill_rectangle(rc, COLOR_BLUE);
+  } else if (caption == _T("Magenta")) {
+    InflateRect(&rc, -3, -3);
+    canvas.fill_rectangle(rc, COLOR_MAGENTA);
+  } else if (caption == _T("Yellow")) {
+    InflateRect(&rc, -3, -3);
+    canvas.fill_rectangle(rc, COLOR_YELLOW);
+  }
+
 }
