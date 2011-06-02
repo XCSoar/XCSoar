@@ -223,6 +223,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmNet.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
+	$(SRC)/FLARM/Friends.cpp \
 	$(SRC)/GlideComputer.cpp \
 	$(SRC)/GlideComputerBlackboard.cpp \
 	$(SRC)/GlideComputerAirData.cpp \
