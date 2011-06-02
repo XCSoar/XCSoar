@@ -72,9 +72,7 @@ FlarmTrafficWindow::on_create()
   hbWarning.set(hcWarning);
   hbAlarm.set(hcAlarm);
   hbSelection.set(hcSelection);
-  hbTeam.set(hcTeam);
   hbRadar.set(hcRadar);
-  hbPassive.set(hcPassive);
 
   int width = Layout::FastScale(small ? 1 : 2);
   hpWarning.set(width, hcWarning);
