@@ -28,6 +28,10 @@ Copyright_License {
 
 #include "OS/FileUtil.hpp"
 
+#ifdef ANDROID
+#include "Android/Environment.hpp"
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -299,8 +303,6 @@ FindDataPath()
   }
 
   if (is_android()) {
-    /* XXX use Environment.getExternalStorageDirectory() */
-
 #ifdef ANDROID
     /* hack for Samsung Galaxy S and Samsung Galaxy Tab (which has a
        build-in and an external SD card) */
@@ -312,6 +314,28 @@ FindDataPath()
                           "Enable Samsung hack, " XCSDATADIR " in "
                           ANDROID_SAMSUNG_EXTERNAL_SD);
       return strdup(ANDROID_SAMSUNG_EXTERNAL_SD "/" XCSDATADIR);
+    }
+
+    /* try Context.getExternalStoragePublicDirectory() */
+    char buffer[MAX_PATH];
+    if (Environment::getExternalStoragePublicDirectory(buffer, sizeof(buffer),
+                                                       "XCSoarData") != NULL) {
+      __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+                          "Environment.getExternalStoragePublicDirectory()='%s'",
+                          buffer);
+      return strdup(buffer);
+    }
+
+    /* now try Context.getExternalStorageDirectory(), because
+       getExternalStoragePublicDirectory() needs API level 8 */
+    if (Environment::getExternalStorageDirectory(buffer,
+                                                 sizeof(buffer) - 32) != NULL) {
+      __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+                          "Environment.getExternalStorageDirectory()='%s'",
+                          buffer);
+
+      strcat(buffer, "/" XCSDATADIR);
+      return strdup(buffer);
     }
 
     /* hard-coded path for Android */
