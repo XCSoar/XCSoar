@@ -46,9 +46,7 @@ protected:
   Brush hbWarning;
   Brush hbAlarm;
   Brush hbSelection;
-  Brush hbTeam;
   Brush hbRadar;
-  Brush hbPassive;
 
   Pen hpWarning;
   Pen hpAlarm;

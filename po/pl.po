@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-13 08:22+0200\n"
-"PO-Revision-Date: 2011-05-14 12:43+0000\n"
-"Last-Translator: Krzysztof Kajda <Unknown>\n"
+"PO-Revision-Date: 2011-05-26 20:21+0000\n"
+"Last-Translator: Michal Jezierski <Unknown>\n"
 "Language-Team: Polish <pl@li.org>\n"
 "Language: pl\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-15 08:36+0000\n"
-"X-Generator: Launchpad (build 13037)\n"
+"X-Launchpad-Export-Date: 2011-05-31 18:48+0000\n"
+"X-Generator: Launchpad (build 13117)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:303
@@ -28,7 +28,7 @@ msgstr ""
 #: Data/Input/default.xci:476
 #, no-c-format
 msgid "Task"
-msgstr "Zadanie"
+msgstr "Trasa"
 
 #: src/Airspace/AirspaceGlue.cpp:40
 msgid "Loading Airspace File..."
@@ -53,7 +53,7 @@ msgstr "Przestrzeń"
 
 #: src/Airspace/AirspaceParser.cpp:882
 msgid "Unknown Filetype."
-msgstr "Nieznany Rodzaj Pliku"
+msgstr "Nieznany typ pliku"
 
 #: src/ConditionMonitor.cpp:162
 msgid "Significant wind change"
@@ -97,17 +97,19 @@ msgstr "Zatrzymaj logger"
 
 #: src/Logger/ExternalLogger.cpp:48
 msgid "Declare task?"
-msgstr ""
+msgstr "Zadeklarować trasę?"
 
 #: src/Logger/ExternalLogger.cpp:51
 msgid "Task declared!"
-msgstr ""
+msgstr "Trasa zadeklarowana!"
 
 #: src/Logger/ExternalLogger.cpp:55
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Wystąpił błąd.\n"
+"Trasa NIE została zadeklarowana!"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -143,7 +145,7 @@ msgstr "Ładowanie punktów zwrotnych..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:256
 msgid "Not Circling"
-msgstr ""
+msgstr "Brak krążenia"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:271
 msgid "No Traffic"
@@ -343,7 +345,7 @@ msgstr "Wszystkie"
 #: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1423
 #, no-c-format
 msgid "Task & Landables"
-msgstr ""
+msgstr "Trasa i lądowiska"
 
 #: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1425
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:94
@@ -629,7 +631,7 @@ msgstr "Dodatkowa wysokość wymagana do osiągnięcia następnego PZ"
 #: src/InfoBoxes/Content/Factory.cpp:187
 #, no-c-format
 msgid "Next waypoint"
-msgstr ""
+msgstr "Następny punkt zwrotny"
 
 #: src/InfoBoxes/Content/Factory.cpp:188 src/InfoBoxes/Content/Task.cpp:84
 #: Data/Dialogs/dlgTaskPoint.xml:6 Data/Dialogs/dlgTaskPoint_L.xml:5
@@ -885,58 +887,61 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:304
 #, no-c-format
 msgid "AA time"
-msgstr ""
+msgstr "Czas obszarówki"
 
 #: src/InfoBoxes/Content/Factory.cpp:305
 #, no-c-format
 msgid "AA Time"
-msgstr ""
+msgstr "Czas AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:306
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
+"Pozostały czas obszarówki. Zmienia kolor na czerwony, gdy czas ten minie."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
 #, no-c-format
 msgid "AA max. distance "
-msgstr ""
+msgstr "Maksymalna odległość obszarówki "
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
 msgid "AA Dmax"
-msgstr ""
+msgstr "Maks. odl. AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:315
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
 msgstr ""
+"Maksymalna możliwa odległość dla pozostałej trasy w konkurencji obszarowej."
 
 #: src/InfoBoxes/Content/Factory.cpp:322
 #, no-c-format
 msgid "AA min. distance"
-msgstr ""
+msgstr "Minimalna odległość obszarówki"
 
 #: src/InfoBoxes/Content/Factory.cpp:323
 #, no-c-format
 msgid "AA Dmin"
-msgstr ""
+msgstr "Min. odl. AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:324
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
 msgstr ""
+"Minimalna możliwa odległość dla pozostałej trasy w konkurencji obszarowej."
 
 #: src/InfoBoxes/Content/Factory.cpp:331
 #, no-c-format
 msgid "AA speed max. distance"
-msgstr ""
+msgstr "Maksymalna odległość dla minimalnej prędkości obszarówki"
 
 #: src/InfoBoxes/Content/Factory.cpp:332
 #, no-c-format
 msgid "AA Vmax"
-msgstr ""
+msgstr "Maks. V AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:333
 #, no-c-format
@@ -944,16 +949,18 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Średnia prędkość, jaką można uzyskać w obszarówce, lecąc maksymalną "
+"pozostałą odległość w minimalnym czasie konkurencji obszarowej."
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
 msgid "AA speed min. distance"
-msgstr ""
+msgstr "Minimalna odległość dla prędkości obszarówki"
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
 msgid "AA Vmin"
-msgstr ""
+msgstr "Min. V AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:342
 #, no-c-format
@@ -961,6 +968,8 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Średnia prędkość, jaką można uzyskać w obszarówce, lecąc minimalną pozostałą "
+"odległość w minimalnym czasie konkurencji obszarowej."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
@@ -970,7 +979,7 @@ msgstr "Prędkość IAS"
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid "V IAS"
-msgstr ""
+msgstr "V wskazywana"
 
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
@@ -982,7 +991,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
 msgid "Height barometric"
-msgstr ""
+msgstr "Wysokość barometryczna"
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:5
@@ -1007,7 +1016,7 @@ msgstr "Szybkość wg MacCready"
 #: src/InfoBoxes/Content/Factory.cpp:368
 #, no-c-format
 msgid "V MC"
-msgstr ""
+msgstr "V MC"
 
 #: src/InfoBoxes/Content/Factory.cpp:369
 #, no-c-format
@@ -1016,6 +1025,10 @@ msgid ""
 "cruise flight mode, this speed-to-fly is calculated for maintaining "
 "altitude. In final glide mode, this speed-to-fly is calculated for descent."
 msgstr ""
+"Prędkość wg krążka MacCredy'ego zapewniająca optymalny lot do następnego "
+"punktu zwrotnego. W trybie przeskoku prędkość nakazana jest obliczana dla "
+"zachowania stałej wysokości przelotu. W trybie dolotu prędkość jest "
+"obliczana dla zniżania."
 
 #: src/InfoBoxes/Content/Factory.cpp:376
 #, no-c-format
@@ -1025,7 +1038,7 @@ msgstr "Procent wznoszenia"
 #: src/InfoBoxes/Content/Factory.cpp:377
 #, no-c-format
 msgid "% Climb"
-msgstr ""
+msgstr "% wznoszenia"
 
 #: src/InfoBoxes/Content/Factory.cpp:378
 #, no-c-format
@@ -1067,6 +1080,8 @@ msgid ""
 "Magnitude of G loading reported by a supported external intelligent vario. "
 "This value is negative for pitch-down manoeuvres."
 msgstr ""
+"Informacja o przeciążeniu z obsługiwanego zewnętrznego wariometru "
+"inteligentnego. Wartość ujemna dla przeciążeń ujemnych."
 
 #: src/InfoBoxes/Content/Factory.cpp:403
 #, no-c-format
@@ -1089,6 +1104,14 @@ msgid ""
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
+"Wymagana doskonałość do następnego PZ obliczona przez podzielenie odległości "
+"do tego PZ przez wysokość wymaganą do dotarcia na bezpiecznej wysokości. "
+"Wartości ujemne wskazują, że do osiągnięcia PZ jest wymagane wznoszenie. "
+"Jeżeli wymagana wysokość jest bliska zeru, wyświetlana jest wartość '---'. "
+"Należy mieć na uwadze, że te obliczenia mogą być optymistyczne, ponieważ "
+"zmniejszają wysokość wymaganą do osiągnięcia PZ o nadmiar wysokości "
+"szybowca, jeżeli jego prędkość powietrzna jest większa niż prędkość "
+"MacCready i największej doskonałości."
 
 #: src/InfoBoxes/Content/Factory.cpp:412
 #, no-c-format
@@ -1118,7 +1141,7 @@ msgstr "Czas uniwersalny wg GPS."
 #: src/InfoBoxes/Content/Factory.cpp:430
 #, no-c-format
 msgid "Task time to go"
-msgstr ""
+msgstr "Pozostały czas trasy"
 
 #: src/InfoBoxes/Content/Factory.cpp:431
 #, no-c-format
@@ -1137,7 +1160,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:439
 #, no-c-format
 msgid "Next time to go"
-msgstr ""
+msgstr "Pozostały czas do następnego PZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:440
 #, no-c-format
@@ -1156,12 +1179,12 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:448
 #, no-c-format
 msgid "Speed dolphin"
-msgstr ""
+msgstr "Prędkość optymalna"
 
 #: src/InfoBoxes/Content/Factory.cpp:449
 #, no-c-format
 msgid "V Opt"
-msgstr ""
+msgstr "V opt."
 
 #: src/InfoBoxes/Content/Factory.cpp:450
 #, no-c-format
@@ -1174,6 +1197,14 @@ msgid ""
 "the current load factor (if an accelerometer is connected). When Block mode "
 "speed to fly is selected, this InfoBox displays the MacCready speed."
 msgstr ""
+"Chwilowa prędkość według wskazania krążka MacCready'ego wykorzystująca "
+"obliczenia wariometru energii całkowitej w celu ustalenia prędkości "
+"przeskoku przy bieżącym kursie szybowca. W trybie przeskoku prędkość ta jest "
+"obliczana tak, aby zachować wysokość. W trybie dolotu prędkość ta jest "
+"obliczana dla zniżania. W trybie krążenia w polu tym wyświetlana jest "
+"prędkość minimalnego opadania przy bieżącym współczynniku przeciążenia "
+"(jeżeli podłączony jest akcelerometr). Po wybraniu trybu prędkości blokowej "
+"w tym polu wyświetlana jest prędkość MacCready."
 
 #: src/InfoBoxes/Content/Factory.cpp:457
 #, no-c-format
@@ -1193,11 +1224,13 @@ msgid ""
 "vario are connected, otherwise calculations are based on GPS measurements "
 "and wind estimates."
 msgstr ""
+"Chwilowa prędkość pionowa masy powietrza, równa wartości wskazywanej przez "
+"wariometr pomniejszonej o oszacowaną prędkość opadania szybowca."
 
 #: src/InfoBoxes/Content/Factory.cpp:466
 #, no-c-format
 msgid "Task arrival time"
-msgstr ""
+msgstr "Godzina zakończenia trasy"
 
 #: src/InfoBoxes/Content/Factory.cpp:467
 #, no-c-format
@@ -1216,7 +1249,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:475
 #, no-c-format
 msgid "Next arrival time"
-msgstr ""
+msgstr "Godzina nad następnym PZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:476
 #, no-c-format
@@ -1235,7 +1268,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:484
 #, no-c-format
 msgid "Bearing difference"
-msgstr ""
+msgstr "Różnica kierunków"
 
 #: src/InfoBoxes/Content/Factory.cpp:485
 #, no-c-format
@@ -1271,7 +1304,7 @@ msgstr "Temperatura zewnętrzna"
 #: src/InfoBoxes/Content/Factory.cpp:494
 #, no-c-format
 msgid "OAT"
-msgstr ""
+msgstr "Temp. zewn."
 
 #: src/InfoBoxes/Content/Factory.cpp:495
 #, no-c-format
@@ -1298,6 +1331,8 @@ msgid ""
 "Relative humidity of the air in percent as measured by a probe if supported "
 "by a connected intelligent variometer."
 msgstr ""
+"Wyrażona w procentach wilgotność względna powietrza zmierzona przez sondę, "
+"jeśli obsługiwana jest przez podłączony wariometr inteligentny."
 
 #: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1390
 #, no-c-format
@@ -1317,31 +1352,35 @@ msgid ""
 "and relative humidity probe. (Touchscreen/PC only) Pressing the up/down "
 "cursor keys adjusts this forecast temperature."
 msgstr ""
+"Prognozowana temperatura na poziomie ziemi na lotnisku bazowym, "
+"wykorzystywana w połączeniu z pomiarem temperatury powietrza zewnętrznego i "
+"wilgotności względnej do obliczania wysokości konwekcji oraz podstawy chmur. "
+"Naciśnięcie klawiszy strzałek w górę/w dół zmienia prognozowaną temperaturę."
 
 #: src/InfoBoxes/Content/Factory.cpp:520
 #, no-c-format
 msgid "AA distance around target"
-msgstr ""
+msgstr "Odległość do mety obszarówki po punktach"
 
 #: src/InfoBoxes/Content/Factory.cpp:521
 #, no-c-format
 msgid "AA Dtgt"
-msgstr ""
+msgstr "Odl. do mety AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:522
 #, no-c-format
 msgid "Assigned Area Task distance around target points for remainder of task."
-msgstr ""
+msgstr "Odległość obszarówki po PZ pozostałej części trasy."
 
 #: src/InfoBoxes/Content/Factory.cpp:529
 #, no-c-format
 msgid "AA speed around target"
-msgstr ""
+msgstr "Prędkość do mety obszarówki po PZ"
 
 #: src/InfoBoxes/Content/Factory.cpp:530
 #, no-c-format
 msgid "AA Vtgt"
-msgstr ""
+msgstr "V do mety"
 
 #: src/InfoBoxes/Content/Factory.cpp:531
 #, no-c-format
@@ -1349,6 +1388,8 @@ msgid ""
 "Assigned Area Task average speed achievable around target points remaining "
 "in minimum AAT time."
 msgstr ""
+"Średnia prędkość obszarówki, jaką można uzyskać po pozostałych PZ w "
+"minimalnym czasie trasy."
 
 #: src/InfoBoxes/Content/Factory.cpp:538
 #, no-c-format
@@ -1368,6 +1409,11 @@ msgid ""
 "Negative values indicate climbing cruise. If the total energy vario speed is "
 "close to zero, the displayed value is '---'."
 msgstr ""
+"Chwilowa doskonałość uzyskana przez podzielenie prędkości wskazywanej przez "
+"prędkość pionową z wariometru energii całkowitej, jeżeli jest podłączony. "
+"Wartości ujemne oznaczają wznoszenie na przeskoku. Jeżeli prędkość "
+"wskazywana przez wariometr energii całkowitej jest bliska zeru, wyświetlaną "
+"wartością jest '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:547
 #, no-c-format
@@ -1377,7 +1423,7 @@ msgstr "Prędkość TAS"
 #: src/InfoBoxes/Content/Factory.cpp:548
 #, no-c-format
 msgid "V TAS"
-msgstr ""
+msgstr "V TAS"
 
 #: src/InfoBoxes/Content/Factory.cpp:549
 #, no-c-format
@@ -1392,7 +1438,7 @@ msgstr "Kody zespołowe"
 #: src/InfoBoxes/Content/Factory.cpp:557
 #, no-c-format
 msgid "TeamCode"
-msgstr ""
+msgstr "Kod drużynowy"
 
 #: src/InfoBoxes/Content/Factory.cpp:558
 #, no-c-format
@@ -1400,63 +1446,65 @@ msgid ""
 "The current Team code for this aircraft. Use this to report to other team "
 "members. The last team aircraft code entered is displayed underneath."
 msgstr ""
+"Aktualny kod drużynowy tego szybowca. Jest przekazywany innym członków "
+"drużyny. Pod spodem wyświetlany jest kod ostatnio wpisanego szybowca drużyny."
 
 #: src/InfoBoxes/Content/Factory.cpp:565
 #, no-c-format
 msgid "Team bearing"
-msgstr ""
+msgstr "Namiar na drużynę"
 
 #: src/InfoBoxes/Content/Factory.cpp:566
 #, no-c-format
 msgid "Tm Brng"
-msgstr ""
+msgstr "Namiar drużyny"
 
 #: src/InfoBoxes/Content/Factory.cpp:567
 #, no-c-format
 msgid "The bearing to the team aircraft location at the last team code report."
-msgstr ""
+msgstr "Namiar w kierunku ostatnio zgłoszonego kodu szybowca drużyny."
 
 #: src/InfoBoxes/Content/Factory.cpp:574
 #, no-c-format
 msgid "Team bearing difference"
-msgstr ""
+msgstr "Namiar względny na drużynę"
 
 #: src/InfoBoxes/Content/Factory.cpp:575
 #, no-c-format
 msgid "Team Bd"
-msgstr ""
+msgstr "Namiar wzgl. drużyny"
 
 #: src/InfoBoxes/Content/Factory.cpp:576
 #, no-c-format
 msgid ""
 "The relative bearing to the team aircraft location at the last reported team "
 "code."
-msgstr ""
+msgstr "Namiar względny w kierunku ostatnio zgłoszonego kodu szybowca drużyny."
 
 #: src/InfoBoxes/Content/Factory.cpp:583
 #, no-c-format
 msgid "Team range"
-msgstr ""
+msgstr "Odległość od drużyny"
 
 #: src/InfoBoxes/Content/Factory.cpp:584
 #, no-c-format
 msgid "Team Dis"
-msgstr ""
+msgstr "Odl. drużyny"
 
 #: src/InfoBoxes/Content/Factory.cpp:585
 #, no-c-format
 msgid "The range to the team aircraft location at the last reported team code."
-msgstr ""
+msgstr "Odległość do ostatnio zgłoszonego kodu szybowca drużyny."
 
 #: src/InfoBoxes/Content/Factory.cpp:592
 #, no-c-format
 msgid "Speed task instantaneous"
-msgstr ""
+msgstr "Chwilowa prędkość trasy"
 
 #: src/InfoBoxes/Content/Factory.cpp:593
 #, no-c-format
 msgid "V Tsk Ins"
-msgstr ""
+msgstr "V trasy chwil."
 
 #: src/InfoBoxes/Content/Factory.cpp:594
 #, no-c-format
@@ -1464,21 +1512,23 @@ msgid ""
 "Instantaneous cross country speed while on current task, compensated for "
 "altitude. Equivalent to instantaneous Pirker cross-country speed."
 msgstr ""
+"Chwilowa prędkości bieżącej trasy, skompensowana dla danej wysokości. Równa "
+"chwilowej prędkości na przelocie Pirkera."
 
 #: src/InfoBoxes/Content/Factory.cpp:601
 #, no-c-format
 msgid "Distance home"
-msgstr ""
+msgstr "Odległość do lotniska bazowego"
 
 #: src/InfoBoxes/Content/Factory.cpp:602
 #, no-c-format
 msgid "Home Dis"
-msgstr ""
+msgstr "Odl. do bazowego"
 
 #: src/InfoBoxes/Content/Factory.cpp:603
 #, no-c-format
 msgid "Distance to home waypoint (if defined)."
-msgstr ""
+msgstr "Odległość do lotniska bazowego (jeśli została zdefiniowana)."
 
 #: src/InfoBoxes/Content/Factory.cpp:610
 #, no-c-format
@@ -4548,7 +4598,7 @@ msgstr "Speed remaining_EOL"
 
 #: Data/Dialogs/dlgVario.xml:118 Data/Dialogs/dlgVario_L.xml:119
 msgid "Circling hi cutoff"
-msgstr ""
+msgstr "Odcięcie górne w krążeniu"
 
 #: Data/Dialogs/dlgConfiguration.xml:87 Data/Dialogs/dlgConfiguration_L.xml:87
 msgid "The upper limit for Auto-Zoom distance."

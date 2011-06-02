@@ -107,8 +107,9 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Simple"));
-    dfe->addEnumText(_("Detailed"));
+    dfe->addEnumText(_("Simple"), acSimple);
+    dfe->addEnumText(_("Simple (Large)"), acSimpleLarge);
+    dfe->addEnumText(_("Detailed"), acDetailed);
     dfe->Set(Appearance.AircraftSymbol);
     wp->RefreshDisplay();
   }

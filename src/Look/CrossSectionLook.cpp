@@ -21,38 +21,24 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_DEBUG_HPP
-#define XCSOAR_SCREEN_DEBUG_HPP
+#include "CrossSectionLook.hpp"
+#include "Screen/Graphics.hpp"
 
-#ifdef NDEBUG
-
-static inline void
-ScreenInitialized() {}
-
-static inline void
-ScreenDeinitialized() {}
-
-#else
-
-/**
- * Call this when the screen library has been initialized.
- */
 void
-ScreenInitialized();
+CrossSectionLook::Initialise()
+{
+  background_color = COLOR_WHITE;
+  text_color = COLOR_BLACK;
 
-/**
- * Call this when the screen library has been deinitialized.
- */
+  terrain_brush.set(Graphics::GroundColor);
+  grid_pen.set(Pen::DASH, 1, Color(0x60, 0x60, 0x60));
+  aircraft_brush.set(text_color);
+}
+
 void
-ScreenDeinitialized();
-
-/**
- * Determine if the screen library has been initialized and is
- * available.
- */
-bool
-IsScreenInitialized();
-
-#endif
-
-#endif
+CrossSectionLook::Deinitialise()
+{
+  terrain_brush.reset();
+  grid_pen.reset();
+  aircraft_brush.reset();
+}

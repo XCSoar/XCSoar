@@ -21,38 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_DEBUG_HPP
-#define XCSOAR_SCREEN_DEBUG_HPP
+#ifndef THERMAL_BAND_LOOK_HPP
+#define THERMAL_BAND_LOOK_HPP
 
-#ifdef NDEBUG
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
 
-static inline void
-ScreenInitialized() {}
+struct ThermalBandLook {
+  Pen pen;
+  Brush brush;
 
-static inline void
-ScreenDeinitialized() {}
+  Pen white_pen, black_pen;
 
-#else
-
-/**
- * Call this when the screen library has been initialized.
- */
-void
-ScreenInitialized();
-
-/**
- * Call this when the screen library has been deinitialized.
- */
-void
-ScreenDeinitialized();
-
-/**
- * Determine if the screen library has been initialized and is
- * available.
- */
-bool
-IsScreenInitialized();
-
-#endif
+  void Initialise();
+  void Deinitialise();
+};
 
 #endif

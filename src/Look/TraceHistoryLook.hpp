@@ -21,38 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_DEBUG_HPP
-#define XCSOAR_SCREEN_DEBUG_HPP
+#ifndef TRACE_HISTORY_LOOK_HPP
+#define TRACE_HISTORY_LOOK_HPP
 
-#ifdef NDEBUG
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
 
-static inline void
-ScreenInitialized() {}
+struct TraceHistoryLook {
+  Pen axis_pen;
 
-static inline void
-ScreenDeinitialized() {}
+  Pen line_pen;
 
-#else
+  Brush lift_brush, sink_brush;
 
-/**
- * Call this when the screen library has been initialized.
- */
-void
-ScreenInitialized();
-
-/**
- * Call this when the screen library has been deinitialized.
- */
-void
-ScreenDeinitialized();
-
-/**
- * Determine if the screen library has been initialized and is
- * available.
- */
-bool
-IsScreenInitialized();
-
-#endif
+  void Initialise(bool inverse);
+  void Deinitialise();
+};
 
 #endif

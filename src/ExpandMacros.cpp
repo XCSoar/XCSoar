@@ -37,6 +37,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Device/device.hpp"
 #include "Pages.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <stdlib.h>
 
@@ -353,8 +354,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 {
   // ToDo, check Buffer Size
   bool invalid = false;
-  _tcsncpy(OutBuffer, In, Size);
-  OutBuffer[Size - 1] = '\0';
+  CopyString(OutBuffer, In, Size);
 
   if (_tcsstr(OutBuffer, _T("$(")) == NULL)
     return false;

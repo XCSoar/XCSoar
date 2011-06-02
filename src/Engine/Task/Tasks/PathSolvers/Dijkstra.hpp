@@ -33,7 +33,7 @@ extern long count_dijkstra_links;
 
 #define DIJKSTRA_MINMAX_OFFSET 134217727
 
-#define DIJKSTRA_QUEUE_SIZE 50000
+#define DIJKSTRA_QUEUE_SIZE 20000
 
 //uncomment this line to reserve space in queue
 #define USE_RESERVABLE

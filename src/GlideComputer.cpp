@@ -26,9 +26,8 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
-#include "Persist.hpp"
 #include "ConditionMonitor.hpp"
-#include "TeamCodeCalculation.h"
+#include "TeamCodeCalculation.hpp"
 #include "PeriodClock.hpp"
 #include "GlideComputerInterface.hpp"
 #include "InputEvents.hpp"
@@ -81,13 +80,6 @@ GlideComputer::Initialise()
 {
   GlideComputerTask::Initialise();
   ResetFlight(true);
-
-  LoadCalculationsPersist(&SetCalculated(), protected_task_manager, *this);
-  DeleteCalculationsPersist();
-  // required to allow fail-safe operation
-  // if the persistent file is corrupt and causes a crash
-
-  ResetFlight(false);
 }
 
 /**
@@ -207,11 +199,37 @@ GlideComputer::CalculateOwnTeamCode()
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
-  static bool InTeamSector = false;
-
   // No reference waypoint for teamcode calculation chosen -> cancel
   if (!DetermineTeamCodeRefLocation())
     return;
+
+  if (Basic().flarm.available && SettingsComputer().TeamFlarmTracking) {
+    const FLARM_TRAFFIC *traffic =
+        Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget);
+
+    if (traffic && traffic->location_available) {
+      // Set Teammate location to FLARM contact location
+      SetCalculated().TeammateLocation = traffic->location;
+      Basic().Location.distance_bearing(traffic->location,
+                                        SetCalculated().TeammateRange,
+                                        SetCalculated().TeammateBearing);
+
+      // Calculate distance and bearing from teammate to reference waypoint
+
+      Angle bearing;
+      fixed distance;
+      TeamCodeRefLocation.distance_bearing(traffic->location,
+                                           distance, bearing);
+
+      // Calculate TeamCode and save it in Calculated
+      XCSoarInterface::SetSettingsComputer().TeammateCode.Update(bearing, distance);
+      XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
+
+      CheckTeammateRange();
+
+      return;
+    }
+  }
 
   // If (TeamCode exists and is valid)
   if (SettingsComputer().TeammateCodeValid) {
@@ -225,19 +243,27 @@ GlideComputer::CalculateTeammateBearingRange()
     SetCalculated().TeammateBearing = team_vector.Bearing;
     SetCalculated().TeammateRange = team_vector.Distance;
 
-    // Hysteresis for GlideComputerEvent
-    // If (closer than 100m to the teammates last position and "event" not reset)
-    if (Calculated().TeammateRange < fixed(100) && InTeamSector == false) {
-      InTeamSector = true;
-      // Raise GCE_TEAM_POS_REACHED event
-      InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
-    } else if (Calculated().TeammateRange > fixed(300)) {
-      // Reset "event" when distance is greater than 300m again
-      InTeamSector = false;
-    }
+    CheckTeammateRange();
   } else {
     SetCalculated().TeammateBearing = Angle::degrees(fixed_zero);
     SetCalculated().TeammateRange = fixed_zero;
+  }
+}
+
+void
+GlideComputer::CheckTeammateRange()
+{
+  static bool InTeamSector = false;
+
+  // Hysteresis for GlideComputerEvent
+  // If (closer than 100m to the teammates last position and "event" not reset)
+  if (Calculated().TeammateRange < fixed(100) && InTeamSector == false) {
+    InTeamSector = true;
+    // Raise GCE_TEAM_POS_REACHED event
+    InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
+  } else if (Calculated().TeammateRange > fixed(300)) {
+    // Reset "event" when distance is greater than 300m again
+    InTeamSector = false;
   }
 }
 
@@ -293,41 +319,7 @@ GlideComputer::FLARM_ScanTraffic()
   if (Basic().flarm.NewTraffic)
     // new traffic has appeared
     InputEvents::processGlideComputer(GCE_FLARM_NEWTRAFFIC);
-
-  // If (not FLARM available) cancel
-  if (!Basic().flarm.available || !SettingsComputer().TeamFlarmTracking)
-    return;
-
-  if (SettingsComputer().TeamCodeRefWaypoint < 0)
-    return;
-
-  // Get bearing and distance to the reference waypoint
-  const Waypoint *wp =
-      way_points.lookup_id(SettingsComputer().TeamCodeRefWaypoint);
-
-  if (!wp)
-    return;
-
-  const FLARM_TRAFFIC *traffic =
-      Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget);
-
-  if (!traffic || !traffic->location_available)
-    return;
-
-  // Set Teammate location to FLARM contact location
-  SetCalculated().TeammateLocation = traffic->location;
-
-  // Calculate distance and bearing from teammate to reference waypoint
-
-  Angle bearing;
-  fixed distance;
-  wp->Location.distance_bearing(Basic().Location, distance, bearing);
-
-  // Calculate TeamCode and save it in Calculated
-  XCSoarInterface::SetSettingsComputer().TeammateCode.Update(bearing, distance);
-  XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
 }
-
 
 void 
 GlideComputer::OnStartTask()

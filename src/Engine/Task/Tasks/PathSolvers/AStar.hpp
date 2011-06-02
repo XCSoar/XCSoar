@@ -40,7 +40,7 @@ extern long count_astar_links;
 
 #define ASTAR_MINMAX_OFFSET 134217727
 
-#define ASTAR_QUEUE_SIZE 50000
+#define ASTAR_QUEUE_SIZE 1024
 
 struct AStarPriorityValue {
   AStarPriorityValue(unsigned _g=0):g(_g),h(0) {
@@ -77,7 +77,8 @@ struct AStarPriorityValue {
  * Modifications by John Wharington to track optimal solution
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
-template <class Node> class AStar {
+template <class Node, bool m_min=true>
+class AStar {
 public:
 
   /**
@@ -85,8 +86,7 @@ public:
    *
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  AStar(const bool is_min = true, unsigned reserve_default=ASTAR_QUEUE_SIZE):
-    m_min(is_min)
+  AStar(unsigned reserve_default=ASTAR_QUEUE_SIZE)
   {
     reserve(reserve_default);
   }
@@ -97,8 +97,7 @@ public:
    * @param n Node to start
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  AStar(const Node &node, const bool is_min = true, unsigned reserve_default=ASTAR_QUEUE_SIZE) :
-    m_min(is_min)
+  AStar(const Node &node, unsigned reserve_default=ASTAR_QUEUE_SIZE)
   {
     push(node, node, AStarPriorityValue(0));
     reserve(reserve_default);
@@ -320,7 +319,6 @@ private:
   reservable_priority_queue<NodeValue, std::vector<NodeValue>, Rank> q;
 
   node_value_iterator cur;
-  const bool m_min;
 };
 
 #endif

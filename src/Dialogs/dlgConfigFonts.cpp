@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
 #include "DataField/Boolean.hpp"
+#include "Util/StringUtil.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
@@ -197,7 +198,7 @@ GetFontDescription(TCHAR Description[], const TCHAR * prpName, int iMaxLen)
 {
   const WndFrame *wp = (WndFrame *)wf->FindByName(prpName);
   if (wp)
-    _tcsncpy(Description, wp->GetCaption(), iMaxLen - 1);
+    CopyString(Description, wp->GetCaption(), iMaxLen);
 }
 
 static void

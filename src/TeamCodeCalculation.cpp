@@ -21,10 +21,11 @@ Copyright_License {
 }
 */
 
-#include "TeamCodeCalculation.h"
+#include "TeamCodeCalculation.hpp"
 #include "Math/Constants.h"
 #include "Engine/Math/Earth.hpp"
 #include "Math/Angle.hpp"
+#include "Util/StringUtil.hpp"
 
 #include <math.h>
 #include <string.h>
@@ -148,8 +149,7 @@ TeamCode::Update(Angle bearing, fixed range)
 void
 TeamCode::Update(const TCHAR* _code)
 {
-  _tcsncpy(code, _code, 9);
-  code[9] = 0;
+  CopyString(code, _code, 10);
 }
 
 const TCHAR*

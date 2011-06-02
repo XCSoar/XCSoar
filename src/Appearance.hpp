@@ -58,6 +58,7 @@ enum InfoBoxBorderAppearance_t {
 enum AircraftSymbol_t {
   acSimple = 0,
   acDetailed,
+  acSimpleLarge,
 };
 
 struct Appearance {

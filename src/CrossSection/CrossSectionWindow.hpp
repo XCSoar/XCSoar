@@ -28,6 +28,7 @@
 #include "Blackboard.hpp"
 #include "SettingsMapBlackboard.hpp"
 
+struct CrossSectionLook;
 class Airspaces;
 class RasterTerrain;
 class Chart;
@@ -41,10 +42,7 @@ class CrossSectionWindow :
   public SettingsMapBlackboard
 {
 protected:
-  /** Brush used to draw the terrain polygon */
-  Brush terrain_brush;
-  /** Pen used to draw the grid */
-  Pen grid_pen;
+  const CrossSectionLook &look;
 
   /** Pointer to a RasterTerrain instance or NULL */
   RasterTerrain *terrain;
@@ -56,16 +54,11 @@ protected:
   /** Range and direction of the CrossSection */
   GeoVector vec;
 
-  /** Background color */
-  Color background_color;
-  /** Text color */
-  Color text_color;
-
 public:
   /**
    * Constructor. Initializes most class members.
    */
-  CrossSectionWindow();
+  CrossSectionWindow(const CrossSectionLook &look);
 
   void ReadBlackboard(const NMEA_INFO &_gps_info,
                       const DERIVED_INFO &_calculated_info,
@@ -114,37 +107,6 @@ public:
    */
   void set_start(GeoPoint _start) {
     start = _start;
-  }
-
-  /**
-   * Set the background color
-   * @param color New background color
-   */
-  void set_background_color(Color color) {
-    background_color = color;
-  }
-  /**
-   * Set the text color
-   * @param color New text color
-   */
-  void set_text_color(Color color) {
-    text_color = color;
-  }
-  /**
-   * Set the terrain polygon color
-   * @param color New terrain polygon color
-   */
-  void set_terrain_color(Color color) {
-    terrain_brush.set(color);
-  }
-  /**
-   * Set the Pen used for drawing the grid
-   * @param style Pen style
-   * @param width Pen width
-   * @param color Pen color
-   */
-  void set_grid_pen(enum Pen::style style, unsigned width, const Color color) {
-    grid_pen.set(style, width, color);
   }
 
 protected:

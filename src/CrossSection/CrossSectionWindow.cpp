@@ -29,6 +29,7 @@
 #include "Screen/Chart.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Graphics.hpp"
+#include "Look/CrossSectionLook.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
@@ -219,13 +220,11 @@ public:
   }
 };
 
-CrossSectionWindow::CrossSectionWindow() :
-  terrain_brush(Graphics::GroundColor),
-  grid_pen(Pen::DASH, 1, Color(0x60, 0x60, 0x60)),
+CrossSectionWindow::CrossSectionWindow(const CrossSectionLook &_look)
+  :look(_look),
   terrain(NULL), airspace_database(NULL),
   start(Angle::native(fixed_zero), Angle::native(fixed_zero)),
-  vec(fixed(50000), Angle::native(fixed_zero)),
-  background_color(COLOR_WHITE), text_color(COLOR_BLACK) {}
+   vec(fixed(50000), Angle::native(fixed_zero)) {}
 
 void
 CrossSectionWindow::ReadBlackboard(const NMEA_INFO &_gps_info,
@@ -243,7 +242,7 @@ CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc)
   fixed hmin = max(fixed_zero, gps_info.NavAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), gps_info.NavAltitude + fixed(1000));
 
-  Chart chart(canvas, rc);
+  Chart chart(Graphics::chart, canvas, rc);
   chart.ResetScale();
   chart.ScaleXFromValue(fixed_zero);
   chart.ScaleXFromValue(vec.Distance);
@@ -315,7 +314,7 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, Chart &chart)
 
   if (i >= 4) {
     canvas.null_pen();
-    canvas.select(terrain_brush);
+    canvas.select(look.terrain_brush);
     canvas.polygon(&points[0], i);
   }
 }
@@ -327,7 +326,7 @@ CrossSectionWindow::PaintGlide(Chart &chart)
     fixed t = vec.Distance / gps_info.GroundSpeed;
     chart.DrawLine(fixed_zero, gps_info.NavAltitude, vec.Distance,
                    gps_info.NavAltitude + calculated_info.Average30s * t,
-                   Chart::STYLE_BLUETHIN);
+                   ChartLook::STYLE_BLUETHIN);
   }
 }
 
@@ -335,11 +334,8 @@ void
 CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
                                   const PixelRect rc)
 {
-  Brush brush(text_color);
-  canvas.select(brush);
-
-  Pen pen(1, text_color);
-  canvas.select(pen);
+  canvas.select(look.aircraft_brush);
+  canvas.null_pen();
 
   RasterPoint line[4];
   line[0].x = chart.screenX(fixed_zero);
@@ -356,12 +352,12 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
 void
 CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
 {
-  canvas.set_text_color(text_color);
+  canvas.set_text_color(look.text_color);
 
   chart.DrawXGrid(Units::ToSysDistance(fixed(5)), fixed_zero,
-                  grid_pen, fixed(5), true);
+                  look.grid_pen, fixed(5), true);
   chart.DrawYGrid(Units::ToSysAltitude(fixed(1000)), fixed_zero,
-                  grid_pen, fixed(1000), true);
+                  look.grid_pen, fixed(1000), true);
 
   chart.DrawXLabel(_T("D"));
   chart.DrawYLabel(_T("h"));
@@ -370,8 +366,8 @@ CrossSectionWindow::PaintGrid(Canvas &canvas, Chart &chart)
 void
 CrossSectionWindow::on_paint(Canvas &canvas)
 {
-  canvas.clear(background_color);
-  canvas.set_text_color(text_color);
+  canvas.clear(look.background_color);
+  canvas.set_text_color(look.text_color);
   canvas.select(Fonts::Map);
 
   const PixelRect rc = get_client_rect();

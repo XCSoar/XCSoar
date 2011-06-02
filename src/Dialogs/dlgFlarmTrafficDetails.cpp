@@ -207,22 +207,21 @@ OnTeamClicked(gcc_unused WndButton &Sender)
       _T("new teammate?"), _T("New Teammate"), MB_YESNO) != IDYES)
     return;
 
+  SETTINGS_TEAMCODE &settings = CommonInterface::SetSettingsComputer();
+
   // Set the Teammate callsign
   const TCHAR *callsign = FlarmDetails::LookupCallsign(target_id);
-  if (callsign == NULL || !string_is_empty(callsign)) {
-    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+  if (callsign == NULL || string_is_empty(callsign)) {
+    settings.TeamFlarmCNTarget.clear();
   } else {
     // copy the 3 first chars from the name
-    _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget,
-             callsign, 3);
-
-    XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[3] = 0;
+    settings.TeamFlarmCNTarget = callsign;
   }
 
   // Start tracking
-  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = target_id;
-  XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
-  XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
+  settings.TeamFlarmIdTarget = target_id;
+  settings.TeamFlarmTracking = true;
+  settings.TeammateCodeValid = false;
 
   // Close the dialog
   wf->SetModalResult(mrOK);

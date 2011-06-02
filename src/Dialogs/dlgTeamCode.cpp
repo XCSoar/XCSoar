@@ -31,7 +31,7 @@
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "StringUtil.hpp"
-#include "TeamCodeCalculation.h"
+#include "TeamCodeCalculation.hpp"
 #include "Compiler.h"
 #include "Profile/Profile.hpp"
 
@@ -83,8 +83,7 @@ Update()
 
   wp = (WndProperty*)wf->FindByName(_T("prpOwnCode"));
   if (wp) {
-    _tcsncpy(Text, XCSoarInterface::Calculated().OwnTeamCode.GetCode(), 5);
-    Text[5] = '\0';
+    CopyString(Text, XCSoarInterface::Calculated().OwnTeamCode.GetCode(), 6);
     wp->SetText(Text);
     wp->RefreshDisplay();
   }
@@ -98,7 +97,8 @@ Update()
   wp = (WndProperty*)wf->FindByName(_T("prpFlarmLock"));
   if (wp) {
     wp->SetText(XCSoarInterface::SettingsComputer().TeamFlarmTracking ?
-                XCSoarInterface::SettingsComputer().TeamFlarmCNTarget : _T(""));
+                XCSoarInterface::SettingsComputer().TeamFlarmCNTarget.c_str()
+                : _T(""));
     wp->RefreshDisplay();
   }
 }
@@ -119,8 +119,8 @@ OnCodeClicked(gcc_unused WndButton &button)
 {
   TCHAR newTeammateCode[10];
 
-  _tcsncpy(newTeammateCode,
-           XCSoarInterface::SettingsComputer().TeammateCode.GetCode(), 10);
+  CopyString(newTeammateCode,
+             XCSoarInterface::SettingsComputer().TeammateCode.GetCode(), 10);
 
   if (!dlgTextEntryShowModal(newTeammateCode, 7))
     return;
@@ -144,20 +144,19 @@ OnCodeClicked(gcc_unused WndButton &button)
 static void
 OnFlarmLockClicked(gcc_unused WndButton &button)
 {
-  TCHAR newTeamFlarmCNTarget[4];
-  _tcsncpy(newTeamFlarmCNTarget,
-           XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget, 4);
+  SETTINGS_TEAMCODE &settings = CommonInterface::SetSettingsComputer();
+  TCHAR newTeamFlarmCNTarget[settings.TeamFlarmCNTarget.MAX_SIZE];
+  _tcscpy(newTeamFlarmCNTarget, settings.TeamFlarmCNTarget.c_str());
 
   if (!dlgTextEntryShowModal(newTeamFlarmCNTarget, 4))
     return;
 
-  _tcsncpy(XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget,
-           newTeamFlarmCNTarget, 4);
-  XCSoarInterface::SetSettingsComputer().TeammateCodeValid = false;
+  settings.TeamFlarmCNTarget = newTeamFlarmCNTarget;
+  settings.TeammateCodeValid = false;
 
   if (string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget)) {
-    XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
-    XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget.clear();
+    settings.TeamFlarmTracking = false;
+    settings.TeamFlarmIdTarget.clear();
     return;
   }
 
@@ -170,8 +169,8 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
         XCSoarInterface::main_window, _("Set new teammate:"), ids, count);
 
     if (id != NULL && id->defined()) {
-      XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget = *id;
-      XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = true;
+      settings.TeamFlarmIdTarget = *id;
+      settings.TeamFlarmTracking = true;
       return;
     }
   } else {
@@ -179,9 +178,9 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
                 _("Not Found"), MB_OK | MB_ICONINFORMATION);
   }
 
-  XCSoarInterface::SetSettingsComputer().TeamFlarmTracking = false;
-  XCSoarInterface::SetSettingsComputer().TeamFlarmIdTarget.clear();
-  XCSoarInterface::SetSettingsComputer().TeamFlarmCNTarget[0] = 0;
+  settings.TeamFlarmTracking = false;
+  settings.TeamFlarmIdTarget.clear();
+  settings.TeamFlarmCNTarget.clear();
 }
 
 static void

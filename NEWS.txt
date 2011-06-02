@@ -11,10 +11,19 @@ Version 6.1.1 - not yet released
 * calculations
   - fix arrival heights which are below the safety height
   - reduce memory usage
+  - fixed several bugs in the teamcode calculation and display
+* user interface
+  - new option for large glider symbol
+  - re-enable the team bearing diff InfoBox
+  - fix crash in the waypoint editor
+* Windows
+  - workaround for PPC2000 bug that caused lockups
 * Android
   - fix crash bug after orientation change and resume
 * Altair
   - fix UI lag
+  - fix default task on startup
+  - optionally load XCSoarData from USB drive
 
 Version 6.1 - 2011/05/19
 * devices

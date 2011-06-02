@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Math/fixed.hpp"
 
+struct ThermalBandLook;
+struct ChartLook;
 class Chart;
 class Canvas;
 struct NMEA_INFO;
@@ -36,36 +38,42 @@ class OrderedTaskBehaviour;
 class TaskBehaviour;
 
 class ThermalBandRenderer {
-public:
-  static void DrawThermalBand(const NMEA_INFO& basic,
-                              const DERIVED_INFO& calculated,
-                              const SETTINGS_COMPUTER &settings_computer,
-                              Canvas &canvas, 
-                              const PixelRect &rc,
-                              const TaskBehaviour& task_props,
-                              const bool is_map,
-                              const OrderedTaskBehaviour* ordered_props=NULL);
+  const ThermalBandLook &look;
+  const ChartLook &chart_look;
 
-  static void DrawThermalBandSpark(const NMEA_INFO& basic,
-                                   const DERIVED_INFO& calculated,
-                                   const SETTINGS_COMPUTER &settings_computer,
-                                   Canvas &canvas, 
-                                   const PixelRect &rc,
-                                   const TaskBehaviour& task_props);
+public:
+  ThermalBandRenderer(const ThermalBandLook &_look,
+                      const ChartLook &_chart_look)
+    :look(_look), chart_look(_chart_look) {}
+
+  void DrawThermalBand(const NMEA_INFO& basic,
+                       const DERIVED_INFO& calculated,
+                       const SETTINGS_COMPUTER &settings_computer,
+                       Canvas &canvas,
+                       const PixelRect &rc,
+                       const TaskBehaviour& task_props,
+                       const bool is_map,
+                       const OrderedTaskBehaviour* ordered_props=NULL) const;
+
+  void DrawThermalBandSpark(const NMEA_INFO& basic,
+                            const DERIVED_INFO& calculated,
+                            const SETTINGS_COMPUTER &settings_computer,
+                            Canvas &canvas,
+                            const PixelRect &rc,
+                            const TaskBehaviour& task_props) const;
 
 protected:
-  static void _DrawThermalBand(const NMEA_INFO& basic,
-                               const DERIVED_INFO& calculated,
-                               const SETTINGS_COMPUTER &settings_computer,
-                               Chart &chart,
-                               const TaskBehaviour& task_props,
-                               const bool is_infobox,
-                               const OrderedTaskBehaviour* ordered_props);
+  void _DrawThermalBand(const NMEA_INFO& basic,
+                        const DERIVED_INFO& calculated,
+                        const SETTINGS_COMPUTER &settings_computer,
+                        Chart &chart,
+                        const TaskBehaviour& task_props,
+                        const bool is_infobox,
+                        const OrderedTaskBehaviour* ordered_props) const;
 
-  static void scale_chart(const DERIVED_INFO &calculated,
-                          const SETTINGS_COMPUTER &settings_computer,
-                          Chart &chart);
-
+  void scale_chart(const DERIVED_INFO &calculated,
+                   const SETTINGS_COMPUTER &settings_computer,
+                   Chart &chart) const;
 };
 
 #endif

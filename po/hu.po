@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-05-13 08:22+0200\n"
-"PO-Revision-Date: 2011-05-16 15:41+0000\n"
+"PO-Revision-Date: 2011-05-27 12:26+0000\n"
 "Last-Translator: Szombathelyi Zoltán <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-18 07:08+0000\n"
-"X-Generator: Launchpad (build 13067)\n"
+"X-Launchpad-Export-Date: 2011-05-31 18:48+0000\n"
+"X-Generator: Launchpad (build 13117)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:303
@@ -264,7 +264,7 @@ msgstr "Folytatás"
 #: src/ExpandMacros.cpp:317 src/ExpandMacros.cpp:321
 #: src/Dialogs/Message.cpp:168
 msgid "Abort"
-msgstr "megszakad"
+msgstr "Állj"
 
 #: src/ExpandMacros.cpp:416 src/Dialogs/dlgBasicSettings.cpp:55
 #: Data/Dialogs/dlgLoggerReplay.xml:12
@@ -349,7 +349,7 @@ msgstr "Mind"
 #: src/ExpandMacros.cpp:515 src/InputEventsActions.cpp:1423
 #, no-c-format
 msgid "Task & Landables"
-msgstr "feladat + leszállható"
+msgstr "feladat + leszállók"
 
 #: src/ExpandMacros.cpp:517 src/InputEventsActions.cpp:1425
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:94
@@ -371,7 +371,7 @@ msgstr "Magasság tenger feletti"
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:4
 #, no-c-format
 msgid "H GPS"
-msgstr "Mgsg GPS"
+msgstr "Mgsg TF"
 
 #: src/InfoBoxes/Content/Factory.cpp:63
 #, no-c-format
@@ -2302,7 +2302,7 @@ msgstr "Térkép (Teljes képernyő)"
 
 #: src/Pages.cpp:189
 msgid "Info "
-msgstr "Infók "
+msgstr "Kijelzők "
 
 #: src/Pages.cpp:192
 msgid "Map and InfoBoxes "
@@ -2310,7 +2310,7 @@ msgstr "Térkép és kijelzők "
 
 #: src/Pages.cpp:198
 msgid "Info Auto"
-msgstr "Kijelzők változnak"
+msgstr "Kijelzők automata"
 
 #: src/Pages.cpp:200
 msgid "Map and InfoBoxes (Auto)"
@@ -7994,7 +7994,7 @@ msgstr ""
 
 #: Data/Input/default.xci:584
 msgid "Trail"
-msgstr "Nyomvonal"
+msgstr "Nyom"
 
 #: Data/Input/default.xci:115
 msgid "Waiting for GPS connection"
@@ -8034,7 +8034,7 @@ msgstr "Jelzőt letettem"
 
 #: Data/Input/default.xci:720
 msgid "Raw Logger"
-msgstr "Nyers logger"
+msgstr "NMEA logger"
 
 #: Data/Input/default.xci:654
 msgid ""

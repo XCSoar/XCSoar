@@ -2,7 +2,7 @@
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
-  Copyright (C) 2000-2010 The XCSoar Project
+  Copyright (C) 2000-2011 The XCSoar Project
   A detailed list of copyright holders can be found in the file "AUTHORS".
 
   This program is free software; you can redistribute it and/or
@@ -21,20 +21,24 @@ Copyright_License {
 }
 */
 
-#include "Persist.hpp"
+#include "TraceHistoryLook.hpp"
+#include "Screen/Graphics.hpp"
 
 void
-LoadCalculationsPersist(DERIVED_INFO *Calculated,
-                        ProtectedTaskManager &protected_task_manager,
-                        GlideComputer &glide_computer)
-{}
+TraceHistoryLook::Initialise(bool inverse)
+{
+  axis_pen.set(1, COLOR_GRAY);
+  line_pen.set(2, inverse ? COLOR_WHITE : COLOR_BLACK);
+
+  lift_brush.set(inverse ? Graphics::inv_liftColor : Graphics::liftColor);
+  sink_brush.set(inverse ? Graphics::inv_sinkColor : Graphics::sinkColor);
+}
 
 void
-SaveCalculationsPersist(const NMEA_INFO &gps_info,
-                        const DERIVED_INFO &Calculated,
-                        const ProtectedTaskManager &protected_task_manager,
-                        const GlideComputer &glide_computer,
-                        Logger &logger)
-{}
-
-void DeleteCalculationsPersist() {}
+TraceHistoryLook::Deinitialise()
+{
+  axis_pen.reset();
+  line_pen.reset();
+  lift_brush.reset();
+  sink_brush.reset();
+}

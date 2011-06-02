@@ -37,7 +37,7 @@ Copyright_License {
 #include "NMEA/ThermalLocator.hpp"
 #include "NMEA/Validity.hpp"
 #include "NMEA/ClimbHistory.hpp"
-#include "TeamCodeCalculation.h"
+#include "TeamCodeCalculation.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Engine/Navigation/TraceHistory.hpp"
 #include "DateTime.hpp"

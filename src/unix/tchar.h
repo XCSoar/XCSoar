@@ -50,7 +50,6 @@ typedef wchar_t TCHAR;
 #define _tcsnicmp wcsncasecmp
 #define _tcslen wcslen
 #define _tcsclen wcslen
-#define _tcsncpy wcsncpy
 #define _tcsstr wcsstr
 #define _tcschr wcschr
 #define _tcsrchr wcsrchr
@@ -102,7 +101,6 @@ typedef char TCHAR;
 #define _tcsnicmp strncasecmp
 #define _tcslen strlen
 #define _tcsclen strlen
-#define _tcsncpy strncpy
 #define _tcsstr strstr
 #define _tcschr strchr
 #define _tcsrchr strrchr

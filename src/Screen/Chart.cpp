@@ -24,7 +24,6 @@ Copyright_License {
 #include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "Math/FastMath.h"
@@ -48,16 +47,12 @@ Chart::ResetScale()
   y_max = fixed_zero;
 }
 
-Chart::Chart(Canvas &the_canvas, const PixelRect the_rc) :
-  canvas(the_canvas), rc(the_rc), PaddingLeft(24), PaddingBottom(19)
+Chart::Chart(const ChartLook &_look,
+             Canvas &the_canvas, const PixelRect the_rc)
+  :look(_look), canvas(the_canvas), rc(the_rc),
+   PaddingLeft(24), PaddingBottom(19)
 {
   ResetScale();
-
-  pens[STYLE_BLUETHIN].set(Pen::DASH, is_altair() ? 1 : 2, Color(0, 50, 255));
-  pens[STYLE_REDTHICK].set(Pen::DASH, 3, Color(200, 50, 50));
-  pens[STYLE_DASHGREEN].set(Pen::DASH, 2, COLOR_GREEN);
-  pens[STYLE_MEDIUMBLACK].set(is_altair() ? 1 : 2, Color(50, 243, 45));
-  pens[STYLE_THINDASHPAPER].set(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
 }
 
 void
@@ -147,14 +142,13 @@ Chart::ScaleXFromValue(const fixed value)
 }
 
 void
-Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, enum Style Style)
+Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, ChartLook::Style Style)
 {
-  assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
-  StyleLine(l1, l2, pens[(unsigned)Style]);
+  StyleLine(l1, l2, look.GetPen(Style));
 }
 
 void
-Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, Pen &pen)
+Chart::StyleLine(const RasterPoint l1, const RasterPoint l2, const Pen &pen)
 {
   assert(pen.defined());
   canvas.select(pen);
@@ -214,7 +208,7 @@ Chart::DrawYLabel(const TCHAR *text)
 }
 
 void
-Chart::DrawTrend(const LeastSquares &lsdata, enum Style Style)
+Chart::DrawTrend(const LeastSquares &lsdata, ChartLook::Style Style)
 {
   if (lsdata.sum_n < 2)
     return;
@@ -243,7 +237,7 @@ Chart::DrawTrend(const LeastSquares &lsdata, enum Style Style)
 }
 
 void
-Chart::DrawTrendN(const LeastSquares &lsdata, enum Style Style)
+Chart::DrawTrendN(const LeastSquares &lsdata, ChartLook::Style Style)
 {
   if (lsdata.sum_n < 2)
     return;
@@ -273,7 +267,7 @@ Chart::DrawTrendN(const LeastSquares &lsdata, enum Style Style)
 
 void
 Chart::DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, Pen &pen)
+                const fixed xmax, const fixed ymax, const Pen &pen)
 {
   if (unscaled_x || unscaled_y)
     return;
@@ -289,7 +283,8 @@ Chart::DrawLine(const fixed xmin, const fixed ymin,
 
 void 
 Chart::DrawFilledLine(const fixed xmin, const fixed ymin,
-                      const fixed xmax, const fixed ymax, Color &color)
+                      const fixed xmax, const fixed ymax,
+                      const Brush &brush)
 {
   RasterPoint line[4];
 
@@ -302,7 +297,6 @@ Chart::DrawFilledLine(const fixed xmin, const fixed ymin,
   line[3].x = line[0].x;
   line[3].y = (int)((y_max) * yscale) + rc.top;
 
-  Brush brush(color);
   canvas.select(brush);
   canvas.null_pen();
   canvas.polygon(line, 4);
@@ -310,10 +304,9 @@ Chart::DrawFilledLine(const fixed xmin, const fixed ymin,
 
 void
 Chart::DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, enum Style Style)
+                const fixed xmax, const fixed ymax, ChartLook::Style Style)
 {
-  assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
-  DrawLine(xmin, ymin, xmax, ymax, pens[(unsigned)Style]);
+  DrawLine(xmin, ymin, xmax, ymax, look.GetPen(Style));
 }
 
 void
@@ -356,7 +349,7 @@ Chart::DrawFilledLineGraph(const LeastSquares &lsdata)
 }
 
 void
-Chart::DrawLineGraph(const LeastSquares &lsdata, Pen &pen)
+Chart::DrawLineGraph(const LeastSquares &lsdata, const Pen &pen)
 {
   RasterPoint line[2];
 
@@ -373,10 +366,9 @@ Chart::DrawLineGraph(const LeastSquares &lsdata, Pen &pen)
 }
 
 void
-Chart::DrawLineGraph(const LeastSquares &lsdata, enum Style Style)
+Chart::DrawLineGraph(const LeastSquares &lsdata, ChartLook::Style Style)
 {
-  assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
-  DrawLineGraph(lsdata, pens[(unsigned)Style]);
+  DrawLineGraph(lsdata, look.GetPen(Style));
 }
 
 void
@@ -390,15 +382,14 @@ Chart::FormatTicText(TCHAR *text, const fixed val, const fixed step)
 }
 
 void
-Chart::DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
+Chart::DrawXGrid(const fixed tic_step, const fixed zero, ChartLook::Style Style,
                  const fixed unit_step, bool draw_units)
 {
-  assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
-  DrawXGrid(tic_step, zero, pens[(unsigned)Style], unit_step, draw_units);
+  DrawXGrid(tic_step, zero, look.GetPen(Style), unit_step, draw_units);
 }
 
 void
-Chart::DrawXGrid(fixed tic_step, const fixed zero, Pen &pen,
+Chart::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
                  fixed unit_step, bool draw_units)
 {
   if (!positive(tic_step))
@@ -473,15 +464,14 @@ Chart::DrawXGrid(fixed tic_step, const fixed zero, Pen &pen,
 }
 
 void
-Chart::DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
+Chart::DrawYGrid(const fixed tic_step, const fixed zero, ChartLook::Style Style,
                  const fixed unit_step, bool draw_units)
 {
-  assert((unsigned)Style < sizeof(pens) / sizeof(pens[0]));
-  DrawYGrid(tic_step, zero, pens[(unsigned)Style], unit_step, draw_units);
+  DrawYGrid(tic_step, zero, look.GetPen(Style), unit_step, draw_units);
 }
 
 void
-Chart::DrawYGrid(fixed tic_step, const fixed zero, Pen &pen,
+Chart::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
                  fixed unit_step, bool draw_units)
 {
   if (!positive(tic_step))
@@ -608,7 +598,7 @@ Chart::screenS(fixed s) const
 
 void
 Chart::DrawArrow(const fixed x, const fixed y, const fixed mag,
-                 const Angle angle, enum Style Style)
+                 const Angle angle, ChartLook::Style Style)
 {
   RasterPoint wv[2];
 

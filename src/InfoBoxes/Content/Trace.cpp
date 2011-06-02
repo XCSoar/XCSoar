@@ -34,6 +34,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Graphics.hpp"
 #include "Protection.hpp"
 #include "MainWindow.hpp"
 #include "GlideComputer.hpp"
@@ -57,8 +58,9 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
   if (var.empty())
     return;
 
-  TraceHistoryRenderer::RenderVario(canvas, get_spark_rect(infobox), var, center,
-                                    CommonInterface::SettingsComputer().glide_polar_task.get_mc());
+  TraceHistoryRenderer renderer(Graphics::trace_history, Graphics::chart);
+  renderer.RenderVario(canvas, get_spark_rect(infobox), var, center,
+                       CommonInterface::SettingsComputer().glide_polar_task.get_mc());
 }
 
 void
@@ -158,12 +160,13 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  ThermalBandRenderer::DrawThermalBandSpark(CommonInterface::Basic(),
-                                            CommonInterface::Calculated(),
-                                            CommonInterface::SettingsComputer(),
-                                            canvas,
-                                            infobox.get_value_and_comment_rect(),
-                                            XCSoarInterface::SettingsComputer());
+  ThermalBandRenderer renderer(Graphics::thermal_band, Graphics::chart);
+  renderer.DrawThermalBandSpark(CommonInterface::Basic(),
+                                CommonInterface::Calculated(),
+                                CommonInterface::SettingsComputer(),
+                                canvas,
+                                infobox.get_value_and_comment_rect(),
+                                XCSoarInterface::SettingsComputer());
 }
 
 void

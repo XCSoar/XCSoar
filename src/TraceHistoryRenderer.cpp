@@ -25,15 +25,15 @@ Copyright_License {
 #include "Navigation/TraceHistory.hpp"
 #include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/TraceHistoryLook.hpp"
 #include "Appearance.hpp"
 #include <algorithm>
 
 void
 TraceHistoryRenderer::scale_chart(Chart &chart,
                                   const TraceVariableHistory& var,
-                                  const bool centered) 
+                                  const bool centered) const
 {
   chart.PaddingBottom = 0;
   chart.PaddingLeft = 0;
@@ -60,21 +60,18 @@ TraceHistoryRenderer::scale_chart(Chart &chart,
 
 void
 TraceHistoryRenderer::render_axis(Chart &chart,
-                                  const TraceVariableHistory& var)
+                                  const TraceVariableHistory& var) const
 {
-  Pen pen0(1, COLOR_GRAY);
   chart.DrawLine(fixed_zero, fixed_zero, 
                  fixed(var.capacity()-1), fixed_zero, 
-                 pen0);
+                 look.axis_pen);
 }
 
 
 void 
 TraceHistoryRenderer::render_line(Chart &chart,
-                                  const TraceVariableHistory& var)
+                                  const TraceVariableHistory& var) const
 {
-  Pen pen(2, Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK);
-
   fixed x_last, y_last;
   unsigned i=0;
   for (TraceVariableHistory::const_iterator it = var.begin();
@@ -82,7 +79,7 @@ TraceHistoryRenderer::render_line(Chart &chart,
     fixed x= fixed(i);
     fixed y= *it;
     if (i)
-      chart.DrawLine(x_last, y_last, x, y, pen);
+      chart.DrawLine(x_last, y_last, x, y, look.line_pen);
     x_last = x;
     y_last = y;
   }
@@ -98,11 +95,8 @@ static int sgn(const fixed x) {
 
 void 
 TraceHistoryRenderer::render_filled_posneg(Chart &chart,
-                                           const TraceVariableHistory& var)
+                                           const TraceVariableHistory& var) const
 {
-  Color c_pos(Appearance.InverseInfoBox? Graphics::inv_liftColor: Graphics::liftColor);
-  Color c_neg(Appearance.InverseInfoBox? Graphics::inv_sinkColor: Graphics::sinkColor);
-
   fixed x_last(fixed_zero), y_last(fixed_zero);
   unsigned i=0;
   for (TraceVariableHistory::const_iterator it = var.begin();
@@ -112,18 +106,20 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
     if (i) {
       if (sgn(y)*sgn(y_last)<0) {
         if (positive(y_last))
-          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero, c_pos);
+          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero,
+                               look.lift_brush);
         else if (negative(y_last))
-          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero, c_neg);
+          chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero,
+                               look.sink_brush);
         
         x_last = x-fixed_half;
         y_last = fixed_zero;
 
       }
       if (positive(y) || positive(y_last))
-        chart.DrawFilledLine(x_last, y_last, x, y, c_pos);
+        chart.DrawFilledLine(x_last, y_last, x, y, look.lift_brush);
       else if (negative(y) || negative(y_last))
-        chart.DrawFilledLine(x_last, y_last, x, y, c_neg);
+        chart.DrawFilledLine(x_last, y_last, x, y, look.sink_brush);
     }
     x_last = x;
     y_last = y;
@@ -140,9 +136,9 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
                                   const PixelRect rc,
                                   const TraceVariableHistory& var,
                                   const bool centered,
-                                  const fixed mc)
+                                  const fixed mc) const
 {
-  Chart chart(canvas, rc);
+  Chart chart(chart_look, canvas, rc);
   scale_chart(chart, var, centered);
   chart.ScaleYFromValue(mc);
   // render_line(chart, var);
@@ -151,7 +147,7 @@ TraceHistoryRenderer::RenderVario(Canvas& canvas,
     canvas.background_transparent();
     chart.DrawLine(fixed_zero, mc, 
                    fixed(var.capacity()-1), mc, 
-                   Chart::STYLE_DASHGREEN);
+                   ChartLook::STYLE_DASHGREEN);
   }
 
   render_filled_posneg(chart, var);

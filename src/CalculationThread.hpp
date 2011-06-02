@@ -55,8 +55,8 @@ public:
   void SetSettingsComputer(const SETTINGS_COMPUTER &new_value);
   void SetScreenDistanceMeters(fixed new_value);
 
-  bool Start() {
-    if (!WorkerThread::Start())
+  bool Start(bool suspended=false) {
+    if (!WorkerThread::Start(suspended))
       return false;
 
     SetLowPriority();

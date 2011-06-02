@@ -30,6 +30,8 @@
 #ifndef XCSOAR_STATIC_STRING_HPP
 #define XCSOAR_STATIC_STRING_HPP
 
+#include "Util/StringUtil.hpp"
+
 #include <assert.h>
 #include <string.h>
 #include <tchar.h>
@@ -44,6 +46,8 @@ public:
   static const unsigned MAX_SIZE = max;
   static const TCHAR SENTINEL = _T('\0');
 
+  typedef unsigned size_type;
+
 protected:
   TCHAR data[max];
 
@@ -53,7 +57,7 @@ public:
     set(value);
   }
 
-  unsigned length() const {
+  size_type length() const {
     return _tcslen(data);
   }
 
@@ -67,6 +71,18 @@ public:
 
   void clear() {
     data[0] = SENTINEL;
+  }
+
+  /**
+   * Truncate the string to the specified length.
+   *
+   * @param new_length the new length; must be equal or smaller than
+   * the current length
+   */
+  void Truncate(size_type new_length) {
+    assert(new_length <= length());
+
+    data[new_length] = SENTINEL;
   }
 
   bool equals(const TCHAR *other) const {
@@ -85,7 +101,7 @@ public:
   /**
    * Returns one character.  No bounds checking.
    */
-  TCHAR operator[](unsigned i) const {
+  TCHAR operator[](size_type i) const {
     assert(i <= length());
 
     return data[i];
@@ -112,8 +128,7 @@ public:
   void set(const TCHAR *new_value) {
     assert(new_value != NULL);
 
-    _tcsncpy(data, new_value, MAX_SIZE - 1);
-    data[MAX_SIZE - 1] = SENTINEL;
+    CopyString(data, new_value, MAX_SIZE);
   }
 
   const TCHAR *c_str() const {

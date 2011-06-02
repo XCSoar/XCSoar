@@ -264,6 +264,7 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar,
   theTabBar(_theTabBar),
   dragging(false),
   downindex(-1),
+  dragoffbutton(false),
   flipOrientation(_flipOrientation)
 {
   WindowStyle mystyle;

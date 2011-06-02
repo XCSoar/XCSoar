@@ -33,7 +33,7 @@
 #include <assert.h>
 #include <stdio.h>
 
-const Color FlarmTrafficWindow::hcPassive(Graphics::cAlertSafe);
+const Color FlarmTrafficWindow::hcPassive(Color(0x99, 0x99, 0x99));
 const Color FlarmTrafficWindow::hcWarning(Graphics::cAlertWarning);
 const Color FlarmTrafficWindow::hcAlarm(Graphics::cAlertAlarm);
 const Color FlarmTrafficWindow::hcStandard(COLOR_BLACK);
@@ -72,15 +72,13 @@ FlarmTrafficWindow::on_create()
   hbWarning.set(hcWarning);
   hbAlarm.set(hcAlarm);
   hbSelection.set(hcSelection);
-  hbTeam.set(hcTeam);
   hbRadar.set(hcRadar);
-  hbPassive.set(hcPassive);
 
   int width = Layout::FastScale(small ? 1 : 2);
   hpWarning.set(width, hcWarning);
   hpAlarm.set(width, hcAlarm);
   hpStandard.set(width, hcStandard);
-  hpPassive.set(width, COLOR_BLACK);
+  hpPassive.set(width, hcPassive);
   hpSelection.set(width, hcSelection);
   hpTeam.set(width, hcTeam);
 

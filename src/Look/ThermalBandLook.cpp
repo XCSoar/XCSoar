@@ -21,38 +21,26 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_DEBUG_HPP
-#define XCSOAR_SCREEN_DEBUG_HPP
+#include "ThermalBandLook.hpp"
+#include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 
-#ifdef NDEBUG
-
-static inline void
-ScreenInitialized() {}
-
-static inline void
-ScreenDeinitialized() {}
-
-#else
-
-/**
- * Call this when the screen library has been initialized.
- */
 void
-ScreenInitialized();
+ThermalBandLook::Initialise()
+{
+  brush.set(Graphics::skyColor);
+  pen.set(Layout::Scale(1), dark_color(Graphics::skyColor));
 
-/**
- * Call this when the screen library has been deinitialized.
- */
+  white_pen.set(2, COLOR_WHITE);
+  black_pen.set(2, COLOR_BLACK);
+}
+
 void
-ScreenDeinitialized();
+ThermalBandLook::Deinitialise()
+{
+  pen.reset();
+  brush.reset();
 
-/**
- * Determine if the screen library has been initialized and is
- * available.
- */
-bool
-IsScreenInitialized();
-
-#endif
-
-#endif
+  white_pen.reset();
+  black_pen.reset();
+}

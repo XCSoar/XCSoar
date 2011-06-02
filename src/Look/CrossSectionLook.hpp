@@ -19,31 +19,31 @@ Copyright_License {
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
-
 */
 
-#ifndef XCSOAR_PERSIST_HPP
-#define XCSOAR_PERSIST_HPP
+#ifndef CROSS_SECTION_LOOK_HPP
+#define CROSS_SECTION_LOOK_HPP
 
-struct NMEA_INFO;
-struct DERIVED_INFO;
-class ProtectedTaskManager;
-class GlideComputer;
-class Logger;
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
 
-void
-LoadCalculationsPersist(DERIVED_INFO *Calculated,
-                        ProtectedTaskManager &protected_task_manager,
-                        GlideComputer &glide_computer);
+struct CrossSectionLook {
+  /** Background color */
+  Color background_color;
 
-void
-SaveCalculationsPersist(const NMEA_INFO &gps_info,
-                        const DERIVED_INFO &Calculated,
-                        const ProtectedTaskManager &protected_task_manager,
-                        const GlideComputer &glide_computer,
-                        Logger &logger);
+  /** Text color */
+  Color text_color;
 
-void DeleteCalculationsPersist(void);
+  /** Brush used to draw the terrain polygon */
+  Brush terrain_brush;
 
+  /** Pen used to draw the grid */
+  Pen grid_pen;
+
+  Brush aircraft_brush;
+
+  void Initialise();
+  void Deinitialise();
+};
 
 #endif

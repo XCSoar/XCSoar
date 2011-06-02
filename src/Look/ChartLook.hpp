@@ -21,38 +21,33 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_DEBUG_HPP
-#define XCSOAR_SCREEN_DEBUG_HPP
+#ifndef CHART_LOOK_HPP
+#define CHART_LOOK_HPP
 
-#ifdef NDEBUG
+#include "Screen/Pen.hpp"
 
-static inline void
-ScreenInitialized() {}
+#include <assert.h>
 
-static inline void
-ScreenDeinitialized() {}
+struct ChartLook {
+  enum Style {
+    STYLE_BLUETHIN,
+    STYLE_REDTHICK,
+    STYLE_DASHGREEN,
+    STYLE_MEDIUMBLACK,
+    STYLE_THINDASHPAPER,
+    STYLE_COUNT
+  };
 
-#else
+  Pen pens[STYLE_COUNT];
 
-/**
- * Call this when the screen library has been initialized.
- */
-void
-ScreenInitialized();
+  void Initialise();
+  void Deinitialise();
 
-/**
- * Call this when the screen library has been deinitialized.
- */
-void
-ScreenDeinitialized();
-
-/**
- * Determine if the screen library has been initialized and is
- * available.
- */
-bool
-IsScreenInitialized();
-
-#endif
+  const Pen &GetPen(Style style) const {
+    unsigned i = (unsigned)style;
+    assert(i < STYLE_COUNT);
+    return pens[i];
+  }
+};
 
 #endif

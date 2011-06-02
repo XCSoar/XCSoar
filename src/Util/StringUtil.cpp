@@ -28,6 +28,7 @@ Copyright_License {
 #include <assert.h>
 #include <string.h>
 #include <ctype.h>
+#include <algorithm>
 
 const TCHAR *
 string_after_prefix(const TCHAR *string, const TCHAR *prefix)
@@ -52,6 +53,18 @@ string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix)
   return _tcsnicmp(string, prefix, prefix_length) == 0
     ? string + prefix_length
     : NULL;
+}
+
+TCHAR *
+CopyString(TCHAR *dest, const TCHAR *src, size_t size)
+{
+  size_t length = _tcslen(src);
+  if (length >= size)
+    length = size - 1;
+
+  TCHAR *p = std::copy(src, src + length, dest);
+  *p = _T('\0');
+  return p;
 }
 
 const TCHAR *

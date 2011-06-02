@@ -31,6 +31,7 @@
 #define XCSOAR_RADIX_TREE_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/StaticString.hpp"
 #include "StringUtil.hpp"
 #include "tstring.hpp"
 
@@ -78,7 +79,7 @@ class RadixTree {
    * the same character, the node has to be splitted.
    */
   struct Node : private NonCopyable {
-    tstring label;
+    StaticString<8> label;
     Node *next_sibling, *children;
     Leaf *leaves;
 
@@ -90,6 +91,26 @@ class RadixTree {
       delete next_sibling;
       delete children;
       delete leaves;
+    }
+
+    /**
+     * Create a new Node with the specified label (suffix) and value.
+     * If the label is too long for the StaticString, multiple chained
+     * Node objects are created.
+     */
+    Node *CreateLeaf(const TCHAR *label, const T &value) const {
+      Node *top = new Node(label), *bottom = top;
+      while (_tcslen(label) >= Node::label.MAX_SIZE) {
+        /* label too long for the Node's StaticString, create another
+           child Node */
+        label += Node::label.MAX_SIZE - 1;
+        Node *node = new Node(label);
+        bottom->children = node;
+        bottom = node;
+      }
+
+      bottom->add_value(value);
+      return top;
     }
 
     void clear() {
@@ -173,7 +194,7 @@ class RadixTree {
 
         for (const Node *node = children; node != NULL && dest < end;
              node = node->next_sibling)
-          *dest++ = node->label[0];
+          *dest++ = node->label[0u];
 
         *dest = _T('\0');
         return retval;
@@ -189,7 +210,7 @@ class RadixTree {
         return m.first->suggest(m.second, dest, max_length);
 
       /* return one character */
-      dest[0] = m.first->label[m.second - prefix];
+      dest[0u] = m.first->label[(unsigned)(m.second - prefix)];
       dest[1] = _T('\0');
       return dest;
     }
@@ -210,7 +231,7 @@ class RadixTree {
       node->leaves = leaves;
       leaves = NULL;
 
-      label.erase(length);
+      label.Truncate(length);
     }
 
     /**
@@ -495,9 +516,9 @@ class RadixTree {
       Node *node = children, *prev = NULL;
       while (node != NULL) {
         const TCHAR *label = node->label.c_str();
-        if (key[0] < label[0])
+        if (key[0u] < label[0u])
           return match_pair(prev, key);
-        else if (key[0] == label[0])
+        else if (key[0u] == label[0u])
           return match_pair(node, node->match(key));
 
         prev = node;
@@ -523,8 +544,7 @@ class RadixTree {
       match_pair m = find_child(key);
       if (m.second == key) {
         /* no match - create new node */
-        Node *node = new Node(key);
-        node->add_value(value);
+        Node *node = CreateLeaf(key, value);
 
         if (m.first == NULL) {
           /* insert before list head */
@@ -545,10 +565,9 @@ class RadixTree {
           /* add to splitted parent node */
           m.first->add_value(value);
         } else {
-          Node *node = new Node(m.second);
-          node->add_value(value);
+          Node *node = CreateLeaf(m.second, value);
 
-          if (m.second[0] < m.first->children->label[0]) {
+          if (m.second[0u] < m.first->children->label[0u]) {
             /* insert before list head */
             node->next_sibling = m.first->children;
             m.first->children = node;

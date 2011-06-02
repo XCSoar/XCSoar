@@ -21,38 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_DEBUG_HPP
-#define XCSOAR_SCREEN_DEBUG_HPP
+#include "ChartLook.hpp"
+#include "Asset.hpp"
 
-#ifdef NDEBUG
-
-static inline void
-ScreenInitialized() {}
-
-static inline void
-ScreenDeinitialized() {}
-
-#else
-
-/**
- * Call this when the screen library has been initialized.
- */
 void
-ScreenInitialized();
+ChartLook::Initialise()
+{
+  pens[STYLE_BLUETHIN].set(Pen::DASH, is_altair() ? 1 : 2, Color(0, 50, 255));
+  pens[STYLE_REDTHICK].set(Pen::DASH, 3, Color(200, 50, 50));
+  pens[STYLE_DASHGREEN].set(Pen::DASH, 2, COLOR_GREEN);
+  pens[STYLE_MEDIUMBLACK].set(is_altair() ? 1 : 2, Color(50, 243, 45));
+  pens[STYLE_THINDASHPAPER].set(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
+}
 
-/**
- * Call this when the screen library has been deinitialized.
- */
 void
-ScreenDeinitialized();
-
-/**
- * Determine if the screen library has been initialized and is
- * available.
- */
-bool
-IsScreenInitialized();
-
-#endif
-
-#endif
+ChartLook::Deinitialise()
+{
+  for (unsigned i = 0; i < STYLE_COUNT; ++i)
+    pens[i].reset();
+}

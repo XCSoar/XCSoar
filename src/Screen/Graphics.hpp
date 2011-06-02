@@ -28,6 +28,10 @@ Copyright_License {
 #include "Airspace/AirspaceClass.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Features.hpp"
+#include "Look/ChartLook.hpp"
+#include "Look/ThermalBandLook.hpp"
+#include "Look/TraceHistoryLook.hpp"
+#include "Look/CrossSectionLook.hpp"
 
 class Bitmap;
 class MaskedIcon;
@@ -122,10 +126,8 @@ namespace Graphics {
   extern Pen hpTrackBearingLine;
   extern Pen TracePen;
   extern Pen ContestPen[3];
-  extern Pen hpThermalBand;
 
   extern Brush hbCompass;
-  extern Brush hbThermalBand;
   extern Brush hbBestCruiseTrack;
   extern Brush hbFinalGlideBelow;
   extern Brush hbFinalGlideBelowLandable;
@@ -199,6 +201,11 @@ namespace Graphics {
   extern const Color liftColor;
   extern const Color skyColor;
   extern const Color seaColor;
+
+  extern ChartLook chart;
+  extern ThermalBandLook thermal_band;
+  extern TraceHistoryLook trace_history;
+  extern CrossSectionLook cross_section;
 };
 
 #endif

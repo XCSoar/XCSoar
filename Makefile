@@ -388,7 +388,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Marks.cpp \
 	\
-	$(SRC)/Persist.cpp \
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/FlightStatisticsRenderer.cpp \
 	\
@@ -458,6 +457,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/ResourceLoader.cpp \
+	\
+	$(SRC)/Look/ChartLook.cpp \
+	$(SRC)/Look/ThermalBandLook.cpp \
+	$(SRC)/Look/TraceHistoryLook.cpp \
+	$(SRC)/Look/CrossSectionLook.cpp \
 	\
 	$(SRC)/Polar/PolarGlue.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \
@@ -610,7 +614,7 @@ endif
 $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(TARGET_BIN_DIR)/$(PROGRAM_NAME)$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT): $(XCSOAR_OBJS) $(XCSOAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
-	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(XCSOAR_LDFLAGS) -o $@
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(XCSOAR_LDFLAGS) -o $@
 
 $(TARGET_OUTPUT_DIR)/$(SRC)/Version.o: $(topdir)/VERSION.txt
 

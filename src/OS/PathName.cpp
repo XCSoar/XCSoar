@@ -25,6 +25,7 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 
 #include <string.h>
+#include <algorithm>
 
 static const TCHAR *
 LastSeparator(const TCHAR *path)
@@ -58,8 +59,7 @@ DirName(const TCHAR *path, TCHAR *buffer)
   if (p == NULL || p == path)
     return _T(".");
 
-  size_t length = p - path;
-  _tcsncpy(buffer, path, length);
-  buffer[length] = _T('\0');
+  TCHAR *end = std::copy(path, p, buffer);
+  *end = _T('\0');
   return buffer;
 }

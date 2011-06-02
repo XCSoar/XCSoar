@@ -75,6 +75,10 @@ static GestureManager gestures;
 
 class CrossSectionControl: public CrossSectionWindow
 {
+public:
+  CrossSectionControl(const CrossSectionLook &look)
+    :CrossSectionWindow(look) {}
+
 protected:
   virtual bool on_mouse_move(int x, int y, unsigned keys);
   virtual bool on_mouse_down(int x, int y);
@@ -153,13 +157,15 @@ ChartControl::on_paint(Canvas &canvas)
     if (protected_task_manager != NULL) {
       otb = protected_task_manager->get_ordered_task_behaviour();
     }
-    ThermalBandRenderer::DrawThermalBand(XCSoarInterface::Basic(),
-                                         XCSoarInterface::Calculated(),
-                                         CommonInterface::SettingsComputer(),
-                                         canvas, rcgfx, 
-                                         XCSoarInterface::SettingsComputer(),
-                                         false,
-                                         &otb);
+
+    ThermalBandRenderer renderer(Graphics::thermal_band, Graphics::chart);
+    renderer.DrawThermalBand(XCSoarInterface::Basic(),
+                             XCSoarInterface::Calculated(),
+                             CommonInterface::SettingsComputer(),
+                             canvas, rcgfx,
+                             XCSoarInterface::SettingsComputer(),
+                             false,
+                             &otb);
   }
     break;
   case ANALYSIS_PAGE_WIND:
@@ -502,12 +508,10 @@ OnCreateCrossSectionControl(ContainerWindow &parent, int left, int top,
                             unsigned width, unsigned height,
                             const WindowStyle style)
 {
-  csw = new CrossSectionControl();
+  csw = new CrossSectionControl(Graphics::cross_section);
   csw->set(parent, left, top, width, height, style);
   csw->set_airspaces(&airspace_database);
   csw->set_terrain(terrain);
-  csw->set_background_color(COLOR_WHITE);
-  csw->set_text_color(COLOR_BLACK);
   UpdateCrossSection();
   return csw;
 }

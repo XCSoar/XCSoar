@@ -50,17 +50,3 @@ IsScreenInitialized()
 }
 
 #endif
-
-#ifndef XCSOAR_SCREEN_DEBUG_HPP
-#define XCSOAR_SCREEN_DEBUG_HPP
-
-#ifdef NDEBUG
-
-static inline void ScreenInitialized() {}
-static inline void ScreenDeinitialized() {}
-
-#else
-
-#endif
-
-#endif

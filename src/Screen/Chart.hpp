@@ -26,9 +26,8 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
-#include "Screen/Color.hpp"
-#include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
+#include "Look/ChartLook.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -37,44 +36,38 @@ Copyright_License {
 class LeastSquares;
 class Canvas;
 class Brush;
+class Pen;
 
 class Chart
 {
 private:
+  const ChartLook &look;
+
   Canvas &canvas;
   PixelRect rc;
-
-  Pen pens[5];
 
 public:
   int PaddingLeft;
   int PaddingBottom;
 
 public:
-  Chart(Canvas &the_canvas, const PixelRect the_rc);
-
-  enum Style {
-    STYLE_BLUETHIN,
-    STYLE_REDTHICK,
-    STYLE_DASHGREEN,
-    STYLE_MEDIUMBLACK,
-    STYLE_THINDASHPAPER
-  };
+  Chart(const ChartLook &look, Canvas &the_canvas, const PixelRect the_rc);
 
   void Reset();
 
   void DrawBarChart(const LeastSquares &lsdata);
   void DrawFilledLineGraph(const LeastSquares &lsdata);
-  void DrawLineGraph(const LeastSquares &lsdata, Pen &pen);
-  void DrawLineGraph(const LeastSquares &lsdata, enum Style Style);
-  void DrawTrend(const LeastSquares &lsdata, enum Style Style);
-  void DrawTrendN(const LeastSquares &lsdata, enum Style Style);
+  void DrawLineGraph(const LeastSquares &lsdata, const Pen &pen);
+  void DrawLineGraph(const LeastSquares &lsdata, ChartLook::Style Style);
+  void DrawTrend(const LeastSquares &lsdata, ChartLook::Style Style);
+  void DrawTrendN(const LeastSquares &lsdata, ChartLook::Style Style);
   void DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, Pen &pen);
+                const fixed xmax, const fixed ymax, const Pen &pen);
   void DrawLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, enum Style Style);
+                const fixed xmax, const fixed ymax, ChartLook::Style Style);
   void DrawFilledLine(const fixed xmin, const fixed ymin,
-                const fixed xmax, const fixed ymax, Color &colour);
+                      const fixed xmax, const fixed ymax,
+                      const Brush &brush);
   void DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals, const Brush &brush,
                    const Pen* pen= NULL);
   void DrawDot(const fixed x, const fixed y, const int width);
@@ -85,26 +78,28 @@ public:
   void ScaleXFromValue(const fixed val);
   void ScaleMakeSquare();
 
-  void StyleLine(const RasterPoint l1, const RasterPoint l2, Pen &pen);
-  void StyleLine(const RasterPoint l1, const RasterPoint l2, enum Style Style);
+  void StyleLine(const RasterPoint l1, const RasterPoint l2, const Pen &pen);
+  void StyleLine(const RasterPoint l1, const RasterPoint l2, ChartLook::Style Style);
 
   void ResetScale();
 
   static void FormatTicText(TCHAR *text, const fixed val, const fixed step);
-  void DrawXGrid(fixed tic_step, const fixed zero, Pen &pen,
+  void DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
                  fixed unit_step, bool draw_units = false);
-  void DrawXGrid(const fixed tic_step, const fixed zero, enum Style Style,
+  void DrawXGrid(const fixed tic_step, const fixed zero,
+                 ChartLook::Style Style,
                  const fixed unit_step, bool draw_units = false);
-  void DrawYGrid(fixed tic_step, const fixed zero, Pen &pen,
+  void DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
                  fixed unit_step, bool draw_units = false);
-  void DrawYGrid(const fixed tic_step, const fixed zero, enum Style Style,
+  void DrawYGrid(const fixed tic_step, const fixed zero,
+                 ChartLook::Style Style,
                  const fixed unit_step, bool draw_units = false);
 
   void DrawXLabel(const TCHAR *text);
   void DrawYLabel(const TCHAR *text);
   void DrawLabel(const TCHAR *text, const fixed xv, const fixed yv);
   void DrawArrow(const fixed x, const fixed y, const fixed mag,
-                 const Angle angle, enum Style Style);
+                 const Angle angle, ChartLook::Style Style);
   void DrawNoData();
 
   fixed getYmin() const { return y_min; }

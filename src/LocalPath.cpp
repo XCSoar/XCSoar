@@ -274,9 +274,16 @@ GetHomeDataPath(TCHAR *buffer, bool create=false)
 static TCHAR *
 FindDataPath()
 {
-  if (is_altair() && is_embedded())
+  if (is_altair() && is_embedded()) {
+    /* if XCSoarData exists on USB drive, use that, because the
+       internal memory is extremely small */
+    const TCHAR *usb = _T("\\USB HD\\" XCSDATADIR);
+    if (Directory::Exists(usb))
+      return _tcsdup(usb);
+
     /* hard-coded path for Altair */
     return _tcsdup(_T("\\NOR Flash"));
+  }
 
   if (is_android()) {
     /* XXX use Environment.getExternalStorageDirectory() */

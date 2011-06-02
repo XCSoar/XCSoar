@@ -46,10 +46,7 @@ LogStartUp(const TCHAR *Str, ...)
   static TCHAR szFileName[MAX_PATH];
 
   if (!initialised) {
-    if (is_altair())
-      LocalPath(szFileName, _T("persist/xcsoar-startup.log"));
-    else
-      LocalPath(szFileName, _T("xcsoar-startup.log"));
+    LocalPath(szFileName, _T("xcsoar-startup.log"));
   }
 
   TCHAR buf[MAX_PATH];

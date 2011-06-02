@@ -54,7 +54,7 @@ public:
   SuspensibleThread();
 #endif
 
-  bool Start();
+  bool Start(bool suspended=false);
 
   /**
    * Triggers thread shutdown.  Call join() after this to wait

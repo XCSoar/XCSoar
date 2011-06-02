@@ -72,7 +72,7 @@ WayPointGlue::GetPath(int file_number, TCHAR *value)
 bool
 WayPointGlue::IsWritable(int file_number)
 {
-  TCHAR file[255];
+  TCHAR file[MAX_PATH];
   if (!GetPath(file_number, file))
     return false;
 
