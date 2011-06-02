@@ -39,6 +39,7 @@
 #include "MainWindow.hpp"
 #include "Profile/Profile.hpp"
 #include "Compiler.h"
+#include "FLARM/Friends.hpp"
 #include "Gauge/FlarmTrafficLook.hpp"
 #include "Gauge/FlarmTrafficWindow.hpp"
 #include "Language/Language.hpp"
@@ -336,19 +337,58 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
               _("Rel. Alt."));
 
   // ID / Name
+  unsigned font_size;
   if (traffic.HasName()) {
     canvas.select(look.hfCallSign);
-    if (!traffic.HasAlarm()) {
-      if (settings.TeamFlarmTracking &&
-          traffic.id == settings.TeamFlarmIdTarget)
-        canvas.set_text_color(look.hcTeam);
-      else
-        canvas.set_text_color(look.hcSelection);
-    }
+    font_size = look.hfCallSign.get_height();
+
+    if (!traffic.HasAlarm())
+      canvas.set_text_color(look.hcSelection);
+
     _tcscpy(tmp, traffic.name);
   } else {
+    font_size = look.hfInfoLabels.get_height();
     traffic.id.format(tmp);
   }
+
+  if (!WarningMode()) {
+    // Team color dot
+    FlarmFriends::Color team_color = FlarmFriends::GetFriendColor(traffic.id);
+
+    // If no color found but target is teammate
+    if (team_color == FlarmFriends::NONE &&
+        settings.TeamFlarmTracking &&
+        traffic.id == settings.TeamFlarmIdTarget)
+      // .. use yellow color
+      team_color = FlarmFriends::YELLOW;
+
+    // If team color found -> draw a colored circle around the target
+    if (team_color != FlarmFriends::NONE) {
+      switch (team_color) {
+      case FlarmFriends::GREEN:
+        canvas.select(look.hbTeamGreen);
+        break;
+      case FlarmFriends::BLUE:
+        canvas.select(look.hbTeamBlue);
+        break;
+      case FlarmFriends::YELLOW:
+        canvas.select(look.hbTeamYellow);
+        break;
+      case FlarmFriends::MAGENTA:
+        canvas.select(look.hbTeamMagenta);
+        break;
+      default:
+        break;
+      }
+
+      canvas.null_pen();
+      canvas.circle(rc.left + Layout::FastScale(7), rc.top + (font_size / 2),
+                    Layout::FastScale(7));
+
+      rc.left += Layout::FastScale(16);
+    }
+  }
+
   canvas.text(rc.left, rc.top, tmp);
 }
 

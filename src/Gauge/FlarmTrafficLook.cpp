@@ -34,7 +34,6 @@ FlarmTrafficLook::Initialise(bool small)
   hcAlarm = Graphics::cAlertAlarm;
   hcStandard = COLOR_BLACK;
   hcSelection = COLOR_BLUE;
-  hcTeam = COLOR_YELLOW;
   hcBackground = COLOR_WHITE;
   hcRadar = COLOR_LIGHT_GRAY;
 
@@ -42,6 +41,10 @@ FlarmTrafficLook::Initialise(bool small)
   hbAlarm.set(hcAlarm);
   hbSelection.set(hcSelection);
   hbRadar.set(hcRadar);
+  hbTeamGreen.set(COLOR_GREEN);
+  hbTeamBlue.set(COLOR_BLUE);
+  hbTeamYellow.set(COLOR_YELLOW);
+  hbTeamMagenta.set(COLOR_MAGENTA);
 
   int width = Layout::FastScale(small ? 1 : 2);
   hpWarning.set(width, hcWarning);
@@ -49,7 +52,10 @@ FlarmTrafficLook::Initialise(bool small)
   hpStandard.set(width, hcStandard);
   hpPassive.set(width, hcPassive);
   hpSelection.set(width, hcSelection);
-  hpTeam.set(width, hcTeam);
+  hpTeamGreen.set(width, COLOR_GREEN);
+  hpTeamBlue.set(width, COLOR_BLUE);
+  hpTeamYellow.set(width, COLOR_YELLOW);
+  hpTeamMagenta.set(width, COLOR_MAGENTA);
 
   hpPlane.set(width, hcRadar);
   hpRadar.set(1, hcRadar);
@@ -70,16 +76,21 @@ FlarmTrafficLook::Deinitialise()
   hbWarning.reset();
   hbAlarm.reset();
   hbSelection.reset();
-  hbTeam.reset();
   hbRadar.reset();
-  hbPassive.reset();
+  hbTeamGreen.reset();
+  hbTeamBlue.reset();
+  hbTeamYellow.reset();
+  hbTeamMagenta.reset();
 
   hpWarning.reset();
   hpAlarm.reset();
   hpStandard.reset();
   hpPassive.reset();
   hpSelection.reset();
-  hpTeam.reset();
+  hpTeamGreen.reset();
+  hpTeamBlue.reset();
+  hpTeamYellow.reset();
+  hpTeamMagenta.reset();
 
   hpPlane.reset();
   hpRadar.reset();

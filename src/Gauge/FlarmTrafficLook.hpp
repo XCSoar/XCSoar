@@ -35,7 +35,6 @@ struct FlarmTrafficLook {
   Color hcStandard;
   Color hcPassive;
   Color hcSelection;
-  Color hcTeam;
   Color hcBackground;
   Color hcRadar;
 
@@ -43,13 +42,20 @@ struct FlarmTrafficLook {
   Brush hbAlarm;
   Brush hbSelection;
   Brush hbRadar;
+  Brush hbTeamGreen;
+  Brush hbTeamBlue;
+  Brush hbTeamYellow;
+  Brush hbTeamMagenta;
 
   Pen hpWarning;
   Pen hpAlarm;
   Pen hpStandard;
   Pen hpPassive;
   Pen hpSelection;
-  Pen hpTeam;
+  Pen hpTeamGreen;
+  Pen hpTeamBlue;
+  Pen hpTeamYellow;
+  Pen hpTeamMagenta;
 
   Pen hpPlane, hpRadar;
 

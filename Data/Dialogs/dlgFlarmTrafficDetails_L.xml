@@ -4,6 +4,13 @@
   <Button Name="cmdClose" Caption="Close" X="3" Y="2" Width="58" Height="28" />
   <Button Name="cmdSetAsTeamMate" Caption="Team" X="3" Y="32" Width="58" Height="28" />
 
+  <Label X="3" Y="83" Width="58" Height="16" Caption="Friends:" />
+  <SymbolButton Name="cmdFriendGreen" Caption="Green" X="3" Y="100" Width="28" Height="28" />
+  <SymbolButton Name="cmdFriendBlue" Caption="Blue" X="33" Y="100" Width="28" Height="28" />
+  <SymbolButton Name="cmdFriendYellow" Caption="Yellow" X="3" Y="130" Width="28" Height="28" />
+  <SymbolButton Name="cmdFriendMagenta" Caption="Magenta" X="33" Y="130" Width="28" Height="28" />
+  <Button Name="cmdFriendClear" Caption="Clear" X="3" Y="160" Width="58" Height="28" />
+
   <Button Name="cmdCallsign" Caption="..." X="-38" Y="20" Width="36" Height="22" />
 
   <Edit Name="prpCallsign" Caption="Comp. ID" X="65" Y="20" Width="-40" Height="22" CaptionWidth="90" ReadOnly="1" />

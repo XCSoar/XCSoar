@@ -23,6 +23,7 @@
 
 #include "FlarmTrafficWindow.hpp"
 #include "FLARM/Traffic.hpp"
+#include "FLARM/Friends.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "Units/UnitsFormatter.hpp"
@@ -290,12 +291,39 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       canvas.hollow_brush();
       canvas.select(look.hpPassive);
     } else {
-      if (settings.TeamFlarmTracking &&
-          traffic.id == settings.TeamFlarmIdTarget) {
+      // Search for team color
+      FlarmFriends::Color team_color = FlarmFriends::GetFriendColor(traffic.id);
+
+      // If no color found but target is teammate
+      if (team_color == FlarmFriends::NONE &&
+          settings.TeamFlarmTracking &&
+          traffic.id == settings.TeamFlarmIdTarget)
+        // .. use yellow color
+        team_color = FlarmFriends::YELLOW;
+
+      // If team color found -> draw a colored circle around the target
+      if (team_color != FlarmFriends::NONE) {
+        switch (team_color) {
+        case FlarmFriends::GREEN:
+          canvas.select(look.hpTeamGreen);
+          break;
+        case FlarmFriends::BLUE:
+          canvas.select(look.hpTeamBlue);
+          break;
+        case FlarmFriends::YELLOW:
+          canvas.select(look.hpTeamYellow);
+          break;
+        case FlarmFriends::MAGENTA:
+          canvas.select(look.hpTeamMagenta);
+          break;
+        default:
+          break;
+        }
+
         canvas.hollow_brush();
-        canvas.select(look.hpTeam);
         canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
       }
+
       if (!small && static_cast<unsigned> (selection) == i) {
         canvas.select(look.hpSelection);
         canvas.select(look.hbSelection);

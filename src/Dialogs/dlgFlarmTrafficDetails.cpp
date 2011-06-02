@@ -34,6 +34,7 @@
 #include "FLARM/FlarmNet.hpp"
 #include "FLARM/Traffic.hpp"
 #include "FLARM/FlarmDetails.hpp"
+#include "FLARM/Friends.hpp"
 #include "Screen/Layout.hpp"
 #include "Engine/Math/Earth.hpp"
 #include "LocalPath.hpp"
@@ -242,6 +243,36 @@ OnCallsignClicked(gcc_unused WndButton &Sender)
   Update();
 }
 
+static void
+OnFriendBlueClicked(gcc_unused WndButton &Sender)
+{
+  FlarmFriends::SetFriendColor(target_id, FlarmFriends::BLUE);
+}
+
+static void
+OnFriendGreenClicked(gcc_unused WndButton &Sender)
+{
+  FlarmFriends::SetFriendColor(target_id, FlarmFriends::GREEN);
+}
+
+static void
+OnFriendYellowClicked(gcc_unused WndButton &Sender)
+{
+  FlarmFriends::SetFriendColor(target_id, FlarmFriends::YELLOW);
+}
+
+static void
+OnFriendMagentaClicked(gcc_unused WndButton &Sender)
+{
+  FlarmFriends::SetFriendColor(target_id, FlarmFriends::MAGENTA);
+}
+
+static void
+OnFriendClearClicked(gcc_unused WndButton &Sender)
+{
+  FlarmFriends::SetFriendColor(target_id, FlarmFriends::NONE);
+}
+
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
@@ -274,6 +305,17 @@ dlgFlarmTrafficDetailsShowModal(FlarmId id)
       SetOnClickNotify(OnTeamClicked);
   ((WndButton *)wf->FindByName(_T("cmdCallsign")))->
       SetOnClickNotify(OnCallsignClicked);
+
+  ((WndSymbolButton*)wf->FindByName(_T("cmdFriendGreen")))->
+      SetOnClickNotify(OnFriendGreenClicked);
+  ((WndSymbolButton*)wf->FindByName(_T("cmdFriendBlue")))->
+      SetOnClickNotify(OnFriendBlueClicked);
+  ((WndSymbolButton*)wf->FindByName(_T("cmdFriendYellow")))->
+      SetOnClickNotify(OnFriendYellowClicked);
+  ((WndSymbolButton*)wf->FindByName(_T("cmdFriendMagenta")))->
+      SetOnClickNotify(OnFriendMagentaClicked);
+  ((WndButton*)wf->FindByName(_T("cmdFriendClear")))->
+      SetOnClickNotify(OnFriendClearClicked);
 
   // Update fields for the first time
   Update();
