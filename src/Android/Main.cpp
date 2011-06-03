@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Android/Main.hpp"
+#include "Android/Context.hpp"
 #include "Android/NativeView.hpp"
 #include "Android/SoundUtil.hpp"
 #include "LocalPath.hpp"
@@ -44,6 +45,8 @@ Copyright_License {
 
 #include <assert.h>
 
+Context *context;
+
 NativeView *native_view;
 
 EventQueue *event_queue;
@@ -52,17 +55,19 @@ SoundUtil *sound_util;
 
 JNIEXPORT jboolean JNICALL
 Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
-                                            jobject context,
+                                            jobject _context,
                                             jint width, jint height)
 {
   Java::Init(env);
+
+  context = new Context(env, _context);
 
   InitialiseDataPath();
 
   OpenGL::Initialise();
 
   assert(native_view == NULL);
-  native_view = new NativeView(env, obj, context, width, height);
+  native_view = new NativeView(env, obj, width, height);
   InitAsset();
 
   Profile::SetFiles(_T(""));
@@ -96,6 +101,8 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   OpenGL::Deinitialise();
   ScreenDeinitialized();
   DeinitialiseDataPath();
+
+  delete context;
 }
 
 JNIEXPORT void JNICALL

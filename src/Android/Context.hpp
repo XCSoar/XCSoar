@@ -21,41 +21,15 @@ Copyright_License {
 }
 */
 
-#include "Audio/Sound.hpp"
-#include "ResourceLoader.hpp"
+#ifndef XCSOAR_ANDROID_CONTEXT_HPP
+#define XCSOAR_ANDROID_CONTEXT_HPP
 
-#ifdef ANDROID
-#include "Android/Main.hpp"
-#include "Android/SoundUtil.hpp"
-#include "Android/Context.hpp"
-#endif
+#include "Java/Object.hpp"
 
-#ifndef DISABLEAUDIO
-#include <windows.h>
-#include <mmsystem.h>
-#endif
-
-bool PlayResource (const TCHAR* lpName)
-{
-#ifdef ANDROID
-  return sound_util != NULL &&
-    sound_util->play(Java::GetEnv(), context->get(), lpName);
-#elif defined(DISABLEAUDIO)
-  return false;
-#else
-  BOOL bRtn;
-
-  // TODO code: Modify to allow use of WAV Files and/or Embedded files
-
-  if (_tcsstr(lpName, TEXT(".wav"))) {
-    bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
-
-  } else {
-    ResourceLoader::Data data = ResourceLoader::Load(lpName, _T("WAVE"));
-    return data.first != NULL &&
-      sndPlaySound((LPCTSTR)data.first,
-                   SND_MEMORY | SND_ASYNC | SND_NODEFAULT);
+class Context : public Java::Object {
+public:
+  Context(JNIEnv *env, jobject obj):Java::Object(env, obj) {
   }
-  return bRtn;
+};
+
 #endif
-}
