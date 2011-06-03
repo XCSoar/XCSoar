@@ -119,11 +119,11 @@ public:
    * @return Node for processing
    */
   const Node &pop() {
-    cur = q.top().second;
+    cur = q.top().iterator;
 
     do
       q.pop();
-    while (!q.empty() && q.top().second->second < q.top().first);
+    while (!q.empty() && q.top().iterator->second < q.top().edge_value);
 
     return cur->first;
   }
@@ -229,7 +229,7 @@ private:
       // -> Don't use this new leg
       return;
 
-    q.push(std::make_pair(edge_value, it));
+    q.push(Value(edge_value, it));
   }
 
   void set_predecessor(const Node &node, const Node &parent) {
@@ -253,12 +253,19 @@ private:
   typedef typename node_parent_map::iterator node_parent_iterator;
   typedef typename node_parent_map::const_iterator node_parent_const_iterator;
 
-  typedef std::pair<unsigned, node_value_iterator> Value;
+  struct Value {
+    unsigned edge_value;
+
+    node_value_iterator iterator;
+
+    Value(unsigned _edge_value, node_value_iterator _iterator)
+      :edge_value(_edge_value), iterator(_iterator) {}
+  };
 
   struct Rank : public std::binary_function<Value, Value, bool> {
     gcc_pure
     bool operator()(const Value& x, const Value& y) const {
-      return x.first > y.first;
+      return x.edge_value > y.edge_value;
     }
   };
 
