@@ -41,6 +41,7 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
+#include <android/log.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #endif
@@ -306,11 +307,17 @@ FindDataPath()
     struct stat st;
     if (stat(ANDROID_SAMSUNG_EXTERNAL_SD, &st) == 0 &&
         (st.st_mode & S_IFDIR) != 0 &&
-        fgrep("/proc/mounts", ANDROID_SAMSUNG_EXTERNAL_SD " "))
+        fgrep("/proc/mounts", ANDROID_SAMSUNG_EXTERNAL_SD " ")) {
+      __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+                          "Enable Samsung hack, " XCSDATADIR " in "
+                          ANDROID_SAMSUNG_EXTERNAL_SD);
       return strdup(ANDROID_SAMSUNG_EXTERNAL_SD "/" XCSDATADIR);
-#endif
+    }
 
     /* hard-coded path for Android */
+    __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+                        "Fallback " XCSDATADIR " in " ANDROID_SDCARD);
+#endif
     return _tcsdup(_T(ANDROID_SDCARD "/" XCSDATADIR));
   }
 
