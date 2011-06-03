@@ -25,8 +25,6 @@ Copyright_License {
 #define TRACE_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Util/SliceAllocator.hpp"
-#include <kdtree++/kdtree.hpp>
 #include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Compiler.h"
@@ -37,14 +35,8 @@ Copyright_License {
 
 struct AIRCRAFT_STATE;
 
-typedef std::set<TracePoint, TracePoint::time_sort> TracePointSet;
-typedef std::list<TracePoint> TracePointList;
-
 /**
- * Container for traces using kd-tree representation internally for fast 
- * geospatial lookups.
- *
- * This also uses a smart thinning algorithm to limit the number of items
+ * This class uses a smart thinning algorithm to limit the number of items
  * in the store.  The thinning algorithm is an online type of Douglas-Peuker
  * algorithm such that candidates are removed by ranking based on the
  * loss of precision caused by removing that point.  The loss is measured
@@ -52,73 +44,9 @@ typedef std::list<TracePoint> TracePointList;
  * the candidate point removed.  In this version, time differences is also a
  * secondary factor, such that thinning attempts to remove points such that,
  * for equal distance ranking, smaller time step details are removed first.
- *
- * The implementation uses a set/list to maintain a sorted list of
- * candidates and their ranking criteria such that sorting and
- * recalculation of their rank is not required unless the node or its
- * neighbours are deleted.  The list contains pointers to previous and
- * next (in time) items to avoid having to search the list for
- * neighbour lookups.  On deletion of items, the candidate list is
- * updated.
- *
- * The sorting ensures the last two points in the list are the earliest and
- * latest points, above these are candidates with most available to be removed
- * towards the top.
- *
- * Complexity analysis:
- *
- *   n: size of tree
- *
- * Insertion:
- *   O(log(n)) for set + O(log(n)) for kdtree
- *   = O(log(n))
- *
- * Erasing an item
- *   O(1) for set + O(log(n)) for kdtree + O(log(n)) neighbours
- *   = O(log(n))
- *
- * Pruning:
- *   O(n) erasures
- *   + O(n log^2 n) tree optimisation
- *   + O(n2) leaf reassignment
- *   = O(n + n2 + n log^2 n) per n steps
- *   = O(n + log^2 n)
- *
- * Retrieval of trace in time sequence:
- *   O(n)
- *
- * Geospatial find within range (k items within range):
- *   O(sqrt(n) + k)
- *
- * Conclusion:
- *   main overhead is due to leaf reassignment and tree construction;
- *   potential benefits if kdtree is modified to use a median-finding algorithm,
- *   and only updates parts of the tree it needs to rather than constructing
- *   afresh each time.
- *
- *   With current solution, we are using O(n + log^2 n) operations extra to save
- *   O(n) - O(sqrt(n)) operations in range searches.
- *
- *   Total cost
- *      O(n + log^2 n) + O(sqrt(n)) < O(n) ? no!
- *   But first part is done in idle time, so real question is:
- *      O(sqrt(n)) < O(n) ? yes!
- *
- *   Therefore, current solution is superior to not using kdtree.
  */
-class Trace: private NonCopyable 
+class Trace : private NonCopyable
 {
-  friend class PrintHelper;
-
-  /**
-   * Type of KD-tree data structure for trace container
-   */
-  typedef KDTree::KDTree<2, TracePoint, TracePoint::kd_get_location,
-                         KDTree::squared_difference<TracePoint::kd_get_location::result_type,
-                                                    TracePoint::kd_get_location::result_type>,
-                         std::less<TracePoint::kd_get_location::result_type>,
-                         SliceAllocator<KDTree::_Node<TracePoint>, 256> > TraceTree;
-
   struct TraceDelta {
     /**
      * Function used to points for sorting by deltas.
@@ -142,27 +70,28 @@ class Trace: private NonCopyable
         return false;
 
       // all else fails, go by age
-      if (x.p_time < y.p_time)
+      if (x.point.time < y.point.time)
         return true;
 
-      if (x.p_time > y.p_time)
+      if (x.point.time > y.point.time)
         return false;
 
       return false;
     }
 
     struct DeltaRankOp {
-      bool operator()(const TraceDelta& s1, const TraceDelta& s2) {
-        return DeltaRank(s1, s2);
+      bool operator()(const TraceDelta *s1, const TraceDelta *s2) {
+        return DeltaRank(*s1, *s2);
       }
     };
 
-    typedef std::set<TraceDelta, DeltaRankOp> List;
+    typedef std::set<TraceDelta *, DeltaRankOp> List;
     typedef List::iterator iterator;
     typedef List::const_iterator const_iterator;
     typedef std::pair<iterator, iterator> neighbours;
 
-    unsigned p_time;
+    TracePoint point;
+
     unsigned elim_time;
     unsigned elim_distance;
     unsigned delta_distance;
@@ -170,36 +99,32 @@ class Trace: private NonCopyable
     // these items are mutable only so we can get around the const
     // nature of set iterators.  They don't affect set ordering though,
     // so doing this is safe.
-    mutable TraceTree::const_iterator leaf;
     mutable iterator prev;
     mutable iterator next;
 
-    TraceDelta(const TracePoint &p, const TraceTree::const_iterator &_leaf)
+    TraceDelta(const TracePoint &p)
+      :point(p),
+       elim_time(null_time), elim_distance(null_delta),
+       delta_distance(0) {}
+
+    TraceDelta(const TracePoint &p_last, const TracePoint &p,
+               const TracePoint &p_next)
+      :point(p),
+       elim_time(time_metric(p_last, p, p_next)),
+       elim_distance(distance_metric(p_last, p, p_next)),
+       delta_distance(p.approx_dist(p_last))
     {
-      p_time = p.time;
-      leaf = _leaf;
-      elim_distance = null_delta;
-      elim_time = null_time;
-      delta_distance = 0;
+      assert(elim_distance != null_delta);
     }
 
-    TraceDelta(const TracePoint& p_last, const TracePoint& p,
-               const TracePoint& p_next, const TraceTree::const_iterator &_leaf)
-    {
-      p_time = p.time;
-      elim_distance = distance_metric(p_last, p, p_next);
-      elim_time = time_metric(p_last, p, p_next);
-      delta_distance = p.approx_dist(p_last);
-      leaf = _leaf;
-      assert (elim_distance != null_delta);
-    }
-
-    void set_times(const TracePoint &p) {
-      p_time = p.time;
+    void update(const TracePoint &p_last, const TracePoint &p_next) {
+      elim_time = time_metric(p_last, point, p_next);
+      elim_distance = distance_metric(p_last, point, p_next);
+      delta_distance = point.approx_dist(p_last);
     }
 
     unsigned delta_time() const {
-      return p_time - prev->p_time;
+      return point.time - (*prev)->point.time;
     }
 
     /**
@@ -239,6 +164,24 @@ class Trace: private NonCopyable
     }
   };
 
+  struct ChronologicalList : public std::list<TraceDelta> {
+    iterator find_reference(const TraceDelta &ref) {
+      for (iterator i = begin(); i != end(); ++i) {
+        const TraceDelta &current = *i;
+        if (&current == &ref)
+          return i;
+      }
+
+      return end();
+    }
+
+    void erase_reference(const TraceDelta &ref) {
+      iterator i = find_reference(ref);
+      assert(i != end());
+      erase(i);
+    }
+  };
+
   class DeltaList {
     TraceDelta::List list;
 
@@ -251,8 +194,9 @@ class Trace: private NonCopyable
      * @param tp Point to add
      * @param tree Tree to store items
      */
-    void append(const TracePoint &tp, TraceTree& tree) {
-      TraceDelta td(tp, tree.insert(tp));
+    void append(const TracePoint &tp, ChronologicalList &chronological_list) {
+      chronological_list.push_back(tp);
+      TraceDelta &td = chronological_list.back();
       if (list.empty()) {
         insert(td); // will always be at back
         TraceDelta::iterator back = list.begin();
@@ -264,7 +208,8 @@ class Trace: private NonCopyable
         link(new_it, new_it);
         link(old_back, new_it);
         if (list.size() > 2) {
-          TraceDelta::iterator new_back = update_delta(old_back, tree);
+          TraceDelta::iterator new_back = update_delta(old_back,
+                                                       chronological_list);
           link(new_back, new_it);
         }
       }
@@ -293,13 +238,13 @@ class Trace: private NonCopyable
       TraceDelta::const_iterator it = first();
       assert(it != last());
       do {
-        const TraceDelta &tit = *it;
-        if (tit.p_time >= min_time)
-          v.push_back(*(tit.leaf));
+        const TraceDelta &tit = **it;
+        if (tit.point.time >= min_time)
+          v.push_back(tit.point);
 
         it = tit.next;
-      } while (it->next != it);
-      v.push_back(*(it->leaf));
+      } while ((*it)->next != it);
+      v.push_back((*it)->point);
     }
 
     /**
@@ -312,14 +257,16 @@ class Trace: private NonCopyable
      * @return Iterator to updated item
      */
     TraceDelta::iterator update_delta(TraceDelta::iterator it,
-                                      TraceTree& tree) {
+                                      ChronologicalList &chronological_list) {
       assert(it != list.end());
 
-      const TraceDelta::neighbours ne = std::make_pair(it->prev, it->next);
+      const TraceDelta::neighbours ne =
+        std::make_pair((*it)->prev, (*it)->next);
       if ((ne.second == it) || (ne.first == it))
         return it;
 
-      TraceDelta td (*(ne.first->leaf), *it->leaf, *(ne.second->leaf), it->leaf);
+      TraceDelta &td = **it;
+      td.update((*ne.first)->point, (*ne.second)->point);
 
       // erase old one
       list.erase(it);
@@ -329,26 +276,8 @@ class Trace: private NonCopyable
       link(ne.first, it);
       link(it, ne.second);
 
-      merge_leaf(it, tree);
-
-      assert(tree.size() == list.size());
+      assert(chronological_list.size() == list.size());
       return it;
-    }
-
-    /**
-     * Update links from tree leaves to the delta list.
-     * This is slow but necessary since leaf iterators are invalidated
-     * after optimise.
-     *
-     * @param tree Tree to point to
-     */
-    void update_leaves(const TraceTree& tree) {
-      TraceTree::const_iterator tend = tree.end();
-      for (TraceTree::const_iterator tr = tree.begin();
-           tr != tend; ++tr) {
-        TraceDelta::iterator id = find_time(tr->time);
-        id->leaf = tr;
-      }
     }
 
     /**
@@ -359,18 +288,19 @@ class Trace: private NonCopyable
      * @param tree Tree to remove from
      *
      */
-    void erase_inside(TraceDelta::iterator it, TraceTree& tree) {
+    void erase_inside(TraceDelta::iterator it,
+                      ChronologicalList &chronological_list) {
       assert(it != list.end());
 
       // now delete the item
-      tree.erase_exact(*it->leaf);
-
       TraceDelta::neighbours ne = erase(it);
       assert (ne.first != ne.second);
 
+      chronological_list.erase_reference(**it);
+
       // and update the deltas
-      update_delta(ne.first, tree);
-      update_delta(ne.second, tree);
+      update_delta(ne.first, chronological_list);
+      update_delta(ne.second, chronological_list);
     }
 
     /**
@@ -383,7 +313,8 @@ class Trace: private NonCopyable
      */
     TraceDelta::neighbours erase(TraceDelta::iterator it) {
       assert(it != list.end());
-      const TraceDelta::neighbours ne = std::make_pair(it->prev, it->next);
+      const TraceDelta::neighbours ne =
+        std::make_pair((*it)->prev, (*it)->next);
       assert(ne.first != it);
       assert(ne.second != it);
 
@@ -399,8 +330,8 @@ class Trace: private NonCopyable
      * (increasing time order)
      */
     TraceDelta::iterator erase_from_list(TraceDelta::iterator it) {
-      link(it->prev, it->next);
-      TraceDelta::iterator next = it->next;
+      link((*it)->prev, (*it)->next);
+      TraceDelta::iterator next = (*it)->next;
       list.erase(it);
       return next;
     }
@@ -419,7 +350,8 @@ class Trace: private NonCopyable
      *
      * @return True if items were erased
      */
-    bool erase_delta(const unsigned target_size, TraceTree& tree,
+    bool erase_delta(const unsigned target_size,
+                     ChronologicalList &chronological_list,
                      const unsigned recent = 0) {
       if (size() < 2)
         return false;
@@ -436,8 +368,8 @@ class Trace: private NonCopyable
           // exhausted non-recent candidates!
           return modified;
 
-        if (candidate->p_time < recent_time) {
-          erase_inside(candidate, tree);
+        if ((*candidate)->point.time < recent_time) {
+          erase_inside(candidate, chronological_list);
           lsize--;
           candidate = begin(); // find new top
           modified = true;
@@ -446,7 +378,7 @@ class Trace: private NonCopyable
           // suppressed removal, skip it.
         }
       }
-      assert(list.size() == tree.size());
+      assert(list.size() == chronological_list.size());
       return modified;
     }
 
@@ -459,7 +391,8 @@ class Trace: private NonCopyable
      *
      * @return True if items were erased
      */
-    bool erase_earlier_than(const unsigned p_time, TraceTree& tree) {
+    bool erase_earlier_than(const unsigned p_time,
+                            ChronologicalList &chronological_list) {
       if (!p_time)
         // there will be nothing to remove
         return false;
@@ -472,12 +405,12 @@ class Trace: private NonCopyable
            it != list.end(); ) {
         TraceDelta::iterator next = it; 
         ++next;
-        if (it->p_time < p_time) {
-          tree.erase(it->leaf);
+        if ((*it)->point.time < p_time) {
+          chronological_list.erase_reference(**it);
           list.erase(it);
           modified = true;
-        } else if (it->p_time < start_time) {
-          start_time = it->p_time;
+        } else if ((*it)->point.time < start_time) {
+          start_time = (*it)->point.time;
           new_start = it;
         }
         it = next;
@@ -487,7 +420,7 @@ class Trace: private NonCopyable
       if (modified && !list.empty())
         erase_start(new_start);
 
-      assert(tree.size() == list.size());
+      assert(chronological_list.size() == list.size());
       return modified;
     }
 
@@ -504,8 +437,8 @@ class Trace: private NonCopyable
         return 0;
 
       TraceDelta::const_iterator d_last = last();
-      if (d_last->p_time> t)
-        return d_last->p_time-t;
+      if ((*d_last)->point.time> t)
+        return (*d_last)->point.time-t;
 
       return 0;
     }
@@ -593,8 +526,8 @@ class Trace: private NonCopyable
       unsigned counter = 0;
       for (TraceDelta::const_iterator i= list.begin();
            i!= list.end(); ++i, ++counter) {
-        if (i->p_time < r)
-          acc += i->delta_distance;
+        if ((*i)->point.time < r)
+          acc += (*i)->delta_distance;
       }
       if (counter)
         return acc / counter;
@@ -608,8 +541,8 @@ class Trace: private NonCopyable
       unsigned counter = 0;
       for (TraceDelta::const_iterator i= list.begin();
            i!= list.end(); ++i, ++counter) {
-        if (i->p_time < r)
-          acc += i->delta_time();
+        if ((*i)->point.time < r)
+          acc += (*i)->delta_time();
       }
       if (counter)
         return acc / counter;
@@ -618,8 +551,8 @@ class Trace: private NonCopyable
     }
 
   private:
-    void insert(const TraceDelta &td) {
-      list.insert(td);
+    void insert(TraceDelta &td) {
+      list.insert(&td);
     }
 
     /**
@@ -629,38 +562,26 @@ class Trace: private NonCopyable
      * @param to To item
      */
     static void link(TraceDelta::iterator from, TraceDelta::iterator to) {
-      to->prev = from;
-      from->next = to;
+      (*to)->prev = from;
+      (*from)->next = to;
     }
 
     /**
      * Update start node (and neighbour) after min time pruning
      */
     void erase_start(TraceDelta::iterator i_start) {
-      TraceDelta::iterator i_next = i_start->next;
-      bool last = (i_start->next == i_start);
-      TraceDelta td_start = *i_start;
+      TraceDelta::iterator i_next = (*i_start)->next;
+      bool last = ((*i_start)->next == i_start);
+      TraceDelta &td_start = **i_start;
       list.erase(i_start);
       td_start.elim_distance = null_delta;
       td_start.elim_time = null_time;
       TraceDelta::iterator i_new = merge_insert(td_start);
-      i_new->prev = i_new;
+      (*i_new)->prev = i_new;
       if (last)
         link(i_new, i_new);
       else
         link(i_new, i_next);
-    }
-
-    /**
-     * Create new tree leaf with corrected time links due to removal of
-     * its predecessor in time.
-     *
-     * @param it Item for which leaf must be updated
-     * @param tree Tree structure to work on
-     */
-    void merge_leaf(TraceDelta::iterator it, TraceTree& tree) {
-      // @todo merge data for erased point?
-      it->leaf->last_time = it->prev->p_time;
     }
 
     /**
@@ -670,8 +591,8 @@ class Trace: private NonCopyable
      *
      * @return Iterator to inserted position
      */
-    TraceDelta::iterator merge_insert(const TraceDelta td) {
-      return list.insert(td).first;
+    TraceDelta::iterator merge_insert(TraceDelta &td) {
+      return list.insert(&td).first;
     }
 
     /**
@@ -684,7 +605,7 @@ class Trace: private NonCopyable
     TraceDelta::iterator find_time(const unsigned p_time) {
       TraceDelta::const_iterator lend = list.end();
       for (TraceDelta::iterator i= list.begin(); i!= lend; ++i)
-        if (i->p_time== p_time)
+        if ((*i)->point.time== p_time)
           return i;
 
       assert(0);
@@ -692,7 +613,7 @@ class Trace: private NonCopyable
     }
   };
 
-  TraceTree trace_tree;
+  ChronologicalList chronological_list;
   DeltaList delta_list;
   TaskProjection task_projection;
   TracePoint m_last_point;
@@ -753,23 +674,6 @@ public:
    */
   bool optimise_if_old();
 
-  /**
-   * Find traces within approximate range (square range box)
-   * to search location.  Possible use by screen display functions.
-   *
-   * @param loc Location from which to search
-   * @param range Distance in meters of search radius
-   * @param mintime Minimum time to match (recency)
-   * @param resolution Thin data to achieve minimum step size in (m) (if positive)
-   *
-   * @return Vector of trace points within square range
-   */
-  gcc_pure
-  TracePointVector
-  find_within_range(const GeoPoint &loc, const fixed range,
-                    const unsigned mintime = 0,
-                    const fixed resolution = fixed_zero) const;
-
   /** 
    * Retrieve a vector of trace points sorted by time
    * 
@@ -792,11 +696,6 @@ public:
   void get_trace_edges(TracePointVector& iov) const;
 
 private:
-  static void thin_trace_resolution(TracePointList& vec, const unsigned range_sq);
-
-  gcc_pure
-  bool inside_time_window(unsigned time) const;
-
   gcc_pure
   unsigned get_min_time() const;
 
@@ -833,6 +732,59 @@ public:
   gcc_pure
   const TracePoint& get_last_point() const {
     return m_last_point;
+  }
+
+public:
+  class const_iterator {
+    friend class Trace;
+
+    ChronologicalList::const_iterator iterator;
+
+    const_iterator(ChronologicalList::const_iterator _iterator)
+      :iterator(_iterator) {}
+
+  public:
+    const TracePoint &operator*() const {
+      return iterator->point;
+    }
+
+    const_iterator &operator++() {
+      ++iterator;
+      return *this;
+    }
+
+    const_iterator &NextSquareRange(unsigned sq_resolution,
+                                    const const_iterator &end) {
+      const TracePoint &previous = iterator->point;
+      while (true) {
+        ++iterator;
+
+        if (iterator == end.iterator ||
+            iterator->point.approx_sq_dist(previous) >= sq_resolution)
+          return *this;
+      }
+    }
+
+    bool operator==(const const_iterator &other) const {
+      return iterator == other.iterator;
+    }
+
+    bool operator!=(const const_iterator &other) const {
+      return iterator != other.iterator;
+    }
+  };
+
+  const_iterator begin() const {
+    return chronological_list.begin();
+  }
+
+  const_iterator end() const {
+    return chronological_list.end();
+  }
+
+  gcc_pure
+  unsigned ProjectRange(const GeoPoint &location, fixed distance) const {
+    return task_projection.project_range(location, distance);
   }
 };
 

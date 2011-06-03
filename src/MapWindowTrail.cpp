@@ -62,10 +62,24 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
 
   const WindowProjection &projection = render_projection;
 
-  TracePointVector trace =
-    task->find_trace_points(projection.GetGeoScreenCenter(),
-                            projection.GetScreenDistanceMeters(),
-                            min_time, projection.DistancePixelsToMeters(3));
+  TracePointVector trace;
+
+  {
+    ProtectedTaskManager::Lease lease(*task);
+    const Trace &src = lease->GetTrace();
+    if (src.empty())
+      return;
+
+    trace.reserve(src.size());
+    const unsigned range =
+      src.ProjectRange(projection.GetGeoScreenCenter(),
+                       projection.DistancePixelsToMeters(3));
+    const unsigned sq_range = range * range;
+    Trace::const_iterator end = src.end();
+    for (Trace::const_iterator i = src.begin(); i != end;
+         i.NextSquareRange(sq_range, end))
+      trace.push_back(*i);
+  }
 
   if (trace.empty())
     return;
@@ -100,7 +114,6 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
     value_min = max(fixed(-5.0), value_min);
   }
 
-  unsigned last_time = 0;
   RasterPoint last_point;
   for (TracePointVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
@@ -108,7 +121,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
     RasterPoint pt = projection.GeoToScreen(it->get_location().
         parametric(traildrift, dt * it->drift_factor / 256));
 
-    if (it->last_time == last_time) {
+    if (it != trace.begin()) {
       if (settings_map.SnailType == stAltitude) {
         int index = (it->GetAltitude() - value_min) / (value_max - value_min) *
                     (NUMSNAILCOLORS - 1);
@@ -127,7 +140,6 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
       }
       canvas.line_piece(last_point, pt);
     }
-    last_time = it->time;
     last_point = pt;
   }
 

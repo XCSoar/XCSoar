@@ -58,16 +58,6 @@ ProtectedTaskManager::get_mode() const
   return lease->get_mode();
 }
 
-TracePointVector 
-ProtectedTaskManager::find_trace_points(const GeoPoint &loc, 
-                                        const fixed range,
-                                        const unsigned mintime,
-                                        const fixed resolution) const
-{
-  Lease lease(*this);
-  return lease->find_trace_points(loc, range, mintime, resolution);
-}
-
 const OrderedTaskBehaviour 
 ProtectedTaskManager::get_ordered_task_behaviour() const
 {

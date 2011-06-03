@@ -380,9 +380,9 @@ public:
    * Retrieve trace vector
    *
    */
-  TracePointVector find_trace_points(const GeoPoint &loc, const fixed range,
-                                     const unsigned mintime,
-                                     const fixed resolution) const;
+  const Trace &GetTrace() const {
+    return trace_full;
+  }
 
   /**
    * Retrieve olc trace vector

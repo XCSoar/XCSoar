@@ -416,14 +416,6 @@ TaskManager::set_glide_polar(const GlidePolar& glide_polar)
   m_glide_polar = glide_polar;
 }
 
-TracePointVector 
-TaskManager::find_trace_points(const GeoPoint &loc, const fixed range,
-                               const unsigned mintime,
-                               const fixed resolution) const
-{
-  return trace_full.find_within_range(loc, range, mintime, resolution);
-}
-
 fixed 
 TaskManager::get_finish_height() const
 {

@@ -5,7 +5,6 @@
 TracePoint::TracePoint(const AIRCRAFT_STATE &state):
   SearchPoint(state.Location),
   time((int)state.Time),
-  last_time(UINT_MAX),
   drift_factor(state.thermal_drift_factor() * 256),
   altitude(state.NavAltitude),
   vario(state.NettoVario * 256)

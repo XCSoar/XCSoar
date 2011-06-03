@@ -17,8 +17,6 @@ class TracePoint : public SearchPoint
 public:
   /** Time of sample */
   unsigned time;
-  /** Time of sample prior to this --- mutable for kdtree update efficiency */
-  mutable unsigned last_time;
   /**
    * Thermal drift factor:
    * 256 indicates drift rate equal to wind speed
@@ -44,7 +42,7 @@ public:
    * @return Null object
    */
   TracePoint():
-    time(0 - 1), last_time(0 - 1) {};
+    time(0 - 1) {};
 
   /**
    * Constructor for a TracePoint which is only used as parameter to
@@ -110,16 +108,6 @@ public:
   unsigned approx_dist(const TracePoint& tp) const {
     return (unsigned)lhypot(get_flatLocation().Longitude - tp.get_flatLocation().Longitude,
                             get_flatLocation().Latitude - tp.get_flatLocation().Latitude);
-  }
-
-  /** 
-   * Calculate time step of this point from previous
-   * 
-   * @return Time step (s)
-   */
-  gcc_pure
-  unsigned dt() const {
-    return time - last_time;
   }
 
   /**

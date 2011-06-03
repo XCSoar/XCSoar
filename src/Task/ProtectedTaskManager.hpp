@@ -82,13 +82,6 @@ public:
   gcc_pure
   TaskManager::TaskMode_t get_mode() const;
 
-  // trace points
-  gcc_pure
-  TracePointVector find_trace_points(const GeoPoint &loc, 
-                                     const fixed range,
-                                     const unsigned mintime, 
-                                     const fixed resolution) const;
-
   gcc_pure
   const OrderedTaskBehaviour get_ordered_task_behaviour() const;
 

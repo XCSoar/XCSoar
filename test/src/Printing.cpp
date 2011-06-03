@@ -648,23 +648,14 @@ PrintHelper::print(const ContestResult& score)
 
 
 static void
-print_tpv(const TracePointVector& vec, std::ofstream& fs)
+PrintTracePoint(const TracePoint &point, std::ofstream& fs)
 {
-  unsigned last_time = 0;
-  for (TracePointVector::const_iterator it = vec.begin(); it != vec.end();
-       ++it) {
-    if (it->last_time != last_time) {
-      fs << "\n";
-    }
-    fs << it->time 
-       << " " << it->get_location().Longitude 
-       << " " << it->get_location().Latitude
-       << " " << it->GetAltitude()
-       << " " << it->last_time
-       << " " << it->GetVario()
-       << "\n";
-    last_time = it->time;
-  }
+  fs << point.time
+     << " " << point.get_location().Longitude
+     << " " << point.get_location().Latitude
+     << " " << point.GetAltitude()
+     << " " << point.GetVario()
+     << "\n";
 }
 
 void
@@ -672,14 +663,8 @@ PrintHelper::trace_print(const Trace& trace, const GeoPoint &loc)
 {
   std::ofstream fs("results/res-trace.txt");
 
-  TracePointVector vec = trace.find_within_range(loc, fixed(10000),
-                                                 0);
-  print_tpv(vec, fs);
-
-  std::ofstream ft("results/res-trace-thin.txt");
-  vec = trace.find_within_range(loc, fixed(10000), 0, fixed(1000));
-
-  print_tpv(vec, ft);
+  for (Trace::const_iterator it = trace.begin(); it != trace.end(); ++it)
+    PrintTracePoint(*it, fs);
 }
 
 
