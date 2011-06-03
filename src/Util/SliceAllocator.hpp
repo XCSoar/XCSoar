@@ -54,6 +54,11 @@ class SliceAllocator {
   typedef T &reference;
   typedef const T &const_reference;
 
+  template<class O>
+  struct rebind {
+    typedef SliceAllocator<O, size> other;
+  };
+
   /**
    * One allocated item in the heap.  When it is on the "available"
    * list, the "next" attribute points to the next available slot.
