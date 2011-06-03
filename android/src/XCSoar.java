@@ -132,7 +132,7 @@ public class XCSoar extends Activity {
      * remind the user that we're sucking his battery empty */
     Notification notification = new Notification(R.drawable.icon, null,
                                                  System.currentTimeMillis());
-    Intent intent = new Intent(this, XCSoar.class);
+    Intent intent = new Intent(this, getClass());
     PendingIntent contentIntent =
       PendingIntent.getActivity(this, 0, intent, 0);
     notification.setLatestEventInfo(this, "XCSoar", "XCSoar is running",
