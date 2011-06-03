@@ -84,8 +84,8 @@ public class XCSoar extends Activity {
 
     // fullscreen mode
     requestWindowFeature(Window.FEATURE_NO_TITLE);
-    getWindow().setFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON,
-                         WindowManager.LayoutParams.FLAG_FULLSCREEN|WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
+    getWindow().addFlags(WindowManager.LayoutParams.FLAG_FULLSCREEN|
+                         WindowManager.LayoutParams.FLAG_KEEP_SCREEN_ON);
 
     TextView tv = new TextView(this);
     tv.setText("Loading XCSoar...");

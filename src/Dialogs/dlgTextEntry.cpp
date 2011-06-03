@@ -64,6 +64,8 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
+  const PixelRect rc = Sender->get_client_rect();
+
   canvas.clear(Color(0x40, 0x40, 0x00));
 
   // Do the actual painting of the text
@@ -75,7 +77,7 @@ OnTextPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   RasterPoint p[5];
   p[0].x = 10;
-  p[0].y = 20;
+  p[0].y = (rc.bottom - rc.top - tsize.cy - 5) / 2;
 
   p[2].x = p[0].x + tsizec.cx;
   p[2].y = p[0].y + tsize.cy + 5;
@@ -273,15 +275,13 @@ dlgTextEntryShowModal(TCHAR *text, int width,
 {
   switch (Appearance.TextInputStyle) {
   case tiDefault:
+  case tiKeyboard:
     if (has_pointer())
       return dlgTextEntryKeyboardShowModal(text, width, accb);
     else {
       dlgTextEntryHighscoreType(text, width);
       return true;
     }
-
-  case tiKeyboard:
-    return dlgTextEntryKeyboardShowModal(text, width, accb);
 
   case tiHighScore:
     dlgTextEntryHighscoreType(text, width);

@@ -7,7 +7,7 @@ Version 6.2 - not yet released
   - added task declaration support for the IMI ERIXX logger
   - improved support for the Digifly Leonardo
 
-Version 6.1.1 - not yet released
+Version 6.1.1 - 2011/06/01
 * calculations
   - fix arrival heights which are below the safety height
   - reduce memory usage
@@ -20,10 +20,15 @@ Version 6.1.1 - not yet released
   - workaround for PPC2000 bug that caused lockups
 * Android
   - fix crash bug after orientation change and resume
+  - support non-standard SD card mount points
 * Altair
   - fix UI lag
   - fix default task on startup
   - optionally load XCSoarData from USB drive
+  - swap "ACK Warn" / "ACK Space" hot keys
+  - disallow the on-screen keyboard
+  - fix clipped cursor in text entry dialog
+  - fix default font for "important topology"
 
 Version 6.1 - 2011/05/19
 * devices

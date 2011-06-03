@@ -524,7 +524,9 @@ endif
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/Java/Global.cpp \
+	$(SRC)/Java/String.cpp \
 	$(SRC)/Device/AndroidBluetoothPort.cpp \
+	$(SRC)/Android/Environment.cpp \
 	$(SRC)/Android/InternalGPS.cpp \
 	$(SRC)/Android/SoundUtil.cpp \
 	$(SRC)/Android/TextUtil.cpp \

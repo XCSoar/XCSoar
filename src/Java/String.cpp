@@ -27,34 +27,17 @@
  * OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
-#ifndef XCSOAR_JAVA_STRING_HPP
-#define XCSOAR_JAVA_STRING_HPP
+#include "Java/String.hpp"
+#include "Util/StringUtil.hpp"
 
-#include "Java/Ref.hpp"
+char *
+Java::String::CopyTo(JNIEnv *env, char *buffer, size_t max_size)
+{
+  const char *p = env->GetStringUTFChars(get(), NULL);
+  if (p == NULL)
+    return NULL;
 
-#include <assert.h>
-#include <jni.h>
-
-namespace Java {
-  /**
-   * Wrapper for a local "jstring" reference.
-   */
-  class String : public LocalRef<jstring> {
-  public:
-    String(JNIEnv *env, jstring value)
-      :LocalRef<jstring>(env, value) {}
-
-    String(JNIEnv *_env, const char *_value)
-      :LocalRef<jstring>(_env, _env->NewStringUTF(_value)) {}
-
-    /**
-     * Copy the value to the specified buffer.  Truncates the value if
-     * it does not fit into the buffer.
-     *
-     * @return a pointer to the terminating null byte, NULL on error
-     */
-    char *CopyTo(JNIEnv *env, char *buffer, size_t max_size);
-  };
+  char *result = CopyString(buffer, p, max_size);
+  env->ReleaseStringUTFChars(get(), p);
+  return result;
 }
-
-#endif

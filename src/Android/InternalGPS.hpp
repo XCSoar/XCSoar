@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <jni.h>
 
-class NativeView;
+class Context;
 
 class InternalGPS : public Java::Object {
   jmethodID mid_setLocationProvider;
@@ -40,7 +40,7 @@ public:
   ~InternalGPS();
 
   gcc_malloc
-  static InternalGPS *create(JNIEnv *env, NativeView *native_view,
+  static InternalGPS *create(JNIEnv *env, Context *native_view,
                              unsigned index);
 };
 

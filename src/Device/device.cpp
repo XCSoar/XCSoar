@@ -210,7 +210,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
     if (is_simulator())
       return true;
 
-    device.internal_gps = InternalGPS::create(Java::GetEnv(), native_view,
+    device.internal_gps = InternalGPS::create(Java::GetEnv(), context,
                                               device.GetIndex());
     return device.internal_gps != NULL;
 #else

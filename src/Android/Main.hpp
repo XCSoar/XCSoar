@@ -26,9 +26,12 @@ Copyright_License {
 
 #include <jni.h>
 
+class Context;
 class NativeView;
 class EventQueue;
 class SoundUtil;
+
+extern Context *context;
 
 extern NativeView *native_view;
 

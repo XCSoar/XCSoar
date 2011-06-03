@@ -1,3 +1,9 @@
+xcsoar (6.1.1) unstable; urgency=low
+
+  * new release
+
+ -- Max Kellermann <max@duempel.org>  Wed, 01 Jun 2011 09:37:59 +0200
+
 xcsoar (6.1) unstable; urgency=low
 
   * final release 6.1

@@ -28,6 +28,10 @@ Copyright_License {
 
 #include "OS/FileUtil.hpp"
 
+#ifdef ANDROID
+#include "Android/Environment.hpp"
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
@@ -41,11 +45,24 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
+#include <android/log.h>
 #include <sys/stat.h>
 #include <unistd.h>
 #endif
 
 #define XCSDATADIR _T("XCSoarData")
+
+/**
+ * The default mount point of the SD card on Android.
+ */
+#define ANDROID_SDCARD "/sdcard"
+
+/**
+ * On the Samsung Galaxy Tab, the "external" SD card is mounted here.
+ * Shame on the Samsung engineers, they didn't implement
+ * Environment.getExternalStorageDirectory() properly.
+ */
+#define ANDROID_SAMSUNG_EXTERNAL_SD "/sdcard/external_sd"
 
 /**
  * The absolute location of the XCSoarData directory.
@@ -286,20 +303,46 @@ FindDataPath()
   }
 
   if (is_android()) {
-    /* XXX use Environment.getExternalStorageDirectory() */
-
 #ifdef ANDROID
     /* hack for Samsung Galaxy S and Samsung Galaxy Tab (which has a
        build-in and an external SD card) */
     struct stat st;
-    if (stat("/sdcard/external_sd", &st) == 0 &&
+    if (stat(ANDROID_SAMSUNG_EXTERNAL_SD, &st) == 0 &&
         (st.st_mode & S_IFDIR) != 0 &&
-        fgrep("/proc/mounts", "/sdcard/external_sd "))
-      return strdup("/sdcard/external_sd/XCSoarData");
-#endif
+        fgrep("/proc/mounts", ANDROID_SAMSUNG_EXTERNAL_SD " ")) {
+      __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+                          "Enable Samsung hack, " XCSDATADIR " in "
+                          ANDROID_SAMSUNG_EXTERNAL_SD);
+      return strdup(ANDROID_SAMSUNG_EXTERNAL_SD "/" XCSDATADIR);
+    }
+
+    /* try Context.getExternalStoragePublicDirectory() */
+    char buffer[MAX_PATH];
+    if (Environment::getExternalStoragePublicDirectory(buffer, sizeof(buffer),
+                                                       "XCSoarData") != NULL) {
+      __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+                          "Environment.getExternalStoragePublicDirectory()='%s'",
+                          buffer);
+      return strdup(buffer);
+    }
+
+    /* now try Context.getExternalStorageDirectory(), because
+       getExternalStoragePublicDirectory() needs API level 8 */
+    if (Environment::getExternalStorageDirectory(buffer,
+                                                 sizeof(buffer) - 32) != NULL) {
+      __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+                          "Environment.getExternalStorageDirectory()='%s'",
+                          buffer);
+
+      strcat(buffer, "/" XCSDATADIR);
+      return strdup(buffer);
+    }
 
     /* hard-coded path for Android */
-    return _tcsdup(_T("/sdcard/XCSoarData"));
+    __android_log_print(ANDROID_LOG_DEBUG, "XCSoar",
+                        "Fallback " XCSDATADIR " in " ANDROID_SDCARD);
+#endif
+    return _tcsdup(_T(ANDROID_SDCARD "/" XCSDATADIR));
   }
 
 #ifdef _WIN32_WCE

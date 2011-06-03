@@ -22,7 +22,8 @@ Copyright_License {
 */
 
 #include "Android/InternalGPS.hpp"
-#include "Android/NativeView.hpp"
+#include "Android/Context.hpp"
+#include "Java/Class.hpp"
 #include "org_xcsoar_InternalGPS.h"
 #include "DeviceBlackboard.hpp"
 #include "Protection.hpp"
@@ -44,7 +45,7 @@ InternalGPS::~InternalGPS()
 }
 
 InternalGPS *
-InternalGPS::create(JNIEnv *env, NativeView *native_view, unsigned index)
+InternalGPS::create(JNIEnv *env, Context *context, unsigned index)
 {
   Java::Class cls(env, "org/xcsoar/InternalGPS");
 
@@ -52,7 +53,7 @@ InternalGPS::create(JNIEnv *env, NativeView *native_view, unsigned index)
                                    "(Landroid/content/Context;I)V");
   assert(cid != NULL);
 
-  jobject obj = env->NewObject(cls, cid, native_view->get_context(), index);
+  jobject obj = env->NewObject(cls, cid, context->get(), index);
   assert(obj != NULL);
 
   InternalGPS *internal_gps = new InternalGPS(env, obj);

@@ -33,7 +33,6 @@ Copyright_License {
 class NativeView {
   JNIEnv *env;
   Java::Object obj;
-  Java::Object context;
 
   unsigned width, height;
 
@@ -55,9 +54,9 @@ public:
     SCREEN_ORIENTATION_NOSENSOR = 5,
   };
 
-  NativeView(JNIEnv *_env, jobject _obj, jobject _context,
+  NativeView(JNIEnv *_env, jobject _obj,
              unsigned _width, unsigned _height)
-    :env(_env), obj(env, _obj), context(env, _context),
+    :env(_env), obj(env, _obj),
      width(_width), height(_height) {
     Java::Class cls(env, "org/xcsoar/NativeView");
     init_surface_method = env->GetMethodID(cls, "initSurface", "()Z");
@@ -75,14 +74,6 @@ public:
   void SetSize(unsigned _width, unsigned _height) {
     width = _width;
     height = _height;
-  }
-
-  /**
-   * Returns the android.content.Context object.  The returned value
-   * does not need to be dereferenced by the caller.
-   */
-  jobject get_context() {
-    return context;
   }
 
   bool initSurface() {

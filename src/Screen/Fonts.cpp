@@ -101,6 +101,8 @@ LoadAltairLogFonts()
   InitialiseLogfont(&LogTitle, _T("RasterGothicNineCond"), 10);
   InitialiseLogfont(&LogCDI, _T("RasterGothicEighteenCond"), 19, true);
   InitialiseLogfont(&LogMapLabel, _T("RasterGothicTwelveCond"), 13);
+  InitialiseLogfont(&LogMapLabelImportant,
+                    _T("RasterGothicTwelveCond"), 13, true);
   InitialiseLogfont(&LogMap, _T("RasterGothicFourteenCond"), 15);
   InitialiseLogfont(&LogMapBold, _T("RasterGothicFourteenCond"), 15, true);
   InitialiseLogfont(&LogInfoBoxSmall, _T("RasterGothicEighteenCond"), 19, true);
