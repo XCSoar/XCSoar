@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2011 The XCSoar Project
@@ -18,7 +19,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
+
 #ifndef DIJKSTRA_HPP
 #define DIJKSTRA_HPP
 

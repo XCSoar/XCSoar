@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2011 The XCSoar Project
