@@ -140,7 +140,7 @@ protected:
   gcc_pure
   bool is_final(const ScanTaskPoint &sp) const {
     assert(num_stages <= MAX_STAGES);
-    return sp.first + 1 == num_stages;
+    return sp.stage_number + 1 == num_stages;
   }
 
   /** 
@@ -152,7 +152,7 @@ protected:
    */
   gcc_pure
   bool is_first(const ScanTaskPoint &sp) const {
-    return sp.first == 0;
+    return sp.stage_number == 0;
   }
 
   /** 
@@ -230,10 +230,10 @@ protected:
     ScanTaskPoint p_last(p);
 
     do {
-      solution[p.first] = get_point(p);
+      solution[p.stage_number] = get_point(p);
       p_last = p;
       p = dijkstra.get_predecessor(p);
-    } while (p.first != p_last.first);
+    } while (p.stage_number != p_last.stage_number);
   }
 
   /** Number of stages in search */

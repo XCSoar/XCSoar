@@ -234,7 +234,7 @@ ContestDijkstra::add_start_edges()
   ScanTaskPoint destination(0, 0);
   const ScanTaskPoint end(num_stages-1, n_points-1);
 
-  for (; destination.second != n_points; ++destination.second) {
+  for (; destination.point_index != n_points; ++destination.point_index) {
     // only add points that are valid for the finish
     solution[0] = get_point(destination);
     if (admit_candidate(end)) {
@@ -246,19 +246,19 @@ ContestDijkstra::add_start_edges()
 void
 ContestDijkstra::add_edges(const ScanTaskPoint& origin)
 {
-  ScanTaskPoint destination(origin.first + 1, origin.second);
+  ScanTaskPoint destination(origin.stage_number + 1, origin.point_index);
 
   find_solution(origin);
 
   // only add last point!
   if (is_final(destination)) {
     assert(n_points > 0);
-    destination.second = n_points-1;
+    destination.point_index = n_points - 1;
   }
 
-  for (; destination.second != n_points; ++destination.second) {
+  for (; destination.point_index != n_points; ++destination.point_index) {
     if (admit_candidate(destination)) {
-      const unsigned d = get_weighting(origin.first) *
+      const unsigned d = get_weighting(origin.stage_number) *
                          distance(origin, destination);
       dijkstra.link(destination, origin, d);
     }
@@ -268,8 +268,8 @@ ContestDijkstra::add_edges(const ScanTaskPoint& origin)
 const TracePoint &
 ContestDijkstra::get_point(const ScanTaskPoint &sp) const
 {
-  assert(sp.second < n_points);
-  return trace[sp.second];
+  assert(sp.point_index < n_points);
+  return trace[sp.point_index];
 }
 
 unsigned

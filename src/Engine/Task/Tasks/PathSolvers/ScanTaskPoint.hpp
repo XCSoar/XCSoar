@@ -29,6 +29,19 @@ Copyright_License {
  * number (turn point number); second element is the index in the
  * #TracePointVector / #SearchPointVector.
  */
-typedef std::pair<unsigned, unsigned> ScanTaskPoint;
+struct ScanTaskPoint {
+  unsigned stage_number;
+
+  unsigned point_index;
+
+  ScanTaskPoint(unsigned _stage_number, unsigned _point_index)
+    :stage_number(_stage_number), point_index(_point_index) {}
+
+  bool operator<(const ScanTaskPoint &other) const {
+    return stage_number < other.stage_number ||
+      (stage_number == other.stage_number &&
+       point_index < other.point_index);
+  }
+};
 
 #endif

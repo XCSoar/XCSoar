@@ -72,14 +72,14 @@ OLCSprint::find_start() const
   if (end_time > 9000) {
     // fast forward to 2.5 hours before finish
     const unsigned start_time = end_time-9000;
-    assert(start.second < n_points);
+    assert(start.point_index < n_points);
     while (get_point(start).time < start_time) {
-      ++start.second;
-      assert(start.second < n_points);
+      ++start.point_index;
+      assert(start.point_index < n_points);
     }
   }
 
-  return start.second;
+  return start.point_index;
 }
 
 void
@@ -102,7 +102,7 @@ OLCSprint::add_start_edges()
 void 
 OLCSprint::add_edges(const ScanTaskPoint &origin)
 {
-  const ScanTaskPoint destination(origin.first + 1, n_points - 1);
+  const ScanTaskPoint destination(origin.stage_number + 1, n_points - 1);
   if (!is_final(destination)) {
     ContestDijkstra::add_edges(origin);
     return;
@@ -110,7 +110,7 @@ OLCSprint::add_edges(const ScanTaskPoint &origin)
   /*
     For final, only add last valid point
    */
-  const unsigned d = get_weighting(origin.first) *
+  const unsigned d = get_weighting(origin.stage_number) *
     distance(origin, destination);
   dijkstra.link(destination, origin, d);
 }

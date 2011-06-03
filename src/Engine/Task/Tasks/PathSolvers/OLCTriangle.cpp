@@ -93,8 +93,8 @@ OLCTriangle::path_closed() const
   ScanTaskPoint start(0, 0);
 
   assert(first_tp < n_points);
-  for (start.second=0; start.second <= first_tp; 
-       ++start.second) {
+  for (start.point_index = 0; start.point_index <= first_tp;
+       ++start.point_index) {
 
     const fixed d_this =
       get_point(start).get_location().distance(
@@ -206,20 +206,22 @@ OLCTriangle::add_start_edges()
 void 
 OLCTriangle::add_edges(const ScanTaskPoint& origin)
 {
-  assert(origin.second < n_points);
-  ScanTaskPoint destination(origin.first+1, origin.second+1);
+  assert(origin.point_index < n_points);
+  ScanTaskPoint destination(origin.stage_number + 1, origin.point_index + 1);
 
-  switch (destination.first) {
+  switch (destination.stage_number) {
   case 1:
     // add points up to finish
-    for (destination.second=0; destination.second < origin.second; 
-         ++destination.second) {
+    for (destination.point_index = 0;
+         destination.point_index < origin.point_index;
+         ++destination.point_index) {
       const unsigned d = 
         distance(origin, destination);
 
       if (!is_fai || (4*d >= best_d)) { // no reason to add candidate if worse
                                         // than 25% rule for FAI tasks
-        dijkstra.link(destination, origin, get_weighting(origin.first)*d);
+        dijkstra.link(destination, origin,
+                      get_weighting(origin.stage_number) * d);
       }
 
     }
@@ -228,24 +230,25 @@ OLCTriangle::add_edges(const ScanTaskPoint& origin)
     find_solution(origin);
 
     // give first leg points to penultimate node
-    for (; destination.second < n_points-1; ++destination.second) {
+    for (; destination.point_index < n_points-1; ++destination.point_index) {
       solution[2] = get_point(destination);
       const unsigned d = second_leg_distance(destination, best_d);
       if (d) {
-        dijkstra.link(destination, origin, get_weighting(origin.first)*d);
+        dijkstra.link(destination, origin,
+                      get_weighting(origin.stage_number) * d);
 
         // we have an improved solution
         is_complete = true;
 
         // need to scan again whether path is closed
         is_closed = false;
-        first_tp = origin.second;
+        first_tp = origin.point_index;
       }
     }
     break;
   case 3:
     // dummy just to close the triangle
-    destination.second = n_points-1;
+    destination.point_index = n_points - 1;
     dijkstra.link(destination, origin, 0);
     break;
   default:
