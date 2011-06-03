@@ -273,15 +273,13 @@ dlgTextEntryShowModal(TCHAR *text, int width,
 {
   switch (Appearance.TextInputStyle) {
   case tiDefault:
+  case tiKeyboard:
     if (has_pointer())
       return dlgTextEntryKeyboardShowModal(text, width, accb);
     else {
       dlgTextEntryHighscoreType(text, width);
       return true;
     }
-
-  case tiKeyboard:
-    return dlgTextEntryKeyboardShowModal(text, width, accb);
 
   case tiHighScore:
     dlgTextEntryHighscoreType(text, width);
