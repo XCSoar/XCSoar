@@ -48,6 +48,11 @@
 template<typename T, unsigned size>
 class SliceAllocator {
   typedef std::size_t size_type;
+  typedef T value_type;
+  typedef T *pointer;
+  typedef const T *const_pointer;
+  typedef T &reference;
+  typedef const T &const_reference;
 
   /**
    * One allocated item in the heap.  When it is on the "available"
