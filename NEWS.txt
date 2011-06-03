@@ -22,6 +22,7 @@ Version 6.1.1 - not yet released
   - optionally load XCSoarData from USB drive
   - swap "ACK Warn" / "ACK Space" hot keys
   - disallow the on-screen keyboard
+  - fix default font for "important topology"
 
 Version 6.1 - 2011/05/19
 * devices
