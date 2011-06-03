@@ -26,11 +26,11 @@ Copyright_License {
 #include <algorithm>
 
 Trace::Trace(const unsigned _no_thin_time, const unsigned max_time,
-             const unsigned max_points) :
-  m_max_time(max_time),
-  no_thin_time(_no_thin_time),
-  m_max_points(max_points),
-  m_opt_points((3*max_points)/4)
+             const unsigned max_points)
+  :m_max_time(max_time),
+   no_thin_time(_no_thin_time),
+   m_max_points(max_points),
+   m_opt_points((3*max_points)/4)
 {
   m_last_point.time = null_time;
   assert(max_points >= 4);
