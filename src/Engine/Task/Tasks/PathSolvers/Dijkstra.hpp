@@ -239,7 +239,7 @@ private:
       // first entry
       // If the node wasn't found
       // -> Insert a new node into the node_parent_map
-      node_parents.insert(make_pair(node, parent));
+      node_parents.insert(std::make_pair(node, parent));
     else
       // If the node was found
       // -> Replace the according parent node with the new one
