@@ -48,6 +48,18 @@ Copyright_License {
 #define XCSDATADIR _T("XCSoarData")
 
 /**
+ * The default mount point of the SD card on Android.
+ */
+#define ANDROID_SDCARD "/sdcard"
+
+/**
+ * On the Samsung Galaxy Tab, the "external" SD card is mounted here.
+ * Shame on the Samsung engineers, they didn't implement
+ * Environment.getExternalStorageDirectory() properly.
+ */
+#define ANDROID_SAMSUNG_EXTERNAL_SD "/sdcard/external_sd"
+
+/**
  * The absolute location of the XCSoarData directory.
  */
 static TCHAR *data_path;
@@ -292,14 +304,14 @@ FindDataPath()
     /* hack for Samsung Galaxy S and Samsung Galaxy Tab (which has a
        build-in and an external SD card) */
     struct stat st;
-    if (stat("/sdcard/external_sd", &st) == 0 &&
+    if (stat(ANDROID_SAMSUNG_EXTERNAL_SD, &st) == 0 &&
         (st.st_mode & S_IFDIR) != 0 &&
-        fgrep("/proc/mounts", "/sdcard/external_sd "))
-      return strdup("/sdcard/external_sd/XCSoarData");
+        fgrep("/proc/mounts", ANDROID_SAMSUNG_EXTERNAL_SD " "))
+      return strdup(ANDROID_SAMSUNG_EXTERNAL_SD "/" XCSDATADIR);
 #endif
 
     /* hard-coded path for Android */
-    return _tcsdup(_T("/sdcard/XCSoarData"));
+    return _tcsdup(_T(ANDROID_SDCARD "/" XCSDATADIR));
   }
 
 #ifdef _WIN32_WCE
