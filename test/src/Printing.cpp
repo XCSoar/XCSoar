@@ -600,7 +600,7 @@ PrintHelper::contestmanager_print(const ContestManager& man)
     for (TracePointVector::const_iterator it = v.begin();
          it != v.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
-         << " " << it->NavAltitude << " " << it->time 
+         << " " << it->GetAltitude() << " " << it->time
          << "\n";
     }
   }
@@ -614,7 +614,7 @@ PrintHelper::contestmanager_print(const ContestManager& man)
     for (TracePointVector::const_iterator it = v.begin();
          it != v.end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
-         << " " << it->NavAltitude << " " << it->time 
+         << " " << it->GetAltitude() << " " << it->time
          << "\n";
     }
   }
@@ -631,7 +631,7 @@ PrintHelper::contestmanager_print(const ContestManager& man)
     for (const TracePoint* it = man.stats.solution[0].begin();
          it != man.stats.solution[0].end(); ++it) {
       fs << it->get_location().Longitude << " " << it->get_location().Latitude 
-         << " " << it->NavAltitude << " " << it->time 
+         << " " << it->GetAltitude() << " " << it->time
          << "\n";
     }
   }
@@ -659,9 +659,9 @@ print_tpv(const TracePointVector& vec, std::ofstream& fs)
     fs << it->time 
        << " " << it->get_location().Longitude 
        << " " << it->get_location().Latitude
-       << " " << it->NavAltitude
+       << " " << it->GetAltitude()
        << " " << it->last_time
-       << " " << it->Vario
+       << " " << it->GetVario()
        << "\n";
     last_time = it->time;
   }

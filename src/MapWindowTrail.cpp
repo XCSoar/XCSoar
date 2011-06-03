@@ -85,16 +85,16 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
     value_min = fixed(500);
     for (TracePointVector::const_iterator it = trace.begin();
          it != trace.end(); ++it) {
-      value_max = max(it->NavAltitude, value_max);
-      value_min = min(it->NavAltitude, value_min);
+      value_max = max(it->GetAltitude(), value_max);
+      value_min = min(it->GetAltitude(), value_min);
     }
   } else {
     value_max = fixed(0.75);
     value_min = fixed(-2.0);
     for (TracePointVector::const_iterator it = trace.begin();
          it != trace.end(); ++it) {
-      value_max = max(it->NettoVario, value_max);
-      value_min = min(it->NettoVario, value_min);
+      value_max = max(it->GetVario(), value_max);
+      value_min = min(it->GetVario(), value_min);
     }
     value_max = min(fixed(7.5), value_max);
     value_min = max(fixed(-5.0), value_min);
@@ -106,18 +106,18 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
        it != trace.end(); ++it) {
     const fixed dt = Basic().Time - fixed(it->time);
     RasterPoint pt = projection.GeoToScreen(it->get_location().
-        parametric(traildrift, dt * it->drift_factor));
+        parametric(traildrift, dt * it->drift_factor / 256));
 
     if (it->last_time == last_time) {
       if (settings_map.SnailType == stAltitude) {
-        int index = (it->NavAltitude - value_min) / (value_max - value_min) *
+        int index = (it->GetAltitude() - value_min) / (value_max - value_min) *
                     (NUMSNAILCOLORS - 1);
         index = max(0, min(NUMSNAILCOLORS - 1, index));
         canvas.select(Graphics::hpSnail[index]);
       } else {
-        const fixed colour_vario = negative(it->NettoVario) ?
-                                   - it->NettoVario / value_min :
-                                   it->NettoVario / value_max ;
+        const fixed colour_vario = negative(it->GetVario())
+          ? - it->GetVario() / value_min
+          : it->GetVario() / value_max ;
 
         if (!settings_map.SnailScaling ||
             projection.GetMapScale() > fixed_int_constant(6000))

@@ -84,8 +84,8 @@ bool
 AbstractContest::finish_altitude_valid(const TracePoint& start,
                                        const TracePoint& finish) const
 {
-  return (finish.NavAltitude + fixed(m_finish_alt_diff) >=
-          start.NavAltitude);
+  return finish.GetIntegerAltitude() + (int)m_finish_alt_diff >=
+    start.GetIntegerAltitude();
 }
 
 fixed 
