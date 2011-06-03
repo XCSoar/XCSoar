@@ -20,6 +20,7 @@ Version 6.1.1 - not yet released
   - fix UI lag
   - fix default task on startup
   - optionally load XCSoarData from USB drive
+  - swap "ACK Warn" / "ACK Space" hot keys
 
 Version 6.1 - 2011/05/19
 * devices

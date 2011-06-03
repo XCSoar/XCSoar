@@ -200,12 +200,12 @@ OnKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 #ifdef GNAV
     case VK_APP1:
     case '6':
-      Ack();
+      Ack1();
     return true;
 
     case VK_APP2:
     case '7':
-      Ack1();
+      Ack();
     return true;
 
     case VK_APP3:
