@@ -31,8 +31,8 @@
 #include <assert.h>
 #include <stdio.h>
 
-Trace full_trace;
-Trace sprint_trace(9000, 300);
+static Trace full_trace(60);
+static Trace sprint_trace(0, 9000, 300);
 unsigned handicap = 100;
 
 ContestManager olc_classic(OLC_Classic, handicap, 
