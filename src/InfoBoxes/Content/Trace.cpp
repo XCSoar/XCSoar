@@ -146,7 +146,7 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkEnter:
     dlgAnalysisShowModal(XCSoarInterface::main_window,
-                         *glide_computer,
+                         CommonInterface::Full(), *glide_computer,
                          protected_task_manager, &airspace_database, terrain,
                          0);
     return true;

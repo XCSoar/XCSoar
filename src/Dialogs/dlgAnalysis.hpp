@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_ANALYSIS_DIALOG_HPP
 
 class SingleWindow;
+class FullBlackboard;
 class GlideComputer;
 class ProtectedTaskManager;
 class Airspaces;
@@ -32,6 +33,7 @@ class RasterTerrain;
 
 void
 dlgAnalysisShowModal(SingleWindow &parent,
+                     const FullBlackboard &blackboard,
                      const GlideComputer &glide_computer,
                      const ProtectedTaskManager *protected_task_manager,
                      const Airspaces *airspaces,

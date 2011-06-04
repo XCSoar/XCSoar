@@ -29,7 +29,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Init.hpp"
 #include "ResourceLoader.hpp"
-#include "Interface.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Logger/Logger.hpp"
 #include "Terrain/RasterWeather.hpp"
@@ -53,6 +52,7 @@ Copyright_License {
 #include "GlideComputerInterface.hpp"
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
+#include "InterfaceBlackboard.hpp"
 
 /* fake symbols: */
 
@@ -104,8 +104,6 @@ EstimateThermalBase(const GeoPoint Thermal_Location,
 
 /* done with fake symbols. */
 
-InterfaceBlackboard CommonInterface::blackboard;
-
 static RasterTerrain *terrain;
 
 static void
@@ -136,6 +134,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   const Waypoints way_points;
 
+  InterfaceBlackboard blackboard;
+
   GlideComputerTaskEvents task_events;
   TaskManager task_manager(task_events, way_points);
 
@@ -145,7 +145,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
   ProtectedTaskManager protected_task_manager(task_manager,
-                                              XCSoarInterface::SettingsComputer(),
+                                              blackboard.SettingsComputer(),
                                               task_events, airspace_database);
 
   LoadFiles(airspace_database);
@@ -170,12 +170,12 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                   0, 0, 640, 480);
 
   Graphics::Initialise();
-  Graphics::InitialiseConfigured(CommonInterface::SetSettingsMap());
+  Graphics::InitialiseConfigured(blackboard.SettingsMap());
 
   Fonts::Initialize();
   main_window.show();
 
-  dlgAnalysisShowModal(main_window, glide_computer,
+  dlgAnalysisShowModal(main_window, blackboard, glide_computer,
                        &protected_task_manager, &airspace_database, terrain);
 
   Fonts::Deinitialize();

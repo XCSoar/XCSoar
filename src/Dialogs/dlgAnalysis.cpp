@@ -65,6 +65,7 @@ enum analysis_page {
 
 class ChartControl;
 
+static const FullBlackboard *blackboard;
 static const GlideComputer *glide_computer;
 static const ProtectedTaskManager *protected_task_manager;
 static const Airspaces *airspaces;
@@ -131,11 +132,10 @@ ChartControl::on_paint(Canvas &canvas)
 {
   assert(glide_computer != NULL);
 
-  const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SettingsComputer();
-  const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
-  const NMEA_INFO &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const SETTINGS_COMPUTER &settings_computer = blackboard->SettingsComputer();
+  const SETTINGS_MAP &settings_map = blackboard->SettingsMap();
+  const NMEA_INFO &basic = blackboard->Basic();
+  const DERIVED_INFO &calculated = blackboard->Calculated();
 
 #ifdef ENABLE_OPENGL
   /* enable clipping */
@@ -228,12 +228,11 @@ ChartControl::on_paint(Canvas &canvas)
 static void
 UpdateCrossSection()
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const NMEA_INFO &basic = blackboard->Basic();
+  const DERIVED_INFO &calculated = blackboard->Calculated();
 
   assert(csw != NULL);
-  csw->ReadBlackboard(basic, calculated,
-                      XCSoarInterface::SettingsMap());
+  csw->ReadBlackboard(basic, calculated, blackboard->SettingsMap());
   csw->set_direction(basic.track);
   csw->set_start(basic.Location);
 }
@@ -249,9 +248,8 @@ Update(void)
   assert(csw != NULL);
   assert(glide_computer != NULL);
 
-  const SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SettingsComputer();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const SETTINGS_COMPUTER &settings_computer = blackboard->SettingsComputer();
+  const DERIVED_INFO &calculated = blackboard->Calculated();
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
 
@@ -555,12 +553,14 @@ static CallBackTableEntry CallBackTable[] = {
 
 void
 dlgAnalysisShowModal(SingleWindow &parent,
+                     const FullBlackboard &_blackboard,
                      const GlideComputer &_glide_computer,
                      const ProtectedTaskManager *_protected_task_manager,
                      const Airspaces *_airspaces,
                      const RasterTerrain *_terrain,
                      int _page)
 {
+  blackboard = &_blackboard;
   glide_computer = &_glide_computer;
   protected_task_manager = _protected_task_manager;
   airspaces = _airspaces;
