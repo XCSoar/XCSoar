@@ -200,4 +200,56 @@ public:
   }
 };
 
+/**
+ * This allocator refers to one global SliceAllocator, instead of
+ * creating a new SliceAllocator for each container.
+ *
+ * @param T the type that is wrapped by this allocator
+ * @param size the number of objects for each area
+ */
+template<typename T, unsigned size>
+class GlobalSliceAllocator {
+  typedef SliceAllocator<T, size> Allocator;
+
+  static Allocator allocator;
+
+public:
+  typedef size_t size_type;
+  typedef T value_type;
+  typedef T *pointer;
+  typedef const T *const_pointer;
+  typedef T &reference;
+  typedef const T &const_reference;
+
+  template<typename O>
+  struct rebind {
+    typedef GlobalSliceAllocator<O, size> other;
+  };
+
+public:
+  GlobalSliceAllocator() {}
+
+  template<typename U>
+  GlobalSliceAllocator(const GlobalSliceAllocator<U, size> &_other) {}
+
+  T *allocate(const size_type n) {
+    return allocator.allocate(n);
+  }
+
+  void deallocate(T *t, const size_type n) {
+    return allocator.deallocate(t, n);
+  }
+
+  void construct(T *t, const T &val) {
+    return allocator.construct(t, val);
+  }
+
+  void destroy(T *t) {
+    return allocator.destroy(t);
+  }
+};
+
+template<typename T, unsigned size>
+SliceAllocator<T, size> GlobalSliceAllocator<T, size>::allocator;
+
 #endif

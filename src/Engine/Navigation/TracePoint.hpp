@@ -12,10 +12,7 @@
  * Class for points used in traces (snail trail, OLC scans)
  * Internally, keeps track of predecessors as a kind of a linked-list
  */
-class TracePoint:
-  public SearchPoint,
-  public ALTITUDE_STATE,
-  public VARIO_STATE
+class TracePoint : public SearchPoint
 {
 public:
   /** Time of sample */
@@ -24,10 +21,21 @@ public:
   mutable unsigned last_time;
   /**
    * Thermal drift factor:
-   * 1 indicates drift rate equal to wind speed
+   * 256 indicates drift rate equal to wind speed
    * 0 indicates no drift.
    */
-  fixed drift_factor;
+  unsigned short drift_factor;
+
+  /**
+   * The NavAltitude [m].  This is a "short" integer to save memory.
+   */
+  signed short altitude;
+
+  /**
+   * The NettoVario value [m/256s].  This is a "short" fixed-point
+   * integer to save memory.
+   */
+  signed short vario;
 
 public:
   /**
@@ -58,6 +66,22 @@ public:
 
   bool Defined() const {
     return time != (unsigned)(0 - 1);
+  }
+
+  fixed GetAltitude() const {
+    return fixed(altitude);
+  }
+
+  /**
+   * Returns the altitude as an integer.  Some calculations may not
+   * need the fractional part.
+   */
+  int GetIntegerAltitude() const {
+    return altitude;
+  }
+
+  fixed GetVario() const {
+    return fixed(vario) / 256;
   }
 
   /** 
