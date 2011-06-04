@@ -25,11 +25,9 @@
 #include "Navigation/TaskProjection.hpp"
 #include "Math/FastMath.h"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
-#include <stdio.h>
 
 RoutePlanner::RoutePlanner(const GlidePolar& polar,
                            const SpeedVector& wind):
-  verbose(0),
   rpolars_route(polar, wind),
   rpolars_reach(polar, wind),
   terrain(NULL),
@@ -130,23 +128,8 @@ RoutePlanner::solve(const AGeoPoint& origin,
 
   unsigned best_d = UINT_MAX;
 
-  if (verbose) {
-    printf("# goal node (%d,%d,%d)\n",
-           m_astar_goal.Longitude, m_astar_goal.Latitude, m_astar_goal.altitude);
-    printf("# start node (%d,%d,%d)\n",
-           start.Longitude, start.Latitude, start.altitude);
-  }
-
   while (!m_planner.empty()) {
     const RoutePoint node = m_planner.pop();
-
-    if (verbose>1) {
-      printf("# processing node (%d,%d,%d)  %d,%d  q size %d\n",
-             node.Longitude, node.Latitude, node.altitude,
-             m_planner.get_node_value(node).g,
-             m_planner.get_node_value(node).h,
-             m_planner.queue_size());
-    }
 
     h_min = std::min(h_min, node.altitude);
     h_max = std::max(h_max, node.altitude);
@@ -183,10 +166,6 @@ RoutePlanner::solve(const AGeoPoint& origin,
 
   }
   count_unique = m_unique.size();
-
-  if (retval && verbose) {
-    printf("# solved with %d intermediate points\n", (int)(solution_route.size()-2));
-  }
 
   if (retval) {
     // correct solution for rounding
@@ -297,26 +276,6 @@ RoutePlanner::link_cleared(const RouteLink &e)
                        (is_final? 0 : RoutePolars::round_time(h)));
   // add one to tie-break towards lower number of links
 
-  if (verbose>1) {
-    printf("# link (%d,%d,%d) (%d,%d,%d) value -----------------------------  %d %d = %d\n",
-           e.first.Longitude, e.first.Latitude, e.first.altitude,
-           e.second.Longitude, e.second.Latitude, e.second.altitude,
-           g, h, g+h
-      );
-
-    GeoPoint e1 = task_projection.unproject(e.first);
-    GeoPoint e2 = task_projection.unproject(e.second);
-    printf("%g %g %d # cleared\n",
-           (double)e1.Longitude.value_degrees(),
-           (double)e1.Latitude.value_degrees(),
-           e.first.altitude);
-    printf("%g %g %d # cleared\n",
-           (double)e2.Longitude.value_degrees(),
-           (double)e2.Latitude.value_degrees(),
-           e.second.altitude);
-    printf("# cleared\n");
-  }
-
   m_planner.reserve(ASTAR_QUEUE_SIZE);
   m_planner.link(e.second, e.first, v);
   return true;
@@ -343,20 +302,6 @@ RoutePlanner::add_candidate(const RouteLinkBase& e)
 
   const RouteLink c_link = rpolars_route.generate_intermediate(e.first, e.second, task_projection);
 
-  if (verbose>2) {
-    GeoPoint e1 = task_projection.unproject(c_link.first);
-    printf("%g %g %d # cand\n",
-           (double)e1.Longitude.value_degrees(),
-           (double)e1.Latitude.value_degrees(),
-           c_link.first.altitude);
-    GeoPoint e2 = task_projection.unproject(c_link.second);
-    printf("%g %g %d # cand\n",
-           (double)e2.Longitude.value_degrees(),
-           (double)e2.Latitude.value_degrees(),
-           c_link.second.altitude);
-    printf("# cand\n");
-  }
-
   m_links.push(c_link);
   return;
 }
@@ -366,20 +311,6 @@ RoutePlanner::add_candidate(const RouteLink& e)
 {
   if (!set_unique(e))
     return;
-
-  if (verbose>2) {
-    GeoPoint e1 = task_projection.unproject(e.first);
-    printf("%g %g %d # cand\n",
-           (double)e1.Longitude.value_degrees(),
-           (double)e1.Latitude.value_degrees(),
-           e.first.altitude);
-    GeoPoint e2 = task_projection.unproject(e.second);
-    printf("%g %g %d # cand\n",
-           (double)e2.Longitude.value_degrees(),
-           (double)e2.Latitude.value_degrees(),
-           e.second.altitude);
-    printf("# cand\n");
-  }
 
   m_links.push(e);
   return;
@@ -415,16 +346,6 @@ RoutePlanner::add_shortcut(const RoutePoint& node)
 
   if (check_clearance(r_shortcut, inx)) {
     link_cleared(r_shortcut);
-  } else
-    return;
-
-  if (verbose>1) {
-    GeoPoint e2 = task_projection.unproject(previous);
-    printf("%g %g %d # shortcut\n",
-           (double)e2.Longitude.value_degrees(),
-           (double)e2.Latitude.value_degrees(),
-           previous.altitude);
-    printf("# shortcut\n");
   }
 }
 
@@ -505,12 +426,6 @@ RoutePlanner::add_nearby_terrain_sweep(const RoutePoint& p, const RouteLink &c_l
     return;
 
   add_candidate(link_divert);
-
-  if (verbose>1) {
-    printf("# divert link (%d,%d,%d) to (%d,%d,%d)\n",
-           link_divert.first.Longitude, link_divert.first.Latitude, link_divert.first.altitude,
-           link_divert.second.Longitude, link_divert.second.Latitude, link_divert.second.altitude);
-  }
 }
 
 void
@@ -555,13 +470,6 @@ RoutePlanner::add_nearby_terrain(const RoutePoint &p, const RouteLink& e)
 
   //  RoutePoint dummy;
   //  assert(check_clearance(c_link, dummy));
-
-  if (verbose<2)
-    return;
-
-  printf("# direct link cleared (%d,%d,%d) to (%d,%d,%d)\n",
-         c_link.first.Longitude, c_link.first.Latitude, c_link.first.altitude,
-         c_link.second.Longitude, c_link.second.Latitude, c_link.second.altitude);
 }
 
 void

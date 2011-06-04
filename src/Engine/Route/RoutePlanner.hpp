@@ -204,9 +204,6 @@ public:
                     const AGeoPoint& destination,
                     GeoPoint& intx) const;
 
-  unsigned short verbose; /**< Used for debugging output. To be removed when
-                           * code is stable. */
-
   /**
    * Find arrival height at destination.
    *

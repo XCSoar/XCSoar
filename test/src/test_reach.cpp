@@ -46,7 +46,6 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
   printf("# pixel size %g\n", (double)pd);
 
   bool retval= true;
-  route.verbose = 2;
 
   RoutePlannerConfig config;
   config.mode = RoutePlannerConfig::rpBoth;

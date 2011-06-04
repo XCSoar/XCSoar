@@ -46,7 +46,6 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
   printf("# pixel size %g\n", (double)pd);
 
   bool retval= true;
-  route.verbose = 0;
 
   {
     std::ofstream fout ("results/terrain.txt");
@@ -74,9 +73,6 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
     GeoPoint dest = GeoVector(fixed(40000.0), Angle::radians(ang)).end_point(origin);
 
     short hdest = map.GetHeight(dest)+100;
-
-    if (i==3)
-      route.verbose=3;
 
     retval = route.solve(AGeoPoint(origin, map.GetHeight(origin)+100),
                          AGeoPoint(dest, positive(mc)? hdest: std::max(hdest, (short)3200)),
