@@ -252,7 +252,7 @@ public:
   gcc_pure
   fixed get_ordered_taskpoint_radius(const unsigned TPindex) const;
 
-  void route_set_terrain(RasterTerrain* terrain);
+  void route_set_terrain(const RasterTerrain *terrain);
   void route_solve(const AGeoPoint& dest, const AGeoPoint& start,
                    const short h_ceiling);
   void route_update_polar(const SpeedVector& wind);

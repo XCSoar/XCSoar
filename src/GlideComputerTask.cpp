@@ -186,7 +186,7 @@ GlideComputerTask::OnTakeoff()
 }
 
 void 
-GlideComputerTask::set_terrain(RasterTerrain* _terrain) {
+GlideComputerTask::set_terrain(const RasterTerrain* _terrain) {
   terrain = _terrain;
   m_task.route_set_terrain(terrain);
 }

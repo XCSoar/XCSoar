@@ -36,7 +36,7 @@ class GlideComputerTask:
   GPSClock route_clock;
   GPSClock reach_clock;
 
-  RasterTerrain *terrain;
+  const RasterTerrain *terrain;
 
 public:
   GlideComputerTask(ProtectedTaskManager& task);
@@ -51,7 +51,7 @@ protected:
   void ProcessMoreTask();
   void ResetFlight(const bool full=true);
 
-  void set_terrain(RasterTerrain* _terrain);
+  void set_terrain(const RasterTerrain* _terrain);
 
   virtual void OnTakeoff();
 

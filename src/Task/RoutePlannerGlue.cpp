@@ -35,11 +35,11 @@ RoutePlannerGlue::RoutePlannerGlue(const GlidePolar& polar,
 }
 
 void
-RoutePlannerGlue::set_terrain(RasterTerrain* _terrain)
+RoutePlannerGlue::set_terrain(const RasterTerrain *_terrain)
 {
   terrain = _terrain;
   if (terrain) {
-    RasterTerrain::ExclusiveLease lease(*terrain);
+    RasterTerrain::Lease lease(*terrain);
     m_planner.reset();
     m_planner.set_terrain(&terrain->map);
   } else {
@@ -54,7 +54,7 @@ RoutePlannerGlue::solve(const AGeoPoint& origin,
                         const RoutePlannerConfig& config,
                         const short h_ceiling)
 {
-  RasterTerrain::ExclusiveLease lease(*terrain);
+  RasterTerrain::Lease lease(*terrain);
   return m_planner.solve(origin, destination, config, h_ceiling);
 }
 
@@ -62,7 +62,7 @@ void
 RoutePlannerGlue::solve_reach(const AGeoPoint& origin, const bool do_solve)
 {
   if (terrain) {
-    RasterTerrain::ExclusiveLease lease(*terrain);
+    RasterTerrain::Lease lease(*terrain);
     m_planner.solve_reach(origin, do_solve);
   } else {
     m_planner.solve_reach(origin, do_solve);
@@ -89,7 +89,7 @@ RoutePlannerGlue::intersection(const AGeoPoint& origin,
                                const AGeoPoint& destination,
                                GeoPoint& intx) const
 {
-  RasterTerrain::ExclusiveLease lease(*terrain);
+  RasterTerrain::Lease lease(*terrain);
   return m_planner.intersection(origin, destination, intx);
 }
 

@@ -327,7 +327,7 @@ ProtectedTaskManager::reset()
 }
 
 void
-ProtectedTaskManager::route_set_terrain(RasterTerrain* terrain)
+ProtectedTaskManager::route_set_terrain(const RasterTerrain *terrain)
 {
   ExclusiveLease lease(*this);
   m_route.set_terrain(terrain);
