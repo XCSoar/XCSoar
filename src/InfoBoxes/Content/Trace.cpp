@@ -39,6 +39,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "GlideComputer.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
+#include "Dialogs/dlgAnalysis.hpp"
 
 static PixelRect
 get_spark_rect(const InfoBoxWindow &infobox)

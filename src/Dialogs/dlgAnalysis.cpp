@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/Internal.hpp"
 #include "CrossSection/CrossSectionWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
