@@ -56,7 +56,6 @@ struct CLIMB_INFO
     return positive(LastThermalAverage);
   }
 
-  void ClearPartial();
   void Clear();
 };
 

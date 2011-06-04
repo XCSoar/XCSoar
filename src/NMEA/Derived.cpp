@@ -35,12 +35,25 @@ TERRAIN_ALT_INFO::Clear()
 void
 DERIVED_INFO::reset()
 {
+  VARIO_INFO::Clear();
+  CLIMB_INFO::Clear();
+  CIRCLING_INFO::Clear();
+  ClimbHistory::Clear();
+  TERRAIN_ALT_INFO::Clear();
+
   Heading = Angle::native(fixed_zero);
   pressure_available.Clear();
   AirspeedAvailable.Clear();
   estimated_wind_available.Clear();
+  wind_available.Clear();
   task_stats.reset();
   common_stats.reset();
+
+  flight.flying_state_reset();
+  thermal_band.clear();
+  thermal_locator.Clear();
+
+  trace_history.clear();
 
   auto_mac_cready_available.Clear();
 }
@@ -55,34 +68,4 @@ DERIVED_INFO::expire(fixed Time)
   AirspeedAvailable.Expire(Time, fixed(5));
 
   auto_mac_cready_available.Expire(Time, fixed(300));
-}
-
-void
-DERIVED_INFO::ResetFlight(bool full)
-{
-  if (full) {
-    VARIO_INFO::Clear();
-    CLIMB_INFO::Clear();
-    CIRCLING_INFO::Clear();
-    ClimbHistory::Clear();
-    trace_history.clear();
-  } else {
-    CLIMB_INFO::ClearPartial();
-    CIRCLING_INFO::ClearPartial();
-  }
-
-  pressure_available.Clear();
-  AirspeedAvailable.Clear();
-  estimated_wind_available.Clear();
-  wind_available.Clear();
-
-  flight.flying_state_reset();
-
-  thermal_band.clear();
-
-  thermal_locator.Clear();
-
-  auto_mac_cready_available.Clear();
-
-  TERRAIN_ALT_INFO::Clear();
 }

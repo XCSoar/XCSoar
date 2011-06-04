@@ -22,20 +22,11 @@ Copyright_License {
 */
 
 #include "ClimbInfo.hpp"
-#include "Defines.h"
-
-void
-CLIMB_INFO::ClearPartial()
-{
-  // If you load persistent values, you need at least these reset:
-  LastThermalAverage = fixed_zero;
-  ThermalGain = fixed_zero;
-}
 
 void
 CLIMB_INFO::Clear()
 {
-  ClearPartial();
-
   ThermalAverage = fixed_zero;
+  ThermalGain = fixed_zero;
+  LastThermalAverage = fixed_zero;
 }

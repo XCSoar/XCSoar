@@ -99,7 +99,6 @@ struct CIRCLING_INFO
   /** Total height climbed during task */
   fixed TotalHeightClimb;
 
-  void ClearPartial();
   void Clear();
 };
 

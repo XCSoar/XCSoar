@@ -126,15 +126,6 @@ NMEA_INFO::reset()
 }
 
 void
-NMEA_INFO::ResetFlight(bool full)
-{
-  if (full) {
-    Time = fixed_zero;
-    BaroAltitudeAvailable.Clear();
-  }
-}
-
-void
 NMEA_INFO::expire_wall_clock()
 {
 #ifdef ANDROID

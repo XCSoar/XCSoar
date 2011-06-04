@@ -24,15 +24,9 @@ Copyright_License {
 #include "CirclingInfo.hpp"
 
 void
-CIRCLING_INFO::ClearPartial()
-{
-  Circling = false;
-}
-
-void
 CIRCLING_INFO::Clear()
 {
-  ClearPartial();
+  Circling = false;
 
   TurnRate = TurnRateWind = fixed_zero;
 

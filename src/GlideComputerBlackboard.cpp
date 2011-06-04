@@ -43,18 +43,8 @@ GlideComputerBlackboard::GlideComputerBlackboard(ProtectedTaskManager &task):
 void
 GlideComputerBlackboard::ResetFlight(const bool full)
 {
-  /*
-    \todo also need to call flight_state_reset() on Basic() ?
-
-    calculated_info.Flying = false;
-    if (full) {
-      calculated_info.FlightTime = 0;
-      calculated_info.TakeOffTime = 0;
-    }
-  */
-
-  gps_info.ResetFlight(full);
-  calculated_info.ResetFlight(full);
+  gps_info.reset();
+  calculated_info.reset();
 }
 
 /**
