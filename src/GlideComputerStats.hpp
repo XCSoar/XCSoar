@@ -31,7 +31,6 @@ Copyright_License {
 #include <assert.h>
 
 class Logger;
-class ProtectedTaskManager;
 
 class GlideComputerStats:
   virtual public GlideComputerBlackboard
@@ -46,7 +45,7 @@ protected:
   Logger *logger;
 
 public:
-  GlideComputerStats(ProtectedTaskManager &task);
+  GlideComputerStats();
 
   void SetLogger(Logger *_logger) {
     assert(logger == NULL);

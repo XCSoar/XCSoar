@@ -35,7 +35,7 @@ using std::max;
 // call any event
 
 GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task):
-  GlideComputerBlackboard(task),
+  m_task(task),
   route_clock(fixed(5)),
   reach_clock(fixed(5)),
   terrain(NULL)

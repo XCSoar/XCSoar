@@ -33,6 +33,8 @@ class RasterTerrain;
 class GlideComputerTask: 
   virtual public GlideComputerBlackboard 
 {
+  ProtectedTaskManager &m_task;
+
   GPSClock route_clock;
   GPSClock reach_clock;
 

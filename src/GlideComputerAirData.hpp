@@ -34,7 +34,6 @@ Copyright_License {
 
 class GlidePolar;
 class ProtectedAirspaceWarningManager;
-class ProtectedTaskManager;
 
 // TODO: replace copy constructors so copies of these structures
 // do not replicate the large items or items that should be singletons
@@ -57,8 +56,7 @@ private:
   WindowFilter<30> netto_30s_filter;
 
 public:
-  GlideComputerAirData(ProtectedAirspaceWarningManager &_awm,
-                       ProtectedTaskManager &_task);
+  GlideComputerAirData(ProtectedAirspaceWarningManager &_awm);
 
   virtual void ProcessIdle();
 

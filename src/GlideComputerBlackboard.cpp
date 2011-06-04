@@ -30,9 +30,8 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "Defines.h"
 
-GlideComputerBlackboard::GlideComputerBlackboard(ProtectedTaskManager &task):
-  ScreenDistanceMeters(fixed(50000)),
-  m_task(task)
+GlideComputerBlackboard::GlideComputerBlackboard()
+  :ScreenDistanceMeters(fixed(50000))
 {
 }
 

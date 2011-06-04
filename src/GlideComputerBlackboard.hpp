@@ -44,11 +44,8 @@ class GlideComputerBlackboard:
   DERIVED_INFO last_calculated_info;
   bool _time_retreated;
 
-protected:
-  ProtectedTaskManager &m_task;
-
 public:
-  GlideComputerBlackboard(ProtectedTaskManager &task);
+  GlideComputerBlackboard();
 
   void ReadBlackboard(const NMEA_INFO &nmea_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
