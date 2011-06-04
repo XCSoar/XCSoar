@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.1.2 - not yet released
+
 Version 6.1.1 - 2011/06/01
 * calculations
   - fix arrival heights which are below the safety height
