@@ -36,6 +36,8 @@ class GlideComputerTask:
   GPSClock route_clock;
   GPSClock reach_clock;
 
+  RasterTerrain *terrain;
+
 public:
   GlideComputerTask(ProtectedTaskManager& task);
 
@@ -59,8 +61,6 @@ private:
 
 protected:
   virtual void ProcessIdle();
-  RasterTerrain* terrain;
 };
 
 #endif
-

@@ -52,6 +52,9 @@ class GlideComputer:
   bool TeamCodeRefFound;
   GeoPoint TeamCodeRefLocation;
 
+  PeriodClock idle_clock;
+  VegaVoice vegavoice;
+
 public:
   GlideComputer(const Waypoints &_way_points,
                 ProtectedTaskManager& task,
@@ -75,8 +78,6 @@ public:
   void OnTransitionEnter();
 
 protected:
-  PeriodClock idle_clock;
-  VegaVoice    vegavoice;
   virtual void OnTakeoff();
   virtual void OnLanding();
   virtual void OnSwitchClimbMode(bool isclimb, bool left);

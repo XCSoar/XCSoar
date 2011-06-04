@@ -27,6 +27,9 @@
 class RasterTerrain;
 
 class RoutePlannerGlue {
+  RasterTerrain* terrain;
+  AirspaceRoute m_planner;
+
 public:
   RoutePlannerGlue(const GlidePolar& polar,
                    const Airspaces& master);
@@ -72,10 +75,6 @@ public:
   GlidePolar get_reach_polar() const;
 
   short get_terrain_base() const;
-
-private:
-  RasterTerrain* terrain;
-  AirspaceRoute m_planner;
 };
 
 #endif

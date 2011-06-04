@@ -8,6 +8,8 @@ class GlideComputer;
 class GlideComputerTaskEvents:
   public TaskEvents
 {
+  GlideComputer* m_computer;
+
 public:
   void set_computer(GlideComputer& computer);
 
@@ -24,8 +26,6 @@ public:
   void task_finish();
 
   void transition_flight_mode(const bool is_final);
-private:
-  GlideComputer* m_computer;
 };
 
 #endif

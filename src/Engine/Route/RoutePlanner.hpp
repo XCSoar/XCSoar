@@ -109,6 +109,52 @@ typedef std::vector<AGeoPoint> Route;
  */
 
 class RoutePlanner {
+protected:
+  typedef std::pair<AFlatGeoPoint, AFlatGeoPoint> ClearingPair;
+
+  bool dirty; /**< Whether an updated solution is required */
+  TaskProjection task_projection; /**< Task projection used for flat-earth representation */
+  RoutePolars rpolars_route; /**< Aircraft performance model */
+  RoutePolars rpolars_reach; /**< Aircraft performance model */
+  const RasterMap *terrain; /**< Terrain raster */
+  short h_min; /**< Minimum height scanned during solution (m) */
+  short h_max; /**< Maxmimum height scanned during solution (m) */
+  GlidePolar glide_polar_reach;
+
+private:
+  AStar<RoutePoint> m_planner; /**< A* search algorithm */
+  SearchPointVector m_search_hull; /**< Convex hull of search to date,
+                                    used by terrain node generator to prevent
+                                    backtracking */
+
+#ifdef PLANNER_SET
+  typedef std::set< RouteLinkBase> RouteLinkSet;
+#else
+  typedef std::tr1::unordered_set< RouteLinkBase > RouteLinkSet;
+#endif
+  RouteLinkSet m_unique; /**<  Links that have been visited during solution */
+  typedef std::queue< RouteLink> RouteLinkQueue;
+  RouteLinkQueue m_links; /**< Link candidates to be processed for intersection
+                           * tests */
+
+  Route solution_route; /**< Result route found by solve() method */
+
+  AFlatGeoPoint origin_last; /**< Origin at last call to solve() */
+  AFlatGeoPoint destination_last; /**< Destination at last call to solve() */
+
+  ReachFan reach;
+
+  RoutePlannerConfig::PolarMode m_reach_polar_mode;
+
+  mutable unsigned long count_dij;
+  mutable unsigned long count_unique;
+  mutable unsigned long count_supressed;
+
+protected:
+  RoutePoint m_astar_goal;
+  mutable unsigned long count_airspace;
+  mutable unsigned long count_terrain;
+
 public:
   friend class PrintHelper;
 
@@ -231,17 +277,6 @@ public:
   }
 
 protected:
-  typedef std::pair<AFlatGeoPoint, AFlatGeoPoint> ClearingPair;
-
-  bool dirty; /**< Whether an updated solution is required */
-  TaskProjection task_projection; /**< Task projection used for flat-earth representation */
-  RoutePolars rpolars_route; /**< Aircraft performance model */
-  RoutePolars rpolars_reach; /**< Aircraft performance model */
-  const RasterMap *terrain; /**< Terrain raster */
-  short h_min; /**< Minimum height scanned during solution (m) */
-  short h_max; /**< Maxmimum height scanned during solution (m) */
-  GlidePolar glide_polar_reach;
-
   /**
    * Test whether a solution is required or the solution is trivial
    * (too short, etc.)
@@ -320,30 +355,6 @@ protected:
   bool check_clearance_terrain(const RouteLink &e, RoutePoint& inp) const;
 
 private:
-  AStar<RoutePoint> m_planner; /**< A* search algorithm */
-  SearchPointVector m_search_hull; /**< Convex hull of search to date,
-                                    used by terrain node generator to prevent
-                                    backtracking */
-
-#ifdef PLANNER_SET
-  typedef std::set< RouteLinkBase> RouteLinkSet;
-#else
-  typedef std::tr1::unordered_set< RouteLinkBase > RouteLinkSet;
-#endif
-  RouteLinkSet m_unique; /**<  Links that have been visited during solution */
-  typedef std::queue< RouteLink> RouteLinkQueue;
-  RouteLinkQueue m_links; /**< Link candidates to be processed for intersection
-                           * tests */
-
-  Route solution_route; /**< Result route found by solve() method */
-
-  AFlatGeoPoint origin_last; /**< Origin at last call to solve() */
-  AFlatGeoPoint destination_last; /**< Destination at last call to solve() */
-
-  ReachFan reach;
-
-  RoutePlannerConfig::PolarMode m_reach_polar_mode;
-
   /**
    * Check a second category of obstacle clearance.  This allows compound
    * obstacle categories by subclasses.
@@ -425,14 +436,6 @@ private:
    * @return Destination score (s)
    */
   unsigned find_solution(const RoutePoint &final, Route& this_route) const;
-
-  mutable unsigned long count_dij;
-  mutable unsigned long count_unique;
-  mutable unsigned long count_supressed;
-protected:
-  RoutePoint m_astar_goal;
-  mutable unsigned long count_airspace;
-  mutable unsigned long count_terrain;
 };
 
 #endif
