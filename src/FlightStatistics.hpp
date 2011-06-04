@@ -35,7 +35,7 @@ public:
   LeastSquares Altitude_Ceiling;
   LeastSquares Task_Speed;
   LeastSquares Altitude_Terrain;
-  Mutex mutexStats;
+  mutable Mutex mutexStats;
 
   void StartTask();
 

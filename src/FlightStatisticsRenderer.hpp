@@ -46,10 +46,10 @@ class ProtectedTaskManager;
 struct ContestStatistics;
 
 class FlightStatisticsRenderer {
-  FlightStatistics &fs;
+  const FlightStatistics &fs;
 
 public:
-  FlightStatisticsRenderer(FlightStatistics &_flight_statistics)
+  FlightStatisticsRenderer(const FlightStatistics &_flight_statistics)
     :fs(_flight_statistics) {}
 
 public:
