@@ -31,6 +31,8 @@
 template<unsigned max>
 class WindowFilter : public AvFilter<max>
 {
+  unsigned i;
+
 public:
   /**
    * Updates filter to add sample to buffer
@@ -60,9 +62,6 @@ public:
     AvFilter<max>::reset();
     i = 0;
   }
-
-private:
-  unsigned i;
 };
 
 #endif
