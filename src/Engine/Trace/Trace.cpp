@@ -236,12 +236,12 @@ Trace::inside_time_window(unsigned time) const
 }
 
 void
-Trace::get_trace_edges(TracePointVector& iov) const
+Trace::get_trace_edges(TracePointVector &v) const
 {
-  if (trace_tree.size() < 2) {
-    iov.clear();
+  v.clear();
+
+  if (trace_tree.size() < 2)
     return;
-  }
 
   // special case - just look for points within time range
   TracePoint p;
@@ -255,11 +255,8 @@ Trace::get_trace_edges(TracePointVector& iov) const
     }
   }
   if ((tmin != null_time) && (m_last_point.time != null_time)) {
-    TracePointVector v;
+    v.reserve(2);
     v.push_back(p);
     v.push_back(m_last_point);
-    v.swap(iov);
-  } else {
-    iov.clear();
   }
 }

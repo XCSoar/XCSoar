@@ -281,11 +281,13 @@ class Trace: private NonCopyable
       return list.size();
     }
 
-    void get_trace(TracePointVector& iov, const unsigned min_time = 0) const {
-      if (list.size() < 3)
-        return TracePointVector().swap(iov);
+    void get_trace(TracePointVector &v, const unsigned min_time = 0) const {
+      v.clear();
 
-      TracePointVector v; v.reserve(list.size());
+      if (list.size() < 3)
+        return;
+
+      v.reserve(list.size());
       TraceDelta::const_iterator it = first();
       assert(it != last());
       do {
@@ -296,7 +298,6 @@ class Trace: private NonCopyable
         it = tit.next;
       } while (it->next != it);
       v.push_back(*(it->leaf));
-      v.swap(iov);
     }
 
     /**
