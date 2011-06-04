@@ -68,8 +68,12 @@ struct DeviceConfig {
   };
 
   port_type port_type;          /**< Type of the port */
-  unsigned port_index;          /**< Index of the port */
   unsigned speed_index;         /**< Speed index (baud rate) */
+
+  /**
+   * The path name of the serial port, e.g. "COM4:" or "/dev/ttyUSB0".
+   */
+  StaticString<64> path;
 
   /**
    * The Bluetooth MAC address of the peer.

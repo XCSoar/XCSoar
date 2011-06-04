@@ -84,6 +84,35 @@ ReadPortType(unsigned n)
   return StringToPortType(value);
 }
 
+static bool
+LoadPath(DeviceConfig &config, unsigned n)
+{
+  TCHAR buffer[64];
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("Path"));
+  return Profile::Get(buffer, config.path);
+}
+
+static bool
+LoadPortIndex(DeviceConfig &config, unsigned n)
+{
+  TCHAR buffer[64];
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("Index"));
+
+  unsigned index;
+  if (!Profile::Get(buffer, index))
+    return false;
+
+  /* adjust the number, compatibility quirk for XCSoar 5 */
+  if (index < 10)
+    ++index;
+  else if (index == 10)
+    index = 0;
+
+  _stprintf(buffer, _T("COM%u:"), index);
+  config.path = buffer;
+  return true;
+}
+
 void
 Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 {
@@ -95,15 +124,14 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("BluetoothMAC"));
   Get(buffer, config.bluetooth_mac);
 
-  MakeDeviceSettingName(buffer, _T("Port"), n, _T("Index"));
-  if (Get(buffer, Temp))
-    config.port_index = Temp;
-  else if (is_altair() && n == 0)
-    config.port_index = 2;
-  else if (is_altair() && n == 2)
-    config.port_index = 1;
-  else
-    config.port_index = 0;
+  config.path.clear();
+  if (config.port_type == DeviceConfig::SERIAL &&
+      !LoadPath(config, n) && !LoadPortIndex(config, n)) {
+    if (is_altair() && n == 0)
+      config.path = _T("COM3:");
+    else if (is_altair() && n == 2)
+      config.path = _T("COM2:");
+  }
 
   MakeDeviceSettingName(buffer, _T("Speed"), n, _T("Index"));
   if (Get(buffer, Temp))
@@ -176,8 +204,8 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("BluetoothMAC"));
   Set(buffer, config.bluetooth_mac);
 
-  MakeDeviceSettingName(buffer, _T("Port"), n, _T("Index"));
-  Set(buffer, config.port_index);
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("Path"));
+  Set(buffer, config.path);
 
   MakeDeviceSettingName(buffer, _T("Speed"), n, _T("Index"));
   Set(buffer, config.speed_index);

@@ -187,6 +187,17 @@ DevicesConfigPanel::OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t
   }
 }
 
+static void
+FillPorts(DataFieldEnum &dfe)
+{
+#ifdef WIN32
+  for (unsigned i = 1; i <= 10; ++i) {
+    TCHAR buffer[64];
+    _stprintf(buffer, _T("COM%u:"), i);
+    dfe.addEnumText(buffer);
+  }
+#endif
+}
 
 static void
 SetupDeviceFields(const DeviceConfig &config,
@@ -194,13 +205,6 @@ SetupDeviceFields(const DeviceConfig &config,
                   WndProperty *driver_field, WndButton *setup_button)
 {
 #ifndef ANDROID
-  static const TCHAR *const COMMPort[] = {
-    _T("COM1"), _T("COM2"), _T("COM3"), _T("COM4"),
-    _T("COM5"), _T("COM6"), _T("COM7"), _T("COM8"),
-    _T("COM9"), _T("COM10"), _T("COM0"),
-    NULL
-  };
-
   static const TCHAR *const tSpeed[] = {
     _T("1200"), _T("2400"), _T("4800"), _T("9600"),
     _T("19200"), _T("38400"), _T("57600"), _T("115200"),
@@ -217,6 +221,8 @@ SetupDeviceFields(const DeviceConfig &config,
       if (port_types[i].type == config.port_type)
         dfe->Set(i);
     }
+
+    FillPorts(*dfe);
 
 #ifdef ANDROID
     JNIEnv *env = Java::GetEnv();
@@ -253,11 +259,12 @@ SetupDeviceFields(const DeviceConfig &config,
       }
     }
 #else
-    dfe->addEnumTexts(COMMPort);
-
     switch (config.port_type) {
     case DeviceConfig::SERIAL:
-      dfe->Set(config.port_index + num_port_types);
+      if (!dfe->Exists(config.path))
+        dfe->addEnumText(config.path);
+
+      dfe->SetAsString(config.path);
       break;
 
     case DeviceConfig::DISABLED:
@@ -328,7 +335,7 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
       return false;
 #else
     if (config.port_type == DeviceConfig::SERIAL &&
-        value == config.port_index)
+        _tcscmp(config.path, df.GetAsString()) == 0)
       return false;
 #endif
 
@@ -337,7 +344,7 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
     config.bluetooth_mac = df.GetAsString();
 #else
     config.port_type = DeviceConfig::SERIAL;
-    config.port_index = value;
+    config.path = df.GetAsString();
 #endif
     return true;
   }

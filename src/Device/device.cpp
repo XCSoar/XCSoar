@@ -71,20 +71,6 @@ Copyright_License {
 //  of deadlock.  So, FlightData must never be locked after Comm.  Ever.
 //  Thankfully WinCE "critical sections" are recursive locks.
 
-static const TCHAR *const COMMPort[] = {
-  _T("COM1:"),
-  _T("COM2:"),
-  _T("COM3:"),
-  _T("COM4:"),
-  _T("COM5:"),
-  _T("COM6:"),
-  _T("COM7:"),
-  _T("COM8:"),
-  _T("COM9:"),
-  _T("COM10:"),
-  _T("COM0:"),
-};
-
 static const unsigned dwSpeed[] = {
   1200,
   2400,
@@ -131,7 +117,10 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     return NULL;
 
   case DeviceConfig::SERIAL:
-    path = COMMPort[config.port_index];
+    if (config.path.empty())
+      return NULL;
+
+    path = config.path.c_str();
     break;
 
   case DeviceConfig::RFCOMM:
@@ -290,7 +279,7 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
   switch (a.port_type) {
   case DeviceConfig::SERIAL:
     return b.port_type == DeviceConfig::SERIAL &&
-      a.port_index == b.port_index;
+      a.path.equals(b.path);
 
   case DeviceConfig::RFCOMM:
     return b.port_type == DeviceConfig::RFCOMM &&
