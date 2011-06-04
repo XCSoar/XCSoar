@@ -22,6 +22,8 @@
 #ifndef DIJKSTRA_HPP
 #define DIJKSTRA_HPP
 
+#include "Util/SliceAllocator.hpp"
+
 #include <map>
 #include "Util/queue.hpp"
 #include <assert.h>
@@ -244,10 +246,12 @@ private:
       it->second = parent; 
   }
 
-  typedef std::map<Node, unsigned> node_value_map;
+  typedef std::map<Node, unsigned, std::less<Node>,
+                   GlobalSliceAllocator<std::pair<Node, unsigned>, 256u> > node_value_map;
   typedef typename node_value_map::iterator node_value_iterator;
 
-  typedef std::map<Node, Node> node_parent_map;
+  typedef std::map<Node, Node, std::less<Node>,
+                   GlobalSliceAllocator<std::pair<Node, Node>, 256u> > node_parent_map;
   typedef typename node_parent_map::iterator node_parent_iterator;
   typedef typename node_parent_map::const_iterator node_parent_const_iterator;
 
