@@ -328,7 +328,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   LogStartUp(_T("OpenTerrain"));
   terrain = RasterTerrain::OpenTerrain(file_cache);
 
-  glide_computer = new GlideComputer(way_points, *protected_task_manager,
+  glide_computer = new GlideComputer(way_points, airspace_database,
+                                     *protected_task_manager,
                                      *airspace_warnings,
                                      task_events);
   glide_computer->set_terrain(terrain);

@@ -33,7 +33,6 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "LocalTime.hpp"
 #include "MapWindowProjection.hpp"
-#include "Components.hpp"
 #include "Interface.hpp"
 #include "Atmosphere/CuSonde.hpp"
 #include "LogFile.hpp"
@@ -59,7 +58,11 @@ static const fixed CruiseClimbSwitch(15);
 static const fixed ClimbCruiseSwitch(10);
 static const fixed THERMAL_TIME_MIN(45);
 
-GlideComputerAirData::GlideComputerAirData(ProtectedAirspaceWarningManager &awm):
+GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points,
+                                           Airspaces &_airspace_database,
+                                           ProtectedAirspaceWarningManager &awm)
+  :way_points(_way_points), airspace_database(_airspace_database),
+   terrain(NULL),
   m_airspace(awm),
   // scan airspace every second
   airspace_clock(fixed_one)

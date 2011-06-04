@@ -32,6 +32,9 @@ Copyright_License {
 #include "GPSClock.hpp"
 #include "Util/WindowFilter.hpp"
 
+class Waypoints;
+class Airspaces;
+class RasterTerrain;
 class GlidePolar;
 class ProtectedAirspaceWarningManager;
 
@@ -40,6 +43,10 @@ class ProtectedAirspaceWarningManager;
 // OR: just make them static?
 
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
+  const Waypoints &way_points;
+  Airspaces &airspace_database;
+  const RasterTerrain *terrain;
+
 public:
   WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
   GlideRatioCalculator rotaryLD;
@@ -56,7 +63,13 @@ private:
   WindowFilter<30> netto_30s_filter;
 
 public:
-  GlideComputerAirData(ProtectedAirspaceWarningManager &_awm);
+  GlideComputerAirData(const Waypoints &way_points,
+                       Airspaces &airspace_database,
+                       ProtectedAirspaceWarningManager &_awm);
+
+  void set_terrain(const RasterTerrain* _terrain) {
+    terrain = _terrain;
+  }
 
   virtual void ProcessIdle();
 

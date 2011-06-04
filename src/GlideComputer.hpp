@@ -57,6 +57,7 @@ class GlideComputer:
 
 public:
   GlideComputer(const Waypoints &_way_points,
+                Airspaces &_airspace_database,
                 ProtectedTaskManager& task,
                 ProtectedAirspaceWarningManager &_awm,
                 GlideComputerTaskEvents& events);

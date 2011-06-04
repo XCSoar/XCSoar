@@ -45,10 +45,11 @@ static PeriodClock last_team_code_update;
  * @return
  */
 GlideComputer::GlideComputer(const Waypoints &_way_points,
+                             Airspaces &_airspace_database,
                              ProtectedTaskManager &task,
                              ProtectedAirspaceWarningManager &airspace,
                              GlideComputerTaskEvents& events):
-  GlideComputerAirData(airspace),
+  GlideComputerAirData(_way_points, _airspace_database, airspace),
   GlideComputerTask(task),
   way_points(_way_points), protected_task_manager(task),
   TeamCodeRefId(-1)
@@ -348,5 +349,6 @@ GlideComputer::OnTransitionEnter()
 void
 GlideComputer::set_terrain(RasterTerrain* _terrain)
 {
+  GlideComputerAirData::set_terrain(_terrain);
   GlideComputerTask::set_terrain(_terrain);
 }

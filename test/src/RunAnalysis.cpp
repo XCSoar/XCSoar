@@ -111,7 +111,7 @@ EstimateThermalBase(const GeoPoint Thermal_Location,
 
 InterfaceBlackboard CommonInterface::blackboard;
 
-Waypoints way_points;
+static Waypoints way_points;
 
 static GlideComputerTaskEvents task_events;
 
@@ -161,7 +161,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   LoadFiles();
 
-  glide_computer = new GlideComputer(way_points, *protected_task_manager,
+  glide_computer = new GlideComputer(way_points, airspace_database,
+                                     *protected_task_manager,
                                      airspace_warnings,
                                      task_events);
   glide_computer->set_terrain(terrain);
