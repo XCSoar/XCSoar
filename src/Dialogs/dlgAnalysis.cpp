@@ -35,7 +35,6 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "GlideComputer.hpp"
 #include "Blackboard.hpp"
-#include "Components.hpp"
 #include "Protection.hpp"
 #include "StringUtil.hpp"
 #include "Compiler.h"
@@ -65,6 +64,11 @@ enum analysis_page {
 };
 
 class ChartControl;
+
+static const GlideComputer *glide_computer;
+static const ProtectedTaskManager *protected_task_manager;
+static const Airspaces *airspaces;
+static const RasterTerrain *terrain;
 
 static enum analysis_page page = ANALYSIS_PAGE_BAROGRAPH;
 static WndForm *wf = NULL;
@@ -511,7 +515,7 @@ OnCreateCrossSectionControl(ContainerWindow &parent, int left, int top,
 {
   csw = new CrossSectionControl(Graphics::cross_section);
   csw->set(parent, left, top, width, height, style);
-  csw->set_airspaces(&airspace_database);
+  csw->set_airspaces(airspaces);
   csw->set_terrain(terrain);
   UpdateCrossSection();
   return csw;
@@ -541,8 +545,18 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAnalysisShowModal(SingleWindow &parent, int _page)
+dlgAnalysisShowModal(SingleWindow &parent,
+                     const GlideComputer &_glide_computer,
+                     const ProtectedTaskManager *_protected_task_manager,
+                     const Airspaces *_airspaces,
+                     const RasterTerrain *_terrain,
+                     int _page)
 {
+  glide_computer = &_glide_computer;
+  protected_task_manager = _protected_task_manager;
+  airspaces = _airspaces;
+  terrain = _terrain;
+
   wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ? _T("IDR_XML_ANALYSIS_L") :
                                       _T("IDR_XML_ANALYSIS"));

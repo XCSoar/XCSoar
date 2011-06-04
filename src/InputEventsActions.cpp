@@ -679,7 +679,9 @@ InputEvents::eventStatus(const TCHAR *misc)
 void
 InputEvents::eventAnalysis(gcc_unused const TCHAR *misc)
 {
-  dlgAnalysisShowModal(XCSoarInterface::main_window);
+  dlgAnalysisShowModal(XCSoarInterface::main_window,
+                       *glide_computer,
+                       protected_task_manager, &airspace_database, terrain);
 }
 
 // WaypointDetails

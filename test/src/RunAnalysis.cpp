@@ -80,14 +80,9 @@ void ConditionMonitorsUpdate(const GlideComputer &cmp) {}
 
 bool InputEvents::processGlideComputer(unsigned) { return false; }
 
-Logger logger;
-
 void Logger::LogStartEvent(const NMEA_INFO &gps_info) {}
 void Logger::LogFinishEvent(const NMEA_INFO &gps_info) {}
 void Logger::LogPoint(const NMEA_INFO &gps_info) {}
-LoggerImpl::LoggerImpl() {}
-LoggerImpl::~LoggerImpl() {}
-TaskFile::~TaskFile() {}
 ThermalLocator::ThermalLocator() {}
 void ThermalLocator::Reset() {}
 
@@ -111,26 +106,10 @@ EstimateThermalBase(const GeoPoint Thermal_Location,
 
 InterfaceBlackboard CommonInterface::blackboard;
 
-static Waypoints way_points;
-
-static GlideComputerTaskEvents task_events;
-
-static TaskManager task_manager(task_events, way_points);
-
-Airspaces airspace_database;
-
-static AirspaceWarningManager airspace_warning(airspace_database,
-                                               task_manager);
-
-static ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
-
-ProtectedTaskManager *protected_task_manager;
-
-GlideComputer *glide_computer;
-RasterTerrain *terrain;
+static RasterTerrain *terrain;
 
 static void
-LoadFiles()
+LoadFiles(Airspaces &airspace_database)
 {
   terrain = RasterTerrain::OpenTerrain(NULL);
 
@@ -155,17 +134,27 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Profile::SetFiles(_T(""));
   Profile::Load();
 
-  protected_task_manager = new ProtectedTaskManager(task_manager,
-                                                    XCSoarInterface::SettingsComputer(),
-                                                    task_events, airspace_database);
+  const Waypoints way_points;
 
-  LoadFiles();
+  GlideComputerTaskEvents task_events;
+  TaskManager task_manager(task_events, way_points);
 
-  glide_computer = new GlideComputer(way_points, airspace_database,
-                                     *protected_task_manager,
-                                     airspace_warnings,
-                                     task_events);
-  glide_computer->set_terrain(terrain);
+  Airspaces airspace_database;
+  AirspaceWarningManager airspace_warning(airspace_database,
+                                          task_manager);
+  ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
+
+  ProtectedTaskManager protected_task_manager(task_manager,
+                                              XCSoarInterface::SettingsComputer(),
+                                              task_events, airspace_database);
+
+  LoadFiles(airspace_database);
+
+  GlideComputer glide_computer(way_points, airspace_database,
+                               protected_task_manager,
+                               airspace_warnings,
+                               task_events);
+  glide_computer.set_terrain(terrain);
 
   ScreenGlobalInit screen_init;
 
@@ -185,14 +174,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Fonts::Initialize();
   main_window.show();
 
-  dlgAnalysisShowModal(main_window, -1);
+  dlgAnalysisShowModal(main_window, glide_computer,
+                       &protected_task_manager, &airspace_database, terrain);
 
   Fonts::Deinitialize();
   Graphics::Deinitialise();
 
-  delete glide_computer;
   delete terrain;
-  delete protected_task_manager;
 
   DeinitialiseDataPath();
 
