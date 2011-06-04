@@ -45,9 +45,10 @@ protected:
   const CrossSectionLook &look;
 
   /** Pointer to a RasterTerrain instance or NULL */
-  RasterTerrain *terrain;
+  const RasterTerrain *terrain;
+
   /** Pointer to an airspace database instance or NULL */
-  Airspaces *airspace_database;
+  const Airspaces *airspace_database;
 
   /** Left side of the CrossSectionWindow */
   GeoPoint start;
@@ -75,7 +76,7 @@ public:
    * Set airspace database to use
    * @param _airspace_database Pointer to the airspace database or NULL
    */
-  void set_airspaces(Airspaces *_airspace_database) {
+  void set_airspaces(const Airspaces *_airspace_database) {
     airspace_database = _airspace_database;
   }
 
@@ -83,7 +84,7 @@ public:
    * Set RasterTerrain to use
    * @param _terrain Pointer to the RasterTerrain or NULL
    */
-  void set_terrain(RasterTerrain *_terrain) {
+  void set_terrain(const RasterTerrain *_terrain) {
     terrain = _terrain;
   }
 
