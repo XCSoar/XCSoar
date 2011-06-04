@@ -34,6 +34,8 @@ class WindowFilter : public AvFilter<max>
   unsigned i;
 
 public:
+  WindowFilter():i(0) {}
+
   /**
    * Updates filter to add sample to buffer
    *
