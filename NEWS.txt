@@ -7,6 +7,7 @@ Version 6.2 - not yet released
   - added task declaration support for the IMI ERIXX logger
   - improved support for the Digifly Leonardo
   - auto-detect serial ports on Windows CE
+  - serial port support on UNIX
 
 Version 6.1.2 - not yet released
 * calculations

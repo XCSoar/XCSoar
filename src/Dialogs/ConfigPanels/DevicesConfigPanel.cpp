@@ -191,6 +191,50 @@ DevicesConfigPanel::OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t
   }
 }
 
+#if defined(HAVE_POSIX) && !defined(ANDROID)
+
+#include <dirent.h>
+
+static bool
+DetectSerialPorts(DataFieldEnum &dfe)
+{
+  DIR *dir = opendir("/dev");
+  if (dir == NULL)
+    return false;
+
+  unsigned sort_start = dfe.Count();
+
+  bool found = false;
+  struct dirent *ent;
+  while ((ent = readdir(dir)) != NULL) {
+    /* filter "/dev/tty*" */
+    if (memcmp(ent->d_name, "tty", 3) != 0)
+      continue;
+
+    /* filter out "/dev/tty0", ... (valid integer after "tty") */
+    char *endptr;
+    strtoul(ent->d_name + 3, &endptr, 10);
+    if (*endptr == 0)
+      continue;
+
+    char path[64];
+    snprintf(path, sizeof(path), "/dev/%s", ent->d_name);
+    if (access(path, R_OK|W_OK) == 0 && access(path, X_OK) < 0) {
+      dfe.addEnumText(path);
+      found = true;
+    }
+  }
+
+  closedir(dir);
+
+  if (found)
+    dfe.Sort(sort_start);
+
+  return found;
+}
+
+#endif
+
 #ifdef _WIN32_WCE
 
 gcc_pure
@@ -283,7 +327,11 @@ DetectSerialPorts(DataFieldEnum &dfe)
 static void
 FillPorts(DataFieldEnum &dfe)
 {
-#ifdef WIN32
+#if defined(HAVE_POSIX) && !defined(ANDROID)
+  if (DetectSerialPorts(dfe))
+    return;
+#elif defined(WIN32)
+
 #ifdef _WIN32_WCE
   if (DetectSerialPorts(dfe))
     return;
