@@ -25,6 +25,7 @@ Copyright_License {
 #define TRACE_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Util/SliceAllocator.hpp"
 #include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Compiler.h"
@@ -85,7 +86,8 @@ class Trace : private NonCopyable
       }
     };
 
-    typedef std::set<TraceDelta *, DeltaRankOp> List;
+    typedef std::set<TraceDelta *, DeltaRankOp,
+                     GlobalSliceAllocator<TraceDelta *, 256u> > List;
     typedef List::iterator iterator;
     typedef List::const_iterator const_iterator;
     typedef std::pair<iterator, iterator> neighbours;
