@@ -39,6 +39,10 @@ Copyright_License {
 #include "DevicesConfigPanel.hpp"
 #include "Language/Language.hpp"
 
+#ifdef _WIN32_WCE
+#include "Config/Registry.hpp"
+#endif
+
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
 #endif
@@ -187,10 +191,104 @@ DevicesConfigPanel::OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t
   }
 }
 
+#ifdef _WIN32_WCE
+
+gcc_pure
+static bool
+CompareRegistryValue(const RegistryKey &registry,
+                     const TCHAR *name, const TCHAR *value)
+{
+  TCHAR real_value[64];
+  return registry.get_value(name, real_value, 64) &&
+    _tcscmp(value, real_value) == 0;
+}
+
+gcc_pure
+static bool
+IsUnimodemPort(const RegistryKey &registry)
+{
+  return CompareRegistryValue(registry, _T("Tsp"), _T("Unimodem.dll"));
+}
+
+gcc_pure
+static bool
+IsWidcommSerialPort(const RegistryKey &registry)
+{
+  return CompareRegistryValue(registry, _T("Dll"), _T("btcedrivers.dll")) &&
+    CompareRegistryValue(registry, _T("Prefix"), _T("COM"));
+}
+
+gcc_pure
+static bool
+IsSerialPort(const TCHAR *key)
+{
+  RegistryKey registry(HKEY_LOCAL_MACHINE, key, true);
+  if (registry.error())
+    return false;
+
+  return IsUnimodemPort(registry) || IsWidcommSerialPort(registry);
+}
+
+gcc_pure
+static bool
+GetDeviceFriendlyName(const TCHAR *key, TCHAR *buffer, size_t max_size)
+{
+  RegistryKey registry(HKEY_LOCAL_MACHINE, key, true);
+  return !registry.error() &&
+    registry.get_value(_T("FriendlyName"), buffer, max_size);
+}
+
+static bool
+DetectSerialPorts(DataFieldEnum &dfe)
+{
+  RegistryKey drivers_active(HKEY_LOCAL_MACHINE, _T("Drivers\\Active"), true);
+  if (drivers_active.error())
+    return false;
+
+  unsigned sort_start = dfe.Count();
+
+  bool found = false;
+  TCHAR key_name[64], device_key[64], device_name[64];
+  for (unsigned i = 0; drivers_active.enum_key(i, key_name, 64); ++i) {
+    RegistryKey device(drivers_active, key_name, true);
+
+    if (!device.error() &&
+        device.get_value(_T("Key"), device_key, 64) &&
+        IsSerialPort(device_key) &&
+        device.get_value(_T("Name"), device_name, 64)) {
+      TCHAR display_name[256];
+      _tcscpy(display_name, device_name);
+      size_t length = _tcslen(display_name);
+      if (GetDeviceFriendlyName(device_key, display_name + length + 2,
+                                256 - length - 3)) {
+        /* build a string in the form: "COM1: (Friendly Name)" */
+        display_name[length] = _T(' ');
+        display_name[length + 1] = _T('(');
+        _tcscat(display_name, _T(")"));
+      }
+
+      dfe.addEnumText(device_name, display_name);
+      found = true;
+    }
+  }
+
+  if (found)
+    dfe.Sort(sort_start);
+
+  return found;
+}
+
+#endif
+
 static void
 FillPorts(DataFieldEnum &dfe)
 {
 #ifdef WIN32
+#ifdef _WIN32_WCE
+  if (DetectSerialPorts(dfe))
+    return;
+#endif
+
   for (unsigned i = 1; i <= 10; ++i) {
     TCHAR buffer[64];
     _stprintf(buffer, _T("COM%u:"), i);
