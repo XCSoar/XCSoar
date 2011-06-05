@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "ClimbHistory.hpp"
 
+#include <algorithm>
+
 void
 ClimbHistory::Clear()
 {
-  for (unsigned i = 0; i < 200; i++) {
-    AverageClimbRate[i] = fixed_zero;
-    AverageClimbRateN[i] = 0;
-  }
+  std::fill(AverageClimbRate, AverageClimbRate + SIZE, fixed_zero);
+  std::fill(AverageClimbRateN, AverageClimbRateN + SIZE, 0);
 }
