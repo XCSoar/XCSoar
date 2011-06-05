@@ -33,7 +33,7 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
-struct ClimbHistory;
+class ClimbHistory;
 struct SETTINGS_COMPUTER;
 struct SETTINGS_MAP;
 class Canvas;
