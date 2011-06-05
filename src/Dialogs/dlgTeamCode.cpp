@@ -42,13 +42,13 @@ static WndForm *wf = NULL;
 static void
 Update()
 {
+  const TEAMCODE_INFO &teamcode_info = XCSoarInterface::Calculated();
   WndProperty* wp;
   TCHAR Text[100];
-  Angle teammateBearing = XCSoarInterface::Calculated().TeammateBearing;
-  double teammateRange = XCSoarInterface::Calculated().TeammateRange;
 
   if (XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint >= 0) {
-    double Value = (teammateBearing - XCSoarInterface::Basic().track).
+    double Value = (teamcode_info.teammate_vector.Bearing -
+                    XCSoarInterface::Basic().track).
       as_delta().value_degrees();
 
     if (Value > 1)
@@ -70,14 +70,14 @@ Update()
   wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(teammateBearing.value_degrees());
+    df.SetAsFloat(teamcode_info.teammate_vector.Bearing.value_degrees());
     wp->RefreshDisplay();
   }
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserDistance(fixed(teammateRange)));
+    df.SetAsFloat(Units::ToUserDistance(teamcode_info.teammate_vector.Distance));
     wp->RefreshDisplay();
   }
 

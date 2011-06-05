@@ -83,10 +83,10 @@ struct TEAMCODE_INFO
 {
   /** Team code */
   TeamCode OwnTeamCode;
-  /** Bearing to the chosen team mate */
-  Angle TeammateBearing;
-  /** Distance to the chosen team mate */
-  fixed TeammateRange;
+
+  /** Vector to the chosen team mate */
+  GeoVector teammate_vector;
+
   /** Position of the chosen team mate */
   GeoPoint TeammateLocation;
 };

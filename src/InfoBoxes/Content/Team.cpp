@@ -103,7 +103,7 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 
   if (settings.TeamFlarmIdTarget.defined() || settings.TeammateCodeValid) {
     // Set Value
-    infobox.SetValue(XCSoarInterface::Calculated().TeammateBearing,
+    infobox.SetValue(XCSoarInterface::Calculated().teammate_vector.Bearing,
                      _T("T"));
   }
   else
@@ -131,7 +131,7 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
 
   if (settings.TeamFlarmIdTarget.defined() || settings.TeammateCodeValid) {
     // Set Value
-    Angle Value = XCSoarInterface::Calculated().TeammateBearing -
+    Angle Value = XCSoarInterface::Calculated().teammate_vector.Bearing -
                   XCSoarInterface::Basic().track;
 
     SetValueBearingDifference(infobox, Value);
@@ -165,7 +165,7 @@ InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserDistance(XCSoarInterface::Calculated().TeammateRange,
+  Units::FormatUserDistance(XCSoarInterface::Calculated().teammate_vector.Distance,
                             tmp, 32, false);
   infobox.SetValue(tmp);
 

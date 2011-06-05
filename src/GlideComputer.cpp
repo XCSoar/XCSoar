@@ -214,9 +214,7 @@ ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
 
   // Set Teammate location to FLARM contact location
   teamcode_info.TeammateLocation = traffic->location;
-  location.distance_bearing(traffic->location,
-                            teamcode_info.TeammateRange,
-                            teamcode_info.TeammateBearing);
+  teamcode_info.teammate_vector = location.distance_bearing(traffic->location);
 
   // Calculate distance and bearing from teammate to reference waypoint
 
@@ -237,12 +235,8 @@ ComputeTeamCode(const GeoPoint &location, const GeoPoint &reference_location,
 {
   // Calculate bearing and distance to teammate
   teamcode_info.TeammateLocation = team_code.GetLocation(reference_location);
-
-  GeoVector team_vector(location, teamcode_info.TeammateLocation);
-
-  // Save bearing and distance to teammate in Calculated
-  teamcode_info.TeammateBearing = team_vector.Bearing;
-  teamcode_info.TeammateRange = team_vector.Distance;
+  teamcode_info.teammate_vector =
+    location.distance_bearing(teamcode_info.TeammateLocation);
 }
 
 void
@@ -267,8 +261,8 @@ GlideComputer::CalculateTeammateBearingRange()
                     teamcode_info);
     CheckTeammateRange();
   } else {
-    teamcode_info.TeammateBearing = Angle::degrees(fixed_zero);
-    teamcode_info.TeammateRange = fixed_zero;
+    teamcode_info.teammate_vector.Bearing = Angle::degrees(fixed_zero);
+    teamcode_info.teammate_vector.Distance = fixed_zero;
   }
 }
 
@@ -279,11 +273,12 @@ GlideComputer::CheckTeammateRange()
 
   // Hysteresis for GlideComputerEvent
   // If (closer than 100m to the teammates last position and "event" not reset)
-  if (Calculated().TeammateRange < fixed(100) && InTeamSector == false) {
+  if (Calculated().teammate_vector.Distance < fixed(100) &&
+      InTeamSector == false) {
     InTeamSector = true;
     // Raise GCE_TEAM_POS_REACHED event
     InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
-  } else if (Calculated().TeammateRange > fixed(300)) {
+  } else if (Calculated().teammate_vector.Distance > fixed(300)) {
     // Reset "event" when distance is greater than 300m again
     InTeamSector = false;
   }
