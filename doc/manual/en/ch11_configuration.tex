@@ -76,8 +76,10 @@ Expert user level:
 %error was found in a file, the user must re-enter that file in the
 %configuration settings after remedying the situation.
 
+
+%%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Site Files}
+\section{Site files}
 The dialogue specifies most of the important files that must be
 configured when flying at a new site.
 
@@ -131,7 +133,7 @@ See Section~\ref{sec:map} for more details on map files.
 
 %%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Map Projection}\label{sec:map-projection}
+\section{Map projection}\label{sec:map-projection}
 
 This page let you specify the favoured map orientation and projection.
 
@@ -175,7 +177,7 @@ automatically when leaving circling mode.
 
 %%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Map Elements}\label{sec:map-elements}
+\section{Map elements}\label{sec:map-elements}
 
 This page provides options relating to screen elements overlayed to the map display.
 
@@ -238,7 +240,7 @@ display.
 
 %%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Waypoint Display}\label{sec:waypoint-display}
+\section{Waypoint display}\label{sec:waypoint-display}
 
 This page provides options relating to the map display.
 
@@ -285,6 +287,145 @@ This page provides options relating to the map display.
 \item[Landable size]  A percentage to select the size landables are displayed on the map.
 \item[Scale runway length]  Enabling this option will display for detailed landables 
  additionally a scaled runway length based on real length.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Terrain display}\label{sec:terrain-display}
+
+This page sets how terrain and topography is drawn on the map window.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-terrain.png}
+\end{center}
+
+\begin{description}
+\item[Terrain display]  Draws digital elevation terrain on the map.
+\item[Topography display]  Draws topographical features (roads, rivers, lakes etc.) on
+ the map.
+\item[Terrain contrast*]  Defines the amount of Phong shading in the terrain rendering. 
+ Use large values to emphasise terrain slope, smaller values if flying in steep mountains.
+\item[Terrain brightness*]  Defines the brightness (whiteness) of the terrain rendering. 
+ This controls the average illumination of the terrain.
+\item[Terrain colours]  Defines the colour ramp used in terrain rendering.  Various 
+ schemes are available, which works best for you will depend on how mountainous your region is.
+\item[Slope shading*]  \label{conf:shading} The terrain can be shaded among slopes 
+ to indicate either wind direction, sun position or a fixed shading from north-east. 
+ Slopes faced to the wind (or sun) get displayed brighter and the averted slopes get darker.
+\end{description}
+
+
+\begin{maxipage}
+The available terrain colour schemes are illustrated in the table below.
+
+\begin{longtable}{c c c c}
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-flatlands.png}&
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-mountanous.png}&
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-icao.png}&
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-grey.png}
+\\
+
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhof4.png}&
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhof7.png}&
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhof12.png}&
+\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhofatlas.png}
+\\
+\end{longtable}
+\end{maxipage}
+
+
+%%%%%%%%%%
+\clearpage
+\section{FLARM and other gauges}\label{sec:vario-gauge}
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-othergauges.png}
+\end{center}
+
+\begin{description}
+\item[FLARM radar]  \label{conf:flarmdisplay} This enables the display of the FLARM 
+ radar gauge. The track bearing of the target relative to the track bearing of the 
+ aircraft is displayed as an arrow head, and a triangle pointing up or down shows 
+ the relative altitude of the target relative to you.
+\item[Auto close FLARM*]  This will close the FLARM radar view when all FLARM traffic has gone.
+\item[ThermalAssistant] \label{conf:thermalassistant} Enables the display of the
+ThermalAssistant gauge.
+
+\label{conf:variogauge}
+\item[Speed arrows*]  Whether to show speed command arrows on the vario gauge.
+ When shown, in cruise mode, arrows point up to command slow down; arrows point down 
+ to command speed up.
+\item[Show average*]  Whether to show the average climb rate.  In cruise mode, this 
+ switches to showing the average netto airmass rate.
+\item[Show MacCready*]  Whether to show the MacCready setting.
+\item[Show bugs*]  Whether to show the bugs percentage.
+\item[Show ballast*]  Whether to show the ballast percentage.
+\item[Show gross*]  Whether to show the gross vario value.
+\item[Averager needle*]  If true, the vario gauge will display a hollow averager
+ needle. During cruise, this needle displays the average netto value. During circling, 
+ this needle displays the average gross value.
+\end{description}
+
+In all FLARM environment, the colour of the target indicates the threat level.
+
+
+%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Glide computer}\label{sec:final-glide}
+
+This page allows glide computer algorithms to be configured.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-glidecomputer.png}
+\end{center}
+
+\begin{description}
+\item[Auto wind]  \label{conf:autowind} This allows switching on or off the
+ automatic wind algorithm.
+\begin{description}
+ \item[Manual]  When the algorithm is switched off, the pilot is responsible for
+  setting the wind estimate.
+ \item[Circling]  Circling mode requires only a GPS source.
+ \item[ZigZag]  ZigZag requires an intelligent vario with airspeed output.
+ \item[Both]  Uses Circling and ZigZag.
+\end{description}
+
+\item[External wind]  If enabled, the wind vector received from external
+ devices overrides XCSoar's internal wind calculation.
+\item[Auto MC mode]  This option defines which auto MacCready algorithm is used.
+ For more details see Section~\ref{sec:auto-maccready}.
+\begin{description}
+ \item[Final glide]  Final glide adjusts MC for fastest arrival.
+ \item[Trending average climb]  Sets MC to the trending average climb rate based on all climbs.
+ \item[Both]  Uses trending average during task, then fastest arrival when in final glide mode.
+\end{description}
+
+\item[Block speed to fly*]  If enabled, the command speed in cruise
+ is set to the MacCready speed to fly in no vertical air-mass movement.
+ If disabled, the command speed in cruise is set to the dolphin speed to fly,
+ equivalent to the MacCready speed with vertical air-mass movement.
+\item[Nav by baro altitude*]  When enabled and if connected to a barometric
+ altimeter, barometric altitude is used for all navigation functions. Otherwise
+ GPS altitude is used.
+\item[Flap forces cruise*]
+ When this option is enabled, causes the flap switches in Vega to
+ force cruise mode when the flap is not positive. This means that
+ when departing a thermal, switching to neutral or negative flap will
+ immediately switch XCSoar's mode to cruise mode.
+ Similarly, for Borgelt B50 systems, the speed command switch forces
+ XCSoar's climb or cruise mode.
+\item[L/D Average period*]  Average efficiency is always calculated in real-time. 
+ Here you can decide on how many seconds of flight this calculation must be done. 
+ The real distance covered second by second in this period is divided by the final 
+ difference of altitude.  So if for example you go and return back to the same point 
+ after 2 minutes, and you have set 2 minutes as period, average LD will consider the 
+ total distance covered in those two minutes , and not the distance between your 
+ position 2 minutes before and your current position, that in this case could be 
+ almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 
+ 15 seconds. Lower values will give as a result pretty much the same as LD Instant, 
+ while higher values will look like LD Cruise. Other commercial instruments and 
+ software use 2 minutes.
 \end{description}
 
 
@@ -375,106 +516,7 @@ rounded box.
 \item[North arrow*]  Two styles are available.  Normal, or with a white outline.
 \end{description}
 
-%%%%%%%%%%%%%%%%%%
-\clearpage
-\section{Terrain display}\label{sec:terrain-display}
-
-This page sets how terrain and topography is drawn on the map window.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-terrain.png}
-\end{center}
-
-\begin{description}
-\item[Terrain display]  Draws digital elevation terrain on the map.
-\item[Topography display]  Draws topographical features (roads, rivers, lakes) on
-the map.
-\item[Slope shading]  \label{conf:shading} Slopes faced to the wind get
-displayed brighter and the averted slopes get darker.
-\item[Terrain contrast]  Defines the amount of Phong shading in the terrain rendering.  Use large values 
-to emphasise terrain slope, smaller values if flying in steep mountains.
-\item[Terrain brightness]  Defines the brightness (whiteness) of the terrain rendering.  This controls the 
-average illumination of the terrain.
-\item[Terrain colours]  Defines the colour ramp used in terrain rendering.  Various schemes are available, 
-which works best for you will depend on how mountainous your region is.
-\end{description}
-
-
-\begin{maxipage}
-The available terrain colour schemes are illustrated in the table below.
-
-\begin{longtable}{c c c c}
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-flatlands.png}&
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-mountanous.png}&
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-icao.png}&
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-grey.png}
-\\
-
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhof4.png}&
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhof7.png}&
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhof12.png}&
-\includegraphics[angle=0,width=3.5cm,keepaspectratio='true']{figures/ramp-terrain-imhofatlas.png}
-\\
-\end{longtable}
-\end{maxipage}
-
-
-%%%%%%%%%%%%%%%%%%
-\clearpage
-\section{Glide computer}\label{sec:final-glide}
-
-This page allows glide computer algorithms to be configured.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-glidecomputer.png}
-\end{center}
-
-\begin{description}
-\item[Auto wind]  \label{conf:autowind} This allows switching on or off the
-automatic wind algorithm.
- \begin{description}
-\item[Manual]  When the algorithm is switched off, the pilot is responsible for
-  setting the wind estimate.
-\item[Circling]  Circling mode requires only a GPS source, 
-\item[ZigZag]  ZigZag requires an intelligent vario with airspeed output.
-\item[Both]  Uses Circling and ZigZag.
-\end{description}
-
-\item[External wind]  If enabled, the wind vector received from external
-devices overrides XCSoar's internal wind calculation.
-
-\item[Auto MC mode] This option defines which auto MacCready algorithm is used.
-For more details see Section~\ref{sec:auto-maccready}.
- \begin{description}
-\item[Final glide] Final glide adjusts MC for fastest arrival.
-\item[Trending average climb]  Sets MC to the trending average climb rate
-based on all climbs.
-\item[Both] Uses trending average during task, then fastest arrival when in
-final glide mode.
-\end{description}
-
-\item[Block speed to fly*] If enabled, the command speed in cruise
-  is set to the MacCready speed to fly in no vertical air-mass movement.
-  If disabled, the command speed in cruise is set to the dolphin speed to fly,
-  equivalent to the MacCready speed with vertical air-mass movement.
-
-\item[Nav by baro altitude*] When enabled and if connected to a barometric
-  altimeter, barometric altitude is used for all navigation functions. Otherwise
-  GPS altitude is used.
-
-\item[Flap forces cruise*]
-  When this option is enabled, causes the flap switches in Vega to
-  force cruise mode when the flap is not positive.  This means that
-  when departing a thermal, switching to neutral or negative flap will
-  immediately switch XCSoar's mode to cruise mode.
-
-  Similarly, for Borgelt B50 systems, the speed command switch forces
-  XCSoar's climb or cruise mode.
-
-\item[L/D Average period] Average glide ratio is always calculated in real time. Here you can decide 
-on how many seconds of flight this calculation must be done.
-\end{description}
-
+%%%%%%%%%%%%%
 \section{Safety factors}
 
 This page allows the safety heights and behaviour in abort mode to be defined.
@@ -681,39 +723,8 @@ centred or in the top left corner.
 \item[Dialogue style*]  Determines the display size of dialogues.
 \end{description}
 
-%%%%%%%%%%
-
-\clearpage
-\section{FLARM and other gauges}\label{sec:vario-gauge}
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-othergauges.png}
-\end{center}
-\label{conf:variogauge}
-\begin{description}
-\item[Speed arrows]  Whether to show speed command arrows on the vario gauge.
-When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.
-\item[Show average]  Whether to show the average climb rate.  In cruise mode, this switches to showing the average 
-netto airmass rate.
-\item[Show MacCready]  Whether to show the MacCready setting.
-\item[Show bugs*]  Whether to show the bugs percentage.
-\item[Show ballast*]  Whether to show the ballast percentage.
-\item[Show gross*]  Whether to show the gross vario value.
-\item[Averager needle*]  If true, the vario gauge will display a hollow averager
-needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.
-\item[FLARM radar]  \label{conf:flarmdisplay} Enables the display of the FLARM
-radar gauge. The track bearing of the target relative to the track bearing of the aircraft 
-is displayed as an arrow head.
-\item[Auto close FLARM]  This will close the FLARM radar view when all
-FLARM traffic has gone.
-\item[ThermalAssistant] \label{conf:thermalassistant} Enables the display of the
-ThermalAssistant gauge.
-\end{description}
-
-In all FLARM environment, the colour of the target indicates the threat level.
 
 %%%%%%%%%%
-
 \clearpage
 \section{Default Task Rules}
 Task rules may be defined to limit valid starts according to competition
