@@ -35,7 +35,7 @@ void
 InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
-  const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
+  const TEAMCODE_INFO &teamcode_info = XCSoarInterface::Calculated();
 
   if (!settings.TeamCodeRefWaypoint) {
     infobox.SetInvalid();
@@ -46,14 +46,12 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
   infobox.SetValue(XCSoarInterface::Calculated().OwnTeamCode.GetCode());
 
   // Set Comment
-  if (settings.TeammateCodeValid) {
+  if (teamcode_info.flarm_teammate_code_available) {
+    infobox.SetComment(teamcode_info.flarm_teammate_code.GetCode());
+    infobox.SetColorBottom(teamcode_info.flarm_teammate_code_current ? 2 : 1);
+  } else if (settings.TeammateCodeValid) {
     infobox.SetComment(settings.TeammateCode.GetCode());
-    if (!settings.TeamFlarmTracking)
-      infobox.SetColorBottom(0);
-    else if (flarm.FindTraffic(settings.TeamFlarmIdTarget) != NULL)
-      infobox.SetColorBottom(2);
-    else
-      infobox.SetColorBottom(1);
+    infobox.SetColorBottom(0);
   }
   else
     infobox.SetCommentInvalid();
@@ -156,7 +154,6 @@ void
 InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
-  const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
   const TEAMCODE_INFO &teamcode_info = CommonInterface::Calculated();
 
   // Set Value
@@ -179,8 +176,5 @@ InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
   else
     infobox.SetComment(_T("???"));
 
-  if (flarm.FindTraffic(settings.TeamFlarmIdTarget) != NULL)
-    infobox.SetColorBottom(2);
-  else
-    infobox.SetColorBottom(1);
+  infobox.SetColorBottom(teamcode_info.flarm_teammate_code_current ? 2 : 1);
 }

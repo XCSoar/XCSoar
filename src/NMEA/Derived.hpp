@@ -86,6 +86,16 @@ struct TEAMCODE_INFO
    */
   bool teammate_available;
 
+  /**
+   * Is #flarm_teammate_code available?
+   */
+  bool flarm_teammate_code_available;
+
+  /**
+   * is #flarm_teammate_code current or did we lose him?
+   */
+  bool flarm_teammate_code_current;
+
   /** Team code */
   TeamCode OwnTeamCode;
 
@@ -94,6 +104,11 @@ struct TEAMCODE_INFO
 
   /** Position of the chosen team mate */
   GeoPoint TeammateLocation;
+
+  /**
+   * The team code of the FLARM teammate.
+   */
+  TeamCode flarm_teammate_code;
 
   void Clear();
 };

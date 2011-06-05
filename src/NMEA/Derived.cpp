@@ -36,6 +36,8 @@ void
 TEAMCODE_INFO::Clear()
 {
   teammate_available = false;
+
+  flarm_teammate_code_available = false;
 }
 
 void
@@ -44,6 +46,7 @@ DERIVED_INFO::reset()
   VARIO_INFO::Clear();
   CLIMB_INFO::Clear();
   CIRCLING_INFO::Clear();
+  TEAMCODE_INFO::Clear();
   ClimbHistory::Clear();
   TERRAIN_ALT_INFO::Clear();
   TEAMCODE_INFO::Clear();

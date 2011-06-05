@@ -35,7 +35,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Logger/Logger.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "Interface.hpp"
 #include "LocalTime.hpp"
 
 static PeriodClock last_team_code_update;
@@ -205,12 +204,16 @@ ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
                  const FLARM_STATE &flarm, const FlarmId target_id,
                  TEAMCODE_INFO &teamcode_info)
 {
-  if (!flarm.available)
+  if (!flarm.available) {
+    teamcode_info.flarm_teammate_code_current = false;
     return;
+  }
 
   const FLARM_TRAFFIC *traffic = flarm.FindTraffic(target_id);
-  if (traffic == NULL || !traffic->location_available)
+  if (traffic == NULL || !traffic->location_available) {
+    teamcode_info.flarm_teammate_code_current = false;
     return;
+  }
 
   // Set Teammate location to FLARM contact location
   teamcode_info.TeammateLocation = traffic->location;
@@ -225,8 +228,9 @@ ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
                                       distance, bearing);
 
   // Calculate TeamCode and save it in Calculated
-  XCSoarInterface::SetSettingsComputer().TeammateCode.Update(bearing, distance);
-  XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
+  teamcode_info.flarm_teammate_code.Update(bearing, distance);
+  teamcode_info.flarm_teammate_code_available = true;
+  teamcode_info.flarm_teammate_code_current = true;
 }
 
 static void
@@ -258,12 +262,15 @@ GlideComputer::CalculateTeammateBearingRange()
                      teamcode_info);
     CheckTeammateRange();
   } else if (settings_computer.TeammateCodeValid) {
+    teamcode_info.flarm_teammate_code_available = false;
+
     ComputeTeamCode(basic.Location, TeamCodeRefLocation,
                     settings_computer.TeammateCode,
                     teamcode_info);
     CheckTeammateRange();
   } else {
     teamcode_info.teammate_available = false;
+    teamcode_info.flarm_teammate_code_available = false;
   }
 }
 
