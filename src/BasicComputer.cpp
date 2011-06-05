@@ -91,6 +91,24 @@ ComputeNavAltitude(NMEA_INFO &basic,
     : basic.GPSAltitude;
 }
 
+static void
+ComputeGroundSpeed(NMEA_INFO &basic, const NMEA_INFO &last)
+{
+  if (basic.GroundSpeedAvailable)
+    return;
+
+  basic.GroundSpeed = fixed_zero;
+  if (!basic.LocationAvailable || !last.LocationAvailable)
+    return;
+
+  fixed t = basic.Time - last.Time;
+  if (!positive(t))
+    return;
+
+  fixed d = basic.Location.distance(last.Location);
+  basic.GroundSpeed = d / t;
+}
+
 /**
  * Calculates the turn rate of the heading,
  * the estimated bank angle and
@@ -144,6 +162,8 @@ BasicComputer::Compute(NMEA_INFO &data, const NMEA_INFO &last,
                        const DERIVED_INFO &calculated,
                        const SETTINGS_COMPUTER &settings_computer)
 {
+  ComputeGroundSpeed(data, last);
+
   if (data.Time > last.Time)
     ComputeDynamics(data, calculated);
 }
