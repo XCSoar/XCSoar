@@ -127,7 +127,7 @@
       </Edit>
 
       <Edit Name="prpAircraftSymbol" Caption="Aircraft symbol" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Sets the symbol used for the aircraft.&#10;[Simple] Simplified line graphics.&#10;[Detailed] Rendered aircraft graphics.">
+        Help="Sets the symbol used for the aircraft.&#10;[Simple] Simplified line graphics, black with white contours.&#10;[Simple (large)] Enlarged simple graphics.&#10;[Detailed] Rendered aircraft graphics.">
         <DataField DataType="enum" />
       </Edit>
 
