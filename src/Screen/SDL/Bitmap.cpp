@@ -144,7 +144,7 @@ Bitmap::reset()
   assert(!defined() || IsScreenInitialized());
 
 #ifdef ENABLE_OPENGL
-  assert(pthread_equal(pthread_self(), OpenGL::thread));
+  assert(!defined() || pthread_equal(pthread_self(), OpenGL::thread));
 
   delete texture;
   texture = NULL;
