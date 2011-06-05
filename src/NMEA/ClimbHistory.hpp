@@ -39,7 +39,7 @@ class ClimbHistory {
   fixed vario[SIZE];
 
   /** Number of samples in each episode */
-  long count[SIZE];
+  unsigned short count[SIZE];
 
 public:
   void Clear();

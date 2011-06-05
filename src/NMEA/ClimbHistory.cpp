@@ -38,6 +38,12 @@ ClimbHistory::Add(unsigned speed, fixed _vario)
   if (speed >= SIZE)
     return;
 
+  if (count[speed] >= 0x8000) {
+    /* prevent integer overflow */
+    vario[speed] /= 2;
+    count[speed] /= 2;
+  }
+
   vario[speed] += _vario;
   ++count[speed];
 }
