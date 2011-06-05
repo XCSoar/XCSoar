@@ -272,7 +272,6 @@ FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                                    const SETTINGS_COMPUTER &settings_computer,
                                    const GlidePolar& glide_polar) const
 {
-  int i;
   Chart chart(Graphics::chart, canvas, rc);
   Pen blue_pen(2, COLOR_BLUE);
 
@@ -289,9 +288,11 @@ FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
   fixed sinkrate0, sinkrate1;
   fixed v0 = fixed_zero, v1;
   bool v0valid = false;
-  int i0 = 0;
+  unsigned i0 = 0;
 
-  for (i = glide_polar.get_Vmin(); i <= (int)glide_polar.get_Vmax(); ++i) {
+  const unsigned vmin = (unsigned)glide_polar.get_Vmin();
+  const unsigned vmax = (unsigned)glide_polar.get_Vmax();
+  for (unsigned i = vmin; i <= vmax; ++i) {
     sinkrate0 = -glide_polar.SinkRate(fixed(i));
     sinkrate1 = -glide_polar.SinkRate(fixed(i + 1));
     chart.DrawLine(fixed(i), sinkrate0, fixed(i + 1), sinkrate1,
