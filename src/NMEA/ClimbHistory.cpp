@@ -28,16 +28,16 @@ Copyright_License {
 void
 ClimbHistory::Clear()
 {
-  std::fill(AverageClimbRate, AverageClimbRate + SIZE, fixed_zero);
-  std::fill(AverageClimbRateN, AverageClimbRateN + SIZE, 0);
+  std::fill(vario, vario + SIZE, fixed_zero);
+  std::fill(count, count + SIZE, 0);
 }
 
 void
-ClimbHistory::Add(unsigned speed, fixed vario)
+ClimbHistory::Add(unsigned speed, fixed _vario)
 {
   if (speed >= SIZE)
     return;
 
-  AverageClimbRate[speed] += vario;
-  ++AverageClimbRateN[speed];
+  vario[speed] += _vario;
+  ++count[speed];
 }

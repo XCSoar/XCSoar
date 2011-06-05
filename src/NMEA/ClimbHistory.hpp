@@ -36,9 +36,10 @@ class ClimbHistory {
   static const unsigned SIZE = 200;
 
   /** Average climb rate for each episode */
-  fixed AverageClimbRate[SIZE];
+  fixed vario[SIZE];
+
   /** Number of samples in each episode */
-  long AverageClimbRateN[SIZE];
+  long count[SIZE];
 
 public:
   void Clear();
@@ -49,7 +50,7 @@ public:
    * Do we have data for the specified speed?
    */
   bool Check(unsigned speed) const {
-    return speed < SIZE && AverageClimbRateN[speed] > 0;
+    return speed < SIZE && count[speed] > 0;
   }
 
   /**
@@ -57,9 +58,9 @@ public:
    */
   fixed Get(unsigned speed) const {
     assert(speed < SIZE);
-    assert(AverageClimbRateN[speed] > 0);
+    assert(count[speed] > 0);
 
-    return AverageClimbRate[speed] / AverageClimbRateN[speed];
+    return vario[speed] / count[speed];
   }
 };
 
