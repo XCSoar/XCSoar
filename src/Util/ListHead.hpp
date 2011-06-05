@@ -78,6 +78,27 @@ public:
   }
 
   /**
+   * Is the specified item the first one in the list?
+   */
+  bool IsFirst(const ListHead &item) const {
+    return item.prev == this;
+  }
+
+  /**
+   * Is the specified item the last one in the list?
+   */
+  bool IsLast(const ListHead &item) const {
+    return item.next == this;
+  }
+
+  /**
+   * Is the specified item the first or the last one in the list?
+   */
+  bool IsEdge(const ListHead &item) const {
+    return IsFirst(item) || IsLast(item);
+  }
+
+  /**
    * Count the number of items in this list, not including the current
    * one.
    */
