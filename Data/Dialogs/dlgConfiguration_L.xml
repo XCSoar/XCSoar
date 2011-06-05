@@ -214,8 +214,8 @@
         <DataField DataType="boolean" />
       </Edit>
       
-      <Edit Name="prpAutoCloseFlarmDialog" Caption="Auto. close FLARM" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Setting this to &quot;ON&quot; will automatically close the FLARM dialog if there is no traffic. &quot;Off&quot; will keep the dialog open even without current traffic.">
+      <Edit Name="prpAutoCloseFlarmDialog" Caption="Auto close FLARM" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Setting this to &quot;On&quot; will automatically close the FLARM dialog if there is no traffic. &quot;Off&quot; will keep the dialog open even without current traffic.">
         <DataField DataType="boolean"/>
       </Edit>
       
