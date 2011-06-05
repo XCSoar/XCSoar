@@ -370,26 +370,23 @@ GlideComputerAirData::AverageClimbRate()
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
-  if (calculated.AirspeedAvailable && basic.TotalEnergyVarioAvailable &&
-      !calculated.Circling) {
+  if (calculated.AirspeedAvailable && positive(calculated.IndicatedAirspeed) &&
+      positive(calculated.TrueAirspeed) &&
+      basic.TotalEnergyVarioAvailable &&
+      !calculated.Circling &&
+      (!basic.acceleration.Available ||
+       fabs(fabs(basic.acceleration.Gload) - fixed_one) <= fixed(0.25))) {
     int vi = iround(calculated.IndicatedAirspeed);
     if (vi <= 0 || vi >= iround(SettingsComputer().SafetySpeed))
       // out of range
       return;
 
-    if (basic.acceleration.Available)
-      if (fabs(fabs(basic.acceleration.Gload) - fixed_one) > fixed(0.25))
-        // G factor too high
-        return;
+    // TODO: Check this is correct for TAS/IAS
+    fixed ias_to_tas = calculated.IndicatedAirspeed / calculated.TrueAirspeed;
+    fixed w_tas = basic.TotalEnergyVario * ias_to_tas;
 
-    if (positive(calculated.TrueAirspeed)) {
-      // TODO: Check this is correct for TAS/IAS
-      fixed ias_to_tas = calculated.IndicatedAirspeed / calculated.TrueAirspeed;
-      fixed w_tas = basic.TotalEnergyVario * ias_to_tas;
-
-      calculated.climb_history.AverageClimbRate[vi] += w_tas;
-      calculated.climb_history.AverageClimbRateN[vi]++;
-    }
+    calculated.climb_history.AverageClimbRate[vi] += w_tas;
+    calculated.climb_history.AverageClimbRateN[vi]++;
   }
 }
 
