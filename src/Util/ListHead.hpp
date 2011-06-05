@@ -174,6 +174,21 @@ public:
     Remove();
     InsertAfter(other);
   }
+
+  /**
+   * Insert this item with the specified one.
+   */
+  void Replace(ListHead &other) {
+    assert(&other != this);
+    assert(prev->next == this);
+    assert(next->prev == this);
+
+    other.next = next;
+    other.prev = prev;
+
+    next->prev = &other;
+    prev->next = &other;
+  }
 };
 
 #endif
