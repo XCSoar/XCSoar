@@ -92,6 +92,11 @@ public:
   static const SETTINGS_MAP& SettingsMap()
   { return blackboard.SettingsMap(); }
 
+  gcc_const
+  static const FullBlackboard Full() {
+    return blackboard;
+  }
+
   /**
    * Returns the InterfaceBlackboard.SettingsMap (read-write)
    * @return The InterfaceBlackboard.SettingsMap
