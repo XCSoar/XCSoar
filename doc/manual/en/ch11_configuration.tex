@@ -169,84 +169,122 @@ automatically when leaving circling mode.
 \item[Glider position offset]  \label{conf:gliderposition} Defines the location of the 
  glider drawn on the screen in percent from the screen edge.
 
-\item[Max. auto-zoom distance]  The upper limit for Auto-Zoom distance.
+\item[Max. auto zoom distance]  The upper limit for auto zoom distance.
 \end{description}
 
 
 %%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Map Display}\label{sec:map-display}
+\section{Map Elements}\label{sec:map-elements}
 
-This page provides options relating to the map display.
+This page provides options relating to screen elements overlayed to the map display.
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-map.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-map_elements.png}
 \end{center}
 
 \begin{description}
-\item[Labels] This setting \label{conf:labels} determines the label
-displayed with each waypoint. There are 7 options:
+\item[Track bearing]  Display the ground track (ground track projection) on the map.
+ The setting "Auto" displays the ground track only if there is a significant difference to plane heading.
+\item[FLARM traffic]  \label{conf:flarm-on-map} This enables the display of FLARM traffic on the map.
 
-\begin{description}
-\item[Names] The full name of each waypoint is displayed.
-\item[Numbers] The waypoint enumeration of each waypoint is displayed, as read
-from the waypoint file. Referring to this number is not reliable, thus the
-feature will die soon.
-\item[None] No names are displayed with the waypoints.
-\item[Names in task] Names are only displayed for waypoints that are in the active task as well as the home airfield.
-\item[First 3] The first 3 letters of the waypoint name are displayed.
-\item[First 5] The first 5 letters of the waypoint name are displayed.
-\item[First word] Only the first word (up to the first space) of the waypoint name is displayed.
-\end{description}
-
-\item[Trail length] \label{conf:snailtrail} Determines whether and how long a
+\item[Trail length*] \label{conf:snailtrail} Determines whether and how long a
 snail trail is drawn behind the glider.
 \begin{description}
-\item[Off] No trail is drawn
-\item[Long] A long trail is drawn (approx 60 minutes)
-\item[Short] A short trail is drawn (approx 10 minutes) 
-\item[Full] A trail for the entire flight is drawn
+ \item[Off]  No trail is drawn.
+ \item[Long]  A long trail is drawn (approx 60 minutes).
+ \item[Short]  A short trail is drawn (approx 10 minutes).
+ \item[Full]  A trail for the entire flight is drawn.
 \end{description}
 
 \item[Trail drift*] \label{conf:traildrift} Determines whether the
-snail trail is drifted with the wind when displayed in circling mode.  When OFF,
-the snail trail is uncompensated for wind draft.
+ snail trail is drifted with the wind when displayed in circling mode.  Switched Off,
+ the snail trail stays uncompensated for wind draft.
 
 \item[Trail type*] \label{conf:snailtype} Sets the type of the snail trail
 display.
 \begin{description}
-\item[Vario \#1]  Within lift areas lines get displayed green and
-thicker, while sinking lines are shown red and thin.  Zero lift
-is presented as a grey line.
-\item[Vario \#2]  The climb colour for this scheme is orange to red, sinking is
-displayed as light blue to dark blue. Zero lift
-is presented as a yellow line.
-\item[Altitude] The colour scheme corresponds to the height.
+ \item[Vario \#1]  Within lift areas lines get displayed green and
+ thicker, while sinking lines are shown red and thin.  Zero lift
+ is presented as a grey line.
+ \item[Vario \#2]  The climb colour for this scheme is orange to red, sinking is
+ displayed as light blue to dark blue. Zero lift
+ is presented as a yellow line.
+ \item[Altitude] The colour scheme corresponds to the height.
 \end{description}
 
-\item[Waypoint label visibility] \label{conf:labelvisibility} Controls which waypoints are displayed with names and arrival altitudes on the map:
- \begin{description}
-\item[All] All waypoint labels will be displayed.
-\item[Task waypoints and landables] All waypoints part of a task and all landables will be displayed.
-\item[Task waypoints] All waypoints part of a task will be displayed.
-\item[None] No waypoint labels will be displayed.
- \end{description}
-
-\item[Trail width*] \label{conf:trailwidth} Sets the width of the snail trail
-display.
+\item[Trail scaled*] \label{conf:trailscaled} If activates, the snail trail width 
+ is scaled according to the vario signal.
 \item[Detour cost markers*]  If enabled this displays in cruise flight some
-figures projected in front of the nose of the glider icon.  This is the
-additional distance in percent if you fly up the position of the figure and
-after that again straight towards the target, compared to the straight distance
-to target.
-\item[FLARM map]  \label{conf:flarm-on-map}This enables the display of FLARM
-traffic on the map window as well as the pop-up radar-like display.
+ figures projected in front of the nose of the glider icon.  This is the
+ additional distance in percent if you fly up the position of the figure and
+ after that again straight towards the target, compared to the straight distance
+ to target.
+
+\item[Aircraft symbol*]  Sets the symbol used for the aircraft.
 \begin{description}
-\item[OFF]  FLARM map display disabled
-\item[ON/Fixed]  FLARM map display enabled with fixed scale.
-\item[ON/Scaled]  FLARM map display enabled and auto scaled. The FLARM targets on the map display are 
-scaled so that when the map is at large zoom levels, targets are still visible.
+ \item[Simple] Simplified line graphics, a black glider shape with white contours.
+ \item[Simple (large)] Enlarged simple graphics for better visibility on a small display.
+ \item[Detailed] Rendered aircraft graphics.
 \end{description}
+
+\item[Wind arrow*]  Determines the way the wind arrow is drawn on the map.
+\begin{description}
+ \item[Arrow head]  Draws an arrow head only.
+ \item[Full arrow]  Draws an arrow head with a dashed arrow line.
+\end{description}
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Waypoint Display}\label{sec:waypoint-display}
+
+This page provides options relating to the map display.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-map_waypoint.png}
+\end{center}
+
+\begin{description}
+\item[Label format]  This setting \label{conf:labels} determines the label format 
+ displayed with each waypoint. There are four different format options:
+\begin{description}
+ \item[Full name]  The full name of each waypoint is displayed.
+ \item[First word of name]  Only the first word (up to the first space) of the waypoint name is displayed.
+ \item[First 3]  The first 3 letters of the waypoint name are displayed.
+ \item[First 5]  The first 5 letters of the waypoint name are displayed.
+ \item[None]  No name is displayed with the waypoint.
+\end{description}
+
+\item[Arrival height*]  This enables the arival height info shown additionally for landables.
+\begin{description}
+ \item[None]  No arrival height is displayed.
+ \item[Straight glide]  Straight glide arrival height (no terrain is considered).
+ \item[Terrain avoidance glide]  Arival height considering terrain avoidance.
+ \item[Straight \& terrain glide]  Both arrival heights are displayed.
+\end{description}
+
+\item[Label style*]  Labels for lanbables can be shown on a rounded rectangle with white background, or 
+ with outlined letters.
+
+\item[Waypoint label visibility*] \label{conf:labelvisibility} Controls which waypoints 
+ are displayed with names and arrival altitudes on the map:
+\begin{description}
+ \item[All]  All waypoint labels will be displayed.
+ \item[Task waypoints and landables]  All waypoints part of a task and all landables will be displayed.
+ \item[Task waypoints]  All waypoints part of a task will be displayed.
+ \item[None]  No waypoint labels will be displayed.
+\end{description}
+
+\item[Landable symbols]  \label{conf:waypointicons} Three styles are available:
+ Purple circles (WinPilot style), a high contrast style with icons,
+ and icons with a trafic light colour scheme. See Section~\ref{sec:waypoint-schemes} for details.
+\item[Detailed landables*]  Enabling details on landables displays instead of fixed icons 
+ variable information like runway length and heading.
+\item[Landable size]  A percentage to select the size landables are displayed on the map.
+\item[Scale runway length]  Enabling this option will display for detailed landables 
+ additionally a scaled runway length based on real length.
 \end{description}
 
 
@@ -333,15 +371,7 @@ This page provides options relating to the items overlaying the map display.
 Alternate. The differences between these styles is cosmetic.  Alternate displays the height difference to the 
 right of the final glide bar; default displays the height difference above/below the final glide bar and inside a 
 rounded box.
-\item[Landable fields] \label{conf:waypointicons} Three styles are available:
-Purple circles (WinPilot style), a high contrast (monochrome) style with icons,
-or orange icons. See Section~\ref{sec:waypoint-schemes} for details
 
-\item[Wind arrow*]  Determines the way the wind arrow is drawn on the map.
-\begin{description}
-\item[Arrow head] Draws an arrow head only
-\item[Full arrow] Draws an arrow head with a dashed arrow line
-\end{description}
 \item[North arrow*]  Two styles are available.  Normal, or with a white outline.
 \end{description}
 
