@@ -131,6 +131,12 @@ ChartControl::on_paint(Canvas &canvas)
 {
   assert(glide_computer != NULL);
 
+  const SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SettingsComputer();
+  const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+
 #ifdef ENABLE_OPENGL
   /* enable clipping */
   GLScissor scissor(OpenGL::translate_x,
@@ -150,11 +156,11 @@ ChartControl::on_paint(Canvas &canvas)
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
-    fs.RenderBarograph(canvas, rcgfx, XCSoarInterface::Basic(), 
-                       XCSoarInterface::Calculated(), protected_task_manager);
+    fs.RenderBarograph(canvas, rcgfx, basic,
+                       calculated, protected_task_manager);
     break;
   case ANALYSIS_PAGE_CLIMB:
-    fs.RenderClimb(canvas, rcgfx, CommonInterface::SettingsComputer().glide_polar_task);
+    fs.RenderClimb(canvas, rcgfx, settings_computer.glide_polar_task);
     break;
   case ANALYSIS_PAGE_THERMAL_BAND:
   {
@@ -164,23 +170,23 @@ ChartControl::on_paint(Canvas &canvas)
     }
 
     ThermalBandRenderer renderer(Graphics::thermal_band, Graphics::chart);
-    renderer.DrawThermalBand(XCSoarInterface::Basic(),
-                             XCSoarInterface::Calculated(),
-                             CommonInterface::SettingsComputer(),
+    renderer.DrawThermalBand(basic,
+                             calculated,
+                             settings_computer,
                              canvas, rcgfx,
-                             XCSoarInterface::SettingsComputer(),
+                             settings_computer,
                              false,
                              &otb);
   }
     break;
   case ANALYSIS_PAGE_WIND:
-    fs.RenderWind(canvas, rcgfx, XCSoarInterface::Basic(),
+    fs.RenderWind(canvas, rcgfx, basic,
                   glide_computer->windanalyser.windstore);
     break;
   case ANALYSIS_PAGE_POLAR:
-    fs.RenderGlidePolar(canvas, rcgfx, XCSoarInterface::Calculated(),
-                        XCSoarInterface::SettingsComputer(),
-                        CommonInterface::SettingsComputer().glide_polar_task);
+    fs.RenderGlidePolar(canvas, rcgfx, calculated,
+                        settings_computer,
+                        settings_computer.glide_polar_task);
     break;
   case ANALYSIS_PAGE_TEMPTRACE:
     fs.RenderTemperature(canvas, rcgfx);
@@ -188,10 +194,8 @@ ChartControl::on_paint(Canvas &canvas)
   case ANALYSIS_PAGE_TASK:
     if (protected_task_manager != NULL) {
       ProtectedTaskManager::Lease task(*protected_task_manager);
-      fs.RenderTask(canvas, rcgfx, XCSoarInterface::Basic(),
-                    CommonInterface::Calculated(),
-                    XCSoarInterface::SettingsComputer(),
-                    XCSoarInterface::SettingsMap(),
+      fs.RenderTask(canvas, rcgfx, basic, calculated,
+                    settings_computer, settings_map,
                     task);
     }
     break;
@@ -203,18 +207,16 @@ ChartControl::on_paint(Canvas &canvas)
         task->get_trace_points(trace);
       }
 
-      fs.RenderOLC(canvas, rcgfx, XCSoarInterface::Basic(),
-                   CommonInterface::Calculated(),
-                   XCSoarInterface::SettingsComputer(),
-                   XCSoarInterface::SettingsMap(),
-                   XCSoarInterface::Calculated().contest_stats, trace);
+      fs.RenderOLC(canvas, rcgfx, basic, calculated,
+                   settings_computer, settings_map,
+                   calculated.contest_stats, trace);
     }
     break;
   case ANALYSIS_PAGE_TASK_SPEED:
     if (protected_task_manager != NULL) {
       ProtectedTaskManager::Lease task(*protected_task_manager);
-      fs.RenderSpeed(canvas, rcgfx, XCSoarInterface::Basic(),
-                     XCSoarInterface::Calculated(), task);
+      fs.RenderSpeed(canvas, rcgfx, basic,
+                     calculated, task);
     }
     break;
   default:
@@ -226,11 +228,14 @@ ChartControl::on_paint(Canvas &canvas)
 static void
 UpdateCrossSection()
 {
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+
   assert(csw != NULL);
-  csw->ReadBlackboard(XCSoarInterface::Basic(), XCSoarInterface::Calculated(),
+  csw->ReadBlackboard(basic, calculated,
                       XCSoarInterface::SettingsMap());
-  csw->set_direction(XCSoarInterface::Basic().track);
-  csw->set_start(XCSoarInterface::Basic().Location);
+  csw->set_direction(basic.track);
+  csw->set_start(basic.Location);
 }
 
 static void
@@ -243,6 +248,10 @@ Update(void)
   assert(wGrid != NULL);
   assert(csw != NULL);
   assert(glide_computer != NULL);
+
+  const SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SettingsComputer();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
 
@@ -285,9 +294,9 @@ Update(void)
   case ANALYSIS_PAGE_POLAR:
     _stprintf(sTmp, _T("%s: %s (%s %d kg)"), _("Analysis"),
               _("Glide Polar"), _("Mass"),
-              (int)CommonInterface::SettingsComputer().glide_polar_task.get_all_up_weight());
+              (int)settings_computer.glide_polar_task.get_all_up_weight());
     wf->SetCaption(sTmp);
-    fs.CaptionPolar(sTmp, CommonInterface::SettingsComputer().glide_polar_task);
+    fs.CaptionPolar(sTmp, settings_computer.glide_polar_task);
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Settings"));
    break;
@@ -313,18 +322,18 @@ Update(void)
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
               _("Task"));
     wf->SetCaption(sTmp);
-    fs.CaptionTask(sTmp, XCSoarInterface::Calculated());
+    fs.CaptionTask(sTmp, calculated);
     wInfo->SetCaption(sTmp);
     SetCalcCaption(_("Task calc"));
     break;
 
   case ANALYSIS_PAGE_OLC:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-        ContestToString(XCSoarInterface::SettingsComputer().contest));
+        ContestToString(settings_computer.contest));
     wf->SetCaption(sTmp);
     SetCalcCaption(_T(""));
-    fs.CaptionOLC(sTmp, XCSoarInterface::SettingsComputer(),
-                  XCSoarInterface::Calculated());
+    fs.CaptionOLC(sTmp, settings_computer,
+                  calculated);
     wInfo->SetCaption(sTmp);
     break;
 
