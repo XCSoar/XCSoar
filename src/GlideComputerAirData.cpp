@@ -387,8 +387,8 @@ GlideComputerAirData::AverageClimbRate()
       fixed ias_to_tas = calculated.IndicatedAirspeed / calculated.TrueAirspeed;
       fixed w_tas = basic.TotalEnergyVario * ias_to_tas;
 
-      calculated.AverageClimbRate[vi] += w_tas;
-      calculated.AverageClimbRateN[vi]++;
+      calculated.climb_history.AverageClimbRate[vi] += w_tas;
+      calculated.climb_history.AverageClimbRateN[vi]++;
     }
   }
 }

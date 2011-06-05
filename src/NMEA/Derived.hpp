@@ -122,8 +122,7 @@ struct DERIVED_INFO:
   public CLIMB_INFO,
   public CIRCLING_INFO,
   public TERRAIN_ALT_INFO,
-  public TEAMCODE_INFO,
-  public ClimbHistory
+  public TEAMCODE_INFO
 {
   /**
    * @todo Reset to cleared state
@@ -160,6 +159,8 @@ struct DERIVED_INFO:
 
   /** Nav Altitude + Energy height (m) */
   fixed TEAltitude;
+
+  ClimbHistory climb_history;
 
   /**
    * Does #estimated_wind have a meaningful value?

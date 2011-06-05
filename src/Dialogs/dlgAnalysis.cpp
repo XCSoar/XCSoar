@@ -184,7 +184,7 @@ ChartControl::on_paint(Canvas &canvas)
                   glide_computer->windanalyser.windstore);
     break;
   case ANALYSIS_PAGE_POLAR:
-    fs.RenderGlidePolar(canvas, rcgfx, calculated,
+    fs.RenderGlidePolar(canvas, rcgfx, calculated.climb_history,
                         settings_computer,
                         settings_computer.glide_polar_task);
     break;

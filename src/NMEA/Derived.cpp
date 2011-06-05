@@ -47,13 +47,15 @@ DERIVED_INFO::reset()
   CLIMB_INFO::Clear();
   CIRCLING_INFO::Clear();
   TEAMCODE_INFO::Clear();
-  ClimbHistory::Clear();
   TERRAIN_ALT_INFO::Clear();
   TEAMCODE_INFO::Clear();
 
   Heading = Angle::native(fixed_zero);
   pressure_available.Clear();
   AirspeedAvailable.Clear();
+
+  climb_history.Clear();
+
   estimated_wind_available.Clear();
   wind_available.Clear();
   task_stats.reset();
