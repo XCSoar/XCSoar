@@ -146,6 +146,22 @@ public:
   }
 
   /**
+   * Insert this item before the specified one.  It must not be in the
+   * list already (or in another list).
+   */
+  void InsertBefore(ListHead &other) {
+    assert(&other != this);
+    assert(&other != this);
+    assert(other.prev->next == &other);
+    assert(other.next->prev == &other);
+
+    prev = other.prev;
+    prev->next = this;
+    next = &other;
+    other.prev = this;
+  }
+
+  /**
    * Move this item from its current position in the list after the
    * specified one.
    */
