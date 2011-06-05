@@ -90,9 +90,12 @@ GlideComputer::ProcessGPS()
   PeriodClock clock;
   clock.update();
 
-  SetCalculated().local_date_time = Basic().DateTime + GetUTCOffset();
+  const NMEA_INFO &basic = Basic();
+  DERIVED_INFO &calculated = SetCalculated();
 
-  SetCalculated().expire(Basic().Time);
+  calculated.local_date_time = basic.DateTime + GetUTCOffset();
+
+  calculated.expire(basic.Time);
 
   // Process basic information
   ProcessBasic();
@@ -119,16 +122,16 @@ GlideComputer::ProcessGPS()
   // (if teammate is a FLARM target)
   FLARM_ScanTraffic();
 
-  vegavoice.Update(&Basic(), &Calculated(), SettingsComputer());
+  vegavoice.Update(&basic, &Calculated(), SettingsComputer());
 
   // update basic trace history
   if (time_advanced())
-    SetCalculated().trace_history.append(Basic(), Calculated());
+    calculated.trace_history.append(basic, Calculated());
 
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(*this);
 
-  SetCalculated().time_process_gps = clock.elapsed();
+  calculated.time_process_gps = clock.elapsed();
 
   if (idle_clock.check_update(500)) {
     return true;
@@ -157,13 +160,15 @@ GlideComputer::ProcessIdle()
 bool
 GlideComputer::DetermineTeamCodeRefLocation()
 {
-  if (SettingsComputer().TeamCodeRefWaypoint < 0)
+  const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
+
+  if (settings_computer.TeamCodeRefWaypoint < 0)
     return false;
 
-  if (SettingsComputer().TeamCodeRefWaypoint == TeamCodeRefId)
+  if (settings_computer.TeamCodeRefWaypoint == TeamCodeRefId)
     return TeamCodeRefFound;
 
-  TeamCodeRefId = SettingsComputer().TeamCodeRefWaypoint;
+  TeamCodeRefId = settings_computer.TeamCodeRefWaypoint;
   const Waypoint *wp = way_points.lookup_id(TeamCodeRefId);
   if (wp == NULL)
     return TeamCodeRefFound = false;
@@ -198,20 +203,24 @@ GlideComputer::CalculateOwnTeamCode()
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
+  const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
+  const NMEA_INFO &basic = Basic();
+  TEAMCODE_INFO &teamcode_info = SetCalculated();
+
   // No reference waypoint for teamcode calculation chosen -> cancel
   if (!DetermineTeamCodeRefLocation())
     return;
 
-  if (Basic().flarm.available && SettingsComputer().TeamFlarmTracking) {
+  if (basic.flarm.available && SettingsComputer().TeamFlarmTracking) {
     const FLARM_TRAFFIC *traffic =
-        Basic().flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget);
+        basic.flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget);
 
     if (traffic && traffic->location_available) {
       // Set Teammate location to FLARM contact location
-      SetCalculated().TeammateLocation = traffic->location;
-      Basic().Location.distance_bearing(traffic->location,
-                                        SetCalculated().TeammateRange,
-                                        SetCalculated().TeammateBearing);
+      teamcode_info.TeammateLocation = traffic->location;
+      basic.Location.distance_bearing(traffic->location,
+                                        teamcode_info.TeammateRange,
+                                        teamcode_info.TeammateBearing);
 
       // Calculate distance and bearing from teammate to reference waypoint
 
@@ -231,21 +240,21 @@ GlideComputer::CalculateTeammateBearingRange()
   }
 
   // If (TeamCode exists and is valid)
-  if (SettingsComputer().TeammateCodeValid) {
+  if (settings_computer.TeammateCodeValid) {
     // Calculate bearing and distance to teammate
-    SetCalculated().TeammateLocation =
-        SettingsComputer().TeammateCode.GetLocation(TeamCodeRefLocation);
+    teamcode_info.TeammateLocation =
+        settings_computer.TeammateCode.GetLocation(TeamCodeRefLocation);
 
-    GeoVector team_vector(Basic().Location, Calculated().TeammateLocation);
+    GeoVector team_vector(basic.Location, Calculated().TeammateLocation);
 
     // Save bearing and distance to teammate in Calculated
-    SetCalculated().TeammateBearing = team_vector.Bearing;
-    SetCalculated().TeammateRange = team_vector.Distance;
+    teamcode_info.TeammateBearing = team_vector.Bearing;
+    teamcode_info.TeammateRange = team_vector.Distance;
 
     CheckTeammateRange();
   } else {
-    SetCalculated().TeammateBearing = Angle::degrees(fixed_zero);
-    SetCalculated().TeammateRange = fixed_zero;
+    teamcode_info.TeammateBearing = Angle::degrees(fixed_zero);
+    teamcode_info.TeammateRange = fixed_zero;
   }
 }
 
@@ -307,15 +316,18 @@ GlideComputer::OnDepartedThermal()
 void
 GlideComputer::FLARM_ScanTraffic()
 {
-  if (Basic().flarm.rx && LastBasic().flarm.rx == 0)
+  const NMEA_INFO &basic = Basic();
+  const NMEA_INFO &last_basic = LastBasic();
+
+  if (basic.flarm.rx && last_basic.flarm.rx == 0)
     // traffic has appeared..
     InputEvents::processGlideComputer(GCE_FLARM_TRAFFIC);
 
-  if (Basic().flarm.rx == 0 && LastBasic().flarm.rx)
+  if (basic.flarm.rx == 0 && last_basic.flarm.rx)
     // traffic has disappeared..
     InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
 
-  if (Basic().flarm.NewTraffic)
+  if (basic.flarm.NewTraffic)
     // new traffic has appeared
     InputEvents::processGlideComputer(GCE_FLARM_NEWTRAFFIC);
 }
