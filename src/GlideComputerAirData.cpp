@@ -33,7 +33,6 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "LocalTime.hpp"
 #include "MapWindowProjection.hpp"
-#include "Interface.hpp"
 #include "Atmosphere/CuSonde.hpp"
 #include "LogFile.hpp"
 #include "GPSClock.hpp"
@@ -209,7 +208,6 @@ GlideComputerAirData::SelectWind()
     // auto wind when available and newer than manual wind
     calculated.wind = calculated.estimated_wind;
     calculated.wind_available = calculated.estimated_wind_available;
-    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.Clear(); // unset manual wind
 
   } else if (SettingsComputer().ManualWindAvailable
              && SettingsComputer().AutoWindMode) {

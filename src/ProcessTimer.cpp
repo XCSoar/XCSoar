@@ -219,11 +219,24 @@ BallastDumpProcessTimer()
 }
 
 static void
+ManualWindProcessTimer()
+{
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+
+  /* as soon as another wind setting is used, clear the manual wind */
+  if (calculated.wind_available.Modified(settings_computer.ManualWindAvailable))
+    settings_computer.ManualWindAvailable.Clear();
+}
+
+static void
 SettingsProcessTimer()
 {
   QNHProcessTimer();
   MacCreadyProcessTimer();
   BallastDumpProcessTimer();
+  ManualWindProcessTimer();
 }
 
 void
