@@ -33,6 +33,7 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+struct ClimbHistory;
 struct SETTINGS_COMPUTER;
 struct SETTINGS_MAP;
 class Canvas;
@@ -67,7 +68,7 @@ public:
                    const GlidePolar& glide_polar) const;
 
   void RenderGlidePolar(Canvas &canvas, const PixelRect rc,
-                        const DERIVED_INFO &derived,
+                        const ClimbHistory &climb_history,
                         const SETTINGS_COMPUTER &settings_computer,
                         const GlidePolar& glide_polar) const;
 

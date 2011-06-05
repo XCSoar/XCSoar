@@ -268,7 +268,7 @@ FlightStatisticsRenderer::RenderClimb(Canvas &canvas, const PixelRect rc,
 
 void
 FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
-                                   const DERIVED_INFO &derived, 
+                                           const ClimbHistory &climb_history,
                                    const SETTINGS_COMPUTER &settings_computer,
                                    const GlidePolar& glide_polar) const
 {
@@ -297,8 +297,9 @@ FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
     chart.DrawLine(fixed(i), sinkrate0, fixed(i + 1), sinkrate1,
                    ChartLook::STYLE_MEDIUMBLACK);
 
-    if (derived.AverageClimbRateN[i] > 0) {
-      v1 = derived.AverageClimbRate[i] / derived.AverageClimbRateN[i];
+    if (climb_history.AverageClimbRateN[i] > 0) {
+      v1 = climb_history.AverageClimbRate[i] /
+        climb_history.AverageClimbRateN[i];
 
       if (v0valid)
         chart.DrawLine(fixed(i0), v0, fixed(i), v1, blue_pen);
