@@ -19,14 +19,15 @@ the content and structure of the button menu to be changed.
 \item Defining how long status messages appear and sounds to be played
  when those messages occur.
 \end{itemize}
-Describing all of these is beyond the scope of this document;
-the user is referred to the {\em XCSoar Advanced Configuration Manual} 
-for more details. \todonum[inline]{Write a advanced config manual} 
+Describing all of these in a detail level like a reference manual would 
+do is beyond the scope of this document. The user is referred to browse 
+through the XCSoar Wiki for more details. 
+\url{http://www.xcsoar.org/trac/wiki}
 
 \section{Modifying settings}
 
 There are a large set of configuration settings that may be customised
-from the Settings dialog accessible from the menu under
+from the Settings dialogue accessible from the menu under
 \begin{quote}
 \bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Setup system}
 \end{quote}
@@ -36,8 +37,8 @@ flight.  \warning  All changes to the settings should be performed on the ground
 so that their desired effect on the programs behaviour can be
 verified.
 
-The settings dialog contains several pages.  Once changes have been made,
-click the Close button on the screen or PWR/ESC on Altair to close the dialog
+The settings dialogue contains several pages.  Once changes have been made,
+click the Close button on the screen or PWR/ESC on Altair to close the dialogue
 and return the program back to normal map mode.
 
 \tip Once you are happy with your configuration settings, save the
@@ -50,11 +51,11 @@ the field can be left blank.  File name fields in forms show files
 that match a file extension filter.  This makes it much easier to find
 and select the correct file.
 
-The main configuration dialog (Setup System) can be run in Basic or
-Expert user level, via a selectable field on the left of the dialog.
+The main configuration dialogue (Setup System) can be run in Basic or
+Expert user level, via a selectable field on the left of the dialogue.
 When in Basic mode, many of the less commonly used and advanced
 configuration settings are hidden.  In the descriptions below,
-all of the parameters marked with an asterix are only visible in
+all of the parameters marked with an asterisk are only visible in
 expert user level.
 
 Basic user level:
@@ -67,25 +68,17 @@ Expert user level:
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-expert.png}
 \end{center}
 
-\subsection*{Safety lock}
-
-A safety feature is available to prevent settings being modified in
-flight.  This optionally prevents the configuration settings dialog
-from starting if the aircraft is in flight. See Section~\ref{sec:interface} for customisation.
-
-Note: In simulator mode the configuration settings dialog will also be available in flight.
-
 %\subsection*{Fail-safe}
 
 %If the XCSoar software crashes due to an unrecoverable error while
 %loading a file, the file will be removed from the configuration
-%settings in order to prevent the crash reoccuring.  Therefore, if an
+%settings in order to prevent the crash reoccurring.  Therefore, if an
 %error was found in a file, the user must re-enter that file in the
 %configuration settings after remedying the situation.
 
 \clearpage
-\section{Site}
-The dialog specifies most of the important files that must be
+\section{Site Files}
+The dialogue specifies most of the important files that must be
 configured when flying at a new site.
 
 \begin{center}
@@ -93,23 +86,28 @@ configured when flying at a new site.
 \end{center}
 
 \begin{description}
+\item[XCSoar data path]  The location for all of your XCSoar data on your hard drive, 
+  SD card, or the PDA's static memory.
 \item[Map Database]  The name of the map file (XCM) containing digital elevation
-  terrain data, topology, and optionally waypoints, airspace etc. A good
+  terrain data, topography, and optionally waypoints, airspace etc. A good
   prepared database file covers all the needs for this page.
 \item[Waypoints]  Primary waypoints file.  If left blank, waypoints are loaded
 from the map file (if available).
-\item[More Waypoints]  Secondary waypoints file.  This may be used to add waypoints for a competition.
+\item[More waypoints*]  Secondary waypoints file.  This may be used to add waypoints for a competition.
+\item[Watched waypoints*]  Waypoint file containing special waypoints for which additional computations 
+  like calculation of arrival height in map display always takes place. Useful for waypoints 
+  like known reliable thermal sources (e.g. powerplants) or mountain passes.
 \item[Airspaces]  The file name of the primary airspace file.  If left blank,
 airspaces are loaded from the map file (if available).
-\item[More Airspaces]  The file name of the secondary airspace file.
+\item[More airspaces*]  The file name of the secondary airspace file.
 \item[Terrain file*]  The name of the file containing digital elevation
   terrain data.  Typically left blank, because terrain is loaded from the map
   file.
-\item[Topology file*]  Specifies the file defining the topological features.
-The topology file defines the map topology in terms of points, lines
-and areas with optional labels.  Typically left blank, because topology is
+\item[Topography file*]  Specifies the file defining the topographical features.
+The topography file defines the map topography in terms of points, lines
+and areas with optional labels.  Typically left blank, because topography is
 loaded from the map file.
-\item[Waypoint Details*]  The airfields file may contain extracts from Enroute Supplements or
+\item[Waypoint details*]  The airfields file may contain extracts from Enroute Supplements or
 other contributed information about individual airfields.
 \end{description}
 
@@ -120,10 +118,10 @@ airspace file.
 
 The XCM map database concept is the recommended way to setup a site to fly.
 The old method (XCSoar v5.x) requires each to be separate files and to be
-specified separately (as the ``Terrain file'' and ``Topology file'' respectively).  
+specified separately (as the ``Terrain file'' and ``Topography file'' respectively).  
 
-When XCM map files are used, however, then these files contain terrain, topology
-and optionally waypoints.  In this case, the ``Terrain file'', ``Topology file'' and 
+When XCM map files are used, however, then these files contain terrain, topography
+and optionally waypoints.  In this case, the ``Terrain file'', ``Topography file'' and 
 ``Primary waypoint file'' may be left blank and the system will load those items
 from the map file. However, if a map file is used, the use can still specify the other
 files and they will be used instead of the data in the map file.
@@ -131,70 +129,49 @@ files and they will be used instead of the data in the map file.
 See Section~\ref{sec:map} for more details on map files.
 
 
+%%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Airspace}
+\section{Map Projection}\label{sec:map-projection}
 
-This page is used to determine how the airspace information is
-displayed and how warnings are issued.
+This page let you specify the favoured map orientation and projection.
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-airspace.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-map_projection.png}
 \end{center}
 
 \begin{description}
-\item[Airspace display] Controls how airspace display and warnings are filtered based on altitude.  The airspace filter dialog also allows filtering
- of display and warnings independently for each airspace class.
+\item[Cruise/Circling orientation]  \label{conf:orientation} This determines how
+the screen is rotated with the glider, depending on it's current display mode.
 \begin{description}
-\item[All on] All the airspace information is displayed at the same time.
-\item[Clip] Only airspace below a user determined altitude is shown.
-\item[Auto] Only airspace at the current altitude plus or minus a user definable margin is shown.
-\item[All Below]  Only airspace below the glider is shown.
-\end{description}
-\item[Clip altitude] For clip mode, this is the altitude below which airspace is displayed.
-\item[Margin] For auto mode, this is the safety margin for warnings and display.
-\item[Warnings] Determines whether all warnings are enabled or disabled.
-\item[Warning time*]  This is the time before an incursion is estimated at
-  which the system will warn the pilot.
-\item[Acknowledge time*]  This is the time period in which an acknowledged airspace warning will not be repeated.
-\item[Use black outline*] Draws a black outline around each airspace
+\item[Track up]  The moving map display will be rotated so the glider's track
+ is oriented up. The north arrow symbol points to true north. The glider symbol 
+ may be shown rotated according to the computed heading of the glider taking wind into account.
+\item[North up]  The moving map display will always be orientated true north to
+ south and the glider icon will be rotated to show its course (corrected for
+ wind).
+\item[Target up]  The moving map display will be rotated so the current target
+ direction is oriented up.
 \end{description}
 
-This page also has \button{Colours} and \button{Filter} buttons which
-can be used to review or change the colours/patterns used by each
-airspace class, and whether each airspace class will be filtered out
-of warnings and/or display.  
+\item[Circling zoom]  \label{conf:circlingzoom} This determines whether separate
+zoom levels will be maintained for circling and cruise modes.  If enabled, then the 
+map will zoom in automatically when entering circling mode and zoom out
+automatically when leaving circling mode.
 
-\subsection*{Colours}
-This function is used to determine the colours used to draw each type of
-airspace.
+\item[Map shift reference]  The direction according to the map will be displaced 
+ in order to present a meaningful map section.
+\begin{description}
+  \item[None]  Disable any adjustment.
+  \item[Track]  Use a recent average of the ground track as basis.
+  \item[Target]  Use the current target waypoint as basis.
+\end{description}
 
-First select the airspace type you wish to change.
+\item[Glider position offset]  \label{conf:gliderposition} Defines the location of the 
+ glider drawn on the screen in percent from the screen edge.
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-airspacecolors.png}
-\end{center}
+\item[Max. auto-zoom distance]  The upper limit for Auto-Zoom distance.
+\end{description}
 
-Pressing the \button{Lookup} button brings up the airspace select dialog.
-This functions similarly to the waypoint lookup dialog, and allows
-search based on name, distance, direction, and type (class).  
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/airspacelookup.png}
-\end{center}
-
-Now select the colour and pattern you wish the selected airspace to be drawn in.
-
-
-\subsection*{Filters}
-The filter function is described in Section~\ref{sec:airsp-filt-dial}.
-
-%\clearpage
-%\section{Airspace Colours and Patterns}
-
-
-%This is accessed via the configuration dialog, menu under
-%\bmenu{Config}\blink\bmenu{Setup system} in the Airspace page, select the
-%button \button{Colours}
 
 %%%%%%%%%%%%%%%%%%
 \clearpage
@@ -230,24 +207,6 @@ snail trail is drawn behind the glider.
 \item[Short] A short trail is drawn (approx 10 minutes) 
 \item[Full] A trail for the entire flight is drawn
 \end{description}
-
-\item[Cruise/Circling Orientation] \label{conf:orientation} This determines how
-the screen is rotated with the glider, depending on it's current display mode.
-\begin{description}
-\item[North up] The moving map display will always be orientated true north to
-south and the glider icon will be rotated to show its course (corrected for
-wind).
-\item[Track up] The moving map display will be rotated so the glider's track
- is oriented up. The north arrow symbol points to true north. The glider symbol 
- may be shown rotated according to the computed heading of the glider taking wind into account.
-\item[Target up] The moving map display will be rotated so the current target
-direction is oriented up.
-\end{description}
-
-\item[Circling zoom] \label{conf:circlingzoom} This determines whether separate
-zoom levels will be maintained for circling and cruise modes.  If enabled, then the 
-map will zoom in automatically when entering circling mode and zoom out
-automatically when leaving circling mode.
 
 \item[Trail drift*] \label{conf:traildrift} Determines whether the
 snail trail is drifted with the wind when displayed in circling mode.  When OFF,
@@ -293,6 +252,72 @@ scaled so that when the map is at large zoom levels, targets are still visible.
 
 %%%%%%%%%%%%%%%%%%
 \clearpage
+\section{Airspace}
+
+This page is used to determine how the airspace information is
+displayed and how warnings are issued.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-airspace.png}
+\end{center}
+
+\begin{description}
+\item[Airspace display] Controls how airspace display and warnings are filtered based on altitude.  The airspace filter dialogue also allows filtering
+ of display and warnings independently for each airspace class.
+\begin{description}
+\item[All on] All the airspace information is displayed at the same time.
+\item[Clip] Only airspace below a user determined altitude is shown.
+\item[Auto] Only airspace at the current altitude plus or minus a user definable margin is shown.
+\item[All Below]  Only airspace below the glider is shown.
+\end{description}
+\item[Clip altitude] For clip mode, this is the altitude below which airspace is displayed.
+\item[Margin] For auto mode, this is the safety margin for warnings and display.
+\item[Warnings] Determines whether all warnings are enabled or disabled.
+\item[Warning time*]  This is the time before an incursion is estimated at
+  which the system will warn the pilot.
+\item[Acknowledge time*]  This is the time period in which an acknowledged airspace warning will not be repeated.
+\item[Use black outline*] Draws a black outline around each airspace
+\end{description}
+
+This page also has \button{Colours} and \button{Filter} buttons which
+can be used to review or change the colours/patterns used by each
+airspace class, and whether each airspace class will be filtered out
+of warnings and/or display.  
+
+\subsection*{Colours}
+This function is used to determine the colours used to draw each type of
+airspace.
+
+First select the airspace type you wish to change.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-airspacecolors.png}
+\end{center}
+
+Pressing the \button{Lookup} button brings up the airspace select dialogue.
+This functions similarly to the waypoint lookup dialogue, and allows
+search based on name, distance, direction, and type (class).  
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/airspacelookup.png}
+\end{center}
+
+Now select the colour and pattern you wish the selected airspace to be drawn in.
+
+
+\subsection*{Filters}
+The filter function is described in Section~\ref{sec:airsp-filt-dial}.
+
+%\clearpage
+%\section{Airspace Colours and Patterns}
+
+
+%This is accessed via the configuration dialogue, menu under
+%\bmenu{Config}\blink\bmenu{Setup system} in the Airspace page, select the
+%button \button{Colours}
+
+%%%%%%%%%%%%%%%%%%
+\clearpage
 \section{Symbols}\label{sec:symbols}
 
 This page provides options relating to the items overlaying the map display.
@@ -302,8 +327,7 @@ This page provides options relating to the items overlaying the map display.
 \end{center}
 
 \begin{description}
-\item[Glider position] \label{conf:gliderposition} Defines the location of the
-glider drawn on the screen in percent from the bottom. 
+
 
 \item[Final glide bar]  Two styles are available: Default and
 Alternate. The differences between these styles is cosmetic.  Alternate displays the height difference to the 
@@ -325,7 +349,7 @@ or orange icons. See Section~\ref{sec:waypoint-schemes} for details
 \clearpage
 \section{Terrain display}\label{sec:terrain-display}
 
-This page sets how terrain and topology is drawn on the map window.
+This page sets how terrain and topography is drawn on the map window.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-terrain.png}
@@ -333,15 +357,15 @@ This page sets how terrain and topology is drawn on the map window.
 
 \begin{description}
 \item[Terrain display]  Draws digital elevation terrain on the map.
-\item[Topology display]  Draws topological features (roads, rivers, lakes) on
+\item[Topography display]  Draws topographical features (roads, rivers, lakes) on
 the map.
 \item[Slope shading]  \label{conf:shading} Slopes faced to the wind get
 displayed brighter and the averted slopes get darker.
-\item[Terrain contrast]  Defines the amount of phong shading in the terrain rendering.  Use large values 
+\item[Terrain contrast]  Defines the amount of Phong shading in the terrain rendering.  Use large values 
 to emphasise terrain slope, smaller values if flying in steep mountains.
 \item[Terrain brightness]  Defines the brightness (whiteness) of the terrain rendering.  This controls the 
 average illumination of the terrain.
-\item[Terrain colors]  Defines the colour ramp used in terrain rendering.  Various schemes are available, 
+\item[Terrain colours]  Defines the colour ramp used in terrain rendering.  Various schemes are available, 
 which works best for you will depend on how mountainous your region is.
 \end{description}
 
@@ -437,7 +461,7 @@ This page allows the safety heights and behaviour in abort mode to be defined.
 \item[Safety MC*]  The MacCready setting used for reach calculations, task abort, alternates and
   for determining arrival altitude at airfields. 
 \item[Alternates mode]\label{conf:alternatesmode}
-Determines sorting of alternates in the alternates dialog and in abort mode: {\bf Simple} The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height. {\bf Task} The sorting will also take the current task direction into account.{\bf Home} The sorting will try to find landing options in the current direction to the configured home waypoint.
+Determines sorting of alternates in the alternates dialogue and in abort mode: {\bf Simple} The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height. {\bf Task} The sorting will also take the current task direction into account.{\bf Home} The sorting will try to find landing options in the current direction to the configured home waypoint.
 \item[STF risk factor*] 
   The STF risk factor reduces the MacCready setting used to calculate
   speed to fly as the glider gets low, in order to compensate for
@@ -509,7 +533,7 @@ functions.
 
 COM ports 0 to 10 may be used.  Which COM port is appropriate for you
 depends on what make of PDA you use, and the communications medium
-(serial cable, BlueTooth, virtual COM port, SD card or CF based GPS,
+(serial cable, Bluetooth, virtual COM port, SD card or CF based GPS,
 internal GPS).  Detailing the various options for different devices is
 beyond the scope of this document.  If you have trouble identifying
 which COM port to set, please refer to the XCSoar website and mailing
@@ -527,7 +551,7 @@ frequently runs out of battery power or otherwise loses time.
 \section{Units}
 
 This page allows you to set the units preferences used in all
-displays, {\InfoBox}es, dialogs and input fields.  Separate selections
+displays, {\InfoBox}es, dialogues and input fields.  Separate selections
 are available for speed, distance, lift rate, altitude, temperature, task
 speed and latitude/longitude.
 
@@ -546,7 +570,7 @@ set.
 \clearpage
 \section{Interface}\label{sec:interface}
 
-This page allows to customize the way the user controls and interacts with
+This page allows to customise the way the user controls and interacts with
 XCSoar.
 
 \begin{center}
@@ -558,7 +582,7 @@ XCSoar.
 period of inactivity when operating on internal battery power (visible for PDA
 only).
 
-\item[Safety lock]  This determines whether the configuration settings dialog is
+\item[Safety lock]  This determines whether the configuration settings dialogue is
 accessible during flight.
 \item[Gestures]  Enable this, if you run XCSoar on a touch-screen device and
 like the gestures to control it.
@@ -566,7 +590,7 @@ like the gestures to control it.
 responds to button presses and events from external devices.
 \item[Language*]  The language file defines translations for XCSoar text in English to
 other languages.  Select ``None'' for a native English interface, ``Automatic''
-to localize XCSoar according to the system settings.
+to localise XCSoar according to the system settings.
 \item[Status message*]  The status message file can be used to define sounds to be played when certain
 events occur, and how long various status messages will appear on screen.
 \item[Menu timeout*]  This determines how long menus will appear on screen if the user
@@ -597,16 +621,16 @@ Press the \button{Fonts} button to adjust the fonts XCSoar uses.
 \clearpage
 \section{Fonts}
 
-This page enables customisation of fonts in various fields of the programm.
+This page enables customization of fonts in various fields of the program.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-fonts.png}
 \end{center}
 
-Once the customisation is enabled, the \button{Edit} buttons allow to change some parameters (Font 
+Once the customization is enabled, the \button{Edit} buttons allow to change some parameters (Font 
 Face, Height, Bold and Italic) of the chosen font.
 
-If customisation is disabled, default fonts will be used.
+If customization is disabled, default fonts will be used.
 
 %%%%%%%%%%
 \clearpage
@@ -619,12 +643,12 @@ This page defines various display styles used by symbols and InfoBoxes.
 \end{center}
 
 \begin{description}
-\item[Infobox Geometry]  Sets the geometry values for infoboxes. In landscpae
-mode infoboxes are placed left and right, in portrait mode top and bottom of the screen. The numbers in front refer 
-to the total number of infoboxes.
+\item[Infobox Geometry]  Sets the geometry values for InfoBoxes. In landscape
+mode InfoBoxes are placed left and right, in portrait mode top and bottom of the screen. The numbers in front refer 
+to the total number of InfoBoxes.
 \item[Msg window*]  Defines the alignment of the status message box, either
-centered or in the top left corner.
-\item[Dialog Style*]  Determines the display size of dialogs.
+centred or in the top left corner.
+\item[Dialogue style*]  Determines the display size of dialogues.
 \end{description}
 
 %%%%%%%%%%
@@ -637,7 +661,7 @@ centered or in the top left corner.
 \end{center}
 \label{conf:variogauge}
 \begin{description}
-\item[Speed arrows]  Whether to show speed command arrows on the Vario gauge.
+\item[Speed arrows]  Whether to show speed command arrows on the vario gauge.
 When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.
 \item[Show average]  Whether to show the average climb rate.  In cruise mode, this switches to showing the average 
 netto airmass rate.
@@ -674,13 +698,13 @@ rules. \label{conf:taskrules}
 \item[Start max speed margin] Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance.
 \item[Start max height]  Maximum height above ground while starting the task.  Set to 0 for no limit.
 \item[Start max height margin]  Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance.
-\item[Start height ref]  Reference used for start max height rule
+\item[Start height ref]  Reference used for start max. height rule
 \begin{description}
 \item[MSL] Reference is altitude above mean sea level
 \item[AGL] Reference is the height above the start point
 \end{description}
 \item[Finish min height]  Minimum height above ground while finishing the task.  Set to 0 for no limit. 
-\item[Online contest] Determines the rules used to optimise On-Line Contest
+\item[OnLine Contest] Determines the rules used to optimize OnLine Contest
 paths.  The implementation  conforms to the official release 2010, Sept. 23.
 \begin{description}
 \item[OLC Sprint]  Up to 5 points including start and finish, maximum duration
@@ -690,7 +714,7 @@ paths.  The implementation  conforms to the official release 2010, Sept. 23.
 not be lower than start height less 1000 meters.
 \item[OLC Classic]  Up to seven points including start and finish, finish height
 must not be lower than start height less 1000 meters.
-\item[OLC League]  A contest on top of the classic task optimization, cutting
+\item[OLC League]  A contest on top of the classic task optimisation, cutting
 a 2.5 hours segment over max. 3 of the turns. Finish height must not be below
 start height.
 \item[OLC Plus]  A combination of Classic and FAI rules. 30\% of the FAI score
@@ -703,9 +727,9 @@ are added to the Classic score.
 \clearpage
 \section{{\InfoBox}es}
 
-This page allows the configuration of four InfoBoxe sets to be defined for each
+This page allows the configuration of four InfoBox sets to be defined for each
 display mode (circling, cruise, final glide) and one auxiliary set.  See
-Section~\ref{cha:infobox} for a description of the infobox types and their meanings.
+Section~\ref{cha:infobox} for a description of the InfoBox types and their meanings.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-infoboxes.png}
@@ -713,7 +737,7 @@ Section~\ref{cha:infobox} for a description of the infobox types and their meani
 
 To arrange a set of InfoBoxes press one of the buttons labeled with the name
 of the set.  The InfoBoxes are numbered; the location of the InfoBoxes depends
-on the screen geometry.  The table below shows the infobox numbers for landscape screen layout (Altair):
+on the screen geometry.  The table below shows the InfoBox numbers for landscape screen layout (Altair):
 
 \begin{tabular}{|c|c|}
 \hline
@@ -731,7 +755,7 @@ on the screen geometry.  The table below shows the infobox numbers for landscape
 \hline
 \end{tabular}
 
-The table below shows the infobox numbering for portrait screen layout:
+The table below shows the InfoBox numbering for portrait screen layout:
 
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -745,9 +769,9 @@ The table below shows the infobox numbering for portrait screen layout:
 \begin{description}
 \item[Inverse InfoBoxes*]  If true, the InfoBoxes are white on black, otherwise black on white.
 \item[Colour InfoBoxes*]  If true, certain InfoBoxes will have coloured text. For example, the 
-active waypoint infobox will be blue when the glider is above final glide.
-\item[Infobox border*]  Two styles for infobox borders are available: `Box'
-draws boxes around each infobox.  `Tab' draws a tab at the top of the infobox across the title.
+active waypoint InfoBox will be blue when the glider is above final glide.
+\item[Infobox border*]  Two styles for InfoBox borders are available: `Box'
+draws boxes around each InfoBox.  `Tab' draws a tab at the top of the InfoBox across the title.
 \end{description}
 
 %%%%%%%%%%
