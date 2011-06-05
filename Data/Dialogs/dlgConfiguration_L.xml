@@ -177,16 +177,16 @@
     </Panel>
   
     <Panel Name="frmTerrain">
-      <Edit Name="prpEnableTerrain" Caption="Terrain display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draws digital elevation terrain on the map. This is shaded by the wind direction: upwind is brighter, downwind darker.">
+      <Edit Name="prpEnableTerrain" Caption="Terrain display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw a digital elevation terrain on the map.">
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topographical features (roads, rivers, lakes etc) on the map.  Requires the topography file to be specified.">
+      <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topographical features (roads, rivers, lakes etc) on the map.">
         <DataField DataType="boolean" />
       </Edit>
     
       <Edit Name="prpTerrainContrast" Caption="Terrain contrast" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Defines the amount of phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
+        Help="Defines the amount of Phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5" />
       </Edit>
     
