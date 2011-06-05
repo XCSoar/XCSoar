@@ -162,9 +162,11 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 void
 MapWindow::DrawTeammate(Canvas &canvas) const
 {
-  if (SettingsComputer().TeammateCodeValid) {
+  const TEAMCODE_INFO &teamcode_info = Calculated();
+
+  if (teamcode_info.teammate_available) {
     RasterPoint sc;
-    if (render_projection.GeoToScreenIfVisible(Calculated().TeammateLocation,
+    if (render_projection.GeoToScreenIfVisible(teamcode_info.TeammateLocation,
                                                  sc))
       Graphics::hBmpTeammatePosition.draw(canvas, sc);
   }

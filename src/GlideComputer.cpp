@@ -215,6 +215,7 @@ ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
   // Set Teammate location to FLARM contact location
   teamcode_info.TeammateLocation = traffic->location;
   teamcode_info.teammate_vector = location.distance_bearing(traffic->location);
+  teamcode_info.teammate_available = true;
 
   // Calculate distance and bearing from teammate to reference waypoint
 
@@ -237,6 +238,7 @@ ComputeTeamCode(const GeoPoint &location, const GeoPoint &reference_location,
   teamcode_info.TeammateLocation = team_code.GetLocation(reference_location);
   teamcode_info.teammate_vector =
     location.distance_bearing(teamcode_info.TeammateLocation);
+  teamcode_info.teammate_available = true;
 }
 
 void
@@ -261,8 +263,7 @@ GlideComputer::CalculateTeammateBearingRange()
                     teamcode_info);
     CheckTeammateRange();
   } else {
-    teamcode_info.teammate_vector.Bearing = Angle::degrees(fixed_zero);
-    teamcode_info.teammate_vector.Distance = fixed_zero;
+    teamcode_info.teammate_available = false;
   }
 }
 

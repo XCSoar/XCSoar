@@ -100,11 +100,11 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
   const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
+  const TEAMCODE_INFO &teamcode_info = CommonInterface::Calculated();
 
-  if (settings.TeamFlarmIdTarget.defined() || settings.TeammateCodeValid) {
+  if (teamcode_info.teammate_available) {
     // Set Value
-    infobox.SetValue(XCSoarInterface::Calculated().teammate_vector.Bearing,
-                     _T("T"));
+    infobox.SetValue(teamcode_info.teammate_vector.Bearing, _T("T"));
   }
   else
     infobox.SetValueInvalid();
@@ -127,13 +127,13 @@ void
 InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
-  const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
+  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  const FLARM_STATE &flarm = basic.flarm;
+  const TEAMCODE_INFO &teamcode_info = CommonInterface::Calculated();
 
-  if (settings.TeamFlarmIdTarget.defined() || settings.TeammateCodeValid) {
+  if (teamcode_info.teammate_available && basic.track_available) {
     // Set Value
-    Angle Value = XCSoarInterface::Calculated().teammate_vector.Bearing -
-                  XCSoarInterface::Basic().track;
-
+    Angle Value = teamcode_info.teammate_vector.Bearing - basic.track;
     SetValueBearingDifference(infobox, Value);
   } else
     infobox.SetValueInvalid();
@@ -157,20 +157,19 @@ InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
   const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
-
-  if (!settings.TeammateCodeValid) {
-    infobox.SetInvalid();
-    return;
-  }
+  const TEAMCODE_INFO &teamcode_info = CommonInterface::Calculated();
 
   // Set Value
-  TCHAR tmp[32];
-  Units::FormatUserDistance(XCSoarInterface::Calculated().teammate_vector.Distance,
-                            tmp, 32, false);
-  infobox.SetValue(tmp);
+  if (teamcode_info.teammate_available) {
+    TCHAR tmp[32];
+    Units::FormatUserDistance(teamcode_info.teammate_vector.Distance,
+                              tmp, 32, false);
+    infobox.SetValue(tmp);
 
-  // Set Unit
-  infobox.SetValueUnit(Units::Current.DistanceUnit);
+    // Set Unit
+    infobox.SetValueUnit(Units::Current.DistanceUnit);
+  } else
+    infobox.SetValueInvalid();
 
   // Set Comment
   if (!settings.TeamFlarmIdTarget.defined())

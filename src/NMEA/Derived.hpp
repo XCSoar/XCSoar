@@ -81,6 +81,11 @@ struct TERRAIN_ALT_INFO
  */
 struct TEAMCODE_INFO
 {
+  /**
+   * Are #teammate_vector and #TeammateLocation available?
+   */
+  bool teammate_available;
+
   /** Team code */
   TeamCode OwnTeamCode;
 
@@ -89,6 +94,8 @@ struct TEAMCODE_INFO
 
   /** Position of the chosen team mate */
   GeoPoint TeammateLocation;
+
+  void Clear();
 };
 
 /**

@@ -33,6 +33,12 @@ TERRAIN_ALT_INFO::Clear()
 }
 
 void
+TEAMCODE_INFO::Clear()
+{
+  teammate_available = false;
+}
+
+void
 DERIVED_INFO::reset()
 {
   VARIO_INFO::Clear();
@@ -40,6 +46,7 @@ DERIVED_INFO::reset()
   CIRCLING_INFO::Clear();
   ClimbHistory::Clear();
   TERRAIN_ALT_INFO::Clear();
+  TEAMCODE_INFO::Clear();
 
   Heading = Angle::native(fixed_zero);
   pressure_available.Clear();

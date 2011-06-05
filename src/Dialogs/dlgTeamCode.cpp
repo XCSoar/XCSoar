@@ -42,14 +42,14 @@ static WndForm *wf = NULL;
 static void
 Update()
 {
-  const TEAMCODE_INFO &teamcode_info = XCSoarInterface::Calculated();
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const TEAMCODE_INFO &teamcode_info = CommonInterface::Calculated();
   WndProperty* wp;
   TCHAR Text[100];
 
-  if (XCSoarInterface::SettingsComputer().TeamCodeRefWaypoint >= 0) {
-    double Value = (teamcode_info.teammate_vector.Bearing -
-                    XCSoarInterface::Basic().track).
-      as_delta().value_degrees();
+  if (teamcode_info.teammate_available && basic.track_available) {
+    double Value = (teamcode_info.teammate_vector.Bearing - basic.track)
+      .as_delta().value_degrees();
 
     if (Value > 1)
       _stprintf(Text, _T("%2.0f")_T(DEG)_T(">"), Value);
@@ -67,15 +67,15 @@ Update()
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
-  if (wp) {
+  if (teamcode_info.teammate_available) {
+    wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(teamcode_info.teammate_vector.Bearing.value_degrees());
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
-  if (wp) {
+  if (teamcode_info.teammate_available) {
+    wp = (WndProperty*)wf->FindByName(_T("prpRange"));
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     df.SetAsFloat(Units::ToUserDistance(teamcode_info.teammate_vector.Distance));
     wp->RefreshDisplay();
