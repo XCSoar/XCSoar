@@ -41,6 +41,9 @@ AirspaceRendererSettings::SetDefaults()
   fill_mode = AS_FILL_DEFAULT;
 #endif
 
+  std::fill(brushes, brushes + AIRSPACECLASSCOUNT, 0);
+  std::fill(colours, colours + AIRSPACECLASSCOUNT, 0);
+
   brushes[0] = 2;
   brushes[1] = 0;
   brushes[2] = 0;
