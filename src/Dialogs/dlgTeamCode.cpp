@@ -125,12 +125,7 @@ OnCodeClicked(gcc_unused WndButton &button)
   if (!dlgTextEntryShowModal(newTeammateCode, 7))
     return;
 
-  for (int i = _tcslen(newTeammateCode) - 1; i >= 0; i--) {
-    if (newTeammateCode[i] != _T(' '))
-      break;
-
-    newTeammateCode[i] = 0;
-  }
+  TrimRight(newTeammateCode);
 
   XCSoarInterface::SetSettingsComputer().TeammateCode.Update(newTeammateCode);
   if (!string_is_empty(XCSoarInterface::SettingsComputer().TeammateCode.GetCode())) {
