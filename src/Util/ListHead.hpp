@@ -43,36 +43,63 @@
 class ListHead {
   ListHead *prev, *next;
 
+#ifndef NDEBUG
+  enum {
+    UNKNOWN,
+    HEAD,
+    CONNECTED,
+    DISCONNECTED,
+  } type;
+#endif
+
 public:
   /**
    * Cheap non-initializing constructor.
    */
-  ListHead() {}
+  ListHead()
+#ifndef NDEBUG
+    :type(UNKNOWN)
+#endif
+  {}
 
   struct empty {};
 
   /**
    * Initialize an empty list.
    */
-  ListHead(empty):prev(this), next(this) {}
+  ListHead(empty)
+    :prev(this), next(this)
+#ifndef NDEBUG
+    , type(HEAD)
+#endif
+  {}
 
   const ListHead *GetPrevious() const {
+    assert(type == CONNECTED || type == HEAD);
+
     return prev;
   }
 
   ListHead *GetPrevious() {
+    assert(type == CONNECTED || type == HEAD);
+
     return prev;
   }
 
   const ListHead *GetNext() const {
+    assert(type == CONNECTED || type == HEAD);
+
     return next;
   }
 
   ListHead *GetNext() {
+    assert(type == CONNECTED || type == HEAD);
+
     return next;
   }
 
   bool IsEmpty() const {
+    assert(type == HEAD);
     assert((prev == this) == (next == this));
     return prev == this;
   }
@@ -81,6 +108,8 @@ public:
    * Is the specified item the first one in the list?
    */
   bool IsFirst(const ListHead &item) const {
+    assert(type == HEAD);
+
     return item.prev == this;
   }
 
@@ -88,6 +117,8 @@ public:
    * Is the specified item the last one in the list?
    */
   bool IsLast(const ListHead &item) const {
+    assert(type == HEAD);
+
     return item.next == this;
   }
 
@@ -104,6 +135,8 @@ public:
    */
   gcc_pure
   unsigned Count() const {
+    assert(type == HEAD);
+
     unsigned n = 0;
     for (const ListHead *p = next; p != this; p = p->next)
       ++n;
@@ -114,19 +147,31 @@ public:
    * Turns this object into an empty list.
    */
   void Clear() {
+#ifndef NDEBUG
+    assert(type == UNKNOWN || type == HEAD);
+#endif
+
     prev = next = this;
+
+#ifndef NDEBUG
+    type = HEAD;
+#endif
   }
 
   /**
    * Remove this item from the linked list.
    */
   void Remove() {
-    assert(!IsEmpty());
+    assert(type == CONNECTED);
     assert(prev->next == this);
     assert(next->prev == this);
 
     next->prev = prev;
     prev->next = next;
+
+#ifndef NDEBUG
+    type = DISCONNECTED;
+#endif
   }
 
   /**
@@ -134,8 +179,10 @@ public:
    * list already (or in another list).
    */
   void InsertAfter(ListHead &other) {
+    assert(type == UNKNOWN || type == DISCONNECTED);
     assert(&other != this);
     assert(&other != this);
+    assert(other.type == HEAD || other.type == CONNECTED);
     assert(other.prev->next == &other);
     assert(other.next->prev == &other);
 
@@ -143,6 +190,10 @@ public:
     next->prev = this;
     prev = &other;
     other.next = this;
+
+#ifndef NDEBUG
+    type = CONNECTED;
+#endif
   }
 
   /**
@@ -150,8 +201,10 @@ public:
    * list already (or in another list).
    */
   void InsertBefore(ListHead &other) {
+    assert(type == UNKNOWN || type == DISCONNECTED);
     assert(&other != this);
     assert(&other != this);
+    assert(other.type == HEAD || other.type == CONNECTED);
     assert(other.prev->next == &other);
     assert(other.next->prev == &other);
 
@@ -159,6 +212,10 @@ public:
     prev->next = this;
     next = &other;
     other.prev = this;
+
+#ifndef NDEBUG
+    type = CONNECTED;
+#endif
   }
 
   /**
@@ -166,6 +223,9 @@ public:
    * specified one.
    */
   void MoveAfter(ListHead &other) {
+    assert(type == CONNECTED);
+    assert(other.type == HEAD || other.type == CONNECTED);
+
     if (prev == &other) {
       assert(other.next == this);
       return;
@@ -179,9 +239,11 @@ public:
    * Insert this item with the specified one.
    */
   void Replace(ListHead &other) {
+    assert(type == CONNECTED);
     assert(&other != this);
     assert(prev->next == this);
     assert(next->prev == this);
+    assert(other.type == UNKNOWN || other.type == DISCONNECTED);
 
     other.next = next;
     other.prev = prev;
