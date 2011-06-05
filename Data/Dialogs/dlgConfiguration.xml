@@ -262,8 +262,8 @@
     </Panel>
 
     <Panel Name="frmFinalGlide">
-      <Edit Name="prpAutoWind" Caption="Auto. wind" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source&#10;[ZigZag] requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling.">
+      <Edit Name="prpAutoWind" Caption="Auto wind" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling.">
         <DataField DataType="enum"/>
       </Edit>
     
@@ -272,7 +272,7 @@
         <DataField DataType="boolean"/>
       </Edit>
 
-      <Edit Name="prpAutoMcMode" Caption="Auto. MC mode" X="2" Width="-2" Height="22" CaptionWidth="150"
+      <Edit Name="prpAutoMcMode" Caption="Auto MC mode" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This option defines which auto MacCready algorithm is used.&#10;[Final glide] adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in order to cover the greatest distance in the remaining time and reach the finish height.&#10;[Trending Average] sets MC to the trending average climb rate based on all climbs.&#10;[Both] Uses trending average during task, then fastest arrival when in final glide mode.">
         <DataField DataType="enum"/>
       </Edit>
@@ -293,7 +293,7 @@
       </Edit>
     
       <Edit Name="prpAverEffTime" Caption="L/D average period" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Average efficiency is always calculated in REAL TIME. Here you can decide on how many seconds of flight this calculation must be done. The real distance covered second by second in this period is divided by the final difference of altitude.  So if for example you go and return back to the same point after 2 minutes, and you have set 2 minutes as period, averageLD will consider the total distance covered in those two minutes , and NOT the distance between your position 2 minutes before and your current position, that in this case could be almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds. Lower values will give as a result pretty much the same as LD Instant , while higher values will look like LD Cruise. Other commercial instruments and software use 2 minutes.">
+        Help="Here you can decide on how many seconds of flight this calculation must be done. Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds.">
         <DataField DataType="enum"/>
       </Edit>      
     </Panel>
