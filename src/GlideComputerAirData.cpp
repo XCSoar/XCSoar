@@ -376,17 +376,11 @@ GlideComputerAirData::AverageClimbRate()
       !calculated.Circling &&
       (!basic.acceleration.Available ||
        fabs(fabs(basic.acceleration.Gload) - fixed_one) <= fixed(0.25))) {
-    int vi = iround(calculated.IndicatedAirspeed);
-    if (vi <= 0 || (unsigned)vi >= ClimbHistory::SIZE)
-      // out of range
-      return;
-
     // TODO: Check this is correct for TAS/IAS
     fixed ias_to_tas = calculated.IndicatedAirspeed / calculated.TrueAirspeed;
     fixed w_tas = basic.TotalEnergyVario * ias_to_tas;
 
-    calculated.climb_history.AverageClimbRate[vi] += w_tas;
-    calculated.climb_history.AverageClimbRateN[vi]++;
+    calculated.climb_history.Add(uround(calculated.IndicatedAirspeed), w_tas);
   }
 }
 

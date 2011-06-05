@@ -31,3 +31,13 @@ ClimbHistory::Clear()
   std::fill(AverageClimbRate, AverageClimbRate + SIZE, fixed_zero);
   std::fill(AverageClimbRateN, AverageClimbRateN + SIZE, 0);
 }
+
+void
+ClimbHistory::Add(unsigned speed, fixed vario)
+{
+  if (speed >= SIZE)
+    return;
+
+  AverageClimbRate[speed] += vario;
+  ++AverageClimbRateN[speed];
+}

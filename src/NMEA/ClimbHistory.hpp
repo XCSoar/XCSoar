@@ -26,12 +26,13 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
+#include <assert.h>
+
 /**
  * Derived climb rate history
  * 
  */
-struct ClimbHistory
-{
+class ClimbHistory {
   static const unsigned SIZE = 200;
 
   /** Average climb rate for each episode */
@@ -39,7 +40,27 @@ struct ClimbHistory
   /** Number of samples in each episode */
   long AverageClimbRateN[SIZE];
 
+public:
   void Clear();
+
+  void Add(unsigned speed, fixed vario);
+
+  /**
+   * Do we have data for the specified speed?
+   */
+  bool Check(unsigned speed) const {
+    return speed < SIZE && AverageClimbRateN[speed] > 0;
+  }
+
+  /**
+   * Returns the average climb rate for the specified speed.
+   */
+  fixed Get(unsigned speed) const {
+    assert(speed < SIZE);
+    assert(AverageClimbRateN[speed] > 0);
+
+    return AverageClimbRate[speed] / AverageClimbRateN[speed];
+  }
 };
 
 #endif
