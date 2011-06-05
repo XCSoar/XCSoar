@@ -377,7 +377,7 @@ GlideComputerAirData::AverageClimbRate()
       (!basic.acceleration.Available ||
        fabs(fabs(basic.acceleration.Gload) - fixed_one) <= fixed(0.25))) {
     int vi = iround(calculated.IndicatedAirspeed);
-    if (vi <= 0 || vi >= iround(SettingsComputer().SafetySpeed))
+    if (vi <= 0 || (unsigned)vi >= ClimbHistory::SIZE)
       // out of range
       return;
 

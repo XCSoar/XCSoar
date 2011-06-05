@@ -32,10 +32,12 @@ Copyright_License {
  */
 struct ClimbHistory
 {
+  static const unsigned SIZE = 200;
+
   /** Average climb rate for each episode */
-  fixed AverageClimbRate[200];
+  fixed AverageClimbRate[SIZE];
   /** Number of samples in each episode */
-  long AverageClimbRateN[200];
+  long AverageClimbRateN[SIZE];
 
   void Clear();
 };
