@@ -200,6 +200,51 @@ GlideComputer::CalculateOwnTeamCode()
   SetCalculated().OwnTeamCode.Update(bearing, distance);
 }
 
+static void
+ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
+                 const FLARM_STATE &flarm, const FlarmId target_id,
+                 TEAMCODE_INFO &teamcode_info)
+{
+  if (!flarm.available)
+    return;
+
+  const FLARM_TRAFFIC *traffic = flarm.FindTraffic(target_id);
+  if (traffic == NULL || !traffic->location_available)
+    return;
+
+  // Set Teammate location to FLARM contact location
+  teamcode_info.TeammateLocation = traffic->location;
+  location.distance_bearing(traffic->location,
+                            teamcode_info.TeammateRange,
+                            teamcode_info.TeammateBearing);
+
+  // Calculate distance and bearing from teammate to reference waypoint
+
+  Angle bearing;
+  fixed distance;
+  reference_location.distance_bearing(traffic->location,
+                                      distance, bearing);
+
+  // Calculate TeamCode and save it in Calculated
+  XCSoarInterface::SetSettingsComputer().TeammateCode.Update(bearing, distance);
+  XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
+}
+
+static void
+ComputeTeamCode(const GeoPoint &location, const GeoPoint &reference_location,
+                const TeamCode &team_code,
+                TEAMCODE_INFO &teamcode_info)
+{
+  // Calculate bearing and distance to teammate
+  teamcode_info.TeammateLocation = team_code.GetLocation(reference_location);
+
+  GeoVector team_vector(location, teamcode_info.TeammateLocation);
+
+  // Save bearing and distance to teammate in Calculated
+  teamcode_info.TeammateBearing = team_vector.Bearing;
+  teamcode_info.TeammateRange = team_vector.Distance;
+}
+
 void
 GlideComputer::CalculateTeammateBearingRange()
 {
@@ -211,46 +256,15 @@ GlideComputer::CalculateTeammateBearingRange()
   if (!DetermineTeamCodeRefLocation())
     return;
 
-  if (basic.flarm.available && SettingsComputer().TeamFlarmTracking) {
-    const FLARM_TRAFFIC *traffic =
-        basic.flarm.FindTraffic(SettingsComputer().TeamFlarmIdTarget);
-
-    if (traffic && traffic->location_available) {
-      // Set Teammate location to FLARM contact location
-      teamcode_info.TeammateLocation = traffic->location;
-      basic.Location.distance_bearing(traffic->location,
-                                        teamcode_info.TeammateRange,
-                                        teamcode_info.TeammateBearing);
-
-      // Calculate distance and bearing from teammate to reference waypoint
-
-      Angle bearing;
-      fixed distance;
-      TeamCodeRefLocation.distance_bearing(traffic->location,
-                                           distance, bearing);
-
-      // Calculate TeamCode and save it in Calculated
-      XCSoarInterface::SetSettingsComputer().TeammateCode.Update(bearing, distance);
-      XCSoarInterface::SetSettingsComputer().TeammateCodeValid = true;
-
-      CheckTeammateRange();
-
-      return;
-    }
-  }
-
-  // If (TeamCode exists and is valid)
-  if (settings_computer.TeammateCodeValid) {
-    // Calculate bearing and distance to teammate
-    teamcode_info.TeammateLocation =
-        settings_computer.TeammateCode.GetLocation(TeamCodeRefLocation);
-
-    GeoVector team_vector(basic.Location, Calculated().TeammateLocation);
-
-    // Save bearing and distance to teammate in Calculated
-    teamcode_info.TeammateBearing = team_vector.Bearing;
-    teamcode_info.TeammateRange = team_vector.Distance;
-
+  if (settings_computer.TeamFlarmTracking) {
+    ComputeFlarmTeam(basic.Location, TeamCodeRefLocation,
+                     basic.flarm, settings_computer.TeamFlarmIdTarget,
+                     teamcode_info);
+    CheckTeammateRange();
+  } else if (settings_computer.TeammateCodeValid) {
+    ComputeTeamCode(basic.Location, TeamCodeRefLocation,
+                    settings_computer.TeammateCode,
+                    teamcode_info);
     CheckTeammateRange();
   } else {
     teamcode_info.TeammateBearing = Angle::degrees(fixed_zero);
