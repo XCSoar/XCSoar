@@ -230,25 +230,6 @@ class Trace : private NonCopyable
       return list.size();
     }
 
-    void get_trace(TracePointVector &v, const unsigned min_time = 0) const {
-      v.clear();
-
-      if (list.size() < 3)
-        return;
-
-      v.reserve(list.size());
-      TraceDelta::const_iterator it = first();
-      assert(it != last());
-      do {
-        const TraceDelta &tit = **it;
-        if (tit.point.time >= min_time)
-          v.push_back(tit.point);
-
-        it = tit.next;
-      } while ((*it)->next != it);
-      v.push_back((*it)->point);
-    }
-
     /**
      * Update delta values for specified item in the delta list and the
      * tree.  This repositions the item after into its sorted position.
@@ -679,16 +660,10 @@ public:
   /** 
    * Retrieve a vector of trace points sorted by time
    * 
-   * @param edges_only Search only for trace edges (first, last time)
    * @param iov Vector of trace points (output)
    *
    */
-  void get_trace_points(TracePointVector& iov) const {
-    if (delta_list.size() < 3)
-      get_trace_edges(iov);
-    else
-      delta_list.get_trace(iov, get_min_time());
-  }
+  void get_trace_points(TracePointVector& iov) const;
 
   /**
    * Retrieve a vector of the earliest and latest trace points

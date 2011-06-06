@@ -134,6 +134,14 @@ Trace::is_null(const TracePoint& tp)
 }
 
 void
+Trace::get_trace_points(TracePointVector& iov) const
+{
+  iov.clear();
+  iov.reserve(size());
+  std::copy(begin(), end(), std::back_inserter(iov));
+}
+
+void
 Trace::get_trace_edges(TracePointVector &v) const
 {
   v.clear();
