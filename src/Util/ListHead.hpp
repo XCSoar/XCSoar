@@ -41,7 +41,7 @@
  * use it, derive your class/struct from this one.
  */
 class ListHead {
-  ListHead *prev, *next;
+  ListHead *next, *prev;
 
 #ifndef NDEBUG
   enum {
@@ -68,7 +68,7 @@ public:
    * Initialize an empty list.
    */
   ListHead(empty)
-    :prev(this), next(this)
+    :next(this), prev(this)
 #ifndef NDEBUG
     , type(HEAD)
 #endif
