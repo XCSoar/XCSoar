@@ -85,6 +85,42 @@ Trace::get_min_time() const
   return std::max(0, (int)m_last_point.time - (int)m_max_time);
 }
 
+unsigned
+Trace::calc_average_delta_distance(const unsigned no_thin) const
+{
+  unsigned r = delta_list.get_recent_time(no_thin);
+  unsigned acc = 0;
+  unsigned counter = 0;
+
+  ChronologicalList::const_iterator end = chronological_list.end();
+  for (ChronologicalList::const_iterator it = chronological_list.begin();
+       it != end && it->point.time < r; ++it, ++counter)
+    acc += it->delta_distance;
+
+  if (counter)
+    return acc / counter;
+
+  return 0;
+}
+
+unsigned
+Trace::calc_average_delta_time(const unsigned no_thin) const
+{
+  unsigned r = delta_list.get_recent_time(no_thin);
+  unsigned acc = 0;
+  unsigned counter = 0;
+
+  ChronologicalList::const_iterator end = chronological_list.end();
+  for (ChronologicalList::const_iterator it = chronological_list.begin();
+       it != end && it->point.time < r; ++it, ++counter)
+    acc += it->delta_time();
+
+  if (counter)
+    return acc / counter;
+
+  return 0;
+}
+
 bool
 Trace::optimise_if_old()
 {
@@ -109,8 +145,8 @@ Trace::optimise_if_old()
   } else
     return false;
 
-  m_average_delta_distance = delta_list.calc_average_delta_distance(no_thin_time);
-  m_average_delta_time = delta_list.calc_average_delta_time(no_thin_time);
+  m_average_delta_distance = calc_average_delta_distance(no_thin_time);
+  m_average_delta_time = calc_average_delta_time(no_thin_time);
 
   return true;
 }

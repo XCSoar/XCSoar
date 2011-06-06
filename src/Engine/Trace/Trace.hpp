@@ -503,36 +503,6 @@ class Trace : private NonCopyable
       return list.empty();
     }
 
-    unsigned calc_average_delta_distance(const unsigned no_thin) const {
-      unsigned r = get_recent_time(no_thin);
-      unsigned acc = 0;
-      unsigned counter = 0;
-      for (TraceDelta::const_iterator i= list.begin();
-           i!= list.end(); ++i, ++counter) {
-        if ((*i)->point.time < r)
-          acc += (*i)->delta_distance;
-      }
-      if (counter)
-        return acc / counter;
-
-      return 0;
-    }
-
-    unsigned calc_average_delta_time(const unsigned no_thin) const {
-      unsigned r = get_recent_time(no_thin);
-      unsigned acc = 0;
-      unsigned counter = 0;
-      for (TraceDelta::const_iterator i= list.begin();
-           i!= list.end(); ++i, ++counter) {
-        if ((*i)->point.time < r)
-          acc += (*i)->delta_time();
-      }
-      if (counter)
-        return acc / counter;
-
-      return 0;
-    }
-
   private:
     void insert(TraceDelta &td) {
       list.insert(&td);
@@ -675,6 +645,12 @@ public:
 private:
   gcc_pure
   unsigned get_min_time() const;
+
+  gcc_pure
+  unsigned calc_average_delta_distance(const unsigned no_thin) const;
+
+  gcc_pure
+  unsigned calc_average_delta_time(const unsigned no_thin) const;
 
   static const unsigned null_delta = 0 - 1;
 
