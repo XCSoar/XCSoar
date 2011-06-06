@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 #include "Util/SliceAllocator.hpp"
+#include "Util/ListHead.hpp"
 #include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Compiler.h"
@@ -49,7 +50,7 @@ struct AIRCRAFT_STATE;
  */
 class Trace : private NonCopyable
 {
-  struct TraceDelta {
+  struct TraceDelta : public ListHead {
     /**
      * Function used to points for sorting by deltas.
      * Ranking is primarily by distance delta; for equal distances, rank by
@@ -91,7 +92,6 @@ class Trace : private NonCopyable
                      GlobalSliceAllocator<TraceDelta *, 256u> > List;
     typedef List::iterator iterator;
     typedef List::const_iterator const_iterator;
-    typedef std::pair<iterator, iterator> neighbours;
 
     TracePoint point;
 
@@ -100,9 +100,6 @@ class Trace : private NonCopyable
     unsigned delta_distance;
 
     iterator delta_list_iterator;
-
-    iterator prev;
-    iterator next;
 
     TraceDelta(const TracePoint &p)
       :point(p),
@@ -124,6 +121,14 @@ class Trace : private NonCopyable
      */
     bool IsEdge() const {
       return elim_time == null_time;
+    }
+
+    TraceDelta &GetPrevious() {
+      return *(TraceDelta *)ListHead::GetPrevious();
+    }
+
+    TraceDelta &GetNext() {
+      return *(TraceDelta *)ListHead::GetNext();
     }
 
     void update(const TracePoint &p_last, const TracePoint &p_next) {
@@ -189,8 +194,11 @@ class Trace : private NonCopyable
 
   class DeltaList {
     TraceDelta::List list;
+    ListHead head;
 
   public:
+    DeltaList():head(ListHead::empty()) {}
+
     /**
      * Append new point to tree and list in sorted order.
      * It is expected this will be called in increasing time order,
@@ -200,24 +208,16 @@ class Trace : private NonCopyable
      * @param tree Tree to store items
      */
     void append(TraceDelta &td) {
-      if (list.empty()) {
-        insert(td); // will always be at back
-        TraceDelta::iterator back = list.begin();
-        link(back, back);
-      } else {
-        TraceDelta::iterator old_back = last();
-        TraceDelta::iterator new_it = merge_insert(td);
-        link(new_it, new_it);
-        link(old_back, new_it);
-        if (list.size() > 2) {
-          TraceDelta::iterator new_back = update_delta(old_back);
-          link(new_back, new_it);
-        }
-      }
+      insert(td);
+      td.InsertBefore(head);
+
+      if (!head.IsFirst(td))
+        update_delta(td.GetPrevious());
     }
 
     void clear() {
       list.clear();
+      head.Clear();
     }
 
     // return top element of list
@@ -238,25 +238,20 @@ class Trace : private NonCopyable
      *
      * @return Iterator to updated item
      */
-    TraceDelta::iterator update_delta(TraceDelta::iterator it) {
-      assert(it != list.end());
+    void update_delta(TraceDelta &td) {
+      if (head.IsEdge(td))
+        return;
 
-      const TraceDelta::neighbours ne =
-        std::make_pair((*it)->prev, (*it)->next);
-      if ((ne.second == it) || (ne.first == it))
-        return it;
+      const TraceDelta &previous = td.GetPrevious();
+      const TraceDelta &next = td.GetNext();
 
-      TraceDelta &td = **it;
-      td.update((*ne.first)->point, (*ne.second)->point);
+      td.update(previous.point, next.point);
 
       // erase old one
-      list.erase(it);
+      list.erase(td.delta_list_iterator);
 
       // insert new in sorted position
-      it = merge_insert(td);
-      link(ne.first, it);
-      link(it, ne.second);
-      return it;
+      insert(td);
     }
 
     /**
@@ -274,15 +269,17 @@ class Trace : private NonCopyable
       TraceDelta &td = **it;
       assert(!td.IsEdge());
 
+      TraceDelta &previous = td.GetPrevious();
+      TraceDelta &next = td.GetNext();
+
       // now delete the item
-      TraceDelta::neighbours ne = erase(it);
-      assert (ne.first != ne.second);
+      erase(it);
 
       chronological_list.erase_reference(td);
 
       // and update the deltas
-      update_delta(ne.first);
-      update_delta(ne.second);
+      update_delta(previous);
+      update_delta(next);
     }
 
     /**
@@ -293,17 +290,14 @@ class Trace : private NonCopyable
      *
      * @return Neighbours
      */
-    TraceDelta::neighbours erase(TraceDelta::iterator it) {
+    void erase(TraceDelta::iterator it) {
       assert(it != list.end());
-      const TraceDelta::neighbours ne =
-        std::make_pair((*it)->prev, (*it)->next);
-      assert(ne.first != it);
-      assert(ne.second != it);
+
+      TraceDelta &td = **it;
+      td.Remove();
 
       // next and last now linked
       list.erase(it);
-      link(ne.first, ne.second);
-      return ne;
     }
 
     /**
@@ -367,6 +361,7 @@ class Trace : private NonCopyable
 
       while (chronological_list.front().point.time < p_time) {
         TraceDelta &td = chronological_list.front();
+        td.Remove();
         list.erase(td.delta_list_iterator);
         chronological_list.pop_front();
 
@@ -450,43 +445,14 @@ class Trace : private NonCopyable
     }
 
     /**
-     * Update from-to links for time-succession
-     *
-     * @param from From item
-     * @param to To item
-     */
-    static void link(TraceDelta::iterator from, TraceDelta::iterator to) {
-      (*to)->prev = from;
-      (*from)->next = to;
-    }
-
-    /**
      * Update start node (and neighbour) after min time pruning
      */
     void erase_start(TraceDelta &td_start) {
       TraceDelta::iterator i_start = td_start.delta_list_iterator;
-      TraceDelta::iterator i_next = td_start.next;
-      bool last = (td_start.next == i_start);
       list.erase(i_start);
       td_start.elim_distance = null_delta;
       td_start.elim_time = null_time;
-      TraceDelta::iterator i_new = merge_insert(td_start);
-      (*i_new)->prev = i_new;
-      if (last)
-        link(i_new, i_new);
-      else
-        link(i_new, i_next);
-    }
-
-    /**
-     * Insert new delta list item in sorted position
-     *
-     * @param td Point to add to delta list
-     *
-     * @return Iterator to inserted position
-     */
-    TraceDelta::iterator merge_insert(TraceDelta &td) {
-      return td.delta_list_iterator = list.insert(&td).first;
+      insert(td_start);
     }
   };
 
