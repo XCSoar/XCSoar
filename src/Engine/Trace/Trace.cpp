@@ -107,18 +107,23 @@ unsigned
 Trace::calc_average_delta_time(const unsigned no_thin) const
 {
   unsigned r = delta_list.get_recent_time(no_thin);
-  unsigned acc = 0;
   unsigned counter = 0;
 
+  /* find the last item before the "r" timestamp */
   ChronologicalList::const_iterator end = chronological_list.end();
-  for (ChronologicalList::const_iterator it = chronological_list.begin();
-       it != end && it->point.time < r; ++it, ++counter)
-    acc += it->delta_time();
+  ChronologicalList::const_iterator it;
+  for (it = chronological_list.begin(); it != end && it->point.time < r; ++it)
+    ++counter;
 
-  if (counter)
-    return acc / counter;
+  if (counter < 2)
+    return 0;
 
-  return 0;
+  --it;
+  --counter;
+
+  unsigned start_time = chronological_list.front().point.time;
+  unsigned end_time = it->point.time;
+  return (end_time - start_time) / counter;
 }
 
 bool

@@ -125,10 +125,6 @@ class Trace : private NonCopyable
       delta_distance = point.approx_dist(p_last);
     }
 
-    unsigned delta_time() const {
-      return point.time - (*prev)->point.time;
-    }
-
     /**
      * Calculate error distance, between last through this to next,
      * if this node is removed.  This metric provides for Douglas-Peuker
