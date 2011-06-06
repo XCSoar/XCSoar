@@ -99,6 +99,8 @@ class Trace : private NonCopyable
     unsigned elim_distance;
     unsigned delta_distance;
 
+    iterator delta_list_iterator;
+
     iterator prev;
     iterator next;
 
@@ -452,7 +454,7 @@ class Trace : private NonCopyable
 
   private:
     void insert(TraceDelta &td) {
-      list.insert(&td);
+      td.delta_list_iterator = list.insert(&td).first;
     }
 
     /**
@@ -492,7 +494,7 @@ class Trace : private NonCopyable
      * @return Iterator to inserted position
      */
     TraceDelta::iterator merge_insert(TraceDelta &td) {
-      return list.insert(&td).first;
+      return td.delta_list_iterator = list.insert(&td).first;
     }
 
     /**
