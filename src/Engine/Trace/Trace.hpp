@@ -652,10 +652,6 @@ private:
 public:
   static const unsigned null_time = 0 - 1;
 
-  unsigned is_recent(const TracePoint& p) const {
-    return m_last_point.time - p.time > delta_list.get_recent_time(no_thin_time);
-  }
-
   unsigned average_delta_distance() const {
     return m_average_delta_distance;
   }
