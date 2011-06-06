@@ -59,14 +59,12 @@ Trace::append(const AIRCRAFT_STATE& state)
     assert(1);
     clear();
     return;
-  }
+  } else if ((unsigned)state.Time - m_last_point.time < 2)
+    // only add one item per two seconds
+    return;
 
   TracePoint tp(state);
   tp.project(task_projection);
-
-  // only add one item per two seconds
-  if ((tp.time - m_last_point.time) < 2)
-    return;
 
   tp.project(task_projection);
   m_last_point = tp;
