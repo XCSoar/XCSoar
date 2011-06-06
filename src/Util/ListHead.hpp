@@ -251,6 +251,11 @@ public:
 
     next->prev = &other;
     prev->next = &other;
+
+#ifndef NDEBUG
+    type = DISCONNECTED;
+    other.type = CONNECTED;
+#endif
   }
 
   class const_iterator {
