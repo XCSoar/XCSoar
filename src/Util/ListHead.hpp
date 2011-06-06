@@ -271,6 +271,10 @@ public:
       return *current;
     }
 
+    pointer operator->() const {
+      return current;
+    }
+
     const_iterator &operator++() {
       current = current->next;
       return *this;
