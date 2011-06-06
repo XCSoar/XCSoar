@@ -186,250 +186,9 @@ class Trace : private NonCopyable
 
   typedef CastIterator<const TraceDelta, ListHead::const_iterator> ChronologicalConstIterator;
 
-  class DeltaList {
-    TraceDelta::List list;
+  TraceDelta::List delta_list;
+  ListHead chronological_list;
 
-  public:
-    ListHead head;
-
-    DeltaList():head(ListHead::empty()) {}
-
-    /**
-     * Append new point to tree and list in sorted order.
-     * It is expected this will be called in increasing time order,
-     * if not, the system should be cleared.
-     *
-     * @param tp Point to add
-     * @param tree Tree to store items
-     */
-    void append(const TraceDelta &_td) {
-      TraceDelta &td = insert(_td);
-      td.InsertBefore(head);
-
-      if (!head.IsFirst(td))
-        update_delta(td.GetPrevious());
-    }
-
-    void clear() {
-      list.clear();
-      head.Clear();
-    }
-
-    // return top element of list
-    TraceDelta::iterator begin() {
-      return list.begin();
-    }
-
-    unsigned size() const {
-      return list.size();
-    }
-
-    /**
-     * Update delta values for specified item in the delta list and the
-     * tree.  This repositions the item after into its sorted position.
-     *
-     * @param it Item to update
-     * @param tree Tree containing leaf
-     *
-     * @return Iterator to updated item
-     */
-    void update_delta(TraceDelta &td) {
-      if (head.IsEdge(td))
-        return;
-
-      const TraceDelta &previous = td.GetPrevious();
-      const TraceDelta &next = td.GetNext();
-
-      TraceDelta temp_td = td;
-      temp_td.SetDisconnected();
-
-      td.Replace(temp_td);
-
-      // erase old one
-      list.erase(td.delta_list_iterator);
-
-      // insert new in sorted position
-      temp_td.update(previous.point, next.point);
-      TraceDelta &new_td = insert(temp_td);
-      new_td.SetDisconnected();
-      temp_td.Replace(new_td);
-    }
-
-    /**
-     * Erase a non-edge item from delta list and tree, updating
-     * deltas in the process.  This invalidates the calling iterator.
-     *
-     * @param it Item to erase
-     * @param tree Tree to remove from
-     *
-     */
-    void erase_inside(TraceDelta::iterator it) {
-      assert(it != list.end());
-
-      const TraceDelta &td = *it;
-      assert(!td.IsEdge());
-
-      TraceDelta &previous = const_cast<TraceDelta &>(td.GetPrevious());
-      TraceDelta &next = const_cast<TraceDelta &>(td.GetNext());
-
-      // now delete the item
-      erase(it);
-
-      // and update the deltas
-      update_delta(previous);
-      update_delta(next);
-    }
-
-    /**
-     * Erase element and update time link, returning neighbours.
-     * must update the distance delta of both neighbours after!
-     *
-     * @param it Item to erase
-     *
-     * @return Neighbours
-     */
-    void erase(TraceDelta::iterator it) {
-      assert(it != list.end());
-
-      const TraceDelta &td = *it;
-      td.RemoveConst();
-      list.erase(it);
-    }
-
-    /**
-     * Erase elements based on delta metric until the size is
-     * equal to the target size.  Wont remove elements more recent than
-     * specified time from the last point.
-     *
-     * Note that the recent time is obeyed even if the results will
-     * fail to set the target size.
-     *
-     * @param target_size Size of desired list.
-     * @param tree Tree to remove from
-     * @param recent Time window for which to not remove points
-     *
-     * @return True if items were erased
-     */
-    bool erase_delta(const unsigned target_size,
-                     const unsigned recent = 0) {
-      if (size() < 2)
-        return false;
-
-      bool modified = false;
-
-      const unsigned recent_time = get_recent_time(recent);
-      unsigned lsize = list.size();
-
-      TraceDelta::iterator candidate = begin();
-      while (lsize > target_size) {
-        const TraceDelta &td = *candidate;
-        if (!td.IsEdge() && td.point.time < recent_time) {
-          erase_inside(candidate);
-          lsize--;
-          candidate = begin(); // find new top
-          modified = true;
-        } else {
-          ++candidate;
-          // suppressed removal, skip it.
-        }
-      }
-
-      return modified;
-    }
-
-    /**
-     * Erase elements older than specified time from delta and tree,
-     * and update earliest item to become the new start
-     *
-     * @param p_time Time to remove
-     * @param tree Tree to remove from
-     *
-     * @return True if items were erased
-     */
-    bool erase_earlier_than(const unsigned p_time) {
-      if (!p_time)
-        // there will be nothing to remove
-        return false;
-
-      bool modified = false;
-
-      while (!head.IsEmpty() &&
-             ((TraceDelta *)head.GetNext())->point.time < p_time) {
-        TraceDelta &td = *(TraceDelta *)head.GetNext();
-        td.Remove();
-        list.erase(td.delta_list_iterator);
-
-        modified = true;
-      }
-
-      // need to set deltas for first point, only one of these
-      // will occur (have to search for this point)
-      if (modified && !list.empty())
-        erase_start(*(TraceDelta *)head.GetNext());
-
-      return modified;
-    }
-
-    /**
-     * Find recent time after which points should not be culled
-     * (this is set to n seconds before the latest time)
-     *
-     * @param t Time window
-     *
-     * @return Recent time
-     */
-    unsigned get_recent_time(const unsigned t) const {
-      if (empty())
-        return 0;
-
-      const TracePoint &last =
-        static_cast<const TraceDelta *>(head.GetPrevious())->point;
-      if (last.time > t)
-        return last.time - t;
-
-      return 0;
-    }
-
-    /**
-     * Determine if delta list is empty
-     *
-     * @return True if list is empty
-     */
-    bool empty() const {
-      return list.empty();
-    }
-
-  private:
-    TraceDelta &insert(const TraceDelta &td) {
-      TraceDelta::iterator it = list.insert(td).first;
-
-      /* std::set doesn't allow modification of an item, but we
-         override that */
-      TraceDelta &new_td = const_cast<TraceDelta &>(*it);
-      new_td.delta_list_iterator = it;
-      return new_td;
-    }
-
-    /**
-     * Update start node (and neighbour) after min time pruning
-     */
-    void erase_start(TraceDelta &td_start) {
-      TraceDelta temp_td = td_start;
-      temp_td.SetDisconnected();
-      td_start.Replace(temp_td);
-
-      TraceDelta::iterator i_start = td_start.delta_list_iterator;
-      list.erase(i_start);
-      temp_td.elim_distance = null_delta;
-      temp_td.elim_time = null_time;
-
-      TraceDelta &new_td = insert(temp_td);
-      new_td.SetDisconnected();
-      temp_td.Replace(new_td);
-    }
-  };
-
-  DeltaList delta_list;
   TaskProjection task_projection;
 
   const unsigned m_max_time;
@@ -453,6 +212,75 @@ public:
         const unsigned max_time = null_time,
         const unsigned max_points = 1000);
 
+protected:
+  /**
+   * Find recent time after which points should not be culled
+   * (this is set to n seconds before the latest time)
+   *
+   * @param t Time window
+   *
+   * @return Recent time
+   */
+  gcc_pure
+  unsigned get_recent_time(const unsigned t) const;
+
+  /**
+   * Update delta values for specified item in the delta list and the
+   * tree.  This repositions the item after into its sorted position.
+   *
+   * @param it Item to update
+   * @param tree Tree containing leaf
+   *
+   * @return Iterator to updated item
+   */
+  void update_delta(TraceDelta &td);
+
+  /**
+   * Erase a non-edge item from delta list and tree, updating
+   * deltas in the process.  This invalidates the calling iterator.
+   *
+   * @param it Item to erase
+   * @param tree Tree to remove from
+   *
+   */
+  void erase_inside(TraceDelta::iterator it);
+
+  /**
+   * Erase elements based on delta metric until the size is
+   * equal to the target size.  Wont remove elements more recent than
+   * specified time from the last point.
+   *
+   * Note that the recent time is obeyed even if the results will
+   * fail to set the target size.
+   *
+   * @param target_size Size of desired list.
+   * @param tree Tree to remove from
+   * @param recent Time window for which to not remove points
+   *
+   * @return True if items were erased
+   */
+  bool erase_delta(const unsigned target_size,
+                   const unsigned recent = 0);
+
+  /**
+   * Erase elements older than specified time from delta and tree,
+   * and update earliest item to become the new start
+   *
+   * @param p_time Time to remove
+   * @param tree Tree to remove from
+   *
+   * @return True if items were erased
+   */
+  bool erase_earlier_than(const unsigned p_time);
+
+  TraceDelta &insert(const TraceDelta &td);
+
+  /**
+   * Update start node (and neighbour) after min time pruning
+   */
+  void erase_start(TraceDelta &td_start);
+
+public:
   /**
    * Add trace to internal store.  Call optimise() periodically
    * to balance tree for faster queries
@@ -473,7 +301,7 @@ public:
    * @return Number of traces in tree
    */
   unsigned size() const {
-    return delta_list.head.Count();
+    return chronological_list.Count();
   }
 
   /**
@@ -482,7 +310,7 @@ public:
    * @return True if no traces stored
    */
   bool empty() const {
-    return delta_list.head.IsEmpty();
+    return chronological_list.IsEmpty();
   }
 
   /**
@@ -549,7 +377,7 @@ public:
   const TracePoint& get_last_point() const {
     assert(!empty());
 
-    return static_cast<const TraceDelta *>(delta_list.head.GetPrevious())->point;
+    return static_cast<const TraceDelta *>(chronological_list.GetPrevious())->point;
   }
 
 public:
@@ -603,11 +431,11 @@ public:
   };
 
   const_iterator begin() const {
-    return delta_list.head.begin();
+    return chronological_list.begin();
   }
 
   const_iterator end() const {
-    return delta_list.head.end();
+    return chronological_list.end();
   }
 
   gcc_pure

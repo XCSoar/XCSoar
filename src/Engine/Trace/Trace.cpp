@@ -27,7 +27,8 @@ Copyright_License {
 
 Trace::Trace(const unsigned _no_thin_time, const unsigned max_time,
              const unsigned max_points)
-  :m_max_time(max_time),
+  :chronological_list(ListHead::empty()),
+   m_max_time(max_time),
    no_thin_time(_no_thin_time),
    m_max_points(max_points),
    m_opt_points((3*max_points)/4)
@@ -40,7 +41,150 @@ Trace::clear()
 {
   m_average_delta_distance = 0;
   m_average_delta_time = 0;
+
   delta_list.clear();
+  chronological_list.Clear();
+}
+
+unsigned
+Trace::get_recent_time(const unsigned t) const
+{
+  if (empty())
+    return 0;
+
+  const TracePoint &last = get_last_point();
+  if (last.time > t)
+    return last.time - t;
+
+  return 0;
+}
+
+void
+Trace::update_delta(TraceDelta &td)
+{
+  if (chronological_list.IsEdge(td))
+    return;
+
+  const TraceDelta &previous = td.GetPrevious();
+  const TraceDelta &next = td.GetNext();
+
+  TraceDelta temp_td = td;
+  temp_td.SetDisconnected();
+
+  td.Replace(temp_td);
+
+  // erase old one
+  delta_list.erase(td.delta_list_iterator);
+
+  // insert new in sorted position
+  temp_td.update(previous.point, next.point);
+  TraceDelta &new_td = insert(temp_td);
+  new_td.SetDisconnected();
+  temp_td.Replace(new_td);
+}
+
+void
+Trace::erase_inside(TraceDelta::iterator it)
+{
+  assert(it != delta_list.end());
+
+  const TraceDelta &td = *it;
+  assert(!td.IsEdge());
+
+  TraceDelta &previous = const_cast<TraceDelta &>(td.GetPrevious());
+  TraceDelta &next = const_cast<TraceDelta &>(td.GetNext());
+
+  // now delete the item
+  td.RemoveConst();
+  delta_list.erase(it);
+
+  // and update the deltas
+  update_delta(previous);
+  update_delta(next);
+}
+
+bool
+Trace::erase_delta(const unsigned target_size, const unsigned recent)
+{
+  if (size() < 2)
+    return false;
+
+  bool modified = false;
+
+  const unsigned recent_time = get_recent_time(recent);
+  unsigned lsize = delta_list.size();
+
+  TraceDelta::iterator candidate = delta_list.begin();
+  while (lsize > target_size) {
+    const TraceDelta &td = *candidate;
+    if (!td.IsEdge() && td.point.time < recent_time) {
+      erase_inside(candidate);
+      lsize--;
+      candidate = delta_list.begin(); // find new top
+      modified = true;
+    } else {
+      ++candidate;
+      // suppressed removal, skip it.
+    }
+  }
+
+  return modified;
+}
+
+bool
+Trace::erase_earlier_than(const unsigned p_time)
+{
+  if (!p_time)
+    // there will be nothing to remove
+    return false;
+
+  bool modified = false;
+
+  while (!chronological_list.IsEmpty() &&
+         ((TraceDelta *)chronological_list.GetNext())->point.time < p_time) {
+    TraceDelta &td = *(TraceDelta *)chronological_list.GetNext();
+    td.Remove();
+    delta_list.erase(td.delta_list_iterator);
+
+    modified = true;
+  }
+
+  // need to set deltas for first point, only one of these
+  // will occur (have to search for this point)
+  if (modified && !delta_list.empty())
+    erase_start(*(TraceDelta *)chronological_list.GetNext());
+
+  return modified;
+}
+
+Trace::TraceDelta &
+Trace::insert(const TraceDelta &td) {
+  TraceDelta::iterator it = delta_list.insert(td).first;
+
+  /* std::set doesn't allow modification of an item, but we
+     override that */
+  TraceDelta &new_td = const_cast<TraceDelta &>(*it);
+  new_td.delta_list_iterator = it;
+  return new_td;
+}
+
+/**
+ * Update start node (and neighbour) after min time pruning
+ */
+void
+Trace::erase_start(TraceDelta &td_start) {
+  TraceDelta temp_td = td_start;
+  temp_td.SetDisconnected();
+  td_start.Replace(temp_td);
+
+  TraceDelta::iterator i_start = td_start.delta_list_iterator;
+  delta_list.erase(i_start);
+  temp_td.elim_distance = null_delta;
+  temp_td.elim_time = null_time;
+
+  TraceDelta &new_td = insert(temp_td);
+  new_td.SetDisconnected();
+  temp_td.Replace(new_td);
 }
 
 void
@@ -62,7 +206,11 @@ Trace::append(const AIRCRAFT_STATE& state)
   TracePoint tp(state);
   tp.project(task_projection);
 
-  delta_list.append(TraceDelta(tp));
+  TraceDelta &td = insert(tp);
+  td.InsertBefore(chronological_list);
+
+  if (!chronological_list.IsFirst(td))
+    update_delta(td.GetPrevious());
 }
 
 unsigned
@@ -81,12 +229,12 @@ Trace::get_min_time() const
 unsigned
 Trace::calc_average_delta_distance(const unsigned no_thin) const
 {
-  unsigned r = delta_list.get_recent_time(no_thin);
+  unsigned r = get_recent_time(no_thin);
   unsigned acc = 0;
   unsigned counter = 0;
 
-  const ChronologicalConstIterator end = delta_list.head.end();
-  for (ChronologicalConstIterator it = delta_list.head.begin();
+  const ChronologicalConstIterator end = chronological_list.end();
+  for (ChronologicalConstIterator it = chronological_list.begin();
        it != end && it->point.time < r; ++it, ++counter)
     acc += it->delta_distance;
 
@@ -99,13 +247,13 @@ Trace::calc_average_delta_distance(const unsigned no_thin) const
 unsigned
 Trace::calc_average_delta_time(const unsigned no_thin) const
 {
-  unsigned r = delta_list.get_recent_time(no_thin);
+  unsigned r = get_recent_time(no_thin);
   unsigned counter = 0;
 
   /* find the last item before the "r" timestamp */
-  const ChronologicalConstIterator end = delta_list.head.end();
+  const ChronologicalConstIterator end = chronological_list.end();
   ChronologicalConstIterator it;
-  for (it = delta_list.head.begin(); it != end && it->point.time < r; ++it)
+  for (it = chronological_list.begin(); it != end && it->point.time < r; ++it)
     ++counter;
 
   if (counter < 2)
@@ -114,7 +262,7 @@ Trace::calc_average_delta_time(const unsigned no_thin) const
   --it;
   --counter;
 
-  unsigned start_time = static_cast<const TraceDelta *>(delta_list.head.GetNext())->point.time;
+  unsigned start_time = static_cast<const TraceDelta *>(chronological_list.GetNext())->point.time;
   unsigned end_time = it->point.time;
   return (end_time - start_time) / counter;
 }
@@ -124,18 +272,18 @@ Trace::optimise_if_old()
 {
   if (size() >= m_max_points) {
     // first remove points outside max time range
-    bool updated = delta_list.erase_earlier_than(get_min_time());
+    bool updated = erase_earlier_than(get_min_time());
 
     if (size() >= m_opt_points)
       // if still too big, remove points based on line simplification
-      updated |= delta_list.erase_delta(m_opt_points, no_thin_time);
+      updated |= erase_delta(m_opt_points, no_thin_time);
 
     if (!updated)
       return false;
 
   } else if (size() * 2 == m_max_points) {
     // half size, appropriate time to remove old points
-    if (!delta_list.erase_earlier_than(get_min_time()))
+    if (!erase_earlier_than(get_min_time()))
       return false;
 
   } else
@@ -162,7 +310,7 @@ Trace::get_trace_edges(TracePointVector &v) const
 
   if (size() >= 2) {
     v.reserve(2);
-    v.push_back(static_cast<const TraceDelta *>(delta_list.head.GetNext())->point);
-    v.push_back(static_cast<const TraceDelta *>(delta_list.head.GetPrevious())->point);
+    v.push_back(static_cast<const TraceDelta *>(chronological_list.GetNext())->point);
+    v.push_back(static_cast<const TraceDelta *>(chronological_list.GetPrevious())->point);
   }
 }
