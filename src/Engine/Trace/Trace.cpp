@@ -54,8 +54,7 @@ Trace::append(const AIRCRAFT_STATE& state)
     task_projection.reset(state.get_location());
     task_projection.update_fast();
     m_last_point.time = null_time;
-  } else if (!chronological_list.empty() &&
-             state.Time < fixed(m_last_point.time)) {
+  } else if (state.Time < fixed(m_last_point.time)) {
     // gone back in time, must reset. (shouldn't get here!)
     assert(1);
     clear();
