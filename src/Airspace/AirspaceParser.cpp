@@ -89,6 +89,7 @@ static const int k_nAreaType[k_nAreaCount] = {
 struct TempAirspaceType
 {
   TempAirspaceType() {
+    points.reserve(256);
     reset();
   }
 
