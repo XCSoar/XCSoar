@@ -201,8 +201,7 @@ class Trace : private NonCopyable
         link(back, back);
       } else {
         TraceDelta::iterator old_back = last();
-        insert(td);
-        TraceDelta::iterator new_it = last();
+        TraceDelta::iterator new_it = merge_insert(td);
         link(new_it, new_it);
         link(old_back, new_it);
         if (list.size() > 2) {
