@@ -261,7 +261,7 @@ public:
     const_iterator(const ListHead *_current):current(_current) {}
 
   public:
-    typedef std::forward_iterator_tag iterator_category;
+    typedef std::bidirectional_iterator_tag iterator_category;
     typedef ptrdiff_t difference_type;
     typedef const ListHead value_type;
     typedef const ListHead *pointer;
@@ -279,6 +279,11 @@ public:
 
     const_iterator &operator++() {
       current = current->next;
+      return *this;
+    }
+
+    const_iterator &operator--() {
+      current = current->prev;
       return *this;
     }
 
