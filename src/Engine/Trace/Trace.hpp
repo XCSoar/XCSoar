@@ -192,9 +192,7 @@ class Trace : private NonCopyable
      * @param tp Point to add
      * @param tree Tree to store items
      */
-    void append(const TracePoint &tp, ChronologicalList &chronological_list) {
-      chronological_list.push_back(tp);
-      TraceDelta &td = chronological_list.back();
+    void append(TraceDelta &td) {
       if (list.empty()) {
         insert(td); // will always be at back
         TraceDelta::iterator back = list.begin();
@@ -205,8 +203,7 @@ class Trace : private NonCopyable
         link(new_it, new_it);
         link(old_back, new_it);
         if (list.size() > 2) {
-          TraceDelta::iterator new_back = update_delta(old_back,
-                                                       chronological_list);
+          TraceDelta::iterator new_back = update_delta(old_back);
           link(new_back, new_it);
         }
       }
@@ -234,8 +231,7 @@ class Trace : private NonCopyable
      *
      * @return Iterator to updated item
      */
-    TraceDelta::iterator update_delta(TraceDelta::iterator it,
-                                      ChronologicalList &chronological_list) {
+    TraceDelta::iterator update_delta(TraceDelta::iterator it) {
       assert(it != list.end());
 
       const TraceDelta::neighbours ne =
@@ -253,8 +249,6 @@ class Trace : private NonCopyable
       it = merge_insert(td);
       link(ne.first, it);
       link(it, ne.second);
-
-      assert(chronological_list.size() == list.size());
       return it;
     }
 
@@ -277,8 +271,8 @@ class Trace : private NonCopyable
       chronological_list.erase_reference(**it);
 
       // and update the deltas
-      update_delta(ne.first, chronological_list);
-      update_delta(ne.second, chronological_list);
+      update_delta(ne.first);
+      update_delta(ne.second);
     }
 
     /**

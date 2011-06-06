@@ -63,7 +63,10 @@ Trace::append(const AIRCRAFT_STATE& state)
   TracePoint tp(state);
   tp.project(task_projection);
 
-  delta_list.append(tp, chronological_list);
+  chronological_list.push_back(tp);
+  delta_list.append(chronological_list.back());
+
+  assert(chronological_list.size() == delta_list.size());
 }
 
 unsigned
