@@ -37,6 +37,7 @@ AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius):
 
   // @todo: find better enclosing radius as fn of NUM_SEGMENTS
   #define NUM_SEGMENTS 12
+  m_border.reserve(NUM_SEGMENTS);
   for (unsigned i=0; i<=12; ++i) {
     const Angle angle = Angle::degrees(fixed(i*360/NUM_SEGMENTS));
     const GeoPoint p = GeoVector(m_radius*fixed(1.1), angle).end_point(m_center);
