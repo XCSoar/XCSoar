@@ -267,6 +267,8 @@ public:
     typedef const ListHead *pointer;
     typedef const ListHead &reference;
 
+    const_iterator() {}
+
     reference operator*() const {
       return *current;
     }
