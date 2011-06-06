@@ -32,6 +32,7 @@
 
 #include "Compiler.h"
 
+#include <iterator>
 #include <cassert>
 
 /**
@@ -250,6 +251,50 @@ public:
 
     next->prev = &other;
     prev->next = &other;
+  }
+
+  class const_iterator {
+    friend class ListHead;
+
+    const ListHead *current;
+
+    const_iterator(const ListHead *_current):current(_current) {}
+
+  public:
+    typedef std::forward_iterator_tag iterator_category;
+    typedef ListHead value_type;
+    typedef ListHead *pointer;
+    typedef ListHead &reference;
+    typedef ptrdiff_t difference_type;
+
+    const ListHead &operator*() const {
+      return *current;
+    }
+
+    const_iterator &operator++() {
+      current = current->next;
+      return *this;
+    }
+
+    bool operator==(const const_iterator &other) const {
+      return current == other.current;
+    }
+
+    bool operator!=(const const_iterator &other) const {
+      return current != other.current;
+    }
+  };
+
+  const_iterator begin() const {
+    assert(type == HEAD);
+
+    return next;
+  }
+
+  const_iterator end() const {
+    assert(type == HEAD);
+
+    return this;
   }
 };
 
