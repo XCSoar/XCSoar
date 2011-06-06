@@ -364,27 +364,19 @@ class Trace : private NonCopyable
         return false;
 
       bool modified = false;
-      unsigned start_time = null_time;
-      TraceDelta::iterator new_start = list.begin();
 
-      for (TraceDelta::iterator it = list.begin();
-           it != list.end(); ) {
-        TraceDelta::iterator next = it; 
-        ++next;
-        if ((*it)->point.time < p_time) {
-          chronological_list.erase_reference(**it);
-          list.erase(it);
-          modified = true;
-        } else if ((*it)->point.time < start_time) {
-          start_time = (*it)->point.time;
-          new_start = it;
-        }
-        it = next;
+      while (chronological_list.front().point.time < p_time) {
+        TraceDelta &td = chronological_list.front();
+        list.erase(td.delta_list_iterator);
+        chronological_list.pop_front();
+
+        modified = true;
       }
+
       // need to set deltas for first point, only one of these
       // will occur (have to search for this point)
       if (modified && !list.empty())
-        erase_start(new_start);
+        erase_start(chronological_list.front());
 
       assert(chronological_list.size() == list.size());
       return modified;
@@ -471,8 +463,8 @@ class Trace : private NonCopyable
     /**
      * Update start node (and neighbour) after min time pruning
      */
-    void erase_start(TraceDelta::iterator i_start) {
-      TraceDelta &td_start = **i_start;
+    void erase_start(TraceDelta &td_start) {
+      TraceDelta::iterator i_start = td_start.delta_list_iterator;
       TraceDelta::iterator i_next = td_start.next;
       bool last = (td_start.next == i_start);
       list.erase(i_start);
