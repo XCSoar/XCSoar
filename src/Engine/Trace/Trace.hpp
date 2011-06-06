@@ -33,7 +33,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <set>
-#include <list>
 #include <assert.h>
 #include <stdio.h>
 
@@ -84,13 +83,13 @@ class Trace : private NonCopyable
     }
 
     struct DeltaRankOp {
-      bool operator()(const TraceDelta *s1, const TraceDelta *s2) {
-        return DeltaRank(*s1, *s2);
+      bool operator()(const TraceDelta &s1, const TraceDelta &s2) {
+        return DeltaRank(s1, s2);
       }
     };
 
-    typedef std::set<TraceDelta *, DeltaRankOp,
-                     GlobalSliceAllocator<TraceDelta *, 256u> > List;
+    typedef std::set<TraceDelta, DeltaRankOp,
+                     GlobalSliceAllocator<TraceDelta, 256u> > List;
     typedef List::iterator iterator;
     typedef List::const_iterator const_iterator;
 
@@ -117,6 +116,8 @@ class Trace : private NonCopyable
       assert(elim_distance != null_delta);
     }
 
+    void foo() {}
+
     /**
      * Is this the first or the last point?
      */
@@ -130,6 +131,14 @@ class Trace : private NonCopyable
 
     TraceDelta &GetNext() {
       return *(TraceDelta *)ListHead::GetNext();
+    }
+
+    const TraceDelta &GetPrevious() const {
+      return *(const TraceDelta *)ListHead::GetPrevious();
+    }
+
+    const TraceDelta &GetNext() const {
+      return *(const TraceDelta *)ListHead::GetNext();
     }
 
     void update(const TracePoint &p_last, const TracePoint &p_next) {
@@ -177,24 +186,6 @@ class Trace : private NonCopyable
 
   typedef CastIterator<const TraceDelta, ListHead::const_iterator> ChronologicalConstIterator;
 
-  struct ChronologicalList : public std::list<TraceDelta> {
-    iterator find_reference(const TraceDelta &ref) {
-      for (iterator i = begin(); i != end(); ++i) {
-        const TraceDelta &current = *i;
-        if (&current == &ref)
-          return i;
-      }
-
-      return end();
-    }
-
-    void erase_reference(const TraceDelta &ref) {
-      iterator i = find_reference(ref);
-      assert(i != end());
-      erase(i);
-    }
-  };
-
   class DeltaList {
     TraceDelta::List list;
 
@@ -211,8 +202,8 @@ class Trace : private NonCopyable
      * @param tp Point to add
      * @param tree Tree to store items
      */
-    void append(TraceDelta &td) {
-      insert(td);
+    void append(const TraceDelta &_td) {
+      TraceDelta &td = insert(_td);
       td.InsertBefore(head);
 
       if (!head.IsFirst(td))
@@ -249,13 +240,19 @@ class Trace : private NonCopyable
       const TraceDelta &previous = td.GetPrevious();
       const TraceDelta &next = td.GetNext();
 
-      td.update(previous.point, next.point);
+      TraceDelta temp_td = td;
+      temp_td.SetDisconnected();
+
+      td.Replace(temp_td);
 
       // erase old one
       list.erase(td.delta_list_iterator);
 
       // insert new in sorted position
-      insert(td);
+      temp_td.update(previous.point, next.point);
+      TraceDelta &new_td = insert(temp_td);
+      new_td.SetDisconnected();
+      temp_td.Replace(new_td);
     }
 
     /**
@@ -266,20 +263,17 @@ class Trace : private NonCopyable
      * @param tree Tree to remove from
      *
      */
-    void erase_inside(TraceDelta::iterator it,
-                      ChronologicalList &chronological_list) {
+    void erase_inside(TraceDelta::iterator it) {
       assert(it != list.end());
 
-      TraceDelta &td = **it;
+      const TraceDelta &td = *it;
       assert(!td.IsEdge());
 
-      TraceDelta &previous = td.GetPrevious();
-      TraceDelta &next = td.GetNext();
+      TraceDelta &previous = const_cast<TraceDelta &>(td.GetPrevious());
+      TraceDelta &next = const_cast<TraceDelta &>(td.GetNext());
 
       // now delete the item
       erase(it);
-
-      chronological_list.erase_reference(td);
 
       // and update the deltas
       update_delta(previous);
@@ -297,10 +291,8 @@ class Trace : private NonCopyable
     void erase(TraceDelta::iterator it) {
       assert(it != list.end());
 
-      TraceDelta &td = **it;
-      td.Remove();
-
-      // next and last now linked
+      const TraceDelta &td = *it;
+      td.RemoveConst();
       list.erase(it);
     }
 
@@ -319,7 +311,6 @@ class Trace : private NonCopyable
      * @return True if items were erased
      */
     bool erase_delta(const unsigned target_size,
-                     ChronologicalList &chronological_list,
                      const unsigned recent = 0) {
       if (size() < 2)
         return false;
@@ -331,9 +322,9 @@ class Trace : private NonCopyable
 
       TraceDelta::iterator candidate = begin();
       while (lsize > target_size) {
-        const TraceDelta &td = **candidate;
+        const TraceDelta &td = *candidate;
         if (!td.IsEdge() && td.point.time < recent_time) {
-          erase_inside(candidate, chronological_list);
+          erase_inside(candidate);
           lsize--;
           candidate = begin(); // find new top
           modified = true;
@@ -342,7 +333,7 @@ class Trace : private NonCopyable
           // suppressed removal, skip it.
         }
       }
-      assert(list.size() == chronological_list.size());
+
       return modified;
     }
 
@@ -355,19 +346,18 @@ class Trace : private NonCopyable
      *
      * @return True if items were erased
      */
-    bool erase_earlier_than(const unsigned p_time,
-                            ChronologicalList &chronological_list) {
+    bool erase_earlier_than(const unsigned p_time) {
       if (!p_time)
         // there will be nothing to remove
         return false;
 
       bool modified = false;
 
-      while (chronological_list.front().point.time < p_time) {
-        TraceDelta &td = chronological_list.front();
+      while (!head.IsEmpty() &&
+             ((TraceDelta *)head.GetNext())->point.time < p_time) {
+        TraceDelta &td = *(TraceDelta *)head.GetNext();
         td.Remove();
         list.erase(td.delta_list_iterator);
-        chronological_list.pop_front();
 
         modified = true;
       }
@@ -375,9 +365,8 @@ class Trace : private NonCopyable
       // need to set deltas for first point, only one of these
       // will occur (have to search for this point)
       if (modified && !list.empty())
-        erase_start(chronological_list.front());
+        erase_start(*(TraceDelta *)head.GetNext());
 
-      assert(chronological_list.size() == list.size());
       return modified;
     }
 
@@ -394,8 +383,8 @@ class Trace : private NonCopyable
         return 0;
 
       TraceDelta::const_iterator d_last = last();
-      if ((*d_last)->point.time> t)
-        return (*d_last)->point.time-t;
+      if (d_last->point.time > t)
+        return d_last->point.time - t;
 
       return 0;
     }
@@ -444,23 +433,35 @@ class Trace : private NonCopyable
     }
 
   private:
-    void insert(TraceDelta &td) {
-      td.delta_list_iterator = list.insert(&td).first;
+    TraceDelta &insert(const TraceDelta &td) {
+      TraceDelta::iterator it = list.insert(td).first;
+
+      /* std::set doesn't allow modification of an item, but we
+         override that */
+      TraceDelta &new_td = const_cast<TraceDelta &>(*it);
+      new_td.delta_list_iterator = it;
+      return new_td;
     }
 
     /**
      * Update start node (and neighbour) after min time pruning
      */
     void erase_start(TraceDelta &td_start) {
+      TraceDelta temp_td = td_start;
+      temp_td.SetDisconnected();
+      td_start.Replace(temp_td);
+
       TraceDelta::iterator i_start = td_start.delta_list_iterator;
       list.erase(i_start);
-      td_start.elim_distance = null_delta;
-      td_start.elim_time = null_time;
-      insert(td_start);
+      temp_td.elim_distance = null_delta;
+      temp_td.elim_time = null_time;
+
+      TraceDelta &new_td = insert(temp_td);
+      new_td.SetDisconnected();
+      temp_td.Replace(new_td);
     }
   };
 
-  ChronologicalList chronological_list;
   DeltaList delta_list;
   TaskProjection task_projection;
 
@@ -505,7 +506,7 @@ public:
    * @return Number of traces in tree
    */
   unsigned size() const {
-    return chronological_list.size();
+    return delta_list.head.Count();
   }
 
   /**
@@ -514,7 +515,7 @@ public:
    * @return True if no traces stored
    */
   bool empty() const {
-    return delta_list.empty();
+    return delta_list.head.IsEmpty();
   }
 
   /**
@@ -579,9 +580,9 @@ public:
    */
   gcc_pure
   const TracePoint& get_last_point() const {
-    assert(!chronological_list.empty());
+    assert(!empty());
 
-    return chronological_list.back().point;
+    return static_cast<const TraceDelta *>(delta_list.head.GetPrevious())->point;
   }
 
 public:

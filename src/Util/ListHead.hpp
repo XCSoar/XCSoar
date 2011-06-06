@@ -176,6 +176,20 @@ public:
   }
 
   /**
+   * Remove this item from the linked list.  This variant allows
+   * removing a const object from the list.  Debug information is not
+   * updated, this object must not ever be used again.  Use with care!
+   */
+  void RemoveConst() const {
+    assert(type == CONNECTED);
+    assert(prev->next == this);
+    assert(next->prev == this);
+
+    next->prev = prev;
+    prev->next = next;
+  }
+
+  /**
    * Insert this item after the specified one.  It must not be in the
    * list already (or in another list).
    */
@@ -255,6 +269,17 @@ public:
 #ifndef NDEBUG
     type = DISCONNECTED;
     other.type = CONNECTED;
+#endif
+  }
+
+  /**
+   * Changes the type from CONNECTED to DISCONNECTED.  Call this on
+   * the copy of an existing object.
+   */
+  void SetDisconnected() {
+#ifndef NDEBUG
+    assert(type == CONNECTED);
+    type = DISCONNECTED;
 #endif
   }
 

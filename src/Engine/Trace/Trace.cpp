@@ -38,7 +38,6 @@ Trace::Trace(const unsigned _no_thin_time, const unsigned max_time,
 void
 Trace::clear()
 {
-  chronological_list.clear();
   m_average_delta_distance = 0;
   m_average_delta_time = 0;
   delta_list.clear();
@@ -63,10 +62,7 @@ Trace::append(const AIRCRAFT_STATE& state)
   TracePoint tp(state);
   tp.project(task_projection);
 
-  chronological_list.push_back(tp);
-  delta_list.append(chronological_list.back());
-
-  assert(chronological_list.size() == delta_list.size());
+  delta_list.append(TraceDelta(tp));
 }
 
 unsigned
@@ -118,7 +114,7 @@ Trace::calc_average_delta_time(const unsigned no_thin) const
   --it;
   --counter;
 
-  unsigned start_time = chronological_list.front().point.time;
+  unsigned start_time = static_cast<const TraceDelta *>(delta_list.head.GetNext())->point.time;
   unsigned end_time = it->point.time;
   return (end_time - start_time) / counter;
 }
@@ -126,22 +122,20 @@ Trace::calc_average_delta_time(const unsigned no_thin) const
 bool
 Trace::optimise_if_old()
 {
-  if (chronological_list.size() >= m_max_points) {
+  if (size() >= m_max_points) {
     // first remove points outside max time range
-    bool updated = delta_list.erase_earlier_than(get_min_time(),
-                                                 chronological_list);
+    bool updated = delta_list.erase_earlier_than(get_min_time());
 
-    if (chronological_list.size() >= m_opt_points)
+    if (size() >= m_opt_points)
       // if still too big, remove points based on line simplification
-      updated |= delta_list.erase_delta(m_opt_points, chronological_list,
-                                        no_thin_time);
+      updated |= delta_list.erase_delta(m_opt_points, no_thin_time);
 
     if (!updated)
       return false;
 
-  } else if (chronological_list.size() * 2 == m_max_points) {
+  } else if (size() * 2 == m_max_points) {
     // half size, appropriate time to remove old points
-    if (!delta_list.erase_earlier_than(get_min_time(), chronological_list))
+    if (!delta_list.erase_earlier_than(get_min_time()))
       return false;
 
   } else
@@ -166,9 +160,9 @@ Trace::get_trace_edges(TracePointVector &v) const
 {
   v.clear();
 
-  if (chronological_list.size() >= 2) {
+  if (size() >= 2) {
     v.reserve(2);
-    v.push_back(chronological_list.front().point);
-    v.push_back(chronological_list.back().point);
+    v.push_back(static_cast<const TraceDelta *>(delta_list.head.GetNext())->point);
+    v.push_back(static_cast<const TraceDelta *>(delta_list.head.GetPrevious())->point);
   }
 }
