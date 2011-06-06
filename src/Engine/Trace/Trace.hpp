@@ -99,11 +99,8 @@ class Trace : private NonCopyable
     unsigned elim_distance;
     unsigned delta_distance;
 
-    // these items are mutable only so we can get around the const
-    // nature of set iterators.  They don't affect set ordering though,
-    // so doing this is safe.
-    mutable iterator prev;
-    mutable iterator next;
+    iterator prev;
+    iterator next;
 
     TraceDelta(const TracePoint &p)
       :point(p),
