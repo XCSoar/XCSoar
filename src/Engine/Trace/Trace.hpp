@@ -470,9 +470,9 @@ class Trace : private NonCopyable
      * Update start node (and neighbour) after min time pruning
      */
     void erase_start(TraceDelta::iterator i_start) {
-      TraceDelta::iterator i_next = (*i_start)->next;
-      bool last = ((*i_start)->next == i_start);
       TraceDelta &td_start = **i_start;
+      TraceDelta::iterator i_next = td_start.next;
+      bool last = (td_start.next == i_start);
       list.erase(i_start);
       td_start.elim_distance = null_delta;
       td_start.elim_time = null_time;
