@@ -382,45 +382,12 @@ class Trace : private NonCopyable
       if (empty())
         return 0;
 
-      TraceDelta::const_iterator d_last = last();
-      if (d_last->point.time > t)
-        return d_last->point.time - t;
+      const TracePoint &last =
+        static_cast<const TraceDelta *>(head.GetPrevious())->point;
+      if (last.time > t)
+        return last.time - t;
 
       return 0;
-    }
-
-    /**
-     * Find latest item in list.  Returns end() on failure.
-     *
-     * @return Iterator to last (latest) item
-     */
-    gcc_pure
-    TraceDelta::iterator last() {
-      assert(list.size());
-      if (!list.empty()) {
-        TraceDelta::iterator i = list.end();
-        --i;
-        return i;
-      }
-
-      return list.end();
-    }
-
-    /**
-     * Find latest item in list.  Returns end() on failure.
-     *
-     * @return Iterator to last (latest) item
-     */
-    gcc_pure
-    TraceDelta::const_iterator last() const {
-      assert(list.size());
-      if (!list.empty()) {
-        TraceDelta::const_iterator i = list.end();
-        --i;
-        return i;
-      }
-
-      return list.end();
     }
 
     /**
