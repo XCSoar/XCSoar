@@ -28,6 +28,7 @@ Copyright_License {
 Trace::Trace(const unsigned _no_thin_time, const unsigned max_time,
              const unsigned max_points)
   :chronological_list(ListHead::empty()),
+   cached_size(0),
    m_max_time(max_time),
    no_thin_time(_no_thin_time),
    m_max_points(max_points),
@@ -39,11 +40,18 @@ Trace::Trace(const unsigned _no_thin_time, const unsigned max_time,
 void
 Trace::clear()
 {
+  assert(cached_size == delta_list.size());
+  assert(cached_size == chronological_list.Count());
+
   m_average_delta_distance = 0;
   m_average_delta_time = 0;
 
   delta_list.clear();
   chronological_list.Clear();
+  cached_size = 0;
+
+  assert(cached_size == delta_list.size());
+  assert(cached_size == chronological_list.Count());
 }
 
 unsigned
@@ -62,6 +70,9 @@ Trace::get_recent_time(const unsigned t) const
 void
 Trace::update_delta(TraceDelta &td)
 {
+  assert(cached_size == delta_list.size());
+  assert(cached_size == chronological_list.Count());
+
   if (chronological_list.IsEdge(td))
     return;
 
@@ -86,6 +97,9 @@ Trace::update_delta(TraceDelta &td)
 void
 Trace::erase_inside(TraceDelta::iterator it)
 {
+  assert(cached_size > 0);
+  assert(cached_size == delta_list.size());
+  assert(cached_size == chronological_list.Count());
   assert(it != delta_list.end());
 
   const TraceDelta &td = *it;
@@ -97,6 +111,7 @@ Trace::erase_inside(TraceDelta::iterator it)
   // now delete the item
   td.RemoveConst();
   delta_list.erase(it);
+  --cached_size;
 
   // and update the deltas
   update_delta(previous);
@@ -106,13 +121,16 @@ Trace::erase_inside(TraceDelta::iterator it)
 bool
 Trace::erase_delta(const unsigned target_size, const unsigned recent)
 {
+  assert(cached_size == delta_list.size());
+  assert(cached_size == chronological_list.Count());
+
   if (size() < 2)
     return false;
 
   bool modified = false;
 
   const unsigned recent_time = get_recent_time(recent);
-  unsigned lsize = delta_list.size();
+  unsigned lsize = size();
 
   TraceDelta::iterator candidate = delta_list.begin();
   while (lsize > target_size) {
@@ -145,6 +163,7 @@ Trace::erase_earlier_than(const unsigned p_time)
     TraceDelta &td = *(TraceDelta *)chronological_list.GetNext();
     td.Remove();
     delta_list.erase(td.delta_list_iterator);
+    --cached_size;
 
     modified = true;
   }
@@ -190,6 +209,9 @@ Trace::erase_start(TraceDelta &td_start) {
 void
 Trace::append(const AIRCRAFT_STATE& state)
 {
+  assert(cached_size == delta_list.size());
+  assert(cached_size == chronological_list.Count());
+
   if (empty()) {
     // first point determines origin for flat projection
     task_projection.reset(state.get_location());
@@ -208,6 +230,8 @@ Trace::append(const AIRCRAFT_STATE& state)
 
   TraceDelta &td = insert(tp);
   td.InsertBefore(chronological_list);
+
+  ++cached_size;
 
   if (!chronological_list.IsFirst(td))
     update_delta(td.GetPrevious());
@@ -270,6 +294,9 @@ Trace::calc_average_delta_time(const unsigned no_thin) const
 bool
 Trace::optimise_if_old()
 {
+  assert(cached_size == delta_list.size());
+  assert(cached_size == chronological_list.Count());
+
   if (size() >= m_max_points) {
     // first remove points outside max time range
     bool updated = erase_earlier_than(get_min_time());

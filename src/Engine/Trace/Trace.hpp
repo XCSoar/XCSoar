@@ -188,6 +188,7 @@ class Trace : private NonCopyable
 
   TraceDelta::List delta_list;
   ListHead chronological_list;
+  unsigned cached_size;
 
   TaskProjection task_projection;
 
@@ -301,7 +302,7 @@ public:
    * @return Number of traces in tree
    */
   unsigned size() const {
-    return chronological_list.Count();
+    return cached_size;
   }
 
   /**
