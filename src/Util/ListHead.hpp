@@ -262,12 +262,12 @@ public:
 
   public:
     typedef std::forward_iterator_tag iterator_category;
-    typedef ListHead value_type;
-    typedef ListHead *pointer;
-    typedef ListHead &reference;
     typedef ptrdiff_t difference_type;
+    typedef const ListHead value_type;
+    typedef const ListHead *pointer;
+    typedef const ListHead &reference;
 
-    const ListHead &operator*() const {
+    reference operator*() const {
       return *current;
     }
 
