@@ -504,14 +504,18 @@ public:
    *
    * @return Number of traces in tree
    */
-  unsigned size() const;
+  unsigned size() const {
+    return chronological_list.size();
+  }
 
   /**
    * Whether traces store is empty
    *
    * @return True if no traces stored
    */
-  bool empty() const;
+  bool empty() const {
+    return delta_list.empty();
+  }
 
   /**
    * Re-balance kd-tree periodically 
@@ -564,7 +568,9 @@ public:
    * @return True if point is invalid
    */
   gcc_pure
-  static bool is_null(const TracePoint& tp);
+  static bool is_null(const TracePoint& tp) {
+    return tp.time == null_time;
+  }
 
   /**
    * Get last point added to store

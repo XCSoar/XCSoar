@@ -153,24 +153,6 @@ Trace::optimise_if_old()
   return true;
 }
 
-unsigned
-Trace::size() const
-{
-  return chronological_list.size();
-}
-
-bool
-Trace::empty() const
-{
-  return delta_list.empty();
-}
-
-bool
-Trace::is_null(const TracePoint& tp)
-{
-  return tp.time == null_time;
-}
-
 void
 Trace::get_trace_points(TracePointVector& iov) const
 {
