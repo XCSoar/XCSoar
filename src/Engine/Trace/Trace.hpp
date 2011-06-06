@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Util/SliceAllocator.hpp"
 #include "Util/ListHead.hpp"
+#include "Util/CastIterator.hpp"
 #include "Navigation/TracePoint.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Compiler.h"
@@ -173,6 +174,8 @@ class Trace : private NonCopyable
              std::min(next.time - node.time, node.time - last.time);
     }
   };
+
+  typedef CastIterator<const TraceDelta, ListHead::const_iterator> ChronologicalConstIterator;
 
   struct ChronologicalList : public std::list<TraceDelta> {
     iterator find_reference(const TraceDelta &ref) {

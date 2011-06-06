@@ -89,8 +89,8 @@ Trace::calc_average_delta_distance(const unsigned no_thin) const
   unsigned acc = 0;
   unsigned counter = 0;
 
-  ChronologicalList::const_iterator end = chronological_list.end();
-  for (ChronologicalList::const_iterator it = chronological_list.begin();
+  const ChronologicalConstIterator end = delta_list.head.end();
+  for (ChronologicalConstIterator it = delta_list.head.begin();
        it != end && it->point.time < r; ++it, ++counter)
     acc += it->delta_distance;
 
@@ -107,9 +107,9 @@ Trace::calc_average_delta_time(const unsigned no_thin) const
   unsigned counter = 0;
 
   /* find the last item before the "r" timestamp */
-  ChronologicalList::const_iterator end = chronological_list.end();
-  ChronologicalList::const_iterator it;
-  for (it = chronological_list.begin(); it != end && it->point.time < r; ++it)
+  const ChronologicalConstIterator end = delta_list.head.end();
+  ChronologicalConstIterator it;
+  for (it = delta_list.head.begin(); it != end && it->point.time < r; ++it)
     ++counter;
 
   if (counter < 2)
