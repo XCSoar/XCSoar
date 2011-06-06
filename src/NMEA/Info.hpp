@@ -94,9 +94,6 @@ struct GPS_STATE
   /** Horizontal dilution of precision */
   fixed HDOP;
 
-  /** Is the GPS unit moving? (Speed > 2.0) */
-  bool MovementDetected;
-
   /**
    * Is the fix real? (no replay, no simulator)
    */
@@ -383,6 +380,10 @@ struct NMEA_INFO {
   Validity StallRatioAvailable;
 
   FLARM_STATE flarm;
+
+  bool MovementDetected() const {
+    return GroundSpeedAvailable && GroundSpeed > fixed_two;
+  }
 
   /**
    * Sets a fake location, and marks it as "unavailable".  This is

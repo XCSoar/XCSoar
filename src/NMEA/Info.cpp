@@ -50,7 +50,6 @@ GPS_STATE::reset()
   AndroidInternalGPS = false;
 #endif
   SatellitesUsed = 0;
-  MovementDetected = false;
   Replay = false;
 }
 

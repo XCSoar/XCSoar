@@ -100,7 +100,6 @@ Simulator::Process(NMEA_INFO &basic)
   basic.gps.SatellitesUsed = 6;
   basic.gps.Simulator = true;
   basic.gps.real = false;
-  basic.gps.MovementDetected = false;
 
 #ifdef ANDROID
   basic.gps.AndroidInternalGPS = false;

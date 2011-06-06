@@ -70,7 +70,7 @@ XCSoarInterface::ExchangeDeviceBlackboard()
 
   const NMEA_INFO &real = device_blackboard.RealState();
   movement_detected = real.Connected && real.gps.real &&
-    real.gps.MovementDetected;
+    real.MovementDetected();
 
   ReadBlackboardCalculated(device_blackboard.Calculated());
 

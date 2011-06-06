@@ -486,7 +486,6 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   fixed speed;
   bool GroundSpeedAvailable = line.read_checked(speed);
-  gps.MovementDetected = GroundSpeedAvailable && speed > fixed_two;
 
   fixed track;
   bool track_available = line.read_checked(track);
@@ -513,7 +512,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->GroundSpeedAvailable.Update(GPS_INFO->Time);
   }
 
-  if (track_available && gps.MovementDetected) {
+  if (track_available && GPS_INFO->MovementDetected()) {
     // JMW don't update bearing unless we're moving
     GPS_INFO->track = Angle::degrees(track).as_bearing();
     GPS_INFO->track_available.Update(GPS_INFO->Time);
