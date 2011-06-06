@@ -194,9 +194,10 @@ class Trace : private NonCopyable
 
   class DeltaList {
     TraceDelta::List list;
-    ListHead head;
 
   public:
+    ListHead head;
+
     DeltaList():head(ListHead::empty()) {}
 
     /**
@@ -578,9 +579,9 @@ public:
   class const_iterator {
     friend class Trace;
 
-    ChronologicalList::const_iterator iterator;
+    ListHead::const_iterator iterator;
 
-    const_iterator(ChronologicalList::const_iterator _iterator)
+    const_iterator(ListHead::const_iterator _iterator)
       :iterator(_iterator) {}
 
   public:
@@ -591,7 +592,8 @@ public:
     typedef ptrdiff_t difference_type;
 
     const TracePoint &operator*() const {
-      return iterator->point;
+      const TraceDelta &td = (const TraceDelta &)*iterator;
+      return td.point;
     }
 
     const_iterator &operator++() {
@@ -601,12 +603,15 @@ public:
 
     const_iterator &NextSquareRange(unsigned sq_resolution,
                                     const const_iterator &end) {
-      const TracePoint &previous = iterator->point;
+      const TracePoint &previous = ((const TraceDelta &)*iterator).point;
       while (true) {
         ++iterator;
 
-        if (iterator == end.iterator ||
-            iterator->point.approx_sq_dist(previous) >= sq_resolution)
+        if (iterator == end.iterator)
+          return *this;
+
+        const TraceDelta &td = (const TraceDelta &)*iterator;
+        if (td.point.approx_sq_dist(previous) >= sq_resolution)
           return *this;
       }
     }
@@ -621,11 +626,11 @@ public:
   };
 
   const_iterator begin() const {
-    return chronological_list.begin();
+    return delta_list.head.begin();
   }
 
   const_iterator end() const {
-    return chronological_list.end();
+    return delta_list.head.end();
   }
 
   gcc_pure
