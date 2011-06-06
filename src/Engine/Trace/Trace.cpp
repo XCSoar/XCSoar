@@ -65,8 +65,6 @@ Trace::append(const AIRCRAFT_STATE& state)
 
   TracePoint tp(state);
   tp.project(task_projection);
-
-  tp.project(task_projection);
   m_last_point = tp;
 
   delta_list.append(tp, chronological_list);
