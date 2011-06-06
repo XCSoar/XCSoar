@@ -269,11 +269,14 @@ class Trace : private NonCopyable
                       ChronologicalList &chronological_list) {
       assert(it != list.end());
 
+      TraceDelta &td = **it;
+      assert(!td.IsEdge());
+
       // now delete the item
       TraceDelta::neighbours ne = erase(it);
       assert (ne.first != ne.second);
 
-      chronological_list.erase_reference(**it);
+      chronological_list.erase_reference(td);
 
       // and update the deltas
       update_delta(ne.first);
