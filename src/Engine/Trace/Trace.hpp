@@ -297,18 +297,6 @@ class Trace : private NonCopyable
     }
 
     /**
-     * Erase element from list, without updating deltas.
-     * For when this class is used as a conventionally sorted list
-     * (increasing time order)
-     */
-    TraceDelta::iterator erase_from_list(TraceDelta::iterator it) {
-      link((*it)->prev, (*it)->next);
-      TraceDelta::iterator next = (*it)->next;
-      list.erase(it);
-      return next;
-    }
-
-    /**
      * Erase elements based on delta metric until the size is
      * equal to the target size.  Wont remove elements more recent than
      * specified time from the last point.
