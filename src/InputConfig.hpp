@@ -36,7 +36,7 @@ Copyright_License {
 struct InputConfig {
   // Sensible maximums
   enum {
-    MAX_MODE = 64,
+    MAX_MODE = 32,
     MAX_MODE_STRING = 24,
 #ifdef ENABLE_SDL
     MAX_KEY = 400,
