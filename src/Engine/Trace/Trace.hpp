@@ -33,6 +33,7 @@ Copyright_License {
 #include <set>
 #include <list>
 #include <assert.h>
+#include <stdio.h>
 
 struct AIRCRAFT_STATE;
 
@@ -117,6 +118,13 @@ class Trace : private NonCopyable
        delta_distance(p.approx_dist(p_last))
     {
       assert(elim_distance != null_delta);
+    }
+
+    /**
+     * Is this the first or the last point?
+     */
+    bool IsEdge() const {
+      return elim_time == null_time;
     }
 
     void update(const TracePoint &p_last, const TracePoint &p_next) {
@@ -321,14 +329,10 @@ class Trace : private NonCopyable
       const unsigned recent_time = get_recent_time(recent);
       unsigned lsize = list.size();
 
-      TraceDelta::const_iterator lfirst = first();
       TraceDelta::iterator candidate = begin();
       while (lsize > target_size) {
-        if (candidate == lfirst)
-          // exhausted non-recent candidates!
-          return modified;
-
-        if ((*candidate)->point.time < recent_time) {
+        const TraceDelta &td = **candidate;
+        if (!td.IsEdge() && td.point.time < recent_time) {
           erase_inside(candidate, chronological_list);
           lsize--;
           candidate = begin(); // find new top
@@ -435,40 +439,6 @@ class Trace : private NonCopyable
       }
 
       return list.end();
-    }
-
-    /**
-     * Find first item in list (by time).  Returns end() on failure
-     *
-     * @return Iterator to first (earliest) item
-     */
-    gcc_pure
-    TraceDelta::iterator first() {
-      if (size() > 1) {
-        TraceDelta::iterator i = last();
-        --i;
-        return i;
-      } else {
-        assert(1);
-        return list.end();
-      }
-    }
-
-    /**
-     * Find first item in list (by time).  Returns end() on failure
-     *
-     * @return Iterator to first (earliest) item
-     */
-    gcc_pure
-    TraceDelta::const_iterator first() const {
-      if (size() > 1) {
-        TraceDelta::const_iterator i = last();
-        --i;
-        return i;
-      } else {
-        assert(1);
-        return list.end();
-      }
     }
 
     /**
