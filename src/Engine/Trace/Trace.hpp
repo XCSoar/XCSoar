@@ -564,7 +564,6 @@ class Trace : private NonCopyable
   ChronologicalList chronological_list;
   DeltaList delta_list;
   TaskProjection task_projection;
-  TracePoint m_last_point;
 
   const unsigned m_max_time;
   const unsigned no_thin_time;
@@ -675,7 +674,9 @@ public:
    */
   gcc_pure
   const TracePoint& get_last_point() const {
-    return m_last_point;
+    assert(!chronological_list.empty());
+
+    return chronological_list.back().point;
   }
 
 public:

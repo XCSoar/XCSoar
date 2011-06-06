@@ -75,6 +75,11 @@ ContestDijkstra::master_is_updated()
 {
   assert(num_stages <= MAX_STAGES);
 
+  if (trace_master.empty()) {
+    last_point.time = Trace::null_time;
+    return true;
+  }
+
   // find min distance and time step within this trace
   const unsigned threshold_delta_t_trace = trace_master.average_delta_time();
   const unsigned threshold_distance_trace = trace_master.average_delta_distance();

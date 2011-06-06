@@ -32,7 +32,6 @@ Trace::Trace(const unsigned _no_thin_time, const unsigned max_time,
    m_max_points(max_points),
    m_opt_points((3*max_points)/4)
 {
-  m_last_point.time = null_time;
   assert(max_points >= 4);
 }
 
@@ -40,7 +39,6 @@ void
 Trace::clear()
 {
   chronological_list.clear();
-  m_last_point.time = null_time;
   m_average_delta_distance = 0;
   m_average_delta_time = 0;
   delta_list.clear();
@@ -53,19 +51,17 @@ Trace::append(const AIRCRAFT_STATE& state)
     // first point determines origin for flat projection
     task_projection.reset(state.get_location());
     task_projection.update_fast();
-    m_last_point.time = null_time;
-  } else if (state.Time < fixed(m_last_point.time)) {
+  } else if (state.Time < fixed(get_last_point().time)) {
     // gone back in time, must reset. (shouldn't get here!)
     assert(1);
     clear();
     return;
-  } else if ((unsigned)state.Time - m_last_point.time < 2)
+  } else if ((unsigned)state.Time - get_last_point().time < 2)
     // only add one item per two seconds
     return;
 
   TracePoint tp(state);
   tp.project(task_projection);
-  m_last_point = tp;
 
   delta_list.append(tp, chronological_list);
 }
@@ -73,11 +69,14 @@ Trace::append(const AIRCRAFT_STATE& state)
 unsigned
 Trace::get_min_time() const
 {
-  if (m_last_point.time == null_time ||
-      m_max_time == null_time)
+  if (empty() || m_max_time == null_time)
     return 0;
 
-  return std::max(0, (int)m_last_point.time - (int)m_max_time);
+  unsigned last_time = get_last_point().time;
+  if (last_time == null_time || last_time <= m_max_time)
+    return 0;
+
+  return last_time - m_max_time;
 }
 
 unsigned
