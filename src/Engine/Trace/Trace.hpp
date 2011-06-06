@@ -488,23 +488,6 @@ class Trace : private NonCopyable
     TraceDelta::iterator merge_insert(TraceDelta &td) {
       return td.delta_list_iterator = list.insert(&td).first;
     }
-
-    /**
-     * Finds item of set time. Undefined behaviour if not found.
-     *
-     * @param p_time Time to search for
-     *
-     * @return Iterator to found item
-     */
-    TraceDelta::iterator find_time(const unsigned p_time) {
-      TraceDelta::const_iterator lend = list.end();
-      for (TraceDelta::iterator i= list.begin(); i!= lend; ++i)
-        if ((*i)->point.time== p_time)
-          return i;
-
-      assert(0);
-      return list.end();
-    }
   };
 
   ChronologicalList chronological_list;
