@@ -54,7 +54,7 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
   const Waypoint* way_point = (alternates.size()>index) ? &alternates[index].first : NULL;
 
   SetCommentFromWaypointName(infobox, way_point);
-  if (!way_point) {
+  if (!way_point || !XCSoarInterface::Basic().track_available) {
     infobox.SetInvalid();
     return;
   }
