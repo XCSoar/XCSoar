@@ -58,7 +58,8 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
 {
   const GlideResult &solution_remaining =
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+  if (!XCSoarInterface::Basic().track_available ||
+      !XCSoarInterface::Calculated().task_stats.task_valid ||
       !solution_remaining.defined() ||
       solution_remaining. Vector.Distance <= fixed(10)) {
     infobox.SetInvalid();
@@ -93,7 +94,8 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
 
   const GlideResult &solution_remaining =
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
-  if (!XCSoarInterface::Calculated().task_stats.task_valid ||
+  if (!XCSoarInterface::Basic().track_available ||
+      !XCSoarInterface::Calculated().task_stats.task_valid ||
       !solution_remaining.defined() ||
       solution_remaining.Vector.Distance <= fixed(10)) {
     infobox.SetValueInvalid();
@@ -146,7 +148,8 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult &solution_remaining =
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
-  if (!task_stats.task_valid || !solution_remaining.defined()) {
+  if (!task_stats.task_valid ||
+      !solution_remaining.defined()) {
     infobox.SetInvalid();
     return;
   }
@@ -154,8 +157,11 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
   // Set Value
   SetValueFromDistance(infobox, solution_remaining.Vector.Distance);
 
-  Angle bd = solution_remaining.Vector.Bearing - XCSoarInterface::Basic().track;
-  SetCommentBearingDifference(infobox, bd);
+  if (XCSoarInterface::Basic().track_available) {
+    Angle bd = solution_remaining.Vector.Bearing - XCSoarInterface::Basic().track;
+    SetCommentBearingDifference(infobox, bd);
+  } else
+    infobox.SetCommentInvalid();
 }
 
 void
@@ -507,8 +513,11 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
   // Set Value
   SetValueFromDistance(infobox, common_stats.vector_home.Distance);
 
-  Angle bd = common_stats.vector_home.Bearing - XCSoarInterface::Basic().track;
-  SetCommentBearingDifference(infobox, bd);
+  if (XCSoarInterface::Basic().track_available) {
+    Angle bd = common_stats.vector_home.Bearing - XCSoarInterface::Basic().track;
+    SetCommentBearingDifference(infobox, bd);
+  } else
+    infobox.SetCommentInvalid();
 }
 
 void
