@@ -76,6 +76,21 @@ InfoBoxContent::SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta)
 }
 
 void
+InfoBoxContent::SetCommentBearingDifference(InfoBoxWindow &infobox, Angle delta)
+{
+  double delta_degrees = delta.as_delta().value_degrees();
+  TCHAR tmp[32];
+  if (delta_degrees > 1)
+    _stprintf(tmp, _T("%2.0f°»"), delta_degrees);
+  else if (delta_degrees < -1)
+    _stprintf(tmp, _T("«%2.0f°"), -delta_degrees);
+  else
+    _tcscpy(tmp, _T("«»"));
+
+  infobox.SetComment(tmp);
+}
+
+void
 InfoBoxContent::SetTitleFromWaypointName(InfoBoxWindow &infobox,
                                          const Waypoint* waypoint)
 {

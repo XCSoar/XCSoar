@@ -105,6 +105,7 @@ public:
                                 const TCHAR* format, fixed value);
 
   static void SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta);
+  static void SetCommentBearingDifference(InfoBoxWindow &infobox, Angle delta);
   static void SetValueFromDistance(InfoBoxWindow &infobox, fixed distance);
 };
 
