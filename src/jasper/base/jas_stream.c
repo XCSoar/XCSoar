@@ -174,7 +174,7 @@ jas_stream_t *jas_stream_memopen(char *buf, int bufsize)
 	/* Since the stream data is already resident in memory, buffering
 	is not necessary. */
 	/* But... It still may be faster to use buffering anyways. */
-	jas_stream_initbuf(stream, JAS_STREAM_FULLBUF, 0, 0);
+	jas_stream_initbuf(stream, JAS_STREAM_UNBUF, 0, 0);
 
 	/* Select the operations for a memory stream. */
 	stream->ops_ = &jas_stream_memops;
