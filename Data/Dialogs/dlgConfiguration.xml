@@ -389,25 +389,28 @@
           <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         
-        <Edit Name="prpPolarMassDry" Caption="Dry mass; max. ballast" Expert="1" Y="62" Width="182" Height="22" CaptionWidth="133">
+        <Edit Name="prpPolarMassDry" Caption="Ref. mass; max. ballast" Expert="1" Y="62" Width="182" Height="22" CaptionWidth="133"
+          Help="Reference weight at which the given polar is valid.">
           <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarMaxBallast" Caption="Max. ballast" X="182" Expert="1" Y="62" Width="50" Height="22" CaptionWidth="1">
+        <Edit Name="prpPolarMaxBallast" Caption="Max. ballast" X="182" Expert="1" Y="62" Width="50" Height="22" CaptionWidth="1"
+          Help="Optional the amount of water ballast XCSoar refers to as 100% ballast. Set to zero if it does not apply.">
           <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" Min="0" Max="500" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
 
-        <Edit Name="prpPolarWingArea" Caption="Wing area" Expert="1" Y="84" Width="232" Height="22" CaptionWidth="133">
+        <Edit Name="prpPolarWingArea" Caption="Wing area" Expert="1" Y="84" Width="232" Height="22" CaptionWidth="133"
+          Help="Optional specification of the wing area.">
           <DataField DataType="double" DisplayFormat="%.1f m^2" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
       </Panel>
 
       <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
+        Help="Optional the maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5"/>
       </Edit>
     
       <Edit Name="prpHandicap" Caption="Handicap" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="The handicap factor used for On-Line Contest scoring.">
+        Help="The handicap factor used for the OnLine Contest scoring.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="50" Max="150" Step="1"/>
       </Edit>
     
