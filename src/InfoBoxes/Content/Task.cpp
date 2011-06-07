@@ -153,6 +153,9 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
 
   // Set Value
   SetValueFromDistance(infobox, solution_remaining.Vector.Distance);
+
+  Angle bd = solution_remaining.Vector.Bearing - XCSoarInterface::Basic().track;
+  SetCommentBearingDifference(infobox, bd);
 }
 
 void
