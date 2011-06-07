@@ -504,7 +504,8 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
   // Set Value
   SetValueFromDistance(infobox, common_stats.vector_home.Distance);
 
-  infobox.SetComment(common_stats.vector_home.Bearing);
+  Angle bd = common_stats.vector_home.Bearing - XCSoarInterface::Basic().track;
+  SetCommentBearingDifference(infobox, bd);
 }
 
 void
