@@ -24,12 +24,14 @@ Copyright_License {
 #ifndef XCSOAR_OPERATION_HPP
 #define XCSOAR_OPERATION_HPP
 
+#include "Util/NonCopyable.hpp"
+
 /**
  * An environment a complex operation runs in.  The operation may run
  * in a separate thread, and this class provides a bridge to the
  * calling thread.
  */
-class OperationEnvironment {
+class OperationEnvironment : private NonCopyable {
 public:
   /**
    * Sleep for a fixed amount of time.  May return earlier if an event
