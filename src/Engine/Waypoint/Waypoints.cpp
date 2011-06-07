@@ -246,25 +246,6 @@ Waypoints::lookup_id(const unsigned id) const
   return NULL;
 }
 
-std::vector<WaypointEnvelope>
-Waypoints::find_within_range(const GeoPoint &loc, const fixed range) const
-{
-  std::vector<WaypointEnvelope> vectors;
-  if (empty())
-    return vectors; // nothing to do
-
-  WaypointEnvelope bb_target(loc, task_projection);
-  const unsigned mrange = task_projection.project_range(loc, range);
-
-  waypoint_tree.find_within_range(bb_target, mrange, std::back_inserter(vectors));
-
-#ifdef INSTRUMENT_TASK
-  n_queries++;
-#endif
-
-  return vectors;
-}
-
 void
 Waypoints::visit_within_range(const GeoPoint &loc, const fixed range,
     WaypointVisitor& visitor) const

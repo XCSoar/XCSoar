@@ -295,18 +295,6 @@ public:
   const_iterator end() const;
 
 private:
-  /**
-   * Find waypoints within approximate range (square range box)
-   * to search location.  Possible use by screen display functions.
-   *
-   * @param loc Location from which to search
-   * @param range Distance in meters of search radius
-   *
-   * @return Vector of waypoints within square range
-   */
-  std::vector<WaypointEnvelope>
-    find_within_range(const GeoPoint &loc, const fixed range) const;
-
   unsigned next_id;
 
   WaypointTree waypoint_tree;
