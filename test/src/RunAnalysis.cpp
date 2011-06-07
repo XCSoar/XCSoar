@@ -117,7 +117,7 @@ static RasterTerrain *terrain;
 static void
 LoadFiles(Airspaces &airspace_database)
 {
-  OperationEnvironment operation;
+  NullOperationEnvironment operation;
 
   terrain = RasterTerrain::OpenTerrain(NULL, operation);
 

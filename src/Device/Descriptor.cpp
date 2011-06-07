@@ -81,7 +81,7 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
   parser.SetReal(_tcscmp(Driver->Name, _T("Condor")) != 0);
 
   device = Driver->CreateOnPort(Com);
-  OperationEnvironment env;
+  QuietOperationEnvironment env;
   if (!device->Open(env)) {
     delete device;
     device = NULL;
@@ -225,7 +225,7 @@ DeviceDescriptor::Declare(const struct Declaration *declaration)
   assert(!declaring);
   declaring = true;
 
-  OperationEnvironment env(true);
+  VerboseOperationEnvironment env;
   bool result = device != NULL && device->Declare(declaration, env);
   ProgressGlue::Close();
 

@@ -428,7 +428,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   Waypoints file_waypoints;
   {
     WaypointReaderSeeYou waypoint_file(path, 0);
-    OperationEnvironment operation;
+    NullOperationEnvironment operation;
     if (!waypoint_file.Parse(file_waypoints, operation))
       return NULL;
   }

@@ -44,7 +44,7 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  OperationEnvironment operation;
+  NullOperationEnvironment operation;
   if (!ReadAirspace(airspaces, reader, operation)) {
     fprintf(stderr, "Failed to parse input file\n");
     return 1;

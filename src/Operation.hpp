@@ -34,36 +34,51 @@ Copyright_License {
  * calling thread.
  */
 class OperationEnvironment : private NonCopyable {
-  bool show_progress;
-
 public:
-  OperationEnvironment(bool _show_progress=false)
-    :show_progress(_show_progress) {}
-
   /**
    * Sleep for a fixed amount of time.  May return earlier if an event
    * occurs.
    */
-  void Sleep(unsigned ms);
+  virtual void Sleep(unsigned ms) = 0;
 
   /**
    * Show a human-readable (localized) short text describing the
    * current state of the operation.
    */
-  void SetText(const TCHAR *text);
+  virtual void SetText(const TCHAR *text) = 0;
 
   /**
    * Initialize the progress bar, and set the maximum value which will
    * mean "100% done".  The default value is 0, which means "no
    * progress bar".
    */
-  void SetProgressRange(unsigned range);
+  virtual void SetProgressRange(unsigned range) = 0;
 
   /**
    * Set the current position of the progress bar.  Must not be bigger
    * than the configured range.
    */
-  void SetProgressPosition(unsigned position);
+  virtual void SetProgressPosition(unsigned position) = 0;
+};
+
+class NullOperationEnvironment : public OperationEnvironment {
+public:
+  virtual void Sleep(unsigned ms);
+  virtual void SetText(const TCHAR *text);
+  virtual void SetProgressRange(unsigned range);
+  virtual void SetProgressPosition(unsigned position);
+};
+
+class QuietOperationEnvironment : public NullOperationEnvironment {
+public:
+  virtual void Sleep(unsigned ms);
+};
+
+class VerboseOperationEnvironment : public QuietOperationEnvironment {
+public:
+  virtual void SetText(const TCHAR *text);
+  virtual void SetProgressRange(unsigned range);
+  virtual void SetProgressPosition(unsigned position);
 };
 
 #endif

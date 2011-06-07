@@ -180,7 +180,7 @@ static Blackboard blackboard;
 static void
 LoadFiles()
 {
-  OperationEnvironment operation;
+  NullOperationEnvironment operation;
 
   topography = new TopographyStore();
   LoadConfiguredTopography(*topography, operation);

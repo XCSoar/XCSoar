@@ -216,7 +216,7 @@ XCSoarInterface::AfterStartup()
 bool
 XCSoarInterface::Startup(HINSTANCE hInstance)
 {
-  OperationEnvironment operation(true);
+  VerboseOperationEnvironment operation;
 
   // Set the application title to "XCSoar"
   TCHAR szTitle[] = _T("XCSoar");
@@ -463,7 +463,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 void
 XCSoarInterface::Shutdown(void)
 {
-  OperationEnvironment operation(true);
+  VerboseOperationEnvironment operation;
   gcc_unused ScopeBusyIndicator busy;
 
   // Show progress dialog

@@ -99,7 +99,7 @@ int main(int argc, char **argv)
   }
 
   TopographyStore topography;
-  OperationEnvironment operation;
+  NullOperationEnvironment operation;
   topography.Load(operation, reader, NULL, dir);
   zzip_dir_close(dir);
 

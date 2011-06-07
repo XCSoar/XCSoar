@@ -22,30 +22,22 @@ Copyright_License {
 */
 
 #include "Operation.hpp"
-#include "OS/Sleep.h"
+#include "ProgressGlue.hpp"
 
 void
-NullOperationEnvironment::Sleep(unsigned ms)
+VerboseOperationEnvironment::SetText(const TCHAR *text)
 {
+  ProgressGlue::Create(text);
 }
 
 void
-NullOperationEnvironment::SetText(const TCHAR *text)
+VerboseOperationEnvironment::SetProgressRange(unsigned range)
 {
+  ProgressGlue::SetRange(range);
 }
 
 void
-NullOperationEnvironment::SetProgressRange(unsigned range)
+VerboseOperationEnvironment::SetProgressPosition(unsigned position)
 {
-}
-
-void
-NullOperationEnvironment::SetProgressPosition(unsigned position)
-{
-}
-
-void
-QuietOperationEnvironment::Sleep(unsigned ms)
-{
-  ::Sleep(ms);
+  ProgressGlue::SetValue(position);
 }

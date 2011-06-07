@@ -30,7 +30,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
 #include "OS/PathName.hpp"
-#include "Operation.hpp"
+#include "ConsoleOperationEnvironment.hpp"
 
 #ifdef HAVE_POSIX
 #include "Device/TTYPort.hpp"
@@ -133,7 +133,7 @@ int main(int argc, char **argv)
   Device *device = driver->CreateOnPort(port);
   assert(device != NULL);
 
-  OperationEnvironment env;
+  ConsoleOperationEnvironment env;
   if (!device->Open(env)) {
     delete port;
     fprintf(stderr, "Failed to open driver: %s\n", argv[1]);

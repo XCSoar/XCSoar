@@ -55,7 +55,7 @@ void dlgAirspaceDetails(const AbstractAirspace& the_airspace) {}
 static void
 LoadFiles(Airspaces &airspace_database)
 {
-  OperationEnvironment operation;
+  NullOperationEnvironment operation;
 
   TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile);
   if (reader != NULL) {

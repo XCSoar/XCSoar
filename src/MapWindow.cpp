@@ -146,7 +146,7 @@ MapWindow::UpdateWeather()
   if (weather == NULL)
     return false;
 
-  OperationEnvironment operation;
+  QuietOperationEnvironment operation;
   weather->Reload((int)Basic().Time, operation);
   weather->SetViewCenter(visible_projection.GetGeoScreenCenter(),
                          visible_projection.GetScreenWidthMeters() / 2);

@@ -51,7 +51,7 @@ int main(int argc, char **argv)
   _tcscpy(j2w_path, PathName(map_path));
   _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
 
-  OperationEnvironment operation;
+  NullOperationEnvironment operation;
   RasterTileCache rtc;
   if (!rtc.LoadOverview(jp2_path, j2w_path, operation)) {
     fprintf(stderr, "LoadOverview failed\n");

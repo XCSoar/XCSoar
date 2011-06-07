@@ -101,7 +101,7 @@ SettingsLeave()
 
   SuspendAllThreads();
 
-  OperationEnvironment operation(true);
+  VerboseOperationEnvironment operation;
 
   if (LanguageChanged)
     ReadLanguageFile();

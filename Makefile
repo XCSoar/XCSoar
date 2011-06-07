@@ -214,6 +214,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Airspace/AirspaceRendererSettings.cpp \
 	\
 	$(SRC)/Operation.cpp \
+	$(SRC)/VerboseOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/ConditionMonitor.cpp \

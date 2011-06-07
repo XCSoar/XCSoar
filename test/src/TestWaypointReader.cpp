@@ -186,7 +186,7 @@ TestWayPointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
     return false;
   }
 
-  OperationEnvironment operation;
+  NullOperationEnvironment operation;
   if(!ok1(f.Parse(way_points, operation))) {
     skip(2, 0, "parsing waypoint file failed");
     return false;

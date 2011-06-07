@@ -98,7 +98,7 @@ TEST_TROUTE_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/test_troute.cpp
 TEST_TROUTE_OBJS = $(call SRC_TO_OBJ,$(TEST_TROUTE_SOURCES))
 TEST_TROUTE_BIN = $(TARGET_BIN_DIR)/test_troute$(TARGET_EXEEXT)
@@ -123,7 +123,7 @@ TEST_REACH_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/test_reach.cpp
 TEST_REACH_OBJS = $(call SRC_TO_OBJ,$(TEST_REACH_SOURCES))
 TEST_REACH_BIN = $(TARGET_BIN_DIR)/test_reach$(TARGET_EXEEXT)
@@ -148,7 +148,7 @@ TEST_ROUTE_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/test_route.cpp
 TEST_ROUTE_OBJS = $(call SRC_TO_OBJ,$(TEST_ROUTE_SOURCES))
 TEST_ROUTE_BIN = $(TARGET_BIN_DIR)/test_route$(TARGET_EXEEXT)
@@ -480,6 +480,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Operation.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
@@ -487,7 +488,6 @@ TEST_DRIVER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
@@ -512,6 +512,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/WayPoint/WaypointReaderFS.cpp \
 	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
 	$(SRC)/WayPoint/WaypointWriter.cpp \
+	$(SRC)/Operation.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
@@ -520,7 +521,6 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointEnvelope.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestWaypointReader.cpp
 TEST_WAY_POINT_FILE_OBJS = $(call SRC_TO_OBJ,$(TEST_WAY_POINT_FILE_SOURCES))
@@ -843,7 +843,7 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
 LOAD_TOPOGRAPHY_OBJS = $(call SRC_TO_OBJ,$(LOAD_TOPOGRAPHY_SOURCES))
 LOAD_TOPOGRAPHY_BIN = $(TARGET_BIN_DIR)/LoadTopography$(TARGET_EXEEXT)
@@ -866,7 +866,7 @@ LOAD_TERRAIN_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/LoadTerrain.cpp
 LOAD_TERRAIN_OBJS = $(call SRC_TO_OBJ,$(LOAD_TERRAIN_SOURCES))
 LOAD_TERRAIN_BIN = $(TARGET_BIN_DIR)/LoadTerrain$(TARGET_EXEEXT)
@@ -893,8 +893,8 @@ RUN_HEIGHT_MATRIX_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
+	$(SRC)/Operation.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/RunHeightMatrix.cpp
 RUN_HEIGHT_MATRIX_OBJS = $(call SRC_TO_OBJ,$(RUN_HEIGHT_MATRIX_SOURCES))
 RUN_HEIGHT_MATRIX_BIN = $(TARGET_BIN_DIR)/RunHeightMatrix$(TARGET_EXEEXT)
@@ -941,8 +941,8 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/RunWayPointParser.cpp
 RUN_WAY_POINT_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_WAY_POINT_PARSER_SOURCES))
 RUN_WAY_POINT_PARSER_LDADD = \
@@ -959,8 +959,8 @@ $(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS
 RUN_AIRSPACE_PARSER_SOURCES = \
 	$(SRC)/Airspace/AirspaceParser.cpp \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceParser.cpp
@@ -1053,10 +1053,10 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Operation.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/RunDeviceDriver.cpp
 RUN_DEVICE_DRIVER_OBJS = $(call SRC_TO_OBJ,$(RUN_DEVICE_DRIVER_SOURCES))
@@ -1083,9 +1083,10 @@ RUN_DECLARE_SOURCES = \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(SRC)/Operation.cpp \
+	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
@@ -1138,8 +1139,8 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_OBJS = $(call SRC_TO_OBJ,$(RUN_IGC_WRITER_SOURCES))
@@ -1176,8 +1177,8 @@ RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(SRC)/Wind/WindZigZag.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/RunWindZigZag.cpp
 RUN_WIND_ZIG_ZAG_OBJS = $(call SRC_TO_OBJ,$(RUN_WIND_ZIG_ZAG_SOURCES))
@@ -1319,13 +1320,13 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/WayPoint/WaypointWriter.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/xmlParser.cpp \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/RunMapWindow.cpp
 RUN_MAP_WINDOW_OBJS = $(call SRC_TO_OBJ,$(RUN_MAP_WINDOW_SOURCES))
 RUN_MAP_WINDOW_BIN = $(TARGET_BIN_DIR)/RunMapWindow$(TARGET_EXEEXT)
@@ -1560,12 +1561,12 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/IO/ConfiguredFile.cpp \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_OBJS = $(call SRC_TO_OBJ,$(RUN_ANALYSIS_SOURCES))
 RUN_ANALYSIS_BIN = $(TARGET_BIN_DIR)/RunAnalysis$(TARGET_EXEEXT)
@@ -1613,6 +1614,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(SRC)/Operation.cpp \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
@@ -1621,7 +1623,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunAirspaceWarningDialog.cpp
 RUN_AIRSPACE_WARNING_DIALOG_BIN = $(TARGET_BIN_DIR)/RunAirspaceWarningDialog$(TARGET_EXEEXT)
@@ -1683,13 +1684,13 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/WayPoint/WaypointReaderZander.cpp \
 	$(SRC)/Compatibility/string.c \
+	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
-	$(TEST_SRC_DIR)/FakeOperation.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunTaskEditorDialog.cpp
 RUN_TASK_EDITOR_DIALOG_BIN = $(TARGET_BIN_DIR)/RunTaskEditorDialog$(TARGET_EXEEXT)

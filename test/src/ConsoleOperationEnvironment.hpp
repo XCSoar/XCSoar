@@ -21,26 +21,18 @@ Copyright_License {
 }
 */
 
+#ifndef XCSOAR_CONSOLE_OPERATION_ENVIRONMENT_HPP
+#define XCSOAR_CONSOLE_OPERATION_ENVIRONMENT_HPP
+
 #include "Operation.hpp"
-#include "OS/Sleep.h"
 
-void
-OperationEnvironment::Sleep(unsigned ms)
-{
-  ::Sleep(ms);
-}
+class ConsoleOperationEnvironment : public QuietOperationEnvironment {
+  unsigned range;
 
-void
-OperationEnvironment::SetText(const TCHAR *text)
-{
-}
+public:
+  virtual void SetText(const TCHAR *text);
+  virtual void SetProgressRange(unsigned range);
+  virtual void SetProgressPosition(unsigned position);
+};
 
-void
-OperationEnvironment::SetProgressRange(unsigned range)
-{
-}
-
-void
-OperationEnvironment::SetProgressPosition(unsigned position)
-{
-}
+#endif

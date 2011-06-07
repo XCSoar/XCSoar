@@ -169,7 +169,7 @@ int main(int argc, char** argv)
   _tcscpy(j2w_path, PathName(hc_path));
   _tcscat(j2w_path, _T(DIR_SEPARATOR_S) _T("terrain.j2w"));
 
-  OperationEnvironment operation;
+  NullOperationEnvironment operation;
   RasterMap map(jp2_path, j2w_path, NULL, operation);
   do {
     map.SetViewCenter(map.GetMapCenter(), fixed(100000));

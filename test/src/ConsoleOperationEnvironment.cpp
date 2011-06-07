@@ -21,31 +21,24 @@ Copyright_License {
 }
 */
 
-#include "Operation.hpp"
-#include "OS/Sleep.h"
+#include "ConsoleOperationEnvironment.hpp"
+
+#include <stdio.h>
 
 void
-NullOperationEnvironment::Sleep(unsigned ms)
+ConsoleOperationEnvironment::SetText(const TCHAR *text)
 {
+  _tprintf(_T("%s\n"), text);
 }
 
 void
-NullOperationEnvironment::SetText(const TCHAR *text)
+ConsoleOperationEnvironment::SetProgressRange(unsigned _range)
 {
+  range = _range;
 }
 
 void
-NullOperationEnvironment::SetProgressRange(unsigned range)
+ConsoleOperationEnvironment::SetProgressPosition(unsigned position)
 {
-}
-
-void
-NullOperationEnvironment::SetProgressPosition(unsigned position)
-{
-}
-
-void
-QuietOperationEnvironment::Sleep(unsigned ms)
-{
-  ::Sleep(ms);
+  printf("%4u%%\n", position * 100 / range);
 }
