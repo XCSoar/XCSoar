@@ -25,6 +25,8 @@ Copyright_License {
 #define XCSOAR_MAIN_WINDOW_HXX
 
 #include "Screen/SingleWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
+#include "InfoBoxes/InfoBoxLayout.hpp"
 #include "PopupMessage.hpp"
 #include "BatteryTimer.hpp"
 #include "DisplayMode.hpp"
@@ -115,6 +117,11 @@ public:
    * position/size.
    */
   void ReinitialiseLayout();
+
+  /**
+   * Adjust the flarm radar position
+   */
+  void ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout ib_layout);
 
   /**
    * Adjust vario

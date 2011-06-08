@@ -279,3 +279,5 @@ const TCHAR szProfileTurningReach[] = _T("TurningReach");
 const TCHAR szProfileReachPolarMode[] = _T("ReachPolarMode");
 
 const TCHAR szProfileAircraftSymbol[] = _T("AircraftSymbol");
+
+const TCHAR szProfileFlarmLocation[] = _T("FlarmLocation");

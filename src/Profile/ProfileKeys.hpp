@@ -223,4 +223,6 @@ extern const TCHAR szProfileReachPolarMode[];
 
 extern const TCHAR szProfileAircraftSymbol[];
 
+extern const TCHAR szProfileFlarmLocation[];
+
 #endif

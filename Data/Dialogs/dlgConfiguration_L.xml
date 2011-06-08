@@ -769,6 +769,11 @@
         <DataField DataType="enum" />
       </Edit>
 
+      <Edit Name="prpAppFlarmLocation" Caption="Flarm location" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="Choose a location for the flarm">
+        <DataField DataType="enum"/>
+      </Edit>
+
       <Edit Name="prpTabDialogStyle" Caption="Tab dialog style"  X="2" Width="-2" Height="22" CaptionWidth="100"
       Help="Determines whether tabbed dialogs use text or icons">
         <DataField DataType="enum"/>

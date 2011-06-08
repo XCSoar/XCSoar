@@ -46,6 +46,8 @@ Copyright_License {
 #include "Appearance.hpp"
 #include "UtilsSystem.hpp"
 #include "Look/Look.hpp"
+#include "Profile/ProfileKeys.hpp"
+#include "Profile/Profile.hpp"
 
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
@@ -159,13 +161,14 @@ MainWindow::InitialiseConfigured()
   hidden_border.border();
 
   flarm = new GaugeFLARM(*this,
-                         rc.right - ib_layout.control_width * 2 + 1,
-                         rc.bottom - ib_layout.control_height * 2 + 1,
+                         0, // assume top left, moved in layout
+                         0,
                          ib_layout.control_width * 2 - 1,
                          ib_layout.control_height * 2 - 1,
                          look->flarm_gauge,
                          hidden_border);
   flarm->bring_to_top();
+  ReinitialiseLayout_flarm(rc, ib_layout);
 
   unsigned sz = std::min(ib_layout.control_height,
                          ib_layout.control_width) * 2;
@@ -264,11 +267,7 @@ MainWindow::ReinitialiseLayout()
 
   ReinitialiseLayout_vario();
 
-  if (flarm != NULL)
-    flarm->move(rc.right - ib_layout.control_width * 2 + 1,
-                rc.bottom - ib_layout.control_height * 2 + 1,
-                ib_layout.control_width * 2 - 1,
-                ib_layout.control_height * 2 - 1);
+  ReinitialiseLayout_flarm(rc, ib_layout);
 
   if (ta != NULL) {
     unsigned sz = std::min(ib_layout.control_height,
@@ -291,6 +290,84 @@ MainWindow::ReinitialiseLayout()
 
   if (map != NULL)
     map->BringToBottom();
+}
+
+void 
+MainWindow::ReinitialiseLayout_flarm(PixelRect rc, const InfoBoxLayout::Layout ib_layout)
+{
+  if (flarm != NULL) {
+    unsigned val = 0;
+    if (!Profile::Get(szProfileFlarmLocation, val)) val = flAuto;
+
+    // Automatic mode - follow info boxes
+    if (val == flAuto) {
+      switch (InfoBoxLayout::InfoBoxGeometry) {
+        case InfoBoxLayout::ibTop8:
+          val = flTopRight;
+          break;
+        case InfoBoxLayout::ibLeft8:
+          val = flBottomLeft;
+          break;
+        case InfoBoxLayout::ibTop12:
+          val = flTopLeft;
+          break;
+        default:
+          val = flBottomRight;    // Assume bottom right unles...
+          break;
+      }
+    }
+
+    switch (val) {
+      case flTopLeft:
+        flarm->move(
+          rc.left + 1, 
+          rc.top + 1,
+          ib_layout.control_width * 2 - 1,
+          ib_layout.control_height * 2 - 1
+        );
+        break;
+      case flTopRight:
+        flarm->move(
+          rc.right - ib_layout.control_width * 2 + 1, 
+          rc.top + 1,
+          ib_layout.control_width * 2 - 1,
+          ib_layout.control_height * 2 - 1
+        );
+        break;
+      case flBottomLeft:
+        flarm->move(
+          rc.left + 1, 
+          rc.bottom - ib_layout.control_height * 2 + 1,
+          ib_layout.control_width * 2 - 1,
+          ib_layout.control_height * 2 - 1
+        );
+        break;
+      case flCentreTop:
+        flarm->move(
+          rc.left + ((rc.right - rc.left) / 2) - ib_layout.control_width, 
+          1,
+          ib_layout.control_width * 2 - 1,
+          ib_layout.control_height * 2 - 1
+        );
+        break;
+      case flCentreBottom:
+        flarm->move(
+          rc.left + ((rc.right - rc.left) / 2) - ib_layout.control_width, 
+          rc.bottom - ib_layout.control_height * 2 + 1,
+          ib_layout.control_width * 2 - 1,
+          ib_layout.control_height * 2 - 1
+        );
+        break;
+      default:    // aka flBottomRight
+        flarm->move(
+          rc.right - ib_layout.control_width * 2 + 1, 
+          rc.bottom - ib_layout.control_height * 2 + 1,
+          ib_layout.control_width * 2 - 1,
+          ib_layout.control_height * 2 - 1
+        );
+        break;
+    }
+  }
 }
 
 void

@@ -88,6 +88,16 @@ enum DisplayTrackBearing_t {
   dtbAuto
 };
 
+/** Location of Flarm radar */
+enum FlarmLocation {
+  flAuto,
+  flTopLeft,
+  flTopRight,
+  flBottomLeft,
+  flBottomRight,
+  flCentreTop,
+  flCentreBottom,
+};
 
 // user interface options
 
