@@ -600,7 +600,7 @@
       </Panel>
   
       <Edit Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" Expert="1" X="62" Width="173" Height="22" CaptionWidth="80"
-        Help="option, if enabled sets the clock of the computer to the GPS time once a fix is set.  This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
+        Help="If enabled sets the clock of the computer to the GPS time once a fix is set. This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
         <DataField DataType="boolean"/>
       </Edit>
 
@@ -702,7 +702,7 @@
       </Edit>
     
       <Edit Name="prpLanguageFile" Caption="Language" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="The language file defines translations for XCSoar text in English to other languages.  If this field is left blank, then XCSoar uses English.">
+        Help="The language options selects translations for English texts to other languages. Select English for a native interface or Automatic to localise XCSoar according to the system settings.">
         <DataField DataType="enum"/>
       </Edit>
     
