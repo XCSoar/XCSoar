@@ -47,6 +47,7 @@
  */
 template<typename T, unsigned size>
 class SliceAllocator {
+public:
   typedef std::size_t size_type;
   typedef T value_type;
   typedef T *pointer;
@@ -59,6 +60,7 @@ class SliceAllocator {
     typedef SliceAllocator<O, size> other;
   };
 
+private:
   /**
    * One allocated item in the heap.  When it is on the "available"
    * list, the "next" attribute points to the next available slot.
