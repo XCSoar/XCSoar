@@ -671,13 +671,10 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
   wp->SetText(selected_waypoint->Comment.c_str());
 
-  Units::LongitudeToString(selected_waypoint->Location.Longitude, sTmp, sizeof(sTmp)-1);
-  ((WndProperty *)wf->FindByName(_T("prpLongitude")))
-    ->SetText(sTmp);
-
-  Units::LatitudeToString(selected_waypoint->Location.Latitude, sTmp, sizeof(sTmp)-1);
-  ((WndProperty *)wf->FindByName(_T("prpLatitude")))
-    ->SetText(sTmp);
+  TCHAR *location = Units::FormatGeoPoint(selected_waypoint->Location,
+                                          sTmp, 128);
+  if (location != NULL)
+    ((WndProperty *)wf->FindByName(_T("Location")))->SetText(location);
 
   Units::FormatUserAltitude(selected_waypoint->Altitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))
@@ -701,10 +698,11 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
     TCHAR DistanceText[MAX_PATH];
     Units::FormatUserDistance(gv.Distance, DistanceText, 10);
-    ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(DistanceText);
 
-    _stprintf(sTmp, _T("%d")_T(DEG), iround(gv.Bearing.value_degrees()));
-    ((WndProperty *)wf->FindByName(_T("prpBearing")))->SetText(sTmp);
+    _sntprintf(sTmp, 128, _T("%d")_T(DEG)_T(" %s"),
+               iround(gv.Bearing.value_degrees()),
+               DistanceText);
+    ((WndProperty *)wf->FindByName(_T("BearingDistance")))->SetText(sTmp);
   }
 
   if (protected_task_manager != NULL) {

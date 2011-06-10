@@ -10,12 +10,10 @@
 
   <Panel Name="frmInfos" X="0" Y="0" Height="-39">
     <Edit Name="prpWpComment" Caption="Comment" X="2" Y="2" Height="40" CaptionWidth="100" ReadOnly="1" MultiLine="1" />
-    <Edit Name="prpLatitude" Caption="Latitude" X="2" Height="22" CaptionWidth="100" ReadOnly="1" />
-    <Edit Name="prpLongitude" Caption="Longitude" X="2" Height="22" CaptionWidth="100" ReadOnly="1" />
+    <Edit Name="Location" Caption="Location" X="2" Height="22" CaptionWidth="100" ReadOnly="1" />
     <Edit Name="prpAltitude" Caption="Elevation" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
     <Edit Name="prpSunset" Caption="Sunset" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpDistance" Caption="Distance" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
-    <Edit Name="prpBearing" Caption="Bearing" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
+    <Edit Name="BearingDistance" Caption="Bearing and Distance" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
     <Edit Name="prpMc0" Caption="Alt. diff. MC 0" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
     <Edit Name="prpMc1" Caption="Alt. diff. MC safety" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
     <Edit Name="prpMc2" Caption="Alt. diff. MC current" X="2" Height="22" CaptionWidth="150" ReadOnly="1" />
