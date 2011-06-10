@@ -513,6 +513,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
 	$(SRC)/WayPoint/WaypointWriter.cpp \
 	$(SRC)/Operation.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
@@ -942,6 +943,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/Operation.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/RunWayPointParser.cpp
 RUN_WAY_POINT_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_WAY_POINT_PARSER_SOURCES))
@@ -1321,6 +1323,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Operation.cpp \
+	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \

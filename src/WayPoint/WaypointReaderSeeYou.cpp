@@ -114,7 +114,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   // and description (e.g. "Some Description")
   if (new_waypoint.IsLandable()) {
     if (iFrequency < n_params)
-      appendStringWithSeperator(new_waypoint.Comment, params[iFrequency]);
+      new_waypoint.radio_frequency = RadioFrequency::Parse(params[iFrequency]);
 
     // Runway length (e.g. 546.0m)
     fixed rwlen = fixed_minus_one;

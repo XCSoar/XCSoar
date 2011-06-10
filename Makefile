@@ -200,6 +200,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Task/TaskStore.cpp \
 	\
+	$(SRC)/RadioFrequency.cpp \
+	\
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/TraceHistoryRenderer.cpp \
 	$(SRC)/ThermalBandRenderer.cpp \

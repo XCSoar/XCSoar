@@ -10,6 +10,7 @@
 
   <Panel Name="frmInfos" X="76" Y="0">
     <Edit Name="prpWpComment" Caption="Comment" X="2" Y="2" Height="40" CaptionWidth="88" ReadOnly="1" MultiLine="1" />
+    <Edit Name="Radio" Caption="Radio frequency" X="2" Height="20" CaptionWidth="88" ReadOnly="1" />
     <Edit Name="Location" Caption="Location" X="2" Height="20" CaptionWidth="88" ReadOnly="1" />
     <Edit Name="prpAltitude" Caption="Elevation" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
     <Edit Name="prpSunset" Caption="Sunset" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />

@@ -671,6 +671,12 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
   wp->SetText(selected_waypoint->Comment.c_str());
 
+  TCHAR *radio_frequency;
+  if (selected_waypoint->radio_frequency.IsDefined() &&
+      (radio_frequency =
+       selected_waypoint->radio_frequency.Format(sTmp, 128)) != NULL)
+    ((WndProperty *)wf->FindByName(_T("Radio")))->SetText(radio_frequency);
+
   TCHAR *location = Units::FormatGeoPoint(selected_waypoint->Location,
                                           sTmp, 128);
   if (location != NULL)

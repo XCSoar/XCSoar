@@ -1,4 +1,5 @@
-/* Copyright_License {
+/*
+Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
   Copyright (C) 2000-2011 The XCSoar Project
@@ -18,30 +19,37 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
 
-#include "Waypoint.hpp"
+#include "RadioFrequency.hpp"
 
-void
-Waypoint::Flags::SetDefaultFlags(bool turnpoint)
+#include <stdio.h>
+#include <stdlib.h>
+
+TCHAR *
+RadioFrequency::Format(TCHAR *buffer, size_t max_size) const
 {
-  TurnPoint = turnpoint;
-  Home = false;
-  StartPoint = false;
-  FinishPoint = false;
-  Watched = false;
+  if (!IsDefined())
+    return NULL;
+
+  unsigned khz = GetKiloHertz();
+  unsigned mhz = khz / 1000;
+  khz %= 1000;
+
+  _sntprintf(buffer, max_size, _T("%u.%03u"), mhz, khz);
+  return buffer;
 }
 
-Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
-  Location(_location), RunwayDirection(Angle::degrees(fixed_minus_one)),
-  RunwayLength(0), Type(wtNormal)
+RadioFrequency
+RadioFrequency::Parse(const TCHAR *p)
 {
-  Flags.SetDefaultFlags(is_turnpoint);
-  radio_frequency.Clear();
-}
+  TCHAR *endptr;
+  double mhz = _tcstod(p, &endptr);
 
-bool
-Waypoint::IsCloseTo(const GeoPoint &location, const fixed range) const
-{
-  return Location.distance(location) <= range;
+  RadioFrequency frequency;
+  if (mhz < 100 || *endptr != _T('\0'))
+    frequency.Clear();
+  else
+    frequency.SetKiloHertz((unsigned)(mhz * 1000));
+  return frequency;
 }

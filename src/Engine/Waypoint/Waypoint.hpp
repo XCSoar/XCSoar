@@ -25,6 +25,7 @@
 
 #include "Util/tstring.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "RadioFrequency.hpp"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -105,6 +106,9 @@ public:
   Angle RunwayDirection;
   /** Main runway length in m (0 for unknown) */
   int RunwayLength;
+
+  RadioFrequency radio_frequency;
+
   /** Type of the waypoint */
   enum Type Type;
   /** Flag types of this waypoint */
