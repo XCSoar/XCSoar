@@ -28,7 +28,9 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 #include <tchar.h>
+
 class Angle;
+struct GeoPoint;
 
 /**
  * Namespace to manage unit display.
@@ -50,6 +52,11 @@ namespace Units
    * @param size Size of the Buffer
    */
   bool LatitudeToString(Angle Latitude, TCHAR *Buffer, size_t size);
+
+  /**
+   * Convert a GeoPoint into a formatted string.
+   */
+  TCHAR *FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size);
 
   /**
    * Converts a double-based Altitude into a formatted string

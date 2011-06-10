@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Units/UnitsFormatter.hpp"
 #include "Math/Angle.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 #include "DateTime.hpp"
 #include "Util/StringUtil.hpp"
 
@@ -162,6 +163,24 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
   }
 
   return true;
+}
+
+TCHAR *
+Units::FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
+{
+  if (!LatitudeToString(location.Latitude, buffer, size))
+    return NULL;
+
+  TCHAR *end = buffer + size, *p = buffer + _tcslen(buffer);
+  if (p >= end)
+    return NULL;
+
+  *p++ = _T(' ');
+
+  if (!LongitudeToString(location.Longitude, p, end - p))
+    return NULL;
+
+  return buffer;
 }
 
 bool
