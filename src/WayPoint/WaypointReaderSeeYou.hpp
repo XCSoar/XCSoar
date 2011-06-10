@@ -49,8 +49,6 @@ protected:
                  Waypoints &way_points);
 
 private:
-  static void appendStringWithSeperator(tstring &dest, const TCHAR *src,
-                                        const TCHAR seperator=' ');
   static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   static bool parseAltitude(const TCHAR* src, fixed& dest);
   static bool parseDistance(const TCHAR* src, fixed& dest);

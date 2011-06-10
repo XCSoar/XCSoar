@@ -135,28 +135,10 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   }
 
   if (iDescription < n_params)
-    appendStringWithSeperator(new_waypoint.Comment, params[iDescription]);
+    new_waypoint.Comment = params[iDescription];
 
   way_points.append(new_waypoint);
   return true;
-}
-
-/**
-  * Append string to another inserting seperator character if dest is not empty
-  * @param dest result string
-  * @param src the string to append
-  * @param seperator character (default: ' ')
-  */
-void
-WaypointReaderSeeYou::appendStringWithSeperator(tstring &dest,
-                                              const TCHAR* src,
-                                              const TCHAR seperator)
-{
-  if (*src == _T('\0'))
-    return;
-  if (dest.length() > 0)
-    dest += seperator;
-  dest += src;
 }
 
 bool
