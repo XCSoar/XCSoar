@@ -123,8 +123,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
       new_waypoint.RunwayLength = rwlen;
 
     if (iRWDir < n_params && *params[iRWDir]) {
-      appendStringWithSeperator(new_waypoint.Comment, params[iRWDir]);
-      new_waypoint.Comment += _T("°");
       TCHAR *end;
       int direction =_tcstol(params[iRWDir], &end, 10);
       if (end == params[iRWDir] || direction < 0 || direction > 360 ||
@@ -134,9 +132,6 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
         direction = 0;
       new_waypoint.RunwayDirection = Angle::degrees(fixed(direction));
     }
-
-    if (positive(rwlen))
-      appendStringWithSeperator(new_waypoint.Comment, params[iRWLen]);
   }
 
   if (iDescription < n_params)

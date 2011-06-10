@@ -677,6 +677,18 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
        selected_waypoint->radio_frequency.Format(sTmp, 128)) != NULL)
     ((WndProperty *)wf->FindByName(_T("Radio")))->SetText(radio_frequency);
 
+  if (!negative(selected_waypoint->RunwayDirection.value_native())) {
+    _stprintf(sTmp, _T("%02u"),
+              iround(selected_waypoint->RunwayDirection.value_degrees() / 10));
+    if (selected_waypoint->RunwayLength > 0) {
+      _tcscat(sTmp, _T("; "));
+      Units::FormatUserDistance(fixed(selected_waypoint->RunwayLength),
+                                sTmp + _tcslen(sTmp), 128 - _tcslen(sTmp));
+    }
+
+    ((WndProperty *)wf->FindByName(_T("Runway")))->SetText(sTmp);
+  }
+
   TCHAR *location = Units::FormatGeoPoint(selected_waypoint->Location,
                                           sTmp, 128);
   if (location != NULL)
