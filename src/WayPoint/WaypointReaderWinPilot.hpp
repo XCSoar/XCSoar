@@ -29,6 +29,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 class Angle;
+class Runway;
 
 /** 
  * Waypoint file read/writer for WinPilot format
@@ -49,7 +50,7 @@ private:
   static bool parseAngle(const TCHAR* src, Angle& dest, const bool lat);
   static bool parseAltitude(const TCHAR* src, fixed& dest);
   static bool parseFlags(const TCHAR* src, Waypoint &dest);
-  static bool parseRunwayDirection(const TCHAR* src, Angle& dest);
+  static bool parseRunwayDirection(const TCHAR* src, Runway &runway);
 };
 
 #endif

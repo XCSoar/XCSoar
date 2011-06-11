@@ -92,7 +92,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
     // Description (e.g. 119.750 Airport)
     new_waypoint.Comment=params[6];
     if (welt2000_format)
-      parseRunwayDirection(params[6], new_waypoint.RunwayDirection);
+      parseRunwayDirection(params[6], new_waypoint.runway);
   }
 
   // Waypoint Flags (e.g. AT)
@@ -158,11 +158,10 @@ WaypointReaderWinPilot::parseAngle(const TCHAR* src, Angle& dest, const bool lat
 }
 
 bool
-WaypointReaderWinPilot::parseRunwayDirection(const TCHAR* src, Angle& dest)
+WaypointReaderWinPilot::parseRunwayDirection(const TCHAR* src, Runway &dest)
 {
   // WELT2000 written files contain a 4-digit runway direction specification
   // at the end of the comment, e.g. "123.50 0927"
-  dest = Angle::degrees(fixed_minus_one);
 
   TCHAR const *start = _tcsrchr(src, _T(' '));
   if (start)
@@ -191,7 +190,7 @@ WaypointReaderWinPilot::parseRunwayDirection(const TCHAR* src, Angle& dest)
   if (a1 != a2 && (a1 + 180) % 360 != a2)
     return false;
 
-  dest = Angle::degrees(fixed(a1));
+  dest.SetDirectionDegrees(a1);
   return true;
 }
 

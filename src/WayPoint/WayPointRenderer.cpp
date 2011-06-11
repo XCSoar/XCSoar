@@ -550,15 +550,16 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
   DrawLandableBase(canvas, pt, way_point.IsAirport(), radius);
 
   // Render runway indication
-  if (way_point.RunwayDirection.value_degrees() >= fixed_zero) {
+  const Runway &runway = way_point.runway;
+  if (runway.IsDirectionDefined()) {
     fixed len;
-    if (Appearance.ScaleRunwayLength && way_point.RunwayLength > 0)
+    if (Appearance.ScaleRunwayLength && runway.IsLengthDefined())
       len = (radius / fixed_two) +
-            ((way_point.RunwayLength - 500) / 500) * (radius / fixed_four);
+        ((runway.GetLength() - 500) / 500) * (radius / fixed_four);
     else
       len = radius;
     len += fixed_two * scale;
-    Angle runwayDrawingAngle = way_point.RunwayDirection - screenRotation;
+    Angle runwayDrawingAngle = runway.GetDirection() - screenRotation;
     canvas.select(Graphics::hbWhite);
     DrawLandableRunway(canvas, pt, runwayDrawingAngle, len,
                        fixed_int_constant(5) * scale);

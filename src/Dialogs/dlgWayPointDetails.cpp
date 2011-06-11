@@ -677,12 +677,12 @@ dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
        selected_waypoint->radio_frequency.Format(sTmp, 128)) != NULL)
     ((WndProperty *)wf->FindByName(_T("Radio")))->SetText(radio_frequency);
 
-  if (!negative(selected_waypoint->RunwayDirection.value_native())) {
-    _stprintf(sTmp, _T("%02u"),
-              iround(selected_waypoint->RunwayDirection.value_degrees() / 10));
-    if (selected_waypoint->RunwayLength > 0) {
+  const Runway &runway = selected_waypoint->runway;
+  if (runway.IsDirectionDefined()) {
+    _stprintf(sTmp, _T("%02u"), runway.GetDirectionName());
+    if (runway.IsLengthDefined()) {
       _tcscat(sTmp, _T("; "));
-      Units::FormatUserDistance(fixed(selected_waypoint->RunwayLength),
+      Units::FormatUserDistance(fixed(runway.GetLength()),
                                 sTmp + _tcslen(sTmp), 128 - _tcslen(sTmp));
     }
 

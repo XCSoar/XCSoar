@@ -26,6 +26,7 @@
 #include "Util/tstring.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "RadioFrequency.hpp"
+#include "Runway.hpp"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -102,10 +103,9 @@ public:
   GeoPoint Location;
   /** Height AMSL (m) of waypoint terrain */
   fixed Altitude;
-  /** Main runway direction in degrees (0-359, -1 unknown) */
-  Angle RunwayDirection;
-  /** Main runway length in m (0 for unknown) */
-  int RunwayLength;
+
+  /** Main runway */
+  Runway runway;
 
   RadioFrequency radio_frequency;
 

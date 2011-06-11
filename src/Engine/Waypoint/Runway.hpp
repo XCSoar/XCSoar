@@ -1,0 +1,97 @@
+/* Copyright_License {
+
+  XCSoar Glide Computer - http://www.xcsoar.org/
+  Copyright (C) 2000-2011 The XCSoar Project
+  A detailed list of copyright holders can be found in the file "AUTHORS".
+
+  This program is free software; you can redistribute it and/or
+  modify it under the terms of the GNU General Public License
+  as published by the Free Software Foundation; either version 2
+  of the License, or (at your option) any later version.
+
+  This program is distributed in the hope that it will be useful,
+  but WITHOUT ANY WARRANTY; without even the implied warranty of
+  MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+  GNU General Public License for more details.
+
+  You should have received a copy of the GNU General Public License
+  along with this program; if not, write to the Free Software
+  Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
+}
+ */
+
+#ifndef XCSOAR_RUNWAY_HPP
+#define XCSOAR_RUNWAY_HPP
+
+#include "Math/Angle.hpp"
+
+class Runway {
+  /** Main runway direction in degrees (0-359, -1 unknown) */
+  Angle direction;
+
+  /** Main runway length in m (0 for unknown) */
+  unsigned length;
+
+public:
+  /**
+   * No initialisation.
+   */
+  Runway() {}
+
+  bool IsDirectionDefined() const {
+    return !negative(direction.value_native());
+  }
+
+  bool IsLengthDefined() const {
+    return length > 0;
+  }
+
+  void Clear() {
+    direction = Angle::native(fixed_minus_one);
+    length = 0;
+  }
+
+  void SetDirection(Angle _direction) {
+    direction = _direction.as_bearing();
+  }
+
+  void SetDirectionDegrees(unsigned degrees) {
+    assert(degrees < 360);
+
+    direction = Angle::degrees(fixed(degrees));
+  }
+
+  gcc_pure
+  Angle GetDirection() const {
+    assert(IsDirectionDefined());
+
+    return direction;
+  }
+
+  gcc_pure
+  unsigned GetDirectionDegrees() const {
+    assert(IsDirectionDefined());
+
+    return iround(direction.value_degrees());
+  }
+
+  gcc_pure
+  unsigned GetDirectionName() const {
+    assert(IsDirectionDefined());
+
+    return iround(direction.value_degrees() / 10);
+  }
+
+  void SetLength(unsigned _length) {
+    length = _length;
+  }
+
+  gcc_pure
+  unsigned GetLength() const {
+    assert(IsLengthDefined());
+
+    return length;
+  }
+};
+
+#endif

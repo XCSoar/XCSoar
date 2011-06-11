@@ -228,7 +228,9 @@ TestWinPilotWayPoint(const Waypoint org_wp, const Waypoint *wp)
   ok1(wp->Flags.Home == org_wp.Flags.Home);
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
   ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
-  ok1(wp->RunwayDirection == org_wp.RunwayDirection);
+  ok1(wp->runway.IsDirectionDefined() == org_wp.runway.IsDirectionDefined() &&
+      (!wp->runway.IsDirectionDefined() ||
+       wp->runway.GetDirectionDegrees() == org_wp.runway.GetDirectionDegrees()));
 }
 
 static void
@@ -263,8 +265,12 @@ TestSeeYouWayPoint(const Waypoint org_wp, const Waypoint *wp)
   ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
   ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
   ok1(wp->Comment == org_wp.Comment);
-  ok1(wp->RunwayLength == org_wp.RunwayLength);
-  ok1(wp->RunwayDirection == org_wp.RunwayDirection);
+  ok1(wp->runway.IsDirectionDefined() == org_wp.runway.IsDirectionDefined() &&
+      (!wp->runway.IsDirectionDefined() ||
+       wp->runway.GetDirectionDegrees() == org_wp.runway.GetDirectionDegrees()));
+  ok1(wp->runway.IsLengthDefined() == org_wp.runway.IsLengthDefined() &&
+      (!wp->runway.IsLengthDefined() ||
+       wp->runway.GetLength() == org_wp.runway.GetLength()));
 }
 
 static void
@@ -389,8 +395,8 @@ CreateOriginalWaypoints()
   wp.Altitude = fixed(488);
   wp.Name = _T("Bergneustadt");
   wp.Comment = _T("Rabbit holes, 20\" ditch south end of rwy");
-  wp.RunwayDirection = Angle::degrees(fixed(40));
-  wp.RunwayLength = 590;
+  wp.runway.SetDirection(Angle::degrees(fixed(40)));
+  wp.runway.SetLength(590);
 
   wp.Type = Waypoint::wtAirfield;
   wp.Flags.TurnPoint = true;
@@ -407,8 +413,6 @@ CreateOriginalWaypoints()
   wp2.Altitude = fixed(6962);
   wp2.Name = _T("Aconcagua");
   wp2.Comment = _T("Highest mountain in south-america");
-  wp2.RunwayDirection = Angle::degrees(fixed(-1));
-  wp2.RunwayLength = 0;
 
   wp2.Type = Waypoint::wtMountainTop;
   wp2.Flags.TurnPoint = true;
@@ -425,8 +429,6 @@ CreateOriginalWaypoints()
   wp3.Altitude = fixed(227);
   wp3.Name = _T("Golden Gate Bridge");
   wp3.Comment = _T("");
-  wp3.RunwayDirection = Angle::degrees(fixed(-1));
-  wp3.RunwayLength = 0;
 
   wp3.Type = Waypoint::wtBridge;
   wp3.Flags.TurnPoint = true;
@@ -442,8 +444,8 @@ CreateOriginalWaypoints()
   Waypoint wp4(loc);
   wp4.Altitude = fixed(123);
   wp4.Name = _T("Red Square");
-  wp4.RunwayDirection = Angle::degrees(fixed(90));
-  wp4.RunwayLength = Units::ToSysUnit(fixed(0.01), unStatuteMiles);
+  wp4.runway.SetDirection(Angle::degrees(fixed(90)));
+  wp4.runway.SetLength(Units::ToSysUnit(fixed(0.01), unStatuteMiles));
 
   wp4.Type = Waypoint::wtOutlanding;
   wp4.Flags.TurnPoint = true;
@@ -460,8 +462,6 @@ CreateOriginalWaypoints()
   wp5.Altitude = fixed(5);
   wp5.Name = _T("Sydney Opera");
   wp5.Comment = _T("");
-  wp5.RunwayDirection = Angle::degrees(fixed(-1));
-  wp5.RunwayLength = 0;
 
   wp5.Type = Waypoint::wtNormal;
   wp5.Flags.TurnPoint = true;

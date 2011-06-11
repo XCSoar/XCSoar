@@ -33,10 +33,11 @@ Waypoint::Flags::SetDefaultFlags(bool turnpoint)
 }
 
 Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
-  Location(_location), RunwayDirection(Angle::degrees(fixed_minus_one)),
-  RunwayLength(0), Type(wtNormal)
+  Location(_location),
+  Type(wtNormal)
 {
   Flags.SetDefaultFlags(is_turnpoint);
+  runway.Clear();
   radio_frequency.Clear();
 }
 

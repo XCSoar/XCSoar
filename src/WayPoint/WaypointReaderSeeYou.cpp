@@ -120,7 +120,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     fixed rwlen = fixed_minus_one;
     if (iRWLen < n_params && parseDistance(params[iRWLen], rwlen) &&
         positive(rwlen))
-      new_waypoint.RunwayLength = rwlen;
+      new_waypoint.runway.SetLength(rwlen);
 
     if (iRWDir < n_params && *params[iRWDir]) {
       TCHAR *end;
@@ -130,7 +130,8 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
         direction = -1;
       else if (direction == 360)
         direction = 0;
-      new_waypoint.RunwayDirection = Angle::degrees(fixed(direction));
+      if (direction >= 0)
+        new_waypoint.runway.SetDirectionDegrees(direction);
     }
   }
 
