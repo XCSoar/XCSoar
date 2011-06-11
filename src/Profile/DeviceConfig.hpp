@@ -49,6 +49,11 @@ struct DeviceConfig {
     RFCOMM,
 
     /**
+     * Android IOIO UArt device
+     */
+    IOIOUART,
+
+    /**
      * Attempt to auto-discover the GPS source.
      *
      * On Windows CE, this opens the GPS Intermediate Driver Multiplexer.
@@ -94,6 +99,11 @@ struct DeviceConfig {
   StaticString<32> bluetooth_mac;
 
   /**
+   * The IOIO UART ID.
+   */
+  unsigned ioio_uart_id;
+
+  /**
    * Name of the driver.
    */
   StaticString<32> driver_name;
@@ -102,7 +112,7 @@ struct DeviceConfig {
    * Does this port type use a baud rate?
    */
   static bool UsesSpeed(enum port_type port_type) {
-    return port_type == SERIAL || port_type == AUTO;
+    return port_type == SERIAL || port_type == AUTO || port_type == IOIOUART;
   }
 
   bool UsesSpeed() const {
@@ -114,7 +124,7 @@ struct DeviceConfig {
    */
   static bool UsesDriver(enum port_type port_type) {
     return port_type == SERIAL || port_type == RFCOMM || port_type == AUTO ||
-      port_type == TCP_LISTENER;
+      port_type == TCP_LISTENER || port_type == IOIOUART;
   }
 
   bool UsesDriver() const {

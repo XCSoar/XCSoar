@@ -182,6 +182,19 @@ is_android()
 }
 
 /**
+ * Returns whether the application is compiled with IOIOLib
+ */
+static inline bool
+is_ioiolib()
+{
+#if defined(IOIOLIB)
+  return true;
+#else
+  return false;
+#endif
+}
+
+/**
  * Does this device have a pointer device? (mouse or touch screen)
  * @return True if a touch screen or mouse is assumed for the hardware
  * that XCSoar is running on, False if the hardware has only buttons

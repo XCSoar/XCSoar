@@ -20,3 +20,9 @@ DRAW_LOAD ?= n
 ifeq ($(DRAW_LOAD),y)
 TARGET_CPPFLAGS += -DDRAWLOAD
 endif
+
+ifeq ($(TARGET),ANDROID)
+ifneq ($(IOIOLIB_DIR),)
+TARGET_CPPFLAGS += -DIOIOLIB
+endif
+endif

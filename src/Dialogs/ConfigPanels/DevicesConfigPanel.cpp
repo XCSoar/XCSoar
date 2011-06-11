@@ -46,6 +46,9 @@ Copyright_License {
 
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
+#ifdef IOIOLIB
+#include "Device/AndroidIOIOUartPort.hpp"
+#endif
 #endif
 
 static WndForm* wf = NULL;
@@ -70,9 +73,12 @@ static const struct {
   { DeviceConfig::SERIAL, NULL } /* sentinel */
 };
 
+/** the number of fixed port types (excludes Serial, Bluetooth and IOIOUart) */
 static const unsigned num_port_types =
   sizeof(port_types) / sizeof(port_types[0]) - 1;
 
+/** number of bluetooth devices shown in the port list */
+static unsigned num_bluetooth_types = 0;
 
 static DeviceConfig device_config[NUMDEV];
 
@@ -135,11 +141,19 @@ UpdateDeviceControlVisibility(WndProperty &port_field,
                               WndProperty &driver_field)
 {
   unsigned port = port_field.GetDataField()->GetAsInteger();
-  enum DeviceConfig::port_type type = port < num_port_types
-    ? port_types[port].type
-    : (is_android()
-       ? DeviceConfig::RFCOMM
-       : DeviceConfig::SERIAL);
+
+  enum DeviceConfig::port_type type = DeviceConfig::DISABLED;
+
+  if (port < num_port_types)
+    type = port_types[port].type;
+  else if (is_android()) {
+    if (port - num_port_types >= num_bluetooth_types)
+      type = DeviceConfig::IOIOUART;
+    else
+      type = DeviceConfig::RFCOMM;
+  } else {
+    type = DeviceConfig::SERIAL;
+  }
 
   speed_field.set_visible(DeviceConfig::UsesSpeed(type));
   bulk_baud_rate_field.set_visible(DeviceConfig::UsesSpeed(type) &&
@@ -402,8 +416,6 @@ FillPorts(DataFieldEnum &dfe)
 #endif
 }
 
-#ifndef ANDROID
-
 static void
 FillBaudRates(DataFieldEnum &dfe)
 {
@@ -416,8 +428,6 @@ FillBaudRates(DataFieldEnum &dfe)
   dfe.addEnumText(_T("57600"), 57600);
   dfe.addEnumText(_T("115200"), 115200);
 }
-
-#endif
 
 static void
 SetupDeviceFields(const DeviceConfig &config,
@@ -440,6 +450,7 @@ SetupDeviceFields(const DeviceConfig &config,
 #ifdef ANDROID
     JNIEnv *env = Java::GetEnv();
     jobjectArray bonded = BluetoothHelper::list(env);
+    num_bluetooth_types = 0u;
     if (bonded != NULL) {
       jsize n = env->GetArrayLength(bonded) / 2;
       for (jsize i = 0; i < n; ++i) {
@@ -457,6 +468,8 @@ SetupDeviceFields(const DeviceConfig &config,
           : NULL;
 
         dfe->addEnumText(address2, name2);
+        num_bluetooth_types++;
+
         env->ReleaseStringUTFChars(address, address2);
         if (name2 != NULL)
           env->ReleaseStringUTFChars(name, name2);
@@ -466,11 +479,29 @@ SetupDeviceFields(const DeviceConfig &config,
 
       if (config.port_type == DeviceConfig::RFCOMM &&
           !config.bluetooth_mac.empty()) {
-        if (!dfe->Exists(config.bluetooth_mac))
+        if (!dfe->Exists(config.bluetooth_mac)) {
           dfe->addEnumText(config.bluetooth_mac);
+          num_bluetooth_types++;
+        }
         dfe->SetAsString(config.bluetooth_mac);
       }
     }
+
+#ifdef IOIOLIB
+    TCHAR tempID[4];
+    TCHAR tempName[15];
+    for (unsigned i = 0; i < AndroidIOIOUartPort::getNumberUarts(); i++) {
+      _sntprintf(tempID, sizeof(tempID), _T("%d"), i);
+      _sntprintf(tempName, sizeof(tempName), _T("IOIO Uart %d"), i);
+      dfe->addEnumText(tempID, tempName);
+    }
+
+    if (config.port_type == DeviceConfig::IOIOUART &&
+        config.ioio_uart_id < AndroidIOIOUartPort::getNumberUarts()) {
+      _sntprintf(tempID,  sizeof(tempID), _T("%d"), config.ioio_uart_id);
+      dfe->SetAsString(tempID);
+    }
+#endif
 #else
     switch (config.port_type) {
     case DeviceConfig::SERIAL:
@@ -482,6 +513,7 @@ SetupDeviceFields(const DeviceConfig &config,
 
     case DeviceConfig::DISABLED:
     case DeviceConfig::RFCOMM:
+    case DeviceConfig::IOIOUART:
     case DeviceConfig::AUTO:
     case DeviceConfig::INTERNAL:
     case DeviceConfig::TCP_LISTENER:
@@ -493,14 +525,10 @@ SetupDeviceFields(const DeviceConfig &config,
   }
 
   if (speed_field != NULL) {
-#ifdef ANDROID
-    speed_field->hide();
-#else
     DataFieldEnum &dfe = *(DataFieldEnum *)speed_field->GetDataField();
     FillBaudRates(dfe);
     dfe.Set(config.baud_rate);
     speed_field->RefreshDisplay();
-#endif
   }
 
 #ifdef ANDROID
@@ -557,6 +585,11 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
     if (config.port_type == DeviceConfig::RFCOMM &&
         _tcscmp(config.bluetooth_mac, df.GetAsString()) == 0)
       return false;
+#ifdef IOIOLIB
+    if (config.port_type == DeviceConfig::IOIOUART &&
+        (int)config.ioio_uart_id == atoi(df.GetAsString()))
+      return false;
+#endif
 #else
     if (config.port_type == DeviceConfig::SERIAL &&
         _tcscmp(config.path, df.GetAsString()) == 0)
@@ -564,8 +597,13 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
 #endif
 
 #ifdef ANDROID
-    config.port_type = DeviceConfig::RFCOMM;
-    config.bluetooth_mac = df.GetAsString();
+    if (value >= num_bluetooth_types) {
+      config.port_type = DeviceConfig::IOIOUART;
+      config.ioio_uart_id = (unsigned)atoi(df.GetAsString());
+    } else {
+      config.port_type = DeviceConfig::RFCOMM;
+      config.bluetooth_mac = df.GetAsString();
+    }
 #else
     config.port_type = DeviceConfig::SERIAL;
     config.path = df.GetAsString();
@@ -586,7 +624,6 @@ FinishDeviceFields(DeviceConfig &config,
   if (port_field != NULL && FinishPortField(config, *port_field))
     changed = true;
 
-#ifndef ANDROID
   if (config.UsesSpeed() && speed_field != NULL &&
       (int)config.baud_rate != speed_field->GetDataField()->GetAsInteger()) {
     config.baud_rate = speed_field->GetDataField()->GetAsInteger();
@@ -598,7 +635,6 @@ FinishDeviceFields(DeviceConfig &config,
     config.bulk_baud_rate = (unsigned)bulk_baud_rate_field.GetDataField()->GetAsInteger();
     changed = true;
   }
-#endif
 
   if (config.UsesDriver() && driver_field != NULL &&
       !config.driver_name.equals(driver_field->GetDataField()->GetAsString())) {

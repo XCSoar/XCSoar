@@ -93,9 +93,15 @@ endif
 # SDK generate build.xml
 $(ANDROID_BUILD)/build.xml: $(MANIFEST) $(PNG_FILES) | $(TARGET_OUTPUT_DIR)/bin/dirstamp
 	@$(NQ)echo "  ANDROID $@"
-	$(Q)rm -f $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
-	$(Q)mkdir -p $(ANDROID_BUILD)/res
-	$(Q)ln -s ../../../$(MANIFEST) ../../../android/src ../bin $(@D)/
+	$(Q)rm -r -f $(@D)/AndroidManifest.xml $(@D)/src $(@D)/bin $(@D)/res/values
+	$(Q)mkdir -p $(ANDROID_BUILD)/res $(ANDROID_BUILD)/src
+	$(Q)ln -s ../../../$(MANIFEST) ../bin $(@D)/
+	$(Q)ln -s ../../../../android/src $(@D)/src/xcsoar
+ifneq ($(IOIOLIB_DIR),)
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/api) $(ANDROID_BUILD)/src/ioio_api
+	$(Q)ln -s $(abspath $(IOIOLIB_DIR)/src/ioio/lib/impl) $(ANDROID_BUILD)/src/ioio_impl
+	$(Q)ln -s ../../../../android/IOIOHelper $(@D)/src/ioio_xcsoar
+endif
 	$(Q)ln -s ../../../../android/res/values $(@D)/res/
 	$(Q)$(ANDROID_SDK)/tools/android update project --path $(@D) --target $(ANDROID_PLATFORM)
 ifeq ($(TESTING),y)

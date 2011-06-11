@@ -53,6 +53,9 @@ StringToPortType(const TCHAR *value)
   if (_tcscmp(value, _T("rfcomm")) == 0)
     return DeviceConfig::RFCOMM;
 
+  if (_tcscmp(value, _T("ioio_uart")) == 0)
+    return DeviceConfig::IOIOUART;
+
   if (_tcscmp(value, _T("auto")) == 0)
     return DeviceConfig::AUTO;
 
@@ -123,6 +126,9 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("BluetoothMAC"));
   Get(buffer, config.bluetooth_mac);
 
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("IOIOUartID"));
+  Get(buffer, config.ioio_uart_id);
+
   config.path.clear();
   if (config.port_type == DeviceConfig::SERIAL &&
       !LoadPath(config, n) && !LoadPortIndex(config, n)) {
@@ -190,6 +196,9 @@ PortTypeToString(enum DeviceConfig::port_type type)
   case DeviceConfig::RFCOMM:
     return _T("rfcomm");
 
+  case DeviceConfig::IOIOUART:
+    return _T("ioio_uart");
+
   case DeviceConfig::AUTO:
     return _T("auto");
 
@@ -225,6 +234,9 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("BluetoothMAC"));
   Set(buffer, config.bluetooth_mac);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("IOIOUartID"));
+  Set(buffer, config.ioio_uart_id);
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("Path"));
   Set(buffer, config.path);

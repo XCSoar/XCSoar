@@ -52,6 +52,9 @@ Copyright_License {
 #include "Java/Object.hpp"
 #include "Java/Global.hpp"
 #include "Device/AndroidBluetoothPort.hpp"
+#ifdef IOIOLIB
+#include "Device/AndroidIOIOUartPort.hpp"
+#endif
 #elif defined(HAVE_POSIX)
 #include "Device/TTYPort.hpp"
 #else
@@ -124,6 +127,31 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     return NULL;
 #endif
 
+  case DeviceConfig::IOIOUART:
+#if defined(ANDROID) && defined(IOIOLIB)
+    {
+      if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts()) {
+        LogStartUp(_T("No IOIOUart configured in profile"));
+        return NULL;
+      }
+
+      {
+        AndroidIOIOUartPort *port =
+          new AndroidIOIOUartPort(config.ioio_uart_id, config.baud_rate, handler);
+
+        if (!port->Open()) {
+          delete port;
+          return NULL;
+        }
+
+        return port;
+      }
+    }
+#else
+    LogStartUp(_T("IOIO Uart not available on this platform or version"));
+    return NULL;
+#endif
+
   case DeviceConfig::AUTO:
     if (!detect_gps(buffer, sizeof(buffer))) {
       LogStartUp(_T("no GPS detected"));
@@ -189,6 +217,11 @@ PortOpenError(const DeviceConfig &config)
   case DeviceConfig::RFCOMM:
     _sntprintf(name_buffer, 64, _T("Bluetooth %s"),
                config.bluetooth_mac.c_str());
+    break;
+
+  case DeviceConfig::IOIOUART:
+    _sntprintf(name_buffer, 64, _T("IOIO UArt %d"),
+               config.ioio_uart_id);
     break;
 
   case DeviceConfig::AUTO:
@@ -274,6 +307,9 @@ DeviceConfigAvailable(const DeviceConfig &config)
   case DeviceConfig::RFCOMM:
     return is_android();
 
+  case DeviceConfig::IOIOUART:
+    return is_android() && is_ioiolib();
+
   case DeviceConfig::AUTO:
     return is_windows_ce();
 
@@ -305,6 +341,10 @@ DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
   case DeviceConfig::RFCOMM:
     return b.port_type == DeviceConfig::RFCOMM &&
       a.bluetooth_mac.equals(b.bluetooth_mac);
+
+  case DeviceConfig::IOIOUART:
+    return (b.port_type == DeviceConfig::IOIOUART) &&
+      a.ioio_uart_id == b.ioio_uart_id;
 
   case DeviceConfig::DISABLED:
   case DeviceConfig::AUTO:

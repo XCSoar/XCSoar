@@ -4,6 +4,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.2 - not yet released
 * devices
+  - Android IOIO
   - added task declaration support for the IMI ERIXX logger
   - improved support for the Digifly Leonardo
   - auto-detect serial ports on Windows CE

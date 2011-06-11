@@ -568,6 +568,12 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/BluetoothHelper.cpp \
 	$(SRC)/Android/Battery.cpp \
 	$(SRC)/Android/Main.cpp
+ifneq ($(IOIOLIB_DIR),)
+XCSOAR_SOURCES += \
+	$(SRC)/Device/AndroidIOIOUartPort.cpp \
+	$(SRC)/Android/IOIOHelper.cpp
+endif
+
 else
 XCSOAR_SOURCES += \
 	$(SRC)/Hardware/Battery.cpp \
