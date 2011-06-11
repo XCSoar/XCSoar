@@ -388,7 +388,7 @@ CreateOriginalWaypoints()
   Waypoint wp(loc);
   wp.Altitude = fixed(488);
   wp.Name = _T("Bergneustadt");
-  wp.Comment = _T("123.650 040° 590m Rabbit holes, 20\" ditch south end of rwy");
+  wp.Comment = _T("Rabbit holes, 20\" ditch south end of rwy");
   wp.RunwayDirection = Angle::degrees(fixed(40));
   wp.RunwayLength = 590;
 
@@ -442,7 +442,6 @@ CreateOriginalWaypoints()
   Waypoint wp4(loc);
   wp4.Altitude = fixed(123);
   wp4.Name = _T("Red Square");
-  wp4.Comment = _T("90° 0.01ml");
   wp4.RunwayDirection = Angle::degrees(fixed(90));
   wp4.RunwayLength = Units::ToSysUnit(fixed(0.01), unStatuteMiles);
 
