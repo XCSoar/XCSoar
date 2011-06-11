@@ -114,7 +114,8 @@ public:
   /** Flag types of this waypoint */
   struct Flags Flags;
   /** File number to store waypoint in (0,1), -1 to delete/ignore */
-  int FileNum;
+  int8_t FileNum;
+
   /** Name of waypoint */
   tstring Name;
   /** Additional comment text for waypoint */
