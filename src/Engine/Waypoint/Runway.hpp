@@ -25,12 +25,14 @@
 
 #include "Math/Angle.hpp"
 
+#include <stdint.h>
+
 class Runway {
   /** Main runway direction in degrees (0-359, -1 unknown) */
-  Angle direction;
+  int16_t direction;
 
   /** Main runway length in m (0 for unknown) */
-  unsigned length;
+  uint16_t length;
 
 public:
   /**
@@ -39,7 +41,7 @@ public:
   Runway() {}
 
   bool IsDirectionDefined() const {
-    return !negative(direction.value_native());
+    return direction >= 0;
   }
 
   bool IsLengthDefined() const {
@@ -47,39 +49,39 @@ public:
   }
 
   void Clear() {
-    direction = Angle::native(fixed_minus_one);
+    direction = -1;
     length = 0;
   }
 
   void SetDirection(Angle _direction) {
-    direction = _direction.as_bearing();
+    direction = iround(_direction.as_bearing().value_degrees());
   }
 
   void SetDirectionDegrees(unsigned degrees) {
     assert(degrees < 360);
 
-    direction = Angle::degrees(fixed(degrees));
+    direction = degrees;
   }
 
   gcc_pure
   Angle GetDirection() const {
     assert(IsDirectionDefined());
 
-    return direction;
+    return Angle::degrees(fixed(direction));
   }
 
   gcc_pure
   unsigned GetDirectionDegrees() const {
     assert(IsDirectionDefined());
 
-    return iround(direction.value_degrees());
+    return direction;
   }
 
   gcc_pure
   unsigned GetDirectionName() const {
     assert(IsDirectionDefined());
 
-    return iround(direction.value_degrees() / 10);
+    return (direction + 5) / 10;
   }
 
   void SetLength(unsigned _length) {
