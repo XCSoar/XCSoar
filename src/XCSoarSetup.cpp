@@ -81,7 +81,7 @@ extern "C" {
 #endif
 
 /**
- * Handles tasls done at start of installation
+ * Handles tasks done at start of installation
  */
 codeINSTALL_INIT
 Install_Init(HWND hwndparent, BOOL ffirstcall, BOOL fpreviouslyinstalled,
