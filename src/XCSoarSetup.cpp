@@ -79,9 +79,6 @@ extern "C" {
 #endif
 #endif
 
-//#define DebugMessage(Caption, Text)    MessageBox(NULL, Text, Caption, MB_ICONINFORMATION)
-#define DebugMessage(Caption, Text)      ((void)0)
-
 /**
  * Handles tasls done at start of installation
  */
@@ -90,26 +87,18 @@ codeINSTALL_INIT Install_Init(HWND hwndparent,
 {
   HKEY hKey = NULL;
 
-  DebugMessage("Setup", "Install_Init Entry");
-
   if (RegOpenKeyEx(HKEY_LOCAL_MACHINE ,
       TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
       0, KEY_ALL_ACCESS, &hKey
     ) == ERROR_SUCCESS){
 
-    DebugMessage("Setup", "Delete Value DLL");
-
     RegDeleteValue(hKey, TEXT("DLL"));
-
-    DebugMessage("Setup", "Refresh Today");
 
     SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
 
     RegCloseKey(hKey);
 
   }
-
-  DebugMessage("Setup", "Install_Init Exit");
 
   return codeINSTALL_INIT_CONTINUE;
 }
@@ -123,8 +112,6 @@ codeINSTALL_EXIT Install_Exit(
     WORD cfailedregvals,
     WORD cfailedshortcuts)
 {
-  DebugMessage("Setup", "Install_Exit");
-
   SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
 
   return codeINSTALL_EXIT_DONE;
@@ -143,13 +130,9 @@ codeUNINSTALL_INIT Uninstall_Init(
       0, KEY_ALL_ACCESS, &hKey
     ) == ERROR_SUCCESS){
 
-    DebugMessage("Setup", "Delete Value DLL");
-
     RegDeleteValue(hKey, TEXT("DLL"));
 
     RegCloseKey(hKey);
-
-    DebugMessage("Setup", "Refresh Today");
 
     SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
 
@@ -159,8 +142,6 @@ codeUNINSTALL_INIT Uninstall_Init(
       TEXT("\\Software\\Microsoft\\Today\\Items"),
       0, KEY_ALL_ACCESS, &hKey
     ) == ERROR_SUCCESS){
-
-    DebugMessage("Setup", "Delete Key \\...Today\\XCSoar");
 
     RegDeleteKey(hKey, TEXT("XCSoar"));
 
