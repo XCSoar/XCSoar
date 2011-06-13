@@ -28,11 +28,11 @@ Copyright_License {
 
 class BatteryTimer {
   // Battery status for SIMULATOR mode
-  // 30% reminder, 20% exit, 30 second reminders on warnings
+  // 10% reminder, 5% exit, 5 minute reminders on warnings
 
-  static const unsigned BATTERY_WARNING = 30;
-  static const unsigned BATTERY_EXIT = 20;
-  static const unsigned BATTERY_REMINDER = 30000;
+  static const unsigned BATTERY_WARNING = 10;
+  static const unsigned BATTERY_EXIT = 5;
+  static const unsigned BATTERY_REMINDER = 5 * 60 * 1000;
 
   PeriodClock last_warning;
 
