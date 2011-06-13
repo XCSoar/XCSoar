@@ -20,6 +20,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 /**
  * Defines the entry point for the DLL application.
  * @file XCSoarSetup.cpp
@@ -82,22 +83,18 @@ extern "C" {
 /**
  * Handles tasls done at start of installation
  */
-codeINSTALL_INIT Install_Init(HWND hwndparent,
-  BOOL ffirstcall, BOOL fpreviouslyinstalled, LPCTSTR pszinstalldir)
+codeINSTALL_INIT
+Install_Init(HWND hwndparent, BOOL ffirstcall, BOOL fpreviouslyinstalled,
+             LPCTSTR pszinstalldir)
 {
   HKEY hKey = NULL;
 
-  if (RegOpenKeyEx(HKEY_LOCAL_MACHINE ,
-      TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
-      0, KEY_ALL_ACCESS, &hKey
-    ) == ERROR_SUCCESS){
-
+  if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                   TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
+                   0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS) {
     RegDeleteValue(hKey, TEXT("DLL"));
-
     SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
-
     RegCloseKey(hKey);
-
   }
 
   return codeINSTALL_INIT_CONTINUE;
@@ -106,47 +103,36 @@ codeINSTALL_INIT Install_Init(HWND hwndparent,
 /**
  * Handles tasks done at end of installation
  */
-codeINSTALL_EXIT Install_Exit(
-    HWND hwndparent,LPCTSTR pszinstalldir,
-    WORD cfaileddirs,WORD cfailedfiles,WORD cfailedregkeys,
-    WORD cfailedregvals,
-    WORD cfailedshortcuts)
+codeINSTALL_EXIT
+Install_Exit(HWND hwndparent, LPCTSTR pszinstalldir, WORD cfaileddirs,
+             WORD cfailedfiles, WORD cfailedregkeys, WORD cfailedregvals,
+             WORD cfailedshortcuts)
 {
   SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
-
   return codeINSTALL_EXIT_DONE;
 }
 
 /**
  * Handles tasks done at beginning of uninstallation
  */
-codeUNINSTALL_INIT Uninstall_Init(
-  HWND hwndparent,LPCTSTR pszinstalldir)
+codeUNINSTALL_INIT
+Uninstall_Init(HWND hwndparent, LPCTSTR pszinstalldir)
 {
   HKEY hKey = NULL;
 
-  if (RegOpenKeyEx(HKEY_LOCAL_MACHINE ,
-      TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
-      0, KEY_ALL_ACCESS, &hKey
-    ) == ERROR_SUCCESS){
-
+  if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                   TEXT("\\Software\\Microsoft\\Today\\Items\\XCSoar"),
+                   0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS) {
     RegDeleteValue(hKey, TEXT("DLL"));
-
     RegCloseKey(hKey);
-
     SendMessage(HWND_BROADCAST, WM_WININICHANGE, 0xF2, 0);
-
   }
 
-  if (RegOpenKeyEx(HKEY_LOCAL_MACHINE ,
-      TEXT("\\Software\\Microsoft\\Today\\Items"),
-      0, KEY_ALL_ACCESS, &hKey
-    ) == ERROR_SUCCESS){
-
+  if (RegOpenKeyEx(HKEY_LOCAL_MACHINE,
+                   TEXT("\\Software\\Microsoft\\Today\\Items"),
+                   0, KEY_ALL_ACCESS, &hKey) == ERROR_SUCCESS) {
     RegDeleteKey(hKey, TEXT("XCSoar"));
-
     RegCloseKey(hKey);
-
   }
 
   return codeUNINSTALL_INIT_CONTINUE;
@@ -155,17 +141,14 @@ codeUNINSTALL_INIT Uninstall_Init(
 /**
  * Handles tasks done at end of uninstallation
  */
-codeUNINSTALL_EXIT Uninstall_Exit(HWND hwndparent)
+codeUNINSTALL_EXIT
+Uninstall_Exit(HWND hwndparent)
 {
-  //do nothing
-  //return value
   return codeUNINSTALL_EXIT_DONE;
 }
 
-BOOL APIENTRY DllMain( HANDLE hModule,
-                       DWORD  ul_reason_for_call,
-                       LPVOID lpReserved
-					 )
+BOOL APIENTRY
+DllMain(HANDLE hModule, DWORD ul_reason_for_call, LPVOID lpReserved)
 {
   return TRUE;
 }
