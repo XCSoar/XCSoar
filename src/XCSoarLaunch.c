@@ -75,7 +75,6 @@ Copyright_License {
 #define WINDOW_TITLE TEXT("XCSoarLaunch")
 #define MAIN_WND_CLASS TEXT("XCSoarLaunchWndClass")
 #define REG_PATH TEXT("Software\\OpenSource\\XCSoar")
-#define FILE_EXPLORER TEXT("fexplore.exe")
 
 #define BUF_SIZE 256
 
