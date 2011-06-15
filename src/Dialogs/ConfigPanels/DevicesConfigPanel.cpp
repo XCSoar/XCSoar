@@ -235,7 +235,18 @@ DetectSerialPorts(DataFieldEnum &dfe)
 
 #endif
 
-#ifdef _WIN32_WCE
+#ifdef GNAV
+
+static bool
+DetectSerialPorts(DataFieldEnum &dfe)
+{
+  dfe.addEnumText(_T("COM1:"), _T("Vario (COM1)"));
+  dfe.addEnumText(_T("COM2:"), _T("Radio (COM2)"));
+  dfe.addEnumText(_T("COM3:"), _T("Internal (COM3)"));
+  return true;
+}
+
+#elif defined(_WIN32_WCE)
 
 gcc_pure
 static bool
