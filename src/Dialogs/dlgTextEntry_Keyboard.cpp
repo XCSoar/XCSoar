@@ -36,6 +36,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 
 #include <algorithm>
+#include <assert.h>
 
 using std::min;
 
@@ -60,11 +61,8 @@ UpdateAllowedCharacters()
 static void
 UpdateTextboxProp(void)
 {
-  WndProperty *wp;
-  wp = (WndProperty*)wf->FindByName(_T("prpText"));
-  if (!wp)
-    return;
-
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpText"));
+  assert(wp != NULL);
   wp->SetText(edittext);
 
   UpdateAllowedCharacters();
@@ -182,16 +180,12 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width,
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_TEXTENTRY_KEYBOARD_L") :
                                       _T("IDR_XML_TEXTENTRY_KEYBOARD"));
-
-  if (!wf)
-    return false;
+  assert(wf != NULL);
 
   AllowedCharactersCallback = accb;
 
   kb = (KeyboardControl*)wf->FindByName(_T("Keyboard"));
-  if (!kb)
-    return false;
-
+  assert(kb != NULL);
 
   cursor = 0;
   ClearText();
