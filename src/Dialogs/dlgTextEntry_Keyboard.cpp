@@ -179,12 +179,9 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width,
 
   max_width = min(MAX_TEXTENTRY, width);
 
-  if (Layout::landscape)
-    wf = LoadDialog(CallBackTable,
-			XCSoarInterface::main_window, _T("IDR_XML_TEXTENTRY_KEYBOARD_L"));
-  else
-    wf = LoadDialog(CallBackTable,
-			XCSoarInterface::main_window, _T("IDR_XML_TEXTENTRY_KEYBOARD"));
+  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                  Layout::landscape ? _T("IDR_XML_TEXTENTRY_KEYBOARD_L") :
+                                      _T("IDR_XML_TEXTENTRY_KEYBOARD"));
 
   if (!wf)
     return false;
