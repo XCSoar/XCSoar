@@ -171,6 +171,16 @@ event=Zoom slowin
 
 mode=default
 type=key
+data=LEFT
+event=ScreenModes previous
+
+mode=default
+type=key
+data=RIGHT
+event=ScreenModes next
+
+mode=default
+type=key
 data=6
 event=Setup Basic
 event=Mode default
