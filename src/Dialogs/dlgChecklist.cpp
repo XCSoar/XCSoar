@@ -173,8 +173,10 @@ LoadChecklist(void)
   ChecklistTitle[0] = NULL;
 
   TLineReader *reader = OpenDataTextFile(_T(XCSCHKLIST));
-  if (reader == NULL)
+  if (reader == NULL) {
+    addChecklist(_("No checklist loaded"),_("Load a checklist in Setup System\n"));
     return;
+  }
 
   TCHAR Details[MAXDETAILS];
   TCHAR Name[100];
