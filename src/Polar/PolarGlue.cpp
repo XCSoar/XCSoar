@@ -116,8 +116,10 @@ PolarGlue::LoadFromProfile(GlidePolar &gp, SETTINGS_POLAR &settings)
 {
   PolarInfo polar;
   if (!LoadFromProfile(polar) || !polar.CopyIntoGlidePolar(gp)) {
-    MessageBoxX(_("Polar has invalid coefficients.\nUsing LS8 polar instead!"),
-                _("Warning"), MB_OK);
+    unsigned Temp;
+    if (Profile::Get(szProfilePolarID, Temp))
+      MessageBoxX(_("Polar has invalid coefficients.\nUsing LS8 polar instead!"),
+                  _("Warning"), MB_OK);
     LoadDefault(polar);
     polar.CopyIntoGlidePolar(gp);
   }
