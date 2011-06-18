@@ -327,18 +327,6 @@ Waypoints::visit_name_prefix(const TCHAR *prefix,
   name_tree.visit_prefix(normalized, adapter);
 }
 
-Waypoints::const_iterator
-Waypoints::begin() const
-{
-  return waypoint_tree.begin();
-}
-
-Waypoints::const_iterator
-Waypoints::end() const
-{
-  return waypoint_tree.end();
-}
-
 void
 Waypoints::clear()
 {
@@ -346,18 +334,6 @@ Waypoints::clear()
   name_tree.clear();
   waypoint_tree.clear();
   next_id = 1;
-}
-
-unsigned
-Waypoints::size() const
-{
-  return waypoint_tree.size();
-}
-
-bool
-Waypoints::empty() const
-{
-  return waypoint_tree.empty() && tmp_wps.empty();
 }
 
 void

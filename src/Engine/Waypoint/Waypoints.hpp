@@ -109,14 +109,20 @@ public:
    *
    * @return Number of waypoints in tree
    */
-  unsigned size() const;
+  gcc_pure
+  unsigned size() const {
+    return waypoint_tree.size();
+  }
 
   /**
    * Whether waypoints store is empty
    *
    * @return True if no waypoints stored
    */
-  bool empty() const;
+  gcc_pure
+  bool empty() const {
+    return waypoint_tree.empty() && tmp_wps.empty();
+  }
 
   /**
    * Sets the airfield details of the specified waypoint
@@ -285,14 +291,18 @@ public:
    *
    * @return First waypoint in store
    */
-  const_iterator begin() const;
+  const_iterator begin() const {
+    return waypoint_tree.begin();
+  }
 
   /**
    * Access end waypoint in store, for use in iterators as end point.
    *
    * @return End waypoint in store
    */
-  const_iterator end() const;
+  const_iterator end() const {
+    return waypoint_tree.end();
+  }
 
 private:
   unsigned next_id;
