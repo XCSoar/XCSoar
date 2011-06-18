@@ -25,9 +25,8 @@
 #include "Util/NonCopyable.hpp"
 #include "Util/SliceAllocator.hpp"
 #include "Util/RadixTree.hpp"
-#include <kdtree++/kdtree.hpp>
+#include "Util/QuadTree.hpp"
 #include "WaypointEnvelope.hpp"
-#include <deque>
 
 #include "Navigation/TaskProjection.hpp"
 
@@ -75,7 +74,7 @@ public:
    * @param orig Waypoint that will be replaced
    * @param replacement New waypoint
    */
-  void replace(const Waypoint& orig, Waypoint& replacement);
+  void replace(const Waypoint &orig, const Waypoint &replacement);
 
   /**
    * Create new waypoint (without appending it to the store),
@@ -121,7 +120,7 @@ public:
    */
   gcc_pure
   bool empty() const {
-    return waypoint_tree.empty() && tmp_wps.empty();
+    return waypoint_tree.IsEmpty();
   }
 
   /**
@@ -248,14 +247,8 @@ protected:
   /**
    * Type of KD-tree data structure for waypoint container
    */
-  typedef KDTree::KDTree<2, 
-                         WaypointEnvelope, 
-                         WaypointEnvelope::kd_get_location,
-                         KDTree::squared_difference<WaypointEnvelope::kd_get_location::result_type,
-                                                    WaypointEnvelope::kd_get_location::result_type>,
-                         std::less<WaypointEnvelope::kd_get_location::result_type>,
-                         SliceAllocator<KDTree::_Node<WaypointEnvelope>, 1024>
-                         > WaypointTree;
+  typedef QuadTree<WaypointEnvelope, WaypointEnvelope::Accessor,
+                   SliceAllocator<WaypointEnvelope, 512u> > WaypointTree;
 
   typedef RadixTree<const Waypoint*> WaypointNameTree;
 
@@ -310,8 +303,6 @@ private:
   WaypointTree waypoint_tree;
   WaypointNameTree name_tree;
   TaskProjection task_projection;
-
-  std::deque<WaypointEnvelope> tmp_wps;
 
   mutable const Waypoint* m_home;
 };

@@ -103,28 +103,39 @@ public:
     return en.waypoint;
   }
 
+  /**
+   * Dirty hack to convert a Waypoint reference to a WaypointEnvelope
+   * reference, assuming that the Waypoint is inside a
+   * WaypointEnvelope.
+   */
+  static const WaypointEnvelope &FromWaypoint(const Waypoint &wp) {
+    const WaypointEnvelope *null_envelope = NULL;
+    const Waypoint *null_wp = &null_envelope->waypoint;
+    const void *null_void = (const void *)null_wp;
+    const char *null_char = (const char *)null_void;
+    const char *null_origin = (const char *)NULL;
+    unsigned position = null_char - null_origin;
+
+    const void *wp_void = (const void *)&wp;
+    const char *wp_char = (const char *)wp_void;
+    wp_char -= position;
+    wp_void = (const void *)wp_char;
+    return *(const WaypointEnvelope *)wp_void;
+  }
+
 public:
   /**
-   * Function object used to provide access to coordinate values by kd-tree
+   * Function object used to provide access to coordinate values by
+   * QuadTree.
    */
-  struct kd_get_location {    
-    typedef int result_type; /**< type of returned value */
-    /**
-     * Retrieve coordinate value from object given coordinate index
-     * @param d WaypointEnvelope object
-     * @param k index of coordinate
-     *
-     * @return Coordinate value
-     */
-    int operator() ( const WaypointEnvelope &d, const unsigned k) const {
-      switch(k) {
-      case 0:
-        return d.FlatLocation.Longitude;
-      case 1:
-        return d.FlatLocation.Latitude;
-      };
-      return 0; 
-    };
+  struct Accessor {
+    int GetX(const WaypointEnvelope &envelope) const {
+      return envelope.FlatLocation.Longitude;
+    }
+
+    int GetY(const WaypointEnvelope &envelope) const {
+      return envelope.FlatLocation.Latitude;
+    }
   };
 
   /**

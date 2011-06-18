@@ -80,35 +80,13 @@ public:
 void
 Waypoints::optimise()
 {
-  if (tmp_wps.empty() && waypoint_tree.empty())
-    return; // nothing to do
+  task_projection.update_fast();
 
-  if (task_projection.update_fast()) {
-    // task projection changed, so need to push items back onto stack
-    std::copy(begin(), end(), std::back_inserter(tmp_wps));
-    name_tree.clear();
-    waypoint_tree.clear();
-  }
+  for (WaypointTree::iterator it = waypoint_tree.begin();
+       it != waypoint_tree.end(); ++it)
+    it->project(task_projection);
 
-  if (!tmp_wps.empty()) {
-    while (!tmp_wps.empty()) {
-      WaypointEnvelope &w = tmp_wps.front();
-      w.project(task_projection);
-      (void)waypoint_tree.insert(w);
-      tmp_wps.pop_front();
-    }
-    waypoint_tree.optimize();
-
-    /* rebuild the radix tree - we have to do this because the
-       pointers to Waypoint objects in KDTree are not stable */
-    name_tree.clear();
-    for (const_iterator it = begin(); it != end(); ++it) {
-      const Waypoint &wp = it->get_waypoint();
-      TCHAR normalized_name[wp.Name.length() + 1];
-      normalize_search_string(normalized_name, wp.Name.c_str());
-      name_tree.add(normalized_name, &wp);
-    }
-  }
+  waypoint_tree.Optimise();
 }
 
 void
@@ -121,7 +99,23 @@ Waypoints::append(Waypoint& wp)
 
   task_projection.scan_location(wp.Location);
   wp.id = next_id++;
-  tmp_wps.push_back(WaypointEnvelope(wp));
+
+  const WaypointEnvelope new_envelope(wp);
+
+  bool must_optimise = !waypoint_tree.IsWithinKnownBounds(new_envelope);
+  if (must_optimise) {
+    waypoint_tree.Flatten();
+    waypoint_tree.ClearBounds();
+  }
+
+  const WaypointEnvelope &envelope = waypoint_tree.Add(new_envelope);
+
+  if (must_optimise)
+    waypoint_tree.Optimise();
+
+  TCHAR normalized_name[wp.Name.length() + 1];
+  normalize_search_string(normalized_name, wp.Name.c_str());
+  name_tree.add(normalized_name, &envelope.get_waypoint());
 }
 
 const Waypoint*
@@ -342,22 +336,41 @@ Waypoints::erase(const Waypoint& wp)
   if (m_home != NULL && m_home->id == wp.id)
     m_home = NULL;
 
-  WaypointEnvelope w(wp);
-  w.project(task_projection);
+  const WaypointEnvelope &envelope = WaypointEnvelope::FromWaypoint(wp);
+  WaypointTree::const_iterator it = waypoint_tree.FindPointer(&envelope);
+  assert(it != waypoint_tree.end());
 
-  WaypointTree::const_iterator it = waypoint_tree.find_exact(w);
   name_tree.remove(it->get_waypoint().Name.c_str(), &it->get_waypoint());
   waypoint_tree.erase(it);
 }
 
 void
-Waypoints::replace(const Waypoint& orig, Waypoint& replacement)
+Waypoints::replace(const Waypoint &orig, const Waypoint &replacement)
 {
-  replacement.id = orig.id;
-  erase(orig);
+  name_tree.remove(orig.Name.c_str(), &orig);
 
-  /* preserve the old waypoint id */
-  tmp_wps.push_back(WaypointEnvelope(replacement));
+  Waypoint new_waypoint(replacement);
+  new_waypoint.id = orig.id;
+  WaypointEnvelope new_envelope(new_waypoint);
+  new_envelope.project(task_projection);
+
+  bool must_optimise = !waypoint_tree.IsWithinKnownBounds(new_envelope);
+  if (must_optimise) {
+    waypoint_tree.Flatten();
+    waypoint_tree.ClearBounds();
+  }
+
+  const WaypointEnvelope &envelope = WaypointEnvelope::FromWaypoint(orig);
+  WaypointTree::const_iterator it = waypoint_tree.FindPointer(&envelope);
+  assert(it != waypoint_tree.end());
+  waypoint_tree.Replace(it, new_envelope);
+
+  if (must_optimise)
+    waypoint_tree.Optimise();
+
+  TCHAR normalized_name[replacement.Name.length() + 1];
+  normalize_search_string(normalized_name, replacement.Name.c_str());
+  name_tree.add(normalized_name, &envelope.get_waypoint());
 }
 
 Waypoint
