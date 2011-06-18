@@ -175,7 +175,7 @@ Units::FormatUserAltitude(fixed Altitude, TCHAR *Buffer, size_t size,
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%d%s"), iround(Altitude), pU->Name);
+    _stprintf(sTmp, _T("%d %s"), iround(Altitude), pU->Name);
   else
     _stprintf(sTmp, _T("%d"), iround(Altitude));
 
@@ -220,7 +220,7 @@ Units::FormatUserArrival(fixed Altitude, TCHAR *Buffer, size_t size,
   Altitude = Altitude * pU->ToUserFact; // + pU->ToUserOffset;
 
   if (IncludeUnit)
-    _stprintf(sTmp, _T("%+d%s"), iround(Altitude), pU->Name);
+    _stprintf(sTmp, _T("%+d %s"), iround(Altitude), pU->Name);
   else
     _stprintf(sTmp, _T("%+d"), iround(Altitude));
 
