@@ -80,6 +80,9 @@ public:
 void
 Waypoints::optimise()
 {
+  if (waypoint_tree.IsEmpty())
+    return;
+
   task_projection.update_fast();
 
   for (WaypointTree::iterator it = waypoint_tree.begin();
