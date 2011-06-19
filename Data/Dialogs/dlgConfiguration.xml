@@ -398,7 +398,7 @@
           <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         
-        <Edit Name="prpPolarMassDry" Caption="Dry mass; max. ballast" Expert="1" Y="62" Width="182" Height="22" CaptionWidth="133">
+        <Edit Name="prpPolarReferenceMass" Caption="Dry mass; max. ballast" Expert="1" Y="62" Width="182" Height="22" CaptionWidth="133">
           <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         <Edit Name="prpPolarMaxBallast" Caption="Max. ballast" X="182" Expert="1" Y="62" Width="50" Height="22" CaptionWidth="1">
