@@ -52,6 +52,31 @@ struct PolarInfo;
  */
 class GlidePolar
 {
+  fixed mc;                  /**< MacCready ring setting (m/s) */
+  fixed inv_mc;              /**< Inverse of MC setting (s/m) */
+  fixed bugs;                /**< Clean ratio (1=clean, 0=100% bugs) */
+  fixed ballast;             /**< Ballast ratio (0=empty, 1=full) */
+  fixed cruise_efficiency;   /**< Cruise efficiency */
+  fixed bestLD;              /**< Best lift to drag ratio */
+  fixed VbestLD;             /**< Speed for best L/D (m/s) */
+  fixed SbestLD;             /**< Sink rate at best L/D (m/s, positive down) */
+  fixed Vmax;                /**< Maximum cruise speed (m/s) */
+  fixed Smax;                /**< Sink rate at maximum cruise speed (m/s, positive down) */
+  fixed Vmin;                /**< Speed for minimum sink (m/s) */
+  fixed Smin;                /**< Minimum sink rate (m/s, positive down) */
+
+  fixed ideal_polar_a;       /**< 'a' coefficient of glide polar empty/clean */
+  fixed ideal_polar_b;       /**< 'b' coefficient of glide polar empty/clean */
+  fixed ideal_polar_c;       /**< 'c' coefficient of glide polar empty/clean */
+
+  fixed polar_a;             /**< 'a' coefficient of glide polar at bug/ballast */
+  fixed polar_b;             /**< 'b' coefficient of glide polar at bug/ballast */
+  fixed polar_c;             /**< 'c' coefficient of glide polar at bug/ballast */
+
+  fixed ballast_ratio;       /**< Ratio of mass of ballast to glider empty weight */
+  fixed reference_mass;            /**< Dry/unballasted mass of glider, kg */
+  fixed wing_area;           /**< Reference wing area, m^2 */
+
   friend struct PolarInfo;
 
 public:
@@ -407,31 +432,6 @@ private:
 
   /** Solve for min sink rate at current bugs/ballast setting. */
   void solve_min();
-
-  fixed mc;                  /**< MacCready ring setting (m/s) */
-  fixed inv_mc;              /**< Inverse of MC setting (s/m) */
-  fixed bugs;                /**< Clean ratio (1=clean, 0=100% bugs) */ 
-  fixed ballast;             /**< Ballast ratio (0=empty, 1=full) */
-  fixed cruise_efficiency;   /**< Cruise efficiency */
-  fixed bestLD;              /**< Best lift to drag ratio */
-  fixed VbestLD;             /**< Speed for best L/D (m/s) */
-  fixed SbestLD;             /**< Sink rate at best L/D (m/s, positive down) */
-  fixed Vmax;                /**< Maximum cruise speed (m/s) */
-  fixed Smax;                /**< Sink rate at maximum cruise speed (m/s, positive down) */
-  fixed Vmin;                /**< Speed for minimum sink (m/s) */
-  fixed Smin;                /**< Minimum sink rate (m/s, positive down) */
-
-  fixed ideal_polar_a;       /**< 'a' coefficient of glide polar empty/clean */
-  fixed ideal_polar_b;       /**< 'b' coefficient of glide polar empty/clean */
-  fixed ideal_polar_c;       /**< 'c' coefficient of glide polar empty/clean */
-
-  fixed polar_a;             /**< 'a' coefficient of glide polar at bug/ballast */
-  fixed polar_b;             /**< 'b' coefficient of glide polar at bug/ballast */
-  fixed polar_c;             /**< 'c' coefficient of glide polar at bug/ballast */
-
-  fixed ballast_ratio;       /**< Ratio of mass of ballast to glider empty weight */
-  fixed reference_mass;            /**< Dry/unballasted mass of glider, kg */
-  fixed wing_area;           /**< Reference wing area, m^2 */
 };
 
 #endif
