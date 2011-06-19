@@ -55,6 +55,12 @@ ProfileMap::Set(const TCHAR *key, const TCHAR *value)
   return true;
 }
 
+bool
+ProfileMap::Exists(const TCHAR *key)
+{
+  return map.find(key) != map.end();
+}
+
 void
 ProfileMap::Export(ProfileWriter &writer)
 {

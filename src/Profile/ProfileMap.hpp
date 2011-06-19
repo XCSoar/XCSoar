@@ -189,6 +189,8 @@ namespace ProfileMap {
     return Get(key, value.buffer(), value.MAX_SIZE);
   }
 
+  bool Exists(const TCHAR *key);
+
   void Export(ProfileWriter &writer);
 }
 
