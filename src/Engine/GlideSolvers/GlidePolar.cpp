@@ -420,10 +420,3 @@ GlidePolar::get_ld_over_ground(const AIRCRAFT_STATE &state) const
 
   return fixed_zero;
 }
-
-fixed 
-GlidePolar::get_V_for_sinkrate(const fixed S) const
-{
-  /// @todo unimplemented
-  return VbestLD;
-}
