@@ -189,11 +189,15 @@ MacCreadyProcessTimer()
 static void
 BallastDumpProcessTimer()
 {
+  SETTINGS_COMPUTER &settings_computer =
+    CommonInterface::SetSettingsComputer();
+
+  if (!settings_computer.BallastTimerActive)
+    return;
+
   // only update every 5 seconds to stop flooding the devices
   static GPSClock ballast_clock(fixed(5));
 
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
   const NMEA_INFO &basic = CommonInterface::Basic();
 
   // We don't know how fast the water is flowing so don't pretend that we do
@@ -204,7 +208,7 @@ BallastDumpProcessTimer()
 
   fixed dt = ballast_clock.delta_advance(basic.Time);
 
-  if (!settings_computer.BallastTimerActive || negative(dt))
+  if (negative(dt))
     return;
 
   GlidePolar &glide_polar = settings_computer.glide_polar_task;
