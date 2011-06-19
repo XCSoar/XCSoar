@@ -103,7 +103,7 @@
 
       <Edit Name="prpTrail" Caption="Trail length" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Determines whether and how long a snail trail is drawn behind the glider">
-        <DataField DataType="enum"/>
+        <DataField DataType="enum" OnDataAccess="SymbolsConfigPanel::OnTrailLength"/>
       </Edit>
 
       <Edit Name="prpTrailDrift" Caption="Trail drift" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"

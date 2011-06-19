@@ -34,6 +34,22 @@ Copyright_License {
 
 static WndForm* wf = NULL;
 
+static void
+ShowTrailControls(bool show)
+{
+  ShowFormControl(*wf, _T("prpTrailDrift"), show);
+  ShowFormControl(*wf, _T("prpSnailType"), show);
+  ShowFormControl(*wf, _T("prpSnailWidthScale"), show);
+}
+
+void
+SymbolsConfigPanel::OnTrailLength(DataField *Sender,
+                                  DataField::DataAccessKind_t Mode)
+{
+  const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
+  TrailLength trail_length = (TrailLength)df.GetAsInteger();
+  ShowTrailControls(trail_length != TRAIL_OFF);
+}
 
 void
 SymbolsConfigPanel::Init(WndForm *_wf)
@@ -116,6 +132,8 @@ SymbolsConfigPanel::Init(WndForm *_wf)
     dfe->Set(Appearance.AircraftSymbol);
     wp->RefreshDisplay();
   }
+
+  ShowTrailControls(settings_map.trail_length != TRAIL_OFF);
 }
 
 

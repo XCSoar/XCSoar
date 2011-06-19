@@ -25,11 +25,14 @@ Copyright_License {
 #define SYMBOLSCONFIGPANEL_HPP
 
 #include "Form/Form.hpp"
+#include "DataField/Base.hpp"
 
 namespace SymbolsConfigPanel
 {
   void Init(WndForm *wf);
   bool Save();
+
+  void OnTrailLength(DataField *Sender, DataField::DataAccessKind_t Mode);
 };
 
 #endif /* SYMBOLSCONFIGPANEL_HPP */
