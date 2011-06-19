@@ -181,7 +181,7 @@
         <DataField DataType="boolean" />
       </Edit>
     
-      <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topographical features (roads, rivers, lakes etc) on the map.">
+      <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topographical features (roads, rivers, lakes etc.) on the map.">
         <DataField DataType="boolean" />
       </Edit>
     
