@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "SettingsComputerBlackboard.hpp"
+#include "OS/Clock.hpp"
 
 #include <algorithm>
 
@@ -46,7 +47,7 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.LoggerShortName = false;
   settings_computer.BallastTimerActive = false;
   settings_computer.BallastSecsToEmpty = 120;
-  settings_computer.UTCOffset = 0;
+  settings_computer.UTCOffset = GetSystemUTCOffset();
 
   // for user-set teammate code
   settings_computer.TeammateCodeValid = false;
