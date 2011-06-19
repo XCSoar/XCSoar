@@ -175,7 +175,7 @@ LoadChecklist(void)
 
   TLineReader *reader = OpenDataTextFile(_T(XCSCHKLIST));
   if (reader == NULL) {
-    addChecklist(_("No checklist loaded"),_("Load a checklist in Setup System\n"));
+    addChecklist(_("No checklist loaded"),_("Create xcsoar-checklist.txt\n"));
     return;
   }
 
