@@ -197,8 +197,7 @@ Profile::Use()
 
   LoadAirspaceConfig();
 
-  Get(szProfileSnailTrail,
-      settings_map.TrailActive);
+  GetEnum(szProfileSnailTrail, settings_map.trail_length);
 
   Get(szProfileTrailDrift,
       settings_map.EnableTrailDrift);

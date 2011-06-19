@@ -59,11 +59,11 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   if (wp) {
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Long"));
-    dfe->addEnumText(_("Short"));
-    dfe->addEnumText(_("Full"));
-    dfe->Set(settings_map.TrailActive);
+    dfe->addEnumText(_("Off"), TRAIL_OFF);
+    dfe->addEnumText(_("Long"), TRAIL_LONG);
+    dfe->addEnumText(_("Short"), TRAIL_SHORT);
+    dfe->addEnumText(_("Full"), TRAIL_FULL);
+    dfe->Set(settings_map.trail_length);
     wp->RefreshDisplay();
   }
 
@@ -130,9 +130,9 @@ SymbolsConfigPanel::Save()
                               szProfileWindArrowStyle,
                               settings_map.WindArrowStyle);
 
-  changed |= SaveFormProperty(*wf, _T("prpTrail"),
-                              szProfileSnailTrail,
-                              settings_map.TrailActive);
+  changed |= SaveFormPropertyEnum(*wf, _T("prpTrail"),
+                                  szProfileSnailTrail,
+                                  settings_map.trail_length);
 
   changed |= SaveFormProperty(*wf, _T("prpTrailDrift"),
                               szProfileTrailDrift,

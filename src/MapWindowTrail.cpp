@@ -57,7 +57,7 @@ void
 MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
                      unsigned min_time, bool enable_traildrift) const
 {
-  if (!SettingsMap().TrailActive || task == NULL)
+  if (SettingsMap().trail_length == TRAIL_OFF || task == NULL)
     return;
 
   const WindowProjection &projection = render_projection;

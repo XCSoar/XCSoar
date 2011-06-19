@@ -75,6 +75,13 @@ enum DisplayMode_t{
   dmFinalGlide
 };
 
+enum TrailLength {
+  TRAIL_OFF,
+  TRAIL_LONG,
+  TRAIL_SHORT,
+  TRAIL_FULL,
+};
+
 enum SnailType_t {
   stStandardVario,
   stSeeYouVario,
@@ -127,7 +134,7 @@ struct SETTINGS_MAP {
   /** What type of waypoint labels to render */
   RenderMode LandableRenderMode;
 
-  int TrailActive;
+  TrailLength trail_length;
 
   AirspaceRendererSettings airspace;
 

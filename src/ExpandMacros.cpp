@@ -417,20 +417,20 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       _("Start"), Size);
 
   if (_tcsstr(OutBuffer, _T("$(SnailTrailToggleName)"))) {
-    switch(SettingsMap().TrailActive) {
-    case 0:
+    switch (SettingsMap().trail_length) {
+    case TRAIL_OFF:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Long"), Size);
       break;
-    case 1:
+    case TRAIL_LONG:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Short"), Size);
       break;
-    case 2:
+    case TRAIL_SHORT:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Full"), Size);
       break;
-    case 3:
+    case TRAIL_FULL:
       ReplaceInString(OutBuffer, _T("$(SnailTrailToggleName)"),
                       _("Off"), Size);
       break;
@@ -557,16 +557,16 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(AirspaceModeAllOffIndicator)"),
                       _T("(*)"), _T(""), Size);
 
-  CondReplaceInString(SettingsMap().TrailActive == 0,
+  CondReplaceInString(SettingsMap().trail_length == TRAIL_OFF,
                       OutBuffer, _T("$(SnailTrailOffShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().TrailActive == 2,
+  CondReplaceInString(SettingsMap().trail_length == TRAIL_SHORT,
                       OutBuffer, _T("$(SnailTrailShortShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().TrailActive == 1,
+  CondReplaceInString(SettingsMap().trail_length == TRAIL_LONG,
                       OutBuffer, _T("$(SnailTrailLongShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().TrailActive == 3,
+  CondReplaceInString(SettingsMap().trail_length == TRAIL_FULL,
                       OutBuffer, _T("$(SnailTrailFullShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 

@@ -165,27 +165,35 @@ InputEvents::eventSnailTrail(const TCHAR *misc)
   SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
 
   if (_tcscmp(misc, _T("toggle")) == 0) {
-    settings_map.TrailActive =
-        settings_map.TrailActive + 1;
-    if (settings_map.TrailActive > 3)
-      settings_map.TrailActive = 0;
+    unsigned trail_length = (int)settings_map.trail_length;
+    trail_length = (trail_length + 1u) % 4u;
+    settings_map.trail_length = (TrailLength)trail_length;
   } else if (_tcscmp(misc, _T("off")) == 0)
-    settings_map.TrailActive = 0;
+    settings_map.trail_length = TRAIL_OFF;
   else if (_tcscmp(misc, _T("long")) == 0)
-    settings_map.TrailActive = 1;
+    settings_map.trail_length = TRAIL_LONG;
   else if (_tcscmp(misc, _T("short")) == 0)
-    settings_map.TrailActive = 2;
+    settings_map.trail_length = TRAIL_SHORT;
   else if (_tcscmp(misc, _T("full")) == 0)
-    settings_map.TrailActive = 3;
+    settings_map.trail_length = TRAIL_FULL;
   else if (_tcscmp(misc, _T("show")) == 0) {
-    if (settings_map.TrailActive == 0)
+    switch (settings_map.trail_length) {
+    case TRAIL_OFF:
       Message::AddMessage(_("Snail trail off"));
-    if (settings_map.TrailActive == 1)
+      break;
+
+    case TRAIL_LONG:
       Message::AddMessage(_("Long snail trail"));
-    if (settings_map.TrailActive == 2)
+      break;
+
+    case TRAIL_SHORT:
       Message::AddMessage(_("Short snail trail"));
-    if (settings_map.TrailActive == 3)
+      break;
+
+    case TRAIL_FULL:
       Message::AddMessage(_("Full snail trail"));
+      break;
+    }
   }
 
   ActionInterface::SendSettingsMap(true);
