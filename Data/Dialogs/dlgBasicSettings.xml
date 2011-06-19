@@ -4,12 +4,8 @@
   <Button Name="cmdDump" Caption="Dump" X="2" Y="2" Width="75" Height="35" OnClick="OnBallastDump" />
   <Button Name="cmdClose" Caption="Close" X="96" Y="2" Width="75" Height="35" OnClick="OnCloseClicked" />
 
-  <Edit Name="prpBallastPercent" Caption="Ballast" X="2" Width="-2" Height="22" CaptionWidth="78" Help="Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).  Press ENTER on this field to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings.">
-    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="100" Step="5" OnDataAccess="OnBallastData" />
-  </Edit>
-
-  <Edit Name="prpBallastLitres" Caption="Volume" X="2" Width="-2" Height="22" CaptionWidth="78" ReadOnly="1">
-    <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" ReadOnly="1" />
+  <Edit Name="prpBallast" Caption="Ballast" X="2" Width="-2" Height="22" CaptionWidth="78" Help="Ballast of the glider.  Increase this value if the pilot/cockpit load is greater than the reference pilot weight of the glide polar (typically 75kg).  Press ENTER on this field to toggle count-down of the ballast volume according to the dump rate specified in the configuration settings.">
+    <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" Min="0" Max="500" Step="5" OnDataAccess="OnBallastData" />
   </Edit>
 
   <Edit Name="prpWingLoading" Caption="Wing loading" X="2" Width="-2" Height="22" CaptionWidth="78" ReadOnly="1">

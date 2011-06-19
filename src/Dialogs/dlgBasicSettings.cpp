@@ -156,17 +156,7 @@ SetBallast(void)
 {
   WndProperty* wp;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpBallastPercent"));
-  if (wp) {
-    if (glide_polar.is_ballastable()) {
-      DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      df.SetAsFloat(glide_polar.get_ballast() * 100);
-    } else
-      wp->hide();
-
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpBallastLitres"));
+  wp = (WndProperty*)wf->FindByName(_T("prpBallast"));
   if (wp) {
     if (glide_polar.is_ballastable()) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
@@ -223,7 +213,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
                     !XCSoarInterface::SettingsComputer().BallastTimerActive);
     break;
   case DataField::daChange:
-    glide_polar.set_ballast(df.GetAsFixed() / 100);
+    glide_polar.set_ballast_litres(df.GetAsFixed());
     changed = true;
     SetButtons();
     SetBallast();
