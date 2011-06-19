@@ -131,6 +131,7 @@ GlidePolar::SinkRate(const fixed V, const fixed n) const
              w0 + (V / (fixed_two * bestLD)) * (n * n - fixed_one) * vl * vl);
 }
 
+#if 0
 /**
  * Finds VOpt for a given MacCready setting
  * Intended to be used temporarily.
@@ -169,21 +170,24 @@ public:
 private:
   const GlidePolar &polar;
 };
+#endif
 
 void
 GlidePolar::solve_ld()
 {
-/*
+#if 0
   // this method to be used if polar is not parabolic
   GlidePolarVopt gpvopt(*this, Vmin, Vmax);
   VbestLD = gpvopt.find_min(VbestLD);
-*/
+#else
   assert(!negative(mc));
   VbestLD = max(Vmin, min(Vmax, sqrt((polar_c+mc)/polar_a)));
   SbestLD = SinkRate(VbestLD);
   bestLD = VbestLD / SbestLD;
+#endif
 }
 
+#if 0
 /**
  * Finds min sink speed.
  * Intended to be used temporarily.
@@ -214,17 +218,19 @@ public:
 private:
   const GlidePolar &polar;
 };
+#endif
 
 void 
 GlidePolar::solve_min()
 {
-/*
+#if 0
   // this method to be used if polar is not parabolic
   GlidePolarMinSink gpminsink(*this, Vmax);
   Vmin = gpminsink.find_min(Vmin);
-*/
+#else
   Vmin = min(Vmax, -polar_b/(fixed_two*polar_a));
   Smin = SinkRate(Vmin);
+#endif
 }
 
 // global, used for test harness
