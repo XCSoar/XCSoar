@@ -49,6 +49,7 @@ Copyright_License {
 #include "ResourceLoader.hpp"
 
 #include <stdio.h>    // for _stprintf
+#include <assert.h>
 #include <tchar.h>
 #include <limits.h>
 
@@ -307,23 +308,11 @@ GetCallBack(CallBackTableEntry *LookUpTable,
                         StringToStringDflt(node.getAttribute(attribute), NULL));
 }
 
-static void
-ShowXMLError(const TCHAR* msg = _T("Error in loading XML dialog"))
-{
-  MessageBoxX(msg, _T("Dialog error"),
-              MB_OK | MB_ICONEXCLAMATION);
-}
-
 static XMLNode
 xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
 {
   ResourceLoader::Data data = ResourceLoader::Load(lpName, _T("XMLDialog"));
-  if (data.first == NULL) {
-    ShowXMLError(_T("Can't find resource"));
-
-    // unable to find the resource
-    return XMLNode::emptyXMLNode;
-  }
+  assert(data.first != NULL);
 
   const char *buffer = (const char *)data.first;
 
@@ -364,14 +353,7 @@ xmlOpenResourceHelper(const TCHAR *resource)
   XMLNode xnode = xmlLoadFromResource(resource, &pResults);
 
   // Show errors if they exist
-  if (pResults.error != eXMLErrorNone) {
-    XMLNode::GlobalError = true;
-    TCHAR errortext[100];
-    _stprintf(errortext,_T("%s %i %i"), XMLNode::getError(pResults.error),
-              pResults.nLine, pResults.nColumn);
-
-    ShowXMLError(errortext);
-  }
+  assert(pResults.error == eXMLErrorNone);
 
   return xnode;
 }
@@ -432,25 +414,17 @@ LoadWindow(CallBackTableEntry *LookUpTable,
     return NULL;
 
   XMLNode node = xmlOpenResourceHelper(resource);
-
-  if (node.isEmpty()) {
-    ShowXMLError();
-    return NULL;
-  }
+  assert(!node.isEmpty());
 
   // use style of last form loaded
   DialogStyle dialog_style = dialog_style_last;
 
   // load only one top-level control.
   Window *window = LoadChild(*form, parent, form->GetBackColor(), LookUpTable,
-                             node, dialog_style,
-                             0);
+                             node, dialog_style, 0);
 
-  if (XMLNode::GlobalError) {
-    ShowXMLError();
-    delete form;
-    return NULL;
-  }
+  assert(!XMLNode::GlobalError);
+
   return window;
 }
 
@@ -475,10 +449,7 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
   // If XML error occurred -> Error messagebox + cancel
-  if (node.isEmpty()) {
-    ShowXMLError();
-    return NULL;
-  }
+  assert(!node.isEmpty());
 
   // If the main XMLNode is of type "Form"
   if (_tcsicmp(node.getName(), _T("Form")) != 0)
@@ -487,10 +458,7 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
     node = node.getChildNode(_T("Form"));
 
   // If Node does not exists -> Error messagebox + cancel
-  if (node.isEmpty()) {
-    ShowXMLError();
-    return NULL;
-  }
+  assert(!node.isEmpty());
 
   // Determine the dialog style of the dialog
   DialogStyle dialog_style = GetDialogStyle(node);
@@ -543,11 +511,7 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
                       LookUpTable, &node, dialog_style);
 
   // If XML error occurred -> Error messagebox + cancel
-  if (XMLNode::GlobalError) {
-    ShowXMLError();
-    delete form;
-    return NULL;
-  }
+  assert(!XMLNode::GlobalError);
 
   // Return the created form
   return form;
