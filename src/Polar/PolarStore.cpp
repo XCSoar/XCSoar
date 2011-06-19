@@ -63,7 +63,7 @@ struct InternalPolarInfo
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
-static const InternalPolarInfo WinPilotPolars[] =
+static const InternalPolarInfo InternalPolars[] =
 {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 41.666, 100 },
   { _T("604 Kestrel"), 570, 100, 112.97, -0.72, 150.64, -1.42, 207.13, -4.1, 16.26, 0.0, 114 },
@@ -244,7 +244,7 @@ const TCHAR*
 PolarStore::GetName(unsigned i)
 {
   assert(i < Count());
-  return WinPilotPolars[i].name;
+  return InternalPolars[i].name;
 }
 
 /**
@@ -257,7 +257,7 @@ unsigned
 PolarStore::GetContestHandicap(unsigned i)
 {
   assert(i < Count());
-  return WinPilotPolars[i].contest_handicap;
+  return InternalPolars[i].contest_handicap;
 }
 
 /**
@@ -270,11 +270,11 @@ void
 PolarStore::Read(unsigned i, PolarInfo &polar)
 {
   assert(i < Count());
-  WinPilotPolars[i].Transfer(polar);
+  InternalPolars[i].Transfer(polar);
 }
 
 unsigned
 PolarStore::Count()
 {
-  return sizeof(WinPilotPolars) / sizeof(WinPilotPolars[0]);
+  return sizeof(InternalPolars) / sizeof(InternalPolars[0]);
 }
