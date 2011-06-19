@@ -25,6 +25,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "NMEA/Info.hpp"
 #include "Asset.hpp"
+#include "OS/Clock.hpp"
 
 #include <windows.h>
 
@@ -59,22 +60,7 @@ GetUTCOffset()
   if (is_altair() || !is_embedded())
     return XCSoarInterface::SettingsComputer().UTCOffset;
 
-  int utcoffset = 0;
-  // returns offset in seconds
-  TIME_ZONE_INFORMATION TimeZoneInformation;
-  DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
-
-  utcoffset = -TimeZoneInformation.Bias * 60;
-
-  if (tzi == TIME_ZONE_ID_STANDARD) {
-    utcoffset -= TimeZoneInformation.StandardBias * 60;
-  }
-
-  if (tzi == TIME_ZONE_ID_DAYLIGHT) {
-    utcoffset -= TimeZoneInformation.DaylightBias * 60;
-  }
-
-  return utcoffset;
+  return GetSystemUTCOffset();
 #else /* !WIN32 */
   // XXX
   return XCSoarInterface::SettingsComputer().UTCOffset;
