@@ -178,7 +178,7 @@
   
     <Panel Name="frmTerrain">
       <Edit Name="prpEnableTerrain" Caption="Terrain display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw a digital elevation terrain on the map.">
-        <DataField DataType="boolean"/>
+        <DataField DataType="boolean" OnDataAccess="TerrainDisplayConfigPanel::OnEnableTerrain"/>
       </Edit>
     
       <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topographical features (roads, rivers, lakes etc.) on the map.">

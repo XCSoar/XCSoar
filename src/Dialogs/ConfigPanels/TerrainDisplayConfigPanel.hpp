@@ -25,11 +25,14 @@ Copyright_License {
 #define TERRAINDISPLAYCONFIGPANEL_HPP
 
 #include "Form/Form.hpp"
+#include "DataField/Base.hpp"
 
 namespace TerrainDisplayConfigPanel
 {
   void Init(WndForm *wf);
   bool Save();
+
+  void OnEnableTerrain(DataField *Sender, DataField::DataAccessKind_t Mode);
 };
 
 #endif /* TERRAINDISPLAYCONFIGPANEL_HPP */

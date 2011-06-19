@@ -204,6 +204,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceModeClicked),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(TerrainDisplayConfigPanel::OnEnableTerrain),
   DeclareCallBackEntry(DevicesConfigPanel::OnSetupDeviceAClicked),
   DeclareCallBackEntry(DevicesConfigPanel::OnSetupDeviceBClicked),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAPort),

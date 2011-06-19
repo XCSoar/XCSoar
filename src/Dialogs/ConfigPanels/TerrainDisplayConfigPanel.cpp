@@ -27,12 +27,30 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/Boolean.hpp"
 #include "Interface.hpp"
 #include "Appearance.hpp"
 #include "Screen/Graphics.hpp"
 #include "Language/Language.hpp"
 
 static WndForm* wf = NULL;
+
+static void
+ShowTerrainControls(bool show)
+{
+  ShowFormControl(*wf, _T("prpSlopeShadingType"), show);
+  ShowFormControl(*wf, _T("prpTerrainContrast"), show);
+  ShowFormControl(*wf, _T("prpTerrainBrightness"), show);
+  ShowFormControl(*wf, _T("prpTerrainRamp"), show);
+}
+
+void
+TerrainDisplayConfigPanel::OnEnableTerrain(DataField *Sender,
+                                           DataField::DataAccessKind_t Mode)
+{
+  const DataFieldBoolean &df = *(const DataFieldBoolean *)Sender;
+  ShowTerrainControls(df.GetAsBoolean());
+}
 
 void
 TerrainDisplayConfigPanel::Init(WndForm *_wf)
@@ -82,6 +100,8 @@ TerrainDisplayConfigPanel::Init(WndForm *_wf)
     dfe->Set(terrain.ramp);
     wp->RefreshDisplay();
   }
+
+  ShowTerrainControls(terrain.enable);
 }
 
 
