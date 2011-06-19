@@ -98,7 +98,7 @@ ThermalLocator::Process(const bool circling,
                         const SpeedVector wind,
                         THERMAL_LOCATOR_INFO& therm) {}
 
-long GetUTCOffset() { return 0; }
+int GetUTCOffset() { return 0; }
 
 void
 EstimateThermalBase(const GeoPoint Thermal_Location,

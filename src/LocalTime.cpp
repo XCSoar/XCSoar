@@ -52,15 +52,14 @@ DetectCurrentTime(const NMEA_INFO *Basic)
   return TimeLocal(utc_time);
 }
 
-
-long
+int
 GetUTCOffset()
 {
 #ifdef WIN32
   if (is_altair() || !is_embedded())
     return XCSoarInterface::SettingsComputer().UTCOffset;
 
-  long utcoffset = 0;
+  int utcoffset = 0;
   // returns offset in seconds
   TIME_ZONE_INFORMATION TimeZoneInformation;
   DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
