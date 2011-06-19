@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "DataField/Enum.hpp"
+#include "DataField/Boolean.hpp"
 #include "DataField/ComboList.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
@@ -49,6 +50,36 @@ AirspaceConfigPanel::OnAirspaceModeClicked(gcc_unused WndButton &button)
   dlgAirspaceShowModal(false);
 }
 
+static void
+ShowDisplayControls(AirspaceDisplayMode_t mode)
+{
+  ShowFormControl(*wf, _T("prpClipAltitude"), mode == CLIP);
+  ShowFormControl(*wf, _T("prpAltWarningMargin"), mode == AUTO);
+}
+
+static void
+ShowWarningControls(bool visible)
+{
+  ShowFormControl(*wf, _T("prpWarningTime"), visible);
+  ShowFormControl(*wf, _T("prpAcknowledgementTime"), visible);
+}
+
+void
+AirspaceConfigPanel::OnAirspaceDisplay(DataField *Sender,
+                                       DataField::DataAccessKind_t Mode)
+{
+  const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
+  AirspaceDisplayMode_t mode = (AirspaceDisplayMode_t)df.GetAsInteger();
+  ShowDisplayControls(mode);
+}
+
+void
+AirspaceConfigPanel::OnAirspaceWarning(DataField *Sender,
+                                       DataField::DataAccessKind_t Mode)
+{
+  const DataFieldBoolean &df = *(const DataFieldBoolean *)Sender;
+  ShowWarningControls(df.GetAsBoolean());
+}
 
 void
 AirspaceConfigPanel::Init(WndForm *_wf)
@@ -114,6 +145,9 @@ AirspaceConfigPanel::Init(WndForm *_wf)
     wp->hide();
     wf->RemoveExpert(wp);  // prevent unhiding with expert-switch
   }
+
+  ShowDisplayControls(renderer.altitude_mode);
+  ShowWarningControls(computer.enable_warnings);
 }
 
 

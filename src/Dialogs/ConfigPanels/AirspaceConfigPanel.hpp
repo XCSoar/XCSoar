@@ -34,6 +34,9 @@ namespace AirspaceConfigPanel
 
   void OnAirspaceColoursClicked(gcc_unused WndButton &button);
   void OnAirspaceModeClicked(gcc_unused WndButton &button);
+
+  void OnAirspaceDisplay(DataField *Sender, DataField::DataAccessKind_t Mode);
+  void OnAirspaceWarning(DataField *Sender, DataField::DataAccessKind_t Mode);
 };
 
 #endif /* AIRSPACECONFIGPANEL_HPP */

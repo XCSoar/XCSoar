@@ -432,7 +432,7 @@
       <Button Name="cmdAirspaceMode" Caption="Filter" X="170" Y="2" Width="70" Height="22" OnClick="AirspaceConfigPanel::OnAirspaceModeClicked" />
   
       <Edit Name="prpAirspaceDisplay" Caption="Airspace display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class.&#10;[All on] All is displayed.&#10;[Clip] Only airspace below the clip altitude.&#10;[Auto] All within a margin of the glider.&#10;[All below] All airspace below the glider.">
-        <DataField DataType="enum" />
+        <DataField DataType="enum" OnDataAccess="AirspaceConfigPanel::OnAirspaceDisplay"/>
       </Edit>
   
       <Edit Name="prpClipAltitude" Caption="Clip altitude" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -445,7 +445,7 @@
       </Edit>
     
       <Edit Name="prpAirspaceWarnings" Caption="Warnings" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Enable/disable all airspace warnings.">
-        <DataField DataType="boolean" />
+        <DataField DataType="boolean" OnDataAccess="AirspaceConfigPanel::OnAirspaceWarning"/>
       </Edit>
     
       <Edit Name="prpWarningTime" Caption="Warning time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot.">

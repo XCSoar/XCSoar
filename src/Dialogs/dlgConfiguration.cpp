@@ -202,6 +202,8 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceColoursClicked),
   DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceModeClicked),
+  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceDisplay),
+  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceWarning),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(SymbolsConfigPanel::OnTrailLength),
