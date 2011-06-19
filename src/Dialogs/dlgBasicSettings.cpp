@@ -225,6 +225,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
   case DataField::daChange:
     glide_polar.set_ballast(df.GetAsFixed() / 100);
     changed = true;
+    SetButtons();
     SetBallast();
     break;
 
