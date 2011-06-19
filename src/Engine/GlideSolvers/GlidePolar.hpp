@@ -217,6 +217,13 @@ public:
   }
 
   /**
+   * Retrieve if the glider is ballasted
+   */
+  bool has_ballast() const {
+    return positive(ballast);
+  }
+
+  /**
    * Retrieve ballast in litres
    * @return Ballast (l or kg)
    */
