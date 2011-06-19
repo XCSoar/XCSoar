@@ -219,7 +219,7 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daSpecial:
-    SetBallastTimer(glide_polar.get_ballast() > fixed(0.01) &&
+    SetBallastTimer(positive(glide_polar.get_ballast()) &&
                     !XCSoarInterface::SettingsComputer().BallastTimerActive);
     break;
   case DataField::daChange:
