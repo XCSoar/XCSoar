@@ -438,11 +438,6 @@ LoadWindow(CallBackTableEntry *LookUpTable,
     return NULL;
   }
 
-  if (node.isEmpty()) {
-    ShowXMLError();
-    return NULL;
-  }
-
   // use style of last form loaded
   DialogStyle dialog_style = dialog_style_last;
 
