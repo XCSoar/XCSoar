@@ -25,7 +25,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "NMEA/Info.hpp"
 #include "Asset.hpp"
-#include "OS/Clock.hpp"
 
 #include <windows.h>
 
@@ -56,14 +55,5 @@ DetectCurrentTime(const NMEA_INFO *Basic)
 int
 GetUTCOffset()
 {
-#ifdef WIN32
-  if (is_altair() || !is_embedded())
-    return XCSoarInterface::SettingsComputer().UTCOffset;
-
-  return GetSystemUTCOffset();
-#else /* !WIN32 */
-  // XXX
   return XCSoarInterface::SettingsComputer().UTCOffset;
-#endif /* !WIN32 */
 }
-
