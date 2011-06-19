@@ -91,38 +91,14 @@ ResetFonts(bool bUseCustom)
 static void
 ShowFontEditButtons(bool bVisible)
 {
-  WndProperty * wp;
-  wp = (WndProperty*)wf->FindByName(_T("cmdInfoWindowFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdTitleWindowFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdMapWindowFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdTitleSmallWindowFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdMapWindowBoldFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdCDIWindowFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdMapLabelFont"));
-  if (wp)
-    wp->set_visible(bVisible);
-
-  wp = (WndProperty*)wf->FindByName(_T("cmdMapLabelImportantFont"));
-  if (wp)
-    wp->set_visible(bVisible);
+  ShowFormControl(*wf, _T("cmdInfoWindowFont"), bVisible);
+  ShowFormControl(*wf, _T("cmdTitleWindowFont"), bVisible);
+  ShowFormControl(*wf, _T("cmdMapWindowFont"), bVisible);
+  ShowFormControl(*wf, _T("cmdTitleSmallWindowFont"), bVisible);
+  ShowFormControl(*wf, _T("cmdMapWindowBoldFont"), bVisible);
+  ShowFormControl(*wf, _T("cmdCDIWindowFont"), bVisible);
+  ShowFormControl(*wf, _T("cmdMapLabelFont"), bVisible);
+  ShowFormControl(*wf, _T("cmdMapLabelImportantFont"), bVisible);
 }
 
 static void

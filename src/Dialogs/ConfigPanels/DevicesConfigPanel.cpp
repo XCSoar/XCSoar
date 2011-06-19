@@ -154,9 +154,8 @@ UpdateDeviceSetupButton(unsigned DeviceIdx, const TCHAR *Name)
   TCHAR button_name[] = _T("cmdSetupDeviceA");
   button_name[(sizeof(button_name) / sizeof(button_name[0])) - 2] += DeviceIdx;
 
-  WndButton *wb = (WndButton *)wf->FindByName(button_name);
-  if (wb != NULL)
-    wb->set_visible(Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
+  ShowFormControl(*wf, button_name,
+                  Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
 }
 
 

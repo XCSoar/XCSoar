@@ -34,7 +34,6 @@ Copyright_License {
 
 static WndForm* wf = NULL;
 
-
 void
 TerrainDisplayConfigPanel::Init(WndForm *_wf)
 {

@@ -32,6 +32,14 @@ Copyright_License {
 #include <assert.h>
 
 void
+ShowFormControl(WndForm &form, const TCHAR *control_name, bool visible)
+{
+  Window *window = form.FindByName(control_name);
+  assert(window != NULL);
+  window->set_visible(visible);
+}
+
+void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value)
 {
   assert(control_name != NULL);

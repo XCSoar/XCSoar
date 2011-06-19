@@ -48,23 +48,20 @@ static void
 UpdateButtons()
 {
   const unsigned index = wTaskPoints->GetCursorIndex();
-  WndButton* wb = (WndButton*)wf->FindByName(_T("cmdMakeFinish"));
-  assert(wb);
-  wb->set_visible(index > 0 &&
-      (index == ordered_task->task_size() - 1) &&
-      !ordered_task->has_finish()); // Todo check if point is already finish
+  // Todo check if point is already finish
+  ShowFormControl(*wf, _T("cmdMakeFinish"),
+                  index > 0 &&
+                  (index == ordered_task->task_size() - 1) &&
+                  !ordered_task->has_finish());
 
-  wb = (WndButton*)wf->FindByName(_T("cmdDown"));
-  assert(wb);
-  wb->set_visible((int)index < ((int)(ordered_task->task_size()) - 1));
+  ShowFormControl(*wf, _T("cmdDown"),
+                  (int)index < ((int)(ordered_task->task_size()) - 1));
 
-  wb = (WndButton*)wf->FindByName(_T("cmdUp"));
-  assert(wb);
-  wb->set_visible(index > 0 && index < ordered_task->task_size());
+  ShowFormControl(*wf, _T("cmdUp"),
+                  index > 0 && index < ordered_task->task_size());
 
-  wb = (WndButton*)wf->FindByName(_T("cmdEditTurnpoint"));
-  assert(wb);
-  wb->set_enabled(index < ordered_task->task_size());
+  ShowFormControl(*wf, _T("cmdEditTurnpoint"),
+                  index < ordered_task->task_size());
 }
 
 void

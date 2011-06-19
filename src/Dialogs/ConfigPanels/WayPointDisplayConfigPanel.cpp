@@ -41,13 +41,8 @@ WayPointDisplayConfigPanel::UpdateVisibilities()
   assert(wp != NULL);
   bool visible = (wp->GetDataField()->GetAsInteger() != 0);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppLandableRenderingScale"));
-  assert(wp != NULL);
-  wp->set_visible(visible);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpAppScaleRunwayLength"));
-  assert(wp != NULL);
-  wp->set_visible(visible);
+  ShowFormControl(*wf, _T("prpAppLandableRenderingScale"), visible);
+  ShowFormControl(*wf, _T("prpAppScaleRunwayLength"), visible);
 }
 
 void

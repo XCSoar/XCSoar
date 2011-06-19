@@ -32,6 +32,12 @@ Copyright_License {
 class WndForm;
 
 /**
+ * Show or hide a named form control.
+ */
+void
+ShowFormControl(WndForm &form, const TCHAR *control_name, bool visible);
+
+/**
  * Loads the specified value into the form.
  *
  * @param form the form

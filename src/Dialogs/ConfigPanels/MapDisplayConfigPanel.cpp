@@ -37,9 +37,9 @@ MapDisplayConfigPanel::UpdateVisibilities()
 {
   WndProperty* wp_shift = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
   assert(wp_shift != NULL);
-  WndProperty* wp_pos = (WndProperty*)wf->FindByName(_T("prpGliderScreenPosition"));
-  assert(wp_pos != NULL);
-  wp_pos->set_visible(wp_shift->GetDataField()->GetAsInteger() != 0);
+
+  ShowFormControl(*wf, _T("prpGliderScreenPosition"),
+                  wp_shift->GetDataField()->GetAsInteger() != 0);
 }
 
 void
