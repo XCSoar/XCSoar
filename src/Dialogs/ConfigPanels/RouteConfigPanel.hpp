@@ -25,11 +25,15 @@ Copyright_License {
 #define ROUTECONFIGPANEL_HPP
 
 #include "Form/Form.hpp"
+#include "DataField/Base.hpp"
 
 namespace RouteConfigPanel
 {
   void Init(WndForm *wf);
   bool Save();
+
+  void OnRouteMode(DataField *Sender, DataField::DataAccessKind_t Mode);
+  void OnReachMode(DataField *Sender, DataField::DataAccessKind_t Mode);
 };
 
 #endif /* ROUTECONFIGPANEL_HPP */

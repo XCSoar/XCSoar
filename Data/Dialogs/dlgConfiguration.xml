@@ -339,7 +339,7 @@
       <Panel X="2" Y="2" Width="-2" Height="72" Border="1">    
       <Edit Name="prpRoutePlannerMode" Caption="Route mode" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="If set to &quot;None&quot;, neither airspace or terrain is used for route planning.  If set to &quot;Terrain&quot;, routes will avoid terrain; if set to &quot;Airspace&quot;, routes will avoid airspace.  If set to &quot;Both&quot;, routes will avoid airspace and terrain.">
-        <DataField DataType="enum" />
+        <DataField DataType="enum" OnDataAccess="RouteConfigPanel::OnRouteMode"/>
       </Edit>
 
       <Edit Name="prpRoutePlannerAllowClimb" Caption="Route climb" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
@@ -357,7 +357,7 @@
 
       <Edit Name="prpTurningReach" Caption="Reach mode" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="How calculations are performed of the reach of the glider with respect to terrain.&#10;[Off] Reach calculations disabled.&#10;[Straight] The reach is from straight line paths from the glider.&#10;[Turning] The reach is calculated allowing turns around terrain obstacles.">
-       <DataField DataType="enum" />
+        <DataField DataType="enum" OnDataAccess="RouteConfigPanel::OnReachMode"/>
       </Edit>
 
       <Edit Name="prpFinalGlideTerrain" Caption="Reach display" X="2" Width="-2" Height="22" CaptionWidth="150"

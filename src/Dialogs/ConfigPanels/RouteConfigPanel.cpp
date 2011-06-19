@@ -32,6 +32,38 @@ Copyright_License {
 
 static WndForm* wf = NULL;
 
+static void
+ShowRouteControls(bool show)
+{
+  ShowFormControl(*wf, _T("prpRoutePlannerAllowClimb"), show);
+  ShowFormControl(*wf, _T("prpRoutePlannerUseCeiling"), show);
+}
+
+static void
+ShowReachControls(bool show)
+{
+  ShowFormControl(*wf, _T("prpFinalGlideTerrain"), show);
+  ShowFormControl(*wf, _T("prpReachPolarMode"), show);
+}
+
+void
+RouteConfigPanel::OnRouteMode(DataField *Sender,
+                              DataField::DataAccessKind_t Mode)
+{
+  const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
+  RoutePlannerConfig::Mode mode = (RoutePlannerConfig::Mode)df.GetAsInteger();
+  ShowRouteControls(mode != RoutePlannerConfig::rpNone);
+}
+
+void
+RouteConfigPanel::OnReachMode(DataField *Sender,
+                              DataField::DataAccessKind_t Mode)
+{
+  const DataFieldEnum &df = *(const DataFieldEnum *)Sender;
+  RoutePlannerConfig::ReachMode mode =
+    (RoutePlannerConfig::ReachMode)df.GetAsInteger();
+  ShowReachControls(mode != RoutePlannerConfig::rmOff);
+}
 
 void
 RouteConfigPanel::Init(WndForm *_wf)
@@ -90,6 +122,9 @@ RouteConfigPanel::Init(WndForm *_wf)
     dfe->Set(settings_computer.route_planner.reach_polar_mode);
     wp->RefreshDisplay();
   }
+
+  ShowRouteControls(settings_computer.route_planner.mode != RoutePlannerConfig::rpNone);
+  ShowReachControls(settings_computer.route_planner.reach_calc_mode != RoutePlannerConfig::rmOff);
 }
 
 
