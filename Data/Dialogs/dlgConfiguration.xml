@@ -374,7 +374,7 @@
     </Panel>
 
     <Panel Name="frmPolar">
-      <Panel Name="pnlPolarDetails" X="2" Y="2" Border="30" Height="109" Width="-2">
+      <Panel Name="pnlPolarDetails" X="2" Y="2" Border="30" Height="86" Width="-2">
         <Label Name="lblPolar" Caption="Polar" X="2" Y="2" Height="16" Width="-60" />
         <Label Name="lblPolarInvalid" Caption="Invalid" X="-50" Y="2" Height="16" CaptionColor="0xFF0000" />
 
@@ -398,17 +398,14 @@
           <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
         
-        <Edit Name="prpPolarReferenceMass" Caption="Dry mass; max. ballast" Expert="1" Y="62" Width="182" Height="22" CaptionWidth="133">
+        <Edit Name="prpPolarReferenceMass" Caption="Dry mass" Expert="1" Y="62" Width="-2" Height="22" CaptionWidth="150">
           <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarMaxBallast" Caption="Max. ballast" X="182" Expert="1" Y="62" Width="50" Height="22" CaptionWidth="1">
-          <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" Min="0" Max="500" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
-        </Edit>
-
-        <Edit Name="prpPolarWingArea" Caption="Wing area" Expert="1" Y="84" Width="232" Height="22" CaptionWidth="133">
-          <DataField DataType="double" DisplayFormat="%.1f m^2" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="PolarConfigPanel::OnFieldData" />
-        </Edit>
       </Panel>
+
+      <Edit Name="prpPolarWingArea" Caption="Wing area" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150">
+        <DataField DataType="double" DisplayFormat="%.1f m^2" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="PolarConfigPanel::OnFieldData" />
+      </Edit>
 
       <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
@@ -418,6 +415,10 @@
       <Edit Name="prpHandicap" Caption="Handicap" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="The handicap factor used for On-Line Contest scoring.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="50" Max="150" Step="1"/>
+      </Edit>
+
+      <Edit Name="prpPolarMaxBallast" Caption="Max. ballast" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150">
+        <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" Min="0" Max="500" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
       </Edit>
     
       <Edit Name="prpBallastSecsToEmpty" Caption="Dump time" X="2" Width="-2" Height="22" CaptionWidth="150"
