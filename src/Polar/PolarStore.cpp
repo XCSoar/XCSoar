@@ -33,7 +33,7 @@ struct InternalPolarInfo
 
   // Using doubles here to simplify the code in PolarStore.cpp
   //
-  double dry_mass;     /**< Mass dry gross (kg) */
+  double reference_mass;     /**< Mass dry gross (kg) */
   double max_ballast;  /**< Max water ballast (l) */
   double v1;           /**< Speed (kph) of point 1 */
   double w1;           /**< Sink rate (negative, m/s) of point 1  */
@@ -47,7 +47,7 @@ struct InternalPolarInfo
 
   void Transfer(PolarInfo &polar) const {
     polar.name = name;
-    polar.dry_mass = fixed(dry_mass);
+    polar.reference_mass = fixed(reference_mass);
     polar.max_ballast = fixed(max_ballast);
     polar.v1 = Units::ToSysUnit(fixed(v1), unKiloMeterPerHour);
     polar.w1 = fixed(w1);

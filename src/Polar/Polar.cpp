@@ -63,7 +63,7 @@ void
 PolarInfo::Init()
 {
   v1 = v2 = v3 = w1 = w2 = w3 = fixed_zero;
-  dry_mass = max_ballast = wing_area = v_no = fixed_zero;
+  reference_mass = max_ballast = wing_area = v_no = fixed_zero;
   name = NULL;
 }
 
@@ -79,9 +79,9 @@ PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
   polar.ideal_polar_c = pc.c;
 
   // Glider empty weight
-  polar.dry_mass = fixed(dry_mass);
+  polar.reference_mass = fixed(reference_mass);
   // Ballast weight
-  polar.ballast_ratio = fixed(max_ballast) / polar.dry_mass;
+  polar.ballast_ratio = fixed(max_ballast) / polar.reference_mass;
 
   polar.wing_area = fixed(wing_area);
 
@@ -99,12 +99,12 @@ PolarInfo::GetString(TCHAR* line, size_t size, bool include_v_no) const
 
   if (include_v_no)
     _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-               (double)dry_mass, (double)max_ballast, (double)V1, (double)w1,
+               (double)reference_mass, (double)max_ballast, (double)V1, (double)w1,
                (double)V2, (double)w2, (double)V3, (double)w3,
                (double)wing_area, (double)v_no);
   else
     _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
-               (double)dry_mass, (double)max_ballast, (double)V1, (double)w1,
+               (double)reference_mass, (double)max_ballast, (double)V1, (double)w1,
                (double)V2, (double)w2, (double)V3, (double)w3,
                (double)wing_area);
 }
@@ -123,7 +123,7 @@ PolarInfo::ReadString(const TCHAR *line)
 
   TCHAR *p;
 
-  polar.dry_mass = fixed(_tcstod(line, &p));
+  polar.reference_mass = fixed(_tcstod(line, &p));
   if (*p != _T(','))
     return false;
 

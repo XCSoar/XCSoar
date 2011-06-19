@@ -44,7 +44,7 @@ struct PolarInfo
 
   // Using doubles here to simplify the code in PolarStore.cpp
   //
-  fixed dry_mass;     /**< Mass dry gross (kg) */
+  fixed reference_mass;     /**< Mass dry gross (kg) */
   fixed max_ballast;  /**< Max water ballast (l) */
   fixed v1;           /**< Speed (m/s) of point 1 */
   fixed w1;           /**< Sink rate (negative, m/s) of point 1  */

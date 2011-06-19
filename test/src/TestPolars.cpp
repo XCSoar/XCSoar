@@ -47,7 +47,7 @@ TestBasic()
   // Test ReadString()
   PolarInfo polar;
   polar.ReadString(_T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918"));
-  ok1(equals(fixed(polar.dry_mass), 318));
+  ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
   ok1(equals(fixed(polar.v1), 22.2222222));
   ok1(equals(fixed(polar.w1), -0.606));
@@ -58,7 +58,7 @@ TestBasic()
   ok1(equals(fixed(polar.wing_area), 0.0));
 
   polar.ReadString(_T("318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8"));
-  ok1(equals(fixed(polar.dry_mass), 318));
+  ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
   ok1(equals(fixed(polar.v1), 22.2222222));
   ok1(equals(fixed(polar.w1), -0.606));
@@ -81,7 +81,7 @@ TestFileImport()
   // Test LoadFromFile()
   PolarInfo polar;
   PolarGlue::LoadFromFile(polar, _T("test/data/test.plr"));
-  ok1(equals(fixed(polar.dry_mass), 318));
+  ok1(equals(fixed(polar.reference_mass), 318));
   ok1(equals(fixed(polar.max_ballast), 100));
   ok1(equals(fixed(polar.v1), 22.2222222));
   ok1(equals(fixed(polar.w1), -0.606));

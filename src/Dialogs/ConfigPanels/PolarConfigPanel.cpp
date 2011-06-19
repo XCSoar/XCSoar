@@ -92,7 +92,7 @@ UpdatePolarFields(const PolarInfo &polar)
   LoadFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, polar.w2);
   LoadFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, polar.w3);
 
-  LoadFormProperty(*wf, _T("prpPolarMassDry"), polar.dry_mass);
+  LoadFormProperty(*wf, _T("prpPolarMassDry"), polar.reference_mass);
   LoadFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
 
   LoadFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
@@ -138,7 +138,7 @@ SaveFormToPolar(PolarInfo &polar)
   changed |= SaveFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, polar.w2);
   changed |= SaveFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, polar.w3);
 
-  changed |= SaveFormProperty(*wf, _T("prpPolarMassDry"), polar.dry_mass);
+  changed |= SaveFormProperty(*wf, _T("prpPolarMassDry"), polar.reference_mass);
   changed |= SaveFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
 
   changed |= SaveFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
