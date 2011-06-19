@@ -40,6 +40,9 @@ SymbolsConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
+
+  const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
+
   WndProperty *wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpWindArrowStyle"));
@@ -48,7 +51,7 @@ SymbolsConfigPanel::Init(WndForm *_wf)
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Arrow head"));
     dfe->addEnumText(_("Full arrow"));
-    dfe->Set(XCSoarInterface::SettingsMap().WindArrowStyle);
+    dfe->Set(settings_map.WindArrowStyle);
     wp->RefreshDisplay();
   }
 
@@ -60,12 +63,12 @@ SymbolsConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("Long"));
     dfe->addEnumText(_("Short"));
     dfe->addEnumText(_("Full"));
-    dfe->Set(XCSoarInterface::SettingsMap().TrailActive);
+    dfe->Set(settings_map.TrailActive);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpTrailDrift"),
-                   XCSoarInterface::SettingsMap().EnableTrailDrift);
+                   settings_map.EnableTrailDrift);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
   if (wp) {
@@ -79,15 +82,15 @@ SymbolsConfigPanel::Init(WndForm *_wf)
     _tcscat(tmp_text, _T(" #2"));
     dfe->addEnumText(tmp_text);
     dfe->addEnumText(_("Altitude"));
-    dfe->Set((int)XCSoarInterface::SettingsMap().SnailType);
+    dfe->Set((int)settings_map.SnailType);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpSnailWidthScale"),
-                   XCSoarInterface::SettingsMap().SnailScaling);
+                   settings_map.SnailScaling);
 
   LoadFormProperty(*wf, _T("prpDetourCostMarker"),
-                   XCSoarInterface::SettingsMap().EnableDetourCostMarker);
+                   settings_map.EnableDetourCostMarker);
 
   wp = (WndProperty*)wf->FindByName(_T("prpDisplayTrackBearing"));
   if (wp) {
@@ -96,12 +99,12 @@ SymbolsConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("Off"));
     dfe->addEnumText(_("On"));
     dfe->addEnumText(_("Auto"));
-    dfe->Set(XCSoarInterface::SettingsMap().DisplayTrackBearing);
+    dfe->Set(settings_map.DisplayTrackBearing);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpEnableFLARMMap"),
-                   XCSoarInterface::SettingsMap().EnableFLARMMap);
+                   settings_map.EnableFLARMMap);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
   if (wp) {
@@ -119,50 +122,51 @@ SymbolsConfigPanel::Init(WndForm *_wf)
 bool
 SymbolsConfigPanel::Save()
 {
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
   bool changed = false;
   WndProperty *wp;
 
   changed |= SaveFormProperty(*wf, _T("prpWindArrowStyle"),
                               szProfileWindArrowStyle,
-                              XCSoarInterface::SetSettingsMap().WindArrowStyle);
+                              settings_map.WindArrowStyle);
 
   changed |= SaveFormProperty(*wf, _T("prpTrail"),
                               szProfileSnailTrail,
-                              XCSoarInterface::SetSettingsMap().TrailActive);
+                              settings_map.TrailActive);
 
   changed |= SaveFormProperty(*wf, _T("prpTrailDrift"),
                               szProfileTrailDrift,
-                              XCSoarInterface::SetSettingsMap().EnableTrailDrift);
+                              settings_map.EnableTrailDrift);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
   if (wp) {
-    if (XCSoarInterface::SettingsMap().SnailType != (SnailType_t)wp->GetDataField()->GetAsInteger()) {
-      XCSoarInterface::SetSettingsMap().SnailType = (SnailType_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSnailType, (int)XCSoarInterface::SettingsMap().SnailType);
+    if (settings_map.SnailType != (SnailType_t)wp->GetDataField()->GetAsInteger()) {
+      settings_map.SnailType = (SnailType_t)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileSnailType, (int)settings_map.SnailType);
       changed = true;
-      Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
+      Graphics::InitSnailTrail(settings_map);
     }
   }
 
   bool snailscaling_changed =
       SaveFormProperty(*wf, _T("prpSnailWidthScale"),
                        szProfileSnailWidthScale,
-                       XCSoarInterface::SetSettingsMap().SnailScaling);
+                       settings_map.SnailScaling);
   changed |= snailscaling_changed;
   if (snailscaling_changed)
-    Graphics::InitSnailTrail(XCSoarInterface::SettingsMap());
+    Graphics::InitSnailTrail(settings_map);
 
   changed |= SaveFormProperty(*wf, _T("prpDetourCostMarker"),
                               szProfileDetourCostMarker,
-                              XCSoarInterface::SetSettingsMap().EnableDetourCostMarker);
+                              settings_map.EnableDetourCostMarker);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpDisplayTrackBearing"),
                               szProfileDisplayTrackBearing,
-                              XCSoarInterface::SetSettingsMap().DisplayTrackBearing);
+                              settings_map.DisplayTrackBearing);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableFLARMMap"),
                               szProfileEnableFLARMMap,
-                              XCSoarInterface::SetSettingsMap().EnableFLARMMap);
+                              settings_map.EnableFLARMMap);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
   if (wp) {
