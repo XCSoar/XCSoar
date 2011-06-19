@@ -91,6 +91,13 @@ GlidePolar::set_ballast(const fixed bal)
 }
 
 void
+GlidePolar::set_ballast_litres(const fixed litres)
+{
+  ballast = litres / (ballast_ratio * dry_mass);
+  update();
+}
+
+void
 GlidePolar::set_mc(const fixed _mc)
 {
   mc = _mc;

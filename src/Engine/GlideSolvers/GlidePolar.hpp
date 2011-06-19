@@ -208,6 +208,12 @@ public:
   void set_ballast(const fixed ratio);
 
   /**
+   * Set ballast value in litres
+   * @param litres The new ballast setting (l or kg)
+   */
+  void set_ballast_litres(const fixed litres);
+
+  /**
    * Retrieve ballast 
    * @return Proportion of possible ballast [0-1]
    */
