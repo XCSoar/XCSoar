@@ -10,6 +10,7 @@ Version 6.1.2 - not yet released
   - change low battery thresholds
   - manual and translation updates
   - fix UTC offset setting
+  - fix overlapped InfoBox text
 
 Version 6.1.1 - 2011/06/01
 * calculations

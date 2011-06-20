@@ -214,7 +214,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   y = recTitle.top + 1 + font.get_capital_height() - font.get_ascent_height();
 
-  canvas.text(x, y, mTitle.c_str());
+  canvas.TextAutoClipped(x, y, mTitle.c_str());
 
   if (Appearance.InfoBoxBorder == apIbTab && halftextwidth > IBLSCALE(3)) {
     int ytop = recTitle.top + font.get_capital_height() / 2;
@@ -273,7 +273,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   y = recValue.top + 1 - ascent_height +
     (recValue.bottom - recValue.top + capital_height) / 2;
 
-  canvas.text(x, y, mValue.c_str());
+  canvas.TextAutoClipped(x, y, mValue.c_str());
 
   if (unit_symbol != NULL && colorValue >= 0) {
     RasterPoint origin = unit_symbol->get_origin(Appearance.InverseInfoBox
@@ -305,7 +305,7 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
   y = recComment.top + 1 + font.get_capital_height()
     - font.get_ascent_height();
 
-  canvas.text(x, y, mComment);
+  canvas.TextAutoClipped(x, y, mComment);
 }
 
 void
