@@ -395,9 +395,8 @@ WndProperty::on_paint(Canvas &canvas)
   } else {
     /* don't need to erase the background when it has been done by the
        parent window already */
-#ifdef HAVE_CLIPPING
-    canvas.clear(GetBackColor());
-#endif
+    if (have_clipping())
+      canvas.clear(GetBackColor());
   }
 
   WindowControl::on_paint(canvas);
@@ -424,7 +423,11 @@ WndProperty::on_paint(Canvas &canvas)
     if (org.x < 1)
       org.x = 1;
 
-    canvas.text(org.x, org.y, mCaption.c_str());
+    if (have_clipping())
+      canvas.text(org.x, org.y, mCaption.c_str());
+    else
+      canvas.text_clipped(org.x, org.y, mCaptionWidth - org.x,
+                          mCaption.c_str());
   }
 
   // can't but dlgComboPicker here b/c it calls paint when combopicker closes too

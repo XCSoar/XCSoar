@@ -143,34 +143,27 @@ This page let you specify the favoured map orientation and projection.
 
 \begin{description}
 \item[Cruise/Circling orientation]  \label{conf:orientation} This determines how
-the screen is rotated with the glider, depending on it's current display mode.
-\begin{description}
-\item[Track up]  The moving map display will be rotated so the glider's track
- is oriented up. The north arrow symbol points to true north. The glider symbol 
- may be shown rotated according to the computed heading of the glider taking wind into account.
-\item[North up]  The moving map display will always be orientated true north to
- south and the glider icon will be rotated to show its course (corrected for
- wind).
-\item[Target up]  The moving map display will be rotated so the current target
- direction is oriented up.
-\end{description}
-
+  the screen is rotated with the glider, depending on it's current display mode. \\
+  {\bf Track up}: The moving map display will be rotated so the glider's track
+  is oriented up. The north arrow symbol points to true north. The glider symbol 
+  may be shown rotated according to the computed heading of the glider taking 
+  wind into account. \\
+  {\bf North up}: The moving map display will always be orientated true north to
+  south and the glider icon will be rotated to show its course (corrected for
+  wind). \\
+  {\bf Target up}: The moving map display will be rotated so the current target
+  direction is oriented up.
 \item[Circling zoom]  \label{conf:circlingzoom} This determines whether separate
-zoom levels will be maintained for circling and cruise modes.  If enabled, then the 
-map will zoom in automatically when entering circling mode and zoom out
-automatically when leaving circling mode.
-
+  zoom levels will be maintained for circling and cruise modes.  If enabled, then the 
+  map will zoom in automatically when entering circling mode and zoom out
+  automatically when leaving circling mode.
 \item[Map shift reference]  The direction according to the map will be displaced 
- in order to present a meaningful map section.
-\begin{description}
-  \item[None]  Disable any adjustment.
-  \item[Track]  Use a recent average of the ground track as basis.
-  \item[Target]  Use the current target waypoint as basis.
-\end{description}
-
+  in order to present a meaningful map section. \\
+  {\bf None}: Disable any adjustment. \\
+  {\bf Track}: Use a recent average of the ground track as basis. \\
+  {\bf Target}: Use the current target waypoint as basis.
 \item[Glider position offset]  \label{conf:gliderposition} Defines the location of the 
- glider drawn on the screen in percent from the screen edge.
-
+  glider drawn on the screen in percent from the screen edge.
 \item[Max. auto zoom distance]  The upper limit for auto zoom distance.
 \end{description}
 
@@ -187,54 +180,40 @@ This page provides options relating to screen elements overlayed to the map disp
 
 \begin{description}
 \item[Track bearing]  Display the ground track (ground track projection) on the map.
- The setting "Auto" displays the ground track only if there is a significant difference to plane heading.
-\item[FLARM traffic]  \label{conf:flarm-on-map} This enables the display of FLARM traffic on the map.
-
+  The setting "Auto" displays the ground track only if there is a significant 
+  difference to plane heading.
+\item[FLARM traffic]  \label{conf:flarm-on-map} This enables the display of FLARM 
+  traffic on the map.
 \item[Trail length*] \label{conf:snailtrail} Determines whether and how long a
-snail trail is drawn behind the glider.
-\begin{description}
- \item[Off]  No trail is drawn.
- \item[Long]  A long trail is drawn (approx 60 minutes).
- \item[Short]  A short trail is drawn (approx 10 minutes).
- \item[Full]  A trail for the entire flight is drawn.
-\end{description}
-
+  snail trail is drawn behind the glider. \\
+  {\bf Off}: No trail is drawn. \\
+  {\bf Long}: A long trail is drawn (approx 60 minutes). \\
+  {\bf Short}: A short trail is drawn (approx 10 minutes). \\
+  {\bf Full}: A trail for the entire flight is drawn.
 \item[Trail drift*] \label{conf:traildrift} Determines whether the
- snail trail is drifted with the wind when displayed in circling mode.  Switched Off,
- the snail trail stays uncompensated for wind draft.
-
-\item[Trail type*] \label{conf:snailtype} Sets the type of the snail trail
-display.
-\begin{description}
- \item[Vario \#1]  Within lift areas lines get displayed green and
- thicker, while sinking lines are shown red and thin.  Zero lift
- is presented as a grey line.
- \item[Vario \#2]  The climb colour for this scheme is orange to red, sinking is
- displayed as light blue to dark blue. Zero lift
- is presented as a yellow line.
- \item[Altitude] The colour scheme corresponds to the height.
-\end{description}
-
+  snail trail is drifted with the wind when displayed in circling mode.  Switched Off,
+  the snail trail stays uncompensated for wind draft.
+\item[Trail type*] \label{conf:snailtype} Sets the type of the snail trail display. \\
+  {\bf Vario \#1}: Within lift areas lines get displayed green and
+  thicker, while sinking lines are shown red and thin.  Zero lift
+  is presented as a grey line. \\
+  {\bf Vario \#2}: The climb colour for this scheme is orange to red, sinking is
+  displayed as light blue to dark blue. Zero lift is presented as a yellow line. \\
+  {\bf Altitude}: The colour scheme corresponds to the height.
 \item[Trail scaled*] \label{conf:trailscaled} If activates, the snail trail width 
- is scaled according to the vario signal.
+  is scaled according to the vario signal.
 \item[Detour cost markers*]  If enabled this displays in cruise flight some
- figures projected in front of the nose of the glider icon.  This is the
- additional distance in percent if you fly up the position of the figure and
- after that again straight towards the target, compared to the straight distance
- to target.
-
-\item[Aircraft symbol*]  Sets the symbol used for the aircraft.
-\begin{description}
- \item[Simple] Simplified line graphics, a black glider shape with white contours.
- \item[Simple (large)] Enlarged simple graphics for better visibility on a small display.
- \item[Detailed] Rendered aircraft graphics.
-\end{description}
-
-\item[Wind arrow*]  Determines the way the wind arrow is drawn on the map.
-\begin{description}
- \item[Arrow head]  Draws an arrow head only.
- \item[Full arrow]  Draws an arrow head with a dashed arrow line.
-\end{description}
+  figures projected in front of the nose of the glider icon.  This is the
+  additional distance in percent if you fly up the position of the figure and
+  after that again straight towards the target, compared to the straight distance
+  to target.
+\item[Aircraft symbol*]  Sets the symbol used for the aircraft. \\
+  {\bf Simple}: Simplified line graphics, a black glider shape with white contours. \\
+  {\bf Simple (large)}: Enlarged simple graphics for better visibility on a small display. \\
+  {\bf Detailed}: Rendered aircraft graphics.
+\item[Wind arrow*]  Determines the way the wind arrow is drawn on the map. \\
+  {\bf Arrow head}: Draws an arrow head only. \\
+  {\bf Full arrow}: Draws an arrow head with a dashed arrow line.
 \end{description}
 
 
@@ -250,43 +229,36 @@ This page provides options relating to the map display.
 
 \begin{description}
 \item[Label format]  This setting \label{conf:labels} determines the label format 
- displayed with each waypoint. There are four different format options:
-\begin{description}
- \item[Full name]  The full name of each waypoint is displayed.
- \item[First word of name]  Only the first word (up to the first space) of the waypoint name is displayed.
- \item[First 3]  The first 3 letters of the waypoint name are displayed.
- \item[First 5]  The first 5 letters of the waypoint name are displayed.
- \item[None]  No name is displayed with the waypoint.
-\end{description}
-
-\item[Arrival height*]  This enables the arival height info shown additionally for landables.
-\begin{description}
- \item[None]  No arrival height is displayed.
- \item[Straight glide]  Straight glide arrival height (no terrain is considered).
- \item[Terrain avoidance glide]  Arival height considering terrain avoidance.
- \item[Straight \& terrain glide]  Both arrival heights are displayed.
-\end{description}
-
-\item[Label style*]  Labels for lanbables can be shown on a rounded rectangle with white background, or 
- with outlined letters.
-
-\item[Waypoint label visibility*] \label{conf:labelvisibility} Controls which waypoints 
- are displayed with names and arrival altitudes on the map:
-\begin{description}
- \item[All]  All waypoint labels will be displayed.
- \item[Task waypoints and landables]  All waypoints part of a task and all landables will be displayed.
- \item[Task waypoints]  All waypoints part of a task will be displayed.
- \item[None]  No waypoint labels will be displayed.
-\end{description}
-
+  displayed with each waypoint. There are four different format options.
+  {\bf Full name}: The full name of each waypoint is displayed. \\
+  {\bf First word of name}: Only the first word (up to the first space) of the 
+  waypoint name is displayed. \\
+  {\bf First 3}: The first 3 letters of the waypoint name are displayed. \\
+  {\bf First 5}: The first 5 letters of the waypoint name are displayed. \\
+  {\bf None}: No name is displayed with the waypoint.
+\item[Arrival height*]  This enables the arrival height info shown additionally 
+  for landables. \\
+  {\bf None}: No arrival height is displayed. \\
+  {\bf Straight glide}: Straight glide arrival height (no terrain is considered). \\
+  {\bf Terrain avoidance glide}: Arrival height considering terrain avoidance. \\
+  {\bf Straight \& terrain glide}: Both arrival heights are displayed.
+\item[Label style*]  Labels for lanbables can be shown on a rounded rectangle with 
+  white background, or with outlined letters.
+\item[Waypoint label visibility*]  \label{conf:labelvisibility} Controls which waypoints 
+  are displayed with names and arrival altitudes on the map: \\
+  {\bf All}: All waypoint labels will be displayed. \\
+  {\bf Task waypoints and landables}: All waypoints part of a task and all landables 
+  will be displayed. \\
+  {\bf Task waypoints}: All waypoints part of a task will be displayed. \\
+  {\bf None}:  No waypoint labels will be displayed.
 \item[Landable symbols]  \label{conf:waypointicons} Three styles are available:
- Purple circles (WinPilot style), a high contrast style with icons,
- and icons with a trafic light colour scheme. See Section~\ref{sec:waypoint-schemes} for details.
+  Purple circles (WinPilot style), a high contrast style with icons,
+  and icons with a traffic light colour scheme. See Section~\ref{sec:waypoint-schemes} for details.
 \item[Detailed landables*]  Enabling details on landables displays instead of fixed icons 
- variable information like runway length and heading.
+  variable information like runway length and heading.
 \item[Landable size]  A percentage to select the size landables are displayed on the map.
 \item[Scale runway length]  Enabling this option will display for detailed landables 
- additionally a scaled runway length based on real length.
+  additionally a scaled runway length based on real length.
 \end{description}
 
 
@@ -335,14 +307,15 @@ The available terrain colour schemes are illustrated in the table below.
 \end{maxipage}
 
 
-%%%%%%%%%%
+%%%%%%%%%%%%%%%%%%
 \clearpage
-\section{FLARM and other gauges}\label{sec:other-gauge}
+\section{FLARM and other gauges} \label{sec:vario-gauge}
 
 \todonum[inline]{Update config dialog screenshots, check order}
 
 \begin{description}
 \item[FLARM radar]  \label{conf:flarmdisplay} This enables the display of the FLARM 
+<<<<<<< HEAD
  radar gauge. The track bearing of the target relative to the track bearing of the 
  aircraft is displayed as an arrow head, and a triangle pointing up or down shows 
  the relative altitude of the target relative to you.
@@ -363,18 +336,19 @@ In all FLARM environment, the colour of the target indicates the threat level.
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-othergauges.png}
 \end{center}
 \label{conf:variogauge}
-\item[Speed arrows*]  Whether to show speed command arrows on the vario gauge.
- When shown, in cruise mode, arrows point up to command slow down; arrows point down 
- to command speed up.
+\item[Speed arrows*]  \label{conf:variogauge} Whether to show speed command 
+  arrows on the vario gauge.
+  When shown, in cruise mode, arrows point up to command slow down; arrows point down 
+  to command speed up.
 \item[Show average*]  Whether to show the average climb rate.  In cruise mode, this 
- switches to showing the average netto airmass rate.
+  switches to showing the average net airmass rate.
 \item[Show MacCready*]  Whether to show the MacCready setting.
 \item[Show bugs*]  Whether to show the bugs percentage.
 \item[Show ballast*]  Whether to show the ballast percentage.
 \item[Show gross*]  Whether to show the gross vario value.
 \item[Averager needle*]  If true, the vario gauge will display a hollow averager
- needle. During cruise, this needle displays the average netto value. During circling, 
- this needle displays the average gross value.
+  needle. During cruise, this needle displays the average net value. During circling, 
+  this needle displays the average gross value.
 \end{description}
 
 
@@ -390,50 +364,152 @@ This page allows glide computer algorithms to be configured.
 
 \begin{description}
 \item[Auto wind]  \label{conf:autowind} This allows switching on or off the
- automatic wind algorithm.
-\begin{description}
- \item[Manual]  When the algorithm is switched off, the pilot is responsible for
-  setting the wind estimate.
- \item[Circling]  Circling mode requires only a GPS source.
- \item[ZigZag]  ZigZag requires an intelligent vario with airspeed output.
- \item[Both]  Uses Circling and ZigZag.
-\end{description}
-
+  automatic wind algorithm. \\
+  {\bf Manual}: When the algorithm is switched off, the pilot is responsible for
+  setting the wind estimate. \\
+  {\bf Circling}: Circling mode requires only a GPS source. \\
+  {\bf ZigZag}: ZigZag requires an intelligent vario with airspeed output. \\
+  {\bf Both}:  Uses Circling and ZigZag.
 \item[External wind]  If enabled, the wind vector received from external
- devices overrides XCSoar's internal wind calculation.
+  devices overrides XCSoar's internal wind calculation.
 \item[Auto MC mode]  This option defines which auto MacCready algorithm is used.
- For more details see Section~\ref{sec:auto-maccready}.
-\begin{description}
- \item[Final glide]  Final glide adjusts MC for fastest arrival.
- \item[Trending average climb]  Sets MC to the trending average climb rate based on all climbs.
- \item[Both]  Uses trending average during task, then fastest arrival when in final glide mode.
+  For more details see Section~\ref{sec:auto-maccready}. \\
+  {\bf Final glide}: Final glide adjusts MC for fastest arrival. \\
+  {\bf Trending average climb}: Sets MC to the trending average climb rate based 
+  on all climbs. \\
+  {\bf Both}: Uses trending average during task, then fastest arrival when in final 
+  glide mode.
+\item[Block speed to fly*]  If enabled, the command speed in cruise
+  is set to the MacCready speed to fly in no vertical air-mass movement.
+  If disabled, the command speed in cruise is set to the dolphin speed to fly,
+  equivalent to the MacCready speed with vertical air-mass movement.
+\item[Nav by baro altitude*]  When enabled and if connected to a barometric
+  altimeter, barometric altitude is used for all navigation functions. Otherwise
+  GPS altitude is used.
+\item[Flap forces cruise*]
+  When this option is enabled, causes the flap switches in Vega to
+  force cruise mode when the flap is not positive. This means that
+  when departing a thermal, switching to neutral or negative flap will
+  immediately switch XCSoar's mode to cruise mode.
+  Similarly, for Borgelt B50 systems, the speed command switch forces
+  XCSoar's climb or cruise mode.
+\item[L/D Average period*]  Average efficiency is always calculated in real-time. 
+  Here you can decide on how many seconds of flight this calculation must be done. 
+  The real distance covered second by second in this period is divided by the final 
+  difference of altitude.  So if for example you go and return back to the same point 
+  after 2 minutes, and you have set 2 minutes as period, average LD will consider the 
+  total distance covered in those two minutes , and not the distance between your 
+  position 2 minutes before and your current position, that in this case could be 
+  almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 
+  15 seconds. Lower values will give as a result pretty much the same as LD Instant, 
+  while higher values will look like LD Cruise. Other commercial instruments and 
+  software use 2 minutes.
 \end{description}
 
-\item[Block speed to fly*]  If enabled, the command speed in cruise
- is set to the MacCready speed to fly in no vertical air-mass movement.
- If disabled, the command speed in cruise is set to the dolphin speed to fly,
- equivalent to the MacCready speed with vertical air-mass movement.
-\item[Nav by baro altitude*]  When enabled and if connected to a barometric
- altimeter, barometric altitude is used for all navigation functions. Otherwise
- GPS altitude is used.
-\item[Flap forces cruise*]
- When this option is enabled, causes the flap switches in Vega to
- force cruise mode when the flap is not positive. This means that
- when departing a thermal, switching to neutral or negative flap will
- immediately switch XCSoar's mode to cruise mode.
- Similarly, for Borgelt B50 systems, the speed command switch forces
- XCSoar's climb or cruise mode.
-\item[L/D Average period*]  Average efficiency is always calculated in real-time. 
- Here you can decide on how many seconds of flight this calculation must be done. 
- The real distance covered second by second in this period is divided by the final 
- difference of altitude.  So if for example you go and return back to the same point 
- after 2 minutes, and you have set 2 minutes as period, average LD will consider the 
- total distance covered in those two minutes , and not the distance between your 
- position 2 minutes before and your current position, that in this case could be 
- almost zero! Normally for gliders a good value is 90-120 seconds, and for paragliders 
- 15 seconds. Lower values will give as a result pretty much the same as LD Instant, 
- while higher values will look like LD Cruise. Other commercial instruments and 
- software use 2 minutes.
+
+%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Safety factors}
+
+This page allows the safety heights and behaviour in abort mode to be defined.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-safety.png}
+\end{center}
+
+\begin{description}
+\item[Arrival height]  The height above terrain that the glider
+  should arrive at for a safe landing.
+\item[Terrain height]  \label{conf:safetyterrain} The height above terrain that the glider must
+  clear during final glide.
+\item[Alternates mode]  \label{conf:alternatesmode} Determines sorting of alternates 
+  in the alternates dialogue and in abort mode. \\
+  {\bf Simple}: The alternates will only   be sorted by waypoint type 
+  (airport/outlanding field) and arrival height. \\
+  {\bf Task}: The sorting will also take the current task direction into account. \\
+  {\bf Home}: The sorting will try to find landing options in the current direction 
+  to the configured home waypoint.
+\item[Safety MC*]  The MacCready setting used for reach calculations, task abort, alternates and
+  for determining arrival altitude at airfields. 
+\item[STF risk factor*] 
+  The STF risk factor reduces the MacCready setting used to calculate
+  speed to fly as the glider gets low, in order to compensate for
+  risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with
+  height.  See Section~\ref{sec:speed-fly-with} for more details.
+\end{description}
+See Section~\ref{sec:safety-heights} for more details on the meanings
+of the safety heights.
+
+
+%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Route}
+
+This page allows control over glide reach calculations and route
+optimisations.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-route.png}
+\end{center}
+
+\begin{description}
+\item[Route mode]  \label{conf:routemode} This controls which types
+  of obstacles are used in route planning.
+\item[Route climb*]  \label{conf:routeclimb} When enabled and Mc is positive, route 
+  planning allows climbs between the aircraft location and destination.
+\item[Route ceiling*]  \label{conf:routeceiling} When enabled, route planning climbs 
+  are limited to ceiling defined by greater of current aircraft altitude plus 
+  500 m and the thermal ceiling.  If disabled, climbs are unlimited.
+\\
+\item[Reach mode]  \label{conf:turningreach} How calculations are performed of 
+  the reach of the glider with respect to terrain. \\
+  {\bf Off}: Reach calculations disabled. \\
+  {\bf Straight}: The reach is from straight line paths from the glider. \\
+  {\bf Turning}: The reach is calculated allowing turns around terrain obstacles.
+\item[Reach display]  \label{conf:gliderange} This determines whether the
+glide reach is drawn as a line resp.\ a shade on the map area.
+\item[Reach polar*]  \label{conf:reachpolar} This determines the glide performance 
+  used in reach, landable arrival, abort and alternate calculations. \\
+  {\bf Task}: Uses task glide polar; \\
+  {\bf Safety MC}: Uses safety MacCready value.
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Polar}
+
+This page allows the glide polar to be defined. For a large variety of glider types 
+XCSoar provides a predefined glide polar, they could be modified if needed, or 
+you can load your own polar from a file. 
+The file format is based on the WinPilot polar file format (see section~\ref{sec:glide-polar}).
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-polar.png}
+\end{center}
+
+\label{conf:polar} To configure the glide computer to the performance of a glider 
+type start with the selection of a type from the \button{List}. 
+Choose \button{Import} when you want to load an external polar file.
+Customize the three V/W points defining the parable curve and the reference 
+weight to your needs. 
+\tip Be aware that namely those four items are of crucial importance 
+for every glide performance relevant computation of XCSoar.   
+\button{Export} your efforts to a file is always a good idea.
+
+\begin{description}
+\item[Polar V/W*]  Pair of corresponding horizontal and vertical speed of the glider. 
+  A good choice for the point triplet is one at the top most area of the polar, the second at a 
+  still very curved area and the third far out where the curvature seems to disappear.
+\item[Ref. mass*]  Reference weight at which the given polar is valid.
+\item[Max. ballast]  Optional the amount of water ballast XCSoar refers to as 100\% ballast.
+  Set to zero if it does not apply.
+\item[Wing area*]  Optional specification of the wing area of the glider type.
+\item[V rough air*] Optional the maximum manoeuvring speed can 
+  be entered on this page to prevent the glide computer from commanding 
+  unrealistic cruise speeds.
+\item[Handicap*]  The handicap factor used for the OnLine Contest scoring.
+\item[Dump time*]  The time in seconds needed for dumping full ballast.
 \end{description}
 
 
@@ -449,146 +525,99 @@ displayed and how warnings are issued.
 \end{center}
 
 \begin{description}
-\item[Airspace display] Controls how airspace display and warnings are filtered based on altitude.  The airspace filter dialogue also allows filtering
- of display and warnings independently for each airspace class.
-\begin{description}
-\item[All on] All the airspace information is displayed at the same time.
-\item[Clip] Only airspace below a user determined altitude is shown.
-\item[Auto] Only airspace at the current altitude plus or minus a user definable margin is shown.
-\item[All Below]  Only airspace below the glider is shown.
-\end{description}
+\item[Airspace display]  Controls how airspace display and warnings are filtered 
+  based on altitude.  The airspace filter dialogue also allows filtering
+  of display and warnings independently for each airspace class. \\
+  {\bf All on}: All the airspace information is displayed at the same time. \\
+  {\bf Clip}: Only airspace below a user determined altitude is shown. \\
+  {\bf Auto}: Only airspace at the current altitude plus or minus a user definable margin is shown. \\
+  {\bf All below}:  Only airspace below the glider is shown.
 \item[Clip altitude] For clip mode, this is the altitude below which airspace is displayed.
-\item[Margin] For auto mode, this is the safety margin for warnings and display.
-\item[Warnings] Determines whether all warnings are enabled or disabled.
+\item[Margin]  For auto airspace mode, this is the height above/below which airspace is included.
+\item[Warnings]  Determines whether warnings are enabled or disabled.
 \item[Warning time*]  This is the time before an incursion is estimated at
   which the system will warn the pilot.
-\item[Acknowledge time*]  This is the time period in which an acknowledged airspace warning will not be repeated.
-\item[Use black outline*] Draws a black outline around each airspace
+\item[Acknowledge time*]  This is the time period in which an acknowledged airspace 
+  warning will not be repeated.
+\item[Use black outline*]  Draws a black outline around each airspace.
+\item[Airspace fill mode*]  Specifies the mode for filling the airspace area. \\
+  {\bf Fill all}:  Transparently fills the airspace colour over the whole area. \\
+  {\bf Fill padding}: Draws a solid outline with a half transparent border around the airspace. \\
+  {\bf Default}:  This selects the best performing option for your hardware. In fact 
+  it favours "fill padding" except for PPC 2000 system.
+\item[Airspace transparency*]  If enabled, then airspaces are filled transparently.
 \end{description}
 
 This page also has \button{Colours} and \button{Filter} buttons which
 can be used to review or change the colours/patterns used by each
 airspace class, and whether each airspace class will be filtered out
-of warnings and/or display.  
+of warnings and/or display. Depending on the airspace transparency setting it is 
+no longer needed to define patterns. The availability of transparency relies 
+on the capabilities of the used hardware and may differ. 
 
 \subsection*{Colours}
-This function is used to determine the colours used to draw each type of
-airspace.
+This function is used to determine the colours used to draw each class of
+airspaces.
 
-First select the airspace type you wish to change.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-airspacecolors.png}
-\end{center}
-
-Pressing the \button{Lookup} button brings up the airspace select dialogue.
-This functions similarly to the waypoint lookup dialogue, and allows
-search based on name, distance, direction, and type (class).  
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/airspacelookup.png}
-\end{center}
-
-Now select the colour and pattern you wish the selected airspace to be drawn in.
-
+First select the airspace class you wish to change. Then select the colour and 
+pattern you wish the selected airspace class to be drawn in.
 
 \subsection*{Filters}
 The filter function is described in Section~\ref{sec:airsp-filt-dial}.
 
+
+%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Default Task Rules}
+
+Task rules may be defined to limit valid starts according to competition
+rules. \label{conf:taskrules}
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-rules.png}
+\end{center}
+
+\begin{description}
+\item[Start max. speed*]  Maximum speed allowed in start observation zone.  Set 
+  to 0 for no limit.
+\item[Start max. speed margin*] Maximum speed above maximum start speed to tolerate. 
+  Set to 0 for no tolerance.
+\item[Start max. height*]  Maximum height above ground while starting the task. 
+  Set to 0 for no limit.
+\item[Start max. height margin*]  Maximum height above maximum start height to 
+  tolerate.  Set to 0 for no tolerance.
+\item[Start height ref.*]  Reference used for start max. height rule. \\
+  {\bf MSL}: Reference is altitude above mean sea level. \\
+  {\bf AGL}: Reference is the height above the start point.
+\item[Finish min. height*]  Minimum height above ground while finishing the task. 
+  Set to 0 for no limit. 
+\item[OnLine Contest] Determines the rules used to optimize OnLine Contest 
+  paths.  The implementation  conforms to the official release 2010, Sept. 23. \\
+  {\bf OLC FAI}: Four points with common start and finish.  For tasks longer than
+  500km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\% 
+  of total.  Finish height must not be lower than start height less 1000 meters. \\
+  {\bf OLC Classic}: Up to seven points including start and finish, finish height
+  must not be lower than start height less 1000 meters. \\
+  {\bf OLC League}: A contest on top of the classic task optimisation, cutting
+  a 2.5 hours segment over max. 3 of the turns. Finish height must not be below
+  start height. \\
+  {\bf OLC Plus}: A combination of Classic and FAI rules. 30\% of the FAI score
+  are added to the Classic score. \\
+  {\bf XContest}: tbd.
+  {\bf DHV-XC}: tbd.
+  {\bf SIS-AT}: tbd. 
+\end{description}
+
+
+%%%%%%%%%%%%%%%%%%
 %\clearpage
-%\section{Airspace Colours and Patterns}
+\section{Default Task Turnpoint Types}
 
+This page allows to set default turnpoint types used by the task editor. All 
+options are well described for the task editor in chapter~\ref{cha:tasks}.
 
-%This is accessed via the configuration dialogue, menu under
-%\bmenu{Config}\blink\bmenu{Setup system} in the Airspace page, select the
-%button \button{Colours}
 
 %%%%%%%%%%%%%%%%%%
-\clearpage
-\section{Symbols}\label{sec:symbols}
-
-This page provides options relating to the items overlaying the map display.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-symbols.png}
-\end{center}
-
-\begin{description}
-
-
-\item[Final glide bar]  Two styles are available: Default and
-Alternate. The differences between these styles is cosmetic.  Alternate displays the height difference to the 
-right of the final glide bar; default displays the height difference above/below the final glide bar and inside a 
-rounded box.
-
-\item[North arrow*]  Two styles are available.  Normal, or with a white outline.
-\end{description}
-
-%%%%%%%%%%%%%
-\section{Safety factors}
-
-This page allows the safety heights and behaviour in abort mode to be defined.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-safety.png}
-\end{center}
-
-\begin{description}
-\item[Arrival height]  The height above terrain that the glider
-  should arrive at for a safe landing.
-\item[Terrain height] \label{conf:safetyterrain} The height above terrain that the glider must
-  clear during final glide.
-\item[Safety MC*]  The MacCready setting used for reach calculations, task abort, alternates and
-  for determining arrival altitude at airfields. 
-\item[Alternates mode]\label{conf:alternatesmode}
-Determines sorting of alternates in the alternates dialogue and in abort mode: {\bf Simple} The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height. {\bf Task} The sorting will also take the current task direction into account.{\bf Home} The sorting will try to find landing options in the current direction to the configured home waypoint.
-\item[STF risk factor*] 
-  The STF risk factor reduces the MacCready setting used to calculate
-  speed to fly as the glider gets low, in order to compensate for
-  risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with
-  height.  See Section~\ref{sec:speed-fly-with} for more details.
-\end{description}
-See Section~\ref{sec:safety-heights} for more details on the meanings
-of the safety heights.
-
-\section{Route}
-
-This page allows control over glide reach calculations and route
-optimisations.
-
-\begin{description}
-\item[Route mode] \label{conf:routemode} This controls which types
-of obstacles are used in route planning.
-\item[Route climb] \label{conf:routeclimb} When enabled and Mc is positive, route planning allows climbs between the
-  aircraft location and destination.
-\item[Route ceiling] \label{conf:routeceiling} When enabled, route planning climbs are limited to ceiling defined by greater of current aircraft altitude plus 500 m and the thermal ceiling.  If disabled, climbs are unlimited.
-\item[Reach mode] \label{conf:turningreach} How calculations are performed of the reach of the glider with respect to terrain. {\bf Off} Reach calculations disabled. {\bf Straight} The reach is from straight line paths from the glider. {\bf Turning} The reach is calculated allowing turns around terrain obstacles.
-\item[Reach display]  \label{conf:gliderange} This determines whether the
-glide reach is drawn as a line resp.\ a shade on the map area.
-\item[Reach polar] \label{conf:reachpolar} This determines the glide performance used in reach, landable arrival, abort and alternate calculations: {\bf Task} Uses task glide polar; {\bf Safety MC} Uses safety MacCready value.
-\end{description}
-
-%%%%%%%%%%%%%%%%%%
-\clearpage
-\section{Polar}
-
-This page allows the glide polar to be defined.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-polar.png}
-\end{center}
-
-\begin{description}
-\item[Type]  \label{conf:polar} This contains a selection of gliders of
-different performance classes, as well as a special entry for ``External Polar File''.  
-\item[Polar file]  When ``External Polar File'' is the polar type, 
- this is the name of the file containing the glide polar data in WinPilot
- format.
-\item[V rough air] The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.
-\item[Handicap] The handicap factor used for OnLine Contest scoring.
-\item[Dump time] The time in seconds needed for dumping full ballast.
-\end{description}
-
 \clearpage
 \section{Devices} \label{conf:comdevices}
 
@@ -620,18 +649,53 @@ which COM port to set, please refer to the XCSoar website and mailing
 lists.
 
 \begin{description}
-\item[Use GPS time] This option, if enabled sets the clock of the computer to the GPS time once a fix is set.  
-This is only necessary if your computer does not have a real-time clock with battery backup or your computer 
-frequently runs out of battery power or otherwise loses time.
-\item[Ignore checksum*] If your GPS device outputs invalid NMEA checksums, this will allow it's data to be used anyway.
+\item[Use GPS time*] This option, if enabled sets the clock of the computer to 
+  the GPS time once a fix is set. This is only necessary if your computer does 
+  not have a real-time clock with battery backup or your computer 
+  frequently runs out of battery power or otherwise loses time.
+\item[Ignore checksum*] If your GPS device outputs invalid NMEA checksums, this 
+  will allow it's data to be used anyway.
 \end{description}
+
+
+%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Logger}
+
+This page allows you to set the pilot and aircraft details used for
+annotating XCSoar's IGC logger. 
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-logger.png}
+\end{center}
+
+\begin{description}
+\item[Time step cruise*]  This is the time interval between logged points when 
+  not circling. 
+\item[Time step circling*]  This is the time interval between logged points when 
+  circling. 
+\item[Pilot name]  This is the pilot name used in the internal software logger 
+  declaration.
+\item[Aircraft type]  This is the aircraft type used in the internal software 
+  logger declaration.
+\item[Aircraft reg.]  This is the aircraft registration used in the internal 
+  software logger declaration.
+\item[Competition ID]  This is the aircraft competition ID.
+\item[Logger ID]  This is the logger registration.
+\item[Short file name*]  This determines whether the logger uses the short or the 
+  long IGC file name.
+\item[Auto logger*]  Enables the automatic starting and stopping of the logger
+  on takeoff and landing respectively. Disable when flying paragliders to prevent 
+  the low ground speeds from triggering the automatic logger.
+\end{description}
+
 
 %%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Units}
 
 This page allows you to set the units preferences used in all
-displays, {\InfoBox}es, dialogues and input fields.  Separate selections
+displays, InfoBoxes, dialogues and input fields.  Separate selections
 are available for speed, distance, lift rate, altitude, temperature, task
 speed and latitude/longitude.
 
@@ -639,16 +703,19 @@ speed and latitude/longitude.
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-units.png}
 \end{center}
 
+For most users hopefully one of the presets will match the needs.  The presets 
+include unit sets for {\bf American}, {\bf Australian}, {\bf British}, 
+and {\bf European}.
+
 The UTC offset field allows the UTC local time offset to be specified.
 The local time is displayed below in order to make it easier to verify
 the correct offset has been entered.  Offsets to the half-hour may be
 set.
 
 
-%%%%%%%%%%%%%%%%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Interface}\label{sec:interface}
+\section{User Interface}\label{sec:interface}
 
 This page allows to customise the way the user controls and interacts with
 XCSoar.
@@ -658,33 +725,29 @@ XCSoar.
 \end{center}
 
 \begin{description}
-\item[Auto Blank] This determines whether to blank the display after a long
-period of inactivity when operating on internal battery power (visible for PDA
-only).
-
-\item[Safety lock]  This determines whether the configuration settings dialogue is
-accessible during flight.
-\item[Gestures]  Enable this, if you run XCSoar on a touch-screen device and
-like the gestures to control it.
+\item[Auto Blank*] This determines whether to blank the display after a long
+  period of inactivity when operating on internal battery power (visible for PDA
+  only).
 \item[Events*]  The Input Events file defines the menu system and how XCSoar
-responds to button presses and events from external devices.
-\item[Language*]  The language file defines translations for XCSoar text in English to
-other languages.  Select ``None'' for a native English interface, ``Automatic''
-to localise XCSoar according to the system settings.
-\item[Status message*]  The status message file can be used to define sounds to be played when certain
-events occur, and how long various status messages will appear on screen.
+  responds to button presses and events from external devices.
+\item[Language]  The language options selects translations for English texts to
+  other languages.  Select {\bf English} for a native interface, {\bf Automatic}
+  to localise XCSoar according to the system settings; or you may select one of 
+  the two character language short cuts directly.
+\item[Status message*]  The status message file can be used to define sounds to 
+  be played when certain events occur, and how long various status messages will 
+  appear on screen.
 \item[Menu timeout*]  This determines how long menus will appear on screen if the user
-does not make any button presses or interacts with the computer.
-\item[Debounce timeout*]  This is the minimum interval between the system recognising key presses. 
-Set this to a low value for a more responsive user interface; if
-it is too low, then accidental multiple key presses can occur.
-
-\item[Text Input Style*] Determines which style for text entries is used. See Section~ for further information on text entries.
-\begin{description}
-\item[HighScore Style] For entering text you have to change the underlined character to the relevant letter.
-\item[Keyboard] Uses the on-screen keyboard for entering text.
-\item[Default] Uses the default input style for your platform.
-\end{description}
+  does not make any button presses or interacts with the computer.
+\item[Debounce timeout*]  This is the minimum interval between the system 
+  recognising key presses.  Set this to a low value for a more responsive user 
+  interface; if it is too low, then accidental multiple key presses can occur.
+\item[Text Input Style*]  Determines which style for text entries is used. 
+  See Section~\ref{sec:textentry} for further information on textual input. \\
+  {\bf HighScore Style}: For entering text you have to change the underlined 
+  character to the relevant letter. \\
+  {\bf Keyboard}: Uses the on-screen keyboard for entering text. \\
+  {\bf Default}: Uses the default input style for your platform.
 \end{description}
 
 Some Pocket PC devices have poorly designed keys that are subject to
@@ -696,8 +759,8 @@ the value is set too low, then bouncing may occur.
 
 Press the \button{Fonts} button to adjust the fonts XCSoar uses.
 
-%%%%%%%%%%
 
+%%%%%%%%%%%%%%%%%%
 \clearpage
 \section{Fonts}
 
@@ -711,6 +774,32 @@ Once the customization is enabled, the \button{Edit} buttons allow to change som
 Face, Height, Bold and Italic) of the chosen font.
 
 If customization is disabled, default fonts will be used.
+
+%%%%%%%%%%%%%%%%%%
+\clearpage
+\section{Symbols}\label{sec:symbols}
+
+This page provides options relating to the items overlaying the map display.
+
+\begin{center}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-symbols.png}
+\end{center}
+
+\begin{description}
+
+
+\item[Final glide bar]  Two styles are available: Default and
+Alternate. The differences between these styles is cosmetic.  Alternate displays the height difference to the 
+right of the final glide bar; default displays the height difference above/below the final glide bar and inside a 
+rounded box.
+
+\item[North arrow*]  Two styles are available.  Normal, or with a white outline.
+\end{description}
+
+
+
+
+
 
 %%%%%%%%%%
 \clearpage
@@ -732,44 +821,7 @@ centred or in the top left corner.
 \end{description}
 
 
-%%%%%%%%%%
-\clearpage
-\section{Default Task Rules}
-Task rules may be defined to limit valid starts according to competition
-rules. \label{conf:taskrules}
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-rules.png}
-\end{center}
-
-\begin{description}
-\item[Start max speed]  Maximum speed allowed in start observation zone.  Set to 0 for no limit.
-\item[Start max speed margin] Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance.
-\item[Start max height]  Maximum height above ground while starting the task.  Set to 0 for no limit.
-\item[Start max height margin]  Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance.
-\item[Start height ref]  Reference used for start max. height rule
-\begin{description}
-\item[MSL] Reference is altitude above mean sea level
-\item[AGL] Reference is the height above the start point
-\end{description}
-\item[Finish min height]  Minimum height above ground while finishing the task.  Set to 0 for no limit. 
-\item[OnLine Contest] Determines the rules used to optimize OnLine Contest
-paths.  The implementation  conforms to the official release 2010, Sept. 23.
-\begin{description}
-\item[OLC Sprint]  Up to 5 points including start and finish, maximum duration
-2.5 hours, finish height must not be below start height.
-\item[OLC FAI]  Four points with common start and finish.  For tasks longer than
-500km, no leg less than 25\% or larger than 45\%; otherwise no leg less than 28\% of total.  Finish height must 
-not be lower than start height less 1000 meters.
-\item[OLC Classic]  Up to seven points including start and finish, finish height
-must not be lower than start height less 1000 meters.
-\item[OLC League]  A contest on top of the classic task optimisation, cutting
-a 2.5 hours segment over max. 3 of the turns. Finish height must not be below
-start height.
-\item[OLC Plus]  A combination of Classic and FAI rules. 30\% of the FAI score
-are added to the Classic score.
-\end{description}
-\end{description}
 
 %%%%%%%%%%
 
@@ -823,32 +875,7 @@ active waypoint InfoBox will be blue when the glider is above final glide.
 draws boxes around each InfoBox.  `Tab' draws a tab at the top of the InfoBox across the title.
 \end{description}
 
-%%%%%%%%%%
 
-\clearpage
-\section{Logger}
-
-This page allows you to set the pilot and aircraft details used for
-annotating XCSoar's IGC logger. 
-% The fields available are the pilot's name, aircraft type, and aircraft registration.
-
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-logger.png}
-\end{center}
-
-\begin{description}
-\item[Time step cruise*]  This is the time interval between logged points when not circling. 
-\item[Time step circling*]  This is the time interval between logged points when circling. 
-\item[Pilot name]  This is the pilot name used in the internal software logger declaration.
-\item[Aircraft type]  This is the aircraft type used in the internal software logger declaration.
-%\item[Aircraft rego]  This is the aircraft registration used in the internal software logger declaration.
-\item[Competition ID]  This is the aircraft competition ID.
-\item[Logger ID]  This is the logger registration.
-\item[Short file name]  This determines whether the logger uses the short or the long IGC file name.
-\item[Auto logger*]  Enables the automatic starting and stopping of the logger
-on takeoff and landing respectively. Disable when flying paragliders to prevent the low ground speeds from
-triggering the automatic logger.
-\end{description}
 
 %%%%%%%%%%
 

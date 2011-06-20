@@ -52,33 +52,8 @@ DetectCurrentTime(const NMEA_INFO *Basic)
   return TimeLocal(utc_time);
 }
 
-
-long
+int
 GetUTCOffset()
 {
-#ifdef WIN32
-  if (is_altair() || !is_embedded())
-    return XCSoarInterface::SettingsComputer().UTCOffset;
-
-  long utcoffset = 0;
-  // returns offset in seconds
-  TIME_ZONE_INFORMATION TimeZoneInformation;
-  DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
-
-  utcoffset = -TimeZoneInformation.Bias * 60;
-
-  if (tzi == TIME_ZONE_ID_STANDARD) {
-    utcoffset -= TimeZoneInformation.StandardBias * 60;
-  }
-
-  if (tzi == TIME_ZONE_ID_DAYLIGHT) {
-    utcoffset -= TimeZoneInformation.DaylightBias * 60;
-  }
-
-  return utcoffset;
-#else /* !WIN32 */
-  // XXX
   return XCSoarInterface::SettingsComputer().UTCOffset;
-#endif /* !WIN32 */
 }
-

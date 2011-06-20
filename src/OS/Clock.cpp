@@ -54,3 +54,24 @@ MonotonicClockMS()
   return ::GetTickCount();
 #endif /* !HAVE_POSIX */
 }
+
+int
+GetSystemUTCOffset()
+{
+#ifdef HAVE_POSIX
+  // XXX implement
+  return 0;
+#else
+  TIME_ZONE_INFORMATION TimeZoneInformation;
+  DWORD tzi = GetTimeZoneInformation(&TimeZoneInformation);
+
+  int offset = -TimeZoneInformation.Bias * 60;
+  if (tzi == TIME_ZONE_ID_STANDARD)
+    offset -= TimeZoneInformation.StandardBias * 60;
+
+  if (tzi == TIME_ZONE_ID_DAYLIGHT)
+    offset -= TimeZoneInformation.DaylightBias * 60;
+
+  return offset;
+#endif
+}

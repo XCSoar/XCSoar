@@ -12,6 +12,12 @@ Version 6.2 - not yet released
 Version 6.1.2 - not yet released
 * calculations
   - reduce memory usage further
+  - fix boundary routine of the key hole zone
+* user interface
+  - change low battery thresholds
+  - manual and translation updates
+  - fix UTC offset setting
+  - fix overlapped InfoBox text
 
 Version 6.1.1 - 2011/06/01
 * calculations

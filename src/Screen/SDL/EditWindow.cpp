@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/EditWindow.hpp"
 #include "Screen/Canvas.hpp"
+#include "Screen/Features.hpp"
 
 void
 EditWindow::set(ContainerWindow &parent, int left, int top,
@@ -51,5 +52,9 @@ EditWindow::on_paint(Canvas &canvas)
   }
 
   canvas.background_transparent();
-  canvas.formatted_text(&rc, value.c_str(), get_text_style());
+
+  if (have_clipping() || (get_text_style() & DT_WORDBREAK) != 0)
+    canvas.formatted_text(&rc, value.c_str(), get_text_style());
+  else
+    canvas.TextAutoClipped(rc.left, rc.top, value.c_str());
 }

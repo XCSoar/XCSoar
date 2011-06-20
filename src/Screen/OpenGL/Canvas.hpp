@@ -286,12 +286,19 @@ public:
 
   void text_clipped(int x, int y, const PixelRect &rc, const TCHAR *text) {
     // XXX
-    this->text(x, y, text);
+
+    if (x < rc.right)
+      text_clipped(x, y, rc.right - x, text);
   }
 
-  void text_clipped(int x, int y, unsigned width, const TCHAR *text) {
-    // XXX
-    this->text(x, y, text);
+  void text_clipped(int x, int y, unsigned width, const TCHAR *text);
+
+  /**
+   * Render text, clip it within the bounds of this Canvas.
+   */
+  void TextAutoClipped(int x, int y, const TCHAR *t) {
+    if (x < (int)get_width())
+      text_clipped(x, y, get_width() - x, t);
   }
 
   void formatted_text(PixelRect *rc, const TCHAR *text, unsigned format);

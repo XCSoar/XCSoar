@@ -378,10 +378,10 @@ RefreshView()
   assert(wb);
   wb->set_visible(active_index == 0);
   if (ordered_task->optional_start_points_size() == 0)
-    wb->SetCaption(_T("Enable Alternate Starts"));
+    wb->SetCaption(_("Enable Alternate Starts"));
   else {
     TCHAR tmp[50];
-    _stprintf(tmp, _T("Edit Alternate Starts(%d)"),
+    _stprintf(tmp, _T("%s (%d)"), _("Edit Alternates"),
         ordered_task->optional_start_points_size());
     wb->SetCaption(tmp);
   }

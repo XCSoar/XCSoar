@@ -29,7 +29,17 @@ Copyright_License {
 /**
  * Returns the value of a monotonic clock in milliseconds.
  */
+gcc_pure
 unsigned
 MonotonicClockMS();
+
+/**
+ * Query the UTC offset from the OS.
+ *
+ * @return the offset in seconds
+ */
+gcc_pure
+int
+GetSystemUTCOffset();
 
 #endif

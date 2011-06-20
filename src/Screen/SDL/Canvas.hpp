@@ -370,6 +370,13 @@ public:
     this->text(x, y, text);
   }
 
+  /**
+   * Render text, clip it within the bounds of this Canvas.
+   */
+  void TextAutoClipped(int x, int y, const TCHAR *t) {
+    text(x, y, t);
+  }
+
   void formatted_text(PixelRect *rc, const TCHAR *text, unsigned format);
 
   void copy(int dest_x, int dest_y,

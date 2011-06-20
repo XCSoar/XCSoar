@@ -9,7 +9,7 @@
     <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="0" Max="355" Step="5"/>
   </Edit>
 
-  <Edit Name="prpAutoWind" Caption="Auto. wind" X="2" Y="46" Width="-2" Height="22" CaptionWidth="120" Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source&#10;[ZigZag] requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling.">
+  <Edit Name="prpAutoWind" Caption="Auto. wind" X="2" Y="46" Width="-2" Height="22" CaptionWidth="120" Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling.">
     <DataField DataType="enum"/>
   </Edit>
 

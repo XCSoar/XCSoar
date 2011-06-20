@@ -181,7 +181,7 @@
         <DataField DataType="boolean" OnDataAccess="TerrainDisplayConfigPanel::OnEnableTerrain"/>
       </Edit>
     
-      <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topographical features (roads, rivers, lakes etc) on the map.">
+      <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topographical features (roads, rivers, lakes etc.) on the map.">
         <DataField DataType="boolean" />
       </Edit>
     
@@ -399,26 +399,29 @@
           <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
 
-        <Edit Name="prpPolarReferenceMass" Caption="Reference mass" Expert="1" Y="62" Width="-2" Height="22" CaptionWidth="139">
+        <Edit Name="prpPolarReferenceMass" Caption="Reference mass" Expert="1" Y="62" Width="-2" Height="22" CaptionWidth="139"
+          Help="Reference weight at which the given polar is valid.">
           <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
       </Panel>
 
-      <Edit Name="prpPolarWingArea" Caption="Wing area" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150">
+      <Edit Name="prpPolarWingArea" Caption="Wing area" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Optional specification of the wing area.">
         <DataField DataType="double" DisplayFormat="%.1f m^2" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="PolarConfigPanel::OnFieldData" />
       </Edit>
 
       <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="The maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
+        Help="Optional the maximum manoeuvring speed can be entered on this page to prevent the glide computer from commanding unrealistic cruise speeds.">
         <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5"/>
       </Edit>
 
       <Edit Name="prpHandicap" Caption="Handicap" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="The handicap factor used for On-Line Contest scoring.">
+        Help="The handicap factor used for the OnLine Contest scoring.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="50" Max="150" Step="1"/>
       </Edit>
 
-      <Edit Name="prpPolarMaxBallast" Caption="Max. ballast" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150">
+      <Edit Name="prpPolarMaxBallast" Caption="Max. ballast" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="Optional the amount of water ballast XCSoar refers to as 100% ballast. Set to zero if it does not apply.">
         <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" Min="0" Max="500" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
       </Edit>
 
@@ -503,7 +506,7 @@
       </Edit>
   
       <Edit Name="prpContests" Caption="On-Line Contest" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="Select the rules used for calculating optimal points for the On-Line Contest. The implementation  conforms to the official release 2010, Sept.23.&#10;[Sprint] Based on the Classic rules, limited to five points and 150 min. task time, finish height must not be lower than start height.&#10;[Classic] Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.&#10;[FAI] Conforms to FAI triangle rules. Three turns and common start and finish. No leg less than 28% of total except for tasks longer than 500km: No leg less than 25% or larger than 45%.&#10;[League] The most recent contest with Sprint task rules.&#10;[Plus] A combination of Classic and FAI rules. 30% of the FAI score are added to the Classic score.">
+        Help="Select the rules used for calculating optimal points for the On-Line Contest. The implementation  conforms to the official release 2010, Sept.23.&#10;[Classic] Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.&#10;[FAI] Conforms to FAI triangle rules. Three turns and common start and finish. No leg less than 28% of total except for tasks longer than 500km: No leg less than 25% or larger than 45%.&#10;[League] The most recent contest with Sprint task rules.&#10;[Plus] A combination of Classic and FAI rules. 30% of the FAI score are added to the Classic score.">
         <DataField DataType="enum" />
       </Edit>
     </Panel>
@@ -608,7 +611,7 @@
       </Panel>
   
       <Edit Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="option, if enabled sets the clock of the computer to the GPS time once a fix is set.  This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
+        Help="If enabled sets the clock of the computer to the GPS time once a fix is set. This is only necessary if your computer does not have a real-time clock with battery backup or your computer frequently runs out of battery power or otherwise loses time.">
         <DataField DataType="boolean" />
       </Edit>
 
@@ -710,7 +713,7 @@
       </Edit>
     
       <Edit Name="prpLanguageFile" Caption="Language" X="2" Width="-2" Height="22" CaptionWidth="150"
-        Help="The language file defines translations for XCSoar text in English to other languages.  If this field is left blank, then XCSoar uses English.">
+        Help="The language options selects translations for English texts to other languages. Select English for a native interface or Automatic to localise XCSoar according to the system settings.">
         <DataField DataType="enum"/>
       </Edit>
     

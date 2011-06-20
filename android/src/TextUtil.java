@@ -49,6 +49,8 @@ public class TextUtil {
         paint = new Paint(Paint.ANTI_ALIAS_FLAG);
         paint.setTypeface(tf);
         paint.setTextSize(textSize);
+        if ((style & Typeface.ITALIC) != 0 && !tf.isItalic())
+          paint.setTextSkewX((float) -0.2);
     }
     public void getFontMetrics(int[] metrics) {
         Rect bounds = new Rect();
