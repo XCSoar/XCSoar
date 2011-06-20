@@ -370,6 +370,13 @@ public:
   void text_clipped(int x, int y, const PixelRect &rc, const TCHAR *text);
   void text_clipped(int x, int y, unsigned width, const TCHAR *text);
 
+  /**
+   * Render text, clip it within the bounds of this Canvas.
+   */
+  void TextAutoClipped(int x, int y, const TCHAR *t) {
+    text(x, y, t);
+  }
+
   void formatted_text(RECT *rc, const TCHAR *text, unsigned format) {
     ::DrawText(dc, text, -1, rc, format);
   }
