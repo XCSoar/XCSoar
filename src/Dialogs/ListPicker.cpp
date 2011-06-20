@@ -128,7 +128,6 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
     list_control->move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top - help_height - 10);
     list_control->SetCursorCallback(OnPointCursorCallback);
     OnPointCursorCallback(initial_value);
-    help_callback = NULL;
   }
   else
     wItemHelp = NULL;
