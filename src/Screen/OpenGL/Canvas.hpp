@@ -286,13 +286,12 @@ public:
 
   void text_clipped(int x, int y, const PixelRect &rc, const TCHAR *text) {
     // XXX
-    this->text(x, y, text);
+
+    if (x < rc.right)
+      text_clipped(x, y, rc.right - x, text);
   }
 
-  void text_clipped(int x, int y, unsigned width, const TCHAR *text) {
-    // XXX
-    this->text(x, y, text);
-  }
+  void text_clipped(int x, int y, unsigned width, const TCHAR *text);
 
   void formatted_text(PixelRect *rc, const TCHAR *text, unsigned format);
 
