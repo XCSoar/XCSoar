@@ -395,9 +395,8 @@ WndProperty::on_paint(Canvas &canvas)
   } else {
     /* don't need to erase the background when it has been done by the
        parent window already */
-#ifdef HAVE_CLIPPING
-    canvas.clear(GetBackColor());
-#endif
+    if (have_clipping())
+      canvas.clear(GetBackColor());
   }
 
   WindowControl::on_paint(canvas);
