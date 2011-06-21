@@ -90,7 +90,15 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   SetTitleFromWaypointName(infobox, way_point);
 
   // Set Comment
-  infobox.SetComment(way_point->Comment.c_str());
+  if (way_point->radio_frequency.IsDefined()) {
+    StaticString<128> comment;
+    const unsigned freq = way_point->radio_frequency.GetKiloHertz();
+    _sntprintf(comment.buffer(), comment.MAX_SIZE, _T("%u.%03u %s"),
+               freq / 1000, freq % 1000, way_point->Comment.c_str());
+    infobox.SetComment(comment);
+  }
+  else
+    infobox.SetComment(way_point->Comment.c_str());
 
   const GlideResult &solution_remaining =
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
