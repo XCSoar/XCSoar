@@ -555,7 +555,7 @@ WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
     fixed len;
     if (Appearance.ScaleRunwayLength && runway.IsLengthDefined())
       len = (radius / fixed_two) +
-        ((runway.GetLength() - 500) / 500) * (radius / fixed_four);
+        (((int) runway.GetLength() - 500) / 500) * (radius / fixed_four);
     else
       len = radius;
     len += fixed_two * scale;
