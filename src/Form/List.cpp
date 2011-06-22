@@ -76,6 +76,7 @@ bool
 WndListFrame::on_resize(unsigned width, unsigned height)
 {
   PaintWindow::on_resize(width, height);
+  items_visible = height / item_height;
   show_or_hide_scroll_bar();
   return true;
 }
