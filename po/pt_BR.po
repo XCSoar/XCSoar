@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-18 13:53+0200\n"
-"PO-Revision-Date: 2011-05-07 23:32+0000\n"
-"Last-Translator: Júlio Cezar Santos Pires <Unknown>\n"
+"PO-Revision-Date: 2011-06-11 15:16+0000\n"
+"Last-Translator: Paulo Coimbra <Unknown>\n"
 "Language-Team: Brazilian Portuguese <pt_BR@li.org>\n"
 "Language: pt_BR\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-11 18:39+0000\n"
-"X-Generator: Launchpad (build 13014)\n"
+"X-Launchpad-Export-Date: 2011-06-22 07:28+0000\n"
+"X-Generator: Launchpad (build 13265)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:309
@@ -97,17 +97,19 @@ msgstr "Parar logger"
 
 #: src/Logger/ExternalLogger.cpp:48
 msgid "Declare task?"
-msgstr ""
+msgstr "Prova declarada?"
 
 #: src/Logger/ExternalLogger.cpp:51
 msgid "Task declared!"
-msgstr ""
+msgstr "Prova declarada!"
 
 #: src/Logger/ExternalLogger.cpp:55
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Ocorreu um erro,\n"
+"prova NÃO declarada!"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -185,7 +187,7 @@ msgstr "Pto. virada final"
 
 #: src/ExpandMacros.cpp:200 src/ExpandMacros.cpp:246
 msgid "Next Startpoint"
-msgstr ""
+msgstr "Próximo Startpoint"
 
 #: src/ExpandMacros.cpp:206 src/ExpandMacros.cpp:252
 msgid "Start Turnpoint"
@@ -613,6 +615,7 @@ msgstr "WP AltD"
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
 msgstr ""
+"Altitude de chegada no próximo waypoint relativo à altura de chegada segura."
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
@@ -2178,7 +2181,7 @@ msgstr "Mostrar detalhes:"
 
 #: src/InputEventsActions.cpp:642
 msgid "Unknown competition number"
-msgstr ""
+msgstr "Número da competição desconhecido"
 
 #: src/InputEventsActions.cpp:643
 msgid "Not found"
@@ -2271,7 +2274,7 @@ msgstr "No setor, arme o avanço quando pronto"
 
 #: src/Pages.cpp:181
 msgid "Info Hide"
-msgstr ""
+msgstr "Info oculto"
 
 #: src/Pages.cpp:183
 msgid "Map (Full screen)"
@@ -2553,7 +2556,7 @@ msgstr "Distância a percorrer"
 
 #: src/FlightStatisticsRenderer.cpp:769 src/FlightStatisticsRenderer.cpp:779
 msgid "Target speed"
-msgstr ""
+msgstr "Velocidade alvo"
 
 #: src/Interface.cpp:126
 msgid "Quit program?"
@@ -2613,7 +2616,7 @@ msgstr "Aviso"
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
 msgid "Battery low"
-msgstr ""
+msgstr "Bateria fraca"
 
 #: src/Components.cpp:267
 msgid "Initialising"
@@ -2662,7 +2665,7 @@ msgstr "Desligando, salvando prova ..."
 
 #: src/Device/TCPPort.cpp:82
 msgid "Failed to create TCP socket"
-msgstr ""
+msgstr "Falha ao criar socket TCP"
 
 #: src/Device/TCPPort.cpp:103
 #, c-format
@@ -2672,7 +2675,7 @@ msgstr ""
 #: src/Device/TCPPort.cpp:111
 #, c-format
 msgid "Failed to listen on TCP port %u"
-msgstr ""
+msgstr "Falha ao ouvir na porta TCP %u"
 
 #: src/Dialogs/Message.cpp:130
 msgid "OK"
@@ -2725,7 +2728,7 @@ msgstr "Configuração salva"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:55
 msgid "Enable airspace again?"
-msgstr ""
+msgstr "Ativar espaço aéreo novamente?"
 
 #: src/Dialogs/dlgAirspaceDetails.cpp:55
 msgid "Acknowledge for day?"
@@ -2754,7 +2757,7 @@ msgstr "Alternativos"
 
 #: src/Dialogs/dlgFlarmDetailsList.cpp:99
 msgid "No further information"
-msgstr ""
+msgstr "Sem mais informações"
 
 #: src/Dialogs/dlgAnalysis.cpp:246 src/Dialogs/dlgAnalysis.cpp:255
 #: src/Dialogs/dlgAnalysis.cpp:264 src/Dialogs/dlgAnalysis.cpp:273
@@ -3095,7 +3098,7 @@ msgstr "Regr Prova"
 #: src/Dialogs/dlgStatus.cpp:55
 #, no-c-format
 msgid "Times"
-msgstr ""
+msgstr "Vezes"
 
 #: src/Dialogs/dlgStatus.cpp:151 src/Dialogs/dlgStatus.cpp:182
 #: src/Dialogs/dlgStatus.cpp:192
@@ -3138,7 +3141,7 @@ msgstr "Padrão"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:98
 msgid "Fill all"
-msgstr ""
+msgstr "Preencher tudo"
 
 #: src/Dialogs/ConfigPanels/AirspaceConfigPanel.cpp:99
 msgid "Fill padding"
@@ -3244,9 +3247,8 @@ msgid "12 Bottom (Portrait)"
 msgstr "12 Abaixo (Paisagem)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
-#, fuzzy
 msgid "12 Top (Portrait)"
-msgstr "8 Acima (Retrato)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
 msgid "24 Right (Landscape)"
@@ -3400,11 +3402,11 @@ msgstr "Sombra"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:78
 msgid "Straight"
-msgstr ""
+msgstr "Direto"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:79
 msgid "Turning"
-msgstr ""
+msgstr "Virando"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:89
 #: Data/Dialogs/dlgConfiguration_L.xml:318
@@ -3441,9 +3443,8 @@ msgid "Altitude"
 msgstr "Altitude"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:111
-#, fuzzy
 msgid "Simple (large)"
-msgstr "Simples"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:112
 msgid "Detailed"
@@ -3558,7 +3559,7 @@ msgstr "pés/min"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:65
 msgid "Full name"
-msgstr ""
+msgstr "Nome completo"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:65
 msgid "The full name of each waypoint is displayed."
@@ -3566,7 +3567,7 @@ msgstr "Nome completo de cada pto. virada é mostrado."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:66
 msgid "First word of name"
-msgstr ""
+msgstr "Primeira palavra do nome"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:66
 msgid "The first word of the waypoint name is displayed."
@@ -3574,7 +3575,7 @@ msgstr "Primeira letra do nome do pto de virada é mostrada."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "First 3 letters"
-msgstr ""
+msgstr "Primeiras 3 letras"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "The first 3 letters of the waypoint name are displayed."
@@ -3582,7 +3583,7 @@ msgstr "3 primeiras letras do nome do pto. de virada serão mostradas."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:68
 msgid "First 5 letters"
-msgstr ""
+msgstr "Primeiras 5 letras"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:68
 msgid "The first 5 letters of the waypoint name are displayed."
@@ -3642,7 +3643,7 @@ msgstr "Todos ptos. virada da prova e todos ptos. pouso serão mostrados."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:108
 msgid "Task waypoints"
-msgstr ""
+msgstr "Waypoints da prova"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:109
 msgid "All waypoints part of a task will be displayed."
@@ -3654,7 +3655,7 @@ msgstr "Rótulos ptos. virada não serão mostrados."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:121
 msgid "Purple circle"
-msgstr ""
+msgstr "Círculo roxo"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:122
 msgid ""
@@ -3663,6 +3664,10 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
+"Aeroportos e campos de pouso são apresentados como círculos roxos. Se o "
+"waypoint está acessível, um grande círculo verde é adicionado atrás do roxo. "
+"Se o waypoint está bloqueado por uma montanha no círculo verde ficará "
+"vermelho."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:123
 msgid "B/W"
@@ -3674,10 +3679,13 @@ msgid ""
 "is reachable the color is changed to green. If the waypoint is blocked by a "
 "mountain the color is changed to red instead."
 msgstr ""
+"Aeroportos e campos de pouso são exibidos em cinza / branco. Se o waypoint "
+"está acessível a cor é alterada para verde. Se o waypoint está bloqueado por "
+"uma montanha, a cor é alterada para vermelho."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:125
 msgid "Traffic lights"
-msgstr ""
+msgstr "Luzes de tráfego"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:126
 msgid ""
@@ -3685,6 +3693,9 @@ msgid ""
 "light. Green if reachable, Orange if blocked by mountain and red if not "
 "reachable at all."
 msgstr ""
+"Aeroportos e campos de pouso são exibidas com as cores de um semáforo. Verde "
+"se acessível, Laranja se bloqueado por montanhas e vermelho não se acessível "
+"a todos."
 
 #: src/Dialogs/dlgTaskManager.cpp:73 src/Dialogs/dlgTaskManager.cpp:156
 #: Data/Dialogs/dlgTaskManager_L.xml:3 Data/Dialogs/dlgTaskManager.xml:3
@@ -3704,24 +3715,20 @@ msgstr ""
 "Continuar?"
 
 #: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
-#, fuzzy
 msgid "Calculator"
-msgstr "Calculadora de Prova"
+msgstr "Calculadora"
 
 #: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
-#, fuzzy
 msgid "Turn Points"
-msgstr "Ponto da Prova"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
-#, fuzzy
 msgid "Manage"
-msgstr "Gerenciador de Tarefas"
+msgstr "Gerenciar"
 
 #: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
-#, fuzzy
 msgid "Rules"
-msgstr "Regr Prova"
+msgstr "Regras"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -3733,7 +3740,7 @@ msgstr "Prova inalterada"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Clear all points?"
-msgstr ""
+msgstr "Limpar todos pontos?"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Task edit"
@@ -3757,7 +3764,7 @@ msgstr "Procurar Prova"
 
 #: src/Dialogs/pnlTaskList.cpp:202
 msgid "Can't delete .CUP files"
-msgstr ""
+msgstr "Impossível deletar arquivos .CUP"
 
 #: src/Dialogs/pnlTaskList.cpp:202
 msgid "Delete Error"
@@ -3769,7 +3776,7 @@ msgstr "Deletar a prova selecionada?"
 
 #: src/Dialogs/pnlTaskList.cpp:235
 msgid "Can't rename .CUP files"
-msgstr ""
+msgstr "Impossível renomear arquivos .CUP"
 
 #: src/Dialogs/pnlTaskList.cpp:235
 msgid "Rename Error"
@@ -3777,29 +3784,27 @@ msgstr "Erro de renomeação"
 
 #: src/Dialogs/pnlTaskList.cpp:285
 msgid "Create new task?"
-msgstr ""
+msgstr "Criar nova prova?"
 
 #: src/Dialogs/pnlTaskList.cpp:285
 msgid "Task New"
-msgstr ""
+msgstr "Nova prova"
 
 #: src/Dialogs/pnlTaskCalculator.cpp:272
 msgid "Calculator excludes unsaved task changes!"
-msgstr ""
+msgstr "Calculadora exclui alterações não salvas da prova!"
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
 msgid "(Add Alternate Start)"
 msgstr "(Adicionar largada alternativa)"
 
 #: src/Dialogs/dlgTaskPoint.cpp:381
-#, fuzzy
 msgid "Enable Alternate Starts"
-msgstr "(Adicionar largada alternativa)"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:384
-#, fuzzy
 msgid "Edit Alternates"
-msgstr "Alternativos"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:438
 msgid "Remove task point?"
@@ -6379,9 +6384,8 @@ msgid "Arrival height"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:87 Data/Dialogs/dlgConfiguration.xml:87
-#, fuzzy
 msgid "Max. auto zoom distance"
-msgstr "Próxima distância"
+msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid ""
@@ -7105,9 +7109,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:276
 #: Data/Dialogs/dlgConfiguration.xml:275
-#, fuzzy
 msgid "Auto MC mode"
-msgstr "MacCready autom LIGADO"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:168
 #: Data/Dialogs/dlgConfiguration.xml:168
@@ -8494,6 +8497,9 @@ msgstr "Pouso"
 
 #~ msgid "V ach"
 #~ msgstr "V ating"
+
+#~ msgid "Task Calculator"
+#~ msgstr "Calculadora de Prova"
 
 #~ msgid "Info box values small"
 #~ msgstr "Vals pequ Caixas Info"
