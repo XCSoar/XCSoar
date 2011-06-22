@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-18 13:53+0200\n"
-"PO-Revision-Date: 2011-04-15 16:33+0000\n"
-"Last-Translator: Levan Chikobava <Unknown>\n"
+"PO-Revision-Date: 2011-06-18 10:24+0000\n"
+"Last-Translator: Strahov Nikita <Unknown>\n"
 "Language-Team: Russian <ru@li.org>\n"
 "Language: ru\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-20 07:04+0000\n"
-"X-Generator: Launchpad (build 12847)\n"
+"X-Launchpad-Export-Date: 2011-06-22 07:28+0000\n"
+"X-Generator: Launchpad (build 13265)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:309
@@ -96,23 +96,20 @@ msgid "Stop Logger"
 msgstr "Остановить запись."
 
 #: src/Logger/ExternalLogger.cpp:48
-#, fuzzy
 msgid "Declare task?"
-msgstr "Установить задание"
+msgstr "Объявить задачу?"
 
 #: src/Logger/ExternalLogger.cpp:51
-#, fuzzy
 msgid "Task declared!"
-msgstr "Упражнение объявлено"
+msgstr "Задача объявлена!"
 
 #: src/Logger/ExternalLogger.cpp:55
-#, fuzzy
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
 "Произошла ошибка,\n"
-"Задача не объявлена!"
+"задача не объявлена!"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -189,9 +186,8 @@ msgid "Finish Turnpoint"
 msgstr "Финишная поворотная точка"
 
 #: src/ExpandMacros.cpp:200 src/ExpandMacros.cpp:246
-#, fuzzy
 msgid "Next Startpoint"
-msgstr "Следующий поворотный"
+msgstr "Следующая точка начала"
 
 #: src/ExpandMacros.cpp:206 src/ExpandMacros.cpp:252
 msgid "Start Turnpoint"
@@ -207,11 +203,11 @@ msgstr "Ручной поворот"
 
 #: src/ExpandMacros.cpp:261
 msgid "Disarm start"
-msgstr ""
+msgstr "Обезвредить начало"
 
 #: src/ExpandMacros.cpp:264
 msgid "Disarm turn"
-msgstr ""
+msgstr "Обезвредить очередь"
 
 #: src/ExpandMacros.cpp:274
 msgid ""
@@ -405,6 +401,9 @@ msgid ""
 "terrain file. The value is coloured red when the glider is below the terrain "
 "safety clearance height."
 msgstr ""
+"Навигационная высота минус высоту местности, полученную из файла местности. "
+"Значение красного цвета, это когда планер находится ниже безопасной высоты "
+"рельефа."
 
 #: src/InfoBoxes/Content/Factory.cpp:79
 #, no-c-format
@@ -414,7 +413,7 @@ msgstr "тепловой последние 30 с"
 #: src/InfoBoxes/Content/Factory.cpp:80
 #, no-c-format
 msgid "TC 30s"
-msgstr ""
+msgstr "TC 30с"
 
 #: src/InfoBoxes/Content/Factory.cpp:81
 #, no-c-format
@@ -422,6 +421,8 @@ msgid ""
 "A 30 second rolling average climb rate based of the reported GPS altitude, "
 "or vario if available."
 msgstr ""
+"Усреднение скороподъемности потока за крайние 30 секунд. Значения берутся по "
+"данным GPS или электронного вариометра."
 
 #: src/InfoBoxes/Content/Factory.cpp:88 src/InfoBoxes/Content/Factory.cpp:89
 #: Data/Dialogs/dlgStatusAircraft.xml:10 Data/Dialogs/dlgStatus.xml:15
@@ -438,6 +439,8 @@ msgid ""
 "True bearing of the next waypoint.  For AAT tasks, this is the true bearing "
 "to the target within the AAT sector."
 msgstr ""
+"Истинный азимут следующего пункта. Для упражнения с назначенными зонами, это "
+"истинное азимут до цели в пределах ААТ сектора."
 
 #: src/InfoBoxes/Content/Factory.cpp:97
 #, no-c-format
@@ -457,6 +460,10 @@ msgid ""
 "climbing cruise. If the vertical speed is close to zero, the displayed value "
 "is '---'."
 msgstr ""
+"Текущее качество планера, полученное путем деления скорости движения "
+"относительно земли  на скороподъемность (GPS) в течение последних 20 секунд. "
+"В режиме полета с набором высоты показывается отрицательные значения. Если "
+"вертикальная скорость близка к нулю, отображается значение'---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:106
 #, no-c-format
@@ -517,6 +524,8 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"Общая высота прирост/убыль за крайний поток делится на время, проведенное в "
+"спирали."
 
 #: src/InfoBoxes/Content/Factory.cpp:133
 #, no-c-format
@@ -600,12 +609,10 @@ msgid "WP AltD"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:171
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the next waypoint relative to the safety arrival height."
 msgstr ""
-"Высота прибытия на следующий поворотный сотносительно с безопасной высотой "
-"прибытия."
 
 #: src/InfoBoxes/Content/Factory.cpp:178
 #, no-c-format
@@ -657,11 +664,11 @@ msgid "Fin AltD"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:198
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
-msgstr "Высота прибытия на финиш касательно безопасной высоты прибытия."
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:205
 #, no-c-format
@@ -723,7 +730,7 @@ msgid "Fin LD"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:234
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The required glide ratio to finish the task, given by the distance to go "
 "divided by the height required to arrive at the safety arrival height. "
@@ -733,13 +740,6 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
-"Потребное аэродинамическое качество необходимое что бы прийти к финишу, "
-"определяется: дистанция до финиша деленная на безопасную высоту прибытия. "
-"Отрицательные значения говорят о том что необходимо добрать высоты для "
-"долета.Если потребная высота близка к нулю показывается значение '---'. "
-"Обратите внимание на то что расчет может быть оптимистичным поскольку "
-"снижает высоту необходимую для финиша на избыточную энергию высоты планера "
-"если его истинная воздушная скорость больше Маккриди и лучшие LD скоростей"
 
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
@@ -1078,7 +1078,7 @@ msgid "WP LD"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:405
-#, fuzzy, no-c-format
+#, no-c-format
 msgid ""
 "The required glide ratio to reach the next waypoint, given by the distance "
 "to next waypoint divided by the height required to arrive at the safety "
@@ -1088,8 +1088,6 @@ msgid ""
 "height required to reach the waypoint by the excess energy height of the "
 "glider if its true airspeed is greater than the MacCready and best LD speeds."
 msgstr ""
-"Потребное качество до следующей путевой точки. Определяется расстоянием до "
-"нее деленным на потребную высоту для безопасного прибытия туда."
 
 #: src/InfoBoxes/Content/Factory.cpp:412
 #, no-c-format
@@ -2150,9 +2148,8 @@ msgid "Hold turn"
 msgstr "Задержать поворот"
 
 #: src/InputEventsActions.cpp:637
-#, fuzzy
 msgid "Show details:"
-msgstr "Подробн."
+msgstr ""
 
 #: src/InputEventsActions.cpp:642
 msgid "Unknown competition number"
@@ -2248,9 +2245,8 @@ msgid "In sector, arm advance when ready"
 msgstr "В секторе отметки, укажите когда будете готовы"
 
 #: src/Pages.cpp:181
-#, fuzzy
 msgid "Info Hide"
-msgstr "Инфо"
+msgstr ""
 
 #: src/Pages.cpp:183
 msgid "Map (Full screen)"
@@ -2265,9 +2261,8 @@ msgid "Map and InfoBoxes "
 msgstr ""
 
 #: src/Pages.cpp:198
-#, fuzzy
 msgid "Info Auto"
-msgstr "Авто"
+msgstr ""
 
 #: src/Pages.cpp:200
 msgid "Map and InfoBoxes (Auto)"
@@ -2591,9 +2586,8 @@ msgstr "Внимание !!!"
 
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
-#, fuzzy
 msgid "Battery low"
-msgstr "Батарея"
+msgstr ""
 
 #: src/Components.cpp:267
 msgid "Initialising"
@@ -3150,9 +3144,8 @@ msgid "Final glide"
 msgstr "долет"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
-#, fuzzy
 msgid "Trending average climb"
-msgstr "Тенденции среднего набора"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:80
 msgid "Flap"
@@ -3382,9 +3375,8 @@ msgid "Straight"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:79
-#, fuzzy
 msgid "Turning"
-msgstr "Внимание !!!"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:89
 #: Data/Dialogs/dlgConfiguration_L.xml:318
@@ -3536,9 +3528,8 @@ msgid "ft/min"
 msgstr "фут/мин"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:65
-#, fuzzy
 msgid "Full name"
-msgstr "Полное название"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:65
 msgid "The full name of each waypoint is displayed."
@@ -3553,18 +3544,16 @@ msgid "The first word of the waypoint name is displayed."
 msgstr "Отображается первое слово в названии точки"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
-#, fuzzy
 msgid "First 3 letters"
-msgstr "Первые 3 буквы"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "The first 3 letters of the waypoint name are displayed."
 msgstr "Первые 3 буквы показаны на карте в названиях точек"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:68
-#, fuzzy
 msgid "First 5 letters"
-msgstr "Первые 5 букв"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:68
 msgid "The first 5 letters of the waypoint name are displayed."
@@ -3595,9 +3584,8 @@ msgid "Arrival height considering terrain avoidance"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:82
-#, fuzzy
 msgid "Straight & terrain glide"
-msgstr "Отображение долета"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:82
 msgid "Both arrival heights are displayed."
@@ -3616,18 +3604,16 @@ msgid "All waypoint labels will be displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:105
-#, fuzzy
 msgid "Task waypoints & landables"
-msgstr "задачи и посадки"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:107
 msgid "All waypoints part of a task and all landables will be displayed."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:108
-#, fuzzy
 msgid "Task waypoints"
-msgstr "Отображение точек на карте"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:109
 msgid "All waypoints part of a task will be displayed."
@@ -3661,9 +3647,8 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:125
-#, fuzzy
 msgid "Traffic lights"
-msgstr "Высота над рельефом"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:126
 msgid ""
@@ -3688,23 +3673,20 @@ msgid ""
 msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
-#, fuzzy
 msgid "Calculator"
-msgstr "Симулятор"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
-#, fuzzy
 msgid "Turn Points"
-msgstr "Внимание !!!"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
 msgid "Manage"
 msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
-#, fuzzy
 msgid "Rules"
-msgstr "Задача"
+msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -3715,9 +3697,8 @@ msgid "Task unchanged"
 msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
-#, fuzzy
 msgid "Clear all points?"
-msgstr "Удалить точку?"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Task edit"
@@ -3760,14 +3741,12 @@ msgid "Rename Error"
 msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:285
-#, fuzzy
 msgid "Create new task?"
-msgstr "Заменить в задаче"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:285
-#, fuzzy
 msgid "Task New"
-msgstr "Достигн скорость в задаче"
+msgstr ""
 
 #: src/Dialogs/pnlTaskCalculator.cpp:272
 msgid "Calculator excludes unsaved task changes!"
@@ -3778,14 +3757,12 @@ msgid "(Add Alternate Start)"
 msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:381
-#, fuzzy
 msgid "Enable Alternate Starts"
-msgstr "Альтерн. старт. точки"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:384
-#, fuzzy
 msgid "Edit Alternates"
-msgstr "Настроить"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:438
 msgid "Remove task point?"
@@ -4496,9 +4473,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:266
 #: Data/Dialogs/dlgConfiguration.xml:265
-#, fuzzy
 msgid "Auto wind"
-msgstr "Авто"
+msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts_L.xml:3 Data/Dialogs/dlgConfigFonts.xml:3
 msgid "Font Configuration"
@@ -4633,9 +4609,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:350
 #: Data/Dialogs/dlgConfiguration.xml:349
-#, fuzzy
 msgid "Reach mode"
-msgstr "Модель прибора"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:188
 #: Data/Dialogs/dlgConfiguration.xml:188
@@ -4725,9 +4700,8 @@ msgid "Clean"
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts_L.xml:28 Data/Dialogs/dlgConfigFonts.xml:28
-#, fuzzy
 msgid "Dialog text"
-msgstr "Диалоговые окна"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator_L.xml:45
 #: Data/Dialogs/pnlTaskCalculator.xml:45
@@ -5235,9 +5209,8 @@ msgid "Clear"
 msgstr "Очистить"
 
 #: Data/Dialogs/dlgConfigFonts_L.xml:22 Data/Dialogs/dlgConfigFonts.xml:22
-#, fuzzy
 msgid "Topography labels, normal"
-msgstr "Топография Вкл"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
 #: Data/Dialogs/pnlTaskCalculator.xml:22
@@ -6205,9 +6178,8 @@ msgid "V manoeuvering"
 msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts_L.xml:25 Data/Dialogs/dlgConfigFonts.xml:25
-#, fuzzy
 msgid "Topography labels, important"
-msgstr "Топография/Рельеф"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:27
 msgid "Acknowledge"
@@ -6363,9 +6335,8 @@ msgid "Arrival height"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:87 Data/Dialogs/dlgConfiguration.xml:87
-#, fuzzy
 msgid "Max. auto zoom distance"
-msgstr "Следующая дистанция"
+msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid ""
@@ -6466,9 +6437,8 @@ msgid "Aircraft symbol"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskEdit_L.xml:10 Data/Dialogs/pnlTaskEdit.xml:12
-#, fuzzy
 msgid "Clear All"
-msgstr "Очистить"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:291
 #: Data/Dialogs/dlgConfiguration.xml:290
@@ -6669,14 +6639,12 @@ msgid "Waypoint distance"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskList_L.xml:13 Data/Dialogs/pnlTaskList.xml:12
-#, fuzzy
 msgid "Browse"
-msgstr "Файл. браузер"
+msgstr ""
 
 #: Data/Dialogs/pnlTaskList_L.xml:11 Data/Dialogs/pnlTaskList.xml:10
-#, fuzzy
 msgid "New Task"
-msgstr "Задач Нет"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:700
 #: Data/Dialogs/dlgConfiguration.xml:699
@@ -7092,15 +7060,13 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:276
 #: Data/Dialogs/dlgConfiguration.xml:275
-#, fuzzy
 msgid "Auto MC mode"
-msgstr "Авто.Маккреди"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:168
 #: Data/Dialogs/dlgConfiguration.xml:168
-#, fuzzy
 msgid "Landable size"
-msgstr "задачи и посадки"
+msgstr ""
 
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:4
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:4 Data/Dialogs/dlgTaskPoint_L.xml:14
@@ -7385,9 +7351,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:355
 #: Data/Dialogs/dlgConfiguration.xml:354
-#, fuzzy
 msgid "Reach display"
-msgstr "Показать ландшафт"
+msgstr ""
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:3
 msgid "Airspace Details"
@@ -7733,11 +7698,10 @@ msgid ""
 msgstr ""
 
 #: Data/Input/default.xci:906
-#, fuzzy
 msgid ""
 "FLARM\n"
 "Details"
-msgstr "Подробн."
+msgstr ""
 
 #: Data/Input/default.xci:219 Data/Input/default.xci:524
 msgid ""
@@ -7782,39 +7746,6 @@ msgstr "Командный Код"
 msgid "Landing"
 msgstr "приземление"
 
-#~ msgid "Declare Task?"
-#~ msgstr "Объявить упражнение?"
-
-#~ msgid "Task Declared!"
-#~ msgstr "Упражнение объявлено!"
-
-#~ msgid "Marks cleared"
-#~ msgstr "ОЧИСТКА МЕТОК"
-
-#~ msgid "Start point cycle"
-#~ msgstr "Стартовый круг"
-
-#~ msgid "Previous Waypoint"
-#~ msgstr "Предыдущий Waypoint"
-
-#~ msgid "Organiser Battery Low"
-#~ msgstr "Разряжена батарея"
-
-#~ msgid "Orange"
-#~ msgstr "Оранжевый"
-
-#~ msgid "Clear Task"
-#~ msgstr "Очистка задачи"
-
-#~ msgid "True"
-#~ msgstr "ИСТИНН."
-
-#~ msgid "False"
-#~ msgstr "ОШИБКА"
-
-#~ msgid "Set speed remaining"
-#~ msgstr "Расчетная скорость"
-
 #~ msgid "Previous turnpoint"
 #~ msgstr "прошлый поворотный пункт"
 
@@ -7823,6 +7754,9 @@ msgstr "приземление"
 
 #~ msgid "CPU Load"
 #~ msgstr "Загрузка процессора"
+
+#~ msgid "No Task"
+#~ msgstr "Задач Нет"
 
 #~ msgid "Finish turnpoint"
 #~ msgstr "завершать поворотный пункт"
@@ -7881,8 +7815,115 @@ msgstr "приземление"
 #~ msgid "Topology on"
 #~ msgstr "Топология включена"
 
+#~ msgid ""
+#~ "Error occured,\n"
+#~ "Task NOT Declared!"
+#~ msgstr ""
+#~ "Произошла ошибка,\n"
+#~ "Задача не объявлена!"
+
+#~ msgid "Declare Task?"
+#~ msgstr "Объявить упражнение?"
+
+#~ msgid "Task Declared!"
+#~ msgstr "Упражнение объявлено!"
+
+#~ msgid ""
+#~ "Arrival altitude at the next waypoint relative to the safety arrival "
+#~ "altitude."
+#~ msgstr ""
+#~ "Высота прибытия на следующий поворотный сотносительно с безопасной "
+#~ "высотой прибытия."
+
+#~ msgid ""
+#~ "Arrival altitude at the final task turn point relative to the safety "
+#~ "arrival altitude."
+#~ msgstr "Высота прибытия на финиш касательно безопасной высоты прибытия."
+
+#~ msgid ""
+#~ "The required glide ratio to finish the task, given by the distance to go "
+#~ "divided by the height required to arrive at the safety arrival altitude. "
+#~ "Negative values indicate a climb is necessary to finish. If the height "
+#~ "required is close to zero, the displayed value is '---'. Note that this "
+#~ "calculation may be optimistic because it reduces the height required to "
+#~ "finish by the excess energy height of the glider if its true airspeed is "
+#~ "greater than the MacCready and best LD speeds."
+#~ msgstr ""
+#~ "Потребное аэродинамическое качество необходимое что бы прийти к финишу, "
+#~ "определяется: дистанция до финиша деленная на безопасную высоту прибытия. "
+#~ "Отрицательные значения говорят о том что необходимо добрать высоты для "
+#~ "долета.Если потребная высота близка к нулю показывается значение '---'. "
+#~ "Обратите внимание на то что расчет может быть оптимистичным поскольку "
+#~ "снижает высоту необходимую для финиша на избыточную энергию высоты "
+#~ "планера если его истинная воздушная скорость больше Маккриди и лучшие LD "
+#~ "скоростей"
+
 #~ msgid "None "
 #~ msgstr "Нечего "
 
+#~ msgid "Previous Waypoint"
+#~ msgstr "Предыдущий Waypoint"
+
+#~ msgid "Start point cycle"
+#~ msgstr "Стартовый круг"
+
+#~ msgid ""
+#~ "The required glide ratio to reach the next waypoint, given by the "
+#~ "distance to next waypoint divided by the height required to arrive at the "
+#~ "safety arrival altitude. Negative values indicate a climb is necessary to "
+#~ "reach the waypoint. If the height required is close to zero, the "
+#~ "displayed value is '---'.   Note that this calculation may be optimistic "
+#~ "because it reduces the height required to reach the waypoint by the "
+#~ "excess energy height of the glider if its true airspeed is greater than "
+#~ "the MacCready and best LD speeds."
+#~ msgstr ""
+#~ "Потребное качество до следующей путевой точки. Определяется расстоянием "
+#~ "до нее деленным на потребную высоту для безопасного прибытия туда."
+
+#~ msgid "Organiser Battery Low"
+#~ msgstr "Разряжена батарея"
+
 #~ msgid "Waypoint not editable"
 #~ msgstr "Точка не редактируемая"
+
+#~ msgid "Trending Average climb"
+#~ msgstr "Тенденции среднего набора"
+
+#~ msgid "Full Name"
+#~ msgstr "Полное название"
+
+#~ msgid "First 3 Letters"
+#~ msgstr "Первые 3 буквы"
+
+#~ msgid "First 5 Letters"
+#~ msgstr "Первые 5 букв"
+
+#~ msgid "True"
+#~ msgstr "ИСТИНН."
+
+#~ msgid "False"
+#~ msgstr "ОШИБКА"
+
+#~ msgid "Alternate"
+#~ msgstr "Настроить"
+
+#~ msgid "Orange"
+#~ msgstr "Оранжевый"
+
+#~ msgid "Clear Task"
+#~ msgstr "Очистка задачи"
+
+#~ msgid "Map waypoints"
+#~ msgstr "Отображение точек на карте"
+
+#~ msgid "Set speed remaining"
+#~ msgstr "Расчетная скорость"
+
+#~ msgid "Dialog boxes"
+#~ msgstr "Диалоговые окна"
+
+#~ msgid "Glide terrain line"
+#~ msgstr "Отображение долета"
+
+#~ msgid "Marks cleared"
+#~ msgstr "ОЧИСТКА МЕТОК"
