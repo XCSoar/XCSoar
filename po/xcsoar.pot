@@ -8,7 +8,7 @@ msgid ""
 msgstr ""
 "Project-Id-Version: PACKAGE VERSION\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-18 13:53+0200\n"
+"POT-Creation-Date: 2011-06-24 01:31+0200\n"
 "PO-Revision-Date: YEAR-MO-DA HO:MI+ZONE\n"
 "Last-Translator: FULL NAME <EMAIL@ADDRESS>\n"
 "Language-Team: LANGUAGE <LL@li.org>\n"
@@ -4176,10 +4176,6 @@ msgstr ""
 msgid "Waypoint Info"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration_L.xml:184
-msgid "Draw topographical features (roads, rivers, lakes etc) on the map."
-msgstr ""
-
 #: Data/Dialogs/dlgVario_L.xml:51 Data/Dialogs/dlgVario.xml:50
 msgid "Calibration factor applied to total energy probe to obtain TE vario."
 msgstr ""
@@ -4192,17 +4188,6 @@ msgstr ""
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:6
 #: Data/Dialogs/dlgConfigWaypoints.xml:6
 msgid "New"
-msgstr ""
-
-#: Data/Dialogs/dlgWindSettings.xml:12
-#: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:4
-msgid ""
-"This allows switching on or off the automatic wind algorithm.  When the "
-"algorithm is switched off, the pilot is responsible for setting the wind "
-"estimate.\n"
-"[Circling] Requires only a GPS source\n"
-"[ZigZag] requires an intelligent vario with airspeed output.\n"
-"[Both] Use ZigZag and circling."
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:173
@@ -4509,13 +4494,6 @@ msgstr ""
 msgid "Profile"
 msgstr ""
 
-#: Data/Dialogs/dlgConfiguration_L.xml:738
-#: Data/Dialogs/dlgConfiguration.xml:737
-msgid ""
-"Geometry values range 0-7 but in landscape mode only some of them are really "
-"available."
-msgstr ""
-
 #: Data/Dialogs/dlgStatusAircraft.xml:5 Data/Dialogs/dlgStatus.xml:10
 #: Data/Dialogs/dlgWayPointDetails_L.xml:13
 #: Data/Dialogs/dlgWayPointDetails.xml:13
@@ -4767,6 +4745,7 @@ msgstr ""
 msgid "Route ceiling"
 msgstr ""
 
+#: Data/Dialogs/dlgConfiguration_L.xml:184
 #: Data/Dialogs/dlgConfiguration.xml:184
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
 msgstr ""
@@ -5533,6 +5512,13 @@ msgstr ""
 msgid "FLARM"
 msgstr ""
 
+#: Data/Dialogs/dlgConfiguration_L.xml:738
+#: Data/Dialogs/dlgConfiguration.xml:737
+msgid ""
+"A list of possible InfoBox layouts. Do some trials to find the best for your "
+"screen size."
+msgstr ""
+
 #: Data/Dialogs/dlgTaskPointType_L.xml:3 Data/Dialogs/dlgTaskPointType.xml:3
 msgid "Task Point Type"
 msgstr ""
@@ -5839,14 +5825,14 @@ msgstr ""
 msgid "V airbrake"
 msgstr ""
 
+#: Data/Dialogs/dlgConfiguration_L.xml:69 Data/Dialogs/dlgConfiguration.xml:69
+msgid "Circling orientation"
+msgstr ""
+
 #: Data/Dialogs/dlgVario_L.xml:55 Data/Dialogs/dlgVario.xml:54
 msgid ""
 "Proportion of TE probe value used in total energy mixing with pitot/static "
 "total energy."
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration_L.xml:69 Data/Dialogs/dlgConfiguration.xml:69
-msgid "Circling orientation"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:332
@@ -6587,7 +6573,8 @@ msgid ""
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:266
-#: Data/Dialogs/dlgConfiguration.xml:265
+#: Data/Dialogs/dlgConfiguration.xml:265 Data/Dialogs/dlgWindSettings.xml:12
+#: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:4
 msgid ""
 "This allows switching on or off the automatic wind algorithm.  When the "
 "algorithm is switched off, the pilot is responsible for setting the wind "
