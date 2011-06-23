@@ -83,14 +83,6 @@ public:
     void SetDefaultFlags(bool turnpoint);
   };
 
-  /**
-   * Constructor for real waypoints
-   *
-   * @param is_turnpoint Whether newly created waypoint is a turnpoint
-   * @return Uninitialised object
-   */
-  Waypoint(const GeoPoint &_location, const bool is_turnpoint = false);
-
   /** Unique id */
   unsigned id;
 
@@ -122,6 +114,14 @@ public:
   tstring Comment;
   /** Airfield or additional (long) details */
   tstring Details;
+
+  /**
+   * Constructor for real waypoints
+   *
+   * @param is_turnpoint Whether newly created waypoint is a turnpoint
+   * @return Uninitialised object
+   */
+  Waypoint(const GeoPoint &_location, const bool is_turnpoint = false);
 
   /** 
    * Determine if waypoint is marked as able to be landed at
