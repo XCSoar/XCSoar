@@ -481,7 +481,7 @@ The file format is based on the WinPilot polar file format (see section~\ref{sec
 \label{conf:polar} To configure the glide computer to the performance of a glider 
 type start with the selection of a type from the \button{List}. 
 Choose \button{Import} when you want to load an external polar file.
-Customize the three V/W points defining the parable curve and the reference 
+Customise the three V/W points defining the parable curve and the reference 
 weight to your needs. 
 \tip Be aware that namely those four items are of crucial importance 
 for every glide performance relevant computation of XCSoar.   
@@ -593,9 +593,9 @@ rules. \label{conf:taskrules}
   start height. \\
   {\bf OLC Plus}: A combination of Classic and FAI rules. 30\% of the FAI score
   are added to the Classic score. \\
-  {\bf XContest}: tbd.
-  {\bf DHV-XC}: tbd.
-  {\bf SIS-AT}: tbd. 
+  {\bf XContest}: \todonum{tbd.} \\
+  {\bf DHV-XC}: \todonum{tbd.} \\
+  {\bf SIS-AT}: \todonum{tbd.} \\
 \end{description}
 
 
@@ -716,8 +716,8 @@ XCSoar.
 
 \begin{description}
 \item[Auto Blank*] This determines whether to blank the display after a long
-  period of inactivity when operating on internal battery power (visible for PDA
-  only).
+  period of inactivity when operating on internal battery power (visible for mobile 
+  devices only).
 \item[Events*]  The Input Events file defines the menu system and how XCSoar
   responds to button presses and events from external devices.
 \item[Language]  The language options selects translations for English texts to
@@ -754,99 +754,81 @@ Press the \button{Fonts} button to adjust the fonts XCSoar uses.
 \clearpage
 \section{Fonts}
 
-This page enables customization of fonts in various fields of the program.
+This page enables customisation of fonts in various fields of the program.
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-fonts.png}
 \end{center}
 
-Once the customization is enabled, the \button{Edit} buttons allow to change some parameters (Font 
-Face, Height, Bold and Italic) of the chosen font.
+Once the customisation is enabled, the \button{Edit} buttons allow to change some parameters (font face, height, bold and italic) of the chosen font.
 
-If customization is disabled, default fonts will be used.
+If customisation is disabled, default fonts will be used.
+
 
 %%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Symbols}\label{sec:symbols}
+\section{Interface Appearance}\label{sec:interface-appearance}
 
-This page provides options relating to the items overlaying the map display.
+This page once more details the appearance of the graphical user interface of XCSoar.
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-symbols.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-interface_appearance.png}
 \end{center}
 
 \begin{description}
-
-
-\item[Final glide bar]  Two styles are available: Default and
-Alternate. The differences between these styles is cosmetic.  Alternate displays the height difference to the 
-right of the final glide bar; default displays the height difference above/below the final glide bar and inside a 
-rounded box.
-
-\item[North arrow*]  Two styles are available.  Normal, or with a white outline.
+\item[Infobox Geometry]  A list of possible InfoBox layouts. Do some trials to find the 
+  best for your screen size. The numbers in front refer to the total number of 
+  InfoBoxes.
+\item[Tab dialog style]  Determines whether tabbed dialogs use text or icons.
+\item[Msg. window*]  Defines the alignment of the status message box, either 
+  centred or in the top left corner.
+\item[Dialog style*]  Determines the display size of dialogues.
+\item[Inverse InfoBoxes*]  If {\bf On}, the InfoBoxes are white on black, otherwise 
+  black on white.
+\item[Colour InfoBoxes*]  If {\bf On}, certain InfoBoxes will have coloured text. For 
+  example, the active waypoint InfoBox will turn blue when the glider is above final 
+  glide.
+\item[Infobox border*]  Two styles for InfoBox borders are available: {\bf Box} draws 
+  boxes around each InfoBox. {\bf Tab} draws a tab at the top of the InfoBox across the 
+  title.
 \end{description}
-
-
-
-
 
 
 %%%%%%%%%%
 \clearpage
-\section{Layout}
+\section{Screen Pages (or InfoBox Pages)}
 
-This page defines various display styles used by symbols and InfoBoxes.
+This page allows the definition of the screen page ensemble. A typical setup will contain three pages, the expert mode accesses up to eight possible pages.
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-layout.png}
-\end{center}
+There are three predefined InfoBox sets (circling, cruise, final glide) to assign to a screen page. Additionally you can define up to five more InfoBox sets and assign them to further screen pages.  Indeed you can select a map only page and a page with automatic InfoBox set activation depending on your flight mode.
 
-\begin{description}
-\item[Infobox Geometry]  Sets the geometry values for InfoBoxes. In landscape
-mode InfoBoxes are placed left and right, in portrait mode top and bottom of the screen. The numbers in front refer 
-to the total number of InfoBoxes.
-\item[Msg window*]  Defines the alignment of the status message box, either
-centred or in the top left corner.
-\item[Dialogue style*]  Determines the display size of dialogues.
-\end{description}
-
-
-
-
-%%%%%%%%%%
-
-\clearpage
-\section{{\InfoBox}es}
-
-This page allows the configuration of four InfoBox sets to be defined for each
-display mode (circling, cruise, final glide) and one auxiliary set.  See
-Section~\ref{cha:infobox} for a description of the InfoBox types and their meanings.
+See Section~\ref{cha:infobox} for a description of the InfoBox types and their meanings.
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-infoboxes.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-pages.png}
 \end{center}
 
 To arrange a set of InfoBoxes press one of the buttons labeled with the name
 of the set.  The InfoBoxes are numbered; the location of the InfoBoxes depends
-on the screen geometry.  The table below shows the InfoBox numbers for landscape screen layout (Altair):
+on the screen layout.  The table below shows the InfoBox enumeration scheme for the landscape screen layout:
 
 \begin{tabular}{|c|c|}
 \hline
-1 &  \\
+1 & 7 \\
 \hline
-2 &  \\
+2 & 8 \\
 \hline
-3 &  \\
+3 & 9 \\
 \hline
-4 & 7 \\
+4 & 10 \\
 \hline
-5 & 8 \\
+5 & 11 \\
 \hline
-6 & 9 \\
+6 & 12 \\
 \hline
 \end{tabular}
 
-The table below shows the InfoBox numbering for portrait screen layout:
+This table shows the InfoBox enumeration scheme for a portrait screen layout:
 
 \begin{tabular}{|c|c|c|c|}
 \hline
@@ -857,28 +839,31 @@ The table below shows the InfoBox numbering for portrait screen layout:
 \hline
 \end{tabular}
 
-\begin{description}
-\item[Inverse InfoBoxes*]  If true, the InfoBoxes are white on black, otherwise black on white.
-\item[Colour InfoBoxes*]  If true, certain InfoBoxes will have coloured text. For example, the 
-active waypoint InfoBox will be blue when the glider is above final glide.
-\item[Infobox border*]  Two styles for InfoBox borders are available: `Box'
-draws boxes around each InfoBox.  `Tab' draws a tab at the top of the InfoBox across the title.
-\end{description}
 
-
-
-%%%%%%%%%%
-
+%%%%%%%%%%%%%%%%%%
 \clearpage
-\section{Experimental features}
+\section{InfoBox Set Composition (or InfoBox Modes)}\label{sec:infobox_sets}
 
-This page provides experimental features which are not finished yet.
+This page shows the available InfoBox sets.
+
+There are the three predefined ones to configure, and additionally five more you can freely name. By default they are named AUX-1, AUX-2, and so on.
+
+Selecting one of the sets starts a dialogue which provides all means to name and compose an InfoBox set up to your needs.
 
 \begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-exp.png}
+\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/config-infoboxes.png}
 \end{center}
 
 \begin{description}
-\item[Device model] This setting allows the adaptation to specific hardware
-XCSoar runs on (visible for PDA only).
+\item[Name]  Sets the name of the currently customized InfoBox set. The 
+  button starts the text input dialogue of XCSoar.
+\item[InfoBox]  The number identifying the current box.
+\item[Content]  Select the information you want to see at the current box.
 \end{description}
+
+The right side of the dialogue always gives the overview on the composed set. When composing at the PC you can use the mouse to select the individual boxes right from the overview.
+
+
+
+
+
