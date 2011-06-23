@@ -54,17 +54,6 @@ GPS_STATE::reset()
 }
 
 void
-ACCELERATION_STATE::complement(const ACCELERATION_STATE &add)
-{
-  /* calculated: BankAngle, PitchAngle */
-
-  if (!Available && add.Available) {
-    Gload = add.Gload;
-    Available = add.Available;
-  }
-}
-
-void
 NMEA_INFO::reset()
 {
   Connected.Clear();

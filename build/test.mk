@@ -469,6 +469,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
@@ -1047,6 +1048,7 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
@@ -1130,6 +1132,7 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
@@ -1170,6 +1173,7 @@ RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(SRC)/BasicComputer.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
 	$(SRC)/FLARM/State.cpp \
@@ -1224,6 +1228,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
 	$(SRC)/FLARM/State.cpp \
@@ -1466,6 +1471,7 @@ $(RUN_PROGRESS_WINDOW_BIN): $(RUN_PROGRESS_WINDOW_OBJS) $(RUN_PROGRESS_WINDOW_LD
 RUN_ANALYSIS_SOURCES = \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Derived.cpp \
 	$(SRC)/NMEA/VarioInfo.cpp \

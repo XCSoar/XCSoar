@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "NMEA/Validity.hpp"
 #include "NMEA/ExternalSettings.hpp"
+#include "NMEA/Acceleration.hpp"
 #include "DateTime.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Atmosphere/Pressure.hpp"
@@ -118,45 +119,6 @@ struct GPS_STATE
 
   void reset();
 };
-
-/**
- * State of acceleration of aircraft, with calculated pseudo-attitude reference
- */
-struct ACCELERATION_STATE
-{
-  //##################
-  //   Acceleration
-  //##################
-
-  /** Estimated bank angle */
-  Angle BankAngle;
-  /** Estimated pitch angle */
-  Angle PitchAngle;
-
-  /**
-   * Is G-load information available?
-   * @see Gload
-   */
-  bool Available;
-
-  /**
-   * G-Load information of external device (if available)
-   * or estimated (assuming balanced turn) 
-   * @see AccelerationAvailable
-   */
-  fixed Gload;
-
-  void reset() {
-    Available = false;
-  }
-
-  /**
-   * Adds data from the specified object, unless already present in
-   * this one.
-   */
-  void complement(const ACCELERATION_STATE &add);
-};
-
 
 /**
  * A struct that holds all the parsed data read from the connected devices
