@@ -23,10 +23,92 @@ Copyright_License {
 
 #include "Hardware/Display.hpp"
 
+#ifdef WIN32
+#include <windows.h>
+#endif
+
 #include <cstdio>
 
-int main(int argc, char **argv)
+static void
+PrintScreenSize()
 {
-  printf("DPI - X: %d - Y: %d\n", Display::GetXDPI(), Display::GetYDPI());
+#ifdef WIN32
+  unsigned width = GetSystemMetrics(SM_CXSCREEN);
+  unsigned height = GetSystemMetrics(SM_CYSCREEN);
+  printf("Width: %d px | Height: %d px\n", width, height);
+#endif
+}
+
+static void
+PrintDPI()
+{
+  printf("DPI X: %d | DPI Y: %d\n", Display::GetXDPI(), Display::GetYDPI());
+}
+
+static void
+PrintRotationInfo()
+{
+#if defined(DM_DISPLAYORIENTATION) && defined(_WIN32_WCE) && _WIN32_WCE >= 0x400
+  DEVMODE dm;
+  memset(&dm, 0, sizeof(dm));
+  dm.dmSize = sizeof(dm);
+  dm.dmFields = DM_DISPLAYQUERYORIENTATION;
+
+  if (ChangeDisplaySettingsEx(NULL, &dm, NULL, CDS_TEST, NULL)
+      != DISP_CHANGE_SUCCESSFUL) {
+    printf("Display Rotation not supported\n");
+    return;
+  }
+
+  printf("Display Rotation supported\n");
+
+  DWORD dwSupported = dm.dmDisplayOrientation;
+
+  printf("Supported Orientations: 0");
+  if (DMDO_90 & dwSupported)
+    printf(" 90");
+  if (DMDO_180 & dwSupported)
+    printf(" 180");
+  if (DMDO_270 & dwSupported)
+    printf(" 270");
+  printf(" deg\n");
+
+  dm.dmFields = DM_DISPLAYORIENTATION;
+  if (ChangeDisplaySettingsEx(NULL, &dm, NULL, CDS_TEST, NULL)
+      != DISP_CHANGE_SUCCESSFUL) {
+    printf("Current Display Rotation not available\n");
+    return;
+  }
+
+  printf("Current Display Rotation: ");
+  if (dm.dmDisplayOrientation == DMDO_0)
+    printf("0 deg");
+  else if (dm.dmDisplayOrientation == DMDO_90)
+    printf("90 deg");
+  else if (dm.dmDisplayOrientation == DMDO_180)
+    printf("180 deg");
+  else if (dm.dmDisplayOrientation == DMDO_270)
+    printf("270 deg");
+  else
+    printf("unknown");
+  printf("\n");
+#endif
+}
+
+int
+main(int argc, char **argv)
+{
+  printf("Display Information\n\n");
+
+  PrintScreenSize();
+  PrintDPI();
+  PrintRotationInfo();
+
+#ifdef _WIN32_WCE
+  // Console on WinCE is closing automatically
+  // We prevent this by requesting user input
+  getchar();
+#endif
+
   return 0;
 }
