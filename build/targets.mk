@@ -121,7 +121,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r5b
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r5c
 
   ANDROID_PLATFORM = android-8
   ANDROID_ARCH = arm
