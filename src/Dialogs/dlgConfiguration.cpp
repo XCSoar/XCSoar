@@ -301,7 +301,7 @@ void dlgConfigurationShowModal(void)
   changed |= AirspaceConfigPanel::Save(requirerestart);
   changed |= SiteConfigPanel::Save();
   changed |= MapDisplayConfigPanel::Save();
-  changed |= WayPointDisplayConfigPanel::Save(requirerestart);
+  changed |= WayPointDisplayConfigPanel::Save();
   changed |= SymbolsConfigPanel::Save();
   changed |= TerrainDisplayConfigPanel::Save();
   changed |= GlideComputerConfigPanel::Save(requirerestart);

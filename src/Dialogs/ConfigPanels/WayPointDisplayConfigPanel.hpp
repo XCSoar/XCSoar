@@ -32,7 +32,7 @@ namespace WayPointDisplayConfigPanel
   void Init(WndForm *wf);
   void UpdateVisibilities();
   void OnRenderingTypeData(DataField *Sender, DataField::DataAccessKind_t Mode);
-  bool Save(bool &requirerestart);
+  bool Save();
 };
 
 #endif /* WAYPOINTDISPLAYCONFIGPANEL_HPP */
