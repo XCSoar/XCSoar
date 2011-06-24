@@ -325,6 +325,8 @@ protected:
 
       Leaf *deconst_leaf = *p;
       *p = leaf->next;
+
+      assert(size > 0);
       --size;
       return deconst_leaf;
     }
@@ -356,6 +358,26 @@ protected:
 
       head = NULL;
       size = 0;
+    }
+
+    template<class P>
+    void EraseIf(const P &predicate, LeafAllocator &leaf_allocator) {
+      Leaf **p = &head;
+      while (true) {
+        Leaf *leaf = *p;
+        if (leaf == NULL)
+          break;
+
+        if (predicate(leaf->value)) {
+          assert(size > 0);
+          --size;
+
+          *p = leaf->next;
+          leaf_allocator.destroy(leaf);
+          leaf_allocator.deallocate(leaf, 1);
+        } else
+          p = &leaf->next;
+      }
     }
 
     /**
@@ -556,6 +578,14 @@ protected:
       leaf_allocator.deallocate(leaf, 1);
     }
 
+    template<class P>
+    void EraseIf(const P &predicate, LeafAllocator &leaf_allocator) {
+      leaves.EraseIf(predicate, leaf_allocator);
+
+      if (children != NULL)
+        children->EraseIf(predicate, leaf_allocator);
+    }
+
     /**
      * Scan the bounds of all leaves.  Only legal in a "flat"
      * (unsplitted) root bucket.
@@ -731,6 +761,12 @@ protected:
                LeafAllocator &leaf_allocator) {
       for (unsigned i = 0; i < N; ++i)
         buckets[i].Clear(bucket_allocator, leaf_allocator);
+    }
+
+    template<class P>
+    void EraseIf(const P &predicate, LeafAllocator &leaf_allocator) {
+      for (unsigned i = 0; i < N; ++i)
+        buckets[i].EraseIf(predicate, leaf_allocator);
     }
 
     gcc_const
@@ -1184,6 +1220,17 @@ public:
 
     Bucket *bucket = DeconstifyBucket(it.bucket);
     bucket->Erase(it.leaf, leaf_allocator);
+  }
+
+  /**
+   * Erase all elements that match the specified predicate.
+   */
+  template<class P>
+  void EraseIf(const P &predicate) {
+    root.EraseIf(predicate, leaf_allocator);
+
+    if (IsEmpty())
+      ClearBounds();
   }
 
   /**
