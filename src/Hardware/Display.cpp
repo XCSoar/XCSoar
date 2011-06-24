@@ -124,8 +124,11 @@ Display::RotateSupported()
   dm.dmSize = sizeof(dm);
   dm.dmFields = DM_DISPLAYQUERYORIENTATION;
 
-  return ChangeDisplaySettingsEx(NULL, &dm, NULL,
-                                 CDS_TEST, NULL) == DISP_CHANGE_SUCCESSFUL;
+  if (ChangeDisplaySettingsEx(NULL, &dm, NULL, CDS_TEST, NULL) !=
+      DISP_CHANGE_SUCCESSFUL)
+    return false;
+
+  return dm.dmDisplayOrientation != DMDO_0;
 #elif defined(ANDROID)
   return true;
 #else
