@@ -68,7 +68,6 @@ Links = 0,%CE11% ; "\Windows\Start Menu" directory
 
 [TheFiles]
 XCSoar.exe
-XCSoarSetup.dll
 
 [Files.Windows]
 XCSoarLaunch.dll, XCSoarLaunch.dll,,0x40000000
