@@ -25,6 +25,7 @@
 
 #include "Util/tstring.hpp"
 #include "Navigation/GeoPoint.hpp"
+#include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "RadioFrequency.hpp"
 #include "Runway.hpp"
 
@@ -93,6 +94,14 @@ public:
 
   /** Geodetic location */
   GeoPoint Location;
+
+  /** Flat projected location */
+  FlatGeoPoint flat_location;
+
+#ifndef NDEBUG
+  bool flat_location_initialised;
+#endif
+
   /** Height AMSL (m) of waypoint terrain */
   fixed Altitude;
 
@@ -189,6 +198,26 @@ public:
   operator==(const Waypoint&wp) const
   {
     return id == wp.id;
+  }
+
+  /**
+   * Project geolocation to flat location
+   *
+   * @param task_projection Projection to apply
+   */
+  void Project(const TaskProjection& task_projection);
+
+  /**
+   * Get distance in internal flat projected units (fast)
+   *
+   * @param f Point to get distance to
+   *
+   * @return Distance in flat units
+   */
+  unsigned FlatDistanceTo(const FlatGeoPoint &f) const {
+    assert(flat_location_initialised);
+
+    return flat_location.distance_to(f);
   }
 
   /**

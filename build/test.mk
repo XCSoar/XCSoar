@@ -487,12 +487,14 @@ TEST_DRIVER_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/TestDriver.cpp
 TEST_DRIVER_OBJS = $(call SRC_TO_OBJ,$(TEST_DRIVER_SOURCES))
+TEST_DRIVER_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestDriver$(TARGET_EXEEXT): $(TEST_DRIVER_OBJS) $(TEST_DRIVER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
@@ -520,7 +522,6 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
-	$(ENGINE_SRC_DIR)/Waypoint/WaypointEnvelope.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/tap.c \

@@ -26,7 +26,7 @@
 #include "Util/SliceAllocator.hpp"
 #include "Util/RadixTree.hpp"
 #include "Util/QuadTree.hpp"
-#include "WaypointEnvelope.hpp"
+#include "Waypoint.hpp"
 
 #include "Navigation/TaskProjection.hpp"
 
@@ -245,10 +245,26 @@ public:
 
 protected:
   /**
+   * Function object used to provide access to coordinate values by
+   * QuadTree.
+   */
+  struct WaypointAccessor {
+    int GetX(const Waypoint &wp) const {
+      assert(wp.flat_location_initialised);
+      return wp.flat_location.Longitude;
+    }
+
+    int GetY(const Waypoint &wp) const {
+      assert(wp.flat_location_initialised);
+      return wp.flat_location.Latitude;
+    }
+  };
+
+  /**
    * Type of KD-tree data structure for waypoint container
    */
-  typedef QuadTree<WaypointEnvelope, WaypointEnvelope::Accessor,
-                   SliceAllocator<WaypointEnvelope, 512u> > WaypointTree;
+  typedef QuadTree<Waypoint, WaypointAccessor,
+                   SliceAllocator<Waypoint, 512u> > WaypointTree;
 
   class WaypointNameTree : public RadixTree<const Waypoint*> {
   public:

@@ -46,18 +46,18 @@ public:
    * Accessor operator to perform visit
    */
   void
-  operator()(const WaypointEnvelope& as)
+  operator()(const Waypoint &wp)
   {
-    Visit(as);
+    Visit(wp);
   }
 
   /**
    * Visit item inside envelope
    */
   void
-  Visit(const WaypointEnvelope& as)
+  Visit(const Waypoint &wp)
   {
-    waypoint_visitor->Visit(as.get_waypoint());
+    waypoint_visitor->Visit(wp);
   }
 
 private:
@@ -115,8 +115,8 @@ Waypoints::Waypoints():
 
 class LandablePredicate {
 public:
-  bool operator()(const WaypointEnvelope& as) const {
-    return as.get_waypoint().IsLandable();
+  bool operator()(const Waypoint &wp) const {
+    return wp.IsLandable();
   }
 };
 
@@ -130,7 +130,7 @@ Waypoints::optimise()
 
   for (WaypointTree::iterator it = waypoint_tree.begin();
        it != waypoint_tree.end(); ++it)
-    it->project(task_projection);
+    it->Project(task_projection);
 
   waypoint_tree.Optimise();
 }
@@ -146,22 +146,20 @@ Waypoints::append(Waypoint& wp)
   task_projection.scan_location(wp.Location);
   wp.id = next_id++;
 
-  const WaypointEnvelope new_envelope(wp);
-
-  bool must_optimise = !waypoint_tree.IsWithinKnownBounds(new_envelope);
+  bool must_optimise = !waypoint_tree.IsWithinKnownBounds(wp);
   if (must_optimise) {
     waypoint_tree.Flatten();
     waypoint_tree.ClearBounds();
   }
 
-  const WaypointEnvelope &envelope = waypoint_tree.Add(new_envelope);
+  const Waypoint &new_wp = waypoint_tree.Add(wp);
 
   if (must_optimise)
     waypoint_tree.Optimise();
 
   TCHAR normalized_name[wp.Name.length() + 1];
   normalize_search_string(normalized_name, wp.Name.c_str());
-  name_tree.add(normalized_name, &envelope.get_waypoint());
+  name_tree.add(normalized_name, &new_wp);
 }
 
 const Waypoint*
@@ -170,7 +168,8 @@ Waypoints::get_nearest(const GeoPoint &loc) const
   if (empty())
     return NULL;
 
-  WaypointEnvelope bb_target(loc, task_projection);
+  Waypoint bb_target(loc);
+  bb_target.Project(task_projection);
   std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
       waypoint_tree.find_nearest(bb_target);
 
@@ -181,7 +180,7 @@ Waypoints::get_nearest(const GeoPoint &loc) const
   if (found.first == waypoint_tree.end())
     return NULL;
 
-  return &found.first->get_waypoint();
+  return &*found.first;
 }
 
 const Waypoint*
@@ -190,7 +189,8 @@ Waypoints::get_nearest_landable(const GeoPoint &loc, unsigned long range) const
   if (empty())
     return NULL;
 
-  WaypointEnvelope bb_target(loc, task_projection);
+  Waypoint bb_target(loc);
+  bb_target.Project(task_projection);
   std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
       waypoint_tree.find_nearest_if(bb_target, range, LandablePredicate());
 
@@ -201,15 +201,15 @@ Waypoints::get_nearest_landable(const GeoPoint &loc, unsigned long range) const
   if (found.first == waypoint_tree.end())
     return NULL;
 
-  return &found.first->get_waypoint();
+  return &*found.first;
 }
 void
 Waypoints::set_details(const Waypoint& wp, const tstring& Details)
 {
   WaypointTree::iterator found = waypoint_tree.begin();
   while (found != waypoint_tree.end()) {
-    if (found->get_waypoint().id == wp.id)
-      found->set_details(Details);
+    if (found->id == wp.id)
+      found->Details = Details;
 
     ++found;
   }
@@ -244,10 +244,10 @@ Waypoints::find_home() const
 
   for (const_iterator found = waypoint_tree.begin();
        found != waypoint_tree.end(); ++found) {
-    const Waypoint* wp = &(*found).get_waypoint();
-    if (wp->Flags.Home) {
-      m_home = wp;
-      return wp;
+    const Waypoint &wp = *found;
+    if (wp.Flags.Home) {
+      m_home = &wp;
+      return &wp;
     }
   }
 
@@ -261,11 +261,11 @@ Waypoints::set_home(const unsigned id)
 
   for (WaypointTree::iterator found = waypoint_tree.begin();
        found != waypoint_tree.end(); ++found) {
-    WaypointEnvelope* wp = &(*found);
+    Waypoint &wp = *found;
 
-    if (wp->get_waypoint().id == id) {
-      m_home = &wp->get_waypoint();
-      wp->set_home(true);
+    if (wp.id == id) {
+      m_home = &wp;
+      wp.Flags.Home = true;
       return true;
     }
   }
@@ -278,8 +278,8 @@ Waypoints::lookup_id(const unsigned id) const
 {
   for (const_iterator found = waypoint_tree.begin();
        found != waypoint_tree.end(); ++found)
-    if (found->get_waypoint().id == id)
-      return &found->get_waypoint();
+    if (found->id == id)
+      return &*found;
 
   return NULL;
 }
@@ -291,7 +291,8 @@ Waypoints::visit_within_range(const GeoPoint &loc, const fixed range,
   if (empty())
     return; // nothing to do
 
-  WaypointEnvelope bb_target(loc, task_projection);
+  Waypoint bb_target(loc);
+  bb_target.Project(task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
 
   WaypointEnvelopeVisitor wve(&visitor);
@@ -317,17 +318,17 @@ public:
                 WaypointVisitor *_visitor)
     :location(_location), mrange(_mrange), visitor(_visitor) {}
 
-  void operator()(const WaypointEnvelope &envelope) {
-    Visit(envelope);
+  void operator()(const Waypoint &wp) {
+    Visit(wp);
   }
 
-  void Visit(const WaypointEnvelope &envelope) {
+  void Visit(const Waypoint &wp) {
 #ifdef INSTRUMENT_TASK
     count_intersections++;
 #endif
 
-    if (envelope.flat_distance_to(location) <= mrange)
-      (*visitor)(envelope.get_waypoint());
+    if (wp.FlatDistanceTo(location) <= mrange)
+      (*visitor)(wp);
   }
 };
 
@@ -339,7 +340,8 @@ Waypoints::visit_within_radius(const GeoPoint &loc, const fixed range,
     return;
 
   const unsigned mrange = task_projection.project_range(loc, range);
-  WaypointEnvelope bb_target(loc, task_projection);
+  Waypoint bb_target(loc);
+  bb_target.Project(task_projection);
 
   FlatGeoPoint floc = task_projection.project(loc);
   RadiusVisitor radius_visitor(floc, mrange, &visitor);
@@ -368,8 +370,7 @@ Waypoints::erase(const Waypoint& wp)
   if (m_home != NULL && m_home->id == wp.id)
     m_home = NULL;
 
-  const WaypointEnvelope &envelope = WaypointEnvelope::FromWaypoint(wp);
-  WaypointTree::const_iterator it = waypoint_tree.FindPointer(&envelope);
+  WaypointTree::const_iterator it = waypoint_tree.FindPointer(&wp);
   assert(it != waypoint_tree.end());
 
   name_tree.Remove(wp);
@@ -383,26 +384,24 @@ Waypoints::replace(const Waypoint &orig, const Waypoint &replacement)
 
   Waypoint new_waypoint(replacement);
   new_waypoint.id = orig.id;
-  WaypointEnvelope new_envelope(new_waypoint);
-  new_envelope.project(task_projection);
+  new_waypoint.Project(task_projection);
 
-  bool must_optimise = !waypoint_tree.IsWithinKnownBounds(new_envelope);
+  bool must_optimise = !waypoint_tree.IsWithinKnownBounds(new_waypoint);
   if (must_optimise) {
     waypoint_tree.Flatten();
     waypoint_tree.ClearBounds();
   }
 
-  const WaypointEnvelope &envelope = WaypointEnvelope::FromWaypoint(orig);
-  WaypointTree::const_iterator it = waypoint_tree.FindPointer(&envelope);
+  WaypointTree::const_iterator it = waypoint_tree.FindPointer(&orig);
   assert(it != waypoint_tree.end());
-  waypoint_tree.Replace(it, new_envelope);
+  waypoint_tree.Replace(it, new_waypoint);
 
   if (must_optimise)
     waypoint_tree.Optimise();
 
   TCHAR normalized_name[replacement.Name.length() + 1];
   normalize_search_string(normalized_name, replacement.Name.c_str());
-  name_tree.add(normalized_name, &envelope.get_waypoint());
+  name_tree.add(normalized_name, &orig);
 }
 
 Waypoint

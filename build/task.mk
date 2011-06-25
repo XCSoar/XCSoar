@@ -134,7 +134,6 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Route/AbstractReach.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
-	$(ENGINE_SRC_DIR)/Waypoint/WaypointEnvelope.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoints.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/WaypointVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \

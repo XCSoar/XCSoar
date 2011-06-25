@@ -21,6 +21,7 @@
  */
 
 #include "Waypoint.hpp"
+#include "Navigation/TaskProjection.hpp"
 
 void
 Waypoint::Flags::SetDefaultFlags(bool turnpoint)
@@ -34,6 +35,9 @@ Waypoint::Flags::SetDefaultFlags(bool turnpoint)
 
 Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
   Location(_location),
+#ifndef NDEBUG
+  flat_location_initialised(false),
+#endif
   Type(wtNormal)
 {
   Flags.SetDefaultFlags(is_turnpoint);
@@ -45,4 +49,14 @@ bool
 Waypoint::IsCloseTo(const GeoPoint &location, const fixed range) const
 {
   return Location.distance(location) <= range;
+}
+
+void
+Waypoint::Project(const TaskProjection &task_projection)
+{
+  flat_location = task_projection.project(Location);
+
+#ifndef NDEBUG
+  flat_location_initialised = true;
+#endif
 }
