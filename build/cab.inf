@@ -26,20 +26,13 @@ VersionMax = 32767.0
 ; prevent warnings on screen resolution
 BuildMax = 0xE0000000
 
-[SourceDisksNames.arm]
+[SourceDisksNames]
 1 = ,"ARM Files",,..\bin
-3 = ,"ARM Files",,..\bin
-4 = ,"ARM Files",,..\bin
-
-[SourceDisksNames.armv4]
-1 = ,"ARM Files",,..\bin
-3 = ,"ARM Files",,..\bin
-4 = ,"ARM Files",,..\bin
 
 [SourceDisksFiles]
 XCSoar.exe = 1
-XCSoarLaunch.dll = 3
-XCSoarSetup.dll = 4
+XCSoarLaunch.dll = 1
+XCSoarSetup.dll = 1
 
 [DefaultInstall]
 CopyFiles = TheFiles,Files.Windows
