@@ -111,6 +111,30 @@ Display::SetBacklight()
 #define ROTATE_SUPPORTED
 #endif
 
+#ifdef ROTATE_SUPPORTED
+namespace Display {
+  DWORD initial_orientation;
+}
+#endif
+
+void
+Display::RotateInitialize()
+{
+#ifdef ROTATE_SUPPORTED
+  DEVMODE DeviceMode;
+  memset(&DeviceMode, 0, sizeof(DeviceMode));
+  DeviceMode.dmSize = sizeof(DeviceMode);
+  DeviceMode.dmFields = DM_DISPLAYORIENTATION;
+
+  // get current rotation
+  if (ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL, CDS_TEST, NULL) ==
+      DISP_CHANGE_SUCCESSFUL)
+    initial_orientation = DeviceMode.dmDisplayOrientation;
+  else
+    initial_orientation = DMDO_0;
+#endif
+}
+
 bool
 Display::RotateSupported()
 {
@@ -226,7 +250,7 @@ Display::RotateRestore()
   memset(&dm, 0, sizeof(dm));
   dm.dmSize = sizeof(dm);
   dm.dmFields = DM_DISPLAYORIENTATION;
-  dm.dmDisplayOrientation = DMDO_0;
+  dm.dmDisplayOrientation = initial_orientation;
 
   return ChangeDisplaySettingsEx(NULL, &dm, NULL,
                                  CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
