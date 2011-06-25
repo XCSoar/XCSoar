@@ -250,7 +250,13 @@ public:
                          SliceAllocator<KDTree::_Node<WaypointEnvelope>, 1024>
                          > WaypointTree;
 
-  typedef RadixTree<const Waypoint*> WaypointNameTree;
+  class WaypointNameTree : public RadixTree<const Waypoint*> {
+  public:
+    const Waypoint *Get(const TCHAR *name) const;
+    void VisitNormalisedPrefix(const TCHAR *prefix, WaypointVisitor &visitor) const;
+    void Add(const Waypoint &wp);
+    void Remove(const Waypoint &wp);
+  };
 
   /**
    * Looks up nearest waypoint to the search location.
