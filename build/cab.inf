@@ -16,29 +16,15 @@ LinkFilename = "XCSoar"
 ProcessorType=2577
 VersionMin = 3.0
 VersionMax = 32767.0
+; prevent warnings on screen resolution
+BuildMax = 0xE0000000
 
 [CEDevice.ARMV4]
 ProcessorType=2577
 VersionMin = 3.0
 VersionMax = 32767.0
-
 ; prevent warnings on screen resolution
 BuildMax = 0xE0000000
-
-[CEDevice.x86]
-ProcessorType = 0
-VersionMin = 3.0
-VersionMax = 32767.0
-
-[CEDevice.mips]
-ProcessorType = 4000
-VersionMin = 3.0
-VersionMax = 32767.0
-
-[CEDevice.sh3]
-ProcessorType = 10003
-VersionMin = 3.0
-VersionMax = 32767.0
 
 [SourceDisksNames.arm]
 1 = ,"ARM Files",,..\bin
