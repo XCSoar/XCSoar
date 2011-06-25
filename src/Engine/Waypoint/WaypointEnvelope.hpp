@@ -33,7 +33,7 @@ class TaskProjection;
 class WaypointEnvelope
 {
   FlatGeoPoint FlatLocation; /**< Flat projected location */
-  mutable Waypoint waypoint; /**< Actual waypoint contained */
+  Waypoint waypoint; /**< Actual waypoint contained */
 
 public:
 
@@ -85,7 +85,7 @@ public:
  *  Set airfield details
  * @param Details text of airfield details
  */
-  void set_details(const tstring& Details) const {
+  void set_details(const tstring& Details) {
     waypoint.Details = Details;
   }
 
@@ -93,7 +93,7 @@ public:
  * Set/clear home flag of waypoint
  * @param set True/false
  */
-  void set_home(const bool set) const {
+  void set_home(const bool set) {
     waypoint.Flags.Home = set;
   }
 
