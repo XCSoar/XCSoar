@@ -34,7 +34,7 @@ class RasterBuffer : private NonCopyable {
 public:
   /** invalid value for terrain */
   static const short TERRAIN_INVALID = -32768;
-  static const short TERRAIN_WATER_THRESHOLD = 0;
+  static const short TERRAIN_WATER_THRESHOLD = -30000;
 
   gcc_const
   static bool is_invalid(short h) {

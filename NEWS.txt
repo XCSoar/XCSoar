@@ -11,6 +11,8 @@ Version 6.1.2 - not yet released
   - manual and translation updates
   - fix UTC offset setting
   - fix overlapped InfoBox text
+* map
+  - fixed coast line display (areas below zero no longer flooded)
 
 Version 6.1.1 - 2011/06/01
 * calculations
