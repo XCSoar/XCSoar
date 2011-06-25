@@ -746,7 +746,7 @@
       </Edit>
 
       <Edit Name="prpAppInfoBoxGeom" Caption="Infobox geometry" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Geometry values range 0-7 but in landscape mode only some of them are really available.">
+        Help="A list of possible InfoBox layouts. Do some trials to find the best for your screen size.">
         <DataField DataType="enum" />
       </Edit>
 

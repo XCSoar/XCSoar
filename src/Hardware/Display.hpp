@@ -55,6 +55,8 @@ namespace Display {
     ORIENTATION_LANDSCAPE,
   };
 
+  void RotateInitialize();
+
   gcc_const
   bool RotateSupported();
 

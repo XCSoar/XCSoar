@@ -145,6 +145,8 @@ LoadDisplayOrientation()
   if (!Display::RotateSupported())
     return;
 
+  Display::RotateInitialize();
+
   Display::orientation orientation = Profile::GetDisplayOrientation();
   if (orientation == Display::ORIENTATION_DEFAULT)
     return;

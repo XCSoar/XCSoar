@@ -111,6 +111,47 @@ Display::SetBacklight()
 #define ROTATE_SUPPORTED
 #endif
 
+#ifdef ROTATE_SUPPORTED
+namespace Display {
+  bool native_landscape = false;
+  DWORD initial_orientation;
+}
+#endif
+
+void
+Display::RotateInitialize()
+{
+#ifdef ROTATE_SUPPORTED
+  DEVMODE DeviceMode;
+  memset(&DeviceMode, 0, sizeof(DeviceMode));
+  DeviceMode.dmSize = sizeof(DeviceMode);
+  DeviceMode.dmFields = DM_DISPLAYORIENTATION;
+
+  // get current rotation
+  if (ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL, CDS_TEST, NULL) ==
+      DISP_CHANGE_SUCCESSFUL)
+    initial_orientation = DeviceMode.dmDisplayOrientation;
+  else
+    initial_orientation = DMDO_0;
+
+  // determine current screen dimensions
+  bool landscape = GetSystemMetrics(SM_CXSCREEN) > GetSystemMetrics(SM_CYSCREEN);
+
+  switch (initial_orientation) {
+  case DMDO_90:
+  case DMDO_270:
+    native_landscape = !landscape;
+    break;
+
+  case DMDO_0:
+  case DMDO_180:
+  default:
+    native_landscape = landscape;
+    break;
+  }
+#endif
+}
+
 bool
 Display::RotateSupported()
 {
@@ -124,8 +165,11 @@ Display::RotateSupported()
   dm.dmSize = sizeof(dm);
   dm.dmFields = DM_DISPLAYQUERYORIENTATION;
 
-  return ChangeDisplaySettingsEx(NULL, &dm, NULL,
-                                 CDS_TEST, NULL) == DISP_CHANGE_SUCCESSFUL;
+  if (ChangeDisplaySettingsEx(NULL, &dm, NULL, CDS_TEST, NULL) !=
+      DISP_CHANGE_SUCCESSFUL)
+    return false;
+
+  return dm.dmDisplayOrientation != DMDO_0;
 #elif defined(ANDROID)
   return true;
 #else
@@ -143,44 +187,20 @@ Display::Rotate(enum orientation orientation)
 #endif
 
 #ifdef ROTATE_SUPPORTED
-  unsigned width = GetSystemMetrics(SM_CXSCREEN);
-  unsigned height = GetSystemMetrics(SM_CYSCREEN);
-  if (width == height)
-    /* cannot rotate a square display */
-    return false;
-
-  if (width < height) {
-    /* portrait currently */
-    if (orientation == ORIENTATION_PORTRAIT)
-      return true;
-  } else {
-    /* landscape currently */
-    if (orientation == ORIENTATION_LANDSCAPE)
-      return true;
-  }
-
   DEVMODE DeviceMode;
   memset(&DeviceMode, 0, sizeof(DeviceMode));
   DeviceMode.dmSize = sizeof(DeviceMode);
   DeviceMode.dmFields = DM_DISPLAYORIENTATION;
 
-  /* get current rotation */
-
-  if (ChangeDisplaySettingsEx(NULL, &DeviceMode, NULL,
-                              CDS_TEST, NULL) != DISP_CHANGE_SUCCESSFUL)
-    return false;
-
   /* determine the new rotation */
 
-  switch (DeviceMode.dmDisplayOrientation) {
-  case DMDO_0:
-  case DMDO_180:
-    DeviceMode.dmDisplayOrientation = DMDO_90;
+  switch (orientation) {
+  case ORIENTATION_PORTRAIT:
+    DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_90 : DMDO_0);
     break;
 
-  case DMDO_90:
-  case DMDO_270:
-    DeviceMode.dmDisplayOrientation = DMDO_0;
+  case ORIENTATION_LANDSCAPE:
+    DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_0 : DMDO_270);
     break;
 
   default:
@@ -223,7 +243,7 @@ Display::RotateRestore()
   memset(&dm, 0, sizeof(dm));
   dm.dmSize = sizeof(dm);
   dm.dmFields = DM_DISPLAYORIENTATION;
-  dm.dmDisplayOrientation = DMDO_0;
+  dm.dmDisplayOrientation = initial_orientation;
 
   return ChangeDisplaySettingsEx(NULL, &dm, NULL,
                                  CDS_RESET, NULL) == DISP_CHANGE_SUCCESSFUL;
