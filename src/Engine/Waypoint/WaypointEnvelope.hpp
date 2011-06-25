@@ -32,6 +32,9 @@ class TaskProjection;
  */
 class WaypointEnvelope
 {
+  FlatGeoPoint FlatLocation; /**< Flat projected location */
+  mutable Waypoint waypoint; /**< Actual waypoint contained */
+
 public:
 
 /** 
@@ -148,10 +151,6 @@ public:
   bool operator==(const WaypointEnvelope &wpe) const {
     return waypoint == wpe.waypoint;
   }
-
-private:
-  FlatGeoPoint FlatLocation; /**< Flat projected location */
-  mutable Waypoint waypoint; /**< Actual waypoint contained */
 };
 
 
