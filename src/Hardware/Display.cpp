@@ -203,6 +203,14 @@ Display::Rotate(enum orientation orientation)
     DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_0 : DMDO_270);
     break;
 
+  case ORIENTATION_REVERSE_PORTRAIT:
+    DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_270 : DMDO_180);
+    break;
+
+  case ORIENTATION_REVERSE_LANDSCAPE:
+    DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_180 : DMDO_90);
+    break;
+
   default:
     return false;
   }
@@ -223,6 +231,14 @@ Display::Rotate(enum orientation orientation)
 
   case ORIENTATION_LANDSCAPE:
     android_orientation = NativeView::SCREEN_ORIENTATION_LANDSCAPE;
+    break;
+
+  case ORIENTATION_REVERSE_PORTRAIT:
+    android_orientation = NativeView::SCREEN_ORIENTATION_REVERSE_PORTRAIT;
+    break;
+
+  case ORIENTATION_REVERSE_LANDSCAPE:
+    android_orientation = NativeView::SCREEN_ORIENTATION_REVERSE_LANDSCAPE;
     break;
 
   default:

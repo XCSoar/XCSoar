@@ -56,6 +56,8 @@ LayoutConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("Default"));
     dfe->addEnumText(_("Portrait"));
     dfe->addEnumText(_("Landscape"));
+    dfe->addEnumText(_("Reverse Portrait"));
+    dfe->addEnumText(_("Reverse Landscape"));
     dfe->Set(Profile::GetDisplayOrientation());
     wp->RefreshDisplay();
   } else {

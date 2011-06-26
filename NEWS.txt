@@ -8,6 +8,8 @@ Version 6.2 - not yet released
   - improved support for the Digifly Leonardo
   - auto-detect serial ports on Windows CE
   - serial port support on UNIX
+* user interface
+  - added support for reverse portrait/landscape screen orientations
 
 Version 6.1.2 - not yet released
 * calculations
