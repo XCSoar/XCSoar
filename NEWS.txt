@@ -13,6 +13,8 @@ Version 6.1.2 - not yet released
   - fix overlapped InfoBox text
 * map
   - fixed coast line display (areas below zero no longer flooded)
+* Altair
+  - the Escape button saves dialogs (such as InfoBox setup)
 
 Version 6.1.1 - 2011/06/01
 * calculations
