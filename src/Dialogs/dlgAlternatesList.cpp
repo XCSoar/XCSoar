@@ -39,6 +39,13 @@ Copyright_License {
 static AbortTask::AlternateVector alternates;
 
 static void
+UpdateAlternates()
+{
+  ProtectedTaskManager::Lease lease(*protected_task_manager);
+  alternates = lease->getAlternates();
+}
+
+static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
   assert(index < alternates.size());
@@ -83,7 +90,7 @@ dlgAlternatesListShowModal(SingleWindow &parent)
   if (protected_task_manager == NULL)
     return;
 
-  alternates = protected_task_manager->getAlternates();
+  UpdateAlternates();
   unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
                          Fonts::MapLabel.get_height();
   int i = ListPicker(parent, _("Alternates"), alternates.size(), 0,

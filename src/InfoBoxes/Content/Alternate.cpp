@@ -41,17 +41,28 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  const AbortTask::AlternateVector alternates =
-    protected_task_manager->getAlternates();
+  const Waypoint *way_point;
+  const GlideResult *solution;
 
-  if (alternates.size() > 0 && index >= alternates.size())
-    index = alternates.size() - 1;
+  {
+    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    const AbortTask::AlternateVector &alternates = lease->getAlternates();
+
+    if (!alternates.empty()) {
+      if (index >= alternates.size())
+        index = alternates.size() - 1;
+
+      way_point = &alternates[index].first;
+      solution = &alternates[index].second;
+    } else {
+      way_point = NULL;
+      solution = NULL;
+    }
+  }
 
   TCHAR tmp[32];
   _stprintf(tmp, _T("Altrn %d"), index+1);
   infobox.SetTitle(tmp);
-
-  const Waypoint* way_point = (alternates.size()>index) ? &alternates[index].first : NULL;
 
   SetCommentFromWaypointName(infobox, way_point);
   if (!way_point || !XCSoarInterface::Basic().track_available) {
@@ -59,16 +70,14 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  const GlideResult& solution = alternates[index].second;
-
   // Set Value
-  Angle Value = solution.Vector.Bearing -
+  Angle Value = solution->Vector.Bearing -
     XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);
 
   // Set Color (blue/black)
-  infobox.SetColor(solution.glide_reachable(true) ? 2 : 0);
+  infobox.SetColor(solution->glide_reachable(true) ? 2 : 0);
 }
 
 bool
@@ -100,17 +109,28 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  const AbortTask::AlternateVector alternates =
-    protected_task_manager->getAlternates();
+  const Waypoint *way_point;
+  const GlideResult *solution;
 
-  if (alternates.size() > 0 && index >= alternates.size())
-    index = alternates.size() - 1;
+  {
+    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    const AbortTask::AlternateVector &alternates = lease->getAlternates();
+
+    if (!alternates.empty()) {
+      if (index >= alternates.size())
+        index = alternates.size() - 1;
+
+      way_point = &alternates[index].first;
+      solution = &alternates[index].second;
+    } else {
+      way_point = NULL;
+      solution = NULL;
+    }
+  }
 
   TCHAR tmp[32];
   _stprintf(tmp, _T("Altrn %d GR"), index+1);
   infobox.SetTitle(tmp);
-
-  const Waypoint* way_point = (alternates.size()>index) ? &alternates[index].first : NULL;
 
   SetCommentFromWaypointName(infobox, way_point);
   if (!way_point) {
@@ -118,8 +138,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  const GlideResult& solution = alternates[index].second;
-  fixed gradient = ::AngleToGradient(solution.destination_angle_ground());
+  fixed gradient = ::AngleToGradient(solution->destination_angle_ground());
 
   if (negative(gradient)) {
     infobox.SetColor(0);
@@ -135,7 +154,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
   }
 
   // Set Color (blue/black)
-  infobox.SetColor(solution.glide_reachable(true) ? 2 : 0);
+  infobox.SetColor(solution->glide_reachable(true) ? 2 : 0);
 }
 
 bool

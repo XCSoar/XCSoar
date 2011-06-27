@@ -88,9 +88,6 @@ public:
   gcc_pure
   const Waypoint* getActiveWaypoint() const;
 
-  gcc_pure
-  const AbortTask::AlternateVector getAlternates() const;
-
   void incrementActiveTaskPoint(int offset);
   void incrementActiveTaskPointArm(int offset);
 

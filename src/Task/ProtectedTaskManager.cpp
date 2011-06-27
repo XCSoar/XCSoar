@@ -76,13 +76,6 @@ ProtectedTaskManager::getActiveWaypoint() const
   return NULL;
 }
 
-const AbortTask::AlternateVector
-ProtectedTaskManager::getAlternates() const
-{
-  Lease lease(*this);
-  return lease->getAlternates();
-}
-
 bool
 ProtectedTaskManager::isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const
 {
