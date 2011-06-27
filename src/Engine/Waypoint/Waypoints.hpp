@@ -38,6 +38,44 @@ class WaypointVisitor;
  */
 class Waypoints: private NonCopyable 
 {
+  /**
+   * Function object used to provide access to coordinate values by
+   * QuadTree.
+   */
+  struct WaypointAccessor {
+    int GetX(const Waypoint &wp) const {
+      assert(wp.flat_location_initialised);
+      return wp.flat_location.Longitude;
+    }
+
+    int GetY(const Waypoint &wp) const {
+      assert(wp.flat_location_initialised);
+      return wp.flat_location.Latitude;
+    }
+  };
+
+  /**
+   * Type of KD-tree data structure for waypoint container
+   */
+  typedef QuadTree<Waypoint, WaypointAccessor,
+                   SliceAllocator<Waypoint, 512u> > WaypointTree;
+
+  class WaypointNameTree : public RadixTree<const Waypoint*> {
+  public:
+    const Waypoint *Get(const TCHAR *name) const;
+    void VisitNormalisedPrefix(const TCHAR *prefix, WaypointVisitor &visitor) const;
+    void Add(const Waypoint &wp);
+    void Remove(const Waypoint &wp);
+  };
+
+  unsigned next_id;
+
+  WaypointTree waypoint_tree;
+  WaypointNameTree name_tree;
+  TaskProjection task_projection;
+
+  mutable const Waypoint* m_home;
+
 public:
   /**
    * Constructor.  Task projection is updated after call to optimise().
@@ -251,37 +289,6 @@ public:
     return name_tree.suggest(prefix, dest, max_length);
   }
 
-protected:
-  /**
-   * Function object used to provide access to coordinate values by
-   * QuadTree.
-   */
-  struct WaypointAccessor {
-    int GetX(const Waypoint &wp) const {
-      assert(wp.flat_location_initialised);
-      return wp.flat_location.Longitude;
-    }
-
-    int GetY(const Waypoint &wp) const {
-      assert(wp.flat_location_initialised);
-      return wp.flat_location.Latitude;
-    }
-  };
-
-  /**
-   * Type of KD-tree data structure for waypoint container
-   */
-  typedef QuadTree<Waypoint, WaypointAccessor,
-                   SliceAllocator<Waypoint, 512u> > WaypointTree;
-
-  class WaypointNameTree : public RadixTree<const Waypoint*> {
-  public:
-    const Waypoint *Get(const TCHAR *name) const;
-    void VisitNormalisedPrefix(const TCHAR *prefix, WaypointVisitor &visitor) const;
-    void Add(const Waypoint &wp);
-    void Remove(const Waypoint &wp);
-  };
-
 public:
   typedef WaypointTree::const_iterator const_iterator;
 
@@ -326,15 +333,6 @@ public:
   const_iterator end() const {
     return waypoint_tree.end();
   }
-
-private:
-  unsigned next_id;
-
-  WaypointTree waypoint_tree;
-  WaypointNameTree name_tree;
-  TaskProjection task_projection;
-
-  mutable const Waypoint* m_home;
 };
 
 #endif
