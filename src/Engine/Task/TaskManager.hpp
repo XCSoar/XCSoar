@@ -120,7 +120,9 @@ public:
    *
    * @return Vector of alternates
    */
-  const AbortTask::AlternateVector getAlternates() const;
+  const AbortTask::AlternateVector &getAlternates() const {
+    return task_abort.getAlternates();
+  }
 
   /**
    * Enumeration of task modes
