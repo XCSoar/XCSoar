@@ -35,6 +35,7 @@
 #include "StringUtil.hpp"
 #include "tstring.hpp"
 
+#include <algorithm>
 #include <assert.h>
 
 #ifdef PRINT_RADIX_TREE
@@ -75,9 +76,86 @@ class RadixTree {
 
     Leaf(Leaf *_next, const T &_value)
       :next(_next), value(_value) {}
+  };
 
-    ~Leaf() {
-      delete next;
+  /**
+   * A linked list of Leaf objects.
+   */
+  struct LeafList {
+    Leaf *head;
+
+    LeafList():head(NULL) {}
+
+    ~LeafList() {
+      Leaf *next = head;
+      while (next != NULL) {
+        Leaf *leaf = next;
+        next = leaf->next;
+
+        delete leaf;
+      }
+    }
+
+    void Clear() {
+      Leaf *next = head;
+      while (next != NULL) {
+        Leaf *leaf = next;
+        next = leaf->next;
+
+        delete leaf;
+      }
+
+      head = NULL;
+    }
+
+    void Swap(LeafList &other) {
+      std::swap(head, other.head);
+    }
+
+    void Add(const T &value) {
+      head = new Leaf(head, value);
+    }
+
+    bool Remove(const T &value) {
+      Leaf **leaf_r = &head;
+
+      while (*leaf_r != NULL) {
+        Leaf *leaf = *leaf_r;
+        if (leaf->value == value) {
+          *leaf_r = leaf->next;
+          leaf->next = NULL;
+          delete leaf;
+          return true;
+        }
+
+        leaf_r = &leaf->next;
+      }
+
+      return false;
+    }
+
+    T *GetFirstPointer() {
+      return head != NULL
+        ? &head->value
+        : NULL;
+    }
+
+    const T *GetFirstPointer() const {
+      return head != NULL
+        ? &head->value
+        : NULL;
+    }
+
+    template<typename V>
+    void VisitAll(V &visitor) {
+      for (Leaf *leaf = head; leaf != NULL; leaf = leaf->next)
+        visitor(leaf->value);
+    }
+
+    template<typename V>
+    void VisitAll(V &visitor) const {
+      for (const Leaf *leaf = head; leaf != NULL; leaf = leaf->next)
+        visitor(leaf->value);
     }
   };
 
@@ -92,16 +170,14 @@ class RadixTree {
   struct Node : private NonCopyable {
     StaticString<8> label;
     Node *next_sibling, *children;
-    Leaf *leaves;
+    LeafList leaves;
 
     Node(const TCHAR *_label)
       :label(_label),
-       next_sibling(NULL), children(NULL),
-       leaves(NULL) {}
+       next_sibling(NULL), children(NULL) {}
     ~Node() {
       delete next_sibling;
       delete children;
-      delete leaves;
     }
 
     /**
@@ -127,8 +203,7 @@ class RadixTree {
     void clear() {
       delete children;
       children = NULL;
-      delete leaves;
-      leaves = NULL;
+      leaves.Clear();
     }
 
     /**
@@ -174,9 +249,7 @@ class RadixTree {
     T *get(const TCHAR *key) {
       if (string_is_empty(key))
         /* found */
-        return leaves != NULL
-          ? &leaves->value
-          : NULL;
+        return leaves.GetFirstPointer();
 
       Match m = find_child(key);
       return m.is_full_match(key)
@@ -187,9 +260,7 @@ class RadixTree {
     const T *get(const TCHAR *key) const {
       if (string_is_empty(key))
         /* found */
-        return leaves != NULL
-          ? &leaves->value
-          : NULL;
+        return leaves.GetFirstPointer();
 
       Match m = find_child(key);
       return m.is_full_match(key)
@@ -239,8 +310,7 @@ class RadixTree {
       node->children = children;
       children = node;
 
-      node->leaves = leaves;
-      leaves = NULL;
+      leaves.Swap(node->leaves);
 
       label.Truncate(length);
     }
@@ -250,16 +320,14 @@ class RadixTree {
      * same key.
      */
     void add_value(const T &value) {
-      Leaf *leaf = new Leaf(leaves, value);
-      leaves = leaf;
+      leaves.Add(value);
     }
 
     /**
      * Remove all values of this node.
      */
     void remove_values() {
-      delete leaves;
-      leaves = NULL;
+      leaves.Clear();
     }
 
     /**
@@ -269,21 +337,7 @@ class RadixTree {
      * @return true if a value was found and removed
      */
     bool remove_value(const T &value) {
-      Leaf **leaf_r = &leaves;
-
-      while (*leaf_r != NULL) {
-        Leaf *leaf = *leaf_r;
-        if (leaf->value == value) {
-          *leaf_r = leaf->next;
-          leaf->next = NULL;
-          delete leaf;
-          return true;
-        }
-
-        leaf_r = &leaf->next;
-      }
-
-      return false;
+      return leaves.Remove(value);
     }
 
     /**
@@ -326,8 +380,7 @@ class RadixTree {
      */
     template<typename V>
     void visit_values(V &visitor) {
-      for (Leaf *leaf = leaves; leaf != NULL; leaf = leaf->next)
-        visitor(leaf->value);
+      leaves.VisitAll(visitor);
     }
 
     /**
@@ -335,8 +388,7 @@ class RadixTree {
      */
     template<typename V>
     void visit_values(V &visitor) const {
-      for (const Leaf *leaf = leaves; leaf != NULL; leaf = leaf->next)
-        visitor(leaf->value);
+      leaves.VisitAll(visitor);
     }
 
     /**
