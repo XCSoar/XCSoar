@@ -292,7 +292,7 @@ public:
    *
    * @return Null if none found, otherwise pointer to nearest
    */
-  const Waypoint* get_nearest(const GeoPoint &loc) const;
+  const Waypoint *get_nearest(const GeoPoint &loc, fixed range) const;
 
   /**
    * Looks up nearest landable waypoint to the

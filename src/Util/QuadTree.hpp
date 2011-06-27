@@ -1233,15 +1233,15 @@ public:
 
   gcc_pure
   std::pair<const_iterator, distance_type>
-  find_nearest(const Point location) const {
-    return root.find_nearest_if(bounds, location, max_distance(),
+  find_nearest(const Point location, distance_type range) const {
+    return root.find_nearest_if(bounds, location, range,
                                 AlwaysTrue());
   }
 
   gcc_pure
   std::pair<const_iterator, distance_type>
-  find_nearest(const T &value) const {
-    return find_nearest(GetPosition(value));
+  find_nearest(const T &value, distance_type range) const {
+    return find_nearest(GetPosition(value), range);
   }
 
   template<class O>

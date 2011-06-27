@@ -163,15 +163,16 @@ Waypoints::append(Waypoint& wp)
 }
 
 const Waypoint*
-Waypoints::get_nearest(const GeoPoint &loc) const 
+Waypoints::get_nearest(const GeoPoint &loc, fixed range) const
 {
   if (empty())
     return NULL;
 
   Waypoint bb_target(loc);
   bb_target.Project(task_projection);
+  const unsigned mrange = task_projection.project_range(loc, range);
   std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
-      waypoint_tree.find_nearest(bb_target);
+    waypoint_tree.find_nearest(bb_target, mrange);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -214,7 +215,7 @@ Waypoints::lookup_name(const TCHAR *name) const
 const Waypoint*
 Waypoints::lookup_location(const GeoPoint &loc, const fixed range) const
 {
-  const Waypoint* wp = get_nearest(loc);
+  const Waypoint* wp = get_nearest(loc, range);
   if (!wp)
     return NULL;
 

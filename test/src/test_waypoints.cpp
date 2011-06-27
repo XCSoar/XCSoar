@@ -95,7 +95,7 @@ test_nearest(const Waypoints& waypoints)
   if (!r)
     return false;
 
-  r = waypoints.get_nearest(r->Location);
+  r = waypoints.get_nearest(r->Location, fixed_zero);
   if (!r)
     return false;
 

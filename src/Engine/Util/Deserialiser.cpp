@@ -199,7 +199,7 @@ Deserialiser::deserialise_waypoint()
       return new Waypoint(*from_database);
 
     // Try finding the closest waypoint to the original one
-    from_database = waypoints->get_nearest(loc);
+    from_database = waypoints->get_nearest(loc, fixed_ten);
 
     // If closest waypoint found and closer than 10m to the original
     if (from_database != NULL &&

@@ -488,7 +488,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
     }
 
     // Try finding the closest waypoint to the original one
-    wp = waypoints->get_nearest(file_wp->Location);
+    wp = waypoints->get_nearest(file_wp->Location, fixed_ten);
 
     // If closest waypoint found and closer than 10m to the original
     if (wp != NULL &&

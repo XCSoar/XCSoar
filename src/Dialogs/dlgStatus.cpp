@@ -483,7 +483,8 @@ dlgStatusShowModal(int start_page)
   wTabBar = ((TabBarControl *)wf->FindByName(_T("TabBar")));
   assert(wTabBar != NULL);
 
-  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location);
+  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location,
+                                            fixed(100000));
 
   /* setup tabs */
 
