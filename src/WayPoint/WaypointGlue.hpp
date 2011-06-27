@@ -36,7 +36,7 @@ class WaypointReaderBase;
 /**
  * This class is used to parse different waypoint files
  */
-namespace WayPointGlue {
+namespace WaypointGlue {
   void SetHome(Waypoints &way_points, const RasterTerrain *terrain,
                SETTINGS_COMPUTER &settings, const bool reset);
 

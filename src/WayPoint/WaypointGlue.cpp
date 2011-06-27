@@ -41,13 +41,13 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
-namespace WayPointGlue {
+namespace WaypointGlue {
   bool GetPath(int file_number, TCHAR *value);
   bool IsWritable(int file_number);
 }
 
 bool
-WayPointGlue::GetPath(int file_number, TCHAR *value)
+WaypointGlue::GetPath(int file_number, TCHAR *value)
 {
   const TCHAR *key;
 
@@ -69,7 +69,7 @@ WayPointGlue::GetPath(int file_number, TCHAR *value)
 }
 
 bool
-WayPointGlue::IsWritable(int file_number)
+WaypointGlue::IsWritable(int file_number)
 {
   TCHAR file[MAX_PATH];
   if (!GetPath(file_number, file))
@@ -91,7 +91,7 @@ WayPointGlue::IsWritable(int file_number)
  * it resets all special waypoints indices
  */
 void
-WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
+WaypointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
                       SETTINGS_COMPUTER &settings,
                       const bool reset)
 {
@@ -146,7 +146,7 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
 }
 
 bool
-WayPointGlue::LoadWaypointFile(int num, Waypoints &way_points,
+WaypointGlue::LoadWaypointFile(int num, Waypoints &way_points,
                                const RasterTerrain *terrain,
                                OperationEnvironment &operation)
 {
@@ -174,7 +174,7 @@ WayPointGlue::LoadWaypointFile(int num, Waypoints &way_points,
 }
 
 bool
-WayPointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
+WaypointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
                                    Waypoints &way_points,
                                    const RasterTerrain *terrain,
                                    OperationEnvironment &operation)
@@ -214,7 +214,7 @@ WayPointGlue::LoadMapFileWaypoints(int num, const TCHAR* key,
 }
 
 bool
-WayPointGlue::LoadWaypoints(Waypoints &way_points,
+WaypointGlue::LoadWaypoints(Waypoints &way_points,
                             const RasterTerrain *terrain,
                             OperationEnvironment &operation)
 {
@@ -250,7 +250,7 @@ WayPointGlue::LoadWaypoints(Waypoints &way_points,
 }
 
 bool
-WayPointGlue::SaveWaypointFile(const Waypoints &way_points, int num)
+WaypointGlue::SaveWaypointFile(const Waypoints &way_points, int num)
 {
   if (!IsWritable(num)) {
     LogStartUp(_T("Waypoint file %d can not be written"), num);
@@ -274,7 +274,7 @@ WayPointGlue::SaveWaypointFile(const Waypoints &way_points, int num)
 }
 
 bool
-WayPointGlue::SaveWaypoints(const Waypoints &way_points)
+WaypointGlue::SaveWaypoints(const Waypoints &way_points)
 {
   bool result = false;
   LogStartUp(_T("SaveWaypoints"));

@@ -79,7 +79,7 @@ OnWaypointEditClicked(gcc_unused WndButton &Sender)
 static void
 SaveWaypoints()
 {
-  if (!WayPointGlue::SaveWaypoints(way_points))
+  if (!WaypointGlue::SaveWaypoints(way_points))
     MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
   else
     WaypointFileChanged = true;

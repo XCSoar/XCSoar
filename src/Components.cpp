@@ -358,13 +358,13 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   LoadConfiguredTopography(*topography, operation);
 
   // Read the waypoint files
-  WayPointGlue::LoadWaypoints(way_points, terrain, operation);
+  WaypointGlue::LoadWaypoints(way_points, terrain, operation);
 
   // Read and parse the airfield info file
   ReadAirfieldFile(way_points, operation);
 
   // Set the home waypoint
-  WayPointGlue::SetHome(way_points, terrain, SetSettingsComputer(),
+  WaypointGlue::SetHome(way_points, terrain, SetSettingsComputer(),
                         false);
 
   // ReSynchronise the blackboards here since SetHome touches them

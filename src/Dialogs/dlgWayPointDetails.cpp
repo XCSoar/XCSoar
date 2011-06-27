@@ -302,7 +302,7 @@ OnNewHomeClicked(gcc_unused WndButton &button)
 
   {
     ScopeSuspendAllThreads suspend;
-    WayPointGlue::SetHome(way_points, terrain,
+    WaypointGlue::SetHome(way_points, terrain,
                           settings_computer,
                           false);
   }

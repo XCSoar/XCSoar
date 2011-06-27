@@ -187,7 +187,7 @@ LoadFiles()
 
   terrain = RasterTerrain::OpenTerrain(NULL, operation);
 
-  WayPointGlue::LoadWaypoints(way_points, terrain, operation);
+  WaypointGlue::LoadWaypoints(way_points, terrain, operation);
 
   TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile);
   if (reader != NULL) {
