@@ -1663,8 +1663,8 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgTaskOverview.cpp \
-	$(SRC)/Dialogs/dlgWayPointSelect.cpp \
-	$(SRC)/Dialogs/dlgWayPointDetails.cpp \
+	$(SRC)/Dialogs/dlgWaypointSelect.cpp \
+	$(SRC)/Dialogs/dlgWaypointDetails.cpp \
 	$(SRC)/Dialogs/dlgTaskWaypoint.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
 	$(SRC)/LocalTime.cpp \

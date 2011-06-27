@@ -106,7 +106,7 @@ Update()
 static void
 OnSetWaypointClicked(gcc_unused WndButton &button)
 {
-  const Waypoint* wp = dlgWayPointSelect(XCSoarInterface::main_window,
+  const Waypoint* wp = dlgWaypointSelect(XCSoarInterface::main_window,
                                          XCSoarInterface::Basic().Location);
   if (wp != NULL) {
     XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = wp->id;

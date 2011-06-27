@@ -872,14 +872,14 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgWayPointSelectAddToLastUsed(const Waypoint &wp)
+dlgWaypointSelectAddToLastUsed(const Waypoint &wp)
 {
   LastUsedWaypointNames.remove(wp.id);
   LastUsedWaypointNames.push_back(wp.id);
 }
 
 const Waypoint*
-dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location,
+dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
                   OrderedTask *ordered_task,
                   const unsigned ordered_task_index)
 {
@@ -947,7 +947,7 @@ dlgWayPointSelect(SingleWindow &parent, const GeoPoint &location,
     retval = WayPointSelectInfo[ItemIndex].way_point;
 
   if (retval != NULL)
-    dlgWayPointSelectAddToLastUsed(*retval);
+    dlgWaypointSelectAddToLastUsed(*retval);
 
   return retval;
 }

@@ -451,7 +451,7 @@ OnDetailsClicked(gcc_unused WndButton &Sender)
 {
   OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
   if (task_point)
-    dlgWayPointDetailsShowModal(wf->GetMainWindow(), task_point->get_waypoint(), false);
+    dlgWaypointDetailsShowModal(wf->GetMainWindow(), task_point->get_waypoint(), false);
 }
 
 static void
@@ -461,7 +461,7 @@ OnRelocateClicked(gcc_unused WndButton &Sender)
                                ordered_task->get_tp(active_index - 1)->get_location() :
                                XCSoarInterface::Basic().Location);
 
-  const Waypoint *wp = dlgWayPointSelect(wf->GetMainWindow(), gpBearing,
+  const Waypoint *wp = dlgWaypointSelect(wf->GetMainWindow(), gpBearing,
                                          ordered_task,
                                          active_index);
   if (wp == NULL)

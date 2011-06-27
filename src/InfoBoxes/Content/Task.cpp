@@ -140,7 +140,7 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
   case ibkEnter:
     const Waypoint *wp = protected_task_manager->getActiveWaypoint();
     if (wp) {
-      dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
+      dlgWaypointDetailsShowModal(XCSoarInterface::main_window, *wp);
       return true;
     }
   }

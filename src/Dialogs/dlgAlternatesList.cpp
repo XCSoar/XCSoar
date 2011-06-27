@@ -99,5 +99,5 @@ dlgAlternatesListShowModal(SingleWindow &parent)
   if (i < 0 || (unsigned)i >= alternates.size())
     return;
 
-  dlgWayPointDetailsShowModal(parent, alternates[i].first);
+  dlgWaypointDetailsShowModal(parent, alternates[i].first);
 }

@@ -53,11 +53,11 @@ void dlgAirspaceSelect();
 void dlgAlternatesListShowModal(SingleWindow &parent);
 
 const Waypoint *
-dlgWayPointSelect(SingleWindow &parent,
+dlgWaypointSelect(SingleWindow &parent,
                   const GeoPoint &location,
                   OrderedTask *ordered_task = NULL,
                   const unsigned ordered_task_index = 0);
-void dlgWayPointSelectAddToLastUsed(const Waypoint &wp);
+void dlgWaypointSelectAddToLastUsed(const Waypoint &wp);
 
 void dlgBasicSettingsShowModal();
 void dlgBrightnessShowModal();
@@ -111,7 +111,7 @@ dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index);
 void dlgVoiceShowModal();
 
 void
-dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint,
+dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint,
                           bool allow_navigation = true);
 
 void dlgTeamCodeShowModal();

@@ -24,7 +24,7 @@ struct AirspaceSelectInfo {
 typedef std::vector<AirspaceSelectInfo> AirspaceSelectInfoVector;
 
 /**
- * Utility class to manage sorting of waypoints (e.g. for dlgWayPointSelect)
+ * Utility class to manage sorting of waypoints (e.g. for dlgWaypointSelect)
  * Note that distance queries do not yet make use of the kdtree, but this system
  * keeps a local master list so won't need to lock the waypoints for long.
  */

@@ -632,7 +632,7 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void 
-dlgWayPointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
+dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
                             bool allow_navigation)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();

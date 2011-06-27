@@ -181,9 +181,9 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgVegaDemo.cpp \
 	$(SRC)/Dialogs/dlgVoice.cpp \
 	$(SRC)/Dialogs/dlgWeather.cpp \
-	$(SRC)/Dialogs/dlgWayPointDetails.cpp \
+	$(SRC)/Dialogs/dlgWaypointDetails.cpp \
 	$(SRC)/Dialogs/dlgWaypointEdit.cpp \
-	$(SRC)/Dialogs/dlgWayPointSelect.cpp \
+	$(SRC)/Dialogs/dlgWaypointSelect.cpp \
 	$(SRC)/Dialogs/dlgWindSettings.cpp \
 	$(SRC)/Dialogs/dlgFontEdit.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \

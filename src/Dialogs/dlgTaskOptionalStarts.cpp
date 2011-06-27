@@ -102,7 +102,7 @@ OnOptionalStartListEnter(unsigned ItemIndex)
   const unsigned index_optional_starts = ItemIndex - (RealStartExists ? 1 : 0);
 
   if (index_optional_starts < ordered_task->optional_start_points_size()) {
-    const Waypoint* way_point = dlgWayPointSelect(wf->GetMainWindow(),
+    const Waypoint* way_point = dlgWaypointSelect(wf->GetMainWindow(),
         ordered_task->task_size() > 0 ? ordered_task->get_tp(0)->get_location()
             : XCSoarInterface::Basic().Location);
     if (!way_point)
@@ -115,7 +115,7 @@ OnOptionalStartListEnter(unsigned ItemIndex)
 
     AbstractTaskFactory &factory = ordered_task->get_factory();
     const Waypoint* way_point =
-        dlgWayPointSelect(wf->GetMainWindow(),
+        dlgWaypointSelect(wf->GetMainWindow(),
                           ordered_task->task_size() > 0 ?
                           ordered_task->get_tp(0)->get_location() :
                           XCSoarInterface::Basic().Location);

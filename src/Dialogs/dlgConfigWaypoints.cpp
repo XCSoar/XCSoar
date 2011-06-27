@@ -63,7 +63,7 @@ OnWaypointNewClicked(gcc_unused WndButton &Sender)
 static void
 OnWaypointEditClicked(gcc_unused WndButton &Sender)
 {
-  const Waypoint *way_point = dlgWayPointSelect(XCSoarInterface::main_window,
+  const Waypoint *way_point = dlgWaypointSelect(XCSoarInterface::main_window,
                                                 XCSoarInterface::Basic().Location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
@@ -98,7 +98,7 @@ OnWaypointDeleteClicked(gcc_unused WndButton &Sender)
 {
 #ifdef OLD_TASK
   int res;
-  res = dlgWayPointSelect(XCSoarInterface::Basic().Location);
+  res = dlgWaypointSelect(XCSoarInterface::Basic().Location);
   if (res != -1){
     if(MessageBoxX(way_points.get(res).Name,
                    _("Delete Waypoint?"),

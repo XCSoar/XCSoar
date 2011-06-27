@@ -716,10 +716,10 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
       return;
     }
   } else if (_tcscmp(misc, _T("select")) == 0) {
-    wp = dlgWayPointSelect(XCSoarInterface::main_window, basic.Location);
+    wp = dlgWaypointSelect(XCSoarInterface::main_window, basic.Location);
   }
   if (wp)
-    dlgWayPointDetailsShowModal(XCSoarInterface::main_window, *wp);
+    dlgWaypointDetailsShowModal(XCSoarInterface::main_window, *wp);
 }
 
 void
@@ -730,7 +730,7 @@ InputEvents::eventGotoLookup(gcc_unused const TCHAR *misc)
   if (protected_task_manager == NULL)
     return;
 
-  const Waypoint* wp = dlgWayPointSelect(XCSoarInterface::main_window,
+  const Waypoint* wp = dlgWaypointSelect(XCSoarInterface::main_window,
                                          basic.Location);
   if (wp != NULL) {
     protected_task_manager->do_goto(*wp);
