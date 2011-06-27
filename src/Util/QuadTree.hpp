@@ -853,6 +853,10 @@ public:
     Clear();
   }
 
+  bool HaveBounds() const {
+    return !bounds.IsEmpty();
+  }
+
   /**
    * Manually set the bounds.
    *
