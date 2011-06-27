@@ -35,8 +35,6 @@
 #include "StringUtil.hpp"
 #include "tstring.hpp"
 
-#include <utility>
-
 #include <assert.h>
 
 #ifdef PRINT_RADIX_TREE
@@ -498,9 +496,12 @@ class RadixTree {
       }
     }
 
-    struct match_pair : public std::pair<Node *, const TCHAR *> {
+    struct match_pair {
+      Node *first;
+      const TCHAR *second;
+
       match_pair(Node *node, const TCHAR *key)
-        :std::pair<Node *, const TCHAR *>(node, key) {}
+        :first(node), second(key) {}
 
       bool is_full_match(const TCHAR *key) {
         return this->second != key && this->second >= key + this->first->label.length();
