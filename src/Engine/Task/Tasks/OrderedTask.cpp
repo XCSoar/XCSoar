@@ -1106,10 +1106,15 @@ OrderedTask::check_duplicate_waypoints(Waypoints& waypoints,
     Waypoint wp(points[i]->get_waypoint());
     const bool this_appended = !waypoints.check_exists_or_append(wp);
     appended |= this_appended;
+
+    const OrderedTaskPoint *new_tp = points[i]->clone(task_behaviour,
+                                                      m_ordered_behaviour,
+                                                      &wp);
     if (is_task)
-      replace(*points[i], i);
+      replace(*new_tp, i);
     else
-      replace_optional_start(*points[i], i);
+      replace_optional_start(*new_tp, i);
+    delete new_tp;
   }
   return appended;
 }
