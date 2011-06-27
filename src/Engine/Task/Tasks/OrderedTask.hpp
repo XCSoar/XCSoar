@@ -83,7 +83,7 @@ public:
               const TaskBehaviour &tb,
               const GlidePolar &gp,
               const bool do_reserve=false);
-  ~OrderedTask();
+  virtual ~OrderedTask();
 
   /**
    * Accessor for factory system for constructing tasks

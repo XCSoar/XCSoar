@@ -47,6 +47,8 @@ public:
     ibkRight = 2
   };
 
+  virtual ~InfoBoxContent() {}
+
   virtual void Update(InfoBoxWindow &infobox) = 0;
   virtual bool HandleKey(const InfoBoxKeyCodes keycode) {
     return false;

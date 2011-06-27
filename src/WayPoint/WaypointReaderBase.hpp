@@ -45,6 +45,8 @@ protected:
                bool _compressed = false);
 
 public:
+  virtual ~WaypointReaderBase() {}
+
   typedef void (*StatusCallback)(unsigned percent);
 
   /**

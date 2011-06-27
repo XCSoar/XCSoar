@@ -35,6 +35,7 @@ class ObservationZone
 {
 public:
   ObservationZone() {}
+  virtual ~ObservationZone() {}
 
   /** 
    * Check whether observer is within OZ

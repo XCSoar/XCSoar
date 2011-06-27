@@ -57,6 +57,7 @@ public:
                 ProtectedTaskManager& task,
                 ProtectedAirspaceWarningManager &_awm,
                 GlideComputerTaskEvents& events);
+  virtual ~GlideComputer() {}
 
   void set_terrain(RasterTerrain* _terrain);
 
