@@ -1096,16 +1096,14 @@ OrderedTask::clone(TaskEvents &te,
   return new_task;
 }
 
-bool 
+void
 OrderedTask::check_duplicate_waypoints(Waypoints& waypoints,
                                        OrderedTaskPointVector& points,
                                        const bool is_task)
 {
-  bool appended = false;
   for (unsigned i = 0; i < points.size(); ++i) {
     Waypoint wp(points[i]->get_waypoint());
-    const bool this_appended = !waypoints.check_exists_or_append(wp);
-    appended |= this_appended;
+    waypoints.check_exists_or_append(wp);
 
     const OrderedTaskPoint *new_tp = points[i]->clone(task_behaviour,
                                                       m_ordered_behaviour,
@@ -1116,19 +1114,13 @@ OrderedTask::check_duplicate_waypoints(Waypoints& waypoints,
       replace_optional_start(*new_tp, i);
     delete new_tp;
   }
-  return appended;
 }
 
-bool
+void
 OrderedTask::check_duplicate_waypoints(Waypoints& waypoints)
 {
-  bool appended = check_duplicate_waypoints(waypoints, task_points, true);
-  appended |= check_duplicate_waypoints(waypoints, optional_start_points, false);
-
-  if (appended)
-    waypoints.optimise();
-
-  return appended;
+  check_duplicate_waypoints(waypoints, task_points, true);
+  check_duplicate_waypoints(waypoints, optional_start_points, false);
 }
 
 bool

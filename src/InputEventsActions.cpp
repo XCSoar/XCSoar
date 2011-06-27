@@ -1531,7 +1531,6 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
     {
       ScopeSuspendAllThreads suspend;
       way_points.append(edit_waypoint);
-      way_points.optimise();
     }
   }
 

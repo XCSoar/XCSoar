@@ -79,10 +79,6 @@ OnWaypointEditClicked(gcc_unused WndButton &Sender)
 static void
 SaveWaypoints()
 {
-  SuspendAllThreads();
-  way_points.optimise();
-  ResumeAllThreads();
-
   if (!WayPointGlue::SaveWaypoints(way_points))
     MessageBoxX(_("Waypoints not editable"), _("Error"), MB_OK);
   else
