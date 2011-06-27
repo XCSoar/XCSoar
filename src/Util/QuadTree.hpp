@@ -392,8 +392,8 @@ protected:
 
     template<class P>
     std::pair<const Leaf *, distance_type>
-    find_nearest_if(const Point location, distance_type square_range,
-                    const P &predicate) const {
+    FindNearestIf(const Point location, distance_type square_range,
+                  const P &predicate) const {
       const Leaf *nearest = NULL;
       distance_type nearest_square_distance = max_distance();
 
@@ -412,8 +412,8 @@ protected:
     }
 
     template<class V>
-    void visit_within_range(const Point location, distance_type square_range,
-                            V &visitor) const {
+    void VisitWithinRange(const Point location, distance_type square_range,
+                          V &visitor) const {
       for (Leaf *leaf = head; leaf != NULL; leaf = leaf->next)
         if (leaf->InSquareRange(location, square_range))
           visitor((const T &)leaf->value);
@@ -663,18 +663,18 @@ protected:
 
     template<class P>
     std::pair<const_iterator, distance_type>
-    find_nearest_if(const Rectangle &bounds,
-                    const Point location, distance_type square_range,
-                    const P &predicate) const {
+    FindNearestIf(const Rectangle &bounds,
+                  const Point location, distance_type square_range,
+                  const P &predicate) const {
       if (!bounds.IsWithinSquareRange(location, square_range))
         return std::make_pair(const_iterator(), max_distance());
 
       if (IsSplitted()) {
-        return children->find_nearest_if(bounds, location, square_range,
-                                         predicate);
+        return children->FindNearestIf(bounds, location, square_range,
+                                       predicate);
       } else {
         std::pair<const Leaf *, distance_type> result =
-          leaves.find_nearest_if(location, square_range, predicate);
+          leaves.FindNearestIf(location, square_range, predicate);
         if (result.first == NULL)
           return std::make_pair(const_iterator(), max_distance());
 
@@ -684,16 +684,16 @@ protected:
     }
 
     template<class V>
-    void visit_within_range(const Rectangle &bounds,
-                            const Point location, distance_type square_range,
-                            V &visitor) const {
-          if (!bounds.IsWithinSquareRange(location, square_range))
-            return;
+    void VisitWithinRange(const Rectangle &bounds,
+                          const Point location, distance_type square_range,
+                          V &visitor) const {
+      if (!bounds.IsWithinSquareRange(location, square_range))
+        return;
 
       if (IsSplitted())
-        children->visit_within_range(bounds, location, square_range, visitor);
+        children->VisitWithinRange(bounds, location, square_range, visitor);
       else
-        leaves.visit_within_range(location, square_range, visitor);
+        leaves.VisitWithinRange(location, square_range, visitor);
     }
   };
 
@@ -764,35 +764,35 @@ protected:
 
     template<class P>
     std::pair<const_iterator, distance_type>
-    find_nearest_if(const Rectangle &bounds,
-                    const Point location, distance_type square_range,
-                    const P &predicate) const {
+    FindNearestIf(const Rectangle &bounds,
+                  const Point location, distance_type square_range,
+                  const P &predicate) const {
       const Point middle = bounds.GetMiddle();
 
       std::pair<const_iterator, distance_type> result =
-        buckets[0].find_nearest_if(GetTopLeft(bounds, middle),
-                                   location, square_range,
-                                   predicate);
+        buckets[0].FindNearestIf(GetTopLeft(bounds, middle),
+                                 location, square_range,
+                                 predicate);
 
       square_range = result.second;
       std::pair<const_iterator, distance_type> tmp =
-        buckets[1].find_nearest_if(GetTopRight(bounds, middle),
-                                   location, square_range,
-                                   predicate);
+        buckets[1].FindNearestIf(GetTopRight(bounds, middle),
+                                 location, square_range,
+                                 predicate);
       if (tmp.second < result.second)
         result = tmp;
 
       square_range = result.second;
-      tmp = buckets[2].find_nearest_if(GetBottomLeft(bounds, middle),
-                                       location, square_range,
-                                       predicate);
+      tmp = buckets[2].FindNearestIf(GetBottomLeft(bounds, middle),
+                                     location, square_range,
+                                     predicate);
       if (tmp.second < result.second)
         result = tmp;
 
       square_range = result.second;
-      tmp = buckets[3].find_nearest_if(GetBottomRight(bounds, middle),
-                                       location, square_range,
-                                       predicate);
+      tmp = buckets[3].FindNearestIf(GetBottomRight(bounds, middle),
+                                     location, square_range,
+                                     predicate);
       if (tmp.second < result.second)
         result = tmp;
 
@@ -800,19 +800,19 @@ protected:
     }
 
     template<class V>
-    void visit_within_range(const Rectangle &bounds,
-                            const Point location, distance_type square_range,
-                            V &visitor) const {
+    void VisitWithinRange(const Rectangle &bounds,
+                          const Point location, distance_type square_range,
+                          V &visitor) const {
       const Point middle = bounds.GetMiddle();
 
-      buckets[0].visit_within_range(GetTopLeft(bounds, middle),
-                                    location, square_range, visitor);
-      buckets[1].visit_within_range(GetTopRight(bounds, middle),
-                                    location, square_range, visitor);
-      buckets[2].visit_within_range(GetBottomLeft(bounds, middle),
-                                    location, square_range, visitor);
-      buckets[3].visit_within_range(GetBottomRight(bounds, middle),
-                                    location, square_range, visitor);
+      buckets[0].VisitWithinRange(GetTopLeft(bounds, middle),
+                                  location, square_range, visitor);
+      buckets[1].VisitWithinRange(GetTopRight(bounds, middle),
+                                  location, square_range, visitor);
+      buckets[2].VisitWithinRange(GetBottomLeft(bounds, middle),
+                                  location, square_range, visitor);
+      buckets[3].VisitWithinRange(GetBottomRight(bounds, middle),
+                                  location, square_range, visitor);
     }
   };
 
@@ -1217,49 +1217,48 @@ public:
   template<class P>
   gcc_pure
   std::pair<const_iterator, distance_type>
-  find_nearest_if(const Point location, distance_type range,
-                  const P &predicate) const {
-    return root.find_nearest_if(bounds, location, Square(range),
-                                predicate);
+  FindNearestIf(const Point location, distance_type range,
+                const P &predicate) const {
+    return root.FindNearestIf(bounds, location, Square(range),
+                              predicate);
   }
 
   template<class P>
   gcc_pure
   std::pair<const_iterator, distance_type>
-  find_nearest_if(const T &value, distance_type range,
-                  const P &predicate) const {
-    return find_nearest_if(GetPosition(value), range, predicate);
+  FindNearestIf(const T &value, distance_type range,
+                const P &predicate) const {
+    return FindNearestIf(GetPosition(value), range, predicate);
   }
 
   gcc_pure
   std::pair<const_iterator, distance_type>
-  find_nearest(const Point location, distance_type range) const {
-    return root.find_nearest_if(bounds, location, range,
-                                AlwaysTrue());
+  FindNearest(const Point location, distance_type range) const {
+    return root.FindNearestIf(bounds, location, range, AlwaysTrue());
   }
 
   gcc_pure
   std::pair<const_iterator, distance_type>
-  find_nearest(const T &value, distance_type range) const {
-    return find_nearest(GetPosition(value), range);
+  FindNearest(const T &value, distance_type range) const {
+    return FindNearest(GetPosition(value), range);
   }
 
   template<class O>
-  void find_within_range(const Point location, distance_type range,
-                         O &output) const {
-    root.find_within_range(location, Square(range), output);
+  void FindWithinRange(const Point location, distance_type range,
+                       O &output) const {
+    root.FindWithinRange(location, Square(range), output);
   }
 
   template<class V>
-  void visit_within_range(const Point location, distance_type range,
-                          V &visitor) const {
-    root.visit_within_range(bounds, location, Square(range), visitor);
+  void VisitWithinRange(const Point location, distance_type range,
+                        V &visitor) const {
+    root.VisitWithinRange(bounds, location, Square(range), visitor);
   }
 
   template<class V>
-  void visit_within_range(const T &value, distance_type range,
-                          V &visitor) const {
-    visit_within_range(GetPosition(value), range, visitor);
+  void VisitWithinRange(const T &value, distance_type range,
+                        V &visitor) const {
+    VisitWithinRange(GetPosition(value), range, visitor);
   }
 };
 

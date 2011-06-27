@@ -171,7 +171,7 @@ Waypoints::get_nearest(const GeoPoint &loc, fixed range) const
   bb_target.Project(task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
   std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
-    waypoint_tree.find_nearest(bb_target, mrange);
+    waypoint_tree.FindNearest(bb_target, mrange);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -193,7 +193,7 @@ Waypoints::get_nearest_landable(const GeoPoint &loc, fixed range) const
   bb_target.Project(task_projection);
   const unsigned mrange = task_projection.project_range(loc, range);
   std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
-      waypoint_tree.find_nearest_if(bb_target, mrange, LandablePredicate());
+      waypoint_tree.FindNearestIf(bb_target, mrange, LandablePredicate());
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -284,7 +284,7 @@ Waypoints::visit_within_range(const GeoPoint &loc, const fixed range,
 
   WaypointEnvelopeVisitor wve(&visitor);
 
-  waypoint_tree.visit_within_range(bb_target, mrange, wve);
+  waypoint_tree.VisitWithinRange(bb_target, mrange, wve);
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
