@@ -126,6 +126,10 @@ public:
    * @param clr Fill color of the buffer
    */
   RawBitmap(unsigned width, unsigned height);
+
+#ifdef ENABLE_OPENGL
+  virtual
+#endif
   ~RawBitmap();
 
   /**

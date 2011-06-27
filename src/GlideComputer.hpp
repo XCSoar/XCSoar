@@ -61,6 +61,7 @@ public:
                 ProtectedTaskManager& task,
                 ProtectedAirspaceWarningManager &_awm,
                 GlideComputerTaskEvents& events);
+  virtual ~GlideComputer() {}
 
   void set_terrain(RasterTerrain* _terrain);
 
@@ -72,7 +73,7 @@ public:
   }
 
   bool ProcessGPS(); // returns true if idle needs processing
-  virtual void ProcessIdle();
+  void ProcessIdle();
 
   void OnStartTask();
   void OnFinishTask();

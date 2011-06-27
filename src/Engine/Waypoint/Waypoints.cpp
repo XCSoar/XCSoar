@@ -64,6 +64,49 @@ private:
   WaypointVisitor *waypoint_visitor;
 };
 
+struct VisitorAdapter {
+  WaypointVisitor &visitor;
+  VisitorAdapter(WaypointVisitor &_visitor):visitor(_visitor) {}
+
+  void operator()(const Waypoint *wp) {
+    visitor.Visit(*wp);
+  }
+};
+
+const Waypoint *
+Waypoints::WaypointNameTree::Get(const TCHAR *name) const
+{
+  TCHAR normalized_name[_tcslen(name) + 1];
+  normalize_search_string(normalized_name, name);
+  return get(normalized_name, NULL);
+}
+
+void
+Waypoints::WaypointNameTree::VisitNormalisedPrefix(const TCHAR *prefix,
+                                                   WaypointVisitor &visitor) const
+{
+  TCHAR normalized[_tcslen(prefix) + 1];
+  normalize_search_string(normalized, prefix);
+  VisitorAdapter adapter(visitor);
+  visit_prefix(normalized, adapter);
+}
+
+void
+Waypoints::WaypointNameTree::Add(const Waypoint &wp)
+{
+  TCHAR normalized_name[wp.Name.length() + 1];
+  normalize_search_string(normalized_name, wp.Name.c_str());
+  add(normalized_name, &wp);
+}
+
+void
+Waypoints::WaypointNameTree::Remove(const Waypoint &wp)
+{
+  TCHAR normalized_name[wp.Name.length() + 1];
+  normalize_search_string(normalized_name, wp.Name.c_str());
+  remove(normalized_name, &wp);
+}
+
 Waypoints::Waypoints():
   next_id(1),
   m_home(NULL)
@@ -175,9 +218,7 @@ Waypoints::set_details(const Waypoint& wp, const tstring& Details)
 const Waypoint*
 Waypoints::lookup_name(const TCHAR *name) const
 {
-  TCHAR normalized[_tcslen(name) + 1];
-  normalize_search_string(normalized, name);
-  return name_tree.get(normalized, NULL);
+  return name_tree.Get(name);
 }
 
 const Waypoint*
@@ -305,23 +346,11 @@ Waypoints::visit_within_radius(const GeoPoint &loc, const fixed range,
   waypoint_tree.visit_within_range(bb_target, mrange, radius_visitor);
 }
 
-struct VisitorAdapter {
-  WaypointVisitor &visitor;
-  VisitorAdapter(WaypointVisitor &_visitor):visitor(_visitor) {}
-
-  void operator()(const Waypoint *wp) {
-    visitor.Visit(*wp);
-  }
-};
-
 void
 Waypoints::visit_name_prefix(const TCHAR *prefix,
                              WaypointVisitor& visitor) const
 {
-  TCHAR normalized[_tcslen(prefix) + 1];
-  normalize_search_string(normalized, prefix);
-  VisitorAdapter adapter(visitor);
-  name_tree.visit_prefix(normalized, adapter);
+  name_tree.VisitNormalisedPrefix(prefix, visitor);
 }
 
 void
@@ -343,7 +372,7 @@ Waypoints::erase(const Waypoint& wp)
   WaypointTree::const_iterator it = waypoint_tree.FindPointer(&envelope);
   assert(it != waypoint_tree.end());
 
-  name_tree.remove(it->get_waypoint().Name.c_str(), &it->get_waypoint());
+  name_tree.Remove(wp);
   waypoint_tree.erase(it);
 }
 

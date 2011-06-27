@@ -80,7 +80,6 @@ protected:
   void SaveFinish();
   void RestoreFinish();
 
-  virtual fixed GetAverageThermal() const;
   virtual void OnClimbBase(fixed StartAlt) = 0;
   virtual void OnClimbCeiling() = 0;
   virtual void OnDepartedThermal() = 0;

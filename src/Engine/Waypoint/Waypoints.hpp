@@ -250,7 +250,13 @@ protected:
   typedef QuadTree<WaypointEnvelope, WaypointEnvelope::Accessor,
                    SliceAllocator<WaypointEnvelope, 512u> > WaypointTree;
 
-  typedef RadixTree<const Waypoint*> WaypointNameTree;
+  class WaypointNameTree : public RadixTree<const Waypoint*> {
+  public:
+    const Waypoint *Get(const TCHAR *name) const;
+    void VisitNormalisedPrefix(const TCHAR *prefix, WaypointVisitor &visitor) const;
+    void Add(const Waypoint &wp);
+    void Remove(const Waypoint &wp);
+  };
 
 public:
   typedef WaypointTree::const_iterator const_iterator;

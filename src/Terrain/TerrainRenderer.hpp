@@ -39,6 +39,7 @@ protected:
 
 public:
   TerrainRenderer(const RasterTerrain *_terrain);
+  virtual ~TerrainRenderer() {}
 
 public:
   RasterPoint spot_max_pt;
