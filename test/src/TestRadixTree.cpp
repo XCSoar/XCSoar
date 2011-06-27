@@ -74,7 +74,7 @@ check_ascending_keys(const RadixTree<T> &tree)
 
 int main(int argc, char **argv)
 {
-  plan_tests(82);
+  plan_tests(86);
 
   TCHAR buffer[64], *suggest;
 
@@ -126,6 +126,11 @@ int main(int argc, char **argv)
   ok1(prefix_sum(irt, _T("fo")) == 44);
   ok1(prefix_sum(irt, _T("foo")) == 44);
   ok1(prefix_sum(irt, _T("foobar")) == 0);
+
+  ok1(irt.get(_T("foo"), 0) == 42 || irt.get(_T("foo"), 0) == 2);
+  ok1(irt.GetIf(_T("foo"), 0, std::bind1st(std::equal_to<int>(), 42)) == 42);
+  ok1(irt.GetIf(_T("foo"), 0, std::bind1st(std::equal_to<int>(), 2)) == 2);
+  ok1(irt.GetIf(_T("foo"), 0, std::bind1st(std::equal_to<int>(), 22)) == 0);
 
   suggest = irt.suggest(_T("foo"), buffer, 64);
   ok1(suggest != NULL);

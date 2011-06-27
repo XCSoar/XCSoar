@@ -146,6 +146,24 @@ class RadixTree {
         : NULL;
     }
 
+    template<class P>
+    T *GetIf(const P &predicate) {
+        for (Leaf *leaf = head; leaf != NULL; leaf = leaf->next)
+          if (predicate(leaf->value))
+            return &leaf->value;
+
+        return NULL;
+    }
+
+    template<class P>
+    const T *GetIf(const P &predicate) const {
+        for (Leaf *leaf = head; leaf != NULL; leaf = leaf->next)
+          if (predicate(leaf->value))
+            return &leaf->value;
+
+        return NULL;
+    }
+
     template<typename V>
     void VisitAll(V &visitor) {
       for (Leaf *leaf = head; leaf != NULL; leaf = leaf->next)
@@ -265,6 +283,30 @@ class RadixTree {
       Match m = find_child(key);
       return m.is_full_match(key)
         ? m.node->get(m.key)
+        : NULL;
+    }
+
+    template<class P>
+    T *GetIf(const TCHAR *key, const P &predicate) {
+      if (string_is_empty(key))
+        /* found */
+        return leaves.GetIf(predicate);
+
+      Match m = find_child(key);
+      return m.is_full_match(key)
+        ? m.node->GetIf(m.key, predicate)
+        : NULL;
+    }
+
+    template<class P>
+    const T *GetIf(const TCHAR *key, const P &predicate) const {
+      if (string_is_empty(key))
+        /* found */
+        return leaves.GetIf(predicate);
+
+      Match m = find_child(key);
+      return m.is_full_match(key)
+        ? m.node->GetIf(m.key, predicate)
         : NULL;
     }
 
@@ -692,6 +734,23 @@ public:
    */
   const T &get(const TCHAR *key, const T &default_value) const {
     const T *value = root.get(key);
+    return value != NULL
+      ? *value
+      : default_value;
+  }
+
+  template<class P>
+  T &GetIf(const TCHAR *key, T &default_value, const P &predicate) {
+    const T *value = root.GetIf(key, predicate);
+    return value != NULL
+      ? *value
+      : default_value;
+  }
+
+  template<class P>
+  const T &GetIf(const TCHAR *key, const T &default_value,
+                 const P &predicate) const {
+    const T *value = root.GetIf(key, predicate);
     return value != NULL
       ? *value
       : default_value;
