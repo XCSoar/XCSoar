@@ -162,15 +162,6 @@ public:
   }
 
   /**
-   * Sets the airfield details of the specified waypoint
-   *
-   * @param wp Waypoint to set
-   * @param Details Text for airfield details
-   *
-   */
-  void set_details(const Waypoint& wp, const tstring& Details);
-
-  /**
    * Generate takeoff waypoint
    *
    * @return waypoint copy

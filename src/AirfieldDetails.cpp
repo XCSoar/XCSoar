@@ -71,8 +71,12 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
                    const tstring &Details)
 {
   const Waypoint *wp = find_waypoint(way_points, name);
-  if (wp != NULL)
-    way_points.set_details(*wp, Details);
+  if (wp == NULL)
+    return;
+
+  Waypoint new_wp(*wp);
+  new_wp.Details = Details.c_str();
+  way_points.replace(*wp, new_wp);
 }
 
 /**

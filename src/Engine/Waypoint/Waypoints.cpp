@@ -203,17 +203,6 @@ Waypoints::get_nearest_landable(const GeoPoint &loc, unsigned long range) const
 
   return &*found.first;
 }
-void
-Waypoints::set_details(const Waypoint& wp, const tstring& Details)
-{
-  WaypointTree::iterator found = waypoint_tree.begin();
-  while (found != waypoint_tree.end()) {
-    if (found->id == wp.id)
-      found->Details = Details;
-
-    ++found;
-  }
-}
 
 const Waypoint*
 Waypoints::lookup_name(const TCHAR *name) const
