@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WayPointRenderer.hpp"
+#include "WaypointRenderer.hpp"
 #include "MapWindowProjection.hpp"
 #include "MapWindowLabels.hpp"
 #include "SettingsMap.hpp"
@@ -122,7 +122,7 @@ struct VisibleWaypoint {
 
   void DrawSymbol(Canvas &canvas, const Projection &projection) const {
     if (waypoint->IsLandable()) {
-      WayPointRenderer::DrawLandableSymbol(canvas, point, reachable_glide,
+      WaypointRenderer::DrawLandableSymbol(canvas, point, reachable_glide,
                                            reachable_terrain, *waypoint,
                                            projection.GetScreenAngle());
     } else {
@@ -405,7 +405,7 @@ MapWaypointLabelRender(Canvas &canvas, unsigned width, unsigned height,
 }
 
 void
-WayPointRenderer::render(Canvas &canvas, LabelBlock &label_block,
+WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          const MapWindowProjection &projection,
                          const SETTINGS_MAP &settings_map,
                          const TaskBehaviour &task_behaviour,
@@ -496,7 +496,7 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
 
 
 void
-WayPointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
+WaypointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
                                      bool reachable_glide,
                                      bool reachable_terrain,
                                      const Waypoint &way_point,

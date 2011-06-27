@@ -31,7 +31,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "MainWindow.hpp"
-#include "WayPointRenderer.hpp"
+#include "WaypointRenderer.hpp"
 #include "Language/Language.hpp"
 
 #include <stdio.h>
@@ -59,7 +59,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   RasterPoint pt = { rc.left + line_height / 2,
                      rc.top + line_height / 2};
 
-  WayPointRenderer::DrawLandableSymbol(canvas, pt,
+  WaypointRenderer::DrawLandableSymbol(canvas, pt,
                                        positive(solution.AltitudeDifference),
                                        true, way_point);
 

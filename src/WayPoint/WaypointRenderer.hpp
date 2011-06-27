@@ -42,11 +42,11 @@ class ProtectedTaskManager;
 /**
  * Renders way point icons and labels into a #Canvas.
  */
-class WayPointRenderer : private NonCopyable {
+class WaypointRenderer : private NonCopyable {
   const Waypoints *way_points;
 
 public:
-  WayPointRenderer(const Waypoints *_way_points=NULL)
+  WaypointRenderer(const Waypoints *_way_points=NULL)
     :way_points(_way_points) {}
 
   void set_way_points(const Waypoints *_way_points) {

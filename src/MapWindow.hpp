@@ -35,7 +35,7 @@ Copyright_License {
 #include "MapWindowBlackboard.hpp"
 #include "NMEA/Derived.hpp"
 #include "BackgroundDrawHelper.hpp"
-#include "WayPoint/WayPointRenderer.hpp"
+#include "WayPoint/WaypointRenderer.hpp"
 #include "Compiler.h"
 #include <vector>
 
@@ -101,7 +101,7 @@ protected:
   RasterWeather *weather;
 
   BackgroundDrawHelper m_background;
-  WayPointRenderer way_point_renderer;
+  WaypointRenderer way_point_renderer;
 
   Airspaces *airspace_database;
   ProtectedAirspaceWarningManager *airspace_warnings;
