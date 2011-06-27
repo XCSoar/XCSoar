@@ -108,8 +108,8 @@ TaskProjection::project(const GeoPoint& tp) const
 
   FlatPoint f = fproject(tp);
   FlatGeoPoint fp;
-  fp.Longitude = (int)(f.x + fixed_half);
-  fp.Latitude = (int)(f.y + fixed_half);
+  fp.Longitude = iround(f.x);
+  fp.Latitude = iround(f.y);
   return fp;
 }
 
@@ -140,7 +140,7 @@ TaskProjection::project_range(const GeoPoint &tp, const fixed range) const
 {
   assert(initialised);
 
-  return (int)(fproject_range(tp, range) + fixed_half);
+  return iround(fproject_range(tp, range));
 }
 
 fixed
