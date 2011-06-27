@@ -45,10 +45,21 @@ struct GeoPoint;
 class SampledTaskPoint
   : public TaskWayPoint, public virtual ObservationZone
 {
-public:
   friend class OrderedTask;
   friend class PrintHelper;
 
+protected:
+  const bool m_boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
+
+private:
+  SearchPointVector m_nominal_point;
+  SearchPointVector m_sampled_points;
+  SearchPointVector m_boundary_points;
+  SearchPoint m_search_max;
+  SearchPoint m_search_min;
+  SearchPoint m_search_reference;
+
+public:
   /**
    * Constructor.  Clears boundary and interior samples on instantiation.
    * Must be followed by update_oz() after task geometry is modified.
@@ -159,8 +170,6 @@ protected:
   void clear_sample_all_but_last(const AIRCRAFT_STATE& state,
                                  const TaskProjection &projection);
 
-  const bool m_boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
-
   /**
    * Set minimum distance point based on location.
    *
@@ -238,12 +247,6 @@ private:
    *
    */
   void clear_sample_points();
-
-  SearchPointVector m_nominal_point;
-  SearchPointVector m_sampled_points;
-  SearchPointVector m_boundary_points;
-  SearchPoint m_search_max;
-  SearchPoint m_search_min;
-  SearchPoint m_search_reference;
 };
+
 #endif //SAMPLEDOBSERVATIONZONE_H

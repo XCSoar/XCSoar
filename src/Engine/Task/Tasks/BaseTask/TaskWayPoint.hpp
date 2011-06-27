@@ -36,10 +36,11 @@
 class TaskWayPoint :
   public TaskPoint
 {
-
-public:
   friend class PrintHelper;
 
+  const Waypoint m_waypoint; /**< local copy of waypoint */
+
+public:
 /**
  * Constructor.  Location and elevation of waypoint is used
  * as the task point's reference values; a copy of the waypoint
@@ -73,9 +74,6 @@ public:
   const Waypoint& get_waypoint() const {
     return m_waypoint;
   }
-
-private:
-  const Waypoint m_waypoint; /**< local copy of waypoint */
 };
 
 #endif

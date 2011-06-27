@@ -45,6 +45,25 @@ class OrderedTaskPoint;
  * This class uses mementos to reduce expensive re-calculation of static data.
  */
 class TaskLeg {
+
+protected:
+  /** Saved vector for current leg's travelled route */
+  GeoVector vector_travelled;
+  /** Saved vector for current leg's remaining route */
+  GeoVector vector_remaining;
+  /** Saved vector for current leg's planned route */
+  GeoVector vector_planned;
+
+private:
+  DistanceMemento memo_max;
+  DistanceMemento memo_min;
+  DistanceMemento memo_nominal;
+  GeoVectorMemento memo_planned;
+  GeoVectorMemento memo_travelled;
+  GeoVectorMemento memo_remaining;
+
+  OrderedTaskPoint& destination;
+
 public:
   /**
    * Constructor.  Takes local copy of taskpoint data used in internal computations
@@ -142,22 +161,7 @@ public:
   gcc_pure
   fixed leg_distance_nominal() const;
 
-protected:
-  /** Saved vector for current leg's travelled route */
-  GeoVector vector_travelled;
-  /** Saved vector for current leg's remaining route */
-  GeoVector vector_remaining;
-  /** Saved vector for current leg's planned route */
-  GeoVector vector_planned;
-
 private:
-  DistanceMemento memo_max;
-  DistanceMemento memo_min;
-  DistanceMemento memo_nominal;
-  GeoVectorMemento memo_planned;
-  GeoVectorMemento memo_travelled;
-  GeoVectorMemento memo_remaining;
-
   gcc_pure
   GeoVector leg_vector_planned() const;
   
@@ -175,8 +179,6 @@ private:
 
   gcc_pure
   OrderedTaskPoint* next() const;
-
-  OrderedTaskPoint& destination;
 };
 
 #endif

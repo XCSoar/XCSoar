@@ -48,6 +48,14 @@ public:
 
   const enum type type;
 
+protected:
+  GeoPoint reference;
+  /** Altitude (AMSL, m) of task point terrain */
+  const fixed m_elevation;
+  /** Reference to task behaviour (for options) */
+  const TaskBehaviour &m_task_behaviour;
+
+public:
   bool is_intermediate() const {
     return type == AST || type == AAT;
   }
@@ -192,13 +200,6 @@ public:
   const GeoPoint & get_location() const {
     return reference;
   }
-
-protected:
-  GeoPoint reference;
-  /** Altitude (AMSL, m) of task point terrain */
-  const fixed m_elevation;
-  /** Reference to task behaviour (for options) */
-  const TaskBehaviour &m_task_behaviour;
 };
 
 #endif

@@ -34,6 +34,8 @@ class TaskPoint;
 class ObservationZoneClient: 
   public virtual ObservationZone
 {
+  ObservationZonePoint *m_oz;
+
 public:
   /**
    * Constructor.  Transfers ownership of the OZ to this object.
@@ -118,10 +120,6 @@ protected:
   virtual void set_legs(const TaskPoint *previous,
                         const TaskPoint *current,
                         const TaskPoint *next);
-
-private:
-  ObservationZonePoint* m_oz;
-
 };
 
 

@@ -54,6 +54,10 @@ public:
 
   const enum shape shape;
 
+private:
+  GeoPoint reference;
+
+public:
   /**
    * Constructor
    *
@@ -113,9 +117,6 @@ public:
   const GeoPoint & get_location() const {
     return reference;
   }
-
-private:
-  GeoPoint reference;
 };
 
 #endif

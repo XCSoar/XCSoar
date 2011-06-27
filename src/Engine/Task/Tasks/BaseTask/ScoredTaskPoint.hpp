@@ -38,6 +38,9 @@
 class ScoredTaskPoint:
   public SampledTaskPoint
 {
+  AIRCRAFT_STATE m_state_entered;
+  AIRCRAFT_STATE m_state_exited;
+
 public:
 /** 
  * Constructor.  Clears entry/exit states on instantiation.
@@ -173,9 +176,6 @@ private:
   virtual bool score_first_entry() const {
     return false;
   }
-
-  AIRCRAFT_STATE m_state_entered;
-  AIRCRAFT_STATE m_state_exited;
 };
 
 #endif

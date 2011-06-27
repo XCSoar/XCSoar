@@ -44,10 +44,34 @@ class OrderedTaskPoint :
   public ScoredTaskPoint,
   public ObservationZoneClient
 {
-public:
   friend class Serialiser;
   friend class PrintHelper;
 
+public:
+  /**
+   * States each task point can be in (with respect to which OrderedTaskPoint is
+   * active/selected).
+   */
+  enum ActiveState_t {
+    NOTFOUND_ACTIVE = 0,        /**< Active task point was not found, ERROR! */
+    BEFORE_ACTIVE,              /**< This taskpoint is before the active one */
+    CURRENT_ACTIVE,             /**< This taskpoint is currently the active one */
+    AFTER_ACTIVE                /**< This taskpoint is after the active one */
+  };
+
+protected:
+  const OrderedTaskBehaviour &m_ordered_task_behaviour; /**< Reference to ordered task behaviour (for task-specific options) */
+
+private:
+  ActiveState_t m_active_state; /**< ActiveState determined from scan_active() */
+
+  OrderedTaskPoint* tp_next;
+
+  OrderedTaskPoint* tp_previous;
+
+  FlatBoundingBox flat_bb;
+
+public:
 /** 
  * Constructor.
  * Ownership of oz is transferred to this object
@@ -133,17 +157,6 @@ public:
   OrderedTaskPoint* get_next() const {
     return tp_next;
   }
-
-  /**
-   * States each task point can be in (with respect to which OrderedTaskPoint is
-   * active/selected).
-   */
-  enum ActiveState_t {
-    NOTFOUND_ACTIVE = 0,        /**< Active task point was not found, ERROR! */
-    BEFORE_ACTIVE,              /**< This taskpoint is before the active one */
-    CURRENT_ACTIVE,             /**< This taskpoint is currently the active one */
-    AFTER_ACTIVE                /**< This taskpoint is after the active one */
-  };
   
 /** 
  * Accessor for activation state of this task point.
@@ -231,9 +244,6 @@ public:
   bool boundingbox_overlaps(const FlatBoundingBox& bb) const;
 
 protected:
-
-  const OrderedTaskBehaviour &m_ordered_task_behaviour; /**< Reference to ordered task behaviour (for task-specific options) */
-
 /** 
  * Calculate distance from previous remaining/planned location to a point,
  * and from that point to the next remaining/planned location.
@@ -251,14 +261,6 @@ private:
 
   bool search_nominal_if_unsampled() const;
   bool search_boundary_points() const;
-
-  ActiveState_t m_active_state; /**< ActiveState determined from scan_active() */
-
-  OrderedTaskPoint* tp_next;
-
-  OrderedTaskPoint* tp_previous;
-
-  FlatBoundingBox flat_bb;
 };
 
 
