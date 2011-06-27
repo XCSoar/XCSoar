@@ -134,9 +134,11 @@ Waypoints::optimise()
   waypoint_tree.Optimise();
 }
 
-void
-Waypoints::append(Waypoint& wp)
+const Waypoint &
+Waypoints::append(const Waypoint &_wp)
 {
+  Waypoint wp(_wp);
+
   if (empty())
     task_projection.reset(wp.Location);
   else if (waypoint_tree.HaveBounds())
@@ -160,6 +162,8 @@ Waypoints::append(Waypoint& wp)
     waypoint_tree.Optimise();
 
   name_tree.Add(new_wp);
+
+  return new_wp;
 }
 
 const Waypoint*
@@ -358,14 +362,14 @@ Waypoints::create(const GeoPoint &location)
 }
 
 bool
-Waypoints::check_exists_or_append(Waypoint& waypoint)
+Waypoints::check_exists_or_append(Waypoint &waypoint)
 {
   const Waypoint* found = lookup_name(waypoint.Name);
   if (found && found->IsCloseTo(waypoint.Location, fixed(100))) {
     waypoint = *found;
     return true;
   }
-  append(waypoint);
+  waypoint = append(waypoint);
   return false;
 }
 
