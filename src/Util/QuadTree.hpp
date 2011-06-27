@@ -667,7 +667,7 @@ protected:
                     const Point location, distance_type square_range,
                     const P &predicate) const {
       if (!bounds.IsWithinSquareRange(location, square_range))
-        return std::make_pair(const_iterator(), distance_type());
+        return std::make_pair(const_iterator(), max_distance());
 
       if (IsSplitted()) {
         return children->find_nearest_if(bounds, location, square_range,
