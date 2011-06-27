@@ -237,11 +237,8 @@ Waypoints::lookup_location(const GeoPoint &loc, const fixed range) const
 }
 
 const Waypoint*
-Waypoints::find_home() const
+Waypoints::find_home()
 {
-  if (m_home && m_home->Flags.Home)
-    return m_home;
-
   for (const_iterator found = waypoint_tree.begin();
        found != waypoint_tree.end(); ++found) {
     const Waypoint &wp = *found;

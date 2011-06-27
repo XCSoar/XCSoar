@@ -74,7 +74,7 @@ class Waypoints: private NonCopyable
   WaypointNameTree name_tree;
   TaskProjection task_projection;
 
-  mutable const Waypoint* m_home;
+  const Waypoint *m_home;
 
 public:
   /**
@@ -198,7 +198,7 @@ public:
    *
    * @return Pointer to waypoint if found (or NULL if not)
    */
-  const Waypoint* find_home() const;
+  const Waypoint *find_home();
 
   /**
    * Set single home waypoint (clearing all others as home)
