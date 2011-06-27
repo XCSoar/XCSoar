@@ -109,7 +109,7 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
 
   // now push results onto the list, best first.
   while (!q.empty() && alternates.size() < max_alternates) {
-    const Alternate top = q.top().first;
+    const Alternate &top = q.top().first;
 
     // only add if not already in the list (from previous stage in two
     // stage process)
