@@ -240,7 +240,7 @@ public:
   * 
   * @return True if found.  False if appended
   */
-  bool check_exists_or_append(Waypoint& waypoint);
+  const Waypoint &check_exists_or_append(const Waypoint &waypoint);
 
   /**
    * Call visitor function on waypoints within approximate range

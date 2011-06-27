@@ -361,16 +361,15 @@ Waypoints::create(const GeoPoint &location)
   return edit_waypoint;
 }
 
-bool
-Waypoints::check_exists_or_append(Waypoint &waypoint)
+const Waypoint &
+Waypoints::check_exists_or_append(const Waypoint &waypoint)
 {
   const Waypoint* found = lookup_name(waypoint.Name);
   if (found && found->IsCloseTo(waypoint.Location, fixed(100))) {
-    waypoint = *found;
-    return true;
+    return *found;
   }
-  waypoint = append(waypoint);
-  return false;
+
+  return append(waypoint);
 }
 
 Waypoint 
