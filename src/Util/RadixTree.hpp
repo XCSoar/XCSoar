@@ -165,9 +165,9 @@ class RadixTree {
           ? &leaves->value
           : NULL;
 
-      match_pair m = find_child(key);
+      Match m = find_child(key);
       return m.is_full_match(key)
-        ? m.first->get(m.second)
+        ? m.node->get(m.key)
         : NULL;
     }
 
@@ -178,9 +178,9 @@ class RadixTree {
           ? &leaves->value
           : NULL;
 
-      match_pair m = find_child(key);
+      Match m = find_child(key);
       return m.is_full_match(key)
-        ? m.first->get(m.second)
+        ? m.node->get(m.key)
         : NULL;
     }
 
@@ -198,17 +198,17 @@ class RadixTree {
         return retval;
       }
 
-      match_pair m = find_child(prefix);
-      if (m.second == prefix)
+      Match m = find_child(prefix);
+      if (m.key == prefix)
         /* mismatch */
         return NULL;
 
       if (m.is_full_match(prefix))
         /* recurse */
-        return m.first->suggest(m.second, dest, max_length);
+        return m.node->suggest(m.key, dest, max_length);
 
       /* return one character */
-      dest[0u] = m.first->label[(unsigned)(m.second - prefix)];
+      dest[0u] = m.node->label[(unsigned)(m.key - prefix)];
       dest[1] = _T('\0');
       return dest;
     }
@@ -283,10 +283,10 @@ class RadixTree {
         /* this is the right node */
         remove_values();
       } else {
-        match_pair m = find_child(key);
+        Match m = find_child(key);
         if (m.is_full_match(key))
           /* recurse */
-          m.first->remove_values(m.second);
+          m.node->remove_values(m.key);
       }
     }
 
@@ -302,9 +302,9 @@ class RadixTree {
         /* this is the right node */
         return remove_value(value);
       } else {
-        match_pair m = find_child(key);
+        Match m = find_child(key);
         return m.is_full_match(key) &&
-          m.first->remove_value(m.second, value);
+          m.node->remove_value(m.key, value);
       }
     }
 
@@ -496,15 +496,15 @@ class RadixTree {
       }
     }
 
-    struct match_pair {
-      Node *first;
-      const TCHAR *second;
+    struct Match {
+      Node *node;
+      const TCHAR *key;
 
-      match_pair(Node *node, const TCHAR *key)
-        :first(node), second(key) {}
+      Match(Node *_node, const TCHAR *_key)
+        :node(_node), key(_key) {}
 
       bool is_full_match(const TCHAR *key) {
-        return this->second != key && this->second >= key + this->first->label.length();
+        return this->key != key && this->key >= key + node->label.length();
       }
     };
 
@@ -513,20 +513,20 @@ class RadixTree {
      * pointer (or NULL if this node has no children), and a pointer
      * to the portion of the key which was not used yet.
      */
-    match_pair find_child(const TCHAR *key) const {
+    Match find_child(const TCHAR *key) const {
       Node *node = children, *prev = NULL;
       while (node != NULL) {
         const TCHAR *label = node->label.c_str();
         if (key[0u] < label[0u])
-          return match_pair(prev, key);
+          return Match(prev, key);
         else if (key[0u] == label[0u])
-          return match_pair(node, node->match(key));
+          return Match(node, node->match(key));
 
         prev = node;
         node = node->next_sibling;
       }
 
-      return match_pair(prev, key);
+      return Match(prev, key);
     }
 
     /**
@@ -542,41 +542,41 @@ class RadixTree {
         return;
       }
 
-      match_pair m = find_child(key);
-      if (m.second == key) {
+      Match m = find_child(key);
+      if (m.key == key) {
         /* no match - create new node */
         Node *node = CreateLeaf(key, value);
 
-        if (m.first == NULL) {
+        if (m.node == NULL) {
           /* insert before list head */
           node->next_sibling = children;
           children = node;
         } else {
           /* insert after that node */
-          node->next_sibling = m.first->next_sibling;
-          m.first->next_sibling = node;
+          node->next_sibling = m.node->next_sibling;
+          m.node->next_sibling = node;
         }
       } else if (m.is_full_match(key)) {
-        m.first->add(m.second, value);
+        m.node->add(m.key, value);
       } else {
         /* split existing node */
-        m.first->split(m.second - key);
+        m.node->split(m.key - key);
 
-        if (string_is_empty(m.second)) {
+        if (string_is_empty(m.key)) {
           /* add to splitted parent node */
-          m.first->add_value(value);
+          m.node->add_value(value);
         } else {
-          Node *node = CreateLeaf(m.second, value);
+          Node *node = CreateLeaf(m.key, value);
 
-          if (m.second[0u] < m.first->children->label[0u]) {
+          if (m.key[0u] < m.node->children->label[0u]) {
             /* insert before list head */
-            node->next_sibling = m.first->children;
-            m.first->children = node;
+            node->next_sibling = m.node->children;
+            m.node->children = node;
           } else {
             /* insert after the splitted child node */
-            assert(m.first->children->next_sibling == NULL);
+            assert(m.node->children->next_sibling == NULL);
 
-            m.first->children->next_sibling = node;
+            m.node->children->next_sibling = node;
           }
         }
       }
