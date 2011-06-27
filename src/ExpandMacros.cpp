@@ -516,7 +516,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                                            N_("Task"),
                                            N_("None") };
     static const unsigned int n = sizeof(labels)/sizeof(labels[0]);
-    unsigned int i = SettingsMap().WayPointLabelSelection;
+    unsigned int i = SettingsMap().WaypointLabelSelection;
     ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
                     gettext(labels[(i + 1) % n]), Size);
   }

@@ -89,22 +89,22 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
     wp->RefreshDisplay();
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpWayPointLabelSelection"));
+  wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabelSelection"));
   if (wp) {
     //Determines what waypoint labels are displayed for each waypoint (space permitting):&#10;
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
-    dfe->addEnumText(_("All"), wlsAllWayPoints,
+    dfe->addEnumText(_("All"), wlsAllWaypoints,
                      _("All waypoint labels will be displayed."));
     dfe->addEnumText(_("Task waypoints & landables"),
-                     wlsTaskAndLandableWayPoints,
+                     wlsTaskAndLandableWaypoints,
                      _("All waypoints part of a task and all landables will be displayed."));
-    dfe->addEnumText(_("Task waypoints"), wlsTaskWayPoints,
+    dfe->addEnumText(_("Task waypoints"), wlsTaskWaypoints,
                      _("All waypoints part of a task will be displayed."));
-    dfe->addEnumText(_("None"), wlsNoWayPoints,
+    dfe->addEnumText(_("None"), wlsNoWaypoints,
                      _("No waypoint labels will be displayed."));
-    dfe->Set(XCSoarInterface::SettingsMap().WayPointLabelSelection);
+    dfe->Set(XCSoarInterface::SettingsMap().WaypointLabelSelection);
     wp->RefreshDisplay();
   }
 
@@ -172,9 +172,9 @@ WayPointDisplayConfigPanel::Save(bool& requirerestart)
     changed = true;
   }
 
-  changed |= SaveFormPropertyEnum(*wf, _T("prpWayPointLabelSelection"),
-                                  szProfileWayPointLabelSelection,
-                                  XCSoarInterface::SetSettingsMap().WayPointLabelSelection);
+  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelSelection"),
+                                  szProfileWaypointLabelSelection,
+                                  XCSoarInterface::SetSettingsMap().WaypointLabelSelection);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppIndLandable"));
   if (wp) {

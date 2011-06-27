@@ -267,16 +267,16 @@ protected:
     vwp.DrawSymbol(canvas, projection);
 
     // Determine whether to draw the waypoint label or not
-    switch (settings_map.WayPointLabelSelection) {
-    case wlsNoWayPoints:
+    switch (settings_map.WaypointLabelSelection) {
+    case wlsNoWaypoints:
       return;
 
-    case wlsTaskWayPoints:
+    case wlsTaskWaypoints:
       if (!vwp.in_task && task_valid && !watchedWaypoint)
         return;
       break;
 
-    case wlsTaskAndLandableWayPoints:
+    case wlsTaskAndLandableWaypoints:
       if (!vwp.in_task && task_valid && !watchedWaypoint &&
           !way_point.IsLandable())
         return;

@@ -151,7 +151,7 @@
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpWayPointLabelSelection" Caption="Label visibility" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100">
+      <Edit Name="prpWaypointLabelSelection" Caption="Label visibility" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100">
         <DataField DataType="enum"/>
       </Edit>
 

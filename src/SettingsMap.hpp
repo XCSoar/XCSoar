@@ -61,11 +61,11 @@ enum WaypointArrivalHeightDisplay_t {
   WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN
 };
 
-enum WayPointLabelSelection_t {
-  wlsAllWayPoints,
-  wlsTaskAndLandableWayPoints,
-  wlsTaskWayPoints,
-  wlsNoWayPoints
+enum WaypointLabelSelection_t {
+  wlsAllWaypoints,
+  wlsTaskAndLandableWaypoints,
+  wlsTaskWaypoints,
+  wlsNoWaypoints
 };
 
 enum DisplayMode_t{
@@ -130,7 +130,7 @@ struct SETTINGS_MAP {
   /** Which arrival height to display next to waypoint labels */
   WaypointArrivalHeightDisplay_t WaypointArrivalHeightDisplay;
   /** What type of waypoint labels to render */
-  WayPointLabelSelection_t WayPointLabelSelection;
+  WaypointLabelSelection_t WaypointLabelSelection;
   /** What type of waypoint labels to render */
   RenderMode LandableRenderMode;
 

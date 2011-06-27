@@ -162,16 +162,16 @@ Profile::Use()
 
   GetEnum(szProfileMapShiftBias, settings_map.MapShiftBias);
 
-  // NOTE: settings_map.WayPointLabelSelection must be loaded after this code
+  // NOTE: settings_map.WaypointLabelSelection must be loaded after this code
   GetEnum(szProfileDisplayText, settings_map.DisplayTextType);
   if (settings_map.DisplayTextType == OBSOLETE_DONT_USE_DISPLAYNAMEIFINTASK) {
     // pref migration. The migrated value of DisplayTextType and
-    // WayPointLabelSelection will not be written to the config file
+    // WaypointLabelSelection will not be written to the config file
     // unless the user explicitly changes the corresponding setting manually.
-    // This requires ordering because a manually changed WayPointLabelSelection
+    // This requires ordering because a manually changed WaypointLabelSelection
     // may be overwritten by the following migration code.
     settings_map.DisplayTextType = DISPLAYNAME;
-    settings_map.WayPointLabelSelection = wlsTaskWayPoints;
+    settings_map.WaypointLabelSelection = wlsTaskWaypoints;
   }
   else if (settings_map.DisplayTextType == OBSOLETE_DONT_USE_DISPLAYNUMBER)
     settings_map.DisplayTextType = DISPLAYNAME;
@@ -179,8 +179,8 @@ Profile::Use()
 
   // NOTE: settings_map.DisplayTextType must be loaded before this code
   //       due to pref migration dependencies!
-  GetEnum(szProfileWayPointLabelSelection,
-          settings_map.WayPointLabelSelection);
+  GetEnum(szProfileWaypointLabelSelection,
+          settings_map.WaypointLabelSelection);
 
   GetEnum(szProfileWaypointArrivalHeightDisplay,
           settings_map.WaypointArrivalHeightDisplay);

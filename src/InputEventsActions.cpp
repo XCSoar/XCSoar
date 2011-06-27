@@ -1441,10 +1441,10 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
                                           _T("task"),
                                           _T("none")};
 
-  WayPointLabelSelection_t& wls = XCSoarInterface::SetSettingsMap()
-                                  .WayPointLabelSelection;
+  WaypointLabelSelection_t& wls = XCSoarInterface::SetSettingsMap()
+                                  .WaypointLabelSelection;
   if (_tcscmp(misc, _T("toggle")) == 0)
-    wls = (WayPointLabelSelection_t) ((wls + 1) %  n);
+    wls = (WaypointLabelSelection_t) ((wls + 1) %  n);
   else if (_tcscmp(misc, _T("show")) == 0 && (unsigned int) wls < n) {
     TCHAR tbuf[64];
     _stprintf(tbuf, _T("%s: %s"), _("Waypoint labels"), gettext(msg[wls]));
@@ -1453,7 +1453,7 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
   else {
     for (unsigned int i=0; i<n; i++)
       if (_tcscmp(misc, actions[i]) == 0)
-        wls = (WayPointLabelSelection_t) i;
+        wls = (WaypointLabelSelection_t) i;
   }
 
   ActionInterface::SendSettingsMap(true);
