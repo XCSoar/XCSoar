@@ -52,6 +52,19 @@
  */
 template<typename T>
 class RadixTree {
+  template<class V>
+  struct KeyVisitorAdapter {
+    V &visitor;
+    const TCHAR *key;
+
+    KeyVisitorAdapter(V &_visitor, const TCHAR *_key)
+      :visitor(_visitor), key(_key) {}
+
+    void operator()(const T &value) const {
+      visitor(key, value);
+    }
+  };
+
   /**
    * A leaf holds one value associated with a key.  Next to the value,
    * it has a "next" attribute to build a singly linked list.
@@ -335,8 +348,8 @@ class RadixTree {
       tstring key(prefix);
       key.append(label);
 
-      for (const Leaf *leaf = leaves; leaf != NULL; leaf = leaf->next)
-        visitor(key.c_str(), leaf->value);
+      const KeyVisitorAdapter<V> adapter(visitor, key.c_str());
+      visit_values(adapter);
     }
 
     /**
