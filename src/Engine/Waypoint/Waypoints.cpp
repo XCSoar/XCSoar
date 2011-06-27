@@ -156,9 +156,7 @@ Waypoints::append(Waypoint& wp)
   if (must_optimise)
     waypoint_tree.Optimise();
 
-  TCHAR normalized_name[wp.Name.length() + 1];
-  normalize_search_string(normalized_name, wp.Name.c_str());
-  name_tree.add(normalized_name, &new_wp);
+  name_tree.Add(new_wp);
 }
 
 const Waypoint*
@@ -323,7 +321,7 @@ Waypoints::erase(const Waypoint& wp)
 void
 Waypoints::replace(const Waypoint &orig, const Waypoint &replacement)
 {
-  name_tree.remove(orig.Name.c_str(), &orig);
+  name_tree.Remove(orig);
 
   Waypoint new_waypoint(replacement);
   new_waypoint.id = orig.id;
@@ -342,9 +340,7 @@ Waypoints::replace(const Waypoint &orig, const Waypoint &replacement)
   if (must_optimise)
     waypoint_tree.Optimise();
 
-  TCHAR normalized_name[replacement.Name.length() + 1];
-  normalize_search_string(normalized_name, replacement.Name.c_str());
-  name_tree.add(normalized_name, &orig);
+  name_tree.Add(orig);
 }
 
 Waypoint
