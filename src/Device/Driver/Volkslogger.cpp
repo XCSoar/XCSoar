@@ -199,7 +199,7 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
                      sizeof(vl.declaration.flightinfo.glidertype),
 		     decl->AircraftType);
 
-  const Waypoint *home = way_points.find_home();
+  const Waypoint *home = way_points.GetHome();
   if (home != NULL)
     CopyWaypoint(vl.declaration.flightinfo.homepoint, *home);
 

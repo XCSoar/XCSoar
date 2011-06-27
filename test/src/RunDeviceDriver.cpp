@@ -40,12 +40,6 @@ const struct DeviceRegister *driver;
 Waypoints way_points;
 Waypoints::Waypoints() {}
 
-const Waypoint *
-Waypoints::find_home() const
-{
-  return NULL;
-}
-
 /*
  * Fake Device/device.cpp
  */

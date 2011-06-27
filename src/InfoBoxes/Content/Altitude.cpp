@@ -431,7 +431,7 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 
   fixed Value = basic.GPSAltitude;
 
-  const Waypoint* home_waypoint = way_points.find_home();
+  const Waypoint *home_waypoint = way_points.GetHome();
   if (home_waypoint)
     Value -= home_waypoint->Altitude;
 
