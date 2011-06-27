@@ -691,12 +691,6 @@ TaskManager::commit(const OrderedTask& other)
   return retval;
 }
 
-const AbortTask::AlternateVector
-TaskManager::getAlternates() const
-{
-  return task_abort.getAlternates();
-}
-
 void
 TaskManager::takeoff_autotask(const GeoPoint& loc, const fixed terrain_alt)
 {

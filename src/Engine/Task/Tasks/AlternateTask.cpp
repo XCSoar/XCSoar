@@ -148,12 +148,6 @@ AlternateTask::set_task_destination_home(const AIRCRAFT_STATE &state_now)
     destination = state_now.get_location();
 }
 
-const AbortTask::AlternateVector
-AlternateTask::getAlternates() const
-{
-  return alternates;
-}
-
 bool 
 AlternateTask::is_waypoint_in_alternates(const Waypoint& waypoint) const
 {

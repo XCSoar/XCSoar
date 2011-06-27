@@ -76,7 +76,9 @@ public:
    *
    * @return Vector of alternates
    */
-  const AlternateVector getAlternates() const;
+  const AlternateVector &getAlternates() const {
+    return alternates;
+  }
 
 protected:
   void clear();
