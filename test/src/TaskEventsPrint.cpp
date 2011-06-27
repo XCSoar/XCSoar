@@ -20,12 +20,12 @@
 }
  */
 #include "TaskEventsPrint.hpp"
-#include "Task/Tasks/BaseTask/TaskWayPoint.hpp"
+#include "Task/Tasks/BaseTask/TaskWaypoint.hpp"
 
 #include <stdio.h>
 
 void 
-TaskEventsPrint::transition_enter(const TaskWayPoint& tp)
+TaskEventsPrint::transition_enter(const TaskWaypoint& tp)
 {
   if (verbose) {
     printf("#- entered sector\n");
@@ -42,7 +42,7 @@ TaskEventsPrint::transition_alternate()
 
 
 void 
-TaskEventsPrint::transition_exit(const TaskWayPoint &tp)
+TaskEventsPrint::transition_exit(const TaskWaypoint &tp)
 {
   if (verbose) {
     printf("#- exited sector\n");
@@ -51,7 +51,7 @@ TaskEventsPrint::transition_exit(const TaskWayPoint &tp)
 
 
 void 
-TaskEventsPrint::active_changed(const TaskWayPoint &tp)
+TaskEventsPrint::active_changed(const TaskWaypoint &tp)
 {
   if (verbose) {
     printf("#- active changed to wp %d\n", tp.get_waypoint().id);
@@ -77,7 +77,7 @@ TaskEventsPrint::warning_start_speed()
 }
 
 void 
-TaskEventsPrint::request_arm(const TaskWayPoint &tp)
+TaskEventsPrint::request_arm(const TaskWaypoint &tp)
 {
   if (verbose) {
     printf("#- ready to advance\n");
@@ -102,7 +102,7 @@ TaskEventsPrint::task_finish()
 
 
 void 
-TaskEventsPrint::active_advanced(const TaskWayPoint &tp, const int i)
+TaskEventsPrint::active_advanced(const TaskWaypoint &tp, const int i)
 {
   if (verbose) {
     printf("#- advance to sector %d\n", i);

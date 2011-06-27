@@ -22,7 +22,7 @@
 #ifndef TASKEVENTS_HPP
 #define TASKEVENTS_HPP
 
-class TaskWayPoint;
+class TaskWaypoint;
 class Waypoint;
 
 /**
@@ -45,14 +45,14 @@ public:
  * 
  * @param tp The turnpoint entered
  */
-  virtual void transition_enter(const TaskWayPoint& tp) {};
+  virtual void transition_enter(const TaskWaypoint& tp) {};
 
 /** 
  * Called when the aircraft exits a turnpoint observation zone
  * 
  * @param tp The turnpoint the aircraft has exited
  */
-  virtual void transition_exit(const TaskWayPoint &tp) {};
+  virtual void transition_exit(const TaskWaypoint &tp) {};
 
 /** 
  * Called when the aircraft alternate changes
@@ -66,7 +66,7 @@ public:
  * @param tp The turnpoint that is now active after auto-advance
  * @param i The task sequence number after auto-advance
  */
-  virtual void active_advanced(const TaskWayPoint &tp, const int i) {};
+  virtual void active_advanced(const TaskWaypoint &tp, const int i) {};
 
 /** 
  * Called when a taskpoint was altered internally.
@@ -76,7 +76,7 @@ public:
  * 
  * @param tp The new active taskpoint
  */
-  virtual void active_changed(const TaskWayPoint &tp) {};
+  virtual void active_changed(const TaskWaypoint &tp) {};
 
 /** 
  * Called when aircraft speed is higher than set limit
@@ -100,7 +100,7 @@ public:
  * 
  * @param tp The taskpoint waiting to be armed
  */
-  virtual void request_arm(const TaskWayPoint &tp) {};
+  virtual void request_arm(const TaskWaypoint &tp) {};
 
 /** 
  * Called when orderd task has started

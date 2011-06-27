@@ -106,7 +106,7 @@ TaskManager::incrementActiveTaskPoint(int offset)
   }
 }
 
-TaskWayPoint*
+TaskWaypoint*
 TaskManager::getActiveTaskPoint() const
 {
   if (active_task) 
@@ -182,7 +182,7 @@ TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
 
   common_stats.next_solution.reset();
   if (active_task) {
-    const TaskWayPoint* tp= active_task->getActiveTaskPoint();
+    const TaskWaypoint* tp= active_task->getActiveTaskPoint();
     if (tp != NULL) {
       // must make an UnorderedTaskPoint here so we pick up arrival height requirements
       UnorderedTaskPoint fp(tp->get_waypoint(), task_behaviour);
@@ -618,7 +618,7 @@ TaskManager::get_ordered_taskpoint_location(const unsigned TPindex,
   if (!check_ordered_task())
     return fallback_location;
 
-  TaskWayPoint *tp = task_ordered.get_ordered_task_point(TPindex);
+  TaskWaypoint *tp = task_ordered.get_ordered_task_point(TPindex);
   if (tp)
     return tp->get_location();
 

@@ -22,7 +22,7 @@
 
 #include "AlternateTask.hpp"
 
-#include "BaseTask/TaskWayPoint.hpp"
+#include "BaseTask/TaskWaypoint.hpp"
 #include "Math/Earth.hpp"
 #include "Task/TaskEvents.hpp"
 #include "Util/queue.hpp"
@@ -98,7 +98,7 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
   const fixed dist_straight = state_now.get_location().distance(destination);
 
   for (AlternateTaskVector::const_iterator i = task_points.begin(); i != task_points.end(); ++i) {
-    const TaskWayPoint& tp = *i->first;
+    const TaskWaypoint& tp = *i->first;
     const Waypoint& wp_alt = tp.get_waypoint();
     const fixed dist_divert =
         ::DoubleDistance(state_now.get_location(), wp_alt.Location, destination);

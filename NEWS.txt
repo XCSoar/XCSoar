@@ -1142,7 +1142,7 @@ Changes from 5.0.0:
 Dialogs changed:
  dlgConfiguration.xml
  dlgStartPoint.xml
- dlgTaskWayPoint.xml
+ dlgTaskWaypoint.xml
  dlgTeamCode.xml
  dlgTextEntry.xml
  dlgWayPointDetails.xml

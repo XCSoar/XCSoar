@@ -33,7 +33,7 @@
  *
  */
 
-class TaskWayPoint :
+class TaskWaypoint :
   public TaskPoint
 {
   friend class PrintHelper;
@@ -51,7 +51,7 @@ public:
  *
  * @return Initialised object
  */
-  TaskWayPoint(enum type _type,
+  TaskWaypoint(enum type _type,
                const Waypoint & wp,
                const TaskBehaviour &tb):
     TaskPoint(_type, wp.Location, wp.Altitude, tb),
@@ -61,7 +61,7 @@ public:
 /**
  * Destructor.  Does nothing yet.
  */
-  virtual ~TaskWayPoint() {};
+  virtual ~TaskWaypoint() {};
 
 /**
  * Recall waypoint associated with this task point.

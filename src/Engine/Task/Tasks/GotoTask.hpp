@@ -65,7 +65,7 @@ public:
  * 
  * @return Index of active task point sequence
  */
-  TaskWayPoint* getActiveTaskPoint() const;
+  TaskWaypoint* getActiveTaskPoint() const;
 
 /** 
  * Set active task point index
@@ -132,7 +132,7 @@ protected:
                          const AIRCRAFT_STATE& state_last);
 
 private:    
-  TaskWayPoint* tp;
+  TaskWaypoint* tp;
   const Waypoints &waypoints;
 public:
 /** 

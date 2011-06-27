@@ -69,7 +69,7 @@ const Waypoint*
 ProtectedTaskManager::getActiveWaypoint() const
 {
   Lease lease(*this);
-  const TaskWayPoint *tp = lease->getActiveTaskPoint();
+  const TaskWaypoint *tp = lease->getActiveTaskPoint();
   if (tp)
     return &tp->get_waypoint();
 

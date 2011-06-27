@@ -59,7 +59,7 @@ AbortTask::setActiveTaskPoint(unsigned index)
   }
 }
 
-TaskWayPoint*
+TaskWaypoint*
 AbortTask::getActiveTaskPoint() const
 {
   if (activeTaskPoint < task_points.size())

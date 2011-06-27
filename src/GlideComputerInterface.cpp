@@ -34,7 +34,7 @@ GlideComputerTaskEvents::set_computer(GlideComputer& computer)
 
 
 void 
-GlideComputerTaskEvents::transition_enter(const TaskWayPoint &tp)
+GlideComputerTaskEvents::transition_enter(const TaskWaypoint &tp)
 {
   m_computer->OnTransitionEnter();
 }
@@ -46,13 +46,13 @@ GlideComputerTaskEvents::transition_alternate()
 }
 
 void 
-GlideComputerTaskEvents::request_arm(const TaskWayPoint &tp)
+GlideComputerTaskEvents::request_arm(const TaskWaypoint &tp)
 {
   InputEvents::processGlideComputer(GCE_ARM_READY);
 }
 
 void 
-GlideComputerTaskEvents::active_advanced(const TaskWayPoint &tp, const int i)
+GlideComputerTaskEvents::active_advanced(const TaskWaypoint &tp, const int i)
 {
   InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 }
