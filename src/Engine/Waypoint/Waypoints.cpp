@@ -139,6 +139,9 @@ Waypoints::append(Waypoint& wp)
 {
   if (empty())
     task_projection.reset(wp.Location);
+  else if (waypoint_tree.HaveBounds())
+    /* QuadTree::IsWithinKnownBounds() needs to know the position */
+    wp.Project(task_projection);
 
   wp.Flags.Watched = (wp.FileNum == 3);
 
