@@ -304,8 +304,7 @@ public:
    *
    * @return Null if none found, otherwise pointer to nearest
    */
-  const Waypoint* get_nearest_landable(const GeoPoint &loc,
-                                       unsigned long range) const;
+  const Waypoint *get_nearest_landable(const GeoPoint &loc, fixed range) const;
 
   /**
    * Access first waypoint in store, for use in iterators.

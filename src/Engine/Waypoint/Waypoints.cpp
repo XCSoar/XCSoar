@@ -184,15 +184,16 @@ Waypoints::get_nearest(const GeoPoint &loc) const
 }
 
 const Waypoint*
-Waypoints::get_nearest_landable(const GeoPoint &loc, unsigned long range) const
+Waypoints::get_nearest_landable(const GeoPoint &loc, fixed range) const
 {
   if (empty())
     return NULL;
 
   Waypoint bb_target(loc);
   bb_target.Project(task_projection);
+  const unsigned mrange = task_projection.project_range(loc, range);
   std::pair<WaypointTree::const_iterator, WaypointTree::distance_type> found =
-      waypoint_tree.find_nearest_if(bb_target, range, LandablePredicate());
+      waypoint_tree.find_nearest_if(bb_target, mrange, LandablePredicate());
 
 #ifdef INSTRUMENT_TASK
   n_queries++;
@@ -435,7 +436,8 @@ Waypoints::add_takeoff_point(const GeoPoint& location,
   if (old_takeoff_point != NULL)
     erase(*old_takeoff_point);
 
-  const Waypoint *nearest_landable = get_nearest_landable(location, 5000);
+  const Waypoint *nearest_landable = get_nearest_landable(location,
+                                                          fixed(5000));
   if (!nearest_landable) {
     // now add new and update database
     Waypoint new_waypoint = generate_takeoff_point(location, terrain_alt);

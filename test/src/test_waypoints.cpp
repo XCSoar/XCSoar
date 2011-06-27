@@ -105,8 +105,9 @@ test_nearest(const Waypoints& waypoints)
 static bool
 test_nearest_landable(const Waypoints& waypoints)
 {
-  const Waypoint *r = waypoints.get_nearest_landable(
-      GeoPoint(Angle::degrees(fixed(0.99)), Angle::degrees(fixed(1.1))), 50000);
+  const Waypoint *r = waypoints.get_nearest_landable(GeoPoint(Angle::degrees(fixed(0.99)),
+                                                              Angle::degrees(fixed(1.1))),
+                                                     fixed(50000));
   if (!r)
     return false;
 
