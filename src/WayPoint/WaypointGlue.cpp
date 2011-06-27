@@ -125,7 +125,7 @@ WayPointGlue::SetHome(Waypoints &way_points, const RasterTerrain *terrain,
     // set team code reference waypoint if we don't have one
     settings.TeamCodeRefWaypoint = settings.HomeWaypoint;
 
-  if (const Waypoint *wp = way_points.lookup_id(settings.HomeWaypoint)) {
+  if (wp != NULL) {
     // OK, passed all checks now
     LogStartUp(_T("Start at home waypoint"));
     device_blackboard.SetStartupLocation(wp->Location, wp->Altitude);
