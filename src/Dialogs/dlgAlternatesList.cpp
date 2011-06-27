@@ -41,7 +41,6 @@ static AbortTask::AlternateVector alternates;
 static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
-  alternates = protected_task_manager->getAlternates();
   assert(index < alternates.size());
 
   const unsigned line_height = rc.bottom - rc.top;
