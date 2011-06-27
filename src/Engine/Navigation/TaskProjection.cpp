@@ -74,7 +74,7 @@ TaskProjection::update_fast()
     location_max.Latitude.Fraction(location_min.Latitude, fixed_half);
   cos_midloc = location_mid.Latitude.fastcosine() * fixed_scale;
   r_cos_midloc = fixed_one/cos_midloc;
-  approx_scale = unproject(FlatGeoPoint(0,-1)).distance(unproject(FlatGeoPoint(0,1)))*fixed_half;
+  approx_scale = unproject(FlatGeoPoint(0,-1)).distance(unproject(FlatGeoPoint(0,1))) / 2;
 
   return !(old_loc == location_mid);
 }
