@@ -255,17 +255,6 @@ public:
                           WaypointVisitor& visitor) const;
 
   /**
-   * Call visitor function on waypoints within radius
-   * to search location.
-   *
-   * @param loc Location from which to search
-   * @param range Distance in meters of search radius
-   * @param visitor Visitor to be called on waypoints within range
-   */
-  void visit_within_radius(const GeoPoint &loc, const fixed range,
-                           WaypointVisitor& visitor) const;
-
-  /**
    * Call visitor function on waypoints with the specified name
    * prefix.
    */

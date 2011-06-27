@@ -26,7 +26,6 @@
 
 // global, used for test harness
 unsigned n_queries = 0;
-extern long count_intersections;
 
 /**
  * Container accessor to allow a WaypointVisitor to visit WaypointEnvelopes 
@@ -290,50 +289,6 @@ Waypoints::visit_within_range(const GeoPoint &loc, const fixed range,
 #ifdef INSTRUMENT_TASK
   n_queries++;
 #endif
-}
-
-/**
- * Forwards a visited way point to another visitor if it is within the
- * specified radius.
- */
-class RadiusVisitor {
-  FlatGeoPoint location;
-  unsigned mrange;
-  WaypointVisitor *visitor;
-
-public:
-  RadiusVisitor(FlatGeoPoint _location, unsigned _mrange,
-                WaypointVisitor *_visitor)
-    :location(_location), mrange(_mrange), visitor(_visitor) {}
-
-  void operator()(const Waypoint &wp) {
-    Visit(wp);
-  }
-
-  void Visit(const Waypoint &wp) {
-#ifdef INSTRUMENT_TASK
-    count_intersections++;
-#endif
-
-    if (wp.FlatDistanceTo(location) <= mrange)
-      (*visitor)(wp);
-  }
-};
-
-void
-Waypoints::visit_within_radius(const GeoPoint &loc, const fixed range,
-    WaypointVisitor& visitor) const
-{
-  if (empty())
-    return;
-
-  const unsigned mrange = task_projection.project_range(loc, range);
-  Waypoint bb_target(loc);
-  bb_target.Project(task_projection);
-
-  FlatGeoPoint floc = task_projection.project(loc);
-  RadiusVisitor radius_visitor(floc, mrange, &visitor);
-  waypoint_tree.visit_within_range(bb_target, mrange, radius_visitor);
 }
 
 void

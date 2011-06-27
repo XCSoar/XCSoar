@@ -55,7 +55,7 @@ test_wp(const unsigned n, std::ostream &fo)
     state.Location.Latitude = Angle::degrees(fixed(y/1000.0));
 
     WaypointVisitorPrint wvp;
-    waypoints.visit_within_radius(state.Location, fixed(50000.0), wvp);
+    waypoints.visit_within_range(state.Location, fixed(50000.0), wvp);
   }
   print_queries(n, fo);
   fo.flush();

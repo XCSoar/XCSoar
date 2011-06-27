@@ -554,7 +554,7 @@ FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
   FilterWaypointVisitor visitor(filter, location, heading, dest);
 
   if (filter.distance_index > 0)
-    src.visit_within_radius(location, Units::ToSysDistance(
+    src.visit_within_range(location, Units::ToSysDistance(
         DistanceFilter[filter.distance_index]), visitor);
   else
     src.visit_name_prefix(filter.name, visitor);

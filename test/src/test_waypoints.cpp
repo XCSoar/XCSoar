@@ -75,19 +75,6 @@ test_range(const Waypoints& waypoints, const double range)
   }
 }
 
-static unsigned
-test_radius(const Waypoints& waypoints, const double range)
-{
-  const Waypoint *r = waypoints.lookup_id(3);
-  if (r) {
-    WaypointVisitorPrint v;
-    waypoints.visit_within_radius(r->Location, fixed(range), v);
-    return v.count;
-  } else {
-    return 0;
-  }
-}
-
 static bool
 test_nearest(const Waypoints& waypoints)
 {
@@ -188,7 +175,7 @@ int main(int argc, char** argv)
     return 0;
   }
 
-  plan_tests(16);
+  plan_tests(14);
 
   Waypoints waypoints;
 
@@ -203,9 +190,7 @@ int main(int argc, char** argv)
   ok(test_location(waypoints,true),"waypoint location good",0);
   ok(test_location(waypoints,false),"waypoint location bad",0);
   ok(test_range(waypoints,100)==1,"waypoint visit range 100m",0);
-  ok(test_radius(waypoints,100)==1,"waypoint radius 100m",0);
   ok(test_range(waypoints,500000)== waypoints.size(),"waypoint range 500000m",0);
-  ok(test_radius(waypoints,25000)<= test_range(waypoints,25000),"waypoint radius<range",0);
 
   // test clear
   waypoints.clear();
