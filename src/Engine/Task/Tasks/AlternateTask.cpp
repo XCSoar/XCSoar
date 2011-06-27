@@ -141,7 +141,7 @@ AlternateTask::set_task_destination_home(const AIRCRAFT_STATE &state_now)
 {
   // if we have a home, use that, otherwise use the aircraft location
   // (which ends up equivalent to sorting by distance)
-  const Waypoint* home_waypoint = waypoints.find_home();
+  const Waypoint *home_waypoint = waypoints.GetHome();
   if (home_waypoint)
     destination = home_waypoint->Location;
   else

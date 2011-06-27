@@ -143,6 +143,14 @@ public:
                          const fixed terrain_alt);
 
   /**
+   * Return the current home waypoint.  May be NULL if none is
+   * configured.
+   */
+  const Waypoint *GetHome() const {
+    return m_home;
+  }
+
+  /**
    * Find first home waypoint
    *
    * @return Pointer to waypoint if found (or NULL if not)

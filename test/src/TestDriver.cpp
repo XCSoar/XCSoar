@@ -70,12 +70,6 @@ Waypoints way_points;
 
 Waypoints::Waypoints() {}
 
-const Waypoint*
-Waypoints::find_home() const
-{
-  return NULL;
-}
-
 /*
  * Fake Device/Geoid.cpp
  */

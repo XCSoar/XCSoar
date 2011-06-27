@@ -341,7 +341,7 @@ AbortTask::reset()
 GeoVector 
 AbortTask::get_vector_home(const AIRCRAFT_STATE &state) const
 {
-  const Waypoint* home_waypoint = waypoints.find_home();
+  const Waypoint *home_waypoint = waypoints.GetHome();
   if (home_waypoint)
     return GeoVector(state.Location, home_waypoint->Location);
 
