@@ -68,7 +68,7 @@ public:
   }
 
   bool ProcessGPS(); // returns true if idle needs processing
-  virtual void ProcessIdle();
+  void ProcessIdle();
 
   void OnStartTask();
   void OnFinishTask();

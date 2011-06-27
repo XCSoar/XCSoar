@@ -58,7 +58,7 @@ private:
   void Reach();
 
 protected:
-  virtual void ProcessIdle();
+  void ProcessIdle();
   RasterTerrain* terrain;
 };
 

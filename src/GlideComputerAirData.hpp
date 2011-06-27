@@ -60,7 +60,7 @@ public:
   GlideComputerAirData(ProtectedAirspaceWarningManager &_awm,
                        ProtectedTaskManager &_task);
 
-  virtual void ProcessIdle();
+  void ProcessIdle();
 
   void SetWindEstimate(const SpeedVector wind, const int quality = 3); // JMW check
 
