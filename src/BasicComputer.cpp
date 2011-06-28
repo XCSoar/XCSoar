@@ -91,6 +91,20 @@ ComputeNavAltitude(NMEA_INFO &basic,
     : basic.GPSAltitude;
 }
 
+static void
+ComputeTrack(NMEA_INFO &basic, const NMEA_INFO &last)
+{
+  if (basic.track_available || !basic.LocationAvailable ||
+      !last.LocationAvailable)
+    return;
+
+  fixed distance;
+  Angle bearing;
+  last.Location.distance_bearing(basic.Location, distance, bearing);
+  if (distance >= fixed_one)
+    basic.track = bearing;
+}
+
 /**
  * Calculates the turn rate of the heading,
  * the estimated bank angle and
@@ -144,6 +158,9 @@ BasicComputer::Compute(NMEA_INFO &data, const NMEA_INFO &last,
                        const DERIVED_INFO &calculated,
                        const SETTINGS_COMPUTER &settings_computer)
 {
-  if (data.Time > last.Time)
-    ComputeDynamics(data, calculated);
+  if (data.Time <= last.Time)
+    return;
+
+  ComputeTrack(data, last);
+  ComputeDynamics(data, calculated);
 }
