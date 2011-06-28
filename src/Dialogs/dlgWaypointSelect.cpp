@@ -53,7 +53,7 @@ class FAITrianglePointValidator;
 static GeoPoint g_location;
 static FAITrianglePointValidator *FAITriPtVali = NULL;
 static WndForm *wf = NULL;
-static WndListFrame *wWayPointList = NULL;
+static WndListFrame *wWaypointList = NULL;
 static WndButton *wbName;
 static WndProperty *wpDistance;
 static WndProperty *wpDirection;
@@ -593,10 +593,10 @@ UpdateList()
     FillList(WaypointSelectInfo, way_points, g_location,
              last_heading, filter_data);
 
-  wWayPointList->SetLength(std::max(1, (int)WaypointSelectInfo.size()));
-  wWayPointList->SetOrigin(0);
-  wWayPointList->SetCursorIndex(0);
-  wWayPointList->invalidate();
+  wWaypointList->SetLength(std::max(1, (int)WaypointSelectInfo.size()));
+  wWaypointList->SetOrigin(0);
+  wWaypointList->SetCursorIndex(0);
+  wWaypointList->invalidate();
 }
 
 static const TCHAR *
@@ -910,10 +910,10 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
   ((WndButton *)wf->FindByName(_T("cmdFltName")))->
       SetOnRightNotify(OnFilterNameButtonRight);
 
-  wWayPointList = (WndListFrame*)wf->FindByName(_T("frmWayPointList"));
-  assert(wWayPointList != NULL);
-  wWayPointList->SetActivateCallback(OnWaypointListEnter);
-  wWayPointList->SetPaintItemCallback(OnPaintListItem);
+  wWaypointList = (WndListFrame*)wf->FindByName(_T("frmWayPointList"));
+  assert(wWaypointList != NULL);
+  wWaypointList->SetActivateCallback(OnWaypointListEnter);
+  wWaypointList->SetPaintItemCallback(OnPaintListItem);
 
   wbName = (WndButton*)wf->FindByName(_T("cmdFltName"));
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
@@ -936,7 +936,7 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
     return NULL;
   }
 
-  unsigned ItemIndex = wWayPointList->GetCursorIndex();
+  unsigned ItemIndex = wWaypointList->GetCursorIndex();
 
   delete wf;
   delete FAITriPtVali;
