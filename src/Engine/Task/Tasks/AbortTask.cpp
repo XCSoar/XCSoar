@@ -162,9 +162,9 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   bool found_final_glide = false;
   reservable_priority_queue<Alternate, AlternateVector, AbortRank> q;
   q.reserve(32);
+
   for (AlternateVector::iterator v = approx_waypoints.begin();
        v != approx_waypoints.end();) {
-
     if (only_airfield && !v->waypoint.IsAirport()) {
       ++v;
       continue;
@@ -323,12 +323,14 @@ void
 AbortTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
 {
   if (!reverse) {
+    const AlternateTaskVector::const_iterator end = task_points.end();
     for (AlternateTaskVector::const_iterator i = task_points.begin();
-         i != task_points.end(); ++i)
+         i != end; ++i)
       visitor.Visit(*i->task_point);
   } else {
+    const AlternateTaskVector::const_reverse_iterator end = task_points.rend();
     for (AlternateTaskVector::const_reverse_iterator i = task_points.rbegin();
-         i != task_points.rend(); ++i)
+         i != end; ++i)
       visitor.Visit(*i->task_point);
   }
 }

@@ -97,7 +97,8 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
 
   const fixed dist_straight = state_now.get_location().distance(destination);
 
-  for (AlternateTaskVector::const_iterator i = task_points.begin(); i != task_points.end(); ++i) {
+  const AlternateTaskVector::const_iterator end = task_points.end();
+  for (AlternateTaskVector::const_iterator i = task_points.begin(); i != end; ++i) {
     const TaskWaypoint& tp = *i->task_point;
     const Waypoint& wp_alt = tp.get_waypoint();
     const fixed dist_divert =
@@ -151,8 +152,9 @@ AlternateTask::set_task_destination_home(const AIRCRAFT_STATE &state_now)
 bool 
 AlternateTask::is_waypoint_in_alternates(const Waypoint& waypoint) const
 {
+  const AlternateVector::const_iterator end = alternates.end();
   for (AlternateVector::const_iterator it = alternates.begin();
-       it != alternates.end(); ++it)
+       it != end; ++it)
     if (it->waypoint == waypoint)
       return true;
 

@@ -50,6 +50,16 @@
 #include "Geo/GeoBounds.hpp"
 #include "Task/TaskStats/TaskSummary.hpp"
 
+static void
+UpdateObservationZones(OrderedTask::OrderedTaskPointVector &points,
+                       const TaskProjection &task_projection)
+{
+  OrderedTask::OrderedTaskPointVector::iterator end = points.end();
+  for (OrderedTask::OrderedTaskPointVector::iterator i = points.begin();
+       i != end; ++i)
+    (*i)->update_oz(task_projection);
+}
+
 void
 OrderedTask::update_geometry() 
 {
@@ -74,10 +84,8 @@ OrderedTask::update_geometry()
   task_projection.update_fast();
 
   // update OZ's for items that depend on next-point geometry 
-  for (OrderedTaskPointVector::iterator it = task_points.begin(); it!= task_points.end(); it++)
-    (*it)->update_oz(task_projection);
-  for (OrderedTaskPointVector::iterator it = optional_start_points.begin(); it!= optional_start_points.end(); it++)
-    (*it)->update_oz(task_projection);
+  UpdateObservationZones(task_points, task_projection);
+  UpdateObservationZones(optional_start_points, task_projection);
 
   // now that the task projection is stable, and oz is stable,
   // calculate the bounding box in projected coordinates
@@ -858,17 +866,33 @@ OrderedTask::OrderedTask(TaskEvents &te,
   active_factory->update_ordered_task_behaviour(m_ordered_behaviour);
 }
 
+static void
+Visit(const OrderedTask::OrderedTaskPointVector &points,
+      TaskPointConstVisitor &visitor)
+{
+    const OrderedTask::OrderedTaskPointVector::const_iterator end = points.end();
+    for (OrderedTask::OrderedTaskPointVector::const_iterator it = points.begin();
+         it != end; ++it)
+      visitor.Visit(**it);
+}
+
+static void
+VisitReverse(const OrderedTask::OrderedTaskPointVector &points,
+             TaskPointConstVisitor &visitor)
+{
+    const OrderedTask::OrderedTaskPointVector::const_reverse_iterator end = points.rend();
+    for (OrderedTask::OrderedTaskPointVector::const_reverse_iterator it = points.rbegin();
+         it != end; ++it)
+      visitor.Visit(**it);
+}
+
 void 
 OrderedTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
 {
   if (!reverse) {
-    for (OrderedTaskPointVector::const_iterator it = task_points.begin();
-         it!= task_points.end(); ++it)
-      visitor.Visit(**it);
+    Visit(task_points, visitor);
   } else {
-    for (OrderedTaskPointVector::const_reverse_iterator it = task_points.rbegin();
-         it!= task_points.rend(); ++it)
-      visitor.Visit(**it);
+    VisitReverse(task_points, visitor);
   }
 }
 
@@ -876,24 +900,27 @@ void
 OrderedTask::sp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
 {
   if (!reverse) {
-    for (OrderedTaskPointVector::const_iterator it = optional_start_points.begin();
-         it!= optional_start_points.end(); ++it)
-      visitor.Visit(**it);
+    Visit(optional_start_points, visitor);
   } else {
-    for (OrderedTaskPointVector::const_reverse_iterator it = optional_start_points.rbegin();
-         it!= optional_start_points.rend(); ++it)
-      visitor.Visit(**it);
+    VisitReverse(optional_start_points, visitor);
   }
+}
+
+static void
+Reset(OrderedTask::OrderedTaskPointVector &points)
+{
+    const OrderedTask::OrderedTaskPointVector::iterator end = points.end();
+    for (OrderedTask::OrderedTaskPointVector::iterator it = points.begin();
+         it != end; ++it)
+      (*it)->reset();
 }
 
 void
 OrderedTask::reset()
 {  
   /// @todo also reset data in this class e.g. stats?
-  for (OrderedTaskPointVector::iterator it = task_points.begin(); it!= task_points.end(); it++)
-    (*it)->reset();
-  for (OrderedTaskPointVector::iterator it = optional_start_points.begin(); it!= optional_start_points.end(); it++)
-    (*it)->reset();
+  Reset(task_points);
+  Reset(optional_start_points);
 
   AbstractTask::reset();
   stats.task_finished = false;
