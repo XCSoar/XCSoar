@@ -98,13 +98,13 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
   const fixed dist_straight = state_now.get_location().distance(destination);
 
   for (AlternateTaskVector::const_iterator i = task_points.begin(); i != task_points.end(); ++i) {
-    const TaskWaypoint& tp = *i->first;
+    const TaskWaypoint& tp = *i->task_point;
     const Waypoint& wp_alt = tp.get_waypoint();
     const fixed dist_divert =
         ::DoubleDistance(state_now.get_location(), wp_alt.Location, destination);
     const fixed delta = dist_straight - dist_divert;
 
-    q.push(std::make_pair(Alternate(wp_alt, i->second), delta));
+    q.push(std::make_pair(Alternate(wp_alt, i->solution), delta));
   }
 
   // now push results onto the list, best first.

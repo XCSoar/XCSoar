@@ -243,7 +243,16 @@ protected:
                       const bool safety);
 
 protected:
-  typedef std::vector<std::pair<TaskWaypoint*, GlideResult> > AlternateTaskVector;
+  struct AlternateTaskPoint {
+    TaskWaypoint *task_point;
+
+    GlideResult solution;
+
+    AlternateTaskPoint(TaskWaypoint *_task_point, const GlideResult &_solution)
+      :task_point(_task_point), solution(_solution) {}
+  };
+
+  typedef std::vector<AlternateTaskPoint> AlternateTaskVector;
   AlternateTaskVector task_points;
 
   /** whether the AbortTask is the master or running in background */
