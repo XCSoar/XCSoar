@@ -53,13 +53,13 @@ WaypointGlue::GetPath(int file_number, TCHAR *value)
 
   switch (file_number) {
   case 1:
-    key = szProfileWayPointFile;
+    key = szProfileWaypointFile;
     break;
   case 2:
-    key = szProfileAdditionalWayPointFile;
+    key = szProfileAdditionalWaypointFile;
     break;
   case 3:
-    key = szProfileWatchedWayPointFile;
+    key = szProfileWatchedWaypointFile;
     break;
   default:
     return false;

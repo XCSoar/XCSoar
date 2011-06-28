@@ -651,7 +651,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
   TCHAR buffer[MAX_PATH];
   const TCHAR *Directory = NULL;
-  if (Profile::GetPath(szProfileWayPointFile, szWaypointFile))
+  if (Profile::GetPath(szProfileWaypointFile, szWaypointFile))
     Directory = DirName(szWaypointFile, buffer);
   if (Directory == NULL)
     Directory = _T("");

@@ -66,12 +66,12 @@ SiteConfigPanel::Init(WndForm *_wf)
   InitFileField(*wf, _T("prpAdditionalAirspaceFile"),
                 szProfileAdditionalAirspaceFile, _T("*.txt\0*.air\0*.sua\0"));
   InitFileField(*wf, _T("prpWaypointFile"),
-                szProfileWayPointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
+                szProfileWaypointFile, _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
   InitFileField(*wf, _T("prpAdditionalWaypointFile"),
-                szProfileAdditionalWayPointFile,
+                szProfileAdditionalWaypointFile,
                 _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
   InitFileField(*wf, _T("prpWatchedWaypointFile"),
-                szProfileWatchedWayPointFile,
+                szProfileWatchedWaypointFile,
                 _T("*.dat\0*.xcw\0*.cup\0*.wpz\0*.wpt\0"));
 
   WndProperty *wp = (WndProperty *)wf->FindByName(_T("prpDataPath"));
@@ -93,11 +93,11 @@ bool
 SiteConfigPanel::Save()
 {
   WaypointFileChanged = WaypointFileChanged |
-    FinishFileField(*wf, _T("prpWaypointFile"), szProfileWayPointFile) |
+    FinishFileField(*wf, _T("prpWaypointFile"), szProfileWaypointFile) |
     FinishFileField(*wf, _T("prpAdditionalWaypointFile"),
-                    szProfileAdditionalWayPointFile) |
+                    szProfileAdditionalWaypointFile) |
     FinishFileField(*wf, _T("prpWatchedWaypointFile"),
-                    szProfileWatchedWayPointFile);
+                    szProfileWatchedWaypointFile);
 
   AirspaceFileChanged =
     FinishFileField(*wf, _T("prpAirspaceFile"), szProfileAirspaceFile) |

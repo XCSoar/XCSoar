@@ -226,11 +226,11 @@ PrepareData(void)
 
     TCHAR szFile[MAX_PATH];
     const TCHAR * t;
-    if (Profile::GetPath(szProfileWayPointFile, szFile)) {
+    if (Profile::GetPath(szProfileWaypointFile, szFile)) {
       t = BaseName(szFile);
       dfe->replaceEnumText(tfFile1, t);
     }
-    if (Profile::GetPath(szProfileAdditionalWayPointFile, szFile)) {
+    if (Profile::GetPath(szProfileAdditionalWaypointFile, szFile)) {
       t = BaseName(szFile);
       dfe->replaceEnumText(tfFile2, t);
     }
