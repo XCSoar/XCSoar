@@ -66,6 +66,25 @@ public:
 
   typedef std::vector<OrderedTaskPoint*> OrderedTaskPointVector; /**< Storage type of task points */ 
 
+private:
+  OrderedTaskPointVector task_points;
+  OrderedTaskPointVector optional_start_points;
+
+  StartPoint *taskpoint_start;
+  FinishPoint *taskpoint_finish;
+
+  TaskProjection task_projection;
+
+  GeoPoint m_location_min_last;
+
+  TaskBehaviour::Factory_t factory_mode;
+  AbstractTaskFactory* active_factory;
+  OrderedTaskBehaviour m_ordered_behaviour;
+  TaskAdvanceSmart task_advance;
+  TaskDijkstraMin dijkstra_min;
+  TaskDijkstraMax dijkstra_max;
+
+public:
   /** 
    * Constructor.
    *
@@ -736,26 +755,9 @@ private:
 
   void update_start_transition(const AIRCRAFT_STATE &state, OrderedTaskPoint& start);
 
-  OrderedTaskPointVector task_points;
-  OrderedTaskPointVector optional_start_points;
-
-  StartPoint *taskpoint_start;
-  FinishPoint *taskpoint_finish;
-
-  TaskProjection task_projection;
-
   gcc_pure
   bool distance_is_significant(const GeoPoint &location,
                                const GeoPoint &location_last) const;
-
-  GeoPoint m_location_min_last;
-
-  TaskBehaviour::Factory_t factory_mode;
-  AbstractTaskFactory* active_factory;
-  OrderedTaskBehaviour m_ordered_behaviour;
-  TaskAdvanceSmart task_advance;
-  TaskDijkstraMin dijkstra_min;
-  TaskDijkstraMax dijkstra_max;
 
   bool allow_incremental_boundary_stats(const AIRCRAFT_STATE &state) const;
 

@@ -79,6 +79,33 @@ public:
   /** Vector of waypoints and solutions used to store candidates */
   typedef std::vector <Alternate> AlternateVector;
 
+protected:
+  struct AlternateTaskPoint {
+    TaskWaypoint *task_point;
+
+    GlideResult solution;
+
+    AlternateTaskPoint(TaskWaypoint *_task_point, const GlideResult &_solution)
+      :task_point(_task_point), solution(_solution) {}
+  };
+
+  typedef std::vector<AlternateTaskPoint> AlternateTaskVector;
+  AlternateTaskVector task_points;
+
+  /** whether the AbortTask is the master or running in background */
+  bool is_active;
+
+  const Waypoints &waypoints;
+
+  /** Hook for external intersection tests */
+  AbortIntersectionTest* intersection_test;
+
+private:
+  unsigned active_waypoint;
+  GlidePolar polar_safety;
+  bool m_landable_reachable;
+
+public:
   /** 
    * Base constructor.
    * 
@@ -245,21 +272,6 @@ protected:
                       const bool safety);
 
 protected:
-  struct AlternateTaskPoint {
-    TaskWaypoint *task_point;
-
-    GlideResult solution;
-
-    AlternateTaskPoint(TaskWaypoint *_task_point, const GlideResult &_solution)
-      :task_point(_task_point), solution(_solution) {}
-  };
-
-  typedef std::vector<AlternateTaskPoint> AlternateTaskVector;
-  AlternateTaskVector task_points;
-
-  /** whether the AbortTask is the master or running in background */
-  bool is_active;
-
   /**
    * This is called by update_sample after the turnpoint list has 
    * been filled with landpoints.
@@ -284,18 +296,6 @@ public:
     intersection_test = _test;
   }
 
-protected:
-  const Waypoints &waypoints;
-
-  /** Hook for external intersection tests */
-  AbortIntersectionTest* intersection_test;
-
-private:
-  unsigned active_waypoint;
-  GlidePolar polar_safety;
-  bool m_landable_reachable;
-
-public:
   /**
    * Accept a const task point visitor; makes the visitor visit
    * all TaskPoint in the task

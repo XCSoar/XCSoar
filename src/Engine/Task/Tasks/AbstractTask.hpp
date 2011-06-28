@@ -41,8 +41,25 @@ class GlidePolar;
 class AbstractTask: 
   public TaskInterface 
 {
-public:
   friend class PrintHelper;
+
+protected:
+  unsigned activeTaskPoint; /**< task point sequence index */
+  unsigned activeTaskPoint_last; /**< task point sequence index at last update*/
+  TaskStats stats; /**< statistics of this task */
+  TaskStatsComputer stats_computer;
+  TaskEvents &task_events; /**< reference to task events (feedback) */
+  const TaskBehaviour &task_behaviour; /**< reference to task behaviour (settings) */
+  const GlidePolar &glide_polar; /**< reference to global glide polar */
+
+private:
+  Filter mc_lpf; /**< low pass filter on best MC calculations */
+  Filter ce_lpf; /**< low pass filter on cruise efficiency calculations */
+  Filter em_lpf; /**< low pass filter on effective MC calculations */
+
+  bool trigger_auto; /**< whether auto MC has been triggered (above final glide) */
+
+public:
   /** 
    * Base constructor.  Sets time constants of Best Mc and cruise efficiency
    * low pass filters.
@@ -444,15 +461,6 @@ protected:
   virtual bool is_scored() const = 0;
 
 protected:
-
-  unsigned activeTaskPoint; /**< task point sequence index */
-  unsigned activeTaskPoint_last; /**< task point sequence index at last update*/
-  TaskStats stats; /**< statistics of this task */
-  TaskStatsComputer stats_computer;
-  TaskEvents &task_events; /**< reference to task events (feedback) */
-  const TaskBehaviour &task_behaviour; /**< reference to task behaviour (settings) */
-  const GlidePolar &glide_polar; /**< reference to global glide polar */
-
 /** 
  * Updates distance calculations and values in the statistics.
  * This is protected rather than private so concrete tasks can 
@@ -470,12 +478,6 @@ private:
   void update_stats_speeds(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&);
   void update_stats_glide(const AIRCRAFT_STATE &state);
   void update_flight_mode();
-
-  Filter mc_lpf; /**< low pass filter on best MC calculations */
-  Filter ce_lpf; /**< low pass filter on cruise efficiency calculations */
-  Filter em_lpf; /**< low pass filter on effective MC calculations */
-
-  bool trigger_auto; /**< whether auto MC has been triggered (above final glide) */
 
 public:
 

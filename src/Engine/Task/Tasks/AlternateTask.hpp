@@ -47,6 +47,12 @@ public:
 
   static const unsigned max_alternates; /// number of alternates
 
+private:
+  AlternateVector alternates;
+  GeoPoint destination;
+  unsigned best_alternate_id;
+
+public:
   /** 
    * Base constructor.
    * 
@@ -93,10 +99,6 @@ protected:
   void check_alternate_changed();
 
 private:
-  AlternateVector alternates;
-  GeoPoint destination;
-  unsigned best_alternate_id;
-
   /**
    * Determine if the candidate waypoint is already in the
    * alternate list.

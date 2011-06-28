@@ -40,9 +40,27 @@ class Trace;
  * Special task holder for Online Contest calculations
  */
 class ContestManager {
-public:
   friend class PrintHelper;
 
+  Contests contest;
+
+  ContestStatistics stats;
+
+  const Trace &trace_full;
+  const Trace &trace_sprint;
+
+  OLCSprint olc_sprint;
+  OLCFAI olc_fai;
+  OLCClassic olc_classic;
+  OLCLeague olc_league;
+  OLCPlus olc_plus;
+  XContestFree olc_xcontest_free;
+  XContestTriangle olc_xcontest_triangle;
+  XContestFree olc_dhvxc_free;
+  XContestTriangle olc_dhvxc_triangle;
+  OLCSISAT olc_sisat;
+
+public:
   /** 
    * Base constructor.
    * 
@@ -86,28 +104,10 @@ public:
   }
 
 private:
-  Contests contest;
-
-  ContestStatistics stats;
-
-  const Trace &trace_full;
-  const Trace &trace_sprint;
-
   bool run_contest(AbstractContest& the_contest, 
                    ContestResult &contest_result,
                    ContestTraceVector &contest_solution,
                    bool exhaustive);
-
-  OLCSprint olc_sprint;
-  OLCFAI olc_fai;
-  OLCClassic olc_classic;
-  OLCLeague olc_league;
-  OLCPlus olc_plus;
-  XContestFree olc_xcontest_free;
-  XContestTriangle olc_xcontest_triangle;
-  XContestFree olc_dhvxc_free;
-  XContestTriangle olc_dhvxc_triangle;
-  OLCSISAT olc_sisat;
 };
 
 #endif

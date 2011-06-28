@@ -33,9 +33,12 @@
 class GotoTask : 
   public UnorderedTask 
 {
-public:
   friend class PrintHelper;
 
+  TaskWaypoint* tp;
+  const Waypoints &waypoints;
+
+public:
   /** 
    * Base constructor.
    * 
@@ -131,9 +134,6 @@ protected:
   bool check_transitions(const AIRCRAFT_STATE& state_now, 
                          const AIRCRAFT_STATE& state_last);
 
-private:    
-  TaskWaypoint* tp;
-  const Waypoints &waypoints;
 public:
 /** 
  * Accept a task point visitor; makes the visitor visit
