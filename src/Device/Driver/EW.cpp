@@ -58,7 +58,7 @@ public:
 
 protected:
   bool TryConnect();
-  bool AddWayPoint(const Waypoint &way_point);
+  bool AddWaypoint(const Waypoint &way_point);
   bool DeclareInner(const struct Declaration *declaration,
                     OperationEnvironment &env);
 
@@ -185,7 +185,7 @@ EWDevice::DeclareInner(const struct Declaration *decl,
       return false;
   }
   for (unsigned j = 0; j < decl->size(); ++j)
-    if (!AddWayPoint(decl->get_waypoint(j)))
+    if (!AddWaypoint(decl->get_waypoint(j)))
       return false;
 
   return true;
@@ -214,7 +214,7 @@ EWDevice::Declare(const struct Declaration *decl, OperationEnvironment &env)
 
 
 bool
-EWDevice::AddWayPoint(const Waypoint &way_point)
+EWDevice::AddWaypoint(const Waypoint &way_point)
 {
   char EWRecord[100];
   TCHAR IDString[12];
