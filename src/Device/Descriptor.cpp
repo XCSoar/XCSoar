@@ -31,6 +31,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 #include "StringUtil.hpp"
 #include "Logger/NMEALogger.hpp"
+#include "Language/Language.hpp"
 #include "Operation.hpp"
 #include "ProgressGlue.hpp"
 #include "OS/Clock.hpp"
@@ -225,12 +226,19 @@ DeviceDescriptor::Declare(const struct Declaration *declaration)
   assert(!declaring);
   declaring = true;
 
+  TCHAR text[60];
   VerboseOperationEnvironment env;
+
+  _stprintf(text, _("Declaring to %s"), Driver->Name);
+  env.SetText(text);
   bool result = device != NULL && device->Declare(declaration, env);
   env.Hide();
 
-  if (parser.isFlarm)
+  if (parser.isFlarm) {
+    _stprintf(text, _("Declaring to %s"), _T("FLARM"));
+    env.SetText(text);
     result = FlarmDeclare(Com, declaration) || result;
+  }
 
   declaring = false;
   return result;
