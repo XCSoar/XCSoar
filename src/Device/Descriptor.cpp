@@ -232,13 +232,14 @@ DeviceDescriptor::Declare(const struct Declaration *declaration)
   _stprintf(text, _("Declaring to %s"), Driver->Name);
   env.SetText(text);
   bool result = device != NULL && device->Declare(declaration, env);
-  env.Hide();
 
   if (parser.isFlarm) {
     _stprintf(text, _("Declaring to %s"), _T("FLARM"));
     env.SetText(text);
-    result = FlarmDeclare(Com, declaration) || result;
+    result = FlarmDeclare(Com, declaration, env) || result;
   }
+
+  env.Hide();
 
   declaring = false;
   return result;

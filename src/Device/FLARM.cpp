@@ -26,6 +26,8 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "Device/Declaration.hpp"
 
+#include "Operation.hpp"
+
 #include <assert.h>
 #include <tchar.h>
 
@@ -62,31 +64,46 @@ FlarmDeclareSetGet(Port *port, TCHAR *s)
 #endif
 
 static bool
-FlarmDeclareInternal(Port *port, const Declaration *decl)
+FlarmDeclareInternal(Port *port, const Declaration *decl,
+                     OperationEnvironment &env)
 {
   TCHAR Buffer[256];
+  unsigned size = decl->size();
+
+  env.SetProgressRange(6 + size);
+  env.SetProgressPosition(0);
 
   _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"), decl->PilotName.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
+  env.SetProgressPosition(1);
+
   _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), decl->AircraftReg.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
+
+  env.SetProgressPosition(2);
 
   _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"), decl->AircraftType.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
+  env.SetProgressPosition(3);
+
   _stprintf(Buffer, _T("PFLAC,S,NEWTASK,Task"));
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
+
+  env.SetProgressPosition(4);
 
   _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,TAKEOFF"));
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
-  for (unsigned i = 0; i < decl->size(); ++i) {
+  env.SetProgressPosition(5);
+
+  for (unsigned i = 0; i < size; ++i) {
     int DegLat, DegLon;
     double tmp, MinLat, MinLon;
     char NoS, EoW;
@@ -116,11 +133,15 @@ FlarmDeclareInternal(Port *port, const Declaration *decl)
 
     if (!FlarmDeclareSetGet(port, Buffer))
       return false;
+
+    env.SetProgressPosition(6 + i);
   }
 
   _stprintf(Buffer, _T("PFLAC,S,ADDWP,0000000N,00000000E,LANDING"));
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
+
+  env.SetProgressPosition(6 + size);
 
   // PFLAC,S,KEY,VALUE
   // Expect
@@ -139,14 +160,14 @@ FlarmDeclareInternal(Port *port, const Declaration *decl)
 }
 
 bool
-FlarmDeclare(Port *port, const Declaration *decl)
+FlarmDeclare(Port *port, const Declaration *decl, OperationEnvironment &env)
 {
   assert(port != NULL);
 
   port->StopRxThread();
   port->SetRxTimeout(500); // set RX timeout to 500[ms]
 
-  bool result = FlarmDeclareInternal(port, decl);
+  bool result = FlarmDeclareInternal(port, decl, env);
 
   // TODO bug: JMW, FLARM Declaration checks
   // Only works on IGC approved devices
