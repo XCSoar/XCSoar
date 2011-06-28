@@ -23,6 +23,7 @@
 #include "GotoTask.hpp"
 #include "BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
+#include "Task/TaskBehaviour.hpp"
 
 GotoTask::GotoTask(TaskEvents &te, 
                    const TaskBehaviour &tb,

@@ -26,8 +26,9 @@
 
 #include "Compiler.h"
 #include "Navigation/Aircraft.hpp"
-#include "Navigation/Geometry/GeoVector.hpp"
-#include "Task/TaskBehaviour.hpp"
+
+struct GeoVector;
+class TaskBehaviour;
 
 /**
  * Base class for all task points 

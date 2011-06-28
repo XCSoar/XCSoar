@@ -21,9 +21,11 @@
 */
 
 #include "StartPoint.hpp"
+#include "Task/OrderedTaskBehaviour.hpp"
 #include "Task/TaskEvents.hpp"
 #include "Util/ZeroFinder.hpp"
 #include "Math/Earth.hpp"
+
 #include <assert.h>
 
 StartPoint::StartPoint(ObservationZonePoint* _oz,

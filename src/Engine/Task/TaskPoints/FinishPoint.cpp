@@ -21,6 +21,8 @@
 */
 
 #include "FinishPoint.hpp"
+#include "Task/TaskBehaviour.hpp"
+
 #include <stdlib.h>
 #include <assert.h>
 

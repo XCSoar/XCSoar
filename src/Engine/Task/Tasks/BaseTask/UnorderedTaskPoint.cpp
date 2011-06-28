@@ -19,8 +19,10 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "UnorderedTaskPoint.hpp"
 
+#include "UnorderedTaskPoint.hpp"
+#include "Task/TaskBehaviour.hpp"
+#include "Navigation/Geometry/GeoVector.hpp"
 
 const GeoVector 
 UnorderedTaskPoint::get_vector_remaining(const AIRCRAFT_STATE &ref) const

@@ -26,6 +26,7 @@
 #include "Util/Gradient.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskEvents.hpp"
+#include "Task/TaskBehaviour.hpp"
 
 AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
                            const TaskBehaviour &tb, const GlidePolar &gp):

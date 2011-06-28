@@ -21,7 +21,7 @@
  */
 
 #include "AbortTask.hpp"
-
+#include "Task/TaskBehaviour.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
