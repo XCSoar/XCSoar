@@ -130,8 +130,6 @@ test_replay(const Contests olc_type,
   Waypoints waypoints;
   AIRCRAFT_STATE state_last;
 
-  TaskBehaviour task_behaviour;
-
   TaskEventsPrint default_events(verbose);
   TaskManager task_manager(default_events,
                            waypoints);
@@ -139,14 +137,16 @@ test_replay(const Contests olc_type,
   task_manager.set_glide_polar(glide_polar);
 
   task_manager.set_contest(olc_type);
-  task_manager.get_task_behaviour().enable_olc = true;
 
   ReplayLoggerSim sim;
   TCHAR szFilename[MAX_PATH];
   ConvertCToT(szFilename, replay_file.c_str());
   sim.SetFilename(szFilename);
 
-  load_scores(task_manager.get_task_behaviour().contest_handicap);
+  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  task_behaviour.enable_olc = false;
+  load_scores(task_behaviour.contest_handicap);
+  task_manager.set_task_behaviour(task_behaviour);
 
   if (verbose) {
     switch (olc_type) {

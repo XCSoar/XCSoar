@@ -73,8 +73,6 @@ test_replay()
   Waypoints waypoints;
   AIRCRAFT_STATE state_last;
 
-  TaskBehaviour task_behaviour;
-
   TaskEventsPrint default_events(verbose);
   TaskManager task_manager(default_events,
                            waypoints);
@@ -82,11 +80,15 @@ test_replay()
   glide_polar.set_ballast(fixed(1.0));
 
   task_manager.set_glide_polar(glide_polar);
-  task_manager.get_task_behaviour().auto_mc = true;
-  task_manager.get_task_behaviour().enable_trace = false;
+
+  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  task_behaviour.all_off();
+  task_behaviour.enable_trace = false;
+  task_manager.set_task_behaviour(task_behaviour);
 
   OrderedTask* blank = 
-    new OrderedTask(default_events, task_behaviour, glide_polar);
+    new OrderedTask(default_events, task_manager.get_task_behaviour(),
+                    glide_polar);
 
   OrderedTask* t = task_load(blank);
   if (t) {

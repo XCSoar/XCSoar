@@ -345,15 +345,15 @@ test_flight(int test_num, int n_wind, const double speed_factor,
   TaskManager task_manager(default_events, waypoints);
   task_manager.set_glide_polar(glide_polar);
 
-  TaskBehaviour& task_behaviour = task_manager.get_task_behaviour();
-
   task_manager.get_ordered_task_behaviour().aat_min_time = aat_min_time(test_num);
 
+  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
   task_behaviour.enable_trace = false;
   task_behaviour.auto_mc = auto_mc;
   task_behaviour.calc_glide_required = false;
   if ((test_num == 0) || (test_num == 2))
     task_behaviour.optimise_targets_bearing = false;
+  task_manager.set_task_behaviour(task_behaviour);
 
   bool goto_target = false;
 

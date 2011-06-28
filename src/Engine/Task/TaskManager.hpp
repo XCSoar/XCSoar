@@ -584,7 +584,7 @@ public:
    * 
    * @return Reference to task behaviour
    */
-  TaskBehaviour& get_task_behaviour() {
+  const TaskBehaviour &get_task_behaviour() const {
     return task_behaviour;
   }
 

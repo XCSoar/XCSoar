@@ -236,8 +236,10 @@ bool test_abort(int n_wind)
   TaskManager task_manager(default_events,
                            waypoints);
 
-  task_manager.get_task_behaviour().all_off();
-  task_manager.get_task_behaviour().enable_trace = false;
+  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  task_behaviour.all_off();
+  task_behaviour.enable_trace = false;
+  task_manager.set_task_behaviour(task_behaviour);
 
   task_manager.set_glide_polar(glide_polar);
 
@@ -266,9 +268,12 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
   TaskManager task_manager(default_events,
                            waypoints);
 
-  task_manager.get_task_behaviour().all_off();
-  task_manager.get_task_behaviour().auto_mc = fixed(auto_mc);
-  task_manager.get_task_behaviour().enable_trace = false;
+
+  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  task_behaviour.all_off();
+  task_behaviour.auto_mc = fixed(auto_mc);
+  task_behaviour.enable_trace = false;
+  task_manager.set_task_behaviour(task_behaviour);
 
   task_manager.set_glide_polar(glide_polar);
 
@@ -299,8 +304,10 @@ bool test_null()
   TaskManager task_manager(default_events,
                            waypoints);
 
-  task_manager.get_task_behaviour().all_off();
-  task_manager.get_task_behaviour().enable_trace = false;
+  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  task_behaviour.all_off();
+  task_behaviour.enable_trace = false;
+  task_manager.set_task_behaviour(task_behaviour);
 
   task_manager.set_glide_polar(glide_polar);
 
@@ -428,12 +435,14 @@ bool test_olc(int n_wind, Contests olc_type)
   TaskManager task_manager(default_events,
                            waypoints);
 
-  task_manager.get_task_behaviour().all_off();
+  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  task_behaviour.all_off();
+  task_behaviour.enable_olc = false;
+  if (!verbose)
+    task_behaviour.enable_trace = false;
+  task_manager.set_task_behaviour(task_behaviour);
+
   task_manager.set_contest(olc_type);
-  task_manager.get_task_behaviour().enable_olc = true;
-  if (!verbose) {
-    task_manager.get_task_behaviour().enable_trace = false;
-  }
 
   task_manager.set_glide_polar(glide_polar);
   test_task(task_manager, waypoints, 1);
