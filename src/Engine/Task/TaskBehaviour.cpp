@@ -38,8 +38,6 @@ TaskBehaviour::TaskBehaviour():
     contest_handicap(100),
     safety_mc(fixed_half),
     safety_height_arrival(300.0),
-    start_max_speed_margin(0.0),
-    start_max_height_margin(0),
     task_type_default(FACTORY_RT),
     enable_trace(true),
     abort_task_mode(atmSimple) {}

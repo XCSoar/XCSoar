@@ -22,6 +22,7 @@
 
 #include "StartPoint.hpp"
 #include "Task/OrderedTaskBehaviour.hpp"
+#include "Task/TaskBehaviour.hpp"
 #include "Task/TaskEvents.hpp"
 #include "Util/ZeroFinder.hpp"
 #include "Math/Earth.hpp"

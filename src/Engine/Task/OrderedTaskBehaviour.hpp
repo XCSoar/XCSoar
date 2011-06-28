@@ -25,7 +25,7 @@
 #include "Math/fixed.hpp"
 
 struct AIRCRAFT_STATE;
-class TaskBehaviour;
+struct TaskStartMargins;
 
 /**
  * Settings for ordered tasks; most of these are set by
@@ -76,7 +76,7 @@ public:
    * @return True if within limits
    */
   bool check_start_speed(const AIRCRAFT_STATE &state, 
-                         const TaskBehaviour& behaviour,
+                         const TaskStartMargins &margins,
                          const bool with_margin=false) const;
 
   /**
@@ -90,7 +90,7 @@ public:
    * @return True if within limits
    */
   bool check_start_height(const AIRCRAFT_STATE &state,
-                          const TaskBehaviour& behaviour,
+                          const TaskStartMargins &margins,
                           const fixed spAlt,
                           const bool with_margin=false) const;
 

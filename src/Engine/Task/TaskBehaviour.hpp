@@ -116,11 +116,21 @@ struct SectorDefaults
   fixed finish_radius;
 };
 
+struct TaskStartMargins {
+  /** Margin in maximum ground speed (m/s) allowed in start sector */
+  fixed start_max_speed_margin;
+  /** Margin in maximum height (m) allowed in start sector */
+  unsigned start_max_height_margin;
+
+  TaskStartMargins()
+    :start_max_speed_margin(fixed_zero), start_max_height_margin(0u) {}
+};
+
 /**
  *  Class defining options for task system.
  *  Typical uses might be default values, and simple aspects of task behaviour.
  */
-class TaskBehaviour 
+class TaskBehaviour : public TaskStartMargins
 {
 public:
   /**
@@ -193,11 +203,6 @@ public:
 
   /** Minimum height above terrain for arrival height at landable waypoint (m) */
   fixed safety_height_arrival;
-
-  /** Margin in maximum ground speed (m/s) allowed in start sector */
-  fixed start_max_speed_margin;
-  /** Margin in maximum height (m) allowed in start sector */
-  unsigned start_max_height_margin;
 
   /** Default task type to use for new tasks */
   Factory_t task_type_default;

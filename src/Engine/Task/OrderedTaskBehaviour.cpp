@@ -41,7 +41,7 @@ OrderedTaskBehaviour::OrderedTaskBehaviour():
 
 bool 
 OrderedTaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
-                                        const TaskBehaviour& behaviour,
+                                        const TaskStartMargins &behaviour,
                                         const bool with_margin) const
 {
   if (start_max_speed == fixed_zero)
@@ -57,7 +57,7 @@ OrderedTaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
 
 bool 
 OrderedTaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
-                                         const TaskBehaviour& behaviour,
+                                         const TaskStartMargins &behaviour,
                                          const fixed spAlt,
                                          const bool with_margin) const
 {
