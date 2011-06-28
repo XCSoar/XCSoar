@@ -163,7 +163,7 @@ $PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
 <2> Barometer Altitude in meters (Leading zeros will be transmitted)
 <3> Engine Noise Level
 <4> Log Flags
-*hh Checksum, XOR of all bytes of the sentence after the ‘$’ and before the ‘*’
+*hh Checksum, XOR of all bytes of the sentence after the Â‘$Â’ and before the Â‘*Â’
 */
 static bool
 cai_PCAID(NMEAInputLine &line, NMEA_INFO &data)
@@ -272,7 +272,7 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 }
 
 static bool
-cai302DeclAddWayPoint(Port *port, const Waypoint &way_point)
+cai302DeclAddWaypoint(Port *port, const Waypoint &way_point)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
@@ -460,7 +460,7 @@ DeclareInner(Port *port, const Declaration *decl,
   DeclIndex = 128;
 
   for (unsigned i = 0; i < decl->size(); ++i)
-    if (!cai302DeclAddWayPoint(port, decl->get_waypoint(i)))
+    if (!cai302DeclAddWaypoint(port, decl->get_waypoint(i)))
       return false;
 
   port->Write("D,255\r");
