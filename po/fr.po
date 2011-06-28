@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-18 13:53+0200\n"
-"PO-Revision-Date: 2011-06-20 20:40+0000\n"
-"Last-Translator: thomas <Unknown>\n"
+"POT-Creation-Date: 2011-06-24 01:31+0200\n"
+"PO-Revision-Date: 2011-06-27 13:48+0000\n"
+"Last-Translator: Linux-ubuntu david <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-22 07:28+0000\n"
-"X-Generator: Launchpad (build 13265)\n"
+"X-Launchpad-Export-Date: 2011-06-28 07:48+0000\n"
+"X-Generator: Launchpad (build 13299)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:309
@@ -145,7 +145,7 @@ msgstr "Chargement des points de virage..."
 
 #: src/Gauge/ThermalAssistantWindow.cpp:256
 msgid "Not Circling"
-msgstr ""
+msgstr "Ne pas encercler"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:269
 msgid "No Traffic"
@@ -175,7 +175,7 @@ msgstr "Prochain point de posé"
 
 #: src/ExpandMacros.cpp:156 src/ExpandMacros.cpp:176
 msgid "Closest Landpoint"
-msgstr ""
+msgstr "Landpoint le plus proche"
 
 #: src/ExpandMacros.cpp:157 src/ExpandMacros.cpp:177
 msgid "Previous Landpoint"
@@ -413,7 +413,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:80
 #, no-c-format
 msgid "TC 30s"
-msgstr ""
+msgstr "TC 30S"
 
 #: src/InfoBoxes/Content/Factory.cpp:81
 #, no-c-format
@@ -460,6 +460,10 @@ msgid ""
 "climbing cruise. If the vertical speed is close to zero, the displayed value "
 "is '---'."
 msgstr ""
+"Ratio de plané instantanée, donné par la vitesse sol divisée par la vitesse "
+"verticale (vitesse GPS) au cours des 20 dernières secondes. Les valeurs "
+"négatives indiquent une croisière escalade. Si la vitesse verticale est "
+"proche de zéro, la valeur affichée est '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:106
 #, no-c-format
@@ -479,6 +483,11 @@ msgid ""
 "(height gain since leaving the last thermal). If the vertical speed is close "
 "to zero, the displayed value is '---'."
 msgstr ""
+"La distance du sommet de la dernière thermique, divisée par l'altitude perdu "
+"depuis le sommet de la dernière thermique. Les valeurs négatives indiquent "
+"escalade croisière (gain de hauteur depuis le départ de la dernière "
+"thermique). Si la vitesse verticale est proche de zéro, la valeur affichée "
+"est '---'."
 
 #: src/InfoBoxes/Content/Factory.cpp:115
 #, no-c-format
@@ -662,6 +671,8 @@ msgid ""
 "Arrival altitude at the final task turn point relative to the safety arrival "
 "height."
 msgstr ""
+"Altitude de l'arrivée à la tâche finale turn point par rapport à la hauteur "
+"d'arrivée de sécurité."
 
 #: src/InfoBoxes/Content/Factory.cpp:205
 #, no-c-format
@@ -718,7 +729,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:233
 #, no-c-format
 msgid "Fin LD"
-msgstr ""
+msgstr "fin LD"
 
 #: src/InfoBoxes/Content/Factory.cpp:234
 #, no-c-format
@@ -4240,10 +4251,6 @@ msgstr "Luminosité"
 msgid "Waypoint Info"
 msgstr "Information du waypoint"
 
-#: Data/Dialogs/dlgConfiguration_L.xml:184
-msgid "Draw topographical features (roads, rivers, lakes etc) on the map."
-msgstr ""
-
 #: Data/Dialogs/dlgVario_L.xml:51 Data/Dialogs/dlgVario.xml:50
 msgid "Calibration factor applied to total energy probe to obtain TE vario."
 msgstr ""
@@ -4257,17 +4264,6 @@ msgstr ""
 #: Data/Dialogs/dlgConfigWaypoints.xml:6
 msgid "New"
 msgstr "Nouveau"
-
-#: Data/Dialogs/dlgWindSettings.xml:12
-#: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:4
-msgid ""
-"This allows switching on or off the automatic wind algorithm.  When the "
-"algorithm is switched off, the pilot is responsible for setting the wind "
-"estimate.\n"
-"[Circling] Requires only a GPS source\n"
-"[ZigZag] requires an intelligent vario with airspeed output.\n"
-"[Both] Use ZigZag and circling."
-msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:173
 #: Data/Dialogs/dlgConfiguration.xml:173
@@ -4573,13 +4569,6 @@ msgstr "Saisie texte"
 msgid "Profile"
 msgstr "Profil"
 
-#: Data/Dialogs/dlgConfiguration_L.xml:738
-#: Data/Dialogs/dlgConfiguration.xml:737
-msgid ""
-"Geometry values range 0-7 but in landscape mode only some of them are really "
-"available."
-msgstr ""
-
 #: Data/Dialogs/dlgStatusAircraft.xml:5 Data/Dialogs/dlgStatus.xml:10
 #: Data/Dialogs/dlgWayPointDetails_L.xml:13
 #: Data/Dialogs/dlgWayPointDetails.xml:13
@@ -4831,6 +4820,7 @@ msgstr ""
 msgid "Route ceiling"
 msgstr ""
 
+#: Data/Dialogs/dlgConfiguration_L.xml:184
 #: Data/Dialogs/dlgConfiguration.xml:184
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
 msgstr ""
@@ -5597,6 +5587,13 @@ msgstr "Actualiser"
 msgid "FLARM"
 msgstr "FLARM"
 
+#: Data/Dialogs/dlgConfiguration_L.xml:738
+#: Data/Dialogs/dlgConfiguration.xml:737
+msgid ""
+"A list of possible InfoBox layouts. Do some trials to find the best for your "
+"screen size."
+msgstr ""
+
 #: Data/Dialogs/dlgTaskPointType_L.xml:3 Data/Dialogs/dlgTaskPointType.xml:3
 msgid "Task Point Type"
 msgstr ""
@@ -5903,14 +5900,14 @@ msgstr ""
 msgid "V airbrake"
 msgstr ""
 
+#: Data/Dialogs/dlgConfiguration_L.xml:69 Data/Dialogs/dlgConfiguration.xml:69
+msgid "Circling orientation"
+msgstr ""
+
 #: Data/Dialogs/dlgVario_L.xml:55 Data/Dialogs/dlgVario.xml:54
 msgid ""
 "Proportion of TE probe value used in total energy mixing with pitot/static "
 "total energy."
-msgstr ""
-
-#: Data/Dialogs/dlgConfiguration_L.xml:69 Data/Dialogs/dlgConfiguration.xml:69
-msgid "Circling orientation"
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:332
@@ -6651,7 +6648,8 @@ msgid ""
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:266
-#: Data/Dialogs/dlgConfiguration.xml:265
+#: Data/Dialogs/dlgConfiguration.xml:265 Data/Dialogs/dlgWindSettings.xml:12
+#: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:4
 msgid ""
 "This allows switching on or off the automatic wind algorithm.  When the "
 "algorithm is switched off, the pilot is responsible for setting the wind "
