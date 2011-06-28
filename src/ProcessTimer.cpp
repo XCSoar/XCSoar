@@ -128,7 +128,10 @@ SystemClockTimer()
     SetTimeZoneInformation(&tzi);
 #endif
     sysTimeInitialised =true;
-  }
+  } else if (!basic.Connected)
+    /* set system clock again after a device reconnect; the new device
+       may have a better GPS time */
+    sysTimeInitialised = false;
 #else
   // XXX
 #endif
