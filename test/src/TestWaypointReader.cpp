@@ -20,8 +20,8 @@
 }
 */
 
-#include "WayPoint/WaypointReader.hpp"
-#include "WayPoint/WaypointReaderBase.hpp"
+#include "Waypoint/WaypointReader.hpp"
+#include "Waypoint/WaypointReaderBase.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Units/Units.hpp"

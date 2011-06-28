@@ -97,7 +97,7 @@ include $(topdir)/build/install.mk
 
 ######## compiler flags
 
-INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR) -I$(SRC)/WayPoint
+INCLUDES += -I$(SRC) -I$(ENGINE_SRC_DIR) -I$(SRC)/Waypoint
 
 ####### linker configuration
 
@@ -269,16 +269,16 @@ XCSOAR_SOURCES := \
 	$(SRC)/TeamCodeCalculation.cpp \
 	$(SRC)/ThermalLocator.cpp \
 	$(SRC)/ThermalBase.cpp \
-	$(SRC)/WayPoint/WaypointGlue.cpp \
-	$(SRC)/WayPoint/WaypointReader.cpp \
-	$(SRC)/WayPoint/WaypointReaderBase.cpp \
-	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
-	$(SRC)/WayPoint/WaypointReaderFS.cpp \
-	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/WayPoint/WaypointReaderZander.cpp \
-	$(SRC)/WayPoint/WaypointRenderer.cpp \
-	$(SRC)/WayPoint/WaypointWriter.cpp \
+	$(SRC)/Waypoint/WaypointGlue.cpp \
+	$(SRC)/Waypoint/WaypointReader.cpp \
+	$(SRC)/Waypoint/WaypointReaderBase.cpp \
+	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
+	$(SRC)/Waypoint/WaypointReaderFS.cpp \
+	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Waypoint/WaypointReaderZander.cpp \
+	$(SRC)/Waypoint/WaypointRenderer.cpp \
+	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Wind/WindAnalyser.cpp \
 	$(SRC)/Wind/WindMeasurementList.cpp \
 	$(SRC)/Wind/WindStore.cpp \

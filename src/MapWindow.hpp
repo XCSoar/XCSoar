@@ -35,7 +35,7 @@ Copyright_License {
 #include "MapWindowBlackboard.hpp"
 #include "NMEA/Derived.hpp"
 #include "BackgroundDrawHelper.hpp"
-#include "WayPoint/WaypointRenderer.hpp"
+#include "Waypoint/WaypointRenderer.hpp"
 #include "Compiler.h"
 #include <vector>
 

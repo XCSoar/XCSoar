@@ -46,7 +46,7 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "Operation.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "WayPoint/WaypointGlue.hpp"
+#include "Waypoint/WaypointGlue.hpp"
 #include "GlideComputer.hpp"
 #include "Language/LanguageGlue.hpp"
 

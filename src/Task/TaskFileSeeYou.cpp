@@ -25,7 +25,7 @@
 
 #include "IO/FileLineReader.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "WayPoint/WaypointReaderSeeYou.hpp"
+#include "Waypoint/WaypointReaderSeeYou.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"

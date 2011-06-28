@@ -36,7 +36,7 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "IO/TextWriter.hpp"
-#include "WayPoint/WaypointWriter.hpp"
+#include "Waypoint/WaypointWriter.hpp"
 #include "Operation.hpp"
 
 #include <windef.h> /* for MAX_PATH */

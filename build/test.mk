@@ -507,14 +507,14 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Geo/UTM.cpp \
-	$(SRC)/WayPoint/WaypointReaderBase.cpp \
-	$(SRC)/WayPoint/WaypointReader.cpp \
-	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/WayPoint/WaypointReaderZander.cpp \
-	$(SRC)/WayPoint/WaypointReaderFS.cpp \
-	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
-	$(SRC)/WayPoint/WaypointWriter.cpp \
+	$(SRC)/Waypoint/WaypointReaderBase.cpp \
+	$(SRC)/Waypoint/WaypointReader.cpp \
+	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Waypoint/WaypointReaderZander.cpp \
+	$(SRC)/Waypoint/WaypointReaderFS.cpp \
+	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
+	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
@@ -929,14 +929,14 @@ $(TARGET_BIN_DIR)/RunInputParser$(TARGET_EXEEXT): $(RUN_INPUT_PARSER_OBJS) $(RUN
 
 RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/Geo/UTM.cpp \
-	$(SRC)/WayPoint/WaypointReaderBase.cpp \
-	$(SRC)/WayPoint/WaypointReader.cpp \
-	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/WayPoint/WaypointReaderFS.cpp \
-	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
-	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/WayPoint/WaypointReaderZander.cpp \
-	$(SRC)/WayPoint/WaypointWriter.cpp \
+	$(SRC)/Waypoint/WaypointReaderBase.cpp \
+	$(SRC)/Waypoint/WaypointReader.cpp \
+	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/Waypoint/WaypointReaderFS.cpp \
+	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
+	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Waypoint/WaypointReaderZander.cpp \
+	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
@@ -1316,16 +1316,16 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/Earth.cpp \
 	$(SRC)/Geo/UTM.cpp \
-	$(SRC)/WayPoint/WaypointGlue.cpp \
-	$(SRC)/WayPoint/WaypointReader.cpp \
-	$(SRC)/WayPoint/WaypointReaderBase.cpp \
-	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
-	$(SRC)/WayPoint/WaypointReaderFS.cpp \
-	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/WayPoint/WaypointReaderZander.cpp \
-	$(SRC)/WayPoint/WaypointRenderer.cpp \
-	$(SRC)/WayPoint/WaypointWriter.cpp \
+	$(SRC)/Waypoint/WaypointGlue.cpp \
+	$(SRC)/Waypoint/WaypointReader.cpp \
+	$(SRC)/Waypoint/WaypointReaderBase.cpp \
+	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
+	$(SRC)/Waypoint/WaypointReaderFS.cpp \
+	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Waypoint/WaypointReaderZander.cpp \
+	$(SRC)/Waypoint/WaypointRenderer.cpp \
+	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Operation.cpp \
@@ -1685,14 +1685,14 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Geo/UTM.cpp \
-	$(SRC)/WayPoint/WaypointGlue.cpp \
-	$(SRC)/WayPoint/WaypointReaderBase.cpp \
-	$(SRC)/WayPoint/WaypointReader.cpp \
-	$(SRC)/WayPoint/WaypointReaderOzi.cpp \
-	$(SRC)/WayPoint/WaypointReaderFS.cpp \
-	$(SRC)/WayPoint/WaypointReaderWinPilot.cpp \
-	$(SRC)/WayPoint/WaypointReaderSeeYou.cpp \
-	$(SRC)/WayPoint/WaypointReaderZander.cpp \
+	$(SRC)/Waypoint/WaypointGlue.cpp \
+	$(SRC)/Waypoint/WaypointReaderBase.cpp \
+	$(SRC)/Waypoint/WaypointReader.cpp \
+	$(SRC)/Waypoint/WaypointReaderOzi.cpp \
+	$(SRC)/Waypoint/WaypointReaderFS.cpp \
+	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
+	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
+	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/Operation.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WayPoint/WaypointWriter.hpp"
+#include "Waypoint/WaypointWriter.hpp"
 
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "IO/TextWriter.hpp"
