@@ -227,7 +227,7 @@ DeviceDescriptor::Declare(const struct Declaration *declaration)
 
   VerboseOperationEnvironment env;
   bool result = device != NULL && device->Declare(declaration, env);
-  ProgressGlue::Close();
+  env.Hide();
 
   if (parser.isFlarm)
     result = FlarmDeclare(Com, declaration) || result;

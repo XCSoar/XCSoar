@@ -41,3 +41,9 @@ VerboseOperationEnvironment::SetProgressPosition(unsigned position)
 {
   ProgressGlue::SetValue(position);
 }
+
+void
+VerboseOperationEnvironment::Hide()
+{
+  ProgressGlue::Close();
+}

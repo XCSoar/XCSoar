@@ -79,6 +79,7 @@ public:
   virtual void SetText(const TCHAR *text);
   virtual void SetProgressRange(unsigned range);
   virtual void SetProgressPosition(unsigned position);
+  void Hide();
 };
 
 #endif
