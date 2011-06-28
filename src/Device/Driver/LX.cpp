@@ -28,9 +28,11 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
+#include "NMEA/Checksum.hpp"
 #include "Operation.hpp"
 #include "Compiler.h"
 
+#include <cstdio>
 #include <stdlib.h>
 
 static const unsigned int NUMTPS = 12;
@@ -110,6 +112,7 @@ protected:
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool PutMacCready(fixed MacCready);
   virtual bool Declare(const Declaration *declaration,
                        OperationEnvironment &env);
 };
@@ -246,6 +249,18 @@ LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // Bugs
   if (line.read_checked(value))
     GPS_INFO->settings.ProvideBugs((fixed(100) - value) / 100, GPS_INFO->Time);
+
+  return true;
+}
+
+bool
+LXDevice::PutMacCready(fixed MacCready)
+{
+  char szTmp[32];
+  sprintf(szTmp, "$PFLX2,%1.1f,,,,,,", (double)MacCready);
+  AppendNMEAChecksum(szTmp);
+  strcat(szTmp, "\r\n");
+  port->Write(szTmp);
 
   return true;
 }
