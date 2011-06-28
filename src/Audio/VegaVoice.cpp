@@ -404,9 +404,9 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
   case VV_NEWWAYPOINT:
     if (!settings.EnableVoiceNewWaypoint) return false;
 #ifdef OLD_TASK
-    static unsigned LastWayPoint = 1000;
-    if (task.getActiveIndex() != LastWayPoint) {
-      LastWayPoint = task.getActiveIndex();
+    static unsigned LastWaypoint = 1000;
+    if (task.getActiveIndex() != LastWaypoint) {
+      LastWaypoint = task.getActiveIndex();
       // Reports that a new waypoint is active
       // e.g.:
       // Now: "INFO"
