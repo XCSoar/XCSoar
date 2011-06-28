@@ -152,7 +152,7 @@ WaypointDisplayConfigPanel::OnRenderingTypeData(DataField *Sender,
 }
 
 bool
-WaypointDisplayConfigPanel::Save(bool& requirerestart)
+WaypointDisplayConfigPanel::Save()
 {
   bool changed = false;
   WndProperty *wp;
@@ -165,12 +165,9 @@ WaypointDisplayConfigPanel::Save(bool& requirerestart)
                                   szProfileWaypointArrivalHeightDisplay,
                                   XCSoarInterface::SetSettingsMap().WaypointArrivalHeightDisplay);
 
-  if (SaveFormPropertyEnum(*wf, _T("prpWaypointLabelStyle"),
-                           szProfileWaypointLabelStyle,
-                           XCSoarInterface::SetSettingsMap().LandableRenderMode)) {
-    requirerestart = true;
-    changed = true;
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelStyle"),
+                                  szProfileWaypointLabelStyle,
+                                  XCSoarInterface::SetSettingsMap().LandableRenderMode);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelSelection"),
                                   szProfileWaypointLabelSelection,

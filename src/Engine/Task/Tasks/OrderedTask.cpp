@@ -1104,6 +1104,7 @@ OrderedTask::check_duplicate_waypoints(Waypoints& waypoints,
   for (unsigned i = 0; i < points.size(); ++i) {
     const Waypoint &wp =
       waypoints.check_exists_or_append(points[i]->get_waypoint());
+
     const OrderedTaskPoint *new_tp = points[i]->clone(task_behaviour,
                                                       m_ordered_behaviour,
                                                       &wp);

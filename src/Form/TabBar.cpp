@@ -196,10 +196,12 @@ const PixelRect
 
   const unsigned margin = 1;
 
+  /*
   bool partialTab = false;
   if ( ((Layout::landscape ^ flipOrientation) && theTabDisplay->GetTabHeight() < get_height()) ||
       ((!Layout::landscape ^ flipOrientation) && theTabDisplay->GetTabWidth() < get_width()) )
     partialTab = true;
+  */
 
   const unsigned finalmargin = 1; //partialTab ? TabLineHeight - 1 * margin : margin;
   // Todo make the final margin display on either beginning or end of tab bar

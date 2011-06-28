@@ -494,6 +494,13 @@ WndForm::ShowModal(Window *mouse_allowed)
     }
 #endif
 
+    /* map VK_ESCAPE to mrOK on Altair, because the Escape key is expected to 
+       be the one that saves and closes a dialog */
+    if (is_altair() && is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
+      mModalResult = mrOK;
+      break;
+    }
+
     loop.dispatch(event);
   } // End Modal Loop
 

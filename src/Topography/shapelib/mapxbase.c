@@ -837,6 +837,7 @@ int msDBFGetItemIndex(DBFHandle dbffile, char *name)
   /* does name exist as a field? */
   for(i=0;i<msDBFGetFieldCount(dbffile);i++) {
     dbfField = msDBFGetFieldInfo(dbffile,i,fName,&fWidth,&fnDecimals);
+    (void)dbfField;
     if(m_strcasecmp(name,fName) == 0) /* found it */
       return(i);
   }
