@@ -42,8 +42,6 @@ class OrderedTaskPoint;
 class InfoBoxPanelConfig;
 class OrderedTask;
 
-void dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close = false);
-bool dlgAirspaceWarningVisible();
 void dlgAirspaceDetails(const AbstractAirspace& the_airspace);
 int dlgAirspaceColoursShowModal();
 int dlgAirspacePatternsShowModal();

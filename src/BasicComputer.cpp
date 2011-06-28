@@ -92,6 +92,20 @@ ComputeNavAltitude(NMEA_INFO &basic,
 }
 
 static void
+ComputeTrack(NMEA_INFO &basic, const NMEA_INFO &last)
+{
+  if (basic.track_available || !basic.LocationAvailable ||
+      !last.LocationAvailable)
+    return;
+
+  fixed distance;
+  Angle bearing;
+  last.Location.distance_bearing(basic.Location, distance, bearing);
+  if (distance >= fixed_one)
+    basic.track = bearing;
+}
+
+static void
 ComputeGroundSpeed(NMEA_INFO &basic, const NMEA_INFO &last)
 {
   if (basic.GroundSpeedAvailable)
@@ -162,8 +176,10 @@ BasicComputer::Compute(NMEA_INFO &data, const NMEA_INFO &last,
                        const DERIVED_INFO &calculated,
                        const SETTINGS_COMPUTER &settings_computer)
 {
-  ComputeGroundSpeed(data, last);
+  if (data.Time <= last.Time)
+    return;
 
-  if (data.Time > last.Time)
-    ComputeDynamics(data, calculated);
+  ComputeTrack(data, last);
+  ComputeGroundSpeed(data, last);
+  ComputeDynamics(data, calculated);
 }

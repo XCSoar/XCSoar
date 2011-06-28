@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_SCOPE_HPP
 #define XCSOAR_SCREEN_OPENGL_SCOPE_HPP
 
-#ifdef ANDROID
+#include "Screen/OpenGL/Features.hpp"
+
+#ifdef HAVE_GLES
 #include <GLES/gl.h>
 #else
 #include <SDL_opengl.h>
@@ -63,7 +65,7 @@ public:
     ::glBlendFunc(sfactor, dfactor);
   }
 
-#ifndef ANDROID
+#ifndef HAVE_GLES
   GLBlend(GLclampf alpha)
     :GLEnable(GL_BLEND) {
     ::glBlendFunc(GL_CONSTANT_ALPHA, GL_ONE_MINUS_CONSTANT_ALPHA);

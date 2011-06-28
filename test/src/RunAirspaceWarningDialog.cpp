@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Interface.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/AirspaceWarningDialog.hpp"
 #include "UtilsSystem.hpp"
 #include "Profile/Profile.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"

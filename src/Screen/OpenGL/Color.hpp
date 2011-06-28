@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_COLOR_HPP
 #define XCSOAR_SCREEN_OPENGL_COLOR_HPP
 
-#ifdef ANDROID
+#include "Screen/OpenGL/Features.hpp"
+
+#ifdef HAVE_GLES
 #include <GLES/gl.h>
 #else
 #include <SDL/SDL_opengl.h>
@@ -40,7 +42,7 @@ Copyright_License {
  * configuration.
  */
 struct Color {
-#ifdef ANDROID
+#ifdef HAVE_GLES
   GLfixed r, g, b, a;
 
   Color(GLubyte _r, GLubyte _g, GLubyte _b)
@@ -64,7 +66,7 @@ struct Color {
   uint8_t
   red() const
   {
-#ifdef ANDROID
+#ifdef HAVE_GLES
     return (uint8_t)(r >> 8u);
 #else
     return r;
@@ -78,7 +80,7 @@ struct Color {
   uint8_t
   green() const
   {
-#ifdef ANDROID
+#ifdef HAVE_GLES
     return (uint8_t)(g >> 8u);
 #else
     return g;
@@ -92,14 +94,14 @@ struct Color {
   uint8_t
   blue() const
   {
-#ifdef ANDROID
+#ifdef HAVE_GLES
     return (uint8_t)(b >> 8u);
 #else
     return b;
 #endif
   }
 
-#ifndef ANDROID
+#ifndef HAVE_GLES
   /**
    * Convert this object to a SDL_Color.
    *
@@ -127,7 +129,7 @@ struct Color {
   Color
   highlight() const
   {
-#ifdef ANDROID
+#ifdef HAVE_GLES
     return Color((r + 3) / 4., (g + 3) / 4., (b + 3) / 4.);
 #else
     return Color((r + 0xff * 3) / 4, (g + 0xff * 3) / 4, (b + 0xff * 3) / 4);
@@ -138,7 +140,7 @@ struct Color {
    * Configures this color in the OpenGL context.
    */
   void set() const {
-#ifdef ANDROID
+#ifdef HAVE_GLES
     /* on Android, glColor4ub() is not implemented, and we're forced
        to use floating point math for something as trivial as
        configuring a RGB color value */

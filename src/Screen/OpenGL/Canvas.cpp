@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/VertexArray.hpp"
+#include "Screen/OpenGL/Features.hpp"
 #include "Screen/Util.hpp"
 
 #include <assert.h>
@@ -40,7 +41,7 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
 {
   color.set();
 
-#ifdef ANDROID
+#ifdef HAVE_GLES
   const RasterPoint vertices[] = {
     { left, top },
     { right, top },
@@ -306,7 +307,7 @@ Canvas::draw_focus(PixelRect rc)
 void
 Canvas::text(int x, int y, const TCHAR *text)
 {
-#ifdef ANDROID
+#ifdef HAVE_GLES
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
 #endif
@@ -344,7 +345,7 @@ Canvas::text(int x, int y, const TCHAR *text)
 void
 Canvas::text_transparent(int x, int y, const TCHAR *text)
 {
-#ifdef ANDROID
+#ifdef HAVE_GLES
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
 #endif
@@ -375,7 +376,7 @@ Canvas::text_transparent(int x, int y, const TCHAR *text)
 void
 Canvas::text_clipped(int x, int y, unsigned width, const TCHAR *text)
 {
-#ifdef ANDROID
+#ifdef HAVE_GLES
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
 #endif
@@ -414,7 +415,7 @@ Canvas::stretch(int dest_x, int dest_y,
                 int src_x, int src_y,
                 unsigned src_width, unsigned src_height)
 {
-#ifdef ANDROID
+#ifdef HAVE_GLES
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
 #endif
@@ -472,7 +473,7 @@ Canvas::stretch(int dest_x, int dest_y,
                 const Bitmap &src, int src_x, int src_y,
                 unsigned src_width, unsigned src_height)
 {
-#ifdef ANDROID
+#ifdef HAVE_GLES
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
 #endif
@@ -492,7 +493,7 @@ Canvas::stretch(int dest_x, int dest_y,
                 unsigned dest_width, unsigned dest_height,
                 const Bitmap &src)
 {
-#ifdef ANDROID
+#ifdef HAVE_GLES
   assert(x_offset == OpenGL::translate_x);
   assert(y_offset == OpenGL::translate_y);
 #endif

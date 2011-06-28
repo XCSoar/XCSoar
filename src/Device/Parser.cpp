@@ -280,6 +280,16 @@ NMEAParser::TimeModify(fixed FixTime, BrokenDateTime &date_time,
   return FixTime;
 }
 
+fixed
+NMEAParser::TimeAdvanceTolerance(fixed time) const
+{
+  /* tolerance is two seconds: fast-forward if the new time stamp is
+     less than two seconds behind the previous one */
+  return time < LastTime && time > LastTime - fixed_two
+    ? LastTime
+    : time;
+}
+
 /**
  * Checks whether time has advanced since last call and
  * updates the GPS_info if necessary
@@ -368,6 +378,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime,
                               GPS_INFO->DateAvailable);
+  ThisTime = TimeAdvanceTolerance(ThisTime);
 
   gpsValid = !NAVWarn(line.read_first_char());
 
@@ -495,6 +506,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     GPS_INFO->DateAvailable = true;
 
   ThisTime = TimeModify(ThisTime, GPS_INFO->DateTime, GPS_INFO->DateAvailable);
+  ThisTime = TimeAdvanceTolerance(ThisTime);
 
   if (!TimeHasAdvanced(ThisTime, GPS_INFO))
     return true;
@@ -583,6 +595,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime,
                               GPS_INFO->DateAvailable);
+  ThisTime = TimeAdvanceTolerance(ThisTime);
 
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);

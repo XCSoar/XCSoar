@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/SDL/TopCanvas.hpp"
+#include "Screen/Features.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -101,7 +102,7 @@ TopCanvas::set()
   glViewport(0, 0, get_width(), get_height());
   glMatrixMode(GL_PROJECTION);
   glLoadIdentity();
-#ifdef ANDROID
+#ifdef HAVE_GLES
   glOrthox(0, get_width()<<16, get_height()<<16, 0, -(1<<16), 1<<16);
 #else
   glOrtho(0, get_width(), get_height(), 0, -1, 1);

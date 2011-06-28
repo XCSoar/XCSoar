@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_FEATURES_HPP
 #define XCSOAR_SCREEN_FEATURES_HPP
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Features.hpp"
+#endif
+
 #ifdef ENABLE_SDL
 
 #else

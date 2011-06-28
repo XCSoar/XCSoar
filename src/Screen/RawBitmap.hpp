@@ -17,6 +17,7 @@
 #include "Screen/OpenGL/Surface.hpp"
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/Features.hpp"
 #endif
 
 /**
@@ -27,7 +28,7 @@ struct BGRColor
 {
   BGRColor() {}
 
-#ifdef ANDROID
+#ifdef HAVE_GLES
   /**
    * RGB color value encoded with 5/6/5 bits per channel.
    */
@@ -193,7 +194,7 @@ public:
                   unsigned dest_width, unsigned dest_height) const {
 #ifdef ENABLE_OPENGL
     texture->bind();
-#ifdef ANDROID
+#ifdef HAVE_GLES
     /* 16 bit 5/6/5 on Android */
 
     glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,

@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Units/Units.hpp"
 #include "Components.hpp"

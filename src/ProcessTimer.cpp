@@ -27,7 +27,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "Device/device.hpp"
 #include "Device/All.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Screen/Blank.hpp"
 #include "UtilsSystem.hpp"
 #include "DeviceBlackboard.hpp"
@@ -37,7 +37,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Simulator.hpp"
 #include "Replay/Replay.hpp"
-#include "Audio/Sound.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "GPSClock.hpp"
@@ -79,11 +78,7 @@ ProcessTimer::AirspaceProcessTimer()
 {
   if (airspaceWarningEvent.Test()) {
     airspaceWarningEvent.Reset();
-    ResetDisplayTimeOut();
-#ifndef GNAV
-    PlayResource(_T("IDR_WAV_BEEPBWEEP"));
-#endif
-    dlgAirspaceWarningsShowModal(XCSoarInterface::main_window, true);
+    CommonInterface::main_window.SendAirspaceWarning();
   }
 }
 
@@ -94,9 +89,6 @@ ProcessTimer::AirspaceProcessTimer()
 static void
 SystemClockTimer()
 {
-  if (is_simulator())
-    return;
-
 #ifdef WIN32
   const NMEA_INFO &basic = CommonInterface::Basic();
 
@@ -106,6 +98,10 @@ SystemClockTimer()
   static bool sysTimeInitialised = false;
 
   if (basic.Connected && CommonInterface::SettingsMap().SetSystemTimeFromGPS
+      && basic.gps.real
+      /* assume that we only have a valid date and time when we have a
+         full GPS fix */
+      && basic.LocationAvailable
       && !sysTimeInitialised) {
     SYSTEMTIME sysTime;
     ::GetSystemTime(&sysTime);
@@ -132,7 +128,10 @@ SystemClockTimer()
     SetTimeZoneInformation(&tzi);
 #endif
     sysTimeInitialised =true;
-  }
+  } else if (!basic.Connected)
+    /* set system clock again after a device reconnect; the new device
+       may have a better GPS time */
+    sysTimeInitialised = false;
 #else
   // XXX
 #endif
@@ -289,9 +288,6 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
       wait_lock = true;
       itimeout = 0;
       InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
-#ifndef DISABLEAUDIO
-      MessageBeep(MB_ICONEXCLAMATION);
-#endif
       TriggerGPSUpdate(); // ensure screen gets updated
     }
   } else if (connected_now) {
@@ -311,9 +307,6 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
       // gps is waiting for connection first time
       wait_connect = true;
       InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
-#ifndef DISABLEAUDIO
-      MessageBeep(MB_ICONEXCLAMATION);
-#endif
     } else if (itimeout % 60 == 0) {
       itimeout = 0;
       // we've been waiting for connection a long time

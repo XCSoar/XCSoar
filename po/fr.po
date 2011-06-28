@@ -8,14 +8,14 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 01:31+0200\n"
-"PO-Revision-Date: 2011-06-27 13:48+0000\n"
+"PO-Revision-Date: 2011-06-28 15:07+0000\n"
 "Last-Translator: Linux-ubuntu david <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-28 07:48+0000\n"
+"X-Launchpad-Export-Date: 2011-06-28 19:52+0000\n"
 "X-Generator: Launchpad (build 13299)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
@@ -473,7 +473,7 @@ msgstr "L/D croisière"
 #: src/InfoBoxes/Content/Factory.cpp:107
 #, no-c-format
 msgid "L/D Cru"
-msgstr ""
+msgstr "L/d Cru"
 
 #: src/InfoBoxes/Content/Factory.cpp:108
 #, no-c-format
@@ -692,7 +692,7 @@ msgstr "Altitude additionnelle nécéssaire pour finir le circuit"
 #: src/InfoBoxes/Content/Factory.cpp:214
 #, no-c-format
 msgid "Speed task average"
-msgstr ""
+msgstr "Moyenne de tâche de vitesse"
 
 #: src/InfoBoxes/Content/Factory.cpp:215
 #, no-c-format
@@ -705,6 +705,8 @@ msgid ""
 "Average cross country speed while on current task, not compensated for "
 "altitude."
 msgstr ""
+"Moyenne des croix pays vitesse sur la tâche en cours, ne pas indemnisé pour "
+"altitude."
 
 #: src/InfoBoxes/Content/Factory.cpp:223
 #, no-c-format

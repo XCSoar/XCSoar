@@ -202,7 +202,6 @@ endif
 
 ifeq ($(TARGET),ALTAIR)
   TARGET_CPPFLAGS += -DGNAV
-  TARGET_CPPFLAGS += -DDISABLEAUDIO
 endif
 
 ifeq ($(HAVE_POSIX),y)
@@ -223,10 +222,6 @@ endif
 
 ifeq ($(TARGET),WINE)
   TARGET_INCLUDES += -I$(SRC)/wine
-endif
-
-ifeq ($(HAVE_WIN32),n)
-  TARGET_CPPFLAGS += -DDISABLEAUDIO
 endif
 
 ifeq ($(TARGET),ANDROID)

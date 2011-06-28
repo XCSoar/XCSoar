@@ -33,13 +33,14 @@ Copyright_License {
 #include "Screen/OpenGL/Color.hpp"
 #include "Screen/OpenGL/Point.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
+#include "Screen/OpenGL/Features.hpp"
 #include "Util/AllocatedArray.hpp"
 #include "Compiler.h"
 
 #include <assert.h>
 #include <tchar.h>
 
-#ifdef ANDROID
+#ifdef HAVE_GLES
 #include <GLES/gl.h>
 #else
 #include <SDL/SDL_opengl.h>

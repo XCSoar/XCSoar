@@ -30,6 +30,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/LabelBlock.hpp"
+#include "Screen/Features.hpp"
 #include "Math/Matrix2D.hpp"
 #include "shapelib/map.h"
 #include "Util/AllocatedArray.hpp"
@@ -71,13 +72,13 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   const unsigned level = file.thinning_level(map_scale);
   const unsigned min_distance = file.min_point_distance(level);
 
-#ifndef ANDROID
+#ifndef HAVE_GLES
   float opengl_matrix[16];
   glGetFloatv(GL_MODELVIEW_MATRIX, opengl_matrix);
 #endif
 
   glPushMatrix();
-#ifdef ANDROID
+#ifdef HAVE_GLES
 #ifdef FIXED_MATH
   GLfixed angle = projection.GetScreenAngle().value_degrees().as_glfixed();
   GLfixed scale = projection.GetScale().as_glfixed_scale();
@@ -115,7 +116,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     const ShapePoint translation =
       cshape->shape_translation(projection.GetGeoLocation());
     glPushMatrix();
-#ifdef ANDROID
+#ifdef HAVE_GLES
     glTranslatex(translation.x, translation.y, 0);
 #else
     glTranslatef(translation.x, translation.y, 0.);
@@ -136,12 +137,12 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       {
         RasterPoint sc;
         if (projection.GeoToScreenIfVisible(cshape->get_center(), sc)) {
-#ifndef ANDROID
+#ifndef HAVE_GLES
           glPushMatrix();
           glLoadMatrixf(opengl_matrix);
 #endif
           icon.draw(canvas, sc.x, sc.y);
-#ifndef ANDROID
+#ifndef HAVE_GLES
           glPopMatrix();
 #endif
         }
@@ -161,7 +162,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     case MS_SHAPE_LINE:
       {
 #ifdef ENABLE_OPENGL
-#ifdef ANDROID
+#ifdef HAVE_GLES
         glVertexPointer(2, GL_FIXED, 0, &points[0].x);
 #else
         glVertexPointer(2, GL_INT, 0, &points[0].x);
@@ -204,7 +205,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
         const GLushort *triangles = cshape->get_indices(level, min_distance,
                                                         index_count);
 
-#ifdef ANDROID
+#ifdef HAVE_GLES
         glVertexPointer(2, GL_FIXED, 0, &points[0].x);
 #else
         glVertexPointer(2, GL_INT, 0, &points[0].x);

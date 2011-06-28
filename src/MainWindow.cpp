@@ -30,6 +30,9 @@ Copyright_License {
 #include "ButtonLabel.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Blank.hpp"
+#include "Dialogs/AirspaceWarningDialog.hpp"
+#include "Audio/Sound.hpp"
 #include "Components.hpp"
 #include "ProcessTimer.hpp"
 #include "LogFile.hpp"
@@ -328,6 +331,31 @@ MainWindow::on_timer(timer_t id)
                  CommonInterface::Calculated());
   }
   return true;
+}
+
+bool
+MainWindow::on_user(unsigned id)
+{
+  switch ((enum cmd)id) {
+  case CMD_AIRSPACE_WARNING:
+    if (!airspace_warning_pending)
+      return true;
+
+    airspace_warning_pending = false;
+    if (dlgAirspaceWarningVisible())
+      /* already visible */
+      return true;
+
+    /* un-blank the display, play a sound and show the dialog */
+    ResetDisplayTimeOut();
+#ifndef GNAV
+    PlayResource(_T("IDR_WAV_BEEPBWEEP"));
+#endif
+    dlgAirspaceWarningsShowModal(*this, true);
+    return true;
+  }
+
+  return false;
 }
 
 bool MainWindow::on_create(void)

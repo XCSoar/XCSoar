@@ -24,11 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
 #define XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
 
+#include "Screen/OpenGL/Features.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>
 
-#ifdef ANDROID
+#ifdef HAVE_GLES
 #include <GLES/gl.h>
 #else
 #include <SDL.h>
@@ -46,6 +47,14 @@ class GLTexture {
 protected:
   GLuint id;
   unsigned width, height;
+
+#ifndef HAVE_GLES
+  /**
+   * The real dimensions of the texture.  This may differ when
+   * ARB_texture_non_power_of_two is not available.
+   */
+  GLsizei allocated_width, allocated_height;
+#endif
 
 public:
 #ifdef ANDROID
@@ -98,6 +107,9 @@ protected:
   }
 
   static inline void configure(bool mag_linear=false) {
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+    glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+
     if (is_embedded()) {
       glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_NEAREST);
     } else {

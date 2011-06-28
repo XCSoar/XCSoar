@@ -38,6 +38,14 @@ class StatusMessageList;
  * The XCSoar main window.
  */
 class MainWindow : public SingleWindow {
+  enum cmd {
+    /**
+     * Check the airspace_warning_pending flag and show the airspace
+     * warning dialog.
+     */
+    CMD_AIRSPACE_WARNING,
+  };
+
 public:
   GlueMapWindow map;
   GlueGaugeVario *vario;
@@ -58,10 +66,13 @@ private:
    */
   bool CustomView;
 
+  bool airspace_warning_pending;
+
 public:
   MainWindow(const StatusMessageList &status_messages)
     :vario(NULL), flarm(NULL), ta(NULL), popup(status_messages, *this),
-     FullScreen(false), CustomView(false) {}
+     FullScreen(false), CustomView(false),
+     airspace_warning_pending(false) {}
   virtual ~MainWindow();
 
   static bool find(const TCHAR *text) {
@@ -115,11 +126,22 @@ public:
   void SetCustomView(PixelRect rc);
   void LeaveCustomView();
 
+  /**
+   * A new airspace warning was found.  This method sends the
+   * CMD_AIRSPACE_WARNING command to this window, which displays the
+   * airspace warning dialog.
+   */
+  void SendAirspaceWarning() {
+    airspace_warning_pending = true;
+    send_user(CMD_AIRSPACE_WARNING);
+  }
+
 protected:
   virtual bool on_resize(unsigned width, unsigned height);
   bool on_activate();
   bool on_setfocus();
   bool on_timer(timer_t id);
+  virtual bool on_user(unsigned id);
   bool on_create();
   bool on_destroy();
   bool on_close();

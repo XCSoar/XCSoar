@@ -21,41 +21,15 @@ Copyright_License {
 }
 */
 
-#include "Audio/Sound.hpp"
-#include "ResourceLoader.hpp"
+#ifndef XCSOAR_AIRSPACE_WARNING_DIALOG_HPP
+#define XCSOAR_AIRSPACE_WARNING_DIALOG_HPP
 
-#ifdef ANDROID
-#include "Android/Main.hpp"
-#include "Android/SoundUtil.hpp"
-#include "Android/Context.hpp"
+class SingleWindow;
+
+void
+dlgAirspaceWarningsShowModal(SingleWindow &parent, bool auto_close=false);
+
+bool
+dlgAirspaceWarningVisible();
+
 #endif
-
-#if defined(WIN32) && !defined(GNAV)
-#include <windows.h>
-#include <mmsystem.h>
-#endif
-
-bool PlayResource (const TCHAR* lpName)
-{
-#ifdef ANDROID
-  return sound_util != NULL &&
-    sound_util->play(Java::GetEnv(), context->get(), lpName);
-#elif defined(WIN32) && !defined(GNAV)
-  BOOL bRtn;
-
-  // TODO code: Modify to allow use of WAV Files and/or Embedded files
-
-  if (_tcsstr(lpName, TEXT(".wav"))) {
-    bRtn = sndPlaySound (lpName, SND_ASYNC | SND_NODEFAULT );
-
-  } else {
-    ResourceLoader::Data data = ResourceLoader::Load(lpName, _T("WAVE"));
-    return data.first != NULL &&
-      sndPlaySound((LPCTSTR)data.first,
-                   SND_MEMORY | SND_ASYNC | SND_NODEFAULT);
-  }
-  return bRtn;
-#else
-  return false;
-#endif
-}

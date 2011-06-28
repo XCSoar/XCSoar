@@ -25,8 +25,9 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_POINT_HPP
 
 #include "Screen/OpenGL/Types.hpp"
+#include "Screen/OpenGL/Features.hpp"
 
-#ifdef ANDROID
+#ifdef HAVE_GLES
 #define RASTER_POINT_SIZE 4
 #else
 #define RASTER_POINT_SIZE 8
