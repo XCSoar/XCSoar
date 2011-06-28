@@ -145,8 +145,6 @@ public:
  */
   void tp_CAccept(TaskPointConstVisitor& visitor,
                   const bool reverse = false) const;
-  void tp_Accept(gcc_unused TaskPointVisitor &visitor,
-                 gcc_unused const bool reverse = false) {}
 
 };
 

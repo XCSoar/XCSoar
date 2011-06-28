@@ -498,14 +498,5 @@ public:
    * @param reverse Visit task points in reverse order
    */
   virtual void sp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const = 0;
-
-/** 
- * Accept a task point visitor; makes the visitor visit
- * all TaskPoint in the task
- * 
- * @param visitor Visitor to accept
- * @param reverse Perform scan in reverse sequence
- */
-  virtual void tp_Accept(TaskPointVisitor& visitor, const bool reverse=false) = 0;
 };
 #endif //ABSTRACTTASK_H
