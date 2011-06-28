@@ -36,6 +36,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "WayPointGlue.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Airspace/AirspaceParser.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceGlue.hpp"

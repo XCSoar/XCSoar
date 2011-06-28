@@ -27,7 +27,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "Device/device.hpp"
 #include "Device/All.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Screen/Blank.hpp"
 #include "UtilsSystem.hpp"
 #include "DeviceBlackboard.hpp"

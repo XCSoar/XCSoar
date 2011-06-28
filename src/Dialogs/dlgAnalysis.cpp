@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/AirspaceWarningDialog.hpp"
 #include "CrossSection/CrossSectionWindow.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "SettingsComputer.hpp"

@@ -57,6 +57,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Message.hpp"
 #include "Marks.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
