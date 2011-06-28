@@ -107,7 +107,7 @@ enum {
   NAMEFILTERLEN = 10,
 };
 
-struct WayPointFilterData
+struct WaypointFilterData
 {
   TCHAR name[NAMEFILTERLEN + 1];
 
@@ -121,7 +121,7 @@ struct WayPointFilterData
   }
 };
 
-static WayPointFilterData filter_data;
+static WaypointFilterData filter_data;
 
 /**
  * Structure to hold Waypoint sorting information
@@ -449,7 +449,7 @@ private:
 
 class FilterWaypointVisitor:
   public WaypointVisitor,
-  private WayPointFilterData
+  private WaypointFilterData
 {
   const GeoPoint location;
   const Angle heading;
@@ -521,10 +521,10 @@ private:
   }
 
 public:
-  FilterWaypointVisitor(const WayPointFilterData &filter,
+  FilterWaypointVisitor(const WaypointFilterData &filter,
                         GeoPoint _location, Angle _heading,
                         WaypointSelectInfoVector &_vector)
-    :WayPointFilterData(filter), location(_location), heading(_heading),
+    :WaypointFilterData(filter), location(_location), heading(_heading),
      vector(_vector) {}
 
   void Visit(const Waypoint &wp) {
@@ -544,7 +544,7 @@ WaypointDistanceCompare(const struct WayPointSelectInfo &a,
 
 static void
 FillList(WaypointSelectInfoVector &dest, const Waypoints &src,
-         GeoPoint location, Angle heading, const WayPointFilterData &filter)
+         GeoPoint location, Angle heading, const WaypointFilterData &filter)
 {
   dest.clear();
 
