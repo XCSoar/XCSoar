@@ -205,7 +205,7 @@ EWMicroRecorderPrintf(Port *port, const TCHAR *fmt, ...)
 }
 
 static void
-EWMicroRecorderWriteWayPoint(Port *port,
+EWMicroRecorderWriteWaypoint(Port *port,
                              const Waypoint &way_point, const TCHAR *EWType)
 {
   int DegLat, DegLon;
@@ -282,17 +282,17 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
     } else {
       const Waypoint &wp = decl->get_waypoint(i);
       if (i == 0) {
-        EWMicroRecorderWriteWayPoint(port, wp, _T("Take Off LatLong:"));
-        EWMicroRecorderWriteWayPoint(port, wp, _T("Start LatLon:"));
+        EWMicroRecorderWriteWaypoint(port, wp, _T("Take Off LatLong:"));
+        EWMicroRecorderWriteWaypoint(port, wp, _T("Start LatLon:"));
       } else if (i + 1 < decl->size()) {
-        EWMicroRecorderWriteWayPoint(port, wp, _T("TP LatLon:"));
+        EWMicroRecorderWriteWaypoint(port, wp, _T("TP LatLon:"));
       }
     }
   }
 
   const Waypoint &wp = decl->get_last_waypoint();
-  EWMicroRecorderWriteWayPoint(port, wp, _T("Finish LatLon:"));
-  EWMicroRecorderWriteWayPoint(port, wp, _T("Land LatLon:"));
+  EWMicroRecorderWriteWaypoint(port, wp, _T("Finish LatLon:"));
+  EWMicroRecorderWriteWaypoint(port, wp, _T("Land LatLon:"));
 
   port->Write('\x03');         // finish sending user file
 
