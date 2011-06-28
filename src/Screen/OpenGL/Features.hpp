@@ -21,28 +21,25 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_SCREEN_OPENGL_POINT_HPP
-#define XCSOAR_SCREEN_OPENGL_POINT_HPP
+#ifndef XCSOAR_SCREEN_OPENGL_FEATURES_HPP
+#define XCSOAR_SCREEN_OPENGL_FEATURES_HPP
 
-#include "Screen/OpenGL/Types.hpp"
-#include "Screen/OpenGL/Features.hpp"
-
-#ifdef HAVE_GLES
-#define RASTER_POINT_SIZE 4
-#else
-#define RASTER_POINT_SIZE 8
+#ifndef ENABLE_OPENGL
+#error No OpenGL
 #endif
 
-struct RasterPoint {
-  GLvalue x, y;
-};
+#ifdef ANDROID
+#define HAVE_GLES
+#endif
 
-struct PixelSize {
-  GLvalue cx, cy;
-};
-
-struct PixelRect {
-  GLvalue left, top, right, bottom;
-};
+static inline bool
+have_gles()
+{
+#ifdef HAVE_GLES
+  return true;
+#else
+  return false;
+#endif
+}
 
 #endif

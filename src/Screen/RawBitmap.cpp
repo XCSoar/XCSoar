@@ -53,7 +53,7 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
   Uint32 rmask, gmask, bmask, amask;
   int depth;
 
-#ifdef ANDROID
+#ifdef HAVE_GLES
   rmask = 0x0000f800;
   gmask = 0x000007e0;
   bmask = 0x0000001f;

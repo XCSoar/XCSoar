@@ -22,10 +22,11 @@ Copyright_License {
 */
 
 #include "Screen/OpenGL/Extension.hpp"
+#include "Screen/OpenGL/Features.hpp"
 
 #include <string.h>
 
-#ifdef ANDROID
+#ifdef HAVE_GLES
 #include <GLES/gl.h>
 #else
 #include <SDL/SDL_opengl.h>

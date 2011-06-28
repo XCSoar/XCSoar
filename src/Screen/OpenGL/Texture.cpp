@@ -23,10 +23,11 @@ Copyright_License {
 
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Globals.hpp"
+#include "Screen/OpenGL/Features.hpp"
 #include "Asset.hpp"
 #include "Compiler.h"
 
-#ifdef ANDROID
+#ifdef HAVE_GLES
 #include <GLES/glext.h>
 #endif
 
@@ -134,7 +135,7 @@ load_surface_into_texture(const SDL_Surface *surface)
 
 GLTexture::GLTexture(unsigned _width, unsigned _height)
   :width(_width), height(_height)
-#ifndef ANDROID
+#ifndef HAVE_GLES
   , allocated_width(validate_texture_size(_width)),
    allocated_height(validate_texture_size(_height))
 #endif
@@ -155,7 +156,7 @@ GLTexture::load(SDL_Surface *src)
   width = src->w;
   height = src->h;
 
-#ifndef ANDROID
+#ifndef HAVE_GLES
   allocated_width = validate_texture_size(width);
   allocated_height = validate_texture_size(src->h);
 #endif
@@ -209,7 +210,7 @@ GLTexture::draw(int dest_x, int dest_y,
                 int src_x, int src_y,
                 unsigned src_width, unsigned src_height) const
 {
-#ifdef ANDROID
+#ifdef HAVE_GLES
   const GLint rect[4] = { src_x, src_y + src_height, src_width,
                           /* negative height to flip the texture */
                           -(int)src_height };

@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 #include "Screen/Color.hpp"
+#include "Screen/Features.hpp"
 
 /**
  * A pen draws lines and borders.
@@ -150,7 +151,7 @@ public:
   void set() const {
     color.set();
 
-#ifdef ANDROID
+#ifdef HAVE_GLES
     glLineWidthx(width << 16);
 #else
     glLineWidth(width);

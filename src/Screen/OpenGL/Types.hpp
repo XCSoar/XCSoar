@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_TYPES_HPP
 #define XCSOAR_SCREEN_OPENGL_TYPES_HPP
 
-#ifdef ANDROID
+#include "Screen/OpenGL/Features.hpp"
+
+#ifdef HAVE_GLES
 
 #include <GLES/gl.h>
 
