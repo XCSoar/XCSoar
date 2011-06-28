@@ -344,6 +344,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   GlidePolar &gp = SetSettingsComputer().glide_polar_task;
   gp = GlidePolar(fixed_zero);
+  gp.set_mc(SettingsComputer().safety_mc);
   PolarGlue::LoadFromProfile(gp, SetSettingsComputer());
   task_manager->set_glide_polar(gp);
 

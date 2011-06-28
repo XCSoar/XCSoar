@@ -8,6 +8,7 @@ Version 6.1.2 - not yet released
   - fix boundary routine of the key hole zone
   - set system clock only from a real GPS fix
   - set system clock again after device reconnect
+  - MacCready setting defaults to safety MacCready on startup
 * user interface
   - change low battery thresholds
   - manual and translation updates
