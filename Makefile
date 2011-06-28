@@ -160,7 +160,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/ConfigPanels/TaskDefaultsConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/TerrainDisplayConfigPanel.cpp \
 	$(SRC)/Dialogs/ConfigPanels/UnitsConfigPanel.cpp \
-	$(SRC)/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp \
+	$(SRC)/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp \
 	\
 	$(SRC)/Dialogs/dlgTaskManager.cpp \
 	$(SRC)/Dialogs/pnlTaskManagerClose.cpp \

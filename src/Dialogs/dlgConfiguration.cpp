@@ -38,7 +38,7 @@ Copyright_License {
 #include "ConfigPanels/AirspaceConfigPanel.hpp"
 #include "ConfigPanels/SiteConfigPanel.hpp"
 #include "ConfigPanels/MapDisplayConfigPanel.hpp"
-#include "ConfigPanels/WayPointDisplayConfigPanel.hpp"
+#include "ConfigPanels/WaypointDisplayConfigPanel.hpp"
 #include "ConfigPanels/SymbolsConfigPanel.hpp"
 #include "ConfigPanels/TerrainDisplayConfigPanel.hpp"
 #include "ConfigPanels/GlideComputerConfigPanel.hpp"
@@ -133,7 +133,7 @@ OnUserLevel(CheckBoxControl &control)
   Profile::Set(szProfileUserLevel, control.get_checked());
   wf->FilterAdvanced(control.get_checked());
   MapDisplayConfigPanel::UpdateVisibilities();
-  WayPointDisplayConfigPanel::UpdateVisibilities();
+  WaypointDisplayConfigPanel::UpdateVisibilities();
 }
 
 static void
@@ -224,7 +224,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(UnitsConfigPanel::OnLoadPreset),
   DeclareCallBackEntry(UnitsConfigPanel::OnFieldData),
   DeclareCallBackEntry(UnitsConfigPanel::OnUTCData),
-  DeclareCallBackEntry(WayPointDisplayConfigPanel::OnRenderingTypeData),
+  DeclareCallBackEntry(WaypointDisplayConfigPanel::OnRenderingTypeData),
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
@@ -239,7 +239,7 @@ setVariables()
   AirspaceConfigPanel::Init(wf);
   SiteConfigPanel::Init(wf);
   MapDisplayConfigPanel::Init(wf);
-  WayPointDisplayConfigPanel::Init(wf);
+  WaypointDisplayConfigPanel::Init(wf);
   SymbolsConfigPanel::Init(wf);
   TerrainDisplayConfigPanel::Init(wf);
   GlideComputerConfigPanel::Init(wf);
@@ -311,7 +311,7 @@ void dlgConfigurationShowModal(void)
   changed |= AirspaceConfigPanel::Save(requirerestart);
   changed |= SiteConfigPanel::Save();
   changed |= MapDisplayConfigPanel::Save();
-  changed |= WayPointDisplayConfigPanel::Save(requirerestart);
+  changed |= WaypointDisplayConfigPanel::Save(requirerestart);
   changed |= SymbolsConfigPanel::Save();
   changed |= TerrainDisplayConfigPanel::Save();
   changed |= GlideComputerConfigPanel::Save(requirerestart);

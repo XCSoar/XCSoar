@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "WayPointDisplayConfigPanel.hpp"
+#include "WaypointDisplayConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
@@ -35,7 +35,7 @@ Copyright_License {
 static WndForm* wf = NULL;
 
 void
-WayPointDisplayConfigPanel::UpdateVisibilities()
+WaypointDisplayConfigPanel::UpdateVisibilities()
 {
   WndProperty* wp = (WndProperty*)wf->FindByName(_T("prpAppUseSWLandablesRendering"));
   assert(wp != NULL);
@@ -46,7 +46,7 @@ WayPointDisplayConfigPanel::UpdateVisibilities()
 }
 
 void
-WayPointDisplayConfigPanel::Init(WndForm *_wf)
+WaypointDisplayConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
@@ -136,7 +136,7 @@ WayPointDisplayConfigPanel::Init(WndForm *_wf)
 }
 
 void
-WayPointDisplayConfigPanel::OnRenderingTypeData(DataField *Sender,
+WaypointDisplayConfigPanel::OnRenderingTypeData(DataField *Sender,
                                                 DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
@@ -152,7 +152,7 @@ WayPointDisplayConfigPanel::OnRenderingTypeData(DataField *Sender,
 }
 
 bool
-WayPointDisplayConfigPanel::Save(bool& requirerestart)
+WaypointDisplayConfigPanel::Save(bool& requirerestart)
 {
   bool changed = false;
   WndProperty *wp;

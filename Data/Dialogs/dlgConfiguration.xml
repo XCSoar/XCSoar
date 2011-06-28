@@ -162,7 +162,7 @@
 
       <Edit Name="prpAppUseSWLandablesRendering" Caption="Detailed landables" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="[Off] Display fixed icons for landables.&#10;[On] Show landables with variable information like runway length and heading.">
-        <DataField DataType="boolean" OnDataAccess="WayPointDisplayConfigPanel::OnRenderingTypeData" />
+        <DataField DataType="boolean" OnDataAccess="WaypointDisplayConfigPanel::OnRenderingTypeData" />
       </Edit>
 
       <Edit Name="prpAppLandableRenderingScale" Caption="Landable size" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"

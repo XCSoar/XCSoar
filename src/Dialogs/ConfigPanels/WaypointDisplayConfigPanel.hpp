@@ -27,7 +27,7 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "DataField/Base.hpp"
 
-namespace WayPointDisplayConfigPanel
+namespace WaypointDisplayConfigPanel
 {
   void Init(WndForm *wf);
   void UpdateVisibilities();
