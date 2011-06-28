@@ -35,11 +35,10 @@
 
 OrderedTaskPoint::OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
                                    const Waypoint & wp, 
-                                   const TaskBehaviour &tb,
                                    const OrderedTaskBehaviour& to,
                                    const bool b_scored): 
   TaskLeg(*this),
-  ScoredTaskPoint(_type, wp, tb, b_scored),
+  ScoredTaskPoint(_type, wp, b_scored),
   ObservationZoneClient(_oz),
   m_ordered_task_behaviour(to),
   m_active_state(NOTFOUND_ACTIVE),

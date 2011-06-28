@@ -88,7 +88,6 @@ public:
  */
   OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
                    const Waypoint & wp, 
-                   const TaskBehaviour &tb,
                    const OrderedTaskBehaviour& to,
                    const bool b_scored=false);
 

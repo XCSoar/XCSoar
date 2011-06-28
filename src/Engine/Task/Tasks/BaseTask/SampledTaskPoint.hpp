@@ -72,7 +72,6 @@ public:
    */
   SampledTaskPoint(enum type _type,
                    const Waypoint & wp,
-                   const TaskBehaviour &tb,
                    const bool b_scored);
 
   virtual ~SampledTaskPoint() {};

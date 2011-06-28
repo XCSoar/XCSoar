@@ -24,6 +24,7 @@
 
 #include "TaskInterface.hpp"
 #include "Task/TaskStats/TaskStats.hpp"
+#include "Task/TaskBehaviour.hpp"
 #include "Util/Filter.hpp"
 
 class TaskPointConstVisitor;
@@ -49,7 +50,10 @@ protected:
   TaskStats stats; /**< statistics of this task */
   TaskStatsComputer stats_computer;
   TaskEvents &task_events; /**< reference to task events (feedback) */
-  const TaskBehaviour &task_behaviour; /**< reference to task behaviour (settings) */
+
+  /** settings */
+  TaskBehaviour task_behaviour;
+
   const GlidePolar &glide_polar; /**< reference to global glide polar */
 
 private:
@@ -73,6 +77,11 @@ public:
   AbstractTask(enum type _type, TaskEvents &te,
                const TaskBehaviour &tb,
                const GlidePolar &gp);
+
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) {
+    task_behaviour = tb;
+  }
+
   /** 
    * Reset the task (as if never flown)
    * 

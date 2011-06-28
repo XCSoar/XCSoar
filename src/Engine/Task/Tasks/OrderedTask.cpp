@@ -51,6 +51,25 @@
 #include "Task/TaskStats/TaskSummary.hpp"
 
 static void
+SetTaskBehaviour(OrderedTask::OrderedTaskPointVector &vector,
+                 const TaskBehaviour &tb)
+{
+  OrderedTask::OrderedTaskPointVector::iterator end = vector.end();
+  for (OrderedTask::OrderedTaskPointVector::iterator i = vector.begin();
+       i != end; ++i)
+    (*i)->SetTaskBehaviour(tb);
+}
+
+void
+OrderedTask::SetTaskBehaviour(const TaskBehaviour &tb)
+{
+  AbstractTask::SetTaskBehaviour(tb);
+
+  ::SetTaskBehaviour(task_points, tb);
+  ::SetTaskBehaviour(optional_start_points, tb);
+}
+
+static void
 UpdateObservationZones(OrderedTask::OrderedTaskPointVector &points,
                        const TaskProjection &task_projection)
 {

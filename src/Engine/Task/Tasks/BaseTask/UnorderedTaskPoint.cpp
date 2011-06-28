@@ -24,6 +24,17 @@
 #include "Task/TaskBehaviour.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
+UnorderedTaskPoint::UnorderedTaskPoint(const Waypoint &wp,
+                                       const TaskBehaviour &tb)
+  :TaskWaypoint(UNORDERED, wp),
+   safety_height_arrival(tb.safety_height_arrival) {}
+
+void
+UnorderedTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
+{
+  safety_height_arrival = tb.safety_height_arrival;
+}
+
 const GeoVector 
 UnorderedTaskPoint::get_vector_remaining(const AIRCRAFT_STATE &ref) const
 {
@@ -56,5 +67,5 @@ UnorderedTaskPoint::get_state_entered() const
 fixed 
 UnorderedTaskPoint::get_elevation() const
 {
-  return m_elevation+m_task_behaviour.safety_height_arrival;
+  return m_elevation + safety_height_arrival;
 }

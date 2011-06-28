@@ -104,6 +104,8 @@ public:
               const bool do_reserve=false);
   virtual ~OrderedTask();
 
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
+
   /**
    * Accessor for factory system for constructing tasks
    *

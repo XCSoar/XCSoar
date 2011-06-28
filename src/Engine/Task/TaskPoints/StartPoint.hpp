@@ -26,6 +26,7 @@
 #define STARTPOINT_HPP
 
 #include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Task/TaskBehaviour.hpp"
 
 /**
  * A StartPoint is an abstract OrderedTaskPoint,
@@ -40,6 +41,8 @@
 class StartPoint:
   public OrderedTaskPoint
 {
+  TaskStartMargins margins;
+
    /**
     * For use with multiple start points, whether enabled.
     */
@@ -61,6 +64,8 @@ public:
              const Waypoint & wp,
              const TaskBehaviour& tb,
              const OrderedTaskBehaviour& to);
+
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 
   /**
    * Set previous/next taskpoints in sequence.

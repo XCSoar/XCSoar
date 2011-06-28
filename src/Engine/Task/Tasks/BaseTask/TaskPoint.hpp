@@ -53,8 +53,6 @@ protected:
   GeoPoint reference;
   /** Altitude (AMSL, m) of task point terrain */
   const fixed m_elevation;
-  /** Reference to task behaviour (for options) */
-  const TaskBehaviour &m_task_behaviour;
 
 public:
   bool is_intermediate() const {
@@ -71,14 +69,16 @@ public:
    * @return Initialised object
    */
   TaskPoint(enum type _type, const GeoPoint& location,
-            const fixed elevation, const TaskBehaviour &tb) :
+            const fixed elevation) :
     type(_type), reference(location),
-    m_elevation(elevation), m_task_behaviour(tb) {}
+    m_elevation(elevation) {}
 
   /**
    * Destructor.  Does nothing yet.
    */
   virtual ~TaskPoint() {};
+
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) {}
 
   /**
    * Retrieve location to be used for remaining task

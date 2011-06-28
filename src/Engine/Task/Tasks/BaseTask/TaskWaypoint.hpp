@@ -52,9 +52,8 @@ public:
  * @return Initialised object
  */
   TaskWaypoint(enum type _type,
-               const Waypoint & wp,
-               const TaskBehaviour &tb):
-    TaskPoint(_type, wp.Location, wp.Altitude, tb),
+               const Waypoint & wp):
+    TaskPoint(_type, wp.Location, wp.Altitude),
     m_waypoint(wp)
     { }
 

@@ -23,8 +23,23 @@
 #include "IntermediatePoint.hpp"
 #include "Task/TaskBehaviour.hpp"
 
+IntermediateTaskPoint::IntermediateTaskPoint(enum type _type,
+                                             ObservationZonePoint *_oz,
+                                             const Waypoint &wp,
+                                             const TaskBehaviour &tb,
+                                             const OrderedTaskBehaviour &to,
+                                             const bool b_scored)
+  :OrderedTaskPoint(_type, _oz, wp, to, b_scored),
+   safety_height_terrain(tb.route_planner.safety_height_terrain) {}
+
+void
+IntermediateTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
+{
+  safety_height_terrain = tb.route_planner.safety_height_terrain;
+}
+
 fixed
 IntermediateTaskPoint::get_elevation() const
 {
-  return m_elevation+m_task_behaviour.route_planner.safety_height_terrain;
+  return m_elevation + safety_height_terrain;
 }

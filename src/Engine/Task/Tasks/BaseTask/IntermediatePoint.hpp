@@ -38,6 +38,8 @@
 class IntermediateTaskPoint: 
   public OrderedTaskPoint 
 {
+  fixed safety_height_terrain;
+
 public:    
 /** 
  * Constructor.
@@ -55,9 +57,9 @@ public:
                     const Waypoint & wp, 
                     const TaskBehaviour& tb,
                     const OrderedTaskBehaviour& to,
-                    const bool b_scored=false): 
-    OrderedTaskPoint(_type, _oz, wp, tb, to, b_scored)
-    {};
+                        const bool b_scored=false);
+
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 
   gcc_pure
   bool valid() const {

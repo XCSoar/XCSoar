@@ -23,9 +23,8 @@
 
 ScoredTaskPoint::ScoredTaskPoint(enum type _type,
                                  const Waypoint & wp, 
-                                 const TaskBehaviour &tb,
                                  const bool b_scored): 
-  SampledTaskPoint(_type, wp, tb, b_scored)
+  SampledTaskPoint(_type, wp, b_scored)
 {
   reset();
 }

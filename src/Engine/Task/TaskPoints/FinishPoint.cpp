@@ -30,9 +30,16 @@ FinishPoint::FinishPoint(ObservationZonePoint* _oz,
                          const Waypoint & wp,
                          const TaskBehaviour& tb,
                          const OrderedTaskBehaviour& to) : 
-  OrderedTaskPoint(FINISH, _oz, wp, tb, to),
+  OrderedTaskPoint(FINISH, _oz, wp, to),
+  safety_height_arrival(tb.safety_height_arrival),
   fai_finish_height(fixed_zero)
 { 
+}
+
+void
+FinishPoint::SetTaskBehaviour(const TaskBehaviour &tb)
+{
+  safety_height_arrival = tb.safety_height_arrival;
 }
 
 void 
@@ -51,8 +58,7 @@ FinishPoint::entry_precondition() const
 fixed
 FinishPoint::get_elevation() const
 {
-  const fixed nominal_elevation = m_elevation
-    +m_task_behaviour.safety_height_arrival;
+  const fixed nominal_elevation = m_elevation + safety_height_arrival;
 
   if (m_ordered_task_behaviour.fai_finish) {
     return max(nominal_elevation, fai_finish_height);

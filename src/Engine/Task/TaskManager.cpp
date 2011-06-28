@@ -43,6 +43,16 @@ TaskManager::TaskManager(TaskEvents &te,
   mode(MODE_NULL),
   active_task(NULL) {}
 
+void
+TaskManager::set_task_behaviour(const TaskBehaviour& behaviour)
+{
+  task_behaviour = behaviour;
+
+  task_ordered.SetTaskBehaviour(behaviour);
+  task_goto.SetTaskBehaviour(behaviour);
+  task_abort.SetTaskBehaviour(behaviour);
+}
+
 TaskManager::TaskMode_t 
 TaskManager::set_mode(const TaskMode_t the_mode)
 {

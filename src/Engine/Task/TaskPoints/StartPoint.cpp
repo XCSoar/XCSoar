@@ -33,11 +33,17 @@ StartPoint::StartPoint(ObservationZonePoint* _oz,
                        const Waypoint & wp,
                        const TaskBehaviour& tb,
                        const OrderedTaskBehaviour& to): 
-  OrderedTaskPoint(START, _oz, wp, tb, to),
+  OrderedTaskPoint(START, _oz, wp, to),
+  margins(tb),
   enabled(true) 
 {
 }
 
+void
+StartPoint::SetTaskBehaviour(const TaskBehaviour &tb)
+{
+  margins = tb;
+}
 
 fixed
 StartPoint::get_elevation() const
@@ -63,7 +69,7 @@ StartPoint::update_sample_near(const AIRCRAFT_STATE& state,
                                const TaskProjection &projection)
 {
   if (isInSector(state)) {
-    if (!m_ordered_task_behaviour.check_start_speed(state, m_task_behaviour)) {
+    if (!m_ordered_task_behaviour.check_start_speed(state, margins)) {
       task_events.warning_start_speed();
     }
   }
@@ -130,7 +136,8 @@ StartPoint::isInSector(const AIRCRAFT_STATE &state) const
   if (!ObservationZoneClient::isInSector(state)) 
     return false;
 
-  return m_ordered_task_behaviour.check_start_height(state, m_task_behaviour, m_elevation );
+  return m_ordered_task_behaviour.check_start_height(state, margins,
+                                                     m_elevation);
 }
 
 bool 
@@ -139,11 +146,11 @@ StartPoint::check_transition_exit(const AIRCRAFT_STATE & ref_now,
 {
   const bool now_in_height = 
     m_ordered_task_behaviour.check_start_height(ref_now,
-                                                m_task_behaviour,
+                                                margins,
                                                 m_elevation);
   const bool last_in_height = 
     m_ordered_task_behaviour.check_start_height(ref_last,
-                                                m_task_behaviour,
+                                                margins,
                                                 m_elevation);
 
   if (now_in_height && last_in_height) {

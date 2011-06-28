@@ -37,6 +37,8 @@
  *
  */
 class FinishPoint : public OrderedTaskPoint {
+  fixed safety_height_arrival;
+
   fixed fai_finish_height;
 
 public:
@@ -55,6 +57,8 @@ public:
               const Waypoint & wp,
               const TaskBehaviour& tb,
               const OrderedTaskBehaviour& to);
+
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 
   void reset();
 

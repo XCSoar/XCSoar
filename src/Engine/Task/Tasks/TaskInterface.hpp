@@ -29,6 +29,7 @@ struct AIRCRAFT_STATE;
 struct GeoPoint;
 struct GeoVector;
 
+class TaskBehaviour;
 class TaskStats;
 class TaskWaypoint;
 class TaskPoint;
@@ -49,6 +50,8 @@ public:
   const enum type type;
 
   TaskInterface(const enum type _type):type(_type) {}
+
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb) = 0;
 
 /** 
  * Size of task

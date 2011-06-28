@@ -575,9 +575,7 @@ public:
    * 
    * @param behaviour Value to set
    */
-  void set_task_behaviour(const TaskBehaviour& behaviour) {
-    task_behaviour = behaviour;
-  }
+  void set_task_behaviour(const TaskBehaviour& behaviour);
   
   /** 
    * Retrieve task behaviour

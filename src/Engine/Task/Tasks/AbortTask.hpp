@@ -120,6 +120,8 @@ public:
             const Waypoints &wps);
   ~AbortTask();
 
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
+
   /**
    * Size of task
    *

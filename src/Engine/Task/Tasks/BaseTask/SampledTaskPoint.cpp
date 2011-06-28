@@ -24,9 +24,8 @@
 
 SampledTaskPoint::SampledTaskPoint(enum type _type,
                                    const Waypoint & wp,
-                                   const TaskBehaviour &tb,
                                    const bool b_scored):
-    TaskWaypoint(_type, wp, tb),
+    TaskWaypoint(_type, wp),
     m_boundary_scored(b_scored),
     m_search_max(get_location()),
     m_search_min(get_location()),

@@ -56,6 +56,8 @@ public:
            const Waypoints &wps);
   ~GotoTask();
 
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
+
 /** 
  * Size of task
  * 

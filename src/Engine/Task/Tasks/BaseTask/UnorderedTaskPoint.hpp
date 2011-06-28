@@ -34,6 +34,8 @@
 class UnorderedTaskPoint : 
   public TaskWaypoint
 {
+  fixed safety_height_arrival;
+
 public:
   /**
    * Constructor.
@@ -42,8 +44,9 @@ public:
    * @param tb Task Behaviour defining options (esp safety heights)
    */
   UnorderedTaskPoint(const Waypoint & wp,
-                     const TaskBehaviour &tb)
-    :TaskWaypoint(UNORDERED, wp, tb) {}
+                     const TaskBehaviour &tb);
+
+  virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 
   const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const;
 

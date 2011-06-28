@@ -35,6 +35,15 @@ GotoTask::GotoTask(TaskEvents &te,
 {
 }
 
+void
+GotoTask::SetTaskBehaviour(const TaskBehaviour &tb)
+{
+  UnorderedTask::SetTaskBehaviour(tb);
+
+  if (tp != NULL)
+    tp->SetTaskBehaviour(tb);
+}
+
 GotoTask::~GotoTask() 
 {
   delete tp;

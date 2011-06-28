@@ -50,6 +50,17 @@ AbortTask::~AbortTask()
   clear();
 }
 
+void
+AbortTask::SetTaskBehaviour(const TaskBehaviour &tb)
+{
+  UnorderedTask::SetTaskBehaviour(tb);
+
+  AlternateTaskVector::iterator end = task_points.end();
+  for (AlternateTaskVector::iterator i = task_points.begin(); i != end; ++i)
+    i->task_point->SetTaskBehaviour(tb);
+
+}
+
 void 
 AbortTask::setActiveTaskPoint(unsigned index)
 {
