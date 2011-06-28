@@ -63,7 +63,17 @@ public:
   /** max search range in km */
   static const fixed max_search_range;
 
-  typedef std::pair <Waypoint, GlideResult> Alternate;
+  struct Alternate {
+    Waypoint waypoint;
+
+    GlideResult solution;
+
+    Alternate(const Waypoint &_waypoint)
+      :waypoint(_waypoint) {}
+    Alternate(const Waypoint &_waypoint, const GlideResult &_solution)
+      :waypoint(_waypoint), solution(_solution) {}
+  };
+
   /** Vector of waypoints and solutions used to store candidates */
   typedef std::vector <Alternate> AlternateVector;
 

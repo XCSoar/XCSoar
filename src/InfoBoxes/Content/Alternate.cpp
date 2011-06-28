@@ -41,8 +41,7 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  const Waypoint *way_point;
-  const GlideResult *solution;
+  const AbortTask::Alternate *alternate;
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
@@ -52,11 +51,9 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
       if (index >= alternates.size())
         index = alternates.size() - 1;
 
-      way_point = &alternates[index].first;
-      solution = &alternates[index].second;
+      alternate = &alternates[index];
     } else {
-      way_point = NULL;
-      solution = NULL;
+      alternate = NULL;
     }
   }
 
@@ -64,20 +61,21 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
   _stprintf(tmp, _T("Altrn %d"), index+1);
   infobox.SetTitle(tmp);
 
-  SetCommentFromWaypointName(infobox, way_point);
-  if (!way_point || !XCSoarInterface::Basic().track_available) {
+  if (alternate == NULL || !XCSoarInterface::Basic().track_available) {
     infobox.SetInvalid();
     return;
   }
 
+  SetCommentFromWaypointName(infobox, &alternate->waypoint);
+
   // Set Value
-  Angle Value = solution->Vector.Bearing -
+  Angle Value = alternate->solution.Vector.Bearing -
     XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);
 
   // Set Color (blue/black)
-  infobox.SetColor(solution->glide_reachable(true) ? 2 : 0);
+  infobox.SetColor(alternate->solution.glide_reachable(true) ? 2 : 0);
 }
 
 bool
@@ -109,8 +107,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  const Waypoint *way_point;
-  const GlideResult *solution;
+  const AbortTask::Alternate *alternate;
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
@@ -120,11 +117,9 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
       if (index >= alternates.size())
         index = alternates.size() - 1;
 
-      way_point = &alternates[index].first;
-      solution = &alternates[index].second;
+      alternate = &alternates[index];
     } else {
-      way_point = NULL;
-      solution = NULL;
+      alternate = NULL;
     }
   }
 
@@ -132,13 +127,15 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
   _stprintf(tmp, _T("Altrn %d GR"), index+1);
   infobox.SetTitle(tmp);
 
-  SetCommentFromWaypointName(infobox, way_point);
-  if (!way_point) {
+  if (alternate == NULL) {
     infobox.SetInvalid();
     return;
   }
 
-  fixed gradient = ::AngleToGradient(solution->destination_angle_ground());
+  SetCommentFromWaypointName(infobox, &alternate->waypoint);
+
+  fixed gradient =
+    ::AngleToGradient(alternate->solution.destination_angle_ground());
 
   if (negative(gradient)) {
     infobox.SetColor(0);
@@ -154,7 +151,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
   }
 
   // Set Color (blue/black)
-  infobox.SetColor(solution->glide_reachable(true) ? 2 : 0);
+  infobox.SetColor(alternate->solution.glide_reachable(true) ? 2 : 0);
 }
 
 bool

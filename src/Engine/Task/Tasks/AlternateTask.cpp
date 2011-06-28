@@ -74,7 +74,7 @@ void
 AlternateTask::check_alternate_changed()
 {
   // remember previous value (or invalid)
-  unsigned id = (alternates.empty() ? UINT_MAX : alternates[0].first.id);
+  unsigned id = (alternates.empty() ? UINT_MAX : alternates[0].waypoint.id);
 
   // send notification on change
   if (best_alternate_id != id) {
@@ -104,7 +104,7 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
         ::DoubleDistance(state_now.get_location(), wp_alt.Location, destination);
     const fixed delta = dist_straight - dist_divert;
 
-    q.push(std::make_pair(std::make_pair(wp_alt, i->second), delta));
+    q.push(std::make_pair(Alternate(wp_alt, i->second), delta));
   }
 
   // now push results onto the list, best first.
@@ -113,7 +113,7 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
 
     // only add if not already in the list (from previous stage in two
     // stage process)
-    if (!is_waypoint_in_alternates(top.first)) {
+    if (!is_waypoint_in_alternates(top.waypoint)) {
       alternates.push_back(top);
     }
 
@@ -153,7 +153,7 @@ AlternateTask::is_waypoint_in_alternates(const Waypoint& waypoint) const
 {
   for (AlternateVector::const_iterator it = alternates.begin();
        it != alternates.end(); ++it)
-    if (it->first == waypoint)
+    if (it->waypoint == waypoint)
       return true;
 
   return false;

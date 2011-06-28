@@ -132,8 +132,8 @@ struct AbortRank :
    */
   bool operator()(const AbortTask::Alternate& x, 
                   const AbortTask::Alternate& y) const {
-    return x.second.TimeElapsed + x.second.TimeVirtual >
-           y.second.TimeElapsed + y.second.TimeVirtual;
+    return x.solution.TimeElapsed + x.solution.TimeVirtual >
+           y.solution.TimeElapsed + y.solution.TimeVirtual;
   }
 };
 
@@ -165,23 +165,23 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   for (AlternateVector::iterator v = approx_waypoints.begin();
        v != approx_waypoints.end();) {
 
-    if (only_airfield && !v->first.IsAirport()) {
+    if (only_airfield && !v->waypoint.IsAirport()) {
       ++v;
       continue;
     }
 
-    UnorderedTaskPoint t(v->first, task_behaviour);
+    UnorderedTaskPoint t(v->waypoint, task_behaviour);
     const GlideResult result = TaskSolution::glide_solution_remaining(t, state, polar);
     if (is_reachable(result, final_glide)) {
       bool intersects = false;
       const bool is_reachable_final = is_reachable(result, true);
 
       if (intersection_test && final_glide && is_reachable_final) {
-        intersects = intersection_test->intersects(AGeoPoint(v->first.Location,
+        intersects = intersection_test->intersects(AGeoPoint(v->waypoint.Location,
                                                              result.MinHeight));
       }
       if (!intersects) {
-        q.push(std::make_pair(v->first, result));
+        q.push(Alternate(v->waypoint, result));
         // remove it since it's already in the list now      
         approx_waypoints.erase(v);
 
@@ -197,7 +197,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   while (!q.empty() && !task_full()) {
     const Alternate top = q.top();
     task_points.push_back(std::make_pair(
-        new UnorderedTaskPoint(top.first, task_behaviour), top.second));
+        new UnorderedTaskPoint(top.waypoint, task_behaviour), top.solution));
 
     const int i = task_points.size() - 1;
     if (task_points[i].first->get_waypoint().id == active_waypoint)
@@ -232,7 +232,7 @@ public:
    */
   void Visit(const Waypoint& wp) {
     if (wp.IsLandable())
-      vector.push_back(std::make_pair(wp, GlideResult()));
+      vector.push_back(wp);
   }
 
 private:

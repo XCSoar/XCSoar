@@ -52,8 +52,8 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   const unsigned line_height = rc.bottom - rc.top;
 
-  const Waypoint &way_point = alternates[index].first;
-  const GlideResult& solution = alternates[index].second;
+  const Waypoint &way_point = alternates[index].waypoint;
+  const GlideResult& solution = alternates[index].solution;
 
   // Draw icon
   RasterPoint pt = { rc.left + line_height / 2,
@@ -99,5 +99,5 @@ dlgAlternatesListShowModal(SingleWindow &parent)
   if (i < 0 || (unsigned)i >= alternates.size())
     return;
 
-  dlgWaypointDetailsShowModal(parent, alternates[i].first);
+  dlgWaypointDetailsShowModal(parent, alternates[i].waypoint);
 }
