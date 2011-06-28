@@ -292,7 +292,7 @@ void PrintHelper::aborttask_print(AbortTask& task, const AIRCRAFT_STATE &state)
   std::ofstream f1("results/res-abort-task.txt");
   f1 << "#### Task points\n";
   for (unsigned i=0; i<task.task_points.size(); i++) {
-    GeoPoint l = task.task_points[i].task_point->get_location();
+    GeoPoint l = task.task_points[i].get_location();
     f1 << "## point " << i << " ###################\n";
     if (i==task.activeTaskPoint) {
       f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";

@@ -23,7 +23,6 @@
 #include "AbortTask.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Navigation/Aircraft.hpp"
-#include "BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "TaskSolvers/TaskSolution.hpp"
 #include "Task/TaskEvents.hpp"
@@ -57,7 +56,7 @@ AbortTask::SetTaskBehaviour(const TaskBehaviour &tb)
 
   AlternateTaskVector::iterator end = task_points.end();
   for (AlternateTaskVector::iterator i = task_points.begin(); i != end; ++i)
-    i->task_point->SetTaskBehaviour(tb);
+    i->SetTaskBehaviour(tb);
 
 }
 
@@ -66,7 +65,7 @@ AbortTask::setActiveTaskPoint(unsigned index)
 {
   if (index < task_points.size()) {
     activeTaskPoint = index;
-    active_waypoint = task_points[index].task_point->get_waypoint().id;
+    active_waypoint = task_points[index].get_waypoint().id;
   }
 }
 
@@ -74,7 +73,8 @@ TaskWaypoint*
 AbortTask::getActiveTaskPoint() const
 {
   if (activeTaskPoint < task_points.size())
-    return task_points[activeTaskPoint].task_point;
+    // XXX eliminate this deconst hack
+    return const_cast<AlternateTaskPoint *>(&task_points[activeTaskPoint]);
 
   return NULL;
 }
@@ -95,10 +95,7 @@ AbortTask::task_size() const
 void
 AbortTask::clear()
 {
-  for (AlternateTaskVector::iterator v = task_points.begin(); v != task_points.end();) {
-    delete v->task_point;
-    task_points.erase(v);
-  }
+  task_points.clear();
   m_landable_reachable = false;
 }
 
@@ -207,12 +204,11 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
 
   while (!q.empty() && !task_full()) {
     const Alternate top = q.top();
-    task_points.push_back(AlternateTaskPoint(new UnorderedTaskPoint(top.waypoint,
-                                                                    task_behaviour),
+    task_points.push_back(AlternateTaskPoint(top.waypoint, task_behaviour,
                                              top.solution));
 
     const int i = task_points.size() - 1;
-    if (task_points[i].task_point->get_waypoint().id == active_waypoint)
+    if (task_points[i].get_waypoint().id == active_waypoint)
       activeTaskPoint = i;
 
     q.pop();
@@ -313,7 +309,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   client_update(state, false);
 
   if (task_points.size()) {
-    const TaskWaypoint &task_point = *task_points[activeTaskPoint].task_point;
+    const TaskWaypoint &task_point = task_points[activeTaskPoint];
     active_waypoint = task_point.get_waypoint().id;
     if (is_active && (active_waypoint_on_entry != active_waypoint))
       task_events.active_changed(task_point);
@@ -337,12 +333,12 @@ AbortTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
     const AlternateTaskVector::const_iterator end = task_points.end();
     for (AlternateTaskVector::const_iterator i = task_points.begin();
          i != end; ++i)
-      visitor.Visit(*i->task_point);
+      visitor.Visit((const TaskPoint &)*i);
   } else {
     const AlternateTaskVector::const_reverse_iterator end = task_points.rend();
     for (AlternateTaskVector::const_reverse_iterator i = task_points.rbegin();
          i != end; ++i)
-      visitor.Visit(*i->task_point);
+      visitor.Visit((const TaskPoint &)*i);
   }
 }
 
@@ -371,7 +367,7 @@ AbortTask::get_task_center(const GeoPoint& fallback_location) const
 
   TaskProjection task_projection;
   for (unsigned i = 0; i < task_points.size(); ++i) {
-    const GeoPoint location = task_points[i].task_point->get_location();
+    const GeoPoint location = task_points[i].get_location();
     if (i == 0)
       task_projection.reset(location);
     else
@@ -389,7 +385,7 @@ AbortTask::get_task_radius(const GeoPoint& fallback_location) const
 
   TaskProjection task_projection;
   for (unsigned i = 0; i < task_points.size(); ++i) {
-    const GeoPoint location = task_points[i].task_point->get_location();
+    const GeoPoint location = task_points[i].get_location();
     if (i == 0)
       task_projection.reset(location);
     else

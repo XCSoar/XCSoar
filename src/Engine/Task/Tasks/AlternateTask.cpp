@@ -99,7 +99,7 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
 
   const AlternateTaskVector::const_iterator end = task_points.end();
   for (AlternateTaskVector::const_iterator i = task_points.begin(); i != end; ++i) {
-    const TaskWaypoint& tp = *i->task_point;
+    const TaskWaypoint& tp = *i;
     const Waypoint& wp_alt = tp.get_waypoint();
     const fixed dist_divert =
         ::DoubleDistance(state_now.get_location(), wp_alt.Location, destination);

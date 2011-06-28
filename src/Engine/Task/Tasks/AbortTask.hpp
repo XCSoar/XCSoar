@@ -24,6 +24,7 @@
 #define ABORTTASK_H
 
 #include "UnorderedTask.hpp"
+#include "BaseTask/UnorderedTaskPoint.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Navigation/SpeedVector.hpp"
@@ -80,13 +81,12 @@ public:
   typedef std::vector <Alternate> AlternateVector;
 
 protected:
-  struct AlternateTaskPoint {
-    TaskWaypoint *task_point;
-
+  struct AlternateTaskPoint : public UnorderedTaskPoint {
     GlideResult solution;
 
-    AlternateTaskPoint(TaskWaypoint *_task_point, const GlideResult &_solution)
-      :task_point(_task_point), solution(_solution) {}
+    AlternateTaskPoint(const Waypoint &waypoint, const TaskBehaviour &tb,
+                       const GlideResult &_solution)
+      :UnorderedTaskPoint(waypoint, tb), solution(_solution) {}
   };
 
   typedef std::vector<AlternateTaskPoint> AlternateTaskVector;
