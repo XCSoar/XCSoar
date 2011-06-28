@@ -31,7 +31,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-class WayPointLabelList : private NonCopyable {
+class WaypointLabelList : private NonCopyable {
 public:
   struct Label{
     TCHAR Name[NAME_SIZE+1];
@@ -51,7 +51,7 @@ protected:
   unsigned num_labels;
 
 public:
-  WayPointLabelList(unsigned _width, unsigned _height)
+  WaypointLabelList(unsigned _width, unsigned _height)
     :width(_width), height(_height), num_labels(0) {}
 
   void Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,

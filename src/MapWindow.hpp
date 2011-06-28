@@ -51,7 +51,7 @@ class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;
 class GlidePolar;
 class ContainerWindow;
-class WayPointLabelList;
+class WaypointLabelList;
 
 class MapWindow :
   public DoubleBufferWindow,

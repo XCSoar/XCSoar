@@ -154,7 +154,7 @@ class WaypointVisitorMap:
   StaticArray<VisibleWaypoint, 256> waypoints;
 
 public:
-  WayPointLabelList labels;
+  WaypointLabelList labels;
 
 public:
   WaypointVisitorMap(const MapWindowProjection &_projection,
@@ -393,12 +393,12 @@ public:
 static void
 MapWaypointLabelRender(Canvas &canvas, unsigned width, unsigned height,
                        LabelBlock &label_block,
-                       WayPointLabelList &labels)
+                       WaypointLabelList &labels)
 {
   labels.Sort();
 
   for (unsigned i = 0; i < labels.size(); i++) {
-    const WayPointLabelList::Label *E = &labels[i];
+    const WaypointLabelList::Label *E = &labels[i];
     TextInBox(canvas, E->Name, E->Pos.x, E->Pos.y, E->Mode,
               width, height, &label_block);
   }

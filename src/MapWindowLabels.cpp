@@ -30,8 +30,8 @@ Copyright_License {
 static int _cdecl
 MapWaypointLabelListCompare(const void *elem1, const void *elem2)
 {
-  const WayPointLabelList::Label &e1 = *(const WayPointLabelList::Label *)elem1;
-  const WayPointLabelList::Label &e2 = *(const WayPointLabelList::Label *)elem2;
+  const WaypointLabelList::Label &e1 = *(const WaypointLabelList::Label *)elem1;
+  const WaypointLabelList::Label &e2 = *(const WaypointLabelList::Label *)elem2;
 
   if (e1.inTask && !e2.inTask)
     return -1;
@@ -67,7 +67,7 @@ MapWaypointLabelListCompare(const void *elem1, const void *elem2)
 }
 
 void
-WayPointLabelList::Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
+WaypointLabelList::Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
                        int AltArivalAGL, bool inTask,
                        bool isLandable, bool isAirport, bool isWatchedWaypoint)
 {
@@ -94,7 +94,7 @@ WayPointLabelList::Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
 }
 
 void
-WayPointLabelList::Sort()
+WaypointLabelList::Sort()
 {
   qsort(&labels, num_labels, sizeof(labels[0]),
         MapWaypointLabelListCompare);
