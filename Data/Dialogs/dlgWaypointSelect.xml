@@ -1,4 +1,4 @@
-<Form Name="frmWayPointSelect" Width="240" Height="320" Caption="Select Waypoint">
+<Form Name="frmWaypointSelect" Width="240" Height="320" Caption="Select Waypoint">
   <Label X="0" Y="0" Width="75" Height="20" Caption="Filter..." />
 
   <Label X="2" Y="35" Width="75" Height="18" Caption="Name" />
@@ -16,7 +16,7 @@
     <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </Edit>
 
-  <List Name="frmWayPointList" X="1" Y="123" Width="-1" Height="-1" ItemHeight="18"/>
+  <List Name="frmWaypointList" X="1" Y="123" Width="-1" Height="-1" ItemHeight="18"/>
 
   <Button Name="cmdSelect" Caption="Select" X="-154" Y="2" Width="75"  Height="35" />
   <Button Name="cmdClose" Caption="Cancel" X="-77" Y="2" Width="75"  Height="35"  />

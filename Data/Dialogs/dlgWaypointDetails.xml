@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmWayPointInfo" Width="240" Height="320" Caption="Waypoint Info">
+<Form Name="frmWaypointInfo" Width="240" Height="320" Caption="Waypoint Info">
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-37" Width="37" Height="35" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="41" Y="-37" Width="37" Height="35" OnClick="OnNextClicked" />
   

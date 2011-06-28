@@ -910,7 +910,7 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
   ((WndButton *)wf->FindByName(_T("cmdFltName")))->
       SetOnRightNotify(OnFilterNameButtonRight);
 
-  wWaypointList = (WndListFrame*)wf->FindByName(_T("frmWayPointList"));
+  wWaypointList = (WndListFrame*)wf->FindByName(_T("frmWaypointList"));
   assert(wWaypointList != NULL);
   wWaypointList->SetActivateCallback(OnWaypointListEnter);
   wWaypointList->SetPaintItemCallback(OnPaintListItem);

@@ -1,4 +1,4 @@
-<Form Name="frmWayPointSelect" Width="320" Height="240" Caption="Select Waypoint">
+<Form Name="frmWaypointSelect" Width="320" Height="240" Caption="Select Waypoint">
   <Label X="3" Y="0" Width="61" Height="16" Caption="Name" />
   <Button Name="cmdFltName" Caption="*" X="2" Y="18" Width="63"  Height="22" />
 
@@ -16,5 +16,5 @@
   <Button Name="cmdSelect" Caption="Select" X="2" Width="63"  Height="35" />
   <Button Name="cmdClose" Caption="Cancel" X="2" Width="63"  Height="35" />
 
-  <List Name="frmWayPointList" X="65" Y="1" Width="-1" Height="-1" ItemHeight="18"/>
+  <List Name="frmWaypointList" X="65" Y="1" Width="-1" Height="-1" ItemHeight="18"/>
 </Form>
