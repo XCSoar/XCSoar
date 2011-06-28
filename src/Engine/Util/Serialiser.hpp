@@ -37,6 +37,11 @@ class Serialiser:
   public TaskPointConstVisitor,
   public ObservationZoneConstVisitor
 {
+  DataNode &m_node;
+
+  const Waypoints *waypoints;
+  bool mode_optional_start;
+
 public:
   /** 
    * Constructor
@@ -109,11 +114,6 @@ protected:
   DataNode* serialise(const OrderedTaskPoint& data, const TCHAR* name);
 
 private:
-  DataNode &m_node;
-
-  const Waypoints *waypoints;
-  bool mode_optional_start;
-
   TaskBehaviour::Factory_t task_factory_type() const;
   const TCHAR* task_factory_type(TaskBehaviour::Factory_t the_type) const;
 };

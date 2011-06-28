@@ -33,6 +33,11 @@ class Waypoints;
  */
 class Deserialiser
 {
+  DataNode &m_node;
+
+  const Waypoints *waypoints;
+  bool mode_optional_start;
+
 public:
   /** 
    * Constructor
@@ -92,11 +97,6 @@ protected:
   void deserialise_point(OrderedTask& data);
 
 private:
-  DataNode &m_node;
-
-  const Waypoints *waypoints;
-  bool mode_optional_start;
-
   TaskBehaviour::Factory_t task_factory_type() const;
 };
 
