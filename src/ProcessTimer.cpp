@@ -37,7 +37,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "Simulator.hpp"
 #include "Replay/Replay.hpp"
-#include "Audio/Sound.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "GPSClock.hpp"
@@ -79,11 +78,7 @@ ProcessTimer::AirspaceProcessTimer()
 {
   if (airspaceWarningEvent.Test()) {
     airspaceWarningEvent.Reset();
-    ResetDisplayTimeOut();
-#ifndef GNAV
-    PlayResource(_T("IDR_WAV_BEEPBWEEP"));
-#endif
-    dlgAirspaceWarningsShowModal(XCSoarInterface::main_window, true);
+    CommonInterface::main_window.SendAirspaceWarning();
   }
 }
 
