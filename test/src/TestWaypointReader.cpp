@@ -178,7 +178,7 @@ TestExtractParameters()
 typedef std::vector<Waypoint> wp_vector;
 
 static bool
-TestWayPointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
+TestWaypointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
 {
   WaypointReader f(filename, 0);
   if (!ok1(!f.Error())) {
@@ -201,7 +201,7 @@ TestWayPointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
 }
 
 static const Waypoint*
-GetWayPoint(const Waypoint org_wp, const Waypoints &way_points)
+GetWaypoint(const Waypoint org_wp, const Waypoints &way_points)
 {
   const Waypoint *wp = way_points.lookup_name(org_wp.Name);
   if (!ok1(wp != NULL)) {
@@ -216,7 +216,7 @@ GetWayPoint(const Waypoint org_wp, const Waypoints &way_points)
 }
 
 static void
-TestWinPilotWayPoint(const Waypoint org_wp, const Waypoint *wp)
+TestWinPilotWaypoint(const Waypoint org_wp, const Waypoint *wp)
 {
   if (wp == NULL) {
     skip(7, 0, "waypoint not found");
@@ -237,7 +237,7 @@ static void
 TestWinPilot(wp_vector org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints.dat"), way_points,
+  if (!TestWaypointFile(_T("test/data/waypoints.dat"), way_points,
                         org_wp.size())) {
     skip(10 * org_wp.size(), 0, "opening waypoint file failed");
     return;
@@ -245,13 +245,13 @@ TestWinPilot(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    const Waypoint *wp = GetWayPoint(*it, way_points);
-    TestWinPilotWayPoint(*it, wp);
+    const Waypoint *wp = GetWaypoint(*it, way_points);
+    TestWinPilotWaypoint(*it, wp);
   }
 }
 
 static void
-TestSeeYouWayPoint(const Waypoint org_wp, const Waypoint *wp)
+TestSeeYouWaypoint(const Waypoint org_wp, const Waypoint *wp)
 {
   if (wp == NULL) {
     skip(6, 0, "waypoint not found");
@@ -277,7 +277,7 @@ static void
 TestSeeYou(wp_vector org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints.cup"), way_points,
+  if (!TestWaypointFile(_T("test/data/waypoints.cup"), way_points,
                         org_wp.size())) {
     skip(9 * org_wp.size(), 0, "opening waypoint file failed");
     return;
@@ -285,13 +285,13 @@ TestSeeYou(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    const Waypoint *wp = GetWayPoint(*it, way_points);
-    TestSeeYouWayPoint(*it, wp);
+    const Waypoint *wp = GetWaypoint(*it, way_points);
+    TestSeeYouWaypoint(*it, wp);
   }
 }
 
 static void
-TestZanderWayPoint(const Waypoint org_wp, const Waypoint *wp)
+TestZanderWaypoint(const Waypoint org_wp, const Waypoint *wp)
 {
   if (wp == NULL) {
     skip(7, 0, "waypoint not found");
@@ -309,7 +309,7 @@ static void
 TestZander(wp_vector org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints.wpz"), way_points,
+  if (!TestWaypointFile(_T("test/data/waypoints.wpz"), way_points,
                         org_wp.size())) {
     skip(10 * org_wp.size(), 0, "opening waypoint file failed");
     return;
@@ -320,8 +320,8 @@ TestZander(wp_vector org_wp)
     if (it->Name.length() > 12)
       it->Name = it->Name.erase(12);
     trim_inplace(it->Name);
-    const Waypoint *wp = GetWayPoint(*it, way_points);
-    TestZanderWayPoint(*it, wp);
+    const Waypoint *wp = GetWaypoint(*it, way_points);
+    TestZanderWaypoint(*it, wp);
   }
 }
 
@@ -329,7 +329,7 @@ static void
 TestFS(wp_vector org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints_geo.wpt"), way_points,
+  if (!TestWaypointFile(_T("test/data/waypoints_geo.wpt"), way_points,
                         org_wp.size())) {
     skip(3 * org_wp.size(), 0, "opening waypoint file failed");
     return;
@@ -340,7 +340,7 @@ TestFS(wp_vector org_wp)
     if (it->Name.length() > 8)
       it->Name = it->Name.erase(8);
     trim_inplace(it->Name);
-    GetWayPoint(*it, way_points);
+    GetWaypoint(*it, way_points);
   }
 }
 
@@ -348,7 +348,7 @@ static void
 TestFS_UTM(wp_vector org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints_utm.wpt"), way_points,
+  if (!TestWaypointFile(_T("test/data/waypoints_utm.wpt"), way_points,
                         org_wp.size())) {
     skip(3 * org_wp.size(), 0, "opening waypoint file failed");
     return;
@@ -359,7 +359,7 @@ TestFS_UTM(wp_vector org_wp)
     if (it->Name.length() > 8)
       it->Name = it->Name.erase(8);
     trim_inplace(it->Name);
-    GetWayPoint(*it, way_points);
+    GetWaypoint(*it, way_points);
   }
 }
 
@@ -367,7 +367,7 @@ static void
 TestOzi(wp_vector org_wp)
 {
   Waypoints way_points;
-  if (!TestWayPointFile(_T("test/data/waypoints_ozi.wpt"), way_points,
+  if (!TestWaypointFile(_T("test/data/waypoints_ozi.wpt"), way_points,
                         org_wp.size())) {
     skip(3 * org_wp.size(), 0, "opening waypoint file failed");
     return;
@@ -376,7 +376,7 @@ TestOzi(wp_vector org_wp)
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
     trim_inplace(it->Name);
-    GetWayPoint(*it, way_points);
+    GetWaypoint(*it, way_points);
   }
 }
 
