@@ -126,7 +126,7 @@ static WaypointFilterData filter_data;
 /**
  * Structure to hold Waypoint sorting information
  */
-struct WayPointSelectInfo
+struct WaypointSelectInfo
 {
   /** Pointer to actual waypoint (unprotected!) */
   const Waypoint* way_point;
@@ -137,10 +137,10 @@ struct WayPointSelectInfo
 };
 
 struct WaypointSelectInfoVector :
-  public std::vector<WayPointSelectInfo>
+  public std::vector<WaypointSelectInfo>
 {
   void push_back(const Waypoint &way_point, const GeoPoint &Location) {
-    WayPointSelectInfo info;
+    WaypointSelectInfo info;
 
     info.way_point = &way_point;
 
@@ -149,11 +149,11 @@ struct WaypointSelectInfoVector :
     info.Distance = vec.Distance;
     info.Direction = vec.Bearing;
 
-    std::vector<WayPointSelectInfo>::push_back(info);
+    std::vector<WaypointSelectInfo>::push_back(info);
   }
 };
 
-static WaypointSelectInfoVector WayPointSelectInfo;
+static WaypointSelectInfoVector WaypointSelectInfo;
 static std::list<unsigned int> LastUsedWaypointNames;
 
 static TCHAR *
@@ -536,8 +536,8 @@ public:
 };
 
 static bool
-WaypointDistanceCompare(const struct WayPointSelectInfo &a,
-                        const struct WayPointSelectInfo &b)
+WaypointDistanceCompare(const struct WaypointSelectInfo &a,
+                        const struct WaypointSelectInfo &b)
 {
   return a.Distance < b.Distance;
 }
@@ -587,13 +587,13 @@ static void
 UpdateList()
 {
   if (filter_data.type_index == tfLastUsed)
-    FillLastUsedList(WayPointSelectInfo, LastUsedWaypointNames,
+    FillLastUsedList(WaypointSelectInfo, LastUsedWaypointNames,
                      way_points, g_location);
   else
-    FillList(WayPointSelectInfo, way_points, g_location,
+    FillList(WaypointSelectInfo, way_points, g_location,
              last_heading, filter_data);
 
-  wWayPointList->SetLength(std::max(1, (int)WayPointSelectInfo.size()));
+  wWayPointList->SetLength(std::max(1, (int)WaypointSelectInfo.size()));
   wWayPointList->SetOrigin(0);
   wWayPointList->SetCursorIndex(0);
   wWayPointList->invalidate();
@@ -725,7 +725,7 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode)
 
 static void
 PaintWaypoint(Canvas &canvas, const PixelRect rc,
-              const struct WayPointSelectInfo &info)
+              const struct WaypointSelectInfo &info)
 {
   const Waypoint &way_point = *info.way_point;
 
@@ -778,7 +778,7 @@ PaintWaypoint(Canvas &canvas, const PixelRect rc,
 static void
 OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
-  if (WayPointSelectInfo.empty()) {
+  if (WaypointSelectInfo.empty()) {
     assert(i == 0);
 
     canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
@@ -788,15 +788,15 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     return;
   }
 
-  assert(i < WayPointSelectInfo.size());
+  assert(i < WaypointSelectInfo.size());
 
-  PaintWaypoint(canvas, rc, WayPointSelectInfo[i]);
+  PaintWaypoint(canvas, rc, WaypointSelectInfo[i]);
 }
 
 static void
 OnWaypointListEnter(gcc_unused unsigned i)
 {
-  if (WayPointSelectInfo.size() > 0)
+  if (WaypointSelectInfo.size() > 0)
     wf->SetModalResult(mrOK);
   else
     OnFilterNameButton(*wbName);
@@ -943,8 +943,8 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
 
   const Waypoint* retval = NULL;
 
-  if (ItemIndex < WayPointSelectInfo.size())
-    retval = WayPointSelectInfo[ItemIndex].way_point;
+  if (ItemIndex < WaypointSelectInfo.size())
+    retval = WaypointSelectInfo[ItemIndex].way_point;
 
   if (retval != NULL)
     dlgWaypointSelectAddToLastUsed(*retval);
