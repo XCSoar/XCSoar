@@ -47,6 +47,14 @@ protected:
   GLuint id;
   unsigned width, height;
 
+#ifndef ANDROID
+  /**
+   * The real dimensions of the texture.  This may differ when
+   * ARB_texture_non_power_of_two is not available.
+   */
+  GLsizei allocated_width, allocated_height;
+#endif
+
 public:
 #ifdef ANDROID
   GLTexture(GLuint _id, unsigned _width, unsigned _height)

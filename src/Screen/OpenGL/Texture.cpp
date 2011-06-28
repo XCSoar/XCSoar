@@ -134,6 +134,10 @@ load_surface_into_texture(const SDL_Surface *surface)
 
 GLTexture::GLTexture(unsigned _width, unsigned _height)
   :width(_width), height(_height)
+#ifndef ANDROID
+  , allocated_width(validate_texture_size(_width)),
+   allocated_height(validate_texture_size(_height))
+#endif
 {
   /* enable linear filtering for the terrain texture */
   init(true);
@@ -150,6 +154,11 @@ GLTexture::load(SDL_Surface *src)
 {
   width = src->w;
   height = src->h;
+
+#ifndef ANDROID
+  allocated_width = validate_texture_size(width);
+  allocated_height = validate_texture_size(src->h);
+#endif
 
   if (!load_surface_into_texture(src)) {
     /* try again after conversion */
@@ -212,10 +221,10 @@ GLTexture::draw(int dest_x, int dest_y,
                 (int)OpenGL::screen_height - OpenGL::translate_y - dest_y - (int)dest_height,
                 0, dest_width, dest_height);
 #else
-  GLfloat x0 = (GLfloat)src_x / width;
-  GLfloat y0 = (GLfloat)src_y / height;
-  GLfloat x1 = (GLfloat)(src_x + src_width) / width;
-  GLfloat y1 = (GLfloat)(src_y + src_height) / height;
+  GLfloat x0 = (GLfloat)src_x / allocated_width;
+  GLfloat y0 = (GLfloat)src_y / allocated_height;
+  GLfloat x1 = (GLfloat)(src_x + src_width) / allocated_width;
+  GLfloat y1 = (GLfloat)(src_y + src_height) / allocated_height;
 
   glBegin(GL_QUADS);
   glTexCoord2f(x0, y0);
