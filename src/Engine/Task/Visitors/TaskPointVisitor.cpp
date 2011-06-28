@@ -31,7 +31,7 @@
 void
 TaskPointConstVisitor::Visit(const TaskPoint &tp)
 {
-  switch (tp.type) {
+  switch (tp.GetType()) {
 
   case TaskPoint::ROUTE:
     assert(1); // not supported yet
@@ -62,7 +62,7 @@ TaskPointConstVisitor::Visit(const TaskPoint &tp)
 void
 TaskPointVisitor::Visit(TaskPoint &tp)
 {
-  switch (tp.type) {
+  switch (tp.GetType()) {
 
   case TaskPoint::ROUTE:
     assert(1); // not supported yet

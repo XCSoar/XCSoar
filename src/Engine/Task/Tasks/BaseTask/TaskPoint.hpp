@@ -47,12 +47,13 @@ public:
     ROUTE
   };
 
-  const enum type type;
+private:
+  enum type type;
 
-protected:
   GeoPoint reference;
+
   /** Altitude (AMSL, m) of task point terrain */
-  const fixed m_elevation;
+  fixed m_elevation;
 
 public:
   bool is_intermediate() const {
@@ -78,8 +79,18 @@ public:
    */
   virtual ~TaskPoint() {};
 
+  enum type GetType() const {
+    return type;
+  }
+
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) {}
 
+protected:
+  fixed GetBaseElevation() const {
+    return m_elevation;
+  }
+
+public:
   /**
    * Retrieve location to be used for remaining task
    * (for a pure TaskPoint, this is the reference location)

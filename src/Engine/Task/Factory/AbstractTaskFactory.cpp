@@ -118,7 +118,7 @@ AbstractTaskFactory::getMutatedPointType(const OrderedTaskPoint &tp) const
   const LegalPointType_t oldtype = getType(tp);
   LegalPointType_t newtype = oldtype;
 
-  switch (tp.type) {
+  switch (tp.GetType()) {
   case TaskPoint::START:
     if (!validStartType(newtype)) {
       newtype = m_behaviour.sector_defaults.start_type;
@@ -225,7 +225,7 @@ AbstractTaskFactory::getType(const OrderedTaskPoint &point) const
 {
   const ObservationZonePoint* oz = point.get_oz();
 
-  switch (point.type) {
+  switch (point.GetType()) {
   case TaskPoint::START:
     switch (oz->shape) {
     case ObservationZonePoint::FAI_SECTOR:
@@ -695,7 +695,7 @@ bool
 AbstractTaskFactory::validType(const OrderedTaskPoint &new_tp,
                                unsigned position) const
 {
-  switch (new_tp.type) {
+  switch (new_tp.GetType()) {
   case TaskPoint::START:
     return validAbstractType(POINT_START, position) &&
         validStartType(getType(new_tp));
@@ -1000,7 +1000,7 @@ AbstractTaskFactory::is_homogeneous() const
 
     for (unsigned i = 2; i < size; i++) {
       OrderedTaskPoint *tp = m_task.get_tp(i);
-      if ((tp->type == TaskPoint::FINISH)) {
+      if ((tp->GetType() == TaskPoint::FINISH)) {
         ; // don't check a valid finish point
       } else {
         if (getType(*tp) != homogtype) {
@@ -1097,7 +1097,7 @@ AbstractTaskFactory::mutate_closed_finish_per_task_type()
     if (!is_closed()) {
       OrderedTaskPoint *tp = m_task.get_tp(m_task.task_size() - 1);
       assert(tp);
-      if (tp->type == TaskPoint::FINISH) {
+      if (tp->GetType() == TaskPoint::FINISH) {
         FinishPoint *fp = createFinish(m_task.get_tp(0)->get_waypoint());
         assert(fp);
         remove(m_task.task_size() - 1, false);

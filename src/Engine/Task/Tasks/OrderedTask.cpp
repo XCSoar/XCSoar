@@ -419,7 +419,7 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
                     get_ordered_task_behaviour().aat_min_time + fixed(task_behaviour.optimise_targets_margin));
 
     if (task_behaviour.optimise_targets_bearing) {
-      if (task_points[activeTaskPoint]->type == TaskPoint::AAT) {
+      if (task_points[activeTaskPoint]->GetType() == TaskPoint::AAT) {
         AATPoint *ap = (AATPoint *)task_points[activeTaskPoint];
         // very nasty hack
         TaskOptTarget tot(task_points, activeTaskPoint, state, glide_polar,
@@ -493,7 +493,7 @@ OrderedTask::get_AAT_task_point(unsigned TPindex) const
    return NULL;
  }
  if (task_points[TPindex]) {
-    if (task_points[TPindex]->type == TaskPoint::AAT)
+    if (task_points[TPindex]->GetType() == TaskPoint::AAT)
       return (AATPoint*) task_points[TPindex];
     else
       return (AATPoint*)NULL;
@@ -511,11 +511,12 @@ OrderedTask::scan_start_finish()
     return false;
   }
 
-  taskpoint_start = task_points[0]->type == TaskPoint::START
+  taskpoint_start = task_points[0]->GetType() == TaskPoint::START
     ? (StartPoint *)task_points[0]
     : NULL;
 
-  taskpoint_finish = task_points.size() > 1 && task_points[task_points.size() - 1]->type == TaskPoint::FINISH
+  taskpoint_finish = task_points.size() > 1 &&
+    task_points[task_points.size() - 1]->GetType() == TaskPoint::FINISH
     ? (FinishPoint *)task_points[task_points.size() - 1]
     : NULL;
 

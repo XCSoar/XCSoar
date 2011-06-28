@@ -77,7 +77,7 @@ TaskAdvanceLegacy::mode_ready(const TaskPoint &tp) const
   case ADVANCE_ARM:
     return m_armed;
   case ADVANCE_ARMSTART:
-    return m_armed || tp.type != TaskPoint::START;
+    return m_armed || tp.GetType() != TaskPoint::START;
   };
   return false;
 }

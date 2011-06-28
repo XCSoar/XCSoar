@@ -41,5 +41,5 @@ IntermediateTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 fixed
 IntermediateTaskPoint::get_elevation() const
 {
-  return m_elevation + safety_height_terrain;
+  return GetBaseElevation() + safety_height_terrain;
 }

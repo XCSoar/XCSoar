@@ -133,7 +133,7 @@ bool
 OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
 {
   return (get_waypoint() == other->get_waypoint()) &&
-    type == other->type &&
+    GetType() == other->GetType() &&
     get_oz()->equals(other->get_oz()) &&
     other->get_oz()->equals(get_oz());
 }
@@ -146,7 +146,7 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
   if (waypoint == NULL)
     waypoint = &get_waypoint();
 
-  switch (type) {
+  switch (GetType()) {
   case START:
     return new StartPoint(get_oz()->clone(&waypoint->Location),
                           *waypoint, task_behaviour,

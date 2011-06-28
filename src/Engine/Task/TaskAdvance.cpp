@@ -43,10 +43,10 @@ TaskAdvance::state_ready(const TaskPoint &tp,
                          const bool x_enter, 
                          const bool x_exit) const
 {
-  if (tp.type == TaskPoint::START)
+  if (tp.GetType() == TaskPoint::START)
     return x_exit;
 
-  if (tp.type == TaskPoint::AAT) {
+  if (tp.GetType() == TaskPoint::AAT) {
     const AATPoint *ap = (const AATPoint *)&tp;
     return aat_state_ready(ap->has_entered(), ap->close_to_target(state));
   } else if (tp.is_intermediate()) {

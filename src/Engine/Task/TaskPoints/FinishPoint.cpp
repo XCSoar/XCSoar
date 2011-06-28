@@ -58,12 +58,13 @@ FinishPoint::entry_precondition() const
 fixed
 FinishPoint::get_elevation() const
 {
-  const fixed nominal_elevation = m_elevation + safety_height_arrival;
+  const fixed nominal_elevation = GetBaseElevation() + safety_height_arrival;
 
   if (m_ordered_task_behaviour.fai_finish) {
     return max(nominal_elevation, fai_finish_height);
   } else {
-    return max(nominal_elevation, m_elevation + fixed(m_ordered_task_behaviour.finish_min_height));
+    return max(nominal_elevation,
+               GetBaseElevation() + fixed(m_ordered_task_behaviour.finish_min_height));
   }
 }
 
@@ -95,7 +96,7 @@ FinishPoint::isInSector(const AIRCRAFT_STATE &state) const
 bool
 FinishPoint::is_in_height_limit(const AIRCRAFT_STATE &state) const
 {
-  if (!m_ordered_task_behaviour.check_finish_height(state, m_elevation))
+  if (!m_ordered_task_behaviour.check_finish_height(state, GetBaseElevation()))
     return false;
 
   if (m_ordered_task_behaviour.fai_finish) {

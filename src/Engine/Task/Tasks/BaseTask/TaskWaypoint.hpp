@@ -38,7 +38,7 @@ class TaskWaypoint :
 {
   friend class PrintHelper;
 
-  const Waypoint m_waypoint; /**< local copy of waypoint */
+  Waypoint m_waypoint; /**< local copy of waypoint */
 
 public:
 /**

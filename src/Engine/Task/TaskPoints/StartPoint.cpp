@@ -49,7 +49,7 @@ fixed
 StartPoint::get_elevation() const
 {
   // no need for safety height at start?
-  return m_elevation;
+  return GetBaseElevation();
 }
 
 
@@ -137,7 +137,7 @@ StartPoint::isInSector(const AIRCRAFT_STATE &state) const
     return false;
 
   return m_ordered_task_behaviour.check_start_height(state, margins,
-                                                     m_elevation);
+                                                     GetBaseElevation());
 }
 
 bool 
@@ -147,11 +147,11 @@ StartPoint::check_transition_exit(const AIRCRAFT_STATE & ref_now,
   const bool now_in_height = 
     m_ordered_task_behaviour.check_start_height(ref_now,
                                                 margins,
-                                                m_elevation);
+                                                GetBaseElevation());
   const bool last_in_height = 
     m_ordered_task_behaviour.check_start_height(ref_last,
                                                 margins,
-                                                m_elevation);
+                                                GetBaseElevation());
 
   if (now_in_height && last_in_height) {
     // both within height limit, so use normal location checks
