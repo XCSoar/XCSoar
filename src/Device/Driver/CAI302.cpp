@@ -333,7 +333,12 @@ static bool
 DeclareInner(Port *port, const Declaration *decl,
              gcc_unused OperationEnvironment &env)
 {
+  unsigned size = decl->size();
+
   port->SetRxTimeout(500);
+
+  env.SetProgressRange(6 + size);
+  env.SetProgressPosition(0);
 
   port->Flush();
   port->Write('\x03');
@@ -365,6 +370,8 @@ DeclareInner(Port *port, const Declaration *decl,
       !port->ExpectString("up>"))
     return false;
 
+  env.SetProgressPosition(1);
+
   port->Write("O 0\r"); // 0=active pilot
 
   cai302_OdataPilot_t cai302_OdataPilot;
@@ -372,6 +379,8 @@ DeclareInner(Port *port, const Declaration *decl,
                  cai302_OdataNoArgs.PilotRecordSize + 3) ||
       !port->ExpectString("up>"))
     return false;
+
+  env.SetProgressPosition(2);
 
   swap(cai302_OdataPilot.ApproachRadius);
   swap(cai302_OdataPilot.ArrivalRadius);
@@ -390,6 +399,8 @@ DeclareInner(Port *port, const Declaration *decl,
       !port->ExpectString("up>"))
     return false;
 
+  env.SetProgressPosition(3);
+
   port->Write("G 0\r");
 
   cai302_Gdata_t cai302_Gdata;
@@ -397,6 +408,8 @@ DeclareInner(Port *port, const Declaration *decl,
                  cai302_GdataNoArgs.GliderRecordSize + 3) ||
       !port->ExpectString("up>"))
     return false;
+
+  env.SetProgressPosition(4);
 
   swap(cai302_Gdata.WeightInLiters);
   swap(cai302_Gdata.BallastCapacity);
@@ -440,6 +453,8 @@ DeclareInner(Port *port, const Declaration *decl,
   if (!port->ExpectString("dn>"))
     return false;
 
+  env.SetProgressPosition(5);
+
   sprintf(szTmp, "G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r",
           GliderType,
           GliderID,
@@ -457,11 +472,16 @@ DeclareInner(Port *port, const Declaration *decl,
   if (!port->ExpectString("dn>"))
     return false;
 
+  env.SetProgressPosition(6);
+
   DeclIndex = 128;
 
-  for (unsigned i = 0; i < decl->size(); ++i)
+  for (unsigned i = 0; i < size; ++i) {
     if (!cai302DeclAddWaypoint(port, decl->get_waypoint(i)))
       return false;
+
+    env.SetProgressPosition(7 + i);
+  }
 
   port->Write("D,255\r");
   port->SetRxTimeout(1500); // D,255 takes more than 800ms
