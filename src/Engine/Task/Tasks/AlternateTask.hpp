@@ -35,7 +35,14 @@ class AlternateTask :
   public AbortTask 
 {
 public:
-  typedef std::pair<Alternate, fixed> Divert;
+  struct Divert : public Alternate {
+    fixed delta;
+
+    Divert(const Waypoint &_waypoint, const GlideResult &_solution,
+           fixed _delta)
+      :Alternate(_waypoint, _solution), delta(_delta) {}
+  };
+
   typedef std::vector<Divert> DivertVector;
 
   static const unsigned max_alternates; /// number of alternates

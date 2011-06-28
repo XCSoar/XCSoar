@@ -66,7 +66,7 @@ struct AlternateRank:
    */
   bool operator()(const AlternateTask::Divert& x, 
                   const AlternateTask::Divert& y) const {
-    return (x.second < y.second);
+    return x.delta < y.delta;
   }
 };
 
@@ -104,12 +104,12 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
         ::DoubleDistance(state_now.get_location(), wp_alt.Location, destination);
     const fixed delta = dist_straight - dist_divert;
 
-    q.push(std::make_pair(Alternate(wp_alt, i->solution), delta));
+    q.push(Divert(wp_alt, i->solution, delta));
   }
 
   // now push results onto the list, best first.
   while (!q.empty() && alternates.size() < max_alternates) {
-    const Alternate &top = q.top().first;
+    const Alternate &top = q.top();
 
     // only add if not already in the list (from previous stage in two
     // stage process)
