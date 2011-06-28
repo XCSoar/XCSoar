@@ -30,7 +30,7 @@ Copyright_License {
 #include "Android/Context.hpp"
 #endif
 
-#ifndef DISABLEAUDIO
+#if defined(WIN32) && !defined(GNAV)
 #include <windows.h>
 #include <mmsystem.h>
 #endif
@@ -40,9 +40,7 @@ bool PlayResource (const TCHAR* lpName)
 #ifdef ANDROID
   return sound_util != NULL &&
     sound_util->play(Java::GetEnv(), context->get(), lpName);
-#elif defined(DISABLEAUDIO)
-  return false;
-#else
+#elif defined(WIN32) && !defined(GNAV)
   BOOL bRtn;
 
   // TODO code: Modify to allow use of WAV Files and/or Embedded files
@@ -57,5 +55,7 @@ bool PlayResource (const TCHAR* lpName)
                    SND_MEMORY | SND_ASYNC | SND_NODEFAULT);
   }
   return bRtn;
+#else
+  return false;
 #endif
 }
