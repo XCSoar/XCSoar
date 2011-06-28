@@ -605,7 +605,7 @@ DEBUG_PROGRAM_NAMES = \
 	LoadTopography LoadTerrain \
 	RunHeightMatrix \
 	RunInputParser \
-	RunWayPointParser RunAirspaceParser \
+	RunWaypointParser RunAirspaceParser \
 	ReadPort RunPortHandler \
 	RunDeviceDriver RunDeclare \
 	RunIGCWriter \
@@ -947,7 +947,7 @@ RUN_WAY_POINT_PARSER_SOURCES = \
 	$(SRC)/Operation.cpp \
 	$(SRC)/RadioFrequency.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
-	$(TEST_SRC_DIR)/RunWayPointParser.cpp
+	$(TEST_SRC_DIR)/RunWaypointParser.cpp
 RUN_WAY_POINT_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_WAY_POINT_PARSER_SOURCES))
 RUN_WAY_POINT_PARSER_LDADD = \
 	$(FAKE_LIBS) \
@@ -956,7 +956,7 @@ RUN_WAY_POINT_PARSER_LDADD = \
 	$(ZZIP_LIBS) \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
-$(TARGET_BIN_DIR)/RunWayPointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS) $(RUN_WAY_POINT_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+$(TARGET_BIN_DIR)/RunWaypointParser$(TARGET_EXEEXT): $(RUN_WAY_POINT_PARSER_OBJS) $(RUN_WAY_POINT_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) -o $@
 
