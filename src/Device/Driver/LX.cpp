@@ -493,28 +493,38 @@ LXDevice::DeclareInner(const Declaration *decl, gcc_unused OperationEnvironment 
   if (!port->SetRxTimeout(2000))
     return false;
 
+  env.SetProgressRange(5);
+  env.SetProgressPosition(0);
+
   if (!StartCommandMode())
       return false;
+
+  env.SetProgressPosition(1);
 
   LoadPilotInfo(decl);
   if (!LoadTask(decl))
     return false;
   LoadContestClass(decl);
 
+  env.SetProgressPosition(2);
+
   port->Write(LX_PREFIX);
   port->Write(LX_WRITE_FLIGHT_INFO);      // start declaration
 
   crc = 0xff;
   WritePilotInfo();
+  env.SetProgressPosition(3);
   WriteTask();
   port->Write(crc);
   if (!port->ExpectString(LX_ACK_STRING))
     return false;
 
+  env.SetProgressPosition(4);
   crc = 0xff;
   port->Write(LX_PREFIX);
   port->Write(LX_WRITE_CONTEST_CLASS);
   WriteContestClass();
+  env.SetProgressPosition(5);
   port->Write(crc);
   return port->ExpectString(LX_ACK_STRING);
 }
