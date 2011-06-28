@@ -221,7 +221,7 @@ public:
       dirty = false;
     }
 
-    glColor4f(1.0, 1.0, 1.0, 1.0);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     GLEnable scope(GL_TEXTURE_2D);
     dest_canvas.stretch(0, 0, dest_width, dest_height,
                         *texture, 0, 0, width, height);

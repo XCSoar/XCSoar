@@ -330,12 +330,13 @@ Canvas::text(int x, int y, const TCHAR *text)
 
   if (background_mode != OPAQUE || background_color != COLOR_BLACK) {
     /* cut out the shape in black */
-    glColor4f(1.0, 1.0, 1.0, 1.0);
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     texture->draw(x, y);
   }
 
   if (text_color != COLOR_BLACK) {
     /* draw the text color on top */
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     logic_op.set(GL_OR);
     text_color.set();
     texture->draw(x, y);
@@ -362,11 +363,12 @@ Canvas::text_transparent(int x, int y, const TCHAR *text)
   GLLogicOp logic_op(GL_AND_INVERTED);
 
   /* cut out the shape in black */
-  glColor4f(1.0, 1.0, 1.0, 1.0);
+  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
   texture->draw(x, y);
 
   if (text_color != COLOR_BLACK) {
     /* draw the text color on top */
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     logic_op.set(GL_OR);
     text_color.set();
     texture->draw(x, y);
@@ -397,11 +399,12 @@ Canvas::text_clipped(int x, int y, unsigned width, const TCHAR *text)
     width = texture->get_width();
 
   /* cut out the shape in black */
-  glColor4f(1.0, 1.0, 1.0, 1.0);
+  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
   texture->draw(x, y, width, height, 0, 0, width, height);
 
   if (text_color != COLOR_BLACK) {
     /* draw the text color on top */
+    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_MODULATE);
     logic_op.set(GL_OR);
     text_color.set();
     texture->draw(x, y, width, height, 0, 0, width, height);
@@ -479,7 +482,7 @@ Canvas::stretch(int dest_x, int dest_y,
 #endif
   assert(src.defined());
 
-  glColor4f(1.0, 1.0, 1.0, 1.0);
+  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
   GLTexture &texture = *src.native();
   GLEnable scope(GL_TEXTURE_2D);
@@ -499,7 +502,7 @@ Canvas::stretch(int dest_x, int dest_y,
 #endif
   assert(src.defined());
 
-  glColor4f(1.0, 1.0, 1.0, 1.0);
+  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
   GLTexture &texture = *src.native();
   GLEnable scope(GL_TEXTURE_2D);
