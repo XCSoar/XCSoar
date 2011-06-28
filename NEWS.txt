@@ -11,12 +11,14 @@ Version 6.1.2 - not yet released
   - manual and translation updates
   - fix UTC offset setting
   - fix overlapped InfoBox text
+  - translation updates
 * map
   - fixed coast line display (areas below zero no longer flooded)
 * Linux
   - fix broken textures on GPUs with power-of-two dimensions
 * Android
   - enable sound effects on task start, arm turn, GPS connection
+  - continue calculations while airspace warning is displayed
 * Altair
   - the Escape button saves dialogs (such as InfoBox setup)
 
