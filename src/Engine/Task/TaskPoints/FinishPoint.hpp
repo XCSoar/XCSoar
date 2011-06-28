@@ -37,6 +37,8 @@
  *
  */
 class FinishPoint : public OrderedTaskPoint {
+  fixed fai_finish_height;
+
 public:
 /** 
  * Constructor.  Sets task area to non-scorable; distances
@@ -107,8 +109,6 @@ private:
     return true;
   }
   bool entry_precondition() const;
-
-  fixed fai_finish_height;
 
   bool is_in_height_limit(const AIRCRAFT_STATE &state) const;
 };

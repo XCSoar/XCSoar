@@ -35,6 +35,9 @@
  */
 class AATIsoline
 {
+protected:
+  const GeoEllipse ell; /**< ellipse representing the isoline segment */
+
 public:
     /** 
      * Constructor.
@@ -42,10 +45,6 @@ public:
      * @param ap The AAT point for which to calculate the Isoline
      */
   AATIsoline(const AATPoint &ap, const TaskProjection &projection);
-protected:
-  const GeoEllipse ell; /**< ellipse representing the isoline segment */
-  /** @link dependency */
-  /*#  AATPoint lnkAATPoint; */
 };
 
 

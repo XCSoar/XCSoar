@@ -40,6 +40,11 @@
 class StartPoint:
   public OrderedTaskPoint
 {
+   /**
+    * For use with multiple start points, whether enabled.
+    */
+  bool enabled;
+
 public:
   /**
    * Constructor.  Sets task area to non-scorable; distances
@@ -122,8 +127,6 @@ public:
                        const TaskProjection &projection);
 
 private:
-  bool enabled; /**< For future use with multiple start points, whether enabled */
-
   bool score_last_exit() const {
     return true;
   }

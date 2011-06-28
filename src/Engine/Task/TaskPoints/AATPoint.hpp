@@ -35,9 +35,14 @@
  * - Elevation may vary with target shift
  */
 class AATPoint : public IntermediateTaskPoint {
-public:
   friend class PrintHelper;
 
+  GeoPoint m_target_location;      /**< Location of target within OZ */
+  GeoPoint m_target_save;          /**< Saved location of target within OZ */
+  bool m_target_locked;            /**< Whether target can float */
+  SearchPointVector m_deadzone;
+
+public:
 /** 
  * Constructor.  Initialises to unlocked target, target is
  * initially set to origin.
@@ -225,11 +230,6 @@ public:
   }
 
 private:
-  GeoPoint m_target_location;      /**< Location of target within OZ */
-  GeoPoint m_target_save;          /**< Saved location of target within OZ */
-  bool m_target_locked;            /**< Whether target can float */
-  SearchPointVector m_deadzone;
-
 /** 
  * Check whether target needs to be moved and if so, to
  * perform the move.  Makes no assumption as to whether the aircraft
