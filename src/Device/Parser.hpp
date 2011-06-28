@@ -70,6 +70,19 @@ public:
 
 private:
 
+  /**
+   * Verifies the given fix time.  If it is smaller than LastTime, but
+   * within a certain tolerance, the LastTime is returned, otherwise
+   * the specified time is returned without modification.
+   *
+   * This is used to reduce quirks when the time stamps in GPGGA and
+   * GPRMC are off by a second.  Without this workaround, XCSoar loses
+   * the GPS fix every now and then, because GPRMC is ignored most of
+   * the time.
+   */
+  gcc_pure
+  fixed TimeAdvanceTolerance(fixed time) const;
+
   bool TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO);
   static fixed TimeModify(fixed FixTime, BrokenDateTime &date_time,
                           bool date_available);

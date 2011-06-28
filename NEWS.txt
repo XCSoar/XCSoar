@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.1.2 - not yet released
+* devices
+  - workaround for GPGGA/GPRMC clock difference
 * calculations
   - reduce memory usage further
   - fix boundary routine of the key hole zone
