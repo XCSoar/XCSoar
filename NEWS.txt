@@ -6,6 +6,7 @@ Version 6.1.2 - not yet released
 * calculations
   - reduce memory usage further
   - fix boundary routine of the key hole zone
+  - set system clock only from a real GPS fix
 * user interface
   - change low battery thresholds
   - manual and translation updates

@@ -89,9 +89,6 @@ ProcessTimer::AirspaceProcessTimer()
 static void
 SystemClockTimer()
 {
-  if (is_simulator())
-    return;
-
 #ifdef WIN32
   const NMEA_INFO &basic = CommonInterface::Basic();
 
@@ -101,6 +98,10 @@ SystemClockTimer()
   static bool sysTimeInitialised = false;
 
   if (basic.Connected && CommonInterface::SettingsMap().SetSystemTimeFromGPS
+      && basic.gps.real
+      /* assume that we only have a valid date and time when we have a
+         full GPS fix */
+      && basic.LocationAvailable
       && !sysTimeInitialised) {
     SYSTEMTIME sysTime;
     ::GetSystemTime(&sysTime);
