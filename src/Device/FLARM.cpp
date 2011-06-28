@@ -57,7 +57,7 @@ FlarmDeclareSetGet(Port *port, TCHAR *s)
   char buffer[_tcslen(s) * 4 + 1];
   return ::WideCharToMultiByte(CP_ACP, 0, s, -1, buffer, sizeof(buffer),
                                NULL, NULL) > 0 &&
-    FlarmDeclareSetGet(port, buffer);
+         FlarmDeclareSetGet(port, buffer);
 }
 #endif
 
@@ -92,29 +92,28 @@ FlarmDeclareInternal(Port *port, const Declaration *decl)
     char NoS, EoW;
 
     tmp = decl->get_location(i).Latitude.value_degrees();
-    NoS = 'N';
-    if(tmp < 0)
-      {
-	NoS = 'S';
-	tmp = -tmp;
-      }
+    if (tmp < 0) {
+      NoS = 'S';
+      tmp = -tmp;
+    } else {
+      NoS = 'N';
+    }
     DegLat = (int)tmp;
     MinLat = (tmp - DegLat) * 60 * 1000;
 
     tmp = decl->get_location(i).Longitude.value_degrees();
-    EoW = 'E';
-    if(tmp < 0)
-      {
-	EoW = 'W';
-	tmp = -tmp;
-      }
+    if (tmp < 0) {
+      EoW = 'W';
+      tmp = -tmp;
+    } else {
+      EoW = 'E';
+    }
     DegLon = (int)tmp;
     MinLon = (tmp - DegLon) * 60 * 1000;
 
-    _stprintf(Buffer,
-	      _T("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),
-	      DegLat, MinLat, NoS, DegLon, MinLon, EoW,
-	      decl->get_name(i));
+    _stprintf(Buffer, _T("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
+              MinLat, NoS, DegLon, MinLon, EoW, decl->get_name(i));
+
     if (!FlarmDeclareSetGet(port, Buffer))
       return false;
   }
@@ -133,6 +132,7 @@ FlarmDeclareInternal(Port *port, const Declaration *decl)
   // PFLAC,,NEWTASK:
   // PFLAC,,ADDWP:
 
+  // Reset the FLARM to activate the declaration
   port->Write("$PFLAR,0\r\n");
 
   return true;
