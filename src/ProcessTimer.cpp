@@ -262,9 +262,6 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
       wait_lock = true;
       itimeout = 0;
       InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
-#ifndef DISABLEAUDIO
-      MessageBeep(MB_ICONEXCLAMATION);
-#endif
       TriggerGPSUpdate(); // ensure screen gets updated
     }
   } else if (connected_now) {
@@ -284,9 +281,6 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
       // gps is waiting for connection first time
       wait_connect = true;
       InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
-#ifndef DISABLEAUDIO
-      MessageBeep(MB_ICONEXCLAMATION);
-#endif
     } else if (itimeout % 60 == 0) {
       itimeout = 0;
       // we've been waiting for connection a long time

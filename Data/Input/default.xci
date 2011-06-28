@@ -113,6 +113,7 @@ mode=default
 type=gce
 data=GPS_CONNECTION_WAIT
 event=StatusMessage Waiting for GPS connection
+event=Beep
 
 mode=default
 type=gce
@@ -123,6 +124,7 @@ mode=default
 type=gce
 data=GPS_FIX_WAIT
 event=StatusMessage Waiting for GPS fix
+event=Beep
 
 mode=default
 type=gce
