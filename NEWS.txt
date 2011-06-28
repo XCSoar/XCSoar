@@ -15,6 +15,8 @@ Version 6.1.2 - not yet released
   - fixed coast line display (areas below zero no longer flooded)
 * Linux
   - fix broken textures on GPUs with power-of-two dimensions
+* Android
+  - enable sound effects on task start, arm turn, GPS connection
 * Altair
   - the Escape button saves dialogs (such as InfoBox setup)
 

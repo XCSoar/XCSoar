@@ -1325,12 +1325,12 @@ InputEvents::eventProfileSave(const TCHAR *misc)
 void
 InputEvents::eventBeep(gcc_unused const TCHAR *misc)
 {
-  #ifndef DISABLEAUDIO
-  MessageBeep(MB_ICONEXCLAMATION);
-  #endif
-
   #if defined(GNAV)
   altair_control.ShortBeep();
+#elif defined(WIN32)
+  MessageBeep(MB_ICONEXCLAMATION);
+#else
+  PlayResource(_T("IDR_WAV_CLEAR"));
   #endif
 }
 
