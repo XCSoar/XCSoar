@@ -39,9 +39,9 @@ struct cai302_Wdata_t {
   unsigned char ID[3];
   unsigned char Type;
   unsigned char Version[5];
-  unsigned char reserved2[6];
+  unsigned char reserved2[5];
   unsigned char cai302ID;
-  unsigned char reserved3;
+  unsigned char reserved3[2];
 } gcc_packed;
 
 /** Structure for CAI302 Odata info */
