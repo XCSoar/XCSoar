@@ -111,6 +111,36 @@ CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
 }
 
 int
+CAI302::ReadLargeReply(Port &port, void *buffer, unsigned max_size,
+                       unsigned timeout_ms)
+{
+  unsigned char header[5];
+  if (!port.FullRead(header, sizeof(header), timeout_ms))
+    return -1;
+
+  unsigned size = (header[0] << 8) | header[1];
+  if (size < sizeof(header))
+    return -1;
+
+  size -= sizeof(header);
+  if (size > max_size)
+    size = max_size;
+
+  if (!port.FullRead(buffer, size, timeout_ms))
+    return -1;
+
+  // XXX verify the checksum
+
+  if (size < max_size) {
+    /* fill the rest with zeroes */
+    char *p = (char *)buffer;
+    std::fill(p + size, p + max_size, 0);
+  }
+
+  return size;
+}
+
+int
 CAI302::UploadShort(Port &port, const char *command,
                     void *response, unsigned max_size,
                     unsigned timeout_ms)
@@ -120,6 +150,25 @@ CAI302::UploadShort(Port &port, const char *command,
     return -1;
 
   int nbytes = ReadShortReply(port, response, max_size, timeout_ms);
+  if (nbytes < 0)
+    return nbytes;
+
+  if (!WaitUploadPrompt(port))
+    return -1;
+
+  return nbytes;
+}
+
+int
+CAI302::UploadLarge(Port &port, const char *command,
+                    void *response, unsigned max_size,
+                    unsigned timeout_ms)
+{
+  port.Flush();
+  if (!WriteString(port, command))
+    return -1;
+
+  int nbytes = ReadLargeReply(port, response, max_size, timeout_ms);
   if (nbytes < 0)
     return nbytes;
 

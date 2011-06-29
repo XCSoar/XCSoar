@@ -142,6 +142,16 @@ namespace CAI302 {
                  unsigned timeout_ms=2000);
 
   /**
+   * Receive a "large" reply from the CAI302.
+   *
+   * @return the number of data bytes received (not including the 5 byte
+   * header), -1 on error
+   */
+  int
+  ReadLargeReply(Port &port, void *buffer, unsigned max_size,
+                 unsigned timeout_ms=8000);
+
+  /**
    * Send an upload command, and read the short response.  CAI302 must
    * be at the upload prompt already.
    *
@@ -156,6 +166,22 @@ namespace CAI302 {
   UploadShort(Port &port, const char *command,
               void *response, unsigned max_size,
               unsigned timeout_ms=2000);
+
+  /**
+   * Send an upload command, and read the large response.  CAI302 must
+   * be at the upload prompt already.
+   *
+   * Note: "upload" means that the CAI302 uploads data to XCSoar,
+   * i.e. we're actually receiving from the CAI302.
+   *
+   * @param command a command string that ends with "\r"
+   * @return the number of data bytes received (not including the 5 byte
+   * header), -1 on error
+   */
+  int
+  UploadLarge(Port &port, const char *command,
+              void *response, unsigned max_size,
+              unsigned timeout_ms=8000);
 
   bool
   UploadPolarMeta(Port &port, PolarMeta &data);
