@@ -1013,14 +1013,12 @@ GlideComputerAirData::LastThermalStats()
     return;
 
   fixed ThermalTime = calculated.CruiseStartTime - calculated.ClimbStartTime;
-
-  if (!positive(ThermalTime))
+  if (ThermalTime < THERMAL_TIME_MIN)
     return;
 
   fixed ThermalGain = calculated.CruiseStartAlt
       + calculated.EnergyHeight - calculated.ClimbStartAlt;
-
-  if (!positive(ThermalGain) || ThermalTime <= THERMAL_TIME_MIN)
+  if (!positive(ThermalGain))
     return;
 
   calculated.last_thermal.gain = ThermalGain;
