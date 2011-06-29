@@ -50,7 +50,6 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Thread/Trigger.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
@@ -71,8 +70,6 @@ Copyright_License {
 #include "ThermalBase.hpp"
 #include "ThermalLocator.hpp"
 #include "LocalTime.hpp"
-
-Trigger airspaceWarningEvent(_T("airspaceWarning"));
 
 TaskFile*
 TaskFile::Create(const TCHAR* path)

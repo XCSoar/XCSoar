@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_PROTECTION_HPP
 #define XCSOAR_PROTECTION_HPP
 
-#include "Thread/Trigger.hpp"
 #include "Thread/Flag.hpp"
 #include "Thread/Mutex.hpp"
 
@@ -50,7 +49,6 @@ extern bool MapFileChanged;
 extern bool LanguageChanged;
 
 extern Flag globalRunningEvent;
-extern Trigger airspaceWarningEvent;
 
 /**
  * Suspend all threads which have unprotected access to shared data.

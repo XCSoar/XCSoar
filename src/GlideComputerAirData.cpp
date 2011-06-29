@@ -24,7 +24,6 @@ Copyright_License {
 
 #include "GlideComputerAirData.hpp"
 #include "GlideComputer.hpp"
-#include "Protection.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"
 #include "Math/LowPassFilter.hpp"
@@ -741,7 +740,7 @@ GlideComputerAirData::AirspaceWarning()
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
   assert(positive(time_delta()));
   if (m_airspace.update_warning(as, Calculated().Circling, (unsigned)iround(time_delta())))
-    airspaceWarningEvent.Signal();
+    SetCalculated().airspace_warnings.latest.Update(Basic().Time);
 }
 
 void

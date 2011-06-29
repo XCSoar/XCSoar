@@ -35,7 +35,6 @@ Copyright_License {
 #include <assert.h>
 
 Flag globalRunningEvent;
-Trigger airspaceWarningEvent;
 
 Mutex mutexBlackboard;
 // protect GPS_INFO, maccready etc,

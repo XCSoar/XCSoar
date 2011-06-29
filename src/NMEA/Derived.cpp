@@ -41,6 +41,12 @@ TEAMCODE_INFO::Clear()
 }
 
 void
+AirspaceWarningsInfo::Clear()
+{
+  latest.Clear();
+}
+
+void
 DERIVED_INFO::reset()
 {
   VARIO_INFO::Clear();
@@ -68,6 +74,8 @@ DERIVED_INFO::reset()
   trace_history.clear();
 
   auto_mac_cready_available.Clear();
+
+  airspace_warnings.Clear();
 }
 
 void

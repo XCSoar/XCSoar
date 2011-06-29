@@ -113,6 +113,16 @@ struct TEAMCODE_INFO
   void Clear();
 };
 
+struct AirspaceWarningsInfo {
+  /**
+   * The time stamp of the most recent airspace warning.  Check if
+   * this value gets increased to see if there's a new warning.
+   */
+  Validity latest;
+
+  void Clear();
+};
+
 /**
  * A struct that holds all the calculated values derived from the data in the
  * NMEA_INFO struct
@@ -206,6 +216,8 @@ struct DERIVED_INFO:
 
   GlidePolar glide_polar_reach; /**< Glide polar used for reach calculations */
   GlidePolar glide_polar_safety; /**< Glide polar used for safety calculations */
+
+  AirspaceWarningsInfo airspace_warnings;
 
   void ResetFlight(bool full);
 };

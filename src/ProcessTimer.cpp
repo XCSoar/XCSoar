@@ -76,8 +76,12 @@ ProcessTimer::MessageProcessTimer()
 void
 ProcessTimer::AirspaceProcessTimer()
 {
-  if (airspaceWarningEvent.Test()) {
-    airspaceWarningEvent.Reset();
+  static Validity previous;
+
+  const AirspaceWarningsInfo &warnings =
+    CommonInterface::Calculated().airspace_warnings;
+  if (warnings.latest.Modified(previous)) {
+    previous = warnings.latest;
     CommonInterface::main_window.SendAirspaceWarning();
   }
 }
