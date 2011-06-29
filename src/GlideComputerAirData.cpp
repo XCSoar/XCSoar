@@ -922,9 +922,6 @@ GlideComputerAirData::Turning()
             + calculated.TurnStartEnergyHeight;
         calculated.ClimbStartTime = calculated.TurnStartTime;
 
-        // set altitude for start of circling (as base of climb)
-        OnClimbBase(calculated.TurnStartAltitude);
-
         // consider code: InputEvents GCE - Move this to InputEvents
         // Consider a way to take the CircleZoom and other logic
         // into InputEvents instead?
@@ -968,8 +965,6 @@ GlideComputerAirData::Turning()
         calculated.CruiseStartLocation = calculated.TurnStartLocation;
         calculated.CruiseStartAlt = calculated.TurnStartAltitude;
         calculated.CruiseStartTime = calculated.TurnStartTime;
-
-        OnClimbCeiling();
 
         OnSwitchClimbMode(false, LEFT);
       }

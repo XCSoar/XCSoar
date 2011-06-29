@@ -116,6 +116,29 @@ GlideComputerStats::OnDepartedThermal()
 }
 
 void
+GlideComputerStats::ProcessClimbEvents()
+{
+  const DERIVED_INFO &calculated = Calculated();
+  const DERIVED_INFO &last_calculated = LastCalculated();
+
+  switch (calculated.TurnMode) {
+  case CLIMB:
+    if (calculated.ClimbStartTime > last_calculated.ClimbStartTime)
+      // set altitude for start of circling (as base of climb)
+      OnClimbBase(calculated.TurnStartAltitude);
+    break;
+
+  case CRUISE:
+    if (calculated.CruiseStartTime > last_calculated.CruiseStartTime)
+      OnClimbCeiling();
+    break;
+
+  default:
+    break;
+  }
+}
+
+void
 GlideComputerStats::SetFastLogging()
 {
   FastLogNum = 5;

@@ -110,6 +110,8 @@ GlideComputer::ProcessGPS()
   // Process extended information
   ProcessVertical();
 
+  GlideComputerStats::ProcessClimbEvents();
+
   // Calculate the team code
   CalculateOwnTeamCode();
 

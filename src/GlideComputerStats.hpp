@@ -64,10 +64,18 @@ protected:
   bool DoLogging();
   void SetFastLogging();
 
+private:
+  void OnClimbBase(fixed StartAlt);
+  void OnClimbCeiling();
+
 protected:
-  virtual void OnClimbBase(fixed StartAlt);
-  virtual void OnClimbCeiling();
   virtual void OnDepartedThermal();
+
+  /**
+   * Check of climbing has started or ended, and collect statistics
+   * about that.
+   */
+  void ProcessClimbEvents();
 };
 
 #endif

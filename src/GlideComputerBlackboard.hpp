@@ -80,8 +80,6 @@ protected:
   void SaveFinish();
   void RestoreFinish();
 
-  virtual void OnClimbBase(fixed StartAlt) = 0;
-  virtual void OnClimbCeiling() = 0;
   virtual void OnDepartedThermal() = 0;
 
   // only the glide computer can write to calculated
