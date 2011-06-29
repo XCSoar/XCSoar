@@ -320,13 +320,6 @@ GlideComputer::OnSwitchClimbMode(bool isclimb, bool left)
   }
 }
 
-void
-GlideComputer::OnDepartedThermal()
-{
-  GlideComputerAirData::OnDepartedThermal();
-  GlideComputerStats::OnDepartedThermal();
-}
-
 /**
  * Searches the FLARM_Traffic array for the TeamMate and updates TeamMate
  * position and TeamCode if found.

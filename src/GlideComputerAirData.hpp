@@ -84,7 +84,11 @@ protected:
 
   virtual void OnTakeoff();
   virtual void OnLanding();
-  virtual void OnDepartedThermal();
+
+private:
+  void OnDepartedThermal();
+
+protected:
   virtual void OnSwitchClimbMode(bool isclimb, bool left);
 
   bool FlightTimes();

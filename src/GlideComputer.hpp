@@ -83,7 +83,6 @@ protected:
   virtual void OnTakeoff();
   virtual void OnLanding();
   virtual void OnSwitchClimbMode(bool isclimb, bool left);
-  virtual void OnDepartedThermal();
 
 private:
 

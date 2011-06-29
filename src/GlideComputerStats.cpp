@@ -136,6 +136,11 @@ GlideComputerStats::ProcessClimbEvents()
   default:
     break;
   }
+
+  if (calculated.last_thermal.IsDefined() &&
+      (!last_calculated.last_thermal.IsDefined() ||
+       calculated.last_thermal.end_time > last_calculated.last_thermal.end_time))
+    OnDepartedThermal();
 }
 
 void

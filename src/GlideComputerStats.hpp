@@ -67,10 +67,9 @@ protected:
 private:
   void OnClimbBase(fixed StartAlt);
   void OnClimbCeiling();
+  void OnDepartedThermal();
 
 protected:
-  virtual void OnDepartedThermal();
-
   /**
    * Check of climbing has started or ended, and collect statistics
    * about that.

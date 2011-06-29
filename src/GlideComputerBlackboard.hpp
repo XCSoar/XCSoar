@@ -80,8 +80,6 @@ protected:
   void SaveFinish();
   void RestoreFinish();
 
-  virtual void OnDepartedThermal() = 0;
-
   // only the glide computer can write to calculated
   DERIVED_INFO& SetCalculated() { return calculated_info; }
 };
