@@ -101,24 +101,10 @@ cai302DeclAddWaypoint(Port *port, const Waypoint &way_point)
 }
 
 static bool
-ReadBlock(Port &port, void *dest, size_t max_length, size_t length)
-{
-  assert(dest != NULL);
-  assert(max_length > 0);
-
-  if (length > max_length)
-    length = max_length;
-
-  if (length == 0)
-    return true;
-
-  return port.FullRead(dest, length, 3000);
-}
-
-static bool
 DeclareInner(Port *port, const Declaration &declaration,
              gcc_unused OperationEnvironment &env)
 {
+  using CAI302::ReadShortReply;
   unsigned size = declaration.size();
 
   port->SetRxTimeout(500);
@@ -151,8 +137,7 @@ DeclareInner(Port *port, const Declaration &declaration,
   port->SetRxTimeout(1500);
 
   CAI302::PilotMeta pilot_meta;
-  if (!ReadBlock(*port, &pilot_meta, sizeof(pilot_meta),
-                 sizeof(pilot_meta)) ||
+  if (ReadShortReply(*port, &pilot_meta, sizeof(pilot_meta)) < 0 ||
       !port->ExpectString("up>"))
     return false;
 
@@ -161,8 +146,7 @@ DeclareInner(Port *port, const Declaration &declaration,
   port->Write("O 0\r"); // 0=active pilot
 
   CAI302::Pilot pilot;
-  if (!ReadBlock(*port, &pilot, sizeof(pilot),
-                 pilot_meta.record_size + 3) ||
+  if (ReadShortReply(*port, &pilot, sizeof(pilot)) < 0 ||
       !port->ExpectString("up>"))
     return false;
 
@@ -171,7 +155,7 @@ DeclareInner(Port *port, const Declaration &declaration,
   port->Write("G\r");
 
   CAI302::PolarMeta polar_meta;
-  if (!ReadBlock(*port, &polar_meta, sizeof(polar_meta), sizeof(polar_meta)) ||
+  if (ReadShortReply(*port, &polar_meta, sizeof(polar_meta)) < 0 ||
       !port->ExpectString("up>"))
     return false;
 
@@ -180,8 +164,7 @@ DeclareInner(Port *port, const Declaration &declaration,
   port->Write("G 0\r");
 
   CAI302::Polar polar;
-  if (!ReadBlock(*port, &polar, sizeof(polar),
-                 polar_meta.record_size + 3) ||
+  if (ReadShortReply(*port, &polar, sizeof(polar)) < 0 ||
       !port->ExpectString("up>"))
     return false;
 

@@ -15,6 +15,7 @@ VOLKSLOGGER_SOURCES += $(SRC)/Device/Volkslogger/vlutils.cpp
 endif
 
 CAI302_SOURCES = \
+	$(DRIVER_SRC_DIR)/CAI302/Protocol.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Parser.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Settings.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Declare.cpp \

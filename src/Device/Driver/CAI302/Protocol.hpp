@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <stdint.h>
 
+class Port;
+
 #define CtrlC 0x03
 
 namespace CAI302 {
@@ -36,13 +38,11 @@ namespace CAI302 {
 
   /** Structure for CAI302 glider response */
   struct PolarMeta {
-    uint8_t result[3];
     uint8_t record_size;
   } gcc_packed;
 
   /** Structure for CAI302 glider data */
   struct Polar {
-    uint8_t result[3];
     uint8_t glider_type[12];
     uint8_t glider_id[12];
     uint8_t best_ld;
@@ -54,20 +54,16 @@ namespace CAI302 {
     uint16_t reserved2;
     uint16_t config_word; // locked(1) = FF FE.  unlocked(0) = FF FF
     uint16_t wing_area; // 100ths square meters
-    uint8_t  Spare[60]; // 302 expect more data than the documented filed
-    // be shure there is space to hold the data
   } gcc_packed;
 
   /** Structure for CAI302 Odata info */
   struct PilotMeta {
-    uint8_t result[3];
     uint8_t count;
     uint8_t record_size;
   } gcc_packed;
 
   /** Structure for CAI302 settings */
   struct Pilot {
-    uint8_t  result[3];
     char name[24];
     uint8_t old_units; // old unit
     uint8_t old_temperatur_units; // 0 = Celcius, 1 = Farenheight
@@ -87,13 +83,10 @@ namespace CAI302 {
     uint16_t unit_word;
     uint16_t reserved2;
     uint16_t margin_height; // (10ths of Meters)
-    uint8_t spare[60]; // 302 expect more data than the documented filed
-    // be shure there is space to hold the data
   } gcc_packed;
 
   /** Structure for CAI302 device info */
   struct GeneralInfo {
-    uint8_t result[3];
     uint8_t reserved[15];
     uint8_t id[3];
     uint8_t type;
@@ -104,6 +97,16 @@ namespace CAI302 {
   } gcc_packed;
 
 #pragma pack(pop)
+
+  /**
+   * Receive a "short" reply from the CAI302.
+   *
+   * @return the number of data bytes received (not including the 3 byte
+   * header), -1 on error
+   */
+  int
+  ReadShortReply(Port &port, void *buffer, unsigned max_size,
+                 unsigned timeout_ms=2000);
 }
 
 #endif
