@@ -63,7 +63,8 @@ void
 GlideComputer::ResetFlight(const bool full)
 {
   GlideComputerBlackboard::ResetFlight(full);
-  GlideComputerAirData::ResetFlight(full);
+  GlideComputerAirData::ResetFlight(SetCalculated(), GetComputerSettings(),
+                                    full);
   GlideComputerTask::ResetFlight(full);
   GlideComputerStats::ResetFlight(full);
 
@@ -94,7 +95,7 @@ GlideComputer::ProcessGPS()
   calculated.Expire(basic.clock);
 
   // Process basic information
-  ProcessBasic();
+  ProcessBasic(Basic(), SetCalculated(), GetComputerSettings());
 
   // Process basic task information
   ProcessBasicTask(basic, LastBasic(),
@@ -104,7 +105,8 @@ GlideComputer::ProcessGPS()
                   GetComputerSettings());
 
   // Check if everything is okay with the gps time and process it
-  if (!FlightTimes())
+  if (!FlightTimes(Basic(), LastBasic(), SetCalculated(),
+                   GetComputerSettings()))
     return false;
 
   TakeoffLanding();
@@ -113,7 +115,8 @@ GlideComputer::ProcessGPS()
     GlideComputerTask::ProcessAutoTask(basic, calculated, LastCalculated());
 
   // Process extended information
-  ProcessVertical();
+  ProcessVertical(Basic(), LastBasic(), SetCalculated(), LastCalculated(),
+                  GetComputerSettings());
 
   if (!time_retreated())
     GlideComputerStats::ProcessClimbEvents(calculated, LastCalculated());
@@ -269,7 +272,7 @@ void
 GlideComputer::OnTakeoff()
 {
   // reset stats on takeoff
-  GlideComputerAirData::ResetFlight();
+  GlideComputerAirData::ResetFlight(SetCalculated(), GetComputerSettings());
 
   // save stats in case we never finish
   SaveFinish();

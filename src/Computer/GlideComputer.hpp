@@ -24,6 +24,7 @@ Copyright_License {
 #if !defined(XCSOAR_GLIDECOMPUTER_HPP)
 #define XCSOAR_GLIDECOMPUTER_HPP
 
+#include "GlideComputerBlackboard.hpp"
 #include "Audio/VegaVoice.hpp"
 #include "GPSClock.hpp"
 #include "PeriodClock.hpp"
@@ -43,7 +44,8 @@ class RasterTerrain;
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
 
-class GlideComputer:
+class GlideComputer
+  : public GlideComputerBlackboard,
     public GlideComputerAirData, public GlideComputerTask,
     public GlideComputerStats
 {

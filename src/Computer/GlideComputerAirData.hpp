@@ -24,7 +24,6 @@ Copyright_License {
 #if !defined(XCSOAR_GLIDECOMPUTER_AIRDATA_HPP)
 #define XCSOAR_GLIDECOMPUTER_AIRDATA_HPP
 
-#include "GlideComputerBlackboard.hpp"
 #include "AutoQNH.hpp"
 #include "GlideRatioCalculator.hpp"
 #include "FlyingComputer.hpp"
@@ -34,6 +33,11 @@ Copyright_License {
 #include "ThermalLocator.hpp"
 #include "Util/WindowFilter.hpp"
 
+struct VarioInfo;
+struct OneClimbInfo;
+struct TerrainInfo;
+struct ThermalLocatorInfo;
+struct ThermalBandInfo;
 class Waypoints;
 class Airspaces;
 class RasterTerrain;
@@ -44,7 +48,7 @@ class ProtectedAirspaceWarningManager;
 // do not replicate the large items or items that should be singletons
 // OR: just make them static?
 
-class GlideComputerAirData: virtual public GlideComputerBlackboard {
+class GlideComputerAirData {
   const Waypoints &waypoints;
   const RasterTerrain *terrain;
 
@@ -74,23 +78,25 @@ public:
   }
 
 protected:
-  void ResetFlight(const bool full=true);
+  void ResetFlight(DerivedInfo &calculated, const ComputerSettings &settings,
+                   const bool full=true);
 
   /**
    * Calculates some basic values
    */
-  void ProcessBasic();
+  void ProcessBasic(const MoreData &basic, DerivedInfo &calculated,
+                    const ComputerSettings &settings);
 
   /**
    * Calculates some other values
    */
-  void ProcessVertical();
-
-private:
-  void OnDepartedThermal();
+  void ProcessVertical(const MoreData &basic, const MoreData &last_basic,
+                       DerivedInfo &calculated,
+                       const DerivedInfo &last_calculated,
+                       const ComputerSettings &settings);
 
 protected:
-  void OnSwitchClimbMode(bool isclimb, bool left);
+  void OnSwitchClimbMode(const ComputerSettings &settings);
 
   /**
    * 1. Detects time retreat and calls ResetFlight if GPS lost
@@ -98,38 +104,50 @@ protected:
    * 3. Calls DetectStartTime and saves the time of flight
    * @return true as default, false if something is wrong in time
    */
-  bool FlightTimes();
+  bool FlightTimes(const NMEAInfo &basic, const NMEAInfo &last_basic,
+                   DerivedInfo &calculated,
+                   const ComputerSettings &settings);
 
 private:
   /**
    * Calculates the heading
    */
-  void Heading();
+  void Heading(const NMEAInfo &basic, DerivedInfo &calculated);
   void EnergyHeight();
-  void NettoVario();
-  void AverageClimbRate();
-  void Average30s();
-  void CurrentThermal();
-  void ResetLiftDatabase();
-  void UpdateLiftDatabase();
-  void MaxHeightGain();
-  void LD();
-  void CruiseLD();
+  void NettoVario(const NMEAInfo &basic, const FlyingState &flight,
+                  VarioInfo &vario, const ComputerSettings &settings_computer);
+  void AverageClimbRate(const NMEAInfo &basic, DerivedInfo &calculated);
+  void Average30s(const MoreData &basic, const NMEAInfo &last_basic,
+                  DerivedInfo &calculated, const DerivedInfo &last_calculated);
+  void CurrentThermal(const MoreData &basic, const CirclingInfo &circling,
+                      OneClimbInfo &current_thermal);
+  void ResetLiftDatabase(DerivedInfo &calculated);
+  void UpdateLiftDatabase(const MoreData &basic, DerivedInfo &calculated,
+                          const DerivedInfo &last_calculated);
+  void MaxHeightGain(const MoreData &basic, DerivedInfo &calculated);
+  void LD(const MoreData &basic, const MoreData &last_basic,
+          const DerivedInfo &calculated, VarioInfo &vario_info);
+  void CruiseLD(const MoreData &basic, DerivedInfo &calculated);
 
   /**
    * Calculates the wind
    */
-  void Wind();
+  void Wind(const MoreData &basic, DerivedInfo &calculated,
+            const ComputerSettings &settings_computer);
 
   /**
    * Choose a wind from: user input; external device; calculated.
    */
-  void SelectWind();
+  void SelectWind(const NMEAInfo &basic, DerivedInfo &calculated,
+                  const ComputerSettings &settings);
 
-  void TerrainHeight();
-  void FlightState(const GlidePolar& glide_polar);
+  void TerrainHeight(const MoreData &basic, TerrainInfo &calculated);
+  void FlightState(const NMEAInfo &basic, const NMEAInfo &last_basic,
+                   const DerivedInfo &calculated, FlyingState &flying,
+                   const GlidePolar &glide_polar);
 
-  void ThermalSources();
+   void ThermalSources(const MoreData &basic, const DerivedInfo &calculated,
+                       ThermalLocatorInfo &thermal_locator);
 
   /**
    * Updates stats during transition from climb mode to cruise mode
@@ -145,25 +163,24 @@ private:
    *  LastThermalTime
    *  LastThermalAverageSmooth
    */
-  void LastThermalStats();
+  void LastThermalStats(const MoreData &basic, DerivedInfo &calculated,
+                        const DerivedInfo &last_calculated);
 
   /**
    * Calculate the circling time percentage and call the thermal band calculation
    * @param Rate Current turn rate
    */
-  void PercentCircling();
-
-  /**
-   * Calculates the turn rate
-   */
-  void TurnRate();
+  void PercentCircling(const MoreData &basic, DerivedInfo &calculated,
+                       const ComputerSettings &settings);
 
   /**
    * Calculates the turn rate and the derived features.
    * Determines the current flight mode (cruise/circling).
    */
-  void Turning();
-  void ProcessSun();
+  void Turning(const MoreData &basic, const MoreData &last_basic,
+               DerivedInfo &calculated, const DerivedInfo &last_calculated,
+               const ComputerSettings &settings);
+  void ProcessSun(const NMEAInfo &basic, DerivedInfo &calculated);
 };
 
 #endif
