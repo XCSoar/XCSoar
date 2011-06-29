@@ -24,9 +24,16 @@ Copyright_License {
 #include "ClimbInfo.hpp"
 
 void
+OneClimbInfo::Clear()
+{
+  duration = fixed_zero;
+  gain = fixed_zero;
+  lift_rate = fixed_zero;
+}
+
+void
 CLIMB_INFO::Clear()
 {
-  ThermalAverage = fixed_zero;
-  ThermalGain = fixed_zero;
-  LastThermalAverage = fixed_zero;
+  current_thermal.Clear();
+  last_thermal.Clear();
 }

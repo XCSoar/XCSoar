@@ -144,8 +144,7 @@ GlideComputerAirData::ProcessVertical()
 
   Average30s();
   AverageClimbRate();
-  ThermalGain();
-  AverageThermal();
+  CurrentThermal();
   UpdateLiftDatabase();
 }
 
@@ -407,14 +406,17 @@ GlideComputerAirData::Average30s()
 }
 
 void
-GlideComputerAirData::AverageThermal()
+GlideComputerAirData::CurrentThermal()
 {
-  DERIVED_INFO &calculated = SetCalculated();
+  const DERIVED_INFO &calculated = Calculated();
+  OneClimbInfo &current_thermal = SetCalculated().current_thermal;
 
-  if (positive(calculated.ClimbStartTime) &&
-      Basic().Time > calculated.ClimbStartTime)
-    calculated.ThermalAverage =
-      calculated.ThermalGain / (Basic().Time - calculated.ClimbStartTime);
+  if (positive(calculated.ClimbStartTime)) {
+    current_thermal.duration = Basic().Time - calculated.ClimbStartTime;
+    current_thermal.gain = calculated.TEAltitude - calculated.ClimbStartAlt;
+    current_thermal.CalculateLiftRate();
+  } else
+    current_thermal.Clear();
 }
 
 /**
@@ -526,17 +528,6 @@ GlideComputerAirData::MaxHeightGain()
   }
 
   calculated.MinAltitude = min(basic.NavAltitude, calculated.MinAltitude);
-}
-
-void
-GlideComputerAirData::ThermalGain()
-{
-  DERIVED_INFO &calculated = SetCalculated();
-
-  if (positive(calculated.ClimbStartTime) &&
-      Basic().Time >= calculated.ClimbStartTime)
-    calculated.ThermalGain =
-      calculated.TEAltitude - calculated.ClimbStartAlt;
 }
 
 void
@@ -983,10 +974,10 @@ GlideComputerAirData::ThermalSources()
   THERMAL_LOCATOR_INFO &thermal_locator = SetCalculated().thermal_locator;
 
   if (!thermal_locator.estimate_valid ||
-      !calculated.LastThermalAvailable())
+      !calculated.last_thermal.IsDefined())
     return;
 
-  if (calculated.wind.norm / calculated.LastThermalAverage > fixed(10.0)) {
+  if (calculated.wind.norm / calculated.last_thermal.lift_rate > fixed(10.0)) {
     // thermal strength is so weak compared to wind that source estimate
     // is unlikely to be reliable, so don't calculate or remember it
     return;
@@ -996,7 +987,7 @@ GlideComputerAirData::ThermalSources()
   fixed ground_altitude = fixed_minus_one;
   EstimateThermalBase(thermal_locator.estimate_location,
                       Basic().NavAltitude,
-                      calculated.LastThermalAverage,
+                      calculated.last_thermal.lift_rate,
                       calculated.wind,
                       ground_location,
                       ground_altitude);
@@ -1004,7 +995,7 @@ GlideComputerAirData::ThermalSources()
   if (positive(ground_altitude)) {
     THERMAL_SOURCE_INFO &source = thermal_locator.AllocateSource(Basic().Time);
 
-    source.LiftRate = calculated.LastThermalAverage;
+    source.LiftRate = calculated.last_thermal.lift_rate;
     source.Location = ground_location;
     source.GroundHeight = ground_altitude;
     source.Time = Basic().Time;
@@ -1032,17 +1023,17 @@ GlideComputerAirData::LastThermalStats()
   if (!positive(ThermalGain) || ThermalTime <= THERMAL_TIME_MIN)
     return;
 
-  calculated.LastThermalAverage = ThermalGain / ThermalTime;
-  calculated.LastThermalGain = ThermalGain;
-  calculated.LastThermalTime = ThermalTime;
+  calculated.last_thermal.gain = ThermalGain;
+  calculated.last_thermal.duration = ThermalTime;
+  calculated.last_thermal.CalculateLiftRate();
 
   if (calculated.LastThermalAverageSmooth == fixed_zero)
     calculated.LastThermalAverageSmooth =
-        calculated.LastThermalAverage;
+        calculated.last_thermal.lift_rate;
   else
     calculated.LastThermalAverageSmooth =
         LowPassFilter(calculated.LastThermalAverageSmooth,
-                      calculated.LastThermalAverage, fixed(0.3));
+                      calculated.last_thermal.lift_rate, fixed(0.3));
 
   OnDepartedThermal();
 }

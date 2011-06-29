@@ -98,11 +98,10 @@ private:
   void NettoVario();
   void AverageClimbRate();
   void Average30s();
-  void AverageThermal();
+  void CurrentThermal();
   void ResetLiftDatabase();
   void UpdateLiftDatabase();
   void MaxHeightGain();
-  void ThermalGain();
   void LD();
   void CruiseLD();
   void Wind();

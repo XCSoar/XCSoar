@@ -110,9 +110,9 @@ GlideComputerStats::OnClimbCeiling()
 void
 GlideComputerStats::OnDepartedThermal()
 {
-  assert(Calculated().LastThermalAvailable());
+  assert(Calculated().last_thermal.IsDefined());
 
-  flightstats.AddThermalAverage(Calculated().LastThermalAverage);
+  flightstats.AddThermalAverage(Calculated().last_thermal.lift_rate);
 }
 
 void

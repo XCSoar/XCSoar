@@ -27,34 +27,49 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 /**
+ * Information about one thermal that was or is being climbed.
+ */
+struct OneClimbInfo {
+  /**
+   * Time spent in this thermal [s].
+   */
+  fixed duration;
+
+  /**
+   * Altitude gained while in the thermal [m].  May be negative.
+   */
+  fixed gain;
+
+  /**
+   * Average vertical speed in the thermal [m/s].  May be negative.
+   */
+  fixed lift_rate;
+
+  void Clear();
+
+  bool IsDefined() const {
+    return positive(duration);
+  }
+
+  void CalculateLiftRate() {
+    lift_rate = positive(duration)
+      ? gain / duration
+      : fixed_zero;
+  }
+};
+
+/**
  * Derived climb data
  * 
  */
 struct CLIMB_INFO
 {
-  /** Average vertical speed in the thermal */
-  fixed ThermalAverage;
+  OneClimbInfo current_thermal;
 
-  /** Altitude gained while in the thermal */
-  fixed ThermalGain;
-
-  /** Average vertical speed in the last thermal */
-  fixed LastThermalAverage;
-  /** Altitude gained while in the last thermal */
-  fixed LastThermalGain;
-  /** Time spend in the last thermal */
-  fixed LastThermalTime;
+  OneClimbInfo last_thermal;
 
   /** Average vertical speed in the last thermals smoothed by low-pass-filter */
   fixed LastThermalAverageSmooth;
-
-  /**
-   * Specifies whether the LastThermal attributes contain real values.
-   * If false, then the LastThermal attributes must not be accessed.
-   */
-  bool LastThermalAvailable() const {
-    return positive(LastThermalAverage);
-  }
 
   void Clear();
 };
