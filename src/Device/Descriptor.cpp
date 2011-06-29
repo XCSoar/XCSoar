@@ -241,8 +241,6 @@ DeviceDescriptor::OnSysTicker(const NMEA_INFO &basic,
   if (device == NULL || declaring)
     return;
 
-  ScopeLock protect(mutexBlackboard);
-
   ticker = !ticker;
   if (ticker)
     // write settings to vario every second
