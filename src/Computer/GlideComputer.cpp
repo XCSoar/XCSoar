@@ -109,7 +109,8 @@ GlideComputer::ProcessGPS()
   // Process extended information
   ProcessVertical();
 
-  GlideComputerStats::ProcessClimbEvents();
+  if (!time_retreated())
+    GlideComputerStats::ProcessClimbEvents(calculated, LastCalculated());
 
   // Calculate the team code
   CalculateOwnTeamCode();
@@ -141,7 +142,7 @@ GlideComputer::ProcessIdle(bool exhaustive)
 {
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
-  DoLogging();
+  DoLogging(Basic(), LastBasic(), Calculated(), SettingsComputer());
 
   GlideComputerTask::ProcessIdle(exhaustive);
 

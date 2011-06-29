@@ -25,6 +25,7 @@ Copyright_License {
 #include "GlideComputerStats.hpp"
 #include "SettingsComputer.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Logger/Logger.hpp"
 #include "GPSClock.hpp"
@@ -53,53 +54,56 @@ GlideComputerStats::StartTask()
  * @return True if valid fix (fix distance <= 200m), False otherwise
  */
 bool
-GlideComputerStats::DoLogging()
+GlideComputerStats::DoLogging(const MoreData &basic,
+                              const NMEAInfo &last_basic,
+                              const DerivedInfo &calculated,
+                              const LoggerSettings &settings_logger)
 {
   /// @todo consider putting this sanity check inside Parser
-  if (Basic().location.Distance(LastBasic().location) > fixed(200))
+  if (basic.location.Distance(last_basic.location) > fixed(200))
     // prevent bad fixes from being logged or added to OLC store
     return false;
 
   // log points more often in circling mode
-  if (Calculated().circling)
-    log_clock.set_dt(fixed(SettingsComputer().logger_time_step_circling));
+  if (calculated.circling)
+    log_clock.set_dt(fixed(settings_logger.logger_time_step_circling));
   else
-    log_clock.set_dt(fixed(SettingsComputer().logger_time_step_cruise));
+    log_clock.set_dt(fixed(settings_logger.logger_time_step_cruise));
 
   if (FastLogNum) {
     log_clock.set_dt(fixed_one);
     FastLogNum--;
   }
 
-  if (log_clock.check_advance(Basic().time) && logger != NULL)
-      logger->LogPoint(Basic());
+  if (log_clock.check_advance(basic.time) && logger != NULL)
+      logger->LogPoint(basic);
 
-  if (Calculated().flight.flying &&
-      stats_clock.check_advance(Basic().time)) {
-    flightstats.AddAltitudeTerrain(Calculated().flight.flight_time,
-                                   Calculated().terrain_altitude);
-    flightstats.AddAltitude(Calculated().flight.flight_time,
-                            Basic().nav_altitude);
-    flightstats.AddTaskSpeed(Calculated().flight.flight_time,
-                             Calculated().task_stats.get_pirker_speed());
+  if (calculated.flight.flying &&
+      stats_clock.check_advance(basic.time)) {
+    flightstats.AddAltitudeTerrain(calculated.flight.flight_time,
+                                   calculated.terrain_altitude);
+    flightstats.AddAltitude(calculated.flight.flight_time,
+                            basic.nav_altitude);
+    flightstats.AddTaskSpeed(calculated.flight.flight_time,
+                             calculated.task_stats.get_pirker_speed());
   }
 
   return true;
 }
 
 void
-GlideComputerStats::OnClimbBase(fixed StartAlt)
+GlideComputerStats::OnClimbBase(const DerivedInfo &calculated, fixed StartAlt)
 {
-  flightstats.AddClimbBase(Calculated().climb_start_time -
-                           Calculated().flight.takeoff_time, StartAlt);
+  flightstats.AddClimbBase(calculated.climb_start_time -
+                           calculated.flight.takeoff_time, StartAlt);
 }
 
 void
-GlideComputerStats::OnClimbCeiling()
+GlideComputerStats::OnClimbCeiling(const DerivedInfo &calculated)
 {
-  flightstats.AddClimbCeiling(Calculated().cruise_start_time -
-                              Calculated().flight.takeoff_time,
-                              Calculated().cruise_start_altitude);
+  flightstats.AddClimbCeiling(calculated.cruise_start_time -
+                              calculated.flight.takeoff_time,
+                              calculated.cruise_start_altitude);
 }
 
 /**
@@ -107,32 +111,27 @@ GlideComputerStats::OnClimbCeiling()
  * calculation of all related statistics
  */
 void
-GlideComputerStats::OnDepartedThermal()
+GlideComputerStats::OnDepartedThermal(const DerivedInfo &calculated)
 {
-  assert(Calculated().last_thermal.IsDefined());
+  assert(calculated.last_thermal.IsDefined());
 
-  flightstats.AddThermalAverage(Calculated().last_thermal.lift_rate);
+  flightstats.AddThermalAverage(calculated.last_thermal.lift_rate);
 }
 
 void
-GlideComputerStats::ProcessClimbEvents()
+GlideComputerStats::ProcessClimbEvents(const DerivedInfo &calculated,
+                                       const DerivedInfo &last_calculated)
 {
-  if (time_retreated())
-    return;
-
-  const DerivedInfo &calculated = Calculated();
-  const DerivedInfo &last_calculated = LastCalculated();
-
   switch (calculated.turn_mode) {
   case CLIMB:
     if (calculated.climb_start_time > last_calculated.climb_start_time)
       // set altitude for start of circling (as base of climb)
-      OnClimbBase(calculated.turn_start_altitude);
+      OnClimbBase(calculated, calculated.turn_start_altitude);
     break;
 
   case CRUISE:
     if (calculated.cruise_start_time > last_calculated.cruise_start_time)
-      OnClimbCeiling();
+      OnClimbCeiling(calculated);
     break;
 
   default:
@@ -142,7 +141,7 @@ GlideComputerStats::ProcessClimbEvents()
   if (calculated.last_thermal.IsDefined() &&
       (!last_calculated.last_thermal.IsDefined() ||
        calculated.last_thermal.end_time > last_calculated.last_thermal.end_time))
-    OnDepartedThermal();
+    OnDepartedThermal(calculated);
 }
 
 void

@@ -24,17 +24,18 @@ Copyright_License {
 #ifndef XCSOAR_GLIDECOMPUTER_STATS_HPP
 #define XCSOAR_GLIDECOMPUTER_STATS_HPP
 
-#include "GlideComputerBlackboard.hpp"
 #include "FlightStatistics.hpp"
 #include "GPSClock.hpp"
 
 #include <assert.h>
 
+struct NMEAInfo;
+struct MoreData;
+struct DerivedInfo;
+struct LoggerSettings;
 class Logger;
 
-class GlideComputerStats:
-  virtual public GlideComputerBlackboard
-{
+class GlideComputerStats {
   FlightStatistics flightstats;
   GPSClock log_clock;
   GPSClock stats_clock;
@@ -61,20 +62,23 @@ public:
 protected:
   void ResetFlight(const bool full = true);
   void StartTask();
-  bool DoLogging();
+  bool DoLogging(const MoreData &basic, const NMEAInfo &last_basic,
+                 const DerivedInfo &calculated,
+                 const LoggerSettings &settings_logger);
   void SetFastLogging();
 
 private:
-  void OnClimbBase(fixed StartAlt);
-  void OnClimbCeiling();
-  void OnDepartedThermal();
+  void OnClimbBase(const DerivedInfo &calculated, fixed StartAlt);
+  void OnClimbCeiling(const DerivedInfo &calculated);
+  void OnDepartedThermal(const DerivedInfo &calculated);
 
 protected:
   /**
    * Check of climbing has started or ended, and collect statistics
    * about that.
    */
-  void ProcessClimbEvents();
+  void ProcessClimbEvents(const DerivedInfo &calculated,
+                          const DerivedInfo &last_calculated);
 };
 
 #endif
