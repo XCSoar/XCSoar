@@ -450,7 +450,6 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Driver/BorgeltB50.cpp \
-	$(SRC)/Device/Driver/CAI302.cpp \
 	$(SRC)/Device/Driver/Condor.cpp \
 	$(SRC)/Device/Driver/EW.cpp \
 	$(SRC)/Device/Driver/EWMicroRecorder.cpp \
@@ -464,6 +463,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/Vega.cpp \
 	$(SRC)/Device/Driver/Volkslogger.cpp \
 	$(SRC)/Device/Driver/Zander.cpp \
+	$(CAI302_SOURCES) \
 	$(VOLKSLOGGER_SOURCES) \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \

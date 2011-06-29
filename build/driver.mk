@@ -14,11 +14,17 @@ ifeq ($(HAVE_MSVCRT),n)
 VOLKSLOGGER_SOURCES += $(SRC)/Device/Volkslogger/vlutils.cpp
 endif
 
+CAI302_SOURCES = \
+	$(DRIVER_SRC_DIR)/CAI302/Parser.cpp \
+	$(DRIVER_SRC_DIR)/CAI302/Settings.cpp \
+	$(DRIVER_SRC_DIR)/CAI302/Declare.cpp \
+	$(DRIVER_SRC_DIR)/CAI302/Register.cpp
+
 DRIVER_SOURCES = \
 	$(VOLKSLOGGER_SOURCES) \
+	$(CAI302_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
-	$(DRIVER_SRC_DIR)/CAI302.cpp \
 	$(DRIVER_SRC_DIR)/CaiGpsNav.cpp \
 	$(DRIVER_SRC_DIR)/Condor.cpp \
 	$(DRIVER_SRC_DIR)/EW.cpp \
