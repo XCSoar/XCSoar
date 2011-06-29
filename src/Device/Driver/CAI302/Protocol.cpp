@@ -25,6 +25,60 @@ Copyright_License {
 #include "Device/Port.hpp"
 
 #include <algorithm>
+#include <string.h>
+#include <stdio.h>
+
+bool
+CAI302::WriteString(Port &port, const char *p)
+{
+  size_t length = strlen(p);
+  return port.FullWrite(p, length, 2000);
+}
+
+bool
+CAI302::CommandModeQuick(Port &port)
+{
+  return port.Write('\x03');
+}
+
+bool
+CAI302::CommandMode(Port &port)
+{
+  port.Flush();
+  return CommandModeQuick(port) && port.ExpectString("cmd>");
+}
+
+bool
+CAI302::LogModeQuick(Port &port)
+{
+  return CommandModeQuick(port) && WriteString(port, "LOG 0\r");
+}
+
+bool
+CAI302::LogMode(Port &port)
+{
+  if (!CommandMode(port))
+    return false;
+
+  port.Flush();
+  return WriteString(port, "LOG 0\r");
+}
+
+static bool
+WaitUploadPrompt(Port &port)
+{
+  return port.ExpectString("up>");
+}
+
+bool
+CAI302::UploadMode(Port &port)
+{
+  if (!CommandMode(port))
+    return false;
+
+  port.Flush();
+  return WriteString(port, "upl 1\r") && WaitUploadPrompt(port);
+}
 
 int
 CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
@@ -54,4 +108,71 @@ CAI302::ReadShortReply(Port &port, void *buffer, unsigned max_size,
   }
 
   return size;
+}
+
+int
+CAI302::UploadShort(Port &port, const char *command,
+                    void *response, unsigned max_size,
+                    unsigned timeout_ms)
+{
+  port.Flush();
+  if (!WriteString(port, command))
+    return -1;
+
+  int nbytes = ReadShortReply(port, response, max_size, timeout_ms);
+  if (nbytes < 0)
+    return nbytes;
+
+  if (!WaitUploadPrompt(port))
+    return -1;
+
+  return nbytes;
+}
+
+bool
+CAI302::UploadPolarMeta(Port &port, PolarMeta &data)
+{
+  return UploadShort(port, "G\r", &data, sizeof(data)) > 0;
+}
+
+bool
+CAI302::UploadPolar(Port &port, Polar &data)
+{
+  return UploadShort(port, "G 0\r", &data, sizeof(data)) > 0;
+}
+
+bool
+CAI302::UploadPilotMeta(Port &port, PilotMeta &data)
+{
+  return UploadShort(port, "O\r", &data, sizeof(data)) > 0;
+}
+
+bool
+CAI302::UploadPilot(Port &port, unsigned i, Pilot &data)
+{
+  char cmd[16];
+  snprintf(cmd, sizeof(cmd), "O %u\r", i);
+  return UploadShort(port, cmd, &data, sizeof(data)) > 0;
+}
+
+static bool
+WaitDownloadPrompt(Port &port)
+{
+  return port.ExpectString("dn>");
+}
+
+bool
+CAI302::DownloadMode(Port &port)
+{
+  if (!CommandMode(port))
+    return false;
+
+  port.Flush();
+  return WriteString(port, "dow 1\r") && WaitDownloadPrompt(port);
+}
+
+bool
+CAI302::DownloadCommand(Port &port, const char *command, unsigned timeout_ms)
+{
+  return WriteString(port, command) && WaitDownloadPrompt(port);
 }

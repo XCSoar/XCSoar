@@ -91,16 +91,15 @@ cai302DeclAddWaypoint(Port *port, int DeclIndex, const Waypoint &way_point)
           Name,
           (int)way_point.Altitude);
 
-  port->Write(szTmp);
-
-  return port->ExpectString("dn>");
+  return CAI302::DownloadCommand(*port, szTmp);
 }
 
 static bool
 DeclareInner(Port *port, const Declaration &declaration,
              gcc_unused OperationEnvironment &env)
 {
-  using CAI302::ReadShortReply;
+  using CAI302::UploadShort;
+  using CAI302::DownloadCommand;
   unsigned size = declaration.size();
 
   port->SetRxTimeout(500);
@@ -108,70 +107,37 @@ DeclareInner(Port *port, const Declaration &declaration,
   env.SetProgressRange(6 + size);
   env.SetProgressPosition(0);
 
-  port->Flush();
-  port->Write('\x03');
-
-  port->GetChar();
-
-  /* empty rx buffer */
-  port->SetRxTimeout(0);
-  while (port->GetChar() != EOF) {}
-
-  port->SetRxTimeout(500);
-  port->Write('\x03');
-  if (!port->ExpectString("cmd>"))
+  CAI302::CommandModeQuick(*port);
+  if (!CAI302::UploadMode(*port))
     return false;
-
-  port->Write("upl 1\r");
-  if (!port->ExpectString("up>"))
-    return false;
-
-  port->Flush();
-
-  port->Write("O\r");
 
   port->SetRxTimeout(1500);
 
   CAI302::PilotMeta pilot_meta;
-  if (ReadShortReply(*port, &pilot_meta, sizeof(pilot_meta)) < 0 ||
-      !port->ExpectString("up>"))
+  if (!CAI302::UploadPilotMeta(*port, pilot_meta))
     return false;
 
   env.SetProgressPosition(1);
 
-  port->Write("O 0\r"); // 0=active pilot
-
   CAI302::Pilot pilot;
-  if (ReadShortReply(*port, &pilot, sizeof(pilot)) < 0 ||
-      !port->ExpectString("up>"))
+  if (!CAI302::UploadPilot(*port, 0, pilot))
     return false;
 
   env.SetProgressPosition(2);
 
-  port->Write("G\r");
-
   CAI302::PolarMeta polar_meta;
-  if (ReadShortReply(*port, &polar_meta, sizeof(polar_meta)) < 0 ||
-      !port->ExpectString("up>"))
+  if (!CAI302::UploadPolarMeta(*port, polar_meta))
     return false;
 
   env.SetProgressPosition(3);
 
-  port->Write("G 0\r");
-
   CAI302::Polar polar;
-  if (ReadShortReply(*port, &polar, sizeof(polar)) < 0 ||
-      !port->ExpectString("up>"))
+  if (!CAI302::UploadPolar(*port, polar))
     return false;
 
   env.SetProgressPosition(4);
 
-  port->Write('\x03');
-  if (!port->ExpectString("cmd>"))
-    return false;
-
-  port->Write("dow 1\r");
-  if (!port->ExpectString("dn>"))
+  if (!CAI302::DownloadMode(*port))
     return false;
 
   char PilotName[25], GliderType[13], GliderID[13];
@@ -199,8 +165,7 @@ DeclareInner(Port *port, const Declaration &declaration,
           FromLE16(pilot.unit_word),
           FromLE16(pilot.margin_height));
 
-  port->Write(szTmp);
-  if (!port->ExpectString("dn>"))
+  if (!DownloadCommand(*port, szTmp))
     return false;
 
   env.SetProgressPosition(5);
@@ -217,8 +182,7 @@ DeclareInner(Port *port, const Declaration &declaration,
           FromLE16(polar.config_word),
           FromLE16(polar.wing_area));
 
-  port->Write(szTmp);
-  if (!port->ExpectString("dn>"))
+  if (!DownloadCommand(*port, szTmp))
     return false;
 
   env.SetProgressPosition(6);
@@ -230,9 +194,8 @@ DeclareInner(Port *port, const Declaration &declaration,
     env.SetProgressPosition(7 + i);
   }
 
-  port->Write("D,255\r");
   port->SetRxTimeout(1500); // D,255 takes more than 800ms
-  return port->ExpectString("dn>");
+  return DownloadCommand(*port, "D,255\r");
 }
 
 bool
@@ -245,10 +208,10 @@ CAI302Device::Declare(const Declaration &declaration,
 
   port->SetRxTimeout(500);
 
-  port->Write('\x03');
-  port->ExpectString("cmd>");
-
-  port->Write("LOG 0\r");
+  if (success)
+    CAI302::LogMode(*port);
+  else
+    CAI302::LogModeQuick(*port);
 
   port->SetRxTimeout(0);
   port->StartRxThread();

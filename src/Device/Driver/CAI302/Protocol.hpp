@@ -98,6 +98,39 @@ namespace CAI302 {
 
 #pragma pack(pop)
 
+  bool
+  WriteString(Port &port, const char *p);
+
+  /**
+   * Enter "command" mode, but don't wait for the prompt.
+   */
+  bool
+  CommandModeQuick(Port &port);
+
+  /**
+   * Enter "command" mode.
+   */
+  bool
+  CommandMode(Port &port);
+
+  /**
+   * Enter "log" mode, but don't wait for the command prompt.
+   */
+  bool
+  LogModeQuick(Port &port);
+
+  /**
+   * Enter "log" mode.
+   */
+  bool
+  LogMode(Port &port);
+
+  /**
+   * Enter "upload" mode.
+   */
+  bool
+  UploadMode(Port &port);
+
   /**
    * Receive a "short" reply from the CAI302.
    *
@@ -107,6 +140,46 @@ namespace CAI302 {
   int
   ReadShortReply(Port &port, void *buffer, unsigned max_size,
                  unsigned timeout_ms=2000);
+
+  /**
+   * Send an upload command, and read the short response.  CAI302 must
+   * be at the upload prompt already.
+   *
+   * Note: "upload" means that the CAI302 uploads data to XCSoar,
+   * i.e. we're actually receiving from the CAI302.
+   *
+   * @param command a command string that ends with "\r"
+   * @return the number of data bytes received (not including the 3 byte
+   * header), -1 on error
+   */
+  int
+  UploadShort(Port &port, const char *command,
+              void *response, unsigned max_size,
+              unsigned timeout_ms=2000);
+
+  bool
+  UploadPolarMeta(Port &port, PolarMeta &data);
+
+  bool
+  UploadPolar(Port &port, Polar &data);
+
+  bool
+  UploadPilotMeta(Port &port, PilotMeta &data);
+
+  bool
+  UploadPilot(Port &port, unsigned i, Pilot &data);
+
+  /**
+   * Enter "download" mode.
+   */
+  bool
+  DownloadMode(Port &port);
+
+  /**
+   * Send a command.  CAI302 must be at the download prompt already.
+   */
+  bool
+  DownloadCommand(Port &port, const char *command, unsigned timeout_ms=2000);
 }
 
 #endif

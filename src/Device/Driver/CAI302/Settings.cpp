@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
+#include "Protocol.hpp"
 #include "Device/Port.hpp"
 #include "Units/Units.hpp"
 
@@ -30,8 +31,7 @@ Copyright_License {
 bool
 CAI302Device::Open(gcc_unused OperationEnvironment &env)
 {
-  port->Write('\x03');
-  port->Write("LOG 0\r");
+  CAI302::LogModeQuick(*port);
 
   return true;
 }
