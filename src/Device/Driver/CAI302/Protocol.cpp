@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Port.hpp"
 
 #include <algorithm>
+#include <assert.h>
 #include <string.h>
 #include <stdio.h>
 
@@ -176,6 +177,48 @@ CAI302::UploadLarge(Port &port, const char *command,
     return -1;
 
   return nbytes;
+}
+
+bool
+CAI302::UploadFileList(Port &port, unsigned i, FileList &data)
+{
+  assert(i < 8);
+
+  char cmd[16];
+  snprintf(cmd, sizeof(cmd), "B %u\r", 196 + i);
+  return UploadLarge(port, cmd, &data, sizeof(data)) == sizeof(data);
+}
+
+bool
+CAI302::UploadFileASCII(Port &port, unsigned i, FileASCII &data)
+{
+  assert(i < 64);
+
+  char cmd[16];
+  snprintf(cmd, sizeof(cmd), "B %u\r", 64 + i);
+  return UploadLarge(port, cmd, &data, sizeof(data)) == sizeof(data);
+}
+
+bool
+CAI302::UploadFileBinary(Port &port, unsigned i, FileBinary &data)
+{
+  assert(i < 64);
+
+  char cmd[16];
+  snprintf(cmd, sizeof(cmd), "B %u\r", 256 + i);
+  return UploadLarge(port, cmd, &data, sizeof(data)) == sizeof(data);
+}
+
+int
+CAI302::UploadFileData(Port &port, bool next, void *data, unsigned length)
+{
+  return UploadLarge(port, next ? "B N\r" : "B R\r", data, length, 15000);
+}
+
+bool
+CAI302::UploadFileSignatureASCII(Port &port, FileSignatureASCII &data)
+{
+  return UploadLarge(port, "B S\r", &data, sizeof(data)) == sizeof(data);
 }
 
 bool

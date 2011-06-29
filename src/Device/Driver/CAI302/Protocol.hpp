@@ -36,6 +36,100 @@ namespace CAI302 {
 
 #pragma pack(push, 1) // force byte alignment
 
+  struct DateTime {
+    uint8_t year, month, day, hour, minute, second;
+
+    bool IsDefined() const {
+      return month > 0;
+    }
+  };
+
+  /**
+   * Get flight log list.
+   *
+   * Command: "B 196+N" (N=0..7 for flights N*8..N*8+7)
+   */
+  struct FileList {
+    struct FileInfo {
+      struct DateTime start_utc, end_utc;
+
+      char pilot_name[24];
+
+      bool IsDefined() const {
+        return start_utc.IsDefined();
+      }
+    } gcc_packed;
+
+    /**
+     * Number of log files stored in 302.
+     */
+    uint8_t num_files;
+
+    /**
+     * Information about the files.
+     */
+    FileInfo files[8];
+  } gcc_packed;
+
+  /**
+   * Download file in ASCII (IGC) format.
+   *
+   * Command: "B 64+N" (Nth file; N=0 means latest file)
+   */
+  struct FileASCII {
+    /**
+     * 'Y': file available; 'N': file not available.
+     */
+    char result;
+
+    uint16_t bytes_per_block;
+
+    /**
+     * Approximate number of blocks.
+     */
+    uint16_t num_blocks;
+  } gcc_packed;
+
+  /**
+   * Download file in binary format (direct memory dump).
+   *
+   * Command: "B 256+N" (Nth file; N=0 means latest file)
+   */
+  struct FileBinary {
+    /**
+     * 'Y': file available; 'N': file not available.
+     */
+    char result;
+
+    uint16_t bytes_per_block;
+
+    uint8_t num_bytes[3];
+
+    uint16_t logging_code;
+  } gcc_packed;
+
+  /**
+   * Transfer a block.
+   *
+   * Command: "B N" (next block) or "B R" (retransfer block)
+   */
+  struct FileData {
+    uint16_t valid_bytes;
+
+    // followed by: uint8_t data[bytes_per_block];
+  } gcc_packed;
+
+  /**
+   * Transfer the signature in ASCII format.
+   *
+   * Command: "B S"
+   */
+  struct FileSignatureASCII {
+    uint16_t size;
+
+    char signature[201];
+  } gcc_packed;
+
   /** Structure for CAI302 glider response */
   struct PolarMeta {
     uint8_t record_size;
@@ -182,6 +276,21 @@ namespace CAI302 {
   UploadLarge(Port &port, const char *command,
               void *response, unsigned max_size,
               unsigned timeout_ms=8000);
+
+  bool
+  UploadFileList(Port &port, unsigned i, FileList &data);
+
+  bool
+  UploadFileASCII(Port &port, unsigned i, FileASCII &data);
+
+  bool
+  UploadFileBinary(Port &port, unsigned i, FileBinary &data);
+
+  int
+  UploadFileData(Port &port, bool next, void *data, unsigned length);
+
+  bool
+  UploadFileSignatureASCII(Port &port, FileSignatureASCII &data);
 
   bool
   UploadPolarMeta(Port &port, PolarMeta &data);
