@@ -48,13 +48,13 @@ public:
 
   friend class PrintHelper;
 
-  virtual void calc_bb();
+  void calc_bb();
 
   void add_point(const FlatGeoPoint &p);
 
   bool is_inside(const FlatGeoPoint &p) const;
 
-  virtual void clear() {
+  void clear() {
     vs.clear();
   }
   bool empty() const {
@@ -87,12 +87,12 @@ public:
     depth(_depth),
     gaps_filled(false) {};
 
-  virtual void clear() {
+  void clear() {
     FlatTriangleFan::clear();
     children.clear();
   }
 
-  virtual void calc_bb();
+  void calc_bb();
 
   bool is_inside_tree(const FlatGeoPoint &p, const bool include_children=true) const;
 
