@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <stdint.h>
+
 #define CtrlC 0x03
 
 namespace CAI302 {
@@ -34,71 +36,71 @@ namespace CAI302 {
 
   /** Structure for CAI302 glider response */
   struct PolarMeta {
-    unsigned char result[3];
-    unsigned char record_size;
+    uint8_t result[3];
+    uint8_t record_size;
   } gcc_packed;
 
   /** Structure for CAI302 glider data */
   struct Polar {
-    unsigned char result[3];
-    unsigned char glider_type[12];
-    unsigned char glider_id[12];
-    unsigned char best_ld;
-    unsigned char best_glide_speed;
-    unsigned char two_ms_sink_at_speed;
-    unsigned char reserved1;
-    unsigned short weight_in_litres;
-    unsigned short ballast_capacity;
-    unsigned short reserved2;
-    unsigned short config_word; // locked(1) = FF FE.  unlocked(0) = FF FF
-    unsigned short wing_area; // 100ths square meters
-    unsigned char  Spare[60]; // 302 expect more data than the documented filed
+    uint8_t result[3];
+    uint8_t glider_type[12];
+    uint8_t glider_id[12];
+    uint8_t best_ld;
+    uint8_t best_glide_speed;
+    uint8_t two_ms_sink_at_speed;
+    uint8_t reserved1;
+    uint16_t weight_in_litres;
+    uint16_t ballast_capacity;
+    uint16_t reserved2;
+    uint16_t config_word; // locked(1) = FF FE.  unlocked(0) = FF FF
+    uint16_t wing_area; // 100ths square meters
+    uint8_t  Spare[60]; // 302 expect more data than the documented filed
     // be shure there is space to hold the data
   } gcc_packed;
 
   /** Structure for CAI302 Odata info */
   struct PilotMeta {
-    unsigned char result[3];
-    unsigned char count;
-    unsigned char record_size;
+    uint8_t result[3];
+    uint8_t count;
+    uint8_t record_size;
   } gcc_packed;
 
   /** Structure for CAI302 settings */
   struct Pilot {
-    unsigned char  result[3];
+    uint8_t  result[3];
     char name[24];
-    unsigned char old_units; // old unit
-    unsigned char old_temperatur_units; // 0 = Celcius, 1 = Farenheight
-    unsigned char sink_tone;
-    unsigned char total_energy_final_glide;
-    unsigned char show_final_glide_altitude_difference;
-    unsigned char map_datum; // ignored on IGC version
-    unsigned short approach_radius;
-    unsigned short arrival_radius;
-    unsigned short enroute_logging_interval;
-    unsigned short close_logging_interval;
-    unsigned short time_between_flight_logs; // [Minutes]
-    unsigned short minimum_speed_to_force_flight_logging; // (Knots)
-    unsigned char stf_dead_band; // (10ths M/S)
-    unsigned char reserved_vario; // multiplexed w/ vario mode:
+    uint8_t old_units; // old unit
+    uint8_t old_temperatur_units; // 0 = Celcius, 1 = Farenheight
+    uint8_t sink_tone;
+    uint8_t total_energy_final_glide;
+    uint8_t show_final_glide_altitude_difference;
+    uint8_t map_datum; // ignored on IGC version
+    uint16_t approach_radius;
+    uint16_t arrival_radius;
+    uint16_t enroute_logging_interval;
+    uint16_t close_logging_interval;
+    uint16_t time_between_flight_logs; // [Minutes]
+    uint16_t minimum_speed_to_force_flight_logging; // (Knots)
+    uint8_t stf_dead_band; // (10ths M/S)
+    uint8_t reserved_vario; // multiplexed w/ vario mode:
     // Tot Energy, SuperNetto, Netto
-    unsigned short unit_word;
-    unsigned short reserved2;
-    unsigned short margin_height; // (10ths of Meters)
-    unsigned char spare[60]; // 302 expect more data than the documented filed
+    uint16_t unit_word;
+    uint16_t reserved2;
+    uint16_t margin_height; // (10ths of Meters)
+    uint8_t spare[60]; // 302 expect more data than the documented filed
     // be shure there is space to hold the data
   } gcc_packed;
 
   /** Structure for CAI302 device info */
   struct GeneralInfo {
-    unsigned char result[3];
-    unsigned char reserved[15];
-    unsigned char id[3];
-    unsigned char type;
-    unsigned char version[5];
-    unsigned char reserved2[5];
-    unsigned char cai302_id;
-    unsigned char reserved3[2];
+    uint8_t result[3];
+    uint8_t reserved[15];
+    uint8_t id[3];
+    uint8_t type;
+    uint8_t version[5];
+    uint8_t reserved2[5];
+    uint8_t cai302_id;
+    uint8_t reserved3[2];
   } gcc_packed;
 
 #pragma pack(pop)
