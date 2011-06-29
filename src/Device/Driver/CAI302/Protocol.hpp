@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_CAI302_PROTOCOL_HPP
 #define XCSOAR_CAI302_PROTOCOL_HPP
 
+#include "Compiler.h"
+
 #define CtrlC 0x03
 
 #define swap(x) x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
@@ -40,14 +42,14 @@ struct cai302_Wdata_t {
   unsigned char reserved2[6];
   unsigned char cai302ID;
   unsigned char reserved3;
-};
+} gcc_packed;
 
 /** Structure for CAI302 Odata info */
 struct cai302_OdataNoArgs_t {
   unsigned char result[3];
   unsigned char PilotCount;
   unsigned char PilotRecordSize;
-};
+} gcc_packed;
 
 /** Structure for CAI302 settings */
 struct cai302_OdataPilot_t {
@@ -73,13 +75,13 @@ struct cai302_OdataPilot_t {
   unsigned short MarginHeight; // (10ths of Meters)
   unsigned char  Spare[60]; // 302 expect more data than the documented filed
                             // be shure there is space to hold the data
-};
+} gcc_packed;
 
 /** Structure for CAI302 glider response */
 struct cai302_GdataNoArgs_t {
   unsigned char result[3];
   unsigned char GliderRecordSize;
-};
+} gcc_packed;
 
 /** Structure for CAI302 glider data */
 struct cai302_Gdata_t {
@@ -97,7 +99,7 @@ struct cai302_Gdata_t {
   unsigned short WingArea; // 100ths square meters
   unsigned char  Spare[60]; // 302 expect more data than the documented filed
                             // be shure there is space to hold the data
-};
+} gcc_packed;
 
 #pragma pack(pop)
 
