@@ -339,7 +339,6 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
 
 
 void ReachFan::reset() {
-  AbstractReach::reset();
   root.clear();
   terrain_base = 0;
 }
@@ -350,8 +349,9 @@ bool ReachFan::solve(const AGeoPoint origin,
                      const bool do_solve) {
   reset();
 
-  if (!AbstractReach::solve(origin, rpolars, terrain))
-    return false;
+  // initialise task_proj
+  task_proj.reset(origin);
+  task_proj.update_fast();
 
   const short h = terrain
     ? terrain->GetHeight(origin)
