@@ -27,6 +27,7 @@
 #include "Navigation/TaskProjection.hpp"
 
 #include <vector>
+#include <list>
 
 class RoutePolars;
 class RasterMap;
@@ -73,7 +74,7 @@ class FlatTriangleFanTree: public FlatTriangleFan {
 public:
   static const unsigned REACH_MAX_FANS = 300;
 
-  typedef std::vector<FlatTriangleFanTree> LeafVector;
+  typedef std::list<FlatTriangleFanTree> LeafVector;
 protected:
   FlatBoundingBox bb_children;
   LeafVector children;
