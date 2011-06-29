@@ -36,8 +36,6 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-static int DeclIndex = 128;
-
 static void
 convert_string(char *dest, size_t size, const TCHAR *src)
 {
@@ -58,7 +56,7 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 }
 
 static bool
-cai302DeclAddWaypoint(Port *port, const Waypoint &way_point)
+cai302DeclAddWaypoint(Port *port, int DeclIndex, const Waypoint &way_point)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
@@ -92,8 +90,6 @@ cai302DeclAddWaypoint(Port *port, const Waypoint &way_point)
           DegLon, MinLon, EoW,
           Name,
           (int)way_point.Altitude);
-
-  DeclIndex++;
 
   port->Write(szTmp);
 
@@ -227,10 +223,8 @@ DeclareInner(Port *port, const Declaration &declaration,
 
   env.SetProgressPosition(6);
 
-  DeclIndex = 128;
-
   for (unsigned i = 0; i < size; ++i) {
-    if (!cai302DeclAddWaypoint(port, declaration.get_waypoint(i)))
+    if (!cai302DeclAddWaypoint(port, 128 + i, declaration.get_waypoint(i)))
       return false;
 
     env.SetProgressPosition(7 + i);
