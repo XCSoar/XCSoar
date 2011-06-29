@@ -24,7 +24,10 @@
 
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Navigation/TaskProjection.hpp"
+
 #include <vector>
+#include <list>
 
 class RoutePolars;
 class RasterMap;
@@ -48,13 +51,13 @@ public:
 
   friend class PrintHelper;
 
-  virtual void calc_bb();
+  void calc_bb();
 
   void add_point(const FlatGeoPoint &p);
 
   bool is_inside(const FlatGeoPoint &p) const;
 
-  virtual void clear() {
+  void clear() {
     vs.clear();
   }
   bool empty() const {
@@ -71,7 +74,7 @@ class FlatTriangleFanTree: public FlatTriangleFan {
 public:
   static const unsigned REACH_MAX_FANS = 300;
 
-  typedef std::vector<FlatTriangleFanTree> LeafVector;
+  typedef std::list<FlatTriangleFanTree> LeafVector;
 protected:
   FlatBoundingBox bb_children;
   LeafVector children;
@@ -87,12 +90,12 @@ public:
     depth(_depth),
     gaps_filled(false) {};
 
-  virtual void clear() {
+  void clear() {
     FlatTriangleFan::clear();
     children.clear();
   }
 
-  virtual void calc_bb();
+  void calc_bb();
 
   bool is_inside_tree(const FlatGeoPoint &p, const bool include_children=true) const;
 
@@ -135,36 +138,34 @@ public:
   virtual void end_fan() = 0;
 };
 
-#include "AbstractReach.hpp"
-
-class ReachFan: public AbstractReach {
-protected:
+class ReachFan {
+  TaskProjection task_proj;
   FlatTriangleFanTree root;
   short terrain_base;
 
 public:
-  ReachFan():AbstractReach(), terrain_base(0) {};
+  ReachFan():terrain_base(0) {};
 
   friend class PrintHelper;
 
-  virtual void reset();
+  void reset();
 
-  virtual bool solve(const AGeoPoint origin,
-                     const RoutePolars &rpolars,
-                     const RasterMap* terrain,
-                     const bool do_solve=true);
+  bool solve(const AGeoPoint origin,
+             const RoutePolars &rpolars,
+             const RasterMap *terrain,
+             const bool do_solve=true);
 
-  virtual bool find_positive_arrival(const AGeoPoint dest,
-                                     const RoutePolars &rpolars,
-                                     short& arrival_height_reach,
-                                     short& arrival_height_direct) const;
+  bool find_positive_arrival(const AGeoPoint dest,
+                             const RoutePolars &rpolars,
+                             short& arrival_height_reach,
+                             short& arrival_height_direct) const;
 
-  virtual bool is_inside(const GeoPoint origin, const bool turning=true) const;
+  bool is_inside(const GeoPoint origin, const bool turning=true) const;
 
   void accept_in_range(const GeoBounds& bounds,
                        TriangleFanVisitor& visitor) const;
 
-  virtual short get_terrain_base() const {
+  short get_terrain_base() const {
     return terrain_base;
   }
 };
