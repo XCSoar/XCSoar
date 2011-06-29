@@ -149,9 +149,9 @@ DeclareInner(Port *port, const Declaration *decl,
 
   port->SetRxTimeout(1500);
 
-  cai302_OdataNoArgs_t cai302_OdataNoArgs;
-  if (!ReadBlock(*port, &cai302_OdataNoArgs, sizeof(cai302_OdataNoArgs),
-                 sizeof(cai302_OdataNoArgs)) ||
+  CAI302::PilotMeta pilot_meta;
+  if (!ReadBlock(*port, &pilot_meta, sizeof(pilot_meta),
+                 sizeof(pilot_meta)) ||
       !port->ExpectString("up>"))
     return false;
 
@@ -159,28 +159,27 @@ DeclareInner(Port *port, const Declaration *decl,
 
   port->Write("O 0\r"); // 0=active pilot
 
-  cai302_OdataPilot_t cai302_OdataPilot;
-  if (!ReadBlock(*port, &cai302_OdataPilot, sizeof(cai302_OdataPilot),
-                 cai302_OdataNoArgs.PilotRecordSize + 3) ||
+  CAI302::Pilot pilot;
+  if (!ReadBlock(*port, &pilot, sizeof(pilot),
+                 pilot_meta.record_size + 3) ||
       !port->ExpectString("up>"))
     return false;
 
   env.SetProgressPosition(2);
 
-  swap(cai302_OdataPilot.ApproachRadius);
-  swap(cai302_OdataPilot.ArrivalRadius);
-  swap(cai302_OdataPilot.EnrouteLoggingInterval);
-  swap(cai302_OdataPilot.CloseTpLoggingInterval);
-  swap(cai302_OdataPilot.TimeBetweenFlightLogs);
-  swap(cai302_OdataPilot.MinimumSpeedToForceFlightLogging);
-  swap(cai302_OdataPilot.UnitWord);
-  swap(cai302_OdataPilot.MarginHeight);
+  swap(pilot.approach_radius);
+  swap(pilot.arrival_radius);
+  swap(pilot.enroute_logging_interval);
+  swap(pilot.close_logging_interval);
+  swap(pilot.time_between_flight_logs);
+  swap(pilot.minimum_speed_to_force_flight_logging);
+  swap(pilot.unit_word);
+  swap(pilot.margin_height);
 
   port->Write("G\r");
 
-  cai302_GdataNoArgs_t cai302_GdataNoArgs;
-  if (!ReadBlock(*port, &cai302_GdataNoArgs, sizeof(cai302_GdataNoArgs),
-                 sizeof(cai302_GdataNoArgs)) ||
+  CAI302::PolarMeta polar_meta;
+  if (!ReadBlock(*port, &polar_meta, sizeof(polar_meta), sizeof(polar_meta)) ||
       !port->ExpectString("up>"))
     return false;
 
@@ -188,18 +187,18 @@ DeclareInner(Port *port, const Declaration *decl,
 
   port->Write("G 0\r");
 
-  cai302_Gdata_t cai302_Gdata;
-  if (!ReadBlock(*port, &cai302_Gdata, sizeof(cai302_Gdata),
-                 cai302_GdataNoArgs.GliderRecordSize + 3) ||
+  CAI302::Polar polar;
+  if (!ReadBlock(*port, &polar, sizeof(polar),
+                 polar_meta.record_size + 3) ||
       !port->ExpectString("up>"))
     return false;
 
   env.SetProgressPosition(4);
 
-  swap(cai302_Gdata.WeightInLiters);
-  swap(cai302_Gdata.BallastCapacity);
-  swap(cai302_Gdata.ConfigWord);
-  swap(cai302_Gdata.WingArea);
+  swap(polar.weight_in_litres);
+  swap(polar.ballast_capacity);
+  swap(polar.config_word);
+  swap(polar.wing_area);
 
   port->Write('\x03');
   if (!port->ExpectString("cmd>"))
@@ -217,22 +216,22 @@ DeclareInner(Port *port, const Declaration *decl,
   char szTmp[255];
   sprintf(szTmp, "O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r",
           PilotName,
-          cai302_OdataPilot.OldUnit,
-          cai302_OdataPilot.OldTemperaturUnit,
-          cai302_OdataPilot.SinkTone,
-          cai302_OdataPilot.TotalEnergyFinalGlide,
-          cai302_OdataPilot.ShowFinalGlideAltitude,
-          cai302_OdataPilot.MapDatum,
-          cai302_OdataPilot.ApproachRadius,
-          cai302_OdataPilot.ArrivalRadius,
-          cai302_OdataPilot.EnrouteLoggingInterval,
-          cai302_OdataPilot.CloseTpLoggingInterval,
-          cai302_OdataPilot.TimeBetweenFlightLogs,
-          cai302_OdataPilot.MinimumSpeedToForceFlightLogging,
-          cai302_OdataPilot.StfDeadBand,
-          cai302_OdataPilot.ReservedVario,
-          cai302_OdataPilot.UnitWord,
-          cai302_OdataPilot.MarginHeight);
+          pilot.old_units,
+          pilot.old_temperatur_units,
+          pilot.sink_tone,
+          pilot.total_energy_final_glide,
+          pilot.show_final_glide_altitude_difference,
+          pilot.map_datum,
+          pilot.approach_radius,
+          pilot.arrival_radius,
+          pilot.enroute_logging_interval,
+          pilot.close_logging_interval,
+          pilot.time_between_flight_logs,
+          pilot.minimum_speed_to_force_flight_logging,
+          pilot.stf_dead_band,
+          pilot.reserved_vario,
+          pilot.unit_word,
+          pilot.margin_height);
 
   port->Write(szTmp);
   if (!port->ExpectString("dn>"))
@@ -243,15 +242,14 @@ DeclareInner(Port *port, const Declaration *decl,
   sprintf(szTmp, "G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r",
           GliderType,
           GliderID,
-          cai302_Gdata.bestLD,
-          cai302_Gdata.BestGlideSpeed,
-          cai302_Gdata.TwoMeterSinkAtSpeed,
-          cai302_Gdata.WeightInLiters,
-          cai302_Gdata.BallastCapacity,
-
+          polar.best_ld,
+          polar.best_glide_speed,
+          polar.two_ms_sink_at_speed,
+          polar.weight_in_litres,
+          polar.ballast_capacity,
           0,
-          cai302_Gdata.ConfigWord,
-          cai302_Gdata.WingArea);
+          polar.config_word,
+          polar.wing_area);
 
   port->Write(szTmp);
   if (!port->ExpectString("dn>"))

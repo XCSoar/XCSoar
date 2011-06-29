@@ -30,77 +30,80 @@ Copyright_License {
 
 #define swap(x) x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
 
+namespace CAI302 {
+
 #pragma pack(push, 1) // force byte alignment
 
-/** Structure for CAI302 device info */
-struct cai302_Wdata_t {
-  unsigned char result[3];
-  unsigned char reserved[15];
-  unsigned char ID[3];
-  unsigned char Type;
-  unsigned char Version[5];
-  unsigned char reserved2[5];
-  unsigned char cai302ID;
-  unsigned char reserved3[2];
-} gcc_packed;
+  /** Structure for CAI302 glider response */
+  struct PolarMeta {
+    unsigned char result[3];
+    unsigned char record_size;
+  } gcc_packed;
 
-/** Structure for CAI302 Odata info */
-struct cai302_OdataNoArgs_t {
-  unsigned char result[3];
-  unsigned char PilotCount;
-  unsigned char PilotRecordSize;
-} gcc_packed;
+  /** Structure for CAI302 glider data */
+  struct Polar {
+    unsigned char result[3];
+    unsigned char glider_type[12];
+    unsigned char glider_id[12];
+    unsigned char best_ld;
+    unsigned char best_glide_speed;
+    unsigned char two_ms_sink_at_speed;
+    unsigned char reserved1;
+    unsigned short weight_in_litres;
+    unsigned short ballast_capacity;
+    unsigned short reserved2;
+    unsigned short config_word; // locked(1) = FF FE.  unlocked(0) = FF FF
+    unsigned short wing_area; // 100ths square meters
+    unsigned char  Spare[60]; // 302 expect more data than the documented filed
+    // be shure there is space to hold the data
+  } gcc_packed;
 
-/** Structure for CAI302 settings */
-struct cai302_OdataPilot_t {
-  unsigned char  result[3];
-  char           PilotName[24];
-  unsigned char  OldUnit; // old unit
-  unsigned char  OldTemperaturUnit; // 0 = Celcius, 1 = Farenheight
-  unsigned char  SinkTone;
-  unsigned char  TotalEnergyFinalGlide;
-  unsigned char  ShowFinalGlideAltitude;
-  unsigned char  MapDatum; // ignored on IGC version
-  unsigned short ApproachRadius;
-  unsigned short ArrivalRadius;
-  unsigned short EnrouteLoggingInterval;
-  unsigned short CloseTpLoggingInterval;
-  unsigned short TimeBetweenFlightLogs; // [Minutes]
-  unsigned short MinimumSpeedToForceFlightLogging; // (Knots)
-  unsigned char  StfDeadBand; // (10ths M/S)
-  unsigned char  ReservedVario; // multiplexed w/ vario mode:
-                                // Tot Energy, SuperNetto, Netto
-  unsigned short UnitWord;
-  unsigned short Reserved2;
-  unsigned short MarginHeight; // (10ths of Meters)
-  unsigned char  Spare[60]; // 302 expect more data than the documented filed
-                            // be shure there is space to hold the data
-} gcc_packed;
+  /** Structure for CAI302 Odata info */
+  struct PilotMeta {
+    unsigned char result[3];
+    unsigned char count;
+    unsigned char record_size;
+  } gcc_packed;
 
-/** Structure for CAI302 glider response */
-struct cai302_GdataNoArgs_t {
-  unsigned char result[3];
-  unsigned char GliderRecordSize;
-} gcc_packed;
+  /** Structure for CAI302 settings */
+  struct Pilot {
+    unsigned char  result[3];
+    char name[24];
+    unsigned char old_units; // old unit
+    unsigned char old_temperatur_units; // 0 = Celcius, 1 = Farenheight
+    unsigned char sink_tone;
+    unsigned char total_energy_final_glide;
+    unsigned char show_final_glide_altitude_difference;
+    unsigned char map_datum; // ignored on IGC version
+    unsigned short approach_radius;
+    unsigned short arrival_radius;
+    unsigned short enroute_logging_interval;
+    unsigned short close_logging_interval;
+    unsigned short time_between_flight_logs; // [Minutes]
+    unsigned short minimum_speed_to_force_flight_logging; // (Knots)
+    unsigned char stf_dead_band; // (10ths M/S)
+    unsigned char reserved_vario; // multiplexed w/ vario mode:
+    // Tot Energy, SuperNetto, Netto
+    unsigned short unit_word;
+    unsigned short reserved2;
+    unsigned short margin_height; // (10ths of Meters)
+    unsigned char spare[60]; // 302 expect more data than the documented filed
+    // be shure there is space to hold the data
+  } gcc_packed;
 
-/** Structure for CAI302 glider data */
-struct cai302_Gdata_t {
-  unsigned char  result[3];
-  unsigned char  GliderType[12];
-  unsigned char  GliderID[12];
-  unsigned char  bestLD;
-  unsigned char  BestGlideSpeed;
-  unsigned char  TwoMeterSinkAtSpeed;
-  unsigned char  Reserved1;
-  unsigned short WeightInLiters;
-  unsigned short BallastCapacity;
-  unsigned short Reserved2;
-  unsigned short ConfigWord; // locked(1) = FF FE.  unlocked(0) = FF FF
-  unsigned short WingArea; // 100ths square meters
-  unsigned char  Spare[60]; // 302 expect more data than the documented filed
-                            // be shure there is space to hold the data
-} gcc_packed;
+  /** Structure for CAI302 device info */
+  struct GeneralInfo {
+    unsigned char result[3];
+    unsigned char reserved[15];
+    unsigned char id[3];
+    unsigned char type;
+    unsigned char version[5];
+    unsigned char reserved2[5];
+    unsigned char cai302_id;
+    unsigned char reserved3[2];
+  } gcc_packed;
 
 #pragma pack(pop)
+}
 
 #endif
