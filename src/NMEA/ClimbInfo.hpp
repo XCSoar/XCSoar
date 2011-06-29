@@ -31,6 +31,17 @@ Copyright_License {
  */
 struct OneClimbInfo {
   /**
+   * Time when circling started.
+   */
+  fixed start_time;
+
+  /**
+   * Time when circling ended (or current time stamp if circling has
+   * not ended yet).
+   */
+  fixed end_time;
+
+  /**
    * Time spent in this thermal [s].
    */
   fixed duration;
@@ -51,10 +62,19 @@ struct OneClimbInfo {
     return positive(duration);
   }
 
+  void CalculateDuration() {
+    duration = end_time - start_time;
+  }
+
   void CalculateLiftRate() {
     lift_rate = positive(duration)
       ? gain / duration
       : fixed_zero;
+  }
+
+  void CalculateAll() {
+    CalculateDuration();
+    CalculateLiftRate();
   }
 };
 

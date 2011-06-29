@@ -412,9 +412,10 @@ GlideComputerAirData::CurrentThermal()
   OneClimbInfo &current_thermal = SetCalculated().current_thermal;
 
   if (positive(calculated.ClimbStartTime)) {
-    current_thermal.duration = Basic().Time - calculated.ClimbStartTime;
+    current_thermal.start_time = calculated.ClimbStartTime;
+    current_thermal.end_time = Basic().Time;
     current_thermal.gain = calculated.TEAltitude - calculated.ClimbStartAlt;
-    current_thermal.CalculateLiftRate();
+    current_thermal.CalculateAll();
   } else
     current_thermal.Clear();
 }
@@ -1021,6 +1022,8 @@ GlideComputerAirData::LastThermalStats()
   if (!positive(ThermalGain))
     return;
 
+  calculated.last_thermal.start_time = calculated.ClimbStartTime;
+  calculated.last_thermal.end_time = calculated.CruiseStartTime;
   calculated.last_thermal.gain = ThermalGain;
   calculated.last_thermal.duration = ThermalTime;
   calculated.last_thermal.CalculateLiftRate();
