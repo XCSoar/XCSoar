@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <assert.h>
 #include <string.h>
-#include <stdio.h>
 
 Port::Port(Handler &_handler)
   :handler(_handler) {}
@@ -66,7 +65,7 @@ Port::GetChar()
   unsigned char ch;
   return Read(&ch, sizeof(ch)) == sizeof(ch)
     ? ch
-    : EOF;
+    : -1;
 }
 
 bool
@@ -101,7 +100,7 @@ Port::ExpectString(const char *token)
   const char *p = token;
   while (*p != '\0') {
     int ch = GetChar();
-    if (ch == EOF)
+    if (ch == -1)
       return false;
 
     if (ch != *p++) {

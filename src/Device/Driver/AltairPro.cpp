@@ -205,9 +205,8 @@ AltairProDevice::PropertySetGet(Port *port, char *Buffer, size_t size)
 
       // read value eg bar
       while(--size){
-        int ch;
-
-        if ((ch = port->GetChar()) == EOF)
+        int ch = port->GetChar();
+        if (ch == -1)
           break;
 
         if (ch == '*'){

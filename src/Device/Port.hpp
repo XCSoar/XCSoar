@@ -119,7 +119,7 @@ public:
 
   /**
    * Read a single byte from the serial port
-   * @return The byte that was read or EOF in failure
+   * @return the unsigned byte that was read or -1 in failure
    */
   int GetChar();
 
