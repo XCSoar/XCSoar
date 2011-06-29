@@ -26,6 +26,7 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "Operation.hpp"
 #include "Units/Units.hpp"
+#include "OS/ByteOrder.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -167,15 +168,6 @@ DeclareInner(Port *port, const Declaration *decl,
 
   env.SetProgressPosition(2);
 
-  swap(pilot.approach_radius);
-  swap(pilot.arrival_radius);
-  swap(pilot.enroute_logging_interval);
-  swap(pilot.close_logging_interval);
-  swap(pilot.time_between_flight_logs);
-  swap(pilot.minimum_speed_to_force_flight_logging);
-  swap(pilot.unit_word);
-  swap(pilot.margin_height);
-
   port->Write("G\r");
 
   CAI302::PolarMeta polar_meta;
@@ -194,11 +186,6 @@ DeclareInner(Port *port, const Declaration *decl,
     return false;
 
   env.SetProgressPosition(4);
-
-  swap(polar.weight_in_litres);
-  swap(polar.ballast_capacity);
-  swap(polar.config_word);
-  swap(polar.wing_area);
 
   port->Write('\x03');
   if (!port->ExpectString("cmd>"))
@@ -222,16 +209,16 @@ DeclareInner(Port *port, const Declaration *decl,
           pilot.total_energy_final_glide,
           pilot.show_final_glide_altitude_difference,
           pilot.map_datum,
-          pilot.approach_radius,
-          pilot.arrival_radius,
-          pilot.enroute_logging_interval,
-          pilot.close_logging_interval,
-          pilot.time_between_flight_logs,
-          pilot.minimum_speed_to_force_flight_logging,
+          FromLE16(pilot.approach_radius),
+          FromLE16(pilot.arrival_radius),
+          FromLE16(pilot.enroute_logging_interval),
+          FromLE16(pilot.close_logging_interval),
+          FromLE16(pilot.time_between_flight_logs),
+          FromLE16(pilot.minimum_speed_to_force_flight_logging),
           pilot.stf_dead_band,
           pilot.reserved_vario,
-          pilot.unit_word,
-          pilot.margin_height);
+          FromLE16(pilot.unit_word),
+          FromLE16(pilot.margin_height));
 
   port->Write(szTmp);
   if (!port->ExpectString("dn>"))
@@ -245,11 +232,11 @@ DeclareInner(Port *port, const Declaration *decl,
           polar.best_ld,
           polar.best_glide_speed,
           polar.two_ms_sink_at_speed,
-          polar.weight_in_litres,
-          polar.ballast_capacity,
+          FromLE16(polar.weight_in_litres),
+          FromLE16(polar.ballast_capacity),
           0,
-          polar.config_word,
-          polar.wing_area);
+          FromLE16(polar.config_word),
+          FromLE16(polar.wing_area));
 
   port->Write(szTmp);
   if (!port->ExpectString("dn>"))

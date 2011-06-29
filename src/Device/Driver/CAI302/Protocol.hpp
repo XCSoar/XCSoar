@@ -28,8 +28,6 @@ Copyright_License {
 
 #define CtrlC 0x03
 
-#define swap(x) x = ((((x<<8) & 0xff00) | ((x>>8) & 0x00ff)) & 0xffff)
-
 namespace CAI302 {
 
 #pragma pack(push, 1) // force byte alignment
