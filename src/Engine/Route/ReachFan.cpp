@@ -311,7 +311,7 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
   }
 
   children.push_back(FlatTriangleFanTree(depth+1));
-  LeafVector::reverse_iterator it = children.rbegin();
+  FlatTriangleFanTree &child = children.back();
 
   for (fixed f= f0; f< fixed(0.9); f+= fixed(0.1)) {
     // find corner point
@@ -322,15 +322,15 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
     // altitude calculated from pure glide from n to x
     const AFlatGeoPoint x(px, h);
 
-    it->fill_reach(x, index_left, index_right, parms);
+    child.fill_reach(x, index_left, index_right, parms);
 
     // prune child if empty or single spike
-    if (it->vs.size()>3) {
-      parms.vertex_counter+= it->vs.size();
+    if (child.vs.size() > 3) {
+      parms.vertex_counter += child.vs.size();
       parms.fan_counter++;
       return true;
     } else {
-      it->vs.clear();
+      child.vs.clear();
     }
   }
 
