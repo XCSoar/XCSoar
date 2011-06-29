@@ -2,6 +2,8 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
+Version 6.1.3 - not yet released
+
 Version 6.1.2 - 2011/06/28
 * devices
   - workaround for GPGGA/GPRMC clock difference
