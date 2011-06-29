@@ -27,10 +27,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 
-#ifdef ENABLE_OPENGL
-#include "Interface.hpp"
-#endif
-
 GlueMapWindow::GlueMapWindow()
   :logger(NULL),
    idle_robin(2),
@@ -53,7 +49,7 @@ GlueMapWindow::SetSettingsMap(const SETTINGS_MAP &new_value)
   assert_thread();
 
 #ifdef ENABLE_OPENGL
-  ReadSettingsMap(CommonInterface::SettingsMap());
+  ReadSettingsMap(new_value);
 #else
   ScopeLock protect(next_mutex);
   next_settings_map = new_value;
@@ -66,7 +62,7 @@ GlueMapWindow::SetSettingsComputer(const SETTINGS_COMPUTER &new_value)
   assert_thread();
 
 #ifdef ENABLE_OPENGL
-  ReadSettingsComputer(CommonInterface::SettingsComputer());
+  ReadSettingsComputer(new_value);
 #else
   ScopeLock protect(next_mutex);
   next_settings_computer = new_value;
