@@ -220,7 +220,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
     return false;
   }
 
-  if (nmeaout == NULL && (Driver->Flags & (1l << dfNmeaOut)))
+  if (nmeaout == NULL && Driver->IsNMEAOut())
     nmeaout = &device;
 
   return true;

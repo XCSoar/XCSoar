@@ -108,6 +108,20 @@ struct DeviceRegister {
   const TCHAR *Name;
   unsigned int Flags;
   Device *(*CreateOnPort)(Port *com_port);
+
+  /**
+   * Is this the NMEA out driver?
+   */
+  bool IsNMEAOut() const {
+    return (Flags & drfNmeaOut) != 0;
+  }
+
+  /**
+   * Does this driver support task declaration with Device::Declare()?
+   */
+  bool CanDeclare() const {
+    return (Flags & drfLogger) != 0;
+  }
 };
 
 #endif

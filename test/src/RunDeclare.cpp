@@ -112,7 +112,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if ((driver->Flags & drfLogger) == 0) {
+  if (!driver->CanDeclare()) {
     fprintf(stderr, "Not a logger driver: %s\n", argv[1]);
     return EXIT_FAILURE;
   }

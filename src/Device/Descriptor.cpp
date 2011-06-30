@@ -74,7 +74,7 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
   Com = _port;
   Driver = _driver;
 
-  assert(Driver->CreateOnPort != NULL || (Driver->Flags & drfNmeaOut));
+  assert(Driver->CreateOnPort != NULL || Driver->IsNMEAOut());
   if (Driver->CreateOnPort == NULL)
     return true;
 
@@ -137,7 +137,7 @@ bool
 DeviceDescriptor::IsLogger() const
 {
   return Driver != NULL &&
-    ((Driver->Flags & drfLogger) != 0 ||
+    (Driver->CanDeclare() ||
      parser.isFlarm);
 }
 
