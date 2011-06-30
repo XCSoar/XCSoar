@@ -14,6 +14,8 @@
 #include "OS/Clock.hpp"
 #include "Compiler.h"
 
+#include <stdint.h>
+
 #ifdef _UNICODE
 #include <windows.h>
 #endif
@@ -38,12 +40,13 @@ unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
  */
 class CDevIMI
 {
-  typedef char IMICHAR;                         // 8bit text character
-  typedef unsigned char IMIBYTE;                // 8bit unsigned
-  typedef unsigned short IMIWORD;               // 16bit unsigned
-  typedef unsigned long IMIDWORD;               // 32bit unsigned
-  typedef short IMISWORD;                       // 16bit unsigned
-  typedef unsigned long IMIDATETIMESEC;         // 32bit unsigned
+  /** 8bit text character */
+  typedef char IMICHAR;
+  typedef uint8_t IMIBYTE;
+  typedef uint16_t IMIWORD;
+  typedef uint32_t IMIDWORD;
+  typedef int16_t IMISWORD;
+  typedef uint32_t IMIDATETIMESEC;
 
   enum TMsgType {
     MSG_ACK_SUCCESS      = 0x00,
