@@ -33,7 +33,7 @@ Copyright_License {
  */
 class TCPPort : public Port, protected StoppableThread
 {
-  static const unsigned NMEA_BUF_SIZE = 100;
+  typedef FifoBuffer<char, 256u> Buffer;
 
   unsigned port;
 
@@ -41,7 +41,7 @@ class TCPPort : public Port, protected StoppableThread
 
   int listener_fd, connection_fd;
 
-  FifoBuffer<char> buffer;
+  Buffer buffer;
 
 public:
   /**

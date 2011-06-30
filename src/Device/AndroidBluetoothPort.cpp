@@ -29,8 +29,7 @@ Copyright_License {
 
 AndroidBluetoothPort::AndroidBluetoothPort(const TCHAR *_address,
                                            Handler &_handler)
-  :Port(_handler), address(_address), helper(NULL),
-   buffer(256)
+  :Port(_handler), address(_address), helper(NULL)
 {
 }
 
@@ -182,7 +181,7 @@ AndroidBluetoothPort::Read(void *Buffer, size_t Size)
 void
 AndroidBluetoothPort::ProcessChar(char c)
 {
-  FifoBuffer<char>::Range range = buffer.write();
+  Buffer::Range range = buffer.write();
   if (range.second == 0) {
     // overflow, so reset buffer
     buffer.clear();

@@ -27,17 +27,17 @@ Copyright_License {
 #include "FifoBuffer.hpp"
 #include "Source.hpp"
 
-template<class T>
+template<class T, unsigned size>
 class BufferedSource : public Source<T> {
 public:
   typedef std::pair<T*, unsigned> Range;
 
 private:
-  FifoBuffer<T> buffer;
+  FifoBuffer<T, size> buffer;
   long position;
 
 public:
-  BufferedSource(unsigned size):buffer(size), position(0) {}
+  BufferedSource():position(0) {}
 
 protected:
   virtual unsigned read(T *p, unsigned n) = 0;

@@ -28,7 +28,7 @@ Copyright_License {
 
 #ifdef HAVE_POSIX
 
-class PosixFileSource : public BufferedSource<char> {
+class PosixFileSource : public BufferedSource<char, 4096u> {
 private:
   int fd;
 
@@ -54,7 +54,7 @@ protected:
 #include <windows.h>
 #include <tchar.h>
 
-class WindowsFileSource : public BufferedSource<char> {
+class WindowsFileSource : public BufferedSource<char, 4096u> {
 private:
   HANDLE handle;
 

@@ -41,12 +41,14 @@ class BluetoothHelper;
  */
 class AndroidBluetoothPort : public Port, protected StoppableThread
 {
+  typedef FifoBuffer<char, 256u> Buffer;
+
   /** the peer's Bluetooth address */
   StaticString<32> address;
 
   BluetoothHelper *helper;
 
-  FifoBuffer<char> buffer;
+  Buffer buffer;
 
 public:
   AndroidBluetoothPort(const TCHAR *address, Handler &_handler);

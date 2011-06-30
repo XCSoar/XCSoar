@@ -30,20 +30,18 @@ Copyright_License {
 #endif
 
 ZipSource::ZipSource(struct zzip_dir *dir, const char *path)
-  :BufferedSource<char>(4096)
 {
   file = zzip_open_rb(dir, path);
 }
 
 ZipSource::ZipSource(const char *path)
-  :BufferedSource<char>(4096)
 {
   file = zzip_fopen(path, "rb");
 }
 
 #ifdef _UNICODE
 ZipSource::ZipSource(const TCHAR *path)
-  :BufferedSource<char>(4096), file(NULL)
+  :file(NULL)
 {
   char narrow_path[4096];
 

@@ -60,8 +60,7 @@ TCPPort_StatusMessage(unsigned type, const TCHAR *caption,
 
 TCPPort::TCPPort(unsigned _port, Handler &_handler)
   :Port(_handler), port(_port), rx_timeout(0),
-   listener_fd(-1), connection_fd(-1),
-   buffer(NMEA_BUF_SIZE)
+   listener_fd(-1), connection_fd(-1)
 {
 }
 
@@ -297,7 +296,7 @@ TCPPort::Read(void *buffer, size_t length)
 void
 TCPPort::ProcessChar(char c)
 {
-  FifoBuffer<char>::Range range = buffer.write();
+  Buffer::Range range = buffer.write();
   if (range.second == 0) {
     // overflow, so reset buffer
     buffer.clear();

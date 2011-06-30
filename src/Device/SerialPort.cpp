@@ -59,8 +59,7 @@ SerialPort_StatusMessage(unsigned type, const TCHAR *caption,
 
 SerialPort::SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
   :Port(_handler), baud_rate(_baud_rate),
-   hPort(INVALID_HANDLE_VALUE),
-   buffer(NMEA_BUF_SIZE)
+   hPort(INVALID_HANDLE_VALUE)
 #ifndef _WIN32_WCE
    , rx_timeout(0)
 #endif
@@ -604,7 +603,7 @@ SerialPort::ProcessChar(char c)
 {
   assert(Thread::IsInside());
 
-  FifoBuffer<char>::Range range = buffer.write();
+  Buffer::Range range = buffer.write();
   if (range.second == 0) {
     // overflow, so reset buffer
     buffer.clear();

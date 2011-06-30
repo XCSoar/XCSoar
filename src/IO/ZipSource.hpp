@@ -31,7 +31,7 @@ Copyright_License {
 struct zzip_file;
 struct zzip_dir;
 
-class ZipSource : public BufferedSource<char> {
+class ZipSource : public BufferedSource<char, 4096u> {
 private:
   struct zzip_file *file;
 

@@ -57,8 +57,7 @@ TTYPort_StatusMessage(unsigned type, const TCHAR *caption,
 
 TTYPort::TTYPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
   :Port(_handler), rx_timeout(0), baud_rate(_baud_rate),
-   fd(-1),
-   buffer(NMEA_BUF_SIZE)
+   fd(-1)
 {
   assert(path != NULL);
 
@@ -315,7 +314,7 @@ TTYPort::Read(void *Buffer, size_t Size)
 void
 TTYPort::ProcessChar(char c)
 {
-  FifoBuffer<char>::Range range = buffer.write();
+  Buffer::Range range = buffer.write();
   if (range.second == 0) {
     // overflow, so reset buffer
     buffer.clear();

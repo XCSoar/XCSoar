@@ -42,22 +42,17 @@
  * read data from the beginning.  This class automatically shifts the
  * buffer as needed.  It is not thread safe.
  */
-template<class T>
+template<class T, unsigned size>
 class FifoBuffer : private NonCopyable {
 public:
   typedef std::pair<T*, unsigned> Range;
 
 protected:
-  T *data;
-  unsigned size, head, tail;
+  unsigned head, tail;
+  T data[size];
 
 public:
-  FifoBuffer(unsigned _size)
-    :data(new T[_size]), size(_size), head(0), tail(0) {}
-
-  ~FifoBuffer() {
-    delete[] data;
-  }
+  FifoBuffer():head(0), tail(0) {}
 
 protected:
   void shift() {

@@ -31,7 +31,6 @@ Copyright_License {
 #include <unistd.h>
 
 PosixFileSource::PosixFileSource(const char *path)
-  :BufferedSource<char>(4096)
 {
   fd = ::open(path, O_RDONLY);
 }
@@ -67,7 +66,6 @@ PosixFileSource::read(char *p, unsigned n)
 #endif
 
 WindowsFileSource::WindowsFileSource(const char *path)
-  :BufferedSource<char>(4096)
 {
 #ifdef _WIN32_WCE
   /* Windows Mobile doesn't provide narrow API functions */
@@ -89,7 +87,6 @@ WindowsFileSource::WindowsFileSource(const char *path)
 
 #ifdef _UNICODE
 WindowsFileSource::WindowsFileSource(const TCHAR *path)
-  :BufferedSource<char>(4096)
 {
   handle = ::CreateFile(path, GENERIC_READ, FILE_SHARE_READ, NULL,
                         OPEN_EXISTING, FILE_ATTRIBUTE_NORMAL, NULL);

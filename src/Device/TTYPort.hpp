@@ -33,7 +33,7 @@ Copyright_License {
  */
 class TTYPort : public Port, protected StoppableThread
 {
-  static const unsigned NMEA_BUF_SIZE = 100;
+  typedef FifoBuffer<char, 256u> Buffer;
 
   /** Name of the serial port */
   TCHAR sPortName[64];
@@ -44,7 +44,7 @@ class TTYPort : public Port, protected StoppableThread
 
   int fd;
 
-  FifoBuffer<char> buffer;
+  Buffer buffer;
 
 public:
   /**
