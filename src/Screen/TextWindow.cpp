@@ -53,11 +53,15 @@ TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
 void
 TextWindow::on_paint(Canvas &canvas)
 {
+#ifndef ENABLE_OPENGL
   canvas.clear_white();
+#endif
 
-  canvas.set_text_color(COLOR_BLACK);
-  canvas.background_transparent();
-  canvas.text(1, 1, text.c_str());
+  if (!text.empty()) {
+    canvas.set_text_color(COLOR_BLACK);
+    canvas.background_transparent();
+    canvas.text(1, 1, text.c_str());
+  }
 }
 
 #endif /* ENABLE_SDL */

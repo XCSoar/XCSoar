@@ -86,12 +86,12 @@ Font::text_texture_gl(const TCHAR *text, PixelSize &size,
                       const Color &fg, const Color &bg) const
 {
   if (!textUtilObject)
-    return NULL;
+    return 0;
 
   size.cx = size.cy = 0;
   text_width(text, size);
   if (size.cx == 0 || size.cy == 0)
-    return NULL;
+    return 0;
 
   return textUtilObject->getTextTextureGL(text,
                                           fg.red(), fg.green(), fg.blue(),

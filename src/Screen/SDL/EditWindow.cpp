@@ -51,6 +51,9 @@ EditWindow::on_paint(Canvas &canvas)
     canvas.set_text_color(COLOR_DARK_GRAY);
   }
 
+  if (value.empty())
+    return;
+
   canvas.background_transparent();
 
   if (have_clipping() || (get_text_style() & DT_WORDBREAK) != 0)

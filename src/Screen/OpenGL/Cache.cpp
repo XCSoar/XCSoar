@@ -62,6 +62,9 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
   assert(font != NULL);
   assert(text != NULL);
 
+  if (*text == 0)
+    return NULL;
+
   char key[4096];
   snprintf(key, sizeof(key),
            "%s_%u_%u_%02x%02x%02x_%02x%02x%02x_%s",
@@ -111,6 +114,9 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
 #ifdef ANDROID
   PixelSize size;
   int texture_id = font->text_texture_gl(text, size, text_color, background_color);
+  if (texture_id == 0)
+    return NULL;
+
   RenderedText *rt = new RenderedText(key, texture_id, size.cx, size.cy);
 #else
   SDL_Surface *surface = ::TTF_RenderUTF8_Solid(font, text, COLOR_BLACK);
