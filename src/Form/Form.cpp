@@ -533,29 +533,31 @@ WndForm::on_paint(Canvas &canvas)
   // Draw the borders
   canvas.raised_edge(rcClient);
 
-  // Set the colors
-  canvas.set_text_color(COLOR_WHITE);
+  if (!mCaption.empty()) {
+    // Set the colors
+    canvas.set_text_color(COLOR_WHITE);
 
-  // Set the titlebar font and font-size
-  canvas.select(*mhTitleFont);
+    // Set the titlebar font and font-size
+    canvas.select(*mhTitleFont);
 
-  // JMW todo add here icons?
+    // JMW todo add here icons?
 
 #ifdef EYE_CANDY
-  canvas.background_transparent();
-  canvas.stretch(mTitleRect.left, mTitleRect.top,
-                 mTitleRect.right - mTitleRect.left,
-                 mTitleRect.bottom - mTitleRect.top,
-                 bitmap_title);
+    canvas.background_transparent();
+    canvas.stretch(mTitleRect.left, mTitleRect.top,
+                   mTitleRect.right - mTitleRect.left,
+                   mTitleRect.bottom - mTitleRect.top,
+                   bitmap_title);
 
-  // Draw titlebar text
-  canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top,
-              mCaption.c_str());
+    // Draw titlebar text
+    canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top,
+                mCaption.c_str());
 #else
-  canvas.set_background_color(mColorTitle);
-  canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
-                     mTitleRect.top, mTitleRect, mCaption.c_str());
+    canvas.set_background_color(mColorTitle);
+    canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
+                       mTitleRect.top, mTitleRect, mCaption.c_str());
 #endif
+  }
 }
 
 void
