@@ -53,7 +53,9 @@ TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
 void
 TextWindow::on_paint(Canvas &canvas)
 {
+#ifndef ENABLE_OPENGL
   canvas.clear_white();
+#endif
 
   if (!text.empty()) {
     canvas.set_text_color(COLOR_BLACK);
