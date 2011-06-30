@@ -198,9 +198,6 @@ InfoBoxWindow::SetCommentInvalid()
 void
 InfoBoxWindow::PaintTitle(Canvas &canvas)
 {
-  int x, y;
-  int halftextwidth;
-
   canvas.set_text_color(look.get_title_color(colorTitle));
 
   const Font &font = *look.title.font;
@@ -208,11 +205,10 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   PixelSize tsize = canvas.text_size(mTitle.c_str());
 
-  halftextwidth = (recTitle.left + recTitle.right - tsize.cx) / 2;
-
-  x = max(1, (int)recTitle.left + halftextwidth);
-
-  y = recTitle.top + 1 + font.get_capital_height() - font.get_ascent_height();
+  int halftextwidth = (recTitle.left + recTitle.right - tsize.cx) / 2;
+  int x = max(1, (int)recTitle.left + halftextwidth);
+  int y = recTitle.top + 1 + font.get_capital_height() -
+    font.get_ascent_height();
 
   canvas.TextAutoClipped(x, y, mTitle.c_str());
 
@@ -242,8 +238,6 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 void
 InfoBoxWindow::PaintValue(Canvas &canvas)
 {
-  int x, y;
-
   canvas.set_text_color(look.get_value_color(colorValue));
 
   canvas.select(*look.value.font);
@@ -267,10 +261,10 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
     unit_size.cy = 0;
   }
 
-  x = max(1, (int)(recValue.left + recValue.right - tsize.cx
+  int x = max(1, (int)(recValue.left + recValue.right - tsize.cx
                    - Layout::FastScale(unit_size.cx)) / 2);
 
-  y = recValue.top + 1 - ascent_height +
+  int y = recValue.top + 1 - ascent_height +
     (recValue.bottom - recValue.top + capital_height) / 2;
 
   canvas.TextAutoClipped(x, y, mValue.c_str());
@@ -292,8 +286,6 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
 void
 InfoBoxWindow::PaintComment(Canvas &canvas)
 {
-  int x, y;
-
   canvas.set_text_color(look.get_comment_color(colorComment));
 
   const Font &font = *look.comment.font;
@@ -301,8 +293,8 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 
   PixelSize tsize = canvas.text_size(mComment);
 
-  x = max(1, (int)(recComment.left + recComment.right - tsize.cx) / 2);
-  y = recComment.top + 1 + font.get_capital_height()
+  int x = max(1, (int)(recComment.left + recComment.right - tsize.cx) / 2);
+  int y = recComment.top + 1 + font.get_capital_height()
     - font.get_ascent_height();
 
   canvas.TextAutoClipped(x, y, mComment);
