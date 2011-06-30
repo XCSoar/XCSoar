@@ -198,6 +198,9 @@ InfoBoxWindow::SetCommentInvalid()
 void
 InfoBoxWindow::PaintTitle(Canvas &canvas)
 {
+  if (mTitle.empty())
+    return;
+
   canvas.set_text_color(look.get_title_color(colorTitle));
 
   const Font &font = *look.title.font;
@@ -238,6 +241,9 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 void
 InfoBoxWindow::PaintValue(Canvas &canvas)
 {
+  if (mValue.empty())
+    return;
+
   canvas.set_text_color(look.get_value_color(colorValue));
 
   canvas.select(*look.value.font);
@@ -286,6 +292,9 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
 void
 InfoBoxWindow::PaintComment(Canvas &canvas)
 {
+  if (mComment.empty())
+    return;
+
   canvas.set_text_color(look.get_comment_color(colorComment));
 
   const Font &font = *look.comment.font;
