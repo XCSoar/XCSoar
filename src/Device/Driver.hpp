@@ -45,8 +45,6 @@ public:
 
   virtual void LinkTimeout() = 0;
 
-  virtual bool IsLogger() = 0;
-
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info) = 0;
 
   virtual bool PutMacCready(fixed MacCready) = 0;
@@ -75,8 +73,6 @@ public:
   virtual bool Open(OperationEnvironment &env);
 
   virtual void LinkTimeout();
-
-  virtual bool IsLogger();
 
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
 

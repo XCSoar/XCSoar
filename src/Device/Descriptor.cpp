@@ -138,7 +138,6 @@ DeviceDescriptor::IsLogger() const
 {
   return Driver != NULL &&
     ((Driver->Flags & drfLogger) != 0 ||
-     (device != NULL && device->IsLogger()) ||
      parser.isFlarm);
 }
 
