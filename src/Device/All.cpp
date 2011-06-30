@@ -82,7 +82,7 @@ AllDevicesPutVolume(int volume)
 }
 
 void
-AllDevicesPutActiveFrequency(double frequency)
+AllDevicesPutActiveFrequency(RadioFrequency frequency)
 {
   if (is_simulator())
     return;
@@ -92,7 +92,7 @@ AllDevicesPutActiveFrequency(double frequency)
 }
 
 void
-AllDevicesPutStandbyFrequency(double frequency)
+AllDevicesPutStandbyFrequency(RadioFrequency frequency)
 {
   if (is_simulator())
     return;

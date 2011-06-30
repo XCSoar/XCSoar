@@ -80,13 +80,13 @@ AbstractDevice::PutVolume(int volume)
 }
 
 bool
-AbstractDevice::PutActiveFrequency(double frequency)
+AbstractDevice::PutActiveFrequency(RadioFrequency frequency)
 {
   return true;
 }
 
 bool
-AbstractDevice::PutStandbyFrequency(double frequency)
+AbstractDevice::PutStandbyFrequency(RadioFrequency frequency)
 {
   return true;
 }

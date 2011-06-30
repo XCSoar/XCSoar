@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_DEVICE_DRIVER_HPP
 
 #include "Device/Declaration.hpp"
+#include "RadioFrequency.hpp"
 
 #include <tchar.h>
 
@@ -54,8 +55,8 @@ public:
                       const DERIVED_INFO &calculated) = 0;
   virtual bool PutVoice(const TCHAR *sentence) = 0;
   virtual bool PutVolume(int volume) = 0;
-  virtual bool PutActiveFrequency(double frequency) = 0;
-  virtual bool PutStandbyFrequency(double frequency) = 0;
+  virtual bool PutActiveFrequency(RadioFrequency frequency) = 0;
+  virtual bool PutStandbyFrequency(RadioFrequency frequency) = 0;
 
   virtual bool Declare(const struct Declaration *declaration,
                        OperationEnvironment &env) = 0;
@@ -83,8 +84,8 @@ public:
                       const DERIVED_INFO &calculated);
   virtual bool PutVoice(const TCHAR *sentence);
   virtual bool PutVolume(int volume);
-  virtual bool PutActiveFrequency(double frequency);
-  virtual bool PutStandbyFrequency(double frequency);
+  virtual bool PutActiveFrequency(RadioFrequency frequency);
+  virtual bool PutStandbyFrequency(RadioFrequency frequency);
 
   virtual bool Declare(const struct Declaration *declaration,
                        OperationEnvironment &env);

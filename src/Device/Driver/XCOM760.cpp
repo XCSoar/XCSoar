@@ -36,8 +36,8 @@ public:
 
 public:
   virtual bool PutVolume(int volume);
-  virtual bool PutActiveFrequency(double frequency);
-  virtual bool PutStandbyFrequency(double frequency);
+  virtual bool PutActiveFrequency(RadioFrequency frequency);
+  virtual bool PutStandbyFrequency(RadioFrequency frequency);
 };
 
 bool
@@ -50,20 +50,23 @@ XCOM760Device::PutVolume(int Volume)
 }
 
 bool
-XCOM760Device::PutActiveFrequency(double Freq)
+XCOM760Device::PutActiveFrequency(RadioFrequency frequency)
 {
   char szTmp[32];
-  sprintf(szTmp, "$TXAF=%.3f\r\n", Freq);
+  sprintf(szTmp, "$TXAF=%u.%03u\r\n",
+          frequency.GetKiloHertz() / 1000,
+          frequency.GetKiloHertz() % 1000);
   port->Write(szTmp);
   return true;
 }
 
 bool
-XCOM760Device::PutStandbyFrequency(double Freq)
+XCOM760Device::PutStandbyFrequency(RadioFrequency frequency)
 {
   char szTmp[32];
-  sprintf(szTmp, "$TXSF=%.3f\r\n", Freq);
-  port->Write(szTmp);
+  sprintf(szTmp, "$TXSF=%u.%03u\r\n",
+          frequency.GetKiloHertz() / 1000,
+          frequency.GetKiloHertz() % 1000);
   return true;
 }
 

@@ -186,13 +186,13 @@ DeviceDescriptor::PutVolume(int volume)
 }
 
 bool
-DeviceDescriptor::PutActiveFrequency(double frequency)
+DeviceDescriptor::PutActiveFrequency(RadioFrequency frequency)
 {
   return device != NULL ? device->PutActiveFrequency(frequency) : true;
 }
 
 bool
-DeviceDescriptor::PutStandbyFrequency(double frequency)
+DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency)
 {
   return device != NULL ? device->PutStandbyFrequency(frequency) : true;
 }

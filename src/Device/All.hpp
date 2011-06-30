@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 #include "Compiler.h"
+#include "RadioFrequency.hpp"
 
 #include <tchar.h>
 
@@ -39,8 +40,12 @@ void AllDevicesPutMacCready(fixed MacCready);
 void AllDevicesPutBugs(fixed bugs);
 void AllDevicesPutBallast(fixed ballast);
 void AllDevicesPutVolume(int volume);
-void AllDevicesPutActiveFrequency(double frequency);
-void AllDevicesPutStandbyFrequency(double frequency);
+
+void
+AllDevicesPutActiveFrequency(RadioFrequency frequency);
+
+void
+AllDevicesPutStandbyFrequency(RadioFrequency frequency);
 
 void
 AllDevicesPutQNH(const AtmosphericPressure &pres,

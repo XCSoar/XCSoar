@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Device/Port.hpp"
 #include "Device/Parser.hpp"
+#include "RadioFrequency.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -123,8 +124,8 @@ public:
   bool PutBugs(fixed bugs);
   bool PutBallast(fixed ballast);
   bool PutVolume(int volume);
-  bool PutActiveFrequency(double frequency);
-  bool PutStandbyFrequency(double frequency);
+  bool PutActiveFrequency(RadioFrequency frequency);
+  bool PutStandbyFrequency(RadioFrequency frequency);
   bool PutQNH(const AtmosphericPressure &pres,
               const DERIVED_INFO &calculated);
   bool PutVoice(const TCHAR *sentence);
