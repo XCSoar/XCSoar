@@ -12,6 +12,7 @@
 #include "Device/Driver.hpp"
 #include "Device/Port.hpp"
 #include "OS/Clock.hpp"
+#include "Compiler.h"
 
 #ifdef _UNICODE
 #include <windows.h>
@@ -153,7 +154,7 @@ struct CDevIMI::TDeviceInfo {
   IMISWORD sensor8kOffset;
   IMIWORD buildNumber;
   IMIBYTE reserved[64 - 22];
-} __attribute__((__packed__));
+} gcc_packed;
 
 
 struct CDevIMI::TDeclarationHeader {
@@ -186,7 +187,7 @@ struct CDevIMI::TDeclarationHeader {
   IMIWORD reserved1;
   IMIDATETIMESEC flightStartDateTime;
   IMIBYTE reserved2[28];
-} __attribute__((__packed__));
+} gcc_packed;
 
 
 struct CDevIMI::TObservationZone {
@@ -212,7 +213,7 @@ struct CDevIMI::TObservationZone {
   IMIDWORD maxAlt: 14;     // maximum altitude of OZ in meters (0-16km). 0 =ignore maximum altitude
 
   IMIDWORD reserved: 6;
-} __attribute__((__packed__));
+} gcc_packed;
 
 
 struct CDevIMI::TWaypoint {
@@ -225,7 +226,7 @@ struct CDevIMI::TWaypoint {
   IMICHAR name[IMIDECL_WP_NAME_LENGTH];
 
   TObservationZone oz;
-} __attribute__((__packed__));
+} gcc_packed;
 
 
 struct CDevIMI::TDeclaration {
@@ -233,7 +234,7 @@ struct CDevIMI::TDeclaration {
   TWaypoint wp[IMIDECL_MAX_WAYPOINTS];
   IMIBYTE reserved[sizeof(TWaypoint) - sizeof(IMIWORD)];
   IMIWORD crc16;
-} __attribute__((__packed__));
+} gcc_packed;
 
 
 struct CDevIMI::TMsg {
@@ -245,7 +246,8 @@ struct CDevIMI::TMsg {
   IMIWORD payloadSize;
   IMIBYTE payload[COMM_MAX_PAYLOAD_SIZE];
   IMIWORD crc16;
-};
+} gcc_packed;
+
 #define IMICOMM_MAX_MSG_SIZE (sizeof(TMsg))
 #define IMICOMM_MSG_HEADER_SIZE ((size_t)(&(((TMsg *)NULL)->payload)))
 #define IMICOMM_BIGPARAM1(param) ((IMIBYTE)((param) >> 16))
