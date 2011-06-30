@@ -117,7 +117,7 @@ SettingsLeave()
   }
 
   if (TerrainFileChanged) {
-    ProgressGlue::Create(_("Loading Terrain File..."));
+    operation.SetText(_("Loading Terrain File..."));
 
     XCSoarInterface::main_window.map.set_terrain(NULL);
     glide_computer->set_terrain(NULL);
@@ -169,7 +169,7 @@ SettingsLeave()
       || WaypointFileChanged
       || TerrainFileChanged
       || TopographyFileChanged) {
-    ProgressGlue::Close();
+    operation.Hide();
     XCSoarInterface::main_window.map.set_focus();
 #ifndef ENABLE_OPENGL
     draw_thread->TriggerRedraw();

@@ -567,7 +567,7 @@ XCSoarInterface::Shutdown(void)
 
   // Close the progress dialog
   LogStartUp(_T("Close Progress Dialog"));
-  ProgressGlue::Close();
+  operation.Hide();
 
   // Clear the EGM96 database
   CloseGeoid();
