@@ -26,7 +26,7 @@ Copyright_License {
 
 const struct DeviceRegister nmoDevice = {
   _T("NmeaOut"),
-  drfNmeaOut,
+  DeviceRegister::NMEA_OUT,
   NULL,
 };
 

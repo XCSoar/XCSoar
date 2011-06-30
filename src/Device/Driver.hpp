@@ -93,18 +93,15 @@ public:
                            const DERIVED_INFO &calculated);
 };
 
-enum DeviceFlags_t {
-  dfLogger,
-  dfNmeaOut,
-};
-
-#define drfLogger	(1l << dfLogger)
-#define drfNmeaOut	(1l << dfNmeaOut)
-
 /**
  * This is the structure exported by a device driver.
  */
 struct DeviceRegister {
+  enum {
+    NMEA_OUT = 0x1,
+    DECLARE = 0x2,
+  };
+
   const TCHAR *Name;
   unsigned int Flags;
   Device *(*CreateOnPort)(Port *com_port);
@@ -113,14 +110,14 @@ struct DeviceRegister {
    * Is this the NMEA out driver?
    */
   bool IsNMEAOut() const {
-    return (Flags & drfNmeaOut) != 0;
+    return (Flags & NMEA_OUT) != 0;
   }
 
   /**
    * Does this driver support task declaration with Device::Declare()?
    */
   bool CanDeclare() const {
-    return (Flags & drfLogger) != 0;
+    return (Flags & DECLARE) != 0;
   }
 };
 

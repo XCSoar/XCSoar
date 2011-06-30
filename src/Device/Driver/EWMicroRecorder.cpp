@@ -332,6 +332,6 @@ EWMicroRecorderCreateOnPort(Port *com_port)
 
 const struct DeviceRegister ewMicroRecorderDevice = {
   _T("EW MicroRecorder"),
-  drfLogger,
+  DeviceRegister::DECLARE,
   EWMicroRecorderCreateOnPort,
 };

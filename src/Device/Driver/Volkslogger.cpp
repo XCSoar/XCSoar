@@ -255,6 +255,6 @@ VolksloggerCreateOnPort(Port *com_port)
 
 const struct DeviceRegister vlDevice = {
   _T("Volkslogger"),
-  drfLogger,
+  DeviceRegister::DECLARE,
   VolksloggerCreateOnPort,
 };
