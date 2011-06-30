@@ -62,6 +62,9 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
   assert(font != NULL);
   assert(text != NULL);
 
+  if (*text == 0)
+    return NULL;
+
   char key[4096];
   snprintf(key, sizeof(key),
            "%s_%u_%u_%02x%02x%02x_%02x%02x%02x_%s",
