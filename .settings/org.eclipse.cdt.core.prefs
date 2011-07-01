@@ -1,4 +1,4 @@
-#Wed Mar 02 20:33:57 CET 2011
+#Fri Jul 01 23:32:03 CEST 2011
 eclipse.preferences.version=1
 environment/project/0.697445322=
 environment/project/0.697445322.381966687=
@@ -24,18 +24,18 @@ environment/project/0.697445322.381966687/append=true
 environment/project/0.697445322.381966687/appendContributed=true
 environment/project/0.697445322/append=true
 environment/project/0.697445322/appendContributed=true
-org.eclipse.cdt.core.formatter.alignment_for_arguments_in_method_invocation=16
+org.eclipse.cdt.core.formatter.alignment_for_arguments_in_method_invocation=18
 org.eclipse.cdt.core.formatter.alignment_for_assignment=0
 org.eclipse.cdt.core.formatter.alignment_for_base_clause_in_type_declaration=80
 org.eclipse.cdt.core.formatter.alignment_for_binary_expression=16
 org.eclipse.cdt.core.formatter.alignment_for_compact_if=0
-org.eclipse.cdt.core.formatter.alignment_for_conditional_expression=80
+org.eclipse.cdt.core.formatter.alignment_for_conditional_expression=82
 org.eclipse.cdt.core.formatter.alignment_for_declarator_list=16
-org.eclipse.cdt.core.formatter.alignment_for_enumerator_list=48
+org.eclipse.cdt.core.formatter.alignment_for_enumerator_list=51
 org.eclipse.cdt.core.formatter.alignment_for_expression_list=0
-org.eclipse.cdt.core.formatter.alignment_for_expressions_in_array_initializer=16
+org.eclipse.cdt.core.formatter.alignment_for_expressions_in_array_initializer=18
 org.eclipse.cdt.core.formatter.alignment_for_member_access=0
-org.eclipse.cdt.core.formatter.alignment_for_parameters_in_method_declaration=16
+org.eclipse.cdt.core.formatter.alignment_for_parameters_in_method_declaration=18
 org.eclipse.cdt.core.formatter.alignment_for_throws_clause_in_method_declaration=16
 org.eclipse.cdt.core.formatter.brace_position_for_array_initializer=end_of_line
 org.eclipse.cdt.core.formatter.brace_position_for_block=end_of_line
