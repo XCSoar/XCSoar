@@ -98,6 +98,25 @@ NOAAStore::AddStation(const char *code)
   return true;
 }
 
+#ifdef _UNICODE
+bool
+NOAAStore::AddStation(const TCHAR *code)
+{
+#ifndef NDEBUG
+  assert(_tcslen(code) == 4);
+  for (unsigned i = 0; i < 4; i++)
+    assert(code[i] >= _T('A') && code[i] <= _T('Z'));
+#endif
+
+  size_t len = _tcslen(code);
+  char code2[len * 4 + 1];
+  ::WideCharToMultiByte(CP_UTF8, 0, code, len, code2, sizeof(code2), NULL, NULL);
+  code2[4] = 0;
+
+  return AddStation(code2);
+}
+#endif
+
 void
 NOAAStore::RemoveStation(unsigned index)
 {

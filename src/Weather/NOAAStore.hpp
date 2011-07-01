@@ -38,6 +38,9 @@ namespace NOAAStore
    * @return True if the station was added, False if the array is full
    */
   bool AddStation(const char *code);
+#ifdef _UNICODE
+  bool AddStation(const TCHAR *code);
+#endif
 
   /**
    * Removes a station from the set of stations for which
