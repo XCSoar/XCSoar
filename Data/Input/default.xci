@@ -838,9 +838,9 @@ location=5
 mode=Info1
 type=key
 data=7
-event=NearestWaypointDetails aircraft
+event=Weather list
 event=Mode default
-label=Nearest\nWaypoint$(CheckWaypointFile)
+label=METAR\nTAF$(CheckNet)
 location=6
 
 mode=Info1
@@ -948,6 +948,9 @@ location=7
 mode=Info3
 type=key
 data=9
+event=NearestWaypointDetails aircraft
+event=Mode default
+label=Nearest\nWaypoint$(CheckWaypointFile)
 location=8
 
 mode=Info3

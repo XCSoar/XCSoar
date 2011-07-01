@@ -1846,3 +1846,10 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     Message::AddMessage(_("In sector, arm advance when ready"));
   }
 }
+
+void
+InputEvents::eventWeather(const TCHAR *misc)
+{
+  if (_tcscmp(misc, _T("list")) == 0)
+    dlgNOAAListShowModal(XCSoarInterface::main_window);
+}

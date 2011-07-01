@@ -147,6 +147,7 @@ namespace InputEvents
   void eventFlarmTraffic(const TCHAR *misc);
   void eventFlarmDetails(const TCHAR *misc);
   void eventCredits(const TCHAR *misc);
+  void eventWeather(const TCHAR *misc);
   // -------
 };
 
