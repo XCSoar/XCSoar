@@ -1,7 +1,3 @@
-//{{NO_DEPENDENCIES}}
-// Microsoft Developer Studio generated include file.
-// Used by XCSoar.rc
-//
 #define IDI_XCSOAR                      101
 #define IDD_PROGRESS                    104
 #define IDB_LANDABLE                    139
@@ -146,15 +142,3 @@
 #define IDB_TRAFFIC_ALARM_HD           5364
 #define IDB_TASKTURNPOINT               365
 #define IDB_TASKTURNPOINT_HD           5365
-
-// Next default values for new objects
-//
-#ifdef APSTUDIO_INVOKED
-#ifndef APSTUDIO_READONLY_SYMBOLS
-#define _APS_3D_CONTROLS                     1
-#define _APS_NEXT_RESOURCE_VALUE        366
-#define _APS_NEXT_COMMAND_VALUE         40025
-#define _APS_NEXT_CONTROL_VALUE         1264
-#define _APS_NEXT_SYMED_VALUE           102
-#endif
-#endif
