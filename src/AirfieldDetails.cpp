@@ -136,9 +136,9 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
  * Opens the airfield details file and parses it
  */
 void
-ReadAirfieldFile(Waypoints &way_points, OperationEnvironment &operation)
+ReadWaypointDetailsFile(Waypoints &way_points, OperationEnvironment &operation)
 {
-  LogStartUp(_T("ReadAirfieldFile"));
+  LogStartUp(_T("ReadWaypointDetailsFile"));
 
   TLineReader *reader =
     OpenConfiguredTextFile(szProfileAirfieldFile, _T("airfields.txt"));

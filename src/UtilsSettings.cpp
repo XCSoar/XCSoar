@@ -133,7 +133,7 @@ SettingsLeave()
   if (WaypointFileChanged || AirfieldFileChanged) {
     // re-load waypoints
     WaypointGlue::LoadWaypoints(way_points, terrain, operation);
-    ReadAirfieldFile(way_points, operation);
+    ReadWaypointDetailsFile(way_points, operation);
   }
 
   if (WaypointFileChanged || TerrainFileChanged) {

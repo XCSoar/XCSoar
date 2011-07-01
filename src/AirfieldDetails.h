@@ -28,6 +28,6 @@ class Waypoints;
 class OperationEnvironment;
 
 void
-ReadAirfieldFile(Waypoints &way_points, OperationEnvironment &operation);
+ReadWaypointDetailsFile(Waypoints &way_points, OperationEnvironment &operation);
 
 #endif
