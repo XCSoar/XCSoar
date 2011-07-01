@@ -46,6 +46,21 @@ public:
 
   typedef void (*DataAccessCallback_t)(DataField * Sender, DataAccessKind_t Mode);
 
+  bool SupportCombo;  // all Types dataField support combolist except DataFieldString.
+
+protected:
+  DataAccessCallback_t mOnDataAccess;
+  TCHAR mEditFormat[FORMATSIZE + 1];
+  TCHAR mDisplayFormat[FORMATSIZE + 1];
+  TCHAR mUnits[UNITSIZE + 1];
+  bool mItemHelp;
+
+private:
+  int mUsageCounter;
+  bool mDisableSpeedup;
+  bool mDetachGUI;
+
+public:
   DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
             DataAccessCallback_t OnDataAccess = NULL);
   virtual ~DataField(void) {}
@@ -101,19 +116,6 @@ public:
   bool GetItemHelpEnabled() { return mItemHelp; }
 
   void CopyString(TCHAR * szStringOut, bool bFormatted);
-  bool SupportCombo;  // all Types dataField support combolist except DataFieldString.
-
-protected:
-  DataAccessCallback_t mOnDataAccess;
-  TCHAR mEditFormat[FORMATSIZE + 1];
-  TCHAR mDisplayFormat[FORMATSIZE + 1];
-  TCHAR mUnits[UNITSIZE + 1];
-  bool mItemHelp;
-
-private:
-  int mUsageCounter;
-  bool mDisableSpeedup;
-  bool mDetachGUI;
 };
 
 #endif

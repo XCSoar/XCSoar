@@ -31,29 +31,29 @@ Copyright_License {
 class DataFieldFloat: 
 public DataField
 {
-  private:
+private:
   fixed mValue;
   fixed mMin;
   fixed mMax;
   fixed mStep;
   PeriodClock last_step;
-    int mSpeedup;
-    int mFine;
+  int mSpeedup;
+  int mFine;
   mutable TCHAR mOutBuf[OUTBUFFERSIZE+1];
 
-  protected:
+protected:
   fixed SpeedUp(bool keyup);
 
 
-  public:
-    DataFieldFloat(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                   fixed Min, fixed Max, fixed Default,
-                   fixed Step, int Fine, DataAccessCallback_t OnDataAccess)
-      :DataField(EditFormat, DisplayFormat, OnDataAccess),
-       mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine)
+public:
+  DataFieldFloat(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
+                 fixed Min, fixed Max, fixed Default,
+                 fixed Step, int Fine, DataAccessCallback_t OnDataAccess)
+    :DataField(EditFormat, DisplayFormat, OnDataAccess),
+     mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine)
   {
-      SupportCombo=true;
-    };
+    SupportCombo=true;
+  }
 
   void Inc(void);
   void Dec(void);

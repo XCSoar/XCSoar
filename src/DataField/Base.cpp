@@ -26,11 +26,20 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <math.h>
-#include <algorithm>
-
-using std::min;
 
 enum { ComboPopupITEMMAX = 100 };
+
+DataField::DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
+                     DataAccessCallback_t OnDataAccess)
+  :mOnDataAccess(OnDataAccess),
+   mItemHelp(false), mUsageCounter(0), mDisableSpeedup(false), mDetachGUI(false)
+{
+  _tcscpy(mEditFormat, EditFormat);
+  _tcscpy(mDisplayFormat, DisplayFormat);
+
+  // blank units
+  mUnits[0]= 0;
+}
 
 void
 DataField::Special(void)
@@ -79,18 +88,6 @@ DataField::SetAsInteger(gcc_unused int Value)
 void
 DataField::SetAsString(gcc_unused const TCHAR *Value)
 {
-}
-
-DataField::DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-                     DataAccessCallback_t OnDataAccess)
-  :mOnDataAccess(OnDataAccess),
-   mItemHelp(false), mUsageCounter(0), mDisableSpeedup(false), mDetachGUI(false)
-{
-  _tcscpy(mEditFormat, EditFormat);
-  _tcscpy(mDisplayFormat, DisplayFormat);
-
-  // blank units
-  mUnits[0]= 0;
 }
 
 void
