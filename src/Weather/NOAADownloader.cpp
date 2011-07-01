@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "NOAADownloader.hpp"
 #include "METAR.hpp"
+#include "TAF.hpp"
 #include "Net/Session.hpp"
 #include "Net/Request.hpp"
 #include "OS/PathName.hpp"
@@ -168,6 +169,72 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar)
 
   // Trim the content string
   TrimRight(metar.content.buffer());
+
+  return true;
+}
+
+bool
+NOAADownloader::DownloadTAF(const char *code, TAF &taf)
+{
+  // Build file url
+  char url[256] = "ftp://tgftp.nws.noaa.gov/data/forecasts/taf/stations/";
+  strcat(url, code);
+  strcat(url, ".TXT");
+  PathName path(url);
+
+  // Open download session
+  Net::Session session;
+  if (session.Error())
+    return false;
+
+  // Request the file
+  Net::Request request(session, path);
+  if (!request.Created())
+    return false;
+
+  /*
+   * Example:
+   *
+   * 2011/07/01 12:27
+   * TAF EDDL 011100Z 0112/0218 32010KT 9999 SCT040
+   *       TEMPO 0112/0119 4000 SHRA SCT030CB PROB30
+   *       TEMPO 0112/0118 32015G30KT TSRA
+   *       BECMG 0118/0121 32005KT PROB30
+   *       TEMPO 0202/0207 BKN012
+   *       BECMG 0210/0213 31010KT
+   */
+
+  // Read first 256 bytes of the response
+  char buffer[256];
+  if (!request.Read(buffer, sizeof(buffer)))
+    return false;
+
+  // Parse date and time of last update
+  const char *p = ParseDateTime(buffer, taf.last_update);
+  if (p == buffer)
+    return false;
+
+  // Skip characters until line feed or string end
+  while (*p != '\n' && *p != 0)
+    p++;
+
+  if (*p == 0)
+    return false;
+
+  // p is now at the first character after the line feed
+  *p++;
+
+  if (*p == 0)
+    return false;
+
+  // Read rest of the response into the content string
+  taf.content.clear();
+  AppendToContentString(p, taf.content);
+  while (request.Read(buffer, sizeof(buffer)))
+    AppendToContentString(buffer, taf.content);
+
+  // Trim the content string
+  TrimRight(taf.content.buffer());
 
   return true;
 }

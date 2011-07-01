@@ -21,31 +21,29 @@ Copyright_License {
 }
 */
 
-#ifndef NOAA_DOWNLOADER_HPP
-#define NOAA_DOWNLOADER_HPP
+#ifndef TAF_HPP
+#define TAF_HPP
 
-struct METAR;
-struct TAF;
+#include "DateTime.hpp"
+#include "Util/StaticString.hpp"
 
-namespace NOAADownloader
+struct TAF
 {
-  /**
-   * Downloads a METAR from the NOAA server
-   * @param code Four letter code of the airport (upper case)
-   * @param metar METAR to write data into
-   * @return True if the METAR was downloaded and parsed successfully,
-   * otherwise False
-   */
-  bool DownloadMETAR(const char *code, METAR &metar);
+  typedef StaticString<1024> ContentString;
 
-  /**
-   * Downloads a METAR from the NOAA server
-   * @param code Four letter code of the airport (upper case)
-   * @param metar METAR to write data into
-   * @return True if the METAR was downloaded and parsed successfully,
-   * otherwise False
-   */
-  bool DownloadTAF(const char *code, TAF &taf);
+  BrokenDateTime last_update;
+  ContentString content;
+
+  void clear() {
+    last_update.year = 0;
+    last_update.month = 0;
+    last_update.day = 0;
+    last_update.day_of_week = 0;
+    last_update.hour = 0;
+    last_update.minute = 0;
+    last_update.second = 0;
+    content.clear();
+  }
 };
 
 #endif

@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Weather/TAF.hpp"
 #include "Weather/METAR.hpp"
 #include "Weather/NOAADownloader.hpp"
 
@@ -29,17 +30,17 @@ Copyright_License {
 using namespace std;
 
 static bool
-Download(const char *code)
+DownloadMETAR(const char *code)
 {
   METAR metar;
   metar.clear();
 
   if (!NOAADownloader::DownloadMETAR(code, metar)) {
-    cout << "Download failed!" << endl;
+    cout << "METAR Download failed!" << endl;
     return false;
   }
 
-  cout << "Download successful:" << endl;
+  cout << "METAR Download successful:" << endl;
   printf("%02d.%02d.%04d %02d:%02d:%02d\n",
          (unsigned)metar.last_update.day,
          (unsigned)metar.last_update.month,
@@ -50,6 +51,34 @@ Download(const char *code)
 
   if (!metar.content.empty()) {
       _tprintf(metar.content.c_str());
+      cout << endl;
+  }
+
+  return true;
+}
+
+static bool
+DownloadTAF(const char *code)
+{
+  TAF taf;
+  taf.clear();
+
+  if (!NOAADownloader::DownloadTAF(code, taf)) {
+    cout << "TAF Download failed!" << endl;
+    return false;
+  }
+
+  cout << "TAF Download successful:" << endl;
+  printf("%02d.%02d.%04d %02d:%02d:%02d\n",
+         (unsigned)taf.last_update.day,
+         (unsigned)taf.last_update.month,
+         (unsigned)taf.last_update.year,
+         (unsigned)taf.last_update.hour,
+         (unsigned)taf.last_update.minute,
+         (unsigned)taf.last_update.second);
+
+  if (!taf.content.empty()) {
+      _tprintf(taf.content.c_str());
       cout << endl;
   }
 
@@ -67,7 +96,8 @@ main(int argc, char *argv[])
     return 1;
   }
 
-  Download(argv[1]);
+  DownloadMETAR(argv[1]);
+  DownloadTAF(argv[1]);
 
   return 0;
 }
