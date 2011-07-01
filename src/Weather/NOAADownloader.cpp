@@ -115,6 +115,12 @@ NOAADownloader::AppendToContentString(const char *buffer,
 bool
 NOAADownloader::DownloadMETAR(const char *code, METAR &metar)
 {
+#ifndef NDEBUG
+  assert(strlen(code) == 4);
+  for (unsigned i = 0; i < 4; i++)
+    assert(code[i] >= 'A' && code[i] <= 'Z');
+#endif
+
   // Build file url
   char url[256] = "ftp://tgftp.nws.noaa.gov/data/observations/metar/stations/";
   strcat(url, code);
@@ -176,6 +182,12 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar)
 bool
 NOAADownloader::DownloadTAF(const char *code, TAF &taf)
 {
+#ifndef NDEBUG
+  assert(strlen(code) == 4);
+  for (unsigned i = 0; i < 4; i++)
+    assert(code[i] >= 'A' && code[i] <= 'Z');
+#endif
+
   // Build file url
   char url[256] = "ftp://tgftp.nws.noaa.gov/data/forecasts/taf/stations/";
   strcat(url, code);

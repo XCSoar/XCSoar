@@ -55,6 +55,12 @@ namespace NOAAStore
 int
 NOAAStore::GetStationIndex(const char *code)
 {
+#ifndef NDEBUG
+  assert(strlen(code) == 4);
+  for (unsigned i = 0; i < 4; i++)
+    assert(code[i] >= 'A' && code[i] <= 'Z');
+#endif
+
   unsigned len = stations.size();
   for (unsigned i = 0; i < len; i++)
     if (strcmp(code, stations[i].code) == 0)
@@ -66,6 +72,12 @@ NOAAStore::GetStationIndex(const char *code)
 bool
 NOAAStore::AddStation(const char *code)
 {
+#ifndef NDEBUG
+  assert(strlen(code) == 4);
+  for (unsigned i = 0; i < 4; i++)
+    assert(code[i] >= 'A' && code[i] <= 'Z');
+#endif
+
   if (stations.full())
     return false;
 
@@ -85,12 +97,19 @@ NOAAStore::AddStation(const char *code)
 void
 NOAAStore::RemoveStation(unsigned index)
 {
+  assert(index < stations.size());
   stations.quick_remove(index);
 }
 
 void
 NOAAStore::RemoveStation(const char *code)
 {
+#ifndef NDEBUG
+  assert(strlen(code) == 4);
+  for (unsigned i = 0; i < 4; i++)
+    assert(code[i] >= 'A' && code[i] <= 'Z');
+#endif
+
   unsigned index = GetStationIndex(code);
   if (index == (unsigned)-1)
     return;
@@ -101,12 +120,14 @@ NOAAStore::RemoveStation(const char *code)
 const char *
 NOAAStore::GetCode(unsigned index)
 {
+  assert(index < stations.size());
   return stations[index].code;
 }
 
 bool
 NOAAStore::GetMETAR(unsigned index, METAR &metar)
 {
+  assert(index < stations.size());
   if (!stations[index].metar_available)
     return false;
 
@@ -117,6 +138,12 @@ NOAAStore::GetMETAR(unsigned index, METAR &metar)
 bool
 NOAAStore::GetMETAR(const char *code, METAR &metar)
 {
+#ifndef NDEBUG
+  assert(strlen(code) == 4);
+  for (unsigned i = 0; i < 4; i++)
+    assert(code[i] >= 'A' && code[i] <= 'Z');
+#endif
+
   unsigned index = GetStationIndex(code);
   if (index == (unsigned)-1)
     return false;
@@ -127,6 +154,7 @@ NOAAStore::GetMETAR(const char *code, METAR &metar)
 bool
 NOAAStore::GetTAF(unsigned index, TAF &taf)
 {
+  assert(index < stations.size());
   if (!stations[index].taf_available)
     return false;
 
@@ -137,6 +165,12 @@ NOAAStore::GetTAF(unsigned index, TAF &taf)
 bool
 NOAAStore::GetTAF(const char *code, TAF &taf)
 {
+#ifndef NDEBUG
+  assert(strlen(code) == 4);
+  for (unsigned i = 0; i < 4; i++)
+    assert(code[i] >= 'A' && code[i] <= 'Z');
+#endif
+
   unsigned index = GetStationIndex(code);
   if (index == (unsigned)-1)
     return false;
@@ -147,6 +181,7 @@ NOAAStore::GetTAF(const char *code, TAF &taf)
 bool
 NOAAStore::UpdateStation(unsigned index)
 {
+  assert(index < stations.size());
   const char *code = stations[index].code;
 
   bool metar_downloaded =
@@ -165,6 +200,12 @@ NOAAStore::UpdateStation(unsigned index)
 bool
 NOAAStore::UpdateStation(const char *code)
 {
+#ifndef NDEBUG
+  assert(strlen(code) == 4);
+  for (unsigned i = 0; i < 4; i++)
+    assert(code[i] >= 'A' && code[i] <= 'Z');
+#endif
+
   unsigned index = GetStationIndex(code);
   if (index == (unsigned)-1)
     return false;
