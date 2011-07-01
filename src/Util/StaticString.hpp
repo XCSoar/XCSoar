@@ -131,6 +131,13 @@ public:
     CopyString(data, new_value, MAX_SIZE);
   }
 
+  void append(const TCHAR *new_value) {
+    assert(new_value != NULL);
+
+    size_type len = length();
+    CopyString(data + len, new_value, MAX_SIZE - len);
+  }
+
   const TCHAR *c_str() const {
     return get();
   }
@@ -141,6 +148,10 @@ public:
 
   void operator =(const TCHAR *new_value) {
     return set(new_value);
+  }
+
+  void operator +=(const TCHAR *new_value) {
+    return append(new_value);
   }
 
   /**
