@@ -405,6 +405,13 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 
     ReplaceInString(OutBuffer, _T("$(CheckFLARM)"), _T(""), Size);
   }
+  if (_tcsstr(OutBuffer, _T("$(CheckNet)"))) {
+#if !defined(WIN32) || defined(_WIN32_WCE)
+    invalid = true;
+#endif
+
+    ReplaceInString(OutBuffer, _T("$(CheckNet)"), _T(""), Size);
+  }
   if (_tcsstr(OutBuffer, _T("$(CheckTerrain)"))) {
     if (!Calculated().TerrainValid)
       invalid = true;
