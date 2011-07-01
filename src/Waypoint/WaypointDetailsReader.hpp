@@ -27,7 +27,10 @@ Copyright_License {
 class Waypoints;
 class OperationEnvironment;
 
-void
-ReadWaypointDetailsFile(Waypoints &way_points, OperationEnvironment &operation);
+namespace WaypointDetails
+{
+  void ReadFileFromProfile(Waypoints &way_points,
+                           OperationEnvironment &operation);
+}
 
 #endif
