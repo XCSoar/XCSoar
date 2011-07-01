@@ -62,11 +62,11 @@ public:
 protected:
   bool StartCommandMode();
   void StartNMEAMode(OperationEnvironment &env);
-  void LoadPilotInfo(const Declaration *decl);
+  void LoadPilotInfo(const Declaration &declaration);
   void WritePilotInfo();
-  bool LoadTask(const Declaration *decl);
+  bool LoadTask(const Declaration &declaration);
   void WriteTask();
-  void LoadContestClass(const Declaration *decl);
+  void LoadContestClass(const Declaration &declaration);
   void WriteContestClass();
   void CRCWriteint32(int32_t i);
   void CRCWrite(const char *buff, unsigned size);
@@ -107,13 +107,13 @@ protected:
   lxDevice_ContestClass_t lxDevice_ContestClass;
   char crc;
 
-  bool DeclareInner(const Declaration *declaration,
+  bool DeclareInner(const Declaration &declaration,
                     OperationEnvironment &env);
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
   virtual bool PutMacCready(fixed MacCready);
-  virtual bool Declare(const Declaration *declaration,
+  virtual bool Declare(const Declaration &declaration,
                        OperationEnvironment &env);
 };
 
@@ -162,7 +162,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 }
 
 static bool
-LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+LXWP0(NMEAInputLine &line, NMEA_INFO &info)
 {
   /*
   $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
@@ -187,27 +187,27 @@ LXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   if (line.read_checked(alt))
     /* a dump on a LX7007 has confirmed that the LX sends uncorrected
        altitude above 1013.25hPa here */
-    GPS_INFO->ProvidePressureAltitude(alt);
+    info.ProvidePressureAltitude(alt);
 
   if (tas_available)
-    GPS_INFO->ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
-                                              unKiloMeterPerHour),
-                                              alt);
+    info.ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
+                                                          unKiloMeterPerHour),
+                                         alt);
 
   if (line.read_checked(value))
-    GPS_INFO->ProvideTotalEnergyVario(value);
+    info.ProvideTotalEnergyVario(value);
 
   line.skip(6);
 
   SpeedVector wind;
   if (ReadSpeedVector(line, wind))
-    GPS_INFO->ProvideExternalWind(wind);
+    info.ProvideExternalWind(wind);
 
   return true;
 }
 
 static bool
-LXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
+LXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 {
   /*
    * $LXWP1,
@@ -221,7 +221,7 @@ LXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 }
 
 static bool
-LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+LXWP2(NMEAInputLine &line, NMEA_INFO &info)
 {
   /*
    * $LXWP2,
@@ -237,18 +237,18 @@ LXWP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   fixed value;
   // MacCready value
   if (line.read_checked(value))
-    GPS_INFO->settings.ProvideMacCready(value, GPS_INFO->Time);
+    info.settings.ProvideMacCready(value, info.Time);
 
   // Ballast
   line.skip();
   /*
   if (line.read_checked(value))
-    GPS_INFO->ProvideBallast(value, GPS_INFO->Time);
+    info.ProvideBallast(value, info.Time);
   */
 
   // Bugs
   if (line.read_checked(value))
-    GPS_INFO->settings.ProvideBugs((fixed(100) - value) / 100, GPS_INFO->Time);
+    info.settings.ProvideBugs((fixed(100) - value) / 100, info.Time);
 
   return true;
 }
@@ -280,20 +280,20 @@ LXDevice::CRCWrite(char c)
 }
 
 bool
-LXDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+LXDevice::ParseNMEA(const char *String, NMEA_INFO &info)
 {
   NMEAInputLine line(String);
   char type[16];
   line.read(type, 16);
 
   if (strcmp(type, "$LXWP0") == 0)
-    return LXWP0(line, GPS_INFO);
+    return LXWP0(line, info);
 
   if (strcmp(type, "$LXWP1") == 0)
-    return LXWP1(line, GPS_INFO);
+    return LXWP1(line, info);
 
   if (strcmp(type, "$LXWP2") == 0)
-    return LXWP2(line, GPS_INFO);
+    return LXWP2(line, info);
 
   return false;
 }
@@ -353,16 +353,16 @@ copy_space_padded(char dest[], const TCHAR src[], unsigned int len)
 }
 
 void
-LXDevice::LoadPilotInfo(const Declaration *decl)
+LXDevice::LoadPilotInfo(const Declaration &declaration)
 {
   memset((void*)lxDevice_Pilot.unknown1, 0, sizeof(lxDevice_Pilot.unknown1));
-  copy_space_padded(lxDevice_Pilot.PilotName, decl->PilotName,
+  copy_space_padded(lxDevice_Pilot.PilotName, declaration.PilotName,
                     sizeof(lxDevice_Pilot.PilotName));
-  copy_space_padded(lxDevice_Pilot.GliderType, decl->AircraftType,
+  copy_space_padded(lxDevice_Pilot.GliderType, declaration.AircraftType,
                     sizeof(lxDevice_Pilot.GliderType));
-  copy_space_padded(lxDevice_Pilot.GliderID, decl->AircraftReg,
+  copy_space_padded(lxDevice_Pilot.GliderID, declaration.AircraftReg,
                     sizeof(lxDevice_Pilot.GliderID));
-  copy_space_padded(lxDevice_Pilot.CompetitionID, decl->CompetitionId,
+  copy_space_padded(lxDevice_Pilot.CompetitionID, declaration.CompetitionId,
                     sizeof(lxDevice_Pilot.CompetitionID));
   memset((void*)lxDevice_Pilot.unknown2, 0, sizeof(lxDevice_Pilot.unknown2));
 }
@@ -379,12 +379,12 @@ LXDevice::WritePilotInfo()
  * @param decl  The declaration
  */
 bool
-LXDevice::LoadTask(const Declaration *decl)
+LXDevice::LoadTask(const Declaration &declaration)
 {
-  if (decl->size() > 10)
+  if (declaration.size() > 10)
     return false;
 
-  if (decl->size() < 2)
+  if (declaration.size() < 2)
       return false;
 
   memset((void*)lxDevice_Declaration.unknown1, 0,
@@ -407,7 +407,7 @@ LXDevice::LoadTask(const Declaration *decl)
   lxDevice_Declaration.monthuser = lxDevice_Declaration.monthinput;
   lxDevice_Declaration.yearuser = lxDevice_Declaration.yearinput;
   lxDevice_Declaration.taskid = 0;
-  lxDevice_Declaration.numtps = decl->size();
+  lxDevice_Declaration.numtps = declaration.size();
 
   for (unsigned i = 0; i < NUMTPS; i++) {
     if (i == 0) { // takeoff
@@ -418,19 +418,19 @@ LXDevice::LoadTask(const Declaration *decl)
         sizeof(lxDevice_Declaration.WaypointNames[i]));
 
 
-    } else if (i <= decl->size()) {
+    } else if (i <= declaration.size()) {
       lxDevice_Declaration.tptypes[i] = 1;
       lxDevice_Declaration.Longitudes[i] =
-          (int32_t)(decl->get_location(i - 1).Longitude.value_degrees()
+          (int32_t)(declaration.get_location(i - 1).Longitude.value_degrees()
            * 60000);
       lxDevice_Declaration.Latitudes[i] =
-          (int32_t)(decl->get_location(i - 1).Latitude.value_degrees()
+          (int32_t)(declaration.get_location(i - 1).Latitude.value_degrees()
            * 60000);
       copy_space_padded(lxDevice_Declaration.WaypointNames[i],
-                        decl->get_name(i - 1),
+                        declaration.get_name(i - 1),
                         sizeof(lxDevice_Declaration.WaypointNames[i]));
 
-    } else if (i == decl->size() + 1) { // landing
+    } else if (i == declaration.size() + 1) { // landing
       lxDevice_Declaration.tptypes[i] = 2;
       lxDevice_Declaration.Longitudes[i] = 0;
       lxDevice_Declaration.Latitudes[i] = 0;
@@ -488,7 +488,7 @@ LXDevice::WriteTask()
 }
 
 void
-LXDevice::LoadContestClass(gcc_unused const Declaration *decl)
+LXDevice::LoadContestClass(gcc_unused const Declaration &declaration)
 {
   copy_space_padded(lxDevice_ContestClass.contest_class, _T(""),
                     sizeof(lxDevice_ContestClass.contest_class));
@@ -503,7 +503,8 @@ LXDevice::WriteContestClass()
 }
 
 bool
-LXDevice::DeclareInner(const Declaration *decl, gcc_unused OperationEnvironment &env)
+LXDevice::DeclareInner(const Declaration &declaration,
+                       gcc_unused OperationEnvironment &env)
 {
   if (!port->SetRxTimeout(2000))
     return false;
@@ -516,10 +517,10 @@ LXDevice::DeclareInner(const Declaration *decl, gcc_unused OperationEnvironment 
 
   env.SetProgressPosition(1);
 
-  LoadPilotInfo(decl);
-  if (!LoadTask(decl))
+  LoadPilotInfo(declaration);
+  if (!LoadTask(declaration))
     return false;
-  LoadContestClass(decl);
+  LoadContestClass(declaration);
 
   env.SetProgressPosition(2);
 
@@ -545,15 +546,15 @@ LXDevice::DeclareInner(const Declaration *decl, gcc_unused OperationEnvironment 
 }
 
 bool
-LXDevice::Declare(const Declaration *decl, OperationEnvironment &env)
+LXDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
 {
-  if (decl->size() < 2 || decl->size() > 12)
+  if (declaration.size() < 2 || declaration.size() > 12)
     return false;
 
   if (!port->StopRxThread())
     return false;
 
-  bool success = DeclareInner(decl, env);
+  bool success = DeclareInner(declaration, env);
 
   StartNMEAMode(env);
   port->SetRxTimeout(0);

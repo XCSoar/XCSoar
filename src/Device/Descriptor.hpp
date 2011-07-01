@@ -117,7 +117,7 @@ public:
   }
 
 private:
-  bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  bool ParseNMEA(const char *line, struct NMEA_INFO &info);
 
 public:
   bool PutMacCready(fixed MacCready);
@@ -131,7 +131,7 @@ public:
   bool PutVoice(const TCHAR *sentence);
 
   void LinkTimeout();
-  bool Declare(const struct Declaration *declaration);
+  bool Declare(const struct Declaration &declaration);
 
   void OnSysTicker(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
 

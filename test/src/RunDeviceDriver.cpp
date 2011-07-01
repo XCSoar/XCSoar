@@ -215,8 +215,8 @@ int main(int argc, char **argv)
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
     TrimRight(buffer);
 
-    if (device == NULL || !device->ParseNMEA(buffer, &data))
-      parser.ParseNMEAString_Internal(buffer, &data);
+    if (device == NULL || !device->ParseNMEA(buffer, data))
+      parser.ParseNMEAString_Internal(buffer, data);
   }
 
   Dump(data);

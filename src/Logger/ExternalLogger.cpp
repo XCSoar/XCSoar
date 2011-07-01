@@ -40,14 +40,14 @@ ExternalLogger::IsDeclared()
 }
 
 static bool
-DeviceDeclare(DeviceDescriptor *dev, const Declaration &decl)
+DeviceDeclare(DeviceDescriptor *dev, const Declaration &declaration)
 {
   if (!dev->IsLogger())
     return false;
 
   if (MessageBoxX(_("Declare task?"),
                   dev->GetName(), MB_YESNO| MB_ICONQUESTION) == IDYES) {
-    if (dev->Declare(&decl)) {
+    if (dev->Declare(declaration)) {
       MessageBoxX(_("Task declared!"),
                   dev->GetName(), MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;

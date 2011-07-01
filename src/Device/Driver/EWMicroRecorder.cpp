@@ -62,11 +62,11 @@ public:
 protected:
   bool TryConnect();
 
-  bool DeclareInner(const Declaration *declaration);
+  bool DeclareInner(const Declaration &declaration);
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
-  virtual bool Declare(const Declaration *declaration,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool Declare(const Declaration &declaration,
                        OperationEnvironment &env);
 };
 
@@ -87,7 +87,7 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 }
 
 bool
-EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO &info)
 {
   if (!VerifyNMEAChecksum(String))
     return false;
@@ -106,7 +106,7 @@ EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
        in the driver instead of letting the generic class NMEAParser
        do it. */
     if (ReadAltitude(line, value))
-      GPS_INFO->ProvidePressureAltitude(value);
+      info.ProvidePressureAltitude(value);
 
     return true;
   } else
@@ -245,11 +245,10 @@ EWMicroRecorderWriteWaypoint(Port *port,
 }
 
 bool
-EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
+EWMicroRecorderDevice::DeclareInner(const Declaration &declaration)
 {
-  assert(decl != NULL);
-  assert(decl->size() >= 2);
-  assert(decl->size() <= 12);
+  assert(declaration.size() >= 2);
+  assert(declaration.size() <= 12);
 
   if (!TryConnect())
     return false;
@@ -263,34 +262,36 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
 
   port->Write("USER DETAILS\r\n--------------\r\n\r\n");
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Pilot Name:"), decl->PilotName.c_str());
+                        _T("Pilot Name:"), declaration.PilotName.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Competition ID:"), decl->CompetitionId.c_str());
+                        _T("Competition ID:"),
+                        declaration.CompetitionId.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Aircraft Type:"), decl->AircraftType.c_str());
+                        _T("Aircraft Type:"),
+                        declaration.AircraftType.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Aircraft ID:"), decl->AircraftReg.c_str());
+                        _T("Aircraft ID:"), declaration.AircraftReg.c_str());
   port->Write("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n");
 
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Description:"), _T("XCSoar task declaration"));
 
   for (unsigned i = 0; i < 11; i++) {
-    if (i+1>= decl->size()) {
+    if (i+1>= declaration.size()) {
       EWMicroRecorderPrintf(port, _T("%-17s %s\r\n"),
                _T("TP LatLon:"), _T("0000000N00000000E TURN POINT"));
     } else {
-      const Waypoint &wp = decl->get_waypoint(i);
+      const Waypoint &wp = declaration.get_waypoint(i);
       if (i == 0) {
         EWMicroRecorderWriteWaypoint(port, wp, _T("Take Off LatLong:"));
         EWMicroRecorderWriteWaypoint(port, wp, _T("Start LatLon:"));
-      } else if (i + 1 < decl->size()) {
+      } else if (i + 1 < declaration.size()) {
         EWMicroRecorderWriteWaypoint(port, wp, _T("TP LatLon:"));
       }
     }
   }
 
-  const Waypoint &wp = decl->get_last_waypoint();
+  const Waypoint &wp = declaration.get_last_waypoint();
   EWMicroRecorderWriteWaypoint(port, wp, _T("Finish LatLon:"));
   EWMicroRecorderWriteWaypoint(port, wp, _T("Land LatLon:"));
 
@@ -300,11 +301,11 @@ EWMicroRecorderDevice::DeclareInner(const Declaration *decl)
 }
 
 bool
-EWMicroRecorderDevice::Declare(const Declaration *decl,
+EWMicroRecorderDevice::Declare(const Declaration &declaration,
                                OperationEnvironment &env)
 {
   // Must have at least two, max 12 waypoints
-  if (decl->size() < 2 || decl->size() > 12)
+  if (declaration.size() < 2 || declaration.size() > 12)
     return false;
 
   port->StopRxThread();
@@ -313,7 +314,7 @@ EWMicroRecorderDevice::Declare(const Declaration *decl,
      the command \x18 */
   port->SetRxTimeout(2500);
 
-  bool success = DeclareInner(decl);
+  bool success = DeclareInner(declaration);
 
   port->Write("!!\r\n");         // go back to NMEA mode
 

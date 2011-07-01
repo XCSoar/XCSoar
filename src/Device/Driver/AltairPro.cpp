@@ -47,7 +47,7 @@ class AltairProDevice : public AbstractDevice {
 private:
   Port *port;
 
-  bool DeclareInternal(const struct Declaration *decl);
+  bool DeclareInternal(const struct Declaration &declaration);
   void PutTurnPoint(const TCHAR *name, const Waypoint *waypoint);
   bool PropertySetGet(Port *port, char *Buffer, size_t size);
 #ifdef _UNICODE
@@ -58,8 +58,8 @@ public:
   AltairProDevice(Port *_port):port(_port){}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
-  virtual bool Declare(const struct Declaration *declaration,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool Declare(const struct Declaration &declaration,
                        OperationEnvironment &env);
   virtual void OnSysTicker(const NMEA_INFO &basic,
                            const DERIVED_INFO &calculated);
@@ -82,7 +82,7 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 }
 
 bool
-AltairProDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+AltairProDevice::ParseNMEA(const char *String, NMEA_INFO &info)
 {
   NMEAInputLine line(String);
   char type[16];
@@ -93,24 +93,22 @@ AltairProDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
   if (strcmp(type, "$PGRMZ") == 0) {
     fixed value;
     if (ReadAltitude(line, value))
-      GPS_INFO->ProvidePressureAltitude(value);
+      info.ProvidePressureAltitude(value);
 
     return true;
   }
 
   return false;
-
 }
 
-
 bool
-AltairProDevice::Declare(const struct Declaration *decl,
+AltairProDevice::Declare(const struct Declaration &declaration,
                          OperationEnvironment &env)
 {
   port->StopRxThread();
   port->SetRxTimeout(500); // set RX timeout to 500[ms]
 
-  bool result = DeclareInternal(decl);
+  bool result = DeclareInternal(declaration);
 
   port->SetRxTimeout(0); // clear timeout
   port->StartRxThread(); // restart RX thread}
@@ -118,21 +116,20 @@ AltairProDevice::Declare(const struct Declaration *decl,
   return result;
 }
 
-
 bool
-AltairProDevice::DeclareInternal(const struct Declaration *decl)
+AltairProDevice::DeclareInternal(const struct Declaration &declaration)
 {
   TCHAR Buffer[256];
 
-  _stprintf(Buffer, _T("PDVSC,S,Pilot,%s"), decl->PilotName.c_str());
+  _stprintf(Buffer, _T("PDVSC,S,Pilot,%s"), declaration.PilotName.c_str());
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 
-  _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), decl->AircraftReg.c_str());
+  _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), declaration.AircraftReg.c_str());
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 
-  _stprintf(Buffer, _T("PDVSC,S,GliderType,%s"), decl->AircraftType.c_str());
+  _stprintf(Buffer, _T("PDVSC,S,GliderType,%s"), declaration.AircraftType.c_str());
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 
@@ -145,20 +142,20 @@ AltairProDevice::DeclareInternal(const struct Declaration *decl)
    * DeclFlightDate
    */
 
-  if (decl->size() > 1){
+  if (declaration.size() > 1){
 
     PutTurnPoint(_T("DeclTakeoff"), NULL);
     PutTurnPoint(_T("DeclLanding"), NULL);
 
-    PutTurnPoint(_T("DeclStart"), &decl->get_first_waypoint());
-    PutTurnPoint(_T("DeclFinish"), &decl->get_last_waypoint());
+    PutTurnPoint(_T("DeclStart"), &declaration.get_first_waypoint());
+    PutTurnPoint(_T("DeclFinish"), &declaration.get_last_waypoint());
 
     for (unsigned int index=1; index <= 10; index++){
       TCHAR TurnPointPropertyName[32];
       _stprintf(TurnPointPropertyName, _T("DeclTurnPoint%d"), index);
 
-      if (index < decl->size()-1){
-        PutTurnPoint(TurnPointPropertyName, &decl->get_waypoint(index));
+      if (index < declaration.size() - 1) {
+        PutTurnPoint(TurnPointPropertyName, &declaration.get_waypoint(index));
       } else {
         PutTurnPoint(TurnPointPropertyName, NULL);
       }

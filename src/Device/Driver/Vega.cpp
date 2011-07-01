@@ -73,7 +73,7 @@ protected:
   void VarioWriteSettings(const DERIVED_INFO &calculated) const;
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
   virtual bool PutQNH(const AtmosphericPressure& pres,
                       const DERIVED_INFO &calculated);
   virtual bool PutVoice(const TCHAR *sentence);
@@ -82,56 +82,56 @@ public:
 };
 
 static bool
-PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+PDSWC(NMEAInputLine &line, NMEA_INFO &info)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
 
   fixed value;
   if (line.read_checked(value))
-    GPS_INFO->settings.ProvideMacCready(value / 10, GPS_INFO->Time);
+    info.settings.ProvideMacCready(value / 10, info.Time);
 
   long switchinputs = line.read_hex(0L);
   long switchoutputs = line.read_hex(0L);
 
   if (line.read_checked(value)) {
-    GPS_INFO->SupplyBatteryVoltage = value / 10;
-    GPS_INFO->SupplyBatteryVoltageAvailable.Update(GPS_INFO->Time);
+    info.SupplyBatteryVoltage = value / 10;
+    info.SupplyBatteryVoltageAvailable.Update(info.Time);
   }
 
-  GPS_INFO->SwitchStateAvailable = true;
+  info.SwitchStateAvailable = true;
 
-  GPS_INFO->SwitchState.AirbrakeLocked =
+  info.SwitchState.AirbrakeLocked =
     (switchinputs & (1<<INPUT_BIT_AIRBRAKELOCKED))>0;
-  GPS_INFO->SwitchState.FlapPositive =
+  info.SwitchState.FlapPositive =
     (switchinputs & (1<<INPUT_BIT_FLAP_POS))>0;
-  GPS_INFO->SwitchState.FlapNeutral =
+  info.SwitchState.FlapNeutral =
     (switchinputs & (1<<INPUT_BIT_FLAP_ZERO))>0;
-  GPS_INFO->SwitchState.FlapNegative =
+  info.SwitchState.FlapNegative =
     (switchinputs & (1<<INPUT_BIT_FLAP_NEG))>0;
-  GPS_INFO->SwitchState.GearExtended =
+  info.SwitchState.GearExtended =
     (switchinputs & (1<<INPUT_BIT_GEAR_EXTENDED))>0;
-  GPS_INFO->SwitchState.Acknowledge =
+  info.SwitchState.Acknowledge =
     (switchinputs & (1<<INPUT_BIT_ACK))>0;
-  GPS_INFO->SwitchState.Repeat =
+  info.SwitchState.Repeat =
     (switchinputs & (1<<INPUT_BIT_REP))>0;
-  GPS_INFO->SwitchState.SpeedCommand =
+  info.SwitchState.SpeedCommand =
     (switchinputs & (1<<INPUT_BIT_SC))>0;
-  GPS_INFO->SwitchState.UserSwitchUp =
+  info.SwitchState.UserSwitchUp =
     (switchinputs & (1<<INPUT_BIT_USERSWUP))>0;
-  GPS_INFO->SwitchState.UserSwitchMiddle =
+  info.SwitchState.UserSwitchMiddle =
     (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE))>0;
-  GPS_INFO->SwitchState.UserSwitchDown =
+  info.SwitchState.UserSwitchDown =
     (switchinputs & (1<<INPUT_BIT_USERSWDOWN))>0;
   /*
-  GPS_INFO->SwitchState.Stall =
+  info.SwitchState.Stall =
     (switchinputs & (1<<INPUT_BIT_STALL))>0;
   */
-  GPS_INFO->SwitchState.FlightMode =
+  info.SwitchState.FlightMode =
     (switchoutputs & (1 << OUTPUT_BIT_CIRCLING)) > 0
     ? SWITCH_INFO::MODE_CIRCLING
     : SWITCH_INFO::MODE_CRUISE;
-  GPS_INFO->SwitchState.FlapLanding =
+  info.SwitchState.FlapLanding =
     (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
   long up_switchinputs;
@@ -174,7 +174,7 @@ PDSWC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 //#include "Audio/VarioSound.h"
 
 static bool
-PDAAV(NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
+PDAAV(NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 {
   gcc_unused unsigned short beepfrequency = line.read(0);
   gcc_unused unsigned short soundfrequency = line.read(0);
@@ -187,7 +187,7 @@ PDAAV(NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 }
 
 static bool
-PDVSC(NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
+PDVSC(NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 {
   char responsetype[10];
   line.read(responsetype, 10);
@@ -221,23 +221,22 @@ PDVSC(NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
 
 static bool
-PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+PDVDV(NMEAInputLine &line, NMEA_INFO &info)
 {
   fixed value;
 
   if (line.read_checked(value))
-    GPS_INFO->ProvideTotalEnergyVario(value / 10);
+    info.ProvideTotalEnergyVario(value / 10);
 
   bool ias_available = line.read_checked(value);
   fixed tas_ratio = line.read(fixed(1024)) / 1024;
   if (ias_available)
-    GPS_INFO->ProvideBothAirspeeds(value / 10,
-                                   value / 10 * tas_ratio);
+    info.ProvideBothAirspeeds(value / 10, value / 10 * tas_ratio);
 
   //hasVega = true;
 
   if (line.read_checked(value))
-    GPS_INFO->ProvidePressureAltitude(value);
+    info.ProvidePressureAltitude(value);
 
   return true;
 }
@@ -245,26 +244,26 @@ PDVDV(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
 // $PDVDS,nx,nz,flap,stallratio,netto
 static bool
-PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+PDVDS(NMEAInputLine &line, NMEA_INFO &info)
 {
   fixed AccelX = line.read(fixed_zero);
   fixed AccelZ = line.read(fixed_zero);
 
   int mag = (int)hypot(AccelX, AccelZ);
-  GPS_INFO->acceleration.Gload = fixed(mag) / 100;
-  GPS_INFO->acceleration.Available = true;
+  info.acceleration.Gload = fixed(mag) / 100;
+  info.acceleration.Available = true;
 
   /*
   double flap = line.read(0.0);
   */
   line.skip();
 
-  GPS_INFO->StallRatio = line.read(fixed_zero);
-  GPS_INFO->StallRatioAvailable.Update(GPS_INFO->Time);
+  info.StallRatio = line.read(fixed_zero);
+  info.StallRatioAvailable.Update(info.Time);
 
   fixed value;
   if (line.read_checked(value))
-    GPS_INFO->ProvideNettoVario(value / 10);
+    info.ProvideNettoVario(value / 10);
 
   //hasVega = true;
 
@@ -272,21 +271,21 @@ PDVDS(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 static bool
-PDVVT(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+PDVVT(NMEAInputLine &line, NMEA_INFO &info)
 {
   fixed value;
-  GPS_INFO->TemperatureAvailable = line.read_checked(value);
-  if (GPS_INFO->TemperatureAvailable)
-    GPS_INFO->OutsideAirTemperature = Units::ToSysUnit(value / 10, unGradCelcius);
+  info.TemperatureAvailable = line.read_checked(value);
+  if (info.TemperatureAvailable)
+    info.OutsideAirTemperature = Units::ToSysUnit(value / 10, unGradCelcius);
 
-  GPS_INFO->HumidityAvailable = line.read_checked(GPS_INFO->RelativeHumidity);
+  info.HumidityAvailable = line.read_checked(info.RelativeHumidity);
 
   return true;
 }
 
 // PDTSM,duration_ms,"free text"
 static bool
-PDTSM(NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
+PDTSM(NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 {
   /*
   int duration = (int)strtol(String, NULL, 10);
@@ -310,24 +309,24 @@ PDTSM(NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
 }
 
 bool
-VegaDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+VegaDevice::ParseNMEA(const char *String, NMEA_INFO &info)
 {
   NMEAInputLine line(String);
   char type[16];
   line.read(type, 16);
 
   if (strcmp(type, "$PDSWC") == 0)
-    return PDSWC(line, GPS_INFO);
+    return PDSWC(line, info);
   else if (strcmp(type, "$PDAAV") == 0)
-    return PDAAV(line, GPS_INFO);
+    return PDAAV(line, info);
   else if (strcmp(type, "$PDVSC") == 0)
-    return PDVSC(line, GPS_INFO);
+    return PDVSC(line, info);
   else if (strcmp(type, "$PDVDV") == 0)
-    return PDVDV(line, GPS_INFO);
+    return PDVDV(line, info);
   else if (strcmp(type, "$PDVDS") == 0)
-    return PDVDS(line, GPS_INFO);
+    return PDVDS(line, info);
   else if (strcmp(type, "$PDVVT") == 0)
-    return PDVVT(line, GPS_INFO);
+    return PDVVT(line, info);
   else if (strcmp(type, "$PDVSD") == 0) {
     const char *message = line.rest();
 #ifdef _UNICODE
@@ -342,7 +341,7 @@ VegaDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
     Message::AddMessage(buffer);
     return true;
   } else if (strcmp(type, "$PDTSM") == 0)
-    return PDTSM(line, GPS_INFO);
+    return PDTSM(line, info);
   else
     return false;
 }

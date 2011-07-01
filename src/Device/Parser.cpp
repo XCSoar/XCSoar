@@ -70,13 +70,13 @@ NMEAParser::Reset(void)
 }
 
 /**
- * Parses a provided NMEA String into a GPS_INFO struct
+ * Parses a provided NMEA String into a NMEA_INFO struct
  * @param String NMEA string
- * @param GPS_INFO GPS_INFO output struct
+ * @param info NMEA_INFO output struct
  * @return Parsing success
  */
 bool
-NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
+NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO &info)
 {
   if (String[0] != '$')
     return false;
@@ -93,36 +93,36 @@ NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO *GPS_INFO)
   if (type[1] == 'P') {
     // Airspeed and vario sentence
     if (strcmp(type + 1, "PTAS1") == 0)
-      return PTAS1(line, GPS_INFO);
+      return PTAS1(line, info);
 
     // FLARM sentences
     if (strcmp(type + 1, "PFLAA") == 0)
-      return PFLAA(line, GPS_INFO);
+      return PFLAA(line, info);
 
     if (strcmp(type + 1, "PFLAU") == 0)
-      return PFLAU(line, GPS_INFO->flarm, GPS_INFO->Time);
+      return PFLAU(line, info.flarm, info.Time);
 
     // Garmin altitude sentence
     if (strcmp(type + 1, "PGRMZ") == 0)
-      return RMZ(line, GPS_INFO);
+      return RMZ(line, info);
 
     return false;
   }
 
   if (strcmp(type + 3, "GSA") == 0)
-    return GSA(line, GPS_INFO);
+    return GSA(line, info);
 
   if (strcmp(type + 3, "GLL") == 0)
-    return GLL(line, GPS_INFO);
+    return GLL(line, info);
 
   if (strcmp(type + 3, "RMB") == 0)
-    return RMB(line, GPS_INFO);
+    return RMB(line, info);
 
   if (strcmp(type + 3, "RMC") == 0)
-    return RMC(line, GPS_INFO);
+    return RMC(line, info);
 
   if (strcmp(type + 3, "GGA") == 0)
-    return GGA(line, GPS_INFO);
+    return GGA(line, info);
 
   return false;
 }
@@ -234,7 +234,7 @@ NMEAParser::ReadAltitude(NMEAInputLine &line, fixed &value_r)
  * Calculates a seconds-based FixTime and corrects it
  * in case over passing the UTC midnight mark
  * @param FixTime NMEA format fix time (HHMMSS)
- * @param GPS_INFO GPS_INFO struct to parse into
+ * @param info NMEA_INFO struct to parse into
  * @return Seconds-based FixTime
  */
 fixed
@@ -294,18 +294,18 @@ NMEAParser::TimeAdvanceTolerance(fixed time) const
  * Checks whether time has advanced since last call and
  * updates the GPS_info if necessary
  * @param ThisTime Current time
- * @param GPS_INFO GPS_INFO struct to update
+ * @param info NMEA_INFO struct to update
  * @return True if time has advanced since last call
  */
 bool
-NMEAParser::TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO)
+NMEAParser::TimeHasAdvanced(fixed ThisTime, NMEA_INFO &info)
 {
   if (ThisTime < LastTime) {
     LastTime = ThisTime;
     StartDay = -1; // reset search for the first day
     return false;
   } else {
-    GPS_INFO->Time = ThisTime;
+    info.Time = ThisTime;
     LastTime = ThisTime;
     return true;
   }
@@ -332,20 +332,20 @@ NMEAParser::TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
+ * @param info NMEA_INFO struct to parse into
  * @return Parsing success
  */
 bool
-NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO &info)
 {
   line.skip();
 
   if (line.read(0) == 1)
-    GPS_INFO->LocationAvailable.Clear();
+    info.LocationAvailable.Clear();
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
   for (unsigned i = 0; i < GPS_STATE::MAXSATELLITES; i++)
-    GPS_INFO->gps.SatelliteIDs[i] = line.read(0);
+    info.gps.SatelliteIDs[i] = line.read(0);
 
   return true;
 }
@@ -367,35 +367,35 @@ NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
+ * @param info NMEA_INFO struct to parse into
  * @return Parsing success
  */
 bool
-NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO &info)
 {
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime,
-                              GPS_INFO->DateAvailable);
+  fixed ThisTime = TimeModify(line.read(fixed_zero), info.DateTime,
+                              info.DateAvailable);
   ThisTime = TimeAdvanceTolerance(ThisTime);
 
   gpsValid = !NAVWarn(line.read_first_char());
 
-  if (!TimeHasAdvanced(ThisTime, GPS_INFO))
+  if (!TimeHasAdvanced(ThisTime, info))
     return true;
 
   if (!gpsValid)
-    GPS_INFO->LocationAvailable.Clear();
+    info.LocationAvailable.Clear();
   else if (valid_location)
-    GPS_INFO->LocationAvailable.Update(GPS_INFO->Time);
+    info.LocationAvailable.Update(info.Time);
 
   if (valid_location)
-    GPS_INFO->Location = location;
+    info.Location = location;
 
-  GPS_INFO->gps.real = real;
+  info.gps.real = real;
 #ifdef ANDROID
-  GPS_INFO->gps.AndroidInternalGPS = false;
+  info.gps.AndroidInternalGPS = false;
 #endif
 
   return true;
@@ -426,11 +426,11 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
+ * @param info NMEA_INFO struct to parse into
  * @return Parsing success
  */
 bool
-NMEAParser::RMB(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
+NMEAParser::RMB(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 {
   return true;
 }
@@ -480,11 +480,11 @@ ReadDate(NMEAInputLine &line, BrokenDate &date)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
+ * @param info NMEA_INFO struct to parse into
  * @return Parsing success
  */
 bool
-NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO &info)
 {
   fixed ThisTime = line.read(fixed_zero);
 
@@ -493,7 +493,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  GPS_STATE &gps = GPS_INFO->gps;
+  GPS_STATE &gps = info.gps;
 
   fixed speed;
   bool GroundSpeedAvailable = line.read_checked(speed);
@@ -502,32 +502,32 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   bool track_available = line.read_checked(track);
 
   // JMW get date info first so TimeModify is accurate
-  if (ReadDate(line, GPS_INFO->DateTime))
-    GPS_INFO->DateAvailable = true;
+  if (ReadDate(line, info.DateTime))
+    info.DateAvailable = true;
 
-  ThisTime = TimeModify(ThisTime, GPS_INFO->DateTime, GPS_INFO->DateAvailable);
+  ThisTime = TimeModify(ThisTime, info.DateTime, info.DateAvailable);
   ThisTime = TimeAdvanceTolerance(ThisTime);
 
-  if (!TimeHasAdvanced(ThisTime, GPS_INFO))
+  if (!TimeHasAdvanced(ThisTime, info))
     return true;
 
   if (!gpsValid)
-    GPS_INFO->LocationAvailable.Clear();
+    info.LocationAvailable.Clear();
   else if (valid_location)
-    GPS_INFO->LocationAvailable.Update(GPS_INFO->Time);
+    info.LocationAvailable.Update(info.Time);
 
   if (valid_location)
-    GPS_INFO->Location = location;
+    info.Location = location;
 
   if (GroundSpeedAvailable) {
-    GPS_INFO->GroundSpeed = Units::ToSysUnit(speed, unKnots);
-    GPS_INFO->GroundSpeedAvailable.Update(GPS_INFO->Time);
+    info.GroundSpeed = Units::ToSysUnit(speed, unKnots);
+    info.GroundSpeedAvailable.Update(info.Time);
   }
 
-  if (track_available && GPS_INFO->MovementDetected()) {
+  if (track_available && info.MovementDetected()) {
     // JMW don't update bearing unless we're moving
-    GPS_INFO->track = Angle::degrees(track).as_bearing();
-    GPS_INFO->track_available.Update(GPS_INFO->Time);
+    info.track = Angle::degrees(track).as_bearing();
+    info.track_available.Update(info.Time);
   }
 
   if (!GGAAvailable) {
@@ -538,9 +538,9 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
       gps.SatellitesUsed = -1;
   }
 
-  GPS_INFO->gps.real = real;
+  info.gps.real = real;
 #ifdef ANDROID
-  GPS_INFO->gps.AndroidInternalGPS = false;
+  info.gps.AndroidInternalGPS = false;
 #endif
 
   return true;
@@ -583,18 +583,18 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
+ * @param info NMEA_INFO struct to parse into
  * @return Parsing success
  */
 bool
-NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO &info)
 {
-  GPS_STATE &gps = GPS_INFO->gps;
+  GPS_STATE &gps = info.gps;
 
   GGAAvailable = true;
 
-  fixed ThisTime = TimeModify(line.read(fixed_zero), GPS_INFO->DateTime,
-                              GPS_INFO->DateAvailable);
+  fixed ThisTime = TimeModify(line.read(fixed_zero), info.DateTime,
+                              info.DateAvailable);
   ThisTime = TimeAdvanceTolerance(ThisTime);
 
   GeoPoint location;
@@ -610,23 +610,23 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 
   gps.SatellitesUsed = nSatellites;
 
-  if (!TimeHasAdvanced(ThisTime, GPS_INFO))
+  if (!TimeHasAdvanced(ThisTime, info))
     return true;
 
   (void)valid_location;
   /* JMW: note ignore location updates from GGA -- definitive frame is GPRMC sentence
   if (!gpsValid)
-    GPS_INFO->LocationAvailable.Clear();
+    info.LocationAvailable.Clear();
   else if (valid_location)
-    GPS_INFO->LocationAvailable.Update(GPS_INFO->Time);
+    info.LocationAvailable.Update(info.Time);
 
   if (valid_location)
-    GPS_INFO->Location = location;
+    info.Location = location;
   */
 
-  GPS_INFO->gps.real = real;
+  info.gps.real = real;
 #ifdef ANDROID
-  GPS_INFO->gps.AndroidInternalGPS = false;
+  info.gps.AndroidInternalGPS = false;
 #endif
 
   gps.HDOP = line.read(fixed_zero);
@@ -634,12 +634,12 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   // VENTA3 CONDOR ALTITUDE
   // "Altitude" should always be GPS Altitude.
 
-  bool altitude_available = ReadAltitude(line, GPS_INFO->GPSAltitude);
+  bool altitude_available = ReadAltitude(line, info.GPSAltitude);
   if (altitude_available)
-    GPS_INFO->GPSAltitudeAvailable.Update(GPS_INFO->Time);
+    info.GPSAltitudeAvailable.Update(info.Time);
   else {
-    GPS_INFO->GPSAltitude = fixed_zero;
-    GPS_INFO->GPSAltitudeAvailable.Clear();
+    info.GPSAltitude = fixed_zero;
+    info.GPSAltitudeAvailable.Clear();
   }
 
   fixed GeoidSeparation;
@@ -651,8 +651,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
       /* Some devices, such as the "LG Incite Cellphone" seem to be
          severely bugged, and report the GPS altitude in the Geoid
          column.  That sucks! */
-      GPS_INFO->GPSAltitude = GeoidSeparation;
-      GPS_INFO->GPSAltitudeAvailable.Update(GPS_INFO->Time);
+      info.GPSAltitude = GeoidSeparation;
+      info.GPSAltitudeAvailable.Update(info.Time);
     }
   } else {
     // need to estimate Geoid Separation internally (optional)
@@ -665,8 +665,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
     //
     if (!HaveCondorDevice()) {
       // JMW TODO really need to know the actual device..
-      GeoidSeparation = LookupGeoidSeparation(GPS_INFO->Location);
-      GPS_INFO->GPSAltitude -= GeoidSeparation;
+      GeoidSeparation = LookupGeoidSeparation(info.Location);
+      info.GPSAltitude -= GeoidSeparation;
     }
   }
 
@@ -679,13 +679,13 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
+ * @param info NMEA_INFO struct to parse into
  * @return Parsing success
  */
 bool
-NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO &info)
 {
-  //JMW?  RMZAltitude = GPS_INFO->pressure.PressureAltitudeToQNHAltitude(RMZAltitude);
+  //JMW?  RMZAltitude = info.pressure.PressureAltitudeToQNHAltitude(RMZAltitude);
 
   fixed value;
   if (ReadAltitude(line, value)) {
@@ -695,9 +695,9 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
          altitude above 1013.25 hPa - since the don't have a "FLARM"
          device driver, we use the auto-detected "isFlarm" flag
          here */
-      GPS_INFO->ProvideWeakPressureAltitude(value);
+      info.ProvideWeakPressureAltitude(value);
     else
-      GPS_INFO->ProvideBaroAltitudeTrue(value);
+      info.ProvideBaroAltitudeTrue(value);
   }
 
   return true;
@@ -721,15 +721,15 @@ NMEAParser::NMEAChecksum(const char *String)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
+ * @param info NMEA_INFO struct to parse into
  * @return Parsing success
  */
 bool
-NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO &info)
 {
   fixed wnet;
   if (line.read_checked(wnet))
-    GPS_INFO->ProvideTotalEnergyVario(Units::ToSysUnit((wnet - fixed(200)) / 10,
+    info.ProvideTotalEnergyVario(Units::ToSysUnit((wnet - fixed(200)) / 10,
                                                        unKnots));
 
   line.skip(); // average vario +200
@@ -737,12 +737,12 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   fixed baralt;
   if (line.read_checked(baralt)) {
     baralt = max(fixed_zero, Units::ToSysUnit(baralt - fixed(2000), unFeet));
-    GPS_INFO->ProvidePressureAltitude(baralt);
+    info.ProvidePressureAltitude(baralt);
   }
 
   fixed vtas;
   if (line.read_checked(vtas))
-    GPS_INFO->ProvideTrueAirspeed(Units::ToSysUnit(vtas, unKnots));
+    info.ProvideTrueAirspeed(Units::ToSysUnit(vtas, unKnots));
 
   return true;
 }
@@ -753,7 +753,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
+ * @param info NMEA_INFO struct to parse into
  * @return Parsing success
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
@@ -780,14 +780,14 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
  * @param String Input string
  * @param params Parameter array
  * @param nparams Number of parameters
- * @param GPS_INFO GPS_INFO struct to parse into
+ * @param info NMEA_INFO struct to parse into
  * @return Parsing success
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 bool
-NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO &info)
 {
-  FLARM_STATE &flarm = GPS_INFO->flarm;
+  FLARM_STATE &flarm = info.flarm;
 
   isFlarm = true;
 
@@ -870,7 +870,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   }
 
   // set time of fix to current time
-  flarm_slot->valid.Update(GPS_INFO->Time);
+  flarm_slot->valid.Update(info.Time);
 
   flarm_slot->Update(traffic);
 

@@ -142,19 +142,18 @@ DeviceDescriptor::IsLogger() const
 }
 
 bool
-DeviceDescriptor::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+DeviceDescriptor::ParseNMEA(const char *line, NMEA_INFO &info)
 {
-  assert(String != NULL);
-  assert(GPS_INFO != NULL);
+  assert(line != NULL);
 
-  if (device != NULL && device->ParseNMEA(String, GPS_INFO)) {
-    GPS_INFO->Connected.Update(fixed(MonotonicClockMS()) / 1000);
+  if (device != NULL && device->ParseNMEA(line, info)) {
+    info.Connected.Update(fixed(MonotonicClockMS()) / 1000);
     return true;
   }
 
   // Additional "if" to find GPS strings
-  if (parser.ParseNMEAString_Internal(String, GPS_INFO)) {
-    GPS_INFO->Connected.Update(fixed(MonotonicClockMS()) / 1000);
+  if (parser.ParseNMEAString_Internal(line, info)) {
+    info.Connected.Update(fixed(MonotonicClockMS()) / 1000);
     return true;
   }
 
@@ -220,7 +219,7 @@ DeviceDescriptor::LinkTimeout()
 }
 
 bool
-DeviceDescriptor::Declare(const struct Declaration *declaration)
+DeviceDescriptor::Declare(const struct Declaration &declaration)
 {
   assert(!declaring);
   declaring = true;
@@ -270,6 +269,6 @@ DeviceDescriptor::LineReceived(const char *line)
   }
 
   ScopeLock protect(mutexBlackboard);
-  if (ParseNMEA(line, &device_blackboard.SetRealState(index)))
+  if (ParseNMEA(line, device_blackboard.SetRealState(index)))
     device_blackboard.Merge();
 }

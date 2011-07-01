@@ -118,7 +118,7 @@ class CDevIMI
   static bool Disconnect(Port &d);
 
 public:
-  static bool DeclareTask(Port &d, const Declaration *decl);
+  static bool DeclareTask(Port &d, const Declaration &declaration);
   static void Register();
 };
 
@@ -839,10 +839,11 @@ bool CDevIMI::Disconnect(Port &d)
   return false;
 }
 
-bool CDevIMI::DeclareTask(Port &d, const Declaration *decl)
+bool
+CDevIMI::DeclareTask(Port &d, const Declaration &declaration)
 {
   // verify WP number
-  if (decl->size() < 2 || decl->size() > 13)
+  if (declaration.size() < 2 || declaration.size() > 13)
     return false;
 
   // stop Rx thread
@@ -856,7 +857,7 @@ bool CDevIMI::DeclareTask(Port &d, const Declaration *decl)
     status = Connect(d);
     if(status) {
       // task declaration
-      status = status && DeclarationWrite(d, *decl);
+      status = status && DeclarationWrite(d, declaration);
     }
 
     // disconnect
@@ -892,11 +893,13 @@ public:
     CDevIMI::Register();
   }
 
-  virtual bool Declare(const Declaration *declaration, OperationEnvironment &env);
+  virtual bool Declare(const Declaration &declaration,
+                       OperationEnvironment &env);
 };
 
 bool
-IMIDevice::Declare(const Declaration *declaration, OperationEnvironment &env)
+IMIDevice::Declare(const Declaration &declaration,
+                   OperationEnvironment &env)
 {
   if (port == NULL)
     return false;

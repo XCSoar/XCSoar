@@ -64,28 +64,28 @@ FlarmDeclareSetGet(Port *port, TCHAR *s)
 #endif
 
 static bool
-FlarmDeclareInternal(Port *port, const Declaration *decl,
+FlarmDeclareInternal(Port *port, const Declaration &declaration,
                      OperationEnvironment &env)
 {
   TCHAR Buffer[256];
-  unsigned size = decl->size();
+  unsigned size = declaration.size();
 
   env.SetProgressRange(6 + size);
   env.SetProgressPosition(0);
 
-  _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"), decl->PilotName.c_str());
+  _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"), declaration.PilotName.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
   env.SetProgressPosition(1);
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), decl->AircraftReg.c_str());
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), declaration.AircraftReg.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
   env.SetProgressPosition(2);
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"), decl->AircraftType.c_str());
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"), declaration.AircraftType.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
@@ -108,7 +108,7 @@ FlarmDeclareInternal(Port *port, const Declaration *decl,
     double tmp, MinLat, MinLon;
     char NoS, EoW;
 
-    tmp = decl->get_location(i).Latitude.value_degrees();
+    tmp = declaration.get_location(i).Latitude.value_degrees();
     if (tmp < 0) {
       NoS = 'S';
       tmp = -tmp;
@@ -118,7 +118,7 @@ FlarmDeclareInternal(Port *port, const Declaration *decl,
     DegLat = (int)tmp;
     MinLat = (tmp - DegLat) * 60 * 1000;
 
-    tmp = decl->get_location(i).Longitude.value_degrees();
+    tmp = declaration.get_location(i).Longitude.value_degrees();
     if (tmp < 0) {
       EoW = 'W';
       tmp = -tmp;
@@ -129,7 +129,7 @@ FlarmDeclareInternal(Port *port, const Declaration *decl,
     MinLon = (tmp - DegLon) * 60 * 1000;
 
     _stprintf(Buffer, _T("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
-              MinLat, NoS, DegLon, MinLon, EoW, decl->get_name(i));
+              MinLat, NoS, DegLon, MinLon, EoW, declaration.get_name(i));
 
     if (!FlarmDeclareSetGet(port, Buffer))
       return false;
@@ -160,14 +160,15 @@ FlarmDeclareInternal(Port *port, const Declaration *decl,
 }
 
 bool
-FlarmDeclare(Port *port, const Declaration *decl, OperationEnvironment &env)
+FlarmDeclare(Port *port, const Declaration &declaration,
+             OperationEnvironment &env)
 {
   assert(port != NULL);
 
   port->StopRxThread();
   port->SetRxTimeout(500); // set RX timeout to 500[ms]
 
-  bool result = FlarmDeclareInternal(port, decl, env);
+  bool result = FlarmDeclareInternal(port, declaration, env);
 
   // TODO bug: JMW, FLARM Declaration checks
   // Only works on IGC approved devices

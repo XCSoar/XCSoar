@@ -56,7 +56,7 @@ public:
     real = _real;
   }
 
-  bool ParseNMEAString_Internal(const char *line, NMEA_INFO *GPS_INFO);
+  bool ParseNMEAString_Internal(const char *line, NMEA_INFO &info);
 
 public:
   // these routines can be used by other parsers.
@@ -83,27 +83,27 @@ private:
   gcc_pure
   fixed TimeAdvanceTolerance(fixed time) const;
 
-  bool TimeHasAdvanced(fixed ThisTime, NMEA_INFO *GPS_INFO);
+  bool TimeHasAdvanced(fixed ThisTime, NMEA_INFO &info);
   static fixed TimeModify(fixed FixTime, BrokenDateTime &date_time,
                           bool date_available);
 
-  bool GLL(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  bool GGA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  bool GSA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  bool RMC(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  static bool RMB(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  bool RMZ(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  bool GLL(NMEAInputLine &line, NMEA_INFO &info);
+  bool GGA(NMEAInputLine &line, NMEA_INFO &info);
+  bool GSA(NMEAInputLine &line, NMEA_INFO &info);
+  bool RMC(NMEAInputLine &line, NMEA_INFO &info);
+  static bool RMB(NMEAInputLine &line, NMEA_INFO &info);
+  bool RMZ(NMEAInputLine &line, NMEA_INFO &info);
 
-  static bool WP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  static bool WP1(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
-  static bool WP2(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  static bool WP0(NMEAInputLine &line, NMEA_INFO &info);
+  static bool WP1(NMEAInputLine &line, NMEA_INFO &info);
+  static bool WP2(NMEAInputLine &line, NMEA_INFO &info);
 
   // Additional sentences
-  static bool PTAS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
+  static bool PTAS1(NMEAInputLine &line, NMEA_INFO &info); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentences
   bool PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time);
-  bool PFLAA(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+  bool PFLAA(NMEAInputLine &line, NMEA_INFO &info);
 };
 
 #endif

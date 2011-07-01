@@ -124,8 +124,8 @@ int main(int argc, char **argv)
 
     TrimRight(buffer);
 
-    if (device == NULL || !device->ParseNMEA(buffer, &data))
-      parser.ParseNMEAString_Internal(buffer, &data);
+    if (device == NULL || !device->ParseNMEA(buffer, data))
+      parser.ParseNMEAString_Internal(buffer, data);
 
     computer.Compute(data, last, calculated, settings_computer);
     calculated.flight.flying_state_moving(data.Time);

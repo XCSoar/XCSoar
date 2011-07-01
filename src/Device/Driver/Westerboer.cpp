@@ -49,7 +49,7 @@ class WesterboerDevice : public AbstractDevice {
 public:
   WesterboerDevice(Port *_port):port(_port) {}
 
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
   virtual bool PutMacCready(fixed mac_cready);
 };
 
@@ -117,7 +117,7 @@ PWES1(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO &info)
 {
   if (!VerifyNMEAChecksum(String))
     return false;
@@ -127,10 +127,10 @@ WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
   line.read(type, 16);
 
   if (strcmp(type, "$PWES0") == 0)
-    return PWES0(line, *GPS_INFO);
+    return PWES0(line, info);
 
   if (strcmp(type, "$PWES1") == 0)
-    return PWES1(line, *GPS_INFO);
+    return PWES1(line, info);
 
   return false;
 }

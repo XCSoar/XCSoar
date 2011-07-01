@@ -33,7 +33,7 @@ Copyright_License {
 
 class CondorDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
 };
 
 static bool
@@ -57,7 +57,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 }
 
 static bool
-cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+cLXWP0(NMEAInputLine &line, NMEA_INFO &info)
 {
   /*
   $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
@@ -82,52 +82,52 @@ cLXWP0(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   fixed alt = line.read(fixed_zero);
 
   if (tas_available)
-    GPS_INFO->ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
+    info.ProvideTrueAirspeedWithAltitude(Units::ToSysUnit(airspeed,
                                                                unKiloMeterPerHour),
                                               alt);
 
   // ToDo check if QNH correction is needed!
-  GPS_INFO->ProvideBaroAltitudeTrue(alt);
+  info.ProvideBaroAltitudeTrue(alt);
 
   if (line.read_checked(value))
-    GPS_INFO->ProvideTotalEnergyVario(value);
+    info.ProvideTotalEnergyVario(value);
 
   line.skip(6);
 
   SpeedVector wind;
   if (ReadSpeedVector(line, wind))
-    GPS_INFO->ProvideExternalWind(wind);
+    info.ProvideExternalWind(wind);
 
   return true;
 }
 
 static bool
-cLXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
+cLXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 {
   return true;
 }
 
 static bool
-cLXWP2(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
+cLXWP2(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 {
   return true;
 }
 
 bool
-CondorDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+CondorDevice::ParseNMEA(const char *String, NMEA_INFO &info)
 {
   NMEAInputLine line(String);
   char type[16];
   line.read(type, 16);
 
   if (strcmp(type, "$LXWP0") == 0)
-    return cLXWP0(line, GPS_INFO);
+    return cLXWP0(line, info);
 
   if (strcmp(type, "$LXWP1") == 0)
-    return cLXWP1(line, GPS_INFO);
+    return cLXWP1(line, info);
 
   if (strcmp(type, "$LXWP2") == 0)
-    return cLXWP2(line, GPS_INFO);
+    return cLXWP2(line, info);
 
   return false;
 }

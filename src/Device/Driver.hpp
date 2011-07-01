@@ -58,9 +58,10 @@ public:
   /**
    * Parse a line of input from the port.
    *
+   * @param info destination for sensor values
    * @return true when the line has been processed
    */
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info) = 0;
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info) = 0;
 
   /**
    * Send the new MacCready value to the device.
@@ -135,13 +136,13 @@ public:
    * @param declaration the task declaration
    * @return true on success
    */
-  virtual bool Declare(const struct Declaration *declaration,
+  virtual bool Declare(const struct Declaration &declaration,
                        OperationEnvironment &env) = 0;
 
   /**
    * Called periodically each second
    *
-   * @param basic the combined sensor values of all devices
+   * @param info the combined sensor values of all devices
    * @param calculated the current set of calculation results
    */
   virtual void OnSysTicker(const NMEA_INFO &basic,
@@ -158,7 +159,7 @@ public:
 
   virtual void LinkTimeout();
 
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
 
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutBugs(fixed bugs);
@@ -170,7 +171,7 @@ public:
   virtual bool PutActiveFrequency(RadioFrequency frequency);
   virtual bool PutStandbyFrequency(RadioFrequency frequency);
 
-  virtual bool Declare(const struct Declaration *declaration,
+  virtual bool Declare(const struct Declaration &declaration,
                        OperationEnvironment &env);
 
   virtual void OnSysTicker(const NMEA_INFO &basic,

@@ -41,14 +41,14 @@ Copyright_License {
 
 class PGDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
 };
 
 static bool
-GPWIN(NMEAInputLine &line, NMEA_INFO *GPS_INFO);
+GPWIN(NMEAInputLine &line, NMEA_INFO &info);
 
 bool
-PGDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+PGDevice::ParseNMEA(const char *String, NMEA_INFO &info)
 {
   NMEAInputLine line(String);
   char type[16];
@@ -57,7 +57,7 @@ PGDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
   // $GPWIN ... Winpilot proprietary sentance includinh baro altitude
   // $GPWIN ,01900 , 0 , 5159 , 0 , 0 , 0 , 0 , 0 , 0 , 0 , 0 * 6 B , 0 7 * 6 0 E
   if (strcmp(type, "$GPWIN") == 0)
-    return GPWIN(line, GPS_INFO);
+    return GPWIN(line, info);
   else
     return false;
 
@@ -79,13 +79,13 @@ const struct DeviceRegister pgDevice = {
 // local stuff
 
 static bool
-GPWIN(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+GPWIN(NMEAInputLine &line, NMEA_INFO &info)
 {
   line.skip(2);
 
   fixed value;
   if (line.read_checked(value))
-    GPS_INFO->ProvidePressureAltitude(value / 10);
+    info.ProvidePressureAltitude(value / 10);
 
   return false;
 }

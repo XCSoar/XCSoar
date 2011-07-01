@@ -59,12 +59,12 @@ public:
 protected:
   bool TryConnect();
   bool AddWaypoint(const Waypoint &way_point);
-  bool DeclareInner(const struct Declaration *declaration,
+  bool DeclareInner(const struct Declaration &declaration,
                     OperationEnvironment &env);
 
 public:
   virtual void LinkTimeout();
-  virtual bool Declare(const struct Declaration *declaration,
+  virtual bool Declare(const struct Declaration &declaration,
                        OperationEnvironment &env);
 };
 
@@ -114,7 +114,7 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 }
 
 bool
-EWDevice::DeclareInner(const struct Declaration *decl,
+EWDevice::DeclareInner(const struct Declaration &declaration,
                        OperationEnvironment &env)
 {
   char sTmp[72];
@@ -128,9 +128,9 @@ EWDevice::DeclareInner(const struct Declaration *decl,
   env.Sleep(50);
 
   char sPilot[13], sGliderType[9], sGliderID[9];
-  convert_string(sPilot, sizeof(sPilot), decl->PilotName);
-  convert_string(sGliderType, sizeof(sGliderType), decl->AircraftType);
-  convert_string(sGliderID, sizeof(sGliderID), decl->AircraftReg);
+  convert_string(sPilot, sizeof(sPilot), declaration.PilotName);
+  convert_string(sGliderType, sizeof(sGliderType), declaration.AircraftType);
+  convert_string(sGliderID, sizeof(sGliderID), declaration.AircraftReg);
 
   // build string (field 4-5 are GPS info, no idea what to write)
   sprintf(sTmp, "%-12s%-8s%-8s%-12s%-12s%-6s\r",
@@ -184,15 +184,16 @@ EWDevice::DeclareInner(const struct Declaration *decl,
     if (!port->ExpectString("OK\r"))
       return false;
   }
-  for (unsigned j = 0; j < decl->size(); ++j)
-    if (!AddWaypoint(decl->get_waypoint(j)))
+  for (unsigned j = 0; j < declaration.size(); ++j)
+    if (!AddWaypoint(declaration.get_waypoint(j)))
       return false;
 
   return true;
 }
 
 bool
-EWDevice::Declare(const struct Declaration *decl, OperationEnvironment &env)
+EWDevice::Declare(const struct Declaration &declaration,
+                  OperationEnvironment &env)
 {
   port->StopRxThread();
 
@@ -200,7 +201,7 @@ EWDevice::Declare(const struct Declaration *decl, OperationEnvironment &env)
 
   port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
 
-  bool success = DeclareInner(decl, env);
+  bool success = DeclareInner(declaration, env);
 
   port->Write("NMEA\r\n"); // switch to NMEA mode
 

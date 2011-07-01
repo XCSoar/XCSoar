@@ -39,7 +39,7 @@ public:
   FlytecDevice(Port *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
 };
 
 /**
@@ -171,18 +171,18 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-FlytecDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
+FlytecDevice::ParseNMEA(const char *_line, NMEA_INFO &info)
 {
   NMEAInputLine line(_line);
   char type[16];
   line.read(type, 16);
 
   if (strcmp(type, "$BRSF") == 0)
-    return FlytecParseBRSF(line, *info);
+    return FlytecParseBRSF(line, info);
   else if (strcmp(type, "$VMVABD") == 0)
-    return FlytecParseVMVABD(line, *info);
+    return FlytecParseVMVABD(line, info);
   else if (strcmp(type, "$FLYSEN") == 0)
-    return FlytecParseFLYSEN(line, *info);
+    return FlytecParseFLYSEN(line, info);
   else
     return false;
 }

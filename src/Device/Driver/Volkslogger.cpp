@@ -54,11 +54,11 @@ public:
   VolksloggerDevice(Port *_port):port(_port) {}
 
 protected:
-  bool DeclareInner(VLAPI &vl, const struct Declaration *declaration);
+  bool DeclareInner(VLAPI &vl, const struct Declaration &declaration);
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
-  virtual bool Declare(const Declaration *declaration,
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool Declare(const Declaration &declaration,
                        OperationEnvironment &env);
 };
 
@@ -67,9 +67,9 @@ public:
 // $PGCS,1,0EC0,FFF9,0C6E,02*61
 // $PGCS,1,0EC0,FFFA,0C6E,03*18
 static bool
-vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+vl_PGCS1(NMEAInputLine &line, NMEA_INFO &info)
 {
-  GPS_STATE &gps = GPS_INFO->gps;
+  GPS_STATE &gps = info.gps;
 
   if (line.read(1) != 1)
     return false;
@@ -85,7 +85,7 @@ vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
        QNH ~2000 hPa */
     altitude -= 65535;
 
-  GPS_INFO->ProvidePressureAltitude(fixed(altitude));
+  info.ProvidePressureAltitude(fixed(altitude));
 
   // ExtractParameter(String,ctemp,3);
   // four characters, hex, constant.  Value 1371 (dec)
@@ -103,7 +103,7 @@ vl_PGCS1(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
 }
 
 bool
-VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO &info)
 {
   if (!VerifyNMEAChecksum(String))
     return false;
@@ -113,7 +113,7 @@ VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
   line.read(type, 16);
 
   if (strcmp(type, "$PGCS") == 0)
-    return vl_PGCS1(line, GPS_INFO);
+    return vl_PGCS1(line, info);
   else
     return false;
 }
@@ -176,9 +176,9 @@ CopyTurnPoint(VLAPI_DATA::DCLWPT &dest, const Declaration::TurnPoint &src)
 }
 
 bool
-VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
+VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration &declaration)
 {
-  assert(decl->size() >= 2);
+  assert(declaration.size() >= 2);
 
   if (vl.open(1, 20, 1, 38400L) != VLA_ERR_NOERR ||
       vl.read_info() != VLA_ERR_NOERR)
@@ -189,30 +189,33 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
 
   CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
 		     sizeof(vl.declaration.flightinfo.pilot),
-		     decl->PilotName);
+                     declaration.PilotName);
 
   CopyToNarrowBuffer(vl.declaration.flightinfo.gliderid,
                      sizeof(vl.declaration.flightinfo.gliderid),
-		     decl->AircraftReg);
+                     declaration.AircraftReg);
 
   CopyToNarrowBuffer(vl.declaration.flightinfo.glidertype,
                      sizeof(vl.declaration.flightinfo.glidertype),
-		     decl->AircraftType);
+                     declaration.AircraftType);
 
   const Waypoint *home = way_points.GetHome();
   if (home != NULL)
     CopyWaypoint(vl.declaration.flightinfo.homepoint, *home);
 
   // start..
-  CopyTurnPoint(vl.declaration.task.startpoint, decl->TurnPoints.front());
+  CopyTurnPoint(vl.declaration.task.startpoint,
+                declaration.TurnPoints.front());
 
   // rest of task...
-  const unsigned n = std::min(decl->size() - 2, 12u);
+  const unsigned n = std::min(declaration.size() - 2, 12u);
   for (unsigned i = 0; i < n; ++i)
-    CopyTurnPoint(vl.declaration.task.turnpoints[i], decl->TurnPoints[i + 1]);
+    CopyTurnPoint(vl.declaration.task.turnpoints[i],
+                  declaration.TurnPoints[i + 1]);
 
   // Finish
-  CopyTurnPoint(vl.declaration.task.finishpoint, decl->TurnPoints.back());
+  CopyTurnPoint(vl.declaration.task.finishpoint,
+                declaration.TurnPoints.back());
 
   vl.declaration.task.nturnpoints = n;
 
@@ -220,9 +223,10 @@ VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration *decl)
 }
 
 bool
-VolksloggerDevice::Declare(const Declaration *decl, OperationEnvironment &env)
+VolksloggerDevice::Declare(const Declaration &declaration,
+                           OperationEnvironment &env)
 {
-  if (decl->size() < 2)
+  if (declaration.size() < 2)
     return false;
 
   env.SetText(_T("Comms with Volkslogger"));
@@ -236,7 +240,7 @@ VolksloggerDevice::Declare(const Declaration *decl, OperationEnvironment &env)
   VLAPI vl(env);
   vl.set_port(port);
 
-  bool success = DeclareInner(vl, decl);
+  bool success = DeclareInner(vl, declaration);
 
   vl.close(1);
 

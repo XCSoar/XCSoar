@@ -85,8 +85,8 @@ NmeaReplayGlue::on_sentence(const char *line)
   ScopeLock protect(mutexBlackboard);
   NMEA_INFO &data = device_blackboard.SetReplayState();
 
-  if ((device != NULL && device->ParseNMEA(line, &data)) ||
-      (parser != NULL && parser->ParseNMEAString_Internal(line, &data))) {
+  if ((device != NULL && device->ParseNMEA(line, data)) ||
+      (parser != NULL && parser->ParseNMEAString_Internal(line, data))) {
     data.gps.Replay = true;
     data.Connected.Update(fixed(MonotonicClockMS()) / 1000);
     device_blackboard.Merge();

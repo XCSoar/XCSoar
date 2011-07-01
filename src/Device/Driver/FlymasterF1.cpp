@@ -32,33 +32,33 @@ Copyright_License {
 
 class FlymasterF1Device : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
 };
 
 static bool
-VARIO(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+VARIO(NMEAInputLine &line, NMEA_INFO &info)
 {
   // $VARIO,fPressure,fVario,Bat1Volts,Bat2Volts,BatBank,TempSensor1,TempSensor2*CS
 
   fixed value;
   if (line.read_checked(value))
-    GPS_INFO->ProvideStaticPressure(value * 100);
+    info.ProvideStaticPressure(value * 100);
 
   if (line.read_checked(value))
-    GPS_INFO->ProvideTotalEnergyVario(value / 10);
+    info.ProvideTotalEnergyVario(value / 10);
 
   return true;
 }
 
 bool
-FlymasterF1Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+FlymasterF1Device::ParseNMEA(const char *String, NMEA_INFO &info)
 {
   NMEAInputLine line(String);
   char type[16];
   line.read(type, 16);
 
   if (strcmp(type, "$VARIO") == 0)
-    return VARIO(line, GPS_INFO);
+    return VARIO(line, info);
   else
     return false;
 }

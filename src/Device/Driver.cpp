@@ -37,7 +37,7 @@ AbstractDevice::LinkTimeout()
 }
 
 bool
-AbstractDevice::ParseNMEA(const char *line, struct NMEA_INFO *info)
+AbstractDevice::ParseNMEA(const char *line, struct NMEA_INFO &info)
 {
   return false;
 }
@@ -92,7 +92,7 @@ AbstractDevice::PutStandbyFrequency(RadioFrequency frequency)
 }
 
 bool
-AbstractDevice::Declare(const struct Declaration *declaration,
+AbstractDevice::Declare(const struct Declaration &declaration,
                         OperationEnvironment &env)
 {
   return false;

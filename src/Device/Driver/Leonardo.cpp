@@ -39,7 +39,7 @@ public:
   LeonardoDevice(Port *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info);
+  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
 };
 
 static bool
@@ -203,18 +203,18 @@ PDGFTL1(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO *info)
+LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO &info)
 {
   NMEAInputLine line(_line);
   char type[16];
   line.read(type, 16);
 
   if (strcmp(type, "$C") == 0 || strcmp(type, "$c") == 0)
-    return LeonardoParseC(line, *info);
+    return LeonardoParseC(line, info);
   else if (strcmp(type, "$D") == 0 || strcmp(type, "$d") == 0)
-    return LeonardoParseD(line, *info);
+    return LeonardoParseD(line, info);
   else if (strcmp(type, "$PDGFTL1") == 0 || strcmp(type, "$PDGFTTL") == 0)
-    return PDGFTL1(line, *info);
+    return PDGFTL1(line, info);
   else
     return false;
 }

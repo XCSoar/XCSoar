@@ -28,7 +28,7 @@ class Port;
 struct Declaration;
 class OperationEnvironment;
 
-bool FlarmDeclare(Port *port, const struct Declaration *decl,
+bool FlarmDeclare(Port *port, const struct Declaration &declaration,
                   OperationEnvironment &env);
 
 #endif

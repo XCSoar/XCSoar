@@ -116,10 +116,10 @@ ReadBlock(Port &port, void *dest, size_t max_length, size_t length)
 }
 
 static bool
-DeclareInner(Port *port, const Declaration *decl,
+DeclareInner(Port *port, const Declaration &declaration,
              gcc_unused OperationEnvironment &env)
 {
-  unsigned size = decl->size();
+  unsigned size = declaration.size();
 
   port->SetRxTimeout(500);
 
@@ -196,9 +196,9 @@ DeclareInner(Port *port, const Declaration *decl,
     return false;
 
   char PilotName[25], GliderType[13], GliderID[13];
-  convert_string(PilotName, sizeof(PilotName), decl->PilotName);
-  convert_string(GliderType, sizeof(GliderType), decl->AircraftType);
-  convert_string(GliderID, sizeof(GliderID), decl->AircraftReg);
+  convert_string(PilotName, sizeof(PilotName), declaration.PilotName);
+  convert_string(GliderType, sizeof(GliderType), declaration.AircraftType);
+  convert_string(GliderID, sizeof(GliderID), declaration.AircraftReg);
 
   char szTmp[255];
   sprintf(szTmp, "O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r",
@@ -247,7 +247,7 @@ DeclareInner(Port *port, const Declaration *decl,
   DeclIndex = 128;
 
   for (unsigned i = 0; i < size; ++i) {
-    if (!cai302DeclAddWaypoint(port, decl->get_waypoint(i)))
+    if (!cai302DeclAddWaypoint(port, declaration.get_waypoint(i)))
       return false;
 
     env.SetProgressPosition(7 + i);
@@ -259,11 +259,12 @@ DeclareInner(Port *port, const Declaration *decl,
 }
 
 bool
-CAI302Device::Declare(const Declaration *decl, OperationEnvironment &env)
+CAI302Device::Declare(const Declaration &declaration,
+                      OperationEnvironment &env)
 {
   port->StopRxThread();
 
-  bool success = DeclareInner(port, decl, env);
+  bool success = DeclareInner(port, declaration, env);
 
   port->SetRxTimeout(500);
 

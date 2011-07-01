@@ -153,7 +153,7 @@ int main(int argc, char **argv)
   declaration.append(MakeWaypoint(_T("Bergneustadt"), 488,
                                   7.7061111111111114, 51.051944444444445));
 
-  if (device->Declare(&declaration, env))
+  if (device->Declare(declaration, env))
     fprintf(stderr, "Declaration ok\n");
   else
     fprintf(stderr, "Declaration failed\n");

@@ -50,7 +50,7 @@ $PCAIB,<1>,<2>,<CR><LF>
 <2> Destination Navpoint attribute word, format XXXXX (leading zeros will be transmitted)
 */
 static bool
-cai_PCAIB(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO *GPS_INFO)
+cai_PCAIB(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 {
   return true;
 }
@@ -99,47 +99,47 @@ cai_PCAID(NMEAInputLine &line, NMEA_INFO &data)
 *hh  Checksum, XOR of all bytes
 */
 static bool
-cai_w(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
+cai_w(NMEAInputLine &line, NMEA_INFO &info)
 {
   SpeedVector wind;
   if (ReadSpeedVector(line, wind))
-    GPS_INFO->ProvideExternalWind(wind.Reciprocal());
+    info.ProvideExternalWind(wind.Reciprocal());
 
   line.skip(2);
 
   fixed value;
   if (line.read_checked(value))
-    GPS_INFO->ProvideBaroAltitudeTrue(value - fixed(1000));
+    info.ProvideBaroAltitudeTrue(value - fixed(1000));
 
   if (line.read_checked(value))
-    GPS_INFO->settings.ProvideQNH(value, GPS_INFO->Time);
+    info.settings.ProvideQNH(value, info.Time);
 
   if (line.read_checked(value))
-    GPS_INFO->ProvideTrueAirspeed(value / 100);
+    info.ProvideTrueAirspeed(value / 100);
 
   if (line.read_checked(value))
-    GPS_INFO->ProvideTotalEnergyVario(Units::ToSysUnit((value - fixed(200)) / 10,
-                                                       unKnots));
+    info.ProvideTotalEnergyVario(Units::ToSysUnit((value - fixed(200)) / 10,
+                                                  unKnots));
 
   line.skip(2);
 
   int i;
 
   if (line.read_checked(i))
-    GPS_INFO->settings.ProvideMacCready(Units::ToSysUnit(fixed(i) / 10, unKnots),
-                                        GPS_INFO->Time);
+    info.settings.ProvideMacCready(Units::ToSysUnit(fixed(i) / 10, unKnots),
+                                        info.Time);
 
   if (line.read_checked(i))
-    GPS_INFO->settings.ProvideBallast(fixed(i) / 100, GPS_INFO->Time);
+    info.settings.ProvideBallast(fixed(i) / 100, info.Time);
 
   if (line.read_checked(i))
-    GPS_INFO->settings.ProvideBugs(fixed(i) / 100, GPS_INFO->Time);
+    info.settings.ProvideBugs(fixed(i) / 100, info.Time);
 
   return true;
 }
 
 bool
-CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
+CAI302Device::ParseNMEA(const char *String, NMEA_INFO &info)
 {
   if (!VerifyNMEAChecksum(String))
     return false;
@@ -149,13 +149,13 @@ CAI302Device::ParseNMEA(const char *String, NMEA_INFO *GPS_INFO)
   line.read(type, 16);
 
   if (strcmp(type, "$PCAIB") == 0)
-    return cai_PCAIB(line, GPS_INFO);
+    return cai_PCAIB(line, info);
 
   if (strcmp(type, "$PCAID") == 0)
-    return cai_PCAID(line, *GPS_INFO);
+    return cai_PCAID(line, info);
 
   if (strcmp(type, "!w") == 0)
-    return cai_w(line, GPS_INFO);
+    return cai_w(line, info);
 
   return false;
 }
