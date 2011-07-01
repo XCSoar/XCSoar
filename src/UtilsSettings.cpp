@@ -27,7 +27,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"
 #include "Terrain/RasterTerrain.hpp"
-#include "AirfieldDetails.h"
+#include "Waypoint/WaypointDetailsReader.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
 #include "Dialogs/Dialogs.h"

@@ -298,7 +298,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Gauge/TaskView.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	\
-	$(SRC)/AirfieldDetails.cpp \
+	$(SRC)/Waypoint/WaypointDetailsReader.cpp \
 	$(SRC)/MenuData.cpp \
 	$(SRC)/MenuBar.cpp \
 	$(SRC)/ButtonLabel.cpp \

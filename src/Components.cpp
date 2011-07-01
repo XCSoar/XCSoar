@@ -48,7 +48,7 @@ Copyright_License {
 #include "SettingsMap.hpp"
 #include "Logger/Logger.hpp"
 #include "Logger/NMEALogger.hpp"
-#include "AirfieldDetails.h"
+#include "Waypoint/WaypointDetailsReader.hpp"
 #include "Screen/Fonts.hpp"
 #include "DeviceBlackboard.hpp"
 #include "MapWindow/MapWindow.hpp"

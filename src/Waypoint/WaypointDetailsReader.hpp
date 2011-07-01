@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef AIRFIELDDETAILS_H
-#define AIRFIELDDETAILS_H
+#ifndef WAYPOINT_DETAILS_READER_HPP
+#define WAYPOINT_DETAILS_READER_HPP
 
 class Waypoints;
 class OperationEnvironment;

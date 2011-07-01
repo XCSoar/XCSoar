@@ -22,7 +22,7 @@ Copyright_License {
 
 */
 
-#include "AirfieldDetails.h"
+#include "WaypointDetailsReader.hpp"
 #include "Language/Language.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "LogFile.hpp"
