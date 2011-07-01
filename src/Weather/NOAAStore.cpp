@@ -27,6 +27,10 @@ Copyright_License {
 #include "TAF.hpp"
 #include "Util/StaticArray.hpp"
 
+#ifdef _UNICODE
+#include <windows.h>
+#endif
+
 namespace NOAAStore
 {
   struct Item
@@ -122,6 +126,23 @@ NOAAStore::GetCode(unsigned index)
 {
   assert(index < stations.size());
   return stations[index].code;
+}
+
+const TCHAR *
+NOAAStore::GetCodeT(unsigned index)
+{
+#ifdef _UNICODE
+  const char *code = GetCode(index);
+
+  int length = strlen(code);
+  TCHAR *code2 = new TCHAR[length + 1];
+  length = MultiByteToWideChar(CP_UTF8, 0, code, length, code2, length);
+  code2[length] = _T('\0');
+
+  return code2;
+#else
+  return GetCode(index);
+#endif
 }
 
 bool

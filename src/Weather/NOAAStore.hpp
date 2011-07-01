@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef NOAA_STORE_HPP
 #define NOAA_STORE_HPP
 
+#include <tchar.h>
+
 struct METAR;
 struct TAF;
 
@@ -56,6 +58,7 @@ namespace NOAAStore
    * @return Four letter code of the station/airport
    */
   const char *GetCode(unsigned index);
+  const TCHAR *GetCodeT(unsigned index);
 
   /**
    * Transfers the downloaded METAR into the given reference if available
