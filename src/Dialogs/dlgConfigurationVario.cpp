@@ -770,7 +770,9 @@ FillAudioEnums(const TCHAR* name)
   }
 }
 
-static void FillAllAudioEnums(void) {
+static void
+FillAllAudioEnums(void)
+{
   FillAudioEnums(_T("CruiseFaster"));
   FillAudioEnums(_T("CruiseSlower"));
   FillAudioEnums(_T("CruiseLift"));
@@ -946,17 +948,16 @@ dlgConfigurationVarioShowModal(void)
   changed = false;
 
   if (!is_simulator() && devVarioFindVega() == NULL) {
-    MessageBoxX (_("No communication with Vega."),
-                 _("Vega error"), MB_OK);
+    MessageBoxX(_("No communication with Vega."), _("Vega error"), MB_OK);
     return false;
   }
 
   if (!Layout::landscape)
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window, _T("IDR_XML_VARIO_L"));
+    wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                    _T("IDR_XML_VARIO_L"));
   else
-    wf = LoadDialog(CallBackTable,
-                        XCSoarInterface::main_window, _T("IDR_XML_VARIO"));
+    wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+                    _T("IDR_XML_VARIO"));
 
   if (!wf)
     return false;
