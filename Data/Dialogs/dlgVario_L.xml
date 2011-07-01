@@ -1,428 +1,427 @@
 <?xml version="1.0"?>
 
-<Form Name="frmVario" Width="240" Height="320" Caption="Vario Configuration">
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="240" Width="35" Height="28" OnClick="OnNextClicked" />
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="240" Width="35" Height="28" OnClick="OnPrevClicked" />
-  <Button Name="cmdClose" Caption="Close" X="5" Y="270" Width="60" Height="28" />
+<Form Name="frmVario" Width="320" Height="240" Caption="Vario Configuration">
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="160" Width="35" Height="28" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="160" Width="35" Height="28" OnClick="OnPrevClicked" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" />
+  <Button Name="cmdDemo" Caption="Demo" X="5" Y="60" Width="60" Height="28" OnClick="OnDemoClicked" />
+  <Button Name="cmdSave" Caption="Save" X="5" Y="90" Width="60" Height="28" OnClick="OnSaveClicked" />
 
-  <Button Name="cmdDemo" Caption="Demo" X="70" Y="270" Width="60" Height="28" OnClick="OnDemoClicked" />
-  <Button Name="cmdSave" Caption="Save" X="140" Y="270" Width="60" Height="28" OnClick="OnSaveClicked" />
-
-  <Tabbed Name="tabbed" X="0" Y="0" Width="235" Height="222">
+  <Tabbed Name="tabbed" X="70" Y="0" Width="246" Height="222">
     <Panel Name="frmHardware">
-      <Edit Name="prpHasPressureTE" Caption="TE port" X="2" Width="235" Height="22" CaptionWidth="150" Help="Whether the Total Energy port is connected.">
+      <Edit Name="prpHasPressureTE" Caption="TE port" X="2" Width="246" Height="22" CaptionWidth="150" Help="Whether the Total Energy port is connected.">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpHasPressurePitot" Caption="Pitot port" X="2" Width="235" Height="22" CaptionWidth="150" Help="Whether the Pitot port is connected.">
+      <Edit Name="prpHasPressurePitot" Caption="Pitot port" X="2" Width="246" Height="22" CaptionWidth="150" Help="Whether the Pitot port is connected.">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpHasPressureStatic" Caption="Static port" X="2" Width="235" Height="22" CaptionWidth="150" Help="Whether the Static port is connected.">
+      <Edit Name="prpHasPressureStatic" Caption="Static port" X="2" Width="246" Height="22" CaptionWidth="150" Help="Whether the Static port is connected.">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpHasPressureStall" Caption="Stall port" X="2" Width="235" Height="22" CaptionWidth="150" Help="Whether the Stall pressure port is connected.">
+      <Edit Name="prpHasPressureStall" Caption="Stall port" X="2" Width="246" Height="22" CaptionWidth="150" Help="Whether the Stall pressure port is connected.">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpHasAccelerometer" Caption="Accelerometer" X="2" Width="235" Height="22" CaptionWidth="150" Help="Whether the internal accelerometer is used.  Only change this if the accelerometer has malfunctioned or the instrument cannot be installed with correct alignment.">
+      <Edit Name="prpHasAccelerometer" Caption="Accelerometer" X="2" Width="246" Height="22" CaptionWidth="150" Help="Whether the internal accelerometer is used.  Only change this if the accelerometer has malfunctioned or the instrument cannot be installed with correct alignment.">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpHasTemperature" Caption="Temperature" X="2" Width="235" Height="22" CaptionWidth="150" Help="Whether a temperature and humidity sensor is installed.  Set to 0 to disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be specified.">
+      <Edit Name="prpHasTemperature" Caption="Temperature" X="2" Width="246" Height="22" CaptionWidth="150" Help="Whether a temperature and humidity sensor is installed.  Set to 0 to disable, 255 to enable auto-detect; otherwise the 1Wire device ID can be specified.">
         <DataField DataType="enum"/>
       </Edit>
     
-      <Edit Name="prpBaudRateA" Caption="Baud rate Vega" X="2" Width="235" Height="22" CaptionWidth="150" Help="Baud rate of serial device connected to Vega port X1.  Use this as necessary when using a third party GPS or data-logger instead of FLARM.  If FLARM is connected the baud rate will be fixed at 38400.  For OzFLARM, the value can be set to 19200.">
+      <Edit Name="prpBaudRateA" Caption="Baud rate Vega" X="2" Width="246" Height="22" CaptionWidth="150" Help="Baud rate of serial device connected to Vega port X1.  Use this as necessary when using a third party GPS or data-logger instead of FLARM.  If FLARM is connected the baud rate will be fixed at 38400.  For OzFLARM, the value can be set to 19200.">
         <DataField DataType="enum"/>
       </Edit>
     
-      <Edit Name="prpFlarmConnected" Caption="FLARM connected" X="2" Width="235" Height="22" CaptionWidth="150" Help="Enable detection of FLARM.  Disable only if FLARM is not used or disconnected.">
+      <Edit Name="prpFlarmConnected" Caption="FLARM connected" X="2" Width="246" Height="22" CaptionWidth="150" Help="Enable detection of FLARM.  Disable only if FLARM is not used or disconnected.">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpEnablePDASupply" Caption="PDA power" X="2" Width="235" Height="22" CaptionWidth="150" Help="Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If Vega is connected to Altair, this should be set to False.">
+      <Edit Name="prpEnablePDASupply" Caption="PDA power" X="2" Width="246" Height="22" CaptionWidth="150" Help="Enable output of +5V power supply for PDA etc. at Vega connector~X2.  If Vega is connected to Altair, this should be set to False.">
         <DataField DataType="boolean"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCalibration">
-      <Edit Name="prpCalibrationTEProbe" Caption="TE probe cal." X="2" Width="235" Height="22" CaptionWidth="150" Help="Calibration factor applied to total energy probe to obtain TE vario.">
+      <Edit Name="prpCalibrationTEProbe" Caption="TE probe cal" X="2" Width="246" Height="22" CaptionWidth="150" Help="Calibration factor applied to total energy probe to obtain TE vario.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="50" Max="150" Step="1"/>
       </Edit>
     
-      <Edit Name="prpTotalEnergyMixingRatio" Caption="TE mixing" X="2" Width="235" Height="22" CaptionWidth="150" Help="Proportion of TE probe value used in total energy mixing with pitot/static total energy.">
+      <Edit Name="prpTotalEnergyMixingRatio" Caption="TE mixing" X="2" Width="246" Height="22" CaptionWidth="150" Help="Proportion of TE probe value used in total energy mixing with pitot/static total energy.">
         <DataField DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min="0" Max="8" Step="1"/>
       </Edit>
     
-      <Edit Name="prpCalibrationAirSpeed" Caption="ASI cal." X="2" Width="235" Height="22" CaptionWidth="150" Help="Calibration factor applied to measured airspeed to obtain indicated airspeed.">
+      <Edit Name="prpCalibrationAirSpeed" Caption="ASI cal." X="2" Width="246" Height="22" CaptionWidth="150" Help="Calibration factor applied to measured airspeed to obtain indicated airspeed.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="200" Step="1"/>
       </Edit>
     
-      <Edit Name="prpCalibrationTEStatic" Caption="TE static cal." X="2" Width="235" Height="22" CaptionWidth="150" Help="Calibration factor applied to static pressure used in total energy calculation.">
+      <Edit Name="prpCalibrationTEStatic" Caption="TE static cal." X="2" Width="246" Height="22" CaptionWidth="150" Help="Calibration factor applied to static pressure used in total energy calculation.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="200" Step="1"/>
       </Edit>
     
-      <Edit Name="prpCalibrationTEDynamic" Caption="TE dynamic cal." X="2" Width="235" Height="22" CaptionWidth="150" Help="Calibration factor applied to dynamic pressure used in total energy calculation.">
+      <Edit Name="prpCalibrationTEDynamic" Caption="TE dynamic cal." X="2" Width="246" Height="22" CaptionWidth="150" Help="Calibration factor applied to dynamic pressure used in total energy calculation.">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="200" Step="1"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmAudioModes">
-      <Edit Name="prpToneClimbComparisonType" Caption="Climb fast trigger" X="2" Width="235" Height="22" CaptionWidth="150" Help="Comparison method used to detect climb states (HIGH/LOW).&#10;[NONE]: State LOW disabled&#10;[MACCREADY]: State High if gross vario is greater than MacCready setting.&#10;[AVERAGE]: State HIGH if gross vario value is greater than average gross vario value.">
+      <Edit Name="prpToneClimbComparisonType" Caption="Climb fast trigger" X="2" Width="246" Height="22" CaptionWidth="150" Help="Comparison method used to detect climb states (HIGH/LOW).&#10;[NONE]: State LOW disabled&#10;[MACCREADY]: State High if gross vario is greater than MacCready setting.&#10;[AVERAGE]: State HIGH if gross vario value is greater than average gross vario value.">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseLiftDetectionType" Caption="Cruise lift trigger" X="2" Width="235" Height="22" CaptionWidth="150" Help="Comparison method used to detect cruise states for switching to lift tones during cruise.&#10;[NONE]: LIFT tone disabled in cruise&#10;[RELATIVE ZERO] LIFT tone when relative vario greater than zero.&#10;[GROSS ZERO] LIFT tone when glider is climbing.&#10;[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.&#10;[NET MC/2] LIFT tone when airmass velocity greater than half MC.">
+      <Edit Name="prpToneCruiseLiftDetectionType" Caption="Cruise lift trigger" X="2" Width="246" Height="22" CaptionWidth="150" Help="Comparison method used to detect cruise states for switching to lift tones during cruise.&#10;[NONE]: LIFT tone disabled in cruise&#10;[RELATIVE ZERO] LIFT tone when relative vario greater than zero.&#10;[GROSS ZERO] LIFT tone when glider is climbing.&#10;[RELATIVE MC/2] LIFT tone when relative vario greater than half MC.&#10;[NET MC/2] LIFT tone when airmass velocity greater than half MC.">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneAveragerVarioTimeScale" Caption="Climb averager scale" X="2" Width="235" Height="22" CaptionWidth="150" Help="Time scale used for vario averager.">
+      <Edit Name="prpToneAveragerVarioTimeScale" Caption="Climb averager scale" X="2" Width="246" Height="22" CaptionWidth="150" Help="Time scale used for vario averager.">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneAveragerCruiseTimeScale" Caption="Cruise averager scale" X="2" Width="235" Height="22" CaptionWidth="150" Help="Time scale used for cruise speed command averager.">
+      <Edit Name="prpToneAveragerCruiseTimeScale" Caption="Cruise averager scale" X="2" Width="246" Height="22" CaptionWidth="150" Help="Time scale used for cruise speed command averager.">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneMeanVolumeCircling" Caption="Circling volume" X="2" Width="235" Height="22" CaptionWidth="150" Help="Mean volume level in circling modes.">
+      <Edit Name="prpToneMeanVolumeCircling" Caption="Circling volume" X="2" Width="246" Height="22" CaptionWidth="150" Help="Mean volume level in circling modes.">
         <DataField DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min="0" Max="8" Step="1"/>
       </Edit>
     
-      <Edit Name="prpToneMeanVolumeCruise" Caption="Cruise volume" X="2" Width="235" Height="22" CaptionWidth="150" Help="Mean volume level in cruise modes.  If set to zero, scales with airspeed.">
+      <Edit Name="prpToneMeanVolumeCruise" Caption="Cruise volume" X="2" Width="246" Height="22" CaptionWidth="150" Help="Mean volume level in cruise modes.  If set to zero, scales with airspeed.">
         <DataField DataType="double" DisplayFormat="%.0f/8" EditFormat="%.0f" Min="0" Max="8" Step="1"/>
       </Edit>
     
-      <Edit Name="prpToneBaseFrequencyOffset" Caption="Base frequency" X="2" Width="235" Height="22" CaptionWidth="150" Help="Adjustment to base frequency of tones in all modes.">
+      <Edit Name="prpToneBaseFrequencyOffset" Caption="Base frequency" X="2" Width="246" Height="22" CaptionWidth="150" Help="Adjustment to base frequency of tones in all modes.">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="-30" Max="30" Step="1"/>
       </Edit>
   
-      <Edit Name="prpVarioTimeConstantCircling" Caption="Filter circling" X="2" Width="235" Height="22" CaptionWidth="150" Help="Variometer low pass filter time constant in circling mode.">
+      <Edit Name="prpVarioTimeConstantCircling" Caption="Filter circling" X="2" Width="246" Height="22" CaptionWidth="150" Help="Variometer low pass filter time constant in circling mode.">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpVarioTimeConstantCruise" Caption="Filter cruise" X="2" Width="235" Height="22" CaptionWidth="150" Help="Variometer low pass filter time constant in cruise mode.">
+      <Edit Name="prpVarioTimeConstantCruise" Caption="Filter cruise" X="2" Width="246" Height="22" CaptionWidth="150" Help="Variometer low pass filter time constant in cruise mode.">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpTonePitchScale" Caption="Tone pitch scale" X="2" Width="235" Height="22" CaptionWidth="150" Help="Adjustment to base pitch scale of tones in all modes.">
+      <Edit Name="prpTonePitchScale" Caption="Tone pitch scale" X="2" Width="246" Height="22" CaptionWidth="150" Help="Adjustment to base pitch scale of tones in all modes.">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="32" Max="100" Step="1"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmAudioDeadband">
-      <Edit Name="prpToneDeadbandCirclingType" Caption="Circling deadband type" X="2" Width="235" Height="22" CaptionWidth="150" Help="Type of dead band used in circling mode.">
+      <Edit Name="prpToneDeadbandCirclingType" Caption="Circling deadband type" X="2" Width="246" Height="22" CaptionWidth="150" Help="Type of dead band used in circling mode.">
         <DataField DataType="enum"/>
       </Edit>
-    
-      <Edit Name="prpToneDeadbandCirclingHigh" Caption="Circling hi cutoff" X="2" Width="235" Height="22" CaptionWidth="150" Help="High limit of circling dead band">
+  
+      <Edit Name="prpToneDeadbandCirclingHigh" Caption="Circling hi cutoff" X="2" Width="246" Height="22" CaptionWidth="150" Help="High limit of circling dead band">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="100" Step="1"/>
       </Edit>
     
-      <Edit Name="prpToneDeadbandCirclingLow" Caption="Circling low cutoff" X="2" Width="235" Height="22" CaptionWidth="150" Help="Low limit of circling dead band">
+      <Edit Name="prpToneDeadbandCirclingLow" Caption="Circling low cutoff" X="2" Width="246" Height="22" CaptionWidth="150" Help="Low limit of circling dead band">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="100" Step="1"/>
       </Edit>
     
-      <Edit Name="prpToneDeadbandCruiseType" Caption="Cruise deadband type" X="2" Width="235" Height="22" CaptionWidth="150" Help="Type of dead band used in cruise mode.">
-        <DataField DataType="enum"/>
+      <Edit Name="prpToneDeadbandCruiseType" Caption="Cruise deadband type" X="2" Width="246" Height="22" CaptionWidth="150" Help="Type of dead band used in cruise mode.">
+          <DataField DataType="enum"/>
       </Edit>
     
-      <Edit Name="prpToneDeadbandCruiseHigh" Caption="Cruise hi cutoff" X="2" Width="235" Height="22" CaptionWidth="150" Help="High limit of cruise dead band">
+      <Edit Name="prpToneDeadbandCruiseHigh" Caption="Cruise hi cutoff" X="2" Width="246" Height="22" CaptionWidth="150" Help="High limit of cruise dead band">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="100" Step="1"/>
       </Edit>
     
-      <Edit Name="prpToneDeadbandCruiseLow" Caption="Cruise low cutoff" X="2" Width="235" Height="22" CaptionWidth="150" Help="Low limit of cruise dead band">
+      <Edit Name="prpToneDeadbandCruiseLow" Caption="Cruise low cutoff" X="2" Width="246" Height="22" CaptionWidth="150" Help="Low limit of cruise dead band">
         <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="0" Max="100" Step="1"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCruiseFaster">
-      <Edit Name="prpToneCruiseFasterBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseFasterBeepType" Caption="Beep type" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseFasterPitchScheme" Caption="Pitch scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseFasterPitchScheme" Caption="Pitch scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseFasterPitchScale" Caption="Pitch scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseFasterPitchScale" Caption="Pitch scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseFasterPeriodScheme" Caption="Period scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseFasterPeriodScheme" Caption="Period scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseFasterPeriodScale" Caption="Period scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseFasterPeriodScale" Caption="Period scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCruiseSlower">
-      <Edit Name="prpToneCruiseSlowerBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseSlowerBeepType" Caption="Beep type" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseSlowerPitchScheme" Caption="Pitch scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseSlowerPitchScheme" Caption="Pitch scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseSlowerPitchScale" Caption="Pitch scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseSlowerPitchScale" Caption="Pitch scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseSlowerPeriodScheme" Caption="Period scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseSlowerPeriodScheme" Caption="Period scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseSlowerPeriodScale" Caption="Period scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseSlowerPeriodScale" Caption="Period scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCruiseLift">
-      <Edit Name="prpToneCruiseLiftBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseLiftBeepType" Caption="Beep type" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseLiftPitchScheme" Caption="Pitch scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseLiftPitchScheme" Caption="Pitch scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseLiftPitchScale" Caption="Pitch scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseLiftPitchScale" Caption="Pitch scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseLiftPeriodScheme" Caption="Period scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseLiftPeriodScheme" Caption="Period scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCruiseLiftPeriodScale" Caption="Period scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCruiseLiftPeriodScale" Caption="Period scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCirclingClimbingHi">
-      <Edit Name="prpToneCirclingClimbingHiBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingClimbingHiBeepType" Caption="Beep type" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingClimbingHiPitchScheme" Caption="Pitch scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingClimbingHiPitchScheme" Caption="Pitch scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingClimbingHiPitchScale" Caption="Pitch scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingClimbingHiPitchScale" Caption="Pitch scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingClimbingHiPeriodScheme" Caption="Period scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingClimbingHiPeriodScheme" Caption="Period scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingClimbingHiPeriodScale" Caption="Period scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingClimbingHiPeriodScale" Caption="Period scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCirclingClimbingLow">
-      <Edit Name="prpToneCirclingClimbingLowBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingClimbingLowBeepType" Caption="Beep type" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingClimbingLowPitchScheme" Caption="Pitch scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingClimbingLowPitchScheme" Caption="Pitch scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingClimbingLowPitchScale" Caption="Pitch scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingClimbingLowPitchScale" Caption="Pitch scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingClimbingLowPeriodScheme" Caption="Period scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingClimbingLowPeriodScheme" Caption="Period scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingClimbingLowPeriodScale" Caption="Period scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingClimbingLowPeriodScale" Caption="Period scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmCirclingDescending">
-      <Edit Name="prpToneCirclingDescendingBeepType" Caption="Beep type" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingDescendingBeepType" Caption="Beep type" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingDescendingPitchScheme" Caption="Pitch scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingDescendingPitchScheme" Caption="Pitch scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingDescendingPitchScale" Caption="Pitch scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingDescendingPitchScale" Caption="Pitch scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingDescendingPeriodScheme" Caption="Period scheme" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingDescendingPeriodScheme" Caption="Period scheme" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
   
-      <Edit Name="prpToneCirclingDescendingPeriodScale" Caption="Period scale" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpToneCirclingDescendingPeriodScale" Caption="Period scale" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmLogger">
-      <Edit Name="prpUTCOffset" Caption="UTC offset" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpUTCOffset" Caption="UTC offset" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="-13" Max="13" Step="1"/>
       </Edit>
     
-      <Edit Name="prpIGCLoging" Caption="IGC logging" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpIGCLoging" Caption="IGC logging" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpIGCLoggerInterval" Caption="Logger interval" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpIGCLoggerInterval" Caption="Logger interval" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="1" Max="12" Step="1"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmMixer">
-      <Edit Name="prpMuteVarioOnPlay" Caption="Mute vario on voice" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpMuteVarioOnPlay" Caption="Mute vario on voice" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpMuteVarioOnCom" Caption="Mute vario on radio" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpMuteVarioOnCom" Caption="Mute vario on radio" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpVarioRelativeMuteVol" Caption="Vario muting" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpVarioRelativeMuteVol" Caption="Vario muting" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f/255" EditFormat="%.0f" Min="0" Max="254" Step="1"/>
       </Edit>
     
-      <Edit Name="prpVoiceRelativeMuteVol" Caption="Voice muting" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpVoiceRelativeMuteVol" Caption="Voice muting" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f/255" EditFormat="%.0f" Min="0" Max="254" Step="1"/>
       </Edit>
     
-      <Edit Name="prpMuteComSpkThreshold" Caption="Speaker threshold" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpMuteComSpkThreshold" Caption="Speaker threshold" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f/255" EditFormat="%.0f" Min="0" Max="254" Step="1"/>
       </Edit>
     
-      <Edit Name="prpMuteComPhnThreshold" Caption="Headset threshold" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpMuteComPhnThreshold" Caption="Headset threshold" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f/255" EditFormat="%.0f" Min="0" Max="254" Step="1"/>
       </Edit>
     
-      <Edit Name="prpMinUrgentVolume" Caption="Urgent min. volume" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpMinUrgentVolume" Caption="Urgent min. volume" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f/255" EditFormat="%.0f" Min="0" Max="250" Step="1"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmFlarmAlerts">
-      <Edit Name="prpFlarmMaxObjectsReported" Caption="Max. objects reported" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpFlarmMaxObjectsReported" Caption="Max. objects reported" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="1" Max="15" Step="1"/>
       </Edit>
     
-      <Edit Name="prpFlarmMaxObjectsReportedOnCircling" Caption="Max. reported circling" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpFlarmMaxObjectsReportedOnCircling" Caption="Max. reported Circling" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="1" Max="4" Step="1"/>
       </Edit>
-  
-      <Edit Name="prpFlarmUserInterface" Caption="Flarm interface" X="2" Width="235" Height="22" CaptionWidth="150">
+    
+      <Edit Name="prpFlarmUserInterface" Caption="Flarm interface" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
-  
-      <Edit Name="prpKeepOnStraightFlightMode" Caption="Disable circling" X="2" Width="235" Height="22" CaptionWidth="150">
+    
+      <Edit Name="prpKeepOnStraightFlightMode" Caption="Disable circling" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpDontReportTraficModeChanges" Caption="No mode reports" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpDontReportTraficModeChanges" Caption="No mode reports" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpDontReportGliderType" Caption="No aircraft type" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpDontReportGliderType" Caption="No aircraft type" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="boolean"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmFlarmIdentification">
-      <Edit Name="prpFlarmPrivacyFlag" Caption="Privacy" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpFlarmPrivacyFlag" Caption="Privacy" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="boolean"/>
       </Edit>
     
-      <Edit Name="prpFlarmAircraftType" Caption="Aircraft type" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpFlarmAircraftType" Caption="Aircraft type" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="enum"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmFlarmRepeats">
-      <Edit Name="prpFlarmInfoRepeatTime" Caption="Interval; info" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpFlarmInfoRepeatTime" Caption="Interval; info" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="1" Max="2000" Step="100"/>
       </Edit>
     
-      <Edit Name="prpFlarmCautionRepeatTime" Caption="Interval; caution" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpFlarmCautionRepeatTime" Caption="Interval; caution" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="1" Max="2000" Step="100"/>
       </Edit>
     
-      <Edit Name="prpFlarmWarningRepeatTime" Caption="Interval; warning" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpFlarmWarningRepeatTime" Caption="Interval; warning" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="1" Max="2000" Step="100"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmAlerts">
-      <Edit Name="prpGearOnDelay" Caption="Gear on delay" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpGearOnDelay" Caption="Gear on delay" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="1" Max="2000" Step="50"/>
       </Edit>
     
-      <Edit Name="prpGearOffDelay" Caption="Gear off delay" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpGearOffDelay" Caption="Gear off delay" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="1" Max="2000" Step="50"/>
       </Edit>
     
-      <Edit Name="prpGearRepeatTime" Caption="Interval; gear" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpGearRepeatTime" Caption="Interval; gear" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="100" Step="1"/>
       </Edit>
     
-      <Edit Name="prpPlyMaxComDelay" Caption="Radio com. max. delay" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpPlyMaxComDelay" Caption="Radio com. max. delay" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="0" Max="100" Step="1"/>
       </Edit>
     
-      <Edit Name="prpBatLowDelay" Caption="Battery low delay" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpBatLowDelay" Caption="Battery low delay" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="0" Max="100" Step="1"/>
       </Edit>
     
-      <Edit Name="prpBatEmptyDelay" Caption="Battery empty delay" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpBatEmptyDelay" Caption="Battery empty delay" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="0" Max="100" Step="1"/>
       </Edit>
     
-      <Edit Name="prpBatRepeatTime" Caption="Interval; battery" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpBatRepeatTime" Caption="Interval; battery" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="0" Max="100" Step="1"/>
       </Edit>
     </Panel>
   
     <Panel Name="frmLimits">
       <Edit Name="prpVelocityNeverExceed" Caption="VNE"
- X="2" Width="235" Height="22" CaptionWidth="150">
+ X="2" Width="246" Height="22" CaptionWidth="150">
        <DataField DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min="0" Max="2000" Step="10"/>
       </Edit>
     
       <Edit Name="prpVelocitySafeTerrain" Caption="V terrain"
- X="2" Width="235" Height="22" CaptionWidth="150">
+ X="2" Width="246" Height="22" CaptionWidth="150">
        <DataField DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min="0" Max="2000" Step="10"/>
       </Edit>
     
       <Edit Name="prpTerrainSafetyHeight" Caption="Height terrain"
- X="2" Width="235" Height="22" CaptionWidth="150">
+ X="2" Width="246" Height="22" CaptionWidth="150">
        <DataField DataType="double" DisplayFormat="%.0f m" EditFormat="%.0f" Min="0" Max="2000" Step="10"/>
       </Edit>
     
       <Edit Name="prpVelocityManoeuvering" Caption="V manoeuvering"
- X="2" Width="235" Height="22" CaptionWidth="150">
+ X="2" Width="246" Height="22" CaptionWidth="150">
        <DataField DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min="0" Max="2000" Step="10"/>
       </Edit>
     
       <Edit Name="prpVelocityAirbrake" Caption="V airbrake"
- X="2" Width="235" Height="22" CaptionWidth="150">
+ X="2" Width="246" Height="22" CaptionWidth="150">
        <DataField DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min="0" Max="2000" Step="10"/>
       </Edit>
     
       <Edit Name="prpVelocityFlap" Caption="V flap"
- X="2" Width="235" Height="22" CaptionWidth="150">
+ X="2" Width="246" Height="22" CaptionWidth="150">
        <DataField DataType="double" DisplayFormat="%.0f (0.1 m/s)" EditFormat="%.0f" Min="0" Max="2000" Step="10"/>
-      </Edit>  
+      </Edit>
     </Panel>
   
     <Panel Name="frmSchemes">
@@ -433,11 +432,11 @@
     </Panel>
   
     <Panel Name="frmDisplay">
-      <Edit Name="prpNeedleGaugeType" Caption="Needle gauge type" X="2" Width="235" Height="22" CaptionWidth="150">
-          <DataField DataType="enum"/>
-        </Edit>
-    
-      <Edit Name="prpLedBrightness" Caption="LED bright" X="2" Width="235" Height="22" CaptionWidth="150">
+      <Edit Name="prpNeedleGaugeType" Caption="Needle gauge type" X="2" Width="246" Height="22" CaptionWidth="150">
+        <DataField DataType="enum"/>
+      </Edit>
+  
+      <Edit Name="prpLedBrightness" Caption="LED bright" X="2" Width="246" Height="22" CaptionWidth="150">
         <DataField DataType="double" DisplayFormat="%.0f/15" EditFormat="%.0f" Min="1" Max="15" Step="1"/>
       </Edit>
     </Panel>
