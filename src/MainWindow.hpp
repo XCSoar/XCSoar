@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_MAIN_WINDOW_HXX
 
 #include "Screen/SingleWindow.hpp"
-#include "GlueMapWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
 #include "BatteryTimer.hpp"
 

@@ -331,8 +331,8 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
-	$(SRC)/MapCanvas.cpp \
-	$(SRC)/MapDrawHelper.cpp \
+	$(SRC)/MapWindow/MapCanvas.cpp \
+	$(SRC)/MapWindow/MapDrawHelper.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
@@ -340,26 +340,26 @@ XCSOAR_SOURCES := \
 	$(SRC)/RenderTaskPoint.cpp \
 	$(SRC)/RenderTask.cpp \
 	$(SRC)/ChartProjection.cpp \
-	$(SRC)/MapWindow.cpp \
-	$(SRC)/MapWindowAirspace.cpp \
-	$(SRC)/MapWindowEvents.cpp \
-	$(SRC)/MapWindowGlideRange.cpp \
-	$(SRC)/MapWindowLabels.cpp \
-	$(SRC)/MapWindowProjection.cpp \
-	$(SRC)/MapWindowRender.cpp \
-	$(SRC)/MapWindowSymbols.cpp \
-	$(SRC)/MapWindowTask.cpp \
-	$(SRC)/MapWindowThermal.cpp \
-	$(SRC)/MapWindowTimer.cpp \
-	$(SRC)/MapWindowTraffic.cpp \
-	$(SRC)/MapWindowTrail.cpp \
-	$(SRC)/MapWindowWaypoints.cpp \
-	$(SRC)/GlueMapWindow.cpp \
-	$(SRC)/GlueMapWindowAirspace.cpp \
-	$(SRC)/GlueMapWindowEvents.cpp \
-	$(SRC)/GlueMapWindowOverlays.cpp \
-	$(SRC)/GlueMapWindowTarget.cpp \
-	$(SRC)/GlueMapWindowDisplayMode.cpp \
+	$(SRC)/MapWindow/MapWindow.cpp \
+	$(SRC)/MapWindow/MapWindowAirspace.cpp \
+	$(SRC)/MapWindow/MapWindowEvents.cpp \
+	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
+	$(SRC)/MapWindow/MapWindowLabels.cpp \
+	$(SRC)/MapWindow/MapWindowProjection.cpp \
+	$(SRC)/MapWindow/MapWindowRender.cpp \
+	$(SRC)/MapWindow/MapWindowSymbols.cpp \
+	$(SRC)/MapWindow/MapWindowTask.cpp \
+	$(SRC)/MapWindow/MapWindowThermal.cpp \
+	$(SRC)/MapWindow/MapWindowTimer.cpp \
+	$(SRC)/MapWindow/MapWindowTraffic.cpp \
+	$(SRC)/MapWindow/MapWindowTrail.cpp \
+	$(SRC)/MapWindow/MapWindowWaypoints.cpp \
+	$(SRC)/MapWindow/GlueMapWindow.cpp \
+	$(SRC)/MapWindow/GlueMapWindowAirspace.cpp \
+	$(SRC)/MapWindow/GlueMapWindowEvents.cpp \
+	$(SRC)/MapWindow/GlueMapWindowOverlays.cpp \
+	$(SRC)/MapWindow/GlueMapWindowTarget.cpp \
+	$(SRC)/MapWindow/GlueMapWindowDisplayMode.cpp \
 	$(SRC)/GestureManager.cpp \
 	$(SRC)/HorizonRenderer.cpp \
 	$(SRC)/DrawThread.cpp \
@@ -370,7 +370,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InstrumentBlackboard.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \
 	$(SRC)/MapProjectionBlackboard.cpp \
-	$(SRC)/MapWindowBlackboard.cpp \
+	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \

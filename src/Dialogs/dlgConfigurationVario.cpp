@@ -970,11 +970,7 @@ dlgConfigurationVarioShowModal(void)
 
   FillEnums();
 
-  ProgressGlue::Create(_("Reading vario settings..."));
-  // Need step size finer than default 10
-  ProgressGlue::SetStep(20);
   UpdateParameters(true);
-  ProgressGlue::Close();
 
   wf->ShowModal();
 

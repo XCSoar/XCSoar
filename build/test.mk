@@ -1260,23 +1260,23 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
-	$(SRC)/MapWindow.cpp \
-	$(SRC)/MapWindowAirspace.cpp \
-	$(SRC)/MapWindowBlackboard.cpp \
-	$(SRC)/MapWindowEvents.cpp \
-	$(SRC)/MapWindowGlideRange.cpp \
-	$(SRC)/MapWindowLabels.cpp \
-	$(SRC)/MapWindowProjection.cpp \
-	$(SRC)/MapWindowRender.cpp \
-	$(SRC)/MapWindowSymbols.cpp \
-	$(SRC)/MapWindowTask.cpp \
-	$(SRC)/MapWindowThermal.cpp \
-	$(SRC)/MapWindowTimer.cpp \
-	$(SRC)/MapWindowTraffic.cpp \
-	$(SRC)/MapWindowTrail.cpp \
-	$(SRC)/MapWindowWaypoints.cpp \
-	$(SRC)/MapCanvas.cpp \
-	$(SRC)/MapDrawHelper.cpp \
+	$(SRC)/MapWindow/MapWindow.cpp \
+	$(SRC)/MapWindow/MapWindowAirspace.cpp \
+	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
+	$(SRC)/MapWindow/MapWindowEvents.cpp \
+	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
+	$(SRC)/MapWindow/MapWindowLabels.cpp \
+	$(SRC)/MapWindow/MapWindowProjection.cpp \
+	$(SRC)/MapWindow/MapWindowRender.cpp \
+	$(SRC)/MapWindow/MapWindowSymbols.cpp \
+	$(SRC)/MapWindow/MapWindowTask.cpp \
+	$(SRC)/MapWindow/MapWindowThermal.cpp \
+	$(SRC)/MapWindow/MapWindowTimer.cpp \
+	$(SRC)/MapWindow/MapWindowTraffic.cpp \
+	$(SRC)/MapWindow/MapWindowTrail.cpp \
+	$(SRC)/MapWindow/MapWindowWaypoints.cpp \
+	$(SRC)/MapWindow/MapCanvas.cpp \
+	$(SRC)/MapWindow/MapDrawHelper.cpp \
 	$(SRC)/RenderTask.cpp \
 	$(SRC)/RenderTaskPoint.cpp \
 	$(SRC)/Marks.cpp \
@@ -1511,13 +1511,13 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Wind/WindZigZag.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
-	$(SRC)/MapWindowProjection.cpp \
+	$(SRC)/MapWindow/MapWindowProjection.cpp \
 	$(SRC)/ChartProjection.cpp \
 	$(SRC)/RenderTask.cpp \
 	$(SRC)/RenderTaskPoint.cpp \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
-	$(SRC)/MapCanvas.cpp \
+	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Appearance.cpp \

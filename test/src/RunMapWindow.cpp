@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.hpp"
+#include "MapWindow/MapWindow.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Fonts.hpp"

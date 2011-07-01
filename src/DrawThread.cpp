@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "DrawThread.hpp"
-#include "GlueMapWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Gauge/GaugeThermalAssistant.hpp"
 #include "Protection.hpp"

@@ -28,7 +28,6 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
 #include "DataField/String.hpp"
-#include "MapWindow.hpp"
 #include "Components.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"

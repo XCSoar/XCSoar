@@ -27,7 +27,7 @@ Copyright_License {
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Screen/Pen.hpp"
-#include "MapCanvas.hpp"
+#include "MapWindow/MapCanvas.hpp"
 #include "Compiler.h"
 
 class Canvas;
