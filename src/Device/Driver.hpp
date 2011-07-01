@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Device/Declaration.hpp"
 #include "RadioFrequency.hpp"
+#include "DateTime.hpp"
+#include "Util/StaticArray.hpp"
 
 #include <tchar.h>
 
@@ -34,6 +36,15 @@ struct DERIVED_INFO;
 class Port;
 class AtmosphericPressure;
 class OperationEnvironment;
+
+struct RecordedFlightInfo {
+  BrokenDate date;
+
+  BrokenTime start_time, end_time;
+};
+
+class RecordedFlightList : public StaticArray<RecordedFlightInfo, 128u> {
+};
 
 /**
  * This is the interface for a device driver.
@@ -140,6 +151,26 @@ public:
                        OperationEnvironment &env) = 0;
 
   /**
+   * Read the list of recorded flights.
+   *
+   * @param flight_list the flights will be appended to this list
+   * @return true on success
+   */
+  virtual bool ReadFlightList(RecordedFlightList &flight_list,
+                              OperationEnvironment &env) = 0;
+
+  /**
+   * Download a flight into a file.
+   *
+   * @param flight the flight that shall be downloaded
+   * @param path the file name to save to
+   * @return true on success
+   */
+  virtual bool DownloadFlight(const RecordedFlightInfo &flight,
+                              const TCHAR *path,
+                              OperationEnvironment &env) = 0;
+
+  /**
    * Called periodically each second
    *
    * @param info the combined sensor values of all devices
@@ -174,6 +205,17 @@ public:
   virtual bool Declare(const struct Declaration &declaration,
                        OperationEnvironment &env);
 
+  virtual bool ReadFlightList(RecordedFlightList &flight_list,
+                              OperationEnvironment &env) {
+    return false;
+  }
+
+  virtual bool DownloadFlight(const RecordedFlightInfo &flight,
+                              const TCHAR *path,
+                              OperationEnvironment &env) {
+    return false;
+  }
+
   virtual void OnSysTicker(const NMEA_INFO &basic,
                            const DERIVED_INFO &calculated);
 };
@@ -194,6 +236,12 @@ struct DeviceRegister {
      * Device::Declare()?
      */
     DECLARE = 0x2,
+
+    /**
+     * Does this device store flight logs which can be downloaded?
+     * See Device::ReadFlightList(), Device::DownloadFlight().
+     */
+    LOGGER = 0x4,
   };
 
   /**
@@ -229,6 +277,14 @@ struct DeviceRegister {
    */
   bool CanDeclare() const {
     return (Flags & DECLARE) != 0;
+  }
+
+  /**
+   * Does this device store flight logs which can be downloaded?
+   * See Device::ReadFlightList(), Device::DownloadFlight().
+   */
+  bool IsLogger() const {
+    return (Flags & LOGGER) != 0;
   }
 };
 

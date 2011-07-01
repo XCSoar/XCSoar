@@ -38,6 +38,8 @@ class Device;
 class AtmosphericPressure;
 struct DeviceRegister;
 class InternalGPS;
+class RecordedFlightList;
+struct RecordedFlightInfo;
 
 class DeviceDescriptor : public Port::Handler {
 public:
@@ -101,6 +103,9 @@ public:
   gcc_pure
   bool CanDeclare() const;
 
+  gcc_pure
+  bool IsLogger() const;
+
   bool IsCondor() const {
     return IsDriver(_T("Condor"));
   }
@@ -133,6 +138,9 @@ public:
 
   void LinkTimeout();
   bool Declare(const struct Declaration &declaration);
+
+  bool ReadFlightList(RecordedFlightList &flight_list);
+  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path);
 
   void OnSysTicker(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
 

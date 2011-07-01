@@ -142,6 +142,12 @@ DeviceDescriptor::CanDeclare() const
 }
 
 bool
+DeviceDescriptor::IsLogger() const
+{
+  return Driver != NULL && Driver->IsLogger();
+}
+
+bool
 DeviceDescriptor::ParseNMEA(const char *line, NMEA_INFO &info)
 {
   assert(line != NULL);
@@ -240,6 +246,39 @@ DeviceDescriptor::Declare(const struct Declaration &declaration)
   env.Hide();
 
   declaring = false;
+  return result;
+}
+
+bool
+DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list)
+{
+  if (Driver == NULL || device == NULL)
+    return false;
+
+  VerboseOperationEnvironment env;
+
+  TCHAR text[60];
+  _stprintf(text, _("Reading flight list from %s"), Driver->display_name);
+  env.SetText(text);
+  bool result = device->ReadFlightList(flight_list, env);
+  env.Hide();
+  return result;
+}
+
+bool
+DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
+                                 const TCHAR *path)
+{
+  if (Driver == NULL || device == NULL)
+    return false;
+
+  VerboseOperationEnvironment env;
+
+  TCHAR text[60];
+  _stprintf(text, _("Downloading flight from %s"), Driver->display_name);
+  env.SetText(text);
+  bool result = device->DownloadFlight(flight, path, env);
+  env.Hide();
   return result;
 }
 
