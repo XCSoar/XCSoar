@@ -133,6 +133,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgInfoBoxAccess.cpp \
 	$(SRC)/Dialogs/dlgLoggerReplay.cpp \
+	$(SRC)/Dialogs/dlgNOAAList.cpp \
 	$(SRC)/Dialogs/dlgSimulatorPrompt.cpp \
 	$(SRC)/Dialogs/dlgStartup.cpp \
 	$(SRC)/Dialogs/dlgStatus.cpp \
@@ -549,6 +550,12 @@ ifeq ($(TARGET),ALTAIR)
 XCSOAR_SOURCES += $(SRC)/Hardware/AltairControl.cpp
 endif
 
+ifeq ($(TARGET),PC)
+XCSOAR_SOURCES += \
+	$(SRC)/Weather/NOAADownloader.cpp \
+	$(SRC)/Weather/NOAAStore.cpp
+endif
+
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))
 XCSOAR_LDADD = \
 	$(PROFILE_LIBS) \
@@ -569,6 +576,11 @@ XCSOAR_LDFLAGS = \
 	$(PROFILE_LDLIBS) \
 	$(SCREEN_LDLIBS) \
 	$(ZZIP_LDFLAGS)
+
+ifeq ($(TARGET),PC)
+XCSOAR_LDADD += $(LIBNET_LIBS)
+XCSOAR_LDFLAGS += -lwininet
+endif
 
 ifeq ($(HAVE_POSIX),n)
 ifeq ($(HAVE_CE),y)

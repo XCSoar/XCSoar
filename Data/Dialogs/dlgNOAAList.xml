@@ -1,0 +1,11 @@
+<?xml version="1.0"?>
+
+<Form Width="240" Height="320" Caption="METAR and TAF">
+  <List Name="StationList" X="1" Y="1" Width="-1" Height="-35"/>
+
+  <Button Caption="Add" X="0" Y="-35" Width="60" Height="35" OnClick="AddClicked"/>
+  <Button Caption="Update" X="60" Y="-35" Width="60" Height="35" OnClick="UpdateClicked"/>
+  <Button Caption="Remove" X="120" Y="-35" Width="60" Height="35" OnClick="RemoveClicked"/>
+  
+  <Button Caption="Close" X="180" Y="-35" Width="60" Height="35" OnClick="CloseClicked"/>
+</Form>

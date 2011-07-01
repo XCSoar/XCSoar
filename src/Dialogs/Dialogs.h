@@ -118,6 +118,8 @@ bool dlgWaypointEditShowModal(Waypoint &way_point);
 
 void dlgWeatherShowModal();
 
+void dlgNOAAListShowModal(SingleWindow &parent);
+
 /**
  * Shows map display zoomed to target point
  * with half dialog popup to manipulate point
