@@ -23,24 +23,21 @@ Copyright_License {
 
 #include "Weather/TAF.hpp"
 #include "Weather/METAR.hpp"
-#include "Weather/NOAADownloader.hpp"
+#include "Weather/NOAAStore.hpp"
 
 #include <cstdio>
 #include <iostream>
 using namespace std;
 
-static bool
-DownloadMETAR(const char *code)
+static void
+DisplayMETAR(unsigned index)
 {
   METAR metar;
-  metar.clear();
-
-  if (!NOAADownloader::DownloadMETAR(code, metar)) {
+  if (!NOAAStore::GetMETAR(index, metar)) {
     cout << "METAR Download failed!" << endl;
-    return false;
+    return;
   }
 
-  cout << "METAR Download successful:" << endl;
   printf("%02d.%02d.%04d %02d:%02d:%02d\n",
          (unsigned)metar.last_update.day,
          (unsigned)metar.last_update.month,
@@ -53,22 +50,17 @@ DownloadMETAR(const char *code)
       _tprintf(metar.content.c_str());
       cout << endl;
   }
-
-  return true;
 }
 
-static bool
-DownloadTAF(const char *code)
+static void
+DisplayTAF(unsigned index)
 {
   TAF taf;
-  taf.clear();
-
-  if (!NOAADownloader::DownloadTAF(code, taf)) {
+  if (!NOAAStore::GetTAF(index, taf)) {
     cout << "TAF Download failed!" << endl;
-    return false;
+    return;
   }
 
-  cout << "TAF Download successful:" << endl;
   printf("%02d.%02d.%04d %02d:%02d:%02d\n",
          (unsigned)taf.last_update.day,
          (unsigned)taf.last_update.month,
@@ -81,23 +73,36 @@ DownloadTAF(const char *code)
       _tprintf(taf.content.c_str());
       cout << endl;
   }
-
-  return true;
 }
 
 int
 main(int argc, char *argv[])
 {
   if (argc < 2) {
-    cout << "Usage: " << argv[0] << " <code>" << endl;
+    cout << "Usage: " << argv[0] << " <code>[ <code> ...]" << endl;
     cout << "   <code> is the four letter ICAO code (upper case)" << endl;
-    cout << "          of the airport you are requesting" << endl << endl;
+    cout << "          of the airport(s) you are requesting" << endl << endl;
     cout << "   Example: " << argv[0] << " EDDL" << endl;
     return 1;
   }
 
-  DownloadMETAR(argv[1]);
-  DownloadTAF(argv[1]);
+  for (int i = 1; i < argc; i++) {
+    cout << "Adding station " << argv[i] << endl;
+    if (!NOAAStore::AddStation(argv[i])) {
+      cout << "NOAA station store full!" << endl;
+      break;
+    }
+  }
+
+  cout << "Updating METAR and TAF ..." << endl;
+  NOAAStore::Update();
+
+  for (unsigned i = 0; i < NOAAStore::Count(); i++) {
+    cout << "---" << endl;
+    cout << "Station " << NOAAStore::GetCode(i) << ":" << endl;
+    DisplayMETAR(i);
+    DisplayTAF(i);
+  }
 
   return 0;
 }
