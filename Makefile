@@ -134,6 +134,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgInfoBoxAccess.cpp \
 	$(SRC)/Dialogs/dlgLoggerReplay.cpp \
 	$(SRC)/Dialogs/dlgNOAAList.cpp \
+	$(SRC)/Dialogs/dlgNOAADetails.cpp \
 	$(SRC)/Dialogs/dlgSimulatorPrompt.cpp \
 	$(SRC)/Dialogs/dlgStartup.cpp \
 	$(SRC)/Dialogs/dlgStatus.cpp \

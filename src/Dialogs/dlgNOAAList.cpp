@@ -42,6 +42,7 @@ Copyright_License {
 
 #include <stdio.h>
 
+static SingleWindow *parent;
 static WndForm *wf;
 static WndListFrame *station_list;
 
@@ -143,8 +144,17 @@ CloseClicked(gcc_unused WndButton &Sender)
   wf->SetModalResult(mrOK);
 }
 
+static void
+ListItemSelected(unsigned index)
+{
+  assert(index < NOAAStore::Count());
+  dlgNOAADetailsShowModal(*parent, index);
+  UpdateList();
+}
+
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(PaintListItem),
+  DeclareCallBackEntry(ListItemSelected),
   DeclareCallBackEntry(AddClicked),
   DeclareCallBackEntry(UpdateClicked),
   DeclareCallBackEntry(RemoveClicked),
@@ -153,9 +163,11 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgNOAAListShowModal(SingleWindow &parent)
+dlgNOAAListShowModal(SingleWindow &_parent)
 {
-  wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
+  parent = &_parent;
+
+  wf = LoadDialog(CallBackTable, _parent, Layout::landscape ?
                   _T("IDR_XML_NOAA_LIST_L") :
                   _T("IDR_XML_NOAA_LIST"));
   assert(wf != NULL);
@@ -167,6 +179,7 @@ dlgNOAAListShowModal(SingleWindow &parent)
   assert(station_list != NULL);
   station_list->SetItemHeight(item_height);
   station_list->SetPaintItemCallback(PaintListItem);
+  station_list->SetActivateCallback(ListItemSelected);
   UpdateList();
 
   wf->ShowModal();
