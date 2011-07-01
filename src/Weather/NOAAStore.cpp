@@ -229,3 +229,9 @@ NOAAStore::Count()
 {
   return stations.size();
 }
+
+bool
+NOAAStore::Full()
+{
+  return stations.full();
+}

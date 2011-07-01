@@ -115,6 +115,11 @@ namespace NOAAStore
    * @return The amount of stations in the array
    */
   unsigned Count();
+
+  /**
+   * Returns whether the station array is already full
+   */
+  bool Full();
 };
 
 #endif
