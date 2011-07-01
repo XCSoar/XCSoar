@@ -33,6 +33,6 @@ CAI302CreateOnPort(Port *port)
 const struct DeviceRegister cai302Device = {
   _T("CAI 302"),
   _T("Cambridge CAI302"),
-  DeviceRegister::DECLARE,
+  DeviceRegister::DECLARE | DeviceRegister::LOGGER,
   CAI302CreateOnPort,
 };

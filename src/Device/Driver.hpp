@@ -30,6 +30,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 
 #include <tchar.h>
+#include <stdint.h>
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
@@ -41,6 +42,16 @@ struct RecordedFlightInfo {
   BrokenDate date;
 
   BrokenTime start_time, end_time;
+
+  /**
+   * Optional driver specific data to address a flight.
+   */
+  union {
+    /**
+     * Flight number, used by the CAI302 driver.
+     */
+    uint8_t cai302;
+  } internal;
 };
 
 class RecordedFlightList : public StaticArray<RecordedFlightInfo, 128u> {

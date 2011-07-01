@@ -19,6 +19,7 @@ CAI302_SOURCES = \
 	$(DRIVER_SRC_DIR)/CAI302/Parser.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Settings.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Declare.cpp \
+	$(DRIVER_SRC_DIR)/CAI302/Logger.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Register.cpp
 
 LX_SOURCES = \

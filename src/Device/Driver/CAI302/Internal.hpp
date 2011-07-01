@@ -45,6 +45,12 @@ public:
   virtual bool PutBallast(fixed ballast);
   virtual bool Declare(const Declaration &declaration,
                        OperationEnvironment &env);
+
+  virtual bool ReadFlightList(RecordedFlightList &flight_list,
+                              OperationEnvironment &env);
+  virtual bool DownloadFlight(const RecordedFlightInfo &flight,
+                              const TCHAR *path,
+                              OperationEnvironment &env);
 };
 
 #endif

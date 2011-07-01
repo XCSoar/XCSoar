@@ -9,6 +9,7 @@ Version 6.2 - not yet released
   - auto-detect serial ports on Windows CE
   - serial port support on UNIX
   - CAI302: fix byte order bug on PC
+  - CAI302: IGC file download
 * user interface
   - added support for reverse portrait/landscape screen orientations
 
