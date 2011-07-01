@@ -26,9 +26,12 @@ Copyright_License {
 
 class Waypoints;
 class OperationEnvironment;
+class TLineReader;
 
 namespace WaypointDetails
 {
+  void ReadFile(TLineReader &reader, Waypoints &way_points,
+                OperationEnvironment &operation);
   void ReadFileFromProfile(Waypoints &way_points,
                            OperationEnvironment &operation);
 }

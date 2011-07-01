@@ -136,18 +136,25 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
  * Opens the airfield details file and parses it
  */
 void
+WaypointDetails::ReadFile(TLineReader &reader, Waypoints &way_points,
+                          OperationEnvironment &operation)
+{
+  LogStartUp(_T("WaypointDetails::ReadFile"));
+  operation.SetText(_("Loading Airfield Details File..."));
+  ParseAirfieldDetails(way_points, reader, operation);
+}
+
+void
 WaypointDetails::ReadFileFromProfile(Waypoints &way_points,
                                      OperationEnvironment &operation)
 {
-  LogStartUp(_T("WaypointDetails::ReadFile"));
+  LogStartUp(_T("WaypointDetails::ReadFileFromProfile"));
 
   TLineReader *reader =
     OpenConfiguredTextFile(szProfileAirfieldFile, _T("airfields.txt"));
   if (reader == NULL)
     return;
 
-  operation.SetText(_("Loading Airfield Details File..."));
-
-  ParseAirfieldDetails(way_points, *reader, operation);
+  ReadFile(*reader, way_points, operation);
   delete reader;
 }
