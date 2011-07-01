@@ -134,7 +134,7 @@ DeviceDescriptor::IsDriver(const TCHAR *name) const
 }
 
 bool
-DeviceDescriptor::IsLogger() const
+DeviceDescriptor::CanDeclare() const
 {
   return Driver != NULL &&
     (Driver->CanDeclare() ||

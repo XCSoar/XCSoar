@@ -42,7 +42,7 @@ ExternalLogger::IsDeclared()
 static bool
 DeviceDeclare(DeviceDescriptor *dev, const Declaration &declaration)
 {
-  if (!dev->IsLogger())
+  if (!dev->CanDeclare())
     return false;
 
   if (MessageBoxX(_("Declare task?"),

@@ -98,7 +98,8 @@ public:
    */
   bool IsDriver(const TCHAR *name) const;
 
-  bool IsLogger() const;
+  gcc_pure
+  bool CanDeclare() const;
 
   bool IsCondor() const {
     return IsDriver(_T("Condor"));
