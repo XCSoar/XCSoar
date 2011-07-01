@@ -35,6 +35,7 @@ GenericCreateOnPort(Port *com_port)
 
 const struct DeviceRegister genDevice = {
   _T("Generic"),
+  _T("Generic"),
   0,
   GenericCreateOnPort,
 };

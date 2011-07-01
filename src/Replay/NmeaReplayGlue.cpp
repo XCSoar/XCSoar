@@ -56,7 +56,7 @@ NmeaReplayGlue::Start()
   Profile::GetDeviceConfig(0, config);
 
   /* instantiate it */
-  const struct DeviceRegister *driver = devGetDriver(config.driver_name);
+  const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
   assert(driver != NULL);
   if (driver->CreateOnPort != NULL)
     device = driver->CreateOnPort(&port);

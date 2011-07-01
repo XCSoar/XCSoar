@@ -195,6 +195,7 @@ FlytecCreateOnPort(Port *com_port)
 
 const struct DeviceRegister flytec_device_driver = {
   _T("Flytec"),
+  _T("Flytec 5030 / Brauniger"),
   0,
   FlytecCreateOnPort,
 };

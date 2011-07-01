@@ -77,19 +77,36 @@ enum {
 };
 
 const TCHAR *
-devRegisterGetName(unsigned Index)
+GetDriverNameByIndex(unsigned i)
 {
-  if (Index >= DeviceRegisterCount)
-    return NULL;
+  return i < DeviceRegisterCount
+    ? DeviceRegister[i]->name
+    : NULL;
+}
 
-  return DeviceRegister[Index]->Name;
+const TCHAR *
+GetDriverDisplayNameByIndex(unsigned i)
+{
+  return i < DeviceRegisterCount
+    ? DeviceRegister[i]->name
+    : NULL;
 }
 
 const struct DeviceRegister *
-devGetDriver(const TCHAR *DevName)
+FindDriverByName(const TCHAR *name)
 {
   for (unsigned i = 1; DeviceRegister[i] != NULL; ++i)
-    if (_tcscmp(DeviceRegister[i]->Name, DevName) == 0)
+    if (_tcscmp(DeviceRegister[i]->name, name) == 0)
+      return DeviceRegister[i];
+
+  return DeviceRegister[0];
+}
+
+const struct DeviceRegister *
+FindDriverByDisplayName(const TCHAR *display_name)
+{
+  for (unsigned i = 1; DeviceRegister[i] != NULL; ++i)
+    if (_tcscmp(DeviceRegister[i]->display_name, display_name) == 0)
       return DeviceRegister[i];
 
   return DeviceRegister[0];

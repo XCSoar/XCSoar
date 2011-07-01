@@ -71,6 +71,7 @@ CaiGpsNavCreateOnPort(Port *com_port)
 
 const struct DeviceRegister caiGpsNavDevice = {
   _T("CAI GPS-NAV"),
+  _T("Cambridge CAI GPS-NAV"),
   0,
   CaiGpsNavCreateOnPort,
 };

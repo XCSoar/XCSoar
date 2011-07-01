@@ -91,7 +91,7 @@ public:
   bool Open(Port *port, const struct DeviceRegister *driver);
   void Close();
 
-  const TCHAR *GetName() const;
+  const TCHAR *GetDisplayName() const;
 
   /**
    * Compares the driver's name.

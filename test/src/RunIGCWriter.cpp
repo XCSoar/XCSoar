@@ -85,14 +85,14 @@ int main(int argc, char **argv)
             "Where DRIVER is one of:\n", argv[0]);
 
     const TCHAR *name;
-    for (unsigned i = 0; (name = devRegisterGetName(i)) != NULL; ++i)
+    for (unsigned i = 0; (name = GetDriverNameByIndex(i)) != NULL; ++i)
       _ftprintf(stderr, _T("\t%s\n"), name);
 
     return 1;
   }
 
   PathName driver_name(argv[1]);
-  const struct DeviceRegister *driver = devGetDriver(driver_name);
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == NULL) {
     fprintf(stderr, "No such driver: %s\n", argv[1]);
     return 1;

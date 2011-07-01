@@ -140,6 +140,7 @@ CondorCreateOnPort(gcc_unused Port *com_port)
 
 const struct DeviceRegister condorDevice = {
   _T("Condor"),
+  _T("Condor Soaring Simulator"),
   0,
   CondorCreateOnPort,
 };

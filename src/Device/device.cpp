@@ -207,7 +207,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
 #endif
   }
 
-  const struct DeviceRegister *Driver = devGetDriver(config.driver_name);
+  const struct DeviceRegister *Driver = FindDriverByName(config.driver_name);
   if (Driver == NULL)
     return false;
 

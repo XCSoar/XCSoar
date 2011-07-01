@@ -71,6 +71,7 @@ PGCreateOnPort(Port *com_port)
 
 const struct DeviceRegister pgDevice = {
   _T("PosiGraph Logger"),
+  _T("PosiGraph Logger"),
   0,
   PGCreateOnPort,
 };

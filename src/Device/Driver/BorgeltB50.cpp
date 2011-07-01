@@ -147,6 +147,7 @@ B50CreateOnPort(Port *com_port)
 
 const struct DeviceRegister b50Device = {
   _T("Borgelt B50"),
+  _T("Borgelt B50"),
   0,
   B50CreateOnPort,
 };

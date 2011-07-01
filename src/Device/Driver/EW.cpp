@@ -323,6 +323,7 @@ EWCreateOnPort(Port *com_port)
 
 const struct DeviceRegister ewDevice = {
   _T("EW Logger"),
+  _T("EW Logger"),
   DeviceRegister::DECLARE,
   EWCreateOnPort,
 };

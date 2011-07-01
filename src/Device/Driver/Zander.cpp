@@ -164,6 +164,7 @@ ZanderCreateOnPort(Port *com_port)
 
 const struct DeviceRegister zanderDevice = {
   _T("Zander"),
+  _T("Zander / SDI"),
   0,
   ZanderCreateOnPort,
 };

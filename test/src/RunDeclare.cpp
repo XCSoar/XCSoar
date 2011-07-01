@@ -96,7 +96,7 @@ int main(int argc, char **argv)
             "Where DRIVER is one of:\n", argv[0]);
 
     const TCHAR *name;
-    for (unsigned i = 0; (name = devRegisterGetName(i)) != NULL; ++i)
+    for (unsigned i = 0; (name = GetDriverNameByIndex(i)) != NULL; ++i)
       _ftprintf(stderr, _T("\t%s\n"), name);
 
     return EXIT_FAILURE;
@@ -106,7 +106,7 @@ int main(int argc, char **argv)
   PathName port_name(argv[2]);
   int baud = atoi(argv[3]);
 
-  const struct DeviceRegister *driver = devGetDriver(driver_name);
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == NULL) {
     fprintf(stderr, "No such driver: %s\n", argv[1]);
     return EXIT_FAILURE;

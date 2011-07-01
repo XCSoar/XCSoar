@@ -319,6 +319,7 @@ AltairProCreateOnPort(Port *com_port)
 
 const struct DeviceRegister atrDevice = {
   _T("Altair RU"),
+  _T("Altair Recording Unit"),
   DeviceRegister::DECLARE,
   AltairProCreateOnPort,
 };

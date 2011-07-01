@@ -79,7 +79,7 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
     return true;
 
   parser.Reset();
-  parser.SetReal(_tcscmp(Driver->Name, _T("Condor")) != 0);
+  parser.SetReal(_tcscmp(Driver->name, _T("Condor")) != 0);
 
   device = Driver->CreateOnPort(Com);
   QuietOperationEnvironment env;
@@ -120,16 +120,16 @@ DeviceDescriptor::Close()
 }
 
 const TCHAR *
-DeviceDescriptor::GetName() const
+DeviceDescriptor::GetDisplayName() const
 {
-  return Driver != NULL ? Driver->Name : NULL;
+  return Driver != NULL ? Driver->display_name : NULL;
 }
 
 bool
 DeviceDescriptor::IsDriver(const TCHAR *name) const
 {
   return Driver != NULL
-    ? _tcscmp(Driver->Name, name) == 0
+    ? _tcscmp(Driver->name, name) == 0
     : false;
 }
 
@@ -227,7 +227,7 @@ DeviceDescriptor::Declare(const struct Declaration &declaration)
   TCHAR text[60];
   VerboseOperationEnvironment env;
 
-  _stprintf(text, _("Declaring to %s"), Driver->Name);
+  _stprintf(text, _("Declaring to %s"), Driver->display_name);
   env.SetText(text);
   bool result = device != NULL && device->Declare(declaration, env);
 

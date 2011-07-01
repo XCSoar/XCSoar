@@ -158,6 +158,7 @@ WesterboerCreateOnPort(Port *com_port)
 
 const struct DeviceRegister westerboer_device_driver = {
   _T("Westerboer VW1150"),
+  _T("Westerboer VW1150"),
   0,
   WesterboerCreateOnPort,
 };

@@ -451,8 +451,8 @@ SetupDeviceFields(const DeviceConfig &config,
     DataFieldEnum *dfe = (DataFieldEnum *)driver_field->GetDataField();
 
     const TCHAR *DeviceName;
-    for (unsigned i = 0; (DeviceName = devRegisterGetName(i)) != NULL; i++)
-      dfe->addEnumText(DeviceName);
+    for (unsigned i = 0; (DeviceName = GetDriverNameByIndex(i)) != NULL; i++)
+      dfe->addEnumText(DeviceName, GetDriverDisplayNameByIndex(i));
 
     dfe->Sort(1);
     dfe->SetAsString(config.driver_name);

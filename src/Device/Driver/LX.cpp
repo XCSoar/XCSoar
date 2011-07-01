@@ -570,6 +570,7 @@ LXCreateOnPort(Port *com_port)
 
 const struct DeviceRegister lxDevice = {
   _T("LX"),
+  _T("LX / Colibri"),
   DeviceRegister::DECLARE,
   LXCreateOnPort,
 };

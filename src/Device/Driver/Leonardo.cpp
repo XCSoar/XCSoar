@@ -227,6 +227,7 @@ LeonardoCreateOnPort(Port *com_port)
 
 const struct DeviceRegister leonardo_device_driver = {
   _T("Leonardo"),
+  _T("Digifly Leonardo"),
   0,
   LeonardoCreateOnPort,
 };

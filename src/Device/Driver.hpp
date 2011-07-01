@@ -197,9 +197,15 @@ struct DeviceRegister {
   };
 
   /**
+   * The internal name of the driver, i.e. the one that is stored in
+   * the profile.
+   */
+  const TCHAR *name;
+
+  /**
    * The human-readable name of this driver.
    */
-  const TCHAR *Name;
+  const TCHAR *display_name;
 
   /**
    * A bit set describing the features of this driver.
