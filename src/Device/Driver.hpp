@@ -42,25 +42,108 @@ class Device {
 public:
   virtual ~Device();
 
+  /**
+   * Called right after opening the port.  May be used to initialise
+   * the connected device, e.g. to switch to NMEA mode.
+   */
   virtual bool Open(OperationEnvironment &env) = 0;
 
+  /**
+   * Called after there has not been any NMEA input on the port for
+   * some time, and XCSoar considers the device "disconnected".  May
+   * be used to reinitialise NMEA mode.
+   */
   virtual void LinkTimeout() = 0;
 
+  /**
+   * Parse a line of input from the port.
+   *
+   * @return true when the line has been processed
+   */
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO *info) = 0;
 
-  virtual bool PutMacCready(fixed MacCready) = 0;
+  /**
+   * Send the new MacCready value to the device.
+   *
+   * @param mac_cready the new MacCready value [m/s]
+   * @return true on success
+   */
+  virtual bool PutMacCready(fixed mac_cready) = 0;
+
+  /**
+   * Send the new "bugs" value to the device (degradation of the
+   * calculated polar).
+   *
+   * @param bugs the new bugs value (XXX define this)
+   * @return true on success
+   */
   virtual bool PutBugs(fixed bugs) = 0;
+
+  /**
+   * Send the new ballast value to the device.
+   *
+   * @param ballast the new ballast value (XXX define this)
+   * @return true on success
+   */
   virtual bool PutBallast(fixed ballast) = 0;
-  virtual bool PutQNH(const AtmosphericPressure &pres,
+
+  /**
+   * Send the new QNH value to the device.
+   *
+   * @param pressure the new QNH
+   * @param calculated the current set of calculation results
+   * @return true on success
+   */
+  virtual bool PutQNH(const AtmosphericPressure &pressure,
                       const DERIVED_INFO &calculated) = 0;
+
+  /**
+   * Send a "voice" sentence to the device (proprietary Vega feature).
+   *
+   * @param sentence the sentence (XXX define this)
+   * @return true on success
+   */
   virtual bool PutVoice(const TCHAR *sentence) = 0;
+
+  /**
+   * Set the radio volume.
+   *
+   * @param volume the new volume (XXX define this)
+   * @return true on success
+   */
   virtual bool PutVolume(int volume) = 0;
+
+  /**
+   * Set a new radio frequency.
+   *
+   * @param frequency the new frequency
+   * @return true on success
+   */
   virtual bool PutActiveFrequency(RadioFrequency frequency) = 0;
+
+  /**
+   * Set a new "standby" radio frequency.
+   *
+   * @param frequency the new frequency
+   * @return true on success
+   */
   virtual bool PutStandbyFrequency(RadioFrequency frequency) = 0;
 
+  /**
+   * Declare a task.
+   *
+   * @param declaration the task declaration
+   * @return true on success
+   */
   virtual bool Declare(const struct Declaration *declaration,
                        OperationEnvironment &env) = 0;
 
+  /**
+   * Called periodically each second
+   *
+   * @param basic the combined sensor values of all devices
+   * @param calculated the current set of calculation results
+   */
   virtual void OnSysTicker(const NMEA_INFO &basic,
                            const DERIVED_INFO &calculated) = 0;
 };
@@ -99,12 +182,32 @@ public:
  */
 struct DeviceRegister {
   enum {
+    /**
+     * Makes XCSoar forward all NMEA input to this device.  This is
+     * only used by the "NmeaOut" driver.
+     */
     NMEA_OUT = 0x1,
+
+    /**
+     * Does this driver support task declaration with
+     * Device::Declare()?
+     */
     DECLARE = 0x2,
   };
 
+  /**
+   * The human-readable name of this driver.
+   */
   const TCHAR *Name;
+
+  /**
+   * A bit set describing the features of this driver.
+   */
   unsigned int Flags;
+
+  /**
+   * Create an instance of this driver for the given NMEA port.
+   */
   Device *(*CreateOnPort)(Port *com_port);
 
   /**
