@@ -20,9 +20,17 @@ CAI302_SOURCES = \
 	$(DRIVER_SRC_DIR)/CAI302/Declare.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Register.cpp
 
+LX_SOURCES = \
+	$(DRIVER_SRC_DIR)/LX/Protocol.cpp \
+	$(DRIVER_SRC_DIR)/LX/Parser.cpp \
+	$(DRIVER_SRC_DIR)/LX/Settings.cpp \
+	$(DRIVER_SRC_DIR)/LX/Declare.cpp \
+	$(DRIVER_SRC_DIR)/LX/Register.cpp
+
 DRIVER_SOURCES = \
 	$(VOLKSLOGGER_SOURCES) \
 	$(CAI302_SOURCES) \
+	$(LX_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
 	$(DRIVER_SRC_DIR)/CaiGpsNav.cpp \
@@ -33,7 +41,6 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Flytec.cpp \
 	$(DRIVER_SRC_DIR)/Generic.cpp \
 	$(DRIVER_SRC_DIR)/IMI.cpp \
-	$(DRIVER_SRC_DIR)/LX.cpp \
 	$(DRIVER_SRC_DIR)/Leonardo.cpp \
 	$(DRIVER_SRC_DIR)/NmeaOut.cpp \
 	$(DRIVER_SRC_DIR)/PosiGraph.cpp \
