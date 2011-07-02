@@ -64,17 +64,9 @@ LXDevice::StartNMEAMode(OperationEnvironment &env)
 bool
 LXDevice::StartCommandMode()
 {
-  port->Write(LX_SYN);
-  port->ExpectString(LX_ACK_STRING);
-
-  port->Write(LX_SYN);
-  port->ExpectString(LX_ACK_STRING);
-
-  port->Write(LX_SYN);
-  if (!port->ExpectString(LX_ACK_STRING))
-    return false;
-
-  return true;
+  LX::Connect(*port);
+  LX::Connect(*port);
+  return LX::Connect(*port);
 }
 
 /**
@@ -267,25 +259,23 @@ LXDevice::DeclareInner(const Declaration &declaration,
 
   env.SetProgressPosition(2);
 
-  port->Write(LX_PREFIX);
-  port->Write(LX_WRITE_FLIGHT_INFO);      // start declaration
+  LX::SendCommand(*port, LX_WRITE_FLIGHT_INFO); // start declaration
 
   crc = 0xff;
   WritePilotInfo();
   env.SetProgressPosition(3);
   WriteTask();
   port->Write(crc);
-  if (!port->ExpectString(LX_ACK_STRING))
+  if (!LX::ExpectACK(*port))
     return false;
 
   env.SetProgressPosition(4);
   crc = 0xff;
-  port->Write(LX_PREFIX);
-  port->Write(LX_WRITE_CONTEST_CLASS);
+  LX::SendCommand(*port, LX_WRITE_CONTEST_CLASS);
   WriteContestClass();
   env.SetProgressPosition(5);
   port->Write(crc);
-  return port->ExpectString(LX_ACK_STRING);
+  return LX::ExpectACK(*port);
 }
 
 bool

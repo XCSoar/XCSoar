@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_LX_PROTOCOL_HPP
 #define XCSOAR_DEVICE_DRIVER_LX_PROTOCOL_HPP
 
+#include "Device/Port.hpp"
+
 #include <stddef.h>
 
 #define LX_ACK_STRING "\x06"
@@ -37,6 +39,32 @@ enum LX_command {
   LX_WRITE_FLIGHT_INFO = 0xCA,
   LX_WRITE_CONTEST_CLASS = 0xD0,
 };
+
+namespace LX {
+  static inline bool
+  ExpectACK(Port &port)
+  {
+    return port.ExpectString(LX_ACK_STRING);
+  }
+
+  /**
+   * Send SYN and wait for ACK.
+   *
+   * @return true on success
+   */
+  static inline bool
+  Connect(Port &port)
+  {
+    return port.Write(LX_SYN) && ExpectACK(port);
+  }
+
+  static inline bool
+  SendCommand(Port &port, LX_command command)
+  {
+    return port.Write(LX_PREFIX) &&
+      port.Write(command);
+  }
+}
 
 char
 calc_crc_char(char d, char crc);
