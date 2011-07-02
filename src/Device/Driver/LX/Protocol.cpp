@@ -23,11 +23,11 @@ Copyright_License {
 
 #include "Device/Driver/LX/Protocol.hpp"
 
-char
-LX::calc_crc_char(char d, char crc)
+uint8_t
+LX::calc_crc_char(uint8_t d, uint8_t crc)
 {
-  char tmp;
-  const char crcpoly = 0x69;
+  uint8_t tmp;
+  const uint8_t crcpoly = 0x69;
   int count;
 
   for (count = 8; --count >= 0; d <<= 1) {
@@ -39,10 +39,10 @@ LX::calc_crc_char(char d, char crc)
   return crc;
 }
 
-char
-LX::calc_crc(const char *p0, size_t len, char crc)
+uint8_t
+LX::calc_crc(const uint8_t *p0, size_t len, uint8_t crc)
 {
-  const char *p = p0;
+  const uint8_t *p = p0;
   size_t i;
 
   for (i = 0; i < len; i++)

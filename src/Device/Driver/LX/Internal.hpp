@@ -51,29 +51,29 @@ protected:
   void LoadContestClass(const Declaration &declaration);
   void WriteContestClass();
   void CRCWriteint32(int32_t i);
-  void CRCWrite(const char *buff, unsigned size);
-  void CRCWrite(char c);
+  void CRCWrite(const uint8_t *buff, unsigned size);
+  void CRCWrite(uint8_t c);
 
   struct lxDevice_Pilot_t { //strings have extra byte for NULL
-    char unknown1[3];
+    uint8_t unknown1[3];
     char PilotName[19];
     char GliderType[12];
     char GliderID[8];
     char CompetitionID[4];
-    char unknown2[73];
+    uint8_t unknown2[73];
   } gcc_packed;
 
   struct lxDevice_Declaration_t { //strings have extra byte for NULL
-    unsigned char unknown1[5];
-    unsigned char dayinput;
-    unsigned char monthinput;
-    unsigned char yearinput;
-    unsigned char dayuser;
-    unsigned char monthuser;
-    unsigned char yearuser;
+    uint8_t unknown1[5];
+    uint8_t dayinput;
+    uint8_t monthinput;
+    uint8_t yearinput;
+    uint8_t dayuser;
+    uint8_t monthuser;
+    uint8_t yearuser;
     int16_t taskid;
-    unsigned char numtps;
-    unsigned char tptypes[12];
+    uint8_t numtps;
+    uint8_t tptypes[12];
     int32_t Longitudes[12];
     int32_t Latitudes[12];
     char WaypointNames[12][9];
@@ -87,7 +87,7 @@ protected:
   lxDevice_Declaration_t lxDevice_Declaration;
   lxDevice_Pilot_t lxDevice_Pilot;
   lxDevice_ContestClass_t lxDevice_ContestClass;
-  char crc;
+  uint8_t crc;
 
   bool DeclareInner(const Declaration &declaration,
                     OperationEnvironment &env);

@@ -28,14 +28,14 @@ Copyright_License {
 #include "Operation.hpp"
 
 void
-LXDevice::CRCWrite(const char *buff, unsigned size)
+LXDevice::CRCWrite(const uint8_t *buff, unsigned size)
 {
   port->Write(buff, size);
   crc = LX::calc_crc(buff, size, crc);
 }
 
 void
-LXDevice::CRCWrite(char c)
+LXDevice::CRCWrite(uint8_t c)
 {
   port->Write(c);
   crc = LX::calc_crc_char(c, crc);
@@ -44,10 +44,10 @@ LXDevice::CRCWrite(char c)
 void
 LXDevice::CRCWriteint32(int32_t i)
 {
-  CRCWrite((char) ((i>>24) & 0xFF));
-  CRCWrite((char) ((i>>16) & 0xFF));
-  CRCWrite((char) ((i>>8) & 0xFF));
-  CRCWrite((char) (i & 0xFF));
+  CRCWrite((uint8_t) ((i>>24) & 0xFF));
+  CRCWrite((uint8_t) ((i>>16) & 0xFF));
+  CRCWrite((uint8_t) ((i>>8) & 0xFF));
+  CRCWrite((uint8_t) (i & 0xFF));
 }
 
 void
@@ -105,7 +105,7 @@ LXDevice::LoadPilotInfo(const Declaration &declaration)
 void
 LXDevice::WritePilotInfo()
 {
-  CRCWrite((const char*)&lxDevice_Pilot, sizeof(lxDevice_Pilot));
+  CRCWrite((const uint8_t *)&lxDevice_Pilot, sizeof(lxDevice_Pilot));
   return;
 }
 
@@ -193,7 +193,7 @@ LXDevice::LoadTask(const Declaration &declaration)
 void
 LXDevice::WriteTask()
 {
-  CRCWrite((const char*)&lxDevice_Declaration,
+  CRCWrite((const uint8_t *)&lxDevice_Declaration,
             sizeof(lxDevice_Declaration.unknown1) +
             sizeof(lxDevice_Declaration.dayinput) +
             sizeof(lxDevice_Declaration.monthinput) +
@@ -202,7 +202,7 @@ LXDevice::WriteTask()
             sizeof(lxDevice_Declaration.monthuser) +
             sizeof(lxDevice_Declaration.yearuser));
 
-  CRCWrite((const char*)&lxDevice_Declaration.taskid,
+  CRCWrite((const uint8_t *)&lxDevice_Declaration.taskid,
             sizeof(lxDevice_Declaration.taskid));
   CRCWrite((char)lxDevice_Declaration.numtps);
 
@@ -216,7 +216,7 @@ LXDevice::WriteTask()
     CRCWriteint32(lxDevice_Declaration.Latitudes[i]);
   }
   for (unsigned int i = 0; i < LX::NUMTPS; i++) {
-    CRCWrite(lxDevice_Declaration.WaypointNames[i],
+    CRCWrite((const uint8_t *)lxDevice_Declaration.WaypointNames[i],
              sizeof(lxDevice_Declaration.WaypointNames[i]));
   }
   return;
@@ -232,7 +232,7 @@ LXDevice::LoadContestClass(gcc_unused const Declaration &declaration)
 void
 LXDevice::WriteContestClass()
 {
-  CRCWrite((const char*)&lxDevice_ContestClass.contest_class,
+  CRCWrite((const uint8_t *)&lxDevice_ContestClass.contest_class,
             sizeof(lxDevice_ContestClass.contest_class));
   return;
 }

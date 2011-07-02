@@ -28,6 +28,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <stddef.h>
+#include <stdint.h>
 
 namespace LX {
   static const unsigned int NUMTPS = 12;
@@ -67,12 +68,12 @@ namespace LX {
   }
 
   gcc_const
-  char
-  calc_crc_char(char d, char crc);
+  uint8_t
+  calc_crc_char(uint8_t d, uint8_t crc);
 
   gcc_pure
-  char
-  calc_crc(const char *p0, size_t len, char crc);
+  uint8_t
+  calc_crc(const uint8_t *p0, size_t len, uint8_t crc);
 }
 
 #endif
