@@ -406,7 +406,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     ReplaceInString(OutBuffer, _T("$(CheckFLARM)"), _T(""), Size);
   }
   if (_tcsstr(OutBuffer, _T("$(CheckNet)"))) {
-#if !defined(WIN32) || defined(_WIN32_WCE)
+#if !defined(WIN32) || defined(_WIN32_WCE) || defined(HAVE_POSIX)
     invalid = true;
 #endif
 
