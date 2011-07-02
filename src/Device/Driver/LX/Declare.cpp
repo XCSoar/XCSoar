@@ -29,20 +29,6 @@ Copyright_License {
 #include "Operation.hpp"
 
 void
-LXDevice::CRCWrite(const void *buff, unsigned size)
-{
-  port->Write(buff, size);
-  crc = LX::calc_crc(buff, size, crc);
-}
-
-void
-LXDevice::CRCWrite(uint8_t c)
-{
-  port->Write(c);
-  crc = LX::calc_crc_char(c, crc);
-}
-
-void
 LXDevice::StartNMEAMode(OperationEnvironment &env)
 {
   port->Write(LX::SYN);
@@ -215,22 +201,21 @@ LXDevice::DeclareInner(const Declaration &declaration,
 
   LX::SendCommand(*port, LX::WRITE_FLIGHT_INFO); // start declaration
 
-  crc = 0xff;
-  CRCWrite(&pilot, sizeof(pilot));
+  LX::CRCWriter writer(*port);
+  writer.Write(&pilot, sizeof(pilot));
   env.SetProgressPosition(3);
 
-  CRCWrite(&lxDevice_Declaration, sizeof(lxDevice_Declaration));
-  port->Write(crc);
+  writer.Write(&lxDevice_Declaration, sizeof(lxDevice_Declaration));
+  writer.Flush();
   if (!LX::ExpectACK(*port))
     return false;
 
   env.SetProgressPosition(4);
-  crc = 0xff;
   LX::SendCommand(*port, LX::WRITE_CONTEST_CLASS);
-  CRCWrite(&contest_class, sizeof(contest_class));
+  writer.Write(&contest_class, sizeof(contest_class));
   env.SetProgressPosition(5);
 
-  port->Write(crc);
+  writer.Flush();
   return LX::ExpectACK(*port);
 }
 

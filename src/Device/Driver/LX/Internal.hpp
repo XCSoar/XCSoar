@@ -33,17 +33,11 @@ class LXDevice: public AbstractDevice
 
 public:
   LXDevice(Port *_port)
-    :port(_port),
-     crc(0xff) {
-  }
+    :port(_port) {}
 
 protected:
   bool StartCommandMode();
   void StartNMEAMode(OperationEnvironment &env);
-  void CRCWrite(const void *buff, unsigned size);
-  void CRCWrite(uint8_t c);
-
-  uint8_t crc;
 
   bool DeclareInner(const Declaration &declaration,
                     OperationEnvironment &env);

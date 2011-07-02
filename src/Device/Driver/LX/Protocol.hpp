@@ -112,6 +112,42 @@ namespace LX {
   gcc_pure
   uint8_t
   calc_crc(const void *p0, size_t len, uint8_t crc);
+
+  /**
+   * Writes data to a #Port, and keeps track of the CRC.
+   */
+  class CRCWriter {
+    Port &port;
+    uint8_t crc;
+
+  public:
+    CRCWriter(Port &_port):port(_port), crc(0xff) {}
+
+    bool Write(const void *data, size_t length) {
+      if (!port.Write(data, length))
+        return false;
+
+      crc = calc_crc((const uint8_t *)data, length, crc);
+      return true;
+    }
+
+    bool Write(uint8_t value) {
+      if (!port.Write(value))
+        return false;
+
+      crc = calc_crc_char(value, crc);
+      return true;
+    }
+
+    /**
+     * Write the CRC, and reset it, so the object can be reused.
+     */
+    bool Flush() {
+      bool success = port.Write(crc);
+      crc = 0xff;
+      return success;
+    }
+  };
 }
 
 #endif
