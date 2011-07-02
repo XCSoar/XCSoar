@@ -39,6 +39,9 @@ namespace ExternalLogger {
   void Declare(const OrderedTask& task);
 
   bool CheckDeclaration();
+
+  void
+  DownloadFlight();
 }
 
 #endif

@@ -23,13 +23,19 @@
 
 #include "Logger/ExternalLogger.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "DataField/ComboList.hpp"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/ComboPicker.hpp"
 #include "Language/Language.hpp"
 #include "Device/device.hpp"
 #include "Device/Declaration.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/List.hpp"
+#include "Device/Driver.hpp"
 #include "Profile/DeclarationConfig.hpp"
+#include "LocalPath.hpp"
+#include "Interface.hpp"
+#include "MainWindow.hpp"
 
 static bool DeclaredToDevice = false;
 
@@ -102,4 +108,79 @@ ExternalLogger::CheckDeclaration(void)
   }
 
   return false;
+}
+
+static void
+DownloadFlightFrom(DeviceDescriptor &device)
+{
+  RecordedFlightList flight_list;
+  if (!device.ReadFlightList(flight_list)) {
+    MessageBoxX(_("Failed to download flight list."),
+                _("Download flight"), MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  if (flight_list.empty()) {
+    MessageBoxX(_("Logger is empty."),
+                _("Download flight"), MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  ComboList combo;
+  for (unsigned i = 0; i < flight_list.size(); ++i) {
+    const RecordedFlightInfo &flight = flight_list[i];
+
+    TCHAR buffer[64];
+    _sntprintf(buffer, 64, _T("%04u/%02u/%02u %02u:%02u-%02u:%02u"),
+           flight.date.year, flight.date.month, flight.date.day,
+           flight.start_time.hour, flight.start_time.minute,
+           flight.end_time.hour, flight.end_time.minute);
+
+    combo.Append(i, buffer);
+  }
+
+  int i = ComboPicker(CommonInterface::main_window, _T("Choose a flight"),
+                      combo, NULL, false);
+  if (i < 0)
+    return;
+
+  TCHAR path[MAX_PATH];
+  LocalPath(path, _T("external.igc")); // XXX better file name
+
+  if (!device.DownloadFlight(flight_list[i], path)) {
+    MessageBoxX(_("Failed to download flight."),
+                _("Download flight"), MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+}
+
+void
+ExternalLogger::DownloadFlight()
+{
+  StaticArray<DeviceDescriptor*, NUMDEV> loggers;
+
+  for (unsigned i = 0; i < NUMDEV; ++i)
+    if (DeviceList[i].IsLogger())
+      loggers.append(&DeviceList[i]);
+
+  if (loggers.empty()) {
+    MessageBoxX(_("No logger connected"),
+                _("Download flight"), MB_OK | MB_ICONINFORMATION);
+    return;
+  }
+
+  if (loggers.size() == 1)
+    DownloadFlightFrom(*loggers[0]);
+  else {
+    ComboList combo;
+    for (unsigned i = 0; i < loggers.size(); ++i)
+      combo.Append(i, loggers[i]->GetDisplayName());
+
+    int i = ComboPicker(CommonInterface::main_window, _T("Choose a logger"),
+                        combo, NULL, false);
+    if (i < 0)
+      return;
+
+    DownloadFlightFrom(*loggers[i]);
+  }
 }

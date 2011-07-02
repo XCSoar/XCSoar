@@ -594,6 +594,13 @@ event=Logger nmea
 label=Raw Logger$(CheckLogger)
 location=5
 
+mode=Config3
+type=key
+data=7
+event=Logger download
+label=Download IGC$(CheckLogger)
+location=6
+
 
 # -------------
 # mode=Vario1

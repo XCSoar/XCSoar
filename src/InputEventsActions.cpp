@@ -77,6 +77,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Components.hpp"
 #include "Language/Language.hpp"
 #include "Logger/Logger.hpp"
+#include "Logger/ExternalLogger.hpp"
 #include "Asset.hpp"
 #include "Logger/NMEALogger.hpp"
 #include "Waypoint/Waypoints.hpp"
@@ -1174,6 +1175,8 @@ InputEvents::eventLogger(const TCHAR *misc)
     } else {
       Message::AddMessage(_("NMEA log off"));
     }
+  } else if (_tcscmp(misc, _T("download")) == 0) {
+    ExternalLogger::DownloadFlight();
   } else if (_tcscmp(misc, _T("show")) == 0)
     if (logger.isLoggerActive()) {
       Message::AddMessage(_("Logger on"));
