@@ -25,22 +25,23 @@ Copyright_License {
 #define XCSOAR_DEVICE_DRIVER_LX_PROTOCOL_HPP
 
 #include "Device/Port.hpp"
+#include "Compiler.h"
 
 #include <stddef.h>
 
-#define LX_ACK_STRING "\x06"
-
-static const unsigned int NUMTPS = 12;
-
-enum LX_command {
-  LX_PREFIX = 0x02,
-  LX_ACK = 0x06,
-  LX_SYN = 0x16,
-  LX_WRITE_FLIGHT_INFO = 0xCA,
-  LX_WRITE_CONTEST_CLASS = 0xD0,
-};
-
 namespace LX {
+  static const unsigned int NUMTPS = 12;
+
+  enum command {
+    PREFIX = 0x02,
+    ACK = 0x06,
+    SYN = 0x16,
+    WRITE_FLIGHT_INFO = 0xCA,
+    WRITE_CONTEST_CLASS = 0xD0,
+  };
+
+  static const char LX_ACK_STRING[] = { ACK, 0 };
+
   static inline bool
   ExpectACK(Port &port)
   {
@@ -55,21 +56,23 @@ namespace LX {
   static inline bool
   Connect(Port &port)
   {
-    return port.Write(LX_SYN) && ExpectACK(port);
+    return port.Write(SYN) && ExpectACK(port);
   }
 
   static inline bool
-  SendCommand(Port &port, LX_command command)
+  SendCommand(Port &port, enum command command)
   {
-    return port.Write(LX_PREFIX) &&
+    return port.Write(PREFIX) &&
       port.Write(command);
   }
+
+  gcc_const
+  char
+  calc_crc_char(char d, char crc);
+
+  gcc_pure
+  char
+  calc_crc(const char *p0, size_t len, char crc);
 }
-
-char
-calc_crc_char(char d, char crc);
-
-char
-filser_calc_crc(const char *p0, size_t len, char crc);
 
 #endif

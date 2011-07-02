@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device/Driver/LX/Protocol.hpp"
 
 char
-calc_crc_char(char d, char crc)
+LX::calc_crc_char(char d, char crc)
 {
   char tmp;
   const char crcpoly = 0x69;
@@ -40,7 +40,7 @@ calc_crc_char(char d, char crc)
 }
 
 char
-filser_calc_crc(const char *p0, size_t len, char crc)
+LX::calc_crc(const char *p0, size_t len, char crc)
 {
   const char *p = p0;
   size_t i;

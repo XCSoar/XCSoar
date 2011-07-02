@@ -31,14 +31,14 @@ void
 LXDevice::CRCWrite(const char *buff, unsigned size)
 {
   port->Write(buff, size);
-  crc = filser_calc_crc(buff, size, crc);
+  crc = LX::calc_crc(buff, size, crc);
 }
 
 void
 LXDevice::CRCWrite(char c)
 {
   port->Write(c);
-  crc = calc_crc_char(c, crc);
+  crc = LX::calc_crc_char(c, crc);
 }
 
 void
@@ -53,11 +53,11 @@ LXDevice::CRCWriteint32(int32_t i)
 void
 LXDevice::StartNMEAMode(OperationEnvironment &env)
 {
-  port->Write(LX_SYN);
+  port->Write(LX::SYN);
   env.Sleep(500);
-  port->Write(LX_SYN);
+  port->Write(LX::SYN);
   env.Sleep(500);
-  port->Write(LX_SYN);
+  port->Write(LX::SYN);
   env.Sleep(500);
 }
 
@@ -144,7 +144,7 @@ LXDevice::LoadTask(const Declaration &declaration)
   lxDevice_Declaration.taskid = 0;
   lxDevice_Declaration.numtps = declaration.size();
 
-  for (unsigned i = 0; i < NUMTPS; i++) {
+  for (unsigned i = 0; i < LX::NUMTPS; i++) {
     if (i == 0) { // takeoff
       lxDevice_Declaration.tptypes[i] = 3;
       lxDevice_Declaration.Latitudes[i] = 0;
@@ -206,16 +206,16 @@ LXDevice::WriteTask()
             sizeof(lxDevice_Declaration.taskid));
   CRCWrite((char)lxDevice_Declaration.numtps);
 
-  for (unsigned int i = 0; i < NUMTPS; i++) {
+  for (unsigned int i = 0; i < LX::NUMTPS; i++) {
     CRCWrite((char)lxDevice_Declaration.tptypes[i]);
   }
-  for (unsigned int i = 0; i < NUMTPS; i++) {
+  for (unsigned int i = 0; i < LX::NUMTPS; i++) {
     CRCWriteint32(lxDevice_Declaration.Longitudes[i]);
   }
-  for (unsigned int i = 0; i < NUMTPS; i++) {
+  for (unsigned int i = 0; i < LX::NUMTPS; i++) {
     CRCWriteint32(lxDevice_Declaration.Latitudes[i]);
   }
-  for (unsigned int i = 0; i < NUMTPS; i++) {
+  for (unsigned int i = 0; i < LX::NUMTPS; i++) {
     CRCWrite(lxDevice_Declaration.WaypointNames[i],
              sizeof(lxDevice_Declaration.WaypointNames[i]));
   }
@@ -259,7 +259,7 @@ LXDevice::DeclareInner(const Declaration &declaration,
 
   env.SetProgressPosition(2);
 
-  LX::SendCommand(*port, LX_WRITE_FLIGHT_INFO); // start declaration
+  LX::SendCommand(*port, LX::WRITE_FLIGHT_INFO); // start declaration
 
   crc = 0xff;
   WritePilotInfo();
@@ -271,7 +271,7 @@ LXDevice::DeclareInner(const Declaration &declaration,
 
   env.SetProgressPosition(4);
   crc = 0xff;
-  LX::SendCommand(*port, LX_WRITE_CONTEST_CLASS);
+  LX::SendCommand(*port, LX::WRITE_CONTEST_CLASS);
   WriteContestClass();
   env.SetProgressPosition(5);
   port->Write(crc);
