@@ -29,8 +29,6 @@ Copyright_License {
 #ifdef __linux__
 #include <byteswap.h>
 #include <endian.h>
-#elif defined(WIN32)
-#include <winsock2.h>
 #endif /* !__linux__ */
 
 gcc_const
@@ -67,8 +65,6 @@ FromBE16(uint16_t value)
 #else
   return be16toh(value);
 #endif
-#elif defined(WIN32)
-  return ntohs(value);
 #elif defined(__i386__) || defined(__x86_64__)
   /* generic little-endian */
   return ByteSwap16(value);
@@ -88,8 +84,6 @@ FromBE32(uint32_t value)
 #else
   return be32toh(value);
 #endif
-#elif defined(WIN32)
-  return ntohl(value);
 #elif defined(__i386__) || defined(__x86_64__)
   /* generic little-endian */
   return ByteSwap32(value);
@@ -143,8 +137,6 @@ ToBE16(uint16_t value)
 {
 #ifdef __linux__
   return htobe16(value);
-#elif defined(WIN32)
-  return htons(value);
 #elif defined(__i386__) || defined(__x86_64__)
   /* generic little-endian */
   return ByteSwap16(value);
@@ -160,8 +152,6 @@ ToBE32(uint32_t value)
 {
 #ifdef __linux__
   return htobe32(value);
-#elif defined(WIN32)
-  return htonl(value);
 #elif defined(__i386__) || defined(__x86_64__)
   /* generic little-endian */
   return ByteSwap32(value);
