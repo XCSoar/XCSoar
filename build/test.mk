@@ -607,7 +607,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunInputParser \
 	RunWaypointParser RunAirspaceParser \
 	ReadPort RunPortHandler \
-	RunDeviceDriver RunDeclare \
+	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	RunIGCWriter \
 	RunWindZigZag \
 	RunCanvas RunMapWindow RunDialog \
@@ -1128,6 +1128,96 @@ RUN_DECLARE_LDADD = \
 	$(UTIL_LIBS)
 $(RUN_DECLARE_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(TARGET_BIN_DIR)/RunDeclare$(TARGET_EXEEXT): $(RUN_DECLARE_OBJS) $(RUN_DECLARE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_FLIGHT_LIST_SOURCES = \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Register.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/IO/CSVLine.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(SRC)/Operation.cpp \
+	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/RunFlightList.cpp
+ifeq ($(HAVE_POSIX),y)
+RUN_FLIGHT_LIST_SOURCES += \
+	$(SRC)/Device/TTYPort.cpp
+else
+RUN_FLIGHT_LIST_SOURCES += \
+	$(SRC)/Device/SerialPort.cpp
+endif
+ifeq ($(HAVE_CE),y)
+RUN_FLIGHT_LIST_SOURCES += \
+	$(SRC)/Device/Widcomm.cpp
+endif
+RUN_FLIGHT_LIST_OBJS = $(call SRC_TO_OBJ,$(RUN_FLIGHT_LIST_SOURCES))
+RUN_FLIGHT_LIST_LDADD = \
+	$(ZZIP_LIBS) \
+	$(DRIVER_LIBS) \
+	$(ENGINE_LIBS) \
+	$(MATH_LIBS) \
+	$(UTIL_LIBS)
+$(RUN_FLIGHT_LIST_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(TARGET_BIN_DIR)/RunFlightList$(TARGET_EXEEXT): $(RUN_FLIGHT_LIST_OBJS) $(RUN_FLIGHT_LIST_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_DOWNLOAD_FLIGHT_SOURCES = \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Register.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/IO/CSVLine.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/StoppableThread.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(SRC)/Operation.cpp \
+	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
+ifeq ($(HAVE_POSIX),y)
+RUN_DOWNLOAD_FLIGHT_SOURCES += \
+	$(SRC)/Device/TTYPort.cpp
+else
+RUN_DOWNLOAD_FLIGHT_SOURCES += \
+	$(SRC)/Device/SerialPort.cpp
+endif
+ifeq ($(HAVE_CE),y)
+RUN_DOWNLOAD_FLIGHT_SOURCES += \
+	$(SRC)/Device/Widcomm.cpp
+endif
+RUN_DOWNLOAD_FLIGHT_OBJS = $(call SRC_TO_OBJ,$(RUN_DOWNLOAD_FLIGHT_SOURCES))
+RUN_DOWNLOAD_FLIGHT_LDADD = \
+	$(ZZIP_LIBS) \
+	$(DRIVER_LIBS) \
+	$(ENGINE_LIBS) \
+	$(MATH_LIBS) \
+	$(UTIL_LIBS)
+$(RUN_DOWNLOAD_FLIGHT_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(TARGET_BIN_DIR)/RunDownloadFlight$(TARGET_EXEEXT): $(RUN_DOWNLOAD_FLIGHT_OBJS) $(RUN_DOWNLOAD_FLIGHT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
