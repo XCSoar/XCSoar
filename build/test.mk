@@ -645,6 +645,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunWaypointParser RunAirspaceParser \
 	ReadPort RunPortHandler \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
+	lxn2igc \
 	RunIGCWriter \
 	RunWindZigZag \
 	RunCanvas RunMapWindow RunDialog \
@@ -1264,6 +1265,17 @@ RUN_DOWNLOAD_FLIGHT_LDADD = \
 	$(UTIL_LIBS)
 $(RUN_DOWNLOAD_FLIGHT_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(TARGET_BIN_DIR)/RunDownloadFlight$(TARGET_EXEEXT): $(RUN_DOWNLOAD_FLIGHT_OBJS) $(RUN_DOWNLOAD_FLIGHT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+LXN2IGC_SOURCES = \
+	$(SRC)/Device/Driver/LX/Convert.cpp \
+	$(SRC)/Device/Driver/LX/LXN.cpp \
+	$(TEST_SRC_DIR)/lxn2igc.cpp
+LXN2IGC_OBJS = $(call SRC_TO_OBJ,$(LXN2IGC_SOURCES))
+LXN2IGC_LDADD =
+$(LXN2IGC_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(TARGET_BIN_DIR)/lxn2igc$(TARGET_EXEEXT): $(LXN2IGC_OBJS) $(LXN2IGC_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

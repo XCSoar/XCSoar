@@ -53,6 +53,26 @@ LX::CommandModeQuick(Port &port, OperationEnvironment &env)
   env.Sleep(500);
 }
 
+bool
+LX::SendPacket(Port &port, enum command command,
+               const void *data, size_t length,
+               unsigned timeout_ms)
+{
+  return SendCommand(port, command) &&
+    port.FullWrite(data, length, timeout_ms) &&
+    port.Write(calc_crc(data, length, 0xff));
+}
+
+bool
+LX::ReceivePacket(Port &port, enum command command,
+                  void *data, size_t length,
+                  unsigned timeout_ms)
+{
+  port.Flush();
+  return SendCommand(port, command) &&
+    ReadCRC(port, data, length, timeout_ms);
+}
+
 uint8_t
 LX::calc_crc_char(uint8_t d, uint8_t crc)
 {
@@ -79,4 +99,14 @@ LX::calc_crc(const void *p0, size_t len, uint8_t crc)
     crc = calc_crc_char(p[i], crc);
 
   return crc;
+}
+
+bool
+LX::ReadCRC(Port &port, void *buffer, size_t length, unsigned timeout_ms)
+{
+  uint8_t crc;
+
+  return port.FullRead(buffer, length, timeout_ms) &&
+    port.FullRead(&crc, sizeof(crc), timeout_ms) &&
+    calc_crc(buffer, length, 0xff) == crc;
 }

@@ -40,7 +40,11 @@ namespace LX {
     ACK = 0x06,
     SYN = 0x16,
     WRITE_FLIGHT_INFO = 0xCA,
+    READ_MEMORY_SECTION = 0xcc,
+    READ_FLIGHT_LIST = 0xcd,
+    SEEK_MEMORY = 0xce,
     WRITE_CONTEST_CLASS = 0xD0,
+    READ_LOGGER_DATA = 0xe6,
   };
 
   static const char LX_ACK_STRING[] = { ACK, 0 };
@@ -76,6 +80,59 @@ namespace LX {
     int32_t Longitudes[NUMTPS];
     int32_t Latitudes[NUMTPS];
     char WaypointNames[NUMTPS][9];
+  } gcc_packed;
+
+  struct MemoryAddress32 {
+    uint8_t address1;
+    uint8_t address0;
+    uint8_t address3;
+    uint8_t address2;
+  } gcc_packed;
+
+  struct MemoryAddress24 {
+    uint8_t address[3];
+
+    MemoryAddress24 &operator=(const MemoryAddress32 &other) {
+      address[0] = other.address0;
+      address[1] = other.address1;
+      address[2] = other.address2;
+      return *this;
+    }
+
+    MemoryAddress24 &operator=(const uint8_t other[3]) {
+      address[0] = other[0];
+      address[1] = other[1];
+      address[2] = other[2];
+      return *this;
+    }
+  } gcc_packed;
+
+  struct FlightInfo {
+    uint8_t valid;
+    MemoryAddress32 start_address;
+    MemoryAddress32 end_address;
+    char date[9];
+    char start_time[9];
+    char stop_time[9];
+    uint8_t dummy0[4];
+    char pilot[52];
+    uint16_t logger_id;
+    uint8_t flight_no; /* ? */
+
+    bool IsValid() const {
+      return valid == 1 && date[8] == 0 && start_time[8] == 0 &&
+        stop_time[8] == 0;
+    }
+  } gcc_packed;
+
+  struct SeekMemory {
+    MemoryAddress24 start_address, end_address;
+  } gcc_packed;
+
+  struct MemorySection {
+    static const unsigned N = 0x10;
+
+    uint16_t lengths[N];
   } gcc_packed;
 
   /**
@@ -124,6 +181,16 @@ namespace LX {
       port.Write(command);
   }
 
+  bool
+  SendPacket(Port &port, enum command command,
+             const void *data, size_t length,
+             unsigned timeout_ms=5000);
+
+  bool
+  ReceivePacket(Port &port, enum command command,
+                void *data, size_t length,
+                unsigned timeout_ms=5000);
+
   gcc_const
   uint8_t
   calc_crc_char(uint8_t d, uint8_t crc);
@@ -131,6 +198,9 @@ namespace LX {
   gcc_pure
   uint8_t
   calc_crc(const void *p0, size_t len, uint8_t crc);
+
+  bool
+  ReadCRC(Port &port, void *buffer, size_t length, unsigned timeout_ms=5000);
 
   /**
    * Writes data to a #Port, and keeps track of the CRC.

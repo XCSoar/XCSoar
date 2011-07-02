@@ -39,6 +39,9 @@ LX_SOURCES = \
 	$(DRIVER_SRC_DIR)/LX/Parser.cpp \
 	$(DRIVER_SRC_DIR)/LX/Settings.cpp \
 	$(DRIVER_SRC_DIR)/LX/Declare.cpp \
+	$(DRIVER_SRC_DIR)/LX/Logger.cpp \
+	$(DRIVER_SRC_DIR)/LX/Convert.cpp \
+	$(DRIVER_SRC_DIR)/LX/LXN.cpp \
 	$(DRIVER_SRC_DIR)/LX/Register.cpp
 
 DRIVER_SOURCES = \

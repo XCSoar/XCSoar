@@ -51,10 +51,16 @@ struct RecordedFlightInfo {
      * Flight number, used by the CAI302 driver.
      */
     uint8_t cai302;
+
     /**
      * Flight address, used by the IMI ERIXX driver.
      */
     uint32_t imi;
+
+    struct {
+      uint8_t start_address[3];
+      uint8_t end_address[3];
+    } lx;
   } internal;
 };
 

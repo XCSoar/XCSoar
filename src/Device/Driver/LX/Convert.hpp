@@ -21,31 +21,19 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DRIVER_LX_INTERNAL_HPP
-#define XCSOAR_DEVICE_DRIVER_LX_INTERNAL_HPP
+#ifndef XCSOAR_DEVICE_DRIVER_LX_CONVERT_HPP
+#define XCSOAR_DEVICE_DRIVER_LX_CONVERT_HPP
 
-#include "Protocol.hpp"
-#include "Device/Driver.hpp"
+#include <stdio.h>
+#include <stddef.h>
 
-class LXDevice: public AbstractDevice
-{
-  Port *port;
-
-public:
-  LXDevice(Port *_port)
-    :port(_port) {}
-
-public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
-  virtual bool PutMacCready(fixed MacCready);
-  virtual bool Declare(const Declaration &declaration,
-                       OperationEnvironment &env);
-
-  virtual bool ReadFlightList(RecordedFlightList &flight_list,
-                              OperationEnvironment &env);
-  virtual bool DownloadFlight(const RecordedFlightInfo &flight,
-                              const TCHAR *path,
-                              OperationEnvironment &env);
-};
+namespace LX {
+  /**
+   * Convert a BLOB of LXN data to IGC, write to a file.
+   */
+  bool
+  ConvertLXNToIGC(const void *data, size_t length,
+                  FILE *file);
+}
 
 #endif
