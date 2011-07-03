@@ -27,6 +27,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "StringUtil.hpp"
+#include "IO/KeyValueFileReader.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/TextWriter.hpp"
 #include "OS/FileUtil.hpp"
@@ -62,31 +63,10 @@ Profile::LoadFile(const TCHAR *szFile)
 
   LogStartUp(_T("Loading profile from %s"), szFile);
 
-  TCHAR *line;
-  while ((line = reader.read()) != NULL) {
-    if (string_is_empty(line) || *line == _T('#'))
-      continue;
-
-    TCHAR *p = _tcschr(line, _T('='));
-    if (p == line || p == NULL)
-      continue;
-
-    *p = _T('\0');
-    TCHAR *value = p + 1;
-
-    const TCHAR *key = line;
-
-    if (*value == _T('"')) {
-      ++value;
-      p = _tcschr(value, _T('"'));
-      if (p == NULL)
-        continue;
-
-      *p = _T('\0');
-    }
-
-    Set(key, value);
-  }
+  KeyValueFileReader kvreader(reader);
+  KeyValuePair pair;
+  while (kvreader.Read(pair))
+    Set(pair.key, pair.value);
 }
 
 void
