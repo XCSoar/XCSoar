@@ -289,7 +289,7 @@ class CDevIMI::CMsgParser {
 
 public:
   void Reset();
-  const TMsg *Parse(const IMIBYTE buffer[], IMIDWORD size);
+  const TMsg *Parse(const IMIBYTE buffer[], int size);
 };
 
 
@@ -344,7 +344,7 @@ bool CDevIMI::CMsgParser::Check(const TMsg *msg, IMIDWORD size) const
  *
  * @return Received message or 0 if invalid on incomplete.
  */
-const CDevIMI::TMsg *CDevIMI::CMsgParser::Parse(const IMIBYTE buffer[], IMIDWORD size)
+const CDevIMI::TMsg *CDevIMI::CMsgParser::Parse(const IMIBYTE buffer[], int size)
 {
   const IMIBYTE *ptr = buffer;
   const TMsg *msg = 0;
@@ -641,7 +641,7 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &d, unsigned extraTimeout,
   while(MonotonicClockMS() < timeout) {
     // read message
     IMIBYTE buffer[64];
-    IMIDWORD bytesRead = d.Read(buffer, sizeof(buffer));
+    int bytesRead = d.Read(buffer, sizeof(buffer));
     if(bytesRead == 0)
       continue;
 
