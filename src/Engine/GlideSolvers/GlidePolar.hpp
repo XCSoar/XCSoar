@@ -74,7 +74,8 @@ class GlidePolar
   fixed polar_c;             /**< 'c' coefficient of glide polar at bug/ballast */
 
   fixed ballast_ratio;       /**< Ratio of mass of ballast to glider empty weight */
-  fixed reference_mass;            /**< Dry/unballasted mass of glider, kg */
+  fixed reference_mass;      /**< Reference mass of polar, kg */
+  fixed dry_mass;            /**< Dry/unballasted mass of glider, kg */
   fixed wing_area;           /**< Reference wing area, m^2 */
 
   friend struct PolarInfo;

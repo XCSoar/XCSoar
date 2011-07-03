@@ -35,6 +35,7 @@ namespace PolarGlue
 {
   bool LoadFromOldProfile(PolarInfo &polar);
   bool LoadSafetySpeed(PolarInfo &polar);
+  void LoadDryMass(PolarInfo &polar);
 }
 
 void
@@ -87,6 +88,13 @@ PolarGlue::LoadSafetySpeed(PolarInfo &polar)
   return (positive(polar.v_no)) || Profile::Get(szProfileSafteySpeed, polar.v_no);
 }
 
+void
+PolarGlue::LoadDryMass(PolarInfo &polar)
+{
+  if (!Profile::Get(szProfileDryMass, polar.dry_mass))
+    polar.dry_mass = fixed_zero;
+}
+
 bool
 PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
@@ -95,11 +103,13 @@ PolarGlue::LoadFromProfile(PolarInfo &polar)
       polar_string[0] != 0 &&
       polar.ReadString(polar_string)) {
     LoadSafetySpeed(polar);
+    LoadDryMass(polar);
     return true;
   }
 
   bool result = LoadFromOldProfile(polar);
   LoadSafetySpeed(polar);
+  LoadDryMass(polar);
   return result;
 }
 
@@ -109,6 +119,7 @@ PolarGlue::SaveToProfile(const PolarInfo &polar)
   TCHAR polar_string[255];
   polar.GetString(polar_string, 255, true);
   Profile::Set(szProfilePolar, polar_string);
+  Profile::Set(szProfileDryMass, polar.dry_mass);
 }
 
 void
@@ -120,6 +131,7 @@ PolarGlue::LoadFromProfile(GlidePolar &gp, SETTINGS_POLAR &settings)
       MessageBoxX(_("Polar has invalid coefficients.\nUsing LS8 polar instead!"),
                   _("Warning"), MB_OK);
     LoadDefault(polar);
+    polar.dry_mass = fixed_zero;
     polar.CopyIntoGlidePolar(gp);
   }
   settings.SafetySpeed = fixed(polar.v_no);

@@ -51,6 +51,7 @@ GlidePolarTest::Init()
   polar.ideal_polar_c = fixed(1.47);
 
   polar.reference_mass = fixed(318);
+  polar.dry_mass = fixed(318);
   polar.ballast_ratio = fixed(100) / polar.reference_mass;
 
   polar.wing_area = fixed(9.8);

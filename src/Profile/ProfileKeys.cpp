@@ -118,6 +118,7 @@ const TCHAR szProfilePolarName[] = _T("PolarName");
 const TCHAR szProfileSafetyAltitudeArrival[] = _T("SafetyAltitudeArrival");
 const TCHAR szProfileSafetyAltitudeTerrain[] = _T("SafetyAltitudeTerrain");
 const TCHAR szProfileSafteySpeed[] = _T("SafteySpeed");
+const TCHAR szProfileDryMass[] = _T("DryMass");
 const TCHAR szProfileSnailTrail[] = _T("SnailTrail");
 const TCHAR szProfileTrailDrift[] = _T("TrailDrift");
 const TCHAR szProfileDetourCostMarker[] = _T("DetourCostMarker");

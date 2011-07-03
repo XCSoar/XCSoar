@@ -45,6 +45,7 @@ GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast)
   ideal_polar_c(1.48),
   ballast_ratio(0.3),
   reference_mass(300),
+  dry_mass(reference_mass),
   wing_area(fixed_zero)
 {
   Update();
@@ -339,7 +340,7 @@ GlidePolar::SpeedToFly(const AIRCRAFT_STATE &state,
 fixed
 GlidePolar::GetTotalMass() const
 {
-  return reference_mass + GetBallastLitres();
+  return dry_mass + GetBallastLitres();
 }
 
 fixed

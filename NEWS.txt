@@ -10,6 +10,8 @@ Version 6.2 - not yet released
   - serial port support on UNIX
   - CAI302: fix byte order bug on PC
   - CAI302: IGC file download
+* calculations
+  - dry mass is seperated from the polar reference mass
 * user interface
   - added support for reverse portrait/landscape screen orientations
 

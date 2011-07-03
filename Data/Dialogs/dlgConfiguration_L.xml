@@ -375,7 +375,7 @@
     </Panel>
   
     <Panel Name="frmPolar">
-      <Panel Name="pnlPolarDetails" X="12" Y="2" Border="30" Height="86" Width="-2">
+      <Panel Name="pnlPolarDetails" X="12" Y="2" Border="30" Height="108" Width="-2">
         <Label Name="lblPolar" Caption="Polar" X="2" Y="2" Height="16" Width="-60" />
         <Label Name="lblPolarInvalid" Caption="Invalid" X="-50" Y="2" Height="16" CaptionColor="0xFF0000" />
 
@@ -401,6 +401,11 @@
 
         <Edit Name="prpPolarReferenceMass" Caption="Reference mass" Expert="1" Y="62" Width="-2" Height="22" CaptionWidth="139"
           Help="Reference weight at which the given polar is valid.">
+          <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
+        </Edit>
+        
+        <Edit Name="prpPolarDryMass" Caption="Dry mass" Expert="1" Y="84" Width="-2" Height="22" CaptionWidth="139"
+          Help="Dry mass of the glider (pilot + empty mass).">
           <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
       </Panel>
