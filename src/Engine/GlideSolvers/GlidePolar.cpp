@@ -67,7 +67,7 @@ GlidePolar::UpdatePolar()
 {
   assert(positive(bugs));
 
-  const fixed loading_factor = sqrt(fixed_one+ballast*ballast_ratio);
+  const fixed loading_factor = sqrt(GetTotalMass() / reference_mass);
   const fixed inv_bugs = fixed_one/bugs;
 
   polar_a = inv_bugs * ideal_polar_a / loading_factor;
