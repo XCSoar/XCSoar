@@ -162,7 +162,7 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale)
     }
   }
 
-
+  image->SetDirty();
 }
 
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
