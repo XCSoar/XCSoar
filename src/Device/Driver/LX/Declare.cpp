@@ -101,6 +101,13 @@ LoadPilotInfo(LX::Pilot &lxDevice_Pilot, const Declaration &declaration)
   memset((void*)lxDevice_Pilot.unknown2, 0, sizeof(lxDevice_Pilot.unknown2));
 }
 
+gcc_const
+static int32_t
+AngleToLX(Angle value)
+{
+  return (int32_t)(value.value_degrees() * 60000);
+}
+
 /**
  * Loads LX task structure from XCSoar task structure
  * @param decl  The declaration
@@ -153,11 +160,9 @@ LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
     } else if (i <= declaration.size()) {
       lxDevice_Declaration.tptypes[i] = 1;
       lxDevice_Declaration.Longitudes[i] =
-          (int32_t)(declaration.get_location(i - 1).Longitude.value_degrees()
-           * 60000);
+        AngleToLX(declaration.get_location(i - 1).Longitude);
       lxDevice_Declaration.Latitudes[i] =
-          (int32_t)(declaration.get_location(i - 1).Latitude.value_degrees()
-           * 60000);
+        AngleToLX(declaration.get_location(i - 1).Latitude);
       copy_space_padded(lxDevice_Declaration.WaypointNames[i],
                         declaration.get_name(i - 1),
                         sizeof(lxDevice_Declaration.WaypointNames[i]));
