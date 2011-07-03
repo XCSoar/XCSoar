@@ -33,6 +33,7 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
+#include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Compatibility/string.h"
 
 #include <math.h>
@@ -409,9 +410,9 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
     return;
 
   // Determine start bearing and radius
-  Angle StartBearing;
-  fixed Radius;
-  temp_area.Center.distance_bearing(Start, Radius, StartBearing);
+  const GeoVector v = temp_area.Center.distance_bearing(Start);
+  Angle StartBearing = v.Bearing;
+  const fixed Radius = v.Distance;
 
   // Determine end bearing
   Angle EndBearing = Bearing(temp_area.Center, End);
@@ -706,13 +707,14 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   GeoPoint to;
   ParseCoordsTNP(parameter, to);
 
-  Angle bearing_from;
   Angle bearing_to;
-  fixed radius;
 
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
 
-  temp_area.Center.distance_bearing(from, radius, bearing_from);
+  const GeoVector v = temp_area.Center.distance_bearing(from);
+  const fixed radius = v.Distance;
+  Angle bearing_from = v.Bearing;
+
   bearing_to = Bearing(temp_area.Center, to);
 
   GeoPoint TempPoint;

@@ -48,13 +48,6 @@ GeoPoint::bearing(const GeoPoint &other) const
   return ::Bearing(*this, other);
 }
 
-void
-GeoPoint::distance_bearing(const GeoPoint &other, fixed &distance,
-                           Angle &bearing) const
-{
-  ::DistanceBearing(*this, other, &distance, &bearing);
-}
-
 GeoVector
 GeoPoint::distance_bearing(const GeoPoint &other) const
 {

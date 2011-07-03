@@ -168,11 +168,6 @@ struct GeoPoint {
   /**
    * Calculate great circle distance and initial bearing from this to the other
    */
-  void distance_bearing(const GeoPoint &other, fixed &distance, Angle &bearing) const;
-
-  /**
-   * Calculate great circle distance and initial bearing from this to the other
-   */
   gcc_pure
   GeoVector distance_bearing(const GeoPoint &other) const;
 

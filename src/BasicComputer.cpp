@@ -98,11 +98,9 @@ ComputeTrack(NMEA_INFO &basic, const NMEA_INFO &last)
       !last.LocationAvailable)
     return;
 
-  fixed distance;
-  Angle bearing;
-  last.Location.distance_bearing(basic.Location, distance, bearing);
-  if (distance >= fixed_one)
-    basic.track = bearing;
+  const GeoVector v = last.Location.distance_bearing(basic.Location);
+  if (v.Distance >= fixed_one)
+    basic.track = v.Bearing;
 }
 
 static void
