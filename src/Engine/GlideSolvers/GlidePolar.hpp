@@ -97,7 +97,7 @@ public:
       const fixed _ballast = fixed_zero);
 
   /**
-   * Accesses sink rate at min airspeed
+   * Accesses minimum sink rate
    *
    * @return Sink rate (m/s, positive down)
    */
@@ -109,7 +109,7 @@ public:
   }
 
   /**
-   * Accesses airspeed for minimum sink
+   * Accesses airspeed for minimum sink rate
    *
    * @return Speed (m/s)
    */
