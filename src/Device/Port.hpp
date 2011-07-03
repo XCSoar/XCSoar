@@ -127,7 +127,7 @@ public:
    * Read data from the serial port
    * @param Buffer Pointer to the buffer
    * @param Size Size of the buffer
-   * @return Number of bytes read from the serial port
+   * @return Number of bytes read from the serial port or -1 in failure
    */
   virtual int Read(void *Buffer, size_t Size) = 0;
 
