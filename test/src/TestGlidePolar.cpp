@@ -37,6 +37,7 @@ public:
 private:
   void Init();
   void TestBasic();
+  void TestMC();
 };
 
 void
@@ -94,15 +95,32 @@ GlidePolarTest::TestBasic()
 }
 
 void
+GlidePolarTest::TestMC()
+{
+  polar.set_mc(fixed_one);
+
+  ok1(equals(polar.get_VbestLD(), 33.482780452));
+  ok1(equals(polar.get_SbestLD(), polar.SinkRate(polar.get_VbestLD())));
+  ok1(equals(polar.get_bestLD(), polar.get_VbestLD() / polar.get_SbestLD()));
+
+  polar.set_mc(fixed_zero);
+
+  ok1(equals(polar.get_VbestLD(), 25.830434162));
+  ok1(equals(polar.get_SbestLD(), polar.SinkRate(polar.get_VbestLD())));
+  ok1(equals(polar.get_bestLD(), polar.get_VbestLD() / polar.get_SbestLD()));
+}
+
+void
 GlidePolarTest::Run()
 {
   Init();
   TestBasic();
+  TestMC();
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(19);
+  plan_tests(25);
 
   GlidePolarTest test;
   test.Run();
