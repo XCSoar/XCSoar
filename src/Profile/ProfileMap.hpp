@@ -30,7 +30,7 @@ Copyright_License {
 #include <tchar.h>
 #include <cstdio>
 
-class ProfileWriter;
+class KeyValueFileWriter;
 
 namespace ProfileMap {
   /**
@@ -192,7 +192,7 @@ namespace ProfileMap {
   bool Exists(const TCHAR *key);
   void Clear();
 
-  void Export(ProfileWriter &writer);
+  void Export(KeyValueFileWriter &writer);
 }
 
 #endif

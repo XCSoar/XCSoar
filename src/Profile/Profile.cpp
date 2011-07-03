@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Profile/Profile.hpp"
-#include "Profile/Writer.hpp"
+#include "IO/KeyValueFileWriter.hpp"
 #include "LogFile.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
@@ -88,10 +88,10 @@ Profile::SaveFile(const TCHAR *szFile)
   if (writer.error())
     return;
 
-  ProfileWriter profile_writer(writer);
+  KeyValueFileWriter kvwriter(writer);
 
   LogStartUp(_T("Saving profile to %s"), szFile);
-  Export(profile_writer);
+  Export(kvwriter);
 }
 
 

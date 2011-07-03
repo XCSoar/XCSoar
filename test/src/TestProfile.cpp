@@ -22,8 +22,6 @@
 
 #include "Profile/ProfileMap.hpp"
 #include "Profile/Profile.hpp"
-#include "Profile/Writer.hpp"
-#include "IO/TextWriter.hpp"
 #include "IO/FileLineReader.hpp"
 #include "TestUtil.hpp"
 

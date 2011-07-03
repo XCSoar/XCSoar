@@ -21,20 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_PROFILE_WRITER_HPP
-#define XCSOAR_PROFILE_WRITER_HPP
+#ifndef XCSOAR_KEY_VALUE_FILE_WRITER_HPP
+#define XCSOAR_KEY_VALUE_FILE_WRITER_HPP
 
 #include <tchar.h>
 
 class TextWriter;
 
-class ProfileWriter {
+class KeyValueFileWriter {
   TextWriter &writer;
 
 public:
-  ProfileWriter(TextWriter &_writer):writer(_writer) {}
+  KeyValueFileWriter(TextWriter &_writer):writer(_writer) {}
 
-  void write(const TCHAR *key, const TCHAR *value);
+  void Write(const TCHAR *key, const TCHAR *value);
 };
 
 #endif

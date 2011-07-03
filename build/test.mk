@@ -93,7 +93,6 @@ TEST_PROFILE_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileMap.cpp \
-	$(SRC)/Profile/Writer.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/TestProfile.cpp
@@ -775,7 +774,6 @@ READ_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/Writer.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileString.cpp
 READ_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_STRING_SOURCES))
@@ -788,7 +786,6 @@ READ_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/Writer.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/ReadProfileInt.cpp
 READ_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(READ_PROFILE_INT_SOURCES))
@@ -801,7 +798,6 @@ WRITE_PROFILE_STRING_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/Writer.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileString.cpp
 WRITE_PROFILE_STRING_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_STRING_SOURCES))
@@ -814,7 +810,6 @@ WRITE_PROFILE_INT_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Profile/Profile.cpp \
-	$(SRC)/Profile/Writer.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/WriteProfileInt.cpp
 WRITE_PROFILE_INT_OBJS = $(call SRC_TO_OBJ,$(WRITE_PROFILE_INT_SOURCES))
@@ -1417,7 +1412,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Terrain/TerrainRenderer.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
-	$(SRC)/Profile/Writer.cpp \
 	$(SRC)/Screen/LabelBlock.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Screen/Graphics.cpp \
@@ -1666,7 +1660,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/FontConfig.cpp \
-	$(SRC)/Profile/Writer.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \
 	$(SRC)/Terrain/RasterTile.cpp \

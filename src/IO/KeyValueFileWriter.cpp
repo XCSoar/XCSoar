@@ -21,14 +21,14 @@ Copyright_License {
 }
 */
 
-#include "Profile/Writer.hpp"
-#include "IO/TextWriter.hpp"
+#include "KeyValueFileWriter.hpp"
+#include "TextWriter.hpp"
 
 #include <assert.h>
 #include <string.h>
 
 void
-ProfileWriter::write(const TCHAR *key, const TCHAR *value)
+KeyValueFileWriter::Write(const TCHAR *key, const TCHAR *value)
 {
   assert(key != NULL);
   assert(value != NULL);

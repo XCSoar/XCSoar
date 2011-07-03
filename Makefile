@@ -434,7 +434,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Compatibility/string.c 	\
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Earth.cpp \
-	$(SRC)/Profile/Writer.cpp \
 	$(SRC)/Profile/ProfileGlue.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/FontConfig.cpp \
