@@ -146,6 +146,10 @@ public:
     return get();
   }
 
+  bool operator ==(const TCHAR *value) const {
+    return (_tcscmp(data, value) == 0);
+  }
+
   void operator =(const TCHAR *new_value) {
     return set(new_value);
   }
