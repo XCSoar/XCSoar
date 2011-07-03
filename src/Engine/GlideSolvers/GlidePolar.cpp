@@ -53,6 +53,9 @@ GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast)
   wing_area(fixed_zero)
 {
   update();
+
+  // Calculate inv_mc
+  set_mc(mc);
 }
 
 void
@@ -61,7 +64,7 @@ GlidePolar::update()
   update_polar();
   Smax = SinkRate(Vmax);
   solve_min();
-  set_mc(mc);
+  solve_ld();
 }
 
 void
