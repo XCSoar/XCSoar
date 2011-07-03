@@ -457,6 +457,7 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/Flytec.cpp \
 	$(SRC)/Device/Driver/Leonardo.cpp \
 	$(SRC)/Device/Driver/ILEC.cpp \
+	$(SRC)/Device/Driver/IMI.cpp \
 	$(SRC)/Device/Driver/Westerboer.cpp \
 	$(SRC)/Device/Driver/PosiGraph.cpp \
 	$(SRC)/Device/Driver/Vega.cpp \

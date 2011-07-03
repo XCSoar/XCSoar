@@ -32,6 +32,7 @@
 #include "Device/Driver/Leonardo.hpp"
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/ILEC.hpp"
+#include "Device/Driver/IMI.hpp"
 #include "Device/Driver/PosiGraph.hpp"
 #include "Device/Driver/Vega.hpp"
 #include "Device/Driver/Volkslogger.hpp"
@@ -741,7 +742,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(359);
+  plan_tests(363);
 
   TestGeneric();
   TestFLARM();
@@ -764,6 +765,7 @@ int main(int argc, char **argv)
   TestDeclare(ewDevice);
   TestDeclare(ewMicroRecorderDevice);
   TestDeclare(pgDevice);
+  TestDeclare(imi_device_driver);
   //TestDeclare(vgaDevice);
 
   /* XXX Volkslogger doesn't do well with this test case */
