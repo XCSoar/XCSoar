@@ -88,10 +88,14 @@ $(TARGET_BIN_DIR)/TestDateTime$(TARGET_EXEEXT): $(TEST_DATE_TIME_OBJS) $(TEST_DA
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_PROFILE_SOURCES = \
+	$(SRC)/LocalPath.cpp \
+	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileMap.cpp \
 	$(SRC)/Profile/Writer.cpp \
 	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/FakeLogFile.cpp \
 	$(TEST_SRC_DIR)/TestProfile.cpp
 TEST_PROFILE_OBJS = $(call SRC_TO_OBJ,$(TEST_PROFILE_SOURCES))
 TEST_PROFILE_LDADD = $(MATH_LIBS) $(IO_LIBS)

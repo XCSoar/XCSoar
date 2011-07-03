@@ -21,6 +21,7 @@
 */
 
 #include "Profile/ProfileMap.hpp"
+#include "Profile/Profile.hpp"
 #include "Profile/Writer.hpp"
 #include "IO/TextWriter.hpp"
 #include "IO/FileLineReader.hpp"
@@ -120,12 +121,34 @@ TestWriter()
   ok1(found2);
 }
 
+static void
+TestReader()
+{
+  ProfileMap::Clear();
+  Profile::LoadFile(_T("output/TestProfileWriter.prf"));
+
+  {
+    int value;
+    ok1(ProfileMap::Exists(_T("key1")));
+    ok1(ProfileMap::Get(_T("key1"), value));
+    ok1(value == 4);
+  }
+
+  {
+    StaticString<32> value;
+    ok1(ProfileMap::Exists(_T("key2")));
+    ok1(ProfileMap::Get(_T("key2"), value));
+    ok1(value == _T("value2"));
+  }
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(28);
+  plan_tests(34);
 
   TestMap();
   TestWriter();
+  TestReader();
 
   return exit_status();
 }
