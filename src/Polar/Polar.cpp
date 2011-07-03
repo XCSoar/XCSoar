@@ -79,11 +79,11 @@ PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
   polar.ideal_polar_c = pc.c;
 
   // Glider empty weight
-  polar.reference_mass = fixed(reference_mass);
+  polar.reference_mass = reference_mass;
   // Ballast weight
-  polar.ballast_ratio = fixed(max_ballast) / polar.reference_mass;
+  polar.ballast_ratio = max_ballast / polar.reference_mass;
 
-  polar.wing_area = fixed(wing_area);
+  polar.wing_area = wing_area;
 
   polar.update();
   return true;
@@ -93,9 +93,9 @@ void
 PolarInfo::GetString(TCHAR* line, size_t size, bool include_v_no) const
 {
   fixed V1, V2, V3;
-  V1 = Units::ToUserUnit(fixed(v1), unKiloMeterPerHour);
-  V2 = Units::ToUserUnit(fixed(v2), unKiloMeterPerHour);
-  V3 = Units::ToUserUnit(fixed(v3), unKiloMeterPerHour);
+  V1 = Units::ToUserUnit(v1, unKiloMeterPerHour);
+  V2 = Units::ToUserUnit(v2, unKiloMeterPerHour);
+  V3 = Units::ToUserUnit(v3, unKiloMeterPerHour);
 
   if (include_v_no)
     _sntprintf(line, size, _T("%.0f,%.0f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f,%.3f"),
