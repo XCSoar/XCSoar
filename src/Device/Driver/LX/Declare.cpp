@@ -43,13 +43,6 @@ LXDevice::CRCWrite(uint8_t c)
 }
 
 void
-LXDevice::CRCWriteint32(int32_t i)
-{
-  uint32_t big_endian = ToBE32(i);
-  CRCWrite(&big_endian, sizeof(big_endian));
-}
-
-void
 LXDevice::StartNMEAMode(OperationEnvironment &env)
 {
   port->Write(LX::SYN);
@@ -105,7 +98,7 @@ gcc_const
 static int32_t
 AngleToLX(Angle value)
 {
-  return (int32_t)(value.value_degrees() * 60000);
+  return ToBE32((int32_t)(value.value_degrees() * 60000));
 }
 
 /**
@@ -212,10 +205,10 @@ LXDevice::WriteTask(const LX::Declaration &lxDevice_Declaration)
     CRCWrite((char)lxDevice_Declaration.tptypes[i]);
   }
   for (unsigned int i = 0; i < LX::NUMTPS; i++) {
-    CRCWriteint32(lxDevice_Declaration.Longitudes[i]);
+    CRCWrite(&lxDevice_Declaration.Longitudes[i], 4);
   }
   for (unsigned int i = 0; i < LX::NUMTPS; i++) {
-    CRCWriteint32(lxDevice_Declaration.Latitudes[i]);
+    CRCWrite(&lxDevice_Declaration.Latitudes[i], 4);
   }
   for (unsigned int i = 0; i < LX::NUMTPS; i++) {
     CRCWrite(lxDevice_Declaration.WaypointNames[i],
