@@ -61,7 +61,7 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
 
   TraceHistoryRenderer renderer(Graphics::trace_history, Graphics::chart);
   renderer.RenderVario(canvas, get_spark_rect(infobox), var, center,
-                       CommonInterface::SettingsComputer().glide_polar_task.get_mc());
+                       CommonInterface::SettingsComputer().glide_polar_task.GetMC());
 }
 
 void

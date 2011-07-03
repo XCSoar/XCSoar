@@ -104,7 +104,7 @@ AbortTask::abort_range(const AIRCRAFT_STATE &state) const
 {
   // always scan at least min range or approx glide range
   return min(max_search_range,
-             max(min_search_range, state.NavAltitude * polar_safety.get_bestLD()));
+             max(min_search_range, state.NavAltitude * polar_safety.GetBestLD()));
 }
 
 GlidePolar
@@ -112,7 +112,7 @@ AbortTask::get_safety_polar() const
 {
   const fixed mc_safety = task_behaviour.safety_mc;
   GlidePolar polar = glide_polar;
-  polar.set_mc(mc_safety);
+  polar.SetMC(mc_safety);
   return polar;
 }
 

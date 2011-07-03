@@ -77,7 +77,7 @@ test_replay()
   TaskManager task_manager(default_events,
                            waypoints);
 
-  glide_polar.set_ballast(fixed(1.0));
+  glide_polar.SetBallast(fixed(1.0));
 
   task_manager.set_glide_polar(glide_polar);
 
@@ -129,7 +129,7 @@ test_replay()
 
       n_samples++;
 
-      if (sim.state.Speed> glide_polar.get_Vtakeoff()) {
+      if (sim.state.Speed> glide_polar.GetVTakeoff()) {
         sim.state.flying_state_moving(sim.state.Time);
       } else {
         sim.state.flying_state_stationary(sim.state.Time);

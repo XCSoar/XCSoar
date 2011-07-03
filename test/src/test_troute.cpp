@@ -86,8 +86,8 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
     i++;
   }
 
-  // polar.set_mc(fixed_zero);
-  // route.update_polar(polar, wind);
+  // polar.SetMC(fixed_zero);
+  // route.UpdatePolar(polar, wind);
 }
 
 int main(int argc, char** argv) {

@@ -48,7 +48,7 @@ fixed
 ProtectedTaskManager::GetMacCready() const
 {
   Lease lease(*this);
-  return lease->get_glide_polar().get_mc();
+  return lease->get_glide_polar().GetMC();
 }
 
 TaskManager::TaskMode_t 

@@ -68,7 +68,7 @@ GlidePolarTest::Init()
 void
 GlidePolarTest::TestBasic()
 {
-  polar.update();
+  polar.Update();
 
   ok1(equals(polar.polar_a, polar.ideal_polar_a));
   ok1(equals(polar.polar_b, polar.ideal_polar_b));
@@ -78,41 +78,41 @@ GlidePolarTest::TestBasic()
   ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), unKiloMeterPerHour)), 0.99));
   ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), unKiloMeterPerHour)), 1.918));
 
-  ok1(equals(polar.get_Smax(), polar.SinkRate(polar.get_Vmax())));
+  ok1(equals(polar.GetSMax(), polar.SinkRate(polar.GetVMax())));
 
-  ok1(equals(polar.get_Vmin(), 19.934640523));
-  ok1(equals(polar.get_Smin(), polar.SinkRate(polar.get_Vmin())));
-  ok1(equals(polar.get_Vtakeoff(), polar.get_Vmin() / 2));
+  ok1(equals(polar.GetVMin(), 19.934640523));
+  ok1(equals(polar.GetSMin(), polar.SinkRate(polar.GetVMin())));
+  ok1(equals(polar.GetVTakeoff(), polar.GetVMin() / 2));
 
-  ok1(equals(polar.get_VbestLD(), 25.830434162));
-  ok1(equals(polar.get_SbestLD(), polar.SinkRate(polar.get_VbestLD())));
-  ok1(equals(polar.get_bestLD(), polar.get_VbestLD() / polar.get_SbestLD()));
+  ok1(equals(polar.GetVBestLD(), 25.830434162));
+  ok1(equals(polar.GetSBestLD(), polar.SinkRate(polar.GetVBestLD())));
+  ok1(equals(polar.GetBestLD(), polar.GetVBestLD() / polar.GetSBestLD()));
 
-  ok1(equals(polar.get_all_up_weight(), 318));
-  ok1(equals(polar.get_wing_loading(), 32.448979592));
-  ok1(equals(polar.get_ballast(), 0));
-  ok1(equals(polar.get_ballast_litres(), 0));
-  ok1(polar.is_ballastable());
-  ok1(!polar.has_ballast());
+  ok1(equals(polar.GetTotalMass(), 318));
+  ok1(equals(polar.GetWingLoading(), 32.448979592));
+  ok1(equals(polar.GetBallast(), 0));
+  ok1(equals(polar.GetBallastLitres(), 0));
+  ok1(polar.IsBallastable());
+  ok1(!polar.HasBallast());
 }
 
 void
 GlidePolarTest::TestBallast()
 {
-  polar.set_ballast(fixed(0.25));
+  polar.SetBallast(fixed(0.25));
 
-  ok1(equals(polar.get_ballast_litres(), 25));
-  ok1(equals(polar.get_ballast(), 0.25));
+  ok1(equals(polar.GetBallastLitres(), 25));
+  ok1(equals(polar.GetBallast(), 0.25));
 
-  polar.set_ballast_litres(fixed(50));
+  polar.SetBallastLitres(fixed(50));
 
-  ok1(equals(polar.get_ballast_litres(), 50));
-  ok1(equals(polar.get_ballast(), 0.5));
-  ok1(equals(polar.get_all_up_weight(), 368));
-  ok1(equals(polar.get_wing_loading(), 37.551020408));
-  ok1(polar.has_ballast());
+  ok1(equals(polar.GetBallastLitres(), 50));
+  ok1(equals(polar.GetBallast(), 0.5));
+  ok1(equals(polar.GetTotalMass(), 368));
+  ok1(equals(polar.GetWingLoading(), 37.551020408));
+  ok1(polar.HasBallast());
 
-  fixed loading_factor = sqrt(polar.get_all_up_weight() / polar.reference_mass);
+  fixed loading_factor = sqrt(polar.GetTotalMass() / polar.reference_mass);
   ok1(equals(polar.polar_a, polar.ideal_polar_a / loading_factor));
   ok1(equals(polar.polar_b, polar.ideal_polar_b));
   ok1(equals(polar.polar_c, polar.ideal_polar_c * loading_factor));
@@ -124,18 +124,18 @@ GlidePolarTest::TestBallast()
   ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), unKiloMeterPerHour)),
              1.722908));
 
-  ok1(equals(polar.get_Vmin(), 21.44464));
-  ok1(equals(polar.get_VbestLD(), 27.78703));
+  ok1(equals(polar.GetVMin(), 21.44464));
+  ok1(equals(polar.GetVBestLD(), 27.78703));
 
-  polar.set_ballast(fixed_zero);
-  ok1(!polar.has_ballast());
+  polar.SetBallast(fixed_zero);
+  ok1(!polar.HasBallast());
 }
 
 void
 GlidePolarTest::TestBugs()
 {
-  polar.set_bugs(fixed(0.75));
-  ok1(equals(polar.get_bugs(), 0.75));
+  polar.SetBugs(fixed(0.75));
+  ok1(equals(polar.GetBugs(), 0.75));
 
   ok1(equals(polar.polar_a, polar.ideal_polar_a * fixed_four / 3));
   ok1(equals(polar.polar_b, polar.ideal_polar_b * fixed_four / 3));
@@ -148,20 +148,20 @@ GlidePolarTest::TestBugs()
   ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), unKiloMeterPerHour)),
              2.557333));
 
-  ok1(equals(polar.get_Vmin(), 19.93464));
-  ok1(equals(polar.get_VbestLD(), 25.83043));
+  ok1(equals(polar.GetVMin(), 19.93464));
+  ok1(equals(polar.GetVBestLD(), 25.83043));
 
-  polar.set_bugs(fixed_one);
+  polar.SetBugs(fixed_one);
 }
 
 void
 GlidePolarTest::TestMC()
 {
-  polar.set_mc(fixed_one);
-  ok1(equals(polar.get_VbestLD(), 33.482780452));
+  polar.SetMC(fixed_one);
+  ok1(equals(polar.GetVBestLD(), 33.482780452));
 
-  polar.set_mc(fixed_zero);
-  ok1(equals(polar.get_VbestLD(), 25.830434162));
+  polar.SetMC(fixed_zero);
+  ok1(equals(polar.GetVBestLD(), 25.830434162));
 }
 
 void

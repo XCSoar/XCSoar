@@ -177,12 +177,12 @@ MacCreadyProcessTimer()
   GlidePolar &glide_polar = settings_computer.glide_polar_task;
 
   if (basic.settings.mac_cready_available.Modified(last_external_settings.mac_cready_available)) {
-    glide_polar.set_mc(basic.settings.mac_cready);
+    glide_polar.SetMC(basic.settings.mac_cready);
     if (protected_task_manager != NULL)
       protected_task_manager->set_glide_polar(glide_polar);
   } else if (calculated.auto_mac_cready_available.Modified(last_auto_mac_cready)) {
     last_auto_mac_cready = calculated.auto_mac_cready_available;
-    glide_polar.set_mc(calculated.auto_mac_cready);
+    glide_polar.SetMC(calculated.auto_mac_cready);
     device_blackboard.SetMC(calculated.auto_mac_cready);
   }
 
@@ -215,7 +215,7 @@ BallastDumpProcessTimer()
     return;
 
   GlidePolar &glide_polar = settings_computer.glide_polar_task;
-  fixed ballast = glide_polar.get_ballast();
+  fixed ballast = glide_polar.GetBallast();
   fixed percent_per_second = fixed_one / settings_computer.BallastSecsToEmpty;
 
   ballast -= dt * percent_per_second;
@@ -224,7 +224,7 @@ BallastDumpProcessTimer()
     ballast = fixed_zero;
   }
 
-  glide_polar.set_ballast(ballast);
+  glide_polar.SetBallast(ballast);
 
   if (protected_task_manager != NULL)
     protected_task_manager->set_glide_polar(glide_polar);

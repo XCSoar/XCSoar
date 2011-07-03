@@ -47,23 +47,23 @@ GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast)
   reference_mass(300),
   wing_area(fixed_zero)
 {
-  update();
+  Update();
 
   // Calculate inv_mc
-  set_mc(mc);
+  SetMC(mc);
 }
 
 void
-GlidePolar::update()
+GlidePolar::Update()
 {
-  update_polar();
+  UpdatePolar();
   Smax = SinkRate(Vmax);
-  solve_min();
-  solve_ld();
+  SolveSMin();
+  SolveLD();
 }
 
 void
-GlidePolar::update_polar()
+GlidePolar::UpdatePolar()
 {
   assert(positive(bugs));
 
@@ -80,29 +80,29 @@ GlidePolar::update_polar()
 }
 
 void
-GlidePolar::set_bugs(const fixed clean)
+GlidePolar::SetBugs(const fixed clean)
 {
   assert(positive(clean) && !positive(clean - fixed_one));
   bugs = clean;
-  update();
+  Update();
 }
 
 void
-GlidePolar::set_ballast(const fixed bal)
+GlidePolar::SetBallast(const fixed bal)
 {
   assert(!negative(bal));
   ballast = bal;
-  update();
+  Update();
 }
 
 void
-GlidePolar::set_ballast_litres(const fixed litres)
+GlidePolar::SetBallastLitres(const fixed litres)
 {
-  set_ballast(litres / (ballast_ratio * reference_mass));
+  SetBallast(litres / (ballast_ratio * reference_mass));
 }
 
 void
-GlidePolar::set_mc(const fixed _mc)
+GlidePolar::SetMC(const fixed _mc)
 {
   mc = _mc;
 
@@ -111,7 +111,7 @@ GlidePolar::set_mc(const fixed _mc)
   else
     inv_mc = fixed_zero;
 
-  solve_ld();
+  SolveLD();
 }
 
 fixed
@@ -177,7 +177,7 @@ private:
 #endif
 
 void
-GlidePolar::solve_ld()
+GlidePolar::SolveLD()
 {
 #if 0
   // this method to be used if polar is not parabolic
@@ -225,7 +225,7 @@ private:
 #endif
 
 void 
-GlidePolar::solve_min()
+GlidePolar::SolveSMin()
 {
 #if 0
   // this method to be used if polar is not parabolic
@@ -238,7 +238,7 @@ GlidePolar::solve_min()
 }
 
 bool 
-GlidePolar::possible_glide(const GlideState &task) const
+GlidePolar::IsGlidePossible(const GlideState &task) const
 {
   if (!positive(task.AltitudeDifference))
     return false;
@@ -315,7 +315,7 @@ private:
 };
 
 fixed
-GlidePolar::speed_to_fly(const AIRCRAFT_STATE &state,
+GlidePolar::SpeedToFly(const AIRCRAFT_STATE &state,
     const GlideResult &solution, const bool block_stf) const
 {
   fixed V_stf;
@@ -336,28 +336,28 @@ GlidePolar::speed_to_fly(const AIRCRAFT_STATE &state,
 }
 
 fixed
-GlidePolar::get_all_up_weight() const
+GlidePolar::GetTotalMass() const
 {
-  return reference_mass + get_ballast_litres();
+  return reference_mass + GetBallastLitres();
 }
 
 fixed
-GlidePolar::get_wing_loading() const
+GlidePolar::GetWingLoading() const
 {
   if (positive(wing_area))
-    return get_all_up_weight() / wing_area;
+    return GetTotalMass() / wing_area;
 
   return fixed_zero;
 }
 
 fixed
-GlidePolar::get_ballast_litres() const
+GlidePolar::GetBallastLitres() const
 {
   return ballast * ballast_ratio * reference_mass;
 }
 
 bool
-GlidePolar::is_ballastable() const
+GlidePolar::IsBallastable() const
 {
   return positive(ballast_ratio);
 }
@@ -369,7 +369,7 @@ FRiskFunction(const fixed x, const fixed k)
 }
 
 fixed
-GlidePolar::mc_risk(const fixed height_fraction, const fixed riskGamma) const
+GlidePolar::GetRiskMC(const fixed height_fraction, const fixed riskGamma) const
 {
 #define fixed_low_limit fixed(0.1)
 #define fixed_up_limit fixed(0.9)
@@ -386,13 +386,13 @@ GlidePolar::mc_risk(const fixed height_fraction, const fixed riskGamma) const
 }
 
 fixed
-GlidePolar::get_Vtakeoff() const
+GlidePolar::GetVTakeoff() const
 {
-  return half(get_Vmin());
+  return half(GetVMin());
 }
 
 fixed
-GlidePolar::get_ld_over_ground(const AIRCRAFT_STATE &state) const
+GlidePolar::GetLDOverGround(const AIRCRAFT_STATE &state) const
 {
   if (state.wind.is_zero())
     return bestLD;

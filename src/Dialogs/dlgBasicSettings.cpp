@@ -50,7 +50,7 @@ SetButtons()
   WndButton* wb;
 
   if ((wb = (WndButton *)wf->FindByName(_T("cmdDump"))) != NULL) {
-    wb->set_visible(glide_polar.has_ballast());
+    wb->set_visible(glide_polar.HasBallast());
     wb->SetCaption(XCSoarInterface::SettingsComputer().BallastTimerActive ?
         _("Stop") : _("Dump"));
   }
@@ -158,9 +158,9 @@ SetBallast(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpBallast"));
   if (wp) {
-    if (glide_polar.is_ballastable()) {
+    if (glide_polar.IsBallastable()) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-      df.SetAsFloat(glide_polar.get_ballast_litres());
+      df.SetAsFloat(glide_polar.GetBallastLitres());
     } else
       wp->hide();
 
@@ -168,7 +168,7 @@ SetBallast(void)
   }
   wp = (WndProperty*)wf->FindByName(_T("prpWingLoading"));
   if (wp) {
-    const fixed wl = glide_polar.get_wing_loading();
+    const fixed wl = glide_polar.GetWingLoading();
     if (wl > fixed_zero) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       df.SetAsFloat(wl);
@@ -209,11 +209,11 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daSpecial:
-    SetBallastTimer(glide_polar.has_ballast() &&
+    SetBallastTimer(glide_polar.HasBallast() &&
                     !XCSoarInterface::SettingsComputer().BallastTimerActive);
     break;
   case DataField::daChange:
-    glide_polar.set_ballast_litres(df.GetAsFixed());
+    glide_polar.SetBallastLitres(df.GetAsFixed());
     changed = true;
     SetButtons();
     SetBallast();
@@ -232,7 +232,7 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 
   switch (Mode) {
   case DataField::daChange:
-    glide_polar.set_bugs(Sender->GetAsFixed() / 100);
+    glide_polar.SetBugs(Sender->GetAsFixed() / 100);
     changed = true;
     break;
 
@@ -288,7 +288,7 @@ dlgBasicSettingsShowModal()
   SetButtons();
 
   SetBallast();
-  LoadFormProperty(*wf, _T("prpBugs"), glide_polar.get_bugs() * 100);
+  LoadFormProperty(*wf, _T("prpBugs"), glide_polar.GetBugs() * 100);
   LoadFormProperty(*wf, _T("prpQNH"),
                    CommonInterface::SettingsComputer().pressure.get_QNH());
 

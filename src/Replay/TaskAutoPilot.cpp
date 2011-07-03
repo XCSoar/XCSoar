@@ -237,7 +237,7 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
     if (positive(stat.solution_remaining.VOpt)) {
       state.TrueAirspeed = stat.solution_remaining.VOpt*speed_factor;
     } else {
-      state.TrueAirspeed = glide_polar.get_VbestLD();
+      state.TrueAirspeed = glide_polar.GetVBestLD();
     }
     state.IndicatedAirspeed = state.TrueAirspeed;
     state.Vario = -glide_polar.SinkRate(state.TrueAirspeed)*parms.sink_factor;
@@ -246,7 +246,7 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
   break;
   case Climb:
   {
-    state.TrueAirspeed = glide_polar.get_Vmin();
+    state.TrueAirspeed = glide_polar.GetVMin();
     fixed d = parms.turn_speed*timestep;
     if (d< fixed_360) {
       heading += Angle::degrees(d);

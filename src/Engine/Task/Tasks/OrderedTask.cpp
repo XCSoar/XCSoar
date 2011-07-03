@@ -773,7 +773,7 @@ OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, fixed& best) const
 {
   // note setting of lower limit on mc
   TaskBestMc bmc(task_points,activeTaskPoint, aircraft, glide_polar);
-  return bmc.search(glide_polar.get_mc(), best);
+  return bmc.search(glide_polar.GetMC(), best);
 }
 
 
@@ -808,10 +808,10 @@ OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft, fixed& val) const
 {
   if (allow_incremental_boundary_stats(aircraft)) {
     TaskEffectiveMacCready bce(task_points,activeTaskPoint, aircraft, glide_polar);
-    val = bce.search(glide_polar.get_mc());
+    val = bce.search(glide_polar.GetMC());
     return true;
   } else {
-    val = glide_polar.get_mc();
+    val = glide_polar.GetMC();
     return false;
   }
 }

@@ -38,11 +38,11 @@ UnorderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, fixed& best) const
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
-    best = glide_polar.get_mc();
+    best = glide_polar.GetMC();
     return false;
   }
   TaskBestMc bmc(tp, aircraft, glide_polar);
-  return bmc.search(glide_polar.get_mc(), best);
+  return bmc.search(glide_polar.GetMC(), best);
 }
 
 bool

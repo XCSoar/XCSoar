@@ -103,7 +103,7 @@ public:
    */
   gcc_pure
   fixed
-  get_Smin() const
+  GetSMin() const
   {
     return Smin;
   }
@@ -115,7 +115,7 @@ public:
    */
   gcc_pure
   fixed
-  get_Vmin() const
+  GetVMin() const
   {
     return Vmin;
   }
@@ -129,7 +129,7 @@ public:
    */
   gcc_pure
   fixed
-  get_Vmax() const
+  GetVMax() const
   {
     return Vmax;
   }
@@ -141,7 +141,7 @@ public:
    */
   gcc_pure
   fixed
-  get_Smax() const
+  GetSMax() const
   {
     return Smax;
   }
@@ -153,7 +153,7 @@ public:
    */
   gcc_pure
   fixed
-  get_VbestLD() const
+  GetVBestLD() const
   {
     return VbestLD;
   }
@@ -165,7 +165,7 @@ public:
    */
   gcc_pure
   fixed
-  get_SbestLD() const
+  GetSBestLD() const
   {
     return SbestLD;
   }
@@ -176,7 +176,7 @@ public:
    * @return Best L/D ratio
    */
   gcc_pure
-  fixed get_bestLD() const
+  fixed GetBestLD() const
   {
     return bestLD;
   }
@@ -185,7 +185,7 @@ public:
    * Takeoff speed
    * @return Takeoff speed threshold (m/s)
    */
-  fixed get_Vtakeoff() const;
+  fixed GetVTakeoff() const;
 
   /**
    * Set cruise efficiency value.  1.0 = perfect MacCready speed
@@ -193,7 +193,7 @@ public:
    * @param _ce The new cruise efficiency value
    */
   void
-  set_cruise_efficiency(const fixed _ce)
+  SetCruiseEfficiency(const fixed _ce)
   {
     cruise_efficiency = _ce;
   }
@@ -205,7 +205,7 @@ public:
    */
   gcc_pure
   fixed
-  get_cruise_efficiency() const
+  GetCruiseEfficiency() const
   {
     return cruise_efficiency;
   }
@@ -215,14 +215,14 @@ public:
    *
    * @param clean The new bugs setting (clean ratio) (0-1]
    */
-  void set_bugs(const fixed clean);
+  void SetBugs(const fixed clean);
 
   /**
    * Retrieve bugs 
    * @return Cleanliness of glider (0-1]
    */
   gcc_pure
-  fixed get_bugs() const {
+  fixed GetBugs() const {
     return bugs;
   }
 
@@ -231,27 +231,27 @@ public:
    *
    * @param ratio The new ballast setting (proportion of possible ballast, [0-1]
    */
-  void set_ballast(const fixed ratio);
+  void SetBallast(const fixed ratio);
 
   /**
    * Set ballast value in litres
    * @param litres The new ballast setting (l or kg)
    */
-  void set_ballast_litres(const fixed litres);
+  void SetBallastLitres(const fixed litres);
 
   /**
    * Retrieve ballast 
    * @return Proportion of possible ballast [0-1]
    */
   gcc_pure
-  fixed get_ballast() const {
+  fixed GetBallast() const {
     return ballast;
   }
 
   /**
    * Retrieve if the glider is ballasted
    */
-  bool has_ballast() const {
+  bool HasBallast() const {
     return positive(ballast);
   }
 
@@ -259,14 +259,14 @@ public:
    * Retrieve ballast in litres
    * @return Ballast (l or kg)
    */
-  fixed get_ballast_litres() const;
+  fixed GetBallastLitres() const;
 
   /**
    * Determine if glider carries ballast
    *
    * @return True if glider can carry ballast
    */
-  bool is_ballastable() const;
+  bool IsBallastable() const;
 
   /**
    * Set MacCready value.  Internally this performs search
@@ -274,7 +274,7 @@ public:
    *
    * @param _mc The new MacCready ring setting (m/s)
    */
-  void set_mc(const fixed _mc);
+  void SetMC(const fixed _mc);
 
   /**
    * Accessor for MC setting
@@ -282,7 +282,7 @@ public:
    * @return The current MacCready ring setting (m/s)
    */
   gcc_pure
-  fixed get_mc() const {
+  fixed GetMC() const {
     return mc;
   }
 
@@ -292,7 +292,7 @@ public:
    * @return The inverse of current MacCready ring setting (s/m)
    */
   gcc_pure
-  fixed get_inv_mc() const {
+  fixed GetInvMC() const {
     return inv_mc;
   }
 
@@ -301,14 +301,14 @@ public:
    *
    * @return Mass (kg) of aircraft including ballast
    */
-  fixed get_all_up_weight() const;
+  fixed GetTotalMass() const;
 
   /**
    * Calculate wing loading
    *
    * @return Wing loading (all up mass divided by reference area, kg/m^2)
    */
-  fixed get_wing_loading() const;
+  fixed GetWingLoading() const;
 
   /**
    * Sink rate model (actual glide polar) function.
@@ -362,7 +362,7 @@ public:
    *
    * @return True if a glide solution is feasible (optimistically)
    */
-  bool possible_glide(const GlideState &task) const;
+  bool IsGlidePossible(const GlideState &task) const;
 
   /**
    * Calculate speed-to-fly according to MacCready dolphin theory
@@ -374,7 +374,7 @@ public:
    *
    * @return Speed to fly (true, m/s)
    */
-  fixed speed_to_fly(const AIRCRAFT_STATE &state, const GlideResult &solution,
+  fixed SpeedToFly(const AIRCRAFT_STATE &state, const GlideResult &solution,
       const bool block_stf) const;
 
   /**
@@ -386,7 +386,7 @@ public:
    *
    * @return MC value adjusted for risk (m/s)
    */
-  fixed mc_risk(const fixed height_fraction, const fixed riskGamma) const;
+  fixed GetRiskMC(const fixed height_fraction, const fixed riskGamma) const;
 
   /**
    * Find LD relative to ground for specified track bearing
@@ -395,20 +395,20 @@ public:
    *
    * @return LD ratio (distance travelled per unit height loss)
    */
-  fixed get_ld_over_ground(const AIRCRAFT_STATE &state) const;
+  fixed GetLDOverGround(const AIRCRAFT_STATE &state) const;
 
 private:
   /** Update computed values after change */
-  void update();
+  void Update();
 
   /** Update glide polar coefficients from ideal terms */
-  void update_polar();
+  void UpdatePolar();
 
   /** Solve for best LD at current MC/bugs/ballast setting. */
-  void solve_ld();
+  void SolveLD();
 
   /** Solve for min sink rate at current bugs/ballast setting. */
-  void solve_min();
+  void SolveSMin();
 };
 
 #endif

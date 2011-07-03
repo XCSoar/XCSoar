@@ -48,7 +48,7 @@ AbstractTask::update_auto_mc(GlidePolar &glide_polar,
                              fixed fallback_mc)
 {
   if (!positive(fallback_mc))
-    fallback_mc = glide_polar.get_mc();
+    fallback_mc = glide_polar.GetMC();
 
   if (!task_started(true) || !task_behaviour.auto_mc) {
     reset_auto_mc();
@@ -75,7 +75,7 @@ AbstractTask::update_auto_mc(GlidePolar &glide_polar,
   if (trigger_auto) {
     // smooth out updates
     stats.mc_best = mc_lpf.update(mc_found);
-    glide_polar.set_mc(stats.mc_best);
+    glide_polar.SetMC(stats.mc_best);
   } else {
     // reset lpf so will be smooth next time it becomes active
     stats.mc_best = mc_lpf.reset(fallback_mc);
@@ -97,12 +97,12 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
   }
 
   if (task_started() && task_behaviour.calc_effective_mc) {
-    fixed val = glide_polar.get_mc();
+    fixed val = glide_polar.GetMC();
     if (calc_effective_mc(state, val)) {
       stats.effective_mc = em_lpf.update(val);
     }
   } else {
-    stats.effective_mc = em_lpf.reset(glide_polar.get_mc());
+    stats.effective_mc = em_lpf.reset(glide_polar.GetMC());
   }
 
   if (task_behaviour.calc_glide_required)
@@ -149,9 +149,9 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
   glide_solution_remaining(state, glide_polar, stats.total.solution_remaining,
                            stats.current_leg.solution_remaining);
 
-  if (positive(glide_polar.get_mc())) {
+  if (positive(glide_polar.GetMC())) {
     GlidePolar polar_mc0 = glide_polar;
-    polar_mc0.set_mc(fixed_zero); 
+    polar_mc0.SetMC(fixed_zero); 
     
     glide_solution_remaining(state, polar_mc0, stats.total.solution_mc0,
                              stats.current_leg.solution_mc0);
@@ -246,7 +246,7 @@ AbstractTask::update_stats_times(const AIRCRAFT_STATE &state)
 void
 AbstractTask::reset_auto_mc()
 {
-  stats.mc_best = mc_lpf.reset(glide_polar.get_mc());
+  stats.mc_best = mc_lpf.reset(glide_polar.GetMC());
   trigger_auto = false;
 }
 
@@ -279,7 +279,7 @@ AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) const
 bool 
 AbstractTask::calc_effective_mc(const AIRCRAFT_STATE &state_now, fixed& val) const
 {
-  val = glide_polar.get_mc();
+  val = glide_polar.GetMC();
   return true;
 }
 

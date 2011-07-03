@@ -199,23 +199,23 @@ public:
   };
 
   virtual fixed get_cruise_speed() const {
-    return m_glide_polar.get_VbestLD();
+    return m_glide_polar.GetVBestLD();
   }
 
   virtual fixed get_cruise_descent() const {
-    return m_glide_polar.get_SbestLD();
+    return m_glide_polar.GetSBestLD();
   }
 
   virtual fixed get_climb_rate() const {
-    return m_glide_polar.get_mc();
+    return m_glide_polar.GetMC();
   }
 
   virtual fixed get_descent_rate() const {
-    return m_glide_polar.get_Smax();
+    return m_glide_polar.GetSMax();
   }
 
   virtual fixed get_max_speed() const {
-    return m_glide_polar.get_Vmax();
+    return m_glide_polar.GetVMax();
   }
 
 protected:

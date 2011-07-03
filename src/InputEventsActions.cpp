@@ -771,17 +771,17 @@ InputEvents::eventMacCready(const TCHAR *misc)
     return;
 
   GlidePolar &polar = settings_computer.glide_polar_task;
-  fixed mc = polar.get_mc();
+  fixed mc = polar.GetMC();
 
   if (_tcscmp(misc, _T("up")) == 0) {
     mc = std::min(mc + fixed_one / 10, fixed(5));
-    polar.set_mc(mc);
+    polar.SetMC(mc);
     protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
     InfoBoxManager::SetDirty();
   } else if (_tcscmp(misc, _T("down")) == 0) {
     mc = std::max(mc - fixed_one / 10, fixed_zero);
-    polar.set_mc(mc);
+    polar.SetMC(mc);
     protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
     InfoBoxManager::SetDirty();
@@ -1053,7 +1053,7 @@ InputEvents::eventBugs(const TCHAR *misc)
     return;
 
   GlidePolar &polar = CommonInterface::SetSettingsComputer().glide_polar_task;
-  fixed BUGS = polar.get_bugs();
+  fixed BUGS = polar.GetBugs();
   fixed oldBugs = BUGS;
 
   if (_tcscmp(misc, _T("up")) == 0) {
@@ -1075,7 +1075,7 @@ InputEvents::eventBugs(const TCHAR *misc)
   }
 
   if (BUGS != oldBugs) {
-    polar.set_bugs(fixed(BUGS));
+    polar.SetBugs(fixed(BUGS));
     protected_task_manager->set_glide_polar(polar);
   }
 }
@@ -1094,7 +1094,7 @@ InputEvents::eventBallast(const TCHAR *misc)
     return;
 
   GlidePolar &polar = CommonInterface::SetSettingsComputer().glide_polar_task;
-  fixed BALLAST = polar.get_ballast();
+  fixed BALLAST = polar.GetBallast();
   fixed oldBallast = BALLAST;
 
   if (_tcscmp(misc, _T("up")) == 0) {
@@ -1116,7 +1116,7 @@ InputEvents::eventBallast(const TCHAR *misc)
   }
 
   if (BALLAST != oldBallast) {
-    polar.set_ballast(fixed(BALLAST));
+    polar.SetBallast(fixed(BALLAST));
     protected_task_manager->set_glide_polar(polar);
   }
 }
@@ -1228,7 +1228,7 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
                           CommonInterface::SettingsMap().airspace,
                           aircraft_state);
   GlidePolar polar = settings_computer.glide_polar_task;
-  polar.set_mc(max(polar.get_mc(),fixed_one));
+  polar.SetMC(max(polar.GetMC(),fixed_one));
   AirspaceAircraftPerformanceGlide perf(polar);
   AirspaceSoonestSort ans(aircraft_state, perf, fixed(1800), visible);
 
@@ -1776,7 +1776,7 @@ InputEvents::sub_SetZoom(fixed value)
     Message::AddMessage(_("Auto. zoom off"));
   }
 
-  fixed vmin = CommonInterface::SettingsComputer().glide_polar_task.get_Vmin();
+  fixed vmin = CommonInterface::SettingsComputer().glide_polar_task.GetVMin();
   fixed scale_2min_distance = vmin * fixed_int_constant(12);
   const fixed scale_500m = fixed_int_constant(50);
   const fixed scale_1600km = fixed_int_constant(1600*100);

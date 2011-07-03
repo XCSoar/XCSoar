@@ -744,7 +744,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
     // alt reqd at mc 0
 
-    glide_polar.set_mc(fixed_zero);
+    glide_polar.SetMC(fixed_zero);
     r = TaskSolution::glide_solution_remaining(t, aircraft_state, glide_polar);
     wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
     if (wp) {

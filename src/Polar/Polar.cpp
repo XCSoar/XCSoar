@@ -85,7 +85,7 @@ PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
 
   polar.wing_area = wing_area;
 
-  polar.update();
+  polar.Update();
   return true;
 }
 

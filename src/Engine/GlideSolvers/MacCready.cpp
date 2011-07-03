@@ -46,7 +46,7 @@ MacCready::MacCready(const GlidePolar &_glide_polar,
 GlideResult 
 MacCready::solve_vertical(const GlideState &task) const
 {
-  GlideResult result(task, glide_polar.get_VbestLD());
+  GlideResult result(task, glide_polar.GetVBestLD());
 
   // distance relation
   //   V*t_cr = W*(t_cl+t_cr)
@@ -65,14 +65,14 @@ MacCready::solve_vertical(const GlideState &task) const
     return result;
   }
   
-  const fixed V = glide_polar.get_VbestLD() * cruise_efficiency;
+  const fixed V = glide_polar.GetVBestLD() * cruise_efficiency;
   const fixed denom1 = V - task.EffectiveWindSpeed;
 
   if (!positive(denom1)) {
     result.Solution = GlideResult::RESULT_WIND_EXCESSIVE;
     return result;
   }
-  const fixed denom2 = glide_polar.get_mc() * denom1 - task.EffectiveWindSpeed;
+  const fixed denom2 = glide_polar.GetMC() * denom1 - task.EffectiveWindSpeed;
   if (!positive(denom2)) {
     result.Solution = GlideResult::RESULT_MACCREADY_INSUFFICIENT;
     return result;
@@ -95,7 +95,7 @@ MacCready::solve(const GlidePolar &glide_polar, const GlideState &task)
 #ifdef INSTRUMENT_TASK
   count_mc++;
 #endif
-  MacCready mac(glide_polar, glide_polar.get_cruise_efficiency());
+  MacCready mac(glide_polar, glide_polar.GetCruiseEfficiency());
   return mac.solve(task);
 }
 
@@ -106,19 +106,19 @@ MacCready::solve_sink(const GlidePolar &glide_polar, const GlideState &task,
 #ifdef INSTRUMENT_TASK
   count_mc++;
 #endif
-  MacCready mac(glide_polar, glide_polar.get_cruise_efficiency());
+  MacCready mac(glide_polar, glide_polar.GetCruiseEfficiency());
   return mac.solve_sink(task, S);
 }
 
 GlideResult
 MacCready::solve_cruise(const GlideState &task) const
 {
-  const fixed VOpt = glide_polar.get_VbestLD();
+  const fixed VOpt = glide_polar.GetVBestLD();
   GlideResult result(task, VOpt);
 
-  const fixed S = glide_polar.get_SbestLD();
-  const fixed mc = glide_polar.get_mc();
-  const fixed inv_mc = glide_polar.get_inv_mc();
+  const fixed S = glide_polar.GetSBestLD();
+  const fixed mc = glide_polar.GetMC();
+  const fixed inv_mc = glide_polar.GetInvMC();
   const fixed rho = S * inv_mc;
   const fixed rhoplusone = fixed_one + rho;
   const fixed invrhoplusone = fixed_one / rhoplusone;
@@ -214,7 +214,7 @@ MacCready::solve_sink(const GlideState &task, const fixed S) const
   const fixed h_offset = fixed_1mil;
   GlideState virt_task = task;
   virt_task.AltitudeDifference += h_offset;
-  GlideResult res = solve_glide(task, glide_polar.get_VbestLD(), S);
+  GlideResult res = solve_glide(task, glide_polar.GetVBestLD(), S);
   res.AltitudeDifference -= h_offset;
   return res;
 }
@@ -224,7 +224,7 @@ MacCready::solve(const GlideState &task) const
 {
   if (!positive(task.Vector.Distance)) {
     return solve_vertical(task);
-  } else if (!positive(glide_polar.get_mc())) {
+  } else if (!positive(glide_polar.GetMC())) {
     // whole task must be glide
     return optimise_glide(task, false);
   } else if (!positive(task.AltitudeDifference)) {
@@ -320,10 +320,10 @@ private:
 GlideResult
 MacCready::optimise_glide(const GlideState &task, const bool allow_partial) const
 {
-  MacCreadyVopt mcvopt(task, *this, glide_polar.get_Vmin(),
-      glide_polar.get_Vmax(), allow_partial);
+  MacCreadyVopt mcvopt(task, *this, glide_polar.GetVMin(),
+      glide_polar.GetVMax(), allow_partial);
 
-  return mcvopt.result(glide_polar.get_Vmin());
+  return mcvopt.result(glide_polar.GetVMin());
 }
 
 /*
@@ -341,11 +341,11 @@ subs rho=(gamma*Vn+S)/mc
 fixed
 MacCready::get_mc() const
 {
-  return glide_polar.get_mc();
+  return glide_polar.GetMC();
 }
 
 fixed
 MacCready::get_inv_mc() const
 {
-  return glide_polar.get_inv_mc();
+  return glide_polar.GetInvMC();
 }

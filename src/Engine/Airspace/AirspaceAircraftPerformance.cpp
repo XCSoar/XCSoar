@@ -260,7 +260,7 @@ AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AIRCRAFT_
     m_v = leg_distance / time_remaining;
     if (positive(solution.HeightClimb)) {
       m_cruise_descent = -solution.HeightClimb/time_remaining; 
-      m_climb_rate = polar.get_mc();
+      m_climb_rate = polar.GetMC();
     } else {
       m_cruise_descent = solution.HeightGlide/time_remaining;
       m_climb_rate = fixed_zero;
@@ -270,7 +270,7 @@ AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AIRCRAFT_
     m_cruise_descent = fixed_zero;
     m_climb_rate = fixed_zero;
   }
-  m_max_descent = polar.get_SbestLD();
+  m_max_descent = polar.GetSBestLD();
 
   set_tolerance_vertical(fixed(0.001));
 }

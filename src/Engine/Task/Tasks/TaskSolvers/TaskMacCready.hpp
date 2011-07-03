@@ -109,7 +109,7 @@ public:
  * @param mc MacCready value (m/s)
  */
   void set_mc(fixed mc) {
-    m_glide_polar.set_mc(mc);
+    m_glide_polar.SetMC(mc);
   };
 
 /** 
@@ -118,7 +118,7 @@ public:
  * @param ce Cruise efficiency
  */
   void set_cruise_efficiency(fixed ce) {
-    m_glide_polar.set_cruise_efficiency(ce);
+    m_glide_polar.SetCruiseEfficiency(ce);
   };
 
 /** 

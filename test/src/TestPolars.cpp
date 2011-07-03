@@ -33,7 +33,7 @@
 #include <windows.h>
 #endif
 
-void GlidePolar::update() {}
+void GlidePolar::Update() {}
 
 TLineReader*
 OpenConfiguredTextFile(const TCHAR *profile_key, ConvertLineReader::charset cs)

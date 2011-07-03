@@ -293,7 +293,7 @@ Update(void)
   case ANALYSIS_PAGE_POLAR:
     _stprintf(sTmp, _T("%s: %s (%s %d kg)"), _("Analysis"),
               _("Glide Polar"), _("Mass"),
-              (int)settings_computer.glide_polar_task.get_all_up_weight());
+              (int)settings_computer.glide_polar_task.GetTotalMass());
     wf->SetCaption(sTmp);
     fs.CaptionPolar(sTmp, settings_computer.glide_polar_task);
     wInfo->SetCaption(sTmp);

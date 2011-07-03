@@ -172,7 +172,7 @@ GlideComputerAirData::Wind()
   // update zigzag wind
   if ((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG) &&
       Basic().AirspeedAvailable &&
-      Basic().TrueAirspeed > SettingsComputer().glide_polar_task.get_Vtakeoff()) {
+      Basic().TrueAirspeed > SettingsComputer().glide_polar_task.GetVTakeoff()) {
     WindZigZagGlue::Result result = wind_zig_zag.Update(Basic(), calculated);
 
     if (result.quality > 0)
@@ -676,7 +676,7 @@ GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
     ? std::max(calculated.TrueAirspeed, basic.GroundSpeed)
     : basic.GroundSpeed;
 
-  if (speed > glide_polar.get_Vtakeoff() ||
+  if (speed > glide_polar.GetVTakeoff() ||
       (calculated.AltitudeAGLValid && calculated.AltitudeAGL > fixed(300))) {
     calculated.flight.flying_state_moving(basic.Time);
   } else {

@@ -205,7 +205,7 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
 
-  SetVSpeed(infobox, settings_computer.glide_polar_task.get_mc());
+  SetVSpeed(infobox, settings_computer.glide_polar_task.GetMC());
 
   // Set Comment
   if (XCSoarInterface::SettingsComputer().auto_mc)
@@ -223,19 +223,19 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
   SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SetSettingsComputer();
   GlidePolar &polar = settings_computer.glide_polar_task;
-  fixed mc = polar.get_mc();
+  fixed mc = polar.GetMC();
 
   switch (keycode) {
   case ibkUp:
     mc = std::min(mc + fixed_one / 10, fixed(5));
-    polar.set_mc(mc);
+    polar.SetMC(mc);
     protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
     return true;
 
   case ibkDown:
     mc = std::max(mc - fixed_one / 10, fixed_zero);
-    polar.set_mc(mc);
+    polar.SetMC(mc);
     protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
     return true;
@@ -268,14 +268,14 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
   SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SetSettingsComputer();
   GlidePolar &polar = settings_computer.glide_polar_task;
-  fixed mc = polar.get_mc();
+  fixed mc = polar.GetMC();
 
   if (_tcscmp(misc, _T("+0.1")) == 0) {
     return HandleKey(ibkUp);
 
   } else if (_tcscmp(misc, _T("+0.5")) == 0) {
     mc = std::min(mc + fixed_one / 2, fixed(5));
-    polar.set_mc(mc);
+    polar.SetMC(mc);
     protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
     return true;
@@ -285,7 +285,7 @@ InfoBoxContentMacCready::HandleQuickAccess(const TCHAR *misc)
 
   } else if (_tcscmp(misc, _T("-0.5")) == 0) {
     mc = std::max(mc - fixed_one / 2, fixed_zero);
-    polar.set_mc(mc);
+    polar.SetMC(mc);
     protected_task_manager->set_glide_polar(polar);
     device_blackboard.SetMC(mc);
     return true;

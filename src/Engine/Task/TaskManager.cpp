@@ -238,26 +238,26 @@ TaskManager::update_common_stats_task(const AIRCRAFT_STATE &state)
 void
 TaskManager::update_common_stats_polar(const AIRCRAFT_STATE &state)
 {
-  common_stats.current_mc = m_glide_polar.get_mc();
-  common_stats.current_bugs = m_glide_polar.get_bugs();
-  common_stats.current_ballast = m_glide_polar.get_ballast();
+  common_stats.current_mc = m_glide_polar.GetMC();
+  common_stats.current_bugs = m_glide_polar.GetBugs();
+  common_stats.current_ballast = m_glide_polar.GetBallast();
 
   common_stats.current_risk_mc = 
-    m_glide_polar.mc_risk(state.working_band_fraction, 
+    m_glide_polar.GetRiskMC(state.working_band_fraction, 
                           task_behaviour.risk_gamma);
 
   GlidePolar risk_polar = m_glide_polar;
-  risk_polar.set_mc(common_stats.current_risk_mc);
+  risk_polar.SetMC(common_stats.current_risk_mc);
 
   common_stats.V_block = 
-    m_glide_polar.speed_to_fly(state,
+    m_glide_polar.SpeedToFly(state,
                                get_stats().current_leg.solution_remaining,
                                true);
 
   // note right now we only use risk mc for dolphin speeds
 
   common_stats.V_dolphin = 
-    risk_polar.speed_to_fly(state,
+    risk_polar.SpeedToFly(state,
                             get_stats().current_leg.solution_remaining,
                             false);
 }
@@ -393,7 +393,7 @@ TaskManager::reset()
   task_abort.reset();
   contest_manager.reset();
   common_stats.reset();
-  m_glide_polar.set_cruise_efficiency(fixed_one);
+  m_glide_polar.SetCruiseEfficiency(fixed_one);
   trace_full.clear();
   trace_sprint.clear();
 }
@@ -450,7 +450,7 @@ TaskManager::update_auto_mc(const AIRCRAFT_STATE& state_now,
     return false;
 
   if (positive(fallback_mc)) {
-    m_glide_polar.set_mc(fallback_mc);
+    m_glide_polar.SetMC(fallback_mc);
     return true;
   }
 

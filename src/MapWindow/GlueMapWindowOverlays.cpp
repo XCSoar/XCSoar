@@ -365,7 +365,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (SettingsComputer().BallastTimerActive) {
     TCHAR TEMP[20];
     _stprintf(TEMP, _T("BALLAST %d LITERS "),
-              (int)SettingsComputer().glide_polar_task.get_ballast_litres());
+              (int)SettingsComputer().glide_polar_task.GetBallastLitres());
     _tcscat(ScaleInfo, TEMP);
   }
 

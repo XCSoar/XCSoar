@@ -41,12 +41,12 @@ polar_mc(const fixed mc)
 {
   GlidePolar polar(mc);
   ofile << (double)mc << " " 
-        << (double)polar.get_VbestLD() << " " 
-        << (double)polar.get_bestLD() << " " 
-        << (double)polar.get_Vmin() << " " 
-        << (double)polar.get_Smin() << " " 
-        << (double)polar.get_Vmax() << " " 
-        << (double)polar.get_Smax() << "\n";
+        << (double)polar.GetVBestLD() << " " 
+        << (double)polar.GetBestLD() << " " 
+        << (double)polar.GetVMin() << " " 
+        << (double)polar.GetSMin() << " " 
+        << (double)polar.GetVMax() << " " 
+        << (double)polar.GetSMax() << "\n";
 }
 
 static void
@@ -58,7 +58,7 @@ basic_polar(const fixed mc)
   std::ofstream mfile(bname);
 
   GlidePolar polar(mc);
-  for (fixed V= Vmin; V<= polar.get_Vmax(); V+= fixed(0.25)) {
+  for (fixed V= Vmin; V<= polar.GetVMax(); V+= fixed(0.25)) {
     pfile << (double)mc << " " 
           << (double)V << " " 
           << -(double)polar.SinkRate(V) << " " 
@@ -69,12 +69,12 @@ basic_polar(const fixed mc)
   mfile << (double)mc 
         << " " << 0
         << " " << (double)mc
-        << " " << (double)polar.get_bestLD() 
+        << " " << (double)polar.GetBestLD() 
         << "\n";
   mfile << (double)mc 
-        << " " << (double)polar.get_VbestLD() 
-        << " " << -(double)polar.get_SbestLD() 
-        << " " << (double)polar.get_bestLD() 
+        << " " << (double)polar.GetVBestLD() 
+        << " " << -(double)polar.GetSBestLD() 
+        << " " << (double)polar.GetBestLD() 
         << "\n";
 }
 
@@ -84,7 +84,7 @@ test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
                std::ostream &hfile)
 {
   GlidePolar polar(fixed_zero);
-  polar.set_mc(fixed_one);
+  polar.SetMC(fixed_one);
 
   AIRCRAFT_STATE ac;
   ac.wind.norm = fabs(W);
@@ -112,7 +112,7 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
                std::ostream &hfile)
 {
   GlidePolar polar(fixed_zero);
-  polar.set_mc(fixed_one);
+  polar.SetMC(fixed_one);
 
   AIRCRAFT_STATE ac;
   ac.wind.norm = fabs(W);
@@ -128,7 +128,7 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
   GlideState gs(vect, fixed_zero, ac.NavAltitude, ac.wind);
   GlideResult gr = MacCready::solve(polar, gs);
 
-  fixed Vstf = polar.speed_to_fly(ac, gr, false);
+  fixed Vstf = polar.SpeedToFly(ac, gr, false);
 
   hfile << (double)h << " " 
         << (double)gr.AltitudeDifference << " "

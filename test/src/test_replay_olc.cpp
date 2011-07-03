@@ -187,7 +187,7 @@ test_replay(const Contests olc_type,
 
       n_samples++;
 
-      if (sim.state.Speed> glide_polar.get_Vtakeoff()) {
+      if (sim.state.Speed> glide_polar.GetVTakeoff()) {
         sim.state.flying_state_moving(sim.state.Time);
       } else {
         sim.state.flying_state_stationary(sim.state.Time);
