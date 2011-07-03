@@ -644,6 +644,8 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &d, unsigned extraTimeout,
     int bytesRead = d.Read(buffer, sizeof(buffer));
     if(bytesRead == 0)
       continue;
+    if (bytesRead == -1)
+      break;
 
     // parse message
     const TMsg *lastMsg = _parser.Parse(buffer, bytesRead);
