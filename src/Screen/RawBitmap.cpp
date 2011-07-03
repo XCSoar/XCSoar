@@ -40,6 +40,7 @@ RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
    corrected_width(CorrectedWidth(nWidth))
 #ifdef ENABLE_OPENGL
   , texture(new GLTexture(CorrectedWidth(nWidth), nHeight))
+  , dirty(true)
 #endif
 {
   assert(nWidth > 0);

@@ -101,6 +101,12 @@ protected:
 
 #ifdef ENABLE_OPENGL
   GLTexture *texture;
+
+  /**
+   * Has the buffer been modified, and needs to be copied into the
+   * texture?
+   */
+  mutable bool dirty;
 #elif defined(ENABLE_SDL)
   SDL_Surface *surface;
 #else
@@ -164,6 +170,12 @@ public:
 #endif
   }
 
+  void SetDirty() {
+#ifdef ENABLE_OPENGL
+    dirty = true;
+#endif
+  }
+
   /**
    * Returns real width of the screen buffer. It could be slightly more then
    * requested width. This parameter is important only when you work with
@@ -194,16 +206,20 @@ public:
                   unsigned dest_width, unsigned dest_height) const {
 #ifdef ENABLE_OPENGL
     texture->bind();
-#ifdef HAVE_GLES
-    /* 16 bit 5/6/5 on Android */
 
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
-                    GL_RGB, GL_UNSIGNED_SHORT_5_6_5, buffer);
+    if (dirty) {
+#ifdef HAVE_GLES
+      /* 16 bit 5/6/5 on Android */
+      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
+                      GL_RGB, GL_UNSIGNED_SHORT_5_6_5, buffer);
 #else
-    /* 32 bit R/G/B/A on full OpenGL */
-    glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
-                    GL_BGRA, GL_UNSIGNED_BYTE, buffer);
+      /* 32 bit R/G/B/A on full OpenGL */
+      glTexSubImage2D(GL_TEXTURE_2D, 0, 0, 0, corrected_width, this->height,
+                      GL_BGRA, GL_UNSIGNED_BYTE, buffer);
 #endif
+
+      dirty = false;
+    }
 
     glColor4f(1.0, 1.0, 1.0, 1.0);
     GLEnable scope(GL_TEXTURE_2D);

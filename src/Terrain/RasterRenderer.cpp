@@ -161,6 +161,8 @@ RasterRenderer::GenerateUnshadedImage(unsigned height_scale)
       }
     }
   }
+
+
 }
 
 // JMW: if zoomed right in (e.g. one unit is larger than terrain
@@ -298,6 +300,8 @@ RasterRenderer::GenerateSlopeImage(unsigned height_scale,
       }
     }
   }
+
+  image->SetDirty();
 }
 
 void
