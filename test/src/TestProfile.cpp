@@ -115,26 +115,33 @@ static void
 TestReader()
 {
   ProfileMap::Clear();
-  Profile::LoadFile(_T("output/TestProfileWriter.prf"));
+  Profile::LoadFile(_T("test/data/TestProfileReader.prf"));
 
   {
     int value;
     ok1(ProfileMap::Exists(_T("key1")));
     ok1(ProfileMap::Get(_T("key1"), value));
-    ok1(value == 4);
+    ok1(value == 1);
   }
 
   {
     StaticString<32> value;
     ok1(ProfileMap::Exists(_T("key2")));
     ok1(ProfileMap::Get(_T("key2"), value));
-    ok1(value == _T("value2"));
+    ok1(value == _T("value"));
+  }
+
+  {
+    int value;
+    ok1(ProfileMap::Exists(_T("key3")));
+    ok1(ProfileMap::Get(_T("key3"), value));
+    ok1(value == 5);
   }
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(34);
+  plan_tests(37);
 
   TestMap();
   TestWriter();
