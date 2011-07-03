@@ -86,8 +86,8 @@ copy_space_padded(char dest[], const TCHAR src[], unsigned int len)
   dest[len-1] = '\0';
 }
 
-void
-LXDevice::LoadPilotInfo(const Declaration &declaration)
+static void
+LoadPilotInfo(LX::Pilot &lxDevice_Pilot, const Declaration &declaration)
 {
   memset((void*)lxDevice_Pilot.unknown1, 0, sizeof(lxDevice_Pilot.unknown1));
   copy_space_padded(lxDevice_Pilot.PilotName, declaration.PilotName,
@@ -101,19 +101,12 @@ LXDevice::LoadPilotInfo(const Declaration &declaration)
   memset((void*)lxDevice_Pilot.unknown2, 0, sizeof(lxDevice_Pilot.unknown2));
 }
 
-void
-LXDevice::WritePilotInfo()
-{
-  CRCWrite(&lxDevice_Pilot, sizeof(lxDevice_Pilot));
-  return;
-}
-
 /**
  * Loads LX task structure from XCSoar task structure
  * @param decl  The declaration
  */
-bool
-LXDevice::LoadTask(const Declaration &declaration)
+static bool
+LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
 {
   if (declaration.size() > 10)
     return false;
@@ -123,6 +116,11 @@ LXDevice::LoadTask(const Declaration &declaration)
 
   memset((void*)lxDevice_Declaration.unknown1, 0,
           sizeof(lxDevice_Declaration.unknown1));
+
+  BrokenDate DeclDate;
+  DeclDate.day = 1;
+  DeclDate.month = 1;
+  DeclDate.year = 2010;
 
   if (DeclDate.day > 0 && DeclDate.day < 32
       && DeclDate.month > 0 && DeclDate.month < 13) {
@@ -190,7 +188,7 @@ LXDevice::LoadTask(const Declaration &declaration)
  * @param decl  The declaration
  */
 void
-LXDevice::WriteTask()
+LXDevice::WriteTask(const LX::Declaration &lxDevice_Declaration)
 {
   CRCWrite(&lxDevice_Declaration,
             sizeof(lxDevice_Declaration.unknown1) +
@@ -221,19 +219,12 @@ LXDevice::WriteTask()
   return;
 }
 
-void
-LXDevice::LoadContestClass(gcc_unused const Declaration &declaration)
+static void
+LoadContestClass(LX::ContestClass &lxDevice_ContestClass,
+                 gcc_unused const Declaration &declaration)
 {
   copy_space_padded(lxDevice_ContestClass.contest_class, _T(""),
                     sizeof(lxDevice_ContestClass.contest_class));
-}
-
-void
-LXDevice::WriteContestClass()
-{
-  CRCWrite(&lxDevice_ContestClass.contest_class,
-            sizeof(lxDevice_ContestClass.contest_class));
-  return;
 }
 
 bool
@@ -251,19 +242,24 @@ LXDevice::DeclareInner(const Declaration &declaration,
 
   env.SetProgressPosition(1);
 
-  LoadPilotInfo(declaration);
-  if (!LoadTask(declaration))
+  LX::Pilot pilot;
+  LoadPilotInfo(pilot, declaration);
+
+  LX::Declaration lxDevice_Declaration;
+  if (!LoadTask(lxDevice_Declaration, declaration))
     return false;
-  LoadContestClass(declaration);
+
+  LX::ContestClass contest_class;
+  LoadContestClass(contest_class, declaration);
 
   env.SetProgressPosition(2);
 
   LX::SendCommand(*port, LX::WRITE_FLIGHT_INFO); // start declaration
 
   crc = 0xff;
-  WritePilotInfo();
+  CRCWrite(&pilot, sizeof(pilot));
   env.SetProgressPosition(3);
-  WriteTask();
+  WriteTask(lxDevice_Declaration);
   port->Write(crc);
   if (!LX::ExpectACK(*port))
     return false;
@@ -271,8 +267,9 @@ LXDevice::DeclareInner(const Declaration &declaration,
   env.SetProgressPosition(4);
   crc = 0xff;
   LX::SendCommand(*port, LX::WRITE_CONTEST_CLASS);
-  WriteContestClass();
+  CRCWrite(&contest_class, sizeof(contest_class));
   env.SetProgressPosition(5);
+
   port->Write(crc);
   return LX::ExpectACK(*port);
 }

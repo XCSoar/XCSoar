@@ -26,38 +26,25 @@ Copyright_License {
 
 #include "Protocol.hpp"
 #include "Device/Driver.hpp"
-#include "DateTime.hpp"
 
 class LXDevice: public AbstractDevice
 {
   Port *port;
-  BrokenDate DeclDate;
 
 public:
   LXDevice(Port *_port)
     :port(_port),
      crc(0xff) {
-    DeclDate.day = 1;
-    DeclDate.month = 1;
-    DeclDate.year = 2010;
   }
 
 protected:
   bool StartCommandMode();
   void StartNMEAMode(OperationEnvironment &env);
-  void LoadPilotInfo(const Declaration &declaration);
-  void WritePilotInfo();
-  bool LoadTask(const Declaration &declaration);
-  void WriteTask();
-  void LoadContestClass(const Declaration &declaration);
-  void WriteContestClass();
+  void WriteTask(const LX::Declaration &lxDevice_Declaration);
   void CRCWriteint32(int32_t i);
   void CRCWrite(const void *buff, unsigned size);
   void CRCWrite(uint8_t c);
 
-  LX::Declaration lxDevice_Declaration;
-  LX::Pilot lxDevice_Pilot;
-  LX::ContestClass lxDevice_ContestClass;
   uint8_t crc;
 
   bool DeclareInner(const Declaration &declaration,
