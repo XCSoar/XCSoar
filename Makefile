@@ -281,6 +281,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
 	$(SRC)/Waypoint/WaypointRenderer.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
+	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Wind/WindAnalyser.cpp \
 	$(SRC)/Wind/WindMeasurementList.cpp \
 	$(SRC)/Wind/WindStore.cpp \
@@ -554,7 +555,6 @@ endif
 ifeq ($(TARGET),PC)
 XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAADownloader.cpp \
-	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/NOAAStore.cpp
 endif
 
