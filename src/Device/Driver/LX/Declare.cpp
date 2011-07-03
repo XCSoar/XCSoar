@@ -178,45 +178,6 @@ LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
   return true;
 }
 
-/**
- * Writes task structure to LX
- * LX task has max 12 points which include Takeoff,
- * start, tps, finish and landing.
- * Leave takeoff and landing as all 0's.
- * @param decl  The declaration
- */
-void
-LXDevice::WriteTask(const LX::Declaration &lxDevice_Declaration)
-{
-  CRCWrite(&lxDevice_Declaration,
-            sizeof(lxDevice_Declaration.unknown1) +
-            sizeof(lxDevice_Declaration.dayinput) +
-            sizeof(lxDevice_Declaration.monthinput) +
-            sizeof(lxDevice_Declaration.yearinput) +
-            sizeof(lxDevice_Declaration.dayuser) +
-            sizeof(lxDevice_Declaration.monthuser) +
-            sizeof(lxDevice_Declaration.yearuser));
-
-  CRCWrite(&lxDevice_Declaration.taskid,
-            sizeof(lxDevice_Declaration.taskid));
-  CRCWrite((char)lxDevice_Declaration.numtps);
-
-  for (unsigned int i = 0; i < LX::NUMTPS; i++) {
-    CRCWrite((char)lxDevice_Declaration.tptypes[i]);
-  }
-  for (unsigned int i = 0; i < LX::NUMTPS; i++) {
-    CRCWrite(&lxDevice_Declaration.Longitudes[i], 4);
-  }
-  for (unsigned int i = 0; i < LX::NUMTPS; i++) {
-    CRCWrite(&lxDevice_Declaration.Latitudes[i], 4);
-  }
-  for (unsigned int i = 0; i < LX::NUMTPS; i++) {
-    CRCWrite(lxDevice_Declaration.WaypointNames[i],
-             sizeof(lxDevice_Declaration.WaypointNames[i]));
-  }
-  return;
-}
-
 static void
 LoadContestClass(LX::ContestClass &lxDevice_ContestClass,
                  gcc_unused const Declaration &declaration)
@@ -257,7 +218,8 @@ LXDevice::DeclareInner(const Declaration &declaration,
   crc = 0xff;
   CRCWrite(&pilot, sizeof(pilot));
   env.SetProgressPosition(3);
-  WriteTask(lxDevice_Declaration);
+
+  CRCWrite(&lxDevice_Declaration, sizeof(lxDevice_Declaration));
   port->Write(crc);
   if (!LX::ExpectACK(*port))
     return false;

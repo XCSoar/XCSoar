@@ -40,7 +40,6 @@ public:
 protected:
   bool StartCommandMode();
   void StartNMEAMode(OperationEnvironment &env);
-  void WriteTask(const LX::Declaration &lxDevice_Declaration);
   void CRCWrite(const void *buff, unsigned size);
   void CRCWrite(uint8_t c);
 
