@@ -85,17 +85,7 @@ TestWriter()
   ProfileMap::Set(_T("key1"), 4);
   ProfileMap::Set(_T("key2"), _T("value2"));
 
-  {
-    TextWriter file(_T("output/TestProfileWriter.prf"));
-    // ... on error -> return
-    if (file.error()) {
-      skip(3, 0, "write error");
-      return;
-    }
-
-    ProfileWriter writer(file);
-    ProfileMap::Export(writer);
-  }
+  Profile::SaveFile(_T("output/TestProfileWriter.prf"));
 
   FileLineReader reader(_T("output/TestProfileWriter.prf"));
   if (reader.error()) {
