@@ -31,7 +31,7 @@ bool
 WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
                               Waypoints &way_points)
 {
-  TCHAR ctemp[255];
+  TCHAR ctemp[4096];
   const TCHAR *params[20];
   static const unsigned int max_params = sizeof(params) / sizeof(params[0]);
   size_t n_params;
