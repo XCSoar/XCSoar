@@ -37,6 +37,7 @@ public:
 private:
   void Init();
   void TestBasic();
+  void TestBallast();
   void TestMC();
 };
 
@@ -95,19 +96,48 @@ GlidePolarTest::TestBasic()
 }
 
 void
+GlidePolarTest::TestBallast()
+{
+  polar.set_ballast(fixed(0.25));
+
+  ok1(equals(polar.get_ballast_litres(), 25));
+  ok1(equals(polar.get_ballast(), 0.25));
+
+  polar.set_ballast_litres(fixed(50));
+
+  ok1(equals(polar.get_ballast_litres(), 50));
+  ok1(equals(polar.get_ballast(), 0.5));
+  ok1(equals(polar.get_all_up_weight(), 368));
+  ok1(equals(polar.get_wing_loading(), 37.551020408));
+  ok1(polar.has_ballast());
+
+  fixed loading_factor = sqrt(polar.get_all_up_weight() / polar.reference_mass);
+  ok1(equals(polar.polar_a, polar.ideal_polar_a / loading_factor));
+  ok1(equals(polar.polar_b, polar.ideal_polar_b));
+  ok1(equals(polar.polar_c, polar.ideal_polar_c * loading_factor));
+
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), unKiloMeterPerHour)),
+             0.640739));
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), unKiloMeterPerHour)),
+             0.928976));
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), unKiloMeterPerHour)),
+             1.722908));
+
+  ok1(equals(polar.get_Vmin(), 21.44464));
+  ok1(equals(polar.get_VbestLD(), 27.78703));
+
+  polar.set_ballast(fixed_zero);
+  ok1(!polar.has_ballast());
+}
+
+void
 GlidePolarTest::TestMC()
 {
   polar.set_mc(fixed_one);
-
   ok1(equals(polar.get_VbestLD(), 33.482780452));
-  ok1(equals(polar.get_SbestLD(), polar.SinkRate(polar.get_VbestLD())));
-  ok1(equals(polar.get_bestLD(), polar.get_VbestLD() / polar.get_SbestLD()));
 
   polar.set_mc(fixed_zero);
-
   ok1(equals(polar.get_VbestLD(), 25.830434162));
-  ok1(equals(polar.get_SbestLD(), polar.SinkRate(polar.get_VbestLD())));
-  ok1(equals(polar.get_bestLD(), polar.get_VbestLD() / polar.get_SbestLD()));
 }
 
 void
@@ -115,12 +145,13 @@ GlidePolarTest::Run()
 {
   Init();
   TestBasic();
+  TestBallast();
   TestMC();
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(25);
+  plan_tests(37);
 
   GlidePolarTest test;
   test.Run();
