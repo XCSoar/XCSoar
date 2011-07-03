@@ -636,7 +636,7 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &d, unsigned extraTimeout,
     return NULL;
 
   // wait for the message
-  const TMsg *msg = 0;
+  const TMsg *msg = NULL;
   timeout += MonotonicClockMS();
   while(MonotonicClockMS() < timeout) {
     // read message
