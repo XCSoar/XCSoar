@@ -40,9 +40,9 @@ LX::calc_crc_char(uint8_t d, uint8_t crc)
 }
 
 uint8_t
-LX::calc_crc(const uint8_t *p0, size_t len, uint8_t crc)
+LX::calc_crc(const void *p0, size_t len, uint8_t crc)
 {
-  const uint8_t *p = p0;
+  const uint8_t *p = (const uint8_t *)p0;
   size_t i;
 
   for (i = 0; i < len; i++)

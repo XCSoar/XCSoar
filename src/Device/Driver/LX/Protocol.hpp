@@ -73,7 +73,7 @@ namespace LX {
 
   gcc_pure
   uint8_t
-  calc_crc(const uint8_t *p0, size_t len, uint8_t crc);
+  calc_crc(const void *p0, size_t len, uint8_t crc);
 }
 
 #endif

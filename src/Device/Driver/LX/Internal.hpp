@@ -51,7 +51,7 @@ protected:
   void LoadContestClass(const Declaration &declaration);
   void WriteContestClass();
   void CRCWriteint32(int32_t i);
-  void CRCWrite(const uint8_t *buff, unsigned size);
+  void CRCWrite(const void *buff, unsigned size);
   void CRCWrite(uint8_t c);
 
   struct lxDevice_Pilot_t { //strings have extra byte for NULL
