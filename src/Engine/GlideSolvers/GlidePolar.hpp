@@ -78,6 +78,7 @@ class GlidePolar
   fixed wing_area;           /**< Reference wing area, m^2 */
 
   friend struct PolarInfo;
+  friend class GlidePolarTest;
 
 public:
   /**

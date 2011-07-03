@@ -63,7 +63,7 @@ TEST_NAMES = \
 	TestWaypointReader TestThermalBase \
 	test_load_task TestFlarmNet \
 	TestColorRamp TestGeoPoint TestDiffFilter \
-	TestFileUtil TestPolars TestCSVLine \
+	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
@@ -284,6 +284,24 @@ TEST_POLARS_SOURCES = \
 TEST_POLARS_OBJS = $(call SRC_TO_OBJ,$(TEST_POLARS_SOURCES))
 TEST_POLARS_LDADD = $(MATH_LIBS) $(IO_LIBS)
 $(TARGET_BIN_DIR)/TestPolars$(TARGET_EXEEXT): $(TEST_POLARS_OBJS) $(TEST_POLARS_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_GLIDE_POLAR_SOURCES = \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/GlideState.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
+	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestGlidePolar.cpp
+TEST_GLIDE_POLAR_OBJS = $(call SRC_TO_OBJ,$(TEST_GLIDE_POLAR_SOURCES))
+TEST_GLIDE_POLAR_LDADD = $(MATH_LIBS) $(IO_LIBS)
+$(TARGET_BIN_DIR)/TestGlidePolar$(TARGET_EXEEXT): $(TEST_GLIDE_POLAR_OBJS) $(TEST_GLIDE_POLAR_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
