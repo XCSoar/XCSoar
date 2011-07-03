@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Driver/LX/Protocol.hpp"
 #include "Device/Port.hpp"
+#include "OS/ByteOrder.hpp"
 #include "Operation.hpp"
 
 void
@@ -44,10 +45,8 @@ LXDevice::CRCWrite(uint8_t c)
 void
 LXDevice::CRCWriteint32(int32_t i)
 {
-  CRCWrite((uint8_t) ((i>>24) & 0xFF));
-  CRCWrite((uint8_t) ((i>>16) & 0xFF));
-  CRCWrite((uint8_t) ((i>>8) & 0xFF));
-  CRCWrite((uint8_t) (i & 0xFF));
+  uint32_t big_endian = ToBE32(i);
+  CRCWrite(&big_endian, sizeof(big_endian));
 }
 
 void
