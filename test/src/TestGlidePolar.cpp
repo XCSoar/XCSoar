@@ -38,6 +38,7 @@ private:
   void Init();
   void TestBasic();
   void TestBallast();
+  void TestBugs();
   void TestMC();
 };
 
@@ -131,6 +132,29 @@ GlidePolarTest::TestBallast()
 }
 
 void
+GlidePolarTest::TestBugs()
+{
+  polar.set_bugs(fixed(0.75));
+  ok1(equals(polar.get_bugs(), 0.75));
+
+  ok1(equals(polar.polar_a, polar.ideal_polar_a * fixed_four / 3));
+  ok1(equals(polar.polar_b, polar.ideal_polar_b * fixed_four / 3));
+  ok1(equals(polar.polar_c, polar.ideal_polar_c * fixed_four / 3));
+
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), unKiloMeterPerHour)),
+             0.808));
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), unKiloMeterPerHour)),
+             1.32));
+  ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(160), unKiloMeterPerHour)),
+             2.557333));
+
+  ok1(equals(polar.get_Vmin(), 19.93464));
+  ok1(equals(polar.get_VbestLD(), 25.83043));
+
+  polar.set_bugs(fixed_one);
+}
+
+void
 GlidePolarTest::TestMC()
 {
   polar.set_mc(fixed_one);
@@ -146,12 +170,13 @@ GlidePolarTest::Run()
   Init();
   TestBasic();
   TestBallast();
+  TestBugs();
   TestMC();
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(37);
+  plan_tests(46);
 
   GlidePolarTest test;
   test.Run();
