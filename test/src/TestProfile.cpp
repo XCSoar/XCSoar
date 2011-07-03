@@ -22,13 +22,14 @@
 
 #include "Profile/ProfileMap.hpp"
 #include "Profile/Writer.hpp"
+#include "IO/TextWriter.hpp"
+#include "IO/FileLineReader.hpp"
 #include "TestUtil.hpp"
 
-void ProfileWriter::write(const TCHAR *key, const TCHAR *value) {}
-
-int main(int argc, char **argv)
+static void
+TestMap()
 {
-  plan_tests(25);
+  ProfileMap::Clear();
 
   {
     int value;
@@ -74,6 +75,57 @@ int main(int argc, char **argv)
     ok1(ProfileMap::Get(_T("key5"), value));
     ok1(equals(value, 1.337));
   }
+}
+
+static void
+TestWriter()
+{
+  ProfileMap::Clear();
+  ProfileMap::Set(_T("key1"), 4);
+  ProfileMap::Set(_T("key2"), _T("value2"));
+
+  {
+    TextWriter file(_T("output/TestProfileWriter.prf"));
+    // ... on error -> return
+    if (file.error()) {
+      skip(3, 0, "write error");
+      return;
+    }
+
+    ProfileWriter writer(file);
+    ProfileMap::Export(writer);
+  }
+
+  FileLineReader reader(_T("output/TestProfileWriter.prf"));
+  if (reader.error()) {
+    skip(3, 0, "read error");
+    return;
+  }
+
+  unsigned count = 0;
+  bool found1 = false, found2 = false;
+
+  TCHAR *line;
+  while ((line = reader.read()) != NULL) {
+    if (_tcscmp(line, _T("key1=\"4\"")) == 0)
+      found1 = true;
+    if (_tcscmp(line, _T("key2=\"value2\"")) == 0)
+      found2 = true;
+
+    count++;
+  }
+
+  ok1(count == 2);
+  ok1(found1);
+  ok1(found2);
+}
+
+int main(int argc, char **argv)
+{
+  plan_tests(28);
+
+  TestMap();
+  TestWriter();
 
   return exit_status();
 }
