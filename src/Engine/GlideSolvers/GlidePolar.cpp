@@ -87,6 +87,7 @@ GlidePolar::update_polar()
 void
 GlidePolar::set_bugs(const fixed clean)
 {
+  assert(positive(clean) && !positive(clean - fixed_one));
   bugs = clean;
   update();
 }
@@ -94,6 +95,7 @@ GlidePolar::set_bugs(const fixed clean)
 void
 GlidePolar::set_ballast(const fixed bal)
 {
+  assert(!negative(bal));
   ballast = bal;
   update();
 }
@@ -101,8 +103,7 @@ GlidePolar::set_ballast(const fixed bal)
 void
 GlidePolar::set_ballast_litres(const fixed litres)
 {
-  ballast = litres / (ballast_ratio * reference_mass);
-  update();
+  set_ballast(litres / (ballast_ratio * reference_mass));
 }
 
 void
