@@ -91,14 +91,15 @@ void
 GlidePolar::SetBallast(const fixed bal)
 {
   assert(!negative(bal));
-  ballast = bal;
-  Update();
+  SetBallastLitres(bal * ballast_ratio * reference_mass);
 }
 
 void
 GlidePolar::SetBallastLitres(const fixed litres)
 {
-  SetBallast(litres / (ballast_ratio * reference_mass));
+  assert(!negative(litres));
+  ballast = litres;
+  Update();
 }
 
 void
@@ -353,7 +354,7 @@ GlidePolar::GetWingLoading() const
 fixed
 GlidePolar::GetBallastLitres() const
 {
-  return ballast * ballast_ratio * reference_mass;
+  return ballast;
 }
 
 bool

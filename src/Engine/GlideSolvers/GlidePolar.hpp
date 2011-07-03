@@ -55,7 +55,7 @@ class GlidePolar
   fixed mc;                  /**< MacCready ring setting (m/s) */
   fixed inv_mc;              /**< Inverse of MC setting (s/m) */
   fixed bugs;                /**< Clean ratio (1=clean, 0=100% bugs) */
-  fixed ballast;             /**< Ballast ratio (0=empty, 1=full) */
+  fixed ballast;             /**< Ballast ratio (litres) */
   fixed cruise_efficiency;   /**< Cruise efficiency */
   fixed bestLD;              /**< Best lift to drag ratio */
   fixed VbestLD;             /**< Speed for best L/D (m/s) */
@@ -245,7 +245,7 @@ public:
    */
   gcc_pure
   fixed GetBallast() const {
-    return ballast;
+    return ballast / (ballast_ratio * reference_mass);
   }
 
   /**
