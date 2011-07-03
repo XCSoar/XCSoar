@@ -20,7 +20,6 @@
 }
 */
 
-#include "Profile/ProfileMap.hpp"
 #include "Profile/Profile.hpp"
 #include "IO/FileLineReader.hpp"
 #include "TestUtil.hpp"
@@ -28,50 +27,50 @@
 static void
 TestMap()
 {
-  ProfileMap::Clear();
+  Profile::Clear();
 
   {
     int value;
-    ok1(!ProfileMap::Exists(_T("key1")));
-    ok1(!ProfileMap::Get(_T("key1"), value));
-    ok1(ProfileMap::Set(_T("key1"), 4));
-    ok1(ProfileMap::Exists(_T("key1")));
-    ok1(ProfileMap::Get(_T("key1"), value));
+    ok1(!Profile::Exists(_T("key1")));
+    ok1(!Profile::Get(_T("key1"), value));
+    ok1(Profile::Set(_T("key1"), 4));
+    ok1(Profile::Exists(_T("key1")));
+    ok1(Profile::Get(_T("key1"), value));
     ok1(value == 4);
   }
 
   {
     short value;
-    ok1(!ProfileMap::Get(_T("key2"), value));
-    ok1(ProfileMap::Set(_T("key2"), 123));
-    ok1(ProfileMap::Get(_T("key2"), value));
+    ok1(!Profile::Get(_T("key2"), value));
+    ok1(Profile::Set(_T("key2"), 123));
+    ok1(Profile::Get(_T("key2"), value));
     ok1(value == 123);
   }
 
   {
     unsigned value;
-    ok1(!ProfileMap::Get(_T("key3"), value));
-    ok1(ProfileMap::Set(_T("key3"), -42));
-    ok1(ProfileMap::Get(_T("key3"), value));
+    ok1(!Profile::Get(_T("key3"), value));
+    ok1(Profile::Set(_T("key3"), -42));
+    ok1(Profile::Get(_T("key3"), value));
     ok1(value == -42u);
   }
 
   {
     bool value;
-    ok1(!ProfileMap::Get(_T("key4"), value));
-    ok1(ProfileMap::Set(_T("key4"), true));
-    ok1(ProfileMap::Get(_T("key4"), value));
+    ok1(!Profile::Get(_T("key4"), value));
+    ok1(Profile::Set(_T("key4"), true));
+    ok1(Profile::Get(_T("key4"), value));
     ok1(value);
-    ok1(ProfileMap::Set(_T("key4"), false));
-    ok1(ProfileMap::Get(_T("key4"), value));
+    ok1(Profile::Set(_T("key4"), false));
+    ok1(Profile::Get(_T("key4"), value));
     ok1(!value);
   }
 
   {
     fixed value;
-    ok1(!ProfileMap::Get(_T("key5"), value));
-    ok1(ProfileMap::Set(_T("key5"), fixed(1.337)));
-    ok1(ProfileMap::Get(_T("key5"), value));
+    ok1(!Profile::Get(_T("key5"), value));
+    ok1(Profile::Set(_T("key5"), fixed(1.337)));
+    ok1(Profile::Get(_T("key5"), value));
     ok1(equals(value, 1.337));
   }
 }
@@ -79,9 +78,9 @@ TestMap()
 static void
 TestWriter()
 {
-  ProfileMap::Clear();
-  ProfileMap::Set(_T("key1"), 4);
-  ProfileMap::Set(_T("key2"), _T("value2"));
+  Profile::Clear();
+  Profile::Set(_T("key1"), 4);
+  Profile::Set(_T("key2"), _T("value2"));
 
   Profile::SaveFile(_T("output/TestProfileWriter.prf"));
 
@@ -112,27 +111,27 @@ TestWriter()
 static void
 TestReader()
 {
-  ProfileMap::Clear();
+  Profile::Clear();
   Profile::LoadFile(_T("test/data/TestProfileReader.prf"));
 
   {
     int value;
-    ok1(ProfileMap::Exists(_T("key1")));
-    ok1(ProfileMap::Get(_T("key1"), value));
+    ok1(Profile::Exists(_T("key1")));
+    ok1(Profile::Get(_T("key1"), value));
     ok1(value == 1);
   }
 
   {
     StaticString<32> value;
-    ok1(ProfileMap::Exists(_T("key2")));
-    ok1(ProfileMap::Get(_T("key2"), value));
+    ok1(Profile::Exists(_T("key2")));
+    ok1(Profile::Get(_T("key2"), value));
     ok1(value == _T("value"));
   }
 
   {
     int value;
-    ok1(ProfileMap::Exists(_T("key3")));
-    ok1(ProfileMap::Get(_T("key3"), value));
+    ok1(Profile::Exists(_T("key3")));
+    ok1(Profile::Get(_T("key3"), value));
     ok1(value == 5);
   }
 }
