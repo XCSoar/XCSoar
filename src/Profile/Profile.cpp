@@ -83,13 +83,9 @@ Profile::LoadFile(const TCHAR *szFile)
         continue;
 
       *p = _T('\0');
-
-      Set(key, value);
-    } else {
-      long l = _tcstol(value, &p, 10);
-      if (p > value)
-        Set(key, l);
     }
+
+    Set(key, value);
   }
 }
 
