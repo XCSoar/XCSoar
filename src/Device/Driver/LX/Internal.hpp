@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DRIVER_LX_INTERNAL_HPP
 #define XCSOAR_DEVICE_DRIVER_LX_INTERNAL_HPP
 
+#include "Protocol.hpp"
 #include "Device/Driver.hpp"
 #include "DateTime.hpp"
 
@@ -54,39 +55,9 @@ protected:
   void CRCWrite(const void *buff, unsigned size);
   void CRCWrite(uint8_t c);
 
-  struct lxDevice_Pilot_t { //strings have extra byte for NULL
-    uint8_t unknown1[3];
-    char PilotName[19];
-    char GliderType[12];
-    char GliderID[8];
-    char CompetitionID[4];
-    uint8_t unknown2[73];
-  } gcc_packed;
-
-  struct lxDevice_Declaration_t { //strings have extra byte for NULL
-    uint8_t unknown1[5];
-    uint8_t dayinput;
-    uint8_t monthinput;
-    uint8_t yearinput;
-    uint8_t dayuser;
-    uint8_t monthuser;
-    uint8_t yearuser;
-    int16_t taskid;
-    uint8_t numtps;
-    uint8_t tptypes[12];
-    int32_t Longitudes[12];
-    int32_t Latitudes[12];
-    char WaypointNames[12][9];
-  } gcc_packed;
-
-
-  struct lxDevice_ContestClass_t { //strings have extra byte for NULL
-    char contest_class[9];
-  } gcc_packed;
-
-  lxDevice_Declaration_t lxDevice_Declaration;
-  lxDevice_Pilot_t lxDevice_Pilot;
-  lxDevice_ContestClass_t lxDevice_ContestClass;
+  LX::Declaration lxDevice_Declaration;
+  LX::Pilot lxDevice_Pilot;
+  LX::ContestClass lxDevice_ContestClass;
   uint8_t crc;
 
   bool DeclareInner(const Declaration &declaration,

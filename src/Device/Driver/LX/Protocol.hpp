@@ -43,6 +43,44 @@ namespace LX {
 
   static const char LX_ACK_STRING[] = { ACK, 0 };
 
+  /**
+   * Strings have extra byte for NULL.
+   */
+  struct Pilot {
+    uint8_t unknown1[3];
+    char PilotName[19];
+    char GliderType[12];
+    char GliderID[8];
+    char CompetitionID[4];
+    uint8_t unknown2[73];
+  } gcc_packed;
+
+  /**
+   * Strings have extra byte for NULL.
+   */
+  struct Declaration {
+    uint8_t unknown1[5];
+    uint8_t dayinput;
+    uint8_t monthinput;
+    uint8_t yearinput;
+    uint8_t dayuser;
+    uint8_t monthuser;
+    uint8_t yearuser;
+    int16_t taskid;
+    uint8_t numtps;
+    uint8_t tptypes[NUMTPS];
+    int32_t Longitudes[NUMTPS];
+    int32_t Latitudes[NUMTPS];
+    char WaypointNames[NUMTPS][9];
+  } gcc_packed;
+
+  /**
+   * Strings have extra byte for NULL.
+   */
+  struct ContestClass {
+    char contest_class[9];
+  } gcc_packed;
+
   static inline bool
   ExpectACK(Port &port)
   {
