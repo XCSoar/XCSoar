@@ -35,6 +35,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Graphics.hpp"
+#include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/METAR.hpp"
 #include "MainWindow.hpp"
@@ -109,6 +110,7 @@ AddClicked(gcc_unused WndButton &Sender)
   }
 
   NOAAStore::AddStation(code);
+  NOAAStore::SaveToProfile();
 
   UpdateList();
 }
@@ -134,6 +136,7 @@ RemoveClicked(gcc_unused WndButton &Sender)
     return;
 
   NOAAStore::RemoveStation(index);
+  NOAAStore::SaveToProfile();
 
   UpdateList();
 }

@@ -89,6 +89,7 @@ Copyright_License {
 #include "ProgressGlue.hpp"
 #include "Operation.hpp"
 #include "Pages.hpp"
+#include "Weather/NOAAGlue.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "DrawThread.hpp"
@@ -386,6 +387,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   // Read the FLARM details file
   FlarmDetails::Load();
+
+  NOAAStore::LoadFromProfile();
 
 #ifndef DISABLEAUDIOVARIO
   /*

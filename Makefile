@@ -554,6 +554,7 @@ endif
 ifeq ($(TARGET),PC)
 XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAADownloader.cpp \
+	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/NOAAStore.cpp
 endif
 

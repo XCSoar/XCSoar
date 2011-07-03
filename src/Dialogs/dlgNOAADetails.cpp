@@ -26,6 +26,7 @@ Copyright_License {
 
 #if defined(WIN32) && !defined(_WIN32_WCE) && !defined(HAVE_POSIX)
 
+#include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/METAR.hpp"
 #include "Weather/TAF.hpp"
@@ -77,6 +78,8 @@ RemoveClicked(gcc_unused WndButton &Sender)
     return;
 
   NOAAStore::RemoveStation(index);
+  NOAAStore::SaveToProfile();
+
   wf->SetModalResult(mrOK);
 }
 

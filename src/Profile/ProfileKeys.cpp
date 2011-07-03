@@ -95,6 +95,7 @@ const TCHAR szProfileDisplayText[] = _T("DisplayText");
 const TCHAR szProfileWaypointArrivalHeightDisplay[] = _T("WaypointArrivalHeightDisplay");
 const TCHAR szProfileWaypointLabelSelection[] = _T("WayPointLabelSelection");
 const TCHAR szProfileWaypointLabelStyle[] = _T("WayPointLabelStyle");
+const TCHAR szProfileWeatherStations[] = _T("WeatherStations");
 const TCHAR szProfileDisplayUpValue[] = _T("DisplayUp");
 const TCHAR szProfileOrientationCruise[] = _T("OrientationCruise");
 const TCHAR szProfileOrientationCircling[] = _T("OrientationCircling");
