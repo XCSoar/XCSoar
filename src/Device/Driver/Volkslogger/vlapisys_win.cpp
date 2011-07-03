@@ -15,7 +15,7 @@
  **
  ***********************************************************************/
 
-#include "Device/Volkslogger/vla_support.h"
+#include "vla_support.h"
 #include "Device/Port.hpp"
 #include "ProgressGlue.hpp"
 

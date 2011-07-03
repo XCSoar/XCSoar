@@ -29,11 +29,11 @@
  */
 
 // VLAPI-Includes
-#include "Device/Volkslogger/vlconv.h"
-#include "Device/Volkslogger/vlapihlp.h"
+#include "vlconv.h"
+#include "vlapihlp.h"
 
 // redeclaration of itoa()
-#include "Device/Volkslogger/utils.h"
+#include "utils.h"
 
 // C-Includes
 #include <string.h>

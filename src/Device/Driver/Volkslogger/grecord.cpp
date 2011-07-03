@@ -15,8 +15,8 @@
 **
 ***********************************************************************/
 
-#include "Device/Volkslogger/grecord.h"
-#include "Device/Volkslogger/vlapihlp.h"
+#include "grecord.h"
+#include "vlapihlp.h"
 
 #include <stdio.h>
 #include <string.h>

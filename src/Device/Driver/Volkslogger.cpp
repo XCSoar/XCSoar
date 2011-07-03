@@ -26,13 +26,13 @@ Copyright_License {
 
 // adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
-#include "Device/Driver/Volkslogger.hpp"
+#include "Volkslogger.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Port.hpp"
 #include "Operation.hpp"
 #include "UtilsText.hpp"
-#include "Device/Volkslogger/vlapi2.h"
-#include "Device/Volkslogger/vlapihlp.h"
+#include "Volkslogger/vlapi2.h"
+#include "Volkslogger/vlapihlp.h"
 #include "Components.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"

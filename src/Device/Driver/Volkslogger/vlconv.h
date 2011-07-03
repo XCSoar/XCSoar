@@ -18,7 +18,7 @@
 #ifndef VLCONV_H
 #define VLCONV_H
 
-#include "Device/Volkslogger/vlapityp.h"
+#include "vlapityp.h"
 
 #include <stdio.h>
 #include <time.h>

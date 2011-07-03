@@ -1,17 +1,17 @@
 DRIVER_SRC_DIR = $(SRC)/Device/Driver
 
 VOLKSLOGGER_SOURCES = \
-	$(SRC)/Device/Volkslogger/CRC16.cpp \
-	$(SRC)/Device/Volkslogger/Util.cpp \
-	$(SRC)/Device/Volkslogger/dbbconv.cpp \
-	$(SRC)/Device/Volkslogger/grecord.cpp \
-	$(SRC)/Device/Volkslogger/vlapi2.cpp \
-	$(SRC)/Device/Volkslogger/vlapihlp.cpp \
-	$(SRC)/Device/Volkslogger/vlapisys_win.cpp \
-	$(SRC)/Device/Volkslogger/vlconv.cpp
+	$(DRIVER_SRC_DIR)/Volkslogger/CRC16.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/Util.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/dbbconv.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/grecord.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/vlapi2.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/vlapihlp.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/vlapisys_win.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/vlconv.cpp
 
 ifeq ($(HAVE_MSVCRT),n)
-VOLKSLOGGER_SOURCES += $(SRC)/Device/Volkslogger/vlutils.cpp
+VOLKSLOGGER_SOURCES += $(DRIVER_SRC_DIR)/Volkslogger/vlutils.cpp
 endif
 
 CAI302_SOURCES = \

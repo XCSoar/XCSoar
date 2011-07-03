@@ -15,10 +15,10 @@
  **
  ***********************************************************************/
 
-#include "Device/Volkslogger/vlapi2.h"
-#include "Device/Volkslogger/dbbconv.h"
-#include "Device/Volkslogger/grecord.h"
-#include "Device/Volkslogger/utils.h"
+#include "vlapi2.h"
+#include "dbbconv.h"
+#include "grecord.h"
+#include "utils.h"
 #include "Device/Port.hpp"
 #include "Util.hpp"
 #include "CRC16.hpp"
