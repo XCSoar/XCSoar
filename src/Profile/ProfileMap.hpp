@@ -190,6 +190,7 @@ namespace ProfileMap {
   }
 
   bool Exists(const TCHAR *key);
+  void Clear();
 
   void Export(ProfileWriter &writer);
 }

@@ -69,3 +69,9 @@ ProfileMap::Export(ProfileWriter &writer)
        it_str != map.end(); it_str++)
     writer.write(it_str->first.c_str(), it_str->second.c_str());
 }
+
+void
+ProfileMap::Clear()
+{
+  map.clear();
+}
