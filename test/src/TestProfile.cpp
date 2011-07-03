@@ -28,12 +28,14 @@ void ProfileWriter::write(const TCHAR *key, const TCHAR *value) {}
 
 int main(int argc, char **argv)
 {
-  plan_tests(23);
+  plan_tests(25);
 
   {
     int value;
+    ok1(!ProfileMap::Exists(_T("key1")));
     ok1(!ProfileMap::Get(_T("key1"), value));
     ok1(ProfileMap::Set(_T("key1"), 4));
+    ok1(ProfileMap::Exists(_T("key1")));
     ok1(ProfileMap::Get(_T("key1"), value));
     ok1(value == 4);
   }
