@@ -19,8 +19,10 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskSolution.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
+#include "GlideSolvers/MacCready.hpp"
 #include <algorithm>
 
 GlideResult 
@@ -32,7 +34,7 @@ TaskSolution::glide_solution_remaining(const TaskPoint& taskpoint,
   GlideState gs(taskpoint.get_vector_remaining(ac),
                 max(minH,taskpoint.get_elevation()),
                 ac.NavAltitude, ac.wind);
-  return polar.solve(gs);
+  return MacCready::solve(polar, gs);
 }
 
 GlideResult 
@@ -44,7 +46,7 @@ TaskSolution::glide_solution_planned(const TaskPoint& taskpoint,
   GlideState gs(taskpoint.get_vector_planned(),
                 max(minH,taskpoint.get_elevation()),
                 ac.NavAltitude, ac.wind);
-  return polar.solve(gs);
+  return MacCready::solve(polar, gs);
 }
 
 GlideResult 
@@ -56,7 +58,7 @@ TaskSolution::glide_solution_travelled(const TaskPoint& taskpoint,
   GlideState gs(taskpoint.get_vector_travelled(ac),
                 max(minH,taskpoint.get_elevation()),
                 ac.NavAltitude, ac.wind);
-  return polar.solve(gs);
+  return MacCready::solve(polar, gs);
 }
 
 GlideResult 
@@ -68,5 +70,5 @@ TaskSolution::glide_solution_sink(const TaskPoint& taskpoint,
   GlideState gs(taskpoint.get_vector_remaining(ac),
                 taskpoint.get_elevation(),
                 ac.NavAltitude, ac.wind);
-  return polar.solve_sink(gs,S);
+  return MacCready::solve_sink(polar, gs, S);
 }

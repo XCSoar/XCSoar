@@ -32,6 +32,11 @@
 
 #define fixed_1mil fixed_int_constant(1000000)
 
+#ifdef INSTRUMENT_TASK
+// global, used for test harness
+long count_mc = 0;
+#endif
+
 MacCready::MacCready(const GlidePolar &_glide_polar,
     const fixed _cruise_efficiency) :
   glide_polar(_glide_polar), cruise_efficiency(_cruise_efficiency)
@@ -82,6 +87,27 @@ MacCready::solve_vertical(const GlideState &task) const
   result.Solution = GlideResult::RESULT_OK;
 
   return result;
+}
+
+GlideResult
+MacCready::solve(const GlidePolar &glide_polar, const GlideState &task)
+{
+#ifdef INSTRUMENT_TASK
+  count_mc++;
+#endif
+  MacCready mac(glide_polar, glide_polar.get_cruise_efficiency());
+  return mac.solve(task);
+}
+
+GlideResult
+MacCready::solve_sink(const GlidePolar &glide_polar, const GlideState &task,
+                      const fixed S)
+{
+#ifdef INSTRUMENT_TASK
+  count_mc++;
+#endif
+  MacCready mac(glide_polar, glide_polar.get_cruise_efficiency());
+  return mac.solve_sink(task, S);
 }
 
 GlideResult

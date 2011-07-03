@@ -353,30 +353,6 @@ public:
   fixed MSinkRate(const fixed V) const;
 
   /**
-   * Use classical MC theory to compute the optimal glide solution
-   * for a given task.
-   *
-   * @param task The glide task for which to compute a solution
-   *
-   * @return Glide solution
-   */
-  GlideResult solve(const GlideState &task) const;
-
-  /**
-   * Neglecting the actual glide sink rate, calculate the
-   * glide solution with an externally supplied sink rate,
-   * assuming the glider flies at speeds according to classical
-   * MacCready theory.  This is used to calculate the sink rate
-   * required for glide-only solutions.
-   *
-   * @param task The glide task for which to compute a solution
-   * @param S Imposed sink rate
-   *
-   * @return Glide solution for the virtual task
-   */
-  GlideResult solve_sink(const GlideState &task, const fixed S) const;
-
-  /**
    * Quickly determine whether a task is achievable without
    * climb, assuming favorable wind.  This can be used to quickly
    * pre-filter waypoints for arrival altitude before performing

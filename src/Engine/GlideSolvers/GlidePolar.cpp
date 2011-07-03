@@ -32,11 +32,6 @@
 
 #define fixed_75 fixed(75.0)
 
-#ifdef INSTRUMENT_TASK
-// global, used for test harness
-long count_mc = 0;
-#endif
-
 GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast) :
   mc(_mc),
   bugs(_bugs),
@@ -240,26 +235,6 @@ GlidePolar::solve_min()
   Vmin = min(Vmax, -polar_b/(fixed_two*polar_a));
   Smin = SinkRate(Vmin);
 #endif
-}
-
-GlideResult
-GlidePolar::solve(const GlideState &task) const
-{
-#ifdef INSTRUMENT_TASK
-  count_mc++;
-#endif
-  MacCready mac(*this, cruise_efficiency);
-  return mac.solve(task);
-}
-
-GlideResult
-GlidePolar::solve_sink(const GlideState &task, const fixed S) const
-{
-#ifdef INSTRUMENT_TASK
-  count_mc++;
-#endif
-  MacCready mac(*this, cruise_efficiency);
-  return mac.solve_sink(task,S);
 }
 
 bool 

@@ -63,6 +63,8 @@ public:
    * @return Returns the glide result containing data about the optimal solution
    */
   GlideResult solve_sink(const GlideState &task, const fixed S) const;
+  static GlideResult solve_sink(const GlidePolar &glide_polar,
+                                const GlideState &task, const fixed S);
 
   /** 
    * Calculates the glide solution for a classical MacCready theory task.
@@ -74,6 +76,8 @@ public:
    * @return Returns the glide result containing data about the optimal solution
    */
   GlideResult solve(const GlideState &task) const;
+  static GlideResult solve(const GlidePolar &glide_polar,
+                           const GlideState &task);
 
   /**
    * Calculates the glide solution for a classical MacCready theory task

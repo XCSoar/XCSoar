@@ -23,6 +23,7 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideState.hpp"
 #include "GlideSolvers/GlideResult.hpp"
+#include "GlideSolvers/MacCready.hpp"
 #include "Navigation/SpeedVector.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Math/FastMath.h"
@@ -44,7 +45,7 @@ RoutePolar::solve_task(const GlidePolar& glide_polar,
 {
   fixed altitude = glide? fixed(1.0e5): fixed_zero;
   GlideState task(GeoVector(fixed(1.0), theta), fixed_zero, altitude, wind);
-  return glide_polar.solve(task);
+  return MacCready::solve(glide_polar, task);
 }
 
 

@@ -25,6 +25,7 @@
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/GlideState.hpp"
 #include "GlideSolvers/GlideResult.hpp"
+#include "GlideSolvers/MacCready.hpp"
 #include "Navigation/Aircraft.hpp"
 #include <stdio.h>
 #include <fstream>
@@ -96,7 +97,7 @@ test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
 
   GeoVector vect(fixed(400.0));
   GlideState gs(vect, fixed_zero, ac.NavAltitude, ac.wind);
-  GlideResult gr = polar.solve(gs);
+  GlideResult gr = MacCready::solve(polar, gs);
   hfile << (double)h << " " 
         << (double)gr.AltitudeDifference << " "
         << (double)gr.TimeElapsed << " " 
@@ -125,7 +126,7 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
 
   GeoVector vect(fixed(400.0));
   GlideState gs(vect, fixed_zero, ac.NavAltitude, ac.wind);
-  GlideResult gr = polar.solve(gs);
+  GlideResult gr = MacCready::solve(polar, gs);
 
   fixed Vstf = polar.speed_to_fly(ac, gr, false);
 
@@ -230,7 +231,7 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
 
   GeoVector vect(fixed(400.0));
   GlideState gs (vect, fixed_zero, ac.NavAltitude, ac.wind);
-  GlideResult gr = polar.solve(gs);
+  GlideResult gr = MacCready::solve(polar, gs);
 
   gr.calc_deferred(ac);
 
