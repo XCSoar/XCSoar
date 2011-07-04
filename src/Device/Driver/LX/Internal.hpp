@@ -35,10 +35,6 @@ public:
   LXDevice(Port *_port)
     :port(_port) {}
 
-protected:
-  bool DeclareInner(const Declaration &declaration,
-                    OperationEnvironment &env);
-
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
   virtual bool PutMacCready(fixed MacCready);

@@ -153,17 +153,17 @@ LoadContestClass(LX::ContestClass &lxDevice_ContestClass,
                     sizeof(lxDevice_ContestClass.contest_class));
 }
 
-bool
-LXDevice::DeclareInner(const Declaration &declaration,
-                       gcc_unused OperationEnvironment &env)
+static bool
+DeclareInner(Port &port, const Declaration &declaration,
+             gcc_unused OperationEnvironment &env)
 {
-  if (!port->SetRxTimeout(2000))
+  if (!port.SetRxTimeout(2000))
     return false;
 
   env.SetProgressRange(5);
   env.SetProgressPosition(0);
 
-  if (!LX::CommandMode(*port))
+  if (!LX::CommandMode(port))
       return false;
 
   env.SetProgressPosition(1);
@@ -180,24 +180,24 @@ LXDevice::DeclareInner(const Declaration &declaration,
 
   env.SetProgressPosition(2);
 
-  LX::SendCommand(*port, LX::WRITE_FLIGHT_INFO); // start declaration
+  LX::SendCommand(port, LX::WRITE_FLIGHT_INFO); // start declaration
 
-  LX::CRCWriter writer(*port);
+  LX::CRCWriter writer(port);
   writer.Write(&pilot, sizeof(pilot));
   env.SetProgressPosition(3);
 
   writer.Write(&lxDevice_Declaration, sizeof(lxDevice_Declaration));
   writer.Flush();
-  if (!LX::ExpectACK(*port))
+  if (!LX::ExpectACK(port))
     return false;
 
   env.SetProgressPosition(4);
-  LX::SendCommand(*port, LX::WRITE_CONTEST_CLASS);
+  LX::SendCommand(port, LX::WRITE_CONTEST_CLASS);
   writer.Write(&contest_class, sizeof(contest_class));
   env.SetProgressPosition(5);
 
   writer.Flush();
-  return LX::ExpectACK(*port);
+  return LX::ExpectACK(port);
 }
 
 bool
@@ -209,7 +209,7 @@ LXDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
   if (!port->StopRxThread())
     return false;
 
-  bool success = DeclareInner(declaration, env);
+  bool success = DeclareInner(*port, declaration, env);
 
   LX::CommandModeQuick(*port, env);
   port->SetRxTimeout(0);
