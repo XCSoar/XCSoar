@@ -29,7 +29,7 @@ Copyright_License {
 #include "SettingsMap.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Screen/Layout.hpp"
-#include "shapelib/map.h"
+#include "shapelib/mapserver.h"
 
 #include <zzip/lib.h>
 
@@ -52,7 +52,7 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
    labelImportantThreshold(_labelImportantThreshold),
    shapefileopen(false)
 {
-  if (msSHPOpenFile(&shpfile, "rb", dir, filename) == -1)
+  if (msShapefileOpen(&shpfile, "rb", dir, filename, 0) == -1)
     return;
 
   shpCache.resize_discard(shpfile.numshapes);
@@ -74,7 +74,7 @@ TopographyFile::~TopographyFile()
     return;
 
   ClearCache();
-  msSHPCloseFile(&shpfile);
+  msShapefileClose(&shpfile);
 
   if (dir != NULL) {
     --dir->refcount;
@@ -124,7 +124,7 @@ TopographyFile::updateCache(const WindowProjection &map_projection)
 
   // Test which shapes are inside the given bounds and save the
   // status to shpfile.status
-  msSHPWhichShapes(&shpfile, dir, deg_bounds, 0);
+  msShapefileWhichShapes(&shpfile, dir, deg_bounds, 0);
 
   // If not a single shape is inside the bounds
   if (!shpfile.status) {

@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: maptree.h 4800 2005-08-25 14:20:16Z sdlime $
+ * $Id: maptree.h 8741 2009-03-09 21:04:52Z jlacroix $
  *
  * Project:  MapServer
  * Purpose:  .qix spatial index declarations.
@@ -25,22 +25,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- ******************************************************************************
- *
- * $Log$
- * Revision 1.10  2005/08/25 14:20:16  sdlime
- * Applied patch for bug 1440.
- *
- * Revision 1.9  2005/06/14 16:03:35  dan
- * Updated copyright date to 2005
- *
- * Revision 1.8  2005/02/18 03:06:47  dan
- * Turned all C++ (//) comments into C comments (bug 1238)
- *
- * Revision 1.7  2004/10/21 04:30:56  frank
- * Added standardized headers.  Added MS_CVSID().
- *
- */
+ ****************************************************************************/
 
 #ifndef MAPTREE_H
 #define MAPTREE_H
@@ -106,15 +91,13 @@ MS_DLL_EXPORT treeObj *msCreateTree(shapefileObj *shapefile, int maxdepth);
 MS_DLL_EXPORT void msTreeTrim(treeObj *tree);
 MS_DLL_EXPORT void msDestroyTree(treeObj *tree);
 
-MS_DLL_EXPORT char *msSearchTree(treeObj *tree, rectObj aoi);
-MS_DLL_EXPORT char *msSearchDiskTree(struct zzip_dir *zdir,
-                                     const char *filename, rectObj aoi,
-                                     int debug);
+MS_DLL_EXPORT ms_bitarray msSearchTree(const treeObj *tree, rectObj aoi);
+MS_DLL_EXPORT ms_bitarray msSearchDiskTree(struct zzip_dir *zdir, const char *filename, rectObj aoi, int debug);
 
 MS_DLL_EXPORT treeObj *msReadTree(char *filename, int debug);
 MS_DLL_EXPORT int msWriteTree(treeObj *tree, char *filename, int LSB_order);
 
-MS_DLL_EXPORT void msFilterTreeSearch(const shapefileObj *shp, char *status, rectObj search_rect);
+MS_DLL_EXPORT void msFilterTreeSearch(shapefileObj *shp, ms_bitarray status, rectObj search_rect);
 
 #ifdef __cplusplus
 }

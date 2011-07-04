@@ -1,9 +1,10 @@
 /******************************************************************************
+ * $Id: maptree.c 10772 2010-11-29 18:27:02Z aboudreault $
  *
  * Project:  MapServer
- * Purpose:  .qix spatial index implementation.  
+ * Purpose:  .qix spatial index implementation.  Derived from shapelib, and 
+ *           relicensed with permission of Frank Warmerdam (shapelib author).
  * Author:   Steve Lime
- *           Derived from code in shapelib.
  *
  ******************************************************************************
  * Copyright (c) 1996-2005 Regents of the University of Minnesota.
@@ -25,32 +26,14 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- ******************************************************************************
- *
- * $Log$
- * Revision 1.18  2006/04/19 16:36:18  hobu
- * don't throw an MS_IOERR when we're in debug mode when we don't find an index (bug 1752)
- *
- * Revision 1.17  2005/08/25 14:20:16  sdlime
- * Applied patch for bug 1440.
- *
- * Revision 1.16  2005/06/14 16:03:35  dan
- * Updated copyright date to 2005
- *
- * Revision 1.15  2005/02/18 03:06:47  dan
- * Turned all C++ (//) comments into C comments (bug 1238)
- *
- * Revision 1.14  2004/10/21 04:30:56  frank
- * Added standardized headers.  Added MS_CVSID().
- *
- */
+ ****************************************************************************/
 
-#include "map.h"
+#include "mapserver.h"
 #include "maptree.h"
 
 #include <zzip/util.h>
 
-#include <stdlib.h>
+#include <stdio.h>
 #include <string.h>
 #include <sys/param.h>
 #include <stdbool.h>
@@ -59,9 +42,7 @@
 #include <sys/endian.h>
 #endif
 
-#ifdef SHAPELIB_DISABLED
-MS_CVSID("$Id: maptree.c 5397 2006-04-19 16:36:18Z hobu $")
-#endif /* SHAPELIB_DISABLED */
+MS_CVSID("$Id: maptree.c 10772 2010-11-29 18:27:02Z aboudreault $")
 
 static const bool bBigEndian = BYTE_ORDER == BIG_ENDIAN;
 
@@ -106,7 +87,7 @@ static treeNodeObj *treeNodeCreate(rectObj rect)
 {
     treeNodeObj	*node;
 
-    node = (treeNodeObj *) malloc(sizeof(treeNodeObj));
+    node = (treeNodeObj *) msSmallMalloc(sizeof(treeNodeObj));
 
     node->numshapes = 0;
     node->ids = NULL;
@@ -144,13 +125,13 @@ SHPTreeHandle msSHPDiskTreeOpen(struct zzip_dir *zdir, const char * pszTree,
   /* -------------------------------------------------------------------- */
   /*	Initialize the info structure.					    */
   /* -------------------------------------------------------------------- */
-    psTree = (SHPTreeHandle) malloc(sizeof(SHPTreeInfo));
+    psTree = (SHPTreeHandle) msSmallMalloc(sizeof(SHPTreeInfo));
   
   /* -------------------------------------------------------------------- */
   /*	Compute the base (layer) name.  If there is any extension	    */
   /*	on the passed in filename we will strip it off.			    */
   /* -------------------------------------------------------------------- */
-    pszBasename = (char *) malloc(strlen(pszTree)+5);
+    pszBasename = (char *) msSmallMalloc(strlen(pszTree)+5);
     strcpy( pszBasename, pszTree );
     for( i = strlen(pszBasename)-1; 
        i > 0 && pszBasename[i] != '.' && pszBasename[i] != '/'
@@ -164,7 +145,7 @@ SHPTreeHandle msSHPDiskTreeOpen(struct zzip_dir *zdir, const char * pszTree,
   /*	Open the .shp and .shx files.  Note that files pulled from	    */
   /*	a PC to Unix with upper case filenames won't work!		    */
   /* -------------------------------------------------------------------- */
-    pszFullname = (char *) malloc(strlen(pszBasename) + 5);
+    pszFullname = (char *) msSmallMalloc(strlen(pszBasename) + 5);
     sprintf( pszFullname, "%s%s", pszBasename, MS_INDEX_EXTENSION); 
     psTree->zfp = zzip_open_rb(zdir, pszFullname);
 
@@ -251,7 +232,7 @@ treeObj *msCreateTree(shapefileObj *shapefile, int maxdepth)
   /* -------------------------------------------------------------------- */
   /*      Allocate the tree object                                        */
   /* -------------------------------------------------------------------- */
-  tree = (treeObj *) malloc(sizeof(treeObj));
+  tree = (treeObj *) msSmallMalloc(sizeof(treeObj));
   
   tree->numshapes = shapefile->numshapes;
   tree->maxdepth = maxdepth;
@@ -275,7 +256,7 @@ treeObj *msCreateTree(shapefileObj *shapefile, int maxdepth)
   tree->root = treeNodeCreate(shapefile->bounds);
 
   for(i=0; i<shapefile->numshapes; i++) {
-    if ( !msSHPReadBounds(shapefile->hSHP, i, &bounds))
+    if(msSHPReadBounds(shapefile->hSHP, i, &bounds) == MS_SUCCESS)
       treeAddShapeId(tree, i, bounds);
   }
 
@@ -419,7 +400,7 @@ static int treeAddShapeId(treeObj *tree, int id, rectObj rect)
   return(treeNodeAddShapeId(tree->root, id, rect, tree->maxdepth));
 }
 
-static void treeCollectShapeIds(treeNodeObj *node, rectObj aoi, char *status)
+static void treeCollectShapeIds(treeNodeObj *node, rectObj aoi, ms_bitarray status)
 {
   int i;
     
@@ -445,9 +426,9 @@ static void treeCollectShapeIds(treeNodeObj *node, rectObj aoi, char *status)
   }
 }
 
-char *msSearchTree(treeObj *tree, rectObj aoi)
+ms_bitarray msSearchTree(const treeObj *tree, rectObj aoi)
 {
-  char *status=NULL;
+  ms_bitarray status=NULL;
 
   status = msAllocBitArray(tree->numshapes);
   if(!status) {
@@ -495,7 +476,7 @@ void msTreeTrim(treeObj *tree)
 
 #endif /* SHAPELIB_DISABLED */
 
-static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status) 
+static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, ms_bitarray status) 
 {
   int i;
   ms_int32 offset;
@@ -522,7 +503,7 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
     return;
   }
   if(numshapes > 0) {
-    ids = (int *)malloc(numshapes*sizeof(ms_int32));
+    ids = (int *)msSmallMalloc(numshapes*sizeof(ms_int32));
 
     zzip_fread( ids, numshapes*sizeof(ms_int32), 1, disktree->zfp );
     if (disktree->needswap )
@@ -550,11 +531,10 @@ static void searchDiskTreeNode(SHPTreeHandle disktree, rectObj aoi, char *status
   return;
 }
 
-char *msSearchDiskTree(struct zzip_dir *zdir, const char *filename,
-                       rectObj aoi, int debug)
+ms_bitarray msSearchDiskTree(struct zzip_dir *zdir, const char *filename, rectObj aoi, int debug)
 {
   SHPTreeHandle	disktree;
-  char *status=NULL;
+  ms_bitarray status=NULL;
 
   disktree = msSHPDiskTreeOpen(zdir, filename, debug);
   if(!disktree) {
@@ -586,7 +566,7 @@ treeNodeObj *readTreeNode( SHPTreeHandle disktree )
   ms_int32 offset;
   treeNodeObj *node;
 
-  node = (treeNodeObj *) malloc(sizeof(treeNodeObj));
+  node = (treeNodeObj *) msSmallMalloc(sizeof(treeNodeObj));
   node->ids = NULL;
 
   res = fread( &offset, 4, 1, disktree->fp );
@@ -604,7 +584,7 @@ treeNodeObj *readTreeNode( SHPTreeHandle disktree )
   fread( &node->numshapes, 4, 1, disktree->fp );
   if ( disktree->needswap ) SwapWord ( 4, &node->numshapes );
   if( node->numshapes > 0 )
-    node->ids = (ms_int32 *)malloc(sizeof(ms_int32)*node->numshapes);
+    node->ids = (ms_int32 *)msSmallMalloc(sizeof(ms_int32)*node->numshapes);
   fread( node->ids, node->numshapes*4, 1, disktree->fp );
   for( i=0; i < node->numshapes; i++ )
   {
@@ -629,10 +609,7 @@ treeObj *msReadTree(char *filename, int debug)
   }
 
   tree = (treeObj *) malloc(sizeof(treeObj));
-  if(!tree) {
-    msSetError(MS_MEMERR, NULL, "msReadTree()");
-    return(NULL);
-  }
+  MS_CHECK_ALLOC(tree, sizeof(treeObj), NULL);
   
   tree->numshapes = disktree->nShapes;
   tree->maxdepth = disktree->nDepth;
@@ -675,7 +652,7 @@ static void writeTreeNode(SHPTreeHandle disktree, treeNodeObj *node)
 
   offset = getSubNodeOffset(node);
   
-  pabyRec = malloc(sizeof(rectObj) + (3 * sizeof(ms_int32)) + (node->numshapes * sizeof(ms_int32)) );
+  pabyRec = msSmallMalloc(sizeof(rectObj) + (3 * sizeof(ms_int32)) + (node->numshapes * sizeof(ms_int32)) );
 
   memcpy( pabyRec, &offset, 4);
   if( disktree->needswap ) SwapWord( 4, pabyRec );
@@ -721,12 +698,13 @@ int msWriteTree(treeObj *tree, char *filename, int B_order)
   
   
   disktree = (SHPTreeHandle) malloc(sizeof(SHPTreeInfo));
+  MS_CHECK_ALLOC(disktree, sizeof(SHPTreeInfo), MS_FALSE);
 
   /* -------------------------------------------------------------------- */
   /*	Compute the base (layer) name.  If there is any extension	    */
   /*	on the passed in filename we will strip it off.			    */
   /* -------------------------------------------------------------------- */
-  pszBasename = (char *) malloc(strlen(filename)+5);
+  pszBasename = (char *) msSmallMalloc(strlen(filename)+5);
   strcpy( pszBasename, filename );
   for( i = strlen(pszBasename)-1; 
        i > 0 && pszBasename[i] != '.' && pszBasename[i] != '/'
@@ -740,7 +718,7 @@ int msWriteTree(treeObj *tree, char *filename, int B_order)
   /*	Open the .shp and .shx files.  Note that files pulled from	    */
   /*	a PC to Unix with upper case filenames won't work!		    */
   /* -------------------------------------------------------------------- */
-  pszFullname = (char *) malloc(strlen(pszBasename) + 5);
+  pszFullname = (char *) msSmallMalloc(strlen(pszBasename) + 5);
   sprintf( pszFullname, "%s%s", pszBasename, MS_INDEX_EXTENSION); 
   disktree->fp = fopen(pszFullname, "wb");
   
@@ -811,16 +789,19 @@ int msWriteTree(treeObj *tree, char *filename, int B_order)
 #endif /* SHAPELIB_DISABLED */
 
 /* Function to filter search results further against feature bboxes */
-void msFilterTreeSearch(const shapefileObj *shp, char *status, rectObj search_rect)
+void msFilterTreeSearch(shapefileObj *shp, ms_bitarray status, rectObj search_rect)
 {
   int i;
   rectObj shape_rect;
 
-  for(i=0;i<shp->numshapes;i++) { /* for each shape */
-    if(msGetBit(status, i)) {
-      if(!msSHPReadBounds(shp->hSHP, i, &shape_rect))
-	if(msRectOverlap(&shape_rect, &search_rect) != MS_TRUE)
-	  msSetBit(status, i, 0);
+  i = msGetNextBit(status, 0, shp->numshapes);
+  while(i >= 0) {
+    if(msSHPReadBounds(shp->hSHP, i, &shape_rect) == MS_SUCCESS) {
+	    if(msRectOverlap(&shape_rect, &search_rect) != MS_TRUE) {
+	      msSetBit(status, i, 0);
+      }
     }
+    i = msGetNextBit(status, i+1, shp->numshapes);
   }
+
 }

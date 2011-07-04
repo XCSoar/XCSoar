@@ -24,7 +24,7 @@ Copyright_License {
 #include "Topography/XShape.hpp"
 #include "Util/UTF8.hpp"
 #include "Units/Units.hpp"
-#include "shapelib/map.h"
+#include "shapelib/mapserver.h"
 #ifdef ENABLE_OPENGL
 #include "Projection.hpp"
 #include "Math/Earth.hpp"

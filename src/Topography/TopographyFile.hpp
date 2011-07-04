@@ -25,7 +25,7 @@ Copyright_License {
 #ifndef TOPOGRAPHY_HPP
 #define TOPOGRAPHY_HPP
 
-#include "shapelib/mapshape.h"
+#include "shapelib/mapserver.h"
 #include "Geo/GeoBounds.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/AllocatedArray.hpp"

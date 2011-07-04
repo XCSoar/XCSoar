@@ -1,5 +1,5 @@
 /******************************************************************************
- * $Id: maperror.h 5283 2006-03-16 22:28:38Z tamas $
+ * $Id: maperror.h 11128 2011-03-09 20:38:48Z dmorissette $
  *
  * Project:  MapServer
  * Purpose:  Declarations for Error and Debug functions.
@@ -25,27 +25,7 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- ******************************************************************************
- *
- * $Log$
- * Revision 1.35  2006/03/16 22:28:38  tamas
- * Fixed msGetErrorString so as not to truncate the length of the error messages
- * Added msAddErrorDisplayString to read the displayable messages separatedly
- *
- * Revision 1.34  2006/03/14 03:17:19  assefa
- * Add SOS error code (Bug 1710).
- * Correct error codes numbers for MS_TIMEERR and MS_GMLERR.
- *
- * Revision 1.33  2005/06/14 16:03:33  dan
- * Updated copyright date to 2005
- *
- * Revision 1.32  2005/01/07 18:51:09  sdlime
- * Added MS_GMLERR code.
- *
- * Revision 1.31  2004/10/21 04:30:56  frank
- * Added standardized headers.  Added MS_CVSID().
- *
- */
+ ****************************************************************************/
 
 #ifndef MAPERROR_H
 #define MAPERROR_H
@@ -53,6 +33,10 @@
 #ifdef __cplusplus
 extern "C" {
 #endif
+
+/*====================================================================
+ *   maperror.c
+ *====================================================================*/
 
 #define MS_NOERR 0 /* general error codes */
 #define MS_IOERR 1 
@@ -92,14 +76,23 @@ extern "C" {
 #define MS_TIMEERR 35
 #define MS_GMLERR 36
 #define MS_SOSERR 37
-#define MS_NUMERRORCODES 38
+#define MS_NULLPARENTERR 38
+#define MS_AGGERR 39
+#define MS_OWSERR 40
+#define MS_OGLERR 42
+#define MS_RENDERERERR 43
+#define MS_NUMERRORCODES 44
 
 #define MESSAGELENGTH 2048
 #define ROUTINELENGTH 64
 
-#ifndef MS_DLL_EXPORT
+#define MS_ERROR_LANGUAGE "en-US"
+
+#ifdef SHAPELIB_DISABLED
+#  define MS_DLL_EXPORT     __declspec(dllexport)
+#else
 #define  MS_DLL_EXPORT
-#endif
+#endif /* SHAPELIB_DISABLED */
 
 #ifdef SHAPELIB_DISABLED
 
@@ -107,15 +100,11 @@ typedef struct error_obj {
   int code;
   char routine[ROUTINELENGTH];
   char message[MESSAGELENGTH];
+  int isreported;
 #ifndef SWIG
   struct error_obj *next;
 #endif
 } errorObj;
-
-/*
-** Global variables
-*/
-/* extern errorObj ms_error; */
 
 /*
 ** Function prototypes
@@ -123,6 +112,7 @@ typedef struct error_obj {
 MS_DLL_EXPORT errorObj *msGetErrorObj(void);
 MS_DLL_EXPORT void msResetErrorList(void);
 MS_DLL_EXPORT char *msGetVersion(void);
+MS_DLL_EXPORT int  msGetVersionInt(void);
 MS_DLL_EXPORT char *msGetErrorString(char *delimiter);
 
 #ifndef SWIG
@@ -135,13 +125,67 @@ MS_DLL_EXPORT char *msAddErrorDisplayString(char *source, errorObj *error);
 struct map_obj;
 MS_DLL_EXPORT void msWriteErrorImage(struct map_obj *map, char *filename, int blank);
 
+#endif /* SWIG */
+
+/*====================================================================
+ *   mapdebug.c (See also MS-RFC-28)
+ *====================================================================*/
+
+typedef enum { MS_DEBUGLEVEL_ERRORSONLY = 0,  /* DEBUG OFF, log fatal errors */
+               MS_DEBUGLEVEL_DEBUG      = 1,  /* DEBUG ON */
+               MS_DEBUGLEVEL_TUNING     = 2,  /* Reports timing info */
+               MS_DEBUGLEVEL_V          = 3,  /* Verbose */
+               MS_DEBUGLEVEL_VV         = 4,  /* Very verbose */
+               MS_DEBUGLEVEL_VVV        = 5   /* Very very verbose */
+} debugLevel;
+
+#ifndef SWIG
+
+typedef enum { MS_DEBUGMODE_OFF,
+               MS_DEBUGMODE_FILE,
+               MS_DEBUGMODE_STDERR,
+               MS_DEBUGMODE_STDOUT,
+               MS_DEBUGMODE_WINDOWSDEBUG
+} debugMode;
+
+typedef struct debug_info_obj 
+{
+    debugLevel  global_debug_level;
+    debugMode   debug_mode;
+    char        *errorfile;
+    FILE        *fp;
+    /* The following 2 members are used only with USE_THREAD (but we won't #ifndef them) */
+    int         thread_id;
+    struct debug_info_obj *next;
+} debugInfoObj;
+
+
 MS_DLL_EXPORT void msDebug( const char * pszFormat, ... );
-#endif
+MS_DLL_EXPORT int msSetErrorFile(const char *pszErrorFile, const char *pszRelToPath);
+MS_DLL_EXPORT void msCloseErrorFile( void );
+MS_DLL_EXPORT const char *msGetErrorFile( void );
+MS_DLL_EXPORT void msSetGlobalDebugLevel(int level);
+MS_DLL_EXPORT debugLevel msGetGlobalDebugLevel( void );
+MS_DLL_EXPORT int msDebugInitFromEnv( void );
+MS_DLL_EXPORT void msDebugCleanup( void );
+
+#endif /* SWIG */
 
 #endif /* SHAPELIB_DISABLED */
 
-#define msSetError(...) do {} while (0)
-#define msDebug(...) do {} while (0)
+static inline void
+msSetError(int code, const char *message, const char *routine, ...)
+{
+  (void)code;
+  (void)message;
+  (void)routine;
+}
+
+static inline void
+msDebug(const char *fmt, ...)
+{
+  (void)fmt;
+}
 
 #ifdef __cplusplus
 }

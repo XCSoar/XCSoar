@@ -1,6 +1,7 @@
 SHPSRC = $(SRC)/Topography/shapelib
 
 SHAPELIB = \
+	$(SHPSRC)/mapstring.c \
 	$(SHPSRC)/mapbits.c 	\
 	$(SHPSRC)/mapfile.c \
 	$(SHPSRC)/mapprimitive.c 	\

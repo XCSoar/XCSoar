@@ -1,8 +1,15 @@
 /******************************************************************************
+ * $Id: mapsearch.c 10535 2010-09-29 18:18:31Z warmerdam $
  *
  * Project:  MapServer
  * Purpose:  Various geospatial search operations.
  * Author:   Steve Lime and the MapServer team.
+ *
+ * Notes: For information on point in polygon function please see:
+ *
+ *   http://www.ecse.rpi.edu/Homepages/wrf/Research/Short_Notes/pnpoly.html
+ * 
+ * The appropriate copyright notice accompanies the funtion definition.
  *
  ******************************************************************************
  * Copyright (c) 1996-2005 Regents of the University of Minnesota.
@@ -24,27 +31,13 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- ******************************************************************************
- *
- * $Log$
- * Revision 1.17  2005/06/14 16:03:34  dan
- * Updated copyright date to 2005
- *
- * Revision 1.16  2005/02/18 03:06:47  dan
- * Turned all C++ (//) comments into C comments (bug 1238)
- *
- * Revision 1.15  2004/10/21 04:30:54  frank
- * Added standardized headers.  Added MS_CVSID().
- *
- */
+ ****************************************************************************/
 
-#include "map.h"
+#include "mapserver.h"
 
 #include <math.h>
 
-#ifdef SHAPELIB_DISABLED
-MS_CVSID("$Id: mapsearch.c 4695 2005-06-14 16:03:36Z dan $")
-#endif /* SHAPELIB_DISABLED */
+MS_CVSID("$Id: mapsearch.c 10535 2010-09-29 18:18:31Z warmerdam $")
 
 #define LASTVERT(v,n)  ((v) == 0 ? n-2 : v-1)
 #define NEXTVERT(v,n)  ((v) == n-2 ? 0 : v+1)
@@ -60,6 +53,28 @@ int msRectOverlap(const rectObj *a, const rectObj *b)
   if(a->maxy < b->miny) return(MS_FALSE);
   return(MS_TRUE);
 }
+
+/*
+** Computes the intersection of two rectangles, updating the first
+** to be only the intersection of the two.  Returns MS_FALSE if
+** the intersection is empty. 
+*/
+int msRectIntersect( rectObj *a, const rectObj *b )
+{
+    if( a->maxx > b->maxx )
+        a->maxx = b->maxx;
+    if( a->minx < b->minx )
+        a->minx = b->minx;
+    if( a->maxy > b->maxy )
+        a->maxy = b->maxy;
+    if( a->miny < b->miny )
+        a->miny = b->miny;
+
+    if( a->maxx < a->minx || b->maxx < b->minx )
+        return MS_FALSE;
+    else 
+        return MS_TRUE;
+}        
 
 /*
 ** Returns MS_TRUE if rectangle a is contained in rectangle b
@@ -128,6 +143,28 @@ int msPolygonDirection(lineObj *c)
       return(0); /* shouldn't happen unless the polygon is self intersecting */
 }
 
+/*                                                                                                                         
+** Copyright (c) 1970-2003, Wm. Randolph Franklin                                                                          
+**                                                                                                                         
+** Permission is hereby granted, free of charge, to any person obtaining a copy of this software and                       
+** associated documentation files (the "Software"), to deal in the Software without restriction, including                 
+** without limitation the rights to use, copy, modify, merge, publish, distribute, sublicense, and/or sell                 
+** copies of the Software, and to permit persons to whom the Software is furnished to do so, subject to the                
+** following conditions:                                                                                                   
+**                                                                                                                         
+** 1. Redistributions of source code must retain the above copyright notice, this list of conditions and the               
+**    following disclaimers.                                                                                               
+** 2. Redistributions in binary form must reproduce the above copyright notice in the documentation and/or                 
+**    other materials provided with the distribution.                                                                      
+** 3. The name of W. Randolph Franklin may not be used to endorse or promote products derived from this                    
+**    Software without specific prior written permission.                                                                  
+**                                                                                                                         
+** THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT                   
+** LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN                  
+** NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY,                    
+** WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE                     
+** SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.                                                                  
+*/
 int msPointInPolygon(pointObj *p, lineObj *c)
 {
   int i, j, status = MS_FALSE;
@@ -201,12 +238,18 @@ int msIntersectPointPolygon(pointObj *point, shapeObj *poly) {
   return(status);  
 }
 
-int msIntersectMultipointPolygon(multipointObj *points, shapeObj *poly) {
-  int i;
-  
-  for(i=0; i<points->numpoints; i++) {
-    if(msIntersectPointPolygon(&(points->point[i]), poly) == MS_TRUE)
-      return(MS_TRUE);
+int msIntersectMultipointPolygon(shapeObj *multipoint, shapeObj *poly) {
+  int i,j;
+
+  /* The change to loop through all the lines has been made for ticket
+   * #2443 but is no more needed since ticket #2762. PostGIS now put all
+   * points into a single line.  */
+  for(i=0; i<multipoint->numlines; i++ ) {
+    lineObj points = multipoint->line[i];
+    for(j=0; j<points.numpoints; j++) {
+          if(msIntersectPointPolygon(&(points.point[j]), poly) == MS_TRUE)
+        return(MS_TRUE);
+    }
   }
     
   return(MS_FALSE);
@@ -218,56 +261,48 @@ int msIntersectPolylines(shapeObj *line1, shapeObj *line2) {
   for(c1=0; c1<line1->numlines; c1++)
     for(v1=1; v1<line1->line[c1].numpoints; v1++)
       for(c2=0; c2<line2->numlines; c2++)
-  for(v2=1; v2<line2->line[c2].numpoints; v2++)
-    if(msIntersectSegments(&(line1->line[c1].point[v1-1]), &(line1->line[c1].point[v1]), &(line2->line[c2].point[v2-1]), &(line2->line[c2].point[v2])) ==  MS_TRUE)
-      return(MS_TRUE);
+        for(v2=1; v2<line2->line[c2].numpoints; v2++)
+          if(msIntersectSegments(&(line1->line[c1].point[v1-1]), &(line1->line[c1].point[v1]),
+              &(line2->line[c2].point[v2-1]), &(line2->line[c2].point[v2])) ==  MS_TRUE)
+            return(MS_TRUE);
 
   return(MS_FALSE);
 }
 
 int msIntersectPolylinePolygon(shapeObj *line, shapeObj *poly) {
-  int c1,v1,c2,v2;
+  int i;
 
   /* STEP 1: polygon might competely contain the polyline or one of it's parts (only need to check one point from each part) */
-  for(c1=0; c1<line->numlines; c1++) {
-    if(msIntersectPointPolygon(&(line->line[c1].point[0]), poly) == MS_TRUE) /* this considers holes and multiple parts */
+  for(i=0; i<line->numlines; i++) {
+    if(msIntersectPointPolygon(&(line->line[i].point[0]), poly) == MS_TRUE) /* this considers holes and multiple parts */
       return(MS_TRUE);
   }
 
-
   /* STEP 2: look for intersecting line segments */
-  for(c1=0; c1<line->numlines; c1++)
-    for(v1=1; v1<line->line[c1].numpoints; v1++)
-      for(c2=0; c2<poly->numlines; c2++)
-  for(v2=1; v2<poly->line[c2].numpoints; v2++)
-    if(msIntersectSegments(&(line->line[c1].point[v1-1]), &(line->line[c1].point[v1]), &(poly->line[c2].point[v2-1]), &(poly->line[c2].point[v2])) ==  MS_TRUE)
-      return(MS_TRUE);
-  
+  if (msIntersectPolylines(line, poly) == MS_TRUE)
+    return (MS_TRUE);
+
   return(MS_FALSE);
 }
 
 int msIntersectPolygons(shapeObj *p1, shapeObj *p2) {
-  int c1,v1,c2,v2;
+  int i;
 
   /* STEP 1: polygon 1 completely contains 2 (only need to check one point from each part) */
-  for(c2=0; c2<p2->numlines; c2++) {
-    if(msIntersectPointPolygon(&(p2->line[c2].point[0]), p1) == MS_TRUE) /* this considers holes and multiple parts */
+  for(i=0; i<p2->numlines; i++) {
+    if(msIntersectPointPolygon(&(p2->line[i].point[0]), p1) == MS_TRUE) /* this considers holes and multiple parts */
       return(MS_TRUE);
   }
 
   /* STEP 2: polygon 2 completely contains 1 (only need to check one point from each part) */
-  for(c1=0; c1<p1->numlines; c1++) {
-    if(msIntersectPointPolygon(&(p1->line[c1].point[0]), p2) == MS_TRUE) /* this considers holes and multiple parts */
+  for(i=0; i<p1->numlines; i++) {
+    if(msIntersectPointPolygon(&(p1->line[i].point[0]), p2) == MS_TRUE) /* this considers holes and multiple parts */
       return(MS_TRUE);
   }
 
   /* STEP 3: look for intersecting line segments */
-  for(c1=0; c1<p1->numlines; c1++)
-    for(v1=1; v1<p1->line[c1].numpoints; v1++)
-      for(c2=0; c2<p2->numlines; c2++)
-  for(v2=1; v2<p2->line[c2].numpoints; v2++)
-    if(msIntersectSegments(&(p1->line[c1].point[v1-1]), &(p1->line[c1].point[v1]), &(p2->line[c2].point[v2-1]), &(p2->line[c2].point[v2])) ==  MS_TRUE)     
-      return(MS_TRUE);
+  if (msIntersectPolylines(p1, p2) == MS_TRUE)
+    return(MS_TRUE);
 
   /*
   ** At this point we know there are are no intersections between edges. There may be other tests necessary
@@ -285,34 +320,50 @@ int msIntersectPolygons(shapeObj *p1, shapeObj *p2) {
 double msDistancePointToPoint(pointObj *a, pointObj *b)
 {
   double d;
+
+  d = sqrt(msSquareDistancePointToPoint(a, b));
+
+  return(d);
+}
+
+/*
+** Quickly compute the square of the distance; avoids expensive sqrt() call on each invocation
+*/
+double msSquareDistancePointToPoint(pointObj *a, pointObj *b)
+{
   double dx, dy;
   
   dx = a->x - b->x;
   dy = a->y - b->y;
-  d = sqrt(dx*dx + dy*dy);
-  return(d);
+
+  return(dx*dx + dy*dy);
 }
 
 double msDistancePointToSegment(pointObj *p, pointObj *a, pointObj *b)
 {
-  double l; /* length of line ab */
+	return (sqrt(msSquareDistancePointToSegment(p, a, b)));
+}
+
+double msSquareDistancePointToSegment(pointObj *p, pointObj *a, pointObj *b)
+{
+  double l_squared; /* squared length of line ab */
   double r,s;
 
-  l = msDistancePointToPoint(a,b);
+  l_squared = msSquareDistancePointToPoint(a,b);
 
-  if(l == 0.0) /* a = b */
-    return( msDistancePointToPoint(a,p));
+  if(l_squared == 0.0) /* a = b */
+    return(msSquareDistancePointToPoint(a,p));
 
-  r = ((a->y - p->y)*(a->y - b->y) - (a->x - p->x)*(b->x - a->x))/(l*l);
+  r = ((a->y - p->y)*(a->y - b->y) - (a->x - p->x)*(b->x - a->x))/(l_squared);
 
   if(r > 1) /* perpendicular projection of P is on the forward extention of AB */
-    return(MS_MIN(msDistancePointToPoint(p, b),msDistancePointToPoint(p, a)));
+    return(MS_MIN(msSquareDistancePointToPoint(p, b),msSquareDistancePointToPoint(p, a)));
   if(r < 0) /* perpendicular projection of P is on the backward extention of AB */
-    return(MS_MIN(msDistancePointToPoint(p, b),msDistancePointToPoint(p, a)));
+    return(MS_MIN(msSquareDistancePointToPoint(p, b),msSquareDistancePointToPoint(p, a)));
 
-  s = ((a->y - p->y)*(b->x - a->x) - (a->x - p->x)*(b->y - a->y))/(l*l);
+  s = ((a->y - p->y)*(b->x - a->x) - (a->x - p->x)*(b->y - a->y))/l_squared;
 
-  return(fabs(s*l));
+  return(fabs(s*s*l_squared));
 }
 
 #define SMALL_NUMBER 0.00000001
@@ -420,6 +471,18 @@ double msDistanceSegmentToSegment(pointObj *pa, pointObj *pb, pointObj *pc, poin
 
 double msDistancePointToShape(pointObj *point, shapeObj *shape)
 {
+  double d;
+
+  d = msSquareDistancePointToShape(point, shape);
+
+  return(sqrt(d));
+}
+
+/*
+** As msDistancePointToShape; avoid expensive sqrt calls
+*/
+double msSquareDistancePointToShape(pointObj *point, shapeObj *shape)
+{
   int i, j;
   double dist, minDist=-1;
 
@@ -427,7 +490,7 @@ double msDistancePointToShape(pointObj *point, shapeObj *shape)
   case(MS_SHAPE_POINT):
     for(j=0;j<shape->numlines;j++) {
       for(i=0; i<shape->line[j].numpoints; i++) {
-        dist = msDistancePointToPoint(point, &(shape->line[j].point[i]));
+        dist = msSquareDistancePointToPoint(point, &(shape->line[j].point[i]));
         if((dist < minDist) || (minDist < 0)) minDist = dist;
       }
     }
@@ -435,7 +498,7 @@ double msDistancePointToShape(pointObj *point, shapeObj *shape)
   case(MS_SHAPE_LINE):
     for(j=0;j<shape->numlines;j++) {
       for(i=1; i<shape->line[j].numpoints; i++) {
-        dist = msDistancePointToSegment(point, &(shape->line[j].point[i-1]), &(shape->line[j].point[i]));
+        dist = msSquareDistancePointToSegment(point, &(shape->line[j].point[i-1]), &(shape->line[j].point[i]));
         if((dist < minDist) || (minDist < 0)) minDist = dist;
       }
     }
@@ -446,7 +509,7 @@ double msDistancePointToShape(pointObj *point, shapeObj *shape)
     else { /* treat shape just like a line */
       for(j=0;j<shape->numlines;j++) {
         for(i=1; i<shape->line[j].numpoints; i++) {
-          dist = msDistancePointToSegment(point, &(shape->line[j].point[i-1]), &(shape->line[j].point[i]));
+          dist = msSquareDistancePointToSegment(point, &(shape->line[j].point[i-1]), &(shape->line[j].point[i]));
           if((dist < minDist) || (minDist < 0)) minDist = dist;
         }
       }
@@ -468,22 +531,24 @@ double msDistanceShapeToShape(shapeObj *shape1, shapeObj *shape2)
   case(MS_SHAPE_POINT): /* shape1 */
     for(i=0;i<shape1->numlines;i++) {
       for(j=0; j<shape1->line[i].numpoints; j++) {
-        dist = msDistancePointToShape(&(shape1->line[i].point[j]), shape2);
+        dist = msSquareDistancePointToShape(&(shape1->line[i].point[j]), shape2);
         if((dist < minDist) || (minDist < 0)) 
     minDist = dist;
       }
     }
+    minDist = sqrt(minDist);
     break;
   case(MS_SHAPE_LINE): /* shape1 */
     switch(shape2->type) {
     case(MS_SHAPE_POINT):
       for(i=0;i<shape2->numlines;i++) {
         for(j=0; j<shape2->line[i].numpoints; j++) {
-          dist = msDistancePointToShape(&(shape2->line[i].point[j]), shape1);
+          dist = msSquareDistancePointToShape(&(shape2->line[i].point[j]), shape1);
           if((dist < minDist) || (minDist < 0)) 
       minDist = dist;
         }
       }
+      minDist = sqrt(minDist);
       break;
     case(MS_SHAPE_LINE):
       for(i=0;i<shape1->numlines;i++) {
@@ -535,11 +600,12 @@ double msDistanceShapeToShape(shapeObj *shape1, shapeObj *shape2)
     case(MS_SHAPE_POINT):
       for(i=0;i<shape2->numlines;i++) {
         for(j=0; j<shape2->line[i].numpoints; j++) {
-          dist = msDistancePointToShape(&(shape2->line[i].point[j]), shape1);
+          dist = msSquareDistancePointToShape(&(shape2->line[i].point[j]), shape1);
           if((dist < minDist) || (minDist < 0)) 
       minDist = dist;
         }
       }
+      minDist = sqrt(minDist);
       break;
     case(MS_SHAPE_LINE):
       /* shape1 (the polygon) could contain shape2 or one of it's parts       */

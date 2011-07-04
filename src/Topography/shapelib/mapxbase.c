@@ -1,10 +1,10 @@
 /******************************************************************************
+ * $Id: mapxbase.c 10772 2010-11-29 18:27:02Z aboudreault $
  *
  * Project:  MapServer
- * Purpose:  .dbf access API.
+ * Purpose:  .dbf access API.  Derived from shapelib, and relicensed with 
+ *           permission of Frank Warmerdam (shapelib author).
  * Author:   Steve Lime and the MapServer team.
- *
- * Derived from shapelib, and relicensed with permission.
  *
  ******************************************************************************
  * Copyright (c) 1996-2005 Regents of the University of Minnesota.
@@ -26,30 +26,11 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- ******************************************************************************
- *
- * $Log$
- * Revision 1.23  2006/08/22 13:54:37  hobu
- * cast the second argument to char* that we're passing into strncopy
- *
- * Revision 1.22  2005/06/14 16:03:35  dan
- * Updated copyright date to 2005
- *
- * Revision 1.21  2005/04/22 14:11:30  frank
- * Bug 791: initialize some fields in msDBFCreate()
- *
- * Revision 1.20  2005/02/18 03:06:48  dan
- * Turned all C++ (//) comments into C comments (bug 1238)
- *
- * Revision 1.19  2005/02/07 18:37:43  frank
- * Removed dangerous junk in leading space trimmer.
- *
- * Revision 1.18  2004/10/21 04:30:54  frank
- * Added standardized headers.  Added MS_CVSID().
- *
- */
+ ****************************************************************************/
 
-#include "map.h"
+#define _FILE_OFFSET_BITS 64
+
+#include "mapserver.h"
 
 #include <zzip/util.h>
 
@@ -57,9 +38,10 @@
 #include <string.h>
 #include <ctype.h>
 
-#ifdef SHAPELIB_DISABLED
-MS_CVSID("$Id: mapxbase.c 5620 2006-08-22 13:54:37Z hobu $")
-#endif /* SHAPELIB_DISABLED */
+MS_CVSID("$Id: mapxbase.c 10772 2010-11-29 18:27:02Z aboudreault $")
+
+/* try to use a large file version of fseek for files up to 4GB (#3514) */
+#define safe_fseek zzip_seek
 
 /************************************************************************/
 /*                             SfRealloc()                              */
@@ -138,7 +120,7 @@ static void writeHeader(DBFHandle psDBF)
 static void flushRecord( DBFHandle psDBF )
 
 {
-    int		nRecordOffset;
+    unsigned int nRecordOffset;
 
     if( psDBF->bCurrentRecordModified && psDBF->nCurrentRecord > -1 )
     {
@@ -147,7 +129,7 @@ static void flushRecord( DBFHandle psDBF )
 	nRecordOffset = psDBF->nRecordLength * psDBF->nCurrentRecord 
 	                                             + psDBF->nHeaderLength;
 
-	fseek( psDBF->fp, nRecordOffset, 0 );
+	safe_fseek( psDBF->fp, nRecordOffset, 0 );
 	fwrite( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp );
     }
 }
@@ -179,7 +161,7 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir, const char *pszFilename,
     /*	Ensure the extension is converted to dbf or DBF if it is 	    */
     /*	currently .shp or .shx.						    */
     /* -------------------------------------------------------------------- */
-    pszDBFFilename = (char *) malloc(strlen(pszFilename)+1);
+    pszDBFFilename = (char *) msSmallMalloc(strlen(pszFilename)+1);
     strcpy( pszDBFFilename, pszFilename );
     
     if( strcmp(pszFilename+strlen(pszFilename)-4,".shp") 
@@ -197,9 +179,9 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir, const char *pszFilename,
     /*      Open the file.                                                  */
     /* -------------------------------------------------------------------- */
     psDBF = (DBFHandle) calloc( 1, sizeof(DBFInfo) );
-    psDBF->zfp = zzip_open_rb(zdir, pszDBFFilename);
-    free( pszDBFFilename );
-    if( psDBF->zfp == NULL )
+    MS_CHECK_ALLOC(psDBF, sizeof(DBFInfo), NULL);
+    psDBF->fp = zzip_open_rb(zdir, pszDBFFilename);
+    if( psDBF->fp == NULL )
         return( NULL );
 
 #ifdef SHAPELIB_DISABLED
@@ -216,8 +198,8 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir, const char *pszFilename,
     /* -------------------------------------------------------------------- */
     /*  Read Table Header info                                              */
     /* -------------------------------------------------------------------- */
-    pabyBuf = (uchar *) malloc(500);
-    zzip_fread( pabyBuf, 32, 1, psDBF->zfp );
+    pabyBuf = (uchar *) msSmallMalloc(500);
+    zzip_fread( pabyBuf, 32, 1, psDBF->fp );
 
     psDBF->nRecords = nRecords = 
      pabyBuf[4] + pabyBuf[5]*256 + pabyBuf[6]*256*256 + pabyBuf[7]*256*256*256;
@@ -227,7 +209,7 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir, const char *pszFilename,
     
     psDBF->nFields = nFields = (nHeadLen - 32) / 32;
 
-    psDBF->pszCurrentRecord = (char *) malloc(nRecLen);
+    psDBF->pszCurrentRecord = (char *) msSmallMalloc(nRecLen);
 
     /* -------------------------------------------------------------------- */
     /*  Read in Field Definitions                                           */
@@ -235,13 +217,13 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir, const char *pszFilename,
     pabyBuf = (uchar *) SfRealloc(pabyBuf,nHeadLen);
     psDBF->pszHeader = (char *) pabyBuf;
 
-    zzip_seek( psDBF->zfp, 32, 0 );
-    zzip_fread( pabyBuf, nHeadLen, 1, psDBF->zfp );
+    zzip_seek( psDBF->fp, 32, 0 );
+    zzip_fread( pabyBuf, nHeadLen, 1, psDBF->fp );
 
-    psDBF->panFieldOffset = (int *) malloc(sizeof(int) * nFields);
-    psDBF->panFieldSize = (int *) malloc(sizeof(int) * nFields);
-    psDBF->panFieldDecimals = (int *) malloc(sizeof(int) * nFields);
-    psDBF->pachFieldType = (char *) malloc(sizeof(char) * nFields);
+    psDBF->panFieldOffset = (int *) msSmallMalloc(sizeof(int) * nFields);
+    psDBF->panFieldSize = (int *) msSmallMalloc(sizeof(int) * nFields);
+    psDBF->panFieldDecimals = (int *) msSmallMalloc(sizeof(int) * nFields);
+    psDBF->pachFieldType = (char *) msSmallMalloc(sizeof(char) * nFields);
 
     for( iField = 0; iField < nFields; iField++ )
     {
@@ -314,9 +296,9 @@ void  msDBFClose(DBFHandle psDBF)
     /* -------------------------------------------------------------------- */
     /*      Close, and free resources.                                      */
     /* -------------------------------------------------------------------- */
-    if (psDBF->zfp) {
-      zzip_fclose( psDBF->zfp );
-      psDBF->zfp = 0;
+    if (psDBF->fp) {
+      zzip_fclose( psDBF->fp );
+      psDBF->fp = 0;
     }
 
     if( psDBF->panFieldOffset != NULL )
@@ -366,6 +348,13 @@ DBFHandle msDBFCreate( const char * pszFilename )
     /*	Create the info structure.			  		    */
     /* -------------------------------------------------------------------- */
     psDBF = (DBFHandle) malloc(sizeof(DBFInfo));
+    if (psDBF == NULL)
+    {
+        msSetError(MS_MEMERR, "%s: %d: Out of memory allocating %u bytes.\n", "msDBFCreate()",
+                   __FILE__, __LINE__, sizeof(DBFInfo));
+        fclose(fp);
+        return NULL;
+    }
 
     psDBF->fp = fp;
     psDBF->nRecords = 0;
@@ -489,29 +478,62 @@ int	msDBFAddField(DBFHandle psDBF, const char * pszFieldName, DBFFieldType eType
 #endif /* SHAPELIB_DISABLED */
 
 /************************************************************************/
+/*                         DBFIsValueNULL()                             */
+/*                                                                      */
+/*      Return TRUE if value is NULL (in DBF terms).                    */
+/*                                                                      */
+/*      Based on DBFIsAttributeNULL of shapelib                         */
+/************************************************************************/
+
+static int DBFIsValueNULL( const char* pszValue, char type )
+
+{   
+    switch(type)
+    {
+      case 'N':
+      case 'F':
+        /* NULL numeric fields have value "****************" */
+        return pszValue[0] == '*';
+
+      case 'D':
+        /* NULL date fields have value "00000000" */
+        return strncmp(pszValue,"00000000",8) == 0;
+
+      case 'L':
+        /* NULL boolean fields have value "?" */
+        return pszValue[0] == '?';
+
+      default:
+        /* empty string fields are considered NULL */
+        return strlen(pszValue) == 0;
+    }
+}
+
+/************************************************************************/
 /*                          msDBFReadAttribute()                        */
 /*                                                                      */
 /*      Read one of the attribute fields of a record.                   */
 /************************************************************************/
-static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
+static const char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
 
 {
-    int	       	nRecordOffset, i;
-    const uchar *pabyRec;
-    char	*pReturnField = NULL;
-
+    int	       	i;
+    unsigned int nRecordOffset;
+    const uchar	*pabyRec;
+    const char	*pReturnField = NULL;
+    
     /* -------------------------------------------------------------------- */
     /*	Is the request valid?                  				    */
     /* -------------------------------------------------------------------- */
     if( iField < 0 || iField >= psDBF->nFields ) 
     {
-        msSetError(MS_DBFERR, "Invalid field index %d.", "msDBFGetItemIndex()",iField );
+        msSetError(MS_DBFERR, "Invalid field index %d.", "msDBFReadAttribute()",iField );
         return( NULL );
     }
 
     if( hEntity < 0 || hEntity >= psDBF->nRecords )
     {
-        msSetError(MS_DBFERR, "Invalid record number %d.", "msDBFGetItemIndex()",hEntity );
+        msSetError(MS_DBFERR, "Invalid record number %d.", "msDBFReadAttribute()",hEntity );
         return( NULL );
     }
 
@@ -526,13 +548,15 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
 
 	nRecordOffset = psDBF->nRecordLength * hEntity + psDBF->nHeaderLength;
 
-	zzip_seek( psDBF->zfp, nRecordOffset, 0 );
-	zzip_fread( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->zfp );
+	safe_fseek( psDBF->fp, nRecordOffset, 0 );
+	zzip_fread( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp );
 
 	psDBF->nCurrentRecord = hEntity;
     }
 
     pabyRec = (const uchar *) psDBF->pszCurrentRecord;
+    /* DEBUG */
+    /* printf("CurrentRecord(%c):%s\n", psDBF->pachFieldType[iField], pabyRec); */
 
     /* -------------------------------------------------------------------- */
     /*	Ensure our field buffer is large enough to hold this buffer.	    */
@@ -574,8 +598,15 @@ static char *msDBFReadAttribute(DBFHandle psDBF, int hEntity, int iField )
     else
         pReturnField = psDBF->pszStringField;
 
+    /*  detect null values */
+    if ( DBFIsValueNULL( pReturnField, psDBF->pachFieldType[iField] )  ) {
+	if (psDBF->pachFieldType[iField] == 'N' || psDBF->pachFieldType[iField] == 'F' || psDBF->pachFieldType[iField] == 'D')
+		pReturnField="0";	
+    }	
     return( pReturnField );
 }
+
+#ifdef SHAPELIB_DISABLED
 
 /************************************************************************/
 /*                        msDBFReadIntAttribute()                       */
@@ -598,6 +629,8 @@ double	msDBFReadDoubleAttribute( DBFHandle psDBF, int iRecord, int iField )
   return(atof(msDBFReadAttribute( psDBF, iRecord, iField )));
 }
 
+#endif /* SHAPELIB_DISABLED */
+
 /************************************************************************/
 /*                        msDBFReadStringAttribute()                      */
 /*                                                                      */
@@ -607,6 +640,8 @@ const char *msDBFReadStringAttribute( DBFHandle psDBF, int iRecord, int iField )
 {
   return( msDBFReadAttribute( psDBF, iRecord, iField ) );  
 }
+
+#ifdef SHAPELIB_DISABLED
 
 /************************************************************************/
 /*                          msDBFGetFieldCount()                        */
@@ -669,8 +704,6 @@ DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName
     }
 }
 
-#ifdef SHAPELIB_DISABLED
-
 /************************************************************************/
 /*                         msDBFWriteAttribute()                        */
 /*									*/
@@ -678,7 +711,8 @@ DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char * pszFieldName
 /************************************************************************/
 static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * pValue )
 {
-  int	       	nRecordOffset, i, j;
+  unsigned int	       	nRecordOffset;
+  int  i, j;
   uchar	*pabyRec;
   char	szSField[40], szFormat[12];
   
@@ -715,7 +749,7 @@ static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * 
       
       nRecordOffset = psDBF->nRecordLength * hEntity + psDBF->nHeaderLength;
       
-      fseek( psDBF->fp, nRecordOffset, 0 );
+      safe_fseek( psDBF->fp, nRecordOffset, 0 );
       fread( psDBF->pszCurrentRecord, psDBF->nRecordLength, 1, psDBF->fp );
 
       psDBF->nCurrentRecord = hEntity;
@@ -731,14 +765,14 @@ static int msDBFWriteAttribute(DBFHandle psDBF, int hEntity, int iField, void * 
   case 'N':
   case 'F':
     if( psDBF->panFieldDecimals[iField] == 0 ) {
-      sprintf( szFormat, "%%%dd", psDBF->panFieldSize[iField] );
-      sprintf(szSField, szFormat, (int) *((double *) pValue) );
+      snprintf( szFormat, sizeof(szFormat), "%%%dd", psDBF->panFieldSize[iField] );
+      snprintf(szSField, sizeof(szSField), szFormat, (int) *((double *) pValue) );
       if( (int) strlen(szSField) > psDBF->panFieldSize[iField] )
 	szSField[psDBF->panFieldSize[iField]] = '\0';
       strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]), szSField, strlen(szSField) );
     } else {
-      sprintf( szFormat, "%%%d.%df", psDBF->panFieldSize[iField], psDBF->panFieldDecimals[iField] );
-      sprintf(szSField, szFormat, *((double *) pValue) );
+      snprintf( szFormat, sizeof(szFormat), "%%%d.%df", psDBF->panFieldSize[iField], psDBF->panFieldDecimals[iField] );
+      snprintf(szSField, sizeof(szSField), szFormat, *((double *) pValue) );
       if( (int) strlen(szSField) > psDBF->panFieldSize[iField] )
 	szSField[psDBF->panFieldSize[iField]] = '\0';
       strncpy((char *) (pabyRec+psDBF->panFieldOffset[iField]),  szSField, strlen(szSField) );
@@ -793,8 +827,6 @@ int msDBFWriteStringAttribute( DBFHandle psDBF, int iRecord, int iField, const c
 {
   return( msDBFWriteAttribute( psDBF, iRecord, iField, (void *) pszValue ) );
 }
-
-#endif /* SHAPELIB_DISABLED */
 
 static int
 m_strcasecmp(const char *s1, const char*s2)
@@ -860,14 +892,12 @@ char **msDBFGetItems(DBFHandle dbffile)
     return(NULL);
   }
 
-  if((items = (char **)malloc(sizeof(char *)*nFields)) == NULL) {
-    msSetError(MS_MEMERR, NULL, "msGetDBFItems()");
-    return(NULL);
-  }
+  items = (char **)malloc(sizeof(char *)*nFields);
+  MS_CHECK_ALLOC(items, sizeof(char *)*nFields, NULL);
 
   for(i=0;i<nFields;i++) {
     msDBFGetFieldInfo(dbffile, i, fName, NULL, NULL);
-    items[i] = strdup(fName);
+    items[i] = msStrdup(fName);
   }
 
   return(items);
@@ -886,13 +916,11 @@ char **msDBFGetValues(DBFHandle dbffile, int record)
     return(NULL);
   }
 
-  if((values = (char **)malloc(sizeof(char *)*nFields)) == NULL) {
-    msSetError(MS_MEMERR, NULL, "msGetAllDBFValues()");
-    return(NULL);
-  }
+  values = (char **)malloc(sizeof(char *)*nFields);
+  MS_CHECK_ALLOC(values, sizeof(char *)*nFields, NULL);
 
   for(i=0;i<nFields;i++)
-    values[i] = strdup(msDBFReadStringAttribute(dbffile, record, i));
+    values[i] = msStrdup(msDBFReadStringAttribute(dbffile, record, i));
 
   return(values);
 }
@@ -902,13 +930,10 @@ int *msDBFGetItemIndexes(DBFHandle dbffile, char **items, int numitems)
   int *itemindexes=NULL, i;
 
   if(numitems == 0) return(NULL);
-
+  
   itemindexes = (int *)malloc(sizeof(int)*numitems);
-  if(!itemindexes) {
-    msSetError(MS_MEMERR, NULL, "msGetItemIndexes()");
-    return(NULL);
-  }
-
+  MS_CHECK_ALLOC(itemindexes, sizeof(int)*numitems, NULL);
+  
   for(i=0;i<numitems;i++) {
     itemindexes[i] = msDBFGetItemIndex(dbffile, items[i]);
     if(itemindexes[i] == -1) { 
@@ -928,17 +953,17 @@ char **msDBFGetValueList(DBFHandle dbffile, int record, int *itemindexes, int nu
 
   if(numitems == 0) return(NULL);
 
-  if((values = (char **)malloc(sizeof(char *)*numitems)) == NULL) {
-    msSetError(MS_MEMERR, NULL, "msGetSomeDBFValues()");
-    return(NULL);
-  }
+  values = (char **)malloc(sizeof(char *)*numitems);
+  MS_CHECK_ALLOC(values, sizeof(char *)*numitems, NULL);
 
   for(i=0;i<numitems;i++) {
     value = msDBFReadStringAttribute(dbffile, record, itemindexes[i]);
     if (value == NULL)
       return NULL; /* Error already reported by msDBFReadStringAttribute() */
-    values[i] = strdup(value);
+    values[i] = msStrdup(value);
   }
 
   return(values);
 }
+
+#endif /* SHAPELIB_DISABLED */

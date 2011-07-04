@@ -1,4 +1,5 @@
 /******************************************************************************
+ * $Id: mapshape.h 10497 2010-09-02 16:23:37Z warmerdam $
  *
  * Project:  MapServer
  * Purpose:  Shapefile access API
@@ -24,27 +25,15 @@
  * LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING
  * FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER
  * DEALINGS IN THE SOFTWARE.
- ******************************************************************************
- *
- * $Log$
- * Revision 1.35  2006/02/22 05:04:34  sdlime
- * Applied patch for bug 1660 to hide certain structures from Swig-based MapScript.
- *
- * Revision 1.34  2005/06/14 16:03:34  dan
- * Updated copyright date to 2005
- *
- * Revision 1.33  2005/02/18 03:06:47  dan
- * Turned all C++ (//) comments into C comments (bug 1238)
- *
- * Revision 1.32  2004/10/21 04:30:54  frank
- * Added standardized headers.  Added MS_CVSID().
- *
- */
+ ****************************************************************************/
 
 #ifndef MAPSHAPE_H
 #define MAPSHAPE_H
 
+#ifdef SHAPELIB_DISABLED
 #include <stdio.h>
+#endif /* SHAPELIB_DISABLED */
+
 #include "mapprimitive.h"
 
 struct zzip_dir;
@@ -53,9 +42,7 @@ struct zzip_dir;
 extern "C" {
 #endif
 
-#ifndef MS_DLL_EXPORT
-#define MS_DLL_EXPORT
-#endif
+#define SHX_BUFFER_PAGE 1024
 
 #ifndef SWIG
 #define MS_PATH_LENGTH 1024
@@ -96,16 +83,19 @@ extern "C" {
 typedef unsigned char uchar;
 
 typedef	struct {
-    struct zzip_file *zfpSHP;
-    struct zzip_file *zfpSHX;
+    struct zzip_file *fpSHP;
+    struct zzip_file *fpSHX;
 
     int		nShapeType;				/* SHPT_* */
     int		nFileSize;				/* SHP file */
 
     int		nRecords;
     int		nMaxRecords;
+
     int		*panRecOffset;
     int		*panRecSize;
+    ms_bitarray panRecLoaded;
+    int   panRecAllLoaded;
 
     double	adBoundsMin[4];
     double	adBoundsMax[4];
@@ -123,16 +113,18 @@ typedef	struct {
 typedef SHPInfo * SHPHandle;
 #endif
 
+
+
 typedef	struct
 {
 #ifdef SWIG
 %immutable;
 #endif
-    struct zzip_file *zfp;
+    struct zzip_file *fp;
 
     int		nRecords;
 
-    int		nRecordLength;
+    unsigned int nRecordLength;
     int		nHeaderLength;
     int		nFields;
     int		*panFieldOffset;
@@ -184,7 +176,7 @@ typedef struct {
 
   int lastshape;
 
-  char *status;
+  ms_bitarray status;
   rectObj statusbounds; /* holds extent associated with the status vector */
 
   int isopen;
@@ -201,15 +193,13 @@ typedef struct {
   int tilelayerindex;
 } msTiledSHPLayerInfo;
 
+#endif /* SHAPELIB_DISABLED */
 
 /* shapefileObj function prototypes  */
-MS_DLL_EXPORT int msSHPOpenFile(shapefileObj *shpfile, const char *mode,
-                                struct zzip_dir *zdir, const char *filename);
-MS_DLL_EXPORT int msSHPCreateFile(shapefileObj *shpfile, char *filename, int type);
-MS_DLL_EXPORT void msSHPCloseFile(shapefileObj *shpfile);
-MS_DLL_EXPORT int msSHPWhichShapes(shapefileObj *shpfile,
-                                   struct zzip_dir *zdir,
-                                   rectObj rect, int debug);
+MS_DLL_EXPORT int msShapefileOpen(shapefileObj *shpfile, const char *mode, struct zzip_dir *zdir, const char *filename, int log_failures);
+MS_DLL_EXPORT int msShapefileCreate(shapefileObj *shpfile, char *filename, int type);
+MS_DLL_EXPORT void msShapefileClose(shapefileObj *shpfile);
+MS_DLL_EXPORT int msShapefileWhichShapes(shapefileObj *shpfile, struct zzip_dir *zdir, rectObj rect, int debug);
 
 /* SHP/SHX function prototypes */
 MS_DLL_EXPORT SHPHandle msSHPOpen(struct zzip_dir *zdir,
@@ -223,14 +213,21 @@ MS_DLL_EXPORT void msSHPReadShape( SHPHandle psSHP, int hEntity, shapeObj *shape
 MS_DLL_EXPORT int msSHPReadPoint(SHPHandle psSHP, int hEntity, pointObj *point );
 MS_DLL_EXPORT int msSHPWriteShape( SHPHandle psSHP, shapeObj *shape );
 MS_DLL_EXPORT int msSHPWritePoint(SHPHandle psSHP, pointObj *point );
+/* SHX reading */
+MS_DLL_EXPORT int msSHXLoadAll( SHPHandle psSHP );
+MS_DLL_EXPORT int msSHXLoadPage( SHPHandle psSHP, int shxBufferPage );
+MS_DLL_EXPORT int msSHXReadOffset( SHPHandle psSHP, int hEntity );
+MS_DLL_EXPORT int msSHXReadSize( SHPHandle psSHP, int hEntity );
 
-/* tiledShapefileObj function prototypes are in map.h */
+/* tiledShapefileObj function prototypes are in mapserver.h */
 
 /* XBase function prototypes */
 MS_DLL_EXPORT DBFHandle msDBFOpen(struct zzip_dir *zdir,
                                   const char *pszDBFFile,
                                   const char *pszAccess);
 MS_DLL_EXPORT void msDBFClose( DBFHandle hDBF );
+
+#ifdef SHAPELIB_DISABLED
 MS_DLL_EXPORT DBFHandle msDBFCreate( const char * pszDBFFile );
 
 MS_DLL_EXPORT int msDBFGetFieldCount( DBFHandle psDBF );
@@ -241,7 +238,12 @@ MS_DLL_EXPORT DBFFieldType msDBFGetFieldInfo( DBFHandle psDBF, int iField, char 
 
 MS_DLL_EXPORT int msDBFReadIntegerAttribute( DBFHandle hDBF, int iShape, int iField );
 MS_DLL_EXPORT double msDBFReadDoubleAttribute( DBFHandle hDBF, int iShape, int iField );
+
+#endif /* SHAPELIB_DISABLED */
+
 MS_DLL_EXPORT const char *msDBFReadStringAttribute( DBFHandle hDBF, int iShape, int iField );
+
+#ifdef SHAPELIB_DISABLED
 
 MS_DLL_EXPORT int msDBFWriteIntegerAttribute( DBFHandle hDBF, int iShape, int iField, int nFieldValue );
 MS_DLL_EXPORT int msDBFWriteDoubleAttribute( DBFHandle hDBF, int iShape, int iField, double dFieldValue );

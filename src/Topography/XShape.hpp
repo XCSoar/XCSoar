@@ -28,6 +28,7 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Geo/GeoBounds.hpp"
+#include "shapelib/mapserver.h"
 #include "shapelib/mapshape.h"
 #ifdef ENABLE_OPENGL
 #include "Screen/Point.hpp"

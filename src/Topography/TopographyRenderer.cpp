@@ -32,7 +32,7 @@ Copyright_License {
 #include "Screen/LabelBlock.hpp"
 #include "Screen/Features.hpp"
 #include "Math/Matrix2D.hpp"
-#include "shapelib/map.h"
+#include "shapelib/mapserver.h"
 #include "Util/AllocatedArray.hpp"
 #include "Geo/GeoClip.hpp"
 
