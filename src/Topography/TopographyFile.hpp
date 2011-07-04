@@ -45,11 +45,34 @@ struct zzip_dir;
 class TopographyFile : private NonCopyable {
   struct zzip_dir *dir;
 
+  shapefileObj shpfile;
+
   AllocatedArray<XShape *> shpCache;
 
   int label_field, icon, pen_width;
 
   Color color;
+
+  /**
+   * The threshold value for the visibility check. If the current scale
+   * is below this value the contents of this TopographyFile will be drawn.
+   */
+  fixed scaleThreshold;
+
+  /**
+   * The threshold value for label rendering. If the current scale
+   * is below this value no labels of this TopographyFile will be drawn.
+   */
+  fixed labelThreshold;
+
+  /**
+   * The threshold value for label rendering in important style . If the current
+   * scale is below this value labels of this TopographyFile will be drawn
+   * in standard style
+   */
+  fixed labelImportantThreshold;
+
+  bool shapefileopen;
 
 public:
   /**
@@ -137,25 +160,6 @@ public:
    */
   bool updateCache(const WindowProjection &map_projection);
 
-  /**
-   * The threshold value for the visibility check. If the current scale
-   * is below this value the contents of this TopographyFile will be drawn.
-   */
-  fixed scaleThreshold;
-
-  /**
-   * The threshold value for label rendering. If the current scale
-   * is below this value no labels of this TopographyFile will be drawn.
-   */
-  fixed labelThreshold;
-
-  /**
-   * The threshold value for label rendering in important style . If the current
-   * scale is below this value labels of this TopographyFile will be drawn
-   * in standard style
-   */
-  fixed labelImportantThreshold;
-
 private:
   /**
    * The current scope of the shape cache.  If the screen exceeds this
@@ -167,9 +171,6 @@ private:
 
 protected:
   void ClearCache();
-
-  shapefileObj shpfile;
-  bool shapefileopen;
 };
 
 #endif
