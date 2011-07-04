@@ -24,8 +24,10 @@ Copyright_License {
 #ifndef AIRSPACECONFIGPANEL_HPP
 #define AIRSPACECONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
-#include "Form/Button.hpp"
+#include "DataField/Base.hpp"
+
+class WndForm;
+class WndButton;
 
 namespace AirspaceConfigPanel
 {

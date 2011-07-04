@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "AirspaceConfigPanel.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "DataField/ComboList.hpp"
@@ -31,7 +32,6 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Interface.hpp"
-#include "AirspaceConfigPanel.hpp"
 #include "Language/Language.hpp"
 
 static WndForm* wf = NULL;
