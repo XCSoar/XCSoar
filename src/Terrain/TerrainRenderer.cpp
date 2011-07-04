@@ -162,9 +162,9 @@ const ColorRamp terrain_colors[8][NUM_COLOR_RAMP_LEVELS] = {
 //  mapscale/7.5 terrain units/pixel
 //
 // this is for TerrainInfo.StepSize = 0.0025;
-TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain) :
-  last_color_ramp(NULL),
-  terrain(_terrain)
+TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain)
+  :terrain(_terrain),
+   last_color_ramp(NULL)
 {
   assert(terrain != NULL);
 }

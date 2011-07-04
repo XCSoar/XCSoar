@@ -34,12 +34,14 @@ class RasterTerrain;
 struct ColorRamp;
 
 class TerrainRenderer : private NonCopyable {
-protected:
-  RasterRenderer raster_renderer;
+  const RasterTerrain *terrain;
 
-public:
-  TerrainRenderer(const RasterTerrain *_terrain);
-  virtual ~TerrainRenderer() {}
+protected:
+  struct TerrainRendererSettings settings;
+
+  const ColorRamp *last_color_ramp;
+
+  RasterRenderer raster_renderer;
 
 public:
   RasterPoint spot_max_pt;
@@ -47,15 +49,11 @@ public:
   short spot_max_val;
   short spot_min_val;
 
-protected:
-  const ColorRamp *last_color_ramp;
-
-private:
-  const RasterTerrain *terrain;
+public:
+  TerrainRenderer(const RasterTerrain *_terrain);
+  virtual ~TerrainRenderer() {}
 
 protected:
-  struct TerrainRendererSettings settings;
-
   void ScanSpotHeights();
 
   void CopyTo(Canvas &canvas, unsigned width, unsigned height);
