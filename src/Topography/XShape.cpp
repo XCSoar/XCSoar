@@ -275,10 +275,11 @@ XShape::BuildIndices(unsigned thinning_level, unsigned min_distance)
 
 const unsigned short *
 XShape::get_indices(int thinning_level, unsigned min_distance,
-                    const unsigned short *&count)
+                    const unsigned short *&count) const
 {
   if (indices[thinning_level] == NULL) {
-    if (!BuildIndices(thinning_level, min_distance))
+    XShape &deconst = const_cast<XShape &>(*this);
+    if (!deconst.BuildIndices(thinning_level, min_distance))
       return NULL;
   }
 

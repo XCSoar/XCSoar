@@ -97,7 +97,7 @@ protected:
 
 public:
   const unsigned short *get_indices(int thinning_level, unsigned min_distance,
-                                    const unsigned short *&count);
+                                    const unsigned short *&count) const;
 #endif
 
   const GeoBounds &get_bounds() const {
