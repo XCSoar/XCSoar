@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/Traffic.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/ListPicker.hpp"
 #include "Screen/Layout.hpp"

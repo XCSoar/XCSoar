@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/Airspace.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"

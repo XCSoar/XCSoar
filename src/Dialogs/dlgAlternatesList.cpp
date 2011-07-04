@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/Waypoint.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"

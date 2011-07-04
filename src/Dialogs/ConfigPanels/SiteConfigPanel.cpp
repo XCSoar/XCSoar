@@ -24,6 +24,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Dialogs/Dialogs.h"
+#include "Dialogs/Waypoint.hpp"
 #include "Form/Edit.hpp"
 #include "LocalPath.hpp"
 #include "Protection.hpp"

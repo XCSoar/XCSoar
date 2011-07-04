@@ -21,50 +21,39 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_DIALOGS_H)
-#define XCSOAR_DIALOGS_H
+#ifndef XCSOAR_DIALOGS_WAYPOINT_HPP
+#define XCSOAR_DIALOGS_WAYPOINT_HPP
 
-#include "Form/Form.hpp"
+#include <stddef.h>
 
-#include <tchar.h>
-
+struct GeoPoint;
+class Waypoint;
+class Waypoints;
 class SingleWindow;
+class OrderedTask;
 
-void dlgAlternatesListShowModal(SingleWindow &parent);
-
-void dlgBasicSettingsShowModal();
-void dlgBrightnessShowModal();
-void dlgHelpShowModal(SingleWindow &parent, const TCHAR* Caption,
-    const TCHAR* HelpText);
-
-void dlgChecklistShowModal();
-void dlgConfigurationShowModal();
-void dlgConfigFontsShowModal();
-
-void dlgVegaDemoShowModal();
-bool dlgConfigurationVarioShowModal();
-void dlgLoggerReplayShowModal();
-
-/**
- * @return true on success, false if the user has pressed the "Quit"
- * button
- */
-bool
-dlgStartupShowModal();
-
-void dlgWindSettingsShowModal();
-
-void dlgStatusShowModal(int page);
-
-void dlgSwitchesShowModal();
+const Waypoint *
+dlgWaypointSelect(SingleWindow &parent,
+                  const GeoPoint &location,
+                  OrderedTask *ordered_task = NULL,
+                  const unsigned ordered_task_index = 0);
 
 void
-dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
+dlgWaypointSelectAddToLastUsed(const Waypoint &wp);
 
-void dlgVoiceShowModal();
+void
+dlgConfigWaypointsShowModal();
 
-void dlgThermalAssistantShowModal();
+bool
+dlgWaypointEditShowModal(Waypoint &way_point);
 
-void dlgCreditsShowModal(SingleWindow &parent);
+void
+dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& waypoint,
+                            bool allow_navigation = true);
+
+bool
+PopupNearestWaypointDetails(const Waypoints &way_points,
+                            const GeoPoint &location,
+                            double range, bool scalefilter = false);
 
 #endif

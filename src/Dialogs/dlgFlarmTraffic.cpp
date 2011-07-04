@@ -30,6 +30,7 @@
  * highlighted in orange or red (depending on the level)
  */
 
+#include "Dialogs/Traffic.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Screen.hpp"
 #include "Screen/Fonts.hpp"

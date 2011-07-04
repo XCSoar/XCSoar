@@ -21,50 +21,25 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_DIALOGS_H)
-#define XCSOAR_DIALOGS_H
-
-#include "Form/Form.hpp"
+#ifndef XCSOAR_DIALOGS_TRAFFIC_HPP
+#define XCSOAR_DIALOGS_TRAFFIC_HPP
 
 #include <tchar.h>
 
 class SingleWindow;
-
-void dlgAlternatesListShowModal(SingleWindow &parent);
-
-void dlgBasicSettingsShowModal();
-void dlgBrightnessShowModal();
-void dlgHelpShowModal(SingleWindow &parent, const TCHAR* Caption,
-    const TCHAR* HelpText);
-
-void dlgChecklistShowModal();
-void dlgConfigurationShowModal();
-void dlgConfigFontsShowModal();
-
-void dlgVegaDemoShowModal();
-bool dlgConfigurationVarioShowModal();
-void dlgLoggerReplayShowModal();
-
-/**
- * @return true on success, false if the user has pressed the "Quit"
- * button
- */
-bool
-dlgStartupShowModal();
-
-void dlgWindSettingsShowModal();
-
-void dlgStatusShowModal(int page);
-
-void dlgSwitchesShowModal();
+class FlarmId;
 
 void
-dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
+dlgTeamCodeShowModal();
 
-void dlgVoiceShowModal();
+void
+dlgFlarmTrafficShowModal();
 
-void dlgThermalAssistantShowModal();
+void
+dlgFlarmTrafficDetailsShowModal(FlarmId id);
 
-void dlgCreditsShowModal(SingleWindow &parent);
+const FlarmId *
+dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
+                             const FlarmId *_array[], unsigned count);
 
 #endif

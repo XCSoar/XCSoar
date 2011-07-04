@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/TextEntry.hpp"
 #include "Units/Units.hpp"

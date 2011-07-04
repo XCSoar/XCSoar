@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/Weather.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"

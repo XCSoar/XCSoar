@@ -21,50 +21,18 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_DIALOGS_H)
-#define XCSOAR_DIALOGS_H
-
-#include "Form/Form.hpp"
-
-#include <tchar.h>
+#ifndef XCSOAR_DIALOGS_WEATHER_HPP
+#define XCSOAR_DIALOGS_WEATHER_HPP
 
 class SingleWindow;
 
-void dlgAlternatesListShowModal(SingleWindow &parent);
-
-void dlgBasicSettingsShowModal();
-void dlgBrightnessShowModal();
-void dlgHelpShowModal(SingleWindow &parent, const TCHAR* Caption,
-    const TCHAR* HelpText);
-
-void dlgChecklistShowModal();
-void dlgConfigurationShowModal();
-void dlgConfigFontsShowModal();
-
-void dlgVegaDemoShowModal();
-bool dlgConfigurationVarioShowModal();
-void dlgLoggerReplayShowModal();
-
-/**
- * @return true on success, false if the user has pressed the "Quit"
- * button
- */
-bool
-dlgStartupShowModal();
-
-void dlgWindSettingsShowModal();
-
-void dlgStatusShowModal(int page);
-
-void dlgSwitchesShowModal();
+void
+dlgWeatherShowModal();
 
 void
-dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
+dlgNOAAListShowModal(SingleWindow &parent);
 
-void dlgVoiceShowModal();
-
-void dlgThermalAssistantShowModal();
-
-void dlgCreditsShowModal(SingleWindow &parent);
+void
+dlgNOAADetailsShowModal(SingleWindow &parent, unsigned index);
 
 #endif

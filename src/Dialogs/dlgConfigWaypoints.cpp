@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Protection.hpp"
 #include "Screen/Layout.hpp"

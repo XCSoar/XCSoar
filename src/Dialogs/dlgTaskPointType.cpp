@@ -21,7 +21,9 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/Task.hpp"
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/Waypoint.hpp"
 #include "Screen/Layout.hpp"
 #include "LocalPath.hpp"
 

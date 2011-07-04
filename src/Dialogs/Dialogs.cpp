@@ -22,8 +22,7 @@ Copyright_License {
 
 */
 
-#include "Dialogs/Dialogs.h"
-
+#include "Dialogs/Waypoint.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Waypoint/Waypoints.hpp"

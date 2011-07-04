@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Engine/Task/TaskEvents.hpp"
 #include "Engine/Task/Factory/AbstractTaskFactory.hpp"

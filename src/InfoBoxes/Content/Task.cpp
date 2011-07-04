@@ -27,7 +27,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/Waypoint.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "MainWindow.hpp"
 #include "LocalTime.hpp"

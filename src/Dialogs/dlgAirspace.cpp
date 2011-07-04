@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/Airspace.hpp"
 #include "Dialogs/Internal.hpp"
 #include "../Message.hpp"
 #include "Profile/Profile.hpp"

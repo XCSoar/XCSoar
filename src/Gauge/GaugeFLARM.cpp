@@ -24,7 +24,7 @@ Copyright_License {
 
 #include "Gauge/GaugeFLARM.hpp"
 #include "NMEA/Info.hpp"
-#include "Dialogs/Dialogs.h"
+#include "Dialogs/Traffic.hpp"
 
 /**
  * Constructor of the GaugeFLARM class

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/dlgTaskManager.hpp"
+#include "Dialogs/Task.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Screen/Layout.hpp"

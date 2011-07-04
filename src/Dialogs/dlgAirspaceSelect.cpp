@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/Airspace.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Blackboard.hpp"
 #include "Airspace/AirspaceSorter.hpp"

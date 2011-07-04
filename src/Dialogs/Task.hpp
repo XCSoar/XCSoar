@@ -21,50 +21,39 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_DIALOGS_H)
-#define XCSOAR_DIALOGS_H
-
-#include "Form/Form.hpp"
-
-#include <tchar.h>
+#ifndef XCSOAR_DIALOGS_TASK_HPP
+#define XCSOAR_DIALOGS_TASK_HPP
 
 class SingleWindow;
-
-void dlgAlternatesListShowModal(SingleWindow &parent);
-
-void dlgBasicSettingsShowModal();
-void dlgBrightnessShowModal();
-void dlgHelpShowModal(SingleWindow &parent, const TCHAR* Caption,
-    const TCHAR* HelpText);
-
-void dlgChecklistShowModal();
-void dlgConfigurationShowModal();
-void dlgConfigFontsShowModal();
-
-void dlgVegaDemoShowModal();
-bool dlgConfigurationVarioShowModal();
-void dlgLoggerReplayShowModal();
-
-/**
- * @return true on success, false if the user has pressed the "Quit"
- * button
- */
-bool
-dlgStartupShowModal();
-
-void dlgWindSettingsShowModal();
-
-void dlgStatusShowModal(int page);
-
-void dlgSwitchesShowModal();
+class OrderedTask;
 
 void
-dlgInfoBoxAccessShowModal(SingleWindow &parent, const int id);
+dlgStartTaskShowModal(bool *validStart, double Time,
+                      double Speed, double Altitude);
 
-void dlgVoiceShowModal();
+void
+dlgTaskManagerShowModal(SingleWindow &parent);
 
-void dlgThermalAssistantShowModal();
+bool
+dlgTaskPointShowModal(SingleWindow &parent, OrderedTask** task, const unsigned index);
 
-void dlgCreditsShowModal(SingleWindow &parent);
+bool
+dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index);
+
+bool
+dlgTaskOptionalStarts(SingleWindow &parent, OrderedTask** task);
+
+bool
+dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index);
+
+/**
+ * Shows map display zoomed to target point
+ * with half dialog popup to manipulate point
+ *
+ * @param TargetPoint if -1 then goes to active target
+ * else goes to TargetPoint by default
+ */
+void
+dlgTargetShowModal(int TargetPoint = -1);
 
 #endif
