@@ -21,6 +21,7 @@ Copyright_License {
 }
 */
 
+#include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
 #include "Appearance.hpp"
 #include "Profile/ProfileKeys.hpp"

@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/dlgAnalysis.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Dialogs/Task.hpp"

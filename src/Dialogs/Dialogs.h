@@ -24,8 +24,6 @@ Copyright_License {
 #if !defined(XCSOAR_DIALOGS_H)
 #define XCSOAR_DIALOGS_H
 
-#include "Form/Form.hpp"
-
 #include <tchar.h>
 
 class SingleWindow;

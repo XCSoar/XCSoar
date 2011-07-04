@@ -32,6 +32,7 @@
 
 #include "Dialogs/Traffic.hpp"
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Screen.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"

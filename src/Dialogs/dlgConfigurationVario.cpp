@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Dialogs/Message.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"

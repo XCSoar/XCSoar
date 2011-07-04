@@ -30,7 +30,6 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_INTERNAL_HPP
 #define XCSOAR_DIALOGS_INTERNAL_HPP
 
-#include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgTools.h"
 #include "Dialogs/XML.hpp"
 #include "Dialogs/Message.hpp"

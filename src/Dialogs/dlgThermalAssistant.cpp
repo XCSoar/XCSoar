@@ -21,6 +21,7 @@
 }
 */
 
+#include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"

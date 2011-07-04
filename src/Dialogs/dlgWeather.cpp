@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Weather.hpp"
 #include "Dialogs/Internal.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Units/Units.hpp"
 #include "LocalTime.hpp"
 #include "Terrain/RasterWeather.hpp"
