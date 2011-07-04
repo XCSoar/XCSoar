@@ -151,7 +151,7 @@ SaveTask()
   (*active_task)->get_factory().CheckAddFinish();
 
   if ((*active_task)->check_task()) {
-    if (!OrderedTaskSave(**active_task))
+    if (!OrderedTaskSave(*(SingleWindow *)wf->get_root_owner(), **active_task))
       return;
 
     task_store.scan();
@@ -240,7 +240,8 @@ RenameTask()
   if (upperstring.find(_T(".TSK")) != tstring::npos)
     newname = newname.substr(0, upperstring.find(_T(".TSK")));
 
-  if (!dlgTextEntryShowModal(newname, 40))
+  if (!dlgTextEntryShowModal(*(SingleWindow *)wf->get_root_owner(),
+                             newname, 40))
     return;
 
   newname += _T(".tsk");

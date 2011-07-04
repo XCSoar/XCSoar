@@ -30,7 +30,6 @@ Copyright_License {
 #include "Form/Edit.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "StringUtil.hpp"
@@ -169,7 +168,7 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 bool
-dlgTextEntryKeyboardShowModal(TCHAR *text, int width,
+dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text, int width,
                               AllowedCharactersCallback_t accb)
 {
   if (width == 0)
@@ -177,7 +176,7 @@ dlgTextEntryKeyboardShowModal(TCHAR *text, int width,
 
   max_width = min(MAX_TEXTENTRY, width);
 
-  wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
+  wf = LoadDialog(CallBackTable, parent,
                   Layout::landscape ? _T("IDR_XML_TEXTENTRY_KEYBOARD_L") :
                                       _T("IDR_XML_TEXTENTRY_KEYBOARD"));
   assert(wf != NULL);

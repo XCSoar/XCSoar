@@ -642,7 +642,7 @@ void
 InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
 {
   TCHAR callsign[4] = _T("");
-  if (!dlgTextEntryShowModal(callsign, 4))
+  if (!dlgTextEntryShowModal(CommonInterface::main_window, callsign, 4))
     return;
 
   const FlarmId *ids[30];

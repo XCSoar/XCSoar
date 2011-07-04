@@ -84,7 +84,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 }
 
 static void
-AddClicked(gcc_unused WndButton &Sender)
+AddClicked(gcc_unused WndButton &button)
 {
   if (NOAAStore::Full()) {
     MessageBoxX(_("The list of tracked stations is full. Please remove a station before adding a new one."),
@@ -93,7 +93,8 @@ AddClicked(gcc_unused WndButton &Sender)
   }
 
   TCHAR code[5] = _T("");
-  if (!dlgTextEntryShowModal(code, 5))
+  if (!dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+                             code, 5))
     return;
 
   if (_tcslen(code) != 4) {

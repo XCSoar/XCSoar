@@ -29,7 +29,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Draw.hpp"
 #include "Form/Button.hpp"
-#include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "SettingsMap.hpp"
@@ -213,7 +212,7 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 static void
-dlgTextEntryHighscoreType(TCHAR *text, int width)
+dlgTextEntryHighscoreType(SingleWindow &parent, TCHAR *text, int width)
 {
   wf = NULL;
   wGrid = NULL;
@@ -223,8 +222,7 @@ dlgTextEntryHighscoreType(TCHAR *text, int width)
 
   max_width = min(MAX_TEXTENTRY, width);
 
-  wf = LoadDialog(CallBackTable,
-                      XCSoarInterface::main_window, _T("IDR_XML_TEXTENTRY"));
+  wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TEXTENTRY"));
   if (!wf)
     return;
 
@@ -256,13 +254,13 @@ dlgTextEntryHighscoreType(TCHAR *text, int width)
 }
 
 bool
-dlgTextEntryShowModal(tstring &text, int width,
+dlgTextEntryShowModal(SingleWindow &parent, tstring &text, int width,
                       AllowedCharactersCallback_t accb)
 {
   TCHAR buf[width];
   _tcscpy(buf, text.c_str());
 
-  if (!dlgTextEntryShowModal(buf, width, accb))
+  if (!dlgTextEntryShowModal(parent, buf, width, accb))
     return false;
 
   text = tstring(buf);
@@ -270,21 +268,21 @@ dlgTextEntryShowModal(tstring &text, int width,
 }
 
 bool
-dlgTextEntryShowModal(TCHAR *text, int width,
+dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
                       AllowedCharactersCallback_t accb)
 {
   switch (Appearance.TextInputStyle) {
   case tiDefault:
   case tiKeyboard:
     if (has_pointer())
-      return dlgTextEntryKeyboardShowModal(text, width, accb);
+      return dlgTextEntryKeyboardShowModal(parent, text, width, accb);
     else {
-      dlgTextEntryHighscoreType(text, width);
+      dlgTextEntryHighscoreType(parent, text, width);
       return true;
     }
 
   case tiHighScore:
-    dlgTextEntryHighscoreType(text, width);
+    dlgTextEntryHighscoreType(parent, text, width);
     return true;
   }
   return false;

@@ -98,7 +98,8 @@ OnCompetitionIdClicked(gcc_unused WndButton &button)
   TCHAR Temp[100];
   if (buttonCompetitionId) {
     Profile::Get(szProfileCompetitionId, Temp, 100);
-    if (dlgTextEntryShowModal(Temp, 100)) {
+    if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+                              Temp, 100)) {
       Profile::Set(szProfileCompetitionId, Temp);
       changed = true;
     }
@@ -112,7 +113,8 @@ OnAircraftTypeClicked(gcc_unused WndButton &button)
   TCHAR Temp[100];
   if (buttonAircraftType) {
     Profile::Get(szProfileAircraftType, Temp, 100);
-    if (dlgTextEntryShowModal(Temp, 100)) {
+    if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+                              Temp, 100)) {
       Profile::Set(szProfileAircraftType, Temp);
       changed = true;
     }
@@ -126,7 +128,8 @@ OnAircraftRegClicked(gcc_unused WndButton &button)
   TCHAR Temp[100];
   if (buttonAircraftReg) {
     Profile::Get(szProfileAircraftReg, Temp, 100);
-    if (dlgTextEntryShowModal(Temp, 100)) {
+    if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+                              Temp, 100)) {
       Profile::Set(szProfileAircraftReg, Temp);
       changed = true;
     }
@@ -140,7 +143,8 @@ OnPilotNameClicked(gcc_unused WndButton &button)
   TCHAR Temp[100];
   if (buttonPilotName) {
     Profile::Get(szProfilePilotName, Temp, 100);
-    if (dlgTextEntryShowModal(Temp, 100)) {
+    if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+                              Temp, 100)) {
       Profile::Set(szProfilePilotName, Temp);
       changed = true;
     }
@@ -154,7 +158,8 @@ OnLoggerIDClicked(gcc_unused WndButton &button)
   TCHAR Temp[100];
   if (buttonLoggerID) {
     Profile::Get(szProfileLoggerID, Temp, 100);
-    if (dlgTextEntryShowModal(Temp, 100)) {
+    if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+                              Temp, 100)) {
       Profile::Set(szProfileLoggerID, Temp);
       changed = true;
     }

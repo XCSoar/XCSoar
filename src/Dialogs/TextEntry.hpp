@@ -26,18 +26,20 @@ Copyright_License {
 
 #include "Util/tstring.hpp"
 
+class SingleWindow;
+
 typedef const TCHAR *(*AllowedCharactersCallback_t)(const TCHAR *value);
 
 bool
-dlgTextEntryShowModal(TCHAR *text, int width,
+dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
                       AllowedCharactersCallback_t accb=NULL);
 
 bool
-dlgTextEntryShowModal(tstring &text, int width,
+dlgTextEntryShowModal(SingleWindow &parent, tstring &text, int width,
                       AllowedCharactersCallback_t accb=NULL);
 
 bool
-dlgTextEntryKeyboardShowModal(TCHAR *text, int width=0,
+dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text, int width=0,
                               AllowedCharactersCallback_t accb=NULL);
 
 #endif

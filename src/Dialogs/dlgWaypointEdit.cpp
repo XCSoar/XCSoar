@@ -69,7 +69,8 @@ OnNameClicked(gcc_unused WndButton &button)
 
   TCHAR buff[NAME_SIZE + 1];
   _tcscpy(buff, global_wpt->Name.c_str());
-  dlgTextEntryShowModal(buff, NAME_SIZE);
+  dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+                        buff, NAME_SIZE);
   global_wpt->Name = buff;
 
   UpdateButtons();
@@ -82,7 +83,8 @@ OnCommentClicked(gcc_unused WndButton &button)
 
   TCHAR buff[COMMENT_SIZE+1];
   _tcscpy(buff, global_wpt->Comment.c_str());
-  dlgTextEntryShowModal(buff, COMMENT_SIZE);
+  dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+                        buff, COMMENT_SIZE);
   global_wpt->Comment = buff;
 
   UpdateButtons();

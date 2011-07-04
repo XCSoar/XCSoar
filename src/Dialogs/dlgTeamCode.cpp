@@ -124,7 +124,8 @@ OnCodeClicked(gcc_unused WndButton &button)
   CopyString(newTeammateCode,
              XCSoarInterface::SettingsComputer().TeammateCode.GetCode(), 10);
 
-  if (!dlgTextEntryShowModal(newTeammateCode, 7))
+  if (!dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+                             newTeammateCode, 7))
     return;
 
   TrimRight(newTeammateCode);
@@ -145,7 +146,8 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
   TCHAR newTeamFlarmCNTarget[settings.TeamFlarmCNTarget.MAX_SIZE];
   _tcscpy(newTeamFlarmCNTarget, settings.TeamFlarmCNTarget.c_str());
 
-  if (!dlgTextEntryShowModal(newTeamFlarmCNTarget, 4))
+  if (!dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
+                             newTeamFlarmCNTarget, 4))
     return;
 
   settings.TeamFlarmCNTarget = newTeamFlarmCNTarget;

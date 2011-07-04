@@ -26,6 +26,8 @@ Copyright_License {
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 
+class SingleWindow;
+
 const TCHAR* OrderedTaskFactoryDescription(TaskBehaviour::Factory_t type);
 const TCHAR* OrderedTaskFactoryName(TaskBehaviour::Factory_t type);
 
@@ -37,7 +39,8 @@ const TCHAR* OrderedTaskFactoryName(TaskBehaviour::Factory_t type);
  */
 void OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks);
 void OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name, TCHAR* radius);
-bool OrderedTaskSave(const OrderedTask& task, bool noask=false);
+bool OrderedTaskSave(SingleWindow &parent,
+                     const OrderedTask& task, bool noask=false);
 
 const TCHAR* OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type);
 const TCHAR* OrderedTaskPointName(AbstractTaskFactory::LegalPointType_t type);
