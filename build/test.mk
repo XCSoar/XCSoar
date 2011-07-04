@@ -1377,6 +1377,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
+	$(SRC)/CompareProjection.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \

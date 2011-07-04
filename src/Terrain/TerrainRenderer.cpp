@@ -217,9 +217,26 @@ TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height) const
 }
 
 void
+TerrainRenderer::SetSettings(const TerrainRendererSettings &_settings)
+{
+  if (settings == _settings)
+    return;
+
+  settings = _settings;
+  compare_projection.Clear();
+}
+
+void
 TerrainRenderer::Generate(const WindowProjection &map_projection,
                           const Angle sunazimuth)
 {
+  if (compare_projection.CompareAndUpdate(map_projection) &&
+      last_sun_azimuth == sunazimuth)
+    /* no change since previous frame */
+    return;
+
+  last_sun_azimuth = sunazimuth;
+
   const bool do_water = true;
   const unsigned height_scale = 4;
   const int interp_levels = 2;

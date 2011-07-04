@@ -339,6 +339,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
+	$(SRC)/CompareProjection.cpp \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/RenderTaskPoint.cpp \
 	$(SRC)/RenderTask.cpp \

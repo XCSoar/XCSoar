@@ -27,6 +27,7 @@ Copyright_License {
 #include "RasterRenderer.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Terrain/TerrainSettings.hpp"
+#include "CompareProjection.hpp"
 
 class Canvas;
 class WindowProjection;
@@ -38,6 +39,10 @@ class TerrainRenderer : private NonCopyable {
 
 protected:
   struct TerrainRendererSettings settings;
+
+  CompareProjection compare_projection;
+
+  Angle last_sun_azimuth;
 
   const ColorRamp *last_color_ramp;
 
@@ -59,9 +64,7 @@ protected:
   void CopyTo(Canvas &canvas, unsigned width, unsigned height) const;
 
 public:
-  void SetSettings(const TerrainRendererSettings &_settings) {
-    settings = _settings;
-  }
+  void SetSettings(const TerrainRendererSettings &_settings);
 
   virtual void Generate(const WindowProjection &map_projection,
                         const Angle sunazimuth);

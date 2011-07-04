@@ -52,6 +52,18 @@ struct TerrainRendererSettings {
    * Set all attributes to the default values.
    */
   void SetDefaults();
+
+  bool operator==(const TerrainRendererSettings &other) const {
+    return enable == other.enable &&
+      slope_shading == other.slope_shading &&
+      contrast == other.contrast &&
+      brightness == other.brightness &&
+      ramp == other.ramp;
+  }
+
+  bool operator!=(const TerrainRendererSettings &other) const {
+    return !(*this == other);
+  }
 };
 
 #endif
