@@ -105,7 +105,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   for (TopographyFile::const_iterator it = file.begin(), end = file.end();
        it != end; ++it) {
     const XShape *cshape = *it;
-    if (!cshape)
+    if (gcc_likely(cshape == NULL))
       continue;
 
     if (!projection.GetScreenBounds().overlaps(cshape->get_bounds()))
@@ -291,7 +291,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   for (TopographyFile::const_iterator it = file.begin(), end = file.end();
        it != end; ++it) {
     const XShape *cshape = *it;
-    if (!cshape)
+    if (gcc_likely(cshape == NULL))
       continue;
 
     const TCHAR *label = cshape->get_label();
