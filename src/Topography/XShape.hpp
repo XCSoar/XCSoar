@@ -49,12 +49,12 @@ class XShape : private NonCopyable {
   GeoPoint center;
 #endif
 
-  int type;
+  unsigned char type;
 
   /**
    * The number of elements in the "lines" array.
    */
-  unsigned num_lines;
+  unsigned char num_lines;
 
   /**
    * An array which stores the number of points of each line.  This is
@@ -95,10 +95,6 @@ public:
   const unsigned short *get_indices(int thinning_level, unsigned min_distance,
                                     const unsigned short *&count);
 #endif
-
-  bool is_visible(int label_field) const {
-    return label_field < 0 || label != NULL;
-  }
 
   const GeoBounds &get_bounds() const {
     return bounds;
