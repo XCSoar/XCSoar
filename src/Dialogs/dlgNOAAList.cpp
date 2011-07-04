@@ -44,7 +44,6 @@ Copyright_License {
 
 #include <stdio.h>
 
-static SingleWindow *parent;
 static WndForm *wf;
 static WndListFrame *station_list;
 
@@ -153,7 +152,7 @@ static void
 ListItemSelected(unsigned index)
 {
   assert(index < NOAAStore::Count());
-  dlgNOAADetailsShowModal(*parent, index);
+  dlgNOAADetailsShowModal(*(SingleWindow *)wf->get_root_owner(), index);
   UpdateList();
 }
 
@@ -168,11 +167,9 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgNOAAListShowModal(SingleWindow &_parent)
+dlgNOAAListShowModal(SingleWindow &parent)
 {
-  parent = &_parent;
-
-  wf = LoadDialog(CallBackTable, _parent, Layout::landscape ?
+  wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
                   _T("IDR_XML_NOAA_LIST_L") :
                   _T("IDR_XML_NOAA_LIST"));
   assert(wf != NULL);
