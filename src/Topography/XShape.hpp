@@ -48,12 +48,12 @@ class XShape : private NonCopyable {
   GeoPoint center;
 #endif
 
-  int type;
+  unsigned char type;
 
   /**
    * The number of elements in the "lines" array.
    */
-  unsigned num_lines;
+  unsigned char num_lines;
 
   /**
    * An array which stores the number of points of each line.  This is
