@@ -43,6 +43,10 @@ protected:
   T *data;
 
 public:
+  typedef T *iterator;
+  typedef const T *const_iterator;
+
+public:
   AllocatedArray():the_size(0), data(NULL) {}
   explicit AllocatedArray(unsigned _size):the_size(_size), data(new T[the_size]) {
     assert(size() == 0 || data != NULL);
@@ -96,19 +100,19 @@ public:
     return data[i];
   }
 
-  T *begin() {
+  iterator begin() {
     return data;
   }
 
-  const T *begin() const {
+  const_iterator begin() const {
     return data;
   }
 
-  T *end() {
+  iterator end() {
     return data + the_size;
   }
 
-  const T *end() const {
+  const_iterator end() const {
     return data + the_size;
   }
 
