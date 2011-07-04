@@ -102,8 +102,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   int iskip = file.GetSkipSteps(map_scale);
 #endif
 
-  for (unsigned i = 0; i < file.size(); ++i) {
-    XShape *cshape = file[i];
+  for (TopographyFile::const_iterator it = file.begin(), end = file.end();
+       it != end; ++it) {
+    const XShape *cshape = *it;
     if (!cshape)
       continue;
 
@@ -287,8 +288,9 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   m1.Scale(projection.GetScale());
 #endif
 
-  for (unsigned i = 0; i < file.size(); ++i) {
-    const XShape *cshape = file[i];
+  for (TopographyFile::const_iterator it = file.begin(), end = file.end();
+       it != end; ++it) {
+    const XShape *cshape = *it;
     if (!cshape)
       continue;
 

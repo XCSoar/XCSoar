@@ -43,11 +43,13 @@ class XShape;
 struct zzip_dir;
 
 class TopographyFile : private NonCopyable {
+  typedef AllocatedArray<XShape *> XShapePointerArray;
+
   struct zzip_dir *dir;
 
   shapefileObj shpfile;
 
-  AllocatedArray<XShape *> shpCache;
+  XShapePointerArray shpCache;
 
   int label_field, icon, pen_width;
 
@@ -73,6 +75,41 @@ class TopographyFile : private NonCopyable {
   fixed labelImportantThreshold;
 
   bool shapefileopen;
+
+public:
+  typedef XShapePointerArray::const_iterator const_iterator;
+
+  /*
+  class const_iterator {
+    friend class TopographyFile;
+
+    XShapePointerArray::const_iterator i;
+
+    const_iterator(XShapePointerArray::const_iterator _i):i(_i) {}
+
+  public:
+    const_iterator &operator++() {
+      ++i;
+      return *this;
+    }
+
+    const XShape &operator*() const {
+      return **i;
+    }
+
+    const XShape *operator->() const {
+      return *i;
+    }
+
+    bool operator==(const const_iterator &other) const {
+      return i == other.i;
+    }
+
+    bool operator!=(const const_iterator &other) const {
+      return i == other.i;
+    }
+  };
+  */
 
 public:
   /**
@@ -138,6 +175,14 @@ public:
 
   XShape *operator[](unsigned i) const {
     return shpCache[i];
+  }
+
+  const_iterator begin() const {
+    return shpCache.begin();
+  }
+
+  const_iterator end() const {
+    return shpCache.end();
   }
 
   gcc_pure
