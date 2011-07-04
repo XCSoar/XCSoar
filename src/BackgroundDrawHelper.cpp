@@ -96,8 +96,8 @@ BackgroundDrawHelper::Draw(Canvas& canvas,
   }
 
   renderer->SetSettings(terrain_settings);
-  renderer->Draw(canvas, proj,
-                 sun_azimuth);
+  renderer->Generate(proj, sun_azimuth);
+  renderer->Draw(canvas, proj);
 }
 
 void

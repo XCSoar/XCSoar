@@ -56,15 +56,17 @@ public:
 protected:
   void ScanSpotHeights();
 
-  void CopyTo(Canvas &canvas, unsigned width, unsigned height);
+  void CopyTo(Canvas &canvas, unsigned width, unsigned height) const;
 
 public:
   void SetSettings(const TerrainRendererSettings &_settings) {
     settings = _settings;
   }
 
-  virtual void Draw(Canvas &canvas, const WindowProjection &map_projection,
-                    const Angle sunazimuth);
+  virtual void Generate(const WindowProjection &map_projection,
+                        const Angle sunazimuth);
+
+  void Draw(Canvas &canvas, const WindowProjection &map_projection) const;
 };
 
 #endif

@@ -128,9 +128,8 @@ WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,
 }
 
 void
-WeatherTerrainRenderer::Draw(Canvas &canvas,
-                             const WindowProjection &projection,
-                             const Angle sunazimuth)
+WeatherTerrainRenderer::Generate(const WindowProjection &projection,
+                                 const Angle sunazimuth)
 {
   bool do_water = false;
   unsigned height_scale;
@@ -187,13 +186,13 @@ WeatherTerrainRenderer::Draw(Canvas &canvas,
     break;
 
   default:
-    TerrainRenderer::Draw(canvas, projection, sunazimuth);
+    TerrainRenderer::Generate(projection, sunazimuth);
     return;
   }
 
   const RasterMap *map = weather->GetMap();
   if (map == NULL) {
-    TerrainRenderer::Draw(canvas, projection, sunazimuth);
+    TerrainRenderer::Generate(projection, sunazimuth);
     return;
   }
 
@@ -208,8 +207,6 @@ WeatherTerrainRenderer::Draw(Canvas &canvas,
   raster_renderer.GenerateImage(do_shading, height_scale,
                                 settings.contrast, settings.brightness,
                                 sunazimuth);
-
-  CopyTo(canvas, projection.GetScreenWidth(), projection.GetScreenHeight());
 
   ScanSpotHeights();
 }

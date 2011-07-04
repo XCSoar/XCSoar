@@ -209,23 +209,16 @@ TerrainRenderer::ScanSpotHeights()
 }
 
 void
-TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height)
+TerrainRenderer::CopyTo(Canvas &canvas, unsigned width, unsigned height) const
 {
   raster_renderer.GetImage().stretch_to(raster_renderer.get_width(),
                                         raster_renderer.get_height(), canvas,
                                         width, height);
 }
 
-/**
- * Draws the terrain to the given canvas
- * @param canvas The drawing canvas
- * @param map_projection The Projection
- * @param sunazimuth Azimuth of the sun (for terrain shading)
- */
 void
-TerrainRenderer::Draw(Canvas &canvas,
-                      const WindowProjection &map_projection,
-                      const Angle sunazimuth)
+TerrainRenderer::Generate(const WindowProjection &map_projection,
+                          const Angle sunazimuth)
 {
   const bool do_water = true;
   const unsigned height_scale = 4;
@@ -248,7 +241,18 @@ TerrainRenderer::Draw(Canvas &canvas,
   raster_renderer.GenerateImage(do_shading, height_scale,
                                 settings.contrast, settings.brightness,
                                 sunazimuth);
+}
 
+/**
+ * Draws the terrain to the given canvas
+ * @param canvas The drawing canvas
+ * @param map_projection The Projection
+ * @param sunazimuth Azimuth of the sun (for terrain shading)
+ */
+void
+TerrainRenderer::Draw(Canvas &canvas,
+                      const WindowProjection &map_projection) const
+{
   CopyTo(canvas, map_projection.GetScreenWidth(),
          map_projection.GetScreenHeight());
 }
