@@ -92,6 +92,10 @@ public:
   ~XShape();
 
 #ifdef ENABLE_OPENGL
+protected:
+  bool BuildIndices(unsigned thinning_level, unsigned min_distance);
+
+public:
   const unsigned short *get_indices(int thinning_level, unsigned min_distance,
                                     const unsigned short *&count);
 #endif

@@ -202,72 +202,84 @@ XShape::~XShape()
 
 #ifdef ENABLE_OPENGL
 
+bool
+XShape::BuildIndices(unsigned thinning_level, unsigned min_distance)
+{
+  assert(indices[thinning_level] == NULL);
+
+  unsigned short *idx, *idx_count;
+  unsigned num_points = 0;
+
+  for (unsigned i=0; i < num_lines; i++)
+    num_points += lines[i];
+
+  if (type == MS_SHAPE_LINE) {
+    if (num_points <= 2)
+      return false;  // line cannot be simplified, so don't create indices
+    index_count[thinning_level] = idx_count =
+      new GLushort[num_lines + num_points];
+    indices[thinning_level] = idx = idx_count + num_lines;
+
+    const unsigned short *end_l = lines + num_lines;
+    const ShapePoint *p = points;
+    unsigned i = 0;
+    for (const unsigned short *l = lines; l < end_l; l++) {
+      assert(*l >= 2);
+      const ShapePoint *end_p = p + *l - 1;
+      // always add first point
+      *idx++ = i;
+      p++; i++;
+      const unsigned short *after_first_idx = idx;
+      // add points if they are not too close to the previous point
+      for (; p < end_p; p++, i++)
+        if (manhattan_distance(points[idx[-1]], *p) >= min_distance)
+          *idx++ = i;
+      // remove points from behind if they are too close to the end point
+      while (idx > after_first_idx &&
+             manhattan_distance(points[idx[-1]], *p) < min_distance)
+        idx--;
+      // always add last point
+      *idx++ = i;
+      p++; i++;
+      *idx_count++ = idx - after_first_idx + 1;
+    }
+    // TODO: free memory saved by thinning (use malloc/realloc or some class?)
+    return true;
+  } else if (type == MS_SHAPE_POLYGON) {
+    index_count[thinning_level] = idx_count =
+      new GLushort[1 + 3*(num_points-2) + 2*(num_lines-1)];
+    indices[thinning_level] = idx = idx_count + 1;
+
+    *idx_count = 0;
+    const ShapePoint *pt = points;
+    for (unsigned i=0; i < num_lines; i++) {
+      unsigned count = polygon_to_triangle(pt, lines[i], idx + *idx_count,
+                                           min_distance);
+      if (i > 0) {
+        const GLushort offset = pt - points;
+        const unsigned max_idx_count = *idx_count + count;
+        for (unsigned j=*idx_count; j < max_idx_count; j++)
+          idx[j] += offset;
+      }
+      *idx_count += count;
+      pt += lines[i];
+    }
+    *idx_count = triangle_to_strip(idx, *idx_count, num_points, num_lines);
+    // TODO: free memory saved by thinning (use malloc/realloc or some class?)
+    return true;
+  } else {
+    assert(false);
+    return false;
+  }
+}
+
 const unsigned short *
 XShape::get_indices(int thinning_level, unsigned min_distance,
                     const unsigned short *&count)
 {
   if (indices[thinning_level] == NULL) {
-    unsigned short *idx, *idx_count;
-    unsigned num_points = 0;
-
-    for (unsigned i=0; i < num_lines; i++)
-      num_points += lines[i];
-
-    if (type == MS_SHAPE_LINE) {
-      if (num_points <= 2)
-        return NULL;  // line cannot be simplified, so don't create indices
-      index_count[thinning_level] = idx_count =
-        new GLushort[num_lines + num_points];
-      indices[thinning_level] = idx = idx_count + num_lines;
-
-      const unsigned short *end_l = lines + num_lines;
-      const ShapePoint *p = points;
-      unsigned i = 0;
-      for (const unsigned short *l = lines; l < end_l; l++) {
-        assert(*l >= 2);
-        const ShapePoint *end_p = p + *l - 1;
-        // always add first point
-        *idx++ = i;
-        p++; i++;
-        const unsigned short *after_first_idx = idx;
-        // add points if they are not too close to the previous point
-        for (; p < end_p; p++, i++)
-          if (manhattan_distance(points[idx[-1]], *p) >= min_distance)
-            *idx++ = i;
-        // remove points from behind if they are too close to the end point
-        while (idx > after_first_idx &&
-               manhattan_distance(points[idx[-1]], *p) < min_distance)
-          idx--;
-        // always add last point
-        *idx++ = i;
-        p++; i++;
-        *idx_count++ = idx - after_first_idx + 1;
-      }
-      // TODO: free memory saved by thinning (use malloc/realloc or some class?)
-    } else if (type == MS_SHAPE_POLYGON) {
-      index_count[thinning_level] = idx_count =
-        new GLushort[1 + 3*(num_points-2) + 2*(num_lines-1)];
-      indices[thinning_level] = idx = idx_count + 1;
-
-      *idx_count = 0;
-      const ShapePoint *pt = points;
-      for (unsigned i=0; i < num_lines; i++) {
-        unsigned count = polygon_to_triangle(pt, lines[i], idx + *idx_count,
-                                             min_distance);
-        if (i > 0) {
-          const GLushort offset = pt - points;
-          const unsigned max_idx_count = *idx_count + count;
-          for (unsigned j=*idx_count; j < max_idx_count; j++)
-            idx[j] += offset;
-        }
-        *idx_count += count;
-        pt += lines[i];
-      }
-      *idx_count = triangle_to_strip(idx, *idx_count, num_points, num_lines);
-      // TODO: free memory saved by thinning (use malloc/realloc or some class?)
-    } else {
-      assert(false);
-    }
+    if (!BuildIndices(thinning_level, min_distance))
+      return NULL;
   }
 
   count = index_count[thinning_level];
