@@ -36,9 +36,6 @@ public:
     :port(_port) {}
 
 protected:
-  bool StartCommandMode();
-  void StartNMEAMode(OperationEnvironment &env);
-
   bool DeclareInner(const Declaration &declaration,
                     OperationEnvironment &env);
 

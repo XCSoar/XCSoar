@@ -30,6 +30,8 @@ Copyright_License {
 #include <stddef.h>
 #include <stdint.h>
 
+class OperationEnvironment;
+
 namespace LX {
   static const unsigned int NUMTPS = 12;
 
@@ -97,6 +99,18 @@ namespace LX {
   {
     return port.Write(SYN) && ExpectACK(port);
   }
+
+  /**
+   * Enter command mode: sends SYN three times and waits for ACK.
+   */
+  bool
+  CommandMode(Port &port);
+
+  /**
+   * Enter command mode without waiting for ACK.
+   */
+  void
+  CommandModeQuick(Port &port, OperationEnvironment &env);
 
   static inline bool
   SendCommand(Port &port, enum command command)

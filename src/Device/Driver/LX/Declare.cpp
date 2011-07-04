@@ -28,25 +28,6 @@ Copyright_License {
 #include "OS/ByteOrder.hpp"
 #include "Operation.hpp"
 
-void
-LXDevice::StartNMEAMode(OperationEnvironment &env)
-{
-  port->Write(LX::SYN);
-  env.Sleep(500);
-  port->Write(LX::SYN);
-  env.Sleep(500);
-  port->Write(LX::SYN);
-  env.Sleep(500);
-}
-
-bool
-LXDevice::StartCommandMode()
-{
-  LX::Connect(*port);
-  LX::Connect(*port);
-  return LX::Connect(*port);
-}
-
 /**
  * fills dest with src and appends spaces to end
  * adds '\0' to end of string resulting in
@@ -182,7 +163,7 @@ LXDevice::DeclareInner(const Declaration &declaration,
   env.SetProgressRange(5);
   env.SetProgressPosition(0);
 
-  if (!StartCommandMode())
+  if (!LX::CommandMode(*port))
       return false;
 
   env.SetProgressPosition(1);
@@ -230,7 +211,7 @@ LXDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
 
   bool success = DeclareInner(declaration, env);
 
-  StartNMEAMode(env);
+  LX::CommandModeQuick(*port, env);
   port->SetRxTimeout(0);
   port->StartRxThread();
   return success;

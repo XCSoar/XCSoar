@@ -22,6 +22,26 @@ Copyright_License {
 */
 
 #include "Device/Driver/LX/Protocol.hpp"
+#include "Operation.hpp"
+
+bool
+LX::CommandMode(Port &port)
+{
+  Connect(port);
+  Connect(port);
+  return Connect(port);
+}
+
+void
+LX::CommandModeQuick(Port &port, OperationEnvironment &env)
+{
+  port.Write(SYN);
+  env.Sleep(500);
+  port.Write(SYN);
+  env.Sleep(500);
+  port.Write(SYN);
+  env.Sleep(500);
+}
 
 uint8_t
 LX::calc_crc_char(uint8_t d, uint8_t crc)
