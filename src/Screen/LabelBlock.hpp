@@ -29,7 +29,8 @@ Copyright_License {
 #include "Compiler.h"
 
 class LabelBlock {
-  StaticArray<PixelRect, 256> blocks;
+  typedef StaticArray<PixelRect, 256u> BlockArray;
+  BlockArray blocks;
 
 public:
   bool check(const PixelRect rc);

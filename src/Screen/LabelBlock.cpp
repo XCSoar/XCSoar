@@ -38,8 +38,9 @@ CheckRectOverlap(const PixelRect& rc1, const PixelRect& rc2)
 
 bool LabelBlock::check(const PixelRect rc)
 {
-  for (unsigned i = 0; i < blocks.size(); i++)
-    if (CheckRectOverlap(blocks[i], rc))
+  for (BlockArray::const_iterator i = blocks.begin(), end = blocks.end();
+       i != end; ++i)
+    if (CheckRectOverlap(*i, rc))
       return false;
 
   if (!blocks.full())
