@@ -70,10 +70,21 @@ UpdateList()
   PlaneFileVisitor pfv;
   VisitDataFiles(_T("*.xcp"), pfv);
 
-  std::sort(list.begin(), list.end());
+  unsigned len = list.size();
 
-  plane_list->SetLength(list.size());
+  if (len > 0)
+    std::sort(list.begin(), list.end());
+
+  plane_list->SetLength(len);
   plane_list->invalidate();
+
+  WndButton* b = (WndButton*)dialog->FindByName(_T("LoadButton"));
+  assert(b != NULL);
+  b->set_enabled(len > 0);
+
+  b = (WndButton*)dialog->FindByName(_T("DeleteButton"));
+  assert(b != NULL);
+  b->set_enabled(len > 0);
 }
 
 static void
@@ -136,6 +147,21 @@ CancelClicked(gcc_unused WndButton &button)
 }
 
 static void
+DeleteClicked(gcc_unused WndButton &button)
+{
+  assert(plane_list->GetCursorIndex() < list.size());
+
+  TCHAR tmp[256];
+  _stprintf(tmp, _("Do you really want to delete plane profile \"%s\"?"),
+            list[plane_list->GetCursorIndex()].name.c_str());
+  if (MessageBoxX(tmp, _("Delete"), MB_YESNO) != IDYES)
+    return;
+
+  File::Delete(list[plane_list->GetCursorIndex()].path);
+  UpdateList();
+}
+
+static void
 ListItemSelected(unsigned i)
 {
   assert(i < list.size());
@@ -151,6 +177,7 @@ ListItemSelected(unsigned i)
 static CallBackTableEntry CallBackTable[] = {
    DeclareCallBackEntry(LoadClicked),
    DeclareCallBackEntry(CancelClicked),
+   DeclareCallBackEntry(DeleteClicked),
    DeclareCallBackEntry(NULL)
 };
 
