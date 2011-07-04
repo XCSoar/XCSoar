@@ -60,8 +60,6 @@ protected:
 
   void CopyTo(Canvas &canvas, unsigned width, unsigned height);
 
-  virtual bool do_scan_spot();
-
 public:
   void SetSettings(const TerrainRendererSettings &_settings) {
     settings = _settings;

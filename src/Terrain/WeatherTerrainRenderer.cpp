@@ -127,13 +127,6 @@ WeatherTerrainRenderer::WeatherTerrainRenderer(const RasterTerrain *_terrain,
   assert(weather != NULL);
 }
 
-
-bool 
-WeatherTerrainRenderer::do_scan_spot()
-{
-  return weather->GetParameter() > 0;
-}
-
 void
 WeatherTerrainRenderer::Draw(Canvas &canvas,
                              const WindowProjection &projection,

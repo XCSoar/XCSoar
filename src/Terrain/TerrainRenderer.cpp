@@ -252,9 +252,3 @@ TerrainRenderer::Draw(Canvas &canvas,
   CopyTo(canvas, map_projection.GetScreenWidth(),
          map_projection.GetScreenHeight());
 }
-
-bool 
-TerrainRenderer::do_scan_spot()
-{
-  return false;
-}

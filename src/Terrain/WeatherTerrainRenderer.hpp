@@ -38,7 +38,6 @@ public:
 
 private:
   const RasterWeather *weather;
-  bool do_scan_spot();
 };
 
 #endif
