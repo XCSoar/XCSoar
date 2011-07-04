@@ -142,6 +142,8 @@ RawBitmap::surface_destroyed()
 {
   delete texture;
   texture = NULL;
+
+  dirty = true;
 }
 
 #endif
