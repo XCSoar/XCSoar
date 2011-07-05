@@ -41,8 +41,11 @@ import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.content.BroadcastReceiver;
+import android.util.Log;
 
 public class XCSoar extends Activity {
+  private static final String TAG = "XCSoar";
+
   private static NativeView nativeView;
 
   PowerManager.WakeLock wakeLock;
@@ -60,6 +63,14 @@ public class XCSoar extends Activity {
 
   @Override protected void onCreate(Bundle savedInstanceState) {
     super.onCreate(savedInstanceState);
+
+    Log.d(TAG, "ABI=" + Build.CPU_ABI);
+    Log.d(TAG, "PRODUCT=" + Build.PRODUCT);
+    Log.d(TAG, "MANUFACTURER=" + Build.MANUFACTURER);
+    Log.d(TAG, "MODEL=" + Build.MODEL);
+    Log.d(TAG, "DEVICE=" + Build.DEVICE);
+    Log.d(TAG, "BOARD=" + Build.BOARD);
+    Log.d(TAG, "FINGERPRINT=" + Build.FINGERPRINT);
 
     if (!Loader.loaded) {
       TextView tv = new TextView(this);
