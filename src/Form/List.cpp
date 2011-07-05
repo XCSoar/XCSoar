@@ -470,7 +470,7 @@ WndListFrame::on_mouse_down(int x, int y)
 }
 
 bool
-WndListFrame::on_mouse_wheel(int delta)
+WndListFrame::on_mouse_wheel(int x, int y, int delta)
 {
   scroll_bar.drag_end(this);
   drag_end();

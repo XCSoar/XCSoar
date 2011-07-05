@@ -205,7 +205,8 @@ protected:
   virtual bool on_mouse_move(int x, int y, unsigned keys);
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
-  virtual bool on_mouse_wheel(int delta);
+  virtual bool on_mouse_wheel(int x, int y, int delta);
+
   /**
    * This event handler gets called when a gesture has
    * been painted by the user

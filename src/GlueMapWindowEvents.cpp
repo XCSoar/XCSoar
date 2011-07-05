@@ -245,7 +245,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
 }
 
 bool
-GlueMapWindow::on_mouse_wheel(int delta)
+GlueMapWindow::on_mouse_wheel(int x, int y, int delta)
 {
   if (drag_mode != DRAG_NONE)
     return true;

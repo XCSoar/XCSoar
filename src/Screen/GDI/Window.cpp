@@ -155,7 +155,8 @@ Window::on_message(HWND _hWnd, UINT message,
 
 #ifdef WM_MOUSEWHEEL
   case WM_MOUSEWHEEL:
-    if (on_mouse_wheel(GET_WHEEL_DELTA_WPARAM(wParam))) {
+    if (on_mouse_wheel(GET_X_LPARAM(lParam), GET_Y_LPARAM(lParam),
+                       GET_WHEEL_DELTA_WPARAM(wParam))) {
       /* true returned: message was handled */
       ResetDisplayTimeOut();
       return 0;

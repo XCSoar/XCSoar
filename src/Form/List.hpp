@@ -196,7 +196,7 @@ protected:
    * The on_mouse_wheel event is called when the mouse wheel is turned
    * (derived from Window)
    */
-  virtual bool on_mouse_wheel(int delta);
+  virtual bool on_mouse_wheel(int x, int y, int delta);
 
   virtual bool on_key_check(unsigned key_code) const;
 
