@@ -241,7 +241,7 @@ WndProperty::UpdateLayout()
 
   const PixelSize size = get_size();
 
-  if (mCaptionWidth != 0) {
+  if (mCaptionWidth >= 0) {
     mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)*2
         - mBitmapSize;
     mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
@@ -404,7 +404,7 @@ WndProperty::on_paint(Canvas &canvas)
   /* kludge: don't draw caption if width is too small (but not 0),
      used by the polar configuration panel.  This concept needs to be
      redesigned. */
-  if ((mCaptionWidth == 0 || mCaptionWidth >= 8) && !mCaption.empty()) {
+  if ((mCaptionWidth < 0 || mCaptionWidth >= 8) && !mCaption.empty()) {
     canvas.set_text_color(GetForeColor());
     canvas.background_transparent();
     canvas.select(*GetFont());
@@ -412,7 +412,7 @@ WndProperty::on_paint(Canvas &canvas)
     PixelSize tsize = canvas.text_size(mCaption.c_str());
 
     RasterPoint org;
-    if (mCaptionWidth == 0) {
+    if (mCaptionWidth < 0) {
       org.x = mEditPos.x;
       org.y = mEditPos.y - tsize.cy;
     } else {
