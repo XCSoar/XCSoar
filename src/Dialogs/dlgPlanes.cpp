@@ -29,6 +29,7 @@ Copyright_License {
 #include "Plane/PlaneGlue.hpp"
 #include "Plane/PlaneFileGlue.hpp"
 #include "OS/FileUtil.hpp"
+#include "OS/PathName.hpp"
 #include "LocalPath.hpp"
 #include "MainWindow.hpp"
 #include "Components.hpp"
@@ -79,6 +80,10 @@ UpdateList()
   plane_list->invalidate();
 
   WndButton* b = (WndButton*)dialog->FindByName(_T("LoadButton"));
+  assert(b != NULL);
+  b->set_enabled(len > 0);
+
+  b = (WndButton*)dialog->FindByName(_T("EditButton"));
   assert(b != NULL);
   b->set_enabled(len > 0);
 
@@ -147,6 +152,84 @@ CancelClicked(gcc_unused WndButton &button)
 }
 
 static void
+NewClicked(gcc_unused WndButton &button)
+{
+  Plane plane = CommonInterface::SettingsComputer().plane;
+
+  while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->get_root_owner(), plane)) {
+    if (plane.registration.empty()) {
+      MessageBoxX(_("Please enter the registration of the plane!"),
+                  _("Error"), MB_OK);
+      continue;
+    }
+
+    StaticString<42> filename(plane.registration);
+    filename += _T(".xcp");
+
+    StaticString<MAX_PATH> path;
+    LocalPath(path.buffer(), filename);
+
+    if (File::Exists(path)) {
+      TCHAR tmp[256];
+      _stprintf(tmp, _("A plane profile \"%s\" already exists. Do you want to overwrite it?"),
+                filename.c_str());
+      if (MessageBoxX(tmp, _("Overwrite"), MB_YESNO) != IDYES)
+        continue;
+    }
+
+    PlaneGlue::WriteFile(plane, path);
+    UpdateList();
+    break;
+  }
+}
+
+static void
+EditClicked(gcc_unused WndButton &button)
+{
+  assert(plane_list->GetCursorIndex() < list.size());
+
+  const TCHAR *old_path = list[plane_list->GetCursorIndex()].path;
+  const TCHAR *old_filename = list[plane_list->GetCursorIndex()].name;
+
+  Plane plane;
+  PlaneGlue::ReadFile(plane, old_path);
+
+  while (dlgPlaneDetailsShowModal(*(SingleWindow*)dialog->get_root_owner(), plane)) {
+    if (plane.registration.empty()) {
+      MessageBoxX(_("Please enter the registration of the plane!"),
+                  _("Error"), MB_OK);
+      continue;
+    }
+
+    StaticString<42> filename(plane.registration);
+    filename += _T(".xcp");
+
+    if (!(filename == old_filename)) {
+      StaticString<MAX_PATH> path;
+      DirName(old_path, path.buffer());
+      path += _T("/");
+      path += filename;
+
+      if (File::Exists(path)) {
+        TCHAR tmp[256];
+        _stprintf(tmp, _("A plane profile \"%s\" already exists. Do you want to overwrite it?"),
+                  filename.c_str());
+        if (MessageBoxX(tmp, _("Overwrite"), MB_YESNO) != IDYES)
+          continue;
+      }
+
+      File::Delete(old_path);
+      PlaneGlue::WriteFile(plane, path);
+    } else {
+      PlaneGlue::WriteFile(plane, old_path);
+    }
+
+    UpdateList();
+    break;
+  }
+}
+
+static void
 DeleteClicked(gcc_unused WndButton &button)
 {
   assert(plane_list->GetCursorIndex() < list.size());
@@ -177,6 +260,8 @@ ListItemSelected(unsigned i)
 static CallBackTableEntry CallBackTable[] = {
    DeclareCallBackEntry(LoadClicked),
    DeclareCallBackEntry(CancelClicked),
+   DeclareCallBackEntry(NewClicked),
+   DeclareCallBackEntry(EditClicked),
    DeclareCallBackEntry(DeleteClicked),
    DeclareCallBackEntry(NULL)
 };

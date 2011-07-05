@@ -1,0 +1,58 @@
+<?xml version="1.0"?>
+
+<Form Width="320" Height="240" Caption="Plane Polar">
+  <Panel Height="26">
+    <Label Name="PolarLabel" Caption="Polar" X="2" Y="6" Height="-2" Width="-60" />
+    <Label Name="InvalidLabel" Caption="Invalid" X="-50" Y="6" Height="-2" CaptionColor="0xFF0000" />
+  </Panel>
+  
+  <Panel Height="26">
+    <Label Caption="Polar V:" X="2" Y="6" Height="-2" Width="-257" />
+
+    <Edit Name="V1Edit" X="-252" Y="2" Width="-172" Height="-2">
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarChanged" />
+    </Edit>
+    <Edit Name="V2Edit" X="-167" Y="2" Width="-87" Height="-2">
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarChanged" />
+    </Edit>
+    <Edit Name="V3Edit" X="-82" Y="2" Width="-2" Height="-2">
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarChanged" />
+    </Edit>
+  </Panel>
+
+  <Panel Height="26">
+    <Label Caption="Polar W:" X="2" Y="6" Height="-2" Width="-257" />
+
+    <Edit Name="W1Edit" X="-252" Y="2" Width="-172" Height="-2">
+      <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarChanged" />
+    </Edit>
+    <Edit Name="W2Edit" X="-167" Y="2" Width="-87" Height="-2">
+      <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarChanged" />
+    </Edit>
+    <Edit Name="W3Edit" X="-82" Y="2" Width="-2" Height="-2">
+      <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarChanged" />
+    </Edit>
+  </Panel>
+
+  <Panel Height="26">
+    <Label Caption="Reference Mass:" X="2" Y="6" Height="-2" Width="-172" />
+    <Edit Name="ReferenceMassEdit" X="-167" Y="2" Width="-2" Height="-2">
+      <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarChanged" />
+    </Edit>
+  </Panel>
+
+  <Panel Height="26">
+    <Label Caption="Dry Mass:" X="2" Y="6" Height="-2" Width="-172" />
+    <Edit Name="DryMassEdit" X="-167" Y="2" Width="-2" Height="-2">
+      <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" />
+    </Edit>
+  </Panel>
+
+  <Panel Y="-30">
+    <Button Caption="List" X="0" Y="0" Width="75" OnClick="ListClicked" />
+    <Button Caption="Import" X="75" Y="0" Width="75" OnClick="ImportClicked" />
+    
+    <Button Caption="Okay" X="-150" Y="0" Width="-75" OnClick="OkayClicked" />
+    <Button Caption="Cancel" X="-75" Y="0" OnClick="CancelClicked" />
+  </Panel>
+</Form>
