@@ -113,12 +113,6 @@ TCPPort::Open()
     return false;
   }
 
-  if (!StartRxThread()){
-    close(listener_fd);
-    listener_fd = -1;
-    return false;
-  }
-
   return true;
 }
 

@@ -45,11 +45,6 @@ AndroidBluetoothPort::Open()
   if (helper == NULL)
     return false;
 
-  if (!StartRxThread()) {
-    Close();
-    return false;
-  }
-
   return true;
 }
 

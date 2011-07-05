@@ -52,7 +52,6 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  port->StopRxThread();
   port->SetRxTimeout(0x10000);
 
   char buffer[4096];

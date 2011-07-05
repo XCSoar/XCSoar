@@ -83,7 +83,7 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
 
   device = Driver->CreateOnPort(Com);
   QuietOperationEnvironment env;
-  if (!device->Open(env)) {
+  if (!device->Open(env) || !Com->StartRxThread()) {
     delete device;
     device = NULL;
     Com = NULL;

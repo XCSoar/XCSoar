@@ -158,13 +158,6 @@ SerialPort::Open()
   // SETRTS: Sends the RTS (request-to-send) signal.
   EscapeCommFunction(hPort, SETRTS);
 
-  if (!StartRxThread()){
-    CloseHandle(hPort);
-    hPort = INVALID_HANDLE_VALUE;
-
-    return false;
-  }
-
   return true;
 }
 

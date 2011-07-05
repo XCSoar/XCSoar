@@ -81,13 +81,6 @@ TTYPort::Open()
 
   SetBaudrate(baud_rate);
 
-  if (!StartRxThread()){
-    close(fd);
-    fd = -1;
-
-    return false;
-  }
-
   return true;
 }
 
