@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Name="frmTextEntry_Keyboard" Width="320" Height="240" Caption="Edit Text">
-  <Edit Name="prpText"    X="0" Y="2" Width="270" Height="22" CaptionWidth="1" ReadOnly="1" />
+  <Edit Name="prpText"    X="0" Y="2" Width="270" Height="22" ReadOnly="1" />
   <Button Name="btnBackspace" Caption="&lt;-"    X="272" Y="3" Width="36"  Height="20" OnClick="OnBackspace"/>
 
   <Button Name="btnOK" Caption="Ok" X="2" Y="185" Width="80" Height="40" OnClick="OnOk"/>

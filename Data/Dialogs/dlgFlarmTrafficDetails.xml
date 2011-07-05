@@ -14,8 +14,8 @@
   <Button Name="cmdSetAsTeamMate" Caption="Team" X="-61" Y="-30" Width="58" Height="28"/>
 
   <Edit Name="prpCallsign" Caption="Comp. ID" X="10" Y="20" Width="-38" Height="22" CaptionWidth="70" ReadOnly="1" />
-  <Edit Name="prpDirectionH" Caption=" " X="-83" Y="50" Height="22" CaptionWidth="1" ReadOnly="1" />
-  <Edit Name="prpDirectionV" Caption=" " X="-83" Y="70" Height="22" CaptionWidth="1" ReadOnly="1" />
+  <Edit Name="prpDirectionH" Caption=" " X="-83" Y="50" Height="22" ReadOnly="1" />
+  <Edit Name="prpDirectionV" Caption=" " X="-83" Y="70" Height="22" ReadOnly="1" />
   <Edit Name="prpDistance" Caption="Distance" X="10" Y="50" Width="-83" Height="22" CaptionWidth="70" ReadOnly="1" />
   <Edit Name="prpAltitude" Caption="Altitude" X="10" Y="70" Width="-83" Height="22" CaptionWidth="70" ReadOnly="1" />
   <Edit Name="prpVSpeed" Caption="Vario" X="10" Y="90" Height="22" CaptionWidth="70" ReadOnly="1" />

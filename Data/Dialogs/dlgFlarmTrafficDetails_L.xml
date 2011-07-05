@@ -14,8 +14,8 @@
   <Button Name="cmdCallsign" Caption="..." X="-38" Y="20" Width="36" Height="22" />
 
   <Edit Name="prpCallsign" Caption="Comp. ID" X="65" Y="20" Width="-40" Height="22" CaptionWidth="90" ReadOnly="1" />
-  <Edit Name="prpDirectionH" Caption=" " X="-83" Y="50" Height="22" CaptionWidth="1" ReadOnly="1" />
-  <Edit Name="prpDirectionV" Caption=" " X="-83" Y="70" Height="22" CaptionWidth="1" ReadOnly="1" />
+  <Edit Name="prpDirectionH" Caption=" " X="-83" Y="50" Height="22" ReadOnly="1" />
+  <Edit Name="prpDirectionV" Caption=" " X="-83" Y="70" Height="22" ReadOnly="1" />
   <Edit Name="prpDistance" Caption="Distance" X="65" Y="50" Width="-83" Height="22" CaptionWidth="90" ReadOnly="1" />
   <Edit Name="prpAltitude" Caption="Altitude" X="65" Y="70" Width="-83" Height="22" CaptionWidth="90" ReadOnly="1" />
   <Edit Name="prpVSpeed" Caption="Vario" X="65" Y="90" Height="22" CaptionWidth="90" ReadOnly="1" />
