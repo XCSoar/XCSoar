@@ -57,11 +57,18 @@ public:
   /**
    * Determine the value of the flag, and clear it before returning.
    */
-  bool GetAndClear() {
+  bool GetAndSet(bool new_value=true) {
     ScopeLock protect(mutex);
-    bool _value = value;
-    value = false;
-    return _value;
+    bool old_value = value;
+    value = new_value;
+    return old_value;
+  }
+
+  /**
+   * Determine the value of the flag, and clear it before returning.
+   */
+  bool GetAndClear() {
+    return GetAndSet(false);
   }
 
   /**
