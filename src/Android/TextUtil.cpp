@@ -70,7 +70,7 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
     midGetFontMetrics   = env->GetMethodID(textUtilClass, "getFontMetrics",
                                            "([I)V");
     midGetTextBounds    = env->GetMethodID(textUtilClass, "getTextBounds",
-                                           "(Ljava/lang/String;[I)V");
+                                           "(Ljava/lang/String;)[I");
     midGetTextTextureGL = env->GetMethodID(textUtilClass, "getTextTextureGL",
                                            "(Ljava/lang/String;IIIIII)I");
   }
@@ -100,14 +100,11 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
 std::pair<unsigned, unsigned>
 TextUtil::getTextBounds(const char *text) const
 {
-  jintArray paramExtent;
   jint extent[2];
 
-  paramExtent = env->NewIntArray(2);
-
-  env->CallVoidMethod(get(), midGetTextBounds,
-                      Java::String(env, text).get(),
-                      paramExtent);
+  jintArray paramExtent = (jintArray)
+    env->CallObjectMethod(get(), midGetTextBounds,
+                          Java::String(env, text).get());
   env->GetIntArrayRegion(paramExtent, 0, 2, extent);
 
   // free local references

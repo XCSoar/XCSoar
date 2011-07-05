@@ -62,19 +62,20 @@ public class TextUtil {
     metrics[4] = Math.round(paint.getFontSpacing());
   }
 
-  public void getTextBounds(String text, int[] extent) {
+  public int[] getTextBounds(String text) {
     /* we cannot simply use getTextBounds() here, because xcsoar will not
      * know where the baseline of the text is inside the texture
      */
     Paint.FontMetricsInt metrics = paint.getFontMetricsInt();
     extent[0] = Math.round(paint.measureText(text, 0, text.length()));
     extent[1] = metrics.descent - metrics.ascent;
+    return extent;
   }
 
   public int getTextTextureGL(String text,
                               int fg_red, int fg_green, int fg_blue,
                               int bg_red, int bg_green, int bg_blue) {
-    getTextBounds(text, extent);
+    getTextBounds(text);
 
     // draw text into a bitmap
     Bitmap bmp = Bitmap.createBitmap(extent[0], extent[1], Bitmap.Config.RGB_565);
