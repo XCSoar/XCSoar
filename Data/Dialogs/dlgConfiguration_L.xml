@@ -16,7 +16,7 @@
 
   <Tabbed Name="tabbed" X="70" Y="0" Width="0" Height="222">
     <Panel Name="frmSite">
-      <Edit Name="prpDataPath" X="2" Width="-2" Height="22" CaptionWidth="1"/>
+      <Edit Name="prpDataPath" X="2" Width="-2" Height="22"/>
 
       <Edit Name="prpMapFile" Caption="Map database" X="2" Width="-2" Height="22" CaptionWidth="100"
         Help="The name of the file (.xcm) containing terrain, topography, and optionally waypoints, their details and airspaces.">
@@ -382,20 +382,20 @@
         <Edit Name="prpPolarV1" Caption="Polar V" Expert="1" X="2" Y="18" Width="130" Height="22" CaptionWidth="80">
           <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarV2" Caption=" " Expert="1" X="132" Y="18" Width="50" Height="22" CaptionWidth="1">
+        <Edit Name="prpPolarV2" Caption=" " Expert="1" X="132" Y="18" Width="50" Height="22">
           <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarV3" Caption=" " Expert="1" X="182" Y="18" Width="50" Height="22" CaptionWidth="1">
+        <Edit Name="prpPolarV3" Caption=" " Expert="1" X="182" Y="18" Width="50" Height="22">
           <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
 
         <Edit Name="prpPolarW1" Caption="Polar W" Expert="1" X="2" Y="40" Width="130" Height="22" CaptionWidth="80">
           <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarW2" Caption=" " Expert="1" X="132" Y="40" Width="50" Height="22" CaptionWidth="1">
+        <Edit Name="prpPolarW2" Caption=" " Expert="1" X="132" Y="40" Width="50" Height="22">
           <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
-        <Edit Name="prpPolarW3" Caption=" " Expert="1" X="182" Y="40" Width="50" Height="22" CaptionWidth="1">
+        <Edit Name="prpPolarW3" Caption=" " Expert="1" X="182" Y="40" Width="50" Height="22">
           <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarConfigPanel::OnFieldData" />
         </Edit>
 

@@ -3,7 +3,7 @@
 <Form Name="frmTarget" Height="100" Caption="Target" Popup="1">
   <Button Name="btnOK" Caption="Close" X="-62" Y="2" Width="60" Height="33" OnClick="OnOKClicked" />
 
-  <Edit Name="prpTaskPoint" Caption="" X="1" Y="0" Width="174" Height="29" CaptionWidth="1"
+  <Edit Name="prpTaskPoint" Caption="" X="1" Y="0" Width="174" Height="29"
   Help="This sets the task point for review.">
     <DataField DataType="enum" OnDataAccess="OnTaskPointData"/>
   </Edit>

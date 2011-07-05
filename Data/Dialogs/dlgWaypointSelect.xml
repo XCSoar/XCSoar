@@ -4,15 +4,15 @@
   <Label X="2" Y="35" Width="75" Height="18" Caption="Name" />
   <Button Name="cmdFltName" Caption="*" X="2" Y="55" Width="75"  Height="22" />
 
-  <Edit Name="prpFltType" Caption="Type" X="100" Y="39" Width="98" Height="40" CaptionWidth="0">
+  <Edit Name="prpFltType" Caption="Type" X="100" Y="39" Width="98" Height="40" CaptionWidth="-1">
     <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
   </Edit>
 
-  <Edit Name="prpFltDistance" Caption="Distance" X="2" Y="81" Width="98" Height="40" CaptionWidth="0">
+  <Edit Name="prpFltDistance" Caption="Distance" X="2" Y="81" Width="98" Height="40" CaptionWidth="-1">
     <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
   </Edit>
 
-  <Edit Name="prpFltDirection" Caption="Direction" X="100" Y="81" Width="98" Height="40" CaptionWidth="0">
+  <Edit Name="prpFltDirection" Caption="Direction" X="100" Y="81" Width="98" Height="40" CaptionWidth="-1">
     <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
   </Edit>
 
