@@ -38,6 +38,7 @@ import java.nio.ShortBuffer;
 
 public class TextUtil {
   private Paint paint;
+  private Paint.FontMetricsInt metrics;
   private int[] extent = new int[2];
 
   public TextUtil(String family_name, int style, int textSize) {
@@ -47,6 +48,8 @@ public class TextUtil {
     paint.setTextSize(textSize);
     if ((style & Typeface.ITALIC) != 0 && !tf.isItalic())
       paint.setTextSkewX((float) -0.2);
+
+    metrics = paint.getFontMetricsInt();
   }
 
   public void getFontMetrics(int[] metrics) {
@@ -66,7 +69,6 @@ public class TextUtil {
     /* we cannot simply use getTextBounds() here, because xcsoar will not
      * know where the baseline of the text is inside the texture
      */
-    Paint.FontMetricsInt metrics = paint.getFontMetricsInt();
     extent[0] = Math.round(paint.measureText(text, 0, text.length()));
     extent[1] = metrics.descent - metrics.ascent;
     return extent;
