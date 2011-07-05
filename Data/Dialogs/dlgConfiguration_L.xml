@@ -412,7 +412,7 @@
 
       <Edit Name="prpPolarWingArea" Caption="Wing area" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Optional specification of the wing area.">
-        <DataField DataType="double" DisplayFormat="%.1f m^2" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="PolarConfigPanel::OnFieldData" />
+        <DataField DataType="double" DisplayFormat="%.1f m&#178;" EditFormat="%.1f" Min="0" Max="20" Step="0.1" OnDataAccess="PolarConfigPanel::OnFieldData" />
       </Edit>
 
       <Edit Name="prpMaxManoeuveringSpeed" Caption="V rough air" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
