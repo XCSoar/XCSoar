@@ -55,7 +55,7 @@ public:
   }
 
   /**
-   * Determine the value of the flag, and clear it before returning.
+   * Determine the value of the flag, and set it before returning.
    */
   bool GetAndSet(bool new_value=true) {
     ScopeLock protect(mutex);
