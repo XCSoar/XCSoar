@@ -38,6 +38,7 @@ import java.nio.ShortBuffer;
 
 public class TextUtil {
   private Paint paint;
+  private int[] extent = new int[2];
 
   public TextUtil(String family_name, int style, int textSize) {
     Typeface tf = Typeface.create(family_name, style);
@@ -73,7 +74,6 @@ public class TextUtil {
   public int getTextTextureGL(String text,
                               int fg_red, int fg_green, int fg_blue,
                               int bg_red, int bg_green, int bg_blue) {
-    int[] extent = new int[2];
     getTextBounds(text, extent);
 
     // draw text into a bitmap
