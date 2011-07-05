@@ -87,7 +87,8 @@ match_window(const SDL_Event &event, void *ctx)
 void
 EventQueue::purge(Window &window)
 {
-  purge(SDL_EVENTMASK(Window::EVENT_USER), match_window, (void *)&window);
+  purge(SDL_EVENTMASK(Window::EVENT_USER) | SDL_EVENTMASK(Window::EVENT_TIMER),
+        match_window, (void *)&window);
 }
 
 static bool
