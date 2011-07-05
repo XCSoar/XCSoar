@@ -33,6 +33,18 @@ class TopWindow;
 class SDLTimer;
 class Window;
 
+enum {
+  /**
+   * A "user" event for a #Window.
+   */
+  EVENT_USER = SDL_USEREVENT,
+
+  /**
+   * A "timer" event for a #Window.
+   */
+  EVENT_TIMER,
+};
+
 static inline bool
 is_user_input(const SDL_Event &event)
 {

@@ -38,8 +38,6 @@ Copyright_License {
 
 #ifdef ANDROID
 struct Event;
-#elif defined(ENABLE_SDL)
-#include <SDL_events.h>
 #endif
 
 class Canvas;
@@ -165,11 +163,6 @@ public:
 #ifdef ANDROID
   typedef AndroidTimer *timer_t;
 #elif defined(ENABLE_SDL)
-  enum {
-    EVENT_USER = SDL_USEREVENT,
-    EVENT_TIMER,
-  };
-
   friend class SDLTimer;
   typedef SDLTimer *timer_t;
 #else
