@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 01:31+0200\n"
-"PO-Revision-Date: 2011-06-28 15:07+0000\n"
-"Last-Translator: Linux-ubuntu david <Unknown>\n"
+"PO-Revision-Date: 2011-07-03 16:04+0000\n"
+"Last-Translator: thomas <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-06-28 19:52+0000\n"
-"X-Generator: Launchpad (build 13299)\n"
+"X-Launchpad-Export-Date: 2011-07-05 17:21+0000\n"
+"X-Generator: Launchpad (build 13333)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:309
@@ -408,7 +408,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:79
 #, no-c-format
 msgid "Thermal last 30 s"
-msgstr ""
+msgstr "Ascendance 30s"
 
 #: src/InfoBoxes/Content/Factory.cpp:80
 #, no-c-format
@@ -506,6 +506,9 @@ msgid ""
 "mode, pressing the up and down arrows adjusts the speed, and left and right "
 "turn the glider."
 msgstr ""
+"Vitesse sol mesurée par le GPS. Si cette indication est active en mode "
+"simulation, alors les flèches haut et bas modifient la vitesse, et les "
+"flèches gauche et droite tourne le planeur."
 
 #: src/InfoBoxes/Content/Factory.cpp:124
 #, no-c-format
@@ -523,6 +526,8 @@ msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
 msgstr ""
+"Gain/perte total(e) dans le dernier thermique divisé par le temps passé "
+"dedans."
 
 #: src/InfoBoxes/Content/Factory.cpp:133
 #, no-c-format
@@ -604,7 +609,7 @@ msgstr "Prochaine différence d'altitude"
 #: src/InfoBoxes/Content/Factory.cpp:170
 #, no-c-format
 msgid "WP AltD"
-msgstr ""
+msgstr "WP AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:171
 #, no-c-format
@@ -663,7 +668,7 @@ msgstr "Différence d'altitude en arrivée"
 #: src/InfoBoxes/Content/Factory.cpp:197
 #, no-c-format
 msgid "Fin AltD"
-msgstr ""
+msgstr "Fin AltD"
 
 #: src/InfoBoxes/Content/Factory.cpp:198
 #, no-c-format
@@ -829,6 +834,8 @@ msgid ""
 "Instantaneous vertical speed, as reported by the GPS, or the intelligent "
 "vario total energy vario value if connected to one."
 msgstr ""
+"Vitesse verticale instantanée, donnée par le GPS, ou par le vario à énergie "
+"totale si connecté."
 
 #: src/InfoBoxes/Content/Factory.cpp:286
 #, no-c-format
@@ -961,7 +968,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
 msgid "Indicated Airspeed reported by a supported external intelligent vario."
-msgstr ""
+msgstr "Vitesse air indiquée par un vario externe intelligent."
 
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
@@ -7323,7 +7330,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:222
 #: Data/Dialogs/dlgConfiguration.xml:222
 msgid "Thermal assistant"
-msgstr ""
+msgstr "Assistant Thermique"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:437
 #: Data/Dialogs/dlgConfiguration.xml:436
@@ -7337,7 +7344,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:670
 #: Data/Dialogs/dlgConfiguration.xml:669
 msgid "Units used for temperature."
-msgstr ""
+msgstr "Unité des températures"
 
 #: Data/Dialogs/dlgStatus.xml:40
 msgid "Valid start"
@@ -7442,6 +7449,8 @@ msgid ""
 "Manual\n"
 "Demo"
 msgstr ""
+"Manuel\n"
+"Demo"
 
 #: Data/Input/default.xci:584
 msgid "Trail"
@@ -7462,6 +7471,8 @@ msgid ""
 "Check\n"
 "list"
 msgstr ""
+"Check\n"
+"Liste"
 
 #: Data/Input/default.xci:891
 msgid "Weather"
@@ -7527,11 +7538,11 @@ msgstr ""
 
 #: Data/Input/default.xci:833
 msgid "FLARM Radar"
-msgstr ""
+msgstr "Radar FLARM"
 
 #: Data/Input/default.xci:539
 msgid "Zoom"
-msgstr ""
+msgstr "Zoom"
 
 #: Data/Input/default.xci:786
 msgid "Vario ASI zeroed"
@@ -7573,7 +7584,7 @@ msgstr ""
 
 #: Data/Input/default.xci:120
 msgid "Restarting comm. ports"
-msgstr ""
+msgstr "Redémarre les ports com."
 
 #: Data/Input/default.xci:233 Data/Input/default.xci:841
 msgid ""
@@ -7583,7 +7594,7 @@ msgstr ""
 
 #: Data/Input/default.xci:801
 msgid "Stored to EEPROM"
-msgstr ""
+msgstr "Enregistré dans l'EEPROM"
 
 #: Data/Input/default.xci:768
 msgid "Accel"
@@ -7591,31 +7602,37 @@ msgstr ""
 
 #: Data/Input/default.xci:933
 msgid "Credits"
-msgstr ""
+msgstr "Crédits"
 
 #: Data/Input/default.xci:226 Data/Input/default.xci:531
 msgid ""
 "Zoom\n"
 "Out"
-msgstr ""
+msgstr "Dézoomer"
 
 #: Data/Input/default.xci:816
 msgid ""
 "Climb\n"
 "Demo"
 msgstr ""
+"Montée\n"
+"Démo"
 
 #: Data/Input/default.xci:955
 msgid ""
 "Message\n"
 "Repeat"
 msgstr ""
+"Message\n"
+"Répeter"
 
 #: Data/Input/default.xci:906
 msgid ""
 "FLARM\n"
 "Details"
 msgstr ""
+"FLARM\n"
+"Details"
 
 #: Data/Input/default.xci:219 Data/Input/default.xci:524
 msgid ""
@@ -7633,10 +7650,12 @@ msgid ""
 "Settings\n"
 "Airspace"
 msgstr ""
+"Réglages\n"
+"Espaces aériens"
 
 #: Data/Input/default.xci:802
 msgid "Store"
-msgstr ""
+msgstr "Enregistrer"
 
 #: Data/Input/default.xci:130
 msgid ""
