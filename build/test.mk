@@ -652,6 +652,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunProgressWindow \
 	RunAnalysis \
 	RunAirspaceWarningDialog \
+	TestNotify \
 	DebugDisplay
 
 ifeq ($(TARGET),UNIX)
@@ -863,6 +864,7 @@ KEY_CODE_DUMPER_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
@@ -1342,6 +1344,7 @@ RUN_CANVAS_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Util/StringUtil.cpp \
@@ -1443,6 +1446,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Topography/TopographyFile.cpp \
 	$(SRC)/Topography/TopographyStore.cpp \
 	$(SRC)/Topography/TopographyRenderer.cpp \
@@ -1506,6 +1510,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Util/StringUtil.cpp \
@@ -1541,6 +1546,7 @@ $(RUN_DIALOG_BIN): $(RUN_DIALOG_OBJS) $(RUN_DIALOG_LDADD) | $(TARGET_BIN_DIR)/di
 RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/Layout.cpp \
@@ -1587,6 +1593,7 @@ RUN_PROGRESS_WINDOW_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/ProgressBar.cpp \
 	$(SRC)/Screen/Layout.cpp \
@@ -1663,6 +1670,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
@@ -1755,6 +1763,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
@@ -1859,6 +1868,27 @@ $(RUN_TASK_EDITOR_DIALOG_BIN): LDLIBS += $(SCREEN_LDLIBS)
 $(RUN_TASK_EDITOR_DIALOG_BIN): $(RUN_TASK_EDITOR_DIALOG_OBJS) $(RUN_TASK_EDITOR_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_NOTIFY_SOURCES = \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/Notify.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/TestNotify.cpp
+TEST_NOTIFY_OBJS = $(call SRC_TO_OBJ,$(TEST_NOTIFY_SOURCES))
+TEST_NOTIFY_BIN = $(TARGET_BIN_DIR)/TestNotify$(TARGET_EXEEXT)
+TEST_NOTIFY_LDADD = \
+	$(SCREEN_LIBS) \
+	$(TESTLIBS1)
+$(TEST_NOTIFY_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(TEST_NOTIFY_BIN): LDLIBS += $(SCREEN_LDLIBS)
+$(TEST_NOTIFY_BIN): $(TEST_NOTIFY_OBJS) $(TEST_NOTIFY_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(PROFILE_LDLIBS) $(ZZIP_LDFLAGS) -o $@
 
 FEED_NMEA_SOURCES = \
 	$(TEST_SRC_DIR)/FeedNMEA.cpp

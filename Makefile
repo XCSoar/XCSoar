@@ -453,6 +453,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Thread/WorkerThread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Notify.cpp \
 	\
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \

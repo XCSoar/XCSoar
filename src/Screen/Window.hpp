@@ -331,6 +331,11 @@ public:
   void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
            int left, int top, unsigned width, unsigned height,
            const WindowStyle window_style=WindowStyle());
+
+  /**
+   * Create a message-only window.
+   */
+  void CreateMessageWindow();
 #endif
 
 #ifndef ENABLE_SDL

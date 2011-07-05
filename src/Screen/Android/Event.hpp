@@ -33,6 +33,7 @@ Copyright_License {
 class TopWindow;
 class Window;
 class AndroidTimer;
+class Notify;
 
 struct Event {
   enum type {
@@ -40,6 +41,12 @@ struct Event {
     QUIT,
     TIMER,
     USER,
+
+    /**
+     * @see #Notify
+     */
+    NOTIFY,
+
     KEY_DOWN,
     KEY_UP,
     MOUSE_MOTION,
@@ -120,6 +127,7 @@ public:
   void purge(bool (*match)(const Event &event, void *ctx), void *ctx);
 
   void purge(enum Event::type type);
+  void purge(Notify &notify);
   void purge(Window &window);
   void purge(AndroidTimer &timer);
 };

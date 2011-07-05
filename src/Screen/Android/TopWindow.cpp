@@ -110,6 +110,7 @@ TopWindow::on_event(const Event &event)
   case Event::QUIT:
   case Event::TIMER:
   case Event::USER:
+  case Event::NOTIFY:
     break;
 
   case Event::KEY_DOWN:

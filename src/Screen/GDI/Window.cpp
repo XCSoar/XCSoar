@@ -62,6 +62,19 @@ Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
 }
 
 void
+Window::CreateMessageWindow()
+{
+  hWnd = ::CreateWindowEx(0, _T("PaintWindow"), NULL, 0, 0, 0, 0, 0,
+#ifdef _WIN32_WCE
+                          NULL,
+#else
+                          HWND_MESSAGE,
+#endif
+                          NULL, NULL, this);
+  assert(hWnd != NULL);
+}
+
+void
 Window::created(HWND _hWnd)
 {
   assert(hWnd == NULL);

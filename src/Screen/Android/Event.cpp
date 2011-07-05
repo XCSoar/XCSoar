@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/Android/Event.hpp"
 #include "Screen/TopWindow.hpp"
+#include "Thread/Notify.hpp"
 
 void
 EventQueue::push(const Event &event)
@@ -96,6 +97,18 @@ EventQueue::purge(enum Event::type type)
 }
 
 static bool
+match_notify(const Event &event, void *ctx)
+{
+  return event.type == Event::NOTIFY && event.ptr == ctx;
+}
+
+void
+EventQueue::purge(Notify &notify)
+{
+  purge(match_notify, (void *)&notify);
+}
+
+static bool
 match_window(const Event &event, void *ctx)
 {
   return event.type == Event::USER && event.ptr == ctx;
@@ -148,6 +161,9 @@ EventLoop::dispatch(const Event &event)
   } else if (event.type == Event::TIMER) {
     AndroidTimer *timer = (AndroidTimer *)event.ptr;
     timer->run();
+  } else if (event.type == Event::NOTIFY) {
+    Notify *notify = (Notify *)event.ptr;
+    notify->RunNotification();
   } else if (event.type != Event::NOP)
     top_window.on_event(event);
 }

@@ -32,6 +32,7 @@ Copyright_License {
 class TopWindow;
 class SDLTimer;
 class Window;
+class Notify;
 
 enum {
   /**
@@ -43,6 +44,11 @@ enum {
    * A "timer" event for a #Window.
    */
   EVENT_TIMER,
+
+  /**
+   * An event for class #Notify.
+   */
+  EVENT_NOTIFY,
 };
 
 static inline bool
@@ -76,6 +82,11 @@ namespace EventQueue {
    */
   void purge(Uint32 mask,
              bool (*match)(const SDL_Event &event, void *ctx), void *ctx);
+
+  /**
+   * Purge all events for this #Notify from the event queue.
+   */
+  void purge(Notify &notify);
 
   /**
    * Purge all events for this Window from the event queue.

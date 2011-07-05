@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Screen/SDL/Event.hpp"
 #include "Thread/Debug.hpp"
+#include "Thread/Notify.hpp"
 #include "Asset.hpp"
 
 #include "Screen/TopWindow.hpp"
@@ -57,6 +58,9 @@ EventLoop::dispatch(SDL_Event &event)
     Window *window = (Window *)event.user.data1;
     SDLTimer *timer = (SDLTimer *)event.user.data2;
     window->on_timer(timer);
+  } else if (event.type == EVENT_NOTIFY && event.user.data1 != NULL) {
+    Notify *notify = (Notify *)event.user.data1;
+    notify->RunNotification();
   } else
     top_window.on_event(event);
 }
@@ -74,6 +78,18 @@ EventQueue::purge(Uint32 mask,
     if (!match(events[i], ctx))
       std::copy(events + i + 1, events + count--, events + i);
   SDL_PeepEvents(events, count, SDL_ADDEVENT, mask);
+}
+
+static bool
+match_notify(const SDL_Event &event, void *ctx)
+{
+  return event.type == EVENT_NOTIFY && event.user.data1 == ctx;
+}
+
+void
+EventQueue::purge(Notify &notify)
+{
+  purge(SDL_EVENTMASK(EVENT_NOTIFY), match_notify, (void *)&notify);
 }
 
 static bool
