@@ -54,16 +54,15 @@ PolarInfo::CalculateCoefficients() const
 }
 
 bool
-PolarInfo::IsValid(const PolarCoefficients &coeff)
+PolarCoefficients::IsValid() const
 {
-  return positive(coeff.a) && negative(coeff.b) && positive(coeff.c);
+  return positive(a) && negative(b) && positive(c);
 }
 
 bool
 PolarInfo::IsValid() const
 {
-  PolarCoefficients pc = CalculateCoefficients();
-  return IsValid(pc);
+  return CalculateCoefficients().IsValid();
 }
 
 void
@@ -78,7 +77,7 @@ bool
 PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
 {
   PolarCoefficients pc = CalculateCoefficients();
-  if (!IsValid(pc))
+  if (!pc.IsValid())
     return false;
 
   polar.ideal_polar_a = pc.a;

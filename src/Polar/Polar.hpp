@@ -33,6 +33,8 @@ class TLineReader;
 struct PolarCoefficients
 {
   fixed a, b, c;
+
+  bool IsValid() const;
 };
 
 /**
@@ -71,7 +73,6 @@ struct PolarInfo
                                                  fixed w1, fixed w2, fixed w3);
 
   bool IsValid() const;
-  static bool IsValid(const PolarCoefficients &coeff);
 
   void Init();
 };
