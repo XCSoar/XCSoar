@@ -40,7 +40,7 @@ public class TextUtil {
   private Paint paint;
   private Paint.FontMetricsInt metrics;
   private int[] extent = new int[2];
-  private int[] id = new int[1];
+  private int[] id = new int[3];
 
   public TextUtil(String family_name, int style, int textSize) {
     Typeface tf = Typeface.create(family_name, style);
@@ -75,9 +75,9 @@ public class TextUtil {
     return extent;
   }
 
-  public int getTextTextureGL(String text,
-                              int fg_red, int fg_green, int fg_blue,
-                              int bg_red, int bg_green, int bg_blue) {
+  public int[] getTextTextureGL(String text,
+                                int fg_red, int fg_green, int fg_blue,
+                                int bg_red, int bg_green, int bg_blue) {
     getTextBounds(text);
 
     // draw text into a bitmap
@@ -109,7 +109,9 @@ public class TextUtil {
                       GL_RGB, GL_UNSIGNED_SHORT_5_6_5, pixels);
     }
 
-    return id[0];
+    id[1] = extent[0];
+    id[2] = extent[1];
+    return id;
   }
 
   private int next_power_of_two(int i) {

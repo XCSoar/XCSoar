@@ -49,8 +49,16 @@ public:
   gcc_pure
   PixelSize getTextBounds(const char *text) const;
 
-  int getTextTextureGL(const char *text, int fr, int fg, int fb,
-                       int br, int bg, int bb) const;
+  struct Texture {
+    unsigned id;
+    unsigned width, height;
+
+    Texture(unsigned _id, unsigned _width, unsigned _height)
+      :id(_id), width(_width), height(_height) {}
+  };
+
+  Texture getTextTextureGL(const char *text, int fr, int fg, int fb,
+                           int br, int bg, int bb) const;
 
   unsigned get_height() const {
     return height;

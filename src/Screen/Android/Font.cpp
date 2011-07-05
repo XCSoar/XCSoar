@@ -87,11 +87,14 @@ Font::text_texture_gl(const TCHAR *text, PixelSize &size,
   if (!textUtilObject)
     return 0;
 
-  size = TextSize(text);
-  if (size.cx == 0 || size.cy == 0)
+  if (*text == _T('\0'))
     return 0;
 
-  return textUtilObject->getTextTextureGL(text,
-                                          fg.red(), fg.green(), fg.blue(),
-                                          bg.red(), bg.green(), bg.blue());
+  const TextUtil::Texture texture =
+    textUtilObject->getTextTextureGL(text,
+                                     fg.red(), fg.green(), fg.blue(),
+                                     bg.red(), bg.green(), bg.blue());
+  size.cx = texture.width;
+  size.cy = texture.height;
+  return texture.id;
 }
