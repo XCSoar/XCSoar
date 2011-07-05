@@ -52,8 +52,12 @@ ReadCompaqID(void)
   if(strAssetNumber[0] != '\0')
     return;
 
-  CreateProcess(_T("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
-                     FALSE, 0, NULL, NULL, NULL, &pi);
+  if (CreateProcess(_T("\\windows\\CreateAssetFile.exe"), NULL, NULL, NULL,
+                    FALSE, 0, NULL, NULL, NULL, &pi)) {
+    WaitForSingleObject(pi.hProcess, 1000);
+    CloseHandle(pi.hProcess);
+    CloseHandle(pi.hThread);
+  }
 
   FILE *file = _tfopen(_T("\\windows\\cpqAssetData.dat"), _T("rb"));
   if (file == NULL) {

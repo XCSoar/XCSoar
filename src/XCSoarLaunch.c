@@ -325,8 +325,13 @@ LaunchXCSoar(HWND hWnd, const TCHAR *CommandLine)
   _sntprintf(buffer, 256, _T("\"%s\" %s"), FileName, CommandLine);
 
   PROCESS_INFORMATION pi;
-  return CreateProcess(FileName, buffer, NULL, NULL, false,
-                       0, NULL, NULL, NULL, &pi);
+  if (!CreateProcess(FileName, buffer, NULL, NULL, false,
+                     0, NULL, NULL, NULL, &pi))
+    return false;
+
+  CloseHandle(pi.hProcess);
+  CloseHandle(pi.hThread);
+  return true;
 }
 
 /* ****************************************************************************

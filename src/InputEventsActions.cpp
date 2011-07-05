@@ -1411,6 +1411,8 @@ InputEvents::eventRun(const TCHAR *misc)
 
   // wait for program to finish!
   ::WaitForSingleObject(pi.hProcess, INFINITE);
+  ::CloseHandle(pi.hProcess);
+  ::CloseHandle(pi.hThread);
 
   #else /* !WIN32 */
   system(misc);
