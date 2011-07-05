@@ -29,7 +29,8 @@ Copyright_License {
 #include <cstdio>
 
 PolarCoefficients
-PolarInfo::CalculateCoefficients() const
+PolarInfo::CalculateCoefficients(fixed v1, fixed v2, fixed v3,
+                                 fixed w1, fixed w2, fixed w3)
 {
   PolarCoefficients pc;
 
@@ -44,6 +45,12 @@ PolarInfo::CalculateCoefficients() const
   pc.c = -(w3 + pc.a * v3 * v3 + pc.b * v3);
 
   return pc;
+}
+
+PolarCoefficients
+PolarInfo::CalculateCoefficients() const
+{
+  return CalculateCoefficients(v1, v2, v3, w1, w2, w3);
 }
 
 bool

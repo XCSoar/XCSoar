@@ -67,6 +67,9 @@ struct PolarInfo
 
   PolarCoefficients CalculateCoefficients() const;
 
+  static PolarCoefficients CalculateCoefficients(fixed v1, fixed v2, fixed v3,
+                                                 fixed w1, fixed w2, fixed w3);
+
   bool IsValid() const;
   static bool IsValid(const PolarCoefficients &coeff);
 
