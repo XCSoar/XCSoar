@@ -40,6 +40,7 @@ public class TextUtil {
   private Paint paint;
   private Paint.FontMetricsInt metrics;
   private int[] extent = new int[2];
+  private int[] id = new int[1];
 
   public TextUtil(String family_name, int style, int textSize) {
     Typeface tf = Typeface.create(family_name, style);
@@ -91,7 +92,6 @@ public class TextUtil {
     bmp.copyPixelsToBuffer(pixels);
 
     // create OpenGL texture
-    int[] id = new int[1];
     int width2 = next_power_of_two(extent[0]);
     int height2 = next_power_of_two(extent[1]);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
