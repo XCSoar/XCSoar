@@ -35,6 +35,8 @@ struct PolarCoefficients
   fixed a, b, c;
 
   bool IsValid() const;
+  static PolarCoefficients FromVW(fixed v1, fixed v2, fixed v3,
+                                  fixed w1, fixed w2, fixed w3);
 };
 
 /**
@@ -68,9 +70,6 @@ struct PolarInfo
   bool CopyIntoGlidePolar(GlidePolar &polar) const;
 
   PolarCoefficients CalculateCoefficients() const;
-
-  static PolarCoefficients CalculateCoefficients(fixed v1, fixed v2, fixed v3,
-                                                 fixed w1, fixed w2, fixed w3);
 
   bool IsValid() const;
 
