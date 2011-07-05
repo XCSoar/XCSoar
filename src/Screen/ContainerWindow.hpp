@@ -68,6 +68,7 @@ protected:
   virtual bool on_mouse_down(int x, int y);
   virtual bool on_mouse_up(int x, int y);
   virtual bool on_mouse_double(int x, int y);
+  virtual bool on_mouse_wheel(int x, int y, int delta);
   virtual void on_paint(Canvas &canvas);
 #else /* !ENABLE_SDL */
   virtual LRESULT on_message(HWND hWnd, UINT message,
