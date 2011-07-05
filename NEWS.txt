@@ -20,6 +20,10 @@ Version 6.2 - not yet released
 Version 6.1.3 - not yet released
 * calculations
   - reduce memory usage
+* user interface
+  - translation updates
+  - new translation: Japanese
+  - support mouse wheel on Linux
 
 Version 6.1.2 - 2011/06/28
 * devices

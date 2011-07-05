@@ -274,6 +274,18 @@ ContainerWindow::on_mouse_double(int x, int y)
   return PaintWindow::on_mouse_double(x, y);
 }
 
+bool
+ContainerWindow::on_mouse_wheel(int x, int y, int delta)
+{
+  Window *child = event_child_at(x, y);
+  if (child != NULL) {
+    child->on_mouse_wheel(x - child->get_left(), y - child->get_top(), delta);
+    return true;
+  }
+
+  return PaintWindow::on_mouse_wheel(x, y, delta);
+}
+
 void
 ContainerWindow::on_paint(Canvas &canvas)
 {

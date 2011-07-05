@@ -215,12 +215,22 @@ TopWindow::on_event(const SDL_Event &event)
     return on_mouse_move(event.motion.x, event.motion.y, 0);
 
   case SDL_MOUSEBUTTONDOWN:
+    if (event.button.button == SDL_BUTTON_WHEELUP)
+      return on_mouse_wheel(event.button.x, event.button.y, 1);
+    else if (event.button.button == SDL_BUTTON_WHEELDOWN)
+      return on_mouse_wheel(event.button.x, event.button.y, -1);
+
     static PeriodClock double_click;
     return double_click.check_always_update(300)
       ? on_mouse_down(event.button.x, event.button.y)
       : on_mouse_double(event.button.x, event.button.y);
 
   case SDL_MOUSEBUTTONUP:
+    if (event.button.button == SDL_BUTTON_WHEELUP ||
+        event.button.button == SDL_BUTTON_WHEELDOWN)
+      /* the wheel has already been handled in SDL_MOUSEBUTTONDOWN */
+      return false;
+
     return on_mouse_up(event.button.x, event.button.y);
   }
 

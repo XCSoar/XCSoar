@@ -148,6 +148,13 @@ class NativeView extends SurfaceView
     egl = (EGL10)EGLContext.getEGL();
     display = egl.eglGetDisplay(EGL10.EGL_DEFAULT_DISPLAY);
 
+    Log.d(TAG, "EGL vendor: " +
+          egl.eglQueryString(display, EGL10.EGL_VENDOR));
+    Log.d(TAG, "EGL version: " +
+          egl.eglQueryString(display, EGL10.EGL_VERSION));
+    Log.d(TAG, "EGL extensions: " +
+          egl.eglQueryString(display, EGL10.EGL_EXTENSIONS));
+
     int[] version = new int[2];
     egl.eglInitialize(display, version);
 
@@ -210,7 +217,10 @@ class NativeView extends SurfaceView
     egl.eglMakeCurrent(display, surface, surface, context);
 
     gl = (GL10)context.getGL();
+    Log.d(TAG, "OpenGL vendor: " + gl.glGetString(GL10.GL_VENDOR));
+    Log.d(TAG, "OpenGL version: " + gl.glGetString(GL10.GL_VERSION));
     Log.d(TAG, "OpenGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
+    Log.d(TAG, "OpenGL extensions: " + gl.glGetString(GL10.GL_EXTENSIONS));
   }
 
   /**

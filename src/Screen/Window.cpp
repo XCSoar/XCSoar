@@ -194,7 +194,7 @@ Window::on_mouse_double(int x, int y)
 }
 
 bool
-Window::on_mouse_wheel(int delta)
+Window::on_mouse_wheel(int x, int y, int delta)
 {
   return false;
 }
