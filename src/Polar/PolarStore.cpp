@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-PolarStore::InternalPolarInfo::Transfer(PolarInfo &polar) const
+PolarStore::Item::Transfer(PolarInfo &polar) const
 {
   polar.name = name;
   polar.reference_mass = fixed(reference_mass);
@@ -47,7 +47,7 @@ PolarStore::InternalPolarInfo::Transfer(PolarInfo &polar) const
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
-static const PolarStore::InternalPolarInfo InternalPolars[] =
+static const PolarStore::Item InternalPolars[] =
 {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 41.666, 100 },
   { _T("604 Kestrel"), 570, 100, 112.97, -0.72, 150.64, -1.42, 207.13, -4.1, 16.26, 0.0, 114 },

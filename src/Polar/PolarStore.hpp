@@ -32,7 +32,7 @@ struct PolarInfo;
 
 namespace PolarStore
 {
-  struct InternalPolarInfo
+  struct Item
   {
     const TCHAR* name;   /**< Name of the glider type */
 
