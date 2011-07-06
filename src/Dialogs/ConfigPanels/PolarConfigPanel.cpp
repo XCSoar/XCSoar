@@ -83,15 +83,22 @@ SetLiftFieldStepAndMax(const TCHAR *control)
 }
 
 static void
+UpdatePolarPoints(fixed v1, fixed v2, fixed v3,
+                  fixed w1, fixed w2, fixed w3)
+{
+  LoadFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed, v1);
+  LoadFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed, v2);
+  LoadFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed, v3);
+
+  LoadFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, w1);
+  LoadFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, w2);
+  LoadFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, w3);
+}
+
+static void
 UpdatePolarFields(const PolarInfo &polar)
 {
-  LoadFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed, polar.v1);
-  LoadFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed, polar.v2);
-  LoadFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed, polar.v3);
-
-  LoadFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, polar.w1);
-  LoadFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, polar.w2);
-  LoadFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, polar.w3);
+  UpdatePolarPoints(polar.v1, polar.v2, polar.v3, polar.w1, polar.w2, polar.w3);
 
   LoadFormProperty(*wf, _T("prpPolarReferenceMass"), polar.reference_mass);
   LoadFormProperty(*wf, _T("prpPolarDryMass"),
@@ -185,16 +192,10 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
   if (result >= 0) {
     const PolarStore::Item &item = PolarStore::GetItem(list[result].DataFieldIndex);
 
-    LoadFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed,
-                     Units::ToSysUnit(fixed(item.v1), unKiloMeterPerHour));
-    LoadFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed,
-                     Units::ToSysUnit(fixed(item.v2), unKiloMeterPerHour));
-    LoadFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed,
-                     Units::ToSysUnit(fixed(item.v3), unKiloMeterPerHour));
-
-    LoadFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, fixed(item.w1));
-    LoadFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, fixed(item.w2));
-    LoadFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, fixed(item.w3));
+    UpdatePolarPoints(Units::ToSysUnit(fixed(item.v1), unKiloMeterPerHour),
+                      Units::ToSysUnit(fixed(item.v2), unKiloMeterPerHour),
+                      Units::ToSysUnit(fixed(item.v3), unKiloMeterPerHour),
+                      fixed(item.w1), fixed(item.w2), fixed(item.w3));
 
     LoadFormProperty(*wf, _T("prpPolarReferenceMass"), fixed(item.reference_mass));
     LoadFormProperty(*wf, _T("prpPolarDryMass"), fixed(item.reference_mass));
@@ -249,13 +250,7 @@ PolarConfigPanel::OnLoadFromFile(WndButton &button)
     PolarInfo polar;
     PolarGlue::LoadFromFile(polar, path);
 
-    LoadFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed, polar.v1);
-    LoadFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed, polar.v2);
-    LoadFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed, polar.v3);
-
-    LoadFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, polar.w1);
-    LoadFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, polar.w2);
-    LoadFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, polar.w3);
+    UpdatePolarPoints(polar.v1, polar.v2, polar.v3, polar.w1, polar.w2, polar.w3);
 
     LoadFormProperty(*wf, _T("prpPolarReferenceMass"), polar.reference_mass);
     LoadFormProperty(*wf, _T("prpPolarDryMass"), polar.reference_mass);
