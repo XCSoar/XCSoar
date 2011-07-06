@@ -271,9 +271,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   if (!LoadProfile())
     return false;
 
-  PlaneGlue::FromProfile(SetSettingsComputer().plane);
-  PlaneGlue::Synchronize(SettingsComputer().plane, SetSettingsComputer());
-
   operation.SetText(_("Initialising"));
 
   LoadDisplayOrientation();
@@ -358,6 +355,9 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   polar.CopyIntoGlidePolar(gp);
   SetSettingsComputer().SafetySpeed = fixed(polar.v_no);
   task_manager->set_glide_polar(gp);
+
+  PlaneGlue::FromProfile(SetSettingsComputer().plane);
+  PlaneGlue::Synchronize(SettingsComputer().plane, SetSettingsComputer());
 
   task_manager->set_contest(SettingsComputer().contest);
 
