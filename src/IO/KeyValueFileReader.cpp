@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "KeyValueFileReader.hpp"
 #include "Util/StringUtil.hpp"
-#include "FileLineReader.hpp"
+#include "LineReader.hpp"
 
 bool
 KeyValueFileReader::Read(KeyValuePair &pair)

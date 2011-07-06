@@ -32,15 +32,15 @@ struct KeyValuePair
   TCHAR *value;
 };
 
-class FileLineReader;
+class TLineReader;
 
 class KeyValueFileReader
 {
 protected:
-  FileLineReader &reader;
+  TLineReader &reader;
 
 public:
-  KeyValueFileReader(FileLineReader &_reader): reader(_reader) {}
+  KeyValueFileReader(TLineReader &_reader): reader(_reader) {}
   bool Read(KeyValuePair &pair);
 };
 
