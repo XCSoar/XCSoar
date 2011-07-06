@@ -121,19 +121,13 @@ UpdatePolarFields(const PolarInfo &polar)
 }
 
 static void
-SetPolarTitle(const TCHAR* title)
+UpdatePolarTitle()
 {
   TCHAR caption[255];
   _tcscpy(caption,  _("Polar"));
   _tcscat(caption, _T(": "));
-  _tcscat(caption, title);
+  _tcscat(caption, CommonInterface::SettingsComputer().plane.polar_name);
   ((WndFrame *)wf->FindByName(_T("lblPolar")))->SetCaption(caption);
-}
-
-static void
-UpdatePolarTitle()
-{
-  SetPolarTitle(CommonInterface::SettingsComputer().plane.polar_name);
 }
 
 static bool
