@@ -25,11 +25,14 @@ Copyright_License {
 #define PLANE_GLUE_HPP
 
 struct Plane;
+struct SETTINGS_COMPUTER;
 
 namespace PlaneGlue
 {
   void FromProfile(Plane &plane);
   void ToProfile(const Plane &plane);
+
+  void Synchronize(const Plane &plane, SETTINGS_COMPUTER &settings);
 }
 
 #endif

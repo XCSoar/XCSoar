@@ -314,7 +314,7 @@ PolarConfigPanel::Init(WndForm *_wf)
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
   LoadFormProperty(*wf, _T("prpHandicap"),
-                   settings_computer.contest_handicap);
+                   settings_computer.plane.handicap);
 
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                    settings_computer.plane.dump_time);
@@ -328,8 +328,8 @@ PolarConfigPanel::Save()
   bool changed = false;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
 
-  changed |= SaveFormProperty(*wf, _T("prpHandicap"), szProfileHandicap,
-                              settings_computer.contest_handicap);
+  changed |= SaveFormProperty(*wf, _T("prpHandicap"),
+                              settings_computer.plane.handicap);
 
   changed |= SaveFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                               settings_computer.plane.dump_time);
@@ -347,8 +347,10 @@ PolarConfigPanel::Save()
     }
   }
 
-  if (changed)
+  if (changed) {
     PlaneGlue::ToProfile(settings_computer.plane);
+    PlaneGlue::Synchronize(settings_computer.plane, settings_computer);
+  }
 
   return changed;
 }

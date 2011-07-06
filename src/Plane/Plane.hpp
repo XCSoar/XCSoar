@@ -35,6 +35,8 @@ struct Plane
 
   /** Time to drain full ballast (s) */
   unsigned dump_time;
+
+  unsigned handicap;
 };
 
 #endif

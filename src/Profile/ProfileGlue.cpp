@@ -309,8 +309,6 @@ Profile::Use()
         settings_computer.contest = OLC_League; // Handle out-dated Sprint rule in profile
   }
 
-  Get(szProfileHandicap,
-      settings_computer.contest_handicap);
   Get(szProfileEnableExternalTriggerCruise,
       settings_computer.EnableExternalTriggerCruise);
 

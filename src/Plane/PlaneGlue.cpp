@@ -26,6 +26,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarGlue.hpp"
+#include "SettingsComputer.hpp"
 
 void
 PlaneGlue::FromProfile(Plane &plane)
@@ -41,6 +42,9 @@ PlaneGlue::FromProfile(Plane &plane)
 
   if (!Profile::Get(szProfileBallastSecsToEmpty, plane.dump_time))
     plane.dump_time = 120;
+
+  if (!Profile::Get(szProfileHandicap, plane.handicap))
+    plane.handicap = 100;
 }
 
 void
@@ -51,4 +55,11 @@ PlaneGlue::ToProfile(const Plane &plane)
   Profile::Set(szProfileAircraftType, plane.type);
 
   Profile::Set(szProfileBallastSecsToEmpty, plane.dump_time);
+  Profile::Set(szProfileHandicap, plane.handicap);
+}
+
+void
+PlaneGlue::Synchronize(const Plane &plane, SETTINGS_COMPUTER &settings)
+{
+  settings.contest_handicap = plane.handicap;
 }
