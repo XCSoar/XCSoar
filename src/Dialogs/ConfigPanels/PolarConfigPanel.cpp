@@ -177,14 +177,34 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
   int result = ComboPicker(XCSoarInterface::main_window, _("Load Polar"), list, NULL);
   if (result >= 0) {
     const PolarStore::Item &item = PolarStore::GetItem(list[result].DataFieldIndex);
-    UpdatePolarFields(item.ToPolarInfo());
+
+    LoadFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed,
+                     Units::ToSysUnit(fixed(item.v1), unKiloMeterPerHour));
+    LoadFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed,
+                     Units::ToSysUnit(fixed(item.v2), unKiloMeterPerHour));
+    LoadFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed,
+                     Units::ToSysUnit(fixed(item.v3), unKiloMeterPerHour));
+
+    LoadFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, fixed(item.w1));
+    LoadFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, fixed(item.w2));
+    LoadFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, fixed(item.w3));
+
+    LoadFormProperty(*wf, _T("prpPolarReferenceMass"), fixed(item.reference_mass));
+    LoadFormProperty(*wf, _T("prpPolarDryMass"), fixed(item.reference_mass));
+    LoadFormProperty(*wf, _T("prpPolarMaxBallast"), fixed(item.max_ballast));
+
+    if (item.wing_area > 0.0)
+      LoadFormProperty(*wf, _T("prpPolarWingArea"), fixed(item.wing_area));
+
+    if (item.v_no > 0.0)
+      LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), fixed(item.v_no));
+
+    if (item.contest_handicap > 0)
+      LoadFormProperty(*wf, _T("prpHandicap"), item.contest_handicap);
 
     Profile::Set(szProfilePolarName, item.name);
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
-
-    if (item.contest_handicap > 0)
-      LoadFormProperty(*wf, _T("prpHandicap"), item.contest_handicap);
   }
 }
 
