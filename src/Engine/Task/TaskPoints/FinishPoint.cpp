@@ -28,7 +28,7 @@ FinishPoint::FinishPoint(ObservationZonePoint* _oz,
                          const Waypoint & wp,
                          const TaskBehaviour& tb,
                          const OrderedTaskBehaviour& to) : 
-  OrderedTaskPoint(FINISH, _oz, wp, tb, to),
+  OrderedTaskPoint(FINISH, _oz, wp, tb, to, true),
   fai_finish_height(fixed_zero)
 { 
 }
