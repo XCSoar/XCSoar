@@ -44,8 +44,6 @@ struct PolarCoefficients
  */
 struct PolarInfo
 {
-  const TCHAR* name;   /**< Name of the glider type */
-
   // Using doubles here to simplify the code in PolarStore.cpp
   //
   fixed reference_mass; /**< Reference Mass (kg) */

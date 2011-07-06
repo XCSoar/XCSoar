@@ -32,7 +32,6 @@ PolarStore::Item::ToPolarInfo() const
 {
   PolarInfo polar;
 
-  polar.name = name;
   polar.reference_mass = fixed(reference_mass);
   polar.dry_mass = fixed_zero;
   polar.max_ballast = fixed(max_ballast);
