@@ -97,8 +97,7 @@ TestBuiltInPolars()
 {
   unsigned count = PolarStore::Count();
   for(unsigned i = 0; i < count; i++) {
-    PolarInfo polar;
-    PolarStore::GetItem(i).Transfer(polar);
+    PolarInfo polar = PolarStore::GetItem(i).ToPolarInfo();
 #ifdef _UNICODE
   size_t wide_length = _tcslen(PolarStore::GetItem(i).name);
   char narrow[wide_length * 4 + 1];

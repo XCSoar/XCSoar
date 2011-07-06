@@ -66,7 +66,7 @@ namespace PolarStore
     /** Contest handicap, 0 if unknown */
     unsigned contest_handicap;
 
-    void Transfer(PolarInfo &polar) const;
+    PolarInfo ToPolarInfo() const;
   };
 
   const Item &GetItem(unsigned i);

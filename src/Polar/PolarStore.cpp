@@ -27,9 +27,11 @@ Copyright_License {
 
 #include <assert.h>
 
-void
-PolarStore::Item::Transfer(PolarInfo &polar) const
+PolarInfo
+PolarStore::Item::ToPolarInfo() const
 {
+  PolarInfo polar;
+
   polar.name = name;
   polar.reference_mass = fixed(reference_mass);
   polar.dry_mass = fixed_zero;
@@ -42,6 +44,8 @@ PolarStore::Item::Transfer(PolarInfo &polar) const
   polar.w3 = fixed(w3);
   polar.wing_area = fixed(wing_area);
   polar.v_no = fixed(v_no);
+
+  return polar;
 }
 
 /**

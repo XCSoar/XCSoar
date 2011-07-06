@@ -179,9 +179,8 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
 
   int result = ComboPicker(XCSoarInterface::main_window, _("Load Polar"), list, NULL);
   if (result >= 0) {
-    PolarInfo polar;
-    PolarStore::GetItem(list[result].DataFieldIndex).Transfer(polar);
-    UpdatePolarFields(polar);
+    UpdatePolarFields(PolarStore::GetItem(
+        list[result].DataFieldIndex).ToPolarInfo());
 
     Profile::Set(szProfilePolarName, list[result].StringValue);
     UpdatePolarTitle();
