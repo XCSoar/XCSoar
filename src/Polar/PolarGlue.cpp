@@ -38,11 +38,11 @@ namespace PolarGlue
   void LoadDryMass(PolarInfo &polar);
 }
 
-void
-PolarGlue::LoadDefault(PolarInfo &polar)
+PolarInfo
+PolarGlue::GetDefault()
 {
-  // Load LS8 polar
-  polar = PolarStore::GetItem(56).ToPolarInfo();
+  // Return LS8 polar
+  return PolarStore::GetItem(56).ToPolarInfo();
 }
 
 const TCHAR *
@@ -136,7 +136,7 @@ PolarGlue::LoadFromProfile(GlidePolar &gp, SETTINGS_POLAR &settings)
     if (Profile::Exists(szProfilePolar) || Profile::Exists(szProfilePolarID))
       MessageBoxX(_("Polar has invalid coefficients.\nUsing LS8 polar instead!"),
                   _("Warning"), MB_OK);
-    LoadDefault(polar);
+    polar = GetDefault();
     polar.CopyIntoGlidePolar(gp);
   }
   settings.SafetySpeed = fixed(polar.v_no);

@@ -32,7 +32,7 @@ struct SETTINGS_POLAR;
 
 namespace PolarGlue
 {
-  void LoadDefault(PolarInfo &polar);
+  PolarInfo GetDefault();
   const TCHAR *GetDefaultName();
 
   bool LoadFromProfile(PolarInfo &polar);
