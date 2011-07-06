@@ -40,6 +40,9 @@ PlaneGlue::FromProfile(Plane &plane)
   if (!Profile::Get(szProfileAircraftType, plane.type))
     plane.type.clear();
 
+  if (!Profile::Get(szProfilePolarName, plane.polar_name))
+    plane.polar_name.clear();
+
   if (!Profile::Get(szProfileBallastSecsToEmpty, plane.dump_time))
     plane.dump_time = 120;
 
@@ -53,6 +56,8 @@ PlaneGlue::ToProfile(const Plane &plane)
   Profile::Set(szProfileAircraftReg, plane.registration);
   Profile::Set(szProfileCompetitionId, plane.competition_id);
   Profile::Set(szProfileAircraftType, plane.type);
+
+  Profile::Set(szProfilePolarName, plane.polar_name);
 
   Profile::Set(szProfileBallastSecsToEmpty, plane.dump_time);
   Profile::Set(szProfileHandicap, plane.handicap);

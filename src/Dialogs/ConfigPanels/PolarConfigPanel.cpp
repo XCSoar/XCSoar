@@ -133,9 +133,7 @@ SetPolarTitle(const TCHAR* title)
 static void
 UpdatePolarTitle()
 {
-  TCHAR title[255];
-  if (Profile::Get(szProfilePolarName, title, 255))
-    SetPolarTitle(title);
+  SetPolarTitle(CommonInterface::SettingsComputer().plane.polar_name);
 }
 
 static bool
@@ -211,7 +209,7 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
     if (item.contest_handicap > 0)
       LoadFormProperty(*wf, _T("prpHandicap"), item.contest_handicap);
 
-    Profile::Set(szProfilePolarName, item.name);
+    CommonInterface::SetSettingsComputer().plane.polar_name = item.name;
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
   }
@@ -263,7 +261,8 @@ PolarConfigPanel::OnLoadFromFile(WndButton &button)
       LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
                        polar.v_no);
 
-    Profile::Set(szProfilePolarName, list[result].StringValueFormatted);
+    CommonInterface::SetSettingsComputer().plane.polar_name =
+        list[result].StringValueFormatted;
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
   }
@@ -284,7 +283,7 @@ PolarConfigPanel::OnExport(WndButton &button)
   PolarInfo polar;
   SaveFormToPolar(polar);
   if (PolarGlue::SaveToFile(polar, path)) {
-    Profile::Set(szProfilePolarName, filename);
+    CommonInterface::SetSettingsComputer().plane.polar_name = filename;
     UpdatePolarTitle();
   }
 }
@@ -295,7 +294,7 @@ PolarConfigPanel::OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mod
   switch (Mode) {
   case DataField::daChange:
     if (!loading)
-      Profile::Set(szProfilePolarName, _T("Custom"));
+      CommonInterface::SetSettingsComputer().plane.polar_name = _T("Custom");
 
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();

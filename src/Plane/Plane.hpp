@@ -33,6 +33,8 @@ struct Plane
   StaticString<6> competition_id;
   StaticString<32> type;
 
+  StaticString<32> polar_name;
+
   /** Time to drain full ballast (s) */
   unsigned dump_time;
 
