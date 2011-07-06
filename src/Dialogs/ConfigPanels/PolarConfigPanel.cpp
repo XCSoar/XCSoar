@@ -338,7 +338,8 @@ PolarConfigPanel::Init(WndForm *_wf)
   PolarInfo polar;
   if (!PolarGlue::LoadFromProfile(polar)) {
     PolarGlue::LoadDefault(polar);
-    SetPolarTitle(PolarGlue::GetDefaultName());
+    CommonInterface::SetSettingsComputer().plane.polar_name =
+        PolarGlue::GetDefaultName();
   }
   UpdatePolarFields(polar);
   UpdatePolarTitle();
