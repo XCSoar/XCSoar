@@ -171,7 +171,7 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
   ComboList list;
   unsigned len = PolarStore::Count();
   for (unsigned i = 0; i < len; i++)
-    list.Append(i, PolarStore::GetName(i));
+    list.Append(i, PolarStore::GetItem(i).name);
 
   list.Sort();
 

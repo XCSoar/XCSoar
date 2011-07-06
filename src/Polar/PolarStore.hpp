@@ -70,15 +70,6 @@ namespace PolarStore
   };
 
   /**
-   * Returns the name of the internal WinPilot polar defined
-   * by the array id i
-   * @param i Array id of the polar
-   * @return The name of the polar
-   */
-  gcc_const
-  const TCHAR *GetName(unsigned i);
-
-  /**
    * Reads internal WinPilot polar and passes it to
    * the converter
    * @param i Array id of the polar

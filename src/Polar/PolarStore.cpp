@@ -218,12 +218,6 @@ static const PolarStore::Item InternalPolars[] =
   { _T("VT-116 Orlik II"), 335, 0, 80, -0.7, 100, -1.05, 120, -1.65, 12.8, 33.333, 86 },
 };
 
-const TCHAR*
-PolarStore::GetName(unsigned i)
-{
-  return GetItem(i).name;
-}
-
 void
 PolarStore::Read(unsigned i, PolarInfo &polar)
 {

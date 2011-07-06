@@ -100,16 +100,16 @@ TestBuiltInPolars()
     PolarInfo polar;
     PolarStore::Read(i, polar);
 #ifdef _UNICODE
-  size_t wide_length = _tcslen(PolarStore::GetName(i));
+  size_t wide_length = _tcslen(PolarStore::GetItem(i).name);
   char narrow[wide_length * 4 + 1];
   int narrow_length =
-      ::WideCharToMultiByte(CP_ACP, 0, PolarStore::GetName(i), wide_length,
+      ::WideCharToMultiByte(CP_ACP, 0, PolarStore::GetItem(i).name, wide_length,
                             narrow, sizeof(narrow), NULL, NULL);
   narrow[narrow_length] = 0;
 
   ok(polar.IsValid(), narrow);
 #else
-  ok(polar.IsValid(), PolarStore::GetName(i));
+  ok(polar.IsValid(), PolarStore::GetItem(i).name);
 #endif
   }
 }
