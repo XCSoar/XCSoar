@@ -105,8 +105,9 @@ TextUtil::getTextBounds(const char *text) const
 
   paramExtent = env->NewIntArray(2);
 
+  Java::String text2(env, text);
   env->CallVoidMethod(get(), midGetTextBounds,
-                      Java::String(env, text).get(),
+                      text2.get(),
                       paramExtent);
   env->GetIntArrayRegion(paramExtent, 0, 2, extent);
 
@@ -120,7 +121,8 @@ int
 TextUtil::getTextTextureGL(const char *text, int fr, int fg, int fb,
                            int br, int bg, int bb) const
 {
+  Java::String text2(env, text);
   return env->CallIntMethod(get(), midGetTextTextureGL,
-                            Java::String(env, text).get(),
+                            text2.get(),
                             fr, fg, fb, br, bg, bb);
 }
