@@ -94,6 +94,7 @@ namespace PolarStore
    */
   void Read(unsigned i, PolarInfo &polar);
 
+  const Item &GetItem(unsigned i);
   unsigned Count();
 }
 

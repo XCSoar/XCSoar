@@ -221,22 +221,26 @@ static const PolarStore::Item InternalPolars[] =
 const TCHAR*
 PolarStore::GetName(unsigned i)
 {
-  assert(i < Count());
-  return InternalPolars[i].name;
+  return GetItem(i).name;
 }
 
 unsigned
 PolarStore::GetContestHandicap(unsigned i)
 {
-  assert(i < Count());
-  return InternalPolars[i].contest_handicap;
+  return GetItem(i).contest_handicap;
 }
 
 void
 PolarStore::Read(unsigned i, PolarInfo &polar)
 {
+  GetItem(i).Transfer(polar);
+}
+
+const PolarStore::Item &
+PolarStore::GetItem(unsigned i)
+{
   assert(i < Count());
-  InternalPolars[i].Transfer(polar);
+  return InternalPolars[i];
 }
 
 unsigned
