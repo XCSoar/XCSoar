@@ -301,7 +301,7 @@ PolarConfigPanel::Init(WndForm *_wf)
   PolarInfo polar;
   if (!PolarGlue::LoadFromProfile(polar)) {
     PolarGlue::LoadDefault(polar);
-    SetPolarTitle(polar.name);
+    SetPolarTitle(PolarGlue::GetDefaultName());
   }
   UpdatePolarFields(polar);
   UpdatePolarTitle();

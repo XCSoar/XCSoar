@@ -45,6 +45,12 @@ PolarGlue::LoadDefault(PolarInfo &polar)
   polar = PolarStore::GetItem(56).ToPolarInfo();
 }
 
+const TCHAR *
+PolarGlue::GetDefaultName()
+{
+  return PolarStore::GetItem(56).name;
+}
+
 static bool
 ReadPolarFileFromProfile(PolarInfo &polar)
 {

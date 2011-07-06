@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_POLAR_LOADER_HPP
 #define XCSOAR_POLAR_LOADER_HPP
 
+#include <tchar.h>
+
 class GlidePolar;
 struct PolarInfo;
 struct SETTINGS_POLAR;
@@ -31,6 +33,7 @@ struct SETTINGS_POLAR;
 namespace PolarGlue
 {
   void LoadDefault(PolarInfo &polar);
+  const TCHAR *GetDefaultName();
 
   bool LoadFromProfile(PolarInfo &polar);
   void SaveToProfile(const PolarInfo &polar);
