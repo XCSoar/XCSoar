@@ -179,17 +179,15 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
 
   int result = ComboPicker(XCSoarInterface::main_window, _("Load Polar"), list, NULL);
   if (result >= 0) {
-    UpdatePolarFields(PolarStore::GetItem(
-        list[result].DataFieldIndex).ToPolarInfo());
+    const PolarStore::Item &item = PolarStore::GetItem(list[result].DataFieldIndex);
+    UpdatePolarFields(item.ToPolarInfo());
 
-    Profile::Set(szProfilePolarName, list[result].StringValue);
+    Profile::Set(szProfilePolarName, item.name);
     UpdatePolarTitle();
     UpdatePolarInvalidLabel();
 
-    unsigned contest_handicap =
-      PolarStore::GetItem(list[result].DataFieldIndex).contest_handicap;
-    if (contest_handicap > 0)
-      LoadFormProperty(*wf, _T("prpHandicap"), contest_handicap);
+    if (item.contest_handicap > 0)
+      LoadFormProperty(*wf, _T("prpHandicap"), item.contest_handicap);
   }
 }
 
