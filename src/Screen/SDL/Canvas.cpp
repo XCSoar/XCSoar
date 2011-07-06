@@ -177,7 +177,7 @@ Canvas::text_size(const TCHAR *text) const
     return size;
 
 #ifdef ANDROID
-  font->text_width(text, size);
+  return font->TextSize(text);
 #else // !ANDROID
   int ret, w, h;
 #ifdef UNICODE
@@ -189,9 +189,9 @@ Canvas::text_size(const TCHAR *text) const
     size.cx = w;
     size.cy = h;
   }
-#endif // !ANDROID
 
   return size;
+#endif // !ANDROID
 }
 
 #ifndef ENABLE_OPENGL

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Android/TextUtil.hpp"
 #include "Java/Class.hpp"
 #include "Java/String.hpp"
+#include "Screen/Point.hpp"
 
 JNIEnv *TextUtil::env(NULL);
 jmethodID TextUtil::midTextUtil(NULL);
@@ -97,7 +98,7 @@ TextUtil::create(const char *facename, int height, bool bold, bool italic)
   return tu;
 }
 
-std::pair<unsigned, unsigned>
+PixelSize
 TextUtil::getTextBounds(const char *text) const
 {
   jint extent[2];
@@ -110,7 +111,8 @@ TextUtil::getTextBounds(const char *text) const
   // free local references
   env->DeleteLocalRef(paramExtent);
 
-  return std::pair<unsigned, unsigned>(extent[0], extent[1]);
+  PixelSize size = { extent[0], extent[1] };
+  return size;
 }
 
 int

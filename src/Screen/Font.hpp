@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_FONT_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Compiler.h"
 
 #ifdef ANDROID
 #include "Util/tstring.hpp"
@@ -97,7 +98,8 @@ public:
   void reset();
 
   #ifdef ANDROID
-  void text_width(const TCHAR *text, PixelSize &size) const;
+  gcc_pure
+  PixelSize TextSize(const TCHAR *text) const;
 
   int text_texture_gl(const TCHAR *text, PixelSize &size,
                       const Color &fg, const Color &bg) const;

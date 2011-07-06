@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <utility>
 
+struct PixelSize;
+
 class TextUtil : protected Java::Object {
   static JNIEnv *env;
   static jmethodID midTextUtil, midGetFontMetrics, midGetTextBounds;
@@ -45,7 +47,7 @@ public:
                           bool bold, bool italic);
 
   gcc_pure
-  std::pair<unsigned, unsigned> getTextBounds(const char *text) const;
+  PixelSize getTextBounds(const char *text) const;
 
   int getTextTextureGL(const char *text, int fr, int fg, int fb,
                        int br, int bg, int bb) const;
