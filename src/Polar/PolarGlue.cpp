@@ -69,21 +69,24 @@ PolarGlue::LoadFromOldProfile(PolarInfo &polar)
 {
   unsigned polar_id;
   if (Profile::Get(szProfilePolarID, polar_id)) {
-    if (polar_id == 6) {
-      if (ReadPolarFileFromProfile(polar))
-        return true;
-    } else {
-      if (polar_id < 6)
-        polar_id = (polar_id == 0) ? 52 :
-               (polar_id == 1) ? 23 :
-               (polar_id == 2) ? 63 :
-               (polar_id == 3) ? 26 :
-               (polar_id == 4) ? 62 :
-               125;
+    if (polar_id == 6)
+      return ReadPolarFileFromProfile(polar);
 
-      polar = PolarStore::GetItem(polar_id - 7).ToPolarInfo();
-      return true;
-    }
+    if (polar_id == 0)
+      polar_id = 52;
+    else if (polar_id == 1)
+      polar_id = 23;
+    else if (polar_id == 2)
+      polar_id = 63;
+    else if (polar_id == 3)
+      polar_id = 26;
+    else if (polar_id == 4)
+      polar_id = 62;
+    else if (polar_id == 5)
+      polar_id = 125;
+
+    polar = PolarStore::GetItem(polar_id - 7).ToPolarInfo();
+    return true;
   }
   return false;
 }
