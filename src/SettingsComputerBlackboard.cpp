@@ -45,8 +45,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.LoggerTimeStepCircling=1;
   settings_computer.DisableAutoLogger = false;
   settings_computer.LoggerShortName = false;
-  settings_computer.BallastTimerActive = false;
-  settings_computer.BallastSecsToEmpty = 120;
   settings_computer.UTCOffset = GetSystemUTCOffset();
 
   // for user-set teammate code
