@@ -218,12 +218,6 @@ static const PolarStore::Item InternalPolars[] =
   { _T("VT-116 Orlik II"), 335, 0, 80, -0.7, 100, -1.05, 120, -1.65, 12.8, 33.333, 86 },
 };
 
-/**
- * Returns the name of the internal WinPilot polar defined
- * by the array id i
- * @param i Array id of the polar
- * @return The name of the polar
- */
 const TCHAR*
 PolarStore::GetName(unsigned i)
 {
@@ -231,12 +225,6 @@ PolarStore::GetName(unsigned i)
   return InternalPolars[i].name;
 }
 
-/**
- * Returns the name of the internal WinPilot polar defined
- * by the array id i
- * @param i Array id of the polar
- * @return The name of the polar
- */
 unsigned
 PolarStore::GetContestHandicap(unsigned i)
 {
@@ -244,12 +232,6 @@ PolarStore::GetContestHandicap(unsigned i)
   return InternalPolars[i].contest_handicap;
 }
 
-/**
- * Reads internal WinPilot polar and passes it to
- * the converter
- * @param i Array id of the polar
- * @param polar Polar to set
- */
 void
 PolarStore::Read(unsigned i, PolarInfo &polar)
 {
