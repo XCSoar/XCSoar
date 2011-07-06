@@ -159,10 +159,7 @@ UpdatePolarInvalidLabel()
   PolarInfo polar;
   polar.Init();
   SaveFormToPolar(polar);
-  if (polar.IsValid())
-    ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->hide();
-  else
-    ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->show();
+  ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->set_visible(!polar.IsValid());
 }
 
 void
