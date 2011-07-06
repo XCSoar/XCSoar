@@ -370,8 +370,8 @@ PolarConfigPanel::Save()
     changed = true;
 
     if (protected_task_manager != NULL) {
-      PolarGlue::LoadFromProfile(settings_computer.glide_polar_task,
-                                 settings_computer);
+      polar.CopyIntoGlidePolar(settings_computer.glide_polar_task);
+      settings_computer.SafetySpeed = fixed(polar.v_no);
       protected_task_manager->set_glide_polar(settings_computer.glide_polar_task);
     }
   }
