@@ -224,12 +224,6 @@ PolarStore::GetName(unsigned i)
   return GetItem(i).name;
 }
 
-unsigned
-PolarStore::GetContestHandicap(unsigned i)
-{
-  return GetItem(i).contest_handicap;
-}
-
 void
 PolarStore::Read(unsigned i, PolarInfo &polar)
 {

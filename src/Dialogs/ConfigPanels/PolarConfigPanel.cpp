@@ -188,7 +188,7 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
     UpdatePolarInvalidLabel();
 
     unsigned contest_handicap =
-      PolarStore::GetContestHandicap(list[result].DataFieldIndex);
+      PolarStore::GetItem(list[result].DataFieldIndex).contest_handicap;
     if (contest_handicap > 0)
       LoadFormProperty(*wf, _T("prpHandicap"), contest_handicap);
   }
