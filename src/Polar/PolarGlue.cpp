@@ -29,7 +29,6 @@ Copyright_License {
 #include "IO/ConfiguredFile.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
-#include "SettingsComputer.hpp"
 
 namespace PolarGlue
 {
@@ -137,8 +136,8 @@ PolarGlue::SaveToProfile(const PolarInfo &polar)
   Profile::Set(szProfileDryMass, polar.dry_mass);
 }
 
-void
-PolarGlue::LoadFromProfile(GlidePolar &gp, SETTINGS_POLAR &settings)
+PolarInfo
+PolarGlue::LoadFromProfile()
 {
   PolarInfo polar;
   if (!LoadFromProfile(polar) || !polar.IsValid()) {
@@ -147,6 +146,6 @@ PolarGlue::LoadFromProfile(GlidePolar &gp, SETTINGS_POLAR &settings)
                   _("Warning"), MB_OK);
     polar = GetDefault();
   }
-  polar.CopyIntoGlidePolar(gp);
-  settings.SafetySpeed = fixed(polar.v_no);
+
+  return polar;
 }

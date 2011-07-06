@@ -26,9 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-class GlidePolar;
 struct PolarInfo;
-struct SETTINGS_POLAR;
 
 namespace PolarGlue
 {
@@ -38,7 +36,7 @@ namespace PolarGlue
   bool LoadFromProfile(PolarInfo &polar);
   void SaveToProfile(const PolarInfo &polar);
 
-  void LoadFromProfile(GlidePolar &gp, SETTINGS_POLAR &settings);
+  PolarInfo LoadFromProfile();
 }
 
 #endif
