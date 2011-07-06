@@ -67,21 +67,21 @@ ReadPolarFileFromProfile(PolarInfo &polar)
 bool
 PolarGlue::LoadFromOldProfile(PolarInfo &polar)
 {
-  unsigned Temp;
-  if (Profile::Get(szProfilePolarID, Temp)) {
-    if (Temp == 6) {
+  unsigned polar_id;
+  if (Profile::Get(szProfilePolarID, polar_id)) {
+    if (polar_id == 6) {
       if (ReadPolarFileFromProfile(polar))
         return true;
     } else {
-      if (Temp < 6)
-        Temp = (Temp == 0) ? 52 :
-               (Temp == 1) ? 23 :
-               (Temp == 2) ? 63 :
-               (Temp == 3) ? 26 :
-               (Temp == 4) ? 62 :
+      if (polar_id < 6)
+        polar_id = (polar_id == 0) ? 52 :
+               (polar_id == 1) ? 23 :
+               (polar_id == 2) ? 63 :
+               (polar_id == 3) ? 26 :
+               (polar_id == 4) ? 62 :
                125;
 
-      polar = PolarStore::GetItem(Temp - 7).ToPolarInfo();
+      polar = PolarStore::GetItem(polar_id - 7).ToPolarInfo();
       return true;
     }
   }
