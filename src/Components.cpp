@@ -272,6 +272,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
     return false;
 
   PlaneGlue::FromProfile(SetSettingsComputer().plane);
+  PlaneGlue::Synchronize(SettingsComputer().plane, SetSettingsComputer());
 
   operation.SetText(_("Initialising"));
 
