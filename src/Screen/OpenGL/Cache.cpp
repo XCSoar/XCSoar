@@ -53,6 +53,34 @@ static ListHead text_cache_head = ListHead(ListHead::empty());
 static unsigned text_cache_size = 0;
 
 #ifdef ANDROID
+PixelSize
+TextCache::LookupSize(const Font &font, const char *text)
+{
+  PixelSize size = { 0, 0 };
+
+  if (*text == 0)
+    return size;
+
+  char key[4096];
+  snprintf(key, sizeof(key),
+           "%s_%u_%u_000000_ffffff_%s",
+           font.get_facename(),
+           font.get_style(),
+           font.get_height(),
+           text);
+
+  Map::const_iterator i = text_cache_map.find(key);
+  if (i == text_cache_map.end())
+    return size;
+
+  const RenderedText &rendered = *i->second;
+  size.cx = rendered.texture.get_width();
+  size.cy = rendered.texture.get_height();
+  return size;
+}
+#endif
+
+#ifdef ANDROID
 GLTexture *
 TextCache::get(const Font *font, Color background_color, Color text_color,
                const char *text)

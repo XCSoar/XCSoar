@@ -39,6 +39,11 @@ class Font;
 struct Color;
 
 namespace TextCache {
+#ifdef ANDROID
+  gcc_pure
+  PixelSize LookupSize(const Font &font, const char *text);
+#endif
+
   gcc_pure
 #ifdef ANDROID
   GLTexture *get(const Font *font, Color background_color, Color text_color,

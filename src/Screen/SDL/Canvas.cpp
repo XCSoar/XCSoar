@@ -25,6 +25,10 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Util/StringUtil.hpp"
 
+#ifdef ANDROID
+#include "Screen/OpenGL/Cache.hpp"
+#endif
+
 #include <assert.h>
 #include <string.h>
 
@@ -177,6 +181,11 @@ Canvas::text_size(const TCHAR *text) const
     return size;
 
 #ifdef ANDROID
+  /* see if the TextCache can handle this request */
+  size = TextCache::LookupSize(*font, text);
+  if (size.cy > 0)
+    return size;
+
   return font->TextSize(text);
 #else // !ANDROID
   int ret, w, h;
