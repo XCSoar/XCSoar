@@ -102,7 +102,6 @@ struct SETTINGS_LOGGER {
  */
 struct SETTINGS_POLAR {
   fixed SafetySpeed;           /**< Manoeuvering speed (m/s) */
-  int BallastSecsToEmpty;       /**< Time to drain full ballast (s) */
   bool BallastTimerActive;      /**< Whether the ballast countdown timer is active */
 };
 

@@ -204,7 +204,7 @@ BallastDumpProcessTimer()
   const NMEA_INFO &basic = CommonInterface::Basic();
 
   // We don't know how fast the water is flowing so don't pretend that we do
-  if (settings_computer.BallastSecsToEmpty <= 0) {
+  if (settings_computer.plane.dump_time <= 0) {
     settings_computer.BallastTimerActive = false;
     return;
   }
@@ -216,7 +216,7 @@ BallastDumpProcessTimer()
 
   GlidePolar &glide_polar = settings_computer.glide_polar_task;
   fixed ballast = glide_polar.GetBallast();
-  fixed percent_per_second = fixed_one / settings_computer.BallastSecsToEmpty;
+  fixed percent_per_second = fixed_one / settings_computer.plane.dump_time;
 
   ballast -= dt * percent_per_second;
   if (negative(ballast)) {

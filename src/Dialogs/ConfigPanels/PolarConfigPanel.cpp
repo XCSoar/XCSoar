@@ -49,6 +49,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "OS/FileUtil.hpp"
 #include "Language/Language.hpp"
+#include "Plane/PlaneGlue.hpp"
 
 #include <cstdio>
 
@@ -316,7 +317,7 @@ PolarConfigPanel::Init(WndForm *_wf)
                    settings_computer.contest_handicap);
 
   LoadFormProperty(*wf, _T("prpBallastSecsToEmpty"),
-                   settings_computer.BallastSecsToEmpty);
+                   settings_computer.plane.dump_time);
 
   loading = false;
 }
@@ -331,8 +332,7 @@ PolarConfigPanel::Save()
                               settings_computer.contest_handicap);
 
   changed |= SaveFormProperty(*wf, _T("prpBallastSecsToEmpty"),
-                              szProfileBallastSecsToEmpty,
-                              settings_computer.BallastSecsToEmpty);
+                              settings_computer.plane.dump_time);
 
   PolarInfo polar;
   PolarGlue::LoadFromProfile(polar);
@@ -346,6 +346,9 @@ PolarConfigPanel::Save()
       protected_task_manager->set_glide_polar(settings_computer.glide_polar_task);
     }
   }
+
+  if (changed)
+    PlaneGlue::ToProfile(settings_computer.plane);
 
   return changed;
 }

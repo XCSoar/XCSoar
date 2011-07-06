@@ -340,8 +340,6 @@ Profile::Use()
 
   Get(szProfileGliderScreenPosition,
       settings_map.GliderScreenPosition);
-  Get(szProfileBallastSecsToEmpty,
-      settings_computer.BallastSecsToEmpty);
   Get(szProfileSetSystemTimeFromGPS,
       settings_map.SetSystemTimeFromGPS);
   Get(szProfileUseCustomFonts,
