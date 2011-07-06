@@ -85,11 +85,13 @@ UpdateButtons(void)
 static void
 OnCompetitionIdClicked(gcc_unused WndButton &button)
 {
-  TCHAR Temp[100];
-  Profile::Get(szProfileCompetitionId, Temp, 100);
+  StaticString<100> tmp;
+  if (!Profile::Get(szProfileCompetitionId, tmp))
+    tmp.clear();
+
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                            Temp, 100)) {
-    Profile::Set(szProfileCompetitionId, Temp);
+                            tmp.buffer(), tmp.MAX_SIZE)) {
+    Profile::Set(szProfileCompetitionId, tmp);
     changed = true;
   }
   UpdateButtons();
@@ -98,11 +100,13 @@ OnCompetitionIdClicked(gcc_unused WndButton &button)
 static void
 OnAircraftTypeClicked(gcc_unused WndButton &button)
 {
-  TCHAR Temp[100];
-  Profile::Get(szProfileAircraftType, Temp, 100);
+  StaticString<100> tmp;
+  if (!Profile::Get(szProfileAircraftType, tmp))
+    tmp.clear();
+
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                            Temp, 100)) {
-    Profile::Set(szProfileAircraftType, Temp);
+                            tmp.buffer(), tmp.MAX_SIZE)) {
+    Profile::Set(szProfileAircraftType, tmp);
     changed = true;
   }
   UpdateButtons();
@@ -111,11 +115,13 @@ OnAircraftTypeClicked(gcc_unused WndButton &button)
 static void
 OnAircraftRegClicked(gcc_unused WndButton &button)
 {
-  TCHAR Temp[100];
-  Profile::Get(szProfileAircraftReg, Temp, 100);
+  StaticString<100> tmp;
+  if (!Profile::Get(szProfileAircraftReg, tmp))
+    tmp.clear();
+
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                            Temp, 100)) {
-    Profile::Set(szProfileAircraftReg, Temp);
+                            tmp.buffer(), tmp.MAX_SIZE)) {
+    Profile::Set(szProfileAircraftReg, tmp);
     changed = true;
   }
   UpdateButtons();
@@ -124,11 +130,13 @@ OnAircraftRegClicked(gcc_unused WndButton &button)
 static void
 OnPilotNameClicked(gcc_unused WndButton &button)
 {
-  TCHAR Temp[100];
-  Profile::Get(szProfilePilotName, Temp, 100);
+  StaticString<100> tmp;
+  if (!Profile::Get(szProfilePilotName, tmp))
+    tmp.clear();
+
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                            Temp, 100)) {
-    Profile::Set(szProfilePilotName, Temp);
+                            tmp.buffer(), tmp.MAX_SIZE)) {
+    Profile::Set(szProfilePilotName, tmp);
     changed = true;
   }
   UpdateButtons();
@@ -137,11 +145,13 @@ OnPilotNameClicked(gcc_unused WndButton &button)
 static void
 OnLoggerIDClicked(gcc_unused WndButton &button)
 {
-  TCHAR Temp[100];
-  Profile::Get(szProfileLoggerID, Temp, 100);
+  StaticString<100> tmp;
+  if (!Profile::Get(szProfileLoggerID, tmp))
+    tmp.clear();
+
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                            Temp, 100)) {
-    Profile::Set(szProfileLoggerID, Temp);
+                            tmp.buffer(), tmp.MAX_SIZE)) {
+    Profile::Set(szProfileLoggerID, tmp);
     changed = true;
   }
   ReadAssetNumber();
