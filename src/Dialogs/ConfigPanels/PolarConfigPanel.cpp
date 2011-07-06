@@ -248,7 +248,25 @@ PolarConfigPanel::OnLoadFromFile(WndButton &button)
     const TCHAR* path = list[result].StringValue;
     PolarInfo polar;
     PolarGlue::LoadFromFile(polar, path);
-    UpdatePolarFields(polar);
+
+    LoadFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed, polar.v1);
+    LoadFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed, polar.v2);
+    LoadFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed, polar.v3);
+
+    LoadFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, polar.w1);
+    LoadFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, polar.w2);
+    LoadFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, polar.w3);
+
+    LoadFormProperty(*wf, _T("prpPolarReferenceMass"), polar.reference_mass);
+    LoadFormProperty(*wf, _T("prpPolarDryMass"), polar.reference_mass);
+    LoadFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
+
+    if (positive(polar.wing_area))
+      LoadFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
+
+    if (positive(polar.v_no))
+      LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
+                       polar.v_no);
 
     Profile::Set(szProfilePolarName, list[result].StringValueFormatted);
     UpdatePolarTitle();
