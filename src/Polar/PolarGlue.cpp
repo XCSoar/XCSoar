@@ -84,6 +84,8 @@ PolarGlue::LoadFromOldProfile(PolarInfo &polar)
       polar_id = 62;
     else if (polar_id == 5)
       polar_id = 125;
+    else if (polar_id - 7 >= PolarStore::Count())
+      return false;
 
     polar = PolarStore::GetItem(polar_id - 7).ToPolarInfo();
     return true;
