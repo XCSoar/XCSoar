@@ -197,7 +197,8 @@ PolarConfigPanel::OnLoadInternal(WndButton &button)
       LoadFormProperty(*wf, _T("prpPolarWingArea"), fixed(item.wing_area));
 
     if (item.v_no > 0.0)
-      LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), fixed(item.v_no));
+      LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
+                       fixed(item.v_no));
 
     if (item.contest_handicap > 0)
       LoadFormProperty(*wf, _T("prpHandicap"), item.contest_handicap);
