@@ -48,41 +48,36 @@ static void
 UpdateButtons(void)
 {
   TCHAR text[120];
-  TCHAR val[100];
+  StaticString<100> val;
 
-  Profile::Get(szProfilePilotName, val, 100);
-  if (string_is_empty(val))
-    _tcscpy(val, _("(blank)"));
+  if (!Profile::Get(szProfilePilotName, val) || val.empty())
+    val = _("(blank)");
 
-  _stprintf(text, _T("%s: %s"), _("Pilot name"), val);
+  _stprintf(text, _T("%s: %s"), _("Pilot name"), val.c_str());
   buttonPilotName->SetCaption(text);
 
-  Profile::Get(szProfileAircraftType, val, 100);
-  if (string_is_empty(val))
-    _tcscpy(val, _("(blank)"));
+  if (!Profile::Get(szProfileAircraftType, val) || val.empty())
+    val = _("(blank)");
 
-  _stprintf(text, _T("%s: %s"), _("Aircraft type"), val);
+  _stprintf(text, _T("%s: %s"), _("Aircraft type"), val.c_str());
   buttonAircraftType->SetCaption(text);
 
-  Profile::Get(szProfileAircraftReg, val, 100);
-  if (string_is_empty(val))
-    _tcscpy(val, _("(blank)"));
+  if (!Profile::Get(szProfileAircraftReg, val) || val.empty())
+    val = _("(blank)");
 
-  _stprintf(text, _T("%s: %s"), _("Aircraft reg."), val);
+  _stprintf(text, _T("%s: %s"), _("Aircraft reg."), val.c_str());
   buttonAircraftReg->SetCaption(text);
 
-  Profile::Get(szProfileCompetitionId, val, 100);
-  if (string_is_empty(val))
-    _tcscpy(val, _("(blank)"));
+  if (!Profile::Get(szProfileCompetitionId, val) || val.empty())
+    val = _("(blank)");
 
-  _stprintf(text, _T("%s: %s"), _("Competition ID"), val);
+  _stprintf(text, _T("%s: %s"), _("Competition ID"), val.c_str());
   buttonCompetitionId->SetCaption(text);
 
-  Profile::Get(szProfileLoggerID, val, 100);
-  if (string_is_empty(val))
-    _tcscpy(val, _("(blank)"));
+  if (!Profile::Get(szProfileLoggerID, val) || val.empty())
+    val = _("(blank)");
 
-  _stprintf(text, _T("%s: %s"), _("Logger ID"), val);
+  _stprintf(text, _T("%s: %s"), _("Logger ID"), val.c_str());
   buttonLoggerID->SetCaption(text);
 }
 
