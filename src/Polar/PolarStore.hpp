@@ -32,6 +32,43 @@ struct PolarInfo;
 
 namespace PolarStore
 {
+  struct InternalPolarInfo
+  {
+    const TCHAR* name;   /**< Name of the glider type */
+
+    // Using doubles here to simplify the code in PolarStore.cpp
+
+    /** Reference mass of the polar (kg) */
+    double reference_mass;
+
+    /** Max water ballast (l) */
+    double max_ballast;
+
+    /** Speed (kph) of point 1 */
+    double v1;
+    /** Sink rate (negative, m/s) of point 1  */
+    double w1;
+    /** Speed (kph) of point 2 */
+    double v2;
+    /** Sink rate (negative, m/s) of point 2  */
+    double w2;
+    /** Speed (kph) of point 3 */
+    double v3;
+    /** Sink rate (negative, m/s) of point 3  */
+    double w3;
+
+    /** Reference wing area (m^2), 0.0 if unknown */
+    double wing_area;
+
+    /** Maximum speed for normal operations (m/s), 0.0 if unknown */
+    double v_no;
+
+    /** Contest handicap, 0 if unknown */
+    unsigned contest_handicap;
+
+    void Transfer(PolarInfo &polar) const;
+  };
+
   gcc_const
   const TCHAR *GetName(unsigned i);
 

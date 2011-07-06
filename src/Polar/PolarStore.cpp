@@ -27,60 +27,27 @@ Copyright_License {
 
 #include <assert.h>
 
-struct InternalPolarInfo
+void
+PolarStore::InternalPolarInfo::Transfer(PolarInfo &polar) const
 {
-  const TCHAR* name;   /**< Name of the glider type */
-
-  // Using doubles here to simplify the code in PolarStore.cpp
-
-  /** Reference mass of the polar (kg) */
-  double reference_mass;
-
-  /** Max water ballast (l) */
-  double max_ballast;
-
-  /** Speed (kph) of point 1 */
-  double v1;
-  /** Sink rate (negative, m/s) of point 1  */
-  double w1;
-  /** Speed (kph) of point 2 */
-  double v2;
-  /** Sink rate (negative, m/s) of point 2  */
-  double w2;
-  /** Speed (kph) of point 3 */
-  double v3;
-  /** Sink rate (negative, m/s) of point 3  */
-  double w3;
-
-  /** Reference wing area (m^2), 0.0 if unknown */
-  double wing_area;
-
-  /** Maximum speed for normal operations (m/s), 0.0 if unknown */
-  double v_no;
-
-  /** Contest handicap, 0 if unknown */
-  unsigned contest_handicap;
-
-  void Transfer(PolarInfo &polar) const {
-    polar.name = name;
-    polar.reference_mass = fixed(reference_mass);
-    polar.dry_mass = fixed_zero;
-    polar.max_ballast = fixed(max_ballast);
-    polar.v1 = Units::ToSysUnit(fixed(v1), unKiloMeterPerHour);
-    polar.w1 = fixed(w1);
-    polar.v2 = Units::ToSysUnit(fixed(v2), unKiloMeterPerHour);
-    polar.w2 = fixed(w2);
-    polar.v3 = Units::ToSysUnit(fixed(v3), unKiloMeterPerHour);
-    polar.w3 = fixed(w3);
-    polar.wing_area = fixed(wing_area);
-    polar.v_no = fixed(v_no);
-  }
-};
+  polar.name = name;
+  polar.reference_mass = fixed(reference_mass);
+  polar.dry_mass = fixed_zero;
+  polar.max_ballast = fixed(max_ballast);
+  polar.v1 = Units::ToSysUnit(fixed(v1), unKiloMeterPerHour);
+  polar.w1 = fixed(w1);
+  polar.v2 = Units::ToSysUnit(fixed(v2), unKiloMeterPerHour);
+  polar.w2 = fixed(w2);
+  polar.v3 = Units::ToSysUnit(fixed(v3), unKiloMeterPerHour);
+  polar.w3 = fixed(w3);
+  polar.wing_area = fixed(wing_area);
+  polar.v_no = fixed(v_no);
+}
 
 /**
  *  Note: new items should be added to bottom, otherwise saved index is lost
  */
-static const InternalPolarInfo InternalPolars[] =
+static const PolarStore::InternalPolarInfo InternalPolars[] =
 {
   { _T("206 Hornet"), 318, 100, 80, -0.606, 120, -0.99, 160, -1.918, 9.8, 41.666, 100 },
   { _T("604 Kestrel"), 570, 100, 112.97, -0.72, 150.64, -1.42, 207.13, -4.1, 16.26, 0.0, 114 },
