@@ -42,7 +42,7 @@ void
 PolarGlue::LoadDefault(PolarInfo &polar)
 {
   // Load LS8 polar
-  PolarStore::Read(56, polar);
+  PolarStore::GetItem(56).Transfer(polar);
 }
 
 static bool
@@ -75,7 +75,7 @@ PolarGlue::LoadFromOldProfile(PolarInfo &polar)
                (Temp == 4) ? 62 :
                125;
 
-      PolarStore::Read(Temp - 7, polar);
+      PolarStore::GetItem(Temp - 7).Transfer(polar);
       return true;
     }
   }

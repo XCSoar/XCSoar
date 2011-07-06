@@ -218,12 +218,6 @@ static const PolarStore::Item InternalPolars[] =
   { _T("VT-116 Orlik II"), 335, 0, 80, -0.7, 100, -1.05, 120, -1.65, 12.8, 33.333, 86 },
 };
 
-void
-PolarStore::Read(unsigned i, PolarInfo &polar)
-{
-  GetItem(i).Transfer(polar);
-}
-
 const PolarStore::Item &
 PolarStore::GetItem(unsigned i)
 {

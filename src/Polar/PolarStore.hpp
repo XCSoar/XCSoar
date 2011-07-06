@@ -69,14 +69,6 @@ namespace PolarStore
     void Transfer(PolarInfo &polar) const;
   };
 
-  /**
-   * Reads internal WinPilot polar and passes it to
-   * the converter
-   * @param i Array id of the polar
-   * @param polar Polar to set
-   */
-  void Read(unsigned i, PolarInfo &polar);
-
   const Item &GetItem(unsigned i);
   unsigned Count();
 }
