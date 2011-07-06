@@ -211,8 +211,6 @@ LoggerConfigPanel::Save()
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
 
-  PlaneGlue::ToProfile(settings_computer.plane);
-
   changed |= SaveFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
                               szProfileLoggerTimeStepCruise,
                               settings_computer.LoggerTimeStepCruise);
@@ -229,6 +227,9 @@ LoggerConfigPanel::Save()
   changed |= SaveFormPropertyNegated(*wf, _T("prpDisableAutoLogger"),
                                      szProfileDisableAutoLogger,
                                      settings_computer.DisableAutoLogger);
+
+  if (changed)
+    PlaneGlue::ToProfile(settings_computer.plane);
 
   return changed;
 }
