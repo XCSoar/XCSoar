@@ -24,12 +24,13 @@ Copyright_License {
 #include "Profile/DeclarationConfig.hpp"
 #include "Profile/Profile.hpp"
 #include "Device/Declaration.hpp"
+#include "Plane/Plane.hpp"
 
 void
-Profile::GetDeclarationConfig(Declaration &declaration)
+Profile::GetDeclarationConfig(Declaration &declaration, const Plane &plane)
 {
   Profile::Get(szProfilePilotName, declaration.PilotName);
-  Profile::Get(szProfileAircraftType, declaration.AircraftType);
-  Profile::Get(szProfileAircraftReg, declaration.AircraftReg);
-  Profile::Get(szProfileCompetitionId, declaration.CompetitionId);
+  declaration.AircraftType = plane.type;
+  declaration.AircraftReg = plane.registration;
+  declaration.CompetitionId = plane.competition_id;
 }

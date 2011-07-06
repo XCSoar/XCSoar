@@ -38,6 +38,7 @@ Copyright_License {
 
 #include "Airspace/AirspaceComputerSettings.hpp"
 #include "TeamCodeCalculation.hpp"
+#include "Plane/Plane.hpp"
 
 class Waypoint;
 
@@ -203,6 +204,7 @@ struct SETTINGS_COMPUTER:
   GlidePolar glide_polar_task;
 
   AirspaceComputerSettings airspace;
+  Plane plane;
 };
 
 #endif

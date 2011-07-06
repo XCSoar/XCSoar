@@ -223,6 +223,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/ConditionMonitor.cpp \
 	$(SRC)/DateTime.cpp \
+	$(SRC)/Plane/PlaneGlue.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/FlarmNet.cpp \

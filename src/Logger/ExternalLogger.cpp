@@ -77,7 +77,7 @@ ExternalLogger::Declare(const OrderedTask& task)
     return;
 
   Declaration decl(&task);
-  Profile::GetDeclarationConfig(decl);
+  Profile::GetDeclarationConfig(decl, CommonInterface::SettingsComputer().plane);
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     if (DeviceDeclare(&DeviceList[i], decl))

@@ -25,10 +25,11 @@ Copyright_License {
 #define XCSOAR_PROFILE_DECLARATION_CONFIG_HPP
 
 struct Declaration;
+struct Plane;
 
 namespace Profile
 {
-  void GetDeclarationConfig(Declaration &declaration);
+  void GetDeclarationConfig(Declaration &declaration, const Plane &plane);
 };
 
 #endif

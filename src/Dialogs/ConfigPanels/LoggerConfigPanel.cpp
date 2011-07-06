@@ -35,6 +35,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "LoggerConfigPanel.hpp"
 #include "Language/Language.hpp"
+#include "Plane/PlaneGlue.hpp"
 
 static WndForm* wf = NULL;
 static WndButton *buttonPilotName = NULL;
@@ -50,25 +51,30 @@ UpdateButtons(void)
   TCHAR text[120];
   StaticString<100> val;
 
+  const Plane &plane = CommonInterface::SettingsComputer().plane;
+
   if (!Profile::Get(szProfilePilotName, val) || val.empty())
     val = _("(blank)");
 
   _stprintf(text, _T("%s: %s"), _("Pilot name"), val.c_str());
   buttonPilotName->SetCaption(text);
 
-  if (!Profile::Get(szProfileAircraftType, val) || val.empty())
+  val = plane.type;
+  if (val.empty())
     val = _("(blank)");
 
   _stprintf(text, _T("%s: %s"), _("Aircraft type"), val.c_str());
   buttonAircraftType->SetCaption(text);
 
-  if (!Profile::Get(szProfileAircraftReg, val) || val.empty())
+  val = plane.registration;
+  if (val.empty())
     val = _("(blank)");
 
   _stprintf(text, _T("%s: %s"), _("Aircraft reg."), val.c_str());
   buttonAircraftReg->SetCaption(text);
 
-  if (!Profile::Get(szProfileCompetitionId, val) || val.empty())
+  val = plane.competition_id;
+  if (val.empty())
     val = _("(blank)");
 
   _stprintf(text, _T("%s: %s"), _("Competition ID"), val.c_str());
@@ -85,45 +91,39 @@ UpdateButtons(void)
 static void
 OnCompetitionIdClicked(gcc_unused WndButton &button)
 {
-  StaticString<100> tmp;
-  if (!Profile::Get(szProfileCompetitionId, tmp))
-    tmp.clear();
+  Plane &plane = CommonInterface::SetSettingsComputer().plane;
 
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                            tmp.buffer(), tmp.MAX_SIZE)) {
-    Profile::Set(szProfileCompetitionId, tmp);
+                            plane.competition_id.buffer(),
+                            plane.competition_id.MAX_SIZE))
     changed = true;
-  }
+
   UpdateButtons();
 }
 
 static void
 OnAircraftTypeClicked(gcc_unused WndButton &button)
 {
-  StaticString<100> tmp;
-  if (!Profile::Get(szProfileAircraftType, tmp))
-    tmp.clear();
+  Plane &plane = CommonInterface::SetSettingsComputer().plane;
 
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                            tmp.buffer(), tmp.MAX_SIZE)) {
-    Profile::Set(szProfileAircraftType, tmp);
+                            plane.type.buffer(),
+                            plane.type.MAX_SIZE))
     changed = true;
-  }
+
   UpdateButtons();
 }
 
 static void
 OnAircraftRegClicked(gcc_unused WndButton &button)
 {
-  StaticString<100> tmp;
-  if (!Profile::Get(szProfileAircraftReg, tmp))
-    tmp.clear();
+  Plane &plane = CommonInterface::SetSettingsComputer().plane;
 
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                            tmp.buffer(), tmp.MAX_SIZE)) {
-    Profile::Set(szProfileAircraftReg, tmp);
+                            plane.registration.buffer(),
+                            plane.registration.MAX_SIZE))
     changed = true;
-  }
+
   UpdateButtons();
 }
 
@@ -210,6 +210,8 @@ LoggerConfigPanel::Save()
 {
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
+
+  PlaneGlue::ToProfile(settings_computer.plane);
 
   changed |= SaveFormProperty(*wf, _T("prpLoggerTimeStepCruise"),
                               szProfileLoggerTimeStepCruise,

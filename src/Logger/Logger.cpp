@@ -31,6 +31,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Asset.hpp"
 #include "Profile/DeclarationConfig.hpp"
+#include "SettingsComputerBlackboard.hpp"
 
 void
 Logger::LogPoint(const NMEA_INFO &gps_info)
@@ -114,7 +115,7 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
 
   OrderedTask* task = protected_task_manager.task_clone();
   Declaration decl(task);
-  Profile::GetDeclarationConfig(decl);
+  Profile::GetDeclarationConfig(decl, settings.plane);
 
   if (task) {
     delete task;

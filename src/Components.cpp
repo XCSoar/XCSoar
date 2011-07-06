@@ -90,6 +90,7 @@ Copyright_License {
 #include "Operation.hpp"
 #include "Pages.hpp"
 #include "Weather/NOAAGlue.hpp"
+#include "Plane/PlaneGlue.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "DrawThread.hpp"
@@ -269,6 +270,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   if (!LoadProfile())
     return false;
+
+  PlaneGlue::FromProfile(SetSettingsComputer().plane);
 
   operation.SetText(_("Initialising"));
 
