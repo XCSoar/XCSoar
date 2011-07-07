@@ -7,15 +7,15 @@
 
   <Tabbed Name="tab" X="70" Y="2" Width="-2" Height="222">
     <Panel Name="frmInfo">
-      <Canvas X="0" Y="0" OnPaint="OnLogoPaint" />
+      <Canvas OnPaint="OnLogoPaint" />
     </Panel>
     
     <Panel Name="frmAuthors">
-      <Edit Name="prpAuthors" X="0" Y="0" CaptionWidth="-1" ReadOnly="1" MultiLine="1" />
+      <Edit Name="prpAuthors" ReadOnly="1" MultiLine="1" />
     </Panel>
   
     <Panel Name="frmLicense">
-      <Edit Name="prpLicense" X="0" Y="0" CaptionWidth="-1" ReadOnly="1" MultiLine="1" />
+      <Edit Name="prpLicense" ReadOnly="1" MultiLine="1" />
     </Panel>
   </Tabbed>
 </Form>
