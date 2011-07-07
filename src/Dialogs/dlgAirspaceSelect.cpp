@@ -430,6 +430,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnFilterDistance),
   DeclareCallBackEntry(OnFilterDirection),
   DeclareCallBackEntry(OnFilterType),
+  DeclareCallBackEntry(CloseClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -446,9 +447,6 @@ PrepareAirspaceSelectDialog()
 #ifdef GNAV
   wf->SetKeyDownNotify(FormKeyDown);
 #endif
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->
-      SetOnClickNotify(CloseClicked);
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
   assert(wAirspaceList != NULL);

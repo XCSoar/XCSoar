@@ -3,7 +3,7 @@
 <Form Name="frmAirspaceSelect" Width="240" Height="320" Caption="Select Airspace">
   <Label X="0" Y="0" Width="100" Height="20" Caption="Filter..." />
 
-  <Button Name="cmdClose" Caption="Close" X="-77" Y="0" Width="75" Height="35"/>
+  <Button Name="cmdClose" Caption="Close" X="-77" Y="0" Width="75" Height="35" OnClick="CloseClicked" />
 
   <Edit Name="prpFltName" Caption="Name" X="2" Y="32" Width="98" Height="40" CaptionWidth="-1">
     <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
