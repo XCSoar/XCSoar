@@ -36,6 +36,11 @@ Copyright_License {
 class OperationEnvironment : private NonCopyable {
 public:
   /**
+   * Has the caller requested to cancel the operation?
+   */
+  virtual bool IsCancelled() const = 0;
+
+  /**
    * Sleep for a fixed amount of time.  May return earlier if an event
    * occurs.
    */
@@ -63,6 +68,7 @@ public:
 
 class NullOperationEnvironment : public OperationEnvironment {
 public:
+  virtual bool IsCancelled() const;
   virtual void Sleep(unsigned ms);
   virtual void SetText(const TCHAR *text);
   virtual void SetProgressRange(unsigned range);

@@ -24,6 +24,12 @@ Copyright_License {
 #include "Operation.hpp"
 #include "OS/Sleep.h"
 
+bool
+NullOperationEnvironment::IsCancelled() const
+{
+  return false;
+}
+
 void
 NullOperationEnvironment::Sleep(unsigned ms)
 {
