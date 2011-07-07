@@ -40,6 +40,7 @@ struct DeviceRegister;
 class InternalGPS;
 class RecordedFlightList;
 struct RecordedFlightInfo;
+class OperationEnvironment;
 
 class DeviceDescriptor : public Port::Handler {
 public:
@@ -137,10 +138,13 @@ public:
   bool PutVoice(const TCHAR *sentence);
 
   void LinkTimeout();
-  bool Declare(const struct Declaration &declaration);
+  bool Declare(const struct Declaration &declaration,
+               OperationEnvironment &env);
 
-  bool ReadFlightList(RecordedFlightList &flight_list);
-  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path);
+  bool ReadFlightList(RecordedFlightList &flight_list,
+                      OperationEnvironment &env);
+  bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+                      OperationEnvironment &env);
 
   void OnSysTicker(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
 

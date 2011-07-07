@@ -33,7 +33,6 @@ Copyright_License {
 #include "Logger/NMEALogger.hpp"
 #include "Language/Language.hpp"
 #include "Operation.hpp"
-#include "ProgressGlue.hpp"
 #include "OS/Clock.hpp"
 
 #ifdef ANDROID
@@ -225,13 +224,13 @@ DeviceDescriptor::LinkTimeout()
 }
 
 bool
-DeviceDescriptor::Declare(const struct Declaration &declaration)
+DeviceDescriptor::Declare(const struct Declaration &declaration,
+                          OperationEnvironment &env)
 {
   assert(!declaring);
   declaring = true;
 
   TCHAR text[60];
-  VerboseOperationEnvironment env;
 
   _stprintf(text, _("Declaring to %s"), Driver->display_name);
   env.SetText(text);
@@ -243,43 +242,35 @@ DeviceDescriptor::Declare(const struct Declaration &declaration)
     result = FlarmDeclare(Com, declaration, env) || result;
   }
 
-  env.Hide();
-
   declaring = false;
   return result;
 }
 
 bool
-DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list)
+DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
+                                 OperationEnvironment &env)
 {
   if (Driver == NULL || device == NULL)
     return false;
-
-  VerboseOperationEnvironment env;
 
   TCHAR text[60];
   _stprintf(text, _("Reading flight list from %s"), Driver->display_name);
   env.SetText(text);
-  bool result = device->ReadFlightList(flight_list, env);
-  env.Hide();
-  return result;
+  return device->ReadFlightList(flight_list, env);
 }
 
 bool
 DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
-                                 const TCHAR *path)
+                                 const TCHAR *path,
+                                 OperationEnvironment &env)
 {
   if (Driver == NULL || device == NULL)
     return false;
 
-  VerboseOperationEnvironment env;
-
   TCHAR text[60];
   _stprintf(text, _("Downloading flight from %s"), Driver->display_name);
   env.SetText(text);
-  bool result = device->DownloadFlight(flight, path, env);
-  env.Hide();
-  return result;
+  return device->DownloadFlight(flight, path, env);
 }
 
 void

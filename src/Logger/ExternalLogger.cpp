@@ -36,6 +36,7 @@
 #include "LocalPath.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
+#include "Operation.hpp"
 
 static bool DeclaredToDevice = false;
 
@@ -46,6 +47,16 @@ ExternalLogger::IsDeclared()
 }
 
 static bool
+DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration)
+{
+  VerboseOperationEnvironment env;
+  bool success = device.Declare(declaration, env);
+  env.Hide();
+
+  return success;
+}
+
+static bool
 DeviceDeclare(DeviceDescriptor *dev, const Declaration &declaration)
 {
   if (!dev->CanDeclare())
@@ -53,7 +64,7 @@ DeviceDeclare(DeviceDescriptor *dev, const Declaration &declaration)
 
   if (MessageBoxX(_("Declare task?"),
                   dev->GetDisplayName(), MB_YESNO| MB_ICONQUESTION) == IDYES) {
-    if (dev->Declare(declaration)) {
+    if (DoDeviceDeclare(*dev, declaration)) {
       MessageBoxX(_("Task declared!"),
                   dev->GetDisplayName(), MB_OK| MB_ICONINFORMATION);
       DeclaredToDevice = true;
@@ -110,11 +121,32 @@ ExternalLogger::CheckDeclaration(void)
   return false;
 }
 
+static bool
+DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
+{
+  VerboseOperationEnvironment env;
+  bool success = device.ReadFlightList(flight_list, env);
+  env.Hide();
+
+  return success;
+}
+
+static bool
+DoDownloadFlight(DeviceDescriptor &device,
+                 const RecordedFlightInfo &flight, const TCHAR *path)
+{
+  VerboseOperationEnvironment env;
+  bool success = device.DownloadFlight(flight, path, env);
+  env.Hide();
+
+  return success;
+}
+
 static void
 DownloadFlightFrom(DeviceDescriptor &device)
 {
   RecordedFlightList flight_list;
-  if (!device.ReadFlightList(flight_list)) {
+  if (!DoReadFlightList(device, flight_list)) {
     MessageBoxX(_("Failed to download flight list."),
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
     return;
@@ -147,7 +179,7 @@ DownloadFlightFrom(DeviceDescriptor &device)
   TCHAR path[MAX_PATH];
   LocalPath(path, _T("external.igc")); // XXX better file name
 
-  if (!device.DownloadFlight(flight_list[i], path)) {
+  if (!DoDownloadFlight(device, flight_list[i], path)) {
     MessageBoxX(_("Failed to download flight."),
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
     return;
