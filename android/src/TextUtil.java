@@ -39,6 +39,7 @@ import java.nio.ShortBuffer;
 public class TextUtil {
   private Paint paint;
   private Paint.FontMetricsInt metrics;
+  private ShortBuffer pixels;
   private int[] extent = new int[2];
   private int[] id = new int[3];
 
@@ -75,6 +76,27 @@ public class TextUtil {
     return extent;
   }
 
+  /**
+   * Ensures that the #pixels variable has enough room for a bitmap of
+   * the specified size.
+   */
+  private void makeBuffer(int width, int height) {
+    /* start off with a buffer that is pretty large */
+    if (width < 256)
+      width = 256;
+    if (height < 128)
+      height = 128;
+
+    /* round up */
+    int requiredCapacity = ((width * height - 1) | 0x3fff) + 1;
+
+    /* check if the existing buffer is already large enough */
+    if (pixels == null || pixels.capacity() < requiredCapacity)
+      pixels = ShortBuffer.allocate(requiredCapacity);
+    else if (pixels != null)
+      pixels.clear();
+  }
+
   public int[] getTextTextureGL(String text,
                                 int fg_red, int fg_green, int fg_blue,
                                 int bg_red, int bg_green, int bg_blue) {
@@ -88,7 +110,7 @@ public class TextUtil {
     canvas.drawText(text, 0, -paint.getFontMetricsInt().ascent, paint);
 
     // get bitmap pixels
-    ShortBuffer pixels = ShortBuffer.allocate(extent[0] * extent[1]);
+    makeBuffer(extent[0], extent[1]);
     bmp.copyPixelsToBuffer(pixels);
 
     // create OpenGL texture
