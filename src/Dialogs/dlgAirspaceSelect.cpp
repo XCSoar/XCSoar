@@ -368,7 +368,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
 
 static void
-OnWPSCloseClicked(gcc_unused WndButton &button)
+CloseClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrCancel);
 }
@@ -448,7 +448,7 @@ PrepareAirspaceSelectDialog()
 #endif
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->
-      SetOnClickNotify(OnWPSCloseClicked);
+      SetOnClickNotify(CloseClicked);
 
   wAirspaceList = (WndListFrame*)wf->FindByName(_T("frmAirspaceList"));
   assert(wAirspaceList != NULL);
