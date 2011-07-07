@@ -455,6 +455,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Thread/Operation.cpp \
+	$(SRC)/Thread/JobThread.cpp \
 	\
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \
