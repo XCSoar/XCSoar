@@ -103,9 +103,10 @@ TextUtil::getTextBounds(const char *text) const
 {
   jint extent[2];
 
+  Java::String text2(env, text);
   jintArray paramExtent = (jintArray)
     env->CallObjectMethod(get(), midGetTextBounds,
-                          Java::String(env, text).get());
+                          text2.get());
   env->GetIntArrayRegion(paramExtent, 0, 2, extent);
 
   // free local references
@@ -119,7 +120,8 @@ int
 TextUtil::getTextTextureGL(const char *text, int fr, int fg, int fb,
                            int br, int bg, int bb) const
 {
+  Java::String text2(env, text);
   return env->CallIntMethod(get(), midGetTextTextureGL,
-                            Java::String(env, text).get(),
+                            text2.get(),
                             fr, fg, fb, br, bg, bb);
 }

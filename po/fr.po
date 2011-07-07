@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 01:31+0200\n"
-"PO-Revision-Date: 2011-07-03 16:04+0000\n"
-"Last-Translator: thomas <Unknown>\n"
+"PO-Revision-Date: 2011-07-05 20:12+0000\n"
+"Last-Translator: Quentin Henriet <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-05 17:21+0000\n"
-"X-Generator: Launchpad (build 13333)\n"
+"X-Launchpad-Export-Date: 2011-07-06 12:48+0000\n"
+"X-Generator: Launchpad (build 13376)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:309
@@ -1251,7 +1251,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:493
 #, no-c-format
 msgid "Outside air temperature"
-msgstr ""
+msgstr "Température de l'air extérieur"
 
 #: src/InfoBoxes/Content/Factory.cpp:494
 #, no-c-format
@@ -1285,7 +1285,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:511 src/InputEventsActions.cpp:1390
 #, no-c-format
 msgid "Forecast temperature"
-msgstr ""
+msgstr "Température prévue"
 
 #: src/InfoBoxes/Content/Factory.cpp:512
 #, no-c-format
@@ -2084,7 +2084,7 @@ msgstr ""
 
 #: src/InputEventsActions.cpp:637
 msgid "Show details:"
-msgstr ""
+msgstr "Afficher les détails :"
 
 #: src/InputEventsActions.cpp:642
 msgid "Unknown competition number"
@@ -2112,11 +2112,11 @@ msgstr "MacCready "
 
 #: src/InputEventsActions.cpp:992
 msgid "Task aborted"
-msgstr ""
+msgstr "Tâche annulée"
 
 #: src/InputEventsActions.cpp:995
 msgid "Go to target"
-msgstr ""
+msgstr "Aller à la cible"
 
 #: src/InputEventsActions.cpp:998
 msgid "Ordered task"
@@ -2459,7 +2459,7 @@ msgstr ""
 
 #: src/FlightStatisticsRenderer.cpp:769 src/FlightStatisticsRenderer.cpp:779
 msgid "Target speed"
-msgstr ""
+msgstr "Vitesse de la cible"
 
 #: src/Interface.cpp:126
 msgid "Quit program?"
@@ -2834,7 +2834,7 @@ msgstr ""
 #: src/Dialogs/dlgConfiguration.cpp:102
 #, no-c-format
 msgid "Experimental Features"
-msgstr ""
+msgstr "Fonctionnalités expérimentales"
 
 #: src/Dialogs/dlgConfiguration.cpp:325 src/Dialogs/dlgConfigFonts.cpp:344
 msgid "Changes to configuration saved.  Restart XCSoar to apply changes."
