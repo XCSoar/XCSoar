@@ -439,8 +439,8 @@ PrepareAirspaceSelectDialog()
   gcc_unused ScopeBusyIndicator busy;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
-                  !Layout::landscape ? _T("IDR_XML_AIRSPACESELECT_L") :
-                                       _T("IDR_XML_AIRSPACESELECT"));
+                  Layout::landscape ? _T("IDR_XML_AIRSPACESELECT_L") :
+                                      _T("IDR_XML_AIRSPACESELECT"));
   assert(wf != NULL);
 
 #ifdef GNAV

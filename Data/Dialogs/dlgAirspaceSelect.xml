@@ -1,25 +1,25 @@
 <?xml version="1.0"?>
 
-<Form Name="frmAirspaceSelect" Width="320" Height="240" Caption="Select Airspace">
+<Form Name="frmAirspaceSelect" Width="240" Height="320" Caption="Select Airspace">
   <Label X="0" Y="0" Width="100" Height="20" Caption="Filter..." />
 
-  <Edit Name="prpFltName" Caption="Name" X="2" Width="98" Height="36" CaptionWidth="-1">
+  <Button Name="cmdClose" Caption="Close" X="-77" Y="0" Width="75" Height="35"/>
+
+  <Edit Name="prpFltName" Caption="Name" X="2" Y="32" Width="98" Height="40" CaptionWidth="-1">
     <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterName"/>
   </Edit>
 
-  <Edit Name="prpFltDistance" Caption="Distance" X="2" Width="98" Height="36" CaptionWidth="-1">
-    <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
-  </Edit>
-
-  <Edit Name="prpFltDirection" Caption="Direction" X="2" Width="98" Height="36" CaptionWidth="-1">
-    <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
-  </Edit>
-
-  <Edit Name="prpFltType" Caption="Type" X="2" Width="98" Height="36" CaptionWidth="-1">
+  <Edit Name="prpFltType" Caption="Type" X="100" Y="32" Width="98" Height="40" CaptionWidth="-1">
     <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
   </Edit>
 
-  <Button Name="cmdClose" Caption="Close" X="2" Y="-37" Width="75" Height="35" />
+  <Edit Name="prpFltDistance" Caption="Distance" X="2" Y="74" Width="98" Height="40" CaptionWidth="-1">
+    <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
+  </Edit>
 
-  <List Name="frmAirspaceList" X="102" Y="1" Width="-1" Height="-1" ItemHeight="18"/>
+  <Edit Name="prpFltDirection" Caption="Direction" X="100" Y="74" Width="98" Height="40" CaptionWidth="-1">
+    <DataField DataType="string" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
+  </Edit>
+
+  <List Name="frmAirspaceList" X="1" Y="116" Width="-1" Height="-1" ItemHeight="18"/>
 </Form>
