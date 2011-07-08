@@ -61,7 +61,7 @@ PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
 
   // Glider empty weight
   polar.SetReferenceMass(reference_mass, false);
-  polar.dry_mass = (positive(dry_mass) ? dry_mass : reference_mass);
+  polar.SetDryMass(positive(dry_mass) ? dry_mass : reference_mass, false);
   // Ballast weight
   polar.SetBallastRatio(max_ballast / polar.reference_mass);
 

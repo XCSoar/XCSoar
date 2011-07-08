@@ -421,6 +421,19 @@ public:
       Update();
   }
 
+  /** Returns the dry mass in kg */
+  fixed GetDryMass() const {
+    return dry_mass;
+  }
+
+  /** Sets the dry mass in kg */
+  void SetDryMass(fixed _dry_mass, bool update = true) {
+    dry_mass = _dry_mass;
+
+    if (update)
+      Update();
+  }
+
   /** Returns the ballast ratio */
   fixed GetBallastRatio() const {
     return ballast_ratio;
