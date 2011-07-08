@@ -19,7 +19,7 @@
 #include <windows.h>
 #endif
 
-namespace CDevIMI
+namespace IMI
 {
   // variables
   bool _connected;
@@ -63,7 +63,7 @@ unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
 /**
  * @brief Coordinates converter helper
  */
-struct CDevIMI::TAngle
+struct IMI::TAngle
 {
   union {
     struct {
@@ -90,7 +90,7 @@ struct CDevIMI::TAngle
  * @param imiIdx The index of IMI waypoint to set
  * @param imiWp IMI waypoint structure to set
  */
-void CDevIMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
+void IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
 {
   unsigned idx = imiIdx == 0 ? 0 :
     (imiIdx == decl.size() + 1 ? imiIdx - 2 : imiIdx - 1);
@@ -174,7 +174,7 @@ void CDevIMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &i
  *
  * @return Operation status
  */
-bool CDevIMI::Send(Port &port, const TMsg &msg)
+bool IMI::Send(Port &port, const TMsg &msg)
 {
   return port.Write(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2);
 }
@@ -193,7 +193,7 @@ bool CDevIMI::Send(Port &port, const TMsg &msg)
  *
  * @return Operation status
  */
-bool CDevIMI::Send(Port &port,
+bool IMI::Send(Port &port,
                    IMIBYTE msgID, const void *payload /* =0 */, IMIWORD payloadSize /* =0 */,
                    IMIBYTE parameter1 /* =0 */, IMIWORD parameter2 /* =0 */, IMIWORD parameter3 /* =0 */)
 {
@@ -230,7 +230,7 @@ bool CDevIMI::Send(Port &port,
  *
  * @return Pointer to a message structure if expected message was received or 0 otherwise
  */
-const CDevIMI::TMsg *CDevIMI::Receive(Port &port, unsigned extraTimeout,
+const IMI::TMsg *IMI::Receive(Port &port, unsigned extraTimeout,
                                       unsigned expectedPayloadSize)
 {
   if(expectedPayloadSize > COMM_MAX_PAYLOAD_SIZE)
@@ -295,7 +295,7 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &port, unsigned extraTimeout,
  *
  * @return Pointer to a message structure if expected message was received or 0 otherwise
  */
-const CDevIMI::TMsg *CDevIMI::SendRet(Port &port,
+const IMI::TMsg *IMI::SendRet(Port &port,
                                       IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
                                       IMIBYTE reMsgID, IMIWORD retPayloadSize,
                                       IMIBYTE parameter1 /* =0 */, IMIWORD parameter2 /* =0 */, IMIWORD parameter3 /* =0 */,
@@ -326,7 +326,7 @@ const CDevIMI::TMsg *CDevIMI::SendRet(Port &port,
  *
  * @return Operation status
  */
-bool CDevIMI::Connect(Port &port)
+bool IMI::Connect(Port &port)
 {
   if (_connected)
     return true;
@@ -391,7 +391,7 @@ bool CDevIMI::Connect(Port &port)
  *
  * @return Operation status
  */
-bool CDevIMI::DeclarationWrite(Port &port, const Declaration &decl)
+bool IMI::DeclarationWrite(Port &port, const Declaration &decl)
 {
   if (!_connected)
     return false;
@@ -425,7 +425,7 @@ bool CDevIMI::DeclarationWrite(Port &port, const Declaration &decl)
  *
  * @return Operation status
  */
-bool CDevIMI::Disconnect(Port &port)
+bool IMI::Disconnect(Port &port)
 {
   if (!_connected)
     return true;
@@ -438,7 +438,7 @@ bool CDevIMI::Disconnect(Port &port)
 }
 
 bool
-CDevIMI::DeclareTask(Port &port, const Declaration &declaration)
+IMI::DeclareTask(Port &port, const Declaration &declaration)
 {
   // verify WP number
   if (declaration.size() < 2 || declaration.size() > 13)
@@ -471,7 +471,7 @@ CDevIMI::DeclareTask(Port &port, const Declaration &declaration)
   return status;
 }
 
-void CDevIMI::Register()
+void IMI::Register()
 {
   _connected = false;
 }

@@ -28,7 +28,7 @@ Copyright_License {
 IMIDevice::IMIDevice(Port *_port)
   :port(_port)
 {
-  CDevIMI::Register();
+  IMI::Register();
 }
 
 bool
@@ -38,5 +38,5 @@ IMIDevice::Declare(const Declaration &declaration,
   if (port == NULL)
     return false;
 
-  return CDevIMI::DeclareTask(*port, declaration);
+  return IMI::DeclareTask(*port, declaration);
 }

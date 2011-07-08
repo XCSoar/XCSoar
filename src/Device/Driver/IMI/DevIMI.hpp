@@ -20,8 +20,6 @@
 class Port;
 struct Declaration;
 
-using namespace IMI;
-
 /**
  * @brief IMI-Gliding ERIXX device class
  *
@@ -29,7 +27,7 @@ using namespace IMI;
  *
  * @note IMI driver methods are based on the source code provided by Juraj Rojko from IMI-Gliding.
  */
-namespace CDevIMI
+namespace IMI
 {
   enum TMsgType {
     MSG_ACK_SUCCESS      = 0x00,
@@ -98,7 +96,7 @@ static const unsigned IMIDECL_MAX_WAYPOINTS    = 15;
 
 /* *********************** M E S S A G E S ************************** */
 
-struct CDevIMI::TDeviceInfo {
+struct IMI::TDeviceInfo {
   IMIBYTE device;
   IMIBYTE tampered;
   IMIBYTE hwVersion;
@@ -116,7 +114,7 @@ struct CDevIMI::TDeviceInfo {
 } gcc_packed;
 
 
-struct CDevIMI::TDeclarationHeader {
+struct IMI::TDeclarationHeader {
   /** Device type index */
   IMIBYTE id, device;
   /** Serial number */
@@ -171,7 +169,7 @@ struct CDevIMI::TDeclarationHeader {
 } gcc_packed;
 
 
-struct CDevIMI::TObservationZone {
+struct IMI::TObservationZone {
   IMIDWORD style:3;        // 0 -> default, 1-5 -> direction of course, the same value as in SeeYou
                            //0 - default = ignore observation zone setting and use default OZ stored in Erixx
                            //1 - fixed angle
@@ -197,7 +195,7 @@ struct CDevIMI::TObservationZone {
 } gcc_packed;
 
 
-struct CDevIMI::TWaypoint {
+struct IMI::TWaypoint {
   IMIDWORD lon:25;
   IMIDWORD reserved1:7;
 
@@ -210,7 +208,7 @@ struct CDevIMI::TWaypoint {
 } gcc_packed;
 
 
-struct CDevIMI::TDeclaration {
+struct IMI::TDeclaration {
   TDeclarationHeader header;
   TWaypoint wp[IMIDECL_MAX_WAYPOINTS];
   IMIBYTE reserved[sizeof(TWaypoint) - sizeof(IMIWORD)];
@@ -218,7 +216,7 @@ struct CDevIMI::TDeclaration {
 } gcc_packed;
 
 
-struct CDevIMI::TMsg {
+struct IMI::TMsg {
   IMIBYTE syncChar1, syncChar2;
   IMIWORD sn;
   IMIBYTE msgID, parameter1;

@@ -14,7 +14,7 @@
 /**
  * @brief Resets the state of the parser
  */
-void CDevIMI::CMsgParser::Reset()
+void IMI::CMsgParser::Reset()
 {
   _msgBytesLeft = 0;
   _msgBufferPos = 0;
@@ -30,7 +30,7 @@ void CDevIMI::CMsgParser::Reset()
  *
  * @return Verification status
  */
-bool CDevIMI::CMsgParser::Check(const TMsg *msg, IMIDWORD size) const
+bool IMI::CMsgParser::Check(const TMsg *msg, IMIDWORD size) const
 {
   // minimal size of comm message
   if(size < IMICOMM_MSG_HEADER_SIZE + IMICOMM_CRC_LEN)
@@ -45,7 +45,7 @@ bool CDevIMI::CMsgParser::Check(const TMsg *msg, IMIDWORD size) const
     return false;
 
   // check CRC
-  IMIWORD crc1 = IMI::CRC16Checksum(((IMIBYTE*)msg) + IMICOMM_SYNC_LEN, IMICOMM_MSG_HEADER_SIZE + msg->payloadSize - IMICOMM_SYNC_LEN);
+  IMIWORD crc1 = CRC16Checksum(((IMIBYTE*)msg) + IMICOMM_SYNC_LEN, IMICOMM_MSG_HEADER_SIZE + msg->payloadSize - IMICOMM_SYNC_LEN);
   IMIWORD crc2 = (IMIWORD)(((IMIBYTE*)msg)[size - 1]) | ((IMIWORD)(((IMIBYTE*)msg)[size - 2]) << 8);
   if(crc1 != crc2)
     return false;
@@ -62,7 +62,7 @@ bool CDevIMI::CMsgParser::Check(const TMsg *msg, IMIDWORD size) const
  *
  * @return Received message or 0 if invalid on incomplete.
  */
-const CDevIMI::TMsg *CDevIMI::CMsgParser::Parse(const IMIBYTE buffer[], int size)
+const IMI::TMsg *IMI::CMsgParser::Parse(const IMIBYTE buffer[], int size)
 {
   const IMIBYTE *ptr = buffer;
   const TMsg *msg = 0;

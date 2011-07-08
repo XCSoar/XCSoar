@@ -18,7 +18,7 @@
 /**
  * @brief Message parser class
  */
-class CDevIMI::CMsgParser {
+class IMI::CMsgParser {
   /**
    * @brief Parser state
    */
