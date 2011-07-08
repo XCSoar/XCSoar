@@ -78,6 +78,13 @@ struct CDevIMI::TAngle
     };
     IMIDWORD value;
   };
+
+  TAngle(Angle angle) {
+    sign = (angle.sign() == -1) ? 1 : 0;
+    double mag = angle.magnitude_degrees();
+    degrees = static_cast<IMIDWORD>(mag);
+    milliminutes = static_cast<IMIDWORD>((mag - degrees) * 60 * 1000);
+  }
 };
 
 
@@ -99,19 +106,10 @@ void CDevIMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &i
   unicode2usascii(wp.Name.c_str(), imiWp.name, sizeof(imiWp.name));
 
   // set latitude
-  TAngle a;
-  a.sign = (wp.Location.Latitude.sign() == -1) ? 1 : 0;
-  double angle = wp.Location.Latitude.magnitude_degrees();
-  a.degrees = static_cast<IMIDWORD>(angle);
-  a.milliminutes = static_cast<IMIDWORD>((angle - a.degrees) * 60 * 1000);
-  imiWp.lat = a.value;
+  imiWp.lat = TAngle(wp.Location.Latitude).value;
 
   // set longitude
-  a.sign = (wp.Location.Longitude.sign() == -1) ? 1 : 0;
-  angle = wp.Location.Longitude.magnitude_degrees();
-  a.degrees = static_cast<IMIDWORD>(angle);
-  a.milliminutes = static_cast<IMIDWORD>((angle - a.degrees) * 60 * 1000);
-  imiWp.lon = a.value;
+  imiWp.lon = TAngle(wp.Location.Longitude).value;
 
   // TAKEOFF and LANDING do not have OZs
   if(imiIdx == 0 || imiIdx == decl.size() + 1)
