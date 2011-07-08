@@ -42,10 +42,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 {
   ScreenGlobalInit screen_init;
 
-#ifndef ENABLE_SDL
-  PaintWindow::register_class(hInstance);
-#endif
-
 #ifdef WIN32
   ResourceLoader::Init(hInstance);
 #endif

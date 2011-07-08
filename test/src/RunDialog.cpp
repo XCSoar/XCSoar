@@ -79,8 +79,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 
   ResourceLoader::Init(hInstance);
-
-  PaintWindow::register_class(hInstance);
 #endif
 
   if (argc < 2) {

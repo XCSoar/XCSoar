@@ -235,7 +235,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
     return false;
 
   // Register window classes
-  PaintWindow::register_class(hInstance);
   MainWindow::register_class(hInstance);
 
   // Creates the main window

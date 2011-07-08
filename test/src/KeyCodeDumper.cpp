@@ -190,7 +190,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ScreenGlobalInit screen_init;
 
 #ifdef WIN32
-  PaintWindow::register_class(hInstance);
   TestWindow::register_class(hInstance);
 #endif
 

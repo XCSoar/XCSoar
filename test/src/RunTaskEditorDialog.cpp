@@ -157,10 +157,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   InitialiseDataPath();
   ScreenGlobalInit screen_init;
 
-#ifdef WIN32
-  PaintWindow::register_class(hInstance);
-#endif
-
   LoadFiles();
 
   CreateDefaultTask(task_manager, way_points);

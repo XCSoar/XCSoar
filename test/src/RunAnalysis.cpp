@@ -253,8 +253,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);
-
-  PaintWindow::register_class(hInstance);
 #endif
 
   SingleWindow main_window;

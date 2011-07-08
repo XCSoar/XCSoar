@@ -45,7 +45,9 @@ public:
 
   virtual ~PaintWindow();
 
+#ifndef ENABLE_SDL
   static bool register_class(HINSTANCE hInstance);
+#endif
 
 #ifdef ENABLE_SDL
   using Window::set;

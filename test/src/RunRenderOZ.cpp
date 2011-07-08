@@ -298,7 +298,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifndef ENABLE_SDL
   ResourceLoader::Init(hInstance);
-  PaintWindow::register_class(hInstance);
   TestWindow::register_class(hInstance);
 #endif
 

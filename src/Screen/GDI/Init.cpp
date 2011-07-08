@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/GDI/AlphaBlend.hpp"
+#include "Screen/PaintWindow.hpp"
 
 #include <windows.h>
 #include <commctrl.h>
@@ -35,6 +36,9 @@ ScreenGlobalInit::ScreenGlobalInit()
 #ifdef HAVE_DYNAMIC_ALPHA_BLEND
   AlphaBlendInit();
 #endif
+
+  HINSTANCE hInstance = ::GetModuleHandle(NULL);
+  PaintWindow::register_class(hInstance);
 
   ScreenInitialized();
 }

@@ -93,7 +93,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);
-  PaintWindow::register_class(hInstance);
 #endif
 
   LoadFiles(airspace_database);
