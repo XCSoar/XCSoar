@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef NET_SESSION_HPP
 #define NET_SESSION_HPP
 
-#include "Net/WinINet.hpp"
+#include "Net/WinINet/WinINet.hpp"
 
 namespace Net {
   class Session {

@@ -25,7 +25,7 @@ Copyright_License {
 #define NET_CONNECTION_HPP
 
 #include "Thread/Trigger.hpp"
-#include "Net/WinINet.hpp"
+#include "Net/WinINet/WinINet.hpp"
 
 namespace Net {
   class Session;
