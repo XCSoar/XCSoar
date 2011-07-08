@@ -650,6 +650,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunCanvas RunMapWindow RunDialog \
 	RunRenderOZ \
 	RunProgressWindow \
+	RunJobDialog \
 	RunAnalysis \
 	RunAirspaceWarningDialog \
 	TestNotify \
@@ -1612,6 +1613,41 @@ RUN_PROGRESS_WINDOW_LDADD = \
 $(RUN_PROGRESS_WINDOW_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(RUN_PROGRESS_WINDOW_BIN): LDLIBS += $(SCREEN_LDLIBS)
 $(RUN_PROGRESS_WINDOW_BIN): $(RUN_PROGRESS_WINDOW_OBJS) $(RUN_PROGRESS_WINDOW_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_JOB_DIALOG_SOURCES = \
+	$(SRC)/Version.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Operation.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Notify.cpp \
+	$(SRC)/Thread/Thread.cpp \
+	$(SRC)/Thread/Operation.cpp \
+	$(SRC)/Thread/JobThread.cpp \
+	$(SRC)/Screen/ProgressWindow.cpp \
+	$(SRC)/Screen/ProgressBar.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Gauge/LogoView.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Dialogs/JobDialog.cpp \
+	$(SRC)/Form/Form.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/RunJobDialog.cpp
+RUN_JOB_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_JOB_DIALOG_SOURCES))
+RUN_JOB_DIALOG_BIN = $(TARGET_BIN_DIR)/RunJobDialog$(TARGET_EXEEXT)
+RUN_JOB_DIALOG_LDADD = \
+	$(SCREEN_LIBS) \
+	$(MATH_LIBS) \
+	$(RESOURCE_BINARY)
+$(RUN_JOB_DIALOG_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(RUN_JOB_DIALOG_BIN): LDLIBS += $(SCREEN_LDLIBS)
+$(RUN_JOB_DIALOG_BIN): $(RUN_JOB_DIALOG_OBJS) $(RUN_JOB_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

@@ -110,6 +110,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/Message.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
+	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/dlgAirspace.cpp \
 	$(SRC)/Dialogs/dlgAirspaceColours.cpp \
 	$(SRC)/Dialogs/dlgAirspacePatterns.cpp \
