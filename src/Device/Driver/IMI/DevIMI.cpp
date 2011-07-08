@@ -466,18 +466,18 @@ CDevIMI::DeclareTask(Port &port, const Declaration &declaration)
     status = Connect(port);
     if(status) {
       // task declaration
-      status = status && DeclarationWrite(port, declaration);
+      status &= DeclarationWrite(port, declaration);
     }
 
     // disconnect
-    status = Disconnect(port) && status;
+    status &= Disconnect(port);
 
     // restore Rx timeout (we must try that always; don't overwrite error descr)
-    status = port.SetRxTimeout(0) && status;
+    status &= port.SetRxTimeout(0);
   }
 
   // restart Rx thread
-  status = port.StartRxThread() && status;
+  status &= port.StartRxThread();
 
   return status;
 }
