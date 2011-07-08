@@ -162,7 +162,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar)
     return false;
 
   // p is now at the first character after the line feed
-  *p++;
+  p++;
 
   if (*p == 0)
     return false;
@@ -234,7 +234,7 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf)
     return false;
 
   // p is now at the first character after the line feed
-  *p++;
+  p++;
 
   if (*p == 0)
     return false;
