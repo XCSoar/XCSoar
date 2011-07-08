@@ -22,6 +22,12 @@ CAI302_SOURCES = \
 	$(DRIVER_SRC_DIR)/CAI302/Logger.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Register.cpp
 
+IMI_SOURCES = \
+	$(DRIVER_SRC_DIR)/IMI/MsgParser.cpp \
+	$(DRIVER_SRC_DIR)/IMI/DevIMI.cpp \
+	$(DRIVER_SRC_DIR)/IMI/Declare.cpp \
+	$(DRIVER_SRC_DIR)/IMI/Register.cpp
+
 LX_SOURCES = \
 	$(DRIVER_SRC_DIR)/LX/Protocol.cpp \
 	$(DRIVER_SRC_DIR)/LX/Parser.cpp \
@@ -32,6 +38,7 @@ LX_SOURCES = \
 DRIVER_SOURCES = \
 	$(VOLKSLOGGER_SOURCES) \
 	$(CAI302_SOURCES) \
+	$(IMI_SOURCES) \
 	$(LX_SOURCES) \
 	$(DRIVER_SRC_DIR)/AltairPro.cpp \
 	$(DRIVER_SRC_DIR)/BorgeltB50.cpp \
@@ -42,7 +49,6 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/FlymasterF1.cpp \
 	$(DRIVER_SRC_DIR)/Flytec.cpp \
 	$(DRIVER_SRC_DIR)/Generic.cpp \
-	$(DRIVER_SRC_DIR)/IMI.cpp \
 	$(DRIVER_SRC_DIR)/Leonardo.cpp \
 	$(DRIVER_SRC_DIR)/NmeaOut.cpp \
 	$(DRIVER_SRC_DIR)/PosiGraph.cpp \
