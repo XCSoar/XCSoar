@@ -24,8 +24,9 @@ Copyright_License {
 #include "Dialogs/Weather.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Language/Language.hpp"
+#include "Net/Features.hpp"
 
-#if defined(WIN32) && !defined(_WIN32_WCE) && !defined(HAVE_POSIX)
+#ifdef HAVE_NET
 
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"

@@ -25,8 +25,9 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
+#include "Net/Features.hpp"
 
-#if defined(WIN32) && !defined(_WIN32_WCE) && !defined(HAVE_POSIX)
+#ifdef HAVE_NET
 
 #include "Dialogs/TextEntry.hpp"
 #include "Dialogs/XML.hpp"

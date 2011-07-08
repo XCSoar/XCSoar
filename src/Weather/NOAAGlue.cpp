@@ -22,8 +22,9 @@ Copyright_License {
 */
 
 #include "NOAAGlue.hpp"
+#include "Net/Features.hpp"
 
-#if defined(WIN32) && !defined(_WIN32_WCE) && !defined(HAVE_POSIX)
+#ifdef HAVE_NET
 
 #include "NOAAStore.hpp"
 #include "Profile/Profile.hpp"
