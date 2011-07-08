@@ -58,12 +58,6 @@ NullPort::StartRxThread(void)
   return true;
 }
 
-int
-NullPort::GetChar(void)
-{
-  return EOF;
-}
-
 bool
 NullPort::SetRxTimeout(unsigned Timeout)
 {

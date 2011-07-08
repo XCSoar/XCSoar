@@ -40,7 +40,6 @@ public:
   virtual unsigned long SetBaudrate(unsigned long BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();
-  virtual int GetChar();
   virtual int Read(void *Buffer, size_t Size);
 
 private:
