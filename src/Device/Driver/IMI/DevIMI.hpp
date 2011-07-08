@@ -12,12 +12,15 @@
 #define XCSOAR_IMI_DEVIMI_HPP
 
 #include "Compiler.h"
+#include "Types.hpp"
 
 #include <stdint.h>
 #include <stddef.h>
 
 class Port;
 struct Declaration;
+
+using namespace IMI;
 
 /**
  * @brief IMI-Gliding ERIXX device class
@@ -28,14 +31,6 @@ struct Declaration;
  */
 class CDevIMI
 {
-  /** 8bit text character */
-  typedef char IMICHAR;
-  typedef uint8_t IMIBYTE;
-  typedef uint16_t IMIWORD;
-  typedef uint32_t IMIDWORD;
-  typedef int16_t IMISWORD;
-  typedef uint32_t IMIDATETIMESEC;
-
   enum TMsgType {
     MSG_ACK_SUCCESS      = 0x00,
     MSG_ACK_FAILURE      = 0x01,

@@ -34,7 +34,7 @@ unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
 bool CDevIMI::_connected;
 CDevIMI::CMsgParser CDevIMI::_parser;
 CDevIMI::TDeviceInfo CDevIMI::_info;
-CDevIMI::IMIWORD CDevIMI::_serialNumber;
+IMI::IMIWORD CDevIMI::_serialNumber;
 
 
 /**
@@ -45,7 +45,7 @@ CDevIMI::IMIWORD CDevIMI::_serialNumber;
  *
  * @return IMI CRC value
  */
-CDevIMI::IMIWORD CDevIMI::CRC16Checksum(const void *message, unsigned bytes)
+IMI::IMIWORD CDevIMI::CRC16Checksum(const void *message, unsigned bytes)
 {
   const IMIBYTE *pData = (const IMIBYTE *)message;
 
