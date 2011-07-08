@@ -45,6 +45,8 @@ namespace LX {
 
   static const char LX_ACK_STRING[] = { ACK, 0 };
 
+#pragma pack(push, 1) // force byte alignment
+
   /**
    * Strings have extra byte for NULL.
    */
@@ -82,6 +84,8 @@ namespace LX {
   struct ContestClass {
     char contest_class[9];
   } gcc_packed;
+
+#pragma pack(pop)
 
   static inline bool
   ExpectACK(Port &port)

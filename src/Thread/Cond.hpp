@@ -28,6 +28,7 @@ Copyright_License {
 #include "Thread/Mutex.hpp"
 
 #include <pthread.h>
+#include <sys/time.h>
 
 /**
  * This class wraps a POSIX pthread_cond_t.
@@ -70,9 +71,14 @@ public:
    * has expired
    */
   bool Wait(PosixMutex &mutex, unsigned timeout_ms) {
+    struct timeval now;
+    gettimeofday(&now, NULL);
+    long future_us = now.tv_usec + timeout_ms * 1000;
+
     struct timespec timeout;
-    timeout.tv_sec = timeout_ms / 1000;
-    timeout.tv_nsec = (timeout_ms % 1000) * 1000000;
+    timeout.tv_sec = now.tv_sec + future_us / 1000000;
+    timeout.tv_nsec = (future_us % 1000000) * 1000;
+
     return pthread_cond_timedwait(&cond, &mutex.mutex, &timeout) == 0;
   }
 

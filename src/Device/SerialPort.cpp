@@ -365,7 +365,7 @@ SerialPort::Write(const void *data, size_t length)
 
   // Start reading data
   if (::WriteFile(hPort, data, length, &NumberOfBytesWritten, osWriter.GetPointer()))
-    return 0;
+    return NumberOfBytesWritten;
 
   if (::GetLastError() != ERROR_IO_PENDING)
     return 0;
