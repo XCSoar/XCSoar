@@ -440,6 +440,24 @@ public:
     ballast_ratio = _ballast_ratio;
   }
 
+  /** Returns the ideal polar coefficients */
+  PolarCoefficients GetCoefficients() const {
+    return ideal_polar;
+  }
+
+  /** Returns the real polar coefficients */
+  PolarCoefficients GetRealCoefficients() const {
+    return polar;
+  }
+
+  /** Sets the ideal polar coefficients */
+  void SetCoefficients(PolarCoefficients coeff, bool update = true) {
+    ideal_polar = coeff;
+
+    if (update)
+      Update();
+  }
+
 private:
   /** Update computed values after change */
   void Update();

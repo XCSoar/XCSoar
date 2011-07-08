@@ -46,8 +46,8 @@ void
 GlidePolarTest::Init()
 {
   // Polar 1 from PolarStore (206 Hornet)
-  polar.ideal_polar =
-      PolarCoefficients(fixed(0.0022032), fixed(-0.08784), fixed(1.47));
+  polar.SetCoefficients(PolarCoefficients(fixed(0.0022032), fixed(-0.08784),
+                                          fixed(1.47)), false);
 
   polar.SetReferenceMass(fixed(318), false);
   polar.SetDryMass(fixed(318), false);

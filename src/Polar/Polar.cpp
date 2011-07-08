@@ -55,7 +55,7 @@ PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
   if (!pc.IsValid())
     return false;
 
-  polar.ideal_polar = pc;
+  polar.SetCoefficients(pc, false);
 
   // Glider empty weight
   polar.SetReferenceMass(reference_mass, false);
