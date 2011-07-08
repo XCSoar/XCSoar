@@ -110,6 +110,10 @@ NOAADownloader::AppendToContentString(const char *buffer,
 #endif
 
   content += buffer2;
+
+#ifdef _UNICODE
+  delete[] buffer2;
+#endif
 }
 
 bool
