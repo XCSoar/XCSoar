@@ -31,7 +31,6 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "MainWindow.hpp"
 #include "Simulator.hpp"
-#include "ProgressGlue.hpp"
 #include "Compiler.h"
 #include "OS/Sleep.h"
 
@@ -156,11 +155,6 @@ VegaConfigurationUpdated(const TCHAR *name, bool first, bool setvalue = false,
   unsigned lvalue = 0;
 
   WndProperty* wp;
-
-#ifdef _WIN32_WCE
-  if (first)
-    ProgressGlue::Step();
-#endif
 
   _stprintf(updatename, _T("Vega%sUpdated"), name);
   _stprintf(fullname, _T("Vega%s"), name);
