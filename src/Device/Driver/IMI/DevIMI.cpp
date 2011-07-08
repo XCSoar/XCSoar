@@ -21,6 +21,8 @@
 
 namespace IMI
 {
+  struct AngleConverter;
+
   // variables
   bool _connected;
   CMsgParser _parser;
@@ -60,10 +62,7 @@ unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
 
 /* *********************** I M I    D E V I C E ************************** */
 
-/**
- * @brief Coordinates converter helper
- */
-struct IMI::TAngle
+struct IMI::AngleConverter
 {
   union {
     struct {
@@ -74,7 +73,7 @@ struct IMI::TAngle
     IMIDWORD value;
   };
 
-  TAngle(Angle angle) {
+  AngleConverter(Angle angle) {
     sign = (angle.sign() == -1) ? 1 : 0;
     double mag = angle.magnitude_degrees();
     degrees = static_cast<IMIDWORD>(mag);
@@ -101,10 +100,10 @@ void IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp
   unicode2usascii(wp.Name.c_str(), imiWp.name, sizeof(imiWp.name));
 
   // set latitude
-  imiWp.lat = TAngle(wp.Location.Latitude).value;
+  imiWp.lat = AngleConverter(wp.Location.Latitude).value;
 
   // set longitude
-  imiWp.lon = TAngle(wp.Location.Longitude).value;
+  imiWp.lon = AngleConverter(wp.Location.Longitude).value;
 
   // TAKEOFF and LANDING do not have OZs
   if(imiIdx == 0 || imiIdx == decl.size() + 1)

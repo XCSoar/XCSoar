@@ -59,9 +59,6 @@ namespace IMI
   struct TDeclaration;
   struct TMsg;
 
-  // helpers
-  struct TAngle;
-
   // message parser
   class CMsgParser;
 
