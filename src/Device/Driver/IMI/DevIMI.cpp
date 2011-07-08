@@ -181,8 +181,7 @@ void CDevIMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &i
  */
 bool CDevIMI::Send(Port &port, const TMsg &msg)
 {
-  port.Write(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2);
-  return true;
+  return port.Write(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2);
 }
 
 
