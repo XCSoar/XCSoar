@@ -53,16 +53,9 @@ class EWMicroRecorderDevice : public AbstractDevice {
 protected:
   Port *port;
 
-  char user_data[2500];
-
 public:
   EWMicroRecorderDevice(Port *_port)
     :port(_port) {}
-
-protected:
-  bool TryConnect();
-
-  bool DeclareInner(const Declaration &declaration);
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
@@ -113,14 +106,14 @@ EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO &info)
     return false;
 }
 
-bool
-EWMicroRecorderDevice::TryConnect()
+static bool
+TryConnect(Port &port, char *user_data)
 {
   int retries=10;
 
   while (--retries){
 
-    port->Write('\x02');         // send IO Mode command
+    port.Write('\x02');         // send IO Mode command
 
     unsigned user_size = 0;
     bool started = false;
@@ -129,7 +122,7 @@ EWMicroRecorderDevice::TryConnect()
     clock.update();
 
     int i;
-    while ((i = port->GetChar()) != EOF && !clock.check(8000)) {
+    while ((i = port.GetChar()) != EOF && !clock.check(8000)) {
       char ch = (char)i;
 
       if (!started && ch == '-')
@@ -137,7 +130,7 @@ EWMicroRecorderDevice::TryConnect()
 
       if (started) {
         if (ch == 0x13) {
-          port->Write('\x16');
+          port.Write('\x16');
           user_data[user_size] = 0;
           // found end of file
           return true;
@@ -173,7 +166,7 @@ IsValidEWChar(char ch)
 }
 
 static void
-EWMicroRecorderPrintf(Port *port, const TCHAR *fmt, ...)
+EWMicroRecorderPrintf(Port &port, const TCHAR *fmt, ...)
 {
   TCHAR EWStr[128];
   va_list ap;
@@ -201,11 +194,11 @@ EWMicroRecorderPrintf(Port *port, const TCHAR *fmt, ...)
     if (!IsValidEWChar(*p))
       *p = ' ';
 
-  port->Write(buffer);
+  port.Write(buffer);
 }
 
 static void
-EWMicroRecorderWriteWaypoint(Port *port,
+EWMicroRecorderWriteWaypoint(Port &port,
                              const Waypoint &way_point, const TCHAR *EWType)
 {
   int DegLat, DegLon;
@@ -244,23 +237,25 @@ EWMicroRecorderWriteWaypoint(Port *port,
                         way_point.Name.c_str());
 }
 
-bool
-EWMicroRecorderDevice::DeclareInner(const Declaration &declaration)
+static bool
+DeclareInner(Port &port, const Declaration &declaration)
 {
   assert(declaration.size() >= 2);
   assert(declaration.size() <= 12);
 
-  if (!TryConnect())
+  char user_data[2500];
+
+  if (!TryConnect(port, user_data))
     return false;
 
   char *p = strstr(user_data, "USER DETAILS");
   if (p != NULL)
     *p = 0;
 
-  port->Write('\x18');         // start to upload file
-  port->Write(user_data);
+  port.Write('\x18');         // start to upload file
+  port.Write(user_data);
 
-  port->Write("USER DETAILS\r\n--------------\r\n\r\n");
+  port.Write("USER DETAILS\r\n--------------\r\n\r\n");
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Pilot Name:"), declaration.PilotName.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
@@ -271,7 +266,7 @@ EWMicroRecorderDevice::DeclareInner(const Declaration &declaration)
                         declaration.AircraftType.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Aircraft ID:"), declaration.AircraftReg.c_str());
-  port->Write("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n");
+  port.Write("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n");
 
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Description:"), _T("XCSoar task declaration"));
@@ -295,9 +290,9 @@ EWMicroRecorderDevice::DeclareInner(const Declaration &declaration)
   EWMicroRecorderWriteWaypoint(port, wp, _T("Finish LatLon:"));
   EWMicroRecorderWriteWaypoint(port, wp, _T("Land LatLon:"));
 
-  port->Write('\x03');         // finish sending user file
+  port.Write('\x03');         // finish sending user file
 
-  return port->ExpectString("uploaded successfully");
+  return port.ExpectString("uploaded successfully");
 }
 
 bool
@@ -314,7 +309,7 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
      the command \x18 */
   port->SetRxTimeout(2500);
 
-  bool success = DeclareInner(declaration);
+  bool success = DeclareInner(*port, declaration);
 
   port->Write("!!\r\n");         // go back to NMEA mode
 
