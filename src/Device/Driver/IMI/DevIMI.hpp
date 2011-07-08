@@ -81,7 +81,6 @@ class CDevIMI
   static IMIWORD _serialNumber;
 
   // IMI tools
-  static IMIWORD CRC16Checksum(const void *message, unsigned bytes);
   static void IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
   static bool Send(Port &port, const TMsg &msg);
   static bool Send(Port &port,

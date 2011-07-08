@@ -9,6 +9,7 @@
  */
 
 #include "DevIMI.hpp"
+#include "Checksum.hpp"
 #include "Device/Declaration.hpp"
 #include "MsgParser.hpp"
 #include "Device/Port.hpp"
@@ -35,35 +36,6 @@ bool CDevIMI::_connected;
 CDevIMI::CMsgParser CDevIMI::_parser;
 CDevIMI::TDeviceInfo CDevIMI::_info;
 IMI::IMIWORD CDevIMI::_serialNumber;
-
-
-/**
- * @brief Calculates IMI CRC value
- *
- * @param message Message for which CRC should be provided
- * @param bytes The size of the message
- *
- * @return IMI CRC value
- */
-IMI::IMIWORD CDevIMI::CRC16Checksum(const void *message, unsigned bytes)
-{
-  const IMIBYTE *pData = (const IMIBYTE *)message;
-
-  IMIWORD crc = 0xFFFF;
-  for(;bytes; bytes--) {
-    crc  = (IMIBYTE)(crc >> 8) | (crc << 8);
-    crc ^= *pData++;
-    crc ^= (IMIBYTE)(crc & 0xff) >> 4;
-    crc ^= (crc << 8) << 4;
-    crc ^= ((crc & 0xff) << 4) << 1;
-  }
-
-  if (crc == 0xFFFF)
-    crc = 0xAAAA;
-
-  return crc;
-}
-
 
 /**
  * @brief Coordinates converter helper

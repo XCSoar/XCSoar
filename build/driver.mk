@@ -24,6 +24,7 @@ CAI302_SOURCES = \
 
 IMI_SOURCES = \
 	$(DRIVER_SRC_DIR)/IMI/MsgParser.cpp \
+	$(DRIVER_SRC_DIR)/IMI/Checksum.cpp \
 	$(DRIVER_SRC_DIR)/IMI/DevIMI.cpp \
 	$(DRIVER_SRC_DIR)/IMI/Declare.cpp \
 	$(DRIVER_SRC_DIR)/IMI/Register.cpp
