@@ -72,26 +72,23 @@ namespace IMI
   const unsigned IMICOMM_CRC_LEN   = 2;
   const unsigned COMM_MAX_PAYLOAD_SIZE = 1024;
 
+  const unsigned IMIDECL_PLT_LENGTH = 30;
+  const unsigned IMIDECL_CM2_LENGTH = 30;
+  const unsigned IMIDECL_GTY_LENGTH = 20;
+  const unsigned IMIDECL_GID_LENGTH = 12;
+  const unsigned IMIDECL_CID_LENGTH = 4;
+  const unsigned IMIDECL_CCL_LENGTH = 20;
+  const unsigned IMIDECL_CLB_LENGTH = 20;
+  const unsigned IMIDECL_SIT_LENGTH = 20;
+
+  const unsigned IMIDECL_TASK_NAME_LENGTH = 30;
+
+  const unsigned IMIDECL_WP_NAME_LENGTH   = 12;
+  const unsigned IMIDECL_MAX_WAYPOINTS    = 15;
+
   bool DeclareTask(Port &port, const Declaration &declaration);
   void Register();
 };
-
-/* *********************** C O N S T A N T S ************************** */
-
-static const unsigned IMIDECL_PLT_LENGTH = 30;
-static const unsigned IMIDECL_CM2_LENGTH = 30;
-static const unsigned IMIDECL_GTY_LENGTH = 20;
-static const unsigned IMIDECL_GID_LENGTH = 12;
-static const unsigned IMIDECL_CID_LENGTH = 4;
-static const unsigned IMIDECL_CCL_LENGTH = 20;
-static const unsigned IMIDECL_CLB_LENGTH = 20;
-static const unsigned IMIDECL_SIT_LENGTH = 20;
-
-static const unsigned IMIDECL_TASK_NAME_LENGTH = 30;
-
-static const unsigned IMIDECL_WP_NAME_LENGTH   = 12;
-static const unsigned IMIDECL_MAX_WAYPOINTS    = 15;
-
 
 
 /* *********************** M E S S A G E S ************************** */
