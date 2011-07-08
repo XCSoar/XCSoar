@@ -32,8 +32,12 @@ class Job;
 /**
  * Run the specified #Job in a separate thread, and show a modal
  * dialog while it is running.
+ *
+ * @param cancellable show a "cancel" button that allows aborting the
+ * job
  */
 void
-JobDialog(SingleWindow &parent, const TCHAR *caption, Job &job);
+JobDialog(SingleWindow &parent, const TCHAR *caption, Job &job,
+          bool cancellable=false);
 
 #endif

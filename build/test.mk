@@ -1638,6 +1638,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Form/Form.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/RunJobDialog.cpp
 RUN_JOB_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_JOB_DIALOG_SOURCES))
 RUN_JOB_DIALOG_BIN = $(TARGET_BIN_DIR)/RunJobDialog$(TARGET_EXEEXT)

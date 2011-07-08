@@ -72,7 +72,7 @@ static bool
 DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration)
 {
   DeclareJob job(device, declaration);
-  JobDialog(CommonInterface::main_window, _T(""), job);
+  JobDialog(CommonInterface::main_window, _T(""), job, true);
   return job.GetResult();
 }
 
@@ -165,7 +165,7 @@ static bool
 DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
 {
   ReadFlightListJob job(device, flight_list);
-  JobDialog(CommonInterface::main_window, _T(""), job);
+  JobDialog(CommonInterface::main_window, _T(""), job, true);
   return job.GetResult();
 }
 
@@ -195,7 +195,7 @@ DoDownloadFlight(DeviceDescriptor &device,
                  const RecordedFlightInfo &flight, const TCHAR *path)
 {
   DownloadFlightJob job(device, flight, path);
-  JobDialog(CommonInterface::main_window, _T(""), job);
+  JobDialog(CommonInterface::main_window, _T(""), job, true);
   return job.GetResult();
 }
 

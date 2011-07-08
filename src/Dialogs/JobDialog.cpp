@@ -25,8 +25,11 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Screen/ProgressWindow.hpp"
 #include "Screen/SingleWindow.hpp"
+#include "Screen/ButtonWindow.hpp"
+#include "Screen/Layout.hpp"
 #include "Operation.hpp"
 #include "Thread/JobThread.hpp"
+#include "Language/Language.hpp"
 
 class ProgressWindowOperation
   : public ProgressWindow, public QuietOperationEnvironment {
@@ -44,6 +47,19 @@ public:
 
   virtual void SetProgressPosition(unsigned position) {
     set_pos(position);
+  }
+};
+
+class JobCancelButton : public ButtonWindow {
+  JobThread &thread;
+
+public:
+  JobCancelButton(JobThread &_thread)
+    :thread(_thread) {}
+
+  virtual bool on_clicked() {
+    thread.Cancel();
+    return true;
   }
 };
 
@@ -65,15 +81,29 @@ protected:
 
 void
 JobDialog(SingleWindow &parent, const TCHAR *caption,
-          Job &job)
+          Job &job, bool cancellable)
 {
   WindowStyle form_style;
   form_style.hide();
   WndForm form(parent, 0, 0, parent.get_width(), parent.get_height(),
                caption);
+
   ProgressWindowOperation progress(form);
   DialogJobThread thread(progress, job, form);
   thread.Start();
+
+  JobCancelButton cancel_button(thread);
+  if (cancellable) {
+    ButtonWindowStyle style;
+    style.tab_stop();
+
+    PixelRect rc = form.get_client_rect();
+    cancel_button.set(form, _("Cancel"),
+                      rc.right - Layout::Scale(80), rc.top + Layout::Scale(2),
+                      Layout::Scale(78), Layout::Scale(35),
+                      style);
+    cancel_button.bring_to_top();
+  }
 
   form.ShowModal();
 
