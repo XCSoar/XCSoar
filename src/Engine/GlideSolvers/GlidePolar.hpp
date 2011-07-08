@@ -139,7 +139,6 @@ public:
     if (update) {
       UpdateSMax();
       SolveSMin();
-      SolveLD();
     }
   }
 

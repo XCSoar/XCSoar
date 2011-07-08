@@ -66,7 +66,6 @@ GlidePolar::Update()
 
   UpdateSMax();
   SolveSMin();
-  SolveLD();
 }
 
 void
@@ -232,6 +231,8 @@ GlidePolar::SolveSMin()
   Vmin = min(Vmax, -polar.b/(fixed_two*polar.a));
   Smin = SinkRate(Vmin);
 #endif
+
+  SolveLD();
 }
 
 bool 
