@@ -70,6 +70,8 @@ protected:
   void CRCWrite(const char *buff, unsigned size);
   void CRCWrite(char c);
 
+#pragma pack(push, 1) // force byte alignment
+
   struct lxDevice_Pilot_t { //strings have extra byte for NULL
     char unknown1[3];
     char PilotName[19];
@@ -99,6 +101,8 @@ protected:
   struct lxDevice_ContestClass_t { //strings have extra byte for NULL
     char contest_class[9];
   } gcc_packed;
+
+#pragma pack(pop)
 
   lxDevice_Declaration_t lxDevice_Declaration;
   lxDevice_Pilot_t lxDevice_Pilot;
