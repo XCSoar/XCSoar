@@ -85,6 +85,12 @@ public:
   virtual void SetText(const TCHAR *text);
   virtual void SetProgressRange(unsigned range);
   virtual void SetProgressPosition(unsigned position);
+
+  /**
+   * Call after the main window has been resized.
+   */
+  void UpdateLayout();
+
   void Hide();
 };
 

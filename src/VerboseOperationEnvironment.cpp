@@ -43,6 +43,13 @@ VerboseOperationEnvironment::SetProgressPosition(unsigned position)
 }
 
 void
+VerboseOperationEnvironment::UpdateLayout()
+{
+  ProgressGlue::Close();
+  ProgressGlue::Create(NULL);
+}
+
+void
 VerboseOperationEnvironment::Hide()
 {
   ProgressGlue::Close();

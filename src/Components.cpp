@@ -86,7 +86,6 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideComputerInterface.hpp"
-#include "ProgressGlue.hpp"
 #include "Operation.hpp"
 #include "Pages.hpp"
 #include "Weather/NOAAGlue.hpp"
@@ -142,7 +141,7 @@ XCSoarInterface::LoadProfile()
 }
 
 static void
-LoadDisplayOrientation()
+LoadDisplayOrientation(VerboseOperationEnvironment &env)
 {
   if (!Display::RotateSupported())
     return;
@@ -163,8 +162,7 @@ LoadDisplayOrientation()
   XCSoarInterface::main_window.Initialise();
 
   /* force the progress dialog to update its layout */
-  ProgressGlue::Close();
-  ProgressGlue::Create(NULL);
+  env.UpdateLayout();
 }
 
 static void
@@ -199,9 +197,6 @@ XCSoarInterface::AfterStartup()
   protected_task_manager->task_load_default(&way_points);
 
   task_manager->resume();
-
-  LogStartUp(_T("CloseProgressDialog"));
-  ProgressGlue::Close();
 
   main_window.full_screen();
   InfoBoxManager::SetDirty();
@@ -272,7 +267,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   operation.SetText(_("Initialising"));
 
-  LoadDisplayOrientation();
+  LoadDisplayOrientation(operation);
 
   main_window.InitialiseConfigured();
 
@@ -459,6 +454,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   globalRunningEvent.Signal();
 
   AfterStartup();
+
+  operation.Hide();
 
 #ifndef ENABLE_OPENGL
   draw_thread->Resume();
