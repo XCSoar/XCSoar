@@ -140,9 +140,10 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
     orgBottom.y = orgMiddle.y + ValueHeight;
     orgBottom.x = get_right();
 
-    // copy scale bitmap to memory DC
-    canvas.scale_copy(0, 0, hDrawBitMap,
-                      Appearance.InverseInfoBox ? 58 : 0, 0, 58, 120);
+    canvas.stretch(0, 0, 
+                   get_width(), get_height(),
+                   hDrawBitMap,
+                   Appearance.InverseInfoBox ? 58 : 0, 0, 58, 120);
 
     layout_initialised = true;
   }
