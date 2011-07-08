@@ -34,6 +34,8 @@ Copyright_License {
 #include "Weather/TAF.hpp"
 #include "Screen/Layout.hpp"
 
+#include <stdio.h>
+
 static WndForm *wf = NULL;
 static unsigned station_index;
 

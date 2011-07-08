@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NET_FEATURES_HPP
 #define XCSOAR_NET_FEATURES_HPP
 
-#if defined(WIN32) && !defined(_WIN32_WCE) && !defined(HAVE_POSIX)
+#if defined(WIN32) && !defined(_WIN32_WCE)
 #define HAVE_NET
 #endif
 

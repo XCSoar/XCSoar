@@ -27,6 +27,10 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Thread/Trigger.hpp"
 
+#ifdef __WINE__
+#include <windows.h>
+#endif
+
 #include <wininet.h>
 #include <tchar.h>
 #include <assert.h>
@@ -90,6 +94,7 @@ namespace WinINet {
                                dwContext);
     }
 
+#ifdef UNICODE
     HINTERNET Connect(LPCSTR lpszServerName, INTERNET_PORT nServerPort,
                       LPCSTR lpszUsername, LPCSTR lpszPassword,
                       DWORD dwService, DWORD dwFlags,
@@ -103,6 +108,7 @@ namespace WinINet {
                                 dwService, dwFlags,
                                 dwContext);
     }
+#endif
 
     HINTERNET OpenUrl(LPCTSTR lpszUrl,
                       LPCTSTR lpszHeaders, DWORD dwHeadersLength,
@@ -142,6 +148,7 @@ namespace WinINet {
                                dwContext);
     }
 
+#ifdef UNICODE
     HINTERNET OpenRequest(LPCSTR lpszVerb, LPCSTR lpszObjectName,
                           LPCSTR lpszVersion, LPCSTR lpszReferer,
                           LPCSTR *lplpszAcceptTypes,
@@ -156,6 +163,7 @@ namespace WinINet {
                                 dwFlags,
                                 dwContext);
     }
+#endif
   };
 
   class RequestHandle : public Handle {
@@ -170,12 +178,14 @@ namespace WinINet {
       return ::InternetReadFileEx(Get(), lpBuffersOut, dwFlags, dwContext);
     }
 
+#ifdef UNICODE
     bool Read(LPINTERNET_BUFFERSA lpBuffersOut,
               DWORD dwFlags, DWORD_PTR dwContext) {
       assert(IsDefined());
 
       return ::InternetReadFileExA(Get(), lpBuffersOut, dwFlags, dwContext);
     }
+#endif
   };
 
   class HttpRequestHandle : public RequestHandle {
@@ -199,12 +209,14 @@ namespace WinINet {
       return ::InternetReadFileEx(Get(), lpBuffersOut, dwFlags, dwContext);
     }
 
+#ifdef UNICODE
     bool Read(LPINTERNET_BUFFERSA lpBuffersOut,
               DWORD dwFlags, DWORD_PTR dwContext) {
       assert(IsDefined());
 
       return ::InternetReadFileExA(Get(), lpBuffersOut, dwFlags, dwContext);
     }
+#endif
   };
 };
 
