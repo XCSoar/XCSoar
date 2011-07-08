@@ -27,7 +27,7 @@ Copyright_License {
  * @see http://en.wikipedia.org/wiki/EGM96
  */
 
-#include "Device/Geoid.h"
+#include "Geoid.hpp"
 #include "ResourceLoader.hpp"
 
 #include <stdlib.h>

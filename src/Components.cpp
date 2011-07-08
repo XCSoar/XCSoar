@@ -33,7 +33,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "InputEvents.hpp"
-#include "Device/Geoid.h"
+#include "Geo/Geoid.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/dlgSimulatorPrompt.hpp"
 #include "ButtonLabel.hpp"

@@ -28,7 +28,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Protection.hpp"
 #include "OS/Clock.hpp"
-#include "Device/Geoid.h"
+#include "Geo/Geoid.hpp"
 
 InternalGPS::InternalGPS(JNIEnv *env, jobject obj)
   :Java::Object(env, obj)

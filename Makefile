@@ -333,6 +333,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Message.cpp \
 	$(SRC)/LogFile.cpp \
 	\
+	$(SRC)/Geo/Geoid.cpp \
 	$(SRC)/Geo/UTM.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
@@ -493,7 +494,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/device.cpp \
 	$(SRC)/Device/Descriptor.cpp \
 	$(SRC)/Device/All.cpp \
-	$(SRC)/Device/Geoid.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Simulator.cpp \
 	$(SRC)/Device/Port.cpp \
