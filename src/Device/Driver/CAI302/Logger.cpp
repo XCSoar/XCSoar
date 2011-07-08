@@ -66,7 +66,7 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
   port.SetRxTimeout(500);
 
   CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port))
+  if (!CAI302::UploadMode(port) || env.IsCancelled())
     return false;
 
   env.SetProgressPosition(1);
@@ -75,7 +75,8 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
 
   for (unsigned i = 0; i < 8 && !flight_list.full(); ++i) {
     CAI302::FileList file_list;
-    if (!CAI302::UploadFileList(port, i, file_list))
+    if (!CAI302::UploadFileList(port, i, file_list) ||
+        env.IsCancelled())
       break;
 
     for (unsigned j = 0; j < 8 && !flight_list.full(); ++j) {
@@ -87,7 +88,7 @@ ReadFlightListInner(Port &port, RecordedFlightList &flight_list,
     env.SetProgressPosition(1 + i);
   }
 
-  return !flight_list.empty();
+  return !flight_list.empty() && !env.IsCancelled();
 }
 
 bool
@@ -120,13 +121,14 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   port.SetRxTimeout(500);
 
   CAI302::CommandModeQuick(port);
-  if (!CAI302::UploadMode(port))
+  if (!CAI302::UploadMode(port) || env.IsCancelled())
     return false;
 
   port.SetRxTimeout(8000);
 
   CAI302::FileASCII file_ascii;
-  if (!UploadFileASCII(port, flight.internal.cai302, file_ascii))
+  if (!UploadFileASCII(port, flight.internal.cai302, file_ascii) ||
+      env.IsCancelled())
     return false;
 
   unsigned bytes_per_block = FromBE16(file_ascii.bytes_per_block);
@@ -144,7 +146,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   unsigned valid_bytes;
   do {
     int i = UploadFileData(port, true, header, allocated_size);
-    if (i < (int)sizeof(*header)) {
+    if (i < (int)sizeof(*header) || env.IsCancelled()) {
       free(allocated);
       return false;
     }
@@ -169,7 +171,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   free(allocated);
 
   CAI302::FileSignatureASCII signature;
-  if (!CAI302::UploadFileSignatureASCII(port, signature))
+  if (!CAI302::UploadFileSignatureASCII(port, signature) || env.IsCancelled())
     return false;
 
   valid_bytes = FromBE16(signature.size);
