@@ -26,13 +26,15 @@ Copyright_License {
 
 struct Plane;
 struct SETTINGS_COMPUTER;
+class GlidePolar;
 
 namespace PlaneGlue
 {
   void FromProfile(Plane &plane);
   void ToProfile(const Plane &plane);
 
-  void Synchronize(const Plane &plane, SETTINGS_COMPUTER &settings);
+  void Synchronize(const Plane &plane, SETTINGS_COMPUTER &settings,
+                   GlidePolar &gp);
 }
 
 #endif

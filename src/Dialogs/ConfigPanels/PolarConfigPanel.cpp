@@ -97,31 +97,6 @@ UpdatePolarPoints(fixed v1, fixed v2, fixed v3,
 }
 
 static void
-UpdatePolarFields(const PolarInfo &polar)
-{
-  UpdatePolarPoints(polar.v1, polar.v2, polar.v3, polar.w1, polar.w2, polar.w3);
-
-  LoadFormProperty(*wf, _T("prpPolarReferenceMass"), polar.reference_mass);
-  LoadFormProperty(*wf, _T("prpPolarDryMass"),
-                   (positive(polar.dry_mass) ? polar.dry_mass :
-                                               polar.reference_mass));
-  LoadFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
-
-  LoadFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);
-
-  WndProperty *ctl = (WndProperty *)wf->FindByName(_T("prpMaxManoeuveringSpeed"));
-  assert(ctl != NULL);
-  Units_t unit = Units::GetUserSpeedUnit();
-
-  DataFieldFloat *df = (DataFieldFloat *)ctl->GetDataField();
-  df->SetUnits(Units::GetUnitName(unit));
-  if (positive(polar.v_no))
-    df->SetAsFloat(Units::ToUserUnit(polar.v_no, unit));
-
-  ctl->RefreshDisplay();
-}
-
-static void
 UpdatePolarTitle()
 {
   StaticString<100> caption(_("Polar"));
@@ -330,13 +305,18 @@ PolarConfigPanel::Init(WndForm *_wf)
   SetLiftFieldStepAndMax(_T("prpPolarW2"));
   SetLiftFieldStepAndMax(_T("prpPolarW3"));
 
-  PolarInfo polar;
-  if (!PolarGlue::LoadFromProfile(polar)) {
-    polar = PolarGlue::GetDefault();
-    CommonInterface::SetSettingsComputer().plane.polar_name =
-        PolarGlue::GetDefaultName();
-  }
-  UpdatePolarFields(polar);
+  const SETTINGS_COMPUTER &settings = XCSoarInterface::SettingsComputer();
+  UpdatePolarPoints(settings.plane.v1, settings.plane.v2, settings.plane.v3,
+                    settings.plane.w1, settings.plane.w2, settings.plane.w3);
+
+  LoadFormProperty(*wf, _T("prpPolarReferenceMass"), settings.plane.reference_mass);
+  LoadFormProperty(*wf, _T("prpPolarDryMass"), settings.plane.dry_mass);
+  LoadFormProperty(*wf, _T("prpPolarMaxBallast"), settings.plane.max_ballast);
+
+  LoadFormProperty(*wf, _T("prpPolarWingArea"), settings.plane.wing_area);
+  LoadFormProperty(*wf, _T("prpMaxManoeuveringSpeed"), ugHorizontalSpeed,
+                   settings.plane.max_speed);
+
   UpdatePolarTitle();
   UpdatePolarInvalidLabel();
 
@@ -358,28 +338,49 @@ PolarConfigPanel::Save()
   bool changed = false;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
 
+  changed |= SaveFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed,
+                              settings_computer.plane.v1);
+  changed |= SaveFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed,
+                              settings_computer.plane.v2);
+  changed |= SaveFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed,
+                              settings_computer.plane.v3);
+
+  changed |= SaveFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed,
+                              settings_computer.plane.w1);
+  changed |= SaveFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed,
+                              settings_computer.plane.w2);
+  changed |= SaveFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed,
+                              settings_computer.plane.w3);
+
+  changed |= SaveFormProperty(*wf, _T("prpPolarReferenceMass"),
+                              settings_computer.plane.reference_mass);
+
+  changed |= SaveFormProperty(*wf, _T("prpPolarDryMass"),
+                              settings_computer.plane.dry_mass);
+
+  changed |= SaveFormProperty(*wf, _T("prpPolarMaxBallast"),
+                              settings_computer.plane.max_ballast);
+
+  changed |= SaveFormProperty(*wf, _T("prpPolarWingArea"),
+                              settings_computer.plane.wing_area);
+
+  changed |= SaveFormProperty(*wf, _T("prpMaxManoeuveringSpeed"),
+                              ugHorizontalSpeed,
+                              settings_computer.plane.max_speed);
+
   changed |= SaveFormProperty(*wf, _T("prpHandicap"),
                               settings_computer.plane.handicap);
 
   changed |= SaveFormProperty(*wf, _T("prpBallastSecsToEmpty"),
                               settings_computer.plane.dump_time);
 
-  PolarInfo polar;
-  PolarGlue::LoadFromProfile(polar);
-  if (SaveFormToPolar(polar)) {
-    PolarGlue::SaveToProfile(polar);
-    changed = true;
-
-    if (protected_task_manager != NULL) {
-      PolarGlue::CopyIntoGlidePolar(polar, settings_computer.glide_polar_task);
-      settings_computer.SafetySpeed = fixed(polar.v_no);
-      protected_task_manager->set_glide_polar(settings_computer.glide_polar_task);
-    }
-  }
-
   if (changed) {
     PlaneGlue::ToProfile(settings_computer.plane);
-    PlaneGlue::Synchronize(settings_computer.plane, settings_computer);
+    PlaneGlue::Synchronize(settings_computer.plane, settings_computer,
+                           settings_computer.glide_polar_task);
+
+    if (protected_task_manager != NULL)
+      protected_task_manager->set_glide_polar(settings_computer.glide_polar_task);
   }
 
   return changed;

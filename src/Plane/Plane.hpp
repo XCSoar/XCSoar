@@ -35,6 +35,15 @@ struct Plane
 
   StaticString<32> polar_name;
 
+  fixed v1, v2, v3;
+  fixed w1, w2, w3;
+
+  fixed reference_mass;
+  fixed dry_mass;
+  fixed max_ballast;
+  fixed max_speed;
+  fixed wing_area;
+
   /** Time to drain full ballast (s) */
   unsigned dump_time;
 
