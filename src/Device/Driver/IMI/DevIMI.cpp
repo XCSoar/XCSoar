@@ -100,17 +100,15 @@ void CDevIMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &i
 
   // set latitude
   TAngle a;
-  double angle = wp.Location.Latitude.value_degrees();
-  if((a.sign = (angle < 0) ? 1 : 0) != 0)
-    angle *= -1;
+  a.sign = (wp.Location.Latitude.sign() == -1) ? 1 : 0;
+  double angle = wp.Location.Latitude.magnitude_degrees();
   a.degrees = static_cast<IMIDWORD>(angle);
   a.milliminutes = static_cast<IMIDWORD>((angle - a.degrees) * 60 * 1000);
   imiWp.lat = a.value;
 
   // set longitude
-  angle = wp.Location.Longitude.value_degrees();
-  if((a.sign = (angle < 0) ? 1 : 0) != 0)
-    angle *= -1;
+  a.sign = (wp.Location.Longitude.sign() == -1) ? 1 : 0;
+  angle = wp.Location.Longitude.magnitude_degrees();
   a.degrees = static_cast<IMIDWORD>(angle);
   a.milliminutes = static_cast<IMIDWORD>((angle - a.degrees) * 60 * 1000);
   imiWp.lon = a.value;
