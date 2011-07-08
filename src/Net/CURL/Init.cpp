@@ -21,17 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_NET_FEATURES_HPP
-#define XCSOAR_NET_FEATURES_HPP
+#include "Net/Init.hpp"
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
-#define HAVE_NET
-#define HAVE_WININET
-#endif
+#include <curl/curl.h>
 
-#if !defined(WIN32) && defined(HAVE_POSIX) && !defined(ANDROID)
-#define HAVE_NET
-#define HAVE_CURL
-#endif
+void
+Net::Initialise()
+{
+  curl_global_init(CURL_GLOBAL_NOTHING);
+}
 
-#endif
+void
+Net::Deinitialise()
+{
+  curl_global_cleanup();
+}

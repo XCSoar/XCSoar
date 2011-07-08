@@ -49,6 +49,7 @@ For Linux/Unix, you need:
 
 - Boost (http://www.boost.org/)
 - zlib (http://www.zlib.net/)
+- CURL (http://curl.haxx.se/)
 - OpenGL
 
 For Android, you need:

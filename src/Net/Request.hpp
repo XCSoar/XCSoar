@@ -24,15 +24,32 @@ Copyright_License {
 #ifndef NET_REQUEST_HPP
 #define NET_REQUEST_HPP
 
+#include "Net/Features.hpp"
+
+#ifdef HAVE_WININET
 #include "Thread/Trigger.hpp"
 #include "Net/WinINet/WinINet.hpp"
+#endif
+
+#ifdef HAVE_CURL
+#include "Util/FifoBuffer.hpp"
+
+#include <curl/curl.h>
+#include <stdint.h>
+#endif
+
+#include <tchar.h>
 
 namespace Net {
   class Session;
+
+#ifdef HAVE_WININET
   class Connection;
+#endif
 
   class Request {
   public:
+#ifdef HAVE_WININET
     /** Internal connection handle */
     WinINet::HttpRequestHandle handle;
 
@@ -40,6 +57,18 @@ namespace Net {
     Trigger opened_event, completed_event;
     /** The last error code that was retrieved by the Callback() function */
     DWORD last_error;
+#else
+    static const unsigned long INFINITE = (unsigned long)-1;
+#endif
+
+#ifdef HAVE_CURL
+    Session &session;
+
+    CURL *handle;
+
+    typedef FifoBuffer<uint8_t, CURL_MAX_WRITE_SIZE> Buffer;
+    Buffer buffer;
+#endif
 
   public:
     /**
@@ -51,6 +80,7 @@ namespace Net {
     Request(Session &session, const TCHAR *url,
             unsigned long timeout = INFINITE);
 
+#ifdef HAVE_WININET
     /**
      * Creates a Request that can be used to get data from a webserver.
      * @param connection Connection instance that is used for creating this Request
@@ -59,13 +89,28 @@ namespace Net {
      */
     Request(Connection &connection, const char *file,
             unsigned long timeout = INFINITE);
+#endif
 
+#ifdef HAVE_CURL
+    ~Request();
+#endif
+
+#ifdef HAVE_CURL
+  protected:
+    size_t ResponseData(const uint8_t *ptr, size_t size);
+
+    static size_t WriteCallback(void *ptr, size_t size, size_t nmemb,
+                                void *userdata);
+#endif
+
+  public:
     /**
      * Returns whether the Request has been created successfully.
      * Note that this has nothing to do with a physical connection yet!
      */
     bool Created() const;
 
+#ifdef HAVE_WININET
     /**
      * Send the request to the server. If this function fails the server
      * can't be reached. If the file doesn't exists the webserver usually
@@ -75,6 +120,7 @@ namespace Net {
      * the request was sent
      */
     bool Send(unsigned long timeout = INFINITE);
+#endif
 
     /**
      * Reads a number of bytes from the server.
@@ -84,8 +130,10 @@ namespace Net {
      */
     size_t Read(char *buffer, size_t buffer_size, unsigned long timeout = INFINITE);
 
+#ifdef HAVE_WININET
     /** Internal callback function. Don't use this manually! */
     void Callback(DWORD status, LPVOID info, DWORD info_length);
+#endif
   };
 }
 

@@ -24,16 +24,37 @@ Copyright_License {
 #ifndef NET_SESSION_HPP
 #define NET_SESSION_HPP
 
+#include "Net/Features.hpp"
+
+#ifdef HAVE_WININET
 #include "Net/WinINet/WinINet.hpp"
+#endif
+
+#ifdef HAVE_CURL
+#include <map>
+
+#include <curl/curl.h>
+#endif
 
 namespace Net {
   class Session {
+#ifdef HAVE_WININET
     /** Internal session handle */
     WinINet::SessionHandle handle;
+#endif
+
+#ifdef HAVE_CURL
+    CURLM *multi;
+
+    typedef std::map<const CURL *, CURLcode> ResultMap;
+    ResultMap results;
+#endif
 
   public:
+#ifdef HAVE_WININET
     friend class Connection;
     friend class Request;
+#endif
 
     /**
      * Opens a session that can be used for
@@ -41,11 +62,29 @@ namespace Net {
      */
     Session();
 
+#ifdef HAVE_CURL
+    ~Session();
+#endif
+
     /**
      * Was the session created successfully
      * @return True if session was created successfully
      */
     bool Error() const;
+
+#ifdef HAVE_CURL
+    bool Add(CURL *easy) {
+      return curl_multi_add_handle(multi, easy) == CURLM_OK;
+    }
+
+    void Remove(CURL *easy);
+
+    bool Select(int timeout_ms);
+
+    CURLMcode Perform();
+
+    CURLcode InfoRead(const CURL *easy);
+#endif
   };
 }
 
