@@ -439,9 +439,8 @@ bool CDevIMI::DeclarationWrite(Port &port, const Declaration &decl)
   IMIWaypoint(decl, decl.size() + 1, imiDecl.wp[decl.size() + 1]);
 
   // send declaration for current task
-  const TMsg *msg = SendRet(port, MSG_DECLARATION, &imiDecl, sizeof(imiDecl), MSG_ACK_SUCCESS, 0, -1);
-
-  return msg;
+  return SendRet(port, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
+                 MSG_ACK_SUCCESS, 0, -1) != NULL;
 }
 
 
