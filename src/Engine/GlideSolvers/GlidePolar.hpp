@@ -469,10 +469,10 @@ public:
       Update();
   }
 
-private:
   /** Update glide polar coefficients and values depending on them */
   void Update();
 
+private:
   /** Update sink rate at max. cruise speed */
   void UpdateSMax();
 
