@@ -11,7 +11,7 @@
 #ifndef XCSOAR_IMI_MSGPARSER_HPP
 #define XCSOAR_IMI_MSGPARSER_HPP
 
-#include "DevIMI.hpp"
+#include "Types.hpp"
 
 #define IMICOMM_MAX_MSG_SIZE (sizeof(TMsg))
 
