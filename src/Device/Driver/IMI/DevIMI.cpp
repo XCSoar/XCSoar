@@ -19,6 +19,34 @@
 #include <windows.h>
 #endif
 
+namespace CDevIMI
+{
+  // variables
+  bool _connected;
+  CMsgParser _parser;
+  TDeviceInfo _info;
+  IMIWORD _serialNumber;
+
+  // IMI tools
+  void IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
+  bool Send(Port &port, const TMsg &msg);
+  bool Send(Port &port,
+                   IMIBYTE msgID, const void *payload = 0, IMIWORD payloadSize = 0,
+                   IMIBYTE parameter1 = 0, IMIWORD parameter2 = 0, IMIWORD parameter3 = 0);
+  const TMsg *Receive(Port &port,
+                             unsigned extraTimeout, unsigned expectedPayloadSize);
+  const TMsg *SendRet(Port &port,
+                             IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
+                             IMIBYTE reMsgID, IMIWORD retPayloadSize,
+                             IMIBYTE parameter1 = 0, IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
+                             unsigned extraTimeout = 300, int retry = 4);
+
+  // IMI interface
+  bool Connect(Port &port);
+  bool DeclarationWrite(Port &port, const Declaration &decl);
+  bool Disconnect(Port &port);
+};
+
 static void
 unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
 {
@@ -31,11 +59,6 @@ unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
 }
 
 /* *********************** I M I    D E V I C E ************************** */
-
-bool CDevIMI::_connected;
-CDevIMI::CMsgParser CDevIMI::_parser;
-CDevIMI::TDeviceInfo CDevIMI::_info;
-IMI::IMIWORD CDevIMI::_serialNumber;
 
 /**
  * @brief Coordinates converter helper

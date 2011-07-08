@@ -29,7 +29,7 @@ using namespace IMI;
  *
  * @note IMI driver methods are based on the source code provided by Juraj Rojko from IMI-Gliding.
  */
-class CDevIMI
+namespace CDevIMI
 {
   enum TMsgType {
     MSG_ACK_SUCCESS      = 0x00,
@@ -68,40 +68,14 @@ class CDevIMI
   class CMsgParser;
 
   // constants
-  static const IMIBYTE IMICOMM_SYNC_CHAR1 = 'E';
-  static const IMIBYTE IMICOMM_SYNC_CHAR2 = 'X';
-  static const unsigned IMICOMM_SYNC_LEN  = 2;
-  static const unsigned IMICOMM_CRC_LEN   = 2;
-  static const unsigned COMM_MAX_PAYLOAD_SIZE = 1024;
+  const IMIBYTE IMICOMM_SYNC_CHAR1 = 'E';
+  const IMIBYTE IMICOMM_SYNC_CHAR2 = 'X';
+  const unsigned IMICOMM_SYNC_LEN  = 2;
+  const unsigned IMICOMM_CRC_LEN   = 2;
+  const unsigned COMM_MAX_PAYLOAD_SIZE = 1024;
 
-  // variables
-  static bool _connected;
-  static CMsgParser _parser;
-  static TDeviceInfo _info;
-  static IMIWORD _serialNumber;
-
-  // IMI tools
-  static void IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
-  static bool Send(Port &port, const TMsg &msg);
-  static bool Send(Port &port,
-                   IMIBYTE msgID, const void *payload = 0, IMIWORD payloadSize = 0,
-                   IMIBYTE parameter1 = 0, IMIWORD parameter2 = 0, IMIWORD parameter3 = 0);
-  static const TMsg *Receive(Port &port,
-                             unsigned extraTimeout, unsigned expectedPayloadSize);
-  static const TMsg *SendRet(Port &port,
-                             IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
-                             IMIBYTE reMsgID, IMIWORD retPayloadSize,
-                             IMIBYTE parameter1 = 0, IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
-                             unsigned extraTimeout = 300, int retry = 4);
-
-  // IMI interface
-  static bool Connect(Port &port);
-  static bool DeclarationWrite(Port &port, const Declaration &decl);
-  static bool Disconnect(Port &port);
-
-public:
-  static bool DeclareTask(Port &port, const Declaration &declaration);
-  static void Register();
+  bool DeclareTask(Port &port, const Declaration &declaration);
+  void Register();
 };
 
 /* *********************** C O N S T A N T S ************************** */
