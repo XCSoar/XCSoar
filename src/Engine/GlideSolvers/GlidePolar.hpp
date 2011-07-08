@@ -408,6 +408,19 @@ public:
     wing_area = _wing_area;
   }
 
+  /** Returns the reference mass in kg */
+  fixed GetReferenceMass() const {
+    return reference_mass;
+  }
+
+  /** Sets the reference mass in kg */
+  void SetReferenceMass(fixed _reference_mass, bool update = true) {
+    reference_mass = _reference_mass;
+
+    if (update)
+      Update();
+  }
+
   /** Returns the ballast ratio */
   fixed GetBallastRatio() const {
     return ballast_ratio;
