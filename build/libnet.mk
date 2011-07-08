@@ -27,6 +27,14 @@ LIBNET_CPPFLAGS = $(CURL_CPPFLAGS)
 LIBNET_LDLIBS = $(CURL_LDLIBS)
 endif
 
+ifeq ($(TARGET),ANDROID)
+HAVE_NET := y
+
+LIBNET_SOURCES += \
+	$(SRC)/Net/Java/Session.cpp \
+	$(SRC)/Net/Java/Request.cpp
+endif
+
 LIBNET_OBJS = $(call SRC_TO_OBJ,$(LIBNET_SOURCES))
 LIBNET_LIBS = $(TARGET_OUTPUT_DIR)/libnet.a
 

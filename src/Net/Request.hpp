@@ -38,6 +38,10 @@ Copyright_License {
 #include <stdint.h>
 #endif
 
+#ifdef HAVE_JAVA_NET
+#include <jni.h>
+#endif
+
 #include <tchar.h>
 
 namespace Net {
@@ -70,6 +74,14 @@ namespace Net {
     Buffer buffer;
 #endif
 
+#ifdef HAVE_JAVA_NET
+    JNIEnv *env;
+
+    jobject input_stream;
+
+    jmethodID read_method, close_method;
+#endif
+
   public:
     /**
      * Creates a Request that can be used to get data from a webserver.
@@ -91,7 +103,7 @@ namespace Net {
             unsigned long timeout = INFINITE);
 #endif
 
-#ifdef HAVE_CURL
+#if defined(HAVE_CURL) || defined(HAVE_JAVA_NET)
     ~Request();
 #endif
 

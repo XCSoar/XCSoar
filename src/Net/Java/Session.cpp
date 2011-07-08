@@ -21,22 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_NET_FEATURES_HPP
-#define XCSOAR_NET_FEATURES_HPP
+#include "Net/Session.hpp"
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
-#define HAVE_NET
-#define HAVE_WININET
-#endif
+Net::Session::Session() {}
 
-#if !defined(WIN32) && defined(HAVE_POSIX) && !defined(ANDROID)
-#define HAVE_NET
-#define HAVE_CURL
-#endif
-
-#ifdef ANDROID
-#define HAVE_NET
-#define HAVE_JAVA_NET
-#endif
-
-#endif
+bool
+Net::Session::Error() const
+{
+  return false;
+}
