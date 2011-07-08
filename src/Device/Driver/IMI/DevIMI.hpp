@@ -149,31 +149,53 @@ struct CDevIMI::TDeviceInfo {
 
 
 struct CDevIMI::TDeclarationHeader {
+  /** Device type index */
   IMIBYTE id, device;
+  /** Serial number */
   IMIWORD sn;
   IMIDWORD flightNumber;
+  /** Hardware version */
   IMIBYTE hwVersion;
+  /** Firmware version */
   IMIBYTE swVersion;
+  /** GPS module index */
   IMIBYTE gps;
+  /** Baro sensor index with ENL bit */
   IMIBYTE sensor;
+  /** Flight date */
   IMIDATETIMESEC date;
+  /** Pilot name */
   IMICHAR plt[IMIDECL_PLT_LENGTH];
+  /** Pilot birthday */
   IMIBYTE db1Day, db1Month;
   IMIWORD db1Year;
+  /** Second crew member name */
   IMICHAR cm2[IMIDECL_CM2_LENGTH];
+  /** Second crew member birthday */
   IMIBYTE db2Day, db2Month;
   IMIWORD db2Year;
+  /** Glider type */
   IMICHAR gty[IMIDECL_GTY_LENGTH];
+  /** Glider ID */
   IMICHAR gid[IMIDECL_GID_LENGTH];
+  /** Competition ID */
   IMICHAR cid[IMIDECL_CID_LENGTH];
+  /** Competition class */
   IMICHAR ccl[IMIDECL_CCL_LENGTH];
+  /** Club name */
   IMICHAR clb[IMIDECL_CLB_LENGTH];
+  /** Club site */
   IMICHAR sit[IMIDECL_SIT_LENGTH];
+  /** Task name */
   IMICHAR tskName[IMIDECL_TASK_NAME_LENGTH];
+  /** Task number */
   IMIWORD tskNumber;
+  /** Task date */
   IMIBYTE tskDay, tskMonth;
   IMIWORD tskYear;
+  /** Start time of the recording */
   IMIDATETIMESEC recStartDateTime;
+  /** n-th flight of the day */
   IMIWORD flightOfDay;
   IMIWORD reserved1;
   IMIDATETIMESEC flightStartDateTime;
