@@ -132,6 +132,7 @@ MainWindow::InitialiseConfigured()
                              ib_layout.control_width,
                              ib_layout.control_height * 3,
                              hidden);
+  ReinitialiseLayout_vario();
 
   WindowStyle hidden_border;
   hidden_border.hide();
@@ -158,6 +159,27 @@ MainWindow::InitialiseConfigured()
 
   LogStartUp(_T("Initialise message system"));
   popup.set(rc);
+}
+
+void
+MainWindow::ReinitialiseLayout_vario()
+{
+  PixelRect rc = get_client_rect();
+  InfoBoxLayout::Init(rc);
+  const InfoBoxLayout::Layout ib_layout =
+    InfoBoxLayout::Calculate(rc, InfoBoxLayout::InfoBoxGeometry);
+
+  if (vario != NULL) {
+    if (InfoBoxLayout::InfoBoxGeometry == InfoBoxLayout::ibBottom8Vario)
+      vario->move(rc.right - ib_layout.control_width, rc.bottom - ib_layout.control_height * 2,
+                  ib_layout.control_width,
+                  ib_layout.control_height * 2);
+    else
+      vario->move(rc.right - ib_layout.control_width, 0,
+                  ib_layout.control_width,
+                  ib_layout.control_height * 3);
+    vario->bring_to_top();
+  }
 }
 
 void
@@ -195,10 +217,7 @@ MainWindow::ReinitialiseLayout()
   popup.reset();
   popup.set(rc);
 
-  if (vario != NULL)
-    vario->move(rc.right - ib_layout.control_width, 0,
-                ib_layout.control_width,
-                ib_layout.control_height * 3);
+  ReinitialiseLayout_vario();
 
   if (flarm != NULL)
     flarm->move(rc.right - ib_layout.control_width * 2 + 1,

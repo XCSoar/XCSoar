@@ -105,6 +105,11 @@ public:
   void ReinitialiseLayout();
 
   /**
+   * Adjust vario
+   */
+  void ReinitialiseLayout_vario();
+
+  /**
    * Adjust the window position and size, to make it full-screen again
    * after display rotation.
    */

@@ -155,7 +155,7 @@ XCSoarInterface::Debounce(void)
 static bool
 vario_visible()
 {
-  return Layout::landscape && InfoBoxLayout::has_vario();
+  return InfoBoxLayout::has_vario();
 }
 
 /**

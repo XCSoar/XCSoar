@@ -59,6 +59,8 @@ namespace InfoBoxLayout
     ibTop12 = 11,
     // 12: 6 left, 3 right + vario
     ibGNav2 = 12,
+    // 13: 8 bottom + vario
+    ibBottom8Vario = 13,
   };
 
   struct Layout {

@@ -32,7 +32,7 @@ Copyright_License {
 static const unsigned char geometry_counts[] = {
   8, 8, 8, 8, 8, 8,
   9, 5, 12, 24, 12,
-  12, 9,
+  12, 9, 8,
 };
 
 namespace InfoBoxLayout
@@ -134,6 +134,7 @@ InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
                               rc.left, rc.bottom);
     break;
 
+  case ibBottom8Vario:
   case ibBottom8:
     assert(layout.count == 8);
 
@@ -253,6 +254,9 @@ InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
     case ibBottom8:
       return ibRight8;
 
+    case ibBottom8Vario:
+      return ibGNav;
+
     case ibTop8:
       return ibLeft8;
 
@@ -283,6 +287,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
     switch (geometry) {
     case ibTop4Bottom4:
     case ibBottom8:
+    case ibBottom8Vario:
     case ibBottom12:
     case ibTop8:
     case ibTop12:
@@ -335,6 +340,12 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout,
     layout.control_height = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
     break;
 
+  case ibBottom8Vario:
+    // calculate control dimensions
+    layout.control_width = 2 * (rc.right - rc.left) / (layout.count + 2);
+    layout.control_height = (rc.bottom - rc.top) / CONTROLHEIGHTRATIO;
+    break;
+
   case ibLeft4Right4:
   case ibLeft8:
   case ibRight8:
@@ -367,5 +378,7 @@ InfoBoxLayout::CalcInfoBoxSizes(Layout &layout,
 
 bool InfoBoxLayout::has_vario()
 {
-  return (InfoBoxGeometry == ibGNav) || (InfoBoxGeometry == ibGNav2);
+  return (InfoBoxGeometry == ibGNav) 
+      || (InfoBoxGeometry == ibGNav2)
+      || (InfoBoxGeometry == ibBottom8Vario);
 }

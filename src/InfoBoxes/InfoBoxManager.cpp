@@ -438,6 +438,7 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
     break;
 
   case InfoBoxLayout::ibBottom8:
+  case InfoBoxLayout::ibBottom8Vario:
     border |= BORDERTOP;
 
     if (i != 3 && i != 7)

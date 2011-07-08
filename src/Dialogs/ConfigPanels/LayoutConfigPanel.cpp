@@ -74,6 +74,8 @@ LayoutConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("8 Top + Bottom (Portrait)"),
                      InfoBoxLayout::ibTop4Bottom4);
     dfe->addEnumText(_("8 Bottom (Portrait)"), InfoBoxLayout::ibBottom8);
+    dfe->addEnumText(_("8 Bottom + Vario (Portrait)"), 
+                    InfoBoxLayout::ibBottom8Vario);
     dfe->addEnumText(_("8 Top (Portrait)"), InfoBoxLayout::ibTop8);
     dfe->addEnumText(_("8 Left + Right (Landscape)"),
                      InfoBoxLayout::ibLeft4Right4);
