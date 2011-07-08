@@ -26,6 +26,7 @@ struct GlideState;
 struct GlideResult;
 struct AIRCRAFT_STATE;
 
+#include "PolarCoefficients.hpp"
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
@@ -65,13 +66,8 @@ class GlidePolar
   fixed Vmin;                /**< Speed for minimum sink (m/s) */
   fixed Smin;                /**< Minimum sink rate (m/s, positive down) */
 
-  fixed ideal_polar_a;       /**< 'a' coefficient of glide polar empty/clean */
-  fixed ideal_polar_b;       /**< 'b' coefficient of glide polar empty/clean */
-  fixed ideal_polar_c;       /**< 'c' coefficient of glide polar empty/clean */
-
-  fixed polar_a;             /**< 'a' coefficient of glide polar at bug/ballast */
-  fixed polar_b;             /**< 'b' coefficient of glide polar at bug/ballast */
-  fixed polar_c;             /**< 'c' coefficient of glide polar at bug/ballast */
+  PolarCoefficients ideal_polar;  /**< coefficients of glide polar empty/clean */
+  PolarCoefficients polar;        /**< coefficients of glide polar at bug/ballast */
 
   fixed ballast_ratio;       /**< Ratio of mass of ballast to glider empty weight */
   fixed reference_mass;      /**< Reference mass of polar, kg */

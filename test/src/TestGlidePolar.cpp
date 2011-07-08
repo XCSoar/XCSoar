@@ -46,9 +46,8 @@ void
 GlidePolarTest::Init()
 {
   // Polar 1 from PolarStore (206 Hornet)
-  polar.ideal_polar_a = fixed(0.0022032);
-  polar.ideal_polar_b = fixed(-0.08784);
-  polar.ideal_polar_c = fixed(1.47);
+  polar.ideal_polar =
+      PolarCoefficients(fixed(0.0022032), fixed(-0.08784), fixed(1.47));
 
   polar.SetReferenceMass(fixed(318), false);
   polar.SetDryMass(fixed(318), false);
@@ -71,9 +70,9 @@ GlidePolarTest::TestBasic()
 {
   polar.Update();
 
-  ok1(equals(polar.polar_a, polar.ideal_polar_a));
-  ok1(equals(polar.polar_b, polar.ideal_polar_b));
-  ok1(equals(polar.polar_c, polar.ideal_polar_c));
+  ok1(equals(polar.polar.a, polar.ideal_polar.a));
+  ok1(equals(polar.polar.b, polar.ideal_polar.b));
+  ok1(equals(polar.polar.c, polar.ideal_polar.c));
 
   ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), unKiloMeterPerHour)), 0.606));
   ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(120), unKiloMeterPerHour)), 0.99));
@@ -114,9 +113,9 @@ GlidePolarTest::TestBallast()
   ok1(polar.HasBallast());
 
   fixed loading_factor = sqrt(polar.GetTotalMass() / polar.reference_mass);
-  ok1(equals(polar.polar_a, polar.ideal_polar_a / loading_factor));
-  ok1(equals(polar.polar_b, polar.ideal_polar_b));
-  ok1(equals(polar.polar_c, polar.ideal_polar_c * loading_factor));
+  ok1(equals(polar.polar.a, polar.ideal_polar.a / loading_factor));
+  ok1(equals(polar.polar.b, polar.ideal_polar.b));
+  ok1(equals(polar.polar.c, polar.ideal_polar.c * loading_factor));
 
   ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), unKiloMeterPerHour)),
              0.640739));
@@ -138,9 +137,9 @@ GlidePolarTest::TestBugs()
   polar.SetBugs(fixed(0.75));
   ok1(equals(polar.GetBugs(), 0.75));
 
-  ok1(equals(polar.polar_a, polar.ideal_polar_a * fixed_four / 3));
-  ok1(equals(polar.polar_b, polar.ideal_polar_b * fixed_four / 3));
-  ok1(equals(polar.polar_c, polar.ideal_polar_c * fixed_four / 3));
+  ok1(equals(polar.polar.a, polar.ideal_polar.a * fixed_four / 3));
+  ok1(equals(polar.polar.b, polar.ideal_polar.b * fixed_four / 3));
+  ok1(equals(polar.polar.c, polar.ideal_polar.c * fixed_four / 3));
 
   ok1(equals(polar.SinkRate(Units::ToSysUnit(fixed(80), unKiloMeterPerHour)),
              0.808));

@@ -38,7 +38,7 @@ Copyright_License {
 #include "Polar/PolarFileGlue.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "Polar/Polar.hpp"
-#include "Polar/PolarCoefficients.hpp"
+#include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"

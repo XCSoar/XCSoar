@@ -24,6 +24,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideState.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/PolarCoefficients.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \

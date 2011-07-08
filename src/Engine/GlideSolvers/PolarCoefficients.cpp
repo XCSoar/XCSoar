@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Polar/PolarCoefficients.hpp"
+#include "PolarCoefficients.hpp"
 
 PolarCoefficients
 PolarCoefficients::FromVW(fixed v1, fixed v2, fixed v3,

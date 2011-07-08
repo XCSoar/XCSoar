@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Polar/Polar.hpp"
-#include "Polar/PolarCoefficients.hpp"
+#include "Engine/GlideSolvers/PolarCoefficients.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Units/Units.hpp"
 
@@ -55,9 +55,7 @@ PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
   if (!pc.IsValid())
     return false;
 
-  polar.ideal_polar_a = pc.a;
-  polar.ideal_polar_b = pc.b;
-  polar.ideal_polar_c = pc.c;
+  polar.ideal_polar = pc;
 
   // Glider empty weight
   polar.SetReferenceMass(reference_mass, false);

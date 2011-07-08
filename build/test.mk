@@ -292,7 +292,7 @@ TEST_POLARS_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Polar/Polar.cpp \
-	$(SRC)/Polar/PolarCoefficients.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/PolarCoefficients.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \
 	$(SRC)/Polar/PolarStore.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -305,6 +305,7 @@ $(TARGET_BIN_DIR)/TestPolars$(TARGET_EXEEXT): $(TEST_POLARS_OBJS) $(TEST_POLARS_
 
 TEST_GLIDE_POLAR_SOURCES = \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlidePolar.cpp \
+	$(ENGINE_SRC_DIR)/GlideSolvers/PolarCoefficients.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideResult.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/GlideState.cpp \
 	$(ENGINE_SRC_DIR)/GlideSolvers/MacCready.cpp \

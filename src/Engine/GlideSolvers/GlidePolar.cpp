@@ -38,9 +38,7 @@ GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast)
   VbestLD(fixed_zero),
   Vmax(fixed(75.0)),
   Vmin(fixed_zero),
-  ideal_polar_a(0.00157),
-  ideal_polar_b(-0.0734),
-  ideal_polar_c(1.48),
+  ideal_polar(fixed(0.00157), fixed(-0.0734), fixed(1.48)),
   ballast_ratio(0.3),
   reference_mass(300),
   dry_mass(reference_mass),
@@ -69,13 +67,11 @@ GlidePolar::UpdatePolar()
   const fixed loading_factor = sqrt(GetTotalMass() / reference_mass);
   const fixed inv_bugs = fixed_one/bugs;
 
-  polar_a = inv_bugs * ideal_polar_a / loading_factor;
-  polar_b = inv_bugs * ideal_polar_b;
-  polar_c = inv_bugs * ideal_polar_c * loading_factor;
+  polar.a = inv_bugs * ideal_polar.a / loading_factor;
+  polar.b = inv_bugs * ideal_polar.b;
+  polar.c = inv_bugs * ideal_polar.c * loading_factor;
 
-  assert(positive(polar_a));
-  assert(negative(polar_b));
-  assert(positive(polar_c));
+  assert(polar.IsValid());
 }
 
 void
@@ -123,7 +119,7 @@ GlidePolar::MSinkRate(const fixed V) const
 fixed
 GlidePolar::SinkRate(const fixed V) const
 {
-  return V * (V * polar_a + polar_b) + polar_c;
+  return V * (V * polar.a + polar.b) + polar.c;
 }
 
 fixed
@@ -185,7 +181,7 @@ GlidePolar::SolveLD()
   VbestLD = gpvopt.find_min(VbestLD);
 #else
   assert(!negative(mc));
-  VbestLD = max(Vmin, min(Vmax, sqrt((polar_c+mc)/polar_a)));
+  VbestLD = max(Vmin, min(Vmax, sqrt((polar.c+mc)/polar.a)));
   SbestLD = SinkRate(VbestLD);
   bestLD = VbestLD / SbestLD;
 #endif
@@ -232,7 +228,7 @@ GlidePolar::SolveSMin()
   GlidePolarMinSink gpminsink(*this, Vmax);
   Vmin = gpminsink.find_min(Vmin);
 #else
-  Vmin = min(Vmax, -polar_b/(fixed_two*polar_a));
+  Vmin = min(Vmax, -polar.b/(fixed_two*polar.a));
   Smin = SinkRate(Vmin);
 #endif
 }
