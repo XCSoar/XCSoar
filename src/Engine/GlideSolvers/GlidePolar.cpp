@@ -30,15 +30,13 @@
 #include "Util/Quadratic.hpp"
 #include <assert.h>
 
-#define fixed_75 fixed(75.0)
-
 GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast) :
   mc(_mc),
   bugs(_bugs),
   ballast(_ballast),
   cruise_efficiency(fixed_one),
   VbestLD(fixed_zero),
-  Vmax(fixed_75),
+  Vmax(fixed(75.0)),
   Vmin(fixed_zero),
   ideal_polar_a(0.00157),
   ideal_polar_b(-0.0734),
