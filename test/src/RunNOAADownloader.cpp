@@ -28,6 +28,7 @@ Copyright_License {
 
 #include <cstdio>
 #include <iostream>
+
 using namespace std;
 
 static void
@@ -48,8 +49,7 @@ DisplayMETAR(unsigned index)
          (unsigned)metar.last_update.second);
 
   if (!metar.content.empty()) {
-      _tprintf(metar.content.c_str());
-      cout << endl;
+    _tprintf(_T("%s\n"), metar.content.c_str());
   }
 }
 
@@ -71,8 +71,7 @@ DisplayTAF(unsigned index)
          (unsigned)taf.last_update.second);
 
   if (!taf.content.empty()) {
-      _tprintf(taf.content.c_str());
-      cout << endl;
+    _tprintf(_T("%s\n"), taf.content.c_str());
   }
 }
 
