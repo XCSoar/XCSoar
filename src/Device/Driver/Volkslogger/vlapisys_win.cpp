@@ -17,7 +17,6 @@
 
 #include "vla_support.h"
 #include "Device/Port.hpp"
-#include "ProgressGlue.hpp"
 
 #include <stdio.h>
 #if defined(HAVE_POSIX) || !defined(_WIN32_WCE)

@@ -43,7 +43,6 @@ Copyright_License {
 #include "Airspace/AirspaceGlue.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
-#include "ProgressGlue.hpp"
 #include "Operation.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Waypoint/WaypointGlue.hpp"
