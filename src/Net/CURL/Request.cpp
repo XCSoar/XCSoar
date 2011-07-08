@@ -94,7 +94,7 @@ Net::Request::Created() const
 }
 
 size_t
-Net::Request::Read(char *_buffer, size_t buffer_size, unsigned long timeout)
+Net::Request::Read(void *_buffer, size_t buffer_size, unsigned long timeout)
 {
   assert(handle != NULL);
 
@@ -124,8 +124,9 @@ Net::Request::Read(char *_buffer, size_t buffer_size, unsigned long timeout)
   if (buffer_size > range.second)
     buffer_size = range.second;
 
-  std::copy(range.first, range.first + buffer_size, (uint8_t *)_buffer);
-  _buffer[buffer_size] = 0;
+  uint8_t *p = (uint8_t *)_buffer;
+  std::copy(range.first, range.first + buffer_size, p);
+  p[buffer_size] = 0;
 
   buffer.consume(buffer_size);
   curl_easy_pause(handle, CURLPAUSE_CONT);

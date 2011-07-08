@@ -96,7 +96,7 @@ Net::Request::Created() const
 }
 
 size_t
-Net::Request::Read(char *buffer, size_t buffer_size, unsigned long timeout)
+Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
 {
   // XXX implement timeout
 

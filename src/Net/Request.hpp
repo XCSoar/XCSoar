@@ -140,7 +140,7 @@ namespace Net {
      * @param timeout Timeout used for retrieving the data chunk
      * @return Number of bytes that were read from the server. 0 means EOF.
      */
-    size_t Read(char *buffer, size_t buffer_size, unsigned long timeout = INFINITE);
+    size_t Read(void *buffer, size_t buffer_size, unsigned long timeout = INFINITE);
 
 #ifdef HAVE_WININET
     /** Internal callback function. Don't use this manually! */

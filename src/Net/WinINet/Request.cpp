@@ -26,6 +26,7 @@ Copyright_License {
 #include "Net/Connection.hpp"
 
 #include <assert.h>
+#include <stdint.h>
 
 static void CALLBACK
 RequestCallback(HINTERNET hInternet,
@@ -104,7 +105,7 @@ Net::Request::Send(unsigned long timeout)
 }
 
 size_t
-Net::Request::Read(char *buffer, size_t buffer_size, unsigned long timeout)
+Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
 {
   INTERNET_BUFFERSA InetBuff;
   FillMemory(&InetBuff, sizeof(InetBuff), 0);
@@ -119,7 +120,7 @@ Net::Request::Read(char *buffer, size_t buffer_size, unsigned long timeout)
     // return "0 bytes read"
     return 0;
 
-  buffer[InetBuff.dwBufferLength] = 0;
+  ((uint8_t *)buffer)[InetBuff.dwBufferLength] = 0;
   return InetBuff.dwBufferLength;
 }
 
