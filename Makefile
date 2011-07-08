@@ -575,6 +575,7 @@ XCSOAR_LDADD = \
 	$(ENGINE_LIBS) \
 	$(SHAPELIB_LIBS) \
 	$(JASPER_LIBS) \
+	$(LIBNET_LIBS) \
 	$(ZZIP_LIBS) \
 	$(UTIL_LIBS) \
 	$(MATH_LIBS) \
@@ -583,12 +584,8 @@ XCSOAR_LDFLAGS = \
 	$(GETTEXT_LDLIBS) \
 	$(PROFILE_LDLIBS) \
 	$(SCREEN_LDLIBS) \
+	$(LIBNET_LDLIBS) \
 	$(ZZIP_LDFLAGS)
-
-ifeq ($(HAVE_NET),y)
-XCSOAR_LDADD += $(LIBNET_LIBS)
-XCSOAR_LDFLAGS += -lwininet
-endif
 
 ifeq ($(HAVE_POSIX),n)
 ifeq ($(HAVE_CE),y)

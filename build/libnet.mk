@@ -9,6 +9,7 @@ LIBNET_SOURCES += \
 	$(SRC)/Net/WinINet/Session.cpp \
 	$(SRC)/Net/WinINet/Connection.cpp \
 	$(SRC)/Net/WinINet/Request.cpp
+LIBNET_LDLIBS = -lwininet
 endif
 
 LIBNET_OBJS = $(call SRC_TO_OBJ,$(LIBNET_SOURCES))
