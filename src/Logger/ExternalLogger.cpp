@@ -37,6 +37,9 @@
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "Operation.hpp"
+#include "Dialogs/JobDialog.hpp"
+#include "Thread/JobThread.hpp"
+#include "Job.hpp"
 
 static bool DeclaredToDevice = false;
 
@@ -46,14 +49,31 @@ ExternalLogger::IsDeclared()
   return DeclaredToDevice;
 }
 
+class DeclareJob : public Job {
+  DeviceDescriptor &device;
+  const struct Declaration &declaration;
+
+  bool result;
+
+public:
+  DeclareJob(DeviceDescriptor &_device, const struct Declaration &_declaration)
+    :device(_device), declaration(_declaration) {}
+
+  bool GetResult() const {
+    return result;
+  }
+
+  virtual void Run(OperationEnvironment &env) {
+    result = device.Declare(declaration, env);
+  }
+};
+
 static bool
 DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration)
 {
-  VerboseOperationEnvironment env;
-  bool success = device.Declare(declaration, env);
-  env.Hide();
-
-  return success;
+  DeclareJob job(device, declaration);
+  JobDialog(CommonInterface::main_window, _T(""), job);
+  return job.GetResult();
 }
 
 static bool
@@ -121,25 +141,62 @@ ExternalLogger::CheckDeclaration(void)
   return false;
 }
 
+class ReadFlightListJob : public Job {
+  DeviceDescriptor &device;
+  RecordedFlightList &flight_list;
+
+  bool result;
+
+public:
+  ReadFlightListJob(DeviceDescriptor &_device,
+                    RecordedFlightList &_flight_list)
+    :device(_device), flight_list(_flight_list) {}
+
+  bool GetResult() const {
+    return result;
+  }
+
+  virtual void Run(OperationEnvironment &env) {
+    result = device.ReadFlightList(flight_list, env);
+  }
+};
+
 static bool
 DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
 {
-  VerboseOperationEnvironment env;
-  bool success = device.ReadFlightList(flight_list, env);
-  env.Hide();
-
-  return success;
+  ReadFlightListJob job(device, flight_list);
+  JobDialog(CommonInterface::main_window, _T(""), job);
+  return job.GetResult();
 }
+
+class DownloadFlightJob : public Job {
+  DeviceDescriptor &device;
+  const RecordedFlightInfo &flight;
+  const TCHAR *path;
+
+  bool result;
+
+public:
+  DownloadFlightJob(DeviceDescriptor &_device,
+                    const RecordedFlightInfo &_flight, const TCHAR *_path)
+    :device(_device), flight(_flight), path(_path) {}
+
+  bool GetResult() const {
+    return result;
+  }
+
+  virtual void Run(OperationEnvironment &env) {
+    result = device.DownloadFlight(flight, path, env);
+  }
+};
 
 static bool
 DoDownloadFlight(DeviceDescriptor &device,
                  const RecordedFlightInfo &flight, const TCHAR *path)
 {
-  VerboseOperationEnvironment env;
-  bool success = device.DownloadFlight(flight, path, env);
-  env.Hide();
-
-  return success;
+  DownloadFlightJob job(device, flight, path);
+  JobDialog(CommonInterface::main_window, _T(""), job);
+  return job.GetResult();
 }
 
 static void
