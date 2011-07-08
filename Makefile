@@ -195,6 +195,7 @@ DIALOG_SOURCES = \
 XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(IO_SRC_DIR)/DataFile.cpp \
+	$(SRC)/Net/ToBuffer.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
