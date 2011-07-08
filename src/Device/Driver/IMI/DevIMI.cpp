@@ -408,14 +408,7 @@ bool CDevIMI::DeclarationWrite(Port &port, const Declaration &decl)
   unicode2usascii(decl.AircraftType,     imiDecl.header.gty, sizeof(imiDecl.header.gty));
   unicode2usascii(decl.AircraftReg,     imiDecl.header.gid, sizeof(imiDecl.header.gid));
   unicode2usascii(decl.CompetitionId,    imiDecl.header.cid, sizeof(imiDecl.header.cid));
-  unicode2usascii(_T(""), imiDecl.header.ccl, sizeof(imiDecl.header.ccl));
-  // strncpy(decl.header.clb, idecl.clb, sizeof(decl.header.clb));
-  // strncpy(decl.header.sit, idecl.sit, sizeof(decl.header.sit));
-  // strncpy(decl.header.cm2, idecl.cm2, sizeof(decl.header.cm2));
-  // decl.header.db2Year = year; decl.header.db2Month = month; decl.header.db2Day = day;
   unicode2usascii(_T("XCSOARTASK"), imiDecl.header.tskName, sizeof(imiDecl.header.tskName));
-  // decl.header.tskYear = year; decl.header.tskMonth = month; decl.header.tskDay = day;
-  // decl.header.tskNumber = MIN(9999, idecl.tskNumber);
 
   IMIWaypoint(decl, 0, imiDecl.wp[0]);
   for (unsigned i = 0; i < decl.size(); i++)
