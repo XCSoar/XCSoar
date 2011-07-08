@@ -27,7 +27,6 @@ Copyright_License {
 #include <tchar.h>
 
 struct PolarInfo;
-class GlidePolar;
 
 namespace PolarGlue
 {
@@ -38,9 +37,6 @@ namespace PolarGlue
   void SaveToProfile(const PolarInfo &polar);
 
   PolarInfo LoadFromProfile();
-
-  /** Copies data from a PolarInfo into a GlidePolar */
-  bool CopyIntoGlidePolar(const PolarInfo &polar, GlidePolar &gp);
 }
 
 #endif
