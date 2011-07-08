@@ -185,9 +185,9 @@ void CDevIMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &i
  *
  * @return Operation status
  */
-bool CDevIMI::Send(Port &d, const TMsg &msg)
+bool CDevIMI::Send(Port &port, const TMsg &msg)
 {
-  d.Write(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2);
+  port.Write(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2);
   return true;
 }
 
@@ -207,7 +207,7 @@ bool CDevIMI::Send(Port &d, const TMsg &msg)
  *
  * @return Operation status
  */
-bool CDevIMI::Send(Port &d,
+bool CDevIMI::Send(Port &port,
                    IMIBYTE msgID, const void *payload /* =0 */, IMIWORD payloadSize /* =0 */,
                    IMIBYTE parameter1 /* =0 */, IMIWORD parameter2 /* =0 */, IMIWORD parameter3 /* =0 */)
 {
@@ -231,7 +231,7 @@ bool CDevIMI::Send(Port &d,
   msg.payload[payloadSize] = (IMIBYTE)(crc >> 8);
   msg.payload[payloadSize + 1] = (IMIBYTE)crc;
 
-  return Send(d, msg);
+  return Send(port, msg);
 }
 
 
@@ -246,19 +246,19 @@ bool CDevIMI::Send(Port &d,
  *
  * @return Pointer to a message structure if expected message was received or 0 otherwise
  */
-const CDevIMI::TMsg *CDevIMI::Receive(Port &d, unsigned extraTimeout,
+const CDevIMI::TMsg *CDevIMI::Receive(Port &port, unsigned extraTimeout,
                                       unsigned expectedPayloadSize)
 {
   if(expectedPayloadSize > COMM_MAX_PAYLOAD_SIZE)
     expectedPayloadSize = COMM_MAX_PAYLOAD_SIZE;
 
   // set timeout
-  unsigned baudrate = d.GetBaudrate();
+  unsigned baudrate = port.GetBaudrate();
   if (!baudrate)
     return NULL;
 
   unsigned timeout = extraTimeout + 10000 * (expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate;
-  if(!d.SetRxTimeout(timeout))
+  if(!port.SetRxTimeout(timeout))
     return NULL;
 
   // wait for the message
@@ -267,7 +267,7 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &d, unsigned extraTimeout,
   while(MonotonicClockMS() < timeout) {
     // read message
     IMIBYTE buffer[64];
-    int bytesRead = d.Read(buffer, sizeof(buffer));
+    int bytesRead = port.Read(buffer, sizeof(buffer));
     if(bytesRead == 0)
       continue;
     if (bytesRead == -1)
@@ -278,7 +278,7 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &d, unsigned extraTimeout,
     if(lastMsg) {
       // message received
       if(lastMsg->msgID == MSG_ACK_NOTCONFIG)
-        Disconnect(d);
+        Disconnect(port);
       else if(lastMsg->msgID != MSG_CFG_KEEPCONFIG)
         msg = lastMsg;
 
@@ -287,7 +287,7 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &d, unsigned extraTimeout,
   }
 
   // restore timeout
-  if(!d.SetRxTimeout(0))
+  if(!port.SetRxTimeout(0))
     return NULL;
 
   return msg;
@@ -313,20 +313,20 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &d, unsigned extraTimeout,
  *
  * @return Pointer to a message structure if expected message was received or 0 otherwise
  */
-const CDevIMI::TMsg *CDevIMI::SendRet(Port &d,
+const CDevIMI::TMsg *CDevIMI::SendRet(Port &port,
                                       IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
                                       IMIBYTE reMsgID, IMIWORD retPayloadSize,
                                       IMIBYTE parameter1 /* =0 */, IMIWORD parameter2 /* =0 */, IMIWORD parameter3 /* =0 */,
                                       unsigned extraTimeout /* =300 */, int retry /* =4 */)
 {
-  unsigned baudRate = d.GetBaudrate();
+  unsigned baudRate = port.GetBaudrate();
   if (!baudRate)
     return NULL;
 
   extraTimeout += 10000 * (payloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudRate;
   while (retry--) {
-    if(Send(d, msgID, payload, payloadSize, parameter1, parameter2, parameter3)) {
-      const TMsg *msg = Receive(d, extraTimeout, retPayloadSize);
+    if(Send(port, msgID, payload, payloadSize, parameter1, parameter2, parameter3)) {
+      const TMsg *msg = Receive(port, extraTimeout, retPayloadSize);
       if(msg && msg->msgID == reMsgID && (retPayloadSize == (IMIWORD)-1 || msg->payloadSize == retPayloadSize))
         return msg;
     }
@@ -346,10 +346,10 @@ const CDevIMI::TMsg *CDevIMI::SendRet(Port &d,
  *
  * @return Operation status
  */
-bool CDevIMI::Connect(Port &d)
+bool CDevIMI::Connect(Port &port)
 {
   if(_connected)
-    if(!Disconnect(d))
+    if(!Disconnect(port))
       return false;
 
   _connected = false;
@@ -358,8 +358,8 @@ bool CDevIMI::Connect(Port &d)
   _parser.Reset();
 
   // check connectivity
-  if(Send(d, MSG_CFG_HELLO)) {
-    const TMsg *msg = Receive(d, 100, 0);
+  if(Send(port, MSG_CFG_HELLO)) {
+    const TMsg *msg = Receive(port, 100, 0);
     if (!msg || msg->msgID != MSG_CFG_HELLO)
       return false;
 
@@ -367,17 +367,17 @@ bool CDevIMI::Connect(Port &d)
   }
 
   // configure baudrate
-  unsigned baudRate = d.GetBaudrate();
+  unsigned baudRate = port.GetBaudrate();
   if (!baudRate)
     return false;
 
-  if(!Send(d, MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate), IMICOMM_BIGPARAM2(baudRate)))
+  if(!Send(port, MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate), IMICOMM_BIGPARAM2(baudRate)))
     return false;
 
   // get device info
   for(int i = 0; i < 4; i++) {
-    if(Send(d, MSG_CFG_DEVICEINFO)) {
-      const TMsg *msg = Receive(d, 300, sizeof(TDeviceInfo));
+    if(Send(port, MSG_CFG_DEVICEINFO)) {
+      const TMsg *msg = Receive(port, 300, sizeof(TDeviceInfo));
       if(msg) {
         if(msg->msgID == MSG_CFG_DEVICEINFO) {
           if(msg->payloadSize == sizeof(TDeviceInfo)) {
@@ -410,7 +410,7 @@ bool CDevIMI::Connect(Port &d)
  *
  * @return Operation status
  */
-bool CDevIMI::DeclarationWrite(Port &d, const Declaration &decl)
+bool CDevIMI::DeclarationWrite(Port &port, const Declaration &decl)
 {
   if (!_connected)
     return false;
@@ -439,7 +439,7 @@ bool CDevIMI::DeclarationWrite(Port &d, const Declaration &decl)
   IMIWaypoint(decl, decl.size() + 1, imiDecl.wp[decl.size() + 1]);
 
   // send declaration for current task
-  const TMsg *msg = SendRet(d, MSG_DECLARATION, &imiDecl, sizeof(imiDecl), MSG_ACK_SUCCESS, 0, -1);
+  const TMsg *msg = SendRet(port, MSG_DECLARATION, &imiDecl, sizeof(imiDecl), MSG_ACK_SUCCESS, 0, -1);
 
   return msg;
 }
@@ -454,10 +454,10 @@ bool CDevIMI::DeclarationWrite(Port &d, const Declaration &decl)
  *
  * @return Operation status
  */
-bool CDevIMI::Disconnect(Port &d)
+bool CDevIMI::Disconnect(Port &port)
 {
   if(_connected) {
-    if(Send(d, MSG_CFG_BYE)) {
+    if(Send(port, MSG_CFG_BYE)) {
       _connected = false;
       memset(&_info, 0, sizeof(_info));
       _serialNumber = 0;
@@ -468,35 +468,35 @@ bool CDevIMI::Disconnect(Port &d)
 }
 
 bool
-CDevIMI::DeclareTask(Port &d, const Declaration &declaration)
+CDevIMI::DeclareTask(Port &port, const Declaration &declaration)
 {
   // verify WP number
   if (declaration.size() < 2 || declaration.size() > 13)
     return false;
 
   // stop Rx thread
-  if(!d.StopRxThread())
+  if(!port.StopRxThread())
     return false;
 
   // set new Rx timeout
-  bool status = d.SetRxTimeout(2000);
+  bool status = port.SetRxTimeout(2000);
   if(status) {
     // connect to the device
-    status = Connect(d);
+    status = Connect(port);
     if(status) {
       // task declaration
-      status = status && DeclarationWrite(d, declaration);
+      status = status && DeclarationWrite(port, declaration);
     }
 
     // disconnect
-    status = Disconnect(d) && status;
+    status = Disconnect(port) && status;
 
     // restore Rx timeout (we must try that always; don't overwrite error descr)
-    status = d.SetRxTimeout(0) && status;
+    status = port.SetRxTimeout(0) && status;
   }
 
   // restart Rx thread
-  status = d.StartRxThread() && status;
+  status = port.StartRxThread() && status;
 
   return status;
 }

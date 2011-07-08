@@ -88,25 +88,25 @@ class CDevIMI
   // IMI tools
   static IMIWORD CRC16Checksum(const void *message, unsigned bytes);
   static void IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
-  static bool Send(Port &d, const TMsg &msg);
-  static bool Send(Port &d,
+  static bool Send(Port &port, const TMsg &msg);
+  static bool Send(Port &port,
                    IMIBYTE msgID, const void *payload = 0, IMIWORD payloadSize = 0,
                    IMIBYTE parameter1 = 0, IMIWORD parameter2 = 0, IMIWORD parameter3 = 0);
-  static const TMsg *Receive(Port &d,
+  static const TMsg *Receive(Port &port,
                              unsigned extraTimeout, unsigned expectedPayloadSize);
-  static const TMsg *SendRet(Port &d,
+  static const TMsg *SendRet(Port &port,
                              IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
                              IMIBYTE reMsgID, IMIWORD retPayloadSize,
                              IMIBYTE parameter1 = 0, IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
                              unsigned extraTimeout = 300, int retry = 4);
 
   // IMI interface
-  static bool Connect(Port &d);
-  static bool DeclarationWrite(Port &d, const Declaration &decl);
-  static bool Disconnect(Port &d);
+  static bool Connect(Port &port);
+  static bool DeclarationWrite(Port &port, const Declaration &decl);
+  static bool Disconnect(Port &port);
 
 public:
-  static bool DeclareTask(Port &d, const Declaration &declaration);
+  static bool DeclareTask(Port &port, const Declaration &declaration);
   static void Register();
 };
 
