@@ -334,11 +334,9 @@ const CDevIMI::TMsg *CDevIMI::SendRet(Port &port,
  */
 bool CDevIMI::Connect(Port &port)
 {
-  if(_connected)
-    if(!Disconnect(port))
-      return false;
+  if (_connected)
+    return true;
 
-  _connected = false;
   memset(&_info, 0, sizeof(_info));
   _serialNumber = 0;
   _parser.Reset();
