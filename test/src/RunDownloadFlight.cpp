@@ -25,7 +25,6 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
-#include "Device/Geoid.h"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
@@ -41,20 +40,6 @@ Copyright_License {
 #include <stdio.h>
 
 Waypoints way_points;
-
-/*
- * Fake Device/device.cpp
- */
-
-/*
- * Fake Device/Geoid.cpp
- */
-
-fixed
-LookupGeoidSeparation(const GeoPoint pt)
-{
-  return fixed_zero;
-}
 
 /*
  * Fake InputEvents.cpp

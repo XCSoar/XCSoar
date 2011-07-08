@@ -27,7 +27,6 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"
 #include "Device/device.hpp"
-#include "Device/Geoid.h"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
@@ -48,16 +47,6 @@ bool
 HaveCondorDevice()
 {
   return _tcscmp(driver->name, _T("Condor")) == 0;
-}
-
-/*
- * Fake Device/Geoid.cpp
- */
-
-fixed
-LookupGeoidSeparation(const GeoPoint pt)
-{
-  return fixed_zero;
 }
 
 /*

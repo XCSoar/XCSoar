@@ -40,7 +40,6 @@
 #include "Device/Driver/Zander.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
-#include "Device/Geoid.h"
 #include "Device/device.hpp"
 #include "NMEA/Info.hpp"
 #include "Protection.hpp"
@@ -70,16 +69,6 @@ InputEvents::processNmea(unsigned ne_id)
 Waypoints way_points;
 
 Waypoints::Waypoints() {}
-
-/*
- * Fake Device/Geoid.cpp
- */
-
-fixed
-LookupGeoidSeparation(const GeoPoint pt)
-{
-  return fixed_zero;
-}
 
 /*
  * Unit tests
