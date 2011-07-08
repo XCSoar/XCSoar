@@ -22,15 +22,8 @@ Copyright_License {
 */
 
 #include "Screen/Fonts.hpp"
-#include "LogFile.hpp"
-#include "ButtonLabel.hpp"
-#include "Profile/ProfileKeys.hpp"
-#include "Profile/FontConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/AnyCanvas.hpp"
-#include "Appearance.hpp"
-
-#include <stdio.h>
 
 /// values inside infoboxes  like numbers, etc.
 Font Fonts::InfoBox;
@@ -83,15 +76,6 @@ InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
   else
     font->lfQuality = ANTIALIASED_QUALITY;
 #endif
-}
-
-static void
-LoadCustomFont(Font *theFont, const TCHAR FontRegKey[])
-{
-  LOGFONT logfont;
-  memset((char *)&logfont, 0, sizeof(LOGFONT));
-  if (Profile::GetFont(FontRegKey, &logfont))
-    theFont->set(logfont);
 }
 
 static void
@@ -200,19 +184,6 @@ Fonts::SizeInfoboxFont(unsigned control_width)
   if (!is_altair())
     SizeLogFont(lf, control_width, _T("1234m"));
   InfoBox.set(lf);
-}
-
-void
-Fonts::LoadCustom()
-{
-  LoadCustomFont(&InfoBox, szProfileFontInfoWindowFont);
-  LoadCustomFont(&InfoBoxSmall, szProfileFontTitleSmallWindowFont);
-  LoadCustomFont(&Title, szProfileFontTitleWindowFont);
-  LoadCustomFont(&CDI, szProfileFontCDIWindowFont);
-  LoadCustomFont(&MapLabel, szProfileFontMapLabelFont);
-  LoadCustomFont(&MapLabelImportant, szProfileFontMapLabelImportantFont);
-  LoadCustomFont(&Map, szProfileFontMapWindowFont);
-  LoadCustomFont(&MapBold, szProfileFontMapWindowBoldFont);
 }
 
 void

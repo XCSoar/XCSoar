@@ -1545,7 +1545,6 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Look/TraceHistoryLook.cpp \
 	$(SRC)/Look/CrossSectionLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
-	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Appearance.cpp \
 	$(SRC)/Projection.cpp \
@@ -1745,6 +1744,7 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Audio/Sound.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Screen/CustomFonts.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \

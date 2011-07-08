@@ -459,6 +459,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/Blank.cpp \
 	$(SRC)/Screen/Chart.cpp \
 	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Screen/CustomFonts.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Screen/Graphics.cpp \
