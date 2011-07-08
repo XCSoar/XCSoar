@@ -435,8 +435,6 @@ bool CDevIMI::Disconnect(Port &port)
     return false;
 
   _connected = false;
-  memset(&_info, 0, sizeof(_info));
-  _serialNumber = 0;
   return true;
 }
 
@@ -477,6 +475,4 @@ CDevIMI::DeclareTask(Port &port, const Declaration &declaration)
 void CDevIMI::Register()
 {
   _connected = false;
-  memset(&_info, 0, sizeof(_info));
-  _serialNumber = 0;
 }
