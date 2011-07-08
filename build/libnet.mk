@@ -1,8 +1,10 @@
 # Build rules for the HTTP client library
 
 LIBNET_SOURCES =
+HAVE_NET := n
 
-ifeq ($(HAVE_WIN32),y)
+ifeq ($(TARGET),PC)
+HAVE_NET := y
 LIBNET_SOURCES += \
 	$(SRC)/Net/WinINet/Session.cpp \
 	$(SRC)/Net/WinINet/Connection.cpp \

@@ -661,7 +661,7 @@ DEBUG_PROGRAM_NAMES += FeedNMEA \
 	FeedTCP
 endif
 
-ifeq ($(TARGET),PC)
+ifeq ($(HAVE_NET),y)
 DEBUG_PROGRAM_NAMES += RunHTTPReader RunNOAADownloader
 endif
 

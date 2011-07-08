@@ -585,7 +585,7 @@ XCSOAR_LDFLAGS = \
 	$(SCREEN_LDLIBS) \
 	$(ZZIP_LDFLAGS)
 
-ifeq ($(TARGET),PC)
+ifeq ($(HAVE_NET),y)
 XCSOAR_LDADD += $(LIBNET_LIBS)
 XCSOAR_LDFLAGS += -lwininet
 endif
