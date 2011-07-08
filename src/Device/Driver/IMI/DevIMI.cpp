@@ -243,7 +243,7 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &port, unsigned extraTimeout,
 
   // set timeout
   unsigned baudrate = port.GetBaudrate();
-  if (!baudrate)
+  if (baudrate == 0)
     return NULL;
 
   unsigned timeout = extraTimeout + 10000 * (expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate;
@@ -307,7 +307,7 @@ const CDevIMI::TMsg *CDevIMI::SendRet(Port &port,
                                       unsigned extraTimeout /* =300 */, int retry /* =4 */)
 {
   unsigned baudRate = port.GetBaudrate();
-  if (!baudRate)
+  if (baudRate == 0)
     return NULL;
 
   extraTimeout += 10000 * (payloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudRate;
@@ -352,7 +352,7 @@ bool CDevIMI::Connect(Port &port)
 
   // configure baudrate
   unsigned baudRate = port.GetBaudrate();
-  if (!baudRate)
+  if (baudRate == 0)
     return false;
 
   if(!Send(port, MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate), IMICOMM_BIGPARAM2(baudRate)))
