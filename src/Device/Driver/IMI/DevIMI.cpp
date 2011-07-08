@@ -91,7 +91,7 @@ struct CDevIMI::TAngle
 void CDevIMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
 {
   unsigned idx = imiIdx == 0 ? 0 :
-    (imiIdx == (unsigned)decl.size() + 1 ? imiIdx - 2 : imiIdx - 1);
+    (imiIdx == decl.size() + 1 ? imiIdx - 2 : imiIdx - 1);
   const Declaration::TurnPoint &tp = decl.TurnPoints[idx];
   const Waypoint &wp = tp.waypoint;
 
@@ -114,7 +114,7 @@ void CDevIMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &i
   imiWp.lon = a.value;
 
   // TAKEOFF and LANDING do not have OZs
-  if(imiIdx == 0 || imiIdx == (unsigned)decl.size() + 1)
+  if(imiIdx == 0 || imiIdx == decl.size() + 1)
     return;
 
   // set observation zones
@@ -133,7 +133,7 @@ void CDevIMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &i
       break;
     }
     imiWp.oz.R1 = (IMIDWORD)std::min(250000u, tp.radius);
-  } else if(imiIdx == (unsigned)decl.size()) {
+  } else if(imiIdx == decl.size()) {
     // FINISH
     imiWp.oz.style = 4;
     switch(tp.shape) {
