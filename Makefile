@@ -558,7 +558,7 @@ ifeq ($(TARGET),ALTAIR)
 XCSOAR_SOURCES += $(SRC)/Hardware/AltairControl.cpp
 endif
 
-ifeq ($(TARGET),PC)
+ifeq ($(HAVE_NET),y)
 XCSOAR_SOURCES += \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp
