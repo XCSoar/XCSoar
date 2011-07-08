@@ -341,13 +341,14 @@ bool CDevIMI::Connect(Port &port)
   _parser.Reset();
 
   // check connectivity
-  if(Send(port, MSG_CFG_HELLO)) {
-    const TMsg *msg = Receive(port, 100, 0);
-    if (!msg || msg->msgID != MSG_CFG_HELLO)
-      return false;
+  if (!Send(port, MSG_CFG_HELLO))
+    return false;
 
-    _serialNumber = msg->sn;
-  }
+  const TMsg *msg = Receive(port, 100, 0);
+  if (!msg || msg->msgID != MSG_CFG_HELLO)
+    return false;
+
+  _serialNumber = msg->sn;
 
   // configure baudrate
   unsigned baudRate = port.GetBaudrate();
