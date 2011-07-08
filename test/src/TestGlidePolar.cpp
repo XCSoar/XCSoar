@@ -54,7 +54,7 @@ GlidePolarTest::Init()
   polar.dry_mass = fixed(318);
   polar.ballast_ratio = fixed(100) / polar.reference_mass;
 
-  polar.wing_area = fixed(9.8);
+  polar.SetWingArea(fixed(9.8));
 
   // No ballast and no bugs on the wings
   polar.ballast = fixed_zero;

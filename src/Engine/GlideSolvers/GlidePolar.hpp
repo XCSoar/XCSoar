@@ -398,6 +398,16 @@ public:
    */
   fixed GetLDOverGround(const AIRCRAFT_STATE &state) const;
 
+  /** Returns the wing area in m^2 */
+  fixed GetWingArea() const {
+    return wing_area;
+  }
+
+  /** Sets the wing area in m^2 */
+  void SetWingArea(fixed _wing_area) {
+    wing_area = _wing_area;
+  }
+
 private:
   /** Update computed values after change */
   void Update();

@@ -65,7 +65,7 @@ PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
   // Ballast weight
   polar.ballast_ratio = max_ballast / polar.reference_mass;
 
-  polar.wing_area = wing_area;
+  polar.SetWingArea(wing_area);
 
   polar.Update();
   return true;
