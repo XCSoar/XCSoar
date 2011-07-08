@@ -431,7 +431,7 @@ WndForm::ShowModal(Window *mouse_allowed)
   MSG event;
 #endif
 
-  while (mModalResult == 0 && loop.get(event)) {
+  while ((mModalResult == 0 || force) && loop.get(event)) {
     if (!main_window.FilterEvent(event, this, mouse_allowed))
       continue;
 
@@ -490,7 +490,7 @@ WndForm::ShowModal(Window *mouse_allowed)
 #ifdef ENABLE_SDL
     if (is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
       mModalResult = mrCancel;
-      break;
+      continue;
     }
 #endif
 
@@ -498,7 +498,7 @@ WndForm::ShowModal(Window *mouse_allowed)
        be the one that saves and closes a dialog */
     if (is_altair() && is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
       mModalResult = mrOK;
-      break;
+      continue;
     }
 
     loop.dispatch(event);

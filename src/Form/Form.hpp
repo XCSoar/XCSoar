@@ -111,6 +111,13 @@ private:
 protected:
   SingleWindow &main_window;
   int mModalResult;
+
+  /**
+   * The dialog stays open as long as this flag is set, even if
+   * SetModalResult has been called.
+   */
+  bool force;
+
   /** Background color of the titlebar */
   Color mColorTitle;
   /** Font of the titlebar */
@@ -228,6 +235,10 @@ public:
    * @param advanced True if advanced mode activated
    */
   void FilterAdvanced(bool advanced);
+
+  void SetForceOpen(bool _force) {
+    force = _force;
+  }
 
   int GetModalResult(void) { return mModalResult; }
   int SetModalResult(int Value) {
