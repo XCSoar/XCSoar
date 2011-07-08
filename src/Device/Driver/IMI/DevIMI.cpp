@@ -176,9 +176,7 @@ void CDevIMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &i
 /**
  * @brief Sends message buffer to a device
  *
- * @param d Device handle
- * @param errBufSize The size of the buffer for error string
- * @param errBuf The buffer for error string
+ * @param port Device handle
  * @param msg IMI message to send
  *
  * @return Operation status
@@ -193,9 +191,7 @@ bool CDevIMI::Send(Port &port, const TMsg &msg)
 /**
  * @brief Prepares and sends the message to a device
  *
- * @param d Device handle
- * @param errBufSize The size of the buffer for error string
- * @param errBuf The buffer for error string
+ * @param port Device handle
  * @param msgID ID of the message to send
  * @param payload Payload buffer to use for the message
  * @param payloadSize The size of the payload buffer
@@ -236,9 +232,7 @@ bool CDevIMI::Send(Port &port,
 /**
  * @brief Receives a message from the device
  *
- * @param d Device handle
- * @param errBufSize The size of the buffer for error string
- * @param errBuf The buffer for error string
+ * @param port Device handle
  * @param extraTimeout Additional timeout to wait for the message
  * @param expectedPayloadSize Expected size of the message
  *
@@ -295,9 +289,7 @@ const CDevIMI::TMsg *CDevIMI::Receive(Port &port, unsigned extraTimeout,
 /**
  * @brief Sends a message and waits for a confirmation from the device
  *
- * @param d Device handle
- * @param errBufSize The size of the buffer for error string
- * @param errBuf The buffer for error string
+ * @param port Device handle
  * @param msgID ID of the message to send
  * @param payload Payload buffer to use for the message
  * @param payloadSize The size of the payload buffer
@@ -338,9 +330,7 @@ const CDevIMI::TMsg *CDevIMI::SendRet(Port &port,
 /**
  * @brief Connects to the device
  *
- * @param d Device handle
- * @param errBufSize The size of the buffer for error string
- * @param errBuf The buffer for error string
+ * @param port Device handle
  *
  * @return Operation status
  */
@@ -401,10 +391,8 @@ bool CDevIMI::Connect(Port &port)
 /**
  * @brief Sends task declaration
  *
- * @param d Device handle
+ * @param port Device handle
  * @param decl Task declaration data
- * @param errBufSize The size of the buffer for error string
- * @param errBuf The buffer for error string
  *
  * @return Operation status
  */
@@ -445,9 +433,7 @@ bool CDevIMI::DeclarationWrite(Port &port, const Declaration &decl)
 /**
  * @brief Disconnects from the device
  *
- * @param d Device handle
- * @param errBufSize The size of the buffer for error string
- * @param errBuf The buffer for error string
+ * @param port Device handle
  *
  * @return Operation status
  */
