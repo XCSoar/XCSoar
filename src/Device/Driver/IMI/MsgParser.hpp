@@ -13,6 +13,8 @@
 
 #include "DevIMI.hpp"
 
+#define IMICOMM_MAX_MSG_SIZE (sizeof(TMsg))
+
 /**
  * @brief Message parser class
  */
