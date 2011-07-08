@@ -59,9 +59,6 @@ namespace IMI
   struct TDeclaration;
   struct TMsg;
 
-  // message parser
-  class CMsgParser;
-
   // constants
   const IMIBYTE IMICOMM_SYNC_CHAR1 = 'E';
   const IMIBYTE IMICOMM_SYNC_CHAR2 = 'X';
