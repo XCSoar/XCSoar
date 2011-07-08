@@ -430,15 +430,16 @@ bool CDevIMI::DeclarationWrite(Port &port, const Declaration &decl)
  */
 bool CDevIMI::Disconnect(Port &port)
 {
-  if(_connected) {
-    if(Send(port, MSG_CFG_BYE)) {
-      _connected = false;
-      memset(&_info, 0, sizeof(_info));
-      _serialNumber = 0;
-      return true;
-    }
-  }
-  return false;
+  if (!_connected)
+    return true;
+
+  if (!Send(port, MSG_CFG_BYE))
+    return false;
+
+  _connected = false;
+  memset(&_info, 0, sizeof(_info));
+  _serialNumber = 0;
+  return true;
 }
 
 bool
