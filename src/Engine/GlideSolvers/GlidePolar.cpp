@@ -53,15 +53,6 @@ GlidePolar::GlidePolar(const fixed _mc, const fixed _bugs, const fixed _ballast)
 void
 GlidePolar::Update()
 {
-  UpdatePolar();
-  Smax = SinkRate(Vmax);
-  SolveSMin();
-  SolveLD();
-}
-
-void
-GlidePolar::UpdatePolar()
-{
   assert(positive(bugs));
 
   const fixed loading_factor = sqrt(GetTotalMass() / reference_mass);
@@ -72,6 +63,10 @@ GlidePolar::UpdatePolar()
   polar.c = inv_bugs * ideal_polar.c * loading_factor;
 
   assert(polar.IsValid());
+
+  Smax = SinkRate(Vmax);
+  SolveSMin();
+  SolveLD();
 }
 
 void

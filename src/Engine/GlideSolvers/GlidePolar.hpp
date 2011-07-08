@@ -459,11 +459,8 @@ public:
   }
 
 private:
-  /** Update computed values after change */
+  /** Update glide polar coefficients and values depending on them */
   void Update();
-
-  /** Update glide polar coefficients from ideal terms */
-  void UpdatePolar();
 
   /** Solve for best LD at current MC/bugs/ballast setting. */
   void SolveLD();
