@@ -462,6 +462,9 @@ private:
   /** Update glide polar coefficients and values depending on them */
   void Update();
 
+  /** Update sink rate at max. cruise speed */
+  void UpdateSMax();
+
   /** Solve for best LD at current MC/bugs/ballast setting. */
   void SolveLD();
 

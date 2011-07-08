@@ -64,9 +64,15 @@ GlidePolar::Update()
 
   assert(polar.IsValid());
 
-  Smax = SinkRate(Vmax);
+  UpdateSMax();
   SolveSMin();
   SolveLD();
+}
+
+void
+GlidePolar::UpdateSMax()
+{
+  Smax = SinkRate(Vmax);
 }
 
 void
