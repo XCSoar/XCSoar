@@ -35,6 +35,7 @@ Copyright_License {
 #include "Waypoint/Waypoint.hpp"
 #include "Units/Units.hpp"
 #include "PeriodClock.hpp"
+#include "Operation.hpp"
 
 #include <tchar.h>
 #include <assert.h>
@@ -238,14 +239,15 @@ EWMicroRecorderWriteWaypoint(Port &port,
 }
 
 static bool
-DeclareInner(Port &port, const Declaration &declaration)
+DeclareInner(Port &port, const Declaration &declaration,
+             OperationEnvironment &env)
 {
   assert(declaration.size() >= 2);
   assert(declaration.size() <= 12);
 
   char user_data[2500];
 
-  if (!TryConnect(port, user_data))
+  if (!TryConnect(port, user_data) || env.IsCancelled())
     return false;
 
   char *p = strstr(user_data, "USER DETAILS");
@@ -272,6 +274,9 @@ DeclareInner(Port &port, const Declaration &declaration)
                         _T("Description:"), _T("XCSoar task declaration"));
 
   for (unsigned i = 0; i < 11; i++) {
+    if (env.IsCancelled())
+      return false;
+
     if (i+1>= declaration.size()) {
       EWMicroRecorderPrintf(port, _T("%-17s %s\r\n"),
                _T("TP LatLon:"), _T("0000000N00000000E TURN POINT"));
@@ -289,6 +294,9 @@ DeclareInner(Port &port, const Declaration &declaration)
   const Waypoint &wp = declaration.get_last_waypoint();
   EWMicroRecorderWriteWaypoint(port, wp, _T("Finish LatLon:"));
   EWMicroRecorderWriteWaypoint(port, wp, _T("Land LatLon:"));
+
+  if (env.IsCancelled())
+      return false;
 
   port.Write('\x03');         // finish sending user file
 
@@ -309,7 +317,7 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
      the command \x18 */
   port->SetRxTimeout(2500);
 
-  bool success = DeclareInner(*port, declaration);
+  bool success = DeclareInner(*port, declaration, env);
 
   port->Write("!!\r\n");         // go back to NMEA mode
 
