@@ -359,25 +359,29 @@ bool CDevIMI::Connect(Port &port)
     return false;
 
   // get device info
-  for(int i = 0; i < 4; i++) {
-    if(Send(port, MSG_CFG_DEVICEINFO)) {
-      const TMsg *msg = Receive(port, 300, sizeof(TDeviceInfo));
-      if(msg) {
-        if(msg->msgID == MSG_CFG_DEVICEINFO) {
-          if(msg->payloadSize == sizeof(TDeviceInfo)) {
-            memcpy(&_info, msg->payload, sizeof(TDeviceInfo));
-          } else if(msg->payloadSize == 16) {
-            // old version of the structure
-            memset(&_info, 0, sizeof(TDeviceInfo));
-            memcpy(&_info, msg->payload, 16);
-          }
-          _connected = true;
-          return true;
-        }
-      } else {
-        return false;
-      }
+  for (unsigned i = 0; i < 4; i++) {
+    if (!Send(port, MSG_CFG_DEVICEINFO))
+      continue;
+
+    const TMsg *msg = Receive(port, 300, sizeof(TDeviceInfo));
+    if (!msg)
+      return false;
+
+    if (msg->msgID != MSG_CFG_DEVICEINFO)
+      continue;
+
+    if (msg->payloadSize == sizeof(TDeviceInfo)) {
+      memcpy(&_info, msg->payload, sizeof(TDeviceInfo));
+    } else if (msg->payloadSize == 16) {
+      // old version of the structure
+      memset(&_info, 0, sizeof(TDeviceInfo));
+      memcpy(&_info, msg->payload, 16);
+    } else {
+      return false;
     }
+
+    _connected = true;
+    return true;
   }
 
   return false;
