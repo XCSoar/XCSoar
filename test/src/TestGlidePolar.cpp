@@ -62,7 +62,7 @@ GlidePolarTest::Init()
   // MC zero
   polar.mc = fixed_zero;
 
-  polar.Vmax = Units::ToSysUnit(fixed(200), unKiloMeterPerHour);
+  polar.SetVMax(Units::ToSysUnit(fixed(200), unKiloMeterPerHour), false);
 }
 
 void

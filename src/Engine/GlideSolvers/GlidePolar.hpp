@@ -131,6 +131,18 @@ public:
     return Vmax;
   }
 
+  void
+  SetVMax(fixed _v_max, bool update = true)
+  {
+    Vmax = _v_max;
+
+    if (update) {
+      UpdateSMax();
+      SolveSMin();
+      SolveLD();
+    }
+  }
+
   /**
    * Accesses sink rate at max airspeed
    *
