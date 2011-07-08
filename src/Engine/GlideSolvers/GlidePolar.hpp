@@ -408,6 +408,16 @@ public:
     wing_area = _wing_area;
   }
 
+  /** Returns the ballast ratio */
+  fixed GetBallastRatio() const {
+    return ballast_ratio;
+  }
+
+  /** Sets the ballast ratio */
+  void SetBallastRatio(fixed _ballast_ratio) {
+    ballast_ratio = _ballast_ratio;
+  }
+
 private:
   /** Update computed values after change */
   void Update();
