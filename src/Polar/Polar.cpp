@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Polar/Polar.hpp"
+#include "Polar/PolarCoefficients.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Units/Units.hpp"
 
@@ -29,34 +30,9 @@ Copyright_License {
 #include <cstdio>
 
 PolarCoefficients
-PolarCoefficients::FromVW(fixed v1, fixed v2, fixed v3,
-                          fixed w1, fixed w2, fixed w3)
-{
-  PolarCoefficients pc;
-
-  fixed d = v1 * v1 * (v2 - v3) + v2 * v2 * (v3 - v1) + v3 * v3 * (v1 - v2);
-  pc.a = (d == fixed_zero) ? fixed_zero :
-         -((v2 - v3) * (w1 - w3) + (v3 - v1) * (w2 - w3)) / d;
-
-  d = v2 - v3;
-  pc.b = (d == fixed_zero) ? fixed_zero:
-         -(w2 - w3 + pc.a * (v2 * v2 - v3 * v3)) / d;
-
-  pc.c = -(w3 + pc.a * v3 * v3 + pc.b * v3);
-
-  return pc;
-}
-
-PolarCoefficients
 PolarInfo::CalculateCoefficients() const
 {
   return PolarCoefficients::FromVW(v1, v2, v3, w1, w2, w3);
-}
-
-bool
-PolarCoefficients::IsValid() const
-{
-  return positive(a) && negative(b) && positive(c);
 }
 
 bool

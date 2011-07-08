@@ -292,6 +292,7 @@ TEST_POLARS_SOURCES = \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Polar/Polar.cpp \
+	$(SRC)/Polar/PolarCoefficients.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \
 	$(SRC)/Polar/PolarStore.cpp \
 	$(TEST_SRC_DIR)/tap.c \

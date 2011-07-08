@@ -29,15 +29,7 @@ Copyright_License {
 
 class GlidePolar;
 class TLineReader;
-
-struct PolarCoefficients
-{
-  fixed a, b, c;
-
-  bool IsValid() const;
-  static PolarCoefficients FromVW(fixed v1, fixed v2, fixed v3,
-                                  fixed w1, fixed w2, fixed w3);
-};
+struct PolarCoefficients;
 
 /**
  * Struct for internally stored WinPilot-like polars
