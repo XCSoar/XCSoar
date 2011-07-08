@@ -29,6 +29,8 @@ Copyright_License {
 #include "IO/ConfiguredFile.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
+#include "Engine/GlideSolvers/PolarCoefficients.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
 
 namespace PolarGlue
 {
@@ -148,4 +150,28 @@ PolarGlue::LoadFromProfile()
   }
 
   return polar;
+}
+
+bool
+PolarGlue::CopyIntoGlidePolar(const PolarInfo &polar, GlidePolar &gp)
+{
+  PolarCoefficients pc = polar.CalculateCoefficients();
+  if (!pc.IsValid())
+    return false;
+
+  gp.SetCoefficients(pc, false);
+
+  // Glider empty weight
+  gp.SetReferenceMass(polar.reference_mass, false);
+  gp.SetDryMass(positive(polar.dry_mass) ?
+                polar.dry_mass : polar.reference_mass, false);
+
+  // Ballast weight
+  gp.SetBallastRatio(polar.max_ballast / polar.reference_mass);
+
+  gp.SetWingArea(polar.wing_area);
+
+  gp.Update();
+
+  return true;
 }

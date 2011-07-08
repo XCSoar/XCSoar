@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Polar/Polar.hpp"
 #include "Engine/GlideSolvers/PolarCoefficients.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Units/Units.hpp"
 
 #include <stdlib.h>
@@ -46,27 +45,6 @@ PolarInfo::Init()
 {
   v1 = v2 = v3 = w1 = w2 = w3 = fixed_zero;
   reference_mass = dry_mass = max_ballast = wing_area = v_no = fixed_zero;
-}
-
-bool
-PolarInfo::CopyIntoGlidePolar(GlidePolar &polar) const
-{
-  PolarCoefficients pc = CalculateCoefficients();
-  if (!pc.IsValid())
-    return false;
-
-  polar.SetCoefficients(pc, false);
-
-  // Glider empty weight
-  polar.SetReferenceMass(reference_mass, false);
-  polar.SetDryMass(positive(dry_mass) ? dry_mass : reference_mass, false);
-  // Ballast weight
-  polar.SetBallastRatio(max_ballast / reference_mass);
-
-  polar.SetWingArea(wing_area);
-
-  polar.Update();
-  return true;
 }
 
 void

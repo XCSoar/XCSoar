@@ -351,7 +351,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   gp = GlidePolar(fixed_zero);
   gp.SetMC(SettingsComputer().safety_mc);
   PolarInfo polar = PolarGlue::LoadFromProfile();
-  polar.CopyIntoGlidePolar(gp);
+  PolarGlue::CopyIntoGlidePolar(polar, gp);
   SetSettingsComputer().SafetySpeed = fixed(polar.v_no);
   task_manager->set_glide_polar(gp);
 

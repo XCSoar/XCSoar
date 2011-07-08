@@ -27,7 +27,6 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include <tchar.h>
 
-class GlidePolar;
 class TLineReader;
 struct PolarCoefficients;
 
@@ -52,12 +51,6 @@ struct PolarInfo
 
   bool ReadString(const TCHAR* line);
   void GetString(TCHAR* line, size_t size, bool include_v_no = false) const;
-
-  /**
-   * Converts a WinPilot based PolarInfo to a XCSoar based GlidePolar
-   * @param polar Reference to the GlidePolar to save the data to
-   */
-  bool CopyIntoGlidePolar(GlidePolar &polar) const;
 
   PolarCoefficients CalculateCoefficients() const;
 
