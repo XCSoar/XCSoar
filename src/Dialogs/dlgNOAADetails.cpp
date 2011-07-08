@@ -35,7 +35,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 static WndForm *wf = NULL;
-static unsigned index;
+static unsigned station_index;
 
 static void
 Update()
@@ -43,7 +43,7 @@ Update()
   tstring metar_taf;
 
   METAR metar;
-  if (!NOAAStore::GetMETAR(index, metar)) {
+  if (!NOAAStore::GetMETAR(station_index, metar)) {
     metar_taf = _("No METAR available!");
   } else {
     metar_taf = metar.content.c_str();
@@ -52,7 +52,7 @@ Update()
   metar_taf += _T("\n\n");
 
   TAF taf;
-  if (!NOAAStore::GetTAF(index, taf)) {
+  if (!NOAAStore::GetTAF(station_index, taf)) {
     metar_taf += _("No TAF available!");
   } else {
     metar_taf += taf.content.c_str();
@@ -65,7 +65,7 @@ Update()
 static void
 UpdateClicked(gcc_unused WndButton &Sender)
 {
-  NOAAStore::UpdateStation(index);
+  NOAAStore::UpdateStation(station_index);
   Update();
 }
 
@@ -74,12 +74,12 @@ RemoveClicked(gcc_unused WndButton &Sender)
 {
   TCHAR tmp[256];
   _stprintf(tmp, _("Do you want to remove station %s?"),
-            NOAAStore::GetCodeT(index));
+            NOAAStore::GetCodeT(station_index));
 
   if (MessageBoxX(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;
 
-  NOAAStore::RemoveStation(index);
+  NOAAStore::RemoveStation(station_index);
   NOAAStore::SaveToProfile();
 
   wf->SetModalResult(mrOK);
@@ -99,10 +99,10 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgNOAADetailsShowModal(SingleWindow &parent, unsigned _index)
+dlgNOAADetailsShowModal(SingleWindow &parent, unsigned _station_index)
 {
-  assert(_index < NOAAStore::Count());
-  index = _index;
+  assert(_station_index < NOAAStore::Count());
+  station_index = _station_index;
 
   wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
                   _T("IDR_XML_NOAA_DETAILS_L") : _T("IDR_XML_NOAA_DETAILS"));
@@ -110,7 +110,7 @@ dlgNOAADetailsShowModal(SingleWindow &parent, unsigned _index)
 
   TCHAR caption[100];
   _stprintf(caption, _T("%s: %s"), _("METAR and TAF"),
-            NOAAStore::GetCodeT(index));
+            NOAAStore::GetCodeT(station_index));
   wf->SetCaption(caption);
 
   Update();
@@ -125,7 +125,7 @@ dlgNOAADetailsShowModal(SingleWindow &parent, unsigned _index)
 #include "Dialogs/Message.hpp"
 
 void
-dlgNOAADetailsShowModal(SingleWindow &parent, unsigned index)
+dlgNOAADetailsShowModal(SingleWindow &parent, unsigned station_index)
 {
   MessageBoxX(_("This function is not available on your platform yet."),
               _("Error"), MB_OK);
