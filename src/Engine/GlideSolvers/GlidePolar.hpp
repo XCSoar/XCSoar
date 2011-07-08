@@ -138,7 +138,7 @@ public:
 
     if (update) {
       UpdateSMax();
-      SolveSMin();
+      UpdateSMin();
     }
   }
 
@@ -477,10 +477,10 @@ private:
   void UpdateSMax();
 
   /** Solve for best LD at current MC/bugs/ballast setting. */
-  void SolveLD();
+  void UpdateBestLD();
 
   /** Solve for min sink rate at current bugs/ballast setting. */
-  void SolveSMin();
+  void UpdateSMin();
 };
 
 #endif

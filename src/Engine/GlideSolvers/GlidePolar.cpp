@@ -65,7 +65,7 @@ GlidePolar::Update()
   assert(polar.IsValid());
 
   UpdateSMax();
-  SolveSMin();
+  UpdateSMin();
 }
 
 void
@@ -107,7 +107,7 @@ GlidePolar::SetMC(const fixed _mc)
   else
     inv_mc = fixed_zero;
 
-  SolveLD();
+  UpdateBestLD();
 }
 
 fixed
@@ -173,7 +173,7 @@ private:
 #endif
 
 void
-GlidePolar::SolveLD()
+GlidePolar::UpdateBestLD()
 {
 #if 0
   // this method to be used if polar is not parabolic
@@ -221,7 +221,7 @@ private:
 #endif
 
 void 
-GlidePolar::SolveSMin()
+GlidePolar::UpdateSMin()
 {
 #if 0
   // this method to be used if polar is not parabolic
@@ -232,7 +232,7 @@ GlidePolar::SolveSMin()
   Smin = SinkRate(Vmin);
 #endif
 
-  SolveLD();
+  UpdateBestLD();
 }
 
 bool 
