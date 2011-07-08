@@ -40,6 +40,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Graphics.hpp"
+#include "Net/Init.hpp"
 
 /**
  * Main entry point for the whole XCSoar application
@@ -57,6 +58,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+  Net::Initialise();
+
   InitialiseDataPath();
   InitAsset();
 
@@ -96,6 +99,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Graphics::Deinitialise();
 
   DeinitialiseDataPath();
+  Net::Deinitialise();
 
   return ret;
 }

@@ -24,6 +24,7 @@ Copyright_License {
 #include "Weather/TAF.hpp"
 #include "Weather/METAR.hpp"
 #include "Weather/NOAAStore.hpp"
+#include "Net/Init.hpp"
 
 #include <cstdio>
 #include <iostream>
@@ -94,6 +95,8 @@ main(int argc, char *argv[])
     }
   }
 
+  Net::Initialise();
+
   cout << "Updating METAR and TAF ..." << endl;
   NOAAStore::Update();
 
@@ -103,6 +106,8 @@ main(int argc, char *argv[])
     DisplayMETAR(i);
     DisplayTAF(i);
   }
+
+  Net::Deinitialise();
 
   return 0;
 }

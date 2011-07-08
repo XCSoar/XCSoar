@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Net/Session.hpp"
 #include "Net/Request.hpp"
+#include "Net/Init.hpp"
 #include "OS/PathName.hpp"
 
 #include <iostream>
@@ -65,8 +66,12 @@ main(int argc, char *argv[])
     return 1;
   }
 
+  Net::Initialise();
+
   PathName url(argv[1]);
   TestConnection(url);
+
+  Net::Deinitialise();
 
   return 0;
 }
