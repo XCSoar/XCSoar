@@ -166,6 +166,9 @@ DeclareInner(Port &port, const Declaration &declaration,
   if (!LX::CommandMode(port))
       return false;
 
+  if (env.IsCancelled())
+    return false;
+
   env.SetProgressPosition(1);
 
   LX::Pilot pilot;
@@ -178,6 +181,9 @@ DeclareInner(Port &port, const Declaration &declaration,
   LX::ContestClass contest_class;
   LoadContestClass(contest_class, declaration);
 
+  if (env.IsCancelled())
+    return false;
+
   env.SetProgressPosition(2);
 
   LX::SendCommand(port, LX::WRITE_FLIGHT_INFO); // start declaration
@@ -186,9 +192,15 @@ DeclareInner(Port &port, const Declaration &declaration,
   writer.Write(&pilot, sizeof(pilot));
   env.SetProgressPosition(3);
 
+  if (env.IsCancelled())
+    return false;
+
   writer.Write(&lxDevice_Declaration, sizeof(lxDevice_Declaration));
   writer.Flush();
   if (!LX::ExpectACK(port))
+    return false;
+
+  if (env.IsCancelled())
     return false;
 
   env.SetProgressPosition(4);
