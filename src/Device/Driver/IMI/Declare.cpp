@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
-#include "DevIMI.hpp"
+#include "Protocol/DevIMI.hpp"
 #include "Device/Port.hpp"
 
 IMIDevice::IMIDevice(Port *_port)
