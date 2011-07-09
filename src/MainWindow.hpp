@@ -69,10 +69,7 @@ private:
   bool airspace_warning_pending;
 
 public:
-  MainWindow(const StatusMessageList &status_messages)
-    :vario(NULL), flarm(NULL), ta(NULL), popup(status_messages, *this),
-     FullScreen(false), CustomView(false),
-     airspace_warning_pending(false) {}
+  MainWindow(const StatusMessageList &status_messages);
   virtual ~MainWindow();
 
   static bool find(const TCHAR *text) {
