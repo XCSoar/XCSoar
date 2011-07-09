@@ -398,15 +398,20 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
   canvas.background_transparent();
 
   if (!is_persistent() || (dirty && _tcscmp(diLabel->lastText, Label) != 0)) {
-    canvas.set_background_color(look.background_color);
     canvas.set_text_color(look.dimmed_text_color);
     canvas.select(Fonts::Title);
     tsize = canvas.text_size(Label);
     diLabel->orgText.x = diLabel->recBkg.right - tsize.cx;
-    canvas.text_opaque(diLabel->orgText.x, diLabel->orgText.y,
-                       diLabel->recBkg, Label);
-    diLabel->recBkg.left = diLabel->orgText.x;
-    _tcscpy(diLabel->lastText, Label);
+
+    if (is_persistent()) {
+      canvas.set_background_color(look.background_color);
+      canvas.text_opaque(diLabel->orgText.x, diLabel->orgText.y,
+                         diLabel->recBkg, Label);
+      diLabel->recBkg.left = diLabel->orgText.x;
+      _tcscpy(diLabel->lastText, Label);
+    } else {
+      canvas.text(diLabel->orgText.x, diLabel->orgText.y, Label);
+    }
   }
 
   if (!is_persistent() || (dirty && diValue->lastValue != Value)) {
@@ -418,11 +423,15 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
     tsize = canvas.text_size(Temp);
     diValue->orgText.x = diValue->recBkg.right - tsize.cx;
 
-    canvas.text_opaque(diValue->orgText.x, diValue->orgText.y,
-                       diValue->recBkg, Temp);
+    if (is_persistent()) {
+      canvas.text_opaque(diValue->orgText.x, diValue->orgText.y,
+                         diValue->recBkg, Temp);
 
-    diValue->recBkg.left = diValue->orgText.x;
-    diValue->lastValue = Value;
+      diValue->recBkg.left = diValue->orgText.x;
+      diValue->lastValue = Value;
+    } else {
+      canvas.text(diValue->orgText.x, diValue->orgText.y, Temp);
+    }
   }
 
   if (!is_persistent() || (dirty && unit_symbol != NULL &&
