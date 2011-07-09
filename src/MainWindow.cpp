@@ -510,7 +510,7 @@ MainWindow::GetDisplayMode() const
 void
 MainWindow::on_pause()
 {
-  if (!map.defined() && has_dialog())
+  if (!IsRunning() && has_dialog())
     /* suspending before initialization has finished doesn't leave
        anything worth resuming, so let's just quit now */
     CancelDialog();
