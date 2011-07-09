@@ -621,19 +621,26 @@ GaugeVario::RenderBallast(Canvas &canvas)
 
   unsigned BALLAST = uround(Calculated().common_stats.current_ballast * 100);
 
-  if (BALLAST != lastBallast) {
+  if (!is_persistent() || BALLAST != lastBallast) {
     // ballast hase been changed
 
     canvas.select(Fonts::Title);
-    canvas.set_background_color(look.background_color);
 
-    if (lastBallast == 0 || BALLAST == 0) {
+    if (is_persistent())
+      canvas.set_background_color(look.background_color);
+    else
+      canvas.background_transparent();
+
+    if (is_persistent() || lastBallast == 0 || BALLAST == 0) {
       // new ballast is 0, hide label
       if (BALLAST > 0) {
         canvas.set_text_color(look.dimmed_text_color);
         // ols ballast was 0, show label
-        canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBal);
-      } else
+        if (is_persistent())
+          canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBal);
+        else
+          canvas.text(orgLabel.x, orgLabel.y, TextBal);
+      } else if (is_persistent())
         canvas.fill_rectangle(recLabelBk, look.background_color);
     }
 
@@ -642,11 +649,16 @@ GaugeVario::RenderBallast(Canvas &canvas)
       TCHAR Temp[18];
       _stprintf(Temp, _T("%u%%"), BALLAST);
       canvas.set_text_color(look.text_color);
-      canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
-    } else
+
+      if (is_persistent())
+        canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
+      else
+        canvas.text(orgValue.x, orgValue.y, Temp);
+    } else if (is_persistent())
       canvas.fill_rectangle(recValueBk, look.background_color);
 
-    lastBallast = BALLAST;
+    if (is_persistent())
+      lastBallast = BALLAST;
   }
 }
 
@@ -699,15 +711,22 @@ GaugeVario::RenderBugs(Canvas &canvas)
   }
 
   int BUGS = iround((fixed_one - Calculated().common_stats.current_bugs) * 100);
-  if (BUGS != lastBugs) {
+  if (is_persistent() || BUGS != lastBugs) {
 
     canvas.select(Fonts::Title);
-    canvas.set_background_color(look.background_color);
 
-    if (lastBugs < 1 || BUGS < 1) {
+    if (is_persistent())
+      canvas.set_background_color(look.background_color);
+    else
+      canvas.background_transparent();
+
+    if (is_persistent() || lastBugs < 1 || BUGS < 1) {
       if (BUGS > 0) {
         canvas.set_text_color(look.dimmed_text_color);
-        canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
+        if (is_persistent())
+          canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
+        else
+          canvas.text(orgLabel.x, orgLabel.y, TextBug);
       } else
         canvas.fill_rectangle(recLabelBk, look.background_color);
     }
@@ -716,11 +735,15 @@ GaugeVario::RenderBugs(Canvas &canvas)
       TCHAR Temp[18];
       _stprintf(Temp, _T("%d%%"), BUGS);
       canvas.set_text_color(look.text_color);
-      canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
+      if (is_persistent())
+        canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
+      else
+        canvas.text(orgValue.x, orgValue.y, Temp);
     } else
       canvas.fill_rectangle(recValueBk, look.background_color);
 
-    lastBugs = BUGS;
+    if (is_persistent())
+      lastBugs = BUGS;
   }
 }
 
