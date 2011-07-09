@@ -26,13 +26,6 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "Operation.hpp"
 
-static bool
-DeclareInner(Port *port, const Declaration &declaration, OperationEnvironment &env)
-{
-    // task declaration
-  return IMI::DeclarationWrite(*port, declaration);
-}
-
 bool
 IMIDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
 {
@@ -43,7 +36,7 @@ IMIDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
   if (!Connect(env) || env.IsCancelled())
     return false;
 
-  bool success = DeclareInner(port, declaration, env);
+  bool success = IMI::DeclarationWrite(*port, declaration);
 
   // disconnect
   Disconnect();
