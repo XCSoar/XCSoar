@@ -17,10 +17,6 @@
 #include "Device/Port.hpp"
 #include "OS/Clock.hpp"
 
-#ifdef _UNICODE
-#include <windows.h>
-#endif
-
 namespace IMI
 {
   bool _connected = false;
@@ -95,17 +91,6 @@ namespace IMI
                       IMIWORD retPayloadSize, IMIBYTE parameter1 = 0,
                       IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
                       unsigned extraTimeout = 300, int retry = 4);
-}
-
-static void
-unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
-{
-#ifdef _UNICODE
-  WideCharToMultiByte(CP_ACP, 0, unicode, -1, ascii, outSize, "?", NULL);
-#else
-  strncpy(ascii, unicode, outSize - 1);
-  ascii[outSize - 1] = 0;
-#endif
 }
 
 void

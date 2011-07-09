@@ -13,6 +13,8 @@
 
 #include "Types.hpp"
 
+#include <tchar.h>
+
 class Angle;
 struct BrokenDateTime;
 
@@ -34,6 +36,7 @@ namespace IMI
     AngleConverter(Angle angle);
   };
 
+  void unicode2usascii(const TCHAR* unicode, char* ascii, int outSize);
   void Convert(IMIDATETIMESEC in, BrokenDateTime &out);
 }
 
