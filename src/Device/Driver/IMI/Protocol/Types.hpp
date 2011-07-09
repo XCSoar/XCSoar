@@ -216,6 +216,28 @@ namespace IMI
     IMIBYTE payload[COMM_MAX_PAYLOAD_SIZE];
     IMIWORD crc16;
   } gcc_packed;
+
+  struct FlightInfo
+  {
+    IMIDWORD address;
+    /** Serial number */
+    IMIWORD sn;
+    /** n-th flight of the day */
+    IMIWORD flightOfDay;
+    /** Start date and time */
+    IMIDATETIMESEC start;
+    /** Landing date and time */
+    IMIDATETIMESEC finish;
+    /** Pilot name */
+    IMICHAR plt[IMIDECL_PLT_LENGTH];
+    /** Glider ID */
+    IMICHAR gid[IMIDECL_GID_LENGTH];
+    /** Glider type */
+    IMICHAR gty[IMIDECL_GTY_LENGTH];
+    /** Competition ID */
+    IMICHAR cid[IMIDECL_CID_LENGTH];
+    IMIBYTE reserved[96 - 82];
+  } gcc_packed;
 }
 
 #define IMICOMM_MSG_HEADER_SIZE ((size_t)(&(((TMsg *)NULL)->payload)))
