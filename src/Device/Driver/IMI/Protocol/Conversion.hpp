@@ -35,6 +35,7 @@ namespace IMI
       IMIDWORD value;
     };
 
+    AngleConverter() {}
     AngleConverter(Angle angle);
   };
 
