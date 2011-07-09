@@ -95,34 +95,6 @@ namespace IMI
                       IMIWORD retPayloadSize, IMIBYTE parameter1 = 0,
                       IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
                       unsigned extraTimeout = 300, int retry = 4);
-
-  /**
-   * @brief Connects to the device
-   *
-   * @param port Device handle
-   *
-   * @return Operation status
-   */
-  bool Connect(Port &port);
-
-  /**
-   * @brief Sends task declaration
-   *
-   * @param port Device handle
-   * @param decl Task declaration data
-   *
-   * @return Operation status
-   */
-  bool DeclarationWrite(Port &port, const Declaration &decl);
-
-  /**
-   * @brief Disconnects from the device
-   *
-   * @param port Device handle
-   *
-   * @return Operation status
-   */
-  bool Disconnect(Port &port);
 }
 
 static void
@@ -441,40 +413,6 @@ IMI::Disconnect(Port &port)
 
   _connected = false;
   return true;
-}
-
-bool
-IMI::DeclareTask(Port &port, const Declaration &declaration)
-{
-  // verify WP number
-  if (declaration.size() < 2 || declaration.size() > 13)
-    return false;
-
-  // stop Rx thread
-  if (!port.StopRxThread())
-    return false;
-
-  // set new Rx timeout
-  bool status = port.SetRxTimeout(2000);
-  if (status) {
-    // connect to the device
-    status = Connect(port);
-    if (status) {
-      // task declaration
-      status &= DeclarationWrite(port, declaration);
-    }
-
-    // disconnect
-    status &= Disconnect(port);
-
-    // restore Rx timeout (we must try that always; don't overwrite error descr)
-    status &= port.SetRxTimeout(0);
-  }
-
-  // restart Rx thread
-  status &= port.StartRxThread();
-
-  return status;
 }
 
 void

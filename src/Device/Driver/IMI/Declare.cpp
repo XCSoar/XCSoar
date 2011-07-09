@@ -38,5 +38,31 @@ IMIDevice::Declare(const Declaration &declaration,
   if (port == NULL)
     return false;
 
-  return IMI::DeclareTask(*port, declaration);
+  // verify WP number
+  if (declaration.size() < 2 || declaration.size() > 13)
+    return false;
+
+  // stop Rx thread
+  if (!port->StopRxThread())
+    return false;
+
+  // set new Rx timeout
+  port->SetRxTimeout(2000);
+
+  // connect to the device
+  bool success = IMI::Connect(*port);
+  if (success)
+    // task declaration
+    success = IMI::DeclarationWrite(*port, declaration);
+
+  // disconnect
+  IMI::Disconnect(*port);
+
+  // restore Rx timeout (we must try that always; don't overwrite error descr)
+  port->SetRxTimeout(0);
+
+  // restart Rx thread
+  port->StartRxThread();
+
+  return success;
 }

@@ -25,7 +25,34 @@ struct Declaration;
  */
 namespace IMI
 {
-  bool DeclareTask(Port &port, const Declaration &declaration);
+  /**
+   * @brief Connects to the device
+   *
+   * @param port Device handle
+   *
+   * @return Operation status
+   */
+  bool Connect(Port &port);
+
+  /**
+   * @brief Sends task declaration
+   *
+   * @param port Device handle
+   * @param decl Task declaration data
+   *
+   * @return Operation status
+   */
+  bool DeclarationWrite(Port &port, const Declaration &decl);
+
+  /**
+   * @brief Disconnects from the device
+   *
+   * @param port Device handle
+   *
+   * @return Operation status
+   */
+  bool Disconnect(Port &port);
+
   void Register();
 };
 
