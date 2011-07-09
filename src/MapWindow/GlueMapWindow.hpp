@@ -30,6 +30,7 @@ Copyright_License {
 #include "ThermalBandRenderer.hpp"
 #include "DisplayMode.hpp"
 
+struct Look;
 class Logger;
 
 struct ZoomClimb_t
@@ -117,7 +118,7 @@ class GlueMapWindow : public MapWindow {
   ThermalBandRenderer thermal_band_renderer;
 
 public:
-  GlueMapWindow();
+  GlueMapWindow(const Look &look);
 
   void SetLogger(Logger *_logger) {
     logger = _logger;

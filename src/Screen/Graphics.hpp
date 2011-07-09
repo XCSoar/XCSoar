@@ -28,11 +28,6 @@ Copyright_License {
 #include "Airspace/AirspaceClass.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Features.hpp"
-#include "Look/ChartLook.hpp"
-#include "Look/ThermalBandLook.hpp"
-#include "Look/TraceHistoryLook.hpp"
-#include "Look/CrossSectionLook.hpp"
-#include "Gauge/FlarmTrafficLook.hpp"
 
 class Bitmap;
 class MaskedIcon;
@@ -202,13 +197,6 @@ namespace Graphics {
   extern const Color liftColor;
   extern const Color skyColor;
   extern const Color seaColor;
-
-  extern ChartLook chart;
-  extern ThermalBandLook thermal_band;
-  extern TraceHistoryLook trace_history;
-  extern CrossSectionLook cross_section;
-  extern FlarmTrafficLook flarm_gauge;
-  extern FlarmTrafficLook flarm_dialog;
 };
 
 #endif

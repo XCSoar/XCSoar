@@ -21,24 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANALYSIS_DIALOG_HPP
-#define XCSOAR_ANALYSIS_DIALOG_HPP
-
-struct Look;
-class SingleWindow;
-class FullBlackboard;
-class GlideComputer;
-class ProtectedTaskManager;
-class Airspaces;
-class RasterTerrain;
+#include "Look.hpp"
 
 void
-dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
-                     const FullBlackboard &blackboard,
-                     const GlideComputer &glide_computer,
-                     const ProtectedTaskManager *protected_task_manager,
-                     const Airspaces *airspaces,
-                     const RasterTerrain *terrain,
-                     int page=-1);
+Look::Initialise()
+{
+  flarm_dialog.Initialise(false);
+  flarm_gauge.Initialise(true);
+}
 
-#endif
+void
+Look::InitialiseConfigured(bool inverse)
+{
+  chart.Initialise();
+  thermal_band.Initialise();
+  trace_history.Initialise(inverse);
+  cross_section.Initialise();
+}

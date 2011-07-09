@@ -45,12 +45,16 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Appearance.hpp"
 #include "UtilsSystem.hpp"
+#include "Look/Look.hpp"
 
 MainWindow::MainWindow(const StatusMessageList &status_messages)
-  :map(NULL), vario(NULL), flarm(NULL), ta(NULL),
+  :look(NULL),
+   map(NULL), vario(NULL), flarm(NULL), ta(NULL),
    popup(status_messages, *this),
    FullScreen(false), CustomView(false),
-   airspace_warning_pending(false) {}
+   airspace_warning_pending(false)
+{
+}
 
 /**
  * Destructor of the MainWindow-Class
@@ -103,6 +107,10 @@ MainWindow::Initialise()
 
   LogStartUp(_T("Initialise fonts"));
   Fonts::Initialize();
+
+  assert(look == NULL);
+  look = new Look();
+  look->Initialise();
 }
 
 void
@@ -121,6 +129,9 @@ MainWindow::InitialiseConfigured()
     LogStartUp(_T("Load fonts"));
     Fonts::LoadCustom();
   }
+
+  assert(look != NULL);
+  look->InitialiseConfigured(Appearance.InverseInfoBox);
 
   LogStartUp(_T("Create info boxes"));
   InfoBoxManager::Create(rc, ib_layout);
@@ -150,7 +161,7 @@ MainWindow::InitialiseConfigured()
                          rc.bottom - ib_layout.control_height * 2 + 1,
                          ib_layout.control_width * 2 - 1,
                          ib_layout.control_height * 2 - 1,
-                         Graphics::flarm_gauge,
+                         look->flarm_gauge,
                          hidden_border);
   flarm->bring_to_top();
 
@@ -161,7 +172,7 @@ MainWindow::InitialiseConfigured()
                                  hidden_border);
   ta->bring_to_top();
 
-  map = new GlueMapWindow();
+  map = new GlueMapWindow(*look);
   map->set(*this, map_rect);
   map->set_font(Fonts::Map);
 
@@ -188,6 +199,9 @@ MainWindow::Deinitialise()
 
   delete ta;
   ta = NULL;
+
+  delete look;
+  look = NULL;
 }
 
 void

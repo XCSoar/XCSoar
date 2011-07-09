@@ -559,6 +559,7 @@ InfoBoxContentOLC::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkEnter:
     dlgAnalysisShowModal(XCSoarInterface::main_window,
+                         *CommonInterface::main_window.look,
                          CommonInterface::Full(), *glide_computer,
                          protected_task_manager, &airspace_database, terrain,
                          8);

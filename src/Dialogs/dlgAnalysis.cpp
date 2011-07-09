@@ -32,10 +32,9 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/Earth.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
-#include "MainWindow.hpp"
+#include "Look/Look.hpp"
 #include "GlideComputer.hpp"
 #include "Blackboard.hpp"
 #include "Protection.hpp"
@@ -69,6 +68,7 @@ enum analysis_page {
 
 class ChartControl;
 
+static const Look *look;
 static const FullBlackboard *blackboard;
 static const GlideComputer *glide_computer;
 static const ProtectedTaskManager *protected_task_manager;
@@ -86,8 +86,9 @@ static GestureManager gestures;
 class CrossSectionControl: public CrossSectionWindow
 {
 public:
-  CrossSectionControl(const CrossSectionLook &look)
-    :CrossSectionWindow(look) {}
+  CrossSectionControl(const CrossSectionLook &look,
+                      const ChartLook &chart_look)
+    :CrossSectionWindow(look, chart_look) {}
 
 protected:
   virtual bool on_mouse_move(int x, int y, unsigned keys);
@@ -97,9 +98,14 @@ protected:
 
 class ChartControl: public PaintWindow
 {
+  const ChartLook &chart_look;
+  const ThermalBandLook &thermal_band_look;
+
 public:
   ChartControl(ContainerWindow &parent, int X, int Y, int Width, int Height,
-               const WindowStyle style);
+               const WindowStyle style,
+               const ChartLook &chart_look,
+               const ThermalBandLook &thermal_band_look);
 
 protected:
   virtual bool on_mouse_move(int x, int y, unsigned keys);
@@ -110,8 +116,10 @@ protected:
 };
 
 ChartControl::ChartControl(ContainerWindow &parent, int X, int Y,
-                           int Width, int Height, const WindowStyle style)
-  :PaintWindow()
+                           int Width, int Height, const WindowStyle style,
+                           const ChartLook &_chart_look,
+                           const ThermalBandLook &_thermal_band_look)
+  :chart_look(_chart_look), thermal_band_look(_thermal_band_look)
 {
   set(parent, X, Y, Width, Height, style);
 }
@@ -156,7 +164,8 @@ ChartControl::on_paint(Canvas &canvas)
 
   // background is painted in the base-class
 
-  const FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
+  const FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
+                                    chart_look);
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -173,7 +182,7 @@ ChartControl::on_paint(Canvas &canvas)
       otb = protected_task_manager->get_ordered_task_behaviour();
     }
 
-    ThermalBandRenderer renderer(Graphics::thermal_band, Graphics::chart);
+    ThermalBandRenderer renderer(thermal_band_look, chart_look);
     renderer.DrawThermalBand(basic,
                              calculated,
                              settings_computer,
@@ -255,7 +264,8 @@ Update(void)
   const SETTINGS_COMPUTER &settings_computer = blackboard->SettingsComputer();
   const DERIVED_INFO &calculated = blackboard->Calculated();
 
-  FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
+  FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
+                              look->chart);
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -524,7 +534,7 @@ OnCreateCrossSectionControl(ContainerWindow &parent, int left, int top,
                             unsigned width, unsigned height,
                             const WindowStyle style)
 {
-  csw = new CrossSectionControl(Graphics::cross_section);
+  csw = new CrossSectionControl(look->cross_section, look->chart);
   csw->set(parent, left, top, width, height, style);
   csw->set_airspaces(airspaces);
   csw->set_terrain(terrain);
@@ -537,7 +547,8 @@ OnCreateChartControl(ContainerWindow &parent, int left, int top,
                      unsigned width, unsigned height,
                      const WindowStyle style)
 {
-  return new ChartControl(parent, left, top, width, height, style);
+  return new ChartControl(parent, left, top, width, height, style,
+                          look->chart, look->thermal_band);
 }
 
 static void
@@ -556,7 +567,7 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 void
-dlgAnalysisShowModal(SingleWindow &parent,
+dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
                      const FullBlackboard &_blackboard,
                      const GlideComputer &_glide_computer,
                      const ProtectedTaskManager *_protected_task_manager,
@@ -564,6 +575,7 @@ dlgAnalysisShowModal(SingleWindow &parent,
                      const RasterTerrain *_terrain,
                      int _page)
 {
+  look = &_look;
   blackboard = &_blackboard;
   glide_computer = &_glide_computer;
   protected_task_manager = _protected_task_manager;

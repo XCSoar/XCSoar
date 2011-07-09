@@ -29,6 +29,7 @@ Copyright_License {
 #include "BatteryTimer.hpp"
 #include "DisplayMode.hpp"
 
+struct Look;
 class GlueMapWindow;
 class GlueGaugeVario;
 class GaugeFLARM;
@@ -50,7 +51,10 @@ class MainWindow : public SingleWindow {
   };
 
 public:
+  Look *look;
+
   GlueMapWindow *map;
+
   GlueGaugeVario *vario;
   GaugeFLARM *flarm;
   GaugeThermalAssistant *ta;

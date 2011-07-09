@@ -39,6 +39,7 @@
 #include "Screen/Key.h"
 #include "Form/CheckBox.hpp"
 #include "MainWindow.hpp"
+#include "Look/Look.hpp"
 #include "Profile/Profile.hpp"
 #include "Compiler.h"
 #include "FLARM/Friends.hpp"
@@ -47,7 +48,6 @@
 #include "Language/Language.hpp"
 #include "GestureManager.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Screen/Graphics.hpp"
 
 /**
  * A Window which renders FLARM traffic, with user interaction.
@@ -653,7 +653,8 @@ OnCreateFlarmTrafficControl(ContainerWindow &parent, int left, int top,
                             unsigned width, unsigned height,
                             const WindowStyle style)
 {
-  wdf = new FlarmTrafficControl(Graphics::flarm_dialog);
+  const Look &look = *CommonInterface::main_window.look;
+  wdf = new FlarmTrafficControl(look.flarm_dialog);
   wdf->set(parent, left, top, width, height, style);
 
   return wdf;

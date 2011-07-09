@@ -696,6 +696,7 @@ void
 InputEvents::eventAnalysis(gcc_unused const TCHAR *misc)
 {
   dlgAnalysisShowModal(XCSoarInterface::main_window,
+                       *CommonInterface::main_window.look,
                        CommonInterface::Full(),
                        *glide_computer,
                        protected_task_manager, &airspace_database, terrain);

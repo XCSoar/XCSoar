@@ -220,8 +220,9 @@ public:
   }
 };
 
-CrossSectionWindow::CrossSectionWindow(const CrossSectionLook &_look)
-  :look(_look),
+CrossSectionWindow::CrossSectionWindow(const CrossSectionLook &_look,
+                                       const ChartLook &_chart_look)
+  :look(_look), chart_look(_chart_look),
   terrain(NULL), airspace_database(NULL),
   start(Angle::native(fixed_zero), Angle::native(fixed_zero)),
    vec(fixed(50000), Angle::native(fixed_zero)) {}
@@ -242,7 +243,7 @@ CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc)
   fixed hmin = max(fixed_zero, gps_info.NavAltitude - fixed(3300));
   fixed hmax = max(fixed(3300), gps_info.NavAltitude + fixed(1000));
 
-  Chart chart(Graphics::chart, canvas, rc);
+  Chart chart(chart_look, canvas, rc);
   chart.ResetScale();
   chart.ScaleXFromValue(fixed_zero);
   chart.ScaleXFromValue(vec.Distance);

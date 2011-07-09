@@ -26,15 +26,15 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Screen/Graphics.hpp"
+#include "Look/Look.hpp"
 
-GlueMapWindow::GlueMapWindow()
+GlueMapWindow::GlueMapWindow(const Look &look)
   :logger(NULL),
    idle_robin(2),
    drag_mode(DRAG_NONE),
    ignore_single_click(false),
    DisplayMode(DM_CRUISE),
-   thermal_band_renderer(Graphics::thermal_band, Graphics::chart)
+   thermal_band_renderer(look.thermal_band, look.chart)
 {
 }
 

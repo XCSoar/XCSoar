@@ -21,24 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_ANALYSIS_DIALOG_HPP
-#define XCSOAR_ANALYSIS_DIALOG_HPP
+#ifndef XCSOAR_LOOK_HPP
+#define XCSOAR_LOOK_HPP
 
-struct Look;
-class SingleWindow;
-class FullBlackboard;
-class GlideComputer;
-class ProtectedTaskManager;
-class Airspaces;
-class RasterTerrain;
+#include "ChartLook.hpp"
+#include "ThermalBandLook.hpp"
+#include "TraceHistoryLook.hpp"
+#include "CrossSectionLook.hpp"
+#include "Gauge/FlarmTrafficLook.hpp"
 
-void
-dlgAnalysisShowModal(SingleWindow &parent, const Look &look,
-                     const FullBlackboard &blackboard,
-                     const GlideComputer &glide_computer,
-                     const ProtectedTaskManager *protected_task_manager,
-                     const Airspaces *airspaces,
-                     const RasterTerrain *terrain,
-                     int page=-1);
+struct SETTINGS_MAP;
+
+struct Look {
+  ChartLook chart;
+  ThermalBandLook thermal_band;
+  TraceHistoryLook trace_history;
+  CrossSectionLook cross_section;
+  FlarmTrafficLook flarm_gauge;
+  FlarmTrafficLook flarm_dialog;
+
+  void Initialise();
+  void InitialiseConfigured(bool inverse);
+};
 
 #endif

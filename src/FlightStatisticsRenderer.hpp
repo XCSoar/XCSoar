@@ -45,13 +45,17 @@ class Chart;
 class TaskManager;
 class ProtectedTaskManager;
 struct ContestStatistics;
+struct ChartLook;
 
 class FlightStatisticsRenderer {
   const FlightStatistics &fs;
+  const ChartLook &chart_look;
 
 public:
-  FlightStatisticsRenderer(const FlightStatistics &_flight_statistics)
-    :fs(_flight_statistics) {}
+  FlightStatisticsRenderer(const FlightStatistics &_flight_statistics,
+                           const ChartLook &_chart_look)
+    :fs(_flight_statistics),
+     chart_look(_chart_look) {}
 
 public:
   void RenderBarograph(Canvas &canvas, const PixelRect rc,

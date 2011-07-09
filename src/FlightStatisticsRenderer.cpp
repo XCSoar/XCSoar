@@ -126,7 +126,7 @@ FlightStatisticsRenderer::RenderBarographSpark(
     const DERIVED_INFO &derived_info, const ProtectedTaskManager *_task) const
 {
   ScopeLock lock(fs.mutexStats);
-  Chart chart(Graphics::chart, canvas, rc);
+  Chart chart(chart_look, canvas, rc);
   chart.PaddingBottom = 0;
   chart.PaddingLeft = 0;
 
@@ -158,7 +158,7 @@ FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const PixelRect rc,
                                   const DERIVED_INFO &derived_info,
                                   const ProtectedTaskManager *_task) const
 {
-  Chart chart(Graphics::chart, canvas, rc);
+  Chart chart(chart_look, canvas, rc);
 
   if (fs.Altitude.sum_n < 2) {
     chart.DrawNoData();
@@ -203,7 +203,7 @@ FlightStatisticsRenderer::RenderSpeed(Canvas &canvas, const PixelRect rc,
                               const DERIVED_INFO &derived_info,
                               const TaskManager &task) const
 {
-  Chart chart(Graphics::chart, canvas, rc);
+  Chart chart(chart_look, canvas, rc);
 
   if ((fs.Task_Speed.sum_n < 2) || !task.check_ordered_task()) {
     chart.DrawNoData();
@@ -233,7 +233,7 @@ void
 FlightStatisticsRenderer::RenderClimb(Canvas &canvas, const PixelRect rc,
                               const GlidePolar& glide_polar) const
 {
-  Chart chart(Graphics::chart, canvas, rc);
+  Chart chart(chart_look, canvas, rc);
 
   if (fs.ThermalAverage.sum_n < 1) {
     chart.DrawNoData();
@@ -272,7 +272,7 @@ FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
                                    const SETTINGS_COMPUTER &settings_computer,
                                    const GlidePolar& glide_polar) const
 {
-  Chart chart(Graphics::chart, canvas, rc);
+  Chart chart(chart_look, canvas, rc);
   Pen blue_pen(2, COLOR_BLUE);
 
   chart.ScaleYFromValue(fixed_zero);
@@ -377,7 +377,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                             const TracePointVector& trace) const
 {
   if (trace.size() < 2) {
-    Chart chart(Graphics::chart, canvas, rc);
+    Chart chart(chart_look, canvas, rc);
     chart.DrawNoData();
     return;
   }
@@ -488,7 +488,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                              const SETTINGS_MAP &settings_map,
                              const TaskManager &task_manager) const
 {
-  Chart chart(Graphics::chart, canvas, rc);
+  Chart chart(chart_look, canvas, rc);
 
   const OrderedTask &task = task_manager.get_ordered_task();
 
@@ -520,7 +520,7 @@ void
 FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
                                             const PixelRect rc) const
 {
-  Chart chart(Graphics::chart, canvas, rc);
+  Chart chart(chart_look, canvas, rc);
 
   int hmin = 10000;
   int hmax = -10000;
@@ -611,7 +611,7 @@ FlightStatisticsRenderer::RenderWind(Canvas &canvas, const PixelRect rc,
   fixed mag;
 
   LeastSquares windstats_mag;
-  Chart chart(Graphics::chart, canvas, rc);
+  Chart chart(chart_look, canvas, rc);
 
   if (fs.Altitude_Ceiling.y_max - fs.Altitude_Ceiling.y_min <= fixed_ten) {
     chart.DrawNoData();

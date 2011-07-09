@@ -34,9 +34,9 @@ Copyright_License {
 #include "Interface.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Graphics.hpp"
 #include "Protection.hpp"
 #include "MainWindow.hpp"
+#include "Look/Look.hpp"
 #include "GlideComputer.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
@@ -59,7 +59,8 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
   if (var.empty())
     return;
 
-  TraceHistoryRenderer renderer(Graphics::trace_history, Graphics::chart);
+  const Look &look = *CommonInterface::main_window.look;
+  TraceHistoryRenderer renderer(look.trace_history, look.chart);
   renderer.RenderVario(canvas, get_spark_rect(infobox), var, center,
                        CommonInterface::SettingsComputer().glide_polar_task.GetMC());
 }
@@ -135,7 +136,9 @@ InfoBoxContentBarogram::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  FlightStatisticsRenderer fs(glide_computer->GetFlightStats());
+  const Look &look = *CommonInterface::main_window.look;
+  FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
+                              look.chart);
   fs.RenderBarographSpark(canvas, get_spark_rect(infobox), XCSoarInterface::Basic(),
                           XCSoarInterface::Calculated(), protected_task_manager);
 }
@@ -146,6 +149,7 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkEnter:
     dlgAnalysisShowModal(XCSoarInterface::main_window,
+                         *CommonInterface::main_window.look,
                          CommonInterface::Full(), *glide_computer,
                          protected_task_manager, &airspace_database, terrain,
                          0);
@@ -164,7 +168,8 @@ InfoBoxContentBarogram::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  ThermalBandRenderer renderer(Graphics::thermal_band, Graphics::chart);
+  const Look &look = *CommonInterface::main_window.look;
+  ThermalBandRenderer renderer(look.thermal_band, look.chart);
   renderer.DrawThermalBandSpark(CommonInterface::Basic(),
                                 CommonInterface::Calculated(),
                                 CommonInterface::SettingsComputer(),

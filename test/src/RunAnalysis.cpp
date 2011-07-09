@@ -58,6 +58,7 @@ Copyright_License {
 #include "Replay/IGCParser.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Operation.hpp"
+#include "Look/Look.hpp"
 
 #ifdef WIN32
 #include <shellapi.h>
@@ -263,11 +264,17 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Graphics::InitialiseConfigured(blackboard.SettingsMap());
 
   Fonts::Initialize();
+
+  Look *look = new Look();
+  look->Initialise();
+  look->InitialiseConfigured(false);
+
   main_window.show();
 
-  dlgAnalysisShowModal(main_window, blackboard, glide_computer,
+  dlgAnalysisShowModal(main_window, *look, blackboard, glide_computer,
                        &protected_task_manager, &airspace_database, terrain);
 
+  delete look;
   Fonts::Deinitialize();
   Graphics::Deinitialise();
 

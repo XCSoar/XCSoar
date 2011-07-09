@@ -475,6 +475,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	\
+	$(SRC)/Look/Look.cpp \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \

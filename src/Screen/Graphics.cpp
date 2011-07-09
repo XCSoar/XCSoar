@@ -134,13 +134,6 @@ Brush Graphics::hbLightGray;
 Brush Graphics::hbNotReachableTerrain;
 Brush Graphics::hbGround;
 
-ChartLook Graphics::chart;
-ThermalBandLook Graphics::thermal_band;
-TraceHistoryLook Graphics::trace_history;
-CrossSectionLook Graphics::cross_section;
-FlarmTrafficLook Graphics::flarm_dialog;
-FlarmTrafficLook Graphics::flarm_gauge;
-
 // airspace brushes/colours
 const Color
 Graphics::GetAirspaceColour(const int i)
@@ -356,9 +349,6 @@ Graphics::Initialise()
   hbGround.set(GroundColor);
 
   hpTrackBearingLine.set(3, COLOR_GRAY);
-
-  flarm_dialog.Initialise(false);
-  flarm_gauge.Initialise(true);
 }
 
 void
@@ -367,11 +357,6 @@ Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
   InitSnailTrail(settings_map);
   InitLandableIcons();
   InitAirspacePens(settings_map.airspace);
-
-  chart.Initialise();
-  thermal_band.Initialise();
-  trace_history.Initialise(Appearance.InverseInfoBox);
-  cross_section.Initialise();
 }
 
 void
@@ -604,13 +589,6 @@ Graphics::Deinitialise()
   FieldMarginalIcon.reset();
   FieldReachableIcon.reset();
   FieldUnreachableIcon.reset();
-
-  chart.Deinitialise();
-  thermal_band.Deinitialise();
-  trace_history.Deinitialise();
-  cross_section.Deinitialise();
-  flarm_dialog.Deinitialise();
-  flarm_gauge.Deinitialise();
 }
 
 static void
