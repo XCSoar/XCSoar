@@ -60,7 +60,7 @@ public:
 #endif /* ENABLE_SDL */
 
 protected:
-  virtual Brush *on_color(Window &window, Canvas &canvas);
+  virtual const Brush *on_color(Window &window, Canvas &canvas);
 
 #ifdef ENABLE_SDL
   virtual bool on_destroy();

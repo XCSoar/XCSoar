@@ -83,7 +83,7 @@ class WndForm: public ContainerWindow
 
   protected:
     virtual bool on_command(unsigned id, unsigned code);
-    virtual Brush *on_color(Window &window, Canvas &canvas);
+    virtual const Brush *on_color(Window &window, Canvas &canvas);
     virtual void on_paint(Canvas &canvas);
   };
 

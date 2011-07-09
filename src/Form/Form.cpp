@@ -57,7 +57,7 @@ WndForm::ClientAreaWindow::on_command(unsigned id, unsigned code)
     || ContainerWindow::on_command(id, code);
 }
 
-Brush *
+const Brush *
 WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
 {
 #ifdef _WIN32_WCE

@@ -151,7 +151,7 @@ ProgressWindow::on_paint(Canvas &canvas)
   ContainerWindow::on_paint(canvas);
 }
 
-Brush *
+const Brush *
 ProgressWindow::on_color(Window &window, Canvas &canvas)
 {
   canvas.set_text_color(COLOR_BLACK);

@@ -64,7 +64,7 @@ public:
 
 protected:
   virtual void on_paint(Canvas &canvas);
-  virtual Brush *on_color(Window &window, Canvas &canvas);
+  virtual const Brush *on_color(Window &window, Canvas &canvas);
 };
 
 #endif
