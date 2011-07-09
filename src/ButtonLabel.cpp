@@ -46,6 +46,7 @@ void
 ButtonLabel::Destroy()
 {
   delete bar;
+  bar = NULL;
 }
 
 void

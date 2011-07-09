@@ -99,6 +99,12 @@ public:
   void InitialiseConfigured();
 
   /**
+   * Destroy the components of the main view (map, info boxes,
+   * gauges).
+   */
+  void Deinitialise();
+
+  /**
    * Destroy and re-create all info boxes, and adjust the map
    * position/size.
    */

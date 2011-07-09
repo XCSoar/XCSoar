@@ -167,6 +167,26 @@ MainWindow::InitialiseConfigured()
 }
 
 void
+MainWindow::Deinitialise()
+{
+  InfoBoxManager::Destroy();
+  ButtonLabel::Destroy();
+
+  popup.reset();
+
+  map.reset();
+
+  delete vario;
+  vario = NULL;
+
+  delete flarm;
+  flarm = NULL;
+
+  delete ta;
+  ta = NULL;
+}
+
+void
 MainWindow::ReinitialiseLayout_vario()
 {
   PixelRect rc = get_client_rect();
@@ -262,16 +282,7 @@ MainWindow::ReinitialisePosition()
 void
 MainWindow::reset()
 {
-  map.reset();
-
-  delete vario;
-  vario = NULL;
-
-  delete flarm;
-  flarm = NULL;
-
-  delete ta;
-  ta = NULL;
+  Deinitialise();
 
   TopWindow::reset();
 }

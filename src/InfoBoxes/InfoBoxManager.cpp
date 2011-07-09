@@ -589,12 +589,15 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout)
 void
 InfoBoxManager::Destroy()
 {
-  for (unsigned i = 0; i < layout.count; i++)
-    delete (InfoBoxes[i]);
+  for (unsigned i = 0; i < layout.count; i++) {
+    delete InfoBoxes[i];
+    InfoBoxes[i] = NULL;
+  }
 
   full_window.reset();
 
   delete info_box_look;
+  info_box_look = NULL;
 }
 
 static const ComboList *info_box_combo_list;

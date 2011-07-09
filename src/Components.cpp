@@ -520,7 +520,7 @@ XCSoarInterface::Shutdown(void)
 #endif
 
   LogStartUp(_T("delete MapWindow"));
-  main_window.map.reset();
+  main_window.Deinitialise();
 
   // Save the task for the next time
   operation.SetText(_("Shutdown, saving task..."));
@@ -557,13 +557,6 @@ XCSoarInterface::Shutdown(void)
 
   delete protected_task_manager;
   delete task_manager;
-
-  // Kill windows
-  LogStartUp(_T("Destroy Info Boxes"));
-  InfoBoxManager::Destroy();
-
-  LogStartUp(_T("Destroy Button Labels"));
-  ButtonLabel::Destroy();
 
   // Close the progress dialog
   LogStartUp(_T("Close Progress Dialog"));
