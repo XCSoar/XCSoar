@@ -74,6 +74,8 @@ namespace IMI
 
   const unsigned IMIRSA_MAX_BITS = 1024;
 
+  const unsigned IMINO_ENL_MASK = 0x80;
+
   // messages
   struct TDeviceInfo {
     IMIBYTE device;
