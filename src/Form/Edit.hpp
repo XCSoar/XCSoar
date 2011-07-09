@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/EditWindow.hpp"
 #include "Screen/Point.hpp"
 
+struct DialogLook;
 class DataField;
 class ContainerWindow;
 
@@ -90,6 +91,8 @@ public:
   typedef void (*ClickDownCallback_t)(WindowControl *Sender);
 
 private:
+  const DialogLook &look;
+
   bool mDialogStyle;
 
   /** Arrow left bitmap */
@@ -140,9 +143,9 @@ public:
    * @param DataChangeNotify Function to call when the data changed
    * @param MultiLine If true, the Control can handle mutliple lines
    */
-  WndProperty(ContainerWindow &parent, const TCHAR *Caption,
+  WndProperty(ContainerWindow &parent, const DialogLook &look,
+              const TCHAR *Caption,
               int X, int Y, int Width, int Height, int CaptionWidth,
-              Color _background_color,
               const WindowStyle style,
               const EditWindowStyle edit_style,
               DataChangeCallback_t DataChangeNotify);

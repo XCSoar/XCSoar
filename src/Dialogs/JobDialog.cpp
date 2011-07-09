@@ -80,12 +80,14 @@ protected:
 };
 
 void
-JobDialog(SingleWindow &parent, const TCHAR *caption,
+JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
+          const TCHAR *caption,
           Job &job, bool cancellable)
 {
   WindowStyle form_style;
   form_style.hide();
-  WndForm form(parent, 0, 0, parent.get_width(), parent.get_height(),
+  WndForm form(parent, dialog_look,
+               0, 0, parent.get_width(), parent.get_height(),
                caption);
 
   ProgressWindowOperation progress(form);

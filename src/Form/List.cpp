@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Form/List.hpp"
 #include "Form/Internal.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
@@ -43,10 +44,11 @@ Copyright_License {
 using std::min;
 using std::max;
 
-WndListFrame::WndListFrame(ContainerWindow &parent,
+WndListFrame::WndListFrame(ContainerWindow &parent, const DialogLook &_look,
                            int X, int Y, int Width, int Height,
                            const WindowStyle style,
-                           unsigned _item_height):
+                           unsigned _item_height)
+  :look(_look),
   item_height(_item_height),
   length(0), origin(0), items_visible(Height / item_height),
   cursor(0),
@@ -100,14 +102,10 @@ WndListFrame::on_killfocus()
 void
 WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 {
-  const Color text_color = COLOR_BLACK;
-  const Color background_color = COLOR_WHITE;
-  const Color selected_background_color = COLOR_LIGHT_GRAY;
-
   PixelRect rc = item_rect(start);
 
-  canvas.set_text_color(text_color);
-  canvas.set_background_color(background_color);
+  canvas.set_text_color(look.list.text_color);
+  canvas.set_background_color(look.list.background_color);
   canvas.background_transparent();
   canvas.select(Fonts::MapBold);
 
@@ -122,9 +120,9 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
 
   for (unsigned i = start; i < last_item; i++) {
     if (i == cursor)
-      canvas.fill_rectangle(rc, selected_background_color);
+      canvas.fill_rectangle(rc, look.list.selected.background_color);
     else
-      canvas.fill_rectangle(rc, background_color);
+      canvas.fill_rectangle(rc, look.list.background_color);
 
     PaintItemCallback(canvas, rc, i);
 
@@ -137,7 +135,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   /* paint the bottom part below the last item */
   rc.bottom = canvas.get_height();
   if (rc.bottom > rc.top)
-    canvas.fill_rectangle(rc, background_color);
+    canvas.fill_rectangle(rc, look.list.background_color);
 }
 
 void

@@ -28,19 +28,19 @@ Copyright_License {
 #include "Screen/Features.hpp"
 #include "Util/StaticString.hpp"
 
+struct DialogLook;
+
 class WndFrame : public PaintWindow {
-#ifdef HAVE_CLIPPING
-  Color background_color;
-#endif
+  const DialogLook &look;
 
   Color caption_color;
+
   const Font *font;
   StaticString<256> text;
 
 public:
-  WndFrame(ContainerWindow &parent,
+  WndFrame(ContainerWindow &parent, const DialogLook &look,
            int X, int Y, int Width, int Height,
-           Color background_color,
            const WindowStyle style=WindowStyle());
 
   void SetAlignCenter();

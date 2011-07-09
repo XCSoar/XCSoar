@@ -22,13 +22,13 @@ Copyright_License {
 */
 
 #include "Form/Panel.hpp"
+#include "Look/DialogLook.hpp"
 
-PanelControl::PanelControl(ContainerWindow &parent,
+PanelControl::PanelControl(ContainerWindow &parent, const DialogLook &look,
                            int x, int y, unsigned width, unsigned height,
-                           Color _background_color,
                            const WindowStyle style)
 #ifdef HAVE_CLIPPING
-  :background_color(_background_color)
+  :background_color(look.background_color)
 #endif
 {
   set(parent, x, y, width, height, style);

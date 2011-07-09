@@ -30,6 +30,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Interface.hpp"
+#include "Look/Look.hpp"
 
 #include <assert.h>
 #include <limits.h>
@@ -39,11 +40,12 @@ class ModalResultButton : public WndButton {
   int result;
 
 public:
-  ModalResultButton(ContainerWindow &parent, const TCHAR *Caption,
+  ModalResultButton(ContainerWindow &parent, const DialogLook &look,
+                    const TCHAR *Caption,
                     int X, int Y, int Width, int Height,
                     const WindowStyle style,
                     WndForm &_form, int _result)
-    :WndButton(parent, Caption, X, Y, Width, Height,
+    :WndButton(parent, look, Caption, X, Y, Width, Height,
                style),
      form(_form), result(_result) {}
 
@@ -97,15 +99,15 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   style.hide();
   style.control_parent();
 
-  WndForm wf(XCSoarInterface::main_window,
+  const DialogLook &dialog_look = CommonInterface::main_window.look->dialog;
+  WndForm wf(XCSoarInterface::main_window, dialog_look,
              X, Y, Width, Height, lpCaption,
              style);
   ContainerWindow &client_area = wf.GetClientAreaWindow();
 
   // Create text element
-  wText = new WndFrame(client_area,
-                       0, Layout::Scale(2), Width, Height,
-                       wf.GetBackColor());
+  wText = new WndFrame(client_area, dialog_look,
+                       0, Layout::Scale(2), Width, Height);
 
   wText->SetCaption(lpText);
   wText->SetAlignCenter();
@@ -127,7 +129,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   uType = uType & 0x000f;
   if (uType == MB_OK || uType == MB_OKCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, _("OK"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("OK"), 0, y, w, h,
                             button_style, wf, IDOK);
 
     ButtonCount++;
@@ -135,13 +137,13 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   if (uType == MB_YESNO || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, _("Yes"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("Yes"), 0, y, w, h,
                             button_style, wf, IDYES);
 
     ButtonCount++;
 
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, _("No"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("No"), 0, y, w, h,
                             button_style, wf, IDNO);
 
     ButtonCount++;
@@ -149,7 +151,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   if (uType == MB_ABORTRETRYIGNORE || uType == MB_RETRYCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, _("Retry"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("Retry"), 0, y, w, h,
                             button_style, wf, IDRETRY);
 
     ButtonCount++;
@@ -157,7 +159,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   if (uType == MB_OKCANCEL || uType == MB_RETRYCANCEL || uType == MB_YESNOCANCEL) {
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, _("Cancel"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("Cancel"), 0, y, w, h,
                             button_style, wf, IDCANCEL);
 
     ButtonCount++;
@@ -165,13 +167,13 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   if (uType == MB_ABORTRETRYIGNORE) {
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, _("Abort"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("Abort"), 0, y, w, h,
                             button_style, wf, IDABORT);
 
     ButtonCount++;
 
     wButtons[ButtonCount] =
-      new ModalResultButton(client_area, _("Ignore"), 0, y, w, h,
+      new ModalResultButton(client_area, dialog_look, _("Ignore"), 0, y, w, h,
                             button_style, wf, IDIGNORE);
 
     ButtonCount++;

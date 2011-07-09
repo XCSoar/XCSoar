@@ -53,6 +53,14 @@ Copyright_License {
 #include <tchar.h>
 #include <limits.h>
 
+static const DialogLook *xml_dialog_look;
+
+void
+SetXMLDialogLook(const DialogLook &_dialog_look)
+{
+  xml_dialog_look = &_dialog_look;
+}
+
 // used when stretching dialog and components
 static int dialog_width_scale = 1024;
 
@@ -81,14 +89,13 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
                                           const WindowStyle style);
 
 static Window *
-LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
+LoadChild(WndForm &form, ContainerWindow &parent,
           CallBackTableEntry *LookUpTable,
           XMLNode node, const DialogStyle eDialogStyle,
           int bottom_most=0);
 
 static void
 LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
-                    Color background_color,
                     CallBackTableEntry *LookUpTable,
                     XMLNode *Node, const DialogStyle eDialogStyle);
 
@@ -358,24 +365,6 @@ xmlOpenResourceHelper(const TCHAR *resource)
   return xnode;
 }
 
-/**
- * Loads the color information from the XMLNode and sets the fore- and
- * background color of the given WindowControl
- * @param wc The WindowControl
- * @param node The XMLNode
- */
-static void
-LoadColors(WindowControl &wc, const XMLNode &node)
-{
-  Color color;
-
-  if (StringToColor(node.getAttribute(_T("BackColor")), color))
-    wc.SetBackColor(color);
-
-  if (StringToColor(node.getAttribute(_T("ForeColor")), color))
-    wc.SetForeColor(color);
-}
-
 static void
 InitScaleWidth(const PixelSize size, const PixelRect rc,
                const DialogStyle eDialogStyle)
@@ -420,7 +409,7 @@ LoadWindow(CallBackTableEntry *LookUpTable,
   DialogStyle dialog_style = dialog_style_last;
 
   // load only one top-level control.
-  Window *window = LoadChild(*form, parent, form->GetBackColor(), LookUpTable,
+  Window *window = LoadChild(*form, parent, LookUpTable,
                              node, dialog_style, 0);
 
   assert(!XMLNode::GlobalError);
@@ -499,15 +488,11 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   style.hide();
   style.control_parent();
 
-  form = new WndForm(Parent, pos.x, pos.y, size.cx, size.cy, Caption, style);
-
-  // Set fore- and background colors
-  Color color;
-  if (StringToColor(node.getAttribute(_T("BackColor")), color))
-    form->SetBackColor(color);
+  form = new WndForm(Parent, *xml_dialog_look,
+                     pos.x, pos.y, size.cx, size.cy, Caption, style);
 
   // Load the children controls
-  LoadChildrenFromXML(*form, form->GetClientAreaWindow(), form->GetBackColor(),
+  LoadChildrenFromXML(*form, form->GetClientAreaWindow(),
                       LookUpTable, &node, dialog_style);
 
   // If XML error occurred -> Error messagebox + cancel
@@ -581,7 +566,7 @@ LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
  * @param eDialogStyle The parent's dialog style
  */
 static Window *
-LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
+LoadChild(WndForm &form, ContainerWindow &parent,
           CallBackTableEntry *LookUpTable,
           XMLNode node, const DialogStyle eDialogStyle,
           int bottom_most)
@@ -660,14 +645,11 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
       edit_style.vscroll();
     }
 
-    window = W = new WndProperty(parent, Caption,
+    window = W = new WndProperty(parent, *xml_dialog_look, Caption,
                                  pos.x, pos.y, size.cx, size.cy,
-                                 CaptionWidth, background_color,
+                                 CaptionWidth,
                                  style, edit_style,
                                  DataNotifyCallback);
-
-    // Set the fore- and background color
-    LoadColors(*W, node);
 
     // Set the help function event callback
     W->SetOnHelpCallback(OnHelpCallback);
@@ -700,7 +682,7 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
     bstyle.tab_stop();
     bstyle.multiline();
 
-    window = new WndButton(parent, Caption,
+    window = new WndButton(parent, *xml_dialog_look, Caption,
                            pos.x, pos.y, size.cx, size.cy,
                            bstyle, ClickCallback);
 
@@ -730,9 +712,9 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
 
     style.tab_stop();
 
-    window = new WndSymbolButton(parent, Caption,
+    window = new WndSymbolButton(parent, *xml_dialog_look, Caption,
                                  pos.x, pos.y, size.cx, size.cy,
-                                 style, background_color,
+                                 style,
                                  ClickCallback);
 
   // PanelControl (WndPanel)
@@ -741,14 +723,14 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
 
     style.control_parent();
 
-    PanelControl *frame = new PanelControl(parent,
+    PanelControl *frame = new PanelControl(parent, *xml_dialog_look,
                                            pos.x, pos.y, size.cx, size.cy,
-                                           background_color, style);
+                                           style);
 
     window = frame;
 
     // Load children controls from the XMLNode
-    LoadChildrenFromXML(form, *frame, background_color,
+    LoadChildrenFromXML(form, *frame,
                         LookUpTable, &node, eDialogStyle);
 
   // KeyboardControl
@@ -759,8 +741,8 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
 
     // Create the KeyboardControl
     KeyboardControl *kb =
-      new KeyboardControl(parent,
-                          pos.x, pos.y, size.cx, size.cy, background_color,
+      new KeyboardControl(parent, *xml_dialog_look,
+                          pos.x, pos.y, size.cx, size.cy,
                           CharacterCallback, style);
 
     window = kb;
@@ -782,9 +764,9 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
   // FrameControl (WndFrame)
   } else if (_tcscmp(node.getName(), _T("Label")) == 0){
     // Create the FrameControl
-    WndFrame* frame = new WndFrame(parent,
+    WndFrame* frame = new WndFrame(parent, *xml_dialog_look,
                                    pos.x, pos.y, size.cx, size.cy,
-                                   background_color, style);
+                                   style);
 
     // Set the caption
     frame->SetCaption(Caption);
@@ -812,7 +794,7 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
     else
       style.sunken_edge();
 
-    window = new WndListFrame(parent,
+    window = new WndListFrame(parent, *xml_dialog_look,
                               pos.x, pos.y, size.cx, size.cy,
                               style,
                               item_height);
@@ -832,7 +814,7 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
     const unsigned n = node.nChildNode();
     for (unsigned i = 0; i < n; ++i) {
       // Load each child control from the child nodes
-      Window *child = LoadChild(form, *tabbed, background_color,
+      Window *child = LoadChild(form, *tabbed,
                                 LookUpTable,
                                 node.getChildNode(i), eDialogStyle);
       if (child != NULL)
@@ -889,7 +871,6 @@ LoadChild(WndForm &form, ContainerWindow &parent, Color background_color,
  */
 static void
 LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
-                    Color background_color,
                     CallBackTableEntry *LookUpTable,
                     XMLNode *Node, const DialogStyle eDialogStyle)
 {
@@ -901,7 +882,7 @@ LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
   // Iterate through the childnodes
   for (int i = 0; i < Count; i++) {
     // Load each child control from the child nodes
-    Window *window = LoadChild(form, parent, background_color, LookUpTable,
+    Window *window = LoadChild(form, parent, LookUpTable,
                                Node->getChildNode(i), eDialogStyle,
                                bottom_most);
     if (window == NULL)

@@ -33,8 +33,6 @@ Copyright_License {
 #include <stdlib.h>
 
 WindowControl::WindowControl() :
-    mColorBack(COLOR_WHITE),
-    mColorFore(COLOR_BLACK),
     mhFont(&Fonts::Map),
     mHelpText(NULL),
     mOnHelpCallback(NULL)
@@ -73,24 +71,6 @@ WindowControl::SetFont(const Font &Value)
   if (mhFont != &Value) {
     // todo
     mhFont = &Value;
-    invalidate();
-  }
-}
-
-void
-WindowControl::SetForeColor(Color Value)
-{
-  if (mColorFore != Value) {
-    mColorFore = Value;
-    invalidate();
-  }
-}
-
-void
-WindowControl::SetBackColor(Color Value)
-{
-  if (mColorBack != Value) {
-    mColorBack = Value;
     invalidate();
   }
 }

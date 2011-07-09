@@ -28,6 +28,7 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct DialogLook;
 class Window;
 class WndForm;
 class SingleWindow;
@@ -60,6 +61,12 @@ enum DialogStyle
 };
 
 extern DialogStyle DialogStyleSetting;
+
+/**
+ * Sets the global dialog look for loading XML dialogs.
+ */
+void
+SetXMLDialogLook(const DialogLook &dialog_look);
 
 Window *
 LoadWindow(CallBackTableEntry *LookUpTable,

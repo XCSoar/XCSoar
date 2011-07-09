@@ -26,6 +26,7 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct DialogLook;
 class SingleWindow;
 class Job;
 
@@ -37,7 +38,8 @@ class Job;
  * job
  */
 void
-JobDialog(SingleWindow &parent, const TCHAR *caption, Job &job,
+JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
+          const TCHAR *caption, Job &job,
           bool cancellable=false);
 
 #endif

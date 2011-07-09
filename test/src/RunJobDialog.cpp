@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/JobDialog.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
@@ -66,8 +67,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                   0, 0, 640, 480);
   main_window.show();
 
+  DialogLook *look = new DialogLook();
+  look->Initialise();
+
   TestJob job;
-  JobDialog(main_window, _T("RunJobDialog"), job);
+  JobDialog(main_window, *look, _T("RunJobDialog"), job);
+
+  delete look;
 
   return 0;
 }

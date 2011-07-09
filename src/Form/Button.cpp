@@ -25,12 +25,13 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
 
-WndButton::WndButton(ContainerWindow &parent,
+WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
     const TCHAR *Caption, int X, int Y, int Width, int Height,
                      const ButtonWindowStyle style,
     ClickNotifyCallback_t Function,
     LeftRightNotifyCallback_t LeftFunction,
-    LeftRightNotifyCallback_t RightFunction) :
+    LeftRightNotifyCallback_t RightFunction)
+  :look(_look),
     mOnClickNotify(Function),
     mOnLeftNotify(LeftFunction),
     mOnRightNotify(RightFunction)

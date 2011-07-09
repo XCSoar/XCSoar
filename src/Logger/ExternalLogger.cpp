@@ -36,6 +36,7 @@
 #include "LocalPath.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
+#include "Look/Look.hpp"
 #include "Operation.hpp"
 #include "Dialogs/JobDialog.hpp"
 #include "Thread/JobThread.hpp"
@@ -72,7 +73,9 @@ static bool
 DoDeviceDeclare(DeviceDescriptor &device, const Declaration &declaration)
 {
   DeclareJob job(device, declaration);
-  JobDialog(CommonInterface::main_window, _T(""), job, true);
+  JobDialog(CommonInterface::main_window,
+            CommonInterface::main_window.look->dialog,
+            _T(""), job, true);
   return job.GetResult();
 }
 
@@ -165,7 +168,9 @@ static bool
 DoReadFlightList(DeviceDescriptor &device, RecordedFlightList &flight_list)
 {
   ReadFlightListJob job(device, flight_list);
-  JobDialog(CommonInterface::main_window, _T(""), job, true);
+  JobDialog(CommonInterface::main_window,
+            CommonInterface::main_window.look->dialog,
+            _T(""), job, true);
   return job.GetResult();
 }
 
@@ -195,7 +200,9 @@ DoDownloadFlight(DeviceDescriptor &device,
                  const RecordedFlightInfo &flight, const TCHAR *path)
 {
   DownloadFlightJob job(device, flight, path);
-  JobDialog(CommonInterface::main_window, _T(""), job, true);
+  JobDialog(CommonInterface::main_window,
+            CommonInterface::main_window.look->dialog,
+            _T(""), job, true);
   return job.GetResult();
 }
 

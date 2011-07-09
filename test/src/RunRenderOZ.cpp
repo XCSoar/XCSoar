@@ -33,6 +33,7 @@ Copyright_License {
 #include "Screen/Init.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/List.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "RenderObservationZone.hpp"
@@ -240,7 +241,8 @@ public:
   }
 #endif /* !ENABLE_SDL */
 
-  void set(int left, int top, unsigned width, unsigned height) {
+  void set(const DialogLook &look,
+           int left, int top, unsigned width, unsigned height) {
     SingleWindow::set(_T("RunRenderOZ"), _T("RunRenderOZ"),
                       left, top, width, height);
 
@@ -253,7 +255,8 @@ public:
            with_border);
     oz_window = &oz;
 
-    type_list = new WndListFrame(*this, 0, 0, rc.right / 2, rc.bottom - 30,
+    type_list = new WndListFrame(*this, look,
+                                 0, 0, rc.right / 2, rc.bottom - 30,
                                  with_border, 25);
     type_list->SetPaintItemCallback(paint_oz_type_name);
     type_list->SetCursorCallback(oz_type_cursor_callback);
@@ -301,8 +304,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow::register_class(hInstance);
 #endif
 
+  DialogLook *look = new DialogLook();
+  look->Initialise();
+
   TestWindow window;
-  window.set(0, 0, 480, 480);
+  window.set(*look, 0, 0, 480, 480);
 
   Graphics::Initialise();
   Graphics::InitialiseConfigured(settings_map);
@@ -311,6 +317,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.show();
   window.event_loop();
 
+  delete look;
   Fonts::Deinitialize();
   Graphics::Deinitialise();
 

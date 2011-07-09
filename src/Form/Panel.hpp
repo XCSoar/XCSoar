@@ -27,6 +27,8 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Features.hpp"
 
+struct DialogLook;
+
 /**
  * The PanelControl class implements the simplest form of a ContainerControl
  */
@@ -44,9 +46,8 @@ public:
    * @param width Width of the Control
    * @param height Height of the Control
    */
-  PanelControl(ContainerWindow &parent,
+  PanelControl(ContainerWindow &parent, const DialogLook &look,
                int x, int y, unsigned width, unsigned height,
-               Color _background_color,
                const WindowStyle style=WindowStyle());
 
 #ifdef HAVE_CLIPPING

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Form/SymbolButton.hpp"
 #include "Form/Control.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "resource.h"
@@ -32,7 +33,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
 {
 #ifdef HAVE_CLIPPING
   /* background and selector */
-  canvas.clear(background_brush);
+  canvas.clear(look.background_brush);
 #endif
 
   // Get button PixelRect and shrink it to make room for the selector/focus

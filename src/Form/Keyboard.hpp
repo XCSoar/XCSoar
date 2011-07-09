@@ -29,6 +29,8 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct DialogLook;
+
 /**
  * The PanelControl class implements the simplest form of a ContainerControl
  */
@@ -40,6 +42,8 @@ protected:
   enum {
     MAX_BUTTONS = 40,
   };
+
+  const DialogLook &look;
 
   unsigned num_buttons;
   ButtonWindow buttons[MAX_BUTTONS];
@@ -54,9 +58,9 @@ public:
    * @param width Width of the Control
    * @param height Height of the Control
    */
-  KeyboardControl(ContainerWindow &parent, int x, int y,
+  KeyboardControl(ContainerWindow &parent, const DialogLook &look,
+                  int x, int y,
                   unsigned width, unsigned height,
-                  Color background_color,
                   OnCharacterCallback_t function,
                   const WindowStyle _style = WindowStyle());
 
@@ -75,8 +79,6 @@ protected:
   virtual bool on_resize(unsigned width, unsigned height);
 
 private:
-  Color background_color;
-
   unsigned button_width;
   unsigned button_height;
 

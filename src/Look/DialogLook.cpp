@@ -21,22 +21,33 @@ Copyright_License {
 }
 */
 
-#include "Look.hpp"
+#include "DialogLook.hpp"
+#include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 
 void
-Look::Initialise()
+DialogLook::Initialise()
 {
-  dialog.Initialise();
-  flarm_dialog.Initialise(false);
-  flarm_gauge.Initialise(true);
+  caption.background_color = Color(0, 77, 124);
+  caption.text_color = COLOR_BLACK;
+
+  SetBackgroundColor(Color(0xe2, 0xdc, 0xbe));
+  text_color = COLOR_BLACK;
+
+  focused.text_color = COLOR_BLACK;
+  focused.border_pen.set(Layout::FastScale(1) + 2, COLOR_BLACK);
+
+  list.background_color = COLOR_WHITE;
+  list.text_color = COLOR_BLACK;
+  list.selected.background_color = COLOR_LIGHT_GRAY;
+  list.selected.text_color = COLOR_BLACK;
 }
 
 void
-Look::InitialiseConfigured(bool inverse)
+DialogLook::SetBackgroundColor(Color color)
 {
-  vario.Initialise(inverse);
-  chart.Initialise();
-  thermal_band.Initialise();
-  trace_history.Initialise(inverse);
-  cross_section.Initialise();
+  background_color = color;
+  background_brush.set(color);
+
+  focused.background_color = color.highlight();
 }

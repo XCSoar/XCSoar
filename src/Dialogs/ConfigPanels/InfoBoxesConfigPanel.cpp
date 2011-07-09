@@ -58,7 +58,7 @@ OnInfoBoxesButton(WndButton &button)
   InfoBoxPanelConfig &data = infoBoxManagerConfig.panel[i];
 
   bool changed =
-    dlgConfigInfoboxesShowModal(wf->GetMainWindow(),
+    dlgConfigInfoboxesShowModal(wf->GetMainWindow(), wf->GetLook(),
                                 InfoBoxLayout::InfoBoxGeometry, data,
                                 i >= InfoBoxManagerConfig::PREASSIGNED_PANELS);
   if (changed) {

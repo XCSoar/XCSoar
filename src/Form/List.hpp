@@ -28,6 +28,7 @@ Copyright_License {
 #include "Form/ScrollBar.hpp"
 #include "Compiler.h"
 
+struct DialogLook;
 class ContainerWindow;
 
 /**
@@ -42,6 +43,8 @@ public:
                                       unsigned idx);
 
 protected:
+  const DialogLook &look;
+
   /** The ScrollBar object */
   ScrollBar scroll_bar;
 
@@ -73,7 +76,7 @@ public:
    * @param Height Height of the ListFrameControl
    * @param _item_height Height of an item of the ListFrameControl
    */
-  WndListFrame(ContainerWindow &parent,
+  WndListFrame(ContainerWindow &parent, const DialogLook &look,
                int X, int Y, int Width, int Height,
                const WindowStyle style,
                unsigned _item_height);

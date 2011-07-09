@@ -24,12 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_FORM_CONTROL_HPP
 #define XCSOAR_FORM_CONTROL_HPP
 
-#include "Screen/Color.hpp"
 #include "Screen/Brush.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Util/StaticString.hpp"
 
 #include <tchar.h>
+
+struct DialogLook;
 
 /**
  * The WindowControl class is the base class for every other control
@@ -44,11 +45,6 @@ protected:
   StaticString<254> mCaption;
 
 private:
-  /** Background color */
-  Color mColorBack;
-  /** Foreground color */
-  Color mColorFore;
-
   /** Font of the Control */
   const Font *mhFont;
 
@@ -130,36 +126,6 @@ public:
    */
   void SetFont(const Font *font) {
     SetFont(*font);
-  }
-
-  /**
-   * Sets the Control's foreground color
-   * @param Value The new foreground color
-   * @return The old foreground color
-   */
-  void SetForeColor(Color Value);
-
-  /**
-   * Return the Control's foreground color
-   * @return The Control's foreground color
-   */
-  Color GetForeColor() const {
-    return mColorFore;
-  }
-
-  /**
-   * Sets the Control's background color
-   * @param Value The new background color
-   * @return The old background color
-   */
-  void SetBackColor(Color Value);
-
-  /**
-   * Return the Control's background color
-   * @return The Control's background color
-   */
-  Color GetBackColor() const {
-    return mColorBack;
   }
 
   /**

@@ -21,22 +21,39 @@ Copyright_License {
 }
 */
 
-#include "Look.hpp"
+#ifndef XCSOAR_DIALOG_LOOK_HPP
+#define XCSOAR_DIALOG_LOOK_HPP
 
-void
-Look::Initialise()
-{
-  dialog.Initialise();
-  flarm_dialog.Initialise(false);
-  flarm_gauge.Initialise(true);
-}
+#include "Screen/Color.hpp"
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
 
-void
-Look::InitialiseConfigured(bool inverse)
-{
-  vario.Initialise(inverse);
-  chart.Initialise();
-  thermal_band.Initialise();
-  trace_history.Initialise(inverse);
-  cross_section.Initialise();
-}
+struct DialogLook {
+  struct {
+    Color background_color, text_color;
+  } caption;
+
+  Color background_color, text_color;
+
+  Brush background_brush;
+
+  struct {
+    Color background_color, text_color;
+
+    Pen border_pen;
+  } focused;
+
+  struct {
+    Color background_color, text_color;
+
+    struct {
+      Color background_color, text_color;
+    } selected;
+  } list;
+
+  void Initialise();
+
+  void SetBackgroundColor(Color color);
+};
+
+#endif

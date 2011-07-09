@@ -29,6 +29,7 @@ Copyright_License {
 #define DEFAULTBORDERPENWIDTH Layout::FastScale(1)
 #define SELECTORWIDTH Layout::FastScale(4)
 
+struct DialogLook;
 class Canvas;
 
 bool
@@ -37,6 +38,7 @@ KeyTimer(bool isdown, unsigned key_code);
 
 /** Paints the "Selector" */
 void
-PaintSelector(Canvas &canvas, const PixelRect rc);
+PaintSelector(Canvas &canvas, const PixelRect rc,
+              const DialogLook &look);
 
 #endif

@@ -24,16 +24,13 @@ Copyright_License {
 #include "Form/Frame.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/VirtualCanvas.hpp"
+#include "Look/DialogLook.hpp"
 
-WndFrame::WndFrame(ContainerWindow &parent,
+WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
                    int X, int Y, int Width, int Height,
-                   Color _background_color,
                    const WindowStyle style)
-  :
-#ifdef HAVE_CLIPPING
-   background_color(_background_color),
-#endif
-   caption_color(COLOR_BLACK),
+  :look(_look),
+   caption_color(look.text_color),
    font(&Fonts::Map),
    mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
@@ -78,7 +75,7 @@ void
 WndFrame::on_paint(Canvas &canvas)
 {
 #ifdef HAVE_CLIPPING
-  canvas.clear(background_color);
+  canvas.clear(look.background_brush);
 #endif
 
   canvas.set_text_color(caption_color);

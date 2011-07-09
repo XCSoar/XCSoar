@@ -35,6 +35,7 @@ Copyright_License {
 #include <map>
 #include <list>
 
+struct DialogLook;
 class SingleWindow;
 class PeriodClock;
 
@@ -61,25 +62,15 @@ class WndForm: public ContainerWindow
   typedef std::map<tstring, Window *, tstring_less_than> name_to_window_t;
 
   class ClientAreaWindow : public ContainerWindow {
+    const DialogLook &look;
+
   public:
     typedef bool (*CommandCallback_t)(unsigned cmd);
     CommandCallback_t mCommandCallback;
 
-  protected:
-    Color background_color;
-    Brush background_brush;
-
   public:
-    ClientAreaWindow():mCommandCallback(NULL) {}
-
-    Color GetBackColor() const {
-      return background_color;
-    }
-
-    void SetBackColor(Color color) {
-      background_color = color;
-      background_brush.set(color);
-    }
+    ClientAreaWindow(const DialogLook &_look)
+      :look(_look), mCommandCallback(NULL) {}
 
   protected:
     virtual bool on_command(unsigned id, unsigned code);
@@ -110,6 +101,9 @@ private:
 
 protected:
   SingleWindow &main_window;
+
+  const DialogLook &look;
+
   int mModalResult;
 
   /**
@@ -118,8 +112,6 @@ protected:
    */
   bool force;
 
-  /** Background color of the titlebar */
-  Color mColorTitle;
   /** Font of the titlebar */
   const Font *mhTitleFont;
 #ifdef EYE_CANDY
@@ -155,7 +147,8 @@ public:
    * @param Width Width of the Window
    * @param Height Height of the Window
    */
-  WndForm(SingleWindow &_main_window, int X, int Y, int Width, int Height,
+  WndForm(SingleWindow &_main_window, const DialogLook &_look,
+          int X, int Y, int Width, int Height,
           const TCHAR *Caption = _T(""),
           const WindowStyle style = WindowStyle());
 
@@ -172,6 +165,10 @@ public:
    */
   SingleWindow &GetMainWindow() {
     return main_window;
+  }
+
+  const DialogLook &GetLook() const {
+    return look;
   }
 
   ContainerWindow &GetClientAreaWindow(void);
@@ -267,13 +264,6 @@ public:
   virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
   virtual bool on_command(unsigned id, unsigned code);
-
-  Color GetBackColor() const {
-    return client_area.GetBackColor();
-  }
-
-  /** Set the background color of the window */
-  void SetBackColor(Color Value);
 
   void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify) {
     mOnKeyDownNotify = KeyDownNotify;

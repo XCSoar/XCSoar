@@ -302,6 +302,7 @@ OnKeyDown(WndForm &sender, unsigned key_code)
 
 bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,
+                            const DialogLook &dialog_look,
                             InfoBoxLayout::Geometry geometry,
                             InfoBoxPanelConfig &data_r,
                             bool allow_name_change)
@@ -310,7 +311,7 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   data = data_r;
 
   PixelRect rc = parent.get_client_rect();
-  wf = new WndForm(parent, rc.left, rc.top,
+  wf = new WndForm(parent, dialog_look, rc.left, rc.top,
                    rc.right - rc.left, rc.bottom - rc.top);
 
 #ifdef _WIN32_WCE
@@ -348,7 +349,6 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   else
     edit_style.sunken_edge();
 
-  const Color background_color = wf->GetBackColor();
   const int x = rc.left;
   const unsigned width = rc.right - rc.left - Layout::FastScale(2);
   const unsigned height = Layout::Scale(22);
@@ -360,16 +360,16 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   button_style.tab_stop();
 
   buttonPanelName =
-    new WndButton(client_area, _T(""),
+    new WndButton(client_area, dialog_look, _T(""),
                   x, y, width, height, button_style, OnNameAccess);
   buttonPanelName->set_enabled(allow_name_change);
   UpdatePanelName();
 
   y += height;
 
-  edit_select = new WndProperty(client_area, _("InfoBox"),
+  edit_select = new WndProperty(client_area, dialog_look, _("InfoBox"),
                                 x, y, width, height, caption_width,
-                                background_color, style, edit_style,
+                                style, edit_style,
                                 NULL);
 
   DataFieldEnum *dfe = new DataFieldEnum(OnSelectAccess);
@@ -383,9 +383,9 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   y += height;
 
-  edit_content = new WndProperty(client_area, _("Content"),
+  edit_content = new WndProperty(client_area, dialog_look, _("Content"),
                                  x, y, width, height, caption_width,
-                                 background_color, style, edit_style,
+                                 style, edit_style,
                                  NULL);
 
   dfe = new DataFieldEnum(OnContentAccess);
@@ -407,17 +407,17 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   const int button_y = rc.bottom - button_height;
   int button_x = rc.left;
   WndButton *close_button =
-    new WndButton(client_area, _("Close"),
+    new WndButton(client_area, dialog_look, _("Close"),
                   button_x, button_y, button_width, button_height,
                   button_style, OnCloseClicked);
   button_x += button_width + Layout::Scale(2);
   WndButton *copy_button =
-    new WndButton(client_area, _("Copy"),
+    new WndButton(client_area, dialog_look, _("Copy"),
                   button_x, button_y, button_width, button_height,
                   button_style, OnCopy);
   button_x += button_width + Layout::Scale(2);
   buttonPaste =
-    new WndButton(client_area, _("Paste"),
+    new WndButton(client_area, dialog_look, _("Paste"),
                   button_x, button_y, button_width, button_height,
                   button_style, OnPaste);
 

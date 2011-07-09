@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Form/Keyboard.hpp"
+#include "Look/DialogLook.hpp"
 #include "StringUtil.hpp"
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/Fonts.hpp"
@@ -33,12 +34,12 @@ static const TCHAR keyboard_letters[] =
   _T("1234567890ABCDEFGHIJKLMNOPQRSTUVWXYZ");
 
 KeyboardControl::KeyboardControl(ContainerWindow &parent,
+                                 const DialogLook &_look,
                                  int x, int y, unsigned width, unsigned height,
-                                 Color _background_color,
                                  OnCharacterCallback_t function,
-                                 const WindowStyle _style) :
+                                 const WindowStyle _style)
+  :look(_look),
   num_buttons(0),
-  background_color(_background_color),
   button_width(50), button_height(50),
   mOnCharacter(function)
 {
@@ -175,7 +176,7 @@ KeyboardControl::move_buttons()
 void
 KeyboardControl::on_paint(Canvas &canvas)
 {
-  canvas.clear(background_color);
+  canvas.clear(look.background_color);
 
   ContainerWindow::on_paint(canvas);
 }

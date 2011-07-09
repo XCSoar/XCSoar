@@ -25,6 +25,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/DialogLook.hpp"
 
 // returns true if it is a long press,
 // otherwise returns false
@@ -52,10 +53,10 @@ KeyTimer(bool isdown, unsigned thekey)
 }
 
 void
-PaintSelector(Canvas &canvas, const PixelRect rc)
+PaintSelector(Canvas &canvas, const PixelRect rc,
+              const DialogLook &look)
 {
-  const Pen pen(DEFAULTBORDERPENWIDTH + 2, COLOR_BLACK);
-  canvas.select(pen);
+  canvas.select(look.focused.border_pen);
 
   canvas.two_lines(rc.right - SELECTORWIDTH - 1, rc.top,
                    rc.right - 1, rc.top,

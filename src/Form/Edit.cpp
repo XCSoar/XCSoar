@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Form/Edit.hpp"
 #include "Form/Internal.hpp"
+#include "Look/DialogLook.hpp"
 #include "DataField/Base.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
@@ -144,16 +145,15 @@ Bitmap WndProperty::hBmpRight32;
 
 int WndProperty::InstCount = 0;
 
-WndProperty::WndProperty(ContainerWindow &parent,
+WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          const TCHAR *Caption,
                          int X, int Y,
                          int Width, int Height,
                          int CaptionWidth,
-                         Color _background_color,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
-  :mDialogStyle(true), edit(this),
+  :look(_look), mDialogStyle(true), edit(this),
    mBitmapSize(Layout::Scale(32) / 2), mCaptionWidth(CaptionWidth),
    mDownDown(false), mUpDown(false),
    mOnDataChangeNotify(DataChangeNotify),
@@ -172,8 +172,6 @@ WndProperty::WndProperty(ContainerWindow &parent,
 #if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
-
-  SetBackColor(_background_color);
 
   if (InstCount == 0) {
     hBmpLeft32.load(IDB_DLGBUTTONLEFT32);
@@ -388,15 +386,17 @@ WndProperty::DecValue(void)
 void
 WndProperty::on_paint(Canvas &canvas)
 {
+  const bool focused = edit.has_focus();
+
   /* background and selector */
-  if (edit.has_focus()) {
-    canvas.clear(GetBackColor().highlight());
-    PaintSelector(canvas, get_client_rect());
+  if (focused) {
+    canvas.clear(look.focused.background_color);
+    PaintSelector(canvas, get_client_rect(), look);
   } else {
     /* don't need to erase the background when it has been done by the
        parent window already */
     if (have_clipping())
-      canvas.clear(GetBackColor());
+      canvas.clear(look.background_color);
   }
 
   WindowControl::on_paint(canvas);
@@ -405,7 +405,9 @@ WndProperty::on_paint(Canvas &canvas)
      used by the polar configuration panel.  This concept needs to be
      redesigned. */
   if (mCaptionWidth != 0 && !mCaption.empty()) {
-    canvas.set_text_color(GetForeColor());
+    canvas.set_text_color(focused
+                          ? look.focused.text_color
+                          : look.text_color);
     canvas.background_transparent();
     canvas.select(*GetFont());
 

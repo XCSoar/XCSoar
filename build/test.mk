@@ -1553,6 +1553,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/RenderObservationZone.cpp \
+	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
@@ -1635,6 +1636,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Screen/ProgressBar.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Fonts.cpp \
+	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
 	$(SRC)/ResourceLoader.cpp \
@@ -1730,6 +1732,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
+	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/FlightStatisticsRenderer.cpp \

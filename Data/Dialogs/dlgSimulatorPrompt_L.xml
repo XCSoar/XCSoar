@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmComboPopup" Width="320" Height="240" BackColor="0xFFFFFF">
+<Form Name="frmComboPopup" Width="320" Height="240">
   <Label X="48" Y="-70" Width="-4" Height="20" Caption="What do you want to do?" />
   <SymbolButton Name="cmdFly" Caption="Fly" X="48" Y="-45" Width="112" Height="30" OnClick="OnFlyClicked"/>
   <SymbolButton Name="cmdSimulator" Caption="Simulator" X="160" Y="-45" Width="112" Height="30" OnClick="OnSimulatorClicked"/>

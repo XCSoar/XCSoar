@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/ButtonWindow.hpp"
 
+struct DialogLook;
 class ContainerWindow;
 
 /**
@@ -36,6 +37,9 @@ class WndButton : public ButtonWindow {
 public:
   typedef void (*ClickNotifyCallback_t)(WndButton &button);
   typedef void (*LeftRightNotifyCallback_t)(WndButton &button);
+
+protected:
+  const DialogLook &look;
 
 private:
   /**
@@ -64,7 +68,8 @@ public:
    * @param Function The function that should be called
    * when the button is clicked
    */
-  WndButton(ContainerWindow &parent, const TCHAR *Caption,
+  WndButton(ContainerWindow &parent, const DialogLook &look,
+            const TCHAR *Caption,
       int X, int Y, int Width, int Height,
             const ButtonWindowStyle style,
       ClickNotifyCallback_t Function = NULL,

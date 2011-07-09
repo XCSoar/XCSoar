@@ -31,6 +31,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
 #include "Util/StringUtil.hpp"
+#include "Look/DialogLook.hpp"
 
 #ifdef ENABLE_SDL
 #include "Screen/SDL/Reference.hpp"
@@ -70,14 +71,14 @@ WndForm::ClientAreaWindow::on_color(Window &window, Canvas &canvas)
 #endif
 
   canvas.set_text_color(COLOR_BLACK);
-  canvas.set_background_color(background_color);
-  return &background_brush;
+  canvas.set_background_color(look.background_color);
+  return &look.background_brush;
 }
 
 void
 WndForm::ClientAreaWindow::on_paint(Canvas &canvas)
 {
-  canvas.clear(background_brush);
+  canvas.clear(look.background_color);
 
   ContainerWindow::on_paint(canvas);
 }
@@ -91,14 +92,14 @@ add_border(WindowStyle style)
   return style;
 }
 
-WndForm::WndForm(SingleWindow &_main_window,
+WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
                  int X, int Y, int Width, int Height,
                  const TCHAR *Caption,
                  const WindowStyle style):
-  main_window(_main_window),
+  main_window(_main_window), look(_look),
   mModalResult(0), force(false),
-  mColorTitle(Color(0, 77, 124)),
   mhTitleFont(&Fonts::MapBold),
+  client_area(_look),
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
   mCaption = Caption;
@@ -116,7 +117,6 @@ WndForm::WndForm(SingleWindow &_main_window,
   client_area.set(*this, mClientRect.left, mClientRect.top,
                   mClientRect.right - mClientRect.left,
                   mClientRect.bottom - mClientRect.top, client_style);
-  client_area.SetBackColor(Color(0xe2, 0xdc, 0xbe));
 
 #if !defined(ENABLE_SDL) && !defined(NDEBUG)
   ::SetWindowText(hWnd, mCaption.c_str());
@@ -553,7 +553,7 @@ WndForm::on_paint(Canvas &canvas)
     canvas.text(mTitleRect.left + Layout::FastScale(2), mTitleRect.top,
                 mCaption.c_str());
 #else
-    canvas.set_background_color(mColorTitle);
+    canvas.set_background_color(look.caption.background_color);
     canvas.text_opaque(mTitleRect.left + Layout::FastScale(2),
                        mTitleRect.top, mTitleRect, mCaption.c_str());
 #endif
@@ -571,12 +571,6 @@ WndForm::SetCaption(const TCHAR *Value)
     UpdateLayout();
     invalidate(mTitleRect);
   }
-}
-
-void
-WndForm::SetBackColor(Color Value)
-{
-  client_area.SetBackColor(Value);
 }
 
 #ifdef ANDROID

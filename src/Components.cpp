@@ -62,6 +62,7 @@ Copyright_License {
 #include "Polar/PolarGlue.hpp"
 #include "Polar/Polar.hpp"
 #include "MainWindow.hpp"
+#include "Look/Look.hpp"
 #include "resource.h"
 #include "GlideComputer.hpp"
 #include "StatusMessage.hpp"
@@ -246,6 +247,11 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 #ifdef SIMULATOR_AVAILABLE
   // prompt for simulator if not set by command line argument "-simulator" or "-fly"
   if (!sim_set_in_cmd_line_flag) {
+    DialogLook white_look;
+    white_look.Initialise();
+    white_look.SetBackgroundColor(COLOR_WHITE);
+    SetXMLDialogLook(white_look);
+
     SimulatorPromptResult result = dlgSimulatorPromptShowModal();
     switch (result) {
     case SPR_QUIT:
@@ -261,6 +267,8 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
     }
   }
 #endif
+
+  SetXMLDialogLook(main_window.look->dialog);
 
   if (!LoadProfile())
     return false;

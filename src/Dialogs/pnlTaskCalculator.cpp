@@ -36,6 +36,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Graphics.hpp"
+#include "Look/DialogLook.hpp"
 
 #include <math.h>
 #include <algorithm>
@@ -286,7 +287,7 @@ pnlTaskCalculator::OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &
                 message);
   }
   else {
-    canvas.clear(wf->GetBackColor());
+    canvas.clear(wf->GetLook().background_color);
   }
 }
 
