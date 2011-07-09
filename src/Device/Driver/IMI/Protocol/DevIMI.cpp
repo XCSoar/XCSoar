@@ -23,12 +23,10 @@ namespace IMI
 {
   struct AngleConverter;
 
-  // variables
   bool _connected;
   TDeviceInfo _info;
   IMIWORD _serialNumber;
 
-  // IMI tools
   /**
    * @brief Sets data in IMI Waypoint structure
    *
@@ -37,6 +35,7 @@ namespace IMI
    * @param imiWp IMI waypoint structure to set
    */
   void IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
+
   /**
    * @brief Sends message buffer to a device
    *
@@ -46,6 +45,7 @@ namespace IMI
    * @return Operation status
    */
   bool Send(Port &port, const TMsg &msg);
+
   /**
    * @brief Prepares and sends the message to a device
    *
@@ -59,9 +59,9 @@ namespace IMI
    *
    * @return Operation status
    */
-  bool Send(Port &port,
-                   IMIBYTE msgID, const void *payload = 0, IMIWORD payloadSize = 0,
-                   IMIBYTE parameter1 = 0, IMIWORD parameter2 = 0, IMIWORD parameter3 = 0);
+  bool Send(Port &port, IMIBYTE msgID, const void *payload = 0,
+            IMIWORD payloadSize = 0, IMIBYTE parameter1 = 0,
+            IMIWORD parameter2 = 0, IMIWORD parameter3 = 0);
   /**
    * @brief Receives a message from the device
    *
@@ -71,8 +71,8 @@ namespace IMI
    *
    * @return Pointer to a message structure if expected message was received or 0 otherwise
    */
-  const TMsg *Receive(Port &port,
-                             unsigned extraTimeout, unsigned expectedPayloadSize);
+  const TMsg *Receive(Port &port, unsigned extraTimeout,
+                      unsigned expectedPayloadSize);
   /**
    * @brief Sends a message and waits for a confirmation from the device
    *
@@ -90,11 +90,11 @@ namespace IMI
    *
    * @return Pointer to a message structure if expected message was received or 0 otherwise
    */
-  const TMsg *SendRet(Port &port,
-                             IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
-                             IMIBYTE reMsgID, IMIWORD retPayloadSize,
-                             IMIBYTE parameter1 = 0, IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
-                             unsigned extraTimeout = 300, int retry = 4);
+  const TMsg *SendRet(Port &port, IMIBYTE msgID, const void *payload,
+                      IMIWORD payloadSize, IMIBYTE reMsgID,
+                      IMIWORD retPayloadSize, IMIBYTE parameter1 = 0,
+                      IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
+                      unsigned extraTimeout = 300, int retry = 4);
 
   /**
    * @brief Connects to the device
@@ -104,6 +104,7 @@ namespace IMI
    * @return Operation status
    */
   bool Connect(Port &port);
+
   /**
    * @brief Sends task declaration
    *
@@ -113,6 +114,7 @@ namespace IMI
    * @return Operation status
    */
   bool DeclarationWrite(Port &port, const Declaration &decl);
+
   /**
    * @brief Disconnects from the device
    *
@@ -121,7 +123,7 @@ namespace IMI
    * @return Operation status
    */
   bool Disconnect(Port &port);
-};
+}
 
 static void
 unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
@@ -136,27 +138,31 @@ unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
 
 struct IMI::AngleConverter
 {
-  union {
-    struct {
-      IMIDWORD milliminutes:16;
-      IMIDWORD degrees:8;
-      IMIDWORD sign:1;
+  union
+  {
+    struct
+    {
+      IMIDWORD milliminutes :16;
+      IMIDWORD degrees :8;
+      IMIDWORD sign :1;
     };
     IMIDWORD value;
   };
 
-  AngleConverter(Angle angle) {
+  AngleConverter(Angle angle)
+  {
     sign = (angle.sign() == -1) ? 1 : 0;
     double mag = angle.magnitude_degrees();
-    degrees = static_cast<IMIDWORD>(mag);
-    milliminutes = static_cast<IMIDWORD>((mag - degrees) * 60 * 1000);
+    degrees = static_cast<IMIDWORD> (mag);
+    milliminutes = static_cast<IMIDWORD> ((mag - degrees) * 60 * 1000);
   }
 };
 
-void IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
+void
+IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
 {
-  unsigned idx = imiIdx == 0 ? 0 :
-    (imiIdx == decl.size() + 1 ? imiIdx - 2 : imiIdx - 1);
+  unsigned idx = imiIdx == 0 ? 0 : (imiIdx == decl.size() + 1 ? imiIdx - 2
+                                                              : imiIdx - 1);
   const Declaration::TurnPoint &tp = decl.TurnPoints[idx];
   const Waypoint &wp = tp.waypoint;
 
@@ -170,14 +176,14 @@ void IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp
   imiWp.lon = AngleConverter(wp.Location.Longitude).value;
 
   // TAKEOFF and LANDING do not have OZs
-  if(imiIdx == 0 || imiIdx == decl.size() + 1)
+  if (imiIdx == 0 || imiIdx == decl.size() + 1)
     return;
 
   // set observation zones
-  if(imiIdx == 1) {
+  if (imiIdx == 1) {
     // START
     imiWp.oz.style = 3;
-    switch(tp.shape) {
+    switch (tp.shape) {
     case Declaration::TurnPoint::CYLINDER: // cylinder
       imiWp.oz.A1 = 1800;
       break;
@@ -189,10 +195,10 @@ void IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp
       break;
     }
     imiWp.oz.R1 = (IMIDWORD)std::min(250000u, tp.radius);
-  } else if(imiIdx == decl.size()) {
+  } else if (imiIdx == decl.size()) {
     // FINISH
     imiWp.oz.style = 4;
-    switch(tp.shape) {
+    switch (tp.shape) {
     case Declaration::TurnPoint::CYLINDER: // cylinder
       imiWp.oz.A1 = 1800;
       break;
@@ -207,7 +213,7 @@ void IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp
   } else {
     // TPs
     imiWp.oz.style = 2;
-    switch(tp.shape) {
+    switch (tp.shape) {
     case Declaration::TurnPoint::CYLINDER: // cylinder
       imiWp.oz.A1 = 1800;
       imiWp.oz.R1 = (IMIDWORD)std::min(250000u, tp.radius);
@@ -225,19 +231,20 @@ void IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp
   // other unused data
   imiWp.oz.maxAlt = 0;
   imiWp.oz.reduce = 0;
-  imiWp.oz.move   = 0;
+  imiWp.oz.move = 0;
 }
 
-bool IMI::Send(Port &port, const TMsg &msg)
+bool
+IMI::Send(Port &port, const TMsg &msg)
 {
   return port.Write(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2);
 }
 
-bool IMI::Send(Port &port,
-                   IMIBYTE msgID, const void *payload /* =0 */, IMIWORD payloadSize /* =0 */,
-                   IMIBYTE parameter1 /* =0 */, IMIWORD parameter2 /* =0 */, IMIWORD parameter3 /* =0 */)
+bool
+IMI::Send(Port &port, IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
+          IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3)
 {
-  if(payloadSize > COMM_MAX_PAYLOAD_SIZE)
+  if (payloadSize > COMM_MAX_PAYLOAD_SIZE)
     return false;
 
   TMsg msg;
@@ -253,17 +260,18 @@ bool IMI::Send(Port &port,
   msg.payloadSize = payloadSize;
   memcpy(msg.payload, payload, payloadSize);
 
-  IMIWORD crc = CRC16Checksum(((IMIBYTE*)&msg) + 2, payloadSize + IMICOMM_MSG_HEADER_SIZE - 2);
+  IMIWORD crc = CRC16Checksum(((IMIBYTE*)&msg) + 2,
+                              payloadSize + IMICOMM_MSG_HEADER_SIZE - 2);
   msg.payload[payloadSize] = (IMIBYTE)(crc >> 8);
   msg.payload[payloadSize + 1] = (IMIBYTE)crc;
 
   return Send(port, msg);
 }
 
-const IMI::TMsg *IMI::Receive(Port &port, unsigned extraTimeout,
-                                      unsigned expectedPayloadSize)
+const IMI::TMsg *
+IMI::Receive(Port &port, unsigned extraTimeout, unsigned expectedPayloadSize)
 {
-  if(expectedPayloadSize > COMM_MAX_PAYLOAD_SIZE)
+  if (expectedPayloadSize > COMM_MAX_PAYLOAD_SIZE)
     expectedPayloadSize = COMM_MAX_PAYLOAD_SIZE;
 
   // set timeout
@@ -271,29 +279,30 @@ const IMI::TMsg *IMI::Receive(Port &port, unsigned extraTimeout,
   if (baudrate == 0)
     return NULL;
 
-  unsigned timeout = extraTimeout + 10000 * (expectedPayloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate;
-  if(!port.SetRxTimeout(timeout))
+  unsigned timeout = extraTimeout + 10000 * (expectedPayloadSize
+      + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudrate;
+  if (!port.SetRxTimeout(timeout))
     return NULL;
 
   // wait for the message
   const TMsg *msg = NULL;
   timeout += MonotonicClockMS();
-  while(MonotonicClockMS() < timeout) {
+  while (MonotonicClockMS() < timeout) {
     // read message
     IMIBYTE buffer[64];
     int bytesRead = port.Read(buffer, sizeof(buffer));
-    if(bytesRead == 0)
+    if (bytesRead == 0)
       continue;
     if (bytesRead == -1)
       break;
 
     // parse message
     const TMsg *lastMsg = MessageParser::Parse(buffer, bytesRead);
-    if(lastMsg) {
+    if (lastMsg) {
       // message received
-      if(lastMsg->msgID == MSG_ACK_NOTCONFIG)
+      if (lastMsg->msgID == MSG_ACK_NOTCONFIG)
         Disconnect(port);
-      else if(lastMsg->msgID != MSG_CFG_KEEPCONFIG)
+      else if (lastMsg->msgID != MSG_CFG_KEEPCONFIG)
         msg = lastMsg;
 
       break;
@@ -301,27 +310,30 @@ const IMI::TMsg *IMI::Receive(Port &port, unsigned extraTimeout,
   }
 
   // restore timeout
-  if(!port.SetRxTimeout(0))
+  if (!port.SetRxTimeout(0))
     return NULL;
 
   return msg;
 }
 
-const IMI::TMsg *IMI::SendRet(Port &port,
-                                      IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
-                                      IMIBYTE reMsgID, IMIWORD retPayloadSize,
-                                      IMIBYTE parameter1 /* =0 */, IMIWORD parameter2 /* =0 */, IMIWORD parameter3 /* =0 */,
-                                      unsigned extraTimeout /* =300 */, int retry /* =4 */)
+const IMI::TMsg *
+IMI::SendRet(Port &port, IMIBYTE msgID, const void *payload,
+             IMIWORD payloadSize, IMIBYTE reMsgID, IMIWORD retPayloadSize,
+             IMIBYTE parameter1, IMIWORD parameter2, IMIWORD parameter3,
+             unsigned extraTimeout, int retry)
 {
   unsigned baudRate = port.GetBaudrate();
   if (baudRate == 0)
     return NULL;
 
-  extraTimeout += 10000 * (payloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10) / baudRate;
+  extraTimeout += 10000 * (payloadSize + sizeof(IMICOMM_MSG_HEADER_SIZE) + 10)
+      / baudRate;
   while (retry--) {
-    if(Send(port, msgID, payload, payloadSize, parameter1, parameter2, parameter3)) {
+    if (Send(port, msgID, payload, payloadSize, parameter1, parameter2,
+             parameter3)) {
       const TMsg *msg = Receive(port, extraTimeout, retPayloadSize);
-      if(msg && msg->msgID == reMsgID && (retPayloadSize == (IMIWORD)-1 || msg->payloadSize == retPayloadSize))
+      if (msg && msg->msgID == reMsgID && (retPayloadSize == (IMIWORD)-1
+          || msg->payloadSize == retPayloadSize))
         return msg;
     }
   }
@@ -329,7 +341,8 @@ const IMI::TMsg *IMI::SendRet(Port &port,
   return NULL;
 }
 
-bool IMI::Connect(Port &port)
+bool
+IMI::Connect(Port &port)
 {
   if (_connected)
     return true;
@@ -353,7 +366,8 @@ bool IMI::Connect(Port &port)
   if (baudRate == 0)
     return false;
 
-  if(!Send(port, MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate), IMICOMM_BIGPARAM2(baudRate)))
+  if (!Send(port, MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate),
+            IMICOMM_BIGPARAM2(baudRate)))
     return false;
 
   // get device info
@@ -385,7 +399,8 @@ bool IMI::Connect(Port &port)
   return false;
 }
 
-bool IMI::DeclarationWrite(Port &port, const Declaration &decl)
+bool
+IMI::DeclarationWrite(Port &port, const Declaration &decl)
 {
   if (!_connected)
     return false;
@@ -394,12 +409,16 @@ bool IMI::DeclarationWrite(Port &port, const Declaration &decl)
   memset(&imiDecl, 0, sizeof(imiDecl));
 
   // idecl.date ignored - will be set by FR
-  unicode2usascii(decl.PilotName,        imiDecl.header.plt, sizeof(imiDecl.header.plt));
-  // decl.header.db1Year = year; decl.header.db1Month = month; decl.header.db1Day = day;
-  unicode2usascii(decl.AircraftType,     imiDecl.header.gty, sizeof(imiDecl.header.gty));
-  unicode2usascii(decl.AircraftReg,     imiDecl.header.gid, sizeof(imiDecl.header.gid));
-  unicode2usascii(decl.CompetitionId,    imiDecl.header.cid, sizeof(imiDecl.header.cid));
-  unicode2usascii(_T("XCSOARTASK"), imiDecl.header.tskName, sizeof(imiDecl.header.tskName));
+  unicode2usascii(decl.PilotName, imiDecl.header.plt,
+                  sizeof(imiDecl.header.plt));
+  unicode2usascii(decl.AircraftType, imiDecl.header.gty,
+                  sizeof(imiDecl.header.gty));
+  unicode2usascii(decl.AircraftReg, imiDecl.header.gid,
+                  sizeof(imiDecl.header.gid));
+  unicode2usascii(decl.CompetitionId, imiDecl.header.cid,
+                  sizeof(imiDecl.header.cid));
+  unicode2usascii(_T("XCSOARTASK"), imiDecl.header.tskName,
+                  sizeof(imiDecl.header.tskName));
 
   IMIWaypoint(decl, 0, imiDecl.wp[0]);
   for (unsigned i = 0; i < decl.size(); i++)
@@ -411,7 +430,8 @@ bool IMI::DeclarationWrite(Port &port, const Declaration &decl)
                  MSG_ACK_SUCCESS, 0, -1) != NULL;
 }
 
-bool IMI::Disconnect(Port &port)
+bool
+IMI::Disconnect(Port &port)
 {
   if (!_connected)
     return true;
@@ -431,15 +451,15 @@ IMI::DeclareTask(Port &port, const Declaration &declaration)
     return false;
 
   // stop Rx thread
-  if(!port.StopRxThread())
+  if (!port.StopRxThread())
     return false;
 
   // set new Rx timeout
   bool status = port.SetRxTimeout(2000);
-  if(status) {
+  if (status) {
     // connect to the device
     status = Connect(port);
-    if(status) {
+    if (status) {
       // task declaration
       status &= DeclarationWrite(port, declaration);
     }
@@ -457,7 +477,8 @@ IMI::DeclareTask(Port &port, const Declaration &declaration)
   return status;
 }
 
-void IMI::Register()
+void
+IMI::Register()
 {
   _connected = false;
 }
