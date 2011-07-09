@@ -45,13 +45,13 @@ IMI::MessageParser::GetMessage()
 /**
  * @brief Resets the state of the parser
  */
-void IMI::MessageParser::Reset()
+void
+IMI::MessageParser::Reset()
 {
   bytes_left = 0;
   buffer_pos = 0;
   state = STATE_NOT_SYNC;
 }
-
 
 /**
  * @brief Verifies received message
@@ -61,14 +61,16 @@ void IMI::MessageParser::Reset()
  *
  * @return Verification status
  */
-bool IMI::MessageParser::Check(const TMsg *msg, IMIDWORD size)
+bool
+IMI::MessageParser::Check(const TMsg *msg, IMIDWORD size)
 {
   // minimal size of comm message
-  if(size < IMICOMM_MSG_HEADER_SIZE + IMICOMM_CRC_LEN)
+  if (size < IMICOMM_MSG_HEADER_SIZE + IMICOMM_CRC_LEN)
     return false;
 
   // check signature
-  if(msg->syncChar1 != IMICOMM_SYNC_CHAR1 || msg->syncChar2 != IMICOMM_SYNC_CHAR2)
+  if(msg->syncChar1 != IMICOMM_SYNC_CHAR1 ||
+     msg->syncChar2 != IMICOMM_SYNC_CHAR2)
     return false;
 
   // check size
@@ -76,12 +78,15 @@ bool IMI::MessageParser::Check(const TMsg *msg, IMIDWORD size)
     return false;
 
   // check CRC
-  IMIWORD crc1 = CRC16Checksum(((IMIBYTE*)msg) + IMICOMM_SYNC_LEN, IMICOMM_MSG_HEADER_SIZE + msg->payloadSize - IMICOMM_SYNC_LEN);
-  IMIWORD crc2 = (IMIWORD)(((IMIBYTE*)msg)[size - 1]) | ((IMIWORD)(((IMIBYTE*)msg)[size - 2]) << 8);
+  IMIWORD crc1 = CRC16Checksum(((IMIBYTE*)msg) + IMICOMM_SYNC_LEN,
+                               IMICOMM_MSG_HEADER_SIZE + msg->payloadSize -
+                               IMICOMM_SYNC_LEN);
+
+  IMIWORD crc2 = (IMIWORD)(((IMIBYTE*)msg)[size - 1]) |
+                 ((IMIWORD)(((IMIBYTE*)msg)[size - 2]) << 8);
 
   return crc1 == crc2;
 }
-
 
 /**
  * @brief Parses received message chunk
@@ -91,37 +96,34 @@ bool IMI::MessageParser::Check(const TMsg *msg, IMIDWORD size)
  *
  * @return Received message or 0 if invalid on incomplete.
  */
-const IMI::TMsg *IMI::MessageParser::Parse(const IMIBYTE _buffer[], int size)
+const IMI::TMsg *
+IMI::MessageParser::Parse(const IMIBYTE _buffer[], int size)
 {
   const IMIBYTE *ptr = _buffer;
   const TMsg *msg = 0;
 
-  for(;size; size--) {
+  for (; size; size--) {
     IMIBYTE byte = *ptr++;
 
-    if(state == STATE_NOT_SYNC) {
+    if (state == STATE_NOT_SYNC) {
       // verify synchronization chars
-      if(byte == IMICOMM_SYNC_CHAR1 && buffer_pos == 0) {
+      if (byte == IMICOMM_SYNC_CHAR1 && buffer_pos == 0) {
         buffer[buffer_pos++] = byte;
-      }
-      else if(byte == IMICOMM_SYNC_CHAR2 && buffer_pos == 1) {
+      } else if (byte == IMICOMM_SYNC_CHAR2 && buffer_pos == 1) {
         buffer[buffer_pos++] = byte;
         state = STATE_COMM_MSG;
-      }
-      else {
+      } else {
         buffer_pos = 0;
       }
-    }
-    else if(state == STATE_COMM_MSG) {
-      if(buffer_pos < IMICOMM_MSG_HEADER_SIZE) {
+    } else if (state == STATE_COMM_MSG) {
+      if (buffer_pos < IMICOMM_MSG_HEADER_SIZE) {
         // copy header
         buffer[buffer_pos++] = byte;
-      }
-      else {
-        if(buffer_pos == IMICOMM_MSG_HEADER_SIZE) {
+      } else {
+        if (buffer_pos == IMICOMM_MSG_HEADER_SIZE) {
           // verify payload size
           bytes_left = GetMessage().payloadSize + IMICOMM_CRC_LEN;
-          if(bytes_left > COMM_MAX_PAYLOAD_SIZE + IMICOMM_CRC_LEN) {
+          if (bytes_left > COMM_MAX_PAYLOAD_SIZE + IMICOMM_CRC_LEN) {
             // Invalid length
             Reset();
             continue;
@@ -130,12 +132,12 @@ const IMI::TMsg *IMI::MessageParser::Parse(const IMIBYTE _buffer[], int size)
 
         // copy payload
         bytes_left--;
-        if(buffer_pos < sizeof(buffer)) // Just in case
+        if (buffer_pos < sizeof(buffer)) // Just in case
           buffer[buffer_pos++] = byte;
 
-        if(bytes_left == 0) {
+        if (bytes_left == 0) {
           // end of message
-          if(Check(&GetMessage(), buffer_pos))
+          if (Check(&GetMessage(), buffer_pos))
             msg = &GetMessage();
 
           // prepare parser for the next message
