@@ -36,8 +36,10 @@ class Job;
  *
  * @param cancellable show a "cancel" button that allows aborting the
  * job
+ * @return true if the job has finished (may have failed), false if
+ * the job was cancelled by the user
  */
-void
+bool
 JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
           const TCHAR *caption, Job &job,
           bool cancellable=false);

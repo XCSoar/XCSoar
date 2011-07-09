@@ -79,7 +79,7 @@ protected:
   }
 };
 
-void
+bool
 JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
           const TCHAR *caption,
           Job &job, bool cancellable)
@@ -107,8 +107,10 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
     cancel_button.bring_to_top();
   }
 
-  form.ShowModal();
+  int result = form.ShowModal();
 
   thread.Cancel();
   thread.Join();
+
+  return result == mrOK;
 }
