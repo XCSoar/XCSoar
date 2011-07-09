@@ -14,6 +14,7 @@
 #include "Types.hpp"
 
 class Angle;
+struct BrokenDateTime;
 
 namespace IMI
 {
@@ -32,6 +33,8 @@ namespace IMI
 
     AngleConverter(Angle angle);
   };
+
+  void Convert(IMIDATETIMESEC in, BrokenDateTime &out);
 }
 
 #endif
