@@ -31,6 +31,7 @@ namespace IMI
    * @param imiWp IMI waypoint structure to set
    */
   void IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
+  void IMIWaypoint(const Waypoint &wp, TWaypoint &imiWp);
 
   /**
    * @brief Sends message buffer to a device
@@ -94,13 +95,8 @@ namespace IMI
 }
 
 void
-IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
+IMI::IMIWaypoint(const Waypoint &wp, TWaypoint &imiWp)
 {
-  unsigned idx = imiIdx == 0 ? 0 : (imiIdx == decl.size() + 1 ? imiIdx - 2
-                                                              : imiIdx - 1);
-  const Declaration::TurnPoint &tp = decl.TurnPoints[idx];
-  const Waypoint &wp = tp.waypoint;
-
   // set name
   ConvertToChar(wp.Name.c_str(), imiWp.name, sizeof(imiWp.name));
 
@@ -109,6 +105,17 @@ IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
 
   // set longitude
   imiWp.lon = AngleConverter(wp.Location.Longitude).value;
+}
+
+void
+IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
+{
+  unsigned idx = imiIdx == 0 ? 0 : (imiIdx == decl.size() + 1 ? imiIdx - 2
+                                                              : imiIdx - 1);
+  const Declaration::TurnPoint &tp = decl.TurnPoints[idx];
+  const Waypoint &wp = tp.waypoint;
+
+  IMIWaypoint(wp, imiWp);
 
   // TAKEOFF and LANDING do not have OZs
   if (imiIdx == 0 || imiIdx == decl.size() + 1)
