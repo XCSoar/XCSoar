@@ -219,18 +219,18 @@ NOAAStore::GetTAF(const char *code, TAF &taf)
 }
 
 bool
-NOAAStore::UpdateStation(unsigned index)
+NOAAStore::UpdateStation(unsigned index, JobRunner &runner)
 {
   assert(index < stations.size());
   const char *code = stations[index].code;
 
   bool metar_downloaded =
-      NOAADownloader::DownloadMETAR(code, stations[index].metar);
+    NOAADownloader::DownloadMETAR(code, stations[index].metar, runner);
   if (metar_downloaded)
     stations[index].metar_available = true;
 
   bool taf_downloaded =
-    NOAADownloader::DownloadTAF(code, stations[index].taf);
+    NOAADownloader::DownloadTAF(code, stations[index].taf, runner);
   if (taf_downloaded)
     stations[index].taf_available = true;
 
@@ -238,7 +238,7 @@ NOAAStore::UpdateStation(unsigned index)
 }
 
 bool
-NOAAStore::UpdateStation(const char *code)
+NOAAStore::UpdateStation(const char *code, JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -250,16 +250,16 @@ NOAAStore::UpdateStation(const char *code)
   if (index == (unsigned)-1)
     return false;
 
-  return UpdateStation(index);
+  return UpdateStation(index, runner);
 }
 
 bool
-NOAAStore::Update()
+NOAAStore::Update(JobRunner &runner)
 {
   bool result = true;
   unsigned len = stations.size();
   for (unsigned i = 0; i < len; i++)
-    result = UpdateStation(i) && result;
+    result = UpdateStation(i, runner) && result;
 
   return result;
 }

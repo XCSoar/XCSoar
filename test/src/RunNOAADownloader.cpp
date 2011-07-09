@@ -25,6 +25,7 @@ Copyright_License {
 #include "Weather/METAR.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Net/Init.hpp"
+#include "ConsoleJobRunner.hpp"
 
 #include <cstdio>
 #include <iostream>
@@ -97,7 +98,8 @@ main(int argc, char *argv[])
   Net::Initialise();
 
   cout << "Updating METAR and TAF ..." << endl;
-  NOAAStore::Update();
+  ConsoleJobRunner runner;
+  NOAAStore::Update(runner);
 
   for (unsigned i = 0; i < NOAAStore::Count(); i++) {
     cout << "---" << endl;

@@ -749,6 +749,10 @@ RUN_NOAA_DOWNLOADER_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp \
+	$(SRC)/Operation.cpp \
+	$(SRC)/Net/ToBuffer.cpp \
+	$(TEST_SRC_DIR)/ConsoleJobRunner.cpp \
+	$(TEST_SRC_DIR)/ConsoleOperationEnvironment.cpp \
 	$(TEST_SRC_DIR)/RunNOAADownloader.cpp
 RUN_NOAA_DOWNLOADER_OBJS = $(call SRC_TO_OBJ,$(RUN_NOAA_DOWNLOADER_SOURCES))
 RUN_NOAA_DOWNLOADER_BIN = $(TARGET_BIN_DIR)/RunNOAADownloader$(TARGET_EXEEXT)

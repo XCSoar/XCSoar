@@ -28,6 +28,7 @@ Copyright_License {
 
 struct METAR;
 struct TAF;
+class JobRunner;
 
 namespace NOAAStore
 {
@@ -102,19 +103,20 @@ namespace NOAAStore
    * @param index Index of the station in the array
    * @return True if the data was downloaded successfully
    */
-  bool UpdateStation(unsigned index);
+  bool UpdateStation(unsigned index, JobRunner &runner);
+
   /**
    * Attempts to download new data for the given station
    * @param code Four letter code of the station/airport (upper case)
    * @return True if the data was downloaded successfully
    */
-  bool UpdateStation(const char *code);
+  bool UpdateStation(const char *code, JobRunner &runner);
 
   /**
    * Attempts to download new data for all stations
    * @return True if the data for all stations was downloaded successfully
    */
-  bool Update();
+  bool Update(JobRunner &runner);
 
   /**
    * Returns the amount of stations in the array

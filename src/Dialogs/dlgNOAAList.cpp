@@ -24,6 +24,7 @@ Copyright_License {
 #include "Dialogs/Weather.hpp"
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Message.hpp"
+#include "Dialogs/JobDialog.hpp"
 #include "Language/Language.hpp"
 #include "Net/Features.hpp"
 
@@ -119,7 +120,9 @@ AddClicked(gcc_unused WndButton &button)
 static void
 UpdateClicked(gcc_unused WndButton &Sender)
 {
-  NOAAStore::Update();
+  DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
+                         _("Download"), true);
+  NOAAStore::Update(runner);
   UpdateList();
 }
 

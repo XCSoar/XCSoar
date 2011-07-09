@@ -25,7 +25,7 @@ Copyright_License {
 #include "METAR.hpp"
 #include "TAF.hpp"
 #include "Net/Session.hpp"
-#include "Net/Request.hpp"
+#include "Net/ToBuffer.hpp"
 #include "OS/PathName.hpp"
 #include "Util/StringUtil.hpp"
 
@@ -117,7 +117,8 @@ NOAADownloader::AppendToContentString(const char *buffer,
 }
 
 bool
-NOAADownloader::DownloadMETAR(const char *code, METAR &metar)
+NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
+                              JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -137,9 +138,12 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar)
     return false;
 
   // Request the file
-  Net::Request request(session, path);
-  if (!request.Created())
+  char buffer[4096];
+  Net::DownloadToBufferJob job(session, path, buffer, sizeof(buffer) - 1);
+  if (!runner.Run(job) || job.GetLength() < 0)
     return false;
+
+  buffer[job.GetLength()] = 0;
 
   /*
    * Example:
@@ -147,11 +151,6 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar)
    * 2011/07/01 10:20
    * EDDL 011020Z 31004KT 270V340 9999 SCT032TCU SCT050 17/09 Q1022 TEMPO SHRA
    */
-
-  // Read first 256 bytes of the response
-  char buffer[256];
-  if (!request.Read(buffer, sizeof(buffer)))
-    return false;
 
   // Parse date and time of last update
   const char *p = ParseDateTime(buffer, metar.last_update);
@@ -174,8 +173,6 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar)
   // Read rest of the response into the content string
   metar.content.clear();
   AppendToContentString(p, metar.content);
-  while (request.Read(buffer, sizeof(buffer)))
-    AppendToContentString(buffer, metar.content);
 
   // Trim the content string
   TrimRight(metar.content.buffer());
@@ -184,7 +181,8 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar)
 }
 
 bool
-NOAADownloader::DownloadTAF(const char *code, TAF &taf)
+NOAADownloader::DownloadTAF(const char *code, TAF &taf,
+                            JobRunner &runner)
 {
 #ifndef NDEBUG
   assert(strlen(code) == 4);
@@ -204,9 +202,12 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf)
     return false;
 
   // Request the file
-  Net::Request request(session, path);
-  if (!request.Created())
+  char buffer[4096];
+  Net::DownloadToBufferJob job(session, path, buffer, sizeof(buffer) - 1);
+  if (!runner.Run(job) || job.GetLength() < 0)
     return false;
+
+  buffer[job.GetLength()] = 0;
 
   /*
    * Example:
@@ -219,11 +220,6 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf)
    *       TEMPO 0202/0207 BKN012
    *       BECMG 0210/0213 31010KT
    */
-
-  // Read first 256 bytes of the response
-  char buffer[256];
-  if (!request.Read(buffer, sizeof(buffer)))
-    return false;
 
   // Parse date and time of last update
   const char *p = ParseDateTime(buffer, taf.last_update);
@@ -246,8 +242,6 @@ NOAADownloader::DownloadTAF(const char *code, TAF &taf)
   // Read rest of the response into the content string
   taf.content.clear();
   AppendToContentString(p, taf.content);
-  while (request.Read(buffer, sizeof(buffer)))
-    AppendToContentString(buffer, taf.content);
 
   // Trim the content string
   TrimRight(taf.content.buffer());

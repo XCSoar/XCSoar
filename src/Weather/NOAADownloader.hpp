@@ -26,6 +26,7 @@ Copyright_License {
 
 struct METAR;
 struct TAF;
+class JobRunner;
 
 namespace NOAADownloader
 {
@@ -36,7 +37,8 @@ namespace NOAADownloader
    * @return True if the METAR was downloaded and parsed successfully,
    * otherwise False
    */
-  bool DownloadMETAR(const char *code, METAR &metar);
+  bool DownloadMETAR(const char *code, METAR &metar,
+                     JobRunner &runner);
 
   /**
    * Downloads a METAR from the NOAA server
@@ -45,7 +47,8 @@ namespace NOAADownloader
    * @return True if the METAR was downloaded and parsed successfully,
    * otherwise False
    */
-  bool DownloadTAF(const char *code, TAF &taf);
+  bool DownloadTAF(const char *code, TAF &taf,
+                   JobRunner &runner);
 };
 
 #endif
