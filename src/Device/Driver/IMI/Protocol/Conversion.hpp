@@ -12,12 +12,12 @@
 #define XCSOAR_IMI_CONVERSION_HPP
 
 #include "Types.hpp"
+#include "Device/Declaration.hpp"
 
 #include <tchar.h>
 
 class Angle;
 struct BrokenDateTime;
-struct Declaration;
 class Waypoint;
 
 namespace IMI
@@ -41,14 +41,8 @@ namespace IMI
   void ConvertToChar(const TCHAR* unicode, char* ascii, int outSize);
   BrokenDateTime ConvertToDateTime(IMIDATETIMESEC in);
 
-  /**
-   * @brief Sets data in IMI Waypoint structure
-   *
-   * @param decl LK task declaration
-   * @param imiIdx The index of IMI waypoint to set
-   * @param imiWp IMI waypoint structure to set
-   */
-  void ConvertOZ(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
+  void ConvertOZ(const Declaration::TurnPoint &tp, bool is_start,
+                 bool is_finish, TWaypoint &imiWp);
   void ConvertWaypoint(const Waypoint &wp, TWaypoint &imiWp);
 
 }

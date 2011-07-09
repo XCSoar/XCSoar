@@ -12,7 +12,6 @@
 #include "DateTime.hpp"
 #include "Math/Angle.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
-#include "Device/Declaration.hpp"
 
 #ifdef _UNICODE
 #include <windows.h>
@@ -115,21 +114,11 @@ IMI::ConvertWaypoint(const Waypoint &wp, TWaypoint &imiWp)
 }
 
 void
-IMI::ConvertOZ(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
+IMI::ConvertOZ(const Declaration::TurnPoint &tp, bool is_start, bool is_finish,
+               TWaypoint &imiWp)
 {
-  unsigned idx = imiIdx == 0 ? 0 : (imiIdx == decl.size() + 1 ? imiIdx - 2
-                                                              : imiIdx - 1);
-  const Declaration::TurnPoint &tp = decl.TurnPoints[idx];
-  const Waypoint &wp = tp.waypoint;
-
-  ConvertWaypoint(wp, imiWp);
-
-  // TAKEOFF and LANDING do not have OZs
-  if (imiIdx == 0 || imiIdx == decl.size() + 1)
-    return;
-
   // set observation zones
-  if (imiIdx == 1) {
+  if (is_start) {
     // START
     imiWp.oz.style = 3;
     switch (tp.shape) {
@@ -144,7 +133,7 @@ IMI::ConvertOZ(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
       break;
     }
     imiWp.oz.R1 = (IMIDWORD)std::min(250000u, tp.radius);
-  } else if (imiIdx == decl.size()) {
+  } else if (is_finish) {
     // FINISH
     imiWp.oz.style = 4;
     switch (tp.shape) {
