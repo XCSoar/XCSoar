@@ -39,6 +39,29 @@ class WindowControl : public ContainerWindow {
 public:
   typedef void (*OnHelpCallback_t)(WindowControl *Sender);
 
+protected:
+  /** Caption/Text of the Control */
+  StaticString<254> mCaption;
+
+private:
+  /** Background color */
+  Color mColorBack;
+  /** Foreground color */
+  Color mColorFore;
+
+  /** Font of the Control */
+  const Font *mhFont;
+
+  /** Helptext of the Control */
+  TCHAR *mHelpText;
+
+  /**
+   * The callback-function that should be called when the help button is
+   * pressed while the control has focus
+   * @see SetOnHelpCallback()
+   */
+  OnHelpCallback_t mOnHelpCallback;
+
 public:
   WindowControl();
 
@@ -159,32 +182,8 @@ public:
    */
   void SetHelpText(const TCHAR *Value);
 
-protected:
-  /** Caption/Text of the Control */
-  StaticString<254> mCaption;
-
-public:
   /** Paints the "Selector" */
   static void PaintSelector(Canvas &canvas, const PixelRect rc);
-
-private:
-  /** Background color */
-  Color mColorBack;
-  /** Foreground color */
-  Color mColorFore;
-
-  /** Font of the Control */
-  const Font *mhFont;
-
-  /** Helptext of the Control */
-  TCHAR *mHelpText;
-
-  /**
-   * The callback-function that should be called when the help button is
-   * pressed while the control has focus
-   * @see SetOnHelpCallback()
-   */
-  OnHelpCallback_t mOnHelpCallback;
 };
 
 #endif

@@ -37,6 +37,21 @@ public:
   typedef void (*ClickNotifyCallback_t)(WndButton &button);
   typedef void (*LeftRightNotifyCallback_t)(WndButton &button);
 
+private:
+  /**
+   * The callback-function that should be called when the button is pressed
+   * @see SetOnClickNotify()
+   */
+  ClickNotifyCallback_t mOnClickNotify;
+
+  /**
+   * The callback-functions that should be called when the Left and Right
+   * keys are pressed
+   * @see SetOnLeftNotify() and SetOnRightNotify()
+   */
+  LeftRightNotifyCallback_t mOnLeftNotify;
+  LeftRightNotifyCallback_t mOnRightNotify;
+
 public:
   /**
    * Constructor of the WndButton class
@@ -111,22 +126,6 @@ public:
 protected:
   virtual bool on_key_check(unsigned key_code) const;
   virtual bool on_key_down(unsigned key_code);
-
-
-private:
-  /**
-   * The callback-function that should be called when the button is pressed
-   * @see SetOnClickNotify()
-   */
-  ClickNotifyCallback_t mOnClickNotify;
-
-  /**
-   * The callback-functions that should be called when the Left and Right
-   * keys are pressed
-   * @see SetOnLeftNotify() and SetOnRightNotify()
-   */
-  LeftRightNotifyCallback_t mOnLeftNotify;
-  LeftRightNotifyCallback_t mOnRightNotify;
 };
 
 #endif
