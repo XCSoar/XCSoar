@@ -28,6 +28,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "GestureManager.hpp"
 #include "ThermalBandRenderer.hpp"
+#include "DisplayMode.hpp"
 
 class Logger;
 
@@ -88,7 +89,7 @@ class GlueMapWindow : public MapWindow {
    */
   Projection drag_projection;
 
-  DisplayMode_t DisplayMode;
+  enum DisplayMode DisplayMode;
 
   OffsetHistory offsetHistory;
 
@@ -252,7 +253,7 @@ public:
   void UpdateDisplayMode();
   void SetMapScale(const fixed x);
 
-  DisplayMode_t GetDisplayMode() const {
+  enum DisplayMode GetDisplayMode() const {
     return DisplayMode;
   }
 };

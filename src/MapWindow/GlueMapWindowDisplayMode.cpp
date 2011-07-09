@@ -77,7 +77,7 @@ GlueMapWindow::SetMapScale(const fixed x)
   MapWindow::SetMapScale(x);
 
   if (!SettingsMap().TargetPan) {
-    if (GetDisplayMode() == dmCircling && SettingsMap().CircleZoom)
+    if (GetDisplayMode() == DM_CIRCLING && SettingsMap().CircleZoom)
       // save cruise scale
       zoomclimb.ClimbScale = visible_projection.GetScale();
     else
@@ -112,7 +112,7 @@ GlueMapWindow::SaveDisplayModeScales()
 void
 GlueMapWindow::SwitchZoomClimb()
 {
-  bool isclimb = (GetDisplayMode() == dmCircling);
+  bool isclimb = (GetDisplayMode() == DM_CIRCLING);
 
   bool my_target_pan = SettingsMap().TargetPan;
 
@@ -155,26 +155,12 @@ GlueMapWindow::SwitchZoomClimb()
   }
 }
 
-static DisplayMode_t
-GetNewDisplayMode(const SETTINGS_MAP &settings_map,
-                  const DERIVED_INFO &derived_info)
-{
-  if (settings_map.UserForceDisplayMode != dmNone)
-    return settings_map.UserForceDisplayMode;
-  else if (derived_info.Circling)
-    return dmCircling;
-  else if (derived_info.task_stats.flight_mode_final_glide)
-    return dmFinalGlide;
-  else
-    return dmCruise;
-}
-
 void
 GlueMapWindow::UpdateDisplayMode()
 {
-  DisplayMode_t new_mode = GetNewDisplayMode(SettingsMap(), Calculated());
+  enum DisplayMode new_mode = GetNewDisplayMode(SettingsMap(), Calculated());
 
-  if (DisplayMode != new_mode && new_mode == dmCircling)
+  if (DisplayMode != new_mode && new_mode == DM_CIRCLING)
     offsetHistory.reset();
 
   DisplayMode = new_mode;
@@ -194,7 +180,7 @@ GlueMapWindow::UpdateScreenAngle()
   }
 
   DisplayOrientation_t orientation =
-      (GetDisplayMode() == dmCircling) ?
+      (GetDisplayMode() == DM_CIRCLING) ?
           settings.OrientationCircling : settings.OrientationCruise;
 
   if (orientation == TARGETUP &&
@@ -222,7 +208,7 @@ GlueMapWindow::UpdateMapScale()
     return;
   }
 
-  if (GetDisplayMode() == dmCircling && SettingsMap().CircleZoom)
+  if (GetDisplayMode() == DM_CIRCLING && SettingsMap().CircleZoom)
     return;
 
   if (SettingsMap().EnablePan)
@@ -232,7 +218,7 @@ GlueMapWindow::UpdateMapScale()
   if (SettingsMap().AutoZoom && positive(wpd)) {
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
-    int AutoZoomFactor = (GetDisplayMode() == dmCircling) ?
+    int AutoZoomFactor = (GetDisplayMode() == DM_CIRCLING) ?
                                  50 : 100 - SettingsMap().GliderScreenPosition;
     // Leave 5% of full distance for target display
     AutoZoomFactor -= 5;
@@ -256,7 +242,7 @@ GlueMapWindow::UpdateProjection()
   center.x = (rc.left + rc.right) / 2;
   center.y = (rc.top + rc.bottom) / 2;
 
-  if (GetDisplayMode() == dmCircling || settings_map.EnablePan)
+  if (GetDisplayMode() == DM_CIRCLING || settings_map.EnablePan)
     visible_projection.SetScreenOrigin(center.x, center.y);
   else if (settings_map.OrientationCruise == NORTHUP) {
     RasterPoint offset = OffsetHistory::zeroPoint;
@@ -285,7 +271,7 @@ GlueMapWindow::UpdateProjection()
 
   if (settings_map.EnablePan)
     SetLocation(settings_map.PanLocation);
-  else if (GetDisplayMode() == dmCircling &&
+  else if (GetDisplayMode() == DM_CIRCLING &&
            Calculated().thermal_locator.estimate_valid) {
     const fixed d_t = Calculated().thermal_locator.estimate_location.distance(Basic().Location);
     if (!positive(d_t)) {

@@ -31,6 +31,7 @@ Copyright_License {
 #include "Airspace/AirspaceRendererSettings.hpp"
 #include "Screen/TextInBox.hpp"
 #include "Terrain/TerrainSettings.hpp"
+#include "DisplayMode.hpp"
 
 enum DisplayOrientation_t {
   TRACKUP = 0,
@@ -66,13 +67,6 @@ enum WaypointLabelSelection_t {
   wlsTaskAndLandableWaypoints,
   wlsTaskWaypoints,
   wlsNoWaypoints
-};
-
-enum DisplayMode_t{
-  dmNone,
-  dmCircling,
-  dmCruise,
-  dmFinalGlide
 };
 
 enum TrailLength {
@@ -148,7 +142,9 @@ struct SETTINGS_MAP {
 
   bool EnableAuxiliaryInfo;
   unsigned AuxiliaryInfoBoxPanel;
-  DisplayMode_t UserForceDisplayMode;
+
+  DisplayMode UserForceDisplayMode;
+
   bool EnablePan;
   GeoPoint PanLocation;
   bool TargetPan;

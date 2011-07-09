@@ -48,7 +48,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.OrientationCruise = TRACKUP;
   settings_map.EnableAuxiliaryInfo = true;
   settings_map.AuxiliaryInfoBoxPanel = 0;
-  settings_map.UserForceDisplayMode = dmNone;
+  settings_map.UserForceDisplayMode = DM_NONE;
   settings_map.EnablePan = false;
   settings_map.PanLocation.Longitude = Angle::native(fixed_zero);
   settings_map.PanLocation.Latitude = Angle::native(fixed_zero);

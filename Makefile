@@ -382,6 +382,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/CalculationThread.cpp \
+	$(SRC)/DisplayMode.cpp \
 	\
 	$(SRC)/Topography/TopographyFile.cpp \
 	$(SRC)/Topography/TopographyStore.cpp \

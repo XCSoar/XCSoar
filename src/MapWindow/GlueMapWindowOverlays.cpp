@@ -102,9 +102,9 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 
   if (task != NULL && (task->get_mode() == TaskManager::MODE_ABORT))
     bmp = &Graphics::hAbort;
-  else if (GetDisplayMode() == dmCircling)
+  else if (GetDisplayMode() == DM_CIRCLING)
     bmp = &Graphics::hClimb;
-  else if (GetDisplayMode() == dmFinalGlide)
+  else if (GetDisplayMode() == DM_FINAL_GLIDE)
     bmp = &Graphics::hFinalGlide;
   else
     bmp = &Graphics::hCruise;
@@ -391,7 +391,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 void
 GlueMapWindow::DrawThermalEstimate(Canvas &canvas) const
 {
-  if (GetDisplayMode() == dmCircling) {
+  if (GetDisplayMode() == DM_CIRCLING) {
     // in circling mode, draw thermal at actual estimated location
     const MapWindowProjection &projection = render_projection;
     const THERMAL_LOCATOR_INFO &thermal_locator = Calculated().thermal_locator;
@@ -410,7 +410,7 @@ void
 GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
   unsigned min_time = 0;
-  if (GetDisplayMode() == dmCircling) {
+  if (GetDisplayMode() == DM_CIRCLING) {
     min_time = max(0, (int)Basic().Time - 600);
   } else {
     switch(SettingsMap().trail_length) {
@@ -429,7 +429,7 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
   }
 
   DrawTrail(canvas, aircraft_pos, min_time,
-            SettingsMap().EnableTrailDrift && GetDisplayMode() == dmCircling);
+            SettingsMap().EnableTrailDrift && GetDisplayMode() == DM_CIRCLING);
 }
 
 void
@@ -437,7 +437,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
 {
   if (Calculated().task_stats.total.solution_remaining.defined() &&
       Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50)
-      && GetDisplayMode() == dmFinalGlide)
+      && GetDisplayMode() == DM_FINAL_GLIDE)
     return;
 
   PixelRect tb_rect;

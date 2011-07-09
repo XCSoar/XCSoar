@@ -33,7 +33,7 @@ GlueMapWindow::GlueMapWindow()
    idle_robin(2),
    drag_mode(DRAG_NONE),
    ignore_single_click(false),
-   DisplayMode(dmCruise),
+   DisplayMode(DM_CRUISE),
    thermal_band_renderer(Graphics::thermal_band, Graphics::chart)
 {
 }

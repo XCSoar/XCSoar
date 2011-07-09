@@ -28,6 +28,7 @@ Copyright_License {
 #include "MapWindow/GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
 #include "BatteryTimer.hpp"
+#include "DisplayMode.hpp"
 
 class GlueGaugeVario;
 class GaugeFLARM;
@@ -148,6 +149,9 @@ public:
 
   void SetTerrain(RasterTerrain *terrain);
   void SetTopography(TopographyStore *topography);
+
+  gcc_pure
+  DisplayMode GetDisplayMode() const;
 
 protected:
   virtual bool on_resize(unsigned width, unsigned height);

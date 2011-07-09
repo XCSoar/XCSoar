@@ -1488,13 +1488,13 @@ InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
   SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
 
   if (_tcscmp(misc, _T("unforce")) == 0)
-    settings_map.UserForceDisplayMode = dmNone;
+    settings_map.UserForceDisplayMode = DM_NONE;
   else if (_tcscmp(misc, _T("forceclimb")) == 0)
-    settings_map.UserForceDisplayMode = dmCircling;
+    settings_map.UserForceDisplayMode = DM_CIRCLING;
   else if (_tcscmp(misc, _T("forcecruise")) == 0)
-    settings_map.UserForceDisplayMode = dmCruise;
+    settings_map.UserForceDisplayMode = DM_CRUISE;
   else if (_tcscmp(misc, _T("forcefinal")) == 0)
-    settings_map.UserForceDisplayMode = dmFinalGlide;
+    settings_map.UserForceDisplayMode = DM_FINAL_GLIDE;
   else if (_tcscmp(misc, _T("show")) == 0)
     Message::AddMessage(_("Map labels on"));
 
@@ -1774,9 +1774,9 @@ InputEvents::sub_SetZoom(fixed value)
 {
   SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
 
-  DisplayMode_t displayMode = XCSoarInterface::main_window.map.GetDisplayMode();
+  DisplayMode displayMode = XCSoarInterface::main_window.GetDisplayMode();
   if (settings_map.AutoZoom &&
-      !(displayMode == dmCircling && settings_map.CircleZoom) &&
+      !(displayMode == DM_CIRCLING && settings_map.CircleZoom) &&
       !settings_map.EnablePan) {
     settings_map.AutoZoom = false;  // disable autozoom if user manually changes zoom
     Profile::Set(szProfileAutoZoom, false);
@@ -1787,7 +1787,7 @@ InputEvents::sub_SetZoom(fixed value)
   fixed scale_2min_distance = vmin * fixed_int_constant(12);
   const fixed scale_500m = fixed_int_constant(50);
   const fixed scale_1600km = fixed_int_constant(1600*100);
-  fixed minreasonable = (displayMode == dmCircling) ?
+  fixed minreasonable = (displayMode == DM_CIRCLING) ?
                         scale_500m : max(scale_500m, scale_2min_distance);
 
   value = max(minreasonable, min(scale_1600km, value));

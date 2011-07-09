@@ -190,9 +190,9 @@ InfoBoxManager::GetCurrentPanel()
       panel = PANEL_AUXILIARY;
     return panel;
   }
-  else if (XCSoarInterface::main_window.map.GetDisplayMode() == dmCircling)
+  else if (XCSoarInterface::main_window.GetDisplayMode() == DM_CIRCLING)
     return PANEL_CIRCLING;
-  else if (XCSoarInterface::main_window.map.GetDisplayMode() == dmFinalGlide)
+  else if (XCSoarInterface::main_window.GetDisplayMode() == DM_FINAL_GLIDE)
     return PANEL_FINAL_GLIDE;
   else
     return PANEL_CRUISE;

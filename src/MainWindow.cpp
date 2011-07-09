@@ -470,6 +470,12 @@ MainWindow::SetTopography(TopographyStore *topography)
   map.set_topography(topography);
 }
 
+DisplayMode
+MainWindow::GetDisplayMode() const
+{
+  return map.GetDisplayMode();
+}
+
 #ifdef ANDROID
 
 void

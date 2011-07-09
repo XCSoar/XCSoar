@@ -536,16 +536,16 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                       OutBuffer, _T("$(AuxInfoToggleActionName)"),
                       _("Off"), _("On"), Size);
 
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmCircling,
+  CondReplaceInString(SettingsMap().UserForceDisplayMode == DM_CIRCLING,
                       OutBuffer, _T("$(DispModeClimbShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmCruise,
+  CondReplaceInString(SettingsMap().UserForceDisplayMode == DM_CRUISE,
                       OutBuffer, _T("$(DispModeCruiseShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmNone,
+  CondReplaceInString(SettingsMap().UserForceDisplayMode == DM_NONE,
                       OutBuffer, _T("$(DispModeAutoShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == dmFinalGlide,
+  CondReplaceInString(SettingsMap().UserForceDisplayMode == DM_FINAL_GLIDE,
                       OutBuffer, _T("$(DispModeFinalShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 
