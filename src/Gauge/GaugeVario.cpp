@@ -624,30 +624,27 @@ GaugeVario::RenderBallast(Canvas &canvas)
   if (BALLAST != lastBallast) {
     // ballast hase been changed
 
-    TCHAR Temp[18];
-
     canvas.select(Fonts::Title);
     canvas.set_background_color(look.background_color);
 
     if (lastBallast == 0 || BALLAST == 0) {
       // new ballast is 0, hide label
-      if (BALLAST == 0)
-        canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, _T(""));
-      else {
+      if (BALLAST > 0) {
         canvas.set_text_color(look.dimmed_text_color);
         // ols ballast was 0, show label
         canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBal);
-      }
+      } else
+        canvas.fill_rectangle(recLabelBk, look.background_color);
     }
 
     // new ballast 0, hide value
-    if (BALLAST == 0)
-      Temp[0] = _T('\0');
-    else
+    if (BALLAST > 0) {
+      TCHAR Temp[18];
       _stprintf(Temp, _T("%u%%"), BALLAST);
-
-    canvas.set_text_color(look.text_color);
-    canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
+      canvas.set_text_color(look.text_color);
+      canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
+    } else
+      canvas.fill_rectangle(recValueBk, look.background_color);
 
     lastBallast = BALLAST;
   }
@@ -703,27 +700,25 @@ GaugeVario::RenderBugs(Canvas &canvas)
 
   int BUGS = iround((fixed_one - Calculated().common_stats.current_bugs) * 100);
   if (BUGS != lastBugs) {
-    TCHAR Temp[18];
 
     canvas.select(Fonts::Title);
     canvas.set_background_color(look.background_color);
 
     if (lastBugs < 1 || BUGS < 1) {
-      if (BUGS < 1)
-        canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, _T(""));
-      else {
+      if (BUGS > 0) {
         canvas.set_text_color(look.dimmed_text_color);
         canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
-      }
+      } else
+        canvas.fill_rectangle(recLabelBk, look.background_color);
     }
 
-    if (BUGS < 1)
-      Temp[0] = _T('\0');
-    else
+    if (BUGS > 0) {
+      TCHAR Temp[18];
       _stprintf(Temp, _T("%d%%"), BUGS);
-
-    canvas.set_text_color(look.text_color);
-    canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
+      canvas.set_text_color(look.text_color);
+      canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
+    } else
+      canvas.fill_rectangle(recValueBk, look.background_color);
 
     lastBugs = BUGS;
   }
