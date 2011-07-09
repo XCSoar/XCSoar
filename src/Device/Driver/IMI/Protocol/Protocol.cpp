@@ -10,6 +10,7 @@
 
 #include "Protocol.hpp"
 #include "Checksum.hpp"
+#include "Conversion.hpp"
 #include "Device/Declaration.hpp"
 #include "Device/Driver.hpp"
 #include "MessageParser.hpp"
@@ -22,8 +23,6 @@
 
 namespace IMI
 {
-  struct AngleConverter;
-
   bool _connected = false;
   TDeviceInfo _info;
   IMIWORD _serialNumber;
@@ -167,28 +166,6 @@ unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
   ascii[outSize - 1] = 0;
 #endif
 }
-
-struct IMI::AngleConverter
-{
-  union
-  {
-    struct
-    {
-      IMIDWORD milliminutes :16;
-      IMIDWORD degrees :8;
-      IMIDWORD sign :1;
-    };
-    IMIDWORD value;
-  };
-
-  AngleConverter(Angle angle)
-  {
-    sign = (angle.sign() == -1) ? 1 : 0;
-    double mag = angle.magnitude_degrees();
-    degrees = static_cast<IMIDWORD> (mag);
-    milliminutes = static_cast<IMIDWORD> ((mag - degrees) * 60 * 1000);
-  }
-};
 
 void
 IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
