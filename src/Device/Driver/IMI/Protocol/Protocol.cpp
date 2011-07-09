@@ -8,7 +8,7 @@
  * IMI driver methods are based on the source code provided by Juraj Rojko from IMI-Gliding.
  */
 
-#include "DevIMI.hpp"
+#include "Protocol.hpp"
 #include "Checksum.hpp"
 #include "Device/Declaration.hpp"
 #include "MessageParser.hpp"

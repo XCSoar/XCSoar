@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
-#include "Protocol/DevIMI.hpp"
+#include "Protocol/Protocol.hpp"
 #include "Device/Port.hpp"
 #include "Operation.hpp"
 
