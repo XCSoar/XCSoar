@@ -95,49 +95,49 @@ cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point)
 }
 
 static bool
-DeclareInner(Port *port, const Declaration &declaration,
+DeclareInner(Port &port, const Declaration &declaration,
              gcc_unused OperationEnvironment &env)
 {
   using CAI302::UploadShort;
   using CAI302::DownloadCommand;
   unsigned size = declaration.size();
 
-  port->SetRxTimeout(500);
+  port.SetRxTimeout(500);
 
   env.SetProgressRange(6 + size);
   env.SetProgressPosition(0);
 
-  CAI302::CommandModeQuick(*port);
-  if (!CAI302::UploadMode(*port) || env.IsCancelled())
+  CAI302::CommandModeQuick(port);
+  if (!CAI302::UploadMode(port) || env.IsCancelled())
     return false;
 
-  port->SetRxTimeout(1500);
+  port.SetRxTimeout(1500);
 
   CAI302::PilotMeta pilot_meta;
-  if (!CAI302::UploadPilotMeta(*port, pilot_meta) || env.IsCancelled())
+  if (!CAI302::UploadPilotMeta(port, pilot_meta) || env.IsCancelled())
     return false;
 
   env.SetProgressPosition(1);
 
   CAI302::Pilot pilot;
-  if (!CAI302::UploadPilot(*port, 0, pilot) || env.IsCancelled())
+  if (!CAI302::UploadPilot(port, 0, pilot) || env.IsCancelled())
     return false;
 
   env.SetProgressPosition(2);
 
   CAI302::PolarMeta polar_meta;
-  if (!CAI302::UploadPolarMeta(*port, polar_meta) || env.IsCancelled())
+  if (!CAI302::UploadPolarMeta(port, polar_meta) || env.IsCancelled())
     return false;
 
   env.SetProgressPosition(3);
 
   CAI302::Polar polar;
-  if (!CAI302::UploadPolar(*port, polar) || env.IsCancelled())
+  if (!CAI302::UploadPolar(port, polar) || env.IsCancelled())
     return false;
 
   env.SetProgressPosition(4);
 
-  if (!CAI302::DownloadMode(*port) || env.IsCancelled())
+  if (!CAI302::DownloadMode(port) || env.IsCancelled())
     return false;
 
   char PilotName[25], GliderType[13], GliderID[13];
@@ -165,7 +165,7 @@ DeclareInner(Port *port, const Declaration &declaration,
           FromLE16(pilot.unit_word),
           FromLE16(pilot.margin_height));
 
-  if (!DownloadCommand(*port, szTmp) || env.IsCancelled())
+  if (!DownloadCommand(port, szTmp) || env.IsCancelled())
     return false;
 
   env.SetProgressPosition(5);
@@ -182,21 +182,21 @@ DeclareInner(Port *port, const Declaration &declaration,
           FromLE16(polar.config_word),
           FromLE16(polar.wing_area));
 
-  if (!DownloadCommand(*port, szTmp) || env.IsCancelled())
+  if (!DownloadCommand(port, szTmp) || env.IsCancelled())
     return false;
 
   env.SetProgressPosition(6);
 
   for (unsigned i = 0; i < size; ++i) {
-    if (!cai302DeclAddWaypoint(*port, 128 + i, declaration.get_waypoint(i)) ||
+    if (!cai302DeclAddWaypoint(port, 128 + i, declaration.get_waypoint(i)) ||
         env.IsCancelled())
       return false;
 
     env.SetProgressPosition(7 + i);
   }
 
-  port->SetRxTimeout(1500); // D,255 takes more than 800ms
-  return DownloadCommand(*port, "D,255\r");
+  port.SetRxTimeout(1500); // D,255 takes more than 800ms
+  return DownloadCommand(port, "D,255\r");
 }
 
 bool
@@ -205,7 +205,7 @@ CAI302Device::Declare(const Declaration &declaration,
 {
   port->StopRxThread();
 
-  bool success = DeclareInner(port, declaration, env);
+  bool success = DeclareInner(*port, declaration, env);
 
   port->SetRxTimeout(500);
 
