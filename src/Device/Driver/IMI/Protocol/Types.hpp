@@ -68,6 +68,8 @@ namespace IMI
   const unsigned IMIDECL_WP_NAME_LENGTH   = 12;
   const unsigned IMIDECL_MAX_WAYPOINTS    = 15;
 
+  const unsigned IMIRSA_MAX_BITS = 1024;
+
   // messages
   struct TDeviceInfo {
     IMIBYTE device;
@@ -237,6 +239,46 @@ namespace IMI
     /** Competition ID */
     IMICHAR cid[IMIDECL_CID_LENGTH];
     IMIBYTE reserved[96 - 82];
+  } gcc_packed;
+
+  struct FlightFinish
+  {
+    IMIWORD stop;
+    IMIWORD reserved;
+    IMIDATETIMESEC recStopDateTime;
+    IMIDWORD fixes;
+    IMIDWORD fixes2;
+    IMIDWORD lastLat;
+    IMIDWORD lastLon;
+    IMIDATETIMESEC flightStopDateTime;
+    IMIBYTE reserved2[66];
+    IMIWORD crc16;
+  } gcc_packed;
+
+  struct Signature
+  {
+    IMIWORD hashBits;
+    IMIWORD rsaBits;
+    IMIBYTE signature[IMIRSA_MAX_BITS / 8];
+    IMIBYTE reserved[160 - (IMIRSA_MAX_BITS / 8) - 7];
+    IMIBYTE tampered;
+    IMIWORD crc16;
+  } gcc_packed;
+
+  struct Flight
+  {
+    TDeclaration decl;
+    FlightFinish finish;
+    Signature signature;
+  } gcc_packed;
+
+  struct Fix
+  {
+    IMIDWORD id:3;
+    IMIDWORD time:17;
+    IMIDWORD padding:12;
+    IMIBYTE body[11];
+    IMIBYTE checksum;
   } gcc_packed;
 }
 
