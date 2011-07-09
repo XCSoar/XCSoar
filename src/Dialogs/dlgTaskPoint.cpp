@@ -434,7 +434,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   PaintTaskPoint(canvas, rc, *ordered_task, *tp,
                  XCSoarInterface::Basic().Location,
                  XCSoarInterface::SettingsMap(),
-                 look.airspace,
+                 look.task, look.airspace,
                  terrain);
 }
 

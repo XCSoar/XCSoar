@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Fonts.hpp"
 #include "Math/Earth.hpp"
@@ -32,6 +31,7 @@ Copyright_License {
 #include "RenderObservationZone.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
+#include "Look/TaskLook.hpp"
 
 #include <stdio.h>
 #include <math.h>
@@ -42,12 +42,13 @@ public:
   RenderTaskPointMap(Canvas &_canvas, Canvas *_buffer,
                      const WindowProjection &_projection,
                      const SETTINGS_MAP &_settings_map,
+                     const TaskLook &task_look,
                      const TaskProjection &_task_projection,
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
                      const GeoPoint &location):
     RenderTaskPoint(_canvas, _buffer, _projection,
-                    _settings_map, _task_projection,
+                    _settings_map, task_look, _task_projection,
                     _ozv, draw_bearing, location)
     {};
 
@@ -60,7 +61,7 @@ protected:
 
     RasterPoint sc;
     if (m_proj.GeoToScreenIfVisible(tp.get_location_remaining(), sc))
-      Graphics::hBmpTarget.draw(canvas, sc.x, sc.y);
+      task_look.target_icon.draw(canvas, sc.x, sc.y);
   }
 };
 
@@ -93,7 +94,7 @@ MapWindow::DrawTask(Canvas &canvas)
   const AbstractTask *task = task_manager->get_active_task();
   if (task && task->check_task()) {
 
-    RenderObservationZone ozv(airspace_renderer.GetLook());
+    RenderObservationZone ozv(task_look, airspace_renderer.GetLook());
     RenderTaskPointMap tpv(canvas,
 #ifdef ENABLE_OPENGL
                            /* OpenGL doesn't have the BufferCanvas
@@ -104,6 +105,7 @@ MapWindow::DrawTask(Canvas &canvas)
 #endif
                            render_projection,
                            SettingsMap(),
+                           task_look,
                            /* we're accessing the OrderedTask here,
                               which may be invalid at this point, but it
                               will be used only if active, so it's ok */
@@ -115,7 +117,7 @@ MapWindow::DrawTask(Canvas &canvas)
   }
 
   if (draw_route) {
-    canvas.select(Graphics::hpBearing);
+    canvas.select(task_look.bearing_pen);
     const int r_size = route.size();
     RasterPoint p[r_size];
     RasterPoint* pp = &p[0];

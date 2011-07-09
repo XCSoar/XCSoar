@@ -101,6 +101,7 @@ class ChartControl: public PaintWindow
 {
   const ChartLook &chart_look;
   const AirspaceLook &airspace_look;
+  const TaskLook &task_look;
   const ThermalBandLook &thermal_band_look;
 
 public:
@@ -108,6 +109,7 @@ public:
                const WindowStyle style,
                const ChartLook &chart_look,
                const AirspaceLook &airspace_look,
+               const TaskLook &task_look,
                const ThermalBandLook &thermal_band_look);
 
 protected:
@@ -122,8 +124,10 @@ ChartControl::ChartControl(ContainerWindow &parent, int X, int Y,
                            int Width, int Height, const WindowStyle style,
                            const ChartLook &_chart_look,
                            const AirspaceLook &_airspace_look,
+                           const TaskLook &_task_look,
                            const ThermalBandLook &_thermal_band_look)
   :chart_look(_chart_look), airspace_look(_airspace_look),
+   task_look(_task_look),
    thermal_band_look(_thermal_band_look)
 {
   set(parent, X, Y, Width, Height, style);
@@ -170,7 +174,7 @@ ChartControl::on_paint(Canvas &canvas)
   // background is painted in the base-class
 
   const FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                                    chart_look, airspace_look);
+                                    chart_look, airspace_look, task_look);
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -270,7 +274,7 @@ Update(void)
   const DERIVED_INFO &calculated = blackboard->Calculated();
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                              look->chart, look->airspace);
+                              look->chart, look->airspace, look->task);
 
   switch (page) {
   case ANALYSIS_PAGE_BAROGRAPH:
@@ -554,7 +558,8 @@ OnCreateChartControl(ContainerWindow &parent, int left, int top,
                      const WindowStyle style)
 {
   return new ChartControl(parent, left, top, width, height, style,
-                          look->chart, look->airspace, look->thermal_band);
+                          look->chart, look->airspace, look->task,
+                          look->thermal_band);
 }
 
 static void

@@ -21,36 +21,33 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_LOOK_HPP
-#define XCSOAR_LOOK_HPP
+#ifndef XCSOAR_TASK_LOOK_HPP
+#define XCSOAR_TASK_LOOK_HPP
 
-#include "DialogLook.hpp"
-#include "VarioLook.hpp"
-#include "ChartLook.hpp"
-#include "ThermalBandLook.hpp"
-#include "TraceHistoryLook.hpp"
-#include "AirspaceLook.hpp"
-#include "CrossSectionLook.hpp"
-#include "Gauge/FlarmTrafficLook.hpp"
-#include "TaskLook.hpp"
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
+#include "Screen/Icon.hpp"
+#include "Screen/Features.hpp"
+#include "Engine/Airspace/AirspaceClass.hpp"
+#include "Sizes.h"
 
-struct SETTINGS_MAP;
+struct TaskLook {
+  Pen oz_current_pen;
+  Pen oz_active_pen;
+  Pen oz_inactive_pen;
 
-struct Look {
-  DialogLook dialog;
-  VarioLook vario;
-  ChartLook chart;
-  ThermalBandLook thermal_band;
-  TraceHistoryLook trace_history;
-  AirspaceLook airspace;
-  CrossSectionLook cross_section;
-  FlarmTrafficLook flarm_gauge;
-  FlarmTrafficLook flarm_dialog;
-  TaskLook task;
+  Pen leg_active_pen;
+  Pen leg_inactive_pen;
+  Pen arrow_pen;
+  Pen isoline_pen;
+
+  Pen bearing_pen;
+  Pen best_cruise_track_pen;
+  Brush best_cruise_track_brush;
+
+  MaskedIcon target_icon;
 
   void Initialise();
-  void InitialiseConfigured(bool inverse,
-                            const AirspaceRendererSettings &airspace_settings);
 };
 
 #endif

@@ -29,15 +29,17 @@ Copyright_License {
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Screen/Graphics.hpp"
 #include "WindowProjection.hpp"
 #include "SettingsMap.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
 
-RenderObservationZone::RenderObservationZone(const AirspaceLook &_airspace_look)
-  :airspace_look(_airspace_look), layer(LAYER_SHADE)
+RenderObservationZone::RenderObservationZone(const TaskLook &_task_look,
+                                             const AirspaceLook &_airspace_look)
+  :task_look(_task_look), airspace_look(_airspace_look),
+   layer(LAYER_SHADE)
 {
 }
 
@@ -76,11 +78,11 @@ RenderObservationZone::draw_style(Canvas &canvas,
     if (layer == LAYER_ACTIVE && offset >= 0) {
       if (offset == 0)
         /* current task point */
-        canvas.select(Graphics::oz_current_pen);
+        canvas.select(task_look.oz_current_pen);
       else
-        canvas.select(Graphics::oz_active_pen);
+        canvas.select(task_look.oz_active_pen);
     } else {
-      canvas.select(Graphics::oz_inactive_pen);
+      canvas.select(task_look.oz_inactive_pen);
     }
     return true;
   }

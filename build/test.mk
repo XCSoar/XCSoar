@@ -1439,11 +1439,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
-	$(SRC)/Look/ChartLook.cpp \
-	$(SRC)/Look/ThermalBandLook.cpp \
-	$(SRC)/Look/TraceHistoryLook.cpp \
-	$(SRC)/Look/CrossSectionLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
+	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
@@ -1565,10 +1562,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Screen/Fonts.cpp \
-	$(SRC)/Look/ChartLook.cpp \
-	$(SRC)/Look/ThermalBandLook.cpp \
-	$(SRC)/Look/TraceHistoryLook.cpp \
-	$(SRC)/Look/CrossSectionLook.cpp \
+	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Appearance.cpp \
@@ -1719,6 +1713,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/TraceHistoryLook.cpp \
 	$(SRC)/Look/CrossSectionLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
+	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \

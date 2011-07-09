@@ -22,8 +22,7 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
-
-#include "Screen/Graphics.hpp"
+#include "Look/TaskLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Interface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -32,7 +31,7 @@ Copyright_License {
 void
 GlueMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
 {
-  Graphics::hBmpTarget.draw(canvas, drag_last.x, drag_last.y);
+  task_look.target_icon.draw(canvas, drag_last.x, drag_last.y);
 }
 
 bool

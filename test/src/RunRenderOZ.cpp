@@ -35,6 +35,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/AirspaceLook.hpp"
+#include "Look/TaskLook.hpp"
 #include "Form/List.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "RenderObservationZone.hpp"
@@ -83,8 +84,8 @@ class OZWindow : public PaintWindow {
   Projection projection;
 
 public:
-  OZWindow(const AirspaceLook &airspace_look)
-    :roz(airspace_look), oz(NULL) {
+  OZWindow(const TaskLook &task_look, const AirspaceLook &airspace_look)
+    :roz(task_look, airspace_look), oz(NULL) {
     projection.SetGeoLocation(location);
     set_shape(ObservationZonePoint::LINE);
   }
@@ -219,8 +220,8 @@ class TestWindow : public SingleWindow {
   };
 
 public:
-  TestWindow(const AirspaceLook &airspace_look)
-    :type_list(NULL), oz(airspace_look) {}
+  TestWindow(const TaskLook &task_look, const AirspaceLook &airspace_look)
+    :type_list(NULL), oz(task_look, airspace_look) {}
   ~TestWindow() {
     delete type_list;
   }
@@ -310,10 +311,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   DialogLook *look = new DialogLook();
   look->Initialise();
 
+  TaskLook *task_look = new TaskLook();
+  task_look->Initialise();
+
   AirspaceLook *airspace_look = new AirspaceLook();
   airspace_look->Initialise(settings_map.airspace);
 
-  TestWindow window(*airspace_look);
+  TestWindow window(*task_look, *airspace_look);
   window.set(*look, 0, 0, 480, 480);
 
   Graphics::Initialise();
@@ -324,6 +328,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.event_loop();
 
   delete airspace_look;
+  delete task_look;
   delete look;
   Fonts::Deinitialize();
   Graphics::Deinitialise();

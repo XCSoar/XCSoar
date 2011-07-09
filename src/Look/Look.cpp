@@ -29,6 +29,7 @@ Look::Initialise()
   dialog.Initialise();
   flarm_dialog.Initialise(false);
   flarm_gauge.Initialise(true);
+  task.Initialise();
 }
 
 void

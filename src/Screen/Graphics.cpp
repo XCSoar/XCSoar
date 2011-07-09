@@ -59,17 +59,7 @@ Pen Graphics::hpAircraftSimple1;
 Pen Graphics::hpAircraftSimple2;
 Pen Graphics::hpCanopy;
 
-Pen Graphics::oz_current_pen;
-Pen Graphics::oz_active_pen;
-Pen Graphics::oz_inactive_pen;
-
-Pen Graphics::hpTaskActive;
-Pen Graphics::hpTaskInactive;
-Pen Graphics::hpTaskArrow;
 Pen Graphics::hpWind;
-Pen Graphics::hpIsoline;
-Pen Graphics::hpBearing;
-Pen Graphics::hpBestCruiseTrack;
 Pen Graphics::hpCompass;
 Pen Graphics::hpFinalGlideAbove;
 Pen Graphics::hpFinalGlideBelow;
@@ -83,7 +73,6 @@ Pen Graphics::ContestPen[3];
 
 Brush Graphics::hbCanopy;
 Brush Graphics::hbCompass;
-Brush Graphics::hbBestCruiseTrack;
 Brush Graphics::hbFinalGlideBelow;
 Brush Graphics::hbFinalGlideBelowLandable;
 Brush Graphics::hbFinalGlideAbove;
@@ -96,7 +85,6 @@ MaskedIcon Graphics::AirportReachableIcon, Graphics::AirportUnreachableIcon;
 MaskedIcon Graphics::AirportMarginalIcon, Graphics::FieldMarginalIcon;
 MaskedIcon Graphics::FieldReachableIcon, Graphics::FieldUnreachableIcon;
 MaskedIcon Graphics::hBmpThermalSource;
-MaskedIcon Graphics::hBmpTarget;
 MaskedIcon Graphics::hBmpTeammatePosition;
 
 MaskedIcon Graphics::hBmpMapScaleLeft;
@@ -142,11 +130,6 @@ const Color Graphics::GroundColor = Color(0x80,0x45,0x15);
 const Color Graphics::skyColor = Color(0x0a,0xb9,0xf3);
 const Color Graphics::seaColor = Color(0xbd,0xc5,0xd5); // ICAO open water area
 
-// Magenta ICAO color is 0x65,0x23,0x1c
-const Color Graphics::TaskColor = Color(0x62,0x4e,0x90);
-const Color Graphics::IsolineColor = BearingColor;
-const Color Graphics::BearingColor = Color(0x3e,0x30,0x5f);
-
 void
 Graphics::Initialise()
 {
@@ -179,19 +162,8 @@ Graphics::Initialise()
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
 #endif
 
-  hpIsoline.set(Pen::DASH, Layout::Scale(1), IsolineColor);
-
   hpWind.set(Layout::Scale(1), dark_color(COLOR_GRAY));
   hbWind.set(COLOR_GRAY);
-
-  oz_current_pen.set(Pen::SOLID, Layout::SmallScale(2), TaskColor);
-  oz_active_pen.set(Pen::SOLID, Layout::SmallScale(1), TaskColor);
-  oz_inactive_pen.set(Pen::SOLID, Layout::SmallScale(1),
-                      dark_color(TaskColor));
-
-  hpTaskActive.set(Pen::DASH, Layout::Scale(2), Graphics::TaskColor);
-  hpTaskInactive.set(Pen::DASH, Layout::Scale(1), Graphics::TaskColor);
-  hpTaskArrow.set(Layout::Scale(1), Graphics::TaskColor);
 
   hBmpMapScaleLeft.load_big(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
   hBmpMapScaleRight.load_big(IDB_MAPSCALE_RIGHT, IDB_MAPSCALE_RIGHT_HD, false);
@@ -207,7 +179,6 @@ Graphics::Initialise()
   hBmpTabTimes.load((Layout::scale > 1) ? IDB_CLOCK_HD : IDB_CLOCK);
 
   hBmpThermalSource.load_big(IDB_THERMALSOURCE, IDB_THERMALSOURCE_HD);
-  hBmpTarget.load_big(IDB_TARGET, IDB_TARGET_HD);
 
   hBmpTrafficSafe.load_big(IDB_TRAFFIC_SAFE, IDB_TRAFFIC_SAFE_HD, false);
   hBmpTrafficWarning.load_big(IDB_TRAFFIC_WARNING, IDB_TRAFFIC_WARNING_HD, false);
@@ -223,10 +194,6 @@ Graphics::Initialise()
 
   hbFinalGlideAbove.set(COLOR_GREEN);
   hpFinalGlideAbove.set(Layout::Scale(1), dark_color(COLOR_GREEN));
-
-  hpBearing.set(Layout::Scale(2), BearingColor);
-  hpBestCruiseTrack.set(Layout::Scale(1), dark_color(BearingColor));
-  hbBestCruiseTrack.set(BearingColor);
 
   hpCompass.set(Layout::Scale(1), COLOR_GRAY);
 
@@ -405,7 +372,6 @@ Graphics::Deinitialise()
   hBmpTabTimes.reset();
 
   hBmpThermalSource.reset();
-  hBmpTarget.reset();
 
   hBmpTrafficSafe.reset();
   hBmpTrafficWarning.reset();
@@ -413,24 +379,12 @@ Graphics::Deinitialise()
 
   hbCompass.reset();
 
-  hbBestCruiseTrack.reset();
   hbFinalGlideBelow.reset();
   hbFinalGlideBelowLandable.reset();
   hbFinalGlideAbove.reset();
 
-  oz_current_pen.reset();
-  oz_active_pen.reset();
-  oz_inactive_pen.reset();
-
-  hpTaskActive.reset();
-  hpTaskInactive.reset();
-  hpTaskArrow.reset();
-
   hpWind.reset();
-  hpIsoline.reset();
 
-  hpBearing.reset();
-  hpBestCruiseTrack.reset();
   hpCompass.reset();
 
   hpFinalGlideBelow.reset();

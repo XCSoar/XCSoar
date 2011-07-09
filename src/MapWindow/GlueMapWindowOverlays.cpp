@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
-
+#include "Look/TaskLook.hpp"
 #include "Screen/Icon.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Graphics.hpp"
@@ -273,7 +273,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
       cross_sign = -1;
 
     if (cross_sign != 0) {
-      canvas.select(Graphics::hpBearing);
+      canvas.select(task_look.bearing_pen);
       canvas.line(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 - 5),
                   Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 + 5));
       canvas.line(Layout::Scale(9 - 5), y0 + cross_sign * Layout::Scale(9 + 5),

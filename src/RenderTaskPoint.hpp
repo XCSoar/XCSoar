@@ -35,6 +35,7 @@ class WindowProjection;
 class RenderObservationZone;
 class OrderedTaskPoint;
 struct SETTINGS_MAP;
+struct TaskLook;
 
 enum RenderTaskLayer {
   RENDER_TASK_OZ_SHADE,
@@ -51,12 +52,14 @@ protected:
   const WindowProjection &m_proj;
   MapCanvas map_canvas;
   const SETTINGS_MAP &m_settings_map;
+  const TaskLook &task_look;
   const TaskProjection &task_projection;
 
 public:
   RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                   const WindowProjection &_projection,
                   const SETTINGS_MAP &_settings_map,
+                  const TaskLook &task_look,
                   const TaskProjection &_task_projection,
                   RenderObservationZone &_ozv,
                   const bool draw_bearing,

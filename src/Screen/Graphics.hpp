@@ -73,17 +73,7 @@ namespace Graphics {
   extern Brush hbCanopy;
   extern Pen hpCanopy;
 
-  extern Pen oz_current_pen;
-  extern Pen oz_active_pen;
-  extern Pen oz_inactive_pen;
-
-  extern Pen hpTaskActive;
-  extern Pen hpTaskInactive;
-  extern Pen hpTaskArrow;
-  extern Pen hpIsoline;
   extern Pen hpWind;
-  extern Pen hpBearing;
-  extern Pen hpBestCruiseTrack;
   extern Pen hpCompass;
   extern Pen hpFinalGlideAbove;
   extern Pen hpFinalGlideBelow;
@@ -96,7 +86,6 @@ namespace Graphics {
   extern Pen ContestPen[3];
 
   extern Brush hbCompass;
-  extern Brush hbBestCruiseTrack;
   extern Brush hbFinalGlideBelow;
   extern Brush hbFinalGlideBelowLandable;
   extern Brush hbFinalGlideAbove;
@@ -108,7 +97,6 @@ namespace Graphics {
   extern MaskedIcon AirportMarginalIcon, FieldMarginalIcon;
   extern MaskedIcon FieldReachableIcon, FieldUnreachableIcon;
   extern MaskedIcon hBmpThermalSource;
-  extern MaskedIcon hBmpTarget;
   extern MaskedIcon hBmpTrafficSafe;
   extern MaskedIcon hBmpTrafficWarning;
   extern MaskedIcon hBmpTrafficAlarm;
@@ -143,11 +131,6 @@ namespace Graphics {
   extern Brush hbLightGray;
   extern Brush hbNotReachableTerrain;
   extern Brush hbGround;
-
-  // misc
-  extern const Color TaskColor;
-  extern const Color IsolineColor;
-  extern const Color BearingColor;
 
   // used by infobox and gauges
   extern const Color inv_redColor;

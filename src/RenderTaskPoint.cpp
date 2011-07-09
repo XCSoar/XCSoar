@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "RenderTaskPoint.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "WindowProjection.hpp"
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
@@ -32,6 +31,7 @@ Copyright_License {
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/FinishPoint.hpp"
+#include "Look/TaskLook.hpp"
 #include "Math/Screen.hpp"
 #include "RenderObservationZone.hpp"
 #include "NMEA/Info.hpp"
@@ -41,6 +41,7 @@ Copyright_License {
 RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                                  const WindowProjection &_projection,
                                  const SETTINGS_MAP &_settings_map,
+                                 const TaskLook &_task_look,
                                  const TaskProjection &_task_projection,
                                  RenderObservationZone &_ozv,
                                  const bool draw_bearing,
@@ -49,6 +50,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
    map_canvas(_canvas, _projection,
               _projection.GetScreenBounds().scale(fixed(1.1))),
    m_settings_map(_settings_map),
+   task_look(_task_look),
    task_projection(_task_projection),
    m_draw_bearing(draw_bearing),
    m_index(0),
@@ -198,7 +200,7 @@ RenderTaskPoint::draw_bearing(const TaskPoint &tp)
   if (!do_draw_bearing(tp)) 
     return;
 
-  canvas.select(Graphics::hpBearing);
+  canvas.select(task_look.bearing_pen);
   map_canvas.offset_line(m_location, tp.get_location_remaining());
 }
 
@@ -212,7 +214,9 @@ RenderTaskPoint::draw_target(const TaskPoint &tp)
 void 
 RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end) 
 {
-  canvas.select(leg_active() ? Graphics::hpTaskActive : Graphics::hpTaskInactive);
+  canvas.select(leg_active()
+                ? task_look.leg_active_pen
+                : task_look.leg_inactive_pen);
   canvas.background_transparent();
   map_canvas.line(start, end);
   canvas.background_opaque();
@@ -232,7 +236,7 @@ RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end)
   Arrow[2] = Arrow[1];
   Arrow[1] = p_p;
   
-  canvas.select(Graphics::hpTaskArrow);
+  canvas.select(task_look.arrow_pen);
   canvas.polyline(Arrow, 3);
 }
 
@@ -259,7 +263,7 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
       screen[i] = m_proj.GeoToScreen(ga);
     }
 
-    canvas.select(Graphics::hpIsoline);
+    canvas.select(task_look.isoline_pen);
     canvas.background_transparent();
     canvas.polyline(screen, 20);
     canvas.background_opaque();

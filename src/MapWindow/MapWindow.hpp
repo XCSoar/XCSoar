@@ -40,6 +40,7 @@ Copyright_License {
 #include "Compiler.h"
 #include <vector>
 
+struct TaskLook;
 class TopographyStore;
 class TopographyRenderer;
 class RasterTerrain;
@@ -101,6 +102,8 @@ protected:
 
   RasterWeather *weather;
 
+  const TaskLook &task_look;
+
   BackgroundDrawHelper m_background;
   WaypointRenderer way_point_renderer;
 
@@ -129,7 +132,8 @@ protected:
   friend class DrawThread;
 
 public:
-  MapWindow(const AirspaceLook &airspace_look);
+  MapWindow(const AirspaceLook &airspace_look,
+            const TaskLook &task_look);
   virtual ~MapWindow();
 
   virtual void set(ContainerWindow &parent, const PixelRect &rc);

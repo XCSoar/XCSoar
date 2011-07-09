@@ -29,6 +29,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Appearance.hpp"
 #include "Units/Units.hpp"
+#include "Look/TaskLook.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -147,8 +148,8 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
   if (Calculated().TurnMode == CLIMB)
     return;
 
-  canvas.select(Graphics::hpBestCruiseTrack);
-  canvas.select(Graphics::hbBestCruiseTrack);
+  canvas.select(task_look.best_cruise_track_pen);
+  canvas.select(task_look.best_cruise_track_brush);
 
   const Angle angle = Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
                     - render_projection.GetScreenAngle();
