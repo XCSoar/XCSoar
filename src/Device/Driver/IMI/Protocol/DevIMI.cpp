@@ -25,7 +25,6 @@ namespace IMI
 
   // variables
   bool _connected;
-  CMsgParser _parser;
   TDeviceInfo _info;
   IMIWORD _serialNumber;
 
@@ -257,7 +256,7 @@ const IMI::TMsg *IMI::Receive(Port &port, unsigned extraTimeout,
       break;
 
     // parse message
-    const TMsg *lastMsg = _parser.Parse(buffer, bytesRead);
+    const TMsg *lastMsg = CMsgParser::Parse(buffer, bytesRead);
     if(lastMsg) {
       // message received
       if(lastMsg->msgID == MSG_ACK_NOTCONFIG)
@@ -332,7 +331,7 @@ bool IMI::Connect(Port &port)
 
   memset(&_info, 0, sizeof(_info));
   _serialNumber = 0;
-  _parser.Reset();
+  CMsgParser::Reset();
 
   // check connectivity
   if (!Send(port, MSG_CFG_HELLO))

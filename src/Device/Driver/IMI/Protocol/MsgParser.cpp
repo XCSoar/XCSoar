@@ -11,6 +11,37 @@
 #include "MsgParser.hpp"
 #include "Checksum.hpp"
 
+#define IMICOMM_MAX_MSG_SIZE (sizeof(TMsg))
+
+namespace IMI {
+namespace CMsgParser {
+  /**
+   * @brief Parser state
+   */
+  enum TState {
+    STATE_NOT_SYNC,                               /**< @brief Synchronization bits not found */
+    STATE_COMM_MSG                                /**< @brief Parsing message body */
+  };
+
+  TState _state;                                  /**< @brief Parser state */
+  IMIBYTE _msgBuffer[IMICOMM_MAX_MSG_SIZE];       /**< @brief Parsed message buffer */
+  unsigned _msgBufferPos;                         /**< @brief Current position in a message buffer */
+  unsigned _msgBytesLeft;                         /**< @brief Remaining number of bytes of the message to parse */
+
+  /**
+   * Cast the head of the buffer to a TMsg.
+   */
+  TMsg &GetMessage();
+  bool Check(const TMsg *msg, IMIDWORD size);
+}
+}
+
+IMI::TMsg &
+IMI::CMsgParser::GetMessage()
+{
+  return *(TMsg *)(void *)_msgBuffer;
+}
+
 /**
  * @brief Resets the state of the parser
  */
@@ -30,7 +61,7 @@ void IMI::CMsgParser::Reset()
  *
  * @return Verification status
  */
-bool IMI::CMsgParser::Check(const TMsg *msg, IMIDWORD size) const
+bool IMI::CMsgParser::Check(const TMsg *msg, IMIDWORD size)
 {
   // minimal size of comm message
   if(size < IMICOMM_MSG_HEADER_SIZE + IMICOMM_CRC_LEN)
