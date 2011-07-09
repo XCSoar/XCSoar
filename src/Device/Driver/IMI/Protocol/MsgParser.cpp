@@ -78,10 +78,8 @@ bool IMI::MessageParser::Check(const TMsg *msg, IMIDWORD size)
   // check CRC
   IMIWORD crc1 = CRC16Checksum(((IMIBYTE*)msg) + IMICOMM_SYNC_LEN, IMICOMM_MSG_HEADER_SIZE + msg->payloadSize - IMICOMM_SYNC_LEN);
   IMIWORD crc2 = (IMIWORD)(((IMIBYTE*)msg)[size - 1]) | ((IMIWORD)(((IMIBYTE*)msg)[size - 2]) << 8);
-  if(crc1 != crc2)
-    return false;
 
-  return true;
+  return crc1 == crc2;
 }
 
 
