@@ -294,7 +294,6 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   // Show the main and map windows
   LogStartUp(_T("Create map window"));
   main_window.show();
-  main_window.map.show();
 
 #ifdef HAVE_AYGSHELL_DLL
   const AYGShellDLL &ayg = main_window.ayg_shell_dll;
