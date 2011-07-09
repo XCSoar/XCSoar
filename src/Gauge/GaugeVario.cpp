@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeVario.hpp"
-#include "LogFile.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
@@ -77,8 +76,6 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   diLabelTop.InitDone = false;
   diLabelMiddle.InitDone = false;
   diLabelBottom.InitDone = false;
-
-  LogStartUp(_T("Create Vario"));
 
   set(parent, left, top, width, height, style);
 
