@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Form/List.hpp"
-#include "Form/Control.hpp"
+#include "Form/Internal.hpp"
 #include "Screen/ContainerWindow.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Key.h"

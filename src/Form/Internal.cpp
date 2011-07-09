@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Form/Internal.hpp"
 #include "PeriodClock.hpp"
+#include "Screen/Canvas.hpp"
+#include "Screen/Layout.hpp"
 
 // returns true if it is a long press,
 // otherwise returns false
@@ -47,4 +49,27 @@ KeyTimer(bool isdown, unsigned thekey)
     }
   }
   return false;
+}
+
+void
+PaintSelector(Canvas &canvas, const PixelRect rc)
+{
+  const Pen pen(DEFAULTBORDERPENWIDTH + 2, COLOR_BLACK);
+  canvas.select(pen);
+
+  canvas.two_lines(rc.right - SELECTORWIDTH - 1, rc.top,
+                   rc.right - 1, rc.top,
+                   rc.right - 1, rc.top + SELECTORWIDTH + 1);
+
+  canvas.two_lines(rc.right - 1, rc.bottom - SELECTORWIDTH - 2,
+                   rc.right - 1, rc.bottom - 1,
+                   rc.right - SELECTORWIDTH - 1, rc.bottom - 1);
+
+  canvas.two_lines(SELECTORWIDTH + 1, rc.bottom - 1,
+                   rc.left, rc.bottom - 1,
+                   rc.left, rc.bottom - SELECTORWIDTH - 2);
+
+  canvas.two_lines(rc.left, rc.top + SELECTORWIDTH + 1,
+                   rc.left, rc.top,
+                   rc.left + SELECTORWIDTH + 1, rc.top);
 }

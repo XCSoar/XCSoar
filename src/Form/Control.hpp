@@ -181,9 +181,6 @@ public:
    * @param Value The new Helptext of the Control
    */
   void SetHelpText(const TCHAR *Value);
-
-  /** Paints the "Selector" */
-  static void PaintSelector(Canvas &canvas, const PixelRect rc);
 };
 
 #endif
