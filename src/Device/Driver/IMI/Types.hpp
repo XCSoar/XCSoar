@@ -142,26 +142,44 @@ namespace IMI
 
 
   struct TObservationZone {
-    IMIDWORD style:3;        // 0 -> default, 1-5 -> direction of course, the same value as in SeeYou
-                             //0 - default = ignore observation zone setting and use default OZ stored in Erixx
-                             //1 - fixed angle
-                             //2 - symmetrical (invalid for start and finish WP)
-                             //3 - to next point (invalid for finish WP)
-                             //4 - to prev point (invalid of start WP)
-                             //5 - to start point (invalid for start WP)
+    /**
+     * 0 -> default, 1-5 -> direction of course, the same value as in SeeYou
+     *
+     * 0 - default = ignore observation zone setting and use
+     *               default OZ stored in Erixx
+     * 1 - fixed angle
+     * 2 - symmetrical (invalid for start and finish WP)
+     * 3 - to next point (invalid for finish WP)
+     * 4 - to prev point (invalid of start WP)
+     * 5 - to start point (invalid for start WP)
+     */
+    IMIDWORD style:3;
 
-    IMIDWORD A1:11;          // angle * 10, 0-180 degrees, values 0-1800 (= angle modulo 180 * 10)
-    IMIDWORD R1:18;          // radius in meters (max. radius 250km)
+    /** angle * 10, 0-180 degrees, values 0-1800 (= angle modulo 180 * 10) */
+    IMIDWORD A1:11;
+    /** radius in meters (max. radius 250km) */
+    IMIDWORD R1:18;
 
-    IMIDWORD reduce:1;       // = reduce leg distance (for cylinder for example)
-    IMIDWORD move:1;         // = currently not used in Erixx
-    IMIDWORD line_only:1;    // = Line only (not cylinder nor sector, angle is ignored)
+    /** reduce leg distance (for cylinder for example) */
+    IMIDWORD reduce:1;
+    /** currently not used in Erixx */
+    IMIDWORD move:1;
+    /** Line only (not cylinder nor sector, angle is ignored) */
+    IMIDWORD line_only:1;
 
-    IMIDWORD A2:11;          // angle * 10, 0-180 degrees, values 0-1800 (= angle modulo 180 * 10)
-    IMIDWORD R2:18;          // radius in meters (max. radius 250km)
+    /** angle * 10, 0-180 degrees, values 0-1800 (= angle modulo 180 * 10) */
+    IMIDWORD A2:11;
+    /** radius in meters (max. radius 250km) */
+    IMIDWORD R2:18;
 
-    IMIDWORD A12:12;         // angle * 10, 0,0-360,0 (modulo 360 * 10), used when style = 1 = fixed value
-    IMIDWORD maxAlt: 14;     // maximum altitude of OZ in meters (0-16km). 0 =ignore maximum altitude
+    /**
+     * angle * 10, 0,0-360,0 (modulo 360 * 10),
+     * used when style = 1 = fixed value
+     */
+    IMIDWORD A12:12;
+
+    /** maximum altitude of OZ in meters (0-16km). 0 =ignore maximum altitude */
+    IMIDWORD maxAlt: 14;
 
     IMIDWORD reserved: 6;
   } gcc_packed;
