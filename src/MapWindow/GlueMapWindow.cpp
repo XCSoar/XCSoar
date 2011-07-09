@@ -26,13 +26,17 @@ Copyright_License {
 #include "DrawThread.hpp"
 #include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Screen/Graphics.hpp"
 
 GlueMapWindow::GlueMapWindow()
   :logger(NULL),
    idle_robin(2),
    drag_mode(DRAG_NONE),
    ignore_single_click(false),
-   DisplayMode(dmCruise) {}
+   DisplayMode(dmCruise),
+   thermal_band_renderer(Graphics::thermal_band, Graphics::chart)
+{
+}
 
 void
 GlueMapWindow::set(ContainerWindow &parent, const PixelRect &rc)

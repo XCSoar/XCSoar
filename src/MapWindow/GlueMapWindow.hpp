@@ -27,6 +27,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "PeriodClock.hpp"
 #include "GestureManager.hpp"
+#include "ThermalBandRenderer.hpp"
 
 class Logger;
 
@@ -111,6 +112,8 @@ class GlueMapWindow : public MapWindow {
    */
   SETTINGS_COMPUTER next_settings_computer;
 #endif
+
+  ThermalBandRenderer thermal_band_renderer;
 
 public:
   GlueMapWindow();

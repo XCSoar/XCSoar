@@ -36,7 +36,7 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
-#include "ThermalBandRenderer.hpp"
+
 #include <stdio.h>
 
 void
@@ -446,7 +446,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
   tb_rect.top = IBLSCALE(4);
   tb_rect.bottom = tb_rect.top+(rc.bottom-rc.top)/2-IBLSCALE(30);
 
-  ThermalBandRenderer renderer(Graphics::thermal_band, Graphics::chart);
+  const ThermalBandRenderer &renderer = thermal_band_renderer;
   if (task != NULL) {
     ProtectedTaskManager::Lease task_manager(*task);
     renderer.DrawThermalBand(Basic(),
