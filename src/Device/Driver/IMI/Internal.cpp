@@ -33,15 +33,15 @@ IMIDevice::Connect(OperationEnvironment &env)
     return false;
 
   // stop Rx thread
-  if (!port->StopRxThread() || env.IsCancelled())
+  if (!port->StopRxThread())
     return false;
 
   // set new Rx timeout
-  if (!port->SetRxTimeout(2000) || env.IsCancelled())
+  if (!port->SetRxTimeout(2000))
     return false;
 
   // connect to the device
-  if (!IMI::Connect(*port))
+  if (!IMI::Connect(*port, env))
     return false;
 
   return true;

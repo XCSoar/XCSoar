@@ -16,6 +16,7 @@
 class Port;
 struct Declaration;
 class RecordedFlightList;
+class OperationEnvironment;
 
 /**
  * @brief IMI-Gliding ERIXX device class
@@ -33,7 +34,7 @@ namespace IMI
    *
    * @return Operation status
    */
-  bool Connect(Port &port);
+  bool Connect(Port &port, OperationEnvironment &env);
 
   /**
    * @brief Sends task declaration
