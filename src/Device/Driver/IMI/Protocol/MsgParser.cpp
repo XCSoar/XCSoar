@@ -15,18 +15,20 @@
 
 namespace IMI {
 namespace MessageParser {
-  /**
-   * @brief Parser state
-   */
+  /** Parser state */
   enum TState {
-    STATE_NOT_SYNC,                               /**< @brief Synchronization bits not found */
-    STATE_COMM_MSG                                /**< @brief Parsing message body */
-  };
+    /** Synchronization bits not found */
+    STATE_NOT_SYNC,
+    /** Parsing message body */
+    STATE_COMM_MSG
+  } state;
 
-  TState state;                                  /**< @brief Parser state */
-  IMIBYTE buffer[IMICOMM_MAX_MSG_SIZE];       /**< @brief Parsed message buffer */
-  unsigned buffer_pos;                         /**< @brief Current position in a message buffer */
-  unsigned bytes_left;                         /**< @brief Remaining number of bytes of the message to parse */
+  /** Parsed message buffer */
+  IMIBYTE buffer[IMICOMM_MAX_MSG_SIZE];
+  /** Current position in a message buffer */
+  unsigned buffer_pos;
+  /** Remaining number of bytes of the message to parse */
+  unsigned bytes_left;
 
   /**
    * Cast the head of the buffer to a TMsg.
