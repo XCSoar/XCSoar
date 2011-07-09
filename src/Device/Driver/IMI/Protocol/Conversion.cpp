@@ -11,6 +11,8 @@
 #include "Conversion.hpp"
 #include "DateTime.hpp"
 #include "Math/Angle.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "Device/Declaration.hpp"
 
 #ifdef _UNICODE
 #include <windows.h>
@@ -97,4 +99,86 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
   out.second++;
 
   return out;
+}
+
+void
+IMI::IMIWaypoint(const Waypoint &wp, TWaypoint &imiWp)
+{
+  // set name
+  ConvertToChar(wp.Name.c_str(), imiWp.name, sizeof(imiWp.name));
+
+  // set latitude
+  imiWp.lat = AngleConverter(wp.Location.Latitude).value;
+
+  // set longitude
+  imiWp.lon = AngleConverter(wp.Location.Longitude).value;
+}
+
+void
+IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
+{
+  unsigned idx = imiIdx == 0 ? 0 : (imiIdx == decl.size() + 1 ? imiIdx - 2
+                                                              : imiIdx - 1);
+  const Declaration::TurnPoint &tp = decl.TurnPoints[idx];
+  const Waypoint &wp = tp.waypoint;
+
+  IMIWaypoint(wp, imiWp);
+
+  // TAKEOFF and LANDING do not have OZs
+  if (imiIdx == 0 || imiIdx == decl.size() + 1)
+    return;
+
+  // set observation zones
+  if (imiIdx == 1) {
+    // START
+    imiWp.oz.style = 3;
+    switch (tp.shape) {
+    case Declaration::TurnPoint::CYLINDER: // cylinder
+      imiWp.oz.A1 = 1800;
+      break;
+    case Declaration::TurnPoint::LINE: // line
+      imiWp.oz.line_only = 1;
+      break;
+    case Declaration::TurnPoint::SECTOR: // fai sector
+      imiWp.oz.A1 = 450;
+      break;
+    }
+    imiWp.oz.R1 = (IMIDWORD)std::min(250000u, tp.radius);
+  } else if (imiIdx == decl.size()) {
+    // FINISH
+    imiWp.oz.style = 4;
+    switch (tp.shape) {
+    case Declaration::TurnPoint::CYLINDER: // cylinder
+      imiWp.oz.A1 = 1800;
+      break;
+    case Declaration::TurnPoint::LINE: // line
+      imiWp.oz.line_only = 1;
+      break;
+    case Declaration::TurnPoint::SECTOR: // fai sector
+      imiWp.oz.A1 = 450;
+      break;
+    }
+    imiWp.oz.R1 = (IMIDWORD)std::min(250000u, tp.radius);
+  } else {
+    // TPs
+    imiWp.oz.style = 2;
+    switch (tp.shape) {
+    case Declaration::TurnPoint::CYLINDER: // cylinder
+      imiWp.oz.A1 = 1800;
+      imiWp.oz.R1 = (IMIDWORD)std::min(250000u, tp.radius);
+      break;
+    case Declaration::TurnPoint::SECTOR: // sector
+      imiWp.oz.A1 = 450;
+      imiWp.oz.R1 = (IMIDWORD)std::min(250000u, tp.radius);
+      break;
+    case Declaration::TurnPoint::LINE: // line
+      assert(0);
+      break;
+    }
+  }
+
+  // other unused data
+  imiWp.oz.maxAlt = 0;
+  imiWp.oz.reduce = 0;
+  imiWp.oz.move = 0;
 }

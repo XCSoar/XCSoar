@@ -17,6 +17,8 @@
 
 class Angle;
 struct BrokenDateTime;
+struct Declaration;
+class Waypoint;
 
 namespace IMI
 {
@@ -38,6 +40,17 @@ namespace IMI
 
   void ConvertToChar(const TCHAR* unicode, char* ascii, int outSize);
   BrokenDateTime ConvertToDateTime(IMIDATETIMESEC in);
+
+  /**
+   * @brief Sets data in IMI Waypoint structure
+   *
+   * @param decl LK task declaration
+   * @param imiIdx The index of IMI waypoint to set
+   * @param imiWp IMI waypoint structure to set
+   */
+  void IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
+  void IMIWaypoint(const Waypoint &wp, TWaypoint &imiWp);
+
 }
 
 #endif
