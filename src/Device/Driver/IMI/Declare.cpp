@@ -24,6 +24,7 @@ Copyright_License {
 #include "Internal.hpp"
 #include "Protocol/DevIMI.hpp"
 #include "Device/Port.hpp"
+#include "Operation.hpp"
 
 IMIDevice::IMIDevice(Port *_port)
   :port(_port)
@@ -31,9 +32,19 @@ IMIDevice::IMIDevice(Port *_port)
   IMI::Register();
 }
 
+static bool
+DeclareInner(Port *port, const Declaration &declaration, OperationEnvironment &env)
+{
+  // connect to the device
+  if (!IMI::Connect(*port) || env.IsCancelled())
+    return false;
+
+    // task declaration
+  return IMI::DeclarationWrite(*port, declaration);
+}
+
 bool
-IMIDevice::Declare(const Declaration &declaration,
-                   OperationEnvironment &env)
+IMIDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
 {
   if (port == NULL)
     return false;
@@ -43,17 +54,14 @@ IMIDevice::Declare(const Declaration &declaration,
     return false;
 
   // stop Rx thread
-  if (!port->StopRxThread())
+  if (!port->StopRxThread() || env.IsCancelled())
     return false;
 
   // set new Rx timeout
-  port->SetRxTimeout(2000);
+  if (!port->SetRxTimeout(2000) || env.IsCancelled())
+    return false;
 
-  // connect to the device
-  bool success = IMI::Connect(*port);
-  if (success)
-    // task declaration
-    success = IMI::DeclarationWrite(*port, declaration);
+  bool success = DeclareInner(port, declaration, env);
 
   // disconnect
   IMI::Disconnect(*port);
