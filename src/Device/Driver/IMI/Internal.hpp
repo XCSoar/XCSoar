@@ -34,7 +34,7 @@ private:
   Port *port;
 
 public:
-  IMIDevice(Port *_port);
+  IMIDevice(Port *_port):port(_port) {}
 
   virtual bool Declare(const Declaration &declaration,
                        OperationEnvironment &env);

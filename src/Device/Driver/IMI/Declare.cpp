@@ -26,11 +26,6 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "Operation.hpp"
 
-IMIDevice::IMIDevice(Port *_port)
-  :port(_port)
-{
-}
-
 static bool
 DeclareInner(Port *port, const Declaration &declaration, OperationEnvironment &env)
 {
