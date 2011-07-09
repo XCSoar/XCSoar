@@ -36,8 +36,8 @@ namespace IMI
     AngleConverter(Angle angle);
   };
 
-  void unicode2usascii(const TCHAR* unicode, char* ascii, int outSize);
-  void Convert(IMIDATETIMESEC in, BrokenDateTime &out);
+  void ConvertToChar(const TCHAR* unicode, char* ascii, int outSize);
+  void ConvertToDateTime(IMIDATETIMESEC in, BrokenDateTime &out);
 }
 
 #endif

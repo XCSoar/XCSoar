@@ -26,7 +26,7 @@ static const IMI::IMIBYTE IMI_DAYS_IN_MONTH[12] =
   { 31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 };
 
 void
-IMI::unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
+IMI::ConvertToChar(const TCHAR* unicode, char* ascii, int outSize)
 {
 #ifdef _UNICODE
   WideCharToMultiByte(CP_ACP, 0, unicode, -1, ascii, outSize, "?", NULL);
@@ -45,7 +45,7 @@ IMI::AngleConverter::AngleConverter(Angle angle)
 }
 
 void
-IMI::Convert(IMI::IMIDATETIMESEC in, BrokenDateTime &out)
+IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in, BrokenDateTime &out)
 {
   if (in >= IMI_SECONDS_IN_DAY) {
     // find year

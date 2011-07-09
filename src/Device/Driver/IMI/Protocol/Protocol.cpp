@@ -102,7 +102,7 @@ IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
   const Waypoint &wp = tp.waypoint;
 
   // set name
-  unicode2usascii(wp.Name.c_str(), imiWp.name, sizeof(imiWp.name));
+  ConvertToChar(wp.Name.c_str(), imiWp.name, sizeof(imiWp.name));
 
   // set latitude
   imiWp.lat = AngleConverter(wp.Location.Latitude).value;
@@ -344,15 +344,15 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl)
   memset(&imiDecl, 0, sizeof(imiDecl));
 
   // idecl.date ignored - will be set by FR
-  unicode2usascii(decl.PilotName, imiDecl.header.plt,
+  ConvertToChar(decl.PilotName, imiDecl.header.plt,
                   sizeof(imiDecl.header.plt));
-  unicode2usascii(decl.AircraftType, imiDecl.header.gty,
+  ConvertToChar(decl.AircraftType, imiDecl.header.gty,
                   sizeof(imiDecl.header.gty));
-  unicode2usascii(decl.AircraftReg, imiDecl.header.gid,
+  ConvertToChar(decl.AircraftReg, imiDecl.header.gid,
                   sizeof(imiDecl.header.gid));
-  unicode2usascii(decl.CompetitionId, imiDecl.header.cid,
+  ConvertToChar(decl.CompetitionId, imiDecl.header.cid,
                   sizeof(imiDecl.header.cid));
-  unicode2usascii(_T("XCSOARTASK"), imiDecl.header.tskName,
+  ConvertToChar(_T("XCSOARTASK"), imiDecl.header.tskName,
                   sizeof(imiDecl.header.tskName));
 
   IMIWaypoint(decl, 0, imiDecl.wp[0]);
@@ -391,8 +391,8 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list)
       RecordedFlightInfo &ifi = flight_list.append();
 
       BrokenDateTime start, finish;
-      Convert(fi->start, start);
-      Convert(fi->finish, finish);
+      ConvertToDateTime(fi->start, start);
+      ConvertToDateTime(fi->finish, finish);
 
       ifi.date = start;
       ifi.start_time = start;
