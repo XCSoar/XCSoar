@@ -56,11 +56,14 @@ public:
 
   void add_point(const FlatGeoPoint &p);
 
+  gcc_pure
   bool is_inside(const FlatGeoPoint &p) const;
 
   void clear() {
     vs.clear();
   }
+
+  gcc_pure
   bool empty() const {
     return vs.empty();
   }
@@ -100,6 +103,7 @@ public:
 
   void calc_bb();
 
+  gcc_pure
   bool is_inside_tree(const FlatGeoPoint &p, const bool include_children=true) const;
 
   void fill_reach(const AFlatGeoPoint &origin, ReachFanParms& parms);
@@ -131,6 +135,7 @@ public:
   void update_terrain_base(const FlatGeoPoint& origin, 
                            ReachFanParms& parms);
 
+  gcc_pure
   short direct_arrival(const FlatGeoPoint& dest, const ReachFanParms& parms) const;
 };
 
