@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Internal.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
+#include "Look/Look.hpp"
 
 #include <assert.h>
 
@@ -39,9 +39,10 @@ OnAirspacePatternsPaintListItem(Canvas &canvas, const RECT rc, unsigned i)
 {
   assert(i < NUMAIRSPACECOLORS);
 
-  canvas.black_pen();
-  canvas.set_background_color(COLOR_WHITE);
-  canvas.select(Graphics::GetAirspaceBrush(i));
+  const AirspaceLook &look = CommonInterface::main_window.look->airspace;
+
+  canvas.background_transparent();
+  canvas.select(look.brushes[i]);
   canvas.set_text_color(COLOR_BLACK);
   canvas.rectangle(rc.left + Layout::FastScale(2),
                    rc.top + Layout::FastScale(2),

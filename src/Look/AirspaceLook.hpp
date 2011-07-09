@@ -21,24 +21,38 @@ Copyright_License {
 }
 */
 
-#include "Look.hpp"
+#ifndef XCSOAR_AIRSPACE_LOOK_HPP
+#define XCSOAR_AIRSPACE_LOOK_HPP
 
-void
-Look::Initialise()
-{
-  dialog.Initialise();
-  flarm_dialog.Initialise(false);
-  flarm_gauge.Initialise(true);
-}
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
+#include "Screen/Icon.hpp"
+#include "Screen/Features.hpp"
+#include "Engine/Airspace/AirspaceClass.hpp"
+#include "Sizes.h"
 
-void
-Look::InitialiseConfigured(bool inverse,
-                           const AirspaceRendererSettings &airspace_settings)
-{
-  vario.Initialise(inverse);
-  chart.Initialise();
-  thermal_band.Initialise();
-  trace_history.Initialise(inverse);
-  airspace.Initialise(airspace_settings);
-  cross_section.Initialise();
-}
+struct AirspaceRendererSettings;
+
+struct AirspaceLook {
+  static const Color colors[NUMAIRSPACECOLORS];
+
+#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
+  /**
+   * Non-pattern brushes used for transparent
+   */
+  Brush solid_brushes[NUMAIRSPACECOLORS];
+#endif
+
+#ifndef ENABLE_SDL
+  Bitmap bitmaps[NUMAIRSPACEBRUSHES];
+  Brush brushes[NUMAIRSPACEBRUSHES];
+#endif
+
+  Pen pens[AIRSPACECLASSCOUNT];
+
+  MaskedIcon intercept_icon;
+
+  void Initialise(const AirspaceRendererSettings &settings);
+};
+
+#endif

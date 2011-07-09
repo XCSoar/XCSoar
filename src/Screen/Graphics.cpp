@@ -38,17 +38,6 @@ Copyright_License {
 #include "Asset.hpp"
 #include "LogFile.hpp"
 
-Pen Graphics::hAirspacePens[AIRSPACECLASSCOUNT];
-
-#ifndef ENABLE_SDL
-Brush Graphics::hAirspaceBrushes[NUMAIRSPACEBRUSHES];
-Bitmap Graphics::hAirspaceBitmap[NUMAIRSPACEBRUSHES];
-#endif
-
-#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
-Brush Graphics::solid_airspace_brushes[NUMAIRSPACECOLORS];
-#endif
-
 Pen Graphics::hpSnail[NUMSNAILCOLORS];
 Pen Graphics::hpSnailVario[NUMSNAILCOLORS];
 
@@ -57,7 +46,6 @@ Bitmap Graphics::hAboveTerrainBitmap;
 Brush Graphics::hAboveTerrainBrush;
 #endif
 
-MaskedIcon Graphics::hAirspaceInterceptBitmap;
 MaskedIcon Graphics::hTerrainWarning;
 MaskedIcon Graphics::hFLARMTraffic;
 MaskedIcon Graphics::hLogger, Graphics::hLoggerOff;
@@ -139,37 +127,6 @@ Brush Graphics::hbLightGray;
 Brush Graphics::hbNotReachableTerrain;
 Brush Graphics::hbGround;
 
-// airspace brushes/colours
-const Color
-Graphics::GetAirspaceColour(const int i)
-{
-  return Colours[i];
-}
-
-#ifndef ENABLE_SDL
-const Brush &
-Graphics::GetAirspaceBrush(const int i)
-{
-  return hAirspaceBrushes[i];
-}
-#endif
-
-const Color
-Graphics::GetAirspaceColourByClass(const int i,
-                                   const AirspaceRendererSettings &settings)
-{
-  return GetAirspaceColour(settings.colours[i]);
-}
-
-#ifndef ENABLE_SDL
-const Brush &
-Graphics::GetAirspaceBrushByClass(const int i,
-                                  const AirspaceRendererSettings &settings)
-{
-  return GetAirspaceBrush(settings.brushes[i]);
-}
-#endif
-
 const Color Graphics::inv_redColor = Color(0xff, 0x70, 0x70);
 const Color Graphics::inv_blueColor = Color(0x90, 0x90, 0xff);
 const Color Graphics::inv_yellowColor = COLOR_YELLOW;
@@ -189,25 +146,6 @@ const Color Graphics::seaColor = Color(0xbd,0xc5,0xd5); // ICAO open water area
 const Color Graphics::TaskColor = Color(0x62,0x4e,0x90);
 const Color Graphics::IsolineColor = BearingColor;
 const Color Graphics::BearingColor = Color(0x3e,0x30,0x5f);
-
-const Color Graphics::Colours[] = {
-  COLOR_RED,
-  COLOR_GREEN,
-  COLOR_BLUE,
-  COLOR_YELLOW,
-  COLOR_MAGENTA,
-  COLOR_CYAN,
-  dark_color(COLOR_RED),
-  dark_color(COLOR_GREEN),
-  dark_color(COLOR_BLUE),
-  dark_color(COLOR_YELLOW),
-  dark_color(COLOR_MAGENTA),
-  dark_color(COLOR_CYAN),
-  COLOR_WHITE,
-  COLOR_LIGHT_GRAY,
-  COLOR_GRAY,
-  COLOR_BLACK,
-};
 
 void
 Graphics::Initialise()
@@ -235,35 +173,10 @@ Graphics::Initialise()
   hFinalGlide.load_big(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
   hAbort.load_big(IDB_ABORT, IDB_ABORT_HD, false);
 
-  // airspace brushes and colors
-#ifndef ENABLE_SDL
-  hAirspaceBitmap[0].load(IDB_AIRSPACE0);
-  hAirspaceBitmap[1].load(IDB_AIRSPACE1);
-  hAirspaceBitmap[2].load(IDB_AIRSPACE2);
-  hAirspaceBitmap[3].load(IDB_AIRSPACE3);
-  hAirspaceBitmap[4].load(IDB_AIRSPACE4);
-  hAirspaceBitmap[5].load(IDB_AIRSPACE5);
-  hAirspaceBitmap[6].load(IDB_AIRSPACE6);
-  hAirspaceBitmap[7].load(IDB_AIRSPACE7);
-#endif
-
-  hAirspaceInterceptBitmap.load_big(IDB_AIRSPACEI, IDB_AIRSPACEI_HD);
-
 #ifndef ENABLE_SDL
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
 
-  for (int i = 0; i < NUMAIRSPACEBRUSHES; i++)
-    hAirspaceBrushes[i].set(hAirspaceBitmap[i]);
-
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
-#endif
-
-#ifdef HAVE_ALPHA_BLEND
-  if (AlphaBlendAvailable())
-#endif
-#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
-    for (unsigned i = 0; i < NUMAIRSPACECOLORS; ++i)
-      solid_airspace_brushes[i].set(Colours[i]);
 #endif
 
   hpIsoline.set(Pen::DASH, Layout::Scale(1), IsolineColor);
@@ -361,7 +274,6 @@ Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 {
   InitSnailTrail(settings_map);
   InitLandableIcons();
-  InitAirspacePens(settings_map.airspace);
 }
 
 void
@@ -451,14 +363,6 @@ Graphics::InitLandableIcons()
 }
 
 void
-Graphics::InitAirspacePens(const AirspaceRendererSettings &settings)
-{
-  for (int i = 0; i < AIRSPACECLASSCOUNT; i++)
-    hAirspacePens[i].set(Layout::Scale(2),
-                         GetAirspaceColourByClass(i, settings));
-}
-
-void
 Graphics::Deinitialise()
 {
   DeinitialiseUnitSymbols();
@@ -480,28 +384,10 @@ Graphics::Deinitialise()
   hFinalGlide.reset();
   hAbort.reset();
 
-  hAirspaceInterceptBitmap.reset();
-
 #ifndef ENABLE_SDL
-  for (unsigned i = 0; i < NUMAIRSPACEBRUSHES; i++) {
-    hAirspaceBrushes[i].reset();
-    hAirspaceBitmap[i].reset();
-  }
-
   hAboveTerrainBrush.reset();
   hAboveTerrainBitmap.reset();
 #endif
-
-#ifdef HAVE_ALPHA_BLEND
-  if (AlphaBlendAvailable())
-#endif
-#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
-    for (unsigned i = 0; i < NUMAIRSPACECOLORS; ++i)
-      solid_airspace_brushes[i].reset();
-#endif
-
-  for (unsigned i = 0; i < AIRSPACECLASSCOUNT; i++)
-    hAirspacePens[i].reset();
 
   hbWind.reset();
 

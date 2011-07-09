@@ -28,9 +28,9 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/AirspaceConfig.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
+#include "Look/Look.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
@@ -52,6 +52,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     CommonInterface::SettingsComputer().airspace;
   const AirspaceRendererSettings &renderer =
     CommonInterface::SettingsMap().airspace;
+  const AirspaceLook &look = CommonInterface::main_window.look->airspace;
 
   int w1, w2, x0;
   int w0 = rc.right - rc.left - Layout::FastScale(4);
@@ -63,16 +64,16 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   if (colormode) {
     canvas.white_pen();
 #ifdef ENABLE_SDL
-    canvas.select(Graphics::solid_airspace_brushes[renderer.colours[i]]);
+    canvas.select(look.solid_brushes[renderer.colours[i]]);
 #else
 #ifdef HAVE_ALPHA_BLEND
     if (renderer.transparency && AlphaBlendAvailable()) {
-      canvas.select(Graphics::solid_airspace_brushes[renderer.colours[i]]);
+      canvas.select(look.solid_brushes[renderer.colours[i]]);
     } else {
 #endif
-      canvas.set_text_color(Graphics::GetAirspaceColourByClass(i, renderer));
+      canvas.set_text_color(look.colors[renderer.colours[i]]);
       canvas.set_background_color(Color(0xFF, 0xFF, 0xFF));
-      canvas.select(Graphics::GetAirspaceBrushByClass(i, renderer));
+      canvas.select(look.brushes[renderer.brushes[i]]);
 #ifdef HAVE_ALPHA_BLEND
     }
 #endif
@@ -113,7 +114,9 @@ OnAirspaceListEnter(unsigned ItemIndex)
       ActionInterface::SendSettingsMap();
       Profile::SetAirspaceColor(ItemIndex, renderer.colours[ItemIndex]);
       changed = true;
-      Graphics::InitAirspacePens(renderer);
+
+      AirspaceLook &look = CommonInterface::main_window.look->airspace;
+      look.Initialise(renderer);
     }
 
 #ifndef ENABLE_SDL

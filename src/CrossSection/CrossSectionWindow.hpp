@@ -29,6 +29,7 @@
 #include "SettingsMapBlackboard.hpp"
 
 struct CrossSectionLook;
+struct AirspaceLook;
 struct ChartLook;
 class Airspaces;
 class RasterTerrain;
@@ -44,6 +45,7 @@ class CrossSectionWindow :
 {
 protected:
   const CrossSectionLook &look;
+  const AirspaceLook &airspace_look;
   const ChartLook &chart_look;
 
   /** Pointer to a RasterTerrain instance or NULL */
@@ -62,6 +64,7 @@ public:
    * Constructor. Initializes most class members.
    */
   CrossSectionWindow(const CrossSectionLook &look,
+                     const AirspaceLook &airspace_look,
                      const ChartLook &chart_look);
 
   void ReadBlackboard(const NMEA_INFO &_gps_info,

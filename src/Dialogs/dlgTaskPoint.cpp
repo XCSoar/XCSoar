@@ -42,6 +42,8 @@ Copyright_License {
 #include "Gauge/TaskView.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 #include "Compiler.h"
+#include "Look/Look.hpp"
+#include "MainWindow.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -428,9 +430,11 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     return;
   }
 
+  const Look &look = *CommonInterface::main_window.look;
   PaintTaskPoint(canvas, rc, *ordered_task, *tp,
                  XCSoarInterface::Basic().Location,
                  XCSoarInterface::SettingsMap(),
+                 look.airspace,
                  terrain);
 }
 

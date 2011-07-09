@@ -481,6 +481,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
+	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/CrossSectionLook.cpp \
 	\
 	$(SRC)/Polar/PolarGlue.cpp \

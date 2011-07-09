@@ -138,7 +138,7 @@ InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   const Look &look = *CommonInterface::main_window.look;
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
-                              look.chart);
+                              look.chart, look.airspace);
   fs.RenderBarographSpark(canvas, get_spark_rect(infobox), XCSoarInterface::Basic(),
                           XCSoarInterface::Calculated(), protected_task_manager);
 }

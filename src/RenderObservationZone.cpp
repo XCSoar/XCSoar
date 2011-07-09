@@ -34,9 +34,10 @@ Copyright_License {
 #include "SettingsMap.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
+#include "Look/AirspaceLook.hpp"
 
-RenderObservationZone::RenderObservationZone()
-  :layer(LAYER_SHADE)
+RenderObservationZone::RenderObservationZone(const AirspaceLook &_airspace_look)
+  :airspace_look(_airspace_look), layer(LAYER_SHADE)
 {
 }
 
@@ -50,7 +51,7 @@ RenderObservationZone::draw_style(Canvas &canvas,
       /* past task point */
       return false;
 
-    Color color = Graphics::Colours[settings.colours[AATASK]];
+    Color color = airspace_look.colors[settings.colours[AATASK]];
 #ifdef ENABLE_OPENGL
     glEnable(GL_BLEND);
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
@@ -64,7 +65,7 @@ RenderObservationZone::draw_style(Canvas &canvas,
     // this color is used as the black bit
     canvas.set_text_color(color);
     // get brush, can be solid or a 1bpp bitmap
-    canvas.select(Graphics::hAirspaceBrushes[settings.brushes[AATASK]]);
+    canvas.select(airspace_look.brushes[settings.brushes[AATASK]]);
 #endif /* !SDL */
 
     canvas.null_pen();

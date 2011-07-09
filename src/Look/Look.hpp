@@ -29,6 +29,7 @@ Copyright_License {
 #include "ChartLook.hpp"
 #include "ThermalBandLook.hpp"
 #include "TraceHistoryLook.hpp"
+#include "AirspaceLook.hpp"
 #include "CrossSectionLook.hpp"
 #include "Gauge/FlarmTrafficLook.hpp"
 
@@ -40,12 +41,14 @@ struct Look {
   ChartLook chart;
   ThermalBandLook thermal_band;
   TraceHistoryLook trace_history;
+  AirspaceLook airspace;
   CrossSectionLook cross_section;
   FlarmTrafficLook flarm_gauge;
   FlarmTrafficLook flarm_dialog;
 
   void Initialise();
-  void InitialiseConfigured(bool inverse);
+  void InitialiseConfigured(bool inverse,
+                            const AirspaceRendererSettings &airspace_settings);
 };
 
 #endif

@@ -35,8 +35,9 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Icon.hpp"
-#include "Screen/Graphics.hpp"
 #include "Look/DialogLook.hpp"
+#include "Look/Look.hpp"
+#include "MainWindow.hpp"
 
 #include <math.h>
 #include <algorithm>
@@ -275,7 +276,8 @@ pnlTaskCalculator::OnWarningPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &
     canvas.select(Fonts::Title);
     const int textheight = canvas.text_height(message);
 
-    const MaskedIcon *bmp = &Graphics::hAirspaceInterceptBitmap;
+    const AirspaceLook &look = CommonInterface::main_window.look->airspace;
+    const MaskedIcon *bmp = &look.intercept_icon;
     const int offsetx = bmp->get_size().cx;
     const int offsety = canvas.get_height() - bmp->get_size().cy;
     canvas.clear(COLOR_YELLOW);

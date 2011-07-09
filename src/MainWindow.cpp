@@ -131,7 +131,8 @@ MainWindow::InitialiseConfigured()
   }
 
   assert(look != NULL);
-  look->InitialiseConfigured(Appearance.InverseInfoBox);
+  look->InitialiseConfigured(Appearance.InverseInfoBox,
+                             CommonInterface::SettingsMap().airspace);
 
   LogStartUp(_T("Create info boxes"));
   InfoBoxManager::Create(rc, ib_layout);

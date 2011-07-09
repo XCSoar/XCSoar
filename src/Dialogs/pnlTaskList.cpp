@@ -34,6 +34,8 @@ Copyright_License {
 #include "Gauge/TaskView.hpp"
 #include "OS/FileUtil.hpp"
 #include "Logger/Logger.hpp"
+#include "Look/Look.hpp"
+#include "MainWindow.hpp"
 
 #include <assert.h>
 
@@ -108,8 +110,10 @@ pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     canvas.clear_white();
     return;
   }
+
+  const Look &look = *CommonInterface::main_window.look;
   PaintTask(canvas, rc, *ordered_task, XCSoarInterface::Basic().Location,
-            XCSoarInterface::SettingsMap(), terrain);
+            XCSoarInterface::SettingsMap(), look.airspace, terrain);
 }
 
 void

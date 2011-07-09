@@ -267,7 +267,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   Look *look = new Look();
   look->Initialise();
-  look->InitialiseConfigured(false);
+  look->InitialiseConfigured(false, blackboard.SettingsMap().airspace);
 
   main_window.show();
 

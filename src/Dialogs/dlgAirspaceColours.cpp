@@ -23,9 +23,9 @@ Copyright_License {
 
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Internal.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "MainWindow.hpp"
+#include "Look/Look.hpp"
 
 #include <assert.h>
 
@@ -39,14 +39,15 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   assert(i < NUMAIRSPACECOLORS);
 
+  const AirspaceLook &look = CommonInterface::main_window.look->airspace;
+
   canvas.black_pen();
 #ifdef ENABLE_SDL
-  Color color = Graphics::GetAirspaceColour(i);
-  canvas.select(Brush(color));
+  canvas.select(look.solid_brushes[i]);
 #else
-  canvas.set_background_color(COLOR_WHITE);
-  canvas.select(Graphics::GetAirspaceBrush(1)); // this is the solid brush
-  canvas.set_text_color(Graphics::GetAirspaceColour(i));
+  canvas.background_transparent();
+  canvas.select(look.brushes[1]); // this is the solid brush
+  canvas.set_text_color(look.colors[i]);
 #endif
   canvas.rectangle(rc.left + Layout::FastScale(2),
                    rc.top + Layout::FastScale(2),

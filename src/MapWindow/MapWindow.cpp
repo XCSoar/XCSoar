@@ -37,8 +37,9 @@ Copyright_License {
 /**
  * Constructor of the MapWindow class
  */
-MapWindow::MapWindow()
-  :way_points(NULL),
+MapWindow::MapWindow(const AirspaceLook &_airspace_look)
+  :airspace_look(_airspace_look),
+   way_points(NULL),
    topography(NULL), topography_renderer(NULL),
    terrain(NULL),
    terrain_radius(fixed_zero),

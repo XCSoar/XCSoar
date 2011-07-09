@@ -27,6 +27,7 @@ Copyright_License {
 #include "Math/Angle.hpp"
 #include "Screen/Point.hpp"
 
+struct AirspaceLook;
 class Canvas;
 class Projection;
 struct AirspaceRendererSettings;
@@ -51,10 +52,12 @@ public:
   };
 
 protected:
+  const AirspaceLook &airspace_look;
+
   enum layer layer;
 
 public:
-  RenderObservationZone();
+  RenderObservationZone(const AirspaceLook &airspace_look);
 
   void Draw(Canvas &canvas, const Projection &projection,
             const ObservationZonePoint &oz) const;

@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "MapWindow.hpp"
 #include "MapCanvas.hpp"
+#include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
@@ -33,8 +34,6 @@ Copyright_License {
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "MapDrawHelper.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Graphics.hpp"
-#include "Screen/Icon.hpp"
 #include "NMEA/Aircraft.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -124,17 +123,19 @@ public:
 
 class AirspaceRenderer : public AirspaceVisitor, protected MapCanvas
 {
-private:
+  const AirspaceLook &airspace_look;
   const AirspaceWarningCopy& m_warnings;
   const AirspaceRendererSettings &settings;
   Pen pen_thick;
 
 public:
   AirspaceRenderer(Canvas &_canvas, const WindowProjection &_projection,
+                   const AirspaceLook &_airspace_look,
                    const AirspaceWarningCopy& warnings,
                    const AirspaceRendererSettings &_settings)
     :MapCanvas(_canvas, _projection,
                _projection.GetScreenBounds().scale(fixed(1.1))),
+     airspace_look(_airspace_look),
      m_warnings(warnings),
      settings(_settings),
      pen_thick(IBLSCALE(10), Color(0x00, 0x00, 0x00))
@@ -164,7 +165,7 @@ public:
         canvas.circle(screen_center.x, screen_center.y, screen_radius);
       } else {
         // draw a ring inside the circle
-        Color color = Graphics::Colours[settings.colours[airspace.get_type()]];
+        Color color = airspace_look.colors[settings.colours[airspace.get_type()]];
         Pen pen_donut(pen_thick.get_width()/2, color.with_alpha(90));
         canvas.hollow_brush();
         canvas.select(pen_donut);
@@ -223,7 +224,7 @@ private:
     if (settings.black_outline)
       canvas.black_pen();
     else
-      canvas.select(Graphics::hAirspacePens[airspace.get_type()]);
+      canvas.select(airspace_look.pens[airspace.get_type()]);
     canvas.hollow_brush();
   }
 
@@ -237,7 +238,7 @@ private:
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-    Color color = Graphics::Colours[settings.colours[airspace.get_type()]];
+    Color color = airspace_look.colors[settings.colours[airspace.get_type()]];
     canvas.select(Brush(color.with_alpha(90)));
     canvas.null_pen();
   }
@@ -276,11 +277,15 @@ class AirspaceVisitorMap:
   public AirspaceVisitor,
   public MapDrawHelper
 {
+  const AirspaceLook &airspace_look;
+
 public:
   AirspaceVisitorMap(MapDrawHelper &_helper,
                      const AirspaceWarningCopy& warnings,
-                     const AirspaceRendererSettings &_settings)
+                     const AirspaceRendererSettings &_settings,
+                     const AirspaceLook &_airspace_look)
     :MapDrawHelper(_helper),
+     airspace_look(_airspace_look),
      m_warnings(warnings),
      pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
      pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00))
@@ -330,19 +335,19 @@ private:
     const unsigned color_index = settings.colours[airspace.get_type()];
 
 #ifdef ENABLE_SDL
-    m_buffer.select(Graphics::solid_airspace_brushes[color_index]);
+    m_buffer.select(airspace_look.solid_brushes[color_index]);
 #else /* !SDL */
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency && AlphaBlendAvailable()) {
-      m_buffer.select(Graphics::solid_airspace_brushes[color_index]);
+      m_buffer.select(airspace_look.solid_brushes[color_index]);
     } else {
 #endif
       // this color is used as the black bit
-      m_buffer.set_text_color(light_color(Graphics::Colours[color_index]));
+      m_buffer.set_text_color(light_color(airspace_look.colors[color_index]));
 
       // get brush, can be solid or a 1bpp bitmap
-      m_buffer.select(Graphics::hAirspaceBrushes[settings.brushes[airspace.get_type()]]);
+      m_buffer.select(airspace_look.brushes[settings.brushes[airspace.get_type()]]);
 
       m_buffer.background_opaque();
       m_buffer.set_background_color(COLOR_WHITE);
@@ -372,13 +377,16 @@ class AirspaceOutlineRenderer
   :public AirspaceVisitor,
    protected MapCanvas
 {
+  const AirspaceLook &airspace_look;
   bool black;
 
 public:
   AirspaceOutlineRenderer(Canvas &_canvas, const WindowProjection &_projection,
+                          const AirspaceLook &_airspace_look,
                           bool _black)
     :MapCanvas(_canvas, _projection,
                _projection.GetScreenBounds().scale(fixed(1.1))),
+     airspace_look(_airspace_look),
      black(_black) {
     if (black)
       canvas.black_pen();
@@ -388,7 +396,7 @@ public:
 protected:
   void setup_canvas(const AbstractAirspace &airspace) {
     if (!black)
-      canvas.select(Graphics::hAirspacePens[airspace.get_type()]);
+      canvas.select(airspace_look.pens[airspace.get_type()]);
   }
 
 public:
@@ -411,7 +419,7 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
   for (unsigned i = m_airspace_intersections.size(); i--;) {
     RasterPoint sc;
     if (render_projection.GeoToScreenIfVisible(m_airspace_intersections[i], sc))
-      Graphics::hAirspaceInterceptBitmap.draw(canvas, sc.x, sc.y);
+      airspace_look.intercept_icon.draw(canvas, sc.x, sc.y);
   }
 }
 
@@ -436,7 +444,7 @@ MapWindow::DrawAirspace(Canvas &canvas)
                                    false, awc);
 
 #ifdef ENABLE_OPENGL
-  AirspaceRenderer renderer(canvas, render_projection, awc,
+  AirspaceRenderer renderer(canvas, render_projection, airspace_look, awc,
                             SettingsMap().airspace);
   airspace_database->visit_within_range(render_projection.GetGeoScreenCenter(),
                                         render_projection.GetScreenDistanceMeters(),
@@ -444,7 +452,8 @@ MapWindow::DrawAirspace(Canvas &canvas)
 #else
   MapDrawHelper helper(canvas, buffer_canvas, stencil_canvas, render_projection,
                        SettingsMap().airspace);
-  AirspaceVisitorMap v(helper, awc, SettingsMap().airspace);
+  AirspaceVisitorMap v(helper, awc, SettingsMap().airspace,
+                       airspace_look);
 
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
@@ -459,6 +468,7 @@ MapWindow::DrawAirspace(Canvas &canvas)
   v.draw_intercepts();
 
   AirspaceOutlineRenderer outline_renderer(canvas, render_projection,
+                                           airspace_look,
                                            SettingsMap().airspace.black_outline);
   airspace_database->visit_within_range(render_projection.GetGeoScreenCenter(),
                                         render_projection.GetScreenDistanceMeters(),

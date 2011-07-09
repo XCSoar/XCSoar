@@ -93,7 +93,7 @@ MapWindow::DrawTask(Canvas &canvas)
   const AbstractTask *task = task_manager->get_active_task();
   if (task && task->check_task()) {
 
-    RenderObservationZone ozv;
+    RenderObservationZone ozv(airspace_look);
     RenderTaskPointMap tpv(canvas,
 #ifdef ENABLE_OPENGL
                            /* OpenGL doesn't have the BufferCanvas

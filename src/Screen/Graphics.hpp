@@ -25,7 +25,6 @@ Copyright_License {
 #define SCREEN_GRAPHICS_HPP
 
 #include "Sizes.h"
-#include "Airspace/AirspaceClass.hpp"
 #include "Screen/Point.hpp"
 #include "Screen/Features.hpp"
 
@@ -36,7 +35,6 @@ struct Color;
 class Pen;
 
 struct SETTINGS_MAP;
-struct AirspaceRendererSettings;
 class LabelBlock;
 
 class Canvas;
@@ -49,38 +47,9 @@ namespace Graphics {
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
   void InitSnailTrail(const SETTINGS_MAP &settings_map);
   void InitLandableIcons();
-  void InitAirspacePens(const AirspaceRendererSettings &settings);
   void Deinitialise();
   void DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
                     const Angle angle, const RasterPoint aircraft_pos);
-
-  // airspace brushes/colours
-  const Color GetAirspaceColour(const int i);
-
-#ifndef ENABLE_SDL
-  const Brush &GetAirspaceBrush(const int i);
-#endif
-
-  const Color GetAirspaceColourByClass(const int i,
-                                       const AirspaceRendererSettings &settings);
-
-#ifndef ENABLE_SDL
-  const Brush &GetAirspaceBrushByClass(const int i,
-                                       const AirspaceRendererSettings &settings);
-#endif
-
-  extern Pen hAirspacePens[AIRSPACECLASSCOUNT];
-#ifndef ENABLE_SDL
-  extern Brush hAirspaceBrushes[NUMAIRSPACEBRUSHES];
-  extern Bitmap hAirspaceBitmap[NUMAIRSPACEBRUSHES];
-#endif
-
-#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
-  /**
-   * Non-pattern brushes used for transparent
-   */
-  extern Brush solid_airspace_brushes[NUMAIRSPACECOLORS];
-#endif
 
   extern Pen hpSnail[NUMSNAILCOLORS];
   extern Pen hpSnailVario[NUMSNAILCOLORS];
@@ -90,7 +59,6 @@ namespace Graphics {
   extern Brush hAboveTerrainBrush;
 #endif
 
-  extern MaskedIcon hAirspaceInterceptBitmap;
   extern MaskedIcon hTerrainWarning;
   extern MaskedIcon hFLARMTraffic;
   extern MaskedIcon hLogger, hLoggerOff;
@@ -180,7 +148,6 @@ namespace Graphics {
   extern const Color TaskColor;
   extern const Color IsolineColor;
   extern const Color BearingColor;
-  extern const Color Colours[NUMAIRSPACECOLORS];
 
   // used by infobox and gauges
   extern const Color inv_redColor;

@@ -39,6 +39,7 @@ Copyright_License {
 #include "Compiler.h"
 #include <vector>
 
+struct AirspaceLook;
 class TopographyStore;
 class TopographyRenderer;
 class RasterTerrain;
@@ -68,6 +69,8 @@ class MapWindow :
   LabelBlock label_block;
 
 protected:
+  const AirspaceLook &airspace_look;
+
   /**
    * The projection as currently visible on the screen.  This object
    * is being edited by the user.
@@ -130,7 +133,7 @@ protected:
   friend class DrawThread;
 
 public:
-  MapWindow();
+  MapWindow(const AirspaceLook &airspace_look);
   virtual ~MapWindow();
 
   virtual void set(ContainerWindow &parent, const PixelRect &rc);

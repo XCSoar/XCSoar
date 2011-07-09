@@ -38,6 +38,8 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Appearance.hpp"
 #include "Protection.hpp"
+#include "Look/Look.hpp"
+#include "MainWindow.hpp"
 
 #include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
@@ -108,9 +110,10 @@ dlgTaskManager::TaskViewRestore(WndOwnerDrawFrame *wTaskView)
 void
 dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
+  const Look &look = *CommonInterface::main_window.look;
   PaintTask(canvas, Sender->get_client_rect(), *active_task,
             XCSoarInterface::Basic().Location,
-            XCSoarInterface::SettingsMap(), terrain);
+            XCSoarInterface::SettingsMap(), look.airspace, terrain);
 }
 
 void

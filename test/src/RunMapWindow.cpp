@@ -55,6 +55,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Operation.hpp"
+#include "Look/AirspaceLook.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -109,7 +110,8 @@ public:
   };
 
 public:
-  TestWindow() {}
+  TestWindow(const AirspaceLook &airspace_look)
+    :map(airspace_look) {}
 
   static bool register_class(HINSTANCE hInstance) {
 #ifdef ENABLE_SDL
@@ -277,7 +279,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow::register_class(hInstance);
 #endif
 
-  TestWindow window;
+  AirspaceLook *airspace_look = new AirspaceLook();
+  airspace_look->Initialise(blackboard.SettingsMap().airspace);
+
+  TestWindow window(*airspace_look);
   window.set(0, 0, 640, 480);
 
   Graphics::Initialise();
@@ -298,6 +303,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   delete terrain;
   delete topography;
+  delete airspace_look;
 
   DeinitialiseDataPath();
 

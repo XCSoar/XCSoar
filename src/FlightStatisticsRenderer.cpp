@@ -499,7 +499,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
   ChartProjection proj(rc, task, nmea_info.Location);
 
-  RenderObservationZone ozv;
+  RenderObservationZone ozv(airspace_look);
   RenderTaskPoint tpv(canvas, NULL, proj, settings_map,
                       task.get_task_projection(),
                       ozv, false, nmea_info.Location);

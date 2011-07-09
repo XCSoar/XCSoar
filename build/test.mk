@@ -1439,6 +1439,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
 	$(SRC)/Look/CrossSectionLook.cpp \
+	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
@@ -1554,6 +1555,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
@@ -1712,6 +1714,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
 	$(SRC)/Look/CrossSectionLook.cpp \
+	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
