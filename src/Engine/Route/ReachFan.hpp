@@ -25,6 +25,7 @@
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Navigation/TaskProjection.hpp"
+#include "Util/SliceAllocator.hpp"
 
 #include <vector>
 #include <list>
@@ -74,7 +75,9 @@ class FlatTriangleFanTree: public FlatTriangleFan {
 public:
   static const unsigned REACH_MAX_FANS = 300;
 
-  typedef std::list<FlatTriangleFanTree> LeafVector;
+  typedef std::list<FlatTriangleFanTree,
+                    GlobalSliceAllocator<FlatTriangleFanTree, 128u> > LeafVector;
+
 protected:
   FlatBoundingBox bb_children;
   LeafVector children;
