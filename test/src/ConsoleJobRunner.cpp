@@ -21,29 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_JOB_HPP
-#define XCSOAR_JOB_HPP
+#include "ConsoleJobRunner.hpp"
+#include "ConsoleOperationEnvironment.hpp"
 
-class OperationEnvironment;
-
-/**
- * Base class for a job that can be offloaded into a separate thread.
- */
-class Job {
-public:
-  virtual void Run(OperationEnvironment &env) = 0;
-};
-
-/**
- * An environment that can run one or more jobs.
- */
-class JobRunner {
-public:
-  /**
-   * @return true if the job has finished (may have failed), false if
-   * the job was cancelled by the user
-   */
-  virtual bool Run(Job &job) = 0;
-};
-
-#endif
+bool
+ConsoleJobRunner::Run(Job &job)
+{
+  ConsoleOperationEnvironment env;
+  job.Run(env);
+  return true;
+}

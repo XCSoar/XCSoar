@@ -114,3 +114,9 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
 
   return result == mrOK;
 }
+
+bool
+DialogJobRunner::Run(Job &job)
+{
+  return JobDialog(parent, dialog_look, caption, job, cancellable);
+}

@@ -21,43 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_JOB_DIALOG_HPP
-#define XCSOAR_JOB_DIALOG_HPP
+#ifndef XCSOAR_CONSOLE_JOB_RUNNER_HPP
+#define XCSOAR_CONSOLE_JOB_RUNNER_HPP
 
 #include "Job.hpp"
 
-#include <tchar.h>
-
-struct DialogLook;
-class SingleWindow;
-class Job;
-
-/**
- * Run the specified #Job in a separate thread, and show a modal
- * dialog while it is running.
- *
- * @param cancellable show a "cancel" button that allows aborting the
- * job
- * @return true if the job has finished (may have failed), false if
- * the job was cancelled by the user
- */
-bool
-JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
-          const TCHAR *caption, Job &job,
-          bool cancellable=false);
-
-class DialogJobRunner : public JobRunner {
-  SingleWindow &parent;
-  const DialogLook &dialog_look;
-  const TCHAR *caption;
-  bool cancellable;
-
+class ConsoleJobRunner : public JobRunner {
 public:
-  DialogJobRunner(SingleWindow &_parent, const DialogLook &_dialog_look,
-                  const TCHAR *_caption, bool _cancellable=false)
-    :parent(_parent), dialog_look(_dialog_look),
-     caption(_caption), cancellable(_cancellable) {}
-
   virtual bool Run(Job &job);
 };
 
