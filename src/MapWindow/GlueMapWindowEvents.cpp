@@ -232,6 +232,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
         return true;
     } else {
       // click more then one second -> open nearest airspace details
+      const Airspaces *airspace_database = airspace_renderer.GetAirspaces();
       if (airspace_database != NULL &&
           AirspaceDetailsAtPoint(drag_start_geopoint))
         return true;

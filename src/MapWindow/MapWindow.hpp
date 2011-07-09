@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"
+#include "AirspaceRenderer.hpp"
 #include "Screen/DoubleBufferWindow.hpp"
 #ifndef ENABLE_OPENGL
 #include "Screen/BufferCanvas.hpp"
@@ -39,7 +40,6 @@ Copyright_License {
 #include "Compiler.h"
 #include <vector>
 
-struct AirspaceLook;
 class TopographyStore;
 class TopographyRenderer;
 class RasterTerrain;
@@ -69,8 +69,6 @@ class MapWindow :
   LabelBlock label_block;
 
 protected:
-  const AirspaceLook &airspace_look;
-
   /**
    * The projection as currently visible on the screen.  This object
    * is being edited by the user.
@@ -106,8 +104,8 @@ protected:
   BackgroundDrawHelper m_background;
   WaypointRenderer way_point_renderer;
 
-  Airspaces *airspace_database;
-  ProtectedAirspaceWarningManager *airspace_warnings;
+  AirspaceRenderer airspace_renderer;
+
   ProtectedTaskManager *task;
 
   Marks *marks;
@@ -128,8 +126,6 @@ protected:
   unsigned scale_buffer;
 #endif
 
-  StaticArray<GeoPoint,32> m_airspace_intersections;
-
   friend class DrawThread;
 
 public:
@@ -149,8 +145,7 @@ public:
 
   void set_airspaces(Airspaces *_airspace_database,
                      ProtectedAirspaceWarningManager *_airspace_warnings) {
-    airspace_database = _airspace_database;
-    airspace_warnings = _airspace_warnings;
+    airspace_renderer.SetAirspaces(_airspace_database, _airspace_warnings);
   }
 
   void set_topography(TopographyStore *_topography);
@@ -185,8 +180,6 @@ public:
   void DrawCompass(Canvas &canvas, const PixelRect &rc) const;
   void DrawWind(Canvas &canvas, const RasterPoint &Orig,
                            const PixelRect &rc) const;
-  void DrawAirspace(Canvas &canvas);
-  void DrawAirspaceIntersections(Canvas &canvas) const;
   void DrawWaypoints(Canvas &canvas);
 
   void DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,

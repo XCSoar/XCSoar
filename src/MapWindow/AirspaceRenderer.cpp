@@ -21,7 +21,11 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.hpp"
+#include "AirspaceRenderer.hpp"
+#include "SettingsComputer.hpp"
+#include "SettingsMap.hpp"
+#include "WindowProjection.hpp"
+#include "Screen/Canvas.hpp"
 #include "MapCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
@@ -121,7 +125,7 @@ public:
 
 #ifdef ENABLE_OPENGL
 
-class AirspaceRenderer : public AirspaceVisitor, protected MapCanvas
+class AirspaceVisitorRenderer : public AirspaceVisitor, protected MapCanvas
 {
   const AirspaceLook &airspace_look;
   const AirspaceWarningCopy& m_warnings;
@@ -129,10 +133,10 @@ class AirspaceRenderer : public AirspaceVisitor, protected MapCanvas
   Pen pen_thick;
 
 public:
-  AirspaceRenderer(Canvas &_canvas, const WindowProjection &_projection,
-                   const AirspaceLook &_airspace_look,
-                   const AirspaceWarningCopy& warnings,
-                   const AirspaceRendererSettings &_settings)
+  AirspaceVisitorRenderer(Canvas &_canvas, const WindowProjection &_projection,
+                          const AirspaceLook &_airspace_look,
+                          const AirspaceWarningCopy& warnings,
+                          const AirspaceRendererSettings &_settings)
     :MapCanvas(_canvas, _projection,
                _projection.GetScreenBounds().scale(fixed(1.1))),
      airspace_look(_airspace_look),
@@ -145,7 +149,7 @@ public:
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
   }
 
-  ~AirspaceRenderer() {
+  ~AirspaceVisitorRenderer() {
     glStencilMask(0xff);
   }
 
@@ -414,11 +418,12 @@ public:
 #endif // !ENABLE_OPENGL
 
 void
-MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
+AirspaceRenderer::DrawIntersections(Canvas &canvas,
+                                    const WindowProjection &projection) const
 {
   for (unsigned i = m_airspace_intersections.size(); i--;) {
     RasterPoint sc;
-    if (render_projection.GeoToScreenIfVisible(m_airspace_intersections[i], sc))
+    if (projection.GeoToScreenIfVisible(m_airspace_intersections[i], sc))
       airspace_look.intercept_icon.draw(canvas, sc.x, sc.y);
   }
 }
@@ -429,7 +434,15 @@ MapWindow::DrawAirspaceIntersections(Canvas &canvas) const
  * @param buffer The drawing buffer
  */
 void
-MapWindow::DrawAirspace(Canvas &canvas)
+AirspaceRenderer::Draw(Canvas &canvas,
+#ifndef ENABLE_OPENGL
+                       Canvas &buffer_canvas, Canvas &stencil_canvas,
+#endif
+                       const WindowProjection &projection,
+                       const NMEA_INFO &basic,
+                       const DERIVED_INFO &calculated,
+                       const SETTINGS_COMPUTER &settings_computer,
+                       const SETTINGS_MAP &settings_map)
 {
   if (airspace_database == NULL)
     return;
@@ -438,28 +451,28 @@ MapWindow::DrawAirspace(Canvas &canvas)
   if (airspace_warnings != NULL)
     airspace_warnings->visit_warnings(awc);
 
-  const AirspaceMapVisible visible(SettingsComputer().airspace,
-                                   SettingsMap().airspace,
-                                   ToAircraftState(Basic(), Calculated()),
+  const AirspaceMapVisible visible(settings_computer.airspace,
+                                   settings_map.airspace,
+                                   ToAircraftState(basic, calculated),
                                    false, awc);
 
 #ifdef ENABLE_OPENGL
-  AirspaceRenderer renderer(canvas, render_projection, airspace_look, awc,
-                            SettingsMap().airspace);
-  airspace_database->visit_within_range(render_projection.GetGeoScreenCenter(),
-                                        render_projection.GetScreenDistanceMeters(),
+  AirspaceVisitorRenderer renderer(canvas, projection, airspace_look, awc,
+                                   settings_map.airspace);
+  airspace_database->visit_within_range(projection.GetGeoScreenCenter(),
+                                        projection.GetScreenDistanceMeters(),
                                         renderer, visible);
 #else
-  MapDrawHelper helper(canvas, buffer_canvas, stencil_canvas, render_projection,
-                       SettingsMap().airspace);
-  AirspaceVisitorMap v(helper, awc, SettingsMap().airspace,
+  MapDrawHelper helper(canvas, buffer_canvas, stencil_canvas, projection,
+                       settings_map.airspace);
+  AirspaceVisitorMap v(helper, awc, settings_map.airspace,
                        airspace_look);
 
   // JMW TODO wasteful to draw twice, can't it be drawn once?
   // we are using two draws so borders go on top of everything
 
-  airspace_database->visit_within_range(render_projection.GetGeoScreenCenter(),
-                                        render_projection.GetScreenDistanceMeters(),
+  airspace_database->visit_within_range(projection.GetGeoScreenCenter(),
+                                        projection.GetScreenDistanceMeters(),
                                         v, visible);
 
   awc.visit_warned(v);
@@ -467,11 +480,11 @@ MapWindow::DrawAirspace(Canvas &canvas)
 
   v.draw_intercepts();
 
-  AirspaceOutlineRenderer outline_renderer(canvas, render_projection,
+  AirspaceOutlineRenderer outline_renderer(canvas, projection,
                                            airspace_look,
-                                           SettingsMap().airspace.black_outline);
-  airspace_database->visit_within_range(render_projection.GetGeoScreenCenter(),
-                                        render_projection.GetScreenDistanceMeters(),
+                                           settings_map.airspace.black_outline);
+  airspace_database->visit_within_range(projection.GetGeoScreenCenter(),
+                                        projection.GetScreenDistanceMeters(),
                                         outline_renderer, visible);
   awc.visit_warned(outline_renderer);
   awc.visit_inside(outline_renderer);

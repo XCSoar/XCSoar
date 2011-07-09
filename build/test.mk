@@ -1401,7 +1401,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
-	$(SRC)/MapWindow/MapWindowAirspace.cpp \
+	$(SRC)/MapWindow/AirspaceRenderer.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
 	$(SRC)/MapWindow/MapWindowGlideRange.cpp \

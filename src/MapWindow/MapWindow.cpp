@@ -38,13 +38,13 @@ Copyright_License {
  * Constructor of the MapWindow class
  */
 MapWindow::MapWindow(const AirspaceLook &_airspace_look)
-  :airspace_look(_airspace_look),
-   way_points(NULL),
+  :way_points(NULL),
    topography(NULL), topography_renderer(NULL),
    terrain(NULL),
    terrain_radius(fixed_zero),
    weather(NULL),
-   airspace_database(NULL), airspace_warnings(NULL), task(NULL),
+   airspace_renderer(_airspace_look),
+   task(NULL),
    marks(NULL)
 #ifndef ENABLE_OPENGL
    , ui_generation(1), buffer_generation(0),

@@ -69,7 +69,13 @@ void
 MapWindow::RenderAirspace(Canvas &canvas)
 {
   if (SettingsMap().airspace.enable)
-    DrawAirspace(canvas);
+    airspace_renderer.Draw(canvas,
+#ifndef ENABLE_OPENGL
+                           buffer_canvas, stencil_canvas,
+#endif
+                           render_projection,
+                           Basic(), Calculated(),
+                           SettingsComputer(), SettingsMap());
 }
 
 void
@@ -135,7 +141,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   DrawBestCruiseTrack(canvas, aircraft_pos);
 
-  DrawAirspaceIntersections(canvas);
+  airspace_renderer.DrawIntersections(canvas, render_projection);
 
   // Draw wind vector at aircraft
   DrawWind(canvas, aircraft_pos, rc);

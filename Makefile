@@ -340,6 +340,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/MapWindow/MapDrawHelper.cpp \
+	$(SRC)/MapWindow/AirspaceRenderer.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
@@ -349,7 +350,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/RenderTask.cpp \
 	$(SRC)/ChartProjection.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
-	$(SRC)/MapWindow/MapWindowAirspace.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
 	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
 	$(SRC)/MapWindow/MapWindowLabels.cpp \

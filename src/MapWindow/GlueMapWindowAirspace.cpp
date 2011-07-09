@@ -208,6 +208,10 @@ const AirspaceDetailsDialogVisitor *AirspaceDetailsDialogVisitor::instance;
 bool
 GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
 {
+  const Airspaces *airspace_database = airspace_renderer.GetAirspaces();
+  const ProtectedAirspaceWarningManager *airspace_warnings =
+    airspace_renderer.GetAirspaceWarnings();
+
   if (airspace_database == NULL)
     return false;
 
