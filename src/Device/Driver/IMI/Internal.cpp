@@ -40,6 +40,10 @@ IMIDevice::Connect(OperationEnvironment &env)
   if (!port->SetRxTimeout(2000) || env.IsCancelled())
     return false;
 
+  // connect to the device
+  if (!IMI::Connect(*port))
+    return false;
+
   return true;
 }
 
