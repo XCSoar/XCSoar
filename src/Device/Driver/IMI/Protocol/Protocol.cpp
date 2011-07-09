@@ -269,7 +269,7 @@ IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
 bool
 IMI::Send(Port &port, const TMsg &msg)
 {
-  return port.Write(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2);
+  return port.FullWrite(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2, 2000);
 }
 
 bool
