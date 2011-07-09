@@ -27,36 +27,10 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Dialogs/Dialogs.h"
-#include "PeriodClock.hpp"
 #include "Util/StringUtil.hpp"
 #include "Language/Language.hpp"
 
 #include <stdlib.h>
-
-// returns true if it is a long press,
-// otherwise returns false
-bool
-KeyTimer(bool isdown, unsigned thekey)
-{
-  static PeriodClock fps_time_down;
-  static unsigned savedKey = 0;
-
-  if (thekey == savedKey && fps_time_down.check_update(2000)) {
-    savedKey = 0;
-    return true;
-  }
-
-  if (!isdown) {
-    // key is released
-  } else {
-    // key is lowered
-    if (thekey != savedKey) {
-      fps_time_down.update();
-      savedKey = thekey;
-    }
-  }
-  return false;
-}
 
 WindowControl::WindowControl() :
     mColorBack(COLOR_WHITE),
