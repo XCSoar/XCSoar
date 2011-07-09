@@ -52,8 +52,6 @@ namespace IMI
    * @return Operation status
    */
   bool Disconnect(Port &port);
-
-  void Register();
 };
 
 #endif

@@ -29,7 +29,6 @@ Copyright_License {
 IMIDevice::IMIDevice(Port *_port)
   :port(_port)
 {
-  IMI::Register();
 }
 
 static bool

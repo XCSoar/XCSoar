@@ -23,7 +23,7 @@ namespace IMI
 {
   struct AngleConverter;
 
-  bool _connected;
+  bool _connected = false;
   TDeviceInfo _info;
   IMIWORD _serialNumber;
 
@@ -413,10 +413,4 @@ IMI::Disconnect(Port &port)
 
   _connected = false;
   return true;
-}
-
-void
-IMI::Register()
-{
-  _connected = false;
 }
