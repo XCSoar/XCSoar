@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "FLARM/FlarmNet.hpp"
 #include "FLARM/FlarmDetails.hpp"
+#include "FLARM/FlarmId.hpp"
 #include "Util/StringUtil.hpp"
 #include "Language/Language.hpp"
 #include "MainWindow.hpp"

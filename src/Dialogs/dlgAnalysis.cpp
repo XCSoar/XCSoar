@@ -44,6 +44,7 @@ Copyright_License {
 #include "Units/UnitsFormatter.hpp"
 #include "FlightStatisticsRenderer.hpp"
 #include "ThermalBandRenderer.hpp"
+#include "GestureManager.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"

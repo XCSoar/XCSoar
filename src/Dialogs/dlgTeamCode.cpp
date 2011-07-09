@@ -36,6 +36,7 @@
 #include "TeamCodeCalculation.hpp"
 #include "Compiler.h"
 #include "Profile/Profile.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 
 #include <stdio.h>
 
