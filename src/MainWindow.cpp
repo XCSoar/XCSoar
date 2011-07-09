@@ -145,7 +145,7 @@ MainWindow::InitialiseConfigured()
   WindowStyle hidden;
   hidden.hide();
 
-  vario = new GlueGaugeVario(*this,
+  vario = new GlueGaugeVario(*this, look->vario,
                              rc.right - ib_layout.control_width, 0,
                              ib_layout.control_width,
                              ib_layout.control_height * 3,

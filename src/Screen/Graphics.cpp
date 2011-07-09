@@ -185,11 +185,6 @@ const Color Graphics::TaskColor = Color(0x62,0x4e,0x90);
 const Color Graphics::IsolineColor = BearingColor;
 const Color Graphics::BearingColor = Color(0x3e,0x30,0x5f);
 
-const Color Graphics::inv_sinkColor = Color(0xc4, 0x80, 0x1e);
-const Color Graphics::inv_liftColor = Color(0x1e, 0xf1, 0x73);
-const Color Graphics::sinkColor = Color(0xa3,0x69,0x0d);
-const Color Graphics::liftColor = Color(0x19,0x94,0x03);
-
 const Color Graphics::Colours[] = {
   COLOR_RED,
   COLOR_GREEN,

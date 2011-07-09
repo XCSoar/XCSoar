@@ -32,8 +32,6 @@ struct TraceHistoryLook {
 
   Pen line_pen;
 
-  Brush lift_brush, sink_brush;
-
   void Initialise(bool inverse);
   void Deinitialise();
 };

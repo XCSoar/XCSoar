@@ -21,37 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef GLUE_GAUGE_VARIO_H
-#define GLUE_GAUGE_VARIO_H
+#ifndef XCSOAR_VARIO_LOOK_HPP
+#define XCSOAR_VARIO_LOOK_HPP
 
-#include "GaugeVario.hpp"
+#include "Screen/Color.hpp"
+#include "Screen/Brush.hpp"
 
-/**
- * A variant of GaugeVario which auto-updates its data from the device
- * blackboard.
- */
-class GlueGaugeVario : public GaugeVario {
-  /**
-   * Is our InstrumentBlackboard up to date?
-   */
-  bool blackboard_valid;
+struct VarioLook {
+  Color background_color, text_color, dimmed_text_color;
 
-public:
-  GlueGaugeVario(ContainerWindow &parent, const VarioLook &look,
-                 int left, int top, unsigned width, unsigned height,
-                 const WindowStyle style=WindowStyle())
-    :GaugeVario(parent, look, left, top, width, height, style),
-     blackboard_valid(false) {}
+  Color sink_color, lift_color;
 
-  /**
-   * Indicate that vario data in the device blackboard has been
-   * updated, and trigger a redraw.  This method may be called from
-   * any thread.
-   */
-  void invalidate_blackboard();
+  Brush sink_brush, lift_brush;
 
-protected:
-  virtual void on_paint_buffer(Canvas &canvas);
+  void Initialise(bool inverse);
 };
 
 #endif

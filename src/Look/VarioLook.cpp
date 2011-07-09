@@ -21,37 +21,25 @@ Copyright_License {
 }
 */
 
-#ifndef GLUE_GAUGE_VARIO_H
-#define GLUE_GAUGE_VARIO_H
+#include "VarioLook.hpp"
 
-#include "GaugeVario.hpp"
+void
+VarioLook::Initialise(bool inverse)
+{
+  if (inverse) {
+    background_color = COLOR_BLACK;
+    text_color = COLOR_WHITE;
+    dimmed_text_color = Color(0xa0, 0xa0, 0xa0);
+    sink_color = Color(0xc4, 0x80, 0x1e);
+    lift_color = Color(0x1e, 0xf1, 0x73);
+  } else {
+    background_color = COLOR_WHITE;
+    text_color = COLOR_BLACK;
+    dimmed_text_color = Color((uint8_t)~0xa0, (uint8_t)~0xa0, (uint8_t)~0xa0);
+    sink_color = Color(0xa3,0x69,0x0d);
+    lift_color = Color(0x19,0x94,0x03);
+  }
 
-/**
- * A variant of GaugeVario which auto-updates its data from the device
- * blackboard.
- */
-class GlueGaugeVario : public GaugeVario {
-  /**
-   * Is our InstrumentBlackboard up to date?
-   */
-  bool blackboard_valid;
-
-public:
-  GlueGaugeVario(ContainerWindow &parent, const VarioLook &look,
-                 int left, int top, unsigned width, unsigned height,
-                 const WindowStyle style=WindowStyle())
-    :GaugeVario(parent, look, left, top, width, height, style),
-     blackboard_valid(false) {}
-
-  /**
-   * Indicate that vario data in the device blackboard has been
-   * updated, and trigger a redraw.  This method may be called from
-   * any thread.
-   */
-  void invalidate_blackboard();
-
-protected:
-  virtual void on_paint_buffer(Canvas &canvas);
-};
-
-#endif
+  sink_brush.set(sink_color);
+  lift_brush.set(lift_color);
+}

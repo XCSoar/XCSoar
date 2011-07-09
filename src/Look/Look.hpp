@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_LOOK_HPP
 #define XCSOAR_LOOK_HPP
 
+#include "VarioLook.hpp"
 #include "ChartLook.hpp"
 #include "ThermalBandLook.hpp"
 #include "TraceHistoryLook.hpp"
@@ -33,6 +34,7 @@ Copyright_License {
 struct SETTINGS_MAP;
 
 struct Look {
+  VarioLook vario;
   ChartLook chart;
   ThermalBandLook thermal_band;
   TraceHistoryLook trace_history;

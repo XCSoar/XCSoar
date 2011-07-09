@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Look/TraceHistoryLook.hpp"
+#include "Look/VarioLook.hpp"
 #include "Appearance.hpp"
 #include <algorithm>
 
@@ -107,19 +108,19 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
       if (sgn(y)*sgn(y_last)<0) {
         if (positive(y_last))
           chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero,
-                               look.lift_brush);
+                               vario_look.lift_brush);
         else if (negative(y_last))
           chart.DrawFilledLine(x_last, y_last, x_last+fixed_half, fixed_zero,
-                               look.sink_brush);
+                               vario_look.sink_brush);
         
         x_last = x-fixed_half;
         y_last = fixed_zero;
 
       }
       if (positive(y) || positive(y_last))
-        chart.DrawFilledLine(x_last, y_last, x, y, look.lift_brush);
+        chart.DrawFilledLine(x_last, y_last, x, y, vario_look.lift_brush);
       else if (negative(y) || negative(y_last))
-        chart.DrawFilledLine(x_last, y_last, x, y, look.sink_brush);
+        chart.DrawFilledLine(x_last, y_last, x, y, vario_look.sink_brush);
     }
     x_last = x;
     y_last = y;

@@ -60,7 +60,7 @@ InfoBoxContentSpark::do_paint(InfoBoxWindow &infobox, Canvas &canvas,
     return;
 
   const Look &look = *CommonInterface::main_window.look;
-  TraceHistoryRenderer renderer(look.trace_history, look.chart);
+  TraceHistoryRenderer renderer(look.trace_history, look.vario, look.chart);
   renderer.RenderVario(canvas, get_spark_rect(infobox), var, center,
                        CommonInterface::SettingsComputer().glide_polar_task.GetMC());
 }

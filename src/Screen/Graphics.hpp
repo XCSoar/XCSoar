@@ -191,10 +191,6 @@ namespace Graphics {
   extern const Color cAlertSafe;
   extern const Color cAlertWarning;
   extern const Color cAlertAlarm;
-  extern const Color inv_sinkColor;
-  extern const Color inv_liftColor;
-  extern const Color sinkColor;
-  extern const Color liftColor;
   extern const Color skyColor;
   extern const Color seaColor;
 };

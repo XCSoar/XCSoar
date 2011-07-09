@@ -33,6 +33,7 @@ Look::Initialise()
 void
 Look::InitialiseConfigured(bool inverse)
 {
+  vario.Initialise(inverse);
   chart.Initialise();
   thermal_band.Initialise();
   trace_history.Initialise(inverse);

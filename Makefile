@@ -476,6 +476,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ResourceLoader.cpp \
 	\
 	$(SRC)/Look/Look.cpp \
+	$(SRC)/Look/VarioLook.cpp \
 	$(SRC)/Look/ChartLook.cpp \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \

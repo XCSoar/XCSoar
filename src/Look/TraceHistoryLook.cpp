@@ -29,9 +29,6 @@ TraceHistoryLook::Initialise(bool inverse)
 {
   axis_pen.set(1, COLOR_GRAY);
   line_pen.set(2, inverse ? COLOR_WHITE : COLOR_BLACK);
-
-  lift_brush.set(inverse ? Graphics::inv_liftColor : Graphics::liftColor);
-  sink_brush.set(inverse ? Graphics::inv_sinkColor : Graphics::sinkColor);
 }
 
 void
@@ -39,6 +36,4 @@ TraceHistoryLook::Deinitialise()
 {
   axis_pen.reset();
   line_pen.reset();
-  lift_brush.reset();
-  sink_brush.reset();
 }

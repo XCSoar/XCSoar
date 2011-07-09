@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Gauge/GaugeVario.hpp"
-#include "Screen/Graphics.hpp"
+#include "Look/VarioLook.hpp"
 #include "Screen/UnitSymbol.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
@@ -45,9 +45,10 @@ using std::max;
 #define TextBug _T("Bug")
 #define TextBal _T("Bal")
 
-GaugeVario::GaugeVario(ContainerWindow &parent,
+GaugeVario::GaugeVario(ContainerWindow &parent, const VarioLook &_look,
                        int left, int top, unsigned width, unsigned height,
-                       const WindowStyle style) :
+                       const WindowStyle style)
+  :look(_look),
    ShowAvgText(false),
    ShowMc(false),
    ShowSpeedToFly(false),
@@ -83,37 +84,16 @@ GaugeVario::GaugeVario(ContainerWindow &parent,
   hDrawBitMap.load(Units::GetUserVerticalSpeedUnit() == unKnots ?
                    IDB_VARIOSCALEC : IDB_VARIOSCALEA);
 
-  Color thesinkColor;
-  Color theliftColor;
+  sinkThickPen.set(Layout::Scale(5), look.sink_color);
+  liftThickPen.set(Layout::Scale(5), look.lift_color);
 
   if (Appearance.InverseInfoBox) {
-    thesinkColor = Graphics::inv_sinkColor;
-    theliftColor = Graphics::inv_liftColor;
-  } else {
-    thesinkColor = Graphics::sinkColor;
-    theliftColor = Graphics::liftColor;
-  }
-
-  sinkBrush.set(thesinkColor);
-  liftBrush.set(theliftColor);
-  sinkPen.set(1, thesinkColor);
-  liftPen.set(1, theliftColor);
-  sinkThickPen.set(Layout::Scale(5), thesinkColor);
-  liftThickPen.set(Layout::Scale(5), theliftColor);
-
-  if (Appearance.InverseInfoBox) {
-    colText = COLOR_WHITE;
-    colTextBackgnd = COLOR_BLACK;
-    colTextGray = Color(0xa0, 0xa0, 0xa0);
     hBitmapClimb.load(IDB_CLIMBSMALLINV);
   } else {
-    colText = COLOR_BLACK;
-    colTextBackgnd = COLOR_WHITE;
-    colTextGray = Color((uint8_t)~0xa0, (uint8_t)~0xa0, (uint8_t)~0xa0);
     hBitmapClimb.load(IDB_CLIMBSMALL);
   }
 
-  blankThickPen.set(Layout::Scale(5), colTextBackgnd);
+  blankThickPen.set(Layout::Scale(5), look.background_color);
 
   unit_symbol = GetUnitSymbol(Units::Current.VerticalSpeedUnit);
 
@@ -418,8 +398,8 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
   canvas.background_transparent();
 
   if (!is_persistent() || (dirty && _tcscmp(diLabel->lastText, Label) != 0)) {
-    canvas.set_background_color(colTextBackgnd);
-    canvas.set_text_color(colTextGray);
+    canvas.set_background_color(look.background_color);
+    canvas.set_text_color(look.dimmed_text_color);
     canvas.select(Fonts::Title);
     tsize = canvas.text_size(Label);
     diLabel->orgText.x = diLabel->recBkg.right - tsize.cx;
@@ -431,8 +411,8 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
 
   if (!is_persistent() || (dirty && diValue->lastValue != Value)) {
     TCHAR Temp[18];
-    canvas.set_background_color(colTextBackgnd);
-    canvas.set_text_color(colText);
+    canvas.set_background_color(look.background_color);
+    canvas.set_text_color(look.text_color);
     _stprintf(Temp, _T("%.1f"), (double)Value);
     canvas.select(Fonts::CDI);
     tsize = canvas.text_size(Temp);
@@ -521,9 +501,9 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
     if (Appearance.InfoBoxColors) {
       if (positive(vdiff)) {
         // too slow
-        canvas.select(sinkBrush);
+        canvas.select(look.sink_brush);
       } else {
-        canvas.select(liftBrush);
+        canvas.select(look.lift_brush);
       }
     } else {
       if (Appearance.InverseInfoBox)
@@ -647,14 +627,14 @@ GaugeVario::RenderBallast(Canvas &canvas)
     TCHAR Temp[18];
 
     canvas.select(Fonts::Title);
-    canvas.set_background_color(colTextBackgnd);
+    canvas.set_background_color(look.background_color);
 
     if (lastBallast < fixed(0.001) || BALLAST < fixed(0.001)) {
       // new ballast is 0, hide label
       if (BALLAST < fixed(0.001))
         canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, _T(""));
       else {
-        canvas.set_text_color(colTextGray);
+        canvas.set_text_color(look.dimmed_text_color);
         // ols ballast was 0, show label
         canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBal);
       }
@@ -666,7 +646,7 @@ GaugeVario::RenderBallast(Canvas &canvas)
     else
       _stprintf(Temp, _T("%d%%"), (int)(BALLAST * 100));
 
-    canvas.set_text_color(colText);
+    canvas.set_text_color(look.text_color);
     canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
 
     lastBallast = BALLAST;
@@ -726,13 +706,13 @@ GaugeVario::RenderBugs(Canvas &canvas)
     TCHAR Temp[18];
 
     canvas.select(Fonts::Title);
-    canvas.set_background_color(colTextBackgnd);
+    canvas.set_background_color(look.background_color);
 
     if (lastBugs > fixed(0.999) || BUGS > fixed(0.999)) {
       if (BUGS > fixed(0.999))
         canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, _T(""));
       else {
-        canvas.set_text_color(colTextGray);
+        canvas.set_text_color(look.dimmed_text_color);
         canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
       }
     }
@@ -742,7 +722,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
     else
       _stprintf(Temp, _T("%d%%"), (int)((fixed_one - BUGS) * 100));
 
-    canvas.set_text_color(colText);
+    canvas.set_text_color(look.text_color);
     canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
 
     lastBugs = BUGS;

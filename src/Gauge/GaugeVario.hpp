@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "InstrumentBlackboard.hpp"
 
+struct VarioLook;
 class ContainerWindow;
 class UnitSymbol;
 
@@ -58,6 +59,8 @@ class GaugeVario:
     gmax = GAUGEVARIOSWEEP + 2,
   };
 
+  const VarioLook &look;
+
 public:
   bool ShowAvgText;
   bool ShowMc;
@@ -72,14 +75,6 @@ private:
   int xoffset;
   int yoffset;
 
-  Color colTextGray;
-  Color colText;
-  Color colTextBackgnd;
-
-  Brush sinkBrush;
-  Brush liftBrush;
-  Pen sinkPen;
-  Pen liftPen;
   Pen sinkThickPen;
   Pen liftThickPen;
   Pen blankThickPen;
@@ -109,7 +104,7 @@ private:
   RasterPoint lines[gmax * 2 + 1];
 
 public:
-  GaugeVario(ContainerWindow &parent,
+  GaugeVario(ContainerWindow &parent, const VarioLook &look,
              int left, int top, unsigned width, unsigned height,
              const WindowStyle style=WindowStyle());
 
