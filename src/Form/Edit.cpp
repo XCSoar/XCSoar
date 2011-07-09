@@ -34,6 +34,12 @@ Copyright_License {
 
 #include <assert.h>
 
+static bool
+CanEditInPlace()
+{
+  return has_keyboard();
+}
+
 bool
 WndProperty::Editor::on_mouse_down(int x, int y)
 {
@@ -271,7 +277,7 @@ WndProperty::UpdateLayout()
 void
 WndProperty::on_editor_setfocus()
 {
-  if (mDataField != NULL) {
+  if (mDataField != NULL && CanEditInPlace()) {
     edit.set_text(mDataField->GetAsString());
   }
 
@@ -281,7 +287,7 @@ WndProperty::on_editor_setfocus()
 void
 WndProperty::on_editor_killfocus()
 {
-  if (mDataField != NULL) {
+  if (mDataField != NULL && CanEditInPlace()) {
     TCHAR sTmp[128];
     edit.get_text(sTmp, (sizeof(sTmp) / sizeof(TCHAR)) - 1);
     mDataField->SetAsString(sTmp);
@@ -358,7 +364,7 @@ WndProperty::CallSpecial(void)
 {
   if (mDataField != NULL) {
     mDataField->Special();
-    edit.set_text(mDataField->GetAsString());
+    RefreshDisplay();
   }
   return 0;
 }
@@ -368,7 +374,7 @@ WndProperty::IncValue(void)
 {
   if (mDataField != NULL) {
     mDataField->Inc();
-    edit.set_text(mDataField->GetAsString());
+    RefreshDisplay();
   }
   return 0;
 }
@@ -378,7 +384,7 @@ WndProperty::DecValue(void)
 {
   if (mDataField != NULL) {
     mDataField->Dec();
-    edit.set_text(mDataField->GetAsString());
+    RefreshDisplay();
   }
   return 0;
 }
@@ -453,7 +459,7 @@ WndProperty::RefreshDisplay()
   if (!mDataField)
     return;
 
-  if (edit.has_focus())
+  if (edit.has_focus() && CanEditInPlace())
     edit.set_text(mDataField->GetAsString());
   else
     edit.set_text(mDataField->GetAsDisplayString());
