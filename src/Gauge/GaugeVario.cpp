@@ -736,7 +736,7 @@ GaugeVario::RenderBugs(Canvas &canvas)
           canvas.text_opaque(orgLabel.x, orgLabel.y, recLabelBk, TextBug);
         else
           canvas.text(orgLabel.x, orgLabel.y, TextBug);
-      } else
+      } else if (is_persistent())
         canvas.fill_rectangle(recLabelBk, look.background_color);
     }
 
@@ -746,9 +746,9 @@ GaugeVario::RenderBugs(Canvas &canvas)
       canvas.set_text_color(look.text_color);
       if (is_persistent())
         canvas.text_opaque(orgValue.x, orgValue.y, recValueBk, Temp);
-      else
+      else 
         canvas.text(orgValue.x, orgValue.y, Temp);
-    } else
+    } else if (is_persistent())
       canvas.fill_rectangle(recValueBk, look.background_color);
 
     if (is_persistent())
