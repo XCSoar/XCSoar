@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "MainWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "resource.h"
 #include "Protection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -46,7 +47,8 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 
 MainWindow::MainWindow(const StatusMessageList &status_messages)
-  :vario(NULL), flarm(NULL), ta(NULL), popup(status_messages, *this),
+  :map(NULL), vario(NULL), flarm(NULL), ta(NULL),
+   popup(status_messages, *this),
    FullScreen(false), CustomView(false),
    airspace_warning_pending(false) {}
 
@@ -159,8 +161,9 @@ MainWindow::InitialiseConfigured()
                                  hidden_border);
   ta->bring_to_top();
 
-  map.set(*this, map_rect);
-  map.set_font(Fonts::Map);
+  map = new GlueMapWindow();
+  map->set(*this, map_rect);
+  map->set_font(Fonts::Map);
 
   LogStartUp(_T("Initialise message system"));
   popup.set(rc);
@@ -174,7 +177,8 @@ MainWindow::Deinitialise()
 
   popup.reset();
 
-  map.reset();
+  delete map;
+  map = NULL;
 
   delete vario;
   vario = NULL;
@@ -210,7 +214,7 @@ MainWindow::ReinitialiseLayout_vario()
 void
 MainWindow::ReinitialiseLayout()
 {
-  if (!map.defined()) {
+  if (map == NULL) {
 #ifdef ANDROID
     if (has_dialog())
       dialogs.top()->ReinitialiseLayout();  // adapt simulator prompt
@@ -256,11 +260,11 @@ MainWindow::ReinitialiseLayout()
     ta->move(0, rc.bottom - sz, sz, sz);
   }
 
-  if (!FullScreen) {
-    map.move(map_rect.left, map_rect.top,
-             map_rect.right - map_rect.left,
-             map_rect.bottom - map_rect.top);
-    map.FullRedraw();
+  if (!FullScreen && map != NULL) {
+    map->move(map_rect.left, map_rect.top,
+              map_rect.right - map_rect.left,
+              map_rect.bottom - map_rect.top);
+    map->FullRedraw();
   }
 
 #ifdef ANDROID
@@ -269,7 +273,8 @@ MainWindow::ReinitialiseLayout()
     dialogs.top()->ReinitialiseLayout();
 #endif
 
-  map.BringToBottom();
+  if (map != NULL)
+    map->BringToBottom();
 }
 
 void
@@ -290,13 +295,17 @@ MainWindow::reset()
 void
 MainWindow::SetDefaultFocus()
 {
-  map.set_focus();
+  if (map != NULL)
+    map->set_focus();
+  else
+    set_focus();
 }
 
 void
 MainWindow::full_redraw()
 {
-  map.FullRedraw();
+  if (map != NULL)
+    map->FullRedraw();
 }
 
 // Windows event handlers
@@ -310,7 +319,7 @@ MainWindow::on_resize(unsigned width, unsigned height)
 
   ReinitialiseLayout();
 
-  if (map.defined()) {
+  if (map != NULL) {
     /* the map being created already is an indicator that XCSoar is
        running already, and so we assume the menu buttons have been
        created, too */
@@ -319,7 +328,7 @@ MainWindow::on_resize(unsigned width, unsigned height)
     ButtonLabel::CreateButtonLabels(*this);
     ButtonLabel::SetFont(Fonts::MapBold);
 
-    map.BringToBottom();
+    map->BringToBottom();
   }
 
   return true;
@@ -342,8 +351,8 @@ MainWindow::on_setfocus()
     /* the main window should never have the keyboard focus; if we
        happen to get the focus despite of that, forward it to the map
        window to make keyboard shortcuts work */
-    if (map.defined())
-      map.set_focus();
+    if (map != NULL)
+      map->set_focus();
     return true;
   }
 
@@ -445,8 +454,11 @@ MainWindow::SetFullScreen(bool _full_screen)
   else
     InfoBoxManager::Show();
 
-  const PixelRect rc = FullScreen ? get_client_rect() : map_rect;
-  map.fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+  if (map != NULL) {
+    const PixelRect rc = FullScreen ? get_client_rect() : map_rect;
+    map->fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+  }
+
   // the repaint will be triggered by the DrawThread
 }
 
@@ -456,7 +468,9 @@ MainWindow::SetCustomView(PixelRect rc)
   CustomView = true;
 
   InfoBoxManager::Hide();
-  map.fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
+
+  if (map != NULL)
+    map->fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
 }
 
 void
@@ -472,19 +486,23 @@ MainWindow::LeaveCustomView()
 void
 MainWindow::SetTerrain(RasterTerrain *terrain)
 {
-  map.set_terrain(terrain);
+  if (map != NULL)
+    map->set_terrain(terrain);
 }
 
 void
 MainWindow::SetTopography(TopographyStore *topography)
 {
-  map.set_topography(topography);
+  if (map != NULL)
+    map->set_topography(topography);
 }
 
 DisplayMode
 MainWindow::GetDisplayMode() const
 {
-  return map.GetDisplayMode();
+  return map != NULL
+    ? map->GetDisplayMode()
+    : DM_NONE;
 }
 
 #ifdef ANDROID

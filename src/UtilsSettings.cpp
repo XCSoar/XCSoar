@@ -24,6 +24,7 @@ Copyright_License {
 #include "UtilsSettings.hpp"
 #include "Protection.hpp"
 #include "MainWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"
 #include "Terrain/RasterTerrain.hpp"

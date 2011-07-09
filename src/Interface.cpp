@@ -24,6 +24,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Thread/Mutex.hpp"
 #include "MainWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
 #include "StatusMessage.hpp"
@@ -81,10 +82,11 @@ void
 ActionInterface::SendSettingsComputer()
 {
   assert(calculation_thread != NULL);
+  assert(main_window.map != NULL);
 
-  main_window.map.SetSettingsComputer(SettingsComputer());
+  main_window.map->SetSettingsComputer(SettingsComputer());
   calculation_thread->SetSettingsComputer(SettingsComputer());
-  calculation_thread->SetScreenDistanceMeters(main_window.map.VisibleProjection().GetScreenDistanceMeters());
+  calculation_thread->SetScreenDistanceMeters(main_window.map->VisibleProjection().GetScreenDistanceMeters());
 }
 
 /**
@@ -94,6 +96,8 @@ ActionInterface::SendSettingsComputer()
 void
 ActionInterface::SendSettingsMap(const bool trigger_draw)
 {
+  assert(main_window.map != NULL);
+
   // trigger_draw: asks for an immediate exchange of blackboard data
   // (via ProcessTimer()) rather than waiting for the idle timer every 500ms
 
@@ -102,7 +106,7 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
     InfoBoxManager::ProcessTimer();
   }
 
-  main_window.map.SetSettingsMap(SettingsMap());
+  main_window.map->SetSettingsMap(SettingsMap());
 
   if (trigger_draw)
     main_window.full_redraw();

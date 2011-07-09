@@ -26,6 +26,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 
 /**
  * Opens up the WaypointDetails window of the nearest
@@ -47,7 +48,7 @@ PopupNearestWaypointDetails(const Waypoints &way_points,
 
   if (way_point &&
       (!scalefilter ||
-       XCSoarInterface::main_window.map.VisibleProjection().WaypointInScaleFilter(*way_point))) {
+       XCSoarInterface::main_window.map->VisibleProjection().WaypointInScaleFilter(*way_point))) {
     dlgWaypointSelectAddToLastUsed(*way_point);
     dlgWaypointDetailsShowModal(XCSoarInterface::main_window, *way_point);
     return true;

@@ -28,6 +28,7 @@ Copyright_License {
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
 #include "MainWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -556,7 +557,7 @@ dlgTargetShowModal(int TargetPoint)
     map_rect.top = dialog_rect.bottom;
   XCSoarInterface::main_window.SetCustomView(map_rect);
 
-  wf->ShowModal(&XCSoarInterface::main_window.map); // enable map
+  wf->ShowModal(XCSoarInterface::main_window.map); // enable map
 
   XCSoarInterface::SetSettingsMap().EnablePan = oldEnablePan;
   XCSoarInterface::SetSettingsMap().PanLocation = oldPanLocation;

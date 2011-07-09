@@ -51,7 +51,7 @@ Copyright_License {
 #include "Waypoint/WaypointDetailsReader.hpp"
 #include "Screen/Fonts.hpp"
 #include "DeviceBlackboard.hpp"
-#include "MapWindow/MapWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "Marks.hpp"
 #include "Device/device.hpp"
 #include "Topography/TopographyStore.hpp"
@@ -409,22 +409,25 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   operation.SetText(_("Initialising display"));
 
-  main_window.map.set_way_points(&way_points);
-  main_window.map.set_task(protected_task_manager);
-  main_window.map.set_airspaces(&airspace_database, airspace_warnings);
+  GlueMapWindow *map_window = main_window.map;
+  if (map_window != NULL) {
+    map_window->set_way_points(&way_points);
+    map_window->set_task(protected_task_manager);
+    map_window->set_airspaces(&airspace_database, airspace_warnings);
 
-  main_window.map.set_topography(topography);
-  main_window.map.set_terrain(terrain);
-  main_window.map.set_weather(&RASP);
-  main_window.map.set_marks(marks);
-  main_window.map.SetLogger(&logger);
+    map_window->set_topography(topography);
+    map_window->set_terrain(terrain);
+    map_window->set_weather(&RASP);
+    map_window->set_marks(marks);
+    map_window->SetLogger(&logger);
+  }
 
   // Finally ready to go.. all structures must be present before this.
 
   // Create the drawing thread
 #ifndef ENABLE_OPENGL
   LogStartUp(_T("CreateDrawingThread"));
-  draw_thread = new DrawThread(main_window.map, main_window.flarm,
+  draw_thread = new DrawThread(*map_window, main_window.flarm,
                                main_window.ta);
   draw_thread->Start(true);
 #endif

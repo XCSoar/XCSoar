@@ -25,11 +25,11 @@ Copyright_License {
 #define XCSOAR_MAIN_WINDOW_HXX
 
 #include "Screen/SingleWindow.hpp"
-#include "MapWindow/GlueMapWindow.hpp"
 #include "PopupMessage.hpp"
 #include "BatteryTimer.hpp"
 #include "DisplayMode.hpp"
 
+class GlueMapWindow;
 class GlueGaugeVario;
 class GaugeFLARM;
 class GaugeThermalAssistant;
@@ -50,7 +50,7 @@ class MainWindow : public SingleWindow {
   };
 
 public:
-  GlueMapWindow map;
+  GlueMapWindow *map;
   GlueGaugeVario *vario;
   GaugeFLARM *flarm;
   GaugeThermalAssistant *ta;
@@ -88,7 +88,7 @@ protected:
   bool IsRunning() {
     /* it is safe enough to say that XCSoar initialization is complete
        after the MapWindow has been created */
-    return map.defined();
+    return map != NULL;
   }
 
 public:

@@ -70,6 +70,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "MainWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "Atmosphere/CuSonde.hpp"
 #include "Gauge/GaugeFLARM.hpp"
 #include "Profile/Profile.hpp"
@@ -1260,6 +1261,9 @@ void
 InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
+  const GlueMapWindow *map_window = CommonInterface::main_window.map;
+  if (map_window == NULL)
+    return;
 
   if (_tcscmp(misc, _T("aircraft")) == 0)
     // big range..
@@ -1268,7 +1272,7 @@ InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
   else if (_tcscmp(misc, _T("pan")) == 0)
     // big range..
     PopupNearestWaypointDetails(way_points,
-                                XCSoarInterface::main_window.map.VisibleProjection().GetGeoLocation(),
+                                map_window->VisibleProjection().GetGeoLocation(),
                                 1.0e5);
 }
 
@@ -1734,19 +1738,21 @@ void
 InputEvents::sub_PanCursor(int dx, int dy)
 {
   SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
-
   if (!settings_map.EnablePan)
     return;
 
-  const WindowProjection &projection =
-      XCSoarInterface::main_window.map.VisibleProjection();
+  GlueMapWindow *map_window = CommonInterface::main_window.map;
+  if (map_window == NULL)
+    return;
+
+  const WindowProjection &projection = map_window->VisibleProjection();
 
   RasterPoint pt = projection.GetScreenOrigin();
   pt.x -= dx * projection.GetScreenWidth() / 4;
   pt.y -= dy * projection.GetScreenHeight() / 4;
   settings_map.PanLocation = projection.ScreenToGeo(pt);
 
-  XCSoarInterface::main_window.map.QuickRedraw(settings_map);
+  map_window->QuickRedraw(settings_map);
   XCSoarInterface::SendSettingsMap(true);
 }
 
@@ -1773,6 +1779,9 @@ void
 InputEvents::sub_SetZoom(fixed value)
 {
   SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  GlueMapWindow *map_window = CommonInterface::main_window.map;
+  if (map_window == NULL)
+    return;
 
   DisplayMode displayMode = XCSoarInterface::main_window.GetDisplayMode();
   if (settings_map.AutoZoom &&
@@ -1791,17 +1800,20 @@ InputEvents::sub_SetZoom(fixed value)
                         scale_500m : max(scale_500m, scale_2min_distance);
 
   value = max(minreasonable, min(scale_1600km, value));
-  XCSoarInterface::main_window.map.SetMapScale(value);
-
-  XCSoarInterface::main_window.map.QuickRedraw(settings_map);
+  map_window->SetMapScale(value);
+  map_window->QuickRedraw(settings_map);
   XCSoarInterface::SendSettingsMap(true);
 }
 
 void
 InputEvents::sub_ScaleZoom(int vswitch)
 {
+  const GlueMapWindow *map_window = CommonInterface::main_window.map;
+  if (map_window == NULL)
+    return;
+
   const MapWindowProjection &projection =
-      XCSoarInterface::main_window.map.VisibleProjection();
+      map_window->VisibleProjection();
 
   fixed value = projection.GetMapScale();
 
