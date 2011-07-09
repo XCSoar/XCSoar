@@ -49,7 +49,7 @@ namespace IMI
    * @param imiWp IMI waypoint structure to set
    */
   void IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
-  void IMIWaypoint(const Waypoint &wp, TWaypoint &imiWp);
+  void ConvertWaypoint(const Waypoint &wp, TWaypoint &imiWp);
 
 }
 

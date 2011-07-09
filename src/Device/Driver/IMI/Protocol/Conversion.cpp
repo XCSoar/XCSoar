@@ -102,7 +102,7 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
 }
 
 void
-IMI::IMIWaypoint(const Waypoint &wp, TWaypoint &imiWp)
+IMI::ConvertWaypoint(const Waypoint &wp, TWaypoint &imiWp)
 {
   // set name
   ConvertToChar(wp.Name.c_str(), imiWp.name, sizeof(imiWp.name));
@@ -122,7 +122,7 @@ IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
   const Declaration::TurnPoint &tp = decl.TurnPoints[idx];
   const Waypoint &wp = tp.waypoint;
 
-  IMIWaypoint(wp, imiWp);
+  ConvertWaypoint(wp, imiWp);
 
   // TAKEOFF and LANDING do not have OZs
   if (imiIdx == 0 || imiIdx == decl.size() + 1)

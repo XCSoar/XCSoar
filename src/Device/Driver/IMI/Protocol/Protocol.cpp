@@ -270,12 +270,12 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl)
   ConvertToChar(_T("XCSOARTASK"), imiDecl.header.tskName,
                   sizeof(imiDecl.header.tskName));
 
-  IMIWaypoint(decl.TurnPoints[0].waypoint, imiDecl.wp[0]);
+  ConvertWaypoint(decl.TurnPoints[0].waypoint, imiDecl.wp[0]);
 
   for (unsigned i = 0; i < decl.size(); i++)
     IMIWaypoint(decl, i + 1, imiDecl.wp[i + 1]);
 
-  IMIWaypoint(decl.TurnPoints[decl.size() - 1].waypoint,
+  ConvertWaypoint(decl.TurnPoints[decl.size() - 1].waypoint,
               imiDecl.wp[decl.size() + 1]);
 
   // send declaration for current task
