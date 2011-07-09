@@ -34,7 +34,6 @@ EventLoop::get(MSG &msg)
   if (!::GetMessage(&msg, NULL, 0, 0))
     return false;
 
-  ::TranslateMessage(&msg);
   return true;
 }
 
@@ -42,6 +41,7 @@ void
 EventLoop::dispatch(const MSG &msg)
 {
   assert_none_locked();
+  ::TranslateMessage(&msg);
   ::DispatchMessage(&msg);
   assert_none_locked();
 }
