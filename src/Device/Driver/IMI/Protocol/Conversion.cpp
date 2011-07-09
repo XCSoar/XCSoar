@@ -93,9 +93,6 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
   out.year += 2000;
   out.month++;
   out.day++;
-  out.hour++;
-  out.minute++;
-  out.second++;
 
   return out;
 }
