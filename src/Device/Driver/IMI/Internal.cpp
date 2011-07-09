@@ -41,7 +41,7 @@ IMIDevice::Connect(OperationEnvironment &env)
     return false;
 
   // connect to the device
-  if (!IMI::Connect(*port))
+  if (!IMI::Connect(*port, env))
     return false;
 
   return true;

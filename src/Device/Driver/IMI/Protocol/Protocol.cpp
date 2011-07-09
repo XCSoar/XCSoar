@@ -12,6 +12,7 @@
 #include "Checksum.hpp"
 #include "Conversion.hpp"
 #include "Communication.hpp"
+#include "Operation.hpp"
 #include "Device/Declaration.hpp"
 #include "Device/Driver.hpp"
 #include "MessageParser.hpp"
@@ -26,7 +27,7 @@ namespace IMI
 }
 
 bool
-IMI::Connect(Port &port)
+IMI::Connect(Port &port, OperationEnvironment &env)
 {
   if (_connected)
     return true;
@@ -36,11 +37,11 @@ IMI::Connect(Port &port)
   MessageParser::Reset();
 
   // check connectivity
-  if (!Send(port, MSG_CFG_HELLO))
+  if (!Send(port, MSG_CFG_HELLO) || env.IsCancelled())
     return false;
 
   const TMsg *msg = Receive(port, 100, 0);
-  if (!msg || msg->msgID != MSG_CFG_HELLO)
+  if (!msg || msg->msgID != MSG_CFG_HELLO || env.IsCancelled())
     return false;
 
   _serialNumber = msg->sn;
@@ -51,7 +52,7 @@ IMI::Connect(Port &port)
     return false;
 
   if (!Send(port, MSG_CFG_STARTCONFIG, 0, 0, IMICOMM_BIGPARAM1(baudRate),
-            IMICOMM_BIGPARAM2(baudRate)))
+            IMICOMM_BIGPARAM2(baudRate)) || env.IsCancelled())
     return false;
 
   // get device info
@@ -59,8 +60,11 @@ IMI::Connect(Port &port)
     if (!Send(port, MSG_CFG_DEVICEINFO))
       continue;
 
+    if (env.IsCancelled())
+      return false;
+
     const TMsg *msg = Receive(port, 300, sizeof(TDeviceInfo));
-    if (!msg)
+    if (!msg || env.IsCancelled())
       return false;
 
     if (msg->msgID != MSG_CFG_DEVICEINFO)
