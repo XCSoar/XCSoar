@@ -43,6 +43,9 @@ namespace IMI
 
     MSG_DECLARATION      = 0x20,
 
+    MSG_FLASH = 0x30,
+    MSG_FLASH_BULK = 0x31,
+
     MSG_FLIGHT_INFO      = 0x40,
     MSG_FLIGHT_DELETEALL = 0x42
   };
