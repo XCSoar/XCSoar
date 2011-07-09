@@ -109,6 +109,7 @@ public:
              const WindowStyle style=WindowStyle());
 
 protected:
+  virtual bool on_resize(unsigned width, unsigned height);
   virtual void on_paint_buffer(Canvas &canvas);
 
 private:
@@ -127,10 +128,6 @@ private:
   void MakePolygon(const int i);
   void MakeAllPolygons();
   RasterPoint *getPolygon(const int i);
-
-public:
-  // overloaded from Window
-  void move(int left, int top, unsigned width, unsigned height);
 };
 
 #endif

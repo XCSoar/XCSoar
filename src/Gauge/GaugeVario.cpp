@@ -729,16 +729,18 @@ GaugeVario::RenderBugs(Canvas &canvas)
   }
 }
 
-void
-GaugeVario::move(int left, int top, unsigned width, unsigned height)
+bool
+GaugeVario::on_resize(unsigned width, unsigned height)
 {
-  Window::move(left, top, width, height);
+  BufferWindow::on_resize(width, height);
 
   /* trigger reinitialisation */
-  xoffset = get_right();
-  yoffset = get_height() / 2 + get_top();
+  xoffset = width;
+  yoffset = height / 2;
   layout_initialised = false;
   needle_initialised = false;
   ballast_initialised = false;
   bugs_initialised = false;
+
+  return true;
 }
