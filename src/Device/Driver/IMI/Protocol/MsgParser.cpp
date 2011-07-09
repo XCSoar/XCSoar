@@ -32,6 +32,15 @@ namespace MessageParser {
    * Cast the head of the buffer to a TMsg.
    */
   TMsg &GetMessage();
+
+  /**
+   * @brief Verifies received message
+   *
+   * @param msg Message to check
+   * @param size Size of received message
+   *
+   * @return Verification status
+   */
   bool Check(const TMsg *msg, IMIDWORD size);
 }
 }
@@ -42,9 +51,6 @@ IMI::MessageParser::GetMessage()
   return *(TMsg *)(void *)buffer;
 }
 
-/**
- * @brief Resets the state of the parser
- */
 void
 IMI::MessageParser::Reset()
 {
@@ -53,14 +59,6 @@ IMI::MessageParser::Reset()
   state = STATE_NOT_SYNC;
 }
 
-/**
- * @brief Verifies received message
- *
- * @param msg Message to check
- * @param size Size of received message
- *
- * @return Verification status
- */
 bool
 IMI::MessageParser::Check(const TMsg *msg, IMIDWORD size)
 {
@@ -88,14 +86,6 @@ IMI::MessageParser::Check(const TMsg *msg, IMIDWORD size)
   return crc1 == crc2;
 }
 
-/**
- * @brief Parses received message chunk
- *
- * @param buffer Buffer with received data
- * @param size The size of received data
- *
- * @return Received message or 0 if invalid on incomplete.
- */
 const IMI::TMsg *
 IMI::MessageParser::Parse(const IMIBYTE _buffer[], int size)
 {
