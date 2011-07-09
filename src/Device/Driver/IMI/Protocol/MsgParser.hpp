@@ -15,7 +15,7 @@
 
 namespace IMI
 {
-  namespace CMsgParser {
+  namespace MessageParser {
     void Reset();
     const TMsg *Parse(const IMIBYTE buffer[], int size);
   };

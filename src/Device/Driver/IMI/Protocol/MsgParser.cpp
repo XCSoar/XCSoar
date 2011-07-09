@@ -14,7 +14,7 @@
 #define IMICOMM_MAX_MSG_SIZE (sizeof(TMsg))
 
 namespace IMI {
-namespace CMsgParser {
+namespace MessageParser {
   /**
    * @brief Parser state
    */
@@ -37,7 +37,7 @@ namespace CMsgParser {
 }
 
 IMI::TMsg &
-IMI::CMsgParser::GetMessage()
+IMI::MessageParser::GetMessage()
 {
   return *(TMsg *)(void *)_msgBuffer;
 }
@@ -45,7 +45,7 @@ IMI::CMsgParser::GetMessage()
 /**
  * @brief Resets the state of the parser
  */
-void IMI::CMsgParser::Reset()
+void IMI::MessageParser::Reset()
 {
   _msgBytesLeft = 0;
   _msgBufferPos = 0;
@@ -61,7 +61,7 @@ void IMI::CMsgParser::Reset()
  *
  * @return Verification status
  */
-bool IMI::CMsgParser::Check(const TMsg *msg, IMIDWORD size)
+bool IMI::MessageParser::Check(const TMsg *msg, IMIDWORD size)
 {
   // minimal size of comm message
   if(size < IMICOMM_MSG_HEADER_SIZE + IMICOMM_CRC_LEN)
@@ -93,7 +93,7 @@ bool IMI::CMsgParser::Check(const TMsg *msg, IMIDWORD size)
  *
  * @return Received message or 0 if invalid on incomplete.
  */
-const IMI::TMsg *IMI::CMsgParser::Parse(const IMIBYTE buffer[], int size)
+const IMI::TMsg *IMI::MessageParser::Parse(const IMIBYTE buffer[], int size)
 {
   const IMIBYTE *ptr = buffer;
   const TMsg *msg = 0;

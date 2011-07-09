@@ -256,7 +256,7 @@ const IMI::TMsg *IMI::Receive(Port &port, unsigned extraTimeout,
       break;
 
     // parse message
-    const TMsg *lastMsg = CMsgParser::Parse(buffer, bytesRead);
+    const TMsg *lastMsg = MessageParser::Parse(buffer, bytesRead);
     if(lastMsg) {
       // message received
       if(lastMsg->msgID == MSG_ACK_NOTCONFIG)
@@ -331,7 +331,7 @@ bool IMI::Connect(Port &port)
 
   memset(&_info, 0, sizeof(_info));
   _serialNumber = 0;
-  CMsgParser::Reset();
+  MessageParser::Reset();
 
   // check connectivity
   if (!Send(port, MSG_CFG_HELLO))
