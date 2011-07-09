@@ -115,7 +115,7 @@ IMI::ConvertWaypoint(const Waypoint &wp, TWaypoint &imiWp)
 }
 
 void
-IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
+IMI::ConvertOZ(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
 {
   unsigned idx = imiIdx == 0 ? 0 : (imiIdx == decl.size() + 1 ? imiIdx - 2
                                                               : imiIdx - 1);

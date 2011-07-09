@@ -273,7 +273,7 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl)
   ConvertWaypoint(decl.TurnPoints[0].waypoint, imiDecl.wp[0]);
 
   for (unsigned i = 0; i < decl.size(); i++)
-    IMIWaypoint(decl, i + 1, imiDecl.wp[i + 1]);
+    ConvertOZ(decl, i + 1, imiDecl.wp[i + 1]);
 
   ConvertWaypoint(decl.TurnPoints[decl.size() - 1].waypoint,
               imiDecl.wp[decl.size() + 1]);

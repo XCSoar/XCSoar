@@ -48,7 +48,7 @@ namespace IMI
    * @param imiIdx The index of IMI waypoint to set
    * @param imiWp IMI waypoint structure to set
    */
-  void IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
+  void ConvertOZ(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
   void ConvertWaypoint(const Waypoint &wp, TWaypoint &imiWp);
 
 }
