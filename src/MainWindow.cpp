@@ -108,7 +108,7 @@ MainWindow::Initialise()
   LogStartUp(_T("Initialise fonts"));
   Fonts::Initialize();
 
-  assert(look == NULL);
+  delete look;
   look = new Look();
   look->Initialise();
 }
