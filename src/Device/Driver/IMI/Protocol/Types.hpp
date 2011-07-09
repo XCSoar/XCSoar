@@ -299,6 +299,80 @@ namespace IMI
     IMIBYTE body[11];
     IMIBYTE checksum;
   } gcc_packed;
+
+  struct FixB
+  {
+    IMIDWORD id:3;
+    IMIDWORD time:17;
+    IMIDWORD fv:2;
+    IMIDWORD enl:10;
+
+    IMIDDWORD lat:25;
+    IMIDDWORD lon:25;
+    IMIDDWORD gpsalt:14;
+
+    IMIDWORD alt:14;
+    IMIDWORD fxa:10;
+    IMIDWORD checksum:8;
+  } gcc_packed; // B record (id = 2)
+
+  struct FixB2
+  {
+    IMIDWORD id:3;
+    IMIDWORD time1:5;
+    IMIDWORD time2:4;
+    IMIDWORD enl1:10;
+    IMIDWORD enl2:10;
+
+    IMISDWORD lat1:11;
+    IMISDWORD lon1:11;
+    IMISDWORD lat2:10;
+
+    IMISDWORD lon2:10;
+    IMISDWORD alt1:8;
+    IMISDWORD alt2:7;
+    IMISDWORD gpsalt2:7;
+
+    IMISDWORD gpsalt1:8;
+    IMISDWORD fxa1:8;
+    IMISDWORD fxa2:8;
+    IMIDWORD checksum:8;
+  } gcc_packed; // B2 record (id = 3)
+
+  #define IMIFIX_E_TYPE_SATELLITES 0
+  #define IMIFIX_E_TYPE_COMMENT    1
+  #define IMIFIX_E_TYPE_PEV        2
+  #define IMIFIX_E_TYPE_TASK       3
+
+  struct FixE
+  {
+    IMIBYTE id:3;
+    IMIBYTE time1:5;
+    IMIBYTE time2:8;
+    IMIBYTE time3:4;
+    IMIBYTE type:4;
+
+    IMIBYTE text[12];
+
+    IMIBYTE checksum;
+  } gcc_packed; // Event, Satellites, Comment (id = 5)
+
+  struct FixK
+  {
+    IMIDWORD id:3;
+    IMIDWORD time:17;
+    IMIDWORD temp:12;
+
+    IMIDWORD vext:8;
+    IMIDWORD gsp:10;
+    IMIDWORD pressure:14;
+
+    IMIDWORD hdt:9;
+    IMIDWORD reserved1:23;
+
+    IMIBYTE reserved2[3];
+    IMIBYTE checksum;
+  } gcc_packed;
 }
 
 #define IMICOMM_MSG_HEADER_SIZE ((size_t)(&(((TMsg *)NULL)->payload)))
