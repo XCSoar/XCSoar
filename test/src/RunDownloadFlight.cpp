@@ -135,7 +135,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  printf("Flight downloaded successfully");
+  printf("Flight downloaded successfully\n");
 
   delete device;
   delete port;
