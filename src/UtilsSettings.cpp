@@ -96,8 +96,6 @@ SettingsLeave()
   if (!globalRunningEvent.Test())
     return;
 
-  XCSoarInterface::main_window.map.set_focus();
-
   SuspendAllThreads();
 
   VerboseOperationEnvironment operation;
@@ -163,18 +161,6 @@ SettingsLeave()
     lease->set_contest(XCSoarInterface::SettingsComputer().contest);
   }
 
-  if (AirfieldFileChanged
-      || AirspaceFileChanged
-      || WaypointFileChanged
-      || TerrainFileChanged
-      || TopographyFileChanged) {
-    operation.Hide();
-    XCSoarInterface::main_window.map.set_focus();
-#ifndef ENABLE_OPENGL
-    draw_thread->TriggerRedraw();
-#endif
-  }
-
   if (DevicePortChanged)
     devRestart();
 
@@ -182,6 +168,10 @@ SettingsLeave()
   // allow map and calculations threads to continue
 
   ActionInterface::SendSettingsMap(true);
+
+  operation.Hide();
+  XCSoarInterface::main_window.full_redraw();
+  XCSoarInterface::main_window.map.set_focus();
 }
 
 void
