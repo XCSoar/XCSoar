@@ -51,6 +51,9 @@ EditWindow::on_paint(Canvas &canvas)
     canvas.set_text_color(COLOR_DARK_GRAY);
   }
 
+  canvas.outline_rectangle(0, 0, canvas.get_width() - 1,
+                           canvas.get_height() - 1, COLOR_BLACK);
+
   if (value.empty())
     return;
 
