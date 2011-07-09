@@ -22,7 +22,9 @@ namespace IMI
   typedef uint8_t IMIBYTE;
   typedef uint16_t IMIWORD;
   typedef uint32_t IMIDWORD;
+  typedef uint64_t IMIDDWORD;
   typedef int16_t IMISWORD;
+  typedef int32_t IMISDWORD;
   typedef uint32_t IMIDATETIMESEC;
 
   enum TMsgType {
