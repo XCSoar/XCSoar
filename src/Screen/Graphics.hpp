@@ -105,6 +105,10 @@ namespace Graphics {
   extern Brush hbCanopy;
   extern Pen hpCanopy;
 
+  extern Pen oz_current_pen;
+  extern Pen oz_active_pen;
+  extern Pen oz_inactive_pen;
+
   extern Pen hpTaskActive;
   extern Pen hpTaskInactive;
   extern Pen hpTaskArrow;
