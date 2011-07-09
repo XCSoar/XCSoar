@@ -15,6 +15,7 @@
 
 class Port;
 struct Declaration;
+class RecordedFlightList;
 
 /**
  * @brief IMI-Gliding ERIXX device class
@@ -43,6 +44,8 @@ namespace IMI
    * @return Operation status
    */
   bool DeclarationWrite(Port &port, const Declaration &decl);
+
+  bool ReadFlightList(Port &port, RecordedFlightList &flight_list);
 
   /**
    * @brief Disconnects from the device

@@ -11,6 +11,7 @@
 #include "Protocol.hpp"
 #include "Checksum.hpp"
 #include "Device/Declaration.hpp"
+#include "Device/Driver.hpp"
 #include "MessageParser.hpp"
 #include "Device/Port.hpp"
 #include "OS/Clock.hpp"
@@ -95,6 +96,65 @@ namespace IMI
                       IMIWORD retPayloadSize, IMIBYTE parameter1 = 0,
                       IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
                       unsigned extraTimeout = 300, int retry = 4);
+}
+
+#define IMI_SECONDS_IN_MINUTE       (60)
+#define IMI_SECONDS_IN_HOUR      (60*60)
+#define IMI_SECONDS_IN_DAY    (24*60*60)
+#define IMI_ISLEAP(y) ((y & 3) == 0) //simple version valid for years 2000-2099
+#define IMI_DAYS_IN_YEAR(year) (IMI_ISLEAP(year) ? 366 : 365)
+static const IMI::IMIBYTE IMI_DAYS_IN_MONTH[12] =
+{31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31};
+
+static void
+Convert(IMI::IMIDATETIMESEC in, BrokenDateTime &out)
+{
+  if (in >= IMI_SECONDS_IN_DAY) {
+    // find year
+    for (out.year = 0; out.year <= 99; out.year++) {
+      unsigned secondsinyear = IMI_DAYS_IN_YEAR(out.year) * IMI_SECONDS_IN_DAY;
+      if (in < secondsinyear)
+        break;
+
+      in -= secondsinyear;
+    }
+
+    // find month
+    for (out.month = 0; out.month < 12; out.month++) {
+      unsigned secondsinmonth = IMI_DAYS_IN_MONTH[out.month]
+          * IMI_SECONDS_IN_DAY;
+      if (out.month == 1 && IMI_ISLEAP(out.year))
+        secondsinmonth += IMI_SECONDS_IN_DAY;
+
+      if (in < secondsinmonth)
+        break;
+      in -= secondsinmonth;
+    }
+
+    // calculate day
+    out.day = (uint8_t)(in / IMI_SECONDS_IN_DAY);
+    in -= (out.day) * IMI_SECONDS_IN_DAY;
+  } else {
+    out.year = 0;
+    out.month = 0;
+    out.day = 0;
+  }
+
+  // hour, minutes and seconds
+  out.hour = (uint8_t)(in / IMI_SECONDS_IN_HOUR);
+  in -= (out.hour) * IMI_SECONDS_IN_HOUR;
+
+  out.minute = (uint8_t)(in / IMI_SECONDS_IN_MINUTE);
+  in -= (out.minute) * IMI_SECONDS_IN_MINUTE;
+
+  out.second = (uint8_t)in;
+
+  out.year += 2000;
+  out.month++;
+  out.day++;
+  out.hour++;
+  out.minute++;
+  out.second++;
 }
 
 static void
@@ -400,6 +460,47 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl)
   // send declaration for current task
   return SendRet(port, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),
                  MSG_ACK_SUCCESS, 0, -1) != NULL;
+}
+
+bool
+IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list)
+{
+  flight_list.clear();
+
+  if (!_connected)
+    return false;
+
+  IMIWORD address = 0, addressStop = 0xFFFF;
+  IMIBYTE count = 1, totalCount = 0;
+
+  for (;; count++) {
+    const TMsg *pMsg = SendRet(port, MSG_FLIGHT_INFO, NULL, 0, MSG_FLIGHT_INFO,
+                               -1, totalCount, address, addressStop, 200, 6);
+    if (pMsg == NULL)
+      break;
+
+    totalCount = pMsg->parameter1;
+    address = pMsg->parameter2;
+    addressStop = pMsg->parameter3;
+
+    for (unsigned i = 0; i < pMsg->payloadSize / sizeof(IMI::FlightInfo); i++) {
+      const IMI::FlightInfo *fi = ((const IMI::FlightInfo*)pMsg->payload) + i;
+      RecordedFlightInfo &ifi = flight_list.append();
+
+      BrokenDateTime start, finish;
+      Convert(fi->start, start);
+      Convert(fi->finish, finish);
+
+      ifi.date = start;
+      ifi.start_time = start;
+      ifi.end_time = finish;
+    }
+
+    if (pMsg->payloadSize == 0 || address == 0xFFFF)
+      return true;
+  }
+
+  return false;
 }
 
 bool

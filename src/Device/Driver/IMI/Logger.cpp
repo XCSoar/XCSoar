@@ -21,28 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_IMI_INTERNAL_HPP
-#define XCSOAR_IMI_INTERNAL_HPP
+#include "Internal.hpp"
+#include "Protocol/Protocol.hpp"
+#include "Device/Port.hpp"
+#include "Operation.hpp"
 
-#include "Device/Driver.hpp"
+bool
+IMIDevice::ReadFlightList(RecordedFlightList &flight_list,
+                          OperationEnvironment &env)
+{
+  if (!Connect(env) || env.IsCancelled())
+    return false;
 
-/**
- * Device driver for IMI ERIXX
- */
-class IMIDevice : public AbstractDevice {
-private:
-  Port *port;
+  bool success = IMI::ReadFlightList(*port, flight_list);
 
-public:
-  IMIDevice(Port *_port):port(_port) {}
+  // disconnect
+  Disconnect();
 
-  virtual bool ReadFlightList(RecordedFlightList &flight_list,
-                              OperationEnvironment &env);
-  virtual bool Declare(const Declaration &declaration,
-                       OperationEnvironment &env);
-private:
-  bool Connect(OperationEnvironment &env);
-  void Disconnect();
-};
-
-#endif
+  return success;
+}
