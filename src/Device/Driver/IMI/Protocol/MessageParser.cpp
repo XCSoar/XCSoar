@@ -8,7 +8,7 @@
  * IMI driver methods are based on the source code provided by Juraj Rojko from IMI-Gliding.
  */
 
-#include "MsgParser.hpp"
+#include "MessageParser.hpp"
 #include "Checksum.hpp"
 
 #define IMICOMM_MAX_MSG_SIZE (sizeof(TMsg))

@@ -11,7 +11,7 @@
 #include "DevIMI.hpp"
 #include "Checksum.hpp"
 #include "Device/Declaration.hpp"
-#include "MsgParser.hpp"
+#include "MessageParser.hpp"
 #include "Device/Port.hpp"
 #include "OS/Clock.hpp"
 
