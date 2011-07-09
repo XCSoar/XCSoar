@@ -44,9 +44,11 @@ IMI::AngleConverter::AngleConverter(Angle angle)
   milliminutes = static_cast<IMIDWORD> ((mag - degrees) * 60 * 1000);
 }
 
-void
-IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in, BrokenDateTime &out)
+BrokenDateTime
+IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in)
 {
+  BrokenDateTime out;
+
   if (in >= IMI_SECONDS_IN_DAY) {
     // find year
     for (out.year = 0; out.year <= 99; out.year++) {
@@ -93,4 +95,6 @@ IMI::ConvertToDateTime(IMI::IMIDATETIMESEC in, BrokenDateTime &out)
   out.hour++;
   out.minute++;
   out.second++;
+
+  return out;
 }

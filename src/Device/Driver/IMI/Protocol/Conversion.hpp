@@ -37,7 +37,7 @@ namespace IMI
   };
 
   void ConvertToChar(const TCHAR* unicode, char* ascii, int outSize);
-  void ConvertToDateTime(IMIDATETIMESEC in, BrokenDateTime &out);
+  BrokenDateTime ConvertToDateTime(IMIDATETIMESEC in);
 }
 
 #endif

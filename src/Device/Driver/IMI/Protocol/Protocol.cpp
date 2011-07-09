@@ -390,13 +390,10 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list)
       const IMI::FlightInfo *fi = ((const IMI::FlightInfo*)pMsg->payload) + i;
       RecordedFlightInfo &ifi = flight_list.append();
 
-      BrokenDateTime start, finish;
-      ConvertToDateTime(fi->start, start);
-      ConvertToDateTime(fi->finish, finish);
-
+      BrokenDateTime start = ConvertToDateTime(fi->start);
       ifi.date = start;
       ifi.start_time = start;
-      ifi.end_time = finish;
+      ifi.end_time = ConvertToDateTime(fi->finish);
     }
 
     if (pMsg->payloadSize == 0 || address == 0xFFFF)
