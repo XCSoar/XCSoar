@@ -278,6 +278,17 @@ namespace IMI
     Signature signature;
   } gcc_packed;
 
+  #define IMIFIX_ID_DELETED     0   //000
+  #define IMIFIX_ID_IMIDECLARATION 1   //001
+  #define IMIFIX_ID_B_RECORD    2   //010
+  #define IMIFIX_ID_B2_RECORD   3   //011
+  #define IMIFIX_ID_E_RECORD    4   //100
+  #define IMIFIX_ID_K_RECORD    5   //101
+  #define IMIFIX_ID_X_RECORD    6   //110 // reserved
+  #define IMIFIX_ID_FREE        7   //111
+
+  #define IMIIS_FIX(id) (id >= IMIFIX_ID_B_RECORD && id <= IMIFIX_ID_X_RECORD)
+
   struct Fix
   {
     IMIDWORD id:3;
