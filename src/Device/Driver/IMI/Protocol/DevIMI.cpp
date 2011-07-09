@@ -29,22 +29,97 @@ namespace IMI
   IMIWORD _serialNumber;
 
   // IMI tools
+  /**
+   * @brief Sets data in IMI Waypoint structure
+   *
+   * @param decl LK task declaration
+   * @param imiIdx The index of IMI waypoint to set
+   * @param imiWp IMI waypoint structure to set
+   */
   void IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp);
+  /**
+   * @brief Sends message buffer to a device
+   *
+   * @param port Device handle
+   * @param msg IMI message to send
+   *
+   * @return Operation status
+   */
   bool Send(Port &port, const TMsg &msg);
+  /**
+   * @brief Prepares and sends the message to a device
+   *
+   * @param port Device handle
+   * @param msgID ID of the message to send
+   * @param payload Payload buffer to use for the message
+   * @param payloadSize The size of the payload buffer
+   * @param parameter1 1st parameter for to put in the message
+   * @param parameter2 2nd parameter for to put in the message
+   * @param parameter3 3rd parameter for to put in the message
+   *
+   * @return Operation status
+   */
   bool Send(Port &port,
                    IMIBYTE msgID, const void *payload = 0, IMIWORD payloadSize = 0,
                    IMIBYTE parameter1 = 0, IMIWORD parameter2 = 0, IMIWORD parameter3 = 0);
+  /**
+   * @brief Receives a message from the device
+   *
+   * @param port Device handle
+   * @param extraTimeout Additional timeout to wait for the message
+   * @param expectedPayloadSize Expected size of the message
+   *
+   * @return Pointer to a message structure if expected message was received or 0 otherwise
+   */
   const TMsg *Receive(Port &port,
                              unsigned extraTimeout, unsigned expectedPayloadSize);
+  /**
+   * @brief Sends a message and waits for a confirmation from the device
+   *
+   * @param port Device handle
+   * @param msgID ID of the message to send
+   * @param payload Payload buffer to use for the message
+   * @param payloadSize The size of the payload buffer
+   * @param reMsgID Expected ID of the message to receive
+   * @param retPayloadSize Expected size of the received message
+   * @param parameter1 1st parameter for to put in the message
+   * @param parameter2 2nd parameter for to put in the message
+   * @param parameter3 3rd parameter for to put in the message
+   * @param extraTimeout Additional timeout to wait for the message
+   * @param retry Number of send retries
+   *
+   * @return Pointer to a message structure if expected message was received or 0 otherwise
+   */
   const TMsg *SendRet(Port &port,
                              IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
                              IMIBYTE reMsgID, IMIWORD retPayloadSize,
                              IMIBYTE parameter1 = 0, IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
                              unsigned extraTimeout = 300, int retry = 4);
 
-  // IMI interface
+  /**
+   * @brief Connects to the device
+   *
+   * @param port Device handle
+   *
+   * @return Operation status
+   */
   bool Connect(Port &port);
+  /**
+   * @brief Sends task declaration
+   *
+   * @param port Device handle
+   * @param decl Task declaration data
+   *
+   * @return Operation status
+   */
   bool DeclarationWrite(Port &port, const Declaration &decl);
+  /**
+   * @brief Disconnects from the device
+   *
+   * @param port Device handle
+   *
+   * @return Operation status
+   */
   bool Disconnect(Port &port);
 };
 
@@ -58,8 +133,6 @@ unicode2usascii(const TCHAR* unicode, char* ascii, int outSize)
   ascii[outSize - 1] = 0;
 #endif
 }
-
-/* *********************** I M I    D E V I C E ************************** */
 
 struct IMI::AngleConverter
 {
@@ -80,14 +153,6 @@ struct IMI::AngleConverter
   }
 };
 
-
-/**
- * @brief Sets data in IMI Waypoint structure
- *
- * @param decl LK task declaration
- * @param imiIdx The index of IMI waypoint to set
- * @param imiWp IMI waypoint structure to set
- */
 void IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp)
 {
   unsigned idx = imiIdx == 0 ? 0 :
@@ -163,34 +228,11 @@ void IMI::IMIWaypoint(const Declaration &decl, unsigned imiIdx, TWaypoint &imiWp
   imiWp.oz.move   = 0;
 }
 
-
-/**
- * @brief Sends message buffer to a device
- *
- * @param port Device handle
- * @param msg IMI message to send
- *
- * @return Operation status
- */
 bool IMI::Send(Port &port, const TMsg &msg)
 {
   return port.Write(&msg, IMICOMM_MSG_HEADER_SIZE + msg.payloadSize + 2);
 }
 
-
-/**
- * @brief Prepares and sends the message to a device
- *
- * @param port Device handle
- * @param msgID ID of the message to send
- * @param payload Payload buffer to use for the message
- * @param payloadSize The size of the payload buffer
- * @param parameter1 1st parameter for to put in the message
- * @param parameter2 2nd parameter for to put in the message
- * @param parameter3 3rd parameter for to put in the message
- *
- * @return Operation status
- */
 bool IMI::Send(Port &port,
                    IMIBYTE msgID, const void *payload /* =0 */, IMIWORD payloadSize /* =0 */,
                    IMIBYTE parameter1 /* =0 */, IMIWORD parameter2 /* =0 */, IMIWORD parameter3 /* =0 */)
@@ -218,16 +260,6 @@ bool IMI::Send(Port &port,
   return Send(port, msg);
 }
 
-
-/**
- * @brief Receives a message from the device
- *
- * @param port Device handle
- * @param extraTimeout Additional timeout to wait for the message
- * @param expectedPayloadSize Expected size of the message
- *
- * @return Pointer to a message structure if expected message was received or 0 otherwise
- */
 const IMI::TMsg *IMI::Receive(Port &port, unsigned extraTimeout,
                                       unsigned expectedPayloadSize)
 {
@@ -275,24 +307,6 @@ const IMI::TMsg *IMI::Receive(Port &port, unsigned extraTimeout,
   return msg;
 }
 
-
-/**
- * @brief Sends a message and waits for a confirmation from the device
- *
- * @param port Device handle
- * @param msgID ID of the message to send
- * @param payload Payload buffer to use for the message
- * @param payloadSize The size of the payload buffer
- * @param reMsgID Expected ID of the message to receive
- * @param retPayloadSize Expected size of the received message
- * @param parameter1 1st parameter for to put in the message
- * @param parameter2 2nd parameter for to put in the message
- * @param parameter3 3rd parameter for to put in the message
- * @param extraTimeout Additional timeout to wait for the message
- * @param retry Number of send retries
- *
- * @return Pointer to a message structure if expected message was received or 0 otherwise
- */
 const IMI::TMsg *IMI::SendRet(Port &port,
                                       IMIBYTE msgID, const void *payload, IMIWORD payloadSize,
                                       IMIBYTE reMsgID, IMIWORD retPayloadSize,
@@ -315,15 +329,6 @@ const IMI::TMsg *IMI::SendRet(Port &port,
   return NULL;
 }
 
-
-
-/**
- * @brief Connects to the device
- *
- * @param port Device handle
- *
- * @return Operation status
- */
 bool IMI::Connect(Port &port)
 {
   if (_connected)
@@ -380,15 +385,6 @@ bool IMI::Connect(Port &port)
   return false;
 }
 
-
-/**
- * @brief Sends task declaration
- *
- * @param port Device handle
- * @param decl Task declaration data
- *
- * @return Operation status
- */
 bool IMI::DeclarationWrite(Port &port, const Declaration &decl)
 {
   if (!_connected)
@@ -415,14 +411,6 @@ bool IMI::DeclarationWrite(Port &port, const Declaration &decl)
                  MSG_ACK_SUCCESS, 0, -1) != NULL;
 }
 
-
-/**
- * @brief Disconnects from the device
- *
- * @param port Device handle
- *
- * @return Operation status
- */
 bool IMI::Disconnect(Port &port)
 {
   if (!_connected)
