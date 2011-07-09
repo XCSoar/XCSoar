@@ -36,10 +36,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 RenderObservationZone::RenderObservationZone()
-  :layer(LAYER_SHADE),
-   pen_boundary_current(Pen::SOLID, Layout::SmallScale(2), Graphics::TaskColor),
-   pen_boundary_active(Pen::SOLID, Layout::SmallScale(1), Graphics::TaskColor),
-   pen_boundary_inactive(Pen::SOLID, Layout::SmallScale(1), dark_color(Graphics::TaskColor))
+  :layer(LAYER_SHADE)
 {
 }
 
@@ -78,11 +75,11 @@ RenderObservationZone::draw_style(Canvas &canvas,
     if (layer == LAYER_ACTIVE && offset >= 0) {
       if (offset == 0)
         /* current task point */
-        canvas.select(pen_boundary_current);
+        canvas.select(Graphics::oz_current_pen);
       else
-        canvas.select(pen_boundary_active);
+        canvas.select(Graphics::oz_active_pen);
     } else {
-      canvas.select(pen_boundary_inactive);
+      canvas.select(Graphics::oz_inactive_pen);
     }
     return true;
   }

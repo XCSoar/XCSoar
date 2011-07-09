@@ -25,7 +25,6 @@ Copyright_License {
 #define XCSOAR_RENDER_OBSERVATION_ZONE_HPP
 
 #include "Math/Angle.hpp"
-#include "Screen/Pen.hpp"
 #include "Screen/Point.hpp"
 
 class Canvas;
@@ -80,11 +79,6 @@ public:
    * method must be invoked if draw_style() has returned true.
    */
   void un_draw_style(Canvas &canvas) const;
-
-protected:
-  const Pen pen_boundary_current;
-  const Pen pen_boundary_active;
-  const Pen pen_boundary_inactive;
 };
 
 #endif

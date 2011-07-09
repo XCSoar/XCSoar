@@ -69,6 +69,11 @@ Pen Graphics::hpAircraft;
 Pen Graphics::hpAircraftSimple1;
 Pen Graphics::hpAircraftSimple2;
 Pen Graphics::hpCanopy;
+
+Pen Graphics::oz_current_pen;
+Pen Graphics::oz_active_pen;
+Pen Graphics::oz_inactive_pen;
+
 Pen Graphics::hpTaskActive;
 Pen Graphics::hpTaskInactive;
 Pen Graphics::hpTaskArrow;
@@ -269,6 +274,11 @@ Graphics::Initialise()
 
   hpWind.set(Layout::Scale(1), dark_color(COLOR_GRAY));
   hbWind.set(COLOR_GRAY);
+
+  oz_current_pen.set(Pen::SOLID, Layout::SmallScale(2), TaskColor);
+  oz_active_pen.set(Pen::SOLID, Layout::SmallScale(1), TaskColor);
+  oz_inactive_pen.set(Pen::SOLID, Layout::SmallScale(1),
+                      dark_color(TaskColor));
 
   hpTaskActive.set(Pen::DASH, Layout::Scale(2), Graphics::TaskColor);
   hpTaskInactive.set(Pen::DASH, Layout::Scale(1), Graphics::TaskColor);
@@ -511,6 +521,10 @@ Graphics::Deinitialise()
   hbFinalGlideBelow.reset();
   hbFinalGlideBelowLandable.reset();
   hbFinalGlideAbove.reset();
+
+  oz_current_pen.reset();
+  oz_active_pen.reset();
+  oz_inactive_pen.reset();
 
   hpTaskActive.reset();
   hpTaskInactive.reset();
