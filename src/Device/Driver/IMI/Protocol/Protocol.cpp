@@ -149,6 +149,7 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list)
       ifi.date = start;
       ifi.start_time = start;
       ifi.end_time = ConvertToDateTime(fi->finish);
+      ifi.internal.imi = fi->address;
     }
 
     if (pMsg->payloadSize == 0 || address == 0xFFFF)
