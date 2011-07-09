@@ -57,7 +57,7 @@ Canvas::fill_rectangle(int left, int top, int right, int bottom,
 }
 
 void
-Canvas::outline_rectangle(int left, int top, int right, int bottom)
+Canvas::OutlineRectangleGL(int left, int top, int right, int bottom)
 {
   const RasterPoint vertices[] = {
     { left, top },
@@ -66,7 +66,6 @@ Canvas::outline_rectangle(int left, int top, int right, int bottom)
     { left, bottom },
   };
 
-  pen.set();
   glVertexPointer(2, GL_VALUE, 0, vertices);
   glDrawArrays(GL_LINE_LOOP, 0, 4);
 }
@@ -299,9 +298,7 @@ Canvas::keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
 void
 Canvas::draw_focus(PixelRect rc)
 {
-  Pen pen(1, COLOR_DARK_GRAY);
-  select(pen);
-  outline_rectangle(rc.left, rc.top, rc.right, rc.bottom);
+  outline_rectangle(rc.left, rc.top, rc.right, rc.bottom, COLOR_DARK_GRAY);
 }
 
 void

@@ -202,7 +202,28 @@ public:
     fill_rectangle(rc.left, rc.top, rc.right, rc.bottom, brush);
   }
 
-  void outline_rectangle(int left, int top, int right, int bottom);
+  /**
+   * Draw a rectangle outline with the current OpenGL color and
+   * settings.
+   */
+  void OutlineRectangleGL(int left, int top, int right, int bottom);
+
+  void outline_rectangle(int left, int top, int right, int bottom) {
+    pen.set();
+    OutlineRectangleGL(left, top, right, bottom);
+  }
+
+  void outline_rectangle(int left, int top, int right, int bottom,
+                         Color color) {
+    color.set();
+#ifdef HAVE_GLES
+    glLineWidthx(1 << 16);
+#else
+    glLineWidth(1);
+#endif
+
+    OutlineRectangleGL(left, top, right, bottom);
+  }
 
   void clear() {
     rectangle(0, 0, get_width(), get_height());
