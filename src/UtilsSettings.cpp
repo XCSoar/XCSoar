@@ -100,6 +100,8 @@ SettingsLeave()
 
   VerboseOperationEnvironment operation;
 
+  MainWindow &main_window = XCSoarInterface::main_window;
+
   if (LanguageChanged)
     ReadLanguageFile();
 
@@ -116,14 +118,14 @@ SettingsLeave()
   if (TerrainFileChanged) {
     operation.SetText(_("Loading Terrain File..."));
 
-    XCSoarInterface::main_window.map.set_terrain(NULL);
+    main_window.SetTerrain(NULL);
     glide_computer->set_terrain(NULL);
 
     // re-load terrain
     delete terrain;
     terrain = RasterTerrain::OpenTerrain(file_cache, operation);
 
-    XCSoarInterface::main_window.map.set_terrain(terrain);
+    main_window.SetTerrain(terrain);
     glide_computer->set_terrain(terrain);
   }
 
@@ -141,10 +143,10 @@ SettingsLeave()
   }
 
   if (TopographyFileChanged) {
-    XCSoarInterface::main_window.map.set_topography(NULL);
+    main_window.SetTopography(NULL);
     topography->Reset();
     LoadConfiguredTopography(*topography, operation);
-    XCSoarInterface::main_window.map.set_topography(topography);
+    main_window.SetTopography(topography);
   }
 
   if (AirspaceFileChanged) {
@@ -170,8 +172,8 @@ SettingsLeave()
   ActionInterface::SendSettingsMap(true);
 
   operation.Hide();
-  XCSoarInterface::main_window.full_redraw();
-  XCSoarInterface::main_window.map.set_focus();
+  main_window.full_redraw();
+  main_window.SetDefaultFocus();
 }
 
 void

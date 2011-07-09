@@ -176,7 +176,7 @@ InfoBoxManager::Event_Select(int i)
   }
 
   if (InfoFocus >= 0)
-    XCSoarInterface::main_window.map.set_focus();
+    XCSoarInterface::main_window.SetDefaultFocus();
   else
     InfoBoxes[i]->set_focus();
 }

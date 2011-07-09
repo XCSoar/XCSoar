@@ -607,7 +607,7 @@ InputEvents::eventMode(const TCHAR *misc)
 {
   assert(misc != NULL);
 
-  XCSoarInterface::main_window.map.set_focus();
+  XCSoarInterface::main_window.SetDefaultFocus();
 
   InputEvents::setMode(misc);
 }

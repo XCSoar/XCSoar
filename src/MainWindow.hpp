@@ -33,6 +33,8 @@ class GlueGaugeVario;
 class GaugeFLARM;
 class GaugeThermalAssistant;
 class StatusMessageList;
+class RasterTerrain;
+class TopographyStore;
 
 /**
  * The XCSoar main window.
@@ -115,6 +117,12 @@ public:
   void reset();
 
   /**
+   * Set the keyboard focus on the default element (i.e. the
+   * MapWindow).
+   */
+  void SetDefaultFocus();
+
+  /**
    * Trigger a full redraw of the screen.
    */
   void full_redraw();
@@ -137,6 +145,9 @@ public:
     airspace_warning_pending = true;
     send_user(CMD_AIRSPACE_WARNING);
   }
+
+  void SetTerrain(RasterTerrain *terrain);
+  void SetTopography(TopographyStore *topography);
 
 protected:
   virtual bool on_resize(unsigned width, unsigned height);

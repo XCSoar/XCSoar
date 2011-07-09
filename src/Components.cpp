@@ -444,7 +444,7 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
   LogStartUp(_T("ProgramStarted"));
 
   // Give focus to the map
-  main_window.map.set_focus();
+  main_window.SetDefaultFocus();
 
   Pages::LoadFromProfile();
 

@@ -277,6 +277,12 @@ MainWindow::reset()
 }
 
 void
+MainWindow::SetDefaultFocus()
+{
+  map.set_focus();
+}
+
+void
 MainWindow::full_redraw()
 {
   map.FullRedraw();
@@ -450,6 +456,18 @@ MainWindow::LeaveCustomView()
   /* quick hack to force SetFullScreen() to update the MapWindow */
   FullScreen = !FullScreen;
   SetFullScreen(!FullScreen);
+}
+
+void
+MainWindow::SetTerrain(RasterTerrain *terrain)
+{
+  map.set_terrain(terrain);
+}
+
+void
+MainWindow::SetTopography(TopographyStore *topography)
+{
+  map.set_topography(topography);
 }
 
 #ifdef ANDROID
