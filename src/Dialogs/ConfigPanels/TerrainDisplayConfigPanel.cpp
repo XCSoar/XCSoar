@@ -29,8 +29,8 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
-#include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "SettingsMap.hpp"
 
 static WndForm* wf = NULL;
 
@@ -52,10 +52,9 @@ TerrainDisplayConfigPanel::OnEnableTerrain(DataField *Sender,
 }
 
 void
-TerrainDisplayConfigPanel::Init(WndForm *_wf)
+TerrainDisplayConfigPanel::Init(WndForm *_wf, const SETTINGS_MAP &settings_map)
 {
-  const TerrainRendererSettings &terrain =
-    CommonInterface::SettingsMap().terrain;
+  const TerrainRendererSettings &terrain = settings_map.terrain;
 
   assert(_wf != NULL);
   wf = _wf;
@@ -64,7 +63,7 @@ TerrainDisplayConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpEnableTerrain"), terrain.enable);
 
   LoadFormProperty(*wf, _T("prpEnableTopography"),
-                   XCSoarInterface::SettingsMap().EnableTopography);
+                   settings_map.EnableTopography);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
   if (wp) {
@@ -105,10 +104,9 @@ TerrainDisplayConfigPanel::Init(WndForm *_wf)
 
 
 bool
-TerrainDisplayConfigPanel::Save()
+TerrainDisplayConfigPanel::Save(SETTINGS_MAP &settings_map)
 {
-  TerrainRendererSettings &terrain =
-    CommonInterface::SetSettingsMap().terrain;
+  TerrainRendererSettings &terrain = settings_map.terrain;
 
   bool changed = false;
   WndProperty *wp;
@@ -119,7 +117,7 @@ TerrainDisplayConfigPanel::Save()
 
   changed |= SaveFormProperty(*wf, _T("prpEnableTopography"),
                               szProfileDrawTopography,
-                              XCSoarInterface::SetSettingsMap().EnableTopography);
+                              settings_map.EnableTopography);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSlopeShadingType"));
   if (wp) {

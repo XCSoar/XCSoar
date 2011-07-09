@@ -26,12 +26,13 @@ Copyright_License {
 
 #include "DataField/Base.hpp"
 
+struct SETTINGS_MAP;
 class WndForm;
 
 namespace TerrainDisplayConfigPanel
 {
-  void Init(WndForm *wf);
-  bool Save();
+  void Init(WndForm *wf, const SETTINGS_MAP &settings_map);
+  bool Save(SETTINGS_MAP &settings_map);
 
   void OnEnableTerrain(DataField *Sender, DataField::DataAccessKind_t Mode);
 };

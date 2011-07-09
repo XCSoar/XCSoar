@@ -31,8 +31,9 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Dialogs/Airspace.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Interface.hpp"
 #include "Language/Language.hpp"
+#include "Airspace/AirspaceComputerSettings.hpp"
+#include "Airspace/AirspaceRendererSettings.hpp"
 
 static WndForm* wf = NULL;
 
@@ -82,16 +83,13 @@ AirspaceConfigPanel::OnAirspaceWarning(DataField *Sender,
 }
 
 void
-AirspaceConfigPanel::Init(WndForm *_wf)
+AirspaceConfigPanel::Init(WndForm *_wf,
+                          const AirspaceComputerSettings &computer,
+                          const AirspaceRendererSettings &renderer)
 {
   assert(_wf != NULL);
   wf = _wf;
   WndProperty *wp;
-
-  const AirspaceComputerSettings &computer =
-    CommonInterface::SettingsComputer().airspace;
-  const AirspaceRendererSettings &renderer =
-    CommonInterface::SettingsMap().airspace;
 
   wp = (WndProperty*)wf->FindByName(_T("prpAirspaceDisplay"));
   if (wp) {
@@ -152,14 +150,11 @@ AirspaceConfigPanel::Init(WndForm *_wf)
 
 
 bool
-AirspaceConfigPanel::Save(bool &requirerestart)
+AirspaceConfigPanel::Save(bool &requirerestart,
+                          AirspaceComputerSettings &computer,
+                          AirspaceRendererSettings &renderer)
 {
   bool changed = false;
-
-  AirspaceComputerSettings &computer =
-    CommonInterface::SetSettingsComputer().airspace;
-  AirspaceRendererSettings &renderer =
-    CommonInterface::SetSettingsMap().airspace;
 
   short tmp = renderer.altitude_mode;
   changed |= SaveFormProperty(*wf, _T("prpAirspaceDisplay"),

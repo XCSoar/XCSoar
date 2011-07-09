@@ -237,12 +237,13 @@ setVariables()
   UnitsConfigPanel::Init(wf);
   LoggerConfigPanel::Init(wf);
   DevicesConfigPanel::Init(wf);
-  AirspaceConfigPanel::Init(wf);
+  AirspaceConfigPanel::Init(wf, CommonInterface::SettingsComputer().airspace,
+                            CommonInterface::SettingsMap().airspace);
   SiteConfigPanel::Init(wf);
   MapDisplayConfigPanel::Init(wf);
   WaypointDisplayConfigPanel::Init(wf);
   SymbolsConfigPanel::Init(wf);
-  TerrainDisplayConfigPanel::Init(wf);
+  TerrainDisplayConfigPanel::Init(wf, CommonInterface::SettingsMap());
   GlideComputerConfigPanel::Init(wf);
   SafetyFactorsConfigPanel::Init(wf);
   RouteConfigPanel::Init(wf);
@@ -309,12 +310,14 @@ void dlgConfigurationShowModal(void)
   changed |= PolarConfigPanel::Save();
   changed |= LoggerConfigPanel::Save();
   changed |= DevicesConfigPanel::Save();
-  changed |= AirspaceConfigPanel::Save(requirerestart);
+  changed |= AirspaceConfigPanel::Save(requirerestart,
+                                       CommonInterface::SetSettingsComputer().airspace,
+                                       CommonInterface::SetSettingsMap().airspace);
   changed |= SiteConfigPanel::Save();
   changed |= MapDisplayConfigPanel::Save();
   changed |= WaypointDisplayConfigPanel::Save();
   changed |= SymbolsConfigPanel::Save();
-  changed |= TerrainDisplayConfigPanel::Save();
+  changed |= TerrainDisplayConfigPanel::Save(CommonInterface::SetSettingsMap());
   changed |= GlideComputerConfigPanel::Save(requirerestart);
   changed |= SafetyFactorsConfigPanel::Save();
   changed |= RouteConfigPanel::Save();

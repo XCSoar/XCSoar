@@ -26,13 +26,19 @@ Copyright_License {
 
 #include "DataField/Base.hpp"
 
+struct AirspaceComputerSettings;
+struct AirspaceRendererSettings;
 class WndForm;
 class WndButton;
 
 namespace AirspaceConfigPanel
 {
-  void Init(WndForm *wf);
-  bool Save(bool &requirerestart);
+  void Init(WndForm *wf,
+            const AirspaceComputerSettings &computer,
+            const AirspaceRendererSettings &renderer);
+  bool Save(bool &requirerestart,
+            AirspaceComputerSettings &computer,
+            AirspaceRendererSettings &renderer);
 
   void OnAirspaceColoursClicked(gcc_unused WndButton &button);
   void OnAirspaceModeClicked(gcc_unused WndButton &button);
