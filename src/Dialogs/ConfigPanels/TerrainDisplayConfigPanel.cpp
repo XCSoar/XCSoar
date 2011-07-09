@@ -26,11 +26,10 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
+#include "Form/Form.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/Boolean.hpp"
 #include "Interface.hpp"
-#include "Appearance.hpp"
-#include "Screen/Graphics.hpp"
 #include "Language/Language.hpp"
 
 static WndForm* wf = NULL;

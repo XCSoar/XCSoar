@@ -26,7 +26,6 @@ Copyright_License {
 #include "Dialogs/ListPicker.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Task/ProtectedTaskManager.hpp"

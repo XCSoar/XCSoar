@@ -31,7 +31,6 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Dialogs/Airspace.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
 

@@ -24,8 +24,9 @@ Copyright_License {
 #ifndef TERRAINDISPLAYCONFIGPANEL_HPP
 #define TERRAINDISPLAYCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
 #include "DataField/Base.hpp"
+
+class WndForm;
 
 namespace TerrainDisplayConfigPanel
 {

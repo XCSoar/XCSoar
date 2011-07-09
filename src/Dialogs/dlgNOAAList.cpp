@@ -36,7 +36,6 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Graphics.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/METAR.hpp"
