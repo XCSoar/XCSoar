@@ -48,7 +48,7 @@ namespace MessageParser {
 IMI::TMsg &
 IMI::MessageParser::GetMessage()
 {
-  return *(TMsg *)(void *)buffer;
+  return *(TMsg *)buffer;
 }
 
 void
