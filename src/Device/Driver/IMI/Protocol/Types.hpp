@@ -289,6 +289,7 @@ namespace IMI
 }
 
 #define IMICOMM_MSG_HEADER_SIZE ((size_t)(&(((TMsg *)NULL)->payload)))
+#define IMICOMM_MAKEBIGPARAM(param1, param2) ((((unsigned)(param1 & 0xFF)) << 16) | (unsigned)(param2 & 0xFFFF))
 #define IMICOMM_BIGPARAM1(param) ((IMIBYTE)((param) >> 16))
 #define IMICOMM_BIGPARAM2(param) ((IMIWORD)(param))
 
