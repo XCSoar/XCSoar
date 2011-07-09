@@ -38,6 +38,9 @@ public:
 
   virtual bool Declare(const Declaration &declaration,
                        OperationEnvironment &env);
+private:
+  bool Connect(OperationEnvironment &env);
+  void Disconnect();
 };
 
 #endif

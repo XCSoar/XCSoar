@@ -26,31 +26,32 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "Operation.hpp"
 
-static bool
-DeclareInner(Port *port, const Declaration &declaration, OperationEnvironment &env)
+bool
+IMIDevice::Connect(OperationEnvironment &env)
 {
-  // connect to the device
-  if (!IMI::Connect(*port) || env.IsCancelled())
+  if (port == NULL)
     return false;
 
-    // task declaration
-  return IMI::DeclarationWrite(*port, declaration);
+  // stop Rx thread
+  if (!port->StopRxThread() || env.IsCancelled())
+    return false;
+
+  // set new Rx timeout
+  if (!port->SetRxTimeout(2000) || env.IsCancelled())
+    return false;
+
+  return true;
 }
 
-bool
-IMIDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
+void
+IMIDevice::Disconnect()
 {
-  // verify WP number
-  if (declaration.size() < 2 || declaration.size() > 13)
-    return false;
-
-  if (!Connect(env))
-    return false;
-
-  bool success = DeclareInner(port, declaration, env);
-
   // disconnect
-  Disconnect();
+  IMI::Disconnect(*port);
 
-  return success;
+  // restore Rx timeout (we must try that always; don't overwrite error descr)
+  port->SetRxTimeout(0);
+
+  // restart Rx thread
+  port->StartRxThread();
 }
