@@ -56,7 +56,7 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 }
 
 static bool
-cai302DeclAddWaypoint(Port *port, int DeclIndex, const Waypoint &way_point)
+cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point)
 {
   int DegLat, DegLon;
   double tmp, MinLat, MinLon;
@@ -91,7 +91,7 @@ cai302DeclAddWaypoint(Port *port, int DeclIndex, const Waypoint &way_point)
           Name,
           (int)way_point.Altitude);
 
-  return CAI302::DownloadCommand(*port, szTmp);
+  return CAI302::DownloadCommand(port, szTmp);
 }
 
 static bool
@@ -188,7 +188,7 @@ DeclareInner(Port *port, const Declaration &declaration,
   env.SetProgressPosition(6);
 
   for (unsigned i = 0; i < size; ++i) {
-    if (!cai302DeclAddWaypoint(port, 128 + i, declaration.get_waypoint(i)) ||
+    if (!cai302DeclAddWaypoint(*port, 128 + i, declaration.get_waypoint(i)) ||
         env.IsCancelled())
       return false;
 
