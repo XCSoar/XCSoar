@@ -126,14 +126,6 @@ namespace Graphics {
   extern Brush hbNotReachableTerrain;
   extern Brush hbGround;
 
-  // used by infobox and gauges
-  extern const Color inv_redColor;
-  extern const Color inv_blueColor;
-  // Not really used, tested and dropped. But useful for the future
-  extern const Color inv_yellowColor;
-  extern const Color inv_greenColor;
-  extern const Color inv_magentaColor;
-
   extern const Color GroundColor;
 
   extern const Color skyColor;

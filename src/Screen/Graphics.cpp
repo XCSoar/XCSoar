@@ -108,12 +108,6 @@ Brush Graphics::hbLightGray;
 Brush Graphics::hbNotReachableTerrain;
 Brush Graphics::hbGround;
 
-const Color Graphics::inv_redColor = Color(0xff, 0x70, 0x70);
-const Color Graphics::inv_blueColor = Color(0x90, 0x90, 0xff);
-const Color Graphics::inv_yellowColor = COLOR_YELLOW;
-const Color Graphics::inv_greenColor = COLOR_GREEN;
-const Color Graphics::inv_magentaColor = COLOR_MAGENTA;
-
 static Color clrSepia(0x78,0x31,0x18);
 const Color Graphics::GroundColor = Color(0x80,0x45,0x15);
 const Color Graphics::skyColor = Color(0x0a,0xb9,0xf3);

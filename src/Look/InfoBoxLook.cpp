@@ -24,7 +24,12 @@ Copyright_License {
 #include "InfoBoxLook.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Graphics.hpp"
+
+#define COLOR_INVERSE_RED Color(0xff, 0x70, 0x70)
+#define COLOR_INVERSE_BLUE Color(0x90, 0x90, 0xff)
+#define COLOR_INVERSE_YELLOW COLOR_YELLOW
+#define COLOR_INVERSE_GREEN COLOR_GREEN
+#define COLOR_INVERSE_MAGENTA COLOR_MAGENTA
 
 void
 InfoBoxLook::Initialise(bool inverse)
@@ -43,9 +48,9 @@ InfoBoxLook::Initialise(bool inverse)
   small_font = &Fonts::InfoBoxSmall;
 
   colors[0] = border_color;
-  colors[1] = inverse ? Graphics::inv_redColor : COLOR_RED;
-  colors[2] = inverse ? Graphics::inv_blueColor : COLOR_BLUE;
-  colors[3] = inverse ? Graphics::inv_greenColor : COLOR_GREEN;
-  colors[4] = inverse ? Graphics::inv_yellowColor : COLOR_YELLOW;
-  colors[5] = inverse ? Graphics::inv_magentaColor : COLOR_MAGENTA;
+  colors[1] = inverse ? COLOR_INVERSE_RED : COLOR_RED;
+  colors[2] = inverse ? COLOR_INVERSE_BLUE : COLOR_BLUE;
+  colors[3] = inverse ? COLOR_INVERSE_GREEN : COLOR_GREEN;
+  colors[4] = inverse ? COLOR_INVERSE_YELLOW : COLOR_YELLOW;
+  colors[5] = inverse ? COLOR_INVERSE_MAGENTA : COLOR_MAGENTA;
 }
