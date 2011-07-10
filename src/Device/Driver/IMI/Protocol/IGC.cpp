@@ -159,12 +159,13 @@ IMI::WriteHeader(const TDeclaration &decl, IMIBYTE tampered, FILE *file)
     fputs("\r\n", file);
   }
 
-  // FIXME
-  if (decl.header.cid[0] != 0) {
-    fputs("HFCCLCOMPETITIONCLASS:", file);
+  // This seems to be a bug in the original implementation
+  // When the competition class line is missing the integrity check will fail!
+  fputs("HFCCLCOMPETITIONCLASS:", file);
+  if (decl.header.ccl[0] != 0) {
     fputs(decl.header.ccl, file);
-    fputs("\r\n", file);
   }
+  fputs("\r\n", file);
 
   if (decl.header.cm2[0] != '\0') {
     fputs("HFCM2SECONDCREW:", file);
