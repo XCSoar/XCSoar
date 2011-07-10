@@ -237,7 +237,8 @@ OnCallsignClicked(gcc_unused WndButton &Sender)
 {
   TCHAR newName[21];
   newName[0] = 0;
-  if (dlgTextEntryShowModal(XCSoarInterface::main_window, newName, 4) &&
+  if (dlgTextEntryShowModal(XCSoarInterface::main_window, newName, 4,
+                            _("Competition ID")) &&
       FlarmDetails::AddSecondaryItem(target_id, newName))
     FlarmDetails::SaveSecondary();
 
