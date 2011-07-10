@@ -27,9 +27,19 @@ Copyright_License {
 bool
 LX::CommandMode(Port &port)
 {
-  Connect(port);
-  Connect(port);
-  return Connect(port);
+  /* switch to command mode, first attempt */
+  port.Write(SYN);
+
+  /* now flush all of the remaining input */
+  port.SetRxTimeout(10);
+  port.FullFlush(20);
+
+  /* the port is clean now; try the SYN/ACK procedure up to three
+     times */
+  return port.SetRxTimeout(500) &&
+    (Connect(port) || Connect(port) || Connect(port)) &&
+    /* ... and configure the timeout */
+    port.SetRxTimeout(2000);
 }
 
 void

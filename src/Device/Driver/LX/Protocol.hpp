@@ -105,7 +105,8 @@ namespace LX {
   }
 
   /**
-   * Enter command mode: sends SYN three times and waits for ACK.
+   * Enter command mode: flush all buffers, configure a sensible
+   * receive timeout, sends SYN three times and waits for ACK.
    */
   bool
   CommandMode(Port &port);

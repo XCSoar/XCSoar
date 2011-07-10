@@ -157,9 +157,6 @@ static bool
 DeclareInner(Port &port, const Declaration &declaration,
              gcc_unused OperationEnvironment &env)
 {
-  if (!port.SetRxTimeout(2000))
-    return false;
-
   env.SetProgressRange(5);
   env.SetProgressPosition(0);
 
