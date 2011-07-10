@@ -237,7 +237,8 @@ OnNameAccess(WndButton &button)
     TCHAR buffer[InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH];
     _tcscpy(buffer, data.name);
     if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(), buffer,
-                              InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH)) {
+                              InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH,
+                              _("Panel name"))) {
       _tcscpy(data.name, buffer);
       UpdatePanelName();
     }
