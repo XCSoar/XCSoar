@@ -1441,7 +1441,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
-	$(SRC)/Gauge/FlarmTrafficLook.cpp \
+	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputer.cpp \
@@ -1704,6 +1704,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/CrossSectionLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
+	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \

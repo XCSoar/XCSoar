@@ -31,6 +31,7 @@ Copyright_License {
 #include "TraceHistoryLook.hpp"
 #include "AirspaceLook.hpp"
 #include "CrossSectionLook.hpp"
+#include "TrafficLook.hpp"
 #include "Gauge/FlarmTrafficLook.hpp"
 #include "TaskLook.hpp"
 
@@ -44,6 +45,7 @@ struct Look {
   TraceHistoryLook trace_history;
   AirspaceLook airspace;
   CrossSectionLook cross_section;
+  TrafficLook traffic;
   FlarmTrafficLook flarm_gauge;
   FlarmTrafficLook flarm_dialog;
   TaskLook task;

@@ -22,16 +22,16 @@
 */
 
 #include "FlarmTrafficLook.hpp"
-#include "Screen/Graphics.hpp"
+#include "Look/TrafficLook.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 
 void
-FlarmTrafficLook::Initialise(bool small)
+FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
 {
   hcPassive = Color(0x99, 0x99, 0x99);
-  hcWarning = Graphics::cAlertWarning;
-  hcAlarm = Graphics::cAlertAlarm;
+  hcWarning = other.warning_color;
+  hcAlarm = other.alarm_color;
   hcStandard = COLOR_BLACK;
   hcSelection = COLOR_BLUE;
   hcBackground = COLOR_WHITE;

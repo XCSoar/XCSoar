@@ -57,6 +57,7 @@ Copyright_License {
 #include "Operation.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"
+#include "Look/TrafficLook.hpp"
 
 #ifndef _MSC_VER
 #include <algorithm>
@@ -111,8 +112,9 @@ public:
   };
 
 public:
-  TestWindow(const AirspaceLook &airspace_look, const TaskLook &task_look)
-    :map(airspace_look, task_look) {}
+  TestWindow(const AirspaceLook &airspace_look, const TaskLook &task_look,
+             const TrafficLook &traffic_look)
+    :map(airspace_look, task_look, traffic_look) {}
 
   static bool register_class(HINSTANCE hInstance) {
 #ifdef ENABLE_SDL
@@ -286,7 +288,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TaskLook *task_look = new TaskLook();
   task_look->Initialise();
 
-  TestWindow window(*airspace_look, *task_look);
+  TrafficLook *traffic_look = new TrafficLook();
+  traffic_look->Initialise();
+
+  TestWindow window(*airspace_look, *task_look, *traffic_look);
   window.set(0, 0, 640, 480);
 
   Graphics::Initialise();
@@ -307,6 +312,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   delete terrain;
   delete topography;
+  delete traffic_look;
   delete task_look;
   delete airspace_look;
 

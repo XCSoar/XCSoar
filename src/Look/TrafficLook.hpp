@@ -21,51 +21,27 @@
 }
 */
 
-#ifndef FLARM_TRAFFIC_WINDOW_LOOK_HPP
-#define FLARM_TRAFFIC_WINDOW_LOOK_HPP
+#ifndef XCSOAR_TRAFFIC_LOOK_HPP
+#define XCSOAR_TRAFFIC_LOOK_HPP
 
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
-#include "Screen/Font.hpp"
+#include "Screen/Icon.hpp"
 
-struct TrafficLook;
+struct TrafficLook {
+  Color safe_color;
+  Color warning_color;
+  Color alarm_color;
 
-struct FlarmTrafficLook {
-  Color hcWarning;
-  Color hcAlarm;
-  Color hcStandard;
-  Color hcPassive;
-  Color hcSelection;
-  Color hcBackground;
-  Color hcRadar;
+  Brush safe_brush;
+  Brush warning_brush;
+  Brush alarm_brush;
 
-  Brush hbWarning;
-  Brush hbAlarm;
-  Brush hbSelection;
-  Brush hbRadar;
-  Brush hbTeamGreen;
-  Brush hbTeamBlue;
-  Brush hbTeamYellow;
-  Brush hbTeamMagenta;
+  MaskedIcon teammate_icon;
+  MaskedIcon alert_icon;
 
-  Pen hpWarning;
-  Pen hpAlarm;
-  Pen hpStandard;
-  Pen hpPassive;
-  Pen hpSelection;
-  Pen hpTeamGreen;
-  Pen hpTeamBlue;
-  Pen hpTeamYellow;
-  Pen hpTeamMagenta;
-
-  Pen hpPlane, hpRadar;
-
-  Font hfLabels, hfSideInfo, hfNoTraffic;
-  Font hfInfoValues, hfInfoLabels, hfCallSign;
-
-  void Initialise(const TrafficLook &other, bool small);
-  void Deinitialise();
+  void Initialise();
 };
 
 #endif

@@ -100,7 +100,6 @@ namespace Graphics {
   extern MaskedIcon hBmpTrafficSafe;
   extern MaskedIcon hBmpTrafficWarning;
   extern MaskedIcon hBmpTrafficAlarm;
-  extern MaskedIcon hBmpTeammatePosition;
 
   extern MaskedIcon hBmpMapScaleLeft;
   extern MaskedIcon hBmpMapScaleRight;
@@ -116,11 +115,6 @@ namespace Graphics {
   extern Bitmap hBmpTabSystem;
   extern Bitmap hBmpTabRules;
   extern Bitmap hBmpTabTimes;
-
-  // used for flarm
-  extern Brush AlarmBrush;
-  extern Brush WarningBrush;
-  extern Brush TrafficBrush;
 
   // used for landable rendering
   extern Brush hbGreen;
@@ -142,9 +136,6 @@ namespace Graphics {
 
   extern const Color GroundColor;
 
-  extern const Color cAlertSafe;
-  extern const Color cAlertWarning;
-  extern const Color cAlertAlarm;
   extern const Color skyColor;
   extern const Color seaColor;
 };

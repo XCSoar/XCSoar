@@ -29,7 +29,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 
 GlueMapWindow::GlueMapWindow(const Look &look)
-  :MapWindow(look.airspace, look.task),
+  :MapWindow(look.airspace, look.task, look.traffic),
    logger(NULL),
    idle_robin(2),
    drag_mode(DRAG_NONE),

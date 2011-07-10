@@ -21,26 +21,20 @@ Copyright_License {
 }
 */
 
-#include "Look.hpp"
+#include "TrafficLook.hpp"
+#include "resource.h"
 
 void
-Look::Initialise()
+TrafficLook::Initialise()
 {
-  dialog.Initialise();
-  traffic.Initialise();
-  flarm_dialog.Initialise(traffic, false);
-  flarm_gauge.Initialise(traffic, true);
-  task.Initialise();
-}
+  safe_color = Color(0x1d,0x9b,0xc5);
+  warning_color = Color(0xfe,0x84,0x38);
+  alarm_color = Color(0xfb,0x35,0x2f);
 
-void
-Look::InitialiseConfigured(bool inverse,
-                           const AirspaceRendererSettings &airspace_settings)
-{
-  vario.Initialise(inverse);
-  chart.Initialise();
-  thermal_band.Initialise();
-  trace_history.Initialise(inverse);
-  airspace.Initialise(airspace_settings);
-  cross_section.Initialise();
+  safe_brush.set(safe_color);
+  warning_brush.set(warning_color);
+  alarm_brush.set(alarm_color);
+
+  teammate_icon.load_big(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
+  alert_icon.load_big(IDB_FLARMTRAFFIC, IDB_FLARMTRAFFIC_HD);
 }

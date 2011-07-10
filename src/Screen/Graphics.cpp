@@ -47,7 +47,6 @@ Brush Graphics::hAboveTerrainBrush;
 #endif
 
 MaskedIcon Graphics::hTerrainWarning;
-MaskedIcon Graphics::hFLARMTraffic;
 MaskedIcon Graphics::hLogger, Graphics::hLoggerOff;
 MaskedIcon Graphics::hCruise, Graphics::hClimb,
            Graphics::hFinalGlide, Graphics::hAbort;
@@ -85,7 +84,6 @@ MaskedIcon Graphics::AirportReachableIcon, Graphics::AirportUnreachableIcon;
 MaskedIcon Graphics::AirportMarginalIcon, Graphics::FieldMarginalIcon;
 MaskedIcon Graphics::FieldReachableIcon, Graphics::FieldUnreachableIcon;
 MaskedIcon Graphics::hBmpThermalSource;
-MaskedIcon Graphics::hBmpTeammatePosition;
 
 MaskedIcon Graphics::hBmpMapScaleLeft;
 MaskedIcon Graphics::hBmpMapScaleRight;
@@ -99,11 +97,6 @@ Bitmap Graphics::hBmpTabFlight;
 Bitmap Graphics::hBmpTabSystem;
 Bitmap Graphics::hBmpTabRules;
 Bitmap Graphics::hBmpTabTimes;
-
-// used for flarm
-Brush Graphics::AlarmBrush;
-Brush Graphics::WarningBrush;
-Brush Graphics::TrafficBrush;
 
 // used for landable rendering
 Brush Graphics::hbGreen;
@@ -121,10 +114,6 @@ const Color Graphics::inv_yellowColor = COLOR_YELLOW;
 const Color Graphics::inv_greenColor = COLOR_GREEN;
 const Color Graphics::inv_magentaColor = COLOR_MAGENTA;
 
-const Color Graphics::cAlertSafe = Color(0x1d,0x9b,0xc5);
-const Color Graphics::cAlertWarning = Color(0xfe,0x84,0x38);
-const Color Graphics::cAlertAlarm = Color(0xfb,0x35,0x2f);
-
 static Color clrSepia(0x78,0x31,0x18);
 const Color Graphics::GroundColor = Color(0x80,0x45,0x15);
 const Color Graphics::skyColor = Color(0x0a,0xb9,0xf3);
@@ -139,17 +128,11 @@ Graphics::Initialise()
 
   LoadUnitSymbols();
 
-  AlarmBrush.set(cAlertAlarm);
-  WarningBrush.set(cAlertWarning);
-  TrafficBrush.set(cAlertSafe);
-
-  hFLARMTraffic.load_big(IDB_FLARMTRAFFIC, IDB_FLARMTRAFFIC_HD);
   hTerrainWarning.load_big(IDB_TERRAINWARNING, IDB_TERRAINWARNING_HD);
   hGPSStatus1.load_big(IDB_GPSSTATUS1, IDB_GPSSTATUS1_HD, false);
   hGPSStatus2.load_big(IDB_GPSSTATUS2, IDB_GPSSTATUS2_HD, false);
   hLogger.load_big(IDB_LOGGER, IDB_LOGGER_HD);
   hLoggerOff.load_big(IDB_LOGGEROFF, IDB_LOGGEROFF_HD);
-  hBmpTeammatePosition.load_big(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
 
   hCruise.load_big(IDB_CRUISE, IDB_CRUISE_HD, false);
   hClimb.load_big(IDB_CLIMB, IDB_CLIMB_HD, false);
@@ -334,17 +317,11 @@ Graphics::Deinitialise()
 {
   DeinitialiseUnitSymbols();
 
-  AlarmBrush.reset();
-  WarningBrush.reset();
-  TrafficBrush.reset();
-
-  hFLARMTraffic.reset();
   hTerrainWarning.reset();
   hGPSStatus1.reset();
   hGPSStatus2.reset();
   hLogger.reset();
   hLoggerOff.reset();
-  hBmpTeammatePosition.reset();
 
   hCruise.reset();
   hClimb.reset();

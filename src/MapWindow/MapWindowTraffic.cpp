@@ -24,7 +24,6 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "Math/Screen.hpp"
 #include "Math/Earth.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
@@ -32,6 +31,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Look/TrafficLook.hpp"
 
 #include <stdio.h>
 
@@ -114,7 +114,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // If FLARM alarm draw alarm icon below corresponding target
     if ((traffic.alarm_level > 0) && (traffic.alarm_level < 4))
-      Graphics::hFLARMTraffic.draw(canvas, sc);
+      traffic_look.alert_icon.draw(canvas, sc);
 
     // Fill the Arrow array with a normal arrow pointing north
     Arrow[0].x = -4;
@@ -131,15 +131,15 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     // Select brush depending on AlarmLevel
     switch (traffic.alarm_level) {
     case 1:
-      canvas.select(Graphics::WarningBrush);
+      canvas.select(traffic_look.warning_brush);
       break;
     case 2:
     case 3:
-      canvas.select(Graphics::AlarmBrush);
+      canvas.select(traffic_look.alarm_brush);
       break;
     case 0:
     case 4:
-      canvas.select(Graphics::TrafficBrush);
+      canvas.select(traffic_look.safe_brush);
       break;
     }
 
@@ -168,6 +168,6 @@ MapWindow::DrawTeammate(Canvas &canvas) const
     RasterPoint sc;
     if (render_projection.GeoToScreenIfVisible(teamcode_info.TeammateLocation,
                                                  sc))
-      Graphics::hBmpTeammatePosition.draw(canvas, sc);
+      traffic_look.teammate_icon.draw(canvas, sc);
   }
 }

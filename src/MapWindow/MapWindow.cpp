@@ -38,13 +38,14 @@ Copyright_License {
  * Constructor of the MapWindow class
  */
 MapWindow::MapWindow(const AirspaceLook &_airspace_look,
-                     const TaskLook &_task_look)
+                     const TaskLook &_task_look,
+                     const TrafficLook &_traffic_look)
   :way_points(NULL),
    topography(NULL), topography_renderer(NULL),
    terrain(NULL),
    terrain_radius(fixed_zero),
    weather(NULL),
-   task_look(_task_look),
+   task_look(_task_look), traffic_look(_traffic_look),
    airspace_renderer(_airspace_look),
    task(NULL),
    marks(NULL)

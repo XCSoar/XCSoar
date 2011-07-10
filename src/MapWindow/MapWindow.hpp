@@ -41,6 +41,7 @@ Copyright_License {
 #include <vector>
 
 struct TaskLook;
+struct TrafficLook;
 class TopographyStore;
 class TopographyRenderer;
 class RasterTerrain;
@@ -103,6 +104,7 @@ protected:
   RasterWeather *weather;
 
   const TaskLook &task_look;
+  const TrafficLook &traffic_look;
 
   BackgroundDrawHelper m_background;
   WaypointRenderer way_point_renderer;
@@ -133,7 +135,7 @@ protected:
 
 public:
   MapWindow(const AirspaceLook &airspace_look,
-            const TaskLook &task_look);
+            const TaskLook &task_look, const TrafficLook &traffic_look);
   virtual ~MapWindow();
 
   virtual void set(ContainerWindow &parent, const PixelRect &rc);
