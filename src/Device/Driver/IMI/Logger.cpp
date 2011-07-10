@@ -40,3 +40,18 @@ IMIDevice::ReadFlightList(RecordedFlightList &flight_list,
 
   return success;
 }
+
+bool
+IMIDevice::DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
+                          OperationEnvironment &env)
+{
+  if (!Connect(env) || env.IsCancelled())
+    return false;
+
+  bool success = IMI::FlightDownload(*port, flight, path, env);
+
+  // disconnect
+  Disconnect();
+
+  return success;
+}
