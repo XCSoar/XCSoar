@@ -33,10 +33,8 @@ IMIDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
   if (declaration.size() < 2 || declaration.size() > 13)
     return false;
 
-  if (!Connect(env) || env.IsCancelled())
-    return false;
-
-  bool success = IMI::DeclarationWrite(*port, declaration);
+  bool success = Connect(env) && !env.IsCancelled();
+  success = success && IMI::DeclarationWrite(*port, declaration);
 
   // disconnect
   Disconnect();
