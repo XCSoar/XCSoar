@@ -21,7 +21,7 @@
     <Edit Name="prpMc2" Caption="Alt. diff. MC current" X="2" Height="20" CaptionWidth="138" ReadOnly="1" />
   </Panel>
 
-  <List Name="frmDetails" X="76" Y="0" ItemHeight="18"/>
+  <Edit Name="frmDetails" X="76" Y="0" ItemHeight="18" CaptionWidth="0" ReadOnly="1" MultiLine="1" />
 
   <Panel Name="frmCommands" X="76" Y="0" Visible="0">
     <Button Name="cmdReplace" Caption="Replace In Task" X="40" Y="10" Width="-50" Height="30" />

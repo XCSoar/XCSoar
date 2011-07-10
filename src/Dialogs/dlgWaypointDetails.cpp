@@ -64,7 +64,7 @@ enum task_edit_result {
 
 static int page = 0;
 static WndForm *wf = NULL;
-static WndListFrame *wDetails = NULL;
+static WndProperty *wDetails = NULL;
 static WndFrame *wInfo = NULL;
 static WndFrame *wCommand = NULL;
 static WndOwnerDrawFrame *wImage = NULL;
@@ -77,10 +77,6 @@ static Bitmap jpgimage1, jpgimage2;
 static TCHAR path_modis[MAX_PATH];
 static TCHAR path_google[MAX_PATH];
 static TCHAR szWaypointFile[MAX_PATH];
-
-#define MAXLINES 100
-static int LineOffsets[MAXLINES];
-static unsigned nTextLines = 0;
 
 static void
 NextPage(int Step)
@@ -140,28 +136,6 @@ NextPage(int Step)
   wDetails->set_visible(page == 1);
   wCommand->set_visible(page == 2);
   wImage->set_visible(page >= 3);
-}
-
-static void
-OnPaintDetailsListItem(Canvas &canvas, const PixelRect rc,
-                       unsigned DrawListIndex)
-{
-  assert(selected_waypoint);
-  assert(DrawListIndex < nTextLines);
-
-  const TCHAR* text = selected_waypoint->Details.c_str();
-  int nstart = LineOffsets[DrawListIndex];
-  int nlen;
-  if (DrawListIndex < nTextLines - 1) {
-    nlen = LineOffsets[DrawListIndex + 1] - LineOffsets[DrawListIndex];
-    nlen--;
-  } else {
-    nlen = _tcslen(text + nstart) - 1;
-  }
-
-  if (nlen > 0)
-    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-                text + nstart, nlen);
 }
 
 static void
@@ -648,8 +622,6 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
                                       _T("IDR_XML_WAYPOINTDETAILS"));
   assert(wf != NULL);
 
-  nTextLines = 0;
-
   TCHAR buffer[MAX_PATH];
   const TCHAR *Directory = NULL;
   if (Profile::GetPath(szProfileWaypointFile, szWaypointFile))
@@ -774,17 +746,14 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   wInfo = ((WndFrame *)wf->FindByName(_T("frmInfos")));
   wCommand = ((WndFrame *)wf->FindByName(_T("frmCommands")));
   wImage = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmImage")));
-  wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
-  wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
+  wDetails = (WndProperty*)wf->FindByName(_T("frmDetails"));
 
   assert(wInfo != NULL);
   assert(wCommand != NULL);
   assert(wImage != NULL);
   assert(wDetails != NULL);
 
-  nTextLines = TextToLineOffsets(way_point.Details.c_str(), LineOffsets, MAXLINES);
-  wDetails->SetLength(nTextLines);
-
+  wDetails->SetText(selected_waypoint->Details.c_str());
   wCommand->hide();
   wImage->SetOnPaintNotify(OnImagePaint);
 
