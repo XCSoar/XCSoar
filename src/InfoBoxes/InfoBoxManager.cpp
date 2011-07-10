@@ -526,39 +526,6 @@ InfoBoxManager::GetInfoBoxBorder(unsigned i)
   return border;
 }
 
-static void
-InfoBoxLookDefaults(InfoBoxLook &info_box_look)
-{
-  info_box_look.value.fg_color
-    = info_box_look.title.fg_color
-    = info_box_look.comment.fg_color
-    = Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK;
-  info_box_look.background_brush.set(Appearance.InverseInfoBox
-                                     ? COLOR_BLACK : COLOR_WHITE);
-
-  Color border_color = Color(128, 128, 128);
-  info_box_look.border_pen.set(info_box_look.BORDER_WIDTH, border_color);
-  info_box_look.selector_pen.set(IBLSCALE(1) + 2,
-                                 info_box_look.value.fg_color);
-
-  info_box_look.value.font = &Fonts::InfoBox;
-  info_box_look.title.font = &Fonts::Title;
-  info_box_look.comment.font = &Fonts::Title;
-  info_box_look.small_font = &Fonts::InfoBoxSmall;
-
-  info_box_look.colors[0] = border_color;
-  info_box_look.colors[1] = Appearance.InverseInfoBox
-    ? Graphics::inv_redColor : COLOR_RED;
-  info_box_look.colors[2] = Appearance.InverseInfoBox
-    ? Graphics::inv_blueColor : COLOR_BLUE;
-  info_box_look.colors[3] = Appearance.InverseInfoBox
-    ? Graphics::inv_greenColor : COLOR_GREEN;
-  info_box_look.colors[4] = Appearance.InverseInfoBox
-    ? Graphics::inv_yellowColor : COLOR_YELLOW;
-  info_box_look.colors[5] = Appearance.InverseInfoBox
-    ? Graphics::inv_magentaColor : COLOR_MAGENTA;
-}
-
 void
 InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout)
 {
@@ -566,7 +533,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout)
   layout = _layout;
 
   info_box_look = new InfoBoxLook;
-  InfoBoxLookDefaults(*info_box_look);
+  info_box_look->Initialise(Appearance.InverseInfoBox);
 
   WindowStyle style;
   style.hide();

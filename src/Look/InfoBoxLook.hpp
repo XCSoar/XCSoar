@@ -44,6 +44,8 @@ struct InfoBoxLook {
 
   Color colors[6];
 
+  void Initialise(bool inverse);
+
   Color get_color(int i, Color default_color) const {
     if (i < 0)
       return colors[0];
