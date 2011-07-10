@@ -13,9 +13,12 @@
 
 #include "Types.hpp"
 
+#include <tchar.h>
+
 class Port;
 struct Declaration;
 class RecordedFlightList;
+struct RecordedFlightInfo;
 class OperationEnvironment;
 
 /**
@@ -47,7 +50,8 @@ namespace IMI
   bool DeclarationWrite(Port &port, const Declaration &decl);
 
   bool ReadFlightList(Port &port, RecordedFlightList &flight_list);
-
+  bool FlightDownload(Port &port, const RecordedFlightInfo &flight,
+                      const TCHAR *path, OperationEnvironment &env);
   /**
    * @brief Disconnects from the device
    *

@@ -11,6 +11,7 @@
 #include "Protocol.hpp"
 #include "Checksum.hpp"
 #include "Conversion.hpp"
+#include "IGC.hpp"
 #include "Communication.hpp"
 #include "Operation.hpp"
 #include "Device/Declaration.hpp"
@@ -18,6 +19,9 @@
 #include "MessageParser.hpp"
 #include "Device/Port.hpp"
 #include "OS/Clock.hpp"
+#include "OS/FileUtil.hpp"
+
+#include <cstdio>
 
 namespace IMI
 {
@@ -161,6 +165,74 @@ IMI::ReadFlightList(Port &port, RecordedFlightList &flight_list)
   }
 
   return false;
+}
+
+bool
+IMI::FlightDownload(Port &port, const RecordedFlightInfo &flight_info,
+                    const TCHAR *path, OperationEnvironment &env)
+{
+  if (!_connected)
+    return false;
+
+  MessageParser::Reset();
+
+  Flight flight;
+  if (!FlashRead(port, &flight, flight_info.internal.imi, sizeof(flight)))
+    return false;
+
+  FILE *fileIGC = _tfopen(path, _T("w+b"));
+  if (fileIGC == NULL)
+    return false;
+
+  unsigned fixesCount = COMM_MAX_PAYLOAD_SIZE / sizeof(Fix);
+  Fix *fixBuffer = (Fix*)malloc(sizeof(Fix) * fixesCount);
+  if (fixBuffer == NULL)
+    return false;
+
+  bool ok = true;
+
+  WriteHeader(flight.decl, flight.signature.tampered, fileIGC);
+
+  int noenl = 0;
+  if ((flight.decl.header.sensor & IMINO_ENL_MASK) != 0)
+    noenl = 1;
+
+  unsigned address = flight_info.internal.imi + sizeof(flight);
+
+  unsigned fixesRemains = flight.finish.fixes;
+  while (ok && fixesRemains) {
+    unsigned fixesToRead = fixesRemains;
+    if (fixesToRead > fixesCount)
+      fixesToRead = fixesCount;
+
+    if (!FlashRead(port, fixBuffer, address, fixesToRead * sizeof(Fix)))
+      ok = false;
+
+    for (unsigned i = 0; ok && i < fixesToRead; i++) {
+      const Fix *pFix = fixBuffer + i;
+      if (IMIIS_FIX(pFix->id))
+        WriteFix(*pFix, false, noenl, fileIGC);
+    }
+
+    address = address + fixesToRead * sizeof(Fix);
+    fixesRemains -= fixesToRead;
+
+    if (env.IsCancelled())
+      // canceled by user
+      ok = false;
+  }
+
+  free(fixBuffer);
+
+  if (ok)
+    WriteSignature(flight.signature, flight.decl.header.sn, fileIGC);
+
+  fclose(fileIGC);
+
+  if (!ok)
+    File::Delete(path);
+
+  return ok;
 }
 
 bool
