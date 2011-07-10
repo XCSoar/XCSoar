@@ -49,9 +49,8 @@ ByteSwap32(uint32_t value)
 #ifdef __linux__
   return bswap_32(value);
 #else
-  const uint8_t *bytes = (const uint8_t *)(const void *)&value;
-  return ((uint32_t)bytes[3] << 24) | ((uint32_t)bytes[2] << 16)
-    | ((uint32_t)bytes[1] << 8) | ((uint32_t)bytes[0]);
+  return (value >> 24) | ((value >> 8) & 0x0000ff00) |
+    ((value << 8) & 0x00ff0000) | (value << 24);
 #endif
 }
 
