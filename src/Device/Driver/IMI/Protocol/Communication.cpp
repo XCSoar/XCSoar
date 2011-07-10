@@ -20,6 +20,7 @@
 namespace IMI
 {
   extern IMIWORD _serialNumber;
+  extern bool _connected;
 }
 
 bool
@@ -127,4 +128,62 @@ IMI::SendRet(Port &port, IMIBYTE msgID, const void *payload,
   }
 
   return NULL;
+}
+
+static bool
+RLEDecompress(IMI::IMIBYTE* dest, const IMI::IMIBYTE *src, unsigned size,
+              unsigned destSize)
+{
+  if (size > destSize)
+    return false;
+
+  if (size == destSize) {
+    memcpy(dest, src, size);
+    return true;
+  }
+
+  while (size--) {
+    IMI::IMIBYTE b = *src++;
+
+    if (destSize-- == 0)
+      return false;
+
+    *dest++ = b;
+
+    if (b == 0 || b == 0xFF) {
+      unsigned count = *src++;
+
+      if (size-- == 0)
+        return false;
+
+      while (count--) {
+        if (destSize-- == 0)
+          return false;
+
+        *dest++ = b;
+      }
+    }
+  }
+
+  return destSize == 0;
+}
+
+bool
+IMI::FlashRead(Port &port, void *buffer, unsigned address, unsigned size)
+{
+  if (!_connected)
+    return false;
+
+  if (size == 0)
+    return true;
+
+  const TMsg *pMsg = SendRet(port, MSG_FLASH, 0, 0, MSG_FLASH, -1,
+                             IMICOMM_BIGPARAM1(address),
+                             IMICOMM_BIGPARAM2(address),
+                             size, 300, 2);
+
+  if (pMsg == NULL || size != pMsg->parameter3)
+    return false;
+
+  return RLEDecompress((IMIBYTE*)buffer, pMsg->payload, pMsg->payloadSize, size);
 }

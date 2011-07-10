@@ -76,6 +76,8 @@ namespace IMI
                       IMIWORD retPayloadSize, IMIBYTE parameter1 = 0,
                       IMIWORD parameter2 = 0, IMIWORD parameter3 = 0,
                       unsigned extraTimeout = 300, int retry = 4);
+
+  bool FlashRead(Port &port, void *buffer, unsigned address, unsigned size);
 }
 
 #endif
