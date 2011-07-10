@@ -24,6 +24,7 @@ namespace IMI
    * @return IMI CRC value
    */
   IMIWORD CRC16Checksum(const void *message, unsigned bytes);
+  IMIBYTE FixChecksum(const void *message, unsigned bytes);
 }
 
 #endif
