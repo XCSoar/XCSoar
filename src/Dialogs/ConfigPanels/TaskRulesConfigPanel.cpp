@@ -107,9 +107,9 @@ TaskRulesConfigPanel::Save()
                                   settings_computer.start_max_height_margin,
                                   szProfileStartMaxHeightMargin);
 
-  changed |= SaveFormProperty(*wf, _T("prpStartHeightRef"), ugAltitude,
-                                  settings_computer.ordered_defaults.start_max_height_ref,
-                                  szProfileStartHeightRef);
+  changed |= SaveFormProperty(*wf, _T("prpStartHeightRef"),
+                              szProfileStartHeightRef,
+                              settings_computer.ordered_defaults.start_max_height_ref);
 
   changed |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                                   settings_computer.ordered_defaults.finish_min_height,
