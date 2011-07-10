@@ -133,12 +133,12 @@ AllDevicesLinkTimeout()
 }
 
 bool
-AllDevicesIsDeclaring()
+AllDevicesIsBusy()
 {
   assert(!is_simulator());
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    if (DeviceList[i].IsDeclaring())
+    if (DeviceList[i].IsBusy())
       return true;
 
   return false;

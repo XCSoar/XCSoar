@@ -60,6 +60,6 @@ void AllDevicesLinkTimeout();
  */
 gcc_pure
 bool
-AllDevicesIsDeclaring();
+AllDevicesIsBusy();
 
 #endif

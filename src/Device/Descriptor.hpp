@@ -28,6 +28,7 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "RadioFrequency.hpp"
 
+#include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
 
@@ -62,9 +63,10 @@ public:
   bool ticker;
 
   /**
-   * True during task declaration.  Link timeouts are disabled meanwhile.
+   * True during task declaration or flight download.  Link timeouts
+   * are disabled meanwhile.
    */
-  bool declaring;
+  bool busy;
 
 public:
   DeviceDescriptor();
@@ -116,11 +118,18 @@ public:
   }
 
   /**
-   * Is this device currently declaring a task?  During that, the
-   * device usually does not send GPS updates.
+   * Is this device currently busy (i.e. not in normal NMEA receiving
+   * mode)?  During that, we do not expect it to send GPS updates, and
+   * the link timeouts are disabled.
    */
-  bool IsDeclaring() const {
-    return declaring;
+  bool IsBusy() const {
+    return busy;
+  }
+
+  void SetBusy(bool _busy) {
+    assert(_busy != busy);
+
+    busy = _busy;
   }
 
 private:

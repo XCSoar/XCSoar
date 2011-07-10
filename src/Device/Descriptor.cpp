@@ -47,13 +47,13 @@ DeviceDescriptor::DeviceDescriptor()
 #ifdef ANDROID
    internal_gps(NULL),
 #endif
-   ticker(false), declaring(false)
+   ticker(false), busy(false)
 {
 }
 
 DeviceDescriptor::~DeviceDescriptor()
 {
-  assert(!declaring);
+  assert(!busy);
 }
 
 bool
@@ -217,7 +217,7 @@ DeviceDescriptor::PutVoice(const TCHAR *sentence)
 void
 DeviceDescriptor::LinkTimeout()
 {
-  assert(!declaring);
+  assert(!busy);
 
   if (device != NULL)
     device->LinkTimeout();
@@ -227,8 +227,7 @@ bool
 DeviceDescriptor::Declare(const struct Declaration &declaration,
                           OperationEnvironment &env)
 {
-  assert(!declaring);
-  declaring = true;
+  SetBusy(true);
 
   TCHAR text[60];
 
@@ -242,7 +241,7 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
     result = FlarmDeclare(Com, declaration, env) || result;
   }
 
-  declaring = false;
+  SetBusy(false);
   return result;
 }
 
@@ -277,7 +276,7 @@ void
 DeviceDescriptor::OnSysTicker(const NMEA_INFO &basic,
                               const DERIVED_INFO &calculated)
 {
-  if (device == NULL || declaring)
+  if (device == NULL || IsBusy())
     return;
 
   ticker = !ticker;
