@@ -94,7 +94,7 @@ AddClicked(gcc_unused WndButton &button)
 
   TCHAR code[5] = _T("");
   if (!dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                             code, 5))
+                             code, 5, _("Airport ICAO code")))
     return;
 
   if (_tcslen(code) != 4) {
