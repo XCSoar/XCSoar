@@ -43,7 +43,6 @@ struct CrossSectionLook {
   Brush aircraft_brush;
 
   void Initialise();
-  void Deinitialise();
 };
 
 #endif

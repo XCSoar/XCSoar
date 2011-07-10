@@ -34,13 +34,3 @@ ThermalBandLook::Initialise()
   white_pen.set(2, COLOR_WHITE);
   black_pen.set(2, COLOR_BLACK);
 }
-
-void
-ThermalBandLook::Deinitialise()
-{
-  pen.reset();
-  brush.reset();
-
-  white_pen.reset();
-  black_pen.reset();
-}

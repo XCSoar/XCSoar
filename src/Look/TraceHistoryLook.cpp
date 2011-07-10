@@ -30,10 +30,3 @@ TraceHistoryLook::Initialise(bool inverse)
   axis_pen.set(1, COLOR_GRAY);
   line_pen.set(2, inverse ? COLOR_WHITE : COLOR_BLACK);
 }
-
-void
-TraceHistoryLook::Deinitialise()
-{
-  axis_pen.reset();
-  line_pen.reset();
-}

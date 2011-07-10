@@ -41,7 +41,6 @@ struct ChartLook {
   Pen pens[STYLE_COUNT];
 
   void Initialise();
-  void Deinitialise();
 
   const Pen &GetPen(Style style) const {
     unsigned i = (unsigned)style;

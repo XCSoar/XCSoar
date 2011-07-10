@@ -33,7 +33,6 @@ struct TraceHistoryLook {
   Pen line_pen;
 
   void Initialise(bool inverse);
-  void Deinitialise();
 };
 
 #endif

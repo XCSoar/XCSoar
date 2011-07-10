@@ -34,7 +34,6 @@ struct ThermalBandLook {
   Pen white_pen, black_pen;
 
   void Initialise();
-  void Deinitialise();
 };
 
 #endif

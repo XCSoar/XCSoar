@@ -33,10 +33,3 @@ ChartLook::Initialise()
   pens[STYLE_MEDIUMBLACK].set(is_altair() ? 1 : 2, Color(50, 243, 45));
   pens[STYLE_THINDASHPAPER].set(Pen::DASH, 1, Color(0xB0, 0xB0, 0xB0));
 }
-
-void
-ChartLook::Deinitialise()
-{
-  for (unsigned i = 0; i < STYLE_COUNT; ++i)
-    pens[i].reset();
-}

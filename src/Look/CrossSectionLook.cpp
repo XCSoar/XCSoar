@@ -34,11 +34,3 @@ CrossSectionLook::Initialise()
   grid_pen.set(Pen::DASH, 1, Color(0x60, 0x60, 0x60));
   aircraft_brush.set(text_color);
 }
-
-void
-CrossSectionLook::Deinitialise()
-{
-  terrain_brush.reset();
-  grid_pen.reset();
-  aircraft_brush.reset();
-}
