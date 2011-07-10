@@ -11,6 +11,7 @@
 
 namespace IMI
 {
+  void WriteString(const char *buffer, size_t max_length, FILE *file);
   void WriteSerialNumber(IMIWORD sn, FILE *file);
   const IMICHAR* GetDeviceName(unsigned i);
   const IMICHAR* GetGPSName(unsigned i);
@@ -23,6 +24,17 @@ static IMI::FixB fixB1 = {0};
 static IMI::FixB fixB2 = {0};
 
 static const IMI::IMICHAR snDigits[] = "0123456789ABCDEFHJKLMNPRSTUVWXYZ";
+
+void
+IMI::WriteString(const char *buffer, size_t max_length, FILE *file)
+{
+  size_t length = max_length;
+  const char *zero = (const char *)memchr(buffer, '\0', max_length);
+  if (zero != NULL)
+    length = zero - buffer;
+
+  fwrite(buffer, sizeof(char), length, file);
+}
 
 void
 IMI::WriteSerialNumber(IMIWORD sn, FILE *file)
@@ -115,7 +127,7 @@ IMI::WriteHeader(const TDeclaration &decl, IMIBYTE tampered, FILE *file)
   fputs("HFFXA010\r\n", file);
 
   fputs("HFPLTPILOT:", file);
-  fputs(decl.header.plt, file);
+  WriteString(decl.header.plt, sizeof(decl.header.plt), file);
   fputs("\r\n", file);
 
   if (decl.header.db1Day != 0)
@@ -124,11 +136,11 @@ IMI::WriteHeader(const TDeclaration &decl, IMIBYTE tampered, FILE *file)
             decl.header.db1Year % 100);
 
   fputs("HFGTYGLIDERTYPE:", file);
-  fputs(decl.header.gty, file);
+  WriteString(decl.header.gty, sizeof(decl.header.gty), file);
   fputs("\r\n", file);
 
   fputs("HFGIDGLIDERID:", file);
-  fputs(decl.header.gid, file);
+  WriteString(decl.header.gid, sizeof(decl.header.gid), file);
   fputs("\r\n", file);
 
   fputs("HFDTM100DATUM:WGS-1984\r\n", file);
@@ -155,21 +167,20 @@ IMI::WriteHeader(const TDeclaration &decl, IMIBYTE tampered, FILE *file)
 
   if (decl.header.cid[0] != 0) {
     fputs("HFCIDCOMPETITIONID:", file);
-    fputs(decl.header.cid, file);
+    WriteString(decl.header.cid, sizeof(decl.header.cid), file);
     fputs("\r\n", file);
   }
 
   // This seems to be a bug in the original implementation
   // When the competition class line is missing the integrity check will fail!
   fputs("HFCCLCOMPETITIONCLASS:", file);
-  if (decl.header.ccl[0] != 0) {
-    fputs(decl.header.ccl, file);
-  }
+  if (decl.header.ccl[0] != 0)
+    WriteString(decl.header.ccl, sizeof(decl.header.ccl), file);
   fputs("\r\n", file);
 
   if (decl.header.cm2[0] != '\0') {
     fputs("HFCM2SECONDCREW:", file);
-    fputs(decl.header.cm2, file);
+    WriteString(decl.header.cm2, sizeof(decl.header.cm2), file);
     fputs("\r\n", file);
 
     if (decl.header.db2Day != 0)
@@ -180,13 +191,13 @@ IMI::WriteHeader(const TDeclaration &decl, IMIBYTE tampered, FILE *file)
 
   if (decl.header.clb[0] != '\0') {
     fputs("HFCLBCLUB:", file);
-    fputs(decl.header.clb, file);
+    WriteString(decl.header.clb, sizeof(decl.header.clb), file);
     fputs("\r\n", file);
   }
 
   if (decl.header.sit[0] != '\0') {
     fputs("HFCLBSITE:", file);
-    fputs(decl.header.sit, file);
+    WriteString(decl.header.sit, sizeof(decl.header.sit), file);
     fputs("\r\n", file);
   }
 
@@ -212,7 +223,7 @@ IMI::WriteHeader(const TDeclaration &decl, IMIBYTE tampered, FILE *file)
       fputs("000000", file);
 
     fprintf(file, "%04d%02d", decl.header.tskNumber, count - 2);
-    fputs(decl.header.tskName, file);
+    WriteString(decl.header.tskName, sizeof(decl.header.tskName), file);
     fputs("\r\n", file);
 
     const IMI::TWaypoint *wp = decl.wp;
@@ -226,7 +237,7 @@ IMI::WriteHeader(const TDeclaration &decl, IMIBYTE tampered, FILE *file)
       fprintf(file, "%03d%05d%c", l.degrees, l.milliminutes,
               (l.sign ? 'W' : 'E'));
 
-      fputs(wp->name, file);
+      WriteString(wp->name, sizeof(wp->name), file);
       fputs("\r\n", file);
     }
   }
@@ -379,14 +390,14 @@ IMI::WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file)
       fputs("LIMI", file);
       BrokenTime time = ConvertToDateTime(fix.time);
       fprintf(file, "%02d%02d%02d", time.hour, time.minute, time.second);
-      fputs((const char *)fix_e->text, file);
+      WriteString((const char *)fix_e->text, sizeof(fix_e->text), file);
 
       append_line_break = true;
     } else if (fix_e->type == IMIFIX_E_TYPE_PEV) {
       fputc('E', file);
       BrokenTime time = ConvertToDateTime(fix.time);
       fprintf(file, "%02d%02d%02d", time.hour, time.minute, time.second);
-      fputs((const char *)fix_e->text, file);
+      WriteString((const char *)fix_e->text, sizeof(fix_e->text), file);
 
       append_line_break = true;
     } else if (fix_e->type == IMIFIX_E_TYPE_TASK) {
@@ -396,7 +407,7 @@ IMI::WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file)
 
       if (fix_e->text[0] == 1) {
         fputs("STA", file);
-        fputs((const char *)fix_e->text + 2, file);
+        WriteString((const char *)fix_e->text + 2, sizeof(fix_e->text) - 2, file);
       } else {
         if (fix_e->text[0] == 2)
           fputs("ONT", file);
@@ -406,7 +417,7 @@ IMI::WriteFix(const Fix &fix, bool fromB2, int no_enl, FILE *file)
           fputs("TPC", file);
 
         fprintf(file, "%02d", fix_e->text[1]);
-        fputs((const char *)fix_e->text + 2, file);
+        WriteString((const char *)fix_e->text + 2, sizeof(fix_e->text) - 2, file);
       }
 
       append_line_break = true;
