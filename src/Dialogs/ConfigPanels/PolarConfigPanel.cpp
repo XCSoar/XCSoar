@@ -243,7 +243,7 @@ PolarConfigPanel::OnExport(WndButton &button)
 {
   TCHAR filename[69] = _T("");
   if (!dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                             filename, 64))
+                             filename, 64, _("Polar name")))
     return;
 
   TCHAR path[MAX_PATH];
