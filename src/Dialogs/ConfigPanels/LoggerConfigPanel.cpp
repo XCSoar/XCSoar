@@ -95,7 +95,8 @@ OnCompetitionIdClicked(gcc_unused WndButton &button)
 
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
                             plane.competition_id.buffer(),
-                            plane.competition_id.MAX_SIZE))
+                            plane.competition_id.MAX_SIZE,
+                            _("Competition ID")))
     changed = true;
 
   UpdateButtons();
@@ -108,7 +109,8 @@ OnAircraftTypeClicked(gcc_unused WndButton &button)
 
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
                             plane.type.buffer(),
-                            plane.type.MAX_SIZE))
+                            plane.type.MAX_SIZE,
+                            _("Aircraft type")))
     changed = true;
 
   UpdateButtons();
@@ -121,7 +123,8 @@ OnAircraftRegClicked(gcc_unused WndButton &button)
 
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
                             plane.registration.buffer(),
-                            plane.registration.MAX_SIZE))
+                            plane.registration.MAX_SIZE,
+                            _("Aircraft reg.")))
     changed = true;
 
   UpdateButtons();
@@ -135,7 +138,8 @@ OnPilotNameClicked(gcc_unused WndButton &button)
     tmp.clear();
 
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                            tmp.buffer(), tmp.MAX_SIZE)) {
+                            tmp.buffer(), tmp.MAX_SIZE,
+                            _("Pilot name"))) {
     Profile::Set(szProfilePilotName, tmp);
     changed = true;
   }
@@ -150,7 +154,8 @@ OnLoggerIDClicked(gcc_unused WndButton &button)
     tmp.clear();
 
   if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                            tmp.buffer(), tmp.MAX_SIZE)) {
+                            tmp.buffer(), tmp.MAX_SIZE,
+                            _("Logger ID"))) {
     Profile::Set(szProfileLoggerID, tmp);
     changed = true;
   }
