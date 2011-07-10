@@ -212,7 +212,8 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 static void
-dlgTextEntryHighscoreType(SingleWindow &parent, TCHAR *text, int width)
+dlgTextEntryHighscoreType(SingleWindow &parent, TCHAR *text, int width,
+                          const TCHAR* caption)
 {
   wf = NULL;
   wGrid = NULL;
@@ -225,6 +226,9 @@ dlgTextEntryHighscoreType(SingleWindow &parent, TCHAR *text, int width)
   wf = LoadDialog(CallBackTable, parent, _T("IDR_XML_TEXTENTRY"));
   if (!wf)
     return;
+
+  if (caption)
+    wf->SetCaption(caption);
 
   wGrid = (WndOwnerDrawFrame*)wf->FindByName(_T("frmGrid"));
 
@@ -255,12 +259,12 @@ dlgTextEntryHighscoreType(SingleWindow &parent, TCHAR *text, int width)
 
 bool
 dlgTextEntryShowModal(SingleWindow &parent, tstring &text, int width,
-                      AllowedCharactersCallback_t accb)
+                      const TCHAR* caption, AllowedCharactersCallback_t accb)
 {
   TCHAR buf[width];
   _tcscpy(buf, text.c_str());
 
-  if (!dlgTextEntryShowModal(parent, buf, width, accb))
+  if (!dlgTextEntryShowModal(parent, buf, width, caption, accb))
     return false;
 
   text = tstring(buf);
@@ -269,20 +273,20 @@ dlgTextEntryShowModal(SingleWindow &parent, tstring &text, int width,
 
 bool
 dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
-                      AllowedCharactersCallback_t accb)
+                      const TCHAR* caption, AllowedCharactersCallback_t accb)
 {
   switch (Appearance.TextInputStyle) {
   case tiDefault:
   case tiKeyboard:
     if (has_pointer())
-      return dlgTextEntryKeyboardShowModal(parent, text, width, accb);
+      return dlgTextEntryKeyboardShowModal(parent, text, width, caption, accb);
     else {
-      dlgTextEntryHighscoreType(parent, text, width);
+      dlgTextEntryHighscoreType(parent, text, width, caption);
       return true;
     }
 
   case tiHighScore:
-    dlgTextEntryHighscoreType(parent, text, width);
+    dlgTextEntryHighscoreType(parent, text, width, caption);
     return true;
   }
   return false;

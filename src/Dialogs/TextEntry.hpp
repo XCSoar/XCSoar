@@ -31,15 +31,18 @@ class SingleWindow;
 typedef const TCHAR *(*AllowedCharactersCallback_t)(const TCHAR *value);
 
 bool
-dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
-                      AllowedCharactersCallback_t accb=NULL);
+dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text,
+                      int width, const TCHAR* caption = NULL,
+                      AllowedCharactersCallback_t accb = NULL);
 
 bool
-dlgTextEntryShowModal(SingleWindow &parent, tstring &text, int width,
-                      AllowedCharactersCallback_t accb=NULL);
+dlgTextEntryShowModal(SingleWindow &parent, tstring &text,
+                      int width, const TCHAR* caption = NULL,
+                      AllowedCharactersCallback_t accb = NULL);
 
 bool
-dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text, int width=0,
-                              AllowedCharactersCallback_t accb=NULL);
+dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text,
+                              int width = 0, const TCHAR* caption = NULL,
+                              AllowedCharactersCallback_t accb = NULL);
 
 #endif

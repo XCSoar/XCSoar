@@ -168,7 +168,8 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 bool
-dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text, int width,
+dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text,
+                              int width, const TCHAR* caption,
                               AllowedCharactersCallback_t accb)
 {
   if (width == 0)
@@ -180,6 +181,9 @@ dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text, int width,
                   Layout::landscape ? _T("IDR_XML_TEXTENTRY_KEYBOARD_L") :
                                       _T("IDR_XML_TEXTENTRY_KEYBOARD"));
   assert(wf != NULL);
+
+  if (caption)
+    wf->SetCaption(caption);
 
   AllowedCharactersCallback = accb;
 

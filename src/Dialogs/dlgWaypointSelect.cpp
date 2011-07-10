@@ -653,7 +653,7 @@ OnFilterNameButton(gcc_unused WndButton &button)
   TCHAR newNameFilter[NAMEFILTERLEN + 1];
   CopyString(newNameFilter, filter_data.name, NAMEFILTERLEN + 1);
   dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                        newNameFilter, NAMEFILTERLEN,
+                        newNameFilter, NAMEFILTERLEN, _("Waypoint name"),
                         WaypointNameAllowedCharacters);
 
   int i = _tcslen(newNameFilter) - 1;
