@@ -43,43 +43,8 @@ enum BorderKind_t {
 #define BORDERBOTTOM (1<<bkBottom)
 #define BORDERLEFT   (1<<bkLeft)
 
-class Font;
 class Angle;
-
-struct InfoBoxLook {
-  Pen border_pen, selector_pen;
-  Brush background_brush;
-
-  struct {
-    Color fg_color;
-    const Font *font;
-  } title, value, comment;
-
-  const Font *small_font;
-
-  Color colors[6];
-
-  Color get_color(int i, Color default_color) const {
-    if (i < 0)
-      return colors[0];
-    else if (i >= 1 && (unsigned)i < sizeof(colors) / sizeof(colors[0]))
-      return colors[i];
-    else
-      return default_color;
-  }
-
-  Color get_title_color(int i) const {
-    return get_color(i, title.fg_color);
-  }
-
-  Color get_value_color(int i) const {
-    return get_color(i, value.fg_color);
-  }
-
-  Color get_comment_color(int i) const {
-    return get_color(i, comment.fg_color);
-  }
-};
+struct InfoBoxLook;
 
 class InfoBoxWindow : public PaintWindow
 {

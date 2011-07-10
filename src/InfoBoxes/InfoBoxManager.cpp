@@ -25,6 +25,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
+#include "Look/InfoBoxLook.hpp"
 #include "Protection.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "InfoBoxes/Content/Base.hpp"
