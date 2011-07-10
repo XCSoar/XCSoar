@@ -42,11 +42,10 @@ Copyright_License {
 
 static int page = 0;
 static WndForm *wf = NULL;
-static WndListFrame *wDetails = NULL;
+static WndProperty *wDetails = NULL;
 
 #define MAXLINES 100
 #define MAXLISTS 20
-static int LineOffsets[MAXLINES];
 static unsigned nTextLines;
 static int nLists = 0;
 static TCHAR *ChecklistText[MAXTITLE];
@@ -63,8 +62,6 @@ NextPage(int Step)
   if (page < 0)
     page = nLists - 1;
 
-  nTextLines = TextToLineOffsets(ChecklistText[page], LineOffsets, MAXLINES);
-
   _tcscpy(buffer, _("Checklist"));
 
   if (ChecklistTitle[page] &&
@@ -75,31 +72,7 @@ NextPage(int Step)
   }
   wf->SetCaption(buffer);
 
-  wDetails->SetLength(nTextLines);
-  wDetails->invalidate();
-}
-
-static void
-OnPaintDetailsListItem(Canvas &canvas, const PixelRect rc, unsigned i)
-{
-  assert(i < nTextLines);
-
-  TCHAR* text = ChecklistText[page];
-  if (text == NULL)
-    return;
-
-  int nstart = LineOffsets[i];
-  int nlen;
-  if (i < nTextLines - 1) {
-    nlen = LineOffsets[i + 1] - LineOffsets[i];
-    nlen--;
-  } else {
-    nlen = _tcslen(text + nstart) - 1;
-  }
-
-  if (nlen > 0)
-    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-                text + nstart, nlen);
+  wDetails->SetText(ChecklistText[page]);
 }
 
 static void
@@ -243,10 +216,8 @@ dlgChecklistShowModal(void)
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  wDetails = (WndListFrame*)wf->FindByName(_T("frmDetails"));
+  wDetails = (WndProperty*)wf->FindByName(_T("frmDetails"));
   assert(wDetails != NULL);
-
-  wDetails->SetPaintItemCallback(OnPaintDetailsListItem);
 
   page = 0;
   NextPage(0); // JMW just to turn proper pages on/off

@@ -6,5 +6,5 @@
 
   <Button Name="cmdClose" Caption="Close" X="-62" Y="-30" Width="60" Height="28" />
 
-  <List Name="frmDetails" X="1" Y="1" Width="-1" Height="-32" ItemHeight="18"/>
+  <Edit Name="frmDetails" X="1" Y="1" Width="-1" Height="-32" ReadOnly="1" MultiLine="1" />
 </Form>
