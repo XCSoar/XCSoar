@@ -537,7 +537,7 @@ InfoBoxLookDefaults(InfoBoxLook &info_box_look)
                                      ? COLOR_BLACK : COLOR_WHITE);
 
   Color border_color = Color(128, 128, 128);
-  info_box_look.border_pen.set(InfoBoxWindow::BORDER_WIDTH, border_color);
+  info_box_look.border_pen.set(info_box_look.BORDER_WIDTH, border_color);
   info_box_look.selector_pen.set(IBLSCALE(1) + 2,
                                  info_box_look.value.fg_color);
 

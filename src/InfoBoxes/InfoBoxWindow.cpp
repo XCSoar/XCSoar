@@ -446,16 +446,16 @@ InfoBoxWindow::on_resize(unsigned width, unsigned height)
   PixelRect rc = get_client_rect();
 
   if (mBorderKind & BORDERLEFT)
-    rc.left += BORDER_WIDTH;
+    rc.left += look.BORDER_WIDTH;
 
   if (mBorderKind & BORDERRIGHT)
-    rc.right -= BORDER_WIDTH;
+    rc.right -= look.BORDER_WIDTH;
 
   if (mBorderKind & BORDERTOP)
-    rc.top += BORDER_WIDTH;
+    rc.top += look.BORDER_WIDTH;
 
   if (mBorderKind & BORDERBOTTOM)
-    rc.bottom -= BORDER_WIDTH;
+    rc.bottom -= look.BORDER_WIDTH;
 
   recTitle = rc;
   recTitle.bottom = rc.top + look.title.font->get_capital_height() + 2;

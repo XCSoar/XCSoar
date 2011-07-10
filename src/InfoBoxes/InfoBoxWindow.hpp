@@ -51,11 +51,6 @@ class InfoBoxWindow : public PaintWindow
   /** timeout in quarter seconds of infobox focus */
   static const unsigned FOCUSTIMEOUTMAX = 24*4;
 
-public:
-  enum {
-    BORDER_WIDTH = 1,
-  };
-
 private:
   InfoBoxContent *content;
   ContainerWindow &parent;
