@@ -132,6 +132,15 @@ public:
   virtual int Read(void *Buffer, size_t Size) = 0;
 
   /**
+   * Force flushing the receive buffers, by trying to read from the
+   * port until it times out.
+   *
+   * @param timeout_ms the maximum duration of this method [ms]; the
+   * receive timeout must already be set accordingly.
+   */
+  void FullFlush(unsigned timeout_ms);
+
+  /**
    * Read data from the serial port, take care for partial reads.
    *
    * Note that this port's receive timeout is still in effect for each

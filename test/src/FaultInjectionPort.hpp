@@ -114,6 +114,12 @@ Port::GetChar()
     : EOF;
 }
 
+void
+Port::FullFlush(unsigned timeout_ms)
+{
+  Flush();
+}
+
 bool
 Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
 {

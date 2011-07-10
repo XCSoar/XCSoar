@@ -68,6 +68,17 @@ Port::GetChar()
     : -1;
 }
 
+void
+Port::FullFlush(unsigned timeout_ms)
+{
+  Flush();
+
+  PeriodClock clock;
+  clock.update();
+  char buffer[0x100];
+  while (Read(buffer, sizeof(buffer)) && !clock.check(timeout_ms)) {}
+}
+
 bool
 Port::FullRead(void *buffer, size_t length, unsigned timeout_ms)
 {
