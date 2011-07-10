@@ -1557,25 +1557,15 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
-	$(SRC)/Screen/Graphics.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Ramp.cpp \
-	$(SRC)/Screen/UnitSymbol.cpp \
 	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Look/TaskLook.cpp \
-	$(SRC)/Gauge/FlarmTrafficLook.cpp \
-	$(SRC)/Math/Screen.cpp \
-	$(SRC)/Appearance.cpp \
 	$(SRC)/Projection.cpp \
-	$(SRC)/Units/Units.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Airspace/AirspaceRendererSettings.cpp \
-	$(TEST_SRC_DIR)/FakeLogFile.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
-	$(TEST_SRC_DIR)/FakeProfileGlue.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/RunRenderOZ.cpp

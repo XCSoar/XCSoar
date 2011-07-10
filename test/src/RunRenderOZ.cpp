@@ -31,7 +31,6 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/Init.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Fonts.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/AirspaceLook.hpp"
@@ -48,7 +47,7 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Projection.hpp"
-#include "SettingsMap.hpp"
+#include "Airspace/AirspaceRendererSettings.hpp"
 #include "ResourceLoader.hpp"
 
 enum {
@@ -76,7 +75,7 @@ static GeoPoint previous(Angle::degrees(fixed(10.6)),
 static GeoPoint next(Angle::degrees(fixed(10.2)),
                      Angle::degrees(fixed(51.4)));
 
-static SETTINGS_MAP settings_map;
+static AirspaceRendererSettings airspace_renderer_settings;
 
 class OZWindow : public PaintWindow {
   RenderObservationZone roz;
@@ -173,19 +172,19 @@ OZWindow::on_paint(Canvas &canvas)
   const int offset = 0;
 
   roz.set_layer(RenderObservationZone::LAYER_SHADE);
-  if (roz.draw_style(canvas, settings_map.airspace, offset)) {
+  if (roz.draw_style(canvas, airspace_renderer_settings, offset)) {
     roz.Draw(canvas, projection, *oz);
     roz.un_draw_style(canvas);
   }
 
   roz.set_layer(RenderObservationZone::LAYER_INACTIVE);
-  if (roz.draw_style(canvas, settings_map.airspace, offset)) {
+  if (roz.draw_style(canvas, airspace_renderer_settings, offset)) {
     roz.Draw(canvas, projection, *oz);
     roz.un_draw_style(canvas);
   }
 
   roz.set_layer(RenderObservationZone::LAYER_ACTIVE);
-  if (roz.draw_style(canvas, settings_map.airspace, offset)) {
+  if (roz.draw_style(canvas, airspace_renderer_settings, offset)) {
     roz.Draw(canvas, projection, *oz);
     roz.un_draw_style(canvas);
   }
@@ -301,7 +300,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 {
   ScreenGlobalInit screen_init;
 
-  settings_map.airspace.SetDefaults();
+  airspace_renderer_settings.SetDefaults();
 
 #ifndef ENABLE_SDL
   ResourceLoader::Init(hInstance);
@@ -315,13 +314,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   task_look->Initialise();
 
   AirspaceLook *airspace_look = new AirspaceLook();
-  airspace_look->Initialise(settings_map.airspace);
+  airspace_look->Initialise(airspace_renderer_settings);
 
   TestWindow window(*task_look, *airspace_look);
   window.set(*look, 0, 0, 480, 480);
 
-  Graphics::Initialise();
-  Graphics::InitialiseConfigured(settings_map);
   Fonts::Initialize();
 
   window.show();
@@ -331,7 +328,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   delete task_look;
   delete look;
   Fonts::Deinitialize();
-  Graphics::Deinitialise();
 
   return 0;
 }
