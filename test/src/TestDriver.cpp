@@ -762,7 +762,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(373);
+  plan_tests(376);
 
   TestGeneric();
   TestFLARM();
@@ -785,6 +785,7 @@ int main(int argc, char **argv)
   TestDeclare(ewDevice);
   TestDeclare(ewMicroRecorderDevice);
   TestDeclare(pgDevice);
+  TestDeclare(lxDevice);
   TestDeclare(imi_device_driver);
   //TestDeclare(vgaDevice);
 
