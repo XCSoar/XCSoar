@@ -86,6 +86,17 @@ ExternalSettings::ProvideBallast(fixed value, fixed time)
 }
 
 bool
+ExternalSettings::ProvideWingLoading(fixed value, fixed time)
+{
+  if (wing_loading_available && fabs(wing_loading - value) <= fixed(0.01))
+    return false;
+
+  wing_loading = value;
+  wing_loading_available.Update(time);
+  return true;
+}
+
+bool
 ExternalSettings::ProvideBugs(fixed value, fixed time)
 {
   if (bugs_available && fabs(bugs - value) <= fixed(0.01))
