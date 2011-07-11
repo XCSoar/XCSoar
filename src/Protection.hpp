@@ -27,8 +27,6 @@ Copyright_License {
 #include "Thread/Flag.hpp"
 #include "Thread/Mutex.hpp"
 
-extern Mutex mutexBlackboard;
-
 void TriggerGPSUpdate();
 void TriggerVarioUpdate();
 void CreateCalculationThread(void);

@@ -27,7 +27,6 @@
 #include "Device/Register.hpp"
 #include "Language/Language.hpp"
 #include "Dialogs/Message.hpp"
-#include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Profile/DeviceConfig.hpp"
 
@@ -82,7 +81,7 @@ NmeaReplayGlue::on_sentence(const char *line)
 {
   assert(device != NULL);
 
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(device_blackboard.mutex);
   NMEA_INFO &data = device_blackboard.SetReplayState();
 
   if ((device != NULL && device->ParseNMEA(line, data)) ||

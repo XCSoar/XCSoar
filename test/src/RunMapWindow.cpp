@@ -65,7 +65,6 @@ using std::min;
 #endif
 
 #ifdef ENABLE_OPENGL
-Mutex mutexBlackboard;
 #include "MapProjectionBlackboard.hpp"
 void MapProjectionBlackboard::ReadMapProjection(const MapWindowProjection &) {}
 #endif

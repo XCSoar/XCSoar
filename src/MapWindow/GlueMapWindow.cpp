@@ -24,7 +24,6 @@ Copyright_License {
 #include "GlueMapWindow.hpp"
 #include "Components.hpp"
 #include "DrawThread.hpp"
-#include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Look/Look.hpp"
 
@@ -79,9 +78,9 @@ GlueMapWindow::ExchangeBlackboard()
 {
   /* copy device_blackboard to MapWindow */
 
-  mutexBlackboard.Lock();
+  device_blackboard.mutex.Lock();
   ReadBlackboard(device_blackboard.Basic(), device_blackboard.Calculated());
-  mutexBlackboard.Unlock();
+  device_blackboard.mutex.Unlock();
 
 #ifndef ENABLE_OPENGL
   next_mutex.Lock();

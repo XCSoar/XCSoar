@@ -26,7 +26,6 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/FLARM.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Protection.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "StringUtil.hpp"
@@ -65,10 +64,10 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
   assert(device == NULL);
   assert(!ticker);
 
-  mutexBlackboard.Lock();
+  device_blackboard.mutex.Lock();
   device_blackboard.SetRealState(index).reset();
   device_blackboard.Merge();
-  mutexBlackboard.Unlock();
+  device_blackboard.mutex.Unlock();
 
   Com = _port;
   Driver = _driver;
@@ -112,10 +111,10 @@ DeviceDescriptor::Close()
   pDevPipeTo = NULL;
   ticker = false;
 
-  mutexBlackboard.Lock();
+  device_blackboard.mutex.Lock();
   device_blackboard.SetRealState(index).reset();
   device_blackboard.Merge();
-  mutexBlackboard.Unlock();
+  device_blackboard.mutex.Unlock();
 }
 
 const TCHAR *
@@ -297,7 +296,7 @@ DeviceDescriptor::LineReceived(const char *line)
     pDevPipeTo->Com->Write("\r\n");
   }
 
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(device_blackboard.mutex);
   if (ParseNMEA(line, device_blackboard.SetRealState(index)))
     device_blackboard.Merge();
 }

@@ -51,7 +51,7 @@ DeviceBlackboard device_blackboard;
 void
 DeviceBlackboard::Initialise()
 {
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(mutex);
 
   last_location_available.Clear();
   last_te_vario_available.Clear();
@@ -82,7 +82,7 @@ DeviceBlackboard::Initialise()
 void
 DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
 {
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(mutex);
 
   if (Calculated().flight.Flying)
     return;
@@ -115,7 +115,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
                               const fixed alt, const fixed baroalt,
                               const fixed t)
 {
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(mutex);
   NMEA_INFO &basic = SetReplayState();
 
   basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
@@ -147,7 +147,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
  * Stops the replay
  */
 void DeviceBlackboard::StopReplay() {
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(mutex);
 
   replay_data.Connected.Clear();
 
@@ -160,7 +160,7 @@ DeviceBlackboard::ProcessSimulation()
   if (!is_simulator())
     return;
 
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(mutex);
 
   simulator.Process(simulator_data);
   Merge();
@@ -175,7 +175,7 @@ DeviceBlackboard::ProcessSimulation()
 void
 DeviceBlackboard::SetSpeed(fixed val)
 {
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(mutex);
   NMEA_INFO &basic = simulator_data;
 
   basic.GroundSpeed = val;
@@ -193,7 +193,7 @@ DeviceBlackboard::SetSpeed(fixed val)
 void
 DeviceBlackboard::SetTrack(Angle val)
 {
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(mutex);
   simulator_data.track = val.as_bearing();
 
   Merge();
@@ -208,7 +208,7 @@ DeviceBlackboard::SetTrack(Angle val)
 void
 DeviceBlackboard::SetAltitude(fixed val)
 {
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(mutex);
   NMEA_INFO &basic = simulator_data;
 
   basic.GPSAltitude = val;
@@ -379,7 +379,7 @@ DeviceBlackboard::ProcessFLARM()
 bool
 DeviceBlackboard::expire_wall_clock()
 {
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(mutex);
   if (!Basic().Connected)
     return false;
 
@@ -451,7 +451,7 @@ DeviceBlackboard::tick()
 void
 DeviceBlackboard::SetQNH(fixed qnh)
 {
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(mutex);
 
   AllDevicesPutQNH(AtmosphericPressure(qnh), Calculated());
 }

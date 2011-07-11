@@ -39,7 +39,6 @@ Copyright_License {
 #include "PeriodClock.hpp"
 #include "Screen/Blank.hpp"
 #include "LogFile.hpp"
-#include "Protection.hpp"
 #include "DeviceBlackboard.hpp"
 #include "CalculationThread.hpp"
 
@@ -66,7 +65,7 @@ XCSoarInterface::ExchangeBlackboard()
 void
 XCSoarInterface::ExchangeDeviceBlackboard()
 {
-  ScopeLock protect(mutexBlackboard);
+  ScopeLock protect(device_blackboard.mutex);
   ReadBlackboardBasic(device_blackboard.Basic());
 
   const NMEA_INFO &real = device_blackboard.RealState();

@@ -65,7 +65,7 @@ CalculationThread::Tick()
 
   // update and transfer master info to glide computer
   {
-    ScopeLock protect(mutexBlackboard);
+    ScopeLock protect(device_blackboard.mutex);
 
     gps_updated = device_blackboard.Basic().LocationAvailable.Modified(glide_computer.Basic().LocationAvailable);
 
@@ -108,9 +108,8 @@ CalculationThread::Tick()
   // should be changed in DoCalculations, so we only need to write
   // that one back (otherwise we may write over new data)
   {
-    mutexBlackboard.Lock();
+    ScopeLock protect(device_blackboard.mutex);
     device_blackboard.ReadBlackboard(glide_computer.Calculated());
-    mutexBlackboard.Unlock();
   }
 
   // trigger updates of vario gauge

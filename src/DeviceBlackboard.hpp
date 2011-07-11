@@ -29,6 +29,7 @@ Copyright_License {
 #include "BasicComputer.hpp"
 #include "Device/Simulator.hpp"
 #include "Device/List.hpp"
+#include "Thread/Mutex.hpp"
 
 #include <cassert>
 
@@ -74,6 +75,9 @@ class DeviceBlackboard:
    * Data from replay.
    */
   NMEA_INFO replay_data;
+
+public:
+  Mutex mutex;
 
 public:
   void Initialise();
