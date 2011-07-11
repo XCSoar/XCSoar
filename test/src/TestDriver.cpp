@@ -735,9 +735,33 @@ TestDeclare(const struct DeviceRegister &driver)
   delete device;
 }
 
+static void
+TestFlightList(const struct DeviceRegister &driver)
+{
+  FaultInjectionPort port(*(Port::Handler *)NULL);
+  Device *device = driver.CreateOnPort(&port);
+  ok1(device != NULL);
+
+  for (unsigned i = 0; i < 1024; ++i) {
+    inject_port_fault = i;
+    NullOperationEnvironment env;
+    RecordedFlightList flight_list;
+    bool success = device->ReadFlightList(flight_list, env);
+    if (success || !port.running || port.timeout != 0 ||
+        port.baud_rate != FaultInjectionPort::DEFAULT_BAUD_RATE)
+      break;
+  }
+
+  ok1(port.running);
+  ok1(port.timeout == 0);
+  ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
+
+  delete device;
+}
+
 int main(int argc, char **argv)
 {
-  plan_tests(369);
+  plan_tests(373);
 
   TestGeneric();
   TestFLARM();
@@ -765,6 +789,8 @@ int main(int argc, char **argv)
 
   /* XXX Volkslogger doesn't do well with this test case */
   //TestDeclare(vlDevice);
+
+  TestFlightList(cai302Device);
 
   return exit_status();
 }
