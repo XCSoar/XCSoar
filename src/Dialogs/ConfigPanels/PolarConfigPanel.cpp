@@ -118,7 +118,6 @@ SaveFormToPolar(PolarInfo &polar)
   changed |= SaveFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, polar.w3);
 
   changed |= SaveFormProperty(*wf, _T("prpPolarReferenceMass"), polar.reference_mass);
-  changed |= SaveFormProperty(*wf, _T("prpPolarDryMass"), polar.dry_mass);
   changed |= SaveFormProperty(*wf, _T("prpPolarMaxBallast"), polar.max_ballast);
 
   changed |= SaveFormProperty(*wf, _T("prpPolarWingArea"), polar.wing_area);

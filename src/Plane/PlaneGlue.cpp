@@ -51,11 +51,12 @@ PlaneGlue::FromProfile(Plane &plane)
   plane.w2 = polar.w2;
   plane.w3 = polar.w3;
   plane.reference_mass = polar.reference_mass;
-  plane.dry_mass = positive(polar.dry_mass) ? polar.dry_mass :
-                                              polar.reference_mass;
   plane.max_ballast = polar.max_ballast;
   plane.max_speed = polar.v_no;
   plane.wing_area = polar.wing_area;
+
+  if (!Profile::Get(szProfileDryMass, plane.dry_mass))
+    plane.dry_mass = plane.reference_mass;
 
   if (!Profile::Get(szProfileBallastSecsToEmpty, plane.dump_time))
     plane.dump_time = 120;

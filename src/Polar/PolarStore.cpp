@@ -33,7 +33,6 @@ PolarStore::Item::ToPolarInfo() const
   PolarInfo polar;
 
   polar.reference_mass = fixed(reference_mass);
-  polar.dry_mass = fixed_zero;
   polar.max_ballast = fixed(max_ballast);
   polar.v1 = Units::ToSysUnit(fixed(v1), unKiloMeterPerHour);
   polar.w1 = fixed(w1);

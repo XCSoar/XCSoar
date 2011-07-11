@@ -102,13 +102,6 @@ PolarGlue::LoadSafetySpeed(PolarInfo &polar)
   return (positive(polar.v_no)) || Profile::Get(szProfileSafteySpeed, polar.v_no);
 }
 
-void
-PolarGlue::LoadDryMass(PolarInfo &polar)
-{
-  if (!Profile::Get(szProfileDryMass, polar.dry_mass))
-    polar.dry_mass = fixed_zero;
-}
-
 bool
 PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
@@ -117,13 +110,11 @@ PolarGlue::LoadFromProfile(PolarInfo &polar)
       polar_string[0] != 0 &&
       polar.ReadString(polar_string)) {
     LoadSafetySpeed(polar);
-    LoadDryMass(polar);
     return true;
   }
 
   bool result = LoadFromOldProfile(polar);
   LoadSafetySpeed(polar);
-  LoadDryMass(polar);
   return result;
 }
 
@@ -133,7 +124,6 @@ PolarGlue::SaveToProfile(const PolarInfo &polar)
   TCHAR polar_string[255];
   polar.GetString(polar_string, 255, true);
   Profile::Set(szProfilePolar, polar_string);
-  Profile::Set(szProfileDryMass, polar.dry_mass);
 }
 
 PolarInfo

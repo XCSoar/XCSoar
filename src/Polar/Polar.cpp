@@ -44,7 +44,7 @@ void
 PolarInfo::Init()
 {
   v1 = v2 = v3 = w1 = w2 = w3 = fixed_zero;
-  reference_mass = dry_mass = max_ballast = wing_area = v_no = fixed_zero;
+  reference_mass = max_ballast = wing_area = v_no = fixed_zero;
 }
 
 void
@@ -112,7 +112,6 @@ PolarInfo::ReadString(const TCHAR *line)
   polar.w3 = fixed(_tcstod(p + 1, &p));
   polar.wing_area = (*p != _T(',')) ? fixed_zero : fixed(_tcstod(p + 1, &p));
   polar.v_no = (*p != _T(',')) ? fixed_zero : fixed(_tcstod(p + 1, &p));
-  polar.dry_mass = fixed_zero;
 
   *this = polar;
 
