@@ -42,6 +42,14 @@ struct ExternalSettings {
   /** Ballast information (1: full, 0: empty) of external device (if available) */
   fixed ballast_fraction;
 
+  Validity ballast_overload_available;
+
+  /**
+   * Ballast information (1: no ballast, 1.5: ballast = 0.5 times dry mass)
+   * of external device (if available)
+   */
+  fixed ballast_overload;
+
   Validity wing_loading_available;
 
   /** Wing loading information (kg/m^2) of external device (if available) */
@@ -69,6 +77,7 @@ struct ExternalSettings {
    */
   bool ProvideMacCready(fixed value, fixed time);
   bool ProvideBallastFraction(fixed value, fixed time);
+  bool ProvideBallastOverload(fixed value, fixed time);
   bool ProvideWingLoading(fixed value, fixed time);
   bool ProvideBugs(fixed value, fixed time);
   bool ProvideQNH(fixed value, fixed time);
