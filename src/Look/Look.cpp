@@ -43,4 +43,5 @@ Look::InitialiseConfigured(bool inverse,
   trace_history.Initialise(inverse);
   airspace.Initialise(airspace_settings);
   cross_section.Initialise();
+  info_box.Initialise(inverse);
 }

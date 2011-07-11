@@ -34,6 +34,7 @@ Copyright_License {
 #include "TrafficLook.hpp"
 #include "Gauge/FlarmTrafficLook.hpp"
 #include "TaskLook.hpp"
+#include "InfoBoxLook.hpp"
 
 struct SETTINGS_MAP;
 
@@ -49,6 +50,7 @@ struct Look {
   FlarmTrafficLook flarm_gauge;
   FlarmTrafficLook flarm_dialog;
   TaskLook task;
+  InfoBoxLook info_box;
 
   void Initialise();
   void InitialiseConfigured(bool inverse,

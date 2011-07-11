@@ -30,6 +30,7 @@ Copyright_License {
 
 extern InfoBoxManagerConfig infoBoxManagerConfig;
 
+struct InfoBoxLook;
 class InfoBoxWindow;
 
 namespace InfoBoxLayout {
@@ -75,7 +76,8 @@ namespace InfoBoxManager
   void ProcessTimer();
   void SetDirty();
 
-  void Create(PixelRect rc, const InfoBoxLayout::Layout &layout);
+  void Create(PixelRect rc, const InfoBoxLayout::Layout &layout,
+              const InfoBoxLook &look);
   void Destroy();
   void Paint();
   void Show();

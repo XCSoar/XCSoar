@@ -1730,6 +1730,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \
+	$(SRC)/Look/InfoBoxLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \

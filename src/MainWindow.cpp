@@ -135,7 +135,7 @@ MainWindow::InitialiseConfigured()
                              CommonInterface::SettingsMap().airspace);
 
   LogStartUp(_T("Create info boxes"));
-  InfoBoxManager::Create(rc, ib_layout);
+  InfoBoxManager::Create(rc, ib_layout, look->info_box);
   map_rect = ib_layout.remaining;
 
   LogStartUp(_T("Create button labels"));
@@ -255,7 +255,7 @@ MainWindow::ReinitialiseLayout()
 
   Fonts::SizeInfoboxFont(ib_layout.control_width);
 
-  InfoBoxManager::Create(rc, ib_layout);
+  InfoBoxManager::Create(rc, ib_layout, look->info_box);
   map_rect = ib_layout.remaining;
 
   popup.reset();
