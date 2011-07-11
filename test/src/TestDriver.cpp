@@ -761,7 +761,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(373);
+  plan_tests(377);
 
   TestGeneric();
   TestFLARM();
@@ -791,6 +791,7 @@ int main(int argc, char **argv)
   //TestDeclare(vlDevice);
 
   TestFlightList(cai302Device);
+  TestFlightList(lxDevice);
 
   return exit_status();
 }
