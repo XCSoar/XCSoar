@@ -64,6 +64,9 @@ GetPrimaryDataPath();
  */
 void LocalPath(TCHAR* buf, const TCHAR *file);
 
+TCHAR *
+LocalPath(TCHAR *buffer, const TCHAR *subdir, const TCHAR *name);
+
 /**
  * Converts a file path by replacing %LOCAL_PATH% with the full pathname to
  * the XCSoarData folder

@@ -98,6 +98,24 @@ LocalPath(TCHAR *buffer, const TCHAR *file)
   _tcscpy(buffer + data_path_length + 1, file);
 }
 
+TCHAR *
+LocalPath(TCHAR *buffer, const TCHAR *subdir, const TCHAR *name)
+{
+  assert(data_path != NULL);
+  assert(subdir != NULL);
+  assert(!string_is_empty(subdir));
+  assert(name != NULL);
+  assert(!string_is_empty(name));
+
+  memcpy(buffer, data_path, data_path_length * sizeof(data_path[0]));
+  buffer[data_path_length] = _T(DIR_SEPARATOR);
+  _tcscpy(buffer + data_path_length + 1, subdir);
+  _tcscat(buffer + data_path_length + 1, _T(DIR_SEPARATOR_S));
+  _tcscat(buffer + data_path_length + 1, name);
+
+  return buffer;
+}
+
 /**
  * Convert backslashes to slashes on platforms where it matters.
  * @param p Pointer to the string to normalize

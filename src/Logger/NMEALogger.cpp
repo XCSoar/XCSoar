@@ -25,7 +25,6 @@ Copyright_License {
 #include "IO/BatchTextWriter.hpp"
 #include "LocalPath.hpp"
 #include "NMEA/Info.hpp"
-#include "Compatibility/path.h"
 #include "Thread/Mutex.hpp"
 #include "Interface.hpp"
 
@@ -46,13 +45,14 @@ RawLoggerStart()
   BrokenDateTime dt = XCSoarInterface::Basic().DateTime;
   assert(dt.Plausible());
 
-  TCHAR path[MAX_PATH];
-  LocalPath(path, _T("logs"));
-  unsigned len = _tcslen(path);
-  _sntprintf(path+len, MAX_PATH-len,
-             _T(DIR_SEPARATOR_S "%04u-%02u-%02u_%02u-%02u.nmea"),
+  TCHAR name[64];
+  _sntprintf(name, 64,
+             _T("%04u-%02u-%02u_%02u-%02u.nmea"),
              dt.year, dt.month, dt.day,
              dt.hour, dt.minute);
+
+  TCHAR path[MAX_PATH];
+  LocalPath(path, _T("logs"), name);
 
   RawLoggerWriter = new BatchTextWriter(path, false);
   return RawLoggerWriter != NULL;
