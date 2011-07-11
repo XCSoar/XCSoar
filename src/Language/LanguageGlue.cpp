@@ -30,7 +30,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Util/StringUtil.hpp"
 
-#if defined(HAVE_POSIX) && !defined(ANDROID)
+#ifdef HAVE_NATIVE_GETTEXT
 #include <locale.h>
 #endif
 
@@ -50,7 +50,7 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
-#if !defined(HAVE_POSIX) || defined(ANDROID)
+#ifndef HAVE_NATIVE_GETTEXT
 
 #include "MOLoader.hpp"
 
@@ -289,7 +289,7 @@ ReadResourceLanguageFile(const TCHAR *resource)
 static void
 AutoDetectLanguage()
 {
-#if defined(HAVE_POSIX) && !defined(ANDROID)
+#ifdef HAVE_NATIVE_GETTEXT
 
   // Set the current locale to the environment's default
   setlocale(LC_ALL, "");
@@ -298,7 +298,7 @@ AutoDetectLanguage()
   bindtextdomain("xcsoar", "/usr/share/locale");
   textdomain("xcsoar");
 
-#else /* !HAVE_POSIX */
+#else /* !HAVE_NATIVE_GETTEXT */
 
   // Try to detect the language by calling the OS's corresponding functions
   const TCHAR *resource = detect_language();
@@ -306,18 +306,18 @@ AutoDetectLanguage()
     // If a language was detected -> try to load the MO file
     ReadResourceLanguageFile(resource);
 
-#endif /* !HAVE_POSIX */
+#endif /* !HAVE_NATIVE_GETTEXT */
 }
 
 static bool
 LoadLanguageFile(const TCHAR *path)
 {
-#if defined(HAVE_POSIX) && !defined(ANDROID)
+#ifdef HAVE_NATIVE_GETTEXT
 
   /* not supported on UNIX */
   return false;
 
-#else /* !HAVE_POSIX */
+#else /* !HAVE_NATIVE_GETTEXT */
 
   LogStartUp(_T("Language: loading file '%s'"), path);
 
@@ -335,7 +335,7 @@ LoadLanguageFile(const TCHAR *path)
   mo_file = &mo_loader->get();
   return true;
 
-#endif /* !HAVE_POSIX */
+#endif /* !HAVE_NATIVE_GETTEXT */
 }
 
 /**
@@ -344,9 +344,7 @@ LoadLanguageFile(const TCHAR *path)
 void
 ReadLanguageFile()
 {
-#if !defined(HAVE_POSIX) || defined(ANDROID)
   CloseLanguageFile();
-#endif
 
   LogStartUp(_T("Loading language file"));
 
@@ -378,7 +376,7 @@ ReadLanguageFile()
 void
 CloseLanguageFile()
 {
-#if !defined(HAVE_POSIX) || defined(ANDROID)
+#ifndef HAVE_NATIVE_GETTEXT
   mo_file = NULL;
   reset_gettext_cache();
   delete mo_loader;
