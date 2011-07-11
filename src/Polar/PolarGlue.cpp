@@ -33,8 +33,6 @@ Copyright_License {
 namespace PolarGlue
 {
   bool LoadFromOldProfile(PolarInfo &polar);
-  bool LoadSafetySpeed(PolarInfo &polar);
-  void LoadDryMass(PolarInfo &polar);
 }
 
 PolarInfo
@@ -97,25 +95,16 @@ PolarGlue::LoadFromOldProfile(PolarInfo &polar)
 }
 
 bool
-PolarGlue::LoadSafetySpeed(PolarInfo &polar)
-{
-  return (positive(polar.v_no)) || Profile::Get(szProfileSafteySpeed, polar.v_no);
-}
-
-bool
 PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
   TCHAR polar_string[255];
   if (Profile::Get(szProfilePolar, polar_string, 255) &&
       polar_string[0] != 0 &&
       polar.ReadString(polar_string)) {
-    LoadSafetySpeed(polar);
     return true;
   }
 
-  bool result = LoadFromOldProfile(polar);
-  LoadSafetySpeed(polar);
-  return result;
+  return LoadFromOldProfile(polar);
 }
 
 PolarInfo
