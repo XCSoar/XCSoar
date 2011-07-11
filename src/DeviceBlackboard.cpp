@@ -95,6 +95,8 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
     real_data.SetFakeLocation(loc, alt);
 
   simulator_data.SetFakeLocation(loc, alt);
+
+  Merge();
 }
 
 /**
