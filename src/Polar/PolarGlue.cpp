@@ -105,7 +105,7 @@ PolarGlue::LoadSafetySpeed(PolarInfo &polar)
 bool
 PolarGlue::LoadFromProfile(PolarInfo &polar)
 {
-  TCHAR polar_string[255] = _T("\0");
+  TCHAR polar_string[255];
   if (Profile::Get(szProfilePolar, polar_string, 255) &&
       polar_string[0] != 0 &&
       polar.ReadString(polar_string)) {
