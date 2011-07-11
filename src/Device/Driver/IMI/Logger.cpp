@@ -30,10 +30,8 @@ bool
 IMIDevice::ReadFlightList(RecordedFlightList &flight_list,
                           OperationEnvironment &env)
 {
-  if (!Connect(env) || env.IsCancelled())
-    return false;
-
-  bool success = IMI::ReadFlightList(*port, flight_list);
+  bool success = Connect(env) && !env.IsCancelled();
+  success = success && IMI::ReadFlightList(*port, flight_list);
 
   // disconnect
   Disconnect();
@@ -45,10 +43,8 @@ bool
 IMIDevice::DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
                           OperationEnvironment &env)
 {
-  if (!Connect(env) || env.IsCancelled())
-    return false;
-
-  bool success = IMI::FlightDownload(*port, flight, path, env);
+  bool success = Connect(env) && !env.IsCancelled();
+  success = success && IMI::FlightDownload(*port, flight, path, env);
 
   // disconnect
   Disconnect();
