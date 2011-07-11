@@ -34,7 +34,6 @@ namespace PolarGlue
   const TCHAR *GetDefaultName();
 
   bool LoadFromProfile(PolarInfo &polar);
-  void SaveToProfile(const PolarInfo &polar);
 
   PolarInfo LoadFromProfile();
 }

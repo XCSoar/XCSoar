@@ -118,14 +118,6 @@ PolarGlue::LoadFromProfile(PolarInfo &polar)
   return result;
 }
 
-void
-PolarGlue::SaveToProfile(const PolarInfo &polar)
-{
-  TCHAR polar_string[255];
-  polar.GetString(polar_string, 255, true);
-  Profile::Set(szProfilePolar, polar_string);
-}
-
 PolarInfo
 PolarGlue::LoadFromProfile()
 {
