@@ -585,9 +585,11 @@ TestWesterboer()
   ok1(nmea_info.TemperatureAvailable);
   ok1(equals(nmea_info.OutsideAirTemperature, 29.5));
 
-  ok1(device->ParseNMEA("$PWES1,20,21*21", nmea_info));
+  ok1(device->ParseNMEA("$PWES1,20,21,0,030,1,6,385,10*1a", nmea_info));
   ok1(nmea_info.settings.mac_cready_available);
   ok1(equals(nmea_info.settings.mac_cready, 2.1));
+  ok1(nmea_info.settings.bugs_available);
+  ok1(equals(nmea_info.settings.bugs, 0.9));
 
   delete device;
 }
@@ -731,7 +733,7 @@ TestDeclare(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(363);
+  plan_tests(365);
 
   TestGeneric();
   TestFLARM();
