@@ -54,8 +54,6 @@ struct PolarInfo
   PolarCoefficients CalculateCoefficients() const;
 
   bool IsValid() const;
-
-  void Init();
 };
 
 #endif

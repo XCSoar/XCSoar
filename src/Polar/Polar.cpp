@@ -41,13 +41,6 @@ PolarInfo::IsValid() const
 }
 
 void
-PolarInfo::Init()
-{
-  v1 = v2 = v3 = w1 = w2 = w3 = fixed_zero;
-  reference_mass = max_ballast = wing_area = v_no = fixed_zero;
-}
-
-void
 PolarInfo::GetString(TCHAR* line, size_t size, bool include_v_no) const
 {
   fixed V1, V2, V3;
