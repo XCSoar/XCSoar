@@ -113,7 +113,10 @@ PWES1(NMEAInputLine &line, NMEA_INFO &info)
   if (line.read_checked(i))
     info.settings.ProvideMacCready(fixed(i) / 10, info.Time);
 
-  line.skip(5);
+  line.skip(4);
+
+  if (line.read_checked(i))
+    info.settings.ProvideWingLoading(fixed(i) / 10, info.Time);
 
   if (line.read_checked(i))
     info.settings.ProvideBugs(fixed(100 - i) / 100, info.Time);
