@@ -73,13 +73,13 @@ on_advance(const GeoPoint &loc, const fixed speed,
 static int
 TestOLC(const char *filename)
 {
-  FileLineReader reader(filename);
+  FileLineReaderA reader(filename);
   if (reader.error()) {
     fprintf(stderr, "Failed to open %s\n", filename);
     return EXIT_FAILURE;
   }
 
-  TCHAR *line;
+  char *line;
   for (int i = 1; (line = reader.read()) != NULL; i++) {
     if (i % 500 == 0) {
       putchar('.');

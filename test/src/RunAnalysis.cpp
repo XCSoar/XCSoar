@@ -129,7 +129,7 @@ static void
 LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
         InterfaceBlackboard &blackboard)
 {
-  FileLineReader reader(path);
+  FileLineReaderA reader(path);
   if (reader.error()) {
     fprintf(stderr, "Failed to open input file\n");
     exit(EXIT_FAILURE);
@@ -141,7 +141,7 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
   basic.reset();
   last.reset();
 
-  TCHAR *line;
+  char *line;
   while ((line = reader.read()) != NULL) {
     IGCFix fix;
     if (!IGCParseFix(line, fix))

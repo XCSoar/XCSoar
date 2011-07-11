@@ -26,17 +26,17 @@ Copyright_License {
 #include <stdio.h>
 
 bool
-IGCParseFix(const TCHAR *buffer, IGCFix &fix)
+IGCParseFix(const char *buffer, IGCFix &fix)
 {
   int DegLat, DegLon;
   int MinLat, MinLon;
-  TCHAR NoS, EoW;
+  char NoS, EoW;
   int iAltitude, iPressureAltitude;
   int Hour = 0;
   int Minute = 0;
   int Second = 0;
   int lfound =
-      _stscanf(buffer, _T("B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d"),
+      sscanf(buffer, "B%02d%02d%02d%02d%05d%c%03d%05d%cA%05d%05d",
       &Hour, &Minute, &Second, &DegLat, &MinLat, &NoS, &DegLon,
       &MinLon, &EoW, &iPressureAltitude, &iAltitude);
 
@@ -47,11 +47,11 @@ IGCParseFix(const TCHAR *buffer, IGCFix &fix)
     return false;
 
   fixed Latitude = fixed(DegLat) + fixed(MinLat) / 60000;
-  if (NoS == _T('S'))
+  if (NoS == 'S')
     Latitude *= -1;
 
   fixed Longitude = fixed(DegLon) + fixed(MinLon) / 60000;
-  if (EoW == _T('W'))
+  if (EoW == 'W')
     Longitude *= -1;
 
   fix.location.Latitude = Angle::degrees(Latitude);

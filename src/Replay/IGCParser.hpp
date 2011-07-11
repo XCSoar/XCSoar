@@ -43,6 +43,6 @@ struct IGCFix {
  * @return true on success, false if the line was not recognized
  */
 bool
-IGCParseFix(const TCHAR *buffer, IGCFix &fix);
+IGCParseFix(const char *buffer, IGCFix &fix);
 
 #endif

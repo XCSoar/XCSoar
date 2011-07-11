@@ -42,7 +42,7 @@ class IgcReplay: public AbstractReplay
   CatmullRomInterpolator cli;
 
   TCHAR FileName[MAX_PATH];
-  FileLineReader *reader;
+  FileLineReaderA *reader;
 
 protected:
   fixed t_simulation;
@@ -67,7 +67,7 @@ protected:
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t) = 0;
 
-  bool ScanBuffer(const TCHAR *buffer, IGCFix &fix);
+  bool ScanBuffer(const char *buffer, IGCFix &fix);
 
   bool ReadPoint(IGCFix &fix);
 

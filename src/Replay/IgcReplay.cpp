@@ -38,7 +38,7 @@ IgcReplay::IgcReplay() :
 }
 
 bool
-IgcReplay::ScanBuffer(const TCHAR* buffer, IGCFix &fix)
+IgcReplay::ScanBuffer(const char *buffer, IGCFix &fix)
 {
   return IGCParseFix(buffer, fix);
 }
@@ -46,7 +46,7 @@ IgcReplay::ScanBuffer(const TCHAR* buffer, IGCFix &fix)
 bool
 IgcReplay::ReadPoint(IGCFix &fix)
 {
-  TCHAR *buffer;
+  char *buffer;
 
   while ((buffer = reader->read()) != NULL) {
     if (ScanBuffer(buffer, fix))
@@ -158,7 +158,7 @@ IgcReplay::OpenFile()
   if (string_is_empty(FileName))
     return false;
 
-  reader = new FileLineReader(FileName);
+  reader = new FileLineReaderA(FileName);
   if (!reader->error())
     return true;
 

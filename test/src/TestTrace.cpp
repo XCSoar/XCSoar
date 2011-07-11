@@ -63,7 +63,7 @@ on_advance(Trace &trace,
 static bool
 TestTrace(const char *filename, unsigned ntrace, bool output=false)
 {
-  FileLineReader reader(filename);
+  FileLineReaderA reader(filename);
   if (reader.error()) {
     fprintf(stderr, "Failed to open %s\n", filename);
     return false;
@@ -72,7 +72,7 @@ TestTrace(const char *filename, unsigned ntrace, bool output=false)
   printf("# %d", ntrace);  
   Trace trace(1000, ntrace);
 
-  TCHAR *line;
+  char *line;
   int i = 0;
   for (; (line = reader.read()) != NULL; i++) {
     if (output && (i % 500 == 0)) {

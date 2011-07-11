@@ -125,21 +125,21 @@ class IGCFileVisitor : public File::Visitor {
 void
 IGCFileVisitor::Visit(const TCHAR *path, const TCHAR *filename)
 {
-  FileLineReader reader(path);
+  FileLineReaderA reader(path);
   if (reader.error()) {
     _ftprintf(stderr, _T("Failed to open %s\n"), path);
     return;
   }
 
   FlightCheck flight(filename);
-  TCHAR *line;
+  char *line;
   while ((line = reader.read()) != NULL) {
     unsigned day, month, year;
 
     IGCFix fix;
     if (IGCParseFix(line, fix))
       flight.fix(fix);
-    else if (_stscanf(line, _T("HFDTE%02u%02u%02u"), &day, &month, &year)) {
+    else if (sscanf(line, "HFDTE%02u%02u%02u", &day, &month, &year)) {
       /* damn you, Y2K bug! */
       if (year > 80)
         year += 1900;
