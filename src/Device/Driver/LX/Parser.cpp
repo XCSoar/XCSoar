@@ -122,11 +122,8 @@ LXWP2(NMEAInputLine &line, NMEA_INFO &info)
     info.settings.ProvideMacCready(value, info.Time);
 
   // Ballast
-  line.skip();
-  /*
   if (line.read_checked(value))
-    info.ProvideBallast(value, info.Time);
-  */
+    info.settings.ProvideBallastOverload(value, info.Time);
 
   // Bugs
   if (line.read_checked(value))
