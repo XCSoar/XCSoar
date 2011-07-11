@@ -51,6 +51,7 @@ public:
 
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
   virtual bool PutMacCready(fixed mac_cready);
+  virtual bool PutBugs(fixed bugs);
 };
 
 /**
@@ -151,6 +152,21 @@ WesterboerDevice::PutMacCready(fixed _mac_cready)
 
   char buffer[64];
   sprintf(buffer, "$PWES4,,%02u,,,,,,,", mac_cready);
+  AppendNMEAChecksum(buffer);
+  strcat(buffer, "\r\n");
+  port->Write(buffer);
+
+  return true;
+}
+
+bool
+WesterboerDevice::PutBugs(fixed _bugs)
+{
+  // Dirtyness from 0 until 20 %
+  unsigned bugs = 100 - ((unsigned)_bugs * 100);
+
+  char buffer[64];
+  sprintf(buffer, "$PWES4,,,,,%02u,,,,", bugs);
   AppendNMEAChecksum(buffer);
   strcat(buffer, "\r\n");
   port->Write(buffer);
