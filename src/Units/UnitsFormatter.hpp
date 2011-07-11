@@ -110,7 +110,7 @@ namespace Units
    * @return True if Buffer long enough, False otherwise
    */
   bool FormatUserSpeed(fixed Altitude, TCHAR *Buffer, size_t size,
-                       bool IncludeUnit = true);
+                       bool IncludeUnit = true, bool Precision = true);
 
   /**
    * Converts a double-based vertical Speed into a formatted string

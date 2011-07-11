@@ -362,7 +362,7 @@ Units::FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
 
 bool
 Units::FormatUserSpeed(fixed Speed, TCHAR *Buffer, size_t size,
-                       bool IncludeUnit)
+                       bool IncludeUnit, bool Precision)
 {
   int prec;
   TCHAR sTmp[32];
@@ -371,7 +371,7 @@ Units::FormatUserSpeed(fixed Speed, TCHAR *Buffer, size_t size,
   Speed = Speed * pU->ToUserFact;
 
   prec = 0;
-  if (Speed < fixed(100))
+  if (Precision && Speed < fixed(100))
     prec = 1;
 
   if (IncludeUnit)
