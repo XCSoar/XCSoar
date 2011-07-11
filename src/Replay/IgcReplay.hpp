@@ -66,7 +66,8 @@ protected:
   virtual void on_advance(const GeoPoint &loc,
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t) = 0;
-  virtual bool ScanBuffer(const TCHAR* buffer, IGCFix &fix);
+
+  bool ScanBuffer(const TCHAR *buffer, IGCFix &fix);
 
   bool ReadPoint(IGCFix &fix);
 
