@@ -29,7 +29,16 @@ void ReadLanguageFile(void);
 void
 CloseLanguageFile();
 
-#if (defined(WIN32) && !defined(HAVE_POSIX)) || defined(ANDROID)
+#if defined(HAVE_POSIX) && !defined(ANDROID)
+
+/**
+ * Using the C library's gettext implementation instead of rolling our
+ * own.
+ */
+#define HAVE_NATIVE_GETTEXT
+
+#elif defined(WIN32) || defined(ANDROID)
+
 #define HAVE_BUILTIN_LANGUAGES
 
 #include <tchar.h>

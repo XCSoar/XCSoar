@@ -26,6 +26,8 @@ Version 6.1.3 - not yet released
 * calculations
   - reduce memory usage
   - finish: allow flight to boundary
+  - Racing task, FAI Task: allow 11 turnpoints
+  - task: support AGL maximum start height
 * user interface
   - translation updates
   - new translation: Japanese

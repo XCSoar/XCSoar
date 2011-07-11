@@ -25,6 +25,7 @@
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Navigation/TaskProjection.hpp"
+#include "Util/SliceAllocator.hpp"
 
 #include <vector>
 #include <list>
@@ -55,11 +56,14 @@ public:
 
   void add_point(const FlatGeoPoint &p);
 
+  gcc_pure
   bool is_inside(const FlatGeoPoint &p) const;
 
   void clear() {
     vs.clear();
   }
+
+  gcc_pure
   bool empty() const {
     return vs.empty();
   }
@@ -74,7 +78,9 @@ class FlatTriangleFanTree: public FlatTriangleFan {
 public:
   static const unsigned REACH_MAX_FANS = 300;
 
-  typedef std::list<FlatTriangleFanTree> LeafVector;
+  typedef std::list<FlatTriangleFanTree,
+                    GlobalSliceAllocator<FlatTriangleFanTree, 128u> > LeafVector;
+
 protected:
   FlatBoundingBox bb_children;
   LeafVector children;
@@ -97,6 +103,7 @@ public:
 
   void calc_bb();
 
+  gcc_pure
   bool is_inside_tree(const FlatGeoPoint &p, const bool include_children=true) const;
 
   void fill_reach(const AFlatGeoPoint &origin, ReachFanParms& parms);
@@ -128,6 +135,7 @@ public:
   void update_terrain_base(const FlatGeoPoint& origin, 
                            ReachFanParms& parms);
 
+  gcc_pure
   short direct_arrival(const FlatGeoPoint& dest, const ReachFanParms& parms) const;
 };
 

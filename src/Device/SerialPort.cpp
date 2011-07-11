@@ -200,6 +200,8 @@ SerialPort::WaitDataPending(OverlappedEvent &overlapped,
     if (overlapped.Wait(timeout_ms) != OverlappedEvent::FINISHED) {
       /* the operation may still be running, we have to cancel it */
       ::CancelIo(hPort);
+      ::SetCommMask(hPort, 0);
+      overlapped.Wait();
       return -1;
     }
 
@@ -265,6 +267,8 @@ SerialPort::Run()
 
       if (osReader.Wait() != OverlappedEvent::FINISHED) {
         ::CancelIo(hPort);
+        ::SetCommMask(hPort, 0);
+        osReader.Wait();
         continue;
       }
 
@@ -380,6 +384,8 @@ SerialPort::Write(const void *data, size_t length)
 
   default:
     ::CancelIo(hPort);
+    ::SetCommMask(hPort, 0);
+    osWriter.Wait();
     return 0;
   }
 #endif

@@ -36,6 +36,7 @@ Copyright_License {
 #include "Logger/Logger.hpp"
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
+#include "Simulator.hpp"
 
 #include <assert.h>
 
@@ -418,6 +419,10 @@ pnlTaskList::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
 
   browse_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbedManage")));
   assert(browse_tabbed != NULL);
+
+  if (is_simulator())
+    /* cannot communicate with real devices in simulator mode */
+    wf->FindByName(_T("cmdDeclare"))->set_enabled(false);
 
   // Save important control pointers
   wTaskView = (WndOwnerDrawFrame*)wf->FindByName(_T("frmTaskView1"));
