@@ -131,6 +131,9 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     return NULL;
 
   case DeviceConfig::SERIAL:
+    if (config.port_index >= sizeof(COMMPort) / sizeof(COMMPort[0]))
+      return NULL;
+
     path = COMMPort[config.port_index];
     break;
 
