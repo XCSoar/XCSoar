@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 01:31+0200\n"
-"PO-Revision-Date: 2011-07-04 15:38+0000\n"
+"PO-Revision-Date: 2011-07-10 15:04+0000\n"
 "Last-Translator: Masahiro Mori <Unknown>\n"
 "Language-Team: Japanese <ja@li.org>\n"
 "Language: ja\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-05 17:21+0000\n"
-"X-Generator: Launchpad (build 13333)\n"
+"X-Launchpad-Export-Date: 2011-07-11 07:12+0000\n"
+"X-Generator: Launchpad (build 13388)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:309
@@ -409,7 +409,7 @@ msgstr ""
 #: Data/Dialogs/dlgWayPointDetails.xml:18
 #, no-c-format
 msgid "Bearing"
-msgstr ""
+msgstr "方位"
 
 #: src/InfoBoxes/Content/Factory.cpp:90
 #, no-c-format
@@ -547,7 +547,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:161
 #, no-c-format
 msgid "WP Dist"
-msgstr ""
+msgstr "ウェイポイント距離"
 
 #: src/InfoBoxes/Content/Factory.cpp:162
 #, no-c-format
@@ -1083,7 +1083,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:449
 #, no-c-format
 msgid "V Opt"
-msgstr ""
+msgstr "最良速度"
 
 #: src/InfoBoxes/Content/Factory.cpp:450
 #, no-c-format
@@ -1181,7 +1181,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:494
 #, no-c-format
 msgid "OAT"
-msgstr ""
+msgstr "外気温"
 
 #: src/InfoBoxes/Content/Factory.cpp:495
 #, no-c-format
@@ -2532,7 +2532,7 @@ msgstr "再試行"
 #: Data/Dialogs/dlgWayPointSelect.xml:22 Data/Dialogs/dlgWindSettings.xml:20
 #: Data/Input/default.xci:994
 msgid "Cancel"
-msgstr ""
+msgstr "取消"
 
 #: src/Dialogs/Message.cpp:174
 msgid "Ignore"
@@ -7325,6 +7325,8 @@ msgid ""
 "Waypoint\n"
 "List"
 msgstr ""
+"ウェイポイント\n"
+"リスト"
 
 #: Data/Input/default.xci:615 Data/Input/default.xci:664
 #: Data/Input/default.xci:713 Data/Input/default.xci:980
@@ -7398,6 +7400,8 @@ msgid ""
 "Waypoint\n"
 "Details"
 msgstr ""
+"ウェイポイント\n"
+"の詳細"
 
 #: Data/Input/default.xci:546
 msgid "Dropped marker"
@@ -7506,6 +7510,8 @@ msgid ""
 "Nearest\n"
 "Waypoint"
 msgstr ""
+"最寄りの\n"
+"ウェイポイント"
 
 #: Data/Input/default.xci:801
 msgid "Stored to EEPROM"
