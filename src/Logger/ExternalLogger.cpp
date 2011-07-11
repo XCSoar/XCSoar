@@ -41,6 +41,7 @@
 #include "Dialogs/JobDialog.hpp"
 #include "Thread/JobThread.hpp"
 #include "Job.hpp"
+#include "OS/FileUtil.hpp"
 
 static bool DeclaredToDevice = false;
 
@@ -248,6 +249,7 @@ DownloadFlightFrom(DeviceDescriptor &device)
   LocalPath(path, _T("external.igc")); // XXX better file name
 
   if (!DoDownloadFlight(device, flight_list[i], path)) {
+    File::Delete(path);
     MessageBoxX(_("Failed to download flight."),
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
     return;
