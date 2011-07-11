@@ -262,8 +262,8 @@ TestCAI302()
   ok1(device->ParseNMEA("!w,0,0,0,0,0,0,0,0,0,0,10,50,90*56", nmea_info));
   ok1(nmea_info.settings.mac_cready_available);
   ok1(equals(nmea_info.settings.mac_cready, 0.5144444444444444));
-  ok1(nmea_info.settings.ballast_available);
-  ok1(equals(nmea_info.settings.ballast, 0.5));
+  ok1(nmea_info.settings.ballast_fraction_available);
+  ok1(equals(nmea_info.settings.ballast_fraction, 0.5));
   ok1(nmea_info.settings.bugs_available);
   ok1(equals(nmea_info.settings.bugs, 0.9));
 

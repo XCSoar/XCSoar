@@ -130,7 +130,7 @@ cai_w(NMEAInputLine &line, NMEA_INFO &info)
                                         info.Time);
 
   if (line.read_checked(i))
-    info.settings.ProvideBallast(fixed(i) / 100, info.Time);
+    info.settings.ProvideBallastFraction(fixed(i) / 100, info.Time);
 
   if (line.read_checked(i))
     info.settings.ProvideBugs(fixed(i) / 100, info.Time);

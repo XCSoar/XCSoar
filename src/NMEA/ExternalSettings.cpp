@@ -27,7 +27,7 @@ void
 ExternalSettings::Clear()
 {
   mac_cready_available.Clear();
-  ballast_available.Clear();
+  ballast_fraction_available.Clear();
   wing_loading_available.Clear();
   bugs_available.Clear();
   qnh_available.Clear();
@@ -48,9 +48,9 @@ ExternalSettings::Complement(const ExternalSettings &add)
     mac_cready_available = add.mac_cready_available;
   }
 
-  if (add.ballast_available.Modified(ballast_available)) {
-    ballast = add.ballast;
-    ballast_available = add.ballast_available;
+  if (add.ballast_fraction_available.Modified(ballast_fraction_available)) {
+    ballast_fraction = add.ballast_fraction;
+    ballast_fraction_available = add.ballast_fraction_available;
   }
 
   if (add.wing_loading_available.Modified(wing_loading_available)) {
@@ -81,13 +81,13 @@ ExternalSettings::ProvideMacCready(fixed value, fixed time)
 }
 
 bool
-ExternalSettings::ProvideBallast(fixed value, fixed time)
+ExternalSettings::ProvideBallastFraction(fixed value, fixed time)
 {
-  if (ballast_available && fabs(ballast - value) <= fixed(0.01))
+  if (ballast_fraction_available && fabs(ballast_fraction - value) <= fixed(0.01))
     return false;
 
-  ballast = value;
-  ballast_available.Update(time);
+  ballast_fraction = value;
+  ballast_fraction_available.Update(time);
   return true;
 }
 

@@ -37,10 +37,10 @@ struct ExternalSettings {
   /** MacCready value (m/s) of external device (if available) */
   fixed mac_cready;
 
-  Validity ballast_available;
+  Validity ballast_fraction_available;
 
   /** Ballast information (1: full, 0: empty) of external device (if available) */
-  fixed ballast;
+  fixed ballast_fraction;
 
   Validity wing_loading_available;
 
@@ -68,7 +68,7 @@ struct ExternalSettings {
    * @return true if the value and the time stamp have been updated
    */
   bool ProvideMacCready(fixed value, fixed time);
-  bool ProvideBallast(fixed value, fixed time);
+  bool ProvideBallastFraction(fixed value, fixed time);
   bool ProvideWingLoading(fixed value, fixed time);
   bool ProvideBugs(fixed value, fixed time);
   bool ProvideQNH(fixed value, fixed time);

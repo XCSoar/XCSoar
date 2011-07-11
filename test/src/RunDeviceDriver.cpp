@@ -85,8 +85,8 @@ Dump(const ExternalSettings &settings)
   if (settings.mac_cready_available)
     printf("MacCready=%.1f\n", (double)settings.mac_cready);
 
-  if (settings.ballast_available)
-    printf("Ballast=%.1f\n", (double)settings.ballast);
+  if (settings.ballast_fraction_available)
+    printf("Ballast=%.1f\n", (double)settings.ballast_fraction);
 
   if (settings.bugs_available)
     printf("Bugs=%.1f\n", (double)settings.bugs);
