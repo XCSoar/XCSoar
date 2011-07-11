@@ -150,7 +150,7 @@ WesterboerDevice::PutMacCready(fixed _mac_cready)
   unsigned mac_cready = std::min(uround(_mac_cready * 10 / 5) * 5, 60u);
 
   char buffer[64];
-  sprintf(buffer, "$PWES4,,%u,,,,,,,", mac_cready);
+  sprintf(buffer, "$PWES4,,%02u,,,,,,,", mac_cready);
   AppendNMEAChecksum(buffer);
   strcat(buffer, "\r\n");
   port->Write(buffer);
