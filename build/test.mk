@@ -64,7 +64,8 @@ TEST_NAMES = \
 	test_load_task TestFlarmNet \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
-	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint
+	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
+	TestPlanes
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -99,6 +100,18 @@ TEST_PROFILE_SOURCES = \
 TEST_PROFILE_OBJS = $(call SRC_TO_OBJ,$(TEST_PROFILE_SOURCES))
 TEST_PROFILE_LDADD = $(MATH_LIBS) $(IO_LIBS)
 $(TARGET_BIN_DIR)/TestProfile$(TARGET_EXEEXT): $(TEST_PROFILE_OBJS) $(TEST_PROFILE_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_PLANES_SOURCES = \
+	$(SRC)/Plane/PlaneFileGlue.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestPlanes.cpp
+TEST_PLANES_OBJS = $(call SRC_TO_OBJ,$(TEST_PLANES_SOURCES))
+TEST_PLANES_LDADD = $(MATH_LIBS) $(IO_LIBS)
+$(TARGET_BIN_DIR)/TestPlanes$(TARGET_EXEEXT): $(TEST_PLANES_OBJS) $(TEST_PLANES_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
