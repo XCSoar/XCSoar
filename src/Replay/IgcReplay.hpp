@@ -39,6 +39,14 @@ struct IGCFix;
 
 class IgcReplay: public AbstractReplay
 {
+  CatmullRomInterpolator cli;
+
+  TCHAR FileName[MAX_PATH];
+  FileLineReader *reader;
+
+protected:
+  fixed t_simulation;
+
 public:
   IgcReplay();
 
@@ -60,16 +68,9 @@ protected:
                           const fixed alt, const fixed baroalt, const fixed t) = 0;
   virtual bool ScanBuffer(const TCHAR* buffer, IGCFix &fix);
 
-  fixed t_simulation;
-
   bool ReadPoint(IGCFix &fix);
 
 private:
-  CatmullRomInterpolator cli;
-
-  TCHAR FileName[MAX_PATH];
-  FileLineReader *reader;
-
   bool OpenFile();
   void CloseFile();
 };
