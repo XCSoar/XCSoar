@@ -42,6 +42,8 @@
 #include "Thread/JobThread.hpp"
 #include "Job.hpp"
 #include "OS/FileUtil.hpp"
+#include "IO/FileLineReader.hpp"
+#include "Replay/IGCParser.hpp"
 
 static bool DeclaredToDevice = false;
 
@@ -212,6 +214,46 @@ DoDownloadFlight(DeviceDescriptor &device,
 }
 
 static void
+ReadIGCMetaData(const TCHAR *path, IGCHeader &header, BrokenDate &date)
+{
+  strcpy(header.manufacturer, "XXX");
+  strcpy(header.id, "000");
+  header.flight = 0;
+
+  FileLineReaderA reader(path);
+  if (reader.error()) {
+    date = BrokenDateTime::NowUTC();
+    return;
+  }
+
+  char *line = reader.read();
+  if (line != NULL)
+    IGCParseHeader(line, header);
+
+  line = reader.read();
+  if (line == NULL || !IGCParseDate(line, date))
+    date = BrokenDateTime::NowUTC();
+}
+
+static void
+BuildIGCFileName(TCHAR *name, const IGCHeader &header, const BrokenDate &date)
+{
+  assert(strlen(header.manufacturer) == 3);
+  assert(strlen(header.id) == 3);
+
+  TCHAR manufacturer[4], id[4];
+  /* poor man's char->TCHAR converted; this works because we know
+     we're dealing with ASCII only */
+  std::copy(header.manufacturer, header.manufacturer + 4, manufacturer);
+  std::copy(header.id, header.id + 4, id);
+
+  _stprintf(name, _T("%04u-%02u-%02u-%s-%s-%02u.igc"),
+            date.year, date.month, date.day,
+            manufacturer,id,
+            header.flight);
+}
+
+static void
 DownloadFlightFrom(DeviceDescriptor &device)
 {
   RecordedFlightList flight_list;
@@ -246,7 +288,7 @@ DownloadFlightFrom(DeviceDescriptor &device)
     return;
 
   TCHAR path[MAX_PATH];
-  LocalPath(path, _T("external.igc")); // XXX better file name
+  LocalPath(path, _T("logs"), _T("temp.igc"));
 
   if (!DoDownloadFlight(device, flight_list[i], path)) {
     File::Delete(path);
@@ -254,6 +296,21 @@ DownloadFlightFrom(DeviceDescriptor &device)
                 _("Download flight"), MB_OK | MB_ICONINFORMATION);
     return;
   }
+
+  /* read the IGC header and build the final IGC file name with it */
+
+  IGCHeader header;
+  BrokenDate date;
+  ReadIGCMetaData(path, header, date);
+
+  TCHAR name[64];
+  TCHAR final_path[MAX_PATH];
+  do {
+    BuildIGCFileName(name, header, date);
+    LocalPath(final_path, _T("logs"), name);
+  } while (File::Exists(final_path) && ++header.flight < 100);
+
+  File::Rename(path, final_path);
 }
 
 void
