@@ -34,17 +34,17 @@ Copyright_License {
 struct ExternalSettings {
   Validity mac_cready_available;
 
-  /** MacCready value of external device (if available) */
+  /** MacCready value (m/s) of external device (if available) */
   fixed mac_cready;
 
   Validity ballast_available;
 
-  /** Ballast information of external device (if available) */
+  /** Ballast information (1: full, 0: empty) of external device (if available) */
   fixed ballast;
 
   Validity bugs_available;
 
-  /** Bugs information of external device (if available) */
+  /** Bugs information (1: clean, 0: dirty) of external device (if available) */
   fixed bugs;
 
   Validity qnh_available;
