@@ -1,0 +1,10 @@
+<?xml version="1.0"?>
+
+<Form Name="PlanesDialog" Width="240" Height="320" Caption="Planes">
+  <List Name="List" X="0" Y="0" Width="-1" Height="-30" ItemHeight="25"/>
+  
+  <Panel X="0" Height="30" Width="-1">
+    <Button Name="LoadButton" Caption="Load" X="-90" Y="0" Height="30" Width="45" OnClick="LoadClicked" />
+    <Button Name="CancelButton" Caption="Cancel" X="-45" Y="0" Height="30" Width="45" OnClick="CancelClicked" />
+  </Panel>
+</Form>

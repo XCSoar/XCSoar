@@ -123,6 +123,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgBasicSettings.cpp \
 	$(SRC)/Dialogs/dlgBrightness.cpp \
 	$(SRC)/Dialogs/dlgChecklist.cpp \
+	$(SRC)/Dialogs/dlgPlanes.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/dlgConfiguration.cpp \
 	$(SRC)/Dialogs/dlgConfigFonts.cpp \

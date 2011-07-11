@@ -61,6 +61,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Weather.hpp"
 #include "Dialogs/TextEntry.hpp"
+#include "Dialogs/Planes.hpp"
 #include "Dialogs/Message.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/AirspaceWarningDialog.hpp"
@@ -1393,6 +1394,8 @@ InputEvents::eventSetup(const TCHAR *misc)
     dlgTeamCodeShowModal();
   else if (_tcscmp(misc, _T("Target")) == 0)
     dlgTargetShowModal();
+  else if (_tcscmp(misc, _T("Plane")) == 0)
+    dlgPlanesShowModal(XCSoarInterface::main_window);
   else if (_tcscmp(misc, _T("Alternates")) == 0)
     dlgAlternatesListShowModal(XCSoarInterface::main_window);
 
