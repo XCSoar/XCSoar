@@ -68,7 +68,6 @@ SettingsComputerBlackboard::SettingsComputerBlackboard()
   settings_computer.EnableSoundModes = true;
   settings_computer.EnableSoundTask = true;
 
-  settings_computer.SafetySpeed = fixed(70);
   settings_computer.BallastTimerActive = false;
 
   settings_computer.enable_olc = true;

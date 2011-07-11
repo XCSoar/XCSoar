@@ -101,7 +101,6 @@ struct SETTINGS_LOGGER {
  * Glide polar settings
  */
 struct SETTINGS_POLAR {
-  fixed SafetySpeed;           /**< Manoeuvering speed (m/s) */
   bool BallastTimerActive;      /**< Whether the ballast countdown timer is active */
 };
 
