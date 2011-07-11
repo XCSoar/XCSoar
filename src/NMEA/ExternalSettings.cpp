@@ -28,6 +28,7 @@ ExternalSettings::Clear()
 {
   mac_cready_available.Clear();
   ballast_available.Clear();
+  wing_loading_available.Clear();
   bugs_available.Clear();
   qnh_available.Clear();
 }
@@ -50,6 +51,11 @@ ExternalSettings::Complement(const ExternalSettings &add)
   if (add.ballast_available.Modified(ballast_available)) {
     ballast = add.ballast;
     ballast_available = add.ballast_available;
+  }
+
+  if (add.wing_loading_available.Modified(wing_loading_available)) {
+    wing_loading = add.wing_loading;
+    wing_loading_available = add.wing_loading_available;
   }
 
   if (add.bugs_available.Modified(bugs_available)) {
