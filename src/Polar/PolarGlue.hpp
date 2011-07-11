@@ -31,7 +31,6 @@ struct PolarInfo;
 namespace PolarGlue
 {
   PolarInfo GetDefault();
-  const TCHAR *GetDefaultName();
 
   bool LoadFromProfile(PolarInfo &polar);
 
