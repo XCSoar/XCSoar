@@ -89,6 +89,9 @@ InterfaceConfigPanel::Init(WndForm *_wf)
 
   wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
   if (wp != NULL) {
+#ifdef HAVE_NATIVE_GETTEXT
+    wp->hide();
+#else /* !HAVE_NATIVE_GETTEXT */
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
     df.addEnumText(_("Automatic"));
     df.addEnumText(_("English"));
@@ -126,6 +129,7 @@ InterfaceConfigPanel::Init(WndForm *_wf)
     }
 
     wp->RefreshDisplay();
+#endif /* !HAVE_NATIVE_GETTEXT */
   }
 
   InitFileField(*wf, _T("prpStatusFile"), szProfileStatusFile, _T("*.xcs\0"));
@@ -172,6 +176,7 @@ InterfaceConfigPanel::Save(bool &requirerestart)
     requirerestart = true;
   }
 
+#ifndef HAVE_NATIVE_GETTEXT
   wp = (WndProperty *)wf->FindByName(_T("prpLanguageFile"));
   if (wp != NULL) {
     DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
@@ -212,6 +217,7 @@ InterfaceConfigPanel::Save(bool &requirerestart)
       LanguageChanged = changed = true;
     }
   }
+#endif
 
   if (FinishFileField(*wf, _T("prpStatusFile"), szProfileStatusFile)) {
     changed = true;
