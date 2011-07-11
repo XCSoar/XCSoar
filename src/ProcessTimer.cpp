@@ -280,8 +280,8 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
     return itimeout;
 
   static bool connected_last = false;
+  static bool location_last = false;
   static bool wait_connect = false;
-  static bool wait_lock = false;
 
   const NMEA_INFO &basic = CommonInterface::Basic();
 
@@ -289,18 +289,13 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
   if (connected_now) {
     if (basic.LocationAvailable) {
       wait_connect = false;
-      wait_lock = false;
       itimeout = 0;
-    } else if (!wait_lock) {
+    } else if (!connected_last || location_last) {
       // waiting for lock first time
-      wait_lock = true;
       itimeout = 0;
       InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
       TriggerGPSUpdate(); // ensure screen gets updated
     }
-  } else {
-    // not connected
-    wait_lock = false;
   }
 
   if (!connected_now && !connected_last) {
@@ -324,6 +319,7 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
   }
 
   connected_last = connected_now;
+  location_last = basic.LocationAvailable;
   return itimeout;
 }
 
