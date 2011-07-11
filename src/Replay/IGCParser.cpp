@@ -22,8 +22,85 @@ Copyright_License {
 */
 
 #include "IGCParser.hpp"
+#include "DateTime.hpp"
 
+#include <string.h>
 #include <stdio.h>
+
+/**
+ * Character table for base-36.
+ */
+static const char c36[] = "0123456789abcdefghijklmnopqrstuvwxyz";
+
+/**
+ * Convert a 5 digit logger serial to a 3 letter logger id.
+ */
+static void
+ImportDeprecatedLoggerSerial(char id[4], unsigned serial)
+{
+  id[0] = c36[(serial / 36 / 36) % 36];
+  id[1] = c36[(serial / 36) % 36];
+  id[2] = c36[serial % 36];
+  id[3] = 0;
+}
+
+bool
+IGCParseHeader(const char *line, IGCHeader &header)
+{
+  /* sample from CAI302: "ACAM3OV" */
+  /* sample from Colibri: "ALXN13103FLIGHT:1" */
+
+  if (line[0] != 'A')
+    return false;
+
+  ++line;
+  size_t length = strlen(line);
+  if (length < 6)
+    return false;
+
+  memcpy(header.manufacturer, line, 3);
+  header.manufacturer[3] = 0;
+  line += 3;
+
+  char *endptr;
+  unsigned long serial = strtoul(line, &endptr, 10);
+  if (endptr == line + 5) {
+    /* deprecated: numeric serial, 5 digits (e.g. from Colibri) */
+    ImportDeprecatedLoggerSerial(header.id, serial);
+    line = endptr;
+  } else {
+    memcpy(header.id, line, 3);
+    header.id[3] = 0;
+    line += 3;
+  }
+
+  const char *colon = strchr(line, ':');
+  header.flight = colon != NULL
+    ? strtoul(colon + 1, NULL, 10)
+    : 0;
+
+  return true;
+}
+
+bool
+IGCParseDate(const char *line, BrokenDate &date)
+{
+  if (memcmp(line, "HFDTE", 5) != 0)
+    return false;
+
+  line += 5;
+
+  char *endptr;
+  unsigned long value = strtoul(line, &endptr, 10);
+  if (endptr != line + 6)
+    return false;
+
+  date.year = 2000 + value % 100; /* Y2100 bug! */
+  date.month = (value / 100) % 100;
+  date.year = value / 10000;
+
+  return date.Plausible();
+}
 
 bool
 IGCParseFix(const char *buffer, IGCFix &fix)

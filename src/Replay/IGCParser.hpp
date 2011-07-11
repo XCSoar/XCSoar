@@ -24,10 +24,30 @@ Copyright_License {
 #ifndef XCSOAR_IGC_PARSER_HPP
 #define XCSOAR_IGC_PARSER_HPP
 
+#include "Util/StaticString.hpp"
 #include "Math/fixed.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 
 #include <tchar.h>
+
+struct BrokenDate;
+
+struct IGCHeader {
+  /**
+   * 3-letter manufacturer id.
+   */
+  char manufacturer[4];
+
+  /**
+   * 3-letter logger id.
+   */
+  char id[4];
+
+  /**
+   * The flight number on that day.
+   */
+  unsigned flight;
+};
 
 struct IGCFix {
   fixed time;
@@ -36,6 +56,22 @@ struct IGCFix {
 
   fixed gps_altitude, pressure_altitude;
 };
+
+/**
+ * Parse an IGC "A" record.
+ *
+ * @return true on success, false if the line was not recognized
+ */
+bool
+IGCParseHeader(const char *line, IGCHeader &header);
+
+/**
+ * Parse an IGC "HFDTE" record.
+ *
+ * @return true on success, false if the line was not recognized
+ */
+bool
+IGCParseDate(const char *line, BrokenDate &date);
 
 /**
  * Parse an IGC "B" record.
