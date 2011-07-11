@@ -64,7 +64,7 @@
     <Panel Name="frmDisplay">
       <Edit Name="prpOrientationCruise" Caption="Cruise orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="Determines how the screen is rotated with the glider in cruise">
-        <DataField DataType="enum" />
+        <DataField DataType="enum" OnDataAccess="MapDisplayConfigPanel::OnShiftTypeData" />
       </Edit>
 
       <Edit Name="prpOrientationCircling" Caption="Circling orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
