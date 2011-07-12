@@ -30,6 +30,7 @@ Copyright_License {
 #include "Device/Simulator.hpp"
 #include "Device/List.hpp"
 #include "Thread/Mutex.hpp"
+#include "FLARM/FlarmComputer.hpp"
 
 #include <cassert>
 
@@ -55,6 +56,8 @@ class DeviceBlackboard:
 
   NMEA_INFO state_last;
   BasicComputer computer;
+
+  FlarmComputer flarm_computer;
 
   /**
    * Data from each physical device.
@@ -129,9 +132,6 @@ public:
   void tick();
 
 private:
-// moved from GlideComputerAirData
-  void ProcessFLARM();
-
   const NMEA_INFO& LastBasic() { return state_last; }
 };
 
