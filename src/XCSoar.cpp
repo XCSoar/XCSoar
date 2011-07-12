@@ -41,6 +41,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Net/Init.hpp"
 #include "UtilsSystem.hpp"
+#include "ResourceLoader.hpp"
 
 /**
  * Main entry point for the whole XCSoar application
@@ -58,6 +59,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
         int nCmdShow)
 #endif
 {
+#ifdef WIN32
+  ResourceLoader::Init(hInstance);
+#endif
+
   Net::Initialise();
 
   InitialiseDataPath();
@@ -68,7 +73,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   // Read options from the command line
 #ifndef WIN32
-  HINSTANCE hInstance = NULL;
   const TCHAR *lpCmdLine = argc >= 2 ? argv[1] : _T("");
 #elif !defined(_WIN32_WCE)
   /* on Windows (non-CE), the lpCmdLine argument is narrow, and we
@@ -88,9 +92,14 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   SetThreadPriority(GetCurrentThread(), THREAD_PRIORITY_ABOVE_NORMAL);
 #endif
 
+  // Register window classes
+#ifdef USE_GDI
+  MainWindow::register_class(hInstance);
+#endif
+
   // Perform application initialization and run loop
   int ret = EXIT_FAILURE;
-  if (XCSoarInterface::Startup(hInstance))
+  if (XCSoarInterface::Startup())
     ret = CommonInterface::main_window.event_loop();
 
   CommonInterface::main_window.reset();

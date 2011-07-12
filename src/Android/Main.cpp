@@ -75,7 +75,7 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
   sound_util = new SoundUtil(env);
 
   ScreenInitialized();
-  return XCSoarInterface::Startup(NULL);
+  return XCSoarInterface::Startup();
 }
 
 JNIEXPORT void JNICALL

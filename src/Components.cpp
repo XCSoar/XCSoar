@@ -68,7 +68,6 @@ Copyright_License {
 #include "StatusMessage.hpp"
 #include "CalculationThread.hpp"
 #include "Replay/Replay.hpp"
-#include "ResourceLoader.hpp"
 #include "LocalPath.hpp"
 #include "IO/FileCache.hpp"
 #include "Hardware/AltairControl.hpp"
@@ -214,26 +213,16 @@ XCSoarInterface::AfterStartup()
  * @return True if bootup successful, False otherwise
  */
 bool
-XCSoarInterface::Startup(HINSTANCE hInstance)
+XCSoarInterface::Startup()
 {
   VerboseOperationEnvironment operation;
 
   // Set the application title to "XCSoar"
   TCHAR szTitle[] = _T("XCSoar");
 
-  // Store instance handle in our global variable
-#ifdef WIN32
-  ResourceLoader::Init(hInstance);
-#endif
-
   //If "XCSoar" is already running, stop this instance
   if (MainWindow::find(szTitle))
     return false;
-
-  // Register window classes
-#ifdef USE_GDI
-  MainWindow::register_class(hInstance);
-#endif
 
   // Creates the main window
   LogStartUp(_T("Create main window"));

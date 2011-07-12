@@ -27,8 +27,6 @@ Copyright_License {
 #include "InterfaceBlackboard.hpp"
 #include "Compiler.h"
 
-#include <windef.h> /* for HINSTANCE */
-
 class MainWindow;
 class StatusMessageList;
 
@@ -159,7 +157,7 @@ public:
 
   static void AfterStartup();
   static void Shutdown();
-  static bool Startup(HINSTANCE);
+  static bool Startup();
 
   static void ExchangeBlackboard();
 
