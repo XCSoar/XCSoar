@@ -159,6 +159,8 @@ FileCache::save(const TCHAR *name, const TCHAR *original_path)
   if (!get_regular_file_info(original_path, &original_info))
     return NULL;
 
+  Directory::Create(cache_path);
+
   TCHAR path[path_buffer_size(name)];
   make_cache_path(path, name);
 
