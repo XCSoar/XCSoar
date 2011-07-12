@@ -29,30 +29,6 @@ Copyright_License {
 #include <windef.h>
 
 enum {
-  IDCANCEL = 3, /* same value as mrCancel */
-  IDOK,
-  IDYES,
-  IDNO,
-  IDRETRY,
-  IDABORT,
-  IDIGNORE,
-};
-
-enum {
-  MB_OKCANCEL,
-  MB_OK,
-  MB_YESNO,
-  MB_YESNOCANCEL,
-  MB_RETRYCANCEL,
-  MB_ABORTRETRYIGNORE,
-  MB_ICONINFORMATION = 0x10,
-  MB_ICONWARNING = 0x20,
-  MB_ICONEXCLAMATION = 0x40,
-  MB_ICONQUESTION = 0x80,
-  MB_ICONERROR = 0x100,
-};
-
-enum {
   DT_EXPANDTABS = 0x1,
   DT_LEFT = 0x2,
   DT_NOCLIP = 0x4,

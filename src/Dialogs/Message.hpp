@@ -24,8 +24,37 @@ Copyright_License {
 #ifndef XCSOAR_DIALOGS_MESSAGE_HPP
 #define XCSOAR_DIALOGS_MESSAGE_HPP
 
-#include <windows.h>
 #include <tchar.h>
+
+#ifdef WIN32
+#include <windows.h>
+#else
+
+enum {
+  IDCANCEL = 3,
+  IDOK,
+  IDYES,
+  IDNO,
+  IDRETRY,
+  IDABORT,
+  IDIGNORE,
+};
+
+enum {
+  MB_OKCANCEL,
+  MB_OK,
+  MB_YESNO,
+  MB_YESNOCANCEL,
+  MB_RETRYCANCEL,
+  MB_ABORTRETRYIGNORE,
+  MB_ICONINFORMATION = 0x10,
+  MB_ICONWARNING = 0x20,
+  MB_ICONEXCLAMATION = 0x40,
+  MB_ICONQUESTION = 0x80,
+  MB_ICONERROR = 0x100,
+};
+
+#endif
 
 int
 MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType);
