@@ -115,10 +115,8 @@ public:
              const TrafficLook &traffic_look)
     :map(airspace_look, task_look, traffic_look) {}
 
+#ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance) {
-#ifndef USE_GDI
-    return true;
-#else /* USE_GDI */
     WNDCLASS wc;
 
     wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -133,8 +131,8 @@ public:
     wc.lpszClassName = _T("RunMapWindow");
 
     return RegisterClass(&wc);
-#endif /* USE_GDI */
   }
+#endif /* USE_GDI */
 
   void set(int left, int top, unsigned width, unsigned height) {
     SingleWindow::set(_T("RunMapWindow"), _T("RunMapWindow"),
@@ -277,7 +275,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);
+#endif
 
+#ifdef USE_GDI
   TestWindow::register_class(hInstance);
 #endif
 

@@ -231,7 +231,9 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
     return false;
 
   // Register window classes
+#ifdef USE_GDI
   MainWindow::register_class(hInstance);
+#endif
 
   // Creates the main window
   LogStartUp(_T("Create main window"));

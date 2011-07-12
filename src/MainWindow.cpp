@@ -65,10 +65,11 @@ MainWindow::~MainWindow()
   reset();
 }
 
+#ifdef USE_GDI
+
 bool
 MainWindow::register_class(HINSTANCE hInstance)
 {
-#ifdef USE_GDI
   WNDCLASS wc;
 
   wc.style                      = CS_HREDRAW | CS_VREDRAW;
@@ -83,10 +84,9 @@ MainWindow::register_class(HINSTANCE hInstance)
   wc.lpszClassName = _T("XCSoarMain");
 
   return (RegisterClass(&wc)!= FALSE);
-#else
-  return true;
-#endif
 }
+
+#endif /* USE_GDI */
 
 void
 MainWindow::set(const TCHAR* text,

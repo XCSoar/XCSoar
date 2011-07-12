@@ -83,7 +83,9 @@ public:
     return TopWindow::find(_T("XCSoarMain"), text);
   }
 
+#ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance);
+#endif
 
 protected:
   /**
