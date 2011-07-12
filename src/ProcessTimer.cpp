@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ProcessTimer.hpp"
-#include "Protection.hpp"
 #include "Interface.hpp"
 #include "InputEvents.hpp"
 #include "Device/device.hpp"
@@ -314,7 +313,6 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
       // waiting for lock first time
       itimeout = 0;
       InputEvents::processGlideComputer(GCE_GPS_FIX_WAIT);
-      TriggerGPSUpdate(); // ensure screen gets updated
     }
   }
 
