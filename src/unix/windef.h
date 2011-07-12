@@ -24,14 +24,9 @@ Copyright_License {
 #ifndef WINDEF_H
 #define WINDEF_H
 
-#include <stdint.h>
-
 #ifndef MAX_PATH
 #define MAX_PATH 4096
 #endif
-
-typedef uint8_t BYTE;
-typedef int32_t LONG;
 
 typedef struct w32_handle *HANDLE;
 typedef HANDLE HINSTANCE;
