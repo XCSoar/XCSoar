@@ -22,11 +22,9 @@ Copyright_License {
 */
 
 #include "UtilsSystem.hpp"
-#include "Interface.hpp"
 #include "Asset.hpp"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
-#include "Asset.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/MemInfo.hpp"
 #include "Screen/Point.hpp"
@@ -94,16 +92,6 @@ unsigned long FindFreeSpace(const TCHAR *path) {
   } else
     return 0;
 #endif /* !HAVE_POSIX */
-}
-
-/**
- * Creates a new directory in the home directory, if it doesn't exist yet
- * @param filename Name of the new directory
- */
-void CreateDirectoryIfAbsent(const TCHAR *filename) {
-  TCHAR fullname[MAX_PATH];
-  LocalPath(fullname, filename);
-  Directory::Create(fullname);
 }
 
 void

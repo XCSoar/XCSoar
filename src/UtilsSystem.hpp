@@ -33,7 +33,6 @@ void MyCompactHeaps();
 #endif
 
 unsigned long FindFreeSpace(const TCHAR *path);
-void CreateDirectoryIfAbsent(const TCHAR *filename);
 
 void StartupLogFreeRamAndStorage();
 

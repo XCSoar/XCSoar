@@ -45,6 +45,12 @@ void
 DeinitialiseDataPath();
 
 /**
+ * Create the primary data path;
+ */
+void
+CreateDataPath();
+
+/**
  * Overrides the detected primary data path.
  */
 void

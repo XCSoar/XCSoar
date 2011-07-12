@@ -435,3 +435,9 @@ DeinitialiseDataPath()
 {
   free(data_path);
 }
+
+void
+CreateDataPath()
+{
+  Directory::Create(GetPrimaryDataPath());
+}

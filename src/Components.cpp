@@ -268,6 +268,9 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   ProgressGlue::Create(_("Initialising"));
 
+  /* create XCSoarData on the first start */
+  CreateDataPath();
+
   LoadDisplayOrientation();
 
   main_window.InitialiseConfigured();
