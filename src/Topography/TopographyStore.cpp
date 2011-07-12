@@ -29,6 +29,7 @@ Copyright_License {
 #include "Operation.hpp"
 #include "Compatibility/path.h"
 
+#include <stdint.h>
 #include <windef.h> // for MAX_PATH
 
 unsigned
@@ -87,7 +88,7 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
       continue;
 
 
-    BYTE red, green, blue;
+    uint8_t red, green, blue;
     // filename,range,icon,field
 
     // File name
@@ -115,17 +116,17 @@ TopographyStore::Load(OperationEnvironment &operation, NLineReader &reader,
       continue;
 
     // Red component of line / shading colour
-    red = (BYTE)strtol(p + 1, &p, 10);
+    red = (uint8_t)strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
     // Green component of line / shading colour
-    green = (BYTE)strtol(p + 1, &p, 10);
+    green = (uint8_t)strtol(p + 1, &p, 10);
     if (*p != _T(','))
       continue;
 
     // Blue component of line / shading colour
-    blue = (BYTE)strtol(p + 1, &p, 10);
+    blue = (uint8_t)strtol(p + 1, &p, 10);
 
     // Pen width of lines
     int pen_width=1;

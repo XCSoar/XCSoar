@@ -31,6 +31,7 @@ Copyright_License {
 #include "Asset.hpp"
 
 #include <assert.h>
+#include <stdint.h>
 
 //#define FAST_RSQRT
 
@@ -41,7 +42,7 @@ MIX(unsigned x, unsigned y, unsigned i)
 }
 
 inline void
-TerrainShading(const short illum, BYTE &r, BYTE &g, BYTE &b)
+TerrainShading(const short illum, uint8_t &r, uint8_t &g, uint8_t &b)
 {
   char x;
   if (illum < 0) {
@@ -326,7 +327,7 @@ RasterRenderer::ColorTable(const ColorRamp *color_ramp, bool do_water,
 {
   for (int i = 0; i < 256; i++) {
     for (int mag = -64; mag < 64; mag++) {
-      BYTE r, g, b;
+      uint8_t r, g, b;
       if (i == 255) {
         if (do_water) {
           // water colours
