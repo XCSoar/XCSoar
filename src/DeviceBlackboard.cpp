@@ -385,10 +385,19 @@ DeviceBlackboard::expire_wall_clock()
   if (!Basic().Connected)
     return;
 
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    per_device_data[i].expire_wall_clock();
+  bool modified = false;
+  for (unsigned i = 0; i < NUMDEV; ++i) {
+    NMEA_INFO &basic = per_device_data[i];
+    if (!basic.Connected)
+      continue;
 
-  Merge();
+    basic.expire_wall_clock();
+    if (!basic.Connected)
+      modified = true;
+  }
+
+  if (modified)
+    Merge();
 }
 
 void
