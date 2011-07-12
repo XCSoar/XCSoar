@@ -66,7 +66,7 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
 
   device_blackboard.mutex.Lock();
   device_blackboard.SetRealState(index).reset();
-  device_blackboard.Merge();
+  device_blackboard.ScheduleMerge();
   device_blackboard.mutex.Unlock();
 
   Com = _port;
@@ -113,7 +113,7 @@ DeviceDescriptor::Close()
 
   device_blackboard.mutex.Lock();
   device_blackboard.SetRealState(index).reset();
-  device_blackboard.Merge();
+  device_blackboard.ScheduleMerge();
   device_blackboard.mutex.Unlock();
 }
 
@@ -298,5 +298,5 @@ DeviceDescriptor::LineReceived(const char *line)
 
   ScopeLock protect(device_blackboard.mutex);
   if (ParseNMEA(line, device_blackboard.SetRealState(index)))
-    device_blackboard.Merge();
+    device_blackboard.ScheduleMerge();
 }

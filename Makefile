@@ -387,6 +387,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
+	$(SRC)/MergeThread.cpp \
 	$(SRC)/CalculationThread.cpp \
 	$(SRC)/DisplayMode.cpp \
 	\

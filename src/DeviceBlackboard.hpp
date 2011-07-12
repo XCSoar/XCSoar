@@ -26,11 +26,9 @@ Copyright_License {
 
 #include "Blackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
-#include "BasicComputer.hpp"
 #include "Device/Simulator.hpp"
 #include "Device/List.hpp"
 #include "Thread/Mutex.hpp"
-#include "FLARM/FlarmComputer.hpp"
 
 #include <cassert>
 
@@ -47,17 +45,9 @@ class DeviceBlackboard:
   public BaseBlackboard,
   public SettingsComputerBlackboard
 {
-  Validity last_location_available;
-
-  Validity last_te_vario_available, last_netto_vario_available;
-  unsigned last_vario_counter;
+  friend class MergeThread;
 
   Simulator simulator;
-
-  NMEA_INFO state_last;
-  BasicComputer computer;
-
-  FlarmComputer flarm_computer;
 
   /**
    * Data from each physical device.
@@ -124,15 +114,16 @@ public:
   void expire_wall_clock();
 
   /**
+   * Trigger the MergeThread, which will call Merge().  Call this
+   * after a modification.  The caller doesn't need to hold the lock.
+   */
+  void ScheduleMerge();
+
+  /**
    * Copy real_data or simulator_data or replay_data to gps_info.
    * Caller must lock the blackboard.
    */
   void Merge();
-
-  void tick();
-
-private:
-  const NMEA_INFO& LastBasic() { return state_last; }
 };
 
 extern DeviceBlackboard device_blackboard;

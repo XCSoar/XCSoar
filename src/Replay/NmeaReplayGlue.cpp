@@ -88,7 +88,7 @@ NmeaReplayGlue::on_sentence(const char *line)
       (parser != NULL && parser->ParseNMEAString_Internal(line, data))) {
     data.gps.Replay = true;
     data.Connected.Update(fixed(MonotonicClockMS()) / 1000);
-    device_blackboard.Merge();
+    device_blackboard.ScheduleMerge();
   }
 }
 

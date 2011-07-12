@@ -30,11 +30,19 @@ Copyright_License {
 #include "Components.hpp"
 #include "GlideComputer.hpp"
 #include "CalculationThread.hpp"
+#include "MergeThread.hpp"
 #include "DrawThread.hpp"
 
 #include <assert.h>
 
 Flag globalRunningEvent;
+
+void
+TriggerMergeThread()
+{
+  if (merge_thread != NULL)
+    merge_thread->Trigger();
+}
 
 /**
  * Triggers a GPS update resulting in a run of the calculation thread
@@ -69,12 +77,16 @@ void CreateCalculationThread(void) {
   device_blackboard.ReadBlackboard(glide_computer->Calculated());
 
   // Create a read thread for performing calculations
+  merge_thread = new MergeThread(device_blackboard);
   calculation_thread = new CalculationThread(*glide_computer);
 }
 
 void
 SuspendAllThreads()
 {
+  /* not suspending MergeThread, because it does not access shared
+     unprotected data structures */
+
 #ifndef ENABLE_OPENGL
   draw_thread->Suspend();
 #endif

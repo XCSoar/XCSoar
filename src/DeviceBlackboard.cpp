@@ -25,7 +25,6 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Math/Earth.hpp"
 #include "UtilsSystem.hpp"
-#include "FLARM/FlarmComputer.hpp"
 #include "Asset.hpp"
 #include "Device/All.hpp"
 #include "Math/Constants.h"
@@ -48,11 +47,6 @@ void
 DeviceBlackboard::Initialise()
 {
   ScopeLock protect(mutex);
-
-  last_location_available.Clear();
-  last_te_vario_available.Clear();
-  last_netto_vario_available.Clear();
-  last_vario_counter = 0;
 
   // Clear the gps_info and calculated_info
   gps_info.reset();
@@ -92,7 +86,7 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
 
   simulator_data.SetFakeLocation(loc, alt);
 
-  Merge();
+  ScheduleMerge();
 }
 
 /**
@@ -138,7 +132,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.gps.Replay = true;
   basic.gps.Simulator = false;
 
-  Merge();
+  ScheduleMerge();
 };
 
 /**
@@ -149,7 +143,7 @@ void DeviceBlackboard::StopReplay() {
 
   replay_data.Connected.Clear();
 
-  Merge();
+  ScheduleMerge();
 }
 
 void
@@ -161,7 +155,7 @@ DeviceBlackboard::ProcessSimulation()
   ScopeLock protect(mutex);
 
   simulator.Process(simulator_data);
-  Merge();
+  ScheduleMerge();
 }
 
 /**
@@ -179,7 +173,7 @@ DeviceBlackboard::SetSpeed(fixed val)
   basic.GroundSpeed = val;
   basic.ProvideBothAirspeeds(val);
 
-  Merge();
+  ScheduleMerge();
 }
 
 /**
@@ -194,7 +188,7 @@ DeviceBlackboard::SetTrack(Angle val)
   ScopeLock protect(mutex);
   simulator_data.track = val.as_bearing();
 
-  Merge();
+  ScheduleMerge();
 }
 
 /**
@@ -213,7 +207,7 @@ DeviceBlackboard::SetAltitude(fixed val)
   basic.ProvidePressureAltitude(val);
   basic.ProvideBaroAltitudeTrue(val);
 
-  Merge();
+  ScheduleMerge();
 }
 
 /**
@@ -260,7 +254,13 @@ DeviceBlackboard::expire_wall_clock()
   }
 
   if (modified)
-    Merge();
+    ScheduleMerge();
+}
+
+void
+DeviceBlackboard::ScheduleMerge()
+{
+  TriggerMergeThread();
 }
 
 void
@@ -280,42 +280,6 @@ DeviceBlackboard::Merge()
     SetBasic() = simulator_data;
   } else {
     SetBasic() = real_data;
-  }
-
-  computer.Fill(SetBasic(), SettingsComputer());
-
-  flarm_computer.Process(SetBasic().flarm, LastBasic().flarm, Basic());
-
-  if (last_location_available != Basic().LocationAvailable) {
-    // trigger update if gps has become available or dropped out
-    last_location_available = Basic().LocationAvailable;
-    TriggerGPSUpdate();
-  } else if (last_vario_counter != Basic().VarioCounter) {
-    // trigger update if vario has updated with no change of gps status
-    last_vario_counter = Basic().VarioCounter;
-    TriggerGPSUpdate();
-  }
-
-  if (!Basic().LocationAvailable && (
-        last_te_vario_available != Basic().TotalEnergyVarioAvailable ||
-        last_netto_vario_available != Basic().NettoVarioAvailable)) {
-    // trigger update on change of vario connected status only if no gps connected
-    last_te_vario_available = Basic().TotalEnergyVarioAvailable;
-    last_netto_vario_available = Basic().NettoVarioAvailable;
-    TriggerVarioUpdate();
-  }
-}
-
-void
-DeviceBlackboard::tick()
-{
-  // calculate fast data to complete aircraft state
-
-  computer.Compute(SetBasic(), LastBasic(),
-                   Calculated(), SettingsComputer());
-
-  if (Basic().Time!= LastBasic().Time) {
-    state_last = Basic();
   }
 }
 

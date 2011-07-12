@@ -66,6 +66,7 @@ Copyright_License {
 #include "resource.h"
 #include "GlideComputer.hpp"
 #include "StatusMessage.hpp"
+#include "MergeThread.hpp"
 #include "CalculationThread.hpp"
 #include "Replay/Replay.hpp"
 #include "LocalPath.hpp"
@@ -105,6 +106,7 @@ RasterWeather RASP;
 DrawThread *draw_thread;
 #endif
 
+MergeThread *merge_thread;
 CalculationThread *calculation_thread;
 
 Logger logger;
@@ -455,6 +457,7 @@ XCSoarInterface::Startup()
   Pages::LoadFromProfile();
 
   // Start calculation thread
+  merge_thread->Start();
   calculation_thread->Start();
 
   globalRunningEvent.Signal();
@@ -511,9 +514,15 @@ XCSoarInterface::Shutdown(void)
   draw_thread->BeginStop();
 #endif
   calculation_thread->BeginStop();
+  merge_thread->BeginStop();
 
   // Wait for the calculations thread to finish
   LogStartUp(_T("Waiting for calculation thread"));
+
+  merge_thread->Join();
+  delete merge_thread;
+  merge_thread = NULL;
+
   calculation_thread->Join();
   delete calculation_thread;
   calculation_thread = NULL;

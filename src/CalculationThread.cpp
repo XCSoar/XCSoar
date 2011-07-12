@@ -76,10 +76,6 @@ CalculationThread::Tick()
     }
     last_vario_counter = device_blackboard.Basic().VarioCounter;
 
-    // if (new GPS data available)
-    if (gps_updated)
-      device_blackboard.tick();
-
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer.ReadBlackboard(device_blackboard.Basic());
   }

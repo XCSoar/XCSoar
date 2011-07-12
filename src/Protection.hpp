@@ -27,6 +27,13 @@ Copyright_License {
 #include "Thread/Flag.hpp"
 #include "Thread/Mutex.hpp"
 
+/**
+ * Notify the #MergeThread that new data has arrived in the
+ * #DeviceBlackboard.
+ */
+void
+TriggerMergeThread();
+
 void TriggerGPSUpdate();
 void TriggerVarioUpdate();
 void CreateCalculationThread(void);

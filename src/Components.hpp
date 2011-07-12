@@ -31,6 +31,7 @@ class RasterTerrain;
 class RasterWeather;
 class GlideComputer;
 class DrawThread;
+class MergeThread;
 class CalculationThread;
 class Waypoints;
 class Airspaces;
@@ -55,6 +56,7 @@ extern GlideComputer *glide_computer;
 #ifndef ENABLE_OPENGL
 extern DrawThread *draw_thread;
 #endif
+extern MergeThread *merge_thread;
 extern CalculationThread *calculation_thread;
 
 extern Logger logger;

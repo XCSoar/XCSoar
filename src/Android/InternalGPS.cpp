@@ -90,7 +90,7 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
     break;
   }
 
-  device_blackboard.Merge();
+  device_blackboard.ScheduleMerge();
 }
 
 JNIEXPORT void JNICALL
@@ -161,5 +161,5 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
     basic.acceleration.Gload = fixed(acceleration);
   }
 
-  device_blackboard.Merge();
+  device_blackboard.ScheduleMerge();
 }

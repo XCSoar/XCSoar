@@ -295,12 +295,16 @@ rendering):
   \draw[->] (calc.north) -- (draw.south)
   node[midway, below, sloped, font=\tiny]{results};
 
-  \path(calc.south)+(-3,-2) node(device1)[thread]{Device};
-  \draw[->] (device1.north) -- (calc.250)
+  \path(calc.south)+(0,-2) node(merge)[thread]{MergeThread};
+  \draw[->] (merge.north) -- (calc.south)
+  node[midway, below, sloped, font=\tiny]{results};
+
+  \path(merge.south)+(-3,-2) node(device1)[thread]{Device};
+  \draw[->] (device1.north) -- (merge.250)
   node[midway, above, sloped, font=\tiny]{sensor data};
 
-  \path(calc.south)+(3,-2) node(device2)[thread]{Device 2};
-  \draw[->] (device2.north) -- (calc.290)
+  \path(merge.south)+(3,-2) node(device2)[thread]{Device 2};
+  \draw[->] (device2.north) -- (merge.290)
   node[midway, above, sloped, font=\tiny]{sensor data};
 \end{tikzpicture}
 
@@ -310,14 +314,20 @@ manipulate windows.  The UI thread has a timer which does regular
 house keeping twice per second (\texttt{Pro\-cess\-Ti\-mer.cpp}).
 
 The calculation thread (\texttt{Calcu\-la\-tion\-Thread.cpp},
-\texttt{Glide\-Com\-pu\-ter*.cpp}) does all the expensive calculations in
-background.  It gets data from the devices and forwards it together
-with calculation results to the drawing thread and the main thread.
+\texttt{Glide\-Com\-pu\-ter*.cpp}) does all the expensive calculations
+in background.  It gets data from the devices (through
+\texttt{Merge\-Thread}) and forwards it together with calculation
+results to the drawing thread and the main thread.
 
 Each device has its own thread (\texttt{Serial\-Port.cpp}).  This is
 needed because Windows CE does not support asynchronous COMM port I/O.
 The thread is stopped during task declaration (which happens in the UI
 thread).
+
+When new data arrives on the serial port, the \texttt{Merge\-Thread}
+gets notified, which will merge all sensor values into one data
+structure.  It will then run cheap calculations, and forwards
+everything to the \texttt{Calcu\-la\-tion\-Thread}.
 
 With OpenGL, the map is rendered live without a buffer.  There is no
 DrawThread.
