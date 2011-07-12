@@ -28,7 +28,4 @@ Copyright_License {
 #define MAX_PATH 4096
 #endif
 
-typedef struct w32_handle *HANDLE;
-typedef HANDLE HINSTANCE;
-
 #endif
