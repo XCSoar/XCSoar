@@ -24,7 +24,6 @@ Copyright_License {
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Dialogs/Dialogs.h"
-#include "../Message.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/AirspaceConfig.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -195,7 +194,6 @@ dlgAirspaceShowModal(bool coloredit)
     }
 
     Profile::Save();
-    Message::AddMessage(_("Configuration saved"));
   }
 
   delete wf;
