@@ -27,6 +27,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "Interface.hpp"
+#include "OS/FileUtil.hpp"
 
 #include <windef.h> // for MAX_PATH
 #include <stdio.h>
@@ -52,6 +53,9 @@ RawLoggerStart()
              dt.hour, dt.minute);
 
   TCHAR path[MAX_PATH];
+  LocalPath(path, _T("logs"));
+  Directory::Create(path);
+
   LocalPath(path, _T("logs"), name);
 
   RawLoggerWriter = new BatchTextWriter(path, false);

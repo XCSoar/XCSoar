@@ -205,6 +205,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     strAssetNumber[i] = IsAlphaNum(strAssetNumber[i]) ?
                         strAssetNumber[i] : _T('A');
 
+  LocalPath(szLoggerFileName, _T("logs"));
+  Directory::Create(szLoggerFileName);
+
   TCHAR name[64];
   for (i = 1; i < 99; i++) {
     // 2003-12-31-XXX-987-01.igc

@@ -222,5 +222,4 @@ InitAsset()
 
   // VENTA2- TODO fix these directories are not used always!
   CreateDirectoryIfAbsent(_T(""));  // RLD make sure the LocalPath folder actually exists
-  CreateDirectoryIfAbsent(_T("logs"));
 }
