@@ -34,7 +34,6 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
-#include "Asset.hpp"
 #include "Interface.hpp"
 #include "Compiler.h"
 #include "Screen/Fonts.hpp"
@@ -60,7 +59,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 {
   InitialiseDataPath();
   StartupLogFreeRamAndStorage();
-  InitAsset();
 
   // Write startup note + version to logfile
   LogStartUp(_T("Starting XCSoar %s"), XCSoar_VersionString);

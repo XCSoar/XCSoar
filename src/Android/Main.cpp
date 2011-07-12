@@ -32,7 +32,6 @@ Copyright_License {
 #include "Screen/Android/Event.hpp"
 #include "Screen/OpenGL/Init.hpp"
 #include "Simulator.hpp"
-#include "Asset.hpp"
 #include "Profile/Profile.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
@@ -68,7 +67,6 @@ Java_org_xcsoar_NativeView_initializeNative(JNIEnv *env, jobject obj,
 
   assert(native_view == NULL);
   native_view = new NativeView(env, obj, width, height);
-  InitAsset();
 
   Profile::SetFiles(_T(""));
 
