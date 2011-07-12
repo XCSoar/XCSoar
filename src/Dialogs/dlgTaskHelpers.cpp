@@ -40,6 +40,7 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdio.h>
+#include <windef.h> /* for MAX_PATH */
 
 const TCHAR*
 OrderedTaskFactoryName(TaskBehaviour::Factory_t type)

@@ -41,6 +41,7 @@ Copyright_License {
 #include <ctype.h>
 #include <assert.h>
 #include <stdio.h>
+#include <windef.h> /* for MAX_PATH */
 
 #define fixed_7_5 fixed(7.5)
 
