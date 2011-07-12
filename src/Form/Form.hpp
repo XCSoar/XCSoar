@@ -263,7 +263,10 @@ public:
   virtual bool on_resize(unsigned width, unsigned height);
   virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
+
+#ifdef WIN32
   virtual bool on_command(unsigned id, unsigned code);
+#endif
 
   void SetKeyDownNotify(KeyDownNotifyCallback_t KeyDownNotify) {
     mOnKeyDownNotify = KeyDownNotify;

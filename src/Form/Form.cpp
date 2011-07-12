@@ -220,6 +220,8 @@ WndForm::on_timer(timer_t id)
     return ContainerWindow::on_timer(id);
 }
 
+#ifdef WIN32
+
 bool
 WndForm::on_command(unsigned id, unsigned code)
 {
@@ -233,6 +235,8 @@ WndForm::on_command(unsigned id, unsigned code)
 
   return ContainerWindow::on_command(id, code);
 }
+
+#endif
 
 void
 WndForm::SetTitleFont(const Font &font)
