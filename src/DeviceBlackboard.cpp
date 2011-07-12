@@ -378,18 +378,17 @@ DeviceBlackboard::ProcessFLARM()
   }
 }
 
-bool
+void
 DeviceBlackboard::expire_wall_clock()
 {
   ScopeLock protect(mutex);
   if (!Basic().Connected)
-    return false;
+    return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     per_device_data[i].expire_wall_clock();
 
   Merge();
-  return !Basic().Connected;
 }
 
 void

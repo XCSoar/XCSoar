@@ -118,7 +118,7 @@ public:
    * @return true if the connection has just expired, false if the
    * connection status has not changed
    */
-  bool expire_wall_clock();
+  void expire_wall_clock();
 
   /**
    * Copy real_data or simulator_data or replay_data to gps_info.
