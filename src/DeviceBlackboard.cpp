@@ -438,8 +438,6 @@ DeviceBlackboard::Merge()
 void
 DeviceBlackboard::tick()
 {
-  SetBasic().expire();
-
   // calculate fast data to complete aircraft state
 
   computer.Compute(SetBasic(), LastBasic(),
