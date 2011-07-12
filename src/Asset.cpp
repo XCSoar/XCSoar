@@ -39,7 +39,7 @@ Copyright_License {
 // Registration Data
 TCHAR strAssetNumber[MAX_LOADSTRING] = _T(""); //4G17DW31L0HY");
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#ifdef HAVE_MODEL_TYPE
 ModelType GlobalModelType = MODELTYPE_PNA_PNA;
 #endif
 
@@ -207,7 +207,7 @@ void ReadAssetNumber(void)
 void
 InitAsset()
 {
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#ifdef HAVE_MODEL_TYPE
   /*
   LocalPath is called for the very first time by CreateDirectoryIfAbsent.
   In order to be able in the future to behave differently for each PNA device

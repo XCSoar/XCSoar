@@ -42,6 +42,7 @@ enum ModelType {
 };
 
 #if defined(_WIN32_WCE) && !defined(GNAV)
+#define HAVE_MODEL_TYPE
 
 extern ModelType GlobalModelType;
 
@@ -50,6 +51,16 @@ extern ModelType GlobalModelType;
 #define GlobalModelType MODELTYPE_PNA_PNA
 
 #endif
+
+static inline bool
+have_model_type()
+{
+#ifdef HAVE_MODEL_TYPE
+  return true;
+#else
+  return false;
+#endif
+}
 
 /**
  * Returns whether this is a debug build.
