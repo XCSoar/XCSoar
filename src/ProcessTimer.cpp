@@ -145,6 +145,18 @@ ProcessTimer::SystemProcessTimer()
   CheckDisplayTimeOut(false);
 }
 
+static void
+BlackboardProcessTimer()
+{
+  if (device_blackboard.expire_wall_clock())
+    /* trigger a redraw when the connection was just lost, to show the
+       new state; when no GPS is connected, no other entity triggers
+       the redraw, so we have to do it */
+    CommonInterface::main_window.full_redraw();
+
+  XCSoarInterface::ExchangeBlackboard();
+}
+
 /**
  * Collect QNH updates from external devices and AutoQNH.
  */
@@ -258,8 +270,9 @@ SettingsProcessTimer()
 void
 ProcessTimer::CommonProcessTimer()
 {
+  BlackboardProcessTimer();
+
   ActionInterface::DisplayModes();
-  XCSoarInterface::ExchangeBlackboard();
 
   SettingsProcessTimer();
 
@@ -326,12 +339,6 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
 void
 ProcessTimer::Process(void)
 {
-  if (device_blackboard.expire_wall_clock())
-    /* trigger a redraw when the connection was just lost, to show the
-       new state; when no GPS is connected, no other entity triggers
-       the redraw, so we have to do it */
-    CommonInterface::main_window.full_redraw();
-
   CommonProcessTimer();
 
   if (!is_simulator()) {
