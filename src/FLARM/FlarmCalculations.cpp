@@ -24,25 +24,9 @@ Copyright_License {
 #include "FLARM/FlarmCalculations.hpp"
 #include "FLARM/State.hpp"
 
-FlarmCalculations::~FlarmCalculations()
-{
-  for (AverageCalculatorMap::iterator i = averageCalculatorMap.begin();
-       i != averageCalculatorMap.end(); ++i)
-    delete i->second;
-}
-
 fixed
 FlarmCalculations::Average30s(FlarmId flarmId, fixed curTime, fixed curAltitude)
 {
-  ClimbAverageCalculator *itemTemp = NULL;
-  AverageCalculatorMap::iterator iterFind = averageCalculatorMap.find(flarmId);
-
-  if (iterFind != averageCalculatorMap.end()) {
-    itemTemp = (ClimbAverageCalculator*)iterFind->second;
-  } else {
-    itemTemp = new ClimbAverageCalculator();
-    averageCalculatorMap[flarmId] = itemTemp;
-  }
-
-  return itemTemp->GetAverage(curTime, curAltitude, fixed(30));
+  ClimbAverageCalculator &item = averageCalculatorMap[flarmId];
+  return item.GetAverage(curTime, curAltitude, fixed(30));
 }
