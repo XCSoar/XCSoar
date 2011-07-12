@@ -41,7 +41,7 @@ Brush::set(const Color c)
   #endif
 }
 
-#ifndef ENABLE_SDL
+#ifdef HAVE_HATCHED_BRUSH
 
 void
 Brush::set(const Bitmap &bitmap)

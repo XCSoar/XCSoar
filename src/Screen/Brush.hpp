@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Util/NonCopyable.hpp"
 #include "Screen/Color.hpp"
+#include "Screen/Features.hpp"
 
 #ifndef ENABLE_SDL
 class Bitmap;
@@ -72,7 +73,7 @@ public:
    */
   void set(const Color c);
 
-#ifndef ENABLE_SDL
+#ifdef HAVE_HATCHED_BRUSH
 
   /**
    * Creates a bitmap-based Brush

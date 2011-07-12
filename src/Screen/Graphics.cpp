@@ -41,7 +41,7 @@ Copyright_License {
 Pen Graphics::hpSnail[NUMSNAILCOLORS];
 Pen Graphics::hpSnailVario[NUMSNAILCOLORS];
 
-#ifndef ENABLE_SDL
+#ifdef HAVE_HATCHED_BRUSH
 Bitmap Graphics::hAboveTerrainBitmap;
 Brush Graphics::hAboveTerrainBrush;
 #endif
@@ -133,7 +133,7 @@ Graphics::Initialise()
   hFinalGlide.load_big(IDB_FINALGLIDE, IDB_FINALGLIDE_HD, false);
   hAbort.load_big(IDB_ABORT, IDB_ABORT_HD, false);
 
-#ifndef ENABLE_SDL
+#ifdef HAVE_HATCHED_BRUSH
   hAboveTerrainBitmap.load(IDB_ABOVETERRAIN);
 
   hAboveTerrainBrush.set(hAboveTerrainBitmap);
@@ -322,7 +322,7 @@ Graphics::Deinitialise()
   hFinalGlide.reset();
   hAbort.reset();
 
-#ifndef ENABLE_SDL
+#ifdef HAVE_HATCHED_BRUSH
   hAboveTerrainBrush.reset();
   hAboveTerrainBitmap.reset();
 #endif

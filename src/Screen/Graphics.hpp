@@ -54,7 +54,7 @@ namespace Graphics {
   extern Pen hpSnail[NUMSNAILCOLORS];
   extern Pen hpSnailVario[NUMSNAILCOLORS];
 
-#ifndef ENABLE_SDL
+#ifdef HAVE_HATCHED_BRUSH
   extern Bitmap hAboveTerrainBitmap;
   extern Brush hAboveTerrainBrush;
 #endif
