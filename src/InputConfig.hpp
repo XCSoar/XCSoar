@@ -38,7 +38,7 @@ struct InputConfig {
   enum {
     MAX_MODE = 32,
     MAX_MODE_STRING = 24,
-#ifdef ENABLE_SDL
+#if defined(ENABLE_SDL) && !defined(ANDROID)
     MAX_KEY = 400,
 #else
     MAX_KEY = 255,
