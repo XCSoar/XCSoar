@@ -32,7 +32,7 @@ Brush::set(const Color c)
 {
   assert(IsScreenInitialized());
 
-  #ifdef ENABLE_SDL
+  #ifndef USE_GDI
   hollow = false;
   color = c;
   #else
@@ -57,7 +57,7 @@ Brush::reset()
 {
   assert(!defined() || IsScreenInitialized());
 
-  #ifdef ENABLE_SDL
+  #ifndef USE_GDI
   hollow = true;
   #else
   if (brush != NULL) {

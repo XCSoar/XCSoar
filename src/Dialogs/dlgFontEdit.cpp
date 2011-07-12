@@ -62,7 +62,7 @@ OnResetClicked(gcc_unused WndButton &Sender)
 static void
 GetLogFont(LOGFONT &logfont)
 {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   WndProperty* wp;
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp)
@@ -120,7 +120,7 @@ InitGUI(const TCHAR * FontDescription)
 
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp) {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     /* we cannot obtain a list of fonts on SDL/OpenGL currently */
     wp->hide();
 #else
@@ -142,7 +142,7 @@ LoadGUI()
 
   WndProperty* wp;
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   wp = (WndProperty*)wf->FindByName(_T("prpFontName"));
   if (wp) {
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();

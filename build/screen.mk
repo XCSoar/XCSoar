@@ -80,25 +80,24 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/Event.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintCanvas.cpp
+GDI_CPPFLAGS = -DUSE_GDI
+
+ifeq ($(HAVE_CE),y)
+GDI_LDLIBS = -lcommctrl
+else
+GDI_LDLIBS = -lcomctl32 -luser32 -lgdi32 -lmsimg32
+endif
+
+ifeq ($(TARGET),PC)
+GDI_LDLIBS += -Wl,-subsystem,windows
+endif
 endif
 
 SCREEN_OBJS = $(call SRC_TO_OBJ,$(SCREEN_SOURCES))
 
 SCREEN_LIBS = $(TARGET_OUTPUT_DIR)/screen.a
-SCREEN_LDLIBS = $(SDL_LDLIBS)
-SCREEN_CPPFLAGS = $(SDL_CPPFLAGS)
-
-ifeq ($(HAVE_WIN32),y)
-ifeq ($(HAVE_CE),y)
-SCREEN_LDLIBS += -lcommctrl
-else
-SCREEN_LDLIBS += -lcomctl32 -luser32 -lgdi32 -lmsimg32
-endif
-endif
-
-ifeq ($(TARGET),PC)
-SCREEN_LDLIBS += -Wl,-subsystem,windows
-endif
+SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS)
+SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS)
 
 $(SCREEN_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(SCREEN_LIBS): $(SCREEN_OBJS)

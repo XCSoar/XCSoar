@@ -51,7 +51,7 @@ public:
     return !dialogs.empty();
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 protected:
   gcc_pure
   bool FilterMouseEvent(int x, int y, Window *allowed,

@@ -225,7 +225,7 @@ public:
     delete type_list;
   }
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance) {
     WNDCLASS wc;
 
@@ -242,7 +242,7 @@ public:
 
     return RegisterClass(&wc);
   }
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 
   void set(const DialogLook &look,
            int left, int top, unsigned width, unsigned height) {
@@ -302,7 +302,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   airspace_renderer_settings.SetDefaults();
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   ResourceLoader::Init(hInstance);
   TestWindow::register_class(hInstance);
 #endif

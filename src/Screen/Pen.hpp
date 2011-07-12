@@ -32,41 +32,41 @@ Copyright_License {
  * A pen draws lines and borders.
  */
 class Pen
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   : private NonCopyable
 #endif
 {
 public:
-  #ifdef ENABLE_SDL
+#ifndef USE_GDI
   enum style {
     SOLID,
     DASH,
     BLANK
   };
-  #else
+#else
   enum style {
     SOLID = PS_SOLID,
     DASH = PS_DASH,
     BLANK = PS_NULL
   };
-  #endif
+#endif
 
 protected:
-  #ifdef ENABLE_SDL
+#ifndef USE_GDI
   unsigned width;
   Color color;
-  #else
+#else
   HPEN pen;
-  #endif
+#endif
 
 public:
-  #ifdef ENABLE_SDL
+#ifndef USE_GDI
   Pen():width(0) {}
   Pen(enum style style, unsigned _width, const Color _color)
     :width(_width), color(_color) {} // XXX style
   Pen(unsigned _width, const Color _color)
     :width(_width), color(_color) {}
-  #else /* !ENABLE_SDL */
+#else /* USE_GDI */
   /** Base Constructor for the Pen class */
   Pen() : pen(NULL) {}
   /**
@@ -86,7 +86,7 @@ public:
   Pen(unsigned width, Color c):pen(NULL) {
     set(width, c);
   }
-  #endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 
   /** Destructor */
   ~Pen() { reset(); }
@@ -117,14 +117,14 @@ public:
   bool
   defined() const
   {
-    #ifdef ENABLE_SDL
+#ifndef USE_GDI
     return width > 0;
-    #else
+#else
     return pen != NULL;
-    #endif
+#endif
   }
 
-  #ifdef ENABLE_SDL
+#ifndef USE_GDI
   unsigned
   get_width() const
   {
@@ -136,13 +136,13 @@ public:
   {
     return color;
   }
-  #else
+#else
   /**
    * Returns the native HPEN object
    * @return The native HPEN object
    */
   HPEN native() const { return pen; }
-  #endif
+#endif
 
 #ifdef ENABLE_OPENGL
   /**

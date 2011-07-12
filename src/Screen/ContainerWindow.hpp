@@ -26,9 +26,9 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 #include <list>
-#endif /* !ENABLE_SDL */
+#endif
 
 class WindowReference;
 
@@ -39,7 +39,7 @@ class WindowReference;
  */
 class ContainerWindow : public PaintWindow {
 protected:
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   std::list<Window*> children;
 
   /**
@@ -57,12 +57,12 @@ protected:
 public:
   ContainerWindow();
   virtual ~ContainerWindow();
-#endif /* ENABLE_SDL */
+#endif /* !USE_GDI */
 
 protected:
   virtual const Brush *on_color(Window &window, Canvas &canvas);
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   virtual bool on_destroy();
   virtual bool on_mouse_move(int x, int y, unsigned keys);
   virtual bool on_mouse_down(int x, int y);
@@ -70,13 +70,13 @@ protected:
   virtual bool on_mouse_double(int x, int y);
   virtual bool on_mouse_wheel(int x, int y, int delta);
   virtual void on_paint(Canvas &canvas);
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
 #endif
 
 public:
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   void add_child(Window &child);
   void remove_child(Window &child);
 
@@ -149,7 +149,7 @@ protected:
   Window *find_previous_control(Window *reference);
 
 public:
-#endif /* ENABLE_SDL */
+#endif /* !USE_GDI */
 
   /**
    * Sets the keyboard focus on the first descendant window which has

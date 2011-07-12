@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Thread/Flag.hpp"
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
 #include "Screen/Window.hpp"
 #endif
 
@@ -37,7 +37,7 @@ Copyright_License {
  * OnNotification().
  */
 class Notify : private
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
                NonCopyable
 #else
                Window
@@ -74,7 +74,7 @@ protected:
    */
   virtual void OnNotification() = 0;
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   virtual bool on_user(unsigned id);
 #endif
 };

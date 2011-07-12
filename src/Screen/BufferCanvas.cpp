@@ -28,7 +28,7 @@ Copyright_License {
 #include <assert.h>
 #include <algorithm>
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
 
 BufferCanvas::BufferCanvas(const Canvas &canvas, unsigned _width, unsigned _height)
   :VirtualCanvas(canvas, _width, _height)
@@ -78,7 +78,7 @@ void BufferCanvas::resize(unsigned _width, unsigned _height)
   ::SelectObject(dc, bitmap);
 }
 
-#endif /* !ENABLE_SDL */
+#endif /* !USE_GDI */
 
 void
 BufferCanvas::grow(unsigned _width, unsigned _height)

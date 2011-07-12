@@ -232,7 +232,7 @@ ThermalAssistantWindow::PaintPoints(Canvas &canvas) const
 {
 #ifdef ENABLE_OPENGL
   GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-#elif !defined(ENABLE_SDL)
+#elif defined(USE_GDI)
   canvas.mix_mask();
 #endif /* GDI */
 

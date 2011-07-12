@@ -30,7 +30,7 @@ Copyright_License {
 #include "OS/AYGShellDLL.hpp"
 #endif
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 #include "Thread/Mutex.hpp"
 #include "Screen/SDL/TopCanvas.hpp"
 #endif
@@ -46,7 +46,7 @@ struct Event;
  * A top-level full-screen window.
  */
 class TopWindow : public ContainerWindow {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   TopCanvas screen;
 
   Mutex invalidated_lock;
@@ -78,7 +78,7 @@ class TopWindow : public ContainerWindow {
   unsigned new_width, new_height;
 #endif
 
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
 
 #ifdef _WIN32_WCE
   /**
@@ -96,7 +96,7 @@ class TopWindow : public ContainerWindow {
 #ifdef HAVE_AYGSHELL_DLL
   SHACTIVATEINFO s_sai;
 #endif
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 
 public:
 #ifdef HAVE_AYGSHELL_DLL
@@ -115,7 +115,7 @@ public:
   void reset();
 #endif
 
-#if !defined(ENABLE_SDL) && !defined(_WIN32_WCE)
+#if defined(USE_GDI) && !defined(_WIN32_WCE)
   gcc_pure
   const PixelRect get_client_rect() const {
     if (::IsIconic(hWnd)) {
@@ -150,18 +150,18 @@ public:
 
   void full_screen();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   virtual void invalidate();
 
   virtual void expose();
 
   void refresh();
-#endif /* ENABLE_SDL */
+#endif /* !USE_GDI */
 
   void close() {
     assert_none_locked();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     on_close();
 #else /* ENABLE_SDL */
     ::SendMessage(hWnd, WM_CLOSE, 0, 0);

@@ -140,7 +140,7 @@ LoadTextFromResource(const TCHAR* name, const TCHAR* control)
   const char *buffer2 = buffer;
 #endif
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   // Replace \n by \r\r\n to enable usage of line-breaks in edit control
   TCHAR buffer3[sizeof(buffer2) * 3];
   const TCHAR* p2 = buffer2;

@@ -26,7 +26,7 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 
 void
 Pen::set(enum style style, unsigned _width, const Color c)
@@ -53,7 +53,7 @@ Pen::reset()
 #endif
 }
 
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
 
 void
 Pen::set(enum style style, unsigned width, const Color c)
@@ -81,4 +81,4 @@ Pen::reset()
   }
 }
 
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */

@@ -39,7 +39,7 @@ class ProgressWindow : public ContainerWindow {
 
   Bitmap bitmap_progress_border;
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   Font font;
 #endif
 

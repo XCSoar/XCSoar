@@ -24,7 +24,7 @@ Copyright_License {
 #include "ProgressBar.hpp"
 #include "Thread/Debug.hpp"
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
 #include <commctrl.h>
 #else
 #include "Screen/Canvas.hpp"
@@ -33,7 +33,7 @@ Copyright_License {
 void
 ProgressBarStyle::vertical()
 {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   style |= PBS_VERTICAL;
 #endif
 }
@@ -41,7 +41,7 @@ ProgressBarStyle::vertical()
 void
 ProgressBarStyle::smooth()
 {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   style |= PBS_SMOOTH;
 #endif
 }
@@ -52,7 +52,7 @@ ProgressBar::set(ContainerWindow &parent,
                  const ProgressBarStyle style)
 {
   Window::set(&parent,
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
               PROGRESS_CLASS, NULL,
 #endif
               left, top, width, height,
@@ -65,17 +65,17 @@ ProgressBar::set_range(unsigned min_value, unsigned max_value)
   assert_none_locked();
   assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   this->min_value = min_value;
   this->max_value = max_value;
   value = 0;
   step_size = 1;
   expose();
-#else /* !ENABLE_SDL */
+#else
   ::SendMessage(hWnd,
                 PBM_SETRANGE, (WPARAM)0,
                 (LPARAM)MAKELPARAM(min_value, max_value));
-#endif /* !ENABLE_SDL */
+#endif
 }
 
 void
@@ -84,13 +84,13 @@ ProgressBar::set_position(unsigned value)
   assert_none_locked();
   assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   this->value = value;
   expose();
-#else /* !ENABLE_SDL */
+#else
   ::SendMessage(hWnd, PBM_SETPOS,
                 value, 0);
-#endif /* !ENABLE_SDL */
+#endif
 }
 
 void
@@ -99,13 +99,13 @@ ProgressBar::set_step(unsigned size)
   assert_none_locked();
   assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   step_size = size;
   expose();
-#else /* !ENABLE_SDL */
+#else
   ::SendMessage(hWnd,
                 PBM_SETSTEP, (WPARAM)size, (LPARAM)0);
-#endif /* !ENABLE_SDL */
+#endif
 }
 
 void
@@ -114,16 +114,16 @@ ProgressBar::step()
   assert_none_locked();
   assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   value += step_size;
   expose();
-#else /* !ENABLE_SDL */
+#else
   ::SendMessage(hWnd, PBM_STEPIT,
                 (WPARAM)0, (LPARAM)0);
-#endif /* !ENABLE_SDL */
+#endif
 }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 void
 ProgressBar::on_paint(Canvas &canvas)
 {

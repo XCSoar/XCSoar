@@ -56,7 +56,7 @@ protected:
       ButtonWindow::set(parent, text, left, top, width, height, style);
     }
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   protected:
     virtual LRESULT on_message(HWND hWnd, UINT message,
                                WPARAM wParam, LPARAM lParam);

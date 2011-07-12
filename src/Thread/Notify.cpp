@@ -33,7 +33,7 @@ Copyright_License {
 
 Notify::Notify()
 {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   Window::CreateMessageWindow();
 #endif
 }
@@ -72,7 +72,7 @@ Notify::RunNotification()
     OnNotification();
 }
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
 
 bool
 Notify::on_user(unsigned id)

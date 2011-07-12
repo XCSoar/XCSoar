@@ -57,9 +57,7 @@ WndFrame::SetText(const TCHAR *_text)
 unsigned
 WndFrame::GetTextHeight()
 {
-#ifdef ENABLE_SDL
-  return font->get_height(); // XXX implement properly
-#else /* !ENABLE_SDL */
+#ifdef USE_GDI
   PixelRect rc = get_client_rect();
   ::InflateRect(&rc, -2, -2); // todo border width
 
@@ -68,7 +66,9 @@ WndFrame::GetTextHeight()
   canvas.formatted_text(&rc, text.c_str(), mCaptionStyle | DT_CALCRECT);
 
   return rc.bottom - rc.top;
-#endif /* !ENABLE_SDL */
+#else
+  return font->get_height(); // XXX implement properly
+#endif
 }
 
 void

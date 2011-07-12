@@ -62,9 +62,9 @@ public:
   {}
 
   static bool register_class(HINSTANCE hInstance) {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     return true;
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
     WNDCLASS wc;
 
     wc.style = CS_HREDRAW | CS_VREDRAW;
@@ -79,7 +79,7 @@ public:
     wc.lpszClassName = _T("RunCanvas");
 
     return RegisterClass(&wc);
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
   }
 
   void set(int left, int top, unsigned width, unsigned height) {

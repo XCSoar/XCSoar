@@ -48,7 +48,7 @@ class ContainerWindow;
  * creation.
  */
 class WindowStyle {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 protected:
   bool visible;
   bool enabled;
@@ -63,7 +63,7 @@ public:
      double_clicks(false),
      text_style(0) {}
 
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
 protected:
   DWORD style, ex_style;
   bool double_clicks;
@@ -78,10 +78,10 @@ public:
   WindowStyle()
     :style(WS_CHILD | WS_VISIBLE | WS_CLIPCHILDREN | WS_CLIPSIBLINGS),
      ex_style(0), double_clicks(false), custom_painting(false) {}
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 
   void hide() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     visible = false;
 #else
     style &= ~WS_VISIBLE;
@@ -89,7 +89,7 @@ public:
   }
 
   void disable() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     enabled = false;
 #else
     style |= WS_DISABLED;
@@ -97,7 +97,7 @@ public:
   }
 
   void tab_stop() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     m_tab_stop = true;
 #else
     style |= WS_TABSTOP;
@@ -105,7 +105,7 @@ public:
   }
 
   void control_parent() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     m_control_parent = true;
 #else
     ex_style |= WS_EX_CONTROLPARENT;
@@ -113,33 +113,33 @@ public:
   }
 
   void border() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= WS_BORDER;
 #endif
   }
 
   void sunken_edge() {
     border();
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     ex_style |= WS_EX_CLIENTEDGE;
 #endif
   }
 
   void vscroll() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= WS_VSCROLL;
 #endif
   }
 
   void popup() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style &= ~WS_CHILD;
     style |= WS_SYSMENU;
 #endif
   }
 
   void enable_custom_painting() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     custom_painting = true;
 #endif
   }
@@ -170,7 +170,7 @@ public:
 #endif
 
 protected:
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   ContainerWindow *parent;
 
 private:
@@ -199,7 +199,7 @@ private:
   bool custom_painting;
 
 public:
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   Window()
     :parent(NULL), width(0), height(0),
      font(NULL),
@@ -216,12 +216,12 @@ public:
    * because its preparation would needlessly allocate resources.
    */
   void enable_custom_painting() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     custom_painting = true;
 #endif
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   const ContainerWindow *GetParent() const {
     return parent;
   }
@@ -258,7 +258,7 @@ protected:
   void assert_thread() const;
 #endif
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   bool get_custom_painting() const {
     return custom_painting;
   }
@@ -266,14 +266,14 @@ protected:
 
 public:
   bool defined() const {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     return width > 0;
 #else
     return hWnd != NULL;
 #endif
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   void clear_parent() {
     parent = NULL;
   }
@@ -313,7 +313,7 @@ public:
   int get_text_style() const {
     return text_style;
   }
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
   unsigned get_width() const {
     return get_size().cx;
   }
@@ -323,7 +323,7 @@ public:
   }
 #endif
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   void set(ContainerWindow *parent,
            int left, int top, unsigned width, unsigned height,
            const WindowStyle window_style=WindowStyle());
@@ -338,7 +338,7 @@ public:
   void CreateMessageWindow();
 #endif
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   void created(HWND _hWnd);
 #endif
 
@@ -355,7 +355,7 @@ public:
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     this->left = left;
     this->top = top;
     invalidate();
@@ -370,10 +370,10 @@ public:
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     move(left, top);
     resize(width, height);
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
     ::SetWindowPos(hWnd, NULL, left, top, width, height,
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
     // XXX store new size?
@@ -388,9 +388,9 @@ public:
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     move(left, top, width, height);
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
     ::SetWindowPos(hWnd, NULL, left, top, width, height,
                    SWP_NOCOPYBITS | SWP_NOREDRAW | SWP_DEFERERASE |
                    SWP_NOZORDER | SWP_NOACTIVATE | SWP_NOOWNERZORDER);
@@ -401,7 +401,7 @@ public:
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     if (width == this->width && height == this->height)
       return;
 
@@ -410,7 +410,7 @@ public:
 
     invalidate();
     on_resize(width, height);
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
     ::SetWindowPos(hWnd, NULL, 0, 0, width, height,
                    SWP_NOMOVE | SWP_NOZORDER |
                    SWP_NOACTIVATE | SWP_NOOWNERZORDER);
@@ -418,7 +418,7 @@ public:
 #endif
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   void bring_to_top();
   void BringToBottom();
 #else
@@ -447,7 +447,7 @@ public:
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     bring_to_top();
     show();
 #else
@@ -461,7 +461,7 @@ public:
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     font = &_font;
     invalidate();
 #else
@@ -472,14 +472,14 @@ public:
 
   gcc_pure
   bool is_visible() const {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     return visible;
 #else
     return ::IsWindowVisible(hWnd);
 #endif
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   void show();
   void hide();
 #else
@@ -503,7 +503,7 @@ public:
   void fast_hide() {
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     hide();
 #else
     ::SetWindowPos(hWnd, NULL, 0, 0, 0, 0,
@@ -521,7 +521,7 @@ public:
       hide();
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   bool is_tab_stop() const {
     return tab_stop;
   }
@@ -536,7 +536,7 @@ public:
    */
   gcc_pure
   bool is_enabled() const {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     return enabled;
 #else
     return ::IsWindowEnabled(hWnd);
@@ -549,7 +549,7 @@ public:
   void set_enabled(bool enabled) {
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     if (enabled == this->enabled)
       return;
 
@@ -560,7 +560,7 @@ public:
 #endif
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 
   virtual Window *get_focused_window();
   void set_focus();
@@ -572,7 +572,7 @@ public:
    */
   virtual void ClearFocus();
 
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
 
   void set_focus() {
     assert_none_locked();
@@ -581,22 +581,22 @@ public:
     ::SetFocus(hWnd);
   }
 
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 
   gcc_pure
   bool has_focus() const {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     return focused;
 #else
     return hWnd == ::GetFocus();
 #endif
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   void set_capture();
   void release_capture();
   virtual void clear_capture();
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
 
   void set_capture() {
     assert_none_locked();
@@ -625,7 +625,7 @@ public:
 
     ::SetWindowLongPtr(hWnd, GWLP_USERDATA, (LONG_PTR)value);
   }
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 
   timer_t set_timer(unsigned id, unsigned ms)
   {
@@ -654,7 +654,7 @@ public:
 #endif
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   void to_screen(PixelRect &rc) const;
 #endif
 
@@ -665,7 +665,7 @@ public:
   const PixelRect get_screen_position() const
   {
     PixelRect rc;
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     rc = get_position();
     to_screen(rc);
 #else
@@ -681,7 +681,7 @@ public:
   const PixelRect get_position() const
   {
     PixelRect rc;
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     rc.left = get_left();
     rc.top = get_top();
     rc.right = get_right();
@@ -713,7 +713,7 @@ public:
   const PixelRect get_client_rect() const
   {
     PixelRect rc;
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     rc.left = 0;
     rc.top = 0;
     rc.right = get_width();
@@ -743,7 +743,7 @@ public:
     return s;
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   void setup(Canvas &canvas);
 
   virtual void invalidate();
@@ -752,7 +752,7 @@ public:
    * Ensures that the window is updated on the physical screen.
    */
   virtual void expose();
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
   HDC BeginPaint(PAINTSTRUCT *ps) {
     assert_thread();
 
@@ -768,9 +768,7 @@ public:
   void scroll(int dx, int dy, const PixelRect &rc) {
     ::ScrollWindowEx(hWnd, dx, dy, &rc, NULL, NULL, NULL, SW_INVALIDATE);
   }
-#endif /* !ENABLE_SDL */
 
-#ifndef ENABLE_SDL
   gcc_const
   static void *get_userdata(HWND hWnd) {
     return (void *)::GetWindowLongPtr(hWnd, GWLP_USERDATA);
@@ -819,7 +817,7 @@ public:
   }
 #endif
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   void send_user(unsigned id);
 #else
   void send_user(unsigned id) {
@@ -832,9 +830,9 @@ public:
 #endif
 
 protected:
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 public:
-#endif /* ENABLE_SDL */
+#endif /* !USE_GDI */
   /**
    * @return true on success, false if the window should not be
    * created
@@ -873,7 +871,7 @@ public:
   virtual void on_paint(Canvas &canvas);
   virtual void on_paint(Canvas &canvas, const PixelRect &dirty);
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   /**
    * Called by on_message() when the message was not handled by any
    * virtual method.  Calls the default handler.  This function is
@@ -885,14 +883,14 @@ public:
 
   virtual LRESULT on_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam);
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 
 public:
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   void install_wndproc() {
     // XXX
   }
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
   /**
    * This static method reads the Window* object from GWL_USERDATA and
    * calls on_message().
@@ -905,7 +903,7 @@ public:
    * methods on_*() methods, which may be implemented by sub classes.
    */
   void install_wndproc();
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 };
 
 #endif

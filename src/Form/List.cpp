@@ -33,7 +33,7 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Globals.hpp"
-#elif !defined(ENABLE_SDL)
+#elif defined(USE_GDI)
 #include "Screen/WindowCanvas.hpp"
 #endif
 
@@ -250,13 +250,13 @@ WndListFrame::SetOrigin(int i)
   if ((unsigned)i == origin)
     return;
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   int delta = origin - i;
 #endif
 
   origin = i;
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   if ((unsigned)abs(delta) < items_visible) {
     PixelRect rc = get_client_rect();
     rc.right = scroll_bar.get_left(get_size());

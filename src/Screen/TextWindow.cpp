@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Screen/TextWindow.hpp"
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
 #include <commctrl.h>
 #endif
 
@@ -32,7 +32,7 @@ TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
                 int left, int top, unsigned width, unsigned height,
                 const TextWindowStyle style)
 {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   if (_text != NULL)
     text = _text;
   else
@@ -40,14 +40,14 @@ TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
 #endif
 
   Window::set(&parent,
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
               WC_STATIC, _text,
 #endif
               left, top, width, height,
               style);
 }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 #include "Screen/Canvas.hpp"
 
 void
@@ -64,4 +64,4 @@ TextWindow::on_paint(Canvas &canvas)
   }
 }
 
-#endif /* ENABLE_SDL */
+#endif /* !USE_GDI */

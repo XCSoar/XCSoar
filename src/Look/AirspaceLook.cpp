@@ -26,7 +26,7 @@ Copyright_License {
 #include "Airspace/AirspaceRendererSettings.hpp"
 #include "resource.h"
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
 #include "Screen/GDI/AlphaBlend.hpp"
 #endif
 

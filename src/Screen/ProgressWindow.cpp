@@ -45,7 +45,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   bitmap_progress_border.load(IDB_PROGRESSBORDER);
 
   // Determine text height
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   font.set("Droid Sans", 12);
   text_height = font.get_height();
 #else
@@ -65,7 +65,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
               height - progress_border_height - text_height - (height/48),
               width, text_height, message_style);
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   message.set_font(font);
 #endif
 

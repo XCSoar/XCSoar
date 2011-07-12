@@ -29,26 +29,26 @@ Copyright_License {
 class CheckBoxStyle : public WindowStyle {
 public:
   CheckBoxStyle() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= BS_CHECKBOX | BS_AUTOCHECKBOX;
 #endif
   }
 
   CheckBoxStyle(const WindowStyle _style):WindowStyle(_style) {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= BS_CHECKBOX | BS_AUTOCHECKBOX;
 #endif
   }
 
   void enable_custom_painting() {
     WindowStyle::enable_custom_painting();
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= BS_OWNERDRAW;
 #endif
   }
 };
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 
 #include "Screen/PaintWindow.hpp"
 #include "Util/tstring.hpp"
@@ -92,7 +92,7 @@ protected:
   virtual bool on_clicked();
 };
 
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
 
 #include "Screen/ButtonWindow.hpp"
 
@@ -122,6 +122,6 @@ public:
   }
 };
 
-#endif
+#endif /* USE_GDI */
 
 #endif

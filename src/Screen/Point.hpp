@@ -24,15 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_POINT_HPP
 #define XCSOAR_SCREEN_POINT_HPP
 
-#ifdef ENABLE_SDL
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Point.hpp"
-#else /* !OPENGL */
+#elif defined(ENABLE_SDL)
 #include "Screen/SDL/Point.hpp"
-#endif /* !OPENGL */
-#else /* !SDL */
+#else
 #include "Screen/GDI/Point.hpp"
-#endif /* !SDL */
+#endif
 
 #include <stdlib.h>
 

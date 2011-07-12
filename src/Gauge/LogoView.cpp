@@ -30,7 +30,7 @@ LogoView::LogoView()
   :logo(IDB_SWIFT), big_logo(IDB_SWIFT_HD),
    title(IDB_TITLE), big_title(IDB_TITLE_HD)
 {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   font.set("Droid Sans", 12);
 #endif
 }
@@ -89,7 +89,7 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
 
   // Draw full XCSoar version number
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   canvas.select(font);
 #endif
 

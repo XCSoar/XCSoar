@@ -24,10 +24,10 @@ Copyright_License {
 #include "Screen/WindowCanvas.hpp"
 #include "Screen/PaintWindow.hpp"
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
 
 WindowCanvas::WindowCanvas(PaintWindow &window)
   :Canvas(::GetDC(window), window.get_width(), window.get_height()),
    wnd(window) {}
 
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */

@@ -33,17 +33,17 @@ Copyright_License {
 #include "Util/StringUtil.hpp"
 #include "Look/DialogLook.hpp"
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 #include "Screen/SDL/Reference.hpp"
 #endif
 
 #ifdef ANDROID
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
-#elif defined(ENABLE_SDL)
-#include "Screen/SDL/Event.hpp"
-#else
+#elif defined(USE_GDI)
 #include "Screen/GDI/Event.hpp"
+#else
+#include "Screen/SDL/Event.hpp"
 #endif
 
 #ifdef EYE_CANDY
@@ -118,7 +118,7 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
                   mClientRect.right - mClientRect.left,
                   mClientRect.bottom - mClientRect.top, client_style);
 
-#if !defined(ENABLE_SDL) && !defined(NDEBUG)
+#if defined(USE_GDI) && !defined(NDEBUG)
   ::SetWindowText(hWnd, mCaption.c_str());
 #endif
 }
@@ -392,12 +392,12 @@ WndForm::ShowModal(Window *mouse_allowed)
   assert_none_locked();
 
 #define OPENCLOSESUPPRESSTIME 500
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   ContainerWindow *root = get_root_owner();
   WindowReference old_focus_reference = root->GetFocusedWindowReference();
 #else
   HWND oldFocusHwnd;
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 
   PeriodClock enter_clock;
   if (is_embedded() && !is_altair())
@@ -407,11 +407,11 @@ WndForm::ShowModal(Window *mouse_allowed)
 
   mModalResult = 0;
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   oldFocusHwnd = ::GetFocus();
   if (oldFocusHwnd != NULL)
     ::SendMessage(oldFocusHwnd, WM_CANCELMODE, 0, 0);
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
   set_focus();
   focus_first_control();
 
@@ -420,7 +420,7 @@ WndForm::ShowModal(Window *mouse_allowed)
 
   main_window.add_dialog(this);
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   main_window.refresh();
 #endif
 
@@ -456,7 +456,7 @@ WndForm::ShowModal(Window *mouse_allowed)
       continue;
 
     if (mOnKeyDownNotify != NULL && is_key_down(event) &&
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
         identify_descendant(event.hwnd) &&
 #endif
         !check_special_key(this, event) &&
@@ -473,7 +473,7 @@ WndForm::ShowModal(Window *mouse_allowed)
 #endif
 
     if (is_key_down(event) &&
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
         identify_descendant(event.hwnd) &&
 #endif
         (get_key_code(event) == VK_UP || get_key_code(event) == VK_DOWN)) {
@@ -491,7 +491,7 @@ WndForm::ShowModal(Window *mouse_allowed)
       }
     }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     if (is_key_down(event) && get_key_code(event) == VK_ESCAPE) {
       mModalResult = mrCancel;
       continue;
@@ -513,15 +513,15 @@ WndForm::ShowModal(Window *mouse_allowed)
   // static.  this is current open/close or child open/close
   WndForm::timeAnyOpenClose.update();
 
-#ifdef ENABLE_SDL
+#ifdef USE_GDI
+  SetFocus(oldFocusHwnd);
+#else
   if (old_focus_reference.Defined()) {
     Window *old_focus = old_focus_reference.Get(*root);
     if (old_focus != NULL)
       old_focus->set_focus();
   }
-#else
-  SetFocus(oldFocusHwnd);
-#endif /* !ENABLE_SDL */
+#endif /* !USE_GDI */
 
   return mModalResult;
 }

@@ -24,10 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_SDL_TIMER_HXX
 #define XCSOAR_SCREEN_SDL_TIMER_HXX
 
-#ifndef ENABLE_SDL
-#error This header is SDL-only
-#endif
-
 #include <SDL.h>
 
 class Window;

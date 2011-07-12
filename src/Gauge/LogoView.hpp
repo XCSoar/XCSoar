@@ -32,7 +32,7 @@ class Canvas;
 class LogoView {
   Bitmap logo, big_logo, title, big_title;
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   Font font;
 #endif
 

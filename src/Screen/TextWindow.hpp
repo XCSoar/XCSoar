@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 #include <tstring.hpp>
 #include <algorithm>
 #endif
@@ -37,25 +37,25 @@ public:
   TextWindowStyle(const WindowStyle other):WindowStyle(other) {}
 
   void left() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= SS_LEFT;
 #endif
   }
 
   void right() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= SS_RIGHT;
 #endif
   }
 
   void center() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= SS_CENTER;
 #endif
   }
 
   void notify() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= SS_NOTIFY;
 #endif
   }
@@ -65,7 +65,7 @@ public:
  * A window which renders static text.
  */
 class TextWindow : public Window {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   tstring text;
 #endif
 
@@ -78,25 +78,25 @@ public:
     assert_none_locked();
     assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     if (_text != NULL)
       text = _text;
     else
       text.clear();
     invalidate();
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
     ::SetWindowText(hWnd, _text);
 
 #ifdef _WIN32_WCE
     ::UpdateWindow(hWnd);
 #endif
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 protected:
   virtual void on_paint(Canvas &canvas);
-#endif /* ENABLE_SDL */
+#endif /* !USE_GDI */
 };
 
 #endif

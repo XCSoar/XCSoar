@@ -78,7 +78,7 @@ int main(int argc, char **argv)
   TestThread thread(notify);
   thread.Start();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   while (!quit && loop.get(event))
     loop.dispatch(event);
 #else

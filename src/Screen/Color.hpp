@@ -24,15 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_COLOR_HPP
 #define XCSOAR_SCREEN_COLOR_HPP
 
-#ifdef ENABLE_SDL
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Color.hpp"
-#else /* !OPENGL */
+#elif defined(ENABLE_SDL)
 #include "Screen/SDL/Color.hpp"
-#endif /* !OPENGL */
-#else /* !SDL */
+#else
 #include "Screen/GDI/Color.hpp"
-#endif /* !SDL */
+#endif
 
 #define COLOR_WHITE Color(0xff, 0xff, 0xff)
 #define COLOR_BLACK Color(0x00, 0x00, 0x00)

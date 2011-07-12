@@ -28,12 +28,8 @@ Copyright_License {
 #include "Screen/OpenGL/Features.hpp"
 #endif
 
-#ifdef ENABLE_SDL
-
-#else
-
+#ifdef USE_GDI
 #include "Screen/GDI/Features.hpp"
-
 #endif
 
 /**

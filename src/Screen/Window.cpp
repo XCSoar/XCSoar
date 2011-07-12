@@ -50,7 +50,7 @@ Window::assert_thread() const
 {
 #ifdef ENABLE_OPENGL
   assert(pthread_equal(pthread_self(), OpenGL::thread));
-#elif !defined(ENABLE_SDL)
+#elif defined(USE_GDI)
   assert(hWnd != NULL);
   assert(!::IsWindow(hWnd) ||
          ::GetWindowThreadProcessId(hWnd, NULL) == ::GetCurrentThreadId());
@@ -68,12 +68,12 @@ Window::reset()
   assert(IsScreenInitialized());
   assert_thread();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   on_destroy();
 
   width = 0;
   height = 0;
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
   ::DestroyWindow(hWnd);
 
   /* the on_destroy() method must have cleared the variable by
@@ -82,13 +82,13 @@ Window::reset()
 
   hWnd = NULL;
   prev_wndproc = NULL;
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 }
 
 ContainerWindow *
 Window::get_root_owner()
 {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   if (parent == NULL)
     /* no parent?  We must be a ContainerWindow instance */
     return (ContainerWindow *)this;
@@ -98,7 +98,7 @@ Window::get_root_owner()
     root = root->parent;
 
   return root;
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
 #ifndef _WIN32_WCE
   HWND hRoot = ::GetAncestor(hWnd, GA_ROOTOWNER);
   if (hRoot == NULL)
@@ -116,7 +116,7 @@ Window::get_root_owner()
   /* can't use the "checked" method get() because hRoot may be a
      dialog, and uses Dialog::DlgProc() */
   return (ContainerWindow *)get_unchecked(hRoot);
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 }
 
 bool
@@ -128,7 +128,7 @@ Window::on_create()
 bool
 Window::on_destroy()
 {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   if (capture)
     release_capture();
 
@@ -142,11 +142,11 @@ Window::on_destroy()
 #else
   EventQueue::purge(*this);
 #endif
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
   assert(hWnd != NULL);
 
   hWnd = NULL;
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 
   return true;
 }
@@ -185,7 +185,7 @@ Window::on_mouse_up(int x, int y)
 bool
 Window::on_mouse_double(int x, int y)
 {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   if (!double_clicks)
     return on_mouse_down(x, y);
 #endif
@@ -226,7 +226,7 @@ Window::on_command(unsigned id, unsigned code)
 bool
 Window::on_cancel_mode()
 {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   release_capture();
 #endif
 
@@ -236,31 +236,29 @@ Window::on_cancel_mode()
 bool
 Window::on_setfocus()
 {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   assert(!focused);
 
   focused = true;
   return true;
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
   return false;
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 }
 
 bool
 Window::on_killfocus()
 {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   assert(focused);
 
-#ifdef ENABLE_SDL
   release_capture();
-#endif
 
   focused = false;
   return true;
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
   return false;
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 }
 
 bool
@@ -280,7 +278,7 @@ Window::on_erase(Canvas &canvas)
 {
   /* if on_paint() is implemented, then don't erase the background;
      on_paint() will paint on top */
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   return false;
 #else
   return custom_painting;

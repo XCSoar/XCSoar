@@ -45,11 +45,11 @@ public:
 
   virtual ~PaintWindow();
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance);
 #endif
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   using Window::set;
 
   void set(ContainerWindow &parent,
@@ -57,7 +57,7 @@ public:
            const WindowStyle style=WindowStyle()) {
     set(&parent, left, top, width, height, style);
   }
-#else /* !SDL */
+#else /* USE_GDI */
   void set(ContainerWindow *parent, const TCHAR *cls,
            int left, int top, unsigned width, unsigned height,
            const WindowStyle style=WindowStyle()) {
@@ -76,7 +76,7 @@ public:
            const WindowStyle style=WindowStyle()) {
     set(parent, _T("PaintWindow"), left, top, width, height, style);
   }
-#endif /* !SDL */
+#endif /* USE_GDI */
 
   int get_left() const {
     return 0;
@@ -107,11 +107,11 @@ public:
    * occur in the main thread).
    */
   void invalidate() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     Window::invalidate();
-#else /* !ENABLE_SDL */
+#else
     ::InvalidateRect(hWnd, NULL, false);
-#endif /* !ENABLE_SDL */
+#endif
   }
 
   /**
@@ -119,23 +119,23 @@ public:
    * (which will occur in the main thread).
    */
   void invalidate(const PixelRect &rect) {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     invalidate();
-#else /* !ENABLE_SDL */
+#else
     ::InvalidateRect(hWnd, &rect, false);
-#endif /* !ENABLE_SDL */
+#endif
   }
 
   void update() {
     //assert_none_locked();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     // XXX
     expose();
-#else /* !ENABLE_SDL */
+#else
     ::UpdateWindow(hWnd);
     // duplicate in MainWindow
-#endif /* !ENABLE_SDL */
+#endif
   }
 };
 

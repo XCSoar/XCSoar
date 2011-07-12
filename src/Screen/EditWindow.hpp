@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Screen/Window.hpp"
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 #include <tstring.hpp>
 #include <algorithm>
 #endif
@@ -36,7 +36,7 @@ public:
   bool is_read_only;
 
 public:
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   EditWindowStyle():is_read_only(false) {
     text_style |= DT_LEFT | DT_VCENTER;
   }
@@ -56,7 +56,7 @@ public:
 #endif
 
   void read_only() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     is_read_only = true;
 #else
     style |= ES_READONLY;
@@ -64,7 +64,7 @@ public:
   }
 
   void multiline() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     text_style &= ~DT_VCENTER;
     text_style |= DT_WORDBREAK;
 #else
@@ -74,7 +74,7 @@ public:
   }
 
   void center() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     text_style &= ~DT_LEFT;
     text_style |= DT_CENTER;
 #else
@@ -88,7 +88,7 @@ public:
  * A simple text editor widget.
  */
 class EditWindow : public Window {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   bool read_only;
 
   tstring value;
@@ -102,7 +102,7 @@ public:
   unsigned get_row_count() const {
     assert_none_locked();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     const TCHAR *str = value.c_str();
     int row_count = 1;
 
@@ -111,47 +111,47 @@ public:
       row_count++;
     }
     return row_count;
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
     return ::SendMessage(hWnd, EM_GETLINECOUNT, 0, 0);
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
   }
 
   void set_text(const TCHAR *text) {
     assert_none_locked();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     if (text != NULL)
       value = text;
     else
       value.clear();
     invalidate();
-#else /* !ENABLE_SDL */
+#else
     ::SetWindowText(hWnd, text);
-#endif /* !ENABLE_SDL */
+#endif
   }
 
   void get_text(TCHAR *text, size_t max_length) {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     value.copy(text, std::min(max_length - 1, value.length()));
-#else /* !ENABLE_SDL */
+#else
     ::GetWindowText(hWnd, text, max_length);
-#endif /* !ENABLE_SDL */
+#endif
   }
 
   void set_read_only(bool value) {
     assert_none_locked();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     // XXX
-#else /* !ENABLE_SDL */
+#else
     ::SendMessage(hWnd, EM_SETREADONLY, (WPARAM)(BOOL)value, 0L);
-#endif /* !ENABLE_SDL */
+#endif
   }
 
   bool is_read_only() const {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     return read_only;
-#else /* !ENABLE_SDL */
+#else
     return (get_window_style() & ES_READONLY) != 0;
 #endif
   }
@@ -159,25 +159,25 @@ public:
   void set_selection(int start, int end) {
     assert_none_locked();
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     // XXX
-#else /* !ENABLE_SDL */
+#else
     ::SendMessage(hWnd, EM_SETSEL, (WPARAM)start, (LPARAM)end);
-#endif /* !ENABLE_SDL */
+#endif
   }
 
   void set_selection() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     // XXX
-#else /* !ENABLE_SDL */
+#else
     set_selection(0, -1);
-#endif /* !ENABLE_SDL */
+#endif
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 protected:
   virtual void on_paint(Canvas &canvas);
-#endif /* ENABLE_SDL */
+#endif /* !USE_GDI */
 };
 
 #endif

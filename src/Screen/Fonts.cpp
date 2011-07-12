@@ -121,7 +121,7 @@ InitialiseLogFonts()
     return;
   }
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
   int FontHeight = Layout::SmallScale(is_android() ? 30 : 24);
 #else
   int FontHeight = Layout::SmallScale(35);

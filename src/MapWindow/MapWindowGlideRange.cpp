@@ -316,7 +316,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
     glDisable(GL_BLEND);
     glDisable(GL_STENCIL_TEST);
 
-#elif !defined(ENABLE_SDL)
+#elif defined(USE_GDI)
 
     // Get a buffer for drawing a mask
     Canvas &buffer = buffer_canvas;
@@ -402,7 +402,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 
   glDisable(GL_STENCIL_TEST);
 
-#elif !defined(ENABLE_SDL)
+#elif defined(USE_GDI)
 
   // Get a buffer for drawing a mask
   Canvas &buffer = buffer_canvas;

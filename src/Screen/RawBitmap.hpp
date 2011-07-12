@@ -151,7 +151,7 @@ public:
    * Returns a pointer to the top-most row.
    */
   BGRColor *GetTopRow() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     return buffer;
 #else
   /* in WIN32 bitmaps, the bottom-most row comes first */
@@ -163,7 +163,7 @@ public:
    * Returns a pointer to the row below the current one.
    */
   BGRColor *GetNextRow(BGRColor *row) {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     return row + corrected_width;
 #else
     return row - corrected_width;

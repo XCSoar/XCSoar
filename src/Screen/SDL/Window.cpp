@@ -28,9 +28,9 @@ Copyright_License {
 #ifdef ANDROID
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
-#elif defined(ENABLE_SDL)
+#else
 #include "Screen/SDL/Event.hpp"
-#endif /* ENABLE_SDL */
+#endif
 
 void
 Window::set(ContainerWindow *parent,

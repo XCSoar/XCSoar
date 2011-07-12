@@ -102,7 +102,7 @@ MenuBar::Button::on_clicked()
   return true;
 }
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
 LRESULT
 MenuBar::Button::on_message(HWND hWnd, UINT message,
                             WPARAM wParam, LPARAM lParam)

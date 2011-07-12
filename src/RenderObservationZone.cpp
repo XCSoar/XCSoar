@@ -59,16 +59,16 @@ RenderObservationZone::draw_style(Canvas &canvas,
     glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
 
     canvas.select(Brush(color.with_alpha(64)));
-#elif defined(ENABLE_SDL)
-    canvas.select(Brush(color));
-#else /* !SDL */
+#elif defined(USE_GDI)
     canvas.mix_mask();
 
     // this color is used as the black bit
     canvas.set_text_color(color);
     // get brush, can be solid or a 1bpp bitmap
     canvas.select(airspace_look.brushes[settings.brushes[AATASK]]);
-#endif /* !SDL */
+#else /* !GDI */
+    canvas.select(Brush(color));
+#endif /* !GDI */
 
     canvas.null_pen();
     
@@ -94,7 +94,7 @@ RenderObservationZone::un_draw_style(Canvas &canvas) const
   if (layer == LAYER_SHADE) {
 #ifdef ENABLE_OPENGL
     glDisable(GL_BLEND);
-#elif !defined(ENABLE_SDL)
+#elif defined(USE_GDI)
     canvas.mix_copy();
 #endif /* GDI */
   }

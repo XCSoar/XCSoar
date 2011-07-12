@@ -95,7 +95,7 @@ public:
     // Enable "transparency" effect
 #ifdef ENABLE_OPENGL
     GLBlend blend(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
-#elif !defined(ENABLE_SDL)
+#elif defined(USE_GDI)
     canvas.mix_mask();
 #endif /* GDI */
 
@@ -132,7 +132,7 @@ public:
     // Disable "transparency" effect
 #ifdef ENABLE_OPENGL
     glDisable(GL_BLEND);
-#elif !defined(ENABLE_SDL)
+#elif defined(USE_GDI)
     canvas.mix_copy();
 #endif /* GDI */
 
@@ -163,7 +163,7 @@ public:
       return;
 
     // Select pens and brushes
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     Color color = airspace_look.colors[settings.colours[type]];
 #ifdef ENABLE_OPENGL
     color = color.with_alpha(48);

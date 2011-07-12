@@ -49,7 +49,7 @@ WndProperty::Editor::on_mouse_down(int x, int y)
     if (parent->on_mouse_down(x, y))
       return true;
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
 
   // If the Control is read-only -> drop this event,
   // so the default handler doesn't obtain the focus
@@ -175,7 +175,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 
   edit.set_font(*GetFont());
 
-#if !defined(ENABLE_SDL) && !defined(NDEBUG)
+#if defined(USE_GDI) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
 

@@ -30,7 +30,7 @@ Copyright_License {
 class ButtonWindowStyle : public WindowStyle {
 public:
   ButtonWindowStyle() {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     text_style |= DT_CENTER | DT_VCENTER | DT_WORDBREAK;
 #else
     style |= BS_PUSHBUTTON | BS_CENTER | BS_VCENTER;
@@ -38,7 +38,7 @@ public:
   }
 
   ButtonWindowStyle(const WindowStyle other):WindowStyle(other) {
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
     text_style |= DT_CENTER | DT_VCENTER | DT_WORDBREAK;
 #else
     style |= BS_PUSHBUTTON | BS_CENTER | BS_VCENTER;
@@ -46,20 +46,20 @@ public:
   }
 
   void multiline() {
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= BS_MULTILINE;
 #endif
   }
 
   void enable_custom_painting() {
     WindowStyle::enable_custom_painting();
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
     style |= BS_OWNERDRAW;
 #endif
   }
 };
 
-#ifdef ENABLE_SDL
+#ifndef USE_GDI
 
 #include "Screen/PaintWindow.hpp"
 
@@ -122,7 +122,7 @@ protected:
   virtual void on_paint(Canvas &canvas);
 };
 
-#else /* !ENABLE_SDL */
+#else /* USE_GDI */
 
 #include "Screen/Window.hpp"
 
@@ -190,6 +190,6 @@ public:
   const tstring get_text() const;
 };
 
-#endif /* !ENABLE_SDL */
+#endif /* USE_GDI */
 
 #endif

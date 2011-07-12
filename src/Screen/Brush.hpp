@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Features.hpp"
 
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
 class Bitmap;
 #endif
 
@@ -36,23 +36,23 @@ class Bitmap;
  * A Brush is used for drawing filled circles, rectangles and so on
  */
 class Brush
-#ifndef ENABLE_SDL
+#ifdef USE_GDI
   : private NonCopyable
 #endif
 {
 protected:
-  #ifdef ENABLE_SDL
+#ifndef USE_GDI
   bool hollow;
   Color color;
-  #else
+#else
   HBRUSH brush;
-  #endif
+#endif
 
 public:
-  #ifdef ENABLE_SDL
+#ifndef USE_GDI
   Brush():hollow(true) {}
   explicit Brush(const Color _color):hollow(false), color(_color)  {}
-  #else
+#else
   /** Base Constructor of the Brush class */
   Brush():brush(NULL) {}
 
@@ -95,17 +95,17 @@ public:
   bool
   defined() const
   {
-    #ifdef ENABLE_SDL
+#ifndef USE_GDI
     return !hollow;
-    #else
+#else
     return brush != NULL;
-    #endif
+#endif
   }
 
-  #ifdef ENABLE_SDL
+#ifndef USE_GDI
   bool is_hollow() const { return hollow; }
   const Color get_color() const { return color; }
-  #else
+#else
   /**
    * Returns the native HBRUSH object
    * @return The native HBRUSH object
@@ -113,7 +113,7 @@ public:
   HBRUSH native() const {
     return brush;
   }
-  #endif
+#endif
 
 #ifdef ENABLE_OPENGL
   /**
