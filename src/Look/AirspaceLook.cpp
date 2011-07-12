@@ -57,7 +57,7 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
                 colors[settings.colours[i]]);
 
   // airspace brushes and colors
-#ifndef ENABLE_SDL
+#ifdef HAVE_HATCHED_BRUSH
   bitmaps[0].load(IDB_AIRSPACE0);
   bitmaps[1].load(IDB_AIRSPACE1);
   bitmaps[2].load(IDB_AIRSPACE2);
@@ -74,7 +74,7 @@ AirspaceLook::Initialise(const AirspaceRendererSettings &settings)
 #ifdef HAVE_ALPHA_BLEND
   if (AlphaBlendAvailable())
 #endif
-#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
+#if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
     for (unsigned i = 0; i < NUMAIRSPACECOLORS; ++i)
       solid_brushes[i].set(colors[i]);
 #endif

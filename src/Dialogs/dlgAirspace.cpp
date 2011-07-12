@@ -62,7 +62,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   if (colormode) {
     canvas.white_pen();
-#ifdef ENABLE_SDL
+#ifndef HAVE_HATCHED_BRUSH
     canvas.select(look.solid_brushes[renderer.colours[i]]);
 #else
 #ifdef HAVE_ALPHA_BLEND
@@ -118,7 +118,7 @@ OnAirspaceListEnter(unsigned ItemIndex)
       look.Initialise(renderer);
     }
 
-#ifndef ENABLE_SDL
+#ifdef HAVE_HATCHED_BRUSH
 #ifdef HAVE_ALPHA_BLEND
     if (!renderer.transparency || !AlphaBlendAvailable()) {
 #endif

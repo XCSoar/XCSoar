@@ -30,6 +30,8 @@ Copyright_License {
  */
 #define HAVE_CLIPPING
 
+#define HAVE_HATCHED_BRUSH
+
 #ifdef _WIN32_WCE /* embedded Windows? */
 
 /* AlphaBlend() is implemented since WM5, but we need to load it

@@ -42,7 +42,7 @@ OnAirspaceColoursPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   const AirspaceLook &look = CommonInterface::main_window.look->airspace;
 
   canvas.black_pen();
-#ifdef ENABLE_SDL
+#ifndef HAVE_HATCHED_BRUSH
   canvas.select(look.solid_brushes[i]);
 #else
   canvas.background_transparent();

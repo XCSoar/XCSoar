@@ -338,9 +338,9 @@ private:
   void set_buffer_pens(const AbstractAirspace &airspace) {
     const unsigned color_index = settings.colours[airspace.get_type()];
 
-#ifdef ENABLE_SDL
+#ifndef HAVE_HATCHED_BRUSH
     m_buffer.select(airspace_look.solid_brushes[color_index]);
-#else /* !SDL */
+#else /* HAVE_HATCHED_BRUSH */
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency && AlphaBlendAvailable()) {
@@ -368,8 +368,8 @@ private:
       m_stencil.select(pen_thick);
       m_stencil.hollow_brush();
     }
-#endif
 
+#endif /* HAVE_HATCHED_BRUSH */
   }
 
   const AirspaceWarningCopy& m_warnings;

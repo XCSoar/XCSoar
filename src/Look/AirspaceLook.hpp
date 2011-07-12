@@ -36,14 +36,14 @@ struct AirspaceRendererSettings;
 struct AirspaceLook {
   static const Color colors[NUMAIRSPACECOLORS];
 
-#if defined(HAVE_ALPHA_BLEND) || defined(ENABLE_SDL)
+#if defined(HAVE_ALPHA_BLEND) || !defined(HAVE_HATCHED_BRUSH)
   /**
    * Non-pattern brushes used for transparent
    */
   Brush solid_brushes[NUMAIRSPACECOLORS];
 #endif
 
-#ifndef ENABLE_SDL
+#ifdef HAVE_HATCHED_BRUSH
   Bitmap bitmaps[NUMAIRSPACEBRUSHES];
   Brush brushes[NUMAIRSPACEBRUSHES];
 #endif
