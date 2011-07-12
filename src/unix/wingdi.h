@@ -32,19 +32,19 @@ enum {
 };
 
 typedef struct tagLOGFONT {
-	LONG lfHeight;
-	LONG lfWidth;
-	LONG lfEscapement;
-	LONG lfOrientation;
-	LONG lfWeight;
-	BYTE lfItalic;
-	BYTE lfUnderline;
-	BYTE lfStrikeOut;
-	BYTE lfCharSet;
-	BYTE lfOutPrecision;
-	BYTE lfClipPrecision;
-	BYTE lfQuality;
-	BYTE lfPitchAndFamily;
+  unsigned lfHeight;
+  unsigned lfWidth;
+  unsigned char lfEscapement;
+  unsigned char lfOrientation;
+  unsigned short lfWeight;
+  bool lfItalic;
+  bool lfUnderline;
+  bool lfStrikeOut;
+  unsigned char lfCharSet;
+  unsigned char lfOutPrecision;
+  unsigned char lfClipPrecision;
+  unsigned char lfQuality;
+  unsigned char lfPitchAndFamily;
 	char lfFaceName[LF_FACESIZE];
 } LOGFONT;
 
