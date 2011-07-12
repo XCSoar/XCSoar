@@ -34,7 +34,7 @@ Copyright_License {
 #include "Device/NullPort.hpp"
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Dialogs/Message.hpp"
+#include "Message.hpp"
 #include "Language/Language.hpp"
 #include "Asset.hpp"
 #include "../Simulator.hpp"
@@ -59,6 +59,7 @@ Copyright_License {
 #endif
 
 #include <assert.h>
+#include <windef.h> /* for MAX_PATH */
 
 // A note about locking.
 //  The ComPort RX threads lock using FlightData critical section.
@@ -190,6 +191,46 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
 #endif
 }
 
+/**
+ * The configured port failed to open; display an error message.
+ */
+static void
+PortOpenError(const DeviceConfig &config)
+{
+  TCHAR name_buffer[64];
+  const TCHAR *name = name_buffer;
+  switch (config.port_type) {
+  case DeviceConfig::DISABLED:
+    name = _("Disabled");
+    break;
+
+  case DeviceConfig::SERIAL:
+    name = config.path.c_str();
+    break;
+
+  case DeviceConfig::RFCOMM:
+    _sntprintf(name_buffer, 64, _T("Bluetooth %s"),
+               config.bluetooth_mac.c_str());
+    break;
+
+  case DeviceConfig::AUTO:
+    name = _("GPS Intermediate Driver");
+    break;
+
+  case DeviceConfig::INTERNAL:
+    name = _("Built-in GPS");
+    break;
+
+  case DeviceConfig::TCP_LISTENER:
+    name = _T("TCP port 4353");
+    break;
+  }
+
+  TCHAR msg[256];
+  _sntprintf(msg, 256, _("Unable to open port %s"), name);
+  Message::AddMessage(msg);
+}
+
 static bool
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
            DeviceDescriptor *&nmeaout)
@@ -212,8 +253,10 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
     return false;
 
   Port *Com = OpenPort(config, device);
-  if (Com == NULL)
+  if (Com == NULL) {
+    PortOpenError(config);
     return false;
+  }
 
   if (!device.Open(Com, Driver)) {
     delete Com;

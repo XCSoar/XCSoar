@@ -22,9 +22,6 @@ Copyright_License {
 */
 
 #include "Device/SerialPort.hpp"
-#include "Dialogs/Message.hpp"
-#include "Language/Language.hpp"
-#include "Message.hpp"
 #include "Asset.hpp"
 #include "OS/Sleep.h"
 
@@ -39,23 +36,6 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
-
-static void
-SerialPort_StatusMessage(unsigned type, const TCHAR *caption,
-                      const TCHAR *fmt, ...)
-{
-  TCHAR tmp[127];
-  va_list ap;
-
-  va_start(ap, fmt);
-  _vsntprintf(tmp, 127, fmt, ap);
-  va_end(ap);
-
-  if (caption)
-    MessageBoxX(tmp, caption, type);
-  else
-    Message::AddMessage(tmp);
-}
 
 SerialPort::SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
   :Port(_handler), baud_rate(_baud_rate),
@@ -102,10 +82,6 @@ SerialPort::Open()
 
   // If it fails to open the port, return false.
   if (hPort == INVALID_HANDLE_VALUE) {
-    // Could not open the port.
-    SerialPort_StatusMessage(MB_OK | MB_ICONINFORMATION, NULL,
-                          _("Unable to open port %s"), sPortName);
-
     return false;
   }
 
@@ -139,11 +115,6 @@ SerialPort::Open()
     // Could not create the read thread.
     CloseHandle(hPort);
     hPort = INVALID_HANDLE_VALUE;
-
-    // TODO code: SCOTT I18N - Fix this to sep the TEXT from PORT, TEXT can be
-    // gettext(), port added on new line
-    SerialPort_StatusMessage(MB_OK, _("Error"),
-                          _("Unable to change settings on port %s"), sPortName);
     return false;
   }
 
@@ -478,8 +449,6 @@ SerialPort::SetRxTimeout(unsigned Timeout)
     if (!is_embedded())
       Sleep(2000); // needed for windows bug
 
-    SerialPort_StatusMessage(MB_OK, _("Error"),
-                          _("Unable to set serial port timers %s"), sPortName);
     return false;
   }
 

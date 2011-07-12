@@ -22,9 +22,6 @@ Copyright_License {
 */
 
 #include "Device/TCPPort.hpp"
-#include "Dialogs/Message.hpp"
-#include "Language/Language.hpp"
-#include "Message.hpp"
 
 #include <unistd.h>
 #include <assert.h>
@@ -40,23 +37,6 @@ Copyright_License {
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #endif
-
-static void
-TCPPort_StatusMessage(unsigned type, const TCHAR *caption,
-                      const TCHAR *fmt, ...)
-{
-  TCHAR tmp[127];
-  va_list ap;
-
-  va_start(ap, fmt);
-  _vsntprintf(tmp, 127, fmt, ap);
-  va_end(ap);
-
-  if (caption)
-    MessageBoxX(tmp, caption, type);
-  else
-    Message::AddMessage(tmp);
-}
 
 TCPPort::TCPPort(unsigned _port, Handler &_handler)
   :Port(_handler), port(_port), rx_timeout(0),
@@ -77,8 +57,6 @@ TCPPort::Open()
 
   listener_fd = socket(AF_INET, SOCK_STREAM, 0);
   if (listener_fd < 0) {
-    TCPPort_StatusMessage(MB_OK | MB_ICONINFORMATION, NULL,
-                          _("Failed to create TCP socket"));
     return false;
   }
 
@@ -98,16 +76,12 @@ TCPPort::Open()
 
   if (bind(listener_fd, (const struct sockaddr *)&address,
            sizeof(address)) < 0) {
-    TCPPort_StatusMessage(MB_OK | MB_ICONINFORMATION, NULL,
-                          _("Failed to bind to TCP port %u"), port);
     close(listener_fd);
     listener_fd = -1;
     return false;
   }
 
   if (listen(listener_fd, 1) < 0) {
-    TCPPort_StatusMessage(MB_OK | MB_ICONINFORMATION, NULL,
-                          _("Failed to listen on TCP port %u"), port);
     close(listener_fd);
     listener_fd = -1;
     return false;

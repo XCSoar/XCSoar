@@ -22,9 +22,6 @@ Copyright_License {
 */
 
 #include "Device/TTYPort.hpp"
-#include "Dialogs/Message.hpp"
-#include "Language/Language.hpp"
-#include "Message.hpp"
 #include "Asset.hpp"
 #include "OS/Sleep.h"
 
@@ -37,23 +34,6 @@ Copyright_License {
 #include <assert.h>
 #include <tchar.h>
 #include <stdio.h>
-
-static void
-TTYPort_StatusMessage(unsigned type, const TCHAR *caption,
-                      const TCHAR *fmt, ...)
-{
-  TCHAR tmp[127];
-  va_list ap;
-
-  va_start(ap, fmt);
-  _vsntprintf(tmp, 127, fmt, ap);
-  va_end(ap);
-
-  if (caption)
-    MessageBoxX(tmp, caption, type);
-  else
-    Message::AddMessage(tmp);
-}
 
 TTYPort::TTYPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler)
   :Port(_handler), rx_timeout(0), baud_rate(_baud_rate),
@@ -74,8 +54,6 @@ TTYPort::Open()
 {
   fd = open(sPortName, O_RDWR | O_NOCTTY);
   if (fd < 0) {
-    TTYPort_StatusMessage(MB_OK | MB_ICONINFORMATION, NULL,
-                          _("Unable to open port %s"), sPortName);
     return false;
   }
 

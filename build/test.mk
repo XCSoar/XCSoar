@@ -1057,9 +1057,6 @@ READ_PORT_SOURCES = \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Compatibility/string.c \
-	$(TEST_SRC_DIR)/FakeLanguage.cpp \
-	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/ReadPort.cpp
 ifeq ($(HAVE_POSIX),y)
 READ_PORT_SOURCES += \
@@ -1085,9 +1082,6 @@ RUN_PORT_HANDLER_SOURCES = \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Compatibility/string.c \
-	$(TEST_SRC_DIR)/FakeLanguage.cpp \
-	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/RunPortHandler.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_PORT_HANDLER_SOURCES += \
