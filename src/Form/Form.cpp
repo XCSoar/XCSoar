@@ -231,7 +231,7 @@ WndForm::on_command(unsigned id, unsigned code)
     return true;
   }
 
-  return false;
+  return ContainerWindow::on_command(id, code);
 }
 
 void
