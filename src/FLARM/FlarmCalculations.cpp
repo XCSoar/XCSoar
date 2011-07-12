@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "FLARM/FlarmCalculations.h"
+#include "FLARM/FlarmCalculations.hpp"
 #include "FLARM/State.hpp"
 
 FlarmCalculations::~FlarmCalculations()

@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef FLARMCALCULATIONS_H
-#define FLARMCALCULATIONS_H
+#ifndef XCSOAR_FLARM_CALCULATIONS_HPP
+#define XCSOAR_FLARM_CALCULATIONS_HPP
 
 #include "FLARM/FlarmId.hpp"
 #include "ClimbAverageCalculator.hpp"

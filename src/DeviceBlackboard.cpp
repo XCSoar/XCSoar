@@ -27,7 +27,7 @@ Copyright_License {
 #include "UtilsSystem.hpp"
 #include "TeamCodeCalculation.hpp"
 #include "FLARM/FlarmDetails.hpp"
-#include "FLARM/FlarmCalculations.h"
+#include "FLARM/FlarmCalculations.hpp"
 #include "Asset.hpp"
 #include "Device/All.hpp"
 #include "Math/Constants.h"
