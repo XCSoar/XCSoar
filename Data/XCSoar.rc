@@ -312,6 +312,7 @@ sk.mo MO DISCARDABLE "../output/po/sk.mo"
 sr.mo MO DISCARDABLE "../output/po/sr.mo"
 sv.mo MO DISCARDABLE "../output/po/sv.mo"
 tr.mo MO DISCARDABLE "../output/po/tr.mo"
+uk.mo MO DISCARDABLE "../output/po/uk.mo"
 #endif
 
 LICENSE TEXT DISCARDABLE "../COPYING"

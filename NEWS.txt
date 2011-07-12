@@ -31,9 +31,13 @@ Version 6.1.3 - not yet released
   - task: support AGL maximum start height
 * user interface
   - translation updates
-  - new translation: Japanese
+  - new translations: Japanese, Ukrainian
   - support mouse wheel on Linux
   - fix duplicate text input in edit controls on PC
+  - update info boxes after leaving full-screen
+  - fix PNA model type
+* map
+  - fix map location when all devices fail
 
 Version 6.1.2 - 2011/06/28
 * devices

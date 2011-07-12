@@ -240,7 +240,7 @@ MainWindow::ReinitialiseLayout()
     return;
   }
 
-#ifndef ENABLE_SDL
+#ifndef ENABLE_OPENGL
   if (draw_thread == NULL)
     /* no layout changes during startup */
     return;

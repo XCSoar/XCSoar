@@ -284,9 +284,6 @@ InfoBoxManager::Event_Change(int i)
 void
 InfoBoxManager::DisplayInfoBox()
 {
-  if (InfoBoxesHidden)
-    return;
-
   int DisplayType[InfoBoxPanelConfig::MAX_INFOBOXES];
   static int DisplayTypeLast[InfoBoxPanelConfig::MAX_INFOBOXES];
 
@@ -381,7 +378,8 @@ InfoBoxManager::InfoBoxDrawIfDirty()
   // This should save lots of battery power due to CPU usage
   // of drawing the screen
 
-  if (InfoBoxesDirty && !XCSoarInterface::SettingsMap().ScreenBlanked) {
+  if (InfoBoxesDirty && !InfoBoxesHidden &&
+      !XCSoarInterface::SettingsMap().ScreenBlanked) {
     DisplayInfoBox();
     InfoBoxesDirty = false;
   }

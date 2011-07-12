@@ -199,15 +199,16 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     const SETTINGS_COMPUTER &settings, const TCHAR *astrAssetNumber)
 {
   int i;
-  TCHAR path[MAX_PATH];
 
   // chars must be legal in file names
   for (i = 0; i < 3; i++)
     strAssetNumber[i] = IsAlphaNum(strAssetNumber[i]) ?
                         strAssetNumber[i] : _T('A');
 
-  LocalPath(path, _T("logs"));
+  LocalPath(szLoggerFileName, _T("logs"));
+  Directory::Create(szLoggerFileName);
 
+  TCHAR name[64];
   for (i = 1; i < 99; i++) {
     // 2003-12-31-XXX-987-01.igc
     // long filename form of IGC file.
@@ -215,9 +216,8 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 
     if (!settings.LoggerShortName) {
       // Long file name
-      _stprintf(szLoggerFileName,
-                _T("%s" DIR_SEPARATOR_S "%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),
-          path,
+      _stprintf(name,
+                _T("%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),
                 gps_info.DateTime.year,
                 gps_info.DateTime.month,
                 gps_info.DateTime.day,
@@ -232,9 +232,8 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
       cmonth = NumToIGCChar(gps_info.DateTime.month);
       cday = NumToIGCChar(gps_info.DateTime.day);
       cflight = NumToIGCChar(i);
-      _stprintf(szLoggerFileName,
-                _T("%s" DIR_SEPARATOR_S "%c%c%cX%c%c%c%c.igc"),
-          path,
+      _stprintf(name,
+                _T("%c%c%cX%c%c%c%c.igc"),
           cyear,
           cmonth,
           cday,
@@ -245,6 +244,7 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
 
     }
 
+    LocalPath(szLoggerFileName, _T("logs"), name);
     if (!File::Exists(szLoggerFileName))
       break;  // file not exist, we'll use this name
   }

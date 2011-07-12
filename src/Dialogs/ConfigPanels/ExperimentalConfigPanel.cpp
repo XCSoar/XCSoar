@@ -40,14 +40,14 @@ ExperimentalConfigPanel::Init(WndForm *_wf)
   wf = _wf;
   WndProperty *wp;
 
-  if (!is_windows_ce() || is_altair()) {
+  if (!have_model_type()) {
     wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
     if (wp) {
       wp->hide();
     }
   }
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#ifdef HAVE_MODEL_TYPE
 // VENTA-ADDON Model change config menu 11
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));
   if (wp) {
@@ -71,7 +71,7 @@ ExperimentalConfigPanel::Save(bool &requirerestart)
 {
   bool changed = false;
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#ifdef HAVE_MODEL_TYPE
   // VENTA-ADDON MODEL CHANGE
   WndProperty *wp;
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxModel"));

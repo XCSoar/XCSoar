@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Asset.hpp"
 
-#if defined(_WIN32_WCE) && !defined(GNAV)
+#ifdef HAVE_MODEL_TYPE
 
 ModelType GlobalModelType = MODELTYPE_PNA_PNA;
 

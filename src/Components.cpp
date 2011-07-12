@@ -275,6 +275,11 @@ XCSoarInterface::Startup(HINSTANCE hInstance)
 
   operation.SetText(_("Initialising"));
 
+  /* create XCSoarData on the first start */
+  CreateDataPath();
+
+  InitAsset();
+
   LoadDisplayOrientation(operation);
 
   main_window.InitialiseConfigured();

@@ -34,13 +34,13 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "CommandLine.hpp"
 #include "MainWindow.hpp"
-#include "Asset.hpp"
 #include "Interface.hpp"
 #include "Compiler.h"
 #include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Graphics.hpp"
 #include "Net/Init.hpp"
+#include "UtilsSystem.hpp"
 
 /**
  * Main entry point for the whole XCSoar application
@@ -61,7 +61,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Net::Initialise();
 
   InitialiseDataPath();
-  InitAsset();
+  StartupLogFreeRamAndStorage();
 
   // Write startup note + version to logfile
   LogStartUp(_T("Starting XCSoar %s"), XCSoar_VersionString);
