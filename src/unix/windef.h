@@ -31,6 +31,4 @@ Copyright_License {
 typedef struct w32_handle *HANDLE;
 typedef HANDLE HINSTANCE;
 
-#define _cdecl
-
 #endif

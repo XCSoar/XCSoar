@@ -27,6 +27,10 @@ Copyright_License {
 #include <stdlib.h>
 #include <assert.h>
 
+#ifndef WIN32
+#define _cdecl
+#endif
+
 static int _cdecl
 MapWaypointLabelListCompare(const void *elem1, const void *elem2)
 {

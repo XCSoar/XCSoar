@@ -37,6 +37,10 @@ Copyright_License {
 #include <assert.h>
 #include <stdlib.h>
 
+#ifndef WIN32
+#define _cdecl
+#endif
+
 /**
  * Checks whether the given string str equals a xcsoar internal file's filename
  * @param str The string to check
