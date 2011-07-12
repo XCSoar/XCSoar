@@ -71,6 +71,8 @@ struct VARIO_INFO
    */
   fixed LiftDatabase[36];
 
+  void ClearLiftDatabase();
+
   void Clear();
 };
 

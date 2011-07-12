@@ -505,9 +505,7 @@ GlideComputerAirData::ResetLiftDatabase()
 {
   DERIVED_INFO &calculated = SetCalculated();
 
-  // Reset LiftDatabase to zero
-  for (unsigned i = 0; i < 36; i++)
-    calculated.LiftDatabase[i] = fixed_zero;
+  calculated.ClearLiftDatabase();
 
   calculated.trace_history.CirclingAverage.clear();
 }

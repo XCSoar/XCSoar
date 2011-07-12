@@ -24,6 +24,14 @@ Copyright_License {
 #include "VarioInfo.hpp"
 #include "Defines.h"
 
+#include <algorithm>
+
+void
+VARIO_INFO::ClearLiftDatabase()
+{
+  std::fill(LiftDatabase, LiftDatabase + 36, fixed_zero);
+}
+
 void
 VARIO_INFO::Clear()
 {
@@ -35,4 +43,6 @@ VARIO_INFO::Clear()
   AverageLD = fixed(INVALID_GR);
   LD = fixed(INVALID_GR);
   LDvario = fixed(INVALID_GR);
+
+  ClearLiftDatabase();
 }
