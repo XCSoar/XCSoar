@@ -40,6 +40,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Graphics.hpp"
+#include "UtilsSystem.hpp"
 
 /**
  * Main entry point for the whole XCSoar application
@@ -58,6 +59,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 {
   InitialiseDataPath();
+  StartupLogFreeRamAndStorage();
   InitAsset();
 
   // Write startup note + version to logfile
