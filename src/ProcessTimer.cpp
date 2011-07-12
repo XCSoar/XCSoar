@@ -56,14 +56,6 @@ ProcessTimer::HeapCompact()
 #endif
 
 void
-ProcessTimer::SystemProcessTimer()
-{
-#ifdef _WIN32_WCE
-  HeapCompact();
-#endif
-}
-
-void
 ProcessTimer::MessageProcessTimer()
 {
   // don't display messages if airspace warning dialog is active
@@ -139,6 +131,18 @@ SystemClockTimer()
 #else
   // XXX
 #endif
+}
+
+void
+ProcessTimer::SystemProcessTimer()
+{
+#ifdef _WIN32_WCE
+  HeapCompact();
+#endif
+
+  SystemClockTimer();
+
+  CheckDisplayTimeOut(false);
 }
 
 /**
@@ -254,10 +258,6 @@ SettingsProcessTimer()
 void
 ProcessTimer::CommonProcessTimer()
 {
-  SystemClockTimer();
-
-  CheckDisplayTimeOut(false);
-
   ActionInterface::DisplayModes();
   XCSoarInterface::ExchangeBlackboard();
 
