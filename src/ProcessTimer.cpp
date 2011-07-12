@@ -148,13 +148,20 @@ ProcessTimer::SystemProcessTimer()
 static void
 BlackboardProcessTimer()
 {
-  if (device_blackboard.expire_wall_clock())
+  device_blackboard.expire_wall_clock();
+
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const bool last_connected = basic.Connected;
+  const bool last_location_available = basic.LocationAvailable;
+
+  XCSoarInterface::ExchangeBlackboard();
+
+  if ((bool)basic.Connected != last_connected ||
+      (bool)basic.LocationAvailable != last_location_available)
     /* trigger a redraw when the connection was just lost, to show the
        new state; when no GPS is connected, no other entity triggers
        the redraw, so we have to do it */
     CommonInterface::main_window.full_redraw();
-
-  XCSoarInterface::ExchangeBlackboard();
 }
 
 /**
