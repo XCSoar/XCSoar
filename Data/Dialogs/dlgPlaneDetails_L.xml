@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="320" Height="240" Caption="Plane Details">
+<Form Caption="Plane Details">
   <Panel Height="26">
     <Label Caption="Registration:" X="2" Y="6" Height="-2" Width="88" />
     <Button Name="RegistrationButton" X="90" Y="2" Width="-112" Height="-2" OnClick="RegistrationClicked"/>

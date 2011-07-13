@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="240" Height="320" Caption="Plane Polar">
+<Form Caption="Plane Polar">
   <Panel Height="26">
     <Label Name="PolarLabel" Caption="Polar" X="2" Y="6" Height="-2" Width="-60" />
     <Label Name="InvalidLabel" Caption="Invalid" X="-50" Y="6" Height="-2" CaptionColor="0xFF0000" />

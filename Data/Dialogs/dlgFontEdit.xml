@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form X="5" Y="5" Width="240" Height="230" Caption="Edit Font">
+<Form Caption="Edit Font">
   <Edit Name="prpFontName" Caption="Font face" X="2" Width="235" Height="22" CaptionWidth="78" Help="Standard names of fonts available">
     <DataField DataType="enum" OnDataAccess="OnData"/>
   </Edit>

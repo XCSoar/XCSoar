@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="320" Height="240" Caption="Checklist">
+<Form Caption="Checklist">
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="160" Width="35" Height="28" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="160" Width="35" Height="28" OnClick="OnNextClicked" />
 

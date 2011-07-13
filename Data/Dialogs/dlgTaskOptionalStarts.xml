@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="240" Height="320" Caption="Alternate Start Points">
+<Form Caption="Alternate Start Points">
   <Button Name="cmdRelocate" Caption="Relocate" X="3" Y="2" Width="72" Height="35" OnClick="OnRelocateClicked"/>
   <Button Name="cmdRemove" Caption="Remove" X="77" Y="2" Width="72" Height="35" OnClick="OnRemoveClicked"/>
   <Button Caption="Close" X="170" Y="2" Width="67" Height="35" OnClick="OnCloseClicked"/>

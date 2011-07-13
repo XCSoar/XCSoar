@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="320" Height="240" Caption="Task Point Type">
+<Form Caption="Task Point Type">
   <Button Name="cmdSelect" Caption="Select" X="2" Y="2" Width="75" Height="35" OnClick="OnSelectClicked"/>
   <Button Name="cmdClose" Caption="Cancel" X="2" Y="100" Width="75" Height="35" OnClick="OnCloseClicked"/>
 

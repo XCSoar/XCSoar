@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="320" Height="240" Caption="Font Configuration">
+<Form Caption="Font Configuration">
   <Button Name="cmdClose" Caption="Close" X="5" Y="-33" Width="60" Height="28"/>
 
   <Edit Name="prpUseCustomFonts" Caption="Customize fonts" X="70" Y="1" Width="-2" Height="22" CaptionWidth="150">

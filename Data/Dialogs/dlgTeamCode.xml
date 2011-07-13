@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<Form X="0" Y="0" Width="240" Height="320" Caption="Team Code">
+<Form Caption="Team Code">
   <Button Name="cmdClose" Caption="Close" X="172" Y="270" Width="60" Height="28" OnClick="OnCloseClicked" />
   <Button Caption="Flarm Lock" X="8" Y="240" Width="110" Height="28" OnClick="OnFlarmLockClicked" />
   <Button Name="cmdSetCode" Caption="Set Code" X="8" Y="270" Width="110"  Height="28" />

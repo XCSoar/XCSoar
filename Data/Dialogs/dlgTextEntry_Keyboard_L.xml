@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="320" Height="240" Caption="Edit Text">
+<Form Caption="Edit Text">
   <Edit Name="prpText"    X="0" Y="2" Width="270" Height="22" ReadOnly="1" />
   <Button Name="btnBackspace" Caption="&lt;-"    X="272" Y="3" Width="36"  Height="20" OnClick="OnBackspace"/>
 

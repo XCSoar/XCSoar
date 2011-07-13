@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="320" Height="240" Caption="FLARM Traffic Details">
+<Form Caption="FLARM Traffic Details">
   <Button Name="cmdClose" Caption="Close" X="3" Y="2" Width="58" Height="28" />
   <Button Name="cmdSetAsTeamMate" Caption="Team" X="3" Y="32" Width="58" Height="28" />
 

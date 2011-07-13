@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="320" Height="240" Caption="Analysis">
+<Form Caption="Analysis">
   <Custom Name="frmGrid" X="90" Y="2" Width="-1" Height="218" Border="1" OnCreate="OnCreateChartControl" />
   <Custom Name="frmCrossSection" X="90" Y="2" Width="-1" Height="218" Border="1" OnCreate="OnCreateCrossSectionControl" />
 

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="240" Height="320" Caption="FLARM Traffic">
+<Form Caption="FLARM Traffic">
   <Button Name="cmdDetails" Caption="Details" X="3" Y="242" Width="58" Height="28" />
   <SymbolButton Name="cmdZoomIn" Caption="+" X="63" Y="242" Width="28" Height="28" />
   <SymbolButton Name="cmdZoomOut" Caption="-" X="93" Y="242" Width="28" Height="28" />

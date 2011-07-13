@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="240" Height="320" Caption="Picker">
+<Form Caption="Picker">
   <Button Name="cmdClose" Caption="Select" X="5" Y="-37" Width="70" Height="35" OnClick="OnCloseClicked"/>
 
   <Button Name="cmdCancel" Caption="Cancel" X="82" Y="-37" Width="70" Height="35" OnClick="OnCancelClicked"/>

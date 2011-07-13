@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Width="240" Height="320" Caption="FLARM Traffic Details">
+<Form Caption="FLARM Traffic Details">
   <Button Name="cmdCallsign" Caption="..." X="-38" Y="20" Width="36" Height="22"/>
 
   <Label X="3" Y="-97" Width="58" Height="16" Caption="Friends:" />
