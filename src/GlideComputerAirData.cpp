@@ -1052,7 +1052,7 @@ GlideComputerAirData::ThermalBand()
   if ((!Calculated().Circling) || negative(Calculated().Average30s))
     return;
 
-  tbi.add(dheight, Calculated().BruttoVario);
+  tbi.Add(dheight, Calculated().BruttoVario);
 }
 
 void

@@ -49,8 +49,8 @@ DeviceBlackboard::Initialise()
   ScopeLock protect(mutex);
 
   // Clear the gps_info and calculated_info
-  gps_info.reset();
-  calculated_info.reset();
+  gps_info.Reset();
+  calculated_info.Reset();
 
   // Set GPS assumed time to system time
   gps_info.DateTime = BrokenDateTime::NowUTC();
@@ -249,7 +249,7 @@ DeviceBlackboard::expire_wall_clock()
     if (!basic.Connected)
       continue;
 
-    basic.expire_wall_clock();
+    basic.ExpireWallClock();
     if (!basic.Connected)
       modified = true;
   }
@@ -267,17 +267,17 @@ DeviceBlackboard::ScheduleMerge()
 void
 DeviceBlackboard::Merge()
 {
-  real_data.reset();
+  real_data.Reset();
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    per_device_data[i].expire();
-    real_data.complement(per_device_data[i]);
+    per_device_data[i].Expire();
+    real_data.Complement(per_device_data[i]);
   }
 
   if (replay_data.Connected) {
-    replay_data.expire();
+    replay_data.Expire();
     SetBasic() = replay_data;
   } else if (simulator_data.Connected) {
-    simulator_data.expire();
+    simulator_data.Expire();
     SetBasic() = simulator_data;
   } else {
     SetBasic() = real_data;

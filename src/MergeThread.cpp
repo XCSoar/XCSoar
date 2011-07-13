@@ -29,8 +29,8 @@ MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
   :WorkerThread(150, 50, 20),
    device_blackboard(_device_blackboard)
 {
-  last_fix.reset();
-  last_any.reset();
+  last_fix.Reset();
+  last_any.Reset();
 }
 
 void

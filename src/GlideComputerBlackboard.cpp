@@ -41,8 +41,8 @@ GlideComputerBlackboard::GlideComputerBlackboard()
 void
 GlideComputerBlackboard::ResetFlight(const bool full)
 {
-  gps_info.reset();
-  calculated_info.reset();
+  gps_info.Reset();
+  calculated_info.Reset();
 }
 
 /**

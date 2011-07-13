@@ -134,13 +134,6 @@ struct DERIVED_INFO:
   public TERRAIN_ALT_INFO,
   public TEAMCODE_INFO
 {
-  /**
-   * @todo Reset to cleared state
-   */
-  void reset();
-
-  void expire(fixed Time);
-
   /** GPS date and time (local) */
   BrokenDateTime local_date_time;
 
@@ -210,7 +203,14 @@ struct DERIVED_INFO:
 
   AirspaceWarningsInfo airspace_warnings;
 
+  /**
+   * @todo Reset to cleared state
+   */
+  void Reset();
+
   void ResetFlight(bool full);
+
+  void Expire(fixed Time);
 };
 
 #endif

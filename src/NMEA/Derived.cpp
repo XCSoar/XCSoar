@@ -47,7 +47,7 @@ AirspaceWarningsInfo::Clear()
 }
 
 void
-DERIVED_INFO::reset()
+DERIVED_INFO::Reset()
 {
   VARIO_INFO::Clear();
   CLIMB_INFO::Clear();
@@ -67,7 +67,7 @@ DERIVED_INFO::reset()
   common_stats.reset();
 
   flight.flying_state_reset();
-  thermal_band.clear();
+  thermal_band.Clear();
   thermal_locator.Clear();
 
   trace_history.clear();
@@ -78,7 +78,7 @@ DERIVED_INFO::reset()
 }
 
 void
-DERIVED_INFO::expire(fixed Time)
+DERIVED_INFO::Expire(fixed Time)
 {
   /* the estimated wind remains valid for an hour */
   estimated_wind_available.Expire(Time, fixed(3600));

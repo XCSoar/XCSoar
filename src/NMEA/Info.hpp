@@ -59,7 +59,7 @@ struct SWITCH_INFO
   bool FlapLanding;
   // bool Stall;
 
-  void reset();
+  void Reset();
 };
 
 /**
@@ -117,7 +117,7 @@ struct GPS_STATE
   bool AndroidInternalGPS;
 #endif
 
-  void reset();
+  void Reset();
 };
 
 /**
@@ -489,7 +489,7 @@ struct NMEA_INFO {
   /**
    * Clears all information, start with tabula rasa.
    */
-  void reset();
+  void Reset();
 
   void ResetFlight(bool full);
 
@@ -499,14 +499,14 @@ struct NMEA_INFO {
    * GPS time cannot be used here, because a disconnected device would
    * not update its GPS time.
    */
-  void expire_wall_clock();
+  void ExpireWallClock();
 
   /**
    * Check expiry times of all attributes which have a time stamp
    * associated with them.  This should be called after the GPS time
    * stamp has been updated.
    */
-  void expire();
+  void Expire();
 
   /**
    * Adds data from the specified object, unless already present in
@@ -515,7 +515,7 @@ struct NMEA_INFO {
    * Note that this does not copy calculated values which are managed
    * outside of the NMEA parser.
    */
-  void complement(const NMEA_INFO &add);
+  void Complement(const NMEA_INFO &add);
 };
 
 #endif

@@ -50,21 +50,22 @@ struct ThermalBandInfo
   /** Average climb rate in each bucket */ 
   fixed ThermalProfileW[NUMTHERMALBUCKETS];
 
-  void clear();
+  void Clear();
 
   /**
    * Calculates the bucket number for the specified height.
    */
-  unsigned bucket_for_height(fixed height) const;
+  unsigned BucketForHeight(fixed height) const;
 
   /**
    * Calculates the base height of the specified bucket.
    */
-  fixed bucket_height(unsigned bucket) const;
+  fixed BucketHeight(unsigned bucket) const;
 
-  void add(const fixed height, const fixed total_energy_vario);
+  void Add(const fixed height, const fixed total_energy_vario);
+
 private:
-  void expand(const fixed height);
+  void Expand(const fixed height);
 };
 
 #endif

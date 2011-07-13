@@ -53,7 +53,7 @@ struct ACCELERATION_STATE
    */
   fixed Gload;
 
-  void reset() {
+  void Reset() {
     Available = false;
   }
 
@@ -61,7 +61,7 @@ struct ACCELERATION_STATE
    * Adds data from the specified object, unless already present in
    * this one.
    */
-  void complement(const ACCELERATION_STATE &add);
+  void Complement(const ACCELERATION_STATE &add);
 };
 
 #endif

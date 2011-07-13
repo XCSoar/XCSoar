@@ -138,8 +138,8 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
   BasicComputer basic_computer;
 
   NMEA_INFO basic, last;
-  basic.reset();
-  last.reset();
+  basic.Reset();
+  last.Reset();
 
   char *line;
   while ((line = reader.read()) != NULL) {

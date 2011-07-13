@@ -24,7 +24,7 @@ Copyright_License {
 #include "NMEA/Acceleration.hpp"
 
 void
-ACCELERATION_STATE::complement(const ACCELERATION_STATE &add)
+ACCELERATION_STATE::Complement(const ACCELERATION_STATE &add)
 {
   /* calculated: BankAngle, PitchAngle */
 

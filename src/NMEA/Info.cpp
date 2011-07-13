@@ -25,7 +25,7 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 void
-SWITCH_INFO::reset()
+SWITCH_INFO::Reset()
 {
   AirbrakeLocked = false;
   FlapPositive = false;
@@ -42,7 +42,7 @@ SWITCH_INFO::reset()
 }
 
 void
-GPS_STATE::reset()
+GPS_STATE::Reset()
 {
   real = false;
   Simulator = false;
@@ -54,12 +54,12 @@ GPS_STATE::reset()
 }
 
 void
-NMEA_INFO::reset()
+NMEA_INFO::Reset()
 {
   Connected.Clear();
 
-  gps.reset();
-  acceleration.reset();
+  gps.Reset();
+  acceleration.Reset();
 
   LocationAvailable.Clear();
 
@@ -105,7 +105,7 @@ NMEA_INFO::reset()
   SupplyBatteryVoltageAvailable.Clear();
 
   SwitchStateAvailable = false;
-  SwitchState.reset();
+  SwitchState.Reset();
 
   StallRatioAvailable.Clear();
 
@@ -115,7 +115,7 @@ NMEA_INFO::reset()
 }
 
 void
-NMEA_INFO::expire_wall_clock()
+NMEA_INFO::ExpireWallClock()
 {
 #ifdef ANDROID
   if (gps.AndroidInternalGPS)
@@ -126,13 +126,13 @@ NMEA_INFO::expire_wall_clock()
   const fixed monotonic = fixed(MonotonicClockMS()) / 1000;
   Connected.Expire(monotonic, fixed(10));
   if (!Connected) {
-    gps.reset();
+    gps.Reset();
     flarm.clear();
   }
 }
 
 void
-NMEA_INFO::expire()
+NMEA_INFO::Expire()
 {
   LocationAvailable.Expire(Time, fixed(10));
   track_available.Expire(Time, fixed(10));
@@ -155,7 +155,7 @@ NMEA_INFO::expire()
 }
 
 void
-NMEA_INFO::complement(const NMEA_INFO &add)
+NMEA_INFO::Complement(const NMEA_INFO &add)
 {
   if (!add.Connected)
     /* if there is no heartbeat on the other object, there cannot be
@@ -170,7 +170,7 @@ NMEA_INFO::complement(const NMEA_INFO &add)
 
   Connected.Complement(add.Connected);
 
-  acceleration.complement(add.acceleration);
+  acceleration.Complement(add.acceleration);
 
   if (LocationAvailable.Complement(add.LocationAvailable))
     Location = add.Location;

@@ -65,7 +65,7 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
   assert(!ticker);
 
   device_blackboard.mutex.Lock();
-  device_blackboard.SetRealState(index).reset();
+  device_blackboard.SetRealState(index).Reset();
   device_blackboard.ScheduleMerge();
   device_blackboard.mutex.Unlock();
 
@@ -112,7 +112,7 @@ DeviceDescriptor::Close()
   ticker = false;
 
   device_blackboard.mutex.Lock();
-  device_blackboard.SetRealState(index).reset();
+  device_blackboard.SetRealState(index).Reset();
   device_blackboard.ScheduleMerge();
   device_blackboard.mutex.Unlock();
 }

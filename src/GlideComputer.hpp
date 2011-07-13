@@ -69,7 +69,7 @@ public:
   void Initialise();
 
   void Expire() {
-    SetCalculated().expire(Basic().Time);
+    SetCalculated().Expire(Basic().Time);
   }
 
   bool ProcessGPS(); // returns true if idle needs processing

@@ -97,7 +97,7 @@ int main(int argc, char **argv)
   NMEAParser parser;
 
   NMEA_INFO data, last;
-  data.reset();
+  data.Reset();
 
   static DERIVED_INFO calculated;
   static SETTINGS_COMPUTER settings_computer;

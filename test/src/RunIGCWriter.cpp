@@ -95,7 +95,7 @@ int main(int argc, char **argv)
   NMEAParser parser;
 
   NMEA_INFO data;
-  data.reset();
+  data.Reset();
 
   char buffer[1024];
   for (unsigned i = 0; i < 10 &&

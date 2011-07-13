@@ -207,7 +207,7 @@ GenerateBlackboard(MapWindow &map)
   DERIVED_INFO derived_info;
   SETTINGS_COMPUTER settings_computer;
 
-  nmea_info.reset();
+  nmea_info.Reset();
   nmea_info.Time = fixed(1297230000);
   nmea_info.Connected.Update(nmea_info.Time);
   nmea_info.gps.SatellitesUsed = 4;

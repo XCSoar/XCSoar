@@ -26,7 +26,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-ThermalBandInfo::clear()
+ThermalBandInfo::Clear()
 {
   working_band_height = working_band_ceiling = fixed_zero;
   working_band_fraction = fixed_zero;
@@ -40,7 +40,7 @@ ThermalBandInfo::clear()
 }
 
 unsigned
-ThermalBandInfo::bucket_for_height(fixed height) const
+ThermalBandInfo::BucketForHeight(fixed height) const
 {
   if (negative(height))
     return 0;
@@ -59,7 +59,7 @@ ThermalBandInfo::bucket_for_height(fixed height) const
 }
 
 fixed
-ThermalBandInfo::bucket_height(unsigned bucket) const
+ThermalBandInfo::BucketHeight(unsigned bucket) const
 {
   assert(bucket < NUMTHERMALBUCKETS);
 
@@ -67,27 +67,27 @@ ThermalBandInfo::bucket_height(unsigned bucket) const
 }
 
 void
-ThermalBandInfo::add(const fixed height, const fixed total_energy_vario)
+ThermalBandInfo::Add(const fixed height, const fixed total_energy_vario)
 {
   if (height > MaxThermalHeight) {
     // moved beyond ceiling, so redistribute buckets
-    expand(height);
+    Expand(height);
   }
 
-  const unsigned bucket = bucket_for_height(height);
+  const unsigned bucket = BucketForHeight(height);
   ThermalProfileW[bucket] += total_energy_vario;
   ThermalProfileN[bucket]++;
 }
 
 void
-ThermalBandInfo::expand(const fixed height)
+ThermalBandInfo::Expand(const fixed height)
 {
   ThermalBandInfo new_tbi;
 
   // calculate new buckets so glider is below max
   fixed hbuk = MaxThermalHeight / NUMTHERMALBUCKETS;
 
-  new_tbi.clear();
+  new_tbi.Clear();
   new_tbi.MaxThermalHeight = std::max(fixed_one, MaxThermalHeight);
 
   // increase ceiling until reach required height
@@ -97,10 +97,10 @@ ThermalBandInfo::expand(const fixed height)
 
   // shift data into new buckets
   for (unsigned i = 0; i < NUMTHERMALBUCKETS; ++i) {
-    const fixed h = bucket_height(i);
+    const fixed h = BucketHeight(i);
     // height of center of bucket
     if (ThermalProfileN[i] > 0) {
-      const unsigned j = new_tbi.bucket_for_height(h);
+      const unsigned j = new_tbi.BucketForHeight(h);
       new_tbi.ThermalProfileW[j] += ThermalProfileW[i];
       new_tbi.ThermalProfileN[j] += ThermalProfileN[i];
     }
