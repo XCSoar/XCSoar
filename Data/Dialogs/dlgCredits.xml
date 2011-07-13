@@ -1,11 +1,11 @@
 <?xml version="1.0"?>
 
 <Form Name="frmConfiguration" Width="240" Height="320" Caption="Configuration">
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="240" Width="35" Height="28" OnClick="OnNext" />
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="240" Width="35" Height="28" OnClick="OnPrev" />
-  <Button Name="cmdClose" Caption="Close" X="5" Y="270" Width="60" Height="28" OnClick="OnClose" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="37" Y="-30" Width="35" Height="28" OnClick="OnNext" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-30" Width="35" Height="28" OnClick="OnPrev" />
+  <Button Name="cmdClose" Caption="Close" X="-62" Y="-30" Width="60" Height="28" OnClick="OnClose" />
 
-  <Tabbed Name="tab" X="0" Y="0" Width="0" Height="222">
+  <Tabbed Name="tab" X="0" Y="0" Height="-32">
     <Panel Name="frmInfo">
       <Canvas X="2" Y="2" Width="-2" OnPaint="OnLogoPaint" />
     </Panel>
