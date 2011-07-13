@@ -7,7 +7,7 @@
     <DataField DataType="enum"/>
   </Edit>
 
-  <Edit Name="prpTime" Caption="Time" X="2" Width="-2" Height="22" CaptionWidth="45" Help="TODO">
+  <Edit Name="prpTime" Caption="Time" X="2" Width="-2" Height="22" CaptionWidth="45">
     <DataField DataType="enum"/>
   </Edit>
 </Form>
