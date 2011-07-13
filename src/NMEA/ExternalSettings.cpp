@@ -75,6 +75,37 @@ ExternalSettings::Complement(const ExternalSettings &add)
   }
 }
 
+void
+ExternalSettings::EliminateRedundant(const ExternalSettings &other,
+                                     const ExternalSettings &last)
+{
+  if (mac_cready_available && other.CompareMacCready(mac_cready) &&
+      !last.CompareMacCready(mac_cready))
+    mac_cready_available.Clear();
+
+  if (ballast_fraction_available &&
+      other.CompareBallastFraction(ballast_fraction) &&
+      !last.CompareBallastFraction(ballast_fraction))
+    ballast_fraction_available.Clear();
+
+  if (ballast_overload_available &&
+      other.CompareBallastOverload(ballast_overload) &&
+      !last.CompareBallastOverload(ballast_overload))
+    ballast_overload_available.Clear();
+
+  if (wing_loading_available && other.CompareWingLoading(wing_loading) &&
+      !last.CompareWingLoading(wing_loading))
+    wing_loading_available.Clear();
+
+  if (bugs_available && other.CompareBugs(bugs) &&
+      !last.CompareBugs(bugs))
+    bugs_available.Clear();
+
+  if (qnh_available && other.CompareQNH(qnh.get_QNH()) &&
+      !last.CompareQNH(qnh.get_QNH()))
+    qnh_available.Clear();
+}
+
 bool
 ExternalSettings::ProvideMacCready(fixed value, fixed time)
 {

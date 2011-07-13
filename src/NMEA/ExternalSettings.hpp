@@ -70,6 +70,18 @@ struct ExternalSettings {
   void Complement(const ExternalSettings &add);
 
   /**
+   * Clear attributes that have the same values like those in the
+   * "other" object, but only if that is different from the values in
+   * "last".
+   *
+   * This is used by the device code to break the feedback loop: when
+   * a setting is sent to the device, and the device reports back the
+   * new setting, it is ignored, by calling this method.
+   */
+  void EliminateRedundant(const ExternalSettings &other,
+                          const ExternalSettings &last);
+
+  /**
    * Compare the MacCready setting with the specified value.
    *
    * @return true if the current setting is the same, false if the

@@ -69,6 +69,9 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
   device_blackboard.ScheduleMerge();
   device_blackboard.mutex.Unlock();
 
+  settings_sent.Clear();
+  settings_received.Clear();
+
   Com = _port;
   Driver = _driver;
 
@@ -115,6 +118,9 @@ DeviceDescriptor::Close()
   device_blackboard.SetRealState(index).Reset();
   device_blackboard.ScheduleMerge();
   device_blackboard.mutex.Unlock();
+
+  settings_sent.Clear();
+  settings_received.Clear();
 }
 
 const TCHAR *
@@ -150,10 +156,25 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEA_INFO &info)
 {
   assert(line != NULL);
 
+  /* restore the driver's ExternalSettings */
+  const ExternalSettings old_settings = info.settings;
+  info.settings = settings_received;
+
   if (device != NULL && device->ParseNMEA(line, info)) {
     info.Connected.Update(fixed(MonotonicClockMS()) / 1000);
+
+    /* clear the settings when the values are the same that we already
+       sent to the device */
+    const ExternalSettings old_received = settings_received;
+    settings_received = info.settings;
+    info.settings.EliminateRedundant(settings_sent, old_received);
+
     return true;
   }
+
+  /* no change - restore the ExternalSettings that we returned last
+     time */
+  info.settings = old_settings;
 
   // Additional "if" to find GPS strings
   if (parser.ParseNMEAString_Internal(line, info)) {
@@ -165,21 +186,54 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEA_INFO &info)
 }
 
 bool
-DeviceDescriptor::PutMacCready(fixed MacCready)
+DeviceDescriptor::PutMacCready(fixed value)
 {
-  return device != NULL ? device->PutMacCready(MacCready) : true;
+  if (device == NULL || settings_sent.CompareMacCready(value))
+    return true;
+
+  if (!device->PutMacCready(value))
+    return false;
+
+  ScopeLock protect(device_blackboard.mutex);
+  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  settings_sent.mac_cready = value;
+  settings_sent.mac_cready_available = basic.Time;
+
+  return true;
 }
 
 bool
-DeviceDescriptor::PutBugs(fixed bugs)
+DeviceDescriptor::PutBugs(fixed value)
 {
-  return device != NULL ? device->PutBugs(bugs) : true;
+  if (device == NULL || settings_sent.CompareBugs(value))
+    return true;
+
+  if (!device->PutBugs(value))
+    return false;
+
+  ScopeLock protect(device_blackboard.mutex);
+  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  settings_sent.bugs = value;
+  settings_sent.bugs_available = basic.Time;
+
+  return true;
 }
 
 bool
-DeviceDescriptor::PutBallast(fixed ballast)
+DeviceDescriptor::PutBallast(fixed value)
 {
-  return device != NULL ? device->PutBallast(ballast) : true;
+  if (device == NULL || settings_sent.CompareBallastFraction(value))
+    return true;
+
+  if (!device->PutBallast(value))
+    return false;
+
+  ScopeLock protect(device_blackboard.mutex);
+  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  settings_sent.ballast_fraction = value;
+  settings_sent.ballast_fraction_available = basic.Time;
+
+  return true;
 }
 
 bool
@@ -201,10 +255,21 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency)
 }
 
 bool
-DeviceDescriptor::PutQNH(const AtmosphericPressure &pres,
+DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
                          const DERIVED_INFO &calculated)
 {
-  return device != NULL ? device->PutQNH(pres, calculated) : true;
+  if (device == NULL || settings_sent.CompareQNH(value.get_QNH()))
+    return true;
+
+  if (!device->PutQNH(value, calculated))
+    return false;
+
+  ScopeLock protect(device_blackboard.mutex);
+  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  settings_sent.qnh = value;
+  settings_sent.qnh_available = basic.Time;
+
+  return true;
 }
 
 bool
@@ -297,6 +362,7 @@ DeviceDescriptor::LineReceived(const char *line)
   }
 
   ScopeLock protect(device_blackboard.mutex);
-  if (ParseNMEA(line, device_blackboard.SetRealState(index)))
+  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  if (ParseNMEA(line, basic))
     device_blackboard.ScheduleMerge();
 }

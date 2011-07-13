@@ -82,6 +82,11 @@ protected:
   MoreData &SetMoreData() { return gps_info; }
 
 public:
+  const NMEA_INFO &RealState(unsigned i) const {
+    assert(i < NUMDEV);
+    return per_device_data[i];
+  }
+
   NMEA_INFO &SetRealState(unsigned i) {
     assert(i < NUMDEV);
     return per_device_data[i];

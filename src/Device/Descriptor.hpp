@@ -27,6 +27,7 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "Device/Parser.hpp"
 #include "RadioFrequency.hpp"
+#include "NMEA/ExternalSettings.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -59,6 +60,24 @@ public:
 #endif
 
   NMEAParser parser;
+
+  /**
+   * The settings that were sent to the device.  This is used to check
+   * if the device is sending back the new configuration; then the
+   * device isn't actually sending a new setting, it is merely
+   * repeating the settings we sent it.  This should not make XCSoar
+   * reconfigure itself.
+   */
+  ExternalSettings settings_sent;
+
+  /**
+   * The settings that were received from the device.  This temporary
+   * buffer mirrors NMEA_INFO::settings; NMEA_INFO::settings may get
+   * cleared with ExternalSettings::EliminateRedundant(), so this one
+   * always preserves the original values from the device, without
+   * having to do a full NMEA_INFO copy.
+   */
+  ExternalSettings settings_received;
 
   bool ticker;
 
