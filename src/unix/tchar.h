@@ -43,7 +43,6 @@ typedef wchar_t TCHAR;
 #define _fputts fputws
 #define _tcsdup wcsdup
 #define _tcscpy wcscpy
-#define tcslen wcslen
 #define _tcscmp wcscmp
 #define _tcsncmp wcscmp
 #define _tcsicmp wcscasecmp
@@ -94,7 +93,6 @@ typedef char TCHAR;
 #define _fputts fputs
 #define _tcsdup strdup
 #define _tcscpy strcpy
-#define tcslen strlen
 #define _tcscmp strcmp
 #define _tcsncmp strncmp
 #define _tcsicmp strcasecmp

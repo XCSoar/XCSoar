@@ -261,7 +261,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
     return;
 
   p = duplicated = _tcsdup(text);
-  len = tcslen(duplicated);
+  len = _tcslen(duplicated);
   while ((p = _tcschr(p, _T('\n'))) != NULL) {
 #ifndef ANDROID
     // hide \r chars. this is a HACK! centered text will be missplaced.
@@ -275,7 +275,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
   // simple wordbreak algorithm. looks for single spaces only, no tabs,
   // no grouping of multiple spaces
   if (format & DT_WORDBREAK) {
-    for (i = 0; i < len; i += tcslen(duplicated + i) + 1) {
+    for (i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
       PixelSize sz = text_size(duplicated + i);
       TCHAR *prev_p = NULL;
 
@@ -299,7 +299,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
   skip = ::TTF_FontLineSkip(font);
 #endif
   y = (format & DT_VCENTER) ? (rc->top + rc->bottom - lines*skip)/2 : rc->top;
-  for (i = 0; i < len; i += tcslen(duplicated + i) + 1) {
+  for (i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
     if (duplicated[i] != _T('\0')) {
       if (format & (DT_RIGHT | DT_CENTER)) {
         PixelSize sz = text_size(duplicated + i);
