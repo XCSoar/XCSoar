@@ -326,7 +326,7 @@ GlideComputerAirData::GPSVario()
 
   if (positive(dT)) {
     const fixed Gain = basic.NavAltitude - LastBasic().NavAltitude;
-    const fixed GainTE = calculated.TEAltitude - calculated.TEAltitude;
+    const fixed GainTE = calculated.TEAltitude - LastCalculated().TEAltitude;
 
     // estimate value from GPS
     vario.GPSVario = Gain / dT;
