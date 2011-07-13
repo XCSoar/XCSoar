@@ -20,6 +20,8 @@ Version 6.1.3 - not yet released
   - fix PNA model type
 * map
   - fix map location when all devices fail
+* Android
+  - support hardware keyboard in custom XCI files
 
 Version 6.1.2 - 2011/06/28
 * devices

@@ -25,16 +25,40 @@ Copyright_License {
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
 
+/**
+ * @see http://developer.android.com/reference/android/view/KeyEvent.html
+ */
+enum {
+  KEYCODE_0 = 0x07,
+  KEYCODE_9 = 0x10,
+  KEYCODE_A = 0x1d,
+  KEYCODE_Z = 0x36,
+};
+
+static unsigned
+TranslateKeyCode(unsigned key_code)
+{
+  if (key_code >= KEYCODE_0 && key_code <= KEYCODE_9)
+    return '0' + (key_code - KEYCODE_0);
+
+  if (key_code >= KEYCODE_A && key_code <= KEYCODE_Z)
+    /* return upper-case character, because InputEvents::findKey()
+       calls _totupper() */
+    return 'A' + (key_code - KEYCODE_A);
+
+  return key_code;
+}
+
 void
 Java_org_xcsoar_EventBridge_onKeyDown(JNIEnv *env, jclass cls, jint key_code)
 {
-  event_queue->push(Event(Event::KEY_DOWN, key_code));
+  event_queue->push(Event(Event::KEY_DOWN, TranslateKeyCode(key_code)));
 }
 
 void
 Java_org_xcsoar_EventBridge_onKeyUp(JNIEnv *env, jclass cls, jint key_code)
 {
-  event_queue->push(Event(Event::KEY_UP, key_code));
+  event_queue->push(Event(Event::KEY_UP, TranslateKeyCode(key_code)));
 }
 
 void
