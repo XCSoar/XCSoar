@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
 #include "Device/NullPort.hpp"
@@ -96,7 +96,8 @@ int main(int argc, char **argv)
 
   NMEAParser parser;
 
-  NMEA_INFO data, last;
+  MoreData data;
+  NMEA_INFO last;
   data.Reset();
 
   static DERIVED_INFO calculated;

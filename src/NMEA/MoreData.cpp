@@ -27,6 +27,8 @@ void
 MoreData::Reset()
 {
   NavAltitude = fixed_zero;
+  EnergyHeight = fixed_zero;
+  TEAltitude = fixed_zero;
 
   NMEA_INFO::Reset();
 }

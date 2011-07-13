@@ -41,8 +41,6 @@ Copyright_License {
 
 #include <algorithm>
 
-#define fixed_inv_2g fixed(1.0/(2.0*9.81))
-
 using std::min;
 using std::max;
 
@@ -89,7 +87,6 @@ GlideComputerAirData::ResetFlight(const bool full)
 void
 GlideComputerAirData::ProcessFast()
 {
-  EnergyHeight();
   BruttoVario();
   NettoVario();
 }
@@ -103,7 +100,6 @@ GlideComputerAirData::ProcessBasic()
   TerrainHeight();
   ProcessSun();
 
-  EnergyHeight();
   GPSVario(); // <-- note inserted here, as depends on energy height
   BruttoVario();
   NettoVario();
@@ -243,27 +239,6 @@ GlideComputerAirData::Heading()
 }
 
 /**
- * Calculates energy height on TAS basis
- *
- * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
- */
-void
-GlideComputerAirData::EnergyHeight()
-{
-  const MoreData &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
-
-  if (basic.AirspeedAvailable)
-    calculated.EnergyHeight = sqr(basic.TrueAirspeed) * fixed_inv_2g;
-  else
-    /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
-       of the glider for sure. */
-    calculated.EnergyHeight = fixed_zero;
-
-  calculated.TEAltitude = basic.NavAltitude + calculated.EnergyHeight;
-}
-
-/**
  * Calculates the vario values for gps vario, gps total energy vario
  * Sets Vario to GPSVario or received Vario data from instrument
  */
@@ -271,7 +246,6 @@ void
 GlideComputerAirData::GPSVario()
 {
   const MoreData &basic = Basic();
-  const DERIVED_INFO &calculated = Calculated();
   VARIO_INFO &vario = SetCalculated();
 
   // Calculate time passed since last calculation
@@ -279,7 +253,7 @@ GlideComputerAirData::GPSVario()
 
   if (positive(dT)) {
     const fixed Gain = basic.NavAltitude - LastBasic().NavAltitude;
-    const fixed GainTE = calculated.TEAltitude - calculated.TEAltitude;
+    const fixed GainTE = basic.TEAltitude - LastBasic().TEAltitude;
 
     // estimate value from GPS
     vario.GPSVario = Gain / dT;
@@ -375,7 +349,7 @@ GlideComputerAirData::CurrentThermal()
   if (positive(calculated.ClimbStartTime)) {
     current_thermal.start_time = calculated.ClimbStartTime;
     current_thermal.end_time = Basic().Time;
-    current_thermal.gain = calculated.TEAltitude - calculated.ClimbStartAlt;
+    current_thermal.gain = Basic().TEAltitude - calculated.ClimbStartAlt;
     current_thermal.CalculateAll();
   } else
     current_thermal.Clear();
@@ -842,7 +816,7 @@ GlideComputerAirData::Turning()
       calculated.TurnStartTime = Basic().Time;
       calculated.TurnStartLocation = Basic().Location;
       calculated.TurnStartAltitude = Basic().NavAltitude;
-      calculated.TurnStartEnergyHeight = calculated.EnergyHeight;
+      calculated.TurnStartEnergyHeight = Basic().EnergyHeight;
       calculated.TurnMode = WAITCLIMB;
     }
     if (!forcecircling)
@@ -887,7 +861,7 @@ GlideComputerAirData::Turning()
       calculated.TurnStartTime = Basic().Time;
       calculated.TurnStartLocation = Basic().Location;
       calculated.TurnStartAltitude = Basic().NavAltitude;
-      calculated.TurnStartEnergyHeight = calculated.EnergyHeight;
+      calculated.TurnStartEnergyHeight = Basic().EnergyHeight;
 
       // JMW Transition to cruise, due to not properly turning
       calculated.TurnMode = WAITCRUISE;
@@ -977,7 +951,7 @@ GlideComputerAirData::LastThermalStats()
     return;
 
   fixed ThermalGain = calculated.CruiseStartAlt
-      + calculated.EnergyHeight - calculated.ClimbStartAlt;
+    + Basic().EnergyHeight - calculated.ClimbStartAlt;
   if (!positive(ThermalGain))
     return;
 
@@ -1013,7 +987,7 @@ GlideComputerAirData::WorkingBand()
   const fixed h_safety = SettingsComputer().route_planner.safety_height_terrain +
     calculated.TerrainBase;
 
-  tbi.working_band_height = calculated.TEAltitude - h_safety;
+  tbi.working_band_height = Basic().TEAltitude - h_safety;
   if (negative(tbi.working_band_height)) {
     tbi.working_band_fraction = fixed_zero;
     return;
@@ -1026,7 +1000,7 @@ GlideComputerAirData::WorkingBand()
     tbi.working_band_fraction = fixed_one;
 
   tbi.working_band_ceiling = std::max(max_height + h_safety,
-                                      calculated.TEAltitude);
+                                      Basic().TEAltitude);
 }
 
 void

@@ -148,12 +148,6 @@ struct DERIVED_INFO:
   AtmosphericPressure pressure;
   Validity pressure_available;
 
-  /** Energy height excess to slow to best glide speed @author JMW */
-  fixed EnergyHeight;
-
-  /** Nav Altitude + Energy height (m) */
-  fixed TEAltitude;
-
   ClimbHistory climb_history;
 
   /**

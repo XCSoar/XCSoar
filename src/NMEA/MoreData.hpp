@@ -35,6 +35,12 @@ struct MoreData : public NMEA_INFO {
   /** Altitude used for navigation (GPS or Baro) */
   fixed NavAltitude;
 
+  /** Energy height excess to slow to best glide speed */
+  fixed EnergyHeight;
+
+  /** Nav Altitude + Energy height (m) */
+  fixed TEAltitude;
+
   void Reset();
 };
 

@@ -46,7 +46,7 @@ MergeThread::Tick()
     device_blackboard.SettingsComputer();
 
   computer.Fill(device_blackboard.SetMoreData(), settings_computer);
-  computer.Compute(device_blackboard.SetBasic(), last_fix,
+  computer.Compute(device_blackboard.SetMoreData(), last_fix,
                    device_blackboard.Calculated(), settings_computer);
 
   flarm_computer.Process(device_blackboard.SetBasic().flarm,

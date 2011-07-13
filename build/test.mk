@@ -1343,6 +1343,7 @@ RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(SRC)/BasicComputer.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Checksum.cpp \

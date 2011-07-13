@@ -27,6 +27,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 
 #define fixed_inv_g fixed(1.0/9.81)
+#define fixed_inv_2g fixed(1.0/(2.0*9.81))
 #define fixed_small fixed(0.001)
 
 static void
@@ -159,6 +160,24 @@ ComputeAirspeed(NMEA_INFO &basic, const DERIVED_INFO &calculated)
 }
 
 /**
+ * Calculates energy height on TAS basis
+ *
+ * \f${m/2} \times v^2 = m \times g \times h\f$ therefore \f$h = {v^2}/{2 \times g}\f$
+ */
+static void
+ComputeEnergyHeight(MoreData &basic)
+{
+  if (basic.AirspeedAvailable)
+    basic.EnergyHeight = sqr(basic.TrueAirspeed) * fixed_inv_2g;
+  else
+    /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
+       of the glider for sure. */
+    basic.EnergyHeight = fixed_zero;
+
+  basic.TEAltitude = basic.NavAltitude + basic.EnergyHeight;
+}
+
+/**
  * Calculates the turn rate of the heading,
  * the estimated bank angle and
  * the estimated pitch angle
@@ -207,7 +226,7 @@ BasicComputer::Fill(MoreData &data, const SETTINGS_COMPUTER &settings_computer)
 }
 
 void
-BasicComputer::Compute(NMEA_INFO &data, const NMEA_INFO &last,
+BasicComputer::Compute(MoreData &data, const NMEA_INFO &last,
                        const DERIVED_INFO &calculated,
                        const SETTINGS_COMPUTER &settings_computer)
 {
@@ -217,5 +236,6 @@ BasicComputer::Compute(NMEA_INFO &data, const NMEA_INFO &last,
   ComputeTrack(data, last);
   ComputeGroundSpeed(data, last);
   ComputeAirspeed(data, calculated);
+  ComputeEnergyHeight(data);
   ComputeDynamics(data, calculated);
 }

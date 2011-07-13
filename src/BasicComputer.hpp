@@ -49,7 +49,7 @@ public:
    * @param calculations the most up-to-date version of calculated values
    * @param settings_computer the computer settings
    */
-  void Compute(NMEA_INFO &data, const NMEA_INFO &last,
+  void Compute(MoreData &data, const NMEA_INFO &last,
                const DERIVED_INFO &calculated,
                const SETTINGS_COMPUTER &settings_computer);
 };
