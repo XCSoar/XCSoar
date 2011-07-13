@@ -130,6 +130,14 @@ protected:
 
 public:
   /**
+   * Configure a new MacCready setting in #SETTINGS_COMPUTER, and
+   * forward it to all XCSoar modules that want it.
+   *
+   * @param to_devices send the new settings to all devices?
+   */
+  static void SetMacCready(fixed mc, bool to_devices=true);
+
+  /**
    * Call this after SETTINGS_MAP has been modified with
    * SetSettingsMap().  It sends the new values to all sub systems,
    * and optionally forces a redraw.

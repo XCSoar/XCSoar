@@ -41,6 +41,7 @@ Copyright_License {
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
 #include "CalculationThread.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 
 bool CommonInterface::movement_detected = false;
 
@@ -86,6 +87,34 @@ ActionInterface::SendSettingsComputer()
   main_window.map->SetSettingsComputer(SettingsComputer());
   calculation_thread->SetSettingsComputer(SettingsComputer());
   calculation_thread->SetScreenDistanceMeters(main_window.map->VisibleProjection().GetScreenDistanceMeters());
+}
+
+void
+ActionInterface::SetMacCready(fixed mc, bool to_devices)
+{
+  /* update interface settings */
+
+  GlidePolar &polar = SetSettingsComputer().glide_polar_task;
+  polar.SetMC(mc);
+
+  /* update InfoBoxes (that might show the MacCready setting) */
+
+  InfoBoxManager::SetDirty();
+
+  /* send to calculation thread and trigger recalculation */
+
+  if (protected_task_manager != NULL)
+    protected_task_manager->set_glide_polar(polar);
+
+  if (calculation_thread != NULL) {
+    calculation_thread->SetSettingsComputer(SettingsComputer());
+    calculation_thread->Trigger();
+  }
+
+  /* send to external devices */
+
+  if (to_devices)
+    device_blackboard.SetMC(mc);
 }
 
 /**

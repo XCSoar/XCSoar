@@ -193,19 +193,14 @@ MacCreadyProcessTimer()
   static ExternalSettings last_external_settings;
   static Validity last_auto_mac_cready;
 
-  SETTINGS_COMPUTER &settings_computer = CommonInterface::SetSettingsComputer();
   const NMEA_INFO &basic = CommonInterface::Basic();
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
-  GlidePolar &glide_polar = settings_computer.glide_polar_task;
 
   if (basic.settings.mac_cready_available.Modified(last_external_settings.mac_cready_available)) {
-    glide_polar.SetMC(basic.settings.mac_cready);
-    if (protected_task_manager != NULL)
-      protected_task_manager->set_glide_polar(glide_polar);
+    ActionInterface::SetMacCready(basic.settings.mac_cready, false);
   } else if (calculated.auto_mac_cready_available.Modified(last_auto_mac_cready)) {
     last_auto_mac_cready = calculated.auto_mac_cready_available;
-    glide_polar.SetMC(calculated.auto_mac_cready);
-    device_blackboard.SetMC(calculated.auto_mac_cready);
+    ActionInterface::SetMacCready(calculated.auto_mac_cready);
   }
 
   last_external_settings = basic.settings;

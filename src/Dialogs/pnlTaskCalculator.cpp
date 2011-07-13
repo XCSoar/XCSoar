@@ -59,14 +59,6 @@ GetCruiseEfficiency(void)
 }
 
 static void
-SetMC(fixed mc) {
-  GlidePolar &polar = XCSoarInterface::SetSettingsComputer().glide_polar_task;
-  polar.SetMC(mc);
-  protected_task_manager->set_glide_polar(polar);
-  device_blackboard.SetMC(mc);
-}
-
-static void
 RefreshCalculator(void)
 {
   WndProperty* wp;
@@ -194,13 +186,13 @@ pnlTaskCalculator::OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_
       MACCREADY = XCSoarInterface::Calculated().TotalHeightClimb /
                   XCSoarInterface::Calculated().timeCircling;
       df->Set(Units::ToUserVSpeed(MACCREADY));
-      SetMC(MACCREADY);
+      ActionInterface::SetMacCready(MACCREADY);
       RefreshCalculator();
     }
     break;
   case DataField::daChange:
     MACCREADY = Units::ToSysVSpeed(df->GetAsFixed());
-    SetMC(MACCREADY);
+    ActionInterface::SetMacCready(MACCREADY);
     RefreshCalculator();
     break;
 
