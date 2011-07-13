@@ -249,10 +249,6 @@ GlideComputerAirData::NettoVario()
                                                     basic.acceleration.Gload)
     /* the glider sink rate is useless when not flying */
     : fixed_zero;
-
-  vario.NettoVario = basic.NettoVarioAvailable
-    ? basic.NettoVario
-    : basic.BruttoVario - vario.GliderSinkRate;
 }
 
 void
@@ -285,7 +281,7 @@ GlideComputerAirData::Average30s()
     vario_30s_filter.reset();
     netto_30s_filter.reset();
     calculated.Average30s = basic.BruttoVario;
-    calculated.NettoAverage30s = calculated.NettoVario;
+    calculated.NettoAverage30s = basic.NettoVario;
   }
 
   if (!time_advanced())
@@ -297,7 +293,7 @@ GlideComputerAirData::Average30s()
 
   for (unsigned i = 0; i < Elapsed; ++i) {
     vario_30s_filter.update(basic.BruttoVario);
-    netto_30s_filter.update(calculated.NettoVario);
+    netto_30s_filter.update(basic.NettoVario);
   }
   calculated.Average30s = vario_30s_filter.average();
   calculated.NettoAverage30s = netto_30s_filter.average();

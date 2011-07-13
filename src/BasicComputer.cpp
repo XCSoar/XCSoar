@@ -206,6 +206,19 @@ ComputeBruttoVario(MoreData &basic)
 }
 
 /**
+ * Compute the NettoVario value if it's unavailable.
+ */
+static void
+ComputeNettoVario(MoreData &basic, const VARIO_INFO &vario)
+{
+  if (basic.NettoVarioAvailable)
+    /* got it already */
+    return;
+
+  basic.NettoVario = basic.BruttoVario - vario.GliderSinkRate;
+}
+
+/**
  * Calculates the turn rate of the heading,
  * the estimated bank angle and
  * the estimated pitch angle
@@ -267,5 +280,6 @@ BasicComputer::Compute(MoreData &data, const MoreData &last,
   ComputeEnergyHeight(data);
   ComputeGPSVario(data, last);
   ComputeBruttoVario(data);
+  ComputeNettoVario(data, calculated);
   ComputeDynamics(data, calculated);
 }

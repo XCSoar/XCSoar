@@ -43,7 +43,7 @@ ToAircraftState(const MoreData &info, const DERIVED_INFO &calculated)
 
   /* VARIO_INFO */
   aircraft.Vario = info.BruttoVario;
-  aircraft.NettoVario = calculated.NettoVario;
+  aircraft.NettoVario = info.NettoVario;
 
   /* FLYING_STATE */
   (FLYING_STATE &)aircraft = calculated.flight;
