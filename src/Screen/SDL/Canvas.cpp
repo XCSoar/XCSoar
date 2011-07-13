@@ -262,24 +262,30 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
 #endif
   int max_lines = (rc->bottom - rc->top + skip - 1) / skip;
 
-  TCHAR *p, *duplicated;
-  p = duplicated = _tcsdup(text);
-  size_t len = _tcslen(duplicated);
+  size_t len = _tcslen(text);
+  TCHAR *duplicated = new TCHAR[len + 1], *p = duplicated;
   int lines = 1;
-  while ((p = _tcschr(p, _T('\n'))) != NULL) {
-#ifndef ANDROID
-    // hide \r chars. this is a HACK! centered text will be missplaced.
-    if (p > duplicated && p[-1] == _T('\r'))
-      p[-1] = _T(' ');
-#endif
-    *p++ = _T('\0');
-    lines++;
+  for (const TCHAR *i = text; *i != _T('\0'); ++i) {
+    TCHAR ch = *i;
+    if (ch == _T('\n')) {
+      /* explicit line break */
 
-    if (lines >= max_lines) {
-      len = p - duplicated - 1;
-      break;
-    }
+      if (++lines >= max_lines)
+        break;
+
+      ch = _T('\0');
+    } else if (ch == _T('\r'))
+      /* skip */
+      continue;
+    else if ((unsigned)ch < 0x20)
+      /* replace non-printable characters */
+      ch = _T(' ');
+
+    *p++ = ch;
   }
+
+  *p = _T('\0');
+  len = p - duplicated;
 
   // simple wordbreak algorithm. looks for single spaces only, no tabs,
   // no grouping of multiple spaces
@@ -326,7 +332,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
       break;
   }
 
-  free(duplicated);
+  delete[] duplicated;
 }
 
 void
