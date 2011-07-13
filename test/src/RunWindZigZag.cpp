@@ -96,8 +96,7 @@ int main(int argc, char **argv)
 
   NMEAParser parser;
 
-  MoreData data;
-  NMEA_INFO last;
+  MoreData data, last;
   data.Reset();
 
   static DERIVED_INFO calculated;

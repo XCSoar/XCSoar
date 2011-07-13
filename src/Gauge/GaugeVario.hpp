@@ -110,7 +110,7 @@ public:
              const WindowStyle style=WindowStyle());
 
 protected:
-  const NMEA_INFO &Basic() const {
+  const MoreData &Basic() const {
     return blackboard.Basic();
   }
 

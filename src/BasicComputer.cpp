@@ -178,12 +178,40 @@ ComputeEnergyHeight(MoreData &basic)
 }
 
 /**
+ * Calculates the vario values for gps vario, gps total energy vario
+ * Sets Vario to GPSVario or received Vario data from instrument
+ */
+static void
+ComputeGPSVario(MoreData &basic, const MoreData &last)
+{
+  // Calculate time passed since last calculation
+  const fixed dT = basic.Time - last.Time;
+
+  if (positive(dT)) {
+    const fixed Gain = basic.NavAltitude - last.NavAltitude;
+    const fixed GainTE = basic.TEAltitude - last.TEAltitude;
+
+    // estimate value from GPS
+    basic.GPSVario = Gain / dT;
+    basic.GPSVarioTE = GainTE / dT;
+  }
+}
+
+static void
+ComputeBruttoVario(MoreData &basic)
+{
+  basic.BruttoVario = basic.TotalEnergyVarioAvailable
+    ? basic.TotalEnergyVario
+    : basic.GPSVario;
+}
+
+/**
  * Calculates the turn rate of the heading,
  * the estimated bank angle and
  * the estimated pitch angle
  */
 static void
-ComputeDynamics(NMEA_INFO &basic, const DERIVED_INFO &calculated)
+ComputeDynamics(MoreData &basic, const DERIVED_INFO &calculated)
 {
   if (calculated.flight.Flying &&
       (positive(basic.GroundSpeed) || calculated.wind.is_non_zero())) {
@@ -204,7 +232,7 @@ ComputeDynamics(NMEA_INFO &basic, const DERIVED_INFO &calculated)
 
     // estimate pitch angle (assuming balanced turn)
     if (basic.AirspeedAvailable && basic.TotalEnergyVarioAvailable)
-      basic.acceleration.PitchAngle = Angle::radians(atan2(calculated.GPSVario - basic.TotalEnergyVario,
+      basic.acceleration.PitchAngle = Angle::radians(atan2(basic.GPSVario - basic.TotalEnergyVario,
                                                            basic.TrueAirspeed));
     else
       basic.acceleration.PitchAngle = Angle::native(fixed_zero);
@@ -226,7 +254,7 @@ BasicComputer::Fill(MoreData &data, const SETTINGS_COMPUTER &settings_computer)
 }
 
 void
-BasicComputer::Compute(MoreData &data, const NMEA_INFO &last,
+BasicComputer::Compute(MoreData &data, const MoreData &last,
                        const DERIVED_INFO &calculated,
                        const SETTINGS_COMPUTER &settings_computer)
 {
@@ -237,5 +265,7 @@ BasicComputer::Compute(MoreData &data, const NMEA_INFO &last,
   ComputeGroundSpeed(data, last);
   ComputeAirspeed(data, calculated);
   ComputeEnergyHeight(data);
+  ComputeGPSVario(data, last);
+  ComputeBruttoVario(data);
   ComputeDynamics(data, calculated);
 }

@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef BASIC_COMPUTER_HPP
 #define BASIC_COMPUTER_HPP
 
-struct NMEA_INFO;
 struct MoreData;
 struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
@@ -49,7 +48,7 @@ public:
    * @param calculations the most up-to-date version of calculated values
    * @param settings_computer the computer settings
    */
-  void Compute(MoreData &data, const NMEA_INFO &last,
+  void Compute(MoreData &data, const MoreData &last,
                const DERIVED_INFO &calculated,
                const SETTINGS_COMPUTER &settings_computer);
 };

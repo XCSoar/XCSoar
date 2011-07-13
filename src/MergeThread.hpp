@@ -27,7 +27,7 @@ Copyright_License {
 #include "Thread/WorkerThread.hpp"
 #include "BasicComputer.hpp"
 #include "FLARM/FlarmComputer.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 
 class DeviceBlackboard;
 
@@ -42,7 +42,7 @@ class MergeThread : public WorkerThread {
    * The previous values at the time of the last GPS fix (last
    * LocationAvailable modification).
    */
-  NMEA_INFO last_fix;
+  MoreData last_fix;
 
   /**
    * The previous values at the time of the last update of any

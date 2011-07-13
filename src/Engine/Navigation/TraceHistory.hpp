@@ -27,8 +27,7 @@ Copyright_License {
 
 class TraceVariableHistory: public OverwritingRingBuffer<fixed, 30> {};
 
-struct NMEA_INFO;
-struct DERIVED_INFO;
+struct MoreData;
 
 class TraceHistory {
 public:
@@ -36,7 +35,7 @@ public:
   TraceVariableHistory NettoVario;
   TraceVariableHistory CirclingAverage;
 
-  void append(const NMEA_INFO& basic, const DERIVED_INFO& calculated);
+  void append(const MoreData &basic);
   void clear();
 };
 

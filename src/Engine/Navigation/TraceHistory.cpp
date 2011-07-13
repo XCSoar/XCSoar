@@ -21,15 +21,14 @@ Copyright_License {
 }
 */
 #include "TraceHistory.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include <assert.h>
 
 void
-TraceHistory::append(const NMEA_INFO& basic, const DERIVED_INFO& calculated)
+TraceHistory::append(const MoreData &basic)
 {
-  BruttoVario.push(calculated.BruttoVario);
-  NettoVario.push(calculated.NettoVario);
+  BruttoVario.push(basic.BruttoVario);
+  NettoVario.push(basic.NettoVario);
 }
 
 void

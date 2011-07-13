@@ -96,8 +96,6 @@ protected:
 private:
   void Heading();
   void EnergyHeight();
-  void GPSVario();
-  void BruttoVario();
   void NettoVario();
   void AverageClimbRate();
   void Average30s();

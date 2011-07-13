@@ -88,7 +88,7 @@ GlideComputer::ProcessGPS()
   PeriodClock clock;
   clock.update();
 
-  const NMEA_INFO &basic = Basic();
+  const MoreData &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
   calculated.local_date_time = basic.DateTime + GetUTCOffset();
@@ -126,7 +126,7 @@ GlideComputer::ProcessGPS()
 
   // update basic trace history
   if (time_advanced())
-    calculated.trace_history.append(basic, Calculated());
+    calculated.trace_history.append(basic);
 
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(*this);

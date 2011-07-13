@@ -36,8 +36,6 @@ void
 VARIO_INFO::Clear()
 {
   GliderSinkRate = fixed_zero;
-  GPSVario = GPSVarioTE = fixed_zero;
-  BruttoVario = fixed_zero;
   NettoVario = fixed_zero;
   CruiseLD = fixed(INVALID_GR);
   AverageLD = fixed(INVALID_GR);

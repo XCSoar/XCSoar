@@ -41,7 +41,7 @@ MergeThread::Tick()
 
   device_blackboard.Merge();
 
-  const NMEA_INFO &basic = device_blackboard.Basic();
+  const MoreData &basic = device_blackboard.Basic();
   const SETTINGS_COMPUTER &settings_computer =
     device_blackboard.SettingsComputer();
 

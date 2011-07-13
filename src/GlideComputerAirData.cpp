@@ -87,7 +87,6 @@ GlideComputerAirData::ResetFlight(const bool full)
 void
 GlideComputerAirData::ProcessFast()
 {
-  BruttoVario();
   NettoVario();
 }
 
@@ -100,8 +99,6 @@ GlideComputerAirData::ProcessBasic()
   TerrainHeight();
   ProcessSun();
 
-  GPSVario(); // <-- note inserted here, as depends on energy height
-  BruttoVario();
   NettoVario();
 }
 
@@ -125,7 +122,7 @@ GlideComputerAirData::ProcessVertical()
 
   thermallocator.Process(calculated.Circling,
                          basic.Time, basic.Location,
-                         calculated.NettoVario,
+                         basic.NettoVario,
                          calculated.wind, calculated.thermal_locator);
 
   CuSonde::updateMeasurements(basic, calculated);
@@ -238,44 +235,10 @@ GlideComputerAirData::Heading()
   }
 }
 
-/**
- * Calculates the vario values for gps vario, gps total energy vario
- * Sets Vario to GPSVario or received Vario data from instrument
- */
-void
-GlideComputerAirData::GPSVario()
-{
-  const MoreData &basic = Basic();
-  VARIO_INFO &vario = SetCalculated();
-
-  // Calculate time passed since last calculation
-  const fixed dT = basic.Time - LastBasic().Time;
-
-  if (positive(dT)) {
-    const fixed Gain = basic.NavAltitude - LastBasic().NavAltitude;
-    const fixed GainTE = basic.TEAltitude - LastBasic().TEAltitude;
-
-    // estimate value from GPS
-    vario.GPSVario = Gain / dT;
-    vario.GPSVarioTE = GainTE / dT;
-  }
-}
-
-void
-GlideComputerAirData::BruttoVario()
-{
-  const NMEA_INFO &basic = Basic();
-  VARIO_INFO &vario = SetCalculated();
-
-  vario.BruttoVario = basic.TotalEnergyVarioAvailable
-    ? basic.TotalEnergyVario
-    : vario.GPSVario;
-}
-
 void
 GlideComputerAirData::NettoVario()
 {
-  const NMEA_INFO &basic = Basic();
+  const MoreData &basic = Basic();
   const DERIVED_INFO &calculated = Calculated();
   const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
   VARIO_INFO &vario = SetCalculated();
@@ -289,7 +252,7 @@ GlideComputerAirData::NettoVario()
 
   vario.NettoVario = basic.NettoVarioAvailable
     ? basic.NettoVario
-    : vario.BruttoVario - vario.GliderSinkRate;
+    : basic.BruttoVario - vario.GliderSinkRate;
 }
 
 void
@@ -315,13 +278,13 @@ GlideComputerAirData::AverageClimbRate()
 void
 GlideComputerAirData::Average30s()
 {
-  const NMEA_INFO &basic = Basic();
+  const MoreData &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
   if (!time_advanced() || calculated.Circling != LastCalculated().Circling) {
     vario_30s_filter.reset();
     netto_30s_filter.reset();
-    calculated.Average30s = calculated.BruttoVario;
+    calculated.Average30s = basic.BruttoVario;
     calculated.NettoAverage30s = calculated.NettoVario;
   }
 
@@ -333,7 +296,7 @@ GlideComputerAirData::Average30s()
     return;
 
   for (unsigned i = 0; i < Elapsed; ++i) {
-    vario_30s_filter.update(calculated.BruttoVario);
+    vario_30s_filter.update(basic.BruttoVario);
     netto_30s_filter.update(calculated.NettoVario);
   }
   calculated.Average30s = vario_30s_filter.average();
@@ -417,7 +380,7 @@ GlideComputerAirData::UpdateLiftDatabase()
        left == negative((calculated.Heading - h).as_delta().value_degrees());
        h += heading_step) {
     unsigned index = heading_to_index(h);
-    calculated.LiftDatabase[index] = calculated.BruttoVario;
+    calculated.LiftDatabase[index] = Basic().BruttoVario;
   }
 
   // detect zero crossing
@@ -696,7 +659,7 @@ GlideComputerAirData::PercentCircling(const fixed Rate)
     calculated.timeCircling += fixed_one;
 
     // Add the Vario signal to the total climb height
-    calculated.TotalHeightClimb += calculated.GPSVario;
+    calculated.TotalHeightClimb += Basic().GPSVario;
 
     // call ThermalBand function here because it is then explicitly
     // tied to same condition as %circling calculations
@@ -1026,7 +989,7 @@ GlideComputerAirData::ThermalBand()
   if ((!Calculated().Circling) || negative(Calculated().Average30s))
     return;
 
-  tbi.Add(dheight, Calculated().BruttoVario);
+  tbi.Add(dheight, Basic().BruttoVario);
 }
 
 void

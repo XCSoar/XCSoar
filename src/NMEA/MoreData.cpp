@@ -30,5 +30,8 @@ MoreData::Reset()
   EnergyHeight = fixed_zero;
   TEAltitude = fixed_zero;
 
+  GPSVario = GPSVarioTE = fixed_zero;
+  BruttoVario = fixed_zero;
+
   NMEA_INFO::Reset();
 }
