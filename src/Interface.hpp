@@ -91,7 +91,7 @@ public:
   { return blackboard.SettingsMap(); }
 
   gcc_const
-  static const FullBlackboard Full() {
+  static const FullBlackboard &Full() {
     return blackboard;
   }
 
