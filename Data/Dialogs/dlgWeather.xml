@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 
-<Form X="200" Y="0" Width="119" Height="240" Caption="Weather Forecast">
-  <Button Caption="Close" X="2" Y="2" Width="66" Height="22" OnClick="OnCloseClicked" />
-
-  <Edit Name="prpDisplayItem" Caption="Field" X="2" Width="-2" Height="22" CaptionWidth="45" OnHelp="OnWeatherHelp">
+<Form X="-180" Height="90" Caption="Weather Forecast">
+  <Edit Name="prpDisplayItem" Caption="Field" X="2" Y="2" Width="-2" Height="22" CaptionWidth="60" OnHelp="OnWeatherHelp">
     <DataField DataType="enum"/>
   </Edit>
 
-  <Edit Name="prpTime" Caption="Time" X="2" Width="-2" Height="22" CaptionWidth="45">
+  <Edit Name="prpTime" Caption="Time" X="2" Width="-2" Height="22" CaptionWidth="60">
     <DataField DataType="enum"/>
   </Edit>
+
+  <Button Caption="Close" X="-68" Y="-24" Width="-2" Height="22" OnClick="OnCloseClicked" />
 </Form>

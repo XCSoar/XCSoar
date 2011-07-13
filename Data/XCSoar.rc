@@ -257,7 +257,6 @@ IDR_XML_WAYPOINTSELECT  XMLDIALOG DISCARDABLE   "Dialogs/dlgWaypointSelect.xml"
 IDR_XML_WAYPOINTSELECT_L XMLDIALOG DISCARDABLE   "Dialogs/dlgWaypointSelect_L.xml"
 IDR_XML_WINDSETTINGS    XMLDIALOG DISCARDABLE   "Dialogs/dlgWindSettings.xml"
 IDR_XML_WEATHER         XMLDIALOG DISCARDABLE   "Dialogs/dlgWeather.xml"
-IDR_XML_WEATHER_L       XMLDIALOG DISCARDABLE   "Dialogs/dlgWeather_L.xml"
 
 // infobox access
 IDR_XML_INFOBOXACCESS		XMLDIALOG DISCARDABLE	"Dialogs/dlgInfoBoxAccess.xml"
