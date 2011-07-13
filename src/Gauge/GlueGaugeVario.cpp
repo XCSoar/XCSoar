@@ -43,9 +43,7 @@ GlueGaugeVario::on_paint_buffer(Canvas &canvas)
 {
   if (!blackboard_valid) {
     const ScopeLock protect(device_blackboard.mutex);
-    ReadBlackboardBasic(device_blackboard.Basic());
-    ReadBlackboardCalculated(device_blackboard.Calculated());
-    ReadSettingsComputer(CommonInterface::SettingsComputer());
+    CommonInterface::ReadBlackboardBasic(device_blackboard.Basic());
   }
 
   GaugeVario::on_paint_buffer(canvas);

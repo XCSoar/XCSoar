@@ -380,7 +380,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/BasicComputer.cpp \
 	$(SRC)/AutoQNH.cpp \
 	$(SRC)/DeviceBlackboard.cpp \
-	$(SRC)/InstrumentBlackboard.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \
 	$(SRC)/MapProjectionBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \

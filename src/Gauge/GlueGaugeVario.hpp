@@ -37,10 +37,11 @@ class GlueGaugeVario : public GaugeVario {
   bool blackboard_valid;
 
 public:
-  GlueGaugeVario(ContainerWindow &parent, const VarioLook &look,
+  GlueGaugeVario(const FullBlackboard &blackboard,
+                 ContainerWindow &parent, const VarioLook &look,
                  int left, int top, unsigned width, unsigned height,
                  const WindowStyle style=WindowStyle())
-    :GaugeVario(parent, look, left, top, width, height, style),
+    :GaugeVario(blackboard, parent, look, left, top, width, height, style),
      blackboard_valid(false) {}
 
   /**

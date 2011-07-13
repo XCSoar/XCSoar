@@ -45,10 +45,11 @@ using std::max;
 #define TextBug _T("Bug")
 #define TextBal _T("Bal")
 
-GaugeVario::GaugeVario(ContainerWindow &parent, const VarioLook &_look,
+GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
+                       ContainerWindow &parent, const VarioLook &_look,
                        int left, int top, unsigned width, unsigned height,
                        const WindowStyle style)
-  :look(_look),
+  :blackboard(_blackboard), look(_look),
    ShowAvgText(false),
    ShowMc(false),
    ShowSpeedToFly(false),

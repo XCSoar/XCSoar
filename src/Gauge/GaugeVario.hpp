@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/BufferWindow.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Point.hpp"
-#include "InstrumentBlackboard.hpp"
+#include "FullBlackboard.hpp"
 
 struct VarioLook;
 class ContainerWindow;
@@ -42,9 +42,7 @@ struct DrawInfo_t {
   const UnitSymbol *last_unit_symbol;
 };
 
-class GaugeVario:
-  public BufferWindow,
-  public InstrumentBlackboard
+class GaugeVario : public BufferWindow
 {
   enum {
     NARROWS = 3,
@@ -58,6 +56,8 @@ class GaugeVario:
 
     gmax = GAUGEVARIOSWEEP + 2,
   };
+
+  const FullBlackboard &blackboard;
 
   const VarioLook &look;
 
@@ -104,9 +104,23 @@ private:
   RasterPoint lines[gmax * 2 + 1];
 
 public:
-  GaugeVario(ContainerWindow &parent, const VarioLook &look,
+  GaugeVario(const FullBlackboard &blackboard,
+             ContainerWindow &parent, const VarioLook &look,
              int left, int top, unsigned width, unsigned height,
              const WindowStyle style=WindowStyle());
+
+protected:
+  const NMEA_INFO &Basic() const {
+    return blackboard.Basic();
+  }
+
+  const DERIVED_INFO &Calculated() const {
+    return blackboard.Calculated();
+  }
+
+  const SETTINGS_COMPUTER &SettingsComputer() const {
+    return blackboard.SettingsComputer();
+  }
 
 protected:
   virtual bool on_resize(unsigned width, unsigned height);
