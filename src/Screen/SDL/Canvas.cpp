@@ -255,6 +255,13 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
   if (font == NULL)
     return;
 
+#ifdef ANDROID
+  int skip = font->get_line_spacing();
+#else
+  int skip = ::TTF_FontLineSkip(font);
+#endif
+  int max_lines = (rc->bottom - rc->top + skip - 1) / skip;
+
   TCHAR *p, *duplicated;
   p = duplicated = _tcsdup(text);
   size_t len = _tcslen(duplicated);
@@ -267,6 +274,11 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
 #endif
     *p++ = _T('\0');
     lines++;
+
+    if (lines >= max_lines) {
+      len = p - duplicated - 1;
+      break;
+    }
   }
 
   // simple wordbreak algorithm. looks for single spaces only, no tabs,
@@ -285,17 +297,16 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
         prev_p = p;
         sz = text_size(duplicated + i);
       }
-      if (prev_p)
+
+      if (prev_p) {
         lines++;
+        if (lines >= max_lines)
+          break;
+      }
     }
   }
 
-#ifdef ANDROID
-  int skip = font->get_line_spacing();
-#else
-  int skip = ::TTF_FontLineSkip(font);
-#endif
-  int y = format & DT_VCENTER
+  int y = (format & DT_VCENTER) && lines < max_lines
     ? (rc->top + rc->bottom - lines * skip) / 2
     : rc->top;
   for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
@@ -311,6 +322,8 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
       Canvas::text(x, y, duplicated + i);
     }
     y += skip;
+    if (y >= rc->bottom)
+      break;
   }
 
   free(duplicated);

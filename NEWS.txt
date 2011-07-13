@@ -22,6 +22,7 @@ Version 6.1.3 - not yet released
   - fix map location when all devices fail
 * Android
   - support hardware keyboard in custom XCI files
+  - clip text in the "credits" dialog
 
 Version 6.1.2 - 2011/06/28
 * devices
