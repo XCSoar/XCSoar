@@ -261,30 +261,45 @@ Canvas::text_transparent(int x, int y, const TCHAR *text)
 
 void
 Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
-  TCHAR *p, *duplicated;
-  size_t i, len;
-  int x, y, lines = 1;
-  int skip;
-
   if (font == NULL)
     return;
 
-  p = duplicated = _tcsdup(text);
-  len = tcslen(duplicated);
-  while ((p = _tcschr(p, _T('\n'))) != NULL) {
-#ifndef ANDROID
-    // hide \r chars. this is a HACK! centered text will be missplaced.
-    if (p > duplicated && p[-1] == _T('\r'))
-      p[-1] = _T(' ');
+#ifdef ANDROID
+  int skip = font->get_line_spacing();
+#else
+  int skip = ::TTF_FontLineSkip(font);
 #endif
-    *p++ = _T('\0');
-    lines++;
+  int max_lines = (rc->bottom - rc->top + skip - 1) / skip;
+
+  size_t len = _tcslen(text);
+  TCHAR *duplicated = new TCHAR[len + 1], *p = duplicated;
+  int lines = 1;
+  for (const TCHAR *i = text; *i != _T('\0'); ++i) {
+    TCHAR ch = *i;
+    if (ch == _T('\n')) {
+      /* explicit line break */
+
+      if (++lines >= max_lines)
+        break;
+
+      ch = _T('\0');
+    } else if (ch == _T('\r'))
+      /* skip */
+      continue;
+    else if ((unsigned)ch < 0x20)
+      /* replace non-printable characters */
+      ch = _T(' ');
+
+    *p++ = ch;
   }
+
+  *p = _T('\0');
+  len = p - duplicated;
 
   // simple wordbreak algorithm. looks for single spaces only, no tabs,
   // no grouping of multiple spaces
   if (format & DT_WORDBREAK) {
-    for (i = 0; i < len; i += tcslen(duplicated + i) + 1) {
+    for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
       PixelSize sz = text_size(duplicated + i);
       TCHAR *prev_p = NULL;
 
@@ -297,19 +312,21 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
         prev_p = p;
         sz = text_size(duplicated + i);
       }
-      if (prev_p)
+
+      if (prev_p) {
         lines++;
+        if (lines >= max_lines)
+          break;
+      }
     }
   }
 
-#ifdef ANDROID
-  skip = font->get_line_spacing();
-#else
-  skip = ::TTF_FontLineSkip(font);
-#endif
-  y = (format & DT_VCENTER) ? (rc->top + rc->bottom - lines*skip)/2 : rc->top;
-  for (i = 0; i < len; i += tcslen(duplicated + i) + 1) {
+  int y = (format & DT_VCENTER) && lines < max_lines
+    ? (rc->top + rc->bottom - lines * skip) / 2
+    : rc->top;
+  for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
     if (duplicated[i] != _T('\0')) {
+      int x;
       if (format & (DT_RIGHT | DT_CENTER)) {
         PixelSize sz = text_size(duplicated + i);
         x = (format & DT_CENTER) ? (rc->left + rc->right - sz.cx)/2 :
@@ -320,9 +337,11 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
       Canvas::text(x, y, duplicated + i);
     }
     y += skip;
+    if (y >= rc->bottom)
+      break;
   }
 
-  free(duplicated);
+  delete[] duplicated;
 }
 
 void

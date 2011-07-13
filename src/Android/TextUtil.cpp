@@ -107,10 +107,15 @@ TextUtil::getTextBounds(const char *text) const
   jintArray paramExtent = (jintArray)
     env->CallObjectMethod(get(), midGetTextBounds,
                           text2.get());
-  env->GetIntArrayRegion(paramExtent, 0, 2, extent);
-
-  // free local references
-  env->DeleteLocalRef(paramExtent);
+  if (paramExtent != NULL) {
+    env->GetIntArrayRegion(paramExtent, 0, 2, extent);
+    env->DeleteLocalRef(paramExtent);
+  } else {
+    /* Java exception has occurred; return zeroes */
+    env->ExceptionClear();
+    extent[0] = 0;
+    extent[1] = 0;
+  }
 
   PixelSize size = { extent[0], extent[1] };
   return size;
@@ -125,9 +130,14 @@ TextUtil::getTextTextureGL(const char *text, int fr, int fg, int fb,
     env->CallIntMethod(get(), midGetTextTextureGL,
                        text2.get(),
                        fr, fg, fb, br, bg, bb);
-
   jint result[3];
-  env->GetIntArrayRegion(jresult, 0, 3, result);
+  if (jresult != NULL) {
+    env->GetIntArrayRegion(jresult, 0, 3, result);
+    env->DeleteLocalRef(jresult);
+  } else {
+    env->ExceptionClear();
+    result[0] = result[1] = result[2] = 0;
+  }
 
   return Texture(result[0], result[1], result[2]);
 }
