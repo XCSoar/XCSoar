@@ -250,7 +250,7 @@ GlideComputerAirData::Heading()
 void
 GlideComputerAirData::EnergyHeight()
 {
-  const NMEA_INFO &basic = Basic();
+  const MoreData &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
   if (basic.AirspeedAvailable)
@@ -270,7 +270,7 @@ GlideComputerAirData::EnergyHeight()
 void
 GlideComputerAirData::GPSVario()
 {
-  const NMEA_INFO &basic = Basic();
+  const MoreData &basic = Basic();
   const DERIVED_INFO &calculated = Calculated();
   VARIO_INFO &vario = SetCalculated();
 
@@ -474,7 +474,7 @@ GlideComputerAirData::ResetLiftDatabase()
 void
 GlideComputerAirData::MaxHeightGain()
 {
-  const NMEA_INFO &basic = Basic();
+  const MoreData &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
   if (!calculated.flight.Flying)
@@ -549,7 +549,7 @@ GlideComputerAirData::CruiseLD()
 void
 GlideComputerAirData::TerrainHeight()
 {
-  const NMEA_INFO &basic = Basic();
+  const MoreData &basic = Basic();
   TERRAIN_ALT_INFO &calculated = SetCalculated();
 
   if (!basic.LocationAvailable || terrain == NULL) {

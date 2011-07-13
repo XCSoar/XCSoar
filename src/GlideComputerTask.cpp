@@ -57,7 +57,7 @@ GlideComputerTask::ResetFlight(const bool full)
 void
 GlideComputerTask::ProcessBasicTask()
 {
-  const NMEA_INFO &basic = Basic();
+  const MoreData &basic = Basic();
   DERIVED_INFO &derived = SetCalculated();
 
   ProtectedTaskManager::ExclusiveLease task(m_task);

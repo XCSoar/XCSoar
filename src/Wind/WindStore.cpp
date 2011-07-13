@@ -42,7 +42,7 @@ Copyright_License {
 
 #include "Wind/WindStore.hpp"
 #include "Math/Constants.h"
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
 #include <math.h>
@@ -75,7 +75,7 @@ WindStore::reset()
  * important in the end result and stay in the store longer.
  */
 void
-WindStore::SlotMeasurement(const NMEA_INFO &info, DERIVED_INFO &derived,
+WindStore::SlotMeasurement(const MoreData &info, DERIVED_INFO &derived,
                            Vector windvector, int quality)
 {
   updated = true;
@@ -91,7 +91,7 @@ WindStore::SlotMeasurement(const NMEA_INFO &info, DERIVED_INFO &derived,
  * NewWind signal.
  */
 void
-WindStore::SlotAltitude(const NMEA_INFO &info, DERIVED_INFO &derived)
+WindStore::SlotAltitude(const MoreData &info, DERIVED_INFO &derived)
 {
   if ((fabs(info.NavAltitude - _lastAltitude) > fixed(100)) || updated) {
     //only recalculate if there is a significant change
@@ -112,7 +112,7 @@ WindStore::GetWind(fixed Time, fixed h, bool &found) const
   * May result in a NewWind signal. */
 
 void
-WindStore::recalculateWind(const NMEA_INFO &info, DERIVED_INFO &derived)
+WindStore::recalculateWind(const MoreData &info, DERIVED_INFO &derived)
 {
   bool found;
   Vector CurWind = windlist->getWind(info.Time, info.NavAltitude, found);

@@ -26,11 +26,11 @@ Copyright_License {
 
 #include "Navigation/Aircraft.hpp"
 
-struct NMEA_INFO;
+struct MoreData;
 struct DERIVED_INFO;
 
 gcc_pure
 const AIRCRAFT_STATE
-ToAircraftState(const NMEA_INFO &info, const DERIVED_INFO &calculated);
+ToAircraftState(const MoreData &info, const DERIVED_INFO &calculated);
 
 #endif

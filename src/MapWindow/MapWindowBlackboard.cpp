@@ -38,7 +38,7 @@ MapWindowBlackboard::ReadSettingsMap(const SETTINGS_MAP
 }
 
 void
-MapWindowBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info,
+MapWindowBlackboard::ReadBlackboard(const MoreData &nmea_info,
 				    const DERIVED_INFO &derived_info)
 {
   gps_info = nmea_info;

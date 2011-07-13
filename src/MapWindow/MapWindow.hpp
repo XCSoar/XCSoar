@@ -162,10 +162,10 @@ public:
     marks = _marks;
   }
 
-  void ReadBlackboard(const NMEA_INFO &nmea_info,
+  void ReadBlackboard(const MoreData &nmea_info,
                       const DERIVED_INFO &derived_info);
 
-  void ReadBlackboard(const NMEA_INFO &nmea_info,
+  void ReadBlackboard(const MoreData &nmea_info,
                       const DERIVED_INFO &derived_info,
                       const SETTINGS_COMPUTER &settings_computer,
                       const SETTINGS_MAP &settings_map);

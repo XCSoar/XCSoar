@@ -57,7 +57,7 @@ public:
    * @return InterfaceBlackboard.Basic
    */
   gcc_const
-  static const NMEA_INFO& Basic() { return blackboard.Basic(); }
+  static const MoreData &Basic() { return blackboard.Basic(); }
 
   /**
    * Returns InterfaceBlackboard.Calculated (DERIVED_INFO) (read-only)
@@ -103,7 +103,7 @@ public:
   static SETTINGS_MAP& SetSettingsMap()
   { return blackboard.SetSettingsMap(); }
 
-  static void ReadBlackboardBasic(const NMEA_INFO& nmea_info) {
+  static void ReadBlackboardBasic(const MoreData &nmea_info) {
     blackboard.ReadBlackboardBasic(nmea_info);
   }
   static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {

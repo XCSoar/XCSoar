@@ -24,6 +24,7 @@ Copyright_License {
 #include "MergeThread.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Protection.hpp"
+#include "NMEA/MoreData.hpp"
 
 MergeThread::MergeThread(DeviceBlackboard &_device_blackboard)
   :WorkerThread(150, 50, 20),
@@ -44,7 +45,7 @@ MergeThread::Tick()
   const SETTINGS_COMPUTER &settings_computer =
     device_blackboard.SettingsComputer();
 
-  computer.Fill(device_blackboard.SetBasic(), settings_computer);
+  computer.Fill(device_blackboard.SetMoreData(), settings_computer);
   computer.Compute(device_blackboard.SetBasic(), last_fix,
                    device_blackboard.Calculated(), settings_computer);
 

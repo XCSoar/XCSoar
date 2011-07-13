@@ -234,7 +234,7 @@ CrossSectionWindow::CrossSectionWindow(const CrossSectionLook &_look,
    vec(fixed(50000), Angle::native(fixed_zero)) {}
 
 void
-CrossSectionWindow::ReadBlackboard(const NMEA_INFO &_gps_info,
+CrossSectionWindow::ReadBlackboard(const MoreData &_gps_info,
                                    const DERIVED_INFO &_calculated_info,
                                    const SETTINGS_MAP &_settings_map)
 {

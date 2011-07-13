@@ -22,11 +22,11 @@ Copyright_License {
 */
 
 #include "NMEA/Aircraft.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
 const AIRCRAFT_STATE
-ToAircraftState(const NMEA_INFO &info, const DERIVED_INFO &calculated)
+ToAircraftState(const MoreData &info, const DERIVED_INFO &calculated)
 {
   AIRCRAFT_STATE aircraft;
 

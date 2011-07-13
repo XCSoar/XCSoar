@@ -28,7 +28,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 
 struct AirspaceLook;
-struct NMEA_INFO;
+struct MoreData;
 struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
 struct SETTINGS_MAP;
@@ -75,7 +75,7 @@ public:
             Canvas &buffer_canvas, Canvas &stencil_canvas,
 #endif
             const WindowProjection &projection,
-            const NMEA_INFO &basic, const DERIVED_INFO &calculated,
+            const MoreData &basic, const DERIVED_INFO &calculated,
             const SETTINGS_COMPUTER &settings_computer,
             const SETTINGS_MAP &settings_map);
 

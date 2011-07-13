@@ -86,7 +86,7 @@ GlideComputerBlackboard::RestoreFinish()
  * @param nmea_info New GPS data
  */
 void
-GlideComputerBlackboard::ReadBlackboard(const NMEA_INFO &nmea_info)
+GlideComputerBlackboard::ReadBlackboard(const MoreData &nmea_info)
 {
   _time_retreated = false;
 

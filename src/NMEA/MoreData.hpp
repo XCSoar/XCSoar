@@ -21,31 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
+#ifndef XCSOAR_MORE_DATA_HPP
+#define XCSOAR_MORE_DATA_HPP
 
-#include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
-#include "Compiler.h"
+#include "NMEA/Info.hpp"
 
 /**
- * Base class for blackboards, providing read access to NMEA_INFO and DERIVED_INFO
+ * A wrapper for NMEA_INFO which adds a few attributes that are cheap
+ * to calculate.  They are managed by #BasicComputer inside
+ * #MergeThread.
  */
-class BaseBlackboard
-{
-public:
-  // all blackboards can be read as const
-  gcc_pure
-  const MoreData &Basic() const {
-    return gps_info;
-  }
+struct MoreData : public NMEA_INFO {
+  /** Altitude used for navigation (GPS or Baro) */
+  fixed NavAltitude;
 
-  gcc_pure
-  const DERIVED_INFO& Calculated() const { return calculated_info; }
-
-protected:
-  MoreData gps_info;
-  DERIVED_INFO calculated_info;
+  void Reset();
 };
 
 #endif

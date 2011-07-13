@@ -29,7 +29,7 @@ InterfaceBlackboard::ReadBlackboardCalculated(const DERIVED_INFO &derived_info)
 }
 
 void
-InterfaceBlackboard::ReadBlackboardBasic(const NMEA_INFO &nmea_info)
+InterfaceBlackboard::ReadBlackboardBasic(const MoreData &nmea_info)
 {
   gps_info = nmea_info;
 }

@@ -21,6 +21,7 @@
 #include "Wind/WindMeasurementList.hpp"
 
 struct NMEA_INFO;
+struct MoreData;
 struct DERIVED_INFO;
 
 /**
@@ -43,7 +44,7 @@ public:
    * measurement is. Higher quality measurements are more important in the
    * end result and stay in the store longer.
    */
-  void SlotMeasurement(const NMEA_INFO &info, DERIVED_INFO &derived,
+  void SlotMeasurement(const MoreData &info, DERIVED_INFO &derived,
       Vector windvector, int quality);
 
   /**
@@ -51,7 +52,7 @@ public:
    * Determines where measurements are stored and may result in a NewWind
    * signal.
    */
-  void SlotAltitude(const NMEA_INFO &info, DERIVED_INFO &derived);
+  void SlotAltitude(const MoreData &info, DERIVED_INFO &derived);
 
   // signals
   /**
@@ -75,7 +76,7 @@ private:
    * Recalculates the wind from the stored measurements.
    * May result in a NewWind signal.
    */
-  void recalculateWind(const NMEA_INFO &info, DERIVED_INFO &derived);
+  void recalculateWind(const MoreData &info, DERIVED_INFO &derived);
 
   bool updated;
 };

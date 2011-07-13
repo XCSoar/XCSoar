@@ -31,7 +31,7 @@ struct ThermalBandLook;
 struct ChartLook;
 class Chart;
 class Canvas;
-struct NMEA_INFO;
+struct MoreData;
 struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
 class OrderedTaskBehaviour;
@@ -46,7 +46,7 @@ public:
                       const ChartLook &_chart_look)
     :look(_look), chart_look(_chart_look) {}
 
-  void DrawThermalBand(const NMEA_INFO& basic,
+  void DrawThermalBand(const MoreData& basic,
                        const DERIVED_INFO& calculated,
                        const SETTINGS_COMPUTER &settings_computer,
                        Canvas &canvas,
@@ -55,7 +55,7 @@ public:
                        const bool is_map,
                        const OrderedTaskBehaviour* ordered_props=NULL) const;
 
-  void DrawThermalBandSpark(const NMEA_INFO& basic,
+  void DrawThermalBandSpark(const MoreData &basic,
                             const DERIVED_INFO& calculated,
                             const SETTINGS_COMPUTER &settings_computer,
                             Canvas &canvas,
@@ -63,7 +63,7 @@ public:
                             const TaskBehaviour& task_props) const;
 
 protected:
-  void _DrawThermalBand(const NMEA_INFO& basic,
+  void _DrawThermalBand(const MoreData &basic,
                         const DERIVED_INFO& calculated,
                         const SETTINGS_COMPUTER &settings_computer,
                         Chart &chart,

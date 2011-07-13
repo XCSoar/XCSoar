@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "BasicComputer.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
 
@@ -82,7 +82,7 @@ ComputePressure(NMEA_INFO &basic, const SETTINGS_COMPUTER &settings_computer)
 }
 
 static void
-ComputeNavAltitude(NMEA_INFO &basic,
+ComputeNavAltitude(MoreData &basic,
                    const SETTINGS_COMPUTER &settings_computer)
 {
   basic.NavAltitude = settings_computer.EnableNavBaroAltitude &&
@@ -199,7 +199,7 @@ ComputeDynamics(NMEA_INFO &basic, const DERIVED_INFO &calculated)
 }
 
 void
-BasicComputer::Fill(NMEA_INFO &data, const SETTINGS_COMPUTER &settings_computer)
+BasicComputer::Fill(MoreData &data, const SETTINGS_COMPUTER &settings_computer)
 {
   ComputePressure(data, settings_computer);
   ComputeNavAltitude(data, settings_computer);

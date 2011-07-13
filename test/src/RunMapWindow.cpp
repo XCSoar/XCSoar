@@ -203,7 +203,7 @@ LoadFiles()
 static void
 GenerateBlackboard(MapWindow &map)
 {
-  NMEA_INFO nmea_info;
+  MoreData nmea_info;
   DERIVED_INFO derived_info;
   SETTINGS_COMPUTER settings_computer;
 

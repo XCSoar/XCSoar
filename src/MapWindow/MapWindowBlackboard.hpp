@@ -39,7 +39,7 @@ class MapWindowBlackboard:
   public SettingsMapBlackboard
 {
 protected:
-  void ReadBlackboard(const NMEA_INFO &nmea_info,
+  void ReadBlackboard(const MoreData &nmea_info,
                       const DERIVED_INFO &derived_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
   void ReadSettingsMap(const SETTINGS_MAP &settings);

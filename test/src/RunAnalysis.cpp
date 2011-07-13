@@ -137,7 +137,8 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
 
   BasicComputer basic_computer;
 
-  NMEA_INFO basic, last;
+  MoreData basic;
+  NMEA_INFO last;
   basic.Reset();
   last.Reset();
 

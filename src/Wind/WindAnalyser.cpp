@@ -43,7 +43,7 @@ Copyright_License {
 #include "Math/Constants.h"
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
 #include <stdlib.h>
@@ -112,7 +112,7 @@ WindAnalyser::reset()
  * Called if a new sample is available in the samplelist.
  */
 void
-WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
+WindAnalyser::slot_newSample(const MoreData &info, DERIVED_INFO &derived)
 {
   if (!active)
     // only work if we are in active mode
@@ -191,7 +191,7 @@ WindAnalyser::slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived)
 }
 
 void
-WindAnalyser::slot_Altitude(const NMEA_INFO &info, DERIVED_INFO &derived)
+WindAnalyser::slot_Altitude(const MoreData &info, DERIVED_INFO &derived)
 {
   windstore.SlotAltitude(info, derived);
 }
@@ -231,7 +231,7 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
 }
 
 void
-WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
+WindAnalyser::_calcWind(const MoreData &info, DERIVED_INFO &derived)
 {
   if (windsamples.empty())
     return;
@@ -334,7 +334,7 @@ WindAnalyser::_calcWind(const NMEA_INFO &info, DERIVED_INFO &derived)
 }
 
 void
-WindAnalyser::slot_newEstimate(const NMEA_INFO &info,
+WindAnalyser::slot_newEstimate(const MoreData &info,
                                DERIVED_INFO &derived,
                                Vector a, int quality)
 {

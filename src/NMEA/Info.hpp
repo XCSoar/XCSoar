@@ -230,9 +230,6 @@ struct NMEA_INFO {
    */
   bool PressureAltitudeWeak;
 
-  /** Altitude used for navigation (GPS or Baro) */
-  fixed NavAltitude;
-
   //##########
   //   Time
   //##########

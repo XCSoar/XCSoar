@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "ThermalBandRenderer.hpp"
-#include "NMEA/Info.hpp"
+#include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "SettingsComputer.hpp"
 #include "Screen/Chart.hpp"
@@ -49,7 +49,7 @@ ThermalBandRenderer::scale_chart(const DERIVED_INFO &calculated,
 
 
 void
-ThermalBandRenderer::_DrawThermalBand(const NMEA_INFO& basic,
+ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
                                       const DERIVED_INFO& calculated,
                                       const SETTINGS_COMPUTER &settings_computer,
                                       Chart &chart,
@@ -172,7 +172,7 @@ ThermalBandRenderer::_DrawThermalBand(const NMEA_INFO& basic,
 }
 
 void 
-ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
+ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
                                      const DERIVED_INFO& calculated,
                                      const SETTINGS_COMPUTER &settings_computer,
                                      Canvas &canvas, 
@@ -203,7 +203,7 @@ ThermalBandRenderer::DrawThermalBand(const NMEA_INFO& basic,
 }
 
 void 
-ThermalBandRenderer::DrawThermalBandSpark(const NMEA_INFO& basic,
+ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
                                           const DERIVED_INFO& calculated,
                                           const SETTINGS_COMPUTER &settings_computer,
                                           Canvas &canvas, 

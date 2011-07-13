@@ -23,6 +23,8 @@
 #include "Navigation/GeoPoint.hpp"
 #include "Util/StaticArray.hpp"
 
+struct MoreData;
+
 /**
  * The windanalyser analyses the list of flightsamples looking
  * for windspeed and direction.
@@ -91,18 +93,18 @@ public:
   /**
    * Called if a new sample is available in the samplelist.
    */
-  void slot_newSample(const NMEA_INFO &info, DERIVED_INFO &derived);
+  void slot_newSample(const MoreData &info, DERIVED_INFO &derived);
 
   // used to update output if altitude changes
-  void slot_Altitude(const NMEA_INFO &info, DERIVED_INFO &derived);
+  void slot_Altitude(const MoreData &info, DERIVED_INFO &derived);
 
-  void slot_newEstimate(const NMEA_INFO &info, DERIVED_INFO &derived,
+  void slot_newEstimate(const MoreData &info, DERIVED_INFO &derived,
       Vector v, int quality);
 
   //void calcThermalDrift();
 
 private:
-  void _calcWind(const NMEA_INFO &info, DERIVED_INFO &derived);
+  void _calcWind(const MoreData &info, DERIVED_INFO &derived);
 };
 
 #endif

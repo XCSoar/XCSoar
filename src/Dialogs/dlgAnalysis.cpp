@@ -155,7 +155,7 @@ ChartControl::on_paint(Canvas &canvas)
 
   const SETTINGS_COMPUTER &settings_computer = blackboard->SettingsComputer();
   const SETTINGS_MAP &settings_map = blackboard->SettingsMap();
-  const NMEA_INFO &basic = blackboard->Basic();
+  const MoreData &basic = blackboard->Basic();
   const DERIVED_INFO &calculated = blackboard->Calculated();
 
 #ifdef ENABLE_OPENGL
@@ -250,7 +250,7 @@ ChartControl::on_paint(Canvas &canvas)
 static void
 UpdateCrossSection()
 {
-  const NMEA_INFO &basic = blackboard->Basic();
+  const MoreData &basic = blackboard->Basic();
   const DERIVED_INFO &calculated = blackboard->Calculated();
 
   assert(csw != NULL);

@@ -21,31 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef BLACKBOARD_H
-#define BLACKBOARD_H
-
 #include "NMEA/MoreData.hpp"
-#include "NMEA/Derived.hpp"
-#include "Compiler.h"
 
-/**
- * Base class for blackboards, providing read access to NMEA_INFO and DERIVED_INFO
- */
-class BaseBlackboard
+void
+MoreData::Reset()
 {
-public:
-  // all blackboards can be read as const
-  gcc_pure
-  const MoreData &Basic() const {
-    return gps_info;
-  }
+  NavAltitude = fixed_zero;
 
-  gcc_pure
-  const DERIVED_INFO& Calculated() const { return calculated_info; }
-
-protected:
-  MoreData gps_info;
-  DERIVED_INFO calculated_info;
-};
-
-#endif
+  NMEA_INFO::Reset();
+}

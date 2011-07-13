@@ -25,6 +25,7 @@ Copyright_License {
 #define BASIC_COMPUTER_HPP
 
 struct NMEA_INFO;
+struct MoreData;
 struct DERIVED_INFO;
 struct SETTINGS_COMPUTER;
 
@@ -38,7 +39,7 @@ public:
   /**
    * Fill the missing attributes with a fallback.
    */
-  void Fill(NMEA_INFO &data, const SETTINGS_COMPUTER &settings_computer);
+  void Fill(MoreData &data, const SETTINGS_COMPUTER &settings_computer);
 
   /**
    * Runs all calculations.

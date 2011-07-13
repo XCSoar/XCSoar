@@ -83,8 +83,6 @@ NMEA_INFO::Reset()
 
   DateAvailable = false;
 
-  NavAltitude = fixed_zero;
-
   Time = fixed_zero;
   DateTime.hour = DateTime.minute = DateTime.second = 0;
 

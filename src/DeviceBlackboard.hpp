@@ -78,7 +78,8 @@ public:
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 
 protected:
-  NMEA_INFO& SetBasic() { return gps_info; }
+  NMEA_INFO &SetBasic() { return gps_info; }
+  MoreData &SetMoreData() { return gps_info; }
 
 public:
   NMEA_INFO &SetRealState(unsigned i) {

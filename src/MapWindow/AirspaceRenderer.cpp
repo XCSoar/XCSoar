@@ -439,7 +439,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
                        Canvas &buffer_canvas, Canvas &stencil_canvas,
 #endif
                        const WindowProjection &projection,
-                       const NMEA_INFO &basic,
+                       const MoreData &basic,
                        const DERIVED_INFO &calculated,
                        const SETTINGS_COMPUTER &settings_computer,
                        const SETTINGS_MAP &settings_map)

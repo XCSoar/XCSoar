@@ -28,6 +28,7 @@
 #include "Blackboard.hpp"
 #include "SettingsMapBlackboard.hpp"
 
+struct MoreData;
 struct CrossSectionLook;
 struct AirspaceLook;
 struct ChartLook;
@@ -67,7 +68,7 @@ public:
                      const AirspaceLook &airspace_look,
                      const ChartLook &chart_look);
 
-  void ReadBlackboard(const NMEA_INFO &_gps_info,
+  void ReadBlackboard(const MoreData &_gps_info,
                       const DERIVED_INFO &_calculated_info,
                       const SETTINGS_MAP &_settings_map);
 

@@ -30,7 +30,7 @@ Copyright_License {
 class InterfaceBlackboard : public FullBlackboard
 {
 public:
-  void ReadBlackboardBasic(const NMEA_INFO &nmea_info);
+  void ReadBlackboardBasic(const MoreData &nmea_info);
   void ReadBlackboardCalculated(const DERIVED_INFO &derived_info);
 
   gcc_const

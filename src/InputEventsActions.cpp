@@ -1218,7 +1218,7 @@ InputEvents::eventRepeatStatusMessage(gcc_unused const TCHAR *misc)
 void 
 InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const MoreData &basic = CommonInterface::Basic();
   const DERIVED_INFO &calculated = CommonInterface::Calculated();
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();

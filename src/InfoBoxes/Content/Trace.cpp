@@ -122,7 +122,7 @@ InfoBoxContentCirclingAverageSpark::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentBarogram::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const MoreData &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
   Units::FormatUserAltitude(basic.NavAltitude, sTmp,

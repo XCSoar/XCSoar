@@ -81,7 +81,7 @@ MapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 }
 
 void
-MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
+MapWindow::ReadBlackboard(const MoreData &nmea_info,
                           const DERIVED_INFO &derived_info)
 {
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
@@ -96,7 +96,7 @@ MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
  * @param settings_map Map settings to exchange
  */
 void
-MapWindow::ReadBlackboard(const NMEA_INFO &nmea_info,
+MapWindow::ReadBlackboard(const MoreData &nmea_info,
                           const DERIVED_INFO &derived_info,
                           const SETTINGS_COMPUTER &settings_computer,
                           const SETTINGS_MAP &settings_map)

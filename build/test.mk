@@ -1400,6 +1400,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Aircraft.cpp \
@@ -1670,6 +1671,7 @@ $(RUN_JOB_DIALOG_BIN): $(RUN_JOB_DIALOG_OBJS) $(RUN_JOB_DIALOG_LDADD) | $(TARGET
 RUN_ANALYSIS_SOURCES = \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/MoreData.cpp \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Derived.cpp \

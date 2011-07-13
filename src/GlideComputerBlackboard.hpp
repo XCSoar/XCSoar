@@ -40,16 +40,16 @@ class GlideComputerBlackboard:
   fixed ScreenDistanceMeters;
 
   DERIVED_INFO Finish_Derived_Info;
-  NMEA_INFO     last_gps_info;
+  MoreData last_gps_info;
   DERIVED_INFO last_calculated_info;
   bool _time_retreated;
 
 public:
   GlideComputerBlackboard();
 
-  void ReadBlackboard(const NMEA_INFO &nmea_info);
+  void ReadBlackboard(const MoreData &nmea_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
-  const NMEA_INFO& LastBasic() const { return last_gps_info; }
+  const MoreData &LastBasic() const { return last_gps_info; }
   const DERIVED_INFO& LastCalculated() const { return last_calculated_info; }
 
   fixed GetScreenDistanceMeters() const {
