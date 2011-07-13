@@ -60,21 +60,12 @@ void
 CalculationThread::Tick()
 {
   bool gps_updated;
-  bool vario_updated;
-  unsigned last_vario_counter = 0;
 
   // update and transfer master info to glide computer
   {
     ScopeLock protect(device_blackboard.mutex);
 
     gps_updated = device_blackboard.Basic().LocationAvailable.Modified(glide_computer.Basic().LocationAvailable);
-
-    if (device_blackboard.Basic().TotalEnergyVarioAvailable) {
-      vario_updated = last_vario_counter != device_blackboard.Basic().VarioCounter;
-    } else {
-      vario_updated = gps_updated;
-    }
-    last_vario_counter = device_blackboard.Basic().VarioCounter;
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer.ReadBlackboard(device_blackboard.Basic());
@@ -95,9 +86,6 @@ CalculationThread::Tick()
   if (gps_updated) {
     // perform idle call if time advanced and slow calculations need to be updated
     do_idle |= glide_computer.ProcessGPS();
-  } else if (vario_updated) {
-    // if time not advanced, update must have come from vario
-    glide_computer.ProcessFast();
   }
 
   // values changed, so copy them back now: ONLY CALCULATED INFO
@@ -106,11 +94,6 @@ CalculationThread::Tick()
   {
     ScopeLock protect(device_blackboard.mutex);
     device_blackboard.ReadBlackboard(glide_computer.Calculated());
-  }
-
-  // trigger updates of vario gauge
-  if (vario_updated) {
-    TriggerVarioUpdate();
   }
 
   // if (new GPS data)

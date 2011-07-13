@@ -89,8 +89,6 @@ NMEA_INFO::Reset()
   TotalEnergyVarioAvailable.Clear();
   NettoVarioAvailable.Clear();
 
-  VarioCounter = 0;
-
   settings.Clear();
 
   ExternalWindAvailable.Clear();
@@ -199,7 +197,6 @@ NMEA_INFO::Complement(const NMEA_INFO &add)
     PressureAltitude = add.PressureAltitude;
 
   if (TotalEnergyVarioAvailable.Complement(add.TotalEnergyVarioAvailable)) {
-    VarioCounter = add.VarioCounter;
     TotalEnergyVario = add.TotalEnergyVario;
   }
 

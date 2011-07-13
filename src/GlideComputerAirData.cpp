@@ -81,16 +81,6 @@ GlideComputerAirData::ResetFlight(const bool full)
 }
 
 /**
- * these calculations do not require time to have been advanced
- * they should be quick -- may be called from fast vario data
- */
-void
-GlideComputerAirData::ProcessFast()
-{
-  NettoVario();
-}
-
-/**
  * Calculates some basic values
  */
 void

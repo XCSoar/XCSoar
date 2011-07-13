@@ -52,19 +52,11 @@ MergeThread::Tick()
   flarm_computer.Process(device_blackboard.SetBasic().flarm,
                          last_fix.flarm, basic);
 
-  if (last_any.LocationAvailable != basic.LocationAvailable) {
+  if (last_any.LocationAvailable != basic.LocationAvailable)
     // trigger update if gps has become available or dropped out
     TriggerGPSUpdate();
-  } else if (last_any.VarioCounter != basic.VarioCounter) {
-    // trigger update if vario has updated with no change of gps status
-    TriggerGPSUpdate();
-  }
 
-  if (!basic.LocationAvailable &&
-      (last_any.TotalEnergyVarioAvailable != basic.TotalEnergyVarioAvailable ||
-       last_any.NettoVarioAvailable != basic.NettoVarioAvailable))
-    // trigger update on change of vario connected status only if no gps connected
-    TriggerVarioUpdate();
+  TriggerVarioUpdate();
 
   /* update last_any in every iteration */
   last_any = basic;
