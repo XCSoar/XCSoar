@@ -89,7 +89,6 @@ GlideComputerAirData::ResetFlight(const bool full)
 void
 GlideComputerAirData::ProcessFast()
 {
-  Airspeed();
   EnergyHeight();
   BruttoVario();
   NettoVario();
@@ -104,7 +103,6 @@ GlideComputerAirData::ProcessBasic()
   TerrainHeight();
   ProcessSun();
 
-  Airspeed();
   EnergyHeight();
   GPSVario(); // <-- note inserted here, as depends on energy height
   BruttoVario();
@@ -171,7 +169,7 @@ GlideComputerAirData::Wind()
 
   // update zigzag wind
   if ((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG) &&
-      Basic().AirspeedAvailable &&
+      Basic().AirspeedAvailable && Basic().AirspeedReal &&
       Basic().TrueAirspeed > SettingsComputer().glide_polar_task.GetVTakeoff()) {
     WindZigZagGlue::Result result = wind_zig_zag.Update(Basic(), calculated);
 
@@ -244,43 +242,6 @@ GlideComputerAirData::Heading()
   }
 }
 
-void
-GlideComputerAirData::Airspeed()
-{
-  const NMEA_INFO &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
-
-  fixed TrueAirspeedEstimated = fixed_zero;
-
-  if (!basic.AirspeedAvailable) {
-
-    if (!calculated.wind_available) {
-      calculated.AirspeedAvailable.Clear();
-      return;
-    }
-
-    const SpeedVector wind = calculated.wind;
-    if (positive(basic.GroundSpeed) || wind.is_non_zero()) {
-      fixed x0 = basic.track.fastsine() * basic.GroundSpeed;
-      fixed y0 = basic.track.fastcosine() * basic.GroundSpeed;
-      x0 += wind.bearing.fastsine() * wind.norm;
-      y0 += wind.bearing.fastcosine() * wind.norm;
-
-      TrueAirspeedEstimated = hypot(x0, y0);
-    }
-
-    calculated.TrueAirspeed = TrueAirspeedEstimated;
-    calculated.IndicatedAirspeed = TrueAirspeedEstimated
-      / AtmosphericPressure::AirDensityRatio(basic.GetAltitudeBaroPreferred());
-    calculated.AirspeedAvailable.Update(basic.Time);
-
-  } else {
-    calculated.TrueAirspeed = basic.TrueAirspeed;
-    calculated.IndicatedAirspeed = basic.IndicatedAirspeed;
-    calculated.AirspeedAvailable = basic.AirspeedAvailable;
-  }
-}
-
 /**
  * Calculates energy height on TAS basis
  *
@@ -292,8 +253,8 @@ GlideComputerAirData::EnergyHeight()
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
-  if (calculated.AirspeedAvailable)
-    calculated.EnergyHeight = sqr(calculated.TrueAirspeed) * fixed_inv_2g;
+  if (basic.AirspeedAvailable)
+    calculated.EnergyHeight = sqr(basic.TrueAirspeed) * fixed_inv_2g;
   else
     /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
        of the glider for sure. */
@@ -346,8 +307,8 @@ GlideComputerAirData::NettoVario()
   VARIO_INFO &vario = SetCalculated();
 
   vario.GliderSinkRate =
-    calculated.flight.Flying && calculated.AirspeedAvailable
-    ? - settings_computer.glide_polar_task.SinkRate(calculated.IndicatedAirspeed,
+    calculated.flight.Flying && basic.AirspeedAvailable
+    ? - settings_computer.glide_polar_task.SinkRate(basic.IndicatedAirspeed,
                                                     basic.acceleration.Gload)
     /* the glider sink rate is useless when not flying */
     : fixed_zero;
@@ -363,17 +324,17 @@ GlideComputerAirData::AverageClimbRate()
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
-  if (calculated.AirspeedAvailable && positive(calculated.IndicatedAirspeed) &&
-      positive(calculated.TrueAirspeed) &&
+  if (basic.AirspeedAvailable && positive(basic.IndicatedAirspeed) &&
+      positive(basic.TrueAirspeed) &&
       basic.TotalEnergyVarioAvailable &&
       !calculated.Circling &&
       (!basic.acceleration.Available ||
        fabs(fabs(basic.acceleration.Gload) - fixed_one) <= fixed(0.25))) {
     // TODO: Check this is correct for TAS/IAS
-    fixed ias_to_tas = calculated.IndicatedAirspeed / calculated.TrueAirspeed;
+    fixed ias_to_tas = basic.IndicatedAirspeed / basic.TrueAirspeed;
     fixed w_tas = basic.TotalEnergyVario * ias_to_tas;
 
-    calculated.climb_history.Add(uround(calculated.IndicatedAirspeed), w_tas);
+    calculated.climb_history.Add(uround(basic.IndicatedAirspeed), w_tas);
   }
 }
 
@@ -551,10 +512,10 @@ GlideComputerAirData::LD()
   }
 
   // LD instantaneous from vario, updated every reading..
-  if (Basic().TotalEnergyVarioAvailable && calculated.AirspeedAvailable &&
+  if (Basic().TotalEnergyVarioAvailable && Basic().AirspeedAvailable &&
       calculated.flight.Flying) {
     calculated.LDvario =
-      UpdateLD(calculated.LDvario, calculated.IndicatedAirspeed,
+      UpdateLD(calculated.LDvario, Basic().IndicatedAirspeed,
                -Basic().TotalEnergyVario, fixed(0.3));
   } else {
     calculated.LDvario = fixed(INVALID_GR);
@@ -670,8 +631,8 @@ GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
     return;
 
   // Speed too high for being on the ground
-  const fixed speed = calculated.AirspeedAvailable
-    ? std::max(calculated.TrueAirspeed, basic.GroundSpeed)
+  const fixed speed = basic.AirspeedAvailable
+    ? std::max(basic.TrueAirspeed, basic.GroundSpeed)
     : basic.GroundSpeed;
 
   if (speed > glide_polar.GetVTakeoff() ||

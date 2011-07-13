@@ -122,4 +122,5 @@ Simulator::Process(NMEA_INFO &basic)
 
   // clear Airspeed as it is not available in simulation mode
   basic.AirspeedAvailable.Clear();
+  basic.AirspeedReal = false;
 }

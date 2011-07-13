@@ -58,7 +58,6 @@ DERIVED_INFO::reset()
 
   Heading = Angle::native(fixed_zero);
   pressure_available.Clear();
-  AirspeedAvailable.Clear();
 
   climb_history.Clear();
 
@@ -84,8 +83,6 @@ DERIVED_INFO::expire(fixed Time)
   /* the estimated wind remains valid for an hour */
   estimated_wind_available.Expire(Time, fixed(3600));
   wind_available.Expire(Time, fixed(600));
-  /* the calculated airspeed expires after 5 seconds */
-  AirspeedAvailable.Expire(Time, fixed(5));
 
   auto_mac_cready_available.Expire(Time, fixed(300));
 }

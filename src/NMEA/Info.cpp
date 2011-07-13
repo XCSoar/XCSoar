@@ -69,6 +69,7 @@ NMEA_INFO::reset()
   GroundSpeedAvailable.Clear();
   AirspeedAvailable.Clear();
   GroundSpeed = TrueAirspeed = IndicatedAirspeed = fixed_zero;
+  AirspeedReal = false;
 
   GPSAltitudeAvailable.Clear();
 
@@ -136,7 +137,10 @@ NMEA_INFO::expire()
   LocationAvailable.Expire(Time, fixed(10));
   track_available.Expire(Time, fixed(10));
   GroundSpeedAvailable.Expire(Time, fixed(10));
-  AirspeedAvailable.Expire(Time, fixed(30));
+
+  if (AirspeedAvailable.Expire(Time, fixed(30)))
+    AirspeedReal = false;
+
   GPSAltitudeAvailable.Expire(Time, fixed(30));
   static_pressure_available.Expire(Time, fixed(30));
   BaroAltitudeAvailable.Expire(Time, fixed(30));
@@ -177,9 +181,11 @@ NMEA_INFO::complement(const NMEA_INFO &add)
   if (GroundSpeedAvailable.Complement(add.GroundSpeedAvailable))
     GroundSpeed = add.GroundSpeed;
 
-  if (AirspeedAvailable.Complement(add.AirspeedAvailable)) {
+  if ((add.AirspeedReal || !AirspeedReal) &&
+      AirspeedAvailable.Complement(add.AirspeedAvailable)) {
     TrueAirspeed = add.TrueAirspeed;
     IndicatedAirspeed = add.IndicatedAirspeed;
+    AirspeedReal = add.AirspeedReal;
   }
 
   if (GPSAltitudeAvailable.Complement(add.GPSAltitudeAvailable))

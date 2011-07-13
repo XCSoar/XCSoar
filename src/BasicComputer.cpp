@@ -122,6 +122,42 @@ ComputeGroundSpeed(NMEA_INFO &basic, const NMEA_INFO &last)
 }
 
 /**
+ * Attempt to compute airspeed from ground speed and wind if it's not
+ * available.
+ */
+static void
+ComputeAirspeed(NMEA_INFO &basic, const DERIVED_INFO &calculated)
+{
+  if (basic.AirspeedAvailable && basic.AirspeedReal)
+    /* got it already */
+    return;
+
+  if (!basic.GroundSpeedAvailable || !calculated.wind_available ||
+      !calculated.flight.Flying) {
+    /* impossible to calculate */
+    basic.AirspeedAvailable.Clear();
+    return;
+  }
+
+  fixed TrueAirspeedEstimated = fixed_zero;
+
+  const SpeedVector wind = calculated.wind;
+  if (positive(basic.GroundSpeed) || wind.is_non_zero()) {
+    fixed x0 = basic.track.fastsine() * basic.GroundSpeed;
+    fixed y0 = basic.track.fastcosine() * basic.GroundSpeed;
+    x0 += wind.bearing.fastsine() * wind.norm;
+    y0 += wind.bearing.fastcosine() * wind.norm;
+
+    TrueAirspeedEstimated = hypot(x0, y0);
+  }
+
+  basic.TrueAirspeed = TrueAirspeedEstimated;
+  basic.IndicatedAirspeed = TrueAirspeedEstimated
+    / AtmosphericPressure::AirDensityRatio(basic.GetAltitudeBaroPreferred());
+  basic.AirspeedAvailable.Update(basic.Time);
+}
+
+/**
  * Calculates the turn rate of the heading,
  * the estimated bank angle and
  * the estimated pitch angle
@@ -133,9 +169,9 @@ ComputeDynamics(NMEA_INFO &basic, const DERIVED_INFO &calculated)
       (positive(basic.GroundSpeed) || calculated.wind.is_non_zero())) {
 
     // estimate bank angle (assuming balanced turn)
-    if (calculated.AirspeedAvailable) {
+    if (basic.AirspeedAvailable) {
       const fixed angle = atan(Angle::degrees(calculated.TurnRateWind
-          * calculated.TrueAirspeed * fixed_inv_g).value_radians());
+          * basic.TrueAirspeed * fixed_inv_g).value_radians());
 
       basic.acceleration.BankAngle = Angle::radians(angle);
       if (!basic.acceleration.Available)
@@ -147,9 +183,9 @@ ComputeDynamics(NMEA_INFO &basic, const DERIVED_INFO &calculated)
     }
 
     // estimate pitch angle (assuming balanced turn)
-    if (calculated.AirspeedAvailable && basic.TotalEnergyVarioAvailable)
+    if (basic.AirspeedAvailable && basic.TotalEnergyVarioAvailable)
       basic.acceleration.PitchAngle = Angle::radians(atan2(calculated.GPSVario - basic.TotalEnergyVario,
-          calculated.TrueAirspeed));
+                                                           basic.TrueAirspeed));
     else
       basic.acceleration.PitchAngle = Angle::native(fixed_zero);
 
@@ -179,5 +215,6 @@ BasicComputer::Compute(NMEA_INFO &data, const NMEA_INFO &last,
 
   ComputeTrack(data, last);
   ComputeGroundSpeed(data, last);
+  ComputeAirspeed(data, calculated);
   ComputeDynamics(data, calculated);
 }

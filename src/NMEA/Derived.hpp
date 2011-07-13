@@ -155,15 +155,6 @@ struct DERIVED_INFO:
   AtmosphericPressure pressure;
   Validity pressure_available;
 
-  /**
-   * Airspeed
-   * Is set to measured airspeed if provided, otherwise calculated
-   * from groundspeed and wind, if available.
-   */
-  fixed TrueAirspeed;
-  fixed IndicatedAirspeed;
-  Validity AirspeedAvailable;
-
   /** Energy height excess to slow to best glide speed @author JMW */
   fixed EnergyHeight;
 

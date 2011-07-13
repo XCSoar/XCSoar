@@ -149,6 +149,13 @@ struct NMEA_INFO {
   //   Speeds
   //############
 
+  /**
+   * Did #TrueAirspeed and/or #IndicatedAirspeed come from an
+   * instrument?  If false, then it was calculated (from ground speed
+   * and wind).
+   */
+  bool AirspeedReal;
+
   Validity GroundSpeedAvailable;
 
   /**
@@ -420,6 +427,7 @@ struct NMEA_INFO {
   void ProvideBothAirspeeds(fixed as) {
     IndicatedAirspeed = TrueAirspeed = as;
     AirspeedAvailable.Update(Time);
+    AirspeedReal = true;
   }
 
   /**
@@ -430,6 +438,7 @@ struct NMEA_INFO {
     IndicatedAirspeed = ias;
     TrueAirspeed = tas;
     AirspeedAvailable.Update(Time);
+    AirspeedReal = true;
   }
 
   /**
@@ -441,6 +450,7 @@ struct NMEA_INFO {
     IndicatedAirspeed = TrueAirspeed /
       AtmosphericPressure::AirDensityRatio(altitude);
     AirspeedAvailable.Update(Time);
+    AirspeedReal = true;
   }
 
   /**

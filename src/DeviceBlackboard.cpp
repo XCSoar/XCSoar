@@ -118,6 +118,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.GroundSpeed = speed;
   basic.GroundSpeedAvailable.Update(t);
   basic.AirspeedAvailable.Clear(); // Clear airspeed as it is not given by any value.
+  basic.AirspeedReal = false;
   basic.track = bearing;
   basic.track_available.Update(t);
   basic.GPSAltitude = alt;

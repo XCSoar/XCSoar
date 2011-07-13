@@ -95,7 +95,6 @@ protected:
 
 private:
   void Heading();
-  void Airspeed();
   void EnergyHeight();
   void GPSVario();
   void BruttoVario();
