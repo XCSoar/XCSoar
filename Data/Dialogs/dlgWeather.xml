@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmWeather" X="200" Y="0" Width="119" Height="240" Caption="Weather Forecast">
+<Form X="200" Y="0" Width="119" Height="240" Caption="Weather Forecast">
   <Button Caption="Close" X="2" Y="2" Width="66" Height="22" OnClick="OnCloseClicked" />
 
   <Edit Name="prpDisplayItem" Caption="Field" X="2" Width="-2" Height="22" CaptionWidth="45" OnHelp="OnWeatherHelp">

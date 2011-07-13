@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmAirspaceSelect" Width="320" Height="240" Caption="Select Airspace">
+<Form Width="320" Height="240" Caption="Select Airspace">
   <Label X="0" Y="0" Width="100" Height="20" Caption="Filter..." />
 
   <Edit Name="prpFltName" Caption="Name" X="2" Width="98" Height="36" CaptionWidth="-1">

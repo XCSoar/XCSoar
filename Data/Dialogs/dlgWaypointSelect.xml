@@ -1,4 +1,4 @@
-<Form Name="frmWaypointSelect" Width="240" Height="320" Caption="Select Waypoint">
+<Form Width="240" Height="320" Caption="Select Waypoint">
   <Label X="0" Y="0" Width="75" Height="20" Caption="Filter..." />
 
   <Label X="2" Y="35" Width="75" Height="18" Caption="Name" />

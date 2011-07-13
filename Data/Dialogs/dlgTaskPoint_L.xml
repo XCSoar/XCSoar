@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<Form Name="frmTaskPoint" Width="320" Height="240" Caption="Waypoint">
+<Form Width="320" Height="240" Caption="Waypoint">
   <Button Name="butPrevious" Caption="Previous" X="2" Y="-111" Width="75" Height="35" OnClick="OnPreviousClicked"/>
   <Button Name="butNext" Caption="Next" X="2" Y="-74" Width="75" Height="35" OnClick="OnNextClicked"/>
   <Button Caption="Close" X="2" Y="-37" Width="75" Height="35" OnClick="OnCloseClicked"/>

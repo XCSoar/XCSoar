@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmAirspacePatterns" Width="240" Height="320" Caption="Select Pattern">
+<Form Width="240" Height="320" Caption="Select Pattern">
   <Button Name="cmdClose" Caption="Close" X="2" Y="270" Width="98" Height="28" OnClick="OnCloseClicked"/>
 
   <List Name="frmAirspacePatternsList" X="1" Y="1" Width="-1" Height="250" ItemHeight="18"/>

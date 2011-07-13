@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmVegaDemo" X="5" Y="5" Width="163" Height="160" Caption="Vario Demo">
+<Form X="5" Y="5" Width="163" Height="160" Caption="Vario Demo">
   <Button Caption="Close" X="78" Y="2" Width="70" Height="22" OnClick="OnCloseClicked" />
 
   <Edit Name="prpVegaDemoW" Caption="TE vario" X="2" Width="155" Height="22" CaptionWidth="78" Help="This produces a fake TE vario gross vertical velocity.  It can be used when in circling mode to demonstrate the lift tones.  When not in circling mode, set this to a realistic negative value so speed command tones are produced.">

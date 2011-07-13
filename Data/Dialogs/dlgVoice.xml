@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmVoice" Width="250" Height="240" Caption="Vega Voice Extensions">
+<Form Width="250" Height="240" Caption="Vega Voice Extensions">
   <Button Caption="Close" X="2" Y="2" Width="60" Height="22" OnClick="OnCloseClicked"/>
 
   <Edit Name="prpVoiceClimbRate" Caption="Climb rate" X="2" Width="245" Height="22" CaptionWidth="188" Readonly="0" Help="Enable voice read-back of the average climb rate when circling.">

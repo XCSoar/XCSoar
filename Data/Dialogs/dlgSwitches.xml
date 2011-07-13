@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmSwitches" Width="240" Height="240" Caption="Switches">
+<Form Width="240" Height="240" Caption="Switches">
   <Button Caption="Close" X="2" Y="2" Width="60" Height="22" OnClick="OnCloseClicked"/>
 
   <Panel Name="frmFrm1" X="0" Y="30" Width="125" Height="200">

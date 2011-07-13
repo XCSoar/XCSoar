@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmConfigWaypoints" Width="320" Height="240" Caption="Waypoints Editor">
+<Form Width="320" Height="240" Caption="Waypoints Editor">
   <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28"/>
 
   <Button Name="cmdWaypointNew" Caption="New" X="120" Y="10" Width="100" Height="28" OnClick="OnWaypointNewClicked" />

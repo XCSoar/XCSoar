@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmBrightness" X="5" Y="5" Width="153" Height="111" Caption="Screen Brightness">
+<Form X="5" Y="5" Width="153" Height="111" Caption="Screen Brightness">
   <Button Caption="Close" X="68" Y="2" Width="60" Height="22" OnClick="OnCloseClicked"/>
 
   <Edit Name="prpAuto" Caption="Auto" X="2" Width="-2" Height="22" CaptionWidth="68" Help="Enables automatic backlight, responsive to light sensor.">

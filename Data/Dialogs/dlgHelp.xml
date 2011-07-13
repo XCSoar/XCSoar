@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmHelp" Width="240" Height="320" Caption="Help">
+<Form Width="240" Height="320" Caption="Help">
   <Button Caption="Close" X="5" Y="270" Width="60" Height="28" OnClick="OnCloseClicked"/>
 
   <Edit Name="prpHelpText" X="2" Y="2" Width="-2" Height="250" CaptionWidth="10" ReadOnly="1" MultiLine="1"/>

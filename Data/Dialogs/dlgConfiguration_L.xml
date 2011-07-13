@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmConfiguration" Width="320" Height="240" Caption="Configuration">
+<Form Width="320" Height="240" Caption="Configuration">
   <CheckBox Name="Expert" Caption="Expert" X="5" Y="5" Width="60" Height="25" OnClick="OnUserLevel"/>
 
   <Button Name="cmdFonts" Caption="Fonts" X="5" Y="130" Width="60" Height="28"/>

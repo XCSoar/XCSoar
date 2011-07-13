@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmTaskEdit" Width="320" Height="240" Caption="Task Manager">
+<Form Width="320" Height="240" Caption="Task Manager">
   <TabBar Name="TabBar" X="0" Y="52" Width="80" Height="176" OnClick="dlgTaskManager::OnTabBarClicked">
   </TabBar>
 </Form>

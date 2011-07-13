@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmVario" Width="320" Height="240" Caption="Vario Configuration">
+<Form Width="320" Height="240" Caption="Vario Configuration">
   <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="160" Width="35" Height="28" OnClick="OnNextClicked" />
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="160" Width="35" Height="28" OnClick="OnPrevClicked" />
   <Button Name="cmdClose" Caption="Close" X="5" Y="190" Width="60" Height="28" />

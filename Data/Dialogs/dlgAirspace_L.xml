@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmAirspace" Width="240" Height="320" Caption="Airspace">
+<Form Width="240" Height="320" Caption="Airspace">
   <Button Name="cmdClose" Caption="Close" X="-77" Y="2" Width="75" Height="35" OnClick="OnCloseClicked"/>
   <Button Name="cmdLookup" Caption="Lookup" X="2" Y="2" Width="75" Height="35" OnClick="OnLookupClicked"/>
 

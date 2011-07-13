@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmStartup" Width="320" Height="240" Caption="">
+<Form Width="320" Height="240" Caption="">
   <Button Name="cmdClose" Caption="Continue" X="2" Y="-60" Width="-2" Height="30"/>
 
   <Edit Name="prpProfile" Caption="Profile" X="2" Width="-2" Height="25" CaptionWidth="60">

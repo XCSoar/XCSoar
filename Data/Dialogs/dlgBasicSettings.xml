@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmBasicSettingRegular" Width="173" Height="220" Caption="Flight Setup">
+<Form Width="173" Height="220" Caption="Flight Setup">
   <Button Name="cmdDump" Caption="Dump" X="2" Y="2" Width="75" Height="35" OnClick="OnBallastDump" />
   <Button Name="cmdClose" Caption="Close" X="96" Y="2" Width="75" Height="35" OnClick="OnCloseClicked" />
 

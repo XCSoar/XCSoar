@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<Form Name="frmTeamCode" Width="320" Height="240" Caption="Team Code">
+<Form Width="320" Height="240" Caption="Team Code">
   <Button Caption="Close" X="5" Y="190" Width="60"  Height="28" OnClick="OnCloseClicked" />
 
   <Button Name="cmdSetWaypoint" Caption="Set WP" X="5" Y="15" Width="60" Height="28" />

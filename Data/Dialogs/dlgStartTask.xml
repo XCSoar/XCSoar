@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmStartTaskRegular" X="5" Y="5" Width="143" Height="133" Caption="Task Start">
+<Form X="5" Y="5" Width="143" Height="133" Caption="Task Start">
   <Edit Name="prpTime" Caption="Time" X="2" Width="145" Height="22" CaptionWidth="68" ReadOnly="1" />
 
   <Edit Name="prpSpeed" Caption="Speed" X="2" Width="145" Height="22" CaptionWidth="68" ReadOnly="1" />

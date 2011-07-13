@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmConfiguration" Width="240" Height="320" Caption="Configuration">
+<Form Width="240" Height="320" Caption="Configuration">
   <SymbolButton Name="cmdNext" Caption="&gt;" X="37" Y="-30" Width="35" Height="28" OnClick="OnNext" />
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-30" Width="35" Height="28" OnClick="OnPrev" />
   <Button Name="cmdClose" Caption="Close" X="-62" Y="-30" Width="60" Height="28" OnClick="OnClose" />

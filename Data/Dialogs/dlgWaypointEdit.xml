@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmWaypointEdit" Width="240" Height="320" Caption="Waypoint Editor">
+<Form Width="240" Height="320" Caption="Waypoint Editor">
   <Button Caption="Close" X="2" Y="-30" Width="80" Height="28" OnClick="OnCloseClicked"/>
 
   <Button Name="cmdName" Caption="Name" X="2" Y="0" Height="28" />

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmTaskOptionalStarts" Width="320" Height="240" Caption="Alternate Start Points">
+<Form Width="320" Height="240" Caption="Alternate Start Points">
   <Button Name="cmdRelocate" Caption="Relocate" X="2" Y="-111" Width="75" Height="35" OnClick="OnRelocateClicked"/>
   <Button Name="cmdRemove" Caption="Remove" X="2" Y="-74" Width="75" Height="35" OnClick="OnRemoveClicked"/>
   <Button Name="cmdClose" Caption="Close" X="2" Y="-37" Width="75" Height="35" OnClick="OnCloseClicked"/>

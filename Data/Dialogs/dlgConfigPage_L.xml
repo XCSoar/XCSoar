@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmConfigPages" Width="320" Height="240" Caption="Page Configuration">
+<Form Width="320" Height="240" Caption="Page Configuration">
   <Button Name="cmdOk" Caption="Ok" X="5" Y="190" Width="60" Height="28"/>
   
   <List Name="lstPageLayouts" X="70" Y="0" Width="0" Height="0" />

@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
-<Form Name="frmTaskEdit" Width="240" Height="320" Caption="Task Manager">
+<Form Width="240" Height="320" Caption="Task Manager">
   <TabBar Name="TabBar" X="60" Y="0" Width="181" Height="76">
   </TabBar>
   <Canvas Name="frmBlackRect" X="0" Y="40" Width="61" Height="4" Border="0" OnPaint="dlgTaskManager::OnBlackBarPaint"/>
