@@ -252,16 +252,13 @@ Canvas::text_transparent(int x, int y, const TCHAR *text)
 
 void
 Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
-  TCHAR *p, *duplicated;
-  size_t i, len;
-  int x, y, lines = 1;
-  int skip;
-
   if (font == NULL)
     return;
 
+  TCHAR *p, *duplicated;
   p = duplicated = _tcsdup(text);
-  len = _tcslen(duplicated);
+  size_t len = _tcslen(duplicated);
+  int lines = 1;
   while ((p = _tcschr(p, _T('\n'))) != NULL) {
 #ifndef ANDROID
     // hide \r chars. this is a HACK! centered text will be missplaced.
@@ -275,7 +272,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
   // simple wordbreak algorithm. looks for single spaces only, no tabs,
   // no grouping of multiple spaces
   if (format & DT_WORDBREAK) {
-    for (i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
+    for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
       PixelSize sz = text_size(duplicated + i);
       TCHAR *prev_p = NULL;
 
@@ -294,13 +291,16 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
   }
 
 #ifdef ANDROID
-  skip = font->get_line_spacing();
+  int skip = font->get_line_spacing();
 #else
-  skip = ::TTF_FontLineSkip(font);
+  int skip = ::TTF_FontLineSkip(font);
 #endif
-  y = (format & DT_VCENTER) ? (rc->top + rc->bottom - lines*skip)/2 : rc->top;
-  for (i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
+  int y = format & DT_VCENTER
+    ? (rc->top + rc->bottom - lines * skip) / 2
+    : rc->top;
+  for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
     if (duplicated[i] != _T('\0')) {
+      int x;
       if (format & (DT_RIGHT | DT_CENTER)) {
         PixelSize sz = text_size(duplicated + i);
         x = (format & DT_CENTER) ? (rc->left + rc->right - sz.cx)/2 :
