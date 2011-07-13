@@ -109,7 +109,14 @@ TextUtil::getTextBounds(const char *text) const
   env->CallVoidMethod(get(), midGetTextBounds,
                       text2.get(),
                       paramExtent);
-  env->GetIntArrayRegion(paramExtent, 0, 2, extent);
+  if (!env->ExceptionCheck())
+    env->GetIntArrayRegion(paramExtent, 0, 2, extent);
+  else {
+    /* Java exception has occurred; return zeroes */
+    env->ExceptionClear();
+    extent[0] = 0;
+    extent[1] = 0;
+  }
 
   // free local references
   env->DeleteLocalRef(paramExtent);
@@ -122,7 +129,9 @@ TextUtil::getTextTextureGL(const char *text, int fr, int fg, int fb,
                            int br, int bg, int bb) const
 {
   Java::String text2(env, text);
-  return env->CallIntMethod(get(), midGetTextTextureGL,
-                            text2.get(),
-                            fr, fg, fb, br, bg, bb);
+  jint result = env->CallIntMethod(get(), midGetTextTextureGL,
+                                   text2.get(),
+                                   fr, fg, fb, br, bg, bb);
+  env->ExceptionClear();
+  return result;
 }
