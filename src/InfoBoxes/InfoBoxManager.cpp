@@ -26,7 +26,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Look/InfoBoxLook.hpp"
-#include "Protection.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
 #include "InfoBoxes/Content/Base.hpp"
 #include "Profile/InfoBoxConfig.hpp"
@@ -327,9 +326,6 @@ InfoBoxManager::ProcessKey(InfoBoxContent::InfoBoxKeyCodes keycode)
   InputEvents::HideMenu();
 
   SetDirty();
-  // emulate update to trigger calculations
-  if (!XCSoarInterface::Basic().LocationAvailable)
-    TriggerGPSUpdate();
 
   ResetDisplayTimeOut();
 }
@@ -357,10 +353,6 @@ InfoBoxManager::ProcessQuickAccess(const int id, const TCHAR *Value)
     InfoBoxes[id]->HandleQuickAccess(Value);
 
   SetDirty();
-
-  // emulate update to trigger calculations
-  if (!XCSoarInterface::Basic().LocationAvailable)
-    TriggerGPSUpdate();
 
   ResetDisplayTimeOut();
 }
