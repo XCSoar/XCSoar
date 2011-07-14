@@ -70,6 +70,69 @@ struct ExternalSettings {
   void Complement(const ExternalSettings &add);
 
   /**
+   * Compare the MacCready setting with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool CompareMacCready(fixed value) const {
+    return mac_cready_available && fabs(mac_cready - value) <= fixed(0.05);
+  }
+
+  /**
+   * Compare the ballast fraction setting with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool CompareBallastFraction(fixed value) const {
+    return ballast_fraction_available &&
+      fabs(ballast_fraction - value) <= fixed(0.01);
+  }
+
+  /**
+   * Compare the ballast overload setting with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool CompareBallastOverload(fixed value) const {
+    return ballast_overload_available &&
+      fabs(ballast_overload - value) <= fixed(0.01);
+  }
+
+  /**
+   * Compare the wing loading setting with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool CompareWingLoading(fixed value) const {
+    return wing_loading_available &&
+      fabs(wing_loading - value) <= fixed_half;
+  }
+
+  /**
+   * Compare the bugs setting with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool CompareBugs(fixed value) const {
+    return bugs_available && fabs(bugs - value) <= fixed(0.01);
+  }
+
+  /**
+   * Compare the QNH setting with the specified value.
+   *
+   * @return true if the current setting is the same, false if the
+   * value is different or if there is no value
+   */
+  bool CompareQNH(fixed value) const {
+    return qnh_available && fabs(qnh.get_QNH() - value) <= fixed_half;
+  }
+
+  /**
    * Sets a new MacCready value, but updates the time stamp only if
    * the value has changed.
    *

@@ -78,7 +78,7 @@ ExternalSettings::Complement(const ExternalSettings &add)
 bool
 ExternalSettings::ProvideMacCready(fixed value, fixed time)
 {
-  if (mac_cready_available && fabs(mac_cready - value) <= fixed(0.01))
+  if (CompareMacCready(value))
     return false;
 
   mac_cready = value;
@@ -89,7 +89,7 @@ ExternalSettings::ProvideMacCready(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBallastFraction(fixed value, fixed time)
 {
-  if (ballast_fraction_available && fabs(ballast_fraction - value) <= fixed(0.01))
+  if (CompareBallastFraction(value))
     return false;
 
   ballast_fraction = value;
@@ -100,7 +100,7 @@ ExternalSettings::ProvideBallastFraction(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBallastOverload(fixed value, fixed time)
 {
-  if (ballast_overload_available && fabs(ballast_overload - value) <= fixed(0.01))
+  if (CompareBallastOverload(value))
     return false;
 
   ballast_overload = value;
@@ -111,7 +111,7 @@ ExternalSettings::ProvideBallastOverload(fixed value, fixed time)
 bool
 ExternalSettings::ProvideWingLoading(fixed value, fixed time)
 {
-  if (wing_loading_available && fabs(wing_loading - value) <= fixed(0.01))
+  if (CompareWingLoading(value))
     return false;
 
   wing_loading = value;
@@ -122,7 +122,7 @@ ExternalSettings::ProvideWingLoading(fixed value, fixed time)
 bool
 ExternalSettings::ProvideBugs(fixed value, fixed time)
 {
-  if (bugs_available && fabs(bugs - value) <= fixed(0.01))
+  if (CompareBugs(value))
     return false;
 
   bugs = value;
@@ -133,7 +133,7 @@ ExternalSettings::ProvideBugs(fixed value, fixed time)
 bool
 ExternalSettings::ProvideQNH(fixed value, fixed time)
 {
-  if (qnh_available && fabs(qnh.get_QNH() - value) < fixed(0.1))
+  if (CompareQNH(value))
     return false;
 
   qnh = value;
