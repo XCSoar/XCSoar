@@ -118,6 +118,12 @@ class NativeView extends SurfaceView
   EGLContext context;
   GL10 gl;
 
+  /**
+   * Is the extension ARB_texture_non_power_of_two present?  If yes,
+   * then textures can have any size, not just power of two.
+   */
+  static boolean textureNonPowerOfTwo;
+
   Thread thread;
 
   public NativeView(Activity context, Handler _quitHandler) {
@@ -221,6 +227,13 @@ class NativeView extends SurfaceView
     Log.d(TAG, "OpenGL version: " + gl.glGetString(GL10.GL_VERSION));
     Log.d(TAG, "OpenGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
     Log.d(TAG, "OpenGL extensions: " + gl.glGetString(GL10.GL_EXTENSIONS));
+
+    /* code copied from src/Screen/OpenGL/Init.cpp */
+    String extensions = gl.glGetString(GL10.GL_EXTENSIONS);
+    textureNonPowerOfTwo = extensions != null &&
+      (extensions.indexOf("GL_OES_texture_npot") >= 0 ||
+       extensions.indexOf("GL_APPLE_texture_2D_limited_npot") >= 0 ||
+       extensions.indexOf("GL_ARB_texture_non_power_of_two") >= 0);
   }
 
   /**
@@ -311,11 +324,17 @@ class NativeView extends SurfaceView
   /**
    * Finds the next power of two.  Used to calculate texture sizes.
    */
-  private static int nextPowerOfTwo(int i) {
+  public static int nextPowerOfTwo(int i) {
     int p = 1;
     while (p < i)
       p <<= 1;
     return p;
+  }
+
+  public static int validateTextureSize(int i) {
+    return textureNonPowerOfTwo
+      ? i
+      : nextPowerOfTwo(i);
   }
 
   /**

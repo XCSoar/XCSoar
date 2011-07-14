@@ -89,8 +89,8 @@ public class TextUtil {
 
     // create OpenGL texture
     int[] id = new int[1];
-    int width2 = next_power_of_two(extent[0]);
-    int height2 = next_power_of_two(extent[1]);
+    int width2 = NativeView.validateTextureSize(extent[0]);
+    int height2 = NativeView.validateTextureSize(extent[1]);
     glPixelStorei(GL_UNPACK_ALIGNMENT, 2);
     glGenTextures(1, id, 0);
     glBindTexture(GL_TEXTURE_2D, id[0]);
