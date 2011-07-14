@@ -42,6 +42,10 @@ OpenGL::SetupContext(unsigned width, unsigned height)
   screen_height = height;
 
   texture_non_power_of_two =
+#ifdef HAVE_GLES
+    IsExtensionSupported("GL_OES_texture_npot") ||
+    IsExtensionSupported("GL_APPLE_texture_2D_limited_npot") ||
+#endif
     IsExtensionSupported("GL_ARB_texture_non_power_of_two");
 }
 
