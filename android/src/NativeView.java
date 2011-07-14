@@ -353,7 +353,7 @@ class NativeView extends SurfaceView
     gl.glTexImage2D(GL10.GL_TEXTURE_2D, 0, GL10.GL_RGB,
                     nextPowerOfTwo(bmp.getWidth()),
                     nextPowerOfTwo(bmp.getHeight()),
-                    0, GL10.GL_RGB, GL10.GL_UNSIGNED_BYTE, null);
+                    0, GL10.GL_RGB, GL10.GL_UNSIGNED_SHORT_5_6_5, null);
     GLUtils.texSubImage2D(GL10.GL_TEXTURE_2D, 0, 0, 0, tmp);
     tmp.recycle();
   }
