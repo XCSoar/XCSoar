@@ -126,3 +126,18 @@ Profile::GetPath(const TCHAR *key, TCHAR *value)
   ExpandLocalPath(value);
   return true;
 }
+
+void
+Profile::SetPath(const TCHAR *key, const TCHAR *value)
+{
+  TCHAR path[MAX_PATH];
+
+  if (string_is_empty(value))
+    path[0] = '\0';
+  else {
+    CopyString(path, value, MAX_PATH);
+    ContractLocalPath(path);
+  }
+
+  Set(key, path);
+}
