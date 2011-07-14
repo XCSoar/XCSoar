@@ -127,9 +127,9 @@ TextUtil::getTextTextureGL(const char *text, int fr, int fg, int fb,
 {
   Java::String text2(env, text);
   jintArray jresult = (jintArray)
-    env->CallIntMethod(get(), midGetTextTextureGL,
-                       text2.get(),
-                       fr, fg, fb, br, bg, bb);
+    env->CallObjectMethod(get(), midGetTextTextureGL,
+                          text2.get(),
+                          fr, fg, fb, br, bg, bb);
   jint result[3];
   if (jresult != NULL) {
     env->GetIntArrayRegion(jresult, 0, 3, result);
