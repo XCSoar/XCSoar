@@ -22,15 +22,23 @@ Copyright_License {
 */
 
 #include "PlaneGlue.hpp"
+#include "PlaneFileGlue.hpp"
 #include "Plane.hpp"
 #include "Profile/Profile.hpp"
 #include "Polar/Polar.hpp"
 #include "Polar/PolarGlue.hpp"
 #include "SettingsComputer.hpp"
 
+#include <windows.h>
+
 void
 PlaneGlue::FromProfile(Plane &plane)
 {
+  StaticString<MAX_PATH> plane_path;
+  if (Profile::GetPath(_T("PlanePath"), plane_path.buffer()) &&
+      PlaneGlue::ReadFile(plane, plane_path.c_str()))
+    return;
+
   if (!Profile::Get(szProfileAircraftReg, plane.registration))
     plane.registration.clear();
 
