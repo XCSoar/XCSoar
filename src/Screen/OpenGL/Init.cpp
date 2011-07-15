@@ -27,6 +27,11 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Extension.hpp"
 
+#ifdef ANDROID
+#include "Android/Main.hpp"
+#include "Android/NativeView.hpp"
+#endif
+
 void
 OpenGL::Initialise()
 {
@@ -47,6 +52,10 @@ OpenGL::SetupContext(unsigned width, unsigned height)
     IsExtensionSupported("GL_APPLE_texture_2D_limited_npot") ||
 #endif
     IsExtensionSupported("GL_ARB_texture_non_power_of_two");
+
+#ifdef ANDROID
+  native_view->SetTexturePowerOfTwo(texture_non_power_of_two);
+#endif
 }
 
 void

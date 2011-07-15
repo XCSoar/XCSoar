@@ -227,13 +227,6 @@ class NativeView extends SurfaceView
     Log.d(TAG, "OpenGL version: " + gl.glGetString(GL10.GL_VERSION));
     Log.d(TAG, "OpenGL renderer: " + gl.glGetString(GL10.GL_RENDERER));
     Log.d(TAG, "OpenGL extensions: " + gl.glGetString(GL10.GL_EXTENSIONS));
-
-    /* code copied from src/Screen/OpenGL/Init.cpp */
-    String extensions = gl.glGetString(GL10.GL_EXTENSIONS);
-    textureNonPowerOfTwo = extensions != null &&
-      (extensions.indexOf("GL_OES_texture_npot") >= 0 ||
-       extensions.indexOf("GL_APPLE_texture_2D_limited_npot") >= 0 ||
-       extensions.indexOf("GL_ARB_texture_non_power_of_two") >= 0);
   }
 
   /**
