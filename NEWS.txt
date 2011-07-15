@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.1.4 - not yet released
+* map
+  - fix for the aircraft symbol
 * Android
   - fix text rendering on Adreno GPUs
 
