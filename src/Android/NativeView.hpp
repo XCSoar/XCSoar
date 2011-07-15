@@ -107,6 +107,14 @@ public:
 
     return success;
   }
+
+  void SetTexturePowerOfTwo(bool value) {
+    Java::Class cls(env, env->GetObjectClass(obj));
+    jfieldID id = env->GetStaticFieldID(cls, "textureNonPowerOfTwo", "Z");
+    assert(id);
+
+    env->SetStaticBooleanField(cls, id, value);
+  }
 };
 
 #endif
