@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.1.4 - not yet released
+* Android
+  - fix text rendering on Adreno GPUs
 
 Version 6.1.3 - 2011/07/14
 * devices
