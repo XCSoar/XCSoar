@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Extension.hpp"
+#include "Screen/OpenGL/Features.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -40,18 +41,37 @@ OpenGL::Initialise()
 #endif
 }
 
+/**
+ * Does the current GLES context support textures with dimensions
+ * other than power-of-two?
+ */
+gcc_pure
+static bool
+SupportsNonPowerOfTwoTexturesGLES()
+{
+  return OpenGL::IsExtensionSupported("GL_OES_texture_npot") ||
+    OpenGL::IsExtensionSupported("GL_APPLE_texture_2D_limited_npot");
+}
+
+/**
+ * Does the current OpenGL context support textures with dimensions
+ * other than power-of-two?
+ */
+gcc_pure
+static bool
+SupportsNonPowerOfTwoTextures()
+{
+  return OpenGL::IsExtensionSupported("GL_ARB_texture_non_power_of_two") ||
+    (have_gles() && SupportsNonPowerOfTwoTexturesGLES());
+}
+
 void
 OpenGL::SetupContext(unsigned width, unsigned height)
 {
   screen_width = width;
   screen_height = height;
 
-  texture_non_power_of_two =
-#ifdef HAVE_GLES
-    IsExtensionSupported("GL_OES_texture_npot") ||
-    IsExtensionSupported("GL_APPLE_texture_2D_limited_npot") ||
-#endif
-    IsExtensionSupported("GL_ARB_texture_non_power_of_two");
+  texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 
 #ifdef ANDROID
   native_view->SetTexturePowerOfTwo(texture_non_power_of_two);
