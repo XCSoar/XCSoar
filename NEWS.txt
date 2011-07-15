@@ -20,7 +20,7 @@ Version 6.2 - not yet released
 * map
   - redraw terrain only if needed
 
-Version 6.1.3 - not yet released
+Version 6.1.3 - 2011/07/14
 * devices
   - fix task declaration on PC
   - LX: correct byte alignment for task declaration
@@ -42,6 +42,8 @@ Version 6.1.3 - not yet released
   - support hardware keyboard in custom XCI files
   - clip text in the "credits" dialog
   - catch Java exceptions in the text renderer
+  - reduce texture memory usage on newer GPUs
+  - fix terrain rendering on Mali-400 (Samsung Galaxy S II)
 
 Version 6.1.2 - 2011/06/28
 * devices
