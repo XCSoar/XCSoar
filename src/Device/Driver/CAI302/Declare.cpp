@@ -203,8 +203,6 @@ bool
 CAI302Device::Declare(const Declaration &declaration,
                       OperationEnvironment &env)
 {
-  port->StopRxThread();
-
   bool success = DeclareInner(*port, declaration, env);
 
   port->SetRxTimeout(500);
@@ -213,9 +211,6 @@ CAI302Device::Declare(const Declaration &declaration,
     CAI302::LogMode(*port);
   else
     CAI302::LogModeQuick(*port);
-
-  port->SetRxTimeout(0);
-  port->StartRxThread();
 
   return success;
 }

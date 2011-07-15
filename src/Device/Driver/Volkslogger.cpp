@@ -231,7 +231,6 @@ VolksloggerDevice::Declare(const Declaration &declaration,
 
   env.SetText(_T("Comms with Volkslogger"));
 
-  port->StopRxThread();
   port->SetRxTimeout(500);
 
   // change to IO mode baud rate
@@ -245,8 +244,6 @@ VolksloggerDevice::Declare(const Declaration &declaration,
   vl.close(1);
 
   port->SetBaudrate(lLastBaudrate); // restore baudrate
-  port->SetRxTimeout(0); // clear timeout
-  port->StartRxThread(); // restart RX thread
 
   return success;
 }

@@ -311,8 +311,6 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
   if (declaration.size() < 2 || declaration.size() > 12)
     return false;
 
-  port->StopRxThread();
-
   /* during tests, the EW has taken up to one second to respond to
      the command \x18 */
   port->SetRxTimeout(2500);
@@ -320,9 +318,6 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
   bool success = DeclareInner(*port, declaration, env);
 
   port->Write("!!\r\n");         // go back to NMEA mode
-
-  port->SetRxTimeout(0);                       // clear timeout
-  port->StartRxThread();                       // restart RX thread
 
   return success;
 }

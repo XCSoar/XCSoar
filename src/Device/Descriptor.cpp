@@ -291,12 +291,18 @@ bool
 DeviceDescriptor::Declare(const struct Declaration &declaration,
                           OperationEnvironment &env)
 {
+  if (Com == NULL)
+    return false;
+
   SetBusy(true);
 
   TCHAR text[60];
 
   _stprintf(text, _("Declaring to %s"), Driver->display_name);
   env.SetText(text);
+
+  Com->StopRxThread();
+
   bool result = device != NULL && device->Declare(declaration, env);
 
   if (parser.isFlarm) {
@@ -304,6 +310,8 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
     env.SetText(text);
     result = FlarmDeclare(Com, declaration, env) || result;
   }
+
+  Com->StartRxThread();
 
   SetBusy(false);
   return result;
@@ -313,13 +321,17 @@ bool
 DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
                                  OperationEnvironment &env)
 {
-  if (Driver == NULL || device == NULL)
+  if (Com == NULL || Driver == NULL || device == NULL)
     return false;
 
   TCHAR text[60];
   _stprintf(text, _("Reading flight list from %s"), Driver->display_name);
   env.SetText(text);
-  return device->ReadFlightList(flight_list, env);
+
+  Com->StopRxThread();
+  bool result = device->ReadFlightList(flight_list, env);
+  Com->StartRxThread();
+  return result;
 }
 
 bool
@@ -333,7 +345,11 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
   TCHAR text[60];
   _stprintf(text, _("Downloading flight from %s"), Driver->display_name);
   env.SetText(text);
-  return device->DownloadFlight(flight, path, env);
+
+  Com->StopRxThread();
+  bool result = device->DownloadFlight(flight, path, env);
+  Com->StartRxThread();
+  return result;
 }
 
 void

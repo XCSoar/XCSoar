@@ -32,10 +32,6 @@ IMIDevice::Connect(OperationEnvironment &env)
   if (port == NULL)
     return false;
 
-  // stop Rx thread
-  if (!port->StopRxThread())
-    return false;
-
   // set new Rx timeout
   if (!port->SetRxTimeout(2000))
     return false;
@@ -52,10 +48,4 @@ IMIDevice::Disconnect()
 {
   // disconnect
   IMI::Disconnect(*port);
-
-  // restore Rx timeout (we must try that always; don't overwrite error descr)
-  port->SetRxTimeout(0);
-
-  // restart Rx thread
-  port->StartRxThread();
 }

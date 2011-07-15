@@ -210,8 +210,10 @@ SerialPort::Run()
   // Specify a set of events to be monitored for the port.
   if (is_widcomm)
     SetRxTimeout(180);
-  else
+  else {
     ::SetCommMask(hPort, EV_RXCHAR);
+    SetRxTimeout(0);
+  }
 
   while (!CheckStopped()) {
 

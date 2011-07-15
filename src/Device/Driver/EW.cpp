@@ -195,8 +195,6 @@ bool
 EWDevice::Declare(const struct Declaration &declaration,
                   OperationEnvironment &env)
 {
-  port->StopRxThread();
-
   lLastBaudrate = port->SetBaudrate(9600L);    // change to IO Mode baudrate
 
   port->SetRxTimeout(500);                     // set RX timeout to 500[ms]
@@ -206,9 +204,6 @@ EWDevice::Declare(const struct Declaration &declaration,
   port->Write("NMEA\r\n"); // switch to NMEA mode
 
   port->SetBaudrate(lLastBaudrate);            // restore baudrate
-
-  port->SetRxTimeout(0);                       // clear timeout
-  port->StartRxThread();                       // restart RX thread
 
   return success;
 }

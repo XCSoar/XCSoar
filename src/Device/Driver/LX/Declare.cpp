@@ -215,13 +215,8 @@ LXDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
   if (declaration.size() < 2 || declaration.size() > 12)
     return false;
 
-  if (!port->StopRxThread())
-    return false;
-
   bool success = DeclareInner(*port, declaration, env);
 
   LX::CommandModeQuick(*port, env);
-  port->SetRxTimeout(0);
-  port->StartRxThread();
   return success;
 }
