@@ -35,17 +35,11 @@ static WndForm* wf = NULL;
 void
 MapDisplayConfigPanel::UpdateVisibilities()
 {
-  WndProperty* wp_shift = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
-  assert(wp_shift != NULL);
-
   WndProperty* wp_orientation_cruise = 
                   (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
   assert(wp_orientation_cruise != NULL);
   bool northup = (wp_orientation_cruise->GetDataField()->GetAsInteger() 
                   == NORTHUP);
-
-  ShowFormControl(*wf, _T("prpGliderScreenPosition"),
-                  northup && wp_shift->GetDataField()->GetAsInteger() != 0);
 
   ShowFormControl(*wf, _T("prpMapShiftBias"), northup);
 }
