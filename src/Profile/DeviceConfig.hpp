@@ -119,6 +119,14 @@ struct DeviceConfig {
   bool IsVega() const {
     return IsDriver(_T("Vega"));
   }
+
+  void Clear() {
+    port_type = DISABLED;
+    baud_rate = 4800u;
+    path.clear();
+    bluetooth_mac.clear();
+    driver_name.clear();
+  }
 };
 
 namespace Profile
