@@ -97,7 +97,7 @@ DeclareInner(VLAPI &vl, const Declaration &declaration)
 {
   assert(declaration.size() >= 2);
 
-  if (vl.open(1, 20, 38400L) != VLA_ERR_NOERR ||
+  if (vl.open(20, 38400L) != VLA_ERR_NOERR ||
       vl.read_info() != VLA_ERR_NOERR)
     return false;
 

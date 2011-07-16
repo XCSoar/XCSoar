@@ -253,19 +253,16 @@ VLAPI::~VLAPI() {
 // 0  : logger not present
 // >0 : logger present
 //
-VLA_ERROR VLAPI::open(boolean connectit, int timeout,
+VLA_ERROR VLAPI::open(int timeout,
                       int32 sbaudrate) {
   VLA_ERROR err = VLA_ERR_NOERR;
 
   set_databaud(sbaudrate);
   // connect
-  if (connectit) {
-    if ((err = connect(timeout)) != VLA_ERR_NOERR)
-      return err;
+  if ((err = connect(timeout)) != VLA_ERR_NOERR)
+    return err;
 
-    vlpresent = 1;
-  }
-
+  vlpresent = 1;
   return err;
 }
 
