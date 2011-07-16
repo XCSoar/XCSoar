@@ -90,7 +90,7 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   env.Sleep(td);
   // auf Bestätigung warten
   while (serial_in(&c) != VLA_ERR_NOERR) {
-    if (test_user_break() && clear_user_break() == 1) {
+    if (env.IsCancelled()) {
       showwait(VLS_TXT_UIRQ2);
       return VLA_ERR_USERCANCELED;
     }

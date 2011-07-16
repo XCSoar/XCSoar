@@ -65,8 +65,6 @@ protected:
 	VLA_ERROR serial_empty_io_buffers();
 
   // user interaction functions
-	boolean test_user_break();
-  int16 clear_user_break();
   void progress_reset();
   void progress_set(VLS_TXT_ID);
   void show(VLS_TXT_ID);

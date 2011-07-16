@@ -64,28 +64,6 @@ VLA_ERROR VLA_SYS::serial_empty_io_buffers()
   return VLA_ERR_NOERR;
 }
 
-// interaction - input functions
-//
-boolean VLA_SYS::test_user_break()
-{
-  if(noninteractive)  return 0;
-
-  return 0;
-  /*
-    if you want the datatransfer to be user-interruptable,
-    implement testing a flag or anything which can
-    indicate that the user wants to interrupt the datatransfer
-  */
-}
-
-int16 VLA_SYS::clear_user_break()
-{
-  //  cerr << "VLA_SYS::clear_user_break()\n";
-  if(noninteractive)  return 0;
-
-  return 0;
-}
-
 // text for the status line
 //
 const char *statustext[] = {
