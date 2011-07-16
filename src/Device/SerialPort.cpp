@@ -348,8 +348,8 @@ SerialPort::Write(const void *data, size_t length)
     return 0;
 
   // Let's wait for ReadFile() to finish
-  // 1000ms like WriteTotalTimeoutConstant in SetRxTimeout()
-  switch (osWriter.Wait(1000)) {
+  unsigned timeout_ms = 1000 + length * 10;
+  switch (osWriter.Wait(timeout_ms)) {
   case OverlappedEvent::FINISHED:
     // Get results
     ::GetOverlappedResult(hPort, osWriter.GetPointer(), &NumberOfBytesWritten, FALSE);
