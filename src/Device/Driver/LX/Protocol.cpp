@@ -39,7 +39,7 @@ LX::CommandMode(Port &port)
   return port.SetRxTimeout(500) &&
     (Connect(port) || Connect(port) || Connect(port)) &&
     /* ... and configure the timeout */
-    port.SetRxTimeout(2000);
+    port.SetRxTimeout(5000);
 }
 
 void
