@@ -42,6 +42,38 @@ Volkslogger::Reset(Port &port, OperationEnvironment &env, unsigned n)
   return true;
 }
 
+bool
+Volkslogger::Handshake(Port &port, OperationEnvironment &env,
+                       unsigned timeout_ms)
+{
+  PeriodClock clock;
+  clock.update();
+
+  do { // Solange R's aussenden, bis ein L zurückkommt
+    port.Write('R');
+    env.Sleep(30);
+
+    if (clock.check(timeout_ms))
+      return false;
+  } while (port.GetChar() != 'L');
+
+  unsigned count = 1;
+  while (true) { // Auf 4 hintereinanderfolgende L's warten
+    int ch = port.GetChar();
+    if (ch >= 0) {
+      if (ch != 'L')
+        return false;
+
+      count++;
+      if (count >= 4)
+        return true;
+    }
+
+    if (clock.check(timeout_ms))
+      return false;
+  }
+}
+
 static bool
 SendWithCRC(Port &port, const void *data, size_t length)
 {

@@ -128,45 +128,14 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 // VL to the serial port
 //
 VLA_ERROR VLA_XFR::connect(int32 waittime) {
-  int16 l_count = 0;
-  byte c;
-
   serial_empty_io_buffers();
   // eventuell noch laufende Aktion im Logger abbrechen
   if (!Volkslogger::Reset(*port, env, 10))
     return VLA_ERR_MISC;
 
-  c = 0;
-
   const unsigned timeout_ms = waittime * 1000;
-  PeriodClock clock;
-  clock.update();
-
-  do { // Solange R's aussenden, bis ein L zurückkommt
-    serial_out('R');
-    env.Sleep(30);
-
-    if (clock.check(timeout_ms)) {
-      return VLA_ERR_NOANSWER;
-    }
-  } while (serial_in(&c) != VLA_ERR_NOERR || c != 'L');
-
-  l_count = 1;
-  while (true) { // Auf 4 hintereinanderfolgende L's warten
-    if (serial_in(&c) == VLA_ERR_NOERR) {
-      if (c != 'L') {
-        return VLA_ERR_NOANSWER;
-      }
-
-      l_count++;
-      if (l_count >= 4)
-        break;
-    }
-
-    if (clock.check(timeout_ms)) {
-      return VLA_ERR_TIMEOUT;
-    }
-  }
+  if (!Volkslogger::Handshake(*port, env, timeout_ms))
+    return VLA_ERR_NOANSWER;
 
   port->SetRxTimeout(50);
   port->FullFlush(300);
