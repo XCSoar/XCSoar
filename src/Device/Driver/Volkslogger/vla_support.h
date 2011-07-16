@@ -75,6 +75,8 @@ protected:
 
   //
   Port *port;
+
+ VLA_SYS(Port &_port):port(&_port) {}
 };
 
 
@@ -128,7 +130,7 @@ protected:
   // read block of data from VL, with flow-control
   int32 readlog(lpb puffer, int32);
 
-  VLA_XFR(OperationEnvironment &env);
+  VLA_XFR(Port &port, OperationEnvironment &env);
   void set_databaud(int32 db);
 
 	// establish connection with VL within specified time

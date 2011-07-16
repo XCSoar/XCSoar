@@ -35,12 +35,6 @@ extern int noninteractive;
 const int VLAPI_DBB_MEMSIZE = 16384;
 const int32 VLAPI_LOG_MEMSIZE = 81920L;
 
-void
-VLAPI::set_port(Port *_port)
-{
-  port = _port;
-}
-
 // ------------------------------------------------------------
 //                        VLA_XFR
 // ------------------------------------------------------------
@@ -514,7 +508,8 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   return VLA_ERR_NOERR;
 }
 
-VLA_XFR::VLA_XFR(OperationEnvironment &_env):env(_env) {
+VLA_XFR::VLA_XFR(Port &_port, OperationEnvironment &_env)
+  :VLA_SYS(_port), env(_env) {
   set_databaud(9600L);
 }
 
@@ -536,9 +531,8 @@ VLA_ERROR VLA_XFR::readinfo(lpb buffer, int32 buffersize) {
 // ------------------------------------------------------------
 
 // constructor
-VLAPI::VLAPI(OperationEnvironment &_env):VLA_XFR(_env) {
-
-
+VLAPI::VLAPI(Port &_port, OperationEnvironment &_env)
+  :VLA_XFR(_port, _env) {
   vlpresent = 0;
 }
 

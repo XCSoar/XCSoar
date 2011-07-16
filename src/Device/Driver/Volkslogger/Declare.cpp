@@ -153,8 +153,7 @@ VolksloggerDevice::Declare(const Declaration &declaration,
   // change to IO mode baud rate
   unsigned lLastBaudrate = port->SetBaudrate(9600L);
 
-  VLAPI vl(env);
-  vl.set_port(port);
+  VLAPI vl(*port, env);
 
   bool success = DeclareInner(vl, declaration);
 
