@@ -45,8 +45,6 @@ void VLA_XFR::set_databaud(int32 db) {
 
 // Blockweises Schreiben in den Logger (z.B. Datenbank)
 VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
-  byte c;
-
   // Schreibkommando geben
   if (!Volkslogger::SendCommand(*port, env, Volkslogger::cmd_PDB, 0, 0) ||
       !Volkslogger::WaitForACK(*port, env))
@@ -55,19 +53,10 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   // Schreiben der Datenbank
   env.Sleep(100);
 
-  if (!Volkslogger::WriteBulk(*port, env, dbbbuffer, dbbsize))
+  if (!Volkslogger::WriteBulk(*port, env, dbbbuffer, dbbsize) ||
+      !Volkslogger::WaitForACK(*port, env))
     return VLA_ERR_MISC;
 
-  // auf Bestätigung warten
-  while (serial_in(&c) != VLA_ERR_NOERR) {
-    if (env.IsCancelled()) {
-      return VLA_ERR_USERCANCELED;
-    }
-  }
-
-  // Fehlerbehandlung
-  if (c != Volkslogger::ACK)
-    return VLA_ERR_MISC;
   return VLA_ERR_NOERR;
 }
 
