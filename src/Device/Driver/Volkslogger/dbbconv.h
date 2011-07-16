@@ -19,6 +19,7 @@
 #define DBBCONV_H
 
 #include "vlapityp.h"
+#include "Database.hpp"
 
 class DBB {
 //private:
@@ -41,6 +42,20 @@ public:
  byte block[DBBEnd-DBBBeg];
  byte	fdf[FrmEnd-FrmBeg];
 	DBB();
+
+protected:
+  Volkslogger::TableHeader *GetHeader(unsigned i) {
+    Volkslogger::TableHeader *h = (Volkslogger::TableHeader *)block;
+    return &h[i];
+  }
+
+  const Volkslogger::TableHeader *GetHeader(unsigned i) const {
+    const Volkslogger::TableHeader *h =
+      (const Volkslogger::TableHeader *)block;
+    return &h[i];
+  }
+
+public:
 	void open_dbb();
 	void close_db(int kennung);
 	void add_ds(int kennung,void *quelle);

@@ -21,22 +21,46 @@ Copyright_License {
 }
 */
 
-#include "Util.hpp"
+#ifndef XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_DATABASE_HPP
+#define XCSOAR_DEVICE_DRIVER_VOLKSLOGGER_DATABASE_HPP
 
-#include <assert.h>
-#include <string.h>
+#include "Compiler.h"
 
-void
-copy_padded(char *dest, size_t size, const char *src)
-{
-  assert(dest != NULL);
-  assert(size > 0);
-  assert(src != NULL);
+#include <stdint.h>
 
-  size_t src_length = strlen(src);
-  if (src_length > size)
-    src_length = size;
+namespace Volkslogger {
+#pragma pack(push, 1)
 
-  memcpy(dest, src, src_length);
-  memset(dest + src_length, ' ', size - src_length);
+  struct TableHeader {
+    uint16_t start_offset;
+    uint16_t end_offset;
+    uint8_t dslaenge;
+    uint8_t keylaenge;
+  } gcc_packed;
+
+  struct Waypoint {
+    char name[6];
+    uint8_t type_and_longitude_sign;
+    uint8_t latitude[3];
+    uint8_t longitude[3];
+  } gcc_packed;
+
+  struct DeclarationWaypoint : public Waypoint{
+    uint8_t direction;
+    uint8_t oz_parameter;
+    uint8_t oz_shape;
+  } gcc_packed;
+
+  struct Route {
+    char name[14];
+    Waypoint waypoints[10];
+  } gcc_packed;
+
+  struct Pilot {
+    char name[16];
+  } gcc_packed;
+
+#pragma pack(pop)
 }
+
+#endif

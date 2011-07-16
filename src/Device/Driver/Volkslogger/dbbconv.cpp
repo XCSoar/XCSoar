@@ -18,6 +18,8 @@
 // Low-Level Funktionen für DBB Behandlung (Schreiben)
 
 #include "dbbconv.h"
+#include "OS/ByteOrder.hpp"
+
 #include <memory.h>
 #include <string.h>
 
@@ -44,16 +46,15 @@ DBB::DBB() { // Konstruktor: leeren Datenbank-Block erzeugen
 // and close the table (it can't be extended anymore)
 void DBB::close_db(int kennung) {
  HEADER *h = &header[kennung];
- byte *b = block + kennung*6;
 	// calculate position of last record
 	h->dslast = h->dsfirst + (h->dsanzahl-1) * h->dslaenge;
 	// build database header
-	b[0] = h->dsfirst / 256;
-	b[1] = h->dsfirst % 256;
-	b[2] = h->dslast  / 256;
-	b[3] = h->dslast  % 256;
-	b[4] = h->dslaenge;
-	b[5] = h->keylaenge;
+
+  Volkslogger::TableHeader *dest = GetHeader(kennung);
+  dest->start_offset = ToBE16(h->dsfirst);
+  dest->end_offset = ToBE16(h->dslaenge);
+  dest->dslaenge = h->dslaenge;
+  dest->keylaenge = h->keylaenge;
 }
 
 
@@ -61,13 +62,17 @@ void DBB::close_db(int kennung) {
 void DBB::open_dbb() {
  int i;
 	// determine the beginning and length of the database parts
+ const Volkslogger::TableHeader *src = GetHeader(0);
   for(i=0; i<8; i++) {
-    if ( (block[6*i] == 0xff) && (block[6*i+1] == 0xff) )
+    if (src->start_offset == 0xffff)
       continue;
-    header[i].dsfirst   = 256*block[6*i+0] + block[6*i+1];
-    header[i].dslast    = 256*block[6*i+2] + block[6*i+3];
-    header[i].dslaenge  = block[6*i+4];
-    header[i].keylaenge = block[6*i+5];
+
+    header[i].dsfirst = FromBE16(src->start_offset);
+    header[i].dslast = FromBE16(src->end_offset);
+    header[i].dslaenge = src->dslaenge;
+    header[i].keylaenge = src->keylaenge;
+
+    ++src;
   }
 }
 

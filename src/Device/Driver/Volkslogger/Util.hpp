@@ -33,6 +33,6 @@ Copyright_License {
  * longer than the destination buffer, it is clipped.
  */
 void
-copy_padded(unsigned char *dest, size_t size, const char *src);
+copy_padded(char *dest, size_t size, const char *src);
 
 #endif

@@ -19,6 +19,7 @@
 #include "dbbconv.h"
 #include "grecord.h"
 #include "utils.h"
+#include "Database.hpp"
 #include "Device/Port.hpp"
 #include "Util.hpp"
 #include "Protocol.hpp"
@@ -400,19 +401,26 @@ VLA_ERROR VLAPI::read_igcfile(char *filename, int index, int secmode) {
 
 // getting a waypoint object out of the database memory
 //
-void VLAPI_DATA::WPT::get(lpb p) {
-  int32 ll;
-  memcpy(name,p,6);
-  name[6] = 0;
+void VLAPI_DATA::WPT::get(const void *p) {
+  const Volkslogger::Waypoint *src = (const Volkslogger::Waypoint *)p;
+
+  memcpy(name, src->name, sizeof(src->name));
+  name[sizeof(src->name)] = 0;
   strupr(name);
-  typ = (WPTTYP) p[6] & 0x7f;
-  ll =  (int32) (65536.0*(p[7]&0x7f) + 256.0 * p[8] + p[9]);
+
+  typ = (WPTTYP)(src->type_and_longitude_sign & 0x7f);
+
+  uint32_t ll = ((src->latitude[0] & 0x7f) << 16) |
+    (src->latitude[1] << 8) | src->latitude[2];
   lat = ll / 60000.0;
-  if (p[7] & 0x80)
+  if (src->latitude[0] & 0x80)
     lat = -lat;
-  ll = (int32) (65536.0 * p[10] + 256 * p[11] + p[12]);
+
+  ll = (src->longitude[0] << 16) |
+    (src->longitude[1] << 8) | src->longitude[2];
   lon = ll / 60000.0;
-  if (p[6] & 0x80)
+
+  if (src->type_and_longitude_sign & 0x80)
     lon = -lon;
 }
 
@@ -420,46 +428,61 @@ void VLAPI_DATA::WPT::get(lpb p) {
 
 // putting a waypoint object into the database memory
 //
-void VLAPI_DATA::WPT::put(lpb p) {
-  int32 llat,llon;
+void VLAPI_DATA::WPT::put(void *p) {
+  Volkslogger::Waypoint *dest = (Volkslogger::Waypoint *)p;
   // String, evtl. mit Blanks aufgefüllt, zurückschreiben
   strupr(name);
-  copy_padded(p, 6, name);
+  copy_padded(dest->name, sizeof(dest->name), name);
+
   // Koordinaten zurückschreiben
-  llat = labs((long)(lat * 60000.0));
-  llon = labs((long)(lon * 60000.0));
-  p[6] = (typ&0x7f) | ((lon<0)?0x80:0);
-  p[7] = (byte)((llat >> 16) | ((lat<0)?0x80:0));
-  llat = llat & 0x0000ffff;
-  p[8] = (byte) (llat >> 8);
-  p[9] = (byte) (llat & 0x000000ff);
-  p[10] = (byte) (llon >> 16);
-  llon  = llon & 0x0000ffff;
-  p[11] = (byte) (llon >> 8);
-  p[12] = (byte) (llon & 0x000000ff);
+  uint32_t llat = labs((long)(lat * 60000.0));
+  uint32_t llon = labs((long)(lon * 60000.0));
+
+  dest->type_and_longitude_sign = (typ & 0x7f);
+  if (lon < 0)
+    dest->type_and_longitude_sign |= 0x80;
+
+  dest->latitude[0] = llat >> 16;
+  if (lat < 0)
+    dest->latitude[0] |= 0x80;
+  dest->latitude[1] = llat >> 8;
+  dest->latitude[2] = llat;
+
+  dest->longitude[0] = llon >> 16;
+  dest->longitude[1] = llon >> 8;
+  dest->longitude[2] = llon;
 }
 
 // getting a declaration waypoint object out of the database
 //
-void VLAPI_DATA::DCLWPT::get(lpb p) {
-  WPT::get(p);
-  oztyp = (OZTYP)p[15];
-  ws = p[13] * 2;
+void VLAPI_DATA::DCLWPT::get(const void *p) {
+  const Volkslogger::DeclarationWaypoint *src =
+    (const Volkslogger::DeclarationWaypoint *)p;
+
+  WPT::get(src);
+
+  oztyp = (OZTYP)src->oz_shape;
+  ws = src->direction * 2;
   if(oztyp == OZTYP_LINE) {
-    lw = (p[14] & 0x0f) * ((p[14] & 0xf0) >> 4);
+    lw = (src->oz_parameter & 0x0f) * ((src->oz_parameter & 0xf0) >> 4);
   }
   else {
-    rz = (p[14] & 0x0f) * 100;
-    rs = ((p[14] & 0xf0) >> 4) * 1000;
+    rz = (src->oz_parameter & 0x0f) * 100;
+    rs = ((src->oz_parameter & 0xf0) >> 4) * 1000;
   }
 }
 
 // putting a declaration waypoint object into the database memory
 //
-void VLAPI_DATA::DCLWPT::put(lpb p) {
-  WPT::put(p);
-  p[15] = oztyp;
-  p[13] = ws / 2;
+void VLAPI_DATA::DCLWPT::put(void *p) {
+  Volkslogger::DeclarationWaypoint *dest =
+    (Volkslogger::DeclarationWaypoint *)p;
+
+  WPT::put(dest);
+
+  dest->oz_shape = oztyp;
+  dest->direction = ws / 2;
+
   if(oztyp == OZTYP_LINE) {
     // find two integer numbers between 1 and 15 the product of which
     // is just lower or equal the linewidth
@@ -472,41 +495,50 @@ void VLAPI_DATA::DCLWPT::put(lpb p) {
         break;
       }
     }
-    p[14] = (w1<<4) + w2;
+
+    dest->oz_parameter = (w1 << 4) + w2;
   }
   else {
-    p[14] = (rz / 100) + ( (rs/1000) << 4 );
+    dest->oz_parameter = (rz / 100) + ((rs / 1000 ) << 4);
   }
 }
 
-void VLAPI_DATA::ROUTE::get(lpb p) {
-  memcpy(name,p,14);
-  name[14] = 0;
+void VLAPI_DATA::ROUTE::get(const void *p) {
+  const Volkslogger::Route *src = (const Volkslogger::Route *)p;
+
+  memcpy(name, src->name, sizeof(src->name));
+  name[sizeof(src->name)] = 0;
   strupr(name);
+
   for(int i=0; i<10; i++)
-    wpt[i].get(p + 14 + i*13);
+    wpt[i].get(&src->waypoints[i]);
 }
 
-void VLAPI_DATA::ROUTE::put(lpb p) {
+void VLAPI_DATA::ROUTE::put(void *p) {
+  Volkslogger::Route *dest = (Volkslogger::Route *)p;
+
 	int i;
   strupr(name);
-  copy_padded(p, 14, name);
+  copy_padded(dest->name, sizeof(dest->name), name);
   // In the following line, we insertes "int"
   // (Florian Ehinger)
   for(i=0; i<10; i++)
-    wpt[i].put(p + 14 + i*13);
+    wpt[i].put(&dest->waypoints[i]);
 }
 
 void VLAPI_DATA::PILOT::get(lpb p) {
-  memcpy(name,p,16);
-  name[16] = 0;
+  const Volkslogger::Pilot *src = (const Volkslogger::Pilot *)p;
+
+  memcpy(name, src->name, sizeof(src->name));
+  name[sizeof(src->name)] = 0;
   strupr(name);
 }
 
 void VLAPI_DATA::PILOT::put(lpb p) {
+  Volkslogger::Pilot *dest = (Volkslogger::Pilot *)p;
 
   strupr(name);
-  copy_padded(p, 15, name);
+  copy_padded(dest->name, sizeof(dest->name), name);
 }
 
 

@@ -51,8 +51,8 @@ class VLAPI_DATA {
     double lon; // longitude in degrees, western values are negative
     byte typ; // type(attributes) of WPT, or-combination of enum WPTTYP
   protected:
-    void get(lpb p);
-    void put(lpb p);
+    void get(const void *p);
+    void put(void *p);
   };
 
   // declaration-waypoint
@@ -80,8 +80,8 @@ class VLAPI_DATA {
     // the VL, according to FAI-rules
     OZTYP oztyp;
   protected:
-    void get(lpb p);
-    void put(lpb p);
+    void get(const void *p);
+    void put(void *p);
   };
 
   class ROUTE {
@@ -90,8 +90,8 @@ class VLAPI_DATA {
     char name[15];
     WPT wpt[10];
   protected:
-    void get(lpb p);
-    void put(lpb p);
+    void get(const void *p);
+    void put(void *p);
   };
 
 
