@@ -54,7 +54,9 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   env.Sleep(100);
 
   if (!Volkslogger::WriteBulk(*port, env, dbbbuffer, dbbsize) ||
-      !Volkslogger::WaitForACK(*port, env))
+      !port->SetRxTimeout(8000) ||
+      !Volkslogger::WaitForACK(*port, env) ||
+      !port->SetRxTimeout(500))
     return VLA_ERR_MISC;
 
   return VLA_ERR_NOERR;
