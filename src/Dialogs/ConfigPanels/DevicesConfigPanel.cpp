@@ -356,18 +356,23 @@ FillPorts(DataFieldEnum &dfe)
 }
 
 static void
+FillBaudRates(DataFieldEnum &dfe)
+{
+  dfe.addEnumText(_T("1200"), 1200);
+  dfe.addEnumText(_T("2400"), 2400);
+  dfe.addEnumText(_T("4800"), 4800);
+  dfe.addEnumText(_T("9600"), 9600);
+  dfe.addEnumText(_T("19200"), 19200);
+  dfe.addEnumText(_T("38400"), 38400);
+  dfe.addEnumText(_T("57600"), 57600);
+  dfe.addEnumText(_T("115200"), 115200);
+}
+
+static void
 SetupDeviceFields(const DeviceConfig &config,
                   WndProperty *port_field, WndProperty *speed_field,
                   WndProperty *driver_field, WndButton *setup_button)
 {
-#ifndef ANDROID
-  static const TCHAR *const tSpeed[] = {
-    _T("1200"), _T("2400"), _T("4800"), _T("9600"),
-    _T("19200"), _T("38400"), _T("57600"), _T("115200"),
-    NULL
-  };
-#endif
-
   if (port_field != NULL) {
     DataFieldEnum *dfe = (DataFieldEnum *)port_field->GetDataField();
 
@@ -439,10 +444,9 @@ SetupDeviceFields(const DeviceConfig &config,
 #ifdef ANDROID
     speed_field->hide();
 #else
-    DataFieldEnum *dfe = (DataFieldEnum *)speed_field->GetDataField();
-    dfe->addEnumTexts(tSpeed);
-
-    dfe->Set(config.speed_index);
+    DataFieldEnum &dfe = *(DataFieldEnum *)speed_field->GetDataField();
+    FillBaudRates(dfe);
+    dfe.Set(config.baud_rate);
     speed_field->RefreshDisplay();
 #endif
   }
@@ -519,8 +523,8 @@ FinishDeviceFields(DeviceConfig &config,
 
 #ifndef ANDROID
   if (config.UsesSpeed() && speed_field != NULL &&
-      (int)config.speed_index != speed_field->GetDataField()->GetAsInteger()) {
-    config.speed_index = speed_field->GetDataField()->GetAsInteger();
+      (int)config.baud_rate != speed_field->GetDataField()->GetAsInteger()) {
+    config.baud_rate = speed_field->GetDataField()->GetAsInteger();
     changed = true;
   }
 #endif

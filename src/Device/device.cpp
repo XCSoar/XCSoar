@@ -61,17 +61,6 @@ Copyright_License {
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
 
-static const unsigned dwSpeed[] = {
-  1200,
-  2400,
-  4800,
-  9600,
-  19200,
-  38400,
-  57600,
-  115200
-};
-
 /**
  * Attempt to detect the GPS device.
  *
@@ -167,9 +156,9 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     return NULL;
 
 #ifdef HAVE_POSIX
-  TTYPort *Com = new TTYPort(path, dwSpeed[config.speed_index], handler);
+  TTYPort *Com = new TTYPort(path, config.baud_rate, handler);
 #else
-  SerialPort *Com = new SerialPort(path, dwSpeed[config.speed_index], handler);
+  SerialPort *Com = new SerialPort(path, config.baud_rate, handler);
 #endif
   if (!Com->Open()) {
     delete Com;

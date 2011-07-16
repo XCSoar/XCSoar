@@ -117,7 +117,6 @@ void
 Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 {
   TCHAR buffer[64];
-  unsigned Temp = 0;
 
   config.port_type = ReadPortType(n);
 
@@ -133,13 +132,32 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
       config.path = _T("COM2:");
   }
 
-  MakeDeviceSettingName(buffer, _T("Speed"), n, _T("Index"));
-  if (Get(buffer, Temp))
-    config.speed_index = Temp;
-  else if (is_altair())
-    config.speed_index = 5;
-  else
-    config.speed_index = 2;
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("BaudRate"));
+  if (!Get(buffer, config.baud_rate)) {
+    /* XCSoar before 6.2 used to store a "speed index", not the real
+       baud rate - try to import the old settings */
+
+    static const unsigned speed_index_table[] = {
+      1200,
+      2400,
+      4800,
+      9600,
+      19200,
+      38400,
+      57600,
+      115200
+    };
+
+    MakeDeviceSettingName(buffer, _T("Speed"), n, _T("Index"));
+    unsigned speed_index;
+    if (Get(buffer, speed_index) &&
+        speed_index < sizeof(speed_index_table) / sizeof(speed_index_table[0]))
+      config.baud_rate = speed_index_table[speed_index];
+    else if (is_altair())
+      config.baud_rate = 38400;
+    else
+      config.baud_rate = 4800;
+  }
 
   _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
@@ -207,8 +225,8 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("Path"));
   Set(buffer, config.path);
 
-  MakeDeviceSettingName(buffer, _T("Speed"), n, _T("Index"));
-  Set(buffer, config.speed_index);
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("BaudRate"));
+  Set(buffer, config.baud_rate);
 
   _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
