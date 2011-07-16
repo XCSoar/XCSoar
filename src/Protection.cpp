@@ -78,6 +78,8 @@ void CreateCalculationThread(void) {
 
   // Create a read thread for performing calculations
   merge_thread = new MergeThread(device_blackboard);
+  merge_thread->Trigger();
+
   calculation_thread = new CalculationThread(*glide_computer);
 }
 
