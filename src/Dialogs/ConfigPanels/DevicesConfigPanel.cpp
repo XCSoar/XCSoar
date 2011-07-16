@@ -385,6 +385,8 @@ FillPorts(DataFieldEnum &dfe)
 #endif
 }
 
+#ifndef ANDROID
+
 static void
 FillBaudRates(DataFieldEnum &dfe)
 {
@@ -397,6 +399,8 @@ FillBaudRates(DataFieldEnum &dfe)
   dfe.addEnumText(_T("57600"), 57600);
   dfe.addEnumText(_T("115200"), 115200);
 }
+
+#endif
 
 static void
 SetupDeviceFields(const DeviceConfig &config,
