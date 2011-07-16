@@ -87,8 +87,9 @@ int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
   const int16   d = 2;  //Verzögerungszeit 2ms
   byte 		cmdarray[8];
   // alte Zeichen verwerfen
-  env.Sleep(100);
-  serial_empty_io_buffers();
+  port->SetRxTimeout(20);
+  port->FullFlush(100);
+  port->SetRxTimeout(500);
 
   // Kommandointerpreter im VL zurücksetzen
   for (unsigned i =0 ; i < 6; i++) {
@@ -503,8 +504,9 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   if (!quietmode)
     show(VLS_TXT_CONN_OK);
 
-  env.Sleep(300);
-  serial_empty_io_buffers();
+  port->SetRxTimeout(50);
+  port->FullFlush(300);
+  port->SetRxTimeout(500);
   return VLA_ERR_NOERR;
 }
 
