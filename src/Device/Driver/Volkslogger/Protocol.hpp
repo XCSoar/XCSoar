@@ -103,6 +103,8 @@ namespace Volkslogger {
 
   bool Handshake(Port &port, OperationEnvironment &env, unsigned timeout_ms);
 
+  bool Connect(Port &port, OperationEnvironment &env, unsigned timeout_ms);
+
   bool SendCommand(Port &port, OperationEnvironment &env,
                    Command cmd, uint8_t param1=0, uint8_t param2=0);
 

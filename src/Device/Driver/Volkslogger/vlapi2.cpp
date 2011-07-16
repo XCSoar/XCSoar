@@ -133,12 +133,9 @@ VLA_ERROR VLA_XFR::connect(int32 waittime) {
   port->Flush();
 
   // eventuell noch laufende Aktion im Logger abbrechen
-  if (!Volkslogger::Reset(*port, env, 10))
-    return VLA_ERR_MISC;
-
   const unsigned timeout_ms = waittime * 1000;
-  if (!Volkslogger::Handshake(*port, env, timeout_ms))
-    return VLA_ERR_NOANSWER;
+  if (!Volkslogger::Connect(*port, env, timeout_ms))
+    return VLA_ERR_MISC;
 
   port->SetRxTimeout(50);
   port->FullFlush(300);

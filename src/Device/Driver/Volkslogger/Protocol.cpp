@@ -74,6 +74,13 @@ Volkslogger::Handshake(Port &port, OperationEnvironment &env,
   }
 }
 
+bool
+Volkslogger::Connect(Port &port, OperationEnvironment &env,
+                     unsigned timeout_ms)
+{
+  return Reset(port, env, 10) && Handshake(port, env, timeout_ms);
+}
+
 static bool
 SendWithCRC(Port &port, const void *data, size_t length)
 {
