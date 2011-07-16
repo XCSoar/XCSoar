@@ -25,6 +25,10 @@
 #include "Navigation/Aircraft.hpp"
 
 class AircraftSim {
+  AIRCRAFT_STATE state, state_last;
+
+  fixed random_mag;
+
 public:
   AircraftSim();
 
@@ -56,10 +60,6 @@ private:
   void integrate(const Angle& heading, const fixed timestep);
 
   GeoPoint endpoint(const Angle& heading, const fixed timestep) const;
-
-  AIRCRAFT_STATE state, state_last;
-
-  fixed random_mag;
 };
 
 #endif

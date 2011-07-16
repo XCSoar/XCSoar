@@ -32,6 +32,9 @@ class ProtectedTaskManager;
 class DemoReplayGlue:
   public DemoReplay
 {
+  PeriodClock clock;
+  ProtectedTaskManager* m_task_manager;
+
 public:
   DemoReplayGlue(ProtectedTaskManager& task_manager):
     m_task_manager(&task_manager) {};
@@ -45,9 +48,6 @@ protected:
                           const fixed speed, const Angle bearing,
                           const fixed alt, const fixed baroalt, const fixed t);
   virtual void on_stop();
-private:
-  PeriodClock clock;
-  ProtectedTaskManager* m_task_manager;
 };
 
 #endif

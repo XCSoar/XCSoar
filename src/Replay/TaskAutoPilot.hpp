@@ -29,6 +29,15 @@
 #include <vector>
 
 struct AutopilotParameters {
+  fixed bearing_noise;
+  fixed target_noise;
+  fixed turn_speed;
+  fixed sink_factor;
+  fixed climb_factor;
+  fixed start_alt;
+  bool enable_bestcruisetrack;
+  bool goto_target;
+
   AutopilotParameters():
     target_noise(0.1),
     sink_factor(1.0),
@@ -40,21 +49,16 @@ struct AutopilotParameters {
       realistic();
     };
 
-  fixed bearing_noise;
-  fixed target_noise;
-  fixed turn_speed;
-  fixed sink_factor;
-  fixed climb_factor;
-  fixed start_alt;
-  bool enable_bestcruisetrack;
-  bool goto_target;
-
   void ideal();
   void realistic();
 };
 
 class AbstractAutoPilot {
 public:
+  GeoPoint location_start;
+  GeoPoint location_previous;
+  Angle heading;
+
   AbstractAutoPilot() {};
 
   void set_default_location(const GeoPoint& default_location) {
@@ -62,10 +66,6 @@ public:
     location_previous = default_location;
     location_previous.Latitude-= Angle::degrees(fixed(1.0));
   }
-
-  GeoPoint location_start;
-  GeoPoint location_previous;
-  Angle heading;
 
 protected:
   virtual void on_manual_advance() {};
@@ -133,6 +133,19 @@ public:
     FinalGlide
   };
 
+protected:
+  AcState acstate;
+  unsigned awp;
+
+private:
+  const AutopilotParameters &parms;
+  Filter heading_filt;
+  fixed climb_rate;
+  fixed speed_factor;
+  bool short_flight;
+  GeoPoint w[2];
+
+public:
   TaskAutoPilot(const AutopilotParameters &_parms);
 
   virtual void Start(const TaskAccessor& task);
@@ -153,18 +166,7 @@ public:
     speed_factor = f;
   }
 
-protected:
-  AcState acstate;
-  unsigned awp;
-
 private:
-  const AutopilotParameters &parms;
-  Filter heading_filt;
-  fixed climb_rate;
-  fixed speed_factor;
-  bool short_flight;
-  GeoPoint w[2];
-
   bool do_advance(TaskAccessor& task);
   void advance_if_required(TaskAccessor& task);
   bool has_finished(TaskAccessor& task);

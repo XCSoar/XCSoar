@@ -36,6 +36,18 @@ class ProtectedTaskManager;
 
 class Replay
 {
+  enum ReplayMode {
+    MODE_NULL,
+    MODE_IGC,
+    MODE_NMEA,
+    MODE_DEMO
+  };
+
+  ReplayMode mode;
+  IgcReplayGlue Igc;
+  NmeaReplayGlue Nmea;
+  DemoReplayGlue Demo;
+
 public:
   Replay(ProtectedTaskManager& task_manager):
     mode(MODE_NULL),
@@ -49,19 +61,6 @@ public:
 
   fixed GetTimeScale();
   void SetTimeScale(const fixed TimeScale);
-
-private:
-  enum ReplayMode {
-    MODE_NULL,
-    MODE_IGC,
-    MODE_NMEA,
-    MODE_DEMO
-  };
-
-  ReplayMode mode;
-  IgcReplayGlue Igc;
-  NmeaReplayGlue Nmea;
-  DemoReplayGlue Demo;
 };
 
 #endif

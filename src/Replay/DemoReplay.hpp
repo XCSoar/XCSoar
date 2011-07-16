@@ -31,6 +31,10 @@ Copyright_License {
 class DemoReplay: public AbstractReplay
 {
 public:
+  AutopilotParameters parms;
+  TaskAutoPilot autopilot;
+  AircraftSim aircraft;
+
   DemoReplay();
   virtual void Start() = 0;
   virtual bool Update() = 0;
@@ -41,9 +45,6 @@ protected:
   bool Update(TaskAccessor& task);
   virtual bool update_time();
   virtual void reset_time();
-  AutopilotParameters parms;
-  TaskAutoPilot autopilot;
-  AircraftSim aircraft;
 };
 
 #endif

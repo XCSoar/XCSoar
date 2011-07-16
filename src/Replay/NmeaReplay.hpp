@@ -34,6 +34,9 @@ class FileLineReaderA;
 
 class NmeaReplay: public AbstractReplay
 {
+  TCHAR FileName[MAX_PATH];
+  FileLineReaderA *reader;
+
 public:
   NmeaReplay();
   ~NmeaReplay();
@@ -51,9 +54,6 @@ protected:
   virtual void on_sentence(const char *line) = 0;
 
 private:
-  TCHAR FileName[MAX_PATH];
-  FileLineReaderA *reader;
-
   bool OpenFile();
   void CloseFile();
   bool ReadUntilRMC(bool ignore);

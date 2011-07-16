@@ -38,6 +38,8 @@ class NmeaReplayGlue:
   NMEAParser *parser;
   Device *device;
 
+  PeriodClock clock;
+
 public:
   NmeaReplayGlue();
   virtual ~NmeaReplayGlue();
@@ -50,9 +52,6 @@ protected:
   virtual void reset_time();
   virtual void on_bad_file();
   virtual void on_sentence(const char *line);
-
-private:
-  PeriodClock clock;
 };
 
 #endif

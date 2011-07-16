@@ -31,6 +31,10 @@ class AbstractReplay
 public:
   fixed TimeScale;
 
+protected:
+  bool Enabled;
+
+public:
   AbstractReplay(): TimeScale(fixed_one),Enabled(false) {};
   virtual bool Update() = 0;
   virtual void Stop() = 0;
@@ -41,8 +45,6 @@ public:
   }
 
 protected:
-  bool Enabled;
-
   virtual bool update_time() = 0;
   virtual void reset_time() = 0;
 };
