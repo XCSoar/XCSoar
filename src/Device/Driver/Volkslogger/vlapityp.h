@@ -36,18 +36,8 @@
 #ifndef VLAPITYP_H
 #define VLAPITYP_H
 
-#ifdef VLAPI2_EXPORTS
-#define VLAPI2_API __declspec(dllexport)
-#else
-#define VLAPI2_API __declspec(dllimport)
-#endif
-
 typedef unsigned char
 	boolean;
-
-
-//typedef int
-//	error;
 
 // 8-bit unsigned
 typedef unsigned char
@@ -67,30 +57,6 @@ typedef long
 // 16-bit signed
 typedef int
 	int16;
-
-
-// under 16-bit Borland C++ for DOS, pointers which point to data structures
-// greater than 64KB need the prefix "huge" to work correctly.
-// comment this out and uncomment the empty defintion
-// for other compilers which don't need the "huge" prefix
-
-#ifdef FAR
-#undef FAR
-#endif
-
-
-//#ifdef __MSDOS__
-//#ifdef __BORLANDC__
-//#define HUGE huge
-//#define FAR far
-//#else
-//#define HUGE
-//#define FAR
-//#endif
-//#else
-//#define HUGE
-//#define FAR
-//#endif
 
 // pointer to a byte variable, which can be anywhere in the memory space
 typedef byte *
