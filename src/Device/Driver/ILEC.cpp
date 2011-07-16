@@ -106,7 +106,7 @@ ILECDevice::ParseNMEA(const char *_line, NMEA_INFO &info)
 }
 
 static Device *
-ILECCreateOnPort(Port *com_port)
+ILECCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new ILECDevice(com_port);
 }

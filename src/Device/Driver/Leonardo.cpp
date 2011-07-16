@@ -220,7 +220,7 @@ LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO &info)
 }
 
 static Device *
-LeonardoCreateOnPort(Port *com_port)
+LeonardoCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new LeonardoDevice(com_port);
 }

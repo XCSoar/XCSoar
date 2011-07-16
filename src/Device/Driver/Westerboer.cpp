@@ -175,7 +175,7 @@ WesterboerDevice::PutBugs(fixed _bugs)
 }
 
 static Device *
-WesterboerCreateOnPort(Port *com_port)
+WesterboerCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new WesterboerDevice(com_port);
 }

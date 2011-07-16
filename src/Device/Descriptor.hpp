@@ -38,6 +38,7 @@ struct DERIVED_INFO;
 class Port;
 class Device;
 class AtmosphericPressure;
+struct DeviceConfig;
 struct DeviceRegister;
 class InternalGPS;
 class RecordedFlightList;
@@ -112,7 +113,8 @@ public:
    * When this method fails, the caller is responsible for freeing the
    * Port object.
    */
-  bool Open(Port *port, const struct DeviceRegister *driver);
+  bool Open(const DeviceConfig &config, Port *port,
+            const struct DeviceRegister *driver);
   void Close();
 
   const TCHAR *GetDisplayName() const;

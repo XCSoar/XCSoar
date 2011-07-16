@@ -57,8 +57,11 @@ NmeaReplayGlue::Start()
   /* instantiate it */
   const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
   assert(driver != NULL);
-  if (driver->CreateOnPort != NULL)
-    device = driver->CreateOnPort(&port);
+  if (driver->CreateOnPort != NULL) {
+    DeviceConfig config;
+    config.Clear();
+    device = driver->CreateOnPort(config, &port);
+  }
 
   NmeaReplay::Start();
 }

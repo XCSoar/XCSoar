@@ -64,7 +64,7 @@ FlymasterF1Device::ParseNMEA(const char *String, NMEA_INFO &info)
 }
 
 static Device *
-FlymasterF1CreateOnPort(Port *com_port)
+FlymasterF1CreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new FlymasterF1Device();
 }

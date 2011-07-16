@@ -324,7 +324,7 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
 
 
 static Device *
-EWMicroRecorderCreateOnPort(Port *com_port)
+EWMicroRecorderCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new EWMicroRecorderDevice(com_port);
 }

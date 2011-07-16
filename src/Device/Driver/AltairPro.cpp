@@ -308,7 +308,7 @@ AltairProDevice::OnSysTicker(const NMEA_INFO &basic,
 }
 
 static Device *
-AltairProCreateOnPort(Port *com_port)
+AltairProCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new AltairProDevice(com_port);
 }

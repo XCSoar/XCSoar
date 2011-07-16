@@ -37,6 +37,7 @@ Copyright_License {
 #include "BasicComputer.hpp"
 #include "OS/PathName.hpp"
 #include "Wind/WindZigZag.hpp"
+#include "Profile/DeviceConfig.hpp"
 
 #include <stdio.h>
 
@@ -89,9 +90,12 @@ int main(int argc, char **argv)
     return 1;
   }
 
+  DeviceConfig config;
+  config.Clear();
+
   NullPort port;
   Device *device = driver->CreateOnPort != NULL
-    ? driver->CreateOnPort(&port)
+    ? driver->CreateOnPort(config, &port)
     : NULL;
 
   NMEAParser parser;

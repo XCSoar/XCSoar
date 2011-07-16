@@ -64,7 +64,7 @@ CaiGpsNavDevice::Open(OperationEnvironment &env)
 }
 
 static Device *
-CaiGpsNavCreateOnPort(Port *com_port)
+CaiGpsNavCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new CaiGpsNavDevice(com_port);
 }

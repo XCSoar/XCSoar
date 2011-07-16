@@ -49,6 +49,9 @@
 #include "Operation.hpp"
 #include "FaultInjectionPort.hpp"
 #include "TestUtil.hpp"
+#include "Profile/DeviceConfig.hpp"
+
+static const DeviceConfig dummy_config;
 
 bool
 HaveCondorDevice()
@@ -189,7 +192,7 @@ TestFLARM()
 static void
 TestBorgeltB50()
 {
-  Device *device = b50Device.CreateOnPort(NULL);
+  Device *device = b50Device.CreateOnPort(dummy_config, NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -216,7 +219,7 @@ TestBorgeltB50()
 static void
 TestCAI302()
 {
-  Device *device = cai302Device.CreateOnPort(NULL);
+  Device *device = cai302Device.CreateOnPort(dummy_config, NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -273,7 +276,7 @@ TestCAI302()
 static void
 TestFlymasterF1()
 {
-  Device *device = flymasterf1Device.CreateOnPort(NULL);
+  Device *device = flymasterf1Device.CreateOnPort(dummy_config, NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -302,7 +305,7 @@ TestFlymasterF1()
 static void
 TestFlytec()
 {
-  Device *device = flytec_device_driver.CreateOnPort(NULL);
+  Device *device = flytec_device_driver.CreateOnPort(dummy_config, NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -364,7 +367,7 @@ TestFlytec()
 static void
 TestLeonardo()
 {
-  Device *device = leonardo_device_driver.CreateOnPort(NULL);
+  Device *device = leonardo_device_driver.CreateOnPort(dummy_config, NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -441,7 +444,7 @@ TestLeonardo()
 static void
 TestLX(const struct DeviceRegister &driver, bool condor=false)
 {
-  Device *device = driver.CreateOnPort(NULL);
+  Device *device = driver.CreateOnPort(dummy_config, NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -490,7 +493,7 @@ TestLX(const struct DeviceRegister &driver, bool condor=false)
 static void
 TestILEC()
 {
-  Device *device = ilec_device_driver.CreateOnPort(NULL);
+  Device *device = ilec_device_driver.CreateOnPort(dummy_config, NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -520,7 +523,7 @@ TestILEC()
 static void
 TestVega()
 {
-  Device *device = vgaDevice.CreateOnPort(NULL);
+  Device *device = vgaDevice.CreateOnPort(dummy_config, NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -564,7 +567,7 @@ TestVega()
 static void
 TestWesterboer()
 {
-  Device *device = westerboer_device_driver.CreateOnPort(NULL);
+  Device *device = westerboer_device_driver.CreateOnPort(dummy_config, NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -601,7 +604,7 @@ TestWesterboer()
 static void
 TestZander()
 {
-  Device *device = zanderDevice.CreateOnPort(NULL);
+  Device *device = zanderDevice.CreateOnPort(dummy_config, NULL);
   ok1(device != NULL);
 
   NMEA_INFO nmea_info;
@@ -701,7 +704,7 @@ static void
 TestDeclare(const struct DeviceRegister &driver)
 {
   FaultInjectionPort port(*(Port::Handler *)NULL);
-  Device *device = driver.CreateOnPort(&port);
+  Device *device = driver.CreateOnPort(dummy_config, &port);
   ok1(device != NULL);
 
   Declaration declaration(NULL);
@@ -738,7 +741,7 @@ static void
 TestFlightList(const struct DeviceRegister &driver)
 {
   FaultInjectionPort port(*(Port::Handler *)NULL);
-  Device *device = driver.CreateOnPort(&port);
+  Device *device = driver.CreateOnPort(dummy_config, &port);
   ok1(device != NULL);
 
   for (unsigned i = 0; i < 1024; ++i) {

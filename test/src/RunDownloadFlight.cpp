@@ -30,6 +30,7 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "OS/PathName.hpp"
 #include "ConsoleOperationEnvironment.hpp"
+#include "Profile/DeviceConfig.hpp"
 
 #ifdef HAVE_POSIX
 #include "Device/TTYPort.hpp"
@@ -70,8 +71,11 @@ int main(int argc, char **argv)
 
   PathName driver_name(argv[1]);
   PathName port_name(argv[2]);
-  int baud = atoi(argv[3]);
   PathName path(argv[4]);
+
+  DeviceConfig config;
+  config.Clear();
+  config.baud_rate = atoi(argv[3]);
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == NULL) {
@@ -87,9 +91,11 @@ int main(int argc, char **argv)
   assert(driver->CreateOnPort != NULL);
 
 #ifdef HAVE_POSIX
-  TTYPort *port = new TTYPort(port_name, baud, *(Port::Handler *)NULL);
+  TTYPort *port = new TTYPort(port_name, config.baud_rate,
+                              *(Port::Handler *)NULL);
 #else
-  SerialPort *port = new SerialPort(port_name, baud, *(Port::Handler *)NULL);
+  SerialPort *port = new SerialPort(port_name, config.baud_rate,
+                                    *(Port::Handler *)NULL);
 #endif
   if (!port->Open()) {
     delete port;
@@ -97,7 +103,7 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  Device *device = driver->CreateOnPort(port);
+  Device *device = driver->CreateOnPort(config, port);
   assert(device != NULL);
 
   ConsoleOperationEnvironment env;

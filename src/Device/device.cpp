@@ -236,7 +236,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
     return false;
   }
 
-  if (!device.Open(Com, Driver)) {
+  if (!device.Open(config, Com, Driver)) {
     delete Com;
     return false;
   }

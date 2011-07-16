@@ -140,7 +140,7 @@ B50Device::ParseNMEA(const char *String, NMEA_INFO &info)
 }
 
 static Device *
-B50CreateOnPort(Port *com_port)
+B50CreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new B50Device();
 }

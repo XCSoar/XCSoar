@@ -25,7 +25,7 @@ Copyright_License {
 #include "Device/Driver/LX/Internal.hpp"
 
 static Device *
-LXCreateOnPort(Port *com_port)
+LXCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new LXDevice(com_port);
 }

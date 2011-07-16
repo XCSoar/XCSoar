@@ -71,7 +71,7 @@ XCOM760Device::PutStandbyFrequency(RadioFrequency frequency)
 }
 
 static Device *
-XCOM760CreateOnPort(Port *com_port)
+XCOM760CreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new XCOM760Device(com_port);
 }

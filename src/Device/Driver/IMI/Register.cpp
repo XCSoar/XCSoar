@@ -25,7 +25,7 @@ Copyright_License {
 #include "Internal.hpp"
 
 static Device *
-IMICreateOnPort(Port *com_port)
+IMICreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new IMIDevice(com_port);
 }

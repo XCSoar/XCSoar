@@ -249,7 +249,7 @@ VolksloggerDevice::Declare(const Declaration &declaration,
 }
 
 static Device *
-VolksloggerCreateOnPort(Port *com_port)
+VolksloggerCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new VolksloggerDevice(com_port);
 }

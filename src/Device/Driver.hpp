@@ -34,6 +34,7 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+struct DeviceConfig;
 class Port;
 class AtmosphericPressure;
 class OperationEnvironment;
@@ -284,7 +285,7 @@ struct DeviceRegister {
   /**
    * Create an instance of this driver for the given NMEA port.
    */
-  Device *(*CreateOnPort)(Port *com_port);
+  Device *(*CreateOnPort)(const DeviceConfig &config, Port *com_port);
 
   /**
    * Is this the NMEA out driver?

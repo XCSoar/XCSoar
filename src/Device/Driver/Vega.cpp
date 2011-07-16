@@ -410,7 +410,7 @@ VegaDevice::OnSysTicker(const NMEA_INFO &basic,
 }
 
 static Device *
-VegaCreateOnPort(Port *com_port)
+VegaCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new VegaDevice(com_port);
 }

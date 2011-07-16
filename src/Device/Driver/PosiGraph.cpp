@@ -64,7 +64,7 @@ PGDevice::ParseNMEA(const char *String, NMEA_INFO &info)
 }
 
 static Device *
-PGCreateOnPort(Port *com_port)
+PGCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
   return new PGDevice();
 }
