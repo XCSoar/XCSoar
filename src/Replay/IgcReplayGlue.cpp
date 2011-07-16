@@ -25,16 +25,6 @@
 #include "Logger/Logger.hpp"
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
-#include "Device/Port.hpp"
-#include "Math/Earth.hpp"
-#include "LogFile.hpp"
-#include "Asset.hpp"
-#include "StringUtil.hpp"
-#include "UtilsText.hpp"
-#include "LocalPath.hpp"
-#include "Device/device.hpp"
-#include "InputEvents.hpp"
-#include "Compatibility/string.h"
 #include "DeviceBlackboard.hpp"
 
 #include <algorithm>
