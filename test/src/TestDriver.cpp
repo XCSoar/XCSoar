@@ -755,7 +755,6 @@ TestFlightList(const struct DeviceRegister &driver)
   }
 
   ok1(port.running);
-  ok1(port.timeout == 0);
   ok1(port.baud_rate == FaultInjectionPort::DEFAULT_BAUD_RATE);
 
   delete device;
@@ -763,7 +762,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(376);
+  plan_tests(373);
 
   TestGeneric();
   TestFLARM();
