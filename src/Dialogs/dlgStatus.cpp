@@ -49,9 +49,6 @@ Copyright_License {
 
 #include <algorithm>
 
-using std::min;
-using std::max;
-
 static WndForm *wf = NULL;
 static TabBarControl *wTabBar;
 static int status_page = 0;
