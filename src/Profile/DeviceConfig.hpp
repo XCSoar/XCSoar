@@ -75,6 +75,15 @@ struct DeviceConfig {
   unsigned baud_rate;
 
   /**
+   * The baud rate of the device for bulk transfer (e.g. task
+   * declaration, flight download).  Not used by all drivers, see
+   * Driver::SupportsBulkBaudRate().
+   *
+   * The special value "0" means same value as #baud_rate.
+   */
+  unsigned bulk_baud_rate;
+
+  /**
    * The path name of the serial port, e.g. "COM4:" or "/dev/ttyUSB0".
    */
   StaticString<64> path;

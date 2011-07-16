@@ -264,6 +264,11 @@ struct DeviceRegister {
      * See Device::ReadFlightList(), Device::DownloadFlight().
      */
     LOGGER = 0x4,
+
+    /**
+     * Does this driver support switching to a "bulk" baud rate?
+     */
+    BULK_BAUD_RATE = 0x8,
   };
 
   /**
@@ -307,6 +312,13 @@ struct DeviceRegister {
    */
   bool IsLogger() const {
     return (Flags & LOGGER) != 0;
+  }
+
+  /**
+   * Does this driver support switching to a "bulk" baud rate?
+   */
+  bool SupportsBulkBaudRate() const {
+    return (Flags & BULK_BAUD_RATE) != 0;
   }
 };
 

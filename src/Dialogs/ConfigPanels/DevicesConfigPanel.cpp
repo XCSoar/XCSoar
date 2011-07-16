@@ -34,6 +34,7 @@ Copyright_License {
 #include "Device/Register.hpp"
 #include "Device/List.hpp"
 #include "Device/Parser.hpp"
+#include "Device/Driver.hpp"
 #include "Asset.hpp"
 #include "Protection.hpp"
 #include "DevicesConfigPanel.hpp"
@@ -112,9 +113,25 @@ DevicesConfigPanel::OnSetupDeviceBClicked(WndButton &button)
   button.set_focus();
 }
 
+gcc_pure
+static bool
+SupportsBulkBaudRate(const DataField &df)
+{
+  const TCHAR *driver_name = df.GetAsString();
+  if (driver_name == NULL)
+    return false;
+
+  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  if (driver == NULL)
+    return false;
+
+  return driver->SupportsBulkBaudRate();
+}
+
 static void
 UpdateDeviceControlVisibility(WndProperty &port_field,
                               WndProperty &speed_field,
+                              WndProperty &bulk_baud_rate_field,
                               WndProperty &driver_field)
 {
   unsigned port = port_field.GetDataField()->GetAsInteger();
@@ -125,6 +142,9 @@ UpdateDeviceControlVisibility(WndProperty &port_field,
        : DeviceConfig::SERIAL);
 
   speed_field.set_visible(DeviceConfig::UsesSpeed(type));
+  bulk_baud_rate_field.set_visible(DeviceConfig::UsesSpeed(type) &&
+                                   DeviceConfig::UsesDriver(type) &&
+                                   SupportsBulkBaudRate(*driver_field.GetDataField()));
   driver_field.set_visible(DeviceConfig::UsesDriver(type));
 }
 
@@ -134,6 +154,7 @@ DevicesConfigPanel::OnDeviceAPort(DataField *Sender,
 {
   UpdateDeviceControlVisibility(*(WndProperty *)wf->FindByName(_T("prpComPort1")),
                                 *(WndProperty *)wf->FindByName(_T("prpComSpeed1")),
+                                *(WndProperty *)wf->FindByName(_T("BulkBaudRate1")),
                                 *(WndProperty *)wf->FindByName(_T("prpComDevice1")));
 }
 
@@ -143,6 +164,7 @@ DevicesConfigPanel::OnDeviceBPort(DataField *Sender,
 {
   UpdateDeviceControlVisibility(*(WndProperty *)wf->FindByName(_T("prpComPort2")),
                                 *(WndProperty *)wf->FindByName(_T("prpComSpeed2")),
+                                *(WndProperty *)wf->FindByName(_T("BulkBaudRate2")),
                                 *(WndProperty *)wf->FindByName(_T("prpComDevice2")));
 }
 
@@ -164,6 +186,10 @@ DevicesConfigPanel::OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t
 {
   switch (Mode) {
   case DataField::daChange:
+    UpdateDeviceControlVisibility(*(WndProperty *)wf->FindByName(_T("prpComPort1")),
+                                  *(WndProperty *)wf->FindByName(_T("prpComSpeed1")),
+                                  *(WndProperty *)wf->FindByName(_T("BulkBaudRate1")),
+                                  *(WndProperty *)wf->FindByName(_T("prpComDevice1")));
     UpdateDeviceSetupButton(0, Sender->GetAsString());
     break;
 
@@ -180,6 +206,10 @@ DevicesConfigPanel::OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t
 {
   switch (Mode) {
   case DataField::daChange:
+    UpdateDeviceControlVisibility(*(WndProperty *)wf->FindByName(_T("prpComPort2")),
+                                  *(WndProperty *)wf->FindByName(_T("prpComSpeed2")),
+                                  *(WndProperty *)wf->FindByName(_T("BulkBaudRate2")),
+                                  *(WndProperty *)wf->FindByName(_T("prpComDevice2")));
     UpdateDeviceSetupButton(1, Sender->GetAsString());
     break;
 
@@ -371,6 +401,7 @@ FillBaudRates(DataFieldEnum &dfe)
 static void
 SetupDeviceFields(const DeviceConfig &config,
                   WndProperty *port_field, WndProperty *speed_field,
+                  WndProperty &bulk_baud_rate_field,
                   WndProperty *driver_field, WndButton *setup_button)
 {
   if (port_field != NULL) {
@@ -451,6 +482,16 @@ SetupDeviceFields(const DeviceConfig &config,
 #endif
   }
 
+#ifdef ANDROID
+  bulk_baud_rate_field.hide();
+#else
+  DataFieldEnum &bulk_df = *(DataFieldEnum *)bulk_baud_rate_field.GetDataField();
+  bulk_df.addEnumText(_T("Default"), 0u);
+  FillBaudRates(bulk_df);
+  bulk_df.Set(config.bulk_baud_rate);
+  bulk_baud_rate_field.RefreshDisplay();
+#endif
+
   if (driver_field) {
     DataFieldEnum *dfe = (DataFieldEnum *)driver_field->GetDataField();
 
@@ -467,7 +508,9 @@ SetupDeviceFields(const DeviceConfig &config,
   if (setup_button != NULL)
     setup_button->set_visible(config.IsVega());
 
-  UpdateDeviceControlVisibility(*port_field, *speed_field, *driver_field);
+  UpdateDeviceControlVisibility(*port_field, *speed_field,
+                                bulk_baud_rate_field,
+                                *driver_field);
 }
 
 
@@ -514,6 +557,7 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
 static bool
 FinishDeviceFields(DeviceConfig &config,
                    WndProperty *port_field, WndProperty *speed_field,
+                   const WndProperty &bulk_baud_rate_field,
                    WndProperty *driver_field)
 {
   bool changed = false;
@@ -525,6 +569,12 @@ FinishDeviceFields(DeviceConfig &config,
   if (config.UsesSpeed() && speed_field != NULL &&
       (int)config.baud_rate != speed_field->GetDataField()->GetAsInteger()) {
     config.baud_rate = speed_field->GetDataField()->GetAsInteger();
+    changed = true;
+  }
+
+  if (config.UsesSpeed() &&
+      config.bulk_baud_rate != (unsigned)bulk_baud_rate_field.GetDataField()->GetAsInteger()) {
+    config.bulk_baud_rate = (unsigned)bulk_baud_rate_field.GetDataField()->GetAsInteger();
     changed = true;
   }
 #endif
@@ -552,12 +602,14 @@ DevicesConfigPanel::Init(WndForm *_wf)
   SetupDeviceFields(device_config[0],
                     (WndProperty*)wf->FindByName(_T("prpComPort1")),
                     (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
+                    *(WndProperty *)wf->FindByName(_T("BulkBaudRate1")),
                     (WndProperty*)wf->FindByName(_T("prpComDevice1")),
                     (WndButton *)wf->FindByName(_T("cmdSetupDeviceA")));
 
   SetupDeviceFields(device_config[1],
                     (WndProperty*)wf->FindByName(_T("prpComPort2")),
                     (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
+                    *(WndProperty *)wf->FindByName(_T("BulkBaudRate2")),
                     (WndProperty*)wf->FindByName(_T("prpComDevice2")),
                     (WndButton *)wf->FindByName(_T("cmdSetupDeviceB")));
 
@@ -576,12 +628,14 @@ DevicesConfigPanel::Save()
     FinishDeviceFields(device_config[0],
                        (WndProperty*)wf->FindByName(_T("prpComPort1")),
                        (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
+                       *(const WndProperty *)wf->FindByName(_T("BulkBaudRate1")),
                        (WndProperty*)wf->FindByName(_T("prpComDevice1")));
 
   DevicePortChanged =
     FinishDeviceFields(device_config[1],
                        (WndProperty*)wf->FindByName(_T("prpComPort2")),
                        (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
+                       *(const WndProperty *)wf->FindByName(_T("BulkBaudRate2")),
                        (WndProperty*)wf->FindByName(_T("prpComDevice2"))) ||
     DevicePortChanged;
 

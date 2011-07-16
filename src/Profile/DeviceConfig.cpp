@@ -159,6 +159,10 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
       config.baud_rate = 4800;
   }
 
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("BulkBaudRate"));
+  if (!Get(buffer, config.bulk_baud_rate))
+    config.bulk_baud_rate = 0;
+
   _tcscpy(buffer, _T("DeviceA"));
   buffer[_tcslen(buffer) - 1] += n;
   if (!Get(buffer, config.driver_name)) {
