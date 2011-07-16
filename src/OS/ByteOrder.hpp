@@ -27,15 +27,21 @@ Copyright_License {
 #include <stdint.h>
 
 #ifdef __linux__
+#include <features.h>
+
+#if defined(ANDROID) || (defined(__GLIBC__) && ((__GLIBC__ >= 2 && __GLIBC_MINOR__ >= 9) || __GLIBC__ >= 3))
+/* the byte swap macros were added in glibc 2.9 */
+#define HAVE_BYTESWAP_H
 #include <byteswap.h>
 #include <endian.h>
+#endif
 #endif /* !__linux__ */
 
 gcc_const
 static inline uint16_t
 ByteSwap16(uint16_t value)
 {
-#ifdef __linux__
+#ifdef HAVE_BYTESWAP_H
   return bswap_16(value);
 #else
   return (value >> 8) | (value << 8);
@@ -46,7 +52,7 @@ gcc_const
 static inline uint32_t
 ByteSwap32(uint32_t value)
 {
-#ifdef __linux__
+#ifdef HAVE_BYTESWAP_H
   return bswap_32(value);
 #else
   return (value >> 24) | ((value >> 8) & 0x0000ff00) |
@@ -58,7 +64,7 @@ gcc_const
 static inline uint16_t
 FromBE16(uint16_t value)
 {
-#ifdef __linux__
+#ifdef HAVE_BYTESWAP_H
 #ifdef __BIONIC__
   return betoh16(value);
 #else
@@ -77,7 +83,7 @@ gcc_const
 static inline uint32_t
 FromBE32(uint32_t value)
 {
-#ifdef __linux__
+#ifdef HAVE_BYTESWAP_H
 #ifdef __BIONIC__
   return betoh32(value);
 #else
@@ -96,7 +102,7 @@ gcc_const
 static inline uint16_t
 FromLE16(uint16_t value)
 {
-#ifdef __linux__
+#ifdef HAVE_BYTESWAP_H
 #ifdef __BIONIC__
   return letoh16(value);
 #else
@@ -115,7 +121,7 @@ gcc_const
 static inline uint32_t
 FromLE32(uint32_t value)
 {
-#ifdef __linux__
+#ifdef HAVE_BYTESWAP_H
 #ifdef __BIONIC__
   return letoh32(value);
 #else
@@ -134,7 +140,7 @@ gcc_const
 static inline uint16_t
 ToBE16(uint16_t value)
 {
-#ifdef __linux__
+#ifdef HAVE_BYTESWAP_H
   return htobe16(value);
 #elif defined(__i386__) || defined(__x86_64__)
   /* generic little-endian */
@@ -149,7 +155,7 @@ gcc_const
 static inline uint32_t
 ToBE32(uint32_t value)
 {
-#ifdef __linux__
+#ifdef HAVE_BYTESWAP_H
   return htobe32(value);
 #elif defined(__i386__) || defined(__x86_64__)
   /* generic little-endian */
@@ -164,7 +170,7 @@ gcc_const
 static inline uint16_t
 ToLE16(uint16_t value)
 {
-#ifdef __linux__
+#ifdef HAVE_BYTESWAP_H
   return htole16(value);
 #elif defined(__i386__) || defined(__x86_64__)
   /* generic little-endian */
@@ -179,7 +185,7 @@ gcc_const
 static inline uint32_t
 ToLE32(uint32_t value)
 {
-#ifdef __linux__
+#ifdef HAVE_BYTESWAP_H
   return htole32(value);
 #elif defined(__i386__) || defined(__x86_64__)
   /* generic little-endian */
