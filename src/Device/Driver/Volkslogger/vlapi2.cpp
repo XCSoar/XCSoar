@@ -22,7 +22,6 @@
 #include "Device/Port.hpp"
 #include "Util.hpp"
 #include "Protocol.hpp"
-#include "CRC16.hpp"
 #include "PeriodClock.hpp"
 #include "Operation.hpp"
 
@@ -46,9 +45,7 @@ void VLA_XFR::set_databaud(int32 db) {
 
 // Blockweises Schreiben in den Logger (z.B. Datenbank)
 VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
-  word crc16;
   byte c;
-  int32 td = 1;
 
   // Schreibkommando geben
   if (!Volkslogger::SendCommand(*port, env, Volkslogger::cmd_PDB, 0, 0) ||
@@ -57,35 +54,10 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
 
   // Schreiben der Datenbank
   env.Sleep(100);
-  crc16 = 0;
 
-  env.SetText(_T("Sending task declaration to logger"));
-  env.SetProgressRange(dbbsize);
+  if (!Volkslogger::WriteBulk(*port, env, dbbbuffer, dbbsize))
+    return VLA_ERR_MISC;
 
-  const uint8_t *p = (const uint8_t *)dbbbuffer, *end = p + dbbsize;
-  while (p < end) {
-    size_t n = end - p;
-    if (n > 400)
-      n = 400;
-
-    n = port->Write(p, n);
-    if (n == 0)
-      return VLA_ERR_MISC;
-
-    crc16 = UpdateCRC(p, n, crc16);
-    p += n;
-
-    env.SetProgressPosition(p - (const uint8_t *)dbbbuffer);
-
-    /* throttle sending a bit, or the Volkslogger's receive buffer
-       will overrun */
-    env.Sleep(td * 100);
-  }
-
-  serial_out(crc16/256);
-  env.Sleep(td);
-  serial_out(crc16%256);
-  env.Sleep(td);
   // auf Bestätigung warten
   while (serial_in(&c) != VLA_ERR_NOERR) {
     if (env.IsCancelled()) {

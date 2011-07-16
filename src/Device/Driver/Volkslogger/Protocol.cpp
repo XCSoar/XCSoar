@@ -242,6 +242,43 @@ Volkslogger::ReadBulk(Port &port, OperationEnvironment &env,
   return nbytes - 2;
 }
 
+bool
+Volkslogger::WriteBulk(Port &port, OperationEnvironment &env,
+                       const void *buffer, unsigned length)
+{
+  const unsigned delay = 1;
+
+  env.SetProgressRange(length);
+
+  uint16_t crc16 = 0;
+  const uint8_t *p = (const uint8_t *)buffer, *end = p + length;
+  while (p < end) {
+    unsigned n = end - p;
+    if (n > 400)
+      n = 400;
+
+    n = port.Write(p, n);
+    if (n == 0)
+      return false;
+
+    crc16 = UpdateCRC(p, n, crc16);
+    p += n;
+
+    env.SetProgressPosition(p - (const uint8_t *)buffer);
+
+    /* throttle sending a bit, or the Volkslogger's receive buffer
+       will overrun */
+    env.Sleep(delay * 100);
+  }
+
+  port.Write(crc16 >> 8);
+  env.Sleep(delay);
+  port.Write(crc16 & 0xff);
+  env.Sleep(delay);
+
+  return true;
+}
+
 int
 Volkslogger::SendCommandReadBulk(Port &port, OperationEnvironment &env,
                                  Command cmd,
