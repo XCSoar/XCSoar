@@ -30,8 +30,6 @@
 #include <string.h>
 #include <stdlib.h>
 
-extern int noninteractive;
-
 // sizes of VL memory regions
 const int VLAPI_DBB_MEMSIZE = 16384;
 const int32 VLAPI_LOG_MEMSIZE = 81920L;
@@ -266,9 +264,6 @@ VLA_ERROR VLAPI::open(boolean connectit, int timeout,
       return err;
 
     vlpresent = 1;
-    // nach erfolgreichem Connect
-    // noninteractive wieder auf "Still" setzen
-    //noninteractive = 1;
   }
 
   return err;
