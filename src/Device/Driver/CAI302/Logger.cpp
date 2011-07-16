@@ -95,8 +95,6 @@ bool
 CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
                              OperationEnvironment &env)
 {
-  port->StopRxThread();
-
   bool success = ReadFlightListInner(*port, flight_list, env);
 
   port->SetRxTimeout(500);
@@ -105,9 +103,6 @@ CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
     CAI302::LogMode(*port);
   else
     CAI302::LogModeQuick(*port);
-
-  port->SetRxTimeout(0);
-  port->StartRxThread();
 
   return success;
 }
@@ -196,8 +191,6 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
   if (file == NULL)
     return false;
 
-  port->StopRxThread();
-
   bool success = DownloadFlightInner(*port, flight, file, env);
   fclose(file);
 
@@ -207,9 +200,6 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
     CAI302::LogMode(*port);
   else
     CAI302::LogModeQuick(*port);
-
-  port->SetRxTimeout(0);
-  port->StartRxThread();
 
   return success;
 }

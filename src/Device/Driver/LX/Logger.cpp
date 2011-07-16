@@ -133,16 +133,11 @@ bool
 LXDevice::ReadFlightList(RecordedFlightList &flight_list,
                          OperationEnvironment &env)
 {
-  port->StopRxThread();
-
   bool success = ReadFlightListInner(*port, flight_list, env);
 
   port->SetRxTimeout(500);
 
   LX::CommandModeQuick(*port, env);
-
-  port->SetRxTimeout(0);
-  port->StartRxThread();
 
   return success;
 }
@@ -202,17 +197,12 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
   if (file == NULL)
     return false;
 
-  port->StopRxThread();
-
   bool success = DownloadFlightInner(*port, flight, file, env);
   fclose(file);
 
   port->SetRxTimeout(500);
 
   LX::CommandModeQuick(*port, env);
-
-  port->SetRxTimeout(0);
-  port->StartRxThread();
 
   return success;
 }
