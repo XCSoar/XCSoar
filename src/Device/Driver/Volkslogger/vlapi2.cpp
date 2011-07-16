@@ -40,8 +40,6 @@ const int32 VLAPI_LOG_MEMSIZE = 81920L;
 //                        VLA_XFR
 // ------------------------------------------------------------
 
-int32 VLA_XFR::commandbaud = 9600L;
-
 // set baudrate
 //
 void VLA_XFR::set_databaud(int32 db) {
@@ -273,11 +271,7 @@ VLAPI::~VLAPI() {
 VLA_ERROR VLAPI::open(boolean connectit, int timeout,
                       boolean quiet, int32 sbaudrate) {
   noninteractive = quiet;
-  VLA_ERROR err;
-
-  // setup port
-  if ((err = serial_set_baudrate(commandbaud)) != VLA_ERR_NOERR)
-    return err;
+  VLA_ERROR err = VLA_ERR_NOERR;
 
   set_databaud(sbaudrate);
   // connect

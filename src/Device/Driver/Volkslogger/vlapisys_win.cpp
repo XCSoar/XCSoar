@@ -64,14 +64,6 @@ VLA_ERROR VLA_SYS::serial_empty_io_buffers()
   return VLA_ERR_NOERR;
 }
 
-/** set communication parameters */
-VLA_ERROR VLA_SYS::serial_set_baudrate(const int32 baudrate)
-{
-  port->SetBaudrate(baudrate);    // change to IO Mode baudrate
-
-  return VLA_ERR_NOERR;
-}
-
 // interaction - input functions
 //
 boolean VLA_SYS::test_user_break()
