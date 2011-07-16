@@ -27,10 +27,17 @@ Copyright_License {
 #include "Replay/IgcReplay.hpp"
 #include "PeriodClock.hpp"
 
+class Logger;
+
 class IgcReplayGlue: 
   public IgcReplay
 {
   PeriodClock clock;
+
+  Logger *logger;
+
+public:
+  IgcReplayGlue(Logger *_logger);
 
 protected:
   virtual bool update_time();

@@ -49,8 +49,9 @@ class Replay
   DemoReplayGlue Demo;
 
 public:
-  Replay(ProtectedTaskManager& task_manager):
+  Replay(Logger *_logger, ProtectedTaskManager& task_manager):
     mode(MODE_NULL),
+    Igc(_logger),
     Demo(task_manager) {}
 
   bool Update();

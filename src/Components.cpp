@@ -342,7 +342,7 @@ XCSoarInterface::Startup()
   glide_computer->SetLogger(&logger);
   glide_computer->Initialise();
 
-  replay = new Replay(*protected_task_manager);
+  replay = new Replay(&logger, *protected_task_manager);
 
   // Load the EGM96 geoid data
   OpenGeoid();

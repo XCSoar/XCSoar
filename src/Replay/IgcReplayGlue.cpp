@@ -36,9 +36,13 @@
 #include "InputEvents.hpp"
 #include "Compatibility/string.h"
 #include "DeviceBlackboard.hpp"
-#include "Components.hpp"
 
 #include <algorithm>
+
+IgcReplayGlue::IgcReplayGlue(Logger *_logger)
+  :logger(_logger)
+{
+}
 
 bool
 IgcReplayGlue::update_time()
@@ -73,7 +77,9 @@ void
 IgcReplayGlue::on_stop()
 {
   device_blackboard.StopReplay();
-  logger.clearBuffer();
+
+  if (logger != NULL)
+    logger->clearBuffer();
 }
 
 void
@@ -86,5 +92,6 @@ IgcReplayGlue::on_bad_file()
 void
 IgcReplayGlue::on_reset()
 {
-  logger.clearBuffer();
+  if (logger != NULL)
+    logger->clearBuffer();
 }
