@@ -12,6 +12,7 @@ Version 6.2 - not yet released
   - CAI302: IGC file download
   - IMI ERIXX: IGC file download
   - LX/Colibri: IGC file download
+  - LX: support baud rate switching
   - device declaration can be cancelled
 * calculations
   - dry mass is seperated from the polar reference mass

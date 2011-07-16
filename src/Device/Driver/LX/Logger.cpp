@@ -133,11 +133,18 @@ bool
 LXDevice::ReadFlightList(RecordedFlightList &flight_list,
                          OperationEnvironment &env)
 {
+  const unsigned old_baud_rate = bulk_baud_rate != 0
+    ? port->SetBaudrate(bulk_baud_rate)
+    : 0;
+
   bool success = ReadFlightListInner(*port, flight_list, env);
 
   port->SetRxTimeout(500);
 
   LX::CommandModeQuick(*port, env);
+
+  if (old_baud_rate != 0)
+    port->SetBaudrate(old_baud_rate);
 
   return success;
 }
@@ -197,12 +204,19 @@ LXDevice::DownloadFlight(const RecordedFlightInfo &flight,
   if (file == NULL)
     return false;
 
+  const unsigned old_baud_rate = bulk_baud_rate != 0
+    ? port->SetBaudrate(bulk_baud_rate)
+    : 0;
+
   bool success = DownloadFlightInner(*port, flight, file, env);
   fclose(file);
 
   port->SetRxTimeout(500);
 
   LX::CommandModeQuick(*port, env);
+
+  if (old_baud_rate != 0)
+    port->SetBaudrate(old_baud_rate);
 
   return success;
 }

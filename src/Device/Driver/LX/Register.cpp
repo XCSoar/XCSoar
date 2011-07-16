@@ -23,16 +23,18 @@ Copyright_License {
 
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/LX/Internal.hpp"
+#include "Profile/DeviceConfig.hpp"
 
 static Device *
 LXCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
-  return new LXDevice(com_port);
+  return new LXDevice(com_port, config.bulk_baud_rate);
 }
 
 const struct DeviceRegister lxDevice = {
   _T("LX"),
   _T("LX / Colibri"),
-  DeviceRegister::DECLARE | DeviceRegister::LOGGER,
+  DeviceRegister::DECLARE | DeviceRegister::LOGGER |
+  DeviceRegister::BULK_BAUD_RATE,
   LXCreateOnPort,
 };

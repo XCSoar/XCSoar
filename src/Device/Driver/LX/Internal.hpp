@@ -31,9 +31,11 @@ class LXDevice: public AbstractDevice
 {
   Port *port;
 
+  unsigned bulk_baud_rate;
+
 public:
-  LXDevice(Port *_port)
-    :port(_port) {}
+  LXDevice(Port *_port, unsigned _bulk_baud_rate)
+    :port(_port), bulk_baud_rate(_bulk_baud_rate) {}
 
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
