@@ -61,17 +61,6 @@ Copyright_License {
 #include <assert.h>
 #include <windef.h> /* for MAX_PATH */
 
-// A note about locking.
-//  The ComPort RX threads lock using FlightData critical section.
-//  ComPort::StopRxThread and ComPort::Close both wait for these threads to
-//  exit before returning.  Both these functions are called with the Comm
-//  critical section locked.  Therefore, there is a locking dependency upon
-//  Comm -> FlightData.
-//
-//  If someone locks FlightData and then Comm, there is a high possibility
-//  of deadlock.  So, FlightData must never be locked after Comm.  Ever.
-//  Thankfully WinCE "critical sections" are recursive locks.
-
 static const unsigned dwSpeed[] = {
   1200,
   2400,
