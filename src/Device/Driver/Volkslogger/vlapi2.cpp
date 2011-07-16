@@ -129,15 +129,13 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 //
 VLA_ERROR VLA_XFR::connect(int32 waittime) {
   int16 l_count = 0;
-  int16 i;
   byte c;
 
   serial_empty_io_buffers();
   // eventuell noch laufende Aktion im Logger abbrechen
-  for (i=0; i<10; i++) {
-    serial_out(Volkslogger::CAN);
-    env.Sleep(1);
-  }
+  if (!Volkslogger::Reset(*port, env, 10))
+    return VLA_ERR_MISC;
+
   c = 0;
 
   const unsigned timeout_ms = waittime * 1000;

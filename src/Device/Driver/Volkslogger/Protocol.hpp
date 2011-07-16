@@ -99,6 +99,8 @@ namespace Volkslogger {
     cmd_RST = 0x0c,
   };
 
+  bool Reset(Port &port, OperationEnvironment &env, unsigned n);
+
   bool SendCommand(Port &port, OperationEnvironment &env,
                    Command cmd, uint8_t param1=0, uint8_t param2=0);
 

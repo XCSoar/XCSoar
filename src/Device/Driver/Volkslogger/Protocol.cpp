@@ -29,6 +29,19 @@ Copyright_License {
 
 #include <string.h>
 
+bool
+Volkslogger::Reset(Port &port, OperationEnvironment &env, unsigned n)
+{
+  static const unsigned delay = 2;
+
+  while (n-- > 0) {
+    port.Write(CAN);
+    env.Sleep(delay);
+  }
+
+  return true;
+}
+
 static bool
 SendWithCRC(Port &port, const void *data, size_t length)
 {
@@ -51,10 +64,8 @@ Volkslogger::SendCommand(Port &port, OperationEnvironment &env,
   port.SetRxTimeout(500);
 
   /* reset command interpreter */
-  for (unsigned i = 0; i < 6; ++i) {
-    port.Write(CAN);
-    env.Sleep(delay);
-  }
+  if (!Reset(port, env, 6))
+    return false;
 
   /* send command packet */
 
