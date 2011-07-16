@@ -130,7 +130,8 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 // VL to the serial port
 //
 VLA_ERROR VLA_XFR::connect(int32 waittime) {
-  serial_empty_io_buffers();
+  port->Flush();
+
   // eventuell noch laufende Aktion im Logger abbrechen
   if (!Volkslogger::Reset(*port, env, 10))
     return VLA_ERR_MISC;

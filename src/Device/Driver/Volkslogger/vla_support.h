@@ -36,11 +36,6 @@ class OperationEnvironment;
 */
 class VLA_SYS {
 protected:
-	// serial port functions
-  VLA_ERROR serial_out(const byte outbyte);
-	VLA_ERROR serial_in(byte *inbyte);
-	VLA_ERROR serial_empty_io_buffers();
-
   //
   Port *port;
 
