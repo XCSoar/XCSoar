@@ -89,46 +89,11 @@ protected:
 */
 class VLA_XFR : protected VLA_SYS {
 protected:
-	// flow- and format- control
-	enum {
-		STX = 0x02,
-		ETX = 0x03,
-		ENQ = 0x05,
-		ACK = 0x06,
-		DLE = 0x10,
-		NAK = 0x15,
-		CAN = 0x18
-	};
-	// Kommandos PC -> Logger
-	enum {
-		cmd_INF = 0x00,// Information
-		cmd_DIR = 0x01,// Verzeichnis lesen
-		cmd_GFL = 0x02,// Flug lesen mit MD4
-		cmd_GFS = 0x03,// Flug lesen mit Signatur
-		cmd_RDB = 0x04,// Datenbank lesen
-		cmd_WPR = 0x05,// Parameter schreiben
-		cmd_CFL = 0x06,// Flugspeicher löschen
-		cmd_PDB = 0x07,// Datenbank schreiben
-		cmd_SIG = 0x08,// Signatur berechnen und ausgeben
-		cmd_ERO = 0x09,// Emergency readout (Memorydump lesen)
-		cmd_RST = 0x0c // Restart Logger
-	};
-
 	static int32 commandbaud;    // baudrate for commands
 
   OperationEnvironment &env;
 
   int32 databaud; // Baudrate as integer (e.g. 115200)
-  int databaudidx; // Baudrate as index for VOLKSLOGGER
-
-  bool SendWithCRC(const void *data, size_t length);
-
-  // send command to VL
-  int16 sendcommand(byte cmd, byte param1, byte param2);
-  // wait for acknowledgement of command (if no data is expected)
-  int16 wait4ack();
-  // read block of data from VL, with flow-control
-  int32 readlog(lpb puffer, int32);
 
   VLA_XFR(Port &port, OperationEnvironment &env);
   void set_databaud(int32 db);

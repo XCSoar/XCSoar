@@ -3,6 +3,7 @@ DRIVER_SRC_DIR = $(SRC)/Device/Driver
 VOLKSLOGGER_SOURCES = \
 	$(DRIVER_SRC_DIR)/Volkslogger/Register.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/Parser.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/Protocol.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/Declare.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/CRC16.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/Util.cpp \

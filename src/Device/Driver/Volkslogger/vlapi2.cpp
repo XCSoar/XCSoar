@@ -21,6 +21,7 @@
 #include "utils.h"
 #include "Device/Port.hpp"
 #include "Util.hpp"
+#include "Protocol.hpp"
 #include "CRC16.hpp"
 #include "PeriodClock.hpp"
 #include "Operation.hpp"
@@ -45,252 +46,7 @@ int32 VLA_XFR::commandbaud = 9600L;
 //
 void VLA_XFR::set_databaud(int32 db) {
   databaud = db;
-  switch(db) {
-  case   9600 :
-    databaudidx = 1;
-    break;
-  case  19200 :
-    databaudidx = 2;
-    break;
-  case  38400L :
-    databaudidx = 3;
-    break;
-  case  57600L :
-    databaudidx = 4;
-    break;
-  case 115200L :
-    databaudidx = 5;
-    break;
-  default     :
-    databaudidx = 1;
-    break;
-  }
 }
-
-bool
-VLA_XFR::SendWithCRC(const void *data, size_t length)
-{
-  if (!port->FullWrite(data, length, 2000))
-    return false;
-
-  uint16_t crc16 = UpdateCRC(data, length, 0);
-  serial_out(crc16 >> 8);
-  serial_out(crc16 & 0xff);
-
-  return true;
-}
-
-// send command to VOLKSLOGGER
-//
-int16 VLA_XFR::sendcommand(byte cmd, byte param1, byte param2) {
-  byte	        c=255;
-  const int16   d = 2;  //Verzögerungszeit 2ms
-  byte 		cmdarray[8];
-  // alte Zeichen verwerfen
-  port->SetRxTimeout(20);
-  port->FullFlush(100);
-  port->SetRxTimeout(500);
-
-  // Kommandointerpreter im VL zurücksetzen
-  for (unsigned i =0 ; i < 6; i++) {
-    serial_out(CAN);
-    env.Sleep(d);
-  }
-  // Kommandopaket aufbauen
-
-  cmdarray[0] = cmd;
-  cmdarray[1] = param1;
-  cmdarray[2] = param2;
-  cmdarray[3] = 0;
-  cmdarray[4] = 0;
-  cmdarray[5] = 0;
-  cmdarray[6] = 0;
-  cmdarray[7] = 0;
-  // Kommando verschicken ( ENQ,Daten,CRC )
-  serial_out(ENQ);
-  env.Sleep(d);
-
-  if (!SendWithCRC(cmdarray, sizeof(cmdarray))) {
-    showwait(VLS_TXT_NOFR);
-    return -1;
-  }
-
-  // Kommandobestätigung abwarten, aber höchstens timeout Sekunden
-  const unsigned timeout_ms = 4000;
-  PeriodClock clock;
-  clock.update();
-  while (serial_in(&c) != VLA_ERR_NOERR) {
-    if (clock.check(timeout_ms)) {
-      showwait(VLS_TXT_NOFR);
-      return -1;
-    }
-
-    progress_set(VLS_TXT_SENDCMD);
-  }
-
-  // Fehler (timeout oder Fehlercode vom VL) im Klartext ausgeben
-  switch (c) {
-  case 0:
-    show(VLS_TXT_NIL);
-    break;
-  case 1:
-    showwait(VLS_TXT_BADCMD);
-    break;
-  case 2:
-    showwait(VLS_TXT_WRONGFR);
-    break;
-  }
-  // Fehlercode als Rückgabewert der Funktion benutzen
-  return c;
-  // Rückgabewert:     -1 : timeout
-  //		 0..255 : Bestätigungscode vom Logger
-}
-
-
-// wait until completion of command in the VL
-//
-int16 VLA_XFR::wait4ack() {
-  byte	c;
-  // Anfangszeit merken
-  const unsigned timeout_ms = 180000;
-  PeriodClock clock;
-  clock.update();
-  // Auf Beendigungscode vom Logger warten
-  while (serial_in(&c) != VLA_ERR_NOERR) {
-    if (test_user_break() && clear_user_break() == 1)
-      return 255;
-
-    if (clock.check(timeout_ms))
-      return 255;
-
-    progress_set(VLS_TXT_WTCMD);
-  }
-
-  return c;
-}
-
-
-// read a big data packet from the VL after requesting it with a command
-// via sendcommand. Read a maximum of maxlen characters (excluding CRC)
-//
-int32 VLA_XFR::readlog(lpb puffer, int32 maxlen) {
-  int32 gcs_counter = 0;
-  byte  c;
-  int16 dle_r = 0;
-  word crc16 = 0;
-  int16 start = 0;
-  int16 ende  = 0;
-//  int32 i;
-  lpb p;
-  int pp = 0;
-  progress_reset();
-
-  memset(puffer, 0xff, maxlen);
-
-  p = puffer;
-  env.Sleep(300);
-  while(!ende) {
-    // Zeichen anfordern und darauf warten
-    serial_out(ACK);
-
-    pp++;
-    serial_in(&c);
-    if ((gcs_counter>=maxlen) && (crc16==0)) {
-      ende = 1;
-    }
-
-    // dabei ist Benutzerabbruch jederzeit möglich
-    if (test_user_break() && clear_user_break() == 1) {
-      env.Sleep(10);
-      serial_out(CAN);
-      serial_out(CAN);
-      serial_out(CAN);
-
-      show(VLS_TXT_UIRQ);
-      gcs_counter = 0;
-      return -1;
-    }
-
-    // oder aber das empfangene Zeichen wird ausgewertet
-    switch (c) {
-    case DLE:
-      if (dle_r == 0) {             //!DLE, DLE -> Achtung!
-        dle_r = 1;
-      }
-      else { 	                 // DLE, DLE -> DLE-Zeichen
-        dle_r = 0;
-        if (start) {
-          if(gcs_counter < maxlen)
-            *p++ = c;
-          gcs_counter++;
-          crc16 = UpdateCRC(c,crc16);
-        }
-      }
-      break;
-    case ETX:
-      if (dle_r == 0) {             //!DLE, ETX -> Zeichen
-        if (start) {
-          if(gcs_counter < maxlen) {
-            *p++ = c;
-          }
-          gcs_counter++;
-          crc16 = UpdateCRC(c,crc16);
-        };
-      }
-      else {
-        if (start==1) {
-          ende = 1;                   // DLE, ETX -> Blockende
-          dle_r = 0;
-        }
-      }
-      break;
-    case STX:
-      if (dle_r == 0) {	         //!DLE, STX -> Zeichen
-        if (start) {
-          if(gcs_counter < maxlen)
-            *p++ = c;
-          gcs_counter++;
-          crc16 = UpdateCRC(c,crc16);
-        }
-      }
-      else {
-        start = 1;           // DLE, STX -> Blockstart
-        dle_r = 0;
-        crc16 = 0;
-        progress_set(VLS_TXT_XFERRING);
-      }
-      break;
-    default:
-      if (start) {
-        if(gcs_counter < maxlen)
-          *p++ = c;
-        gcs_counter++;
-        crc16 = UpdateCRC(c,crc16);
-      }
-      break;
-    }
-
-    if (gcs_counter == maxlen) {
-      //    ende = 1; // JMW cheat quick exit... TODO fix me
-    }
-
-  }
-  env.Sleep(100);
-
-  if (crc16) {
-    show(VLS_TXT_CRC);
-    return -1;
-  }
-
-  if (gcs_counter < 2) {
-    show(VLS_TXT_EMPTY);
-    return 0;
-  }
-
-  // CRC am Ende abschneiden
-  return gcs_counter - 2;
-}
-
 
 // Blockweises Schreiben in den Logger (z.B. Datenbank)
 VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
@@ -299,19 +55,10 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   int32 td = 1;
 
   // Schreibkommando geben
-  serial_empty_io_buffers();
-  sendcommand(cmd_PDB,0,0); // muß noch mit Timeout versehen werden
-  // auf Löschende warten
-  while (serial_in(&c) != VLA_ERR_NOERR) {
-    if (test_user_break() && clear_user_break() == 1) {
-      showwait(VLS_TXT_UIRQ2);
-      return VLA_ERR_USERCANCELED;
-    }
-  }
-
-  // Fehlerbehandlung
-  if (c != ACK)
+  if (!Volkslogger::SendCommand(*port, env, Volkslogger::cmd_PDB, 0, 0) ||
+      !Volkslogger::WaitForACK(*port, env))
     return VLA_ERR_MISC;
+
   // Schreiben der Datenbank
   env.Sleep(100);
   crc16 = 0;
@@ -352,35 +99,29 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   }
 
   // Fehlerbehandlung
-  if (c != ACK)
+  if (c != Volkslogger::ACK)
     return VLA_ERR_MISC;
   return VLA_ERR_NOERR;
 }
 
 
 VLA_ERROR VLA_XFR::dbbget(lpb dbbbuffer, int32 dbbsize) {
-  int32 groesse;
-  // Datenbanklesekommando abschicken
-  if (sendcommand(cmd_RDB,0,databaudidx))
-    return VLA_ERR_BADCOMMAND;
-  // DATA-Baudrate einstellen, Datenbank lesen, CMD-Baudrate einstellen
-  serial_set_baudrate(databaud);
-  groesse = readlog(dbbbuffer,dbbsize);
-  serial_set_baudrate(commandbaud);
+  int groesse = Volkslogger::SendCommandReadBulk(*port, env,
+                                                 Volkslogger::cmd_RDB,
+                                                 dbbbuffer, dbbsize, databaud);
   env.Sleep(300);
   if (groesse <= 0)
     return VLA_ERR_NODATA;
-  // und Tschüß
   return VLA_ERR_NOERR;
 }
 
 VLA_ERROR VLA_XFR::readdir(lpb buffer, int32 size) {
-  int r;
   if(buffer==0)
     return VLA_ERR_MISC;
-  if(sendcommand(cmd_DIR,0,0) != 0)
-    return VLA_ERR_NOANSWER;
-  r = readlog(buffer,size);
+
+  int r = Volkslogger::SendCommandReadBulk(*port, env,
+                                           Volkslogger::cmd_DIR,
+                                           buffer, size);
   if (r <= 0)
     return VLA_ERR_NOFLIGHTS;
   else
@@ -388,18 +129,12 @@ VLA_ERROR VLA_XFR::readdir(lpb buffer, int32 size) {
 }
 
 VLA_ERROR VLA_XFR::all_logsget(lpb dbbbuffer, int32 dbbsize) {
-  int32 groesse;
-  // Datenbanklesekommando abschicken
-  if (sendcommand(cmd_ERO,0,databaudidx))
-    return VLA_ERR_BADCOMMAND;
-  // DATA-Baudrate einstellen, log-memory lesen, CMD-Baudrate einstellen
-  serial_set_baudrate(databaud);
-  groesse = readlog(dbbbuffer,dbbsize);
-  serial_set_baudrate(commandbaud);
+  int groesse = Volkslogger::SendCommandReadBulk(*port, env,
+                                                 Volkslogger::cmd_ERO,
+                                                 dbbbuffer, dbbsize, databaud);
   env.Sleep(300);
   if (groesse <= 0)
     return VLA_ERR_NODATA;
-  // und Tschüß
   return VLA_ERR_NOERR;
 }
 
@@ -409,36 +144,23 @@ VLA_ERROR VLA_XFR::all_logsget(lpb dbbbuffer, int32 dbbsize) {
   Abspeichern als GCS-Datei im Speicher
 */
 long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secmode) {
-  long groesse = 0;
-  long sgr = 0;
-
-  int cret;
-
   // read binary flightlog
-  if (secmode)
-    cret = sendcommand(cmd_GFS, flightnr,databaudidx);
-  else
-    cret = sendcommand(cmd_GFL, flightnr,databaudidx);
-
-  if (cret)
-    return 0;
-
-  serial_set_baudrate(databaud); // DATA-Baudrate einstellen
-
-  groesse = readlog(buffer,buffersize);
-
+  const Volkslogger::Command cmd = secmode
+    ? Volkslogger::cmd_GFS
+    : Volkslogger::cmd_GFL;
+  int groesse = Volkslogger::SendCommandReadBulk(*port, env, cmd,
+                                                 buffer, buffersize, databaud);
   if (groesse <= 0)
     return 0;
 
   // read signature
-  serial_set_baudrate(commandbaud); // CMD-Baudrate einstellen
   env.Sleep(300);
-  cret = sendcommand(cmd_SIG, 0,0);
 
-  if (cret)
-    return 0;
-
-  if ((sgr = readlog(buffer+groesse,buffersize-groesse))<=0)
+  int sgr = Volkslogger::SendCommandReadBulk(*port, env, Volkslogger::cmd_SIG,
+                                             buffer + groesse,
+                                             buffersize - groesse,
+                                             databaud);
+  if (sgr <= 0)
     return 0;
 
   return groesse + sgr;
@@ -460,7 +182,7 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   serial_empty_io_buffers();
   // eventuell noch laufende Aktion im Logger abbrechen
   for (i=0; i<10; i++) {
-    serial_out(CAN);
+    serial_out(Volkslogger::CAN);
     env.Sleep(1);
   }
   c = 0;
@@ -517,11 +239,10 @@ VLA_XFR::VLA_XFR(Port &_port, OperationEnvironment &_env)
 
 
 VLA_ERROR VLA_XFR::readinfo(lpb buffer, int32 buffersize) {
-
-  if(sendcommand(cmd_INF,0,0) != 0)
-    return VLA_ERR_MISC;
-
-  if((readlog(buffer, buffersize)) <= 0)
+  int nbytes = Volkslogger::SendCommandReadBulk(*port, env,
+                                                Volkslogger::cmd_INF,
+                                                buffer, buffersize);
+  if (nbytes <= 0)
     return VLA_ERR_NODATA;
 
   return VLA_ERR_NOERR;
@@ -579,7 +300,7 @@ VLA_ERROR VLAPI::open(boolean connectit, int timeout,
 void VLAPI::close(boolean reset) {
   if(vlpresent) {
     if(reset) {
-      sendcommand(cmd_RST,0,0);
+      Volkslogger::Reset(*port, env);
     }
     vlpresent = 0;
   }
