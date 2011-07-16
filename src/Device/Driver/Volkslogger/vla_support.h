@@ -36,34 +36,10 @@ class OperationEnvironment;
 */
 class VLA_SYS {
 protected:
-	// Text-IDs for state and error output messages
-	enum VLS_TXT_ID {
-		VLS_TXT_SENDCMD = 0,
-		VLS_TXT_WTCMD,
-		VLS_TXT_XFERRING,
-		VLS_TXT_WDB,
-
-		VLS_TXT_UIRQ,
-		VLS_TXT_CRC,
-		VLS_TXT_EMPTY,
-		VLS_TXT_UIRQ2,
-		VLS_TXT_CONNECT,
-		VLS_TXT_CONN_OK,
-		VLS_TXT_CONN_FL,
-		VLS_TXT_NIL,
-		VLS_TXT_BADCMD,
-		VLS_TXT_WRONGFR,
-		VLS_TXT_NOFR
-	};
-
 	// serial port functions
   VLA_ERROR serial_out(const byte outbyte);
 	VLA_ERROR serial_in(byte *inbyte);
 	VLA_ERROR serial_empty_io_buffers();
-
-  // user interaction functions
-  void show(VLS_TXT_ID);
-  void showwait(VLS_TXT_ID);
 
   //
   Port *port;
@@ -89,7 +65,7 @@ protected:
   void set_databaud(int32 db);
 
 	// establish connection with VL within specified time
-  VLA_ERROR connect(int32, int quietmode = 0);
+  VLA_ERROR connect(int32 waittime);
 
 	VLA_ERROR readinfo(lpb buffer, int32 buffersize);
 

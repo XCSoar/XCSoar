@@ -63,39 +63,3 @@ VLA_ERROR VLA_SYS::serial_empty_io_buffers()
   port->Flush();
   return VLA_ERR_NOERR;
 }
-
-// text for the status line
-//
-const char *statustext[] = {
-  "sending command to FR",
-  "command is being processed",
-  "datatransfer in progress ... (press <Q> to abort)",
-  "writing database & FDF to FR",
-  "data transfer interrupted by user - press any key",
-  "data transfer unsuccessful, try lower baudrate - press any key",
-  "no data was received from FR - press any key",
-  "user-interrupt !",
-  "please connect the VOLKSLOGGER and press OK",
-  "connection established - press OK",
-  "connection not established - press OK",
-  "intentionally left blank ...",
-  "error: command not implemented",
-  "error: wrong FR connected",
-  "error: no response from FR"
-};
-
-void VLA_SYS::show(VLS_TXT_ID txtid)
-{
-  //JMW  cout << statustext[txtid] << endl;
-
-  if(noninteractive)  return;
-  if (txtid == VLS_TXT_NIL)  return;
-}
-
-
-void VLA_SYS::showwait(VLS_TXT_ID txtid)
-{
-  //JMW  cout << statustext[txtid] << endl;
-
-  if(noninteractive)  return;
-}

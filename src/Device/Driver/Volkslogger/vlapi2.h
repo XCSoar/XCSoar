@@ -167,7 +167,6 @@ class VLAPI : protected VLA_XFR, public VLAPI_DATA {
   // Initialize the API
   VLA_ERROR open(boolean connect = 0, // if connect = 1, a connection to the logger will be established
                  int timeout=15, // time in seconds how long the API will wait for a logger to respond
-                 boolean quiet=0, // instructs the API not to interact with the user
                  int32 baudrate=115200 // data transfer baudrate, needs no change on modern PCs
                  );
 

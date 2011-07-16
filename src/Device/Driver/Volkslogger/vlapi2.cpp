@@ -91,7 +91,6 @@ VLA_ERROR VLA_XFR::dbbput(lpb dbbbuffer, int32 dbbsize) {
   // auf Bestätigung warten
   while (serial_in(&c) != VLA_ERR_NOERR) {
     if (env.IsCancelled()) {
-      showwait(VLS_TXT_UIRQ2);
       return VLA_ERR_USERCANCELED;
     }
   }
@@ -169,13 +168,10 @@ long VLA_XFR::flightget(lpb buffer, int32 buffersize, int16 flightnr, int16 secm
 // wait a specified amount of seconds (waittime) for connection of the
 // VL to the serial port
 //
-VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
+VLA_ERROR VLA_XFR::connect(int32 waittime) {
   int16 l_count = 0;
   int16 i;
   byte c;
-
-  if(!quietmode)
-    show(VLS_TXT_CONNECT);
 
   serial_empty_io_buffers();
   // eventuell noch laufende Aktion im Logger abbrechen
@@ -194,8 +190,6 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
     env.Sleep(30);
 
     if (clock.check(timeout_ms)) {
-      if (!quietmode)
-        show(VLS_TXT_CONN_FL);
       return VLA_ERR_NOANSWER;
     }
   } while (serial_in(&c) != VLA_ERR_NOERR || c != 'L');
@@ -204,8 +198,6 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
   while (true) { // Auf 4 hintereinanderfolgende L's warten
     if (serial_in(&c) == VLA_ERR_NOERR) {
       if (c != 'L') {
-        if (!quietmode)
-          show(VLS_TXT_CONN_FL);
         return VLA_ERR_NOANSWER;
       }
 
@@ -215,14 +207,9 @@ VLA_ERROR VLA_XFR::connect(int32 waittime, int quietmode ) {
     }
 
     if (clock.check(timeout_ms)) {
-      if (!quietmode)
-        show(VLS_TXT_CONN_FL);
       return VLA_ERR_TIMEOUT;
     }
   }
-
-  if (!quietmode)
-    show(VLS_TXT_CONN_OK);
 
   port->SetRxTimeout(50);
   port->FullFlush(300);
@@ -269,14 +256,13 @@ VLAPI::~VLAPI() {
 // >0 : logger present
 //
 VLA_ERROR VLAPI::open(boolean connectit, int timeout,
-                      boolean quiet, int32 sbaudrate) {
-  noninteractive = quiet;
+                      int32 sbaudrate) {
   VLA_ERROR err = VLA_ERR_NOERR;
 
   set_databaud(sbaudrate);
   // connect
   if (connectit) {
-    if ((err = connect(timeout,quiet)) != VLA_ERR_NOERR)
+    if ((err = connect(timeout)) != VLA_ERR_NOERR)
       return err;
 
     vlpresent = 1;
@@ -321,9 +307,9 @@ VLA_ERROR VLAPI::read_info() {
 // if this fails, ask user to connect the VOLKSLOGGER
 VLA_ERROR VLAPI::stillconnect() {
   VLA_ERROR err;
-  err = connect(4,1);
+  err = connect(4);
   if(err != VLA_ERR_NOERR)
-    err = connect(10,0);
+    err = connect(10);
   if (err == VLA_ERR_NOERR)
     vlpresent = 1;
   return err;
