@@ -51,7 +51,7 @@
 #include "TestUtil.hpp"
 #include "Profile/DeviceConfig.hpp"
 
-static const DeviceConfig dummy_config;
+static const DeviceConfig dummy_config = DeviceConfig();
 
 bool
 HaveCondorDevice()
