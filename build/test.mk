@@ -508,7 +508,6 @@ TEST_DRIVER_SOURCES = \
 	$(SRC)/Device/Driver/Westerboer.cpp \
 	$(SRC)/Device/Driver/PosiGraph.cpp \
 	$(SRC)/Device/Driver/Vega.cpp \
-	$(SRC)/Device/Driver/Volkslogger.cpp \
 	$(SRC)/Device/Driver/Zander.cpp \
 	$(CAI302_SOURCES) \
 	$(IMI_SOURCES) \

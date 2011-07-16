@@ -1,6 +1,9 @@
 DRIVER_SRC_DIR = $(SRC)/Device/Driver
 
 VOLKSLOGGER_SOURCES = \
+	$(DRIVER_SRC_DIR)/Volkslogger/Register.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/Parser.cpp \
+	$(DRIVER_SRC_DIR)/Volkslogger/Declare.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/CRC16.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/Util.cpp \
 	$(DRIVER_SRC_DIR)/Volkslogger/dbbconv.cpp \
@@ -62,7 +65,6 @@ DRIVER_SOURCES = \
 	$(DRIVER_SRC_DIR)/NmeaOut.cpp \
 	$(DRIVER_SRC_DIR)/PosiGraph.cpp \
 	$(DRIVER_SRC_DIR)/Vega.cpp \
-	$(DRIVER_SRC_DIR)/Volkslogger.cpp \
 	$(DRIVER_SRC_DIR)/XCOM760.cpp \
 	$(DRIVER_SRC_DIR)/ILEC.cpp \
 	$(DRIVER_SRC_DIR)/Westerboer.cpp \

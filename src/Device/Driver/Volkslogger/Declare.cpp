@@ -21,23 +21,12 @@ Copyright_License {
 }
 */
 
-
-// ToDo
-
-// adding baro alt sentance parser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
-
-#include "Volkslogger.hpp"
-#include "Device/Driver.hpp"
+#include "Internal.hpp"
 #include "Device/Port.hpp"
 #include "Operation.hpp"
-#include "UtilsText.hpp"
-#include "Volkslogger/vlapi2.h"
-#include "Volkslogger/vlapihlp.h"
+#include "vlapi2.h"
 #include "Components.hpp"
-#include "NMEA/Info.hpp"
-#include "NMEA/InputLine.hpp"
-#include "NMEA/Checksum.hpp"
-#include "Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 
 #ifdef _UNICODE
@@ -45,78 +34,6 @@ Copyright_License {
 #endif
 
 #include <algorithm>
-
-class VolksloggerDevice : public AbstractDevice {
-private:
-  Port *port;
-
-public:
-  VolksloggerDevice(Port *_port):port(_port) {}
-
-protected:
-  bool DeclareInner(VLAPI &vl, const struct Declaration &declaration);
-
-public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
-  virtual bool Declare(const Declaration &declaration,
-                       OperationEnvironment &env);
-};
-
-// RMN: Volkslogger
-// Source data:
-// $PGCS,1,0EC0,FFF9,0C6E,02*61
-// $PGCS,1,0EC0,FFFA,0C6E,03*18
-static bool
-vl_PGCS1(NMEAInputLine &line, NMEA_INFO &info)
-{
-  GPS_STATE &gps = info.gps;
-
-  if (line.read(1) != 1)
-    return false;
-
-  /* pressure sensor */
-  line.skip();
-
-  // four characers, hex, barometric altitude
-  long altitude = line.read_hex(0L);
-
-  if (altitude > 60000)
-    /* Assuming that altitude has wrapped around.  60 000 m occurs at
-       QNH ~2000 hPa */
-    altitude -= 65535;
-
-  info.ProvidePressureAltitude(fixed(altitude));
-
-  // ExtractParameter(String,ctemp,3);
-  // four characters, hex, constant.  Value 1371 (dec)
-
-  // nSatellites = (int)(min(12,HexStrToDouble(ctemp, NULL)));
-
-  if (gps.SatellitesUsed <= 0) {
-    gps.SatellitesUsed = 4;
-    // just to make XCSoar quit complaining.  VL doesn't tell how many
-    // satellites it uses.  Without this XCSoar won't do wind
-    // measurements.
-  }
-
-  return false;
-}
-
-bool
-VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO &info)
-{
-  if (!VerifyNMEAChecksum(String))
-    return false;
-
-  NMEAInputLine line(String);
-  char type[16];
-  line.read(type, 16);
-
-  if (strcmp(type, "$PGCS") == 0)
-    return vl_PGCS1(line, info);
-  else
-    return false;
-}
 
 static void
 CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
@@ -133,8 +50,8 @@ CopyToNarrowBuffer(char *dest, size_t max_size, const TCHAR *src)
     dest_length = 0;
   dest[dest_length] = 0;
 #else
-    strncpy(dest, src, max_size - 1);
-    dest[max_size - 1] = 0;
+  strncpy(dest, src, max_size - 1);
+  dest[max_size - 1] = 0;
 #endif
 }
 
@@ -175,8 +92,8 @@ CopyTurnPoint(VLAPI_DATA::DCLWPT &dest, const Declaration::TurnPoint &src)
   dest.ws = 360;
 }
 
-bool
-VolksloggerDevice::DeclareInner(VLAPI &vl, const Declaration &declaration)
+static bool
+DeclareInner(VLAPI &vl, const Declaration &declaration)
 {
   assert(declaration.size() >= 2);
 
@@ -247,16 +164,3 @@ VolksloggerDevice::Declare(const Declaration &declaration,
 
   return success;
 }
-
-static Device *
-VolksloggerCreateOnPort(const DeviceConfig &config, Port *com_port)
-{
-  return new VolksloggerDevice(com_port);
-}
-
-const struct DeviceRegister vlDevice = {
-  _T("Volkslogger"),
-  _T("Volkslogger"),
-  DeviceRegister::DECLARE,
-  VolksloggerCreateOnPort,
-};
