@@ -84,17 +84,6 @@ const char *statustext[] = {
   "error: no response from FR"
 };
 
-
-void VLA_SYS::progress_reset()
-{
-  if(noninteractive)  return;
-}
-
-void VLA_SYS::progress_set(VLS_TXT_ID txtid)
-{
-  if(noninteractive)  return;
-}
-
 void VLA_SYS::show(VLS_TXT_ID txtid)
 {
   //JMW  cout << statustext[txtid] << endl;

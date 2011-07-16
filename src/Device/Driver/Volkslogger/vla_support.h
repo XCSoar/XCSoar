@@ -56,17 +56,12 @@ protected:
 		VLS_TXT_NOFR
 	};
 
-	// Timer functions
-  void wait_ms(const int32 t);
-
 	// serial port functions
   VLA_ERROR serial_out(const byte outbyte);
 	VLA_ERROR serial_in(byte *inbyte);
 	VLA_ERROR serial_empty_io_buffers();
 
   // user interaction functions
-  void progress_reset();
-  void progress_set(VLS_TXT_ID);
   void show(VLS_TXT_ID);
   void showwait(VLS_TXT_ID);
 
