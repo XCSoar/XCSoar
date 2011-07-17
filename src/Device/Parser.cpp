@@ -33,6 +33,7 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compatibility/string.h" /* for _ttoi() */
 #include "Units/Units.hpp"
+#include "OS/Clock.hpp"
 
 #include <math.h>
 #include <ctype.h>
@@ -307,6 +308,7 @@ NMEAParser::TimeHasAdvanced(fixed ThisTime, NMEA_INFO &info)
     return false;
   } else {
     info.Time = ThisTime;
+    info.time_available.Update(fixed(MonotonicClockMS()) / 1000);
     return true;
   }
 }

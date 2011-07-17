@@ -110,7 +110,8 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   ScopeLock protect(mutex);
   NMEA_INFO &basic = SetReplayState();
 
-  basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
+  const fixed monotonic = fixed(MonotonicClockMS()) / 1000;
+  basic.Connected.Update(monotonic);
   basic.gps.SatellitesUsed = 6;
   basic.acceleration.Available = false;
   basic.Location = loc;
@@ -126,6 +127,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.ProvidePressureAltitude(baroalt);
   basic.ProvideBaroAltitudeTrue(baroalt);
   basic.Time = t;
+  basic.time_available.Update(monotonic);
   basic.TotalEnergyVarioAvailable.Clear();
   basic.NettoVarioAvailable.Clear();
   basic.ExternalWindAvailable.Clear();

@@ -148,7 +148,7 @@ LoggerImpl::LogEvent(const NMEA_INFO& gps_info, const char* event)
 void
 LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
 {
-  if (!gps_info.Connected)
+  if (!gps_info.Connected || !gps_info.time_available)
     return;
 
   if (writer == NULL) {

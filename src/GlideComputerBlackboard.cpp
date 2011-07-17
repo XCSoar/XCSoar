@@ -90,7 +90,8 @@ GlideComputerBlackboard::ReadBlackboard(const MoreData &nmea_info)
 {
   _time_retreated = false;
 
-  if (!positive(gps_info.Time) || nmea_info.Time < gps_info.Time) {
+  if (!gps_info.time_available ||
+      (nmea_info.time_available && nmea_info.Time < gps_info.Time)) {
     // backwards in time, so reset last
     last_gps_info = nmea_info;
     last_calculated_info = calculated_info;

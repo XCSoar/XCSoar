@@ -107,6 +107,9 @@ ComputeTrack(NMEA_INFO &basic, const NMEA_INFO &last)
 static void
 ComputeGroundSpeed(NMEA_INFO &basic, const NMEA_INFO &last)
 {
+  assert(basic.time_available);
+  assert(last.time_available);
+
   if (basic.GroundSpeedAvailable)
     return;
 
@@ -184,6 +187,9 @@ ComputeEnergyHeight(MoreData &basic)
 static void
 ComputeGPSVario(MoreData &basic, const MoreData &last)
 {
+  assert(basic.time_available);
+  assert(last.time_available);
+
   // Calculate time passed since last calculation
   const fixed dT = basic.Time - last.Time;
 
@@ -271,7 +277,8 @@ BasicComputer::Compute(MoreData &data, const MoreData &last,
                        const DERIVED_INFO &calculated,
                        const SETTINGS_COMPUTER &settings_computer)
 {
-  if (data.Time <= last.Time)
+  if (data.time_available || !last.time_available ||
+      data.Time <= last.Time)
     return;
 
   ComputeTrack(data, last);

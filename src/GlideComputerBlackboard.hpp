@@ -62,7 +62,8 @@ public:
 
 protected:
   bool time_advanced() const {
-    return time_delta() > fixed_zero;
+    return Basic().time_available && LastBasic().time_available &&
+      time_delta() > fixed_zero;
   }
   /**
    * @see GlideComputerBlackboard::ReadBlackboard()

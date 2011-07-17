@@ -516,7 +516,7 @@ GlideComputerAirData::FlightTimes()
     // reset flight before/after replay logger
     ResetFlight(Basic().gps.Replay);
 
-  if (positive(Basic().Time) && time_retreated()) {
+  if (Basic().time_available && time_retreated()) {
     // 20060519:sgi added (Basic().Time != 0) due to always return here
     // if no GPS time available
     if (Basic().LocationAvailable)
@@ -546,7 +546,7 @@ GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
-  if (basic.Time < LastBasic().Time)
+  if (time_retreated())
     calculated.flight.flying_state_reset();
 
   // GPS not lost
@@ -673,16 +673,17 @@ GlideComputerAirData::TurnRate()
   const NMEA_INFO &basic = Basic();
   DERIVED_INFO &calculated = SetCalculated();
 
-  // Calculate time passed since last calculation
-  const fixed dT = basic.Time - LastBasic().Time;
-
   // Calculate turn rate
 
-  if (!calculated.flight.Flying) {
+  if (!basic.time_available || !LastBasic().time_available ||
+      !calculated.flight.Flying) {
     calculated.TurnRate = fixed_zero;
     calculated.TurnRateWind = fixed_zero;
     return;
   }
+
+  // Calculate time passed since last calculation
+  const fixed dT = basic.Time - LastBasic().Time;
   if (!positive(dT)) {
     return;
   }

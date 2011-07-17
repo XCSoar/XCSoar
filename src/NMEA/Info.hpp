@@ -234,6 +234,11 @@ struct NMEA_INFO {
   //   Time
   //##########
 
+  /**
+   * Did the device provide a time value?
+   */
+  Validity time_available;
+
   fixed Time; /**< global time (seconds UTC) */
 
   /** GPS date and time (UTC) */

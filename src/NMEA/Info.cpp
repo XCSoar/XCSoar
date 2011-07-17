@@ -83,6 +83,7 @@ NMEA_INFO::Reset()
 
   DateAvailable = false;
 
+  time_available.Clear();
   Time = fixed_zero;
   DateTime.hour = DateTime.minute = DateTime.second = 0;
 
@@ -122,8 +123,11 @@ NMEA_INFO::ExpireWallClock()
   const fixed monotonic = fixed(MonotonicClockMS()) / 1000;
   Connected.Expire(monotonic, fixed(10));
   if (!Connected) {
+    time_available.Clear();
     gps.Reset();
     flarm.clear();
+  } else {
+    time_available.Expire(monotonic, fixed(10));
   }
 }
 
@@ -160,11 +164,14 @@ NMEA_INFO::Complement(const NMEA_INFO &add)
 
   if (!Connected) {
     gps = add.gps;
-    Time = add.Time;
-    DateTime = add.DateTime;
   }
 
   Connected.Complement(add.Connected);
+
+  if (time_available.Complement(add.time_available)) {
+    Time = add.Time;
+    DateTime = add.DateTime;
+  }
 
   acceleration.Complement(add.acceleration);
 
