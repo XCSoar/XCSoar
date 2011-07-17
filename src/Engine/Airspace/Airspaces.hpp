@@ -279,13 +279,6 @@ public:
                             =AirspacePredicate::always_true);
 
   /**
-   * Make a non-owning copy of the airspaces master info
-   * Initialises to empty!
-   */
-//  Airspaces copy_meta() const;
-
-
-  /**
    * Make a copy of the airspaces metadata
    */
   Airspaces(const Airspaces& master, bool is_master);
