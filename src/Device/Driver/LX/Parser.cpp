@@ -119,15 +119,15 @@ LXWP2(NMEAInputLine &line, NMEA_INFO &info)
   fixed value;
   // MacCready value
   if (line.read_checked(value))
-    info.settings.ProvideMacCready(value, info.Time);
+    info.settings.ProvideMacCready(value, info.clock);
 
   // Ballast
   if (line.read_checked(value))
-    info.settings.ProvideBallastOverload(value, info.Time);
+    info.settings.ProvideBallastOverload(value, info.clock);
 
   // Bugs
   if (line.read_checked(value))
-    info.settings.ProvideBugs((fixed(100) - value) / 100, info.Time);
+    info.settings.ProvideBugs((fixed(100) - value) / 100, info.clock);
 
   return true;
 }

@@ -208,18 +208,19 @@ GenerateBlackboard(MapWindow &map)
   SETTINGS_COMPUTER settings_computer;
 
   nmea_info.Reset();
+  nmea_info.clock = fixed_one;
   nmea_info.Time = fixed(1297230000);
-  nmea_info.Connected.Update(nmea_info.Time);
+  nmea_info.Connected.Update(nmea_info.clock);
   nmea_info.gps.SatellitesUsed = 4;
   nmea_info.Location.Latitude = Angle::degrees(fixed(51.2));
   nmea_info.Location.Longitude = Angle::degrees(fixed(7.7));
-  nmea_info.LocationAvailable.Update(nmea_info.Time);
+  nmea_info.LocationAvailable.Update(nmea_info.clock);
   nmea_info.track = Angle::degrees(fixed_90);
-  nmea_info.track_available.Update(nmea_info.Time);
+  nmea_info.track_available.Update(nmea_info.clock);
   nmea_info.GroundSpeed = fixed(50);
-  nmea_info.GroundSpeedAvailable.Update(nmea_info.Time);
+  nmea_info.GroundSpeedAvailable.Update(nmea_info.clock);
   nmea_info.GPSAltitude = fixed(1500);
-  nmea_info.GPSAltitudeAvailable.Update(nmea_info.Time);
+  nmea_info.GPSAltitudeAvailable.Update(nmea_info.clock);
 
   memset(&derived_info, 0, sizeof(derived_info));
   derived_info.TerrainValid = true;

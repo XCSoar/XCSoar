@@ -109,7 +109,8 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
 
   ScopeLock protect(device_blackboard.mutex);
   NMEA_INFO &basic = device_blackboard.SetRealState(index);
-  basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
+  basic.UpdateClock();
+  basic.Connected.Update(basic.clock);
 
   BrokenDateTime date_time = BrokenDateTime::FromUnixTimeUTC(time / 1000);
   fixed second_of_day = fixed(date_time.GetSecondOfDay()) +
@@ -130,26 +131,26 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));
   if (n_satellites > 0)
-    basic.LocationAvailable.Update(basic.Time);
+    basic.LocationAvailable.Update(basic.clock);
   else
     basic.LocationAvailable.Clear();
 
   if (hasAltitude) {
     fixed GeoidSeparation = LookupGeoidSeparation(basic.Location);
     basic.GPSAltitude = fixed(altitude) - GeoidSeparation;
-    basic.GPSAltitudeAvailable.Update(basic.Time);
+    basic.GPSAltitudeAvailable.Update(basic.clock);
   } else
     basic.GPSAltitudeAvailable.Clear();
 
   if (hasBearing) {
     basic.track = Angle::degrees(fixed(bearing));
-    basic.track_available.Update(basic.Time);
+    basic.track_available.Update(basic.clock);
   } else
     basic.track_available.Clear();
 
   if (hasSpeed) {
     basic.GroundSpeed = fixed(speed);
-    basic.GroundSpeedAvailable.Update(basic.Time);
+    basic.GroundSpeedAvailable.Update(basic.clock);
   }
 
   if (hasAccuracy)

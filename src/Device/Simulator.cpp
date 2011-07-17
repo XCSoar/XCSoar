@@ -96,7 +96,8 @@ Simulator::Process(NMEA_INFO &basic)
   if (!is_simulator())
     return;
 
-  basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
+  basic.UpdateClock();
+  basic.Connected.Update(basic.clock);
   basic.gps.SatellitesUsed = 6;
   basic.gps.Simulator = true;
   basic.gps.real = false;
@@ -107,10 +108,10 @@ Simulator::Process(NMEA_INFO &basic)
 
   basic.Location = FindLatitudeLongitude(basic.Location, basic.track,
                                          basic.GroundSpeed);
-  basic.LocationAvailable.Update(basic.Time);
-  basic.GPSAltitudeAvailable.Update(basic.Time);
-  basic.track_available.Update(basic.Time);
-  basic.GroundSpeedAvailable.Update(basic.Time);
+  basic.LocationAvailable.Update(basic.clock);
+  basic.GPSAltitudeAvailable.Update(basic.clock);
+  basic.track_available.Update(basic.clock);
+  basic.GroundSpeedAvailable.Update(basic.clock);
 
   basic.Time += fixed_one;
   (BrokenTime &)basic.DateTime =

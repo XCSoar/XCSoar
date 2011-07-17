@@ -313,7 +313,7 @@ VegaVoiceMessage::Update(const NMEA_INFO &basic,
                          const DERIVED_INFO &calculated,
 			 const SETTINGS_COMPUTER &settings)
 {
-  const fixed Time = basic.Time;
+  const fixed Time = basic.clock;
   TCHAR text[80];
 
   switch(id) {

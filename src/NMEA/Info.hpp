@@ -125,6 +125,14 @@ struct GPS_STATE
  */
 struct NMEA_INFO {
   /**
+   * A monotonic wall clock time, in seconds, with an undefined
+   * reference.  This may get updated even if the device doesn't send
+   * any data.  It is used to update and check the #Validity
+   * attributes in this struct.
+   */
+  fixed clock;
+
+  /**
    * Is there a device connected?  This attribute gets updated each
    * time a NMEA line was successfully parsed.  When this expires, it
    * means that the device got disconnected.
@@ -347,6 +355,8 @@ struct NMEA_INFO {
 
   FLARM_STATE flarm;
 
+  void UpdateClock();
+
   bool MovementDetected() const {
     return GroundSpeedAvailable && GroundSpeed > fixed_two;
   }
@@ -369,7 +379,7 @@ struct NMEA_INFO {
    */
   void ProvideBaroAltitudeTrue(fixed value) {
     BaroAltitude = value;
-    BaroAltitudeAvailable.Update(Time);
+    BaroAltitudeAvailable.Update(clock);
   }
 
   /**
@@ -379,7 +389,7 @@ struct NMEA_INFO {
   void ProvidePressureAltitude(fixed value) {
     PressureAltitude = value;
     PressureAltitudeWeak = false;
-    PressureAltitudeAvailable.Update(Time);
+    PressureAltitudeAvailable.Update(clock);
   }
 
   /**
@@ -393,7 +403,7 @@ struct NMEA_INFO {
 
     PressureAltitude = value;
     PressureAltitudeWeak = true;
-    PressureAltitudeAvailable.Update(Time);
+    PressureAltitudeAvailable.Update(clock);
   }
 
   /**
@@ -403,7 +413,7 @@ struct NMEA_INFO {
    */
   void ProvideStaticPressure(fixed value) {
     static_pressure = value;
-    static_pressure_available.Update(Time);
+    static_pressure_available.Update(clock);
   }
 
   /**
@@ -423,7 +433,7 @@ struct NMEA_INFO {
    */
   void ProvideBothAirspeeds(fixed as) {
     IndicatedAirspeed = TrueAirspeed = as;
-    AirspeedAvailable.Update(Time);
+    AirspeedAvailable.Update(clock);
     AirspeedReal = true;
   }
 
@@ -434,7 +444,7 @@ struct NMEA_INFO {
   void ProvideBothAirspeeds(fixed ias, fixed tas) {
     IndicatedAirspeed = ias;
     TrueAirspeed = tas;
-    AirspeedAvailable.Update(Time);
+    AirspeedAvailable.Update(clock);
     AirspeedReal = true;
   }
 
@@ -446,7 +456,7 @@ struct NMEA_INFO {
     TrueAirspeed = tas;
     IndicatedAirspeed = TrueAirspeed /
       AtmosphericPressure::AirDensityRatio(altitude);
-    AirspeedAvailable.Update(Time);
+    AirspeedAvailable.Update(clock);
     AirspeedReal = true;
   }
 
@@ -463,7 +473,7 @@ struct NMEA_INFO {
    */
   void ProvideTotalEnergyVario(fixed value) {
     TotalEnergyVario = value;
-    TotalEnergyVarioAvailable.Update(Time);
+    TotalEnergyVarioAvailable.Update(clock);
   }
 
   /**
@@ -471,7 +481,7 @@ struct NMEA_INFO {
    */
   void ProvideNettoVario(fixed value) {
     NettoVario = value;
-    NettoVarioAvailable.Update(Time);
+    NettoVarioAvailable.Update(clock);
   }
 
   /**
@@ -479,7 +489,7 @@ struct NMEA_INFO {
    */
   void ProvideExternalWind(const SpeedVector &value) {
     ExternalWind = value;
-    ExternalWindAvailable.Update(Time);
+    ExternalWindAvailable.Update(clock);
   }
 
   /**

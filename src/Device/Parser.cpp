@@ -79,6 +79,8 @@ NMEAParser::Reset(void)
 bool
 NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO &info)
 {
+  assert(positive(info.clock));
+
   if (String[0] != '$')
     return false;
 
@@ -101,7 +103,7 @@ NMEAParser::ParseNMEAString_Internal(const char *String, NMEA_INFO &info)
       return PFLAA(line, info);
 
     if (strcmp(type + 1, "PFLAU") == 0)
-      return PFLAU(line, info.flarm, info.Time);
+      return PFLAU(line, info.flarm, info.clock);
 
     // Garmin altitude sentence
     if (strcmp(type + 1, "PGRMZ") == 0)
@@ -390,7 +392,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO &info)
   if (!gpsValid)
     info.LocationAvailable.Clear();
   else if (valid_location)
-    info.LocationAvailable.Update(info.Time);
+    info.LocationAvailable.Update(info.clock);
 
   if (valid_location)
     info.Location = location;
@@ -516,20 +518,20 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO &info)
   if (!gpsValid)
     info.LocationAvailable.Clear();
   else if (valid_location)
-    info.LocationAvailable.Update(info.Time);
+    info.LocationAvailable.Update(info.clock);
 
   if (valid_location)
     info.Location = location;
 
   if (GroundSpeedAvailable) {
     info.GroundSpeed = Units::ToSysUnit(speed, unKnots);
-    info.GroundSpeedAvailable.Update(info.Time);
+    info.GroundSpeedAvailable.Update(info.clock);
   }
 
   if (track_available && info.MovementDetected()) {
     // JMW don't update bearing unless we're moving
     info.track = Angle::degrees(track).as_bearing();
-    info.track_available.Update(info.Time);
+    info.track_available.Update(info.clock);
   }
 
   if (!GGAAvailable) {
@@ -620,7 +622,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO &info)
   if (!gpsValid)
     info.LocationAvailable.Clear();
   else if (valid_location)
-    info.LocationAvailable.Update(info.Time);
+    info.LocationAvailable.Update(info.clock);
 
   if (valid_location)
     info.Location = location;
@@ -638,7 +640,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO &info)
 
   bool altitude_available = ReadAltitude(line, info.GPSAltitude);
   if (altitude_available)
-    info.GPSAltitudeAvailable.Update(info.Time);
+    info.GPSAltitudeAvailable.Update(info.clock);
   else {
     info.GPSAltitude = fixed_zero;
     info.GPSAltitudeAvailable.Clear();
@@ -654,7 +656,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO &info)
          severely bugged, and report the GPS altitude in the Geoid
          column.  That sucks! */
       info.GPSAltitude = GeoidSeparation;
-      info.GPSAltitudeAvailable.Update(info.Time);
+      info.GPSAltitudeAvailable.Update(info.clock);
     }
   } else {
     // need to estimate Geoid Separation internally (optional)
@@ -760,9 +762,9 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEA_INFO &info)
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 bool
-NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time)
+NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed clock)
 {
-  flarm.available.Update(Time);
+  flarm.available.Update(clock);
   isFlarm = true;
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
@@ -872,7 +874,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO &info)
   }
 
   // set time of fix to current time
-  flarm_slot->valid.Update(info.Time);
+  flarm_slot->valid.Update(info.clock);
 
   flarm_slot->Update(traffic);
 

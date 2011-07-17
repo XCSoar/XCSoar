@@ -75,7 +75,7 @@ cai_PCAID(NMEAInputLine &line, NMEA_INFO &data)
   unsigned enl;
   if (line.read_checked(enl)) {
     data.engine_noise_level = enl;
-    data.engine_noise_level_available.Update(data.Time);
+    data.engine_noise_level_available.Update(data.clock);
   }
 
   return true;
@@ -112,7 +112,7 @@ cai_w(NMEAInputLine &line, NMEA_INFO &info)
     info.ProvideBaroAltitudeTrue(value - fixed(1000));
 
   if (line.read_checked(value))
-    info.settings.ProvideQNH(value, info.Time);
+    info.settings.ProvideQNH(value, info.clock);
 
   if (line.read_checked(value))
     info.ProvideTrueAirspeed(value / 100);
@@ -127,13 +127,13 @@ cai_w(NMEAInputLine &line, NMEA_INFO &info)
 
   if (line.read_checked(i))
     info.settings.ProvideMacCready(Units::ToSysUnit(fixed(i) / 10, unKnots),
-                                        info.Time);
+                                   info.clock);
 
   if (line.read_checked(i))
-    info.settings.ProvideBallastFraction(fixed(i) / 100, info.Time);
+    info.settings.ProvideBallastFraction(fixed(i) / 100, info.clock);
 
   if (line.read_checked(i))
-    info.settings.ProvideBugs(fixed(i) / 100, info.Time);
+    info.settings.ProvideBugs(fixed(i) / 100, info.clock);
 
   return true;
 }

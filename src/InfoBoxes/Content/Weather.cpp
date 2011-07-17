@@ -162,7 +162,7 @@ InfoBoxContentWind::PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
   if (!external_wind) {
     settings_computer.ManualWind.norm =
       Units::ToSysWindSpeed(Sender.GetAsFixed());
-    settings_computer.ManualWindAvailable.Update(basic.Time);
+    settings_computer.ManualWindAvailable.Update(basic.clock);
   }
 }
 
@@ -177,7 +177,7 @@ InfoBoxContentWind::PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
 
   if (!external_wind) {
     settings_computer.ManualWind.bearing = Angle::degrees(Sender.GetAsFixed());
-    settings_computer.ManualWindAvailable.Update(basic.Time);
+    settings_computer.ManualWindAvailable.Update(basic.clock);
   }
 }
 
@@ -250,7 +250,7 @@ InfoBoxContentWind::PnlSetupOnTabPreHide()
   DataFieldEnum* dfe = (DataFieldEnum*)((WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAutoWind")))->GetDataField();
 
   if (_tcscmp(dfe->GetAsString(), _("Manual")) == 0)
-    settings_computer.ManualWindAvailable.Update(basic.Time);
+    settings_computer.ManualWindAvailable.Update(basic.clock);
 
   SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().EnableTrailDrift);

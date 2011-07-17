@@ -89,14 +89,14 @@ PDSWC(NMEAInputLine &line, NMEA_INFO &info)
 
   fixed value;
   if (line.read_checked(value))
-    info.settings.ProvideMacCready(value / 10, info.Time);
+    info.settings.ProvideMacCready(value / 10, info.clock);
 
   long switchinputs = line.read_hex(0L);
   long switchoutputs = line.read_hex(0L);
 
   if (line.read_checked(value)) {
     info.SupplyBatteryVoltage = value / 10;
-    info.SupplyBatteryVoltageAvailable.Update(info.Time);
+    info.SupplyBatteryVoltageAvailable.Update(info.clock);
   }
 
   info.SwitchStateAvailable = true;
@@ -259,7 +259,7 @@ PDVDS(NMEAInputLine &line, NMEA_INFO &info)
   line.skip();
 
   info.StallRatio = line.read(fixed_zero);
-  info.StallRatioAvailable.Update(info.Time);
+  info.StallRatioAvailable.Update(info.clock);
 
   fixed value;
   if (line.read_checked(value))

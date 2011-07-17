@@ -67,7 +67,7 @@ PBB50(NMEAInputLine &line, NMEA_INFO &info)
 
   if (line.read_checked(value))
     info.settings.ProvideMacCready(Units::ToSysUnit(value, unKnots),
-                                   info.Time);
+                                   info.clock);
 
   /// @todo: OLD_TASK device MC/bugs/ballast is currently not implemented, have to push MC to master
   ///  oldGlidePolar::SetMacCready(info.MacCready);
@@ -85,7 +85,7 @@ PBB50(NMEAInputLine &line, NMEA_INFO &info)
   if (line.read_checked(value))
     info.settings.ProvideBugs(fixed_one - max(fixed_zero,
                                               min(fixed(30), value)) / 100,
-                              info.Time);
+                              info.clock);
 
   line.skip();
   /*

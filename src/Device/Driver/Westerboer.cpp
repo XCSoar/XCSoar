@@ -91,7 +91,7 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info)
 
   if (line.read_checked(i)) {
     info.SupplyBatteryVoltage = fixed(i) / 10;
-    info.SupplyBatteryVoltageAvailable.Update(info.Time);
+    info.SupplyBatteryVoltageAvailable.Update(info.clock);
   }
 
   if (line.read_checked(i)) {
@@ -112,15 +112,15 @@ PWES1(NMEAInputLine &line, NMEA_INFO &info)
 
   int i;
   if (line.read_checked(i))
-    info.settings.ProvideMacCready(fixed(i) / 10, info.Time);
+    info.settings.ProvideMacCready(fixed(i) / 10, info.clock);
 
   line.skip(4);
 
   if (line.read_checked(i))
-    info.settings.ProvideWingLoading(fixed(i) / 10, info.Time);
+    info.settings.ProvideWingLoading(fixed(i) / 10, info.clock);
 
   if (line.read_checked(i))
-    info.settings.ProvideBugs(fixed(100 - i) / 100, info.Time);
+    info.settings.ProvideBugs(fixed(100 - i) / 100, info.clock);
 
   return true;
 }

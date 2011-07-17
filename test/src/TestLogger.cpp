@@ -95,7 +95,9 @@ int main(int argc, char **argv)
                            Angle::degrees(fixed(50.6322)));
 
   static NMEA_INFO i;
+  i.clock = fixed_one;
   i.Time = fixed(1);
+  i.time_available.Update(i.clock);
   i.DateTime.year = 2010;
   i.DateTime.month = 9;
   i.DateTime.day = 4;
@@ -103,9 +105,9 @@ int main(int argc, char **argv)
   i.DateTime.minute = 22;
   i.DateTime.second = 33;
   i.Location = home;
-  i.LocationAvailable.Update(i.Time);
+  i.LocationAvailable.Update(i.clock);
   i.GPSAltitude = fixed(487);
-  i.GPSAltitudeAvailable.Update(i.Time);
+  i.GPSAltitudeAvailable.Update(i.clock);
   i.ProvideBaroAltitudeTrue(fixed(490));
 
   IGCWriter writer(path, i);

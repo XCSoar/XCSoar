@@ -54,8 +54,16 @@ GPS_STATE::Reset()
 }
 
 void
+NMEA_INFO::UpdateClock()
+{
+  clock = fixed(MonotonicClockMS()) / 1000;
+}
+
+void
 NMEA_INFO::Reset()
 {
+  UpdateClock();
+
   Connected.Clear();
 
   gps.Reset();
@@ -114,44 +122,48 @@ NMEA_INFO::Reset()
 void
 NMEA_INFO::ExpireWallClock()
 {
+  if (!Connected)
+    return;
+
+  UpdateClock();
+
 #ifdef ANDROID
   if (gps.AndroidInternalGPS)
     /* the Android internal GPS does not expire */
     return;
 #endif
 
-  const fixed monotonic = fixed(MonotonicClockMS()) / 1000;
-  Connected.Expire(monotonic, fixed(10));
+  Connected.Expire(clock, fixed(10));
   if (!Connected) {
     time_available.Clear();
     gps.Reset();
     flarm.clear();
   } else {
-    time_available.Expire(monotonic, fixed(10));
+    time_available.Expire(clock, fixed(10));
   }
 }
 
 void
 NMEA_INFO::Expire()
 {
-  LocationAvailable.Expire(Time, fixed(10));
-  track_available.Expire(Time, fixed(10));
-  GroundSpeedAvailable.Expire(Time, fixed(10));
+  LocationAvailable.Expire(clock, fixed(10));
+  track_available.Expire(clock, fixed(10));
+  GroundSpeedAvailable.Expire(clock, fixed(10));
 
-  if (AirspeedAvailable.Expire(Time, fixed(30)))
+  if (AirspeedAvailable.Expire(clock, fixed(30)))
     AirspeedReal = false;
 
-  GPSAltitudeAvailable.Expire(Time, fixed(30));
-  static_pressure_available.Expire(Time, fixed(30));
-  BaroAltitudeAvailable.Expire(Time, fixed(30));
-  PressureAltitudeAvailable.Expire(Time, fixed(30));
-  TotalEnergyVarioAvailable.Expire(Time, fixed(5));
-  NettoVarioAvailable.Expire(Time, fixed(5));
-  settings.Expire(Time);
-  ExternalWindAvailable.Expire(Time, fixed(600));
-  engine_noise_level_available.Expire(Time, fixed(30));
-    SupplyBatteryVoltageAvailable.Expire(Time, fixed(300));
-  flarm.Refresh(Time);
+  GPSAltitudeAvailable.Expire(clock, fixed(30));
+  static_pressure_available.Expire(clock, fixed(30));
+  BaroAltitudeAvailable.Expire(clock, fixed(30));
+  PressureAltitudeAvailable.Expire(clock, fixed(30));
+  TotalEnergyVarioAvailable.Expire(clock, fixed(5));
+  NettoVarioAvailable.Expire(clock, fixed(5));
+  settings.Expire(clock);
+  ExternalWindAvailable.Expire(clock, fixed(600));
+  engine_noise_level_available.Expire(clock, fixed(30));
+  SupplyBatteryVoltageAvailable.Expire(clock, fixed(300));
+  flarm.Refresh(clock);
 }
 
 void

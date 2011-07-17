@@ -93,7 +93,7 @@ GlideComputer::ProcessGPS()
 
   calculated.local_date_time = basic.DateTime + GetUTCOffset();
 
-  calculated.Expire(basic.Time);
+  calculated.Expire(basic.clock);
 
   // Process basic information
   ProcessBasic();

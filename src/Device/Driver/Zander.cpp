@@ -102,7 +102,7 @@ PZAN4(NMEAInputLine &line, NMEA_INFO &info)
 
   fixed mc;
   if (line.read_checked(mc))
-    info.settings.ProvideMacCready(mc, info.Time);
+    info.settings.ProvideMacCready(mc, info.clock);
 
   return true;
 }

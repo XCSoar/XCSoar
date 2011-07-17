@@ -175,7 +175,7 @@ GlideComputerAirData::SelectWind()
   } else if (SettingsComputer().ManualWindAvailable && SettingsComputer().AutoWindMode == 0) {
     // manual wind only if available and desired
     calculated.wind = SettingsComputer().ManualWind;
-    calculated.wind_available.Update(basic.Time);
+    calculated.wind_available.Update(basic.clock);
 
   } else if (calculated.estimated_wind_available.Modified(SettingsComputer().ManualWindAvailable)
              && SettingsComputer().AutoWindMode) {
@@ -611,7 +611,7 @@ GlideComputerAirData::AirspaceWarning()
 
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
   if (m_airspace.update_warning(as, Calculated().Circling, (unsigned)iround(time_delta())))
-    SetCalculated().airspace_warnings.latest.Update(Basic().Time);
+    SetCalculated().airspace_warnings.latest.Update(Basic().clock);
 }
 
 void
@@ -879,7 +879,8 @@ GlideComputerAirData::ThermalSources()
                       ground_altitude);
 
   if (positive(ground_altitude)) {
-    THERMAL_SOURCE_INFO &source = thermal_locator.AllocateSource(Basic().Time);
+    THERMAL_SOURCE_INFO &source =
+      thermal_locator.AllocateSource(Basic().Time);
 
     source.LiftRate = calculated.last_thermal.lift_rate;
     source.Location = ground_location;

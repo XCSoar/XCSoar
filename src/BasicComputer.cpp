@@ -175,7 +175,7 @@ ComputeAirspeed(NMEA_INFO &basic, const DERIVED_INFO &calculated)
   basic.TrueAirspeed = TrueAirspeedEstimated;
   basic.IndicatedAirspeed = TrueAirspeedEstimated
     / AtmosphericPressure::AirDensityRatio(basic.GetAltitudeBaroPreferred());
-  basic.AirspeedAvailable.Update(basic.Time);
+  basic.AirspeedAvailable.Update(basic.clock);
   basic.AirspeedReal = false;
 }
 

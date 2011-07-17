@@ -80,7 +80,7 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info)
 
   // 0,1 = GPS altitude, unit
   if (line.read_checked_compare(info.GPSAltitude, "M"))
-    info.GPSAltitudeAvailable.Update(info.Time);
+    info.GPSAltitudeAvailable.Update(info.clock);
 
   // 2,3 = baro altitude, unit
   if (line.read_checked_compare(value, "M"))

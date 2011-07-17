@@ -53,6 +53,7 @@ DeviceBlackboard::Initialise()
   calculated_info.Reset();
 
   // Set GPS assumed time to system time
+  gps_info.UpdateClock();
   gps_info.DateTime = BrokenDateTime::NowUTC();
   gps_info.Time = fixed(gps_info.DateTime.GetSecondOfDay());
 
@@ -110,8 +111,8 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   ScopeLock protect(mutex);
   NMEA_INFO &basic = SetReplayState();
 
-  const fixed monotonic = fixed(MonotonicClockMS()) / 1000;
-  basic.Connected.Update(monotonic);
+  basic.clock = t;
+  basic.Connected.Update(basic.clock);
   basic.gps.SatellitesUsed = 6;
   basic.acceleration.Available = false;
   basic.Location = loc;
@@ -127,7 +128,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.ProvidePressureAltitude(baroalt);
   basic.ProvideBaroAltitudeTrue(baroalt);
   basic.Time = t;
-  basic.time_available.Update(monotonic);
+  basic.time_available.Update(basic.clock);
   basic.TotalEnergyVarioAvailable.Clear();
   basic.NettoVarioAvailable.Clear();
   basic.ExternalWindAvailable.Clear();
@@ -271,14 +272,23 @@ DeviceBlackboard::Merge()
 {
   real_data.Reset();
   for (unsigned i = 0; i < NUMDEV; ++i) {
+    if (!per_device_data[i].Connected)
+      continue;
+
+    per_device_data[i].UpdateClock();
     per_device_data[i].Expire();
     real_data.Complement(per_device_data[i]);
   }
 
   if (replay_data.Connected) {
+    /* the replay may run at a higher speed; use NMEA_INFO::Time as a
+       "fake wallclock" to prevent them from expiring too quickly */
+    replay_data.clock = replay_data.Time;
+
     replay_data.Expire();
     SetBasic() = replay_data;
   } else if (simulator_data.Connected) {
+    simulator_data.UpdateClock();
     simulator_data.Expire();
     SetBasic() = simulator_data;
   } else {
