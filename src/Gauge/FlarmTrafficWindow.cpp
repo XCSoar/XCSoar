@@ -299,7 +299,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
           settings.TeamFlarmTracking &&
           traffic.id == settings.TeamFlarmIdTarget)
         // .. use yellow color
-        team_color = FlarmFriends::YELLOW;
+        team_color = FlarmFriends::GREEN;
 
       // If team color found -> draw a colored circle around the target
       if (team_color != FlarmFriends::NONE) {
