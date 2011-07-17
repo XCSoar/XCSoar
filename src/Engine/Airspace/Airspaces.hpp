@@ -85,9 +85,12 @@ public:
    *
    * @return empty Airspaces class.
    */
-  Airspaces():m_QNH(0), m_owner(true)
-    {
-    };
+  Airspaces():m_QNH(0), m_owner(true) {}
+
+  /**
+   * Make a copy of the airspaces metadata
+   */
+  Airspaces(const Airspaces& master, bool is_master);
 
   /**
    * Destructor.
@@ -277,11 +280,6 @@ public:
                             const fixed range,
                             const AirspacePredicate &condition
                             =AirspacePredicate::always_true);
-
-  /**
-   * Make a copy of the airspaces metadata
-   */
-  Airspaces(const Airspaces& master, bool is_master);
 };
 
 #endif
