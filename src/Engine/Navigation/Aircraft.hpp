@@ -83,9 +83,6 @@ struct ALTITUDE_STATE
   /** Altitude used for navigation (GPS or Baro) */
   fixed NavAltitude;
 
-  /** Altitude used for airspace (Baro preferred) */
-  fixed AirspaceAltitude;
-
   /** Fraction of working band height */
   fixed working_band_fraction;
 

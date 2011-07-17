@@ -75,12 +75,12 @@ AIRSPACE_ALT::get_as_text(const bool concise) const
 
 bool AIRSPACE_ALT::is_above  (const ALTITUDE_STATE& state,
                               const fixed margin) const {
-  return get_altitude(state) >= state.AirspaceAltitude - margin;
+  return get_altitude(state) >= state.NavAltitude - margin;
 }
 
 bool AIRSPACE_ALT::is_below  (const ALTITUDE_STATE& state,
                               const fixed margin) const {
-  return get_altitude(state) <= state.AirspaceAltitude + margin ||
+  return get_altitude(state) <= state.NavAltitude + margin ||
     /* special case: GND is always "below" the aircraft, even if the
        aircraft's AGL altitude turns out to be negative due to terrain
        file inaccuracies */

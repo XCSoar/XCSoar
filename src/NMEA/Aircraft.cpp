@@ -39,7 +39,6 @@ ToAircraftState(const MoreData &info, const DERIVED_INFO &calculated)
   aircraft.NavAltitude = info.NavAltitude;
   aircraft.working_band_fraction = calculated.thermal_band.working_band_fraction;
   aircraft.AltitudeAGL = calculated.AltitudeAGL;
-  aircraft.AirspaceAltitude = info.GetAltitudeBaroPreferred();
 
   /* VARIO_INFO */
   aircraft.Vario = info.BruttoVario;
