@@ -89,11 +89,11 @@ public:
     {
     };
 
-/** 
- * Destructor.
- * This also destroys Airspace objects contained in the tree or temporary buffer
- * 
- */
+  /**
+   * Destructor.
+   * This also destroys Airspace objects contained in the tree or temporary buffer
+   *
+   */
   ~Airspaces();
 
   /** 
@@ -112,26 +112,26 @@ public:
    */
   void optimise();
 
-/** 
- * Clear the airspace store, deleting airspace objects if m_owner is true
- * 
- */
+  /**
+   * Clear the airspace store, deleting airspace objects if m_owner is true
+   *
+   */
   void clear();
 
-/** 
- * Size of airspace (in tree, not in temporary store) ---
- * must call optimise() before this for it to be accurate.
- * 
- * @return Number of airspaces in tree
- */
+  /**
+   * Size of airspace (in tree, not in temporary store) ---
+   * must call optimise() before this for it to be accurate.
+   *
+   * @return Number of airspaces in tree
+   */
   gcc_pure
   unsigned size() const;
 
-/** 
- * Whether airspace store is empty
- * 
- * @return True if no airspace stored
- */
+  /**
+   * Whether airspace store is empty
+   *
+   * @return True if no airspace stored
+   */
   gcc_pure
   bool empty() const;
 
@@ -234,19 +234,19 @@ public:
                                    const AirspacePredicate &condition
                                    =AirspacePredicate::always_true) const;
 
-/** 
- * Access first airspace in store, for use in iterators.
- * 
- * @return First airspace in store
- */
+  /**
+   * Access first airspace in store, for use in iterators.
+   *
+   * @return First airspace in store
+   */
   gcc_pure
   AirspaceTree::const_iterator begin() const;
 
-/** 
- * Access end airspace in store, for use in iterators as end point.
- * 
- * @return End airspace in store
- */
+  /**
+   * Access end airspace in store, for use in iterators as end point.
+   *
+   * @return End airspace in store
+   */
   gcc_pure
   AirspaceTree::const_iterator end() const;
 
