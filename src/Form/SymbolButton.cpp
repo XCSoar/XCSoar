@@ -140,16 +140,16 @@ WndSymbolButton::on_paint(Canvas &canvas)
 
   else if (caption == _T("Green")) {
     InflateRect(&rc, -3, -3);
-    canvas.fill_rectangle(rc, COLOR_GREEN);
+    canvas.fill_rectangle(rc, Color(0x74, 0xFF, 0));
   } else if (caption == _T("Blue")) {
     InflateRect(&rc, -3, -3);
-    canvas.fill_rectangle(rc, COLOR_BLUE);
+    canvas.fill_rectangle(rc, Color(0, 0x90, 0xFF));
   } else if (caption == _T("Magenta")) {
     InflateRect(&rc, -3, -3);
-    canvas.fill_rectangle(rc, COLOR_MAGENTA);
+    canvas.fill_rectangle(rc, Color(0xFF, 0xE8, 0));
   } else if (caption == _T("Yellow")) {
     InflateRect(&rc, -3, -3);
-    canvas.fill_rectangle(rc, COLOR_YELLOW);
+    canvas.fill_rectangle(rc, Color(0xFF, 0, 0xCB));
   }
 
 }

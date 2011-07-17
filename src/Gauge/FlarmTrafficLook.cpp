@@ -41,10 +41,10 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   hbAlarm.set(hcAlarm);
   hbSelection.set(hcSelection);
   hbRadar.set(hcRadar);
-  hbTeamGreen.set(COLOR_GREEN);
-  hbTeamBlue.set(COLOR_BLUE);
-  hbTeamYellow.set(COLOR_YELLOW);
-  hbTeamMagenta.set(COLOR_MAGENTA);
+  hbTeamGreen.set(Color(0x74, 0xFF, 0));
+  hbTeamBlue.set(Color(0, 0x90, 0xFF));
+  hbTeamYellow.set(Color(0xFF, 0xE8, 0));
+  hbTeamMagenta.set(Color(0xFF, 0, 0xCB));
 
   int width = Layout::FastScale(small ? 1 : 2);
   hpWarning.set(width, hcWarning);
@@ -52,10 +52,10 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   hpStandard.set(width, hcStandard);
   hpPassive.set(width, hcPassive);
   hpSelection.set(width, hcSelection);
-  hpTeamGreen.set(width, COLOR_GREEN);
-  hpTeamBlue.set(width, COLOR_BLUE);
-  hpTeamYellow.set(width, COLOR_YELLOW);
-  hpTeamMagenta.set(width, COLOR_MAGENTA);
+  hpTeamGreen.set(width, Color(0x74, 0xFF, 0));
+  hpTeamBlue.set(width, Color(0, 0x90, 0xFF));
+  hpTeamYellow.set(width, Color(0xFF, 0xE8, 0));
+  hpTeamMagenta.set(width, Color(0xFF, 0, 0xCB));
 
   hpPlane.set(width, hcRadar);
   hpRadar.set(1, hcRadar);
