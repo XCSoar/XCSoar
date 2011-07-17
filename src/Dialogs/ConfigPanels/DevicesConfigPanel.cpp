@@ -304,13 +304,30 @@ IsWidcommSerialPort(const RegistryKey &registry)
 
 gcc_pure
 static bool
+IsYFCommuxPort(const RegistryKey &registry)
+{
+  return CompareRegistryValue(registry, _T("Dll"), _T("commux.dll")) &&
+    CompareRegistryValue(registry, _T("Prefix"), _T("COM"));
+}
+
+gcc_pure
+static bool
+IsGPSPort(const RegistryKey &registry)
+{
+  return CompareRegistryValue(registry, _T("Dll"), _T("GPS.Dll")) &&
+    CompareRegistryValue(registry, _T("Prefix"), _T("COM"));
+}
+
+gcc_pure
+static bool
 IsSerialPort(const TCHAR *key)
 {
   RegistryKey registry(HKEY_LOCAL_MACHINE, key, true);
   if (registry.error())
     return false;
 
-  return IsUnimodemPort(registry) || IsWidcommSerialPort(registry);
+  return IsUnimodemPort(registry) || IsWidcommSerialPort(registry) ||
+    IsYFCommuxPort(registry) || IsGPSPort(registry);
 }
 
 gcc_pure
