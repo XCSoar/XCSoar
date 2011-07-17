@@ -253,9 +253,6 @@ public:
   gcc_pure
   AirspaceTree::const_iterator end() const;
 
-  void lock() const {};
-  void unlock() const {};
-
   const TaskProjection& get_task_projection() const {
     return task_projection;
   }
