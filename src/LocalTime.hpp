@@ -23,17 +23,23 @@ Copyright_License {
 #ifndef LOCALTIME_H
 #define LOCALTIME_H
 
+#include "Compiler.h"
+
 struct NMEA_INFO;
 
+gcc_pure
 unsigned
 DetectCurrentTime(const NMEA_INFO &Basic);
 
+gcc_pure
 unsigned
 TimeLocal(int d, int utc_offset);
 
+gcc_pure
 unsigned
 TimeLocal(int d);
 
+gcc_pure
 int
 GetUTCOffset(void);
 
