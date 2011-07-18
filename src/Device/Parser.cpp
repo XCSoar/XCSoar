@@ -301,14 +301,14 @@ NMEAParser::TimeAdvanceTolerance(fixed time) const
 bool
 NMEAParser::TimeHasAdvanced(fixed ThisTime, NMEA_INFO &info)
 {
-  LastTime = ThisTime;
-
   if (ThisTime < LastTime) {
+    LastTime = ThisTime;
     StartDay = -1; // reset search for the first day
     return false;
   } else {
     info.Time = ThisTime;
     info.time_available.Update(fixed(MonotonicClockMS()) / 1000);
+    LastTime = ThisTime;
     return true;
   }
 }
