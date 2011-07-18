@@ -309,11 +309,11 @@ VegaVoiceMessage::DoSend(gcc_unused double time, TCHAR *text)
 
 
 bool
-VegaVoiceMessage::Update(const NMEA_INFO *Basic,
-                         const DERIVED_INFO *Calculated,
+VegaVoiceMessage::Update(const NMEA_INFO &basic,
+                         const DERIVED_INFO &calculated,
 			 const SETTINGS_COMPUTER &settings)
 {
-  const fixed Time = Basic->Time;
+  const fixed Time = basic.Time;
   TCHAR text[80];
 
   switch(id) {
@@ -324,14 +324,14 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
   case VV_CLIMBRATE:
     if (!settings.EnableVoiceClimbRate) return false;
 
-    if (Calculated->Circling && positive(Calculated->Average30s)) {
+    if (calculated.Circling && positive(calculated.Average30s)) {
       // Gives the average climb rate in user units every X seconds
       // while in circling mode
       // e.g. if average = 3.4 (user units)
       // Now: "CIRCLING THREE FOUR"
       // Later: "AVERAGE THREE POINT FOUR"
       _stprintf(text, _T(",%d"), VWI_CIRCLING);
-      TextToDigitsSmall(text, Units::ToUserVSpeed(Calculated->Average30s));
+      TextToDigitsSmall(text, Units::ToUserVSpeed(calculated.Average30s));
       DoSend(Time, text);
       return true;
     }
@@ -343,12 +343,11 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
     break;
   case VV_WAYPOINTDISTANCE:
 #ifdef OLD_TASK
-    if ((!Calculated->Circling)
-        && (task.Valid())) {
+    if (!calculated.Circling && task.Valid()) {
 
       // Gives the distance to the active waypoint every X seconds,
       // optionally limited when at last 20 km to go?
-      // Calculated->LegDistanceToGo
+      // calculated.LegDistanceToGo
       // e.g.: if distance is 13 (user units)
       // Now: "PLUS ONE THREE"
       // Later: "WAYPOINT DISTANCE THREE FOUR"
@@ -357,24 +356,24 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
       // in final glide mode, e.g.
       // "WAYPOINT BELOW TWO HUNDRED"
 
-      if (Units::ToUserUnit(Calculated->WaypointDistance,
+      if (Units::ToUserUnit(calculated.WaypointDistance,
                             Units::DistanceUnit) < 20.0) {
 
 	      if (!settings.EnableVoiceWaypointDistance) return false;
 
               _stprintf(text, _T(",%d"), VWI_PLUS);
-	      TextToDigitsLarge(text, Units::ToUserUnit(Calculated->WaypointDistance,
+	      TextToDigitsLarge(text, Units::ToUserUnit(calculated.WaypointDistance,
                                                   Units::DistanceUnit));
               DoSend(Time, text);
 	      return true;
       } else {
 
-	      if (Calculated->FinalGlide) {
+	      if (calculated.FinalGlide) {
 
 	        if (!settings.EnableVoiceTaskAltitudeDifference) return false;
 
 	        // TODO feature: BELOW FOUR HUNDRED
-	        double tad = Units::ToUserUnit(Calculated->TaskAltitudeDifference,
+	        double tad = Units::ToUserUnit(calculated.TaskAltitudeDifference,
                                          Units::AltitudeUnit);
 	        if (fabs(tad)>100) {
 	          if (tad>0) {
@@ -420,7 +419,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
   case VV_INSECTOR:
     if (!settings.EnableVoiceInSector) return false;
 #ifdef OLD_TASK
-    if (Calculated->IsInSector) {
+    if (calculated.IsInSector) {
       // Reports when the aircraft is in an AAT/task sector
       // e.g.:
       // Now: INFO
@@ -434,7 +433,7 @@ VegaVoiceMessage::Update(const NMEA_INFO *Basic,
   case VV_AIRSPACE:
     if (!settings.EnableVoiceAirspace) return false;
 #ifdef OLD_TASK
-    if (Calculated->IsInAirspace) {
+    if (calculated.IsInAirspace) {
       // Reports when the aircraft is inside airspace
       // e.g.:
       // Now: "WARNING AIRSPACE"
@@ -526,7 +525,7 @@ VegaVoice::~VegaVoice() {
 }
 
 void
-VegaVoice::Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
+VegaVoice::Update(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
 		  const SETTINGS_COMPUTER &settings)
 {
 
@@ -545,7 +544,7 @@ VegaVoice::Update(const NMEA_INFO *Basic, const DERIVED_INFO *Calculated,
   // update values in each message to determine whether
   // the message should be active
   for (int i=0; i<VV_MESSAGE_COUNT; i++)
-    if (message[i].Update(Basic, Calculated, settings))
+    if (message[i].Update(basic, calculated, settings))
       return;
 
   // no message is active now

@@ -111,8 +111,7 @@ public:
 
 public:
 
-  bool Update(const NMEA_INFO *Basic,
-	      const DERIVED_INFO *Calculated,
+  bool Update(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
 	      const SETTINGS_COMPUTER &settings);
 
 };
@@ -129,8 +128,7 @@ public:
   VegaVoice();
   ~VegaVoice();
 
-  void Update(const NMEA_INFO *Basic,
-	      const DERIVED_INFO *Calculated,
+  void Update(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
 	      const SETTINGS_COMPUTER &settings);
 
   // called when notified by Altair that the message has been spoken

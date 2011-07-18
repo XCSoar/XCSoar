@@ -122,7 +122,7 @@ GlideComputer::ProcessGPS()
   // (if teammate is a FLARM target)
   FLARM_ScanTraffic();
 
-  vegavoice.Update(&basic, &Calculated(), SettingsComputer());
+  vegavoice.Update(basic, Calculated(), SettingsComputer());
 
   // update basic trace history
   if (time_advanced())
