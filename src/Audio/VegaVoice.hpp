@@ -25,6 +25,7 @@ Copyright_License {
 #define VEGAVOICE_HPP
 
 #include "Thread/Mutex.hpp"
+#include "Compiler.h"
 
 #include <tchar.h>
 
@@ -53,11 +54,6 @@ enum {
 
 
 class VegaVoiceMessage {
-public:
-  void Initialise(int the_id);
-
-private:
-
   bool active;
   // indicates whether this message needs to be spoken
 
@@ -82,6 +78,10 @@ private:
 
   TCHAR messageText[80];
 
+public:
+  void Initialise(int the_id);
+
+private:
   void MessageHeader();
 
   void SendMessage();
@@ -118,11 +118,15 @@ public:
 
 
 class VegaVoice {
+  static bool AirspaceNotifierInstalled;
+
+  Mutex mutexVoice;
+
+  VegaVoiceMessage message[VV_MESSAGE_COUNT];
+
 public:
   VegaVoice();
   ~VegaVoice();
-
-  VegaVoiceMessage message[VV_MESSAGE_COUNT];
 
   void Update(const NMEA_INFO *Basic,
 	      const DERIVED_INFO *Calculated,
@@ -130,11 +134,6 @@ public:
 
   // called when notified by Altair that the message has been spoken
   void MessageSpoken(int id_this, double time);
-
-private:
-  Mutex mutexVoice;
- private:
-  static bool AirspaceNotifierInstalled;
 };
 
 #endif
