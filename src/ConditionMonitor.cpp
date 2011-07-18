@@ -44,10 +44,10 @@ Copyright_License {
 class ConditionMonitor
 {
 protected:
-  double LastTime_Notification;
-  double LastTime_Check;
-  double Interval_Notification;
-  double Interval_Check;
+  fixed LastTime_Notification;
+  fixed LastTime_Check;
+  fixed Interval_Notification;
+  fixed Interval_Check;
 
 public:
   ConditionMonitor(unsigned _interval_notification,
@@ -88,12 +88,12 @@ private:
   virtual void SaveLast(void) = 0;
 
   bool
-  Ready_Time_Notification(double T)
+  Ready_Time_Notification(fixed T)
   {
-    if (T <= 0)
+    if (!positive(T))
       return false;
 
-    if ((T < LastTime_Notification) || (LastTime_Notification == -1))
+    if (negative(LastTime_Notification) || T < LastTime_Notification)
       return true;
 
     if (T >= LastTime_Notification + Interval_Notification)
@@ -103,13 +103,13 @@ private:
   }
 
   bool
-  Ready_Time_Check(double T, bool *restart)
+  Ready_Time_Check(fixed T, bool *restart)
   {
-    if (T <= 0)
+    if (!positive(T))
       return false;
 
-    if ((T < LastTime_Check) || (LastTime_Check == -1)) {
-      LastTime_Notification = -1;
+    if (negative(LastTime_Check) || T < LastTime_Check) {
+      LastTime_Notification = fixed_minus_one;
       *restart = true;
       return true;
     }
@@ -198,14 +198,14 @@ protected:
     bool BeforeFinalGlide = !res.is_final_glide();
 
     if (BeforeFinalGlide) {
-      Interval_Notification = 60 * 5;
+      Interval_Notification = fixed(60 * 5);
       if ((tad > fixed(50)) && (last_tad < fixed(-50)))
         // report above final glide early
         return true;
       else if (tad < fixed(-50))
         last_tad = tad;
     } else {
-      Interval_Notification = 60;
+      Interval_Notification = fixed(60);
       if (res.is_final_glide()) {
         if ((last_tad < fixed(-50)) && (tad > fixed_one))
           // just reached final glide, previously well below
