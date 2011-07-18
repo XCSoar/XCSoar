@@ -50,10 +50,12 @@ protected:
   double Interval_Check;
 
 public:
-  ConditionMonitor()
+  ConditionMonitor(unsigned _interval_notification,
+                   unsigned _interval_check)
+    :LastTime_Notification(-1), LastTime_Check(-1),
+     Interval_Notification(_interval_notification),
+     Interval_Check(_interval_check)
   {
-    LastTime_Notification = -1;
-    LastTime_Check = -1;
   }
 
   void
@@ -129,10 +131,8 @@ class ConditionMonitorWind: public ConditionMonitor
   SpeedVector last_wind;
 
 public:
-  ConditionMonitorWind()
+  ConditionMonitorWind():ConditionMonitor(60 * 5, 10)
   {
-    Interval_Notification = 60 * 5;
-    Interval_Check = 10;
   }
 
 protected:
@@ -179,10 +179,8 @@ class ConditionMonitorFinalGlide: public ConditionMonitor
 
 public:
   ConditionMonitorFinalGlide()
-    :tad(fixed_zero)
+    :ConditionMonitor(60 * 5, 1), tad(fixed_zero)
   {
-    Interval_Notification = 60 * 5;
-    Interval_Check = 1;
   }
 
 protected:
@@ -244,10 +242,8 @@ class ConditionMonitorSunset: public ConditionMonitor
   SunEphemeris sun;
 
 public:
-  ConditionMonitorSunset()
+  ConditionMonitorSunset():ConditionMonitor(60 * 30, 60)
   {
-    Interval_Notification = 60 * 30;
-    Interval_Check = 60;
   }
 
 protected:
@@ -288,10 +284,8 @@ protected:
 class ConditionMonitorAATTime: public ConditionMonitor
 {
 public:
-  ConditionMonitorAATTime()
+  ConditionMonitorAATTime():ConditionMonitor(60 * 15, 10)
   {
-    Interval_Notification = 60 * 15;
-    Interval_Check = 10;
   }
 
 protected:
@@ -336,10 +330,8 @@ class ConditionMonitorStartRules: public ConditionMonitor
 
 public:
   ConditionMonitorStartRules()
+    :ConditionMonitor(60, 1), withinMargin(false)
   {
-    Interval_Notification = 60;
-    Interval_Check = 1;
-    withinMargin = false;
   }
 
 protected:
@@ -386,10 +378,8 @@ protected:
 class ConditionMonitorGlideTerrain: public ConditionMonitor
 {
 public:
-  ConditionMonitorGlideTerrain()
+  ConditionMonitorGlideTerrain():ConditionMonitor(60 * 5, 1)
   {
-    Interval_Notification = 60 * 5;
-    Interval_Check = 1;
   }
 
 protected:
@@ -430,10 +420,9 @@ class ConditionMonitorLandableReachable: public ConditionMonitor
   bool now_reachable;
 
 public:
-  ConditionMonitorLandableReachable():last_reachable(false)
+  ConditionMonitorLandableReachable()
+    :ConditionMonitor(60 * 5, 1), last_reachable(false)
   {
-    Interval_Notification = 60 * 5;
-    Interval_Check = 1;
   }
 
 protected:
