@@ -41,28 +41,30 @@ Copyright_License {
 void
 InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::Basic().HumidityAvailable) {
+  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  if (!basic.HumidityAvailable) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%d"), (int)XCSoarInterface::Basic().RelativeHumidity);
+  _stprintf(tmp, _T("%d"), (int)basic.RelativeHumidity);
   infobox.SetValue(tmp);
 }
 
 void
 InfoBoxContentTemperature::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::Basic().TemperatureAvailable) {
+  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  if (!basic.TemperatureAvailable) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   SetValueFromFixed(infobox, _T("%2.1f")_T(DEG),
-      Units::ToUserTemperature(XCSoarInterface::Basic().OutsideAirTemperature));
+                    Units::ToUserTemperature(basic.OutsideAirTemperature));
 }
 
 void
@@ -119,8 +121,11 @@ InfoBoxContentWind::PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBar,
 bool
 InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
 {
-  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
-    XCSoarInterface::SettingsComputer().ExternalWind;
+  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  const SETTINGS_COMPUTER &settings_computer =
+    XCSoarInterface::SettingsComputer();
+  const bool external_wind = basic.ExternalWindAvailable &&
+    settings_computer.ExternalWind;
 
   WndProperty* wp;
 
@@ -148,26 +153,31 @@ InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
 void
 InfoBoxContentWind::PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
 {
-  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
-    XCSoarInterface::SettingsComputer().ExternalWind;
+  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  SETTINGS_COMPUTER &settings_computer =
+    XCSoarInterface::SetSettingsComputer();
+  const bool external_wind = basic.ExternalWindAvailable &&
+    settings_computer.ExternalWind;
 
   if (!external_wind) {
-    XCSoarInterface::SetSettingsComputer().ManualWind.norm =
+    settings_computer.ManualWind.norm =
       Units::ToSysWindSpeed(Sender.GetAsFixed());
-    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.Update(XCSoarInterface::Basic().Time);
+    settings_computer.ManualWindAvailable.Update(basic.Time);
   }
 }
 
 void
 InfoBoxContentWind::PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
 {
-  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
-    XCSoarInterface::SettingsComputer().ExternalWind;
+  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  SETTINGS_COMPUTER &settings_computer =
+    XCSoarInterface::SetSettingsComputer();
+  const bool external_wind = basic.ExternalWindAvailable &&
+    settings_computer.ExternalWind;
 
   if (!external_wind) {
-    XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
-      Angle::degrees(Sender.GetAsFixed());
-    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.Update(XCSoarInterface::Basic().Time);
+    settings_computer.ManualWind.bearing = Angle::degrees(Sender.GetAsFixed());
+    settings_computer.ManualWindAvailable.Update(basic.Time);
   }
 }
 
@@ -188,8 +198,11 @@ InfoBoxContentWind::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
       LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXWINDSETUP"));
   assert(wInfoBoxAccessSetup);
 
-  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
-    XCSoarInterface::SettingsComputer().ExternalWind;
+  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  const SETTINGS_COMPUTER &settings_computer =
+    XCSoarInterface::SettingsComputer();
+  const bool external_wind = basic.ExternalWindAvailable &&
+    settings_computer.ExternalWind;
 
   WndProperty* wp;
 
@@ -207,7 +220,7 @@ InfoBoxContentWind::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
     dfe->addEnumText(_("Circling"));
     dfe->addEnumText(_("ZigZag"));
     dfe->addEnumText(_("Both"));
-    dfe->Set(XCSoarInterface::SettingsComputer().AutoWindMode);
+    dfe->Set(settings_computer.AutoWindMode);
     wp->RefreshDisplay();
   }
 
@@ -224,17 +237,20 @@ InfoBoxContentWind::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
 bool
 InfoBoxContentWind::PnlSetupOnTabPreHide()
 {
-  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
-    XCSoarInterface::SettingsComputer().ExternalWind;
+  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  SETTINGS_COMPUTER &settings_computer =
+    XCSoarInterface::SetSettingsComputer();
+  const bool external_wind = basic.ExternalWindAvailable &&
+    settings_computer.ExternalWind;
 
   if (!external_wind)
     SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpAutoWind"), szProfileAutoWind,
-                     XCSoarInterface::SetSettingsComputer().AutoWindMode);
+                     settings_computer.AutoWindMode);
 
   DataFieldEnum* dfe = (DataFieldEnum*)((WndProperty*)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAutoWind")))->GetDataField();
 
   if (_tcscmp(dfe->GetAsString(), _("Manual")) == 0)
-    XCSoarInterface::SetSettingsComputer().ManualWindAvailable.Update(XCSoarInterface::Basic().Time);
+    settings_computer.ManualWindAvailable.Update(basic.Time);
 
   SaveFormProperty(*dlgInfoBoxAccess::GetWindowForm(), _T("prpTrailDrift"),
                    XCSoarInterface::SetSettingsMap().EnableTrailDrift);
