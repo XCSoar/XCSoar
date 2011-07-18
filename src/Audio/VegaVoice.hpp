@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef VEGAVOICE_H
-#define VEGAVOICE_H
+#ifndef VEGAVOICE_HPP
+#define VEGAVOICE_HPP
 
 #include "Thread/Mutex.hpp"
 

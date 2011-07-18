@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Audio/VegaVoice.h"
+#include "Audio/VegaVoice.hpp"
 #include "SettingsComputer.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Info.hpp"

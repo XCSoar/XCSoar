@@ -24,7 +24,7 @@ Copyright_License {
 #if !defined(XCSOAR_GLIDECOMPUTER_HPP)
 #define XCSOAR_GLIDECOMPUTER_HPP
 
-#include "Audio/VegaVoice.h"
+#include "Audio/VegaVoice.hpp"
 #include "GPSClock.hpp"
 #include "PeriodClock.hpp"
 #include "GlideComputerAirData.hpp"

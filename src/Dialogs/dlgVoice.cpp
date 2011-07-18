@@ -26,7 +26,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
-#include "Audio/VegaVoice.h"
+#include "Audio/VegaVoice.hpp"
 #include "DataField/Base.hpp"
 #include "MainWindow.hpp"
 #include "LogFile.hpp"
