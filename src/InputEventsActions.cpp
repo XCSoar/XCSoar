@@ -116,7 +116,7 @@ trigger_redraw()
 {
   if (!XCSoarInterface::Basic().LocationAvailable)
     TriggerGPSUpdate();
-  CommonInterface::main_window.full_redraw();
+  TriggerMapUpdate();
 }
 
 // -----------------------------------------------------------------------

@@ -28,8 +28,6 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp"
 
 /**
  * Constructor of the CalculationThread class
@@ -99,7 +97,7 @@ CalculationThread::Tick()
   // if (new GPS data)
   if (gps_updated) {
     // inform map new data is ready
-    CommonInterface::main_window.full_redraw();
+    TriggerMapUpdate();
   }
 
   if (do_idle) {

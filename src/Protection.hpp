@@ -36,6 +36,13 @@ TriggerMergeThread();
 
 void TriggerGPSUpdate();
 void TriggerVarioUpdate();
+
+/**
+ * Trigger a redraw of the map window.
+ */
+void
+TriggerMapUpdate();
+
 void CreateCalculationThread(void);
 
 // changed only in config or by user interface

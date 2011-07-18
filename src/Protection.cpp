@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "Protection.hpp"
 #include "MainWindow.hpp"
-#include "MapWindow/MapWindow.hpp"
-#include "SettingsMap.hpp"
 #include "Gauge/GlueGaugeVario.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
@@ -60,6 +58,12 @@ void TriggerVarioUpdate()
   GlueGaugeVario *gauge_vario = CommonInterface::main_window.vario;
   if (gauge_vario != NULL)
     gauge_vario->invalidate_blackboard();
+}
+
+void
+TriggerMapUpdate()
+{
+  CommonInterface::main_window.full_redraw();
 }
 
 #include "DeviceBlackboard.hpp"

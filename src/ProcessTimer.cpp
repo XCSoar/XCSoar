@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ProcessTimer.hpp"
 #include "Interface.hpp"
+#include "Protection.hpp"
 #include "InputEvents.hpp"
 #include "Device/device.hpp"
 #include "Device/All.hpp"
@@ -160,7 +161,7 @@ BlackboardProcessTimer()
     /* trigger a redraw when the connection was just lost, to show the
        new state; when no GPS is connected, no other entity triggers
        the redraw, so we have to do it */
-    CommonInterface::main_window.full_redraw();
+    TriggerMapUpdate();
 }
 
 /**
