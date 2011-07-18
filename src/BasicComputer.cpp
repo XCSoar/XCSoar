@@ -30,6 +30,25 @@ Copyright_License {
 #define fixed_inv_2g fixed(1.0/(2.0*9.81))
 #define fixed_small fixed(0.001)
 
+/**
+ * Fill vario values when they are provided by the external vario.
+ * This is a short path that works even when no GPS (providing GPS
+ * time) is connected.
+ */
+static void
+FillVario(MoreData &data)
+{
+  if (data.TotalEnergyVarioAvailable) {
+    data.BruttoVario = data.TotalEnergyVario;
+
+    if (!data.NettoVarioAvailable)
+      /* copy the NettoVario value from BruttoVario; it will be
+         overwritten by ComputeNettoVario() if the GliderSinkRate is
+         known */
+      data.NettoVario = data.BruttoVario;
+  }
+}
+
 static void
 ComputePressure(NMEA_INFO &basic, const SETTINGS_COMPUTER &settings_computer)
 {
@@ -265,6 +284,7 @@ ComputeDynamics(MoreData &basic, const DERIVED_INFO &calculated)
 void
 BasicComputer::Fill(MoreData &data, const SETTINGS_COMPUTER &settings_computer)
 {
+  FillVario(data);
   ComputePressure(data, settings_computer);
   ComputeNavAltitude(data, settings_computer);
 }
