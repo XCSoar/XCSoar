@@ -90,13 +90,14 @@ private:
 
   void DoSend(double time, TCHAR *text);
 
-  void TextToDigitsSmall(TCHAR *text, double number);
+  static void TextToDigitsSmall(TCHAR *text, double number);
 
-  void TextToDigitsLarge(TCHAR *text, double number);
+  static void TextToDigitsLarge(TCHAR *text, double number);
 
-  void TextToDigitsHuge(TCHAR *text, double number);
+  static void TextToDigitsHuge(TCHAR *text, double number);
 
-  int LookupDigit(int number);
+  gcc_const
+  static int LookupDigit(int number);
 
 public:
   void SendNullMessage();
