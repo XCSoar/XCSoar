@@ -277,7 +277,7 @@ GlideComputerAirData::Average30s()
   if (!time_advanced())
     return;
 
-  const unsigned Elapsed = (unsigned)(basic.Time - LastBasic().Time);
+  const unsigned Elapsed = (unsigned)time_delta();
   if (Elapsed == 0)
     return;
 
@@ -683,10 +683,10 @@ GlideComputerAirData::TurnRate()
   }
 
   // Calculate time passed since last calculation
-  const fixed dT = basic.Time - LastBasic().Time;
-  if (!positive(dT)) {
+  if (!time_advanced())
     return;
-  }
+
+  const fixed dT = time_delta();
 
   calculated.TurnRate =
     (basic.track - LastBasic().track).as_delta().value_degrees() / dT;
