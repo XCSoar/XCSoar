@@ -601,13 +601,15 @@ GlideComputerAirData::OnTakeoff()
 void
 GlideComputerAirData::AirspaceWarning()
 {
+  if (!time_advanced())
+    return;
+
   airspace_database.set_flight_levels(SettingsComputer().pressure);
 
   AirspaceActivity day (Calculated().local_date_time.day_of_week);
   airspace_database.set_activity(day);
 
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
-  assert(positive(time_delta()));
   if (m_airspace.update_warning(as, Calculated().Circling, (unsigned)iround(time_delta())))
     SetCalculated().airspace_warnings.latest.Update(Basic().Time);
 }
