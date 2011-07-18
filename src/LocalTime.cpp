@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <windows.h>
 
-int
+unsigned
 TimeLocal(int localtime, int utc_offset)
 {
   localtime += utc_offset;
@@ -39,13 +39,13 @@ TimeLocal(int localtime, int utc_offset)
   return localtime;
 }
 
-int
+unsigned
 TimeLocal(int localtime)
 {
   return TimeLocal(localtime, GetUTCOffset());
 }
 
-int
+unsigned
 DetectCurrentTime(const NMEA_INFO &Basic)
 {
   int utc_time = (int)Basic.Time;

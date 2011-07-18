@@ -266,8 +266,8 @@ protected:
 
     sun.CalcSunTimes(cmp.Basic().Location, cmp.Basic().DateTime,
                      fixed(GetUTCOffset()) / 3600);
-    fixed d1((res.TimeElapsed + fixed(DetectCurrentTime(&cmp.Basic()))) / 3600);
-    fixed d0(DetectCurrentTime(&cmp.Basic()) / 3600);
+    fixed d1((res.TimeElapsed + fixed(DetectCurrentTime(cmp.Basic()))) / 3600);
+    fixed d0(DetectCurrentTime(cmp.Basic()) / 3600);
 
     bool past_sunset = (d1 > sun.TimeOfSunSet) && (d0 < sun.TimeOfSunSet);
     return past_sunset;

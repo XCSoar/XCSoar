@@ -25,11 +25,14 @@ Copyright_License {
 
 struct NMEA_INFO;
 
-int
+unsigned
 DetectCurrentTime(const NMEA_INFO &Basic);
 
-int TimeLocal(int d, int utc_offset);
-int TimeLocal(int d);
+unsigned
+TimeLocal(int d, int utc_offset);
+
+unsigned
+TimeLocal(int d);
 
 int
 GetUTCOffset(void);

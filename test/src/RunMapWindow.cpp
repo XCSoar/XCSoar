@@ -94,7 +94,7 @@ bool PlayResource(const TCHAR* lpName)
   return false;
 }
 
-int
+unsigned
 TimeLocal(int d)
 {
   return d;
