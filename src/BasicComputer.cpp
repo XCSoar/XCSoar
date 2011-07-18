@@ -109,6 +109,7 @@ ComputeGroundSpeed(NMEA_INFO &basic, const NMEA_INFO &last)
 {
   assert(basic.time_available);
   assert(last.time_available);
+  assert(basic.Time > last.Time);
 
   if (basic.GroundSpeedAvailable)
     return;
@@ -118,9 +119,6 @@ ComputeGroundSpeed(NMEA_INFO &basic, const NMEA_INFO &last)
     return;
 
   fixed t = basic.Time - last.Time;
-  if (!positive(t))
-    return;
-
   fixed d = basic.Location.distance(last.Location);
   basic.GroundSpeed = d / t;
 }
@@ -189,18 +187,17 @@ ComputeGPSVario(MoreData &basic, const MoreData &last)
 {
   assert(basic.time_available);
   assert(last.time_available);
+  assert(basic.Time > last.Time);
 
   // Calculate time passed since last calculation
   const fixed dT = basic.Time - last.Time;
 
-  if (positive(dT)) {
-    const fixed Gain = basic.NavAltitude - last.NavAltitude;
-    const fixed GainTE = basic.TEAltitude - last.TEAltitude;
+  const fixed Gain = basic.NavAltitude - last.NavAltitude;
+  const fixed GainTE = basic.TEAltitude - last.TEAltitude;
 
-    // estimate value from GPS
-    basic.GPSVario = Gain / dT;
-    basic.GPSVarioTE = GainTE / dT;
-  }
+  // estimate value from GPS
+  basic.GPSVario = Gain / dT;
+  basic.GPSVarioTE = GainTE / dT;
 }
 
 static void
