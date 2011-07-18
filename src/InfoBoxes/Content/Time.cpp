@@ -37,7 +37,7 @@ InfoBoxContentTimeLocal::Update(InfoBoxWindow &infobox)
   TCHAR sTmp[32];
 
   // Set Value
-  int dd = DetectCurrentTime(&XCSoarInterface::Basic());
+  int dd = DetectCurrentTime(XCSoarInterface::Basic());
   const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value

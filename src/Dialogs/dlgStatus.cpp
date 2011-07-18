@@ -194,7 +194,7 @@ UpdateValuesTimes(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
   assert(wp != NULL);
-  Units::TimeToTextHHMMSigned(Temp, (int)DetectCurrentTime(&basic));
+  Units::TimeToTextHHMMSigned(Temp, DetectCurrentTime(basic));
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTakeoffTime"));

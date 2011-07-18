@@ -209,7 +209,7 @@ InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
   TCHAR tmp[32];
   int dd = (int)(XCSoarInterface::Calculated().task_stats.current_leg.
                  solution_remaining.TimeElapsed) +
-    DetectCurrentTime(&XCSoarInterface::Basic());
+    DetectCurrentTime(XCSoarInterface::Basic());
   const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value
@@ -362,7 +362,7 @@ InfoBoxContentFinalETA::Update(InfoBoxWindow &infobox)
 
   TCHAR tmp[32];
   int dd = (int)task_stats.total.solution_remaining.TimeElapsed +
-    DetectCurrentTime(&XCSoarInterface::Basic());
+    DetectCurrentTime(XCSoarInterface::Basic());
   const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
   // Set Value

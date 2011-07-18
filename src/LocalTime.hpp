@@ -25,7 +25,8 @@ Copyright_License {
 
 struct NMEA_INFO;
 
-int DetectCurrentTime(const NMEA_INFO *Basic);
+int
+DetectCurrentTime(const NMEA_INFO &Basic);
 
 int TimeLocal(int d, int utc_offset);
 int TimeLocal(int d);
