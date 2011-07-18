@@ -198,7 +198,7 @@ DeviceDescriptor::PutMacCready(fixed value)
   ScopeLock protect(device_blackboard.mutex);
   NMEA_INFO &basic = device_blackboard.SetRealState(index);
   settings_sent.mac_cready = value;
-  settings_sent.mac_cready_available = basic.Time;
+  settings_sent.mac_cready_available.Update(basic.Time);
 
   return true;
 }
@@ -215,7 +215,7 @@ DeviceDescriptor::PutBugs(fixed value)
   ScopeLock protect(device_blackboard.mutex);
   NMEA_INFO &basic = device_blackboard.SetRealState(index);
   settings_sent.bugs = value;
-  settings_sent.bugs_available = basic.Time;
+  settings_sent.bugs_available.Update(basic.Time);
 
   return true;
 }
@@ -232,7 +232,7 @@ DeviceDescriptor::PutBallast(fixed value)
   ScopeLock protect(device_blackboard.mutex);
   NMEA_INFO &basic = device_blackboard.SetRealState(index);
   settings_sent.ballast_fraction = value;
-  settings_sent.ballast_fraction_available = basic.Time;
+  settings_sent.ballast_fraction_available.Update(basic.Time);
 
   return true;
 }
@@ -268,7 +268,7 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
   ScopeLock protect(device_blackboard.mutex);
   NMEA_INFO &basic = device_blackboard.SetRealState(index);
   settings_sent.qnh = value;
-  settings_sent.qnh_available = basic.Time;
+  settings_sent.qnh_available.Update(basic.Time);
 
   return true;
 }

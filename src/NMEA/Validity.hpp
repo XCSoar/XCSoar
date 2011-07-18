@@ -43,7 +43,7 @@ public:
   /**
    * Initialize the object with the specified timestamp.
    */
-  Validity(fixed _last):last(_last) {}
+  explicit Validity(fixed _last):last(_last) {}
 
 public:
   /**
