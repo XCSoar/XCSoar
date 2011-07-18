@@ -62,7 +62,8 @@ MergeThread::Tick()
   last_any = basic;
 
   /* update last_fix only when a new GPS fix was received */
-  if (basic.Time != last_fix.Time ||
+  if ((basic.time_available &&
+       (!last_fix.time_available || basic.Time != last_fix.Time)) ||
       basic.LocationAvailable != last_fix.LocationAvailable)
     last_fix = basic;
 }
