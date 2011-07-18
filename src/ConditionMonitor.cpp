@@ -43,6 +43,12 @@ Copyright_License {
  */
 class ConditionMonitor
 {
+protected:
+  double LastTime_Notification;
+  double LastTime_Check;
+  double Interval_Notification;
+  double Interval_Check;
+
 public:
   ConditionMonitor()
   {
@@ -72,12 +78,6 @@ public:
         SaveLast();
     }
   }
-
-protected:
-  double LastTime_Notification;
-  double LastTime_Check;
-  double Interval_Notification;
-  double Interval_Check;
 
 private:
 
@@ -125,6 +125,9 @@ private:
  */
 class ConditionMonitorWind: public ConditionMonitor
 {
+  SpeedVector wind;
+  SpeedVector last_wind;
+
 public:
   ConditionMonitorWind()
   {
@@ -167,14 +170,13 @@ protected:
   {
     last_wind = wind;
   }
-
-private:
-  SpeedVector wind;
-  SpeedVector last_wind;
 };
 
 class ConditionMonitorFinalGlide: public ConditionMonitor
 {
+  fixed tad;
+  fixed last_tad;
+
 public:
   ConditionMonitorFinalGlide()
     :tad(fixed_zero)
@@ -235,23 +237,20 @@ protected:
   {
     last_tad = tad;
   }
-
-private:
-  fixed tad;
-  fixed last_tad;
 };
 
 class ConditionMonitorSunset: public ConditionMonitor
 {
+  SunEphemeris sun;
+
 public:
   ConditionMonitorSunset()
   {
     Interval_Notification = 60 * 30;
     Interval_Check = 60;
   }
-protected:
-  SunEphemeris sun;
 
+protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
@@ -283,8 +282,6 @@ protected:
   SaveLast(void)
   {
   }
-
-private:
 };
 
 /** Checks whether arrival time will be less than AAT time */
@@ -328,8 +325,6 @@ protected:
   SaveLast(void)
   {
   }
-
-private:
 };
 
 /**
@@ -337,6 +332,8 @@ private:
  */
 class ConditionMonitorStartRules: public ConditionMonitor
 {
+  bool withinMargin;
+
 public:
   ConditionMonitorStartRules()
   {
@@ -344,8 +341,8 @@ public:
     Interval_Check = 1;
     withinMargin = false;
   }
-protected:
 
+protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
@@ -384,9 +381,6 @@ protected:
   SaveLast(void)
   {
   }
-
-private:
-  bool withinMargin;
 };
 
 class ConditionMonitorGlideTerrain: public ConditionMonitor
@@ -432,6 +426,9 @@ protected:
 
 class ConditionMonitorLandableReachable: public ConditionMonitor
 {
+  bool last_reachable;
+  bool now_reachable;
+
 public:
   ConditionMonitorLandableReachable():last_reachable(false)
   {
@@ -467,10 +464,6 @@ protected:
   {
     last_reachable = now_reachable;
   }
-
-private:
-  bool last_reachable;
-  bool now_reachable;
 };
 
 
