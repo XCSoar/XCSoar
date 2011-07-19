@@ -52,8 +52,6 @@ Filter::design(const fixed cutoff_wavelength)
 
   fixed f_star = c / (sample_freq * cutoff_wavelength);
 
-  assert(f_star < fixed_one / 8);
-
   if (f_star >= fixed_one / 8) {
     ok = false;
     return false;
@@ -90,8 +88,7 @@ Filter::reset(const fixed _x)
 fixed
 Filter::update(const fixed _x)
 {
-  if (!ok)
-    return _x;
+  assert(ok);
 
   x[2] = x[1];
   x[1] = x[0];
