@@ -110,7 +110,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   if (DrawListIndex == ordered_task->task_size()) {
     if (!ordered_task->is_max_size()) {
-      _stprintf(sTmp, _T("  (%s)"), _("Add Waypoint"));
+      _stprintf(sTmp, _T("  (%s)"), _("Add Turnpoint"));
       canvas.text(rc.left + Layout::FastScale(2),
                   rc.top + Layout::FastScale(2), sTmp);
     }
