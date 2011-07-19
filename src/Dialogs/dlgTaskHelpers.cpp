@@ -257,77 +257,6 @@ private:
   TCHAR *text;
 };
 
-class LabelSizeObservationZone:
-  public ObservationZoneConstVisitor
-{
-public:
-  LabelSizeObservationZone(TCHAR* _radius):
-    radius(_radius)
-  {
-    radius[0] = _T('\0');
-  }
-
-  void
-  Visit(const FAISectorZone& oz)
-  {
-    _stprintf(radius,_("FAI"));
-  }
-  void
-  Visit(const KeyholeZone& oz)
-  {
-    _stprintf(radius,_("DAeC"));
-  }
-
-  void
-  Visit(const BGAFixedCourseZone& oz)
-  {
-    _stprintf(radius,_("BGA"));
-  }
-
-  void
-  Visit(const BGAEnhancedOptionZone& oz)
-  {
-    _stprintf(radius,_("BGAE"));
-  }
-
-  void
-  Visit(const BGAStartSectorZone& oz)
-  {
-    _stprintf(radius,_("BGA-S"));
-  }
-
-  void
-  Visit(const SectorZone& oz)
-  {
-    _stprintf(radius,_T("%.1f%s"),
-              (double)Units::ToUserDistance(oz.getRadius()),
-              Units::GetDistanceName());
-  }
-
-  void
-  Visit(const AnnularSectorZone& oz)
-  {
-    Visit((const SectorZone&) oz);
-  }
-
-  void
-  Visit(const LineSectorZone& oz)
-  {
-    _stprintf(radius,_T("%.1f%s"),
-              (double)Units::ToUserDistance(oz.getLength()),
-              Units::GetDistanceName());
-  }
-
-  void
-  Visit(const CylinderZone& oz)
-  {
-    _stprintf(radius,_T("%.1f%s"),
-              (double)Units::ToUserDistance(oz.getRadius()),
-              Units::GetDistanceName());
-  }
-  TCHAR* radius;
-};
-
 class LabelTaskPoint:
   public TaskPointConstVisitor
 {
@@ -376,9 +305,48 @@ OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name, TCHA
   const OrderedTaskPoint &tp = *task->getTaskPoint(index);
   tpv.TaskPointConstVisitor::Visit(tp);
 
-  LabelSizeObservationZone obs(radius);
   const ObservationZonePoint *ozp = tp.get_oz();
-  obs.ObservationZoneConstVisitor::Visit(*ozp);
+  switch (ozp->shape) {
+  case ObservationZonePoint::FAI_SECTOR:
+    _stprintf(radius,_("FAI"));
+    break;
+
+  case ObservationZonePoint::SECTOR:
+  case ObservationZonePoint::ANNULAR_SECTOR:
+    _stprintf(radius,_T("%.1f%s"),
+              (double)Units::ToUserDistance(((const SectorZone *)ozp)->getRadius()),
+              Units::GetDistanceName());
+    break;
+
+  case ObservationZonePoint::LINE:
+    _stprintf(radius,_T("%.1f%s"),
+              (double)Units::ToUserDistance(((const LineSectorZone *)ozp)->getLength()),
+              Units::GetDistanceName());
+    break;
+
+  case ObservationZonePoint::CYLINDER:
+    _stprintf(radius,_T("%.1f%s"),
+              (double)Units::ToUserDistance(((const CylinderZone *)ozp)->getRadius()),
+              Units::GetDistanceName());
+    break;
+
+  case ObservationZonePoint::KEYHOLE:
+    _stprintf(radius,_("DAeC"));
+    break;
+
+  case ObservationZonePoint::BGAFIXEDCOURSE:
+    _stprintf(radius,_("BGA"));
+    break;
+
+  case ObservationZonePoint::BGAENHANCEDOPTION:
+    _stprintf(radius,_("BGAE"));
+    break;
+
+  case ObservationZonePoint::BGA_START:
+    _stprintf(radius,_("BGA-S"));
+    break;
+  }
+
 }
 
 const TCHAR*
