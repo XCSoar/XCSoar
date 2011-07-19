@@ -34,8 +34,8 @@ Filter::Filter(const fixed cutoff_wavelength, const bool bessel) :
 bool
 Filter::design(const fixed cutoff_wavelength)
 {
-  fixed sample_freq = fixed_one;
-  fixed n = fixed_one;
+  static const fixed sample_freq = fixed_one;
+  static const fixed n = fixed_one;
   fixed c;
   fixed g;
   fixed p;
