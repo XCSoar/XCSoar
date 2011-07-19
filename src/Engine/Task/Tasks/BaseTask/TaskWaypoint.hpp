@@ -58,11 +58,6 @@ public:
     { }
 
 /**
- * Destructor.  Does nothing yet.
- */
-  virtual ~TaskWaypoint() {};
-
-/**
  * Recall waypoint associated with this task point.
  * Can be used for user feedback (e.g. queries on details of active
  * task point)
