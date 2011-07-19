@@ -287,42 +287,42 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius)
 {
   switch (ozp.shape) {
   case ObservationZonePoint::FAI_SECTOR:
-    _stprintf(radius,_("FAI"));
+    _stprintf(radius,_("FAI quadrant"));
     break;
 
   case ObservationZonePoint::SECTOR:
   case ObservationZonePoint::ANNULAR_SECTOR:
-    _stprintf(radius,_T("%.1f%s"),
+    _stprintf(radius,_T("%s  - %s: %.1f%s"), _("Sector"), _("Radius"),
               (double)Units::ToUserDistance(((const SectorZone &)ozp).getRadius()),
               Units::GetDistanceName());
     break;
 
   case ObservationZonePoint::LINE:
-    _stprintf(radius,_T("%.1f%s"),
+    _stprintf(radius,_T("%s  - %s: %.1f%s"), _("Line"), _("Length"),
               (double)Units::ToUserDistance(((const LineSectorZone &)ozp).getLength()),
               Units::GetDistanceName());
     break;
 
   case ObservationZonePoint::CYLINDER:
-    _stprintf(radius,_T("%.1f%s"),
+    _stprintf(radius,_T("%s  - %s: %.1f%s"), _("Cylinder"), _("Radius"),
               (double)Units::ToUserDistance(((const CylinderZone &)ozp).getRadius()),
               Units::GetDistanceName());
     break;
 
   case ObservationZonePoint::KEYHOLE:
-    _stprintf(radius,_("DAeC"));
+    _stprintf(radius,_("DAeC Keyhole"));
     break;
 
   case ObservationZonePoint::BGAFIXEDCOURSE:
-    _stprintf(radius,_("BGA"));
+    _stprintf(radius,_("BGA Fixed Course"));
     break;
 
   case ObservationZonePoint::BGAENHANCEDOPTION:
-    _stprintf(radius,_("BGAE"));
+    _stprintf(radius,_("BGA Enhanced Option"));
     break;
 
   case ObservationZonePoint::BGA_START:
-    _stprintf(radius,_("BGA-S"));
+    _stprintf(radius,_("BGA Start Sector"));
     break;
   }
 }

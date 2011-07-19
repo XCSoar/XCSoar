@@ -126,6 +126,8 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   }
 
   const OrderedTaskPoint &tp = *ordered_task->getTaskPoint(DrawListIndex);
+  GeoVector leg = tp.leg_vector_nominal();
+  bool show_leg_information = leg.Distance > fixed(0.01);
 
   // Draw icon
   RasterPoint pt = { rc.left + line_height / 2,
@@ -134,32 +136,35 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   wir.Draw(tp.get_waypoint(), pt,
            WaypointIconRenderer::Unreachable, true);
 
-  // Draw turnpoint radius/short description
-  TCHAR sRad[10];
-  OrderedTaskPointRadiusLabel(*tp.get_oz(), sRad);
-  if (!string_is_empty(sRad))
-    canvas.text_clipped(rc.right - Layout::FastScale(2) - canvas.text_width(sRad),
-                        rc.top + Layout::FastScale(2), rc, sRad);
+  // Draw leg distance
+  if (show_leg_information) {
+    TCHAR dist[20];
+    Units::FormatUserDistance(leg.Distance, dist, 20, true);
+    canvas.text_clipped(rc.right - Layout::FastScale(2) - canvas.text_width(dist),
+                        rc.top + Layout::FastScale(2), rc, dist);
+  }
 
   // Draw turnpoint name
   OrderedTaskPointLabel(tp, DrawListIndex, sTmp);
   canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2), rc, sTmp);
 
-  // Draw distance and arrival altitude
-  GeoVector leg = tp.leg_vector_nominal();
-  if (leg.Distance < fixed(0.01))
-    return;
-
-  TCHAR dist[20];
-  Units::FormatUserDistance(leg.Distance, dist, 20, true);
-  _stprintf(sTmp, _T("%s: %s - %s: %.0f" DEG), _("Leg Distance"), dist,
-            _("Bearing"), (double)leg.Bearing.value_degrees());
-
+  // Draw details line
   canvas.select(small_font);
-  canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
-                      rc, sTmp);
+
+  OrderedTaskPointRadiusLabel(*tp.get_oz(), sTmp);
+  if (!string_is_empty(sTmp))
+    canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
+                        rc.top + name_font.get_height() + Layout::FastScale(4),
+                        rc, sTmp);
+
+  if (show_leg_information) {
+    _stprintf(sTmp, _T("%s: %.0f" DEG "T"),
+              _("Bearing"), (double)leg.Bearing.value_degrees());
+    canvas.text_clipped(rc.right - Layout::FastScale(2) - canvas.text_width(sTmp),
+                        rc.top + name_font.get_height() + Layout::FastScale(4),
+                        rc, sTmp);
+  }
 }
 
 void
