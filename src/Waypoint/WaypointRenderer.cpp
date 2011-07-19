@@ -97,9 +97,8 @@ struct VisibleWaypoint {
       reachable = WaypointRenderer::ReachableTerrain;
   }
 
-  void DrawSymbol(Canvas &canvas, const Projection &projection) const {
-    WaypointIconRenderer wir(canvas, projection.GetMapScale() > fixed(4000),
-                             projection.GetScreenAngle());
+  void DrawSymbol(Canvas &canvas, bool small_icons, Angle screen_rotation) const {
+    WaypointIconRenderer wir(canvas, small_icons, screen_rotation);
     wir.Draw(*waypoint, point, (WaypointIconRenderer::Reachability)reachable,
              in_task);
   }
@@ -237,7 +236,8 @@ protected:
     const Waypoint &way_point = *vwp.waypoint;
     bool watchedWaypoint = way_point.Flags.Watched;
 
-    vwp.DrawSymbol(canvas, projection);
+    vwp.DrawSymbol(canvas, projection.GetMapScale() > fixed(4000),
+                   projection.GetScreenAngle());
 
     // Determine whether to draw the waypoint label or not
     switch (settings_map.WaypointLabelSelection) {
