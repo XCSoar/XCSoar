@@ -142,7 +142,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                         rc.top + Layout::FastScale(2), rc, sRad);
 
   // Draw turnpoint name
-  OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp);
+  OrderedTaskPointLabel(tp, DrawListIndex, sTmp);
   canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2), rc, sTmp);
 

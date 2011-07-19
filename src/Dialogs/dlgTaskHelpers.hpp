@@ -38,7 +38,7 @@ const TCHAR* OrderedTaskFactoryName(TaskBehaviour::Factory_t type);
  * @param linebreaks True if each summary item should be separated with a line break
  */
 void OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks);
-void OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name);
+void OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* name);
 void OrderedTaskPointRadiusLabel(OrderedTask* task, const unsigned index, TCHAR* radius);
 bool OrderedTaskSave(SingleWindow &parent,
                      const OrderedTask& task, bool noask=false);

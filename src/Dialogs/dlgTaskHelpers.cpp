@@ -258,9 +258,8 @@ private:
 };
 
 void
-OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name)
+OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* name)
 {
-  const OrderedTaskPoint &tp = *task->getTaskPoint(index);
   switch (tp.GetType()) {
   case TaskPoint::START:
     _stprintf(name, _T("S:  %s"), tp.get_waypoint().Name.c_str());
