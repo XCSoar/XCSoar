@@ -28,6 +28,8 @@
 /**
  * Basic low-pass FIR filter from 2-pole design.
  * If filter design fails, passes data straight through.
+ *
+ * @see http://unicorn.us.com/alex/2polefilters.html
  */
 class Filter 
 {

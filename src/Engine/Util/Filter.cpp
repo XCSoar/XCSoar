@@ -25,8 +25,6 @@
 #include <assert.h>
 #include <stdio.h>
 
-// ref http://unicorn.us.com/alex/2polefilters.html
-
 Filter::Filter(const fixed cutoff_wavelength, const bool bessel) :
   m_bessel(bessel)
 {
