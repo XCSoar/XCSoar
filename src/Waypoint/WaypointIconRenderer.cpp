@@ -177,7 +177,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
 }
 
 void
-WaypointIconRenderer::Draw(const Waypoint &waypoint, RasterPoint point,
+WaypointIconRenderer::Draw(const Waypoint &waypoint, const RasterPoint &point,
                            Reachability reachable, bool in_task)
 {
   if (waypoint.IsLandable())

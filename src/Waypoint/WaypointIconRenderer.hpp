@@ -52,7 +52,7 @@ public:
     :canvas(_canvas), small_icons(_small_icons),
      screen_rotation(_screen_rotation) {}
 
-  void Draw(const Waypoint &waypoint, RasterPoint point,
+  void Draw(const Waypoint &waypoint, const RasterPoint &point,
             Reachability reachable = Unreachable, bool in_task = false);
 
 private:
