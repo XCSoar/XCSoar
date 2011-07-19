@@ -59,9 +59,11 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   RasterPoint pt = { rc.left + line_height / 2,
                      rc.top + line_height / 2};
 
-  WaypointRenderer::DrawLandableSymbol(canvas, pt,
-                                       positive(solution.AltitudeDifference),
-                                       true, way_point);
+  WaypointRenderer::Reachability reachable =
+      positive(solution.AltitudeDifference) ?
+      WaypointRenderer::ReachableTerrain : WaypointRenderer::Unreachable;
+
+  WaypointRenderer::DrawLandableSymbol(canvas, pt, reachable, way_point);
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
