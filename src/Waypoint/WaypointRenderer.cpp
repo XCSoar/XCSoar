@@ -497,8 +497,7 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
 
 void
 WaypointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
-                                     bool reachable_glide,
-                                     bool reachable_terrain,
+                                     Reachability reachable,
                                      const Waypoint &way_point,
                                      const Angle &screenRotation)
 {
@@ -506,10 +505,10 @@ WaypointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
   if (!Appearance.UseSWLandablesRendering) {
     const MaskedIcon *icon;
 
-    if (reachable_glide && reachable_terrain)
+    if (reachable == ReachableTerrain)
       icon = way_point.IsAirport() ? &Graphics::AirportReachableIcon :
                                       &Graphics::FieldReachableIcon;
-    else if (reachable_glide && !reachable_terrain)
+    else if (reachable == ReachableStraight)
       icon = way_point.IsAirport() ? &Graphics::AirportMarginalIcon:
                                       &Graphics::FieldMarginalIcon;
     else
@@ -528,20 +527,23 @@ WaypointRenderer::DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
   canvas.black_pen();
   if (Appearance.IndLandable == wpLandableWinPilot) {
     // Render landable with reachable state
-    if (reachable_glide) {
-      canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbNotReachableTerrain);
+    if (reachable != Unreachable) {
+      canvas.select(reachable == ReachableTerrain ?
+                    Graphics::hbGreen : Graphics::hbNotReachableTerrain);
       DrawLandableBase(canvas, pt, way_point.IsAirport(),
                        radius + radius / fixed_two);
     }
     canvas.select(Graphics::hbMagenta);
   } else if (Appearance.IndLandable == wpLandableAltB) {
-    if (reachable_glide)
-      canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbOrange);
+    if (reachable != Unreachable)
+      canvas.select(reachable == ReachableTerrain ?
+                    Graphics::hbGreen : Graphics::hbOrange);
     else
       canvas.select(Graphics::hbRed);
   } else {
-    if (reachable_glide)
-      canvas.select(reachable_terrain ? Graphics::hbGreen : Graphics::hbNotReachableTerrain);
+    if (reachable != Unreachable)
+      canvas.select(reachable == ReachableTerrain ?
+                    Graphics::hbGreen : Graphics::hbNotReachableTerrain);
     else if (way_point.IsAirport())
       canvas.select(Graphics::hbWhite);
     else
