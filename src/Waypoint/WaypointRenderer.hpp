@@ -62,23 +62,6 @@ public:
 
   static void
   DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
-                     bool reachable_glide, bool reachable_terrain,
-                     const Waypoint &way_point,
-                     const Angle &screen_rotation = Angle::degrees(fixed_zero))
-  {
-    Reachability reachable;
-    if (reachable_glide && reachable_terrain)
-      reachable = ReachableTerrain;
-    else if (reachable_glide && !reachable_terrain)
-      reachable = ReachableStraight;
-    else
-      reachable = Unreachable;
-
-    DrawLandableSymbol(canvas, pt, reachable, way_point, screen_rotation);
-  }
-
-  static void
-  DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
                      Reachability reachable, const Waypoint &way_point,
                      const Angle &screen_rotation = Angle::degrees(fixed_zero));
 
