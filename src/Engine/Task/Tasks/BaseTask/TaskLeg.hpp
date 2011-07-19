@@ -161,6 +161,9 @@ public:
   gcc_pure
   fixed leg_distance_nominal() const;
 
+  gcc_pure
+  GeoVector leg_vector_nominal() const;
+
 private:
   gcc_pure
   GeoVector leg_vector_planned() const;

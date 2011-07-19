@@ -177,6 +177,17 @@ TaskLeg::leg_distance_nominal() const
   return fixed_zero;
 }
 
+GeoVector
+TaskLeg::leg_vector_nominal() const
+{
+  if (!origin()) {
+    return GeoVector(fixed_zero);
+  } else {
+    return memo_planned.calc(origin()->get_location(),
+                             destination.get_location());
+  }
+}
+
 fixed 
 TaskLeg::leg_distance_max() const
 {
