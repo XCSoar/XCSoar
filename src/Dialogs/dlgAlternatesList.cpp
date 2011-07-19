@@ -31,7 +31,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "MainWindow.hpp"
-#include "WaypointRenderer.hpp"
+#include "WaypointIconRenderer.hpp"
 #include "Language/Language.hpp"
 
 #include <stdio.h>
@@ -59,11 +59,11 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   RasterPoint pt = { rc.left + line_height / 2,
                      rc.top + line_height / 2};
 
-  WaypointRenderer::Reachability reachable =
+  WaypointIconRenderer::Reachability reachable =
       positive(solution.AltitudeDifference) ?
-      WaypointRenderer::ReachableTerrain : WaypointRenderer::Unreachable;
+      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
 
-  WaypointRenderer::DrawLandableSymbol(canvas, pt, reachable, way_point);
+  WaypointIconRenderer::DrawLandableSymbol(canvas, pt, reachable, way_point);
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
