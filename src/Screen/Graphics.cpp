@@ -52,11 +52,6 @@ MaskedIcon Graphics::hCruise, Graphics::hClimb,
 MaskedIcon Graphics::hGPSStatus1, Graphics::hGPSStatus2;
 MaskedIcon Graphics::hBmpTrafficSafe, Graphics::hBmpTrafficWarning, Graphics::hBmpTrafficAlarm;
 
-Pen Graphics::hpAircraft;
-Pen Graphics::hpAircraftSimple1;
-Pen Graphics::hpAircraftSimple2;
-Pen Graphics::hpCanopy;
-
 Pen Graphics::hpWind;
 Pen Graphics::hpCompass;
 Pen Graphics::hpFinalGlideAbove;
@@ -69,7 +64,6 @@ Pen Graphics::hpTrackBearingLine;
 Pen Graphics::TracePen;
 Pen Graphics::ContestPen[3];
 
-Brush Graphics::hbCanopy;
 Brush Graphics::hbCompass;
 Brush Graphics::hbFinalGlideBelow;
 Brush Graphics::hbFinalGlideBelowLandable;
@@ -174,12 +168,6 @@ Graphics::Initialise()
   ContestPen[0].set(Layout::Scale(1)+2, COLOR_RED);
   ContestPen[1].set(Layout::Scale(1)+1, COLOR_ORANGE);
   ContestPen[2].set(Layout::Scale(1), COLOR_BLUE);
-
-  hpAircraft.set(1, COLOR_DARK_GRAY);
-  hpAircraftSimple1.set(Layout::Scale(1), COLOR_BLACK);
-  hpAircraftSimple2.set(Layout::Scale(3), COLOR_WHITE);
-  hpCanopy.set(1, dark_color(COLOR_CYAN));
-  hbCanopy.set(COLOR_CYAN);
 
     // used for landable rendering
   hbGreen.set(COLOR_GREEN);
@@ -310,12 +298,6 @@ Graphics::Deinitialise()
   ContestPen[0].reset();
   ContestPen[1].reset();
   ContestPen[2].reset();
-
-  hpAircraft.reset();
-  hpAircraftSimple1.reset();
-  hpAircraftSimple2.reset();
-  hpCanopy.reset();
-  hbCanopy.reset();
 
   hbGreen.reset();
   hbWhite.reset();

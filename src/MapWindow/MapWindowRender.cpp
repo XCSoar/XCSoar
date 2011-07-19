@@ -152,7 +152,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   // Finally, draw you!
   if (Basic().Connected)
-    DrawAircraft(canvas, settings_map,
+    DrawAircraft(canvas, settings_map, aircraft_look,
                  Calculated().Heading - render_projection.GetScreenAngle(),
                  aircraft_pos);
 

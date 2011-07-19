@@ -1463,6 +1463,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/WaypointLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
+	$(SRC)/Look/AircraftLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMapBlackboard.cpp \
@@ -1730,6 +1731,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/WaypointLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
+	$(SRC)/Look/AircraftLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Look/InfoBoxLook.cpp \
 	$(SRC)/Gauge/FlarmTrafficLook.cpp \

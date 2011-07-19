@@ -58,6 +58,7 @@ Copyright_License {
 #include "Look/WaypointLook.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"
+#include "Look/AircraftLook.hpp"
 #include "Look/TrafficLook.hpp"
 
 #ifndef _MSC_VER
@@ -113,9 +114,12 @@ public:
 
 public:
   TestWindow(const WaypointLook &waypoint_look,
-             const AirspaceLook &airspace_look, const TaskLook &task_look,
+             const AirspaceLook &airspace_look,
+             const TaskLook &task_look,
+             const AircraftLook &aircraft_look,
              const TrafficLook &traffic_look)
-    :map(waypoint_look, airspace_look, task_look, traffic_look) {}
+    :map(waypoint_look, airspace_look,
+         task_look, aircraft_look, traffic_look) {}
 
 #ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance) {
@@ -293,10 +297,14 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TaskLook *task_look = new TaskLook();
   task_look->Initialise();
 
+  AircraftLook *aircraft_look = new AircraftLook();
+  aircraft_look->Initialise();
+
   TrafficLook *traffic_look = new TrafficLook();
   traffic_look->Initialise();
 
-  TestWindow window(*waypoint_look, *airspace_look, *task_look, *traffic_look);
+  TestWindow window(*waypoint_look, *airspace_look, *task_look,
+                    *aircraft_look, *traffic_look);
   window.set(0, 0, 640, 480);
 
   Graphics::Initialise();
@@ -318,6 +326,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   delete terrain;
   delete topography;
   delete traffic_look;
+  delete aircraft_look;
   delete task_look;
   delete airspace_look;
   delete waypoint_look;

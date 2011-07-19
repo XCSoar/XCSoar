@@ -48,21 +48,25 @@ struct ContestStatistics;
 struct ChartLook;
 struct AirspaceLook;
 struct TaskLook;
+struct AircraftLook;
 
 class FlightStatisticsRenderer {
   const FlightStatistics &fs;
   const ChartLook &chart_look;
   const AirspaceLook &airspace_look;
+  const AircraftLook &aircraft_look;
   const TaskLook &task_look;
 
 public:
   FlightStatisticsRenderer(const FlightStatistics &_flight_statistics,
                            const ChartLook &_chart_look,
                            const AirspaceLook &_airspace_look,
+                           const AircraftLook &_aircraft_look,
                            const TaskLook &_task_look)
     :fs(_flight_statistics),
      chart_look(_chart_look),
      airspace_look(_airspace_look),
+     aircraft_look(_aircraft_look),
      task_look(_task_look) {}
 
 public:

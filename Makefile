@@ -497,6 +497,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/Look/InfoBoxLook.cpp \
 	$(SRC)/Look/WaypointLook.cpp \
+	$(SRC)/Look/AircraftLook.cpp \
 	\
 	$(SRC)/Polar/PolarGlue.cpp \
 	$(SRC)/Polar/PolarFileGlue.cpp \

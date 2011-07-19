@@ -32,6 +32,7 @@ Copyright_License {
 #include "WaypointLook.hpp"
 #include "AirspaceLook.hpp"
 #include "CrossSectionLook.hpp"
+#include "AircraftLook.hpp"
 #include "TrafficLook.hpp"
 #include "Gauge/FlarmTrafficLook.hpp"
 #include "TaskLook.hpp"
@@ -48,6 +49,7 @@ struct Look {
   WaypointLook waypoint;
   AirspaceLook airspace;
   CrossSectionLook cross_section;
+  AircraftLook aircraft;
   TrafficLook traffic;
   FlarmTrafficLook flarm_gauge;
   FlarmTrafficLook flarm_dialog;

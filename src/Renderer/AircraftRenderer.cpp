@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "AircraftRenderer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
+#include "Look/AircraftLook.hpp"
 #include "Math/Screen.hpp"
 #include "SettingsMap.hpp"
 #include "Appearance.hpp"
@@ -45,6 +45,7 @@ DrawMirroredPolygon(const RasterPoint *src, RasterPoint *dst, unsigned points,
 
 static void
 DrawDetailedAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
+                     const AircraftLook &look,
                      const Angle angle,
                      const RasterPoint aircraft_pos)
 {
@@ -68,7 +69,7 @@ DrawDetailedAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
 
     if (settings_map.terrain.enable) {
       canvas.white_brush();
-      canvas.select(Graphics::hpAircraft);
+      canvas.select(look.aircraft_pen);
     } else {
       canvas.black_brush();
       canvas.white_pen();
@@ -88,8 +89,8 @@ DrawDetailedAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
     const unsigned CANOPY_POINTS = sizeof(Canopy) / sizeof(Canopy[0]);
     RasterPoint buffer[2 * CANOPY_POINTS];
 
-    canvas.select(Graphics::hpCanopy);
-    canvas.select(Graphics::hbCanopy);
+    canvas.select(look.canopy_pen);
+    canvas.select(look.canopy_brush);
     DrawMirroredPolygon(Canopy, buffer, CANOPY_POINTS,
                         canvas, angle, aircraft_pos);
   }
@@ -97,7 +98,8 @@ DrawDetailedAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
 
 
 static void
-DrawSimpleAircraft(Canvas &canvas, const Angle angle,
+DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
+                   const Angle angle,
                    const RasterPoint aircraft_pos, bool large)
 {
   static const RasterPoint AircraftLarge[] = {
@@ -151,27 +153,28 @@ DrawSimpleAircraft(Canvas &canvas, const Angle angle,
   std::copy(Aircraft, Aircraft + AircraftPoints, aircraft);
   PolygonRotateShift(aircraft, AircraftPoints,
                      aircraft_pos.x, aircraft_pos.y, angle, true);
-  canvas.select(Graphics::hpAircraftSimple2);
+  canvas.select(look.aircraft_simple2_pen);
   canvas.polygon(aircraft, AircraftPoints);
   canvas.black_brush();
-  canvas.select(Graphics::hpAircraftSimple1);
+  canvas.select(look.aircraft_simple1_pen);
   canvas.polygon(aircraft, AircraftPoints);
 }
 
 void
 DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
+             const AircraftLook &look,
              const Angle angle, const RasterPoint aircraft_pos)
 {
   switch (Appearance.AircraftSymbol) {
   case acDetailed:
-    DrawDetailedAircraft(canvas, settings_map, angle, aircraft_pos);
+    DrawDetailedAircraft(canvas, settings_map, look, angle, aircraft_pos);
     break;
   case acSimpleLarge:
-    DrawSimpleAircraft(canvas, angle, aircraft_pos, true);
+    DrawSimpleAircraft(canvas, look, angle, aircraft_pos, true);
     break;
   case acSimple:
   default:
-    DrawSimpleAircraft(canvas, angle, aircraft_pos, false);
+    DrawSimpleAircraft(canvas, look, angle, aircraft_pos, false);
     break;
   }
 }

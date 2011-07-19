@@ -65,12 +65,6 @@ namespace Graphics {
 
   extern Brush hBackgroundBrush;
 
-  extern Pen hpAircraft;
-  extern Pen hpAircraftSimple1;
-  extern Pen hpAircraftSimple2;
-  extern Brush hbCanopy;
-  extern Pen hpCanopy;
-
   extern Pen hpWind;
   extern Pen hpCompass;
   extern Pen hpFinalGlideAbove;

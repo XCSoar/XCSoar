@@ -21,19 +21,21 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_AIRCRAFT_RENDERER_HPP
-#define XCSOAR_AIRCRAFT_RENDERER_HPP
+#ifndef AIRCRAFT_LOOK_HPP
+#define AIRCRAFT_LOOK_HPP
 
-#include "Math/Angle.hpp"
-#include "Screen/Point.hpp"
+#include "Screen/Pen.hpp"
+#include "Screen/Brush.hpp"
 
-struct SETTINGS_MAP;
-struct AircraftLook;
-class Canvas;
+struct AircraftLook {
+  Pen aircraft_pen;
+  Pen aircraft_simple1_pen;
+  Pen aircraft_simple2_pen;
 
-void
-DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
-             const AircraftLook &look,
-             const Angle angle, const RasterPoint aircraft_pos);
+  Pen canopy_pen;
+  Brush canopy_brush;
+
+  void Initialise();
+};
 
 #endif
