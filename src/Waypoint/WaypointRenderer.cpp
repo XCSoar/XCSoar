@@ -88,8 +88,7 @@ struct VisibleWaypoint {
   short arrival_height_glide;
   short arrival_height_terrain;
 
-  bool reachable_glide;
-  bool reachable_terrain;
+  WaypointRenderer::Reachability reachable;
 
   bool in_task;
 
@@ -99,7 +98,7 @@ struct VisibleWaypoint {
     point = _point;
     arrival_height_glide = 0;
     arrival_height_terrain = 0;
-    reachable_glide = reachable_terrain = false;
+    reachable = WaypointRenderer::Unreachable;
     in_task = _in_task;
   }
 
@@ -115,15 +114,18 @@ struct VisibleWaypoint {
       arrival_height_glide -= h_base;
     }
 
-    reachable_glide = arrival_height_glide > 0;
-    reachable_terrain = !task_behaviour.route_planner.reach_enabled() ||
-      arrival_height_terrain > 0;
+    if (arrival_height_glide <= 0)
+      reachable = WaypointRenderer::Unreachable;
+    else if (task_behaviour.route_planner.reach_enabled() &&
+             arrival_height_terrain <= 0)
+      reachable = WaypointRenderer::ReachableStraight;
+    else
+      reachable = WaypointRenderer::ReachableTerrain;
   }
 
   void DrawSymbol(Canvas &canvas, const Projection &projection) const {
     if (waypoint->IsLandable()) {
-      WaypointRenderer::DrawLandableSymbol(canvas, point, reachable_glide,
-                                           reachable_terrain, *waypoint,
+      WaypointRenderer::DrawLandableSymbol(canvas, point, reachable, *waypoint,
                                            projection.GetScreenAngle());
     } else {
       // non landable turnpoint
@@ -287,7 +289,8 @@ protected:
     }
 
     TextInBoxMode_t text_mode;
-    if (vwp.reachable_glide && way_point.IsLandable()) {
+    if (vwp.reachable != WaypointRenderer::Unreachable &&
+        way_point.IsLandable()) {
       text_mode.Mode = settings_map.LandableRenderMode;
       text_mode.Bold = true;
       text_mode.MoveInView = true;
@@ -305,7 +308,7 @@ protected:
                 vwp.arrival_height_glide, vwp.arrival_height_terrain);
 
     RasterPoint sc = vwp.point;
-    if ((vwp.reachable_glide &&
+    if ((vwp.reachable != WaypointRenderer::Unreachable &&
          Appearance.IndLandable == wpLandableWinPilot) ||
         Appearance.UseSWLandablesRendering)
       // make space for the green circle
