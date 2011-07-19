@@ -31,6 +31,7 @@ Copyright_License {
 #include <stddef.h>
 
 struct SETTINGS_MAP;
+struct WaypointLook;
 class Canvas;
 class LabelBlock;
 class MapWindowProjection;
@@ -45,6 +46,8 @@ class ProtectedTaskManager;
 class WaypointRenderer : private NonCopyable {
   const Waypoints *way_points;
 
+  const WaypointLook &look;
+
 public:
   enum Reachability
   {
@@ -53,8 +56,9 @@ public:
     ReachableTerrain,
   };
 
-  WaypointRenderer(const Waypoints *_way_points=NULL)
-    :way_points(_way_points) {}
+  WaypointRenderer(const Waypoints *_way_points,
+                   const WaypointLook &_look)
+    :way_points(_way_points), look(_look) {}
 
   void set_way_points(const Waypoints *_way_points) {
     way_points = _way_points;

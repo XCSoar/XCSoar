@@ -40,6 +40,7 @@ Copyright_License {
 #include "Compiler.h"
 #include <vector>
 
+struct WaypointLook;
 struct TaskLook;
 struct TrafficLook;
 class TopographyStore;
@@ -134,7 +135,8 @@ protected:
   friend class DrawThread;
 
 public:
-  MapWindow(const AirspaceLook &airspace_look,
+  MapWindow(const WaypointLook &waypoint_look,
+            const AirspaceLook &airspace_look,
             const TaskLook &task_look, const TrafficLook &traffic_look);
   virtual ~MapWindow();
 

@@ -47,7 +47,6 @@ namespace Graphics {
   void Initialise();
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
   void InitSnailTrail(const SETTINGS_MAP &settings_map);
-  void InitLandableIcons(const WaypointRendererSettings &settings);
   void Deinitialise();
   void DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
                     const Angle angle, const RasterPoint aircraft_pos);
@@ -92,11 +91,6 @@ namespace Graphics {
   extern Brush hbFinalGlideAbove;
   extern Brush hbWind;
 
-  extern MaskedIcon SmallIcon, TurnPointIcon, TaskTurnPointIcon, MountainTopIcon, BridgeIcon;
-  extern MaskedIcon TowerIcon, PowerPlantIcon, TunnelIcon;
-  extern MaskedIcon AirportReachableIcon, AirportUnreachableIcon;
-  extern MaskedIcon AirportMarginalIcon, FieldMarginalIcon;
-  extern MaskedIcon FieldReachableIcon, FieldUnreachableIcon;
   extern MaskedIcon hBmpThermalSource;
   extern MaskedIcon hBmpTrafficSafe;
   extern MaskedIcon hBmpTrafficWarning;
@@ -120,9 +114,7 @@ namespace Graphics {
   // used for landable rendering
   extern Brush hbGreen;
   extern Brush hbWhite;
-  extern Brush hbMagenta;
   extern Brush hbOrange;
-  extern Brush hbRed;
   extern Brush hbLightGray;
   extern Brush hbNotReachableTerrain;
   extern Brush hbGround;

@@ -77,12 +77,6 @@ Brush Graphics::hbFinalGlideBelowLandable;
 Brush Graphics::hbFinalGlideAbove;
 Brush Graphics::hbWind;
 
-MaskedIcon Graphics::SmallIcon, Graphics::TurnPointIcon, Graphics::TaskTurnPointIcon;
-MaskedIcon Graphics::MountainTopIcon, Graphics::BridgeIcon, Graphics::TunnelIcon;
-MaskedIcon Graphics::TowerIcon, Graphics::PowerPlantIcon;
-MaskedIcon Graphics::AirportReachableIcon, Graphics::AirportUnreachableIcon;
-MaskedIcon Graphics::AirportMarginalIcon, Graphics::FieldMarginalIcon;
-MaskedIcon Graphics::FieldReachableIcon, Graphics::FieldUnreachableIcon;
 MaskedIcon Graphics::hBmpThermalSource;
 
 MaskedIcon Graphics::hBmpMapScaleLeft;
@@ -101,9 +95,7 @@ Bitmap Graphics::hBmpTabTimes;
 // used for landable rendering
 Brush Graphics::hbGreen;
 Brush Graphics::hbWhite;
-Brush Graphics::hbMagenta;
 Brush Graphics::hbOrange;
-Brush Graphics::hbRed;
 Brush Graphics::hbLightGray;
 Brush Graphics::hbNotReachableTerrain;
 Brush Graphics::hbGround;
@@ -184,15 +176,6 @@ Graphics::Initialise()
   ContestPen[1].set(Layout::Scale(1)+1, COLOR_ORANGE);
   ContestPen[2].set(Layout::Scale(1), COLOR_BLUE);
 
-  SmallIcon.load_big(IDB_SMALL, IDB_SMALL_HD);
-  TurnPointIcon.load_big(IDB_TURNPOINT, IDB_TURNPOINT_HD);
-  TaskTurnPointIcon.load_big(IDB_TASKTURNPOINT, IDB_TASKTURNPOINT_HD);
-  MountainTopIcon.load_big(IDB_MOUNTAIN_TOP, IDB_MOUNTAIN_TOP_HD);
-  BridgeIcon.load_big(IDB_BRIDGE, IDB_BRIDGE_HD);
-  TunnelIcon.load_big(IDB_TUNNEL, IDB_TUNNEL_HD);
-  TowerIcon.load_big(IDB_TOWER, IDB_TOWER_HD);
-  PowerPlantIcon.load_big(IDB_POWER_PLANT, IDB_POWER_PLANT_HD);
-
   hpAircraft.set(1, COLOR_DARK_GRAY);
   hpAircraftSimple1.set(Layout::Scale(1), COLOR_BLACK);
   hpAircraftSimple2.set(Layout::Scale(3), COLOR_WHITE);
@@ -202,9 +185,7 @@ Graphics::Initialise()
     // used for landable rendering
   hbGreen.set(COLOR_GREEN);
   hbWhite.set(COLOR_WHITE);
-  hbMagenta.set(COLOR_MAGENTA);
   hbOrange.set(COLOR_ORANGE);
-  hbRed.set(COLOR_RED);
   hbLightGray.set(COLOR_LIGHT_GRAY);
   hbNotReachableTerrain.set(light_color(COLOR_RED));
 
@@ -217,7 +198,6 @@ void
 Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 {
   InitSnailTrail(settings_map);
-  InitLandableIcons(settings_map.waypoint);
 }
 
 void
@@ -264,45 +244,6 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 
     hpSnail[i].set(minwidth, color);
     hpSnailVario[i].set(iwidth, color);
-  }
-}
-
-void
-Graphics::InitLandableIcons(const WaypointRendererSettings &settings)
-{
-  if (settings.landable_style == wpLandableWinPilot) {
-    AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
-    AirportMarginalIcon.load_big(IDB_MARGINAL, IDB_MARGINAL_HD);
-    AirportUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_HD);
-    FieldReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
-    FieldMarginalIcon.load_big(IDB_MARGINAL, IDB_MARGINAL_HD);
-    FieldUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_HD);
-  } else if (settings.landable_style == wpLandableAltA) {
-    AirportReachableIcon.load_big(IDB_AIRPORT_REACHABLE,
-                                  IDB_AIRPORT_REACHABLE_HD);
-    AirportMarginalIcon.load_big(IDB_AIRPORT_MARGINAL,
-                                 IDB_AIRPORT_MARGINAL_HD);
-    AirportUnreachableIcon.load_big(IDB_AIRPORT_UNREACHABLE,
-                                    IDB_AIRPORT_UNREACHABLE_HD);
-    FieldReachableIcon.load_big(IDB_OUTFIELD_REACHABLE,
-                                IDB_OUTFIELD_REACHABLE_HD);
-    FieldMarginalIcon.load_big(IDB_OUTFIELD_MARGINAL,
-                               IDB_OUTFIELD_MARGINAL_HD);
-    FieldUnreachableIcon.load_big(IDB_OUTFIELD_UNREACHABLE,
-                                  IDB_OUTFIELD_UNREACHABLE_HD);
-  } else if (settings.landable_style == wpLandableAltB) {
-    AirportReachableIcon.load_big(IDB_AIRPORT_REACHABLE,
-                                  IDB_AIRPORT_REACHABLE_HD);
-    AirportMarginalIcon.load_big(IDB_AIRPORT_MARGINAL2,
-                                 IDB_AIRPORT_MARGINAL2_HD);
-    AirportUnreachableIcon.load_big(IDB_AIRPORT_UNREACHABLE2,
-                                    IDB_AIRPORT_UNREACHABLE2_HD);
-    FieldReachableIcon.load_big(IDB_OUTFIELD_REACHABLE,
-                                IDB_OUTFIELD_REACHABLE_HD);
-    FieldMarginalIcon.load_big(IDB_OUTFIELD_MARGINAL2,
-                               IDB_OUTFIELD_MARGINAL2_HD);
-    FieldUnreachableIcon.load_big(IDB_OUTFIELD_UNREACHABLE2,
-                                  IDB_OUTFIELD_UNREACHABLE2_HD);
   }
 }
 
@@ -371,15 +312,6 @@ Graphics::Deinitialise()
   ContestPen[1].reset();
   ContestPen[2].reset();
 
-  SmallIcon.reset();
-  TurnPointIcon.reset();
-  TaskTurnPointIcon.reset();
-  MountainTopIcon.reset();
-  BridgeIcon.reset();
-  TunnelIcon.reset();
-  TowerIcon.reset();
-  PowerPlantIcon.reset();
-
   hpAircraft.reset();
   hpAircraftSimple1.reset();
   hpAircraftSimple2.reset();
@@ -388,9 +320,7 @@ Graphics::Deinitialise()
 
   hbGreen.reset();
   hbWhite.reset();
-  hbMagenta.reset();
   hbOrange.reset();
-  hbRed.reset();
   hbLightGray.reset();
   hbNotReachableTerrain.reset();
 
@@ -402,13 +332,6 @@ Graphics::Deinitialise()
     hpSnail[i].reset();
     hpSnailVario[i].reset();
   }
-
-  AirportReachableIcon.reset();
-  AirportUnreachableIcon.reset();
-  AirportMarginalIcon.reset();
-  FieldMarginalIcon.reset();
-  FieldReachableIcon.reset();
-  FieldUnreachableIcon.reset();
 }
 
 static void

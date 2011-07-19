@@ -32,6 +32,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
+#include "Look/Look.hpp"
 #include "WaypointIconRenderer.hpp"
 #include "Language/Language.hpp"
 
@@ -64,7 +65,9 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
       positive(solution.AltitudeDifference) ?
       WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
 
-  WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint, canvas);
+  WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint,
+                           CommonInterface::main_window.look->waypoint,
+                           canvas);
   wir.Draw(way_point, pt, reachable);
 
   const Font &name_font = Fonts::MapBold;

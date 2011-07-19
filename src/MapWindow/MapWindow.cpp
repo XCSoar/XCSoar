@@ -37,7 +37,8 @@ Copyright_License {
 /**
  * Constructor of the MapWindow class
  */
-MapWindow::MapWindow(const AirspaceLook &_airspace_look,
+MapWindow::MapWindow(const WaypointLook &_waypoint_look,
+                     const AirspaceLook &_airspace_look,
                      const TaskLook &_task_look,
                      const TrafficLook &_traffic_look)
   :way_points(NULL),
@@ -46,6 +47,7 @@ MapWindow::MapWindow(const AirspaceLook &_airspace_look,
    terrain_radius(fixed_zero),
    weather(NULL),
    task_look(_task_look), traffic_look(_traffic_look),
+   way_point_renderer(NULL, _waypoint_look),
    airspace_renderer(_airspace_look),
    task(NULL),
    marks(NULL)

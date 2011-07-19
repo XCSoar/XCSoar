@@ -1459,6 +1459,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Screen/Ramp.cpp \
 	$(SRC)/Screen/UnitSymbol.cpp \
+	$(SRC)/Look/WaypointLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \
@@ -1724,6 +1725,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/ThermalBandLook.cpp \
 	$(SRC)/Look/TraceHistoryLook.cpp \
 	$(SRC)/Look/CrossSectionLook.cpp \
+	$(SRC)/Look/WaypointLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Look/TrafficLook.cpp \

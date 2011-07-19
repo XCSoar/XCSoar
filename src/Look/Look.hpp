@@ -29,6 +29,7 @@ Copyright_License {
 #include "ChartLook.hpp"
 #include "ThermalBandLook.hpp"
 #include "TraceHistoryLook.hpp"
+#include "WaypointLook.hpp"
 #include "AirspaceLook.hpp"
 #include "CrossSectionLook.hpp"
 #include "TrafficLook.hpp"
@@ -44,6 +45,7 @@ struct Look {
   ChartLook chart;
   ThermalBandLook thermal_band;
   TraceHistoryLook trace_history;
+  WaypointLook waypoint;
   AirspaceLook airspace;
   CrossSectionLook cross_section;
   TrafficLook traffic;
@@ -54,6 +56,7 @@ struct Look {
 
   void Initialise();
   void InitialiseConfigured(bool inverse,
+                            const WaypointRendererSettings &waypoint_settings,
                             const AirspaceRendererSettings &airspace_settings);
 };
 

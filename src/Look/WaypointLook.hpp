@@ -21,29 +21,27 @@ Copyright_License {
 }
 */
 
-#include "Look.hpp"
+#ifndef WAYPOINT_LOOK_HPP
+#define WAYPOINT_LOOK_HPP
 
-void
-Look::Initialise()
-{
-  dialog.Initialise();
-  traffic.Initialise();
-  flarm_dialog.Initialise(traffic, false);
-  flarm_gauge.Initialise(traffic, true);
-  task.Initialise();
-}
+#include "Screen/Icon.hpp"
+#include "Screen/Brush.hpp"
 
-void
-Look::InitialiseConfigured(bool inverse,
-                           const WaypointRendererSettings &waypoint_settings,
-                           const AirspaceRendererSettings &airspace_settings)
-{
-  vario.Initialise(inverse);
-  chart.Initialise();
-  thermal_band.Initialise();
-  trace_history.Initialise(inverse);
-  waypoint.Initialise(waypoint_settings);
-  airspace.Initialise(airspace_settings);
-  cross_section.Initialise();
-  info_box.Initialise(inverse);
-}
+struct WaypointRendererSettings;
+
+struct WaypointLook {
+  MaskedIcon small_icon, turn_point_icon, task_turn_point_icon;
+  MaskedIcon mountain_top_icon, bridge_icon;
+  MaskedIcon tower_icon, power_plant_icon, tunnel_icon;
+  MaskedIcon airport_reachable_icon, airport_unreachable_icon;
+  MaskedIcon airport_marginal_icon;
+  MaskedIcon field_marginal_icon, field_reachable_icon, field_unreachable_icon;
+
+  Brush reachable_brush, terrain_unreachable_brush, unreachable_brush;
+
+  Brush white_brush, light_gray_brush, magenta_brush, orange_brush;
+
+  void Initialise(const WaypointRendererSettings &settings);
+};
+
+#endif

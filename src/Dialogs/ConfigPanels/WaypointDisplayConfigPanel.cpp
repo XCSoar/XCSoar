@@ -28,8 +28,9 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
-#include "Screen/Graphics.hpp"
 #include "Language/Language.hpp"
+#include "MainWindow.hpp"
+#include "Look/Look.hpp"
 
 static WndForm* wf = NULL;
 
@@ -184,7 +185,8 @@ WaypointDisplayConfigPanel::Save()
       settings.landable_style = (IndLandable_t)(wp->GetDataField()->GetAsInteger());
       Profile::Set(szProfileAppIndLandable, settings.landable_style);
       changed = true;
-      Graphics::InitLandableIcons(settings);
+
+      CommonInterface::main_window.look->waypoint.Initialise(settings);
     }
   }
 

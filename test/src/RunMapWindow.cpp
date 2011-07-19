@@ -55,6 +55,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "Operation.hpp"
+#include "Look/WaypointLook.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"
 #include "Look/TrafficLook.hpp"
@@ -111,9 +112,10 @@ public:
   };
 
 public:
-  TestWindow(const AirspaceLook &airspace_look, const TaskLook &task_look,
+  TestWindow(const WaypointLook &waypoint_look,
+             const AirspaceLook &airspace_look, const TaskLook &task_look,
              const TrafficLook &traffic_look)
-    :map(airspace_look, task_look, traffic_look) {}
+    :map(waypoint_look, airspace_look, task_look, traffic_look) {}
 
 #ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance) {
@@ -282,6 +284,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow::register_class(hInstance);
 #endif
 
+  WaypointLook *waypoint_look = new WaypointLook();
+  waypoint_look->Initialise(blackboard.SettingsMap().waypoint);
+
   AirspaceLook *airspace_look = new AirspaceLook();
   airspace_look->Initialise(blackboard.SettingsMap().airspace);
 
@@ -291,7 +296,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TrafficLook *traffic_look = new TrafficLook();
   traffic_look->Initialise();
 
-  TestWindow window(*airspace_look, *task_look, *traffic_look);
+  TestWindow window(*waypoint_look, *airspace_look, *task_look, *traffic_look);
   window.set(0, 0, 640, 480);
 
   Graphics::Initialise();
@@ -315,6 +320,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   delete traffic_look;
   delete task_look;
   delete airspace_look;
+  delete waypoint_look;
 
   DeinitialiseDataPath();
 

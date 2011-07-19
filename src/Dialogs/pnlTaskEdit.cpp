@@ -35,6 +35,8 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Waypoint/WaypointIconRenderer.hpp"
+#include "MainWindow.hpp"
+#include "Look/Look.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -132,7 +134,9 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   // Draw icon
   RasterPoint pt = { rc.left + line_height / 2,
                      rc.top + line_height / 2};
-  WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint, canvas);
+  WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint,
+                           CommonInterface::main_window.look->waypoint,
+                           canvas);
   wir.Draw(tp.get_waypoint(), pt,
            WaypointIconRenderer::Unreachable, true);
 

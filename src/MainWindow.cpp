@@ -134,6 +134,7 @@ MainWindow::InitialiseConfigured()
 
   assert(look != NULL);
   look->InitialiseConfigured(Appearance.InverseInfoBox,
+                             CommonInterface::SettingsMap().waypoint,
                              CommonInterface::SettingsMap().airspace);
 
   LogStartUp(_T("Create info boxes"));

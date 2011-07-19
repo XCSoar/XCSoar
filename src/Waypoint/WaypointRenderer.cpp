@@ -41,7 +41,6 @@ Copyright_License {
 #include "Engine/Task/TaskPoints/ASTPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Screen/Icon.hpp"
-#include "Screen/Graphics.hpp"
 #include "Screen/Canvas.hpp"
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
@@ -97,8 +96,10 @@ struct VisibleWaypoint {
   }
 
   void DrawSymbol(const struct WaypointRendererSettings &settings,
+                  const WaypointLook &look,
                   Canvas &canvas, bool small_icons, Angle screen_rotation) const {
-    WaypointIconRenderer wir(settings, canvas, small_icons, screen_rotation);
+    WaypointIconRenderer wir(settings, look,
+                             canvas, small_icons, screen_rotation);
     wir.Draw(*waypoint, point, (WaypointIconRenderer::Reachability)reachable,
              in_task);
   }
@@ -110,6 +111,7 @@ class WaypointVisitorMap:
 {
   const MapWindowProjection &projection;
   const SETTINGS_MAP &settings_map;
+  const WaypointLook &look;
   const TaskBehaviour &task_behaviour;
 
   int pDisplayTextType;
@@ -131,9 +133,10 @@ public:
 public:
   WaypointVisitorMap(const MapWindowProjection &_projection,
                      const SETTINGS_MAP &_settings_map,
+                     const WaypointLook &_look,
                      const TaskBehaviour &_task_behaviour):
     projection(_projection),
-    settings_map(_settings_map), task_behaviour(_task_behaviour),
+    settings_map(_settings_map), look(_look), task_behaviour(_task_behaviour),
     task_valid(false),
     labels(projection.GetScreenWidth(), projection.GetScreenHeight())
   {
@@ -237,7 +240,7 @@ protected:
     const Waypoint &way_point = *vwp.waypoint;
     bool watchedWaypoint = way_point.Flags.Watched;
 
-    vwp.DrawSymbol(settings, canvas,
+    vwp.DrawSymbol(settings, look, canvas,
                    projection.GetMapScale() > fixed(4000),
                    projection.GetScreenAngle());
 
@@ -394,7 +397,7 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
     canvas.set_text_color(COLOR_BLACK);
 
-    WaypointVisitorMap v(projection, settings_map, task_behaviour);
+    WaypointVisitorMap v(projection, settings_map, look, task_behaviour);
 
     {
       ProtectedTaskManager::Lease task_manager(*task);
