@@ -294,7 +294,7 @@ BasicComputer::Compute(MoreData &data, const MoreData &last,
                        const DERIVED_INFO &calculated,
                        const SETTINGS_COMPUTER &settings_computer)
 {
-  if (data.time_available || !last.time_available ||
+  if (!data.time_available || !last.time_available ||
       data.Time <= last.Time)
     return;
 
