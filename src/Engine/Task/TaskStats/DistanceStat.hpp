@@ -44,48 +44,48 @@ class DistanceStat
 public:
   DistanceStat():distance(fixed_zero), speed(fixed_zero) {}
 
-/** 
- * Setter for distance value
- * 
- * @param d Distance value (m)
- */
+  /**
+   * Setter for distance value
+   *
+   * @param d Distance value (m)
+   */
   void set_distance(const fixed d) {
     distance = d;
   }
 
-/** 
- * Accessor for distance value
- * 
- * @return Distance value (m)
- */
+  /**
+   * Accessor for distance value
+   *
+   * @return Distance value (m)
+   */
   fixed get_distance() const {
     return distance;
-  };
+  }
 
-/** 
- * Accessor for speed
- * 
- * @return Speed (m/s)
- */
+  /**
+   * Accessor for speed
+   *
+   * @return Speed (m/s)
+   */
   fixed get_speed() const {
     return speed;
-  };
+  }
 
-/** 
- * Accessor for incremental speed (rate of change of
- * distance over dt, low-pass filtered)
- * 
- * @return Speed incremental (m/s)
- */
+  /**
+   * Accessor for incremental speed (rate of change of
+   * distance over dt, low-pass filtered)
+   *
+   * @return Speed incremental (m/s)
+   */
   fixed get_speed_incremental() const {
     return speed_incremental;
-  };
+  }
 
-/** 
- * Calculate bulk speed (distance/time), abstract base method
- * 
- * @param es ElementStat (used for time access)
- */
+  /**
+   * Calculate bulk speed (distance/time), abstract base method
+   *
+   * @param es ElementStat (used for time access)
+   */
   void calc_speed(fixed time);
 
 #ifdef DO_PRINT
@@ -94,9 +94,12 @@ public:
 #endif
 
 protected:
-  fixed distance; /**< Distance (m) of metric */
-  fixed speed; /**< Speed (m/s) of metric */
-  fixed speed_incremental; /**< Incremental speed (m/s) of metric */
+  /** Distance (m) of metric */
+  fixed distance;
+  /** Speed (m/s) of metric */
+  fixed speed;
+  /** Incremental speed (m/s) of metric */
+  fixed speed_incremental;
 };
 
 /**
@@ -128,10 +131,11 @@ public:
 
   fixed get_speed_incremental() const {
     return data.get_speed_incremental();
-  };
+  }
+
   fixed get_speed() const {
     return data.get_speed();
-  };
+  }
 
 private:
   static const unsigned N_AV = 3;
