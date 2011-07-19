@@ -353,9 +353,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Projection.cpp \
 	$(SRC)/WindowProjection.cpp \
 	$(SRC)/CompareProjection.cpp \
-	$(SRC)/RenderObservationZone.cpp \
-	$(SRC)/RenderTaskPoint.cpp \
-	$(SRC)/RenderTask.cpp \
+	$(SRC)/Renderer/RenderObservationZone.cpp \
+	$(SRC)/Renderer/RenderTaskPoint.cpp \
+	$(SRC)/Renderer/RenderTask.cpp \
 	$(SRC)/ChartProjection.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \

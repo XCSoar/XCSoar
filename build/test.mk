@@ -1418,7 +1418,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/WindowProjection.cpp \
 	$(SRC)/CompareProjection.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
-	$(SRC)/RenderObservationZone.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
 	$(SRC)/MapWindow/AirspaceRenderer.cpp \
@@ -1437,8 +1436,9 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindow/MapWindowWaypoints.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/MapWindow/MapDrawHelper.cpp \
-	$(SRC)/RenderTask.cpp \
-	$(SRC)/RenderTaskPoint.cpp \
+	$(SRC)/Renderer/RenderObservationZone.cpp \
+	$(SRC)/Renderer/RenderTask.cpp \
+	$(SRC)/Renderer/RenderTaskPoint.cpp \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
@@ -1576,7 +1576,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
-	$(SRC)/RenderObservationZone.cpp \
+	$(SRC)/Renderer/RenderObservationZone.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Screen/Layout.cpp \
@@ -1702,9 +1702,9 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/WindowProjection.cpp \
 	$(SRC)/MapWindow/MapWindowProjection.cpp \
 	$(SRC)/ChartProjection.cpp \
-	$(SRC)/RenderTask.cpp \
-	$(SRC)/RenderTaskPoint.cpp \
-	$(SRC)/RenderObservationZone.cpp \
+	$(SRC)/Renderer/RenderTask.cpp \
+	$(SRC)/Renderer/RenderTaskPoint.cpp \
+	$(SRC)/Renderer/RenderObservationZone.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/Units/Units.cpp \
