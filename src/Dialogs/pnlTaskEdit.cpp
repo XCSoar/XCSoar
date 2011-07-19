@@ -29,9 +29,11 @@ Copyright_License {
 
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
+#include "Screen/Fonts.hpp"
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Form/TabBar.hpp"
+#include "Units/UnitsFormatter.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -106,46 +108,46 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 {
   assert(DrawListIndex <= ordered_task->task_size());
 
+  const unsigned line_height = rc.bottom - rc.top;
+
   TCHAR sTmp[120];
 
+  const Font &name_font = Fonts::MapBold;
+  const Font &small_font = Fonts::MapLabel;
+  canvas.select(name_font);
+
+  // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->task_size()) {
-    if (!ordered_task->is_max_size()) {
-      _stprintf(sTmp, _T("  (%s)"), _("Add Turnpoint"));
-      canvas.text(rc.left + Layout::FastScale(2),
-                  rc.top + Layout::FastScale(2), sTmp);
-    }
-  } else {
-    TCHAR sRad[10];
-    TCHAR sDist[10];
-    fixed fDist = fixed_zero;
-    int w0, wRad, wDist, x;
-
-    w0 = rc.right - rc.left - Layout::FastScale(4);
-    wRad = canvas.text_width(_T("XXXkm"));
-    wDist = canvas.text_width(_T("00000km"));
-    x = w0 - wRad - wDist;
-
-    OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp);
-    OrderedTaskPointRadiusLabel(ordered_task, DrawListIndex, sRad);
-
-    canvas.text_clipped(rc.left + Layout::FastScale(2),
-                        rc.top + Layout::FastScale(2),
-                        x - Layout::FastScale(5), sTmp);
-
-    if (sRad[0] != _T('\0')) {
-      x = w0 - wDist - canvas.text_width(sRad);
-      canvas.text(rc.left + x, rc.top + Layout::FastScale(2), sRad);
-    }
-
-    fDist = ordered_task->getTaskPoint(DrawListIndex)->leg_distance_nominal();
-
-    if (fDist > fixed(0.01)) {
-      _stprintf(sDist, _T("%.1f%s"), (double)Units::ToUserDistance(fDist),
-                Units::GetDistanceName());
-      x = w0 - canvas.text_width(sDist);
-      canvas.text(rc.left + x, rc.top + Layout::FastScale(2), sDist);
-    }
+    _stprintf(sTmp, _T("  (%s)"), _("Add Turnpoint"));
+    canvas.text(rc.left + Layout::FastScale(2),
+                rc.top + line_height / 2 - name_font.get_height() / 2, sTmp);
+    return;
   }
+
+  TCHAR sRad[10];
+  OrderedTaskPointRadiusLabel(ordered_task, DrawListIndex, sRad);
+  if (!string_is_empty(sRad))
+    canvas.text_clipped(rc.right - Layout::FastScale(2) - canvas.text_width(sRad),
+                        rc.top + Layout::FastScale(2), rc, sRad);
+
+  OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp);
+  canvas.text_clipped(rc.left + Layout::FastScale(2),
+                      rc.top + Layout::FastScale(2), rc, sTmp);
+
+  // Draw distance and arrival altitude
+  GeoVector leg = ordered_task->getTaskPoint(DrawListIndex)->leg_vector_nominal();
+  if (leg.Distance < fixed(0.01))
+    return;
+
+  TCHAR dist[20];
+  Units::FormatUserDistance(leg.Distance, dist, 20, true);
+  _stprintf(sTmp, _T("%s: %s - %s: %.0f" DEG), _("Leg Distance"), dist,
+            _("Bearing"), (double)leg.Bearing.value_degrees());
+
+  canvas.select(small_font);
+  canvas.text_clipped(rc.left + Layout::FastScale(2),
+                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc, sTmp);
 }
 
 void
@@ -337,6 +339,9 @@ pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
   assert(wSummary);
   TaskSummaryRect = wSummary->get_position();
 
+  unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
+                         Fonts::MapLabel.get_height();
+  wTaskPoints->SetItemHeight(line_height);
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);
   wTaskPoints->SetCursorCallback(OnTaskCursorCallback);
