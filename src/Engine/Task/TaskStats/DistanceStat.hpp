@@ -41,6 +41,14 @@ class DistanceStat
 {
   friend class DistanceStatComputer;
 
+protected:
+  /** Distance (m) of metric */
+  fixed distance;
+  /** Speed (m/s) of metric */
+  fixed speed;
+  /** Incremental speed (m/s) of metric */
+  fixed speed_incremental;
+
 public:
   DistanceStat():distance(fixed_zero), speed(fixed_zero) {}
 
@@ -92,14 +100,6 @@ public:
   friend std::ostream& operator<< (std::ostream& o, 
                                    const DistanceStat& ds);
 #endif
-
-protected:
-  /** Distance (m) of metric */
-  fixed distance;
-  /** Speed (m/s) of metric */
-  fixed speed;
-  /** Incremental speed (m/s) of metric */
-  fixed speed_incremental;
 };
 
 /**
@@ -109,6 +109,14 @@ protected:
 class DistanceStatComputer {
 protected:
   DistanceStat &data;
+
+private:
+  static const unsigned N_AV = 3;
+
+  AvFilter<N_AV> av_dist;
+  DiffFilter df;
+  Filter v_lpf;
+  bool is_positive; // ideally const but then non-copyable
 
 public:
   /**
@@ -138,13 +146,6 @@ public:
   }
 
 private:
-  static const unsigned N_AV = 3;
-
-  AvFilter<N_AV> av_dist;
-  DiffFilter df;
-  Filter v_lpf;
-  bool is_positive; // ideally const but then non-copyable
-
   void reset_incremental_speed();
 };
 
