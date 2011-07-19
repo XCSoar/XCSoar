@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef FILTER_HPP
 #define FILTER_HPP
 
@@ -30,6 +31,13 @@
  */
 class Filter 
 {
+  fixed a[3];
+  fixed b[2];
+  fixed x[3];
+  fixed y[2];
+  bool m_bessel;
+  bool ok;
+
 public:
   /**
    * Constructor, designs low-pass FIR filter
@@ -75,14 +83,6 @@ public:
   bool valid() const {
     return ok;
   }
-
-private:
-  fixed a[3];
-  fixed b[2];
-  fixed x[3];
-  fixed y[2];
-  bool m_bessel;
-  bool ok;
 };
 
 #endif
