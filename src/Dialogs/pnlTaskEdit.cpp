@@ -34,6 +34,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Form/TabBar.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Waypoint/WaypointIconRenderer.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -119,23 +120,34 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->task_size()) {
     _stprintf(sTmp, _T("  (%s)"), _("Add Turnpoint"));
-    canvas.text(rc.left + Layout::FastScale(2),
+    canvas.text(rc.left + line_height + Layout::FastScale(2),
                 rc.top + line_height / 2 - name_font.get_height() / 2, sTmp);
     return;
   }
 
+  const OrderedTaskPoint &tp = *ordered_task->getTaskPoint(DrawListIndex);
+
+  // Draw icon
+  RasterPoint pt = { rc.left + line_height / 2,
+                     rc.top + line_height / 2};
+  WaypointIconRenderer wir(canvas);
+  wir.Draw(tp.get_waypoint(), pt,
+           WaypointIconRenderer::Unreachable, true);
+
+  // Draw turnpoint radius/short description
   TCHAR sRad[10];
   OrderedTaskPointRadiusLabel(ordered_task, DrawListIndex, sRad);
   if (!string_is_empty(sRad))
     canvas.text_clipped(rc.right - Layout::FastScale(2) - canvas.text_width(sRad),
                         rc.top + Layout::FastScale(2), rc, sRad);
 
+  // Draw turnpoint name
   OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp);
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
+  canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2), rc, sTmp);
 
   // Draw distance and arrival altitude
-  GeoVector leg = ordered_task->getTaskPoint(DrawListIndex)->leg_vector_nominal();
+  GeoVector leg = tp.leg_vector_nominal();
   if (leg.Distance < fixed(0.01))
     return;
 
@@ -145,7 +157,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
             _("Bearing"), (double)leg.Bearing.value_degrees());
 
   canvas.select(small_font);
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
+  canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
                       rc.top + name_font.get_height() + Layout::FastScale(4),
                       rc, sTmp);
 }
