@@ -36,9 +36,7 @@ Filter::design(const fixed cutoff_wavelength)
 {
   static const fixed sample_freq = fixed_one;
   static const fixed n = fixed_one;
-  fixed c;
-  fixed g;
-  fixed p;
+  fixed c, g, p;
 
   if (m_bessel) {
     // Bessel
@@ -100,10 +98,10 @@ Filter::update(const fixed _x)
   x[0] = _x;
 
   fixed _y = a[0] * x[0]
-            + a[1] * x[1]
-            + a[2] * x[2]
-            + b[0] * y[0]
-            + b[1] * y[1];
+           + a[1] * x[1]
+           + a[2] * x[2]
+           + b[0] * y[0]
+           + b[1] * y[1];
 
   y[1] = y[0];
   y[0] = _y;
