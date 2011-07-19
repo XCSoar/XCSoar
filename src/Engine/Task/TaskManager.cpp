@@ -476,23 +476,7 @@ TaskManager::get_task_radius(const GeoPoint& fallback_location) const
 
   return fixed_zero;
 }
-/*
-OrderedTaskPoint*
-TaskManager::get_ordered_task_point(unsigned TPindex) const {
- if (!check_ordered_task())
-   return NULL;
 
- return task_ordered.get_ordered_task_point(TPindex);
-}
-
-AATPoint*
-TaskManager::get_AAT_task_point(unsigned TPindex) const {
- if (!check_ordered_task())
-   return NULL;
-
- return task_ordered.get_AAT_task_point(TPindex);
-}
-*/
 const TCHAR*
 TaskManager::get_ordered_taskpoint_name(unsigned TPindex) const
 {
