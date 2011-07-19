@@ -331,14 +331,12 @@ public:
 class LabelTaskPoint:
   public TaskPointConstVisitor
 {
-  unsigned m_index;
   const unsigned m_active_index;
   TCHAR* name;
   LabelSizeObservationZone ozSize;
 
 public:
   LabelTaskPoint(const unsigned index, TCHAR* _name, TCHAR* _radius):
-    m_index(0),
     m_active_index(index),
     name(_name),
     ozSize(_radius)
@@ -351,54 +349,33 @@ public:
   void
   Visit(const StartPoint& tp)
   {
-    if (found()) {
-      _stprintf(name, _T("S:  %s"), tp.get_waypoint().Name.c_str());
-      const ObservationZonePoint *ozp = tp.get_oz();
-      ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
-    }
-
-    inc_index();
+    _stprintf(name, _T("S:  %s"), tp.get_waypoint().Name.c_str());
+    const ObservationZonePoint *ozp = tp.get_oz();
+    ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
   }
+
   void
   Visit(const FinishPoint& tp)
   {
-    if (found()) {
-      _stprintf(name, _T("F:  %s"), tp.get_waypoint().Name.c_str());
-      const ObservationZonePoint *ozp = tp.get_oz();
-      ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
-    }
-
-    inc_index();
+    _stprintf(name, _T("F:  %s"), tp.get_waypoint().Name.c_str());
+    const ObservationZonePoint *ozp = tp.get_oz();
+    ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
   }
+
   void
   Visit(const AATPoint& tp)
   {
-    if (found()) {
-      _stprintf(name, _T("A%d: %s"), m_index, tp.get_waypoint().Name.c_str());
-      const ObservationZonePoint *ozp = tp.get_oz();
-      ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
-    }
-
-    inc_index();
+    _stprintf(name, _T("A%d: %s"), m_active_index, tp.get_waypoint().Name.c_str());
+    const ObservationZonePoint *ozp = tp.get_oz();
+    ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
   }
+
   void
   Visit(const ASTPoint& tp)
   {
-    if (found()) {
-      _stprintf(name, _T("T%d: %s"), m_index, tp.get_waypoint().Name.c_str());
-      const ObservationZonePoint *ozp = tp.get_oz();
-      ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
-    }
-    inc_index();
-  }
-
-private:
-  bool found() {
-    return (m_index == m_active_index);
-  }
-
-  void inc_index() {
-    m_index++;
+    _stprintf(name, _T("T%d: %s"), m_active_index, tp.get_waypoint().Name.c_str());
+    const ObservationZonePoint *ozp = tp.get_oz();
+    ((ObservationZoneConstVisitor &)ozSize).Visit(*ozp);
   }
 };
 
@@ -406,7 +383,8 @@ void
 OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name, TCHAR* radius)
 {
   LabelTaskPoint tpv(index, name, radius);
-  task->tp_CAccept(tpv);
+  const OrderedTaskPoint &tp = *task->getTaskPoint(index);
+  tpv.TaskPointConstVisitor::Visit(tp);
 }
 
 const TCHAR*
