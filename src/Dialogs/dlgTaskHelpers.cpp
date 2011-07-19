@@ -258,7 +258,7 @@ private:
 };
 
 void
-OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name, TCHAR* radius)
+OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name)
 {
   const OrderedTaskPoint &tp = *task->getTaskPoint(index);
   switch (tp.GetType()) {
@@ -281,7 +281,12 @@ OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name, TCHA
   default:
     break;
   }
+}
 
+void
+OrderedTaskPointRadiusLabel(OrderedTask* task, const unsigned index, TCHAR* radius)
+{
+  const OrderedTaskPoint &tp = *task->getTaskPoint(index);
   const ObservationZonePoint *ozp = tp.get_oz();
   switch (ozp->shape) {
   case ObservationZonePoint::FAI_SECTOR:
@@ -323,7 +328,6 @@ OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name, TCHA
     _stprintf(radius,_("BGA-S"));
     break;
   }
-
 }
 
 const TCHAR*

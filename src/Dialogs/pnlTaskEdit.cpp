@@ -125,7 +125,8 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
     wDist = canvas.text_width(_T("00000km"));
     x = w0 - wRad - wDist;
 
-    OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp, sRad);
+    OrderedTaskPointLabel(ordered_task, DrawListIndex, sTmp);
+    OrderedTaskPointRadiusLabel(ordered_task, DrawListIndex, sRad);
 
     canvas.text_clipped(rc.left + Layout::FastScale(2),
                         rc.top + Layout::FastScale(2),
