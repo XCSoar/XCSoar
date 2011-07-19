@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "WaypointRenderer.hpp"
+#include "WaypointIconRenderer.hpp"
 #include "MapWindow/MapWindowProjection.hpp"
 #include "MapWindow/MapWindowLabels.hpp"
 #include "SettingsMap.hpp"
@@ -49,33 +50,6 @@ Copyright_License {
 
 #include <assert.h>
 #include <stdio.h>
-
-gcc_pure
-static const MaskedIcon &
-GetWaypointIcon(const Waypoint &wp, const Projection &projection, const bool in_task)
-{
-  if ((projection.GetMapScale() > fixed(4000)) && !in_task)
-    return Graphics::SmallIcon;
-
-  switch (wp.Type) {
-  case Waypoint::wtMountainTop:
-    return Graphics::MountainTopIcon;
-  case Waypoint::wtBridge:
-    return Graphics::BridgeIcon;
-  case Waypoint::wtTunnel:
-    return Graphics::TunnelIcon;
-  case Waypoint::wtTower:
-    return Graphics::TowerIcon;
-  case Waypoint::wtPowerPlant:
-    return Graphics::PowerPlantIcon;
-  default:
-    if (in_task) {
-      return Graphics::TaskTurnPointIcon;
-    } else {
-      return Graphics::TurnPointIcon;
-    }
-  }
-}
 
 /**
  * Metadata for a Waypoint that is about to be drawn.
@@ -124,13 +98,10 @@ struct VisibleWaypoint {
   }
 
   void DrawSymbol(Canvas &canvas, const Projection &projection) const {
-    if (waypoint->IsLandable()) {
-      WaypointRenderer::DrawLandableSymbol(canvas, point, reachable, *waypoint,
-                                           projection.GetScreenAngle());
-    } else {
-      // non landable turnpoint
-      GetWaypointIcon(*waypoint, projection, in_task).draw(canvas, point);
-    }
+    WaypointIconRenderer wir(canvas, projection.GetMapScale() > fixed(4000),
+                             projection.GetScreenAngle());
+    wir.Draw(*waypoint, point, (WaypointIconRenderer::Reachability)reachable,
+             in_task);
   }
 };
 

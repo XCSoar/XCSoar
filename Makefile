@@ -288,6 +288,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
+	$(SRC)/Waypoint/WaypointIconRenderer.cpp \
 	$(SRC)/Waypoint/WaypointRenderer.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
