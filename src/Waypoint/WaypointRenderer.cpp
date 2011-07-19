@@ -43,7 +43,6 @@ Copyright_License {
 #include "Screen/Icon.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Canvas.hpp"
-#include "Appearance.hpp"
 #include "Units/Units.hpp"
 #include "Screen/Layout.hpp"
 #include "Util/StaticArray.hpp"
@@ -97,8 +96,9 @@ struct VisibleWaypoint {
       reachable = WaypointRenderer::ReachableTerrain;
   }
 
-  void DrawSymbol(Canvas &canvas, bool small_icons, Angle screen_rotation) const {
-    WaypointIconRenderer wir(canvas, small_icons, screen_rotation);
+  void DrawSymbol(const struct WaypointRendererSettings &settings,
+                  Canvas &canvas, bool small_icons, Angle screen_rotation) const {
+    WaypointIconRenderer wir(settings, canvas, small_icons, screen_rotation);
     wir.Draw(*waypoint, point, (WaypointIconRenderer::Reachability)reachable,
              in_task);
   }
@@ -233,10 +233,12 @@ protected:
   void
   DrawWaypoint(Canvas &canvas, const VisibleWaypoint &vwp)
   {
+    const WaypointRendererSettings &settings = settings_map.waypoint;
     const Waypoint &way_point = *vwp.waypoint;
     bool watchedWaypoint = way_point.Flags.Watched;
 
-    vwp.DrawSymbol(canvas, projection.GetMapScale() > fixed(4000),
+    vwp.DrawSymbol(settings, canvas,
+                   projection.GetMapScale() > fixed(4000),
                    projection.GetScreenAngle());
 
     // Determine whether to draw the waypoint label or not
@@ -280,8 +282,8 @@ protected:
 
     RasterPoint sc = vwp.point;
     if ((vwp.reachable != WaypointRenderer::Unreachable &&
-         Appearance.IndLandable == wpLandableWinPilot) ||
-        Appearance.UseSWLandablesRendering)
+         settings.landable_style == wpLandableWinPilot) ||
+        settings.vector_landable_rendering)
       // make space for the green circle
       sc.x += 5;
 

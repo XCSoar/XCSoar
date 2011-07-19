@@ -35,6 +35,7 @@ struct Color;
 class Pen;
 
 struct SETTINGS_MAP;
+struct WaypointRendererSettings;
 class LabelBlock;
 
 class Canvas;
@@ -46,7 +47,7 @@ namespace Graphics {
   void Initialise();
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
   void InitSnailTrail(const SETTINGS_MAP &settings_map);
-  void InitLandableIcons();
+  void InitLandableIcons(const WaypointRendererSettings &settings);
   void Deinitialise();
   void DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
                     const Angle angle, const RasterPoint aircraft_pos);

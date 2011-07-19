@@ -132,7 +132,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   // Draw icon
   RasterPoint pt = { rc.left + line_height / 2,
                      rc.top + line_height / 2};
-  WaypointIconRenderer wir(canvas);
+  WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint, canvas);
   wir.Draw(tp.get_waypoint(), pt,
            WaypointIconRenderer::Unreachable, true);
 

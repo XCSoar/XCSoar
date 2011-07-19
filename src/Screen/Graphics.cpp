@@ -217,7 +217,7 @@ void
 Graphics::InitialiseConfigured(const SETTINGS_MAP &settings_map)
 {
   InitSnailTrail(settings_map);
-  InitLandableIcons();
+  InitLandableIcons(settings_map.waypoint);
 }
 
 void
@@ -268,16 +268,16 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
 }
 
 void
-Graphics::InitLandableIcons()
+Graphics::InitLandableIcons(const WaypointRendererSettings &settings)
 {
-  if (Appearance.IndLandable == wpLandableWinPilot) {
+  if (settings.landable_style == wpLandableWinPilot) {
     AirportReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
     AirportMarginalIcon.load_big(IDB_MARGINAL, IDB_MARGINAL_HD);
     AirportUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_HD);
     FieldReachableIcon.load_big(IDB_REACHABLE, IDB_REACHABLE_HD);
     FieldMarginalIcon.load_big(IDB_MARGINAL, IDB_MARGINAL_HD);
     FieldUnreachableIcon.load_big(IDB_LANDABLE, IDB_LANDABLE_HD);
-  } else if (Appearance.IndLandable == wpLandableAltA) {
+  } else if (settings.landable_style == wpLandableAltA) {
     AirportReachableIcon.load_big(IDB_AIRPORT_REACHABLE,
                                   IDB_AIRPORT_REACHABLE_HD);
     AirportMarginalIcon.load_big(IDB_AIRPORT_MARGINAL,
@@ -290,7 +290,7 @@ Graphics::InitLandableIcons()
                                IDB_OUTFIELD_MARGINAL_HD);
     FieldUnreachableIcon.load_big(IDB_OUTFIELD_UNREACHABLE,
                                   IDB_OUTFIELD_UNREACHABLE_HD);
-  } else if (Appearance.IndLandable == wpLandableAltB) {
+  } else if (settings.landable_style == wpLandableAltB) {
     AirportReachableIcon.load_big(IDB_AIRPORT_REACHABLE,
                                   IDB_AIRPORT_REACHABLE_HD);
     AirportMarginalIcon.load_big(IDB_AIRPORT_MARGINAL2,

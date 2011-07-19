@@ -254,17 +254,7 @@ Profile::Use()
   */
 
   // new appearance variables
-  GetEnum(szProfileAppIndLandable, Appearance.IndLandable);
-
-  Get(szProfileAppUseSWLandablesRendering,
-      Appearance.UseSWLandablesRendering);
-
-  Get(szProfileAppLandableRenderingScale,
-      Appearance.LandableRenderingScale);
-
-  Get(szProfileAppScaleRunwayLength,
-      Appearance.ScaleRunwayLength);
-  
+ 
   Get(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
 

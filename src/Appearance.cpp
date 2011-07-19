@@ -24,16 +24,12 @@ Copyright_License {
 #include "Appearance.hpp"
 
 struct Appearance Appearance = {
-  wpLandableWinPilot,
   false,
   smAlignCenter,
   tiDefault,
   dtText,
   true,
   apIbBox,
-  false,
-  true,
-  100,
   false,
   acSimple,
 };

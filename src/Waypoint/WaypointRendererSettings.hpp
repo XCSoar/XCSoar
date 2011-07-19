@@ -50,6 +50,12 @@ enum WaypointLabelSelection_t {
   wlsNoWaypoints
 };
 
+enum IndLandable_t {
+  wpLandableWinPilot = 0,
+  wpLandableAltA,
+  wpLandableAltB,
+};
+
 struct WaypointRendererSettings {
   /** What type of text to draw next to the waypoint icon */
   DisplayTextType_t display_text_type;
@@ -63,10 +69,23 @@ struct WaypointRendererSettings {
   /** What type of waypoint labels to render */
   RenderMode landable_render_mode;
 
+  IndLandable_t landable_style;
+
+  bool vector_landable_rendering;
+
+  bool scale_runway_length;
+
+  int landable_rendering_scale;
+
   void SetDefaults() {
     display_text_type = DISPLAYFIRSTFIVE;
     arrival_height_display = WP_ARRIVAL_HEIGHT_GLIDE;
     landable_render_mode = RoundedBlack;
+
+    landable_style = wpLandableWinPilot;
+    vector_landable_rendering = true;
+    scale_runway_length = false;
+    landable_rendering_scale = 100;
   }
 
   void LoadFromProfile();

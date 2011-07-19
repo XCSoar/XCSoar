@@ -28,7 +28,6 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
-#include "Appearance.hpp"
 #include "Screen/Graphics.hpp"
 #include "Language/Language.hpp"
 
@@ -122,18 +121,18 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
                      _("Airports and outlanding fields are displayed in white/grey. If the waypoint is reachable the color is changed to green. If the waypoint is blocked by a mountain the color is changed to red instead."));
     dfe->addEnumText(_("Traffic lights"), wpLandableAltB,
                      _("Airports and outlanding fields are displayed in the colors of a traffic light. Green if reachable, Orange if blocked by mountain and red if not reachable at all."));
-    dfe->Set(Appearance.IndLandable);
+    dfe->Set(settings.landable_style);
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpAppUseSWLandablesRendering"),
-                   Appearance.UseSWLandablesRendering);
+                   settings.vector_landable_rendering);
 
   LoadFormProperty(*wf, _T("prpAppLandableRenderingScale"),
-                   Appearance.LandableRenderingScale);
+                   settings.landable_rendering_scale);
 
   LoadFormProperty(*wf, _T("prpAppScaleRunwayLength"),
-                   Appearance.ScaleRunwayLength);
+                   settings.scale_runway_length);
 
   UpdateVisibilities();
 }
@@ -181,25 +180,25 @@ WaypointDisplayConfigPanel::Save()
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppIndLandable"));
   if (wp) {
-    if (Appearance.IndLandable != (IndLandable_t)(wp->GetDataField()->GetAsInteger())) {
-      Appearance.IndLandable = (IndLandable_t)(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppIndLandable, Appearance.IndLandable);
+    if (settings.landable_style != (IndLandable_t)(wp->GetDataField()->GetAsInteger())) {
+      settings.landable_style = (IndLandable_t)(wp->GetDataField()->GetAsInteger());
+      Profile::Set(szProfileAppIndLandable, settings.landable_style);
       changed = true;
-      Graphics::InitLandableIcons();
+      Graphics::InitLandableIcons(settings);
     }
   }
 
   changed |= SaveFormProperty(*wf, _T("prpAppUseSWLandablesRendering"),
                               szProfileAppUseSWLandablesRendering,
-                              Appearance.UseSWLandablesRendering);
+                              settings.vector_landable_rendering);
 
   changed |= SaveFormProperty(*wf, _T("prpAppLandableRenderingScale"),
                               szProfileAppLandableRenderingScale,
-                              Appearance.LandableRenderingScale);
+                              settings.landable_rendering_scale);
 
   changed |= SaveFormProperty(*wf, _T("prpAppScaleRunwayLength"),
                               szProfileAppScaleRunwayLength,
-                              Appearance.ScaleRunwayLength);
+                              settings.scale_runway_length);
 
 
   return changed;

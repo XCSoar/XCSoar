@@ -30,11 +30,13 @@ Copyright_License {
 #include "Screen/Point.hpp"
 #include "Math/Angle.hpp"
 
+struct WaypointRendererSettings;
 class Canvas;
 class Waypoint;
 
 class WaypointIconRenderer
 {
+  const WaypointRendererSettings &settings;
   Canvas &canvas;
   bool small_icons;
   Angle screen_rotation;
@@ -47,9 +49,10 @@ public:
     ReachableTerrain,
   };
 
-  WaypointIconRenderer(Canvas &_canvas, bool _small_icons = false,
+  WaypointIconRenderer(const WaypointRendererSettings &_settings,
+                       Canvas &_canvas, bool _small_icons = false,
                        Angle _screen_rotation = Angle::degrees(fixed_zero))
-    :canvas(_canvas), small_icons(_small_icons),
+    :settings(_settings), canvas(_canvas), small_icons(_small_icons),
      screen_rotation(_screen_rotation) {}
 
   void Draw(const Waypoint &waypoint, const RasterPoint &point,

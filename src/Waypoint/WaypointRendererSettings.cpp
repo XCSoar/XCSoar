@@ -47,4 +47,9 @@ WaypointRendererSettings::LoadFromProfile()
   GetEnum(szProfileWaypointLabelSelection, label_selection);
   GetEnum(szProfileWaypointArrivalHeightDisplay, arrival_height_display);
   GetEnum(szProfileWaypointLabelStyle, landable_render_mode);
+
+  GetEnum(szProfileAppIndLandable, landable_style);
+  Get(szProfileAppUseSWLandablesRendering, vector_landable_rendering);
+  Get(szProfileAppScaleRunwayLength, scale_runway_length);
+  Get(szProfileAppLandableRenderingScale, landable_rendering_scale);
 }

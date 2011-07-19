@@ -24,12 +24,6 @@ Copyright_License {
 #ifndef APPEARANCE_H
 #define APPEARANCE_H
 
-enum IndLandable_t {
-  wpLandableWinPilot = 0,
-  wpLandableAltA,
-  wpLandableAltB,
-};
-
 enum StateMessageAlign_t {
   smAlignCenter = 0,
   smAlignTopLeft,
@@ -62,7 +56,6 @@ enum AircraftSymbol_t {
 };
 
 struct Appearance {
-  IndLandable_t IndLandable;
   bool InverseInfoBox;
   StateMessageAlign_t StateMessageAlign;
   TextInputStyle_t TextInputStyle;
@@ -70,9 +63,6 @@ struct Appearance {
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
   bool UseCustomFonts;
-  bool UseSWLandablesRendering;
-  int LandableRenderingScale;
-  bool ScaleRunwayLength;
   AircraftSymbol_t AircraftSymbol;
 };
 

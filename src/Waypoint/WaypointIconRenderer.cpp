@@ -27,7 +27,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "WaypointRenderer.hpp"
-#include "Appearance.hpp"
+#include "WaypointRendererSettings.hpp"
 
 gcc_pure
 static const MaskedIcon &
@@ -110,7 +110,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
                                    Reachability reachable)
 {
 
-  if (!Appearance.UseSWLandablesRendering) {
+  if (!settings.vector_landable_rendering) {
     const MaskedIcon *icon;
 
     if (reachable == ReachableTerrain)
@@ -128,12 +128,12 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   }
 
   // SW rendering of landables
-  fixed scale = fixed(Layout::SmallScale(Appearance.LandableRenderingScale)) /
+  fixed scale = fixed(Layout::SmallScale(settings.landable_rendering_scale)) /
                 fixed_int_constant(150);
   fixed radius = fixed_int_constant(10) * scale;
 
   canvas.black_pen();
-  if (Appearance.IndLandable == wpLandableWinPilot) {
+  if (settings.landable_style == wpLandableWinPilot) {
     // Render landable with reachable state
     if (reachable != Unreachable) {
       canvas.select(reachable == ReachableTerrain ?
@@ -142,7 +142,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
                        radius + radius / fixed_two);
     }
     canvas.select(Graphics::hbMagenta);
-  } else if (Appearance.IndLandable == wpLandableAltB) {
+  } else if (settings.landable_style == wpLandableAltB) {
     if (reachable != Unreachable)
       canvas.select(reachable == ReachableTerrain ?
                     Graphics::hbGreen : Graphics::hbOrange);
@@ -163,7 +163,7 @@ WaypointIconRenderer::DrawLandable(const Waypoint &waypoint,
   const Runway &runway = waypoint.runway;
   if (runway.IsDirectionDefined()) {
     fixed len;
-    if (Appearance.ScaleRunwayLength && runway.IsLengthDefined())
+    if (settings.scale_runway_length && runway.IsLengthDefined())
       len = (radius / fixed_two) +
         (((int) runway.GetLength() - 500) / 500) * (radius / fixed_four);
     else
