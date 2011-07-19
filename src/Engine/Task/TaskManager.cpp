@@ -614,7 +614,7 @@ TaskManager::get_ordered_taskpoint_location(const unsigned TPindex,
   if (!check_ordered_task())
     return fallback_location;
 
-  TaskWaypoint *tp = task_ordered.get_ordered_task_point(TPindex);
+  const TaskWaypoint *tp = task_ordered.getTaskPoint(TPindex);
   if (tp)
     return tp->get_location();
 
@@ -627,7 +627,7 @@ TaskManager::get_ordered_taskpoint_radius(const unsigned TPindex) const
   if (!check_ordered_task())
     return fixed(5);
 
-  OrderedTaskPoint *otp = task_ordered.get_ordered_task_point(TPindex);
+  const OrderedTaskPoint *otp = task_ordered.getTaskPoint(TPindex);
   if (otp) {
     ObservationZonePoint *ozp = otp->get_oz();
 

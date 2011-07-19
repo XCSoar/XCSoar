@@ -477,15 +477,6 @@ OrderedTask::check_task() const
   return this->get_factory().validate();
 }
 
-OrderedTaskPoint*
-OrderedTask::get_ordered_task_point(unsigned TPindex) const
-{
- if (TPindex > task_points.size() - 1) {
-   return NULL;
- }
- return task_points[TPindex];
-}
-
 AATPoint*
 OrderedTask::get_AAT_task_point(unsigned TPindex) const
 {

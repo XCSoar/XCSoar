@@ -349,15 +349,6 @@ public:
   bool check_task() const;
 
  /**
-  * returns tp accessed via TPIndex
-  *
-  * @param TPindex index of taskpoint
-  *
-  * @return pointer to tp if valid, else NULL
-  */	
- OrderedTaskPoint* get_ordered_task_point(unsigned TPindex) const;
-
- /**
   * returns pointer to AATPoint accessed via TPIndex if exist
   *
   * @param TPindex index of taskpoint
