@@ -55,10 +55,9 @@ public:
   void Draw(const Waypoint &waypoint, RasterPoint point,
             Reachability reachable = Unreachable, bool in_task = false);
 
-  static void
-  DrawLandableSymbol(Canvas &canvas, const RasterPoint &pt,
-                     Reachability reachable, const Waypoint &way_point,
-                     const Angle &screen_rotation = Angle::degrees(fixed_zero));
+private:
+  void DrawLandable(const Waypoint &waypoint, const RasterPoint &point,
+                    Reachability reachable = Unreachable);
 };
 
 #endif

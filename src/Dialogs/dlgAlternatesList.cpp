@@ -63,7 +63,8 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
       positive(solution.AltitudeDifference) ?
       WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
 
-  WaypointIconRenderer::DrawLandableSymbol(canvas, pt, reachable, way_point);
+  WaypointIconRenderer wir(canvas);
+  wir.Draw(way_point, pt, reachable);
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
