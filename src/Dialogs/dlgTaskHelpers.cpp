@@ -257,53 +257,30 @@ private:
   TCHAR *text;
 };
 
-class LabelTaskPoint:
-  public TaskPointConstVisitor
-{
-  const unsigned m_active_index;
-  TCHAR* name;
-
-public:
-  LabelTaskPoint(const unsigned index, TCHAR* _name):
-    m_active_index(index),
-    name(_name)
-  {
-    name[0] = _T('\0');
-  }
-
-  void Visit(const UnorderedTaskPoint& tp) {}
-
-  void
-  Visit(const StartPoint& tp)
-  {
-    _stprintf(name, _T("S:  %s"), tp.get_waypoint().Name.c_str());
-  }
-
-  void
-  Visit(const FinishPoint& tp)
-  {
-    _stprintf(name, _T("F:  %s"), tp.get_waypoint().Name.c_str());
-  }
-
-  void
-  Visit(const AATPoint& tp)
-  {
-    _stprintf(name, _T("A%d: %s"), m_active_index, tp.get_waypoint().Name.c_str());
-  }
-
-  void
-  Visit(const ASTPoint& tp)
-  {
-    _stprintf(name, _T("T%d: %s"), m_active_index, tp.get_waypoint().Name.c_str());
-  }
-};
-
 void
 OrderedTaskPointLabel(OrderedTask* task, const unsigned index, TCHAR* name, TCHAR* radius)
 {
-  LabelTaskPoint tpv(index, name);
   const OrderedTaskPoint &tp = *task->getTaskPoint(index);
-  tpv.TaskPointConstVisitor::Visit(tp);
+  switch (tp.GetType()) {
+  case TaskPoint::START:
+    _stprintf(name, _T("S:  %s"), tp.get_waypoint().Name.c_str());
+    break;
+
+  case TaskPoint::AST:
+    _stprintf(name, _T("T%d: %s"), index, tp.get_waypoint().Name.c_str());
+    break;
+
+  case TaskPoint::AAT:
+    _stprintf(name, _T("A%d: %s"), index, tp.get_waypoint().Name.c_str());
+    break;
+
+  case TaskPoint::FINISH:
+    _stprintf(name, _T("F:  %s"), tp.get_waypoint().Name.c_str());
+    break;
+
+  default:
+    break;
+  }
 
   const ObservationZonePoint *ozp = tp.get_oz();
   switch (ozp->shape) {
