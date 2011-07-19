@@ -44,9 +44,10 @@ Copyright_License {
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "ChartProjection.hpp"
-#include "RenderTask.hpp"
-#include "RenderTaskPoint.hpp"
-#include "RenderObservationZone.hpp"
+#include "Renderer/RenderTask.hpp"
+#include "Renderer/RenderTaskPoint.hpp"
+#include "Renderer/RenderObservationZone.hpp"
+#include "Renderer/AircraftRenderer.hpp"
 #include "Screen/Chart.hpp"
 #include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
@@ -385,7 +386,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
   ChartProjection proj(rc, trace, nmea_info.Location);
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
-  Graphics::DrawAircraft(canvas, settings_map, calculated.Heading, aircraft_pos);
+  DrawAircraft(canvas, settings_map, calculated.Heading, aircraft_pos);
 
   canvas.select(Graphics::TracePen);
   DrawTrace(canvas, proj, trace);
@@ -512,7 +513,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
   DrawTrace(canvas, proj, trace);
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
-  Graphics::DrawAircraft(canvas, settings_map, calculated.Heading, aircraft_pos);
+  DrawAircraft(canvas, settings_map, calculated.Heading, aircraft_pos);
 }
 
 

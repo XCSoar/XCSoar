@@ -37,7 +37,7 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Form/List.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "RenderObservationZone.hpp"
+#include "Renderer/RenderObservationZone.hpp"
 #include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
 #include "Engine/Task/ObservationZones/FAISectorZone.hpp"

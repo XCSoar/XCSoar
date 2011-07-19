@@ -26,7 +26,7 @@ Copyright_License {
 #include "Topography/TopographyRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Units/Units.hpp"
-#include "Screen/Graphics.hpp"
+#include "Renderer/AircraftRenderer.hpp"
 
 void
 MapWindow::RenderTerrain(Canvas &canvas)
@@ -152,9 +152,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   // Finally, draw you!
   if (Basic().Connected)
-    Graphics::DrawAircraft(canvas, settings_map,
-                           Calculated().Heading - render_projection.GetScreenAngle(),
-                           aircraft_pos);
+    DrawAircraft(canvas, settings_map,
+                 Calculated().Heading - render_projection.GetScreenAngle(),
+                 aircraft_pos);
 
   // Render compass
   DrawCompass(canvas, rc);

@@ -48,8 +48,6 @@ namespace Graphics {
   void InitialiseConfigured(const SETTINGS_MAP &settings_map);
   void InitSnailTrail(const SETTINGS_MAP &settings_map);
   void Deinitialise();
-  void DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
-                    const Angle angle, const RasterPoint aircraft_pos);
 
   extern Pen hpSnail[NUMSNAILCOLORS];
   extern Pen hpSnailVario[NUMSNAILCOLORS];

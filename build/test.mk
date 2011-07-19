@@ -1439,6 +1439,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/RenderObservationZone.cpp \
 	$(SRC)/Renderer/RenderTask.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
+	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
@@ -1705,6 +1706,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/RenderTask.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
 	$(SRC)/Renderer/RenderObservationZone.cpp \
+	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/Units/Units.cpp \
