@@ -67,5 +67,5 @@ Declaration::Declaration(const OrderedTask* task)
 {
   if (task)
     for (unsigned i = 0; i < task->task_size(); i++)
-      TurnPoints.push_back(*task->get_tp(i));
+      TurnPoints.push_back(*task->getTaskPoint(i));
 }

@@ -1326,15 +1326,6 @@ OrderedTask::get_tp(const unsigned position)
   return task_points[position];
 }
 
-const OrderedTaskPoint* 
-OrderedTask::get_tp(const unsigned position) const
-{
-  if (position >= task_size())
-    return NULL;
-
-  return task_points[position];
-}
-
 FlatBoundingBox 
 OrderedTask::get_bounding_box(const GeoBounds& bounds) const
 {

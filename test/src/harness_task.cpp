@@ -299,7 +299,7 @@ bool test_task_type_manip(TaskManager& task_manager,
 
   test_note("# checking mutated start..\n");
   if (!fact.validStartType(
-      fact.getType(*task_manager.get_ordered_task().get_tp(0))))
+      fact.getType(*task_manager.get_ordered_task().getTaskPoint(0))))
     return false;
 
 
@@ -312,13 +312,13 @@ bool test_task_type_manip(TaskManager& task_manager,
     sprintf(tmp, "# checking mutated intermediate point %d..\n", i);
     test_note(tmp);
     if (!fact.validIntermediateType(
-        fact.getType(*task_manager.get_ordered_task().get_tp(i))))
+        fact.getType(*task_manager.get_ordered_task().getTaskPoint(i))))
       return false;
   }
 
   test_note("# checking mutated finish..\n");
   if (!fact.validFinishType(
-      fact.getType(*task_manager.get_ordered_task().get_tp(
+      fact.getType(*task_manager.get_ordered_task().getTaskPoint(
           task_manager.task_size() - 1))))
     return false;
 

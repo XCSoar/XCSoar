@@ -845,15 +845,6 @@ public:
   gcc_pure
   OrderedTaskPoint* get_tp(const unsigned index);
 
-  /** 
-   * Retrieve (const) task point by index
-   * 
-   * @param index index position of task point
-   * @return Task point or NULL if not found
-   */
-  gcc_pure
-  const OrderedTaskPoint* get_tp(const unsigned index) const;
-
   /**
    * @return number of optional start poitns
    */
