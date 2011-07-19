@@ -331,6 +331,11 @@ public:
 class LabelTaskPoint:
   public TaskPointConstVisitor
 {
+  unsigned m_index;
+  const unsigned m_active_index;
+  TCHAR* name;
+  LabelSizeObservationZone ozSize;
+
 public:
     LabelTaskPoint(const unsigned index, TCHAR* _name, TCHAR* _radius):
     m_index(0),
@@ -394,11 +399,6 @@ private:
   void inc_index() {
     m_index++;
   }
-
-  unsigned m_index;
-  const unsigned m_active_index;
-  TCHAR* name;
-  LabelSizeObservationZone ozSize;
 };
 
 void
