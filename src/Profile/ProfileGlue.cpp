@@ -162,30 +162,7 @@ Profile::Use()
 
   GetEnum(szProfileMapShiftBias, settings_map.MapShiftBias);
 
-  // NOTE: settings_map.WaypointLabelSelection must be loaded after this code
-  GetEnum(szProfileDisplayText, settings_map.DisplayTextType);
-  if (settings_map.DisplayTextType == OBSOLETE_DONT_USE_DISPLAYNAMEIFINTASK) {
-    // pref migration. The migrated value of DisplayTextType and
-    // WaypointLabelSelection will not be written to the config file
-    // unless the user explicitly changes the corresponding setting manually.
-    // This requires ordering because a manually changed WaypointLabelSelection
-    // may be overwritten by the following migration code.
-    settings_map.DisplayTextType = DISPLAYNAME;
-    settings_map.WaypointLabelSelection = wlsTaskWaypoints;
-  }
-  else if (settings_map.DisplayTextType == OBSOLETE_DONT_USE_DISPLAYNUMBER)
-    settings_map.DisplayTextType = DISPLAYNAME;
-
-
-  // NOTE: settings_map.DisplayTextType must be loaded before this code
-  //       due to pref migration dependencies!
-  GetEnum(szProfileWaypointLabelSelection,
-          settings_map.WaypointLabelSelection);
-
-  GetEnum(szProfileWaypointArrivalHeightDisplay,
-          settings_map.WaypointArrivalHeightDisplay);
-
-  GetEnum(szProfileWaypointLabelStyle, settings_map.LandableRenderMode);
+  settings_map.waypoint.LoadFromProfile();
 
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();

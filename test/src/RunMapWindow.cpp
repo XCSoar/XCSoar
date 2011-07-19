@@ -169,7 +169,7 @@ public:
   Blackboard() {
     settings_map.OrientationCruise = NORTHUP;
     settings_map.OrientationCircling = NORTHUP;
-    settings_map.DisplayTextType = DISPLAYNAME;
+    settings_map.waypoint.SetDefaults();
     settings_map.EnableTopography = true;
     settings_map.terrain.SetDefaults();
     settings_map.terrain.enable = true;

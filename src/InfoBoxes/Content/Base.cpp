@@ -39,7 +39,7 @@ void FillInfoBoxWaypointName(InfoBoxWindow& infobox, const Waypoint* way_point,
   if (!way_point) {
     tmp[0] = '\0';
   } else {
-    switch(XCSoarInterface::SettingsMap().DisplayTextType) {
+    switch (XCSoarInterface::SettingsMap().waypoint.display_text_type) {
     case DISPLAYFIRSTTHREE:
       CopyString(tmp, way_point->Name.c_str(), 4);
       break;

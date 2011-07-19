@@ -29,7 +29,7 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Airspace/AirspaceRendererSettings.hpp"
-#include "Screen/TextInBox.hpp"
+#include "Waypoint/WaypointRendererSettings.hpp"
 #include "Terrain/TerrainSettings.hpp"
 #include "DisplayMode.hpp"
 
@@ -43,30 +43,6 @@ enum MapShiftBias_t {
   MAP_SHIFT_BIAS_NONE = 0,
   MAP_SHIFT_BIAS_TRACK,
   MAP_SHIFT_BIAS_TARGET
-};
-
-enum DisplayTextType_t {
-  DISPLAYNAME = 0,
-  OBSOLETE_DONT_USE_DISPLAYNUMBER,
-  DISPLAYFIRSTFIVE,
-  DISPLAYNONE,
-  DISPLAYFIRSTTHREE,
-  OBSOLETE_DONT_USE_DISPLAYNAMEIFINTASK,
-  DISPLAYUNTILSPACE
-};
-
-enum WaypointArrivalHeightDisplay_t {
-  WP_ARRIVAL_HEIGHT_NONE = 0,
-  WP_ARRIVAL_HEIGHT_GLIDE,
-  WP_ARRIVAL_HEIGHT_TERRAIN,
-  WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN
-};
-
-enum WaypointLabelSelection_t {
-  wlsAllWaypoints,
-  wlsTaskAndLandableWaypoints,
-  wlsTaskWaypoints,
-  wlsNoWaypoints
 };
 
 enum TrailLength {
@@ -129,14 +105,8 @@ struct SETTINGS_MAP {
   /** 0: standard, 1: seeyou colors */
   SnailType_t SnailType;
   int WindArrowStyle;
-  /** What type of text to draw next to the waypoint icon */
-  DisplayTextType_t DisplayTextType;
-  /** Which arrival height to display next to waypoint labels */
-  WaypointArrivalHeightDisplay_t WaypointArrivalHeightDisplay;
-  /** What type of waypoint labels to render */
-  WaypointLabelSelection_t WaypointLabelSelection;
-  /** What type of waypoint labels to render */
-  RenderMode LandableRenderMode;
+
+  WaypointRendererSettings waypoint;
 
   TrailLength trail_length;
 

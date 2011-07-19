@@ -38,9 +38,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.SnailScaling = true;
   settings_map.SnailType = stStandardVario;
   settings_map.WindArrowStyle = 0;
-  settings_map.DisplayTextType = DISPLAYFIRSTFIVE;
-  settings_map.WaypointArrivalHeightDisplay = WP_ARRIVAL_HEIGHT_GLIDE;
-  settings_map.LandableRenderMode = RoundedBlack;
+  settings_map.waypoint.SetDefaults();
   settings_map.trail_length = TRAIL_LONG;
   settings_map.airspace.SetDefaults();
   settings_map.GliderScreenPosition = 20; // 20% from bottom

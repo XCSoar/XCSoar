@@ -1455,8 +1455,8 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
                                           _T("task"),
                                           _T("none")};
 
-  WaypointLabelSelection_t& wls = XCSoarInterface::SetSettingsMap()
-                                  .WaypointLabelSelection;
+  WaypointLabelSelection_t &wls =
+    XCSoarInterface::SetSettingsMap().waypoint.label_selection;
   if (_tcscmp(misc, _T("toggle")) == 0)
     wls = (WaypointLabelSelection_t) ((wls + 1) %  n);
   else if (_tcscmp(misc, _T("show")) == 0 && (unsigned int) wls < n) {

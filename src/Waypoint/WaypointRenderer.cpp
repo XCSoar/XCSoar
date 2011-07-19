@@ -138,7 +138,7 @@ public:
     labels(projection.GetScreenWidth(), projection.GetScreenHeight())
   {
     // if pan mode, show full names
-    pDisplayTextType = settings_map.DisplayTextType;
+    pDisplayTextType = settings_map.waypoint.display_text_type;
     if (settings_map.EnablePan)
       pDisplayTextType = DISPLAYNAME;
 
@@ -198,14 +198,14 @@ protected:
     if (arrival_height_glide <= 0 && !way_point.Flags.Watched)
       return;
 
-    if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_NONE)
+    if (settings_map.waypoint.arrival_height_display == WP_ARRIVAL_HEIGHT_NONE)
       return;
 
     size_t length = _tcslen(buffer);
     int uah_glide = (int)Units::ToUserAltitude(fixed(arrival_height_glide));
     int uah_terrain = (int)Units::ToUserAltitude(fixed(arrival_height_terrain));
 
-    if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_TERRAIN) {
+    if (settings_map.waypoint.arrival_height_display == WP_ARRIVAL_HEIGHT_TERRAIN) {
       if (arrival_height_terrain > 0) {
         if (length > 0)
           buffer[length++] = _T(':');
@@ -217,7 +217,7 @@ protected:
     if (length > 0)
       buffer[length++] = _T(':');
 
-    if (settings_map.WaypointArrivalHeightDisplay == WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN &&
+    if (settings_map.waypoint.arrival_height_display == WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN &&
         arrival_height_glide > 0 && arrival_height_terrain > 0) {
       int altd = abs(arrival_height_glide - arrival_height_terrain);
       if (altd >= 10 && (altd * 100) / arrival_height_glide > 5) {
@@ -240,7 +240,7 @@ protected:
                    projection.GetScreenAngle());
 
     // Determine whether to draw the waypoint label or not
-    switch (settings_map.WaypointLabelSelection) {
+    switch (settings_map.waypoint.label_selection) {
     case wlsNoWaypoints:
       return;
 
@@ -262,7 +262,7 @@ protected:
     TextInBoxMode_t text_mode;
     if (vwp.reachable != WaypointRenderer::Unreachable &&
         way_point.IsLandable()) {
-      text_mode.Mode = settings_map.LandableRenderMode;
+      text_mode.Mode = settings_map.waypoint.landable_render_mode;
       text_mode.Bold = true;
       text_mode.MoveInView = true;
     } else if (vwp.in_task) {

@@ -52,6 +52,9 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
   wf = _wf;
   WndProperty *wp;
 
+  const WaypointRendererSettings &settings =
+    CommonInterface::SettingsMap().waypoint;
+
   wp = (WndProperty*)wf->FindByName(_T("prpWaypointLabels"));
   if (wp) {
     DataFieldEnum* dfe;
@@ -62,7 +65,7 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("First 3 letters"), DISPLAYFIRSTTHREE, _("The first 3 letters of the waypoint name are displayed."));
     dfe->addEnumText(_("First 5 letters"), DISPLAYFIRSTFIVE, _("The first 5 letters of the waypoint name are displayed."));
     dfe->addEnumText(_("None"), DISPLAYNONE, _("No waypoint name is displayed."));
-    dfe->Set(XCSoarInterface::SettingsMap().DisplayTextType);
+    dfe->Set(settings.display_text_type);
     wp->RefreshDisplay();
   }
 
@@ -75,7 +78,7 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("Straight glide"), WP_ARRIVAL_HEIGHT_GLIDE, _("Straight glide arrival height (no terrain is considered)."));
     dfe->addEnumText(_("Terrain avoidance glide"), WP_ARRIVAL_HEIGHT_TERRAIN, _("Arrival height considering terrain avoidance"));
     dfe->addEnumText(_("Straight & terrain glide"), WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN, _("Both arrival heights are displayed."));
-    dfe->Set(XCSoarInterface::SettingsMap().WaypointArrivalHeightDisplay);
+    dfe->Set(settings.arrival_height_display);
     wp->RefreshDisplay();
   }
 
@@ -85,7 +88,7 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Rounded rectangle"), RoundedBlack);
     dfe->addEnumText(_("Outlined"), OutlinedInverted);
-    dfe->Set(XCSoarInterface::SettingsMap().LandableRenderMode);
+    dfe->Set(settings.landable_render_mode);
     wp->RefreshDisplay();
   }
 
@@ -104,7 +107,7 @@ WaypointDisplayConfigPanel::Init(WndForm *_wf)
                      _("All waypoints part of a task will be displayed."));
     dfe->addEnumText(_("None"), wlsNoWaypoints,
                      _("No waypoint labels will be displayed."));
-    dfe->Set(XCSoarInterface::SettingsMap().WaypointLabelSelection);
+    dfe->Set(settings.label_selection);
     wp->RefreshDisplay();
   }
 
@@ -154,24 +157,27 @@ WaypointDisplayConfigPanel::OnRenderingTypeData(DataField *Sender,
 bool
 WaypointDisplayConfigPanel::Save()
 {
+  WaypointRendererSettings &settings =
+    CommonInterface::SetSettingsMap().waypoint;
+
   bool changed = false;
   WndProperty *wp;
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabels"),
                                   szProfileDisplayText,
-                                  XCSoarInterface::SetSettingsMap().DisplayTextType);
+                                  settings.display_text_type);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointArrivalHeightDisplay"),
                                   szProfileWaypointArrivalHeightDisplay,
-                                  XCSoarInterface::SetSettingsMap().WaypointArrivalHeightDisplay);
+                                  settings.arrival_height_display);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelStyle"),
                                   szProfileWaypointLabelStyle,
-                                  XCSoarInterface::SetSettingsMap().LandableRenderMode);
+                                  settings.landable_render_mode);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpWaypointLabelSelection"),
                                   szProfileWaypointLabelSelection,
-                                  XCSoarInterface::SetSettingsMap().WaypointLabelSelection);
+                                  settings.label_selection);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppIndLandable"));
   if (wp) {
