@@ -26,6 +26,7 @@ Copyright_License {
 #include "Dialogs/TextEntry.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
+#include "Screen/Fonts.hpp"
 #include "Compatibility/string.h"
 #include "Math/FastMath.h"
 #include "DataField/Base.hpp"
@@ -33,6 +34,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
+#include "Waypoint/WaypointIconRenderer.hpp"
 #include "Components.hpp"
 #include "Compiler.h"
 #include "DataField/Enum.hpp"
@@ -41,6 +43,8 @@ Copyright_License {
 #include "Units/UnitsFormatter.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "MainWindow.hpp"
+#include "Look/Look.hpp"
 
 #include <algorithm>
 #include <list>
@@ -726,73 +730,79 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-PaintWaypoint(Canvas &canvas, const PixelRect rc,
-              const struct WaypointSelectInfo &info)
-{
-  const Waypoint &way_point = *info.way_point;
-
-  int w0, w1, w2, w3, x;
-  w0 = rc.right - rc.left - Layout::FastScale(4);
-  w1 = canvas.text_width(_T("XXX"));
-  w2 = canvas.text_width(_T(" 000km"));
-  w3 = canvas.text_width(_T(" 000")_T(DEG));
-
-  x = w0 - w1 - w2 - w3;
-
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2),
-                      x - Layout::FastScale(5), way_point.Name.c_str());
-
-  TCHAR buffer[12];
-  buffer[0] = '\0';
-  buffer[1] = '\0';
-  buffer[2] = '\0';
-
-  if (way_point.Flags.Home)
-    buffer[0] = 'H';
-  else if (way_point.IsAirport())
-    buffer[0] = 'A';
-  else if (way_point.IsLandable())
-    buffer[0] = 'L';
-
-  if (way_point.Flags.TurnPoint) {
-    if (buffer[0] == '\0')
-      buffer[0] = 'T';
-    else
-      buffer[1] = 'T';
-  }
-
-  // left justified
-  canvas.text(rc.left + x, rc.top + Layout::FastScale(2), buffer);
-
-  // right justified after waypoint flags
-  Units::FormatUserDistance(info.Distance, buffer,
-                            sizeof(buffer) / sizeof(buffer[0]));
-  x = w0 - w3 - canvas.text_width(buffer);
-  canvas.text(rc.left + x, rc.top + Layout::FastScale(2), buffer);
-
-  // right justified after distance
-  _stprintf(buffer, _T("%u")_T(DEG), uround(info.Direction.value_degrees()));
-  x = w0 - canvas.text_width(buffer);
-  canvas.text(rc.left + x, rc.top + Layout::FastScale(2), buffer);
-}
-
-static void
 OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
+  const unsigned line_height = rc.bottom - rc.top;
+
+  const Font &name_font = Fonts::MapBold;
+  const Font &small_font = Fonts::MapLabel;
+  canvas.select(name_font);
+
   if (WaypointSelectInfo.empty()) {
     assert(i == 0);
 
-    canvas.text(rc.left + Layout::FastScale(2), rc.top + Layout::FastScale(2),
-                filter_data.defined() || way_points.empty()
-                ? _("No Match!")
-                : _("Choose a filter or click here"));
+    canvas.text(rc.left + line_height + Layout::FastScale(2),
+                rc.top + line_height / 2 - name_font.get_height() / 2,
+                filter_data.defined() || way_points.empty() ?
+                _("No Match!") : _("Choose a filter or click here"));
     return;
   }
 
   assert(i < WaypointSelectInfo.size());
 
-  PaintWaypoint(canvas, rc, WaypointSelectInfo[i]);
+  const struct WaypointSelectInfo &info = WaypointSelectInfo[i];
+  const Waypoint &waypoint = *info.way_point;
+
+  // Draw icon
+  RasterPoint pt = { rc.left + line_height / 2,
+                     rc.top + line_height / 2};
+  WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint,
+                           CommonInterface::main_window.look->waypoint,
+                           canvas);
+  wir.Draw(waypoint, pt);
+
+  // Draw distance and bearing
+  TCHAR buffer[256];
+  Units::FormatUserDistance(info.Distance, buffer,
+                            sizeof(buffer) / sizeof(buffer[0]));
+  _stprintf(buffer + _tcslen(buffer), _T(" %.0f" DEG "T"),
+            (double)info.Direction.value_degrees());
+
+  unsigned left = rc.right - Layout::FastScale(2) - canvas.text_width(buffer);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, buffer);
+
+  // Draw waypoint name
+  canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
+                      rc.top + Layout::FastScale(2),
+                      left - (rc.left + line_height + Layout::FastScale(4)),
+                      waypoint.Name.c_str());
+
+  // Draw details line
+  canvas.select(small_font);
+
+  {
+    TCHAR alt[16];
+    Units::FormatUserAltitude(waypoint.Altitude, alt,
+                              sizeof(alt) / sizeof(alt[0]));
+    _stprintf(buffer, _T("%s: %s"), _T("Altitude"), alt);
+  }
+
+  if (waypoint.radio_frequency.IsDefined()) {
+    TCHAR radio[16];
+    waypoint.radio_frequency.Format(radio, sizeof(radio) / sizeof(radio[0]));
+    _tcscat(buffer, _T(" - "));
+    _tcscat(buffer, radio);
+    _tcscat(buffer, _T(" MHz"));
+  }
+
+  if (!waypoint.Comment.empty()) {
+    _tcscat(buffer, _T(" - "));
+    _tcscat(buffer, waypoint.Comment.c_str());
+  }
+
+  canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
+                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc, buffer);
 }
 
 static void
@@ -916,6 +926,9 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
   assert(wWaypointList != NULL);
   wWaypointList->SetActivateCallback(OnWaypointListEnter);
   wWaypointList->SetPaintItemCallback(OnPaintListItem);
+  unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
+                         Fonts::MapLabel.get_height();
+  wWaypointList->SetItemHeight(line_height);
 
   wbName = (WndButton*)wf->FindByName(_T("cmdFltName"));
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
