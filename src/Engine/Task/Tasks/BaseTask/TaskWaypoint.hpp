@@ -28,42 +28,37 @@
 #include "TaskPoint.hpp"
 #include "Waypoint/Waypoint.hpp"
 
-/**
- * Task points that have a waypoint associated
- *
- */
-
+/** Task points that have a waypoint associated */
 class TaskWaypoint :
   public TaskPoint
 {
   friend class PrintHelper;
 
-  Waypoint m_waypoint; /**< local copy of waypoint */
+  /** local copy of waypoint */
+  Waypoint m_waypoint;
 
 public:
-/**
- * Constructor.  Location and elevation of waypoint is used
- * as the task point's reference values; a copy of the waypoint
- * is also stored to facilitate user-feedback.
- *
- * @param wp Waypoint to be used as task point origin
- * @param tb Task Behaviour defining options (esp safety heights)
- *
- * @return Initialised object
- */
-  TaskWaypoint(enum type _type,
-               const Waypoint & wp):
-    TaskPoint(_type, wp.Location, wp.Altitude),
-    m_waypoint(wp)
-    { }
+  /**
+   * Constructor.  Location and elevation of waypoint is used
+   * as the task point's reference values; a copy of the waypoint
+   * is also stored to facilitate user-feedback.
+   *
+   * @param wp Waypoint to be used as task point origin
+   * @param tb Task Behaviour defining options (esp safety heights)
+   *
+   * @return Initialised object
+   */
+  TaskWaypoint(enum type _type, const Waypoint & wp)
+    :TaskPoint(_type, wp.Location, wp.Altitude),
+     m_waypoint(wp) {}
 
-/**
- * Recall waypoint associated with this task point.
- * Can be used for user feedback (e.g. queries on details of active
- * task point)
- *
- * @return Copy of waypoint associated with this task point
- */
+  /**
+   * Recall waypoint associated with this task point.
+   * Can be used for user feedback (e.g. queries on details of active
+   * task point)
+   *
+   * @return Copy of waypoint associated with this task point
+   */
   gcc_pure
   const Waypoint& get_waypoint() const {
     return m_waypoint;
