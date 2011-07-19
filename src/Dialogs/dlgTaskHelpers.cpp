@@ -337,11 +337,12 @@ class LabelTaskPoint:
   LabelSizeObservationZone ozSize;
 
 public:
-    LabelTaskPoint(const unsigned index, TCHAR* _name, TCHAR* _radius):
+  LabelTaskPoint(const unsigned index, TCHAR* _name, TCHAR* _radius):
     m_index(0),
     m_active_index(index),
     name(_name),
-    ozSize(_radius){
+    ozSize(_radius)
+  {
     name[0] = _T('\0');
   }
 
