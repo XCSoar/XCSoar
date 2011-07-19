@@ -113,6 +113,7 @@ Simulator::Process(NMEA_INFO &basic)
   basic.track_available.Update(basic.clock);
   basic.GroundSpeedAvailable.Update(basic.clock);
 
+  basic.time_available.Update(basic.clock);
   basic.Time += fixed_one;
   (BrokenTime &)basic.DateTime =
     BrokenTime::FromSecondOfDayChecked((unsigned)basic.Time);
