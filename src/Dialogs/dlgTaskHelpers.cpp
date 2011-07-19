@@ -283,11 +283,9 @@ OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* name)
 }
 
 void
-OrderedTaskPointRadiusLabel(OrderedTask* task, const unsigned index, TCHAR* radius)
+OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius)
 {
-  const OrderedTaskPoint &tp = *task->getTaskPoint(index);
-  const ObservationZonePoint *ozp = tp.get_oz();
-  switch (ozp->shape) {
+  switch (ozp.shape) {
   case ObservationZonePoint::FAI_SECTOR:
     _stprintf(radius,_("FAI"));
     break;
@@ -295,19 +293,19 @@ OrderedTaskPointRadiusLabel(OrderedTask* task, const unsigned index, TCHAR* radi
   case ObservationZonePoint::SECTOR:
   case ObservationZonePoint::ANNULAR_SECTOR:
     _stprintf(radius,_T("%.1f%s"),
-              (double)Units::ToUserDistance(((const SectorZone *)ozp)->getRadius()),
+              (double)Units::ToUserDistance(((const SectorZone &)ozp).getRadius()),
               Units::GetDistanceName());
     break;
 
   case ObservationZonePoint::LINE:
     _stprintf(radius,_T("%.1f%s"),
-              (double)Units::ToUserDistance(((const LineSectorZone *)ozp)->getLength()),
+              (double)Units::ToUserDistance(((const LineSectorZone &)ozp).getLength()),
               Units::GetDistanceName());
     break;
 
   case ObservationZonePoint::CYLINDER:
     _stprintf(radius,_T("%.1f%s"),
-              (double)Units::ToUserDistance(((const CylinderZone *)ozp)->getRadius()),
+              (double)Units::ToUserDistance(((const CylinderZone &)ozp).getRadius()),
               Units::GetDistanceName());
     break;
 

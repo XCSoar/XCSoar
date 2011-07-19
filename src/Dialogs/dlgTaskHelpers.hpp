@@ -39,7 +39,7 @@ const TCHAR* OrderedTaskFactoryName(TaskBehaviour::Factory_t type);
  */
 void OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks);
 void OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* name);
-void OrderedTaskPointRadiusLabel(OrderedTask* task, const unsigned index, TCHAR* radius);
+void OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius);
 bool OrderedTaskSave(SingleWindow &parent,
                      const OrderedTask& task, bool noask=false);
 

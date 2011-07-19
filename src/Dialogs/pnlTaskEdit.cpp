@@ -136,7 +136,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   // Draw turnpoint radius/short description
   TCHAR sRad[10];
-  OrderedTaskPointRadiusLabel(ordered_task, DrawListIndex, sRad);
+  OrderedTaskPointRadiusLabel(*tp.get_oz(), sRad);
   if (!string_is_empty(sRad))
     canvas.text_clipped(rc.right - Layout::FastScale(2) - canvas.text_width(sRad),
                         rc.top + Layout::FastScale(2), rc, sRad);
