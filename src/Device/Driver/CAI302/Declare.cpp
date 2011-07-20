@@ -154,16 +154,16 @@ DeclareInner(Port &port, const Declaration &declaration,
           pilot.total_energy_final_glide,
           pilot.show_final_glide_altitude_difference,
           pilot.map_datum,
-          FromLE16(pilot.approach_radius),
-          FromLE16(pilot.arrival_radius),
-          FromLE16(pilot.enroute_logging_interval),
-          FromLE16(pilot.close_logging_interval),
-          FromLE16(pilot.time_between_flight_logs),
-          FromLE16(pilot.minimum_speed_to_force_flight_logging),
+          FromBE16(pilot.approach_radius),
+          FromBE16(pilot.arrival_radius),
+          FromBE16(pilot.enroute_logging_interval),
+          FromBE16(pilot.close_logging_interval),
+          FromBE16(pilot.time_between_flight_logs),
+          FromBE16(pilot.minimum_speed_to_force_flight_logging),
           pilot.stf_dead_band,
           pilot.reserved_vario,
-          FromLE16(pilot.unit_word),
-          FromLE16(pilot.margin_height));
+          FromBE16(pilot.unit_word),
+          FromBE16(pilot.margin_height));
 
   if (!DownloadCommand(port, szTmp) || env.IsCancelled())
     return false;
@@ -176,11 +176,11 @@ DeclareInner(Port &port, const Declaration &declaration,
           polar.best_ld,
           polar.best_glide_speed,
           polar.two_ms_sink_at_speed,
-          FromLE16(polar.weight_in_litres),
-          FromLE16(polar.ballast_capacity),
+          FromBE16(polar.weight_in_litres),
+          FromBE16(polar.ballast_capacity),
           0,
-          FromLE16(polar.config_word),
-          FromLE16(polar.wing_area));
+          FromBE16(polar.config_word),
+          FromBE16(polar.wing_area));
 
   if (!DownloadCommand(port, szTmp) || env.IsCancelled())
     return false;
