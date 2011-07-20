@@ -51,7 +51,7 @@ Filter::design(const fixed cutoff_wavelength, const bool bessel)
 
   fixed f_star = c / (sample_freq * cutoff_wavelength);
 
-  if (f_star >= fixed_one / 8) {
+  if (positive(f_star) && f_star >= fixed_one / 8) {
     ok = false;
     return false;
   }
