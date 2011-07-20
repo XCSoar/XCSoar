@@ -34,7 +34,7 @@ struct PolarCoefficients
   PolarCoefficients(fixed _a, fixed _b, fixed _c):a(_a), b(_b), c(_c) {}
 
   bool IsValid() const;
-  static PolarCoefficients FromVW(fixed v1, fixed v2, fixed v3,
+  static PolarCoefficients From3VW(fixed v1, fixed v2, fixed v3,
                                   fixed w1, fixed w2, fixed w3);
 };
 

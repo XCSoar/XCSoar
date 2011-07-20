@@ -64,8 +64,8 @@ static void
 UpdateInvalidLabel()
 {
   PolarCoefficients coeff =
-      PolarCoefficients::FromVW(plane.v1, plane.v2, plane.v3,
-                                plane.w1, plane.w2, plane.w3);
+      PolarCoefficients::From3VW(plane.v1, plane.v2, plane.v3,
+                                 plane.w1, plane.w2, plane.w3);
   bool visible = !coeff.IsValid();
 
   WndFrame *label = ((WndFrame *)dialog->FindByName(_T("InvalidLabel")));

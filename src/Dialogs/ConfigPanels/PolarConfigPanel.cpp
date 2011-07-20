@@ -139,7 +139,7 @@ UpdatePolarInvalidLabel()
   SaveFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, w2);
   SaveFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, w3);
 
-  PolarCoefficients coeff = PolarCoefficients::FromVW(v1, v2, v3, w1, w2, w3);
+  PolarCoefficients coeff = PolarCoefficients::From3VW(v1, v2, v3, w1, w2, w3);
   ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->set_visible(!coeff.IsValid());
 }
 

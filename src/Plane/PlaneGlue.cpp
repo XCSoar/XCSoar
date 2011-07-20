@@ -113,8 +113,8 @@ PlaneGlue::Synchronize(const Plane &plane, SETTINGS_COMPUTER &settings,
 {
   settings.contest_handicap = plane.handicap;
 
-  PolarCoefficients pc = PolarCoefficients::FromVW(plane.v1, plane.v2, plane.v3,
-                                                   plane.w1, plane.w2, plane.w3);
+  PolarCoefficients pc = PolarCoefficients::From3VW(plane.v1, plane.v2, plane.v3,
+                                                    plane.w1, plane.w2, plane.w3);
   if (!pc.IsValid())
     return;
 

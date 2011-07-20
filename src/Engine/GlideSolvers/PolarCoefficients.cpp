@@ -24,7 +24,7 @@ Copyright_License {
 #include "PolarCoefficients.hpp"
 
 PolarCoefficients
-PolarCoefficients::FromVW(fixed v1, fixed v2, fixed v3,
+PolarCoefficients::From3VW(fixed v1, fixed v2, fixed v3,
                           fixed w1, fixed w2, fixed w3)
 {
   PolarCoefficients pc;
