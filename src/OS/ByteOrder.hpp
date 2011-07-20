@@ -70,7 +70,7 @@ FromBE16(uint16_t value)
 #else
   return be16toh(value);
 #endif
-#elif defined(__i386__) || defined(__x86_64__)
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
   /* generic little-endian */
   return ByteSwap16(value);
 #else
@@ -89,7 +89,7 @@ FromBE32(uint32_t value)
 #else
   return be32toh(value);
 #endif
-#elif defined(__i386__) || defined(__x86_64__)
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
   /* generic little-endian */
   return ByteSwap32(value);
 #else
@@ -108,7 +108,7 @@ FromLE16(uint16_t value)
 #else
   return le16toh(value);
 #endif
-#elif defined(__i386__) || defined(__x86_64__)
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
   /* generic little-endian */
   return value;
 #else
@@ -127,7 +127,7 @@ FromLE32(uint32_t value)
 #else
   return le32toh(value);
 #endif
-#elif defined(__i386__) || defined(__x86_64__)
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
   /* generic little-endian */
   return value;
 #else
@@ -142,7 +142,7 @@ ToBE16(uint16_t value)
 {
 #ifdef HAVE_BYTESWAP_H
   return htobe16(value);
-#elif defined(__i386__) || defined(__x86_64__)
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
   /* generic little-endian */
   return ByteSwap16(value);
 #else
@@ -157,7 +157,7 @@ ToBE32(uint32_t value)
 {
 #ifdef HAVE_BYTESWAP_H
   return htobe32(value);
-#elif defined(__i386__) || defined(__x86_64__)
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
   /* generic little-endian */
   return ByteSwap32(value);
 #else
@@ -172,7 +172,7 @@ ToLE16(uint16_t value)
 {
 #ifdef HAVE_BYTESWAP_H
   return htole16(value);
-#elif defined(__i386__) || defined(__x86_64__)
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
   /* generic little-endian */
   return value;
 #else
@@ -187,7 +187,7 @@ ToLE32(uint32_t value)
 {
 #ifdef HAVE_BYTESWAP_H
   return htole32(value);
-#elif defined(__i386__) || defined(__x86_64__)
+#elif defined(__i386__) || defined(__x86_64__) || defined(__ARMEL__)
   /* generic little-endian */
   return value;
 #else
