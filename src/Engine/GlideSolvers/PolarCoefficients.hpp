@@ -34,8 +34,20 @@ struct PolarCoefficients
   PolarCoefficients(fixed _a, fixed _b, fixed _c):a(_a), b(_b), c(_c) {}
 
   bool IsValid() const;
+
+  /**
+   * Calculates the three polynomial polar coefficients from
+   * three pairs of horizontal vs. vertical speed.
+   */
   static PolarCoefficients From3VW(fixed v1, fixed v2, fixed v3,
                                   fixed w1, fixed w2, fixed w3);
+
+  /**
+   * Calculates the three polynomial polar coefficients from
+   * two pairs of horizontal vs. vertical speed. The first pair defines
+   * the point where the polar is flat (derivative equals zero)!
+   */
+  static PolarCoefficients From2VW(fixed v1, fixed v2, fixed w1, fixed w2);
 };
 
 #endif
