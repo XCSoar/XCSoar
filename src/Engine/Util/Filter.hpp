@@ -36,7 +36,6 @@ class Filter
   fixed b[2];
   fixed x[3];
   fixed y[2];
-  bool m_bessel;
   bool ok;
 
 public:
@@ -56,7 +55,7 @@ public:
    *
    * @return false if failed (cutoff_wavelength too low)
    */
-  bool design(const fixed cutoff_wavelength);
+  bool design(const fixed cutoff_wavelength, const bool bessel = true);
 
   /**
    * Resets filter to produce static value

@@ -25,20 +25,19 @@
 #include <assert.h>
 #include <stdio.h>
 
-Filter::Filter(const fixed cutoff_wavelength, const bool bessel) :
-  m_bessel(bessel)
+Filter::Filter(const fixed cutoff_wavelength, const bool bessel)
 {
-  design(cutoff_wavelength);
+  design(cutoff_wavelength, bessel);
 }
 
 bool
-Filter::design(const fixed cutoff_wavelength)
+Filter::design(const fixed cutoff_wavelength, const bool bessel)
 {
   static const fixed sample_freq = fixed_one;
   static const fixed n = fixed_one;
   fixed c, g, p;
 
-  if (m_bessel) {
+  if (bessel) {
     // Bessel
     c = pow((sqrt(pow(fixed_two, fixed_one / n) - fixed(0.75)) - fixed_half),
             -fixed_half) / sqrt(fixed(3));
