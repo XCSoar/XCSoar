@@ -48,6 +48,22 @@ struct GlideResult {
     RESULT_NOSOLUTION              /**< Solution not computed or algorithm failed */
   };
 
+  GeoVector Vector;            /**< Distance/bearing of task achievable */
+  fixed DistanceToFinal;       /**< Distance to go before final glide (m) */
+  Angle CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
+  fixed VOpt;                  /**< Optimal speed to fly in cruise (m/s) */
+  fixed HeightClimb;           /**< Height to be climbed (m) */
+  fixed HeightGlide;           /**< Height that will be glided (m) */
+  fixed TimeElapsed;           /**< Time to complete task (s) */
+  fixed TimeVirtual;           /**< Equivalent time to recover glided height (s) at MC */
+  fixed AltitudeDifference;    /**< Height above/below final glide for this task (m) */
+  fixed AltitudeRequired;      /**< Height required to solve this task (m) */
+  fixed EffectiveWindSpeed;    /**< (internal) */
+  Angle EffectiveWindAngle;    /**< (internal) */
+  fixed HeadWind;              /**< Head wind component (m/s) in cruise */
+  GlideResult_t Solution;      /**< Solution validity */
+  fixed MinHeight;             /**< Height (m above MSL) of end */
+
   /**
    * Construct an uninitialised object.
    */
@@ -156,22 +172,6 @@ struct GlideResult {
   friend std::ostream& operator<< (std::ostream& o, 
                                    const GlideResult& gl);
 #endif
-
-  GeoVector Vector;            /**< Distance/bearing of task achievable */
-  fixed DistanceToFinal;       /**< Distance to go before final glide (m) */
-  Angle CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
-  fixed VOpt;                  /**< Optimal speed to fly in cruise (m/s) */
-  fixed HeightClimb;           /**< Height to be climbed (m) */
-  fixed HeightGlide;           /**< Height that will be glided (m) */
-  fixed TimeElapsed;           /**< Time to complete task (s) */
-  fixed TimeVirtual;           /**< Equivalent time to recover glided height (s) at MC */
-  fixed AltitudeDifference;    /**< Height above/below final glide for this task (m) */
-  fixed AltitudeRequired;      /**< Height required to solve this task (m) */
-  fixed EffectiveWindSpeed;    /**< (internal) */
-  Angle EffectiveWindAngle;    /**< (internal) */
-  fixed HeadWind;              /**< Head wind component (m/s) in cruise */
-  GlideResult_t Solution;      /**< Solution validity */
-  fixed MinHeight;             /**< Height (m above MSL) of end */
 
 private:
   /**
