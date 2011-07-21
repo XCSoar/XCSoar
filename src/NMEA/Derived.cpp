@@ -26,6 +26,7 @@ Copyright_License {
 void
 TERRAIN_ALT_INFO::Clear()
 {
+  TerrainValid = false;
   TerrainWarning = false;
 
   AltitudeAGLValid = false;
