@@ -35,6 +35,11 @@ ElementStat::Reset()
   planned.Reset();
   travelled.Reset();
   pirker.Reset();
+
+  solution_planned.reset();
+  solution_travelled.reset();
+  solution_remaining.reset();
+  solution_mc0.reset();
 }
 
 void 
