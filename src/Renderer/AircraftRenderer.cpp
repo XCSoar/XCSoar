@@ -153,6 +153,7 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
   std::copy(Aircraft, Aircraft + AircraftPoints, aircraft);
   PolygonRotateShift(aircraft, AircraftPoints,
                      aircraft_pos.x, aircraft_pos.y, angle, true);
+  canvas.hollow_brush();
   canvas.select(look.aircraft_simple2_pen);
   canvas.polygon(aircraft, AircraftPoints);
   canvas.black_brush();

@@ -196,7 +196,7 @@ XShape::~XShape()
 #ifdef ENABLE_OPENGL
   // Note: index_count and indices share one buffer
   for (int i=0; i < THINNING_LEVELS; i++)
-    delete index_count[i];
+    delete[] index_count[i];
 #endif
 }
 

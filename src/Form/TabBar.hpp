@@ -51,6 +51,22 @@ public:
   typedef void (*PostShowNotifyCallback_t)(void);
   typedef void (*ReClickNotifyCallback_t)(void);
 
+  class OneTabButton;
+
+protected:
+  TabDisplay * theTabDisplay;
+  StaticArray<OneTabButton *, 32> buttons;
+  const unsigned int TabLineHeight;
+  bool flipOrientation;
+  /** if false (default) Client rectangle is adjacent to tabs
+   *  if true, Client rectangle overlaps tabs (for advanced drawing)
+   */
+  bool clientOverlapTabs;
+
+private:
+  // used to indicate initial state before tabs have changed
+  bool setting_up;
+
 public:
 /**
  *
@@ -65,6 +81,7 @@ public:
                 const WindowStyle style = WindowStyle(),
                 bool _flipOrientation = false,
                 bool _clientOverlapTabs = false);
+  ~TabBarControl();
 
 private:
 #define TabLineHeightInitUnscaled (unsigned)5
@@ -74,28 +91,6 @@ public:
  * OneTabButton class holds display and callbacks data for a single tab
  */
   class OneTabButton {
-  public:
-    OneTabButton(const TCHAR* _Caption,
-                bool _IsButtonOnly,
-                const Bitmap *_bmp,
-                PreHideNotifyCallback_t _PreHideFunction,
-                PreShowNotifyCallback_t _PreShowFunction,
-                PostShowNotifyCallback_t _PostShowFunction,
-                ReClickNotifyCallback_t _ReClickFunction):
-                  IsButtonOnly(_IsButtonOnly),
-                  bmp(_bmp),
-                  PreHideFunction(_PreHideFunction),
-                  PreShowFunction(_PreShowFunction),
-                  PostShowFunction(_PostShowFunction),
-                  ReClickFunction(_ReClickFunction)
-    {
-      _tcscpy(Caption, _Caption);
-      butSize.left = 0;
-      butSize.top = 0;
-      butSize.right = 0;
-      butSize.bottom = 0;
-    };
-
   public:
     TCHAR Caption[MAX_PATH];
     bool IsButtonOnly;
@@ -123,6 +118,28 @@ public:
      * Called if tab is clicked while it is the currently displayed tab
      */
     ReClickNotifyCallback_t ReClickFunction;
+
+  public:
+    OneTabButton(const TCHAR* _Caption,
+                bool _IsButtonOnly,
+                const Bitmap *_bmp,
+                PreHideNotifyCallback_t _PreHideFunction,
+                PreShowNotifyCallback_t _PreShowFunction,
+                PostShowNotifyCallback_t _PostShowFunction,
+                ReClickNotifyCallback_t _ReClickFunction):
+                  IsButtonOnly(_IsButtonOnly),
+                  bmp(_bmp),
+                  PreHideFunction(_PreHideFunction),
+                  PreShowFunction(_PreShowFunction),
+                  PostShowFunction(_PostShowFunction),
+                  ReClickFunction(_ReClickFunction)
+    {
+      _tcscpy(Caption, _Caption);
+      butSize.left = 0;
+      butSize.top = 0;
+      butSize.right = 0;
+      butSize.bottom = 0;
+    };
   };
 
 public:
@@ -165,21 +182,6 @@ public:
   bool GetButtonIsButtonOnly(unsigned i);
   unsigned GetTabLineHeight() {return TabLineHeight; }
   void SetClientOverlapTabs(bool value) {clientOverlapTabs = value; }
-
-protected:
-  TabDisplay * theTabDisplay;
-  StaticArray<OneTabButton *, 32> buttons;
-  const unsigned int TabLineHeight;
-  bool flipOrientation;
-  /** if false (default) Client rectangle is adjacent to tabs
-   *  if true, Client rectangle overlaps tabs (for advanced drawing)
-   */
-  bool clientOverlapTabs;
-
-private:
-  // used to indicate initial state before tabs have changed
-  bool setting_up;
-
 };
 
 /**
@@ -190,6 +192,13 @@ private:
  */
 class TabDisplay: PaintWindow
 {
+protected:
+  TabBarControl& theTabBar;
+  bool dragging; // tracks that mouse is down and captured
+  int downindex; // index of tab where mouse down occurred
+  bool dragoffbutton; // set by mouse_move
+  bool flipOrientation;
+
 public:
 /**
  *
@@ -207,13 +216,6 @@ public:
   void trigger_invalidate() { invalidate(); }
   unsigned GetTabHeight() { return this->get_height(); }
   unsigned GetTabWidth() { return this->get_width(); }
-
-protected:
-  TabBarControl& theTabBar;
-  bool dragging; // tracks that mouse is down and captured
-  int downindex; // index of tab where mouse down occurred
-  bool dragoffbutton; // set by mouse_move
-  bool flipOrientation;
 
 protected:
 /**

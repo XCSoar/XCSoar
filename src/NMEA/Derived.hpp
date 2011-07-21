@@ -56,6 +56,11 @@ struct TERRAIN_ALT_INFO
   bool TerrainValid;
 
   /**
+   * Does the attribute #TerrainBase have a valid value?
+   */
+  bool terrain_base_valid;
+
+  /**
    * Does the attribute #AltitudeAGL have a valid value?
    */
   bool AltitudeAGLValid;
@@ -74,6 +79,16 @@ struct TERRAIN_ALT_INFO
   GeoPoint TerrainWarningLocation;
 
   void Clear();
+
+  /**
+   * Returns the terrain base, and falls back for terrain altitude if
+   * the base is not known.
+   */
+  fixed GetTerrainBaseFallback() const {
+    return terrain_base_valid
+      ? TerrainBase
+      : TerrainAlt;
+  }
 };
 
 /**

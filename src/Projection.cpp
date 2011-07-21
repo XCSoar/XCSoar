@@ -28,9 +28,9 @@ Copyright_License {
 
 Projection::Projection() :
   GeoLocation(Angle::native(fixed_zero), Angle::native(fixed_zero)),
-  ScreenRotation(Angle::native(fixed_zero)),
-  scale(fixed_one)
+  ScreenRotation(Angle::native(fixed_zero))
 {
+  SetScale(fixed_one);
   ScreenOrigin.x = 0;
   ScreenOrigin.y = 0;
 }

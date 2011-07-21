@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-06-24 01:31+0200\n"
-"PO-Revision-Date: 2011-07-05 20:12+0000\n"
-"Last-Translator: Quentin Henriet <Unknown>\n"
+"PO-Revision-Date: 2011-07-17 16:16+0000\n"
+"Last-Translator: Adrien Ott <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-06 12:48+0000\n"
-"X-Generator: Launchpad (build 13376)\n"
+"X-Launchpad-Export-Date: 2011-07-20 18:52+0000\n"
+"X-Generator: Launchpad (build 13468)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:309
@@ -518,7 +518,7 @@ msgstr "Moyenne du dernier thermique"
 #: src/InfoBoxes/Content/Factory.cpp:125
 #, no-c-format
 msgid "TL Avg"
-msgstr ""
+msgstr "T Moy"
 
 #: src/InfoBoxes/Content/Factory.cpp:126
 #, no-c-format
@@ -552,7 +552,7 @@ msgstr "Durée dans le dernier thermique"
 #: src/InfoBoxes/Content/Factory.cpp:143
 #, no-c-format
 msgid "TL Time"
-msgstr ""
+msgstr "T Durée"
 
 #: src/InfoBoxes/Content/Factory.cpp:144
 #, no-c-format
@@ -627,7 +627,7 @@ msgstr "Prochaine altitude requise"
 #: src/InfoBoxes/Content/Factory.cpp:179
 #, no-c-format
 msgid "WP AltR"
-msgstr ""
+msgstr "WP AltR"
 
 #: src/InfoBoxes/Content/Factory.cpp:180
 #, no-c-format
@@ -687,7 +687,7 @@ msgstr "Altitude d'arrivée requise"
 #: src/InfoBoxes/Content/Factory.cpp:206
 #, no-c-format
 msgid "Fin AltR"
-msgstr ""
+msgstr "AltNec Arr"
 
 #: src/InfoBoxes/Content/Factory.cpp:207
 #, no-c-format
@@ -702,7 +702,7 @@ msgstr "Moyenne de tâche de vitesse"
 #: src/InfoBoxes/Content/Factory.cpp:215
 #, no-c-format
 msgid "VTask Avg"
-msgstr ""
+msgstr "Vmoy Circ"
 
 #: src/InfoBoxes/Content/Factory.cpp:216
 #, no-c-format
@@ -731,7 +731,7 @@ msgstr "Distance jusqu'à l'arrivée en passant par les points de virage"
 #: src/InfoBoxes/Content/Factory.cpp:232
 #, no-c-format
 msgid "Final L/D"
-msgstr ""
+msgstr "F.Nec Circ"
 
 #: src/InfoBoxes/Content/Factory.cpp:233
 #, no-c-format
@@ -749,6 +749,14 @@ msgid ""
 "finish by the excess energy height of the glider if its true airspeed is "
 "greater than the MacCready and best LD speeds."
 msgstr ""
+"Ceci est la finesse nécessaire pour finir le circuit, à partir de la "
+"distance restant à parcourir à la hauteur de sécurité d'arrivée. Une valeur "
+"négative signifie qu'il est nécessaire de monter pour terminer le circuit. "
+"Si la hauteur nécessaire est proche de zéro, alors, '---\" est affiché. "
+"Notez que ce calcul peut être optimiste parce qu'il réduit la hauteur "
+"nécessaire pour finir le circuit en prenant en compte l'énergie cinétique "
+"excessive si la vitesse air \"vraie\" est supérieur aux vitesses MacCready "
+"et finesse max."
 
 #: src/InfoBoxes/Content/Factory.cpp:241
 #, no-c-format
@@ -759,7 +767,7 @@ msgstr "Altitude du terrain."
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:8
 #, no-c-format
 msgid "H GND"
-msgstr ""
+msgstr "HduSol"
 
 #: src/InfoBoxes/Content/Factory.cpp:243
 #, no-c-format
@@ -767,16 +775,18 @@ msgid ""
 "This is the elevation of the terrain above mean sea level, obtained from the "
 "terrain file at the current GPS location."
 msgstr ""
+"Ceci est la hauteur du sol par rapport au niveau moyen des mers, obtenue à "
+"partir du fichier terrain et de la position GPS courante."
 
 #: src/InfoBoxes/Content/Factory.cpp:250
 #, no-c-format
 msgid "Thermal average"
-msgstr ""
+msgstr "Vario moyen"
 
 #: src/InfoBoxes/Content/Factory.cpp:251
 #, no-c-format
 msgid "TC Avg"
-msgstr ""
+msgstr "Vz Moy"
 
 #: src/InfoBoxes/Content/Factory.cpp:252
 #, no-c-format
@@ -795,7 +805,7 @@ msgstr "Gain du thermique."
 #: src/InfoBoxes/Content/Factory.cpp:260
 #, no-c-format
 msgid "TC Gain"
-msgstr ""
+msgstr "Gain Alt"
 
 #: src/InfoBoxes/Content/Factory.cpp:261
 #, no-c-format
@@ -815,6 +825,9 @@ msgid ""
 "active in simulation mode, pressing the up and down  arrows adjusts the "
 "track."
 msgstr ""
+"Route instantanée fournie par le GPS. Pour écans tactiles et PC seulement : "
+"si la fenêtre d'info est active en mode simulation, alors les flèches haut "
+"et bas ajustent la route."
 
 #: src/InfoBoxes/Content/Factory.cpp:277 src/InfoBoxes/Content/Factory.cpp:278
 #: src/InfoBoxes/Content/Factory.cpp:786 src/Dialogs/dlgFlarmTraffic.cpp:314
@@ -845,7 +858,7 @@ msgstr "Vitesse du vent"
 #: src/InfoBoxes/Content/Factory.cpp:287
 #, no-c-format
 msgid "Wind V"
-msgstr ""
+msgstr "V Vent"
 
 #: src/InfoBoxes/Content/Factory.cpp:288
 #, no-c-format
@@ -856,16 +869,21 @@ msgid ""
 "enter cursor key saves the wind value as the initial value when XCSoar next "
 "starts."
 msgstr ""
+"Vitesse du vent calculée par XCSoar. Pour écrans tactiles et PC seulement : "
+"si la fenêtre d'info est active, alors l'ajustement manuel est possible en "
+"utilisant les flèches haut/bas pour l'amplitude, et gauche/droite pour la "
+"direction. L'appui sur la touche entrée enregistre les paramètres de vent "
+"comme paramètres initiaux pour le démarrage d'XCSoar."
 
 #: src/InfoBoxes/Content/Factory.cpp:295
 #, no-c-format
 msgid "Wind bearing"
-msgstr ""
+msgstr "Direction du vent"
 
 #: src/InfoBoxes/Content/Factory.cpp:296
 #, no-c-format
 msgid "Wind B"
-msgstr ""
+msgstr "Dir Vent"
 
 #: src/InfoBoxes/Content/Factory.cpp:297
 #, no-c-format
@@ -874,62 +892,67 @@ msgid ""
 "possible by pressing the up/down cursor keys to adjust bearing when the "
 "InfoBox is active."
 msgstr ""
+"Direction du vent calculée par XCSoar. Pour écrans tactiles et PC "
+"seulement : si la fenêtre d'info est active, alors l'ajustement manuel est "
+"possible en utilisant les flèches haut/bas."
 
 #: src/InfoBoxes/Content/Factory.cpp:304
 #, no-c-format
 msgid "AA time"
-msgstr ""
+msgstr "Temps AA"
 
 #: src/InfoBoxes/Content/Factory.cpp:305
 #, no-c-format
 msgid "AA Time"
-msgstr ""
+msgstr "Temps AA"
 
 #: src/InfoBoxes/Content/Factory.cpp:306
 #, no-c-format
 msgid ""
 "Assigned Area Task time remaining. Goes red when time remaining has expired."
 msgstr ""
+"Temps restant sur l'AAT. Devient rouge lorsque le temps de l'épreuve est "
+"écoulé."
 
 #: src/InfoBoxes/Content/Factory.cpp:313
 #, no-c-format
 msgid "AA max. distance "
-msgstr ""
+msgstr "Distance max. AA "
 
 #: src/InfoBoxes/Content/Factory.cpp:314
 #, no-c-format
 msgid "AA Dmax"
-msgstr ""
+msgstr "Dmax AA"
 
 #: src/InfoBoxes/Content/Factory.cpp:315
 #, no-c-format
 msgid "Assigned Area Task maximum distance possible for remainder of task."
-msgstr ""
+msgstr "Distance maximale possible sur le reste de l'AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:322
 #, no-c-format
 msgid "AA min. distance"
-msgstr ""
+msgstr "Distance min. AA"
 
 #: src/InfoBoxes/Content/Factory.cpp:323
 #, no-c-format
 msgid "AA Dmin"
-msgstr ""
+msgstr "Dmin AA"
 
 #: src/InfoBoxes/Content/Factory.cpp:324
 #, no-c-format
 msgid "Assigned Area Task minimum distance possible for remainder of task."
-msgstr ""
+msgstr "Distance minimale possible sur le reste de l'AAT."
 
 #: src/InfoBoxes/Content/Factory.cpp:331
 #, no-c-format
 msgid "AA speed max. distance"
-msgstr ""
+msgstr "Vitesse max sur l'AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:332
 #, no-c-format
 msgid "AA Vmax"
-msgstr ""
+msgstr "Vmax AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:333
 #, no-c-format
@@ -937,16 +960,18 @@ msgid ""
 "Assigned Area Task average speed achievable if flying maximum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Vitesse moyenne maximale possible sur l'AAT (en parcourant la distance "
+"maximale restante dans le temps minimum de l'épreuve)."
 
 #: src/InfoBoxes/Content/Factory.cpp:340
 #, no-c-format
 msgid "AA speed min. distance"
-msgstr ""
+msgstr "Vitesse min. de l'AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:341
 #, no-c-format
 msgid "AA Vmin"
-msgstr ""
+msgstr "Vmin AAT"
 
 #: src/InfoBoxes/Content/Factory.cpp:342
 #, no-c-format
@@ -954,16 +979,18 @@ msgid ""
 "Assigned Area Task average speed achievable if flying minimum possible "
 "distance remaining in minimum AAT time."
 msgstr ""
+"Vitesse moyenne minimale possible de l'AAT (en parcourant la distance "
+"minimale restante dans le temps minimum de l'épreuve)."
 
 #: src/InfoBoxes/Content/Factory.cpp:349
 #, no-c-format
 msgid "Airspeed IAS"
-msgstr ""
+msgstr "Vitesse air"
 
 #: src/InfoBoxes/Content/Factory.cpp:350
 #, no-c-format
 msgid "V IAS"
-msgstr ""
+msgstr "V Air"
 
 #: src/InfoBoxes/Content/Factory.cpp:351
 #, no-c-format
@@ -973,13 +1000,13 @@ msgstr "Vitesse air indiquée par un vario externe intelligent."
 #: src/InfoBoxes/Content/Factory.cpp:358
 #, no-c-format
 msgid "Height barometric"
-msgstr ""
+msgstr "Altitude barométrique"
 
 #: src/InfoBoxes/Content/Factory.cpp:359
 #: Data/Dialogs/Infobox/pnlInfoBoxAltitudeInfo.xml:5
 #, no-c-format
 msgid "H Baro"
-msgstr ""
+msgstr "Alt Baro"
 
 #: src/InfoBoxes/Content/Factory.cpp:360
 #, no-c-format
@@ -987,6 +1014,8 @@ msgid ""
 "This is the barometric altitude obtained from a GPS equipped with pressure "
 "sensor, or a supported external intelligent vario."
 msgstr ""
+"Altitude barométrique obtenue à partir d'un récepteur GPS équippé d'une "
+"capsule barométrique, ou un variomètre intelligent externe."
 
 #: src/InfoBoxes/Content/Factory.cpp:367
 #, no-c-format

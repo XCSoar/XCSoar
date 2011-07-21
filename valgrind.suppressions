@@ -1,24 +1,8 @@
 {
    <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:_XlcDefaultMapModifiers
-   fun:XSetLocaleModifiers
-}
-{
-   <insert_a_suppression_name_here>
    Memcheck:Overlap
    fun:memcpy
    fun:_ZNSt4pairI8Waypoint11GlideResultEaSERKS2_
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:_XlcCreateLC
-   fun:_XlcDefaultLoader
-   fun:_XOpenLC
-   fun:_XrmInitParseInfo
 }
 
 {
@@ -30,230 +14,169 @@
 
 {
    <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:calloc
-   fun:g_malloc0
-   fun:ORBit_skel_class_register
-}
-
-{
-   g_get_any_init_do
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_strdup
-   fun:g_get_any_init_do
-}
-
-{
-   g_get_any_init_do
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_strjoinv
-   fun:g_get_any_init_do
-}
-
-{
-   g_get_language_names
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_strdup
-   fun:g_get_language_names
-}
-
-{
-   g_get_language_names
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_strconcat
-   fun:_g_compute_locale_variants
-   fun:g_get_language_names
-}
-
-{
-   g_get_language_names
-   Memcheck:Leak
-   fun:memalign
-   fun:posix_memalign
-   fun:slab_allocator_alloc_chunk
-   fun:g_slice_alloc
-   fun:g_hash_table_new_full
-   fun:g_get_language_names
-}
-
-{
-   g_get_language_names
-   Memcheck:Leak
-   fun:calloc
-   fun:g_malloc0
-   fun:g_get_language_names
-}
-
-{
-   g_get_language_names
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_get_language_names
-}
-
-{
-   g_thread_init_glib
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_private_new_posix_impl
-   fun:_g_messages_thread_init_nomessage
-   fun:g_thread_init_glib
-}
-
-{
-   g_thread_init_glib
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_private_new_posix_impl
-   fun:_g_slice_thread_init_nomessage
-   fun:g_thread_init_glib
-}
-
-{
-   g_slice_init_nomessage
-   Memcheck:Leak
-   fun:calloc
-   fun:g_malloc0
-   fun:g_slice_init_nomessage
-}
-
-{
-   g_thread_init_glib
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_private_new_posix_impl
-   fun:g_thread_init_glib
-}
-
-{
-   g_thread_init_glib
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_mutex_new_posix_impl
-   fun:_g_messages_thread_init_nomessage
-   fun:g_thread_init_glib
-}
-
-{
-   g_thread_init_glib
-   Memcheck:Leak
-   fun:calloc
-   fun:g_malloc0
-   fun:g_thread_self
-   fun:g_thread_init_glib
-}
-
-{
-   g_thread_init_glib
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_mutex_new_posix_impl
-   fun:_g_slice_thread_init_nomessage
-   fun:g_thread_init_glib
-}
-
-{
-   g_thread_init_glib
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_cond_new_posix_impl
-   fun:g_thread_init_glib
-}
-
-{
-   g_thread_init_glib
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_mutex_new_posix_impl
-   fun:g_thread_init_glib
-}
-
-{
-   g_thread_init_glib
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_mutex_new_posix_impl
-   fun:_g_mem_thread_init_noprivate_nomessage
-   fun:g_thread_init_glib
-}
-
-{
-   g_quark_from_static_string
-   Memcheck:Leak
-   fun:calloc
-   fun:g_malloc0
-   fun:g_hash_table_new_full
-   fun:g_quark_from_static_string
-}
-
-{
-   g_quark_from_static_string
-   Memcheck:Leak
-   fun:malloc
-   fun:realloc
-   fun:g_realloc
-   fun:g_quark_from_static_string
-}
-
-{
-   g_quark_from_string
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_strdup
-   fun:g_quark_from_string
-}
-
-{
-   g_quark_from_string
-   Memcheck:Leak
-   fun:calloc
-   fun:g_malloc0
-   fun:g_hash_table_new_full
-   fun:g_quark_from_string
-}
-
-{
-   g_quark_from_string
-   Memcheck:Leak
-   fun:malloc
-   fun:realloc
-   fun:g_realloc
-   fun:g_quark_from_string
-}
-
-{
-   g_quark_from_string
-   Memcheck:Leak
-   fun:malloc
-   fun:g_malloc
-   fun:g_slice_alloc
-   fun:g_hash_table_new_full
-   fun:g_quark_from_string
-}
-
-{
-   <insert_a_suppression_name_here>
    Memcheck:Cond
    fun:inflateReset2
    fun:inflateInit2_
    fun:zzip_inflate_init
    fun:zzip_file_open
+}
+
+#
+# dlopen suppressions
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:?alloc
+   ...
+   fun:do_dlopen
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:?alloc
+   ...
+   fun:dlopen*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:dlclose
+}
+
+#
+# libSDL suppressions
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Cond
+   obj:*/libSDL-*.so*
+   obj:*/libSDL-*.so*
+   obj:*/libSDL-*.so*
+   fun:SDL_PumpEvents
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   fun:SDL_CreateMutex
+   obj:*/libSDL-*.so*
+   fun:SDL_CreateThread
+   obj:*/libSDL-*.so*
+   obj:*/libSDL-*.so*
+   fun:SDL_InitSubSystem
+   fun:SDL_Init
+}
+
+#
+# libGL suppressions
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XextCreateExtension
+   obj:*/libGL.so*
+}
+
+#
+# libX11 suppressions
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XGetVisualInfo
+   obj:*/libGL.so*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XrmInternalStringToQuark
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:_XOpenLC
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:XrmGetStringDatabase
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XimOpenIM
+   ...
+   fun:SDL_VideoInit
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:*alloc
+   ...
+   fun:XSetLocaleModifiers
+   obj:*/libSDL-*.so*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:XCreateIC
+   ...
+   fun:SDL_*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   ...
+   fun:InitDefaults
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:InitDefaults
+}
+
+#
+# libXext
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XextCreateExtension
+   fun:_xgeFindDisplay
+   fun:xgeExtRegister
+   fun:XextAddDisplay
+   fun:XShmQueryExtension
 }
