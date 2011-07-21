@@ -28,6 +28,10 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 
 class TabbedControl : public ContainerWindow {
+protected:
+  unsigned current;
+  StaticArray<Window *, 32> tabs;
+
 public:
   TabbedControl(ContainerWindow &parent,
                 int x, int y, unsigned width, unsigned height,
@@ -45,10 +49,6 @@ public:
 
 protected:
   virtual bool on_resize(unsigned width, unsigned height);
-
-protected:
-  unsigned current;
-  StaticArray<Window *, 32> tabs;
 };
 
 #endif
