@@ -52,6 +52,10 @@ TabBarControl::TabBarControl(ContainerWindow &_parent,
 TabBarControl::~TabBarControl()
 {
   delete theTabDisplay;
+
+  StaticArray<OneTabButton *, 32>::const_iterator i, end = buttons.end();
+  for (i = buttons.begin(); i != end; ++i)
+    delete *i;
 }
 
 bool
