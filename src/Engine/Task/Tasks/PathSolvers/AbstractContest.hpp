@@ -23,12 +23,12 @@
 #ifndef ABSTRACT_CONTEST_HPP
 #define ABSTRACT_CONTEST_HPP
 
-#include "Navigation/TracePoint.hpp"
 #include "ScanTaskPoint.hpp"
 #include "Math/fixed.hpp"
 #include "Task/TaskStats/ContestResult.hpp"
 
 class Trace;
+class TracePoint;
 
 /**
  * Abstract class for contest searches

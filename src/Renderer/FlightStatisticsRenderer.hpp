@@ -25,7 +25,6 @@ Copyright_License {
 #define FLIGHT_STATISTICS_RENDERER_HPP
 
 #include "Math/leastsqs.h"
-#include "Navigation/TracePoint.hpp"
 #include "FlightStatistics.hpp"
 #include "Screen/Point.hpp"
 
@@ -34,6 +33,7 @@ Copyright_License {
 struct NMEA_INFO;
 struct DERIVED_INFO;
 class ClimbHistory;
+class TracePointVector;
 struct SETTINGS_COMPUTER;
 struct SETTINGS_MAP;
 class Canvas;

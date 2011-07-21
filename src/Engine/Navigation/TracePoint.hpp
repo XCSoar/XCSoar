@@ -165,7 +165,8 @@ private:
   }
 };
 
-typedef std::vector<TracePoint> TracePointVector;
+class TracePointVector : public std::vector<TracePoint> {
+};
 
 class TaskProjection;
 

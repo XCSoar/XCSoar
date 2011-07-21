@@ -22,12 +22,12 @@ Copyright_License {
 */
 
 #include "WindowProjection.hpp"
-#include "Engine/Navigation/TracePoint.hpp"
 
 class TaskManager;
 class OrderedTask;
 class OrderedTaskPoint;
 class ContestTraceVector;
+class TracePointVector;
 
 /**
  * Utility class to determine projection for a chart from task data,

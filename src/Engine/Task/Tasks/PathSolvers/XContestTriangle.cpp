@@ -21,7 +21,6 @@
  */
 
 #include "XContestTriangle.hpp"
-#include "Navigation/TracePoint.hpp"
 
 XContestTriangle::XContestTriangle(const Trace &_trace,
                                    const unsigned &_handicap,
