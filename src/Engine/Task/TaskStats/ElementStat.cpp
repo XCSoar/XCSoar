@@ -46,8 +46,12 @@ ElementStat::set_times(const fixed ts,
   else
     TimeElapsed = max(state.Time - fixed(ts), fixed_zero);
 
-  TimeRemaining = solution_remaining.TimeElapsed;
-  TimePlanned = TimeElapsed+TimeRemaining;
+  if (solution_remaining.defined()) {
+    TimeRemaining = solution_remaining.TimeElapsed;
+    TimePlanned = TimeElapsed+TimeRemaining;
+  } else {
+    TimeRemaining = TimePlanned = fixed_zero;
+  }
 }
 
 void
