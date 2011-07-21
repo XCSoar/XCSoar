@@ -24,9 +24,8 @@
 
 #include "Math/fixed.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
-#include "Task/TaskStats/ContestResult.hpp"
 #include "GlideSolvers/GlideResult.hpp"
-#include "Route/AirspaceRoute.hpp"
+#include "Route/RoutePlanner.hpp"
 #include "TaskSummary.hpp"
 
 #ifdef DO_PRINT

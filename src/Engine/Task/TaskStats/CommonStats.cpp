@@ -1,5 +1,4 @@
 #include "CommonStats.hpp"
-#include "Waypoint/Waypoint.hpp"
 
 CommonStats::CommonStats():
   vector_home(fixed_zero)
