@@ -73,6 +73,11 @@ StartPoint::find_best_start(const AIRCRAFT_STATE &state,
                             const TaskProjection &projection)
 {
   class StartPointBestStart: public ZeroFinder {
+    const StartPoint& m_start;
+    const GeoPoint m_loc_from;
+    const GeoPoint m_loc_to;
+    fixed p_offset;
+
   public:
     StartPointBestStart(const StartPoint& ts,
                         const GeoPoint &loc_from,
@@ -109,10 +114,6 @@ StartPoint::find_best_start(const AIRCRAFT_STATE &state,
       pp = fmod(pp,fixed_one);
       return m_start.get_boundary_parametric(pp);
     }
-    const StartPoint& m_start;
-    const GeoPoint m_loc_from;
-    const GeoPoint m_loc_to;
-    fixed p_offset;
   };
 
   StartPointBestStart solver(*this, state.Location,
