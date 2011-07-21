@@ -13,6 +13,11 @@ struct GlideResult;
  */
 class TaskVario
 {
+  fixed value;
+
+  DiffFilter df;
+  Filter v_lpf;
+
 public:
   /**
    * Constructor
@@ -42,12 +47,6 @@ public:
  * @param solution Element
  */
   void reset(const GlideResult& solution);
-
-private:
-  fixed value;
-
-  DiffFilter df;
-  Filter v_lpf;
 };
 
 #endif

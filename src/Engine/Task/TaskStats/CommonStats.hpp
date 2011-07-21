@@ -41,11 +41,6 @@
 class CommonStats 
 {
 public:
-  /**
-   * Constructor, initialises all to zero
-   */
-  CommonStats();
-  
   /** Whether the task found landable reachable waypoints (aliases abort) */
   bool landable_reachable;
   /** Whether the task is started (aliases ordered task) */
@@ -117,6 +112,11 @@ public:
 
   /** Summary of ordered task progress */
   TaskSummary ordered_summary;
+
+  /**
+   * Constructor, initialises all to zero
+   */
+  CommonStats();
 
   /**
    * Reset the stats as if never flown

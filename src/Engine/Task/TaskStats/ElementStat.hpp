@@ -38,12 +38,6 @@ struct AIRCRAFT_STATE;
 class ElementStat
 {
 public:
-/** 
- * Constructor.  Initialises all to zero.
- * 
- */
-  ElementStat();
-
   fixed TimeStarted; /**< Time (s) this element was started */
   fixed TimeElapsed; /**< Time (s) since element was started */
   fixed TimeRemaining; /**< Time (s) to element completion */
@@ -62,6 +56,12 @@ public:
   GlideResult solution_mc0; /**< Glide solution for remaining element, MC=0 */
 
   TaskVario vario; /**< Rate of change of altitude difference (m/s) */ 
+
+/** 
+ * Constructor.  Initialises all to zero.
+ * 
+ */
+  ElementStat();
 
 /** 
  * Calculate element times
@@ -98,6 +98,9 @@ public:
   DistanceStatComputer travelled;
   DistanceStatComputer pirker;
 
+private:
+  bool initialised;
+
 public:
   ElementStatComputer(ElementStat &_data);
 
@@ -114,9 +117,6 @@ public:
    * of incremental speeds.
    */
   void reset();
-
-private:
-  bool initialised;
 };
 
 

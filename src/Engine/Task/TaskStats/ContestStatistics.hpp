@@ -25,6 +25,8 @@
 #include "ContestResult.hpp"
 
 struct ContestStatistics {
+  ContestResult result[3];
+  ContestTraceVector solution[3];
 
   void reset() {
     for (unsigned i = 0; i < 3; ++i) {
@@ -70,9 +72,6 @@ struct ContestStatistics {
     // Return index to the best solution
     return i_best;
   }
-
-  ContestResult result[3];
-  ContestTraceVector solution[3];
 };
 
 #endif
