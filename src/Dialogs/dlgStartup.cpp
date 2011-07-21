@@ -91,11 +91,13 @@ dlgStartupShowModal()
 
   if (dfe->GetNumFiles() <= 2) {
     delete wf;
+    delete logo;
     return true;
   }
 
   if (wf->ShowModal() != mrOK) {
     delete wf;
+    delete logo;
     return false;
   }
 
