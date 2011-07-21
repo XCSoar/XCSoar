@@ -25,7 +25,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "Interface.hpp"
-#include "HorizonRenderer.hpp"
+#include "Renderer/HorizonRenderer.hpp"
 #include "Hardware/Battery.hpp"
 #include "OS/SystemLoad.hpp"
 #include "OS/MemInfo.hpp"

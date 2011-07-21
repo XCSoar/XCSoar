@@ -41,8 +41,8 @@ Copyright_License {
 #include "StringUtil.hpp"
 #include "Compiler.h"
 #include "Units/UnitsFormatter.hpp"
-#include "FlightStatisticsRenderer.hpp"
-#include "ThermalBandRenderer.hpp"
+#include "Renderer/FlightStatisticsRenderer.hpp"
+#include "Renderer/ThermalBandRenderer.hpp"
 #include "GestureManager.hpp"
 
 #ifdef ENABLE_OPENGL

@@ -210,9 +210,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/RadioFrequency.cpp \
 	\
 	$(SRC)/Engine/Navigation/TraceHistory.cpp \
-	$(SRC)/TraceHistoryRenderer.cpp \
-	$(SRC)/ThermalBandRenderer.cpp \
-	$(SRC)/TaskProgressRenderer.cpp \
+	$(SRC)/Renderer/TraceHistoryRenderer.cpp \
+	$(SRC)/Renderer/ThermalBandRenderer.cpp \
+	$(SRC)/Renderer/TaskProgressRenderer.cpp \
 	\
 	$(SRC)/Poco/RWLock.cpp \
 	\
@@ -378,7 +378,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindow/GlueMapWindowTarget.cpp \
 	$(SRC)/MapWindow/GlueMapWindowDisplayMode.cpp \
 	$(SRC)/GestureManager.cpp \
-	$(SRC)/HorizonRenderer.cpp \
+	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/DrawThread.cpp \
 	\
 	$(SRC)/BasicComputer.cpp \
@@ -413,7 +413,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Marks.cpp \
 	\
 	$(SRC)/FlightStatistics.cpp \
-	$(SRC)/FlightStatisticsRenderer.cpp \
+	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \
 	\
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \

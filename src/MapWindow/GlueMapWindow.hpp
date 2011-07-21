@@ -27,7 +27,7 @@ Copyright_License {
 #include "MapWindow.hpp"
 #include "PeriodClock.hpp"
 #include "GestureManager.hpp"
-#include "ThermalBandRenderer.hpp"
+#include "Renderer/ThermalBandRenderer.hpp"
 #include "DisplayMode.hpp"
 
 struct Look;

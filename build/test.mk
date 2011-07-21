@@ -1757,8 +1757,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/CrossSection/CrossSectionWindow.cpp \
 	$(SRC)/FlightStatistics.cpp \
-	$(SRC)/FlightStatisticsRenderer.cpp \
-	$(SRC)/ThermalBandRenderer.cpp \
+	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \
+	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/AutoQNH.cpp \
 	$(SRC)/BasicComputer.cpp \
