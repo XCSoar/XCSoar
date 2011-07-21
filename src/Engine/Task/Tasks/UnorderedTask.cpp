@@ -101,7 +101,7 @@ UnorderedTask::glide_solution_planned(const AIRCRAFT_STATE &state,
                                       const fixed total_t_elapsed,
                                       const fixed leg_t_elapsed)
 {
-  GlideResult res = stats.total.solution_remaining;
+  const GlideResult &res = stats.total.solution_remaining;
   total = res;
   leg = res;
   total_remaining_effective.set_distance(res.Vector.Distance);
