@@ -22,7 +22,7 @@
 #ifndef TASK_SUMMARY_HPP
 #define TASK_SUMMARY_HPP
 
-#include <vector>
+#include "Util/StaticArray.hpp"
 #include "Math/fixed.hpp"
 
 struct TaskSummaryPoint {
@@ -40,7 +40,7 @@ struct TaskSummary {
   /** Index of active taskpoint */
   unsigned active;
 
-  typedef std::vector< TaskSummaryPoint> TaskSummaryPointVector;
+  typedef StaticArray<TaskSummaryPoint, 16u> TaskSummaryPointVector;
 
   /** Vector of turnpoint data */
   TaskSummaryPointVector pts;
