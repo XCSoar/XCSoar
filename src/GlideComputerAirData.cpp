@@ -908,13 +908,15 @@ GlideComputerAirData::LastThermalStats()
   if (!positive(ThermalGain))
     return;
 
+  bool was_defined = calculated.last_thermal.IsDefined();
+
   calculated.last_thermal.start_time = calculated.ClimbStartTime;
   calculated.last_thermal.end_time = calculated.CruiseStartTime;
   calculated.last_thermal.gain = ThermalGain;
   calculated.last_thermal.duration = ThermalTime;
   calculated.last_thermal.CalculateLiftRate();
 
-  if (calculated.LastThermalAverageSmooth == fixed_zero)
+  if (!was_defined)
     calculated.LastThermalAverageSmooth =
         calculated.last_thermal.lift_rate;
   else
