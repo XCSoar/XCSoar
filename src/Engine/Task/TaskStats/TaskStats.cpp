@@ -30,6 +30,9 @@ TaskStats::TaskStats()
 void
 TaskStats::reset()
 {
+  total.Reset();
+  current_leg.Reset();
+
   Time = fixed_zero;
   glide_required = fixed_zero;
   cruise_efficiency = fixed_one;

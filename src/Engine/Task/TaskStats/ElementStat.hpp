@@ -57,11 +57,10 @@ public:
 
   TaskVario vario; /**< Rate of change of altitude difference (m/s) */ 
 
-/** 
- * Constructor.  Initialises all to zero.
- * 
- */
-  ElementStat();
+  /**
+   * Resets all to zero.
+   */
+  void Reset();
 
 /** 
  * Calculate element times

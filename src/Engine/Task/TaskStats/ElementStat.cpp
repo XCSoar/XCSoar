@@ -23,20 +23,19 @@
 #include "Navigation/Aircraft.hpp"
 #include <algorithm>
 
-ElementStat::ElementStat():
-  TimeStarted(-1.0),
-  TimeElapsed(0.0),
-  TimeRemaining(0.0),
-  TimePlanned(0.0),
-  gradient(0.0)
+void
+ElementStat::Reset()
 {
+  TimeStarted = fixed_minus_one;
+  TimeElapsed = TimeRemaining = TimePlanned = fixed_zero;
+  gradient = fixed_zero;
+
   remaining_effective.Reset();
   remaining.Reset();
   planned.Reset();
   travelled.Reset();
   pirker.Reset();
 }
-
 
 void 
 ElementStat::set_times(const fixed ts,
