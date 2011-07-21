@@ -65,6 +65,7 @@ public:
                 const WindowStyle style = WindowStyle(),
                 bool _flipOrientation = false,
                 bool _clientOverlapTabs = false);
+  ~TabBarControl();
 
 private:
 #define TabLineHeightInitUnscaled (unsigned)5

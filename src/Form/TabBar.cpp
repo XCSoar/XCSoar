@@ -49,6 +49,11 @@ TabBarControl::TabBarControl(ContainerWindow &_parent,
   theTabDisplay = new TabDisplay(*this, x, y, _width, _height, flipOrientation);
 }
 
+TabBarControl::~TabBarControl()
+{
+  delete theTabDisplay;
+}
+
 bool
 TabBarControl::GetButtonIsButtonOnly(unsigned i)
 {

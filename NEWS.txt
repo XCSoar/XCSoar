@@ -3,6 +3,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.1.4 - not yet released
+* memory leaks fixed
 * map
   - fix for the aircraft symbol
 * Android
