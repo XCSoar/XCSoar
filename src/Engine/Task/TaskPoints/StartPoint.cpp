@@ -94,8 +94,9 @@ StartPoint::find_best_start(const AIRCRAFT_STATE &state,
     GeoPoint solve() {
       // find approx solution first, being the offset for the local function
       // minimiser search
+      p_offset = fixed_zero;
       fixed f_best= f(fixed_zero);
-      for (p_offset=fixed_zero; p_offset< fixed_one; p_offset+= fixed(0.25)) {
+      for (; p_offset < fixed_one; p_offset += fixed(0.25)) {
         fixed ff = f(fixed_zero);
         if (ff< f_best) {
           f_best = ff;
