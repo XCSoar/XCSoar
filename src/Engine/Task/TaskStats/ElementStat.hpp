@@ -35,9 +35,7 @@ struct AIRCRAFT_STATE;
  * Common task element statistics.  Used because we separately want to
  * track overall task statistics as well as that of the current leg.
  */
-class ElementStat
-{
-public:
+struct ElementStat {
   fixed TimeStarted; /**< Time (s) this element was started */
   fixed TimeElapsed; /**< Time (s) since element was started */
   fixed TimeRemaining; /**< Time (s) to element completion */

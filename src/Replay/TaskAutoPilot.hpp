@@ -74,7 +74,7 @@ protected:
 };
 
 class GlidePolar;
-class ElementStat;
+struct ElementStat;
 
 class TaskAccessor {
 public:
