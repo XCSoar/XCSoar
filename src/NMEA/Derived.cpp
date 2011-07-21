@@ -68,6 +68,7 @@ DERIVED_INFO::Reset()
   wind_available.Clear();
   task_stats.reset();
   common_stats.reset();
+  contest_stats.reset();
 
   flight.flying_state_reset();
   thermal_band.Clear();
