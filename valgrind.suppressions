@@ -1,24 +1,8 @@
 {
    <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:_XlcDefaultMapModifiers
-   fun:XSetLocaleModifiers
-}
-{
-   <insert_a_suppression_name_here>
    Memcheck:Overlap
    fun:memcpy
    fun:_ZNSt4pairI8Waypoint11GlideResultEaSERKS2_
-}
-{
-   <insert_a_suppression_name_here>
-   Memcheck:Leak
-   fun:malloc
-   fun:_XlcCreateLC
-   fun:_XlcDefaultLoader
-   fun:_XOpenLC
-   fun:_XrmInitParseInfo
 }
 
 {
@@ -256,4 +240,164 @@
    fun:inflateInit2_
    fun:zzip_inflate_init
    fun:zzip_file_open
+}
+
+#
+# dlopen suppressions
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:?alloc
+   ...
+   fun:do_dlopen
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:?alloc
+   ...
+   fun:dlopen*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:dlclose
+}
+
+#
+# libSDL suppressions
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Cond
+   obj:*/libSDL-*.so*
+   obj:*/libSDL-*.so*
+   obj:*/libSDL-*.so*
+   fun:SDL_PumpEvents
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:calloc
+   fun:SDL_CreateMutex
+   obj:*/libSDL-*.so*
+   fun:SDL_CreateThread
+   obj:*/libSDL-*.so*
+   obj:*/libSDL-*.so*
+   fun:SDL_InitSubSystem
+   fun:SDL_Init
+}
+
+#
+# libGL suppressions
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XextCreateExtension
+   obj:*/libGL.so*
+}
+
+#
+# libX11 suppressions
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XGetVisualInfo
+   obj:*/libGL.so*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XrmInternalStringToQuark
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:_XOpenLC
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:XrmGetStringDatabase
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:_XimOpenIM
+   ...
+   fun:SDL_VideoInit
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:*alloc
+   ...
+   fun:XSetLocaleModifiers
+   obj:*/libSDL-*.so*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:XCreateIC
+   ...
+   fun:SDL_*
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:realloc
+   ...
+   fun:InitDefaults
+}
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   ...
+   fun:InitDefaults
+}
+
+#
+# libXext
+#
+
+{
+   <insert_a_suppression_name_here>
+   Memcheck:Leak
+   fun:malloc
+   fun:XextCreateExtension
+   fun:_xgeFindDisplay
+   fun:xgeExtRegister
+   fun:XextAddDisplay
+   fun:XShmQueryExtension
 }
