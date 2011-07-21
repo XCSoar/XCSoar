@@ -50,8 +50,6 @@ Copyright_License {
 #include "Renderer/RenderObservationZone.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Screen/Chart.hpp"
-#include "Task/Visitors/TaskVisitor.hpp"
-#include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Appearance.hpp"
 
 #include <algorithm>
@@ -61,47 +59,27 @@ Copyright_License {
 using std::min;
 using std::max;
 
-/**
- * Utility class to draw task leg entry lines
- */
-class ChartLegHelper:
-  public TaskPointConstVisitor
+static bool
+IsTaskLegVisible(const OrderedTaskPoint &tp)
 {
-public:
-  ChartLegHelper(Chart& chart, const fixed start_time):
-    m_chart(chart),
-    m_start_time(start_time)
-    {
-    };
+  switch (tp.GetType()) {
+  case TaskPoint::START:
+    return tp.has_exited();
 
-  void Visit(const UnorderedTaskPoint& tp) {}
-  void Visit(const StartPoint& tp) {
-    if (tp.has_exited())
-      draw(tp);
-  }
-  void Visit(const FinishPoint& tp) {
-    if (tp.has_entered())
-      draw(tp);
-  }
-  void Visit(const AATPoint& tp) {
-    if (tp.has_entered())
-      draw(tp);
-  }
-  void Visit(const ASTPoint& tp) {
-    if (tp.has_entered())
-      draw(tp);
+  case TaskPoint::FINISH:
+  case TaskPoint::AAT:
+  case TaskPoint::AST:
+    return tp.has_entered();
+
+  case TaskPoint::UNORDERED:
+  case TaskPoint::ROUTE:
+    break;
   }
 
-private:
-  void draw(const OrderedTaskPoint& tp) {
-    fixed x = (tp.get_state_entered().Time - m_start_time) / 3600;
-    if (x >= fixed_zero)
-      m_chart.DrawLine(x, m_chart.getYmin(), x, m_chart.getYmax(),
-                       ChartLook::STYLE_REDTHICK);
-  }
-  Chart& m_chart;
-  const fixed m_start_time;
-};
+  /* not reachable */
+  assert(false);
+  return false;
+}
 
 static void DrawLegs(Chart& chart,
                      const TaskManager &task_manager,
@@ -117,9 +95,18 @@ static void DrawLegs(Chart& chart,
     : calculated.flight.TakeOffTime;
 
   const OrderedTask &task = task_manager.get_ordered_task();
+  for (unsigned i = 0, n = task.task_size(); i < n; ++i) {
+    const OrderedTaskPoint &tp = *task.getTaskPoint(i);
+    if (!IsTaskLegVisible(tp))
+      continue;
 
-  ChartLegHelper leg_visitor(chart, start_time);
-  task.tp_CAccept(leg_visitor);
+    fixed x = tp.get_state_entered().Time - start_time;
+    if (!negative(x)) {
+      x /= 3600;
+      chart.DrawLine(x, chart.getYmin(), x, chart.getYmax(),
+                     ChartLook::STYLE_REDTHICK);
+    }
+  }
 }
 
 void
