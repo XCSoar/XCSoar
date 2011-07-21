@@ -161,6 +161,13 @@ GlideComputerTask::TerrainWarning()
 void
 GlideComputerTask::Reach()
 {
+  if (!Calculated().TerrainValid) {
+    /* without valid terrain information, we cannot calculate
+       reachabilty, so let's skip that step completely */
+    SetCalculated().terrain_base_valid = false;
+    return;
+  }
+
   const bool do_solve = (SettingsComputer().route_planner.reach_enabled() &&
                          terrain != NULL);
 
