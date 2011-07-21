@@ -130,14 +130,12 @@ SaveFormToPolar(PolarInfo &polar)
 static void
 UpdatePolarInvalidLabel()
 {
-  fixed v1, v2, v3;
-  fixed w1, w2, w3;
-  SaveFormProperty(*wf, _T("prpPolarV1"), ugHorizontalSpeed, v1);
-  SaveFormProperty(*wf, _T("prpPolarV2"), ugHorizontalSpeed, v2);
-  SaveFormProperty(*wf, _T("prpPolarV3"), ugHorizontalSpeed, v3);
-  SaveFormProperty(*wf, _T("prpPolarW1"), ugVerticalSpeed, w1);
-  SaveFormProperty(*wf, _T("prpPolarW2"), ugVerticalSpeed, w2);
-  SaveFormProperty(*wf, _T("prpPolarW3"), ugVerticalSpeed, w3);
+  fixed v1 = GetFormValueFixed(*wf, _T("prpPolarV1"));
+  fixed v2 = GetFormValueFixed(*wf, _T("prpPolarV2"));
+  fixed v3 = GetFormValueFixed(*wf, _T("prpPolarV3"));
+  fixed w1 = GetFormValueFixed(*wf, _T("prpPolarW1"));
+  fixed w2 = GetFormValueFixed(*wf, _T("prpPolarW2"));
+  fixed w3 = GetFormValueFixed(*wf, _T("prpPolarW3"));
 
   PolarCoefficients coeff = PolarCoefficients::From3VW(v1, v2, v3, w1, w2, w3);
   ((WndFrame *)wf->FindByName(_T("lblPolarInvalid")))->set_visible(!coeff.IsValid());
