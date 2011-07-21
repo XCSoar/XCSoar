@@ -8,7 +8,7 @@ MATH_SOURCES = \
 	$(MATH_SRC_DIR)/FastMath.cpp \
 	$(MATH_SRC_DIR)/FastRotation.cpp \
 	$(MATH_SRC_DIR)/fixed.cpp \
-	$(MATH_SRC_DIR)/leastsqs.cpp \
+	$(MATH_SRC_DIR)/LeastSquares.cpp \
 	$(MATH_SRC_DIR)/LowPassFilter.cpp
 
 MATH_OBJS = $(call SRC_TO_OBJ,$(MATH_SOURCES))

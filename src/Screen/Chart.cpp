@@ -29,7 +29,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Math/FastRotation.hpp"
 #include "Asset.hpp"
-#include "Math/leastsqs.h"
+#include "Math/LeastSquares.hpp"
 
 #include <assert.h>
 #include <stdio.h>

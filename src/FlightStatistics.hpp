@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef FLIGHT_STATISTICS_HPP
 #define FLIGHT_STATISTICS_HPP
 
-#include "Math/leastsqs.h"
+#include "Math/LeastSquares.hpp"
 #include "Thread/Mutex.hpp"
 
 class FlightStatistics {

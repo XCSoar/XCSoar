@@ -43,7 +43,7 @@ Copyright_License {
 // Boston, MA  02111-1307, USA.
 
 
-#include "Math/leastsqs.h"
+#include "Math/LeastSquares.hpp"
 
 #include <math.h>
 
