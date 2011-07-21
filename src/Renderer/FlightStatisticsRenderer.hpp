@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef FLIGHT_STATISTICS_RENDERER_HPP
 #define FLIGHT_STATISTICS_RENDERER_HPP
 
-#include "Math/leastsqs.h"
-#include "FlightStatistics.hpp"
 #include "Screen/Point.hpp"
 
 #include <tchar.h>
@@ -44,6 +42,7 @@ class GlidePolar;
 class Chart;
 class TaskManager;
 class ProtectedTaskManager;
+class FlightStatistics;
 struct ContestStatistics;
 struct ChartLook;
 struct AirspaceLook;

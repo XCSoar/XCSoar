@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "FlightStatisticsRenderer.hpp"
+#include "FlightStatistics.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Fonts.hpp"
