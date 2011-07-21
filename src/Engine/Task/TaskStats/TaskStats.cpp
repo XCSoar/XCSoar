@@ -22,11 +22,6 @@
 #include "TaskStats.hpp"
 #include <assert.h>
 
-TaskStats::TaskStats()
-{
-  reset();
-}
-
 void
 TaskStats::reset()
 {

@@ -57,12 +57,6 @@ public:
   bool flight_mode_final_glide; /**< Whether the task is appoximately in final glide */
   int flight_mode_height_margin; /**< Margin for final glide flight mode transition (m) */
 
-/** 
- * Constructor.  Initialises all to zero.
- * 
- */
-  TaskStats();
-
   fixed get_pirker_speed() const; /**< Incremental task speed adjusted for mc,
                                    * target changes */
 

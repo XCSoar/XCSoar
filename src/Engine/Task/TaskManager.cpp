@@ -41,7 +41,9 @@ TaskManager::TaskManager(TaskEvents &te,
                   task_behaviour.contest_handicap,
                   trace_full, trace_sprint),
   mode(MODE_NULL),
-  active_task(NULL) {}
+  active_task(NULL) {
+  null_stats.reset();
+}
 
 void
 TaskManager::set_task_behaviour(const TaskBehaviour& behaviour)

@@ -40,7 +40,9 @@ AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
   mc_lpf(fixed(8)),
   ce_lpf(fixed(60)),
   em_lpf(fixed(60)),
-  trigger_auto(false) {}
+  trigger_auto(false) {
+  stats.reset();
+}
 
 bool 
 AbstractTask::update_auto_mc(GlidePolar &glide_polar,

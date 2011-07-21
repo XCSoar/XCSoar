@@ -624,7 +624,7 @@ private:
   TaskMode_t mode;
   AbstractTask* active_task;
     
-  const TaskStats null_stats;
+  TaskStats null_stats;
 
   TaskMode_t set_mode(const TaskMode_t mode);
 
