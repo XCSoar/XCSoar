@@ -61,7 +61,7 @@ ThermalBandRenderer::_DrawThermalBand(const NMEA_INFO& basic,
 
   // calculate height above safety height
   fixed hoffset = task_props.route_planner.safety_height_terrain +
-                   calculated.TerrainBase;
+    calculated.GetTerrainBaseFallback();
   fixed h = basic.NavAltitude - hoffset;
   chart.ScaleYFromValue(h);
 

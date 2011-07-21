@@ -29,6 +29,8 @@ TERRAIN_ALT_INFO::Clear()
   TerrainValid = false;
   TerrainWarning = false;
 
+  terrain_base_valid = false;
+
   AltitudeAGLValid = false;
   AltitudeAGL = fixed_zero;
 }

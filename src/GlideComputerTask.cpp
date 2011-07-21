@@ -169,8 +169,10 @@ GlideComputerTask::Reach()
   if (reach_clock.check_advance(Basic().Time)) {
     m_task.solve_reach(start, do_solve);
 
-    SetCalculated().TerrainBase =
-      do_solve? fixed(m_task.get_terrain_base()) : Calculated().TerrainAlt;
+    if (do_solve) {
+      SetCalculated().TerrainBase = fixed(m_task.get_terrain_base());
+      SetCalculated().terrain_base_valid = true;
+    }
   }
 }
 
