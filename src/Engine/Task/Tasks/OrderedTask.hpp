@@ -35,7 +35,6 @@
 #include "Task/TaskBehaviour.hpp"
 
 class OrderedTaskPoint;
-class TaskPointVisitor;
 class AbstractTaskFactory;
 class Waypoints;
 class AATPoint;

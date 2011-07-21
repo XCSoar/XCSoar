@@ -28,7 +28,6 @@
 #include "Util/Filter.hpp"
 
 class TaskPointConstVisitor;
-class TaskPointVisitor;
 class AbortTask;
 class TaskBehaviour;
 class TaskEvents;

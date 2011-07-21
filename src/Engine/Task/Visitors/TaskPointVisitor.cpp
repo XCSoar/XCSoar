@@ -58,34 +58,3 @@ TaskPointConstVisitor::Visit(const TaskPoint &tp)
     break;
   }
 }
-
-void
-TaskPointVisitor::Visit(TaskPoint &tp)
-{
-  switch (tp.GetType()) {
-
-  case TaskPoint::ROUTE:
-    assert(1); // not supported yet
-    break;
-
-  case TaskPoint::UNORDERED:
-    Visit((UnorderedTaskPoint &)tp);
-    break;
-
-  case TaskPoint::START:
-    Visit((StartPoint &)tp);
-    break;
-
-  case TaskPoint::AST:
-    Visit((ASTPoint &)tp);
-    break;
-
-  case TaskPoint::AAT:
-    Visit((AATPoint &)tp);
-    break;
-
-  case TaskPoint::FINISH:
-    Visit((FinishPoint &)tp);
-    break;
-  }
-}

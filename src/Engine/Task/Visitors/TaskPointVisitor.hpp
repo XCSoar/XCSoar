@@ -44,20 +44,4 @@ public:
   void Visit(const TaskPoint &tp);
 };
 
-/**
- * Generic visitor for task points (for double-dispatch)
- */
-class TaskPointVisitor {
-protected:
-  virtual void Visit(UnorderedTaskPoint &p) = 0;
-  virtual void Visit(StartPoint &p) = 0;
-  virtual void Visit(ASTPoint &p) = 0;
-  virtual void Visit(AATPoint &p) = 0;
-  virtual void Visit(FinishPoint &p) = 0;
-
-public:
-  void Visit(TaskPoint &tp);
-};
-
-
 #endif
