@@ -50,7 +50,10 @@ protected:
   fixed speed_incremental;
 
 public:
-  DistanceStat():distance(fixed_zero), speed(fixed_zero) {}
+  void Reset() {
+    distance = fixed_zero;
+    speed = fixed_zero;
+  }
 
   /**
    * Setter for distance value

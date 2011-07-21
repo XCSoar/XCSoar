@@ -30,8 +30,11 @@ ElementStat::ElementStat():
   TimePlanned(0.0),
   gradient(0.0)
 {
-
-
+  remaining_effective.Reset();
+  remaining.Reset();
+  planned.Reset();
+  travelled.Reset();
+  pirker.Reset();
 }
 
 
