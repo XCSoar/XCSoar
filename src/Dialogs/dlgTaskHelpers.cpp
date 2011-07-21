@@ -29,8 +29,6 @@ Copyright_License {
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "Units/Units.hpp"
-#include "Task/Visitors/TaskPointVisitor.hpp"
-#include "Task/Visitors/ObservationZoneVisitor.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/SectorZone.hpp"
@@ -199,63 +197,6 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
                 OrderedTaskFactoryName(task->get_factory_type()));
   }
 }
-
-class LabelObservationZone
-{
-public:
-  LabelObservationZone(TCHAR* buff): text(buff) {}
-
-  void
-  Visit(const FAISectorZone& oz)
-  {
-    _stprintf(text, _("FAI quadrant"));
-  }
-
-  void
-  Visit(const KeyholeZone& oz)
-  {
-    _stprintf(text, _("Keyhole"));
-  }
-
-  void
-  Visit(const BGAFixedCourseZone& oz)
-  {
-    _stprintf(text, _("BGAFixedCourse"));
-  }
-
-  void
-  Visit(const BGAEnhancedOptionZone& oz)
-  {
-    _stprintf(text, _("BGAEnhancedOption"));
-  }
-
-  void
-  Visit(const BGAStartSectorZone& oz)
-  {
-    _stprintf(text, _("BGA start sector"));
-  }
-
-  void
-  Visit(const SectorZone& oz)
-  {
-    _stprintf(text, _("Sector"));
-  }
-
-  void
-  Visit(const LineSectorZone& oz)
-  {
-    _stprintf(text, _("Line"));
-  }
-
-  void
-  Visit(const CylinderZone& oz)
-  {
-    _stprintf(text, _("Cylinder"));
-  }
-
-private:
-  TCHAR *text;
-};
 
 void
 OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* name)
