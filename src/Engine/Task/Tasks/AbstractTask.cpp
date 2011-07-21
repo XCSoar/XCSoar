@@ -178,12 +178,14 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
   stats.current_leg.pirker.set_distance(stats.current_leg.planned.get_distance()
                                   -stats.current_leg.remaining_effective.get_distance());
 
-  stats.current_leg.remaining.set_distance(
-    stats.current_leg.solution_remaining.Vector.Distance);
-  stats.current_leg.travelled.set_distance(
-    stats.current_leg.solution_travelled.Vector.Distance);
-  stats.current_leg.planned.set_distance(
-    stats.current_leg.solution_planned.Vector.Distance);
+  if (stats.current_leg.solution_remaining.defined())
+    stats.current_leg.remaining.set_distance(stats.current_leg.solution_remaining.Vector.Distance);
+
+  if (stats.current_leg.solution_travelled.defined())
+    stats.current_leg.travelled.set_distance(stats.current_leg.solution_travelled.Vector.Distance);
+
+  if (stats.current_leg.solution_planned.defined())
+    stats.current_leg.planned.set_distance(stats.current_leg.solution_planned.Vector.Distance);
 
   stats.total.gradient = ::AngleToGradient(calc_gradient(state));
   stats.current_leg.gradient = ::AngleToGradient(leg_gradient(state));
