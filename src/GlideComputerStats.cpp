@@ -118,6 +118,9 @@ GlideComputerStats::OnDepartedThermal()
 void
 GlideComputerStats::ProcessClimbEvents()
 {
+  if (time_retreated())
+    return;
+
   const DERIVED_INFO &calculated = Calculated();
   const DERIVED_INFO &last_calculated = LastCalculated();
 
