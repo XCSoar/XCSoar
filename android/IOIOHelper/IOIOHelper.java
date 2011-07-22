@@ -242,7 +242,9 @@ final class IOIOHelper {
         return;
 
       try {
-        // ToDo support flush()
+        final int toskip = input.available();
+        if (toskip > 0)
+          input.skip(toskip);
       } catch (Exception e) {
         Log.e("IOIOHelper", "IOIOJflush() Unexpected exception caught", e);
       }
