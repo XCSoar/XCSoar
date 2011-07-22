@@ -27,7 +27,7 @@ Copyright_License {
 
 #include <windef.h> /* for MAX_PATH */
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
+#if !defined(_WIN32_WCE)
 int SCREENWIDTH = 640;
 int SCREENHEIGHT = 480;
 #endif
@@ -79,7 +79,7 @@ ParseCommandLine(const TCHAR *CommandLine)
 
   Profile::SetFiles(extrnProfileFile);
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
+#if !defined(_WIN32_WCE)
   SCREENWIDTH = 640;
   SCREENHEIGHT = 480;
 

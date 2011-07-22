@@ -54,7 +54,7 @@ TopWindow::set(const TCHAR *cls, const TCHAR *text,
   WindowStyle style;
   style.popup();
 
-  screen.set();
+  screen.set(width, height);
 
   /* apply the mode which was chosen by TopCanvas */
   width = screen.get_width();

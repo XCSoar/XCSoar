@@ -227,7 +227,7 @@ has_colors()
   return true;
 }
 
-#if defined(WIN32) && !defined(_WIN32_WCE)
+#if !defined(_WIN32_WCE)
 extern int SCREENWIDTH;
 extern int SCREENHEIGHT;
 #endif

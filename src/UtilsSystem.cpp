@@ -126,8 +126,8 @@ SystemWindowSize()
   WindowSize.bottom = GetSystemMetrics(SM_CYSCREEN);
   #else /* !WIN32 */
   /// @todo implement this properly for SDL/UNIX
-  WindowSize.right = 640;
-  WindowSize.bottom = 480;
+  WindowSize.right = SCREENWIDTH;
+  WindowSize.bottom = SCREENHEIGHT;
   #endif /* !WIN32 */
 
 #endif

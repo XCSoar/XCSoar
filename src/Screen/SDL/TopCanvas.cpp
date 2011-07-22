@@ -37,9 +37,8 @@ Copyright_License {
 #include <assert.h>
 
 void
-TopCanvas::set()
+TopCanvas::set(unsigned width, unsigned height)
 {
-  unsigned width = 640, height = 480;
 #ifndef ANDROID
   Uint32 flags = SDL_ANYFORMAT;
 #endif
