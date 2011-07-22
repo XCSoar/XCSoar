@@ -437,6 +437,9 @@ SetupDeviceFields(const DeviceConfig &config,
 {
   if (port_field != NULL) {
     DataFieldEnum *dfe = (DataFieldEnum *)port_field->GetDataField();
+#if defined(ANDROID) && defined (IOIOLIB)
+    dfe->EnableItemHelp(true);
+#endif
 
     for (unsigned i = 0; port_types[i].label != NULL; i++) {
       dfe->addEnumText(gettext(port_types[i].label));
@@ -493,7 +496,9 @@ SetupDeviceFields(const DeviceConfig &config,
     for (unsigned i = 0; i < AndroidIOIOUartPort::getNumberUarts(); i++) {
       _sntprintf(tempID, sizeof(tempID), _T("%d"), i);
       _sntprintf(tempName, sizeof(tempName), _T("IOIO Uart %d"), i);
-      dfe->addEnumText(tempID, tempName);
+      dfe->addEnumText(tempID,
+                      tempName,
+                      AndroidIOIOUartPort::getPortHelp(i));
     }
 
     if (config.port_type == DeviceConfig::IOIOUART &&
