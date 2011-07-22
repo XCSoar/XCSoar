@@ -26,6 +26,10 @@ Copyright_License {
 
 #include <tchar.h>
 
+/**
+ * Reads and parses arguments/options from the command line
+ * @param CommandLine command line argument string
+ */
 void
 ParseCommandLine(const TCHAR *CommandLine);
 

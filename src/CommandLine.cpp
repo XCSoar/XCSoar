@@ -32,10 +32,6 @@ int SCREENWIDTH = 640;
 int SCREENHEIGHT = 480;
 #endif
 
-/**
- * Reads and parses arguments/options from the command line
- * @param CommandLine not in use
- */
 void
 ParseCommandLine(const TCHAR *CommandLine)
 {
