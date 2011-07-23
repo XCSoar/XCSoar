@@ -79,6 +79,21 @@ public:
 
   static unsigned getNumberUarts() { return 4; }
 
+  static const TCHAR *getPortHelp(unsigned UartID) {
+    switch (UartID) {
+    case 0:
+      return _T("IOIO external board Uart: pin3=out, pin4=in");
+    case 1:
+      return _T("IOIO external board Uart: pin5=out, pin6=in");
+    case 2:
+      return _T("IOIO external board Uart: pin10=out, pin11=in");
+    case 3:
+      return _T("IOIO external board Uart: pin12=out, pin13=in");
+    default:
+      return _T("Illegal IOIO Uart ID");
+    }
+  }
+
 protected:
   /**
    * Entry point for the receive thread
