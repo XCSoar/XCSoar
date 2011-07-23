@@ -48,6 +48,12 @@ public:
 
   /**
    * Show a human-readable (localized) short text describing the
+   * error condition.
+   */
+  virtual void SetErrorMessage(const TCHAR *text) = 0;
+
+  /**
+   * Show a human-readable (localized) short text describing the
    * current state of the operation.
    */
   virtual void SetText(const TCHAR *text) = 0;
@@ -70,6 +76,7 @@ class NullOperationEnvironment : public OperationEnvironment {
 public:
   virtual bool IsCancelled() const;
   virtual void Sleep(unsigned ms);
+  virtual void SetErrorMessage(const TCHAR *text);
   virtual void SetText(const TCHAR *text);
   virtual void SetProgressRange(unsigned range);
   virtual void SetProgressPosition(unsigned position);
@@ -78,6 +85,15 @@ public:
 class QuietOperationEnvironment : public NullOperationEnvironment {
 public:
   virtual void Sleep(unsigned ms);
+};
+
+/**
+ * A #OperationEnvironment implementation that displays error messages
+ * with the #PopupMessage class.
+ */
+class PopupOperationEnvironment : public QuietOperationEnvironment {
+public:
+  virtual void SetErrorMessage(const TCHAR *text);
 };
 
 class VerboseOperationEnvironment : public QuietOperationEnvironment {

@@ -22,41 +22,10 @@ Copyright_License {
 */
 
 #include "Operation.hpp"
-#include "OS/Sleep.h"
-
-bool
-NullOperationEnvironment::IsCancelled() const
-{
-  return false;
-}
+#include "Message.hpp"
 
 void
-NullOperationEnvironment::Sleep(unsigned ms)
+PopupOperationEnvironment::SetErrorMessage(const TCHAR *text)
 {
-}
-
-void
-NullOperationEnvironment::SetErrorMessage(const TCHAR *text)
-{
-}
-
-void
-NullOperationEnvironment::SetText(const TCHAR *text)
-{
-}
-
-void
-NullOperationEnvironment::SetProgressRange(unsigned range)
-{
-}
-
-void
-NullOperationEnvironment::SetProgressPosition(unsigned position)
-{
-}
-
-void
-QuietOperationEnvironment::Sleep(unsigned ms)
-{
-  ::Sleep(ms);
+  Message::AddMessage(text);
 }

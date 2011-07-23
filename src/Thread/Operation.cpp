@@ -44,6 +44,16 @@ ThreadedOperationEnvironment::Sleep(unsigned ms)
 }
 
 void
+ThreadedOperationEnvironment::SetErrorMessage(const TCHAR *_error)
+{
+  mutex.Lock();
+  data.SetErrorMessage(_error);
+  mutex.Unlock();
+
+  SendNotification();
+}
+
+void
 ThreadedOperationEnvironment::SetText(const TCHAR *_text)
 {
   mutex.Lock();
@@ -84,6 +94,9 @@ ThreadedOperationEnvironment::OnNotification()
   mutex.Unlock();
 
   /* forward the method calls to the other OperationEnvironment */
+
+  if (new_data.update_error)
+    other.SetErrorMessage(new_data.error);
 
   if (new_data.update_text)
     other.SetText(new_data.text);

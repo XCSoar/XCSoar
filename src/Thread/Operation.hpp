@@ -40,10 +40,12 @@ class ThreadedOperationEnvironment
   : public OperationEnvironment,
     protected Notify {
   struct Data {
+    StaticString<256u> error;
     StaticString<128u> text;
 
     unsigned progress_range, progress_position;
 
+    bool update_error;
     bool update_text, update_progress_range, update_progress_position;
 
     Data()
@@ -51,6 +53,11 @@ class ThreadedOperationEnvironment
        progress_range(0u), progress_position(0u),
        update_text(false),
        update_progress_range(false), update_progress_position(false) {}
+
+    void SetErrorMessage(const TCHAR *_error) {
+      error = _error;
+      update_error = true;
+    }
 
     void SetText(const TCHAR *_text) {
       text = _text;
@@ -76,6 +83,7 @@ class ThreadedOperationEnvironment
     }
 
     void ClearUpdate() {
+      update_error = false;
       update_text = false;
       update_progress_range = update_progress_position = false;
     }
@@ -99,6 +107,7 @@ public:
 public:
   virtual bool IsCancelled() const;
   virtual void Sleep(unsigned ms);
+  virtual void SetErrorMessage(const TCHAR *error);
   virtual void SetText(const TCHAR *text);
   virtual void SetProgressRange(unsigned range);
   virtual void SetProgressPosition(unsigned position);
