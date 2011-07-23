@@ -40,6 +40,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "GPSClock.hpp"
+#include "Operation.hpp"
 
 #ifdef _WIN32_WCE
 void
@@ -305,18 +306,11 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
       // gps is waiting for connection first time
       wait_connect = true;
       InputEvents::processGlideComputer(GCE_GPS_CONNECTION_WAIT);
-    } else if (itimeout % 60 == 0) {
-      itimeout = 0;
-      // we've been waiting for connection a long time
-      // no activity for 30 seconds, so assume PDA has been
-      // switched off and on again
-      //
-      if (!is_altair()) {
-        InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
-        devRestart();
-      }
     }
   }
+
+  PopupOperationEnvironment env;
+  AllDevicesAutoReopen(env);
 
   connected_last = connected_now;
   location_last = basic.LocationAvailable;

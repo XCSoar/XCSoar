@@ -42,6 +42,15 @@ devTick(const DERIVED_INFO &calculated)
 }
 
 void
+AllDevicesAutoReopen(OperationEnvironment &env)
+{
+  for (unsigned i = 0; i < NUMDEV; i++) {
+    DeviceDescriptor &d = DeviceList[i];
+    d.AutoReopen(env);
+  }
+}
+
+void
 AllDevicesPutMacCready(fixed MacCready)
 {
   if (is_simulator())

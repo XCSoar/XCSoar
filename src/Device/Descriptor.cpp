@@ -37,6 +37,9 @@ Copyright_License {
 #include "Operation.hpp"
 #include "OS/Clock.hpp"
 #include "../Simulator.hpp"
+#include "Asset.hpp"
+#include "InputEvents.hpp"
+#include "LogFile.hpp"
 
 #ifdef ANDROID
 #include "Java/Object.hpp"
@@ -71,6 +74,8 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
   assert(Com == NULL);
   assert(device == NULL);
   assert(!ticker);
+
+  reopen_clock.update();
 
   device_blackboard.mutex.Lock();
   device_blackboard.SetRealState(index).Reset();
@@ -178,6 +183,22 @@ DeviceDescriptor::Close()
 
   settings_sent.Clear();
   settings_received.Clear();
+}
+
+void
+DeviceDescriptor::AutoReopen(OperationEnvironment &env)
+{
+  if (is_altair() || !config.IsAvailable() || IsConnected() ||
+      /* attempt to reopen a failed device every 30 seconds */
+      !reopen_clock.check_update(30000))
+    return;
+
+  TCHAR buffer[64];
+  LogStartUp(_T("Restarting device %s"), config.GetPortName(buffer, 64));
+
+  InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
+  Close();
+  Open(env);
 }
 
 const TCHAR *

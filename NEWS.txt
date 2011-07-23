@@ -17,6 +17,7 @@ Version 6.2 - not yet released
   - Volkslogger: fix task declaration on PC
   - Vega: update vario when there is no GPS fix
   - device declaration can be cancelled
+  - reconnect individual devices after failure or timeout
 * calculations
   - dry mass is seperated from the polar reference mass
 * user interface

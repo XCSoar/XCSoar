@@ -32,10 +32,14 @@ Copyright_License {
 
 struct NMEA_INFO;
 struct DERIVED_INFO;
+class OperationEnvironment;
 class AtmosphericPressure;
 
 void
 devTick(const DERIVED_INFO &calculated);
+
+void
+AllDevicesAutoReopen(OperationEnvironment &env);
 
 void AllDevicesPutMacCready(fixed MacCready);
 void AllDevicesPutBugs(fixed bugs);

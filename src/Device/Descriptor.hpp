@@ -29,6 +29,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "RadioFrequency.hpp"
 #include "NMEA/ExternalSettings.hpp"
+#include "PeriodClock.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -60,6 +61,13 @@ class DeviceDescriptor : public Port::Handler {
 #ifdef ANDROID
   InternalGPS *internal_gps;
 #endif
+
+  /**
+   * This clock keeps track when we need to reopen the device next
+   * time after a failure or after a timeout.  It gets updated each
+   * time the failure/timeout occurs, and again after each retry.
+   */
+  PeriodClock reopen_clock;
 
   NMEAParser parser;
 
@@ -136,6 +144,12 @@ public:
   bool Open(OperationEnvironment &env);
 
   void Close();
+
+  /**
+   * Call this periodically to auto-reopen a failed device after a
+   * certain delay.
+   */
+  void AutoReopen(OperationEnvironment &env);
 
   const TCHAR *GetDisplayName() const;
 
