@@ -39,6 +39,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Device/TCPPort.hpp"
+#include "Operation.hpp"
 
 #include <assert.h>
 
@@ -59,6 +60,7 @@ PortOpenError(const DeviceConfig &config)
 static bool
 devInitOne(DeviceDescriptor &device, DeviceDescriptor *&nmeaout)
 {
+  PopupOperationEnvironment env;
   const DeviceConfig &config = device.GetConfig();
 
   if (config.port_type == DeviceConfig::INTERNAL)
@@ -74,7 +76,7 @@ devInitOne(DeviceDescriptor &device, DeviceDescriptor *&nmeaout)
     return false;
   }
 
-  if (!device.Open(Com, Driver)) {
+  if (!device.Open(Com, Driver, env)) {
     delete Com;
     return false;
   }

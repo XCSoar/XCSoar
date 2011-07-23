@@ -61,7 +61,8 @@ DeviceDescriptor::~DeviceDescriptor()
 }
 
 bool
-DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
+DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
+                       OperationEnvironment &env)
 {
   assert(_port != NULL);
   assert(_driver != NULL);
@@ -88,7 +89,6 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
   parser.SetReal(_tcscmp(Driver->name, _T("Condor")) != 0);
 
   device = Driver->CreateOnPort(config, Com);
-  QuietOperationEnvironment env;
   if (!device->Open(env) || !Com->StartRxThread()) {
     delete device;
     device = NULL;
