@@ -64,7 +64,6 @@ void
 NMEAParser::Reset(void)
 {
   real = true;
-  gpsValid = false;
   isFlarm = false;
   GGAAvailable = false;
   LastTime = fixed_zero;
@@ -384,7 +383,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO &info)
                               info.DateAvailable);
   ThisTime = TimeAdvanceTolerance(ThisTime);
 
-  gpsValid = !NAVWarn(line.read_first_char());
+  bool gpsValid = !NAVWarn(line.read_first_char());
 
   if (!TimeHasAdvanced(ThisTime, info))
     return true;
@@ -492,7 +491,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO &info)
 {
   fixed ThisTime = line.read(fixed_zero);
 
-  gpsValid = !NAVWarn(line.read_first_char());
+  bool gpsValid = !NAVWarn(line.read_first_char());
 
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
@@ -605,13 +604,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO &info)
   bool valid_location = ReadGeoPoint(line, location);
 
   gps.FixQuality = line.read(0);
-  if (gps.FixQuality != 1 && gps.FixQuality != 2)
-    gpsValid = false;
 
   int nSatellites = min(16, line.read(0));
-  if (nSatellites == 0)
-    gpsValid = false;
-
   gps.SatellitesUsed = nSatellites;
 
   if (!TimeHasAdvanced(ThisTime, info))

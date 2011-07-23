@@ -44,7 +44,6 @@ private:
 
 public:
   bool real;
-  bool gpsValid;
 
   bool isFlarm;
 
