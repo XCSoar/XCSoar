@@ -39,6 +39,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "DevicesConfigPanel.hpp"
 #include "Language/Language.hpp"
+#include "Compatibility/string.h"
 
 #ifdef _WIN32_WCE
 #include "Config/Registry.hpp"
@@ -583,36 +584,31 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
 
     config.port_type = port_types[value].type;
     return true;
-  } else {
+  } else if (is_android()) {
     value -= num_port_types;
 
-#ifdef ANDROID
-    if (config.port_type == DeviceConfig::RFCOMM &&
-        _tcscmp(config.bluetooth_mac, df.GetAsString()) == 0)
-      return false;
-#ifdef IOIOLIB
-    if (config.port_type == DeviceConfig::IOIOUART &&
-        (int)config.ioio_uart_id == atoi(df.GetAsString()))
-      return false;
-#endif
-#else
-    if (config.port_type == DeviceConfig::SERIAL &&
-        _tcscmp(config.path, df.GetAsString()) == 0)
-      return false;
-#endif
+    if (value <= num_bluetooth_types) {
+      /* Bluetooth */
+      if (config.port_type == DeviceConfig::RFCOMM &&
+          _tcscmp(config.bluetooth_mac, df.GetAsString()) == 0)
+        return false;
 
-#ifdef ANDROID
-    if (value >= num_bluetooth_types) {
-      config.port_type = DeviceConfig::IOIOUART;
-      config.ioio_uart_id = (unsigned)atoi(df.GetAsString());
-    } else {
       config.port_type = DeviceConfig::RFCOMM;
       config.bluetooth_mac = df.GetAsString();
+      return true;
+    } else {
+      /* IOIO UART */
+      if (config.port_type == DeviceConfig::SERIAL &&
+          _tcscmp(config.path, df.GetAsString()) == 0)
+        return false;
+
+      config.port_type = DeviceConfig::IOIOUART;
+      config.ioio_uart_id = (unsigned)_ttoi(df.GetAsString());
+      return true;
     }
-#else
+  } else {
     config.port_type = DeviceConfig::SERIAL;
     config.path = df.GetAsString();
-#endif
     return true;
   }
 }
