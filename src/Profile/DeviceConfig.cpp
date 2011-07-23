@@ -27,6 +27,36 @@ Copyright_License {
 
 #include <stdio.h>
 
+bool
+DeviceConfig::IsAvailable() const
+{
+  switch (port_type) {
+  case DISABLED:
+    return false;
+
+  case SERIAL:
+    return !is_android();
+
+  case RFCOMM:
+    return is_android();
+
+  case IOIOUART:
+    return is_android() && is_ioiolib();
+
+  case AUTO:
+    return is_windows_ce();
+
+  case INTERNAL:
+    return is_android();
+
+  case TCP_LISTENER:
+    return true;
+  }
+
+  /* unreachable */
+  return false;
+}
+
 static const TCHAR *
 MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
                       const TCHAR *suffix)

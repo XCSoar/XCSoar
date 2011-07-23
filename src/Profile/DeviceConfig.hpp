@@ -115,6 +115,13 @@ struct DeviceConfig {
     return port_type == SERIAL || port_type == AUTO || port_type == IOIOUART;
   }
 
+  /**
+   * Checks if the specified DeviceConfig is available on this
+   * platform.
+   */
+  gcc_pure
+  bool IsAvailable() const;
+
   bool UsesSpeed() const {
     return UsesSpeed(port_type);
   }

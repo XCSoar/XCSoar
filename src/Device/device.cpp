@@ -126,40 +126,6 @@ SetPipeTo(DeviceDescriptor &out)
 }
 
 /**
- * Checks if the specified DeviceConfig is available on this platform.
- */
-gcc_pure
-static bool
-DeviceConfigAvailable(const DeviceConfig &config)
-{
-  switch (config.port_type) {
-  case DeviceConfig::DISABLED:
-    return false;
-
-  case DeviceConfig::SERIAL:
-    return !is_android();
-
-  case DeviceConfig::RFCOMM:
-    return is_android();
-
-  case DeviceConfig::IOIOUART:
-    return is_android() && is_ioiolib();
-
-  case DeviceConfig::AUTO:
-    return is_windows_ce();
-
-  case DeviceConfig::INTERNAL:
-    return is_android();
-
-  case DeviceConfig::TCP_LISTENER:
-    return true;
-  }
-
-  /* unreachable */
-  return false;
-}
-
-/**
  * Checks if the two configurations overlap, i.e. they request access
  * to an exclusive resource, like the same physical COM port.  If this
  * is detected, then the second device will be disabled.
@@ -207,7 +173,7 @@ devStartup()
 
     Profile::GetDeviceConfig(i, config[i]);
 
-    if (!DeviceConfigAvailable(config[i]))
+    if (!config[i].IsAvailable())
       continue;
 
     none_available = false;
