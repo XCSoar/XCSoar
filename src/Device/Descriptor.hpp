@@ -46,7 +46,6 @@ struct RecordedFlightInfo;
 class OperationEnvironment;
 
 class DeviceDescriptor : public Port::Handler {
-public:
   /** the index of this device in the global list */
   unsigned index;
 
@@ -100,6 +99,10 @@ public:
     index = _index;
   }
 
+  void SetPipeTo(DeviceDescriptor *other) {
+    pDevPipeTo = other;
+  }
+
 public:
   bool IsOpen() const {
     return Com != NULL
@@ -115,6 +118,9 @@ public:
    */
   bool Open(const DeviceConfig &config, Port *port,
             const struct DeviceRegister *driver);
+
+  bool OpenInternalGPS();
+
   void Close();
 
   const TCHAR *GetDisplayName() const;
@@ -157,6 +163,11 @@ private:
   bool ParseNMEA(const char *line, struct NMEA_INFO &info);
 
 public:
+  void WriteNMEA(const char *line);
+#ifdef _UNICODE
+  void WriteNMEA(const TCHAR *line);
+#endif
+
   bool PutMacCready(fixed MacCready);
   bool PutBugs(fixed bugs);
   bool PutBallast(fixed ballast);

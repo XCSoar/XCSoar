@@ -31,7 +31,6 @@ struct Declaration;
 class Mutex;
 class DeviceDescriptor;
 
-void devWriteNMEAString(DeviceDescriptor &d, const TCHAR *Text);
 void VarioWriteNMEA(const TCHAR *Text);
 DeviceDescriptor *devVarioFindVega(void);
 

@@ -24,7 +24,6 @@ Copyright_License {
 // 20070413:sgi add NmeaOut support, allow nmea chaining an double port platforms
 
 #include "Device/device.hpp"
-#include "Device/Internal.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/List.hpp"
@@ -37,16 +36,11 @@ Copyright_License {
 #include "Message.hpp"
 #include "Language/Language.hpp"
 #include "Asset.hpp"
-#include "../Simulator.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Device/TCPPort.hpp"
 
 #ifdef ANDROID
-#include "Android/InternalGPS.hpp"
-#include "Android/Main.hpp"
-#include "Java/Object.hpp"
-#include "Java/Global.hpp"
 #include "Device/AndroidBluetoothPort.hpp"
 #ifdef IOIOLIB
 #include "Device/AndroidIOIOUartPort.hpp"
@@ -108,18 +102,8 @@ static bool
 devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
            DeviceDescriptor *&nmeaout)
 {
-  if (config.port_type == DeviceConfig::INTERNAL) {
-#ifdef ANDROID
-    if (is_simulator())
-      return true;
-
-    device.internal_gps = InternalGPS::create(Java::GetEnv(), context,
-                                              device.GetIndex());
-    return device.internal_gps != NULL;
-#else
-    return false;
-#endif
-  }
+  if (config.port_type == DeviceConfig::INTERNAL)
+    return device.OpenInternalGPS();
 
   const struct DeviceRegister *Driver = FindDriverByName(config.driver_name);
   if (Driver == NULL)
@@ -148,7 +132,7 @@ SetPipeTo(DeviceDescriptor &out)
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceDescriptor &device = DeviceList[i];
 
-    device.pDevPipeTo = &device == &out ? NULL : &out;
+    device.SetPipeTo(&device == &out ? NULL : &out);
   }
 }
 
@@ -273,38 +257,12 @@ HaveCondorDevice()
   return false;
 }
 
-#ifdef _UNICODE
-static void
-PortWriteNMEA(Port *port, const TCHAR *line)
-{
-  assert(port != NULL);
-  assert(line != NULL);
-
-  char buffer[_tcslen(line) * 4 + 1];
-  if (::WideCharToMultiByte(CP_ACP, 0, line, -1, buffer, sizeof(buffer),
-                            NULL, NULL) <= 0)
-    return;
-
-  PortWriteNMEA(port, buffer);
-}
-#endif
-
-void
-devWriteNMEAString(DeviceDescriptor &d, const TCHAR *text)
-{
-  if (d.Com == NULL)
-    return;
-
-  PortWriteNMEA(d.Com, text);
-}
-
 void
 VarioWriteNMEA(const TCHAR *text)
 {
   for (int i = 0; i < NUMDEV; i++)
     if (DeviceList[i].IsVega())
-      if (DeviceList[i].Com)
-        PortWriteNMEA(DeviceList[i].Com, text);
+      DeviceList[i].WriteNMEA(text);
 }
 
 DeviceDescriptor *

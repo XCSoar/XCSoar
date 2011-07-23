@@ -25,6 +25,7 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Parser.hpp"
 #include "Device/FLARM.hpp"
+#include "Device/Internal.hpp"
 #include "DeviceBlackboard.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
@@ -33,9 +34,13 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Operation.hpp"
 #include "OS/Clock.hpp"
+#include "../Simulator.hpp"
 
 #ifdef ANDROID
+#include "Java/Object.hpp"
+#include "Java/Global.hpp"
 #include "Android/InternalGPS.hpp"
+#include "Android/Main.hpp"
 #endif
 
 #include <assert.h>
@@ -93,6 +98,20 @@ DeviceDescriptor::Open(const DeviceConfig &config, Port *_port,
   }
 
   return true;
+}
+
+bool
+DeviceDescriptor::OpenInternalGPS()
+{
+#ifdef ANDROID
+  if (is_simulator())
+    return true;
+
+  internal_gps = InternalGPS::create(Java::GetEnv(), context, GetIndex());
+  return internal_gps != NULL;
+#else
+  return false;
+#endif
 }
 
 void
@@ -185,6 +204,33 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEA_INFO &info)
 
   return false;
 }
+
+void
+DeviceDescriptor::WriteNMEA(const char *line)
+{
+  assert(line != NULL);
+
+  if (Com != NULL)
+    PortWriteNMEA(Com, line);
+}
+
+#ifdef _UNICODE
+void
+DeviceDescriptor::WriteNMEA(const TCHAR *line)
+{
+  assert(line != NULL);
+
+  if (Com == NULL)
+    return;
+
+  char buffer[_tcslen(line) * 4 + 1];
+  if (::WideCharToMultiByte(CP_ACP, 0, line, -1, buffer, sizeof(buffer),
+                            NULL, NULL) <= 0)
+    return;
+
+  WriteNMEA(buffer);
+}
+#endif
 
 bool
 DeviceDescriptor::PutMacCready(fixed value)
