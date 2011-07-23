@@ -60,7 +60,7 @@ PortOpenError(const DeviceConfig &config)
 static bool
 devInitOne(DeviceDescriptor &device, DeviceDescriptor *&nmeaout)
 {
-  PopupOperationEnvironment env;
+  QuietOperationEnvironment env;
   const DeviceConfig &config = device.GetConfig();
 
   if (config.port_type == DeviceConfig::INTERNAL)
