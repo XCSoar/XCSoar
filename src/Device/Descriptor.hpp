@@ -197,7 +197,7 @@ public:
   bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
                       OperationEnvironment &env);
 
-  void OnSysTicker(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
+  void OnSysTicker(const DERIVED_INFO &calculated);
 
   bool ParseLine(const char *line);
 

@@ -99,7 +99,6 @@ AbstractDevice::Declare(const struct Declaration &declaration,
 }
 
 void
-AbstractDevice::OnSysTicker(const NMEA_INFO &basic,
-                            const DERIVED_INFO &calculated)
+AbstractDevice::OnSysTicker(const DERIVED_INFO &calculated)
 {
 }

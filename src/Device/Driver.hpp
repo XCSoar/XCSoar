@@ -195,11 +195,9 @@ public:
   /**
    * Called periodically each second
    *
-   * @param info the combined sensor values of all devices
    * @param calculated the current set of calculation results
    */
-  virtual void OnSysTicker(const NMEA_INFO &basic,
-                           const DERIVED_INFO &calculated) = 0;
+  virtual void OnSysTicker(const DERIVED_INFO &calculated) = 0;
 };
 
 /**
@@ -238,8 +236,7 @@ public:
     return false;
   }
 
-  virtual void OnSysTicker(const NMEA_INFO &basic,
-                           const DERIVED_INFO &calculated);
+  virtual void OnSysTicker(const DERIVED_INFO &calculated);
 };
 
 /**

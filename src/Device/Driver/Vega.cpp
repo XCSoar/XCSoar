@@ -81,8 +81,7 @@ public:
   virtual bool PutQNH(const AtmosphericPressure& pres,
                       const DERIVED_INFO &calculated);
   virtual bool PutVoice(const TCHAR *sentence);
-  virtual void OnSysTicker(const NMEA_INFO &basic,
-                           const DERIVED_INFO &calculated);
+  virtual void OnSysTicker(const DERIVED_INFO &calculated);
 };
 
 void
@@ -403,8 +402,7 @@ VegaDevice::PutQNH(const AtmosphericPressure& pres,
 }
 
 void
-VegaDevice::OnSysTicker(const NMEA_INFO &basic,
-                        const DERIVED_INFO &calculated)
+VegaDevice::OnSysTicker(const DERIVED_INFO &calculated)
 {
   if (detected)
     VarioWriteSettings(calculated);

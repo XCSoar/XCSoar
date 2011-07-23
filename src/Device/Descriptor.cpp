@@ -401,8 +401,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
 }
 
 void
-DeviceDescriptor::OnSysTicker(const NMEA_INFO &basic,
-                              const DERIVED_INFO &calculated)
+DeviceDescriptor::OnSysTicker(const DERIVED_INFO &calculated)
 {
   if (device == NULL || IsBusy())
     return;
@@ -410,7 +409,7 @@ DeviceDescriptor::OnSysTicker(const NMEA_INFO &basic,
   ticker = !ticker;
   if (ticker)
     // write settings to vario every second
-    device->OnSysTicker(basic, calculated);
+    device->OnSysTicker(calculated);
 }
 
 bool

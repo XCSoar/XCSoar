@@ -34,7 +34,8 @@ struct NMEA_INFO;
 struct DERIVED_INFO;
 class AtmosphericPressure;
 
-void devTick(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
+void
+devTick(const DERIVED_INFO &calculated);
 
 void AllDevicesPutMacCready(fixed MacCready);
 void AllDevicesPutBugs(fixed bugs);

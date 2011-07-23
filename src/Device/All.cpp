@@ -31,13 +31,13 @@ Copyright_License {
 #include <assert.h>
 
 void
-devTick(const NMEA_INFO &basic, const DERIVED_INFO &calculated)
+devTick(const DERIVED_INFO &calculated)
 {
   int i;
 
   for (i = 0; i < NUMDEV; i++) {
     DeviceDescriptor *d = &DeviceList[i];
-    d->OnSysTicker(basic, calculated);
+    d->OnSysTicker(calculated);
   }
 }
 
