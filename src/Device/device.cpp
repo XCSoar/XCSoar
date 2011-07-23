@@ -88,9 +88,10 @@ PortOpenError(const DeviceConfig &config)
 }
 
 static bool
-devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
-           DeviceDescriptor *&nmeaout)
+devInitOne(DeviceDescriptor &device, DeviceDescriptor *&nmeaout)
 {
+  const DeviceConfig &config = device.GetConfig();
+
   if (config.port_type == DeviceConfig::INTERNAL)
     return device.OpenInternalGPS();
 
@@ -104,7 +105,7 @@ devInitOne(DeviceDescriptor &device, const DeviceConfig &config,
     return false;
   }
 
-  if (!device.Open(config, Com, Driver)) {
+  if (!device.Open(Com, Driver)) {
     delete Com;
     return false;
   }
@@ -166,25 +167,30 @@ devStartup()
 
   Profile::Get(szProfileIgnoreNMEAChecksum, NMEAParser::ignore_checksum);
 
-  DeviceConfig config[NUMDEV];
   bool none_available = true;
   for (unsigned i = 0; i < NUMDEV; ++i) {
     DeviceList[i].SetIndex(i);
 
-    Profile::GetDeviceConfig(i, config[i]);
-
-    if (!config[i].IsAvailable())
+    DeviceConfig &config = DeviceList[i].SetConfig();
+    Profile::GetDeviceConfig(i, config);
+    if (!config.IsAvailable()) {
+      config.Clear();
       continue;
+    }
 
     none_available = false;
 
     bool overlap = false;
     for (unsigned j = 0; j < i; ++j)
-      if (DeviceConfigOverlaps(config[i], config[j]))
+      if (DeviceConfigOverlaps(config, DeviceList[j].GetConfig()))
         overlap = true;
 
-    if (!overlap)
-      devInitOne(DeviceList[i], config[i], pDevNmeaOut);
+    if (overlap) {
+      config.Clear();
+      continue;
+    }
+
+    devInitOne(DeviceList[i], pDevNmeaOut);
   }
 
   if (none_available) {
@@ -193,8 +199,10 @@ devStartup()
        available on this platform */
     LogStartUp(_T("Falling back to built-in GPS"));
 
-    config[0].port_type = DeviceConfig::INTERNAL;
-    devInitOne(DeviceList[0], config[0], pDevNmeaOut);
+    DeviceConfig &config = DeviceList[0].SetConfig();
+    config.Clear();
+    config.port_type = DeviceConfig::INTERNAL;
+    devInitOne(DeviceList[0], pDevNmeaOut);
 #endif
   }
 

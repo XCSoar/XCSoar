@@ -61,8 +61,7 @@ DeviceDescriptor::~DeviceDescriptor()
 }
 
 bool
-DeviceDescriptor::Open(const DeviceConfig &config, Port *_port,
-                       const struct DeviceRegister *_driver)
+DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver)
 {
   assert(_port != NULL);
   assert(_driver != NULL);

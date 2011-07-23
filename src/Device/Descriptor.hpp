@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Device/Port.hpp"
 #include "Device/Parser.hpp"
+#include "Profile/DeviceConfig.hpp"
 #include "RadioFrequency.hpp"
 #include "NMEA/ExternalSettings.hpp"
 
@@ -38,7 +39,6 @@ struct DERIVED_INFO;
 class Port;
 class Device;
 class AtmosphericPressure;
-struct DeviceConfig;
 struct DeviceRegister;
 class InternalGPS;
 class RecordedFlightList;
@@ -48,6 +48,8 @@ class OperationEnvironment;
 class DeviceDescriptor : public Port::Handler {
   /** the index of this device in the global list */
   unsigned index;
+
+  DeviceConfig config;
 
   Port *Com;
   DeviceDescriptor *pDevPipeTo;
@@ -99,6 +101,14 @@ public:
     index = _index;
   }
 
+  const DeviceConfig &GetConfig() {
+    return config;
+  }
+
+  DeviceConfig &SetConfig() {
+    return config;
+  }
+
   void SetPipeTo(DeviceDescriptor *other) {
     pDevPipeTo = other;
   }
@@ -116,8 +126,7 @@ public:
    * When this method fails, the caller is responsible for freeing the
    * Port object.
    */
-  bool Open(const DeviceConfig &config, Port *port,
-            const struct DeviceRegister *driver);
+  bool Open(Port *port, const struct DeviceRegister *driver);
 
   bool OpenInternalGPS();
 
