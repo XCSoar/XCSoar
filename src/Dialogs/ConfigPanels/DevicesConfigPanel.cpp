@@ -134,26 +134,30 @@ SupportsBulkBaudRate(const DataField &df)
   return driver->SupportsBulkBaudRate();
 }
 
+gcc_pure
+static enum DeviceConfig::port_type
+GetPortType(WndProperty &port_field)
+{
+  unsigned port = port_field.GetDataField()->GetAsInteger();
+
+  if (port < num_port_types)
+    return port_types[port].type;
+  else if (is_android()) {
+    if (port - num_port_types >= num_bluetooth_types)
+      return DeviceConfig::IOIOUART;
+    else
+      return DeviceConfig::RFCOMM;
+  } else
+    return DeviceConfig::SERIAL;
+}
+
 static void
 UpdateDeviceControlVisibility(WndProperty &port_field,
                               WndProperty &speed_field,
                               WndProperty &bulk_baud_rate_field,
                               WndProperty &driver_field)
 {
-  unsigned port = port_field.GetDataField()->GetAsInteger();
-
-  enum DeviceConfig::port_type type = DeviceConfig::DISABLED;
-
-  if (port < num_port_types)
-    type = port_types[port].type;
-  else if (is_android()) {
-    if (port - num_port_types >= num_bluetooth_types)
-      type = DeviceConfig::IOIOUART;
-    else
-      type = DeviceConfig::RFCOMM;
-  } else {
-    type = DeviceConfig::SERIAL;
-  }
+  const enum DeviceConfig::port_type type = GetPortType(port_field);
 
   speed_field.set_visible(DeviceConfig::UsesSpeed(type));
   bulk_baud_rate_field.set_visible(DeviceConfig::UsesSpeed(type) &&
