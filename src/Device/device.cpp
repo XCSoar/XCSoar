@@ -40,17 +40,6 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "Device/TCPPort.hpp"
 
-#ifdef ANDROID
-#include "Device/AndroidBluetoothPort.hpp"
-#ifdef IOIOLIB
-#include "Device/AndroidIOIOUartPort.hpp"
-#endif
-#elif defined(HAVE_POSIX)
-#include "Device/TTYPort.hpp"
-#else
-#include "Device/SerialPort.hpp"
-#endif
-
 #include <assert.h>
 
 /**
