@@ -45,6 +45,8 @@ private:
 public:
   bool real;
 
+  bool use_geoid;
+
   bool isFlarm;
 
 public:
@@ -53,6 +55,10 @@ public:
 
   void SetReal(bool _real) {
     real = _real;
+  }
+
+  void DisableGeoid() {
+    use_geoid = true;
   }
 
   bool ParseNMEAString_Internal(const char *line, NMEA_INFO &info);

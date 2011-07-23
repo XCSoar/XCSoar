@@ -87,6 +87,8 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
 
   parser.Reset();
   parser.SetReal(_tcscmp(Driver->name, _T("Condor")) != 0);
+  if (config.IsDriver(_T("Condor")))
+    parser.DisableGeoid();
 
   device = Driver->CreateOnPort(config, Com);
   if (!device->Open(env) || !Com->StartRxThread()) {

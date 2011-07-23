@@ -64,6 +64,7 @@ void
 NMEAParser::Reset(void)
 {
   real = true;
+  use_geoid = true;
   isFlarm = false;
   GGAAvailable = false;
   LastTime = fixed_zero;
@@ -661,7 +662,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO &info)
     // If the separation doesn't appear in the sentence,
     // we can assume the GPS unit is giving ellipsoid height
     //
-    if (!HaveCondorDevice()) {
+    if (use_geoid) {
       // JMW TODO really need to know the actual device..
       GeoidSeparation = LookupGeoidSeparation(info.Location);
       info.GPSAltitude -= GeoidSeparation;
