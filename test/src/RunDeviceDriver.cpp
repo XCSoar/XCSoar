@@ -41,16 +41,6 @@ Waypoints way_points;
 Waypoints::Waypoints() {}
 
 /*
- * Fake Device/device.cpp
- */
-
-bool
-HaveCondorDevice()
-{
-  return _tcscmp(driver->name, _T("Condor")) == 0;
-}
-
-/*
  * Fake InputEvents.cpp
  */
 

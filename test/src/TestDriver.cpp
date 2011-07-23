@@ -54,12 +54,6 @@
 static const DeviceConfig dummy_config = DeviceConfig();
 
 bool
-HaveCondorDevice()
-{
-  return false;
-}
-
-bool
 InputEvents::processNmea(unsigned ne_id)
 {
   return false;

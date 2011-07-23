@@ -39,16 +39,6 @@ Copyright_License {
 Waypoints way_points;
 
 /*
- * Fake Device/device.cpp
- */
-
-bool
-HaveCondorDevice()
-{
-  return false;
-}
-
-/*
  * Fake InputEvents.cpp
  */
 

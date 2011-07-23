@@ -46,17 +46,6 @@ const struct DeviceRegister *driver;
 Waypoints way_points;
 
 /*
- * Fake Device/device.cpp
- */
-
-bool
-HaveCondorDevice()
-{
-  return _tcscmp(driver->name, _T("Condor")) == 0;
-}
-
-
-/*
  * Fake InputEvents.cpp
  */
 
