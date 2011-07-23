@@ -411,6 +411,15 @@ DeviceDescriptor::OnSysTicker(const NMEA_INFO &basic,
     device->OnSysTicker(basic, calculated);
 }
 
+bool
+DeviceDescriptor::ParseLine(const char *line)
+{
+  ScopeLock protect(device_blackboard.mutex);
+  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  basic.UpdateClock();
+  return ParseNMEA(line, basic);
+}
+
 void
 DeviceDescriptor::LineReceived(const char *line)
 {
@@ -423,9 +432,6 @@ DeviceDescriptor::LineReceived(const char *line)
     pDevPipeTo->Com->Write("\r\n");
   }
 
-  ScopeLock protect(device_blackboard.mutex);
-  NMEA_INFO &basic = device_blackboard.SetRealState(index);
-  basic.UpdateClock();
-  if (ParseNMEA(line, basic))
+  if (ParseLine(line))
     device_blackboard.ScheduleMerge();
 }

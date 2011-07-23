@@ -198,6 +198,8 @@ public:
 
   void OnSysTicker(const NMEA_INFO &basic, const DERIVED_INFO &calculated);
 
+  bool ParseLine(const char *line);
+
   virtual void LineReceived(const char *line);
 };
 
