@@ -66,13 +66,17 @@ private:
    */
   AtmosphericPressure qnh;
 
+  bool detected;
+
 public:
-  VegaDevice(Port *_port):port(_port) {}
+  VegaDevice(Port *_port)
+    :port(_port), detected(false) {}
 
 protected:
   void VarioWriteSettings(const DERIVED_INFO &calculated) const;
 
 public:
+  virtual void LinkTimeout();
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
   virtual bool PutQNH(const AtmosphericPressure& pres,
                       const DERIVED_INFO &calculated);
@@ -80,6 +84,13 @@ public:
   virtual void OnSysTicker(const NMEA_INFO &basic,
                            const DERIVED_INFO &calculated);
 };
+
+void
+VegaDevice::LinkTimeout()
+{
+  AbstractDevice::LinkTimeout();
+  detected = false;
+}
 
 static bool
 PDSWC(NMEAInputLine &line, NMEA_INFO &info)
@@ -315,6 +326,9 @@ VegaDevice::ParseNMEA(const char *String, NMEA_INFO &info)
   char type[16];
   line.read(type, 16);
 
+  if (memcmp(type, "$PD", 3) == 0)
+    detected = true;
+
   if (strcmp(type, "$PDSWC") == 0)
     return PDSWC(line, info);
   else if (strcmp(type, "$PDAAV") == 0)
@@ -392,7 +406,7 @@ void
 VegaDevice::OnSysTicker(const NMEA_INFO &basic,
                         const DERIVED_INFO &calculated)
 {
-  if (basic.TotalEnergyVarioAvailable)
+  if (detected)
     VarioWriteSettings(calculated);
 
 #ifdef UAV_APPLICATION
