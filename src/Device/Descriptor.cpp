@@ -77,6 +77,7 @@ DeviceDescriptor::Open(Port *_port, const struct DeviceRegister *_driver,
 
   settings_sent.Clear();
   settings_received.Clear();
+  was_connected = false;
 
   Com = _port;
   Driver = _driver;
@@ -326,15 +327,6 @@ DeviceDescriptor::PutVoice(const TCHAR *sentence)
   return device != NULL ? device->PutVoice(sentence) : true;
 }
 
-void
-DeviceDescriptor::LinkTimeout()
-{
-  assert(!busy);
-
-  if (device != NULL)
-    device->LinkTimeout();
-}
-
 bool
 DeviceDescriptor::Declare(const struct Declaration &declaration,
                           OperationEnvironment &env)
@@ -405,6 +397,17 @@ DeviceDescriptor::OnSysTicker(const DERIVED_INFO &calculated)
 {
   if (device == NULL || IsBusy())
     return;
+
+  device_blackboard.mutex.Lock();
+  const NMEA_INFO &basic = device_blackboard.RealState(index);
+  const bool now_connected = basic.Connected;
+  device_blackboard.mutex.Unlock();
+
+  if (!now_connected && was_connected)
+    /* connection was just lost */
+    device->LinkTimeout();
+
+  was_connected = now_connected;
 
   ticker = !ticker;
   if (ticker)

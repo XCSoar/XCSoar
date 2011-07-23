@@ -54,8 +54,6 @@ AllDevicesPutQNH(const AtmosphericPressure &pres,
 
 void AllDevicesPutVoice(const TCHAR *sentence);
 
-void AllDevicesLinkTimeout();
-
 /**
  * Is any device currently declaring a task?
  */

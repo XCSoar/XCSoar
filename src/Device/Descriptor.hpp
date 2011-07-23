@@ -81,6 +81,8 @@ class DeviceDescriptor : public Port::Handler {
    */
   ExternalSettings settings_received;
 
+  bool was_connected;
+
   bool ticker;
 
   /**
@@ -188,7 +190,6 @@ public:
               const DERIVED_INFO &calculated);
   bool PutVoice(const TCHAR *sentence);
 
-  void LinkTimeout();
   bool Declare(const struct Declaration &declaration,
                OperationEnvironment &env);
 

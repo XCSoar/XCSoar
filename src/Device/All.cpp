@@ -122,16 +122,6 @@ AllDevicesPutVoice(const TCHAR *sentence)
     DeviceList[i].PutVoice(sentence);
 }
 
-void
-AllDevicesLinkTimeout()
-{
-  if (is_simulator())
-    return;
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].LinkTimeout();
-}
-
 bool
 AllDevicesIsBusy()
 {
