@@ -24,6 +24,7 @@ Copyright_License {
 #include "Profile/DeviceConfig.hpp"
 #include "Profile/Profile.hpp"
 #include "Asset.hpp"
+#include "Language/Language.hpp"
 
 #include <stdio.h>
 
@@ -55,6 +56,41 @@ DeviceConfig::IsAvailable() const
 
   /* unreachable */
   return false;
+}
+
+const TCHAR *
+DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
+{
+  switch (port_type) {
+  case DeviceConfig::DISABLED:
+    return _("Disabled");
+
+  case DeviceConfig::SERIAL:
+    return path.c_str();
+
+  case DeviceConfig::RFCOMM:
+    _sntprintf(buffer, max_size, _T("Bluetooth %s"),
+               bluetooth_mac.c_str());
+    return buffer;
+
+  case DeviceConfig::IOIOUART:
+    _sntprintf(buffer, max_size, _T("IOIO UArt %d"),
+               ioio_uart_id);
+    return buffer;
+
+  case DeviceConfig::AUTO:
+    return _("GPS Intermediate Driver");
+
+  case DeviceConfig::INTERNAL:
+    return _("Built-in GPS");
+
+  case DeviceConfig::TCP_LISTENER:
+    return _T("TCP port 4353");
+  }
+
+  /* unreachable */
+  assert(false);
+  return _T("Disabled");
 }
 
 static const TCHAR *

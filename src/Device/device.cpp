@@ -49,38 +49,7 @@ static void
 PortOpenError(const DeviceConfig &config)
 {
   TCHAR name_buffer[64];
-  const TCHAR *name = name_buffer;
-  switch (config.port_type) {
-  case DeviceConfig::DISABLED:
-    name = _("Disabled");
-    break;
-
-  case DeviceConfig::SERIAL:
-    name = config.path.c_str();
-    break;
-
-  case DeviceConfig::RFCOMM:
-    _sntprintf(name_buffer, 64, _T("Bluetooth %s"),
-               config.bluetooth_mac.c_str());
-    break;
-
-  case DeviceConfig::IOIOUART:
-    _sntprintf(name_buffer, 64, _T("IOIO UArt %d"),
-               config.ioio_uart_id);
-    break;
-
-  case DeviceConfig::AUTO:
-    name = _("GPS Intermediate Driver");
-    break;
-
-  case DeviceConfig::INTERNAL:
-    name = _("Built-in GPS");
-    break;
-
-  case DeviceConfig::TCP_LISTENER:
-    name = _T("TCP port 4353");
-    break;
-  }
+  const TCHAR *name = config.GetPortName(name_buffer, 64);
 
   TCHAR msg[256];
   _sntprintf(msg, 256, _("Unable to open port %s"), name);

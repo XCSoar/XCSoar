@@ -153,6 +153,12 @@ struct DeviceConfig {
     bluetooth_mac.clear();
     driver_name.clear();
   }
+
+  /**
+   * Generates a human-readable (localised) port name.
+   */
+  gcc_pure
+  const TCHAR *GetPortName(TCHAR *buffer, size_t max_size) const;
 };
 
 namespace Profile
