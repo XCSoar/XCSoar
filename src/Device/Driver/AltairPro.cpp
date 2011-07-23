@@ -61,8 +61,6 @@ public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
   virtual bool Declare(const struct Declaration &declaration,
                        OperationEnvironment &env);
-  virtual void OnSysTicker(const NMEA_INFO &basic,
-                           const DERIVED_INFO &calculated);
 };
 
 static bool
@@ -298,13 +296,6 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
 
   PropertySetGet(port, Buffer, dim(Buffer));
 
-}
-
-void
-AltairProDevice::OnSysTicker(const NMEA_INFO &basic,
-                             const DERIVED_INFO &calculated)
-{
-  // Do To get IO data like temp, humid, etc
 }
 
 static Device *
