@@ -31,7 +31,7 @@ Copyright_License {
 #include "Device/Descriptor.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Port.hpp"
-#include "Device/NullPort.hpp"
+#include "Device/ConfiguredPort.hpp"
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
 #include "Message.hpp"
@@ -41,10 +41,6 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Device/TCPPort.hpp"
-
-#ifdef _WIN32_WCE
-#include "Config/Registry.hpp"
-#endif
 
 #ifdef ANDROID
 #include "Android/InternalGPS.hpp"
@@ -62,140 +58,6 @@ Copyright_License {
 #endif
 
 #include <assert.h>
-#include <windef.h> /* for MAX_PATH */
-
-/**
- * Attempt to detect the GPS device.
- *
- * See http://msdn.microsoft.com/en-us/library/bb202042.aspx
- */
-static bool
-detect_gps(TCHAR *path, size_t path_max_size)
-{
-#ifdef _WIN32_WCE
-  static const TCHAR *const gps_idm_key =
-    _T("System\\CurrentControlSet\\GPS Intermediate Driver\\Multiplexer");
-  static const TCHAR *const gps_idm_value = _T("DriverInterface");
-
-  RegistryKey key(HKEY_LOCAL_MACHINE, gps_idm_key, true);
-  return !key.error() &&
-    key.get_value(gps_idm_value, path, path_max_size);
-#else
-  return false;
-#endif
-}
-
-static Port *
-OpenPort(const DeviceConfig &config, Port::Handler &handler)
-{
-  if (is_simulator())
-    return new NullPort(handler);
-
-  const TCHAR *path = NULL;
-  TCHAR buffer[MAX_PATH];
-
-  switch (config.port_type) {
-  case DeviceConfig::DISABLED:
-    return NULL;
-
-  case DeviceConfig::SERIAL:
-    if (config.path.empty())
-      return NULL;
-
-    path = config.path.c_str();
-    break;
-
-  case DeviceConfig::RFCOMM:
-#ifdef ANDROID
-    if (config.bluetooth_mac.empty()) {
-      LogStartUp(_T("No Bluetooth MAC configured"));
-      return NULL;
-    }
-
-    {
-      AndroidBluetoothPort *port =
-        new AndroidBluetoothPort(config.bluetooth_mac, handler);
-      if (!port->Open()) {
-        delete port;
-        return NULL;
-      }
-
-      return port;
-    }
-#else
-    LogStartUp(_T("Bluetooth not available on this platform"));
-    return NULL;
-#endif
-
-  case DeviceConfig::IOIOUART:
-#if defined(ANDROID) && defined(IOIOLIB)
-    {
-      if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts()) {
-        LogStartUp(_T("No IOIOUart configured in profile"));
-        return NULL;
-      }
-
-      {
-        AndroidIOIOUartPort *port =
-          new AndroidIOIOUartPort(config.ioio_uart_id, config.baud_rate, handler);
-
-        if (!port->Open()) {
-          delete port;
-          return NULL;
-        }
-
-        return port;
-      }
-    }
-#else
-    LogStartUp(_T("IOIO Uart not available on this platform or version"));
-    return NULL;
-#endif
-
-  case DeviceConfig::AUTO:
-    if (!detect_gps(buffer, sizeof(buffer))) {
-      LogStartUp(_T("no GPS detected"));
-      return NULL;
-    }
-
-    LogStartUp(_T("GPS detected: %s"), buffer);
-
-    path = buffer;
-    break;
-
-  case DeviceConfig::INTERNAL:
-    break;
-
-  case DeviceConfig::TCP_LISTENER: {
-    TCPPort *port = new TCPPort(4353, handler);
-    if (!port->Open()) {
-      delete port;
-      return NULL;
-    }
-
-    return port;
-  }
-  }
-
-#ifdef ANDROID
-  return NULL;
-#else
-  if (path == NULL)
-    return NULL;
-
-#ifdef HAVE_POSIX
-  TTYPort *Com = new TTYPort(path, config.baud_rate, handler);
-#else
-  SerialPort *Com = new SerialPort(path, config.baud_rate, handler);
-#endif
-  if (!Com->Open()) {
-    delete Com;
-    return NULL;
-  }
-
-  return Com;
-#endif
-}
 
 /**
  * The configured port failed to open; display an error message.
