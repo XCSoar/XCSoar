@@ -24,64 +24,27 @@ Copyright_License {
 // 20070413:sgi add NmeaOut support, allow nmea chaining an double port platforms
 
 #include "Device/device.hpp"
-#include "Device/Driver.hpp"
-#include "Device/Register.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
 #include "Device/Parser.hpp"
-#include "Device/Port.hpp"
-#include "Device/ConfiguredPort.hpp"
 #include "LogFile.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Message.hpp"
-#include "Language/Language.hpp"
 #include "Asset.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "Device/TCPPort.hpp"
 #include "Operation.hpp"
 
 #include <assert.h>
 
-/**
- * The configured port failed to open; display an error message.
- */
-static void
-PortOpenError(const DeviceConfig &config)
-{
-  TCHAR name_buffer[64];
-  const TCHAR *name = config.GetPortName(name_buffer, 64);
-
-  TCHAR msg[256];
-  _sntprintf(msg, 256, _("Unable to open port %s"), name);
-  Message::AddMessage(msg);
-}
-
 static bool
 devInitOne(DeviceDescriptor &device, DeviceDescriptor *&nmeaout)
 {
-  QuietOperationEnvironment env;
-  const DeviceConfig &config = device.GetConfig();
+  PopupOperationEnvironment env;
 
-  if (config.port_type == DeviceConfig::INTERNAL)
-    return device.OpenInternalGPS();
-
-  const struct DeviceRegister *Driver = FindDriverByName(config.driver_name);
-  if (Driver == NULL)
+  if (!device.Open(env))
     return false;
 
-  Port *Com = OpenPort(config, device);
-  if (Com == NULL) {
-    PortOpenError(config);
-    return false;
-  }
-
-  if (!device.Open(Com, Driver, env)) {
-    delete Com;
-    return false;
-  }
-
-  if (nmeaout == NULL && Driver->IsNMEAOut())
+  if (nmeaout == NULL && device.IsNMEAOut())
     nmeaout = &device;
 
   return true;

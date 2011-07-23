@@ -133,6 +133,8 @@ public:
 
   bool OpenInternalGPS();
 
+  bool Open(OperationEnvironment &env);
+
   void Close();
 
   const TCHAR *GetDisplayName() const;
@@ -155,6 +157,8 @@ public:
   bool IsVega() const {
     return IsDriver(_T("Vega"));
   }
+
+  bool IsNMEAOut() const;
 
   /**
    * Is this device currently busy (i.e. not in normal NMEA receiving

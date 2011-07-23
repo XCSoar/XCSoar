@@ -26,7 +26,9 @@ Copyright_License {
 #include "Device/Parser.hpp"
 #include "Device/FLARM.hpp"
 #include "Device/Internal.hpp"
+#include "Device/Register.hpp"
 #include "DeviceBlackboard.hpp"
+#include "Device/ConfiguredPort.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "StringUtil.hpp"
@@ -116,6 +118,39 @@ DeviceDescriptor::OpenInternalGPS()
 #endif
 }
 
+bool
+DeviceDescriptor::Open(OperationEnvironment &env)
+{
+  if (config.port_type == DeviceConfig::INTERNAL)
+    return OpenInternalGPS();
+
+  const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
+  if (driver == NULL) {
+    TCHAR msg[256];
+    _sntprintf(msg, 256, _("No such driver: %s"), config.driver_name.c_str());
+    env.SetErrorMessage(msg);
+    return false;
+  }
+
+  Port *port = OpenPort(config, *this);
+  if (port == NULL) {
+    TCHAR name_buffer[64];
+    const TCHAR *name = config.GetPortName(name_buffer, 64);
+
+    TCHAR msg[256];
+    _sntprintf(msg, 256, _("Unable to open port %s"), name);
+    env.SetErrorMessage(msg);
+    return false;
+  }
+
+  if (!Open(port, driver, env)) {
+    delete port;
+    return false;
+  }
+
+  return true;
+}
+
 void
 DeviceDescriptor::Close()
 {
@@ -171,6 +206,12 @@ bool
 DeviceDescriptor::IsLogger() const
 {
   return Driver != NULL && Driver->IsLogger();
+}
+
+bool
+DeviceDescriptor::IsNMEAOut() const
+{
+  return Driver != NULL && Driver->IsNMEAOut();
 }
 
 bool
