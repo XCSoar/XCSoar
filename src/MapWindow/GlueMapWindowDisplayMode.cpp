@@ -189,7 +189,7 @@ GlueMapWindow::UpdateScreenAngle()
       calculated.task_stats.current_leg.solution_remaining.defined())
     visible_projection.SetScreenAngle(calculated.task_stats.current_leg.
                                       solution_remaining.Vector.Bearing);
-  else if (orientation == NORTHUP)
+  else if (orientation == NORTHUP || !basic.track_available)
     visible_projection.SetScreenAngle(Angle::native(fixed_zero));
   else
     // normal, glider forward
@@ -258,7 +258,9 @@ GlueMapWindow::UpdateProjection()
       fixed x = fixed_zero;
       fixed y = fixed_zero;
       if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TRACK) {
-        if (basic.GroundSpeed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
+        if (basic.track_available &&
+            basic.GroundSpeedAvailable &&
+            basic.GroundSpeed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
           basic.track.Reciprocal().sin_cos(x, y);
       } else if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TARGET) {
         if (calculated.task_stats.current_leg.solution_remaining.defined())
