@@ -89,14 +89,16 @@ GlueMapWindow::ExchangeBlackboard()
   ReadSettingsComputer(next_settings_computer);
   next_mutex.Unlock();
 #endif
-
-  UpdateDisplayMode();
-  UpdateMapScale();
 }
 
 void
 GlueMapWindow::FullRedraw()
 {
+  UpdateDisplayMode();
+  UpdateScreenAngle();
+  UpdateProjection();
+  UpdateMapScale();
+
 #ifdef ENABLE_OPENGL
   invalidate();
 #else
@@ -107,11 +109,12 @@ GlueMapWindow::FullRedraw()
 void
 GlueMapWindow::QuickRedraw()
 {
-#ifndef ENABLE_OPENGL
-  /* update the Projection */
-
   UpdateScreenAngle();
   UpdateProjection();
+  UpdateMapScale();
+
+#ifndef ENABLE_OPENGL
+  /* update the Projection */
 
   ++ui_generation;
 

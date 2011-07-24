@@ -329,9 +329,6 @@ GlueMapWindow::on_paint_buffer(Canvas &canvas)
 void
 GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
 {
-  UpdateScreenAngle();
-  UpdateProjection();
-
   MapWindow::Render(canvas, rc);
 
   if (!settings_map.EnablePan) {

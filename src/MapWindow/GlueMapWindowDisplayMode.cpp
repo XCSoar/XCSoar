@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
-
+#include "Interface.hpp"
 #include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
 
@@ -158,7 +158,11 @@ GlueMapWindow::SwitchZoomClimb()
 void
 GlueMapWindow::UpdateDisplayMode()
 {
-  enum DisplayMode new_mode = GetNewDisplayMode(SettingsMap(), Calculated());
+  /* not using MapWindowBlackboard here because these methods are
+     called by the main thread */
+  enum DisplayMode new_mode =
+    GetNewDisplayMode(CommonInterface::SettingsMap(),
+                      CommonInterface::Calculated());
 
   if (DisplayMode != new_mode && new_mode == DM_CIRCLING)
     offsetHistory.reset();
@@ -170,9 +174,11 @@ GlueMapWindow::UpdateDisplayMode()
 void
 GlueMapWindow::UpdateScreenAngle()
 {
-  const NMEA_INFO &basic = Basic();
-  const DERIVED_INFO &calculated = Calculated();
-  const SETTINGS_MAP &settings = SettingsMap();
+  /* not using MapWindowBlackboard here because these methods are
+     called by the main thread */
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
 
   if (settings.TargetPan &&
       calculated.common_stats.active_taskpoint_index !=
@@ -201,8 +207,10 @@ GlueMapWindow::UpdateScreenAngle()
 void
 GlueMapWindow::UpdateMapScale()
 {
-  const DERIVED_INFO &calculated = Calculated();
-  const SETTINGS_MAP &settings = SettingsMap();
+  /* not using MapWindowBlackboard here because these methods are
+     called by the main thread */
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
 
   if (SettingsMap().TargetPan) {
     // set scale exactly so that waypoint distance is the zoom factor
@@ -241,9 +249,12 @@ void
 GlueMapWindow::UpdateProjection()
 {
   const PixelRect rc = get_client_rect();
-  const NMEA_INFO &basic = Basic();
-  const DERIVED_INFO &calculated = Calculated();
-  const SETTINGS_MAP &settings_map = SettingsMap();
+
+  /* not using MapWindowBlackboard here because these methods are
+     called by the main thread */
+  const NMEA_INFO &basic = CommonInterface::Basic();
+  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
 
   RasterPoint center;
   center.x = (rc.left + rc.right) / 2;
