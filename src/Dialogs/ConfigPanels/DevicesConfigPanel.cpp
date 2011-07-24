@@ -592,7 +592,7 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
   } else if (is_android()) {
     value -= num_port_types;
 
-    if (value <= num_bluetooth_types) {
+    if (value < num_bluetooth_types) {
       /* Bluetooth */
       if (config.port_type == DeviceConfig::RFCOMM &&
           _tcscmp(config.bluetooth_mac, df.GetAsString()) == 0)
@@ -603,8 +603,8 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
       return true;
     } else {
       /* IOIO UART */
-      if (config.port_type == DeviceConfig::SERIAL &&
-          _tcscmp(config.path, df.GetAsString()) == 0)
+      if (config.port_type == DeviceConfig::IOIOUART &&
+          config.ioio_uart_id == (unsigned)_ttoi(df.GetAsString()))
         return false;
 
       config.port_type = DeviceConfig::IOIOUART;
