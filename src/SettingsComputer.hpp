@@ -40,6 +40,8 @@ Copyright_License {
 #include "TeamCodeCalculation.hpp"
 #include "Plane/Plane.hpp"
 
+#include <stdint.h>
+
 class Waypoint;
 
 // control of calculations, these only changed by user interface
@@ -68,7 +70,7 @@ struct SETTINGS_WIND {
  * 2: ZigZag
  * 3: Both
  */
-  int AutoWindMode; 
+  uint8_t AutoWindMode;
 
   /**
    * If enabled, then the wind vector received from external devices
@@ -89,9 +91,9 @@ struct SETTINGS_WIND {
  */
 struct SETTINGS_LOGGER {
   /** Logger interval in cruise mode */
-  int LoggerTimeStepCruise;
+  uint16_t LoggerTimeStepCruise;
   /** Logger interval in circling mode */
-  int LoggerTimeStepCircling;
+  uint16_t LoggerTimeStepCircling;
   /** Use short IGC filenames for the logger files */
   bool LoggerShortName;
   bool DisableAutoLogger;
@@ -109,8 +111,8 @@ struct SETTINGS_SOUND {
   bool EnableSoundVario;
   bool EnableSoundTask;
   bool EnableSoundModes;
-  int SoundVolume;
-  int SoundDeadband;
+  uint8_t SoundVolume;
+  uint8_t SoundDeadband;
 };
 
 /** 
@@ -119,11 +121,11 @@ struct SETTINGS_SOUND {
 struct SETTINGS_TEAMCODE {
   int TeamCodeRefWaypoint;      /**< Reference waypoint id for code origin */
   bool TeamFlarmTracking;       /**< Whether to enable tracking by FLARM */
+  bool TeammateCodeValid;       /**< Whether the teammate code is valid */  
 
   StaticString<4> TeamFlarmCNTarget;   /**< CN of the glider to track */
   TeamCode TeammateCode;       /**< auto-detected, see also in Info.h */
 
-  bool TeammateCodeValid;       /**< Whether the teammate code is valid */  
   FlarmId TeamFlarmIdTarget; /**< FlarmId of the glider to track */
 };
 
@@ -185,7 +187,7 @@ struct SETTINGS_COMPUTER:
   public SETTINGS_FEATURES,
   public TaskBehaviour
 {
-  int EnableExternalTriggerCruise;
+  uint8_t EnableExternalTriggerCruise;
 
   short AverEffTime;
 

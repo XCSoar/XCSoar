@@ -940,13 +940,17 @@ InputEvents::eventAudioDeadband(const TCHAR *misc)
     CommonInterface::SetSettingsComputer();
 
   if (_tcscmp(misc, _T("+"))) {
+    if (settings_computer.SoundDeadband >= 40)
+      return;
+
     settings_computer.SoundDeadband++;
   }
   if (_tcscmp(misc, _T("-"))) {
+    if (settings_computer.SoundDeadband <= 0)
+      return;
+
     settings_computer.SoundDeadband--;
   }
-  settings_computer.SoundDeadband =
-      min(40, max(settings_computer.SoundDeadband, 0));
 
   /*
   VarioSound_SetVdead(SoundDeadband);
