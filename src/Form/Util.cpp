@@ -223,6 +223,17 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, short &value)
 }
 
 bool
+SaveFormProperty(const WndForm &form, const TCHAR *field, uint8_t &value)
+{
+  uint8_t new_value = (uint8_t)GetFormValueInteger(form, field);
+  if (new_value == value)
+    return false;
+
+  value = new_value;
+  return true;
+}
+
+bool
 SaveFormProperty(WndForm &form, const TCHAR *control_name, fixed &value)
 {
   fixed new_value = GetFormValueFixed(form, control_name);
@@ -299,6 +310,18 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
                  short &value)
+{
+  if (SaveFormProperty(form, field, value)) {
+    Profile::Set(reg, value);
+    return true;
+  } else {
+    return false;
+  }
+}
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+                 uint8_t &value)
 {
   if (SaveFormProperty(form, field, value)) {
     Profile::Set(reg, value);

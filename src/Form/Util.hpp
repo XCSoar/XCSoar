@@ -28,6 +28,7 @@ Copyright_License {
 #include "Compiler.h"
 
 #include <tchar.h>
+#include <stdint.h>
 
 class WndForm;
 
@@ -94,6 +95,9 @@ bool
 SaveFormProperty(const WndForm &form, const TCHAR* field, short &value);
 
 bool
+SaveFormProperty(const WndForm &form, const TCHAR* field, uint8_t &value);
+
+bool
 SaveFormProperty(WndForm &form, const TCHAR *control_name, fixed &value);
 
 #ifdef FIXED_MATH
@@ -140,6 +144,10 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
                  short &value);
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
+                 uint8_t &value);
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
