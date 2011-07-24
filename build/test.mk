@@ -660,7 +660,8 @@ DEBUG_PROGRAM_NAMES = \
 	lxn2igc \
 	RunIGCWriter \
 	RunWindZigZag \
-	RunCanvas RunMapWindow RunDialog \
+	RunCanvas RunMapWindow \
+	RunDialog RunListControl \
 	RunRenderOZ \
 	RunProgressWindow \
 	RunJobDialog \
@@ -1571,6 +1572,34 @@ RUN_DIALOG_LDADD = \
 $(RUN_DIALOG_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
 $(RUN_DIALOG_BIN): LDLIBS += $(SCREEN_LDLIBS)
 $(RUN_DIALOG_BIN): $(RUN_DIALOG_OBJS) $(RUN_DIALOG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_LIST_CONTROL_SOURCES = \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Thread/Debug.cpp \
+	$(SRC)/Thread/Notify.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Form/Form.cpp \
+	$(SRC)/Form/List.cpp \
+	$(SRC)/Form/ScrollBar.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/OS/FileUtil.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/RunListControl.cpp
+RUN_LIST_CONTROL_OBJS = $(call SRC_TO_OBJ,$(RUN_LIST_CONTROL_SOURCES))
+RUN_LIST_CONTROL_BIN = $(TARGET_BIN_DIR)/RunListControl$(TARGET_EXEEXT)
+RUN_LIST_CONTROL_LDADD = \
+	$(SCREEN_LIBS) \
+	$(MATH_LIBS)
+$(RUN_LIST_CONTROL_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)
+$(RUN_LIST_CONTROL_BIN): LDLIBS += $(SCREEN_LDLIBS)
+$(RUN_LIST_CONTROL_BIN): $(RUN_LIST_CONTROL_OBJS) $(RUN_LIST_CONTROL_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
