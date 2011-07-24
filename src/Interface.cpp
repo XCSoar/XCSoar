@@ -55,6 +55,13 @@ MainWindow CommonInterface::main_window(status_messages);
 unsigned XCSoarInterface::debounceTimeout = 250;
 unsigned ActionInterface::MenuTimeoutMax = 8 * 4;
 
+bool
+CommonInterface::IsPanning()
+{
+  return main_window.map != NULL && main_window.map->IsPanning();
+
+}
+
 void
 XCSoarInterface::ExchangeBlackboard()
 {

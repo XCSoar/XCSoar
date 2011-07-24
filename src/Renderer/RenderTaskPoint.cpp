@@ -45,6 +45,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                                  const TaskProjection &_task_projection,
                                  RenderObservationZone &_ozv,
                                  const bool draw_bearing,
+                                 bool _draw_all,
                                  const GeoPoint &location)
   :canvas(_canvas), buffer(_buffer), m_proj(_projection),
    map_canvas(_canvas, _projection,
@@ -53,6 +54,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
    task_look(_task_look),
    task_projection(_task_projection),
    m_draw_bearing(draw_bearing),
+   draw_all(_draw_all),
    m_index(0),
    ozv(_ozv),
    m_active_index(0),
@@ -189,9 +191,7 @@ RenderTaskPoint::do_draw_target(const TaskPoint &tp) const
   if (!tp.has_target()) {
     return false;
   }
-  return (point_current()
-          || m_settings_map.EnablePan 
-          || m_settings_map.TargetPan);
+  return draw_all || point_current();
 }
 
 void 

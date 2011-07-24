@@ -56,6 +56,8 @@ protected:
   const TaskProjection &task_projection;
 
   const bool m_draw_bearing;
+  const bool draw_all;
+
   GeoPoint m_last_point;
   unsigned m_index;
   RenderObservationZone &ozv;
@@ -73,6 +75,7 @@ public:
                   const TaskProjection &_task_projection,
                   RenderObservationZone &_ozv,
                   const bool draw_bearing,
+                  bool draw_all,
                   const GeoPoint &location);
 
   void Visit(const UnorderedTaskPoint& tp);

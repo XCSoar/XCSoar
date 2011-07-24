@@ -62,7 +62,7 @@ GlueMapWindow::on_mouse_double(int x, int y)
 {
   mouse_down_clock.update();
 
-  if (settings_map.EnablePan)
+  if (IsPanning())
     return true;
 
   InputEvents::ShowMenu();
@@ -92,11 +92,9 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
     return true;
 
   case DRAG_PAN:
-
-    XCSoarInterface::SetSettingsMap().PanLocation =
-      drag_projection.GetGeoLocation() + drag_start_geopoint
-      - drag_projection.ScreenToGeo(x, y);
-
+    visible_projection.SetGeoLocation(drag_projection.GetGeoLocation()
+                                      + drag_start_geopoint
+                                      - drag_projection.ScreenToGeo(x, y));
     QuickRedraw();
     return true;
 
@@ -128,11 +126,18 @@ GlueMapWindow::on_mouse_down(int x, int y)
   drag_start_geopoint = visible_projection.ScreenToGeo(x, y);
   drag_last = drag_start;
 
-  if (SettingsMap().TargetPan) {
-    drag_mode = isClickOnTarget(drag_start) ? DRAG_TARGET : DRAG_NONE;
-  } else if (SettingsMap().EnablePan) {
+  switch (follow_mode) {
+  case FOLLOW_SELF:
+    break;
+
+  case FOLLOW_PAN:
     drag_mode = DRAG_PAN;
     drag_projection = visible_projection;
+    break;
+
+  case FOLLOW_TARGET:
+    drag_mode = isClickOnTarget(drag_start) ? DRAG_TARGET : DRAG_NONE;
+    break;
   }
 
   if (Basic().gps.Simulator && drag_mode == DRAG_NONE)
@@ -221,7 +226,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     break;
   }
 
-  if(!dragOverMinDist && !SettingsMap().TargetPan) {
+  if(!dragOverMinDist && !IsTargetDialog()) {
     if (click_time < 1000) {
       // click less then one second -> open nearest waypoint details
       if (way_points != NULL &&
@@ -309,7 +314,7 @@ GlueMapWindow::on_paint(Canvas &canvas)
     TargetPaintDrag(canvas, drag_last);
 
   // Draw center screen cross hair in pan mode
-  if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
+  if (IsPanning())
     DrawCrossHairs(canvas);
 }
 
@@ -330,7 +335,7 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
 {
   MapWindow::Render(canvas, rc);
 
-  if (!settings_map.EnablePan) {
+  if (IsNearSelf()) {
     if (settings_map.EnableThermalProfile)
       DrawThermalBand(canvas, rc);
     DrawStallRatio(canvas, rc);

@@ -394,7 +394,8 @@ RefreshTargetPoint(void)
       if (t == XCSoarInterface::Basic().Location)
         return; // should not happen
 
-      XCSoarInterface::SetSettingsMap().PanLocation = t;
+      GlueMapWindow &map_window = *XCSoarInterface::main_window.map;
+      map_window.SetLocation(t);
       XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
     }
 
@@ -487,9 +488,10 @@ InitTargetPoints()
     const GeoPoint t = protected_task_manager->get_ordered_taskpoint_location(target_point,
         XCSoarInterface::Basic().Location);
     SetZoom();
-    XCSoarInterface::SetSettingsMap().TargetPan = true;
-    XCSoarInterface::SetSettingsMap().EnablePan = true;
-    XCSoarInterface::SetSettingsMap().PanLocation = t;
+
+    GlueMapWindow &map_window = *CommonInterface::main_window.map;
+    map_window.PanToTarget(t);
+
     XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
     ActionInterface::SendSettingsMap(true);
   }
@@ -530,8 +532,9 @@ dlgTargetShowModal(int TargetPoint)
   if (!wf)
     return;
 
-  bool oldEnablePan = XCSoarInterface::SetSettingsMap().EnablePan;
-  GeoPoint oldPanLocation = XCSoarInterface::SetSettingsMap().PanLocation;
+  GlueMapWindow &map_window = *XCSoarInterface::main_window.map;
+  bool oldEnablePan = map_window.IsPanning();
+  GeoPoint oldPanLocation = map_window.GetLocation();
   const bool oldFullScreen = XCSoarInterface::main_window.GetFullScreen();
 
   if (TargetPoint >=0)
@@ -559,9 +562,11 @@ dlgTargetShowModal(int TargetPoint)
 
   wf->ShowModal(XCSoarInterface::main_window.map); // enable map
 
-  XCSoarInterface::SetSettingsMap().EnablePan = oldEnablePan;
-  XCSoarInterface::SetSettingsMap().PanLocation = oldPanLocation;
-  XCSoarInterface::SetSettingsMap().TargetPan = false;
+  if (oldEnablePan)
+    map_window.PanTo(oldPanLocation);
+  else
+    map_window.LeaveTargetPan();
+
   XCSoarInterface::main_window.SetFullScreen(oldFullScreen);
 
   XCSoarInterface::main_window.LeaveCustomView();

@@ -54,7 +54,7 @@ GlueMapWindow::isClickOnTarget(const RasterPoint pc)
   if (task == NULL)
     return false;
 
-  if (XCSoarInterface::SettingsMap().TargetPan) {
+  if (IsTargetDialog()) {
     ProtectedTaskManager::Lease task_manager(*task);
     if (!task_manager->target_is_locked(XCSoarInterface::SettingsMap().TargetPanIndex))
       return false;
@@ -79,7 +79,7 @@ GlueMapWindow::isInSector(const int x, const int y)
 {
   assert(task != NULL);
 
-  if (XCSoarInterface::SettingsMap().TargetPan) {
+  if (IsTargetDialog()) {
     GeoPoint gp = visible_projection.ScreenToGeo(x, y);
     AIRCRAFT_STATE a;
     a.Location = gp;

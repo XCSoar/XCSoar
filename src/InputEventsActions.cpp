@@ -412,7 +412,7 @@ InputEvents::eventPan(const TCHAR *misc)
     sub_PanCursor(-1, 0);
 
   else if (_tcscmp(misc, _T("show")) == 0) {
-    if (XCSoarInterface::SettingsMap().EnablePan)
+    if (CommonInterface::IsPanning())
       Message::AddMessage(_("Pan mode on"));
     else
       Message::AddMessage(_("Pan mode off"));
@@ -1704,44 +1704,39 @@ InputEvents::sub_TerrainTopography(int vswitch)
 void
 InputEvents::sub_Pan(int vswitch)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
-  bool oldPan = settings_map.EnablePan;
+  GlueMapWindow *map_window = CommonInterface::main_window.map;
+  if (map_window == NULL)
+    return;
+
+  bool oldPan = map_window->IsPanning();
 
   if (vswitch == -2) {
     // supertoogle, toogle pan mode and fullscreen
-    settings_map.EnablePan = !settings_map.EnablePan;
+    map_window->TogglePan();
     XCSoarInterface::main_window.SetFullScreen(true);
   } else if (vswitch == -1)
     // toogle, toogle pan mode only
-    settings_map.EnablePan = !settings_map.EnablePan;
+    map_window->TogglePan();
   else
     // 1 = enable pan mode
     // 0 = disable pan mode
-    settings_map.EnablePan = (vswitch !=0);
+    map_window->SetPan(vswitch != 0);
 
-  if (settings_map.EnablePan != oldPan) {
-    if (settings_map.EnablePan) {
-      settings_map.PanLocation = basic.Location;
+  if (map_window->IsPanning() != oldPan) {
+    if (map_window->IsPanning()) {
       setMode(MODE_PAN);
     } else {
       setMode(MODE_DEFAULT);
       Pages::Update();
     }
   }
-
-  ActionInterface::SendSettingsMap(true);
 }
 
 void
 InputEvents::sub_PanCursor(int dx, int dy)
 {
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
-  if (!settings_map.EnablePan)
-    return;
-
   GlueMapWindow *map_window = CommonInterface::main_window.map;
-  if (map_window == NULL)
+  if (map_window == NULL || !map_window->IsPanning())
     return;
 
   const WindowProjection &projection = map_window->VisibleProjection();
@@ -1749,7 +1744,7 @@ InputEvents::sub_PanCursor(int dx, int dy)
   RasterPoint pt = projection.GetScreenOrigin();
   pt.x -= dx * projection.GetScreenWidth() / 4;
   pt.y -= dy * projection.GetScreenHeight() / 4;
-  settings_map.PanLocation = projection.ScreenToGeo(pt);
+  map_window->SetLocation(projection.ScreenToGeo(pt));
 
   map_window->QuickRedraw();
 }
@@ -1767,8 +1762,9 @@ InputEvents::sub_AutoZoom(int vswitch)
 
   Profile::Set(szProfileAutoZoom, settings_map.AutoZoom);
 
-  if (settings_map.AutoZoom && settings_map.EnablePan)
-    settings_map.EnablePan = false;
+  if (settings_map.AutoZoom &&
+      CommonInterface::main_window.map != NULL)
+    CommonInterface::main_window.map->SetPan(false);
 
   ActionInterface::SendSettingsMap(true);
 }
@@ -1784,7 +1780,7 @@ InputEvents::sub_SetZoom(fixed value)
   DisplayMode displayMode = XCSoarInterface::main_window.GetDisplayMode();
   if (settings_map.AutoZoom &&
       !(displayMode == DM_CIRCLING && settings_map.CircleZoom) &&
-      !settings_map.EnablePan) {
+      !CommonInterface::IsPanning()) {
     settings_map.AutoZoom = false;  // disable autozoom if user manually changes zoom
     Profile::Set(szProfileAutoZoom, false);
     Message::AddMessage(_("Auto. zoom off"));

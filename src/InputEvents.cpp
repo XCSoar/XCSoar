@@ -684,8 +684,7 @@ InputEvents::ResetMenuTimeOut()
 void
 InputEvents::ShowMenu()
 {
-  if (XCSoarInterface::SettingsMap().EnablePan &&
-      !XCSoarInterface::SettingsMap().TargetPan)
+  if (CommonInterface::IsPanning())
     /* disable pan mode before displaying the normal menu; leaving pan
        mode enabled would be confusing for the user, and doesn't look
        consistent */
@@ -706,8 +705,7 @@ void
 InputEvents::ProcessMenuTimer()
 {
   if (MenuTimeOut == XCSoarInterface::MenuTimeoutMax) {
-    if (XCSoarInterface::SettingsMap().EnablePan &&
-        !XCSoarInterface::SettingsMap().TargetPan) {
+    if (CommonInterface::IsPanning()) {
       setMode(MODE_PAN);
     } else {
       setMode(MODE_DEFAULT);

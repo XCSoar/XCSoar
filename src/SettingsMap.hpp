@@ -125,9 +125,6 @@ struct SETTINGS_MAP {
 
   DisplayMode UserForceDisplayMode;
 
-  bool EnablePan;
-  GeoPoint PanLocation;
-  bool TargetPan;
   unsigned TargetPanIndex;
   fixed TargetZoomDistance;
   /** Show FLARM radar if traffic present */

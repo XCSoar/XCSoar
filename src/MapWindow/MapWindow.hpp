@@ -74,6 +74,28 @@ class MapWindow :
 
 protected:
   /**
+   * What object does the projection's screen origin follow?
+   */
+  enum FollowMode {
+    /**
+     * Follow the user's aircraft.
+     */
+    FOLLOW_SELF,
+
+    /**
+     * The user pans the map.
+     */
+    FOLLOW_PAN,
+
+    /**
+     * The target is shown (used by dlgTarget).
+     */
+    FOLLOW_TARGET,
+  };
+
+  FollowMode follow_mode;
+
+  /**
    * The projection as currently visible on the screen.  This object
    * is being edited by the user.
    */
@@ -144,6 +166,21 @@ public:
             const TrafficLook &traffic_look);
   virtual ~MapWindow();
 
+  /**
+   * Is the rendered map following the user's aircraft (i.e. near it)?
+   */
+  bool IsNearSelf() const {
+    return follow_mode == FOLLOW_SELF;
+  }
+
+  bool IsPanning() const {
+    return follow_mode == FOLLOW_PAN;
+  }
+
+  bool IsTargetDialog() const {
+    return follow_mode == FOLLOW_TARGET;
+  }
+
   virtual void set(ContainerWindow &parent, const PixelRect &rc);
 
   void set_way_points(const Waypoints *_way_points) {
@@ -178,6 +215,11 @@ public:
 
   const MapWindowProjection &VisibleProjection() const {
     return visible_projection;
+  }
+
+  gcc_pure
+  const GeoPoint &GetLocation() const {
+    return visible_projection.GetGeoLocation();
   }
 
   void SetLocation(const GeoPoint location) {

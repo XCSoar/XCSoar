@@ -345,10 +345,18 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   if (SettingsMap().AutoZoom)
     _tcscat(ScaleInfo, _T("AUTO "));
 
-  if (SettingsMap().TargetPan)
-    _tcscat(ScaleInfo, _T("TARGET "));
-  else if (SettingsMap().EnablePan)
+  switch (follow_mode) {
+  case FOLLOW_SELF:
+    break;
+
+  case FOLLOW_PAN:
     _tcscat(ScaleInfo, _T("PAN "));
+    break;
+
+  case FOLLOW_TARGET:
+    _tcscat(ScaleInfo, _T("TARGET "));
+    break;
+  }
 
   if (SettingsMap().EnableAuxiliaryInfo) {
     _tcscat(ScaleInfo, InfoBoxManager::GetCurrentPanelName());

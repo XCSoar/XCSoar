@@ -287,7 +287,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // .. shade feature disabled
   // .. pan mode activated
   if (SettingsComputer().FinalGlideTerrain == SETTINGS_COMPUTER::FGT_SHADE &&
-      !SettingsMap().EnablePan) {
+      IsNearSelf()) {
 
 #ifdef ENABLE_OPENGL
 

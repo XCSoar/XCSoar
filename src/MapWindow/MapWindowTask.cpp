@@ -46,10 +46,11 @@ public:
                      const TaskProjection &_task_projection,
                      RenderObservationZone &_ozv,
                      const bool draw_bearing,
+                     bool draw_all,
                      const GeoPoint &location):
     RenderTaskPoint(_canvas, _buffer, _projection,
                     _settings_map, task_look, _task_projection,
-                    _ozv, draw_bearing, location)
+                    _ozv, draw_bearing, draw_all, location)
     {};
 
 protected:
@@ -111,6 +112,7 @@ MapWindow::DrawTask(Canvas &canvas)
                               will be used only if active, so it's ok */
                            task_manager->get_ordered_task().get_task_projection(),
                            ozv, draw_bearing,
+                           !IsNearSelf(),
                            Basic().Location);
     RenderTask dv(tpv, render_projection.GetScreenBounds());
     ((TaskVisitor &)dv).Visit(*task);

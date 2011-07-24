@@ -51,6 +51,9 @@ public:
     return movement_detected;
   }
 
+  gcc_pure
+  static bool IsPanning();
+
   // TODO: make this protected
   /**
    * Returns InterfaceBlackboard.Basic (NMEA_INFO) (read-only)

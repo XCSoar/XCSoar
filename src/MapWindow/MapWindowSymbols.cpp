@@ -39,7 +39,7 @@ void
 MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
                     const PixelRect &rc) const
 {
-  if (SettingsMap().EnablePan && !SettingsMap().TargetPan)
+  if (IsPanning())
     return;
 
   TCHAR sTmp[12];

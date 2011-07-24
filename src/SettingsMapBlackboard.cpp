@@ -47,10 +47,6 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.EnableAuxiliaryInfo = true;
   settings_map.AuxiliaryInfoBoxPanel = 0;
   settings_map.UserForceDisplayMode = DM_NONE;
-  settings_map.EnablePan = false;
-  settings_map.PanLocation.Longitude = Angle::native(fixed_zero);
-  settings_map.PanLocation.Latitude = Angle::native(fixed_zero);
-  settings_map.TargetPan = false;
   settings_map.TargetPanIndex = 0;
   settings_map.TargetZoomDistance = fixed(500);
   settings_map.EnableFLARMGauge = true;

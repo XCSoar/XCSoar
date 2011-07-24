@@ -146,6 +146,12 @@ public:
 
   virtual void set(ContainerWindow &parent, const PixelRect &rc);
 
+  void SetPan(bool enable);
+  void TogglePan();
+  void PanTo(const GeoPoint &location);
+  void PanToTarget(const GeoPoint &location);
+  void LeaveTargetPan();
+
   /**
    * If PanTarget, paints target during drag
    * Used by dlgTarget

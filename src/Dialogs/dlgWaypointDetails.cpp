@@ -39,6 +39,7 @@ Copyright_License {
 #include "Screen/Key.h"
 #include "Math/FastMath.h"
 #include "MainWindow.hpp"
+#include "MapWindow/GlueMapWindow.hpp"
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskManager.hpp"
@@ -579,11 +580,11 @@ OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 static void
 OnActivatePanClicked(gcc_unused WndButton &button)
 {
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  GlueMapWindow *map_window = CommonInterface::main_window.map;
+  if (map_window == NULL)
+    return;
 
-  settings_map.PanLocation = selected_waypoint->Location;
-  settings_map.EnablePan = true;
-  XCSoarInterface::SendSettingsMap();
+  map_window->PanTo(selected_waypoint->Location);
   XCSoarInterface::main_window.SetFullScreen(true);
   InputEvents::setMode(InputEvents::MODE_PAN);
   wf->SetModalResult(mrOK);
