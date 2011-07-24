@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "WaypointRenderer.hpp"
 #include "WaypointRendererSettings.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 
 gcc_pure
 static const MaskedIcon &

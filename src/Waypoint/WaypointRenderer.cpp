@@ -22,10 +22,10 @@ Copyright_License {
 */
 
 #include "WaypointRenderer.hpp"
+#include "WaypointRendererSettings.hpp"
 #include "WaypointIconRenderer.hpp"
 #include "MapWindow/MapWindowProjection.hpp"
 #include "MapWindow/MapWindowLabels.hpp"
-#include "SettingsMap.hpp"
 #include "SettingsComputer.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
@@ -110,11 +110,10 @@ class WaypointVisitorMap:
   public TaskPointConstVisitor
 {
   const MapWindowProjection &projection;
-  const SETTINGS_MAP &settings_map;
+  const WaypointRendererSettings &settings;
   const WaypointLook &look;
   const TaskBehaviour &task_behaviour;
 
-  DisplayTextType_t pDisplayTextType;
   TCHAR sAltUnit[4];
   bool task_valid;
 
@@ -132,19 +131,14 @@ public:
 
 public:
   WaypointVisitorMap(const MapWindowProjection &_projection,
-                     const SETTINGS_MAP &_settings_map,
+                     const WaypointRendererSettings &_settings,
                      const WaypointLook &_look,
                      const TaskBehaviour &_task_behaviour):
     projection(_projection),
-    settings_map(_settings_map), look(_look), task_behaviour(_task_behaviour),
+    settings(_settings), look(_look), task_behaviour(_task_behaviour),
     task_valid(false),
     labels(projection.GetScreenWidth(), projection.GetScreenHeight())
   {
-    // if pan mode, show full names
-    pDisplayTextType = settings_map.waypoint.display_text_type;
-    if (settings_map.EnablePan)
-      pDisplayTextType = DISPLAYNAME;
-
     _tcscpy(sAltUnit, Units::GetAltitudeName());
   }
 
@@ -157,7 +151,7 @@ protected:
     if (way_point.Name.length() >= NAME_SIZE - 20)
       return;
 
-    switch (pDisplayTextType) {
+    switch (settings.display_text_type) {
     case DISPLAYNAME:
       _tcscpy(Buffer, way_point.Name.c_str());
       break;
@@ -201,14 +195,14 @@ protected:
     if (arrival_height_glide <= 0 && !way_point.Flags.Watched)
       return;
 
-    if (settings_map.waypoint.arrival_height_display == WP_ARRIVAL_HEIGHT_NONE)
+    if (settings.arrival_height_display == WP_ARRIVAL_HEIGHT_NONE)
       return;
 
     size_t length = _tcslen(buffer);
     int uah_glide = (int)Units::ToUserAltitude(fixed(arrival_height_glide));
     int uah_terrain = (int)Units::ToUserAltitude(fixed(arrival_height_terrain));
 
-    if (settings_map.waypoint.arrival_height_display == WP_ARRIVAL_HEIGHT_TERRAIN) {
+    if (settings.arrival_height_display == WP_ARRIVAL_HEIGHT_TERRAIN) {
       if (arrival_height_terrain > 0) {
         if (length > 0)
           buffer[length++] = _T(':');
@@ -220,7 +214,7 @@ protected:
     if (length > 0)
       buffer[length++] = _T(':');
 
-    if (settings_map.waypoint.arrival_height_display == WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN &&
+    if (settings.arrival_height_display == WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN &&
         arrival_height_glide > 0 && arrival_height_terrain > 0) {
       int altd = abs(arrival_height_glide - arrival_height_terrain);
       if (altd >= 10 && (altd * 100) / arrival_height_glide > 5) {
@@ -236,7 +230,6 @@ protected:
   void
   DrawWaypoint(Canvas &canvas, const VisibleWaypoint &vwp)
   {
-    const WaypointRendererSettings &settings = settings_map.waypoint;
     const Waypoint &way_point = *vwp.waypoint;
     bool watchedWaypoint = way_point.Flags.Watched;
 
@@ -245,7 +238,7 @@ protected:
                    projection.GetScreenAngle());
 
     // Determine whether to draw the waypoint label or not
-    switch (settings_map.waypoint.label_selection) {
+    switch (settings.label_selection) {
     case wlsNoWaypoints:
       return;
 
@@ -267,7 +260,7 @@ protected:
     TextInBoxMode_t text_mode;
     if (vwp.reachable != WaypointRenderer::Unreachable &&
         way_point.IsLandable()) {
-      text_mode.Mode = settings_map.waypoint.landable_render_mode;
+      text_mode.Mode = settings.landable_render_mode;
       text_mode.Bold = true;
       text_mode.MoveInView = true;
     } else if (vwp.in_task) {
@@ -386,7 +379,7 @@ MapWaypointLabelRender(Canvas &canvas, unsigned width, unsigned height,
 void
 WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          const MapWindowProjection &projection,
-                         const SETTINGS_MAP &settings_map,
+                         const struct WaypointRendererSettings &settings,
                          const TaskBehaviour &task_behaviour,
                          const ProtectedTaskManager *task)
 {
@@ -397,7 +390,7 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
     canvas.set_text_color(COLOR_BLACK);
 
-    WaypointVisitorMap v(projection, settings_map, look, task_behaviour);
+    WaypointVisitorMap v(projection, settings, look, task_behaviour);
 
     {
       ProtectedTaskManager::Lease task_manager(*task);

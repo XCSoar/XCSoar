@@ -25,12 +25,8 @@ Copyright_License {
 #define XCSOAR_WAY_POINT_RENDERER_HPP
 
 #include "Util/NonCopyable.hpp"
-#include "Screen/Point.hpp"
-#include "Engine/Waypoint/Waypoint.hpp"
 
-#include <stddef.h>
-
-struct SETTINGS_MAP;
+struct WaypointRendererSettings;
 struct WaypointLook;
 class Canvas;
 class LabelBlock;
@@ -66,7 +62,7 @@ public:
 
   void render(Canvas &canvas, LabelBlock &label_block,
               const MapWindowProjection &projection,
-              const SETTINGS_MAP &settings_map,
+              const struct WaypointRendererSettings &settings,
               const TaskBehaviour &task_behaviour,
               const ProtectedTaskManager *task);
 };
