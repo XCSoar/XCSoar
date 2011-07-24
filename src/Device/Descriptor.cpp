@@ -450,10 +450,12 @@ DeviceDescriptor::OnSysTicker(const DERIVED_INFO &calculated)
 
   was_connected = now_connected;
 
-  ticker = !ticker;
-  if (ticker)
-    // write settings to vario every second
-    device->OnSysTicker(calculated);
+  if (now_connected) {
+    ticker = !ticker;
+    if (ticker)
+      // write settings to vario every second
+      device->OnSysTicker(calculated);
+  }
 }
 
 bool
