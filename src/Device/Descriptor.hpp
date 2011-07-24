@@ -175,6 +175,13 @@ public:
     busy = _busy;
   }
 
+  /**
+   * Query the device's "connected" flag from the DeviceBlackboard.
+   * This method locks the DeviceBlackboard.
+   */
+  gcc_pure
+  bool IsConnected() const;
+
 private:
   bool ParseNMEA(const char *line, struct NMEA_INFO &info);
 

@@ -215,6 +215,13 @@ DeviceDescriptor::IsNMEAOut() const
 }
 
 bool
+DeviceDescriptor::IsConnected() const
+{
+  ScopeLock protect(device_blackboard.mutex);
+  return device_blackboard.RealState(index).Connected;
+}
+
+bool
 DeviceDescriptor::ParseNMEA(const char *line, NMEA_INFO &info)
 {
   assert(line != NULL);
@@ -439,11 +446,7 @@ DeviceDescriptor::OnSysTicker(const DERIVED_INFO &calculated)
   if (device == NULL || IsBusy())
     return;
 
-  device_blackboard.mutex.Lock();
-  const NMEA_INFO &basic = device_blackboard.RealState(index);
-  const bool now_connected = basic.Connected;
-  device_blackboard.mutex.Unlock();
-
+  const bool now_connected = IsConnected();
   if (!now_connected && was_connected)
     /* connection was just lost */
     device->LinkTimeout();
