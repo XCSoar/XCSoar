@@ -170,10 +170,12 @@ GlueMapWindow::UpdateDisplayMode()
 void
 GlueMapWindow::UpdateScreenAngle()
 {
+  const NMEA_INFO &basic = Basic();
+  const DERIVED_INFO &calculated = Calculated();
   const SETTINGS_MAP &settings = SettingsMap();
 
   if (settings.TargetPan &&
-      Calculated().common_stats.active_taskpoint_index !=
+      calculated.common_stats.active_taskpoint_index !=
           settings.TargetPanIndex) {
     visible_projection.SetScreenAngle(Angle::native(fixed_zero));
     return;
@@ -184,14 +186,14 @@ GlueMapWindow::UpdateScreenAngle()
           settings.OrientationCircling : settings.OrientationCruise;
 
   if (orientation == TARGETUP &&
-      Calculated().task_stats.current_leg.solution_remaining.defined())
-    visible_projection.SetScreenAngle(Calculated().task_stats.current_leg.
+      calculated.task_stats.current_leg.solution_remaining.defined())
+    visible_projection.SetScreenAngle(calculated.task_stats.current_leg.
                                       solution_remaining.Vector.Bearing);
   else if (orientation == NORTHUP)
     visible_projection.SetScreenAngle(Angle::native(fixed_zero));
   else
     // normal, glider forward
-    visible_projection.SetScreenAngle(Basic().track);
+    visible_projection.SetScreenAngle(basic.track);
 
   settings_map.NorthArrow = (orientation != NORTHUP);
 }
@@ -199,6 +201,9 @@ GlueMapWindow::UpdateScreenAngle()
 void
 GlueMapWindow::UpdateMapScale()
 {
+  const DERIVED_INFO &calculated = Calculated();
+  const SETTINGS_MAP &settings = SettingsMap();
+
   if (SettingsMap().TargetPan) {
     // set scale exactly so that waypoint distance is the zoom factor
     // across the screen
@@ -214,8 +219,8 @@ GlueMapWindow::UpdateMapScale()
   if (SettingsMap().EnablePan)
     return;
 
-  fixed wpd = Calculated().AutoZoomDistance;
-  if (SettingsMap().AutoZoom && positive(wpd)) {
+  fixed wpd = calculated.AutoZoomDistance;
+  if (settings.AutoZoom && positive(wpd)) {
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
     int AutoZoomFactor = (GetDisplayMode() == DM_CIRCLING) ?
@@ -236,6 +241,8 @@ void
 GlueMapWindow::UpdateProjection()
 {
   const PixelRect rc = get_client_rect();
+  const NMEA_INFO &basic = Basic();
+  const DERIVED_INFO &calculated = Calculated();
   const SETTINGS_MAP &settings_map = SettingsMap();
 
   RasterPoint center;
@@ -251,11 +258,11 @@ GlueMapWindow::UpdateProjection()
       fixed x = fixed_zero;
       fixed y = fixed_zero;
       if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TRACK) {
-        if (Basic().GroundSpeed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
-          Basic().track.Reciprocal().sin_cos(x, y);
+        if (basic.GroundSpeed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
+          basic.track.Reciprocal().sin_cos(x, y);
       } else if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TARGET) {
-        if (Calculated().task_stats.current_leg.solution_remaining.defined())
-          Calculated().task_stats.current_leg.solution_remaining
+        if (calculated.task_stats.current_leg.solution_remaining.defined())
+          calculated.task_stats.current_leg.solution_remaining
                       .Vector.Bearing.Reciprocal().sin_cos(x, y);
       }
       fixed gspFactor = (fixed) (50 - settings_map.GliderScreenPosition) / 100;
@@ -272,19 +279,19 @@ GlueMapWindow::UpdateProjection()
   if (settings_map.EnablePan)
     SetLocation(settings_map.PanLocation);
   else if (GetDisplayMode() == DM_CIRCLING &&
-           Calculated().thermal_locator.estimate_valid) {
-    const fixed d_t = Calculated().thermal_locator.estimate_location.distance(Basic().Location);
+           calculated.thermal_locator.estimate_valid) {
+    const fixed d_t = calculated.thermal_locator.estimate_location.distance(basic.Location);
     if (!positive(d_t)) {
-      SetLocation(Basic().Location);
+      SetLocation(basic.Location);
     } else {
       const fixed d_max = visible_projection.GetMapScale() * fixed_two;
       const fixed t = std::min(d_t, d_max)/d_t;
-      SetLocation(Basic().Location.interpolate(Calculated().thermal_locator.estimate_location,
+      SetLocation(basic.Location.interpolate(calculated.thermal_locator.estimate_location,
                                                t));
     }
   } else
     // Pan is off
-    SetLocation(Basic().Location);
+    SetLocation(basic.Location);
 
   visible_projection.UpdateScreenBounds();
 }
