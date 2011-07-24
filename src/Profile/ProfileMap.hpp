@@ -28,6 +28,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 #include <tchar.h>
+#include <stdint.h>
 #include <cstdio>
 
 class KeyValueFileWriter;
@@ -111,6 +112,16 @@ namespace ProfileMap {
 
     // Save parsed value to output parameter value and return success
     value = tmp;
+    return true;
+  }
+
+  static inline bool Get(const TCHAR *key, uint8_t &value)
+  {
+    unsigned value32;
+    if (!Get(key, value32) || value32 >= 0x100)
+      return false;
+
+    value = (uint8_t)value32;
     return true;
   }
 
