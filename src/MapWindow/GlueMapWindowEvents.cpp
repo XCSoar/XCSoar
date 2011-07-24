@@ -97,7 +97,6 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
       drag_projection.GetGeoLocation() + drag_start_geopoint
       - drag_projection.ScreenToGeo(x, y);
 
-    ActionInterface::SendSettingsMap(true);
     QuickRedraw();
     return true;
 

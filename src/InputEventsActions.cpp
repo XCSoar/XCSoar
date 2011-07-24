@@ -1751,7 +1751,6 @@ InputEvents::sub_PanCursor(int dx, int dy)
   pt.y -= dy * projection.GetScreenHeight() / 4;
   settings_map.PanLocation = projection.ScreenToGeo(pt);
 
-  XCSoarInterface::SendSettingsMap(true);
   map_window->QuickRedraw();
 }
 
@@ -1800,7 +1799,6 @@ InputEvents::sub_SetZoom(fixed value)
 
   value = max(minreasonable, min(scale_1600km, value));
   map_window->SetMapScale(value);
-  XCSoarInterface::SendSettingsMap(true);
   map_window->QuickRedraw();
 }
 

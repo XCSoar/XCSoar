@@ -124,6 +124,12 @@ GlueMapWindow::QuickRedraw()
 #endif
 
   invalidate();
+
+#ifndef ENABLE_OPENGL
+  /* we suppose that the operation will need a full redraw later, so
+     trigger that now */
+  draw_thread->TriggerRedraw();
+#endif
 }
 
 /**
