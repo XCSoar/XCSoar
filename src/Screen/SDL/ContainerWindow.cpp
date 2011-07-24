@@ -395,6 +395,16 @@ ContainerWindow::set_active_child(Window &child)
 }
 
 void
+ContainerWindow::set_focus()
+{
+  /* just in case our child window was focused previously, we must
+     clear it now */
+  ClearFocus();
+
+  Window::set_focus();
+}
+
+void
 ContainerWindow::ClearFocus()
 {
   if (active_child != NULL) {

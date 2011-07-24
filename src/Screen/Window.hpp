@@ -563,7 +563,7 @@ public:
 #ifndef USE_GDI
 
   virtual Window *get_focused_window();
-  void set_focus();
+  virtual void set_focus();
 
   /**
    * Called by the parent window when this window loses focus, or when

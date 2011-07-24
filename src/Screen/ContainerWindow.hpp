@@ -105,6 +105,7 @@ public:
   Window *event_child_at(int x, int y);
 
   void set_active_child(Window &child);
+  virtual void set_focus();
   virtual void ClearFocus();
 
   /**
