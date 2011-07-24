@@ -55,6 +55,16 @@ protected:
   const TaskLook &task_look;
   const TaskProjection &task_projection;
 
+  const bool m_draw_bearing;
+  GeoPoint m_last_point;
+  unsigned m_index;
+  RenderObservationZone &ozv;
+  unsigned m_active_index;
+  RenderTaskLayer m_layer;
+  const GeoPoint m_location;
+  FlatBoundingBox bb_screen;
+  bool mode_optional_start;
+
 public:
   RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                   const WindowProjection &_projection,
@@ -133,15 +143,6 @@ protected:
   void draw_deadzone(const AATPoint& tp);
   void draw_oz_background(Canvas &canvas, const OrderedTaskPoint& tp);
   void draw_oz_foreground(const OrderedTaskPoint& tp);
-  const bool m_draw_bearing;
-  GeoPoint m_last_point;
-  unsigned m_index;
-  RenderObservationZone &ozv;
-  unsigned m_active_index;
-  RenderTaskLayer m_layer;
-  const GeoPoint m_location;
-  FlatBoundingBox bb_screen;
-  bool mode_optional_start;
 };
 
 
