@@ -16,6 +16,7 @@ Version 6.2 - not yet released
   - LX: support baud rate switching
   - Volkslogger: fix task declaration on PC
   - Vega: update vario when there is no GPS fix
+  - PosiGraph: task declaration
   - device declaration can be cancelled
   - reconnect individual devices after failure or timeout
 * calculations

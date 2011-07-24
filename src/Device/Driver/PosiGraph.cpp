@@ -31,15 +31,21 @@ Copyright_License {
 // adding baro alt sentance paser to support baro source priority  if (d == pDevPrimaryBaroSource){...}
 
 #include "Device/Driver/PosiGraph.hpp"
+#include "Device/Driver/LX/Internal.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
+#include "Profile/DeviceConfig.hpp"
 #include "Math/FastMath.h"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"
 
 #include <string.h>
 
-class PGDevice : public AbstractDevice {
+class PGDevice : public LXDevice {
+public:
+  PGDevice(Port *_port, unsigned _bulk_baud_rate)
+    :LXDevice(_port, _bulk_baud_rate) {}
+
 public:
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
 };
@@ -59,20 +65,19 @@ PGDevice::ParseNMEA(const char *String, NMEA_INFO &info)
   if (strcmp(type, "$GPWIN") == 0)
     return GPWIN(line, info);
   else
-    return false;
-
+    return LXDevice::ParseNMEA(String, info);
 }
 
 static Device *
 PGCreateOnPort(const DeviceConfig &config, Port *com_port)
 {
-  return new PGDevice();
+  return new PGDevice(com_port, config.bulk_baud_rate);
 }
 
 const struct DeviceRegister pgDevice = {
   _T("PosiGraph Logger"),
   _T("PosiGraph Logger"),
-  0,
+  DeviceRegister::DECLARE | DeviceRegister::BULK_BAUD_RATE,
   PGCreateOnPort,
 };
 
