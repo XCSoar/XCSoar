@@ -361,6 +361,32 @@ WndListFrame::on_key_down(unsigned key_code)
       SetCursorIndex(GetCursorIndex() + 1);
       return true;
     }
+
+  case VK_HOME:
+    SetOrigin(0);
+    SetCursorIndex(0);
+    return true;
+
+  case VK_END:
+    if (length > 0) {
+      SetOrigin(length - items_visible);
+      SetCursorIndex(length - 1);
+    }
+    return true;
+
+  case VK_PRIOR:
+    if (origin > 0) {
+      SetOrigin(origin - items_visible);
+      SetCursorIndex(origin);
+    }
+    return true;
+
+  case VK_NEXT:
+    if (origin + items_visible < length) {
+      SetOrigin(origin + items_visible);
+      SetCursorIndex(std::min(length - 1, origin + items_visible));
+    }
+    return true;
   }
   return PaintWindow::on_key_down(key_code);
 }
