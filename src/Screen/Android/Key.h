@@ -40,6 +40,10 @@ enum {
 
   VK_DUMMY = 0x80,
   VK_BACK,
+  VK_HOME,
+  VK_END,
+  VK_PRIOR,
+  VK_NEXT,
   VK_F1,
   VK_F2,
   VK_F3,
