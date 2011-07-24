@@ -212,6 +212,7 @@ ContainerWindow::focus_previous_control()
 bool
 ContainerWindow::on_destroy()
 {
+  /* destroy all child windows */
   std::list<Window*>::const_iterator i;
   while ((i = children.begin()) != children.end()) {
     Window *w = *i;
@@ -373,10 +374,14 @@ Window *
 ContainerWindow::event_child_at(int x, int y)
 {
   if (capture)
+    /* if this window is capturing the mouse, events must go exactly
+       here */
     return NULL;
   else if (capture_child != NULL)
+    /* all mouse events go to the capturing child */
     return capture_child;
   else
+    /* find the child window at the specified position */
     return child_at(x, y);
 }
 
@@ -408,6 +413,8 @@ void
 ContainerWindow::ClearFocus()
 {
   if (active_child != NULL) {
+    /* clear the focus recursively, until the focused window is
+       found */
     active_child->ClearFocus();
     active_child = NULL;
   }
