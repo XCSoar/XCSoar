@@ -105,12 +105,8 @@ GlueMapWindow::FullRedraw()
 }
 
 void
-GlueMapWindow::QuickRedraw(const SETTINGS_MAP &_settings_map)
+GlueMapWindow::QuickRedraw()
 {
-  assert(&_settings_map != &SettingsMap());
-
-  SetSettingsMap(_settings_map);
-
 #ifndef ENABLE_OPENGL
   /* update the Projection */
 

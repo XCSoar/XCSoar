@@ -138,7 +138,7 @@ public:
    */
   void FullRedraw();
 
-  void QuickRedraw(const SETTINGS_MAP &_settings_map);
+  void QuickRedraw();
 
   bool Idle();
 
