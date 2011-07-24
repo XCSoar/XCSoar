@@ -165,7 +165,6 @@ FlarmDeclare(Port *port, const Declaration &declaration,
 {
   assert(port != NULL);
 
-  port->StopRxThread();
   port->SetRxTimeout(500); // set RX timeout to 500[ms]
 
   bool result = FlarmDeclareInternal(port, declaration, env);
@@ -176,7 +175,6 @@ FlarmDeclare(Port *port, const Declaration &declaration,
   // probably will issue PFLAC,ERROR if a problem?
 
   port->SetRxTimeout(0); // clear timeout
-  port->StartRxThread(); // restart RX thread
 
   return result;
 }
