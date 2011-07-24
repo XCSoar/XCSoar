@@ -117,7 +117,7 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
 void
 MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
 {
-  if (!SettingsMap().NorthArrow)
+  if (!compass_visible)
     return;
 
   RasterPoint Start;

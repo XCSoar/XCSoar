@@ -54,7 +54,8 @@ MapWindow::MapWindow(const WaypointLook &_waypoint_look,
    way_point_renderer(NULL, _waypoint_look),
    airspace_renderer(_airspace_look),
    task(NULL),
-   marks(NULL)
+   marks(NULL),
+   compass_visible(true)
 #ifndef ENABLE_OPENGL
    , ui_generation(1), buffer_generation(0),
    scale_buffer(0)

@@ -140,6 +140,8 @@ protected:
 
   Marks *marks;
 
+  bool compass_visible;
+
 #ifndef ENABLE_OPENGL
   /**
    * Tracks whether the buffer canvas contains valid data.  We use

@@ -278,7 +278,7 @@ GlueMapWindow::UpdateScreenAngle()
     // normal, glider forward
     visible_projection.SetScreenAngle(basic.track);
 
-  settings_map.NorthArrow = (orientation != NORTHUP);
+  compass_visible = orientation != NORTHUP;
 }
 
 void

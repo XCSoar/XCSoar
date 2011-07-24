@@ -88,8 +88,6 @@ struct SETTINGS_MAP {
   /** Map will show topography */
   bool EnableTopography;
 
-  bool NorthArrow;
-
   TerrainRendererSettings terrain;
 
   /** Snailtrail wind drifting in circling mode */

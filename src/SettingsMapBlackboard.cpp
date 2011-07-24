@@ -29,7 +29,6 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.CircleZoom = true;
   settings_map.MaxAutoZoomDistance = fixed(10000); /* 100 km */
   settings_map.EnableTopography = true;
-  settings_map.NorthArrow = true;
   settings_map.terrain.SetDefaults();
   settings_map.EnableTrailDrift = true;
   settings_map.EnableDetourCostMarker = false;
