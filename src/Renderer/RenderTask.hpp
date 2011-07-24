@@ -35,6 +35,9 @@ class GotoTask;
 class RenderTask: 
   public TaskVisitor
 {
+  RenderTaskPoint &tpv;
+  GeoBounds screen_bounds;
+
 public:
   RenderTask(RenderTaskPoint& _tpv, GeoBounds _screen_bounds);
   void Visit(const AbortTask& task);
@@ -42,8 +45,6 @@ public:
   void Visit(const GotoTask& task);
 protected:
   void draw_layers(const AbstractTask& task);
-  RenderTaskPoint &tpv;
-  GeoBounds screen_bounds;
 };
 
 #endif
