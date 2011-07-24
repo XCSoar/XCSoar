@@ -115,6 +115,16 @@ namespace ProfileMap {
     return true;
   }
 
+  static inline bool Get(const TCHAR *key, uint16_t &value)
+  {
+    unsigned value32;
+    if (!Get(key, value32) || value32 >= 0x10000)
+      return false;
+
+    value = (uint16_t)value32;
+    return true;
+  }
+
   static inline bool Get(const TCHAR *key, uint8_t &value)
   {
     unsigned value32;
