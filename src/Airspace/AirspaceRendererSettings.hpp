@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Airspace/AirspaceClass.hpp"
 
+#include <stdint.h>
+
 /** Airspace display modes */
 enum AirspaceDisplayMode_t
 {
@@ -79,8 +81,8 @@ struct AirspaceRendererSettings {
   } fill_mode;
 #endif
 
-  int brushes[AIRSPACECLASSCOUNT];
-  int colours[AIRSPACECLASSCOUNT];
+  uint8_t brushes[AIRSPACECLASSCOUNT];
+  uint8_t colours[AIRSPACECLASSCOUNT];
 
   void SetDefaults();
 };
