@@ -114,7 +114,7 @@ class WaypointVisitorMap:
   const WaypointLook &look;
   const TaskBehaviour &task_behaviour;
 
-  int pDisplayTextType;
+  DisplayTextType_t pDisplayTextType;
   TCHAR sAltUnit[4];
   bool task_valid;
 
