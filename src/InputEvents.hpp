@@ -26,7 +26,6 @@ Copyright_License {
 
 #include <tchar.h>
 
-#include "Thread/Mutex.hpp"
 #include "Math/fixed.hpp"
 
 typedef void (*pt2Event)(const TCHAR *);
