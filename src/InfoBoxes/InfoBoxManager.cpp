@@ -388,9 +388,10 @@ InfoBoxManager::ProcessTimer()
 {
   static Validity last;
 
-  if (XCSoarInterface::Basic().Connected.Modified(last)) {
+  Validity connected = XCSoarInterface::Basic().Connected;
+  if (connected.Modified(last)) {
     SetDirty();
-    last = XCSoarInterface::Basic().Connected;
+    last = connected;
   }
 
   InfoBoxDrawIfDirty();
