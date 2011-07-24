@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/JobDialog.hpp"
 #include "Look/DialogLook.hpp"
+#include "Fonts.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Init.hpp"
 #include "Screen/Layout.hpp"
@@ -61,19 +62,21 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ResourceLoader::Init(hInstance);
 #endif
 
+  InitialiseFonts();
+  DialogLook *look = new DialogLook();
+  look->Initialise(bold_font, normal_font, bold_font, bold_font);
+
   Layout::Initialize(320,240);
   SingleWindow main_window;
   main_window.set(_T("STATIC"), _T("RunProgressWindow"),
                   0, 0, 640, 480);
   main_window.show();
 
-  DialogLook *look = new DialogLook();
-  look->Initialise();
-
   TestJob job;
   JobDialog(main_window, *look, _T("RunJobDialog"), job);
 
   delete look;
+  DeinitialiseFonts();
 
   return 0;
 }

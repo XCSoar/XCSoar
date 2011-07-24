@@ -113,7 +113,6 @@ protected:
   bool force;
 
   /** Font of the titlebar */
-  const Font *mhTitleFont;
 #ifdef EYE_CANDY
   Bitmap bitmap_title;
 #endif
@@ -242,9 +241,6 @@ public:
     mModalResult = Value;
     return Value;
   }
-
-  /** Set the font of the titlebar */
-  void SetTitleFont(const Font &font);
 
   /**
    * @param mouse_allowed a Window which is allowed to get mouse

@@ -1582,7 +1582,6 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Look/TaskLook.cpp \
 	$(SRC)/Projection.cpp \
 	$(SRC)/Util/StringUtil.cpp \
@@ -1592,6 +1591,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Airspace/AirspaceRendererSettings.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunRenderOZ.cpp
 RUN_RENDER_OZ_OBJS = $(call SRC_TO_OBJ,$(RUN_RENDER_OZ_SOURCES))
 RUN_RENDER_OZ_BIN = $(TARGET_BIN_DIR)/RunRenderOZ$(TARGET_EXEEXT)
@@ -1649,7 +1649,6 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(SRC)/Screen/ProgressWindow.cpp \
 	$(SRC)/Screen/ProgressBar.cpp \
 	$(SRC)/Screen/Layout.cpp \
-	$(SRC)/Screen/Fonts.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/Gauge/LogoView.cpp \
@@ -1659,6 +1658,7 @@ RUN_JOB_DIALOG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
 	$(TEST_SRC_DIR)/RunJobDialog.cpp
 RUN_JOB_DIALOG_OBJS = $(call SRC_TO_OBJ,$(RUN_JOB_DIALOG_SOURCES))
 RUN_JOB_DIALOG_BIN = $(TARGET_BIN_DIR)/RunJobDialog$(TARGET_EXEEXT)

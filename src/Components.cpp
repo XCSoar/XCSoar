@@ -241,7 +241,8 @@ XCSoarInterface::Startup()
   // prompt for simulator if not set by command line argument "-simulator" or "-fly"
   if (!sim_set_in_cmd_line_flag) {
     DialogLook white_look;
-    white_look.Initialise();
+    white_look.Initialise(Fonts::MapBold, Fonts::Map,
+                          Fonts::MapBold, Fonts::MapBold);
     white_look.SetBackgroundColor(COLOR_WHITE);
     SetXMLDialogLook(white_look);
 

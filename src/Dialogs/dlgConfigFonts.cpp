@@ -149,9 +149,6 @@ RefreshFonts()
   sample = (WndFrame *)wf->FindByName(_T("prpMapLabelImportantFont"));
   if (sample)
     sample->SetFont(TempMapLabelImportantFont);
-
-  // now fix the rest of the dlgConfiguration fonts:
-  wf->SetTitleFont(TempMapWindowBoldFont);
 }
 
 static void

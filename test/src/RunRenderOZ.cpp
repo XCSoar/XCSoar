@@ -31,7 +31,7 @@ Copyright_License {
 #include "Screen/ButtonWindow.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/Init.hpp"
-#include "Screen/Fonts.hpp"
+#include "Fonts.hpp"
 #include "Look/DialogLook.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"
@@ -307,8 +307,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow::register_class(hInstance);
 #endif
 
+  InitialiseFonts();
   DialogLook *look = new DialogLook();
-  look->Initialise();
+  look->Initialise(bold_font, normal_font, bold_font, bold_font);
 
   TaskLook *task_look = new TaskLook();
   task_look->Initialise();
@@ -319,15 +320,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow window(*task_look, *airspace_look);
   window.set(*look, 0, 0, 480, 480);
 
-  Fonts::Initialize();
-
   window.show();
   window.event_loop();
 
   delete airspace_look;
   delete task_look;
   delete look;
-  Fonts::Deinitialize();
+  DeinitialiseFonts();
 
   return 0;
 }

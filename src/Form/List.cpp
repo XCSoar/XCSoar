@@ -25,7 +25,6 @@ Copyright_License {
 #include "Form/Internal.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/ContainerWindow.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
 #include "Screen/Point.hpp"
 #include "Asset.hpp"
@@ -107,7 +106,7 @@ WndListFrame::DrawItems(Canvas &canvas, unsigned start, unsigned end) const
   canvas.set_text_color(look.list.text_color);
   canvas.set_background_color(look.list.background_color);
   canvas.background_transparent();
-  canvas.select(Fonts::MapBold);
+  canvas.select(*look.list.font);
 
 #ifdef ENABLE_OPENGL
   /* enable clipping */

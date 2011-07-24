@@ -26,13 +26,20 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
-DialogLook::Initialise()
+DialogLook::Initialise(const Font &caption_font,
+                       const Font &_text_font,
+                       const Font &_button_font,
+                       const Font &list_font)
 {
   caption.background_color = Color(0, 77, 124);
   caption.text_color = COLOR_BLACK;
+  caption.font = &caption_font;
 
   SetBackgroundColor(Color(0xe2, 0xdc, 0xbe));
   text_color = COLOR_BLACK;
+
+  text_font = &_text_font;
+  button_font = &_button_font;
 
   focused.text_color = COLOR_BLACK;
   focused.border_pen.set(Layout::FastScale(1) + 2, COLOR_BLACK);
@@ -41,6 +48,7 @@ DialogLook::Initialise()
   list.text_color = COLOR_BLACK;
   list.selected.background_color = COLOR_LIGHT_GRAY;
   list.selected.text_color = COLOR_BLACK;
+  list.font = &list_font;
 }
 
 void

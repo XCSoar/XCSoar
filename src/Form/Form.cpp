@@ -28,7 +28,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Key.h"
 #include "Util/StringUtil.hpp"
 #include "Look/DialogLook.hpp"
@@ -98,7 +97,6 @@ WndForm::WndForm(SingleWindow &_main_window, const DialogLook &_look,
                  const WindowStyle style):
   main_window(_main_window), look(_look),
   mModalResult(0), force(false),
-  mhTitleFont(&Fonts::MapBold),
   client_area(_look),
   mOnTimerNotify(NULL), mOnKeyDownNotify(NULL)
 {
@@ -153,7 +151,7 @@ WndForm::UpdateLayout()
 
   mTitleRect = rc;
   mTitleRect.bottom = rc.top +
-    (mCaption.empty() ? 0 : mhTitleFont->get_height());
+    (mCaption.empty() ? 0 : look.caption.font->get_height());
 
   mClientRect = rc;
   mClientRect.top = mTitleRect.bottom;
@@ -237,18 +235,6 @@ WndForm::on_command(unsigned id, unsigned code)
 }
 
 #endif
-
-void
-WndForm::SetTitleFont(const Font &font)
-{
-  if (mhTitleFont != &font){
-    // todo
-    mhTitleFont = &font;
-
-    invalidate();
-    UpdateLayout();
-  }
-}
 
 static bool
 is_special_key(unsigned key_code)
@@ -542,7 +528,7 @@ WndForm::on_paint(Canvas &canvas)
     canvas.set_text_color(COLOR_WHITE);
 
     // Set the titlebar font and font-size
-    canvas.select(*mhTitleFont);
+    canvas.select(*look.caption.font);
 
     // JMW todo add here icons?
 

@@ -28,14 +28,20 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
 
+class Font;
+
 struct DialogLook {
   struct {
     Color background_color, text_color;
+
+    const Font *font;
   } caption;
 
   Color background_color, text_color;
 
   Brush background_brush;
+
+  const Font *text_font, *button_font;
 
   struct {
     Color background_color, text_color;
@@ -49,9 +55,14 @@ struct DialogLook {
     struct {
       Color background_color, text_color;
     } selected;
+
+    const Font *font;
   } list;
 
-  void Initialise();
+  void Initialise(const Font &caption_font,
+                  const Font &text_font,
+                  const Font &button_font,
+                  const Font &list_font);
 
   void SetBackgroundColor(Color color);
 };

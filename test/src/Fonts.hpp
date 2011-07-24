@@ -21,34 +21,17 @@ Copyright_License {
 }
 */
 
-#include "Look.hpp"
-#include "Screen/Fonts.hpp"
+#ifndef XCSOAR_TEST_FONTS_HPP
+#define XCSOAR_TEST_FONTS_HPP
+
+class Font;
+
+extern Font normal_font, bold_font;
 
 void
-Look::Initialise()
-{
-  dialog.Initialise(Fonts::MapBold, Fonts::Map,
-                    Fonts::MapBold, Fonts::MapBold);
-  aircraft.Initialise();
-  traffic.Initialise();
-  flarm_dialog.Initialise(traffic, false);
-  flarm_gauge.Initialise(traffic, true);
-  task.Initialise();
-}
+InitialiseFonts();
 
 void
-Look::InitialiseConfigured(bool inverse,
-                           const WaypointRendererSettings &waypoint_settings,
-                           const AirspaceRendererSettings &airspace_settings)
-{
-  dialog.Initialise(Fonts::MapBold, Fonts::Map,
-                    Fonts::MapBold, Fonts::MapBold);
-  vario.Initialise(inverse);
-  chart.Initialise();
-  thermal_band.Initialise();
-  trace_history.Initialise(inverse);
-  waypoint.Initialise(waypoint_settings);
-  airspace.Initialise(airspace_settings);
-  cross_section.Initialise();
-  info_box.Initialise(inverse);
-}
+DeinitialiseFonts();
+
+#endif
