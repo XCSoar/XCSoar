@@ -240,7 +240,7 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
       state.TrueAirspeed = glide_polar.GetVBestLD();
     }
     state.IndicatedAirspeed = state.TrueAirspeed;
-    state.Vario = -glide_polar.SinkRate(state.TrueAirspeed)*parms.sink_factor;
+    state.vario = -glide_polar.SinkRate(state.TrueAirspeed)*parms.sink_factor;
     update_cruise_bearing(task, state, timestep);
   }
   break;
@@ -255,11 +255,11 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
       heading += heading_deviation()*timestep;
     }
     heading = heading.as_bearing();
-    state.Vario = climb_rate*parms.climb_factor;
+    state.vario = climb_rate*parms.climb_factor;
   }
     break;
   };
-  state.NettoVario = state.Vario+glide_polar.SinkRate(state.TrueAirspeed);
+  state.netto_vario = state.vario+glide_polar.SinkRate(state.TrueAirspeed);
 }
 
 

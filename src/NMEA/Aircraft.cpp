@@ -41,8 +41,8 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
   aircraft.AltitudeAGL = calculated.AltitudeAGL;
 
   /* VARIO_INFO */
-  aircraft.Vario = info.BruttoVario;
-  aircraft.NettoVario = info.NettoVario;
+  aircraft.vario = info.BruttoVario;
+  aircraft.netto_vario = info.NettoVario;
 
   /* FLYING_STATE */
   (FlyingState &)aircraft = calculated.flight;

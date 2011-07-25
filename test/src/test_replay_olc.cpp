@@ -111,8 +111,8 @@ protected:
     state.Speed = speed;
     state.track = bearing;
     state.NavAltitude = alt;
-    state.NettoVario = fixed_zero;
-    state.Vario = fixed_zero;
+    state.netto_vario = fixed_zero;
+    state.vario = fixed_zero;
     state.Time = t;
     if (positive(t)) {
       started = true;

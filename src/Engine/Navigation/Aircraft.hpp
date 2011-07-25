@@ -98,23 +98,19 @@ struct ALTITUDE_STATE
 /**
  * Structure for variometer data
  */
-struct VARIO_STATE
+struct VarioState
 {
-  //###########
-  //   Vario
-  //###########
-
   /**
    * Rate of change of total energy of aircraft (m/s, up positive)
    * @see VarioAvailable
    */
-  fixed Vario;
+  fixed vario;
 
   /**
    * Vertical speed of air mass (m/s, up positive)
    * @see NettoVarioAvailable
    */
-  fixed NettoVario;
+  fixed netto_vario;
 };
 
 /**
@@ -165,7 +161,7 @@ private:
 struct AIRCRAFT_STATE: 
   public ALTITUDE_STATE,
   public SPEED_STATE,
-  public VARIO_STATE,
+  public VarioState,
   public FlyingState
 {
   AIRCRAFT_STATE();

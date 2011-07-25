@@ -71,7 +71,7 @@ AircraftSim::integrate(const Angle& heading, const fixed timestep)
   state.track = state.Location.bearing(v);
   state.Speed = v.distance(state.Location)/timestep;
   state.Location = v;
-  state.NavAltitude += state.Vario*timestep;
+  state.NavAltitude += state.vario*timestep;
   state.Time += timestep;
   state.Moving(state.Time);
 }

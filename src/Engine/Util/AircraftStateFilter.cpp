@@ -124,6 +124,6 @@ AircraftStateFilter::get_predicted_state(const fixed &in_time) const
   state_next.Location = vec.end_point(m_state_last.Location);
   state_next.NavAltitude = m_state_last.NavAltitude+get_climb_rate()*in_time;
   state_next.Speed = get_speed();
-  state_next.Vario = get_climb_rate();
+  state_next.vario = get_climb_rate();
   return state_next;
 }

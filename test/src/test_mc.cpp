@@ -122,7 +122,7 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
     ac.wind.bearing = Angle::degrees(Wangle);
   }
   ac.NavAltitude = h;
-  ac.NettoVario = S;
+  ac.netto_vario = S;
 
   GeoVector vect(fixed(400.0));
   GlideState gs(vect, fixed_zero, ac.NavAltitude, ac.wind);
@@ -136,7 +136,7 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
         << (double)Vstf << " " 
         << (double)W << " "
         << (double)Wangle << " "
-        << (double)ac.NettoVario << " "
+        << (double)ac.netto_vario << " "
         << "\n";
 }
 

@@ -101,7 +101,7 @@ test_replay()
   // task_manager.get_task_advance().get_advance_state() = TaskAdvance::AUTO;
 
   ReplayLoggerSim sim;
-  sim.state.NettoVario = fixed_zero;
+  sim.state.netto_vario = fixed_zero;
 
   TCHAR szFilename[MAX_PATH];
   ConvertCToT(szFilename, replay_file.c_str());
