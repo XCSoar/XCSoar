@@ -77,8 +77,6 @@ wind_name(int n_wind)
   return buffer;
 }
 
-
-//////////////////////////////////////////////////////////////
 #include "Task/TaskManager.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 
