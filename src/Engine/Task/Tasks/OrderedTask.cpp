@@ -374,7 +374,6 @@ OrderedTask::check_transition_point(OrderedTaskPoint& point,
                                     bool &last_started,
                                     const bool is_start)
 {
-  bool full_update = false;
   const bool nearby = point.boundingbox_overlaps(bb_now) || point.boundingbox_overlaps(bb_last);
 
   if (nearby && point.transition_enter(state, state_last)) {
@@ -394,14 +393,8 @@ OrderedTask::check_transition_point(OrderedTaskPoint& point,
   if (is_start) 
     update_start_transition(state, point);
   
-  if (nearby) {
-    if (point.update_sample_near(state, task_events, task_projection))
-      full_update = true;
-  } else {
-    if (point.update_sample_far(state, task_events, task_projection))
-      full_update = true;
-  }
-  return full_update;
+  return nearby ? point.update_sample_near(state, task_events, task_projection) :
+                  point.update_sample_far(state, task_events, task_projection);
 }
 
 // ADDITIONAL FUNCTIONS
