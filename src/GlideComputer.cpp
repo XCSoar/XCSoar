@@ -103,9 +103,8 @@ GlideComputer::ProcessGPS()
   ProcessMoreTask();
 
   // Check if everything is okay with the gps time and process it
-  if (!FlightTimes()) {
+  if (!FlightTimes())
     return false;
-  }
 
   // Process extended information
   ProcessVertical();
@@ -133,10 +132,7 @@ GlideComputer::ProcessGPS()
 
   calculated.time_process_gps = clock.elapsed();
 
-  if (idle_clock.check_update(500)) {
-    return true;
-  } else 
-    return false;
+  return idle_clock.check_update(500);
 }
 
 /**
