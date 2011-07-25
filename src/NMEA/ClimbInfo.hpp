@@ -26,34 +26,25 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-/**
- * Information about one thermal that was or is being climbed.
- */
-struct OneClimbInfo {
-  /**
-   * Time when circling started.
-   */
+/** Information about one thermal that was or is being climbed. */
+struct OneClimbInfo
+{
+  /** Time when circling started. */
   fixed start_time;
 
   /**
-   * Time when circling ended (or current time stamp if circling has
-   * not ended yet).
+   * Time when circling ended
+   * (or current time stamp if circling has not ended yet).
    */
   fixed end_time;
 
-  /**
-   * Time spent in this thermal [s].
-   */
+  /** Time spent in this thermal [s]. */
   fixed duration;
 
-  /**
-   * Altitude gained while in the thermal [m].  May be negative.
-   */
+  /** Altitude gained while in the thermal [m]. May be negative. */
   fixed gain;
 
-  /**
-   * Average vertical speed in the thermal [m/s].  May be negative.
-   */
+  /** Average vertical speed in the thermal [m/s]. May be negative. */
   fixed lift_rate;
 
   void Clear();
