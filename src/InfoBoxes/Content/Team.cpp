@@ -35,7 +35,7 @@ void
 InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
-  const TEAMCODE_INFO &teamcode_info = XCSoarInterface::Calculated();
+  const TeamInfo &teamcode_info = XCSoarInterface::Calculated();
 
   if (!settings.TeamCodeRefWaypoint) {
     infobox.SetInvalid();
@@ -43,7 +43,7 @@ InfoBoxContentTeamCode::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  infobox.SetValue(XCSoarInterface::Calculated().OwnTeamCode.GetCode());
+  infobox.SetValue(XCSoarInterface::Calculated().own_teammate_code.GetCode());
 
   // Set Comment
   if (teamcode_info.flarm_teammate_code_available) {
@@ -98,7 +98,7 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
   const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
-  const TEAMCODE_INFO &teamcode_info = CommonInterface::Calculated();
+  const TeamInfo &teamcode_info = CommonInterface::Calculated();
 
   if (teamcode_info.teammate_available) {
     // Set Value
@@ -127,7 +127,7 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
   const NMEA_INFO &basic = XCSoarInterface::Basic();
   const FLARM_STATE &flarm = basic.flarm;
-  const TEAMCODE_INFO &teamcode_info = CommonInterface::Calculated();
+  const TeamInfo &teamcode_info = CommonInterface::Calculated();
 
   if (teamcode_info.teammate_available && basic.track_available) {
     // Set Value
@@ -154,7 +154,7 @@ void
 InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
-  const TEAMCODE_INFO &teamcode_info = CommonInterface::Calculated();
+  const TeamInfo &teamcode_info = CommonInterface::Calculated();
 
   // Set Value
   if (teamcode_info.teammate_available) {

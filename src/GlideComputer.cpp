@@ -191,13 +191,13 @@ GlideComputer::CalculateOwnTeamCode()
   const GeoVector v = TeamCodeRefLocation.distance_bearing(Basic().Location);
 
   // Save teamcode to Calculated
-  SetCalculated().OwnTeamCode.Update(v.Bearing, v.Distance);
+  SetCalculated().own_teammate_code.Update(v.Bearing, v.Distance);
 }
 
 static void
 ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
                  const FLARM_STATE &flarm, const FlarmId target_id,
-                 TEAMCODE_INFO &teamcode_info)
+                 TeamInfo &teamcode_info)
 {
   if (!flarm.available) {
     teamcode_info.flarm_teammate_code_current = false;
@@ -211,7 +211,7 @@ ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
   }
 
   // Set Teammate location to FLARM contact location
-  teamcode_info.TeammateLocation = traffic->location;
+  teamcode_info.teammate_location = traffic->location;
   teamcode_info.teammate_vector = location.distance_bearing(traffic->location);
   teamcode_info.teammate_available = true;
 
@@ -228,12 +228,12 @@ ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
 static void
 ComputeTeamCode(const GeoPoint &location, const GeoPoint &reference_location,
                 const TeamCode &team_code,
-                TEAMCODE_INFO &teamcode_info)
+                TeamInfo &teamcode_info)
 {
   // Calculate bearing and distance to teammate
-  teamcode_info.TeammateLocation = team_code.GetLocation(reference_location);
+  teamcode_info.teammate_location = team_code.GetLocation(reference_location);
   teamcode_info.teammate_vector =
-    location.distance_bearing(teamcode_info.TeammateLocation);
+    location.distance_bearing(teamcode_info.teammate_location);
   teamcode_info.teammate_available = true;
 }
 
@@ -242,7 +242,7 @@ GlideComputer::CalculateTeammateBearingRange()
 {
   const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
   const NMEA_INFO &basic = Basic();
-  TEAMCODE_INFO &teamcode_info = SetCalculated();
+  TeamInfo &teamcode_info = SetCalculated();
 
   // No reference waypoint for teamcode calculation chosen -> cancel
   if (!DetermineTeamCodeRefLocation())

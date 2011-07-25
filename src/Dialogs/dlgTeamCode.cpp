@@ -46,7 +46,7 @@ static void
 Update()
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const TEAMCODE_INFO &teamcode_info = CommonInterface::Calculated();
+  const TeamInfo &teamcode_info = CommonInterface::Calculated();
   WndProperty* wp;
   TCHAR Text[100];
 
@@ -86,7 +86,7 @@ Update()
 
   wp = (WndProperty*)wf->FindByName(_T("prpOwnCode"));
   if (wp) {
-    CopyString(Text, XCSoarInterface::Calculated().OwnTeamCode.GetCode(), 6);
+    CopyString(Text, XCSoarInterface::Calculated().own_teammate_code.GetCode(), 6);
     wp->SetText(Text);
     wp->RefreshDisplay();
   }

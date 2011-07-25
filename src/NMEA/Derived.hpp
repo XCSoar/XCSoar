@@ -90,7 +90,7 @@ struct TerrainInfo
 /**
  * Derived team code information
  */
-struct TEAMCODE_INFO
+struct TeamInfo
 {
   /**
    * Are #teammate_vector and #TeammateLocation available?
@@ -108,13 +108,13 @@ struct TEAMCODE_INFO
   bool flarm_teammate_code_current;
 
   /** Team code */
-  TeamCode OwnTeamCode;
+  TeamCode own_teammate_code;
 
   /** Vector to the chosen team mate */
   GeoVector teammate_vector;
 
   /** Position of the chosen team mate */
-  GeoPoint TeammateLocation;
+  GeoPoint teammate_location;
 
   /**
    * The team code of the FLARM teammate.
@@ -143,7 +143,7 @@ struct DerivedInfo:
   public CLIMB_INFO,
   public CIRCLING_INFO,
   public TerrainInfo,
-  public TEAMCODE_INFO
+  public TeamInfo
 {
   /** GPS date and time (local) */
   BrokenDateTime date_time_local;

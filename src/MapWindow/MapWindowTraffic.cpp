@@ -162,11 +162,11 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 void
 MapWindow::DrawTeammate(Canvas &canvas) const
 {
-  const TEAMCODE_INFO &teamcode_info = Calculated();
+  const TeamInfo &teamcode_info = Calculated();
 
   if (teamcode_info.teammate_available) {
     RasterPoint sc;
-    if (render_projection.GeoToScreenIfVisible(teamcode_info.TeammateLocation,
+    if (render_projection.GeoToScreenIfVisible(teamcode_info.teammate_location,
                                                  sc))
       traffic_look.teammate_icon.draw(canvas, sc);
   }
