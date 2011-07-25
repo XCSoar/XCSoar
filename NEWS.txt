@@ -8,6 +8,7 @@ Version 6.1.4 - not yet released
   - fix miscalculation in start point chooser
 * map
   - fix for the aircraft symbol
+  - airspace rendering optimised
 * Android
   - fix text rendering on Adreno GPUs
 
