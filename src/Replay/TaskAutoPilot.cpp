@@ -94,7 +94,7 @@ TaskAutoPilot::Start(const TaskAccessor& task)
   awp= 0;
 
   // reset the heading
-  heading = Angle::native(fixed_zero);
+  heading = Angle::zero();
   heading_filt.reset(fixed_zero);
 
   acstate = Cruise;

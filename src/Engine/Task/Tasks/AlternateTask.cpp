@@ -43,7 +43,7 @@ void
 AlternateTask::reset()
 {
   AbortTask::reset();
-  destination = GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  destination = GeoPoint(Angle::zero(), Angle::zero());
   best_alternate_id = UINT_MAX;
 }
 

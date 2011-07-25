@@ -84,7 +84,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
   if (trace.empty())
     return;
 
-  GeoPoint traildrift(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  GeoPoint traildrift(Angle::zero(), Angle::zero());
   if (enable_traildrift && Calculated().wind_available) {
     GeoPoint tp1 = FindLatitudeLongitude(Basic().Location,
                                          Calculated().wind.bearing,

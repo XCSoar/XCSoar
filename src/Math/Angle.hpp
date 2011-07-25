@@ -51,6 +51,11 @@ public:
     return m_value;
   }
 
+  gcc_const
+  static Angle zero() {
+    return native(fixed_zero);
+  }
+
 #ifdef RADIANS
   gcc_const
   static Angle degrees(const fixed value) {

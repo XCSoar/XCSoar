@@ -6,7 +6,7 @@
 **
 ************************************************************************
 **
-**   Copyright (c):  2002 by André Somers
+**   Copyright (c):  2002 by Andrï¿½ Somers
 **
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
@@ -139,7 +139,7 @@ WindStore::NewWind(const NMEA_INFO &info, DERIVED_INFO &derived,
   Angle bearing;
 
   if (wind.y == fixed_zero && wind.x == fixed_zero)
-    bearing = Angle::native(fixed_zero);
+    bearing = Angle::zero();
   else
     bearing = Angle::radians(atan2(wind.y, wind.x));
 

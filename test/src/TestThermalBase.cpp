@@ -36,7 +36,7 @@ int main(int argc, char **argv)
   fixed average(2.5);
   SpeedVector wind(Angle::degrees(fixed(60)), fixed(20));
 
-  GeoPoint ground_location(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  GeoPoint ground_location(Angle::zero(), Angle::zero());
   fixed ground_alt;
 
   EstimateThermalBase(location, altitude, average, wind,

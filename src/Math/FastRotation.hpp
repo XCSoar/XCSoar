@@ -40,7 +40,7 @@ public:
   typedef std::pair<fixed,fixed> Pair;
 
   FastRotation()
-    :angle(Angle::native(fixed_zero)), cost(1), sint(0) {}
+    :angle(Angle::zero()), cost(1), sint(0) {}
   FastRotation(Angle _angle):angle(Angle::radians(-fixed(9999))) { SetAngle(_angle); }
 
   Angle GetAngle() const {
@@ -88,7 +88,7 @@ public:
   typedef std::pair<int,int> Pair;
 
   FastIntegerRotation()
- :angle(Angle::native(fixed_zero)), cost(1024), sint(0) {}
+ :angle(Angle::zero()), cost(1024), sint(0) {}
   FastIntegerRotation(Angle _angle):angle(Angle::radians(-fixed(9999))) { SetAngle(_angle); }
 
   Angle GetAngle() const {

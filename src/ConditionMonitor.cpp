@@ -396,8 +396,8 @@ protected:
       return false;
     }
 
-    const GeoPoint null_point(Angle::native(fixed_zero),
-                              Angle::native(fixed_zero));
+    const GeoPoint null_point(Angle::zero(),
+                              Angle::zero());
     return (cmp.Calculated().TerrainWarning);
   }
 

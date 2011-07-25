@@ -206,8 +206,8 @@ void
 MapWindow::set_terrain(RasterTerrain *_terrain)
 {
   terrain = _terrain;
-  terrain_center = GeoPoint(Angle::native(fixed_zero),
-                            Angle::native(fixed_zero));
+  terrain_center = GeoPoint(Angle::zero(),
+                            Angle::zero());
   m_background.set_terrain(_terrain);
 }
 

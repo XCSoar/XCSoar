@@ -367,7 +367,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   // Rotate and shift the arrow
   PolygonRotateShift(Arrow, 5, sc[i].x, sc[i].y,
                      traffic.track - (enable_north_up ?
-                                             Angle::native(fixed_zero) : heading));
+                                             Angle::zero() : heading));
 
   // Draw the polygon
   canvas.polygon(Arrow, 5);

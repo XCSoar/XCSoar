@@ -65,7 +65,7 @@ wind_to_dir(int n_wind)
   if (n_wind)
     return Angle::degrees(fixed(90 * ((n_wind - 1) % 4))).as_bearing();
 
-  return Angle::native(fixed(0));
+  return Angle::zero();
 }
 
 const char*

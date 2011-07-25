@@ -6,7 +6,7 @@
 **
 ************************************************************************
 **
-**   Copyright (c):  2002 by André Somers
+**   Copyright (c):  2002 by Andrï¿½ Somers
 **
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
@@ -88,7 +88,7 @@ WindAnalyser::WindAnalyser()
   :circleCount(0), circleLeft(false),
    active(false),
    circleDeg(0),
-   last_track(Angle::native(fixed_zero)),
+   last_track(Angle::zero()),
    pastHalfway(false),
    curModeOK(false)
 {
@@ -101,7 +101,7 @@ WindAnalyser::reset()
   circleLeft = false;
   active = false;
   circleDeg = 0;
-  last_track = Angle::native(fixed_zero);
+  last_track = Angle::zero();
   pastHalfway = false;
   curModeOK = false;
   windstore.reset();

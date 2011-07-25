@@ -85,7 +85,7 @@ TestTrace(const char *filename, unsigned ntrace, bool output=false)
       continue;
 
     on_advance(trace,
-               fix.location, fixed(30), Angle::native(fixed_zero),
+               fix.location, fixed(30), Angle::zero(),
                fix.gps_altitude, fix.pressure_altitude,
                fix.time);
   }

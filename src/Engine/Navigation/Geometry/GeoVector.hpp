@@ -57,7 +57,7 @@ struct GeoVector {
    */
   GeoVector(const fixed distance):
     Distance(distance),
-    Bearing(Angle::native(fixed_zero))
+    Bearing(Angle::zero())
   {
   }
 

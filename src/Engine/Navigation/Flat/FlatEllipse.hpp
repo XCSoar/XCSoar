@@ -55,8 +55,8 @@ struct FlatEllipse
                 ap(fixed_zero, fixed_zero), 
                 p(fixed_zero, fixed_zero),
                 a(fixed_one), b(fixed_one), 
-                theta(Angle::native(fixed_zero)),
-                theta_initial(Angle::native(fixed_zero))
+                theta(Angle::zero()),
+                theta_initial(Angle::zero())
     {
     };
 

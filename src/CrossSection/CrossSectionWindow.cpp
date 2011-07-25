@@ -230,8 +230,8 @@ CrossSectionWindow::CrossSectionWindow(const CrossSectionLook &_look,
                                        const ChartLook &_chart_look)
   :look(_look), airspace_look(_airspace_look), chart_look(_chart_look),
   terrain(NULL), airspace_database(NULL),
-  start(Angle::native(fixed_zero), Angle::native(fixed_zero)),
-   vec(fixed(50000), Angle::native(fixed_zero)) {}
+  start(Angle::zero(), Angle::zero()),
+   vec(fixed(50000), Angle::zero()) {}
 
 void
 CrossSectionWindow::ReadBlackboard(const MoreData &_gps_info,

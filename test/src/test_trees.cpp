@@ -68,7 +68,7 @@ test_as(const unsigned n, std::ostream &fo)
   AIRCRAFT_STATE state;
 
   Airspaces airspaces;
-  setup_airspaces(airspaces,GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero)), n);
+  setup_airspaces(airspaces,GeoPoint(Angle::zero(), Angle::zero()), n);
 
   print_queries(0, fo);
 

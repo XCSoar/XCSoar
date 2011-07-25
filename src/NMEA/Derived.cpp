@@ -59,7 +59,7 @@ DERIVED_INFO::Reset()
   TERRAIN_ALT_INFO::Clear();
   TEAMCODE_INFO::Clear();
 
-  Heading = Angle::native(fixed_zero);
+  Heading = Angle::zero();
   pressure_available.Clear();
 
   climb_history.Clear();

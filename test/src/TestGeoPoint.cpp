@@ -143,7 +143,7 @@ int main(int argc, char **argv)
   ok1(equals((p2 * fixed_two).projected_distance(p2, p6), 248567.832772));
 
   // Tests moved here from test_fixed.cpp
-  GeoPoint l1(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  GeoPoint l1(Angle::zero(), Angle::zero());
   GeoPoint l2(Angle::degrees(fixed(-0.3)), Angle::degrees(fixed(1.0)));
   GeoPoint l3(Angle::degrees(fixed(0.00001)), Angle::degrees(fixed_zero));
   GeoPoint l4(Angle::degrees(fixed(10)), Angle::degrees(fixed_zero));

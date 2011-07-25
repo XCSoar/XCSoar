@@ -98,7 +98,7 @@ static const WeatherDescriptor WeatherDescriptors[RasterWeather::MAX_WEATHER_MAP
 };
 
 RasterWeather::RasterWeather()
-  :center(Angle::native(fixed_zero), Angle::native(fixed_zero)),
+  :center(Angle::zero(), Angle::zero()),
     _parameter(0),
     _weather_time(0),
     reload(true),
@@ -310,7 +310,7 @@ RasterWeather::_Close()
 {
   delete weather_map;
   weather_map = NULL;
-  center = GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero));
+  center = GeoPoint(Angle::zero(), Angle::zero());
 }
 
 void

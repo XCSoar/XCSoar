@@ -75,7 +75,7 @@ static int DirectionFilter[] = {
   0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
 };
 
-static Angle last_heading = Angle::native(fixed_zero);
+static Angle last_heading = Angle::zero();
 
 /**
  * used for single-letter name search with Left/Right keys

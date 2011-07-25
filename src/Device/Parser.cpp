@@ -824,7 +824,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEA_INFO &info)
   if (!traffic.track_received) {
     // Field is empty in stealth mode
     stealth = true;
-    traffic.track = Angle::native(fixed_zero);
+    traffic.track = Angle::zero();
   } else
     traffic.track = Angle::degrees(value);
 

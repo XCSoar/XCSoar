@@ -260,7 +260,7 @@ ComputeDynamics(MoreData &basic, const DERIVED_INFO &calculated)
       if (!basic.acceleration.available)
         basic.acceleration.g_load = fixed_one / max(fixed_small, fabs(cos(angle)));
     } else {
-      basic.acceleration.bank_angle = Angle::native(fixed_zero);
+      basic.acceleration.bank_angle = Angle::zero();
       if (!basic.acceleration.available)
         basic.acceleration.g_load = fixed_one;
     }
@@ -270,11 +270,11 @@ ComputeDynamics(MoreData &basic, const DERIVED_INFO &calculated)
       basic.acceleration.pitch_angle = Angle::radians(atan2(basic.GPSVario - basic.TotalEnergyVario,
                                                            basic.TrueAirspeed));
     else
-      basic.acceleration.pitch_angle = Angle::native(fixed_zero);
+      basic.acceleration.pitch_angle = Angle::zero();
 
   } else {
-    basic.acceleration.bank_angle = Angle::native(fixed_zero);
-    basic.acceleration.pitch_angle = Angle::native(fixed_zero);
+    basic.acceleration.bank_angle = Angle::zero();
+    basic.acceleration.pitch_angle = Angle::zero();
 
     if (!basic.acceleration.available)
       basic.acceleration.g_load = fixed_one;

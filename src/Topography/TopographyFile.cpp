@@ -63,7 +63,7 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
     ++dir->refcount;
 
   cache_bounds.west = cache_bounds.east =
-    cache_bounds.south = cache_bounds.north = Angle::native(fixed_zero);
+    cache_bounds.south = cache_bounds.north = Angle::zero();
 
   std::fill(shpCache.begin(), shpCache.end(), (XShape *)NULL);
 }

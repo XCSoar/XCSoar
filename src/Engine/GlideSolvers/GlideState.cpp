@@ -95,9 +95,9 @@ GlideState::calc_speedups(const SpeedVector wind)
     HeadWind = -wind.norm*theta.cos();
     dwcostheta_ = fixed_two * HeadWind;
   } else {
-    WindDirection = Angle::native(fixed_zero);
+    WindDirection = Angle::zero();
     EffectiveWindSpeed = fixed_zero;
-    EffectiveWindAngle = Angle::native(fixed_zero);
+    EffectiveWindAngle = Angle::zero();
     HeadWind = fixed_zero;
     wsq_ = fixed_zero;
     dwcostheta_ = fixed_zero;

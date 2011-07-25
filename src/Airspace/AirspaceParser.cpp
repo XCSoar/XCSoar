@@ -122,8 +122,8 @@ struct TempAirspaceType
     Radio = _T("");
     Type = OTHER;
     points.clear();
-    Center.Longitude = Angle::native(fixed_zero);
-    Center.Latitude = Angle::native(fixed_zero);
+    Center.Longitude = Angle::zero();
+    Center.Latitude = Angle::zero();
     Rotation = 1;
     Radius = fixed_zero;
     Waiting = true;

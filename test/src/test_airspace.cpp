@@ -38,7 +38,7 @@ int main(int argc, char** argv)
   ok(test_airspace(100),"airspace 100",0);
   
   Airspaces airspaces;
-  setup_airspaces(airspaces, GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero)), 20);
+  setup_airspaces(airspaces, GeoPoint(Angle::zero(), Angle::zero()), 20);
   ok(test_airspace_extra(airspaces),"airspace extra",0);
 
   return exit_status();

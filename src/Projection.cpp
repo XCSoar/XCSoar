@@ -27,8 +27,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 Projection::Projection() :
-  GeoLocation(Angle::native(fixed_zero), Angle::native(fixed_zero)),
-  ScreenRotation(Angle::native(fixed_zero))
+  GeoLocation(Angle::zero(), Angle::zero()),
+  ScreenRotation(Angle::zero())
 {
   SetScale(fixed_one);
   ScreenOrigin.x = 0;

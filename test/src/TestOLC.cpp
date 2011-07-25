@@ -90,7 +90,7 @@ TestOLC(const char *filename)
     if (!IGCParseFix(line, fix))
       continue;
 
-    on_advance(fix.location, fixed(30), Angle::native(fixed_zero),
+    on_advance(fix.location, fixed(30), Angle::zero(),
                fix.gps_altitude, fix.pressure_altitude,
                fix.time);
 

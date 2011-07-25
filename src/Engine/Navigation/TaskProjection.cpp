@@ -129,7 +129,7 @@ TaskProjection::fproject_range(const GeoPoint &tp, const fixed range) const
 {
   assert(initialised);
 
-  GeoPoint fr = ::FindLatitudeLongitude(tp, Angle::native(fixed_zero), range);
+  GeoPoint fr = ::FindLatitudeLongitude(tp, Angle::zero(), range);
   FlatPoint f = fproject(fr);
   FlatPoint p = fproject(tp);
   return fabs(f.y - p.y);

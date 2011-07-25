@@ -131,7 +131,7 @@ MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
 
   // North arrow
   PolygonRotateShift(Arrow, 5, Start.x, Start.y,
-                     Angle::native(fixed_zero) - render_projection.GetScreenAngle());
+                     Angle::zero() - render_projection.GetScreenAngle());
   canvas.polygon(Arrow, 5);
 }
 

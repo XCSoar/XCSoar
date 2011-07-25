@@ -148,7 +148,7 @@ DistanceBearingS(const GeoPoint loc1, const GeoPoint loc2,
     const fixed x = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_dlon;
 
     *Bearing = (x == fixed_zero && y == fixed_zero)
-      ? Angle::native(fixed_zero)
+      ? Angle::zero()
       : Angle::radians(atan2(y, x)).as_bearing();
   }
 

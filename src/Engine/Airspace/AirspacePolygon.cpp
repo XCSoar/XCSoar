@@ -64,7 +64,7 @@ const GeoPoint
 AirspacePolygon::get_center() const
 {
   if (m_border.empty()) {
-    return GeoPoint(Angle::native(fixed_zero), Angle::native(fixed_zero));
+    return GeoPoint(Angle::zero(), Angle::zero());
   } else {
     return m_border[0].get_location();
   }

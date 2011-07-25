@@ -260,7 +260,7 @@ GlueMapWindow::UpdateScreenAngle()
   if (IsTargetDialog() &&
       calculated.common_stats.active_taskpoint_index !=
           settings.TargetPanIndex) {
-    visible_projection.SetScreenAngle(Angle::native(fixed_zero));
+    visible_projection.SetScreenAngle(Angle::zero());
     return;
   }
 
@@ -273,7 +273,7 @@ GlueMapWindow::UpdateScreenAngle()
     visible_projection.SetScreenAngle(calculated.task_stats.current_leg.
                                       solution_remaining.Vector.Bearing);
   else if (orientation == NORTHUP || !basic.track_available)
-    visible_projection.SetScreenAngle(Angle::native(fixed_zero));
+    visible_projection.SetScreenAngle(Angle::zero());
   else
     // normal, glider forward
     visible_projection.SetScreenAngle(basic.track);
