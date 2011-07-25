@@ -70,7 +70,7 @@ LoggerFRecord::update(const int SatelliteIDs[],
           broken_time.hour, broken_time.minute, broken_time.second);
   eof=7;
 
-  for (unsigned i = 0; i < GPS_STATE::MAXSATELLITES; ++i) {
+  for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i) {
     if (SatelliteIDs[i] > 0){
       sprintf(szFRecord+eof, "%02d",SatelliteIDs[i]);
       eof +=2;

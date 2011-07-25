@@ -113,7 +113,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
 
   basic.clock = t;
   basic.Connected.Update(basic.clock);
-  basic.gps.SatellitesUsed = 6;
+  basic.gps.satellites_used = 6;
   basic.acceleration.Available = false;
   basic.Location = loc;
   basic.LocationAvailable.Update(t);
@@ -133,8 +133,8 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.NettoVarioAvailable.Clear();
   basic.ExternalWindAvailable.Clear();
   basic.gps.real = false;
-  basic.gps.Replay = true;
-  basic.gps.Simulator = false;
+  basic.gps.replay = true;
+  basic.gps.simulator = false;
 
   ScheduleMerge();
 };

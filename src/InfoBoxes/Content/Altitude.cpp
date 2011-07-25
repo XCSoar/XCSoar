@@ -329,7 +329,7 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
 
   if (!is_simulator())
     return false;
-  if (!basic.gps.Simulator)
+  if (!basic.gps.simulator)
     return false;
 
   const Angle a5 = Angle::degrees(fixed(5));

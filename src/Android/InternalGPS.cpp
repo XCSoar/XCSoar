@@ -80,13 +80,13 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
 
   case 1: /* waiting for fix */
     basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
-    basic.gps.AndroidInternalGPS = true;
+    basic.gps.android_internal_gps = true;
     basic.LocationAvailable.Clear();
     break;
 
   case 2: /* connected */
     basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
-    basic.gps.AndroidInternalGPS = true;
+    basic.gps.android_internal_gps = true;
     break;
   }
 
@@ -125,9 +125,9 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.Time = second_of_day;
   basic.DateTime = date_time;
 
-  basic.gps.SatellitesUsed = n_satellites;
+  basic.gps.satellites_used = n_satellites;
   basic.gps.real = true;
-  basic.gps.AndroidInternalGPS = true;
+  basic.gps.android_internal_gps = true;
   basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));
   if (n_satellites > 0)
@@ -154,7 +154,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   }
 
   if (hasAccuracy)
-    basic.gps.HDOP = fixed(accuracy);
+    basic.gps.hdop = fixed(accuracy);
 
   if (hasAcceleration) {
     // TODO: use ACCELERATION_STATE::complement() ?!?

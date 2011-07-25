@@ -58,13 +58,13 @@ LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
   Time = src.Time;
 
   NAVWarning = !src.LocationAvailable;
-  FixQuality = src.gps.FixQuality;
-  SatellitesUsed = src.gps.SatellitesUsed;
-  HDOP = src.gps.HDOP;
+  FixQuality = src.gps.fix_quality;
+  SatellitesUsed = src.gps.satellites_used;
+  HDOP = src.gps.hdop;
   real = src.gps.real;
 
-  std::copy(src.gps.SatelliteIDs,
-            src.gps.SatelliteIDs + GPS_STATE::MAXSATELLITES,
+  std::copy(src.gps.satellite_ids,
+            src.gps.satellite_ids + GPSState::MAXSATELLITES,
             SatelliteIDs);
 
   return *this;
@@ -169,13 +169,13 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
       tmp_info.LocationAvailable.Clear();
     else
       tmp_info.LocationAvailable.Update(tmp_info.clock);
-    tmp_info.gps.FixQuality = src.FixQuality;
-    tmp_info.gps.SatellitesUsed = src.SatellitesUsed;
-    tmp_info.gps.HDOP = src.HDOP;
+    tmp_info.gps.fix_quality = src.FixQuality;
+    tmp_info.gps.satellites_used = src.SatellitesUsed;
+    tmp_info.gps.hdop = src.HDOP;
     tmp_info.gps.real = src.real;
 
-    for (unsigned iSat = 0; iSat < GPS_STATE::MAXSATELLITES; iSat++)
-      tmp_info.gps.SatelliteIDs[iSat] = src.SatelliteIDs[iSat];
+    for (unsigned iSat = 0; iSat < GPSState::MAXSATELLITES; iSat++)
+      tmp_info.gps.satellite_ids[iSat] = src.SatelliteIDs[iSat];
 
     writer->LogPoint(tmp_info);
   }

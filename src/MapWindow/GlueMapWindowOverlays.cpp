@@ -363,9 +363,9 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     _tcscat(ScaleInfo, _T(" "));
   }
 
-  if (Basic().gps.Replay)
+  if (Basic().gps.replay)
     _tcscat(ScaleInfo, _T("REPLAY "));
-  else if (Basic().gps.Simulator) {
+  else if (Basic().gps.simulator) {
     _tcscat(ScaleInfo, _("Simulator"));
     _tcscat(ScaleInfo, _T(" "));
   }

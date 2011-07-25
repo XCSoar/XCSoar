@@ -475,7 +475,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
   // only draw speed command if flying and vario is not circling
   if ((Calculated().flight.Flying)
-      && (!Basic().gps.Simulator || !Calculated().Circling)) {
+      && (!Basic().gps.simulator || !Calculated().Circling)) {
     vdiff = Calculated().V_stf - Basic().IndicatedAirspeed;
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;

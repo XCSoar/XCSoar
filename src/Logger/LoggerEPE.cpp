@@ -120,7 +120,7 @@ IGCWriter::GetIRecord(void)
  * so we assume the table above is a valid estimation.
  *
  * The WAAS function in the US does not set the DGPS flag
- * FixQuality
+ * fix_quality
  * 1 = GPS fix (SPS)
  * 2 = DGPS fix
  * 3 = PPS fix
@@ -135,14 +135,14 @@ IGCWriter::GetEPE(const NMEA_INFO& gps_info)
 {
   fixed dEPE = fixed_zero;
 
-  switch (gps_info.gps.FixQuality) {
+  switch (gps_info.gps.fix_quality) {
 
   case 1:
-    dEPE = (int)gps_info.gps.HDOP * fixed(18.2);
+    dEPE = (int)gps_info.gps.hdop * fixed(18.2);
     break;
 
   case 2:
-    dEPE = (int)gps_info.gps.HDOP * fixed_four;
+    dEPE = (int)gps_info.gps.hdop * fixed_four;
     break;
 
   default:
@@ -159,11 +159,11 @@ IGCWriter::GetSIU(const NMEA_INFO& gps_info)
 {
   int iSIU=0;
 
-  switch (gps_info.gps.FixQuality) {
+  switch (gps_info.gps.fix_quality) {
 
   case 1:
   case 2:
-    iSIU = gps_info.gps.SatellitesUsed;
+    iSIU = gps_info.gps.satellites_used;
     break;
 
   default:

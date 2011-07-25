@@ -75,7 +75,7 @@ static void
 UpdateValuesSystem()
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const GPS_STATE &gps = basic.gps;
+  const GPSState &gps = basic.gps;
 
   TCHAR Temp[80];
   TCHAR Temp2[80];
@@ -88,7 +88,7 @@ UpdateValuesSystem()
     wp->SetText(_("Disconnected"));
   else if (!basic.LocationAvailable)
     wp->SetText(_("Fix invalid"));
-  else if (gps.SatellitesUsed == 0)
+  else if (gps.satellites_used == 0)
     wp->SetText(_("No fix"));
   else
     wp->SetText(_("3D fix"));
@@ -100,9 +100,9 @@ UpdateValuesSystem()
   assert(wp != NULL);
   if (!basic.Connected)
     wp->SetText(_T(""));
-  else if (gps.SatellitesUsed >= 0) {
+  else if (gps.satellites_used >= 0) {
     // known number of sats
-    _stprintf(Temp,_T("%d"), gps.SatellitesUsed);
+    _stprintf(Temp,_T("%d"), gps.satellites_used);
     wp->SetText(Temp);
   } else
     // valid but unknown number of sats

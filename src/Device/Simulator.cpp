@@ -98,12 +98,12 @@ Simulator::Process(NMEA_INFO &basic)
 
   basic.UpdateClock();
   basic.Connected.Update(basic.clock);
-  basic.gps.SatellitesUsed = 6;
-  basic.gps.Simulator = true;
+  basic.gps.satellites_used = 6;
+  basic.gps.simulator = true;
   basic.gps.real = false;
 
 #ifdef ANDROID
-  basic.gps.AndroidInternalGPS = false;
+  basic.gps.android_internal_gps = false;
 #endif
 
   basic.Location = FindLatitudeLongitude(basic.Location, basic.track,

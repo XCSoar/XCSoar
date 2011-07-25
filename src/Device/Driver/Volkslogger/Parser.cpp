@@ -33,7 +33,7 @@ Copyright_License {
 static bool
 vl_PGCS1(NMEAInputLine &line, NMEA_INFO &info)
 {
-  GPS_STATE &gps = info.gps;
+  GPSState &gps = info.gps;
 
   if (line.read(1) != 1)
     return false;
@@ -56,8 +56,8 @@ vl_PGCS1(NMEAInputLine &line, NMEA_INFO &info)
 
   // nSatellites = (int)(min(12,HexStrToDouble(ctemp, NULL)));
 
-  if (gps.SatellitesUsed <= 0) {
-    gps.SatellitesUsed = 4;
+  if (gps.satellites_used <= 0) {
+    gps.satellites_used = 4;
     // just to make XCSoar quit complaining.  VL doesn't tell how many
     // satellites it uses.  Without this XCSoar won't do wind
     // measurements.

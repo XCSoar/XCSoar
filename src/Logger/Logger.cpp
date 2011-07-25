@@ -110,7 +110,7 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
                        const ProtectedTaskManager &protected_task_manager,
                     bool noAsk)
 {
-  if (isLoggerActive() || gps_info.gps.Replay)
+  if (isLoggerActive() || gps_info.gps.replay)
     return;
 
   OrderedTask* task = protected_task_manager.task_clone();

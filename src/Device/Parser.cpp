@@ -348,8 +348,8 @@ NMEAParser::GSA(NMEAInputLine &line, NMEA_INFO &info)
     info.LocationAvailable.Clear();
 
   // satellites are in items 4-15 of GSA string (4-15 is 1-indexed)
-  for (unsigned i = 0; i < GPS_STATE::MAXSATELLITES; i++)
-    info.gps.SatelliteIDs[i] = line.read(0);
+  for (unsigned i = 0; i < GPSState::MAXSATELLITES; i++)
+    info.gps.satellite_ids[i] = line.read(0);
 
   return true;
 }
@@ -399,7 +399,7 @@ NMEAParser::GLL(NMEAInputLine &line, NMEA_INFO &info)
 
   info.gps.real = real;
 #ifdef ANDROID
-  info.gps.AndroidInternalGPS = false;
+  info.gps.android_internal_gps = false;
 #endif
 
   return true;
@@ -497,7 +497,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  GPS_STATE &gps = info.gps;
+  GPSState &gps = info.gps;
 
   fixed speed;
   bool GroundSpeedAvailable = line.read_checked(speed);
@@ -537,14 +537,14 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO &info)
   if (!GGAAvailable) {
     // update SatInUse, some GPS receiver don't emit GGA sentence
     if (!gpsValid)
-      gps.SatellitesUsed = 0;
+      gps.satellites_used = 0;
     else
-      gps.SatellitesUsed = -1;
+      gps.satellites_used = -1;
   }
 
   info.gps.real = real;
 #ifdef ANDROID
-  info.gps.AndroidInternalGPS = false;
+  info.gps.android_internal_gps = false;
 #endif
 
   return true;
@@ -593,7 +593,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEA_INFO &info)
 bool
 NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO &info)
 {
-  GPS_STATE &gps = info.gps;
+  GPSState &gps = info.gps;
 
   GGAAvailable = true;
 
@@ -604,10 +604,10 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  gps.FixQuality = line.read(0);
+  gps.fix_quality = line.read(0);
 
   int nSatellites = min(16, line.read(0));
-  gps.SatellitesUsed = nSatellites;
+  gps.satellites_used = nSatellites;
 
   if (!TimeHasAdvanced(ThisTime, info))
     return true;
@@ -625,10 +625,10 @@ NMEAParser::GGA(NMEAInputLine &line, NMEA_INFO &info)
 
   info.gps.real = real;
 #ifdef ANDROID
-  info.gps.AndroidInternalGPS = false;
+  info.gps.android_internal_gps = false;
 #endif
 
-  gps.HDOP = line.read(fixed_zero);
+  gps.hdop = line.read(fixed_zero);
 
   // VENTA3 CONDOR ALTITUDE
   // "Altitude" should always be GPS Altitude.

@@ -42,15 +42,15 @@ SwitchInfo::Reset()
 }
 
 void
-GPS_STATE::Reset()
+GPSState::Reset()
 {
   real = false;
-  Simulator = false;
+  simulator = false;
 #ifdef ANDROID
-  AndroidInternalGPS = false;
+  android_internal_gps = false;
 #endif
-  SatellitesUsed = 0;
-  Replay = false;
+  satellites_used = 0;
+  replay = false;
 }
 
 void
@@ -128,7 +128,7 @@ NMEA_INFO::ExpireWallClock()
   UpdateClock();
 
 #ifdef ANDROID
-  if (gps.AndroidInternalGPS)
+  if (gps.android_internal_gps)
     /* the Android internal GPS does not expire */
     return;
 #endif

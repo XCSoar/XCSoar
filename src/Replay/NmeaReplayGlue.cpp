@@ -89,7 +89,7 @@ NmeaReplayGlue::on_sentence(const char *line)
 
   if ((device != NULL && device->ParseNMEA(line, data)) ||
       (parser != NULL && parser->ParseNMEAString_Internal(line, data))) {
-    data.gps.Replay = true;
+    data.gps.replay = true;
     data.Connected.Update(fixed(MonotonicClockMS()) / 1000);
     device_blackboard.ScheduleMerge();
   }

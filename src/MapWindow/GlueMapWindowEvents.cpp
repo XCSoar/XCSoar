@@ -140,7 +140,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
     break;
   }
 
-  if (Basic().gps.Simulator && drag_mode == DRAG_NONE)
+  if (Basic().gps.simulator && drag_mode == DRAG_NONE)
     if (compare_squared(visible_projection.GetScreenOrigin().x - x,
                         visible_projection.GetScreenOrigin().y - y,
                         Layout::Scale(30)) != 1)

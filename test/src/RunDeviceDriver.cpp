@@ -97,7 +97,7 @@ Dump(const NMEA_INFO &basic)
   if (!basic.Connected)
     printf("GPS not connected\n");
   else
-    printf("GPS connected, %d satellites\n", basic.gps.SatellitesUsed);
+    printf("GPS connected, %d satellites\n", basic.gps.satellites_used);
 
   if (basic.LocationAvailable) {
     printf("Position=");

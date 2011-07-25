@@ -58,7 +58,7 @@ public:
     fixed Altitude;            /**< GPS Altitude (m) */
     fixed BaroAltitude;        /**< Barometric altitude (m) */
     BrokenDateTime DateTime;    /**< Date and time of fix */
-    int SatelliteIDs[GPS_STATE::MAXSATELLITES]; /**< IDs of satellites in fix */
+    int SatelliteIDs[GPSState::MAXSATELLITES]; /**< IDs of satellites in fix */
     fixed Time;                /**< Time of fix (s) */
     int NAVWarning;             /**< GPS fix state */
     int FixQuality;             /**< GPS fix quality */

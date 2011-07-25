@@ -512,9 +512,9 @@ GlideComputerAirData::TerrainHeight()
 bool
 GlideComputerAirData::FlightTimes()
 {
-  if (Basic().gps.Replay != LastBasic().gps.Replay)
+  if (Basic().gps.replay != LastBasic().gps.replay)
     // reset flight before/after replay logger
-    ResetFlight(Basic().gps.Replay);
+    ResetFlight(Basic().gps.replay);
 
   if (Basic().time_available && time_retreated()) {
     // 20060519:sgi added (Basic().Time != 0) due to always return here
@@ -741,7 +741,7 @@ GlideComputerAirData::Turning()
   // Force cruise or climb mode if external device says so
   bool forcecruise = false;
   bool forcecircling = false;
-  if (SettingsComputer().EnableExternalTriggerCruise && !Basic().gps.Replay) {
+  if (SettingsComputer().EnableExternalTriggerCruise && !Basic().gps.replay) {
     switch (Basic().switch_state.flight_mode) {
     case SwitchInfo::MODE_UNKNOWN:
       forcecircling = false;

@@ -59,7 +59,7 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 {
   if (!is_simulator())
     return false;
-  if (!XCSoarInterface::Basic().gps.Simulator)
+  if (!XCSoarInterface::Basic().gps.simulator)
     return false;
 
   fixed fixed_step = (fixed)Units::ToSysSpeed(fixed_ten);

@@ -65,7 +65,7 @@ struct SwitchInfo
 /**
  * State of GPS fix
  */
-struct GPS_STATE
+struct GPSState
 {
   static const unsigned MAXSATELLITES = 12;
 
@@ -74,7 +74,7 @@ struct GPS_STATE
   //############
 
   /**
-   * FixQuality
+   * fix_quality
    * 1 = GPS fix (SPS)
    * 2 = DGPS fix
    * 3 = PPS fix
@@ -84,16 +84,16 @@ struct GPS_STATE
    * 7 = Manual input mode
    * 8 = Simulation mode
    */
-  int FixQuality;
+  int fix_quality;
 
   /** Number of satellites used for gps fix */
-  int SatellitesUsed;
+  int satellites_used;
 
   /** GPS Satellite ids */
-  int SatelliteIDs[MAXSATELLITES];
+  int satellite_ids[MAXSATELLITES];
 
   /** Horizontal dilution of precision */
-  fixed HDOP;
+  fixed hdop;
 
   /**
    * Is the fix real? (no replay, no simulator)
@@ -101,12 +101,12 @@ struct GPS_STATE
   bool real;
 
   /** Is XCSoar in replay mode? */
-  bool Replay;
+  bool replay;
 
   /**
    * Did the simulator provide the GPS position?
    */
-  bool Simulator;
+  bool simulator;
 
 #ifdef ANDROID
   /**
@@ -114,7 +114,7 @@ struct GPS_STATE
    * yes, then link timeout detection is disabled, because we get
    * notifications from Android when the GPS gets disconnected.
    */
-  bool AndroidInternalGPS;
+  bool android_internal_gps;
 #endif
 
   void Reset();
@@ -139,7 +139,7 @@ struct NMEA_INFO {
    */
   Validity Connected;
 
-  GPS_STATE gps;
+  GPSState gps;
 
   ACCELERATION_STATE acceleration;
 
