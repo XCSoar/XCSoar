@@ -67,7 +67,7 @@ InfoBoxContentTimeUTC::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTimeFlight::Update(InfoBoxWindow &infobox)
 {
-  if (!positive(CommonInterface::Calculated().flight.FlightTime)) {
+  if (!positive(CommonInterface::Calculated().flight.flight_time)) {
     infobox.SetInvalid();
     return;
   }
@@ -75,7 +75,7 @@ InfoBoxContentTimeFlight::Update(InfoBoxWindow &infobox)
   // Set Value
   TCHAR value[32], comment[32];
   Units::TimeToTextSmart(value, comment,
-                         (int)XCSoarInterface::Calculated().flight.FlightTime);
+                         (int)XCSoarInterface::Calculated().flight.flight_time);
 
   infobox.SetValue(value);
   infobox.SetComment(comment);

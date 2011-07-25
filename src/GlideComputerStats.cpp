@@ -75,13 +75,13 @@ GlideComputerStats::DoLogging()
   if (log_clock.check_advance(Basic().Time) && logger != NULL)
       logger->LogPoint(Basic());
 
-  if (Calculated().flight.Flying &&
+  if (Calculated().flight.flying &&
       stats_clock.check_advance(Basic().Time)) {
-    flightstats.AddAltitudeTerrain(Calculated().flight.FlightTime,
+    flightstats.AddAltitudeTerrain(Calculated().flight.flight_time,
                                    Calculated().TerrainAlt);
-    flightstats.AddAltitude(Calculated().flight.FlightTime,
+    flightstats.AddAltitude(Calculated().flight.flight_time,
                             Basic().NavAltitude);
-    flightstats.AddTaskSpeed(Calculated().flight.FlightTime,
+    flightstats.AddTaskSpeed(Calculated().flight.flight_time,
                              Calculated().task_stats.get_pirker_speed());
   }
 
@@ -92,14 +92,14 @@ void
 GlideComputerStats::OnClimbBase(fixed StartAlt)
 {
   flightstats.AddClimbBase(Calculated().ClimbStartTime -
-                           Calculated().flight.TakeOffTime, StartAlt);
+                           Calculated().flight.takeoff_time, StartAlt);
 }
 
 void
 GlideComputerStats::OnClimbCeiling()
 {
   flightstats.AddClimbCeiling(Calculated().CruiseStartTime -
-                              Calculated().flight.TakeOffTime,
+                              Calculated().flight.takeoff_time,
                               Calculated().CruiseStartAlt);
 }
 

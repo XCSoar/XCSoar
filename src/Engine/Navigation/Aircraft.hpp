@@ -120,31 +120,29 @@ struct VARIO_STATE
 /**
  * Structure for flying state (takeoff/landing)
  */
-struct FLYING_STATE
+struct FlyingState
 {
-  FLYING_STATE();
+  FlyingState();
 
   /** True if airborne, False otherwise */
-  bool   Flying;
+  bool flying;
   /** Detects when glider is on ground for several seconds */
-  bool   OnGround;
+  bool on_ground;
 
   /** Time of flight */
-  fixed FlightTime;
+  fixed flight_time;
   /** Time of takeoff */
-  fixed TakeOffTime;
+  fixed takeoff_time;
 
-  /**
-   * Reset flying state as if never flown
-   */
-  void flying_state_reset();
+  /** Reset flying state as if never flown */
+  void Reset();
 
   /**
    * Update flying state when moving 
    *
    * @param time Time the aircraft is moving
    */
-  void flying_state_moving(const fixed time);
+  void Moving(const fixed time);
 
   /**
    * Update flying state when stationary 
@@ -152,12 +150,13 @@ struct FLYING_STATE
    * @param time Time the aircraft is stationary
    * @param on_ground Whether the aircraft is known to be on the ground
    */
-  void flying_state_stationary(const fixed time);
+  void Stationary(const fixed time);
 
 private:
-  void flying_state_check(const fixed time);
-  int  TimeOnGround;
-  int  TimeInFlight;
+  void Check(const fixed time);
+
+  int  time_on_ground;
+  int  time_in_flight;
 };
 
 /**
@@ -167,7 +166,7 @@ struct AIRCRAFT_STATE:
   public ALTITUDE_STATE,
   public SPEED_STATE,
   public VARIO_STATE,
-  public FLYING_STATE
+  public FlyingState
 {
   AIRCRAFT_STATE();
 

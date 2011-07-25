@@ -175,7 +175,7 @@ UpdateValuesTimes(void)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  const FLYING_STATE &flight = calculated.flight;
+  const FlyingState &flight = calculated.flight;
 
   WndProperty *wp;
   TCHAR Temp[1000];
@@ -199,8 +199,8 @@ UpdateValuesTimes(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpTakeoffTime"));
   assert(wp != NULL);
-  if (positive(flight.FlightTime)) {
-    Units::TimeToTextHHMMSigned(Temp, TimeLocal((long)flight.TakeOffTime));
+  if (positive(flight.flight_time)) {
+    Units::TimeToTextHHMMSigned(Temp, TimeLocal((long)flight.takeoff_time));
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));
@@ -208,10 +208,10 @@ UpdateValuesTimes(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpLandingTime"));
   assert(wp != NULL);
-  if (!flight.Flying && positive(flight.FlightTime)) {
+  if (!flight.flying && positive(flight.flight_time)) {
     Units::TimeToTextHHMMSigned(Temp,
-                      TimeLocal((long)(flight.TakeOffTime
-                                       + flight.FlightTime)));
+                      TimeLocal((long)(flight.takeoff_time
+                                       + flight.flight_time)));
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));
@@ -219,8 +219,8 @@ UpdateValuesTimes(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlightTime"));
   assert(wp != NULL);
-  if (positive(flight.FlightTime)) {
-    Units::TimeToTextHHMMSigned(Temp, (int)flight.FlightTime);
+  if (positive(flight.flight_time)) {
+    Units::TimeToTextHHMMSigned(Temp, (int)flight.flight_time);
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));

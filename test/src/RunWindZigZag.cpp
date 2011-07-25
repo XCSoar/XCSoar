@@ -111,7 +111,7 @@ int main(int argc, char **argv)
       parser.ParseNMEAString_Internal(buffer, data);
 
     computer.Compute(data, last, calculated, settings_computer);
-    calculated.flight.flying_state_moving(data.Time);
+    calculated.flight.Moving(data.Time);
 
     WindZigZagGlue::Result result = wind_zig_zag.Update(data, calculated);
     if (result.quality > 0)

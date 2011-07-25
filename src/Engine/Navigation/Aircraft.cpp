@@ -52,76 +52,76 @@ ALTITUDE_STATE::thermal_drift_factor() const
   return sigmoid(AltitudeAGL / 100);
 }
 
-FLYING_STATE::FLYING_STATE()
+FlyingState::FlyingState()
 {
-  flying_state_reset();
+  Reset();
 }
 
 void
-FLYING_STATE::flying_state_reset()
+FlyingState::Reset()
 {
-  TimeInFlight = 0;
-  TimeOnGround = 0;
-  Flying = false;
-  OnGround = false;
+  time_in_flight = 0;
+  time_on_ground = 0;
+  flying = false;
+  on_ground = false;
 }
 
 void
-FLYING_STATE::flying_state_moving(const fixed time)
+FlyingState::Moving(const fixed time)
 {
   // Increase InFlight countdown for further evaluation
-  if (TimeInFlight < 60)
-    TimeInFlight++;
+  if (time_in_flight < 60)
+    time_in_flight++;
 
   // We are moving so we are certainly not on the ground
-  TimeOnGround = 0;
+  time_on_ground = 0;
 
   // Update flying state
-  flying_state_check(time);
+  Check(time);
 }
 
 void
-FLYING_STATE::flying_state_stationary(const fixed time)
+FlyingState::Stationary(const fixed time)
 {
   // Decrease InFlight countdown for further evaluation
-  if (TimeInFlight)
-    TimeInFlight--;
+  if (time_in_flight)
+    time_in_flight--;
 
-  if (TimeOnGround<30)
-    TimeOnGround++;
+  if (time_on_ground<30)
+    time_on_ground++;
 
   // Update flying state
-  flying_state_check(time);
+  Check(time);
 }
 
 void
-FLYING_STATE::flying_state_check(const fixed time)
+FlyingState::Check(const fixed time)
 {
   // Logic to detect takeoff and landing is as follows:
   //   detect takeoff when above threshold speed for 10 seconds
   //
   //   detect landing when below threshold speed for 30 seconds
 
-  if (!Flying) {
+  if (!flying) {
     // We are moving for 10sec now
-    if (TimeInFlight > 10) {
+    if (time_in_flight > 10) {
       // We certainly must be flying after 10sec movement
-      Flying = true;
-      TakeOffTime = time;
-      FlightTime = fixed_zero;
+      flying = true;
+      takeoff_time = time;
+      flight_time = fixed_zero;
     }
   } else {
     // update time of flight
-    FlightTime = time - TakeOffTime;
+    flight_time = time - takeoff_time;
 
     // We are not moving anymore for 60sec now
-    if (TimeInFlight == 0)
+    if (time_in_flight == 0)
       // We are probably not flying anymore
-      Flying = false;
+      flying = false;
   }
 
   // If we are not certainly flying we are probably on the ground
   // To make sure that we are, wait for 10sec to make sure there
   // is no more movement
-  OnGround = (!Flying) && (TimeOnGround > 10);
+  on_ground = (!flying) && (time_on_ground > 10);
 }

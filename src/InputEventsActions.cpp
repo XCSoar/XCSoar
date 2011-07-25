@@ -909,14 +909,14 @@ InputEvents::eventAdjustVarioFilter(const TCHAR *misc)
     dlgVegaDemoShowModal();
   } else if (_tcscmp(misc, _T("zero"))==0) {
     // zero, no mixing
-    if (!CommonInterface::Calculated().flight.Flying) {
+    if (!CommonInterface::Calculated().flight.flying) {
       VarioWriteNMEA(_T("PDVSC,S,ZeroASI,1"));
     }
   } else if (_tcscmp(misc, _T("save")) == 0) {
     VarioWriteNMEA(_T("PDVSC,S,StoreToEeprom,2"));
 
   // accel calibration
-  } else if (!CommonInterface::Calculated().flight.Flying) {
+  } else if (!CommonInterface::Calculated().flight.flying) {
     if (_tcscmp(misc, _T("X1"))==0)
       VarioWriteNMEA(_T("PDVSC,S,CalibrateAccel,1"));
     else if (_tcscmp(misc, _T("X2"))==0)

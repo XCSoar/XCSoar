@@ -61,7 +61,7 @@ public:
   void
   Update(const GlideComputer& cmp)
   {
-    if (!cmp.Calculated().flight.Flying)
+    if (!cmp.Calculated().flight.flying)
       return;
 
     bool restart = false;
@@ -141,7 +141,7 @@ protected:
   {
     wind = cmp.Calculated().wind;
 
-    if (!cmp.Calculated().flight.Flying) {
+    if (!cmp.Calculated().flight.flying) {
       last_wind = wind;
       return false;
     }
@@ -187,7 +187,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Calculated().flight.Flying || !cmp.Calculated().task_stats.task_valid)
+    if (!cmp.Calculated().flight.flying || !cmp.Calculated().task_stats.task_valid)
       return false;
 
     const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
@@ -251,7 +251,7 @@ protected:
   CheckCondition(const GlideComputer& cmp)
   {
     if (!cmp.Basic().LocationAvailable ||
-        !cmp.Calculated().flight.Flying || HaveCondorDevice() ||
+        !cmp.Calculated().flight.flying || HaveCondorDevice() ||
         !cmp.Calculated().task_stats.task_valid)
       return false;
   
@@ -292,7 +292,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Calculated().flight.Flying ||
+    if (!cmp.Calculated().flight.flying ||
         !cmp.Calculated().task_stats.task_valid ||
         !cmp.Calculated().common_stats.mode_ordered ||
         !cmp.Calculated().common_stats.ordered_valid ||
@@ -340,7 +340,7 @@ protected:
   {
 #ifdef OLD_TASK // start condition warnings
     if (!task.Valid()
-        || !cmp.Basic().Flying
+        || !cmp.Basic().flying
         || (task.getActiveIndex() > 0)
         || !task.ValidTaskPoint(task.getActiveIndex() + 1))
       return false;
@@ -386,7 +386,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Calculated().flight.Flying ||
+    if (!cmp.Calculated().flight.flying ||
         !cmp.Calculated().task_stats.task_valid)
       return false;
 
@@ -429,7 +429,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Calculated().flight.Flying)
+    if (!cmp.Calculated().flight.flying)
       return false;
 
     now_reachable = cmp.Calculated().common_stats.landable_reachable;

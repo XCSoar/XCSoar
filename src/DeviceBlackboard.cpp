@@ -75,7 +75,7 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
 {
   ScopeLock protect(mutex);
 
-  if (Calculated().flight.Flying)
+  if (Calculated().flight.flying)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)

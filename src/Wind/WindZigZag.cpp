@@ -76,7 +76,7 @@ WindZigZagGlue::Update(const NMEA_INFO &basic, const DerivedInfo &derived)
   // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 
   // reset if flight hasnt started or airspeed instrument not available
-  if (!derived.flight.Flying ||
+  if (!derived.flight.flying ||
       !basic.AirspeedAvailable) {
     reset();
     return Result(0);

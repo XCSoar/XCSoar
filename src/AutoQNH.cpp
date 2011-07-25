@@ -38,7 +38,7 @@ void
 AutoQNH::Process(const NMEA_INFO &basic, DerivedInfo &calculated,
         const SETTINGS_COMPUTER &settings_computer, const Waypoints &way_points)
 {
-  if (!calculated.flight.OnGround // must be on ground
+  if (!calculated.flight.on_ground // must be on ground
       || IsFinished()    // only do it once
       || !basic.gps.real // never in replay mode / simulator
       || !basic.LocationAvailable // Reject if no valid GPS fix

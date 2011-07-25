@@ -168,7 +168,7 @@ TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height) +
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height_ref ?
               0 : task_ordered.get_tp(0)->get_elevation());
-    if (positive(start_max_height) && state.Flying) {
+    if (positive(start_max_height) && state.flying) {
       if (!positive(common_stats.TimeUnderStartMaxHeight) &&
           state.NavAltitude < start_max_height) {
         common_stats.TimeUnderStartMaxHeight = state.Time;
@@ -291,7 +291,7 @@ TaskManager::update(const AIRCRAFT_STATE &state,
   if (state_last.Time > state.Time)
     reset();
 
-  if (state.Flying) {
+  if (state.flying) {
     // either olc or basic trace requires trace_full
     if (task_behaviour.enable_olc || task_behaviour.enable_trace)
       trace_full.append(state);
@@ -332,7 +332,7 @@ TaskManager::update_idle(const AIRCRAFT_STATE& state)
 {
   bool retval = false;
 
-  if (state.Flying) {
+  if (state.flying) {
     // Update the Traces even if contest
     // optimization is not _currently_ enabled
     if (task_behaviour.enable_olc || task_behaviour.enable_trace)

@@ -193,7 +193,7 @@ struct DerivedInfo:
   CommonStats common_stats; /**< Copy of common task statistics data */
   ContestStatistics contest_stats; /**< Copy of contest statistics data */
 
-  FLYING_STATE flight;
+  FlyingState flight;
 
   ThermalBandInfo thermal_band;
 

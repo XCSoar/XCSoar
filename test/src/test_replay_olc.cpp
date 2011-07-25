@@ -188,9 +188,9 @@ test_replay(const Contests olc_type,
       n_samples++;
 
       if (sim.state.Speed> glide_polar.GetVTakeoff()) {
-        sim.state.flying_state_moving(sim.state.Time);
+        sim.state.Moving(sim.state.Time);
       } else {
-        sim.state.flying_state_stationary(sim.state.Time);
+        sim.state.Stationary(sim.state.Time);
       }
 
       task_manager.update(sim.state, state_last);

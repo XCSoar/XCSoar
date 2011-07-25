@@ -111,7 +111,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic,
                             const DerivedInfo &calculated)
 {
   // if (not flying) nothing to update...
-  if (!calculated.flight.Flying)
+  if (!calculated.flight.flying)
     return;
 
   // if (no temperature or humidity available) nothing to update...

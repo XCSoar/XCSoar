@@ -92,7 +92,7 @@ static void DrawLegs(Chart& chart,
 
   const fixed start_time = task_relative
     ? basic.Time - calculated.common_stats.task_time_elapsed
-    : calculated.flight.TakeOffTime;
+    : calculated.flight.takeoff_time;
 
   const OrderedTask &task = task_manager.get_ordered_task();
   for (unsigned i = 0, n = task.task_size(); i < n; ++i) {

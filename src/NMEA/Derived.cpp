@@ -70,7 +70,7 @@ DerivedInfo::Reset()
   common_stats.reset();
   contest_stats.reset();
 
-  flight.flying_state_reset();
+  flight.Reset();
   thermal_band.Clear();
   thermal_locator.Clear();
 

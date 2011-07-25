@@ -120,7 +120,7 @@ GlideComputerAirData::ProcessVertical()
   LD();
   CruiseLD();
 
-  if (calculated.flight.Flying && !calculated.Circling)
+  if (calculated.flight.flying && !calculated.Circling)
     calculated.average_ld = rotaryLD.calculate();
 
   Average30s();
@@ -137,7 +137,7 @@ GlideComputerAirData::Wind()
 {
   DerivedInfo &calculated = SetCalculated();
 
-  if (!calculated.flight.Flying || !time_advanced())
+  if (!calculated.flight.flying || !time_advanced())
     return;
 
   if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) {
@@ -213,7 +213,7 @@ GlideComputerAirData::Heading()
   const SpeedVector wind = calculated.wind;
 
   if ((positive(basic.GroundSpeed) || wind.is_non_zero()) &&
-      calculated.flight.Flying) {
+      calculated.flight.flying) {
     fixed x0 = basic.track.fastsine() * basic.GroundSpeed;
     fixed y0 = basic.track.fastcosine() * basic.GroundSpeed;
     x0 += wind.bearing.fastsine() * wind.norm;
@@ -234,7 +234,7 @@ GlideComputerAirData::NettoVario()
   VarioInfo &vario = SetCalculated();
 
   vario.sink_rate =
-    calculated.flight.Flying && basic.AirspeedAvailable
+    calculated.flight.flying && basic.AirspeedAvailable
     ? - settings_computer.glide_polar_task.SinkRate(basic.IndicatedAirspeed,
                                                     basic.acceleration.g_load)
     /* the glider sink rate is useless when not flying */
@@ -400,7 +400,7 @@ GlideComputerAirData::MaxHeightGain()
   const MoreData &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
 
-  if (!calculated.flight.Flying)
+  if (!calculated.flight.flying)
     return;
 
   if (positive(calculated.MinAltitude)) {
@@ -430,13 +430,13 @@ GlideComputerAirData::LD()
       UpdateLD(calculated.ld, DistanceFlown,
                LastBasic().NavAltitude - Basic().NavAltitude, fixed(0.1));
 
-    if (calculated.flight.Flying && !calculated.Circling)
+    if (calculated.flight.flying && !calculated.Circling)
       rotaryLD.add((int)DistanceFlown, (int)Basic().NavAltitude);
   }
 
   // LD instantaneous from vario, updated every reading..
   if (Basic().TotalEnergyVarioAvailable && Basic().AirspeedAvailable &&
-      calculated.flight.Flying) {
+      calculated.flight.flying) {
     calculated.ld_vario =
       UpdateLD(calculated.ld_vario, Basic().IndicatedAirspeed,
                -Basic().TotalEnergyVario, fixed(0.3));
@@ -547,7 +547,7 @@ GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
   DerivedInfo &calculated = SetCalculated();
 
   if (time_retreated())
-    calculated.flight.flying_state_reset();
+    calculated.flight.Reset();
 
   // GPS not lost
   if (!basic.LocationAvailable)
@@ -560,9 +560,9 @@ GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
 
   if (speed > glide_polar.GetVTakeoff() ||
       (calculated.AltitudeAGLValid && calculated.AltitudeAGL > fixed(300))) {
-    calculated.flight.flying_state_moving(basic.Time);
+    calculated.flight.Moving(basic.Time);
   } else {
-    calculated.flight.flying_state_stationary(basic.Time);
+    calculated.flight.Stationary(basic.Time);
   }
 }
 
@@ -572,9 +572,9 @@ GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
 void
 GlideComputerAirData::TakeoffLanding()
 {
-  if (Calculated().flight.Flying && !LastCalculated().flight.Flying)
+  if (Calculated().flight.flying && !LastCalculated().flight.flying)
     OnTakeoff();
-  else if (!Calculated().flight.Flying && LastCalculated().flight.Flying)
+  else if (!Calculated().flight.flying && LastCalculated().flight.flying)
     OnLanding();
 }
 
@@ -678,7 +678,7 @@ GlideComputerAirData::TurnRate()
   // Calculate turn rate
 
   if (!basic.time_available || !LastBasic().time_available ||
-      !calculated.flight.Flying) {
+      !calculated.flight.flying) {
     calculated.TurnRate = fixed_zero;
     calculated.TurnRateWind = fixed_zero;
     return;
@@ -706,7 +706,7 @@ GlideComputerAirData::Turning()
   DerivedInfo &calculated = SetCalculated();
 
   // You can't be circling unless you're flying
-  if (!calculated.flight.Flying || !time_advanced())
+  if (!calculated.flight.flying || !time_advanced())
     return;
 
   // JMW limit rate to 50 deg per second otherwise a big spike

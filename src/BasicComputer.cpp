@@ -154,7 +154,7 @@ ComputeAirspeed(NMEA_INFO &basic, const DerivedInfo &calculated)
     return;
 
   if (!basic.GroundSpeedAvailable || !calculated.wind_available ||
-      !calculated.flight.Flying) {
+      !calculated.flight.flying) {
     /* impossible to calculate */
     basic.AirspeedAvailable.Clear();
     return;
@@ -248,7 +248,7 @@ ComputeNettoVario(MoreData &basic, const VarioInfo &vario)
 static void
 ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 {
-  if (calculated.flight.Flying &&
+  if (calculated.flight.flying &&
       (positive(basic.GroundSpeed) || calculated.wind.is_non_zero())) {
 
     // estimate bank angle (assuming balanced turn)

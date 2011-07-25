@@ -266,7 +266,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // .. feature disabled
   // .. feature inaccessible
   if (!Basic().LocationAvailable
-      || !Calculated().flight.Flying
+      || !Calculated().flight.flying
       || SettingsComputer().FinalGlideTerrain == SETTINGS_COMPUTER::FGT_OFF
       || !task)
     return;
@@ -440,7 +440,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
 void
 MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
-  if (!Calculated().flight.Flying ||
+  if (!Calculated().flight.flying ||
       !Calculated().TerrainWarning ||
       Calculated().TerrainWarningLocation.distance(Basic().Location) < fixed(500.0))
     return;
