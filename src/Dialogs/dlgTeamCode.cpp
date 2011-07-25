@@ -45,7 +45,7 @@ static WndForm *wf = NULL;
 static void
 Update()
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
   WndProperty* wp;
   TCHAR Text[100];
@@ -110,7 +110,7 @@ static void
 OnSetWaypointClicked(gcc_unused WndButton &button)
 {
   const Waypoint* wp = dlgWaypointSelect(XCSoarInterface::main_window,
-                                         XCSoarInterface::Basic().Location);
+                                         XCSoarInterface::Basic().location);
   if (wp != NULL) {
     XCSoarInterface::SetSettingsComputer().TeamCodeRefWaypoint = wp->id;
     Profile::Set(szProfileTeamcodeRefWaypoint, wp->id);

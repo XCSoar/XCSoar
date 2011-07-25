@@ -204,7 +204,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
         SettingsComputer().glide_polar_task.GetVMin();
       const Angle newbearing = Bearing(drag_start_geopoint, G);
       if (((newbearing - oldbearing).as_delta().magnitude_degrees() < fixed(30)) ||
-          (Basic().GroundSpeed < minspeed))
+          (Basic().ground_speed < minspeed))
         device_blackboard.SetSpeed(min(fixed(100.0),
                                        max(minspeed,
                                            fixed(distance / (Layout::FastScale(3))))));

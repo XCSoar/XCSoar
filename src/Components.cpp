@@ -376,7 +376,7 @@ XCSoarInterface::Startup()
 
   // Scan for weather forecast
   LogStartUp(_T("RASP load"));
-  RASP.ScanAll(Basic().Location, operation);
+  RASP.ScanAll(Basic().location, operation);
 
   // Reads the airspace files
   ReadAirspace(airspace_database, terrain, SettingsComputer().pressure,

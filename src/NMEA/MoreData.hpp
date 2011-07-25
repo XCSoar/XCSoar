@@ -31,7 +31,7 @@ Copyright_License {
  * to calculate.  They are managed by #BasicComputer inside
  * #MergeThread.
  */
-struct MoreData : public NMEA_INFO {
+struct MoreData : public NMEAInfo {
   /** Altitude used for navigation (GPS or Baro) */
   fixed NavAltitude;
 

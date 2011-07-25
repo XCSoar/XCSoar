@@ -33,7 +33,7 @@ Copyright_License {
 
 class B50Device : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
 
 /*
@@ -52,7 +52,7 @@ HH = Outside airtemp in degrees celcius ( may have leading negative sign )
 CHK = standard NMEA checksum
 */
 static bool
-PBB50(NMEAInputLine &line, NMEA_INFO &info)
+PBB50(NMEAInputLine &line, NMEAInfo &info)
 {
   // $PBB50,100,0,10,1,10000,0,1,0,20*4A..
   // $PBB50,0,.0,.0,0,0,1.07,0,-228*58
@@ -119,15 +119,15 @@ PBB50(NMEAInputLine &line, NMEA_INFO &info)
     break;
   }
 
-  info.TemperatureAvailable = line.read_checked(value);
-  if (info.TemperatureAvailable)
-    info.OutsideAirTemperature = Units::ToSysUnit(value, unGradCelcius);
+  info.temperature_available = line.read_checked(value);
+  if (info.temperature_available)
+    info.temperature = Units::ToSysUnit(value, unGradCelcius);
 
   return true;
 }
 
 bool
-B50Device::ParseNMEA(const char *String, NMEA_INFO &info)
+B50Device::ParseNMEA(const char *String, NMEAInfo &info)
 {
   NMEAInputLine line(String);
   char type[16];

@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <list>
 
-struct NMEA_INFO;
+struct NMEAInfo;
 struct DerivedInfo;
 
 /**
@@ -230,7 +230,7 @@ public:
     Result(int _quality):quality(_quality) {}
   };
 
-  Result Update(const NMEA_INFO &basic, const DerivedInfo &derived);
+  Result Update(const NMEAInfo &basic, const DerivedInfo &derived);
 };
 
 #endif

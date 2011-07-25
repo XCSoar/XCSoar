@@ -75,8 +75,8 @@ void
 InfoBoxContentLDVario::Update(InfoBoxWindow &infobox)
 {
   if (XCSoarInterface::Calculated().ld_vario == fixed(999) ||
-      !XCSoarInterface::Basic().TotalEnergyVarioAvailable ||
-      !XCSoarInterface::Basic().AirspeedAvailable) {
+      !XCSoarInterface::Basic().total_energy_vario_available ||
+      !XCSoarInterface::Basic().airspeed_available) {
     infobox.SetInvalid();
     return;
   }

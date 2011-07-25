@@ -87,64 +87,64 @@ Dump(const ExternalSettings &settings)
 }
 
 static void
-Dump(const NMEA_INFO &basic)
+Dump(const NMEAInfo &basic)
 {
   printf("Date=%02u.%02u.%04u\n",
-         basic.DateTime.day, basic.DateTime.month, basic.DateTime.year);
+         basic.date_time_utc.day, basic.date_time_utc.month, basic.date_time_utc.year);
   printf("Time=%02u:%02u:%02u\n",
-         basic.DateTime.hour, basic.DateTime.minute, basic.DateTime.second);
+         basic.date_time_utc.hour, basic.date_time_utc.minute, basic.date_time_utc.second);
 
-  if (!basic.Connected)
+  if (!basic.connected)
     printf("GPS not connected\n");
   else
     printf("GPS connected, %d satellites\n", basic.gps.satellites_used);
 
-  if (basic.LocationAvailable) {
+  if (basic.location_available) {
     printf("Position=");
-    Dump(basic.Location);
+    Dump(basic.location);
     printf("\n");
   }
 
   if (basic.track_available)
     printf("TrackBearing=%d\n", (int)basic.track.value_degrees());
 
-  if (basic.GroundSpeedAvailable)
-    printf("GroundSpeed=%d\n", (int)basic.GroundSpeed);
+  if (basic.ground_speed_available)
+    printf("GroundSpeed=%d\n", (int)basic.ground_speed);
 
-  if (basic.AirspeedAvailable) {
-    printf("TrueAirspeed=%d\n", (int)basic.TrueAirspeed);
+  if (basic.airspeed_available) {
+    printf("TrueAirspeed=%d\n", (int)basic.true_airspeed);
     printf("IndicatedAirspeed=%d\n",
-           (int)basic.IndicatedAirspeed);
+           (int)basic.indicated_airspeed);
   }
 
-  if (basic.GPSAltitudeAvailable)
-    printf("GPSAltitude=%d\n", (int)basic.GPSAltitude);
+  if (basic.gps_altitude_available)
+    printf("GPSAltitude=%d\n", (int)basic.gps_altitude);
 
   if (basic.static_pressure_available)
     printf("StaticPressure=%d\n", (int)basic.static_pressure);
 
-  if (basic.PressureAltitudeAvailable)
-    printf("PressureAltitude=%d\n", (int)basic.PressureAltitude);
+  if (basic.pressure_altitude_available)
+    printf("PressureAltitude=%d\n", (int)basic.pressure_altitude);
 
-  if (basic.BaroAltitudeAvailable)
-    printf("BaroAltitude=%d\n", (int)basic.BaroAltitude);
+  if (basic.baro_altitude_available)
+    printf("BaroAltitude=%d\n", (int)basic.baro_altitude);
 
-  if (basic.TotalEnergyVarioAvailable)
-    printf("TotalEnergyVario=%.1f\n", (double)basic.TotalEnergyVario);
+  if (basic.total_energy_vario_available)
+    printf("TotalEnergyVario=%.1f\n", (double)basic.total_energy_vario);
 
-  if (basic.NettoVarioAvailable)
-    printf("NettoVario=%.1f\n", (double)basic.NettoVario);
+  if (basic.netto_vario_available)
+    printf("NettoVario=%.1f\n", (double)basic.netto_vario);
 
-  if (basic.ExternalWindAvailable)
+  if (basic.external_wind_available)
     printf("Wind=%d/%d\n",
-           (int)basic.ExternalWind.bearing.value_degrees(),
-           (int)basic.ExternalWind.norm);
+           (int)basic.external_wind.bearing.value_degrees(),
+           (int)basic.external_wind.norm);
 
-  if (basic.TemperatureAvailable)
-    printf("OutsideAirTemperature=%d\n", (int)basic.OutsideAirTemperature);
+  if (basic.temperature_available)
+    printf("OutsideAirTemperature=%d\n", (int)basic.temperature);
 
-  if (basic.HumidityAvailable)
-    printf("RelativeHumidity=%d\n", (int)basic.RelativeHumidity);
+  if (basic.humidity_available)
+    printf("RelativeHumidity=%d\n", (int)basic.humidity);
 
   const FLARM_STATE &flarm = basic.flarm;
   if (flarm.available) {
@@ -191,7 +191,7 @@ int main(int argc, char **argv)
 
   NMEAParser parser;
 
-  NMEA_INFO data;
+  NMEAInfo data;
   data.Reset();
 
   char buffer[1024];

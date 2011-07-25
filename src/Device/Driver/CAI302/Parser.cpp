@@ -50,7 +50,7 @@ $PCAIB,<1>,<2>,<CR><LF>
 <2> Destination Navpoint attribute word, format XXXXX (leading zeros will be transmitted)
 */
 static bool
-cai_PCAIB(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO &info)
+cai_PCAIB(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
   return true;
 }
@@ -64,7 +64,7 @@ $PCAID,<1>,<2>,<3>,<4>*hh<CR><LF>
 *hh Checksum, XOR of all bytes of the sentence after the $ and before the *
 */
 static bool
-cai_PCAID(NMEAInputLine &line, NMEA_INFO &data)
+cai_PCAID(NMEAInputLine &line, NMEAInfo &data)
 {
   line.skip();
 
@@ -99,7 +99,7 @@ cai_PCAID(NMEAInputLine &line, NMEA_INFO &data)
 *hh  Checksum, XOR of all bytes
 */
 static bool
-cai_w(NMEAInputLine &line, NMEA_INFO &info)
+cai_w(NMEAInputLine &line, NMEAInfo &info)
 {
   SpeedVector wind;
   if (ReadSpeedVector(line, wind))
@@ -139,7 +139,7 @@ cai_w(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-CAI302Device::ParseNMEA(const char *String, NMEA_INFO &info)
+CAI302Device::ParseNMEA(const char *String, NMEAInfo &info)
 {
   if (!VerifyNMEAChecksum(String))
     return false;

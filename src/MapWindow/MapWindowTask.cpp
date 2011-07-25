@@ -113,7 +113,7 @@ MapWindow::DrawTask(Canvas &canvas)
                            task_manager->get_ordered_task().get_task_projection(),
                            ozv, draw_bearing,
                            !IsNearSelf(),
-                           Basic().Location);
+                           Basic().location);
     RenderTask dv(tpv, render_projection.GetScreenBounds());
     ((TaskVisitor &)dv).Visit(*task);
   }
@@ -136,7 +136,7 @@ void
 MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
 {
   if (Calculated().circling 
-      || !Basic().LocationAvailable
+      || !Basic().location_available
       || !Basic().track_available
       || !SettingsMap().EnableDetourCostMarker
       || (task == NULL)) 
@@ -151,7 +151,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
     return;
 
   GeoPoint target = tp->get_location_remaining();
-  GeoVector vec(Basic().Location, target);
+  GeoVector vec(Basic().location, target);
 
   if ((Basic().track - vec.Bearing).as_delta().magnitude_degrees() < fixed(10))
     // insignificant error
@@ -164,7 +164,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   if (distance_max < fixed(5000))
     return;
 
-  GeoPoint start = Basic().Location;
+  GeoPoint start = Basic().location;
   
   canvas.select(Fonts::Title);
   canvas.set_text_color(COLOR_BLACK);

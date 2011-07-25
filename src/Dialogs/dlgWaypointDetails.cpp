@@ -672,10 +672,10 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))
     ->SetText(sTmp);
 
-  if (basic.Connected) {
+  if (basic.connected) {
     SunEphemeris sun;
     sun.CalcSunTimes(selected_waypoint->Location,
-                     basic.DateTime,
+                     basic.date_time_utc,
                      fixed(GetUTCOffset()) / 3600);
 
     int sunsethours = (int)sun.TimeOfSunSet;
@@ -685,8 +685,8 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     ((WndProperty *)wf->FindByName(_T("prpSunset")))->SetText(sTmp);
   }
 
-  if (basic.LocationAvailable) {
-    GeoVector gv = basic.Location.distance_bearing(selected_waypoint->Location);
+  if (basic.location_available) {
+    GeoVector gv = basic.location.distance_bearing(selected_waypoint->Location);
 
     TCHAR DistanceText[MAX_PATH];
     Units::FormatUserDistance(gv.Distance, DistanceText, 10);

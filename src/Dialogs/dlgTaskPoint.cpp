@@ -432,7 +432,7 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 
   const Look &look = *CommonInterface::main_window.look;
   PaintTaskPoint(canvas, rc, *ordered_task, *tp,
-                 XCSoarInterface::Basic().Location,
+                 XCSoarInterface::Basic().location,
                  XCSoarInterface::SettingsMap(),
                  look.task, look.airspace,
                  terrain);
@@ -465,7 +465,7 @@ OnRelocateClicked(gcc_unused WndButton &Sender)
 {
   const GeoPoint &gpBearing = (active_index ?
                                ordered_task->get_tp(active_index - 1)->get_location() :
-                               XCSoarInterface::Basic().Location);
+                               XCSoarInterface::Basic().location);
 
   const Waypoint *wp = dlgWaypointSelect(wf->GetMainWindow(), gpBearing,
                                          ordered_task,

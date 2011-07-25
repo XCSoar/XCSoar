@@ -52,12 +52,12 @@ MergeThread::Tick()
   flarm_computer.Process(device_blackboard.SetBasic().flarm,
                          last_fix.flarm, basic);
 
-  if (last_any.LocationAvailable != basic.LocationAvailable)
+  if (last_any.location_available != basic.location_available)
     // trigger update if gps has become available or dropped out
     TriggerGPSUpdate();
 
-  if ((bool)last_any.Connected != (bool)basic.Connected ||
-      (bool)last_any.LocationAvailable != (bool)basic.LocationAvailable)
+  if ((bool)last_any.connected != (bool)basic.connected ||
+      (bool)last_any.location_available != (bool)basic.location_available)
     /* trigger a redraw when the connection was just lost, to show the
        new state; when no GPS is connected, no other entity triggers
        the redraw, so we have to do it */
@@ -70,7 +70,7 @@ MergeThread::Tick()
 
   /* update last_fix only when a new GPS fix was received */
   if ((basic.time_available &&
-       (!last_fix.time_available || basic.Time != last_fix.Time)) ||
-      basic.LocationAvailable != last_fix.LocationAvailable)
+       (!last_fix.time_available || basic.time != last_fix.time)) ||
+      basic.location_available != last_fix.location_available)
     last_fix = basic;
 }

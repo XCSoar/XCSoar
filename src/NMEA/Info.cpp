@@ -54,65 +54,65 @@ GPSState::Reset()
 }
 
 void
-NMEA_INFO::UpdateClock()
+NMEAInfo::UpdateClock()
 {
   clock = fixed(MonotonicClockMS()) / 1000;
 }
 
 void
-NMEA_INFO::Reset()
+NMEAInfo::Reset()
 {
   UpdateClock();
 
-  Connected.Clear();
+  connected.Clear();
 
   gps.Reset();
   acceleration.Reset();
 
-  LocationAvailable.Clear();
+  location_available.Clear();
 
   track = Angle::zero();
   track_available.Clear();
 
-  GroundSpeedAvailable.Clear();
-  AirspeedAvailable.Clear();
-  GroundSpeed = TrueAirspeed = IndicatedAirspeed = fixed_zero;
-  AirspeedReal = false;
+  ground_speed_available.Clear();
+  airspeed_available.Clear();
+  ground_speed = true_airspeed = indicated_airspeed = fixed_zero;
+  airspeed_real = false;
 
-  GPSAltitudeAvailable.Clear();
+  gps_altitude_available.Clear();
 
   static_pressure_available.Clear();
 
-  BaroAltitudeAvailable.Clear();
-  BaroAltitude = fixed_zero;
+  baro_altitude_available.Clear();
+  baro_altitude = fixed_zero;
 
-  PressureAltitudeAvailable.Clear();
-  PressureAltitude = fixed_zero;
+  pressure_altitude_available.Clear();
+  pressure_altitude = fixed_zero;
 
-  DateAvailable = false;
+  date_available = false;
 
   time_available.Clear();
-  Time = fixed_zero;
-  DateTime.hour = DateTime.minute = DateTime.second = 0;
+  time = fixed_zero;
+  date_time_utc.hour = date_time_utc.minute = date_time_utc.second = 0;
 
-  TotalEnergyVarioAvailable.Clear();
-  NettoVarioAvailable.Clear();
+  total_energy_vario_available.Clear();
+  netto_vario_available.Clear();
 
   settings.Clear();
 
-  ExternalWindAvailable.Clear();
+  external_wind_available.Clear();
 
-  TemperatureAvailable = false;
-  HumidityAvailable = false;
+  temperature_available = false;
+  humidity_available = false;
 
   engine_noise_level_available.Clear();
 
-  SupplyBatteryVoltageAvailable.Clear();
+  voltage_available.Clear();
 
-  SwitchStateAvailable = false;
+  switch_state_available = false;
   switch_state.Reset();
 
-  StallRatioAvailable.Clear();
+  stall_ratio_available.Clear();
 
   // XXX StallRatio
 
@@ -120,9 +120,9 @@ NMEA_INFO::Reset()
 }
 
 void
-NMEA_INFO::ExpireWallClock()
+NMEAInfo::ExpireWallClock()
 {
-  if (!Connected)
+  if (!connected)
     return;
 
   UpdateClock();
@@ -133,8 +133,8 @@ NMEA_INFO::ExpireWallClock()
     return;
 #endif
 
-  Connected.Expire(clock, fixed(10));
-  if (!Connected) {
+  connected.Expire(clock, fixed(10));
+  if (!connected) {
     time_available.Clear();
     gps.Reset();
     flarm.clear();
@@ -144,107 +144,107 @@ NMEA_INFO::ExpireWallClock()
 }
 
 void
-NMEA_INFO::Expire()
+NMEAInfo::Expire()
 {
-  LocationAvailable.Expire(clock, fixed(10));
+  location_available.Expire(clock, fixed(10));
   track_available.Expire(clock, fixed(10));
-  GroundSpeedAvailable.Expire(clock, fixed(10));
+  ground_speed_available.Expire(clock, fixed(10));
 
-  if (AirspeedAvailable.Expire(clock, fixed(30)))
-    AirspeedReal = false;
+  if (airspeed_available.Expire(clock, fixed(30)))
+    airspeed_real = false;
 
-  GPSAltitudeAvailable.Expire(clock, fixed(30));
+  gps_altitude_available.Expire(clock, fixed(30));
   static_pressure_available.Expire(clock, fixed(30));
-  BaroAltitudeAvailable.Expire(clock, fixed(30));
-  PressureAltitudeAvailable.Expire(clock, fixed(30));
-  TotalEnergyVarioAvailable.Expire(clock, fixed(5));
-  NettoVarioAvailable.Expire(clock, fixed(5));
+  baro_altitude_available.Expire(clock, fixed(30));
+  pressure_altitude_available.Expire(clock, fixed(30));
+  total_energy_vario_available.Expire(clock, fixed(5));
+  netto_vario_available.Expire(clock, fixed(5));
   settings.Expire(clock);
-  ExternalWindAvailable.Expire(clock, fixed(600));
+  external_wind_available.Expire(clock, fixed(600));
   engine_noise_level_available.Expire(clock, fixed(30));
-  SupplyBatteryVoltageAvailable.Expire(clock, fixed(300));
+  voltage_available.Expire(clock, fixed(300));
   flarm.Refresh(clock);
 }
 
 void
-NMEA_INFO::Complement(const NMEA_INFO &add)
+NMEAInfo::Complement(const NMEAInfo &add)
 {
-  if (!add.Connected)
+  if (!add.connected)
     /* if there is no heartbeat on the other object, there cannot be
        useful information */
     return;
 
-  if (!Connected) {
+  if (!connected) {
     gps = add.gps;
   }
 
-  Connected.Complement(add.Connected);
+  connected.Complement(add.connected);
 
   if (time_available.Complement(add.time_available)) {
-    Time = add.Time;
-    DateTime = add.DateTime;
+    time = add.time;
+    date_time_utc = add.date_time_utc;
   }
 
   acceleration.Complement(add.acceleration);
 
-  if (LocationAvailable.Complement(add.LocationAvailable))
-    Location = add.Location;
+  if (location_available.Complement(add.location_available))
+    location = add.location;
 
   if (track_available.Complement(add.track_available))
     track = add.track;
 
-  if (GroundSpeedAvailable.Complement(add.GroundSpeedAvailable))
-    GroundSpeed = add.GroundSpeed;
+  if (ground_speed_available.Complement(add.ground_speed_available))
+    ground_speed = add.ground_speed;
 
-  if ((add.AirspeedReal || !AirspeedReal) &&
-      AirspeedAvailable.Complement(add.AirspeedAvailable)) {
-    TrueAirspeed = add.TrueAirspeed;
-    IndicatedAirspeed = add.IndicatedAirspeed;
-    AirspeedReal = add.AirspeedReal;
+  if ((add.airspeed_real || !airspeed_real) &&
+      airspeed_available.Complement(add.airspeed_available)) {
+    true_airspeed = add.true_airspeed;
+    indicated_airspeed = add.indicated_airspeed;
+    airspeed_real = add.airspeed_real;
   }
 
-  if (GPSAltitudeAvailable.Complement(add.GPSAltitudeAvailable))
-    GPSAltitude = add.GPSAltitude;
+  if (gps_altitude_available.Complement(add.gps_altitude_available))
+    gps_altitude = add.gps_altitude;
 
   if (static_pressure_available.Complement(add.static_pressure_available))
     static_pressure = add.static_pressure;
 
-  if (BaroAltitudeAvailable.Complement(add.BaroAltitudeAvailable))
-    BaroAltitude = add.BaroAltitude;
+  if (baro_altitude_available.Complement(add.baro_altitude_available))
+    baro_altitude = add.baro_altitude;
 
-  if (PressureAltitudeAvailable.Complement(add.PressureAltitudeAvailable))
-    PressureAltitude = add.PressureAltitude;
+  if (pressure_altitude_available.Complement(add.pressure_altitude_available))
+    pressure_altitude = add.pressure_altitude;
 
-  if (TotalEnergyVarioAvailable.Complement(add.TotalEnergyVarioAvailable)) {
-    TotalEnergyVario = add.TotalEnergyVario;
+  if (total_energy_vario_available.Complement(add.total_energy_vario_available)) {
+    total_energy_vario = add.total_energy_vario;
   }
 
-  if (NettoVarioAvailable.Complement(add.NettoVarioAvailable))
-    NettoVario = add.NettoVario;
+  if (netto_vario_available.Complement(add.netto_vario_available))
+    netto_vario = add.netto_vario;
 
   settings.Complement(add.settings);
 
-  if (ExternalWindAvailable.Complement(add.ExternalWindAvailable))
-    ExternalWind = add.ExternalWind;
+  if (external_wind_available.Complement(add.external_wind_available))
+    external_wind = add.external_wind;
 
-  if (!TemperatureAvailable && add.TemperatureAvailable) {
-    OutsideAirTemperature = add.OutsideAirTemperature;
-    TemperatureAvailable = add.TemperatureAvailable;
+  if (!temperature_available && add.temperature_available) {
+    temperature = add.temperature;
+    temperature_available = add.temperature_available;
   }
 
-  if (!HumidityAvailable && add.HumidityAvailable) {
-    RelativeHumidity = add.RelativeHumidity;
-    HumidityAvailable = add.HumidityAvailable;
+  if (!humidity_available && add.humidity_available) {
+    humidity = add.humidity;
+    humidity_available = add.humidity_available;
   }
 
-  if (SupplyBatteryVoltageAvailable.Complement(add.SupplyBatteryVoltageAvailable))
-    SupplyBatteryVoltage = add.SupplyBatteryVoltage;
+  if (voltage_available.Complement(add.voltage_available))
+    voltage = add.voltage;
 
-  if (!SwitchStateAvailable && add.SwitchStateAvailable)
+  if (!switch_state_available && add.switch_state_available)
     switch_state = add.switch_state;
 
-  if (!StallRatioAvailable && add.StallRatioAvailable)
-    StallRatio = add.StallRatio;
+  if (!stall_ratio_available && add.stall_ratio_available)
+    stall_ratio = add.stall_ratio;
 
   flarm.complement(add.flarm);
 }

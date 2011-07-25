@@ -49,7 +49,7 @@ class WesterboerDevice : public AbstractDevice {
 public:
   WesterboerDevice(Port *_port):port(_port) {}
 
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutMacCready(fixed mac_cready);
   virtual bool PutBugs(fixed bugs);
 };
@@ -58,7 +58,7 @@ public:
  * $PWES0,DD,VVVV,MMMM,NNNN,BBBB,SSSS,AAAAA,QQQQQ,IIII,TTTT,UUU,CCC*CS<CR><LF>
  */
 static bool
-PWES0(NMEAInputLine &line, NMEA_INFO &info)
+PWES0(NMEAInputLine &line, NMEAInfo &info)
 {
   int i, k;
 
@@ -90,13 +90,13 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info)
                                                unKiloMeterPerHour));
 
   if (line.read_checked(i)) {
-    info.SupplyBatteryVoltage = fixed(i) / 10;
-    info.SupplyBatteryVoltageAvailable.Update(info.clock);
+    info.voltage = fixed(i) / 10;
+    info.voltage_available.Update(info.clock);
   }
 
   if (line.read_checked(i)) {
-    info.OutsideAirTemperature = fixed(i) / 10;
-    info.TemperatureAvailable = true;
+    info.temperature = fixed(i) / 10;
+    info.temperature_available = true;
   }
 
   return true;
@@ -106,7 +106,7 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info)
  * $PWES1,DD,MM,S,AAA,F,V,LLL,BB*CS<CR><LF>
  */
 static bool
-PWES1(NMEAInputLine &line, NMEA_INFO &info)
+PWES1(NMEAInputLine &line, NMEAInfo &info)
 {
   line.skip(); /* device */
 
@@ -126,7 +126,7 @@ PWES1(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-WesterboerDevice::ParseNMEA(const char *String, NMEA_INFO &info)
+WesterboerDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   if (!VerifyNMEAChecksum(String))
     return false;

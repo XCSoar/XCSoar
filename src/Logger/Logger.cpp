@@ -34,7 +34,7 @@
 #include "SettingsComputerBlackboard.hpp"
 
 void
-Logger::LogPoint(const NMEA_INFO &gps_info)
+Logger::LogPoint(const NMEAInfo &gps_info)
 {
   // don't hold up the calculation thread if it's locked
   // by another process (most likely the logger gui message)
@@ -46,7 +46,7 @@ Logger::LogPoint(const NMEA_INFO &gps_info)
 }
 
 void
-Logger::LogEvent(const NMEA_INFO &gps_info, const char* event)
+Logger::LogEvent(const NMEAInfo &gps_info, const char* event)
 {
   if (lock.tryWriteLock()) {
     _logger.LogEvent(gps_info, event);
@@ -55,19 +55,19 @@ Logger::LogEvent(const NMEA_INFO &gps_info, const char* event)
 
 }
 
-void Logger::LogStartEvent(const NMEA_INFO &gps_info) {
+void Logger::LogStartEvent(const NMEAInfo &gps_info) {
   LogEvent(gps_info, "STA");
 }
 
-void Logger::LogFinishEvent(const NMEA_INFO &gps_info) {
+void Logger::LogFinishEvent(const NMEAInfo &gps_info) {
   LogEvent(gps_info, "FIN");
 }
 
-void Logger::LogPilotEvent(const NMEA_INFO &gps_info) {
+void Logger::LogPilotEvent(const NMEAInfo &gps_info) {
   LogEvent(gps_info, "PEV");
 }
 
-void Logger::LogTurnpointEvent(const NMEA_INFO &gps_info) {
+void Logger::LogTurnpointEvent(const NMEAInfo &gps_info) {
   LogEvent(gps_info, "TPC");
 }
 
@@ -97,7 +97,7 @@ Logger::isLoggerActive() const
 }
 
 bool
-Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
+Logger::LoggerClearFreeSpace(const NMEAInfo &gps_info)
 {
   Poco::ScopedRWLock protect(lock, true);
   return _logger.LoggerClearFreeSpace(gps_info);
@@ -105,7 +105,7 @@ Logger::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
 
 
 void
-Logger::guiStartLogger(const NMEA_INFO& gps_info,
+Logger::guiStartLogger(const NMEAInfo& gps_info,
                     const SETTINGS_COMPUTER& settings,
                        const ProtectedTaskManager &protected_task_manager,
                     bool noAsk)
@@ -151,7 +151,7 @@ Logger::guiStartLogger(const NMEA_INFO& gps_info,
 }
 
 void
-Logger::guiToggleLogger(const NMEA_INFO& gps_info,
+Logger::guiToggleLogger(const NMEAInfo& gps_info,
                      const SETTINGS_COMPUTER& settings,
                       const ProtectedTaskManager &protected_task_manager,
                      bool noAsk)
@@ -164,7 +164,7 @@ Logger::guiToggleLogger(const NMEA_INFO& gps_info,
 }
 
 void
-Logger::guiStopLogger(const NMEA_INFO &gps_info,
+Logger::guiStopLogger(const NMEAInfo &gps_info,
                    bool noAsk)
 {
   if (!isLoggerActive())

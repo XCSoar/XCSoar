@@ -54,8 +54,8 @@ DeviceBlackboard::Initialise()
 
   // Set GPS assumed time to system time
   gps_info.UpdateClock();
-  gps_info.DateTime = BrokenDateTime::NowUTC();
-  gps_info.Time = fixed(gps_info.DateTime.GetSecondOfDay());
+  gps_info.date_time_utc = BrokenDateTime::NowUTC();
+  gps_info.time = fixed(gps_info.date_time_utc.GetSecondOfDay());
 
   for (unsigned i = 0; i < NUMDEV; ++i)
     per_device_data[i] = gps_info;
@@ -79,10 +79,10 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc, const fixed alt)
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    if (!per_device_data[i].LocationAvailable)
+    if (!per_device_data[i].location_available)
       per_device_data[i].SetFakeLocation(loc, alt);
 
-  if (!real_data.LocationAvailable)
+  if (!real_data.location_available)
     real_data.SetFakeLocation(loc, alt);
 
   simulator_data.SetFakeLocation(loc, alt);
@@ -109,29 +109,29 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
                               const fixed t)
 {
   ScopeLock protect(mutex);
-  NMEA_INFO &basic = SetReplayState();
+  NMEAInfo &basic = SetReplayState();
 
   basic.clock = t;
-  basic.Connected.Update(basic.clock);
+  basic.connected.Update(basic.clock);
   basic.gps.satellites_used = 6;
   basic.acceleration.available = false;
-  basic.Location = loc;
-  basic.LocationAvailable.Update(t);
-  basic.GroundSpeed = speed;
-  basic.GroundSpeedAvailable.Update(t);
-  basic.AirspeedAvailable.Clear(); // Clear airspeed as it is not given by any value.
-  basic.AirspeedReal = false;
+  basic.location = loc;
+  basic.location_available.Update(t);
+  basic.ground_speed = speed;
+  basic.ground_speed_available.Update(t);
+  basic.airspeed_available.Clear(); // Clear airspeed as it is not given by any value.
+  basic.airspeed_real = false;
   basic.track = bearing;
   basic.track_available.Update(t);
-  basic.GPSAltitude = alt;
-  basic.GPSAltitudeAvailable.Update(t);
+  basic.gps_altitude = alt;
+  basic.gps_altitude_available.Update(t);
   basic.ProvidePressureAltitude(baroalt);
   basic.ProvideBaroAltitudeTrue(baroalt);
-  basic.Time = t;
+  basic.time = t;
   basic.time_available.Update(basic.clock);
-  basic.TotalEnergyVarioAvailable.Clear();
-  basic.NettoVarioAvailable.Clear();
-  basic.ExternalWindAvailable.Clear();
+  basic.total_energy_vario_available.Clear();
+  basic.netto_vario_available.Clear();
+  basic.external_wind_available.Clear();
   basic.gps.real = false;
   basic.gps.replay = true;
   basic.gps.simulator = false;
@@ -145,7 +145,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
 void DeviceBlackboard::StopReplay() {
   ScopeLock protect(mutex);
 
-  replay_data.Connected.Clear();
+  replay_data.connected.Clear();
 
   ScheduleMerge();
 }
@@ -172,9 +172,9 @@ void
 DeviceBlackboard::SetSpeed(fixed val)
 {
   ScopeLock protect(mutex);
-  NMEA_INFO &basic = simulator_data;
+  NMEAInfo &basic = simulator_data;
 
-  basic.GroundSpeed = val;
+  basic.ground_speed = val;
   basic.ProvideBothAirspeeds(val);
 
   ScheduleMerge();
@@ -205,9 +205,9 @@ void
 DeviceBlackboard::SetAltitude(fixed val)
 {
   ScopeLock protect(mutex);
-  NMEA_INFO &basic = simulator_data;
+  NMEAInfo &basic = simulator_data;
 
-  basic.GPSAltitude = val;
+  basic.gps_altitude = val;
   basic.ProvidePressureAltitude(val);
   basic.ProvideBaroAltitudeTrue(val);
 
@@ -243,17 +243,17 @@ void
 DeviceBlackboard::expire_wall_clock()
 {
   ScopeLock protect(mutex);
-  if (!Basic().Connected)
+  if (!Basic().connected)
     return;
 
   bool modified = false;
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    NMEA_INFO &basic = per_device_data[i];
-    if (!basic.Connected)
+    NMEAInfo &basic = per_device_data[i];
+    if (!basic.connected)
       continue;
 
     basic.ExpireWallClock();
-    if (!basic.Connected)
+    if (!basic.connected)
       modified = true;
   }
 
@@ -272,7 +272,7 @@ DeviceBlackboard::Merge()
 {
   real_data.Reset();
   for (unsigned i = 0; i < NUMDEV; ++i) {
-    if (!per_device_data[i].Connected)
+    if (!per_device_data[i].connected)
       continue;
 
     per_device_data[i].UpdateClock();
@@ -280,14 +280,14 @@ DeviceBlackboard::Merge()
     real_data.Complement(per_device_data[i]);
   }
 
-  if (replay_data.Connected) {
+  if (replay_data.connected) {
     /* the replay may run at a higher speed; use NMEA_INFO::Time as a
        "fake wallclock" to prevent them from expiring too quickly */
-    replay_data.clock = replay_data.Time;
+    replay_data.clock = replay_data.time;
 
     replay_data.Expire();
     SetBasic() = replay_data;
-  } else if (simulator_data.Connected) {
+  } else if (simulator_data.connected) {
     simulator_data.UpdateClock();
     simulator_data.Expire();
     SetBasic() = simulator_data;

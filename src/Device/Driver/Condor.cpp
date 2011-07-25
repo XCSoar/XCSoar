@@ -33,7 +33,7 @@ Copyright_License {
 
 class CondorDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
 
 static bool
@@ -57,7 +57,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 }
 
 static bool
-cLXWP0(NMEAInputLine &line, NMEA_INFO &info)
+cLXWP0(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
   $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
@@ -102,19 +102,19 @@ cLXWP0(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 static bool
-cLXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO &info)
+cLXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
   return true;
 }
 
 static bool
-cLXWP2(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO &info)
+cLXWP2(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
   return true;
 }
 
 bool
-CondorDevice::ParseNMEA(const char *String, NMEA_INFO &info)
+CondorDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   NMEAInputLine line(String);
   char type[16];

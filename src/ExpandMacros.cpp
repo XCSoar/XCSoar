@@ -326,7 +326,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   return invalid;
 }
 
-static const NMEA_INFO &
+static const NMEAInfo &
 Basic()
 {
   return CommonInterface::Basic();

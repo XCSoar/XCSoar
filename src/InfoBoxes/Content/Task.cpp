@@ -737,7 +737,7 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxWindow &infobox)
     return;
   }
 
-  const int dd = (int)(XCSoarInterface::Basic().Time -
+  const int dd = (int)(XCSoarInterface::Basic().time -
       common_stats.TimeUnderStartMaxHeight);
 
   TCHAR HHMMSSsmart[32];
@@ -751,14 +751,14 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentNextETEVMG::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::Basic().GroundSpeedAvailable) {
+  if (!XCSoarInterface::Basic().ground_speed_available) {
     infobox.SetInvalid();
     return;
   }
 
   const fixed d = XCSoarInterface::Calculated().task_stats.
     current_leg.remaining.get_distance();
-  const fixed &v = XCSoarInterface::Basic().GroundSpeed;
+  const fixed &v = XCSoarInterface::Basic().ground_speed;
 
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !positive(d) ||
@@ -779,14 +779,14 @@ InfoBoxContentNextETEVMG::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFinalETEVMG::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::Basic().GroundSpeedAvailable) {
+  if (!XCSoarInterface::Basic().ground_speed_available) {
     infobox.SetInvalid();
     return;
   }
 
   const fixed d = XCSoarInterface::Calculated().task_stats.
     total.remaining.get_distance();
-  const fixed &v = XCSoarInterface::Basic().GroundSpeed;
+  const fixed &v = XCSoarInterface::Basic().ground_speed;
 
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !positive(d) ||

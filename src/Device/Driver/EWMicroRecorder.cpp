@@ -59,7 +59,7 @@ public:
     :port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool Declare(const Declaration &declaration,
                        OperationEnvironment &env);
 };
@@ -81,7 +81,7 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 }
 
 bool
-EWMicroRecorderDevice::ParseNMEA(const char *String, NMEA_INFO &info)
+EWMicroRecorderDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   if (!VerifyNMEAChecksum(String))
     return false;

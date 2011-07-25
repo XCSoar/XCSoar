@@ -35,7 +35,7 @@ Copyright_License {
 #include <tchar.h>
 #include <windef.h>
 
-struct NMEA_INFO;
+struct NMEAInfo;
 struct SETTINGS_COMPUTER;
 struct Declaration;
 class OrderedTask;
@@ -77,7 +77,7 @@ public:
      * 
      * @return Buffer value
      */
-    const struct LoggerPreTakeoffBuffer &operator=(const NMEA_INFO &src);
+    const struct LoggerPreTakeoffBuffer &operator=(const NMEAInfo &src);
   };
 
 private:
@@ -89,29 +89,29 @@ public:
   ~LoggerImpl();
 
 public:
-  void LogPoint(const NMEA_INFO &gps_info);
-  void LogEvent(const NMEA_INFO &gps_info, const char* event);
+  void LogPoint(const NMEAInfo &gps_info);
+  void LogEvent(const NMEAInfo &gps_info, const char* event);
 
   bool isLoggerActive() const {
     return writer != NULL;
   }
 
-  static bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
-  void StartLogger(const NMEA_INFO &gps_info,
+  static bool LoggerClearFreeSpace(const NMEAInfo &gps_info);
+  void StartLogger(const NMEAInfo &gps_info,
                    const SETTINGS_COMPUTER &settings,
                    const TCHAR *strAssetNumber,
                    const Declaration &decl);
-  void StopLogger(const NMEA_INFO &gps_info);
+  void StopLogger(const NMEAInfo &gps_info);
   void LoggerNote(const TCHAR *text);
   void clearBuffer();
 
 private:
-  void StartLogger(const NMEA_INFO &gps_info,
+  void StartLogger(const NMEAInfo &gps_info,
                    const SETTINGS_COMPUTER &settings,
                    const TCHAR *strAssetNumber);
   
 private:
-  void LogPointToBuffer(const NMEA_INFO &gps_info);
+  void LogPointToBuffer(const NMEAInfo &gps_info);
 
 private:
   TCHAR szLoggerFileName[MAX_PATH];

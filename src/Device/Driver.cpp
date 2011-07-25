@@ -37,7 +37,7 @@ AbstractDevice::LinkTimeout()
 }
 
 bool
-AbstractDevice::ParseNMEA(const char *line, struct NMEA_INFO &info)
+AbstractDevice::ParseNMEA(const char *line, struct NMEAInfo &info)
 {
   return false;
 }

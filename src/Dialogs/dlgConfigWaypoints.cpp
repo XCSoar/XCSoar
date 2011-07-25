@@ -48,7 +48,7 @@ OnCloseClicked(gcc_unused WndButton &button)
 static void
 OnWaypointNewClicked(gcc_unused WndButton &Sender)
 {
-  Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().Location);
+  Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().location);
   edit_waypoint.Altitude = XCSoarInterface::Calculated().terrain_valid
     ? XCSoarInterface::Calculated().terrain_altitude
     : XCSoarInterface::Basic().NavAltitude;
@@ -66,7 +66,7 @@ static void
 OnWaypointEditClicked(gcc_unused WndButton &Sender)
 {
   const Waypoint *way_point = dlgWaypointSelect(XCSoarInterface::main_window,
-                                                XCSoarInterface::Basic().Location);
+                                                XCSoarInterface::Basic().location);
   if (way_point) {
     Waypoint wp_copy = *way_point;
     if (dlgWaypointEditShowModal(wp_copy)) {
@@ -100,7 +100,7 @@ OnWaypointDeleteClicked(gcc_unused WndButton &Sender)
 {
 #ifdef OLD_TASK
   int res;
-  res = dlgWaypointSelect(XCSoarInterface::Basic().Location);
+  res = dlgWaypointSelect(XCSoarInterface::Basic().location);
   if (res != -1){
     if(MessageBoxX(way_points.get(res).Name,
                    _("Delete Waypoint?"),

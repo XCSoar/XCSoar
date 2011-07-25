@@ -30,6 +30,6 @@ Copyright_License {
 class Canvas;
 
 void DrawHorizon(Canvas &canvas, const PixelRect &rc,
-              const NMEA_INFO &Basic);
+              const NMEAInfo &Basic);
 
 #endif

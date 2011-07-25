@@ -31,7 +31,7 @@ Copyright_License {
 // $PGCS,1,0EC0,FFF9,0C6E,02*61
 // $PGCS,1,0EC0,FFFA,0C6E,03*18
 static bool
-vl_PGCS1(NMEAInputLine &line, NMEA_INFO &info)
+vl_PGCS1(NMEAInputLine &line, NMEAInfo &info)
 {
   GPSState &gps = info.gps;
 
@@ -67,7 +67,7 @@ vl_PGCS1(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-VolksloggerDevice::ParseNMEA(const char *String, NMEA_INFO &info)
+VolksloggerDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   if (!VerifyNMEAChecksum(String))
     return false;

@@ -63,7 +63,7 @@ CalculationThread::Tick()
   {
     ScopeLock protect(device_blackboard.mutex);
 
-    gps_updated = device_blackboard.Basic().LocationAvailable.Modified(glide_computer.Basic().LocationAvailable);
+    gps_updated = device_blackboard.Basic().location_available.Modified(glide_computer.Basic().location_available);
 
     // Copy data from DeviceBlackboard to GlideComputerBlackboard
     glide_computer.ReadBlackboard(device_blackboard.Basic());

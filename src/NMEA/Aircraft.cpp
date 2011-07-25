@@ -31,9 +31,9 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
   AIRCRAFT_STATE aircraft;
 
   /* SPEED_STATE */
-  aircraft.Speed = info.GroundSpeed;
-  aircraft.TrueAirspeed = info.TrueAirspeed;
-  aircraft.IndicatedAirspeed = info.IndicatedAirspeed;
+  aircraft.Speed = info.ground_speed;
+  aircraft.TrueAirspeed = info.true_airspeed;
+  aircraft.IndicatedAirspeed = info.indicated_airspeed;
 
   /* ALTITUDE_STATE */
   aircraft.NavAltitude = info.NavAltitude;
@@ -42,14 +42,14 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
 
   /* VARIO_INFO */
   aircraft.vario = info.BruttoVario;
-  aircraft.netto_vario = info.NettoVario;
+  aircraft.netto_vario = info.netto_vario;
 
   /* FLYING_STATE */
   (FlyingState &)aircraft = calculated.flight;
 
   /* AIRCRAFT_STATE */
-  aircraft.Time = info.Time;
-  aircraft.Location = info.Location;
+  aircraft.Time = info.time;
+  aircraft.Location = info.location;
   aircraft.track = info.track;
   aircraft.Gload = info.acceleration.g_load;
   aircraft.wind = calculated.wind;

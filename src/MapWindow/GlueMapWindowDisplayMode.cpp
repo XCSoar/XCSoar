@@ -253,7 +253,7 @@ GlueMapWindow::UpdateScreenAngle()
 {
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
 
@@ -329,7 +329,7 @@ GlueMapWindow::UpdateProjection()
 
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
 
@@ -347,8 +347,8 @@ GlueMapWindow::UpdateProjection()
       fixed y = fixed_zero;
       if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TRACK) {
         if (basic.track_available &&
-            basic.GroundSpeedAvailable &&
-            basic.GroundSpeed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
+            basic.ground_speed_available &&
+            basic.ground_speed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
           basic.track.Reciprocal().sin_cos(x, y);
       } else if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TARGET) {
         if (calculated.task_stats.current_leg.solution_remaining.defined())
@@ -370,18 +370,18 @@ GlueMapWindow::UpdateProjection()
     /* no-op - the Projection's location is updated manually */
   } else if (GetDisplayMode() == DM_CIRCLING &&
            calculated.thermal_locator.estimate_valid) {
-    const fixed d_t = calculated.thermal_locator.estimate_location.distance(basic.Location);
+    const fixed d_t = calculated.thermal_locator.estimate_location.distance(basic.location);
     if (!positive(d_t)) {
-      SetLocation(basic.Location);
+      SetLocation(basic.location);
     } else {
       const fixed d_max = visible_projection.GetMapScale() * fixed_two;
       const fixed t = std::min(d_t, d_max)/d_t;
-      SetLocation(basic.Location.interpolate(calculated.thermal_locator.estimate_location,
+      SetLocation(basic.location.interpolate(calculated.thermal_locator.estimate_location,
                                                t));
     }
   } else
     // Pan is off
-    SetLocation(basic.Location);
+    SetLocation(basic.location);
 
   visible_projection.UpdateScreenBounds();
 }

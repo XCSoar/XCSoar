@@ -74,7 +74,7 @@ static CallBackTableEntry CallBackTable[] = {
 static void
 UpdateValuesSystem()
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const GPSState &gps = basic.gps;
 
   TCHAR Temp[80];
@@ -84,9 +84,9 @@ UpdateValuesSystem()
 
   wp = (WndProperty*)wf->FindByName(_T("prpGPS"));
   assert(wp != NULL);
-  if (!basic.Connected)
+  if (!basic.connected)
     wp->SetText(_("Disconnected"));
-  else if (!basic.LocationAvailable)
+  else if (!basic.location_available)
     wp->SetText(_("Fix invalid"));
   else if (gps.satellites_used == 0)
     wp->SetText(_("No fix"));
@@ -98,7 +98,7 @@ UpdateValuesSystem()
 
   wp = (WndProperty*)wf->FindByName(_T("prpNumSat"));
   assert(wp != NULL);
-  if (!basic.Connected)
+  if (!basic.connected)
     wp->SetText(_T(""));
   else if (gps.satellites_used >= 0) {
     // known number of sats
@@ -113,7 +113,7 @@ UpdateValuesSystem()
 
   wp = (WndProperty*)wf->FindByName(_T("prpVario"));
   assert(wp != NULL);
-  if (basic.TotalEnergyVarioAvailable)
+  if (basic.total_energy_vario_available)
     wp->SetText(_("Connected"));
   else
     wp->SetText(_("Disconnected"));
@@ -160,8 +160,8 @@ UpdateValuesSystem()
     _tcscat(Temp, Temp2);
   }
 #endif
-  if (basic.SupplyBatteryVoltageAvailable) {
-    _stprintf(Temp2, _T("%.1f V"), (double)basic.SupplyBatteryVoltage);
+  if (basic.voltage_available) {
+    _stprintf(Temp2, _T("%.1f V"), (double)basic.voltage);
     _tcscat(Temp, Temp2);
   }
 
@@ -173,7 +173,7 @@ UpdateValuesSystem()
 static void
 UpdateValuesTimes(void)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const FlyingState &flight = calculated.flight;
 
@@ -232,7 +232,7 @@ static const Waypoint* nearest_waypoint;
 static void
 UpdateValuesFlight(void)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   WndProperty *wp;
@@ -240,9 +240,9 @@ UpdateValuesFlight(void)
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-  Units::LongitudeToString(basic.Location.Longitude,
+  Units::LongitudeToString(basic.location.Longitude,
                            sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(basic.Location.Latitude,
+  Units::LatitudeToString(basic.location.Latitude,
                           sLatitude, sizeof(sLatitude)-1);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLongitude"));
@@ -255,9 +255,9 @@ UpdateValuesFlight(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
   assert(wp != NULL);
-  if (basic.GPSAltitudeAvailable) {
+  if (basic.gps_altitude_available) {
     _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(basic.GPSAltitude),
+              (double)Units::ToUserAltitude(basic.gps_altitude),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   }
@@ -270,7 +270,7 @@ UpdateValuesFlight(void)
   wp->SetText(Temp);
 
   if (nearest_waypoint) {
-    GeoVector vec(basic.Location,
+    GeoVector vec(basic.location,
                   nearest_waypoint->Location);
 
     wp = (WndProperty*)wf->FindByName(_T("prpNear"));
@@ -480,7 +480,7 @@ dlgStatusShowModal(int start_page)
   wTabBar = ((TabBarControl *)wf->FindByName(_T("TabBar")));
   assert(wTabBar != NULL);
 
-  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().Location,
+  nearest_waypoint = way_points.get_nearest(XCSoarInterface::Basic().location,
                                             fixed(100000));
 
   /* setup tabs */

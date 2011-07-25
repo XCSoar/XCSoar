@@ -27,7 +27,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 
 struct FLARM_STATE;
-struct NMEA_INFO;
+struct NMEAInfo;
 struct BrokenDateTime;
 class NMEAInputLine;
 
@@ -61,7 +61,7 @@ public:
     use_geoid = true;
   }
 
-  bool ParseNMEAString_Internal(const char *line, NMEA_INFO &info);
+  bool ParseNMEAString_Internal(const char *line, NMEAInfo &info);
 
 public:
   // these routines can be used by other parsers.
@@ -88,27 +88,27 @@ private:
   gcc_pure
   fixed TimeAdvanceTolerance(fixed time) const;
 
-  bool TimeHasAdvanced(fixed ThisTime, NMEA_INFO &info);
+  bool TimeHasAdvanced(fixed ThisTime, NMEAInfo &info);
   static fixed TimeModify(fixed FixTime, BrokenDateTime &date_time,
                           bool date_available);
 
-  bool GLL(NMEAInputLine &line, NMEA_INFO &info);
-  bool GGA(NMEAInputLine &line, NMEA_INFO &info);
-  bool GSA(NMEAInputLine &line, NMEA_INFO &info);
-  bool RMC(NMEAInputLine &line, NMEA_INFO &info);
-  static bool RMB(NMEAInputLine &line, NMEA_INFO &info);
-  bool RMZ(NMEAInputLine &line, NMEA_INFO &info);
+  bool GLL(NMEAInputLine &line, NMEAInfo &info);
+  bool GGA(NMEAInputLine &line, NMEAInfo &info);
+  bool GSA(NMEAInputLine &line, NMEAInfo &info);
+  bool RMC(NMEAInputLine &line, NMEAInfo &info);
+  static bool RMB(NMEAInputLine &line, NMEAInfo &info);
+  bool RMZ(NMEAInputLine &line, NMEAInfo &info);
 
-  static bool WP0(NMEAInputLine &line, NMEA_INFO &info);
-  static bool WP1(NMEAInputLine &line, NMEA_INFO &info);
-  static bool WP2(NMEAInputLine &line, NMEA_INFO &info);
+  static bool WP0(NMEAInputLine &line, NMEAInfo &info);
+  static bool WP1(NMEAInputLine &line, NMEAInfo &info);
+  static bool WP2(NMEAInputLine &line, NMEAInfo &info);
 
   // Additional sentences
-  static bool PTAS1(NMEAInputLine &line, NMEA_INFO &info); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
+  static bool PTAS1(NMEAInputLine &line, NMEAInfo &info); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentences
   bool PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time);
-  bool PFLAA(NMEAInputLine &line, NMEA_INFO &info);
+  bool PFLAA(NMEAInputLine &line, NMEAInfo &info);
 };
 
 #endif

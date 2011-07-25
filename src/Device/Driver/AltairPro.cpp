@@ -58,7 +58,7 @@ public:
   AltairProDevice(Port *_port):port(_port){}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool Declare(const struct Declaration &declaration,
                        OperationEnvironment &env);
 };
@@ -80,7 +80,7 @@ ReadAltitude(NMEAInputLine &line, fixed &value_r)
 }
 
 bool
-AltairProDevice::ParseNMEA(const char *String, NMEA_INFO &info)
+AltairProDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   NMEAInputLine line(String);
   char type[16];

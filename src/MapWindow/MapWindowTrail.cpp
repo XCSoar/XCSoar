@@ -49,7 +49,7 @@ GetSnailColorIndex(fixed cv)
 void
 MapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
-  unsigned min_time = max(0, (int)Basic().Time - 600);
+  unsigned min_time = max(0, (int)Basic().time - 600);
   DrawTrail(canvas, aircraft_pos, min_time);
 }
 
@@ -86,10 +86,10 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
 
   GeoPoint traildrift(Angle::zero(), Angle::zero());
   if (enable_traildrift && Calculated().wind_available) {
-    GeoPoint tp1 = FindLatitudeLongitude(Basic().Location,
+    GeoPoint tp1 = FindLatitudeLongitude(Basic().location,
                                          Calculated().wind.bearing,
                                          Calculated().wind.norm);
-    traildrift = Basic().Location - tp1;
+    traildrift = Basic().location - tp1;
   }
 
   fixed value_max, value_min;
@@ -117,7 +117,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
   RasterPoint last_point;
   for (TracePointVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
-    const fixed dt = Basic().Time - fixed(it->time);
+    const fixed dt = Basic().time - fixed(it->time);
     RasterPoint pt = projection.GeoToScreen(it->get_location().
         parametric(traildrift, dt * it->drift_factor / 256));
 

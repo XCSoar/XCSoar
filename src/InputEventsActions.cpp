@@ -114,7 +114,7 @@ using std::max;
 static void
 trigger_redraw()
 {
-  if (!XCSoarInterface::Basic().LocationAvailable)
+  if (!XCSoarInterface::Basic().location_available)
     TriggerGPSUpdate();
   TriggerMapUpdate();
 }
@@ -128,12 +128,12 @@ trigger_redraw()
 void
 InputEvents::eventMarkLocation(const TCHAR *misc)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
 
   if (_tcscmp(misc, _T("reset")) == 0) {
     marks->Reset();
   } else {
-    marks->MarkLocation(basic.Location, basic.DateTime);
+    marks->MarkLocation(basic.location, basic.date_time_utc);
 
     if (XCSoarInterface::SettingsComputer().EnableSoundModes)
       PlayResource(_T("IDR_WAV_CLEAR"));
@@ -714,7 +714,7 @@ InputEvents::eventAnalysis(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventWaypointDetails(const TCHAR *misc)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const Waypoint* wp = NULL;
 
   if (_tcscmp(misc, _T("current")) == 0) {
@@ -727,7 +727,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
       return;
     }
   } else if (_tcscmp(misc, _T("select")) == 0) {
-    wp = dlgWaypointSelect(XCSoarInterface::main_window, basic.Location);
+    wp = dlgWaypointSelect(XCSoarInterface::main_window, basic.location);
   }
   if (wp)
     dlgWaypointDetailsShowModal(XCSoarInterface::main_window, *wp);
@@ -736,13 +736,13 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
 void
 InputEvents::eventGotoLookup(gcc_unused const TCHAR *misc)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
 
   if (protected_task_manager == NULL)
     return;
 
   const Waypoint* wp = dlgWaypointSelect(XCSoarInterface::main_window,
-                                         basic.Location);
+                                         basic.location);
   if (wp != NULL) {
     protected_task_manager->do_goto(*wp);
     trigger_redraw();
@@ -1155,7 +1155,7 @@ InputEvents::eventLogger(const TCHAR *misc)
   // TODO feature: start logger without requiring feedback
   // start stop toggle addnote
 
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
 
@@ -1261,14 +1261,14 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventNearestWaypointDetails(const TCHAR *misc)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const GlueMapWindow *map_window = CommonInterface::main_window.map;
   if (map_window == NULL)
     return;
 
   if (_tcscmp(misc, _T("aircraft")) == 0)
     // big range..
-    PopupNearestWaypointDetails(way_points, basic.Location,
+    PopupNearestWaypointDetails(way_points, basic.location,
                                 1.0e5);
   else if (_tcscmp(misc, _T("pan")) == 0)
     // big range..
@@ -1531,16 +1531,16 @@ InputEvents::eventAirspaceDisplayMode(const TCHAR *misc)
 void
 InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (_tcscmp(misc, _T("takeoff")) == 0) {
-    if (basic.LocationAvailable && calculated.terrain_valid) {
+    if (basic.location_available && calculated.terrain_valid) {
       ScopeSuspendAllThreads suspend;
-      way_points.add_takeoff_point(basic.Location, calculated.terrain_altitude);
+      way_points.add_takeoff_point(basic.location, calculated.terrain_altitude);
     }
   } else {
-    Waypoint edit_waypoint = way_points.create(basic.Location);
+    Waypoint edit_waypoint = way_points.create(basic.location);
     edit_waypoint.Altitude = calculated.terrain_altitude;
     if (!dlgWaypointEditShowModal(edit_waypoint) || edit_waypoint.Name.empty()) {
       trigger_redraw();

@@ -88,7 +88,7 @@ int main(int argc, char **argv)
 
   NMEAParser parser;
 
-  NMEA_INFO data;
+  NMEAInfo data;
   data.Reset();
 
   char buffer[1024];
@@ -99,7 +99,7 @@ int main(int argc, char **argv)
 
   PathName igc_path(argv[2]);
   IGCWriter writer(igc_path, data);
-  writer.header(data.DateTime,
+  writer.header(data.date_time_utc,
                 _T("Manfred Mustermann"), _T("Ventus"),
                 _T("D-1234"), _T("Foo"), driver_name);
 
@@ -110,7 +110,7 @@ int main(int argc, char **argv)
     if (device == NULL || !device->ParseNMEA(buffer, data))
       parser.ParseNMEAString_Internal(buffer, data);
 
-    if (log_clock.check_advance(data.Time))
+    if (log_clock.check_advance(data.time))
       writer.LogPoint(data);
   }
 

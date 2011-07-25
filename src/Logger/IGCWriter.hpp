@@ -34,7 +34,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 struct BrokenDateTime;
-struct NMEA_INFO;
+struct NMEAInfo;
 struct Declaration;
 struct GeoPoint;
 
@@ -63,16 +63,16 @@ class IGCWriter {
     GeoPoint Location;
     int GPSAltitude;
 
-    const LogPoint_GPSPosition &operator=(const NMEA_INFO &gps_info);
+    const LogPoint_GPSPosition &operator=(const NMEAInfo &gps_info);
   };
 
   LogPoint_GPSPosition LastValidPoint;
 
 public:
-  IGCWriter(const TCHAR *_path, const NMEA_INFO &gps_info);
+  IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info);
 
   bool flush();
-  void finish(const NMEA_INFO &gps_info);
+  void finish(const NMEAInfo &gps_info);
   void sign();
 
   bool writeln(const char *line);
@@ -82,8 +82,8 @@ private:
 
   static const char *GetHFFXARecord();
   static const char *GetIRecord();
-  static fixed GetEPE(const NMEA_INFO &gps_info);
-  static int GetSIU(const NMEA_INFO &gps_info);
+  static fixed GetEPE(const NMEAInfo &gps_info);
+  static int GetSIU(const NMEAInfo &gps_info);
 
 public:
   void header(const BrokenDateTime &DateTime,
@@ -98,8 +98,8 @@ public:
 
   void LoggerNote(const TCHAR *text);
 
-  void LogPoint(const NMEA_INFO &gps_info);
-  void LogEvent(const NMEA_INFO &gps_info, const char *event);
+  void LogPoint(const NMEAInfo &gps_info);
+  void LogEvent(const NMEAInfo &gps_info, const char *event);
 };
 
 #endif

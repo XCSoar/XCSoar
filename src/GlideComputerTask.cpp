@@ -64,7 +64,7 @@ GlideComputerTask::ProcessBasicTask()
 
   task->set_task_behaviour(SettingsComputer());
 
-  if (time_advanced() && basic.LocationAvailable) {
+  if (time_advanced() && basic.location_available) {
     const AIRCRAFT_STATE current_as = ToAircraftState(basic, Calculated());
     const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic(),
                                                    LastCalculated());
@@ -131,7 +131,7 @@ GlideComputerTask::TerrainWarning()
   if (terrain) {
     if (sol.defined()) {
       const AGeoPoint dest(v.end_point(start), sol.MinHeight);
-      bool dirty = route_clock.check_advance(Basic().Time);
+      bool dirty = route_clock.check_advance(Basic().time);
 
       if (!dirty) {
         dirty = Calculated().common_stats.active_taskpoint_index != LastCalculated().common_stats.active_taskpoint_index;
@@ -140,7 +140,7 @@ GlideComputerTask::TerrainWarning()
         dirty |= Calculated().common_stats.mode_ordered != LastCalculated().common_stats.mode_ordered;
         if (dirty) {
           // restart clock
-          route_clock.check_advance(Basic().Time);
+          route_clock.check_advance(Basic().time);
           route_clock.reset();
         }
       }
@@ -173,7 +173,7 @@ GlideComputerTask::Reach()
 
   const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
   const AGeoPoint start (state.Location, state.NavAltitude);
-  if (reach_clock.check_advance(Basic().Time)) {
+  if (reach_clock.check_advance(Basic().time)) {
     m_task.solve_reach(start, do_solve);
 
     if (do_solve) {
@@ -191,7 +191,7 @@ GlideComputerTask::OnTakeoff()
     return;
 
   ProtectedTaskManager::ExclusiveLease task(m_task);
-  task->takeoff_autotask(Basic().Location, Calculated().terrain_altitude);
+  task->takeoff_autotask(Basic().location, Calculated().terrain_altitude);
 }
 
 void 

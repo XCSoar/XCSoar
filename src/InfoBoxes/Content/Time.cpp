@@ -55,7 +55,7 @@ InfoBoxContentTimeUTC::Update(InfoBoxWindow &infobox)
   TCHAR sTmp[32];
 
   // Set Value
-  const BrokenDateTime t = XCSoarInterface::Basic().DateTime;
+  const BrokenDateTime t = XCSoarInterface::Basic().date_time_utc;
   _stprintf(sTmp, _T("%02d:%02d"), t.hour, t.minute);
   infobox.SetValue(sTmp);
 

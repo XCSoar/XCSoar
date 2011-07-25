@@ -83,7 +83,7 @@ IsTaskLegVisible(const OrderedTaskPoint &tp)
 
 static void DrawLegs(Chart& chart,
                      const TaskManager &task_manager,
-                     const NMEA_INFO& basic,
+                     const NMEAInfo& basic,
                      const DerivedInfo& calculated,
                      const bool task_relative)
 {
@@ -91,7 +91,7 @@ static void DrawLegs(Chart& chart,
     return;
 
   const fixed start_time = task_relative
-    ? basic.Time - calculated.common_stats.task_time_elapsed
+    ? basic.time - calculated.common_stats.task_time_elapsed
     : calculated.flight.takeoff_time;
 
   const OrderedTask &task = task_manager.get_ordered_task();
@@ -111,7 +111,7 @@ static void DrawLegs(Chart& chart,
 
 void
 FlightStatisticsRenderer::RenderBarographSpark(
-    Canvas &canvas, const PixelRect rc,const NMEA_INFO &nmea_info,
+    Canvas &canvas, const PixelRect rc,const NMEAInfo &nmea_info,
     const DerivedInfo &derived_info, const ProtectedTaskManager *_task) const
 {
   ScopeLock lock(fs.mutexStats);
@@ -143,7 +143,7 @@ FlightStatisticsRenderer::RenderBarographSpark(
 
 void
 FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const PixelRect rc,
-                                  const NMEA_INFO &nmea_info,
+                                  const NMEAInfo &nmea_info,
                                   const DerivedInfo &derived_info,
                                   const ProtectedTaskManager *_task) const
 {
@@ -188,7 +188,7 @@ FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const PixelRect rc,
 
 void
 FlightStatisticsRenderer::RenderSpeed(Canvas &canvas, const PixelRect rc,
-                              const NMEA_INFO &nmea_info,
+                              const NMEAInfo &nmea_info,
                               const DerivedInfo &derived_info,
                               const TaskManager &task) const
 {
@@ -358,7 +358,7 @@ DrawTrace(Canvas &canvas, const ChartProjection& proj,
 
 void
 FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
-                            const NMEA_INFO &nmea_info, 
+                            const NMEAInfo &nmea_info, 
                             const DerivedInfo &calculated,
                             const SETTINGS_COMPUTER &settings_computer,
                             const SETTINGS_MAP &settings_map,
@@ -371,9 +371,9 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  ChartProjection proj(rc, trace, nmea_info.Location);
+  ChartProjection proj(rc, trace, nmea_info.location);
 
-  RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
+  RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
   DrawAircraft(canvas, settings_map, aircraft_look,
                calculated.heading, aircraft_pos);
 
@@ -472,7 +472,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
 
 void
 FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
-                             const NMEA_INFO &nmea_info, 
+                             const NMEAInfo &nmea_info, 
                              const DerivedInfo &calculated,
                              const SETTINGS_COMPUTER &settings_computer,
                              const SETTINGS_MAP &settings_map,
@@ -487,12 +487,12 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  ChartProjection proj(rc, task, nmea_info.Location);
+  ChartProjection proj(rc, task, nmea_info.location);
 
   RenderObservationZone ozv(task_look, airspace_look);
   RenderTaskPoint tpv(canvas, NULL, proj, settings_map, task_look,
                       task.get_task_projection(),
-                      ozv, false, true, nmea_info.Location);
+                      ozv, false, true, nmea_info.location);
   ::RenderTask dv(tpv, proj.GetScreenBounds());
   dv.Visit(task);
 
@@ -501,7 +501,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
   canvas.select(Graphics::TracePen);
   DrawTrace(canvas, proj, trace);
 
-  RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
+  RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
   DrawAircraft(canvas, settings_map, aircraft_look,
                calculated.heading, aircraft_pos);
 }
@@ -591,7 +591,7 @@ FlightStatisticsRenderer::RenderTemperature(Canvas &canvas,
 
 void
 FlightStatisticsRenderer::RenderWind(Canvas &canvas, const PixelRect rc,
-                             const NMEA_INFO &nmea_info,
+                             const NMEAInfo &nmea_info,
                              const WindStore &wind_store) const
 {
   int numsteps = 10;
@@ -613,7 +613,7 @@ FlightStatisticsRenderer::RenderWind(Canvas &canvas, const PixelRect rc,
     h = fixed(fs.Altitude_Ceiling.y_max - fs.Altitude_Base.y_min) * i /
         (numsteps - 1) + fixed(fs.Altitude_Base.y_min);
 
-    wind = wind_store.GetWind(nmea_info.Time, h, found);
+    wind = wind_store.GetWind(nmea_info.time, h, found);
     mag = hypot(wind.x, wind.y);
 
     windstats_mag.LeastSquaresUpdate(mag, h);
@@ -643,7 +643,7 @@ FlightStatisticsRenderer::RenderWind(Canvas &canvas, const PixelRect rc,
     h = fixed(fs.Altitude_Ceiling.y_max - fs.Altitude_Base.y_min) * hfact +
         fixed(fs.Altitude_Base.y_min);
 
-    wind = wind_store.GetWind(nmea_info.Time, h, found);
+    wind = wind_store.GetWind(nmea_info.time, h, found);
     if (windstats_mag.x_max == fixed_zero)
       windstats_mag.x_max = fixed_one; // prevent /0 problems
     wind.x /= fixed(windstats_mag.x_max);

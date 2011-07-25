@@ -388,7 +388,7 @@ InfoBoxManager::ProcessTimer()
 {
   static Validity last;
 
-  Validity connected = XCSoarInterface::Basic().Connected;
+  Validity connected = XCSoarInterface::Basic().connected;
   if (connected != last) {
     SetDirty();
     last = connected;

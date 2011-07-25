@@ -112,7 +112,7 @@ dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
   const Look &look = *CommonInterface::main_window.look;
   PaintTask(canvas, Sender->get_client_rect(), *active_task,
-            XCSoarInterface::Basic().Location,
+            XCSoarInterface::Basic().location,
             XCSoarInterface::SettingsMap(),
             look.task, look.airspace,
             terrain);

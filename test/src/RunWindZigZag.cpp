@@ -111,15 +111,15 @@ int main(int argc, char **argv)
       parser.ParseNMEAString_Internal(buffer, data);
 
     computer.Compute(data, last, calculated, settings_computer);
-    calculated.flight.Moving(data.Time);
+    calculated.flight.Moving(data.time);
 
     WindZigZagGlue::Result result = wind_zig_zag.Update(data, calculated);
     if (result.quality > 0)
-      printf("%d %d %d %g %g %g %d\n", (int)data.Time, result.quality,
+      printf("%d %d %d %g %g %g %d\n", (int)data.time, result.quality,
              (int)result.wind.bearing.value_degrees(),
              (double)result.wind.norm,
-             (double)data.GroundSpeed,
-             (double)data.TrueAirspeed,
+             (double)data.ground_speed,
+             (double)data.true_airspeed,
              (int)data.track.value_degrees());
   }
 }

@@ -261,7 +261,7 @@ UpdateCrossSection()
   assert(csw != NULL);
   csw->ReadBlackboard(basic, calculated, blackboard->SettingsMap());
   csw->set_direction(basic.track);
-  csw->set_start(basic.Location);
+  csw->set_start(basic.location);
 }
 
 static void

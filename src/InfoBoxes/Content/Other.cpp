@@ -59,12 +59,12 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
       infobox.SetComment(_("AC Off"));
       break;
     case Power::External::ON:
-      if (!XCSoarInterface::Basic().SupplyBatteryVoltageAvailable)
+      if (!XCSoarInterface::Basic().voltage_available)
         infobox.SetComment(_("AC ON"));
       else{
         DisplaySupplyVoltageAsValue = true;
         SetValueFromFixed(infobox, _T("%2.1fV"),
-                          XCSoarInterface::Basic().SupplyBatteryVoltage);
+                          XCSoarInterface::Basic().voltage);
       }
       break;
     case Power::External::UNKNOWN:
@@ -104,9 +104,9 @@ InfoBoxContentBattery::Update(InfoBoxWindow &infobox)
 
 #endif
 
-  if (XCSoarInterface::Basic().SupplyBatteryVoltageAvailable) {
+  if (XCSoarInterface::Basic().voltage_available) {
     SetValueFromFixed(infobox, _T("%2.1fV"),
-                      XCSoarInterface::Basic().SupplyBatteryVoltage);
+                      XCSoarInterface::Basic().voltage);
     return;
   }
 

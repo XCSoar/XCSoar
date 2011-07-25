@@ -30,7 +30,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct NMEA_INFO;
+struct NMEAInfo;
 struct DerivedInfo;
 class OperationEnvironment;
 class AtmosphericPressure;

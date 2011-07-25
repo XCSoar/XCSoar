@@ -32,11 +32,11 @@ Copyright_License {
 
 class ZanderDevice : public AbstractDevice {
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
 
 static bool
-PZAN1(NMEAInputLine &line, NMEA_INFO &info)
+PZAN1(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed baro_altitude;
   if (line.read_checked(baro_altitude))
@@ -49,7 +49,7 @@ PZAN1(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 static bool
-PZAN2(NMEAInputLine &line, NMEA_INFO &info)
+PZAN2(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed vtas, wnet;
 
@@ -63,7 +63,7 @@ PZAN2(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 static bool
-PZAN3(NMEAInputLine &line, NMEA_INFO &info)
+PZAN3(NMEAInputLine &line, NMEAInfo &info)
 {
   // old: $PZAN3,+,026,V,321,035,A,321,035,V*cc
   // new: $PZAN3,+,026,A,321,035,V[,A]*cc
@@ -96,7 +96,7 @@ PZAN3(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 static bool
-PZAN4(NMEAInputLine &line, NMEA_INFO &info)
+PZAN4(NMEAInputLine &line, NMEAInfo &info)
 {
   // $PZAN4,1.5,+,20,39,45*cc
 
@@ -108,7 +108,7 @@ PZAN4(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 static bool
-PZAN5(NMEAInputLine &line, NMEA_INFO &info)
+PZAN5(NMEAInputLine &line, NMEAInfo &info)
 {
   // $PZAN5,VA,MUEHL,123.4,KM,T,234*cc
 
@@ -124,12 +124,12 @@ PZAN5(NMEAInputLine &line, NMEA_INFO &info)
   } else
     return false;
 
-  info.SwitchStateAvailable = true;
+  info.switch_state_available = true;
   return true;
 }
 
 bool
-ZanderDevice::ParseNMEA(const char *String, NMEA_INFO &info)
+ZanderDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   if (!VerifyNMEAChecksum(String))
     return false;

@@ -38,7 +38,7 @@ public:
     :port(_port), bulk_baud_rate(_bulk_baud_rate) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutMacCready(fixed MacCready);
   virtual bool Declare(const Declaration &declaration,
                        OperationEnvironment &env);

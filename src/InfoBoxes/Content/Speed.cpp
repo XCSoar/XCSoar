@@ -39,14 +39,14 @@ void
 InfoBoxContentSpeedGround::Update(InfoBoxWindow &infobox)
 {
 
-  if (!XCSoarInterface::Basic().GroundSpeedAvailable) {
+  if (!XCSoarInterface::Basic().ground_speed_available) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserSpeed(XCSoarInterface::Basic().GroundSpeed,
+  Units::FormatUserSpeed(XCSoarInterface::Basic().ground_speed,
                          tmp, 32, false);
   infobox.SetValue(tmp);
 
@@ -68,12 +68,12 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkUp:
     device_blackboard.SetSpeed(
-        XCSoarInterface::Basic().GroundSpeed + fixed_step);
+        XCSoarInterface::Basic().ground_speed + fixed_step);
     return true;
 
   case ibkDown:
     device_blackboard.SetSpeed(
-        max(fixed_zero, XCSoarInterface::Basic().GroundSpeed - fixed_step));
+        max(fixed_zero, XCSoarInterface::Basic().ground_speed - fixed_step));
     return true;
 
   case ibkLeft:
@@ -94,14 +94,14 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::Basic().AirspeedAvailable) {
+  if (!XCSoarInterface::Basic().airspeed_available) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserSpeed(XCSoarInterface::Basic().IndicatedAirspeed,
+  Units::FormatUserSpeed(XCSoarInterface::Basic().indicated_airspeed,
                          tmp, 32, false, false);
   infobox.SetValue(tmp);
 
@@ -112,14 +112,14 @@ InfoBoxContentSpeedIndicated::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentSpeed::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::Basic().AirspeedAvailable) {
+  if (!XCSoarInterface::Basic().airspeed_available) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserSpeed(XCSoarInterface::Basic().TrueAirspeed,
+  Units::FormatUserSpeed(XCSoarInterface::Basic().true_airspeed,
                          tmp, 32, false, false);
   infobox.SetValue(tmp);
 

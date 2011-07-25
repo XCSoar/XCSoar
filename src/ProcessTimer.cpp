@@ -87,28 +87,28 @@ static void
 SystemClockTimer()
 {
 #ifdef WIN32
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
 
   // Altair doesn't have a battery-backed up realtime clock,
   // so as soon as we get a fix for the first time, set the
   // system clock to the GPS time.
   static bool sysTimeInitialised = false;
 
-  if (basic.Connected && CommonInterface::SettingsMap().SetSystemTimeFromGPS
+  if (basic.connected && CommonInterface::SettingsMap().SetSystemTimeFromGPS
       && basic.gps.real
       /* assume that we only have a valid date and time when we have a
          full GPS fix */
-      && basic.LocationAvailable
+      && basic.location_available
       && !sysTimeInitialised) {
     SYSTEMTIME sysTime;
     ::GetSystemTime(&sysTime);
 
-    sysTime.wYear = (unsigned short)basic.DateTime.year;
-    sysTime.wMonth = (unsigned short)basic.DateTime.month;
-    sysTime.wDay = (unsigned short)basic.DateTime.day;
-    sysTime.wHour = (unsigned short)basic.DateTime.hour;
-    sysTime.wMinute = (unsigned short)basic.DateTime.minute;
-    sysTime.wSecond = (unsigned short)basic.DateTime.second;
+    sysTime.wYear = (unsigned short)basic.date_time_utc.year;
+    sysTime.wMonth = (unsigned short)basic.date_time_utc.month;
+    sysTime.wDay = (unsigned short)basic.date_time_utc.day;
+    sysTime.wHour = (unsigned short)basic.date_time_utc.hour;
+    sysTime.wMinute = (unsigned short)basic.date_time_utc.minute;
+    sysTime.wSecond = (unsigned short)basic.date_time_utc.second;
     sysTime.wMilliseconds = 0;
     ::SetSystemTime(&sysTime);
 
@@ -125,7 +125,7 @@ SystemClockTimer()
     SetTimeZoneInformation(&tzi);
 #endif
     sysTimeInitialised =true;
-  } else if (!basic.Connected)
+  } else if (!basic.connected)
     /* set system clock again after a device reconnect; the new device
        may have a better GPS time */
     sysTimeInitialised = false;
@@ -161,7 +161,7 @@ QNHProcessTimer()
 {
   SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SetSettingsComputer();
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (basic.settings.qnh_available.Modified(settings_computer.pressure_available)) {
@@ -183,7 +183,7 @@ MacCreadyProcessTimer()
   static ExternalSettings last_external_settings;
   static Validity last_auto_mac_cready;
 
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (basic.settings.mac_cready_available.Modified(last_external_settings.mac_cready_available)) {
@@ -208,7 +208,7 @@ BallastDumpProcessTimer()
   // only update every 5 seconds to stop flooding the devices
   static GPSClock ballast_clock(fixed(5));
 
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
 
   // We don't know how fast the water is flowing so don't pretend that we do
   if (settings_computer.plane.dump_time <= 0) {
@@ -216,7 +216,7 @@ BallastDumpProcessTimer()
     return;
   }
 
-  fixed dt = ballast_clock.delta_advance(basic.Time);
+  fixed dt = ballast_clock.delta_advance(basic.time);
 
   if (negative(dt))
     return;
@@ -287,11 +287,11 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
   static bool location_last = false;
   static bool wait_connect = false;
 
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
 
-  bool connected_now = basic.Connected;
+  bool connected_now = basic.connected;
   if (connected_now) {
-    if (basic.LocationAvailable) {
+    if (basic.location_available) {
       wait_connect = false;
       itimeout = 0;
     } else if (!connected_last || location_last) {
@@ -313,7 +313,7 @@ ProcessTimer::ConnectionProcessTimer(int itimeout)
   AllDevicesAutoReopen(env);
 
   connected_last = connected_now;
-  location_last = basic.LocationAvailable;
+  location_last = basic.location_available;
   return itimeout;
 }
 

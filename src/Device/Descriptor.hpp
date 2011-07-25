@@ -35,7 +35,7 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
-struct NMEA_INFO;
+struct NMEAInfo;
 struct DerivedInfo;
 class Port;
 class Device;
@@ -197,7 +197,7 @@ public:
   bool IsConnected() const;
 
 private:
-  bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  bool ParseNMEA(const char *line, struct NMEAInfo &info);
 
 public:
   void WriteNMEA(const char *line);

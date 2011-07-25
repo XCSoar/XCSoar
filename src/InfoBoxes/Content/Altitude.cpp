@@ -88,7 +88,7 @@ bool
 InfoBoxContentAltitude::PnlInfoUpdate()
 {
   const DerivedInfo &calculated = CommonInterface::Calculated();
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
   if (!calculated.altitude_agl_valid) {
@@ -101,21 +101,21 @@ InfoBoxContentAltitude::PnlInfoUpdate()
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltAGL")))->SetText(sTmp);
   }
 
-  if (!basic.BaroAltitudeAvailable) {
+  if (!basic.baro_altitude_available) {
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltBaro")))->SetText(_("N/A"));
   } else {
     // Set Value
-    _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(basic.BaroAltitude),
+    _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(basic.baro_altitude),
                                        Units::GetAltitudeName());
 
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltBaro")))->SetText(sTmp);
   }
 
-  if (!basic.GPSAltitudeAvailable) {
+  if (!basic.gps_altitude_available) {
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(_("N/A"));
   } else {
     // Set Value
-     _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(basic.GPSAltitude),
+     _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(basic.gps_altitude),
                                          Units::GetAltitudeName());
 
       ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(sTmp);
@@ -197,9 +197,9 @@ InfoBoxContentAltitude::PnlSimulatorOnMinusBig(gcc_unused WndButton &Sender)
 void
 InfoBoxContentAltitude::ChangeAltitude(const fixed step)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
 
-  device_blackboard.SetAltitude(basic.GPSAltitude +
+  device_blackboard.SetAltitude(basic.gps_altitude +
                                 (fixed)Units::ToSysAltitude(step));
 }
 
@@ -300,21 +300,21 @@ InfoBoxContentAltitude::GetDialogContent() {
 void
 InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  if (!basic.GPSAltitudeAvailable) {
+  if (!basic.gps_altitude_available) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  Units::FormatUserAltitude(basic.GPSAltitude, sTmp,
+  Units::FormatUserAltitude(basic.gps_altitude, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  Units::FormatAlternateUserAltitude(basic.GPSAltitude, sTmp,
+  Units::FormatAlternateUserAltitude(basic.gps_altitude, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
 
@@ -325,7 +325,7 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 bool
 InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
 
   if (!is_simulator())
     return false;
@@ -392,25 +392,25 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  if (!basic.BaroAltitudeAvailable) {
+  if (!basic.baro_altitude_available) {
     infobox.SetInvalid();
 
-    if (basic.PressureAltitudeAvailable)
+    if (basic.pressure_altitude_available)
       infobox.SetComment(_("no QNH"));
 
     return;
   }
 
   // Set Value
-  Units::FormatUserAltitude(basic.BaroAltitude, sTmp,
+  Units::FormatUserAltitude(basic.baro_altitude, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  Units::FormatAlternateUserAltitude(basic.BaroAltitude, sTmp,
+  Units::FormatAlternateUserAltitude(basic.baro_altitude, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
 
@@ -421,15 +421,15 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  if (!basic.GPSAltitudeAvailable) {
+  if (!basic.gps_altitude_available) {
     infobox.SetInvalid();
     return;
   }
 
-  fixed Value = basic.GPSAltitude;
+  fixed Value = basic.gps_altitude;
 
   const Waypoint *home_waypoint = way_points.GetHome();
   if (home_waypoint)
@@ -452,13 +452,13 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
   TCHAR sTmp[32];
 
-  if (basic.PressureAltitudeAvailable) {
-    fixed Altitude = Units::ToUserUnit(basic.PressureAltitude, unFeet);
+  if (basic.pressure_altitude_available) {
+    fixed Altitude = Units::ToUserUnit(basic.pressure_altitude, unFeet);
 
     // Title color black
     infobox.SetColorTop(0);
@@ -471,11 +471,11 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
     _stprintf(sTmp, _T("%dft"), iround(Altitude));
     infobox.SetComment(sTmp);
 
-  } else if (basic.GPSAltitudeAvailable &&
+  } else if (basic.gps_altitude_available &&
              settings_computer.pressure_available) {
     // Take gps altitude as baro altitude. This is inaccurate but still fits our needs.
     const AtmosphericPressure &qnh = settings_computer.pressure;
-    fixed Altitude = Units::ToUserUnit(qnh.QNHAltitudeToPressureAltitude(basic.GPSAltitude), unFeet);
+    fixed Altitude = Units::ToUserUnit(qnh.QNHAltitudeToPressureAltitude(basic.gps_altitude), unFeet);
 
     // Title color red
     infobox.SetColorTop(1);
@@ -488,7 +488,7 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
     _stprintf(sTmp, _T("%dft"), iround(Altitude));
     infobox.SetComment(sTmp);
 
-  } else if ((basic.BaroAltitudeAvailable || basic.GPSAltitudeAvailable) &&
+  } else if ((basic.baro_altitude_available || basic.gps_altitude_available) &&
              !settings_computer.pressure_available) {
     infobox.SetInvalid();
     infobox.SetComment(_("no QNH"));

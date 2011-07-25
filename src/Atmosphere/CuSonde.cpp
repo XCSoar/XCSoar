@@ -107,7 +107,7 @@ CuSonde::adjustForecastTemperature(double delta)
  * @param basic NMEA_INFO for temperature and humidity
  */
 void
-CuSonde::updateMeasurements(const NMEA_INFO &basic,
+CuSonde::updateMeasurements(const NMEAInfo &basic,
                             const DerivedInfo &calculated)
 {
   // if (not flying) nothing to update...
@@ -115,7 +115,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic,
     return;
 
   // if (no temperature or humidity available) nothing to update...
-  if (!basic.TemperatureAvailable || !basic.HumidityAvailable)
+  if (!basic.temperature_available || !basic.humidity_available)
     return;
 
   // find appropriate level
@@ -143,8 +143,8 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic,
   // if (going up)
   if (level > last_level) {
     // we round down (level) because of potential lag of temp sensor
-    cslevels[level].updateTemps(basic.RelativeHumidity,
-        Units::ToUserUnit(basic.OutsideAirTemperature, unGradCelcius));
+    cslevels[level].updateTemps(basic.humidity,
+        Units::ToUserUnit(basic.temperature, unGradCelcius));
     cslevels[level].updateThermalIndex(level);
 
     if (level > 0) {
@@ -155,8 +155,8 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic,
   // if (going down)
   } else {
     // we round up (level+1) because of potential lag of temp sensor
-    cslevels[level + 1].updateTemps(basic.RelativeHumidity,
-        Units::ToUserUnit(basic.OutsideAirTemperature, unGradCelcius));
+    cslevels[level + 1].updateTemps(basic.humidity,
+        Units::ToUserUnit(basic.temperature, unGradCelcius));
     cslevels[level + 1].updateThermalIndex((unsigned short)(level + 1));
 
     if (level < NUM_LEVELS - 1) {

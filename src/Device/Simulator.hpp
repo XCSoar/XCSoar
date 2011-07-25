@@ -24,13 +24,13 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_SIMULATOR_HPP
 #define XCSOAR_DEVICE_SIMULATOR_HPP
 
-struct NMEA_INFO;
+struct NMEAInfo;
 
 class Simulator {
-  void GenerateFLARMTraffic(NMEA_INFO &basic);
+  void GenerateFLARMTraffic(NMEAInfo &basic);
 
 public:
-  void Process(NMEA_INFO &basic);
+  void Process(NMEAInfo &basic);
 };
 
 #endif

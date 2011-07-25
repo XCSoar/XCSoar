@@ -39,7 +39,7 @@ public:
 
 public:
   virtual bool Open(OperationEnvironment &env);
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutBugs(fixed bugs);
   virtual bool PutBallast(fixed ballast);

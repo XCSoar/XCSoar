@@ -194,7 +194,7 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
                         ordered_task->task_size() > 0 ?
                           ordered_task->get_tp(ordered_task->
                               task_size() - 1)->get_location() :
-                          XCSoarInterface::Basic().Location,
+                          XCSoarInterface::Basic().location,
                         ordered_task, ItemIndex);
     if (!way_point)
       return;

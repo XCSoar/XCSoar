@@ -33,7 +33,7 @@ private:
 public:
   VolksloggerDevice(Port *_port):port(_port) {}
 
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool Declare(const Declaration &declaration,
                        OperationEnvironment &env);
 };

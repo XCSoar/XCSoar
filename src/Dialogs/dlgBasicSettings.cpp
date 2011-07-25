@@ -117,14 +117,14 @@ HideAltitude()
 static void
 RefreshAltitudeControl()
 {
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SetSettingsComputer();
 
-  if (basic.PressureAltitudeAvailable && settings_computer.pressure_available)
-    ShowAltitude(settings_computer.pressure.PressureAltitudeToQNHAltitude(basic.PressureAltitude));
-  else if (basic.BaroAltitudeAvailable)
-    ShowAltitude(basic.BaroAltitude);
+  if (basic.pressure_altitude_available && settings_computer.pressure_available)
+    ShowAltitude(settings_computer.pressure.PressureAltitudeToQNHAltitude(basic.pressure_altitude));
+  else if (basic.baro_altitude_available)
+    ShowAltitude(basic.baro_altitude);
   else
     HideAltitude();
 }
@@ -133,7 +133,7 @@ static void
 OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat *Sender = (DataFieldFloat *)_Sender;
-  const NMEA_INFO &basic = CommonInterface::Basic();
+  const NMEAInfo &basic = CommonInterface::Basic();
   SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SetSettingsComputer();
 

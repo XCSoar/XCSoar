@@ -32,7 +32,7 @@ MoreData::Reset()
 
   GPSVario = GPSVarioTE = fixed_zero;
   BruttoVario = fixed_zero;
-  NettoVario = fixed_zero;
+  netto_vario = fixed_zero;
 
-  NMEA_INFO::Reset();
+  NMEAInfo::Reset();
 }

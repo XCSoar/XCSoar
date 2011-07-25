@@ -88,9 +88,9 @@ void ConditionMonitorsUpdate(const GlideComputer &cmp) {}
 
 bool InputEvents::processGlideComputer(unsigned) { return false; }
 
-void Logger::LogStartEvent(const NMEA_INFO &gps_info) {}
-void Logger::LogFinishEvent(const NMEA_INFO &gps_info) {}
-void Logger::LogPoint(const NMEA_INFO &gps_info) {}
+void Logger::LogStartEvent(const NMEAInfo &gps_info) {}
+void Logger::LogFinishEvent(const NMEAInfo &gps_info) {}
+void Logger::LogPoint(const NMEAInfo &gps_info) {}
 ThermalLocator::ThermalLocator() {}
 void ThermalLocator::Reset() {}
 
@@ -148,22 +148,22 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
       continue;
 
     basic.UpdateClock();
-    basic.Connected.Update(basic.clock);
-    basic.Time = fix.time;
-    basic.DateTime.year = 2011;
-    basic.DateTime.month = 6;
-    basic.DateTime.day = 5;
-    basic.DateTime.hour = (unsigned)(fix.time / 3600);
-    basic.DateTime.minute = (unsigned)(fix.time / 60) % 60;
-    basic.DateTime.second = (unsigned)fix.time % 60;
+    basic.connected.Update(basic.clock);
+    basic.time = fix.time;
+    basic.date_time_utc.year = 2011;
+    basic.date_time_utc.month = 6;
+    basic.date_time_utc.day = 5;
+    basic.date_time_utc.hour = (unsigned)(fix.time / 3600);
+    basic.date_time_utc.minute = (unsigned)(fix.time / 60) % 60;
+    basic.date_time_utc.second = (unsigned)fix.time % 60;
 
-    basic.Location = fix.location;
-    basic.LocationAvailable.Update(fix.time);
-    basic.GPSAltitude = fix.gps_altitude;
-    basic.GPSAltitudeAvailable.Update(fix.time);
-    basic.PressureAltitude = basic.BaroAltitude = fix.pressure_altitude;
-    basic.PressureAltitudeAvailable.Update(fix.time);
-    basic.BaroAltitudeAvailable.Update(fix.time);
+    basic.location = fix.location;
+    basic.location_available.Update(fix.time);
+    basic.gps_altitude = fix.gps_altitude;
+    basic.gps_altitude_available.Update(fix.time);
+    basic.pressure_altitude = basic.baro_altitude = fix.pressure_altitude;
+    basic.pressure_altitude_available.Update(fix.time);
+    basic.baro_altitude_available.Update(fix.time);
 
     basic_computer.Fill(basic, blackboard.SettingsComputer());
     basic_computer.Compute(basic, last, glide_computer.Calculated(),

@@ -265,7 +265,7 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   // .. not flying
   // .. feature disabled
   // .. feature inaccessible
-  if (!Basic().LocationAvailable
+  if (!Basic().location_available
       || !Calculated().flight.flying
       || SettingsComputer().FinalGlideTerrain == SETTINGS_COMPUTER::FGT_OFF
       || !task)
@@ -442,7 +442,7 @@ MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
   if (!Calculated().flight.flying ||
       !Calculated().terrain_warning ||
-      Calculated().terrain_warning_location.distance(Basic().Location) < fixed(500.0))
+      Calculated().terrain_warning_location.distance(Basic().location) < fixed(500.0))
     return;
 
   RasterPoint sc;

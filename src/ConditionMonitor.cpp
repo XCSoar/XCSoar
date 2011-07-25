@@ -65,7 +65,7 @@ public:
       return;
 
     bool restart = false;
-    const fixed Time = cmp.Basic().Time;
+    const fixed Time = cmp.Basic().time;
     if (Ready_Time_Check(Time, &restart)) {
       LastTime_Check = Time;
       if (CheckCondition(cmp)) {
@@ -250,7 +250,7 @@ protected:
   bool
   CheckCondition(const GlideComputer& cmp)
   {
-    if (!cmp.Basic().LocationAvailable ||
+    if (!cmp.Basic().location_available ||
         !cmp.Calculated().flight.flying || HaveCondorDevice() ||
         !cmp.Calculated().task_stats.task_valid)
       return false;
@@ -259,7 +259,7 @@ protected:
 
     /// @todo should be destination location
 
-    sun.CalcSunTimes(cmp.Basic().Location, cmp.Basic().DateTime,
+    sun.CalcSunTimes(cmp.Basic().location, cmp.Basic().date_time_utc,
                      fixed(GetUTCOffset()) / 3600);
     fixed d1((res.TimeElapsed + fixed(DetectCurrentTime(cmp.Basic()))) / 3600);
     fixed d0(DetectCurrentTime(cmp.Basic()) / 3600);

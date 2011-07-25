@@ -28,7 +28,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct NMEA_INFO;
+struct NMEAInfo;
 struct DerivedInfo;
 class ClimbHistory;
 class TracePointVector;
@@ -70,12 +70,12 @@ public:
 
 public:
   void RenderBarograph(Canvas &canvas, const PixelRect rc,
-                       const NMEA_INFO &nmea_info,
+                       const NMEAInfo &nmea_info,
                        const DerivedInfo &derived_info,
                        const ProtectedTaskManager *task) const;
 
   void RenderBarographSpark(Canvas &canvas, const PixelRect rc,
-                            const NMEA_INFO &nmea_info,
+                            const NMEAInfo &nmea_info,
                             const DerivedInfo &derived_info,
                             const ProtectedTaskManager *task) const;
 
@@ -88,20 +88,20 @@ public:
                         const GlidePolar& glide_polar) const;
 
   void RenderWind(Canvas &canvas, const PixelRect rc,
-                  const NMEA_INFO &nmea_info,
+                  const NMEAInfo &nmea_info,
                   const WindStore &wind_store) const;
 
   void RenderTemperature(Canvas &canvas, const PixelRect rc) const;
 
 
   void RenderTrace(Canvas &canvas, const PixelRect rc,
-                   const NMEA_INFO &nmea_info,
+                   const NMEAInfo &nmea_info,
                    const SETTINGS_COMPUTER &settings_computer,
                    const SETTINGS_MAP &settings_map,
                    const TracePointVector& trace) const;
 
   void RenderOLC(Canvas &canvas, const PixelRect rc,
-                 const NMEA_INFO &nmea_info,
+                 const NMEAInfo &nmea_info,
                  const DerivedInfo &calculated,
                  const SETTINGS_COMPUTER &settings_computer,
                  const SETTINGS_MAP &settings_map,
@@ -109,14 +109,14 @@ public:
                  const TracePointVector& trace) const;
 
   void RenderTask(Canvas &canvas, const PixelRect rc,
-                  const NMEA_INFO &nmea_info,
+                  const NMEAInfo &nmea_info,
                   const DerivedInfo &derived_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
                   const TaskManager &task) const;
 
   void RenderSpeed(Canvas &canvas, const PixelRect rc,
-                   const NMEA_INFO &nmea_info,
+                   const NMEAInfo &nmea_info,
                    const DerivedInfo &derived_info,
                    const TaskManager &task) const;
 

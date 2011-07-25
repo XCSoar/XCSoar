@@ -79,7 +79,7 @@ WindStore::SlotMeasurement(const MoreData &info, DerivedInfo &derived,
                            Vector windvector, int quality)
 {
   updated = true;
-  windlist->addMeasurement(info.Time, windvector,
+  windlist->addMeasurement(info.time, windvector,
                            info.NavAltitude, quality);
   //we may have a new wind value, so make sure it's emitted if needed!
   recalculateWind(info, derived);
@@ -115,7 +115,7 @@ void
 WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived)
 {
   bool found;
-  Vector CurWind = windlist->getWind(info.Time, info.NavAltitude, found);
+  Vector CurWind = windlist->getWind(info.time, info.NavAltitude, found);
 
   if (found) {
     if ((fabs(CurWind.x - _lastWind.x) > fixed_one)
@@ -132,7 +132,7 @@ WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived)
 }
 
 void
-WindStore::NewWind(const NMEA_INFO &info, DerivedInfo &derived,
+WindStore::NewWind(const NMEAInfo &info, DerivedInfo &derived,
     Vector &wind)
 {
   fixed mag = hypot(wind.x, wind.y);
@@ -145,7 +145,7 @@ WindStore::NewWind(const NMEA_INFO &info, DerivedInfo &derived,
 
   if (mag < fixed(30)) { // limit to reasonable values
     derived.estimated_wind = SpeedVector(bearing.as_bearing(), mag);
-    derived.estimated_wind_available.Update(info.Time);
+    derived.estimated_wind_available.Update(info.time);
   } else {
     // TODO code: give warning, wind estimate bogus or very strong!
   }

@@ -27,7 +27,7 @@ Copyright_License {
 #include "FLARM/FlarmCalculations.hpp"
 
 struct FLARM_STATE;
-struct NMEA_INFO;
+struct NMEAInfo;
 
 class FlarmComputer {
   FlarmCalculations flarmCalculations;
@@ -38,7 +38,7 @@ public:
    * looks up the callsign of each target
    */
   void Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
-               const NMEA_INFO &basic);
+               const NMEAInfo &basic);
 };
 
 #endif

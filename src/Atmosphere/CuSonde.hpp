@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_ATMOSPHERE_CUSONDE_HPP
 #define XCSOAR_ATMOSPHERE_CUSONDE_HPP
 
-struct NMEA_INFO;
+struct NMEAInfo;
 struct DerivedInfo;
 
 /**
@@ -67,7 +67,7 @@ namespace CuSonde
   /** Height of ground above MSL */
   extern double hGround;
   extern unsigned short last_level;
-  void updateMeasurements(const NMEA_INFO &basic,
+  void updateMeasurements(const NMEAInfo &basic,
                           const DerivedInfo &calculated);
   extern Level cslevels[NUM_LEVELS];
   void findCloudBase(unsigned short level);

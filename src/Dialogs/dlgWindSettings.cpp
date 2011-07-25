@@ -62,7 +62,7 @@ dlgWindSettingsShowModal(void)
   if (wf == NULL)
     return;
 
-  const bool external_wind = XCSoarInterface::Basic().ExternalWindAvailable &&
+  const bool external_wind = XCSoarInterface::Basic().external_wind_available &&
     XCSoarInterface::SettingsComputer().ExternalWind;
 
   WndProperty* wp;

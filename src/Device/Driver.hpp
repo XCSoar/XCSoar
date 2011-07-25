@@ -32,7 +32,7 @@ Copyright_License {
 #include <tchar.h>
 #include <stdint.h>
 
-struct NMEA_INFO;
+struct NMEAInfo;
 struct DerivedInfo;
 struct DeviceConfig;
 class Port;
@@ -94,7 +94,7 @@ public:
    * @param info destination for sensor values
    * @return true when the line has been processed
    */
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info) = 0;
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info) = 0;
 
   /**
    * Send the new MacCready value to the device.
@@ -210,7 +210,7 @@ public:
 
   virtual void LinkTimeout();
 
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutBugs(fixed bugs);

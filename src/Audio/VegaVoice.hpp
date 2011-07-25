@@ -29,7 +29,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct NMEA_INFO;
+struct NMEAInfo;
 struct DerivedInfo;
 struct SETTINGS_COMPUTER;
 
@@ -111,7 +111,7 @@ public:
 
 public:
 
-  bool Update(const NMEA_INFO &basic, const DerivedInfo &calculated,
+  bool Update(const NMEAInfo &basic, const DerivedInfo &calculated,
 	      const SETTINGS_COMPUTER &settings);
 
 };
@@ -128,7 +128,7 @@ public:
   VegaVoice();
   ~VegaVoice();
 
-  void Update(const NMEA_INFO &basic, const DerivedInfo &calculated,
+  void Update(const NMEAInfo &basic, const DerivedInfo &calculated,
 	      const SETTINGS_COMPUTER &settings);
 
   // called when notified by Altair that the message has been spoken

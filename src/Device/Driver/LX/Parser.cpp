@@ -44,7 +44,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 }
 
 static bool
-LXWP0(NMEAInputLine &line, NMEA_INFO &info)
+LXWP0(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
   $LXWP0,Y,222.3,1665.5,1.71,,,,,,239,174,10.1
@@ -89,7 +89,7 @@ LXWP0(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 static bool
-LXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO &info)
+LXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
   /*
    * $LXWP1,
@@ -103,7 +103,7 @@ LXWP1(gcc_unused NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 }
 
 static bool
-LXWP2(NMEAInputLine &line, NMEA_INFO &info)
+LXWP2(NMEAInputLine &line, NMEAInfo &info)
 {
   /*
    * $LXWP2,
@@ -133,7 +133,7 @@ LXWP2(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-LXDevice::ParseNMEA(const char *String, NMEA_INFO &info)
+LXDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   NMEAInputLine line(String);
   char type[16];

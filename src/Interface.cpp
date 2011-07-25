@@ -76,8 +76,8 @@ XCSoarInterface::ExchangeDeviceBlackboard()
   ScopeLock protect(device_blackboard.mutex);
   ReadBlackboardBasic(device_blackboard.Basic());
 
-  const NMEA_INFO &real = device_blackboard.RealState();
-  movement_detected = real.Connected && real.gps.real &&
+  const NMEAInfo &real = device_blackboard.RealState();
+  movement_detected = real.connected && real.gps.real &&
     real.MovementDetected();
 
   ReadBlackboardCalculated(device_blackboard.Calculated());

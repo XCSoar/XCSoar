@@ -43,7 +43,7 @@ RawLoggerStart()
   if (RawLoggerWriter != NULL)
     return true;
 
-  BrokenDateTime dt = XCSoarInterface::Basic().DateTime;
+  BrokenDateTime dt = XCSoarInterface::Basic().date_time_utc;
   assert(dt.Plausible());
 
   TCHAR name[64];

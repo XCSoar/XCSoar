@@ -390,8 +390,8 @@ RefreshTargetPoint(void)
     if (XCSoarInterface::SetSettingsMap().TargetPanIndex != target_point) {
       const GeoPoint t = protected_task_manager->get_ordered_taskpoint_location(
               target_point,
-              XCSoarInterface::Basic().Location);
-      if (t == XCSoarInterface::Basic().Location)
+              XCSoarInterface::Basic().location);
+      if (t == XCSoarInterface::Basic().location)
         return; // should not happen
 
       GlueMapWindow &map_window = *XCSoarInterface::main_window.map;
@@ -486,7 +486,7 @@ InitTargetPoints()
 
   if (TaskSize > target_point) {
     const GeoPoint t = protected_task_manager->get_ordered_taskpoint_location(target_point,
-        XCSoarInterface::Basic().Location);
+        XCSoarInterface::Basic().location);
     SetZoom();
 
     GlueMapWindow &map_window = *CommonInterface::main_window.map;

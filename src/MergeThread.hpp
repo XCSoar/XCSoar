@@ -48,7 +48,7 @@ class MergeThread : public WorkerThread {
    * The previous values at the time of the last update of any
    * attribute (last Connected modification).
    */
-  NMEA_INFO last_any;
+  NMEAInfo last_any;
 
   BasicComputer computer;
   FlarmComputer flarm_computer;

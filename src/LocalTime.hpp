@@ -25,11 +25,11 @@ Copyright_License {
 
 #include "Compiler.h"
 
-struct NMEA_INFO;
+struct NMEAInfo;
 
 gcc_pure
 unsigned
-DetectCurrentTime(const NMEA_INFO &Basic);
+DetectCurrentTime(const NMEAInfo &Basic);
 
 gcc_pure
 unsigned

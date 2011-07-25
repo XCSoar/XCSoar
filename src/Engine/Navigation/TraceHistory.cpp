@@ -28,7 +28,7 @@ void
 TraceHistory::append(const MoreData &basic)
 {
   BruttoVario.push(basic.BruttoVario);
-  NettoVario.push(basic.NettoVario);
+  NettoVario.push(basic.netto_vario);
 }
 
 void

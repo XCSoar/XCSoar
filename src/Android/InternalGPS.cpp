@@ -70,22 +70,22 @@ Java_org_xcsoar_InternalGPS_setConnected(JNIEnv *env, jobject obj,
   unsigned index = env->GetIntField(obj, fid_index);
 
   ScopeLock protect(device_blackboard.mutex);
-  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  NMEAInfo &basic = device_blackboard.SetRealState(index);
 
   switch (connected) {
   case 0: /* not connected */
-    basic.Connected.Clear();
-    basic.LocationAvailable.Clear();
+    basic.connected.Clear();
+    basic.location_available.Clear();
     break;
 
   case 1: /* waiting for fix */
-    basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
+    basic.connected.Update(fixed(MonotonicClockMS()) / 1000);
     basic.gps.android_internal_gps = true;
-    basic.LocationAvailable.Clear();
+    basic.location_available.Clear();
     break;
 
   case 2: /* connected */
-    basic.Connected.Update(fixed(MonotonicClockMS()) / 1000);
+    basic.connected.Update(fixed(MonotonicClockMS()) / 1000);
     basic.gps.android_internal_gps = true;
     break;
   }
@@ -108,9 +108,9 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   unsigned index = env->GetIntField(obj, fid_index);
 
   ScopeLock protect(device_blackboard.mutex);
-  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  NMEAInfo &basic = device_blackboard.SetRealState(index);
   basic.UpdateClock();
-  basic.Connected.Update(basic.clock);
+  basic.connected.Update(basic.clock);
 
   BrokenDateTime date_time = BrokenDateTime::FromUnixTimeUTC(time / 1000);
   fixed second_of_day = fixed(date_time.GetSecondOfDay()) +
@@ -118,29 +118,29 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
        better accuracy */
     fixed((unsigned)(time % 1000)) / 1000u;
 
-  if (second_of_day < basic.Time && date_time > basic.DateTime)
+  if (second_of_day < basic.time && date_time > basic.date_time_utc)
     /* don't wrap around when going past midnight in UTC */
     second_of_day += fixed(24u * 3600u);
 
-  basic.Time = second_of_day;
-  basic.DateTime = date_time;
+  basic.time = second_of_day;
+  basic.date_time_utc = date_time;
 
   basic.gps.satellites_used = n_satellites;
   basic.gps.real = true;
   basic.gps.android_internal_gps = true;
-  basic.Location = GeoPoint(Angle::degrees(fixed(longitude)),
+  basic.location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));
   if (n_satellites > 0)
-    basic.LocationAvailable.Update(basic.clock);
+    basic.location_available.Update(basic.clock);
   else
-    basic.LocationAvailable.Clear();
+    basic.location_available.Clear();
 
   if (hasAltitude) {
-    fixed GeoidSeparation = LookupGeoidSeparation(basic.Location);
-    basic.GPSAltitude = fixed(altitude) - GeoidSeparation;
-    basic.GPSAltitudeAvailable.Update(basic.clock);
+    fixed GeoidSeparation = LookupGeoidSeparation(basic.location);
+    basic.gps_altitude = fixed(altitude) - GeoidSeparation;
+    basic.gps_altitude_available.Update(basic.clock);
   } else
-    basic.GPSAltitudeAvailable.Clear();
+    basic.gps_altitude_available.Clear();
 
   if (hasBearing) {
     basic.track = Angle::degrees(fixed(bearing));
@@ -149,8 +149,8 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
     basic.track_available.Clear();
 
   if (hasSpeed) {
-    basic.GroundSpeed = fixed(speed);
-    basic.GroundSpeedAvailable.Update(basic.clock);
+    basic.ground_speed = fixed(speed);
+    basic.ground_speed_available.Update(basic.clock);
   }
 
   if (hasAccuracy)

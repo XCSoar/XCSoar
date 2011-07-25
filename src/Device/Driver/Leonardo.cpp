@@ -39,7 +39,7 @@ public:
   LeonardoDevice(Port *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
 
 static bool
@@ -64,7 +64,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
  * Example: "$C,+2025,-7,+18,+25,+29,122,314,314,0,-356,+25,45,T*3D"
  */
 static bool
-LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info)
+LeonardoParseC(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
 
@@ -90,9 +90,9 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info)
 
   // 4 = temperature [deg C]
   fixed oat;
-  info.TemperatureAvailable = line.read_checked(oat);
-  if (info.TemperatureAvailable)
-    info.OutsideAirTemperature = Units::ToSysUnit(oat, unGradCelcius);
+  info.temperature_available = line.read_checked(oat);
+  if (info.temperature_available)
+    info.temperature = Units::ToSysUnit(oat, unGradCelcius);
 
   line.skip(5);
 
@@ -111,7 +111,7 @@ LeonardoParseC(NMEAInputLine &line, NMEA_INFO &info)
  * Example: "$D,+0,100554,+25,18,+31,,0,-356,+25,+11,115,96*6A"
  */
 static bool
-LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
+LeonardoParseD(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
 
@@ -135,9 +135,9 @@ LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
 
   // 4 = temperature [deg C]
   fixed oat;
-  info.TemperatureAvailable = line.read_checked(oat);
-  if (info.TemperatureAvailable)
-    info.OutsideAirTemperature = Units::ToSysUnit(oat, unGradCelcius);
+  info.temperature_available = line.read_checked(oat);
+  if (info.temperature_available)
+    info.temperature = Units::ToSysUnit(oat, unGradCelcius);
 
   // 5 = compass [degrees]
   /* XXX unsupported by XCSoar */
@@ -161,7 +161,7 @@ LeonardoParseD(NMEAInputLine &line, NMEA_INFO &info)
  * Example: "$PDGFTL1,2025,2000,250,-14,45,134,28,65,382,153*3D"
  */
 static bool
-PDGFTL1(NMEAInputLine &line, NMEA_INFO &info)
+PDGFTL1(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
 
@@ -193,8 +193,8 @@ PDGFTL1(NMEAInputLine &line, NMEA_INFO &info)
 
   //  Main Lithium Battery Voltage   382      0.01 volts   3,82 volts
   if (line.read_checked(value)) {
-    info.SupplyBatteryVoltage = value / 100;
-    info.SupplyBatteryVoltageAvailable.Update(info.clock);
+    info.voltage = value / 100;
+    info.voltage_available.Update(info.clock);
   }
 
   //  Backup AA Battery Voltage      153      0.01 volts   1,53 volts
@@ -203,7 +203,7 @@ PDGFTL1(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-LeonardoDevice::ParseNMEA(const char *_line, NMEA_INFO &info)
+LeonardoDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
   NMEAInputLine line(_line);
   char type[16];

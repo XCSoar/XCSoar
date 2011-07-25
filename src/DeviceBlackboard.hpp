@@ -52,22 +52,22 @@ class DeviceBlackboard:
   /**
    * Data from each physical device.
    */
-  NMEA_INFO per_device_data[NUMDEV];
+  NMEAInfo per_device_data[NUMDEV];
 
   /**
    * Merged data from the physical devices.
    */
-  NMEA_INFO real_data;
+  NMEAInfo real_data;
 
   /**
    * Data from simulator.
    */
-  NMEA_INFO simulator_data;
+  NMEAInfo simulator_data;
 
   /**
    * Data from replay.
    */
-  NMEA_INFO replay_data;
+  NMEAInfo replay_data;
 
 public:
   Mutex mutex;
@@ -78,25 +78,25 @@ public:
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 
 protected:
-  NMEA_INFO &SetBasic() { return gps_info; }
+  NMEAInfo &SetBasic() { return gps_info; }
   MoreData &SetMoreData() { return gps_info; }
 
 public:
-  const NMEA_INFO &RealState(unsigned i) const {
+  const NMEAInfo &RealState(unsigned i) const {
     assert(i < NUMDEV);
     return per_device_data[i];
   }
 
-  NMEA_INFO &SetRealState(unsigned i) {
+  NMEAInfo &SetRealState(unsigned i) {
     assert(i < NUMDEV);
     return per_device_data[i];
   }
 
-  NMEA_INFO &SetSimulatorState() { return simulator_data; }
-  NMEA_INFO &SetReplayState() { return replay_data; }
+  NMEAInfo &SetSimulatorState() { return simulator_data; }
+  NMEAInfo &SetReplayState() { return replay_data; }
 
 public:
-  const NMEA_INFO &RealState() const { return real_data; }
+  const NMEAInfo &RealState() const { return real_data; }
 
   void SetStartupLocation(const GeoPoint &loc, const fixed alt);
   void SetLocation(const GeoPoint &loc, const fixed speed, const Angle bearing,

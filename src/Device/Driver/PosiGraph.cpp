@@ -47,14 +47,14 @@ public:
     :LXDevice(_port, _bulk_baud_rate) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
 
 static bool
-GPWIN(NMEAInputLine &line, NMEA_INFO &info);
+GPWIN(NMEAInputLine &line, NMEAInfo &info);
 
 bool
-PGDevice::ParseNMEA(const char *String, NMEA_INFO &info)
+PGDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   NMEAInputLine line(String);
   char type[16];
@@ -85,7 +85,7 @@ const struct DeviceRegister pgDevice = {
 // local stuff
 
 static bool
-GPWIN(NMEAInputLine &line, NMEA_INFO &info)
+GPWIN(NMEAInputLine &line, NMEAInfo &info)
 {
   line.skip(2);
 

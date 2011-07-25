@@ -106,7 +106,7 @@ OnOptionalStartListEnter(unsigned ItemIndex)
   if (index_optional_starts < ordered_task->optional_start_points_size()) {
     const Waypoint* way_point = dlgWaypointSelect(wf->GetMainWindow(),
         ordered_task->task_size() > 0 ? ordered_task->get_tp(0)->get_location()
-            : XCSoarInterface::Basic().Location);
+            : XCSoarInterface::Basic().location);
     if (!way_point)
       return;
 
@@ -120,7 +120,7 @@ OnOptionalStartListEnter(unsigned ItemIndex)
         dlgWaypointSelect(wf->GetMainWindow(),
                           ordered_task->task_size() > 0 ?
                           ordered_task->get_tp(0)->get_location() :
-                          XCSoarInterface::Basic().Location);
+                          XCSoarInterface::Basic().location);
     if (!way_point)
       return;
 

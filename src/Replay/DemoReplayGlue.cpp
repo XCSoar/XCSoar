@@ -121,7 +121,7 @@ DemoReplayGlue::Start()
   ProtectedTaskAccessor ta(task_manager, fixed_zero);
   parms.realistic();
   parms.start_alt = device_blackboard.Basic().NavAltitude;
-  DemoReplay::Start(ta, device_blackboard.Basic().Location);
+  DemoReplay::Start(ta, device_blackboard.Basic().location);
 
   // get wind from aircraft
   aircraft.get_state().wind = device_blackboard.Calculated().wind;

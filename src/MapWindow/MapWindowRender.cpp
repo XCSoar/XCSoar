@@ -101,7 +101,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   // Calculate screen position of the aircraft
   const RasterPoint aircraft_pos =
-      render_projection.GeoToScreen(Basic().Location);
+      render_projection.GeoToScreen(Basic().location);
 
   // reset label over-write preventer
   label_block.reset();
@@ -151,7 +151,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   DrawFLARMTraffic(canvas, aircraft_pos);
 
   // Finally, draw you!
-  if (Basic().Connected)
+  if (Basic().connected)
     DrawAircraft(canvas, settings_map, aircraft_look,
                  Calculated().heading - render_projection.GetScreenAngle(),
                  aircraft_pos);

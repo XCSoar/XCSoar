@@ -28,7 +28,7 @@ Copyright_License {
 
 void
 DrawHorizon(Canvas &canvas, const PixelRect &rc,
-            const NMEA_INFO &Basic)
+            const NMEAInfo &Basic)
 {
   RasterPoint center;
   center.y = (rc.top+rc.bottom)/2;

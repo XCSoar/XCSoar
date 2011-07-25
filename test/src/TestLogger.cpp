@@ -94,41 +94,41 @@ int main(int argc, char **argv)
   static const GeoPoint tp(Angle::degrees(fixed(10.726111111111111)),
                            Angle::degrees(fixed(50.6322)));
 
-  static NMEA_INFO i;
+  static NMEAInfo i;
   i.clock = fixed_one;
-  i.Time = fixed(1);
+  i.time = fixed(1);
   i.time_available.Update(i.clock);
-  i.DateTime.year = 2010;
-  i.DateTime.month = 9;
-  i.DateTime.day = 4;
-  i.DateTime.hour = 11;
-  i.DateTime.minute = 22;
-  i.DateTime.second = 33;
-  i.Location = home;
-  i.LocationAvailable.Update(i.clock);
-  i.GPSAltitude = fixed(487);
-  i.GPSAltitudeAvailable.Update(i.clock);
+  i.date_time_utc.year = 2010;
+  i.date_time_utc.month = 9;
+  i.date_time_utc.day = 4;
+  i.date_time_utc.hour = 11;
+  i.date_time_utc.minute = 22;
+  i.date_time_utc.second = 33;
+  i.location = home;
+  i.location_available.Update(i.clock);
+  i.gps_altitude = fixed(487);
+  i.gps_altitude_available.Update(i.clock);
   i.ProvideBaroAltitudeTrue(fixed(490));
 
   IGCWriter writer(path, i);
 
-  writer.header(i.DateTime, _T("Pilot Name"), _T("ASK-21"), _T("D-1234"),
+  writer.header(i.date_time_utc, _T("Pilot Name"), _T("ASK-21"), _T("D-1234"),
                 _T("foo"), _T("bar"));
-  writer.StartDeclaration(i.DateTime, 3);
+  writer.StartDeclaration(i.date_time_utc, 3);
   writer.AddDeclaration(home, _T("Bergneustadt"));
   writer.AddDeclaration(tp, _T("Suhl"));
   writer.AddDeclaration(home, _T("Bergneustadt"));
   writer.EndDeclaration();
 
-  i.DateTime.second += 5;
+  i.date_time_utc.second += 5;
   writer.LogPoint(i);
-  i.DateTime.second += 5;
+  i.date_time_utc.second += 5;
   writer.LogEvent(i, "my_event");
-  i.DateTime.second += 5;
+  i.date_time_utc.second += 5;
   writer.LoggerNote(_T("my_note"));
 
-  i.DateTime.second += 5;
-  i.Location = GeoPoint(Angle::degrees(fixed(-7.7061111111111114)),
+  i.date_time_utc.second += 5;
+  i.location = GeoPoint(Angle::degrees(fixed(-7.7061111111111114)),
                         Angle::degrees(fixed(-51.051944444444445)));
   writer.LogPoint(i);
 

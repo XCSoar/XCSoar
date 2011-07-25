@@ -91,7 +91,7 @@ GlideComputer::ProcessGPS()
   const MoreData &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
 
-  calculated.date_time_local = basic.DateTime + GetUTCOffset();
+  calculated.date_time_local = basic.date_time_utc + GetUTCOffset();
 
   calculated.Expire(basic.clock);
 
@@ -188,7 +188,7 @@ GlideComputer::CalculateOwnTeamCode()
     return;
 
   // Get bearing and distance to the reference waypoint
-  const GeoVector v = TeamCodeRefLocation.distance_bearing(Basic().Location);
+  const GeoVector v = TeamCodeRefLocation.distance_bearing(Basic().location);
 
   // Save teamcode to Calculated
   SetCalculated().own_teammate_code.Update(v.Bearing, v.Distance);
@@ -241,7 +241,7 @@ void
 GlideComputer::CalculateTeammateBearingRange()
 {
   const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
-  const NMEA_INFO &basic = Basic();
+  const NMEAInfo &basic = Basic();
   TeamInfo &teamcode_info = SetCalculated();
 
   // No reference waypoint for teamcode calculation chosen -> cancel
@@ -249,14 +249,14 @@ GlideComputer::CalculateTeammateBearingRange()
     return;
 
   if (settings_computer.TeamFlarmTracking) {
-    ComputeFlarmTeam(basic.Location, TeamCodeRefLocation,
+    ComputeFlarmTeam(basic.location, TeamCodeRefLocation,
                      basic.flarm, settings_computer.TeamFlarmIdTarget,
                      teamcode_info);
     CheckTeammateRange();
   } else if (settings_computer.TeammateCodeValid) {
     teamcode_info.flarm_teammate_code_available = false;
 
-    ComputeTeamCode(basic.Location, TeamCodeRefLocation,
+    ComputeTeamCode(basic.location, TeamCodeRefLocation,
                     settings_computer.TeammateCode,
                     teamcode_info);
     CheckTeammateRange();
@@ -318,8 +318,8 @@ GlideComputer::OnSwitchClimbMode(bool isclimb, bool left)
 void
 GlideComputer::FLARM_ScanTraffic()
 {
-  const NMEA_INFO &basic = Basic();
-  const NMEA_INFO &last_basic = LastBasic();
+  const NMEAInfo &basic = Basic();
+  const NMEAInfo &last_basic = LastBasic();
 
   if (basic.flarm.rx && last_basic.flarm.rx == 0)
     // traffic has appeared..

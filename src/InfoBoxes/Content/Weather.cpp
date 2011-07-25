@@ -41,30 +41,30 @@ Copyright_License {
 void
 InfoBoxContentHumidity::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &basic = XCSoarInterface::Basic();
-  if (!basic.HumidityAvailable) {
+  const NMEAInfo &basic = XCSoarInterface::Basic();
+  if (!basic.humidity_available) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  _stprintf(tmp, _T("%d"), (int)basic.RelativeHumidity);
+  _stprintf(tmp, _T("%d"), (int)basic.humidity);
   infobox.SetValue(tmp);
 }
 
 void
 InfoBoxContentTemperature::Update(InfoBoxWindow &infobox)
 {
-  const NMEA_INFO &basic = XCSoarInterface::Basic();
-  if (!basic.TemperatureAvailable) {
+  const NMEAInfo &basic = XCSoarInterface::Basic();
+  if (!basic.temperature_available) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   SetValueFromFixed(infobox, _T("%2.1f")_T(DEG),
-                    Units::ToUserTemperature(basic.OutsideAirTemperature));
+                    Units::ToUserTemperature(basic.temperature));
 }
 
 void
@@ -121,10 +121,10 @@ InfoBoxContentWind::PnlEditLoad(SingleWindow &parent, TabBarControl* wTabBar,
 bool
 InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
 {
-  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = XCSoarInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
-  const bool external_wind = basic.ExternalWindAvailable &&
+  const bool external_wind = basic.external_wind_available &&
     settings_computer.ExternalWind;
 
   WndProperty* wp;
@@ -153,10 +153,10 @@ InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
 void
 InfoBoxContentWind::PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
 {
-  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = XCSoarInterface::Basic();
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
-  const bool external_wind = basic.ExternalWindAvailable &&
+  const bool external_wind = basic.external_wind_available &&
     settings_computer.ExternalWind;
 
   if (!external_wind) {
@@ -169,10 +169,10 @@ InfoBoxContentWind::PnlEditOnWindSpeed(gcc_unused DataFieldFloat &Sender)
 void
 InfoBoxContentWind::PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
 {
-  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = XCSoarInterface::Basic();
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
-  const bool external_wind = basic.ExternalWindAvailable &&
+  const bool external_wind = basic.external_wind_available &&
     settings_computer.ExternalWind;
 
   if (!external_wind) {
@@ -198,10 +198,10 @@ InfoBoxContentWind::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
       LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_INFOBOXWINDSETUP"));
   assert(wInfoBoxAccessSetup);
 
-  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = XCSoarInterface::Basic();
   const SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SettingsComputer();
-  const bool external_wind = basic.ExternalWindAvailable &&
+  const bool external_wind = basic.external_wind_available &&
     settings_computer.ExternalWind;
 
   WndProperty* wp;
@@ -237,10 +237,10 @@ InfoBoxContentWind::PnlSetupLoad(SingleWindow &parent, TabBarControl* wTabBar,
 bool
 InfoBoxContentWind::PnlSetupOnTabPreHide()
 {
-  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = XCSoarInterface::Basic();
   SETTINGS_COMPUTER &settings_computer =
     XCSoarInterface::SetSettingsComputer();
-  const bool external_wind = basic.ExternalWindAvailable &&
+  const bool external_wind = basic.external_wind_available &&
     settings_computer.ExternalWind;
 
   if (!external_wind)

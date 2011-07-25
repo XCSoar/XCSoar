@@ -39,7 +39,7 @@ public:
   FlytecDevice(Port *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
 
 /**
@@ -48,7 +48,7 @@ public:
  * Example: "$BRSF,063,-013,-0035,1,193,00351,535,485*38"
  */
 static bool
-FlytecParseBRSF(NMEAInputLine &line, NMEA_INFO &info)
+FlytecParseBRSF(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
 
@@ -74,13 +74,13 @@ FlytecParseBRSF(NMEAInputLine &line, NMEA_INFO &info)
  * Example: "$VMVABD,0000.0,M,0547.0,M,-0.0,,,MS,0.0,KH,22.4,C*65"
  */
 static bool
-FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info)
+FlytecParseVMVABD(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
 
   // 0,1 = GPS altitude, unit
-  if (line.read_checked_compare(info.GPSAltitude, "M"))
-    info.GPSAltitudeAvailable.Update(info.clock);
+  if (line.read_checked_compare(info.gps_altitude, "M"))
+    info.gps_altitude_available.Update(info.clock);
 
   // 2,3 = baro altitude, unit
   if (line.read_checked_compare(value, "M"))
@@ -95,10 +95,10 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info)
     info.ProvideBothAirspeeds(Units::ToSysUnit(value, unKiloMeterPerHour));
 
   // 10,11 = temperature, unit
-  info.TemperatureAvailable =
+  info.temperature_available =
     line.read_checked_compare(value, "C");
-  if (info.TemperatureAvailable)
-    info.OutsideAirTemperature = Units::ToSysUnit(value, unGradCelcius);
+  if (info.temperature_available)
+    info.temperature = Units::ToSysUnit(value, unGradCelcius);
 
   return true;
 }
@@ -109,7 +109,7 @@ FlytecParseVMVABD(NMEAInputLine &line, NMEA_INFO &info)
  * @see http://www.flytec.ch/public/Special%20NMEA%20sentence.pdf
  */
 static bool
-FlytecParseFLYSEN(NMEAInputLine &line, NMEA_INFO &info)
+FlytecParseFLYSEN(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
 
@@ -157,8 +157,8 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEA_INFO &info)
     info.ProvideTrueAirspeed(value / 100);
 
   //  Airspeed source P or V,   1 Digit P= pitot, V = Vane wheel
-  //  Temp. PCB (xxx °C),   3 Digits
-  //  Temp. Balloon Envelope (xxx °C),      3 Digits
+  //  Temp. PCB (xxx ï¿½C),   3 Digits
+  //  Temp. Balloon Envelope (xxx ï¿½C),      3 Digits
   //  Battery Capacity Bank 1 (0 to 100%)   3 Digits
   //  Battery Capacity Bank 2 (0 to 100%)   3 Digits
   //  Dist. to WP (xxxxxx m),   6 Digits (Max 200000m)
@@ -171,7 +171,7 @@ FlytecParseFLYSEN(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-FlytecDevice::ParseNMEA(const char *_line, NMEA_INFO &info)
+FlytecDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
   NMEAInputLine line(_line);
   char type[16];

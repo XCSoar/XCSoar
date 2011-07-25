@@ -29,7 +29,7 @@ Copyright_License {
 
 void
 FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
-                       const NMEA_INFO &basic)
+                       const NMEAInfo &basic)
 {
   // if (FLARM data is available)
   if (!flarm.available || flarm.traffic.empty())
@@ -38,19 +38,19 @@ FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
   fixed FLARM_NorthingToLatitude(0);
   fixed FLARM_EastingToLongitude(0);
 
-  if (basic.LocationAvailable) {
+  if (basic.location_available) {
     // Precalculate relative east and north projection to lat/lon
     // for Location calculations of each target
     Angle delta_lat = Angle::degrees(fixed(0.01));
     Angle delta_lon = Angle::degrees(fixed(0.01));
 
-    GeoPoint plat = basic.Location;
+    GeoPoint plat = basic.location;
     plat.Latitude += delta_lat;
-    GeoPoint plon = basic.Location;
+    GeoPoint plon = basic.location;
     plon.Longitude += delta_lon;
 
-    fixed dlat = Distance(basic.Location, plat);
-    fixed dlon = Distance(basic.Location, plon);
+    fixed dlat = Distance(basic.location, plat);
+    fixed dlon = Distance(basic.location, plon);
 
     if (positive(fabs(dlat)) && positive(fabs(dlon))) {
       FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
@@ -74,27 +74,27 @@ FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
     traffic.distance = hypot(traffic.relative_north, traffic.relative_east);
 
     // Calculate Location
-    traffic.location_available = basic.LocationAvailable;
+    traffic.location_available = basic.location_available;
     if (traffic.location_available) {
       traffic.location.Latitude =
           Angle::degrees(traffic.relative_north * FLARM_NorthingToLatitude) +
-          basic.Location.Latitude;
+          basic.location.Latitude;
 
       traffic.location.Longitude =
           Angle::degrees(traffic.relative_east * FLARM_EastingToLongitude) +
-          basic.Location.Longitude;
+          basic.location.Longitude;
     }
 
     // Calculate absolute altitude
-    traffic.altitude_available = basic.GPSAltitudeAvailable;
+    traffic.altitude_available = basic.gps_altitude_available;
     if (traffic.altitude_available)
-      traffic.altitude = traffic.relative_altitude + basic.GPSAltitude;
+      traffic.altitude = traffic.relative_altitude + basic.gps_altitude;
 
     // Calculate average climb rate
     traffic.climb_rate_avg30s_available = traffic.altitude_available;
     if (traffic.climb_rate_avg30s_available)
       traffic.climb_rate_avg30s =
-        flarmCalculations.Average30s(traffic.id, basic.Time, traffic.altitude);
+        flarmCalculations.Average30s(traffic.id, basic.time, traffic.altitude);
 
     // The following calculations are only relevant for targets
     // where information is missing

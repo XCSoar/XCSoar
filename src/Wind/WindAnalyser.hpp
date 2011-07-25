@@ -87,7 +87,7 @@ public:
   /**
    * Called if the flightmode changes
    */
-  void slot_newFlightMode(const NMEA_INFO &info, const DerivedInfo &derived,
+  void slot_newFlightMode(const NMEAInfo &info, const DerivedInfo &derived,
                           bool left, int marker);
 
   /**

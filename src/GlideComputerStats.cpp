@@ -57,7 +57,7 @@ bool
 GlideComputerStats::DoLogging()
 {
   /// @todo consider putting this sanity check inside Parser
-  if (Distance(Basic().Location, LastBasic().Location) > fixed(200))
+  if (Distance(Basic().location, LastBasic().location) > fixed(200))
     // prevent bad fixes from being logged or added to OLC store
     return false;
 
@@ -72,11 +72,11 @@ GlideComputerStats::DoLogging()
     FastLogNum--;
   }
 
-  if (log_clock.check_advance(Basic().Time) && logger != NULL)
+  if (log_clock.check_advance(Basic().time) && logger != NULL)
       logger->LogPoint(Basic());
 
   if (Calculated().flight.flying &&
-      stats_clock.check_advance(Basic().Time)) {
+      stats_clock.check_advance(Basic().time)) {
     flightstats.AddAltitudeTerrain(Calculated().flight.flight_time,
                                    Calculated().terrain_altitude);
     flightstats.AddAltitude(Calculated().flight.flight_time,

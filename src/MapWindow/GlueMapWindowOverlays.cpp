@@ -55,15 +55,15 @@ GlueMapWindow::DrawCrossHairs(Canvas &canvas) const
 
 void
 GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
-                             const NMEA_INFO &info) const
+                             const NMEAInfo &info) const
 {
   const TCHAR *txt;
   MaskedIcon *icon = NULL;
 
-  if (!info.Connected) {
+  if (!info.connected) {
     icon = &Graphics::hGPSStatus2;
     txt = _("GPS not connected");
-  } else if (!info.LocationAvailable) {
+  } else if (!info.location_available) {
     icon = &Graphics::hGPSStatus1;
     txt = _("GPS waiting for fix");
   } else {
@@ -91,7 +91,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 
   // draw logger status
   if (logger != NULL && logger->isLoggerActive()) {
-    bool flip = (Basic().DateTime.second % 2) == 0;
+    bool flip = (Basic().date_time_utc.second % 2) == 0;
     MaskedIcon &icon = flip ? Graphics::hLogger : Graphics::hLoggerOff;
     offset = icon.get_size().cx;
     icon.draw(canvas, rc.right - offset, rc.bottom - icon.get_size().cy);
@@ -419,16 +419,16 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
   unsigned min_time = 0;
   if (GetDisplayMode() == DM_CIRCLING) {
-    min_time = max(0, (int)Basic().Time - 600);
+    min_time = max(0, (int)Basic().time - 600);
   } else {
     switch(SettingsMap().trail_length) {
     case TRAIL_OFF:
       return;
     case TRAIL_LONG:
-      min_time = max(0, (int)Basic().Time - 3600);
+      min_time = max(0, (int)Basic().time - 3600);
       break;
     case TRAIL_SHORT:
-      min_time = max(0, (int)Basic().Time - 600);
+      min_time = max(0, (int)Basic().time - 600);
       break;
     case TRAIL_FULL:
       min_time = 0; // full
@@ -479,9 +479,9 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
 void
 GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
 {
-  if (Basic().StallRatioAvailable) {
+  if (Basic().stall_ratio_available) {
     // JMW experimental, display stall sensor
-    fixed s = max(fixed_zero, min(fixed_one, Basic().StallRatio));
+    fixed s = max(fixed_zero, min(fixed_one, Basic().stall_ratio));
     long m = (long)((rc.bottom - rc.top) * s * s);
 
     canvas.black_pen();

@@ -46,9 +46,9 @@ TimeLocal(int localtime)
 }
 
 unsigned
-DetectCurrentTime(const NMEA_INFO &Basic)
+DetectCurrentTime(const NMEAInfo &Basic)
 {
-  int utc_time = (int)Basic.Time;
+  int utc_time = (int)Basic.time;
   return TimeLocal(utc_time);
 }
 

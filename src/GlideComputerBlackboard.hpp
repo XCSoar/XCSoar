@@ -73,7 +73,7 @@ protected:
   }
 
   fixed time_delta() const {
-    return Basic().Time - LastBasic().Time;
+    return Basic().time - LastBasic().time;
   }
 
   void ResetFlight(const bool full=true);

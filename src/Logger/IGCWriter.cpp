@@ -34,10 +34,10 @@ Copyright_License {
 #endif
 
 const IGCWriter::LogPoint_GPSPosition &
-IGCWriter::LogPoint_GPSPosition::operator=(const NMEA_INFO &gps_info)
+IGCWriter::LogPoint_GPSPosition::operator=(const NMEAInfo &gps_info)
 {
-  Location = gps_info.Location;
-  GPSAltitude = (int)gps_info.GPSAltitude;
+  Location = gps_info.location;
+  GPSAltitude = (int)gps_info.gps_altitude;
   Initialized = true;
 
   return *this;
@@ -63,8 +63,8 @@ igc_format_location(char *buffer, const GeoPoint &location)
   return buffer + strlen(buffer);
 }
 
-IGCWriter::IGCWriter(const TCHAR *_path, const NMEA_INFO &gps_info)
-  :Simulator(gps_info.Connected && !gps_info.gps.real)
+IGCWriter::IGCWriter(const TCHAR *_path, const NMEAInfo &gps_info)
+  :Simulator(gps_info.connected && !gps_info.gps.real)
 {
   _tcscpy(path, _path);
 
@@ -100,9 +100,9 @@ IGCWriter::flush()
 }
 
 void
-IGCWriter::finish(const NMEA_INFO &gps_info)
+IGCWriter::finish(const NMEAInfo &gps_info)
 {
-  if (gps_info.Connected && !gps_info.gps.real)
+  if (gps_info.connected && !gps_info.gps.real)
     Simulator = true;
 
   flush();
@@ -305,7 +305,7 @@ normalize_igc_altitude(int value)
 }
 
 void
-IGCWriter::LogPoint(const NMEA_INFO& gps_info)
+IGCWriter::LogPoint(const NMEAInfo& gps_info)
 {
   char szBRecord[500];
   int iSIU = GetSIU(gps_info);
@@ -315,25 +315,25 @@ IGCWriter::LogPoint(const NMEA_INFO& gps_info)
   char IsValidFix;
 
   // if at least one GPS fix comes from the simulator, disable signing
-  if (gps_info.Connected && !gps_info.gps.real)
+  if (gps_info.connected && !gps_info.gps.real)
     Simulator = true;
 
   if (!Simulator) {
     const char *p = frecord.update(gps_info.gps.satellite_ids,
-                                   gps_info.DateTime, gps_info.Time,
-                                   !gps_info.LocationAvailable);
+                                   gps_info.date_time_utc, gps_info.time,
+                                   !gps_info.location_available);
     if (p != NULL)
       writeln(p);
   }
 
   if (!LastValidPoint.Initialized &&
-      ((gps_info.GPSAltitude < fixed(-100))
-       || (gps_info.BaroAltitude < fixed(-100))
-          || !gps_info.LocationAvailable))
+      ((gps_info.gps_altitude < fixed(-100))
+       || (gps_info.baro_altitude < fixed(-100))
+          || !gps_info.location_available))
     return;
 
 
-  if (!gps_info.LocationAvailable) {
+  if (!gps_info.location_available) {
     IsValidFix = 'V'; // invalid
     p = LastValidPoint;
   } else {
@@ -344,16 +344,16 @@ IGCWriter::LogPoint(const NMEA_INFO& gps_info)
 
   char *q = szBRecord;
   sprintf(q, "B%02d%02d%02d",
-          gps_info.DateTime.hour, gps_info.DateTime.minute,
-          gps_info.DateTime.second);
+          gps_info.date_time_utc.hour, gps_info.date_time_utc.minute,
+          gps_info.date_time_utc.second);
   q += strlen(q);
 
   q = igc_format_location(q, p.Location);
 
   sprintf(q, "%c%05d%05d%03d%02d",
           IsValidFix,
-          normalize_igc_altitude(gps_info.BaroAltitudeAvailable
-                                 ? gps_info.BaroAltitude
+          normalize_igc_altitude(gps_info.baro_altitude_available
+                                 ? gps_info.baro_altitude
                                  /* fall back to GPS altitude */
                                  : p.GPSAltitude),
           normalize_igc_altitude(p.GPSAltitude),
@@ -363,12 +363,12 @@ IGCWriter::LogPoint(const NMEA_INFO& gps_info)
 }
 
 void
-IGCWriter::LogEvent(const NMEA_INFO &gps_info, const char *event)
+IGCWriter::LogEvent(const NMEAInfo &gps_info, const char *event)
 {
   char szBRecord[30];
   sprintf(szBRecord,"E%02d%02d%02d%s",
-          gps_info.DateTime.hour, gps_info.DateTime.minute,
-          gps_info.DateTime.second, event);
+          gps_info.date_time_utc.hour, gps_info.date_time_utc.minute,
+          gps_info.date_time_utc.second, event);
 
   writeln(szBRecord);
   // tech_spec_gnss.pdf says we need a B record immediately after an E record

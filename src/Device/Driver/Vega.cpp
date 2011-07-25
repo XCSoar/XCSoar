@@ -77,7 +77,7 @@ protected:
 
 public:
   virtual void LinkTimeout();
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
   virtual bool PutQNH(const AtmosphericPressure& pres,
                       const DerivedInfo &calculated);
   virtual bool PutVoice(const TCHAR *sentence);
@@ -92,7 +92,7 @@ VegaDevice::LinkTimeout()
 }
 
 static bool
-PDSWC(NMEAInputLine &line, NMEA_INFO &info)
+PDSWC(NMEAInputLine &line, NMEAInfo &info)
 {
   static long last_switchinputs;
   static long last_switchoutputs;
@@ -105,11 +105,11 @@ PDSWC(NMEAInputLine &line, NMEA_INFO &info)
   long switchoutputs = line.read_hex(0L);
 
   if (line.read_checked(value)) {
-    info.SupplyBatteryVoltage = value / 10;
-    info.SupplyBatteryVoltageAvailable.Update(info.clock);
+    info.voltage = value / 10;
+    info.voltage_available.Update(info.clock);
   }
 
-  info.SwitchStateAvailable = true;
+  info.switch_state_available = true;
 
   info.switch_state.airbrake_locked =
     (switchinputs & (1<<INPUT_BIT_AIRBRAKELOCKED))>0;
@@ -184,7 +184,7 @@ PDSWC(NMEAInputLine &line, NMEA_INFO &info)
 //#include "Audio/VarioSound.h"
 
 static bool
-PDAAV(NMEAInputLine &line, gcc_unused NMEA_INFO &info)
+PDAAV(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
   gcc_unused unsigned short beepfrequency = line.read(0);
   gcc_unused unsigned short soundfrequency = line.read(0);
@@ -197,7 +197,7 @@ PDAAV(NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 }
 
 static bool
-PDVSC(NMEAInputLine &line, gcc_unused NMEA_INFO &info)
+PDVSC(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
   char responsetype[10];
   line.read(responsetype, 10);
@@ -231,7 +231,7 @@ PDVSC(NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 // $PDVDV,vario,ias,densityratio,altitude,staticpressure
 
 static bool
-PDVDV(NMEAInputLine &line, NMEA_INFO &info)
+PDVDV(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
 
@@ -254,7 +254,7 @@ PDVDV(NMEAInputLine &line, NMEA_INFO &info)
 
 // $PDVDS,nx,nz,flap,stallratio,netto
 static bool
-PDVDS(NMEAInputLine &line, NMEA_INFO &info)
+PDVDS(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed AccelX = line.read(fixed_zero);
   fixed AccelZ = line.read(fixed_zero);
@@ -268,8 +268,8 @@ PDVDS(NMEAInputLine &line, NMEA_INFO &info)
   */
   line.skip();
 
-  info.StallRatio = line.read(fixed_zero);
-  info.StallRatioAvailable.Update(info.clock);
+  info.stall_ratio = line.read(fixed_zero);
+  info.stall_ratio_available.Update(info.clock);
 
   fixed value;
   if (line.read_checked(value))
@@ -281,21 +281,21 @@ PDVDS(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 static bool
-PDVVT(NMEAInputLine &line, NMEA_INFO &info)
+PDVVT(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
-  info.TemperatureAvailable = line.read_checked(value);
-  if (info.TemperatureAvailable)
-    info.OutsideAirTemperature = Units::ToSysUnit(value / 10, unGradCelcius);
+  info.temperature_available = line.read_checked(value);
+  if (info.temperature_available)
+    info.temperature = Units::ToSysUnit(value / 10, unGradCelcius);
 
-  info.HumidityAvailable = line.read_checked(info.RelativeHumidity);
+  info.humidity_available = line.read_checked(info.humidity);
 
   return true;
 }
 
 // PDTSM,duration_ms,"free text"
 static bool
-PDTSM(NMEAInputLine &line, gcc_unused NMEA_INFO &info)
+PDTSM(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 {
   /*
   int duration = (int)strtol(String, NULL, 10);
@@ -319,7 +319,7 @@ PDTSM(NMEAInputLine &line, gcc_unused NMEA_INFO &info)
 }
 
 bool
-VegaDevice::ParseNMEA(const char *String, NMEA_INFO &info)
+VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
 {
   NMEAInputLine line(String);
   char type[16];

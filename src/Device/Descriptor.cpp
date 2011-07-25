@@ -239,11 +239,11 @@ bool
 DeviceDescriptor::IsConnected() const
 {
   ScopeLock protect(device_blackboard.mutex);
-  return device_blackboard.RealState(index).Connected;
+  return device_blackboard.RealState(index).connected;
 }
 
 bool
-DeviceDescriptor::ParseNMEA(const char *line, NMEA_INFO &info)
+DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
 {
   assert(line != NULL);
 
@@ -252,7 +252,7 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEA_INFO &info)
   info.settings = settings_received;
 
   if (device != NULL && device->ParseNMEA(line, info)) {
-    info.Connected.Update(fixed(MonotonicClockMS()) / 1000);
+    info.connected.Update(fixed(MonotonicClockMS()) / 1000);
 
     /* clear the settings when the values are the same that we already
        sent to the device */
@@ -269,7 +269,7 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEA_INFO &info)
 
   // Additional "if" to find GPS strings
   if (parser.ParseNMEAString_Internal(line, info)) {
-    info.Connected.Update(fixed(MonotonicClockMS()) / 1000);
+    info.connected.Update(fixed(MonotonicClockMS()) / 1000);
     return true;
   }
 
@@ -313,7 +313,7 @@ DeviceDescriptor::PutMacCready(fixed value)
     return false;
 
   ScopeLock protect(device_blackboard.mutex);
-  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  NMEAInfo &basic = device_blackboard.SetRealState(index);
   settings_sent.mac_cready = value;
   settings_sent.mac_cready_available.Update(basic.clock);
 
@@ -330,7 +330,7 @@ DeviceDescriptor::PutBugs(fixed value)
     return false;
 
   ScopeLock protect(device_blackboard.mutex);
-  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  NMEAInfo &basic = device_blackboard.SetRealState(index);
   settings_sent.bugs = value;
   settings_sent.bugs_available.Update(basic.clock);
 
@@ -347,7 +347,7 @@ DeviceDescriptor::PutBallast(fixed value)
     return false;
 
   ScopeLock protect(device_blackboard.mutex);
-  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  NMEAInfo &basic = device_blackboard.SetRealState(index);
   settings_sent.ballast_fraction = value;
   settings_sent.ballast_fraction_available.Update(basic.clock);
 
@@ -383,7 +383,7 @@ DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
     return false;
 
   ScopeLock protect(device_blackboard.mutex);
-  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  NMEAInfo &basic = device_blackboard.SetRealState(index);
   settings_sent.qnh = value;
   settings_sent.qnh_available.Update(basic.clock);
 
@@ -486,7 +486,7 @@ bool
 DeviceDescriptor::ParseLine(const char *line)
 {
   ScopeLock protect(device_blackboard.mutex);
-  NMEA_INFO &basic = device_blackboard.SetRealState(index);
+  NMEAInfo &basic = device_blackboard.SetRealState(index);
   basic.UpdateClock();
   return ParseNMEA(line, basic);
 }

@@ -30,7 +30,7 @@ Copyright_License {
 #include <tchar.h>
 #include "Poco/RWLock.h"
 
-struct NMEA_INFO;
+struct NMEAInfo;
 struct SETTINGS_COMPUTER;
 
 class LoggerImpl;
@@ -41,14 +41,14 @@ class Logger {
 private:
   LoggerImpl _logger;
   mutable Poco::RWLock lock;
-  void LogEvent(const NMEA_INFO &gps_info, const char*);
+  void LogEvent(const NMEAInfo &gps_info, const char*);
 public:
-  void LogPoint(const NMEA_INFO &gps_info);
-  void LogStartEvent(const NMEA_INFO &gps_info);
-  void LogFinishEvent(const NMEA_INFO &gps_info);
-  void LogTurnpointEvent(const NMEA_INFO &gps_info);
-  void LogOnTaskEvent(const NMEA_INFO &gps_info);
-  void LogPilotEvent(const NMEA_INFO &gps_info);
+  void LogPoint(const NMEAInfo &gps_info);
+  void LogStartEvent(const NMEAInfo &gps_info);
+  void LogFinishEvent(const NMEAInfo &gps_info);
+  void LogTurnpointEvent(const NMEAInfo &gps_info);
+  void LogOnTaskEvent(const NMEAInfo &gps_info);
+  void LogPilotEvent(const NMEAInfo &gps_info);
   bool CheckDeclaration(void);
 
   gcc_pure
@@ -57,16 +57,16 @@ public:
   gcc_pure
   bool isLoggerActive() const;
 
-  bool LoggerClearFreeSpace(const NMEA_INFO &gps_info);
-  void guiStartLogger(const NMEA_INFO& gps_info,
+  bool LoggerClearFreeSpace(const NMEAInfo &gps_info);
+  void guiStartLogger(const NMEAInfo& gps_info,
                       const SETTINGS_COMPUTER& settings,
                       const ProtectedTaskManager &protected_task_manager,
                       bool noAsk = false);
-  void guiToggleLogger(const NMEA_INFO& gps_info,
+  void guiToggleLogger(const NMEAInfo& gps_info,
                        const SETTINGS_COMPUTER& settings,
                        const ProtectedTaskManager &protected_task_manager,
                        bool noAsk = false);
-  void guiStopLogger(const NMEA_INFO &gps_info,
+  void guiStopLogger(const NMEAInfo &gps_info,
                      bool noAsk = false);
   void LoggerDeviceDeclare(const OrderedTask& task);
   void LoggerNote(const TCHAR *text);

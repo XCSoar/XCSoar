@@ -39,7 +39,7 @@ public:
   ILECDevice(Port *_port):port(_port) {}
 
 public:
-  virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
+  virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
 };
 
 static bool
@@ -64,7 +64,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
  * Example: "$PILC,PDA1,1489,-3.21,274,15,58*7D"
  */
 static bool
-ParsePDA1(NMEAInputLine &line, NMEA_INFO &info)
+ParsePDA1(NMEAInputLine &line, NMEAInfo &info)
 {
   fixed value;
 
@@ -89,7 +89,7 @@ ParsePDA1(NMEAInputLine &line, NMEA_INFO &info)
 }
 
 bool
-ILECDevice::ParseNMEA(const char *_line, NMEA_INFO &info)
+ILECDevice::ParseNMEA(const char *_line, NMEAInfo &info)
 {
   NMEAInputLine line(_line);
   char type[16];

@@ -20,7 +20,7 @@
 
 #include "Wind/WindMeasurementList.hpp"
 
-struct NMEA_INFO;
+struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
 
@@ -59,7 +59,7 @@ public:
    * Send if a new wind vector has been established. This may happen as
    * new measurements flow in, but also if the altitude changes.
    */
-  void NewWind(const NMEA_INFO &info, DerivedInfo &derived, Vector& wind);
+  void NewWind(const NMEAInfo &info, DerivedInfo &derived, Vector& wind);
 
   const Vector GetWind(fixed Time, fixed h, bool &found) const;
 

@@ -38,46 +38,46 @@ Copyright_License {
 static void
 FillVario(MoreData &data)
 {
-  if (data.TotalEnergyVarioAvailable) {
-    data.BruttoVario = data.TotalEnergyVario;
+  if (data.total_energy_vario_available) {
+    data.BruttoVario = data.total_energy_vario;
 
-    if (!data.NettoVarioAvailable)
+    if (!data.netto_vario_available)
       /* copy the NettoVario value from BruttoVario; it will be
          overwritten by ComputeNettoVario() if the GliderSinkRate is
          known */
-      data.NettoVario = data.BruttoVario;
+      data.netto_vario = data.BruttoVario;
   }
 }
 
 static void
-ComputePressure(NMEA_INFO &basic, const SETTINGS_COMPUTER &settings_computer)
+ComputePressure(NMEAInfo &basic, const SETTINGS_COMPUTER &settings_computer)
 {
   const AtmosphericPressure &qnh = settings_computer.pressure;
   const bool qnh_available = settings_computer.pressure_available;
   const bool static_pressure_available = basic.static_pressure_available;
-  const bool pressure_altitude_available = basic.PressureAltitudeAvailable;
+  const bool pressure_altitude_available = basic.pressure_altitude_available;
 
   if (!basic.static_pressure_available) {
-    if (basic.PressureAltitudeAvailable) {
+    if (basic.pressure_altitude_available) {
       basic.static_pressure =
-        AtmosphericPressure::PressureAltitudeToStaticPressure(basic.PressureAltitude);
-      basic.static_pressure_available = basic.PressureAltitudeAvailable;
-    } else if (basic.BaroAltitudeAvailable && qnh_available) {
+        AtmosphericPressure::PressureAltitudeToStaticPressure(basic.pressure_altitude);
+      basic.static_pressure_available = basic.pressure_altitude_available;
+    } else if (basic.baro_altitude_available && qnh_available) {
       basic.static_pressure =
-        qnh.QNHAltitudeToStaticPressure(basic.BaroAltitude);
-      basic.static_pressure_available = basic.BaroAltitudeAvailable;
+        qnh.QNHAltitudeToStaticPressure(basic.baro_altitude);
+      basic.static_pressure_available = basic.baro_altitude_available;
     }
   }
 
-  if (!basic.PressureAltitudeAvailable) {
+  if (!basic.pressure_altitude_available) {
     if (static_pressure_available) {
-      basic.PressureAltitude =
+      basic.pressure_altitude =
         AtmosphericPressure::StaticPressureToPressureAltitude(basic.static_pressure);
-      basic.PressureAltitudeAvailable = basic.static_pressure_available;
-    } else if (basic.BaroAltitudeAvailable && qnh_available) {
-      basic.PressureAltitude =
-        qnh.QNHAltitudeToPressureAltitude(basic.BaroAltitude);
-      basic.PressureAltitudeAvailable = basic.BaroAltitudeAvailable;
+      basic.pressure_altitude_available = basic.static_pressure_available;
+    } else if (basic.baro_altitude_available && qnh_available) {
+      basic.pressure_altitude =
+        qnh.QNHAltitudeToPressureAltitude(basic.baro_altitude);
+      basic.pressure_altitude_available = basic.baro_altitude_available;
     }
   }
 
@@ -87,18 +87,18 @@ ComputePressure(NMEA_INFO &basic, const SETTINGS_COMPUTER &settings_computer)
        provided it may have a different QNH setting */
 
     if (static_pressure_available) {
-      basic.BaroAltitude =
+      basic.baro_altitude =
         qnh.StaticPressureToQNHAltitude(basic.static_pressure);
-      basic.BaroAltitudeAvailable = basic.static_pressure_available;
+      basic.baro_altitude_available = basic.static_pressure_available;
     } else if (pressure_altitude_available) {
-      basic.BaroAltitude =
-        qnh.PressureAltitudeToQNHAltitude(basic.PressureAltitude);
-      basic.BaroAltitudeAvailable = basic.PressureAltitudeAvailable;
+      basic.baro_altitude =
+        qnh.PressureAltitudeToQNHAltitude(basic.pressure_altitude);
+      basic.baro_altitude_available = basic.pressure_altitude_available;
     }
-  } else if (!basic.BaroAltitudeAvailable && pressure_altitude_available)
+  } else if (!basic.baro_altitude_available && pressure_altitude_available)
     /* no QNH, but let's fill in the best fallback value we can get,
        without setting BaroAltitudeAvailable */
-    basic.BaroAltitude = basic.PressureAltitude;
+    basic.baro_altitude = basic.pressure_altitude;
 }
 
 static void
@@ -106,40 +106,40 @@ ComputeNavAltitude(MoreData &basic,
                    const SETTINGS_COMPUTER &settings_computer)
 {
   basic.NavAltitude = settings_computer.EnableNavBaroAltitude &&
-    basic.BaroAltitudeAvailable
-    ? basic.BaroAltitude
-    : basic.GPSAltitude;
+    basic.baro_altitude_available
+    ? basic.baro_altitude
+    : basic.gps_altitude;
 }
 
 static void
-ComputeTrack(NMEA_INFO &basic, const NMEA_INFO &last)
+ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
 {
-  if (basic.track_available || !basic.LocationAvailable ||
-      !last.LocationAvailable)
+  if (basic.track_available || !basic.location_available ||
+      !last.location_available)
     return;
 
-  const GeoVector v = last.Location.distance_bearing(basic.Location);
+  const GeoVector v = last.location.distance_bearing(basic.location);
   if (v.Distance >= fixed_one)
     basic.track = v.Bearing;
 }
 
 static void
-ComputeGroundSpeed(NMEA_INFO &basic, const NMEA_INFO &last)
+ComputeGroundSpeed(NMEAInfo &basic, const NMEAInfo &last)
 {
   assert(basic.time_available);
   assert(last.time_available);
-  assert(basic.Time > last.Time);
+  assert(basic.time > last.time);
 
-  if (basic.GroundSpeedAvailable)
+  if (basic.ground_speed_available)
     return;
 
-  basic.GroundSpeed = fixed_zero;
-  if (!basic.LocationAvailable || !last.LocationAvailable)
+  basic.ground_speed = fixed_zero;
+  if (!basic.location_available || !last.location_available)
     return;
 
-  fixed t = basic.Time - last.Time;
-  fixed d = basic.Location.distance(last.Location);
-  basic.GroundSpeed = d / t;
+  fixed t = basic.time - last.time;
+  fixed d = basic.location.distance(last.location);
+  basic.ground_speed = d / t;
 }
 
 /**
@@ -147,36 +147,36 @@ ComputeGroundSpeed(NMEA_INFO &basic, const NMEA_INFO &last)
  * available.
  */
 static void
-ComputeAirspeed(NMEA_INFO &basic, const DerivedInfo &calculated)
+ComputeAirspeed(NMEAInfo &basic, const DerivedInfo &calculated)
 {
-  if (basic.AirspeedAvailable && basic.AirspeedReal)
+  if (basic.airspeed_available && basic.airspeed_real)
     /* got it already */
     return;
 
-  if (!basic.GroundSpeedAvailable || !calculated.wind_available ||
+  if (!basic.ground_speed_available || !calculated.wind_available ||
       !calculated.flight.flying) {
     /* impossible to calculate */
-    basic.AirspeedAvailable.Clear();
+    basic.airspeed_available.Clear();
     return;
   }
 
   fixed TrueAirspeedEstimated = fixed_zero;
 
   const SpeedVector wind = calculated.wind;
-  if (positive(basic.GroundSpeed) || wind.is_non_zero()) {
-    fixed x0 = basic.track.fastsine() * basic.GroundSpeed;
-    fixed y0 = basic.track.fastcosine() * basic.GroundSpeed;
+  if (positive(basic.ground_speed) || wind.is_non_zero()) {
+    fixed x0 = basic.track.fastsine() * basic.ground_speed;
+    fixed y0 = basic.track.fastcosine() * basic.ground_speed;
     x0 += wind.bearing.fastsine() * wind.norm;
     y0 += wind.bearing.fastcosine() * wind.norm;
 
     TrueAirspeedEstimated = hypot(x0, y0);
   }
 
-  basic.TrueAirspeed = TrueAirspeedEstimated;
-  basic.IndicatedAirspeed = TrueAirspeedEstimated
+  basic.true_airspeed = TrueAirspeedEstimated;
+  basic.indicated_airspeed = TrueAirspeedEstimated
     / AtmosphericPressure::AirDensityRatio(basic.GetAltitudeBaroPreferred());
-  basic.AirspeedAvailable.Update(basic.clock);
-  basic.AirspeedReal = false;
+  basic.airspeed_available.Update(basic.clock);
+  basic.airspeed_real = false;
 }
 
 /**
@@ -187,8 +187,8 @@ ComputeAirspeed(NMEA_INFO &basic, const DerivedInfo &calculated)
 static void
 ComputeEnergyHeight(MoreData &basic)
 {
-  if (basic.AirspeedAvailable)
-    basic.EnergyHeight = sqr(basic.TrueAirspeed) * fixed_inv_2g;
+  if (basic.airspeed_available)
+    basic.EnergyHeight = sqr(basic.true_airspeed) * fixed_inv_2g;
   else
     /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
        of the glider for sure. */
@@ -206,10 +206,10 @@ ComputeGPSVario(MoreData &basic, const MoreData &last)
 {
   assert(basic.time_available);
   assert(last.time_available);
-  assert(basic.Time > last.Time);
+  assert(basic.time > last.time);
 
   // Calculate time passed since last calculation
-  const fixed dT = basic.Time - last.Time;
+  const fixed dT = basic.time - last.time;
 
   const fixed Gain = basic.NavAltitude - last.NavAltitude;
   const fixed GainTE = basic.TEAltitude - last.TEAltitude;
@@ -222,8 +222,8 @@ ComputeGPSVario(MoreData &basic, const MoreData &last)
 static void
 ComputeBruttoVario(MoreData &basic)
 {
-  basic.BruttoVario = basic.TotalEnergyVarioAvailable
-    ? basic.TotalEnergyVario
+  basic.BruttoVario = basic.total_energy_vario_available
+    ? basic.total_energy_vario
     : basic.GPSVario;
 }
 
@@ -233,11 +233,11 @@ ComputeBruttoVario(MoreData &basic)
 static void
 ComputeNettoVario(MoreData &basic, const VarioInfo &vario)
 {
-  if (basic.NettoVarioAvailable)
+  if (basic.netto_vario_available)
     /* got it already */
     return;
 
-  basic.NettoVario = basic.BruttoVario - vario.sink_rate;
+  basic.netto_vario = basic.BruttoVario - vario.sink_rate;
 }
 
 /**
@@ -249,12 +249,12 @@ static void
 ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 {
   if (calculated.flight.flying &&
-      (positive(basic.GroundSpeed) || calculated.wind.is_non_zero())) {
+      (positive(basic.ground_speed) || calculated.wind.is_non_zero())) {
 
     // estimate bank angle (assuming balanced turn)
-    if (basic.AirspeedAvailable) {
+    if (basic.airspeed_available) {
       const fixed angle = atan(Angle::degrees(calculated.turn_rate_heading
-          * basic.TrueAirspeed * fixed_inv_g).value_radians());
+          * basic.true_airspeed * fixed_inv_g).value_radians());
 
       basic.acceleration.bank_angle = Angle::radians(angle);
       if (!basic.acceleration.available)
@@ -266,9 +266,9 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
     }
 
     // estimate pitch angle (assuming balanced turn)
-    if (basic.AirspeedAvailable && basic.TotalEnergyVarioAvailable)
-      basic.acceleration.pitch_angle = Angle::radians(atan2(basic.GPSVario - basic.TotalEnergyVario,
-                                                           basic.TrueAirspeed));
+    if (basic.airspeed_available && basic.total_energy_vario_available)
+      basic.acceleration.pitch_angle = Angle::radians(atan2(basic.GPSVario - basic.total_energy_vario,
+                                                           basic.true_airspeed));
     else
       basic.acceleration.pitch_angle = Angle::zero();
 
@@ -295,7 +295,7 @@ BasicComputer::Compute(MoreData &data, const MoreData &last,
                        const SETTINGS_COMPUTER &settings_computer)
 {
   if (!data.time_available || !last.time_available ||
-      data.Time <= last.Time)
+      data.time <= last.time)
     return;
 
   ComputeTrack(data, last);

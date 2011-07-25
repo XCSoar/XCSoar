@@ -40,7 +40,7 @@ Copyright_License {
  * @param GPS_INFO Pointer to the NMEA_INFO struct
  */
 void
-Simulator::GenerateFLARMTraffic(NMEA_INFO &basic)
+Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
 {
   static int i = 90;
 
@@ -91,13 +91,13 @@ Simulator::GenerateFLARMTraffic(NMEA_INFO &basic)
 }
 
 void
-Simulator::Process(NMEA_INFO &basic)
+Simulator::Process(NMEAInfo &basic)
 {
   if (!is_simulator())
     return;
 
   basic.UpdateClock();
-  basic.Connected.Update(basic.clock);
+  basic.connected.Update(basic.clock);
   basic.gps.satellites_used = 6;
   basic.gps.simulator = true;
   basic.gps.real = false;
@@ -106,23 +106,23 @@ Simulator::Process(NMEA_INFO &basic)
   basic.gps.android_internal_gps = false;
 #endif
 
-  basic.Location = FindLatitudeLongitude(basic.Location, basic.track,
-                                         basic.GroundSpeed);
-  basic.LocationAvailable.Update(basic.clock);
-  basic.GPSAltitudeAvailable.Update(basic.clock);
+  basic.location = FindLatitudeLongitude(basic.location, basic.track,
+                                         basic.ground_speed);
+  basic.location_available.Update(basic.clock);
+  basic.gps_altitude_available.Update(basic.clock);
   basic.track_available.Update(basic.clock);
-  basic.GroundSpeedAvailable.Update(basic.clock);
+  basic.ground_speed_available.Update(basic.clock);
 
   basic.time_available.Update(basic.clock);
-  basic.Time += fixed_one;
-  (BrokenTime &)basic.DateTime =
-    BrokenTime::FromSecondOfDayChecked((unsigned)basic.Time);
+  basic.time += fixed_one;
+  (BrokenTime &)basic.date_time_utc =
+    BrokenTime::FromSecondOfDayChecked((unsigned)basic.time);
 
   // use this to test FLARM parsing/display
   if (is_debug() && !is_altair())
     GenerateFLARMTraffic(basic);
 
   // clear Airspeed as it is not available in simulation mode
-  basic.AirspeedAvailable.Clear();
-  basic.AirspeedReal = false;
+  basic.airspeed_available.Clear();
+  basic.airspeed_real = false;
 }

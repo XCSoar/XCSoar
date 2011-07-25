@@ -131,7 +131,7 @@ IGCWriter::GetIRecord(void)
  * 8 = Simulation mode
  */
 fixed
-IGCWriter::GetEPE(const NMEA_INFO& gps_info)
+IGCWriter::GetEPE(const NMEAInfo& gps_info)
 {
   fixed dEPE = fixed_zero;
 
@@ -155,7 +155,7 @@ IGCWriter::GetEPE(const NMEA_INFO& gps_info)
  * returns Satellites in use if logger fix quality is a valid gps
  */
 int
-IGCWriter::GetSIU(const NMEA_INFO& gps_info)
+IGCWriter::GetSIU(const NMEAInfo& gps_info)
 {
   int iSIU=0;
 

@@ -51,7 +51,7 @@ InfoBoxContentVario::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentVarioNetto::Update(InfoBoxWindow &infobox)
 {
-  SetVSpeed(infobox, CommonInterface::Basic().NettoVario);
+  SetVSpeed(infobox, CommonInterface::Basic().netto_vario);
 }
 
 void

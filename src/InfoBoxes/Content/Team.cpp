@@ -125,7 +125,7 @@ void
 InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
-  const NMEA_INFO &basic = XCSoarInterface::Basic();
+  const NMEAInfo &basic = XCSoarInterface::Basic();
   const FLARM_STATE &flarm = basic.flarm;
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
 

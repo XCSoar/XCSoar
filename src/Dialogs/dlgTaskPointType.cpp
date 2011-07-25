@@ -130,7 +130,7 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type)
                               ordered_task->task_size() > 0 ?
                               ordered_task->get_tp(ordered_task->
                                   task_size() - 1)->get_location() :
-                              XCSoarInterface::Basic().Location);
+                              XCSoarInterface::Basic().location);
       if (!way_point)
         return false;
 

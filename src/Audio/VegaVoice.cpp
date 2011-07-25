@@ -309,7 +309,7 @@ VegaVoiceMessage::DoSend(gcc_unused double time, TCHAR *text)
 
 
 bool
-VegaVoiceMessage::Update(const NMEA_INFO &basic,
+VegaVoiceMessage::Update(const NMEAInfo &basic,
                          const DerivedInfo &calculated,
 			 const SETTINGS_COMPUTER &settings)
 {
@@ -364,7 +364,7 @@ VegaVoiceMessage::Update(const NMEA_INFO &basic,
               _stprintf(text, _T(",%d"), VWI_PLUS);
 	      TextToDigitsLarge(text, Units::ToUserUnit(calculated.WaypointDistance,
                                                   Units::DistanceUnit));
-              DoSend(Time, text);
+              DoSend(time, text);
 	      return true;
       } else {
 
@@ -382,7 +382,7 @@ VegaVoiceMessage::Update(const NMEA_INFO &basic,
                     _stprintf(text, _T(",%d"), VWI_BELOW);
 	          }
 	          TextToDigitsHuge(text, fabs(tad));
-                  DoSend(Time, text);
+                  DoSend(time, text);
 	          return true;
 	        }
 	      }
@@ -411,7 +411,7 @@ VegaVoiceMessage::Update(const NMEA_INFO &basic,
       // Now: "INFO"
       // Later: "NEW WAYPOINT"
       _stprintf(text, _T(",%d"), VWI_INFO);
-      DoSend(Time, text);
+      DoSend(time, text);
       return true;
     }
 #endif
@@ -425,7 +425,7 @@ VegaVoiceMessage::Update(const NMEA_INFO &basic,
       // Now: INFO
       // Later: "INSIDE SECTOR"
       _stprintf(text, _T(",%d"), VWI_INFO);
-      DoSend(Time, text);
+      DoSend(time, text);
       return true;
     }
 #endif
@@ -441,7 +441,7 @@ VegaVoiceMessage::Update(const NMEA_INFO &basic,
       // Later give distance/height/direction?
       // Later: "WARNING AIRSPACE ABOVE"
       _stprintf(text, _T(",%d,%d,0"), VWI_WARNING, VWI_AIRSPACE);
-      DoSend(Time, text);
+      DoSend(time, text);
       return true;
     }
 #endif
@@ -525,7 +525,7 @@ VegaVoice::~VegaVoice() {
 }
 
 void
-VegaVoice::Update(const NMEA_INFO &basic, const DerivedInfo &calculated,
+VegaVoice::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
 		  const SETTINGS_COMPUTER &settings)
 {
 

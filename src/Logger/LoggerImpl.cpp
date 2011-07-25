@@ -48,16 +48,16 @@
 #include <algorithm>
 
 const struct LoggerImpl::LoggerPreTakeoffBuffer &
-LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEA_INFO &src)
+LoggerImpl::LoggerPreTakeoffBuffer::operator=(const NMEAInfo &src)
 {
-  Location = src.Location;
-  Altitude = src.GPSAltitude;
+  Location = src.location;
+  Altitude = src.gps_altitude;
   BaroAltitude = src.GetAltitudeBaroPreferred();
 
-  DateTime = src.DateTime;
-  Time = src.Time;
+  DateTime = src.date_time_utc;
+  Time = src.time;
 
-  NAVWarning = !src.LocationAvailable;
+  NAVWarning = !src.location_available;
   FixQuality = src.gps.fix_quality;
   SatellitesUsed = src.gps.satellites_used;
   HDOP = src.gps.hdop;
@@ -107,7 +107,7 @@ IGCCharToNum(TCHAR c)
  * @param gps_info NMEA_INFO struct holding the current date
  */
 void
-LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
+LoggerImpl::StopLogger(const NMEAInfo &gps_info)
 {
   // Logger can't be switched off if already off -> cancel
   if (writer == NULL)
@@ -128,9 +128,9 @@ LoggerImpl::StopLogger(const NMEA_INFO &gps_info)
 }
 
 void
-LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
+LoggerImpl::LogPointToBuffer(const NMEAInfo &gps_info)
 {
-  if (!gps_info.Connected && PreTakeoffBuffer.empty())
+  if (!gps_info.connected && PreTakeoffBuffer.empty())
     return;
 
   LoggerPreTakeoffBuffer item;
@@ -139,16 +139,16 @@ LoggerImpl::LogPointToBuffer(const NMEA_INFO &gps_info)
 }
 
 void
-LoggerImpl::LogEvent(const NMEA_INFO& gps_info, const char* event)
+LoggerImpl::LogEvent(const NMEAInfo& gps_info, const char* event)
 {
   if (writer != NULL)
     writer->LogEvent(gps_info, event);
 }
 
 void
-LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
+LoggerImpl::LogPoint(const NMEAInfo& gps_info)
 {
-  if (!gps_info.Connected || !gps_info.time_available)
+  if (!gps_info.connected || !gps_info.time_available)
     return;
 
   if (writer == NULL) {
@@ -158,17 +158,17 @@ LoggerImpl::LogPoint(const NMEA_INFO& gps_info)
 
   while (!PreTakeoffBuffer.empty()) {
     const struct LoggerPreTakeoffBuffer &src = PreTakeoffBuffer.shift();
-    NMEA_INFO tmp_info;
-    tmp_info.Location = src.Location;
-    tmp_info.GPSAltitude = src.Altitude;
-    tmp_info.BaroAltitude = src.BaroAltitude;
-    tmp_info.DateTime = src.DateTime;
-    tmp_info.Time = src.Time;
+    NMEAInfo tmp_info;
+    tmp_info.location = src.Location;
+    tmp_info.gps_altitude = src.Altitude;
+    tmp_info.baro_altitude = src.BaroAltitude;
+    tmp_info.date_time_utc = src.DateTime;
+    tmp_info.time = src.Time;
 
     if (src.NAVWarning)
-      tmp_info.LocationAvailable.Clear();
+      tmp_info.location_available.Clear();
     else
-      tmp_info.LocationAvailable.Update(tmp_info.clock);
+      tmp_info.location_available.Update(tmp_info.clock);
     tmp_info.gps.fix_quality = src.FixQuality;
     tmp_info.gps.satellites_used = src.SatellitesUsed;
     tmp_info.gps.hdop = src.HDOP;
@@ -195,7 +195,7 @@ IsAlphaNum (TCHAR c)
 }
 
 void
-LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
+LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     const SETTINGS_COMPUTER &settings, const TCHAR *astrAssetNumber)
 {
   int i;
@@ -218,9 +218,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
       // Long file name
       _stprintf(name,
                 _T("%04u-%02u-%02u-XCS-%c%c%c-%02d.igc"),
-                gps_info.DateTime.year,
-                gps_info.DateTime.month,
-                gps_info.DateTime.day,
+                gps_info.date_time_utc.year,
+                gps_info.date_time_utc.month,
+                gps_info.date_time_utc.day,
           strAssetNumber[0],
           strAssetNumber[1],
           strAssetNumber[2],
@@ -228,9 +228,9 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
     } else {
       // Short file name
       TCHAR cyear, cmonth, cday, cflight;
-      cyear = NumToIGCChar((int)gps_info.DateTime.year % 10);
-      cmonth = NumToIGCChar(gps_info.DateTime.month);
-      cday = NumToIGCChar(gps_info.DateTime.day);
+      cyear = NumToIGCChar((int)gps_info.date_time_utc.year % 10);
+      cmonth = NumToIGCChar(gps_info.date_time_utc.month);
+      cday = NumToIGCChar(gps_info.date_time_utc.day);
       cflight = NumToIGCChar(i);
       _stprintf(name,
                 _T("%c%c%cX%c%c%c%c.igc"),
@@ -263,7 +263,7 @@ LoggerImpl::LoggerNote(const TCHAR *text)
 }
 
 static time_t
-LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
+LogFileDate(const NMEAInfo &gps_info, const TCHAR *filename)
 {
   TCHAR asset[MAX_PATH];
   unsigned short year, month, day, num;
@@ -290,7 +290,7 @@ LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
 		                 &cyear, &cmonth, &cday, asset, &cflight);
 
   if (matches == 5) {
-    int iyear = (int)gps_info.DateTime.year;
+    int iyear = (int)gps_info.date_time_utc.year;
     int syear = iyear % 10;
     int yearzero = iyear - syear;
     int yearthis = IGCCharToNum(cyear) + yearzero;
@@ -321,7 +321,7 @@ LogFileDate(const NMEA_INFO &gps_info, const TCHAR *filename)
 }
 
 static bool
-LogFileIsOlder(const NMEA_INFO &gps_info,
+LogFileIsOlder(const NMEAInfo &gps_info,
                const TCHAR *oldestname, const TCHAR *thisname)
 {
   return LogFileDate(gps_info, oldestname) > LogFileDate(gps_info, thisname);
@@ -334,7 +334,7 @@ LogFileIsOlder(const NMEA_INFO &gps_info,
  * @return True if a file was found and deleted, False otherwise
  */
 static bool
-DeleteOldestIGCFile(const NMEA_INFO &gps_info, const TCHAR *pathname)
+DeleteOldestIGCFile(const NMEAInfo &gps_info, const TCHAR *pathname)
 {
   TCHAR oldestname[MAX_PATH];
   TCHAR fullname[MAX_PATH];
@@ -378,7 +378,7 @@ DeleteOldestIGCFile(const NMEA_INFO &gps_info, const TCHAR *pathname)
  * @return True if enough space could be cleared, False otherwise
  */
 bool
-LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
+LoggerImpl::LoggerClearFreeSpace(const NMEAInfo &gps_info)
 {
   bool found = true;
   unsigned long kbfree = 0;
@@ -411,7 +411,7 @@ LoggerImpl::LoggerClearFreeSpace(const NMEA_INFO &gps_info)
 
 // TODO: fix scope so only gui things can start it
 void
-LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
+LoggerImpl::StartLogger(const NMEAInfo &gps_info,
                         const SETTINGS_COMPUTER &settings,
                         const TCHAR *strAssetNumber,
                         const Declaration &decl)
@@ -425,14 +425,14 @@ LoggerImpl::StartLogger(const NMEA_INFO &gps_info,
   else
     Profile::GetDeviceConfig(0, device_config);
 
-  writer->header(gps_info.DateTime,
+  writer->header(gps_info.date_time_utc,
                  decl.PilotName, decl.AircraftType, decl.AircraftReg,
                  strAssetNumber, device_config.driver_name);
 
   if (decl.size()) {
     BrokenDateTime FirstDateTime = !PreTakeoffBuffer.empty()
       ? PreTakeoffBuffer.peek().DateTime
-      : gps_info.DateTime;
+      : gps_info.date_time_utc;
     writer->StartDeclaration(FirstDateTime, decl.size());
 
     for (unsigned i = 0; i< decl.size(); ++i)

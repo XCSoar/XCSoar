@@ -35,14 +35,14 @@ namespace AutoQNH
 }
 
 void
-AutoQNH::Process(const NMEA_INFO &basic, DerivedInfo &calculated,
+AutoQNH::Process(const NMEAInfo &basic, DerivedInfo &calculated,
         const SETTINGS_COMPUTER &settings_computer, const Waypoints &way_points)
 {
   if (!calculated.flight.on_ground // must be on ground
       || IsFinished()    // only do it once
       || !basic.gps.real // never in replay mode / simulator
-      || !basic.LocationAvailable // Reject if no valid GPS fix
-      || !basic.PressureAltitudeAvailable // Reject if no pressure altitude
+      || !basic.location_available // Reject if no valid GPS fix
+      || !basic.pressure_altitude_available // Reject if no pressure altitude
       || settings_computer.pressure_available // Reject if QNH already known
     ) {
     if (!IsFinished())
@@ -75,12 +75,12 @@ AutoQNH::IsFinished()
 }
 
 bool
-AutoQNH::CalculateQNH(const NMEA_INFO &basic, DerivedInfo &calculated,
+AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
                       const AtmosphericPressure &pressure,
                       const Waypoints &way_points)
 {
   const Waypoint *next_wp;
-  next_wp = way_points.lookup_location(basic.Location, fixed(1000));
+  next_wp = way_points.lookup_location(basic.location, fixed(1000));
 
   if (next_wp && next_wp->IsAirport())
     CalculateQNH(basic, calculated, pressure, next_wp->Altitude);
@@ -93,10 +93,10 @@ AutoQNH::CalculateQNH(const NMEA_INFO &basic, DerivedInfo &calculated,
 }
 
 void
-AutoQNH::CalculateQNH(const NMEA_INFO &basic, DerivedInfo &calculated,
+AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
                       const AtmosphericPressure &pressure,
                       fixed altitude)
 {
-  calculated.pressure.set_QNH(pressure.FindQNHFromPressureAltitude(basic.PressureAltitude, altitude));
+  calculated.pressure.set_QNH(pressure.FindQNHFromPressureAltitude(basic.pressure_altitude, altitude));
   calculated.pressure_available.Update(basic.clock);
 }

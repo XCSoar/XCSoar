@@ -136,22 +136,22 @@ WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived)
     //to determine the quality)
   }
 
-  curVector = Vector(SpeedVector(info.track, info.GroundSpeed));
+  curVector = Vector(SpeedVector(info.track, info.ground_speed));
 
   if (!windsamples.full()) {
     WindSample &sample = windsamples.append();
     sample.v = curVector;
-    sample.t = info.Time;
-    sample.mag = info.GroundSpeed;
+    sample.t = info.time;
+    sample.mag = info.ground_speed;
   } else {
     // TODO code: give error, too many wind samples
     // or use circular buffer
   }
 
-  if (first || (info.GroundSpeed < minVector.Magnitude()))
+  if (first || (info.ground_speed < minVector.Magnitude()))
     minVector = curVector;
 
-  if (first || (info.GroundSpeed > maxVector.Magnitude()))
+  if (first || (info.ground_speed > maxVector.Magnitude()))
     maxVector = curVector;
 
   if (fullCircle) { //we have completed a full circle!
@@ -173,15 +173,15 @@ WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived)
       startcircle--;
 
     if (startcircle == 1) {
-      climbstartpos = GeoPoint(info.Location.Longitude,
-                               info.Location.Latitude);
-      climbstarttime = info.Time;
+      climbstartpos = GeoPoint(info.location.Longitude,
+                               info.location.Latitude);
+      climbstarttime = info.time;
       startcircle = 0;
     }
 
-    climbendpos = GeoPoint(info.Location.Longitude,
-                           info.Location.Latitude);
-    climbendtime = info.Time;
+    climbendpos = GeoPoint(info.location.Longitude,
+                           info.location.Latitude);
+    climbendtime = info.time;
 
     //no need to reset fullCircle, it will automaticly be reset in the next itteration.
   }
@@ -200,7 +200,7 @@ WindAnalyser::slot_Altitude(const MoreData &info, DerivedInfo &derived)
  * Called if the flightmode changes
  */
 void
-WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
+WindAnalyser::slot_newFlightMode(const NMEAInfo &info,
                                  const DerivedInfo &derived,
                                  bool left, int marker)
 {

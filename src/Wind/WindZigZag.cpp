@@ -71,19 +71,19 @@ using std::max;
 #include "Math/newuoa.hh"
 
 WindZigZagGlue::Result
-WindZigZagGlue::Update(const NMEA_INFO &basic, const DerivedInfo &derived)
+WindZigZagGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 {
   // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 
   // reset if flight hasnt started or airspeed instrument not available
   if (!derived.flight.flying ||
-      !basic.AirspeedAvailable) {
+      !basic.airspeed_available) {
     reset();
     return Result(0);
   }
 
   // ensure system is reset if time retreats
-  if (back_in_time(basic.Time)) {
+  if (back_in_time(basic.time)) {
     reset();
     return Result(0);
   }
@@ -92,18 +92,18 @@ WindZigZagGlue::Update(const NMEA_INFO &basic, const DerivedInfo &derived)
   if ((fabs(derived.turn_rate) > fixed(20)) ||
       (fabs(basic.acceleration.g_load - fixed_one) > fixed(0.3))) {
 
-    blackout(basic.Time);
+    blackout(basic.time);
     return Result(0);
   }
 
   // is this point able to be added?
-  if (!do_append(basic.Time, basic.track))
+  if (!do_append(basic.time, basic.track))
     return Result(0);
 
   // ok to add a point
-  append(ZZObs(basic.Time,
-               basic.GroundSpeed, basic.track,
-               basic.TrueAirspeed));
+  append(ZZObs(basic.time,
+               basic.ground_speed, basic.track,
+               basic.true_airspeed));
 
   if (!full())
     return Result(0);
