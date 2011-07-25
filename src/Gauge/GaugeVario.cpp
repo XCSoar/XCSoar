@@ -130,11 +130,11 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
     // JMW averager now displays netto average if not circling
     if (!Calculated().Circling) {
       RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
-                  Units::ToUserVSpeed(Calculated().NettoAverage30s),
+                  Units::ToUserVSpeed(Calculated().netto_average),
                   _T("NetAvg"));
     } else {
       RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
-                  Units::ToUserVSpeed(Calculated().Average30s), _T("Avg"));
+                  Units::ToUserVSpeed(Calculated().average), _T("Avg"));
     }
   }
 
@@ -163,12 +163,12 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
 
   fixed vval = Basic().BruttoVario;
   ival = ValueToNeedlePos(fixed(vval));
-  sval = ValueToNeedlePos(Calculated().GliderSinkRate);
+  sval = ValueToNeedlePos(Calculated().sink_rate);
   if (ShowAveNeedle) {
     if (!Calculated().Circling)
-      ival_av = ValueToNeedlePos(Calculated().NettoAverage30s);
+      ival_av = ValueToNeedlePos(Calculated().netto_average);
     else
-      ival_av = ValueToNeedlePos(Calculated().Average30s);
+      ival_av = ValueToNeedlePos(Calculated().average);
   }
 
   // clear items first

@@ -333,7 +333,7 @@ CrossSectionWindow::PaintGlide(Chart &chart)
   if (gps_info.GroundSpeed > fixed(10)) {
     fixed t = vec.Distance / gps_info.GroundSpeed;
     chart.DrawLine(fixed_zero, gps_info.NavAltitude, vec.Distance,
-                   gps_info.NavAltitude + calculated_info.Average30s * t,
+                   gps_info.NavAltitude + calculated_info.average * t,
                    ChartLook::STYLE_BLUETHIN);
   }
 }

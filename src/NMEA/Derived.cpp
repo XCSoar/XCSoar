@@ -52,7 +52,7 @@ AirspaceWarningsInfo::Clear()
 void
 DerivedInfo::Reset()
 {
-  VARIO_INFO::Clear();
+  VarioInfo::Clear();
   CLIMB_INFO::Clear();
   CIRCLING_INFO::Clear();
   TEAMCODE_INFO::Clear();

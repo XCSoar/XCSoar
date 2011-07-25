@@ -27,19 +27,19 @@ Copyright_License {
 #include <algorithm>
 
 void
-VARIO_INFO::ClearLiftDatabase()
+VarioInfo::ClearLiftDatabase()
 {
-  std::fill(LiftDatabase, LiftDatabase + 36, fixed_zero);
+  std::fill(lift_database, lift_database + 36, fixed_zero);
 }
 
 void
-VARIO_INFO::Clear()
+VarioInfo::Clear()
 {
-  GliderSinkRate = fixed_zero;
-  CruiseLD = fixed(INVALID_GR);
-  AverageLD = fixed(INVALID_GR);
-  LD = fixed(INVALID_GR);
-  LDvario = fixed(INVALID_GR);
+  sink_rate = fixed_zero;
+  cruise_ld = fixed(INVALID_GR);
+  average_ld = fixed(INVALID_GR);
+  ld = fixed(INVALID_GR);
+  ld_vario = fixed(INVALID_GR);
 
   ClearLiftDatabase();
 }

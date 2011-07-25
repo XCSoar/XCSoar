@@ -32,49 +32,49 @@ Copyright_License {
 void
 InfoBoxContentLDInstant::Update(InfoBoxWindow &infobox)
 {
-  if (XCSoarInterface::Calculated().LD == fixed(999)) {
+  if (XCSoarInterface::Calculated().ld == fixed(999)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().LD);
+  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().ld);
 }
 
 void
 InfoBoxContentLDCruise::Update(InfoBoxWindow &infobox)
 {
-  if (XCSoarInterface::Calculated().CruiseLD == fixed(999)) {
+  if (XCSoarInterface::Calculated().cruise_ld == fixed(999)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().CruiseLD);
+  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().cruise_ld);
 }
 
 void
 InfoBoxContentLDAvg::Update(InfoBoxWindow &infobox)
 {
-  if (XCSoarInterface::Calculated().AverageLD == 0) {
+  if (XCSoarInterface::Calculated().average_ld == 0) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  if (XCSoarInterface::Calculated().AverageLD < 0)
+  if (XCSoarInterface::Calculated().average_ld < 0)
     infobox.SetValue(_T("^^^"));
-  else if (XCSoarInterface::Calculated().AverageLD >= 999)
+  else if (XCSoarInterface::Calculated().average_ld >= 999)
     infobox.SetValue(_T("+++"));
   else
     SetValueFromFixed(infobox, _T("%2.0f"),
-                      fixed(XCSoarInterface::Calculated().AverageLD));
+                      fixed(XCSoarInterface::Calculated().average_ld));
 }
 
 void
 InfoBoxContentLDVario::Update(InfoBoxWindow &infobox)
 {
-  if (XCSoarInterface::Calculated().LDvario == fixed(999) ||
+  if (XCSoarInterface::Calculated().ld_vario == fixed(999) ||
       !XCSoarInterface::Basic().TotalEnergyVarioAvailable ||
       !XCSoarInterface::Basic().AirspeedAvailable) {
     infobox.SetInvalid();
@@ -82,5 +82,5 @@ InfoBoxContentLDVario::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().LDvario);
+  SetValueFromFixed(infobox, _T("%2.0f"), XCSoarInterface::Calculated().ld_vario);
 }

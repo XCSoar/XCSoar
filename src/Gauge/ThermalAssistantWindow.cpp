@@ -128,7 +128,7 @@ ThermalAssistantWindow::UpdateLiftMax()
   max_lift = fixed_one;
 
   for (unsigned i = 0; i < 36; i++)
-    max_lift = std::max(max_lift, fabs(derived.LiftDatabase[i]));
+    max_lift = std::max(max_lift, fabs(derived.lift_database[i]));
 
   max_lift = ceil(max_lift);
 }
@@ -143,9 +143,9 @@ ThermalAssistantWindow::UpdateLiftPoints()
     Angle d = Angle::degrees(fixed(i * 10));
 
     lift_points[i].x = (int)((d - direction).cos() *
-                       RangeScale(derived.LiftDatabase[i]));
+                       RangeScale(derived.lift_database[i]));
     lift_points[i].y = (int)((d - direction).sin() *
-                       RangeScale(derived.LiftDatabase[i]));
+                       RangeScale(derived.lift_database[i]));
 
     if (!LeftTurn()) {
       lift_points[i].x *= -1;

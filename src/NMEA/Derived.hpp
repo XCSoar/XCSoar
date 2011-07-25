@@ -143,7 +143,7 @@ struct AirspaceWarningsInfo {
  * NMEA_INFO struct
  */
 struct DerivedInfo: 
-  public VARIO_INFO,
+  public VarioInfo,
   public CLIMB_INFO,
   public CIRCLING_INFO,
   public TERRAIN_ALT_INFO,

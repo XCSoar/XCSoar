@@ -26,33 +26,30 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-/**
- * Derived vario data
- * 
- */
-struct VARIO_INFO
+/** Derived vario data */
+struct VarioInfo
 {
-  fixed GliderSinkRate;
+  fixed sink_rate;
 
   /** Average vertical speed based on 30s */
-  fixed Average30s;
+  fixed average;
   /** Average vertical speed of the airmass based on 30s */
-  fixed NettoAverage30s;
+  fixed netto_average;
 
   /** Instant glide ratio */
-  fixed LD;
+  fixed ld;
   /** Glide ratio while in Cruise mode */
-  fixed CruiseLD;
+  fixed cruise_ld;
   /** Average glide ratio */
-  int AverageLD;
+  int average_ld;
 
-  fixed LDvario;
+  fixed ld_vario;
 
   /**
    * The lift of each ten degrees while circling.
    * Index 1 equals 5 to 15 degrees.
    */
-  fixed LiftDatabase[36];
+  fixed lift_database[36];
 
   void ClearLiftDatabase();
 

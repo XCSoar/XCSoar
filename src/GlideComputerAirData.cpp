@@ -121,7 +121,7 @@ GlideComputerAirData::ProcessVertical()
   CruiseLD();
 
   if (calculated.flight.Flying && !calculated.Circling)
-    calculated.AverageLD = rotaryLD.calculate();
+    calculated.average_ld = rotaryLD.calculate();
 
   Average30s();
   AverageClimbRate();
@@ -231,9 +231,9 @@ GlideComputerAirData::NettoVario()
   const MoreData &basic = Basic();
   const DerivedInfo &calculated = Calculated();
   const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
-  VARIO_INFO &vario = SetCalculated();
+  VarioInfo &vario = SetCalculated();
 
-  vario.GliderSinkRate =
+  vario.sink_rate =
     calculated.flight.Flying && basic.AirspeedAvailable
     ? - settings_computer.glide_polar_task.SinkRate(basic.IndicatedAirspeed,
                                                     basic.acceleration.g_load)
@@ -270,8 +270,8 @@ GlideComputerAirData::Average30s()
   if (!time_advanced() || calculated.Circling != LastCalculated().Circling) {
     vario_30s_filter.reset();
     netto_30s_filter.reset();
-    calculated.Average30s = basic.BruttoVario;
-    calculated.NettoAverage30s = basic.NettoVario;
+    calculated.average = basic.BruttoVario;
+    calculated.netto_average = basic.NettoVario;
   }
 
   if (!time_advanced())
@@ -285,8 +285,8 @@ GlideComputerAirData::Average30s()
     vario_30s_filter.update(basic.BruttoVario);
     netto_30s_filter.update(basic.NettoVario);
   }
-  calculated.Average30s = vario_30s_filter.average();
-  calculated.NettoAverage30s = netto_30s_filter.average();
+  calculated.average = vario_30s_filter.average();
+  calculated.netto_average = netto_30s_filter.average();
 }
 
 void
@@ -366,7 +366,7 @@ GlideComputerAirData::UpdateLiftDatabase()
        left == negative((calculated.heading - h).as_delta().value_degrees());
        h += heading_step) {
     unsigned index = heading_to_index(h);
-    calculated.LiftDatabase[index] = Basic().BruttoVario;
+    calculated.lift_database[index] = Basic().BruttoVario;
   }
 
   // detect zero crossing
@@ -377,7 +377,7 @@ GlideComputerAirData::UpdateLiftDatabase()
 
     fixed h_av = fixed_zero;
     for (unsigned i=0; i<36; ++i) {
-      h_av += calculated.LiftDatabase[i];
+      h_av += calculated.lift_database[i];
     }
     h_av/= 36;
     calculated.trace_history.CirclingAverage.push(h_av);
@@ -419,15 +419,15 @@ GlideComputerAirData::LD()
   DerivedInfo &calculated = SetCalculated();
 
   if (time_retreated()) {
-    calculated.LDvario = fixed(INVALID_GR);
-    calculated.LD = fixed(INVALID_GR);
+    calculated.ld_vario = fixed(INVALID_GR);
+    calculated.ld = fixed(INVALID_GR);
   }
 
   if (time_advanced()) {
     fixed DistanceFlown = Distance(Basic().Location, LastBasic().Location);
 
-    calculated.LD =
-      UpdateLD(calculated.LD, DistanceFlown,
+    calculated.ld =
+      UpdateLD(calculated.ld, DistanceFlown,
                LastBasic().NavAltitude - Basic().NavAltitude, fixed(0.1));
 
     if (calculated.flight.Flying && !calculated.Circling)
@@ -437,11 +437,11 @@ GlideComputerAirData::LD()
   // LD instantaneous from vario, updated every reading..
   if (Basic().TotalEnergyVarioAvailable && Basic().AirspeedAvailable &&
       calculated.flight.Flying) {
-    calculated.LDvario =
-      UpdateLD(calculated.LDvario, Basic().IndicatedAirspeed,
+    calculated.ld_vario =
+      UpdateLD(calculated.ld_vario, Basic().IndicatedAirspeed,
                -Basic().TotalEnergyVario, fixed(0.3));
   } else {
-    calculated.LDvario = fixed(INVALID_GR);
+    calculated.ld_vario = fixed(INVALID_GR);
   }
 }
 
@@ -458,8 +458,8 @@ GlideComputerAirData::CruiseLD()
     } else {
       fixed DistanceFlown = Distance(Basic().Location,
                                      calculated.CruiseStartLocation);
-      calculated.CruiseLD =
-          UpdateLD(calculated.CruiseLD, DistanceFlown,
+      calculated.cruise_ld =
+          UpdateLD(calculated.cruise_ld, DistanceFlown,
                    calculated.CruiseStartAlt - Basic().NavAltitude,
                    fixed_half);
     }
@@ -978,7 +978,7 @@ GlideComputerAirData::ThermalBand()
     tbi.MaxThermalHeight = dheight;
 
   // only do this if in thermal and have been climbing
-  if ((!Calculated().Circling) || negative(Calculated().Average30s))
+  if ((!Calculated().Circling) || negative(Calculated().average))
     return;
 
   tbi.Add(dheight, Basic().BruttoVario);

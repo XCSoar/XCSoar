@@ -57,10 +57,10 @@ InfoBoxContentVarioNetto::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermal30s::Update(InfoBoxWindow &infobox)
 {
-  SetVSpeed(infobox, XCSoarInterface::Calculated().Average30s);
+  SetVSpeed(infobox, XCSoarInterface::Calculated().average);
 
   // Set Color (red/black)
-  infobox.SetColor(XCSoarInterface::Calculated().Average30s * fixed_two <
+  infobox.SetColor(XCSoarInterface::Calculated().average * fixed_two <
       XCSoarInterface::Calculated().common_stats.current_risk_mc ? 1 : 0);
 }
 

@@ -231,13 +231,13 @@ ComputeBruttoVario(MoreData &basic)
  * Compute the NettoVario value if it's unavailable.
  */
 static void
-ComputeNettoVario(MoreData &basic, const VARIO_INFO &vario)
+ComputeNettoVario(MoreData &basic, const VarioInfo &vario)
 {
   if (basic.NettoVarioAvailable)
     /* got it already */
     return;
 
-  basic.NettoVario = basic.BruttoVario - vario.GliderSinkRate;
+  basic.NettoVario = basic.BruttoVario - vario.sink_rate;
 }
 
 /**
