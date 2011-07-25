@@ -78,18 +78,15 @@ struct OneClimbInfo {
   }
 };
 
-/**
- * Derived climb data
- * 
- */
-struct CLIMB_INFO
+/** Derived climb data */
+struct ClimbInfo
 {
   OneClimbInfo current_thermal;
 
   OneClimbInfo last_thermal;
 
   /** Average vertical speed in the last thermals smoothed by low-pass-filter */
-  fixed LastThermalAverageSmooth;
+  fixed last_thermal_average_smooth;
 
   void Clear();
 };

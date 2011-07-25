@@ -140,7 +140,7 @@ struct AirspaceWarningsInfo {
  */
 struct DerivedInfo: 
   public VarioInfo,
-  public CLIMB_INFO,
+  public ClimbInfo,
   public CirclingInfo,
   public TerrainInfo,
   public TeamInfo

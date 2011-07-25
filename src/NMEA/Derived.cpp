@@ -53,7 +53,7 @@ void
 DerivedInfo::Reset()
 {
   VarioInfo::Clear();
-  CLIMB_INFO::Clear();
+  ClimbInfo::Clear();
   CirclingInfo::Clear();
   TeamInfo::Clear();
   TerrainInfo::Clear();

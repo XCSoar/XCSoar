@@ -73,7 +73,7 @@ GlideComputerTask::ProcessBasicTask()
 
     if (Calculated().last_thermal.IsDefined()) {
       if (task->update_auto_mc(current_as, std::max(fixed_zero, 
-                                                    Calculated().LastThermalAverageSmooth))) {
+                                                    Calculated().last_thermal_average_smooth))) {
         derived.auto_mac_cready = task->get_glide_polar().GetMC();
         derived.auto_mac_cready_available.Update(basic.clock);
       }

@@ -32,7 +32,7 @@ OneClimbInfo::Clear()
 }
 
 void
-CLIMB_INFO::Clear()
+ClimbInfo::Clear()
 {
   current_thermal.Clear();
   last_thermal.Clear();

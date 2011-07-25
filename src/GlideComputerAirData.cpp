@@ -917,11 +917,11 @@ GlideComputerAirData::LastThermalStats()
   calculated.last_thermal.CalculateLiftRate();
 
   if (!was_defined)
-    calculated.LastThermalAverageSmooth =
+    calculated.last_thermal_average_smooth =
         calculated.last_thermal.lift_rate;
   else
-    calculated.LastThermalAverageSmooth =
-        LowPassFilter(calculated.LastThermalAverageSmooth,
+    calculated.last_thermal_average_smooth =
+        LowPassFilter(calculated.last_thermal_average_smooth,
                       calculated.last_thermal.lift_rate, fixed(0.3));
 
   OnDepartedThermal();
