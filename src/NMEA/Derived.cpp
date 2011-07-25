@@ -24,15 +24,15 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 void
-TERRAIN_ALT_INFO::Clear()
+TerrainInfo::Clear()
 {
-  TerrainValid = false;
-  TerrainWarning = false;
+  terrain_valid = false;
+  terrain_warning = false;
 
   terrain_base_valid = false;
 
-  AltitudeAGLValid = false;
-  AltitudeAGL = fixed_zero;
+  altitude_agl_valid = false;
+  altitude_agl = fixed_zero;
 }
 
 void
@@ -56,7 +56,7 @@ DerivedInfo::Reset()
   CLIMB_INFO::Clear();
   CIRCLING_INFO::Clear();
   TEAMCODE_INFO::Clear();
-  TERRAIN_ALT_INFO::Clear();
+  TerrainInfo::Clear();
   TEAMCODE_INFO::Clear();
 
   heading = Angle::zero();

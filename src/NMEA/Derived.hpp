@@ -50,33 +50,29 @@ Copyright_License {
  * Derived terrain altitude information, including glide range
  * 
  */
-struct TERRAIN_ALT_INFO
+struct TerrainInfo
 {
   /** True if terrain is valid, False otherwise */
-  bool TerrainValid;
+  bool terrain_valid;
 
-  /**
-   * Does the attribute #TerrainBase have a valid value?
-   */
+  /** Does the attribute #TerrainBase have a valid value? */
   bool terrain_base_valid;
 
-  /**
-   * Does the attribute #AltitudeAGL have a valid value?
-   */
-  bool AltitudeAGLValid;
+  /** Does the attribute #AltitudeAGL have a valid value? */
+  bool altitude_agl_valid;
 
-  bool TerrainWarning;
+  bool terrain_warning;
 
   /** Terrain altitude */
-  fixed TerrainAlt;
+  fixed terrain_altitude;
 
   /** Lowest height within glide range */
-  fixed TerrainBase;
+  fixed terrain_base;
 
   /** Altitude over terrain */
-  fixed AltitudeAGL;
+  fixed altitude_agl;
 
-  GeoPoint TerrainWarningLocation;
+  GeoPoint terrain_warning_location;
 
   void Clear();
 
@@ -86,8 +82,8 @@ struct TERRAIN_ALT_INFO
    */
   fixed GetTerrainBaseFallback() const {
     return terrain_base_valid
-      ? TerrainBase
-      : TerrainAlt;
+      ? terrain_base
+      : terrain_altitude;
   }
 };
 
@@ -146,7 +142,7 @@ struct DerivedInfo:
   public VarioInfo,
   public CLIMB_INFO,
   public CIRCLING_INFO,
-  public TERRAIN_ALT_INFO,
+  public TerrainInfo,
   public TEAMCODE_INFO
 {
   /** GPS date and time (local) */

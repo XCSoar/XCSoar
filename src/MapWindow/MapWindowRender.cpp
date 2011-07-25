@@ -61,7 +61,7 @@ void
 MapWindow::RenderFinalGlideShading(Canvas &canvas)
 {
   if (terrain != NULL &&
-      Calculated().TerrainValid)
+      Calculated().terrain_valid)
       DrawTerrainAbove(canvas);
 }
 
@@ -90,7 +90,7 @@ void
 MapWindow::RenderGlide(Canvas &canvas)
 {
   // draw red cross on glide through terrain marker
-  if (Calculated().TerrainValid)
+  if (Calculated().terrain_valid)
     DrawGlideThroughTerrain(canvas);
 }
 

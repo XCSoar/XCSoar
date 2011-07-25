@@ -1535,13 +1535,13 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
   const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (_tcscmp(misc, _T("takeoff")) == 0) {
-    if (basic.LocationAvailable && calculated.TerrainValid) {
+    if (basic.LocationAvailable && calculated.terrain_valid) {
       ScopeSuspendAllThreads suspend;
-      way_points.add_takeoff_point(basic.Location, calculated.TerrainAlt);
+      way_points.add_takeoff_point(basic.Location, calculated.terrain_altitude);
     }
   } else {
     Waypoint edit_waypoint = way_points.create(basic.Location);
-    edit_waypoint.Altitude = calculated.TerrainAlt;
+    edit_waypoint.Altitude = calculated.terrain_altitude;
     if (!dlgWaypointEditShowModal(edit_waypoint) || edit_waypoint.Name.empty()) {
       trigger_redraw();
       return;

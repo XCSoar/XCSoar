@@ -441,12 +441,12 @@ void
 MapWindow::DrawGlideThroughTerrain(Canvas &canvas) const
 {
   if (!Calculated().flight.flying ||
-      !Calculated().TerrainWarning ||
-      Calculated().TerrainWarningLocation.distance(Basic().Location) < fixed(500.0))
+      !Calculated().terrain_warning ||
+      Calculated().terrain_warning_location.distance(Basic().Location) < fixed(500.0))
     return;
 
   RasterPoint sc;
-  if (render_projection.GeoToScreenIfVisible(Calculated().TerrainWarningLocation,
+  if (render_projection.GeoToScreenIfVisible(Calculated().terrain_warning_location,
                                              sc))
     Graphics::hTerrainWarning.draw(canvas, sc.x, sc.y);
 }

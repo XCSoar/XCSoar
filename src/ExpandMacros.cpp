@@ -414,7 +414,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     ReplaceInString(OutBuffer, _T("$(CheckNet)"), _T(""), Size);
   }
   if (_tcsstr(OutBuffer, _T("$(CheckTerrain)"))) {
-    if (!Calculated().TerrainValid)
+    if (!Calculated().terrain_valid)
       invalid = true;
 
     ReplaceInString(OutBuffer, _T("$(CheckTerrain)"), _T(""), Size);

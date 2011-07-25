@@ -138,7 +138,7 @@ CuSonde::updateMeasurements(const NMEA_INFO &basic,
     return;
 
   // calculate ground height
-  hGround = calculated.AltitudeAGL;
+  hGround = calculated.altitude_agl;
 
   // if (going up)
   if (level > last_level) {

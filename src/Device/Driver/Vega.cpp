@@ -384,7 +384,7 @@ VegaDevice::VarioWriteSettings(const DerivedInfo &calculated) const
             iround(calculated.common_stats.current_mc*10),
             iround(calculated.V_stf*10),
             calculated.Circling,
-            iround(calculated.TerrainAlt),
+            iround(calculated.terrain_altitude),
             uround(qnh.get_QNH() * 10));
 
     PortWriteNMEA(port, mcbuf);

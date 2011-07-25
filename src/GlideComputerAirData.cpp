@@ -473,13 +473,13 @@ void
 GlideComputerAirData::TerrainHeight()
 {
   const MoreData &basic = Basic();
-  TERRAIN_ALT_INFO &calculated = SetCalculated();
+  TerrainInfo &calculated = SetCalculated();
 
   if (!basic.LocationAvailable || terrain == NULL) {
-    calculated.TerrainValid = false;
-    calculated.TerrainAlt = fixed_zero;
-    calculated.AltitudeAGLValid = false;
-    calculated.AltitudeAGL = fixed_zero;
+    calculated.terrain_valid = false;
+    calculated.terrain_altitude = fixed_zero;
+    calculated.altitude_agl_valid = false;
+    calculated.altitude_agl = fixed_zero;
     return;
   }
 
@@ -489,18 +489,18 @@ GlideComputerAirData::TerrainHeight()
       /* assume water is 0m MSL; that's the best guess */
       Alt = 0;
     else {
-      calculated.TerrainValid = false;
-      calculated.TerrainAlt = fixed_zero;
-      calculated.AltitudeAGLValid = false;
-      calculated.AltitudeAGL = fixed_zero;
+      calculated.terrain_valid = false;
+      calculated.terrain_altitude = fixed_zero;
+      calculated.altitude_agl_valid = false;
+      calculated.altitude_agl = fixed_zero;
       return;
     }
   }
 
-  calculated.TerrainValid = true;
-  calculated.TerrainAlt = fixed(Alt);
-  calculated.AltitudeAGL = basic.NavAltitude - calculated.TerrainAlt;
-  calculated.AltitudeAGLValid = true;
+  calculated.terrain_valid = true;
+  calculated.terrain_altitude = fixed(Alt);
+  calculated.altitude_agl = basic.NavAltitude - calculated.terrain_altitude;
+  calculated.altitude_agl_valid = true;
 }
 
 /**
@@ -559,7 +559,7 @@ GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
     : basic.GroundSpeed;
 
   if (speed > glide_polar.GetVTakeoff() ||
-      (calculated.AltitudeAGLValid && calculated.AltitudeAGL > fixed(300))) {
+      (calculated.altitude_agl_valid && calculated.altitude_agl > fixed(300))) {
     calculated.flight.Moving(basic.Time);
   } else {
     calculated.flight.Stationary(basic.Time);

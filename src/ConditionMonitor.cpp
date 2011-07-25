@@ -398,7 +398,7 @@ protected:
 
     const GeoPoint null_point(Angle::zero(),
                               Angle::zero());
-    return (cmp.Calculated().TerrainWarning);
+    return (cmp.Calculated().terrain_warning);
   }
 
   void

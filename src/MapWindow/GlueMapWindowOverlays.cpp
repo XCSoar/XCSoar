@@ -269,7 +269,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 
     if (!Calculated().task_stats.total.achievable())
       cross_sign = 1;
-    if (Calculated().TerrainWarning && (Offset>0))
+    if (Calculated().terrain_warning && (Offset>0))
       cross_sign = -1;
 
     if (cross_sign != 0) {

@@ -91,11 +91,11 @@ InfoBoxContentAltitude::PnlInfoUpdate()
   const NMEA_INFO &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
-  if (!calculated.AltitudeAGLValid) {
+  if (!calculated.altitude_agl_valid) {
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltAGL")))->SetText(_("N/A"));
   } else {
     // Set Value
-    _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(calculated.AltitudeAGL),
+    _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(calculated.altitude_agl),
                                    Units::GetAltitudeName());
 
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltAGL")))->SetText(sTmp);
@@ -121,11 +121,11 @@ InfoBoxContentAltitude::PnlInfoUpdate()
       ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpAltGPS")))->SetText(sTmp);
   }
 
-  if (!calculated.TerrainValid){
+  if (!calculated.terrain_valid){
     ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTerrain")))->SetText(_("N/A"));
   } else {
     // Set Value
-     _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(calculated.TerrainAlt),
+     _stprintf(sTmp, _T("%.0f %s"), (double)Units::ToUserAltitude(calculated.terrain_altitude),
                                          Units::GetAltitudeName());
 
       ((WndProperty *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("prpTerrain")))->SetText(sTmp);
@@ -366,18 +366,18 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
   const DerivedInfo &calculated = CommonInterface::Calculated();
   TCHAR sTmp[32];
 
-  if (!calculated.AltitudeAGLValid) {
+  if (!calculated.altitude_agl_valid) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  Units::FormatUserAltitude(calculated.AltitudeAGL, sTmp,
+  Units::FormatUserAltitude(calculated.altitude_agl, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  Units::FormatAlternateUserAltitude(calculated.AltitudeAGL, sTmp,
+  Units::FormatAlternateUserAltitude(calculated.altitude_agl, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
 
@@ -385,7 +385,7 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
   infobox.SetValueUnit(Units::Current.AltitudeUnit);
 
   // Set Color (red/black)
-  infobox.SetColor(calculated.AltitudeAGL <
+  infobox.SetColor(calculated.altitude_agl <
       XCSoarInterface::SettingsComputer().route_planner.safety_height_terrain ? 1 : 0);
 }
 
@@ -503,18 +503,18 @@ InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
   const DerivedInfo &calculated = CommonInterface::Calculated();
   TCHAR sTmp[32];
 
-  if (!calculated.TerrainValid){
+  if (!calculated.terrain_valid){
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  Units::FormatUserAltitude(calculated.TerrainAlt, sTmp,
+  Units::FormatUserAltitude(calculated.terrain_altitude, sTmp,
                             sizeof(sTmp) / sizeof(sTmp[0]), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
-  Units::FormatAlternateUserAltitude(calculated.TerrainAlt, sTmp,
+  Units::FormatAlternateUserAltitude(calculated.terrain_altitude, sTmp,
                                      sizeof(sTmp) / sizeof(sTmp[0]));
   infobox.SetComment(sTmp);
 

@@ -147,21 +147,21 @@ GlideComputerTask::TerrainWarning()
 
       if (dirty) {
         m_task.route_solve(dest, start, h_ceiling);
-        SetCalculated().TerrainWarning = m_task.intersection(start, dest,
-                                                             SetCalculated().TerrainWarningLocation);
+        SetCalculated().terrain_warning = m_task.intersection(start, dest,
+                                                             SetCalculated().terrain_warning_location);
       }
       return;
     } else {
       m_task.route_solve(start, start, h_ceiling);
     }
   }
-  SetCalculated().TerrainWarning = false;
+  SetCalculated().terrain_warning = false;
 }
 
 void
 GlideComputerTask::Reach()
 {
-  if (!Calculated().TerrainValid) {
+  if (!Calculated().terrain_valid) {
     /* without valid terrain information, we cannot calculate
        reachabilty, so let's skip that step completely */
     SetCalculated().terrain_base_valid = false;
@@ -177,7 +177,7 @@ GlideComputerTask::Reach()
     m_task.solve_reach(start, do_solve);
 
     if (do_solve) {
-      SetCalculated().TerrainBase = fixed(m_task.get_terrain_base());
+      SetCalculated().terrain_base = fixed(m_task.get_terrain_base());
       SetCalculated().terrain_base_valid = true;
     }
   }
@@ -186,12 +186,12 @@ GlideComputerTask::Reach()
 void 
 GlideComputerTask::OnTakeoff()
 {
-  if (Calculated().AltitudeAGLValid &&
-      Calculated().AltitudeAGL > fixed(500))
+  if (Calculated().altitude_agl_valid &&
+      Calculated().altitude_agl > fixed(500))
     return;
 
   ProtectedTaskManager::ExclusiveLease task(m_task);
-  task->takeoff_autotask(Basic().Location, Calculated().TerrainAlt);
+  task->takeoff_autotask(Basic().Location, Calculated().terrain_altitude);
 }
 
 void 

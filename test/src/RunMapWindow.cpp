@@ -229,7 +229,7 @@ GenerateBlackboard(MapWindow &map)
   nmea_info.GPSAltitudeAvailable.Update(nmea_info.clock);
 
   memset(&derived_info, 0, sizeof(derived_info));
-  derived_info.TerrainValid = true;
+  derived_info.terrain_valid = true;
 
   memset(&settings_computer, 0, sizeof(settings_computer));
 

@@ -143,8 +143,8 @@ DemoReplayGlue::Update()
     return true;
 
   fixed floor_alt = fixed_300;
-  if (device_blackboard.Calculated().TerrainValid) {
-    floor_alt += device_blackboard.Calculated().TerrainAlt;
+  if (device_blackboard.Calculated().terrain_valid) {
+    floor_alt += device_blackboard.Calculated().terrain_altitude;
   }
 
   ProtectedTaskManager::ExclusiveLease task_manager(*m_task_manager);

@@ -78,7 +78,7 @@ GlideComputerStats::DoLogging()
   if (Calculated().flight.flying &&
       stats_clock.check_advance(Basic().Time)) {
     flightstats.AddAltitudeTerrain(Calculated().flight.flight_time,
-                                   Calculated().TerrainAlt);
+                                   Calculated().terrain_altitude);
     flightstats.AddAltitude(Calculated().flight.flight_time,
                             Basic().NavAltitude);
     flightstats.AddTaskSpeed(Calculated().flight.flight_time,
