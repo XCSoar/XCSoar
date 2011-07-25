@@ -104,7 +104,7 @@ MapDrawHelper::buffer_render_finish()
     m_buffer.white_pen();
     
     if (m_use_stencil)
-      m_buffer.copy_transparent_black(m_stencil);
+      m_buffer.copy_or(m_stencil);
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency && AlphaBlendAvailable())

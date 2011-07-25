@@ -26,6 +26,7 @@ Version 6.2 - not yet released
   - multiple flarm team mates and teams possible
 * map
   - redraw terrain only if needed
+  - airspace rendering optimised
 
 Version 6.1.4 - not yet released
 * memory leaks fixed
