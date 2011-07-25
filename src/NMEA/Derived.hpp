@@ -46,10 +46,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-/**
- * Derived terrain altitude information, including glide range
- * 
- */
+/** Derived terrain altitude information, including glide range */
 struct TerrainInfo
 {
   /** True if terrain is valid, False otherwise */
@@ -87,24 +84,16 @@ struct TerrainInfo
   }
 };
 
-/**
- * Derived team code information
- */
+/** Derived team code information */
 struct TeamInfo
 {
-  /**
-   * Are #teammate_vector and #TeammateLocation available?
-   */
+  /** Are #teammate_vector and #TeammateLocation available? */
   bool teammate_available;
 
-  /**
-   * Is #flarm_teammate_code available?
-   */
+  /** Is #flarm_teammate_code available? */
   bool flarm_teammate_code_available;
 
-  /**
-   * is #flarm_teammate_code current or did we lose him?
-   */
+  /** is #flarm_teammate_code current or did we lose him? */
   bool flarm_teammate_code_current;
 
   /** Team code */
@@ -116,9 +105,7 @@ struct TeamInfo
   /** Position of the chosen team mate */
   GeoPoint teammate_location;
 
-  /**
-   * The team code of the FLARM teammate.
-   */
+  /** The team code of the FLARM teammate. */
   TeamCode flarm_teammate_code;
 
   void Clear();
@@ -148,29 +135,25 @@ struct DerivedInfo:
   /** GPS date and time (local) */
   BrokenDateTime date_time_local;
 
-  fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
+  /** Speed to fly block/dolphin (m/s) */
+  fixed V_stf;
 
   /** Bearing including wind factor */
   Angle heading;
 
-  /**
-   * Auto QNH calculation result.
-   */
+  /** Auto QNH calculation result. */
   AtmosphericPressure pressure;
   Validity pressure_available;
 
   ClimbHistory climb_history;
 
-  /**
-   * Does #estimated_wind have a meaningful value?
-   */
+  /** Does #estimated_wind have a meaningful value? */
   Validity estimated_wind_available;
 
-  SpeedVector estimated_wind;   /**< Wind speed, direction */
+  /** Wind speed, direction */
+  SpeedVector estimated_wind;
 
-  /**
-   * Is the wind available?
-   */
+  /** Is the wind available? */
   Validity wind_available;
 
   /**
@@ -179,15 +162,20 @@ struct DerivedInfo:
    */
   SpeedVector wind;
 
-  fixed auto_zoom_distance; /**< Distance to zoom to for autozoom */
+  /** Distance to zoom to for autozoom */
+  fixed auto_zoom_distance;
 
-  fixed sunset_time; /**< Local time of sunset */
+  /** Local time of sunset */
+  fixed sunset_time;
   /** Sun's azimuth at the current location and time */
   Angle sun_azimuth;
 
-  TaskStats task_stats; /**< Copy of task statistics data for active task */
-  CommonStats common_stats; /**< Copy of common task statistics data */
-  ContestStatistics contest_stats; /**< Copy of contest statistics data */
+  /** Copy of task statistics data for active task */
+  TaskStats task_stats;
+  /** Copy of common task statistics data */
+  CommonStats common_stats;
+  /** Copy of contest statistics data */
+  ContestStatistics contest_stats;
 
   FlyingState flight;
 
@@ -195,16 +183,21 @@ struct DerivedInfo:
 
   ThermalLocatorInfo thermal_locator;
 
-  unsigned time_process_gps; /**< Time (ms) to process main computer functions */
-  unsigned time_process_idle; /**< Time (ms) to process idle computer functions */
+  /** Time (ms) to process main computer functions */
+  unsigned time_process_gps;
+  /** Time (ms) to process idle computer functions */
+  unsigned time_process_idle;
 
-  TraceHistory trace_history; /**< Store of short term history of variables */
+  /** Store of short term history of variables */
+  TraceHistory trace_history;
 
   Validity auto_mac_cready_available;
   fixed auto_mac_cready;
 
-  GlidePolar glide_polar_reach; /**< Glide polar used for reach calculations */
-  GlidePolar glide_polar_safety; /**< Glide polar used for safety calculations */
+  /** Glide polar used for reach calculations */
+  GlidePolar glide_polar_reach;
+  /** Glide polar used for safety calculations */
+  GlidePolar glide_polar_safety;
 
   AirspaceWarningsInfo airspace_warnings;
 
