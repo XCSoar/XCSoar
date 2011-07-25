@@ -167,6 +167,7 @@ TerrainRenderer::TerrainRenderer(const RasterTerrain *_terrain)
    last_color_ramp(NULL)
 {
   assert(terrain != NULL);
+  settings.SetDefaults();
 }
 
 void
