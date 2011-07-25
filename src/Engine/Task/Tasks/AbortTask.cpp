@@ -164,8 +164,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   if (task_full() || approx_waypoints.empty())
     return false;
 
-  const AGeoPoint p_start (state.get_location(), 
-                           (short)state.NavAltitude);
+  const AGeoPoint p_start (state.Location, (short)state.NavAltitude);
 
   bool found_final_glide = false;
   reservable_priority_queue<Alternate, AlternateVector, AbortRank> q;

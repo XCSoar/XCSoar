@@ -191,11 +191,6 @@ struct AIRCRAFT_STATE:
    */
   fixed Gload;
 
-  /** Accessor for the aircraft location */
-  const GeoPoint& get_location() const {
-    return Location;
-  }
-
   SpeedVector wind; /**< Wind speed, direction at aircraft */
 
 /**

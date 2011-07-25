@@ -214,7 +214,7 @@ Trace::append(const AIRCRAFT_STATE& state)
 
   if (empty()) {
     // first point determines origin for flat projection
-    task_projection.reset(state.get_location());
+    task_projection.reset(state.Location);
     task_projection.update_fast();
   } else if (state.Time < fixed(get_last_point().time)) {
     // gone back in time, must reset. (shouldn't get here!)

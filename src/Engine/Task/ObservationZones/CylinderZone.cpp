@@ -60,5 +60,5 @@ CylinderZone::randomPointInSector(const fixed mag) const
     GeoVector vec(dis, dir);
     ac.Location = vec.end_point(get_location());
   } while (!isInSector(ac));
-  return ac.get_location();
+  return ac.Location;
 }
