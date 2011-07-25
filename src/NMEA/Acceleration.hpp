@@ -29,39 +29,35 @@ Copyright_License {
 /**
  * State of acceleration of aircraft, with calculated pseudo-attitude reference
  */
-struct ACCELERATION_STATE
+struct AccelerationState
 {
-  //##################
-  //   Acceleration
-  //##################
-
   /** Estimated bank angle */
-  Angle BankAngle;
+  Angle bank_angle;
   /** Estimated pitch angle */
-  Angle PitchAngle;
+  Angle pitch_angle;
 
   /**
    * Is G-load information available?
    * @see Gload
    */
-  bool Available;
+  bool available;
 
   /**
    * G-Load information of external device (if available)
    * or estimated (assuming balanced turn) 
    * @see AccelerationAvailable
    */
-  fixed Gload;
+  fixed g_load;
 
   void Reset() {
-    Available = false;
+    available = false;
   }
 
   /**
    * Adds data from the specified object, unless already present in
    * this one.
    */
-  void Complement(const ACCELERATION_STATE &add);
+  void Complement(const AccelerationState &add);
 };
 
 #endif

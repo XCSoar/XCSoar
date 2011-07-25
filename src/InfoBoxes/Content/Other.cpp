@@ -37,14 +37,14 @@ Copyright_License {
 void
 InfoBoxContentGLoad::Update(InfoBoxWindow &infobox)
 {
-  if (!XCSoarInterface::Basic().acceleration.Available) {
+  if (!XCSoarInterface::Basic().acceleration.available) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   SetValueFromFixed(infobox, _T("%2.2f"),
-                    XCSoarInterface::Basic().acceleration.Gload);
+                    XCSoarInterface::Basic().acceleration.g_load);
 }
 
 void
@@ -165,7 +165,7 @@ InfoBoxContentFreeRAM::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentHorizon::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  if (CommonInterface::Basic().acceleration.Available) {
+  if (CommonInterface::Basic().acceleration.available) {
     DrawHorizon(canvas, infobox.get_value_and_comment_rect(),
                 CommonInterface::Basic());
   }
@@ -175,7 +175,7 @@ void
 InfoBoxContentHorizon::Update(InfoBoxWindow &infobox)
 {
   infobox.SetComment(_T(""));
-  if (!CommonInterface::Basic().acceleration.Available) {
+  if (!CommonInterface::Basic().acceleration.available) {
     infobox.SetInvalid();
     return;
   }

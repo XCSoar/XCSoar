@@ -141,7 +141,7 @@ struct NMEA_INFO {
 
   GPSState gps;
 
-  ACCELERATION_STATE acceleration;
+  AccelerationState acceleration;
 
   Validity LocationAvailable;
 

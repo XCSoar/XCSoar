@@ -24,12 +24,12 @@ Copyright_License {
 #include "NMEA/Acceleration.hpp"
 
 void
-ACCELERATION_STATE::Complement(const ACCELERATION_STATE &add)
+AccelerationState::Complement(const AccelerationState &add)
 {
   /* calculated: BankAngle, PitchAngle */
 
-  if (!Available && add.Available) {
-    Gload = add.Gload;
-    Available = add.Available;
+  if (!available && add.available) {
+    g_load = add.g_load;
+    available = add.available;
   }
 }

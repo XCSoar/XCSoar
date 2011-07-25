@@ -158,8 +158,8 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
 
   if (hasAcceleration) {
     // TODO: use ACCELERATION_STATE::complement() ?!?
-    basic.acceleration.Available = true;
-    basic.acceleration.Gload = fixed(acceleration);
+    basic.acceleration.available = true;
+    basic.acceleration.g_load = fixed(acceleration);
   }
 
   device_blackboard.ScheduleMerge();

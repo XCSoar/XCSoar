@@ -236,7 +236,7 @@ GlideComputerAirData::NettoVario()
   vario.GliderSinkRate =
     calculated.flight.Flying && basic.AirspeedAvailable
     ? - settings_computer.glide_polar_task.SinkRate(basic.IndicatedAirspeed,
-                                                    basic.acceleration.Gload)
+                                                    basic.acceleration.g_load)
     /* the glider sink rate is useless when not flying */
     : fixed_zero;
 }
@@ -251,8 +251,8 @@ GlideComputerAirData::AverageClimbRate()
       positive(basic.TrueAirspeed) &&
       basic.TotalEnergyVarioAvailable &&
       !calculated.Circling &&
-      (!basic.acceleration.Available ||
-       fabs(fabs(basic.acceleration.Gload) - fixed_one) <= fixed(0.25))) {
+      (!basic.acceleration.available ||
+       fabs(fabs(basic.acceleration.g_load) - fixed_one) <= fixed(0.25))) {
     // TODO: Check this is correct for TAS/IAS
     fixed ias_to_tas = basic.IndicatedAirspeed / basic.TrueAirspeed;
     fixed w_tas = basic.TotalEnergyVario * ias_to_tas;
