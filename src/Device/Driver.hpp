@@ -33,7 +33,7 @@ Copyright_License {
 #include <stdint.h>
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
+struct DerivedInfo;
 struct DeviceConfig;
 class Port;
 class AtmosphericPressure;
@@ -129,7 +129,7 @@ public:
    * @return true on success
    */
   virtual bool PutQNH(const AtmosphericPressure &pressure,
-                      const DERIVED_INFO &calculated) = 0;
+                      const DerivedInfo &calculated) = 0;
 
   /**
    * Send a "voice" sentence to the device (proprietary Vega feature).
@@ -197,7 +197,7 @@ public:
    *
    * @param calculated the current set of calculation results
    */
-  virtual void OnSysTicker(const DERIVED_INFO &calculated) = 0;
+  virtual void OnSysTicker(const DerivedInfo &calculated) = 0;
 };
 
 /**
@@ -216,7 +216,7 @@ public:
   virtual bool PutBugs(fixed bugs);
   virtual bool PutBallast(fixed ballast);
   virtual bool PutQNH(const AtmosphericPressure &pres,
-                      const DERIVED_INFO &calculated);
+                      const DerivedInfo &calculated);
   virtual bool PutVoice(const TCHAR *sentence);
   virtual bool PutVolume(int volume);
   virtual bool PutActiveFrequency(RadioFrequency frequency);
@@ -236,7 +236,7 @@ public:
     return false;
   }
 
-  virtual void OnSysTicker(const DERIVED_INFO &calculated);
+  virtual void OnSysTicker(const DerivedInfo &calculated);
 };
 
 /**

@@ -29,7 +29,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
+struct DerivedInfo;
 class ClimbHistory;
 class TracePointVector;
 struct SETTINGS_COMPUTER;
@@ -71,12 +71,12 @@ public:
 public:
   void RenderBarograph(Canvas &canvas, const PixelRect rc,
                        const NMEA_INFO &nmea_info,
-                       const DERIVED_INFO &derived_info,
+                       const DerivedInfo &derived_info,
                        const ProtectedTaskManager *task) const;
 
   void RenderBarographSpark(Canvas &canvas, const PixelRect rc,
                             const NMEA_INFO &nmea_info,
-                            const DERIVED_INFO &derived_info,
+                            const DerivedInfo &derived_info,
                             const ProtectedTaskManager *task) const;
 
   void RenderClimb(Canvas &canvas, const PixelRect rc,
@@ -102,7 +102,7 @@ public:
 
   void RenderOLC(Canvas &canvas, const PixelRect rc,
                  const NMEA_INFO &nmea_info,
-                 const DERIVED_INFO &calculated,
+                 const DerivedInfo &calculated,
                  const SETTINGS_COMPUTER &settings_computer,
                  const SETTINGS_MAP &settings_map,
                  const ContestStatistics &contest,
@@ -110,14 +110,14 @@ public:
 
   void RenderTask(Canvas &canvas, const PixelRect rc,
                   const NMEA_INFO &nmea_info,
-                  const DERIVED_INFO &derived_info,
+                  const DerivedInfo &derived_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
                   const TaskManager &task) const;
 
   void RenderSpeed(Canvas &canvas, const PixelRect rc,
                    const NMEA_INFO &nmea_info,
-                   const DERIVED_INFO &derived_info,
+                   const DerivedInfo &derived_info,
                    const TaskManager &task) const;
 
   void CaptionBarograph(TCHAR *sTmp);
@@ -125,9 +125,9 @@ public:
   void CaptionPolar(TCHAR * sTmp, const GlidePolar& glide_polar) const;
 
   void CaptionTempTrace(TCHAR *sTmp) const;
-  void CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const;
+  void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) const;
   void CaptionOLC(TCHAR *sTmp, const SETTINGS_COMPUTER &settings_computer,
-                  const DERIVED_INFO &derived) const;
+                  const DerivedInfo &derived) const;
 };
 
 #endif

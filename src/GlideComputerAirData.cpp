@@ -99,7 +99,7 @@ void
 GlideComputerAirData::ProcessVertical()
 {
   const NMEA_INFO &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   AutoQNH::Process(basic, calculated, SettingsComputer(), way_points);
 
@@ -135,7 +135,7 @@ GlideComputerAirData::ProcessVertical()
 void
 GlideComputerAirData::Wind()
 {
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   if (!calculated.flight.Flying || !time_advanced())
     return;
@@ -165,7 +165,7 @@ void
 GlideComputerAirData::SelectWind()
 {
   const NMEA_INFO &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   if (basic.ExternalWindAvailable && SettingsComputer().ExternalWind) {
     // external wind available
@@ -209,7 +209,7 @@ void
 GlideComputerAirData::Heading()
 {
   const NMEA_INFO &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
   const SpeedVector wind = calculated.wind;
 
   if ((positive(basic.GroundSpeed) || wind.is_non_zero()) &&
@@ -219,9 +219,9 @@ GlideComputerAirData::Heading()
     x0 += wind.bearing.fastsine() * wind.norm;
     y0 += wind.bearing.fastcosine() * wind.norm;
 
-    calculated.Heading = Angle::radians(atan2(x0, y0)).as_bearing();
+    calculated.heading = Angle::radians(atan2(x0, y0)).as_bearing();
   } else {
-    calculated.Heading = basic.track;
+    calculated.heading = basic.track;
   }
 }
 
@@ -229,7 +229,7 @@ void
 GlideComputerAirData::NettoVario()
 {
   const MoreData &basic = Basic();
-  const DERIVED_INFO &calculated = Calculated();
+  const DerivedInfo &calculated = Calculated();
   const SETTINGS_COMPUTER &settings_computer = SettingsComputer();
   VARIO_INFO &vario = SetCalculated();
 
@@ -245,7 +245,7 @@ void
 GlideComputerAirData::AverageClimbRate()
 {
   const NMEA_INFO &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   if (basic.AirspeedAvailable && positive(basic.IndicatedAirspeed) &&
       positive(basic.TrueAirspeed) &&
@@ -265,7 +265,7 @@ void
 GlideComputerAirData::Average30s()
 {
   const MoreData &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   if (!time_advanced() || calculated.Circling != LastCalculated().Circling) {
     vario_30s_filter.reset();
@@ -292,7 +292,7 @@ GlideComputerAirData::Average30s()
 void
 GlideComputerAirData::CurrentThermal()
 {
-  const DERIVED_INFO &calculated = Calculated();
+  const DerivedInfo &calculated = Calculated();
   OneClimbInfo &current_thermal = SetCalculated().current_thermal;
 
   if (positive(calculated.ClimbStartTime)) {
@@ -332,7 +332,7 @@ heading_to_index(Angle &heading)
 void
 GlideComputerAirData::UpdateLiftDatabase()
 {
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   // Don't update the lift database if we are not in circling mode
   if (!calculated.Circling)
@@ -362,18 +362,18 @@ GlideComputerAirData::UpdateLiftDatabase()
   // Depending on the circling direction the current heading will be
   // smaller or bigger then the last one, because of that negative() is
   // tested against the left variable.
-  for (Angle h = LastCalculated().Heading;
-       left == negative((calculated.Heading - h).as_delta().value_degrees());
+  for (Angle h = LastCalculated().heading;
+       left == negative((calculated.heading - h).as_delta().value_degrees());
        h += heading_step) {
     unsigned index = heading_to_index(h);
     calculated.LiftDatabase[index] = Basic().BruttoVario;
   }
 
   // detect zero crossing
-  if (((calculated.Heading.value_degrees()< fixed_90) && 
-       (LastCalculated().Heading.value_degrees()> fixed_270)) ||
-      ((LastCalculated().Heading.value_degrees()< fixed_90) && 
-       (calculated.Heading.value_degrees()> fixed_270))) {
+  if (((calculated.heading.value_degrees()< fixed_90) && 
+       (LastCalculated().heading.value_degrees()> fixed_270)) ||
+      ((LastCalculated().heading.value_degrees()< fixed_90) && 
+       (calculated.heading.value_degrees()> fixed_270))) {
 
     fixed h_av = fixed_zero;
     for (unsigned i=0; i<36; ++i) {
@@ -387,7 +387,7 @@ GlideComputerAirData::UpdateLiftDatabase()
 void
 GlideComputerAirData::ResetLiftDatabase()
 {
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   calculated.ClearLiftDatabase();
 
@@ -398,7 +398,7 @@ void
 GlideComputerAirData::MaxHeightGain()
 {
   const MoreData &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   if (!calculated.flight.Flying)
     return;
@@ -416,7 +416,7 @@ GlideComputerAirData::MaxHeightGain()
 void
 GlideComputerAirData::LD()
 {
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   if (time_retreated()) {
     calculated.LDvario = fixed(INVALID_GR);
@@ -448,7 +448,7 @@ GlideComputerAirData::LD()
 void
 GlideComputerAirData::CruiseLD()
 {
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   if (!calculated.Circling) {
     if (negative(calculated.CruiseStartTime)) {
@@ -544,7 +544,7 @@ void
 GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
 {
   const NMEA_INFO &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   if (time_retreated())
     calculated.flight.flying_state_reset();
@@ -606,7 +606,7 @@ GlideComputerAirData::AirspaceWarning()
 
   airspace_database.set_flight_levels(SettingsComputer().pressure);
 
-  AirspaceActivity day (Calculated().local_date_time.day_of_week);
+  AirspaceActivity day (Calculated().date_time_local.day_of_week);
   airspace_database.set_activity(day);
 
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
@@ -631,7 +631,7 @@ GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
 void
 GlideComputerAirData::PercentCircling(const fixed Rate)
 {
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   WorkingBand();
 
@@ -673,7 +673,7 @@ void
 GlideComputerAirData::TurnRate()
 {
   const NMEA_INFO &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   // Calculate turn rate
 
@@ -693,7 +693,7 @@ GlideComputerAirData::TurnRate()
   calculated.TurnRate =
     (basic.track - LastBasic().track).as_delta().value_degrees() / dT;
   calculated.TurnRateWind =
-    (calculated.Heading - LastCalculated().Heading).as_delta().value_degrees() / dT;
+    (calculated.heading - LastCalculated().heading).as_delta().value_degrees() / dT;
 }
 
 /**
@@ -703,7 +703,7 @@ GlideComputerAirData::TurnRate()
 void
 GlideComputerAirData::Turning()
 {
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   // You can't be circling unless you're flying
   if (!calculated.flight.Flying || !time_advanced())
@@ -856,7 +856,7 @@ GlideComputerAirData::Turning()
 void
 GlideComputerAirData::ThermalSources()
 {
-  const DERIVED_INFO &calculated = Calculated();
+  const DerivedInfo &calculated = Calculated();
   THERMAL_LOCATOR_INFO &thermal_locator = SetCalculated().thermal_locator;
 
   if (!thermal_locator.estimate_valid ||
@@ -892,7 +892,7 @@ GlideComputerAirData::ThermalSources()
 void
 GlideComputerAirData::LastThermalStats()
 {
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   if (calculated.Circling != false ||
       LastCalculated().Circling != true ||
@@ -936,7 +936,7 @@ GlideComputerAirData::OnDepartedThermal()
 void
 GlideComputerAirData::WorkingBand()
 {
-  const DERIVED_INFO &calculated = Calculated();
+  const DerivedInfo &calculated = Calculated();
   ThermalBandInfo &tbi = SetCalculated().thermal_band;
 
   const fixed h_safety = SettingsComputer().route_planner.safety_height_terrain +
@@ -990,11 +990,11 @@ GlideComputerAirData::ProcessSun()
   if (!Basic().LocationAvailable)
     return;
 
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
   SunEphemeris sun;
   sun.CalcSunTimes(Basic().Location, Basic().DateTime,
                    fixed(GetUTCOffset()) / 3600);
-  calculated.TimeSunset = fixed(sun.TimeOfSunSet);
-  calculated.SunAzimuth = sun.Azimuth;
+  calculated.sunset_time = fixed(sun.TimeOfSunSet);
+  calculated.sun_azimuth = sun.Azimuth;
 }

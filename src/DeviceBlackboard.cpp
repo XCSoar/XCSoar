@@ -221,7 +221,7 @@ DeviceBlackboard::SetAltitude(fixed val)
  * by the GlideComputerBlackboard
  */
 void
-DeviceBlackboard::ReadBlackboard(const DERIVED_INFO &derived_info)
+DeviceBlackboard::ReadBlackboard(const DerivedInfo &derived_info)
 {
   calculated_info = derived_info;
 }

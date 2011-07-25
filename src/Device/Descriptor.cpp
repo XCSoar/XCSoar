@@ -374,7 +374,7 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency)
 
 bool
 DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
-                         const DERIVED_INFO &calculated)
+                         const DerivedInfo &calculated)
 {
   if (device == NULL || settings_sent.CompareQNH(value.get_QNH()))
     return true;
@@ -462,7 +462,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
 }
 
 void
-DeviceDescriptor::OnSysTicker(const DERIVED_INFO &calculated)
+DeviceDescriptor::OnSysTicker(const DerivedInfo &calculated)
 {
   if (device == NULL || IsBusy())
     return;

@@ -62,7 +62,7 @@ protected:
   bool small;
 
   Angle direction;
-  DERIVED_INFO derived;
+  DerivedInfo derived;
   RasterPoint lift_points[37];
   RasterPoint lift_point_avg;
 
@@ -72,7 +72,7 @@ public:
 public:
   bool LeftTurn() const;
 
-  void Update(const Angle &_direction, const DERIVED_INFO &_derived);
+  void Update(const Angle &_direction, const DerivedInfo &_derived);
 
 protected:
   fixed RangeScale(fixed d) const;

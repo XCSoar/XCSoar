@@ -174,7 +174,7 @@ static void
 UpdateValuesTimes(void)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   const FLYING_STATE &flight = calculated.flight;
 
   WndProperty *wp;
@@ -183,7 +183,7 @@ UpdateValuesTimes(void)
   int sunsethours;
   int sunsetmins;
 
-  sunsettime = XCSoarInterface::Calculated().TimeSunset;
+  sunsettime = XCSoarInterface::Calculated().sunset_time;
   sunsethours = (int)sunsettime;
   sunsetmins = (int)((sunsettime - sunsethours) * 60);
 
@@ -233,7 +233,7 @@ static void
 UpdateValuesFlight(void)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
 
   WndProperty *wp;
   TCHAR Temp[1000];
@@ -311,7 +311,7 @@ UpdateValuesRules(void)
   WndProperty *wp;
   TCHAR Temp[80];
 
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   const CommonStats &common_stats = calculated.common_stats;
 
   wp = (WndProperty*)wf->FindByName(_T("prpValidStart"));
@@ -394,7 +394,7 @@ UpdateValuesTask(void)
   if (protected_task_manager == NULL)
     return;
 
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   const TaskStats &task_stats = calculated.task_stats;
 
   WndProperty *wp;

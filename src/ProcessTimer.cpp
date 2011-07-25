@@ -162,7 +162,7 @@ QNHProcessTimer()
   SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SetSettingsComputer();
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (basic.settings.qnh_available.Modified(settings_computer.pressure_available)) {
     settings_computer.pressure = basic.settings.qnh;
@@ -184,7 +184,7 @@ MacCreadyProcessTimer()
   static Validity last_auto_mac_cready;
 
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (basic.settings.mac_cready_available.Modified(last_external_settings.mac_cready_available)) {
     ActionInterface::SetMacCready(basic.settings.mac_cready, false);
@@ -242,7 +242,7 @@ ManualWindProcessTimer()
 {
   SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SetSettingsComputer();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
 
   /* as soon as another wind setting is used, clear the manual wind */
   if (calculated.wind_available.Modified(settings_computer.ManualWindAvailable))

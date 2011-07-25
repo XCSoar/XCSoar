@@ -30,7 +30,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
+struct DerivedInfo;
 struct SETTINGS_COMPUTER;
 
 // These messages are listed in order of priotity,
@@ -111,7 +111,7 @@ public:
 
 public:
 
-  bool Update(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
+  bool Update(const NMEA_INFO &basic, const DerivedInfo &calculated,
 	      const SETTINGS_COMPUTER &settings);
 
 };
@@ -128,7 +128,7 @@ public:
   VegaVoice();
   ~VegaVoice();
 
-  void Update(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
+  void Update(const NMEA_INFO &basic, const DerivedInfo &calculated,
 	      const SETTINGS_COMPUTER &settings);
 
   // called when notified by Altair that the message has been spoken

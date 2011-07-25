@@ -142,7 +142,7 @@ struct AirspaceWarningsInfo {
  * A struct that holds all the calculated values derived from the data in the
  * NMEA_INFO struct
  */
-struct DERIVED_INFO: 
+struct DerivedInfo: 
   public VARIO_INFO,
   public CLIMB_INFO,
   public CIRCLING_INFO,
@@ -150,12 +150,12 @@ struct DERIVED_INFO:
   public TEAMCODE_INFO
 {
   /** GPS date and time (local) */
-  BrokenDateTime local_date_time;
+  BrokenDateTime date_time_local;
 
   fixed V_stf; /**< Speed to fly block/dolphin (m/s) */
 
   /** Bearing including wind factor */
-  Angle Heading;
+  Angle heading;
 
   /**
    * Auto QNH calculation result.
@@ -183,11 +183,11 @@ struct DERIVED_INFO:
    */
   SpeedVector wind;
 
-  fixed AutoZoomDistance; /**< Distance to zoom to for autozoom */
+  fixed auto_zoom_distance; /**< Distance to zoom to for autozoom */
 
-  fixed TimeSunset; /**< Local time of sunset */
+  fixed sunset_time; /**< Local time of sunset */
   /** Sun's azimuth at the current location and time */
-  Angle SunAzimuth;
+  Angle sun_azimuth;
 
   TaskStats task_stats; /**< Copy of task statistics data for active task */
   CommonStats common_stats; /**< Copy of common task statistics data */

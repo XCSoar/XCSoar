@@ -307,7 +307,7 @@ InfoBoxContentWind::GetDialogContent() {
 void
 InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
 {
-  const DERIVED_INFO &info = CommonInterface::Calculated();
+  const DerivedInfo &info = CommonInterface::Calculated();
   if (!info.wind_available) {
     infobox.SetInvalid();
     return;
@@ -327,7 +327,7 @@ InfoBoxContentWindSpeed::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentWindBearing::Update(InfoBoxWindow &infobox)
 {
-  const DERIVED_INFO &info = CommonInterface::Calculated();
+  const DerivedInfo &info = CommonInterface::Calculated();
   if (!info.wind_available) {
     infobox.SetInvalid();
     return;

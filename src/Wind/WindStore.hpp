@@ -6,7 +6,7 @@
 **
 ************************************************************************
 **
-**   Copyright (c):  2002 by André Somers
+**   Copyright (c):  2002 by Andrï¿½ Somers
 **
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
@@ -22,13 +22,13 @@
 
 struct NMEA_INFO;
 struct MoreData;
-struct DERIVED_INFO;
+struct DerivedInfo;
 
 /**
  * WindStore receives single windmeasurements and stores these. It uses
  * single measurements to provide a mean value, differentiated for altitude.
  *
- * @author André Somers
+ * @author Andrï¿½ Somers
  */
 class WindStore
 {
@@ -44,7 +44,7 @@ public:
    * measurement is. Higher quality measurements are more important in the
    * end result and stay in the store longer.
    */
-  void SlotMeasurement(const MoreData &info, DERIVED_INFO &derived,
+  void SlotMeasurement(const MoreData &info, DerivedInfo &derived,
       Vector windvector, int quality);
 
   /**
@@ -52,14 +52,14 @@ public:
    * Determines where measurements are stored and may result in a NewWind
    * signal.
    */
-  void SlotAltitude(const MoreData &info, DERIVED_INFO &derived);
+  void SlotAltitude(const MoreData &info, DerivedInfo &derived);
 
   // signals
   /**
    * Send if a new wind vector has been established. This may happen as
    * new measurements flow in, but also if the altitude changes.
    */
-  void NewWind(const NMEA_INFO &info, DERIVED_INFO &derived, Vector& wind);
+  void NewWind(const NMEA_INFO &info, DerivedInfo &derived, Vector& wind);
 
   const Vector GetWind(fixed Time, fixed h, bool &found) const;
 
@@ -76,7 +76,7 @@ private:
    * Recalculates the wind from the stored measurements.
    * May result in a NewWind signal.
    */
-  void recalculateWind(const MoreData &info, DERIVED_INFO &derived);
+  void recalculateWind(const MoreData &info, DerivedInfo &derived);
 
   bool updated;
 };

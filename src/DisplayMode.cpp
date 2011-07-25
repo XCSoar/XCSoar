@@ -27,7 +27,7 @@ Copyright_License {
 
 DisplayMode
 GetNewDisplayMode(const SETTINGS_MAP &settings_map,
-                  const DERIVED_INFO &derived_info)
+                  const DerivedInfo &derived_info)
 {
   if (settings_map.UserForceDisplayMode != DM_NONE)
     return settings_map.UserForceDisplayMode;

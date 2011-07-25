@@ -89,7 +89,7 @@ MapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 
 void
 MapWindow::ReadBlackboard(const MoreData &nmea_info,
-                          const DERIVED_INFO &derived_info)
+                          const DerivedInfo &derived_info)
 {
   MapWindowBlackboard::ReadBlackboard(nmea_info, derived_info);
 }
@@ -104,7 +104,7 @@ MapWindow::ReadBlackboard(const MoreData &nmea_info,
  */
 void
 MapWindow::ReadBlackboard(const MoreData &nmea_info,
-                          const DERIVED_INFO &derived_info,
+                          const DerivedInfo &derived_info,
                           const SETTINGS_COMPUTER &settings_computer,
                           const SETTINGS_MAP &settings_map)
 {

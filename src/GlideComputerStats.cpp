@@ -121,8 +121,8 @@ GlideComputerStats::ProcessClimbEvents()
   if (time_retreated())
     return;
 
-  const DERIVED_INFO &calculated = Calculated();
-  const DERIVED_INFO &last_calculated = LastCalculated();
+  const DerivedInfo &calculated = Calculated();
+  const DerivedInfo &last_calculated = LastCalculated();
 
   switch (calculated.TurnMode) {
   case CLIMB:

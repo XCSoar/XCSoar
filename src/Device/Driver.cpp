@@ -62,7 +62,7 @@ AbstractDevice::PutBallast(fixed ballast)
 
 bool
 AbstractDevice::PutQNH(const AtmosphericPressure &pres,
-                       const DERIVED_INFO &calculated)
+                       const DerivedInfo &calculated)
 {
   return true;
 }
@@ -99,6 +99,6 @@ AbstractDevice::Declare(const struct Declaration &declaration,
 }
 
 void
-AbstractDevice::OnSysTicker(const DERIVED_INFO &calculated)
+AbstractDevice::OnSysTicker(const DerivedInfo &calculated)
 {
 }

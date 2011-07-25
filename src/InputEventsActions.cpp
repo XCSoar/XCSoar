@@ -1217,7 +1217,7 @@ void
 InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
 {
   const MoreData &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
 
@@ -1532,7 +1532,7 @@ void
 InputEvents::eventAddWaypoint(const TCHAR *misc)
 {
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
 
   if (_tcscmp(misc, _T("takeoff")) == 0) {
     if (basic.LocationAvailable && calculated.TerrainValid) {

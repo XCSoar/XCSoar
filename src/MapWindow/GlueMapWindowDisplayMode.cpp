@@ -254,7 +254,7 @@ GlueMapWindow::UpdateScreenAngle()
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
 
   if (IsTargetDialog() &&
@@ -286,7 +286,7 @@ GlueMapWindow::UpdateMapScale()
 {
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
 
   if (IsTargetDialog()) {
@@ -304,7 +304,7 @@ GlueMapWindow::UpdateMapScale()
   if (!IsNearSelf())
     return;
 
-  fixed wpd = calculated.AutoZoomDistance;
+  fixed wpd = calculated.auto_zoom_distance;
   if (settings.AutoZoom && positive(wpd)) {
     // Calculate distance percentage between plane symbol and map edge
     // 50: centered  100: at edge of map
@@ -330,7 +330,7 @@ GlueMapWindow::UpdateProjection()
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */
   const NMEA_INFO &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
 
   RasterPoint center;

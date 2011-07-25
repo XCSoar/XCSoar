@@ -27,10 +27,10 @@ Copyright_License {
 #include "Navigation/Aircraft.hpp"
 
 struct MoreData;
-struct DERIVED_INFO;
+struct DerivedInfo;
 
 gcc_pure
 const AIRCRAFT_STATE
-ToAircraftState(const MoreData &info, const DERIVED_INFO &calculated);
+ToAircraftState(const MoreData &info, const DerivedInfo &calculated);
 
 #endif

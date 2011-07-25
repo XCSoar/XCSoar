@@ -87,7 +87,7 @@ InfoBoxContentAltitude::PnlInfoOnTabPreShow(TabBarControl::EventType EventType)
 bool
 InfoBoxContentAltitude::PnlInfoUpdate()
 {
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   const NMEA_INFO &basic = CommonInterface::Basic();
   TCHAR sTmp[32];
 
@@ -363,7 +363,7 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
 void
 InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
 {
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   TCHAR sTmp[32];
 
   if (!calculated.AltitudeAGLValid) {
@@ -500,7 +500,7 @@ InfoBoxContentFlightLevel::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
 {
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   TCHAR sTmp[32];
 
   if (!calculated.TerrainValid){

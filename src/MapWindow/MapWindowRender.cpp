@@ -36,7 +36,7 @@ MapWindow::RenderTerrain(Canvas &canvas)
   else
     m_background.set_sun_angle(render_projection,
                                SettingsMap().terrain.slope_shading == sstSun ?
-                               Calculated().SunAzimuth :
+                               Calculated().sun_azimuth :
                                Angle::degrees(fixed(-45.0)));
 
   m_background.Draw(canvas, render_projection, SettingsMap().terrain);
@@ -153,7 +153,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   // Finally, draw you!
   if (Basic().Connected)
     DrawAircraft(canvas, settings_map, aircraft_look,
-                 Calculated().Heading - render_projection.GetScreenAngle(),
+                 Calculated().heading - render_projection.GetScreenAngle(),
                  aircraft_pos);
 
   // Render compass

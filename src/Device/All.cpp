@@ -31,7 +31,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-devTick(const DERIVED_INFO &calculated)
+devTick(const DerivedInfo &calculated)
 {
   int i;
 
@@ -112,7 +112,7 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency)
 
 void
 AllDevicesPutQNH(const AtmosphericPressure &pres,
-                 const DERIVED_INFO &calculated)
+                 const DerivedInfo &calculated)
 {
   if (is_simulator())
     return;

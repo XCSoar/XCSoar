@@ -27,7 +27,7 @@ Copyright_License {
 #include "Compiler.h"
 
 struct SETTINGS_MAP;
-struct DERIVED_INFO;
+struct DerivedInfo;
 
 enum DisplayMode {
   DM_NONE,
@@ -39,6 +39,6 @@ enum DisplayMode {
 gcc_pure
 DisplayMode
 GetNewDisplayMode(const SETTINGS_MAP &settings_map,
-                  const DERIVED_INFO &derived_info);
+                  const DerivedInfo &derived_info);
 
 #endif

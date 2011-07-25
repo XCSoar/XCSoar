@@ -39,9 +39,9 @@ class GlideComputerBlackboard:
 {
   fixed ScreenDistanceMeters;
 
-  DERIVED_INFO Finish_Derived_Info;
+  DerivedInfo Finish_Derived_Info;
   MoreData last_gps_info;
-  DERIVED_INFO last_calculated_info;
+  DerivedInfo last_calculated_info;
   bool _time_retreated;
 
 public:
@@ -50,7 +50,7 @@ public:
   void ReadBlackboard(const MoreData &nmea_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
   const MoreData &LastBasic() const { return last_gps_info; }
-  const DERIVED_INFO& LastCalculated() const { return last_calculated_info; }
+  const DerivedInfo& LastCalculated() const { return last_calculated_info; }
 
   fixed GetScreenDistanceMeters() const {
     return ScreenDistanceMeters;
@@ -82,7 +82,7 @@ protected:
   void RestoreFinish();
 
   // only the glide computer can write to calculated
-  DERIVED_INFO& SetCalculated() { return calculated_info; }
+  DerivedInfo& SetCalculated() { return calculated_info; }
 };
 
 #endif

@@ -36,7 +36,7 @@ Copyright_License {
 #include <stdio.h>
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
+struct DerivedInfo;
 class Port;
 class Device;
 class AtmosphericPressure;
@@ -212,7 +212,7 @@ public:
   bool PutActiveFrequency(RadioFrequency frequency);
   bool PutStandbyFrequency(RadioFrequency frequency);
   bool PutQNH(const AtmosphericPressure &pres,
-              const DERIVED_INFO &calculated);
+              const DerivedInfo &calculated);
   bool PutVoice(const TCHAR *sentence);
 
   bool Declare(const struct Declaration &declaration,
@@ -223,7 +223,7 @@ public:
   bool DownloadFlight(const RecordedFlightInfo &flight, const TCHAR *path,
                       OperationEnvironment &env);
 
-  void OnSysTicker(const DERIVED_INFO &calculated);
+  void OnSysTicker(const DerivedInfo &calculated);
 
   bool ParseLine(const char *line);
 

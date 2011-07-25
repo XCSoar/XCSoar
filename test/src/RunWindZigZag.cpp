@@ -92,7 +92,7 @@ int main(int argc, char **argv)
   MoreData data, last;
   data.Reset();
 
-  static DERIVED_INFO calculated;
+  static DerivedInfo calculated;
   static SETTINGS_COMPUTER settings_computer;
 
   BasicComputer computer;

@@ -58,7 +58,7 @@ void
 GlideComputerTask::ProcessBasicTask()
 {
   const MoreData &basic = Basic();
-  DERIVED_INFO &derived = SetCalculated();
+  DerivedInfo &derived = SetCalculated();
 
   ProtectedTaskManager::ExclusiveLease task(m_task);
 
@@ -103,7 +103,7 @@ GlideComputerTask::ProcessMoreTask()
 
   if (Calculated().task_stats.current_leg.solution_remaining.defined()) {
     const GeoVector &v = Calculated().task_stats.current_leg.solution_remaining.Vector;
-    SetCalculated().AutoZoomDistance = v.Distance;
+    SetCalculated().auto_zoom_distance = v.Distance;
   }
 }
 

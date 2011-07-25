@@ -50,7 +50,7 @@ AirspaceWarningsInfo::Clear()
 }
 
 void
-DERIVED_INFO::Reset()
+DerivedInfo::Reset()
 {
   VARIO_INFO::Clear();
   CLIMB_INFO::Clear();
@@ -59,7 +59,7 @@ DERIVED_INFO::Reset()
   TERRAIN_ALT_INFO::Clear();
   TEAMCODE_INFO::Clear();
 
-  Heading = Angle::zero();
+  heading = Angle::zero();
   pressure_available.Clear();
 
   climb_history.Clear();
@@ -82,7 +82,7 @@ DERIVED_INFO::Reset()
 }
 
 void
-DERIVED_INFO::Expire(fixed Time)
+DerivedInfo::Expire(fixed Time)
 {
   /* the estimated wind remains valid for an hour */
   estimated_wind_available.Expire(Time, fixed(3600));

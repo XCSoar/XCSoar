@@ -26,7 +26,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 
 const AIRCRAFT_STATE
-ToAircraftState(const MoreData &info, const DERIVED_INFO &calculated)
+ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
 {
   AIRCRAFT_STATE aircraft;
 

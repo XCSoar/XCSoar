@@ -111,7 +111,7 @@ ThermalAssistantWindow::LeftTurn() const
 
 void
 ThermalAssistantWindow::Update(const Angle &_direction,
-                               const DERIVED_INFO &_derived)
+                               const DerivedInfo &_derived)
 {
   direction = _direction;
   derived = _derived;

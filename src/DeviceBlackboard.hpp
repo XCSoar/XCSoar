@@ -74,7 +74,7 @@ public:
 
 public:
   void Initialise();
-  void ReadBlackboard(const DERIVED_INFO &derived_info);
+  void ReadBlackboard(const DerivedInfo &derived_info);
   void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
 
 protected:

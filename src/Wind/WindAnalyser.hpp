@@ -6,7 +6,7 @@
 **
 ************************************************************************
 **
-**   Copyright (c):  2002 by André Somers
+**   Copyright (c):  2002 by Andrï¿½ Somers
 **
 **   This file is distributed under the terms of the General Public
 **   Licence. See the file COPYING for more information.
@@ -28,7 +28,7 @@ struct MoreData;
 /**
  * The windanalyser analyses the list of flightsamples looking
  * for windspeed and direction.
- * @author André Somers
+ * @author Andrï¿½ Somers
  */
 struct WindSample
 {
@@ -87,24 +87,24 @@ public:
   /**
    * Called if the flightmode changes
    */
-  void slot_newFlightMode(const NMEA_INFO &info, const DERIVED_INFO &derived,
+  void slot_newFlightMode(const NMEA_INFO &info, const DerivedInfo &derived,
                           bool left, int marker);
 
   /**
    * Called if a new sample is available in the samplelist.
    */
-  void slot_newSample(const MoreData &info, DERIVED_INFO &derived);
+  void slot_newSample(const MoreData &info, DerivedInfo &derived);
 
   // used to update output if altitude changes
-  void slot_Altitude(const MoreData &info, DERIVED_INFO &derived);
+  void slot_Altitude(const MoreData &info, DerivedInfo &derived);
 
-  void slot_newEstimate(const MoreData &info, DERIVED_INFO &derived,
+  void slot_newEstimate(const MoreData &info, DerivedInfo &derived,
       Vector v, int quality);
 
   //void calcThermalDrift();
 
 private:
-  void _calcWind(const MoreData &info, DERIVED_INFO &derived);
+  void _calcWind(const MoreData &info, DerivedInfo &derived);
 };
 
 #endif

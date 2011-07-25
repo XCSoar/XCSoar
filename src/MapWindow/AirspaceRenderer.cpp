@@ -440,7 +440,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 #endif
                        const WindowProjection &projection,
                        const MoreData &basic,
-                       const DERIVED_INFO &calculated,
+                       const DerivedInfo &calculated,
                        const SETTINGS_COMPUTER &settings_computer,
                        const SETTINGS_MAP &settings_map)
 {

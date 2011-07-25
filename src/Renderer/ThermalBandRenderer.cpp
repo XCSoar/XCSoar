@@ -35,7 +35,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
-ThermalBandRenderer::scale_chart(const DERIVED_INFO &calculated,
+ThermalBandRenderer::scale_chart(const DerivedInfo &calculated,
                                  const SETTINGS_COMPUTER &settings_computer,
                                  Chart &chart) const
 {
@@ -50,7 +50,7 @@ ThermalBandRenderer::scale_chart(const DERIVED_INFO &calculated,
 
 void
 ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
-                                      const DERIVED_INFO& calculated,
+                                      const DerivedInfo& calculated,
                                       const SETTINGS_COMPUTER &settings_computer,
                                       Chart &chart,
                                       const TaskBehaviour& task_props,
@@ -173,7 +173,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
 
 void 
 ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
-                                     const DERIVED_INFO& calculated,
+                                     const DerivedInfo& calculated,
                                      const SETTINGS_COMPUTER &settings_computer,
                                      Canvas &canvas, 
                                      const PixelRect &rc,
@@ -204,7 +204,7 @@ ThermalBandRenderer::DrawThermalBand(const MoreData &basic,
 
 void 
 ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
-                                          const DERIVED_INFO& calculated,
+                                          const DerivedInfo& calculated,
                                           const SETTINGS_COMPUTER &settings_computer,
                                           Canvas &canvas, 
                                           const PixelRect &rc,

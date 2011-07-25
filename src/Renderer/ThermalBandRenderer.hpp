@@ -32,7 +32,7 @@ struct ChartLook;
 class Chart;
 class Canvas;
 struct MoreData;
-struct DERIVED_INFO;
+struct DerivedInfo;
 struct SETTINGS_COMPUTER;
 class OrderedTaskBehaviour;
 class TaskBehaviour;
@@ -47,7 +47,7 @@ public:
     :look(_look), chart_look(_chart_look) {}
 
   void DrawThermalBand(const MoreData& basic,
-                       const DERIVED_INFO& calculated,
+                       const DerivedInfo& calculated,
                        const SETTINGS_COMPUTER &settings_computer,
                        Canvas &canvas,
                        const PixelRect &rc,
@@ -56,7 +56,7 @@ public:
                        const OrderedTaskBehaviour* ordered_props=NULL) const;
 
   void DrawThermalBandSpark(const MoreData &basic,
-                            const DERIVED_INFO& calculated,
+                            const DerivedInfo& calculated,
                             const SETTINGS_COMPUTER &settings_computer,
                             Canvas &canvas,
                             const PixelRect &rc,
@@ -64,14 +64,14 @@ public:
 
 protected:
   void _DrawThermalBand(const MoreData &basic,
-                        const DERIVED_INFO& calculated,
+                        const DerivedInfo& calculated,
                         const SETTINGS_COMPUTER &settings_computer,
                         Chart &chart,
                         const TaskBehaviour& task_props,
                         const bool is_infobox,
                         const OrderedTaskBehaviour* ordered_props) const;
 
-  void scale_chart(const DERIVED_INFO &calculated,
+  void scale_chart(const DerivedInfo &calculated,
                    const SETTINGS_COMPUTER &settings_computer,
                    Chart &chart) const;
 };

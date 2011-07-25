@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Gauge/ThermalAssistantWindow.hpp"
 
-struct DERIVED_INFO;
+struct DerivedInfo;
 class Angle;
 class ContainerWindow;
 
@@ -40,7 +40,7 @@ public:
                         WindowStyle style=WindowStyle());
 
   void Update(const bool enabled, const Angle direction,
-              const DERIVED_INFO &derived);
+              const DerivedInfo &derived);
 
 protected:
   bool on_mouse_down(int x, int y);

@@ -114,7 +114,7 @@ protected:
     return blackboard.Basic();
   }
 
-  const DERIVED_INFO &Calculated() const {
+  const DerivedInfo &Calculated() const {
     return blackboard.Calculated();
   }
 

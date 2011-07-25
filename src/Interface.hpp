@@ -67,7 +67,7 @@ public:
    * @return InterfaceBlackboard.Calculated
    */
   gcc_const
-  static const DERIVED_INFO& Calculated() { return blackboard.Calculated(); }
+  static const DerivedInfo& Calculated() { return blackboard.Calculated(); }
 
   /**
    * Returns the InterfaceBlackboard.SettingsComputer (read-only)
@@ -109,7 +109,7 @@ public:
   static void ReadBlackboardBasic(const MoreData &nmea_info) {
     blackboard.ReadBlackboardBasic(nmea_info);
   }
-  static void ReadBlackboardCalculated(const DERIVED_INFO& derived_info) {
+  static void ReadBlackboardCalculated(const DerivedInfo& derived_info) {
     blackboard.ReadBlackboardCalculated(derived_info);
   }
 };

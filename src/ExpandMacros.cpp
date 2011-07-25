@@ -86,7 +86,7 @@ CondReplaceInString(bool Condition, TCHAR *Buffer, const TCHAR *Macro,
 
 static bool
 ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
-                 const DERIVED_INFO &calculated,
+                 const DerivedInfo &calculated,
                  const SETTINGS_COMPUTER &settings_computer)
 {
   if (protected_task_manager == NULL)
@@ -332,7 +332,7 @@ Basic()
   return CommonInterface::Basic();
 }
 
-static const DERIVED_INFO &
+static const DerivedInfo &
 Calculated()
 {
   return CommonInterface::Calculated();

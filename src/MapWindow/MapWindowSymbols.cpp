@@ -172,7 +172,7 @@ MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos) cons
     return;
 
   if (SettingsMap().DisplayTrackBearing == dtbAuto &&
-      (Basic().track - Calculated().Heading).as_delta().magnitude_degrees() < fixed(5))
+      (Basic().track - Calculated().heading).as_delta().magnitude_degrees() < fixed(5))
     return;
 
   RasterPoint end;

@@ -27,24 +27,24 @@ Copyright_License {
 #include "fixed.hpp"
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
+struct DerivedInfo;
 struct SETTINGS_COMPUTER;
 class AtmosphericPressure;
 class Waypoints;
 
 namespace AutoQNH
 {
-  void Process(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+  void Process(const NMEA_INFO &basic, DerivedInfo &calculated,
                const SETTINGS_COMPUTER &settings_computer,
                const Waypoints &way_points);
 
   void Reset();
   bool IsFinished();
 
-  bool CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+  bool CalculateQNH(const NMEA_INFO &basic, DerivedInfo &calculated,
                     const AtmosphericPressure &pressure,
                     const Waypoints &way_points);
-  void CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+  void CalculateQNH(const NMEA_INFO &basic, DerivedInfo &calculated,
                     const AtmosphericPressure &pressure, fixed altitude);
 }
 

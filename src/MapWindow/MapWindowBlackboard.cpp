@@ -39,7 +39,7 @@ MapWindowBlackboard::ReadSettingsMap(const SETTINGS_MAP
 
 void
 MapWindowBlackboard::ReadBlackboard(const MoreData &nmea_info,
-				    const DERIVED_INFO &derived_info)
+				    const DerivedInfo &derived_info)
 {
   gps_info = nmea_info;
   calculated_info = derived_info;

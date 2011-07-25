@@ -29,7 +29,7 @@ Copyright_License {
 
 struct AirspaceLook;
 struct MoreData;
-struct DERIVED_INFO;
+struct DerivedInfo;
 struct SETTINGS_COMPUTER;
 struct SETTINGS_MAP;
 class Airspaces;
@@ -75,7 +75,7 @@ public:
             Canvas &buffer_canvas, Canvas &stencil_canvas,
 #endif
             const WindowProjection &projection,
-            const MoreData &basic, const DERIVED_INFO &calculated,
+            const MoreData &basic, const DerivedInfo &calculated,
             const SETTINGS_COMPUTER &settings_computer,
             const SETTINGS_MAP &settings_map);
 

@@ -471,7 +471,7 @@ MainWindow::on_timer(timer_t id)
 
     if (ta != NULL)
       ta->Update(CommonInterface::SettingsMap().EnableTAGauge,
-                 CommonInterface::Calculated().Heading,
+                 CommonInterface::Calculated().heading,
                  CommonInterface::Calculated());
   }
   return true;

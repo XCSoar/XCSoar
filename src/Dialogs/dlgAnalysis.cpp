@@ -160,7 +160,7 @@ ChartControl::on_paint(Canvas &canvas)
   const SETTINGS_COMPUTER &settings_computer = blackboard->SettingsComputer();
   const SETTINGS_MAP &settings_map = blackboard->SettingsMap();
   const MoreData &basic = blackboard->Basic();
-  const DERIVED_INFO &calculated = blackboard->Calculated();
+  const DerivedInfo &calculated = blackboard->Calculated();
 
 #ifdef ENABLE_OPENGL
   /* enable clipping */
@@ -256,7 +256,7 @@ static void
 UpdateCrossSection()
 {
   const MoreData &basic = blackboard->Basic();
-  const DERIVED_INFO &calculated = blackboard->Calculated();
+  const DerivedInfo &calculated = blackboard->Calculated();
 
   assert(csw != NULL);
   csw->ReadBlackboard(basic, calculated, blackboard->SettingsMap());
@@ -276,7 +276,7 @@ Update(void)
   assert(glide_computer != NULL);
 
   const SETTINGS_COMPUTER &settings_computer = blackboard->SettingsComputer();
-  const DERIVED_INFO &calculated = blackboard->Calculated();
+  const DerivedInfo &calculated = blackboard->Calculated();
 
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
                               look->chart, look->airspace,

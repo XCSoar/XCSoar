@@ -210,7 +210,7 @@ static void
 GenerateBlackboard(MapWindow &map)
 {
   MoreData nmea_info;
-  DERIVED_INFO derived_info;
+  DerivedInfo derived_info;
   SETTINGS_COMPUTER settings_computer;
 
   nmea_info.Reset();

@@ -31,7 +31,7 @@ Copyright_License {
 #include <list>
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
+struct DerivedInfo;
 
 /**
  * This class provides a mechanism to estimate the wind speed and bearing
@@ -230,7 +230,7 @@ public:
     Result(int _quality):quality(_quality) {}
   };
 
-  Result Update(const NMEA_INFO &basic, const DERIVED_INFO &derived);
+  Result Update(const NMEA_INFO &basic, const DerivedInfo &derived);
 };
 
 #endif

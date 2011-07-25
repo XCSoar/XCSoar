@@ -31,12 +31,12 @@ Copyright_License {
 #include <tchar.h>
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
+struct DerivedInfo;
 class OperationEnvironment;
 class AtmosphericPressure;
 
 void
-devTick(const DERIVED_INFO &calculated);
+devTick(const DerivedInfo &calculated);
 
 void
 AllDevicesAutoReopen(OperationEnvironment &env);
@@ -54,7 +54,7 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency);
 
 void
 AllDevicesPutQNH(const AtmosphericPressure &pres,
-                 const DERIVED_INFO &calculated);
+                 const DerivedInfo &calculated);
 
 void AllDevicesPutVoice(const TCHAR *sentence);
 

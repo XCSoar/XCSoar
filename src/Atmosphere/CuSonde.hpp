@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_ATMOSPHERE_CUSONDE_HPP
 
 struct NMEA_INFO;
-struct DERIVED_INFO;
+struct DerivedInfo;
 
 /**
  * Namespaces that provides simple estimates of thermal heights from lapse rates
@@ -68,7 +68,7 @@ namespace CuSonde
   extern double hGround;
   extern unsigned short last_level;
   void updateMeasurements(const NMEA_INFO &basic,
-                          const DERIVED_INFO &calculated);
+                          const DerivedInfo &calculated);
   extern Level cslevels[NUM_LEVELS];
   void findCloudBase(unsigned short level);
   void findThermalHeight(unsigned short level);

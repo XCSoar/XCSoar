@@ -75,7 +75,7 @@ WindStore::reset()
  * important in the end result and stay in the store longer.
  */
 void
-WindStore::SlotMeasurement(const MoreData &info, DERIVED_INFO &derived,
+WindStore::SlotMeasurement(const MoreData &info, DerivedInfo &derived,
                            Vector windvector, int quality)
 {
   updated = true;
@@ -91,7 +91,7 @@ WindStore::SlotMeasurement(const MoreData &info, DERIVED_INFO &derived,
  * NewWind signal.
  */
 void
-WindStore::SlotAltitude(const MoreData &info, DERIVED_INFO &derived)
+WindStore::SlotAltitude(const MoreData &info, DerivedInfo &derived)
 {
   if ((fabs(info.NavAltitude - _lastAltitude) > fixed(100)) || updated) {
     //only recalculate if there is a significant change
@@ -112,7 +112,7 @@ WindStore::GetWind(fixed Time, fixed h, bool &found) const
   * May result in a NewWind signal. */
 
 void
-WindStore::recalculateWind(const MoreData &info, DERIVED_INFO &derived)
+WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived)
 {
   bool found;
   Vector CurWind = windlist->getWind(info.Time, info.NavAltitude, found);
@@ -132,7 +132,7 @@ WindStore::recalculateWind(const MoreData &info, DERIVED_INFO &derived)
 }
 
 void
-WindStore::NewWind(const NMEA_INFO &info, DERIVED_INFO &derived,
+WindStore::NewWind(const NMEA_INFO &info, DerivedInfo &derived,
     Vector &wind)
 {
   fixed mag = hypot(wind.x, wind.y);

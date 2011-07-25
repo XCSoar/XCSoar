@@ -208,10 +208,10 @@ public:
   }
 
   void ReadBlackboard(const MoreData &nmea_info,
-                      const DERIVED_INFO &derived_info);
+                      const DerivedInfo &derived_info);
 
   void ReadBlackboard(const MoreData &nmea_info,
-                      const DERIVED_INFO &derived_info,
+                      const DerivedInfo &derived_info,
                       const SETTINGS_COMPUTER &settings_computer,
                       const SETTINGS_MAP &settings_map);
 

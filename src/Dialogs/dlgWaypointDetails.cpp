@@ -612,7 +612,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
                             bool allow_navigation)
 {
   const MoreData &basic = CommonInterface::Basic();
-  const DERIVED_INFO &calculated = CommonInterface::Calculated();
+  const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
 

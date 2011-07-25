@@ -31,7 +31,7 @@ class InterfaceBlackboard : public FullBlackboard
 {
 public:
   void ReadBlackboardBasic(const MoreData &nmea_info);
-  void ReadBlackboardCalculated(const DERIVED_INFO &derived_info);
+  void ReadBlackboardCalculated(const DerivedInfo &derived_info);
 
   gcc_const
   SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }

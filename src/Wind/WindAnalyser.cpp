@@ -112,7 +112,7 @@ WindAnalyser::reset()
  * Called if a new sample is available in the samplelist.
  */
 void
-WindAnalyser::slot_newSample(const MoreData &info, DERIVED_INFO &derived)
+WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived)
 {
   if (!active)
     // only work if we are in active mode
@@ -191,7 +191,7 @@ WindAnalyser::slot_newSample(const MoreData &info, DERIVED_INFO &derived)
 }
 
 void
-WindAnalyser::slot_Altitude(const MoreData &info, DERIVED_INFO &derived)
+WindAnalyser::slot_Altitude(const MoreData &info, DerivedInfo &derived)
 {
   windstore.SlotAltitude(info, derived);
 }
@@ -201,7 +201,7 @@ WindAnalyser::slot_Altitude(const MoreData &info, DERIVED_INFO &derived)
  */
 void
 WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
-                                 const DERIVED_INFO &derived,
+                                 const DerivedInfo &derived,
                                  bool left, int marker)
 {
   // we are inactive by default
@@ -231,7 +231,7 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
 }
 
 void
-WindAnalyser::_calcWind(const MoreData &info, DERIVED_INFO &derived)
+WindAnalyser::_calcWind(const MoreData &info, DerivedInfo &derived)
 {
   if (windsamples.empty())
     return;
@@ -335,7 +335,7 @@ WindAnalyser::_calcWind(const MoreData &info, DERIVED_INFO &derived)
 
 void
 WindAnalyser::slot_newEstimate(const MoreData &info,
-                               DERIVED_INFO &derived,
+                               DerivedInfo &derived,
                                Vector a, int quality)
 {
   #ifdef DEBUG_WIND

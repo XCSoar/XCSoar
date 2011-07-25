@@ -73,15 +73,15 @@ public:
     :port(_port), detected(false) {}
 
 protected:
-  void VarioWriteSettings(const DERIVED_INFO &calculated) const;
+  void VarioWriteSettings(const DerivedInfo &calculated) const;
 
 public:
   virtual void LinkTimeout();
   virtual bool ParseNMEA(const char *line, struct NMEA_INFO &info);
   virtual bool PutQNH(const AtmosphericPressure& pres,
-                      const DERIVED_INFO &calculated);
+                      const DerivedInfo &calculated);
   virtual bool PutVoice(const TCHAR *sentence);
-  virtual void OnSysTicker(const DERIVED_INFO &calculated);
+  virtual void OnSysTicker(const DerivedInfo &calculated);
 };
 
 void
@@ -376,7 +376,7 @@ VegaDevice::PutVoice(const TCHAR *Sentence)
 }
 
 void
-VegaDevice::VarioWriteSettings(const DERIVED_INFO &calculated) const
+VegaDevice::VarioWriteSettings(const DerivedInfo &calculated) const
 {
     char mcbuf[100];
 
@@ -392,7 +392,7 @@ VegaDevice::VarioWriteSettings(const DERIVED_INFO &calculated) const
 
 bool
 VegaDevice::PutQNH(const AtmosphericPressure& pres,
-                   const DERIVED_INFO &calculated)
+                   const DerivedInfo &calculated)
 {
   qnh = pres;
 
@@ -402,7 +402,7 @@ VegaDevice::PutQNH(const AtmosphericPressure& pres,
 }
 
 void
-VegaDevice::OnSysTicker(const DERIVED_INFO &calculated)
+VegaDevice::OnSysTicker(const DerivedInfo &calculated)
 {
   if (detected)
     VarioWriteSettings(calculated);

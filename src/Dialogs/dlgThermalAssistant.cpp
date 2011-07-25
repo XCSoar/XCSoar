@@ -57,7 +57,7 @@ OnCreateThermalAssistantControl(ContainerWindow &parent, int left, int top,
 static void
 Update()
 {
-  wta->Update(CommonInterface::Calculated().Heading,
+  wta->Update(CommonInterface::Calculated().heading,
               CommonInterface::Calculated());
 }
 

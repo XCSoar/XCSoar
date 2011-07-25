@@ -310,7 +310,7 @@ VegaVoiceMessage::DoSend(gcc_unused double time, TCHAR *text)
 
 bool
 VegaVoiceMessage::Update(const NMEA_INFO &basic,
-                         const DERIVED_INFO &calculated,
+                         const DerivedInfo &calculated,
 			 const SETTINGS_COMPUTER &settings)
 {
   const fixed Time = basic.clock;
@@ -525,7 +525,7 @@ VegaVoice::~VegaVoice() {
 }
 
 void
-VegaVoice::Update(const NMEA_INFO &basic, const DERIVED_INFO &calculated,
+VegaVoice::Update(const NMEA_INFO &basic, const DerivedInfo &calculated,
 		  const SETTINGS_COMPUTER &settings)
 {
 

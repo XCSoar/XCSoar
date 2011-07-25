@@ -23,7 +23,7 @@ Copyright_License {
 #include "InterfaceBlackboard.hpp"
 
 void
-InterfaceBlackboard::ReadBlackboardCalculated(const DERIVED_INFO &derived_info)
+InterfaceBlackboard::ReadBlackboardCalculated(const DerivedInfo &derived_info)
 {
   calculated_info = derived_info;
 }

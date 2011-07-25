@@ -84,7 +84,7 @@ IsTaskLegVisible(const OrderedTaskPoint &tp)
 static void DrawLegs(Chart& chart,
                      const TaskManager &task_manager,
                      const NMEA_INFO& basic,
-                     const DERIVED_INFO& calculated,
+                     const DerivedInfo& calculated,
                      const bool task_relative)
 {
   if (!calculated.common_stats.task_started)
@@ -112,7 +112,7 @@ static void DrawLegs(Chart& chart,
 void
 FlightStatisticsRenderer::RenderBarographSpark(
     Canvas &canvas, const PixelRect rc,const NMEA_INFO &nmea_info,
-    const DERIVED_INFO &derived_info, const ProtectedTaskManager *_task) const
+    const DerivedInfo &derived_info, const ProtectedTaskManager *_task) const
 {
   ScopeLock lock(fs.mutexStats);
   Chart chart(chart_look, canvas, rc);
@@ -144,7 +144,7 @@ FlightStatisticsRenderer::RenderBarographSpark(
 void
 FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const PixelRect rc,
                                   const NMEA_INFO &nmea_info,
-                                  const DERIVED_INFO &derived_info,
+                                  const DerivedInfo &derived_info,
                                   const ProtectedTaskManager *_task) const
 {
   Chart chart(chart_look, canvas, rc);
@@ -189,7 +189,7 @@ FlightStatisticsRenderer::RenderBarograph(Canvas &canvas, const PixelRect rc,
 void
 FlightStatisticsRenderer::RenderSpeed(Canvas &canvas, const PixelRect rc,
                               const NMEA_INFO &nmea_info,
-                              const DERIVED_INFO &derived_info,
+                              const DerivedInfo &derived_info,
                               const TaskManager &task) const
 {
   Chart chart(chart_look, canvas, rc);
@@ -359,7 +359,7 @@ DrawTrace(Canvas &canvas, const ChartProjection& proj,
 void
 FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
                             const NMEA_INFO &nmea_info, 
-                            const DERIVED_INFO &calculated,
+                            const DerivedInfo &calculated,
                             const SETTINGS_COMPUTER &settings_computer,
                             const SETTINGS_MAP &settings_map,
                             const ContestStatistics &contest,
@@ -375,7 +375,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
   DrawAircraft(canvas, settings_map, aircraft_look,
-               calculated.Heading, aircraft_pos);
+               calculated.heading, aircraft_pos);
 
   canvas.select(Graphics::TracePen);
   DrawTrace(canvas, proj, trace);
@@ -390,7 +390,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 void
 FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
                                      const SETTINGS_COMPUTER &settings_computer,
-                                     const DERIVED_INFO &derived) const
+                                     const DerivedInfo &derived) const
 {
   if (settings_computer.contest == OLC_Plus) {
     const ContestResult& result =
@@ -473,7 +473,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
 void
 FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                              const NMEA_INFO &nmea_info, 
-                             const DERIVED_INFO &calculated,
+                             const DerivedInfo &calculated,
                              const SETTINGS_COMPUTER &settings_computer,
                              const SETTINGS_MAP &settings_map,
                              const TaskManager &task_manager) const
@@ -503,7 +503,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.Location);
   DrawAircraft(canvas, settings_map, aircraft_look,
-               calculated.Heading, aircraft_pos);
+               calculated.heading, aircraft_pos);
 }
 
 
@@ -738,7 +738,7 @@ FlightStatisticsRenderer::CaptionTempTrace(TCHAR *sTmp) const
 }
 
 void
-FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DERIVED_INFO &derived) const
+FlightStatisticsRenderer::CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) const
 {
   const CommonStats &common = derived.common_stats;
   fixed d_remaining = derived.task_stats.total.remaining.get_distance();

@@ -25,7 +25,7 @@ Copyright_License {
 #define BASIC_COMPUTER_HPP
 
 struct MoreData;
-struct DERIVED_INFO;
+struct DerivedInfo;
 struct SETTINGS_COMPUTER;
 
 /**
@@ -49,7 +49,7 @@ public:
    * @param settings_computer the computer settings
    */
   void Compute(MoreData &data, const MoreData &last,
-               const DERIVED_INFO &calculated,
+               const DerivedInfo &calculated,
                const SETTINGS_COMPUTER &settings_computer);
 };
 

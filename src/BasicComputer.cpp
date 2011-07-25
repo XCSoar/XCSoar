@@ -147,7 +147,7 @@ ComputeGroundSpeed(NMEA_INFO &basic, const NMEA_INFO &last)
  * available.
  */
 static void
-ComputeAirspeed(NMEA_INFO &basic, const DERIVED_INFO &calculated)
+ComputeAirspeed(NMEA_INFO &basic, const DerivedInfo &calculated)
 {
   if (basic.AirspeedAvailable && basic.AirspeedReal)
     /* got it already */
@@ -246,7 +246,7 @@ ComputeNettoVario(MoreData &basic, const VARIO_INFO &vario)
  * the estimated pitch angle
  */
 static void
-ComputeDynamics(MoreData &basic, const DERIVED_INFO &calculated)
+ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 {
   if (calculated.flight.Flying &&
       (positive(basic.GroundSpeed) || calculated.wind.is_non_zero())) {
@@ -291,7 +291,7 @@ BasicComputer::Fill(MoreData &data, const SETTINGS_COMPUTER &settings_computer)
 
 void
 BasicComputer::Compute(MoreData &data, const MoreData &last,
-                       const DERIVED_INFO &calculated,
+                       const DerivedInfo &calculated,
                        const SETTINGS_COMPUTER &settings_computer)
 {
   if (!data.time_available || !last.time_available ||

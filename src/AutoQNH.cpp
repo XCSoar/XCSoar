@@ -35,7 +35,7 @@ namespace AutoQNH
 }
 
 void
-AutoQNH::Process(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+AutoQNH::Process(const NMEA_INFO &basic, DerivedInfo &calculated,
         const SETTINGS_COMPUTER &settings_computer, const Waypoints &way_points)
 {
   if (!calculated.flight.OnGround // must be on ground
@@ -75,7 +75,7 @@ AutoQNH::IsFinished()
 }
 
 bool
-AutoQNH::CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+AutoQNH::CalculateQNH(const NMEA_INFO &basic, DerivedInfo &calculated,
                       const AtmosphericPressure &pressure,
                       const Waypoints &way_points)
 {
@@ -93,7 +93,7 @@ AutoQNH::CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
 }
 
 void
-AutoQNH::CalculateQNH(const NMEA_INFO &basic, DERIVED_INFO &calculated,
+AutoQNH::CalculateQNH(const NMEA_INFO &basic, DerivedInfo &calculated,
                       const AtmosphericPressure &pressure,
                       fixed altitude)
 {

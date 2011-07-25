@@ -830,9 +830,9 @@ static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
   if (filter_data.direction_index == 1 && !XCSoarInterface::Calculated().Circling) {
-    Angle a = last_heading - CommonInterface::Calculated().Heading;
+    Angle a = last_heading - CommonInterface::Calculated().heading;
     if (a.as_delta().magnitude_degrees() >= fixed(60)) {
-      last_heading = CommonInterface::Calculated().Heading;
+      last_heading = CommonInterface::Calculated().heading;
       UpdateList();
       InitializeDirection(true);
       wpDirection->RefreshDisplay();
@@ -938,7 +938,7 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
   g_location = location;
   FAITriPtVali = new FAITrianglePointValidator(ordered_task,
                                                ordered_task_index);
-  last_heading = CommonInterface::Calculated().Heading;
+  last_heading = CommonInterface::Calculated().heading;
 
   PrepareData();
   UpdateList();

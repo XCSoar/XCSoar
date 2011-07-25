@@ -71,7 +71,7 @@ using std::max;
 #include "Math/newuoa.hh"
 
 WindZigZagGlue::Result
-WindZigZagGlue::Update(const NMEA_INFO &basic, const DERIVED_INFO &derived)
+WindZigZagGlue::Update(const NMEA_INFO &basic, const DerivedInfo &derived)
 {
   // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 

@@ -89,9 +89,9 @@ GlideComputer::ProcessGPS()
   clock.update();
 
   const MoreData &basic = Basic();
-  DERIVED_INFO &calculated = SetCalculated();
+  DerivedInfo &calculated = SetCalculated();
 
-  calculated.local_date_time = basic.DateTime + GetUTCOffset();
+  calculated.date_time_local = basic.DateTime + GetUTCOffset();
 
   calculated.Expire(basic.clock);
 

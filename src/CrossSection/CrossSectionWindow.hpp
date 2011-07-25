@@ -69,7 +69,7 @@ public:
                      const ChartLook &chart_look);
 
   void ReadBlackboard(const MoreData &_gps_info,
-                      const DERIVED_INFO &_calculated_info,
+                      const DerivedInfo &_calculated_info,
                       const SETTINGS_MAP &_settings_map);
 
   /**
