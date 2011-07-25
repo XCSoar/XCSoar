@@ -829,7 +829,7 @@ OnWPSCloseClicked(gcc_unused WndButton &button)
 static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  if (filter_data.direction_index == 1 && !XCSoarInterface::Calculated().Circling) {
+  if (filter_data.direction_index == 1 && !XCSoarInterface::Calculated().circling) {
     Angle a = last_heading - CommonInterface::Calculated().heading;
     if (a.as_delta().magnitude_degrees() >= fixed(60)) {
       last_heading = CommonInterface::Calculated().heading;

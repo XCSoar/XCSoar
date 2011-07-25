@@ -324,7 +324,7 @@ VegaVoiceMessage::Update(const NMEA_INFO &basic,
   case VV_CLIMBRATE:
     if (!settings.EnableVoiceClimbRate) return false;
 
-    if (calculated.Circling && positive(calculated.average)) {
+    if (calculated.circling && positive(calculated.average)) {
       // Gives the average climb rate in user units every X seconds
       // while in circling mode
       // e.g. if average = 3.4 (user units)
@@ -343,7 +343,7 @@ VegaVoiceMessage::Update(const NMEA_INFO &basic,
     break;
   case VV_WAYPOINTDISTANCE:
 #ifdef OLD_TASK
-    if (!calculated.Circling && task.Valid()) {
+    if (!calculated.circling && task.Valid()) {
 
       // Gives the distance to the active waypoint every X seconds,
       // optionally limited when at last 20 km to go?

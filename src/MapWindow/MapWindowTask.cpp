@@ -135,7 +135,7 @@ MapWindow::DrawTask(Canvas &canvas)
 void
 MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
 {
-  if (Calculated().Circling 
+  if (Calculated().circling 
       || !Basic().LocationAvailable
       || !Basic().track_available
       || !SettingsMap().EnableDetourCostMarker

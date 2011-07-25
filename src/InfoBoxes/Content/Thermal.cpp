@@ -115,13 +115,13 @@ InfoBoxContentThermalLastTime::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentThermalAllAvg::Update(InfoBoxWindow &infobox)
 {
-  if (!positive(XCSoarInterface::Calculated().timeCircling)) {
+  if (!positive(XCSoarInterface::Calculated().time_climb)) {
     infobox.SetInvalid();
     return;
   }
 
-  SetVSpeed(infobox, XCSoarInterface::Calculated().TotalHeightClimb /
-            XCSoarInterface::Calculated().timeCircling);
+  SetVSpeed(infobox, XCSoarInterface::Calculated().total_height_gain /
+            XCSoarInterface::Calculated().time_climb);
 }
 
 void
@@ -163,7 +163,7 @@ InfoBoxContentThermalRatio::Update(InfoBoxWindow &infobox)
 {
   // Set Value
   SetValueFromFixed(infobox, _T("%2.0f%%"),
-                    XCSoarInterface::Calculated().PercentCircling);
+                    XCSoarInterface::Calculated().circling_percentage);
 }
 
 void

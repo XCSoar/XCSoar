@@ -253,7 +253,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 
     // estimate bank angle (assuming balanced turn)
     if (basic.AirspeedAvailable) {
-      const fixed angle = atan(Angle::degrees(calculated.TurnRateWind
+      const fixed angle = atan(Angle::degrees(calculated.turn_rate_heading
           * basic.TrueAirspeed * fixed_inv_g).value_radians());
 
       basic.acceleration.bank_angle = Angle::radians(angle);

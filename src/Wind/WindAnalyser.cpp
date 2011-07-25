@@ -216,7 +216,7 @@ WindAnalyser::slot_newFlightMode(const NMEA_INFO &info,
   startcircle = 3;
 
   circleDeg = 0;
-  curModeOK = derived.Circling;
+  curModeOK = derived.circling;
 
   // we are not circling? Exit function!
   if (!curModeOK)

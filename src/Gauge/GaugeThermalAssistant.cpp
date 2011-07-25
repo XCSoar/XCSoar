@@ -46,7 +46,7 @@ void
 GaugeThermalAssistant::Update(const bool enabled, const Angle direction,
                               const DerivedInfo &derived)
 {
-  if (enabled && derived.Circling) {
+  if (enabled && derived.circling) {
     ThermalAssistantWindow::Update(direction, derived);
     show();
   } else {

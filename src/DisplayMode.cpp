@@ -31,7 +31,7 @@ GetNewDisplayMode(const SETTINGS_MAP &settings_map,
 {
   if (settings_map.UserForceDisplayMode != DM_NONE)
     return settings_map.UserForceDisplayMode;
-  else if (derived_info.Circling)
+  else if (derived_info.circling)
     return DM_CIRCLING;
   else if (derived_info.task_stats.flight_mode_final_glide)
     return DM_FINAL_GLIDE;

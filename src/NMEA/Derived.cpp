@@ -54,7 +54,7 @@ DerivedInfo::Reset()
 {
   VarioInfo::Clear();
   CLIMB_INFO::Clear();
-  CIRCLING_INFO::Clear();
+  CirclingInfo::Clear();
   TeamInfo::Clear();
   TerrainInfo::Clear();
   TeamInfo::Clear();

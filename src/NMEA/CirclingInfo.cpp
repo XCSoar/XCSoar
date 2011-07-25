@@ -24,22 +24,22 @@ Copyright_License {
 #include "CirclingInfo.hpp"
 
 void
-CIRCLING_INFO::Clear()
+CirclingInfo::Clear()
 {
-  Circling = false;
+  circling = false;
 
-  TurnRate = TurnRateWind = fixed_zero;
+  turn_rate = turn_rate_heading = fixed_zero;
 
-  timeCruising = fixed_zero;
-  timeCircling = fixed_zero;
-  TotalHeightClimb = fixed_zero;
+  time_cruise = fixed_zero;
+  time_climb = fixed_zero;
+  total_height_gain = fixed_zero;
 
-  CruiseStartTime = fixed_minus_one;
-  ClimbStartTime = fixed_minus_one;
+  cruise_start_time = fixed_minus_one;
+  climb_start_time = fixed_minus_one;
 
-  MinAltitude = fixed_zero;
-  MaxHeightGain = fixed_zero;
+  min_altitude = fixed_zero;
+  max_height_gain = fixed_zero;
 
-  SmoothedTurnRate = fixed_zero;
-  TurnMode = CRUISE;
+  turn_rate_smoothed = fixed_zero;
+  turn_mode = CRUISE;
 }

@@ -145,7 +145,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
       < fixed(0.010))
     return;
 
-  if (Calculated().TurnMode == CLIMB)
+  if (Calculated().turn_mode == CLIMB)
     return;
 
   canvas.select(task_look.best_cruise_track_pen);
@@ -168,7 +168,7 @@ MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos) cons
 {
   if (!Basic().LocationAvailable ||
       SettingsMap().DisplayTrackBearing == dtbOff ||
-      Calculated().Circling)
+      Calculated().circling)
     return;
 
   if (SettingsMap().DisplayTrackBearing == dtbAuto &&

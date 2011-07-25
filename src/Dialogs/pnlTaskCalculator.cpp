@@ -182,9 +182,9 @@ pnlTaskCalculator::OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_
   fixed MACCREADY;
   switch (Mode) {
   case DataField::daSpecial:
-    if (positive(XCSoarInterface::Calculated().timeCircling)) {
-      MACCREADY = XCSoarInterface::Calculated().TotalHeightClimb /
-                  XCSoarInterface::Calculated().timeCircling;
+    if (positive(XCSoarInterface::Calculated().time_climb)) {
+      MACCREADY = XCSoarInterface::Calculated().total_height_gain /
+                  XCSoarInterface::Calculated().time_climb;
       df->Set(Units::ToUserVSpeed(MACCREADY));
       ActionInterface::SetMacCready(MACCREADY);
       RefreshCalculator();

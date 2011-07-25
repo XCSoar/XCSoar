@@ -27,77 +27,75 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Math/fixed.hpp"
 
-/**
- * Enumeration for cruise/circling mode detection
- * 
- */
-enum CirclingMode_t {
-  CRUISE = 0,                    /**< Established cruise mode */
-  WAITCLIMB,                    /**< In cruise, pending transition to climb */
-  CLIMB,                        /**< Established climb mode */
-  WAITCRUISE,                    /**< In climb, pending transition to cruise */
+/** Enumeration for cruise/circling mode detection */
+enum CirclingMode {
+  /** Established cruise mode */
+  CRUISE = 0,
+  /** In cruise, pending transition to climb */
+  WAITCLIMB,
+  /** Established climb mode */
+  CLIMB,
+  /** In climb, pending transition to cruise */
+  WAITCRUISE,
 };
 
-/**
- * Data for tracking of climb/cruise mode and transition points
- * 
- */
-struct CIRCLING_INFO
+/** Data for tracking of climb/cruise mode and transition points */
+struct CirclingInfo
 {
   /** Turn rate based on track */
-  fixed TurnRate;
+  fixed turn_rate;
 
   /** Turn rate based on heading (including wind) */
-  fixed TurnRateWind;
+  fixed turn_rate_heading;
 
   /** Turn rate after low pass filter */
-  fixed SmoothedTurnRate;
+  fixed turn_rate_smoothed;
 
   /** StartLocation of the current/last climb */
-  GeoPoint ClimbStartLocation;
+  GeoPoint climb_start_location;
   /** StartAltitude of the current/last climb */
-  fixed ClimbStartAlt;
+  fixed climb_start_altitude;
   /** StartTime of the current/last climb */
-  fixed ClimbStartTime;
+  fixed climb_start_time;
 
   /** StartLocation of the current/last cruise */
-  GeoPoint CruiseStartLocation;
+  GeoPoint cruise_start_location;
   /** StartAltitude of the current/last cruise */
-  fixed CruiseStartAlt;
+  fixed cruise_start_altitude;
   /** StartTime of the current/last cruise */
-  fixed CruiseStartTime;
+  fixed cruise_start_time;
 
   /** Start/End time of the turn (used for flight mode determination) */
-  fixed TurnStartTime;
+  fixed turn_start_time;
   /** Start/End location of the turn (used for flight mode determination) */
-  GeoPoint TurnStartLocation;
+  GeoPoint turn_start_location;
   /** Start/End altitude of the turn (used for flight mode determination) */
-  fixed TurnStartAltitude;
+  fixed turn_start_altitude;
   /** Start/End energy height of the turn (used for flight mode determination) */
-  fixed TurnStartEnergyHeight;
+  fixed turn_start_energy_height;
 
   /** Current TurnMode (Cruise, Climb or somewhere between) */
-  CirclingMode_t TurnMode;
+  CirclingMode turn_mode;
 
   /** True if in circling mode, False otherwise */
-  bool Circling;
+  bool circling;
 
   /** Circling/Cruise ratio in percent */
-  fixed PercentCircling;
+  fixed circling_percentage;
 
   /** Time spent in cruise mode */
-  fixed timeCruising;
+  fixed time_cruise;
   /** Time spent in circling mode */
-  fixed timeCircling;
+  fixed time_climb;
 
   /** Minimum altitude since start of task */
-  fixed MinAltitude;
+  fixed min_altitude;
 
   /** Maximum height gain (from MinAltitude) during task */
-  fixed MaxHeightGain;
+  fixed max_height_gain;
 
   /** Total height climbed during task */
-  fixed TotalHeightClimb;
+  fixed total_height_gain;
 
   void Clear();
 };

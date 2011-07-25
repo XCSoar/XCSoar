@@ -265,7 +265,7 @@ UpdateValuesFlight(void)
   wp = (WndProperty*)wf->FindByName(_T("prpMaxHeightGain"));
   assert(wp != NULL);
   _stprintf(Temp, _T("%d %s"),
-            (int)Units::ToUserAltitude(calculated.MaxHeightGain),
+            (int)Units::ToUserAltitude(calculated.max_height_gain),
             Units::GetAltitudeName());
   wp->SetText(Temp);
 

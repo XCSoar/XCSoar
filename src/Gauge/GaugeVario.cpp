@@ -128,7 +128,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
 
   if (ShowAvgText) {
     // JMW averager now displays netto average if not circling
-    if (!Calculated().Circling) {
+    if (!Calculated().circling) {
       RenderValue(canvas, orgTop.x, orgTop.y, &diValueTop, &diLabelTop,
                   Units::ToUserVSpeed(Calculated().netto_average),
                   _T("NetAvg"));
@@ -165,7 +165,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   ival = ValueToNeedlePos(fixed(vval));
   sval = ValueToNeedlePos(Calculated().sink_rate);
   if (ShowAveNeedle) {
-    if (!Calculated().Circling)
+    if (!Calculated().circling)
       ival_av = ValueToNeedlePos(Calculated().netto_average);
     else
       ival_av = ValueToNeedlePos(Calculated().average);
@@ -475,7 +475,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
   // only draw speed command if flying and vario is not circling
   if ((Calculated().flight.flying)
-      && (!Basic().gps.simulator || !Calculated().Circling)) {
+      && (!Basic().gps.simulator || !Calculated().circling)) {
     vdiff = Calculated().V_stf - Basic().IndicatedAirspeed;
     vdiff = max(-DeltaVlimit, min(DeltaVlimit, vdiff)); // limit it
     vdiff = iround(vdiff/DeltaVstep) * DeltaVstep;

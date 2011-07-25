@@ -89,7 +89,7 @@ WindZigZagGlue::Update(const NMEA_INFO &basic, const DerivedInfo &derived)
   }
 
   // temporary manoeuvering, dont append this point
-  if ((fabs(derived.TurnRate) > fixed(20)) ||
+  if ((fabs(derived.turn_rate) > fixed(20)) ||
       (fabs(basic.acceleration.g_load - fixed_one) > fixed(0.3))) {
 
     blackout(basic.Time);
@@ -109,7 +109,7 @@ WindZigZagGlue::Update(const NMEA_INFO &basic, const DerivedInfo &derived)
     return Result(0);
 
   Result res;
-  const ZZBeta beta = optimise(res.quality, derived.wind, derived.Circling);
+  const ZZBeta beta = optimise(res.quality, derived.wind, derived.circling);
   res.wind = SpeedVector(beta.east, beta.north);
   return res;
 }

@@ -383,7 +383,7 @@ VegaDevice::VarioWriteSettings(const DerivedInfo &calculated) const
     sprintf(mcbuf, "PDVMC,%d,%d,%d,%d,%d",
             iround(calculated.common_stats.current_mc*10),
             iround(calculated.V_stf*10),
-            calculated.Circling,
+            calculated.circling,
             iround(calculated.terrain_altitude),
             uround(qnh.get_QNH() * 10));
 

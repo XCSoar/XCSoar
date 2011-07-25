@@ -51,18 +51,18 @@ GlideComputerBlackboard::ResetFlight(const bool full)
 void
 GlideComputerBlackboard::StartTask()
 {
-  calculated_info.CruiseStartLocation = gps_info.Location;
-  calculated_info.CruiseStartAlt = gps_info.NavAltitude;
-  calculated_info.CruiseStartTime = gps_info.Time;
+  calculated_info.cruise_start_location = gps_info.Location;
+  calculated_info.cruise_start_altitude = gps_info.NavAltitude;
+  calculated_info.cruise_start_time = gps_info.Time;
 
   // JMW reset time cruising/time circling stats on task start
-  calculated_info.timeCircling = fixed_zero;
-  calculated_info.timeCruising = fixed_zero;
-  calculated_info.TotalHeightClimb = fixed_zero;
+  calculated_info.time_climb = fixed_zero;
+  calculated_info.time_cruise = fixed_zero;
+  calculated_info.total_height_gain = fixed_zero;
 
   // reset max height gain stuff on task start
-  calculated_info.MaxHeightGain = fixed_zero;
-  calculated_info.MinAltitude = fixed_zero;
+  calculated_info.max_height_gain = fixed_zero;
+  calculated_info.min_altitude = fixed_zero;
 }
 
 void

@@ -106,7 +106,7 @@ ThermalAssistantWindow::on_resize(unsigned width, unsigned height)
 bool
 ThermalAssistantWindow::LeftTurn() const
 {
-  return negative(derived.SmoothedTurnRate);
+  return negative(derived.turn_rate_smoothed);
 }
 
 void
@@ -264,7 +264,7 @@ void
 ThermalAssistantWindow::on_paint_buffer(Canvas &canvas)
 {
   PaintRadarBackground(canvas);
-  if (!derived.Circling) {
+  if (!derived.circling) {
     PaintNotCircling(canvas);
     return;
   }

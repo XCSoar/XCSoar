@@ -62,7 +62,7 @@ GlideComputerStats::DoLogging()
     return false;
 
   // log points more often in circling mode
-  if (Calculated().Circling)
+  if (Calculated().circling)
     log_clock.set_dt(fixed(SettingsComputer().LoggerTimeStepCircling));
   else
     log_clock.set_dt(fixed(SettingsComputer().LoggerTimeStepCruise));
@@ -91,16 +91,16 @@ GlideComputerStats::DoLogging()
 void
 GlideComputerStats::OnClimbBase(fixed StartAlt)
 {
-  flightstats.AddClimbBase(Calculated().ClimbStartTime -
+  flightstats.AddClimbBase(Calculated().climb_start_time -
                            Calculated().flight.takeoff_time, StartAlt);
 }
 
 void
 GlideComputerStats::OnClimbCeiling()
 {
-  flightstats.AddClimbCeiling(Calculated().CruiseStartTime -
+  flightstats.AddClimbCeiling(Calculated().cruise_start_time -
                               Calculated().flight.takeoff_time,
-                              Calculated().CruiseStartAlt);
+                              Calculated().cruise_start_altitude);
 }
 
 /**
@@ -124,15 +124,15 @@ GlideComputerStats::ProcessClimbEvents()
   const DerivedInfo &calculated = Calculated();
   const DerivedInfo &last_calculated = LastCalculated();
 
-  switch (calculated.TurnMode) {
+  switch (calculated.turn_mode) {
   case CLIMB:
-    if (calculated.ClimbStartTime > last_calculated.ClimbStartTime)
+    if (calculated.climb_start_time > last_calculated.climb_start_time)
       // set altitude for start of circling (as base of climb)
-      OnClimbBase(calculated.TurnStartAltitude);
+      OnClimbBase(calculated.turn_start_altitude);
     break;
 
   case CRUISE:
-    if (calculated.CruiseStartTime > last_calculated.CruiseStartTime)
+    if (calculated.cruise_start_time > last_calculated.cruise_start_time)
       OnClimbCeiling();
     break;
 
