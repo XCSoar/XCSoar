@@ -408,7 +408,7 @@ VegaDevice::OnSysTicker(const DerivedInfo &calculated)
     VarioWriteSettings(calculated);
 
 #ifdef UAV_APPLICATION
-  const THERMAL_LOCATOR_INFO &t = calculated.thermal_locator;
+  const ThermalLocatorInfo &t = calculated.thermal_locator;
   char tbuf[100];
   sprintf(tbuf, "PTLOC,%d,%3.5f,%3.5f,%g,%g",
           (int)(t.estimate_valid),

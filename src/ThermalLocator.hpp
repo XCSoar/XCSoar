@@ -34,7 +34,7 @@ class TaskProjection;
 #define TLOCATOR_NMIN 5
 #define TLOCATOR_NMAX 60
 
-struct THERMAL_LOCATOR_INFO;
+struct ThermalLocatorInfo;
 
 /**
  * Class to estimate the location of the center of a thermal
@@ -89,7 +89,7 @@ public:
    */
   void Process(const bool circling, const fixed time, const GeoPoint &location,
                const fixed w, const SpeedVector wind,
-               THERMAL_LOCATOR_INFO& therm);
+               ThermalLocatorInfo& therm);
 
   /**
    * Reset as if never flown
@@ -101,7 +101,7 @@ private:
 
   void AddPoint(const fixed t, const GeoPoint &location, const fixed w);
   void Update(const fixed t_0, const GeoPoint &location_0,
-              const SpeedVector wind, THERMAL_LOCATOR_INFO &therm);
+              const SpeedVector wind, ThermalLocatorInfo &therm);
 
   void Drift(const fixed t_0, const TaskProjection& projection,
              const GeoPoint& traildrift);

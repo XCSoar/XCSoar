@@ -100,7 +100,7 @@ ThermalLocator::Process(const bool circling,
                         const GeoPoint &location, 
                         const fixed w,
                         const SpeedVector wind,
-                        THERMAL_LOCATOR_INFO& therm) {}
+                        ThermalLocatorInfo& therm) {}
 
 int GetUTCOffset() { return 0; }
 

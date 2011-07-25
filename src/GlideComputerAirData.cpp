@@ -857,7 +857,7 @@ void
 GlideComputerAirData::ThermalSources()
 {
   const DerivedInfo &calculated = Calculated();
-  THERMAL_LOCATOR_INFO &thermal_locator = SetCalculated().thermal_locator;
+  ThermalLocatorInfo &thermal_locator = SetCalculated().thermal_locator;
 
   if (!thermal_locator.estimate_valid ||
       !calculated.last_thermal.IsDefined())
@@ -879,13 +879,13 @@ GlideComputerAirData::ThermalSources()
                       ground_altitude);
 
   if (positive(ground_altitude)) {
-    THERMAL_SOURCE_INFO &source =
+    ThermalSource &source =
       thermal_locator.AllocateSource(Basic().Time);
 
-    source.LiftRate = calculated.last_thermal.lift_rate;
-    source.Location = ground_location;
-    source.GroundHeight = ground_altitude;
-    source.Time = Basic().Time;
+    source.lift_rate = calculated.last_thermal.lift_rate;
+    source.location = ground_location;
+    source.ground_height = ground_altitude;
+    source.time = Basic().Time;
   }
 }
 

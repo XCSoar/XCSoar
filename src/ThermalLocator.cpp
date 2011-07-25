@@ -74,7 +74,7 @@ void
 ThermalLocator::Update(const fixed t_0, 
                        const GeoPoint &location_0,
                        const SpeedVector wind, 
-                       THERMAL_LOCATOR_INFO &therm)
+                       ThermalLocatorInfo &therm)
 {
   if (n_points < TLOCATOR_NMIN) {
     therm.estimate_valid = false;
@@ -146,7 +146,7 @@ ThermalLocator::Drift(const fixed t_0, const TaskProjection& projection,
 void
 ThermalLocator::Process(const bool circling, const fixed time,
                         const GeoPoint &location, const fixed w,
-                        const SpeedVector wind, THERMAL_LOCATOR_INFO& therm)
+                        const SpeedVector wind, ThermalLocatorInfo& therm)
 {
   if (circling) {
     AddPoint(time, location, w);

@@ -26,22 +26,17 @@ Copyright_License {
 
 #include "Engine/Navigation/GeoPoint.hpp"
 
-/**
- * Structure to hold information on identified thermal sources on the ground
- */
-struct THERMAL_SOURCE_INFO
+/** Structure to hold information on identified thermal sources on the ground */
+struct ThermalSource
 {
-  GeoPoint Location;
-  fixed GroundHeight;
-  fixed LiftRate;
-  fixed Time;
+  GeoPoint location;
+  fixed ground_height;
+  fixed lift_rate;
+  fixed time;
 };
 
-/**
- * Structure for current thermal estimate from ThermalLocator
- * 
- */
-struct THERMAL_LOCATOR_INFO
+/** Structure for current thermal estimate from ThermalLocator */
+struct ThermalLocatorInfo
 {
   static const unsigned MAX_SOURCES = 20;
 
@@ -51,7 +46,7 @@ struct THERMAL_LOCATOR_INFO
   bool estimate_valid;
 
   /** Position and data of the last thermal sources */
-  THERMAL_SOURCE_INFO sources[MAX_SOURCES];
+  ThermalSource sources[MAX_SOURCES];
 
   void Clear();
 
@@ -59,7 +54,7 @@ struct THERMAL_LOCATOR_INFO
    * Allocate a new #THERMAL_SOURCE_INFO slot; discard the oldest one
    * if the list is full.
    */
-  THERMAL_SOURCE_INFO &AllocateSource(fixed Time);
+  ThermalSource &AllocateSource(fixed Time);
 };
 
 #endif

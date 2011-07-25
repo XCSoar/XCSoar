@@ -197,7 +197,7 @@ struct DerivedInfo:
 
   ThermalBandInfo thermal_band;
 
-  THERMAL_LOCATOR_INFO thermal_locator;
+  ThermalLocatorInfo thermal_locator;
 
   unsigned time_process_gps; /**< Time (ms) to process main computer functions */
   unsigned time_process_idle; /**< Time (ms) to process idle computer functions */

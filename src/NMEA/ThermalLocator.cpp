@@ -24,24 +24,24 @@ Copyright_License {
 #include "NMEA/ThermalLocator.hpp"
 
 void
-THERMAL_LOCATOR_INFO::Clear()
+ThermalLocatorInfo::Clear()
 {
   // clear thermal sources for first time.
   for (unsigned i = 0; i < MAX_SOURCES; i++)
-    sources[i].LiftRate = fixed_minus_one;
+    sources[i].lift_rate = fixed_minus_one;
 }
 
-THERMAL_SOURCE_INFO &
-THERMAL_LOCATOR_INFO::AllocateSource(fixed Time)
+ThermalSource &
+ThermalLocatorInfo::AllocateSource(fixed Time)
 {
   fixed tbest = fixed_zero;
   unsigned ibest = 0;
 
   for (unsigned i = 0; i < MAX_SOURCES; i++) {
-    if (negative(sources[i].LiftRate))
+    if (negative(sources[i].lift_rate))
       return sources[i];
 
-    fixed dt = Time - sources[i].Time;
+    fixed dt = Time - sources[i].time;
     if (dt > tbest) {
       tbest = dt;
       ibest = i;
