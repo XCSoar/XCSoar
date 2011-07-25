@@ -742,18 +742,18 @@ GlideComputerAirData::Turning()
   bool forcecruise = false;
   bool forcecircling = false;
   if (SettingsComputer().EnableExternalTriggerCruise && !Basic().gps.Replay) {
-    switch (Basic().SwitchState.FlightMode) {
-    case SWITCH_INFO::MODE_UNKNOWN:
+    switch (Basic().switch_state.flight_mode) {
+    case SwitchInfo::MODE_UNKNOWN:
       forcecircling = false;
       forcecruise = false;
       break;
 
-    case SWITCH_INFO::MODE_CIRCLING:
+    case SwitchInfo::MODE_CIRCLING:
       forcecircling = true;
       forcecruise = false;
       break;
 
-    case SWITCH_INFO::MODE_CRUISE:
+    case SwitchInfo::MODE_CRUISE:
       forcecircling = false;
       forcecruise = true;
       break;

@@ -40,22 +40,22 @@ Update(const TCHAR *name, bool value)
 static void
 UpdateValues()
 {
-  const SWITCH_INFO &switches = XCSoarInterface::Basic().SwitchState;
+  const SwitchInfo &switches = XCSoarInterface::Basic().switch_state;
 
-  Update(_T("prpFlapLanding"), switches.FlapLanding);
-  Update(_T("prpAirbrakeExtended"), switches.AirbrakeLocked);
-  Update(_T("prpFlapPositive"), switches.FlapPositive);
-  Update(_T("prpFlapNeutral"), switches.FlapNeutral);
-  Update(_T("prpFlapNegative"), switches.FlapNegative);
-  Update(_T("prpGearExtended"), switches.GearExtended);
-  Update(_T("prpAcknowledge"), switches.Acknowledge);
-  Update(_T("prpRepeat"), switches.Repeat);
-  Update(_T("prpSpeedCommand"), switches.SpeedCommand);
-  Update(_T("prpUserSwitchUp"), switches.UserSwitchUp);
-  Update(_T("prpUserSwitchMiddle"), switches.UserSwitchMiddle);
-  Update(_T("prpUserSwitchDown"), switches.UserSwitchDown);
+  Update(_T("prpFlapLanding"), switches.flap_landing);
+  Update(_T("prpAirbrakeExtended"), switches.airbrake_locked);
+  Update(_T("prpFlapPositive"), switches.flap_positive);
+  Update(_T("prpFlapNeutral"), switches.flap_neutral);
+  Update(_T("prpFlapNegative"), switches.flap_negative);
+  Update(_T("prpGearExtended"), switches.gear_extended);
+  Update(_T("prpAcknowledge"), switches.acknowledge);
+  Update(_T("prpRepeat"), switches.repeat);
+  Update(_T("prpSpeedCommand"), switches.speed_command);
+  Update(_T("prpUserSwitchUp"), switches.user_switch_up);
+  Update(_T("prpUserSwitchMiddle"), switches.user_switch_middle);
+  Update(_T("prpUserSwitchDown"), switches.user_switch_down);
   Update(_T("prpVarioCircling"),
-         switches.FlightMode == SWITCH_INFO::MODE_CIRCLING);
+         switches.flight_mode == SwitchInfo::MODE_CIRCLING);
 }
 
 static void

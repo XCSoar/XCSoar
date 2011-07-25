@@ -111,37 +111,37 @@ PDSWC(NMEAInputLine &line, NMEA_INFO &info)
 
   info.SwitchStateAvailable = true;
 
-  info.SwitchState.AirbrakeLocked =
+  info.switch_state.airbrake_locked =
     (switchinputs & (1<<INPUT_BIT_AIRBRAKELOCKED))>0;
-  info.SwitchState.FlapPositive =
+  info.switch_state.flap_positive =
     (switchinputs & (1<<INPUT_BIT_FLAP_POS))>0;
-  info.SwitchState.FlapNeutral =
+  info.switch_state.flap_neutral =
     (switchinputs & (1<<INPUT_BIT_FLAP_ZERO))>0;
-  info.SwitchState.FlapNegative =
+  info.switch_state.flap_negative =
     (switchinputs & (1<<INPUT_BIT_FLAP_NEG))>0;
-  info.SwitchState.GearExtended =
+  info.switch_state.gear_extended =
     (switchinputs & (1<<INPUT_BIT_GEAR_EXTENDED))>0;
-  info.SwitchState.Acknowledge =
+  info.switch_state.acknowledge =
     (switchinputs & (1<<INPUT_BIT_ACK))>0;
-  info.SwitchState.Repeat =
+  info.switch_state.repeat =
     (switchinputs & (1<<INPUT_BIT_REP))>0;
-  info.SwitchState.SpeedCommand =
+  info.switch_state.speed_command =
     (switchinputs & (1<<INPUT_BIT_SC))>0;
-  info.SwitchState.UserSwitchUp =
+  info.switch_state.user_switch_up =
     (switchinputs & (1<<INPUT_BIT_USERSWUP))>0;
-  info.SwitchState.UserSwitchMiddle =
+  info.switch_state.user_switch_middle =
     (switchinputs & (1<<INPUT_BIT_USERSWMIDDLE))>0;
-  info.SwitchState.UserSwitchDown =
+  info.switch_state.user_switch_down =
     (switchinputs & (1<<INPUT_BIT_USERSWDOWN))>0;
   /*
-  info.SwitchState.Stall =
+  info.switch_state.Stall =
     (switchinputs & (1<<INPUT_BIT_STALL))>0;
   */
-  info.SwitchState.FlightMode =
+  info.switch_state.flight_mode =
     (switchoutputs & (1 << OUTPUT_BIT_CIRCLING)) > 0
-    ? SWITCH_INFO::MODE_CIRCLING
-    : SWITCH_INFO::MODE_CRUISE;
-  info.SwitchState.FlapLanding =
+    ? SwitchInfo::MODE_CIRCLING
+    : SwitchInfo::MODE_CRUISE;
+  info.switch_state.flap_landing =
     (switchoutputs & (1<<OUTPUT_BIT_FLAP_LANDING))>0;
 
   long up_switchinputs;

@@ -36,28 +36,28 @@ Copyright_License {
 /**
  * State of external switch devices (esp Vega)
  */
-struct SWITCH_INFO
+struct SwitchInfo
 {
-  bool AirbrakeLocked;
-  bool FlapPositive;
-  bool FlapNeutral;
-  bool FlapNegative;
-  bool GearExtended;
-  bool Acknowledge;
-  bool Repeat;
-  bool SpeedCommand;
-  bool UserSwitchUp;
-  bool UserSwitchMiddle;
-  bool UserSwitchDown;
+  bool airbrake_locked;
+  bool flap_positive;
+  bool flap_neutral;
+  bool flap_negative;
+  bool gear_extended;
+  bool acknowledge;
+  bool repeat;
+  bool speed_command;
+  bool user_switch_up;
+  bool user_switch_middle;
+  bool user_switch_down;
 
   enum {
     MODE_UNKNOWN,
     MODE_CIRCLING,
     MODE_CRUISE,
-  } FlightMode;
+  } flight_mode;
 
-  bool FlapLanding;
-  // bool Stall;
+  bool flap_landing;
+  // bool stall;
 
   void Reset();
 };
@@ -348,7 +348,7 @@ struct NMEA_INFO {
   bool SwitchStateAvailable;
 
   /** Switch state of the user inputs */
-  SWITCH_INFO SwitchState;
+  SwitchInfo switch_state;
 
   fixed StallRatio;
   Validity StallRatioAvailable;

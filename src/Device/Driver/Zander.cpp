@@ -116,11 +116,11 @@ PZAN5(NMEAInputLine &line, NMEA_INFO &info)
   line.read(state, 3);
 
   if (strcmp(state, "SF") == 0) {
-    info.SwitchState.FlightMode = SWITCH_INFO::MODE_CRUISE;
-    info.SwitchState.SpeedCommand = true;
+    info.switch_state.flight_mode = SwitchInfo::MODE_CRUISE;
+    info.switch_state.speed_command = true;
   } else if (strcmp(state, "VA") == 0) {
-    info.SwitchState.FlightMode = SWITCH_INFO::MODE_CIRCLING;
-    info.SwitchState.SpeedCommand = false;
+    info.switch_state.flight_mode = SwitchInfo::MODE_CIRCLING;
+    info.switch_state.speed_command = false;
   } else
     return false;
 

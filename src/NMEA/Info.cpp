@@ -25,20 +25,20 @@ Copyright_License {
 #include "OS/Clock.hpp"
 
 void
-SWITCH_INFO::Reset()
+SwitchInfo::Reset()
 {
-  AirbrakeLocked = false;
-  FlapPositive = false;
-  FlapNeutral = false;
-  FlapNegative = false;
-  GearExtended = false;
-  Acknowledge = false;
-  Repeat = false;
-  SpeedCommand = false;
-  UserSwitchUp = false;
-  UserSwitchMiddle = false;
-  UserSwitchDown = false;
-  FlightMode = SWITCH_INFO::MODE_UNKNOWN;
+  airbrake_locked = false;
+  flap_positive = false;
+  flap_neutral = false;
+  flap_negative = false;
+  gear_extended = false;
+  acknowledge = false;
+  repeat = false;
+  speed_command = false;
+  user_switch_up = false;
+  user_switch_middle = false;
+  user_switch_down = false;
+  flight_mode = SwitchInfo::MODE_UNKNOWN;
 }
 
 void
@@ -110,7 +110,7 @@ NMEA_INFO::Reset()
   SupplyBatteryVoltageAvailable.Clear();
 
   SwitchStateAvailable = false;
-  SwitchState.Reset();
+  switch_state.Reset();
 
   StallRatioAvailable.Clear();
 
@@ -241,7 +241,7 @@ NMEA_INFO::Complement(const NMEA_INFO &add)
     SupplyBatteryVoltage = add.SupplyBatteryVoltage;
 
   if (!SwitchStateAvailable && add.SwitchStateAvailable)
-    SwitchState = add.SwitchState;
+    switch_state = add.switch_state;
 
   if (!StallRatioAvailable && add.StallRatioAvailable)
     StallRatio = add.StallRatio;
