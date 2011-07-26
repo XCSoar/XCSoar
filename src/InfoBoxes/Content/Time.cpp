@@ -34,6 +34,11 @@ Copyright_License {
 void
 InfoBoxContentTimeLocal::Update(InfoBoxWindow &infobox)
 {
+  if (!CommonInterface::Basic().time_available) {
+    infobox.SetInvalid();
+    return;
+  }
+
   TCHAR sTmp[32];
 
   // Set Value
@@ -52,6 +57,11 @@ InfoBoxContentTimeLocal::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTimeUTC::Update(InfoBoxWindow &infobox)
 {
+  if (!CommonInterface::Basic().time_available) {
+    infobox.SetInvalid();
+    return;
+  }
+
   TCHAR sTmp[32];
 
   // Set Value
