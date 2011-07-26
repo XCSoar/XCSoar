@@ -16,7 +16,6 @@ SCREEN_SOURCES = \
 	$(SCREEN_SRC_DIR)/Window.cpp \
 	$(SCREEN_SRC_DIR)/BufferWindow.cpp \
 	$(SCREEN_SRC_DIR)/DoubleBufferWindow.cpp \
-	$(SCREEN_SRC_DIR)/PaintWindow.cpp \
 	$(SCREEN_SRC_DIR)/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/TextWindow.cpp \
 	$(SCREEN_SRC_DIR)/SingleWindow.cpp
@@ -71,6 +70,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/Font.cpp \
 	$(SCREEN_SRC_DIR)/GDI/AlphaBlend.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Window.cpp \
+	$(SCREEN_SRC_DIR)/GDI/PaintWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ContainerWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/ButtonWindow.cpp \
 	$(SCREEN_SRC_DIR)/GDI/EditWindow.cpp \

@@ -23,8 +23,6 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
-#ifdef USE_GDI
-
 bool
 PaintWindow::register_class(HINSTANCE hInstance)
 {
@@ -43,5 +41,3 @@ PaintWindow::register_class(HINSTANCE hInstance)
 
   return RegisterClass(&wc) != 0;
 }
-
-#endif /* USE_GDI */
