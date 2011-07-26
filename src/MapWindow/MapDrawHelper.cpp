@@ -103,8 +103,13 @@ MapDrawHelper::buffer_render_finish()
     // need to do this to prevent drawing of colored outline
     m_buffer.white_pen();
     
-    if (m_use_stencil)
+    if (m_use_stencil) {
+#ifdef ENABLE_SDL
+      m_buffer.copy_transparent_black(m_stencil);
+#else
       m_buffer.copy_or(m_stencil);
+#endif
+    }
 
 #ifdef HAVE_ALPHA_BLEND
     if (settings.transparency && AlphaBlendAvailable())
