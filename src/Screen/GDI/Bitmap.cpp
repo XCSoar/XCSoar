@@ -37,15 +37,6 @@ Copyright_License {
 
 #include <assert.h>
 
-struct DIBINFO : public BITMAPINFO
-{
-	RGBQUAD	 arColors[255];    // Color table info - adds an extra 255 entries to palette
-
-	operator LPBITMAPINFO()          { return (LPBITMAPINFO) this; }
-	operator LPBITMAPINFOHEADER()    { return &bmiHeader;          }
-	RGBQUAD* ColorTable()            { return bmiColors;           }
-};
-
 bool
 Bitmap::load(unsigned id)
 {
