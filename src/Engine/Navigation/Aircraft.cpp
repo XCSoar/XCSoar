@@ -59,6 +59,7 @@ FlyingState::Reset()
   time_on_ground = 0;
   flying = false;
   on_ground = false;
+  flight_time = takeoff_time = fixed_zero;
 }
 
 void
