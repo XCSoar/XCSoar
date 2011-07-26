@@ -362,13 +362,14 @@ Canvas::text_opaque(int x, int y, const PixelRect &rc, const TCHAR *_text)
 #ifndef ENABLE_OPENGL
 
 static bool
-clip(int &position, unsigned &length, unsigned max)
+clip(int &position, unsigned &length, unsigned max, int &src_position)
 {
   if (position < 0) {
     if (length <= (unsigned)-position)
       return false;
 
     length -= -position;
+    src_position -= position;
     position = 0;
   }
 
@@ -388,8 +389,8 @@ Canvas::copy(int dest_x, int dest_y,
 {
   assert(src_surface != NULL);
 
-  if (!clip(dest_x, dest_width, width) ||
-      !clip(dest_y, dest_height, height))
+  if (!clip(dest_x, dest_width, width, src_x) ||
+      !clip(dest_y, dest_height, height, src_y))
     return;
 
   SDL_Rect src_rect = { src_x, src_y, dest_width, dest_height };
