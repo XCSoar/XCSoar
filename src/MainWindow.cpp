@@ -194,8 +194,12 @@ MainWindow::Deinitialise()
 
   popup.reset();
 
-  delete map;
+  // During destruction of GlueMapWindow WM_SETFOCUS gets called for
+  // MainWindow which tries to set the focus to GlueMapWindow. Prevent
+  // this issue by setting map to NULL before calling delete.
+  GlueMapWindow *temp_map = map;
   map = NULL;
+  delete temp_map;
 
   delete vario;
   vario = NULL;
