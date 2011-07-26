@@ -57,7 +57,8 @@ static void
 SetTitle()
 {
   TCHAR title[99];
-  _stprintf(title, _T("Status: %s"), wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
+  _stprintf(title, _T("%s: %s"), _("Status"),
+            wTabBar->GetButtonCaption((wTabBar->GetCurrentPage())));
   wf->SetCaption(title);
 }
 
