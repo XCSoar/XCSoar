@@ -212,8 +212,6 @@ private:
    */
   GeoBounds cache_bounds;
 
-  static rectObj ConvertRect(const GeoBounds &br);
-
 protected:
   void ClearCache();
 };

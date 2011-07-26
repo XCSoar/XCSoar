@@ -91,8 +91,9 @@ TopographyFile::ClearCache()
   }
 }
 
-rectObj
-TopographyFile::ConvertRect(const GeoBounds &br)
+gcc_pure
+static rectObj
+ConvertRect(const GeoBounds &br)
 {
   rectObj dest;
   dest.minx = br.west.value_degrees();
