@@ -99,7 +99,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("L/D Inst"),
     N_("Instantaneous glide ratio, given by the ground speed divided by the vertical speed (GPS speed) over the last 20 seconds. Negative values indicate climbing cruise. If the vertical speed is close to zero, the displayed value is '---'."),
     e_LD_Cruise, // LD Cruise
-    71, // LD Avg
+    e_LD_Avg, // LD Avg
   },
 
   // 5
@@ -162,7 +162,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("WP Dist"),
     N_("The distance to the currently selected waypoint. For AAT tasks, this is the distance to the target within the AAT sector."),
     e_WP_AltDiff, // WP AltD
-    73, // OLC
+    e_OC_Distance, // OLC
   },
 
   // 12
@@ -170,7 +170,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Next altitude difference"),
     N_("WP AltD"),
     N_("Arrival altitude at the next waypoint relative to the safety arrival height."),
-    76, // WP AltA
+    e_WP_H, // WP AltA
     e_WP_Distance, // WP Dist
   },
 
@@ -759,8 +759,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Free RAM"),
     N_("Free RAM"),
     N_("Free RAM as reported by OS."),
-    75, // CPU Load
-    75, // CPU Load
+    e_CPU_Load, // CPU Load
+    e_CPU_Load, // CPU Load
   },
 
   // 78
@@ -768,8 +768,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Flight level"),
     N_("Flight Level"),
     N_("Pressure Altitude given as Flight Level. Only available if barometric altitude available and correct QNH set."),
-    0, // H GPS
-    70, // QFE GPS
+    e_HeightGPS, // H GPS
+    e_H_QFE, // QFE GPS
   },
 
   // 79
@@ -777,8 +777,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Barogram"),
     N_("Barogram"),
     N_("Trace of altitude during flight"),
-    79, // H GPS
-    79, // QFE GPS
+    e_Barogram, // H GPS
+    e_Barogram, // QFE GPS
   },
 
   // 80
@@ -786,8 +786,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Vario trace"),
     N_("Vario"),
     N_("Trace of vertical speed, as reported by the GPS, or the intelligent vario total energy vario value if connected to one."),
-    79, // H GPS
-    79, // QFE GPS
+    e_Barogram, // H GPS
+    e_Barogram, // QFE GPS
   },
 
   // 81
@@ -795,8 +795,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Netto vario trace"),
     N_("Netto"),
     N_("Trace of vertical speed of air-mass, equal to vario value less the glider's estimated sink rate."),
-    79, // H GPS
-    79, // QFE GPS
+    e_Barogram, // H GPS
+    e_Barogram, // QFE GPS
   },
   
   // 82
@@ -804,8 +804,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Thermal circling trace"),
     N_("TC Circling"),
     N_("Trace of average climb rate each turn in circling, based of the reported GPS altitude, or vario if available."),
-    79, // H GPS
-    79, // QFE GPS
+    e_Barogram, // H GPS
+    e_Barogram, // QFE GPS
   },
 
   // 83
@@ -813,8 +813,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Climb band"),
     N_("Climb band"),
     N_("Graph of average circling climb rate (horizontal axis) as a function of height (vertical axis)."),
-    79, // H GPS
-    79, // QFE GPS
+    e_Barogram, // H GPS
+    e_Barogram, // QFE GPS
   },
 
   // 84
@@ -822,8 +822,8 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     N_("Task progress"),
     N_("Progress"),
     N_("Clock-like display of distance remaining along task, showing achieved taskpoints."),
-    79, // H GPS
-    79, // QFE GPS
+    e_Barogram, // H GPS
+    e_Barogram, // QFE GPS
   },
 
   // 85

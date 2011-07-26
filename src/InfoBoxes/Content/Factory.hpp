@@ -143,7 +143,7 @@ namespace InfoBoxFactory
     const TCHAR *name;
     const TCHAR *caption;
     const TCHAR *description;
-    char next, previous;
+    enum t_InfoBox next, previous;
   };
 
   static const unsigned NUM_TYPES = (unsigned)e_NUM_TYPES;
