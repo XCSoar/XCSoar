@@ -79,6 +79,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/GDI/Bitmap.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Event.cpp \
 	$(SCREEN_SRC_DIR)/GDI/Canvas.cpp \
+	$(SCREEN_SRC_DIR)/GDI/BufferCanvas.cpp \
 	$(SCREEN_SRC_DIR)/GDI/PaintCanvas.cpp
 GDI_CPPFLAGS = -DUSE_GDI
 

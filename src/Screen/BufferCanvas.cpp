@@ -25,60 +25,7 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 
-#include <assert.h>
 #include <algorithm>
-
-#ifdef USE_GDI
-
-BufferCanvas::BufferCanvas(const Canvas &canvas, unsigned _width, unsigned _height)
-  :VirtualCanvas(canvas, _width, _height)
-{
-  bitmap = ::CreateCompatibleBitmap(canvas, width, height);
-  ::SelectObject(dc, bitmap);
-}
-
-BufferCanvas::~BufferCanvas()
-{
-  reset();
-}
-
-void BufferCanvas::set(const Canvas &canvas, unsigned _width, unsigned _height)
-{
-  assert(canvas.defined());
-
-  reset();
-  VirtualCanvas::set(canvas, _width, _height);
-  bitmap = ::CreateCompatibleBitmap(canvas, width, height);
-  ::SelectObject(dc, bitmap);
-}
-
-void
-BufferCanvas::set(const Canvas &canvas)
-{
-  set(canvas, canvas.get_width(), canvas.get_height());
-}
-
-void BufferCanvas::reset()
-{
-  VirtualCanvas::reset();
-  if (bitmap != NULL)
-    ::DeleteObject(bitmap);
-}
-
-void BufferCanvas::resize(unsigned _width, unsigned _height)
-{
-  assert(dc != NULL);
-
-  if (_width == width && _height == height)
-    return;
-
-  ::DeleteObject(bitmap);
-  Canvas::resize(_width, _height);
-  bitmap = ::CreateCompatibleBitmap(dc, width, height);
-  ::SelectObject(dc, bitmap);
-}
-
-#endif /* !USE_GDI */
 
 void
 BufferCanvas::grow(unsigned _width, unsigned _height)
