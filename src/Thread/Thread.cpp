@@ -73,17 +73,13 @@ Thread::Join()
 #endif
 }
 
+#ifndef HAVE_POSIX
 bool
 Thread::Join(unsigned timeout_ms)
 {
   assert(IsDefined());
   assert(!IsInside());
 
-#ifdef HAVE_POSIX
-  // XXX timeout not implemented with pthread
-  Join();
-  return true;
-#else
   bool result = ::WaitForSingleObject(handle, timeout_ms) == WAIT_OBJECT_0;
   if (result) {
     ::CloseHandle(handle);
@@ -91,8 +87,8 @@ Thread::Join(unsigned timeout_ms)
   }
 
   return result;
-#endif
 }
+#endif
 
 #ifdef HAVE_POSIX
 

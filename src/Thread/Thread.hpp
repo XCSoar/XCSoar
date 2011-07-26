@@ -79,7 +79,10 @@ public:
 
   bool Start();
   void Join();
+
+#ifndef HAVE_POSIX
   bool Join(unsigned timeout_ms);
+#endif
 
 protected:
   virtual void Run() = 0;
