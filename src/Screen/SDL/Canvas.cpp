@@ -500,6 +500,12 @@ Canvas::stretch(int dest_x, int dest_y,
 {
   assert(src != NULL);
 
+  if (dest_width == src_width && dest_height == src_height) {
+    /* fast path: no zooming needed */
+    copy(dest_x, dest_y, dest_width, dest_height, src, src_x, src_y);
+    return;
+  }
+
   SDL_Surface *zoomed =
     ::zoomSurface(src, (double)dest_width / (double)src_width,
                   (double)dest_height / (double)src_height,
