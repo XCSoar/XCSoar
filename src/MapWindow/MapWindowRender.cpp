@@ -35,7 +35,8 @@ MapWindow::RenderTerrain(Canvas &canvas)
     m_background.sun_from_wind(render_projection, Calculated().wind);
   else
     m_background.set_sun_angle(render_projection,
-                               SettingsMap().terrain.slope_shading == sstSun ?
+                               (Basic().location_available &&
+                                SettingsMap().terrain.slope_shading == sstSun) ?
                                Calculated().sun_azimuth :
                                Angle::degrees(fixed(-45.0)));
 
