@@ -23,15 +23,6 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
-#ifndef USE_GDI
-#include "Screen/ContainerWindow.hpp"
-#endif /* !USE_GDI */
-
-PaintWindow::~PaintWindow()
-{
-  reset();
-}
-
 #ifdef USE_GDI
 
 bool

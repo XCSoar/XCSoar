@@ -43,8 +43,6 @@ public:
     enable_custom_painting();
   }
 
-  virtual ~PaintWindow();
-
 #ifdef USE_GDI
   static bool register_class(HINSTANCE hInstance);
 #endif
