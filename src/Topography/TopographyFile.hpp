@@ -76,6 +76,12 @@ class TopographyFile : private NonCopyable {
 
   bool shapefileopen;
 
+  /**
+   * The current scope of the shape cache.  If the screen exceeds this
+   * rectangle, then we need to update the cache.
+   */
+  GeoBounds cache_bounds;
+
 public:
   typedef XShapePointerArray::const_iterator const_iterator;
 
@@ -204,13 +210,6 @@ public:
    * @return true if new data from the topography file has been loaded
    */
   bool updateCache(const WindowProjection &map_projection);
-
-private:
-  /**
-   * The current scope of the shape cache.  If the screen exceeds this
-   * rectangle, then we need to update the cache.
-   */
-  GeoBounds cache_bounds;
 
 protected:
   void ClearCache();
