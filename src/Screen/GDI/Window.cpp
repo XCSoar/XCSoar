@@ -225,7 +225,7 @@ Window::on_message(HWND _hWnd, UINT message,
     {
       Canvas canvas((HDC)wParam, get_width(), get_height());
       if (on_erase(canvas))
-        return 0;
+        return 1;
     }
     break;
 
