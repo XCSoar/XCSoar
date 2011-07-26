@@ -126,11 +126,14 @@ IgcReplay::Update()
     return true;
 
   // if need a new point
-  while (cli.NeedData(t_simulation) && Enabled) {
+  while (cli.NeedData(t_simulation)) {
     IGCFix fix;
-    Enabled = ReadPoint(fix);
+    if (!ReadPoint(fix)) {
+      Stop();
+      return false;
+    }
 
-    if (Enabled && positive(fix.time))
+    if (positive(fix.time))
       cli.Update(fix.time, fix.location,
                  fix.gps_altitude, fix.pressure_altitude);
   }
@@ -138,15 +141,11 @@ IgcReplay::Update()
   if (!positive(t_simulation))
     t_simulation = cli.GetMaxTime();
 
-  if (!Enabled) {
-    Stop();
-  } else {
-    const CatmullRomInterpolator::Record r = cli.Interpolate(t_simulation);
-    const GeoVector v = cli.GetVector(t_simulation);
-    on_advance(r.loc, v.Distance, v.Bearing, r.alt, r.palt, t_simulation);
-  }
+  const CatmullRomInterpolator::Record r = cli.Interpolate(t_simulation);
+  const GeoVector v = cli.GetVector(t_simulation);
+  on_advance(r.loc, v.Distance, v.Bearing, r.alt, r.palt, t_simulation);
 
-  return Enabled;
+  return true;
 }
 
 bool
