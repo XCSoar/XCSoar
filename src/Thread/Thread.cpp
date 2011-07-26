@@ -101,6 +101,7 @@ Thread::ThreadProc(void *p)
 {
   Thread *thread = (Thread *)p;
 
+  thread->defined = true;
   thread->Run();
 
 #ifdef ANDROID
