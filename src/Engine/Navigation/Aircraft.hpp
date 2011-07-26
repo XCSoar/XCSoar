@@ -133,8 +133,6 @@ public:
   /** Time of takeoff */
   fixed takeoff_time;
 
-  FlyingState();
-
   /** Reset flying state as if never flown */
   void Reset();
 

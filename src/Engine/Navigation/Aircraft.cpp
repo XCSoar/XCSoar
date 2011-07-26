@@ -52,11 +52,6 @@ ALTITUDE_STATE::thermal_drift_factor() const
   return sigmoid(AltitudeAGL / 100);
 }
 
-FlyingState::FlyingState()
-{
-  Reset();
-}
-
 void
 FlyingState::Reset()
 {
