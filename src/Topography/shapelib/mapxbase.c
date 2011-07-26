@@ -181,6 +181,7 @@ DBFHandle msDBFOpen(struct zzip_dir *zdir, const char *pszFilename,
     psDBF = (DBFHandle) calloc( 1, sizeof(DBFInfo) );
     MS_CHECK_ALLOC(psDBF, sizeof(DBFInfo), NULL);
     psDBF->fp = zzip_open_rb(zdir, pszDBFFilename);
+    free(pszDBFFilename);
     if( psDBF->fp == NULL )
         return( NULL );
 
