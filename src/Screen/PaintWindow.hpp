@@ -43,8 +43,6 @@ public:
     enable_custom_painting();
   }
 
-  virtual ~PaintWindow();
-
   static bool register_class(HINSTANCE hInstance);
 
 #ifdef ENABLE_SDL

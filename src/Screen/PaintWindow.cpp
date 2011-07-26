@@ -23,15 +23,6 @@ Copyright_License {
 
 #include "Screen/PaintWindow.hpp"
 
-#ifdef ENABLE_SDL
-#include "Screen/ContainerWindow.hpp"
-#endif /* ENABLE_SDL */
-
-PaintWindow::~PaintWindow()
-{
-  reset();
-}
-
 bool
 PaintWindow::register_class(HINSTANCE hInstance)
 {
