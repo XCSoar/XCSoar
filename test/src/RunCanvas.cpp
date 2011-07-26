@@ -213,13 +213,6 @@ protected:
     return SingleWindow::on_command(id, code);
   }
 
-  /*
-  virtual bool on_erase(Canvas &canvas) {
-    canvas.clear_white();
-    return true;
-  }
-  */
-
   virtual void on_paint(Canvas &canvas) {
 #ifndef ENABLE_OPENGL
     if (!buffered) {

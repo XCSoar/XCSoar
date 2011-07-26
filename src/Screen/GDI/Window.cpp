@@ -83,6 +83,14 @@ Window::created(HWND _hWnd)
   assert_thread();
 }
 
+bool
+Window::on_erase(Canvas &canvas)
+{
+  /* if on_paint() is implemented, then don't erase the background;
+     on_paint() will paint on top */
+  return custom_painting;
+}
+
 LRESULT
 Window::on_unhandled_message(HWND hWnd, UINT message,
                              WPARAM wParam, LPARAM lParam)

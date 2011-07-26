@@ -273,18 +273,6 @@ Window::on_user(unsigned id)
   return false;
 }
 
-bool
-Window::on_erase(Canvas &canvas)
-{
-  /* if on_paint() is implemented, then don't erase the background;
-     on_paint() will paint on top */
-#ifndef USE_GDI
-  return false;
-#else
-  return custom_painting;
-#endif
-}
-
 void
 Window::on_paint(Canvas &canvas)
 {
