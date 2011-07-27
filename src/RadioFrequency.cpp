@@ -50,6 +50,6 @@ RadioFrequency::Parse(const TCHAR *p)
   if (mhz < 100 || *endptr != _T('\0'))
     frequency.Clear();
   else
-    frequency.SetKiloHertz((unsigned)(mhz * 1000));
+    frequency.SetKiloHertz((unsigned)(mhz * 1000 + 0.5));
   return frequency;
 }
