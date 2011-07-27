@@ -37,6 +37,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Form/SymbolButton.hpp"
 #include "Asset.hpp"
+#include "InputEvents.hpp"
 
 #include <stdio.h>
 
@@ -562,9 +563,10 @@ dlgTargetShowModal(int TargetPoint)
 
   wf->ShowModal(XCSoarInterface::main_window.map); // enable map
 
-  if (oldEnablePan)
+  if (oldEnablePan) {
     map_window.PanTo(oldPanLocation);
-  else
+    InputEvents::setMode(InputEvents::MODE_PAN);
+  } else
     map_window.LeaveTargetPan();
 
   XCSoarInterface::main_window.SetFullScreen(oldFullScreen);
