@@ -1153,19 +1153,25 @@ AbstractTaskFactory::TestFAITriangle(const fixed d1, const fixed d2,
    * side is less than 25% or larger than 45% of the total length
    * (totallength >= 750km).
    */
-  bool geometryok = false;
 
-  if (d_wp < fixed(750000) && d1 >= fixed(0.28) * d_wp && d2 >= fixed(0.28)
-      * d_wp && d3 >= fixed(0.28) * d_wp)
+  if (d_wp < fixed(750000) &&
+      d1 >= fixed(0.28) * d_wp &&
+      d2 >= fixed(0.28) * d_wp &&
+      d3 >= fixed(0.28) * d_wp)
     // small FAI
-    geometryok = true;
-  else if (d_wp >= fixed(750000) && d1 > d_wp / 4 && d2 > d_wp / 4 && d3 > d_wp
-      / 4 && d1 <= fixed(0.45) * d_wp && d2 <= fixed(0.45) * d_wp && d3
-      <= fixed(0.45) * d_wp)
-    // large FAI
-    geometryok = true;
+    return true;
 
-  return geometryok;
+  if (d_wp >= fixed(750000) &&
+      d1 > d_wp / 4 &&
+      d2 > d_wp / 4 &&
+      d3 > d_wp / 4 &&
+      d1 <= fixed(0.45) * d_wp &&
+      d2 <= fixed(0.45) * d_wp &&
+      d3 <= fixed(0.45) * d_wp)
+    // large FAI
+    return true;
+
+  return false;
 }
 
 bool
