@@ -71,14 +71,15 @@ Bitmap::Reload()
 bool
 Bitmap::load(unsigned _id)
 {
-  id = _id;
+  assert(_id != 0);
 
   reset();
 
-  if (!surface_valid) {
-    AddSurfaceListener(*this);
+  id = _id;
+  AddSurfaceListener(*this);
+
+  if (!surface_valid)
     return true;
-  }
 
   texture = LoadResourceTexture(id);
   if (texture == NULL)
@@ -86,8 +87,6 @@ Bitmap::load(unsigned _id)
 
   width = texture->get_width();
   height = texture->get_height();
-
-  AddSurfaceListener(*this);
 
   return true;
 }
@@ -111,10 +110,13 @@ Bitmap::load_file(const TCHAR *path)
 void
 Bitmap::reset()
 {
-  if (texture == NULL)
+  if (id == 0) {
+    assert(texture == NULL);
     return;
+  }
 
   RemoveSurfaceListener(*this);
+  id = 0;
 
   delete texture;
   texture = NULL;
