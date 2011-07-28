@@ -12,6 +12,7 @@ Version 6.1.4 - not yet released
   - disable huge topography files on PPC2000 and Altair
 * Android
   - fix text rendering on Adreno GPUs
+  - fix another suspend/resume crash
 * Altair:
   - fix upside down screen
 
