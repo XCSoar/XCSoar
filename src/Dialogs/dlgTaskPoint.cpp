@@ -30,6 +30,7 @@ Copyright_License {
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "DataField/Float.hpp"
 
+#include "Task/Tasks/OrderedTask.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
@@ -37,10 +38,7 @@ Copyright_License {
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Task/Visitors/TaskVisitor.hpp"
-#include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Gauge/TaskView.hpp"
-#include "Task/Visitors/ObservationZoneVisitor.hpp"
 #include "Compiler.h"
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
