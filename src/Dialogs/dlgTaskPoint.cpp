@@ -248,13 +248,8 @@ public:
 static void
 EnableSizeEdit(bool enable)
 {
-  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpOZLineLength"));
-  assert(wp);
-  wp->set_enabled(enable);
-
-  wp = (WndProperty*)wf->FindByName(_T("prpOZCylinderRadius"));
-  assert(wp);
-  wp->set_enabled(enable);
+  SetFormControlEnabled(*wf, _T("prpOZLineLength"), enable);
+  SetFormControlEnabled(*wf, _T("prpOZCylinderRadius"), enable);
 }
 
 static void
@@ -278,15 +273,11 @@ RefreshView()
   if (wfrm)
     wfrm->SetCaption(OrderedTaskPointName(ordered_task->get_factory().getType(*tp)));
 
+  SetFormControlEnabled(*wf, _T("butPrevious"), active_index > 0);
+  SetFormControlEnabled(*wf, _T("butNext"),
+                        active_index < (ordered_task->task_size() - 1));
+
   WndButton* wb;
-  wb = ((WndButton*)wf->FindByName(_T("butPrevious")));
-  if (wb)
-    wb->set_enabled(active_index > 0);
-
-  wb = ((WndButton*)wf->FindByName(_T("butNext")));
-  if (wb)
-    wb->set_enabled(active_index < (ordered_task->task_size() - 1));
-
   wb = (WndButton*)wf->FindByName(_T("cmdOptionalStarts"));
   assert(wb);
   wb->set_visible(active_index == 0);
