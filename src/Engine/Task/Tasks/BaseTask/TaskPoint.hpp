@@ -161,8 +161,8 @@ public:
    * @return True if task point has a target (can have range set)
    */
   gcc_pure
-  virtual bool has_target() const {
-    return false;
+  bool has_target() const {
+    return type == AAT;
   }
 
   /**
