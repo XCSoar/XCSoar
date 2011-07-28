@@ -50,13 +50,13 @@ public:
 private:
   enum type type;
 
-  GeoPoint reference;
+  GeoPoint location;
 
   /** Altitude (AMSL, m) of task point terrain */
-  fixed m_elevation;
+  fixed elevation;
 
 public:
-  bool is_intermediate() const {
+  bool IsIntermediatePoint() const {
     return type == AST || type == AAT;
   }
 
@@ -69,10 +69,10 @@ public:
    *
    * @return Initialised object
    */
-  TaskPoint(enum type _type, const GeoPoint& location,
-            const fixed elevation) :
-    type(_type), reference(location),
-    m_elevation(elevation) {}
+  TaskPoint(enum type _type, const GeoPoint &_location,
+            const fixed _elevation) :
+    type(_type), location(_location),
+    elevation(_elevation) {}
 
   /**
    * Destructor.  Does nothing yet.
@@ -87,7 +87,7 @@ public:
 
 protected:
   fixed GetBaseElevation() const {
-    return m_elevation;
+    return elevation;
   }
 
 public:
@@ -99,7 +99,7 @@ public:
    */
   gcc_pure
   virtual const GeoPoint& get_location_remaining() const {
-    return reference;
+    return location;
   }
 
   /**
@@ -203,14 +203,14 @@ public:
    * distance from this to the reference
    */
   fixed distance(const GeoPoint & ref) const {
-    return reference.distance(ref);
+    return location.distance(ref);
   }
 
   /**
    * The actual location
    */
   const GeoPoint & get_location() const {
-    return reference;
+    return location;
   }
 };
 

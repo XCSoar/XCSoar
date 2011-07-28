@@ -72,7 +72,7 @@ TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
       }
     }
     return m_armed && m_state_ready;
-  } else if (tp.is_intermediate()) {
+  } else if (tp.IsIntermediatePoint()) {
     m_state = TaskAdvance::AUTO;
     return m_state_ready;
   } 

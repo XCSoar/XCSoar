@@ -299,7 +299,7 @@ insert_in_task(OrderedTask *task, const Waypoint &wp)
       return UNMODIFIED;
 
     const TaskPoint *tp = task->get_tp(i);
-    if (tp == NULL || tp->is_intermediate())
+    if (tp == NULL || tp->IsIntermediatePoint())
       break;
 
     ++i;

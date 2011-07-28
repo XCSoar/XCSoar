@@ -49,7 +49,7 @@ TaskAdvance::state_ready(const TaskPoint &tp,
   if (tp.GetType() == TaskPoint::AAT) {
     const AATPoint *ap = (const AATPoint *)&tp;
     return aat_state_ready(ap->has_entered(), ap->close_to_target(state));
-  } else if (tp.is_intermediate()) {
+  } else if (tp.IsIntermediatePoint()) {
     const IntermediateTaskPoint *ip = (const IntermediateTaskPoint *)&tp;
     return ip->has_entered();
   }

@@ -532,7 +532,7 @@ AbstractTaskFactory::insert(const OrderedTaskPoint &new_tp,
         return success;
       }
     } else {
-      if (new_tp.is_intermediate()) {
+      if (new_tp.IsIntermediatePoint()) {
         // candidate ok for direct insertion
         return m_task.insert(new_tp, position);
       } else {
