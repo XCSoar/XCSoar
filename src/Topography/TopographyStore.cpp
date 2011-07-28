@@ -27,8 +27,16 @@ Copyright_License {
 #include "IO/LineReader.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"
+#include "Asset.hpp"
 
 #include <windef.h> // for MAX_PATH
+
+static bool
+IsHugeTopographyFile(const char *name)
+{
+  return strcmp(name, "village_point") == 0 ||
+    strcmp(name, "roadsmall_line") == 0;
+}
 
 unsigned
 TopographyStore::ScanVisibility(const WindowProjection &m_projection,
@@ -92,7 +100,18 @@ TopographyStore::Load(NLineReader &reader, StatusCallback callback,
     if (p == NULL || p == line)
       continue;
 
+    if (HasLittleMemory()) {
+      /* hard-coded blacklist for huge files on PPC2000; those
+         devices usually have very little memory */
+
+      *p = 0;
+
+      if (IsHugeTopographyFile(line))
+        continue;
+    }
+
     memcpy(ShapeFilenameEnd, line, p - line);
+
     strcpy(ShapeFilenameEnd + (p - line), ".shp");
 
     // Shape range

@@ -9,6 +9,7 @@ Version 6.1.4 - not yet released
 * map
   - fix for the aircraft symbol
   - airspace rendering optimised
+  - disable huge topography files on PPC2000 and Altair
 * Android
   - fix text rendering on Adreno GPUs
 
