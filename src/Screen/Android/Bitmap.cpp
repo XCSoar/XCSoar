@@ -38,6 +38,21 @@ find_resource_name(unsigned id)
   return NULL;
 }
 
+gcc_malloc
+static GLTexture *
+LoadResourceTexture(unsigned id)
+{
+  const char *name = find_resource_name(id);
+  if (name == NULL)
+    return NULL;
+
+  jint result[3];
+  if (!native_view->loadResourceTexture(name, result))
+    return NULL;
+
+  return new GLTexture(result[0], result[1], result[2]);
+}
+
 bool
 Bitmap::load(unsigned _id)
 {
@@ -50,15 +65,10 @@ Bitmap::load(unsigned _id)
     return true;
   }
 
-  const char *name = find_resource_name(id);
-  if (name == NULL)
+  texture = LoadResourceTexture(id);
+  if (texture == NULL)
     return false;
 
-  jint result[3];
-  if (!native_view->loadResourceTexture(name, result))
-    return false;
-
-  texture = new GLTexture(result[0], result[1], result[2]);
   width = texture->get_width();
   height = texture->get_height();
 
