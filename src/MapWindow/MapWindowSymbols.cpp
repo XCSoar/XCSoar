@@ -140,8 +140,8 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
 {
   if (!Basic().location_available ||
       !Calculated().task_stats.task_valid ||
-      !Calculated().task_stats.current_leg.solution_remaining.defined() ||
-      Calculated().task_stats.current_leg.solution_remaining.Vector.Distance
+      !Calculated().task_stats.current_leg.solution_remaining.IsDefined() ||
+      Calculated().task_stats.current_leg.solution_remaining.vector.Distance
       < fixed(0.010))
     return;
 
@@ -151,7 +151,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
   canvas.select(task_look.best_cruise_track_pen);
   canvas.select(task_look.best_cruise_track_brush);
 
-  const Angle angle = Calculated().task_stats.current_leg.solution_remaining.CruiseTrackBearing
+  const Angle angle = Calculated().task_stats.current_leg.solution_remaining.cruise_track_bearing
                     - render_projection.GetScreenAngle();
 
   RasterPoint Arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },

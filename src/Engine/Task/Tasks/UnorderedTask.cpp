@@ -73,9 +73,9 @@ UnorderedTask::glide_solution_remaining(const AIRCRAFT_STATE &state,
   TaskPoint* tp = getActiveTaskPoint();
   if (tp) {
     res = TaskSolution::glide_solution_remaining(*tp, state, polar);
-    res.calc_deferred(state);
+    res.CalcDeferred(state);
   } else
-    res.reset();
+    res.Reset();
 
   total = res;
   leg = res;
@@ -87,7 +87,7 @@ UnorderedTask::glide_solution_travelled(const AIRCRAFT_STATE &state,
                                         GlideResult &leg)
 {
   GlideResult null_res;
-  null_res.reset();
+  null_res.Reset();
   total = null_res;
   leg = null_res;
 }
@@ -102,13 +102,13 @@ UnorderedTask::glide_solution_planned(const AIRCRAFT_STATE &state,
                                       const fixed leg_t_elapsed)
 {
   const GlideResult &res = stats.total.solution_remaining;
-  if (!res.defined())
+  if (!res.IsDefined())
     return;
 
   total = res;
   leg = res;
-  total_remaining_effective.set_distance(res.Vector.Distance);
-  leg_remaining_effective.set_distance(res.Vector.Distance);
+  total_remaining_effective.set_distance(res.vector.Distance);
+  leg_remaining_effective.set_distance(res.vector.Distance);
 }
 
 

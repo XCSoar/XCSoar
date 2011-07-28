@@ -70,7 +70,7 @@ TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
       AIRCRAFT_STATE aircraft_predict = aircraft;
       aircraft_predict.NavAltitude = m_minHs[i];
       const GlideResult gr = tp_solution(i, aircraft_predict, m_minHs[i + 1]);
-      const fixed dh = aircraft_predict.NavAltitude - gr.HeightGlide;
+      const fixed dh = aircraft_predict.NavAltitude - gr.height_glide;
       if (m_minHs[i + 1] + fixed_tolerance < dh) {
         m_minHs[i + 1] = dh;
         // recalculate again for remainder
@@ -103,33 +103,33 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
     // perform estimate, ensuring that alt is above previous taskpoint  
     gr = tp_solution(i, aircraft_predict, m_minHs[i]);
     m_gs[i] = gr;
-    excess_height -= gr.HeightGlide;
+    excess_height -= gr.height_glide;
 
     // update state
     if (i == m_end)
       acc_gr = gr;
     else if (i > m_start)
-      acc_gr.add(gr);
+      acc_gr.Add(gr);
 
-    if (gr.Solution != GlideResult::RESULT_OK)
+    if (gr.validity != GlideResult::RESULT_OK)
       i = max(m_start, 1) - 1; // quick exit
   }
 
   if (m_end > m_start)
-    gr.add(acc_gr);
+    gr.Add(acc_gr);
 
   aircraft_predict.NavAltitude = aircraft_start.NavAltitude;
   fixed alt_difference = aircraft_start.NavAltitude - m_minHs[m_start];
 
   for (int i = m_start; i <= m_end; ++i) {
-    aircraft_predict.NavAltitude -= m_gs[i].HeightGlide;
+    aircraft_predict.NavAltitude -= m_gs[i].height_glide;
     alt_difference =
         min(alt_difference, aircraft_predict.NavAltitude - m_minHs[i]);
   }
 
-  alt_difference -= gr.HeightClimb;
-  gr.AltitudeDifference = alt_difference;
-  gr.calc_deferred(aircraft);
+  alt_difference -= gr.height_climb;
+  gr.altitude_difference = alt_difference;
+  gr.CalcDeferred(aircraft);
 
   return gr;
 }
@@ -143,12 +143,12 @@ TaskMacCready::glide_sink(const AIRCRAFT_STATE &aircraft, const fixed S)
   for (int i = m_start; i <= m_end; ++i) {
     const GlideResult gr = tp_sink(i, aircraft_predict, S);
 
-    aircraft_predict.NavAltitude -= gr.HeightGlide;
+    aircraft_predict.NavAltitude -= gr.height_glide;
     if (i == m_start)
       acc_gr = gr;
     else
-      acc_gr.AltitudeDifference =
-          min(acc_gr.AltitudeDifference, gr.AltitudeDifference);
+      acc_gr.altitude_difference =
+          min(acc_gr.altitude_difference, gr.altitude_difference);
   }
 
   return acc_gr;
@@ -165,6 +165,6 @@ TaskMacCready::tp_sink(const unsigned i,
 const GlideResult&
 TaskMacCready::get_active_solution(const AIRCRAFT_STATE &aircraft) 
 {
-  m_gs[m_activeTaskPoint].calc_deferred(aircraft);
+  m_gs[m_activeTaskPoint].CalcDeferred(aircraft);
   return m_gs[m_activeTaskPoint];
 }

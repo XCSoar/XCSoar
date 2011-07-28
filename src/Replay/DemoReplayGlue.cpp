@@ -71,10 +71,10 @@ public:
     }
   }
   fixed distance_to_final() const {
-    return task->get_stats().total.solution_remaining.DistanceToFinal;
+    return task->get_stats().total.solution_remaining.distance_to_final;
   }
   fixed remaining_alt_difference() const {
-    return task->get_stats().total.solution_remaining.AltitudeDifference;
+    return task->get_stats().total.solution_remaining.altitude_difference;
   }
   GlidePolar get_glide_polar() const {
     return task->get_glide_polar();

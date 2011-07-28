@@ -101,8 +101,8 @@ GlideComputerTask::ProcessMoreTask()
   else
     SetCalculated().V_stf = Calculated().common_stats.V_dolphin;
 
-  if (Calculated().task_stats.current_leg.solution_remaining.defined()) {
-    const GeoVector &v = Calculated().task_stats.current_leg.solution_remaining.Vector;
+  if (Calculated().task_stats.current_leg.solution_remaining.IsDefined()) {
+    const GeoVector &v = Calculated().task_stats.current_leg.solution_remaining.vector;
     SetCalculated().auto_zoom_distance = v.Distance;
   }
 }
@@ -126,11 +126,11 @@ GlideComputerTask::TerrainWarning()
                                           (int)Calculated().thermal_band.working_band_ceiling);
   // allow at least 500m of climb above current altitude as ceiling, in case
   // there are no actual working band stats.
-  const GeoVector &v = sol.Vector;
+  const GeoVector &v = sol.vector;
 
   if (terrain) {
-    if (sol.defined()) {
-      const AGeoPoint dest(v.end_point(start), sol.MinHeight);
+    if (sol.IsDefined()) {
+      const AGeoPoint dest(v.end_point(start), sol.min_height);
       bool dirty = route_clock.check_advance(Basic().time);
 
       if (!dirty) {

@@ -48,14 +48,14 @@ TaskOptTarget::f(const fixed p)
 
   res = tm.glide_solution(aircraft);
 
-  return res.TimeElapsed;
+  return res.time_elapsed;
 }
 
 bool 
 TaskOptTarget::valid(const fixed tp) 
 {
   f(tp);
-  return (res.Solution== GlideResult::RESULT_OK);
+  return (res.validity== GlideResult::RESULT_OK);
 }
 
 fixed 

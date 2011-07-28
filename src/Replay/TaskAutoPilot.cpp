@@ -191,13 +191,13 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
                                      const fixed timestep)
 {
   const ElementStat stat = task.leg_stats();
-  Angle bct = stat.solution_remaining.CruiseTrackBearing;
+  Angle bct = stat.solution_remaining.cruise_track_bearing;
   Angle bearing;
 
   if (current_has_target(task)) {
-    bearing = stat.solution_remaining.Vector.Bearing;
+    bearing = stat.solution_remaining.vector.Bearing;
 
-    if (parms.enable_bestcruisetrack && (stat.solution_remaining.Vector.Distance>fixed_1000)) {
+    if (parms.enable_bestcruisetrack && (stat.solution_remaining.vector.Distance>fixed_1000)) {
       bearing = bct;
     }
 
@@ -234,8 +234,8 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
   case FinalGlide:
   {
     const ElementStat stat = task.leg_stats();
-    if (positive(stat.solution_remaining.VOpt)) {
-      state.TrueAirspeed = stat.solution_remaining.VOpt*speed_factor;
+    if (positive(stat.solution_remaining.v_opt)) {
+      state.TrueAirspeed = stat.solution_remaining.v_opt*speed_factor;
     } else {
       state.TrueAirspeed = glide_polar.GetVBestLD();
     }

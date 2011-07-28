@@ -71,7 +71,7 @@ public:
 
     Alternate(const Waypoint &_waypoint)
       :waypoint(_waypoint) {
-      solution.reset();
+      solution.Reset();
     }
     Alternate(const Waypoint &_waypoint, const GlideResult &_solution)
       :waypoint(_waypoint), solution(_solution) {}

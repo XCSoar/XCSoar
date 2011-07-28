@@ -43,14 +43,14 @@ InfoBoxContentBearing::Update(InfoBoxWindow &infobox)
   const GlideResult &solution_remaining =
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !solution_remaining.defined() ||
-      solution_remaining.Vector.Distance <= fixed(10)) {
+      !solution_remaining.IsDefined() ||
+      solution_remaining.vector.Distance <= fixed(10)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  infobox.SetValue(solution_remaining.Vector.Bearing, _T("T"));
+  infobox.SetValue(solution_remaining.vector.Bearing, _T("T"));
 }
 
 void
@@ -60,15 +60,15 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!XCSoarInterface::Basic().track_available ||
       !XCSoarInterface::Calculated().task_stats.task_valid ||
-      !solution_remaining.defined() ||
-      solution_remaining. Vector.Distance <= fixed(10)) {
+      !solution_remaining.IsDefined() ||
+      solution_remaining. vector.Distance <= fixed(10)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   Angle Value =
-    solution_remaining.Vector.Bearing - XCSoarInterface::Basic().track;
+    solution_remaining.vector.Bearing - XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);
 }
@@ -104,20 +104,20 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!XCSoarInterface::Basic().track_available ||
       !XCSoarInterface::Calculated().task_stats.task_valid ||
-      !solution_remaining.defined() ||
-      solution_remaining.Vector.Distance <= fixed(10)) {
+      !solution_remaining.IsDefined() ||
+      solution_remaining.vector.Distance <= fixed(10)) {
     infobox.SetValueInvalid();
     return;
   }
 
   // Set Value
   Angle Value =
-    solution_remaining.Vector.Bearing - XCSoarInterface::Basic().track;
+    solution_remaining.vector.Bearing - XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);
 
   // Set Color (blue/black)
-  infobox.SetColor(solution_remaining.is_final_glide() ? 2 : 0);
+  infobox.SetColor(solution_remaining.IsFinalGlide() ? 2 : 0);
 }
 
 bool
@@ -157,16 +157,16 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
   const GlideResult &solution_remaining =
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!task_stats.task_valid ||
-      !solution_remaining.defined()) {
+      !solution_remaining.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  SetValueFromDistance(infobox, solution_remaining.Vector.Distance);
+  SetValueFromDistance(infobox, solution_remaining.vector.Distance);
 
   if (XCSoarInterface::Basic().track_available) {
-    Angle bd = solution_remaining.Vector.Bearing - XCSoarInterface::Basic().track;
+    Angle bd = solution_remaining.vector.Bearing - XCSoarInterface::Basic().track;
     SetCommentBearingDifference(infobox, bd);
   } else
     infobox.SetCommentInvalid();
@@ -208,7 +208,7 @@ InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
 
   TCHAR tmp[32];
   int dd = (int)(XCSoarInterface::Calculated().task_stats.current_leg.
-                 solution_remaining.TimeElapsed) +
+                 solution_remaining.time_elapsed) +
     DetectCurrentTime(XCSoarInterface::Basic());
   const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
@@ -228,14 +228,14 @@ InfoBoxContentNextAltitudeDiff::Update(InfoBoxWindow &infobox)
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
-  if (!task_stats.task_valid || !next_solution.defined()) {
+  if (!task_stats.task_valid || !next_solution.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(next_solution.AltitudeDifference, tmp, 32, false);
+  Units::FormatUserAltitude(next_solution.altitude_difference, tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -249,14 +249,14 @@ InfoBoxContentNextAltitudeRequire::Update(InfoBoxWindow &infobox)
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult &next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
-  if (!task_stats.task_valid || !next_solution.defined()) {
+  if (!task_stats.task_valid || !next_solution.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(next_solution.AltitudeRequired, tmp, 32, false);
+  Units::FormatUserAltitude(next_solution.altitude_required, tmp, 32, false);
   infobox.SetValue(tmp);
 
   // Set Unit
@@ -270,14 +270,14 @@ InfoBoxContentNextAltitudeArrival::Update(InfoBoxWindow &infobox)
 
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const GlideResult next_solution = XCSoarInterface::Calculated().common_stats.next_solution;
-  if (!task_stats.task_valid || !next_solution.glide_reachable(true)) {
+  if (!task_stats.task_valid || !next_solution.IsAchievable(true)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  fixed alt = XCSoarInterface::Basic().NavAltitude-next_solution.HeightGlide;
+  fixed alt = XCSoarInterface::Basic().NavAltitude-next_solution.height_glide;
   Units::FormatUserAltitude(alt, tmp, 32, false);
   infobox.SetValue(tmp);
 
@@ -318,7 +318,7 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
   if (!task_stats.task_valid ||
-      !task_stats.current_leg.solution_remaining.defined()) {
+      !task_stats.current_leg.solution_remaining.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
@@ -327,7 +327,7 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
 
   // Set Value
   SetValueFromDistance(infobox, common_stats.task_finished ?
-                                task_stats.current_leg.solution_remaining.Vector.Distance :
+                                task_stats.current_leg.solution_remaining.vector.Distance :
                                 task_stats.total.remaining.get_distance());
 }
 
@@ -361,7 +361,7 @@ InfoBoxContentFinalETA::Update(InfoBoxWindow &infobox)
   }
 
   TCHAR tmp[32];
-  int dd = (int)task_stats.total.solution_remaining.TimeElapsed +
+  int dd = (int)task_stats.total.solution_remaining.time_elapsed +
     DetectCurrentTime(XCSoarInterface::Basic());
   const BrokenTime t = BrokenTime::FromSecondOfDayChecked(abs(dd));
 
@@ -379,14 +379,14 @@ InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
-      !task_stats.total.solution_remaining.defined()) {
+      !task_stats.total.solution_remaining.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(task_stats.total.solution_remaining.AltitudeDifference,
+  Units::FormatUserAltitude(task_stats.total.solution_remaining.altitude_difference,
                             tmp, 32, false);
   infobox.SetValue(tmp);
 
@@ -399,14 +399,14 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
-      !task_stats.total.solution_remaining.defined()) {
+      !task_stats.total.solution_remaining.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   TCHAR tmp[32];
-  Units::FormatUserAltitude(task_stats.total.solution_remaining.AltitudeRequired,
+  Units::FormatUserAltitude(task_stats.total.solution_remaining.altitude_required,
                             tmp, 32, false);
   infobox.SetValue(tmp);
 

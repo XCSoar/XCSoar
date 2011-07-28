@@ -36,10 +36,10 @@ ElementStat::Reset()
   travelled.Reset();
   pirker.Reset();
 
-  solution_planned.reset();
-  solution_travelled.reset();
-  solution_remaining.reset();
-  solution_mc0.reset();
+  solution_planned.Reset();
+  solution_travelled.Reset();
+  solution_remaining.Reset();
+  solution_mc0.Reset();
 }
 
 void 
@@ -53,8 +53,8 @@ ElementStat::set_times(const fixed ts,
   else
     TimeElapsed = max(state.Time - fixed(ts), fixed_zero);
 
-  if (solution_remaining.defined()) {
-    TimeRemaining = solution_remaining.TimeElapsed;
+  if (solution_remaining.IsDefined()) {
+    TimeRemaining = solution_remaining.time_elapsed;
     TimePlanned = TimeElapsed+TimeRemaining;
   } else {
     TimeRemaining = TimePlanned = fixed_zero;
@@ -98,7 +98,7 @@ ElementStatComputer::calc_speeds(const fixed dt)
   planned.calc_incremental_speed(dt);
   travelled.calc_incremental_speed(dt);
 
-  if (data.solution_remaining.ok_or_partial()) {
+  if (data.solution_remaining.IsOkOrPartial()) {
     remaining_effective.calc_incremental_speed(dt);
     pirker.calc_incremental_speed(dt);
     data.vario.update(data.solution_remaining, fixed(dt));

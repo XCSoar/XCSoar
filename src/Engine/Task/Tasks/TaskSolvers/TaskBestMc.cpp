@@ -54,13 +54,13 @@ TaskBestMc::f(const fixed mc)
   tm.set_mc(max(fixed_tiny, mc));
   res = tm.glide_solution(aircraft);
 
-  return res.AltitudeDifference;
+  return res.altitude_difference;
 }
 
 bool TaskBestMc::valid(const fixed mc) 
 {
-  return (res.Solution == GlideResult::RESULT_OK) 
-    && (res.AltitudeDifference >= -tolerance*fixed_two*res.Vector.Distance);
+  return (res.validity == GlideResult::RESULT_OK) 
+    && (res.altitude_difference >= -tolerance*fixed_two*res.vector.Distance);
 }
 
 fixed 

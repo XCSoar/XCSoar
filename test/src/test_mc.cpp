@@ -99,9 +99,9 @@ test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
   GlideState gs(vect, fixed_zero, ac.NavAltitude, ac.wind);
   GlideResult gr = MacCready::solve(polar, gs);
   hfile << (double)h << " " 
-        << (double)gr.AltitudeDifference << " "
-        << (double)gr.TimeElapsed << " " 
-        << (double)gr.VOpt << " " 
+        << (double)gr.altitude_difference << " "
+        << (double)gr.time_elapsed << " " 
+        << (double)gr.v_opt << " " 
         << (double)W << " "
         << (double)Wangle << " "
         << "\n";
@@ -131,8 +131,8 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
   fixed Vstf = polar.SpeedToFly(ac, gr, false);
 
   hfile << (double)h << " " 
-        << (double)gr.AltitudeDifference << " "
-        << (double)gr.VOpt << " " 
+        << (double)gr.altitude_difference << " "
+        << (double)gr.v_opt << " " 
         << (double)Vstf << " " 
         << (double)W << " "
         << (double)Wangle << " "
@@ -233,12 +233,12 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
   GlideState gs (vect, fixed_zero, ac.NavAltitude, ac.wind);
   GlideResult gr = MacCready::solve(polar, gs);
 
-  gr.calc_deferred(ac);
+  gr.CalcDeferred(ac);
 
   hfile << (double)W << " "
         << (double)Wangle << " "
-        << (double)gr.Vector.Bearing.value_degrees() << " "
-        << (double)gr.CruiseTrackBearing.value_degrees() << " "
+        << (double)gr.vector.Bearing.value_degrees() << " "
+        << (double)gr.cruise_track_bearing.value_degrees() << " "
         << "\n";
 }
 

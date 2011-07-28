@@ -56,8 +56,8 @@ void RoutePolar::initialise(const GlidePolar& polar,
   for (unsigned i=0; i< ROUTEPOLAR_POINTS; ++i) {
     Angle ang(Angle::radians(fixed_half_pi-i*fixed_two_pi/ROUTEPOLAR_POINTS));
     GlideResult res = solve_task(polar, wind, ang, is_glide);
-    RoutePolarPoint point(res.TimeElapsed, res.HeightGlide);
-    if (res.Solution != GlideResult::RESULT_OK)
+    RoutePolarPoint point(res.time_elapsed, res.height_glide);
+    if (res.validity != GlideResult::RESULT_OK)
       point.valid = false;
     points[i] = point;
   }

@@ -194,7 +194,7 @@ TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
 
   common_stats.landable_reachable = task_abort.has_landable_reachable();
 
-  common_stats.next_solution.reset();
+  common_stats.next_solution.Reset();
   if (active_task) {
     const TaskWaypoint* tp= active_task->getActiveTaskPoint();
     if (tp != NULL) {

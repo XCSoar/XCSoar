@@ -167,8 +167,8 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
                          stats.current_leg.solution_planned,
                          stats.total.remaining_effective,
                          stats.current_leg.remaining_effective,
-                         stats.total.solution_remaining.TimeElapsed,
-                         stats.current_leg.solution_remaining.TimeElapsed);
+                         stats.total.solution_remaining.time_elapsed,
+                         stats.current_leg.solution_remaining.time_elapsed);
 
   stats.total.pirker.set_distance(
       stats.total.planned.get_distance() -
@@ -178,17 +178,17 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
       stats.current_leg.planned.get_distance() -
       stats.current_leg.remaining_effective.get_distance());
 
-  if (stats.current_leg.solution_remaining.defined())
+  if (stats.current_leg.solution_remaining.IsDefined())
     stats.current_leg.remaining.set_distance(
-        stats.current_leg.solution_remaining.Vector.Distance);
+        stats.current_leg.solution_remaining.vector.Distance);
 
-  if (stats.current_leg.solution_travelled.defined())
+  if (stats.current_leg.solution_travelled.IsDefined())
     stats.current_leg.travelled.set_distance(
-        stats.current_leg.solution_travelled.Vector.Distance);
+        stats.current_leg.solution_travelled.vector.Distance);
 
-  if (stats.current_leg.solution_planned.defined())
+  if (stats.current_leg.solution_planned.IsDefined())
     stats.current_leg.planned.set_distance(
-        stats.current_leg.solution_planned.Vector.Distance);
+        stats.current_leg.solution_planned.vector.Distance);
 
   stats.total.gradient = ::AngleToGradient(calc_gradient(state));
   stats.current_leg.gradient = ::AngleToGradient(leg_gradient(state));

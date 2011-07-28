@@ -40,7 +40,7 @@ struct GlideResult {
    * Results of glide calculations.  Used to provide feedback if
    * fails due to insufficient MC value etc.
    */
-  enum GlideResult_t {
+  enum GlideResultValidity {
     /** Solution is achievable */
     RESULT_OK = 0,
     /** Solution is partially achievable */
@@ -54,33 +54,33 @@ struct GlideResult {
   };
 
   /** Distance/bearing of task achievable */
-  GeoVector Vector;
+  GeoVector vector;
   /** Distance to go before final glide (m) */
-  fixed DistanceToFinal;
+  fixed distance_to_final;
   /** Track bearing in cruise for optimal drift compensation (deg true) */
-  Angle CruiseTrackBearing;
+  Angle cruise_track_bearing;
   /** Optimal speed to fly in cruise (m/s) */
-  fixed VOpt;
+  fixed v_opt;
   /** Height to be climbed (m) */
-  fixed HeightClimb;
+  fixed height_climb;
   /** Height that will be glided (m) */
-  fixed HeightGlide;
+  fixed height_glide;
   /** Time to complete task (s) */
-  fixed TimeElapsed;
+  fixed time_elapsed;
   /** Equivalent time to recover glided height (s) at MC */
-  fixed TimeVirtual;
+  fixed time_virtual;
   /** Height above/below final glide for this task (m) */
-  fixed AltitudeDifference;
+  fixed altitude_difference;
   /** Height required to solve this task (m) */
-  fixed AltitudeRequired;
-  fixed EffectiveWindSpeed;
-  Angle EffectiveWindAngle;
+  fixed altitude_required;
+  fixed effective_wind_speed;
+  Angle effective_wind_angle;
   /** Head wind component (m/s) in cruise */
-  fixed HeadWind;
+  fixed head_wind;
   /** Solution validity */
-  GlideResult_t Solution;
+  GlideResultValidity validity;
   /** Height (m above MSL) of end */
-  fixed MinHeight;
+  fixed min_height;
 
   /** Construct an uninitialised object. */
   GlideResult() {}
@@ -98,8 +98,8 @@ struct GlideResult {
    */
   GlideResult(const GlideState &task, const fixed V);
 
-  bool defined() const {
-    return Solution != RESULT_NOSOLUTION;
+  bool IsDefined() const {
+    return validity != RESULT_NOSOLUTION;
   }
 
   /**
@@ -107,7 +107,7 @@ struct GlideResult {
    * deferred.
    * @param state State from which this solution was obtained
    */
-  void calc_deferred(const AIRCRAFT_STATE &state);
+  void CalcDeferred(const AIRCRAFT_STATE &state);
 
   /**
    * Check whether aircraft can finish this task without
@@ -115,12 +115,12 @@ struct GlideResult {
    *
    * @return True if aircraft is at or above final glide
    */
-  bool is_final_glide() const;
+  bool IsFinalGlide() const;
 
   /**
    * Convenience function, returns location of start of final glide component
    */
-  GeoPoint location_at_final(const GeoPoint &location) const;
+  GeoPoint FinalGlideStartLocation(const GeoPoint &location) const;
 
   /**
    * Check whether task is partially achievable.  It will
@@ -129,9 +129,9 @@ struct GlideResult {
    * @return True if task is at least partially achievable
    */
   bool
-  ok_or_partial() const
+  IsOkOrPartial() const
   {
-    return (Solution == RESULT_OK) || (Solution == RESULT_PARTIAL);
+    return (validity == RESULT_OK) || (validity == RESULT_PARTIAL);
   }
 
   /**
@@ -141,7 +141,7 @@ struct GlideResult {
    *
    * @return True if target is reachable
    */
-  bool glide_reachable(const bool final_glide=true) const;
+  bool IsAchievable(const bool final_glide=true) const;
 
   /**
    * Adds another GlideResult to this.  This is used to
@@ -150,7 +150,7 @@ struct GlideResult {
    *
    * @param s2 The other glide result segment
    */
-  void add(const GlideResult &s2);
+  void Add(const GlideResult &s2);
 
   /**
    * Calculate virtual speed of solution.  This is defined as
@@ -161,7 +161,7 @@ struct GlideResult {
    *
    * @return Virtual speed (m/s)
    */
-  fixed calc_vspeed(const fixed inv_mc);
+  fixed CalcVSpeed(const fixed inv_mc);
 
   /**
    * Find the gradient of this solution relative to ground.
@@ -169,7 +169,7 @@ struct GlideResult {
    *
    * @return Glide gradient (positive down), or inf if no distance to travel.
    */
-  fixed glide_angle_ground() const;
+  fixed GlideAngleGround() const;
 
   /**
    * Find the gradient of the target relative to ground
@@ -177,10 +177,10 @@ struct GlideResult {
    *
    * @return Glide gradient (positive down), or inf if no distance to travel.
    */
-  fixed destination_angle_ground() const;
+  fixed DestinationAngleGround() const;
 
   /** Reset/clear the solution */
-  void reset();
+  void Reset();
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, 
@@ -192,7 +192,7 @@ private:
    * Calculate cruise track bearing from internal variables.
    * This is expensive so is only done on demand.
    */
-  void calc_cruise_bearing();
+  void CalcCruiseBearing();
 };
 
 #endif

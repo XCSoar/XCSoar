@@ -253,16 +253,16 @@ AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AIRCRAFT_
   assert(task.getActiveTaskPoint());
 
   const GlideResult& solution = task.get_stats().current_leg.solution_remaining; 
-  const fixed leg_distance = solution.Vector.Distance;
-  const fixed time_remaining = solution.TimeElapsed;
+  const fixed leg_distance = solution.vector.Distance;
+  const fixed time_remaining = solution.time_elapsed;
 
   if (positive(time_remaining)) {
     m_v = leg_distance / time_remaining;
-    if (positive(solution.HeightClimb)) {
-      m_cruise_descent = -solution.HeightClimb/time_remaining; 
+    if (positive(solution.height_climb)) {
+      m_cruise_descent = -solution.height_climb/time_remaining; 
       m_climb_rate = polar.GetMC();
     } else {
-      m_cruise_descent = solution.HeightGlide/time_remaining;
+      m_cruise_descent = solution.height_glide/time_remaining;
       m_climb_rate = fixed_zero;
     }
   } else {

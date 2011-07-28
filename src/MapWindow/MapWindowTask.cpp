@@ -73,7 +73,7 @@ MapWindow::DrawTask(Canvas &canvas)
   if (task == NULL)
     return;
 
-  if (!Calculated().task_stats.current_leg.solution_remaining.defined())
+  if (!Calculated().task_stats.current_leg.solution_remaining.IsDefined())
     return;
 
   /* RLD bearing is invalid if GPS not connected and in non-sim mode,

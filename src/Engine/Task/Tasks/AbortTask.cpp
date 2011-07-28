@@ -140,8 +140,8 @@ struct AbortRank :
    */
   bool operator()(const AbortTask::Alternate& x, 
                   const AbortTask::Alternate& y) const {
-    return x.solution.TimeElapsed + x.solution.TimeVirtual >
-           y.solution.TimeElapsed + y.solution.TimeVirtual;
+    return x.solution.time_elapsed + x.solution.time_virtual >
+           y.solution.time_elapsed + y.solution.time_virtual;
   }
 };
 
@@ -149,8 +149,8 @@ bool
 AbortTask::is_reachable(const GlideResult &result,
                         const bool final_glide) const 
 {
-  return !positive(result.Vector.Distance) || 
-    (!negative(result.TimeElapsed) && result.glide_reachable(final_glide));
+  return !positive(result.vector.Distance) || 
+    (!negative(result.time_elapsed) && result.IsAchievable(final_glide));
 }
 
 bool
@@ -185,7 +185,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
 
       if (intersection_test && final_glide && is_reachable_final) {
         intersects = intersection_test->intersects(AGeoPoint(v->waypoint.Location,
-                                                             result.MinHeight));
+                                                             result.min_height));
       }
       if (!intersects) {
         q.push(Alternate(v->waypoint, result));

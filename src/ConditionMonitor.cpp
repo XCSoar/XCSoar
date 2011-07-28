@@ -193,9 +193,9 @@ protected:
     const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
 
     // TODO: use low pass filter
-    tad = res.AltitudeDifference * fixed(0.2) + fixed(0.8) * tad;
+    tad = res.altitude_difference * fixed(0.2) + fixed(0.8) * tad;
 
-    bool BeforeFinalGlide = !res.is_final_glide();
+    bool BeforeFinalGlide = !res.IsFinalGlide();
 
     if (BeforeFinalGlide) {
       Interval_Notification = fixed(60 * 5);
@@ -206,7 +206,7 @@ protected:
         last_tad = tad;
     } else {
       Interval_Notification = fixed(60);
-      if (res.is_final_glide()) {
+      if (res.IsFinalGlide()) {
         if ((last_tad < fixed(-50)) && (tad > fixed_one))
           // just reached final glide, previously well below
           return true;
@@ -261,7 +261,7 @@ protected:
 
     sun.CalcSunTimes(cmp.Basic().location, cmp.Basic().date_time_utc,
                      fixed(GetUTCOffset()) / 3600);
-    fixed d1((res.TimeElapsed + fixed(DetectCurrentTime(cmp.Basic()))) / 3600);
+    fixed d1((res.time_elapsed + fixed(DetectCurrentTime(cmp.Basic()))) / 3600);
     fixed d0(DetectCurrentTime(cmp.Basic()) / 3600);
 
     bool past_sunset = (d1 > sun.TimeOfSunSet) && (d0 < sun.TimeOfSunSet);
@@ -391,7 +391,7 @@ protected:
       return false;
 
     const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
-    if (!res.is_final_glide() || !res.glide_reachable(true)) {
+    if (!res.IsFinalGlide() || !res.IsAchievable(true)) {
       // only give message about terrain warnings if above final glide
       return false;
     }

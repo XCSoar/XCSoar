@@ -710,7 +710,7 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution(aircraft);
   if (activeTaskPoint == 0)
-    leg.Vector = GeoVector(aircraft.Location, taskpoint_start->get_location_remaining());
+    leg.vector = GeoVector(aircraft.Location, taskpoint_start->get_location_remaining());
 }
 
 void

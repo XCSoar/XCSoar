@@ -198,7 +198,7 @@ PrintHelper::abstracttask_print(AbstractTask& task, const AIRCRAFT_STATE &state)
        << " " << task.stats.total.vario.get_value() 
        << " " << task.stats.effective_mc
        << " " << task.stats.get_pirker_speed()
-       << " " << task.stats.total.solution_remaining.AltitudeDifference
+       << " " << task.stats.total.solution_remaining.altitude_difference
        << "\n";
     f6.flush();
   } else {
@@ -358,25 +358,25 @@ std::ostream& operator<< (std::ostream& o,
 std::ostream& operator<< (std::ostream& f, 
                           const GlideResult& gl)
 {
-  if (gl.Solution != GlideResult::RESULT_OK) {
+  if (gl.validity != GlideResult::RESULT_OK) {
     f << "#     Solution NOT OK\n";
   }
-  f << "#    Altitude Difference " << gl.AltitudeDifference << " (m)\n";
-  f << "#    Distance            " << gl.Vector.Distance << " (m)\n";
-  f << "#    TrackBearing        " << gl.Vector.Bearing << " (deg)\n";
-  f << "#    CruiseTrackBearing  " <<  gl.CruiseTrackBearing << " (deg)\n";
-  f << "#    VOpt                " <<  gl.VOpt << " (m/s)\n";
-  f << "#    HeightClimb         " <<  gl.HeightClimb << " (m)\n";
-  f << "#    HeightGlide         " <<  gl.HeightGlide << " (m)\n";
-  f << "#    TimeElapsed         " <<  gl.TimeElapsed << " (s)\n";
-  f << "#    TimeVirtual         " <<  gl.TimeVirtual << " (s)\n";
-  if (positive(gl.TimeElapsed)) {
-    f << "#    Vave remaining      " <<  gl.Vector.Distance/gl.TimeElapsed << " (m/s)\n";
+  f << "#    Altitude Difference " << gl.altitude_difference << " (m)\n";
+  f << "#    Distance            " << gl.vector.Distance << " (m)\n";
+  f << "#    TrackBearing        " << gl.vector.Bearing << " (deg)\n";
+  f << "#    CruiseTrackBearing  " <<  gl.cruise_track_bearing << " (deg)\n";
+  f << "#    VOpt                " <<  gl.v_opt << " (m/s)\n";
+  f << "#    HeightClimb         " <<  gl.height_climb << " (m)\n";
+  f << "#    HeightGlide         " <<  gl.height_glide << " (m)\n";
+  f << "#    TimeElapsed         " <<  gl.time_elapsed << " (s)\n";
+  f << "#    TimeVirtual         " <<  gl.time_virtual << " (s)\n";
+  if (positive(gl.time_elapsed)) {
+    f << "#    Vave remaining      " <<  gl.vector.Distance/gl.time_elapsed << " (m/s)\n";
   }
-  f << "#    EffectiveWindSpeed  " <<  gl.EffectiveWindSpeed << " (m/s)\n";
-  f << "#    EffectiveWindAngle  " <<  gl.EffectiveWindAngle << " (deg)\n";
-  f << "#    DistanceToFinal     " <<  gl.DistanceToFinal << " (m)\n";
-  if (gl.is_final_glide()) {
+  f << "#    EffectiveWindSpeed  " <<  gl.effective_wind_speed << " (m/s)\n";
+  f << "#    EffectiveWindAngle  " <<  gl.effective_wind_angle << " (deg)\n";
+  f << "#    DistanceToFinal     " <<  gl.distance_to_final << " (m)\n";
+  if (gl.IsFinalGlide()) {
     f << "#    On final glide\n";
   }
   return f;

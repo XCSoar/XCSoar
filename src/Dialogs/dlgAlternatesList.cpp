@@ -62,7 +62,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
                      rc.top + line_height / 2};
 
   WaypointIconRenderer::Reachability reachable =
-      positive(solution.AltitudeDifference) ?
+      positive(solution.altitude_difference) ?
       WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
 
   WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint,
@@ -81,8 +81,8 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 
   // Draw distance and arrival altitude
   TCHAR tmp[255], dist[20], alt[20];
-  Units::FormatUserDistance(solution.Vector.Distance, dist, 20, true);
-  Units::FormatUserArrival(solution.AltitudeDifference, alt, 20, true);
+  Units::FormatUserDistance(solution.vector.Distance, dist, 20, true);
+  Units::FormatUserArrival(solution.altitude_difference, alt, 20, true);
   _stprintf(tmp, _T("Distance: %s - Arrival Alt: %s"), dist, alt);
 
   canvas.select(small_font);

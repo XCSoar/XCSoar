@@ -711,7 +711,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     wp = (WndProperty *)wf->FindByName(_T("prpMc2"));
     if (wp) {
       _stprintf(sTmp, _T("%.0f %s"),
-                (double)Units::ToUserAltitude(r.AltitudeDifference),
+                (double)Units::ToUserAltitude(r.altitude_difference),
                 Units::GetAltitudeName());
       wp->SetText(sTmp);
     }
@@ -723,7 +723,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     wp = (WndProperty *)wf->FindByName(_T("prpMc0"));
     if (wp) {
       _stprintf(sTmp, _T("%.0f %s"),
-                (double)Units::ToUserAltitude(r.AltitudeDifference),
+                (double)Units::ToUserAltitude(r.altitude_difference),
                 Units::GetAltitudeName());
       wp->SetText(sTmp);
     }
@@ -734,7 +734,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     wp = (WndProperty *)wf->FindByName(_T("prpMc1"));
     if (wp) {
       _stprintf(sTmp, _T("%.0f %s"),
-                (double)Units::ToUserAltitude(r.AltitudeDifference),
+                (double)Units::ToUserAltitude(r.altitude_difference),
                 Units::GetAltitudeName());
       wp->SetText(sTmp);
     }

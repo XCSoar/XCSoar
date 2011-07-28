@@ -123,10 +123,10 @@ public:
     }
   }
   fixed distance_to_final() const {
-    return task_manager.get_stats().total.solution_remaining.DistanceToFinal;
+    return task_manager.get_stats().total.solution_remaining.distance_to_final;
   }
   fixed remaining_alt_difference() const {
-    return task_manager.get_stats().total.solution_remaining.AltitudeDifference;
+    return task_manager.get_stats().total.solution_remaining.altitude_difference;
   }
   GlidePolar get_glide_polar() const {
     return task_manager.get_glide_polar();

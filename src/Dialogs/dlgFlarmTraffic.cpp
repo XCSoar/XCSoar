@@ -566,9 +566,9 @@ Update()
               XCSoarInterface::SettingsComputer());
 
   wdf->UpdateTaskDirection(XCSoarInterface::Calculated().task_stats.task_valid &&
-                           XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.defined(),
+                           XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.IsDefined(),
                            XCSoarInterface::Calculated().task_stats.
-                           current_leg.solution_remaining.CruiseTrackBearing);
+                           current_leg.solution_remaining.cruise_track_bearing);
 
   SetButtonsEnabled(!wdf->WarningMode());
 }

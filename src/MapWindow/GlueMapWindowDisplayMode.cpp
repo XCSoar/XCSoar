@@ -269,9 +269,9 @@ GlueMapWindow::UpdateScreenAngle()
           settings.OrientationCircling : settings.OrientationCruise;
 
   if (orientation == TARGETUP &&
-      calculated.task_stats.current_leg.solution_remaining.defined())
+      calculated.task_stats.current_leg.solution_remaining.IsDefined())
     visible_projection.SetScreenAngle(calculated.task_stats.current_leg.
-                                      solution_remaining.Vector.Bearing);
+                                      solution_remaining.vector.Bearing);
   else if (orientation == NORTHUP || !basic.track_available)
     visible_projection.SetScreenAngle(Angle::zero());
   else
@@ -351,9 +351,9 @@ GlueMapWindow::UpdateProjection()
             basic.ground_speed > fixed_int_constant(8)) /* 8 m/s ~ 30 km/h */
           basic.track.Reciprocal().sin_cos(x, y);
       } else if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TARGET) {
-        if (calculated.task_stats.current_leg.solution_remaining.defined())
+        if (calculated.task_stats.current_leg.solution_remaining.IsDefined())
           calculated.task_stats.current_leg.solution_remaining
-                      .Vector.Bearing.Reciprocal().sin_cos(x, y);
+                      .vector.Bearing.Reciprocal().sin_cos(x, y);
       }
       fixed gspFactor = (fixed) (50 - settings_map.GliderScreenPosition) / 100;
       offset.x = x * (rc.right - rc.left) * gspFactor;

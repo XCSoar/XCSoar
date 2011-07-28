@@ -69,13 +69,13 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
   SetCommentFromWaypointName(infobox, &alternate->waypoint);
 
   // Set Value
-  Angle Value = alternate->solution.Vector.Bearing -
+  Angle Value = alternate->solution.vector.Bearing -
     XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);
 
   // Set Color (blue/black)
-  infobox.SetColor(alternate->solution.glide_reachable(true) ? 2 : 0);
+  infobox.SetColor(alternate->solution.IsAchievable(true) ? 2 : 0);
 }
 
 bool
@@ -135,7 +135,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
   SetCommentFromWaypointName(infobox, &alternate->waypoint);
 
   fixed gradient =
-    ::AngleToGradient(alternate->solution.destination_angle_ground());
+    ::AngleToGradient(alternate->solution.DestinationAngleGround());
 
   if (negative(gradient)) {
     infobox.SetColor(0);
@@ -151,7 +151,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
   }
 
   // Set Color (blue/black)
-  infobox.SetColor(alternate->solution.glide_reachable(true) ? 2 : 0);
+  infobox.SetColor(alternate->solution.IsAchievable(true) ? 2 : 0);
 }
 
 bool

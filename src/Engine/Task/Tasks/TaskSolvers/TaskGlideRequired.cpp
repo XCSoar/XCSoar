@@ -49,12 +49,12 @@ fixed
 TaskGlideRequired::f(const fixed S) 
 {
   res = tm.glide_sink(aircraft, S);
-  return res.AltitudeDifference;
+  return res.altitude_difference;
 }
 
 fixed 
 TaskGlideRequired::search(const fixed S) 
 {
   fixed a = find_zero(S);
-  return a/res.VOpt;
+  return a/res.v_opt;
 }

@@ -158,15 +158,15 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
   int i;
 
   if (Calculated().task_stats.task_valid &&
-      Calculated().task_stats.total.solution_remaining.defined() &&
-      Calculated().task_stats.total.solution_mc0.defined()) {
+      Calculated().task_stats.total.solution_remaining.IsDefined() &&
+      Calculated().task_stats.total.solution_mc0.IsDefined()) {
     const int y0 = ((rc.bottom - rc.top) / 2) + rc.top;
 
     // 60 units is size, div by 8 means 60*8 = 480 meters.
-    Offset = ((int)Calculated().task_stats.total.solution_remaining.AltitudeDifference) / 8;
+    Offset = ((int)Calculated().task_stats.total.solution_remaining.altitude_difference) / 8;
 
     // JMW OLD_TASK this is broken now
-    Offset0 = ((int)Calculated().task_stats.total.solution_mc0.AltitudeDifference) / 8;
+    Offset0 = ((int)Calculated().task_stats.total.solution_mc0.altitude_difference) / 8;
     // TODO feature: should be an angle if in final glide mode
 
     if (Offset > 60)
@@ -280,7 +280,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
                   Layout::Scale(9 + 5), y0 + cross_sign * Layout::Scale(9 - 5));
     }
 
-    Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.AltitudeDifference,
+    Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.altitude_difference,
                               Value, sizeof(Value) / sizeof(Value[0]),
                               false);
 
@@ -443,8 +443,8 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
 void
 GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
 {
-  if (Calculated().task_stats.total.solution_remaining.defined() &&
-      Calculated().task_stats.total.solution_remaining.AltitudeDifference > fixed(50)
+  if (Calculated().task_stats.total.solution_remaining.IsDefined() &&
+      Calculated().task_stats.total.solution_remaining.altitude_difference > fixed(50)
       && GetDisplayMode() == DM_FINAL_GLIDE)
     return;
 
