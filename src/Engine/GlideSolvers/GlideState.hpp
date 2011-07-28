@@ -43,13 +43,16 @@ struct GlideState
   fixed EffectiveWindSpeed;
   /** (internal use) */
   Angle EffectiveWindAngle;
+  /** headwind component (m/s) in cruise */
+  fixed HeadWind;
+
+private:
   /** (internal use) */
   fixed wsq_;
   /** (internal use) */
   fixed dwcostheta_;
-  /** headwind component (m/s) in cruise */
-  fixed HeadWind;
 
+public:
   /**
    * Dummy task constructor.  Typically used for synthetic glide
    * tasks.  Where there are real targets, the other constructors should
