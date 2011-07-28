@@ -41,32 +41,48 @@ struct GlideResult {
    * fails due to insufficient MC value etc.
    */
   enum GlideResult_t {
-    RESULT_OK = 0,                 /**< Solution is achievable */
-    RESULT_PARTIAL,                /**< Solution is partially achievable */
-    RESULT_WIND_EXCESSIVE,         /**< Wind is too strong to allow progress */
-    RESULT_MACCREADY_INSUFFICIENT, /**< Expected climb rate is too low to allow progress */
-    RESULT_NOSOLUTION              /**< Solution not computed or algorithm failed */
+    /** Solution is achievable */
+    RESULT_OK = 0,
+    /** Solution is partially achievable */
+    RESULT_PARTIAL,
+    /** Wind is too strong to allow progress */
+    RESULT_WIND_EXCESSIVE,
+    /** Expected climb rate is too low to allow progress */
+    RESULT_MACCREADY_INSUFFICIENT,
+    /** Solution not computed or algorithm failed */
+    RESULT_NOSOLUTION
   };
 
-  GeoVector Vector;            /**< Distance/bearing of task achievable */
-  fixed DistanceToFinal;       /**< Distance to go before final glide (m) */
-  Angle CruiseTrackBearing;    /**< Track bearing in cruise for optimal drift compensation (deg true) */
-  fixed VOpt;                  /**< Optimal speed to fly in cruise (m/s) */
-  fixed HeightClimb;           /**< Height to be climbed (m) */
-  fixed HeightGlide;           /**< Height that will be glided (m) */
-  fixed TimeElapsed;           /**< Time to complete task (s) */
-  fixed TimeVirtual;           /**< Equivalent time to recover glided height (s) at MC */
-  fixed AltitudeDifference;    /**< Height above/below final glide for this task (m) */
-  fixed AltitudeRequired;      /**< Height required to solve this task (m) */
-  fixed EffectiveWindSpeed;    /**< (internal) */
-  Angle EffectiveWindAngle;    /**< (internal) */
-  fixed HeadWind;              /**< Head wind component (m/s) in cruise */
-  GlideResult_t Solution;      /**< Solution validity */
-  fixed MinHeight;             /**< Height (m above MSL) of end */
+  /** Distance/bearing of task achievable */
+  GeoVector Vector;
+  /** Distance to go before final glide (m) */
+  fixed DistanceToFinal;
+  /** Track bearing in cruise for optimal drift compensation (deg true) */
+  Angle CruiseTrackBearing;
+  /** Optimal speed to fly in cruise (m/s) */
+  fixed VOpt;
+  /** Height to be climbed (m) */
+  fixed HeightClimb;
+  /** Height that will be glided (m) */
+  fixed HeightGlide;
+  /** Time to complete task (s) */
+  fixed TimeElapsed;
+  /** Equivalent time to recover glided height (s) at MC */
+  fixed TimeVirtual;
+  /** Height above/below final glide for this task (m) */
+  fixed AltitudeDifference;
+  /** Height required to solve this task (m) */
+  fixed AltitudeRequired;
+  fixed EffectiveWindSpeed;
+  Angle EffectiveWindAngle;
+  /** Head wind component (m/s) in cruise */
+  fixed HeadWind;
+  /** Solution validity */
+  GlideResult_t Solution;
+  /** Height (m above MSL) of end */
+  fixed MinHeight;
 
-  /**
-   * Construct an uninitialised object.
-   */
+  /** Construct an uninitialised object. */
   GlideResult() {}
 
   /**
@@ -163,9 +179,7 @@ struct GlideResult {
    */
   fixed destination_angle_ground() const;
 
-  /**
-   * Reset/clear the solution
-   */
+  /** Reset/clear the solution */
   void reset();
 
 #ifdef DO_PRINT
