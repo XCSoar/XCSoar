@@ -6,6 +6,7 @@ Version 6.1.4 - not yet released
 * memory leaks fixed
 * calculations
   - fix miscalculation in start point chooser
+  - finish: revert "allow flight to boundary" for now
 * map
   - fix for the aircraft symbol
   - airspace rendering optimised
