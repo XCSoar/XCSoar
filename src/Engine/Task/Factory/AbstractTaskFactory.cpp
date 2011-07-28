@@ -1148,6 +1148,7 @@ AbstractTaskFactory::TestFAITriangle(const fixed d1, const fixed d2,
                                      const fixed d3)
 {
   const fixed d_wp = d1 + d2 + d3;
+  const fixed d_wp28 = d_wp * fixed(0.28);
 
   /**
    * A triangle is a valid FAI-triangle, if no side is less than
@@ -1157,19 +1158,16 @@ AbstractTaskFactory::TestFAITriangle(const fixed d1, const fixed d2,
    */
 
   if (d_wp < fixed(750000) &&
-      d1 >= fixed(0.28) * d_wp &&
-      d2 >= fixed(0.28) * d_wp &&
-      d3 >= fixed(0.28) * d_wp)
+      d1 >= d_wp28 && d2 >= d_wp28 && d3 >= d_wp28)
     // small FAI
     return true;
 
+  const fixed d_wp25 = d_wp / 4;
+  const fixed d_wp45 = d_wp * fixed(0.45);
+
   if (d_wp >= fixed(750000) &&
-      d1 > d_wp / 4 &&
-      d2 > d_wp / 4 &&
-      d3 > d_wp / 4 &&
-      d1 <= fixed(0.45) * d_wp &&
-      d2 <= fixed(0.45) * d_wp &&
-      d3 <= fixed(0.45) * d_wp)
+      d1 > d_wp25 && d2 > d_wp25 && d3 > d_wp25 &&
+      d1 <= d_wp45 && d2 <= d_wp45 && d3 <= d_wp45)
     // large FAI
     return true;
 
