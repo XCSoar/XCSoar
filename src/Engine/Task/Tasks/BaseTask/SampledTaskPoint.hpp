@@ -49,7 +49,11 @@ class SampledTaskPoint
   friend class PrintHelper;
 
 protected:
-  const bool m_boundary_scored; /**< Whether boundaries are used in scoring distance, or just the reference point */
+  /**
+   * Whether boundaries are used in scoring distance,
+   * or just the reference point
+   */
+  const bool m_boundary_scored;
 
 private:
   SearchPointVector m_nominal_point;
@@ -76,10 +80,7 @@ public:
 
   virtual ~SampledTaskPoint() {};
 
-  /**
-   * Reset the task (as if never flown)
-   *
-   */
+  /** Reset the task (as if never flown) */
   virtual void reset();
 
   /**
@@ -160,7 +161,6 @@ public:
   }
 
 protected:
-
   /**
    * Clear all sample points and add the current state as a sample.
    * This is used, for exmaple, for StartPoints to only remember the last sample
@@ -185,11 +185,9 @@ protected:
   }
 
 private:
-
   /**
    * Re-project boundary and interior sample polygons.
    * Must be called if task_projection changes.
-   *
    */
   void update_projection(const TaskProjection &projection);
 
@@ -241,10 +239,7 @@ private:
     m_search_min = locmin;
   }
 
-  /**
-   * Clear all sample points.
-   *
-   */
+  /** Clear all sample points. */
   void clear_sample_points();
 };
 

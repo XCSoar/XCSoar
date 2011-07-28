@@ -22,14 +22,13 @@
 #include "SampledTaskPoint.hpp"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 
-SampledTaskPoint::SampledTaskPoint(enum type _type,
-                                   const Waypoint & wp,
-                                   const bool b_scored):
-    TaskWaypoint(_type, wp),
-    m_boundary_scored(b_scored),
-    m_search_max(get_location()),
-    m_search_min(get_location()),
-    m_search_reference(get_location())
+SampledTaskPoint::SampledTaskPoint(enum type _type, const Waypoint & wp,
+                                   const bool b_scored)
+  :TaskWaypoint(_type, wp),
+   m_boundary_scored(b_scored),
+   m_search_max(get_location()),
+   m_search_min(get_location()),
+   m_search_reference(get_location())
 {
   m_nominal_point.push_back(m_search_reference);
 }
@@ -43,30 +42,28 @@ SampledTaskPoint::update_sample_near(const AIRCRAFT_STATE& state,
 {
   if (isInSector(state)) {
     // if sample is inside sample polygon
-    //   return false (no update required)
-    // else
-    //   add sample to polygon
-    //   re-compute convex hull
-    //   return true; (update required)
-    //
-    if (PolygonInterior(state.Location, m_sampled_points)) {
-      // do nothing
+    if (PolygonInterior(state.Location, m_sampled_points))
+      // return false (no update required)
       return false;
-    } else {
-      SearchPoint sp(state.Location, projection);
-      m_sampled_points.push_back(sp);
-      // only return true if hull changed 
 
-      bool retval = prune_interior(m_sampled_points);
-      return thin_to_size(m_sampled_points, 64) || retval;
+    // add sample to polygon
+    SearchPoint sp(state.Location, projection);
+    m_sampled_points.push_back(sp);
 
-      // thin to size is used here to ensure the sampled points vector
-      // size is bounded to reasonable values for AAT calculations. 
-    }
+    // re-compute convex hull
+    bool retval = prune_interior(m_sampled_points);
+
+    // only return true if hull changed
+    // return true; (update required)
+    return thin_to_size(m_sampled_points, 64) || retval;
+
+    // thin to size is used here to ensure the sampled points vector
+    // size is bounded to reasonable values for AAT calculations.
   }
+
+  // return false (no update required)
   return false;
 }
-
 
 void 
 SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last,
@@ -89,15 +86,18 @@ SampledTaskPoint::update_oz(const TaskProjection &projection)
   m_search_max = m_search_reference;
   m_search_min = m_search_reference;
   m_boundary_points.clear();
+
   if (m_boundary_scored) {
-    for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
+    for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps) {
       SearchPoint sp(get_boundary_parametric(t));
       m_boundary_points.push_back(sp);
     }
+
     prune_interior(m_boundary_points);
   } else {
     m_boundary_points.push_back(m_search_reference);
   }
+
   update_projection(projection);
 }
 
@@ -114,13 +114,11 @@ SampledTaskPoint::update_projection(const TaskProjection &projection)
   project(m_boundary_points, projection);
 }
 
-
 void
 SampledTaskPoint::reset() 
 {
   m_sampled_points.clear();
 }
-
 
 const SearchPointVector& 
 SampledTaskPoint::get_search_points() const
@@ -151,5 +149,3 @@ SampledTaskPoint::set_search_min(const GeoPoint &location,
   SearchPoint sp(location, projection);
   set_search_min(sp);
 }
-
-
