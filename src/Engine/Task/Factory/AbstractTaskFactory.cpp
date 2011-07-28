@@ -1177,17 +1177,15 @@ AbstractTaskFactory::TestFAITriangle(const fixed d1, const fixed d2,
 bool
 AbstractTaskFactory::TestFAITriangle()
 {
-  bool valid = is_unique();
+  if (!is_unique())
+    return false;
 
-  if (m_task.task_size() == 4) {
-    const fixed d1 = m_task.getTaskPoint(1)->get_vector_planned().Distance;
-    const fixed d2 = m_task.getTaskPoint(2)->get_vector_planned().Distance;
-    const fixed d3 = m_task.getTaskPoint(3)->get_vector_planned().Distance;
+  if (m_task.task_size() != 4)
+    return false;
 
-    valid = TestFAITriangle(d1, d2, d3);
-  } else
-    valid = false;
+  const fixed d1 = m_task.getTaskPoint(1)->get_vector_planned().Distance;
+  const fixed d2 = m_task.getTaskPoint(2)->get_vector_planned().Distance;
+  const fixed d3 = m_task.getTaskPoint(3)->get_vector_planned().Distance;
 
-  return valid;
+  return TestFAITriangle(d1, d2, d3);
 }
-
