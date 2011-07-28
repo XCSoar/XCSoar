@@ -443,47 +443,8 @@ OnOptionalStartsClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-OnOZLineLengthData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
-{
-  if (!Refreshing)
-    ReadValues();
-  wTaskView->invalidate();
-}
-
-static void
-OnOZCylinderRadiusData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
-{
-  if (!Refreshing)
-    ReadValues();
-  wTaskView->invalidate();
-}
-
-static void
-OnOZSectorRadiusData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
-{
-  if (!Refreshing)
-    ReadValues();
-  wTaskView->invalidate();
-}
-
-static void
-OnOZSectorInnerRadiusData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
-{
-  if (!Refreshing)
-    ReadValues();
-  wTaskView->invalidate();
-}
-
-static void
-OnOZSectorStartRadialData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
-{
-  if (!Refreshing)
-    ReadValues();
-  wTaskView->invalidate();
-}
-
-static void
-OnOZSectorFinishRadialData(gcc_unused DataField *Sender, gcc_unused DataField::DataAccessKind_t Mode)
+OnOZData(gcc_unused DataField *Sender,
+         gcc_unused DataField::DataAccessKind_t Mode)
 {
   if (!Refreshing)
     ReadValues();
@@ -500,12 +461,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnOptionalStartsClicked),
   DeclareCallBackEntry(OnTaskPaint),
-  DeclareCallBackEntry(OnOZLineLengthData),
-  DeclareCallBackEntry(OnOZCylinderRadiusData),
-  DeclareCallBackEntry(OnOZSectorRadiusData),
-  DeclareCallBackEntry(OnOZSectorInnerRadiusData),
-  DeclareCallBackEntry(OnOZSectorStartRadialData),
-  DeclareCallBackEntry(OnOZSectorFinishRadialData),
+  DeclareCallBackEntry(OnOZData),
   DeclareCallBackEntry(NULL)
 };
 
