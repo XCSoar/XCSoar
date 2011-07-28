@@ -81,14 +81,7 @@ Bitmap::load(unsigned _id)
   if (!surface_valid)
     return true;
 
-  texture = LoadResourceTexture(id);
-  if (texture == NULL)
-    return false;
-
-  width = texture->get_width();
-  height = texture->get_height();
-
-  return true;
+  return Reload();
 }
 
 bool
