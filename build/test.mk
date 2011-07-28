@@ -66,7 +66,8 @@ TEST_NAMES = \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestPlanes \
-	TestTaskPoint
+	TestTaskPoint \
+	TestTaskWaypoint
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -126,6 +127,21 @@ TEST_TASKPOINT_SOURCES = \
 TEST_TASKPOINT_OBJS = $(call SRC_TO_OBJ,$(TEST_TASKPOINT_SOURCES))
 TEST_TASKPOINT_LDADD = $(MATH_LIBS) $(IO_LIBS)
 $(TARGET_BIN_DIR)/TestTaskPoint$(TARGET_EXEEXT): $(TEST_TASKPOINT_OBJS) $(TEST_TASKPOINT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_TASKWAYPOINT_SOURCES = \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
+	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestTaskWaypoint.cpp
+TEST_TASKWAYPOINT_OBJS = $(call SRC_TO_OBJ,$(TEST_TASKWAYPOINT_SOURCES))
+TEST_TASKWAYPOINT_LDADD = $(MATH_LIBS) $(IO_LIBS)
+$(TARGET_BIN_DIR)/TestTaskWaypoint$(TARGET_EXEEXT): $(TEST_TASKWAYPOINT_OBJS) $(TEST_TASKWAYPOINT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
