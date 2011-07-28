@@ -221,9 +221,9 @@ void
 AbstractTask::update_stats_speeds(const AIRCRAFT_STATE &state, 
                                   const AIRCRAFT_STATE &state_last)
 {
-  const fixed dt = state.Time-state_last.Time;
   if (!task_finished()) {
     if (task_started()) {
+      const fixed dt = state.Time - state_last.Time;
       stats_computer.total.calc_speeds(dt);
       stats_computer.current_leg.calc_speeds(dt);
     } else {
