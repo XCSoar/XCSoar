@@ -45,7 +45,7 @@ AircraftSim::Start(const GeoPoint& location_start,
   state.Time = fixed_zero;
   state.wind.norm = fixed_zero;
   state.wind.bearing = Angle();
-  state.Speed = fixed(16);
+  state.ground_speed = fixed(16);
   state_last = state;
   state_last.Location = location_last;
 
@@ -59,7 +59,7 @@ AircraftSim::Start(const GeoPoint& location_start,
 GeoPoint
 AircraftSim::endpoint(const Angle &heading, const fixed timestep) const
 {
-  GeoPoint ref = GeoVector(state.TrueAirspeed*timestep, heading).end_point(state.Location);
+  GeoPoint ref = GeoVector(state.true_airspeed*timestep, heading).end_point(state.Location);
   return GeoVector(state.wind.norm*timestep,
                    state.wind.bearing+ Angle::degrees(fixed_180)).end_point(ref);
 }
@@ -69,7 +69,7 @@ AircraftSim::integrate(const Angle& heading, const fixed timestep)
 {
   GeoPoint v = endpoint(heading, timestep);
   state.track = state.Location.bearing(v);
-  state.Speed = v.distance(state.Location)/timestep;
+  state.ground_speed = v.distance(state.Location)/timestep;
   state.Location = v;
   state.NavAltitude += state.vario*timestep;
   state.Time += timestep;

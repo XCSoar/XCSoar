@@ -31,9 +31,9 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
   AIRCRAFT_STATE aircraft;
 
   /* SPEED_STATE */
-  aircraft.Speed = info.ground_speed;
-  aircraft.TrueAirspeed = info.true_airspeed;
-  aircraft.IndicatedAirspeed = info.indicated_airspeed;
+  aircraft.ground_speed = info.ground_speed;
+  aircraft.true_airspeed = info.true_airspeed;
+  aircraft.indicated_airspeed = info.indicated_airspeed;
 
   /* ALTITUDE_STATE */
   aircraft.NavAltitude = info.NavAltitude;

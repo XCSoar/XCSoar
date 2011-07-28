@@ -57,7 +57,7 @@ on_advance(const GeoPoint &loc, const fixed speed,
 {
   AIRCRAFT_STATE new_state;
   new_state.Location = loc;
-  new_state.Speed = speed;
+  new_state.ground_speed = speed;
   new_state.NavAltitude = alt;
   new_state.track = bearing;
   new_state.Time = t;

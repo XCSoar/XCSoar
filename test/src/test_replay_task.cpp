@@ -54,7 +54,7 @@ protected:
                   const fixed alt, const fixed baroalt, const fixed t) {
 
     state.Location = loc;
-    state.Speed = speed;
+    state.ground_speed = speed;
     state.track = bearing;
     state.NavAltitude = alt;
     state.Time = t;
@@ -129,7 +129,7 @@ test_replay()
 
       n_samples++;
 
-      if (sim.state.Speed> glide_polar.GetVTakeoff()) {
+      if (sim.state.ground_speed> glide_polar.GetVTakeoff()) {
         sim.state.Moving(sim.state.Time);
       } else {
         sim.state.Stationary(sim.state.Time);

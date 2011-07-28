@@ -345,7 +345,7 @@ UpdateValuesRules(void)
   assert(wp != NULL);
   if (common_stats.task_started) {
     _stprintf(Temp, _T("%d %s"),
-              (int)Units::ToUserTaskSpeed(start_state.Speed),
+              (int)Units::ToUserTaskSpeed(start_state.ground_speed),
               Units::GetTaskSpeedName());
     wp->SetText(Temp);
   } else {

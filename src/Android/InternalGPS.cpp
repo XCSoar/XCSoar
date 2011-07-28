@@ -99,7 +99,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
                                         jdouble longitude, jdouble latitude,
                                         jboolean hasAltitude, jdouble altitude,
                                         jboolean hasBearing, jdouble bearing,
-                                        jboolean hasSpeed, jdouble speed,
+                                        jboolean hasSpeed, jdouble ground_speed,
                                         jboolean hasAccuracy, jdouble accuracy,
                                         jboolean hasAcceleration, jdouble acceleration)
 {
@@ -149,7 +149,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
     basic.track_available.Clear();
 
   if (hasSpeed) {
-    basic.ground_speed = fixed(speed);
+    basic.ground_speed = fixed(ground_speed);
     basic.ground_speed_available.Update(basic.clock);
   }
 

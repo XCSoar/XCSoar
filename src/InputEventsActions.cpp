@@ -1850,7 +1850,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     Units::TimeToTextHHMMSigned(TempTime, (int)TimeLocal((int)start_state.Time));
     Units::FormatUserAltitude(start_state.NavAltitude,
                               TempAlt, sizeof(TempAlt)/sizeof(TCHAR), true);
-    Units::FormatUserSpeed(start_state.Speed,
+    Units::FormatUserSpeed(start_state.ground_speed,
                            TempSpeed, sizeof(TempSpeed)/sizeof(TCHAR), true);
     
     TCHAR TempAll[120];

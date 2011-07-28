@@ -40,7 +40,7 @@
 /**
  * Structure for speed-related state data
  */
-struct SPEED_STATE 
+struct SpeedState 
 {
   //############
   //   Speeds
@@ -51,14 +51,14 @@ struct SPEED_STATE
    * @see TrueAirspeed
    * @see IndicatedAirspeed
    */
-  fixed Speed; 
+  fixed ground_speed; 
 
   /**
    * True air speed (m/s)
    * @see Speed
    * @see IndicatedAirspeed
    */
-  fixed TrueAirspeed;
+  fixed true_airspeed;
 
   /**
    * Indicated air speed (m/s)
@@ -66,7 +66,7 @@ struct SPEED_STATE
    * @see TrueAirspeed
    * @see AirDensityRatio
    */
-  fixed IndicatedAirspeed;
+  fixed indicated_airspeed;
 };
 
 /**
@@ -160,7 +160,7 @@ private:
  */
 struct AIRCRAFT_STATE: 
   public ALTITUDE_STATE,
-  public SPEED_STATE,
+  public SpeedState,
   public VarioState,
   public FlyingState
 {

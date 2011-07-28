@@ -155,7 +155,7 @@ TaskAutoPilot::update_mode(const TaskAccessor& task,
   switch (acstate) {
   case Cruise:
     if ((awp>0) &&
-        (task.distance_to_final()<= state.Speed)) {
+        (task.distance_to_final()<= state.ground_speed)) {
       acstate = FinalGlide;
       on_mode_change();
     } else {
@@ -173,7 +173,7 @@ TaskAutoPilot::update_mode(const TaskAccessor& task,
     break;
   case Climb:
     if ((awp>0) &&
-        (task.distance_to_final()<= state.Speed)) {
+        (task.distance_to_final()<= state.ground_speed)) {
       acstate = FinalGlide;
       on_mode_change();
     } else if (state.NavAltitude>=fixed_1500) {
@@ -205,11 +205,11 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
     bearing = state.Location.bearing(target(task));
   }
 
-  if (positive(state.wind.norm) && positive(state.TrueAirspeed)) {
+  if (positive(state.wind.norm) && positive(state.true_airspeed)) {
     const fixed sintheta = (state.wind.bearing-bearing).sin();
     if (fabs(sintheta)>fixed(0.0001)) {
       bearing +=
-        Angle::radians(asin(sintheta * state.wind.norm / state.TrueAirspeed));
+        Angle::radians(asin(sintheta * state.wind.norm / state.true_airspeed));
     }
   }
   Angle diff = (bearing-heading).as_delta();
@@ -235,18 +235,18 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
   {
     const ElementStat stat = task.leg_stats();
     if (positive(stat.solution_remaining.v_opt)) {
-      state.TrueAirspeed = stat.solution_remaining.v_opt*speed_factor;
+      state.true_airspeed = stat.solution_remaining.v_opt*speed_factor;
     } else {
-      state.TrueAirspeed = glide_polar.GetVBestLD();
+      state.true_airspeed = glide_polar.GetVBestLD();
     }
-    state.IndicatedAirspeed = state.TrueAirspeed;
-    state.vario = -glide_polar.SinkRate(state.TrueAirspeed)*parms.sink_factor;
+    state.indicated_airspeed = state.true_airspeed;
+    state.vario = -glide_polar.SinkRate(state.true_airspeed)*parms.sink_factor;
     update_cruise_bearing(task, state, timestep);
   }
   break;
   case Climb:
   {
-    state.TrueAirspeed = glide_polar.GetVMin();
+    state.true_airspeed = glide_polar.GetVMin();
     fixed d = parms.turn_speed*timestep;
     if (d< fixed_360) {
       heading += Angle::degrees(d);
@@ -259,7 +259,7 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
   }
     break;
   };
-  state.netto_vario = state.vario+glide_polar.SinkRate(state.TrueAirspeed);
+  state.netto_vario = state.vario+glide_polar.SinkRate(state.true_airspeed);
 }
 
 
@@ -270,7 +270,7 @@ TaskAutoPilot::far_from_target(const TaskAccessor& task, const AIRCRAFT_STATE& s
   // are we considered close to the target?
 
   if (task.is_empty())
-    return w[0].distance(state.Location)>state.Speed;
+    return w[0].distance(state.Location)>state.ground_speed;
 
   bool d_far = (task.leg_stats().remaining.get_distance() > fixed(100));
 
@@ -285,9 +285,9 @@ TaskAutoPilot::far_from_target(const TaskAccessor& task, const AIRCRAFT_STATE& s
 
   fixed dc = w[0].distance(state.Location);
   if (awp==0) {
-    return (dc>state.Speed);
+    return (dc>state.ground_speed);
   }
-  return (dc>state.Speed) || !entered;
+  return (dc>state.ground_speed) || !entered;
 }
 
 

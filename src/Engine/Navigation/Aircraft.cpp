@@ -27,7 +27,7 @@ AIRCRAFT_STATE
 AIRCRAFT_STATE::get_predicted_state(const fixed &in_time) const
 {
   AIRCRAFT_STATE state_next = *this;
-  GeoVector vec(Speed * in_time, track);
+  GeoVector vec(ground_speed * in_time, track);
   state_next.Location = vec.end_point(Location);
   state_next.NavAltitude += vario * in_time;
   return state_next;

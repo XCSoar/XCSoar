@@ -52,7 +52,7 @@ OrderedTaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
 
   const fixed margin = with_margin ? behaviour.start_max_speed_margin : fixed_zero;
 
-  return state.Speed <= start_max_speed + margin;
+  return state.ground_speed <= start_max_speed + margin;
 }
 
 bool 
