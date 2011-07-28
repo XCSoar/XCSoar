@@ -38,6 +38,9 @@ class WndForm;
 void
 ShowFormControl(WndForm &form, const TCHAR *control_name, bool visible);
 
+void SetFormControlEnabled(WndForm &form, const TCHAR *control_name,
+                           bool enabled);
+
 /**
  * Loads the specified value into the form.
  *

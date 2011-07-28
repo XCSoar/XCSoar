@@ -40,6 +40,14 @@ ShowFormControl(WndForm &form, const TCHAR *control_name, bool visible)
 }
 
 void
+SetFormControlEnabled(WndForm &form, const TCHAR *control_name, bool enabled)
+{
+  Window *window = form.FindByName(control_name);
+  assert(window != NULL);
+  window->set_enabled(enabled);
+}
+
+void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value)
 {
   assert(control_name != NULL);
