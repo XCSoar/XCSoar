@@ -22,9 +22,11 @@ Copyright_License {
 */
 #ifndef DIALOG_TASK_HELPERS_HPP
 #define DIALOG_TASK_HELPERS_HPP
+
 #include <tchar.h>
-#include "Task/Tasks/OrderedTask.hpp"
+
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Task/TaskBehaviour.hpp"
 
 class SingleWindow;
 

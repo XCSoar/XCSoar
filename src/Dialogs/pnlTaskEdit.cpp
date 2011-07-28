@@ -38,6 +38,8 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
 
+#include "Task/Tasks/OrderedTask.hpp"
+
 #include <assert.h>
 #include <stdio.h>
 

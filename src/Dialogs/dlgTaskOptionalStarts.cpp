@@ -28,6 +28,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Task/Tasks/OrderedTask.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
 
 #include <assert.h>

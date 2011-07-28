@@ -30,6 +30,8 @@ Copyright_License {
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Dialogs/dlgTaskManager.hpp"
 
+#include "Task/Tasks/OrderedTask.hpp"
+
 #include <assert.h>
 #include <stdio.h>
 
