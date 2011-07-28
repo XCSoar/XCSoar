@@ -65,7 +65,8 @@ TEST_NAMES = \
 	TestColorRamp TestGeoPoint TestDiffFilter \
 	TestFileUtil TestPolars TestCSVLine TestGlidePolar \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
-	TestPlanes
+	TestPlanes \
+	TestTaskPoint
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -112,6 +113,19 @@ TEST_PLANES_SOURCES = \
 TEST_PLANES_OBJS = $(call SRC_TO_OBJ,$(TEST_PLANES_SOURCES))
 TEST_PLANES_LDADD = $(MATH_LIBS) $(IO_LIBS)
 $(TARGET_BIN_DIR)/TestPlanes$(TARGET_EXEEXT): $(TEST_PLANES_OBJS) $(TEST_PLANES_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_TASKPOINT_SOURCES = \
+	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Geometry/GeoVector.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestTaskPoint.cpp
+TEST_TASKPOINT_OBJS = $(call SRC_TO_OBJ,$(TEST_TASKPOINT_SOURCES))
+TEST_TASKPOINT_LDADD = $(MATH_LIBS) $(IO_LIBS)
+$(TARGET_BIN_DIR)/TestTaskPoint$(TARGET_EXEEXT): $(TEST_TASKPOINT_OBJS) $(TEST_TASKPOINT_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
