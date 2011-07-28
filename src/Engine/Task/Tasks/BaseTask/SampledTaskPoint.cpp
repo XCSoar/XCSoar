@@ -123,24 +123,20 @@ SampledTaskPoint::reset()
 const SearchPointVector& 
 SampledTaskPoint::get_search_points() const
 {
-  if (search_boundary_points()) {
+  if (search_boundary_points())
     return m_boundary_points;
-  } else {
-    if (!has_sampled()) {
-      if (search_nominal_if_unsampled()) {
-        // this adds a point in case the waypoint was skipped
-        // this is a crude way of handling the situation --- may be best
-        // to de-rate the score in some way
-        return m_nominal_point;
-      } else {
-        return m_boundary_points;
-      }
-    } else {
-      return m_sampled_points;
-    }
-  }
-}
 
+  if (has_sampled())
+    return m_sampled_points;
+
+  if (search_nominal_if_unsampled())
+    // this adds a point in case the waypoint was skipped
+    // this is a crude way of handling the situation --- may be best
+    // to de-rate the score in some way
+    return m_nominal_point;
+
+  return m_boundary_points;
+}
 
 void 
 SampledTaskPoint::set_search_min(const GeoPoint &location,
