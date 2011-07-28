@@ -54,6 +54,21 @@ LoadResourceTexture(unsigned id)
 }
 
 bool
+Bitmap::Reload()
+{
+  assert(id != 0);
+  assert(texture == NULL);
+
+  texture = LoadResourceTexture(id);
+  if (texture == NULL)
+    return false;
+
+  width = texture->get_width();
+  height = texture->get_height();
+  return true;
+}
+
+bool
 Bitmap::load(unsigned _id)
 {
   id = _id;

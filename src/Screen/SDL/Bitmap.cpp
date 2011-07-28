@@ -65,6 +65,19 @@ Bitmap::load(SDL_Surface *_surface)
 #endif
 }
 
+#ifdef ENABLE_OPENGL
+bool
+Bitmap::Reload()
+{
+  assert(id != 0);
+  assert(texture == NULL);
+
+  /* XXX this is no real implementation; we currently support OpenGL
+     surface reinitialisation only on Android */
+  return load(id);
+}
+#endif
+
 bool
 Bitmap::load(unsigned id)
 {

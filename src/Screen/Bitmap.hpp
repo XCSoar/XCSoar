@@ -144,6 +144,12 @@ public:
 
 #ifdef ENABLE_OPENGL
 private:
+  /**
+   * Load the texture again after the OpenGL surface has been
+   * recreated.
+   */
+  bool Reload();
+
   /* from GLSurfaceListener */
   virtual void surface_created();
   virtual void surface_destroyed();
