@@ -19,11 +19,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef QUADRATIC_HPP
 #define QUADRATIC_HPP
 
 #include "Math/fixed.hpp"
 #include "Compiler.h"
+
+#include <assert.h>
 
 /**
  * Utility class for efficient solution of quadratic equations
@@ -78,6 +81,7 @@ public:
   gcc_pure fixed
   solution_max() const
   {
+    assert(check());
     return positive(da) ? solution(true) : solution(false);
   }
 
@@ -89,6 +93,7 @@ public:
   gcc_pure fixed
   solution_min() const
   {
+    assert(check());
     return positive(da) ? solution(false) : solution(true);
   }
 
@@ -104,6 +109,7 @@ private:
   gcc_pure fixed
   solution(const bool positive) const
   {
+    assert(check());
     return (-b + (positive ? sqrt(denom) : -sqrt(denom))) / da;
   }
 
