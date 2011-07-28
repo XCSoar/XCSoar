@@ -65,93 +65,6 @@ OnCloseClicked(gcc_unused WndButton &Sender)
 }
 
 /**
- * Utility class to read observation zone parameters and update the dlgTaskPoint dialog
- * items
- */
-class TPReadObservationZone:
-  public ObservationZoneVisitor
-{
-public:
-  void
-  Visit(gcc_unused FAISectorZone& oz)
-  {
-  }
-  void
-  Visit(gcc_unused KeyholeZone& oz)
-  {
-  }
-  void
-  Visit(gcc_unused BGAFixedCourseZone& oz)
-  {
-  }
-  void
-  Visit(gcc_unused BGAEnhancedOptionZone& oz)
-  {
-  }
-  void
-  Visit(gcc_unused BGAStartSectorZone& oz)
-  {
-  }
-  void
-  Visit(SectorZone& oz)
-  {
-    fixed radius =
-      Units::ToSysDistance(GetFormValueFixed(*wf, _T("prpOZSectorRadius")));
-    if (fabs(radius - oz.getRadius()) > fixed(49)) {
-      oz.setRadius(radius);
-      task_modified = true;
-    }
-
-    fixed start_radial = GetFormValueFixed(*wf, _T("prpOZSectorStartRadial"));
-    if (start_radial != oz.getStartRadial().value_degrees()) {
-      oz.setStartRadial(Angle::degrees(start_radial));
-      task_modified = true;
-    }
-
-    fixed finish_radial = GetFormValueFixed(*wf, _T("prpOZSectorFinishRadial"));
-    if (finish_radial != oz.getEndRadial().value_degrees()) {
-      oz.setEndRadial(Angle::degrees(finish_radial));
-      task_modified = true;
-    }
-  }
-
-  void
-  Visit(AnnularSectorZone& oz)
-  {
-    Visit((SectorZone&)oz);
-
-    fixed radius =
-      Units::ToSysDistance(GetFormValueFixed(*wf, _T("prpOZSectorInnerRadius")));
-    if (fabs(radius - oz.getInnerRadius()) > fixed(49)) {
-      oz.setInnerRadius(radius);
-      task_modified = true;
-    }
-  }
-
-  void
-  Visit(LineSectorZone& oz)
-  {
-    fixed line_length =
-      Units::ToSysDistance(GetFormValueFixed(*wf, _T("prpOZLineLength")));
-    if (fabs(line_length - oz.getLength()) > fixed(49)) {
-      oz.setLength(line_length);
-      task_modified = true;
-    }
-  }
-
-  void
-  Visit(CylinderZone& oz)
-  {
-    fixed radius =
-      Units::ToSysDistance(GetFormValueFixed(*wf, _T("prpOZCylinderRadius")));
-    if (fabs(radius - oz.getRadius()) > fixed(49)) {
-      oz.setRadius(radius);
-      task_modified = true;
-    }
-  }
-};
-
-/**
  * for FAI tasks, make the zone sizes disabled so the user can't alter them
  * @param enable
  */
@@ -287,10 +200,67 @@ RefreshView()
 static void
 ReadValues()
 {
-  TPReadObservationZone tpv;
   OrderedTaskPoint* tp = ordered_task->get_tp(active_index);
-  ObservationZoneVisitor &visitor = tpv;
-  visitor.Visit(*tp->get_oz());
+  ObservationZonePoint &oz = *tp->get_oz();
+
+  switch (oz.shape) {
+  case ObservationZonePoint::ANNULAR_SECTOR: {
+    fixed radius = Units::ToSysDistance(
+        GetFormValueFixed(*wf, _T("prpOZSectorInnerRadius")));
+
+    if (fabs(radius - ((AnnularSectorZone &)oz).getInnerRadius()) > fixed(49)) {
+      ((AnnularSectorZone &)oz).setInnerRadius(radius);
+      task_modified = true;
+    }
+  }
+  case ObservationZonePoint::SECTOR: {
+    fixed radius =
+      Units::ToSysDistance(
+          GetFormValueFixed(*wf, _T("prpOZSectorRadius")));
+
+    if (fabs(radius - ((SectorZone &)oz).getRadius()) > fixed(49)) {
+      ((SectorZone &)oz).setRadius(radius);
+      task_modified = true;
+    }
+
+    fixed start_radial = GetFormValueFixed(*wf, _T("prpOZSectorStartRadial"));
+    if (start_radial != ((SectorZone &)oz).getStartRadial().value_degrees()) {
+      ((SectorZone &)oz).setStartRadial(Angle::degrees(start_radial));
+      task_modified = true;
+    }
+
+    fixed finish_radial = GetFormValueFixed(*wf, _T("prpOZSectorFinishRadial"));
+    if (finish_radial != ((SectorZone &)oz).getEndRadial().value_degrees()) {
+      ((SectorZone &)oz).setEndRadial(Angle::degrees(finish_radial));
+      task_modified = true;
+    }
+    break;
+  }
+  case ObservationZonePoint::LINE: {
+    fixed line_length = Units::ToSysDistance(
+        GetFormValueFixed(*wf, _T("prpOZLineLength")));
+
+    if (fabs(line_length - ((LineSectorZone &)oz).getLength()) > fixed(49)) {
+      ((LineSectorZone &)oz).setLength(line_length);
+      task_modified = true;
+    }
+    break;
+  }
+
+  case ObservationZonePoint::CYLINDER: {
+    fixed radius = Units::ToSysDistance(
+        GetFormValueFixed(*wf, _T("prpOZCylinderRadius")));
+
+    if (fabs(radius - ((CylinderZone &)oz).getRadius()) > fixed(49)) {
+      ((CylinderZone &)oz).setRadius(radius);
+      task_modified = true;
+    }
+    break;
+  }
+
+  default:
+    break;
+  }
 }
 
 static void
