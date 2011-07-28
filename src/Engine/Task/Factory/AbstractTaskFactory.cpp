@@ -977,7 +977,7 @@ AbstractTaskFactory::is_unique() const
 
     for (unsigned j = i + 1; j < size; j++) {
       if (i == 0 && j + 1 == size) {
-        // ok to be the same
+        // start point can be similar to finish point
       } else {
         const Waypoint& wp_1 = m_task.get_tp(j)->get_waypoint();
         if (wp_1 == wp_0)
