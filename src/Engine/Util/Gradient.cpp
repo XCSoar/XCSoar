@@ -19,8 +19,9 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "Gradient.hpp"
-#include "Math/fixed.hpp"
+
 #include <algorithm>
 #include <math.h>
 
