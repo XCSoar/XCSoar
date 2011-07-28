@@ -64,96 +64,6 @@ OnCloseClicked(gcc_unused WndButton &Sender)
   wf->SetModalResult(mrOK);
 }
 
-
-class TPLabelObservationZone:
-  public ObservationZoneConstVisitor
-{
-public:
-  void
-  Visit(gcc_unused const FAISectorZone& oz)
-  {
-    hide_all();
-  }
-  void
-  Visit(gcc_unused const KeyholeZone& oz)
-  {
-    hide_all();
-  }
-
-  void
-  Visit(gcc_unused const BGAFixedCourseZone& oz)
-  {
-    hide_all();
-  }
-
-  void
-  Visit(gcc_unused const BGAEnhancedOptionZone& oz)
-  {
-    hide_all();
-  }
-
-  void
-  Visit(gcc_unused const BGAStartSectorZone& oz)
-  {
-    hide_all();
-  }
-
-  void
-  Visit(const SectorZone& oz)
-  {
-    hide_all();
-    ShowFormControl(*wf, _T("frmOZSector"), true);
-
-    LoadFormProperty(*wf, _T("prpOZSectorRadius"),
-                     ugDistance, oz.getRadius());
-    LoadFormProperty(*wf, _T("prpOZSectorStartRadial"),
-                     oz.getStartRadial().value_degrees());
-    LoadFormProperty(*wf, _T("prpOZSectorFinishRadial"),
-                     oz.getEndRadial().value_degrees());
-
-    ShowFormControl(*wf, _T("prpOZSectorInnerRadius"), false);
-  }
-
-  void
-  Visit(const AnnularSectorZone& oz)
-  {
-    Visit((const SectorZone&)oz);
-    LoadFormProperty(*wf, _T("prpOZSectorInnerRadius"),
-                     ugDistance, oz.getInnerRadius());
-
-    ShowFormControl(*wf, _T("prpOZSectorInnerRadius"), true);
-  }
-
-  void
-  Visit(const LineSectorZone& oz)
-  {
-    hide_all();
-    ShowFormControl(*wf, _T("frmOZLine"), true);
-
-    LoadFormProperty(*wf, _T("prpOZLineLength"),
-                     ugDistance, oz.getLength());
-  }
-
-  void
-  Visit(const CylinderZone& oz)
-  {
-    hide_all();
-    ShowFormControl(*wf, _T("frmOZCylinder"), true);
-
-    LoadFormProperty(*wf, _T("prpOZCylinderRadius"),
-                     ugDistance, oz.getRadius());
-  }
-
-private:
-  void
-  hide_all()
-  {
-    ShowFormControl(*wf, _T("frmOZLine"), false);
-    ShowFormControl(*wf, _T("frmOZSector"), false);
-    ShowFormControl(*wf, _T("frmOZCylinder"), false);
-  }
-};
-
 /**
  * Utility class to read observation zone parameters and update the dlgTaskPoint dialog
  * items
@@ -263,12 +173,53 @@ RefreshView()
 
   Refreshing = true; // tell onChange routines not to save form!
 
-  TPLabelObservationZone ozv;
-  ObservationZoneConstVisitor &visitor = ozv;
-  visitor.Visit(*tp->get_oz());
+  ShowFormControl(*wf, _T("frmOZLine"), false);
+  ShowFormControl(*wf, _T("frmOZSector"), false);
+  ShowFormControl(*wf, _T("frmOZCylinder"), false);
+
+  const ObservationZonePoint &oz = *tp->get_oz();
+
+  switch (oz.shape) {
+  case ObservationZonePoint::SECTOR:
+  case ObservationZonePoint::ANNULAR_SECTOR:
+    ShowFormControl(*wf, _T("frmOZSector"), true);
+
+    LoadFormProperty(*wf, _T("prpOZSectorRadius"),
+                     ugDistance, ((const SectorZone &)oz).getRadius());
+    LoadFormProperty(*wf, _T("prpOZSectorStartRadial"),
+                     ((const SectorZone &)oz).getStartRadial().value_degrees());
+    LoadFormProperty(*wf, _T("prpOZSectorFinishRadial"),
+                     ((const SectorZone &)oz).getEndRadial().value_degrees());
+
+    if (oz.shape == ObservationZonePoint::ANNULAR_SECTOR) {
+      LoadFormProperty(*wf, _T("prpOZSectorInnerRadius"),
+                       ugDistance, ((const AnnularSectorZone &)oz).getInnerRadius());
+
+      ShowFormControl(*wf, _T("prpOZSectorInnerRadius"), true);
+    } else
+      ShowFormControl(*wf, _T("prpOZSectorInnerRadius"), false);
+
+    break;
+
+  case ObservationZonePoint::LINE:
+    ShowFormControl(*wf, _T("frmOZLine"), true);
+
+    LoadFormProperty(*wf, _T("prpOZLineLength"), ugDistance,
+                     ((const LineSectorZone &)oz).getLength());
+    break;
+
+  case ObservationZonePoint::CYLINDER:
+    ShowFormControl(*wf, _T("frmOZCylinder"), true);
+
+    LoadFormProperty(*wf, _T("prpOZCylinderRadius"), ugDistance,
+                     ((const CylinderZone &)oz).getRadius());
+    break;
+
+  default:
+    break;
+  }
 
   WndFrame* wfrm = NULL;
-
   wfrm = ((WndFrame*)wf->FindByName(_T("lblType")));
   if (wfrm)
     wfrm->SetCaption(OrderedTaskPointName(ordered_task->get_factory().getType(*tp)));
