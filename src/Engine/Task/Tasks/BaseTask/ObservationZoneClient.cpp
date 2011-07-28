@@ -22,7 +22,6 @@
 
 #include "ObservationZoneClient.hpp"
 #include "ObservationZonePoint.hpp"
-#include "Task/Visitors/ObservationZoneVisitor.hpp"
 #include "Task/Tasks/BaseTask/TaskPoint.hpp"
 
 ObservationZoneClient::~ObservationZoneClient() {
