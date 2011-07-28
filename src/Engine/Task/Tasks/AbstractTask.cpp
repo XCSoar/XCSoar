@@ -29,25 +29,25 @@
 #include "Task/TaskBehaviour.hpp"
 
 AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
-                           const TaskBehaviour &tb, const GlidePolar &gp):
-  TaskInterface(_type),
-  activeTaskPoint(0),
-  activeTaskPoint_last(0-1),
-  stats_computer(stats),
-  task_events(te),
-  task_behaviour(tb),
-  glide_polar(gp),
-  mc_lpf(fixed(8)),
-  ce_lpf(fixed(60)),
-  em_lpf(fixed(60)),
-  trigger_auto(false) {
-  stats.reset();
+                           const TaskBehaviour &tb, const GlidePolar &gp)
+  :TaskInterface(_type),
+   activeTaskPoint(0),
+   activeTaskPoint_last(0-1),
+   stats_computer(stats),
+   task_events(te),
+   task_behaviour(tb),
+   glide_polar(gp),
+   mc_lpf(fixed(8)),
+   ce_lpf(fixed(60)),
+   em_lpf(fixed(60)),
+   trigger_auto(false)
+{
+   stats.reset();
 }
 
 bool 
 AbstractTask::update_auto_mc(GlidePolar &glide_polar,
-                             const AIRCRAFT_STATE& state,
-                             fixed fallback_mc)
+                             const AIRCRAFT_STATE& state, fixed fallback_mc)
 {
   if (!positive(fallback_mc))
     fallback_mc = glide_polar.GetMC();
@@ -61,11 +61,10 @@ AbstractTask::update_auto_mc(GlidePolar &glide_polar,
     stats.mc_best = mc_lpf.reset(fallback_mc);
     trigger_auto = false;
     return false;
-  } 
+  }
 
   fixed mc_found;
   if (calc_mc_best(state, mc_found)) {
-
     // improved solution found, activate auto fg mode
     if (mc_found > stats.mc_best)
       trigger_auto = true;
@@ -91,18 +90,16 @@ AbstractTask::update_idle(const AIRCRAFT_STATE &state)
 {
   if (task_started() && task_behaviour.calc_cruise_efficiency) {
     fixed val = fixed_one;
-    if (calc_cruise_efficiency(state, val)) {
+    if (calc_cruise_efficiency(state, val))
       stats.cruise_efficiency = ce_lpf.update(val);
-    }
   } else {
     stats.cruise_efficiency = ce_lpf.reset(fixed_one);
   }
 
   if (task_started() && task_behaviour.calc_effective_mc) {
     fixed val = glide_polar.GetMC();
-    if (calc_effective_mc(state, val)) {
+    if (calc_effective_mc(state, val))
       stats.effective_mc = em_lpf.update(val);
-    }
   } else {
     stats.effective_mc = em_lpf.reset(glide_polar.GetMC());
   }
@@ -173,19 +170,25 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
                          stats.total.solution_remaining.TimeElapsed,
                          stats.current_leg.solution_remaining.TimeElapsed);
 
-  stats.total.pirker.set_distance(stats.total.planned.get_distance()
-                                  -stats.total.remaining_effective.get_distance());
-  stats.current_leg.pirker.set_distance(stats.current_leg.planned.get_distance()
-                                  -stats.current_leg.remaining_effective.get_distance());
+  stats.total.pirker.set_distance(
+      stats.total.planned.get_distance() -
+      stats.total.remaining_effective.get_distance());
+
+  stats.current_leg.pirker.set_distance(
+      stats.current_leg.planned.get_distance() -
+      stats.current_leg.remaining_effective.get_distance());
 
   if (stats.current_leg.solution_remaining.defined())
-    stats.current_leg.remaining.set_distance(stats.current_leg.solution_remaining.Vector.Distance);
+    stats.current_leg.remaining.set_distance(
+        stats.current_leg.solution_remaining.Vector.Distance);
 
   if (stats.current_leg.solution_travelled.defined())
-    stats.current_leg.travelled.set_distance(stats.current_leg.solution_travelled.Vector.Distance);
+    stats.current_leg.travelled.set_distance(
+        stats.current_leg.solution_travelled.Vector.Distance);
 
   if (stats.current_leg.solution_planned.defined())
-    stats.current_leg.planned.set_distance(stats.current_leg.solution_planned.Vector.Distance);
+    stats.current_leg.planned.set_distance(
+        stats.current_leg.solution_planned.Vector.Distance);
 
   stats.total.gradient = ::AngleToGradient(calc_gradient(state));
   stats.current_leg.gradient = ::AngleToGradient(leg_gradient(state));
@@ -258,7 +261,7 @@ void
 AbstractTask::reset()
 {
   reset_auto_mc();
-  activeTaskPoint_last = 0-1;
+  activeTaskPoint_last = 0 - 1;
   ce_lpf.reset(fixed_one);
   stats_computer.reset();
 }
