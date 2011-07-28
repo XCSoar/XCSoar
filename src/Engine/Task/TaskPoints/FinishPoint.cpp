@@ -26,13 +26,12 @@
 #include <stdlib.h>
 #include <assert.h>
 
-FinishPoint::FinishPoint(ObservationZonePoint* _oz,
-                         const Waypoint & wp,
+FinishPoint::FinishPoint(ObservationZonePoint* _oz, const Waypoint & wp,
                          const TaskBehaviour& tb,
-                         const OrderedTaskBehaviour& to) : 
-  OrderedTaskPoint(FINISH, _oz, wp, to),
-  safety_height_arrival(tb.safety_height_arrival),
-  fai_finish_height(fixed_zero)
+                         const OrderedTaskBehaviour& to)
+  :OrderedTaskPoint(FINISH, _oz, wp, to),
+   safety_height_arrival(tb.safety_height_arrival),
+   fai_finish_height(fixed_zero)
 { 
 }
 
@@ -70,10 +69,9 @@ FinishPoint::get_elevation() const
 
 
 void 
-FinishPoint::set_neighbours(OrderedTaskPoint* _prev,
-                           OrderedTaskPoint* _next)
+FinishPoint::set_neighbours(OrderedTaskPoint* _prev, OrderedTaskPoint* _next)
 {
-  assert(_next==NULL);
+  assert(_next == NULL);
   // should not ever have an outbound leg
   OrderedTaskPoint::set_neighbours(_prev, _next);
 }
@@ -99,12 +97,11 @@ FinishPoint::is_in_height_limit(const AIRCRAFT_STATE &state) const
   if (!m_ordered_task_behaviour.check_finish_height(state, GetBaseElevation()))
     return false;
 
-  if (m_ordered_task_behaviour.fai_finish) {
+  if (m_ordered_task_behaviour.fai_finish)
     return state.NavAltitude > fai_finish_height;
-  }
+
   return true;
 }
-
 
 bool 
 FinishPoint::check_transition_enter(const AIRCRAFT_STATE & ref_now, 
@@ -113,9 +110,9 @@ FinishPoint::check_transition_enter(const AIRCRAFT_STATE & ref_now,
   const bool now_in_height = is_in_height_limit(ref_now);
   const bool last_in_height = is_in_height_limit(ref_last);
 
-  if (now_in_height && last_in_height) {
+  if (now_in_height && last_in_height)
     // both within height limit, so use normal location checks
     return ObservationZone::check_transition_enter(ref_now, ref_last);
-  }
+
   return false;
 }

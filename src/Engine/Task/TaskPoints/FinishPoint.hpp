@@ -21,7 +21,6 @@
 }
 */
 
-
 #ifndef FINISHPOINT_HPP
 #define FINISHPOINT_HPP
 
@@ -34,51 +33,47 @@
  * No taskpoints shall be present following a FinishPoint.
  *
  * Entry requires previous point to have entered to prevent spurious crossing.
- *
  */
-class FinishPoint : public OrderedTaskPoint {
+class FinishPoint : public OrderedTaskPoint
+{
   fixed safety_height_arrival;
-
   fixed fai_finish_height;
 
 public:
-/** 
- * Constructor.  Sets task area to non-scorable; distances
- * are relative to crossing point or origin.
- * 
- * @param _oz Observation zone for this task point
- * @param wp Waypoint origin of turnpoint
- * @param tb Task Behaviour defining options (esp safety heights)
- * @param to OrderedTask Behaviour defining options 
- * 
- * @return Partially-initialised object
- */
-  FinishPoint(ObservationZonePoint* _oz,
-              const Waypoint & wp,
-              const TaskBehaviour& tb,
-              const OrderedTaskBehaviour& to);
+  /**
+   * Constructor.  Sets task area to non-scorable; distances
+   * are relative to crossing point or origin.
+   *
+   * @param _oz Observation zone for this task point
+   * @param wp Waypoint origin of turnpoint
+   * @param tb Task Behaviour defining options (esp safety heights)
+   * @param to OrderedTask Behaviour defining options
+   *
+   * @return Partially-initialised object
+   */
+  FinishPoint(ObservationZonePoint* _oz, const Waypoint & wp,
+              const TaskBehaviour& tb, const OrderedTaskBehaviour& to);
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 
   void reset();
 
-/** 
- * Set previous/next taskpoints in sequence.
- * Specialises base method to check next is NULL.
- * 
- * @param prev Previous task point 
- * @param next Next task point (must be null!)
- */
-  void set_neighbours(OrderedTaskPoint* prev,
-                      OrderedTaskPoint* next);
+  /**
+   * Set previous/next taskpoints in sequence.
+   * Specialises base method to check next is NULL.
+   *
+   * @param prev Previous task point
+   * @param next Next task point (must be null!)
+   */
+  void set_neighbours(OrderedTaskPoint* prev, OrderedTaskPoint* next);
 
-/** 
- * Test whether aircraft is inside observation zone.
- * 
- * @param ref Aircraft state to test
- * 
- * @return True if aircraft is inside observation zone
- */
+  /**
+   * Test whether aircraft is inside observation zone.
+   *
+   * @param ref Aircraft state to test
+   *
+   * @return True if aircraft is inside observation zone
+   */
   bool isInSector(const AIRCRAFT_STATE &ref) const;
 
   /** 
@@ -93,12 +88,12 @@ public:
   bool check_transition_enter(const AIRCRAFT_STATE & ref_now, 
                               const AIRCRAFT_STATE & ref_last) const;
 
-/** 
- * Retrieve elevation of taskpoint, taking into account
- * rules and safety margins.
- * 
- * @return Minimum allowable elevation of finish point
- */
+  /**
+   * Retrieve elevation of taskpoint, taking into account
+   * rules and safety margins.
+   *
+   * @return Minimum allowable elevation of finish point
+   */
   fixed get_elevation() const;
 
   /** 
@@ -112,6 +107,7 @@ private:
   bool score_first_entry() const {
     return true;
   }
+
   bool entry_precondition() const;
 
   bool is_in_height_limit(const AIRCRAFT_STATE &state) const;
