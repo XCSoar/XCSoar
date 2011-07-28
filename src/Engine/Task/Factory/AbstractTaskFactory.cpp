@@ -602,8 +602,7 @@ AbstractTaskFactory::swap(const unsigned position, const bool auto_mutate)
     return false;
 
   const OrderedTaskPoint* orig = m_task.getTaskPoint(position+1);
-  bool retval = insert(*orig, position, auto_mutate);
-  if (!retval)
+  if (!insert(*orig, position, auto_mutate))
     return false;
 
   return remove(position+2, auto_mutate);
