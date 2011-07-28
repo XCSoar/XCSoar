@@ -30,6 +30,26 @@
  */
 struct GlideState 
 {
+  /** Distance/bearing of task */
+  GeoVector Vector;
+  /** Height (m above MSL) of end */
+  fixed MinHeight;
+  /** Direction of wind (deg True) */
+  Angle WindDirection;
+  /** Aircraft height less target height */
+  fixed AltitudeDifference;
+
+  /** (internal use) */
+  fixed EffectiveWindSpeed;
+  /** (internal use) */
+  Angle EffectiveWindAngle;
+  /** (internal use) */
+  fixed wsq_;
+  /** (internal use) */
+  fixed dwcostheta_;
+  /** headwind component (m/s) in cruise */
+  fixed HeadWind;
+
   /**
    * Dummy task constructor.  Typically used for synthetic glide
    * tasks.  Where there are real targets, the other constructors should
@@ -72,26 +92,6 @@ struct GlideState
    * @return Distance (m) of drift
    */
   fixed drifted_distance(const fixed t_climb) const;
-
-  /** Distance/bearing of task */
-  GeoVector Vector;
-  /** Height (m above MSL) of end */
-  fixed MinHeight;
-  /** Direction of wind (deg True) */
-  Angle WindDirection;
-  /** Aircraft height less target height */
-  fixed AltitudeDifference;
-
-  /** (internal use) */
-  fixed EffectiveWindSpeed;
-  /** (internal use) */
-  Angle EffectiveWindAngle;
-  /** (internal use) */
-  fixed wsq_;
-  /** (internal use) */
-  fixed dwcostheta_;
-  /** headwind component (m/s) in cruise */
-  fixed HeadWind;
 };
 
 #endif
