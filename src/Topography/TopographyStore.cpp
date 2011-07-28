@@ -35,6 +35,8 @@ static bool
 IsHugeTopographyFile(const char *name)
 {
   return strcmp(name, "village_point") == 0 ||
+    strcmp(name, "citysmall_point") == 0 ||
+    strcmp(name, "roadsmall_point") == 0 ||
     strcmp(name, "roadsmall_line") == 0;
 }
 
