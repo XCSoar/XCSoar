@@ -196,11 +196,15 @@ Display::Rotate(enum orientation orientation)
 
   switch (orientation) {
   case ORIENTATION_PORTRAIT:
-    DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_90 : DMDO_0);
+    DeviceMode.dmDisplayOrientation = native_landscape
+      ? DMDO_90
+      : initial_orientation;
     break;
 
   case ORIENTATION_LANDSCAPE:
-    DeviceMode.dmDisplayOrientation = (native_landscape ? DMDO_0 : DMDO_270);
+    DeviceMode.dmDisplayOrientation = native_landscape
+      ? initial_orientation
+      : DMDO_270;
     break;
 
   default:
