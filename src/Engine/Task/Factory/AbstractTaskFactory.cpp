@@ -33,83 +33,36 @@
 #include "Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include <algorithm>
 
-/**
- * Utility class to read the user-definable radius or length of and observation zone
- * returns radius or -1 if oz type has no user-definable radius or length
- */
-class UserSizeObservationZone: public ObservationZoneConstVisitor
+static fixed
+GetOZSize(ObservationZonePoint *oz)
 {
-public:
-  UserSizeObservationZone() :
-    ozUserSize(fixed_minus_one)
-  {
+  switch (oz->shape) {
+  case ObservationZonePoint::SECTOR:
+    return ((SectorZone *)oz)->getRadius();
+
+  case ObservationZonePoint::LINE:
+    return ((LineSectorZone *)oz)->getLength();
+
+  case ObservationZonePoint::CYLINDER:
+    return ((CylinderZone *)oz)->getRadius();
+
+  case ObservationZonePoint::ANNULAR_SECTOR:
+    return ((AnnularSectorZone *)oz)->getRadius();
+
+  default:
+    return fixed_minus_one;
   }
-  void
-  Visit(const FAISectorZone& oz)
-  {
-  }
-  void
-  Visit(const KeyholeZone& oz)
-  {
-  }
-  void
-  Visit(const BGAFixedCourseZone& oz)
-  {
-  }
-  void
-  Visit(const BGAEnhancedOptionZone& oz)
-  {
-  }
-  void
-  Visit(const BGAStartSectorZone& oz)
-  {
-  }
-  void
-  Visit(const SectorZone& oz)
-  {
-    ozUserSize = oz.getRadius();
-  }
-  void
-  Visit(const AnnularSectorZone& oz)
-  {
-    ozUserSize = oz.getRadius();
-  }
-  void
-  Visit(const LineSectorZone& oz)
-  {
-    ozUserSize = oz.getLength();
-  }
-  void
-  Visit(const CylinderZone& oz)
-  {
-    ozUserSize = oz.getRadius();
-  }
-public:
-  fixed
-  get_user_size()
-  {
-    return ozUserSize;
-  }
-private:
-  fixed ozUserSize;
-};
+}
 
 OrderedTaskPoint*
 AbstractTaskFactory::createMutatedPoint(const OrderedTaskPoint &tp,
                                         const LegalPointType_t newtype) const
 {
-  const ObservationZonePoint* oz = tp.get_oz();
-  UserSizeObservationZone soz;
-  ObservationZoneConstVisitor &oz_visitor = soz;
-  oz_visitor.Visit(*oz);
-  const fixed ozsize = soz.get_user_size();
-
-  return (OrderedTaskPoint*)createPoint(newtype, tp.get_waypoint(), ozsize,
-                                        ozsize, ozsize);
+  fixed ozsize = GetOZSize(tp.get_oz());
+  return createPoint(newtype, tp.get_waypoint(), ozsize, ozsize, ozsize);
 }
 
 AbstractTaskFactory::LegalPointType_t
@@ -801,11 +754,7 @@ AbstractTaskFactory::validateFAIOZs()
 
   for (unsigned i = 0; i < m_task.task_size() && valid; i++) {
     const OrderedTaskPoint *tp = m_task.get_tp(i);
-    const ObservationZonePoint* oz = tp->get_oz();
-    UserSizeObservationZone soz;
-    ObservationZoneConstVisitor &oz_visitor = soz;
-    oz_visitor.Visit(*oz);
-    const fixed ozsize = soz.get_user_size();
+    const fixed ozsize = GetOZSize(tp->get_oz());
 
     switch (getType(*tp)) {
     case  START_BGA:
