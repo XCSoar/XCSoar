@@ -2,9 +2,9 @@
 #include "TaskProjection.hpp"
 #include <limits.h>
 
-TracePoint::TracePoint(const AIRCRAFT_STATE &state):
-  SearchPoint(state.Location),
-  time((int)state.Time),
+TracePoint::TracePoint(const AircraftState &state):
+  SearchPoint(state.location),
+  time((int)state.time),
   drift_factor(state.CalcThermalDriftFactor() * 256),
   altitude(state.altitude),
   vario(state.netto_vario * 256)

@@ -61,20 +61,20 @@ protected:
 
   bool check_task() const;
 
-  bool calc_mc_best(const AIRCRAFT_STATE &state_now, fixed& best) const;
+  bool calc_mc_best(const AircraftState &state_now, fixed& best) const;
 
-  fixed calc_glide_required(const AIRCRAFT_STATE &state_now) const;
+  fixed calc_glide_required(const AircraftState &state_now) const;
 
-  void glide_solution_remaining(const AIRCRAFT_STATE &state_now, 
+  void glide_solution_remaining(const AircraftState &state_now, 
                                 const GlidePolar &polar,
                                 GlideResult &total,
                                 GlideResult &leg);
 
-  void glide_solution_travelled(const AIRCRAFT_STATE &state_now, 
+  void glide_solution_travelled(const AircraftState &state_now, 
                                         GlideResult &total,
                                         GlideResult &leg);
 
-  void glide_solution_planned(const AIRCRAFT_STATE &state_now,
+  void glide_solution_planned(const AircraftState &state_now,
                                       GlideResult &total,
                                       GlideResult &leg,
                               DistanceStat &total_remaining_effective,
@@ -82,9 +82,9 @@ protected:
                                       const fixed total_t_elapsed,
                                       const fixed leg_t_elapsed);
 
-  fixed scan_total_start_time(const AIRCRAFT_STATE &state_now);
+  fixed scan_total_start_time(const AircraftState &state_now);
 
-  fixed scan_leg_start_time(const AIRCRAFT_STATE &state_now);
+  fixed scan_leg_start_time(const AircraftState &state_now);
 
   fixed scan_distance_nominal();
   
@@ -100,7 +100,7 @@ protected:
                             bool full,
                             fixed *dmin, fixed *dmax);
 
-  fixed calc_gradient(const AIRCRAFT_STATE &state_now) const;
+  fixed calc_gradient(const AircraftState &state_now) const;
 
   bool has_targets() const { return false; }
 

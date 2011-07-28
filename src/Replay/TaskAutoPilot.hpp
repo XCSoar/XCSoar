@@ -151,14 +151,14 @@ public:
   virtual void Start(const TaskAccessor& task);
   virtual void Stop();
   virtual void update_mode(const TaskAccessor& task,
-                           const AIRCRAFT_STATE& state);
+                           const AircraftState& state);
 
   virtual void update_state(const TaskAccessor& task,
-                            AIRCRAFT_STATE& state, const fixed timestep=fixed_one);
+                            AircraftState& state, const fixed timestep=fixed_one);
 
   bool update_autopilot(TaskAccessor& task,
-                        const AIRCRAFT_STATE& state,
-                        const AIRCRAFT_STATE& state_last);
+                        const AircraftState& state,
+                        const AircraftState& state_last);
 
   gcc_pure
   GeoPoint target(const TaskAccessor& task) const;
@@ -177,13 +177,13 @@ private:
   virtual GeoPoint get_start_location(const TaskAccessor& task,
                                       bool previous=false);
   void update_cruise_bearing(const TaskAccessor& task,
-                             const AIRCRAFT_STATE& state,
+                             const AircraftState& state,
                              const fixed timestep);
   fixed target_height(const TaskAccessor& task) const;
   Angle heading_deviation();
-  bool update_computer(TaskAccessor& task, const AIRCRAFT_STATE& state);
+  bool update_computer(TaskAccessor& task, const AircraftState& state);
   bool far_from_target(const TaskAccessor& task,
-                       const AIRCRAFT_STATE& state);
+                       const AircraftState& state);
 };
 
 #endif

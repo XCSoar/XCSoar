@@ -67,14 +67,14 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
     GeoPoint p_dest(Angle::degrees(fixed(0.8)),Angle::degrees(fixed(-0.7))); p_dest += map.GetMapCenter();
     AGeoPoint loc_start(p_start,map.GetHeight(p_start)+100);
     AGeoPoint loc_end(p_dest,map.GetHeight(p_dest)+100);
-    AIRCRAFT_STATE state;
+    AircraftState state;
     GlidePolar glide_polar(fixed(0.1));
     AirspaceAircraftPerformanceGlide perf(glide_polar);
 
     GeoVector vec(loc_start, loc_end);
     fixed range = fixed(10000)+ vec.Distance / 2;
 
-    state.Location = loc_start;
+    state.location = loc_start;
     state.altitude = fixed(loc_start.altitude);
 
     {

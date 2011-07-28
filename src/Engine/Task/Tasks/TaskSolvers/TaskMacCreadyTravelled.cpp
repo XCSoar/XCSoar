@@ -33,14 +33,14 @@ TaskMacCreadyTravelled::TaskMacCreadyTravelled(const std::vector<OrderedTaskPoin
 
 GlideResult 
 TaskMacCreadyTravelled::tp_solution(const unsigned i,
-                                    const AIRCRAFT_STATE &aircraft, 
+                                    const AircraftState &aircraft, 
                                     fixed minH) const
 {
   return TaskSolution::glide_solution_travelled(*m_tps[i],aircraft, m_glide_polar, minH);
 }
 
-const AIRCRAFT_STATE 
-TaskMacCreadyTravelled::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
+const AircraftState 
+TaskMacCreadyTravelled::get_aircraft_start(const AircraftState &aircraft) const
 {
   if (m_tps[0]->has_entered()) {
     return m_tps[0]->get_state_entered();
@@ -51,7 +51,7 @@ TaskMacCreadyTravelled::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
 
 
 fixed 
-TaskMacCreadyTravelled::get_min_height(const AIRCRAFT_STATE &aircraft) const 
+TaskMacCreadyTravelled::get_min_height(const AircraftState &aircraft) const 
 {
   return aircraft.altitude;
 }

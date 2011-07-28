@@ -40,18 +40,18 @@ AircraftSim::Start(const GeoPoint& location_start,
                    const fixed& altitude)
 {
   state.Reset();
-  state.Location = location_start;
+  state.location = location_start;
   state.altitude = altitude;
-  state.Time = fixed_zero;
+  state.time = fixed_zero;
   state.wind.norm = fixed_zero;
   state.wind.bearing = Angle();
   state.ground_speed = fixed(16);
   state_last = state;
-  state_last.Location = location_last;
+  state_last.location = location_last;
 
   // start with aircraft moving since this isn't a real replay (no time on ground)
   for (unsigned i=0; i<10; i++) {
-    state.Moving(state.Time);
+    state.Moving(state.time);
   }
 }
 
@@ -59,7 +59,7 @@ AircraftSim::Start(const GeoPoint& location_start,
 GeoPoint
 AircraftSim::endpoint(const Angle &heading, const fixed timestep) const
 {
-  GeoPoint ref = GeoVector(state.true_airspeed*timestep, heading).end_point(state.Location);
+  GeoPoint ref = GeoVector(state.true_airspeed*timestep, heading).end_point(state.location);
   return GeoVector(state.wind.norm*timestep,
                    state.wind.bearing+ Angle::degrees(fixed_180)).end_point(ref);
 }
@@ -68,12 +68,12 @@ void
 AircraftSim::integrate(const Angle& heading, const fixed timestep)
 {
   GeoPoint v = endpoint(heading, timestep);
-  state.track = state.Location.bearing(v);
-  state.ground_speed = v.distance(state.Location)/timestep;
-  state.Location = v;
+  state.track = state.location.bearing(v);
+  state.ground_speed = v.distance(state.location)/timestep;
+  state.location = v;
   state.altitude += state.vario*timestep;
-  state.Time += timestep;
-  state.Moving(state.Time);
+  state.time += timestep;
+  state.Moving(state.time);
 }
 
 

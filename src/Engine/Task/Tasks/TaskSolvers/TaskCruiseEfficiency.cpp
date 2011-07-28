@@ -23,7 +23,7 @@
 
 TaskCruiseEfficiency::TaskCruiseEfficiency(const std::vector<OrderedTaskPoint*>& tps,
                                            const unsigned activeTaskPoint,
-                                           const AIRCRAFT_STATE &_aircraft,
+                                           const AircraftState &_aircraft,
                                            const GlidePolar &gp):
   TaskSolveTravelled(tps, activeTaskPoint, _aircraft, gp, fixed(0.1), fixed(2.0))
 {

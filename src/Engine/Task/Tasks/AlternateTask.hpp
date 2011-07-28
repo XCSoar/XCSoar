@@ -72,7 +72,7 @@ public:
    * Sets the target of the task (if any) or fallback to aircraft location.  
    * Must be called before running update_sample!
    */
-  void set_task_destination(const AIRCRAFT_STATE &state_now,
+  void set_task_destination(const AircraftState &state_now,
                             const TaskPoint* _target);
 
   /**
@@ -80,7 +80,7 @@ public:
    * aircraft location.
    * Must be called before running update_sample!
    */
-  void set_task_destination_home(const AIRCRAFT_STATE &state_now);
+  void set_task_destination_home(const AircraftState &state_now);
 
   /**
    * Retrieve a copy of the task alternates
@@ -95,7 +95,7 @@ public:
 
 protected:
   void clear();
-  void client_update(const AIRCRAFT_STATE &state_now, const bool reachable);
+  void client_update(const AircraftState &state_now, const bool reachable);
   void check_alternate_changed();
 
 private:

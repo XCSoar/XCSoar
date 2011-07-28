@@ -86,7 +86,7 @@ test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
   GlidePolar polar(fixed_zero);
   polar.SetMC(fixed_one);
 
-  AIRCRAFT_STATE ac;
+  AircraftState ac;
   ac.wind.norm = fabs(W);
   if (negative(W)) {
     ac.wind.bearing = Angle::degrees(fixed(180)+Wangle);
@@ -114,7 +114,7 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
   GlidePolar polar(fixed_zero);
   polar.SetMC(fixed_one);
 
-  AIRCRAFT_STATE ac;
+  AircraftState ac;
   ac.wind.norm = fabs(W);
   if (negative(W)) {
     ac.wind.bearing = Angle::degrees(fixed(180)+Wangle);
@@ -220,7 +220,7 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
 {
   GlidePolar polar(fixed_one);
 
-  AIRCRAFT_STATE ac;
+  AircraftState ac;
   ac.wind.norm = fabs(W);
   if (negative(W)) {
     ac.wind.bearing = Angle::degrees(fixed(180)+Wangle);

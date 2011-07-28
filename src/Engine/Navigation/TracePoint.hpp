@@ -60,7 +60,7 @@ public:
    *
    * @return Initialised object
    */
-  TracePoint(const AIRCRAFT_STATE &state);
+  TracePoint(const AircraftState &state);
 
   bool Defined() const {
     return time != (unsigned)(0 - 1);

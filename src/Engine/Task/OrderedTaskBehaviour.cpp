@@ -40,7 +40,7 @@ OrderedTaskBehaviour::OrderedTaskBehaviour():
 }
 
 bool 
-OrderedTaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
+OrderedTaskBehaviour::check_start_speed(const AircraftState &state,
                                         const TaskStartMargins &behaviour,
                                         const bool with_margin) const
 {
@@ -56,7 +56,7 @@ OrderedTaskBehaviour::check_start_speed(const AIRCRAFT_STATE &state,
 }
 
 bool 
-OrderedTaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
+OrderedTaskBehaviour::check_start_height(const AircraftState &state,
                                          const TaskStartMargins &behaviour,
                                          const fixed spAlt,
                                          const bool with_margin) const
@@ -76,7 +76,7 @@ OrderedTaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
 }
 
 bool 
-OrderedTaskBehaviour::check_finish_height(const AIRCRAFT_STATE &state,
+OrderedTaskBehaviour::check_finish_height(const AircraftState &state,
                                           const fixed fpAlt) const
 {
   if (finish_min_height == 0)

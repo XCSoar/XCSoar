@@ -31,11 +31,11 @@
 AbstractAirspace::~AbstractAirspace() {}
 
 bool 
-AbstractAirspace::inside(const AIRCRAFT_STATE& state) const
+AbstractAirspace::inside(const AircraftState& state) const
 {
   return m_base.is_below(state) &&
     m_top.is_above(state) &&
-    inside(state.Location);
+    inside(state.location);
 }
 
 
@@ -56,7 +56,7 @@ AbstractAirspace::set_flight_level(const AtmosphericPressure &press)
 
 
 AirspaceInterceptSolution 
-AbstractAirspace::intercept_vertical(const AIRCRAFT_STATE &state,
+AbstractAirspace::intercept_vertical(const AircraftState &state,
                                      const AirspaceAircraftPerformance& perf,
                                      const fixed& distance) const
 {
@@ -72,7 +72,7 @@ AbstractAirspace::intercept_vertical(const AIRCRAFT_STATE &state,
 
 
 AirspaceInterceptSolution 
-AbstractAirspace::intercept_horizontal(const AIRCRAFT_STATE &state,
+AbstractAirspace::intercept_horizontal(const AircraftState &state,
                                        const AirspaceAircraftPerformance& perf,
                                        const fixed& distance_start,
                                        const fixed& distance_end,
@@ -96,16 +96,16 @@ AbstractAirspace::intercept_horizontal(const AIRCRAFT_STATE &state,
 
 
 bool 
-AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
+AbstractAirspace::intercept(const AircraftState &state,
                             const AirspaceAircraftPerformance& perf,
                             AirspaceInterceptSolution &solution,
                             const GeoPoint& loc_start,
                             const GeoPoint& loc_end) const
 {
-  const bool only_vertical = (loc_start==loc_end)&&(loc_start== state.Location);
-  const fixed distance_start = only_vertical? fixed_zero: state.Location.distance(loc_start);
+  const bool only_vertical = (loc_start==loc_end)&&(loc_start== state.location);
+  const fixed distance_start = only_vertical? fixed_zero: state.location.distance(loc_start);
   const fixed distance_end = (loc_start==loc_end)? 
-    distance_start: (only_vertical? fixed_zero: state.Location.distance(loc_end));
+    distance_start: (only_vertical? fixed_zero: state.location.distance(loc_end));
 
   AirspaceInterceptSolution solution_this;
 
@@ -160,7 +160,7 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
       solution.location = loc_end;
     } else if (positive(distance_end)) {
       const fixed t = solution.distance / distance_end;
-      solution.location = state.Location.interpolate(loc_end, t);
+      solution.location = state.location.interpolate(loc_end, t);
     } else {
       solution.location = loc_start;
     }
@@ -173,12 +173,12 @@ AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
 
 
 bool 
-AbstractAirspace::intercept(const AIRCRAFT_STATE &state,
+AbstractAirspace::intercept(const AircraftState &state,
                             const GeoVector& vec,
                             const AirspaceAircraftPerformance& perf,
                             AirspaceInterceptSolution &solution) const
 {
-  AirspaceIntersectionVector vis = intersects(state.Location, vec);
+  AirspaceIntersectionVector vis = intersects(state.location, vec);
   if (vis.empty()) {
     return false;
   }

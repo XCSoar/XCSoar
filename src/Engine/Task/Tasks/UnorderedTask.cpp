@@ -34,7 +34,7 @@ UnorderedTask::UnorderedTask(const enum type _type, TaskEvents &te,
 
 
 bool 
-UnorderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, fixed& best) const
+UnorderedTask::calc_mc_best(const AircraftState &aircraft, fixed& best) const
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
@@ -52,7 +52,7 @@ UnorderedTask::check_task() const
 }
 
 fixed 
-UnorderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) const
+UnorderedTask::calc_glide_required(const AircraftState &aircraft) const
 {
   TaskPoint *tp = getActiveTaskPoint();
   if (!tp) {
@@ -63,7 +63,7 @@ UnorderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) const
 }
 
 void
-UnorderedTask::glide_solution_remaining(const AIRCRAFT_STATE &state, 
+UnorderedTask::glide_solution_remaining(const AircraftState &state, 
                                         const GlidePolar &polar,
                                         GlideResult &total,
                                         GlideResult &leg)
@@ -82,7 +82,7 @@ UnorderedTask::glide_solution_remaining(const AIRCRAFT_STATE &state,
 }
 
 void 
-UnorderedTask::glide_solution_travelled(const AIRCRAFT_STATE &state, 
+UnorderedTask::glide_solution_travelled(const AircraftState &state, 
                                         GlideResult &total,
                                         GlideResult &leg)
 {
@@ -93,7 +93,7 @@ UnorderedTask::glide_solution_travelled(const AIRCRAFT_STATE &state,
 }
 
 void 
-UnorderedTask::glide_solution_planned(const AIRCRAFT_STATE &state, 
+UnorderedTask::glide_solution_planned(const AircraftState &state, 
                                       GlideResult &total,
                                       GlideResult &leg,
                                       DistanceStat &total_remaining_effective,
@@ -114,15 +114,15 @@ UnorderedTask::glide_solution_planned(const AIRCRAFT_STATE &state,
 
 
 fixed 
-UnorderedTask::scan_total_start_time(const AIRCRAFT_STATE &state)
+UnorderedTask::scan_total_start_time(const AircraftState &state)
 {
-  return state.Time;
+  return state.time;
 }
 
 fixed 
-UnorderedTask::scan_leg_start_time(const AIRCRAFT_STATE &state)
+UnorderedTask::scan_leg_start_time(const AircraftState &state)
 {
-  return state.Time;
+  return state.time;
 }
 
 
@@ -169,7 +169,7 @@ UnorderedTask::scan_distance_remaining(const GeoPoint &location)
 }
 
 fixed 
-UnorderedTask::calc_gradient(const AIRCRAFT_STATE &state) const
+UnorderedTask::calc_gradient(const AircraftState &state) const
 {
   return leg_gradient(state);
 }

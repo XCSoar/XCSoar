@@ -79,7 +79,7 @@ class AirspaceMapVisible: public AirspaceVisible
 public:
   AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
                      const AirspaceRendererSettings &_renderer_settings,
-                     const AIRCRAFT_STATE& _state, const bool& _border,
+                     const AircraftState& _state, const bool& _border,
                      const AirspaceWarningCopy2 &warnings):
     AirspaceVisible(_computer_settings, _renderer_settings, _state),
     m_border(_border),

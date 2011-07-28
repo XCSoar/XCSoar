@@ -23,19 +23,19 @@
 #include "Navigation/Aircraft.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-AIRCRAFT_STATE 
-AIRCRAFT_STATE::get_predicted_state(const fixed &in_time) const
+AircraftState 
+AircraftState::GetPredictedState(const fixed &in_time) const
 {
-  AIRCRAFT_STATE state_next = *this;
+  AircraftState state_next = *this;
   GeoVector vec(ground_speed * in_time, track);
-  state_next.Location = vec.end_point(Location);
+  state_next.location = vec.end_point(location);
   state_next.altitude += vario * in_time;
   return state_next;
 }
 
-AIRCRAFT_STATE::AIRCRAFT_STATE():
+AircraftState::AircraftState():
   AltitudeState(),
-  Gload(fixed_one)
+  g_load(fixed_one)
 {
 }
 

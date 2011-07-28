@@ -38,7 +38,7 @@ ProtectedAirspaceWarningManager::clear()
 }
 
 void
-ProtectedAirspaceWarningManager::reset(const AIRCRAFT_STATE &as)
+ProtectedAirspaceWarningManager::reset(const AircraftState &as)
 {
   ExclusiveLease lease(*this);
   lease->reset(as);
@@ -104,14 +104,14 @@ ProtectedAirspaceWarningManager::acknowledge_inside(const AbstractAirspace& airs
 }
 
 void
-ProtectedAirspaceWarningManager::reset_warning(const AIRCRAFT_STATE &as)
+ProtectedAirspaceWarningManager::reset_warning(const AircraftState &as)
 {
   ExclusiveLease lease(*this);
   lease->reset(as);
 }
 
 bool
-ProtectedAirspaceWarningManager::update_warning(const AIRCRAFT_STATE &as,
+ProtectedAirspaceWarningManager::update_warning(const AircraftState &as,
                                                 const bool circling,
                                                 const unsigned dt)
 {

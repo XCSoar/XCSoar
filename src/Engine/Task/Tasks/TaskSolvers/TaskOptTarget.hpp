@@ -52,7 +52,7 @@ public:
  */
   TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                 const unsigned activeTaskPoint,
-                const AIRCRAFT_STATE &_aircraft,
+                const AircraftState &_aircraft,
                 const GlidePolar &_gp,
                 AATPoint& _tp_current,
                 const TaskProjection &projection,
@@ -86,7 +86,7 @@ private:
   void set_target(const fixed p); /**< Sets target location along isoline */
   TaskMacCreadyRemaining tm; /**< Object to calculate remaining task statistics */
   GlideResult res; /**< Glide solution used in search */
-  const AIRCRAFT_STATE &aircraft; /**< Observer */
+  const AircraftState &aircraft; /**< Observer */
   StartPoint *tp_start; /**< Start of task */
   AATPoint &tp_current; /**< Active AATPoint */
   AATIsolineSegment iso; /**< Isoline for active AATPoint target */

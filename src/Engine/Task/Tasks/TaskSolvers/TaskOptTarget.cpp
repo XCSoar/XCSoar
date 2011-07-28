@@ -25,7 +25,7 @@
 
 TaskOptTarget::TaskOptTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
-                             const AIRCRAFT_STATE &_aircraft,
+                             const AircraftState &_aircraft,
                              const GlidePolar &_gp,
                              AATPoint &_tp_current,
                              const TaskProjection &projection,
@@ -85,5 +85,5 @@ TaskOptTarget::set_target(const fixed p)
 {
   const GeoPoint loc = iso.parametric(min(xmax,max(xmin,p)));
   tp_current.set_target(loc);
-  tp_start->scan_distance_remaining(aircraft.Location);
+  tp_start->scan_distance_remaining(aircraft.location);
 }

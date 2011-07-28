@@ -28,7 +28,7 @@
 #include "Navigation/Memento/GeoVectorMemento.hpp"
 #include "Compiler.h"
 
-struct AIRCRAFT_STATE;
+struct AircraftState;
 
 class OrderedTaskPoint;
 

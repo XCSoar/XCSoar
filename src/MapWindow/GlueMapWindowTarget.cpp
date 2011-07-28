@@ -81,8 +81,8 @@ GlueMapWindow::isInSector(const int x, const int y)
 
   if (IsTargetDialog()) {
     GeoPoint gp = visible_projection.ScreenToGeo(x, y);
-    AIRCRAFT_STATE a;
-    a.Location = gp;
+    AircraftState a;
+    a.location = gp;
     return task->isInSector(
                                   XCSoarInterface::SettingsMap().TargetPanIndex, a);
   }
@@ -105,8 +105,8 @@ GlueMapWindow::isInAnyActiveSector(const GeoPoint &gp)
   if (task_manager->get_mode() != TaskManager::MODE_ORDERED)
     return -1;
 
-  AIRCRAFT_STATE a;
-  a.Location = gp;
+  AircraftState a;
+  a.location = gp;
 
   for (unsigned i = ActiveIndex; i < TaskSize; i++) {
     if (task_manager->isInSector(i, a, false))

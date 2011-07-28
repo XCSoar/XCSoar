@@ -246,7 +246,7 @@ AirspaceAircraftPerformance::solution_exists(const fixed& distance_max,
 
 
 
-AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AIRCRAFT_STATE &state,
+AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AircraftState &state,
                                                                  const GlidePolar& polar,
                                                                  const TaskManager& task)
 {

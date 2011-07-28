@@ -57,7 +57,7 @@ AirspaceWarningManager::set_config(const AirspaceWarningConfig &_config)
 }
 
 void
-AirspaceWarningManager::reset(const AIRCRAFT_STATE& state)
+AirspaceWarningManager::reset(const AircraftState& state)
 {
   m_warnings.clear();
   m_cruise_filter.reset(state);
@@ -127,7 +127,7 @@ AirspaceWarningManager::get_warning_index(const AbstractAirspace& airspace) cons
 }
 
 bool 
-AirspaceWarningManager::update(const AIRCRAFT_STATE& state,
+AirspaceWarningManager::update(const AircraftState& state,
                                const bool circling,
                                const unsigned dt)
 {
@@ -194,7 +194,7 @@ public:
  * 
  * @return Initialised object
  */
-  AirspaceIntersectionWarningVisitor(const AIRCRAFT_STATE &state,
+  AirspaceIntersectionWarningVisitor(const AircraftState &state,
                                      const AirspaceAircraftPerformance &perf,
                                      AirspaceWarningManager &warning_manager,
                                      const AirspaceWarning::AirspaceWarningState warning_state,
@@ -230,7 +230,7 @@ public:
       AirspaceInterceptSolution solution;
 
       if (mode_inside) {
-        airspace.intercept(m_state, m_perf, solution, m_state.Location, m_state.Location);
+        airspace.intercept(m_state, m_perf, solution, m_state.location, m_state.location);
       } else {
         solution = intercept(airspace, m_state, m_perf);
       }
@@ -266,7 +266,7 @@ public:
     mode_inside = m;
   }
 private:
-  const AIRCRAFT_STATE m_state;
+  const AircraftState m_state;
   const AirspaceAircraftPerformance &m_perf;
   AirspaceWarningManager &m_warning_manager;
   const AirspaceWarning::AirspaceWarningState m_warning_state;
@@ -287,7 +287,7 @@ private:
 
 
 bool 
-AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state, 
+AirspaceWarningManager::update_predicted(const AircraftState& state, 
                                          const GeoPoint &location_predicted,
                                          const AirspaceAircraftPerformance &perf,
                                          const AirspaceWarning::AirspaceWarningState& warning_state,
@@ -314,18 +314,18 @@ AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state,
                                              warning_state, max_time_limit,
                                              ceiling);
 
-  GeoVector vector_predicted(state.Location, location_predicted);
-  m_airspaces.visit_intersecting(state.Location, vector_predicted, visitor);
+  GeoVector vector_predicted(state.location, location_predicted);
+  m_airspaces.visit_intersecting(state.location, vector_predicted, visitor);
 
   visitor.set_mode(true);
-  m_airspaces.visit_inside(state.Location, visitor);
+  m_airspaces.visit_inside(state.location, visitor);
 
   return visitor.found();
 }
 
 
 bool 
-AirspaceWarningManager::update_task(const AIRCRAFT_STATE& state)
+AirspaceWarningManager::update_task(const AircraftState& state)
 {
   if (!m_task.getActiveTaskPoint()) {
     // empty task, nothing to do
@@ -342,15 +342,15 @@ AirspaceWarningManager::update_task(const AIRCRAFT_STATE& state)
 
 
 bool 
-AirspaceWarningManager::update_filter(const AIRCRAFT_STATE& state, const bool circling)
+AirspaceWarningManager::update_filter(const AircraftState& state, const bool circling)
 {
   // update both filters even though we are using only one
   m_cruise_filter.update(state);
   m_circling_filter.update(state);
 
   const GeoPoint location_predicted = circling?
-    m_circling_filter.get_predicted_state(m_prediction_time_filter).Location:
-    m_cruise_filter.get_predicted_state(m_prediction_time_filter).Location;
+    m_circling_filter.get_predicted_state(m_prediction_time_filter).location:
+    m_cruise_filter.get_predicted_state(m_prediction_time_filter).location;
 
   if (circling) 
     return update_predicted(state, location_predicted,
@@ -364,10 +364,10 @@ AirspaceWarningManager::update_filter(const AIRCRAFT_STATE& state, const bool ci
 
 
 bool 
-AirspaceWarningManager::update_glide(const AIRCRAFT_STATE& state)
+AirspaceWarningManager::update_glide(const AircraftState& state)
 {
   const GeoPoint location_predicted = 
-    state.get_predicted_state(m_prediction_time_glide).Location;
+    state.GetPredictedState(m_prediction_time_glide).location;
 
   return update_predicted(state, location_predicted,
                           m_perf_glide,
@@ -376,7 +376,7 @@ AirspaceWarningManager::update_glide(const AIRCRAFT_STATE& state)
 
 
 bool 
-AirspaceWarningManager::update_inside(const AIRCRAFT_STATE& state)
+AirspaceWarningManager::update_inside(const AircraftState& state)
 {
   bool found = false;
 
@@ -397,8 +397,8 @@ AirspaceWarningManager::update_inside(const AIRCRAFT_STATE& state)
     AirspaceWarning& warning = get_warning(airspace);
 
     if (warning.state_accepted(AirspaceWarning::WARNING_INSIDE)) {
-      GeoPoint c = airspace.closest_point(state.Location);
-      GeoVector vector_exit(state.Location, c);
+      GeoPoint c = airspace.closest_point(state.location);
+      GeoVector vector_exit(state.location, c);
       AirspaceInterceptSolution solution;
       airspace.intercept(state, vector_exit, m_perf_glide, solution); 
 

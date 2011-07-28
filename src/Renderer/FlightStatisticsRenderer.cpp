@@ -100,7 +100,7 @@ static void DrawLegs(Chart& chart,
     if (!IsTaskLegVisible(tp))
       continue;
 
-    fixed x = tp.get_state_entered().Time - start_time;
+    fixed x = tp.get_state_entered().time - start_time;
     if (!negative(x)) {
       x /= 3600;
       chart.DrawLine(x, chart.getYmin(), x, chart.getYmax(),

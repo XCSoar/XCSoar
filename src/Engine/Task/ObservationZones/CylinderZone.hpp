@@ -68,9 +68,9 @@ public:
    *
    * @return True if reference point is inside sector
    */
-  virtual bool isInSector(const AIRCRAFT_STATE &ref) const
+  virtual bool isInSector(const AircraftState &ref) const
   {
-    return distance(ref.Location)<=Radius;
+    return distance(ref.location)<=Radius;
   }  
 
   /**
@@ -97,8 +97,8 @@ public:
    *
    * @return True if constraints are satisfied
    */
-  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
-                                     const AIRCRAFT_STATE & ref_last) const {
+  virtual bool transition_constraint(const AircraftState & ref_now, 
+                                     const AircraftState & ref_last) const {
     return true;
   }
 

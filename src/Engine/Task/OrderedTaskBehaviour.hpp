@@ -24,7 +24,7 @@
 
 #include "Math/fixed.hpp"
 
-struct AIRCRAFT_STATE;
+struct AircraftState;
 struct TaskStartMargins;
 
 /**
@@ -75,7 +75,7 @@ public:
    *
    * @return True if within limits
    */
-  bool check_start_speed(const AIRCRAFT_STATE &state, 
+  bool check_start_speed(const AircraftState &state, 
                          const TaskStartMargins &margins,
                          const bool with_margin=false) const;
 
@@ -89,7 +89,7 @@ public:
    *
    * @return True if within limits
    */
-  bool check_start_height(const AIRCRAFT_STATE &state,
+  bool check_start_height(const AircraftState &state,
                           const TaskStartMargins &margins,
                           const fixed spAlt,
                           const bool with_margin=false) const;
@@ -102,7 +102,7 @@ public:
    *
    * @return True if within limits
    */
-  bool check_finish_height(const AIRCRAFT_STATE &state, const fixed fpAlt) const;
+  bool check_finish_height(const AircraftState &state, const fixed fpAlt) const;
 
 
   /**

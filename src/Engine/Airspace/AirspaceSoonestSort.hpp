@@ -12,7 +12,7 @@ class AirspaceAircraftPerformance;
 class AirspaceSoonestSort:
   public AirspaceNearestSort
 {
-  const AIRCRAFT_STATE &m_state;
+  const AircraftState &m_state;
   const AirspaceAircraftPerformance &m_perf;
   const fixed m_max_time;
 
@@ -27,11 +27,11 @@ public:
  * 
  * @return Initialised object
  */
-  AirspaceSoonestSort(const AIRCRAFT_STATE &state,
+  AirspaceSoonestSort(const AircraftState &state,
                       const AirspaceAircraftPerformance &perf,
                       const fixed max_time = fixed(1.0e6),
                       const AirspacePredicate &condition=AirspacePredicate::always_true):
-    AirspaceNearestSort(state.Location, condition),
+    AirspaceNearestSort(state.location, condition),
     m_state(state),
     m_perf(perf),
     m_max_time(max_time) {};

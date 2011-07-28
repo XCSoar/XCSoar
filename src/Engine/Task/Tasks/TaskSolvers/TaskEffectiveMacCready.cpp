@@ -23,7 +23,7 @@
 
 TaskEffectiveMacCready::TaskEffectiveMacCready(const std::vector<OrderedTaskPoint*>& tps,
                                            const unsigned activeTaskPoint,
-                                           const AIRCRAFT_STATE &_aircraft,
+                                           const AircraftState &_aircraft,
                                            const GlidePolar &gp):
   TaskSolveTravelled(tps, activeTaskPoint, _aircraft, gp, fixed(0.001), fixed(10.0))
 {

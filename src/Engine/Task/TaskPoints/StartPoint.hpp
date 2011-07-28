@@ -84,7 +84,7 @@ public:
    *
    * @return True if aircraft is inside observation zone
    */
-  bool isInSector(const AIRCRAFT_STATE &ref) const;
+  bool isInSector(const AircraftState &ref) const;
 
 
   /**
@@ -96,8 +96,8 @@ public:
    *
    * @return True if aircraft now outside (and was inside)
    */
-  bool check_transition_exit(const AIRCRAFT_STATE & ref_now,
-                             const AIRCRAFT_STATE & ref_last) const;
+  bool check_transition_exit(const AircraftState & ref_now,
+                             const AircraftState & ref_last) const;
 
   /**
    * Update sample, specialisation to check start speed/height
@@ -107,7 +107,7 @@ public:
    *
    * @return True if internal state changed
    */
-  bool update_sample_near(const AIRCRAFT_STATE& state,
+  bool update_sample_near(const AircraftState& state,
                           TaskEvents &task_events,
                           const TaskProjection &projection);
 
@@ -127,7 +127,7 @@ public:
    * @param state Current aircraft state
    * @param next Next task point following the start
    */
-  void find_best_start(const AIRCRAFT_STATE &state,
+  void find_best_start(const AircraftState &state,
                        const OrderedTaskPoint &next,
                        const TaskProjection &projection);
 

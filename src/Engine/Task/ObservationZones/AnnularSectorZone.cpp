@@ -53,9 +53,9 @@ AnnularSectorZone::get_boundary_parametric(fixed t) const
 }
 
 bool
-AnnularSectorZone::isInSector(const AIRCRAFT_STATE &ref) const
+AnnularSectorZone::isInSector(const AircraftState &ref) const
 {
-  GeoVector f(get_location(), ref.Location);
+  GeoVector f(get_location(), ref.location);
 
   return (f.Distance <= Radius) && (f.Distance >= InnerRadius) && angleInSector(f.Bearing);
 }

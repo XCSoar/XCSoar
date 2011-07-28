@@ -38,7 +38,7 @@ Airspace::Airspace(AbstractAirspace& airspace,
 
 
 bool 
-Airspace::inside(const AIRCRAFT_STATE &loc) const
+Airspace::inside(const AircraftState &loc) const
 {
   if (pimpl_airspace) {
     return pimpl_airspace->inside(loc);

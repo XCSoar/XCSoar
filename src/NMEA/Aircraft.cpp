@@ -25,10 +25,10 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 
-const AIRCRAFT_STATE
+const AircraftState
 ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
 {
-  AIRCRAFT_STATE aircraft;
+  AircraftState aircraft;
 
   /* SPEED_STATE */
   aircraft.ground_speed = info.ground_speed;
@@ -48,10 +48,10 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
   (FlyingState &)aircraft = calculated.flight;
 
   /* AIRCRAFT_STATE */
-  aircraft.Time = info.time;
-  aircraft.Location = info.location;
+  aircraft.time = info.time;
+  aircraft.location = info.location;
   aircraft.track = info.track;
-  aircraft.Gload = info.acceleration.g_load;
+  aircraft.g_load = info.acceleration.g_load;
   aircraft.wind = calculated.wind;
 
   return aircraft;

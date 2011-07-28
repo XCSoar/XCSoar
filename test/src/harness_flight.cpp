@@ -241,10 +241,10 @@ bool run_flight(TaskManager &task_manager,
     if (do_print) {
       PrintHelper::taskmanager_print(task_manager, aircraft.get_state());
 
-      const AIRCRAFT_STATE state = aircraft.get_state();
-      f4 << state.Time << " "
-         <<  state.Location.Longitude << " "
-         <<  state.Location.Latitude << " "
+      const AircraftState state = aircraft.get_state();
+      f4 << state.time << " "
+         <<  state.location.Longitude << " "
+         <<  state.location.Latitude << " "
          <<  state.altitude << "\n";
 
       f4.flush();
@@ -285,8 +285,8 @@ bool run_flight(TaskManager &task_manager,
     aircraft.Update(autopilot.heading);
 
     {
-      const AIRCRAFT_STATE state = aircraft.get_state();
-      const AIRCRAFT_STATE state_last = aircraft.get_state_last();
+      const AircraftState state = aircraft.get_state();
+      const AircraftState state_last = aircraft.get_state_last();
       task_manager.update(state, state_last);
       task_manager.update_idle(state);
       task_manager.update_auto_mc(state, fixed_zero);
@@ -300,10 +300,10 @@ bool run_flight(TaskManager &task_manager,
   if (verbose) {
     PrintHelper::taskmanager_print(task_manager, aircraft.get_state());
 
-    const AIRCRAFT_STATE state = aircraft.get_state();
-    f4 << state.Time << " "
-       <<  state.Location.Longitude << " "
-       <<  state.Location.Latitude << " "
+    const AircraftState state = aircraft.get_state();
+    f4 << state.time << " "
+       <<  state.location.Longitude << " "
+       <<  state.location.Latitude << " "
        <<  state.altitude << "\n";
     f4 << "\n";
     f4.flush();

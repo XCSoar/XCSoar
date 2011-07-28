@@ -47,7 +47,7 @@ std::ostream& operator<<(std::ostream& os,fixed const& value)
 void 
 PrintHelper::aatpoint_print(std::ostream& f, 
                             const AATPoint& tp,
-                            const AIRCRAFT_STATE& state,
+                            const AircraftState& state,
                             const TaskProjection &projection,
                             const int item) 
 {
@@ -99,13 +99,13 @@ PrintHelper::aatpoint_print(std::ostream& f,
 void 
 PrintHelper::orderedtaskpoint_print(std::ostream& f, 
                                     const OrderedTaskPoint& tp,
-                                    const AIRCRAFT_STATE& state,
+                                    const AircraftState& state,
                                     const int item) 
 {
   if (item==0) {
     sampledtaskpoint_print(f,tp,state);
     orderedtaskpoint_print_boundary(f,tp,state);
-    f << "# Entered " << tp.get_state_entered().Time << "\n";
+    f << "# Entered " << tp.get_state_entered().time << "\n";
     f << "# Bearing travelled " << tp.vector_travelled.Bearing << "\n";
     f << "# Distance travelled " << tp.vector_travelled.Distance << "\n";
     f << "# Bearing remaining " << tp.vector_remaining.Bearing << "\n";
@@ -119,7 +119,7 @@ PrintHelper::orderedtaskpoint_print(std::ostream& f,
 void 
 PrintHelper::orderedtaskpoint_print_boundary(std::ostream& f, 
                                              const OrderedTaskPoint& tp,
-                                             const AIRCRAFT_STATE &state) 
+                                             const AircraftState &state) 
 {
   f << "#   Boundary points\n";
   for (double t=0; t<= 1.0; t+= 0.05) {
@@ -134,7 +134,7 @@ PrintHelper::orderedtaskpoint_print_boundary(std::ostream& f,
 
 void 
 PrintHelper::sampledtaskpoint_print(std::ostream& f, const SampledTaskPoint& tp,
-                                    const AIRCRAFT_STATE &state) 
+                                    const AircraftState &state) 
 {
   taskpoint_print(f,tp,state);
 }
@@ -143,7 +143,7 @@ PrintHelper::sampledtaskpoint_print(std::ostream& f, const SampledTaskPoint& tp,
 void 
 PrintHelper::sampledtaskpoint_print_samples(std::ostream& f,
                                             const SampledTaskPoint& tp,
-                                            const AIRCRAFT_STATE &state) 
+                                            const AircraftState &state) 
 {
   const unsigned n= tp.get_search_points().size();
   f << "#   Search points\n";
@@ -159,7 +159,7 @@ PrintHelper::sampledtaskpoint_print_samples(std::ostream& f,
 
 void 
 PrintHelper::taskpoint_print(std::ostream& f, const TaskPoint& tp,
-                             const AIRCRAFT_STATE &state) 
+                             const AircraftState &state) 
 {
   f << "# Task point \n";
   f << "#   Location " << tp.get_location().Longitude << "," <<
@@ -168,7 +168,7 @@ PrintHelper::taskpoint_print(std::ostream& f, const TaskPoint& tp,
 
 
 void
-PrintHelper::abstracttask_print(AbstractTask& task, const AIRCRAFT_STATE &state) 
+PrintHelper::abstracttask_print(AbstractTask& task, const AircraftState &state) 
 {
   std::ofstream fs("results/res-stats-all.txt");
   if (!task.stats.task_valid)
@@ -209,7 +209,7 @@ PrintHelper::abstracttask_print(AbstractTask& task, const AIRCRAFT_STATE &state)
 
 
 void 
-PrintHelper::gototask_print(GotoTask& task, const AIRCRAFT_STATE &state) 
+PrintHelper::gototask_print(GotoTask& task, const AircraftState &state) 
 {
   abstracttask_print(task, state);
   if (task.tp) {
@@ -219,7 +219,7 @@ PrintHelper::gototask_print(GotoTask& task, const AIRCRAFT_STATE &state)
 }
 
 void 
-PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state) 
+PrintHelper::orderedtask_print(OrderedTask& task, const AircraftState &state) 
 {
   abstracttask_print(task, state);
   if (!task.stats.task_valid)
@@ -285,7 +285,7 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AIRCRAFT_STATE &state)
 }
 
 
-void PrintHelper::aborttask_print(AbortTask& task, const AIRCRAFT_STATE &state)
+void PrintHelper::aborttask_print(AbortTask& task, const AircraftState &state)
 {
   abstracttask_print(task, state);
 
@@ -295,7 +295,7 @@ void PrintHelper::aborttask_print(AbortTask& task, const AIRCRAFT_STATE &state)
     GeoPoint l = task.task_points[i].get_location();
     f1 << "## point " << i << " ###################\n";
     if (i==task.activeTaskPoint) {
-      f1 << state.Location.Longitude << " " << state.Location.Latitude << "\n";
+      f1 << state.location.Longitude << " " << state.location.Latitude << "\n";
     }
     f1 << l.Longitude << " " << l.Latitude << "\n";
     f1 << "\n";
@@ -303,7 +303,7 @@ void PrintHelper::aborttask_print(AbortTask& task, const AIRCRAFT_STATE &state)
 }
 
 
-void PrintHelper::taskmanager_print(TaskManager& task, const AIRCRAFT_STATE &state)
+void PrintHelper::taskmanager_print(TaskManager& task, const AircraftState &state)
 {
   if (task.active_task) {
     if (task.active_task == &task.task_abort) {
@@ -317,7 +317,7 @@ void PrintHelper::taskmanager_print(TaskManager& task, const AIRCRAFT_STATE &sta
     }
   }
 
-  trace_print(task.trace_full, state.Location);
+  trace_print(task.trace_full, state.location);
 
   contestmanager_print(task.contest_manager);
 

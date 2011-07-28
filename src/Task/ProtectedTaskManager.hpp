@@ -94,7 +94,7 @@ public:
   bool do_goto(const Waypoint & wp);
 
   gcc_pure
-  AIRCRAFT_STATE get_start_state() const;
+  AircraftState get_start_state() const;
 
   gcc_pure
   fixed get_finish_height() const;
@@ -139,7 +139,7 @@ public:
    * @return True if reference point is inside sector
    */
   gcc_pure
-  bool isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const;
+  bool isInSector (const unsigned TPindex, const AircraftState &ref) const;
 
   /**
    * Accessor to get target location of specified tp

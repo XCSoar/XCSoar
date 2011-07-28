@@ -28,7 +28,7 @@
 
 TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,
-                       const AIRCRAFT_STATE &_aircraft,
+                       const AircraftState &_aircraft,
                        const GlidePolar &_gp,
                        const fixed _mc_min):
   ZeroFinder(_mc_min, fixed(10.0), fixed(TOLERANCE_BEST_MC)),
@@ -38,7 +38,7 @@ TaskBestMc::TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
 }
 
 TaskBestMc::TaskBestMc(TaskPoint* tp,
-                       const AIRCRAFT_STATE &_aircraft,
+                       const AircraftState &_aircraft,
                        const GlidePolar &_gp):
   ZeroFinder(fixed(0.1), fixed(10.0), fixed(TOLERANCE_BEST_MC)),
   tm(tp,_gp),

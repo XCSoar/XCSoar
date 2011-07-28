@@ -64,7 +64,7 @@ StartPoint::set_neighbours(OrderedTaskPoint* _prev,
 
 
 bool 
-StartPoint::update_sample_near(const AIRCRAFT_STATE& state,
+StartPoint::update_sample_near(const AircraftState& state,
                                TaskEvents &task_events,
                                const TaskProjection &projection)
 {
@@ -77,7 +77,7 @@ StartPoint::update_sample_near(const AIRCRAFT_STATE& state,
 }
 
 void 
-StartPoint::find_best_start(const AIRCRAFT_STATE &state,
+StartPoint::find_best_start(const AircraftState &state,
                             const OrderedTaskPoint &next,
                             const TaskProjection &projection)
 {
@@ -126,14 +126,14 @@ StartPoint::find_best_start(const AIRCRAFT_STATE &state,
     }
   };
 
-  StartPointBestStart solver(*this, state.Location,
+  StartPointBestStart solver(*this, state.location,
                              next.get_location_remaining());
   set_search_min(solver.solve(), projection);
 }
 
 
 bool 
-StartPoint::isInSector(const AIRCRAFT_STATE &state) const
+StartPoint::isInSector(const AircraftState &state) const
 {
   if (!ObservationZoneClient::isInSector(state)) 
     return false;
@@ -143,8 +143,8 @@ StartPoint::isInSector(const AIRCRAFT_STATE &state) const
 }
 
 bool 
-StartPoint::check_transition_exit(const AIRCRAFT_STATE & ref_now, 
-                                  const AIRCRAFT_STATE & ref_last) const
+StartPoint::check_transition_exit(const AircraftState & ref_now, 
+                                  const AircraftState & ref_last) const
 {
   const bool now_in_height = 
     m_ordered_task_behaviour.check_start_height(ref_now,

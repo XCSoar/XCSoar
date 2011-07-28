@@ -27,7 +27,7 @@
 
 class AbstractAirspace;
 class AirspacePredicateTrue;
-struct AIRCRAFT_STATE;
+struct AircraftState;
 
 /**
  *  Functor class for conditions to be applied to airspace queries
@@ -73,7 +73,7 @@ public:
  */
 class AirspacePredicateAircraftInside: public AirspacePredicate
 {
-  const AIRCRAFT_STATE& m_state;
+  const AircraftState& m_state;
 
 public:
   /**
@@ -83,7 +83,7 @@ public:
    *
    * @return Initialised object
    */
-  AirspacePredicateAircraftInside(const AIRCRAFT_STATE& state);
+  AirspacePredicateAircraftInside(const AircraftState& state);
 
   bool operator()(const AbstractAirspace& t) const;
 };

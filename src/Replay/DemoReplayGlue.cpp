@@ -151,9 +151,9 @@ DemoReplayGlue::Update()
   ProtectedTaskAccessor ta(task_manager, floor_alt);
   bool retval = DemoReplay::Update(ta);
 
-  const AIRCRAFT_STATE s = aircraft.get_state();
-  on_advance(s.Location, s.ground_speed, s.track, s.altitude,
-             s.altitude, s.Time);
+  const AircraftState s = aircraft.get_state();
+  on_advance(s.location, s.ground_speed, s.track, s.altitude,
+             s.altitude, s.time);
 
   return retval;
 }

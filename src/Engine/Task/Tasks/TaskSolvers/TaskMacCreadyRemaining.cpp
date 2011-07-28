@@ -38,15 +38,15 @@ TaskMacCreadyRemaining::TaskMacCreadyRemaining(TaskPoint* tp,
 
 GlideResult 
 TaskMacCreadyRemaining::tp_solution(const unsigned i,
-                                    const AIRCRAFT_STATE &aircraft, 
+                                    const AircraftState &aircraft, 
                                     fixed minH) const
 {
   return TaskSolution::glide_solution_remaining(*m_tps[i],aircraft, m_glide_polar, minH);
 }
 
 
-const AIRCRAFT_STATE 
-TaskMacCreadyRemaining::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
+const AircraftState 
+TaskMacCreadyRemaining::get_aircraft_start(const AircraftState &aircraft) const
 {
   return aircraft;
 }

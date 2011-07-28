@@ -42,7 +42,7 @@ AATPoint::get_location_remaining() const
 }
 
 bool 
-AATPoint::update_sample_near(const AIRCRAFT_STATE& state,
+AATPoint::update_sample_near(const AircraftState& state,
                              TaskEvents &task_events,
                              const TaskProjection &projection)
 {
@@ -59,7 +59,7 @@ AATPoint::update_sample_near(const AIRCRAFT_STATE& state,
 
 
 bool 
-AATPoint::update_sample_far(const AIRCRAFT_STATE& state,
+AATPoint::update_sample_far(const AircraftState& state,
                             TaskEvents &task_events,
                             const TaskProjection &projection)
 {
@@ -72,7 +72,7 @@ AATPoint::update_sample_far(const AIRCRAFT_STATE& state,
 
 
 bool
-AATPoint::check_target(const AIRCRAFT_STATE& state, const bool known_outside) 
+AATPoint::check_target(const AircraftState& state, const bool known_outside) 
 {
   if ((getActiveState() == CURRENT_ACTIVE) && (m_target_locked)) {
     return false;
@@ -88,29 +88,29 @@ AATPoint::check_target(const AIRCRAFT_STATE& state, const bool known_outside)
 }
 
 bool 
-AATPoint::close_to_target(const AIRCRAFT_STATE& state, const fixed threshold) const
+AATPoint::close_to_target(const AircraftState& state, const fixed threshold) const
 {
   if (!valid())
     return false;
 
-  return (double_leg_distance(state.Location)
+  return (double_leg_distance(state.location)
           -double_leg_distance(m_target_location)
           > -threshold);
 }
 
 bool
-AATPoint::check_target_inside(const AIRCRAFT_STATE& state) 
+AATPoint::check_target_inside(const AircraftState& state) 
 {
   // target must be moved if d(p_last,t)+d(t,p_next) 
   //    < d(p_last,state)+d(state,p_next)
 
   if (close_to_target(state)) {
-    if (positive(double_leg_distance(state.Location)
+    if (positive(double_leg_distance(state.location)
                  -double_leg_distance(get_location_max()))) {
       // no improvement available
       return false;
     } else {
-      m_target_location = state.Location;
+      m_target_location = state.location;
       return true;
     }
   } else {
@@ -119,7 +119,7 @@ AATPoint::check_target_inside(const AIRCRAFT_STATE& state)
 }
 
 bool
-AATPoint::check_target_outside(const AIRCRAFT_STATE& state) 
+AATPoint::check_target_outside(const AircraftState& state) 
 {
   return false;
 /*

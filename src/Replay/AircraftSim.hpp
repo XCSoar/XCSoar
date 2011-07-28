@@ -25,20 +25,20 @@
 #include "Navigation/Aircraft.hpp"
 
 class AircraftSim {
-  AIRCRAFT_STATE state, state_last;
+  AircraftState state, state_last;
 
   fixed random_mag;
 
 public:
   AircraftSim();
 
-  const AIRCRAFT_STATE& get_state() const {
+  const AircraftState& get_state() const {
     return state;
   }
-  const AIRCRAFT_STATE& get_state_last() const {
+  const AircraftState& get_state_last() const {
     return state_last;
   }
-  AIRCRAFT_STATE& get_state() {
+  AircraftState& get_state() {
     return state;
   }
 
@@ -53,7 +53,7 @@ public:
   bool Update(const Angle &heading, const fixed timestep=fixed_one);
 
   fixed time() const {
-    return state.Time;
+    return state.time;
   }
 
 private:

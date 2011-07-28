@@ -150,7 +150,7 @@ TaskAutoPilot::target_height(const TaskAccessor& task) const
 
 void
 TaskAutoPilot::update_mode(const TaskAccessor& task,
-                           const AIRCRAFT_STATE& state)
+                           const AircraftState& state)
 {
   switch (acstate) {
   case Cruise:
@@ -187,7 +187,7 @@ TaskAutoPilot::update_mode(const TaskAccessor& task,
 
 void
 TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
-                                     const AIRCRAFT_STATE& state,
+                                     const AircraftState& state,
                                      const fixed timestep)
 {
   const ElementStat stat = task.leg_stats();
@@ -202,7 +202,7 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
     }
 
   } else {
-    bearing = state.Location.bearing(target(task));
+    bearing = state.location.bearing(target(task));
   }
 
   if (positive(state.wind.norm) && positive(state.true_airspeed)) {
@@ -225,7 +225,7 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
 
 void
 TaskAutoPilot::update_state(const TaskAccessor& task,
-                            AIRCRAFT_STATE& state, const fixed timestep)
+                            AircraftState& state, const fixed timestep)
 {
   const GlidePolar &glide_polar = task.get_glide_polar();
 
@@ -265,12 +265,12 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
 
 
 bool
-TaskAutoPilot::far_from_target(const TaskAccessor& task, const AIRCRAFT_STATE& state)
+TaskAutoPilot::far_from_target(const TaskAccessor& task, const AircraftState& state)
 {
   // are we considered close to the target?
 
   if (task.is_empty())
-    return w[0].distance(state.Location)>state.ground_speed;
+    return w[0].distance(state.location)>state.ground_speed;
 
   bool d_far = (task.leg_stats().remaining.get_distance() > fixed(100));
 
@@ -283,7 +283,7 @@ TaskAutoPilot::far_from_target(const TaskAccessor& task, const AIRCRAFT_STATE& s
   if (current_has_target(task))
     return d_far || !entered;
 
-  fixed dc = w[0].distance(state.Location);
+  fixed dc = w[0].distance(state.location);
   if (awp==0) {
     return (dc>state.ground_speed);
   }
@@ -352,7 +352,7 @@ TaskAutoPilot::get_awp(TaskAccessor& task)
 
 bool
 TaskAutoPilot::update_computer(TaskAccessor& task,
-                               const AIRCRAFT_STATE& state)
+                               const AircraftState& state)
 {
   if (!far_from_target(task, state)) {
     on_close();
@@ -367,8 +367,8 @@ TaskAutoPilot::update_computer(TaskAccessor& task,
 
 bool
 TaskAutoPilot::update_autopilot(TaskAccessor& task,
-                                const AIRCRAFT_STATE& state,
-                                const AIRCRAFT_STATE& state_last)
+                                const AircraftState& state,
+                                const AircraftState& state_last)
 {
   update_mode(task, state);
   return update_computer(task, state);

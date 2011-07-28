@@ -68,8 +68,8 @@ public:
  * 
  * @return True if constraints are satisfied
  */
-  bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
-                             const AIRCRAFT_STATE & ref_last) const {
+  bool transition_constraint(const AircraftState & ref_now, 
+                             const AircraftState & ref_last) const {
     return CylinderZone::isInSector(ref_now) && CylinderZone::isInSector(ref_last);
   }
 

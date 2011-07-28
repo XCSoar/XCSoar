@@ -39,8 +39,8 @@ fixed
 IsolineCrossingFinder::f(const fixed t) 
 {
   const GeoPoint a = ell.parametric(t);
-  AIRCRAFT_STATE s;
-  s.Location = a;
+  AircraftState s;
+  s.location = a;
 
   // note: use of isInSector is slow!
   // if (aap.isInSector(s)) ->  attract solutions away from t

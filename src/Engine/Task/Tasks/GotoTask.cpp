@@ -70,7 +70,7 @@ GotoTask::setActiveTaskPoint(unsigned index)
 
 
 bool 
-GotoTask::update_sample(gcc_unused const AIRCRAFT_STATE &state,
+GotoTask::update_sample(gcc_unused const AircraftState &state,
                         gcc_unused const bool full_update)
 {
   return false; // nothing to do
@@ -78,8 +78,8 @@ GotoTask::update_sample(gcc_unused const AIRCRAFT_STATE &state,
 
 
 bool 
-GotoTask::check_transitions(gcc_unused const AIRCRAFT_STATE &,
-                            gcc_unused const AIRCRAFT_STATE &)
+GotoTask::check_transitions(gcc_unused const AircraftState &,
+                            gcc_unused const AircraftState &)
 {
   return false; // nothing to do
 }

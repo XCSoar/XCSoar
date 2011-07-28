@@ -149,7 +149,7 @@ public:
    *
    * @return True if internal state changed
    */
-  bool update(const AIRCRAFT_STATE &state_now, const AIRCRAFT_STATE &state_last);
+  bool update(const AircraftState &state_now, const AircraftState &state_last);
     
   /**
    * Update internal states (non-essential) for housework, or where functions
@@ -159,7 +159,7 @@ public:
    *
    * @return True if internal state changed
    */
-  virtual bool update_idle(const AIRCRAFT_STATE& state_now);
+  virtual bool update_idle(const AircraftState& state_now);
 
   /** 
    * Update auto MC.  Internally uses TaskBehaviour to determine settings
@@ -170,7 +170,7 @@ public:
    * 
    * @return True if MC updated
    */
-  bool update_auto_mc(GlidePolar &glide_polar, const AIRCRAFT_STATE& state_now,
+  bool update_auto_mc(GlidePolar &glide_polar, const AircraftState& state_now,
                       const fixed fallback_mc);
 
   /**
@@ -217,7 +217,7 @@ protected:
    *
    * @return True if internal state changes
    */
-  virtual bool update_sample(const AIRCRAFT_STATE &state_now, 
+  virtual bool update_sample(const AircraftState &state_now, 
                              const bool full_update) = 0;
 
   /**
@@ -231,8 +231,8 @@ protected:
    *
    * @return True if transition occurred
    */
-  virtual bool check_transitions(const AIRCRAFT_STATE& state_now, 
-                                 const AIRCRAFT_STATE& state_last) = 0;
+  virtual bool check_transitions(const AircraftState& state_now, 
+                                 const AircraftState& state_last) = 0;
   
   /**
    * Calculate/search for best MC, being the highest MC value to produce a
@@ -243,7 +243,7 @@ protected:
    *
    * @return true if solution is valid
    */
-  virtual bool calc_mc_best(const AIRCRAFT_STATE &state_now,
+  virtual bool calc_mc_best(const AircraftState &state_now,
                             fixed &best) const = 0;
 
   /**
@@ -255,7 +255,7 @@ protected:
    *
    * @return Sink rate of aircraft (m/s)
    */
-  virtual fixed calc_glide_required(const AIRCRAFT_STATE &state_now) const = 0;
+  virtual fixed calc_glide_required(const AircraftState &state_now) const = 0;
 
   /**
    * Calculate cruise efficiency for the travelled part of the task.
@@ -271,7 +271,7 @@ protected:
    * @return True if cruise efficiency is updated
    */
   gcc_pure
-  virtual bool calc_cruise_efficiency(const AIRCRAFT_STATE &state_now,
+  virtual bool calc_cruise_efficiency(const AircraftState &state_now,
                                       fixed &val) const {
     val = fixed_one;
     return true;
@@ -289,7 +289,7 @@ protected:
    * @return True if cruise efficiency is updated
    */
   gcc_pure
-  virtual bool calc_effective_mc(const AIRCRAFT_STATE &state_now,
+  virtual bool calc_effective_mc(const AircraftState &state_now,
                                  fixed& val) const;
 
   /**
@@ -304,7 +304,7 @@ protected:
    * @return Target range parameter (0-1)
    */
   gcc_pure
-  virtual fixed calc_min_target(const AIRCRAFT_STATE &state_now, 
+  virtual fixed calc_min_target(const AircraftState &state_now, 
                                 const fixed t_target) {
     return fixed_zero;
   };
@@ -318,7 +318,7 @@ protected:
    * @return Gradient angle of remainder of task
    */
   gcc_pure
-  fixed leg_gradient(const AIRCRAFT_STATE &state_now) const;
+  fixed leg_gradient(const AircraftState &state_now) const;
 
   /**
    * Calculate angle from aircraft to remainder of task
@@ -329,7 +329,7 @@ protected:
    * @return Gradient angle of remainder of task
    */
   gcc_pure
-  virtual fixed calc_gradient(const AIRCRAFT_STATE &state_now) const = 0;
+  virtual fixed calc_gradient(const AircraftState &state_now) const = 0;
 
   /**
    * Calculate task start time.
@@ -339,7 +339,7 @@ protected:
    *
    * @return Time (s) of start of task
    */
-  virtual fixed scan_total_start_time(const AIRCRAFT_STATE &state_now) = 0;
+  virtual fixed scan_total_start_time(const AircraftState &state_now) = 0;
 
   /**
    * Calculate leg start time.
@@ -349,7 +349,7 @@ protected:
    *
    * @return Time (s) of start of leg
    */
-  virtual fixed scan_leg_start_time(const AIRCRAFT_STATE &state_now) = 0;
+  virtual fixed scan_leg_start_time(const AircraftState &state_now) = 0;
 
   /**
    * Calculate distance of nominal task (sum of distances from each
@@ -420,7 +420,7 @@ protected:
    * @param total Glide result accumulated for total remaining task
    * @param leg Glide result for current leg of task
    */
-  virtual void glide_solution_remaining(const AIRCRAFT_STATE &state_now, 
+  virtual void glide_solution_remaining(const AircraftState &state_now, 
                                         const GlidePolar &polar,
                                         GlideResult &total,
                                         GlideResult &leg) = 0;
@@ -432,7 +432,7 @@ protected:
    * @param total Glide result accumulated for total travelled task
    * @param leg Glide result for current leg of task
    */
-  virtual void glide_solution_travelled(const AIRCRAFT_STATE &state_now, 
+  virtual void glide_solution_travelled(const AircraftState &state_now, 
                                         GlideResult &total,
                                         GlideResult &leg) = 0;
 
@@ -450,7 +450,7 @@ protected:
    * @param total_t_elapsed Total planned task time (s)
    * @param leg_t_elapsed Leg planned task time (s)
    */
-  virtual void glide_solution_planned(const AIRCRAFT_STATE &state_now,
+  virtual void glide_solution_planned(const AircraftState &state_now,
                                       GlideResult &total, GlideResult &leg,
                                       DistanceStat &total_remaining_effective,
                                       DistanceStat &leg_remaining_effective,
@@ -478,11 +478,11 @@ protected:
                                       const bool full_update);
 
 private:
-  void update_glide_solutions(const AIRCRAFT_STATE &state);
-  void update_stats_times(const AIRCRAFT_STATE &state);
-  void update_stats_speeds(const AIRCRAFT_STATE &state,
-                           const AIRCRAFT_STATE &state_last);
-  void update_stats_glide(const AIRCRAFT_STATE &state);
+  void update_glide_solutions(const AircraftState &state);
+  void update_stats_times(const AircraftState &state);
+  void update_stats_speeds(const AircraftState &state,
+                           const AircraftState &state_last);
+  void update_stats_glide(const AircraftState &state);
   void update_flight_mode();
 
 public:

@@ -29,7 +29,7 @@
 #include <iostream>
 #endif
 
-struct AIRCRAFT_STATE;
+struct AircraftState;
 class AtmosphericPressure;
 class AbstractAirspace;
 class AirspaceActivity;
@@ -110,7 +110,7 @@ public:
    * @return true if aircraft is inside airspace
    */
   gcc_pure
-  bool inside(const AIRCRAFT_STATE &loc) const;
+  bool inside(const AircraftState &loc) const;
 
   /** 
    * Checks whether a point is inside the airspace lateral boundary. 

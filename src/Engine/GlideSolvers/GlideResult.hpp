@@ -29,7 +29,7 @@
 #endif
 
 struct GlideState;
-struct AIRCRAFT_STATE;
+struct AircraftState;
 
 /**
  * Class used to represent a solution to a glide task
@@ -107,7 +107,7 @@ struct GlideResult {
    * deferred.
    * @param state State from which this solution was obtained
    */
-  void CalcDeferred(const AIRCRAFT_STATE &state);
+  void CalcDeferred(const AircraftState &state);
 
   /**
    * Check whether aircraft can finish this task without

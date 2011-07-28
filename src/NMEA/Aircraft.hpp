@@ -30,7 +30,7 @@ struct MoreData;
 struct DerivedInfo;
 
 gcc_pure
-const AIRCRAFT_STATE
+const AircraftState
 ToAircraftState(const MoreData &info, const DerivedInfo &calculated);
 
 #endif

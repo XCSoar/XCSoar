@@ -172,7 +172,7 @@ public:
    *
    * @return True if internal state changes
    */
-  bool update_sample(const AIRCRAFT_STATE &state_now, 
+  bool update_sample(const AircraftState &state_now, 
                      const bool full_update);
 
   /**
@@ -193,7 +193,7 @@ public:
    * @param state State of aircraft
    * @return Vector to home waypoint
    */
-  GeoVector get_vector_home(const AIRCRAFT_STATE &state) const;
+  GeoVector get_vector_home(const AircraftState &state) const;
 
   /**
    * Retrieve copy of safety glide polar used by task system
@@ -218,8 +218,8 @@ protected:
    *
    * @return True if transition occurred
    */
-  bool check_transitions(const AIRCRAFT_STATE& state_now, 
-                         const AIRCRAFT_STATE& state_last);
+  bool check_transitions(const AircraftState& state_now, 
+                         const AircraftState& state_last);
 
   /**
    * Clears task points in list
@@ -243,7 +243,7 @@ protected:
    * @return Distance (m) of approximate glide range of aircraft
    */
   gcc_pure
-  fixed abort_range(const AIRCRAFT_STATE &state_now) const;
+  fixed abort_range(const AircraftState &state_now) const;
 
   /**
    * Propagate changes to safety glide polar from global glide polar.
@@ -266,7 +266,7 @@ protected:
    *
    * @return True if a landpoint within final glide was found
    */
-  bool fill_reachable(const AIRCRAFT_STATE &state,
+  bool fill_reachable(const AircraftState &state,
                       AlternateVector &approx_waypoints,
                       const GlidePolar &polar,
                       const bool only_airfield,
@@ -280,7 +280,7 @@ protected:
    * It's first called after the reachable scan, then may be called again after scanning
    * for unreachable.
    */
-  virtual void client_update(const AIRCRAFT_STATE &state_now,
+  virtual void client_update(const AircraftState &state_now,
                              const bool reachable);
 
 public:

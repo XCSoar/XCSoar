@@ -1229,7 +1229,7 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
     return;
   }
 
-  const AIRCRAFT_STATE aircraft_state =
+  const AircraftState aircraft_state =
     ToAircraftState(basic, calculated);
   AirspaceVisible visible(settings_computer.airspace,
                           CommonInterface::SettingsMap().airspace,
@@ -1841,13 +1841,13 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     return;
 
   if (_tcscmp(misc, _T("start")) == 0) {
-    AIRCRAFT_STATE start_state = protected_task_manager->get_start_state();
+    AircraftState start_state = protected_task_manager->get_start_state();
 
     TCHAR TempTime[40];
     TCHAR TempAlt[40];
     TCHAR TempSpeed[40];
     
-    Units::TimeToTextHHMMSigned(TempTime, (int)TimeLocal((int)start_state.Time));
+    Units::TimeToTextHHMMSigned(TempTime, (int)TimeLocal((int)start_state.time));
     Units::FormatUserAltitude(start_state.altitude,
                               TempAlt, sizeof(TempAlt)/sizeof(TCHAR), true);
     Units::FormatUserSpeed(start_state.ground_speed,

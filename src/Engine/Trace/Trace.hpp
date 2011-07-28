@@ -36,7 +36,7 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-struct AIRCRAFT_STATE;
+struct AircraftState;
 
 /**
  * This class uses a smart thinning algorithm to limit the number of items
@@ -288,7 +288,7 @@ public:
    *
    * @param state Aircraft state to log point for
    */
-  void append(const AIRCRAFT_STATE& state);
+  void append(const AircraftState& state);
 
   /**
    * Clear the trace store

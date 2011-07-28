@@ -27,7 +27,7 @@
 const AirspacePredicateTrue AirspacePredicate::always_true =
   AirspacePredicateTrue();
 
-AirspacePredicateAircraftInside::AirspacePredicateAircraftInside(const AIRCRAFT_STATE& state):
+AirspacePredicateAircraftInside::AirspacePredicateAircraftInside(const AircraftState& state):
   m_state(state) 
 {
 }

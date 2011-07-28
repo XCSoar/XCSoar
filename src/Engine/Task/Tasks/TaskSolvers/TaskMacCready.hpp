@@ -90,7 +90,7 @@ public:
  * 
  * @return Glide result for entire task
  */
-  GlideResult glide_solution(const AIRCRAFT_STATE &aircraft);
+  GlideResult glide_solution(const AircraftState &aircraft);
 
 /** 
  * Calculate glide solution for externally specified aircraft sink rate
@@ -100,7 +100,7 @@ public:
  * 
  * @return Glide result for entire task with virtual sink rate
  */
-  GlideResult glide_sink(const AIRCRAFT_STATE &aircraft,
+  GlideResult glide_sink(const AircraftState &aircraft,
                          const fixed S);
 
 /** 
@@ -128,7 +128,7 @@ public:
  * 
  * @return Glide solution of current leg
  */
-  const GlideResult& get_active_solution(const AIRCRAFT_STATE &aircraft);
+  const GlideResult& get_active_solution(const AircraftState &aircraft);
 
 protected:
 
@@ -143,7 +143,7 @@ protected:
  * @return Glide result for segment
  */
   GlideResult tp_sink(const unsigned index,
-                       const AIRCRAFT_STATE &state, 
+                       const AircraftState &state, 
                        const fixed S) const;
 
 private:
@@ -158,7 +158,7 @@ private:
  * 
  * @return Min height (m) of entire task
  */
-  virtual fixed get_min_height(const AIRCRAFT_STATE &state) const = 0;
+  virtual fixed get_min_height(const AircraftState &state) const = 0;
 
 /** 
  * Pure virtual method to calculate glide solution for specified index, given
@@ -173,7 +173,7 @@ private:
  * @return Glide result for segment
  */
   virtual GlideResult tp_solution(const unsigned index,
-                                  const AIRCRAFT_STATE& state, 
+                                  const AircraftState& state, 
                                   fixed minH) const = 0;
 
 /** 
@@ -185,8 +185,8 @@ private:
  * 
  * @return Aircraft state at start of task
  */
-  virtual const AIRCRAFT_STATE 
-  get_aircraft_start(const AIRCRAFT_STATE &state) const = 0;
+  virtual const AircraftState 
+  get_aircraft_start(const AircraftState &state) const = 0;
 
 /** 
  * Calculate clearance heights for all turnpoints, given the
@@ -195,7 +195,7 @@ private:
  * 
  * @param state Aircraft state
  */
-  void clearance_heights(const AIRCRAFT_STATE &state);
+  void clearance_heights(const AircraftState &state);
 
 protected:
   const std::vector<TaskPoint*> m_tps; /**< The TaskPoints in the task */

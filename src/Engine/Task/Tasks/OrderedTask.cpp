@@ -130,19 +130,19 @@ OrderedTask::update_geometry()
 // TIMES
 
 fixed 
-OrderedTask::scan_total_start_time(const AIRCRAFT_STATE &)
+OrderedTask::scan_total_start_time(const AircraftState &)
 {
   if (taskpoint_start)
-    return taskpoint_start->get_state_entered().Time;
+    return taskpoint_start->get_state_entered().time;
 
   return fixed_zero;
 }
 
 fixed 
-OrderedTask::scan_leg_start_time(const AIRCRAFT_STATE &)
+OrderedTask::scan_leg_start_time(const AircraftState &)
 {
   if (activeTaskPoint)
-    return task_points[activeTaskPoint-1]->get_state_entered().Time;
+    return task_points[activeTaskPoint-1]->get_state_entered().time;
 
   return -fixed_one;
 }
@@ -248,8 +248,8 @@ OrderedTask::scan_distance_planned()
 // TRANSITIONS
 
 bool 
-OrderedTask::check_transitions(const AIRCRAFT_STATE &state, 
-                               const AIRCRAFT_STATE &state_last)
+OrderedTask::check_transitions(const AircraftState &state, 
+                               const AircraftState &state_last)
 {
   if (!taskpoint_start)
     return false;
@@ -264,8 +264,8 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   if (!n_task)
     return false;
 
-  FlatBoundingBox bb_last(task_projection.project(state_last.Location),1);
-  FlatBoundingBox bb_now(task_projection.project(state.Location),1);
+  FlatBoundingBox bb_last(task_projection.project(state_last.location),1);
+  FlatBoundingBox bb_now(task_projection.project(state.location),1);
 
   bool last_started = task_started();
   const bool last_finished = task_finished();
@@ -334,8 +334,8 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
 
 
 bool
-OrderedTask::check_transition_optional_start(const AIRCRAFT_STATE &state, 
-                                             const AIRCRAFT_STATE &state_last,
+OrderedTask::check_transition_optional_start(const AircraftState &state, 
+                                             const AircraftState &state_last,
                                              const FlatBoundingBox& bb_now,
                                              const FlatBoundingBox& bb_last,
                                              bool &transition_enter,
@@ -365,8 +365,8 @@ OrderedTask::check_transition_optional_start(const AIRCRAFT_STATE &state,
 
 bool
 OrderedTask::check_transition_point(OrderedTaskPoint& point,
-                                    const AIRCRAFT_STATE &state, 
-                                    const AIRCRAFT_STATE &state_last,
+                                    const AircraftState &state, 
+                                    const AircraftState &state_last,
                                     const FlatBoundingBox& bb_now,
                                     const FlatBoundingBox& bb_last,
                                     bool &transition_enter,
@@ -400,7 +400,7 @@ OrderedTask::check_transition_point(OrderedTaskPoint& point,
 // ADDITIONAL FUNCTIONS
 
 bool 
-OrderedTask::update_idle(const AIRCRAFT_STATE& state)
+OrderedTask::update_idle(const AircraftState& state)
 {
   bool retval = AbstractTask::update_idle(state);
 
@@ -427,7 +427,7 @@ OrderedTask::update_idle(const AIRCRAFT_STATE& state)
 }
 
 bool 
-OrderedTask::update_sample(const AIRCRAFT_STATE &state, 
+OrderedTask::update_sample(const AircraftState &state, 
                            const bool full_update)
 {
   return true;
@@ -701,7 +701,7 @@ OrderedTask::validTaskPoint(const int index_offset) const
 
 
 void
-OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
+OrderedTask::glide_solution_remaining(const AircraftState &aircraft,
                                       const GlidePolar &polar,
                                       GlideResult &total,
                                       GlideResult &leg)
@@ -710,11 +710,11 @@ OrderedTask::glide_solution_remaining(const AIRCRAFT_STATE &aircraft,
   total = tm.glide_solution(aircraft);
   leg = tm.get_active_solution(aircraft);
   if (activeTaskPoint == 0)
-    leg.vector = GeoVector(aircraft.Location, taskpoint_start->get_location_remaining());
+    leg.vector = GeoVector(aircraft.location, taskpoint_start->get_location_remaining());
 }
 
 void
-OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft, 
+OrderedTask::glide_solution_travelled(const AircraftState &aircraft, 
                                       GlideResult &total,
                                       GlideResult &leg)
 {
@@ -724,7 +724,7 @@ OrderedTask::glide_solution_travelled(const AIRCRAFT_STATE &aircraft,
 }
 
 void
-OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft, 
+OrderedTask::glide_solution_planned(const AircraftState &aircraft, 
                                     GlideResult &total,
                                     GlideResult &leg,
                                     DistanceStat &total_remaining_effective,
@@ -746,14 +746,14 @@ OrderedTask::glide_solution_planned(const AIRCRAFT_STATE &aircraft,
 // Auxiliary glide functions
 
 fixed
-OrderedTask::calc_glide_required(const AIRCRAFT_STATE &aircraft) const
+OrderedTask::calc_glide_required(const AircraftState &aircraft) const
 {
   TaskGlideRequired bgr(task_points, activeTaskPoint, aircraft, glide_polar);
   return bgr.search(fixed_zero);
 }
 
 bool
-OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, fixed& best) const
+OrderedTask::calc_mc_best(const AircraftState &aircraft, fixed& best) const
 {
   // note setting of lower limit on mc
   TaskBestMc bmc(task_points,activeTaskPoint, aircraft, glide_polar);
@@ -762,7 +762,7 @@ OrderedTask::calc_mc_best(const AIRCRAFT_STATE &aircraft, fixed& best) const
 
 
 bool
-OrderedTask::allow_incremental_boundary_stats(const AIRCRAFT_STATE &aircraft) const
+OrderedTask::allow_incremental_boundary_stats(const AircraftState &aircraft) const
 {
   if (!activeTaskPoint)
     return false;
@@ -775,7 +775,7 @@ OrderedTask::allow_incremental_boundary_stats(const AIRCRAFT_STATE &aircraft) co
 }
 
 bool
-OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, fixed& val) const
+OrderedTask::calc_cruise_efficiency(const AircraftState &aircraft, fixed& val) const
 {
   if (allow_incremental_boundary_stats(aircraft)) {
     TaskCruiseEfficiency bce(task_points, activeTaskPoint, aircraft, glide_polar);
@@ -788,7 +788,7 @@ OrderedTask::calc_cruise_efficiency(const AIRCRAFT_STATE &aircraft, fixed& val) 
 }
 
 bool 
-OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft, fixed& val) const
+OrderedTask::calc_effective_mc(const AircraftState &aircraft, fixed& val) const
 {
   if (allow_incremental_boundary_stats(aircraft)) {
     TaskEffectiveMacCready bce(task_points,activeTaskPoint, aircraft, glide_polar);
@@ -802,7 +802,7 @@ OrderedTask::calc_effective_mc(const AIRCRAFT_STATE &aircraft, fixed& val) const
 
 
 fixed
-OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft, 
+OrderedTask::calc_min_target(const AircraftState &aircraft, 
                              const fixed t_target) 
 {
   if (stats.distance_max > stats.distance_min) {
@@ -819,7 +819,7 @@ OrderedTask::calc_min_target(const AIRCRAFT_STATE &aircraft,
 
 
 fixed 
-OrderedTask::calc_gradient(const AIRCRAFT_STATE &state) const
+OrderedTask::calc_gradient(const AircraftState &state) const
 {
   if (task_points.size() < 1)
     return fixed_zero;
@@ -1019,7 +1019,7 @@ OrderedTask::getActiveIndex() const
 }
 
 void
-OrderedTask::update_start_transition(const AIRCRAFT_STATE &state, OrderedTaskPoint& start)
+OrderedTask::update_start_transition(const AircraftState &state, OrderedTaskPoint& start)
 {
   if (activeTaskPoint == 0) {
     // find boundary point that produces shortest
@@ -1033,7 +1033,7 @@ OrderedTask::update_start_transition(const AIRCRAFT_STATE &state, OrderedTaskPoi
   // @todo: modify this for optional start?
 }
 
-AIRCRAFT_STATE 
+AircraftState 
 OrderedTask::get_start_state() const
 {
   if (has_start() && task_started()) 
@@ -1041,17 +1041,17 @@ OrderedTask::get_start_state() const
 
   // @todo: modify this for optional start?
 
-  AIRCRAFT_STATE null_state;
+  AircraftState null_state;
   return null_state;
 }
 
-AIRCRAFT_STATE 
+AircraftState 
 OrderedTask::get_finish_state() const
 {
   if (has_finish() && task_finished()) 
     return taskpoint_finish->get_state_entered();
 
-  AIRCRAFT_STATE null_state;
+  AircraftState null_state;
   return null_state;
 }
 

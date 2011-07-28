@@ -26,7 +26,7 @@
 
 class DummyTaskWaypoint: public TaskWaypoint
 {
-  AIRCRAFT_STATE dummy_state;
+  AircraftState dummy_state;
 
 public:
   friend class TaskWaypointTest;
@@ -34,7 +34,7 @@ public:
   DummyTaskWaypoint(enum type _type, const Waypoint & wp)
     :TaskWaypoint(_type, wp) {}
 
-  virtual const GeoVector get_vector_remaining(const AIRCRAFT_STATE &) const {
+  virtual const GeoVector get_vector_remaining(const AircraftState &) const {
     return GeoVector();
   }
 
@@ -42,7 +42,7 @@ public:
     return GeoVector();
   }
 
-  virtual const GeoVector get_vector_travelled(const AIRCRAFT_STATE &) const {
+  virtual const GeoVector get_vector_travelled(const AircraftState &) const {
     return GeoVector();
   }
 
@@ -50,7 +50,7 @@ public:
     return false;
   }
 
-  virtual const AIRCRAFT_STATE& get_state_entered() const {
+  virtual const AircraftState& get_state_entered() const {
     return dummy_state;
   }
 

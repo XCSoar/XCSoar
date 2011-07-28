@@ -36,18 +36,18 @@ SampledTaskPoint::SampledTaskPoint(enum type _type, const Waypoint & wp,
 // SAMPLES
 
 bool 
-SampledTaskPoint::update_sample_near(const AIRCRAFT_STATE& state,
+SampledTaskPoint::update_sample_near(const AircraftState& state,
                                      TaskEvents &task_events,
                                      const TaskProjection &projection)
 {
   if (isInSector(state)) {
     // if sample is inside sample polygon
-    if (PolygonInterior(state.Location, m_sampled_points))
+    if (PolygonInterior(state.location, m_sampled_points))
       // return false (no update required)
       return false;
 
     // add sample to polygon
-    SearchPoint sp(state.Location, projection);
+    SearchPoint sp(state.location, projection);
     m_sampled_points.push_back(sp);
 
     // re-compute convex hull
@@ -66,12 +66,12 @@ SampledTaskPoint::update_sample_near(const AIRCRAFT_STATE& state,
 }
 
 void 
-SampledTaskPoint::clear_sample_all_but_last(const AIRCRAFT_STATE& ref_last,
+SampledTaskPoint::clear_sample_all_but_last(const AircraftState& ref_last,
                                             const TaskProjection &projection)
 {
   if (has_sampled()) {
     m_sampled_points.clear();
-    SearchPoint sp(ref_last.Location, projection);
+    SearchPoint sp(ref_last.location, projection);
     m_sampled_points.push_back(sp);
   }
 }

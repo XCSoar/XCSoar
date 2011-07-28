@@ -705,7 +705,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
     // alt reqd at current mc
 
-    const AIRCRAFT_STATE aircraft_state = ToAircraftState(basic, calculated);
+    const AircraftState aircraft_state = ToAircraftState(basic, calculated);
     GlideResult r = TaskSolution::glide_solution_remaining(t, aircraft_state,
                                                            glide_polar);
     wp = (WndProperty *)wf->FindByName(_T("prpMc2"));

@@ -27,7 +27,7 @@
 #include "OrderedTaskBehaviour.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 
-struct AIRCRAFT_STATE;
+struct AircraftState;
 
 enum AbortTaskMode {
   atmSimple,

@@ -233,7 +233,7 @@ public:
    * @return airspaces enclosing the aircraft
    */
   gcc_pure
-  const AirspaceVector find_inside(const AIRCRAFT_STATE &state,
+  const AirspaceVector find_inside(const AircraftState &state,
                                    const AirspacePredicate &condition
                                    =AirspacePredicate::always_true) const;
 

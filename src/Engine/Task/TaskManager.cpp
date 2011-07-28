@@ -128,7 +128,7 @@ TaskManager::getActiveTaskPoint() const
 }
 
 void
-TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
+TaskManager::update_common_stats_times(const AircraftState &state)
 {
   if (task_ordered.task_size() > 1) {
     common_stats.task_started = task_ordered.get_stats().task_started;
@@ -171,7 +171,7 @@ TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
     if (positive(start_max_height) && state.flying) {
       if (!positive(common_stats.TimeUnderStartMaxHeight) &&
           state.altitude < start_max_height) {
-        common_stats.TimeUnderStartMaxHeight = state.Time;
+        common_stats.TimeUnderStartMaxHeight = state.time;
       }
       if (state.altitude > start_max_height) {
           common_stats.TimeUnderStartMaxHeight = -fixed_one;
@@ -188,7 +188,7 @@ TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
 }
 
 void
-TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
+TaskManager::update_common_stats_waypoints(const AircraftState &state)
 {
   common_stats.vector_home = task_abort.get_vector_home(state);
 
@@ -208,7 +208,7 @@ TaskManager::update_common_stats_waypoints(const AIRCRAFT_STATE &state)
 }
 
 void
-TaskManager::update_common_stats_task(const AIRCRAFT_STATE &state)
+TaskManager::update_common_stats_task(const AircraftState &state)
 {
   common_stats.mode_abort = (mode == MODE_ABORT);
   common_stats.mode_goto = (mode == MODE_GOTO);
@@ -240,7 +240,7 @@ TaskManager::update_common_stats_task(const AIRCRAFT_STATE &state)
 }
 
 void
-TaskManager::update_common_stats_polar(const AIRCRAFT_STATE &state)
+TaskManager::update_common_stats_polar(const AircraftState &state)
 {
   common_stats.current_mc = m_glide_polar.GetMC();
   common_stats.current_bugs = m_glide_polar.GetBugs();
@@ -267,7 +267,7 @@ TaskManager::update_common_stats_polar(const AIRCRAFT_STATE &state)
 }
 
 void
-TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
+TaskManager::update_common_stats(const AircraftState &state)
 {
   update_common_stats_times(state);
   update_common_stats_task(state);
@@ -276,8 +276,8 @@ TaskManager::update_common_stats(const AIRCRAFT_STATE &state)
 }
 
 bool 
-TaskManager::update(const AIRCRAFT_STATE &state, 
-                    const AIRCRAFT_STATE& state_last)
+TaskManager::update(const AircraftState &state, 
+                    const AircraftState& state_last)
 {
   // always update ordered task so even if we are temporarily
   // in a different mode, so the task stats are still updated.
@@ -288,7 +288,7 @@ TaskManager::update(const AIRCRAFT_STATE &state,
 
   bool retval = false;
 
-  if (state_last.Time > state.Time)
+  if (state_last.time > state.time)
     reset();
 
   if (state.flying) {
@@ -328,7 +328,7 @@ TaskManager::update(const AIRCRAFT_STATE &state,
 }
 
 bool 
-TaskManager::update_idle(const AIRCRAFT_STATE& state)
+TaskManager::update_idle(const AircraftState& state)
 {
   bool retval = false;
 
@@ -440,7 +440,7 @@ TaskManager::get_finish_height() const
 }
 
 bool 
-TaskManager::update_auto_mc(const AIRCRAFT_STATE& state_now,
+TaskManager::update_auto_mc(const AircraftState& state_now,
                             const fixed fallback_mc)
 {
   if (active_task &&
@@ -496,7 +496,7 @@ TaskManager::get_ordered_taskpoint_name(unsigned TPindex) const
 }
 
 bool
-TaskManager::isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref,
+TaskManager::isInSector (const unsigned TPindex, const AircraftState &ref,
                           const bool AATOnly) const
 {
   if (!check_ordered_task())

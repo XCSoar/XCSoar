@@ -26,7 +26,7 @@
 
 TaskMinTarget::TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                              const unsigned activeTaskPoint,
-                             const AIRCRAFT_STATE &_aircraft,
+                             const AircraftState &_aircraft,
                              const GlidePolar &_gp,
                              const fixed _t_remaining,
                              StartPoint *_ts):
@@ -81,5 +81,5 @@ void
 TaskMinTarget::set_range(const fixed p)
 {
   tm.set_range(p, force_current);
-  tp_start->scan_distance_remaining(aircraft.Location);
+  tp_start->scan_distance_remaining(aircraft.location);
 }

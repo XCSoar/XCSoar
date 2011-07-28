@@ -29,7 +29,7 @@
 #include "DistanceStat.hpp"
 #include "TaskVario.hpp"
 
-struct AIRCRAFT_STATE;
+struct AircraftState;
 
 /**
  * Common task element statistics.  Used because we separately want to
@@ -67,7 +67,7 @@ struct ElementStat {
  * @param state Aircraft state (to access time)
  */
   void set_times(const fixed ts, 
-                 const AIRCRAFT_STATE& state);
+                 const AircraftState& state);
 
 /** 
  * Determine whether the task (or subtask) is able to be finished

@@ -298,7 +298,7 @@ public:
  * 
  * @return Initialised object
  */
-  AirspaceAircraftPerformanceTask(const AIRCRAFT_STATE &state,
+  AirspaceAircraftPerformanceTask(const AircraftState &state,
                                   const GlidePolar& polar,
                                   const TaskManager& task);
 

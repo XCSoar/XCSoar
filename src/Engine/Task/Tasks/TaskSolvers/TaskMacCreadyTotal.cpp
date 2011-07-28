@@ -32,14 +32,14 @@ TaskMacCreadyTotal::TaskMacCreadyTotal(const std::vector<OrderedTaskPoint*> &_tp
 
 GlideResult 
 TaskMacCreadyTotal::tp_solution(const unsigned i,
-                                const AIRCRAFT_STATE &aircraft, 
+                                const AircraftState &aircraft, 
                                 fixed minH) const
 {
   return TaskSolution::glide_solution_planned(*m_tps[i],aircraft, m_glide_polar, minH);
 }
 
-const AIRCRAFT_STATE 
-TaskMacCreadyTotal::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
+const AircraftState 
+TaskMacCreadyTotal::get_aircraft_start(const AircraftState &aircraft) const
 {
   if (m_tps[0]->has_entered()) {
     return m_tps[0]->get_state_entered();

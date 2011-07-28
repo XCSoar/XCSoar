@@ -77,7 +77,7 @@ ProtectedTaskManager::getActiveWaypoint() const
 }
 
 bool
-ProtectedTaskManager::isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref) const
+ProtectedTaskManager::isInSector (const unsigned TPindex, const AircraftState &ref) const
 {
   Lease lease(*this);
   return lease->isInSector(TPindex, ref);
@@ -202,7 +202,7 @@ ProtectedTaskManager::do_goto(const Waypoint & wp)
   return lease->do_goto(wp);
 }
 
-AIRCRAFT_STATE 
+AircraftState 
 ProtectedTaskManager::get_start_state() const
 {
   Lease lease(*this);

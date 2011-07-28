@@ -33,7 +33,7 @@ extern AirspaceWarningManager *airspace_warnings;
 
 void setup_airspaces(Airspaces& airspaces, const GeoPoint &center, const unsigned n=150);
 
-void scan_airspaces(const AIRCRAFT_STATE state, 
+void scan_airspaces(const AircraftState state, 
                     const Airspaces& airspaces,
                     const AirspaceAircraftPerformance& perf,
                     bool do_report,

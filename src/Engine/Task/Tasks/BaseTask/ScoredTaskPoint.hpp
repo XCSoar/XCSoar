@@ -38,8 +38,8 @@
 class ScoredTaskPoint:
   public SampledTaskPoint
 {
-  AIRCRAFT_STATE m_state_entered;
-  AIRCRAFT_STATE m_state_exited;
+  AircraftState m_state_entered;
+  AircraftState m_state_exited;
 
 public:
 /** 
@@ -69,7 +69,7 @@ public:
  * @return True if aircraft has entered the OZ
  */
   bool has_entered() const {
-    return m_state_entered.Time > fixed_zero;
+    return m_state_entered.time > fixed_zero;
   }
 
 /** 
@@ -78,7 +78,7 @@ public:
  * @return True if aircraft has exited the OZ
  */
   bool has_exited() const {
-    return m_state_exited.Time > fixed_zero;
+    return m_state_exited.time > fixed_zero;
   }
 
 /** 
@@ -86,7 +86,7 @@ public:
  * 
  * @return State on entry
  */
-  const AIRCRAFT_STATE& get_state_entered() const {
+  const AircraftState& get_state_entered() const {
     return m_state_entered;
   }
 
@@ -99,8 +99,8 @@ public:
  * 
  * @return True if observation zone is entered now
  */
-  bool transition_enter(const AIRCRAFT_STATE &ref_now,
-                        const AIRCRAFT_STATE &ref_last);
+  bool transition_enter(const AircraftState &ref_now,
+                        const AircraftState &ref_last);
 
 /** 
  * Test whether aircraft has exited observation zone and
@@ -111,8 +111,8 @@ public:
  * 
  * @return True if observation zone is exited now
  */
-  bool transition_exit(const AIRCRAFT_STATE &ref_now,
-                       const AIRCRAFT_STATE &ref_last,
+  bool transition_exit(const AircraftState &ref_now,
+                       const AircraftState &ref_last,
                        const TaskProjection &projection);
 
 /** 
@@ -148,7 +148,7 @@ private:
  * 
  * @param state State at entry
  */
-  void set_state_entered(const AIRCRAFT_STATE& state) {
+  void set_state_entered(const AircraftState& state) {
     m_state_entered = state;
   }
 
@@ -157,7 +157,7 @@ private:
  * 
  * @param state State at exit
  */
-  void set_state_exited(const AIRCRAFT_STATE& state) {
+  void set_state_exited(const AircraftState& state) {
     m_state_exited = state;
   }
 

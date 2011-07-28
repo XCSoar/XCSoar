@@ -161,25 +161,25 @@ private:
 /**
  * Compound structure defining an aircraft state
  */
-struct AIRCRAFT_STATE: 
+struct AircraftState: 
   public AltitudeState,
   public SpeedState,
   public VarioState,
   public FlyingState
 {
-  AIRCRAFT_STATE();
+  AircraftState();
 
   //##########
   //   Time
   //##########
 
-  fixed Time; /**< global time (seconds UTC) */
+  fixed time; /**< global time (seconds UTC) */
 
   //################
   //   Navigation
   //################
 
-  GeoPoint Location; /**< location of aircraft */
+  GeoPoint location; /**< location of aircraft */
 
   Angle track; /**< track angle in degrees true */
 
@@ -192,7 +192,7 @@ struct AIRCRAFT_STATE:
    * or estimated (assuming balanced turn) 
    * @see AccelerationAvailable
    */
-  fixed Gload;
+  fixed g_load;
 
   SpeedVector wind; /**< Wind speed, direction at aircraft */
 
@@ -204,7 +204,7 @@ struct AIRCRAFT_STATE:
  * @return Predicted aircraft state in in_time seconds
  */
   gcc_pure
-  AIRCRAFT_STATE get_predicted_state(const fixed& in_time) const;
+  AircraftState GetPredictedState(const fixed& in_time) const;
 };
 
 #endif

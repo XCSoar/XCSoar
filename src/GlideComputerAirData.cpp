@@ -67,7 +67,7 @@ GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points,
 void
 GlideComputerAirData::ResetFlight(const bool full)
 {
-  const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
+  const AircraftState as = ToAircraftState(Basic(), Calculated());
   m_airspace.reset_warning(as);
 
   vario_30s_filter.reset();
@@ -609,7 +609,7 @@ GlideComputerAirData::AirspaceWarning()
   AirspaceActivity day (Calculated().date_time_local.day_of_week);
   airspace_database.set_activity(day);
 
-  const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
+  const AircraftState as = ToAircraftState(Basic(), Calculated());
   if (m_airspace.update_warning(as, Calculated().circling, (unsigned)iround(time_delta())))
     SetCalculated().airspace_warnings.latest.Update(Basic().clock);
 }

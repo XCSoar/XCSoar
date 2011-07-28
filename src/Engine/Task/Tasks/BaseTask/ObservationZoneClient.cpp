@@ -29,7 +29,7 @@ ObservationZoneClient::~ObservationZoneClient() {
 }
 
 bool
-ObservationZoneClient::isInSector(const AIRCRAFT_STATE &ref) const
+ObservationZoneClient::isInSector(const AircraftState &ref) const
 {
   return m_oz->isInSector(ref);
 }
@@ -59,8 +59,8 @@ ObservationZoneClient::get_boundary_parametric(fixed t) const
 }
 
 bool
-ObservationZoneClient::transition_constraint(const AIRCRAFT_STATE & ref_now,
-                                             const AIRCRAFT_STATE & ref_last) const
+ObservationZoneClient::transition_constraint(const AircraftState & ref_now,
+                                             const AircraftState & ref_last) const
 {
   return m_oz->transition_constraint(ref_now, ref_last);
 }

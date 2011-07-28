@@ -153,7 +153,7 @@ public:
                                    const char* yname,
                                    const char* iname,
                                    const bool _do_report,
-                                   const AIRCRAFT_STATE &state,
+                                   const AircraftState &state,
                                    const AirspaceAircraftPerformance &perf):
     do_report(_do_report),
     m_state(state),
@@ -205,7 +205,7 @@ private:
   std::ofstream *yout;
   std::ofstream *iout;
   const bool do_report;
-  const AIRCRAFT_STATE m_state;
+  const AircraftState m_state;
   const AirspaceAircraftPerformance &m_perf;
 };
 
@@ -213,7 +213,7 @@ private:
 class AirspaceVisitorClosest: public AirspaceVisitor {
 public:
   AirspaceVisitorClosest(const char* fname,
-                         const AIRCRAFT_STATE &_state,
+                         const AircraftState &_state,
                          const AirspaceAircraftPerformance &perf):
     fout(NULL),
     state(_state),
@@ -227,14 +227,14 @@ public:
       delete fout;
   }
   virtual void closest(const AbstractAirspace& as) {
-    GeoPoint c = as.closest_point(state.Location);
+    GeoPoint c = as.closest_point(state.location);
     if (fout) {
       *fout << "# closest point\n";
       *fout << c.Longitude << " " << c.Latitude << " " << "\n";
-      *fout << state.Location.Longitude << " " << state.Location.Latitude << " " << "\n\n";
+      *fout << state.location.Longitude << " " << state.location.Latitude << " " << "\n\n";
     }
     AirspaceInterceptSolution solution;
-    GeoVector vec(state.Location, c);
+    GeoVector vec(state.location, c);
     vec.Distance = fixed(20000); // set big distance (for testing)
     if (as.intercept(state, vec, m_perf, solution)) {
       if (fout) {
@@ -250,7 +250,7 @@ public:
   }
 private:
   std::ofstream *fout;
-  const AIRCRAFT_STATE& state;
+  const AircraftState& state;
   const AirspaceAircraftPerformance &m_perf;
 };
 
@@ -269,7 +269,7 @@ struct CallVisitor {
   }
 };
 
-void scan_airspaces(const AIRCRAFT_STATE state, 
+void scan_airspaces(const AircraftState state, 
                     const Airspaces& airspaces,
                     const AirspaceAircraftPerformance& perf,
                     bool do_report,
@@ -277,7 +277,7 @@ void scan_airspaces(const AIRCRAFT_STATE state,
 {
   const fixed range(20000.0);
 
-  const std::vector<Airspace> vn = airspaces.scan_nearest(state.Location);
+  const std::vector<Airspace> vn = airspaces.scan_nearest(state.location);
   AirspaceVisitorPrint pvn("results/res-bb-nearest.txt",
                            do_report);
   std::for_each(vn.begin(), vn.end(), CallVisitor<AirspaceVisitor>(pvn));
@@ -285,13 +285,13 @@ void scan_airspaces(const AIRCRAFT_STATE state,
   {
     AirspaceVisitorPrint pvisitor("results/res-bb-range.txt",
                                   do_report);
-    airspaces.visit_within_range(state.Location, range, pvisitor);
+    airspaces.visit_within_range(state.location, range, pvisitor);
   }
 
   {
     AirspaceVisitorClosest pvisitor("results/res-bb-closest.txt",
                                     state, perf);
-    airspaces.visit_within_range(state.Location, range, pvisitor);
+    airspaces.visit_within_range(state.location, range, pvisitor);
   }
 
   {
@@ -307,12 +307,12 @@ void scan_airspaces(const AIRCRAFT_STATE state,
                                               "results/res-bb-intercepts.txt",
                                               do_report,
                                               state, perf);
-    GeoVector vec(state.Location, target);
-    airspaces.visit_intersecting(state.Location, vec, ivisitor);
+    GeoVector vec(state.location, target);
+    airspaces.visit_intersecting(state.location, vec, ivisitor);
   }
 
   {
-    AirspaceNearestSort ans(state.Location);
+    AirspaceNearestSort ans(state.location);
     const AbstractAirspace* as = ans.find_nearest(airspaces, range);
     if (do_report) {
       std::ofstream fout("results/res-bb-sortednearest.txt");

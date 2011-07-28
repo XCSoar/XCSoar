@@ -25,7 +25,7 @@
 #include "AirspaceVisitor.hpp"
 #include "AbstractAirspace.hpp"
 
-struct AIRCRAFT_STATE;
+struct AircraftState;
 class AirspaceAircraftPerformance;
 
 /**
@@ -63,7 +63,7 @@ protected:
  * @return Solution if any
  */
   AirspaceInterceptSolution intercept(const AbstractAirspace& as,
-                                      const AIRCRAFT_STATE& state,
+                                      const AircraftState& state,
                                       const AirspaceAircraftPerformance &perf,
                                       bool all=true) const;
 };

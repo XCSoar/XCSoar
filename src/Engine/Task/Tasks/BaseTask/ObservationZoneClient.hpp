@@ -62,7 +62,7 @@ public:
  * 
  * @return True if aircraft is inside observation zone
  */
-  virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
+  virtual bool isInSector(const AircraftState &ref) const;
 
   /**
    * If zone when used for start can trigger task start via vertical exit
@@ -107,8 +107,8 @@ protected:
  * 
  * @return True if constraints are satisfied
  */
-  virtual bool transition_constraint(const AIRCRAFT_STATE & ref_now, 
-                                     const AIRCRAFT_STATE & ref_last) const;
+  virtual bool transition_constraint(const AircraftState & ref_now, 
+                                     const AircraftState & ref_last) const;
 
 /**
  * Set previous/next taskpoints to allow OZ to update its geometry

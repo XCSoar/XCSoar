@@ -24,7 +24,7 @@
 
 struct GlideState;
 struct GlideResult;
-struct AIRCRAFT_STATE;
+struct AircraftState;
 
 #include "PolarCoefficients.hpp"
 #include "Math/fixed.hpp"
@@ -381,7 +381,7 @@ public:
    *
    * @return Speed to fly (true, m/s)
    */
-  fixed SpeedToFly(const AIRCRAFT_STATE &state, const GlideResult &solution,
+  fixed SpeedToFly(const AircraftState &state, const GlideResult &solution,
       const bool block_stf) const;
 
   /**
@@ -402,7 +402,7 @@ public:
    *
    * @return LD ratio (distance travelled per unit height loss)
    */
-  fixed GetLDOverGround(const AIRCRAFT_STATE &state) const;
+  fixed GetLDOverGround(const AircraftState &state) const;
 
   /** Returns the wing area in m^2 */
   fixed GetWingArea() const {

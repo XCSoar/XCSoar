@@ -34,7 +34,7 @@
 #include <iostream>
 #endif
 
-struct AIRCRAFT_STATE;
+struct AircraftState;
 struct AltitudeState;
 struct GeoVector;
 class AtmosphericPressure;
@@ -126,7 +126,7 @@ public:
    * @return true if aircraft is inside airspace boundaries
    */
   gcc_pure
-  virtual bool inside(const AIRCRAFT_STATE& state) const;
+  virtual bool inside(const AircraftState& state) const;
 
   /** 
    * Checks whether a line intersects with the airspace.
@@ -263,7 +263,7 @@ public:
  * @param loc_end Location of last point on/in airspace to query (if provided)
  * @return True if intercept found
  */
-  bool intercept(const AIRCRAFT_STATE &state,
+  bool intercept(const AircraftState &state,
                  const AirspaceAircraftPerformance& perf,
                  AirspaceInterceptSolution &solution,
                  const GeoPoint& loc_start,
@@ -282,7 +282,7 @@ public:
  * @param solution Solution of intercept (set if intercept possible, else untouched)
  * @return True if intercept found
  */
-  bool intercept(const AIRCRAFT_STATE &state,
+  bool intercept(const AircraftState &state,
                  const GeoVector& vec,
                  const AirspaceAircraftPerformance& perf,
                  AirspaceInterceptSolution &solution) const;
@@ -398,7 +398,7 @@ private:
  * @return Solution of intercept 
  */
   gcc_pure
-  AirspaceInterceptSolution intercept_vertical(const AIRCRAFT_STATE &state,
+  AirspaceInterceptSolution intercept_vertical(const AircraftState &state,
                                                const AirspaceAircraftPerformance& perf,
                                                const fixed& distance) const;
 
@@ -416,7 +416,7 @@ private:
  * @return Solution of intercept 
  */
   gcc_pure
-  AirspaceInterceptSolution intercept_horizontal(const AIRCRAFT_STATE &state,
+  AirspaceInterceptSolution intercept_horizontal(const AircraftState &state,
                                                  const AirspaceAircraftPerformance& perf,
                                                  const fixed& distance_start,
                                                  const fixed& distance_end,

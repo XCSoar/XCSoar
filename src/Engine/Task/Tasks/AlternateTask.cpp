@@ -84,7 +84,7 @@ AlternateTask::check_alternate_changed()
 }
 
 void 
-AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
+AlternateTask::client_update(const AircraftState &state_now,
                              const bool reachable)
 {
   // build a list of alternates, sorted by distance.
@@ -95,14 +95,14 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
   reservable_priority_queue<Divert, DivertVector, AlternateRank> q;
   q.reserve(task_points.size());
 
-  const fixed dist_straight = state_now.Location.distance(destination);
+  const fixed dist_straight = state_now.location.distance(destination);
 
   const AlternateTaskVector::const_iterator end = task_points.end();
   for (AlternateTaskVector::const_iterator i = task_points.begin(); i != end; ++i) {
     const TaskWaypoint& tp = *i;
     const Waypoint& wp_alt = tp.get_waypoint();
     const fixed dist_divert =
-        ::DoubleDistance(state_now.Location, wp_alt.Location, destination);
+        ::DoubleDistance(state_now.location, wp_alt.Location, destination);
     const fixed delta = dist_straight - dist_divert;
 
     q.push(Divert(wp_alt, i->solution, delta));
@@ -126,7 +126,7 @@ AlternateTask::client_update(const AIRCRAFT_STATE &state_now,
 }
 
 void 
-AlternateTask::set_task_destination(const AIRCRAFT_STATE &state_now,
+AlternateTask::set_task_destination(const AircraftState &state_now,
                                     const TaskPoint* _target) 
 {
   // if we have a target, use that, otherwise use the aircraft location
@@ -134,11 +134,11 @@ AlternateTask::set_task_destination(const AIRCRAFT_STATE &state_now,
   if (_target)
     destination = _target->get_location_remaining();
   else
-    destination = state_now.Location;
+    destination = state_now.location;
 }
 
 void
-AlternateTask::set_task_destination_home(const AIRCRAFT_STATE &state_now)
+AlternateTask::set_task_destination_home(const AircraftState &state_now)
 {
   // if we have a home, use that, otherwise use the aircraft location
   // (which ends up equivalent to sorting by distance)
@@ -146,7 +146,7 @@ AlternateTask::set_task_destination_home(const AIRCRAFT_STATE &state_now)
   if (home_waypoint)
     destination = home_waypoint->Location;
   else
-    destination = state_now.Location;
+    destination = state_now.location;
 }
 
 bool 

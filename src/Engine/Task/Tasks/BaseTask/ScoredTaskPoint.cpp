@@ -30,8 +30,8 @@ ScoredTaskPoint::ScoredTaskPoint(enum type _type,
 }
 
 bool 
-ScoredTaskPoint::transition_enter(const AIRCRAFT_STATE & ref_now, 
-                                  const AIRCRAFT_STATE & ref_last)
+ScoredTaskPoint::transition_enter(const AircraftState & ref_now, 
+                                  const AircraftState & ref_last)
 {
   bool entered = check_transition_enter(ref_now, ref_last);
   if (entered && entry_precondition()) {
@@ -44,8 +44,8 @@ ScoredTaskPoint::transition_enter(const AIRCRAFT_STATE & ref_now,
 }
 
 bool 
-ScoredTaskPoint::transition_exit(const AIRCRAFT_STATE & ref_now, 
-                                 const AIRCRAFT_STATE &ref_last,
+ScoredTaskPoint::transition_exit(const AircraftState & ref_now, 
+                                 const AircraftState &ref_last,
                                  const TaskProjection &projection)
 {
   bool exited = check_transition_exit(ref_now, ref_last);
@@ -88,6 +88,6 @@ void
 ScoredTaskPoint::reset()
 {
   SampledTaskPoint::reset();
-  m_state_entered.Time = fixed_minus_one;
-  m_state_exited.Time = fixed_minus_one;
+  m_state_entered.time = fixed_minus_one;
+  m_state_exited.time = fixed_minus_one;
 }

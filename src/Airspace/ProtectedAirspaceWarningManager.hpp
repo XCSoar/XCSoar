@@ -25,7 +25,7 @@
 
 #include "Thread/Guard.hpp"
 
-struct AIRCRAFT_STATE;
+struct AircraftState;
 class AirspaceWarning;
 class AirspaceWarningManager;
 class AirspaceWarningVisitor;
@@ -38,7 +38,7 @@ public:
     Guard<AirspaceWarningManager>(awm) {}
 
   void clear();
-  void reset(const AIRCRAFT_STATE& as);
+  void reset(const AircraftState& as);
   void clear_warnings();
 
   // warning manager
@@ -56,8 +56,8 @@ public:
   bool warning_empty() const;
   int get_warning_index(const AbstractAirspace& airspace) const;
 
-  void reset_warning(const AIRCRAFT_STATE& as);
-  bool update_warning(const AIRCRAFT_STATE &state, const bool circling, const unsigned dt);
+  void reset_warning(const AircraftState& as);
+  bool update_warning(const AircraftState &state, const bool circling, const unsigned dt);
 };
 
 

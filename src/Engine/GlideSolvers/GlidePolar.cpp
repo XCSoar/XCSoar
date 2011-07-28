@@ -313,11 +313,11 @@ private:
 };
 
 fixed
-GlidePolar::SpeedToFly(const AIRCRAFT_STATE &state,
+GlidePolar::SpeedToFly(const AircraftState &state,
     const GlideResult &solution, const bool block_stf) const
 {
   fixed V_stf;
-  const fixed g_scaling (block_stf ? fixed_one : sqrt(fabs(state.Gload))); 
+  const fixed g_scaling (block_stf ? fixed_one : sqrt(fabs(state.g_load))); 
 
   if (!block_stf && (state.netto_vario > mc + Smin)) {
     // stop to climb
@@ -390,7 +390,7 @@ GlidePolar::GetVTakeoff() const
 }
 
 fixed
-GlidePolar::GetLDOverGround(const AIRCRAFT_STATE &state) const
+GlidePolar::GetLDOverGround(const AircraftState &state) const
 {
   if (state.wind.is_zero())
     return bestLD;

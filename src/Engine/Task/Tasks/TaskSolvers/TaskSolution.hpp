@@ -46,7 +46,7 @@ public:
  * @return GlideResult of task leg
  */
   static GlideResult glide_solution_remaining(const TaskPoint& taskpoint,
-                                              const AIRCRAFT_STATE &state, 
+                                              const AircraftState &state, 
                                               const GlidePolar &polar,
                                               const fixed minH=fixed_zero);
 
@@ -62,7 +62,7 @@ public:
  * @return GlideResult of task leg
  */
   static GlideResult glide_solution_sink(const TaskPoint& taskpoint,
-                                         const AIRCRAFT_STATE &state, 
+                                         const AircraftState &state, 
                                          const GlidePolar &polar,
                                          const fixed S);
 
@@ -77,7 +77,7 @@ public:
  * @return GlideResult of task leg
  */
   static GlideResult glide_solution_travelled(const TaskPoint& taskpoint,
-                                              const AIRCRAFT_STATE &state, 
+                                              const AircraftState &state, 
                                               const GlidePolar &polar,
                                               const fixed minH=fixed_zero);
 
@@ -92,7 +92,7 @@ public:
  * @return GlideResult of task leg
  */
   static GlideResult glide_solution_planned(const TaskPoint& taskpoint,
-                                            const AIRCRAFT_STATE &state, 
+                                            const AircraftState &state, 
                                             const GlidePolar &polar,
                                             const fixed minH=fixed_zero);
 };

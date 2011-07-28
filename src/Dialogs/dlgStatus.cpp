@@ -330,12 +330,12 @@ UpdateValuesRules(void)
   else
     wp->SetText(_("No"));
 
-  AIRCRAFT_STATE start_state = protected_task_manager->get_start_state();
+  AircraftState start_state = protected_task_manager->get_start_state();
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   assert(wp != NULL);
   if (common_stats.task_started) {
-    Units::TimeToTextHHMMSigned(Temp, (int)TimeLocal(start_state.Time));
+    Units::TimeToTextHHMMSigned(Temp, (int)TimeLocal(start_state.time));
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));

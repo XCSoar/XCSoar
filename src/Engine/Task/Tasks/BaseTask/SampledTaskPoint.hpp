@@ -119,7 +119,7 @@ public:
    *
    * @return True if internal state changed
    */
-  virtual bool update_sample_near(const AIRCRAFT_STATE& state,
+  virtual bool update_sample_near(const AircraftState& state,
                                   TaskEvents &task_events,
                                   const TaskProjection &projection);
 
@@ -131,7 +131,7 @@ public:
    *
    * @return True if internal state changed
    */
-  virtual bool update_sample_far(const AIRCRAFT_STATE& state,
+  virtual bool update_sample_far(const AircraftState& state,
                                   TaskEvents &task_events,
                                  const TaskProjection &projection) { return false; }
 
@@ -166,7 +166,7 @@ protected:
    * This is used, for exmaple, for StartPoints to only remember the last sample
    * prior to crossing the start.
    */
-  void clear_sample_all_but_last(const AIRCRAFT_STATE& state,
+  void clear_sample_all_but_last(const AircraftState& state,
                                  const TaskProjection &projection);
 
   /**

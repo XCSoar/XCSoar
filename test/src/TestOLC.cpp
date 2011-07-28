@@ -55,12 +55,12 @@ on_advance(const GeoPoint &loc, const fixed speed,
            const Angle bearing, const fixed alt,
            const fixed baroalt, const fixed t)
 {
-  AIRCRAFT_STATE new_state;
-  new_state.Location = loc;
+  AircraftState new_state;
+  new_state.location = loc;
   new_state.ground_speed = speed;
   new_state.altitude = alt;
   new_state.track = bearing;
-  new_state.Time = t;
+  new_state.time = t;
   new_state.altitude_agl = alt;
 
   full_trace.append(new_state);

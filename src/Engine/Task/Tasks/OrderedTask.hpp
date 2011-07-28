@@ -383,7 +383,7 @@ public:
    *
    * @return True if internal state changes
    */
-  bool update_sample(const AIRCRAFT_STATE &state_now, 
+  bool update_sample(const AircraftState &state_now, 
                      const bool full_update);
 
 
@@ -395,7 +395,7 @@ public:
    *
    * @return True if internal state changed
    */
-  bool update_idle(const AIRCRAFT_STATE& state_now);
+  bool update_idle(const AircraftState& state_now);
 
   /**
    * Return size of task
@@ -430,7 +430,7 @@ public:
    * @return State at task start (or null state if not started)
    */
   gcc_pure
-  AIRCRAFT_STATE get_start_state() const;
+  AircraftState get_start_state() const;
 
   /**
    * Accesses task finish state
@@ -438,7 +438,7 @@ public:
    * @return State at task finish (or null state if not finished)
    */
   gcc_pure
-  AIRCRAFT_STATE get_finish_state() const;
+  AircraftState get_finish_state() const;
 
   fixed get_finish_height() const;
 
@@ -529,8 +529,8 @@ protected:
    *
    * @return True if transition occurred
    */
-  bool check_transitions(const AIRCRAFT_STATE &state_now, 
-                         const AIRCRAFT_STATE &state_last);
+  bool check_transitions(const AircraftState &state_now, 
+                         const AircraftState &state_last);
 
   /**
    * Calculate distance of nominal task (sum of distances from each
@@ -601,7 +601,7 @@ protected:
    *
    * @return Time (s) of start of task
    */
-  fixed scan_total_start_time(const AIRCRAFT_STATE &state_now);
+  fixed scan_total_start_time(const AircraftState &state_now);
 
   /**
    * Calculate leg start time.
@@ -610,7 +610,7 @@ protected:
    *
    * @return Time (s) of start of leg
    */
-  fixed scan_leg_start_time(const AIRCRAFT_STATE &state_now);
+  fixed scan_leg_start_time(const AircraftState &state_now);
 
 
   /**
@@ -621,7 +621,7 @@ protected:
    * @param total Glide result accumulated for total remaining task
    * @param leg Glide result for current leg of task
    */
-  void glide_solution_remaining(const AIRCRAFT_STATE &state_now, 
+  void glide_solution_remaining(const AircraftState &state_now, 
                                 const GlidePolar &polar,
                                 GlideResult &total,
                                 GlideResult &leg);
@@ -633,7 +633,7 @@ protected:
    * @param total Glide result accumulated for total travelled task
    * @param leg Glide result for current leg of task
    */
-  void glide_solution_travelled(const AIRCRAFT_STATE &state_now, 
+  void glide_solution_travelled(const AircraftState &state_now, 
                                 GlideResult &total,
                                 GlideResult &leg);
 
@@ -651,7 +651,7 @@ protected:
    * @param total_t_elapsed Total planned task time (s)
    * @param leg_t_elapsed Leg planned task time (s)
    */
-  void glide_solution_planned(const AIRCRAFT_STATE &state_now, 
+  void glide_solution_planned(const AircraftState &state_now, 
                               GlideResult &total,
                               GlideResult &leg,
                               DistanceStat &total_remaining_effective,
@@ -668,7 +668,7 @@ protected:
    *
    * @return true if solution is valid
    */
-  bool calc_mc_best(const AIRCRAFT_STATE &state_now, fixed& best) const;
+  bool calc_mc_best(const AircraftState &state_now, fixed& best) const;
 
   /**
    * Calculate virtual sink rate of aircraft that allows a pure glide solution
@@ -679,7 +679,7 @@ protected:
    *
    * @return Sink rate of aircraft (m/s)
    */
-  fixed calc_glide_required(const AIRCRAFT_STATE &state_now) const;
+  fixed calc_glide_required(const AircraftState &state_now) const;
 
   /**
    * Calculate cruise efficiency for the travelled part of the task.
@@ -691,9 +691,9 @@ protected:
    *
    * @return True if cruise efficiency is updated
    */
-  bool calc_cruise_efficiency(const AIRCRAFT_STATE &state_now, fixed& value) const;
+  bool calc_cruise_efficiency(const AircraftState &state_now, fixed& value) const;
 
-  bool calc_effective_mc(const AIRCRAFT_STATE &state_now, fixed& value) const;
+  bool calc_effective_mc(const AircraftState &state_now, fixed& value) const;
 
   /**
    * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -705,7 +705,7 @@ protected:
    *
    * @return Target range parameter (0-1)
    */
-  fixed calc_min_target(const AIRCRAFT_STATE &state_now, 
+  fixed calc_min_target(const AircraftState &state_now, 
                         const fixed t_target);
 
   /**
@@ -716,7 +716,7 @@ protected:
    *
    * @return Minimum gradient angle of remainder of task
    */
-  fixed calc_gradient(const AIRCRAFT_STATE &state_now) const;
+  fixed calc_gradient(const AircraftState &state_now) const;
 
 private:
 
@@ -745,17 +745,17 @@ private:
    */
   void erase_optional_start(unsigned i);
 
-  void update_start_transition(const AIRCRAFT_STATE &state, OrderedTaskPoint& start);
+  void update_start_transition(const AircraftState &state, OrderedTaskPoint& start);
 
   gcc_pure
   bool distance_is_significant(const GeoPoint &location,
                                const GeoPoint &location_last) const;
 
-  bool allow_incremental_boundary_stats(const AIRCRAFT_STATE &state) const;
+  bool allow_incremental_boundary_stats(const AircraftState &state) const;
 
   bool check_transition_point(OrderedTaskPoint& point,
-                              const AIRCRAFT_STATE &state_now, 
-                              const AIRCRAFT_STATE &state_last,
+                              const AircraftState &state_now, 
+                              const AircraftState &state_last,
                               const FlatBoundingBox& bb_now,
                               const FlatBoundingBox& bb_last,
                               bool &transition_enter,
@@ -763,8 +763,8 @@ private:
                               bool &last_started,
                               const bool is_start);
 
-  bool check_transition_optional_start(const AIRCRAFT_STATE &state_now, 
-                                       const AIRCRAFT_STATE &state_last,
+  bool check_transition_optional_start(const AircraftState &state_now, 
+                                       const AircraftState &state_last,
                                        const FlatBoundingBox& bb_now,
                                        const FlatBoundingBox& bb_last,
                                        bool &transition_enter,

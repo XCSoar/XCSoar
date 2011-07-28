@@ -54,7 +54,7 @@ TaskMacCready::TaskMacCready(const std::vector<TaskPoint*> &_tps,
   m_glide_polar(gp) {}
 
 void
-TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
+TaskMacCready::clearance_heights(const AircraftState &aircraft)
 {
   #define fixed_tolerance fixed(0.01)
 
@@ -67,7 +67,7 @@ TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
   // set min heights (ensure clearance possible for latest glide)
   for (int i = m_start; i < m_end; ++i) {
     if (m_minHs[i] > m_minHs[i + 1]) {
-      AIRCRAFT_STATE aircraft_predict = aircraft;
+      AircraftState aircraft_predict = aircraft;
       aircraft_predict.altitude = m_minHs[i];
       const GlideResult gr = tp_solution(i, aircraft_predict, m_minHs[i + 1]);
       const fixed dh = aircraft_predict.altitude - gr.height_glide;
@@ -81,11 +81,11 @@ TaskMacCready::clearance_heights(const AIRCRAFT_STATE &aircraft)
 }
 
 GlideResult 
-TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft) 
+TaskMacCready::glide_solution(const AircraftState &aircraft) 
 {
   GlideResult acc_gr, gr;
-  AIRCRAFT_STATE aircraft_predict = aircraft;
-  AIRCRAFT_STATE aircraft_start = get_aircraft_start(aircraft);
+  AircraftState aircraft_predict = aircraft;
+  AircraftState aircraft_start = get_aircraft_start(aircraft);
 
   clearance_heights(aircraft);
 
@@ -135,9 +135,9 @@ TaskMacCready::glide_solution(const AIRCRAFT_STATE &aircraft)
 }
 
 GlideResult 
-TaskMacCready::glide_sink(const AIRCRAFT_STATE &aircraft, const fixed S)
+TaskMacCready::glide_sink(const AircraftState &aircraft, const fixed S)
 {
-  AIRCRAFT_STATE aircraft_predict = aircraft;
+  AircraftState aircraft_predict = aircraft;
   GlideResult acc_gr;
 
   for (int i = m_start; i <= m_end; ++i) {
@@ -156,14 +156,14 @@ TaskMacCready::glide_sink(const AIRCRAFT_STATE &aircraft, const fixed S)
 
 GlideResult 
 TaskMacCready::tp_sink(const unsigned i,
-                       const AIRCRAFT_STATE &aircraft, 
+                       const AircraftState &aircraft, 
                        const fixed S) const
 {
   return TaskSolution::glide_solution_sink(*m_tps[i], aircraft, m_glide_polar, S);
 }
 
 const GlideResult&
-TaskMacCready::get_active_solution(const AIRCRAFT_STATE &aircraft) 
+TaskMacCready::get_active_solution(const AircraftState &aircraft) 
 {
   m_gs[m_activeTaskPoint].CalcDeferred(aircraft);
   return m_gs[m_activeTaskPoint];

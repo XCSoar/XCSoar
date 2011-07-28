@@ -172,10 +172,10 @@ Airspaces::scan_range(const GeoPoint &location,
 }
 
 const Airspaces::AirspaceVector
-Airspaces::find_inside(const AIRCRAFT_STATE &state,
+Airspaces::find_inside(const AircraftState &state,
                        const AirspacePredicate &condition) const
 {
-  Airspace bb_target(state.Location, task_projection);
+  Airspace bb_target(state.location, task_projection);
 
   AirspaceVector vectors;
   airspace_tree.find_within_range(bb_target, 0, std::back_inserter(vectors));

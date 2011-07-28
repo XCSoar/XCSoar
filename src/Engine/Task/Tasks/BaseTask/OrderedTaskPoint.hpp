@@ -189,7 +189,7 @@ public:
  * @param state Aircraft state
  * @return Vector remaining to this taskpoint (or next planned)
  */
-  const GeoVector get_vector_remaining(const AIRCRAFT_STATE &state) const {
+  const GeoVector get_vector_remaining(const AircraftState &state) const {
     return vector_remaining;
   }
 
@@ -203,7 +203,7 @@ public:
  * 
  * @return Vector from this taskpoint to aircraft (or next planned)
  */
-  const GeoVector get_vector_travelled(const AIRCRAFT_STATE &) const {
+  const GeoVector get_vector_travelled(const AircraftState &) const {
     return vector_travelled;
   }
 

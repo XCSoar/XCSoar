@@ -29,20 +29,20 @@ AATIsolineIntercept::AATIsolineIntercept(const AATPoint& ap):
 
 bool 
 AATIsolineIntercept::intercept(const AATPoint &ap,
-                               const AIRCRAFT_STATE &state,
+                               const AircraftState &state,
                                const double bearing_offset,
                                GeoPoint& ip) const
 {
-  AIRCRAFT_STATE s1, s2;
-  if (ell.intersect_extended(state.Location,
-                             s1.Location, s2.Location)) 
+  AircraftState s1, s2;
+  if (ell.intersect_extended(state.location,
+                             s1.location, s2.location)) 
   {
     if (ap.isInSector(s1)) {
-      ip = s1.Location;
+      ip = s1.location;
       return true;
     }
     if (ap.isInSector(s2)) {
-      ip = s2.Location;
+      ip = s2.location;
       return true;
     }
   }

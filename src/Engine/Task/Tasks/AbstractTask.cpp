@@ -47,7 +47,7 @@ AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
 
 bool 
 AbstractTask::update_auto_mc(GlidePolar &glide_polar,
-                             const AIRCRAFT_STATE& state, fixed fallback_mc)
+                             const AircraftState& state, fixed fallback_mc)
 {
   if (!positive(fallback_mc))
     fallback_mc = glide_polar.GetMC();
@@ -86,7 +86,7 @@ AbstractTask::update_auto_mc(GlidePolar &glide_polar,
 }
 
 bool 
-AbstractTask::update_idle(const AIRCRAFT_STATE &state)
+AbstractTask::update_idle(const AircraftState &state)
 {
   if (task_started() && task_behaviour.calc_cruise_efficiency) {
     fixed val = fixed_one;
@@ -143,7 +143,7 @@ AbstractTask::update_stats_distances(const GeoPoint &location,
 }
 
 void
-AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
+AbstractTask::update_glide_solutions(const AircraftState &state)
 {
   glide_solution_remaining(state, glide_polar, stats.total.solution_remaining,
                            stats.current_leg.solution_remaining);
@@ -195,8 +195,8 @@ AbstractTask::update_glide_solutions(const AIRCRAFT_STATE &state)
 }
 
 bool
-AbstractTask::update(const AIRCRAFT_STATE &state, 
-                     const AIRCRAFT_STATE &state_last)
+AbstractTask::update(const AircraftState &state, 
+                     const AircraftState &state_last)
 {
   stats.task_valid = check_task();
   stats.has_targets = has_targets();
@@ -206,7 +206,7 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
     (activeTaskPoint != activeTaskPoint_last);
 
   update_stats_times(state);
-  update_stats_distances(state.Location, full_update);
+  update_stats_distances(state.location, full_update);
   update_glide_solutions(state);
   bool sample_updated = update_sample(state, full_update);
   update_stats_speeds(state, state_last);
@@ -218,12 +218,12 @@ AbstractTask::update(const AIRCRAFT_STATE &state,
 }
 
 void
-AbstractTask::update_stats_speeds(const AIRCRAFT_STATE &state, 
-                                  const AIRCRAFT_STATE &state_last)
+AbstractTask::update_stats_speeds(const AircraftState &state, 
+                                  const AircraftState &state_last)
 {
   if (!task_finished()) {
     if (task_started()) {
-      const fixed dt = state.Time - state_last.Time;
+      const fixed dt = state.time - state_last.time;
       stats_computer.total.calc_speeds(dt);
       stats_computer.current_leg.calc_speeds(dt);
     } else {
@@ -234,16 +234,16 @@ AbstractTask::update_stats_speeds(const AIRCRAFT_STATE &state,
 }
 
 void
-AbstractTask::update_stats_glide(const AIRCRAFT_STATE &state)
+AbstractTask::update_stats_glide(const AircraftState &state)
 {
   stats.glide_required = AngleToGradient(calc_glide_required(state));
 }
 
 void
-AbstractTask::update_stats_times(const AIRCRAFT_STATE &state)
+AbstractTask::update_stats_times(const AircraftState &state)
 {
   // default for tasks with no start time...
-  stats.Time = state.Time;
+  stats.Time = state.time;
   if (!task_finished()) {
     stats.total.set_times(scan_total_start_time(state), state);
     stats.current_leg.set_times(scan_leg_start_time(state),state);
@@ -267,7 +267,7 @@ AbstractTask::reset()
 }
 
 fixed
-AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) const
+AbstractTask::leg_gradient(const AircraftState &aircraft) const
 {
   // Get next turnpoint
   const TaskWaypoint *tp = getActiveTaskPoint();
@@ -284,7 +284,7 @@ AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) const
 }
 
 bool 
-AbstractTask::calc_effective_mc(const AIRCRAFT_STATE &state_now, fixed& val) const
+AbstractTask::calc_effective_mc(const AircraftState &state_now, fixed& val) const
 {
   val = glide_polar.GetMC();
   return true;

@@ -25,7 +25,7 @@
 
 TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
                                      const unsigned activeTaskPoint,
-                                     const AIRCRAFT_STATE &_aircraft,
+                                     const AircraftState &_aircraft,
                                      const GlidePolar &_gp):
   ZeroFinder(-fixed_ten, fixed_ten, fixed(TOLERANCE_GLIDE_REQUIRED)),
   tm(tps,activeTaskPoint,_gp), 
@@ -36,7 +36,7 @@ TaskGlideRequired::TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
 }
 
 TaskGlideRequired::TaskGlideRequired(TaskPoint* tp,
-                                     const AIRCRAFT_STATE &_aircraft,
+                                     const AircraftState &_aircraft,
                                      const GlidePolar &_gp):
   ZeroFinder(-fixed_ten, fixed_ten, fixed(TOLERANCE_GLIDE_REQUIRED)),
   tm(tp,_gp), // Vopt at mc=0

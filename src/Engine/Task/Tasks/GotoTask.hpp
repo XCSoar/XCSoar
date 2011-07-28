@@ -110,7 +110,7 @@ public:
  *
  * @return True if internal state changes
  */
-  bool update_sample(const AIRCRAFT_STATE &state_now, 
+  bool update_sample(const AircraftState &state_now, 
                      const bool full_update);
 
   /**
@@ -133,8 +133,8 @@ protected:
  * 
  * @return True if transition occurred
  */
-  bool check_transitions(const AIRCRAFT_STATE& state_now, 
-                         const AIRCRAFT_STATE& state_last);
+  bool check_transitions(const AircraftState& state_now, 
+                         const AircraftState& state_last);
 
 public:
 /** 

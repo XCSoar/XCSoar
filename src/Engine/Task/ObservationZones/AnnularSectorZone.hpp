@@ -106,7 +106,7 @@ public:
    *
    * @return True if reference point is inside sector
    */
-  virtual bool isInSector(const AIRCRAFT_STATE &ref) const;
+  virtual bool isInSector(const AircraftState &ref) const;
 
   /**
    * Get point on boundary from parametric representation

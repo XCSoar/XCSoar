@@ -88,12 +88,12 @@ public:
     IgcReplay(),
     started(false) {}
 
-  AIRCRAFT_STATE state;
+  AircraftState state;
 
   void print(std::ostream &f) {
-    f << (double)state.Time << " " 
-      <<  (double)state.Location.Longitude.value_degrees() << " " 
-      <<  (double)state.Location.Latitude.value_degrees() << " "
+    f << (double)state.time << " " 
+      <<  (double)state.location.Longitude.value_degrees() << " " 
+      <<  (double)state.location.Latitude.value_degrees() << " "
       <<  (double)state.altitude << "\n";
   }
   bool started;
@@ -107,13 +107,13 @@ protected:
                   const fixed speed, const Angle bearing,
                   const fixed alt, const fixed baroalt, const fixed t) {
 
-    state.Location = loc;
+    state.location = loc;
     state.ground_speed = speed;
     state.track = bearing;
     state.altitude = alt;
     state.netto_vario = fixed_zero;
     state.vario = fixed_zero;
-    state.Time = t;
+    state.time = t;
     if (positive(t)) {
       started = true;
     }
@@ -128,7 +128,7 @@ test_replay(const Contests olc_type,
 
   GlidePolar glide_polar(fixed_two);
   Waypoints waypoints;
-  AIRCRAFT_STATE state_last;
+  AircraftState state_last;
 
   TaskEventsPrint default_events(verbose);
   TaskManager task_manager(default_events,
@@ -180,17 +180,17 @@ test_replay(const Contests olc_type,
   }
   state_last = sim.state;
 
-  fixed time_last = sim.state.Time;
+  fixed time_last = sim.state.time;
 
   while (sim.Update()) {
-    if (sim.state.Time>time_last) {
+    if (sim.state.time>time_last) {
 
       n_samples++;
 
       if (sim.state.ground_speed> glide_polar.GetVTakeoff()) {
-        sim.state.Moving(sim.state.Time);
+        sim.state.Moving(sim.state.time);
       } else {
-        sim.state.Stationary(sim.state.Time);
+        sim.state.Stationary(sim.state.time);
       }
 
       task_manager.update(sim.state, state_last);
@@ -207,7 +207,7 @@ test_replay(const Contests olc_type,
       }
       do_print = (++print_counter % output_skip ==0) && verbose;
     }
-    time_last = sim.state.Time;
+    time_last = sim.state.time;
   };
   sim.Stop();
 

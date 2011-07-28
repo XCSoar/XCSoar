@@ -34,7 +34,7 @@ int main(int argc, char** argv) {
     return 0;
   }
 
-  AIRCRAFT_STATE dummy;
+  AircraftState dummy;
   aircraft_filter = new AircraftStateFilter(fixed(120));
   aircraft_filter->reset(dummy);
 

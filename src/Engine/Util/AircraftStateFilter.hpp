@@ -46,7 +46,7 @@ public:
  * 
  * @param state State to reset to
  */
-  void reset(const AIRCRAFT_STATE& state);
+  void reset(const AircraftState& state);
 
 /** 
  * Update the filters.  Expects time to have advanced;
@@ -54,7 +54,7 @@ public:
  * 
  * @param state New state
  */
-  void update(const AIRCRAFT_STATE& state);
+  void update(const AircraftState& state);
 
 /** 
  * Re-design filter.  Used to adjust the time constant of
@@ -95,12 +95,12 @@ public:
  * @return Predicted aircraft state in in_time seconds
  *
  */
-  AIRCRAFT_STATE get_predicted_state(const fixed &in_time) const;
+  AircraftState get_predicted_state(const fixed &in_time) const;
 
 private:
   DiffFilter m_df_x, m_df_y, m_df_alt;
   Filter m_lpf_x, m_lpf_y, m_lpf_alt;
-  AIRCRAFT_STATE m_state_last;
+  AircraftState m_state_last;
   fixed m_x, m_y;
   fixed m_vx, m_vy, m_vz;
 };

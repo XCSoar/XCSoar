@@ -36,7 +36,7 @@ TaskAdvanceSmart::TaskAdvanceSmart(const OrderedTaskBehaviour& behaviour):
 
 bool 
 TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
-                                   const AIRCRAFT_STATE &state,
+                                   const AircraftState &state,
                                    const bool x_enter, 
                                    const bool x_exit)
 {

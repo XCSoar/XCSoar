@@ -52,13 +52,13 @@ CylinderZone::equals(const ObservationZonePoint* other) const
 GeoPoint
 CylinderZone::randomPointInSector(const fixed mag) const
 {
-  AIRCRAFT_STATE ac;
+  AircraftState ac;
   do {
     Angle dir = Angle::degrees(fixed(rand() % 360));
     fixed dmag = max(min(Radius, fixed(100.0)), Radius * mag);
     fixed dis = fixed((0.1 + (rand() % 90) / 100.0)) * dmag;
     GeoVector vec(dis, dir);
-    ac.Location = vec.end_point(get_location());
+    ac.location = vec.end_point(get_location());
   } while (!isInSector(ac));
-  return ac.Location;
+  return ac.location;
 }

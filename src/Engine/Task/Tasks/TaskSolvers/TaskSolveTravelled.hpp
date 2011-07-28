@@ -44,7 +44,7 @@ public:
  */
   TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps,
                      const unsigned activeTaskPoint,
-                     const AIRCRAFT_STATE &_aircraft,
+                     const AircraftState &_aircraft,
                      const GlidePolar &gp,
                      const fixed xmin,
                      const fixed xmax);
@@ -70,7 +70,7 @@ protected:
   TaskMacCreadyTravelled tm; /**< Travelled calculator */
 private:
   GlideResult res;
-  const AIRCRAFT_STATE &aircraft;
+  const AircraftState &aircraft;
   fixed inv_dt;
   fixed dt;
 };

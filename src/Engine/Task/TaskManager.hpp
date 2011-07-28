@@ -168,8 +168,8 @@ public:
    * @param state_last Aircraft state at last update
    * @return True if internal state changed
    */
-  bool update(const AIRCRAFT_STATE &state_now, 
-              const AIRCRAFT_STATE &state_last);
+  bool update(const AircraftState &state_now, 
+              const AircraftState &state_last);
 
   /**
    * Updates internal state of task to produce
@@ -180,7 +180,7 @@ public:
    *
    * @return True if internal state changed
    */
-  bool update_idle(const AIRCRAFT_STATE &state);
+  bool update_idle(const AircraftState &state);
 
   /** 
    * Update auto MC.  Internally uses TaskBehaviour to determine settings
@@ -190,7 +190,7 @@ public:
    * 
    * @return True if MC updated
    */
-  bool update_auto_mc(const AIRCRAFT_STATE& state_now,
+  bool update_auto_mc(const AircraftState& state_now,
                       const fixed fallback_mc);
 
   bool score_exhaustive();
@@ -400,7 +400,7 @@ public:
    *
    * @return State at task start (or null state if not started)
    */
-  AIRCRAFT_STATE get_start_state() const {
+  AircraftState get_start_state() const {
     return task_ordered.get_start_state();
   }
 
@@ -409,7 +409,7 @@ public:
    *
    * @return State at task finish (or null state if not finished)
    */
-  AIRCRAFT_STATE get_finish_state() const {
+  AircraftState get_finish_state() const {
     return task_ordered.get_finish_state();
   }
 
@@ -454,7 +454,7 @@ public:
    *
    * @return True if reference point is inside sector
    */
- bool isInSector (const unsigned TPindex, const AIRCRAFT_STATE &ref,
+ bool isInSector (const unsigned TPindex, const AircraftState &ref,
      const bool AATOnly = true) const;
 
   /**
@@ -630,11 +630,11 @@ private:
 
   CommonStats common_stats;
 
-  void update_common_stats(const AIRCRAFT_STATE &state);
-  void update_common_stats_times(const AIRCRAFT_STATE &state);
-  void update_common_stats_task(const AIRCRAFT_STATE &state);
-  void update_common_stats_waypoints(const AIRCRAFT_STATE &state);
-  void update_common_stats_polar(const AIRCRAFT_STATE &state);
+  void update_common_stats(const AircraftState &state);
+  void update_common_stats_times(const AircraftState &state);
+  void update_common_stats_task(const AircraftState &state);
+  void update_common_stats_waypoints(const AircraftState &state);
+  void update_common_stats_polar(const AircraftState &state);
 };
 
 #endif

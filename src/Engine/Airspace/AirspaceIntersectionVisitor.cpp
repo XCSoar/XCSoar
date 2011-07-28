@@ -3,7 +3,7 @@
 
 AirspaceInterceptSolution 
 AirspaceIntersectionVisitor::intercept(const AbstractAirspace& as,
-                                       const AIRCRAFT_STATE& state,
+                                       const AircraftState& state,
                                        const AirspaceAircraftPerformance &perf,
                                        bool all) const
 {

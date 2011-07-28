@@ -45,7 +45,7 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
 }
 
 void
-GlideResult::CalcDeferred(const AIRCRAFT_STATE& state)
+GlideResult::CalcDeferred(const AircraftState& state)
 {
   altitude_required = state.altitude - altitude_difference;
   CalcCruiseBearing();

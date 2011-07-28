@@ -100,7 +100,7 @@ AbortTask::clear()
 }
 
 fixed
-AbortTask::abort_range(const AIRCRAFT_STATE &state) const
+AbortTask::abort_range(const AircraftState &state) const
 {
   // always scan at least min range or approx glide range
   return min(max_search_range,
@@ -154,7 +154,7 @@ AbortTask::is_reachable(const GlideResult &result,
 }
 
 bool
-AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
+AbortTask::fill_reachable(const AircraftState &state,
                           AlternateVector &approx_waypoints,
                           const GlidePolar &polar,
                           const bool only_airfield,
@@ -164,7 +164,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   if (task_full() || approx_waypoints.empty())
     return false;
 
-  const AGeoPoint p_start (state.Location, (short)state.altitude);
+  const AGeoPoint p_start (state.location, (short)state.altitude);
 
   bool found_final_glide = false;
   reservable_priority_queue<Alternate, AlternateVector, AbortRank> q;
@@ -247,14 +247,14 @@ private:
 };
 
 void 
-AbortTask::client_update(const AIRCRAFT_STATE &state_now,
+AbortTask::client_update(const AircraftState &state_now,
                          const bool reachable)
 {
   // nothing to do here, it's specialisations that may use this
 }
 
 bool 
-AbortTask::update_sample(const AIRCRAFT_STATE &state, 
+AbortTask::update_sample(const AircraftState &state, 
                          const bool full_update)
 {
   update_polar(state.wind);
@@ -267,7 +267,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
   approx_waypoints.reserve(128);
 
   WaypointVisitorVector wvv(approx_waypoints);
-  waypoints.visit_within_range(state.Location, abort_range(state), wvv);
+  waypoints.visit_within_range(state.location, abort_range(state), wvv);
   if (approx_waypoints.empty()) {
     /**
      * \todo
@@ -319,7 +319,7 @@ AbortTask::update_sample(const AIRCRAFT_STATE &state,
 
 
 bool 
-AbortTask::check_transitions(const AIRCRAFT_STATE &, const AIRCRAFT_STATE&)
+AbortTask::check_transitions(const AircraftState &, const AircraftState&)
 {
   // nothing to do
   return false;
@@ -349,11 +349,11 @@ AbortTask::reset()
 }
 
 GeoVector 
-AbortTask::get_vector_home(const AIRCRAFT_STATE &state) const
+AbortTask::get_vector_home(const AircraftState &state) const
 {
   const Waypoint *home_waypoint = waypoints.GetHome();
   if (home_waypoint)
-    return GeoVector(state.Location, home_waypoint->Location);
+    return GeoVector(state.location, home_waypoint->Location);
 
   return GeoVector(fixed_zero);
 }

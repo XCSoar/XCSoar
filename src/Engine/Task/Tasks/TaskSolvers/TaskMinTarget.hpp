@@ -53,7 +53,7 @@ public:
  */
   TaskMinTarget(const std::vector<OrderedTaskPoint*>& tps,
                 const unsigned activeTaskPoint,
-                const AIRCRAFT_STATE &_aircraft,
+                const AircraftState &_aircraft,
                 const GlidePolar &_gp,
                 const fixed _t_remaining,
                 StartPoint *_ts);
@@ -85,7 +85,7 @@ private:
   void set_range(const fixed p);
   TaskMacCreadyRemaining tm;
   GlideResult res;
-  const AIRCRAFT_STATE &aircraft;
+  const AircraftState &aircraft;
   const fixed t_remaining;
   StartPoint *tp_start;
   bool force_current;

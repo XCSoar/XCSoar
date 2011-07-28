@@ -25,7 +25,7 @@
 
 TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps,
                                        const unsigned activeTaskPoint,
-                                       const AIRCRAFT_STATE &_aircraft,
+                                       const AircraftState &_aircraft,
                                        const GlidePolar &gp,
                                        const fixed _xmin, 
                                        const fixed _xmax):
@@ -33,7 +33,7 @@ TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps
   tm(tps,activeTaskPoint,gp),
   aircraft(_aircraft) 
 {
-  dt = aircraft.Time-tps[0]->get_state_entered().Time;
+  dt = aircraft.time-tps[0]->get_state_entered().time;
   if (positive(dt)) {
     inv_dt = fixed_one/dt;
   } else {

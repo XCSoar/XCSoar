@@ -46,7 +46,7 @@ public:
  */
   TaskEffectiveMacCready(const std::vector<OrderedTaskPoint*>& tps,
                        const unsigned activeTaskPoint,
-                       const AIRCRAFT_STATE &_aircraft,
+                       const AircraftState &_aircraft,
                        const GlidePolar &gp);
   virtual ~TaskEffectiveMacCready() {};
 

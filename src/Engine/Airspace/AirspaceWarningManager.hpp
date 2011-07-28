@@ -96,7 +96,7 @@ public:
  * 
  * @param state State to reset filter to
  */
-  void reset(const AIRCRAFT_STATE& state);
+  void reset(const AircraftState& state);
 
 /** 
  * Perform predictions and interior search to update warning list If
@@ -110,7 +110,7 @@ public:
  * 
  * @return True if warnings changed
  */
-  bool update(const AIRCRAFT_STATE &state, const bool circling, const unsigned dt);
+  bool update(const AircraftState &state, const bool circling, const unsigned dt);
 
 /** 
  * Adjust time of glide predictor
@@ -237,12 +237,12 @@ public:
   bool get_ack_day(const AbstractAirspace& airspace);
 
 private:
-  bool update_task(const AIRCRAFT_STATE& state);
-  bool update_filter(const AIRCRAFT_STATE& state, const bool circling);
-  bool update_glide(const AIRCRAFT_STATE& state);
-  bool update_inside(const AIRCRAFT_STATE& state);
+  bool update_task(const AircraftState& state);
+  bool update_filter(const AircraftState& state, const bool circling);
+  bool update_glide(const AircraftState& state);
+  bool update_inside(const AircraftState& state);
 
-  bool update_predicted(const AIRCRAFT_STATE& state, 
+  bool update_predicted(const AircraftState& state, 
                         const GeoPoint &location_predicted,
                         const AirspaceAircraftPerformance &perf,
                         const AirspaceWarning::AirspaceWarningState& warning_state,

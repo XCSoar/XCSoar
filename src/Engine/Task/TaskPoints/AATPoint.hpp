@@ -93,7 +93,7 @@ public:
  * 
  * @return True if internal state changed
  */
-  bool update_sample_near(const AIRCRAFT_STATE& state,
+  bool update_sample_near(const AircraftState& state,
                           TaskEvents &task_events,
                           const TaskProjection &projection);
 
@@ -107,7 +107,7 @@ public:
  * 
  * @return True if internal state changed
  */
-  bool update_sample_far(const AIRCRAFT_STATE& state,
+  bool update_sample_far(const AircraftState& state,
                          TaskEvents &task_events,
                          const TaskProjection &projection);
 
@@ -205,7 +205,7 @@ public:
  * 
  * @return True if double leg distance from state is within threshold of target
  */
-  bool close_to_target(const AIRCRAFT_STATE& state,
+  bool close_to_target(const AircraftState& state,
                        const fixed threshold=fixed_zero) const;
 
  /** 
@@ -231,7 +231,7 @@ private:
  * 
  * @return True if target was moved
  */
-  bool check_target(const AIRCRAFT_STATE& state, bool known_outside);
+  bool check_target(const AircraftState& state, bool known_outside);
 
 /** 
  * Check whether target needs to be moved and if so, to
@@ -242,7 +242,7 @@ private:
  * 
  * @return True if target was moved
  */
-  bool check_target_inside(const AIRCRAFT_STATE& state);
+  bool check_target_inside(const AircraftState& state);
 
 /** 
  * Check whether target needs to be moved and if so, to
@@ -253,7 +253,7 @@ private:
  * 
  * @return True if target was moved
  */
-  bool check_target_outside(const AIRCRAFT_STATE& state);
+  bool check_target_outside(const AircraftState& state);
 
 /** 
  * Test whether a taskpoint is equivalent to this one

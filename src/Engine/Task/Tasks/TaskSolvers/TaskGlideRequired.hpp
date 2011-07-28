@@ -48,7 +48,7 @@ public:
  */
   TaskGlideRequired(const std::vector<OrderedTaskPoint*>& tps,
                     const unsigned activeTaskPoint,
-                    const AIRCRAFT_STATE &_aircraft,
+                    const AircraftState &_aircraft,
                     const GlidePolar &gp);
 /** 
  * Constructor for single task points (non-ordered ones)
@@ -58,7 +58,7 @@ public:
  * @param gp Glide polar to copy for calculations
  */
   TaskGlideRequired(TaskPoint* tp,
-                    const AIRCRAFT_STATE &_aircraft,
+                    const AircraftState &_aircraft,
                     const GlidePolar &gp);
   virtual ~TaskGlideRequired() {};
 
@@ -75,7 +75,7 @@ public:
 private:
   TaskMacCreadyRemaining tm;
   GlideResult res;
-  const AIRCRAFT_STATE &aircraft;
+  const AircraftState &aircraft;
 };
 
 #endif

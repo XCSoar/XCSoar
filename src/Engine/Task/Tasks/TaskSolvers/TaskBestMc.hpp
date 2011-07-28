@@ -48,7 +48,7 @@ public:
  */
   TaskBestMc(const std::vector<OrderedTaskPoint*>& tps,
              const unsigned activeTaskPoint,
-             const AIRCRAFT_STATE &_aircraft,
+             const AircraftState &_aircraft,
              const GlidePolar &_gp,
              const fixed _mc_min=fixed_zero);
 /** 
@@ -59,7 +59,7 @@ public:
  * @param _gp Glide polar to copy for calculations
  */
   TaskBestMc(TaskPoint* tp,
-             const AIRCRAFT_STATE &_aircraft,
+             const AircraftState &_aircraft,
              const GlidePolar &_gp);
   virtual ~TaskBestMc() {};
 
@@ -89,7 +89,7 @@ public:
 private:
   TaskMacCreadyRemaining tm;
   GlideResult res;
-  const AIRCRAFT_STATE &aircraft;
+  const AircraftState &aircraft;
 };
 
 #endif

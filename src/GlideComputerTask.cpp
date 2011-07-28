@@ -65,8 +65,8 @@ GlideComputerTask::ProcessBasicTask()
   task->set_task_behaviour(SettingsComputer());
 
   if (time_advanced() && basic.location_available) {
-    const AIRCRAFT_STATE current_as = ToAircraftState(basic, Calculated());
-    const AIRCRAFT_STATE last_as = ToAircraftState(LastBasic(),
+    const AircraftState current_as = ToAircraftState(basic, Calculated());
+    const AircraftState last_as = ToAircraftState(LastBasic(),
                                                    LastCalculated());
 
     task->update(current_as, last_as);
@@ -110,7 +110,7 @@ GlideComputerTask::ProcessMoreTask()
 void
 GlideComputerTask::ProcessIdle()
 {
-  const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
+  const AircraftState as = ToAircraftState(Basic(), Calculated());
   ProtectedTaskManager::ExclusiveLease task(m_task);
   task->update_idle(as);
 }
@@ -118,10 +118,10 @@ GlideComputerTask::ProcessIdle()
 void
 GlideComputerTask::TerrainWarning()
 {
-  const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
+  const AircraftState as = ToAircraftState(Basic(), Calculated());
 
   const GlideResult& sol = Calculated().task_stats.current_leg.solution_remaining;
-  const AGeoPoint start (as.Location, as.altitude);
+  const AGeoPoint start (as.location, as.altitude);
   const short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
                                           (int)Calculated().thermal_band.working_band_ceiling);
   // allow at least 500m of climb above current altitude as ceiling, in case
@@ -171,8 +171,8 @@ GlideComputerTask::Reach()
   const bool do_solve = (SettingsComputer().route_planner.reach_enabled() &&
                          terrain != NULL);
 
-  const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
-  const AGeoPoint start (state.Location, state.altitude);
+  const AircraftState state = ToAircraftState(Basic(), Calculated());
+  const AGeoPoint start (state.location, state.altitude);
   if (reach_clock.check_advance(Basic().time)) {
     m_task.solve_reach(start, do_solve);
 

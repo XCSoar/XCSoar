@@ -74,7 +74,7 @@ public:
    *
    * @return True if aircraft is inside observation zone
    */
-  bool isInSector(const AIRCRAFT_STATE &ref) const;
+  bool isInSector(const AircraftState &ref) const;
 
   /** 
    * Check if aircraft has transitioned to inside sector
@@ -85,8 +85,8 @@ public:
    *
    * @return True if aircraft now inside (and was outside)
    */
-  bool check_transition_enter(const AIRCRAFT_STATE & ref_now, 
-                              const AIRCRAFT_STATE & ref_last) const;
+  bool check_transition_enter(const AircraftState & ref_now, 
+                              const AircraftState & ref_last) const;
 
   /**
    * Retrieve elevation of taskpoint, taking into account
@@ -110,7 +110,7 @@ private:
 
   bool entry_precondition() const;
 
-  bool is_in_height_limit(const AIRCRAFT_STATE &state) const;
+  bool is_in_height_limit(const AircraftState &state) const;
 };
 
 #endif

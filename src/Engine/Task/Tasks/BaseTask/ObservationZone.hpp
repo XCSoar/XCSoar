@@ -43,7 +43,7 @@ public:
    * @return True if reference point is inside sector
    */
   gcc_pure
-  virtual bool isInSector(const AIRCRAFT_STATE &ref) const = 0;
+  virtual bool isInSector(const AircraftState &ref) const = 0;
 
   /**
    * If zone when used for start can trigger task start via vertical exit
@@ -62,8 +62,8 @@ public:
    * @return True if constraints are satisfied
    */
   gcc_pure
-  virtual bool transition_constraint(const AIRCRAFT_STATE &ref_now,
-                                     const AIRCRAFT_STATE &ref_last) const = 0;
+  virtual bool transition_constraint(const AircraftState &ref_now,
+                                     const AircraftState &ref_last) const = 0;
 
   /** 
    * Check if aircraft has transitioned to inside sector
@@ -74,8 +74,8 @@ public:
    * @return True if aircraft now inside (and was outside)
    */
   gcc_pure
-  virtual bool check_transition_enter(const AIRCRAFT_STATE &ref_now,
-                                      const AIRCRAFT_STATE &ref_last) const {
+  virtual bool check_transition_enter(const AircraftState &ref_now,
+                                      const AircraftState &ref_last) const {
     return isInSector(ref_now) &&
            !isInSector(ref_last) &&
            transition_constraint(ref_now, ref_last);
@@ -90,8 +90,8 @@ public:
    * @return True if aircraft now outside (and was inside)
    */
   gcc_pure
-  virtual bool check_transition_exit(const AIRCRAFT_STATE &ref_now,
-                                     const AIRCRAFT_STATE &ref_last) const {
+  virtual bool check_transition_exit(const AircraftState &ref_now,
+                                     const AircraftState &ref_last) const {
     return check_transition_enter(ref_last, ref_now);
   }
 

@@ -23,7 +23,7 @@
 #define TASKADVANCE_HPP
 
 class TaskPoint;
-struct AIRCRAFT_STATE;
+struct AircraftState;
 
 /**
  * Class used to control advancement through an OrderedTask
@@ -114,7 +114,7 @@ public:
    * @return true if this tp is ready to advance
    */
   virtual bool ready_to_advance(const TaskPoint &tp,
-                                const AIRCRAFT_STATE &state,
+                                const AircraftState &state,
                                 const bool x_enter, 
                                 const bool x_exit) = 0;
 
@@ -146,7 +146,7 @@ protected:
    * @return true if this tp is ready to advance
    */
   bool state_ready(const TaskPoint &tp,
-                   const AIRCRAFT_STATE &state,
+                   const AircraftState &state,
                    const bool x_enter, 
                    const bool x_exit) const;
 

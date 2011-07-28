@@ -27,7 +27,7 @@
 
 GlideResult 
 TaskSolution::glide_solution_remaining(const TaskPoint& taskpoint,
-                                       const AIRCRAFT_STATE &ac, 
+                                       const AircraftState &ac, 
                                        const GlidePolar &polar,
                                        const fixed minH)
 {
@@ -39,7 +39,7 @@ TaskSolution::glide_solution_remaining(const TaskPoint& taskpoint,
 
 GlideResult 
 TaskSolution::glide_solution_planned(const TaskPoint& taskpoint,
-                                     const AIRCRAFT_STATE &ac, 
+                                     const AircraftState &ac, 
                                      const GlidePolar &polar,
                                      const fixed minH)
 {
@@ -51,7 +51,7 @@ TaskSolution::glide_solution_planned(const TaskPoint& taskpoint,
 
 GlideResult 
 TaskSolution::glide_solution_travelled(const TaskPoint& taskpoint,
-                                       const AIRCRAFT_STATE &ac, 
+                                       const AircraftState &ac, 
                                        const GlidePolar &polar,
                                        const fixed minH)
 {
@@ -63,7 +63,7 @@ TaskSolution::glide_solution_travelled(const TaskPoint& taskpoint,
 
 GlideResult 
 TaskSolution::glide_solution_sink(const TaskPoint& taskpoint,
-                                  const AIRCRAFT_STATE &ac, 
+                                  const AircraftState &ac, 
                                   const GlidePolar &polar,
                                   const fixed S)
 {

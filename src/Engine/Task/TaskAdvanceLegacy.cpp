@@ -34,7 +34,7 @@ TaskAdvanceLegacy::TaskAdvanceLegacy():
 
 bool 
 TaskAdvanceLegacy::ready_to_advance(const TaskPoint &tp,
-                                    const AIRCRAFT_STATE &state,
+                                    const AircraftState &state,
                                     const bool x_enter, 
                                     const bool x_exit)
 {

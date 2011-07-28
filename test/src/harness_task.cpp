@@ -110,7 +110,7 @@ void test_note(const char* text)
 
 void task_report(TaskManager& task_manager, const char* text)
 {
-  AIRCRAFT_STATE ac;
+  AircraftState ac;
   if (verbose) {
     printf("%s",text);
 
