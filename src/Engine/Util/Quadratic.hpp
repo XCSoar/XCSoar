@@ -66,7 +66,7 @@ public:
    * @return True if quadratic has at least one real solution
    */
   gcc_pure bool
-  check() const
+  Check() const
   {
     if (negative(denom))
       return false;
@@ -83,10 +83,10 @@ public:
    * @return greater x value of solutions
    */
   gcc_pure fixed
-  solution_max() const
+  SolutionMax() const
   {
-    assert(check());
-    return positive(da) ? solution(true) : solution(false);
+    assert(Check());
+    return positive(da) ? Solution(true) : Solution(false);
   }
 
   /**
@@ -95,10 +95,10 @@ public:
    * @return smallest x value of solutions
    */
   gcc_pure fixed
-  solution_min() const
+  SolutionMin() const
   {
-    assert(check());
-    return positive(da) ? solution(false) : solution(true);
+    assert(Check());
+    return positive(da) ? Solution(false) : Solution(true);
   }
 
 private:
@@ -111,9 +111,9 @@ private:
    * @return x value of solution
    */
   gcc_pure fixed
-  solution(const bool positive) const
+  Solution(const bool positive) const
   {
-    assert(check());
+    assert(Check());
     return (-b + (positive ? sqrt(denom) : -sqrt(denom))) / da;
   }
 };

@@ -54,9 +54,9 @@ public:
   fixed
   solve() const
   {
-    if (check())
+    if (Check())
       /// @todo check this is correct for all theta
-      return solution_max();
+      return SolutionMax();
 
     return -fixed_one;
   }
