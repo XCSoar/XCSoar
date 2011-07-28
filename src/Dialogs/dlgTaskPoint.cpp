@@ -73,53 +73,36 @@ public:
   Visit(gcc_unused const FAISectorZone& oz)
   {
     hide_all();
-    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZFAISector")));
-    if (wp)
-      wp->show();
   }
   void
   Visit(gcc_unused const KeyholeZone& oz)
   {
     hide_all();
-    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZKeyhole")));
-    if (wp)
-      wp->show();
   }
 
   void
   Visit(gcc_unused const BGAFixedCourseZone& oz)
   {
     hide_all();
-    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAFixedCourse")));
-    if (wp)
-      wp->show();
   }
 
   void
   Visit(gcc_unused const BGAEnhancedOptionZone& oz)
   {
     hide_all();
-    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAEnhancedOption")));
-    if (wp)
-      wp->show();
   }
 
   void
   Visit(gcc_unused const BGAStartSectorZone& oz)
   {
     hide_all();
-    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAStartSector")));
-    if (wp)
-      wp->show();
   }
 
   void
   Visit(const SectorZone& oz)
   {
     hide_all();
-    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZSector")));
-    if (wp)
-      wp->show();
+    ShowFormControl(*wf, _T("frmOZSector"), true);
 
     LoadFormProperty(*wf, _T("prpOZSectorRadius"),
                      ugDistance, oz.getRadius());
@@ -127,10 +110,8 @@ public:
                      oz.getStartRadial().value_degrees());
     LoadFormProperty(*wf, _T("prpOZSectorFinishRadial"),
                      oz.getEndRadial().value_degrees());
-    WndProperty* wap = (WndProperty*)wf->FindByName(_T("prpOZSectorInnerRadius"));
-    if (wap) {
-      wap->hide();
-    }
+
+    ShowFormControl(*wf, _T("prpOZSectorInnerRadius"), false);
   }
 
   void
@@ -140,19 +121,14 @@ public:
     LoadFormProperty(*wf, _T("prpOZSectorInnerRadius"),
                      ugDistance, oz.getInnerRadius());
 
-    WndProperty* wap = (WndProperty*)wf->FindByName(_T("prpOZSectorInnerRadius"));
-    if (wap) {
-      wap->show();
-    }
+    ShowFormControl(*wf, _T("prpOZSectorInnerRadius"), true);
   }
 
   void
   Visit(const LineSectorZone& oz)
   {
     hide_all();
-    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZLine")));
-    if (wp)
-      wp->show();
+    ShowFormControl(*wf, _T("frmOZLine"), true);
 
     LoadFormProperty(*wf, _T("prpOZLineLength"),
                      ugDistance, oz.getLength());
@@ -162,9 +138,7 @@ public:
   Visit(const CylinderZone& oz)
   {
     hide_all();
-    WndFrame* wp = ((WndFrame *)wf->FindByName(_T("frmOZCylinder")));
-    if (wp)
-      wp->show();
+    ShowFormControl(*wf, _T("frmOZCylinder"), true);
 
     LoadFormProperty(*wf, _T("prpOZCylinderRadius"),
                      ugDistance, oz.getRadius());
@@ -174,38 +148,9 @@ private:
   void
   hide_all()
   {
-    WndFrame* wp;
-    wp = ((WndFrame *)wf->FindByName(_T("frmOZFAISector")));
-    if (wp)
-      wp->hide();
-
-    wp = ((WndFrame *)wf->FindByName(_T("frmOZKeyhole")));
-    if (wp)
-      wp->hide();
-
-    wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAFixedCourse")));
-    if (wp)
-      wp->hide();
-
-    wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAEnhancedOption")));
-    if (wp)
-      wp->hide();
-
-    wp = ((WndFrame *)wf->FindByName(_T("frmOZBGAStartSector")));
-    if (wp)
-      wp->hide();
-
-    wp = ((WndFrame *)wf->FindByName(_T("frmOZLine")));
-    if (wp)
-      wp->hide();
-
-    wp = ((WndFrame *)wf->FindByName(_T("frmOZSector")));
-    if (wp)
-      wp->hide();
-
-    wp = ((WndFrame *)wf->FindByName(_T("frmOZCylinder")));
-    if (wp)
-      wp->hide();
+    ShowFormControl(*wf, _T("frmOZLine"), false);
+    ShowFormControl(*wf, _T("frmOZSector"), false);
+    ShowFormControl(*wf, _T("frmOZCylinder"), false);
   }
 };
 
