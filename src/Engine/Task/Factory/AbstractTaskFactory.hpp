@@ -58,24 +58,21 @@ class Waypoint;
 class AbstractTaskFactory: private NonCopyable
 {
 public:
-/** 
- * Constructor
- * 
- * @param task Ordered task to be managed by this factory
- * @param behaviour Behaviour (options)
- */  
-  AbstractTaskFactory(OrderedTask& task, const TaskBehaviour &behaviour):
-    m_task(task),
-    m_behaviour(behaviour) {}
+  /**
+   * Constructor
+   *
+   * @param task Ordered task to be managed by this factory
+   * @param behaviour Behaviour (options)
+   */
+  AbstractTaskFactory(OrderedTask& task, const TaskBehaviour &behaviour)
+    :m_task(task), m_behaviour(behaviour) {}
 
-  virtual ~AbstractTaskFactory() {};
+  virtual ~AbstractTaskFactory() {}
 
   /// @todo should be abstract
   virtual void update_ordered_task_behaviour(OrderedTaskBehaviour& to); 
 
-  /**
-   * Legal types based on position
-   */
+  /** Legal types based on position */
   enum LegalAbstractPointType_t {
     POINT_START,
     POINT_AAT,
@@ -83,14 +80,10 @@ public:
     POINT_FINISH
   };
 
-  /**
-   * Vector of legal abstract point types (non-OZ specific)
-   */
+  /** Vector of legal abstract point types (non-OZ specific) */
   typedef std::vector<LegalAbstractPointType_t> LegalAbstractVector;
 
-  /**
-   * Legal types of points with observation zones
-   */
+  /** Legal types of points with observation zones */
   enum LegalPointType_t {
     START_SECTOR = 0,
     START_LINE,
@@ -109,32 +102,26 @@ public:
     AAT_ANNULAR_SECTOR,
   };
 
-  /**
-   * Vector of legal point types
-   */
+  /** Vector of legal point types */
   typedef std::vector<LegalPointType_t> LegalPointVector;
 
-  /**
-   * Task Validation Error Types
-   */
-enum TaskValidationErrorType_t {
-  NO_VALID_START,
-  NO_VALID_FINISH,
-  TASK_NOT_CLOSED,
-  TASK_NOT_HOMOGENEOUS,
-  INCORRECT_NUMBER_TURNPOINTS,
-  EXCEEDS_MAX_TURNPOINTS,
-  UNDER_MIN_TURNPOINTS,
-  TURNPOINTS_NOT_UNIQUE,
-  INVALID_FAI_TRIANGLE_GEOMETRY,
-  EMPTY_TASK,
-  NON_FAI_OZS
-};
+  /** Task Validation Error Types */
+  enum TaskValidationErrorType_t {
+    NO_VALID_START,
+    NO_VALID_FINISH,
+    TASK_NOT_CLOSED,
+    TASK_NOT_HOMOGENEOUS,
+    INCORRECT_NUMBER_TURNPOINTS,
+    EXCEEDS_MAX_TURNPOINTS,
+    UNDER_MIN_TURNPOINTS,
+    TURNPOINTS_NOT_UNIQUE,
+    INVALID_FAI_TRIANGLE_GEOMETRY,
+    EMPTY_TASK,
+    NON_FAI_OZS
+  };
 
-  /**
-   * Vector of errors returned by validation routine
-   */
-typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
+  /** Vector of errors returned by validation routine */
+  typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
 
   /**
    * Replace taskpoint in ordered task.
@@ -183,7 +170,8 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    *
    * @return True if operation successful
    */
-  bool append_optional_start(const OrderedTaskPoint &new_tp, const bool auto_mutate = true);
+  bool append_optional_start(const OrderedTaskPoint &new_tp,
+                             const bool auto_mutate = true);
 
   /**
    * Insert taskpoint to ordered task.  It is the
@@ -270,10 +258,8 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    * sets radiuses to the correct default for that task type or general defaults
    */
   virtual gcc_pure
-  void getPointDefaultSizes(const LegalPointType_t type,
-                                            fixed &start_radius,
-                                            fixed &turnpoint_radius,
-                                            fixed &finish_radius) const;
+  void getPointDefaultSizes(const LegalPointType_t type, fixed &start_radius,
+                            fixed &turnpoint_radius, fixed &finish_radius) const;
 
   /** 
    * Create a point of supplied type using default sector sizes
@@ -314,8 +300,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    * @return Initialised StartPoint if valid, otherwise NULL
    */
   gcc_pure gcc_malloc
-  StartPoint* createStart(const LegalPointType_t type,
-                          const Waypoint &wp) const;
+  StartPoint* createStart(const LegalPointType_t type, const Waypoint &wp) const;
 
   /**
    * Create intermediate point of specified type
@@ -327,7 +312,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    */
   gcc_pure gcc_malloc
   IntermediateTaskPoint* createIntermediate(const LegalPointType_t type,
-                                        const Waypoint &wp) const;
+                                            const Waypoint &wp) const;
 
   /**
    * Create finish point of specified type
@@ -380,8 +365,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    * @return Initialised object.  Ownership is transferred to client.
    */
   gcc_pure gcc_malloc
-  StartPoint* createStart(ObservationZonePoint* pt,
-                                const Waypoint &wp) const;
+  StartPoint* createStart(ObservationZonePoint* pt, const Waypoint &wp) const;
 
   /**
    * Creates new OrderedTaskPoint of a different type with the
@@ -419,8 +403,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    * @return Initialised object.  Ownership is transferred to client.
    */
   gcc_pure gcc_malloc
-  ASTPoint* createAST(ObservationZonePoint* pt,
-                              const Waypoint &wp) const;
+  ASTPoint* createAST(ObservationZonePoint* pt, const Waypoint &wp) const;
 
   /**
    * Create an AAT point given an OZ
@@ -431,8 +414,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    * @return Initialised object.  Ownership is transferred to client.
    */
   gcc_pure gcc_malloc
-  AATPoint* createAAT(ObservationZonePoint* pt,
-                                const Waypoint &wp) const;
+  AATPoint* createAAT(ObservationZonePoint* pt, const Waypoint &wp) const;
 
   /**
    * Create a finish point given an OZ
@@ -443,8 +425,7 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    * @return Initialised object.  Ownership is transferred to client.
    */
   gcc_pure gcc_malloc
-  FinishPoint* createFinish(ObservationZonePoint* pt,
-                            const Waypoint &wp) const;
+  FinishPoint* createFinish(ObservationZonePoint* pt, const Waypoint &wp) const;
 
   /**
    * Check whether task is complete and valid according to factory rules
@@ -453,11 +434,6 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    * @return True if task is valid according to factory rules
    */
   virtual bool validate();
-  /**
-   * Retrieve settings from task
-   *
-   * @return settings from task
-   */
 
   /**
    * Checks whether shapes of all OZs, start, finish are valid
@@ -481,12 +457,14 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    * @return True if type is valid
    */
   gcc_pure
-  virtual bool validAbstractType(LegalAbstractPointType_t type, const unsigned position) const;
+  virtual bool validAbstractType(LegalAbstractPointType_t type,
+                                 const unsigned position) const;
 
   /**
    *  FOR TESTING ONLY
    * @param index index of task point sequence
-   * @return True if aircraft has previously entered the taskpoint or if index is invalid
+   * @return True if aircraft has previously entered the taskpoint or
+   * if index is invalid
    */
   gcc_pure
   bool has_entered(unsigned index) const;
@@ -506,8 +484,8 @@ typedef std::vector<TaskValidationErrorType_t> TaskValidationErrorVector;
    *
    * @return Vector of valid types in position
    */
-gcc_pure
-LegalPointVector getValidStartTypes() const;
+  gcc_pure
+  LegalPointVector getValidStartTypes() const;
 
   /**
    * Checks for a finish point.
@@ -516,22 +494,22 @@ LegalPointVector getValidStartTypes() const;
    * @return True if converted last point to a finish
    *         False if did not convert (or did not have 2+ pts)
    */
- bool CheckAddFinish();
+  bool CheckAddFinish();
 
- /** List all valid intermediate types for the task type
+  /** List all valid intermediate types for the task type
    *
    * @return Vector of valid types in position
    */
-gcc_pure
-LegalPointVector getValidIntermediateTypes() const;
+  gcc_pure
+  LegalPointVector getValidIntermediateTypes() const;
 
   /**
    * List all valid finish types for the task type
    *
    * @return Vector of valid types in position
    */
-gcc_pure
-LegalPointVector getValidFinishTypes() const;
+  gcc_pure
+  LegalPointVector getValidFinishTypes() const;
 
   /**
    * List valid types for a given position
@@ -627,14 +605,14 @@ LegalPointVector getValidFinishTypes() const;
   bool mutate_tps_to_task_type();
 
   /**
-  * Call to validate() populates this vector
-  * @return returns vector of errors for current task
-  */
+   * Call to validate() populates this vector
+   * @return returns vector of errors for current task
+   */
   gcc_pure
   TaskValidationErrorVector getValidationErrors();
 
-
-  /** tests whether three legs comprise a valid FAI Triangle
+  /**
+   * tests whether three legs comprise a valid FAI Triangle
    * based on FAI Rules
    * @param d1 leg1 distance
    * @param d2 leg2 distance
@@ -643,6 +621,7 @@ LegalPointVector getValidFinishTypes() const;
    */
   static gcc_pure
   bool TestFAITriangle(const fixed d1, const fixed d2, const fixed d3);
+
   /**
    *
    * @return True if task is a valid FAI triangle
@@ -653,7 +632,6 @@ LegalPointVector getValidFinishTypes() const;
   bool TestFAITriangle(void);
 
 protected:
-
   /**
    * Test whether a candidate object is of correct type to be added/replaced/etc
    * in the task.
@@ -719,7 +697,6 @@ protected:
    */
   void addValidationError(TaskValidationErrorType_t e);
 
-
 private:
   /**
    * Verifies and sets the finish waypoint per the is_closed
@@ -730,14 +707,12 @@ private:
    *
    * @return True if task is changed
    */
-   bool mutate_closed_finish_per_task_type();
+  bool mutate_closed_finish_per_task_type();
 
   /**
-  * Clears the vector of validation errors for the current task
-  */
+   * Clears the vector of validation errors for the current task
+   */
   void clearValidationErrors();
-
-
 };
 
 #endif
