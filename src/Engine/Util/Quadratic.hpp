@@ -32,6 +32,10 @@
  * Utility class for efficient solution of quadratic equations
  */
 class Quadratic {
+  const fixed da;
+  const fixed b;
+  const fixed denom;
+
 public:
   /**
    * Constructor for quadratic function x^2+b*x+c=0
@@ -112,10 +116,6 @@ private:
     assert(check());
     return (-b + (positive ? sqrt(denom) : -sqrt(denom))) / da;
   }
-
-  const fixed da;
-  const fixed b;
-  const fixed denom;
 };
 
 #endif
