@@ -41,10 +41,10 @@ on_advance(Trace &trace,
   AIRCRAFT_STATE new_state;
   new_state.Location = loc;
   new_state.ground_speed = speed;
-  new_state.NavAltitude = alt;
+  new_state.altitude = alt;
   new_state.track = bearing;
   new_state.Time = t;
-  new_state.AltitudeAGL = alt;
+  new_state.altitude_agl = alt;
 
   if (t>fixed_one) {
     trace.append(new_state);

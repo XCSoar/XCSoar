@@ -70,9 +70,9 @@ OrderedTaskBehaviour::check_start_height(const AIRCRAFT_STATE &state,
   const unsigned margin = with_margin ? behaviour.start_max_height_margin : 0;
 
   if (start_max_height_ref > 0)
-    return state.NavAltitude <= fixed(start_max_height + margin);
+    return state.altitude <= fixed(start_max_height + margin);
   else
-    return state.NavAltitude <= (fixed(start_max_height + margin) + spAlt);
+    return state.altitude <= (fixed(start_max_height + margin) + spAlt);
 }
 
 bool 
@@ -82,5 +82,5 @@ OrderedTaskBehaviour::check_finish_height(const AIRCRAFT_STATE &state,
   if (finish_min_height == 0)
     return true;
 
-  return state.NavAltitude >= (fixed(finish_min_height) + fpAlt);
+  return state.altitude >= (fixed(finish_min_height) + fpAlt);
 }

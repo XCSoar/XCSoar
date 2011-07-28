@@ -62,7 +62,7 @@ class AirspaceIntersectionVisitorSlice: public AirspaceIntersectionVisitor
   /** GeoPoint at the left of the CrossSection */
   const GeoPoint start;
   /** AltitudeState instance used for AGL-based airspaces */
-  const ALTITUDE_STATE& state;
+  const AltitudeState& state;
 
 public:
   /**
@@ -77,7 +77,7 @@ public:
                                    const AirspaceRendererSettings &_settings,
                                    const AirspaceLook &_airspace_look,
                                    const GeoPoint _start,
-                                   const ALTITUDE_STATE& _state) :
+                                   const AltitudeState& _state) :
     canvas(_canvas), chart(_chart), settings(_settings),
     airspace_look(_airspace_look),
     start(_start), state(_state) {}

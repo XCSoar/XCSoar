@@ -41,7 +41,7 @@ AircraftSim::Start(const GeoPoint& location_start,
 {
   state.Reset();
   state.Location = location_start;
-  state.NavAltitude = altitude;
+  state.altitude = altitude;
   state.Time = fixed_zero;
   state.wind.norm = fixed_zero;
   state.wind.bearing = Angle();
@@ -71,7 +71,7 @@ AircraftSim::integrate(const Angle& heading, const fixed timestep)
   state.track = state.Location.bearing(v);
   state.ground_speed = v.distance(state.Location)/timestep;
   state.Location = v;
-  state.NavAltitude += state.vario*timestep;
+  state.altitude += state.vario*timestep;
   state.Time += timestep;
   state.Moving(state.Time);
 }

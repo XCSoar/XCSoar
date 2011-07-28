@@ -357,7 +357,7 @@ UpdateValuesRules(void)
   assert(wp != NULL);
   if (common_stats.task_started) {
     _stprintf(Temp, _T("%.0f %s"),
-              (double)Units::ToUserAltitude(start_state.NavAltitude),
+              (double)Units::ToUserAltitude(start_state.altitude),
               Units::GetAltitudeName());
     wp->SetText(Temp);
   } else {

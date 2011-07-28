@@ -152,8 +152,8 @@ DemoReplayGlue::Update()
   bool retval = DemoReplay::Update(ta);
 
   const AIRCRAFT_STATE s = aircraft.get_state();
-  on_advance(s.Location, s.ground_speed, s.track, s.NavAltitude,
-             s.NavAltitude, s.Time);
+  on_advance(s.Location, s.ground_speed, s.track, s.altitude,
+             s.altitude, s.Time);
 
   return retval;
 }

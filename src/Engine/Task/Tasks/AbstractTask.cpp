@@ -280,7 +280,7 @@ AbstractTask::leg_gradient(const AIRCRAFT_STATE &aircraft) const
     return fixed_zero;
 
   // Calculate the geometric gradient (height divided by distance)
-  return (aircraft.NavAltitude - tp->get_elevation()) / d;
+  return (aircraft.altitude - tp->get_elevation()) / d;
 }
 
 bool 

@@ -53,5 +53,5 @@ TaskMacCreadyTravelled::get_aircraft_start(const AIRCRAFT_STATE &aircraft) const
 fixed 
 TaskMacCreadyTravelled::get_min_height(const AIRCRAFT_STATE &aircraft) const 
 {
-  return aircraft.NavAltitude;
+  return aircraft.altitude;
 }

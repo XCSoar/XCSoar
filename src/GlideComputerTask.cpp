@@ -121,7 +121,7 @@ GlideComputerTask::TerrainWarning()
   const AIRCRAFT_STATE as = ToAircraftState(Basic(), Calculated());
 
   const GlideResult& sol = Calculated().task_stats.current_leg.solution_remaining;
-  const AGeoPoint start (as.Location, as.NavAltitude);
+  const AGeoPoint start (as.Location, as.altitude);
   const short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
                                           (int)Calculated().thermal_band.working_band_ceiling);
   // allow at least 500m of climb above current altitude as ceiling, in case
@@ -172,7 +172,7 @@ GlideComputerTask::Reach()
                          terrain != NULL);
 
   const AIRCRAFT_STATE state = ToAircraftState(Basic(), Calculated());
-  const AGeoPoint start (state.Location, state.NavAltitude);
+  const AGeoPoint start (state.Location, state.altitude);
   if (reach_clock.check_advance(Basic().time)) {
     m_task.solve_reach(start, do_solve);
 

@@ -75,7 +75,7 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
     fixed range = fixed(10000)+ vec.Distance / 2;
 
     state.Location = loc_start;
-    state.NavAltitude = fixed(loc_start.altitude);
+    state.altitude = fixed(loc_start.altitude);
 
     {
       Airspaces as_route(*airspaces, false);

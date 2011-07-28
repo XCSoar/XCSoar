@@ -5,7 +5,7 @@
 #include "Util/tstring.hpp"
 
 class AtmosphericPressure;
-struct ALTITUDE_STATE;
+struct AltitudeState;
 
 enum AirspaceAltBase_t {
   abUndef,
@@ -38,17 +38,17 @@ struct AIRSPACE_ALT
    * Get Altitude AMSL (m) resolved from type.  For AGL types, this assumes the terrain height
    * is the terrain height at the aircraft.
    */
-  fixed get_altitude(const ALTITUDE_STATE& state) const;
+  fixed get_altitude(const AltitudeState& state) const;
 
   /**
    * Is this altitude reference at or above the aircraft state?
    */
-  bool is_above  (const ALTITUDE_STATE& state, const fixed margin=fixed_zero) const;
+  bool is_above  (const AltitudeState& state, const fixed margin=fixed_zero) const;
 
   /**
    * Is this altitude reference at or below the aircraft state?
    */
-  bool is_below  (const ALTITUDE_STATE& state, const fixed margin=fixed_zero) const;
+  bool is_below  (const AltitudeState& state, const fixed margin=fixed_zero) const;
 
 /** 
  * Test whether airspace boundary is the terrain

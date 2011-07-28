@@ -159,7 +159,7 @@ TaskAutoPilot::update_mode(const TaskAccessor& task,
       acstate = FinalGlide;
       on_mode_change();
     } else {
-      if (state.NavAltitude<=target_height(task)) {
+      if (state.altitude<=target_height(task)) {
         acstate = Climb;
         on_mode_change();
       }
@@ -176,7 +176,7 @@ TaskAutoPilot::update_mode(const TaskAccessor& task,
         (task.distance_to_final()<= state.ground_speed)) {
       acstate = FinalGlide;
       on_mode_change();
-    } else if (state.NavAltitude>=fixed_1500) {
+    } else if (state.altitude>=fixed_1500) {
       acstate = Cruise;
       on_mode_change();
     }

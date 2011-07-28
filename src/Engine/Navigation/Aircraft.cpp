@@ -29,27 +29,27 @@ AIRCRAFT_STATE::get_predicted_state(const fixed &in_time) const
   AIRCRAFT_STATE state_next = *this;
   GeoVector vec(ground_speed * in_time, track);
   state_next.Location = vec.end_point(Location);
-  state_next.NavAltitude += vario * in_time;
+  state_next.altitude += vario * in_time;
   return state_next;
 }
 
 AIRCRAFT_STATE::AIRCRAFT_STATE():
-  ALTITUDE_STATE(),
+  AltitudeState(),
   Gload(fixed_one)
 {
 }
 
-ALTITUDE_STATE::ALTITUDE_STATE():
-  NavAltitude(fixed_zero),
+AltitudeState::AltitudeState():
+  altitude(fixed_zero),
   working_band_fraction(fixed_one),
-  AltitudeAGL(fixed_zero)
+  altitude_agl(fixed_zero)
 {
 }
 
 fixed 
-ALTITUDE_STATE::thermal_drift_factor() const
+AltitudeState::CalcThermalDriftFactor() const
 {
-  return sigmoid(AltitudeAGL / 100);
+  return sigmoid(altitude_agl / 100);
 }
 
 void

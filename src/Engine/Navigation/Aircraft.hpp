@@ -72,27 +72,30 @@ struct SpeedState
 /**
  * Structure for altitude-related state data
  */
-struct ALTITUDE_STATE 
+struct AltitudeState 
 {
-  ALTITUDE_STATE();
+  AltitudeState();
 
   //##############
   //   Altitude
   //##############
 
   /** Altitude used for navigation (GPS or Baro) */
-  fixed NavAltitude;
+  fixed altitude;
 
   /** Fraction of working band height */
   fixed working_band_fraction;
 
   /** Altitude over terrain */
-  fixed AltitudeAGL;
+  fixed altitude_agl;
 
-  /** Thermal drift factor: 1 indicates drift rate equal to wind speed,
-   0 indicates no drift. */
+  /**
+   * Thermal drift factor:
+   * 1 indicates drift rate equal to wind speed,
+   * 0 indicates no drift.
+   */
   gcc_pure
-  fixed thermal_drift_factor() const;
+  fixed CalcThermalDriftFactor() const;
 };
 
 /**
@@ -159,7 +162,7 @@ private:
  * Compound structure defining an aircraft state
  */
 struct AIRCRAFT_STATE: 
-  public ALTITUDE_STATE,
+  public AltitudeState,
   public SpeedState,
   public VarioState,
   public FlyingState

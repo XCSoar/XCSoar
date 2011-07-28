@@ -307,7 +307,7 @@ AirspaceWarningManager::update_predicted(const AIRCRAFT_STATE& state,
   // collected for it.  It is very unlikely users will have more than 1000m
   // in AltWarningMargin anyway.
 
-  const fixed ceiling = state.NavAltitude + fixed(max((unsigned)1000, config.AltWarningMargin));
+  const fixed ceiling = state.altitude + fixed(max((unsigned)1000, config.AltWarningMargin));
 
   AirspaceIntersectionWarningVisitor visitor(state, perf, 
                                              *this, 

@@ -93,10 +93,10 @@ test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
   } else {
     ac.wind.bearing = Angle::degrees(Wangle);
   }
-  ac.NavAltitude = h;
+  ac.altitude = h;
 
   GeoVector vect(fixed(400.0));
-  GlideState gs(vect, fixed_zero, ac.NavAltitude, ac.wind);
+  GlideState gs(vect, fixed_zero, ac.altitude, ac.wind);
   GlideResult gr = MacCready::solve(polar, gs);
   hfile << (double)h << " " 
         << (double)gr.altitude_difference << " "
@@ -121,11 +121,11 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
   } else {
     ac.wind.bearing = Angle::degrees(Wangle);
   }
-  ac.NavAltitude = h;
+  ac.altitude = h;
   ac.netto_vario = S;
 
   GeoVector vect(fixed(400.0));
-  GlideState gs(vect, fixed_zero, ac.NavAltitude, ac.wind);
+  GlideState gs(vect, fixed_zero, ac.altitude, ac.wind);
   GlideResult gr = MacCready::solve(polar, gs);
 
   fixed Vstf = polar.SpeedToFly(ac, gr, false);
@@ -227,10 +227,10 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
   } else {
     ac.wind.bearing = Angle::degrees(Wangle);
   }
-  ac.NavAltitude = h;
+  ac.altitude = h;
 
   GeoVector vect(fixed(400.0));
-  GlideState gs (vect, fixed_zero, ac.NavAltitude, ac.wind);
+  GlideState gs (vect, fixed_zero, ac.altitude, ac.wind);
   GlideResult gr = MacCready::solve(polar, gs);
 
   gr.CalcDeferred(ac);

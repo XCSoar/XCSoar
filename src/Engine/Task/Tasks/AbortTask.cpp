@@ -104,7 +104,7 @@ AbortTask::abort_range(const AIRCRAFT_STATE &state) const
 {
   // always scan at least min range or approx glide range
   return min(max_search_range,
-             max(min_search_range, state.NavAltitude * polar_safety.GetBestLD()));
+             max(min_search_range, state.altitude * polar_safety.GetBestLD()));
 }
 
 GlidePolar
@@ -164,7 +164,7 @@ AbortTask::fill_reachable(const AIRCRAFT_STATE &state,
   if (task_full() || approx_waypoints.empty())
     return false;
 
-  const AGeoPoint p_start (state.Location, (short)state.NavAltitude);
+  const AGeoPoint p_start (state.Location, (short)state.altitude);
 
   bool found_final_glide = false;
   reservable_priority_queue<Alternate, AlternateVector, AbortRank> q;

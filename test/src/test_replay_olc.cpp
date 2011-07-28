@@ -94,7 +94,7 @@ public:
     f << (double)state.Time << " " 
       <<  (double)state.Location.Longitude.value_degrees() << " " 
       <<  (double)state.Location.Latitude.value_degrees() << " "
-      <<  (double)state.NavAltitude << "\n";
+      <<  (double)state.altitude << "\n";
   }
   bool started;
 
@@ -110,7 +110,7 @@ protected:
     state.Location = loc;
     state.ground_speed = speed;
     state.track = bearing;
-    state.NavAltitude = alt;
+    state.altitude = alt;
     state.netto_vario = fixed_zero;
     state.vario = fixed_zero;
     state.Time = t;

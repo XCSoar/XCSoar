@@ -321,7 +321,7 @@ OrderedTask::check_transitions(const AIRCRAFT_STATE &state,
   stats.task_started = task_started();
 
   if (stats.task_started)
-    taskpoint_finish->set_fai_finish_height(get_start_state().NavAltitude - fixed(1000));
+    taskpoint_finish->set_fai_finish_height(get_start_state().altitude - fixed(1000));
 
   if (stats.task_started && !last_started)
     task_events.task_start();
@@ -834,7 +834,7 @@ OrderedTask::calc_gradient(const AIRCRAFT_STATE &state) const
     return fixed_zero;
 
   // Calculate gradient to the last turnpoint of the remaining task
-  return (state.NavAltitude - task_points[task_points.size() - 1]->get_elevation()) / distance;
+  return (state.altitude - task_points[task_points.size() - 1]->get_elevation()) / distance;
 }
 
 // Constructors/destructors

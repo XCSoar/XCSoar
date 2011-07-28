@@ -63,7 +63,7 @@ AbstractAirspace::intercept_vertical(const AIRCRAFT_STATE &state,
   AirspaceInterceptSolution solution;
   solution.distance = distance;
   solution.elapsed_time = perf.solution_vertical(solution.distance, 
-                                                 state.NavAltitude,
+                                                 state.altitude,
                                                  m_base.get_altitude(state), 
                                                  m_top.get_altitude(state),
                                                  solution.altitude);
@@ -88,7 +88,7 @@ AbstractAirspace::intercept_horizontal(const AIRCRAFT_STATE &state,
   solution.altitude = lower? m_base.get_altitude(state): m_top.get_altitude(state);
   solution.elapsed_time = perf.solution_horizontal(distance_start, 
                                                    distance_end,
-                                                   state.NavAltitude,
+                                                   state.altitude,
                                                    solution.altitude,
                                                    solution.distance);
   return solution;

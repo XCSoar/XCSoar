@@ -170,10 +170,10 @@ TaskManager::update_common_stats_times(const AIRCRAFT_STATE &state)
               0 : task_ordered.get_tp(0)->get_elevation());
     if (positive(start_max_height) && state.flying) {
       if (!positive(common_stats.TimeUnderStartMaxHeight) &&
-          state.NavAltitude < start_max_height) {
+          state.altitude < start_max_height) {
         common_stats.TimeUnderStartMaxHeight = state.Time;
       }
-      if (state.NavAltitude > start_max_height) {
+      if (state.altitude > start_max_height) {
           common_stats.TimeUnderStartMaxHeight = -fixed_one;
       }
     } else {

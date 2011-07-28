@@ -6,19 +6,19 @@
 
 struct AirspaceComputerSettings;
 struct AirspaceRendererSettings;
-struct ALTITUDE_STATE;
+struct AltitudeState;
 
 class AirspaceVisible: public AirspacePredicate
 {
 protected:
   const AirspaceComputerSettings &computer_settings;
   const AirspaceRendererSettings &renderer_settings;
-  const ALTITUDE_STATE& m_state;
+  const AltitudeState& m_state;
 
 public:
   AirspaceVisible(const AirspaceComputerSettings &_computer_settings,
                   const AirspaceRendererSettings &_renderer_settings,
-                  const ALTITUDE_STATE& _state)
+                  const AltitudeState& _state)
     :computer_settings(_computer_settings),
      renderer_settings(_renderer_settings),
     m_state(_state)

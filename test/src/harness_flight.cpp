@@ -245,7 +245,7 @@ bool run_flight(TaskManager &task_manager,
       f4 << state.Time << " "
          <<  state.Location.Longitude << " "
          <<  state.Location.Latitude << " "
-         <<  state.NavAltitude << "\n";
+         <<  state.altitude << "\n";
 
       f4.flush();
       if (aircraft_filter) {
@@ -304,7 +304,7 @@ bool run_flight(TaskManager &task_manager,
     f4 << state.Time << " "
        <<  state.Location.Longitude << " "
        <<  state.Location.Latitude << " "
-       <<  state.NavAltitude << "\n";
+       <<  state.altitude << "\n";
     f4 << "\n";
     f4.flush();
     task_report(task_manager, "end of task\n");

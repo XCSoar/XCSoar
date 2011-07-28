@@ -98,7 +98,7 @@ FinishPoint::is_in_height_limit(const AIRCRAFT_STATE &state) const
     return false;
 
   if (m_ordered_task_behaviour.fai_finish)
-    return state.NavAltitude > fai_finish_height;
+    return state.altitude > fai_finish_height;
 
   return true;
 }
