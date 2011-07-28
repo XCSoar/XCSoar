@@ -242,42 +242,6 @@ public:
 };
 
 /**
- * Utility class to find labels for the task point
- */
-class TPLabelTaskPoint:
-  public TaskPointConstVisitor
-{
-public:
-  TPLabelTaskPoint(TCHAR* buffType, TCHAR* buffNamePrefix):
-    textType(buffType),
-    textNamePrefix(buffNamePrefix)
-  {
-    textType[0] = _T('\0');
-    textNamePrefix[0] = _T('\0');
-  }
-
-  void Visit(const UnorderedTaskPoint& tp) {}
-  void Visit(const StartPoint& tp) {    
-    _tcscpy(textType, _T("Start point"));
-    _tcscpy(textNamePrefix, _T("Start: "));
-  }
-  void Visit(const FinishPoint& tp) {
-    _tcscpy(textType, _T("Finish point"));
-    _tcscpy(textNamePrefix, _T("Finish: "));
-  }
-  void Visit(const AATPoint& tp) {
-    _tcscpy(textType, _T("Assigned area point"));
-    _stprintf(textNamePrefix, _T("%d: "), active_index);
-  }
-  void Visit(const ASTPoint& tp) {
-    _tcscpy(textType, _T("Task point"));
-    _stprintf(textNamePrefix, _T("%d: "), active_index);
-  }
-  TCHAR* textType;
-  TCHAR* textNamePrefix;
-};
-
-/**
  * for FAI tasks, make the zone sizes disabled so the user can't alter them
  * @param enable
  */
@@ -339,18 +303,42 @@ RefreshView()
 
   TCHAR bufType[100];
   TCHAR bufNamePrefix[100];
-  TPLabelTaskPoint tpv(bufType, bufNamePrefix);
-  TaskPointConstVisitor &tp_visitor = tpv;
-  tp_visitor.Visit(*tp);
-  wf->SetCaption(tpv.textType);
+
+  switch (tp->GetType()) {
+  case TaskPoint::START:
+    _tcscpy(bufType, _T("Start point"));
+    _tcscpy(bufNamePrefix, _T("Start: "));
+    break;
+
+  case TaskPoint::AST:
+    _tcscpy(bufType, _T("Task point"));
+    _stprintf(bufNamePrefix, _T("%d: "), active_index);
+    break;
+
+  case TaskPoint::AAT:
+    _tcscpy(bufType, _T("Assigned area point"));
+    _stprintf(bufNamePrefix, _T("%d: "), active_index);
+    break;
+
+  case TaskPoint::FINISH:
+    _tcscpy(bufType, _T("Finish point"));
+    _tcscpy(bufNamePrefix, _T("Finish: "));
+    break;
+
+  default:
+    assert(true);
+    break;
+  }
+
+  wf->SetCaption(bufType);
 
   wfrm = ((WndFrame*)wf->FindByName(_T("lblLocation")));
   if (wfrm) {
     TCHAR buff[100];
-    _stprintf(buff, _T("%s %s"), tpv.textNamePrefix,
-        tp->get_waypoint().Name.c_str());
+    _stprintf(buff, _T("%s %s"), bufNamePrefix, tp->get_waypoint().Name.c_str());
     wfrm->SetCaption(buff);
   }
+
   Refreshing = false; // reactivate onChange routines
 }
 
