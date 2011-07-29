@@ -23,6 +23,7 @@
 #define MACCREADY_HPP
 
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 struct GlideState;
 struct GlideResult;
@@ -66,7 +67,10 @@ public:
    * @param S The sink rate 
    * @return Returns the glide result containing data about the optimal solution
    */
+  gcc_pure
   GlideResult solve_sink(const GlideState &task, const fixed S) const;
+
+  gcc_pure
   static GlideResult solve_sink(const GlidePolar &glide_polar,
                                 const GlideState &task, const fixed S);
 
@@ -79,7 +83,10 @@ public:
    * @param task The task for which a solution is desired
    * @return Returns the glide result containing data about the optimal solution
    */
+  gcc_pure
   GlideResult solve(const GlideState &task) const;
+
+  gcc_pure
   static GlideResult solve(const GlidePolar &glide_polar,
                            const GlideState &task);
 
@@ -109,6 +116,7 @@ private:
    * @param allow_partial Return after glide exhausted
    * @return Returns the glide result containing data about the optimal solution
    */
+  gcc_pure
   GlideResult
   solve_glide(const GlideState &task, const fixed V, const fixed S,
               const bool allow_partial = false) const;
@@ -122,6 +130,7 @@ private:
    *
    * @return Solution
    */
+  gcc_pure
   GlideResult optimise_glide(const GlideState &task,
                              const bool allow_partial = false) const;
 
@@ -136,6 +145,7 @@ private:
    *
    * @return Solution
    */
+  gcc_pure
   GlideResult solve_vertical(const GlideState &task) const;
 
   /**
@@ -146,6 +156,7 @@ private:
    *
    * @return Solution
    */
+  gcc_pure
   GlideResult solve_cruise(const GlideState &task) const;
 };
 
