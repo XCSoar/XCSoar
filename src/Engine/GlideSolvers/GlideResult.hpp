@@ -23,6 +23,7 @@
 #define GLIDERESULT_HPP
 
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Compiler.h"
 
 #ifdef DO_PRINT
 #include <iostream>
@@ -115,11 +116,13 @@ struct GlideResult {
    *
    * @return True if aircraft is at or above final glide
    */
+  gcc_pure
   bool IsFinalGlide() const;
 
   /**
    * Convenience function, returns location of start of final glide component
    */
+  gcc_pure
   GeoPoint FinalGlideStartLocation(const GeoPoint &location) const;
 
   /**
@@ -141,6 +144,7 @@ struct GlideResult {
    *
    * @return True if target is reachable
    */
+  gcc_pure
   bool IsAchievable(const bool final_glide=true) const;
 
   /**
@@ -169,6 +173,7 @@ struct GlideResult {
    *
    * @return Glide gradient (positive down), or inf if no distance to travel.
    */
+  gcc_pure
   fixed GlideAngleGround() const;
 
   /**
@@ -177,6 +182,7 @@ struct GlideResult {
    *
    * @return Glide gradient (positive down), or inf if no distance to travel.
    */
+  gcc_pure
   fixed DestinationAngleGround() const;
 
   /** Reset/clear the solution */
