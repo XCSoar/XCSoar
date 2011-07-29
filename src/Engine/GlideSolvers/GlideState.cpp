@@ -90,7 +90,7 @@ GlideState::calc_speedups(const SpeedVector wind)
   if (wind.is_non_zero()) {
     WindDirection = wind.bearing;
     EffectiveWindSpeed = wind.norm;
-    EffectiveWindAngle = Angle::radians(fixed_pi) + wind.bearing - Vector.Bearing;
+    EffectiveWindAngle = WindDirection.Reciprocal() - Vector.Bearing;
     wind_speed_squared = wind.norm * wind.norm;
     HeadWind = -wind.norm * EffectiveWindAngle.cos();
     dwcostheta_ = fixed_two * HeadWind;
