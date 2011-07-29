@@ -24,6 +24,7 @@
 
 #include "Navigation/SpeedVector.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
+#include "Compiler.h"
 
 /**
  * Class used to define a glide/navigation task
@@ -82,6 +83,7 @@ public:
    *
    * @return Average cross-country speed (m/s)
    */
+  gcc_pure
   fixed CalcAverageSpeed(const fixed v_eff) const;
 
   /**
@@ -92,6 +94,7 @@ public:
    *
    * @return Distance (m) of drift
    */
+  gcc_pure
   fixed DriftedDistance(const fixed climb_time) const;
 };
 
