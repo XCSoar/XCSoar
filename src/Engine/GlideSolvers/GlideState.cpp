@@ -86,7 +86,7 @@ GlideState::GlideState(const GeoVector &vector, const fixed htarget,
 void
 GlideState::calc_speedups(const SpeedVector wind)
 {
-  if (positive(wind.norm)) {
+  if (wind.is_non_zero()) {
     WindDirection = wind.bearing;
     EffectiveWindSpeed = wind.norm;
     EffectiveWindAngle = Angle::radians(fixed_pi) + wind.bearing - Vector.Bearing;
