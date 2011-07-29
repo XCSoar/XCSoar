@@ -39,7 +39,7 @@ class Airspaces;
 class ReachIntersectionTest: public AbortIntersectionTest {
 public:
   ReachIntersectionTest(): route(NULL) {};
-  void set_route(RoutePlannerGlue* _route) {
+  void set_route(const RoutePlannerGlue *_route) {
     route = _route;
   }
   virtual bool intersects(const AGeoPoint& destination);
