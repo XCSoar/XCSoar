@@ -66,20 +66,20 @@ MacCready::solve_vertical(const GlideState &task) const
   }
   
   const fixed V = glide_polar.GetVBestLD() * cruise_efficiency;
-  const fixed denom1 = V - task.wind_speed;
+  const fixed denom1 = V - task.wind.norm;
 
   if (!positive(denom1)) {
     result.validity = GlideResult::RESULT_WIND_EXCESSIVE;
     return result;
   }
-  const fixed denom2 = glide_polar.GetMC() * denom1 - task.wind_speed;
+  const fixed denom2 = glide_polar.GetMC() * denom1 - task.wind.norm;
   if (!positive(denom2)) {
     result.validity = GlideResult::RESULT_MACCREADY_INSUFFICIENT;
     return result;
   }
 
   const fixed t_cl = -task.altitude_difference * denom1 / denom2; // from (2)
-  const fixed t_cr = task.wind_speed * t_cl / denom1; // from (1)
+  const fixed t_cr = task.wind.norm * t_cl / denom1; // from (1)
 
   result.time_elapsed = t_cr + t_cl;
   result.height_climb = -task.altitude_difference;

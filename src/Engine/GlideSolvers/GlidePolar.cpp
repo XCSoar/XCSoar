@@ -242,7 +242,7 @@ GlidePolar::IsGlidePossible(const GlideState &task) const
     return false;
 
   // broad test assuming tailwind at best LD (best case)
-  if ((VbestLD + task.wind_speed) * task.altitude_difference
+  if ((VbestLD + task.wind.norm) * task.altitude_difference
       < task.vector.Distance * SbestLD)
     return false;
 

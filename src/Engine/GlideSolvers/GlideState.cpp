@@ -66,7 +66,7 @@ public:
 fixed
 GlideState::CalcAverageSpeed(const fixed Veff) const
 {
-  if (positive(wind_speed)) {
+  if (wind.is_non_zero()) {
     // only need to solve if positive wind speed
     return AverageSpeedSolver(head_wind_doubled, wind_speed_squared, Veff).Solve();
   }
@@ -85,18 +85,17 @@ GlideState::GlideState(const GeoVector &vector, const fixed htarget,
 }
 
 void
-GlideState::CalcSpeedups(const SpeedVector wind)
+GlideState::CalcSpeedups(const SpeedVector _wind)
 {
-  if (wind.is_non_zero()) {
-    wind_direction = wind.bearing;
-    wind_speed = wind.norm;
-    effective_wind_angle = wind_direction.Reciprocal() - vector.Bearing;
-    wind_speed_squared = wind_speed * wind_speed;
-    head_wind = -wind_speed * effective_wind_angle.cos();
+  if (_wind.is_non_zero()) {
+    wind = _wind;
+    effective_wind_angle = wind.bearing.Reciprocal() - vector.Bearing;
+    wind_speed_squared = wind.norm * wind.norm;
+    head_wind = -wind.norm * effective_wind_angle.cos();
     head_wind_doubled = fixed_two * head_wind;
   } else {
-    wind_direction = Angle::zero();
-    wind_speed = fixed_zero;
+    wind.bearing = Angle::zero();
+    wind.norm = fixed_zero;
     effective_wind_angle = Angle::zero();
     head_wind = fixed_zero;
     wind_speed_squared = fixed_zero;
@@ -107,10 +106,10 @@ GlideState::CalcSpeedups(const SpeedVector wind)
 fixed
 GlideState::DriftedDistance(const fixed t_cl) const
 {
-  if (!positive(wind_speed))
+  if (wind.is_zero())
     return vector.Distance;
 
-  const Angle wd = wind_direction.Reciprocal();
+  const Angle wd = wind.bearing.Reciprocal();
   fixed sinwd, coswd;
   wd.sin_cos(sinwd, coswd);
 
@@ -118,7 +117,7 @@ GlideState::DriftedDistance(const fixed t_cl) const
   fixed sintb, costb;
   tb.sin_cos(sintb, costb);
 
-  const fixed aw = wind_speed * t_cl;
+  const fixed aw = wind.norm * t_cl;
   const fixed dx = vector.Distance * sintb - aw * sinwd;
   const fixed dy = vector.Distance * costb - aw * coswd;
 

@@ -36,7 +36,7 @@ GlideResult::GlideResult(const GlideState &task, const fixed V):
   time_virtual(fixed_zero),
   altitude_difference(task.altitude_difference),
   altitude_required(task.altitude_difference),
-  effective_wind_speed(task.wind_speed),
+  effective_wind_speed(task.wind.norm),
   effective_wind_angle(task.effective_wind_angle),
   head_wind(task.head_wind),
   validity(RESULT_NOSOLUTION),

@@ -34,13 +34,11 @@ struct GlideState
   GeoVector vector;
   /** Height (m above MSL) of end */
   fixed min_height;
-  /** Direction of wind (deg True) */
-  Angle wind_direction;
+  /** Wind vector (deg True) */
+  SpeedVector wind;
   /** Aircraft height less target height */
   fixed altitude_difference;
 
-  /** (internal use) */
-  fixed wind_speed;
   /** (internal use) */
   Angle effective_wind_angle;
   /** headwind component (m/s) in cruise */
