@@ -13,6 +13,7 @@ Version 6.1.4 - not yet released
 * Android
   - fix text rendering on Adreno GPUs
   - fix another suspend/resume crash
+  - clip the unit symbol in info boxes
 * Altair:
   - fix upside down screen
 
