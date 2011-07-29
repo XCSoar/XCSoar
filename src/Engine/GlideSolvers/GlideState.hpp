@@ -48,7 +48,7 @@ struct GlideState
 
 private:
   /** (internal use) */
-  fixed wsq_;
+  fixed wind_speed_squared;
   /** (internal use) */
   fixed dwcostheta_;
 

@@ -40,8 +40,9 @@ public:
    *
    * @return Initialised object (not solved)
    */
-  AverageSpeedSolver(const fixed dwcostheta, const fixed wsq, const fixed V) :
-    Quadratic(dwcostheta, wsq - V * V)
+  AverageSpeedSolver(const fixed dwcostheta, const fixed wind_speed_squared,
+                     const fixed V) :
+    Quadratic(dwcostheta, wind_speed_squared - V * V)
   {
   }
 
@@ -67,7 +68,7 @@ GlideState::calc_ave_speed(const fixed Veff) const
 {
   if (positive(EffectiveWindSpeed)) {
     // only need to solve if positive wind speed
-    return AverageSpeedSolver(dwcostheta_, wsq_, Veff).solve();
+    return AverageSpeedSolver(dwcostheta_, wind_speed_squared, Veff).solve();
   }
 
   return Veff;
@@ -90,7 +91,7 @@ GlideState::calc_speedups(const SpeedVector wind)
     WindDirection = wind.bearing;
     EffectiveWindSpeed = wind.norm;
     EffectiveWindAngle = Angle::radians(fixed_pi) + wind.bearing - Vector.Bearing;
-    wsq_ = wind.norm * wind.norm;
+    wind_speed_squared = wind.norm * wind.norm;
     HeadWind = -wind.norm * EffectiveWindAngle.cos();
     dwcostheta_ = fixed_two * HeadWind;
   } else {
@@ -98,7 +99,7 @@ GlideState::calc_speedups(const SpeedVector wind)
     EffectiveWindSpeed = fixed_zero;
     EffectiveWindAngle = Angle::zero();
     HeadWind = fixed_zero;
-    wsq_ = fixed_zero;
+    wind_speed_squared = fixed_zero;
     dwcostheta_ = fixed_zero;
   }
 }
