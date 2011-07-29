@@ -95,7 +95,7 @@ AircraftStateFilter::get_speed() const
 Angle 
 AircraftStateFilter::get_bearing() const
 {
-  return Angle::radians(atan2(m_vx,m_vy)).as_bearing();
+  return Angle::from_xy(m_vy, m_vx).as_bearing();
 }
 
 fixed 
