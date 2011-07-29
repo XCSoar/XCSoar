@@ -35,10 +35,8 @@ using std::max;
 // call any event
 
 GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task):
-  m_task(task),
-  route_clock(fixed(5)),
-  reach_clock(fixed(5)),
-  terrain(NULL)
+  GlideComputerRoute(task),
+  m_task(task)
 {}
 
 void
@@ -50,8 +48,7 @@ void
 GlideComputerTask::ResetFlight(const bool full)
 {
   m_task.reset();
-  route_clock.reset();
-  reach_clock.reset();
+  GlideComputerRoute::ResetFlight();
 }
 
 void
@@ -90,11 +87,8 @@ GlideComputerTask::ProcessBasicTask()
 void
 GlideComputerTask::ProcessMoreTask()
 {
-  m_task.route_update_polar(Calculated().wind);
-  SetCalculated().glide_polar_reach = m_task.get_reach_polar();
-
-  Reach();
-  TerrainWarning();
+  GlideComputerRoute::ProcessRoute(Basic(), SetCalculated(), LastCalculated(),
+                                   SettingsComputer());
 
   if (SettingsComputer().EnableBlockSTF)
     SetCalculated().V_stf = Calculated().common_stats.V_block;
@@ -115,74 +109,6 @@ GlideComputerTask::ProcessIdle()
   task->update_idle(as);
 }
 
-void
-GlideComputerTask::TerrainWarning()
-{
-  const AircraftState as = ToAircraftState(Basic(), Calculated());
-
-  const GlideResult& sol = Calculated().task_stats.current_leg.solution_remaining;
-  const AGeoPoint start (as.location, as.altitude);
-  const short h_ceiling = (short)std::max((int)Basic().NavAltitude+500,
-                                          (int)Calculated().thermal_band.working_band_ceiling);
-  // allow at least 500m of climb above current altitude as ceiling, in case
-  // there are no actual working band stats.
-  const GeoVector &v = sol.vector;
-
-  if (terrain) {
-    if (sol.IsDefined()) {
-      const AGeoPoint dest(v.end_point(start), sol.min_height);
-      bool dirty = route_clock.check_advance(Basic().time);
-
-      if (!dirty) {
-        dirty = Calculated().common_stats.active_taskpoint_index != LastCalculated().common_stats.active_taskpoint_index;
-        dirty |= Calculated().common_stats.mode_abort != LastCalculated().common_stats.mode_abort;
-        dirty |= Calculated().common_stats.mode_goto != LastCalculated().common_stats.mode_goto;
-        dirty |= Calculated().common_stats.mode_ordered != LastCalculated().common_stats.mode_ordered;
-        if (dirty) {
-          // restart clock
-          route_clock.check_advance(Basic().time);
-          route_clock.reset();
-        }
-      }
-
-      if (dirty) {
-        m_task.route_solve(dest, start, h_ceiling);
-        SetCalculated().terrain_warning = m_task.intersection(start, dest,
-                                                             SetCalculated().terrain_warning_location);
-      }
-      return;
-    } else {
-      m_task.route_solve(start, start, h_ceiling);
-    }
-  }
-  SetCalculated().terrain_warning = false;
-}
-
-void
-GlideComputerTask::Reach()
-{
-  if (!Calculated().terrain_valid) {
-    /* without valid terrain information, we cannot calculate
-       reachabilty, so let's skip that step completely */
-    SetCalculated().terrain_base_valid = false;
-    return;
-  }
-
-  const bool do_solve = (SettingsComputer().route_planner.reach_enabled() &&
-                         terrain != NULL);
-
-  const AircraftState state = ToAircraftState(Basic(), Calculated());
-  const AGeoPoint start (state.location, state.altitude);
-  if (reach_clock.check_advance(Basic().time)) {
-    m_task.solve_reach(start, do_solve);
-
-    if (do_solve) {
-      SetCalculated().terrain_base = fixed(m_task.get_terrain_base());
-      SetCalculated().terrain_base_valid = true;
-    }
-  }
-}
-
 void 
 GlideComputerTask::OnTakeoff()
 {
@@ -196,8 +122,7 @@ GlideComputerTask::OnTakeoff()
 
 void 
 GlideComputerTask::set_terrain(const RasterTerrain* _terrain) {
-  terrain = _terrain;
-  m_task.route_set_terrain(terrain);
+  GlideComputerRoute::set_terrain(_terrain);
 }
 
 fixed

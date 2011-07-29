@@ -21,39 +21,42 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_GLIDECOMPUTER_TASK_HPP)
-#define XCSOAR_GLIDECOMPUTER_TASK_HPP
+#ifndef XCSOAR_GLIDE_COMPUTER_ROUTE_HPP
+#define XCSOAR_GLIDE_COMPUTER_ROUTE_HPP
 
-#include "GlideComputerBlackboard.hpp"
-#include "GlideComputerRoute.hpp"
+#include "GPSClock.hpp"
 
+struct MoreData;
+struct DerivedInfo;
+struct SETTINGS_COMPUTER;
 class ProtectedTaskManager;
+class RasterTerrain;
 
-class GlideComputerTask: 
-  GlideComputerRoute,
-  virtual public GlideComputerBlackboard 
-{
+class GlideComputerRoute {
   ProtectedTaskManager &m_task;
 
-public:
-  GlideComputerTask(ProtectedTaskManager& task);
+  GPSClock route_clock;
+  GPSClock reach_clock;
 
-  gcc_pure
-  fixed GetMacCready() const;
+  const RasterTerrain *terrain;
+
+public:
+  GlideComputerRoute(ProtectedTaskManager& task);
 
 protected:
-
-  void Initialise();
-  void ProcessBasicTask();
-  void ProcessMoreTask();
-  void ResetFlight(const bool full=true);
+  void ResetFlight();
+  void ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
+                    const DerivedInfo &last_calculated,
+                    const SETTINGS_COMPUTER &settings_computer);
 
   void set_terrain(const RasterTerrain* _terrain);
 
-  virtual void OnTakeoff();
-
-protected:
-  void ProcessIdle();
- };
+private:
+  void TerrainWarning(const MoreData &basic,
+                      DerivedInfo &calculated,
+                      const DerivedInfo &last_calculated);
+  void Reach(const MoreData &basic, DerivedInfo &calculated,
+             const SETTINGS_COMPUTER &settings_computer);
+};
 
 #endif

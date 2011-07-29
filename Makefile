@@ -243,6 +243,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/GlideComputerAirData.cpp \
 	$(SRC)/GlideComputerInterface.cpp \
 	$(SRC)/GlideComputerStats.cpp \
+	$(SRC)/GlideComputerRoute.cpp \
 	$(SRC)/GlideComputerTask.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/Logger/Logger.cpp \

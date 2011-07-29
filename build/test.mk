@@ -1835,6 +1835,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/GlideComputer.cpp \
 	$(SRC)/GlideComputerBlackboard.cpp \
 	$(SRC)/GlideComputerTask.cpp \
+	$(SRC)/GlideComputerRoute.cpp \
 	$(SRC)/GlideComputerInterface.cpp \
 	$(SRC)/GlideComputerAirData.cpp \
 	$(SRC)/GlideComputerStats.cpp \
