@@ -27,11 +27,74 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(38);
+  plan_tests(92);
+
+  // Test native() and value_native()
+  ok1(equals(Angle::native(fixed_zero).value_native(), fixed_zero));
+  ok1(equals(Angle::native(fixed_one).value_native(), fixed_one));
+  ok1(equals(Angle::native(fixed_two).value_native(), fixed_two));
+  ok1(equals(Angle::native(fixed_90).value_native(), fixed_90));
+
+  // Test zero()
+  ok1(equals(Angle::zero().value_native(), fixed_zero));
+
+  // Test degrees()
+#ifdef RADIANS
+  ok1(equals(Angle::degrees(fixed_zero).value_native(), fixed_zero));
+  ok1(equals(Angle::degrees(fixed_90).value_native(), fixed_half_pi));
+  ok1(equals(Angle::degrees(fixed_180).value_native(), fixed_pi));
+  ok1(equals(Angle::degrees(fixed_270).value_native(), fixed_pi + fixed_half_pi));
+  ok1(equals(Angle::degrees(fixed_360).value_native(), fixed_two_pi));
+
+  ok1(equals(Angle::radians(fixed_zero).value_native(), fixed_zero));
+  ok1(equals(Angle::radians(fixed_half_pi).value_native(), fixed_half_pi));
+  ok1(equals(Angle::radians(fixed_pi).value_native(), fixed_pi));
+  ok1(equals(Angle::radians(fixed_pi + fixed_half_pi).value_native(),
+                            fixed_pi + fixed_half_pi));
+  ok1(equals(Angle::radians(fixed_two_pi).value_native(), fixed_two_pi));
+#else
+  ok1(equals(Angle::degrees(fixed_zero).value_native(), fixed_zero));
+  ok1(equals(Angle::degrees(fixed_90).value_native(), fixed_90));
+  ok1(equals(Angle::degrees(fixed_180).value_native(), fixed_180));
+  ok1(equals(Angle::degrees(fixed_270).value_native(), fixed_270));
+  ok1(equals(Angle::degrees(fixed_360).value_native(), fixed_360));
+
+  ok1(equals(Angle::radians(fixed_zero).value_native(), fixed_zero));
+  ok1(equals(Angle::radians(fixed_half_pi).value_native(), fixed_90));
+  ok1(equals(Angle::radians(fixed_pi).value_native(), fixed_180));
+  ok1(equals(Angle::radians(fixed_pi + fixed_half_pi).value_native(), fixed_270));
+  ok1(equals(Angle::radians(fixed_two_pi).value_native(), fixed_360));
+#endif
+
+  // Test value_degrees()
+  ok1(equals(Angle::degrees(fixed_90).value_degrees(), 90));
+  ok1(equals(Angle::degrees(-fixed_90).value_degrees(), -90));
+
+  // Test value_radians()
+  ok1(equals(Angle::degrees(fixed_90).value_radians(), fixed_half_pi));
+  ok1(equals(Angle::degrees(-fixed_90).value_radians(), -fixed_half_pi));
+
+  // Test value_hours()
+  ok1(equals(Angle::degrees(fixed_90).value_hours(), fixed(6)));
+  ok1(equals(Angle::degrees(-fixed_90).value_hours(), -fixed(6)));
+
+  // Test dms()
+  ok1(equals(Angle::dms(fixed_90, fixed(30), fixed(15)).value_degrees(),
+             fixed(90.504166667)));
+  ok1(equals(Angle::dms(fixed_90, -fixed(30), -fixed(15)).value_degrees(),
+             fixed(89.495833333)));
+  ok1(equals(Angle::dms(-fixed_90, -fixed(30), -fixed(15)).value_degrees(),
+             fixed(-90.504166667)));
+  ok1(equals(Angle::dms(-fixed_90, fixed(30), fixed(15)).value_degrees(),
+             fixed(-89.495833333)));
 
   // Test magnitude_degrees()
   ok1(equals(Angle::degrees(fixed_90).magnitude_degrees(), 90));
   ok1(equals(Angle::degrees(-fixed_90).magnitude_degrees(), 90));
+
+  // Test magnitude_radians()
+  ok1(equals(Angle::degrees(fixed_90).magnitude_radians(), fixed_half_pi));
+  ok1(equals(Angle::degrees(-fixed_90).magnitude_radians(), fixed_half_pi));
 
   // Test Reciprocal()
   ok1(equals(Angle::degrees(fixed_90).Reciprocal(), 270));
@@ -91,6 +154,55 @@ int main(int argc, char **argv)
   ok1(equals(Angle::degrees(fixed_90).BiSector(Angle::degrees(fixed_180)), 45));
   ok1(equals(Angle::degrees(fixed_270).BiSector(Angle::degrees(fixed_zero)), 225));
   ok1(equals(Angle::degrees(fixed_270).BiSector(Angle::degrees(fixed_180)), 315));
+
+  // Test Fraction()
+  ok1(equals(Angle::degrees(fixed_zero).Fraction(
+      Angle::degrees(fixed_90), fixed(0.25)), 22.5));
+  ok1(equals(Angle::degrees(fixed_zero).Fraction(
+      Angle::degrees(fixed_90), fixed(0.5)), 45));
+  ok1(equals(Angle::degrees(fixed_zero).Fraction(
+      Angle::degrees(fixed_90), fixed(0.75)), 67.5));
+
+  // Test sign()
+  ok1(Angle::degrees(fixed_90).sign() == 1);
+  ok1(Angle::degrees(fixed_zero).sign() == 0);
+  ok1(Angle::degrees(-fixed_90).sign() == -1);
+
+  ok1(Angle::degrees(fixed_90).sign(fixed_one) == 1);
+  ok1(Angle::degrees(fixed_half).sign(fixed_one) == 0);
+  ok1(Angle::degrees(fixed_zero).sign(fixed_one) == 0);
+  ok1(Angle::degrees(-fixed_half).sign(fixed_one) == 0);
+  ok1(Angle::degrees(-fixed_90).sign(fixed_one) == -1);
+
+  // Test sin_cos()
+  fixed sin, cos;
+  Angle::degrees(fixed(45)).sin_cos(sin, cos);
+  ok1(equals(sin, Angle::degrees(fixed(45)).sin()));
+  ok1(equals(cos, Angle::degrees(fixed(45)).cos()));
+
+  // Test flip()
+  Angle a = Angle::degrees(fixed_90);
+  a.flip();
+  ok1(equals(a.value_degrees(), -fixed_90));
+
+  // Test flipped()
+  ok1(equals(Angle::degrees(fixed_zero).flipped().value_degrees(), fixed_zero));
+  ok1(equals(Angle::degrees(fixed_90).flipped().value_degrees(), -fixed_90));
+  ok1(equals(Angle::degrees(fixed_180).flipped().value_degrees(), -fixed_180));
+  ok1(equals(Angle::degrees(fixed_270).flipped().value_degrees(), -fixed_270));
+
+  // Test half()
+  ok1(equals(Angle::degrees(fixed_90).half().value_degrees(), fixed(45)));
+  ok1(equals(Angle::degrees(fixed_180).half().value_degrees(), fixed_90));
+
+  // Test from_xy()
+  ok1(equals(Angle::from_xy(fixed_one, fixed_zero), 0));
+  ok1(equals(Angle::from_xy(fixed_one, fixed_one), 45));
+  ok1(equals(Angle::from_xy(fixed_zero, fixed_one), 90));
+  ok1(equals(Angle::from_xy(-fixed_one, fixed_one), 135));
+  ok1(equals(Angle::from_xy(-fixed_one, fixed_zero), 180));
+  ok1(equals(Angle::from_xy(fixed_zero, -fixed_one), -90));
+  ok1(equals(Angle::from_xy(fixed_one, -fixed_one), -45));
 
   return exit_status();
 }
