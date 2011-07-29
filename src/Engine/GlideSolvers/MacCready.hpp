@@ -42,6 +42,9 @@ class GlidePolar;
  */
 class MacCready 
 {
+  const GlidePolar &glide_polar;
+  const fixed cruise_efficiency;
+
 public:
   /**
    * Constructor for MacCready helper class.
@@ -144,15 +147,6 @@ private:
    * @return Solution
    */
   GlideResult solve_cruise(const GlideState &task) const;
-
-  const GlidePolar &glide_polar;
-  const fixed cruise_efficiency;
-
-  // /** @link dependency */
-  /*#  MacCreadyVopt lnkMacCreadyVopt; */
-
-  // /** @link dependency */
-  /*#  GlideQuadratic lnkGlideQuadratic; */
 };
 
 #endif
