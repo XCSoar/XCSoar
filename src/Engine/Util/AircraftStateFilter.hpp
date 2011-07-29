@@ -33,6 +33,12 @@
  * in order to derive average speed, bearing and climb rate
  */
 class AircraftStateFilter {
+  DiffFilter m_df_x, m_df_y, m_df_alt;
+  Filter m_lpf_x, m_lpf_y, m_lpf_alt;
+  AircraftState m_state_last;
+  fixed m_x, m_y;
+  fixed m_vx, m_vy, m_vz;
+
 public:
   /** 
    * Constructor
@@ -95,13 +101,6 @@ public:
    * @return Predicted aircraft state in in_time seconds
    */
   AircraftState get_predicted_state(const fixed &in_time) const;
-
-private:
-  DiffFilter m_df_x, m_df_y, m_df_alt;
-  Filter m_lpf_x, m_lpf_y, m_lpf_alt;
-  AircraftState m_state_last;
-  fixed m_x, m_y;
-  fixed m_vx, m_vy, m_vz;
 };
 
 #endif
