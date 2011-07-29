@@ -42,9 +42,13 @@ class GlidePolar;
  */
 class MacCready 
 {
+  const GlidePolar &glide_polar;
+  const fixed cruise_efficiency;
+
 public:
-  /** Constructor for MacCready helper class.
-   *   Not intended to be used directly, but by GlidePolar class.
+  /**
+   * Constructor for MacCready helper class.
+   * Not intended to be used directly, but by GlidePolar class.
    *
    * @param _glide_polar The glide polar used for calculations.
    * @param _cruise_efficiency The efficiency ratio for calculations 
@@ -91,17 +95,7 @@ public:
    */
   gcc_pure
   GlideResult solve_glide(const GlideState &task, const fixed V,
-      const bool allow_partial=false) const;
-
-  /**
-   * Returns current MacCready setting of the glide polar (convenience function)
-   */
-  fixed get_mc() const;
-
-  /**
-   * Returns inverse of current MacCready setting of the glide polar (convenience function)
-   */
-  fixed get_inv_mc() const;
+                          const bool allow_partial = false) const;
 
 private:
   /**
@@ -117,7 +111,7 @@ private:
    */
   GlideResult
   solve_glide(const GlideState &task, const fixed V, const fixed S,
-      const bool allow_partial = false) const;
+              const bool allow_partial = false) const;
 
   /**
    * Solve a task which is known to be pure glide,
@@ -129,7 +123,7 @@ private:
    * @return Solution
    */
   GlideResult optimise_glide(const GlideState &task,
-      const bool allow_partial = false) const;
+                             const bool allow_partial = false) const;
 
   /**
    * Solve a task which is known to be pure climb (no distance
@@ -153,15 +147,6 @@ private:
    * @return Solution
    */
   GlideResult solve_cruise(const GlideState &task) const;
-
-  const GlidePolar &glide_polar;
-  const fixed cruise_efficiency;
-
-  // /** @link dependency */
-  /*#  MacCreadyVopt lnkMacCreadyVopt; */
-
-  // /** @link dependency */
-  /*#  GlideQuadratic lnkGlideQuadratic; */
 };
 
 #endif

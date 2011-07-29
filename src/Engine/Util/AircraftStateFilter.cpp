@@ -95,7 +95,7 @@ AircraftStateFilter::get_speed() const
 Angle 
 AircraftStateFilter::get_bearing() const
 {
-  return Angle::radians(atan2(m_vx,m_vy)).as_bearing();
+  return Angle::from_xy(m_vy, m_vx).as_bearing();
 }
 
 fixed 
@@ -120,10 +120,10 @@ AircraftState
 AircraftStateFilter::get_predicted_state(const fixed &in_time) const
 {
   AircraftState state_next = m_state_last;
-  GeoVector vec(get_speed()*in_time, get_bearing());
+  state_next.ground_speed = get_speed();
+  GeoVector vec(state_next.ground_speed * in_time, get_bearing());
   state_next.location = vec.end_point(m_state_last.location);
   state_next.altitude = m_state_last.altitude+get_climb_rate()*in_time;
-  state_next.ground_speed = get_speed();
   state_next.vario = get_climb_rate();
   return state_next;
 }
