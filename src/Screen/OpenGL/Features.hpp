@@ -35,6 +35,11 @@ Copyright_License {
  */
 #define HAVE_GLES
 
+/**
+ * The OES_draw_texture extension is available.
+ */
+#define HAVE_OES_DRAW_TEXTURE
+
 #endif
 
 /**

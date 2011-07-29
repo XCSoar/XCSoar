@@ -48,7 +48,7 @@ protected:
   GLuint id;
   unsigned width, height;
 
-#ifndef HAVE_GLES
+#ifndef HAVE_OES_DRAW_TEXTURE
   /**
    * The real dimensions of the texture.  This may differ when
    * ARB_texture_non_power_of_two is not available.
