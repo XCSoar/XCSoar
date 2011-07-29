@@ -78,9 +78,15 @@ unsigned SystemLoadCPU()
 
 #elif defined(__linux__) || defined(ANDROID)
 
+#include <algorithm>
+
 #include <unistd.h>
 #include <fcntl.h>
 #include <stdio.h>
+
+struct cpu {
+  long busy, idle;
+};
 
 unsigned
 SystemLoadCPU()
@@ -97,11 +103,8 @@ SystemLoadCPU()
 
   line[nbytes] = 0;
 
-  struct cpu {
-    long busy, idle;
-  };
-
-  static cpu last;
+  static const unsigned HISTORY_LENGTH = 5;
+  static cpu history[HISTORY_LENGTH];
 
   cpu current;
   long user, nice, system;
@@ -112,18 +115,18 @@ SystemLoadCPU()
 
   current.busy = user + nice + system;
 
-  if (last.idle == 0) {
+  const cpu last = history[0];
+  std::copy(&history[1], &history[HISTORY_LENGTH], &history[0]);
+  history[HISTORY_LENGTH - 1] = current;
+
+  if (last.idle == 0)
     /* first run */
-    last = current;
     return (unsigned)-1;
-  }
 
   const cpu diff = {
     current.busy - last.busy,
     current.idle - last.idle,
   };
-
-  last = current;
 
   long total = diff.busy + diff.idle;
   if (total <= 0)
