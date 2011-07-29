@@ -200,7 +200,7 @@ public:
      * Calculate the minimum square distance of this rectangle to the
      * specified point.  Returns 0 when the point is inside.
      */
-    bool SquareDistanceTo(const Point &other) const {
+    distance_type SquareDistanceTo(const Point &other) const {
       distance_type dx = other.x < left
         ? left - other.x
         : (other.x > right
