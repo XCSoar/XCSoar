@@ -93,16 +93,6 @@ public:
   GlideResult solve_glide(const GlideState &task, const fixed V,
       const bool allow_partial=false) const;
 
-  /**
-   * Returns current MacCready setting of the glide polar (convenience function)
-   */
-  fixed get_mc() const;
-
-  /**
-   * Returns inverse of current MacCready setting of the glide polar (convenience function)
-   */
-  fixed get_inv_mc() const;
-
 private:
   /**
    * Calculates the glide solution for a classical MacCready theory task

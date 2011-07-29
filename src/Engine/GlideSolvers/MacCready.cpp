@@ -339,15 +339,3 @@ subs rho=(gamma*Vn+S)/mc
     rho = (S+M)/M-1
 
 */
-
-fixed
-MacCready::get_mc() const
-{
-  return glide_polar.GetMC();
-}
-
-fixed
-MacCready::get_inv_mc() const
-{
-  return glide_polar.GetInvMC();
-}
