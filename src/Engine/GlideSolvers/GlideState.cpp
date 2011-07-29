@@ -29,7 +29,7 @@
  * 
  * - document this equation!
  */
-class GlideQuadratic: public Quadratic
+class AverageSpeedSolver: public Quadratic
 {
 public:
   /**
@@ -40,7 +40,7 @@ public:
    *
    * @return Initialised object (not solved)
    */
-  GlideQuadratic(const fixed dwcostheta, const fixed wsq, const fixed V) :
+  AverageSpeedSolver(const fixed dwcostheta, const fixed wsq, const fixed V) :
     Quadratic(dwcostheta, wsq - V * V)
   {
   }
@@ -67,7 +67,7 @@ GlideState::calc_ave_speed(const fixed Veff) const
 {
   if (positive(EffectiveWindSpeed)) {
     // only need to solve if positive wind speed
-    return GlideQuadratic(dwcostheta_, wsq_, Veff).solve();
+    return AverageSpeedSolver(dwcostheta_, wsq_, Veff).solve();
   }
 
   return Veff;
