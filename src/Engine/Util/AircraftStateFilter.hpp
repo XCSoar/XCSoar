@@ -92,7 +92,9 @@ public:
    *
    * @return Climb rate (m/s)
    */
-  fixed GetClimbRate() const;
+  inline fixed GetClimbRate() const {
+    return v_alt;
+  }
 
   /**
    * Calculate predicted state in future

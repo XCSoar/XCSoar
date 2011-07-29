@@ -93,12 +93,6 @@ AircraftStateFilter::GetBearing() const
   return Angle::from_xy(v_y, v_x).as_bearing();
 }
 
-fixed
-AircraftStateFilter::GetClimbRate() const
-{
-  return v_alt;
-}
-
 bool
 AircraftStateFilter::Design(const fixed cutoff_wavelength)
 {
