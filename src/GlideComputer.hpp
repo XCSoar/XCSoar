@@ -34,6 +34,8 @@ Copyright_License {
 
 class Waypoints;
 class ProtectedTaskManager;
+class ProtectedRoutePlanner;
+class RoutePlannerGlue;
 class GlideComputerTaskEvents;
 class RasterTerrain;
 
@@ -59,6 +61,8 @@ public:
   GlideComputer(const Waypoints &_way_points,
                 Airspaces &_airspace_database,
                 ProtectedTaskManager& task,
+                ProtectedRoutePlanner &protected_route_planner,
+                const RoutePlannerGlue &route_planner,
                 ProtectedAirspaceWarningManager &_awm,
                 GlideComputerTaskEvents& events);
   virtual ~GlideComputer() {}

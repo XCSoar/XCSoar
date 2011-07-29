@@ -23,7 +23,8 @@ Copyright_License {
 */
 
 #include "GlideComputerRoute.hpp"
-#include "Task/ProtectedTaskManager.hpp"
+#include "Task/ProtectedRoutePlanner.hpp"
+#include "Task/RoutePlannerGlue.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
@@ -32,11 +33,15 @@ Copyright_License {
 
 #include <algorithm>
 
-GlideComputerRoute::GlideComputerRoute(ProtectedTaskManager &task):
-  m_task(task),
-  route_clock(fixed(5)),
-  reach_clock(fixed(5)),
-  terrain(NULL)
+GlideComputerRoute::GlideComputerRoute(ProtectedRoutePlanner &_protected_route_planner,
+                                       const RoutePlannerGlue &_route_planner,
+                                       Route &_solution)
+  :protected_route_planner(_protected_route_planner),
+   route_planner(_route_planner),
+   route_clock(fixed(5)),
+   reach_clock(fixed(5)),
+   terrain(NULL),
+   solution(_solution)
 {}
 
 void
@@ -50,19 +55,24 @@ void
 GlideComputerRoute::ProcessRoute(const MoreData &basic,
                                  DerivedInfo &calculated,
                                  const DerivedInfo &last_calculated,
-                                 const SETTINGS_COMPUTER &settings_computer)
+                                 const SETTINGS_COMPUTER &settings_computer,
+                                 const GlidePolar &glide_polar,
+                                 const GlidePolar &safety_polar)
 {
-  m_task.route_update_polar(calculated.wind);
-  calculated.glide_polar_reach = m_task.get_reach_polar();
+  protected_route_planner.SetPolars(glide_polar, safety_polar,
+                                    calculated.wind);
+  calculated.glide_polar_reach = route_planner.get_reach_polar();
 
   Reach(basic, calculated, settings_computer);
-  TerrainWarning(basic, calculated, last_calculated);
+  TerrainWarning(basic, calculated, last_calculated,
+                 settings_computer.route_planner);
 }
 
 void
 GlideComputerRoute::TerrainWarning(const MoreData &basic,
                                    DerivedInfo &calculated,
-                                   const DerivedInfo &last_calculated)
+                                   const DerivedInfo &last_calculated,
+                                   const RoutePlannerConfig &config)
 {
   const AircraftState as = ToAircraftState(basic, calculated);
 
@@ -92,14 +102,16 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
       }
 
       if (dirty) {
-        m_task.route_solve(dest, start, h_ceiling);
+        protected_route_planner.SolveRoute(dest, start, config, h_ceiling,
+                                           solution);
         calculated.terrain_warning =
-          m_task.intersection(start, dest,
-                              calculated.terrain_warning_location);
+          route_planner.intersection(start, dest,
+                                     calculated.terrain_warning_location);
       }
       return;
     } else {
-      m_task.route_solve(start, start, h_ceiling);
+      protected_route_planner.SolveRoute(start, start, config, h_ceiling,
+                                         solution);
     }
   }
   calculated.terrain_warning = false;
@@ -122,10 +134,10 @@ GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
   const AircraftState state = ToAircraftState(basic, calculated);
   const AGeoPoint start (state.location, state.altitude);
   if (reach_clock.check_advance(basic.time)) {
-    m_task.solve_reach(start, do_solve);
+    protected_route_planner.SolveReach(start, do_solve);
 
     if (do_solve) {
-      calculated.terrain_base = fixed(m_task.get_terrain_base());
+      calculated.terrain_base = fixed(route_planner.get_terrain_base());
       calculated.terrain_base_valid = true;
     }
   }
@@ -134,5 +146,5 @@ GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
 void
 GlideComputerRoute::set_terrain(const RasterTerrain* _terrain) {
   terrain = _terrain;
-  m_task.route_set_terrain(terrain);
+  protected_route_planner.SetTerrain(terrain);
 }

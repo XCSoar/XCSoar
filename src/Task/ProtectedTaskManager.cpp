@@ -22,13 +22,12 @@ Copyright_License {
 */
 
 #include "ProtectedTaskManager.hpp"
-#include "Task/TaskManager.hpp"
 #include "Util/Serialiser.hpp"
 #include "Util/Deserialiser.hpp"
 #include "Util/DataNodeXML.hpp"
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
-#include "Terrain/RasterTerrain.hpp"
+#include "Task/RoutePlannerGlue.hpp"
 
 #include <windef.h> // for MAX_PATH
 
@@ -320,46 +319,11 @@ ProtectedTaskManager::reset()
 }
 
 void
-ProtectedTaskManager::route_set_terrain(const RasterTerrain *terrain)
-{
+ProtectedTaskManager::SetRoutePlanner(const RoutePlannerGlue *_route) {
+  intersection_test.set_route(_route);
+
   ExclusiveLease lease(*this);
-  m_route.set_terrain(terrain);
-  intersection_test.set_route(&m_route);
   lease->set_intersection_test(&intersection_test);
-}
-
-void
-ProtectedTaskManager::route_solve(const AGeoPoint& dest, const AGeoPoint& start,
-                                  const short h_ceiling)
-{
-  ExclusiveLease lease(*this);
-  m_route.synchronise(m_airspaces, dest, start);
-  m_route.solve(dest, start, lease->get_task_behaviour().route_planner, h_ceiling);
-  m_route.get_solution(lease->get_planned_route());
-}
-
-void
-ProtectedTaskManager::route_update_polar(const SpeedVector& wind)
-{
-  ExclusiveLease lease(*this);
-  m_route.update_polar(lease->get_glide_polar(),
-                       lease->get_safety_polar(),
-                       wind);
-}
-
-GlidePolar
-ProtectedTaskManager::get_reach_polar() const
-{
-  Lease lease(*this);
-  return m_route.get_reach_polar();
-}
-
-bool
-ProtectedTaskManager::intersection(const AGeoPoint& origin,
-                                   const AGeoPoint& destination,
-                                   GeoPoint& intx) const
-{
-  return m_route.intersection(origin, destination, intx);
 }
 
 bool
@@ -372,35 +336,4 @@ ReachIntersectionTest::intersects(const AGeoPoint& destination)
   // we use find_positive_arrival here instead of is_inside, because may use
   // arrival height for sorting later
   return (h< destination.altitude);
-}
-
-void
-ProtectedTaskManager::solve_reach(const AGeoPoint& origin, const bool do_solve)
-{
-  ExclusiveLease lease(*this);
-  m_route.solve_reach(origin, do_solve);
-}
-
-bool
-ProtectedTaskManager::find_positive_arrival(const AGeoPoint& dest,
-                                            short& arrival_height_reach,
-                                            short& arrival_height_direct) const
-{
-  Lease lease(*this);
-  return m_route.find_positive_arrival(dest, arrival_height_reach, arrival_height_direct);
-}
-
-void
-ProtectedTaskManager::accept_in_range(const GeoBounds& bounds,
-                                      TriangleFanVisitor& visitor) const
-{
-  Lease lease(*this);
-  return m_route.accept_in_range(bounds, visitor);
-}
-
-short
-ProtectedTaskManager::get_terrain_base() const
-{
-  Lease lease(*this);
-  return m_route.get_terrain_base();
 }

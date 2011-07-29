@@ -35,6 +35,7 @@ class Waypoints;
 class GlidePolar;
 class TaskBehaviour;
 class ProtectedTaskManager;
+class ProtectedRoutePlanner;
 
 /**
  * Renders way point icons and labels into a #Canvas.
@@ -64,7 +65,8 @@ public:
               const MapWindowProjection &projection,
               const struct WaypointRendererSettings &settings,
               const TaskBehaviour &task_behaviour,
-              const ProtectedTaskManager *task);
+              const ProtectedTaskManager *task,
+              const ProtectedRoutePlanner *route_planner);
 };
 
 #endif

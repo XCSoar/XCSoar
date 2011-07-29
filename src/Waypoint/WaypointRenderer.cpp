@@ -40,6 +40,7 @@ Copyright_License {
 #include "Engine/Task/TaskPoints/AATPoint.hpp"
 #include "Engine/Task/TaskPoints/ASTPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Task/ProtectedRoutePlanner.hpp"
 #include "Screen/Icon.hpp"
 #include "Screen/Canvas.hpp"
 #include "Units/Units.hpp"
@@ -74,13 +75,14 @@ struct VisibleWaypoint {
     in_task = _in_task;
   }
 
-  void CalculateReachability(const ProtectedTaskManager &task,
+  void CalculateReachability(const ProtectedRoutePlanner &route_planner,
                              const TaskBehaviour &task_behaviour)
   {
     const fixed elevation = waypoint->Altitude +
       task_behaviour.safety_height_arrival;
     const AGeoPoint p_dest (waypoint->Location, elevation);
-    if (task.find_positive_arrival(p_dest, arrival_height_terrain, arrival_height_glide)) {
+    if (route_planner.FindPositiveArrival(p_dest, arrival_height_terrain,
+                                          arrival_height_glide)) {
       const short h_base = iround(elevation);
       arrival_height_terrain -= h_base;
       arrival_height_glide -= h_base;
@@ -346,13 +348,13 @@ public:
     task_valid = true;
   }
 
-  void Calculate(const ProtectedTaskManager &task) {
+  void Calculate(const ProtectedRoutePlanner &route_planner) {
     for (unsigned i = 0; i < waypoints.size(); ++i) {
       VisibleWaypoint &vwp = waypoints[i];
       const Waypoint &way_point = *vwp.waypoint;
 
       if (way_point.IsLandable() || way_point.Flags.Watched)
-        vwp.CalculateReachability(task, task_behaviour);
+        vwp.CalculateReachability(route_planner, task_behaviour);
     }
   }
 
@@ -381,12 +383,13 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
                          const MapWindowProjection &projection,
                          const struct WaypointRendererSettings &settings,
                          const TaskBehaviour &task_behaviour,
-                         const ProtectedTaskManager *task)
+                         const ProtectedTaskManager *task,
+                         const ProtectedRoutePlanner *route_planner)
 {
   if ((way_points == NULL) || way_points->empty())
     return;
 
-  if (task) {
+  if (task != NULL && route_planner != NULL) {
 
     canvas.set_text_color(COLOR_BLACK);
 
@@ -409,7 +412,7 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
     way_points->visit_within_range(projection.GetGeoScreenCenter(),
                                    projection.GetScreenDistanceMeters(), v);
 
-    v.Calculate(*task);
+    v.Calculate(*route_planner);
     v.Draw(canvas);
 
     MapWaypointLabelRender(canvas,

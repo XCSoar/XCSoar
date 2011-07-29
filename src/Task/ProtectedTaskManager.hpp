@@ -24,17 +24,11 @@
 #define XCSOAR_PROTECTED_TASK_MANAGER_HPP
 
 #include "Thread/Guard.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskManager.hpp"
-#include "Task/TaskAdvance.hpp"
-#include "Task/TaskPoints/AATPoint.hpp"
-#include "Task/RoutePlannerGlue.hpp"
 #include "Compiler.h"
 
-class TaskStats;
-class CommonStats;
-class RasterTerrain;
-class Airspaces;
+class GlidePolar;
+class RoutePlannerGlue;
 
 class ReachIntersectionTest: public AbortIntersectionTest {
 public:
@@ -56,19 +50,15 @@ class ProtectedTaskManager: public Guard<TaskManager>
 protected:
   const TaskBehaviour &task_behaviour;
   TaskEvents &task_events;
-  Airspaces &m_airspaces;
-  RoutePlannerGlue m_route;
   ReachIntersectionTest intersection_test;
 
   static const TCHAR default_task_path[];
 
 public:
   ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour& tb,
-                       TaskEvents& te,
-                       Airspaces &airspaces)
+                       TaskEvents& te)
     :Guard<TaskManager>(_task_manager),
-     task_behaviour(tb), task_events(te), m_airspaces(airspaces),
-     m_route(_task_manager.get_glide_polar(), m_airspaces)
+     task_behaviour(tb), task_events(te)
     {}
   
   ~ProtectedTaskManager();
@@ -249,24 +239,7 @@ public:
   gcc_pure
   fixed get_ordered_taskpoint_radius(const unsigned TPindex) const;
 
-  void route_set_terrain(const RasterTerrain *terrain);
-  void route_solve(const AGeoPoint& dest, const AGeoPoint& start,
-                   const short h_ceiling);
-  void route_update_polar(const SpeedVector& wind);
-  GlidePolar get_reach_polar() const;
-
-  bool intersection(const AGeoPoint& origin,
-                    const AGeoPoint& destination,
-                    GeoPoint& intx) const;
-
-  void solve_reach(const AGeoPoint& origin, const bool do_solve);
-
-  void accept_in_range(const GeoBounds& bounds,
-                       TriangleFanVisitor& visitor) const;
-
-  bool find_positive_arrival(const AGeoPoint& dest,
-                             short& arrival_height_reach,
-                             short& arrival_height_direct) const;
+  void SetRoutePlanner(const RoutePlannerGlue *_route);
 
   short get_terrain_base() const;
 };

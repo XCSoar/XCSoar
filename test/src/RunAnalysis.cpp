@@ -51,6 +51,7 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Task/ProtectedRoutePlanner.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
@@ -236,12 +237,18 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   ProtectedTaskManager protected_task_manager(task_manager,
                                               blackboard.SettingsComputer(),
-                                              task_events, airspace_database);
+                                              task_events);
+
+  RoutePlannerGlue route_planner(task_manager.get_glide_polar(),
+                                 airspace_database);
+  ProtectedRoutePlanner protected_route_planner(route_planner,
+                                                airspace_database);
 
   LoadFiles(airspace_database);
 
   GlideComputer glide_computer(way_points, airspace_database,
                                protected_task_manager,
+                               protected_route_planner, route_planner,
                                airspace_warnings,
                                task_events);
   glide_computer.set_terrain(terrain);

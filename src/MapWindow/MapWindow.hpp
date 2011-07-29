@@ -137,6 +137,7 @@ protected:
   AirspaceRenderer airspace_renderer;
 
   ProtectedTaskManager *task;
+  const ProtectedRoutePlanner *route_planner;
 
   Marks *marks;
 
@@ -192,6 +193,10 @@ public:
 
   void set_task(ProtectedTaskManager *_task) {
     task = _task;
+  }
+
+  void SetRoutePlanner(const ProtectedRoutePlanner *_route_planner) {
+    route_planner = _route_planner;
   }
 
   void set_airspaces(Airspaces *_airspace_database,

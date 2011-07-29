@@ -25,7 +25,7 @@ Copyright_License {
 #include "Geo/GeoClip.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Icon.hpp"
-#include "Task/ProtectedTaskManager.hpp"
+#include "Task/ProtectedRoutePlanner.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Triangulate.hpp"
@@ -268,14 +268,14 @@ MapWindow::DrawTerrainAbove(Canvas &canvas)
   if (!Basic().location_available
       || !Calculated().flight.flying
       || SettingsComputer().FinalGlideTerrain == SETTINGS_COMPUTER::FGT_OFF
-      || !task)
+      || route_planner == NULL)
     return;
 
   // Create a visitor for the Reach code
   TriangleCompound visitor(render_projection);
 
   // Fill the TriangleCompound with all TriangleFans in range
-  task->accept_in_range(render_projection.GetScreenBounds(), visitor);
+  route_planner->AcceptInRange(render_projection.GetScreenBounds(), visitor);
 
   // Exit early if not fans found
   if (visitor.fans.empty())

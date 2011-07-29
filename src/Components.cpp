@@ -85,6 +85,7 @@ Copyright_License {
 
 #include "Task/TaskManager.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Task/ProtectedRoutePlanner.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "GlideComputerInterface.hpp"
 #include "Operation.hpp"
@@ -115,6 +116,9 @@ Replay *replay;
 Waypoints way_points;
 
 GlideComputerTaskEvents task_events;
+
+static RoutePlannerGlue *route_planner;
+ProtectedRoutePlanner *protected_route_planner;
 
 static TaskManager *task_manager;
 ProtectedTaskManager *protected_task_manager;
@@ -324,7 +328,14 @@ XCSoarInterface::Startup()
   protected_task_manager =
     new ProtectedTaskManager(*task_manager,
                              XCSoarInterface::SettingsComputer(),
-                             task_events, airspace_database);
+                             task_events);
+
+  route_planner = new RoutePlannerGlue(task_manager->get_glide_polar(),
+                                       airspace_database);
+  protected_route_planner = new ProtectedRoutePlanner(*route_planner,
+                                                      airspace_database);
+
+  protected_task_manager->SetRoutePlanner(route_planner);
 
   airspace_warning = new AirspaceWarningManager(airspace_database,
                                                 *task_manager);
@@ -337,6 +348,8 @@ XCSoarInterface::Startup()
 
   glide_computer = new GlideComputer(way_points, airspace_database,
                                      *protected_task_manager,
+                                     *protected_route_planner,
+                                     *route_planner,
                                      *airspace_warnings,
                                      task_events);
   glide_computer->set_terrain(terrain);
@@ -420,6 +433,7 @@ XCSoarInterface::Startup()
   if (map_window != NULL) {
     map_window->set_way_points(&way_points);
     map_window->set_task(protected_task_manager);
+    map_window->SetRoutePlanner(protected_route_planner);
     map_window->set_airspaces(&airspace_database, airspace_warnings);
 
     map_window->set_topography(topography);
@@ -571,6 +585,11 @@ XCSoarInterface::Shutdown(void)
   RawLoggerShutdown();
 
   delete replay;
+
+  protected_task_manager->SetRoutePlanner(NULL);
+
+  delete protected_route_planner;
+  delete route_planner;
 
   delete protected_task_manager;
   delete task_manager;

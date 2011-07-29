@@ -36,7 +36,9 @@ class GlideComputerTask:
   ProtectedTaskManager &m_task;
 
 public:
-  GlideComputerTask(ProtectedTaskManager& task);
+  GlideComputerTask(ProtectedTaskManager& task,
+                    ProtectedRoutePlanner &protected_route_planner,
+                    const RoutePlannerGlue &route_planner);
 
   gcc_pure
   fixed GetMacCready() const;

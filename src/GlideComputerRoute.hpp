@@ -24,37 +24,50 @@ Copyright_License {
 #ifndef XCSOAR_GLIDE_COMPUTER_ROUTE_HPP
 #define XCSOAR_GLIDE_COMPUTER_ROUTE_HPP
 
+#include "Engine/Route/RoutePlanner.hpp"
 #include "GPSClock.hpp"
 
 struct MoreData;
 struct DerivedInfo;
 struct SETTINGS_COMPUTER;
-class ProtectedTaskManager;
+struct RoutePlannerConfig;
+class ProtectedRoutePlanner;
+class RoutePlannerGlue;
 class RasterTerrain;
+class GlidePolar;
 
 class GlideComputerRoute {
-  ProtectedTaskManager &m_task;
+  ProtectedRoutePlanner &protected_route_planner;
+  const RoutePlannerGlue &route_planner;
 
   GPSClock route_clock;
   GPSClock reach_clock;
 
   const RasterTerrain *terrain;
 
+  Route &solution;
+
 public:
-  GlideComputerRoute(ProtectedTaskManager& task);
+  GlideComputerRoute(ProtectedRoutePlanner &_protected_route_planner,
+                     const RoutePlannerGlue &_route_planner,
+                     Route &solution);
 
 protected:
   void ResetFlight();
   void ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
                     const DerivedInfo &last_calculated,
-                    const SETTINGS_COMPUTER &settings_computer);
+                    const SETTINGS_COMPUTER &settings_computer,
+                    const GlidePolar &glide_polar,
+                    const GlidePolar &safety_polar);
 
   void set_terrain(const RasterTerrain* _terrain);
 
 private:
   void TerrainWarning(const MoreData &basic,
                       DerivedInfo &calculated,
-                      const DerivedInfo &last_calculated);
+                      const DerivedInfo &last_calculated,
+                      const RoutePlannerConfig &config);
+
   void Reach(const MoreData &basic, DerivedInfo &calculated,
              const SETTINGS_COMPUTER &settings_computer);
 };
