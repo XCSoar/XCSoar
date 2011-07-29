@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef AIRCRAFT_STATE_FILTER_HPP
 #define AIRCRAFT_STATE_FILTER_HPP
 
@@ -30,7 +31,6 @@
 /**
  * Class for filtering aircraft state (location and altitude) 
  * in order to derive average speed, bearing and climb rate
- * 
  */
 class AircraftStateFilter {
 public:
@@ -39,62 +39,61 @@ public:
    * 
    * @param cutoff_wavelength -3db cutoff wavelength (s) of filters
    */
-  AircraftStateFilter(const fixed cutoff_wavelength=fixed_ten);
+  AircraftStateFilter(const fixed cutoff_wavelength = fixed_ten);
 
-/** 
- * Reset filters to initial state
- * 
- * @param state State to reset to
- */
-  void reset(const AircraftState& state);
+  /**
+   * Reset filters to initial state
+   *
+   * @param state State to reset to
+   */
+  void reset(const AircraftState &state);
 
-/** 
- * Update the filters.  Expects time to have advanced;
- * if it has retreated, will reset the filter to the new state.
- * 
- * @param state New state
- */
-  void update(const AircraftState& state);
+  /**
+   * Update the filters.  Expects time to have advanced;
+   * if it has retreated, will reset the filter to the new state.
+   *
+   * @param state New state
+   */
+  void update(const AircraftState &state);
 
-/** 
- * Re-design filter.  Used to adjust the time constant of
- * the low pass filter.  If this fails, the low pass filter will
- * pass all frequencies through.
- * 
- * @param cutoff_wavelength -3db filter wavelength (s)
- * 
- * @return True if design was successfull
- */
+  /**
+   * Re-design filter.  Used to adjust the time constant of
+   * the low pass filter.  If this fails, the low pass filter will
+   * pass all frequencies through.
+   *
+   * @param cutoff_wavelength -3db filter wavelength (s)
+   *
+   * @return True if design was successfull
+   */
   bool design(const fixed cutoff_wavelength);
 
-/** 
- * Return filtered speed
- * 
- * @return Speed (m/s)
- */
+  /**
+   * Return filtered speed
+   *
+   * @return Speed (m/s)
+   */
   fixed get_speed() const;
 
-/** 
- * Return filtered track bearing
- * 
- * @return Track bearing (deg true north)
- */
+  /**
+   * Return filtered track bearing
+   *
+   * @return Track bearing (deg true north)
+   */
   Angle get_bearing() const;
 
-/** 
- * Return filtered climb rate
- * 
- * @return Climb rate (m/s)
- */
+  /**
+   * Return filtered climb rate
+   *
+   * @return Climb rate (m/s)
+   */
   fixed get_climb_rate() const;
 
-/**
- * Calculate predicted state in future
- *
- * @param in_time Time step for extrapolation (s)
- * @return Predicted aircraft state in in_time seconds
- *
- */
+  /**
+   * Calculate predicted state in future
+   *
+   * @param in_time Time step for extrapolation (s)
+   * @return Predicted aircraft state in in_time seconds
+   */
   AircraftState get_predicted_state(const fixed &in_time) const;
 
 private:

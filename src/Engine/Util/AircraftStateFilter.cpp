@@ -23,19 +23,12 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 #include <assert.h>
 
-AircraftStateFilter::AircraftStateFilter(const fixed cutoff_wavelength):
-  m_df_x(fixed_zero),
-  m_df_y(fixed_zero),
-  m_df_alt(fixed_zero),
-  m_lpf_x(cutoff_wavelength),
-  m_lpf_y(cutoff_wavelength),
-  m_lpf_alt(cutoff_wavelength),
-  m_x(fixed_zero),
-  m_y(fixed_zero)
-{
-}
+AircraftStateFilter::AircraftStateFilter(const fixed cutoff_wavelength)
+  :m_df_x(fixed_zero), m_df_y(fixed_zero), m_df_alt(fixed_zero),
+   m_lpf_x(cutoff_wavelength), m_lpf_y(cutoff_wavelength),
+   m_lpf_alt(cutoff_wavelength), m_x(fixed_zero), m_y(fixed_zero) {}
 
-void 
+void
 AircraftStateFilter::reset(const AircraftState& state)
 {
   m_state_last = state;
@@ -55,10 +48,10 @@ AircraftStateFilter::reset(const AircraftState& state)
   m_df_alt.reset(state.altitude, fixed_zero);
 }
 
-void 
+void
 AircraftStateFilter::update(const AircraftState& state)
 {
-  fixed dt = state.time- m_state_last.time;
+  fixed dt = state.time - m_state_last.time;
 
   if (negative(dt)) {
     reset(state);
@@ -76,8 +69,8 @@ AircraftStateFilter::update(const AircraftState& state)
     return;
   }
 
-  m_x+= vec.Bearing.sin()*vec.Distance;
-  m_y+= vec.Bearing.cos()*vec.Distance;
+  m_x += vec.Bearing.sin() * vec.Distance;
+  m_y += vec.Bearing.cos() * vec.Distance;
 
   m_vx = m_lpf_x.update(m_df_x.update(m_x));
   m_vy = m_lpf_y.update(m_df_y.update(m_y));
@@ -86,26 +79,25 @@ AircraftStateFilter::update(const AircraftState& state)
   m_state_last = state;
 }
 
-fixed 
+fixed
 AircraftStateFilter::get_speed() const
 {
   return hypot(m_vx, m_vy);
 }
 
-Angle 
+Angle
 AircraftStateFilter::get_bearing() const
 {
   return Angle::from_xy(m_vy, m_vx).as_bearing();
 }
 
-fixed 
+fixed
 AircraftStateFilter::get_climb_rate() const
 {
   return m_vz;
 }
 
-
-bool 
+bool
 AircraftStateFilter::design(const fixed cutoff_wavelength)
 {
   bool ok = true;
@@ -116,14 +108,14 @@ AircraftStateFilter::design(const fixed cutoff_wavelength)
   return ok;
 }
 
-AircraftState 
+AircraftState
 AircraftStateFilter::get_predicted_state(const fixed &in_time) const
 {
   AircraftState state_next = m_state_last;
   state_next.ground_speed = get_speed();
   GeoVector vec(state_next.ground_speed * in_time, get_bearing());
   state_next.location = vec.end_point(m_state_last.location);
-  state_next.altitude = m_state_last.altitude+get_climb_rate()*in_time;
+  state_next.altitude = m_state_last.altitude + get_climb_rate() * in_time;
   state_next.vario = get_climb_rate();
   return state_next;
 }
