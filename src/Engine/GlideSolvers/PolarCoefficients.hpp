@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_POLAR_COEFF_HPP
 
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 struct PolarCoefficients
 {
@@ -33,12 +34,14 @@ struct PolarCoefficients
   PolarCoefficients() {}
   PolarCoefficients(fixed _a, fixed _b, fixed _c):a(_a), b(_b), c(_c) {}
 
+  gcc_pure
   bool IsValid() const;
 
   /**
    * Calculates the three polynomial polar coefficients from
    * three pairs of horizontal vs. vertical speed.
    */
+  gcc_pure
   static PolarCoefficients From3VW(fixed v1, fixed v2, fixed v3,
                                   fixed w1, fixed w2, fixed w3);
 
@@ -47,6 +50,7 @@ struct PolarCoefficients
    * two pairs of horizontal vs. vertical speed. The first pair defines
    * the point where the polar is flat (derivative equals zero)!
    */
+  gcc_pure
   static PolarCoefficients From2VW(fixed v1, fixed v2, fixed w1, fixed w2);
 };
 
