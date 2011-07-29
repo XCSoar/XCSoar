@@ -67,7 +67,8 @@ TEST_NAMES = \
 	test_replay_task TestProjection TestFlatPoint TestFlatLine TestFlatGeoPoint \
 	TestPlanes \
 	TestTaskPoint \
-	TestTaskWaypoint
+	TestTaskWaypoint \
+	TestZeroFinder
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -114,6 +115,16 @@ TEST_PLANES_SOURCES = \
 TEST_PLANES_OBJS = $(call SRC_TO_OBJ,$(TEST_PLANES_SOURCES))
 TEST_PLANES_LDADD = $(MATH_LIBS) $(IO_LIBS)
 $(TARGET_BIN_DIR)/TestPlanes$(TARGET_EXEEXT): $(TEST_PLANES_OBJS) $(TEST_PLANES_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_ZEROFINDER_SOURCES = \
+	$(ENGINE_SRC_DIR)/Util/ZeroFinder.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestZeroFinder.cpp
+TEST_ZEROFINDER_OBJS = $(call SRC_TO_OBJ,$(TEST_ZEROFINDER_SOURCES))
+TEST_ZEROFINDER_LDADD = $(MATH_LIBS) $(IO_LIBS)
+$(TARGET_BIN_DIR)/TestZeroFinder$(TARGET_EXEEXT): $(TEST_ZEROFINDER_OBJS) $(TEST_ZEROFINDER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
