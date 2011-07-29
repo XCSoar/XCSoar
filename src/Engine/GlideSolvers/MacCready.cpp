@@ -273,11 +273,12 @@ public:
    * @return Initialised object (not yet searched)
    */
   MacCreadyVopt(const GlideState &_task, const MacCready &_mac,
-      const fixed & vmin, const fixed & vmax, const bool _allow_partial) :
+                const fixed _inv_mc, const fixed & vmin, const fixed & vmax,
+                const bool _allow_partial) :
     ZeroFinder(vmin, vmax, fixed(TOLERANCE_MC_OPT_GLIDE)),
     task(_task),
     mac(_mac),
-    inv_mc(_mac.get_inv_mc()),
+    inv_mc(_inv_mc),
     allow_partial(_allow_partial)
     {
     }
@@ -320,8 +321,9 @@ private:
 GlideResult
 MacCready::optimise_glide(const GlideState &task, const bool allow_partial) const
 {
-  MacCreadyVopt mcvopt(task, *this, glide_polar.GetVMin(),
-      glide_polar.GetVMax(), allow_partial);
+  MacCreadyVopt mcvopt(task, *this, glide_polar.GetInvMC(),
+                       glide_polar.GetVMin(), glide_polar.GetVMax(),
+                       allow_partial);
 
   return mcvopt.result(glide_polar.GetVMin());
 }
