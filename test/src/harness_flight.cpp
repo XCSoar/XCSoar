@@ -211,7 +211,7 @@ bool run_flight(TaskManager &task_manager,
   AirspaceAircraftPerformanceGlide perf(task_manager.get_glide_polar());
 
   if (aircraft_filter)
-    aircraft_filter->reset(aircraft.get_state());
+    aircraft_filter->Reset(aircraft.get_state());
 
   autopilot.Start(ta);
   aircraft.Start(autopilot.location_start, autopilot.location_previous,
@@ -249,9 +249,9 @@ bool run_flight(TaskManager &task_manager,
 
       f4.flush();
       if (aircraft_filter) {
-        f5 << aircraft_filter->get_speed() << " " 
-           << aircraft_filter->get_bearing() << " " 
-           << aircraft_filter->get_climb_rate() << "\n"; 
+        f5 << aircraft_filter->GetSpeed() << " " 
+           << aircraft_filter->GetBearing() << " " 
+           << aircraft_filter->GetClimbRate() << "\n"; 
         f5.flush();
       }
     }
@@ -279,7 +279,7 @@ bool run_flight(TaskManager &task_manager,
     do_print = (++print_counter % output_skip == 0) && verbose;
 
     if (aircraft_filter)
-      aircraft_filter->update(aircraft.get_state());
+      aircraft_filter->Update(aircraft.get_state());
 
     autopilot.update_state(ta, aircraft.get_state());
     aircraft.Update(autopilot.heading);

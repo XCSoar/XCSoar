@@ -249,23 +249,23 @@ public:
   }
 
   virtual fixed get_cruise_speed() const {
-    return m_state_filter.get_speed();
+    return m_state_filter.GetSpeed();
   }
 
   virtual fixed get_cruise_descent() const {
-    return -m_state_filter.get_climb_rate();
+    return -m_state_filter.GetClimbRate();
   }
 
   virtual fixed get_climb_rate() const {
-    return m_state_filter.get_climb_rate();
+    return m_state_filter.GetClimbRate();
   }
 
   virtual fixed get_descent_rate() const {
-    return -m_state_filter.get_climb_rate();
+    return -m_state_filter.GetClimbRate();
   }
 
   virtual fixed get_max_speed() const {
-    return m_state_filter.get_speed();
+    return m_state_filter.GetSpeed();
   }
 };
 

@@ -60,8 +60,8 @@ void
 AirspaceWarningManager::reset(const AircraftState& state)
 {
   m_warnings.clear();
-  m_cruise_filter.reset(state);
-  m_circling_filter.reset(state);
+  m_cruise_filter.Reset(state);
+  m_circling_filter.Reset(state);
 }
 
 void 
@@ -74,8 +74,8 @@ void
 AirspaceWarningManager::set_prediction_time_filter(const fixed& the_time)
 {
   m_prediction_time_filter = the_time;
-  m_cruise_filter.design(max(fixed(10),m_prediction_time_filter*CRUISE_FILTER_FACT));
-  m_circling_filter.design(max(fixed(10),m_prediction_time_filter));
+  m_cruise_filter.Design(max(fixed(10),m_prediction_time_filter*CRUISE_FILTER_FACT));
+  m_circling_filter.Design(max(fixed(10),m_prediction_time_filter));
 }
 
 AirspaceWarning& 
@@ -345,12 +345,12 @@ bool
 AirspaceWarningManager::update_filter(const AircraftState& state, const bool circling)
 {
   // update both filters even though we are using only one
-  m_cruise_filter.update(state);
-  m_circling_filter.update(state);
+  m_cruise_filter.Update(state);
+  m_circling_filter.Update(state);
 
   const GeoPoint location_predicted = circling?
-    m_circling_filter.get_predicted_state(m_prediction_time_filter).location:
-    m_cruise_filter.get_predicted_state(m_prediction_time_filter).location;
+    m_circling_filter.GetPredictedState(m_prediction_time_filter).location:
+    m_cruise_filter.GetPredictedState(m_prediction_time_filter).location;
 
   if (circling) 
     return update_predicted(state, location_predicted,

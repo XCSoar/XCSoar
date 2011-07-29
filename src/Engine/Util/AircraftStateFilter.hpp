@@ -33,11 +33,11 @@
  * in order to derive average speed, bearing and climb rate
  */
 class AircraftStateFilter {
-  DiffFilter m_df_x, m_df_y, m_df_alt;
-  Filter m_lpf_x, m_lpf_y, m_lpf_alt;
-  AircraftState m_state_last;
-  fixed m_x, m_y;
-  fixed m_vx, m_vy, m_vz;
+  DiffFilter x_diff_filter, y_diff_filter, alt_diff_filter;
+  Filter x_low_pass, y_low_pass, alt_low_pass;
+  AircraftState last_state;
+  fixed x, y;
+  fixed v_x, v_y, v_alt;
 
 public:
   /** 
@@ -52,7 +52,7 @@ public:
    *
    * @param state State to reset to
    */
-  void reset(const AircraftState &state);
+  void Reset(const AircraftState &state);
 
   /**
    * Update the filters.  Expects time to have advanced;
@@ -60,7 +60,7 @@ public:
    *
    * @param state New state
    */
-  void update(const AircraftState &state);
+  void Update(const AircraftState &state);
 
   /**
    * Re-design filter.  Used to adjust the time constant of
@@ -71,28 +71,28 @@ public:
    *
    * @return True if design was successfull
    */
-  bool design(const fixed cutoff_wavelength);
+  bool Design(const fixed cutoff_wavelength);
 
   /**
    * Return filtered speed
    *
    * @return Speed (m/s)
    */
-  fixed get_speed() const;
+  fixed GetSpeed() const;
 
   /**
    * Return filtered track bearing
    *
    * @return Track bearing (deg true north)
    */
-  Angle get_bearing() const;
+  Angle GetBearing() const;
 
   /**
    * Return filtered climb rate
    *
    * @return Climb rate (m/s)
    */
-  fixed get_climb_rate() const;
+  fixed GetClimbRate() const;
 
   /**
    * Calculate predicted state in future
@@ -100,7 +100,7 @@ public:
    * @param in_time Time step for extrapolation (s)
    * @return Predicted aircraft state in in_time seconds
    */
-  AircraftState get_predicted_state(const fixed &in_time) const;
+  AircraftState GetPredictedState(const fixed &in_time) const;
 };
 
 #endif

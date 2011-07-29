@@ -24,98 +24,100 @@
 #include <assert.h>
 
 AircraftStateFilter::AircraftStateFilter(const fixed cutoff_wavelength)
-  :m_df_x(fixed_zero), m_df_y(fixed_zero), m_df_alt(fixed_zero),
-   m_lpf_x(cutoff_wavelength), m_lpf_y(cutoff_wavelength),
-   m_lpf_alt(cutoff_wavelength), m_x(fixed_zero), m_y(fixed_zero) {}
+  :x_diff_filter(fixed_zero), y_diff_filter(fixed_zero),
+   alt_diff_filter(fixed_zero),
+   x_low_pass(cutoff_wavelength), y_low_pass(cutoff_wavelength),
+   alt_low_pass(cutoff_wavelength),
+   x(fixed_zero), y(fixed_zero) {}
 
 void
-AircraftStateFilter::reset(const AircraftState& state)
+AircraftStateFilter::Reset(const AircraftState &state)
 {
-  m_state_last = state;
+  last_state = state;
 
-  m_x = fixed_zero;
-  m_y = fixed_zero;
+  x = fixed_zero;
+  y = fixed_zero;
 
-  m_vx = fixed_zero;
-  m_vy = fixed_zero;
-  m_vz = fixed_zero;
+  v_x = fixed_zero;
+  v_y = fixed_zero;
+  v_alt = fixed_zero;
 
-  m_lpf_x.reset(fixed_zero);
-  m_lpf_y.reset(fixed_zero);
-  m_lpf_alt.reset(fixed_zero);
-  m_df_x.reset(m_x, fixed_zero);
-  m_df_y.reset(m_y, fixed_zero);
-  m_df_alt.reset(state.altitude, fixed_zero);
+  x_low_pass.reset(fixed_zero);
+  y_low_pass.reset(fixed_zero);
+  alt_low_pass.reset(fixed_zero);
+  x_diff_filter.reset(x, fixed_zero);
+  y_diff_filter.reset(y, fixed_zero);
+  alt_diff_filter.reset(state.altitude, fixed_zero);
 }
 
 void
-AircraftStateFilter::update(const AircraftState& state)
+AircraftStateFilter::Update(const AircraftState &state)
 {
-  fixed dt = state.time - m_state_last.time;
+  fixed dt = state.time - last_state.time;
 
   if (negative(dt)) {
-    reset(state);
+    Reset(state);
     return;
   }
 
   if (!positive(dt))
     return;
 
-  GeoVector vec(m_state_last.location, state.location);
+  GeoVector vec(last_state.location, state.location);
 
   const fixed MACH_1 = fixed_int_constant(343);
   if (vec.Distance / dt > MACH_1) {
-    reset(state);
+    Reset(state);
     return;
   }
 
-  m_x += vec.Bearing.sin() * vec.Distance;
-  m_y += vec.Bearing.cos() * vec.Distance;
+  x += vec.Bearing.sin() * vec.Distance;
+  y += vec.Bearing.cos() * vec.Distance;
 
-  m_vx = m_lpf_x.update(m_df_x.update(m_x));
-  m_vy = m_lpf_y.update(m_df_y.update(m_y));
-  m_vz = m_lpf_alt.update(m_df_alt.update(state.altitude));
+  v_x = x_low_pass.update(x_diff_filter.update(x));
+  v_y = y_low_pass.update(y_diff_filter.update(y));
+  v_alt = alt_low_pass.update(alt_diff_filter.update(state.altitude));
 
-  m_state_last = state;
+  last_state = state;
 }
 
 fixed
-AircraftStateFilter::get_speed() const
+AircraftStateFilter::GetSpeed() const
 {
-  return hypot(m_vx, m_vy);
+  return hypot(v_x, v_y);
 }
 
 Angle
-AircraftStateFilter::get_bearing() const
+AircraftStateFilter::GetBearing() const
 {
-  return Angle::from_xy(m_vy, m_vx).as_bearing();
+  return Angle::from_xy(v_y, v_x).as_bearing();
 }
 
 fixed
-AircraftStateFilter::get_climb_rate() const
+AircraftStateFilter::GetClimbRate() const
 {
-  return m_vz;
+  return v_alt;
 }
 
 bool
-AircraftStateFilter::design(const fixed cutoff_wavelength)
+AircraftStateFilter::Design(const fixed cutoff_wavelength)
 {
   bool ok = true;
-  ok &= m_lpf_x.design(cutoff_wavelength);
-  ok &= m_lpf_y.design(cutoff_wavelength);
-  ok &= m_lpf_alt.design(cutoff_wavelength);
+  ok &= x_low_pass.design(cutoff_wavelength);
+  ok &= y_low_pass.design(cutoff_wavelength);
+  ok &= alt_low_pass.design(cutoff_wavelength);
   assert(ok);
   return ok;
 }
 
 AircraftState
-AircraftStateFilter::get_predicted_state(const fixed &in_time) const
+AircraftStateFilter::GetPredictedState(const fixed &in_time) const
 {
-  AircraftState state_next = m_state_last;
-  state_next.ground_speed = get_speed();
-  GeoVector vec(state_next.ground_speed * in_time, get_bearing());
-  state_next.location = vec.end_point(m_state_last.location);
-  state_next.altitude = m_state_last.altitude + get_climb_rate() * in_time;
-  state_next.vario = get_climb_rate();
+  AircraftState state_next = last_state;
+  state_next.ground_speed = GetSpeed();
+  GeoVector vec(state_next.ground_speed * in_time, GetBearing());
+  state_next.location = vec.end_point(last_state.location);
+  state_next.altitude = last_state.altitude + GetClimbRate() * in_time;
+  state_next.vario = GetClimbRate();
   return state_next;
 }
