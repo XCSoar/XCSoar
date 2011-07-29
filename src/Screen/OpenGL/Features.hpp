@@ -29,9 +29,17 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
+
+/**
+ * Running on OpenGL/ES.
+ */
 #define HAVE_GLES
+
 #endif
 
+/**
+ * Running on OpenGL/ES?
+ */
 static inline bool
 have_gles()
 {
