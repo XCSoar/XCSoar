@@ -115,9 +115,9 @@ AircraftStateFilter::GetPredictedState(const fixed &in_time) const
 {
   AircraftState state_next = last_state;
   state_next.ground_speed = GetSpeed();
-  GeoVector vec(state_next.ground_speed * in_time, GetBearing());
-  state_next.location = vec.end_point(last_state.location);
   state_next.vario = GetClimbRate();
   state_next.altitude = last_state.altitude + state_next.vario * in_time;
+  state_next.location = GeoVector(state_next.ground_speed * in_time,
+                                  GetBearing()).end_point(last_state.location);
   return state_next;
 }
