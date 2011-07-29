@@ -31,26 +31,26 @@
 struct GlideState 
 {
   /** Distance/bearing of task */
-  GeoVector Vector;
+  GeoVector vector;
   /** Height (m above MSL) of end */
-  fixed MinHeight;
+  fixed min_height;
   /** Direction of wind (deg True) */
-  Angle WindDirection;
+  Angle wind_direction;
   /** Aircraft height less target height */
-  fixed AltitudeDifference;
+  fixed altitude_difference;
 
   /** (internal use) */
-  fixed EffectiveWindSpeed;
+  fixed wind_speed;
   /** (internal use) */
-  Angle EffectiveWindAngle;
+  Angle effective_wind_angle;
   /** headwind component (m/s) in cruise */
-  fixed HeadWind;
+  fixed head_wind;
 
 private:
   /** (internal use) */
   fixed wind_speed_squared;
   /** (internal use) */
-  fixed dwcostheta_;
+  fixed head_wind_doubled;
 
 public:
   /**
@@ -74,7 +74,7 @@ public:
    *
    * @param wind the wind vector
    */
-  void calc_speedups(const SpeedVector wind);
+  void CalcSpeedups(const SpeedVector wind);
 
   /**
    * Calculates average cross-country speed from effective
@@ -84,7 +84,7 @@ public:
    *
    * @return Average cross-country speed (m/s)
    */
-  fixed calc_ave_speed(const fixed Veff) const;
+  fixed CalcAverageSpeed(const fixed v_eff) const;
 
   /**
    * Calculate distance a circling aircraft will drift
@@ -94,7 +94,7 @@ public:
    *
    * @return Distance (m) of drift
    */
-  fixed drifted_distance(const fixed t_climb) const;
+  fixed DriftedDistance(const fixed climb_time) const;
 };
 
 #endif

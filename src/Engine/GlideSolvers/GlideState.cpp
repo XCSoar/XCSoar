@@ -53,7 +53,7 @@ public:
    */
   gcc_pure
   fixed
-  solve() const
+  Solve() const
   {
     if (Check())
       /// @todo check this is correct for all theta
@@ -64,11 +64,11 @@ public:
 };
 
 fixed
-GlideState::calc_ave_speed(const fixed Veff) const
+GlideState::CalcAverageSpeed(const fixed Veff) const
 {
-  if (positive(EffectiveWindSpeed)) {
+  if (positive(wind_speed)) {
     // only need to solve if positive wind speed
-    return AverageSpeedSolver(dwcostheta_, wind_speed_squared, Veff).solve();
+    return AverageSpeedSolver(head_wind_doubled, wind_speed_squared, Veff).Solve();
   }
 
   return Veff;
@@ -77,50 +77,50 @@ GlideState::calc_ave_speed(const fixed Veff) const
 // dummy task
 GlideState::GlideState(const GeoVector &vector, const fixed htarget,
                        fixed altitude, const SpeedVector wind) :
-  Vector(vector),
-  MinHeight(htarget),
-  AltitudeDifference(altitude - MinHeight)
+  vector(vector),
+  min_height(htarget),
+  altitude_difference(altitude - min_height)
 {
-  calc_speedups(wind);
+  CalcSpeedups(wind);
 }
 
 void
-GlideState::calc_speedups(const SpeedVector wind)
+GlideState::CalcSpeedups(const SpeedVector wind)
 {
   if (wind.is_non_zero()) {
-    WindDirection = wind.bearing;
-    EffectiveWindSpeed = wind.norm;
-    EffectiveWindAngle = WindDirection.Reciprocal() - Vector.Bearing;
-    wind_speed_squared = EffectiveWindSpeed * EffectiveWindSpeed;
-    HeadWind = -EffectiveWindSpeed * EffectiveWindAngle.cos();
-    dwcostheta_ = fixed_two * HeadWind;
+    wind_direction = wind.bearing;
+    wind_speed = wind.norm;
+    effective_wind_angle = wind_direction.Reciprocal() - vector.Bearing;
+    wind_speed_squared = wind_speed * wind_speed;
+    head_wind = -wind_speed * effective_wind_angle.cos();
+    head_wind_doubled = fixed_two * head_wind;
   } else {
-    WindDirection = Angle::zero();
-    EffectiveWindSpeed = fixed_zero;
-    EffectiveWindAngle = Angle::zero();
-    HeadWind = fixed_zero;
+    wind_direction = Angle::zero();
+    wind_speed = fixed_zero;
+    effective_wind_angle = Angle::zero();
+    head_wind = fixed_zero;
     wind_speed_squared = fixed_zero;
-    dwcostheta_ = fixed_zero;
+    head_wind_doubled = fixed_zero;
   }
 }
 
 fixed
-GlideState::drifted_distance(const fixed t_cl) const
+GlideState::DriftedDistance(const fixed t_cl) const
 {
-  if (!positive(EffectiveWindSpeed))
-    return Vector.Distance;
+  if (!positive(wind_speed))
+    return vector.Distance;
 
-  const Angle wd = WindDirection.Reciprocal();
+  const Angle wd = wind_direction.Reciprocal();
   fixed sinwd, coswd;
   wd.sin_cos(sinwd, coswd);
 
-  const Angle tb = Vector.Bearing;
+  const Angle tb = vector.Bearing;
   fixed sintb, costb;
   tb.sin_cos(sintb, costb);
 
-  const fixed aw = EffectiveWindSpeed * t_cl;
-  const fixed dx = Vector.Distance * sintb - aw * sinwd;
-  const fixed dy = Vector.Distance * costb - aw * coswd;
+  const fixed aw = wind_speed * t_cl;
+  const fixed dx = vector.Distance * sintb - aw * sinwd;
+  const fixed dy = vector.Distance * costb - aw * coswd;
 
   return hypot(dx, dy);
 
