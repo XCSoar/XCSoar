@@ -38,10 +38,8 @@ long count_mc = 0;
 #endif
 
 MacCready::MacCready(const GlidePolar &_glide_polar,
-    const fixed _cruise_efficiency) :
-  glide_polar(_glide_polar), cruise_efficiency(_cruise_efficiency)
-{
-}
+                     const fixed _cruise_efficiency)
+  :glide_polar(_glide_polar), cruise_efficiency(_cruise_efficiency) {}
 
 GlideResult 
 MacCready::solve_vertical(const GlideState &task) const
@@ -155,7 +153,7 @@ MacCready::solve_cruise(const GlideState &task) const
 
 GlideResult
 MacCready::solve_glide(const GlideState &task, const fixed Vset, const fixed S,
-    const bool allow_partial) const
+                       const bool allow_partial) const
 {
   // spend a lot of time in this function, so it should be quick!
 
@@ -181,13 +179,12 @@ MacCready::solve_glide(const GlideState &task, const fixed Vset, const fixed S,
     // S/Vn > dh/task.Distance
     if (S * task.vector.Distance > Vndh) {
       result.validity = GlideResult::RESULT_PARTIAL;
-      if (negative(task.altitude_difference)) {
+      if (negative(task.altitude_difference))
         // insufficient height, and can't climb
         result.vector.Distance = fixed_zero;
-      } else {
+      else
         // frac*task.Distance;
         result.vector.Distance = Vndh / S;
-      }
     }
   }
 
@@ -202,7 +199,7 @@ MacCready::solve_glide(const GlideState &task, const fixed Vset, const fixed S,
 
 GlideResult
 MacCready::solve_glide(const GlideState &task, const fixed Vset,
-    const bool allow_partial) const
+                       const bool allow_partial) const
 {
   const fixed S = glide_polar.SinkRate(Vset);
   return solve_glide(task, Vset, S, allow_partial);
@@ -222,36 +219,36 @@ MacCready::solve_sink(const GlideState &task, const fixed S) const
 GlideResult
 MacCready::solve(const GlideState &task) const
 {
-  if (!positive(task.vector.Distance)) {
+  if (!positive(task.vector.Distance))
     return solve_vertical(task);
-  } else if (!positive(glide_polar.GetMC())) {
+
+  if (!positive(glide_polar.GetMC()))
     // whole task must be glide
     return optimise_glide(task, false);
-  } else if (!positive(task.altitude_difference)) {
+
+  if (!positive(task.altitude_difference))
     // whole task climb-cruise
     return solve_cruise(task);
-  } else {
-    // task partial climb-cruise, partial glide
 
-    // calc first final glide part
-    GlideResult result_fg = optimise_glide(task, true);
-    if (result_fg.validity == GlideResult::RESULT_OK) {
-      // whole task final glided
-      return result_fg;
-    }
-    
-    // climb-cruise remainder of way
-    
-    GlideState sub_task = task;
-    sub_task.vector.Distance -= result_fg.vector.Distance;
-    sub_task.min_height += result_fg.height_glide;
-    sub_task.altitude_difference -= result_fg.height_glide;
+  // task partial climb-cruise, partial glide
 
-    GlideResult result_cc = solve_cruise(sub_task);
-    result_cc.Add(result_fg);
+  // calc first final glide part
+  GlideResult result_fg = optimise_glide(task, true);
+  if (result_fg.validity == GlideResult::RESULT_OK)
+    // whole task final glided
+    return result_fg;
 
-    return result_cc;
-  }
+  // climb-cruise remainder of way
+
+  GlideState sub_task = task;
+  sub_task.vector.Distance -= result_fg.vector.Distance;
+  sub_task.min_height += result_fg.height_glide;
+  sub_task.altitude_difference -= result_fg.height_glide;
+
+  GlideResult result_cc = solve_cruise(sub_task);
+  result_cc.Add(result_fg);
+
+  return result_cc;
 }
 
 /**
