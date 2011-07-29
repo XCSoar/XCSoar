@@ -43,6 +43,7 @@ public:
   ZeroFinder(const fixed _xmin, const fixed _xmax, const fixed _tolerance) :
     xmin(_xmin), xmax(_xmax), tolerance(_tolerance)
   {
+    assert(xmin < xmax);
   }
 
   /**
