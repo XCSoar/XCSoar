@@ -57,9 +57,6 @@ public:
                   const short h_ceiling,
                   Route &solution);
 
-  gcc_pure
-  GlidePolar GetReachPolar() const;
-
   bool Intersection(const AGeoPoint &origin,
                     const AGeoPoint &destination,
                     GeoPoint &intx) const;

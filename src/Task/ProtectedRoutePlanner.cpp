@@ -59,13 +59,6 @@ ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
   lease->get_solution(solution);
 }
 
-GlidePolar
-ProtectedRoutePlanner::GetReachPolar() const
-{
-  Lease lease(*this);
-  return lease->get_reach_polar();
-}
-
 bool
 ProtectedRoutePlanner::Intersection(const AGeoPoint &origin,
                                     const AGeoPoint &destination,

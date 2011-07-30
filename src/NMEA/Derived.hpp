@@ -192,8 +192,6 @@ struct DerivedInfo:
   Validity auto_mac_cready_available;
   fixed auto_mac_cready;
 
-  /** Glide polar used for reach calculations */
-  GlidePolar glide_polar_reach;
   /** Glide polar used for safety calculations */
   GlidePolar glide_polar_safety;
 

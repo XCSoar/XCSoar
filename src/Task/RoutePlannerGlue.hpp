@@ -72,8 +72,6 @@ public:
                     const AGeoPoint& destination,
                     GeoPoint& intx) const;
 
-  GlidePolar get_reach_polar() const;
-
   short get_terrain_base() const;
 };
 

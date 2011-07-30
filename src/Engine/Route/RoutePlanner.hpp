@@ -268,10 +268,6 @@ public:
                                        arrival_height_direct);
   }
 
-  const GlidePolar& get_reach_polar() const {
-    return glide_polar_reach;
-  }
-
   short get_terrain_base() const {
     return reach.get_terrain_base();
   }
