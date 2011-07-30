@@ -22,13 +22,6 @@ Copyright_License {
 */
 
 #include "ProtectedRoutePlanner.hpp"
-#include "Task/TaskManager.hpp"
-#include "Util/Serialiser.hpp"
-#include "Util/Deserialiser.hpp"
-#include "Util/DataNodeXML.hpp"
-#include "Task/TaskFile.hpp"
-#include "LocalPath.hpp"
-#include "Terrain/RasterTerrain.hpp"
 
 void
 ProtectedRoutePlanner::SetTerrain(const RasterTerrain *terrain)
@@ -39,8 +32,8 @@ ProtectedRoutePlanner::SetTerrain(const RasterTerrain *terrain)
 
 void
 ProtectedRoutePlanner::SetPolars(const GlidePolar &glide_polar,
-                                          const GlidePolar &safety_polar,
-                                          const SpeedVector &wind)
+                                 const GlidePolar &safety_polar,
+                                 const SpeedVector &wind)
 {
   ExclusiveLease lease(*this);
   lease->update_polar(glide_polar, safety_polar, wind);
