@@ -65,9 +65,6 @@ public:
 
   void AcceptInRange(const GeoBounds &bounds,
                      TriangleFanVisitor &visitor) const;
-
-  gcc_pure
-  short GetTerrainBase() const;
 };
 
 #endif

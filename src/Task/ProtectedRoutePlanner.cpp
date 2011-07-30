@@ -82,10 +82,3 @@ ProtectedRoutePlanner::AcceptInRange(const GeoBounds &bounds,
   Lease lease(*this);
   lease->accept_in_range(bounds, visitor);
 }
-
-short
-ProtectedRoutePlanner::GetTerrainBase() const
-{
-  Lease lease(*this);
-  return lease->get_terrain_base();
-}
