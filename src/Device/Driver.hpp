@@ -128,8 +128,7 @@ public:
    * @param calculated the current set of calculation results
    * @return true on success
    */
-  virtual bool PutQNH(const AtmosphericPressure &pressure,
-                      const DerivedInfo &calculated) = 0;
+  virtual bool PutQNH(const AtmosphericPressure &pressure) = 0;
 
   /**
    * Send a "voice" sentence to the device (proprietary Vega feature).
@@ -215,8 +214,7 @@ public:
   virtual bool PutMacCready(fixed MacCready);
   virtual bool PutBugs(fixed bugs);
   virtual bool PutBallast(fixed ballast);
-  virtual bool PutQNH(const AtmosphericPressure &pres,
-                      const DerivedInfo &calculated);
+  virtual bool PutQNH(const AtmosphericPressure &pres);
   virtual bool PutVoice(const TCHAR *sentence);
   virtual bool PutVolume(int volume);
   virtual bool PutActiveFrequency(RadioFrequency frequency);

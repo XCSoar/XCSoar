@@ -53,8 +53,7 @@ void
 AllDevicesPutStandbyFrequency(RadioFrequency frequency);
 
 void
-AllDevicesPutQNH(const AtmosphericPressure &pres,
-                 const DerivedInfo &calculated);
+AllDevicesPutQNH(const AtmosphericPressure &pres);
 
 void AllDevicesPutVoice(const TCHAR *sentence);
 

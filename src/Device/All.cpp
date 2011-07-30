@@ -111,14 +111,13 @@ AllDevicesPutStandbyFrequency(RadioFrequency frequency)
 }
 
 void
-AllDevicesPutQNH(const AtmosphericPressure &pres,
-                 const DerivedInfo &calculated)
+AllDevicesPutQNH(const AtmosphericPressure &pres)
 {
   if (is_simulator())
     return;
 
   for (unsigned i = 0; i < NUMDEV; ++i)
-    DeviceList[i].PutQNH(pres, calculated);
+    DeviceList[i].PutQNH(pres);
 }
 
 void

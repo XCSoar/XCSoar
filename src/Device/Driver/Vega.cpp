@@ -78,8 +78,7 @@ protected:
 public:
   virtual void LinkTimeout();
   virtual bool ParseNMEA(const char *line, struct NMEAInfo &info);
-  virtual bool PutQNH(const AtmosphericPressure& pres,
-                      const DerivedInfo &calculated);
+  virtual bool PutQNH(const AtmosphericPressure& pres);
   virtual bool PutVoice(const TCHAR *sentence);
   virtual void OnSysTicker(const DerivedInfo &calculated);
 };
@@ -391,12 +390,9 @@ VegaDevice::VarioWriteSettings(const DerivedInfo &calculated) const
 }
 
 bool
-VegaDevice::PutQNH(const AtmosphericPressure& pres,
-                   const DerivedInfo &calculated)
+VegaDevice::PutQNH(const AtmosphericPressure& pres)
 {
   qnh = pres;
-
-  VarioWriteSettings(calculated);
 
   return true;
 }

@@ -299,9 +299,7 @@ DeviceBlackboard::Merge()
 void
 DeviceBlackboard::SetQNH(fixed qnh)
 {
-  ScopeLock protect(mutex);
-
-  AllDevicesPutQNH(AtmosphericPressure(qnh), Calculated());
+  AllDevicesPutQNH(AtmosphericPressure(qnh));
 }
 
 void

@@ -173,7 +173,7 @@ QNHProcessTimer()
     settings_computer.pressure = calculated.pressure;
     settings_computer.pressure_available = calculated.pressure_available;
 
-    AllDevicesPutQNH(settings_computer.pressure, calculated);
+    AllDevicesPutQNH(settings_computer.pressure);
   }
 }
 

@@ -373,13 +373,12 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency)
 }
 
 bool
-DeviceDescriptor::PutQNH(const AtmosphericPressure &value,
-                         const DerivedInfo &calculated)
+DeviceDescriptor::PutQNH(const AtmosphericPressure &value)
 {
   if (device == NULL || settings_sent.CompareQNH(value.get_QNH()))
     return true;
 
-  if (!device->PutQNH(value, calculated))
+  if (!device->PutQNH(value))
     return false;
 
   ScopeLock protect(device_blackboard.mutex);

@@ -61,8 +61,7 @@ AbstractDevice::PutBallast(fixed ballast)
 }
 
 bool
-AbstractDevice::PutQNH(const AtmosphericPressure &pres,
-                       const DerivedInfo &calculated)
+AbstractDevice::PutQNH(const AtmosphericPressure &pres)
 {
   return true;
 }
