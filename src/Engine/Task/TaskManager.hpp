@@ -586,10 +586,6 @@ public:
     return task_behaviour;
   }
 
-  Route& get_planned_route() {
-    return common_stats.planned_route;
-  }
-
   /**
    * Set external test function to be used for additional intersection tests
    */

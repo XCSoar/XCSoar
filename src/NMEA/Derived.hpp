@@ -197,6 +197,9 @@ struct DerivedInfo:
 
   AirspaceWarningsInfo airspace_warnings;
 
+  /** Route plan for current leg avoiding airspace */
+  Route planned_route;
+
   /**
    * @todo Reset to cleared state
    */

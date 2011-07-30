@@ -34,14 +34,12 @@ Copyright_License {
 #include <algorithm>
 
 GlideComputerRoute::GlideComputerRoute(ProtectedRoutePlanner &_protected_route_planner,
-                                       const RoutePlannerGlue &_route_planner,
-                                       Route &_solution)
+                                       const RoutePlannerGlue &_route_planner)
   :protected_route_planner(_protected_route_planner),
    route_planner(_route_planner),
    route_clock(fixed(5)),
    reach_clock(fixed(5)),
-   terrain(NULL),
-   solution(_solution)
+   terrain(NULL)
 {}
 
 void
@@ -102,7 +100,7 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
 
       if (dirty) {
         protected_route_planner.SolveRoute(dest, start, config, h_ceiling,
-                                           solution);
+                                           calculated.planned_route);
         calculated.terrain_warning =
           route_planner.intersection(start, dest,
                                      calculated.terrain_warning_location);
@@ -110,7 +108,7 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
       return;
     } else {
       protected_route_planner.SolveRoute(start, start, config, h_ceiling,
-                                         solution);
+                                         calculated.planned_route);
     }
   }
   calculated.terrain_warning = false;

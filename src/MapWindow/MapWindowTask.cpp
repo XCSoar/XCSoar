@@ -81,7 +81,7 @@ MapWindow::DrawTask(Canvas &canvas)
   bool draw_bearing = Basic().track_available;
   bool draw_route = draw_bearing;
 
-  const Route& route = Calculated().common_stats.planned_route;
+  const Route& route = Calculated().planned_route;
 
   if (draw_bearing) {
     if (route.size()>2) {

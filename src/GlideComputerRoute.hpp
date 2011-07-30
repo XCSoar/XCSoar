@@ -45,12 +45,9 @@ class GlideComputerRoute {
 
   const RasterTerrain *terrain;
 
-  Route &solution;
-
 public:
   GlideComputerRoute(ProtectedRoutePlanner &_protected_route_planner,
-                     const RoutePlannerGlue &_route_planner,
-                     Route &solution);
+                     const RoutePlannerGlue &_route_planner);
 
 protected:
   void ResetFlight();

@@ -79,6 +79,8 @@ DerivedInfo::Reset()
   auto_mac_cready_available.Clear();
 
   airspace_warnings.Clear();
+
+  planned_route.clear();
 }
 
 void

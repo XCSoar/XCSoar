@@ -107,9 +107,6 @@ public:
   /** Glide solution flying terminally to active waypoint */
   GlideResult next_solution;
 
-  /** Route plan for current leg avoiding airspace */
-  Route planned_route;
-
   /** Summary of ordered task progress */
   TaskSummary ordered_summary;
 

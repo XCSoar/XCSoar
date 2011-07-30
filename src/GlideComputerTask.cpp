@@ -31,23 +31,13 @@ Copyright_License {
 
 using std::max;
 
-static Route &
-GetPlannedRoute(ProtectedTaskManager &task)
-{
-  /* XXX hack - we need to move the Route of of TaskManager to resolve
-     this */
-  ProtectedTaskManager::ExclusiveLease lease(task);
-  return lease->get_planned_route();
-}
-
 // JMW TODO: abstract up to higher layer so a base copy of this won't
 // call any event
 
 GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
                                      ProtectedRoutePlanner &protected_route_planner,
                                      const RoutePlannerGlue &route_planner):
-  GlideComputerRoute(protected_route_planner, route_planner,
-                     GetPlannedRoute(task)),
+  GlideComputerRoute(protected_route_planner, route_planner),
   m_task(task)
 {}
 
