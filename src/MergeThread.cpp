@@ -61,7 +61,7 @@ MergeThread::Tick()
     /* trigger a redraw when the connection was just lost, to show the
        new state; when no GPS is connected, no other entity triggers
        the redraw, so we have to do it */
-    TriggerMapUpdate();
+    TriggerCalculatedUpdate();
 
   TriggerVarioUpdate();
 

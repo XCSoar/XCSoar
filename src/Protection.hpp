@@ -43,6 +43,13 @@ void TriggerVarioUpdate();
 void
 TriggerMapUpdate();
 
+/**
+ * Called by the calculation thread when new calculation results are
+ * available.  This updates the map and the info boxes.
+ */
+void
+TriggerCalculatedUpdate();
+
 void CreateCalculationThread(void);
 
 // changed only in config or by user interface

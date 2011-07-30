@@ -501,6 +501,14 @@ MainWindow::on_user(unsigned id)
 #endif
     dlgAirspaceWarningsShowModal(*this, true);
     return true;
+
+  case CMD_CALCULATED_UPDATE:
+    if (map != NULL)
+      map->FullRedraw();
+
+    InfoBoxManager::SetDirty();
+    InfoBoxManager::ProcessTimer();
+    return true;
   }
 
   return false;

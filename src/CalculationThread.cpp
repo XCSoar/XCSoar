@@ -97,7 +97,7 @@ CalculationThread::Tick()
   // if (new GPS data)
   if (gps_updated) {
     // inform map new data is ready
-    TriggerMapUpdate();
+    TriggerCalculatedUpdate();
   }
 
   if (do_idle) {

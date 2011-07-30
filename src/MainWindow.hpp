@@ -49,6 +49,12 @@ class MainWindow : public SingleWindow {
      * warning dialog.
      */
     CMD_AIRSPACE_WARNING,
+
+    /**
+     * Called by the calculation thread when new calculation results
+     * are available.  This updates the map and the info boxes.
+     */
+    CMD_CALCULATED_UPDATE,
   };
 
 public:
@@ -163,6 +169,10 @@ public:
   void SendAirspaceWarning() {
     airspace_warning_pending = true;
     send_user(CMD_AIRSPACE_WARNING);
+  }
+
+  void SendCalculatedUpdate() {
+    send_user(CMD_CALCULATED_UPDATE);
   }
 
   void SetTerrain(RasterTerrain *terrain);

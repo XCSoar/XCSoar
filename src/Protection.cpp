@@ -66,6 +66,12 @@ TriggerMapUpdate()
   CommonInterface::main_window.full_redraw();
 }
 
+void
+TriggerCalculatedUpdate()
+{
+  CommonInterface::main_window.SendCalculatedUpdate();
+}
+
 #include "DeviceBlackboard.hpp"
 
 
