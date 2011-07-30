@@ -332,6 +332,8 @@ ContainerWindow::on_paint(Canvas &canvas)
 void
 ContainerWindow::add_child(Window &child) {
   children.push_back(&child);
+
+  invalidate();
 }
 
 void
@@ -340,6 +342,8 @@ ContainerWindow::remove_child(Window &child) {
 
   if (active_child == &child)
     active_child = NULL;
+
+  invalidate();
 }
 
 bool

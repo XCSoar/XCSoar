@@ -7,16 +7,16 @@ msgid ""
 msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
-"POT-Creation-Date: 2011-06-18 13:53+0200\n"
-"PO-Revision-Date: 2011-05-11 16:12+0000\n"
-"Last-Translator: Thomas Amland <Unknown>\n"
+"POT-Creation-Date: 2011-06-24 01:31+0200\n"
+"PO-Revision-Date: 2011-07-23 03:39+0000\n"
+"Last-Translator: Geir Gronlien <Unknown>\n"
 "Language-Team: Norwegian Bokmal <nb@li.org>\n"
 "Language: nb\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-11 18:39+0000\n"
-"X-Generator: Launchpad (build 13014)\n"
+"X-Launchpad-Export-Date: 2011-07-24 13:24+0000\n"
+"X-Generator: Launchpad (build 13483)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:516
 #: src/InputEventsActions.cpp:1424 src/Dialogs/dlgAnalysis.cpp:309
@@ -97,17 +97,17 @@ msgstr "Stopp Logger"
 
 #: src/Logger/ExternalLogger.cpp:48
 msgid "Declare task?"
-msgstr ""
+msgstr "Deklarere oppgave?"
 
 #: src/Logger/ExternalLogger.cpp:51
 msgid "Task declared!"
-msgstr ""
+msgstr "Oppgave deklarert!"
 
 #: src/Logger/ExternalLogger.cpp:55
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
-msgstr ""
+msgstr "Oppgave IKKE deklarert"
 
 #: src/Logger/ExternalLogger.cpp:81
 msgid "No logger connected"
@@ -185,7 +185,7 @@ msgstr "Målpunkt"
 
 #: src/ExpandMacros.cpp:200 src/ExpandMacros.cpp:246
 msgid "Next Startpoint"
-msgstr ""
+msgstr "Neste startpunkt"
 
 #: src/ExpandMacros.cpp:206 src/ExpandMacros.cpp:252
 msgid "Start Turnpoint"
@@ -2168,15 +2168,15 @@ msgstr "Vent med sving"
 
 #: src/InputEventsActions.cpp:637
 msgid "Show details:"
-msgstr ""
+msgstr "Vis detaljer"
 
 #: src/InputEventsActions.cpp:642
 msgid "Unknown competition number"
-msgstr ""
+msgstr "Ukjent konkurransenummer"
 
 #: src/InputEventsActions.cpp:643
 msgid "Not found"
-msgstr ""
+msgstr "Ikke funnet"
 
 #: src/InputEventsActions.cpp:703
 msgid "No active waypoint!"
@@ -2645,7 +2645,7 @@ msgstr "Advarsel"
 #. TODO feature: Show the user what the batt status is.
 #: src/BatteryTimer.cpp:61
 msgid "Battery low"
-msgstr ""
+msgstr "Lite batteri"
 
 #: src/Components.cpp:267
 msgid "Initialising"
@@ -2786,7 +2786,7 @@ msgstr "Altern. landinger"
 
 #: src/Dialogs/dlgFlarmDetailsList.cpp:99
 msgid "No further information"
-msgstr ""
+msgstr "Ingen videre informasjon"
 
 #: src/Dialogs/dlgAnalysis.cpp:246 src/Dialogs/dlgAnalysis.cpp:255
 #: src/Dialogs/dlgAnalysis.cpp:264 src/Dialogs/dlgAnalysis.cpp:273
@@ -3203,7 +3203,7 @@ msgstr "Målglidning"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:63
 msgid "Trending average climb"
-msgstr ""
+msgstr "Trend for snittstig"
 
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:80
 msgid "Flap"
@@ -3219,7 +3219,7 @@ msgstr "Auto"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:94
 msgid "English"
-msgstr ""
+msgstr "Engelsk"
 
 #: src/Dialogs/ConfigPanels/InterfaceConfigPanel.cpp:145
 msgid "Keyboard"
@@ -3278,9 +3278,8 @@ msgid "12 Bottom (Portrait)"
 msgstr "12 Nederst (Stående)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:84
-#, fuzzy
 msgid "12 Top (Portrait)"
-msgstr "8 Øverst (Stående)"
+msgstr "12 Top (Portrait)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
 msgid "24 Right (Landscape)"
@@ -3474,9 +3473,8 @@ msgid "Altitude"
 msgstr "Høyde"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:111
-#, fuzzy
 msgid "Simple (large)"
-msgstr "Enkel"
+msgstr "Enkel (Stor)"
 
 #: src/Dialogs/ConfigPanels/SymbolsConfigPanel.cpp:112
 msgid "Detailed"
@@ -3591,7 +3589,7 @@ msgstr "fot/min"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:65
 msgid "Full name"
-msgstr ""
+msgstr "Fullstendig navn"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:65
 msgid "The full name of each waypoint is displayed."
@@ -3599,7 +3597,7 @@ msgstr "Hele navnet for vendepunktet vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:66
 msgid "First word of name"
-msgstr ""
+msgstr "Første ord av navn"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:66
 msgid "The first word of the waypoint name is displayed."
@@ -3607,7 +3605,7 @@ msgstr "Første ord i vendepunktets navn vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "First 3 letters"
-msgstr ""
+msgstr "Første tre bokstaver"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:67
 msgid "The first 3 letters of the waypoint name are displayed."
@@ -3615,7 +3613,7 @@ msgstr "De første 3 bokstaver i vendepunktets navn vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:68
 msgid "First 5 letters"
-msgstr ""
+msgstr "Første fem bokstaver"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:68
 msgid "The first 5 letters of the waypoint name are displayed."
@@ -3647,7 +3645,7 @@ msgstr "Ankomsthøyde ved å ta hensyn til terrenget"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:82
 msgid "Straight & terrain glide"
-msgstr ""
+msgstr "Rett- & terreng-bane"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:82
 msgid "Both arrival heights are displayed."
@@ -3675,7 +3673,7 @@ msgstr "Alle vendepunkter som hører til oppgaven samt landingsområder vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:108
 msgid "Task waypoints"
-msgstr ""
+msgstr "Oppgave vendepunkter"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:109
 msgid "All waypoints part of a task will be displayed."
@@ -3687,7 +3685,7 @@ msgstr "Ingen vendepunktetiketter vises."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:121
 msgid "Purple circle"
-msgstr ""
+msgstr "Lilla sirkel"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:122
 msgid ""
@@ -3696,6 +3694,9 @@ msgid ""
 "If the waypoint is blocked by a mountain the green circle will be red "
 "instead."
 msgstr ""
+"Flyplasser og utelandsingsplasser er vist som lilla sirkler. Om punktet er "
+"innenfor rekkevidde vil en grønn sirkel dekke rundt det lilla. Om et fjell "
+"står i veien for glidebanen vil sirkelen være rød."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:123
 msgid "B/W"
@@ -3707,10 +3708,13 @@ msgid ""
 "is reachable the color is changed to green. If the waypoint is blocked by a "
 "mountain the color is changed to red instead."
 msgstr ""
+"Flyplasser og utelandingsplasser er hvite/grå. Om vendepunktet er innenfor "
+"rekkevidde vil fargen endres til grønn. Om et fjell står i veien for "
+"glidebanen vil fargen være rød."
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:125
 msgid "Traffic lights"
-msgstr ""
+msgstr "Trafikklys"
 
 #: src/Dialogs/ConfigPanels/WayPointDisplayConfigPanel.cpp:126
 msgid ""
@@ -3718,6 +3722,9 @@ msgid ""
 "light. Green if reachable, Orange if blocked by mountain and red if not "
 "reachable at all."
 msgstr ""
+"Flyplasser og utelandingsplasser er vist i fargene av et trafikklys. Grønn "
+"er innenfor rekkevidde, oransje om det står et fjell i veien og rød om den "
+"du er for lav."
 
 #: src/Dialogs/dlgTaskManager.cpp:73 src/Dialogs/dlgTaskManager.cpp:156
 #: Data/Dialogs/dlgTaskManager_L.xml:3 Data/Dialogs/dlgTaskManager.xml:3
@@ -3737,24 +3744,20 @@ msgstr ""
 "Fortsette?"
 
 #: src/Dialogs/dlgTaskManager.cpp:293 src/Dialogs/dlgTaskManager.cpp:317
-#, fuzzy
 msgid "Calculator"
-msgstr "Simulator"
+msgstr "Kalkulator"
 
 #: src/Dialogs/dlgTaskManager.cpp:296 src/Dialogs/dlgTaskManager.cpp:324
-#, fuzzy
 msgid "Turn Points"
 msgstr "Vendepunkt"
 
 #: src/Dialogs/dlgTaskManager.cpp:301 src/Dialogs/dlgTaskManager.cpp:329
-#, fuzzy
 msgid "Manage"
-msgstr "Oppgavebehandling"
+msgstr "Administrer"
 
 #: src/Dialogs/dlgTaskManager.cpp:305 src/Dialogs/dlgTaskManager.cpp:333
-#, fuzzy
 msgid "Rules"
-msgstr "Oppgaveregler"
+msgstr "Regler"
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
 msgid "Task has been modified"
@@ -3766,7 +3769,7 @@ msgstr "Oppgaven uendret"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Clear all points?"
-msgstr ""
+msgstr "Fjern alle punkter?"
 
 #: src/Dialogs/pnlTaskEdit.cpp:94
 msgid "Task edit"
@@ -3790,7 +3793,7 @@ msgstr "Oppgaveliste"
 
 #: src/Dialogs/pnlTaskList.cpp:202
 msgid "Can't delete .CUP files"
-msgstr ""
+msgstr "Kan ikke slette .CUP-filene"
 
 #: src/Dialogs/pnlTaskList.cpp:202
 msgid "Delete Error"
@@ -3802,7 +3805,7 @@ msgstr "Slette valgt oppgave?"
 
 #: src/Dialogs/pnlTaskList.cpp:235
 msgid "Can't rename .CUP files"
-msgstr ""
+msgstr "Kan ikke endre navn på .CUP-filene"
 
 #: src/Dialogs/pnlTaskList.cpp:235
 msgid "Rename Error"
@@ -3810,29 +3813,27 @@ msgstr "Gi nytt navn Feil"
 
 #: src/Dialogs/pnlTaskList.cpp:285
 msgid "Create new task?"
-msgstr ""
+msgstr "Lage ny oppgave?"
 
 #: src/Dialogs/pnlTaskList.cpp:285
 msgid "Task New"
-msgstr ""
+msgstr "Ny oppgave"
 
 #: src/Dialogs/pnlTaskCalculator.cpp:272
 msgid "Calculator excludes unsaved task changes!"
-msgstr ""
+msgstr "Kalkulatoren tar ikke med ulagrende oppgaveendringer"
 
 #: src/Dialogs/dlgTaskOptionalStarts.cpp:69
 msgid "(Add Alternate Start)"
 msgstr "Legg til Alternativ Start"
 
 #: src/Dialogs/dlgTaskPoint.cpp:381
-#, fuzzy
 msgid "Enable Alternate Starts"
-msgstr "Legg til Alternativ Start"
+msgstr "Aktiver alternative startpunkt"
 
 #: src/Dialogs/dlgTaskPoint.cpp:384
-#, fuzzy
 msgid "Edit Alternates"
-msgstr "Altern. landinger"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:438
 msgid "Remove task point?"
@@ -4227,7 +4228,7 @@ msgstr "Ikke-FAI vendepunkter"
 
 #: src/Dialogs/dlgTeamCode.cpp:169
 msgid "Set new teammate:"
-msgstr ""
+msgstr "Velg ny lagspiller"
 
 #: src/Dialogs/dlgTeamCode.cpp:177
 msgid "Unknown Competition Number"
@@ -4438,13 +4439,6 @@ msgstr "Lysstyrke"
 msgid "Waypoint Info"
 msgstr "Vendepunktsinfo"
 
-#: Data/Dialogs/dlgConfiguration_L.xml:184
-#, fuzzy
-msgid "Draw topographical features (roads, rivers, lakes etc) on the map."
-msgstr ""
-"Vis topografiske elementer (veier, vassdrag, innsjøer, osv) på kartet. "
-"Topografi-fil må være valgt."
-
 #: Data/Dialogs/dlgVario_L.xml:51 Data/Dialogs/dlgVario.xml:50
 msgid "Calibration factor applied to total energy probe to obtain TE vario."
 msgstr ""
@@ -4459,23 +4453,6 @@ msgstr "Ikke bruk sjekksum"
 #: Data/Dialogs/dlgConfigWaypoints.xml:6
 msgid "New"
 msgstr "Ny"
-
-#: Data/Dialogs/dlgWindSettings.xml:12
-#: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:4
-msgid ""
-"This allows switching on or off the automatic wind algorithm.  When the "
-"algorithm is switched off, the pilot is responsible for setting the wind "
-"estimate.\n"
-"[Circling] Requires only a GPS source\n"
-"[ZigZag] requires an intelligent vario with airspeed output.\n"
-"[Both] Use ZigZag and circling."
-msgstr ""
-"Beregning av vindforholdene. \n"
-"[Av] Justeres manuelt av piloten.\n"
-"[Sirkler] Vind beregnes utfra avdrift under termikkflyging. Krever kun GPS.\n"
-"[SikkSakk] Vind beregnes ut fra bakkehastighet. Krever GPS og vario som "
-"måler flyhastighet.\n"
-"[Begge] Vind beregnes ved hjelp av begge målemetodene."
 
 #: Data/Dialogs/dlgConfiguration_L.xml:173
 #: Data/Dialogs/dlgConfiguration.xml:173
@@ -4602,9 +4579,8 @@ msgstr "Definerer hvordan luftrom fylles."
 
 #: Data/Dialogs/dlgConfiguration_L.xml:266
 #: Data/Dialogs/dlgConfiguration.xml:265
-#, fuzzy
 msgid "Auto wind"
-msgstr "Auto Vind"
+msgstr "Autovind"
 
 #: Data/Dialogs/dlgConfigFonts_L.xml:3 Data/Dialogs/dlgConfigFonts.xml:3
 msgid "Font Configuration"
@@ -4806,13 +4782,6 @@ msgstr "Rediger tekst"
 msgid "Profile"
 msgstr "Profil"
 
-#: Data/Dialogs/dlgConfiguration_L.xml:738
-#: Data/Dialogs/dlgConfiguration.xml:737
-msgid ""
-"Geometry values range 0-7 but in landscape mode only some of them are really "
-"available."
-msgstr "Utformingsverdi 0-7, i liggende modus er kun få tilgjengelige."
-
 #: Data/Dialogs/dlgStatusAircraft.xml:5 Data/Dialogs/dlgStatus.xml:10
 #: Data/Dialogs/dlgWayPointDetails_L.xml:13
 #: Data/Dialogs/dlgWayPointDetails.xml:13
@@ -4945,9 +4914,8 @@ msgstr "UTC offsett"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:413
 #: Data/Dialogs/dlgConfiguration.xml:412
-#, fuzzy
 msgid "The handicap factor used for the OnLine Contest scoring."
-msgstr "Handikappfaktor som brukes i On-Line Contest."
+msgstr "Handicapfaktoren for OLC."
 
 #: Data/Dialogs/dlgVario_L.xml:391 Data/Dialogs/dlgVario.xml:390
 msgid "Interval; battery"
@@ -5090,12 +5058,10 @@ msgstr "Start maks. høyde"
 msgid "Route ceiling"
 msgstr "Rute tak"
 
+#: Data/Dialogs/dlgConfiguration_L.xml:184
 #: Data/Dialogs/dlgConfiguration.xml:184
-#, fuzzy
 msgid "Draw topographical features (roads, rivers, lakes etc.) on the map."
-msgstr ""
-"Vis topografiske elementer (veier, vassdrag, innsjøer, osv) på kartet. "
-"Topografi-fil må være valgt."
+msgstr "Vis topografiske elementer (veier, vassdrag, innsjøer, osv) på kartet."
 
 #: Data/Dialogs/dlgFontEdit.xml:8
 msgid "Height"
@@ -5107,16 +5073,12 @@ msgstr "InfoBoksverdier, vanlig"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:129
 #: Data/Dialogs/dlgConfiguration.xml:129
-#, fuzzy
 msgid ""
 "Sets the symbol used for the aircraft.\n"
 "[Simple] Simplified line graphics, black with white contours.\n"
 "[Simple (large)] Enlarged simple graphics.\n"
 "[Detailed] Rendered aircraft graphics."
 msgstr ""
-"Velg flyikon.\n"
-"[Enkel] Enkel flyikon.\n"
-"[Detaljert] Detaljert flyikon."
 
 #: Data/Dialogs/dlgConfiguration_L.xml:232
 #: Data/Dialogs/dlgConfiguration.xml:232
@@ -5926,6 +5888,13 @@ msgstr "Oppdater"
 msgid "FLARM"
 msgstr "FLARM"
 
+#: Data/Dialogs/dlgConfiguration_L.xml:738
+#: Data/Dialogs/dlgConfiguration.xml:737
+msgid ""
+"A list of possible InfoBox layouts. Do some trials to find the best for your "
+"screen size."
+msgstr "En liste med mulige utseender for infoboksene."
+
 #: Data/Dialogs/dlgTaskPointType_L.xml:3 Data/Dialogs/dlgTaskPointType.xml:3
 msgid "Task Point Type"
 msgstr "Oppgavepunkttype"
@@ -6045,9 +6014,8 @@ msgstr "Luftromforsinkelse"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:393
 #: Data/Dialogs/dlgConfiguration.xml:392
-#, fuzzy
 msgid "Ref. mass; max. ballast"
-msgstr "Tørmasse; maks ballast"
+msgstr ""
 
 #: Data/Dialogs/dlgAirspaceSelect_L.xml:4 Data/Dialogs/dlgAirspaceSelect.xml:4
 #: Data/Dialogs/dlgWayPointSelect.xml:2
@@ -6103,15 +6071,14 @@ msgstr "Øverst"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:603
 #: Data/Dialogs/dlgConfiguration.xml:602
-#, fuzzy
 msgid ""
 "If enabled sets the clock of the computer to the GPS time once a fix is set. "
 "This is only necessary if your computer does not have a real-time clock with "
 "battery backup or your computer frequently runs out of battery power or "
 "otherwise loses time."
 msgstr ""
-"Opsjon, kan brukes til å justere enhetens internklokke med GPS-tid. Brukes "
-"kun dersom enheten er ustabil i forhold til å beholde rett klokkeslett."
+"Om valgt, vil datatiden settes etter GPS-klokken. Dette er bare nødvendig om "
+"enheten ikke har en klokke med backupbatteri."
 
 #: Data/Dialogs/dlgConfiguration_L.xml:222
 #: Data/Dialogs/dlgConfiguration.xml:222
@@ -6166,9 +6133,8 @@ msgstr "Alle luftromvarsler av/på."
 
 #: Data/Dialogs/dlgConfiguration_L.xml:217
 #: Data/Dialogs/dlgConfiguration.xml:217
-#, fuzzy
 msgid "Auto close FLARM"
-msgstr "Auto lukk FLARM"
+msgstr "Autolukk FLARM"
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -6259,6 +6225,10 @@ msgstr ""
 msgid "V airbrake"
 msgstr "V luftbrems"
 
+#: Data/Dialogs/dlgConfiguration_L.xml:69 Data/Dialogs/dlgConfiguration.xml:69
+msgid "Circling orientation"
+msgstr "Sirkling orientering"
+
 #: Data/Dialogs/dlgVario_L.xml:55 Data/Dialogs/dlgVario.xml:54
 msgid ""
 "Proportion of TE probe value used in total energy mixing with pitot/static "
@@ -6266,10 +6236,6 @@ msgid ""
 msgstr ""
 "Andel av TE sensor som brukes til totalenergiberegning, sammen med verdier "
 "fra pitotrør."
-
-#: Data/Dialogs/dlgConfiguration_L.xml:69 Data/Dialogs/dlgConfiguration.xml:69
-msgid "Circling orientation"
-msgstr "Sirkling orientering"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:332
 #: Data/Dialogs/dlgConfiguration.xml:331
@@ -6574,13 +6540,10 @@ msgstr "Zander"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:408
 #: Data/Dialogs/dlgConfiguration.xml:407
-#, fuzzy
 msgid ""
 "Optional the maximum manoeuvring speed can be entered on this page to "
 "prevent the glide computer from commanding unrealistic cruise speeds."
 msgstr ""
-"Maksimal flyhastighet for farkosten legges inn her for å unngå at programmet "
-"foreslår urealistiske hastigheter."
 
 #: Data/Dialogs/dlgVario_L.xml:123 Data/Dialogs/dlgVario.xml:122
 msgid "Circling low cutoff"
@@ -6629,15 +6592,14 @@ msgid "Arrival height"
 msgstr "Ankomsthøyde"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:87 Data/Dialogs/dlgConfiguration.xml:87
-#, fuzzy
 msgid "Max. auto zoom distance"
-msgstr "Maks. Autozoom distanse"
+msgstr "Maks autozoomdistanse."
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid ""
 "Name of file to replay.  Can be an IGC file (.igc), a raw NMEA log file (."
 "nmea), or if blank, runs the demo."
-msgstr ""
+msgstr "Navn på fil for reprise. Eks. .IGC eller .nmea-filer."
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:7
 msgid "ACK Space"
@@ -6779,9 +6741,8 @@ msgid "VNE"
 msgstr "VNE"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:87 Data/Dialogs/dlgConfiguration.xml:87
-#, fuzzy
 msgid "The upper limit for auto zoom distance."
-msgstr "Øvre grense for Auto-Zoom distanse."
+msgstr "Øvre grense for auto zoom distanse."
 
 #: Data/Dialogs/dlgVario_L.xml:77 Data/Dialogs/dlgVario.xml:76
 msgid ""
@@ -6807,6 +6768,8 @@ msgid ""
 "languages. Select English for a native interface or Automatic to localise "
 "XCSoar according to the system settings."
 msgstr ""
+"Velg språk. Velg engelsk om noe vises feil eller automatisk for å la XCSoar "
+"finne systemspråket."
 
 #: Data/Dialogs/dlgStatus.xml:44
 msgid "Start speed"
@@ -6835,9 +6798,8 @@ msgstr "Ingen modusrapporter"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:180
 #: Data/Dialogs/dlgConfiguration.xml:180
-#, fuzzy
 msgid "Draw a digital elevation terrain on the map."
-msgstr "Navnet på filen som inneholder terrengets høydeinformasjon."
+msgstr "Vis terreng på kartet."
 
 #: Data/Dialogs/dlgConfiguration_L.xml:425
 #: Data/Dialogs/dlgConfiguration.xml:424
@@ -6860,7 +6822,6 @@ msgstr "Blokker speed-to-fly"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:217
 #: Data/Dialogs/dlgConfiguration.xml:217
-#, fuzzy
 msgid ""
 "Setting this to \"On\" will automatically close the FLARM dialog if there is "
 "no traffic. \"Off\" will keep the dialog open even without current traffic."
@@ -6972,7 +6933,7 @@ msgstr ""
 
 #: Data/Dialogs/pnlTaskList_L.xml:11 Data/Dialogs/pnlTaskList.xml:10
 msgid "New Task"
-msgstr ""
+msgstr "Ny oppgave"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:700
 #: Data/Dialogs/dlgConfiguration.xml:699
@@ -7079,8 +7040,8 @@ msgstr ""
 "\" til målstrekket."
 
 #: Data/Dialogs/dlgConfiguration_L.xml:266
-#: Data/Dialogs/dlgConfiguration.xml:265
-#, fuzzy
+#: Data/Dialogs/dlgConfiguration.xml:265 Data/Dialogs/dlgWindSettings.xml:12
+#: Data/Dialogs/Infobox/pnlInfoBoxWindSetup.xml:4
 msgid ""
 "This allows switching on or off the automatic wind algorithm.  When the "
 "algorithm is switched off, the pilot is responsible for setting the wind "
@@ -7276,7 +7237,6 @@ msgstr "Justering av grunntonen for alle lyder."
 
 #: Data/Dialogs/dlgConfiguration_L.xml:188
 #: Data/Dialogs/dlgConfiguration.xml:188
-#, fuzzy
 msgid ""
 "Defines the amount of Phong shading in the terrain rendering.  Use large "
 "values to emphasise terrain slope, smaller values if flying in steep "
@@ -7395,7 +7355,7 @@ msgstr "Temperatur"
 
 #: Data/Dialogs/pnlTaskList_L.xml:23 Data/Dialogs/pnlTaskList.xml:22
 msgid "Back"
-msgstr ""
+msgstr "Tilbake"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:603
 #: Data/Dialogs/dlgConfiguration.xml:602
@@ -7434,9 +7394,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:276
 #: Data/Dialogs/dlgConfiguration.xml:275
-#, fuzzy
 msgid "Auto MC mode"
-msgstr "Auto. MC modus"
+msgstr "Automatisk MC-modus"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:168
 #: Data/Dialogs/dlgConfiguration.xml:168
@@ -7527,9 +7486,8 @@ msgid "Task distance"
 msgstr "Oppgavedistanse"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:99 Data/Dialogs/dlgConfiguration.xml:99
-#, fuzzy
 msgid "This enables the display of FLARM traffic on the map window."
-msgstr "Termikkhjelp av/på."
+msgstr ""
 
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:9
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:9
@@ -7847,7 +7805,6 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration_L.xml:498
 #: Data/Dialogs/dlgConfiguration.xml:497
-#, fuzzy
 msgid ""
 "Select the rules used for calculating optimal points for the On-Line "
 "Contest. The implementation  conforms to the official release 2010, "
@@ -7863,14 +7820,12 @@ msgid ""
 msgstr ""
 "Regelsettet som brukes til å beregne optimalposisjonene for On-Line Contest. "
 "Algorytmen er i henhold til offisiell utgave 2010, sept.23.\n"
-"[Sprint] Basert på tradisjonelle regler, begrenset til 5 punkter og 150 min. "
-"oppgavetid, målhøyde må ikke være lavere enn starthøyde.\n"
 "[Klassisk] Opp til 7 punkter inklusiv start og mål, målhøyde må ikke være "
 "mer enn 1000 m lavere enn starthøyde.\n"
 "[FAI] I henhold til FAI trekantsreglene. 3 vendepunkter, og felles start og "
 "mål. Ingen side mindre enn 28 % av totaldistansen. For oppgaver over 500 km: "
 "Ingen side mindre enn 25 % eller større enn 45 % av totaldistansen.\n"
-"[Liga] Det nyeste regelsettet for 'contest with Sprint'\n"
+"[Liga] Det nyeste regelsettet for 'contest with Sprint'.\n"
 "[Pluss] En kombinasjon av [Klassisk] og [FAI]. 30 % av FAI scoring legges "
 "til Klassisk scoring."
 
@@ -8202,78 +8157,6 @@ msgid "Landing"
 msgstr "Landing"
 
 #~ msgid ""
-#~ "This enables the display of FLARM traffic on the map window.\n"
-#~ "[Off] FLARM map display disabled\n"
-#~ "[ON/Fixed] FLARM map display enabled with fixed scale.\n"
-#~ "[ON/Scaled] FLARM map display enabled and auto scaled.\n"
-#~ "When auto scaling is enabled, the FLARM targets on the map display are "
-#~ "scaled so that when the map is at large zoom levels, targets are still "
-#~ "visible."
-#~ msgstr ""
-#~ "FLARM trafikk visningsmodus.\n"
-#~ "[Av] FLARM visning slått av.\n"
-#~ "[På/Fast] FLARM visning med fast zoom.\n"
-#~ "[På/Auto] FLARM visning med autozoom.\n"
-#~ "Når autozoom er valgt blir FLARM elementer skalert slik at de er synlige, "
-#~ "selv om kartet har større zoom."
-
-#~ msgid ""
-#~ "Draws digital elevation terrain on the map. This is shaded by the wind "
-#~ "direction: upwind is brighter, downwind darker."
-#~ msgstr ""
-#~ "Forsterker høydedragenes synlighet på kartet. Områder som vinden står på "
-#~ "blir lysere, lesider blir mørkere"
-
-#~ msgid ""
-#~ "Determines what waypoint labels are displayed for each waypoint (space "
-#~ "permitting):\n"
-#~ "[All] All waypoints labels will displayed.\n"
-#~ "[Task Waypoints & Landables] All waypoints labels part of a task and all "
-#~ "landables will be displayed.\n"
-#~ "[Task Waypoints] All waypoints labels part of a task will be displayed.\n"
-#~ "[None] No waypoint labels will be displayed."
-#~ msgstr ""
-#~ "Vendepunkter som skal vises på kartet (avhengig av tilgjengelig plass):\n"
-#~ "[Alle] Alle vendepunkter vises.\n"
-#~ "[Oppgave/Land.] Alle vendepunkter som hører til oppgaven samt mulige "
-#~ "landinger vises.\n"
-#~ "[Oppgave] Alle vendepunkter som hører til oppgaven vises.\n"
-#~ "[Ingen] Ingen vendepunkter vises."
-
-#~ msgid ""
-#~ "Average efficiency is always calculated in REAL TIME. Here you can decide "
-#~ "on how many seconds of flight this calculation must be done. The real "
-#~ "distance covered second by second in this period is divided by the final "
-#~ "difference of altitude.  So if for example you go and return back to the "
-#~ "same point after 2 minutes, and you have set 2 minutes as period, "
-#~ "averageLD will consider the total distance covered in those two minutes , "
-#~ "and NOT the distance between your position 2 minutes before and your "
-#~ "current position, that in this case could be almost zero! Normally for "
-#~ "gliders a good value is 90-120 seconds, and for paragliders 15 seconds. "
-#~ "Lower values will give as a result pretty much the same as LD Instant , "
-#~ "while higher values will look like LD Cruise. Other commercial "
-#~ "instruments and software use 2 minutes."
-#~ msgstr ""
-#~ "Snitteffektivitet beregnes alltid fortløpende og i nåtid. Her kan man "
-#~ "justere hvor mange sekunder av flyturen som skal brukes til beregningen. "
-#~ "Den virkelige forflytningen hvert sekund i denne perioden blir delt på "
-#~ "høydeforskjellen for hele perioden. Så dersom man for eksempel flyr vekk, "
-#~ "og kommer tilbake til samme punkt etter 2 minutter, og man har valgt 2 "
-#~ "minutter som periodelengde, bruker SnittLD totaldistansen tilbakelagt i "
-#~ "de 2 minuttene, og ikke forskjellen mellom den nåværende posisjonen og "
-#~ "den fra 2 minutter tidligere. En gunstig periode for seilfly er 90-120 s, "
-#~ "for paraglidere 15 s. Lavere verdier vil gi resultater nær LD Nå, mens "
-#~ "høyere verdier vil gi resultater nær LD Strekk. Andre kommersielle "
-#~ "instrumenter og programmer bruker 2 minutter."
-
-#~ msgid ""
-#~ "The language file defines translations for XCSoar text in English to "
-#~ "other languages.  If this field is left blank, then XCSoar uses English."
-#~ msgstr ""
-#~ "Språkfilen. En språkfil inneholder frasene for et annet språk. Dersom "
-#~ "ingen språkfil oppgis vil XCSoar være på engelsk."
-
-#~ msgid ""
 #~ "Error occured,\n"
 #~ "Task NOT Declared!"
 #~ msgstr ""
@@ -8376,14 +8259,49 @@ msgstr "Landing"
 #~ msgid "Clear task?"
 #~ msgstr "Tømme oppgaven?"
 
+#~ msgid ""
+#~ "Draw topographical features (roads, rivers, lakes etc) on the map.  "
+#~ "Requires the topography file to be specified."
+#~ msgstr ""
+#~ "Vis topografiske elementer (veier, vassdrag, innsjøer, osv) på kartet. "
+#~ "Topografi-fil må være valgt."
+
 #~ msgid "Clear Task"
 #~ msgstr "Tøm Oppgaven"
+
+#~ msgid "The upper limit for Auto-Zoom distance."
+#~ msgstr "Øvre grense for Auto-Zoom distanse."
+
+#~ msgid "Dry mass; max. ballast"
+#~ msgstr "Tørmasse; maks ballast"
 
 #~ msgid "Important topography labels"
 #~ msgstr "viktige topografiske etiketter"
 
 #~ msgid "Topography labels"
 #~ msgstr "Topografiske etiketter"
+
+#~ msgid ""
+#~ "This enables the display of FLARM traffic on the map window.\n"
+#~ "[Off] FLARM map display disabled\n"
+#~ "[ON/Fixed] FLARM map display enabled with fixed scale.\n"
+#~ "[ON/Scaled] FLARM map display enabled and auto scaled.\n"
+#~ "When auto scaling is enabled, the FLARM targets on the map display are "
+#~ "scaled so that when the map is at large zoom levels, targets are still "
+#~ "visible."
+#~ msgstr ""
+#~ "FLARM trafikk visningsmodus.\n"
+#~ "[Av] FLARM visning slått av.\n"
+#~ "[På/Fast] FLARM visning med fast zoom.\n"
+#~ "[På/Auto] FLARM visning med autozoom.\n"
+#~ "Når autozoom er valgt blir FLARM elementer skalert slik at de er synlige, "
+#~ "selv om kartet har større zoom."
+
+#~ msgid "Max. Auto-Zoom distance"
+#~ msgstr "Maks. Autozoom distanse"
+
+#~ msgid "Auto. MC mode"
+#~ msgstr "Auto. MC modus"
 
 #~ msgid ""
 #~ "This determines whether the glide terrain range is calculated and drawn "
@@ -8398,11 +8316,37 @@ msgstr "Landing"
 #~ "[Linje] Området omrisses av linje.\n"
 #~ "[Skygge] Skygger kartet utenfor området som er innen rekkevidde."
 
+#~ msgid ""
+#~ "Sets the symbol used for the aircraft.\n"
+#~ "[Simple] Simplified line graphics.\n"
+#~ "[Detailed] Rendered aircraft graphics."
+#~ msgstr ""
+#~ "Velg flyikon.\n"
+#~ "[Enkel] Enkel flyikon.\n"
+#~ "[Detaljert] Detaljert flyikon."
+
 #~ msgid "InfoBox values"
 #~ msgstr "InfoBoks verdier"
 
 #~ msgid "Small InfoBox values"
 #~ msgstr "Små InfoBoks verdier"
+
+#~ msgid ""
+#~ "option, if enabled sets the clock of the computer to the GPS time once a "
+#~ "fix is set.  This is only necessary if your computer does not have a real-"
+#~ "time clock with battery backup or your computer frequently runs out of "
+#~ "battery power or otherwise loses time."
+#~ msgstr ""
+#~ "Opsjon, kan brukes til å justere enhetens internklokke med GPS-tid. "
+#~ "Brukes kun dersom enheten er ustabil i forhold til å beholde rett "
+#~ "klokkeslett."
+
+#~ msgid ""
+#~ "The maximum manoeuvring speed can be entered on this page to prevent the "
+#~ "glide computer from commanding unrealistic cruise speeds."
+#~ msgstr ""
+#~ "Maksimal flyhastighet for farkosten legges inn her for å unngå at "
+#~ "programmet foreslår urealistiske hastigheter."
 
 #~ msgid "Dialog boxes"
 #~ msgstr "Dialogbokser"
@@ -8419,6 +8363,9 @@ msgstr "Landing"
 #~ "[På] Ved beregning av rekkevidden tas hensyn til terrenget.\r\n"
 #~ "[Av] Ved beregning av rekkevidden tas ikke nesyn til terrenget."
 
+#~ msgid "Auto. close FLARM"
+#~ msgstr "Auto lukk FLARM"
+
 #~ msgid ""
 #~ "Marks\n"
 #~ "Clear"
@@ -8432,6 +8379,9 @@ msgstr "Landing"
 #~ msgid "Start point cycle"
 #~ msgstr "Startpunkt syklus"
 
+#~ msgid "The handicap factor used for On-Line Contest scoring."
+#~ msgstr "Handikappfaktor som brukes i On-Line Contest."
+
 #~ msgid "Declare Task?"
 #~ msgstr "Deklarere Oppgave?"
 
@@ -8440,6 +8390,72 @@ msgstr "Landing"
 
 #~ msgid "Task Waypoints & Landables"
 #~ msgstr "Oppgavevendepunkter & Landinger"
+
+#~ msgid ""
+#~ "Setting this to \"ON\" will automatically close the FLARM dialog if there "
+#~ "is no traffic. \"Off\" will keep the dialog open even without current "
+#~ "traffic."
+#~ msgstr ""
+#~ "[På] FLARM vinduet blir lukket automatisk dersom det ikke er annen "
+#~ "trafikk. \r\n"
+#~ "[Av] FLARM vinduet forblir åpen også selv om det ikke er annen trafikk."
+
+#~ msgid ""
+#~ "This allows switching on or off the automatic wind algorithm.  When the "
+#~ "algorithm is switched off, the pilot is responsible for setting the wind "
+#~ "estimate.\n"
+#~ "[Circling] Requires only a GPS source\n"
+#~ "[ZigZag] requires an intelligent vario with airspeed output.\n"
+#~ "[Both] Use ZigZag and circling."
+#~ msgstr ""
+#~ "Beregning av vindforholdene. \n"
+#~ "[Av] Justeres manuelt av piloten.\n"
+#~ "[Sirkler] Vind beregnes utfra avdrift under termikkflyging. Krever kun "
+#~ "GPS.\n"
+#~ "[SikkSakk] Vind beregnes ut fra bakkehastighet. Krever GPS og vario som "
+#~ "måler flyhastighet.\n"
+#~ "[Begge] Vind beregnes ved hjelp av begge målemetodene."
+
+#~ msgid ""
+#~ "Select the rules used for calculating optimal points for the On-Line "
+#~ "Contest. The implementation  conforms to the official release 2010, "
+#~ "Sept.23.\n"
+#~ "[Sprint] Based on the Classic rules, limited to five points and 150 min. "
+#~ "task time, finish height must not be lower than start height.\n"
+#~ "[Classic] Up to seven points including start and finish, finish height "
+#~ "must not be lower than start height less 1000 meters.\n"
+#~ "[FAI] Conforms to FAI triangle rules. Three turns and common start and "
+#~ "finish. No leg less than 28% of total except for tasks longer than 500km: "
+#~ "No leg less than 25% or larger than 45%.\n"
+#~ "[League] The most recent contest with Sprint task rules.\n"
+#~ "[Plus] A combination of Classic and FAI rules. 30% of the FAI score are "
+#~ "added to the Classic score."
+#~ msgstr ""
+#~ "Regelsettet som brukes til å beregne optimalposisjonene for On-Line "
+#~ "Contest. Algorytmen er i henhold til offisiell utgave 2010, sept.23.\n"
+#~ "[Sprint] Basert på tradisjonelle regler, begrenset til 5 punkter og 150 "
+#~ "min. oppgavetid, målhøyde må ikke være lavere enn starthøyde.\n"
+#~ "[Klassisk] Opp til 7 punkter inklusiv start og mål, målhøyde må ikke være "
+#~ "mer enn 1000 m lavere enn starthøyde.\n"
+#~ "[FAI] I henhold til FAI trekantsreglene. 3 vendepunkter, og felles start "
+#~ "og mål. Ingen side mindre enn 28 % av totaldistansen. For oppgaver over "
+#~ "500 km: Ingen side mindre enn 25 % eller større enn 45 % av "
+#~ "totaldistansen.\n"
+#~ "[Liga] Det nyeste regelsettet for 'contest with Sprint'\n"
+#~ "[Pluss] En kombinasjon av [Klassisk] og [FAI]. 30 % av FAI scoring legges "
+#~ "til Klassisk scoring."
+
+#~ msgid ""
+#~ "Geometry values range 0-7 but in landscape mode only some of them are "
+#~ "really available."
+#~ msgstr "Utformingsverdi 0-7, i liggende modus er kun få tilgjengelige."
+
+#~ msgid ""
+#~ "Draws digital elevation terrain on the map. This is shaded by the wind "
+#~ "direction: upwind is brighter, downwind darker."
+#~ msgstr ""
+#~ "Forsterker høydedragenes synlighet på kartet. Områder som vinden står på "
+#~ "blir lysere, lesider blir mørkere"
 
 #~ msgid ""
 #~ "Determines what is used to shift the glider from the map center:\n"
@@ -8470,6 +8486,32 @@ msgstr "Landing"
 #~ "[Spor opp] Kartet roteres slik at flyikonet alltid peker oppover.\n"
 #~ "[Mål opp] Kartet roteres slik at retning mot neste vendepunkt er oppover."
 
+#~ msgid ""
+#~ "Average efficiency is always calculated in REAL TIME. Here you can decide "
+#~ "on how many seconds of flight this calculation must be done. The real "
+#~ "distance covered second by second in this period is divided by the final "
+#~ "difference of altitude.  So if for example you go and return back to the "
+#~ "same point after 2 minutes, and you have set 2 minutes as period, "
+#~ "averageLD will consider the total distance covered in those two minutes , "
+#~ "and NOT the distance between your position 2 minutes before and your "
+#~ "current position, that in this case could be almost zero! Normally for "
+#~ "gliders a good value is 90-120 seconds, and for paragliders 15 seconds. "
+#~ "Lower values will give as a result pretty much the same as LD Instant , "
+#~ "while higher values will look like LD Cruise. Other commercial "
+#~ "instruments and software use 2 minutes."
+#~ msgstr ""
+#~ "Snitteffektivitet beregnes alltid fortløpende og i nåtid. Her kan man "
+#~ "justere hvor mange sekunder av flyturen som skal brukes til beregningen. "
+#~ "Den virkelige forflytningen hvert sekund i denne perioden blir delt på "
+#~ "høydeforskjellen for hele perioden. Så dersom man for eksempel flyr vekk, "
+#~ "og kommer tilbake til samme punkt etter 2 minutter, og man har valgt 2 "
+#~ "minutter som periodelengde, bruker SnittLD totaldistansen tilbakelagt i "
+#~ "de 2 minuttene, og ikke forskjellen mellom den nåværende posisjonen og "
+#~ "den fra 2 minutter tidligere. En gunstig periode for seilfly er 90-120 s, "
+#~ "for paraglidere 15 s. Lavere verdier vil gi resultater nær LD Nå, mens "
+#~ "høyere verdier vil gi resultater nær LD Strekk. Andre kommersielle "
+#~ "instrumenter og programmer bruker 2 minutter."
+
 #~ msgid "Specifies the file defining the topological features."
 #~ msgstr "Filen med topografisk innhold."
 
@@ -8493,6 +8535,13 @@ msgstr "Landing"
 #~ "[Begge] Vis begge."
 
 #~ msgid ""
+#~ "The language file defines translations for XCSoar text in English to "
+#~ "other languages.  If this field is left blank, then XCSoar uses English."
+#~ msgstr ""
+#~ "Språkfilen. En språkfil inneholder frasene for et annet språk. Dersom "
+#~ "ingen språkfil oppgis vil XCSoar være på engelsk."
+
+#~ msgid ""
 #~ "If set to \"Simple\", the alternates will only be sorted by waypoint type "
 #~ "(airport/outlanding field) and arrival height. If set to \"Task\" the "
 #~ "sorting will also take the current task direction into account. If set to "
@@ -8507,11 +8556,35 @@ msgstr "Landing"
 #~ "nåværende posisjon til Hjemmeposisjon."
 
 #~ msgid ""
+#~ "Defines the amount of phong shading in the terrain rendering.  Use large "
+#~ "values to emphasise terrain slope, smaller values if flying in steep "
+#~ "mountains."
+#~ msgstr ""
+#~ "Skyggeintensitet. Bruk høye verdier for terreng med lite dynamikk og lave "
+#~ "verdier i fjellterreng."
+
+#~ msgid ""
 #~ "Name of file to replay.  Can be an IGC file, a raw NMEA log file, or if "
 #~ "blank, runs the demo."
 #~ msgstr ""
 #~ "Filen som skal avspilles. Kan være en IGC fil, en rå NMEA loggfil, eller "
 #~ "hvis blank, kjøres demofilen."
+
+#~ msgid ""
+#~ "Determines what waypoint labels are displayed for each waypoint (space "
+#~ "permitting):\n"
+#~ "[All] All waypoints labels will displayed.\n"
+#~ "[Task Waypoints & Landables] All waypoints labels part of a task and all "
+#~ "landables will be displayed.\n"
+#~ "[Task Waypoints] All waypoints labels part of a task will be displayed.\n"
+#~ "[None] No waypoint labels will be displayed."
+#~ msgstr ""
+#~ "Vendepunkter som skal vises på kartet (avhengig av tilgjengelig plass):\n"
+#~ "[Alle] Alle vendepunkter vises.\n"
+#~ "[Oppgave/Land.] Alle vendepunkter som hører til oppgaven samt mulige "
+#~ "landinger vises.\n"
+#~ "[Oppgave] Alle vendepunkter som hører til oppgaven vises.\n"
+#~ "[Ingen] Ingen vendepunkter vises."
 
 #~ msgid ""
 #~ "Determines how labels are displayed with each waypoint:\n"
@@ -8529,3 +8602,7 @@ msgstr "Landing"
 #~ "[Første 3 Tegn] De 3 første tegn vises.\n"
 #~ "[Første 5 Tegn] De 5 første tegn vises.\n"
 #~ "[Ingen] Ingen navn vises."
+
+#~ msgid "Draw topographical features (roads, rivers, lakes etc) on the map."
+#~ msgstr ""
+#~ "Vis topografiske elementer (veier, vassdrag, innsjøer, osv) på kartet."

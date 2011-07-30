@@ -30,8 +30,7 @@ Copyright_License {
 void
 Bitmap::surface_created()
 {
-  if (id != 0 && texture == NULL)
-    load(id);
+  Reload();
 }
 
 void

@@ -28,14 +28,22 @@ Version 6.2 - not yet released
   - redraw terrain only if needed
   - airspace rendering optimised
 
-Version 6.1.4 - not yet released
+Version 6.1.4 - 2011/07/30
 * memory leaks fixed
 * calculations
   - fix miscalculation in start point chooser
+  - finish: revert "allow flight to boundary" for now
 * map
   - fix for the aircraft symbol
+  - airspace rendering optimised
+  - disable huge topography files on PPC2000 and Altair
 * Android
   - fix text rendering on Adreno GPUs
+  - fix another suspend/resume crash
+  - clip the unit symbol in info boxes
+  - smooth CPU usage info box
+* Altair:
+  - fix upside down screen
 
 Version 6.1.3 - 2011/07/14
 * devices

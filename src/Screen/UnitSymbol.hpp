@@ -54,6 +54,7 @@ public:
     bitmap.reset();
   }
 
+  gcc_pure
   bool defined() const {
     return bitmap.defined();
   }
@@ -66,6 +67,7 @@ public:
     return bitmap;
   }
 
+  gcc_pure
   const RasterPoint get_origin(enum kind kind) const;
 
   const PixelSize get_size() const {

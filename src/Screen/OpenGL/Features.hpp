@@ -29,9 +29,22 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
+
+/**
+ * Running on OpenGL/ES.
+ */
 #define HAVE_GLES
+
+/**
+ * The OES_draw_texture extension is available.
+ */
+#define HAVE_OES_DRAW_TEXTURE
+
 #endif
 
+/**
+ * Running on OpenGL/ES?
+ */
 static inline bool
 have_gles()
 {

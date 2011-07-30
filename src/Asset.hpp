@@ -182,6 +182,16 @@ is_android()
 }
 
 /**
+ * Does this device have little main memory?  On those, some expensive
+ * features are disabled.
+ */
+static inline bool
+HasLittleMemory()
+{
+  return is_ancient_hardware() || is_altair();
+}
+
+/**
  * Returns whether the application is compiled with IOIOLib
  */
 static inline bool

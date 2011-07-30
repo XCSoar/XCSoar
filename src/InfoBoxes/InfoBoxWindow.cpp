@@ -277,6 +277,12 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   canvas.TextAutoClipped(x, y, mValue.c_str());
 
   if (unit_symbol != NULL && colorValue >= 0) {
+#ifndef HAVE_CLIPPING
+    /* sort-of clipping */
+    if (x + tsize.cx >= (int)canvas.get_width())
+      return;
+#endif
+
     RasterPoint origin = unit_symbol->get_origin(Appearance.InverseInfoBox
                                            ? UnitSymbol::INVERSE
                                            : UnitSymbol::NORMAL);

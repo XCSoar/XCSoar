@@ -38,33 +38,50 @@ find_resource_name(unsigned id)
   return NULL;
 }
 
-bool
-Bitmap::load(unsigned _id)
+gcc_malloc
+static GLTexture *
+LoadResourceTexture(unsigned id)
 {
-  id = _id;
-
-  reset();
-
-  if (!surface_valid) {
-    AddSurfaceListener(*this);
-    return true;
-  }
-
   const char *name = find_resource_name(id);
   if (name == NULL)
-    return false;
+    return NULL;
 
   jint result[3];
   if (!native_view->loadResourceTexture(name, result))
+    return NULL;
+
+  return new GLTexture(result[0], result[1], result[2]);
+}
+
+bool
+Bitmap::Reload()
+{
+  assert(id != 0);
+  assert(texture == NULL);
+
+  texture = LoadResourceTexture(id);
+  if (texture == NULL)
     return false;
 
-  texture = new GLTexture(result[0], result[1], result[2]);
   width = texture->get_width();
   height = texture->get_height();
+  return true;
+}
 
+bool
+Bitmap::load(unsigned _id)
+{
+  assert(_id != 0);
+
+  reset();
+
+  id = _id;
   AddSurfaceListener(*this);
 
-  return true;
+  if (!surface_valid)
+    return true;
+
+  return Reload();
 }
 
 bool
@@ -86,10 +103,13 @@ Bitmap::load_file(const TCHAR *path)
 void
 Bitmap::reset()
 {
-  if (texture == NULL)
+  if (id == 0) {
+    assert(texture == NULL);
     return;
+  }
 
   RemoveSurfaceListener(*this);
+  id = 0;
 
   delete texture;
   texture = NULL;
