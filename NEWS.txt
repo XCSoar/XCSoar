@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.1.4 - not yet released
+Version 6.1.4 - 2011/07/30
 * memory leaks fixed
 * calculations
   - fix miscalculation in start point chooser
