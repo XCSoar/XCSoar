@@ -75,14 +75,14 @@ struct VisibleWaypoint {
     in_task = _in_task;
   }
 
-  void CalculateReachability(const ProtectedRoutePlanner &route_planner,
+  void CalculateReachability(const RoutePlannerGlue &route_planner,
                              const TaskBehaviour &task_behaviour)
   {
     const fixed elevation = waypoint->Altitude +
       task_behaviour.safety_height_arrival;
     const AGeoPoint p_dest (waypoint->Location, elevation);
-    if (route_planner.FindPositiveArrival(p_dest, arrival_height_terrain,
-                                          arrival_height_glide)) {
+    if (route_planner.find_positive_arrival(p_dest, arrival_height_terrain,
+                                            arrival_height_glide)) {
       const short h_base = iround(elevation);
       arrival_height_terrain -= h_base;
       arrival_height_glide -= h_base;
@@ -349,12 +349,14 @@ public:
   }
 
   void Calculate(const ProtectedRoutePlanner &route_planner) {
+    const ProtectedRoutePlanner::Lease lease(route_planner);
+
     for (unsigned i = 0; i < waypoints.size(); ++i) {
       VisibleWaypoint &vwp = waypoints[i];
       const Waypoint &way_point = *vwp.waypoint;
 
       if (way_point.IsLandable() || way_point.Flags.Watched)
-        vwp.CalculateReachability(route_planner, task_behaviour);
+        vwp.CalculateReachability(lease, task_behaviour);
     }
   }
 

@@ -75,16 +75,6 @@ ProtectedRoutePlanner::SolveReach(const AGeoPoint &origin, const bool do_solve)
   lease->solve_reach(origin, do_solve);
 }
 
-bool
-ProtectedRoutePlanner::FindPositiveArrival(const AGeoPoint &dest,
-                                           short &arrival_height_reach,
-                                           short &arrival_height_direct) const
-{
-  Lease lease(*this);
-  return lease->find_positive_arrival(dest, arrival_height_reach,
-                                      arrival_height_direct);
-}
-
 void
 ProtectedRoutePlanner::AcceptInRange(const GeoBounds &bounds,
                                      TriangleFanVisitor &visitor) const

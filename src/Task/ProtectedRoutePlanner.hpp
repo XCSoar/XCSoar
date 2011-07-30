@@ -66,10 +66,6 @@ public:
   void AcceptInRange(const GeoBounds &bounds,
                      TriangleFanVisitor &visitor) const;
 
-  bool FindPositiveArrival(const AGeoPoint &dest,
-                           short &arrival_height_reach,
-                           short &arrival_height_direct) const;
-
   gcc_pure
   short GetTerrainBase() const;
 };
