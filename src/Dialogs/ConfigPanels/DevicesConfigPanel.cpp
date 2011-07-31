@@ -542,15 +542,11 @@ SetupDeviceFields(const DeviceConfig &config,
     speed_field->RefreshDisplay();
   }
 
-#ifdef ANDROID
-  bulk_baud_rate_field.hide();
-#else
   DataFieldEnum &bulk_df = *(DataFieldEnum *)bulk_baud_rate_field.GetDataField();
   bulk_df.addEnumText(_T("Default"), 0u);
   FillBaudRates(bulk_df);
   bulk_df.Set(config.bulk_baud_rate);
   bulk_baud_rate_field.RefreshDisplay();
-#endif
 
   if (driver_field) {
     DataFieldEnum *dfe = (DataFieldEnum *)driver_field->GetDataField();
