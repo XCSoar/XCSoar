@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.2 - not yet released
 * devices
   - Android IOIO
+  - Android: support native serial ports and USB-RS232 adapters
   - added task declaration support for the IMI ERIXX logger
   - improved support for the Digifly Leonardo
   - auto-detect serial ports on Windows CE

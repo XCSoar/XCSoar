@@ -244,9 +244,10 @@ AddPort(DataFieldEnum &df, enum DeviceConfig::port_type type,
   return id;
 }
 
-#if defined(HAVE_POSIX) && !defined(ANDROID)
+#if defined(HAVE_POSIX)
 
 #include <dirent.h>
+#include <unistd.h>
 
 static bool
 DetectSerialPorts(DataFieldEnum &dfe)
@@ -408,7 +409,7 @@ DetectSerialPorts(DataFieldEnum &dfe)
 static void
 FillPorts(DataFieldEnum &dfe)
 {
-#if defined(HAVE_POSIX) && !defined(ANDROID)
+#if defined(HAVE_POSIX)
   if (DetectSerialPorts(dfe))
     return;
 #elif defined(WIN32)
@@ -514,7 +515,8 @@ SetupDeviceFields(const DeviceConfig &config,
       dfe->SetAsString(tempID);
     }
 #endif
-#else
+#endif /* Android */
+
     switch (config.port_type) {
     case DeviceConfig::SERIAL:
       if (!dfe->Exists(config.path))
@@ -531,7 +533,6 @@ SetupDeviceFields(const DeviceConfig &config,
     case DeviceConfig::TCP_LISTENER:
       break;
     }
-#endif
 
     port_field->RefreshDisplay();
   }
