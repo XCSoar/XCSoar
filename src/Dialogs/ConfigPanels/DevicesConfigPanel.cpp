@@ -294,9 +294,9 @@ DetectSerialPorts(DataFieldEnum &dfe)
 static bool
 DetectSerialPorts(DataFieldEnum &dfe)
 {
-  AddPort(DeviceConfig::SERIAL, _T("COM1:"), _T("Vario (COM1)"));
-  AddPort(DeviceConfig::SERIAL, _T("COM2:"), _T("Radio (COM2)"));
-  AddPort(DeviceConfig::SERIAL, _T("COM3:"), _T("Internal (COM3)"));
+  AddPort(dfe, DeviceConfig::SERIAL, _T("COM1:"), _T("Vario (COM1)"));
+  AddPort(dfe, DeviceConfig::SERIAL, _T("COM2:"), _T("Radio (COM2)"));
+  AddPort(dfe, DeviceConfig::SERIAL, _T("COM3:"), _T("Internal (COM3)"));
   return true;
 }
 
