@@ -256,14 +256,13 @@ DetectSerialPorts(DataFieldEnum &dfe)
   struct dirent *ent;
   while ((ent = readdir(dir)) != NULL) {
     /* filter "/dev/tty*" */
-    if (memcmp(ent->d_name, "tty", 3) != 0 &&
-        memcmp(ent->d_name, "rfcomm", 6) != 0)
-      continue;
-
-    /* filter out "/dev/tty0", ... (valid integer after "tty") */
-    char *endptr;
-    strtoul(ent->d_name + 3, &endptr, 10);
-    if (*endptr == 0)
+    if (memcmp(ent->d_name, "tty", 3) == 0) {
+      /* filter out "/dev/tty0", ... (valid integer after "tty") */
+      char *endptr;
+      strtoul(ent->d_name + 3, &endptr, 10);
+      if (*endptr == 0)
+        continue;
+    } else if (memcmp(ent->d_name, "rfcomm", 6) != 0)
       continue;
 
     char path[64];
