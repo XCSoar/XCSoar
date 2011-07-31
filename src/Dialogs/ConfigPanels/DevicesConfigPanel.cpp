@@ -78,9 +78,6 @@ static const struct {
 static const unsigned num_port_types =
   sizeof(port_types) / sizeof(port_types[0]) - 1;
 
-/** number of bluetooth devices shown in the port list */
-static unsigned num_bluetooth_types = 0;
-
 static DeviceConfig device_config[NUMDEV];
 
 static void
@@ -143,13 +140,8 @@ GetPortType(WndProperty &port_field)
 
   if (port < num_port_types)
     return port_types[port].type;
-  else if (is_android()) {
-    if (port - num_port_types >= num_bluetooth_types)
-      return DeviceConfig::IOIOUART;
-    else
-      return DeviceConfig::RFCOMM;
-  } else
-    return DeviceConfig::SERIAL;
+
+  return (enum DeviceConfig::port_type)(port >> 16);
 }
 
 static void
@@ -239,6 +231,19 @@ DevicesConfigPanel::OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t
   }
 }
 
+static unsigned
+AddPort(DataFieldEnum &df, enum DeviceConfig::port_type type,
+        const TCHAR *text, const TCHAR *display_string=NULL,
+        const TCHAR *help=NULL)
+{
+  /* the uppper 16 bit is the port type, and the lower 16 bit is a
+     serial number to make the enum id unique */
+
+  unsigned id = ((unsigned)type << 16) + df.Count();
+  df.AddChoice(id, text, display_string, help);
+  return id;
+}
+
 #if defined(HAVE_POSIX) && !defined(ANDROID)
 
 #include <dirent.h>
@@ -268,7 +273,7 @@ DetectSerialPorts(DataFieldEnum &dfe)
     char path[64];
     snprintf(path, sizeof(path), "/dev/%s", ent->d_name);
     if (access(path, R_OK|W_OK) == 0 && access(path, X_OK) < 0) {
-      dfe.addEnumText(path);
+      AddPort(dfe, DeviceConfig::SERIAL, path);
       found = true;
     }
   }
@@ -288,9 +293,9 @@ DetectSerialPorts(DataFieldEnum &dfe)
 static bool
 DetectSerialPorts(DataFieldEnum &dfe)
 {
-  dfe.addEnumText(_T("COM1:"), _T("Vario (COM1)"));
-  dfe.addEnumText(_T("COM2:"), _T("Radio (COM2)"));
-  dfe.addEnumText(_T("COM3:"), _T("Internal (COM3)"));
+  AddPort(DeviceConfig::SERIAL, _T("COM1:"), _T("Vario (COM1)"));
+  AddPort(DeviceConfig::SERIAL, _T("COM2:"), _T("Radio (COM2)"));
+  AddPort(DeviceConfig::SERIAL, _T("COM3:"), _T("Internal (COM3)"));
   return true;
 }
 
@@ -387,7 +392,7 @@ DetectSerialPorts(DataFieldEnum &dfe)
         _tcscat(display_name, _T(")"));
       }
 
-      dfe.addEnumText(device_name, display_name);
+      AddPort(dfe, DeviceConfig::SERIAL, device_name, display_name);
       found = true;
     }
   }
@@ -416,7 +421,7 @@ FillPorts(DataFieldEnum &dfe)
   for (unsigned i = 1; i <= 10; ++i) {
     TCHAR buffer[64];
     _stprintf(buffer, _T("COM%u:"), i);
-    dfe.addEnumText(buffer);
+    AddPort(dfe, DeviceConfig::SERIAL, buffer);
   }
 #endif
 }
@@ -447,10 +452,11 @@ SetupDeviceFields(const DeviceConfig &config,
 #endif
 
     for (unsigned i = 0; port_types[i].label != NULL; i++) {
-      dfe->addEnumText(gettext(port_types[i].label));
+      unsigned id = AddPort(*dfe, port_types[i].type,
+                            gettext(port_types[i].label));
 
       if (port_types[i].type == config.port_type)
-        dfe->Set(i);
+        dfe->Set(id);
     }
 
     FillPorts(*dfe);
@@ -458,7 +464,6 @@ SetupDeviceFields(const DeviceConfig &config,
 #ifdef ANDROID
     JNIEnv *env = Java::GetEnv();
     jobjectArray bonded = BluetoothHelper::list(env);
-    num_bluetooth_types = 0u;
     if (bonded != NULL) {
       jsize n = env->GetArrayLength(bonded) / 2;
       for (jsize i = 0; i < n; ++i) {
@@ -475,8 +480,7 @@ SetupDeviceFields(const DeviceConfig &config,
           ? env->GetStringUTFChars(name, NULL)
           : NULL;
 
-        dfe->addEnumText(address2, name2);
-        num_bluetooth_types++;
+        AddPort(*dfe, DeviceConfig::RFCOMM, address2, name2);
 
         env->ReleaseStringUTFChars(address, address2);
         if (name2 != NULL)
@@ -487,10 +491,9 @@ SetupDeviceFields(const DeviceConfig &config,
 
       if (config.port_type == DeviceConfig::RFCOMM &&
           !config.bluetooth_mac.empty()) {
-        if (!dfe->Exists(config.bluetooth_mac)) {
-          dfe->addEnumText(config.bluetooth_mac);
-          num_bluetooth_types++;
-        }
+        if (!dfe->Exists(config.bluetooth_mac))
+          AddPort(*dfe, DeviceConfig::RFCOMM, config.bluetooth_mac);
+
         dfe->SetAsString(config.bluetooth_mac);
       }
     }
@@ -501,9 +504,8 @@ SetupDeviceFields(const DeviceConfig &config,
     for (unsigned i = 0; i < AndroidIOIOUartPort::getNumberUarts(); i++) {
       _sntprintf(tempID, sizeof(tempID), _T("%d"), i);
       _sntprintf(tempName, sizeof(tempName), _T("IOIO Uart %d"), i);
-      dfe->addEnumText(tempID,
-                      tempName,
-                      AndroidIOIOUartPort::getPortHelp(i));
+      AddPort(*dfe, DeviceConfig::IOIOUART, tempID, tempName,
+              AndroidIOIOUartPort::getPortHelp(i));
     }
 
     if (config.port_type == DeviceConfig::IOIOUART &&
@@ -516,7 +518,7 @@ SetupDeviceFields(const DeviceConfig &config,
     switch (config.port_type) {
     case DeviceConfig::SERIAL:
       if (!dfe->Exists(config.path))
-        dfe->addEnumText(config.path);
+        AddPort(*dfe, config.port_type, config.path);
 
       dfe->SetAsString(config.path);
       break;
@@ -578,39 +580,56 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
   const DataFieldEnum &df = *(const DataFieldEnum *)port_field.GetDataField();
   unsigned value = df.GetAsInteger();
 
-  if (value + 1 <= num_port_types) {
-    if (port_types[value].type == config.port_type)
+  /* decode the port type from the upper 16 bits of the id; we don't
+     need the rest, because that's just some serial we don't care
+     about */
+  const enum DeviceConfig::port_type new_type =
+    (enum DeviceConfig::port_type)(value >> 16);
+  switch (new_type) {
+  case DeviceConfig::DISABLED:
+  case DeviceConfig::AUTO:
+  case DeviceConfig::INTERNAL:
+  case DeviceConfig::TCP_LISTENER:
+    if (new_type == config.port_type)
       return false;
 
-    config.port_type = port_types[value].type;
+    config.port_type = new_type;
     return true;
-  } else if (is_android()) {
-    value -= num_port_types;
 
-    if (value < num_bluetooth_types) {
-      /* Bluetooth */
-      if (config.port_type == DeviceConfig::RFCOMM &&
-          _tcscmp(config.bluetooth_mac, df.GetAsString()) == 0)
-        return false;
+  case DeviceConfig::SERIAL:
+    /* Bluetooth */
+    if (new_type == config.port_type &&
+        _tcscmp(config.path, df.GetAsString()) == 0)
+      return false;
 
-      config.port_type = DeviceConfig::RFCOMM;
-      config.bluetooth_mac = df.GetAsString();
-      return true;
-    } else {
-      /* IOIO UART */
-      if (config.port_type == DeviceConfig::IOIOUART &&
-          config.ioio_uart_id == (unsigned)_ttoi(df.GetAsString()))
-        return false;
-
-      config.port_type = DeviceConfig::IOIOUART;
-      config.ioio_uart_id = (unsigned)_ttoi(df.GetAsString());
-      return true;
-    }
-  } else {
-    config.port_type = DeviceConfig::SERIAL;
+    config.port_type = new_type;
     config.path = df.GetAsString();
     return true;
+
+  case DeviceConfig::RFCOMM:
+    /* Bluetooth */
+    if (new_type == config.port_type &&
+        _tcscmp(config.bluetooth_mac, df.GetAsString()) == 0)
+      return false;
+
+    config.port_type = new_type;
+    config.bluetooth_mac = df.GetAsString();
+    return true;
+
+  case DeviceConfig::IOIOUART:
+    /* IOIO UART */
+    if (new_type == config.port_type &&
+        config.ioio_uart_id == (unsigned)_ttoi(df.GetAsString()))
+      return false;
+
+    config.port_type = new_type;
+    config.ioio_uart_id = (unsigned)_ttoi(df.GetAsString());
+    return true;
   }
+
+  /* unreachable */
+  assert(false);
+  return false;
 }
 
 
