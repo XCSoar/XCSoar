@@ -85,13 +85,14 @@ DataFieldEnum::replaceEnumText(unsigned int i, const TCHAR *Text)
 }
 
 bool
-DataFieldEnum::addEnumText(const TCHAR *Text, unsigned id, const TCHAR *ItemHelpText)
+DataFieldEnum::AddChoice(unsigned id, const TCHAR *text,
+                         const TCHAR *display_string, const TCHAR *help)
 {
   if (entries.full())
     return false;
 
   Entry &entry = entries.append();
-  entry.Set(id, Text, NULL, ItemHelpText);
+  entry.Set(id, text, display_string, help);
   return true;
 }
 
