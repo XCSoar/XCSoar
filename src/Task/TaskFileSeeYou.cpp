@@ -36,15 +36,18 @@
 #include "Task/ObservationZones/BGAFixedCourseZone.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "Operation.hpp"
+#include "Units/Units.hpp"
 
 struct SeeYouTaskInformation {
   /** True = RT, False = AAT */
   bool WpDis;
   /** AAT task time in seconds */
   fixed TaskTime;
+  /** MaxAltStart in meters */
+  fixed MaxAltStart;
 
   SeeYouTaskInformation():
-    WpDis(true), TaskTime(fixed_zero) {}
+    WpDis(true), TaskTime(fixed_zero), MaxAltStart(fixed_zero) {}
 };
 
 struct SeeYouTurnpointInformation {
@@ -60,12 +63,13 @@ struct SeeYouTurnpointInformation {
   bool Line;
   bool Reduce;
 
-  fixed Radius1, Radius2;
+  fixed Radius1, Radius2, MaxAlt;
   Angle Angle1, Angle2, Angle12;
 
   SeeYouTurnpointInformation():
     Valid(false), Style(Symmetrical), Line(false), Reduce(false),
     Radius1(fixed(500)), Radius2(fixed(500)),
+    MaxAlt(fixed_zero),
     Angle1(Angle::degrees(fixed_zero)),
     Angle2(Angle::degrees(fixed_zero)),
     Angle12(Angle::degrees(fixed_zero)) {}
@@ -121,6 +125,21 @@ ParseRadius(const TCHAR* str)
   return fixed(radius);
 }
 
+static fixed
+ParseMaxAlt(const TCHAR* str)
+{
+  fixed maxalt = fixed_zero;
+  TCHAR* end;
+  maxalt = fixed(_tcstod(str, &end));
+  if (str == end)
+    return fixed_zero;
+
+  if (_tcslen(end) >= 2 && end[0] == _T('f') && end[1] == _T('t'))
+    maxalt = Units::ToSysUnit(maxalt, unFeet);
+
+  return maxalt;
+}
+
 /**
  * Parses the Options parameters line from See You task file for one task
  * @param task_info Updated with Options
@@ -151,8 +170,9 @@ ParseOptions(SeeYouTaskInformation *task_info, const TCHAR *params[],
  * @param turnpoint_infos Updated with the OZ info
  * @param params Input array of parameters preparsed from See You task file
  * @param n_params Number parameters in the line
+ * @return OZ index from CU (0 to n-1) or -1 if no OZ found
  */
-static void
+static int
 ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
     unsigned n_params)
 {
@@ -160,13 +180,14 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
   TCHAR* end;
   const int oz_index = _tcstol(params[0] + 8, &end, 10);
   if (params[0] + 8 == end || oz_index >= 30)
-    return;
+    return -1;
 
   turnpoint_infos[oz_index].Valid = true;
   // Iterate through available OZ options
   for (unsigned i = 1; i < n_params; i++) {
     const TCHAR *pair = params[i];
     SeeYouTurnpointInformation &tp_info = turnpoint_infos[oz_index];
+
     if (_tcsncmp(pair, _T("Style"), 5) == 0) {
       if (_tcslen(pair) > 6)
         tp_info.Style = ParseStyle(pair + 6);
@@ -185,7 +206,10 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
     } else if (_tcsncmp(pair, _T("A12="), 4) == 0) {
       if (_tcslen(pair) > 3)
         tp_info.Angle12 = ParseAngle(pair + 4);
-    } else if (_tcsncmp(pair, _T("Line"), 4) == 0) {
+    } else if (_tcsncmp(pair, _T("MaxAlt="), 7) == 0) {
+      if (_tcslen(pair) > 7)
+        tp_info.MaxAlt = ParseMaxAlt(pair + 7);
+      } else if (_tcsncmp(pair, _T("Line"), 4) == 0) {
       if (_tcslen(pair) > 5 && pair[5] == _T('1'))
         tp_info.Line = true;
     } else if (_tcsncmp(pair, _T("Reduce"), 6) == 0) {
@@ -193,6 +217,7 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
         tp_info.Reduce = true;
     }
   }
+  return oz_index;
 }
 
 /**
@@ -209,6 +234,7 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
   TCHAR params_buffer[1024];
   const TCHAR *params[20];
   TCHAR *line;
+  int TPIndex = 0;
   const unsigned int max_params = sizeof(params) / sizeof(params[0]);
   while ((line = reader.read()) != NULL &&
          line[0] != _T('\"') && line[0] != _T(',')) {
@@ -224,7 +250,9 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
       if (_tcslen(params[0]) <= 8)
         continue;
 
-      ParseOZs(turnpoint_infos, params, n_params);
+      TPIndex = ParseOZs(turnpoint_infos, params, n_params);
+      if (TPIndex == 0)
+        task_info->MaxAltStart = turnpoint_infos[TPIndex].MaxAlt;
     }
   } // end while
 }
@@ -466,11 +494,16 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   AbstractTaskFactory& fact = task->get_factory();
   const TaskBehaviour::Factory_t factType = task->get_factory_type();
 
+  OrderedTaskBehaviour beh = task->get_ordered_task_behaviour();
   if (factType == TaskBehaviour::FACTORY_AAT) {
-    OrderedTaskBehaviour beh = task->get_ordered_task_behaviour();
     beh.aat_min_time = task_info.TaskTime;
-    task->set_ordered_task_behaviour(beh);
   }
+  if (factType == TaskBehaviour::FACTORY_AAT ||
+      factType == TaskBehaviour::FACTORY_RT) {
+    beh.start_max_height = task_info.MaxAltStart;
+    beh.start_max_height_ref = 1; //abs
+  }
+  task->set_ordered_task_behaviour(beh);
 
   // mark task waypoints.  Skip takeoff and landing point
   for (unsigned i = 0; i < n_waypoints; i++) {
