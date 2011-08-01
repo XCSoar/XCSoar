@@ -84,7 +84,6 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 
   // Show dialog
   show_on_top();
-  update();
 }
 
 void
