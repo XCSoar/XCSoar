@@ -105,6 +105,12 @@ TopWindow::full_screen()
 #endif
 }
 
+void
+TopWindow::refresh()
+{
+  EventQueue::HandlePaintMessages();
+}
+
 bool
 TopWindow::on_activate()
 {

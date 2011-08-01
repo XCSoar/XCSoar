@@ -58,6 +58,14 @@ public:
   void dispatch(MSG &msg);
 };
 
+namespace EventQueue {
+  /**
+   * Handle all pending repaint messages.
+   */
+  void
+  HandlePaintMessages();
+}
+
 gcc_const
 unsigned
 TranscodeKey(unsigned key_code);

@@ -28,20 +28,6 @@ Copyright_License {
 
 static ProgressWindow *global_progress_window;
 
-static void
-handle_paint_messages()
-{
-  assert_none_locked();
-
-#ifdef WIN32
-  MSG msg;
-  while (::PeekMessage(&msg, NULL, WM_PAINT, WM_PAINT, PM_REMOVE)) {
-    ::TranslateMessage(&msg);
-    ::DispatchMessage(&msg);
-  }
-#endif
-}
-
 void
 ProgressGlue::Create(const TCHAR *text)
 {
@@ -51,7 +37,7 @@ ProgressGlue::Create(const TCHAR *text)
   global_progress_window->set_message(text);
   global_progress_window->set_pos(0);
 
-  handle_paint_messages();
+  CommonInterface::main_window.refresh();
 }
 
 void

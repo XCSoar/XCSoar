@@ -154,9 +154,13 @@ public:
   virtual void invalidate();
 
   virtual void expose();
-
-  void refresh();
 #endif /* !USE_GDI */
+
+  /**
+   * Synchronously refresh the screen by handling all pending repaint
+   * requests.
+   */
+  void refresh();
 
   void close() {
     assert_none_locked();

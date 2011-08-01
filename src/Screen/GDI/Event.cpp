@@ -83,6 +83,20 @@ DialogEventLoop::dispatch(MSG &msg)
   EventLoop::dispatch(msg);
 }
 
+void
+EventQueue::HandlePaintMessages()
+{
+  assert_none_locked();
+
+#ifdef WIN32
+  MSG msg;
+  while (::PeekMessage(&msg, NULL, WM_PAINT, WM_PAINT, PM_REMOVE)) {
+    ::TranslateMessage(&msg);
+    ::DispatchMessage(&msg);
+  }
+#endif
+}
+
 unsigned
 TranscodeKey(unsigned key_code)
 {
