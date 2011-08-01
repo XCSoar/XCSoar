@@ -50,15 +50,21 @@ ProgressGlue::Close()
 void
 ProgressGlue::Step()
 {
-  if (global_progress_window != NULL)
-    global_progress_window->step();
+  if (global_progress_window == NULL)
+    return;
+
+  global_progress_window->step();
+  CommonInterface::main_window.refresh();
 }
 
 void
 ProgressGlue::SetValue(unsigned value)
 {
-  if (global_progress_window != NULL)
-    global_progress_window->set_pos(value);
+  if (global_progress_window == NULL)
+    return;
+
+  global_progress_window->set_pos(value);
+  CommonInterface::main_window.refresh();
 }
 
 void
