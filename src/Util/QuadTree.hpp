@@ -1220,6 +1220,9 @@ public:
 
     Bucket *bucket = DeconstifyBucket(it.bucket);
     bucket->Erase(it.leaf, leaf_allocator);
+
+    if (IsEmpty())
+      ClearBounds();
   }
 
   /**

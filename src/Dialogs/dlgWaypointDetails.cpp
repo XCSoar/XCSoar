@@ -203,6 +203,7 @@ replace_in_task(OrderedTask *task, const Waypoint &wp)
     // waypoints database
     ScopeSuspendAllThreads suspend;
     task->check_duplicate_waypoints(way_points);
+    way_points.optimise();
   }
 
   if (task->task_size()==0)
@@ -509,6 +510,7 @@ remove_from_task(OrderedTask *task, const Waypoint &wp)
     // waypoints database
     ScopeSuspendAllThreads suspend;
     task->check_duplicate_waypoints(way_points);
+    way_points.optimise();
   }
 
   bool modified = false;

@@ -145,6 +145,7 @@ dlgTaskManager::CommitTaskChanges()
       // waypoints database
       ScopeSuspendAllThreads suspend;
       active_task->check_duplicate_waypoints(way_points);
+      way_points.optimise();
     }
 
     protected_task_manager->task_commit(*active_task);

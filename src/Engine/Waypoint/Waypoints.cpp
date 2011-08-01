@@ -122,7 +122,8 @@ public:
 void
 Waypoints::optimise()
 {
-  if (waypoint_tree.IsEmpty())
+  if (waypoint_tree.IsEmpty() || waypoint_tree.HaveBounds())
+    /* empty or already optimised */
     return;
 
   task_projection.update_fast();
@@ -139,28 +140,22 @@ Waypoints::append(const Waypoint &_wp)
 {
   Waypoint wp(_wp);
 
-  if (empty())
-    task_projection.reset(wp.Location);
-  else if (waypoint_tree.HaveBounds())
-    /* QuadTree::IsWithinKnownBounds() needs to know the position */
+  if (waypoint_tree.HaveBounds()) {
     wp.Project(task_projection);
+    if (!waypoint_tree.IsWithinBounds(wp)) {
+      /* schedule an optimise() call */
+      waypoint_tree.Flatten();
+      waypoint_tree.ClearBounds();
+    }
+  } else if (empty())
+    task_projection.reset(wp.Location);
 
   wp.Flags.Watched = (wp.FileNum == 3);
 
   task_projection.scan_location(wp.Location);
   wp.id = next_id++;
 
-  bool must_optimise = !waypoint_tree.IsWithinKnownBounds(wp);
-  if (must_optimise) {
-    waypoint_tree.Flatten();
-    waypoint_tree.ClearBounds();
-  }
-
   const Waypoint &new_wp = waypoint_tree.Add(wp);
-
-  if (must_optimise)
-    waypoint_tree.Optimise();
-
   name_tree.Add(new_wp);
 
   return new_wp;
@@ -328,24 +323,25 @@ Waypoints::erase(const Waypoint& wp)
 void
 Waypoints::replace(const Waypoint &orig, const Waypoint &replacement)
 {
+  assert(!waypoint_tree.IsEmpty());
+
   name_tree.Remove(orig);
 
   Waypoint new_waypoint(replacement);
   new_waypoint.id = orig.id;
-  new_waypoint.Project(task_projection);
 
-  bool must_optimise = !waypoint_tree.IsWithinKnownBounds(new_waypoint);
-  if (must_optimise) {
-    waypoint_tree.Flatten();
-    waypoint_tree.ClearBounds();
+  if (waypoint_tree.HaveBounds()) {
+    new_waypoint.Project(task_projection);
+    if (!waypoint_tree.IsWithinBounds(new_waypoint)) {
+      /* schedule an optimise() call */
+      waypoint_tree.Flatten();
+      waypoint_tree.ClearBounds();
+    }
   }
 
   WaypointTree::const_iterator it = waypoint_tree.FindPointer(&orig);
   assert(it != waypoint_tree.end());
   waypoint_tree.Replace(it, new_waypoint);
-
-  if (must_optimise)
-    waypoint_tree.Optimise();
 
   name_tree.Add(orig);
 }

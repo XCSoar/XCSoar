@@ -1538,6 +1538,7 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
     if (basic.location_available && calculated.terrain_valid) {
       ScopeSuspendAllThreads suspend;
       way_points.add_takeoff_point(basic.location, calculated.terrain_altitude);
+      way_points.optimise();
     }
   } else {
     Waypoint edit_waypoint = way_points.create(basic.location);
@@ -1549,6 +1550,7 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
     {
       ScopeSuspendAllThreads suspend;
       way_points.append(edit_waypoint);
+      way_points.optimise();
     }
   }
 

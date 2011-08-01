@@ -59,6 +59,7 @@ OnWaypointNewClicked(gcc_unused WndButton &Sender)
 
     ScopeSuspendAllThreads suspend;
     way_points.append(edit_waypoint);
+    way_points.optimise();
   }
 }
 
@@ -74,6 +75,7 @@ OnWaypointEditClicked(gcc_unused WndButton &Sender)
 
       ScopeSuspendAllThreads suspend;
       way_points.replace(*way_point, wp_copy);
+      way_points.optimise();
     }
   }
 }
