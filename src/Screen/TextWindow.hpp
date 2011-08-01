@@ -86,10 +86,6 @@ public:
     invalidate();
 #else /* USE_GDI */
     ::SetWindowText(hWnd, _text);
-
-#ifdef _WIN32_WCE
-    ::UpdateWindow(hWnd);
-#endif
 #endif /* USE_GDI */
   }
 
