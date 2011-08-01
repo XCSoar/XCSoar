@@ -178,7 +178,7 @@ TopWindow::on_event(const Event &event)
 int
 TopWindow::event_loop()
 {
-  update();
+  refresh();
 
   EventLoop loop(*event_queue, *this);
   Event event;

@@ -34,7 +34,7 @@ Copyright_License {
 #endif
 
 TopWindow::TopWindow()
-  :invalidated(false)
+  :invalidated(true)
 #ifdef ANDROID
   , paused(false), resumed(false), resized(false)
 #endif
@@ -240,7 +240,7 @@ TopWindow::on_event(const SDL_Event &event)
 int
 TopWindow::event_loop()
 {
-  update();
+  refresh();
 
   EventLoop loop(*this);
   SDL_Event event;
