@@ -78,9 +78,6 @@ WindowControl::SetFont(const Font &Value)
 int
 WindowControl::OnHelp()
 {
-#ifdef ALTAIRSYNC
-  return 0; // undefined. return 1 if defined
-#else
   if (mHelpText && !string_is_empty(mHelpText)) {
     dlgHelpShowModal(*(SingleWindow *)get_root_owner(),
                      gettext(mCaption.c_str()), gettext(mHelpText));
@@ -93,7 +90,6 @@ WindowControl::OnHelp()
   }
 
   return 0;
-#endif
 }
 
 bool

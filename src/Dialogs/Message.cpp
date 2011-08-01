@@ -81,13 +81,8 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   const PixelRect rc = XCSoarInterface::main_window.get_client_rect();
 
-#ifdef ALTAIRSYNC
-  Width = Layout::Scale(220);
-  Height = Layout::Scale(160);
-#else
   Width = Layout::Scale(200);
   Height = Layout::Scale(160);
-#endif
 
   X = Y = 0;
 
@@ -195,12 +190,6 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   for (int i = 0; i < ButtonCount; ++i)
     delete wButtons[i];
   wf.reset();
-
-#ifdef ALTAIRSYNC
-  // force a refresh of the window behind
-  InvalidateRect(hWnd,NULL,true);
-  UpdateWindow(hWnd);
-#endif
 
   return(res);
 }
