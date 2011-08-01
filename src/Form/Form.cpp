@@ -29,6 +29,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
+#include "Screen/Event.hpp"
 #include "Util/StringUtil.hpp"
 #include "Look/DialogLook.hpp"
 
@@ -37,12 +38,7 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
-#elif defined(USE_GDI)
-#include "Screen/GDI/Event.hpp"
-#else
-#include "Screen/SDL/Event.hpp"
 #endif
 
 #ifdef EYE_CANDY
