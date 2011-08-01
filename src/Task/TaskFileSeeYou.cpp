@@ -165,30 +165,32 @@ ParseOZs(SeeYouTurnpointInformation turnpoint_infos[], const TCHAR *params[],
   turnpoint_infos[oz_index].Valid = true;
   // Iterate through available OZ options
   for (unsigned i = 1; i < n_params; i++) {
-    if (_tcsncmp(params[i], _T("Style"), 5) == 0) {
-      if (_tcslen(params[i]) > 6)
-        turnpoint_infos[oz_index].Style = ParseStyle(params[i] + 6);
-    } else if (_tcsncmp(params[i], _T("R1="), 3) == 0) {
-      if (_tcslen(params[i]) > 3)
-        turnpoint_infos[oz_index].Radius1 = ParseRadius(params[i] + 3);
-    } else if (_tcsncmp(params[i], _T("A1="), 3) == 0) {
-      if (_tcslen(params[i]) > 3)
-        turnpoint_infos[oz_index].Angle1 = ParseAngle(params[i] + 3);
-    } else if (_tcsncmp(params[i], _T("R2="), 3) == 0) {
-      if (_tcslen(params[i]) > 3)
-        turnpoint_infos[oz_index].Radius2 = ParseRadius(params[i] + 3);
-    } else if (_tcsncmp(params[i], _T("A2="), 3) == 0) {
-      if (_tcslen(params[i]) > 3)
-        turnpoint_infos[oz_index].Angle2 = ParseAngle(params[i] + 3);
-    } else if (_tcsncmp(params[i], _T("A12="), 4) == 0) {
-      if (_tcslen(params[i]) > 3)
-        turnpoint_infos[oz_index].Angle12 = ParseAngle(params[i] + 4);
-    } else if (_tcsncmp(params[i], _T("Line"), 4) == 0) {
-      if (_tcslen(params[i]) > 5 && params[i][5] == _T('1'))
-        turnpoint_infos[oz_index].Line = true;
-    } else if (_tcsncmp(params[i], _T("Reduce"), 6) == 0) {
-      if (_tcslen(params[i]) > 7 && params[i][7] == _T('1'))
-        turnpoint_infos[oz_index].Reduce = true;
+    const TCHAR *pair = params[i];
+    SeeYouTurnpointInformation &tp_info = turnpoint_infos[oz_index];
+    if (_tcsncmp(pair, _T("Style"), 5) == 0) {
+      if (_tcslen(pair) > 6)
+        tp_info.Style = ParseStyle(pair + 6);
+    } else if (_tcsncmp(pair, _T("R1="), 3) == 0) {
+      if (_tcslen(pair) > 3)
+        tp_info.Radius1 = ParseRadius(pair + 3);
+    } else if (_tcsncmp(pair, _T("A1="), 3) == 0) {
+      if (_tcslen(pair) > 3)
+        tp_info.Angle1 = ParseAngle(pair + 3);
+    } else if (_tcsncmp(pair, _T("R2="), 3) == 0) {
+      if (_tcslen(pair) > 3)
+        tp_info.Radius2 = ParseRadius(pair + 3);
+    } else if (_tcsncmp(pair, _T("A2="), 3) == 0) {
+      if (_tcslen(pair) > 3)
+        tp_info.Angle2 = ParseAngle(pair + 3);
+    } else if (_tcsncmp(pair, _T("A12="), 4) == 0) {
+      if (_tcslen(pair) > 3)
+        tp_info.Angle12 = ParseAngle(pair + 4);
+    } else if (_tcsncmp(pair, _T("Line"), 4) == 0) {
+      if (_tcslen(pair) > 5 && pair[5] == _T('1'))
+        tp_info.Line = true;
+    } else if (_tcsncmp(pair, _T("Reduce"), 6) == 0) {
+      if (_tcslen(pair) > 7 && pair[7] == _T('1'))
+        tp_info.Reduce = true;
     }
   }
 }
