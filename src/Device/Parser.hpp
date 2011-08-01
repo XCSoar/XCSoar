@@ -47,8 +47,6 @@ public:
 
   bool use_geoid;
 
-  bool isFlarm;
-
 public:
   NMEAParser();
   void Reset(void);

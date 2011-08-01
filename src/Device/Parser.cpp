@@ -65,7 +65,6 @@ NMEAParser::Reset(void)
 {
   real = true;
   use_geoid = true;
-  isFlarm = false;
   GGAAvailable = false;
   LastTime = fixed_zero;
 }
@@ -689,7 +688,7 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEAInfo &info)
   fixed value;
   if (ReadAltitude(line, value)) {
     // JMW no in-built baro sources, so use this generic one
-    if (isFlarm)
+    if (info.flarm.IsDetected())
       /* FLARM emulates the Garmin $PGRMZ sentence, but emits the
          altitude above 1013.25 hPa - since the don't have a "FLARM"
          device driver, we use the auto-detected "isFlarm" flag
@@ -760,7 +759,6 @@ bool
 NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed clock)
 {
   flarm.available.Update(clock);
-  isFlarm = true;
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
@@ -787,8 +785,6 @@ bool
 NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
 {
   FLARM_STATE &flarm = info.flarm;
-
-  isFlarm = true;
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>

@@ -59,6 +59,10 @@ struct FLARM_STATE
 public:
   void clear();
 
+  bool IsDetected() const {
+    return available || !traffic.empty();
+  }
+
   /**
    * Adds data from the specified object, unless already present in
    * this one.

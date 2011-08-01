@@ -98,6 +98,18 @@ public:
 public:
   const NMEAInfo &RealState() const { return real_data; }
 
+  /**
+   * Is the specified device a FLARM?
+   *
+   * This method does not lock the blackboard, it is unprotected.  It
+   * is assumed that this method is not important enough to implement
+   * proper locking.
+   */
+  gcc_pure
+  bool IsFLARM(unsigned i) const {
+    return RealState(i).flarm.IsDetected();
+  }
+
   void SetStartupLocation(const GeoPoint &loc, const fixed alt);
   void SetLocation(const GeoPoint &loc, const fixed speed, const Angle bearing,
                    const fixed alt, const fixed baroalt, const fixed t);

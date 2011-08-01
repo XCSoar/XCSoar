@@ -220,7 +220,7 @@ DeviceDescriptor::CanDeclare() const
 {
   return Driver != NULL &&
     (Driver->CanDeclare() ||
-     parser.isFlarm);
+     device_blackboard.IsFLARM(index));
 }
 
 bool
@@ -413,7 +413,7 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
 
   bool result = device != NULL && device->Declare(declaration, env);
 
-  if (parser.isFlarm) {
+  if (device_blackboard.IsFLARM(index)) {
     _stprintf(text, _("Declaring to %s"), _T("FLARM"));
     env.SetText(text);
     result = FlarmDeclare(Com, declaration, env) || result;
