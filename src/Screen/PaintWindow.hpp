@@ -123,18 +123,6 @@ public:
     ::InvalidateRect(hWnd, &rect, false);
 #endif
   }
-
-  void update() {
-    //assert_none_locked();
-
-#ifndef USE_GDI
-    // XXX
-    expose();
-#else
-    ::UpdateWindow(hWnd);
-    // duplicate in MainWindow
-#endif
-  }
 };
 
 #endif
