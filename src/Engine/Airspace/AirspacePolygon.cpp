@@ -104,6 +104,6 @@ GeoPoint
 AirspacePolygon::closest_point(const GeoPoint& loc) const
 {
   const FlatGeoPoint p = m_task_projection->project(loc);
-  const FlatGeoPoint pb = nearest_point(m_border, p, m_is_convex); 
+  const FlatGeoPoint pb = nearest_point(m_border, p);
   return m_task_projection->unproject(pb);
 }
