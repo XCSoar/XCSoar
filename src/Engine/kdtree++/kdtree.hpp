@@ -544,7 +544,7 @@ namespace KDTree
 	      }
        }
 	    std::pair<const _Node<_Val>*,
-	      std::pair<size_type, typename _Acc::result_type> >
+	      std::pair<size_type, distance_type> >
 	      best = _S_node_nearest (__K, 0, __val, _M_get_root(), &_M_header,
 				      node, __max, _M_cmp, _M_acc, _M_dist,
 				      always);
@@ -579,7 +579,7 @@ namespace KDTree
             }
 	      }
 	    std::pair<const _Node<_Val>*,
-	      std::pair<size_type, typename _Acc::result_type> >
+	      std::pair<size_type, distance_type> >
 	      best = _S_node_nearest (__K, 0, __val, _M_get_root(), &_M_header,
 				      node, __max, _M_cmp, _M_acc, _M_dist, __p);
        // make sure we didn't just get stuck with the root node...
