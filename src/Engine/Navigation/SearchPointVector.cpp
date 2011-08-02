@@ -105,7 +105,7 @@ static FlatGeoPoint
 nearest_point_nonconvex(const SearchPointVector& spv, const FlatGeoPoint &p3)
 {
   unsigned distance_min = 0-1;
-  SearchPointVector::const_iterator i_best = spv.end();
+  FlatGeoPoint point_best;
   for (SearchPointVector::const_iterator i = spv.begin(); 
        i!= spv.end(); ++i) {
 
@@ -113,10 +113,10 @@ nearest_point_nonconvex(const SearchPointVector& spv, const FlatGeoPoint &p3)
     unsigned d_this = p3.distance_sq_to(pa);
     if (d_this<distance_min) {
       distance_min = d_this;
-      i_best = i;
+      point_best = pa;
     }
   }
-  return i_best->get_flatLocation();
+  return point_best;
 }
 
 SearchPointVector::const_iterator

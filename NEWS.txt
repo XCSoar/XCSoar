@@ -22,6 +22,7 @@ Version 6.2 - not yet released
   - reconnect individual devices after failure or timeout
 * calculations
   - dry mass is seperated from the polar reference mass
+  - airspace distance miscalculations fixed
 * user interface
   - added support for reverse portrait/landscape screen orientations
   - multiple flarm team mates and teams possible
