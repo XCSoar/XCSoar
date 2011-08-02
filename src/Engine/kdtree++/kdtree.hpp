@@ -522,7 +522,7 @@ namespace KDTree
 	    return std::pair<const_iterator, distance_type>
 	      (best.first, best.second.second);
 	  }
-        return std::pair<const_iterator, distance_type>(end(), 0);
+        return std::pair<const_iterator, distance_type>(end(), distance_type(0));
       }
 
       template <class SearchVal>

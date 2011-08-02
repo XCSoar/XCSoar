@@ -165,7 +165,7 @@ namespace KDTree
 			       const _Dist& __dist, const _Acc& __acc,
 			       const _ValA& __a, const _ValB& __b)
   {
-    typename _Dist::distance_type d = 0;
+    typename _Dist::distance_type d(0);
     for (size_t i=0; i<__dim; ++i)
       d += __dist(__acc(__a, i), __acc(__b, i), i);
     return d;
