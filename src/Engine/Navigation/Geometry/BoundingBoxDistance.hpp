@@ -48,7 +48,7 @@ public:
  * 
  * @param _val Set distance (typically 0)
  */
-  BBDist(const double _val) {
+  explicit BBDist(const double _val) {
     set_vals(-1);
     d = (int)_val;
   }
@@ -58,7 +58,7 @@ public:
  * 
  * @param _val Set distance (typically 0)
  */
-  BBDist(const int _val) {
+  explicit BBDist(const int _val) {
     set_vals(-1);
     d = _val;
   }
