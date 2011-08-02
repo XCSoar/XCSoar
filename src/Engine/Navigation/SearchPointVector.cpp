@@ -139,51 +139,8 @@ nearest_index_convex(const SearchPointVector& spv, const FlatGeoPoint &p3)
   return i_best;
 }
 
-
-static
-FlatGeoPoint
-nearest_point_convex(const SearchPointVector& spv, const FlatGeoPoint &p3)
-{
-  unsigned distance_min = 0-1;
-
-  SearchPointVector::const_iterator i_best =
-    nearest_index_convex(spv, p3);
-
-  FlatGeoPoint pc = i_best->get_flatLocation();
-
-  // find nearest point on this segment
-  FlatGeoPoint pa = segment_nearest_point(spv,i_best,p3);
-  if (!(pa == pc)) {
-    unsigned d_seg = pa.distance_sq_to(p3);
-    if (d_seg < distance_min) {
-      distance_min = d_seg;
-      pc = pa;
-    }
-  }
-
-  // find nearest point on previous segment
-  SearchPointVector::const_iterator i_prev;
-  if (i_best == spv.begin()) {
-    i_prev = spv.end()-1;
-  } else {
-    i_prev = i_best-1;
-  }
-
-  FlatGeoPoint pb = segment_nearest_point(spv,i_prev,p3);
-  if (!(pb == pc)) {
-    unsigned d_seg = pb.distance_sq_to(p3);
-    if (d_seg < distance_min) {
-      distance_min = d_seg;
-      pc = pb;
-    }
-  }
-
-  return pc;
-}
-
 FlatGeoPoint nearest_point(const SearchPointVector& spv, 
-                            const FlatGeoPoint &p3,
-                            const bool is_convex)
+                            const FlatGeoPoint &p3)
 {
   // special case
   if (spv.empty()) {
@@ -192,13 +149,7 @@ FlatGeoPoint nearest_point(const SearchPointVector& spv,
     return spv[0].get_flatLocation();
   }
 
-  if (is_convex) {
-    /** \todo Strictly speaking it isn't correct to use this function
-     */
-    return nearest_point_convex(spv,p3);
-  } else {
-    return nearest_point_nonconvex(spv,p3);
-  }
+  return nearest_point_nonconvex(spv,p3);
 }
 
 bool intersects(const SearchPointVector& spv,

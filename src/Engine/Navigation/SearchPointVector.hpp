@@ -44,8 +44,7 @@ thin_to_size(SearchPointVector& spv, const unsigned max_size);
 void project(SearchPointVector& spv, const TaskProjection& tp);
 
 FlatGeoPoint nearest_point(const SearchPointVector& spv, 
-                            const FlatGeoPoint &p,
-                            const bool is_convex=false);
+                           const FlatGeoPoint &p);
 
 /**
  * Find iterator of nearest point, assuming polygon is convex
