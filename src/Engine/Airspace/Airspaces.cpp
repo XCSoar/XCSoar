@@ -108,6 +108,35 @@ Airspaces::visit_intersecting(const GeoPoint &loc,
 
 // SCAN METHODS
 
+struct AirspacePredicateAdapter {
+  const AirspacePredicate &condition;
+
+  AirspacePredicateAdapter(const AirspacePredicate &_condition)
+    :condition(_condition) {}
+
+  bool operator()(const Airspace &as) const {
+    return condition(*as.get_airspace());
+  }
+};
+
+const Airspace *
+Airspaces::find_nearest(const GeoPoint &location,
+                        const AirspacePredicate &condition) const
+{
+  if (empty())
+    return NULL;
+
+  const Airspace bb_target(location, task_projection);
+  const int mrange = task_projection.project_range(location, fixed(30000));
+  const AirspacePredicateAdapter predicate(condition);
+  std::pair<AirspaceTree::const_iterator, AirspaceTree::distance_type> found =
+    airspace_tree.find_nearest_if(bb_target, BBDist(0, mrange), predicate);
+
+  return found.first != airspace_tree.end()
+    ? &*found.first
+    : NULL;
+}
+
 const Airspaces::AirspaceVector
 Airspaces::scan_nearest(const GeoPoint &location,
                         const AirspacePredicate &condition) const 
