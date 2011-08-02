@@ -37,6 +37,7 @@ Copyright_License {
 #include "InfoBoxes/Content/Time.hpp"
 #include "InfoBoxes/Content/Trace.hpp"
 #include "InfoBoxes/Content/Weather.hpp"
+#include "InfoBoxes/Content/Airspace.hpp"
 
 #include "Language/Language.hpp"
 
@@ -857,6 +858,22 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Fin_TimeLocal, // Fin ETA
     e_Fin_Time, // Fin ETE
   },
+
+  {
+    N_("Nearest airspace horizontal"),
+    N_("Near AS H"),
+    N_("The horizontal distance to the nearest airspace"),
+    e_NearestAirspaceVertical,
+    e_NearestAirspaceVertical,
+  },
+
+  {
+    N_("Nearest airspace vertical"),
+    N_("Near AS V"),
+    N_("The vertical distance to the nearest airspace"),
+    e_NearestAirspaceHorizontal,
+    e_NearestAirspaceHorizontal,
+  },
 };
 
 InfoBoxContent*
@@ -1041,6 +1058,12 @@ InfoBoxFactory::Create(unsigned InfoBoxType)
     return new InfoBoxContentNextETEVMG();
   case e_Horizon:
     return new InfoBoxContentHorizon();
+
+  case e_NearestAirspaceHorizontal:
+    return new InfoBoxContentNearestAirspaceHorizontal();
+
+  case e_NearestAirspaceVertical:
+    return new InfoBoxContentNearestAirspaceVertical();
   }
 
   return NULL;

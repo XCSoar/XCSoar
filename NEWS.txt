@@ -26,6 +26,7 @@ Version 6.2 - not yet released
 * user interface
   - added support for reverse portrait/landscape screen orientations
   - multiple flarm team mates and teams possible
+  - nearest airspace distance info boxes
 * map
   - redraw terrain only if needed
   - airspace rendering optimised

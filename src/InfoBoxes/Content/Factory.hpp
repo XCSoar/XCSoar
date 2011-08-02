@@ -132,6 +132,10 @@ namespace InfoBoxFactory
     e_Fin_ETE_VMG,
     e_WP_ETE_VMG,
     e_Horizon,
+
+    e_NearestAirspaceHorizontal,
+    e_NearestAirspaceVertical,
+
     e_NUM_TYPES /* Last item */
   };
 
