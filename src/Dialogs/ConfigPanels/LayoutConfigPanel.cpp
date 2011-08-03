@@ -166,6 +166,7 @@ LayoutConfigPanel::Save(bool &requirerestart)
   WndProperty *wp;
 
   bool orientation_changed = false;
+
   if (Display::RotateSupported()) {
     wp = (WndProperty*)wf->FindByName(_T("prpDisplayOrientation"));
     assert(wp != NULL);
@@ -181,18 +182,11 @@ LayoutConfigPanel::Save(bool &requirerestart)
   }
 
   bool info_box_geometry_changed = false;
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
-  if (wp) {
-    if (InfoBoxLayout::InfoBoxGeometry !=
-        (InfoBoxLayout::Geometry)wp->GetDataField()->GetAsInteger()) {
-      InfoBoxLayout::InfoBoxGeometry =
-          (InfoBoxLayout::Geometry)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileInfoBoxGeometry,
-                   (unsigned)InfoBoxLayout::InfoBoxGeometry);
-      changed = true;
-      info_box_geometry_changed = true;
-    }
-  }
+
+  info_box_geometry_changed |=
+    SaveFormPropertyEnum(*wf, _T("prpAppInfoBoxGeom"),
+                         szProfileInfoBoxGeometry,
+                         InfoBoxLayout::InfoBoxGeometry);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppFlarmLocation"));
   if (wp) {
@@ -202,43 +196,23 @@ LayoutConfigPanel::Save(bool &requirerestart)
     if (newval != oldval) {
       Profile::Set(szProfileFlarmLocation, newval);
       info_box_geometry_changed = true;
-      changed = true;
     }
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppStatusMessageAlignment"));
-  if (wp) {
-    if (Appearance.StateMessageAlign != (StateMessageAlign_t)
-        (wp->GetDataField()->GetAsInteger())) {
-      Appearance.StateMessageAlign = (StateMessageAlign_t)
-        (wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppStatusMessageAlignment,
-                    Appearance.StateMessageAlign);
-      changed = true;
-    }
-  }
+  changed |= info_box_geometry_changed;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpDialogStyle"));
-  if (wp) {
-    if (DialogStyleSetting != (DialogStyle)(wp->GetDataField()->GetAsInteger())) {
-      DialogStyleSetting = (DialogStyle)(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppDialogStyle, DialogStyleSetting);
-      changed = true;
-    }
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpAppStatusMessageAlignment"),
+                                  szProfileAppStatusMessageAlignment,
+                                  Appearance.StateMessageAlign);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
-  if (wp) {
-    if (Appearance.InfoBoxBorder != (InfoBoxBorderAppearance_t)
-        (wp->GetDataField()->GetAsInteger())) {
-      Appearance.InfoBoxBorder = (InfoBoxBorderAppearance_t)
-        (wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppInfoBoxBorder,
-                    Appearance.InfoBoxBorder);
-      changed = true;
-      requirerestart = true;
-    }
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpDialogStyle"),
+                                  szProfileAppDialogStyle,
+                                  DialogStyleSetting);
+
+  changed |= requirerestart |=
+    SaveFormPropertyEnum(*wf, _T("prpAppInfoBoxBorder"),
+                         szProfileAppInfoBoxBorder,
+                         Appearance.InfoBoxBorder);
 
   changed |= requirerestart |=
     SaveFormProperty(*wf, _T("prpAppInverseInfoBox"),
@@ -248,13 +222,9 @@ LayoutConfigPanel::Save(bool &requirerestart)
     SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
                      szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTabDialogStyle"));
-  assert(wp != NULL);
-  if (Appearance.DialogTabStyle != (DialogTabStyle_t)(wp->GetDataField()->GetAsInteger())) {
-    Appearance.DialogTabStyle = (DialogTabStyle_t)(wp->GetDataField()->GetAsInteger());
-    Profile::Set(szProfileAppDialogTabStyle, Appearance.DialogTabStyle);
-    changed = true;
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpTabDialogStyle"),
+                                  szProfileAppDialogTabStyle,
+                                  Appearance.DialogTabStyle);
 
   if (orientation_changed) {
     assert(Display::RotateSupported());
