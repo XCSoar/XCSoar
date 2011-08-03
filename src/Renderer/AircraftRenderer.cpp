@@ -26,7 +26,6 @@ Copyright_License {
 #include "Look/AircraftLook.hpp"
 #include "Math/Screen.hpp"
 #include "SettingsMap.hpp"
-#include "Appearance.hpp"
 
 static void
 DrawMirroredPolygon(const RasterPoint *src, RasterPoint *dst, unsigned points,
@@ -166,7 +165,7 @@ DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
              const AircraftLook &look,
              const Angle angle, const RasterPoint aircraft_pos)
 {
-  switch (Appearance.AircraftSymbol) {
+  switch (settings_map.aircraft_symbol) {
   case acDetailed:
     DrawDetailedAircraft(canvas, settings_map, look, angle, aircraft_pos);
     break;

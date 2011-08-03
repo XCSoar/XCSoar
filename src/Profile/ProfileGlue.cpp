@@ -360,7 +360,7 @@ Profile::Use()
   Get(szProfileDisableAutoLogger,
       settings_computer.DisableAutoLogger);
 
-  GetEnum(szProfileAircraftSymbol, Appearance.AircraftSymbol);
+  GetEnum(szProfileAircraftSymbol, settings_map.aircraft_symbol);
 }
 
 void

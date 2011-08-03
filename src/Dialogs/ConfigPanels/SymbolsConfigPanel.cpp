@@ -28,7 +28,6 @@ Copyright_License {
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
-#include "Appearance.hpp"
 #include "Screen/Graphics.hpp"
 #include "Language/Language.hpp"
 
@@ -129,7 +128,7 @@ SymbolsConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("Simple"), acSimple);
     dfe->addEnumText(_("Simple (large)"), acSimpleLarge);
     dfe->addEnumText(_("Detailed"), acDetailed);
-    dfe->Set(Appearance.AircraftSymbol);
+    dfe->Set(settings_map.aircraft_symbol);
     wp->RefreshDisplay();
   }
 
@@ -188,9 +187,9 @@ SymbolsConfigPanel::Save()
 
   wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
   if (wp) {
-    if (Appearance.AircraftSymbol != (AircraftSymbol_t)wp->GetDataField()->GetAsInteger()) {
-      Appearance.AircraftSymbol = (AircraftSymbol_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAircraftSymbol, (int)Appearance.AircraftSymbol);
+    if (settings_map.aircraft_symbol != (AircraftSymbol_t)wp->GetDataField()->GetAsInteger()) {
+      settings_map.aircraft_symbol = (AircraftSymbol_t)wp->GetDataField()->GetAsInteger();
+      Profile::Set(szProfileAircraftSymbol, (int)settings_map.aircraft_symbol);
       changed = true;
     }
   }

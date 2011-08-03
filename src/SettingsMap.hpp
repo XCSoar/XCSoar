@@ -33,6 +33,12 @@ Copyright_License {
 #include "Terrain/TerrainSettings.hpp"
 #include "DisplayMode.hpp"
 
+enum AircraftSymbol_t {
+  acSimple = 0,
+  acDetailed,
+  acSimpleLarge,
+};
+
 enum DisplayOrientation_t {
   TRACKUP = 0,
   NORTHUP,
@@ -89,6 +95,8 @@ struct SETTINGS_MAP {
   bool EnableTopography;
 
   TerrainRendererSettings terrain;
+
+  AircraftSymbol_t aircraft_symbol;
 
   /** Snailtrail wind drifting in circling mode */
   bool EnableTrailDrift;

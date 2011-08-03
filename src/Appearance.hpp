@@ -49,12 +49,6 @@ enum InfoBoxBorderAppearance_t {
   apIbTab
 };
 
-enum AircraftSymbol_t {
-  acSimple = 0,
-  acDetailed,
-  acSimpleLarge,
-};
-
 struct Appearance {
   bool InverseInfoBox;
   StateMessageAlign_t StateMessageAlign;
@@ -63,7 +57,6 @@ struct Appearance {
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
   bool UseCustomFonts;
-  AircraftSymbol_t AircraftSymbol;
 };
 
 extern struct Appearance Appearance;

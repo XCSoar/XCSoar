@@ -31,5 +31,4 @@ struct Appearance Appearance = {
   true,
   apIbBox,
   false,
-  acSimple,
 };

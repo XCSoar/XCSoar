@@ -30,6 +30,7 @@ SettingsMapBlackboard::SettingsMapBlackboard()
   settings_map.MaxAutoZoomDistance = fixed(10000); /* 100 km */
   settings_map.EnableTopography = true;
   settings_map.terrain.SetDefaults();
+  settings_map.aircraft_symbol = acSimple;
   settings_map.EnableTrailDrift = true;
   settings_map.EnableDetourCostMarker = false;
   settings_map.DisplayTrackBearing = dtbAuto;
