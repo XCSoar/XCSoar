@@ -39,6 +39,16 @@ class Thread : private NonCopyable {
 #ifdef HAVE_POSIX
   pthread_t handle;
   bool defined;
+
+#ifndef NDEBUG
+  /**
+   * The thread is currently being created.  This is a workaround for
+   * IsInside(), which may return false until pthread_create() has
+   * initialised the #handle.
+   */
+  bool creating;
+#endif
+
 #else
   HANDLE handle;
   DWORD id;
@@ -46,7 +56,11 @@ class Thread : private NonCopyable {
 
 public:
 #ifdef HAVE_POSIX
-  Thread():defined(false) {}
+  Thread():defined(false) {
+#ifndef NDEBUG
+    creating = false;
+#endif
+  }
 #else
   Thread():handle(NULL) {}
 #endif
@@ -65,7 +79,7 @@ public:
    */
   bool IsInside() const {
 #ifdef HAVE_POSIX
-    return IsDefined() && pthread_equal(pthread_self(), handle);
+    return IsDefined() && (creating || pthread_equal(pthread_self(), handle));
 #else
     return GetCurrentThreadId() == id;
 #endif
