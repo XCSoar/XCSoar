@@ -113,13 +113,10 @@ Units::GetCoordinateFormat()
   return CoordinateFormat;
 }
 
-CoordinateFormats_t
+void
 Units::SetCoordinateFormat(CoordinateFormats_t NewFormat)
 {
-  CoordinateFormats_t last = CoordinateFormat;
-  if (CoordinateFormat != NewFormat)
-    CoordinateFormat = NewFormat;
-  return last;
+  CoordinateFormat = NewFormat;
 }
 
 Units_t
@@ -128,13 +125,10 @@ Units::GetUserDistanceUnit()
   return Current.DistanceUnit;
 }
 
-Units_t
+void
 Units::SetUserDistanceUnit(Units_t NewUnit)
 {
-  Units_t last = Current.DistanceUnit;
-  if (Current.DistanceUnit != NewUnit)
-    Current.DistanceUnit = NewUnit;
-  return last;
+  Current.DistanceUnit = NewUnit;
 }
 
 Units_t
@@ -143,13 +137,10 @@ Units::GetUserAltitudeUnit()
   return Current.AltitudeUnit;
 }
 
-Units_t
+void
 Units::SetUserAltitudeUnit(Units_t NewUnit)
 {
-  Units_t last = Current.AltitudeUnit;
-  if (Current.AltitudeUnit != NewUnit)
-    Current.AltitudeUnit = NewUnit;
-  return last;
+  Current.AltitudeUnit = NewUnit;
 }
 
 Units_t
@@ -158,13 +149,10 @@ Units::GetUserTemperatureUnit()
   return Current.TemperatureUnit;
 }
 
-Units_t
+void
 Units::SetUserTemperatureUnit(Units_t NewUnit)
 {
-  Units_t last = Current.TemperatureUnit;
-  if (Current.TemperatureUnit != NewUnit)
-    Current.TemperatureUnit = NewUnit;
-  return last;
+  Current.TemperatureUnit = NewUnit;
 }
 
 Units_t
@@ -173,13 +161,10 @@ Units::GetUserSpeedUnit()
   return Current.SpeedUnit;
 }
 
-Units_t
+void
 Units::SetUserSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = Current.SpeedUnit;
-  if (Current.SpeedUnit != NewUnit)
-    Current.SpeedUnit = NewUnit;
-  return last;
+  Current.SpeedUnit = NewUnit;
 }
 
 Units_t
@@ -188,13 +173,10 @@ Units::GetUserTaskSpeedUnit()
   return Current.TaskSpeedUnit;
 }
 
-Units_t
+void
 Units::SetUserTaskSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = Current.TaskSpeedUnit;
-  if (Current.TaskSpeedUnit != NewUnit)
-    Current.TaskSpeedUnit = NewUnit;
-  return last;
+  Current.TaskSpeedUnit = NewUnit;
 }
 
 Units_t
@@ -203,13 +185,10 @@ Units::GetUserVerticalSpeedUnit()
   return Current.VerticalSpeedUnit;
 }
 
-Units_t
+void
 Units::SetUserVerticalSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = Current.VerticalSpeedUnit;
-  if (Current.VerticalSpeedUnit != NewUnit)
-    Current.VerticalSpeedUnit = NewUnit;
-  return last;
+  Current.VerticalSpeedUnit = NewUnit;
 }
 
 Units_t
@@ -218,13 +197,10 @@ Units::GetUserWindSpeedUnit()
   return Current.WindSpeedUnit;
 }
 
-Units_t
+void
 Units::SetUserWindSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = Current.WindSpeedUnit;
-  if (Current.WindSpeedUnit != NewUnit)
-    Current.WindSpeedUnit = NewUnit;
-  return last;
+  Current.WindSpeedUnit = NewUnit;
 }
 
 Units_t

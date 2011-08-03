@@ -31,6 +31,12 @@ Version 6.2 - not yet released
   - redraw terrain only if needed
   - airspace rendering optimised
 
+Version 6.1.5 - not yet released
+* calculations
+  - airspace distance miscalculations fixed
+* Android
+  - fix timer crash
+
 Version 6.1.4 - 2011/07/30
 * memory leaks fixed
 * calculations

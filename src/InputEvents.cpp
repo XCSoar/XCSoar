@@ -704,6 +704,10 @@ InputEvents::ShowMenu()
 void
 InputEvents::ProcessMenuTimer()
 {
+  if (CommonInterface::main_window.has_dialog())
+    /* no menu updates while a dialog is visible */
+    return;
+
   if (MenuTimeOut == XCSoarInterface::MenuTimeoutMax) {
     if (CommonInterface::IsPanning()) {
       setMode(MODE_PAN);
@@ -712,8 +716,7 @@ InputEvents::ProcessMenuTimer()
     }
   }
   // refresh visible buttons if still visible
-  if (!CommonInterface::main_window.has_dialog())
-    drawButtons(getModeID());
+  drawButtons(getModeID());
 
   MenuTimeOut++;
 }

@@ -34,7 +34,6 @@ class AndroidTimer {
   class Bridge : protected Java::Object {
   public:
     Bridge(JNIEnv *env, jlong ptr, jint period);
-    ~Bridge();
 
     void install() {
       call_void("install");
@@ -52,7 +51,6 @@ class AndroidTimer {
 
 public:
   AndroidTimer(Window &window, unsigned ms);
-  ~AndroidTimer();
 
   void disable();
 

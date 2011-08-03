@@ -81,6 +81,10 @@ public:
    */
   bool IsInside() const {
 #ifdef HAVE_POSIX
+#ifdef NDEBUG
+    const bool creating = false;
+#endif
+
     return IsDefined() && (creating || pthread_equal(pthread_self(), handle));
 #else
     return GetCurrentThreadId() == id;
