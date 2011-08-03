@@ -58,8 +58,8 @@ InputEvents::processNmea(unsigned key)
 
 int main(int argc, char **argv)
 {
-  if (argc != 5) {
-    fprintf(stderr, "Usage: %s DRIVER PORT BAUD FILE.igc\n"
+  if (argc < 5) {
+    fprintf(stderr, "Usage: %s DRIVER PORT BAUD FILE.igc [FLIGHT NR]\n"
             "Where DRIVER is one of:\n", argv[0]);
 
     const TCHAR *name;
@@ -76,6 +76,8 @@ int main(int argc, char **argv)
   DeviceConfig config;
   config.Clear();
   config.baud_rate = atoi(argv[3]);
+
+  unsigned flight_id = (argc == 6 ? atoi(argv[5]) : 0);
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name);
   if (driver == NULL) {
@@ -135,7 +137,13 @@ int main(int argc, char **argv)
     return EXIT_FAILURE;
   }
 
-  if (!device->DownloadFlight(flight_list[0], path, env)) {
+  if (flight_id >= flight_list.size()) {
+    delete port;
+    fprintf(stderr, "Flight id not found\n");
+    return EXIT_FAILURE;
+  }
+
+  if (!device->DownloadFlight(flight_list[flight_id], path, env)) {
     delete port;
     fprintf(stderr, "Failed to download flight\n");
     return EXIT_FAILURE;
