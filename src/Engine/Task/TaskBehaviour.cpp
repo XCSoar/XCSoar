@@ -43,6 +43,12 @@ TaskBehaviour::TaskBehaviour():
     abort_task_mode(atmSimple) {}
 
 void
+TaskBehaviour::SetDefaults()
+{
+  enable_olc = true;
+}
+
+void
 TaskBehaviour::all_off()
 {
   optimise_targets_range = false;

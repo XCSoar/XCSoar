@@ -227,6 +227,8 @@ public:
   /** Route and reach planning */
   RoutePlannerConfig route_planner;
 
+  void SetDefaults();
+
   /**
    * Convenience function (used primarily for testing) to disable
    * all expensive task behaviour functions.

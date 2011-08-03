@@ -49,6 +49,13 @@ public:
   AtmosphericPressure(fixed qnh):m_QNH(qnh) {}
 
   /**
+   * Configure the standard pressure (1013.25 hPa);
+   */
+  void SetStandardPressure() {
+    set_QNH(fixed(1013.25));
+  }
+
+  /**
    * Set QNH value (Mean Sea Level pressure)
    *
    * @param set New value of QNH (hPa)

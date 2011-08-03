@@ -84,6 +84,8 @@ struct SETTINGS_WIND {
    */
   SpeedVector ManualWind;
   Validity ManualWindAvailable;
+
+  void SetDefaults();
 };
 
 /**
@@ -97,6 +99,8 @@ struct SETTINGS_LOGGER {
   /** Use short IGC filenames for the logger files */
   bool LoggerShortName;
   bool DisableAutoLogger;
+
+  void SetDefaults();
 };
 
 /**
@@ -104,6 +108,8 @@ struct SETTINGS_LOGGER {
  */
 struct SETTINGS_POLAR {
   bool BallastTimerActive;      /**< Whether the ballast countdown timer is active */
+
+  void SetDefaults();
 };
 
 struct SETTINGS_SOUND {
@@ -113,6 +119,8 @@ struct SETTINGS_SOUND {
   bool EnableSoundModes;
   uint8_t SoundVolume;
   uint8_t SoundDeadband;
+
+  void SetDefaults();
 };
 
 /** 
@@ -127,6 +135,8 @@ struct SETTINGS_TEAMCODE {
   TeamCode TeammateCode;       /**< auto-detected, see also in Info.h */
 
   FlarmId TeamFlarmIdTarget; /**< FlarmId of the glider to track */
+
+  void SetDefaults();
 };
 
 struct SETTINGS_VOICE {
@@ -139,6 +149,8 @@ struct SETTINGS_VOICE {
   bool EnableVoiceNewWaypoint;
   bool EnableVoiceInSector;
   bool EnableVoiceAirspace;
+
+  void SetDefaults();
 };
 
 /**
@@ -151,6 +163,10 @@ struct SETTINGS_PLACES_OF_INTEREST {
   bool HomeLocationAvailable;
 
   GeoPoint HomeLocation;
+
+  void SetDefaults() {
+    ClearHome();
+  }
 
   void ClearHome();
   void SetHome(const Waypoint &wp);
@@ -173,6 +189,8 @@ struct SETTINGS_FEATURES {
 
   /** Navigate by baro altitude instead of GPS altitude */
   bool EnableNavBaroAltitude;
+
+  void SetDefaults();
 };
 
 
@@ -205,6 +223,8 @@ struct SETTINGS_COMPUTER:
 
   AirspaceComputerSettings airspace;
   Plane plane;
+
+  void SetDefaults();
 };
 
 #endif

@@ -22,54 +22,8 @@ Copyright_License {
 */
 
 #include "SettingsComputerBlackboard.hpp"
-#include "OS/Clock.hpp"
-
-#include <algorithm>
 
 SettingsComputerBlackboard::SettingsComputerBlackboard()
 {
-  settings_computer.AutoWindMode= D_AUTOWIND_CIRCLING;
-  settings_computer.ExternalWind = true;
-  settings_computer.EnableBlockSTF = false;
-
-  settings_computer.TeamCodeRefWaypoint = -1;
-  settings_computer.TeamFlarmTracking = false;
-  settings_computer.TeamFlarmCNTarget.clear();
-
-  settings_computer.AverEffTime=0;
-  settings_computer.SoundVolume = 80;
-  settings_computer.SoundDeadband = 5;
-  settings_computer.EnableNavBaroAltitude = true;
-  settings_computer.EnableExternalTriggerCruise=false;
-  settings_computer.LoggerTimeStepCruise=5;
-  settings_computer.LoggerTimeStepCircling=1;
-  settings_computer.DisableAutoLogger = false;
-  settings_computer.LoggerShortName = false;
-  settings_computer.UTCOffset = GetSystemUTCOffset();
-
-  // for user-set teammate code
-  settings_computer.TeammateCodeValid = false;
-  settings_computer.TeamFlarmIdTarget.clear();
-
-  settings_computer.ClearHome();
-
-  settings_computer.EnableVoiceClimbRate = false;
-  settings_computer.EnableVoiceTerrain = false;
-  settings_computer.EnableVoiceWaypointDistance = false;
-  settings_computer.EnableVoiceTaskAltitudeDifference = false;
-  settings_computer.EnableVoiceMacCready = false;
-  settings_computer.EnableVoiceNewWaypoint = false;
-  settings_computer.EnableVoiceInSector = false;
-  settings_computer.EnableVoiceAirspace = false;
-
-  settings_computer.airspace.SetDefaults();
-
-  settings_computer.EnableSoundVario = true;
-  settings_computer.EnableSoundModes = true;
-  settings_computer.EnableSoundTask = true;
-
-  settings_computer.BallastTimerActive = false;
-
-  settings_computer.enable_olc = true;
+  settings_computer.SetDefaults();
 }
-
