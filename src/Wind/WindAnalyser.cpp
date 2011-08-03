@@ -108,9 +108,6 @@ WindAnalyser::reset()
   first = true;
 }
 
-/**
- * Called if a new sample is available in the samplelist.
- */
 void
 WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived)
 {
@@ -196,9 +193,6 @@ WindAnalyser::slot_Altitude(const MoreData &info, DerivedInfo &derived)
   windstore.SlotAltitude(info, derived);
 }
 
-/**
- * Called if the flightmode changes
- */
 void
 WindAnalyser::slot_newFlightMode(const NMEAInfo &info,
                                  const DerivedInfo &derived,
