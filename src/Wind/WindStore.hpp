@@ -34,12 +34,11 @@ class WindStore
 {
   Vector _lastWind;
   fixed _lastAltitude;
-  WindMeasurementList * windlist;
+  WindMeasurementList windlist;
   bool updated;
 
 public:
   WindStore();
-  ~WindStore();
 
   /**
    * Called with new measurements. The quality is a measure for how good the

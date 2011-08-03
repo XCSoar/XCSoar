@@ -50,20 +50,13 @@ Copyright_License {
 WindStore::WindStore()
 {
   //create the lists
-  windlist = new WindMeasurementList();
   updated = true;
-}
-
-WindStore::~WindStore()
-{
-  delete windlist;
 }
 
 void
 WindStore::reset()
 {
-  delete windlist;
-  windlist = new WindMeasurementList();
+  windlist.Reset();
   updated = true;
   _lastAltitude = fixed_zero;
   _lastWind = Vector();
@@ -74,8 +67,7 @@ WindStore::SlotMeasurement(const MoreData &info, DerivedInfo &derived,
                            Vector windvector, int quality)
 {
   updated = true;
-  windlist->addMeasurement(info.time, windvector,
-                           info.NavAltitude, quality);
+  windlist.addMeasurement(info.time, windvector, info.NavAltitude, quality);
   //we may have a new wind value, so make sure it's emitted if needed!
   recalculateWind(info, derived);
 }
@@ -95,14 +87,14 @@ WindStore::SlotAltitude(const MoreData &info, DerivedInfo &derived)
 const Vector
 WindStore::GetWind(fixed Time, fixed h, bool &found) const
 {
-  return windlist->getWind(Time, h, found);
+  return windlist.getWind(Time, h, found);
 }
 
 void
 WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived)
 {
   bool found;
-  Vector CurWind = windlist->getWind(info.time, info.NavAltitude, found);
+  Vector CurWind = windlist.getWind(info.time, info.NavAltitude, found);
 
   if (found) {
     if ((fabs(CurWind.x - _lastWind.x) > fixed_one)
