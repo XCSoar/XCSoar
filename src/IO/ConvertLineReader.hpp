@@ -38,7 +38,6 @@ class ConvertLineReader : public TLineReader {
 public:
   enum charset {
     UTF8,
-    WINDOWS_1252,
     ISO_LATIN_1,
   };
 

@@ -39,10 +39,6 @@ ConvertLineReader::ConvertLineReader(LineReader<char> &_source, charset cs)
     code_page = CP_UTF8;
     break;
 
-  case WINDOWS_1252:
-    code_page = CP_ACP;
-    break;
-
   default:
     code_page = CP_UTF8;
   }
