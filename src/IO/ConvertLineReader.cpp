@@ -121,8 +121,14 @@ ConvertLineReader::read()
       return narrow;
     return const_cast<char *>(utf8);
 
-  case AUTO:
   case UTF8:
+    if (!ValidateUTF8(narrow))
+      /* abort on invalid UTF-8 sequence */
+      return NULL;
+
+    /* fall through ... */
+
+  case AUTO:
     return narrow;
   }
 
