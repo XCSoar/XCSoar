@@ -170,20 +170,17 @@ protected:
   }
 };
 
-class Blackboard : public SettingsMapBlackboard {
-public:
-  Blackboard() {
-    settings_map.OrientationCruise = NORTHUP;
-    settings_map.OrientationCircling = NORTHUP;
-    settings_map.waypoint.SetDefaults();
-    settings_map.EnableTopography = true;
-    settings_map.terrain.SetDefaults();
-    settings_map.terrain.enable = true;
-    settings_map.terrain.slope_shading = sstFixed;
-  }
-};
-
-static Blackboard blackboard;
+static void
+SetDefaults(SETTINGS_MAP &settings_map)
+{
+  settings_map.OrientationCruise = NORTHUP;
+  settings_map.OrientationCircling = NORTHUP;
+  settings_map.waypoint.SetDefaults();
+  settings_map.EnableTopography = true;
+  settings_map.terrain.SetDefaults();
+  settings_map.terrain.enable = true;
+  settings_map.terrain.slope_shading = sstFixed;
+}
 
 static void
 LoadFiles()
@@ -207,7 +204,7 @@ LoadFiles()
 }
 
 static void
-GenerateBlackboard(MapWindow &map)
+GenerateBlackboard(MapWindow &map, const SETTINGS_MAP &settings_map)
 {
   MoreData nmea_info;
   DerivedInfo derived_info;
@@ -243,7 +240,7 @@ GenerateBlackboard(MapWindow &map)
   settings_computer.airspace.SetDefaults();
 
   map.ReadBlackboard(nmea_info, derived_info, settings_computer,
-                     blackboard.SettingsMap());
+                     settings_map);
 }
 
 #ifndef ENABLE_OPENGL
@@ -288,11 +285,15 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   TestWindow::register_class(hInstance);
 #endif
 
+  SETTINGS_MAP settings_map;
+  settings_map.SetDefaults();
+  SetDefaults(settings_map);
+
   WaypointLook *waypoint_look = new WaypointLook();
-  waypoint_look->Initialise(blackboard.SettingsMap().waypoint);
+  waypoint_look->Initialise(settings_map.waypoint);
 
   AirspaceLook *airspace_look = new AirspaceLook();
-  airspace_look->Initialise(blackboard.SettingsMap().airspace);
+  airspace_look->Initialise(settings_map.airspace);
 
   TaskLook *task_look = new TaskLook();
   task_look->Initialise();
@@ -308,9 +309,9 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   window.set(0, 0, 640, 480);
 
   Graphics::Initialise();
-  Graphics::InitialiseConfigured(blackboard.SettingsMap());
+  Graphics::InitialiseConfigured(settings_map);
 
-  GenerateBlackboard(window.map);
+  GenerateBlackboard(window.map, settings_map);
   Fonts::Initialize();
 #ifndef ENABLE_OPENGL
   DrawThread::Draw(window.map);
