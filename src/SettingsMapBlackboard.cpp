@@ -22,39 +22,8 @@ Copyright_License {
 */
 
 #include "SettingsMapBlackboard.hpp"
-#include "Asset.hpp"
 
 SettingsMapBlackboard::SettingsMapBlackboard()
 {
-  settings_map.CircleZoom = true;
-  settings_map.MaxAutoZoomDistance = fixed(10000); /* 100 km */
-  settings_map.EnableTopography = true;
-  settings_map.terrain.SetDefaults();
-  settings_map.aircraft_symbol = acSimple;
-  settings_map.EnableTrailDrift = true;
-  settings_map.EnableDetourCostMarker = false;
-  settings_map.DisplayTrackBearing = dtbAuto;
-  settings_map.AutoZoom = false;
-  settings_map.SnailScaling = true;
-  settings_map.SnailType = stStandardVario;
-  settings_map.WindArrowStyle = 0;
-  settings_map.waypoint.SetDefaults();
-  settings_map.trail_length = TRAIL_LONG;
-  settings_map.airspace.SetDefaults();
-  settings_map.GliderScreenPosition = 20; // 20% from bottom
-  settings_map.OrientationCircling = TRACKUP;
-  settings_map.OrientationCruise = TRACKUP;
-  settings_map.EnableAuxiliaryInfo = true;
-  settings_map.AuxiliaryInfoBoxPanel = 0;
-  settings_map.UserForceDisplayMode = DM_NONE;
-  settings_map.TargetPanIndex = 0;
-  settings_map.TargetZoomDistance = fixed(500);
-  settings_map.EnableFLARMGauge = true;
-  settings_map.AutoCloseFlarmDialog = false;
-  settings_map.EnableFLARMMap = true;
-  settings_map.ScreenBlanked = false;
-  settings_map.EnableAutoBlank = false;
-  settings_map.EnableThermalProfile = false;
-
-  settings_map.SetSystemTimeFromGPS = is_altair() && is_embedded();
+  settings_map.SetDefaults();
 }

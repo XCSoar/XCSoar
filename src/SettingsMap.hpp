@@ -147,6 +147,8 @@ struct SETTINGS_MAP {
 
   /** Display climb band on map */
   bool EnableThermalProfile;
+
+  void SetDefaults();
 };
 
 #endif
