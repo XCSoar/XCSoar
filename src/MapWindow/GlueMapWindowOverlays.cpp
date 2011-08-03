@@ -116,7 +116,7 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
             rc.bottom - bmp->get_size().cy - Layout::Scale(4));
 
   // draw flarm status
-  if (SettingsMap().EnableFLARMGauge)
+  if (CommonInterface::GetUISettings().enable_flarm_gauge)
     // Don't show indicator when the gauge is indicating the traffic anyway
     return;
 

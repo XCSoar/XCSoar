@@ -120,15 +120,7 @@ Profile::Load(SETTINGS_MAP &settings)
   }
 
   GetEnum(szProfileMapShiftBias, settings.MapShiftBias);
-
-  Get(szProfileEnableFLARMGauge, settings.EnableFLARMGauge);
-  Get(szProfileAutoCloseFlarmDialog, settings.AutoCloseFlarmDialog);
-  Get(szProfileEnableTAGauge, settings.EnableTAGauge);
   Get(szProfileEnableFLARMMap, settings.EnableFLARMMap);
-
-#ifdef HAVE_BLANK
-  Get(szProfileAutoBlank, settings.EnableAutoBlank);
-#endif
 
   Get(szProfileEnableThermalProfile, settings.EnableThermalProfile);
 }

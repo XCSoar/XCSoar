@@ -125,14 +125,7 @@ struct SETTINGS_MAP {
   /** The bias for map shifting (Heading, Target, etc.) */
   MapShiftBias_t MapShiftBias;
 
-  /** Show FLARM radar if traffic present */
-  bool EnableFLARMGauge;
-  /** Automatically close the FLARM dialog when no traffic present */
-  bool AutoCloseFlarmDialog;
-  /** Show ThermalAssistant if circling */
-  bool EnableTAGauge;
   bool EnableFLARMMap;
-  bool EnableAutoBlank;
 
   /** Display climb band on map */
   bool EnableThermalProfile;

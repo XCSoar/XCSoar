@@ -501,7 +501,7 @@ InputEvents::eventFLARMRadar(gcc_unused const TCHAR *misc)
 
   if (_tcscmp(misc, _T("ForceToggle")) == 0) {
     gauge_flarm->ForceVisible = !gauge_flarm->ForceVisible;
-    XCSoarInterface::SetSettingsMap().EnableFLARMGauge =
+    CommonInterface::SetUISettings().enable_flarm_gauge =
         gauge_flarm->ForceVisible;
   } else
     gauge_flarm->Suppress = !gauge_flarm->Suppress;

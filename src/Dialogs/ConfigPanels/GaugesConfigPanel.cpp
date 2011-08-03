@@ -39,14 +39,16 @@ GaugesConfigPanel::Init(WndForm *_wf)
   assert(_wf != NULL);
   wf = _wf;
 
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+
   LoadFormProperty(*wf, _T("prpEnableFLARMGauge"),
-                   XCSoarInterface::SettingsMap().EnableFLARMGauge);
+                   ui_settings.enable_flarm_gauge);
 
   LoadFormProperty(*wf, _T("prpAutoCloseFlarmDialog"),
-                   XCSoarInterface::SettingsMap().AutoCloseFlarmDialog);
+                   ui_settings.auto_close_flarm_dialog);
 
   LoadFormProperty(*wf, _T("prpEnableTAGauge"),
-                   XCSoarInterface::SettingsMap().EnableTAGauge);
+                   ui_settings.enable_thermal_assistant_gauge);
 
   LoadFormProperty(*wf, _T("prpEnableThermalProfile"),
                    XCSoarInterface::SettingsMap().EnableThermalProfile);
@@ -56,19 +58,21 @@ GaugesConfigPanel::Init(WndForm *_wf)
 bool
 GaugesConfigPanel::Save()
 {
+  UISettings &ui_settings = CommonInterface::SetUISettings();
+
   bool changed = false;
 
   changed |= SaveFormProperty(*wf, _T("prpEnableFLARMGauge"),
                               szProfileEnableFLARMGauge,
-                              XCSoarInterface::SetSettingsMap().EnableFLARMGauge);
+                              ui_settings.enable_flarm_gauge);
 
   changed |= SaveFormProperty(*wf, _T("prpAutoCloseFlarmDialog"),
                               szProfileAutoCloseFlarmDialog,
-                              XCSoarInterface::SetSettingsMap().AutoCloseFlarmDialog);
+                              ui_settings.auto_close_flarm_dialog);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableTAGauge"),
                               szProfileEnableTAGauge,
-                              XCSoarInterface::SetSettingsMap().EnableTAGauge);
+                              ui_settings.enable_thermal_assistant_gauge);
 
   changed |= SaveFormProperty(*wf, _T("prpEnableThermalProfile"),
                               szProfileEnableThermalProfile,

@@ -42,6 +42,12 @@ void
 Profile::Load(UISettings &settings)
 {
   Get(szProfileUseCustomFonts, settings.custom_fonts);
+  Get(szProfileAutoBlank, settings.enable_auto_blank);
+
+  Get(szProfileEnableFLARMGauge, settings.enable_flarm_gauge);
+  Get(szProfileAutoCloseFlarmDialog, settings.auto_close_flarm_dialog);
+  Get(szProfileEnableTAGauge, settings.enable_thermal_assistant_gauge);
+
   GetEnum(szProfileAppStatusMessageAlignment, settings.popup_message_position);
 
   Load(settings.map);

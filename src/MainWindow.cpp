@@ -469,12 +469,12 @@ MainWindow::on_timer(timer_t id)
     ProcessTimer::Process();
 
     if (flarm != NULL)
-      flarm->Update(CommonInterface::SettingsMap().EnableFLARMGauge,
+      flarm->Update(CommonInterface::GetUISettings().enable_flarm_gauge,
                     CommonInterface::Basic(),
                     CommonInterface::SettingsComputer());
 
     if (ta != NULL)
-      ta->Update(CommonInterface::SettingsMap().EnableTAGauge,
+      ta->Update(CommonInterface::GetUISettings().enable_thermal_assistant_gauge,
                  CommonInterface::Calculated().heading,
                  CommonInterface::Calculated());
   }

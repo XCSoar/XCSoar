@@ -22,11 +22,17 @@ Copyright_License {
 */
 
 #include "UISettings.hpp"
+#include "Asset.hpp"
 
 void
 UISettings::SetDefaults()
 {
   custom_fonts = false;
+  enable_auto_blank = false;
+
+  enable_flarm_gauge = true;
+  auto_close_flarm_dialog = false;
+  enable_thermal_assistant_gauge = true;
 
   popup_message_position = smAlignCenter;
 

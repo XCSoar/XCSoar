@@ -44,9 +44,6 @@ SETTINGS_MAP::SetDefaults()
   GliderScreenPosition = 20; // 20% from bottom
   OrientationCircling = TRACKUP;
   OrientationCruise = TRACKUP;
-  EnableFLARMGauge = true;
-  AutoCloseFlarmDialog = false;
   EnableFLARMMap = true;
-  EnableAutoBlank = false;
   EnableThermalProfile = false;
 }
