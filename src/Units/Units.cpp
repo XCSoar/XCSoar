@@ -113,12 +113,10 @@ Units::GetCoordinateFormat()
   return CoordinateFormat;
 }
 
-CoordinateFormats_t
+void
 Units::SetCoordinateFormat(CoordinateFormats_t NewFormat)
 {
-  CoordinateFormats_t last = CoordinateFormat;
   CoordinateFormat = NewFormat;
-  return last;
 }
 
 Units_t
@@ -127,12 +125,10 @@ Units::GetUserDistanceUnit()
   return Current.DistanceUnit;
 }
 
-Units_t
+void
 Units::SetUserDistanceUnit(Units_t NewUnit)
 {
-  Units_t last = Current.DistanceUnit;
   Current.DistanceUnit = NewUnit;
-  return last;
 }
 
 Units_t
@@ -141,12 +137,10 @@ Units::GetUserAltitudeUnit()
   return Current.AltitudeUnit;
 }
 
-Units_t
+void
 Units::SetUserAltitudeUnit(Units_t NewUnit)
 {
-  Units_t last = Current.AltitudeUnit;
   Current.AltitudeUnit = NewUnit;
-  return last;
 }
 
 Units_t
@@ -155,12 +149,10 @@ Units::GetUserTemperatureUnit()
   return Current.TemperatureUnit;
 }
 
-Units_t
+void
 Units::SetUserTemperatureUnit(Units_t NewUnit)
 {
-  Units_t last = Current.TemperatureUnit;
   Current.TemperatureUnit = NewUnit;
-  return last;
 }
 
 Units_t
@@ -169,12 +161,10 @@ Units::GetUserSpeedUnit()
   return Current.SpeedUnit;
 }
 
-Units_t
+void
 Units::SetUserSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = Current.SpeedUnit;
   Current.SpeedUnit = NewUnit;
-  return last;
 }
 
 Units_t
@@ -183,12 +173,10 @@ Units::GetUserTaskSpeedUnit()
   return Current.TaskSpeedUnit;
 }
 
-Units_t
+void
 Units::SetUserTaskSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = Current.TaskSpeedUnit;
   Current.TaskSpeedUnit = NewUnit;
-  return last;
 }
 
 Units_t
@@ -197,12 +185,10 @@ Units::GetUserVerticalSpeedUnit()
   return Current.VerticalSpeedUnit;
 }
 
-Units_t
+void
 Units::SetUserVerticalSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = Current.VerticalSpeedUnit;
   Current.VerticalSpeedUnit = NewUnit;
-  return last;
 }
 
 Units_t
@@ -211,12 +197,10 @@ Units::GetUserWindSpeedUnit()
   return Current.WindSpeedUnit;
 }
 
-Units_t
+void
 Units::SetUserWindSpeedUnit(Units_t NewUnit)
 {
-  Units_t last = Current.WindSpeedUnit;
   Current.WindSpeedUnit = NewUnit;
-  return last;
 }
 
 Units_t
