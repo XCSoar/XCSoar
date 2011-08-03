@@ -22,11 +22,10 @@ Copyright_License {
 */
 
 #include "ConvertLineReader.hpp"
+#include "Util/UTF8.hpp"
 
 #ifdef _UNICODE
 #include <windows.h>
-#else
-#include "Util/UTF8.hpp"
 #endif
 
 ConvertLineReader::ConvertLineReader(LineReader<char> &_source, charset cs)
@@ -68,9 +67,18 @@ ConvertLineReader::read()
   // Check if there is byte order mark in front
   if (narrow[0] == (char)0xEF &&
       narrow[1] == (char)0xBB &&
-      narrow[2] == (char)0xBF)
+      narrow[2] == (char)0xBF &&
+      (m_charset == AUTO || m_charset == UTF8)) {
     // -> if so, skip it
     narrow += 3;
+
+    /* if it was "AUTO", then explicitly switch to UTF-8 now */
+    m_charset = UTF8;
+  }
+
+  if (m_charset == AUTO && !ValidateUTF8(narrow))
+    /* invalid UTF-8 sequence detected: switch to ISO-Latin-1 */
+    m_charset = ISO_LATIN_1;
 
 #ifdef _UNICODE
   size_t narrow_length = strlen(narrow);
@@ -113,6 +121,7 @@ ConvertLineReader::read()
       return narrow;
     return const_cast<char *>(utf8);
 
+  case AUTO:
   case UTF8:
     return narrow;
   }

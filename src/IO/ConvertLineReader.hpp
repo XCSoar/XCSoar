@@ -34,6 +34,13 @@ Copyright_License {
 class ConvertLineReader : public TLineReader {
 public:
   enum charset {
+    /**
+     * Attempt to determine automatically.  Read UTF-8, but switch to
+     * ISO-Latin-1 as soon as the first invalid UTF-8 sequence is
+     * seen.
+     */
+    AUTO,
+
     UTF8,
     ISO_LATIN_1,
   };
