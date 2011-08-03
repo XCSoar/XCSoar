@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Util/UTF8.hpp"
 
+#include <algorithm>
+
 static bool
 IsContinuation(unsigned char ch)
 {
@@ -70,4 +72,56 @@ ValidateUTF8(const char *p)
   }
 
   return true;
+}
+
+static bool
+IsASCII(char ch)
+{
+  return (ch & 0x80) == 0;
+}
+
+static const char *
+FindNonASCIIOrZero(const char *p)
+{
+  while (*p != 0 && IsASCII(*p))
+    ++p;
+  return p;
+}
+
+const char *
+Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size)
+{
+  const char *p = FindNonASCIIOrZero(src);
+  if (*p == 0)
+    /* everything is plain ASCII, we don't need to convert anything */
+    return src;
+
+  if ((size_t)(p - src) >= buffer_size)
+    /* buffer too small */
+    return NULL;
+
+  const char *const end = buffer + buffer_size;
+  char *q = std::copy(src, p, buffer);
+
+  while (*p != 0) {
+    unsigned char ch = *p++;
+
+    if (IsASCII(ch)) {
+      *q++ = ch;
+
+      if (q >= end)
+        /* buffer too small */
+        return NULL;
+    } else {
+      if (q + 2 >= end)
+        /* buffer too small */
+        return NULL;
+
+      *q++ = 0xc0 | (ch >> 6);
+      *q++ = 0x80 | (ch & 0x3f);
+    }
+  }
+
+  *q = 0;
+  return buffer;
 }

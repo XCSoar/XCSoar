@@ -26,11 +26,24 @@ Copyright_License {
 
 #include "Compiler.h"
 
+#include <stddef.h>
+
 /**
  * Is this a valid UTF-8 string?
  */
 gcc_pure
 bool
 ValidateUTF8(const char *p);
+
+/**
+ * Convert the specified string from ISO-8859-1 to UTF-8.
+ *
+ * @return the UTF-8 version of the source string; may return #src if
+ * there are no non-ASCII characters; returns NULL if the destination
+ * buffer is too small
+ */
+gcc_pure
+const char *
+Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size);
 
 #endif
