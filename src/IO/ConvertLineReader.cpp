@@ -32,16 +32,6 @@ ConvertLineReader::ConvertLineReader(LineReader<char> &_source, charset cs)
   :source(_source),
    m_charset(cs)
 {
-#ifdef _UNICODE
-  switch (cs) {
-  case UTF8:
-    code_page = CP_UTF8;
-    break;
-
-  default:
-    code_page = CP_UTF8;
-  }
-#endif
 }
 
 #ifdef _UNICODE
@@ -98,7 +88,7 @@ ConvertLineReader::read()
     break;
 
   default:
-    int length = MultiByteToWideChar(code_page, 0, narrow, narrow_length,
+    int length = MultiByteToWideChar(CP_UTF8, 0, narrow, narrow_length,
                                      t, narrow_length);
     if (length == 0)
       return NULL;

@@ -50,10 +50,6 @@ protected:
 
   charset m_charset;
 
-#ifdef _UNICODE
-  unsigned code_page;
-#endif
-
   ReusableArray<TCHAR> tbuffer;
 
 public:
