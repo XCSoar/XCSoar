@@ -31,7 +31,7 @@
 #include "Task/ProtectedTaskManager.hpp"
 #include "Asset.hpp"
 #include "Profile/DeclarationConfig.hpp"
-#include "SettingsComputerBlackboard.hpp"
+#include "SettingsComputer.hpp"
 
 void
 Logger::LogPoint(const NMEAInfo &gps_info)
