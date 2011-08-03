@@ -32,13 +32,15 @@ struct DerivedInfo;
  */
 class WindStore
 {
+  Vector _lastWind;
+  fixed _lastAltitude;
+  WindMeasurementList * windlist;
+  bool updated;
 
 public:
   WindStore();
   ~WindStore();
 
-public:
-  // Public slots
   /**
    * Called with new measurements. The quality is a measure for how good the
    * measurement is. Higher quality measurements are more important in the
@@ -54,7 +56,6 @@ public:
    */
   void SlotAltitude(const MoreData &info, DerivedInfo &derived);
 
-  // signals
   /**
    * Send if a new wind vector has been established. This may happen as
    * new measurements flow in, but also if the altitude changes.
@@ -63,22 +64,15 @@ public:
 
   const Vector GetWind(fixed Time, fixed h, bool &found) const;
 
-  /**
-   * Clear as if never flown
-   */
+  /** Clear as if never flown */
   void reset();
-private:
-  Vector _lastWind;
-  fixed _lastAltitude;
-  WindMeasurementList * windlist;
 
+private:
   /**
    * Recalculates the wind from the stored measurements.
    * May result in a NewWind signal.
    */
   void recalculateWind(const MoreData &info, DerivedInfo &derived);
-
-  bool updated;
 };
 
 #endif
