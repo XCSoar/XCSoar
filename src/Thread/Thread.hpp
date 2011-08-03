@@ -60,8 +60,10 @@ public:
 #endif
   }
 
+#ifndef NDEBUG
   /**
    * Check if this thread is the current thread.
+   * For debugging purposes only (assertions).
    */
   bool IsInside() const {
 #ifdef HAVE_POSIX
@@ -70,6 +72,7 @@ public:
     return GetCurrentThreadId() == id;
 #endif
   }
+#endif
 
   void SetLowPriority() {
 #ifndef HAVE_POSIX
