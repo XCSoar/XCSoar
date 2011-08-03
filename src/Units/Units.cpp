@@ -117,8 +117,7 @@ CoordinateFormats_t
 Units::SetCoordinateFormat(CoordinateFormats_t NewFormat)
 {
   CoordinateFormats_t last = CoordinateFormat;
-  if (CoordinateFormat != NewFormat)
-    CoordinateFormat = NewFormat;
+  CoordinateFormat = NewFormat;
   return last;
 }
 
@@ -132,8 +131,7 @@ Units_t
 Units::SetUserDistanceUnit(Units_t NewUnit)
 {
   Units_t last = Current.DistanceUnit;
-  if (Current.DistanceUnit != NewUnit)
-    Current.DistanceUnit = NewUnit;
+  Current.DistanceUnit = NewUnit;
   return last;
 }
 
@@ -147,8 +145,7 @@ Units_t
 Units::SetUserAltitudeUnit(Units_t NewUnit)
 {
   Units_t last = Current.AltitudeUnit;
-  if (Current.AltitudeUnit != NewUnit)
-    Current.AltitudeUnit = NewUnit;
+  Current.AltitudeUnit = NewUnit;
   return last;
 }
 
@@ -162,8 +159,7 @@ Units_t
 Units::SetUserTemperatureUnit(Units_t NewUnit)
 {
   Units_t last = Current.TemperatureUnit;
-  if (Current.TemperatureUnit != NewUnit)
-    Current.TemperatureUnit = NewUnit;
+  Current.TemperatureUnit = NewUnit;
   return last;
 }
 
@@ -177,8 +173,7 @@ Units_t
 Units::SetUserSpeedUnit(Units_t NewUnit)
 {
   Units_t last = Current.SpeedUnit;
-  if (Current.SpeedUnit != NewUnit)
-    Current.SpeedUnit = NewUnit;
+  Current.SpeedUnit = NewUnit;
   return last;
 }
 
@@ -192,8 +187,7 @@ Units_t
 Units::SetUserTaskSpeedUnit(Units_t NewUnit)
 {
   Units_t last = Current.TaskSpeedUnit;
-  if (Current.TaskSpeedUnit != NewUnit)
-    Current.TaskSpeedUnit = NewUnit;
+  Current.TaskSpeedUnit = NewUnit;
   return last;
 }
 
@@ -207,8 +201,7 @@ Units_t
 Units::SetUserVerticalSpeedUnit(Units_t NewUnit)
 {
   Units_t last = Current.VerticalSpeedUnit;
-  if (Current.VerticalSpeedUnit != NewUnit)
-    Current.VerticalSpeedUnit = NewUnit;
+  Current.VerticalSpeedUnit = NewUnit;
   return last;
 }
 
@@ -222,8 +215,7 @@ Units_t
 Units::SetUserWindSpeedUnit(Units_t NewUnit)
 {
   Units_t last = Current.WindSpeedUnit;
-  if (Current.WindSpeedUnit != NewUnit)
-    Current.WindSpeedUnit = NewUnit;
+  Current.WindSpeedUnit = NewUnit;
   return last;
 }
 
