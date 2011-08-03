@@ -145,4 +145,6 @@ int main(int argc, char **argv)
 
   delete device;
   delete port;
+
+  return EXIT_SUCCESS;
 }
