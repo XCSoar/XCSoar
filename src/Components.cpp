@@ -268,6 +268,7 @@ XCSoarInterface::Startup()
 
   SetXMLDialogLook(main_window.look->dialog);
 
+  SetSettingsComputer().SetDefaults();
   SetSettingsMap().SetDefaults();
 
   if (!LoadProfile())

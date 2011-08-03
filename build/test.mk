@@ -1530,7 +1530,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMap.cpp \
 	$(SRC)/SettingsComputer.cpp \
-	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileSeeYou.cpp \
@@ -1864,7 +1863,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/GlideComputerStats.cpp \
 	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
-	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/SettingsMap.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \

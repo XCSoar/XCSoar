@@ -393,7 +393,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/SettingsMap.cpp \
 	$(SRC)/SettingsComputer.cpp \
-	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/MergeThread.cpp \
 	$(SRC)/CalculationThread.cpp \
 	$(SRC)/DisplayMode.cpp \

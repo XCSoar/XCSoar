@@ -30,8 +30,6 @@ Copyright_License {
 class SettingsComputerBlackboard
 {
 public:
-  SettingsComputerBlackboard();
-
   gcc_const
   const SETTINGS_COMPUTER& SettingsComputer() const
   { return settings_computer; }
