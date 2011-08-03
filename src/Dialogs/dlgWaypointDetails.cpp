@@ -75,10 +75,6 @@ static const Waypoint *selected_waypoint = NULL;
 
 static Bitmap jpgimage1, jpgimage2;
 
-static TCHAR path_modis[MAX_PATH];
-static TCHAR path_google[MAX_PATH];
-static TCHAR szWaypointFile[MAX_PATH];
-
 static void
 NextPage(int Step)
 {
@@ -625,19 +621,12 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
                                       _T("IDR_XML_WAYPOINTDETAILS"));
   assert(wf != NULL);
 
-  TCHAR buffer[MAX_PATH];
+  TCHAR path[MAX_PATH], buffer[MAX_PATH];
   const TCHAR *Directory = NULL;
-  if (Profile::GetPath(szProfileWaypointFile, szWaypointFile))
-    Directory = DirName(szWaypointFile, buffer);
+  if (Profile::GetPath(szProfileWaypointFile, path))
+    Directory = DirName(path, buffer);
   if (Directory == NULL)
     Directory = _T("");
-
-  _stprintf(path_modis, _T("%s" DIR_SEPARATOR_S "modis-%03d.jpg"),
-           Directory,
-            selected_waypoint->original_id);
-  _stprintf(path_google,_T("%s" DIR_SEPARATOR_S "google-%03d.jpg"),
-           Directory,
-            selected_waypoint->original_id);
 
   TCHAR sTmp[128];
   _stprintf(sTmp, _T("%s: '%s'"), wf->GetCaption(), selected_waypoint->Name.c_str());
@@ -809,8 +798,13 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   if (wb)
     wb->SetOnClickNotify(OnActivatePanClicked);
 
-  hasimage1 = jpgimage1.load_file(path_modis);
-  hasimage2 = jpgimage2.load_file(path_google);
+  _stprintf(path, _T("%s" DIR_SEPARATOR_S "modis-%03d.jpg"),
+            Directory, selected_waypoint->original_id);
+  hasimage1 = jpgimage1.load_file(path);
+
+  _stprintf(path, _T("%s" DIR_SEPARATOR_S "google-%03d.jpg"),
+            Directory, selected_waypoint->original_id);
+  hasimage2 = jpgimage2.load_file(path);
 
   page = 0;
 
