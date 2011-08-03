@@ -26,7 +26,7 @@
 
 #include "Screen/PaintWindow.hpp"
 #include "Blackboard.hpp"
-#include "SettingsMapBlackboard.hpp"
+#include "Airspace/AirspaceRendererSettings.hpp"
 
 struct MoreData;
 struct CrossSectionLook;
@@ -41,10 +41,11 @@ class Chart;
  */
 class CrossSectionWindow :
   public PaintWindow,
-  public BaseBlackboard,
-  public SettingsMapBlackboard
+  public BaseBlackboard
 {
 protected:
+  AirspaceRendererSettings airspace_renderer_settings;
+
   const CrossSectionLook &look;
   const AirspaceLook &airspace_look;
   const ChartLook &chart_look;
@@ -70,7 +71,7 @@ public:
 
   void ReadBlackboard(const MoreData &_gps_info,
                       const DerivedInfo &_calculated_info,
-                      const SETTINGS_MAP &_settings_map);
+                      const AirspaceRendererSettings &_ar_settings);
 
   /**
    * Renders the CrossSection to the given canvas in the given PixelRect

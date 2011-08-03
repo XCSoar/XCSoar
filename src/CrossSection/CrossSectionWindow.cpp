@@ -236,11 +236,11 @@ CrossSectionWindow::CrossSectionWindow(const CrossSectionLook &_look,
 void
 CrossSectionWindow::ReadBlackboard(const MoreData &_gps_info,
                                    const DerivedInfo &_calculated_info,
-                                   const SETTINGS_MAP &_settings_map)
+                                   const AirspaceRendererSettings &_ar_settings)
 {
   gps_info = _gps_info;
   calculated_info = _calculated_info;
-  settings_map = _settings_map;
+  airspace_renderer_settings = _ar_settings;
 }
 
 void
@@ -272,7 +272,7 @@ CrossSectionWindow::PaintAirspaces(Canvas &canvas, Chart &chart)
 
   // Create IntersectionVisitor to render to the canvas
   AirspaceIntersectionVisitorSlice ivisitor(canvas, chart,
-                                            settings_map.airspace,
+                                            airspace_renderer_settings,
                                             airspace_look,
                                             start,
                                             ToAircraftState(Basic(),

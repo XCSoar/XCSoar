@@ -259,7 +259,7 @@ UpdateCrossSection()
   const DerivedInfo &calculated = blackboard->Calculated();
 
   assert(csw != NULL);
-  csw->ReadBlackboard(basic, calculated, blackboard->SettingsMap());
+  csw->ReadBlackboard(basic, calculated, blackboard->SettingsMap().airspace);
   csw->set_direction(basic.track);
   csw->set_start(basic.location);
 }
