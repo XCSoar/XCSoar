@@ -25,13 +25,13 @@ Copyright_License {
 
 #ifdef _UNICODE
 #include <windows.h>
+#else
+#include "Util/UTF8.hpp"
 #endif
 
 ConvertLineReader::ConvertLineReader(LineReader<char> &_source, charset cs)
-  :source(_source)
-#ifdef _UNICODE
-  , m_charset(cs)
-#endif
+  :source(_source),
+   m_charset(cs)
 {
 #ifdef _UNICODE
   switch (cs) {
@@ -42,8 +42,6 @@ ConvertLineReader::ConvertLineReader(LineReader<char> &_source, charset cs)
   default:
     code_page = CP_UTF8;
   }
-#else
-  // XXX initialize iconv?
 #endif
 }
 
@@ -104,8 +102,24 @@ ConvertLineReader::read()
 
   return t;
 #else
-  // XXX call iconv?
-  return narrow;
+  switch (m_charset) {
+    size_t buffer_size;
+    const char *utf8;
+
+  case ISO_LATIN_1:
+    buffer_size = strlen(narrow) * 2 + 1;
+    utf8 = Latin1ToUTF8(narrow, tbuffer.get(buffer_size), buffer_size);
+    if (utf8 == NULL)
+      return narrow;
+    return const_cast<char *>(utf8);
+
+  case UTF8:
+    return narrow;
+  }
+
+  /* unreachable */
+  assert(false);
+  return NULL;
 #endif
 }
 

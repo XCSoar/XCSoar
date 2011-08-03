@@ -25,10 +25,7 @@ Copyright_License {
 #define XCSOAR_IO_CONVERT_LINE_READER_HPP
 
 #include "LineReader.hpp"
-
-#ifdef _UNICODE
 #include "Util/ReusableArray.hpp"
-#endif
 
 /**
  * Adapter which converts data from LineReader<char> to
@@ -44,11 +41,13 @@ public:
 protected:
   LineReader<char> &source;
 
-#ifdef _UNICODE
   charset m_charset;
+
+#ifdef _UNICODE
   unsigned code_page;
-  ReusableArray<TCHAR> tbuffer;
 #endif
+
+  ReusableArray<TCHAR> tbuffer;
 
 public:
   ConvertLineReader(LineReader<char> &_source, charset cs=UTF8);

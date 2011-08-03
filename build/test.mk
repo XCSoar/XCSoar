@@ -95,6 +95,7 @@ TEST_PROFILE_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/ProfileMap.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -110,6 +111,7 @@ TEST_PLANES_SOURCES = \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestPlanes.cpp
 TEST_PLANES_OBJS = $(call SRC_TO_OBJ,$(TEST_PLANES_SOURCES))
@@ -142,6 +144,7 @@ $(TARGET_BIN_DIR)/TestTaskPoint$(TARGET_EXEEXT): $(TEST_TASKPOINT_OBJS) $(TEST_T
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_TASKWAYPOINT_SOURCES = \
+	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
@@ -232,6 +235,7 @@ $(TEST_ROUTE_BIN): $(TEST_ROUTE_OBJS) $(TEST_ROUTE_LDADD) | $(TARGET_BIN_DIR)/di
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) $(ZZIP_LIBS) -o $@
 
 TEST_REPLAY_TASK_SOURCES = \
+	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Engine/Util/DataNodeXML.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(TEST_SRC_DIR)/test_replay_task.cpp
@@ -290,6 +294,7 @@ $(TARGET_BIN_DIR)/TestGeoBounds$(TARGET_EXEEXT): $(TEST_GEO_BOUNDS_OBJS) $(TEST_
 
 TEST_FLARM_NET_SOURCES = \
 	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/FLARM/FlarmNet.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(TEST_SRC_DIR)/tap.c \
@@ -343,6 +348,7 @@ $(TARGET_BIN_DIR)/TestUnits$(TARGET_EXEEXT): $(TEST_UNITS_OBJS) $(TEST_UNITS_LDA
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_POLARS_SOURCES = \
+	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Polar/Polar.cpp \
@@ -520,6 +526,7 @@ TEST_LOGGER_SOURCES = \
 	$(SRC)/Version.cpp \
 	$(SRC)/Math/fixed.cpp \
 	$(SRC)/Math/Angle.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Aircraft.cpp \
@@ -593,6 +600,7 @@ TEST_WAY_POINT_FILE_SOURCES = \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/UtilsFile.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
@@ -628,6 +636,7 @@ TEST_OLC_SOURCES = \
 	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestOLC.cpp 
@@ -645,6 +654,7 @@ TEST_TRACE_SOURCES = \
 	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/TestTrace.cpp 
@@ -661,6 +671,7 @@ FLIGHT_TABLE_SOURCES = \
 	$(SRC)/Math/Angle.cpp \
 	$(SRC)/Math/FastMath.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(ENGINE_SRC_DIR)/Math/Earth.cpp \
 	$(TEST_SRC_DIR)/FlightTable.cpp
@@ -738,6 +749,7 @@ $(TARGET_BIN_DIR)/BenchmarkProjection$(TARGET_EXEEXT): $(BENCHMARK_PROJECTION_OB
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 DUMP_TEXT_FILE_SOURCES = \
+	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/DumpTextFile.cpp
 DUMP_TEXT_FILE_OBJS = $(call SRC_TO_OBJ,$(DUMP_TEXT_FILE_SOURCES))
 DUMP_TEXT_FILE_LDADD = \
@@ -748,6 +760,7 @@ $(TARGET_BIN_DIR)/DumpTextFile$(TARGET_EXEEXT): $(DUMP_TEXT_FILE_OBJS) $(DUMP_TE
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 DUMP_TEXT_ZIP_SOURCES = \
+	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/DumpTextZip.cpp
 DUMP_TEXT_ZIP_OBJS = $(call SRC_TO_OBJ,$(DUMP_TEXT_ZIP_SOURCES))
 DUMP_TEXT_ZIP_LDADD = \
@@ -819,6 +832,7 @@ $(RUN_NOAA_DOWNLOADER_BIN): $(RUN_NOAA_DOWNLOADER_OBJS) $(RUN_NOAA_DOWNLOADER_LD
 	$(Q)$(CC) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_XML_PARSER_SOURCES = \
+	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(TEST_SRC_DIR)/RunXMLParser.cpp
 RUN_XML_PARSER_OBJS = $(call SRC_TO_OBJ,$(RUN_XML_PARSER_SOURCES))
@@ -889,6 +903,7 @@ $(TARGET_BIN_DIR)/WriteProfileInt$(TARGET_EXEEXT): $(WRITE_PROFILE_INT_OBJS) $(W
 READ_GRECORD_SOURCES = \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/ReadGRecord.cpp
 READ_GRECORD_OBJS = $(call SRC_TO_OBJ,$(READ_GRECORD_SOURCES))
 READ_GRECORD_LDADD = $(IO_LIBS)
@@ -899,6 +914,7 @@ $(TARGET_BIN_DIR)/ReadGRecord$(TARGET_EXEEXT): $(READ_GRECORD_OBJS) $(READ_GRECO
 VERIFY_GRECORD_SOURCES = \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/VerifyGRecord.cpp
 VERIFY_GRECORD_OBJS = $(call SRC_TO_OBJ,$(VERIFY_GRECORD_SOURCES))
 VERIFY_GRECORD_LDADD = $(IO_LIBS)
@@ -909,6 +925,7 @@ $(TARGET_BIN_DIR)/VerifyGRecord$(TARGET_EXEEXT): $(VERIFY_GRECORD_OBJS) $(VERIFY
 APPEND_GRECORD_SOURCES = \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/AppendGRecord.cpp
 APPEND_GRECORD_OBJS = $(call SRC_TO_OBJ,$(APPEND_GRECORD_SOURCES))
 APPEND_GRECORD_LDADD = $(IO_LIBS)
@@ -959,6 +976,7 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/LoadTopography.cpp
 LOAD_TOPOGRAPHY_OBJS = $(call SRC_TO_OBJ,$(LOAD_TOPOGRAPHY_SOURCES))
 LOAD_TOPOGRAPHY_BIN = $(TARGET_BIN_DIR)/LoadTopography$(TARGET_EXEEXT)
@@ -982,6 +1000,7 @@ LOAD_TERRAIN_SOURCES = \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/LoadTerrain.cpp
 LOAD_TERRAIN_OBJS = $(call SRC_TO_OBJ,$(LOAD_TERRAIN_SOURCES))
 LOAD_TERRAIN_BIN = $(TARGET_BIN_DIR)/LoadTerrain$(TARGET_EXEEXT)
@@ -1009,6 +1028,7 @@ RUN_HEIGHT_MATRIX_SOURCES = \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Operation.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/GeoPoint.cpp \
 	$(TEST_SRC_DIR)/RunHeightMatrix.cpp
 RUN_HEIGHT_MATRIX_OBJS = $(call SRC_TO_OBJ,$(RUN_HEIGHT_MATRIX_SOURCES))
@@ -1588,6 +1608,7 @@ RUN_DIALOG_SOURCES = \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/UtilsFile.cpp \
 	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/OS/FileUtil.cpp \
