@@ -90,7 +90,8 @@ WindAnalyser::WindAnalyser()
    circleDeg(0),
    last_track(Angle::zero()),
    pastHalfway(false),
-   curModeOK(false)
+   curModeOK(false),
+   first(true)
 {
 }
 
