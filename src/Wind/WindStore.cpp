@@ -69,11 +69,6 @@ WindStore::reset()
   _lastWind = Vector();
 }
 
-/**
- * Called with new measurements. The quality is a measure for how
- * good the measurement is. Higher quality measurements are more
- * important in the end result and stay in the store longer.
- */
 void
 WindStore::SlotMeasurement(const MoreData &info, DerivedInfo &derived,
                            Vector windvector, int quality)
@@ -85,11 +80,6 @@ WindStore::SlotMeasurement(const MoreData &info, DerivedInfo &derived,
   recalculateWind(info, derived);
 }
 
-/**
- * Called if the altitude changes.
- * Determines where measurements are stored and may result in a
- * NewWind signal.
- */
 void
 WindStore::SlotAltitude(const MoreData &info, DerivedInfo &derived)
 {
@@ -107,9 +97,6 @@ WindStore::GetWind(fixed Time, fixed h, bool &found) const
 {
   return windlist->getWind(Time, h, found);
 }
-
-/** Recalculates the wind from the stored measurements.
-  * May result in a NewWind signal. */
 
 void
 WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived)
