@@ -41,8 +41,6 @@ FileLineReaderA::tell() const
   return splitter.tell();
 }
 
-#ifdef _UNICODE
-
 TCHAR *
 FileLineReader::read()
 {
@@ -60,5 +58,3 @@ FileLineReader::tell() const
 {
   return convert.tell();
 }
-
-#endif

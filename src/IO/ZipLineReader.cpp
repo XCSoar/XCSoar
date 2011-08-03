@@ -41,8 +41,6 @@ ZipLineReaderA::tell() const
   return splitter.tell();
 }
 
-#ifdef _UNICODE
-
 TCHAR *
 ZipLineReader::read()
 {
@@ -60,5 +58,3 @@ ZipLineReader::tell() const
 {
   return convert.tell();
 }
-
-#endif

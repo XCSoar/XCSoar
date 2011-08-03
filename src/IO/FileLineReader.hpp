@@ -55,8 +55,6 @@ public:
   virtual long tell() const;
 };
 
-#ifdef _UNICODE
-
 /**
  * Glue class which combines FileSource, LineSplitter and
  * ConvertLineReader, and provides a public TLineReader interface.
@@ -72,9 +70,11 @@ public:
                  ConvertLineReader::charset cs=ConvertLineReader::UTF8)
     :file(path), splitter(file), convert(splitter, cs) {}
 
+#ifdef _UNICODE
   FileLineReader(const TCHAR *path,
                  ConvertLineReader::charset cs=ConvertLineReader::UTF8)
     :file(path), splitter(file), convert(splitter, cs) {}
+#endif
 
   bool error() const {
     return file.error();
@@ -85,16 +85,5 @@ public:
   virtual long size() const;
   virtual long tell() const;
 };
-
-#else
-
-class FileLineReader : public FileLineReaderA {
-public:
-  FileLineReader(const char *path,
-                 ConvertLineReader::charset cs=ConvertLineReader::UTF8)
-    :FileLineReaderA(path) {}
-};
-
-#endif
 
 #endif

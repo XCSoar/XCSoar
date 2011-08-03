@@ -6,6 +6,7 @@ VALI_XCS_NS = $(TARGET_BIN_DIR)/vali-xcs$(NOSTRIP_SUFFIX)$(TARGET_EXEEXT)
 VALI_XCS_SOURCES = \
 	$(SRC)/Logger/LoggerGRecord.cpp \
 	$(SRC)/Logger/MD5.cpp \
+	$(SRC)/Util/UTF8.cpp \
 	$(SRC)/Version.cpp \
 	$(SRC)/VALI-XCS.cpp
 VALI_XCS_OBJS = $(call SRC_TO_OBJ,$(VALI_XCS_SOURCES))
