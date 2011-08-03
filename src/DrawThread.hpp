@@ -28,8 +28,6 @@ Copyright_License {
 #include "Thread/Trigger.hpp"
 
 class GlueMapWindow;
-class GaugeFLARM;
-class GaugeThermalAssistant;
 
 /**
  * The DrawThread handles the rendering and drawing on the screen.
@@ -52,18 +50,9 @@ class DrawThread : public SuspensibleThread {
   /** Pointer to the MapWindow */
   GlueMapWindow &map;
 
-  /** Pointer to the FLARM gauge */
-  GaugeFLARM *flarm;
-
-  /** Pointer to the FLARM gauge */
-  GaugeThermalAssistant *ta;
-
 public:
-  DrawThread(GlueMapWindow &_map, GaugeFLARM *_flarm,
-             GaugeThermalAssistant *_ta)
-    :trigger(true),
-     map(_map), flarm(_flarm), ta(_ta) {
-  }
+  DrawThread(GlueMapWindow &_map)
+    :trigger(true), map(_map) {}
 
   /** Locks the Mutex and "pauses" the drawing thread */
   void BeginSuspend() {

@@ -448,8 +448,7 @@ XCSoarInterface::Startup()
   // Create the drawing thread
 #ifndef ENABLE_OPENGL
   LogStartUp(_T("CreateDrawingThread"));
-  draw_thread = new DrawThread(*map_window, main_window.flarm,
-                               main_window.ta);
+  draw_thread = new DrawThread(*map_window);
   draw_thread->Start(true);
 #endif
 
