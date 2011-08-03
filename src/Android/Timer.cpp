@@ -43,11 +43,6 @@ AndroidTimer::Bridge::Bridge(JNIEnv *env, jlong ptr, jint period)
   env->DeleteLocalRef(obj);
 }
 
-AndroidTimer::Bridge::~Bridge()
-{
-  uninstall();
-}
-
 AndroidTimer::AndroidTimer(Window &_window, unsigned ms)
   :window(_window), bridge(Java::GetEnv(), (jlong)this, ms),
    disabled(false), running(false)
@@ -60,15 +55,13 @@ match_timer(const Event &event, void *ctx)
   return event.type == Event::TIMER && event.ptr == ctx;
 }
 
-AndroidTimer::~AndroidTimer()
-{
-  event_queue->purge(match_timer, (void *)this);
-}
-
 void
 AndroidTimer::disable()
 {
   assert(!disabled);
+
+  bridge.uninstall();
+  event_queue->purge(match_timer, (void *)this);
 
   if (running)
     disabled = true;
