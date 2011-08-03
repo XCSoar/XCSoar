@@ -49,7 +49,17 @@ Thread::Start()
   assert(!IsDefined());
 
 #ifdef HAVE_POSIX
-  return defined = pthread_create(&handle, NULL, ThreadProc, this) == 0;
+#ifndef NDEBUG
+  creating = true;
+#endif
+
+  defined = pthread_create(&handle, NULL, ThreadProc, this) == 0;
+
+#ifndef NDEBUG
+  creating = false;
+#endif
+
+  return defined;
 #else
   handle = ::CreateThread(NULL, 0, ThreadProc, this, 0, &id);
 
