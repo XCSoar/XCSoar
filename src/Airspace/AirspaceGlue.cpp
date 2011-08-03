@@ -44,7 +44,8 @@ ReadAirspace(Airspaces &airspaces,
 
   // Read the airspace filenames from the registry
   TLineReader *reader =
-    OpenConfiguredTextFile(szProfileAirspaceFile, _T("airspace.txt"));
+    OpenConfiguredTextFile(szProfileAirspaceFile, _T("airspace.txt"),
+                           ConvertLineReader::AUTO);
   if (reader != NULL) {
     if (!ReadAirspace(airspaces, *reader, operation))
       LogStartUp(_T("No airspace file 1"));
@@ -54,7 +55,8 @@ ReadAirspace(Airspaces &airspaces,
     delete reader;
   }
 
-  reader = OpenConfiguredTextFile(szProfileAdditionalAirspaceFile);
+  reader = OpenConfiguredTextFile(szProfileAdditionalAirspaceFile,
+                                  ConvertLineReader::AUTO);
   if (reader != NULL) {
     if (!ReadAirspace(airspaces, *reader, operation))
       LogStartUp(_T("No airspace file 2"));

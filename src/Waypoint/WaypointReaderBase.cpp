@@ -182,14 +182,14 @@ WaypointReaderBase::Parse(Waypoints &way_points,
 
   if (!compressed) {
     // Try to open waypoint file
-    FileLineReader reader(file);
+    FileLineReader reader(file, ConvertLineReader::AUTO);
     if (reader.error())
       return false;
 
     Parse(way_points, reader, operation);
   } else {
     // convert path to ascii
-    ZipLineReader reader(file);
+    ZipLineReader reader(file, ConvertLineReader::AUTO);
     if (reader.error())
       return false;
 

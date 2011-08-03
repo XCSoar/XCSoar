@@ -30,6 +30,8 @@ Version 6.2 - not yet released
 * map
   - redraw terrain only if needed
   - airspace rendering optimised
+* data files
+  - auto-detect the character encoding in waypoint/airspace files
 
 Version 6.1.5 - not yet released
 * calculations
