@@ -35,9 +35,11 @@ struct Vector {
 
   Vector(fixed _x, fixed _y):x(_x), y(_y) {}
 
-  Vector(const SpeedVector speed)
-    :x(speed.norm * speed.bearing.cos()),
-     y(speed.norm * speed.bearing.sin()) {}
+  Vector(const SpeedVector speed) {
+    speed.bearing.sin_cos(y, x);
+    x *= speed.norm;
+    y *= speed.norm;
+  }
 
   fixed Magnitude() {
     return hypot(x, y);
