@@ -33,8 +33,6 @@ Copyright_License {
 class SettingsMapBlackboard
 {
 public:
-  SettingsMapBlackboard();
-
   gcc_const
   const SETTINGS_MAP& SettingsMap() const
   { return settings_map; };

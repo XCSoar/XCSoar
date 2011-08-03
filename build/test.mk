@@ -1529,7 +1529,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Look/TrafficLook.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMap.cpp \
-	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/Task/TaskFile.cpp \
@@ -1867,7 +1866,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/SettingsComputerBlackboard.cpp \
 	$(SRC)/SettingsMap.cpp \
-	$(SRC)/SettingsMapBlackboard.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \
 	$(SRC)/Audio/VegaVoice.cpp \
 	$(SRC)/TeamCodeCalculation.cpp \
