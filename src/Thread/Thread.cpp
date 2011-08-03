@@ -97,7 +97,14 @@ Thread::ThreadProc(void *p)
 {
   Thread *thread = (Thread *)p;
 
+#ifndef NDEBUG
+  /* this works around a race condition that causes an assertion
+     failure due to IsInside() spuriously returning false right after
+     the thread has been created, and the calling thread hasn't
+     initialised "defined" yet */
   thread->defined = true;
+#endif
+
   thread->Run();
 
 #ifdef ANDROID
