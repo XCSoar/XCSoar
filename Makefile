@@ -454,6 +454,11 @@ XCSOAR_SOURCES := \
 	$(SRC)/Compatibility/string.c 	\
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Earth.cpp \
+	$(SRC)/Profile/ComputerProfile.cpp \
+	$(SRC)/Profile/RouteProfile.cpp \
+	$(SRC)/Profile/TaskProfile.cpp \
+	$(SRC)/Profile/MapProfile.cpp \
+	$(SRC)/Profile/UIProfile.cpp \
 	$(SRC)/Profile/ProfileGlue.cpp \
 	$(SRC)/Profile/ProfileKeys.cpp \
 	$(SRC)/Profile/FontConfig.cpp \
