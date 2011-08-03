@@ -21,27 +21,18 @@ Copyright_License {
 }
 */
 
-#ifndef INTERFACE_BLACKBOARD_H
-#define INTERFACE_BLACKBOARD_H
+#ifndef XCSOAR_UI_SETTINGS_HPP
+#define XCSOAR_UI_SETTINGS_HPP
 
-#include "FullBlackboard.hpp"
-#include "Compiler.h"
+#include "SettingsMap.hpp"
 
-class InterfaceBlackboard : public FullBlackboard
-{
-public:
-  void ReadBlackboardBasic(const MoreData &nmea_info);
-  void ReadBlackboardCalculated(const DerivedInfo &derived_info);
+/**
+ * User interface settings.
+ */
+struct UISettings {
+  SETTINGS_MAP map;
 
-  gcc_const
-  SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }
-
-  gcc_const
-  UISettings &SetUISettings() {
-    return ui_settings;
-  }
-
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
+  void SetDefaults();
 };
 
 #endif

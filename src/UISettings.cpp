@@ -21,27 +21,10 @@ Copyright_License {
 }
 */
 
-#ifndef INTERFACE_BLACKBOARD_H
-#define INTERFACE_BLACKBOARD_H
+#include "UISettings.hpp"
 
-#include "FullBlackboard.hpp"
-#include "Compiler.h"
-
-class InterfaceBlackboard : public FullBlackboard
+void
+UISettings::SetDefaults()
 {
-public:
-  void ReadBlackboardBasic(const MoreData &nmea_info);
-  void ReadBlackboardCalculated(const DerivedInfo &derived_info);
-
-  gcc_const
-  SETTINGS_COMPUTER& SetSettingsComputer() { return settings_computer; }
-
-  gcc_const
-  UISettings &SetUISettings() {
-    return ui_settings;
-  }
-
-  void ReadSettingsComputer(const SETTINGS_COMPUTER &settings);
-};
-
-#endif
+  map.SetDefaults();
+}

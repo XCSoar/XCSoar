@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Blackboard.hpp"
 #include "SettingsComputerBlackboard.hpp"
-#include "SettingsMapBlackboard.hpp"
+#include "UISettings.hpp"
 
 /**
  * A blackboard which contains all existing blackboards.  This is the
@@ -35,9 +35,19 @@ Copyright_License {
  */
 class FullBlackboard
   : public BaseBlackboard,
-    public SettingsComputerBlackboard,
-    public SettingsMapBlackboard
+    public SettingsComputerBlackboard
 {
+protected:
+  UISettings ui_settings;
+
+public:
+  const UISettings &GetUISettings() const {
+    return ui_settings;
+  }
+
+  const SETTINGS_MAP &SettingsMap() const {
+    return ui_settings.map;
+  }
 };
 
 #endif

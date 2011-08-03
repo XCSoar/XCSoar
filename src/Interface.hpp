@@ -85,17 +85,28 @@ public:
   static SETTINGS_COMPUTER& SetSettingsComputer()
   { return blackboard.SetSettingsComputer(); }
 
+  gcc_const
+  static const UISettings &GetUISettings() {
+    return blackboard.GetUISettings();
+  }
+
   /**
    * Returns the InterfaceBlackboard.SettingsMap (read-only)
    * @return The InterfaceBlackboard.SettingsMap
    */
   gcc_const
-  static const SETTINGS_MAP& SettingsMap()
-  { return blackboard.SettingsMap(); }
+  static const SETTINGS_MAP& SettingsMap() {
+    return GetUISettings().map;
+  }
 
   gcc_const
   static const FullBlackboard &Full() {
     return blackboard;
+  }
+
+  gcc_const
+  static UISettings &SetUISettings() {
+    return blackboard.SetUISettings();
   }
 
   /**
@@ -103,8 +114,9 @@ public:
    * @return The InterfaceBlackboard.SettingsMap
    */
   gcc_const
-  static SETTINGS_MAP& SetSettingsMap()
-  { return blackboard.SetSettingsMap(); }
+  static SETTINGS_MAP& SetSettingsMap() {
+    return SetUISettings().map;
+  }
 
   static void ReadBlackboardBasic(const MoreData &nmea_info) {
     blackboard.ReadBlackboardBasic(nmea_info);
