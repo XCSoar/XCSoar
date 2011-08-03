@@ -36,7 +36,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "OS/FileUtil.hpp"
 #include "Logger/Logger.hpp"
-#include "Appearance.hpp"
 #include "Protection.hpp"
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
@@ -286,7 +285,8 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     pnlTaskList::Load(parent, wTabBar, wf, &active_task, &task_modified);
   assert(wLst);
 
-  const DialogTabStyle_t IconsStyle = Appearance.DialogTabStyle;
+  const DialogTabStyle_t IconsStyle =
+    CommonInterface::GetUISettings().dialog.tab_style;
   const Bitmap *CalcIcon = ((IconsStyle == dtIcon) ?
                              &Graphics::hBmpTabCalculator : NULL);
   const Bitmap *TurnPointIcon = ((IconsStyle == dtIcon) ?

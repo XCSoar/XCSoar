@@ -152,7 +152,7 @@ LayoutConfigPanel::Init(WndForm *_wf)
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Text"));
     dfe->addEnumText(_("Icons"));
-    dfe->Set(Appearance.DialogTabStyle);
+    dfe->Set(CommonInterface::GetUISettings().dialog.tab_style);
     wp->RefreshDisplay();
   }
 
@@ -222,9 +222,10 @@ LayoutConfigPanel::Save(bool &requirerestart)
     SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
                      szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
 
+  DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   changed |= SaveFormPropertyEnum(*wf, _T("prpTabDialogStyle"),
                                   szProfileAppDialogTabStyle,
-                                  Appearance.DialogTabStyle);
+                                  dialog_settings.tab_style);
 
   if (orientation_changed) {
     assert(Display::RotateSupported());

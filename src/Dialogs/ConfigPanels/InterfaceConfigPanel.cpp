@@ -148,7 +148,7 @@ InterfaceConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("Default"));
     dfe->addEnumText(_("Keyboard"));
     dfe->addEnumText(_("HighScore Style"));
-    dfe->Set(Appearance.TextInputStyle);
+    dfe->Set(CommonInterface::GetUISettings().dialog.text_input_style);
     wp->RefreshDisplay();
   } else {
     /* on-screen keyboard doesn't work without a pointing device
@@ -238,12 +238,15 @@ InterfaceConfigPanel::Save(bool &requirerestart)
                               XCSoarInterface::debounceTimeout);
 
 
+  DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   if (has_pointer()) {
     wp = (WndProperty*)wf->FindByName(_T("prpTextInput"));
     assert(wp != NULL);
-    if (Appearance.TextInputStyle != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger())) {
-      Appearance.TextInputStyle = (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
-      Profile::Set(szProfileAppTextInputStyle, Appearance.TextInputStyle);
+    if (dialog_settings.text_input_style != (TextInputStyle_t)(wp->GetDataField()->GetAsInteger())) {
+      dialog_settings.text_input_style =
+        (TextInputStyle_t)(wp->GetDataField()->GetAsInteger());
+      Profile::Set(szProfileAppTextInputStyle,
+                   dialog_settings.text_input_style);
       changed = true;
     }
   }

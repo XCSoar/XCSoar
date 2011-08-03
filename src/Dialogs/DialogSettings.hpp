@@ -21,27 +21,29 @@ Copyright_License {
 }
 */
 
-#ifndef APPEARANCE_H
-#define APPEARANCE_H
+#ifndef XCSOAR_DIALOG_SETTINGS_HPP
+#define XCSOAR_DIALOG_SETTINGS_HPP
 
-enum StateMessageAlign_t {
-  smAlignCenter = 0,
-  smAlignTopLeft,
+enum TextInputStyle_t {
+  /**
+   * Use the platform default - i.e. keyboard if the device has a
+   * pointing device.
+   */
+  tiDefault,
+  tiKeyboard,
+  tiHighScore,
 };
 
-enum InfoBoxBorderAppearance_t {
-  apIbBox = 0,
-  apIbTab
+enum DialogTabStyle_t {
+  dtText,
+  dtIcon,
 };
 
-struct Appearance {
-  bool InverseInfoBox;
-  StateMessageAlign_t StateMessageAlign;
-  bool InfoBoxColors;
-  InfoBoxBorderAppearance_t InfoBoxBorder;
-  bool UseCustomFonts;
-};
+struct DialogSettings {
+  TextInputStyle_t text_input_style;
+  DialogTabStyle_t tab_style;
 
-extern struct Appearance Appearance;
+  void SetDefaults();
+};
 
 #endif

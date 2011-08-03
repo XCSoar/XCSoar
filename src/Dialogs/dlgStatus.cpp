@@ -40,7 +40,6 @@ Copyright_License {
 #include "Compiler.h"
 
 #include "Form/TabBar.hpp"
-#include "Appearance.hpp"
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 
@@ -486,7 +485,8 @@ dlgStatusShowModal(int start_page)
 
   /* setup tabs */
 
-  const DialogTabStyle_t IconsStyle = Appearance.DialogTabStyle;
+  const DialogTabStyle_t IconsStyle =
+    CommonInterface::GetUISettings().dialog.tab_style;
 
   const Bitmap *FlightIcon = ((IconsStyle == dtIcon) ?
                               &Graphics::hBmpTabFlight : NULL);

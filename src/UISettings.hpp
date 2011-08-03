@@ -25,12 +25,14 @@ Copyright_License {
 #define XCSOAR_UI_SETTINGS_HPP
 
 #include "SettingsMap.hpp"
+#include "Dialogs/DialogSettings.hpp"
 
 /**
  * User interface settings.
  */
 struct UISettings {
   SETTINGS_MAP map;
+  DialogSettings dialog;
 
   void SetDefaults();
 };

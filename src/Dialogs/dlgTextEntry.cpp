@@ -32,9 +32,9 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Compatibility/string.h"
 #include "SettingsMap.hpp"
-#include "Appearance.hpp"
 #include "Asset.hpp"
 #include "StringUtil.hpp"
+#include "Interface.hpp"
 
 #include <algorithm>
 
@@ -275,7 +275,7 @@ bool
 dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
                       const TCHAR* caption, AllowedCharactersCallback_t accb)
 {
-  switch (Appearance.TextInputStyle) {
+  switch (CommonInterface::GetUISettings().dialog.text_input_style) {
   case tiDefault:
   case tiKeyboard:
     if (has_pointer())

@@ -27,4 +27,5 @@ void
 UISettings::SetDefaults()
 {
   map.SetDefaults();
+  dialog.SetDefaults();
 }

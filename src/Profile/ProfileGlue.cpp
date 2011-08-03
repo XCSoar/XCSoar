@@ -254,14 +254,16 @@ Profile::Use()
   */
 
   // new appearance variables
+
+  DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
  
   Get(szProfileAppInverseInfoBox,
 		  Appearance.InverseInfoBox);
 
   GetEnum(szProfileAppInfoBoxBorder, Appearance.InfoBoxBorder);
   GetEnum(szProfileAppStatusMessageAlignment, Appearance.StateMessageAlign);
-  GetEnum(szProfileAppTextInputStyle, Appearance.TextInputStyle);
-  GetEnum(szProfileAppDialogTabStyle, Appearance.DialogTabStyle);
+  GetEnum(szProfileAppTextInputStyle, dialog_settings.text_input_style);
+  GetEnum(szProfileAppDialogTabStyle, dialog_settings.tab_style);
   GetEnum(szProfileAppDialogStyle, DialogStyleSetting);
 
   Get(szProfileAppInfoBoxColors,

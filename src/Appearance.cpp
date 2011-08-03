@@ -26,8 +26,6 @@ Copyright_License {
 struct Appearance Appearance = {
   false,
   smAlignCenter,
-  tiDefault,
-  dtText,
   true,
   apIbBox,
   false,

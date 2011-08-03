@@ -21,27 +21,11 @@ Copyright_License {
 }
 */
 
-#ifndef APPEARANCE_H
-#define APPEARANCE_H
+#include "DialogSettings.hpp"
 
-enum StateMessageAlign_t {
-  smAlignCenter = 0,
-  smAlignTopLeft,
-};
-
-enum InfoBoxBorderAppearance_t {
-  apIbBox = 0,
-  apIbTab
-};
-
-struct Appearance {
-  bool InverseInfoBox;
-  StateMessageAlign_t StateMessageAlign;
-  bool InfoBoxColors;
-  InfoBoxBorderAppearance_t InfoBoxBorder;
-  bool UseCustomFonts;
-};
-
-extern struct Appearance Appearance;
-
-#endif
+void
+DialogSettings::SetDefaults()
+{
+  text_input_style = tiDefault;
+  tab_style = dtText;
+}
