@@ -68,7 +68,7 @@ private:
     int texpiry; // time message will expire
     int tshow; // time message is visible for
 
-    StaticString<1000> text;
+    StaticString<256u> text;
 
     Message()
       :type(MSG_UNKNOWN), tstart(0), texpiry(0) {
