@@ -23,10 +23,6 @@ Copyright_License {
 
 #include "DrawThread.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
-#include "Gauge/GaugeFLARM.hpp"
-#include "Gauge/GaugeThermalAssistant.hpp"
-#include "Protection.hpp"
-#include "DeviceBlackboard.hpp"
 
 #ifndef ENABLE_OPENGL
 
