@@ -51,9 +51,6 @@ DeviceBlackboard::SetStartupLocation(const GeoPoint &loc,
 
 Projection::Projection() {}
 
-SettingsComputerBlackboard::SettingsComputerBlackboard() {}
-SettingsMapBlackboard::SettingsMapBlackboard() {}
-
 DeviceBlackboard device_blackboard;
 static RasterTerrain terrain;
 Logger logger;

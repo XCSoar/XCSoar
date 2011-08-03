@@ -49,12 +49,6 @@ InputEvents::processNmea(unsigned key)
 }
 
 /*
- * Fake Settings*Blackboard.cpp
- */
-
-SettingsComputerBlackboard::SettingsComputerBlackboard() {}
-
-/*
  * The actual code.
  */
 
