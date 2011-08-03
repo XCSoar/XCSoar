@@ -176,3 +176,9 @@ WindMeasurementList::getLeastImportantItem(fixed Time)
 
   return founditem;
 }
+
+void
+WindMeasurementList::Reset()
+{
+  measurements.clear();
+}

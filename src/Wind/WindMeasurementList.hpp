@@ -64,6 +64,8 @@ public:
   /** Adds the windvector vector with quality quality to the list. */
   void addMeasurement(fixed Time, Vector vector, fixed alt, int quality);
 
+  void Reset();
+
 protected:
   /**
    * getLeastImportantItem is called to identify the item that should be
