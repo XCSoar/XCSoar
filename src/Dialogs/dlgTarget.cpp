@@ -408,9 +408,6 @@ RefreshTargetPoint(void)
   if (target_point < TaskSize && target_point >= ActiveTaskPointOnEntry) {
     SetTarget();
 
-    fixed range = fixed_zero;
-    fixed radial = fixed_zero;
-    protected_task_manager->get_target_range_radial(target_point, range, radial);
     RefreshCalculator();
 
     ActionInterface::SendSettingsMap(true);
