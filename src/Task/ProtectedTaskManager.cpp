@@ -83,41 +83,11 @@ ProtectedTaskManager::isInSector (const unsigned TPindex, const AircraftState &r
 }
 
 bool
-ProtectedTaskManager::target_is_locked(const unsigned TPindex) const
-{
-  Lease lease(*this);
-  return lease->target_is_locked(TPindex);
-}
-
-bool
-ProtectedTaskManager::has_target(const unsigned TPindex) const
-{
-  Lease lease(*this);
-  return lease->has_target(TPindex);
-}
-
-bool
-ProtectedTaskManager::set_target(const unsigned TPindex, const GeoPoint &loc,
-   const bool override_lock)
-{
-  ExclusiveLease lease(*this);
-  return lease->set_target(TPindex, loc, override_lock);
-}
-
-bool
 ProtectedTaskManager::set_target(const unsigned TPindex, const fixed range,
    const fixed radial)
 {
   ExclusiveLease lease(*this);
   return lease->set_target(TPindex, range, radial);
-}
-
-bool
-ProtectedTaskManager::get_target_range_radial(const unsigned TPindex, fixed &range,
-                                              fixed &radial) const
-{
-  Lease lease(*this);
-  return lease->get_target_range_radial(TPindex, range, radial);
 }
 
 bool

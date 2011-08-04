@@ -224,18 +224,26 @@ RefreshCalculator()
 {
   WndProperty* wp = NULL;
   bool nodisplay = false;
-  bool bAAT = protected_task_manager->has_target(target_point);
+  bool bAAT;
+  fixed aatTime;
+
+  {
+    ProtectedTaskManager::Lease lease(*protected_task_manager);
+    bAAT = lease->has_target(target_point);
+
+    if (!bAAT) {
+      nodisplay = true;
+      IsLocked = false;
+    } else {
+      lease->get_target_range_radial(target_point, Range, Radial);
+      IsLocked = lease->target_is_locked(target_point);
+    }
+
+    aatTime = lease->get_ordered_task_behaviour().aat_min_time;
+  }
 
   if (btnIsLocked)
     btnIsLocked->set_enabled(bAAT);
-
-  if (!bAAT) {
-    nodisplay = true;
-    IsLocked = false;
-  } else {
-    protected_task_manager->get_target_range_radial(target_point, Range, Radial);
-    IsLocked = protected_task_manager->target_is_locked(target_point);
-  }
 
   LockCalculatorUI();
 
@@ -271,7 +279,6 @@ RefreshCalculator()
 
   fixed aattimeEst = XCSoarInterface::Calculated().common_stats.task_time_remaining +
       XCSoarInterface::Calculated().common_stats.task_time_elapsed;
-  fixed aatTime = protected_task_manager->get_ordered_task_behaviour().aat_min_time;
 
   wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));// Same as infobox
   if (wp) {
@@ -344,8 +351,9 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
     if (target_point >= ActiveTaskPointOnEntry) {
       const fixed RangeNew = df.GetAsFixed() / fixed(100);
       if (RangeNew != Range) {
-        protected_task_manager->set_target(target_point, RangeNew, Radial);
-        protected_task_manager->get_target_range_radial(target_point, Range, Radial);
+        ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
+        lease->set_target(target_point, RangeNew, Radial);
+        lease->get_target_range_radial(target_point, Range, Radial);
       }
     }
     break;
