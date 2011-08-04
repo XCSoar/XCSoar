@@ -33,6 +33,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Blank.hpp"
 #include "Dialogs/AirspaceWarningDialog.hpp"
+#include "Dialogs/Task.hpp"
 #include "Audio/Sound.hpp"
 #include "Components.hpp"
 #include "ProcessTimer.hpp"
@@ -511,6 +512,8 @@ MainWindow::on_user(unsigned id)
 
     InfoBoxManager::SetDirty();
     InfoBoxManager::ProcessTimer();
+
+    TargetDialogUpdate();
     return true;
   }
 

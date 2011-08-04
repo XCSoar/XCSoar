@@ -48,8 +48,6 @@ SETTINGS_MAP::SetDefaults()
   EnableAuxiliaryInfo = true;
   AuxiliaryInfoBoxPanel = 0;
   UserForceDisplayMode = DM_NONE;
-  TargetPanIndex = 0;
-  TargetZoomDistance = fixed(500);
   EnableFLARMGauge = true;
   AutoCloseFlarmDialog = false;
   EnableFLARMMap = true;

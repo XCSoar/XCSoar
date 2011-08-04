@@ -351,10 +351,6 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   case FOLLOW_PAN:
     _tcscat(ScaleInfo, _T("PAN "));
     break;
-
-  case FOLLOW_TARGET:
-    _tcscat(ScaleInfo, _T("TARGET "));
-    break;
   }
 
   if (SettingsMap().EnableAuxiliaryInfo) {

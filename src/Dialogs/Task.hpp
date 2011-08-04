@@ -56,4 +56,12 @@ dlgTaskPointNew(SingleWindow &parent, OrderedTask** task, const unsigned index);
 void
 dlgTargetShowModal(int TargetPoint = -1);
 
+/**
+ * Called by #MainWindow when the calculated data got updated, to
+ * refresh the #TargetMapWindow.  No-op when the target dialog is not
+ * open
+ */
+void
+TargetDialogUpdate();
+
 #endif

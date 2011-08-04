@@ -22,72 +22,7 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
-#include "Look/TaskLook.hpp"
-#include "Screen/Icon.hpp"
-#include "Interface.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Screen/Layout.hpp"
-
-void
-GlueMapWindow::TargetPaintDrag(Canvas &canvas, const RasterPoint drag_last)
-{
-  task_look.target_icon.draw(canvas, drag_last.x, drag_last.y);
-}
-
-bool
-GlueMapWindow::TargetDragged(const int x, const int y)
-{
-  assert(task != NULL);
-
-  GeoPoint gp = visible_projection.ScreenToGeo(x, y);
-  ProtectedTaskManager::ExclusiveLease task_manager(*task);
-  if (task_manager->target_is_locked(XCSoarInterface::SettingsMap().TargetPanIndex)) {
-    task_manager->set_target(XCSoarInterface::SettingsMap().TargetPanIndex, gp, true);
-    return true;
-  }
-  return false;
-}
-
-bool
-GlueMapWindow::isClickOnTarget(const RasterPoint pc)
-{
-  if (task == NULL)
-    return false;
-
-  if (IsTargetDialog()) {
-    ProtectedTaskManager::Lease task_manager(*task);
-    if (!task_manager->target_is_locked(XCSoarInterface::SettingsMap().TargetPanIndex))
-      return false;
-
-    const GeoPoint gnull(Angle::zero(), Angle::zero());
-    const GeoPoint& t = task_manager->get_location_target(
-        XCSoarInterface::SettingsMap().TargetPanIndex, gnull);
-
-    if (t == gnull)
-      return false;
-
-    const GeoPoint gp = visible_projection.ScreenToGeo(pc.x, pc.y);
-    if (visible_projection.GeoToScreenDistance(gp.distance(t)) <
-        unsigned(Layout::Scale(10)))
-      return true;
-  }
-  return false;
-}
-
-bool
-GlueMapWindow::isInSector(const int x, const int y)
-{
-  assert(task != NULL);
-
-  if (IsTargetDialog()) {
-    GeoPoint gp = visible_projection.ScreenToGeo(x, y);
-    AircraftState a;
-    a.location = gp;
-    return task->isInSector(
-                                  XCSoarInterface::SettingsMap().TargetPanIndex, a);
-  }
-  return false;
-}
 
 int
 GlueMapWindow::isInAnyActiveSector(const GeoPoint &gp)

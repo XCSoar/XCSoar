@@ -86,11 +86,6 @@ protected:
      * The user pans the map.
      */
     FOLLOW_PAN,
-
-    /**
-     * The target is shown (used by dlgTarget).
-     */
-    FOLLOW_TARGET,
   };
 
   FollowMode follow_mode;
@@ -178,10 +173,6 @@ public:
 
   bool IsPanning() const {
     return follow_mode == FOLLOW_PAN;
-  }
-
-  bool IsTargetDialog() const {
-    return follow_mode == FOLLOW_TARGET;
   }
 
   virtual void set(ContainerWindow &parent, const PixelRect &rc);

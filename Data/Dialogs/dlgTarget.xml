@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
-<Form Height="100" Caption="Target" Popup="1">
+<Form Caption="Target">
   <Button Name="btnOK" Caption="Close" X="-62" Y="2" Width="60" Height="33" OnClick="OnOKClicked" />
 
   <Edit Name="prpTaskPoint" Caption="" X="1" Y="0" Width="174" Height="29"
@@ -9,26 +9,27 @@
   </Edit>
   <SymbolButton Name="btnNext" Caption=">" X="1" Y="2" Width="35" Height="33" OnClick="OnNextClicked" />
 
-  <Edit Name="prpAATDelta" Caption="delta T" X="2" Y="-46" Width="86" Height="22" CaptionWidth="39" ReadOnly="1" min="0" max="600" step="10"
+  <Edit Name="prpAATDelta" Caption="delta T" X="2" Y="54" Width="86" Height="22" CaptionWidth="39" ReadOnly="1" min="0" max="600" step="10"
     Help="AA Delta Time - Difference between estimated task time and AAT minimum time. Colored red if negative (expected arrival too early), or blue if in sector and can turn now with estimated arrival time greater than AAT time plus 5 minutes.">
     <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" readonly="1"/>
   </Edit>
 
-  <Edit Name="prpSpeedRemaining" Caption="V rem." X="90" Y="-46" Width="86" Height="22" CaptionWidth="35" ReadOnly="1" min="0" max="2000" step="10"
+  <Edit Name="prpSpeedRemaining" Caption="V rem." X="90" Y="54" Width="86" Height="22" CaptionWidth="35" ReadOnly="1" min="0" max="2000" step="10"
     Help="Speed remaining">
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
   </Edit>
 
-  <Edit Name="prpRange" Caption="Range" X="2" Y="-26" Width="86" Height="27" CaptionWidth="39"
+  <Edit Name="prpRange" Caption="Range" X="2" Y="74" Width="86" Height="27" CaptionWidth="39"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">
     <DataField DataType="double" DisplayFormat="%.0f%%" EditFormat="%.0f" Min="-100" Max="100" Step="5" OnDataAccess="OnRangeData"/>
   </Edit>
 
-  <Edit Name="prpRadial" Caption="Radial" X="90" Y="-26" Width="86" Height="27" CaptionWidth="35"
+  <Edit Name="prpRadial" Caption="Radial" X="90" Y="74" Width="86" Height="27" CaptionWidth="35"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Positive values rotate the range line clockwise, negative values rotate the range line counterclockwise.">
     <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-92" Max="92" Step="5" OnDataAccess="OnRadialData"/>
   </Edit>
 
-  <Button Name="btnIsLocked" Caption="Locked" X="-62" Y="-44" Width="60" Height="43" OnClick="OnIsLockedClicked" />
+  <Button Name="btnIsLocked" Caption="Locked" X="-62" Y="54" Width="60" Height="43" OnClick="OnIsLockedClicked" />
 
+  <Custom Name="map" X="1" Y="103" Width="-1" Height="-1" Border="1" OnCreate="OnCreateMap"/>
 </Form>

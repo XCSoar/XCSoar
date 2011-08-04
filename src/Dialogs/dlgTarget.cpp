@@ -23,12 +23,13 @@ Copyright_License {
 
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Internal.hpp"
+#include "Look/Look.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "DataField/Enum.hpp"
 #include "DataField/Float.hpp"
 #include "MainWindow.hpp"
-#include "MapWindow/GlueMapWindow.hpp"
+#include "MapWindow/TargetMapWindow.hpp"
 #include "Components.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -45,6 +46,7 @@ using std::min;
 using std::max;
 
 static WndForm *wf = NULL;
+static TargetMapWindow *map;
 static WndButton *btnIsLocked = NULL;
 static WndSymbolButton *btnNext = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
@@ -54,6 +56,25 @@ static fixed Range = fixed_zero;
 static fixed Radial = fixed_zero;
 static unsigned target_point = 0;
 static bool IsLocked = true;
+
+static Window *
+OnCreateMap(ContainerWindow &parent, int left, int top,
+            unsigned width, unsigned height,
+            const WindowStyle style)
+{
+  const Look &look = *CommonInterface::main_window.look;
+
+  map = new TargetMapWindow(look.waypoint, look.airspace,
+                            look.task, look.aircraft);
+  map->SetTerrain(terrain);
+  map->SetTopograpgy(topography);
+  map->SetAirspaces(&airspace_database);
+  map->SetWaypoints(&way_points);
+  map->SetTask(protected_task_manager);
+  map->set(parent, left, top, width, height, style);
+
+  return map;
+}
 
 static void
 OnOKClicked(gcc_unused WndButton &Sender)
@@ -373,12 +394,9 @@ OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static void
-SetZoom(void)
+SetTarget()
 {
-  const fixed Radius =
-    std::max(protected_task_manager->get_ordered_taskpoint_radius(target_point) * fixed(1.5),
-             fixed(10000));
-  XCSoarInterface::SetSettingsMap().TargetZoomDistance = Radius;
+  map->SetTarget(target_point);
 }
 
 /* resets the target point and reads its polar coordinates
@@ -388,22 +406,11 @@ static void
 RefreshTargetPoint(void)
 {
   if (target_point < TaskSize && target_point >= ActiveTaskPointOnEntry) {
-    if (XCSoarInterface::SetSettingsMap().TargetPanIndex != target_point) {
-      const GeoPoint t = protected_task_manager->get_ordered_taskpoint_location(
-              target_point,
-              XCSoarInterface::Basic().location);
-      if (t == XCSoarInterface::Basic().location)
-        return; // should not happen
-
-      GlueMapWindow &map_window = *XCSoarInterface::main_window.map;
-      map_window.SetLocation(t);
-      XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
-    }
+    SetTarget();
 
     fixed range = fixed_zero;
     fixed radial = fixed_zero;
     protected_task_manager->get_target_range_radial(target_point, range, radial);
-    SetZoom();
     RefreshCalculator();
 
     ActionInterface::SendSettingsMap(true);
@@ -436,6 +443,7 @@ OnTaskPointData(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnCreateMap),
   DeclareCallBackEntry(OnTaskPointData),
   DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnRadialData),
@@ -486,16 +494,9 @@ InitTargetPoints()
   dfe->Set(max(0, (int)target_point - (int)ActiveTaskPointOnEntry));
 
   if (TaskSize > target_point) {
-    const GeoPoint t = protected_task_manager->get_ordered_taskpoint_location(target_point,
-        XCSoarInterface::Basic().location);
-    SetZoom();
-
-    GlueMapWindow &map_window = *CommonInterface::main_window.map;
-    map_window.PanToTarget(t);
-
-    XCSoarInterface::SetSettingsMap().TargetPanIndex = target_point;
-    ActionInterface::SendSettingsMap(true);
+    SetTarget();
   }
+
   wp->RefreshDisplay();
 }
 
@@ -532,11 +533,6 @@ dlgTargetShowModal(int TargetPoint)
                                       _T("IDR_XML_TARGET"));
   assert(wf != NULL);
 
-  GlueMapWindow &map_window = *XCSoarInterface::main_window.map;
-  bool oldEnablePan = map_window.IsPanning();
-  GeoPoint oldPanLocation = map_window.GetLocation();
-  const bool oldFullScreen = XCSoarInterface::main_window.GetFullScreen();
-
   if (TargetPoint >=0)
     target_point = TargetPoint;
   InitTargetPoints();
@@ -547,30 +543,17 @@ dlgTargetShowModal(int TargetPoint)
   drawBtnNext();
 
   wf->SetKeyDownNotify(FormKeyDown);
-
   wf->SetTimerNotify(OnTimerNotify);
 
-  XCSoarInterface::main_window.SetFullScreen(true);
-
-  PixelRect dialog_rect = wf->get_position();
-  PixelRect map_rect = XCSoarInterface::main_window.get_client_rect();
-  if (Layout::landscape)
-    map_rect.left = dialog_rect.right;
-  else
-    map_rect.top = dialog_rect.bottom;
-  XCSoarInterface::main_window.SetCustomView(map_rect);
-
-  wf->ShowModal(XCSoarInterface::main_window.map); // enable map
-
-  if (oldEnablePan) {
-    map_window.PanTo(oldPanLocation);
-    InputEvents::setMode(InputEvents::MODE_PAN);
-  } else
-    map_window.LeaveTargetPan();
-
-  XCSoarInterface::main_window.SetFullScreen(oldFullScreen);
-
-  XCSoarInterface::main_window.LeaveCustomView();
+  wf->ShowModal();
 
   delete wf;
+  map = NULL;
+}
+
+void
+TargetDialogUpdate()
+{
+  if (map != NULL)
+    map->invalidate();
 }

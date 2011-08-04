@@ -381,6 +381,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindow/GlueMapWindowOverlays.cpp \
 	$(SRC)/MapWindow/GlueMapWindowTarget.cpp \
 	$(SRC)/MapWindow/GlueMapWindowDisplayMode.cpp \
+	$(SRC)/MapWindow/TargetMapWindow.cpp \
+	$(SRC)/MapWindow/TargetMapWindowEvents.cpp \
+	$(SRC)/MapWindow/TargetMapWindowDrag.cpp \
 	$(SRC)/GestureManager.cpp \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/DrawThread.cpp \

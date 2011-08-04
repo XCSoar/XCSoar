@@ -82,14 +82,6 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
   case DRAG_NONE:
     break;
 
-  case DRAG_TARGET:
-    if (isInSector(x, y)) {
-      drag_last.x = x;
-      drag_last.y = y;
-      invalidate();
-    }
-    return true;
-
   case DRAG_PAN:
     visible_projection.SetGeoLocation(drag_projection.GetGeoLocation()
                                       + drag_start_geopoint
@@ -133,10 +125,6 @@ GlueMapWindow::on_mouse_down(int x, int y)
     drag_mode = DRAG_PAN;
     drag_projection = visible_projection;
     break;
-
-  case FOLLOW_TARGET:
-    drag_mode = isClickOnTarget(drag_start) ? DRAG_TARGET : DRAG_NONE;
-    break;
   }
 
   if (Basic().gps.simulator && drag_mode == DRAG_NONE)
@@ -175,10 +163,6 @@ GlueMapWindow::on_mouse_up(int x, int y)
 
   switch (old_drag_mode) {
   case DRAG_NONE:
-    break;
-
-  case DRAG_TARGET:
-    TargetDragged(drag_last.x, drag_last.y);
     break;
 
   case DRAG_PAN:
@@ -225,7 +209,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
     break;
   }
 
-  if(!dragOverMinDist && !IsTargetDialog()) {
+  if (!dragOverMinDist) {
     if (click_time < 1000) {
       // click less then one second -> open nearest waypoint details
       if (way_points != NULL &&
@@ -308,9 +292,6 @@ GlueMapWindow::on_paint(Canvas &canvas)
 #endif
 
   MapWindow::on_paint(canvas);
-
-  if (drag_mode == DRAG_TARGET)
-    TargetPaintDrag(canvas, drag_last);
 
   // Draw center screen cross hair in pan mode
   if (IsPanning())

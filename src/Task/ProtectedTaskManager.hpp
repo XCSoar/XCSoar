@@ -216,29 +216,6 @@ public:
   gcc_pure
   const TCHAR* get_ordered_taskpoint_name(const unsigned TPindex) const;
 
-  /**
-   * Accessor for location of specified ordered tp
-   *
-   * @param TPindex index of tp in ordered task
-   *
-   * @return location of tp or fallback_location if
-   * TPindex is invalid
-   */
-  gcc_pure
-  const GeoPoint& get_ordered_taskpoint_location(const unsigned TPindex,
-     const GeoPoint& fallback_location) const;
-
-  /**
-   * Accessor for oz radius of specified ordered tp
-   *
-   * @param TPindex index of tp in ordered task
-   *
-   * @return oz radius or 0 if
-   * TPindex is invalid
-   */
-  gcc_pure
-  fixed get_ordered_taskpoint_radius(const unsigned TPindex) const;
-
   void SetRoutePlanner(const RoutePlannerGlue *_route);
 
   short get_terrain_base() const;

@@ -609,49 +609,6 @@ TaskManager::target_lock(const unsigned TPindex, bool do_lock)
   return true;
 }
 
-const GeoPoint&
-TaskManager::get_ordered_taskpoint_location(const unsigned TPindex,
-   const GeoPoint& fallback_location) const
-{
-  if (!check_ordered_task())
-    return fallback_location;
-
-  const TaskWaypoint *tp = task_ordered.getTaskPoint(TPindex);
-  if (tp)
-    return tp->get_location();
-
-  return fallback_location;
-}
-
-fixed
-TaskManager::get_ordered_taskpoint_radius(const unsigned TPindex) const
-{
-  if (!check_ordered_task())
-    return fixed(5);
-
-  const OrderedTaskPoint *otp = task_ordered.getTaskPoint(TPindex);
-  if (otp) {
-    ObservationZonePoint *ozp = otp->get_oz();
-
-    switch (ozp->shape) {
-    case ObservationZonePoint::LINE:
-    case ObservationZonePoint::CYLINDER:
-    case ObservationZonePoint::SECTOR:
-    case ObservationZonePoint::FAI_SECTOR:
-    case ObservationZonePoint::KEYHOLE:
-    case ObservationZonePoint::BGAFIXEDCOURSE:
-    case ObservationZonePoint::BGAENHANCEDOPTION:
-    case ObservationZonePoint::BGA_START:
-    case ObservationZonePoint::ANNULAR_SECTOR:
-      CylinderZone *cz = (CylinderZone *) ozp;
-      if (cz)
-        return cz->getRadius();
-      break;
-    }
-  }
-  return fixed(5);
-}
-
 OrderedTask* 
 TaskManager::clone(TaskEvents &te, const TaskBehaviour &tb,
                    const GlidePolar &gp) const

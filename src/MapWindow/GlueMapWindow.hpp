@@ -38,7 +38,6 @@ struct ZoomClimb_t
   fixed CruiseScale;
   fixed ClimbScale;
   bool last_isclimb;
-  bool last_targetpan;
 
   ZoomClimb_t();
 };
@@ -74,7 +73,6 @@ class GlueMapWindow : public MapWindow {
     DRAG_PAN,
     DRAG_GESTURE,
     DRAG_SIMULATOR,
-    DRAG_TARGET,
   } drag_mode;
 
   GeoPoint drag_start_geopoint;
@@ -149,39 +147,6 @@ public:
   void SetPan(bool enable);
   void TogglePan();
   void PanTo(const GeoPoint &location);
-  void PanToTarget(const GeoPoint &location);
-  void LeaveTargetPan();
-
-  /**
-   * If PanTarget, paints target during drag
-   * Used by dlgTarget
-   *
-   * @param drag_last location of target
-   * @param canvas
-   */
-  void TargetPaintDrag(Canvas &canvas, const RasterPoint last_drag);
-
-  /**
-   * If PanTarget, tests if target is clicked
-   * Used by dlgTarget
-   *
-   * @param drag_last location of click
-   *
-   * @return true if click is near target
-   */
-  bool isClickOnTarget(const RasterPoint drag_last);
-
-  /**
-   * If PanTarget, tests if drag destination
-   * is in OZ of target being edited
-   * Used by dlgTarget
-   *
-   * @param x mouse_up location
-   * @param y mouse_up location
-   *
-   * @return true if location is in OZ
-   */
-  bool isInSector(const int x, const int y);
 
   /**
    * If point is in any active OZ of the current task,
@@ -195,17 +160,6 @@ public:
    *        if tp index >= task's ActiveIndex
    */
   int isInAnyActiveSector(const GeoPoint &gp);
-
-  /**
-   * If PanTarget, updates task with new target
-   * Used by dlgTarget
-   *
-   * @param x mouse_up location
-   * @param y mouse_up location
-   *
-   * @return true if successful
-   */
-  bool TargetDragged(const int x, const int y);
 
 private:
   bool AirspaceDetailsAtPoint(const GeoPoint &location);

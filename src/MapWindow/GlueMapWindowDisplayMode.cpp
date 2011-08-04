@@ -29,8 +29,7 @@ Copyright_License {
 ZoomClimb_t::ZoomClimb_t():
   CruiseScale(fixed_one / 60),
   ClimbScale(fixed_one / 2),
-  last_isclimb(false),
-  last_targetpan(false) {}
+  last_isclimb(false) {}
 
 
 const RasterPoint OffsetHistory::zeroPoint = {0, 0};
@@ -87,9 +86,6 @@ GlueMapWindow::SetPan(bool enable)
 
     follow_mode = FOLLOW_SELF;
     break;
-
-  case FOLLOW_TARGET:
-    return;
   }
 
   UpdateProjection();
@@ -107,9 +103,6 @@ GlueMapWindow::TogglePan()
   case FOLLOW_PAN:
     follow_mode = FOLLOW_SELF;
     break;
-
-  case FOLLOW_TARGET:
-    return;
   }
 
   UpdateProjection();
@@ -127,41 +120,17 @@ GlueMapWindow::PanTo(const GeoPoint &location)
 }
 
 void
-GlueMapWindow::PanToTarget(const GeoPoint &location)
-{
-  follow_mode = FOLLOW_TARGET;
-  visible_projection.SetGeoLocation(location);
-
-  UpdateProjection();
-  FullRedraw();
-}
-
-void
-GlueMapWindow::LeaveTargetPan()
-{
-  if (follow_mode != FOLLOW_TARGET)
-    return;
-
-  follow_mode = FOLLOW_SELF;
-
-  UpdateProjection();
-  FullRedraw();
-}
-
-void
 GlueMapWindow::SetMapScale(const fixed x)
 {
   MapWindow::SetMapScale(x);
 
-  if (!IsTargetDialog()) {
-    if (GetDisplayMode() == DM_CIRCLING && SettingsMap().CircleZoom)
-      // save cruise scale
-      zoomclimb.ClimbScale = visible_projection.GetScale();
-    else
-      zoomclimb.CruiseScale = visible_projection.GetScale();
+  if (GetDisplayMode() == DM_CIRCLING && SettingsMap().CircleZoom)
+    // save cruise scale
+    zoomclimb.ClimbScale = visible_projection.GetScale();
+  else
+    zoomclimb.CruiseScale = visible_projection.GetScale();
 
-    SaveDisplayModeScales();
-  }
+  SaveDisplayModeScales();
 }
 
 void
@@ -191,27 +160,7 @@ GlueMapWindow::SwitchZoomClimb()
 {
   bool isclimb = (GetDisplayMode() == DM_CIRCLING);
 
-  bool my_target_pan = IsTargetDialog();
-
-  if (my_target_pan != zoomclimb.last_targetpan) {
-    if (my_target_pan) {
-      // save starting values
-      if (isclimb)
-        zoomclimb.ClimbScale = visible_projection.GetScale();
-      else
-        zoomclimb.CruiseScale = visible_projection.GetScale();
-    } else {
-      // restore scales
-      if (isclimb)
-        visible_projection.SetScale(zoomclimb.ClimbScale);
-      else
-        visible_projection.SetScale(zoomclimb.CruiseScale);
-    }
-    zoomclimb.last_targetpan = my_target_pan;
-    return;
-  }
-
-  if (!my_target_pan && SettingsMap().CircleZoom) {
+  if (SettingsMap().CircleZoom) {
     if (isclimb != zoomclimb.last_isclimb) {
       if (isclimb) {
         // save cruise scale
@@ -257,13 +206,6 @@ GlueMapWindow::UpdateScreenAngle()
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
 
-  if (IsTargetDialog() &&
-      calculated.common_stats.active_taskpoint_index !=
-          settings.TargetPanIndex) {
-    visible_projection.SetScreenAngle(Angle::zero());
-    return;
-  }
-
   DisplayOrientation_t orientation =
       (GetDisplayMode() == DM_CIRCLING) ?
           settings.OrientationCircling : settings.OrientationCruise;
@@ -288,15 +230,6 @@ GlueMapWindow::UpdateMapScale()
      called by the main thread */
   const DerivedInfo &calculated = CommonInterface::Calculated();
   const SETTINGS_MAP &settings = CommonInterface::SettingsMap();
-
-  if (IsTargetDialog()) {
-    // set scale exactly so that waypoint distance is the zoom factor
-    // across the screen
-    fixed wpd = SettingsMap().TargetZoomDistance;
-    wpd = max(fixed_int_constant(50), min(fixed_int_constant(160000), wpd / 4));
-    visible_projection.SetFreeMapScale(wpd);
-    return;
-  }
 
   if (GetDisplayMode() == DM_CIRCLING && SettingsMap().CircleZoom)
     return;
