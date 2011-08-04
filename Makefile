@@ -395,6 +395,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapProjectionBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/UIState.cpp \
 	$(SRC)/UISettings.cpp \
 	$(SRC)/SettingsMap.cpp \
 	$(SRC)/SettingsComputer.cpp \

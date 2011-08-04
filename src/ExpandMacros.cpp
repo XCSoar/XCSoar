@@ -39,6 +39,7 @@ Copyright_License {
 #include "Pages.hpp"
 #include "Util/StringUtil.hpp"
 #include "Net/Features.hpp"
+#include "UIState.hpp"
 
 #include <stdlib.h>
 
@@ -350,6 +351,12 @@ SettingsMap()
   return CommonInterface::SettingsMap();
 }
 
+static const UIState &
+GetUIState()
+{
+  return CommonInterface::GetUIState();
+}
+
 bool
 ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
 {
@@ -532,20 +539,20 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
   CondReplaceInString(SettingsComputer().auto_mc,
                       OutBuffer, _T("$(MacCreadyToggleActionName)"),
                       _("Manual"), _("Auto"), Size);
-  CondReplaceInString(SettingsMap().EnableAuxiliaryInfo,
+  CondReplaceInString(GetUIState().auxiliary_enabled,
                       OutBuffer, _T("$(AuxInfoToggleActionName)"),
                       _("Off"), _("On"), Size);
 
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == DM_CIRCLING,
+  CondReplaceInString(GetUIState().force_display_mode == DM_CIRCLING,
                       OutBuffer, _T("$(DispModeClimbShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == DM_CRUISE,
+  CondReplaceInString(GetUIState().force_display_mode == DM_CRUISE,
                       OutBuffer, _T("$(DispModeCruiseShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == DM_NONE,
+  CondReplaceInString(GetUIState().force_display_mode == DM_NONE,
                       OutBuffer, _T("$(DispModeAutoShortIndicator)"),
                       _T("(*)"), _T(""), Size);
-  CondReplaceInString(SettingsMap().UserForceDisplayMode == DM_FINAL_GLIDE,
+  CondReplaceInString(GetUIState().force_display_mode == DM_FINAL_GLIDE,
                       OutBuffer, _T("$(DispModeFinalShortIndicator)"),
                       _T("(*)"), _T(""), Size);
 

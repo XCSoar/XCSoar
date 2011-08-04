@@ -22,15 +22,15 @@ Copyright_License {
 */
 
 #include "DisplayMode.hpp"
-#include "SettingsMap.hpp"
+#include "UIState.hpp"
 #include "NMEA/Derived.hpp"
 
 DisplayMode
-GetNewDisplayMode(const SETTINGS_MAP &settings_map,
+GetNewDisplayMode(const UIState &ui_state,
                   const DerivedInfo &derived_info)
 {
-  if (settings_map.UserForceDisplayMode != DM_NONE)
-    return settings_map.UserForceDisplayMode;
+  if (ui_state.force_display_mode != DM_NONE)
+    return ui_state.force_display_mode;
   else if (derived_info.circling)
     return DM_CIRCLING;
   else if (derived_info.task_stats.flight_mode_final_glide)

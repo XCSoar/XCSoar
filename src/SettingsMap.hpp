@@ -31,7 +31,6 @@ Copyright_License {
 #include "Airspace/AirspaceRendererSettings.hpp"
 #include "Waypoint/WaypointRendererSettings.hpp"
 #include "Terrain/TerrainSettings.hpp"
-#include "DisplayMode.hpp"
 
 enum AircraftSymbol_t {
   acSimple = 0,
@@ -126,11 +125,6 @@ struct SETTINGS_MAP {
   /** The bias for map shifting (Heading, Target, etc.) */
   MapShiftBias_t MapShiftBias;
 
-  bool EnableAuxiliaryInfo;
-  unsigned AuxiliaryInfoBoxPanel;
-
-  DisplayMode UserForceDisplayMode;
-
   /** Show FLARM radar if traffic present */
   bool EnableFLARMGauge;
   /** Automatically close the FLARM dialog when no traffic present */
@@ -138,7 +132,6 @@ struct SETTINGS_MAP {
   /** Show ThermalAssistant if circling */
   bool EnableTAGauge;
   bool EnableFLARMMap;
-  bool ScreenBlanked;
   bool EnableAutoBlank;
   /** Update system time from GPS time */
   bool SetSystemTimeFromGPS;

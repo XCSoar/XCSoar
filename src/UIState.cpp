@@ -21,35 +21,12 @@ Copyright_License {
 }
 */
 
-#include "SettingsMap.hpp"
-#include "Asset.hpp"
+#include "UIState.hpp"
 
 void
-SETTINGS_MAP::SetDefaults()
+UIState::Clear()
 {
-  CircleZoom = true;
-  MaxAutoZoomDistance = fixed(10000); /* 100 km */
-  EnableTopography = true;
-  terrain.SetDefaults();
-  aircraft_symbol = acSimple;
-  EnableTrailDrift = true;
-  EnableDetourCostMarker = false;
-  DisplayTrackBearing = dtbAuto;
-  AutoZoom = false;
-  SnailScaling = true;
-  SnailType = stStandardVario;
-  WindArrowStyle = 0;
-  waypoint.SetDefaults();
-  trail_length = TRAIL_LONG;
-  airspace.SetDefaults();
-  GliderScreenPosition = 20; // 20% from bottom
-  OrientationCircling = TRACKUP;
-  OrientationCruise = TRACKUP;
-  EnableFLARMGauge = true;
-  AutoCloseFlarmDialog = false;
-  EnableFLARMMap = true;
-  EnableAutoBlank = false;
-  EnableThermalProfile = false;
-
-  SetSystemTimeFromGPS = is_altair() && is_embedded();
+  auxiliary_enabled = false;
+  force_display_mode = DM_NONE;
+  screen_blanked = false;
 }

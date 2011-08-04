@@ -21,35 +21,30 @@ Copyright_License {
 }
 */
 
-#include "SettingsMap.hpp"
-#include "Asset.hpp"
+#ifndef XCSOAR_UI_STATE_HPP
+#define XCSOAR_UI_STATE_HPP
 
-void
-SETTINGS_MAP::SetDefaults()
-{
-  CircleZoom = true;
-  MaxAutoZoomDistance = fixed(10000); /* 100 km */
-  EnableTopography = true;
-  terrain.SetDefaults();
-  aircraft_symbol = acSimple;
-  EnableTrailDrift = true;
-  EnableDetourCostMarker = false;
-  DisplayTrackBearing = dtbAuto;
-  AutoZoom = false;
-  SnailScaling = true;
-  SnailType = stStandardVario;
-  WindArrowStyle = 0;
-  waypoint.SetDefaults();
-  trail_length = TRAIL_LONG;
-  airspace.SetDefaults();
-  GliderScreenPosition = 20; // 20% from bottom
-  OrientationCircling = TRACKUP;
-  OrientationCruise = TRACKUP;
-  EnableFLARMGauge = true;
-  AutoCloseFlarmDialog = false;
-  EnableFLARMMap = true;
-  EnableAutoBlank = false;
-  EnableThermalProfile = false;
+#include "DisplayMode.hpp"
 
-  SetSystemTimeFromGPS = is_altair() && is_embedded();
-}
+/**
+ * The state of the user interface.
+ */
+struct UIState {
+  /**
+   * Are the info boxes showing an "auxiliary" set?
+   */
+  bool auxiliary_enabled;
+
+  /**
+   * Which "auxiliary" set is visible if #auxiliary_enabled is true?
+   */
+  unsigned auxiliary_index;
+
+  DisplayMode force_display_mode;
+
+  bool screen_blanked;
+
+  void Clear();
+};
+
+#endif

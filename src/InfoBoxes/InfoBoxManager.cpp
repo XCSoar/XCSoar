@@ -44,6 +44,7 @@ Copyright_License {
 #include "Dialogs/ComboPicker.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 #include "Interface.hpp"
+#include "UIState.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -182,8 +183,10 @@ InfoBoxManager::Event_Select(int i)
 unsigned
 InfoBoxManager::GetCurrentPanel()
 {
-  if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo) {
-    unsigned panel = XCSoarInterface::SettingsMap().AuxiliaryInfoBoxPanel;
+  const UIState &ui_state = CommonInterface::GetUIState();
+
+  if (ui_state.auxiliary_enabled) {
+    unsigned panel = ui_state.auxiliary_index;
     if (panel >= InfoBoxManagerConfig::MAX_INFOBOX_PANELS)
       panel = PANEL_AUXILIARY;
     return panel;
@@ -371,7 +374,7 @@ InfoBoxManager::InfoBoxDrawIfDirty()
   // of drawing the screen
 
   if (InfoBoxesDirty && !InfoBoxesHidden &&
-      !XCSoarInterface::SettingsMap().ScreenBlanked) {
+      !CommonInterface::GetUIState().screen_blanked) {
     DisplayInfoBox();
     InfoBoxesDirty = false;
   }

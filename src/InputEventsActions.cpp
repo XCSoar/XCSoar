@@ -51,6 +51,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Device/device.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
+#include "UIState.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"
 #include "Math/FastMath.h"
@@ -252,6 +253,8 @@ InputEvents::eventScreenModes(const TCHAR *misc)
 
   using namespace Pages;
 
+  const UIState &ui_state = CommonInterface::GetUIState();
+
   if (_tcscmp(misc, _T("normal")) == 0) {
     PageLayout pl(PageLayout::tlMapAndInfoBoxes);
     OpenLayout(pl);
@@ -259,7 +262,7 @@ InputEvents::eventScreenModes(const TCHAR *misc)
     PageLayout pl(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(false, 3));
     OpenLayout(pl);
   } else if (_tcscmp(misc, _T("toggleauxiliary")) == 0) {
-    PageLayout pl(!XCSoarInterface::SettingsMap().EnableAuxiliaryInfo ?
+    PageLayout pl(!ui_state.auxiliary_enabled ?
       PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(false, 3)) :
       PageLayout(PageLayout::tlMapAndInfoBoxes));
     OpenLayout(pl);
@@ -272,7 +275,7 @@ InputEvents::eventScreenModes(const TCHAR *misc)
   } else if (_tcscmp(misc, _T("show")) == 0) {
     if (XCSoarInterface::main_window.GetFullScreen())
       Message::AddMessage(_("Screen Mode Full"));
-    else if (XCSoarInterface::SettingsMap().EnableAuxiliaryInfo)
+    else if (ui_state.auxiliary_enabled)
         Message::AddMessage(_("Auxiliary InfoBoxes"));
     else
         Message::AddMessage(_("Default InfoBoxes"));
@@ -1492,20 +1495,21 @@ InputEvents::eventExit(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventUserDisplayModeForce(const TCHAR *misc)
 {
-  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
+  UIState &ui_state = CommonInterface::SetUIState();
 
   if (_tcscmp(misc, _T("unforce")) == 0)
-    settings_map.UserForceDisplayMode = DM_NONE;
+    ui_state.force_display_mode = DM_NONE;
   else if (_tcscmp(misc, _T("forceclimb")) == 0)
-    settings_map.UserForceDisplayMode = DM_CIRCLING;
+    ui_state.force_display_mode = DM_CIRCLING;
   else if (_tcscmp(misc, _T("forcecruise")) == 0)
-    settings_map.UserForceDisplayMode = DM_CRUISE;
+    ui_state.force_display_mode = DM_CRUISE;
   else if (_tcscmp(misc, _T("forcefinal")) == 0)
-    settings_map.UserForceDisplayMode = DM_FINAL_GLIDE;
+    ui_state.force_display_mode = DM_FINAL_GLIDE;
   else if (_tcscmp(misc, _T("show")) == 0)
     Message::AddMessage(_("Map labels on"));
 
-  ActionInterface::SendSettingsMap(true);
+  /* trigger mode update by GlueMapWindow */
+  CommonInterface::main_window.full_redraw();
 }
 
 void

@@ -27,6 +27,7 @@ Copyright_License {
 #include "InterfaceBlackboard.hpp"
 #include "Compiler.h"
 
+struct UIState;
 class MainWindow;
 class StatusMessageList;
 
@@ -34,6 +35,7 @@ class StatusMessageList;
  * Class to hold data/methods accessible by all interface subsystems
  */
 class CommonInterface {
+  static UIState ui_state;
   static InterfaceBlackboard blackboard;
 
 protected:
@@ -116,6 +118,14 @@ public:
   gcc_const
   static SETTINGS_MAP& SetSettingsMap() {
     return SetUISettings().map;
+  }
+
+  static const UIState &GetUIState() {
+    return ui_state;
+  }
+
+  static UIState &SetUIState() {
+    return ui_state;
   }
 
   static void ReadBlackboardBasic(const MoreData &nmea_info) {

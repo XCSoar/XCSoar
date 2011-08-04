@@ -92,6 +92,7 @@ Copyright_License {
 #include "Pages.hpp"
 #include "Weather/NOAAGlue.hpp"
 #include "Plane/PlaneGlue.hpp"
+#include "UIState.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "DrawThread.hpp"
@@ -270,6 +271,7 @@ XCSoarInterface::Startup()
 
   SetSettingsComputer().SetDefaults();
   SetUISettings().SetDefaults();
+  SetUIState().Clear();
 
   if (!LoadProfile())
     return false;

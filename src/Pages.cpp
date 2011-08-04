@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Pages.hpp"
-
+#include "UIState.hpp"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -119,22 +119,23 @@ Pages::Open(unsigned page)
 void
 Pages::OpenLayout(PageLayout &layout)
 {
+  UIState &ui_state = CommonInterface::SetUIState();
+
   switch (layout.topLayout) {
     case PageLayout::tlMap:
       XCSoarInterface::main_window.SetFullScreen(true);
-      XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
+      ui_state.auxiliary_enabled = false;
       break;
     case PageLayout::tlMapAndInfoBoxes:
       if (!layout.infoBoxConfig.autoSwitch &&
           layout.infoBoxConfig.panel < InfoBoxManagerConfig::MAX_INFOBOX_PANELS) {
         XCSoarInterface::main_window.SetFullScreen(false);
-        XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = true;
-        XCSoarInterface::SetSettingsMap().AuxiliaryInfoBoxPanel = layout.infoBoxConfig.panel;
+        ui_state.auxiliary_enabled = true;
+        ui_state.auxiliary_index = layout.infoBoxConfig.panel;
       }
       else {
         XCSoarInterface::main_window.SetFullScreen(false);
-        XCSoarInterface::SetSettingsMap().EnableAuxiliaryInfo = false;
-        XCSoarInterface::SetSettingsMap().AuxiliaryInfoBoxPanel = 0;
+        ui_state.auxiliary_enabled = false;
       }
       break;
     case PageLayout::tlEmpty:

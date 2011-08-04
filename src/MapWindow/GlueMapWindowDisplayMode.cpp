@@ -187,7 +187,7 @@ GlueMapWindow::UpdateDisplayMode()
   /* not using MapWindowBlackboard here because these methods are
      called by the main thread */
   enum DisplayMode new_mode =
-    GetNewDisplayMode(CommonInterface::SettingsMap(),
+    GetNewDisplayMode(CommonInterface::GetUIState(),
                       CommonInterface::Calculated());
 
   if (DisplayMode != new_mode && new_mode == DM_CIRCLING)

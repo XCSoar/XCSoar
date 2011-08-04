@@ -28,6 +28,7 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Hardware/Battery.hpp"
 #include "Hardware/Display.hpp"
+#include "UIState.hpp"
 
 /** timeout of display/battery mode in quarter seconds */
 static const unsigned DISPLAYTIMEOUTMAX = 60 * 4;
@@ -49,12 +50,14 @@ BlankDisplay(bool doblank)
     // can't do it, not supported
     return;
 
+  UIState &ui_state = CommonInterface::SetUIState();
+
   if (doblank) {
     if (Power::External::Status == Power::External::OFF) {
       // Power off the display
       Display::Blank(true);
       oldblank = true;
-      XCSoarInterface::SetSettingsMap().ScreenBlanked = true;
+      ui_state.screen_blanked = true;
     } else {
       ResetDisplayTimeOut();
     }
@@ -63,7 +66,7 @@ BlankDisplay(bool doblank)
     // Power on the display
     Display::Blank(false);
     oldblank = false;
-    XCSoarInterface::SetSettingsMap().ScreenBlanked = false;
+    ui_state.screen_blanked = false;
   }
 }
 

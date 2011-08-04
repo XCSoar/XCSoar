@@ -42,6 +42,9 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "CalculationThread.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "UIState.hpp"
+
+UIState CommonInterface::ui_state;
 
 bool CommonInterface::movement_detected = false;
 
@@ -177,7 +180,7 @@ XCSoarInterface::Debounce(void)
 
   ResetDisplayTimeOut();
 
-  if (SettingsMap().ScreenBlanked)
+  if (GetUIState().screen_blanked)
     // prevent key presses working if screen is blanked,
     // so a key press just triggers turning the display on again
     return false;
@@ -208,7 +211,7 @@ ActionInterface::DisplayModes()
   if (main_window.vario) {
     // Determine whether the vario gauge should be drawn
     main_window.vario->set_visible(!full_screen && vario_visible() &&
-                                   !SettingsMap().ScreenBlanked);
+                                   !GetUIState().screen_blanked);
   }
 
   if (Basic().flarm.NewTraffic) {

@@ -35,6 +35,8 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "UIState.hpp"
+#include "Interface.hpp"
 
 #include <stdio.h>
 
@@ -353,7 +355,8 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     break;
   }
 
-  if (SettingsMap().EnableAuxiliaryInfo) {
+  const UIState &ui_state = CommonInterface::GetUIState();
+  if (ui_state.auxiliary_enabled) {
     _tcscat(ScaleInfo, InfoBoxManager::GetCurrentPanelName());
     _tcscat(ScaleInfo, _T(" "));
   }
