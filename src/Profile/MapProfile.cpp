@@ -130,6 +130,5 @@ Profile::Load(SETTINGS_MAP &settings)
   Get(szProfileAutoBlank, settings.EnableAutoBlank);
 #endif
 
-  Get(szProfileSetSystemTimeFromGPS, settings.SetSystemTimeFromGPS);
   Get(szProfileEnableThermalProfile, settings.EnableThermalProfile);
 }

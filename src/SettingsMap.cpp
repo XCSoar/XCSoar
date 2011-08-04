@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "SettingsMap.hpp"
-#include "Asset.hpp"
 
 void
 SETTINGS_MAP::SetDefaults()
@@ -50,6 +49,4 @@ SETTINGS_MAP::SetDefaults()
   EnableFLARMMap = true;
   EnableAutoBlank = false;
   EnableThermalProfile = false;
-
-  SetSystemTimeFromGPS = is_altair() && is_embedded();
 }

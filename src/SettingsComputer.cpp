@@ -24,6 +24,7 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "OS/Clock.hpp"
+#include "Asset.hpp"
 
 void
 SETTINGS_WIND::SetDefaults()
@@ -120,6 +121,7 @@ SETTINGS_COMPUTER::SetDefaults()
 
   EnableExternalTriggerCruise =false;
   AverEffTime = 0;
+  SetSystemTimeFromGPS = is_altair() && is_embedded();
   UTCOffset = GetSystemUTCOffset();
   pressure.SetStandardPressure();
   pressure_available.Clear();

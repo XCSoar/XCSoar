@@ -133,8 +133,6 @@ struct SETTINGS_MAP {
   bool EnableTAGauge;
   bool EnableFLARMMap;
   bool EnableAutoBlank;
-  /** Update system time from GPS time */
-  bool SetSystemTimeFromGPS;
 
   /** Display climb band on map */
   bool EnableThermalProfile;

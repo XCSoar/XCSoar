@@ -94,7 +94,8 @@ SystemClockTimer()
   // system clock to the GPS time.
   static bool sysTimeInitialised = false;
 
-  if (basic.connected && CommonInterface::SettingsMap().SetSystemTimeFromGPS
+  if (basic.connected &&
+      CommonInterface::SettingsComputer().SetSystemTimeFromGPS
       && basic.gps.real
       /* assume that we only have a valid date and time when we have a
          full GPS fix */

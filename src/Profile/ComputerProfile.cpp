@@ -117,6 +117,7 @@ Profile::Load(SETTINGS_COMPUTER &settings)
   if (Get(szProfileAverEffTime, Temp))
     settings.AverEffTime = Temp;
 
+  Get(szProfileSetSystemTimeFromGPS, settings.SetSystemTimeFromGPS);
   Get(szProfileUTCOffset, settings.UTCOffset);
   if (settings.UTCOffset > 12 * 3600)
     settings.UTCOffset -= 24 * 3600;

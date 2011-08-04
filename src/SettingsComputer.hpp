@@ -209,6 +209,9 @@ struct SETTINGS_COMPUTER:
 
   short AverEffTime;
 
+  /** Update system time from GPS time */
+  bool SetSystemTimeFromGPS;
+
   /** local time adjustment */
   int UTCOffset;
 
