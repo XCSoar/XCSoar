@@ -402,6 +402,11 @@ public:
       return td.point;
     }
 
+    const TracePoint *operator->() const {
+      const TraceDelta &td = (const TraceDelta &)*iterator;
+      return &td.point;
+    }
+
     const_iterator &operator++() {
       ++iterator;
       return *this;
