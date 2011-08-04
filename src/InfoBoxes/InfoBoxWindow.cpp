@@ -118,9 +118,6 @@ InfoBoxWindow::SetValue(Angle value, const TCHAR *suffix)
 void
 InfoBoxWindow::SetColor(int value)
 {
-  if (!Appearance.InfoBoxColors)
-    value = 0;
-
   if (colorValue == value)
     return;
 
@@ -131,9 +128,6 @@ InfoBoxWindow::SetColor(int value)
 void
 InfoBoxWindow::SetColorBottom(int value)
 {
-  if (!Appearance.InfoBoxColors)
-    value = 0;
-
   if (colorComment == value)
     return;
 
@@ -144,9 +138,6 @@ InfoBoxWindow::SetColorBottom(int value)
 void
 InfoBoxWindow::SetColorTop(int value)
 {
-  if (!Appearance.InfoBoxColors)
-    value = 0;
-
   if (colorTitle == value)
     return;
 

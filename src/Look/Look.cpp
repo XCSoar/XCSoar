@@ -50,5 +50,5 @@ Look::InitialiseConfigured(bool inverse, bool colors,
   waypoint.Initialise(waypoint_settings);
   airspace.Initialise(airspace_settings);
   cross_section.Initialise();
-  info_box.Initialise(inverse);
+  info_box.Initialise(inverse, colors);
 }

@@ -25,6 +25,8 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 
+#include <algorithm>
+
 #define COLOR_INVERSE_RED Color(0xff, 0x70, 0x70)
 #define COLOR_INVERSE_BLUE Color(0x90, 0x90, 0xff)
 #define COLOR_INVERSE_YELLOW COLOR_YELLOW
@@ -32,7 +34,7 @@ Copyright_License {
 #define COLOR_INVERSE_MAGENTA COLOR_MAGENTA
 
 void
-InfoBoxLook::Initialise(bool inverse)
+InfoBoxLook::Initialise(bool inverse, bool use_colors)
 {
   value.fg_color = title.fg_color = comment.fg_color =
     inverse ? COLOR_WHITE : COLOR_BLACK;
@@ -48,9 +50,12 @@ InfoBoxLook::Initialise(bool inverse)
   small_font = &Fonts::InfoBoxSmall;
 
   colors[0] = border_color;
-  colors[1] = inverse ? COLOR_INVERSE_RED : COLOR_RED;
-  colors[2] = inverse ? COLOR_INVERSE_BLUE : COLOR_BLUE;
-  colors[3] = inverse ? COLOR_INVERSE_GREEN : COLOR_GREEN;
-  colors[4] = inverse ? COLOR_INVERSE_YELLOW : COLOR_YELLOW;
-  colors[5] = inverse ? COLOR_INVERSE_MAGENTA : COLOR_MAGENTA;
+  if (use_colors) {
+    colors[1] = inverse ? COLOR_INVERSE_RED : COLOR_RED;
+    colors[2] = inverse ? COLOR_INVERSE_BLUE : COLOR_BLUE;
+    colors[3] = inverse ? COLOR_INVERSE_GREEN : COLOR_GREEN;
+    colors[4] = inverse ? COLOR_INVERSE_YELLOW : COLOR_YELLOW;
+    colors[5] = inverse ? COLOR_INVERSE_MAGENTA : COLOR_MAGENTA;
+  } else
+    std::fill(colors + 1, colors + 6, border_color);
 }
