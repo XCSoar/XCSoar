@@ -391,34 +391,32 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   if ((way_points == NULL) || way_points->empty())
     return;
 
+  WaypointVisitorMap v(projection, settings, look, task_behaviour);
+
   if (task != NULL) {
-    WaypointVisitorMap v(projection, settings, look, task_behaviour);
+    ProtectedTaskManager::Lease task_manager(*task);
 
-    {
-      ProtectedTaskManager::Lease task_manager(*task);
-
-      // task items come first, this is the only way we know that an item is in task,
-      // and we won't add it if it is already there
-      if (task_manager->stats_valid()) {
-        v.set_task_valid();
-      }
-
-      const AbstractTask *atask = task_manager->get_active_task();
-      if (atask != NULL)
-        atask->tp_CAccept(v);
+    // task items come first, this is the only way we know that an item is in task,
+    // and we won't add it if it is already there
+    if (task_manager->stats_valid()) {
+      v.set_task_valid();
     }
 
-    way_points->visit_within_range(projection.GetGeoScreenCenter(),
-                                   projection.GetScreenDistanceMeters(), v);
-
-    if (route_planner != NULL)
-      v.Calculate(*route_planner);
-
-    v.Draw(canvas);
-
-    MapWaypointLabelRender(canvas,
-                           projection.GetScreenWidth(),
-                           projection.GetScreenHeight(),
-                           label_block, v.labels);
+    const AbstractTask *atask = task_manager->get_active_task();
+    if (atask != NULL)
+      atask->tp_CAccept(v);
   }
+
+  way_points->visit_within_range(projection.GetGeoScreenCenter(),
+                                 projection.GetScreenDistanceMeters(), v);
+
+  if (route_planner != NULL)
+    v.Calculate(*route_planner);
+
+  v.Draw(canvas);
+
+  MapWaypointLabelRender(canvas,
+                         projection.GetScreenWidth(),
+                         projection.GetScreenHeight(),
+                         label_block, v.labels);
 }
