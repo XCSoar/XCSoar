@@ -118,6 +118,8 @@ MainWindow::Initialise()
 void
 MainWindow::InitialiseConfigured()
 {
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+
   PixelRect rc = get_client_rect();
 
   LogStartUp(_T("InfoBox geometry"));
@@ -127,7 +129,7 @@ MainWindow::InitialiseConfigured()
 
   Fonts::SizeInfoboxFont(ib_layout.control_width);
 
-  if (Appearance.UseCustomFonts) {
+  if (ui_settings.custom_fonts) {
     LogStartUp(_T("Load fonts"));
     Fonts::LoadCustom();
   }

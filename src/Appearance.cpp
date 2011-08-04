@@ -28,5 +28,4 @@ struct Appearance Appearance = {
   smAlignCenter,
   true,
   apIbBox,
-  false,
 };

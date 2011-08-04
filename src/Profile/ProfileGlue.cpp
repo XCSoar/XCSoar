@@ -69,9 +69,6 @@ Profile::Use()
 
   Get(szProfileMenuTimeout,
       XCSoarInterface::MenuTimeoutMax);
-
-  Get(szProfileUseCustomFonts,
-      Appearance.UseCustomFonts);
 }
 
 void

@@ -26,6 +26,8 @@ Copyright_License {
 void
 UISettings::SetDefaults()
 {
+  custom_fonts = false;
+
   map.SetDefaults();
   dialog.SetDefaults();
 }

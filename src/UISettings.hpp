@@ -31,6 +31,8 @@ Copyright_License {
  * User interface settings.
  */
 struct UISettings {
+  bool custom_fonts;
+
   SETTINGS_MAP map;
   DialogSettings dialog;
 

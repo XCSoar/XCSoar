@@ -39,7 +39,6 @@ struct Appearance {
   StateMessageAlign_t StateMessageAlign;
   bool InfoBoxColors;
   InfoBoxBorderAppearance_t InfoBoxBorder;
-  bool UseCustomFonts;
 };
 
 extern struct Appearance Appearance;

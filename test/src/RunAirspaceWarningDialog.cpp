@@ -39,7 +39,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"
 #include "ResourceLoader.hpp"
-#include "Appearance.hpp"
 #include "IO/FileLineReader.hpp"
 #include "IO/ConfiguredFile.hpp"
 #include "LocalPath.hpp"
@@ -114,8 +113,6 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Layout::Initialize(640, 480);
 
   Fonts::Initialize();
-  if (Appearance.UseCustomFonts)
-    Fonts::LoadCustom();
 
   dlgAirspaceWarningsShowModal(main_window);
 

@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
-#include "Appearance.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/FontConfig.hpp"
@@ -276,9 +275,11 @@ void dlgConfigFontsShowModal()
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  LoadFormProperty(*wf, _T("prpUseCustomFonts"), Appearance.UseCustomFonts);
+  UISettings &ui_settings = CommonInterface::SetUISettings();
 
-  ShowFontEditButtons(Appearance.UseCustomFonts);
+  LoadFormProperty(*wf, _T("prpUseCustomFonts"), ui_settings.custom_fonts);
+
+  ShowFontEditButtons(ui_settings.custom_fonts);
   RefreshFonts();
 
   FontRegistryChanged = false;
@@ -288,7 +289,7 @@ void dlgConfigFontsShowModal()
 
   changed |= SaveFormProperty(*wf, _T("prpUseCustomFonts"),
                               szProfileUseCustomFonts,
-                              Appearance.UseCustomFonts);
+                              ui_settings.custom_fonts);
 
   TempInfoWindowFont.reset();
   TempTitleWindowFont.reset();

@@ -40,6 +40,8 @@ Profile::Load(DialogSettings &settings)
 void
 Profile::Load(UISettings &settings)
 {
+  Get(szProfileUseCustomFonts, settings.custom_fonts);
+
   Load(settings.map);
   Load(settings.dialog);
 }
