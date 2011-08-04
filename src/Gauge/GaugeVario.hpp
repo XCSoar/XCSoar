@@ -75,10 +75,6 @@ private:
   int xoffset;
   int yoffset;
 
-  Pen sinkThickPen;
-  Pen liftThickPen;
-  Pen blankThickPen;
-
   bool dirty;
 
   bool layout_initialised;

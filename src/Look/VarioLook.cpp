@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "VarioLook.hpp"
+#include "Screen/Layout.hpp"
 #include "Units/Units.hpp"
 #include "resource.h"
 
@@ -47,6 +48,10 @@ VarioLook::Initialise(bool _inverse, bool _colors)
 
   sink_brush.set(sink_color);
   lift_brush.set(lift_color);
+
+  thick_background_pen.set(Layout::Scale(5), background_color);
+  thick_sink_pen.set(Layout::Scale(5), sink_color);
+  thick_lift_pen.set(Layout::Scale(5), lift_color);
 
   background_bitmap.load(Units::GetUserVerticalSpeedUnit() == unKnots
                          ? IDB_VARIOSCALEC : IDB_VARIOSCALEA);

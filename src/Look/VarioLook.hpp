@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/Color.hpp"
 #include "Screen/Brush.hpp"
+#include "Screen/Pen.hpp"
 #include "Screen/Bitmap.hpp"
 
 struct VarioLook {
@@ -36,6 +37,8 @@ struct VarioLook {
   Color sink_color, lift_color;
 
   Brush sink_brush, lift_brush;
+
+  Pen thick_background_pen, thick_sink_pen, thick_lift_pen;
 
   Bitmap background_bitmap;
   unsigned background_x;

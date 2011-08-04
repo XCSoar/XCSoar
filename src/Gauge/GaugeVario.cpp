@@ -79,11 +79,6 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
 
   set(parent, left, top, width, height, style);
 
-  sinkThickPen.set(Layout::Scale(5), look.sink_color);
-  liftThickPen.set(Layout::Scale(5), look.lift_color);
-
-  blankThickPen.set(Layout::Scale(5), look.background_color);
-
   unit_symbol = GetUnitSymbol(Units::Current.VerticalSpeedUnit);
 
   xoffset = get_right();
@@ -287,8 +282,9 @@ GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink, bool clear)
   if (i == sink)
     return;
 
-  canvas.select(clear ? blankThickPen :
-                        (i > sink ? liftThickPen: sinkThickPen));
+  canvas.select(clear
+                ? look.thick_background_pen
+                : (i > sink ? look.thick_lift_pen : look.thick_sink_pen));
 
   if (i > sink)
     canvas.polyline(lines + gmax + sink, i - sink);
