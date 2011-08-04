@@ -26,8 +26,11 @@ Copyright_License {
 #include "resource.h"
 
 void
-VarioLook::Initialise(bool inverse)
+VarioLook::Initialise(bool _inverse, bool _colors)
 {
+  inverse = _inverse;
+  colors = _colors;
+
   if (inverse) {
     background_color = COLOR_BLACK;
     text_color = COLOR_WHITE;

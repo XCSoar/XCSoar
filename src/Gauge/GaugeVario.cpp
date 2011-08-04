@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/FastRotation.hpp"
-#include "Appearance.hpp"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
 
@@ -257,7 +256,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
 void
 GaugeVario::RenderZero(Canvas &canvas)
 {
-  if (Appearance.InverseInfoBox)
+  if (look.inverse)
     canvas.white_pen();
   else
     canvas.black_pen();
@@ -301,7 +300,7 @@ GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink, bool clear)
 
     // clear up naked (sink) edge of polygon, this gives it a nice
     // taper look
-    if (Appearance.InverseInfoBox) {
+    if (look.inverse) {
       canvas.black_brush();
     } else {
       canvas.white_brush();
@@ -318,7 +317,7 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
   canvas.null_pen();
 
   // legacy behaviour
-  if (clear ^ Appearance.InverseInfoBox) {
+  if (clear ^ look.inverse) {
     canvas.white_brush();
   } else {
     canvas.black_brush();
@@ -425,7 +424,7 @@ GaugeVario::RenderValue(Canvas &canvas, int x, int y, DrawInfo_t *diValue,
 
   if (!is_persistent() || (dirty && unit_symbol != NULL &&
                            diLabel->last_unit_symbol != unit_symbol)) {
-    RasterPoint BitmapUnitPos = unit_symbol->get_origin(Appearance.InverseInfoBox
+    RasterPoint BitmapUnitPos = unit_symbol->get_origin(look.inverse
                                                   ? UnitSymbol::INVERSE_GRAY
                                                   : UnitSymbol::GRAY);
     PixelSize BitmapUnitSize = unit_symbol->get_size();
@@ -493,7 +492,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
 
     canvas.null_pen();
 
-    if (Appearance.InfoBoxColors) {
+    if (look.colors) {
       if (positive(vdiff)) {
         // too slow
         canvas.select(look.sink_brush);
@@ -501,7 +500,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
         canvas.select(look.lift_brush);
       }
     } else {
-      if (Appearance.InverseInfoBox)
+      if (look.inverse)
         canvas.white_brush();
       else
         canvas.black_brush();

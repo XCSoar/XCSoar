@@ -57,7 +57,7 @@ struct Look {
   InfoBoxLook info_box;
 
   void Initialise();
-  void InitialiseConfigured(bool inverse,
+  void InitialiseConfigured(bool inverse, bool colors,
                             const WaypointRendererSettings &waypoint_settings,
                             const AirspaceRendererSettings &airspace_settings);
 };

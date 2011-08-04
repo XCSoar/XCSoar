@@ -29,6 +29,8 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 
 struct VarioLook {
+  bool inverse, colors;
+
   Color background_color, text_color, dimmed_text_color;
 
   Color sink_color, lift_color;
@@ -40,7 +42,7 @@ struct VarioLook {
 
   Bitmap climb_bitmap;
 
-  void Initialise(bool inverse);
+  void Initialise(bool inverse, bool colors);
 };
 
 #endif

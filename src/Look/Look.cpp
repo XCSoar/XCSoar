@@ -37,13 +37,13 @@ Look::Initialise()
 }
 
 void
-Look::InitialiseConfigured(bool inverse,
+Look::InitialiseConfigured(bool inverse, bool colors,
                            const WaypointRendererSettings &waypoint_settings,
                            const AirspaceRendererSettings &airspace_settings)
 {
   dialog.Initialise(Fonts::MapBold, Fonts::Map,
                     Fonts::MapBold, Fonts::MapBold);
-  vario.Initialise(inverse);
+  vario.Initialise(inverse, colors);
   chart.Initialise();
   thermal_band.Initialise();
   trace_history.Initialise(inverse);

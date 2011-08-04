@@ -134,6 +134,7 @@ MainWindow::InitialiseConfigured()
 
   assert(look != NULL);
   look->InitialiseConfigured(Appearance.InverseInfoBox,
+                             Appearance.InfoBoxColors,
                              CommonInterface::SettingsMap().waypoint,
                              CommonInterface::SettingsMap().airspace);
 
