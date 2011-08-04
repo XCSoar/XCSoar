@@ -41,7 +41,6 @@ Profile::Use()
   Load(CommonInterface::SetUISettings());
 
   LoadUnits();
-  Profile::Load(infoBoxManagerConfig);
 
   Get(szProfileDebounceTimeout, XCSoarInterface::debounceTimeout);
 

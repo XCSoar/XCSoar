@@ -30,8 +30,6 @@ Copyright_License {
 
 struct InfoBoxSettings;
 
-extern InfoBoxSettings infoBoxManagerConfig;
-
 struct InfoBoxLook;
 class InfoBoxWindow;
 

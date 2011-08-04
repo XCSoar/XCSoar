@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Profile/UIProfile.hpp"
 #include "Profile/MapProfile.hpp"
+#include "Profile/InfoBoxConfig.hpp"
 #include "Profile/Profile.hpp"
 #include "UISettings.hpp"
 
@@ -43,5 +44,6 @@ Profile::Load(UISettings &settings)
   Get(szProfileUseCustomFonts, settings.custom_fonts);
 
   Load(settings.map);
+  Load(settings.info_boxes);
   Load(settings.dialog);
 }

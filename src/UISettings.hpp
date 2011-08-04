@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_UI_SETTINGS_HPP
 
 #include "SettingsMap.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
 
 /**
@@ -34,6 +35,7 @@ struct UISettings {
   bool custom_fonts;
 
   SETTINGS_MAP map;
+  InfoBoxSettings info_boxes;
   DialogSettings dialog;
 
   void SetDefaults();

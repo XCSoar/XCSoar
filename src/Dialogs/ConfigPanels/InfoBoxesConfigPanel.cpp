@@ -53,8 +53,10 @@ buttonIndex(const WndButton *button)
 static void
 OnInfoBoxesButton(WndButton &button)
 {
+  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
+
   unsigned i = buttonIndex(&button);
-  InfoBoxSettings::Panel &data = infoBoxManagerConfig.panels[i];
+  InfoBoxSettings::Panel &data = settings.panels[i];
 
   bool changed =
     dlgConfigInfoboxesShowModal(wf->GetMainWindow(), wf->GetLook(),
@@ -62,10 +64,10 @@ OnInfoBoxesButton(WndButton &button)
                                 i >= InfoBoxSettings::PREASSIGNED_PANELS);
   if (changed) {
     data.modified = true;
-    Profile::Save(infoBoxManagerConfig);
+    Profile::Save(settings);
     Profile::Save();
     LogDebug(_T("InfoBox configuration: Changes saved"));
-    buttons[i]->SetCaption(gettext(infoBoxManagerConfig.panels[i].name));
+    buttons[i]->SetCaption(gettext(data.name));
   }
 }
 
@@ -76,13 +78,17 @@ InfoBoxesConfigPanel::Init(WndForm *_wf)
   assert(_wf != NULL);
   wf = _wf;
 
+  const InfoBoxSettings &settings = CommonInterface::GetUISettings().info_boxes;
+
   for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++) {
+    const InfoBoxSettings::Panel &data = settings.panels[i];
+
     TCHAR buffer[32];
     _stprintf(buffer, _T("cmdInfoBoxesPanel%u"), i);
     buttons[i] = (WndButton*) wf->FindByName(buffer);
     if (buttons[i]) {
       buttons[i]->SetOnClickNotify(OnInfoBoxesButton);
-      buttons[i]->SetCaption(gettext(infoBoxManagerConfig.panels[i].name));
+      buttons[i]->SetCaption(gettext(data.name));
     }
   }
 }

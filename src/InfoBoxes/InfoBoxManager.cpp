@@ -79,8 +79,6 @@ static bool InfoBoxesHidden = false;
 
 InfoBoxWindow *InfoBoxes[InfoBoxSettings::Panel::MAX_CONTENTS];
 
-InfoBoxSettings infoBoxManagerConfig;
-
 void
 InfoBoxFullWindow::on_paint(Canvas &canvas)
 {
@@ -202,6 +200,9 @@ InfoBoxManager::GetCurrentPanel()
 const TCHAR*
 InfoBoxManager::GetPanelName(unsigned panelIdx)
 {
+  const InfoBoxSettings &infoBoxManagerConfig =
+    CommonInterface::GetUISettings().info_boxes;
+
   return gettext(infoBoxManagerConfig.panels[panelIdx].name);
 }
 
@@ -216,6 +217,9 @@ InfoBoxManager::GetType(unsigned box, unsigned panelIdx)
 {
   assert(box < InfoBoxSettings::Panel::MAX_CONTENTS);
   assert(panelIdx < InfoBoxSettings::MAX_PANELS);
+
+  const InfoBoxSettings &infoBoxManagerConfig =
+    CommonInterface::GetUISettings().info_boxes;
 
   return infoBoxManagerConfig.panels[panelIdx].contents[box];
 }
@@ -239,6 +243,9 @@ InfoBoxManager::GetTitle(unsigned box)
 bool
 InfoBoxManager::IsEmpty(unsigned panelIdx)
 {
+  const InfoBoxSettings &infoBoxManagerConfig =
+    CommonInterface::GetUISettings().info_boxes;
+
   return infoBoxManagerConfig.panels[panelIdx].IsEmpty();
 }
 
@@ -247,6 +254,9 @@ InfoBoxManager::SetType(unsigned i, unsigned type, unsigned panelIdx)
 {
   assert(i < InfoBoxSettings::Panel::MAX_CONTENTS);
   assert(panelIdx < InfoBoxSettings::MAX_PANELS);
+
+  InfoBoxSettings &infoBoxManagerConfig =
+    CommonInterface::SetUISettings().info_boxes;
 
   if ((unsigned int) type != infoBoxManagerConfig.panels[panelIdx].contents[i]) {
     infoBoxManagerConfig.panels[panelIdx].contents[i] = type;
@@ -614,5 +624,8 @@ InfoBoxManager::SetupFocused(const int id)
 
   SetType(i, new_type, panel);
   DisplayInfoBox();
+
+  const InfoBoxSettings &infoBoxManagerConfig =
+    CommonInterface::GetUISettings().info_boxes;
   Profile::Save(infoBoxManagerConfig);
 }

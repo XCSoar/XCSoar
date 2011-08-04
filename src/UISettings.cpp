@@ -29,5 +29,6 @@ UISettings::SetDefaults()
   custom_fonts = false;
 
   map.SetDefaults();
+  info_boxes.SetDefaults();
   dialog.SetDefaults();
 }
