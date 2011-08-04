@@ -70,33 +70,9 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
     if (src.empty())
       return;
 
-    /* skip the trace points that are before min_time */
-    Trace::const_iterator i = src.begin(), end = src.end();
-    unsigned skipped = 0;
-    while (true) {
-      if (i == end)
-        /* nothing left */
-        return;
-
-      if (i->time >= min_time)
-        /* found the first point that is within range */
-        break;
-
-      ++i;
-      ++skipped;
-    }
-
-    assert(skipped < src.size());
-
-    trace.reserve(src.size() - skipped);
-    const unsigned range =
-      src.ProjectRange(projection.GetGeoScreenCenter(),
+    src.GetTracePoints(trace, min_time,
+                       projection.GetGeoScreenCenter(),
                        projection.DistancePixelsToMeters(3));
-    const unsigned sq_range = range * range;
-    do {
-      trace.push_back(*i);
-      i.NextSquareRange(sq_range, end);
-    } while (i != end);
   }
 
   if (trace.empty())

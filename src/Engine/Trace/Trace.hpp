@@ -330,6 +330,13 @@ public:
   void get_trace_points(TracePointVector& iov) const;
 
   /**
+   * Fill the vector with trace points, not before #min_time, minimum
+   * resolution #min_distance.
+   */
+  void GetTracePoints(TracePointVector &v, unsigned min_time,
+                      const GeoPoint &location, fixed resolution) const;
+
+  /**
    * Retrieve a vector of the earliest and latest trace points
    * 
    * @param iov Vector of trace points

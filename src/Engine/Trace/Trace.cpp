@@ -331,6 +331,37 @@ Trace::get_trace_points(TracePointVector& iov) const
 }
 
 void
+Trace::GetTracePoints(TracePointVector &v, unsigned min_time,
+                      const GeoPoint &location, fixed min_distance) const
+{
+  /* skip the trace points that are before min_time */
+  Trace::const_iterator i = begin(), end = this->end();
+  unsigned skipped = 0;
+  while (true) {
+    if (i == end)
+      /* nothing left */
+      return;
+
+    if (i->time >= min_time)
+      /* found the first point that is within range */
+      break;
+
+    ++i;
+    ++skipped;
+  }
+
+  assert(skipped < size());
+
+  v.reserve(size() - skipped);
+  const unsigned range = ProjectRange(location, min_distance);
+  const unsigned sq_range = range * range;
+  do {
+    v.push_back(*i);
+    i.NextSquareRange(sq_range, end);
+  } while (i != end);
+}
+
+void
 Trace::get_trace_edges(TracePointVector &v) const
 {
   v.clear();
