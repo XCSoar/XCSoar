@@ -251,8 +251,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
     canvas.scale_copy(x, y, look.climb_bitmap, 12, 0, 12, 12);
   else if (is_persistent())
     canvas.fill_rectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
-                          Appearance.InverseInfoBox
-                          ? COLOR_BLACK : COLOR_WHITE);
+                          look.background_color);
 }
 
 void
