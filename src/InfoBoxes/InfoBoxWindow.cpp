@@ -274,7 +274,7 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
       return;
 #endif
 
-    RasterPoint origin = unit_symbol->get_origin(Appearance.InverseInfoBox
+    RasterPoint origin = unit_symbol->get_origin(look.inverse
                                            ? UnitSymbol::INVERSE
                                            : UnitSymbol::NORMAL);
 

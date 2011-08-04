@@ -34,8 +34,10 @@ Copyright_License {
 #define COLOR_INVERSE_MAGENTA COLOR_MAGENTA
 
 void
-InfoBoxLook::Initialise(bool inverse, bool use_colors)
+InfoBoxLook::Initialise(bool _inverse, bool use_colors)
 {
+  inverse = _inverse;
+
   value.fg_color = title.fg_color = comment.fg_color =
     inverse ? COLOR_WHITE : COLOR_BLACK;
   background_brush.set(inverse ? COLOR_BLACK : COLOR_WHITE);

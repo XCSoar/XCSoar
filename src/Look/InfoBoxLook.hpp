@@ -32,6 +32,8 @@ class Font;
 struct InfoBoxLook {
   static const unsigned BORDER_WIDTH = 1;
 
+  bool inverse;
+
   Pen border_pen, selector_pen;
   Brush background_brush;
 
