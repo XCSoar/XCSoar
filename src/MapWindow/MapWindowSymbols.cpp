@@ -27,7 +27,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
-#include "Appearance.hpp"
 #include "Units/Units.hpp"
 #include "Look/TaskLook.hpp"
 

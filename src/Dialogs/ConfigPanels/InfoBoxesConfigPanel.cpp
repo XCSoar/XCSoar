@@ -30,7 +30,6 @@ Copyright_License {
 #include "Dialogs/Dialogs.h"
 #include "Interface.hpp"
 #include "MainWindow.hpp"
-#include "Appearance.hpp"
 #include "InfoBoxesConfigPanel.hpp"
 #include "LogFile.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"

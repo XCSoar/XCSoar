@@ -31,7 +31,6 @@ Copyright_License {
 #include "Screen/Color.hpp"
 #include "Screen/Pen.hpp"
 #include "Screen/Canvas.hpp"
-#include "Appearance.hpp"
 #include "SettingsMap.hpp"
 #include "resource.h"
 #include "Asset.hpp"
