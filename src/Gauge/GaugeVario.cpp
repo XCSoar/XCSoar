@@ -309,14 +309,14 @@ GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink, bool clear)
     canvas.polyline(lines + gmax + i, sink - i);
 
   if (!clear) {
+    canvas.null_pen();
+
     // clear up naked (sink) edge of polygon, this gives it a nice
     // taper look
     if (Appearance.InverseInfoBox) {
       canvas.black_brush();
-      canvas.black_pen();
     } else {
       canvas.white_brush();
-      canvas.white_pen();
     }
     canvas.polygon(getPolygon(sink), 3);
   }
@@ -327,13 +327,13 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
 {
   dirty = true;
 
+  canvas.null_pen();
+
   // legacy behaviour
   if (clear ^ Appearance.InverseInfoBox) {
     canvas.white_brush();
-    canvas.white_pen();
   } else {
     canvas.black_brush();
-    canvas.black_pen();
   }
 
   if (average)
