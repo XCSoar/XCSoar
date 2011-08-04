@@ -391,7 +391,7 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
   if ((way_points == NULL) || way_points->empty())
     return;
 
-  if (task != NULL && route_planner != NULL) {
+  if (task != NULL) {
     WaypointVisitorMap v(projection, settings, look, task_behaviour);
 
     {
@@ -411,7 +411,9 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
     way_points->visit_within_range(projection.GetGeoScreenCenter(),
                                    projection.GetScreenDistanceMeters(), v);
 
-    v.Calculate(*route_planner);
+    if (route_planner != NULL)
+      v.Calculate(*route_planner);
+
     v.Draw(canvas);
 
     MapWaypointLabelRender(canvas,
