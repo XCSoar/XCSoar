@@ -530,8 +530,7 @@ dlgTargetShowModal(int TargetPoint)
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_TARGET_L") :
                                       _T("IDR_XML_TARGET"));
-  if (!wf)
-    return;
+  assert(wf != NULL);
 
   GlueMapWindow &map_window = *XCSoarInterface::main_window.map;
   bool oldEnablePan = map_window.IsPanning();
@@ -574,5 +573,4 @@ dlgTargetShowModal(int TargetPoint)
   XCSoarInterface::main_window.LeaveCustomView();
 
   delete wf;
-  wf = NULL;
 }
