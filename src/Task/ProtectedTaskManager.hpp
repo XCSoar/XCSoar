@@ -132,18 +132,6 @@ public:
   bool isInSector (const unsigned TPindex, const AircraftState &ref) const;
 
   /**
-   * Accessor to get target location of specified tp
-   *
-   * @param TPindex index of tp in task
-   *
-   * @return Target location or fallback_location if TPindex is
-   *    invalid or has no target
-   */
-  gcc_pure
-  const GeoPoint& get_location_target(const unsigned TPindex,
-     const GeoPoint& fallback_location) const;
-
-  /**
    * Accessor for locked state of target of specified tp
    *
    * @param TPindex index of tp in task

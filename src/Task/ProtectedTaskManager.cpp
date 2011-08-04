@@ -82,13 +82,6 @@ ProtectedTaskManager::isInSector (const unsigned TPindex, const AircraftState &r
   return lease->isInSector(TPindex, ref);
 }
 
-const GeoPoint&
-ProtectedTaskManager::get_location_target(const unsigned TPindex, const GeoPoint& fallback_location) const
-{
-  Lease lease(*this);
-  return lease->get_location_target(TPindex, fallback_location);
-}
-
 bool
 ProtectedTaskManager::target_is_locked(const unsigned TPindex) const
 {
