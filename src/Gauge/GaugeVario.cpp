@@ -474,22 +474,19 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
     lastVdiff = vdiff;
 
     if (is_persistent()) {
-      Color background_color = Appearance.InverseInfoBox
-        ? COLOR_BLACK : COLOR_WHITE;
-
       // bottom (too slow)
       canvas.fill_rectangle(x, ybottom + YOFFSET,
                             x + ARROWXSIZE * 2 + 1,
                             ybottom + YOFFSET + nary + ARROWYSIZE +
                             Layout::FastScale(2),
-                            background_color);
+                            look.background_color);
 
       // top (too fast)
       canvas.fill_rectangle(x, ytop - YOFFSET + 1,
                             x + ARROWXSIZE * 2  +1,
                             ytop - YOFFSET - nary + 1 - ARROWYSIZE -
                             Layout::FastScale(2),
-                            background_color);
+                            look.background_color);
     }
 
     RenderClimb(canvas);
