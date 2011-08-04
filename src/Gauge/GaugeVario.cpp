@@ -28,7 +28,6 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Math/FastRotation.hpp"
 #include "Appearance.hpp"
-#include "resource.h"
 #include "LogFile.hpp"
 #include "Profile/Profile.hpp"
 
@@ -81,18 +80,8 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
 
   set(parent, left, top, width, height, style);
 
-  // load vario scale
-  hDrawBitMap.load(Units::GetUserVerticalSpeedUnit() == unKnots ?
-                   IDB_VARIOSCALEC : IDB_VARIOSCALEA);
-
   sinkThickPen.set(Layout::Scale(5), look.sink_color);
   liftThickPen.set(Layout::Scale(5), look.lift_color);
-
-  if (Appearance.InverseInfoBox) {
-    hBitmapClimb.load(IDB_CLIMBSMALLINV);
-  } else {
-    hBitmapClimb.load(IDB_CLIMBSMALL);
-  }
 
   blankThickPen.set(Layout::Scale(5), look.background_color);
 
@@ -120,8 +109,8 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
 
     canvas.stretch(0, 0, 
                    get_width(), get_height(),
-                   hDrawBitMap,
-                   Appearance.InverseInfoBox ? 58 : 0, 0, 58, 120);
+                   look.background_bitmap,
+                   look.background_x, 0, 58, 120);
 
     layout_initialised = true;
   }
@@ -259,7 +248,7 @@ GaugeVario::RenderClimb(Canvas &canvas)
     return;
 
   if (Basic().switch_state.flight_mode == SwitchInfo::MODE_CIRCLING)
-    canvas.scale_copy(x, y, hBitmapClimb, 12, 0, 12, 12);
+    canvas.scale_copy(x, y, look.climb_bitmap, 12, 0, 12, 12);
   else if (is_persistent())
     canvas.fill_rectangle(x, y, x + Layout::Scale(12), y + Layout::Scale(12),
                           Appearance.InverseInfoBox

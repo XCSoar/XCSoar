@@ -22,6 +22,8 @@ Copyright_License {
 */
 
 #include "VarioLook.hpp"
+#include "Units/Units.hpp"
+#include "resource.h"
 
 void
 VarioLook::Initialise(bool inverse)
@@ -42,4 +44,10 @@ VarioLook::Initialise(bool inverse)
 
   sink_brush.set(sink_color);
   lift_brush.set(lift_color);
+
+  background_bitmap.load(Units::GetUserVerticalSpeedUnit() == unKnots
+                         ? IDB_VARIOSCALEC : IDB_VARIOSCALEA);
+  background_x = inverse ? 58 : 0;
+
+  climb_bitmap.load(inverse ? IDB_CLIMBSMALLINV : IDB_CLIMBSMALL);
 }

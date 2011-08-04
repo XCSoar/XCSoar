@@ -79,8 +79,6 @@ private:
   Pen liftThickPen;
   Pen blankThickPen;
 
-  Bitmap hBitmapClimb;
-
   bool dirty;
 
   bool layout_initialised;
@@ -91,7 +89,6 @@ private:
   RasterPoint orgMiddle;
   RasterPoint orgBottom;
 
-  Bitmap hDrawBitMap;
   DrawInfo_t diValueTop;
   DrawInfo_t diValueMiddle;
   DrawInfo_t diValueBottom;
