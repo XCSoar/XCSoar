@@ -409,8 +409,6 @@ RefreshTargetPoint(void)
     SetTarget();
 
     RefreshCalculator();
-
-    ActionInterface::SendSettingsMap(true);
   } else {
     Range = fixed_zero;
     Radial = fixed_zero;
