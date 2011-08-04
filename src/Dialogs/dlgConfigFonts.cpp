@@ -276,32 +276,19 @@ void dlgConfigFontsShowModal()
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  WndProperty *wp;
+  LoadFormProperty(*wf, _T("prpUseCustomFonts"), Appearance.UseCustomFonts);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpUseCustomFonts"));
-  if (wp) {
-    DataFieldBoolean * dfb = (DataFieldBoolean*)wp->GetDataField();
-    dfb->Set(Appearance.UseCustomFonts);
-    ShowFontEditButtons(dfb->GetAsBoolean());
-    wp->RefreshDisplay();
-    RefreshFonts();
-  }
+  ShowFontEditButtons(Appearance.UseCustomFonts);
+  RefreshFonts();
 
   FontRegistryChanged = false;
   changed = false;
 
   wf->ShowModal();
 
-  if (wp) {
-    DataFieldBoolean * dfb = (DataFieldBoolean*) wp->GetDataField();
-    if (dfb) {
-      if (Appearance.UseCustomFonts != dfb->GetAsBoolean()) {
-        Appearance.UseCustomFonts = !Appearance.UseCustomFonts;
-        Profile::Set(szProfileUseCustomFonts, Appearance.UseCustomFonts);
-        changed = true;
-      }
-    }
-  }
+  changed |= SaveFormProperty(*wf, _T("prpUseCustomFonts"),
+                              szProfileUseCustomFonts,
+                              Appearance.UseCustomFonts);
 
   TempInfoWindowFont.reset();
   TempTitleWindowFont.reset();
