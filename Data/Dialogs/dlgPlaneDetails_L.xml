@@ -2,47 +2,47 @@
 
 <Form Caption="Plane Details">
   <Panel Height="26">
-    <Label Caption="Registration:" X="2" Y="6" Height="-2" Width="88" />
+    <Label Caption="Registration" X="2" Y="6" Height="-2" Width="88" />
     <Button Name="RegistrationButton" X="90" Y="2" Width="-112" Height="-2" OnClick="RegistrationClicked"/>
 
-    <Label Caption="Comp. ID:" X="-107" Y="6" Height="-2" Width="-54" />
+    <Label Caption="Comp. ID" X="-107" Y="6" Height="-2" Width="-54" />
     <Button Name="CompetitionIDButton" X="-52" Y="2" Width="-2" Height="-2" OnClick="CompetitionIDClicked"/>
   </Panel>
 
   <Panel Height="26">
-    <Label Caption="Type:" X="2" Y="6" Height="-2" Width="88" />
+    <Label Caption="Type" X="2" Y="6" Height="-2" Width="88" />
     <Button Name="TypeButton" X="90" Y="2" Width="-112" Height="-2" OnClick="TypeClicked"/>
 
-    <Label Caption="Handicap:" X="-107" Y="6" Height="-2" Width="-54" />
+    <Label Caption="Handicap" X="-107" Y="6" Height="-2" Width="-54" />
     <Edit Name="HandicapEdit" X="-52" Y="2" Width="-2" Height="-2">
       <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="50" Max="150" Step="1" />
     </Edit>
   </Panel>
 
   <Panel Height="26">
-    <Label Caption="Polar:" X="2" Y="6" Height="-2" Width="88" />
+    <Label Caption="Polar" X="2" Y="6" Height="-2" Width="88" />
     <Button Name="PolarButton" X="90" Y="2" Width="-112" Height="-2" OnClick="PolarClicked"/>
 
-    <Label Caption="Wing Area:" X="-107" Y="6" Height="-2" Width="-54" />
+    <Label Caption="Wing Area" X="-107" Y="6" Height="-2" Width="-54" />
     <Edit Name="WingAreaEdit" X="-52" Y="2" Width="-2" Height="-2">
       <DataField DataType="double" DisplayFormat="%.1f m&#178;" EditFormat="%.1f" Min="0" Max="20" Step="0.1" />
     </Edit>
   </Panel>
   
   <Panel Height="26">
-    <Label Caption="Max. Ballast:" X="2" Y="6" Height="-2" Width="88" />
+    <Label Caption="Max. Ballast" X="2" Y="6" Height="-2" Width="88" />
     <Edit Name="MaxBallastEdit" X="90" Y="2" Width="-152" Height="-2">
       <DataField DataType="double" DisplayFormat="%.0f l" EditFormat="%.0f" Min="0" Max="500" Step="5" />
     </Edit>
 
-    <Label Caption="Dump Time:" X="-142" Y="6" Height="-2" Width="-84" />
+    <Label Caption="Dump Time" X="-142" Y="6" Height="-2" Width="-84" />
     <Edit Name="DumpTimeEdit" X="-82" Y="2" Width="-2" Height="-2">
       <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="300" Step="5" />
     </Edit>
   </Panel>
   
   <Panel Height="26">
-    <Label Caption="Max. Cruise Speed:" X="2" Y="6" Height="-2" Width="88" />
+    <Label Caption="Max. Cruise Speed" X="2" Y="6" Height="-2" Width="88" />
     <Edit Name="MaxSpeedEdit" X="90" Y="2" Width="-152" Height="-2">
       <DataField DataType="double"  DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5" />
     </Edit>

@@ -3,7 +3,7 @@
 <Form Caption="FLARM Traffic Details">
   <Button Name="cmdCallsign" Caption="..." X="-38" Y="20" Width="36" Height="22"/>
 
-  <Label X="3" Y="-97" Width="58" Height="16" Caption="Friends:" />
+  <Label X="3" Y="-97" Width="58" Height="16" Caption="Friends" />
   <SymbolButton Name="cmdFriendGreen" Caption="Green" X="3" Y="-80" Width="28" Height="28" />
   <SymbolButton Name="cmdFriendBlue" Caption="Blue" X="33" Y="-80" Width="28" Height="28" />
   <SymbolButton Name="cmdFriendYellow" Caption="Yellow" X="63" Y="-80" Width="28" Height="28" />

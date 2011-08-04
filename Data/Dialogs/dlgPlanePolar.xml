@@ -7,7 +7,7 @@
   </Panel>
   
   <Panel Height="26">
-    <Label Caption="Polar V:" X="2" Y="6" Height="-2" Width="-132" />
+    <Label Caption="Polar V" X="2" Y="6" Height="-2" Width="-132" />
 
     <Edit Name="V1Edit" X="-127" Y="2" Width="-2" Height="-2">
       <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarChanged" />
@@ -27,7 +27,7 @@
   </Panel>
 
   <Panel Height="26">
-    <Label Caption="Polar W:" X="2" Y="6" Height="-2" Width="-132" />
+    <Label Caption="Polar W" X="2" Y="6" Height="-2" Width="-132" />
 
     <Edit Name="W1Edit" X="-127" Y="2" Width="-2" Height="-2">
       <DataField DataType="double" DisplayFormat="%.2f %s" EditFormat="%.2f" Min="-10" Max="0" Step="0.05" OnDataAccess="PolarChanged" />
@@ -47,14 +47,14 @@
   </Panel>
 
   <Panel Height="26">
-    <Label Caption="Reference Mass:" X="2" Y="6" Height="-2" Width="-132" />
+    <Label Caption="Reference Mass" X="2" Y="6" Height="-2" Width="-132" />
     <Edit Name="ReferenceMassEdit" X="-127" Y="2" Width="-2" Height="-2">
       <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" OnDataAccess="PolarChanged" />
     </Edit>
   </Panel>
 
   <Panel Height="26">
-    <Label Caption="Dry Mass:" X="2" Y="6" Height="-2" Width="-132" />
+    <Label Caption="Dry Mass" X="2" Y="6" Height="-2" Width="-132" />
     <Edit Name="DryMassEdit" X="-127" Y="2" Width="-2" Height="-2">
       <DataField DataType="double" DisplayFormat="%.0f kg" EditFormat="%.0f" Min="0" Max="1000" Step="5" />
     </Edit>
