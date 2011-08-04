@@ -43,13 +43,6 @@ ProtectedTaskManager::set_glide_polar(const GlidePolar& glide_polar)
   lease->set_glide_polar(glide_polar);
 }
 
-fixed
-ProtectedTaskManager::GetMacCready() const
-{
-  Lease lease(*this);
-  return lease->get_glide_polar().GetMC();
-}
-
 TaskManager::TaskMode_t 
 ProtectedTaskManager::get_mode() const
 {

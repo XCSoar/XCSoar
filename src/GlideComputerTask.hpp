@@ -40,9 +40,6 @@ public:
                     ProtectedRoutePlanner &protected_route_planner,
                     const RoutePlannerGlue &route_planner);
 
-  gcc_pure
-  fixed GetMacCready() const;
-
 protected:
 
   void Initialise();

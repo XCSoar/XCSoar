@@ -135,9 +135,3 @@ void
 GlideComputerTask::set_terrain(const RasterTerrain* _terrain) {
   GlideComputerRoute::set_terrain(_terrain);
 }
-
-fixed
-GlideComputerTask::GetMacCready() const
-{
-  return m_task.GetMacCready();
-}
