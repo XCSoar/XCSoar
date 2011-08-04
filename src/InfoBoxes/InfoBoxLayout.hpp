@@ -24,8 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_INFO_BOX_LAYOUT_HPP
 #define XCSOAR_INFO_BOX_LAYOUT_HPP
 
+#include "InfoBoxSettings.hpp"
 #include "Screen/Point.hpp"
-#include "Profile/InfoBoxConfig.hpp"
 #include "Compiler.h"
 
 namespace InfoBoxLayout
@@ -67,7 +67,7 @@ namespace InfoBoxLayout
     unsigned control_width, control_height;
 
     unsigned count;
-    PixelRect positions[InfoBoxPanelConfig::MAX_INFOBOXES];
+    PixelRect positions[InfoBoxSettings::Panel::MAX_CONTENTS];
 
     PixelRect remaining;
   };

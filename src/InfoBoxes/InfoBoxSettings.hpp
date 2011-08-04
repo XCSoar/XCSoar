@@ -21,24 +21,32 @@ Copyright_License {
 }
 */
 
-#ifndef INFOBOXES_CONFIG_DIALOG_HPP
-#define INFOBOXES_CONFIG_DIALOG_HPP
+#ifndef XCSOAR_INFO_BOX_SETTINGS_HPP
+#define XCSOAR_INFO_BOX_SETTINGS_HPP
 
-#include "InfoBoxes/InfoBoxSettings.hpp"
-#include "InfoBoxes/InfoBoxLayout.hpp"
-#include "tchar.h"
+#include "Util/StaticString.hpp"
+#include "Compiler.h"
 
-struct DialogLook;
-class SingleWindow;
+struct InfoBoxSettings {
+  struct Panel {
+    static const unsigned MAX_CONTENTS = 24;
 
-/**
- * @return true when the #InfoBoxPanelConfig object has been modified
- */
-bool
-dlgConfigInfoboxesShowModal(SingleWindow &parent,
-                            const DialogLook &dialog_look,
-                            InfoBoxLayout::Geometry geometry,
-                            InfoBoxSettings::Panel &data,
-                            bool allow_name_change);
+    StaticString<32u> name;
+    unsigned contents[MAX_CONTENTS];
+    bool modified;
+
+    void Clear();
+
+    gcc_pure
+    bool IsEmpty() const;
+  };
+
+  static const unsigned int MAX_PANELS = 8;
+  static const unsigned int PREASSIGNED_PANELS = 3;
+
+  Panel panels[MAX_PANELS];
+
+  void SetDefaults();
+};
 
 #endif

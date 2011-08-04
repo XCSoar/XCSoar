@@ -77,9 +77,9 @@ namespace InfoBoxManager
 static bool InfoBoxesDirty = false;
 static bool InfoBoxesHidden = false;
 
-InfoBoxWindow *InfoBoxes[InfoBoxPanelConfig::MAX_INFOBOXES];
+InfoBoxWindow *InfoBoxes[InfoBoxSettings::Panel::MAX_CONTENTS];
 
-InfoBoxManagerConfig infoBoxManagerConfig;
+InfoBoxSettings infoBoxManagerConfig;
 
 void
 InfoBoxFullWindow::on_paint(Canvas &canvas)
@@ -187,7 +187,7 @@ InfoBoxManager::GetCurrentPanel()
 
   if (ui_state.auxiliary_enabled) {
     unsigned panel = ui_state.auxiliary_index;
-    if (panel >= InfoBoxManagerConfig::MAX_INFOBOX_PANELS)
+    if (panel >= InfoBoxSettings::MAX_PANELS)
       panel = PANEL_AUXILIARY;
     return panel;
   }
@@ -202,7 +202,7 @@ InfoBoxManager::GetCurrentPanel()
 const TCHAR*
 InfoBoxManager::GetPanelName(unsigned panelIdx)
 {
-  return gettext(infoBoxManagerConfig.panel[panelIdx].name);
+  return gettext(infoBoxManagerConfig.panels[panelIdx].name);
 }
 
 const TCHAR*
@@ -214,10 +214,10 @@ InfoBoxManager::GetCurrentPanelName()
 unsigned
 InfoBoxManager::GetType(unsigned box, unsigned panelIdx)
 {
-  assert(box < InfoBoxPanelConfig::MAX_INFOBOXES);
-  assert(panelIdx < InfoBoxManagerConfig::MAX_INFOBOX_PANELS);
+  assert(box < InfoBoxSettings::Panel::MAX_CONTENTS);
+  assert(panelIdx < InfoBoxSettings::MAX_PANELS);
 
-  return infoBoxManagerConfig.panel[panelIdx].infoBoxID[box];
+  return infoBoxManagerConfig.panels[panelIdx].contents[box];
 }
 
 unsigned
@@ -239,18 +239,18 @@ InfoBoxManager::GetTitle(unsigned box)
 bool
 InfoBoxManager::IsEmpty(unsigned panelIdx)
 {
-  return infoBoxManagerConfig.panel[panelIdx].IsEmpty();
+  return infoBoxManagerConfig.panels[panelIdx].IsEmpty();
 }
 
 void
 InfoBoxManager::SetType(unsigned i, unsigned type, unsigned panelIdx)
 {
-  assert(i < InfoBoxPanelConfig::MAX_INFOBOXES);
-  assert(panelIdx < InfoBoxManagerConfig::MAX_INFOBOX_PANELS);
+  assert(i < InfoBoxSettings::Panel::MAX_CONTENTS);
+  assert(panelIdx < InfoBoxSettings::MAX_PANELS);
 
-  if ((unsigned int) type != infoBoxManagerConfig.panel[panelIdx].infoBoxID[i]) {
-    infoBoxManagerConfig.panel[panelIdx].infoBoxID[i] = type;
-    infoBoxManagerConfig.panel[panelIdx].modified = true;
+  if ((unsigned int) type != infoBoxManagerConfig.panels[panelIdx].contents[i]) {
+    infoBoxManagerConfig.panels[panelIdx].contents[i] = type;
+    infoBoxManagerConfig.panels[panelIdx].modified = true;
   }
 }
 
@@ -286,8 +286,8 @@ InfoBoxManager::Event_Change(int i)
 void
 InfoBoxManager::DisplayInfoBox()
 {
-  int DisplayType[InfoBoxPanelConfig::MAX_INFOBOXES];
-  static int DisplayTypeLast[InfoBoxPanelConfig::MAX_INFOBOXES];
+  int DisplayType[InfoBoxSettings::Panel::MAX_CONTENTS];
+  static int DisplayTypeLast[InfoBoxSettings::Panel::MAX_CONTENTS];
 
   // JMW note: this is updated every GPS time step
 
@@ -614,5 +614,5 @@ InfoBoxManager::SetupFocused(const int id)
 
   SetType(i, new_type, panel);
   DisplayInfoBox();
-  Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);
+  Profile::Save(infoBoxManagerConfig);
 }

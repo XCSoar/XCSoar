@@ -36,13 +36,13 @@ Copyright_License {
 #include "Dialogs/dlgConfigInfoboxes.hpp"
 
 static WndForm* wf = NULL;
-static WndButton *buttons[InfoBoxManagerConfig::MAX_INFOBOX_PANELS];
+static WndButton *buttons[InfoBoxSettings::MAX_PANELS];
 
 
 static unsigned
 buttonIndex(const WndButton *button)
 {
-  for (unsigned i = 0; i < InfoBoxManagerConfig::MAX_INFOBOX_PANELS; i++)
+  for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++)
     if (button == buttons[i])
       return i;
   // Not reached
@@ -54,18 +54,18 @@ static void
 OnInfoBoxesButton(WndButton &button)
 {
   unsigned i = buttonIndex(&button);
-  InfoBoxPanelConfig &data = infoBoxManagerConfig.panel[i];
+  InfoBoxSettings::Panel &data = infoBoxManagerConfig.panels[i];
 
   bool changed =
     dlgConfigInfoboxesShowModal(wf->GetMainWindow(), wf->GetLook(),
                                 InfoBoxLayout::InfoBoxGeometry, data,
-                                i >= InfoBoxManagerConfig::PREASSIGNED_PANELS);
+                                i >= InfoBoxSettings::PREASSIGNED_PANELS);
   if (changed) {
     data.modified = true;
-    Profile::SetInfoBoxManagerConfig(infoBoxManagerConfig);
+    Profile::Save(infoBoxManagerConfig);
     Profile::Save();
     LogDebug(_T("InfoBox configuration: Changes saved"));
-    buttons[i]->SetCaption(gettext(infoBoxManagerConfig.panel[i].name));
+    buttons[i]->SetCaption(gettext(infoBoxManagerConfig.panels[i].name));
   }
 }
 
@@ -76,13 +76,13 @@ InfoBoxesConfigPanel::Init(WndForm *_wf)
   assert(_wf != NULL);
   wf = _wf;
 
-  for (unsigned i = 0; i < InfoBoxManagerConfig::MAX_INFOBOX_PANELS; i++) {
+  for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++) {
     TCHAR buffer[32];
     _stprintf(buffer, _T("cmdInfoBoxesPanel%u"), i);
     buttons[i] = (WndButton*) wf->FindByName(buffer);
     if (buttons[i]) {
       buttons[i]->SetOnClickNotify(OnInfoBoxesButton);
-      buttons[i]->SetCaption(gettext(infoBoxManagerConfig.panel[i].name));
+      buttons[i]->SetCaption(gettext(infoBoxManagerConfig.panels[i].name));
     }
   }
 }

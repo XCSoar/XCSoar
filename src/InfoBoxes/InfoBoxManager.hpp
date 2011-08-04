@@ -28,7 +28,9 @@ Copyright_License {
 #include "InfoBoxes/Content/Base.hpp"
 #include "Profile/InfoBoxConfig.hpp"
 
-extern InfoBoxManagerConfig infoBoxManagerConfig;
+struct InfoBoxSettings;
+
+extern InfoBoxSettings infoBoxManagerConfig;
 
 struct InfoBoxLook;
 class InfoBoxWindow;

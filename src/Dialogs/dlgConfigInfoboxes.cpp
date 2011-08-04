@@ -28,11 +28,11 @@ Copyright_License {
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
 #include "Form/Edit.hpp"
-#include "Profile/InfoBoxConfig.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "DataField/Enum.hpp"
 #include "Compiler.h"
+#include "InfoBoxes/InfoBoxSettings.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "InfoBoxes/Content/Factory.hpp"
@@ -49,12 +49,12 @@ protected:
   virtual void on_paint(Canvas &canvas);
 };
 
-static InfoBoxPanelConfig data;
+static InfoBoxSettings::Panel data;
 static WndForm *wf = NULL;
-static InfoBoxPanelConfig clipboard;
+static InfoBoxSettings::Panel clipboard;
 static unsigned clipboard_size;
 static InfoBoxLayout::Layout info_box_layout;
-static InfoBoxPreview previews[InfoBoxPanelConfig::MAX_INFOBOXES];
+static InfoBoxPreview previews[InfoBoxSettings::Panel::MAX_CONTENTS];
 static unsigned current_preview;
 
 static WndButton *buttonPanelName;
@@ -72,7 +72,7 @@ static void
 RefreshEditContent()
 {
   DataFieldEnum &df = *(DataFieldEnum *)edit_content->GetDataField();
-  df.Set(data.infoBoxID[current_preview]);
+  df.Set(data.contents[current_preview]);
   edit_content->RefreshDisplay();
 }
 
@@ -86,7 +86,7 @@ static void
 OnCopy(gcc_unused WndButton &button)
 {
   clipboard = data;
-  clipboard_size = InfoBoxPanelConfig::MAX_INFOBOXES;
+  clipboard_size = InfoBoxSettings::Panel::MAX_CONTENTS;
 
   RefreshPasteButton();
 }
@@ -102,11 +102,11 @@ OnPaste(gcc_unused WndButton &button)
     return;
 
   for (unsigned item = 0; item < clipboard_size; item++) {
-    unsigned content = clipboard.infoBoxID[item];
+    unsigned content = clipboard.contents[item];
     if (content >= InfoBoxFactory::NUM_TYPES)
       continue;
 
-    data.infoBoxID[item] = content;
+    data.contents[item] = content;
     previews[item].invalidate();
   }
 
@@ -145,7 +145,7 @@ OnContentAccess(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   const DataFieldEnum &dfe = (const DataFieldEnum &)*Sender;
 
-  data.infoBoxID[current_preview] = dfe.GetAsInteger();
+  data.contents[current_preview] = dfe.GetAsInteger();
   previews[current_preview].invalidate();
 }
 
@@ -178,7 +178,7 @@ InfoBoxPreview::on_paint(Canvas &canvas)
   canvas.black_pen();
   canvas.rectangle(0, 0, canvas.get_width() - 1, canvas.get_height() - 1);
 
-  unsigned type = data.infoBoxID[i];
+  unsigned type = data.contents[i];
   const TCHAR *caption = type < InfoBoxFactory::NUM_TYPES
     ? InfoBoxFactory::GetCaption(type)
     : NULL;
@@ -221,7 +221,7 @@ OnContentHelp(WindowControl *Sender)
 static void
 UpdatePanelName()
 {
-  const unsigned BUFFER_LENGTH = InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH + 32;
+  const unsigned BUFFER_LENGTH = data.name.MAX_SIZE + 32;
   TCHAR caption[BUFFER_LENGTH];
 
   _sntprintf(caption, BUFFER_LENGTH, _T("%s: %s"), _("Name"),
@@ -234,12 +234,12 @@ static void
 OnNameAccess(WndButton &button)
 {
   if (buttonPanelName) {
-    TCHAR buffer[InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH];
+    TCHAR buffer[data.name.MAX_SIZE];
     _tcscpy(buffer, data.name);
     if (dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(), buffer,
-                              InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH,
+                              data.name.MAX_SIZE,
                               _("Panel name"))) {
-      _tcscpy(data.name, buffer);
+      data.name = buffer;
       UpdatePanelName();
     }
   }
@@ -305,7 +305,7 @@ bool
 dlgConfigInfoboxesShowModal(SingleWindow &parent,
                             const DialogLook &dialog_look,
                             InfoBoxLayout::Geometry geometry,
-                            InfoBoxPanelConfig &data_r,
+                            InfoBoxSettings::Panel &data_r,
                             bool allow_name_change)
 {
   current_preview = 0;
@@ -436,8 +436,8 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   bool changed = false;
   if (result == mrOK) {
-    for (unsigned i = 0; i < InfoBoxPanelConfig::MAX_INFOBOXES; ++i)
-      if (data.infoBoxID[i] != data_r.infoBoxID[i])
+    for (unsigned i = 0; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i)
+      if (data.contents[i] != data_r.contents[i])
         changed = true;
     changed |= (_tcscmp(data.name, data_r.name) != 0);
 

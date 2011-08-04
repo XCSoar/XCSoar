@@ -23,105 +23,64 @@ Copyright_License {
 
 #include "Profile/InfoBoxConfig.hpp"
 #include "Profile/Profile.hpp"
-#include "Language/Language.hpp"
-
-
-InfoBoxPanelConfig::InfoBoxPanelConfig() : modified(false)
-{
-  name[0] = 0;
-  for (unsigned int i = 0; i < MAX_INFOBOXES; i++)
-    infoBoxID[i] = 0;
-}
-
-
-bool InfoBoxPanelConfig::IsEmpty() const
-{
-  for (unsigned int i = 0; i < MAX_INFOBOXES; i++)
-    if (infoBoxID[i] != 0)
-      return false;
-  return true;
-}
-
-
-InfoBoxManagerConfig::InfoBoxManagerConfig()
-{
-  static const unsigned int DFLT_CONFIG_BOXES = 9;
-  static const unsigned int DFLT_CONFIG_PANELS = 4;
-  static const int dflt_IDs[DFLT_CONFIG_PANELS][DFLT_CONFIG_BOXES] = {
-    { 0x0E, 0x0B, 0x16, 0x31, 0x30, 0x21, 0x07, 0x0F, 0x2D },
-    { 0x0E, 0x0B, 0x03, 0x2B, 0x30, 0x21, 0x11, 0x0F, 0x2D },
-    { 0x0E, 0x12, 0x03, 0x2B, 0x26, 0x21, 0x29, 0x0F, 0x2D },
-    { 0x34, 0x33, 0x31, 0x00, 0x06, 0x19, 0x27, 0x25, 0x1A }
-  };
-
-  assert(MAX_INFOBOX_PANELS >= DFLT_CONFIG_PANELS);
-  assert(InfoBoxPanelConfig::MAX_INFOBOXES >= DFLT_CONFIG_BOXES);
-
-  _tcscpy(panel[0].name, N_("Circling"));
-  _tcscpy(panel[1].name, N_("Cruise"));
-  _tcscpy(panel[2].name, N_("FinalGlide"));
-  for (unsigned int i = PREASSIGNED_PANELS; i < MAX_INFOBOX_PANELS; i++)
-    _stprintf(panel[i].name, _T("AUX-%u"), i-2);
-
-  for (unsigned int i = 0; i < DFLT_CONFIG_PANELS; i++)
-    for (unsigned int j = 0; j < DFLT_CONFIG_BOXES; j++)
-      panel[i].infoBoxID[j] = dflt_IDs[i][j];
-}
-
+#include "InfoBoxes/InfoBoxSettings.hpp"
 
 static void
-GetV60InfoBoxManagerConfig(InfoBoxManagerConfig &config) {
+GetV60InfoBoxManagerConfig(InfoBoxSettings &settings) {
   TCHAR profileKey[16];
 
-  assert(InfoBoxManagerConfig::MAX_INFOBOX_PANELS >= 4);
+  assert(settings.MAX_PANELS >= 4);
   _tcscpy(profileKey, _T("Info"));
 
-  for (unsigned int i = 0; i < InfoBoxPanelConfig::MAX_INFOBOXES; i++) {
-    _stprintf(profileKey+4, _T("%u"), i);
+  for (unsigned i = 0; i < InfoBoxSettings::Panel::MAX_CONTENTS; ++i) {
+    _stprintf(profileKey + 4, _T("%u"), i);
     unsigned int temp = 0;
     if (Profile::Get(profileKey, temp)) {
-      config.panel[0].infoBoxID[i] = temp & 0xFF;
-      config.panel[1].infoBoxID[i] = (temp >> 8) & 0xFF;
-      config.panel[2].infoBoxID[i] = (temp >> 16) & 0xFF;
-      config.panel[3].infoBoxID[i] = (temp >> 24) & 0xFF;
+      settings.panels[0].contents[i] = temp & 0xFF;
+      settings.panels[1].contents[i] = (temp >> 8) & 0xFF;
+      settings.panels[2].contents[i] = (temp >> 16) & 0xFF;
+      settings.panels[3].contents[i] = (temp >> 24) & 0xFF;
     }
   }
 }
 
-
 void
-Profile::GetInfoBoxManagerConfig(InfoBoxManagerConfig &config)
+Profile::Load(InfoBoxSettings &settings)
 {
-  GetV60InfoBoxManagerConfig(config);
+  GetV60InfoBoxManagerConfig(settings);
   TCHAR profileKey[32];
-  for (unsigned int i = 0; i < InfoBoxManagerConfig::MAX_INFOBOX_PANELS; i++) {
-    if (i >= InfoBoxManagerConfig::PREASSIGNED_PANELS) {
+  for (unsigned i = 0; i < settings.MAX_PANELS; ++i) {
+    InfoBoxSettings::Panel &panel = settings.panels[i];
+
+    if (i >= settings.PREASSIGNED_PANELS) {
       _stprintf(profileKey, _T("InfoBoxPanel%uName"), i);
-      Get(profileKey, config.panel[i].name, InfoBoxPanelConfig::MAX_PANEL_NAME_LENGTH);
-      if (config.panel[i].name[0] == 0)
-        _stprintf(config.panel[i].name, _T("AUX-%u"), i-2);
+      Get(profileKey, panel.name);
+      if (panel.name.empty())
+        _stprintf(panel.name.buffer(), _T("AUX-%u"), i-2);
     }
-    for (unsigned int j = 0; j < InfoBoxPanelConfig::MAX_INFOBOXES; j++) {
+
+    for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
       _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), i, j);
-      Get(profileKey, config.panel[i].infoBoxID[j]);
+      Get(profileKey, panel.contents[j]);
     }
   }
 }
 
-
 void
-Profile::SetInfoBoxManagerConfig(const InfoBoxManagerConfig &config)
+Profile::Save(const InfoBoxSettings &settings)
 {
   TCHAR profileKey[32];
-  for (unsigned int i = 0; i < InfoBoxManagerConfig::MAX_INFOBOX_PANELS; i++) {
-    if (config.panel[i].modified) {
-      if (i >= InfoBoxManagerConfig::PREASSIGNED_PANELS) {
+  for (unsigned i = 0; i < settings.MAX_PANELS; ++i) {
+    const InfoBoxSettings::Panel &panel = settings.panels[i];
+
+    if (panel.modified) {
+      if (i >= settings.PREASSIGNED_PANELS) {
         _stprintf(profileKey, _T("InfoBoxPanel%uName"), i);
-        Set(profileKey, config.panel[i].name);
+        Set(profileKey, panel.name);
       }
-      for (unsigned int j = 0; j < InfoBoxPanelConfig::MAX_INFOBOXES; j++) {
+      for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
         _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), i, j);
-        Set(profileKey, config.panel[i].infoBoxID[j]);
+        Set(profileKey, panel.contents[j]);
       }
     }
   }

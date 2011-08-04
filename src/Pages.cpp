@@ -26,8 +26,8 @@ Copyright_License {
 #include "Interface.hpp"
 #include "MainWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
+#include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Profile/Profile.hpp"
-#include "Profile/InfoBoxConfig.hpp"
 #include "Language/Language.hpp"
 
 #include <stdio.h>
@@ -40,7 +40,7 @@ namespace Pages
     1 + // Nothing
     1 + // Map & Auto InfoBoxes
     1 + // Map (Full Screen)
-    InfoBoxManagerConfig::MAX_INFOBOX_PANELS;
+    InfoBoxSettings::MAX_PANELS;
   unsigned validLayoutsCnt = 0;
   PageLayout validLayouts[MAX_VALID_LAYOUTS];
 
@@ -128,7 +128,7 @@ Pages::OpenLayout(PageLayout &layout)
       break;
     case PageLayout::tlMapAndInfoBoxes:
       if (!layout.infoBoxConfig.autoSwitch &&
-          layout.infoBoxConfig.panel < InfoBoxManagerConfig::MAX_INFOBOX_PANELS) {
+          layout.infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
         XCSoarInterface::main_window.SetFullScreen(false);
         ui_state.auxiliary_enabled = true;
         ui_state.auxiliary_index = layout.infoBoxConfig.panel;
@@ -185,7 +185,7 @@ Pages::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
       break;
     case PageLayout::tlMapAndInfoBoxes:
       if (!infoBoxConfig.autoSwitch &&
-          infoBoxConfig.panel < InfoBoxManagerConfig::MAX_INFOBOX_PANELS) {
+          infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
         if (concise) {
           _tcscpy(buffer, _("Info "));
           _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
@@ -255,7 +255,7 @@ Pages::LoadPageFromProfile(unsigned page)
   pl.topLayout = (PageLayout::eTopLayout) temp;
   if (pl.topLayout > PageLayout::tlLAST)
     return;
-  if (pl.infoBoxConfig.panel >= InfoBoxManagerConfig::MAX_INFOBOX_PANELS)
+  if (pl.infoBoxConfig.panel >= InfoBoxSettings::MAX_PANELS)
     return;
   if (page == 0 && pl.topLayout == PageLayout::tlEmpty)
     return;
@@ -291,7 +291,7 @@ Pages::LoadDefault()
   addValidLayout(PageLayout());
   addValidLayout(PageLayout(PageLayout::tlMapAndInfoBoxes));
   addValidLayout(PageLayout(PageLayout::tlMap));
-  for (unsigned i = 0; i < InfoBoxManagerConfig::MAX_INFOBOX_PANELS; i++)
+  for (unsigned i = 0; i < InfoBoxSettings::MAX_PANELS; i++)
     addValidLayout(PageLayout(PageLayout::tlMapAndInfoBoxes, InfoBoxConfig(false, i)));
 }
 

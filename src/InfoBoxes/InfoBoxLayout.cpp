@@ -122,7 +122,7 @@ InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
   Layout layout;
 
   layout.count = geometry_counts[geometry];
-  assert(layout.count <= InfoBoxPanelConfig::MAX_INFOBOXES);
+  assert(layout.count <= InfoBoxSettings::Panel::MAX_CONTENTS);
 
   CalcInfoBoxSizes(layout, rc, geometry);
 

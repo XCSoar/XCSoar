@@ -24,33 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_INFOBOX_CONFIG_HPP
 #define XCSOAR_PROFILE_INFOBOX_CONFIG_HPP
 
-#include <tchar.h>
-
-class InfoBoxPanelConfig {
-public:
-  InfoBoxPanelConfig();
-  bool IsEmpty() const;
-
-  static const unsigned int MAX_INFOBOXES = 24;
-  static const unsigned int MAX_PANEL_NAME_LENGTH = 32;
-  TCHAR name[MAX_PANEL_NAME_LENGTH];
-  unsigned int infoBoxID[MAX_INFOBOXES];
-  bool modified;
-};
-
-class InfoBoxManagerConfig {
-public:
-  InfoBoxManagerConfig();
-
-  static const unsigned int MAX_INFOBOX_PANELS = 8;
-  static const unsigned int PREASSIGNED_PANELS = 3;
-  InfoBoxPanelConfig panel[MAX_INFOBOX_PANELS];
-};
+struct InfoBoxSettings;
 
 namespace Profile
 {
-  void GetInfoBoxManagerConfig(InfoBoxManagerConfig &config);
-  void SetInfoBoxManagerConfig(const InfoBoxManagerConfig &config);
+  void Load(InfoBoxSettings &settings);
+  void Save(const InfoBoxSettings &settings);
 };
 
 #endif
