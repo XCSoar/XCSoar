@@ -392,9 +392,6 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
     return;
 
   if (task != NULL && route_planner != NULL) {
-
-    canvas.set_text_color(COLOR_BLACK);
-
     WaypointVisitorMap v(projection, settings, look, task_behaviour);
 
     {
