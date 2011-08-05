@@ -28,12 +28,14 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 
 struct ThermalBandLook {
+  bool inverse;
+
   Pen pen;
   Brush brush;
 
   Pen white_pen, black_pen;
 
-  void Initialise();
+  void Initialise(bool inverse);
 };
 
 #endif

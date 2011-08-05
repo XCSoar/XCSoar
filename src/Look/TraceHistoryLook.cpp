@@ -25,8 +25,10 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 
 void
-TraceHistoryLook::Initialise(bool inverse)
+TraceHistoryLook::Initialise(bool _inverse)
 {
+  inverse = _inverse;
+
   axis_pen.set(1, COLOR_GRAY);
   line_pen.set(2, inverse ? COLOR_WHITE : COLOR_BLACK);
 }

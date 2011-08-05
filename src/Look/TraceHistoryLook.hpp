@@ -28,6 +28,8 @@ Copyright_License {
 #include "Screen/Brush.hpp"
 
 struct TraceHistoryLook {
+  bool inverse;
+
   Pen axis_pen;
 
   Pen line_pen;

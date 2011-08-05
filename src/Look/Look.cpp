@@ -45,7 +45,7 @@ Look::InitialiseConfigured(bool inverse, bool colors,
                     Fonts::MapBold, Fonts::MapBold);
   vario.Initialise(inverse, colors);
   chart.Initialise();
-  thermal_band.Initialise();
+  thermal_band.Initialise(inverse);
   trace_history.Initialise(inverse);
   waypoint.Initialise(waypoint_settings);
   airspace.Initialise(airspace_settings);

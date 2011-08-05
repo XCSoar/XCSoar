@@ -28,7 +28,6 @@ Copyright_License {
 #include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
 #include "Look/ThermalBandLook.hpp"
-#include "Appearance.hpp"
 #include <algorithm>
 #include "Engine/Task/TaskBehaviour.hpp"
 #include "Units/Units.hpp"
@@ -132,12 +131,12 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   }
 
   // position of thermal band
-  const Pen &pen = is_infobox && Appearance.InverseInfoBox
+  const Pen &pen = is_infobox && look.inverse
     ? look.white_pen : look.black_pen;
   chart.DrawLine(fixed_zero, h,
                  settings_computer.glide_polar_task.GetMC(), h, pen);
 
-  if (is_infobox && Appearance.InverseInfoBox)
+  if (is_infobox && look.inverse)
     chart.get_canvas().white_brush();
   else
     chart.get_canvas().black_brush();

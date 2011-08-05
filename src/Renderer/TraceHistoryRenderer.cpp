@@ -28,7 +28,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Look/TraceHistoryLook.hpp"
 #include "Look/VarioLook.hpp"
-#include "Appearance.hpp"
+
 #include <algorithm>
 
 void
@@ -125,7 +125,7 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
     x_last = x;
     y_last = y;
   }
-  if (Appearance.InverseInfoBox)
+  if (look.inverse)
     chart.get_canvas().white_brush();
   else
     chart.get_canvas().black_brush();

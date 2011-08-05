@@ -26,8 +26,10 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 void
-ThermalBandLook::Initialise()
+ThermalBandLook::Initialise(bool _inverse)
 {
+  inverse = _inverse;
+
   brush.set(Graphics::skyColor);
   pen.set(Layout::Scale(1), dark_color(Graphics::skyColor));
 
