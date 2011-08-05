@@ -38,7 +38,7 @@ Copyright_License {
 #include "TaskLook.hpp"
 #include "InfoBoxLook.hpp"
 
-struct SETTINGS_MAP;
+struct UISettings;
 
 struct Look {
   DialogLook dialog;
@@ -57,9 +57,7 @@ struct Look {
   InfoBoxLook info_box;
 
   void Initialise();
-  void InitialiseConfigured(bool inverse, bool colors,
-                            const WaypointRendererSettings &waypoint_settings,
-                            const AirspaceRendererSettings &airspace_settings);
+  void InitialiseConfigured(const UISettings &settings);
 };
 
 #endif

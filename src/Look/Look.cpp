@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Look.hpp"
 #include "Screen/Fonts.hpp"
+#include "UISettings.hpp"
 
 void
 Look::Initialise()
@@ -37,18 +38,18 @@ Look::Initialise()
 }
 
 void
-Look::InitialiseConfigured(bool inverse, bool colors,
-                           const WaypointRendererSettings &waypoint_settings,
-                           const AirspaceRendererSettings &airspace_settings)
+Look::InitialiseConfigured(const UISettings &settings)
 {
   dialog.Initialise(Fonts::MapBold, Fonts::Map,
                     Fonts::MapBold, Fonts::MapBold);
-  vario.Initialise(inverse, colors);
+  vario.Initialise(settings.info_boxes.inverse,
+                   settings.info_boxes.use_colors);
   chart.Initialise();
-  thermal_band.Initialise(inverse);
-  trace_history.Initialise(inverse);
-  waypoint.Initialise(waypoint_settings);
-  airspace.Initialise(airspace_settings);
+  thermal_band.Initialise(settings.info_boxes.inverse);
+  trace_history.Initialise(settings.info_boxes.inverse);
+  waypoint.Initialise(settings.map.waypoint);
+  airspace.Initialise(settings.map.airspace);
   cross_section.Initialise();
-  info_box.Initialise(inverse, colors);
+  info_box.Initialise(settings.info_boxes.inverse,
+                      settings.info_boxes.use_colors);
 }

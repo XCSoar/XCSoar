@@ -135,10 +135,7 @@ MainWindow::InitialiseConfigured()
   }
 
   assert(look != NULL);
-  look->InitialiseConfigured(CommonInterface::GetUISettings().info_boxes.inverse,
-                             CommonInterface::GetUISettings().info_boxes.use_colors,
-                             CommonInterface::SettingsMap().waypoint,
-                             CommonInterface::SettingsMap().airspace);
+  look->InitialiseConfigured(CommonInterface::GetUISettings());
 
   LogStartUp(_T("Create info boxes"));
   InfoBoxManager::Create(rc, ib_layout, look->info_box);
