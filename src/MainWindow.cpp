@@ -44,7 +44,6 @@ Copyright_License {
 #include "Gauge/GlueGaugeVario.hpp"
 #include "MenuBar.hpp"
 #include "Form/Form.hpp"
-#include "Appearance.hpp"
 #include "UtilsSystem.hpp"
 #include "Look/Look.hpp"
 #include "Profile/ProfileKeys.hpp"
@@ -136,8 +135,8 @@ MainWindow::InitialiseConfigured()
   }
 
   assert(look != NULL);
-  look->InitialiseConfigured(Appearance.InverseInfoBox,
-                             Appearance.InfoBoxColors,
+  look->InitialiseConfigured(CommonInterface::GetUISettings().info_boxes.inverse,
+                             CommonInterface::GetUISettings().info_boxes.use_colors,
                              CommonInterface::SettingsMap().waypoint,
                              CommonInterface::SettingsMap().airspace);
 

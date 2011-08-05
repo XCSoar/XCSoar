@@ -56,15 +56,8 @@ Profile::Use()
 
   // new appearance variables
 
-  Get(szProfileAppInverseInfoBox,
-		  Appearance.InverseInfoBox);
-
-  GetEnum(szProfileAppInfoBoxBorder, Appearance.InfoBoxBorder);
   GetEnum(szProfileAppStatusMessageAlignment, Appearance.StateMessageAlign);
   GetEnum(szProfileAppDialogStyle, DialogStyleSetting);
-
-  Get(szProfileAppInfoBoxColors,
-		  Appearance.InfoBoxColors);
 
   Get(szProfileMenuTimeout,
       XCSoarInterface::MenuTimeoutMax);

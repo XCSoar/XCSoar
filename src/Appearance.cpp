@@ -24,8 +24,5 @@ Copyright_License {
 #include "Appearance.hpp"
 
 struct Appearance Appearance = {
-  false,
   smAlignCenter,
-  true,
-  apIbBox,
 };

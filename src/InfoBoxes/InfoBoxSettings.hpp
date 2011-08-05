@@ -27,6 +27,11 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Compiler.h"
 
+enum InfoBoxBorderAppearance_t {
+  apIbBox = 0,
+  apIbTab
+};
+
 struct InfoBoxSettings {
   struct Panel {
     static const unsigned MAX_CONTENTS = 24;
@@ -42,6 +47,10 @@ struct InfoBoxSettings {
 
   static const unsigned int MAX_PANELS = 8;
   static const unsigned int PREASSIGNED_PANELS = 3;
+
+  bool inverse, use_colors;
+
+  InfoBoxBorderAppearance_t border_style;
 
   Panel panels[MAX_PANELS];
 

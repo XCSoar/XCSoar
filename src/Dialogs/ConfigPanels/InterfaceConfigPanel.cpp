@@ -34,7 +34,6 @@ Copyright_License {
 #include "Interface.hpp"
 #include "Language/LanguageGlue.hpp"
 #include "Asset.hpp"
-#include "Appearance.hpp"
 #include "LocalPath.hpp"
 #include "OS/PathName.hpp"
 #include "Protection.hpp"

@@ -402,7 +402,10 @@ InfoBoxManager::Paint()
 int
 InfoBoxManager::GetInfoBoxBorder(unsigned i)
 {
-  if (Appearance.InfoBoxBorder == apIbTab)
+  const InfoBoxSettings &settings =
+    CommonInterface::GetUISettings().info_boxes;
+
+  if (settings.border_style == apIbTab)
     return 0;
 
   unsigned border = 0;
@@ -510,6 +513,9 @@ void
 InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
                        const InfoBoxLook &look)
 {
+  const InfoBoxSettings &settings =
+    CommonInterface::GetUISettings().info_boxes;
+
   first = true;
   layout = _layout;
 
@@ -526,7 +532,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
     InfoBoxes[i] = new InfoBoxWindow(XCSoarInterface::main_window,
                                      rc.left, rc.top,
                                      rc.right - rc.left, rc.bottom - rc.top,
-                                     Border, look);
+                                     Border, settings, look);
   }
 
   SetDirty();

@@ -29,16 +29,8 @@ enum StateMessageAlign_t {
   smAlignTopLeft,
 };
 
-enum InfoBoxBorderAppearance_t {
-  apIbBox = 0,
-  apIbTab
-};
-
 struct Appearance {
-  bool InverseInfoBox;
   StateMessageAlign_t StateMessageAlign;
-  bool InfoBoxColors;
-  InfoBoxBorderAppearance_t InfoBoxBorder;
 };
 
 extern struct Appearance Appearance;

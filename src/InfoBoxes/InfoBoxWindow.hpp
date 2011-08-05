@@ -44,6 +44,7 @@ enum BorderKind_t {
 #define BORDERLEFT   (1<<bkLeft)
 
 class Angle;
+struct InfoBoxSettings;
 struct InfoBoxLook;
 
 class InfoBoxWindow : public PaintWindow
@@ -54,6 +55,8 @@ class InfoBoxWindow : public PaintWindow
 private:
   InfoBoxContent *content;
   ContainerWindow &parent;
+
+  const InfoBoxSettings &settings;
   const InfoBoxLook &look;
 
   int  mBorderKind;
@@ -184,6 +187,7 @@ public:
    */
   InfoBoxWindow(ContainerWindow &Parent, int X, int Y, int Width, int Height,
           int border_flags,
+                const InfoBoxSettings &settings,
           const InfoBoxLook &_look);
 
   ~InfoBoxWindow() { delete content; }

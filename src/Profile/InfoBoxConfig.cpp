@@ -47,6 +47,11 @@ GetV60InfoBoxManagerConfig(InfoBoxSettings &settings) {
 void
 Profile::Load(InfoBoxSettings &settings)
 {
+  Get(szProfileAppInverseInfoBox, settings.inverse);
+  Get(szProfileAppInfoBoxColors, settings.use_colors);
+
+  GetEnum(szProfileAppInfoBoxBorder, settings.border_style);
+
   GetV60InfoBoxManagerConfig(settings);
   TCHAR profileKey[32];
   for (unsigned i = 0; i < settings.MAX_PANELS; ++i) {

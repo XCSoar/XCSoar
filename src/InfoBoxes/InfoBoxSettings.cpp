@@ -47,6 +47,10 @@ InfoBoxSettings::Panel::IsEmpty() const
 void
 InfoBoxSettings::SetDefaults()
 {
+  inverse = false;
+  use_colors = true;
+  border_style = apIbBox;
+
   for (unsigned i = 0; i < MAX_PANELS; ++i)
     panels[i].Clear();
 

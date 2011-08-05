@@ -44,6 +44,8 @@ static WndForm* wf = NULL;
 void
 LayoutConfigPanel::Init(WndForm *_wf)
 {
+  const UISettings &ui_settings = CommonInterface::GetUISettings();
+
   assert(_wf != NULL);
   wf = _wf;
   WndProperty *wp;
@@ -132,9 +134,10 @@ LayoutConfigPanel::Init(WndForm *_wf)
   }
 
   LoadFormProperty(*wf, _T("prpAppInverseInfoBox"),
-                   Appearance.InverseInfoBox);
+                   ui_settings.info_boxes.inverse);
 
-  LoadFormProperty(*wf, _T("prpAppInfoBoxColors"), Appearance.InfoBoxColors);
+  LoadFormProperty(*wf, _T("prpAppInfoBoxColors"),
+                   ui_settings.info_boxes.use_colors);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxBorder"));
   if (wp) {
@@ -142,7 +145,7 @@ LayoutConfigPanel::Init(WndForm *_wf)
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Box"));
     dfe->addEnumText(_("Tab"));
-    dfe->Set(Appearance.InfoBoxBorder);
+    dfe->Set(ui_settings.info_boxes.border_style);
     wp->RefreshDisplay();
   }
 
@@ -162,6 +165,8 @@ LayoutConfigPanel::Init(WndForm *_wf)
 bool
 LayoutConfigPanel::Save(bool &requirerestart)
 {
+  UISettings &ui_settings = CommonInterface::SetUISettings();
+
   bool changed = false;
   WndProperty *wp;
 
@@ -212,15 +217,17 @@ LayoutConfigPanel::Save(bool &requirerestart)
   changed |= requirerestart |=
     SaveFormPropertyEnum(*wf, _T("prpAppInfoBoxBorder"),
                          szProfileAppInfoBoxBorder,
-                         Appearance.InfoBoxBorder);
+                         ui_settings.info_boxes.border_style);
 
   changed |= requirerestart |=
     SaveFormProperty(*wf, _T("prpAppInverseInfoBox"),
-                     szProfileAppInverseInfoBox, Appearance.InverseInfoBox);
+                     szProfileAppInverseInfoBox,
+                     ui_settings.info_boxes.inverse);
 
   changed |= requirerestart |=
     SaveFormProperty(*wf, _T("prpAppInfoBoxColors"),
-                     szProfileAppInfoBoxColors, Appearance.InfoBoxColors);
+                     szProfileAppInfoBoxColors,
+                     ui_settings.info_boxes.use_colors);
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;
   changed |= SaveFormPropertyEnum(*wf, _T("prpTabDialogStyle"),

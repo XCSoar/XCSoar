@@ -30,7 +30,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/BufferCanvas.hpp"
 #include "Screen/ContainerWindow.hpp"
-#include "Appearance.hpp"
+#include "Interface.hpp"
 #include "Asset.hpp"
 
 #ifdef ENABLE_OPENGL
@@ -47,10 +47,11 @@ using std::max;
 
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, int Height,
                  int border_flags,
+                             const InfoBoxSettings &_settings,
                  const InfoBoxLook &_look)
   :content(NULL),
    parent(_parent),
-   look(_look),
+   settings(_settings), look(_look),
    mBorderKind(border_flags),
    focus_timer(0)
 {
@@ -207,7 +208,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   canvas.TextAutoClipped(x, y, mTitle.c_str());
 
-  if (Appearance.InfoBoxBorder == apIbTab && halftextwidth > IBLSCALE(3)) {
+  if (settings.border_style == apIbTab && halftextwidth > IBLSCALE(3)) {
     int ytop = recTitle.top + font.get_capital_height() / 2;
     int ytopedge = ytop + IBLSCALE(2);
     int ybottom = recTitle.top + IBLSCALE(6) + font.get_capital_height();
