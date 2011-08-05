@@ -38,7 +38,7 @@ int main(int argc, char **argv)
 
   Airspaces airspaces;
 
-  FileLineReader reader(argv[1]);
+  FileLineReader reader(argv[1], ConvertLineReader::AUTO);
   if (reader.error()) {
     fprintf(stderr, "Failed to open input file\n");
     return 1;
