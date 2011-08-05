@@ -250,27 +250,6 @@ InfoBoxManager::IsEmpty(unsigned panelIdx)
 }
 
 void
-InfoBoxManager::SetType(unsigned i, unsigned type, unsigned panelIdx)
-{
-  assert(i < InfoBoxSettings::Panel::MAX_CONTENTS);
-  assert(panelIdx < InfoBoxSettings::MAX_PANELS);
-
-  InfoBoxSettings &infoBoxManagerConfig =
-    CommonInterface::SetUISettings().info_boxes;
-
-  if ((unsigned int) type != infoBoxManagerConfig.panels[panelIdx].contents[i]) {
-    infoBoxManagerConfig.panels[panelIdx].contents[i] = type;
-    infoBoxManagerConfig.panels[panelIdx].modified = true;
-  }
-}
-
-void
-InfoBoxManager::SetCurrentType(unsigned box, unsigned type)
-{
-  SetType(box, type, GetCurrentPanel());
-}
-
-void
 InfoBoxManager::Event_Change(int i)
 {
   int j = 0, k;
@@ -279,7 +258,11 @@ InfoBoxManager::Event_Change(int i)
   if (InfoFocus < 0)
     return;
 
-  k = GetCurrentType(InfoFocus);
+  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
+  const unsigned panel_index = GetCurrentPanel();
+  InfoBoxSettings::Panel &panel = settings.panels[panel_index];
+
+  k = panel.contents[InfoFocus];
   if (i > 0)
     j = InfoBoxFactory::GetNext(k);
   else if (i < 0)
@@ -287,7 +270,10 @@ InfoBoxManager::Event_Change(int i)
 
   // TODO code: if i==0, go to default or reset
 
-  SetCurrentType(InfoFocus, (unsigned) j);
+  if (j == k)
+    return;
+
+  panel.contents[InfoFocus] = j;
 
   InfoBoxes[InfoFocus]->UpdateContent();
   Paint();
@@ -594,8 +580,11 @@ InfoBoxManager::SetupFocused(const int id)
   if (i < 0)
     return;
 
-  const unsigned panel = GetCurrentPanel();
-  int old_type = GetType(i, panel);
+  InfoBoxSettings &settings = CommonInterface::SetUISettings().info_boxes;
+  const unsigned panel_index = GetCurrentPanel();
+  InfoBoxSettings::Panel &panel = settings.panels[panel_index];
+
+  const int old_type = panel.contents[i];
 
   ComboList list;
   for (unsigned i = 0; i < InfoBoxFactory::NUM_TYPES; i++)
@@ -622,10 +611,8 @@ InfoBoxManager::SetupFocused(const int id)
 
   /* yes: apply and save it */
 
-  SetType(i, new_type, panel);
+  panel.contents[i] = new_type;
   DisplayInfoBox();
 
-  const InfoBoxSettings &infoBoxManagerConfig =
-    CommonInterface::GetUISettings().info_boxes;
-  Profile::Save(infoBoxManagerConfig);
+  Profile::Save(panel, panel_index);
 }

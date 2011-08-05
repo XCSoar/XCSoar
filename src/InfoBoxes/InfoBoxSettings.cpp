@@ -32,7 +32,6 @@ InfoBoxSettings::Panel::Clear()
 {
   name.clear();
   std::fill(contents, contents + MAX_CONTENTS, 0);
-  modified = false;
 }
 
 bool

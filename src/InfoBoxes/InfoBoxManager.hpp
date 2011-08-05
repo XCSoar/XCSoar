@@ -90,8 +90,6 @@ namespace InfoBoxManager
   const TCHAR* GetPanelName(unsigned panel);
 
   unsigned GetType(unsigned box, unsigned panel);
-  void SetType(unsigned box, unsigned type, unsigned panel);
-  void SetCurrentType(unsigned box, unsigned type);
   const TCHAR* GetTitle(unsigned box);
 
   bool IsEmpty(unsigned panel);

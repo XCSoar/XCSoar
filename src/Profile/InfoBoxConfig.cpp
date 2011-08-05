@@ -67,21 +67,17 @@ Profile::Load(InfoBoxSettings &settings)
 }
 
 void
-Profile::Save(const InfoBoxSettings &settings)
+Profile::Save(const InfoBoxSettings::Panel &panel, unsigned index)
 {
   TCHAR profileKey[32];
-  for (unsigned i = 0; i < settings.MAX_PANELS; ++i) {
-    const InfoBoxSettings::Panel &panel = settings.panels[i];
 
-    if (panel.modified) {
-      if (i >= settings.PREASSIGNED_PANELS) {
-        _stprintf(profileKey, _T("InfoBoxPanel%uName"), i);
-        Set(profileKey, panel.name);
-      }
-      for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
-        _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), i, j);
-        Set(profileKey, panel.contents[j]);
-      }
-    }
+  if (index >= InfoBoxSettings::PREASSIGNED_PANELS) {
+    _stprintf(profileKey, _T("InfoBoxPanel%uName"), index);
+    Set(profileKey, panel.name);
+  }
+
+  for (unsigned j = 0; j < panel.MAX_CONTENTS; ++j) {
+    _stprintf(profileKey, _T("InfoBoxPanel%uBox%u"), index, j);
+    Set(profileKey, panel.contents[j]);
   }
 }

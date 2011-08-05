@@ -33,7 +33,6 @@ struct InfoBoxSettings {
 
     StaticString<32u> name;
     unsigned contents[MAX_CONTENTS];
-    bool modified;
 
     void Clear();
 

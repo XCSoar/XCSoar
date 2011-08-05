@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_PROFILE_INFOBOX_CONFIG_HPP
 #define XCSOAR_PROFILE_INFOBOX_CONFIG_HPP
 
-struct InfoBoxSettings;
+#include "InfoBoxes/InfoBoxSettings.hpp"
 
 namespace Profile
 {
   void Load(InfoBoxSettings &settings);
-  void Save(const InfoBoxSettings &settings);
+  void Save(const InfoBoxSettings::Panel &panel, unsigned index);
 };
 
 #endif

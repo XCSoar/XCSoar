@@ -63,8 +63,7 @@ OnInfoBoxesButton(WndButton &button)
                                 InfoBoxLayout::InfoBoxGeometry, data,
                                 i >= InfoBoxSettings::PREASSIGNED_PANELS);
   if (changed) {
-    data.modified = true;
-    Profile::Save(settings);
+    Profile::Save(data, i);
     Profile::Save();
     LogDebug(_T("InfoBox configuration: Changes saved"));
     buttons[i]->SetCaption(gettext(data.name));
