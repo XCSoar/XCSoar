@@ -27,7 +27,6 @@ Copyright_License {
 #include "Profile/ComputerProfile.hpp"
 #include "Profile/UIProfile.hpp"
 #include "LogFile.hpp"
-#include "Appearance.hpp"
 #include "Dialogs/XML.hpp"
 #include "Interface.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
@@ -54,9 +53,6 @@ Profile::Use()
   }
   */
 
-  // new appearance variables
-
-  GetEnum(szProfileAppStatusMessageAlignment, Appearance.StateMessageAlign);
   GetEnum(szProfileAppDialogStyle, DialogStyleSetting);
 
   Get(szProfileMenuTimeout,

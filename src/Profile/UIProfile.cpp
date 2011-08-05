@@ -42,6 +42,7 @@ void
 Profile::Load(UISettings &settings)
 {
   Get(szProfileUseCustomFonts, settings.custom_fonts);
+  GetEnum(szProfileAppStatusMessageAlignment, settings.popup_message_position);
 
   Load(settings.map);
   Load(settings.info_boxes);

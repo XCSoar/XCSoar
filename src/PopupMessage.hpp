@@ -31,6 +31,7 @@ Copyright_License {
 
 #include <tchar.h>
 
+struct UISettings;
 class SingleWindow;
 class StatusMessageList;
 
@@ -110,6 +111,8 @@ private:
   SingleWindow &parent;
   PixelRect rc; // maximum message size
 
+  const UISettings &settings;
+
   Mutex mutex;
   struct Message messages[MAXMESSAGES];
   TCHAR msgText[2000];
@@ -120,7 +123,7 @@ private:
 
 public:
   PopupMessage(const StatusMessageList &_status_messages,
-               SingleWindow &_parent);
+               SingleWindow &_parent, const UISettings &settings);
 
   void set(const PixelRect _rc);
 

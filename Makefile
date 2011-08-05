@@ -427,7 +427,6 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Simulator.cpp \
 	$(SRC)/Asset.cpp \
-	$(SRC)/Appearance.cpp \
 	$(SRC)/Hardware/Display.cpp \
 	$(SRC)/Language/MOFile.cpp \
 	$(SRC)/Language/Language.cpp \

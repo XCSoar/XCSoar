@@ -52,7 +52,7 @@ Copyright_License {
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
    map(NULL), vario(NULL), flarm(NULL), ta(NULL),
-   popup(status_messages, *this),
+   popup(status_messages, *this, CommonInterface::GetUISettings()),
    FullScreen(false), CustomView(false),
    airspace_warning_pending(false)
 {

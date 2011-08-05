@@ -1472,7 +1472,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Airspace/AirspaceVisibility.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/Airspace/AirspaceRendererSettings.cpp \
-	$(SRC)/Appearance.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
@@ -1804,7 +1803,6 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Units/UnitsFormatter.cpp \
-	$(SRC)/Appearance.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/Screen/Layout.cpp \
@@ -1908,7 +1906,6 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
-	$(SRC)/Appearance.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
@@ -1966,7 +1963,6 @@ RUN_TASK_EDITOR_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
-	$(SRC)/Appearance.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/ComboPicker.cpp \
 	$(SRC)/Dialogs/dlgHelp.cpp \

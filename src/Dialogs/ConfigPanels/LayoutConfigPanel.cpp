@@ -31,7 +31,6 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Hardware/Display.hpp"
 #include "Interface.hpp"
-#include "Appearance.hpp"
 #include "MainWindow.hpp"
 #include "LogFile.hpp"
 #include "Screen/Graphics.hpp"
@@ -117,7 +116,7 @@ LayoutConfigPanel::Init(WndForm *_wf)
     dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->addEnumText(_("Center"));
     dfe->addEnumText(_("Topleft"));
-    dfe->Set(Appearance.StateMessageAlign);
+    dfe->Set(ui_settings.popup_message_position);
     wp->RefreshDisplay();
   }
 
@@ -208,7 +207,7 @@ LayoutConfigPanel::Save(bool &requirerestart)
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpAppStatusMessageAlignment"),
                                   szProfileAppStatusMessageAlignment,
-                                  Appearance.StateMessageAlign);
+                                  ui_settings.popup_message_position);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpDialogStyle"),
                                   szProfileAppDialogStyle,

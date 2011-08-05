@@ -28,11 +28,18 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxSettings.hpp"
 #include "Dialogs/DialogSettings.hpp"
 
+enum StateMessageAlign_t {
+  smAlignCenter = 0,
+  smAlignTopLeft,
+};
+
 /**
  * User interface settings.
  */
 struct UISettings {
   bool custom_fonts;
+
+  StateMessageAlign_t popup_message_position;
 
   SETTINGS_MAP map;
   InfoBoxSettings info_boxes;

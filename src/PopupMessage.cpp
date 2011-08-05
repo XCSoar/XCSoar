@@ -34,9 +34,9 @@ Copyright_License {
 #include "Audio/Sound.hpp"
 #include "LogFile.hpp"
 #include "SettingsComputer.hpp"
-#include "Appearance.hpp"
 #include "Language/Language.hpp"
 #include "StatusMessage.hpp"
+#include "UISettings.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -97,9 +97,10 @@ PopupMessage::Message::AppendTo(TCHAR *buffer, int now)
 }
 
 PopupMessage::PopupMessage(const StatusMessageList &_status_messages,
-                           SingleWindow &_parent)
+                           SingleWindow &_parent, const UISettings &_settings)
   :status_messages(_status_messages),
    parent(_parent),
+   settings(_settings),
    nvisible(0),
    enable_sound(true)
 {
@@ -159,7 +160,7 @@ void PopupMessage::Resize() {
     int midx = (rc.right+rc.left)/2;
     int midy = (rc.bottom+rc.top)/2;
 
-    if (Appearance.StateMessageAlign == smAlignTopLeft){
+    if (settings.popup_message_position == smAlignTopLeft){
       rthis.top = 0;
       rthis.left = 0;
       rthis.bottom = height;

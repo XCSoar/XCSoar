@@ -28,6 +28,8 @@ UISettings::SetDefaults()
 {
   custom_fonts = false;
 
+  popup_message_position = smAlignCenter;
+
   map.SetDefaults();
   info_boxes.SetDefaults();
   dialog.SetDefaults();

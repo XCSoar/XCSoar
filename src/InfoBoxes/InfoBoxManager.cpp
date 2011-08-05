@@ -36,7 +36,6 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Hardware/Battery.hpp"
 #include "MainWindow.hpp"
-#include "Appearance.hpp"
 #include "Language/Language.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/ComboList.hpp"
