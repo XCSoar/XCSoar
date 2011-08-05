@@ -50,7 +50,6 @@ Copyright_License {
 #include "Renderer/RenderObservationZone.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Screen/Chart.hpp"
-#include "Appearance.hpp"
 
 #include <algorithm>
 
@@ -110,8 +109,10 @@ static void DrawLegs(Chart& chart,
 }
 
 void
-FlightStatisticsRenderer::RenderBarographSpark(
-    Canvas &canvas, const PixelRect rc,const NMEAInfo &nmea_info,
+FlightStatisticsRenderer::RenderBarographSpark(Canvas &canvas,
+                                               const PixelRect rc,
+                                               bool inverse,
+                                               const NMEAInfo &nmea_info,
     const DerivedInfo &derived_info, const ProtectedTaskManager *_task) const
 {
   ScopeLock lock(fs.mutexStats);
@@ -137,7 +138,7 @@ FlightStatisticsRenderer::RenderBarographSpark(
 
   chart.DrawFilledLineGraph(fs.Altitude_Terrain);
 
-  Pen pen(2, Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK);
+  Pen pen(2, inverse ? COLOR_WHITE : COLOR_BLACK);
   chart.DrawLineGraph(fs.Altitude, pen);
 }
 

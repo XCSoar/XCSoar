@@ -188,6 +188,10 @@ public:
 
   ~InfoBoxWindow() { delete content; }
 
+  const InfoBoxLook &GetLook() const {
+    return look;
+  }
+
   void SetContentProvider(InfoBoxContent *_content);
   bool UpdateContent();
   bool HandleKey(InfoBoxContent::InfoBoxKeyCodes keycode);

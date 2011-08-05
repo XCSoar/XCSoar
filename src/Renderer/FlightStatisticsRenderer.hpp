@@ -74,7 +74,7 @@ public:
                        const DerivedInfo &derived_info,
                        const ProtectedTaskManager *task) const;
 
-  void RenderBarographSpark(Canvas &canvas, const PixelRect rc,
+  void RenderBarographSpark(Canvas &canvas, const PixelRect rc, bool inverse,
                             const NMEAInfo &nmea_info,
                             const DerivedInfo &derived_info,
                             const ProtectedTaskManager *task) const;

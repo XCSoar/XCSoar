@@ -35,7 +35,7 @@ class TaskProgressRenderer {
 public:
   static void DrawTaskProgress(const TaskSummary& summary,
                               Canvas &canvas, 
-                               const PixelRect &rc);
+                               const PixelRect &rc, bool inverse);
 };
 
 #endif

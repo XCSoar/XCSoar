@@ -140,7 +140,9 @@ InfoBoxContentBarogram::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
   FlightStatisticsRenderer fs(glide_computer->GetFlightStats(),
                               look.chart, look.airspace,
                               look.aircraft, look.task);
-  fs.RenderBarographSpark(canvas, get_spark_rect(infobox), XCSoarInterface::Basic(),
+  fs.RenderBarographSpark(canvas, get_spark_rect(infobox),
+                          infobox.GetLook().inverse,
+                          XCSoarInterface::Basic(),
                           XCSoarInterface::Calculated(), protected_task_manager);
 }
 
@@ -193,7 +195,8 @@ InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canv
 {
   TaskProgressRenderer::DrawTaskProgress(CommonInterface::Calculated().common_stats.
                                          ordered_summary,
-                                         canvas, infobox.get_value_and_comment_rect());
+                                         canvas, infobox.get_value_and_comment_rect(),
+                                         infobox.GetLook().inverse);
 }
 
 void

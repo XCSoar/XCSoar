@@ -25,15 +25,15 @@ Copyright_License {
 #include "Engine/Task/TaskStats/TaskSummary.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Graphics.hpp"
-#include "Appearance.hpp"
-#include <algorithm>
 #include "Screen/Layout.hpp"
 #include "Screen/Icon.hpp"
+
+#include <algorithm>
 
 void 
 TaskProgressRenderer::DrawTaskProgress(const TaskSummary& summary,
                                        Canvas &canvas, 
-                                       const PixelRect &rc)
+                                       const PixelRect &rc, bool inverse)
 {
   const int radius = std::min(rc.right-rc.left, rc.bottom-rc.top)/2-IBLSCALE(3);
   RasterPoint center;
@@ -41,7 +41,7 @@ TaskProgressRenderer::DrawTaskProgress(const TaskSummary& summary,
   center.y = (rc.bottom+rc.top)/2;
 
   const fixed sweep = fixed_two_pi*fixed(0.9);
-  Pen pen_f(1, Appearance.InverseInfoBox ? COLOR_WHITE : COLOR_BLACK);
+  Pen pen_f(1, inverse ? COLOR_WHITE : COLOR_BLACK);
 
   if (summary.p_remaining<fixed(0.99)) {
     canvas.select(Graphics::hbWind);
