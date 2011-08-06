@@ -40,7 +40,7 @@ static void
 iso_latin_1_to_tchar(TCHAR *dest, const char *src)
 {
     do {
-      *dest++ = *src;
+      *dest++ = (unsigned char)*src;
     } while (*src++ != '\0');
 }
 
