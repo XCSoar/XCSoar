@@ -123,7 +123,10 @@ public:
     pDevPipeTo = other;
   }
 
-public:
+  bool IsConfigured() const {
+    return config.port_type != DeviceConfig::DISABLED;
+  }
+
   bool IsOpen() const {
     return Com != NULL
 #ifdef ANDROID
