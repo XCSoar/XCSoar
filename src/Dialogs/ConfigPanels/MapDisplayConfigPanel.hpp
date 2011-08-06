@@ -24,7 +24,9 @@ Copyright_License {
 #ifndef MAPDISPLAYCONFIGPANEL_HPP
 #define MAPDISPLAYCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
+#include "DataField/Base.hpp"
+
+class WndForm;
 
 namespace MapDisplayConfigPanel
 {

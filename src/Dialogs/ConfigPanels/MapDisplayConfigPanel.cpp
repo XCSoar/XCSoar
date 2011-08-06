@@ -21,13 +21,14 @@ Copyright_License {
 }
 */
 
+#include "MapDisplayConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
+#include "Form/Form.hpp"
 #include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
-#include "MapDisplayConfigPanel.hpp"
 #include "Language/Language.hpp"
 
 static WndForm* wf = NULL;
@@ -35,11 +36,7 @@ static WndForm* wf = NULL;
 void
 MapDisplayConfigPanel::UpdateVisibilities()
 {
-  WndProperty* wp_orientation_cruise = 
-                  (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
-  assert(wp_orientation_cruise != NULL);
-  bool northup = (wp_orientation_cruise->GetDataField()->GetAsInteger() 
-                  == NORTHUP);
+  bool northup = GetFormValueInteger(*wf, _T("prpOrientationCruise")) == NORTHUP;
 
   ShowFormControl(*wf, _T("prpMapShiftBias"), northup);
 }
@@ -118,35 +115,20 @@ MapDisplayConfigPanel::OnShiftTypeData(DataField *Sender, DataField::DataAccessK
 bool
 MapDisplayConfigPanel::Save()
 {
+  SETTINGS_MAP &settings_map = CommonInterface::SetSettingsMap();
   bool changed = false;
-  WndProperty *wp;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
-  assert(wp != NULL);
-  if (XCSoarInterface::SettingsMap().OrientationCruise != wp->GetDataField()->GetAsInteger()) {
-    XCSoarInterface::SetSettingsMap().OrientationCruise = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
-    Profile::Set(szProfileOrientationCruise,
-                 XCSoarInterface::SettingsMap().OrientationCruise);
-    changed = true;
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpOrientationCruise"),
+                                  szProfileOrientationCruise,
+                                  settings_map.OrientationCruise);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCircling"));
-  assert(wp != NULL);
-  if (XCSoarInterface::SettingsMap().OrientationCircling != wp->GetDataField()->GetAsInteger()) {
-    XCSoarInterface::SetSettingsMap().OrientationCircling = (DisplayOrientation_t)wp->GetDataField()->GetAsInteger();
-    Profile::Set(szProfileOrientationCircling,
-                 XCSoarInterface::SettingsMap().OrientationCircling);
-    changed = true;
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpOrientationCircling"),
+                                  szProfileOrientationCircling,
+                                  settings_map.OrientationCircling);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
-  assert(wp != NULL);
-  if (XCSoarInterface::SettingsMap().MapShiftBias != wp->GetDataField()->GetAsInteger()) {
-    XCSoarInterface::SetSettingsMap().MapShiftBias = (MapShiftBias_t)wp->GetDataField()->GetAsInteger();
-    Profile::Set(szProfileMapShiftBias,
-                 XCSoarInterface::SettingsMap().MapShiftBias);
-    changed = true;
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpMapShiftBias"),
+                                  szProfileMapShiftBias,
+                                  settings_map.MapShiftBias);
 
   changed |= SaveFormProperty(*wf, _T("prpGliderScreenPosition"),
                               szProfileGliderScreenPosition,
