@@ -111,7 +111,7 @@ public:
     index = _index;
   }
 
-  const DeviceConfig &GetConfig() {
+  const DeviceConfig &GetConfig() const {
     return config;
   }
 
