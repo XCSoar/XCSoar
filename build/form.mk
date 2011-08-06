@@ -8,6 +8,7 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Panel.cpp \
 	$(FORM_SRC_DIR)/Form.cpp \
 	$(FORM_SRC_DIR)/Button.cpp \
+	$(FORM_SRC_DIR)/ButtonPanel.cpp \
 	$(FORM_SRC_DIR)/CheckBox.cpp \
 	$(FORM_SRC_DIR)/SymbolButton.cpp \
 	$(FORM_SRC_DIR)/Frame.cpp \
