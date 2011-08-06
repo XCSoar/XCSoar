@@ -148,6 +148,8 @@ public:
 
   void Close();
 
+  bool Reopen(OperationEnvironment &env);
+
   /**
    * Call this periodically to auto-reopen a failed device after a
    * certain delay.

@@ -185,6 +185,13 @@ DeviceDescriptor::Close()
   settings_received.Clear();
 }
 
+bool
+DeviceDescriptor::Reopen(OperationEnvironment &env)
+{
+  Close();
+  return Open(env);
+}
+
 void
 DeviceDescriptor::AutoReopen(OperationEnvironment &env)
 {
@@ -197,8 +204,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
   LogStartUp(_T("Restarting device %s"), config.GetPortName(buffer, 64));
 
   InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
-  Close();
-  Open(env);
+  Reopen(env);
 }
 
 const TCHAR *
