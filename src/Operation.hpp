@@ -96,7 +96,16 @@ public:
   virtual void SetErrorMessage(const TCHAR *text);
 };
 
-class VerboseOperationEnvironment : public QuietOperationEnvironment {
+/**
+ * A #OperationEnvironment implementation that displays error messages
+ * with MessageBoxX().
+ */
+class MessageOperationEnvironment : public QuietOperationEnvironment {
+public:
+  virtual void SetErrorMessage(const TCHAR *text);
+};
+
+class VerboseOperationEnvironment : public MessageOperationEnvironment {
 public:
   virtual void SetText(const TCHAR *text);
   virtual void SetProgressRange(unsigned range);

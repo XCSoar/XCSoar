@@ -225,6 +225,7 @@ XCSOAR_SOURCES := \
 	\
 	$(SRC)/Operation.cpp \
 	$(SRC)/PopupOperationEnvironment.cpp \
+	$(SRC)/MessageOperationEnvironment.cpp \
 	$(SRC)/VerboseOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
