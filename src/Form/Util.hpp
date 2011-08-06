@@ -30,6 +30,7 @@ Copyright_License {
 #include <tchar.h>
 #include <stdint.h>
 
+struct StaticEnumChoice;
 class WndForm;
 
 /**
@@ -54,6 +55,10 @@ void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, int value);
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, unsigned int value);
+
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name,
+                 const StaticEnumChoice *list, unsigned value);
 
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value);

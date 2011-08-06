@@ -37,6 +37,33 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "Dialogs/XML.hpp"
 
+static const StaticEnumChoice display_orientation_list[] = {
+  { Display::ORIENTATION_DEFAULT, N_("Default") },
+  { Display::ORIENTATION_PORTRAIT, N_("Portrait") },
+  { Display::ORIENTATION_LANDSCAPE, N_("Landscape") },
+  { Display::ORIENTATION_REVERSE_PORTRAIT, N_("Reverse Portrait") },
+  { Display::ORIENTATION_REVERSE_LANDSCAPE, N_("Reverse Landscape") },
+  { 0 }
+};
+
+static const StaticEnumChoice info_box_geometry_list[] = {
+  { InfoBoxLayout::ibTop4Bottom4, N_("8 Top + Bottom (Portrait)") },
+  { InfoBoxLayout::ibBottom8, N_("8 Bottom (Portrait)") },
+  { InfoBoxLayout::ibBottom8Vario, N_("8 Bottom + Vario (Portrait)") },
+  { InfoBoxLayout::ibTop8, N_("8 Top (Portrait)") },
+  { InfoBoxLayout::ibLeft4Right4, N_("8 Left + Right (Landscape)") },
+  { InfoBoxLayout::ibLeft8, N_("8 Left (Landscape)") },
+  { InfoBoxLayout::ibRight8, N_("8 Right (Landscape)") },
+  { InfoBoxLayout::ibGNav, _("9 Right + Vario (Landscape)") },
+  { InfoBoxLayout::ibGNav2, N_("9 Left + Right (Landscape)") },
+  { InfoBoxLayout::ibSquare, N_("5 Right (Square)") },
+  { InfoBoxLayout::ibRight12, N_("12 Right (Landscape)") },
+  { InfoBoxLayout::ibBottom12, N_("12 Bottom (Portrait)") },
+  { InfoBoxLayout::ibTop12, N_("12 Top (Portrait)") },
+  { InfoBoxLayout::ibRight24, N_("24 Right (Landscape)") },
+  { 0 }
+};
+
 static WndForm* wf = NULL;
 
 
@@ -50,48 +77,15 @@ LayoutConfigPanel::Init(WndForm *_wf)
   WndProperty *wp;
 
   if (Display::RotateSupported()) {
-    wp = (WndProperty*)wf->FindByName(_T("prpDisplayOrientation"));
-    assert(wp != NULL);
-
-    DataFieldEnum *dfe = (DataFieldEnum *)wp->GetDataField();
-    dfe->addEnumText(_("Default"));
-    dfe->addEnumText(_("Portrait"));
-    dfe->addEnumText(_("Landscape"));
-    dfe->addEnumText(_("Reverse Portrait"));
-    dfe->addEnumText(_("Reverse Landscape"));
-    dfe->Set(Profile::GetDisplayOrientation());
-    wp->RefreshDisplay();
+    LoadFormProperty(*wf, _T("prpDisplayOrientation"),
+                     display_orientation_list,
+                     Profile::GetDisplayOrientation());
   } else {
-    wp = (WndProperty*)wf->FindByName(_T("prpDisplayOrientation"));
-    assert(wp != NULL);
-    wp->hide();
+    ShowFormControl(*wf, _T("prpDisplayOrientation"), false);
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAppInfoBoxGeom"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-
-    dfe->addEnumText(_("8 Top + Bottom (Portrait)"),
-                     InfoBoxLayout::ibTop4Bottom4);
-    dfe->addEnumText(_("8 Bottom (Portrait)"), InfoBoxLayout::ibBottom8);
-    dfe->addEnumText(_("8 Bottom + Vario (Portrait)"), 
-                    InfoBoxLayout::ibBottom8Vario);
-    dfe->addEnumText(_("8 Top (Portrait)"), InfoBoxLayout::ibTop8);
-    dfe->addEnumText(_("8 Left + Right (Landscape)"),
-                     InfoBoxLayout::ibLeft4Right4);
-    dfe->addEnumText(_("8 Left (Landscape)"), InfoBoxLayout::ibLeft8);
-    dfe->addEnumText(_("8 Right (Landscape)"), InfoBoxLayout::ibRight8);
-    dfe->addEnumText(_("9 Right + Vario (Landscape)"), InfoBoxLayout::ibGNav);
-    dfe->addEnumText(_("9 Left + Right (Landscape)"), InfoBoxLayout::ibGNav2);
-    dfe->addEnumText(_("5 Right (Square)"), InfoBoxLayout::ibSquare);
-    dfe->addEnumText(_("12 Right (Landscape)"), InfoBoxLayout::ibRight12);
-    dfe->addEnumText(_("12 Bottom (Portrait)"), InfoBoxLayout::ibBottom12);
-    dfe->addEnumText(_("12 Top (Portrait)"), InfoBoxLayout::ibTop12);
-    dfe->addEnumText(_("24 Right (Landscape)"), InfoBoxLayout::ibRight24);
-    dfe->Set(InfoBoxLayout::InfoBoxGeometry);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpAppInfoBoxGeom"),
+                   info_box_geometry_list, InfoBoxLayout::InfoBoxGeometry);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAppFlarmLocation"));
   if (wp) {

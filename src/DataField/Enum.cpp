@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "DataField/Enum.hpp"
 #include "DataField/ComboList.hpp"
+#include "Language/Language.hpp"
 
 #include <stdlib.h>
 
@@ -94,6 +95,19 @@ DataFieldEnum::AddChoice(unsigned id, const TCHAR *text,
   Entry &entry = entries.append();
   entry.Set(id, text, display_string, help);
   return true;
+}
+
+void
+DataFieldEnum::AddChoices(const StaticEnumChoice *p)
+{
+  while (p->display_string != NULL) {
+    const TCHAR *help = p->help;
+    if (help != NULL)
+      help = gettext(help);
+
+    AddChoice(p->id, gettext(p->display_string), NULL, help);
+    ++p;
+  }
 }
 
 unsigned

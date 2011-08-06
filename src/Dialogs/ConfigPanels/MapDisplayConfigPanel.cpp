@@ -23,13 +23,29 @@ Copyright_License {
 
 #include "MapDisplayConfigPanel.hpp"
 #include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
-#include "Form/Form.hpp"
-#include "Form/Edit.hpp"
 #include "Form/Util.hpp"
 #include "DataField/Enum.hpp"
 #include "Interface.hpp"
 #include "Language/Language.hpp"
+
+static const StaticEnumChoice orientation_list[] = {
+  { TRACKUP, N_("Track up"),
+    N_("The moving map display will be rotated so the glider's track is oriented up.") },
+  { NORTHUP, N_("North up"),
+    N_("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course.") },
+  { TARGETUP, N_("Target up"),
+    N_("The moving map display will be rotated so the navigation target is oriented up.") },
+  { 0 }
+};
+
+static const StaticEnumChoice shift_bias_list[] = {
+  { MAP_SHIFT_BIAS_NONE, N_("None"), N_("Disable adjustments.") },
+  { MAP_SHIFT_BIAS_TRACK, N_("Track"),
+    N_("Use a recent average of the ground track as basis.") },
+  { MAP_SHIFT_BIAS_TARGET, N_("Target"),
+    N_("Use the current target waypoint as basis.") },
+  { 0 }
+};
 
 static WndForm* wf = NULL;
 
@@ -46,44 +62,15 @@ MapDisplayConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
-  WndProperty *wp;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCruise"));
-  assert(wp != NULL);
-  DataFieldEnum* dfe;
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->EnableItemHelp(true);
-  dfe->addEnumText(_("Track up"), TRACKUP,
-                   _("The moving map display will be rotated so the glider's track is oriented up."));
-  dfe->addEnumText(_("North up"), NORTHUP,
-                   _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
-  dfe->addEnumText(_("Target up"), TARGETUP,
-                   _("The moving map display will be rotated so the navigation target is oriented up."));
-  dfe->Set(XCSoarInterface::SettingsMap().OrientationCruise);
-  wp->RefreshDisplay();
+  const SETTINGS_MAP &settings_map = CommonInterface::SettingsMap();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpOrientationCircling"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->EnableItemHelp(true);
-  dfe->addEnumText(_("Track up"), TRACKUP,
-                   _("The moving map display will be rotated so the glider's track is oriented up."));
-  dfe->addEnumText(_("North up"), NORTHUP,
-                   _("The moving map display will always be orientated north to south and the glider icon will be rotated to show its course."));
-  dfe->addEnumText(_("Target up"), TARGETUP,
-                   _("The moving map display will be rotated so the navigation target is oriented up."));
-  dfe->Set(XCSoarInterface::SettingsMap().OrientationCircling);
-  wp->RefreshDisplay();
-
-  wp = (WndProperty*)wf->FindByName(_T("prpMapShiftBias"));
-  assert(wp != NULL);
-  dfe = (DataFieldEnum*)wp->GetDataField();
-  dfe->EnableItemHelp(true);
-  dfe->addEnumText(_("None"), MAP_SHIFT_BIAS_NONE, _("Disable adjustments."));
-  dfe->addEnumText(_("Track"), MAP_SHIFT_BIAS_TRACK, _("Use a recent average of the ground track as basis."));
-  dfe->addEnumText(_("Target"), MAP_SHIFT_BIAS_TARGET, _("Use the current target waypoint as basis."));
-  dfe->Set(XCSoarInterface::SettingsMap().MapShiftBias);
-  wp->RefreshDisplay();
+  LoadFormProperty(*wf, _T("prpOrientationCruise"), orientation_list,
+                   settings_map.OrientationCruise);
+  LoadFormProperty(*wf, _T("prpOrientationCircling"), orientation_list,
+                   settings_map.OrientationCircling);
+  LoadFormProperty(*wf, _T("prpMapShiftBias"), shift_bias_list,
+                   settings_map.MapShiftBias);
 
   LoadFormProperty(*wf, _T("prpGliderScreenPosition"),
                    XCSoarInterface::SettingsMap().GliderScreenPosition);

@@ -28,6 +28,15 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
 
+/**
+ * A struct that is used for static initialisation of the enum list.
+ */
+struct StaticEnumChoice {
+  unsigned id;
+  const TCHAR *display_string;
+  const TCHAR *help;
+};
+
 class DataFieldEnum: public DataField
 {
 public:
@@ -88,6 +97,13 @@ public:
 
   bool AddChoice(unsigned id, const TCHAR *text, const TCHAR *display_string=NULL,
                  const TCHAR *help=NULL);
+
+  /**
+   * Add choices from the specified NULL-terminated list (the last
+   * entry has a NULL display_string).  All display strings and help
+   * texts are translated with gettext() by this method.
+   */
+  void AddChoices(const StaticEnumChoice *list);
 
   bool addEnumText(const TCHAR *text, unsigned id, const TCHAR *help=NULL) {
     return AddChoice(id, text, NULL, help);
