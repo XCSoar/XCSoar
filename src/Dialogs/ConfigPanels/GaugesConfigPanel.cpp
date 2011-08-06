@@ -21,14 +21,10 @@ Copyright_License {
 }
 */
 
-#include "Profile/ProfileKeys.hpp"
-#include "Profile/Profile.hpp"
-#include "Form/Edit.hpp"
-#include "Form/Util.hpp"
-//#include "DataField/Enum.hpp"
-#include "Interface.hpp"
-#include "MainWindow.hpp"
 #include "GaugesConfigPanel.hpp"
+#include "Profile/ProfileKeys.hpp"
+#include "Form/Util.hpp"
+#include "Interface.hpp"
 
 static WndForm* wf = NULL;
 

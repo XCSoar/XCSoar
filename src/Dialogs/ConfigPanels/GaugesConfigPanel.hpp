@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef GAUGESCONFIGPANEL_HPP
 #define GAUGESCONFIGPANEL_HPP
 
-#include "Form/Form.hpp"
+class WndForm;
 
 namespace GaugesConfigPanel
 {
