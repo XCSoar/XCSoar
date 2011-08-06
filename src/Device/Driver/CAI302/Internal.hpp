@@ -51,6 +51,47 @@ public:
   virtual bool DownloadFlight(const RecordedFlightInfo &flight,
                               const TCHAR *path,
                               OperationEnvironment &env);
+
+public:
+  /**
+   * Restart the CAI302 by sending the command "SIF 0 0".
+   */
+  bool Reboot(OperationEnvironment &env);
+
+  /**
+   * Power off the CAI302 by sending the command "DIE".
+   */
+  bool PowerOff(OperationEnvironment &env);
+
+  /**
+   * Start logging unconditionally.
+   */
+  bool StartLogging(OperationEnvironment &env);
+
+  /**
+   * Stop logging unconditionally.
+   */
+  bool StopLogging(OperationEnvironment &env);
+
+  /**
+   * Set audio volume 0 is loudest, 170 is silent.
+   */
+  bool SetVolume(unsigned volume, OperationEnvironment &env);
+
+  /**
+   * Erase all waypoints.
+   */
+  bool ClearPoints(OperationEnvironment &env);
+
+  /**
+   * Erase the pilot name.
+   */
+  bool ClearPilot(OperationEnvironment &env);
+
+  /**
+   * Erase all log memory.
+   */
+  bool ClearLog(OperationEnvironment &env);
 };
 
 #endif

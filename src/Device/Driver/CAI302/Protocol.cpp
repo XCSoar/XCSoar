@@ -42,11 +42,33 @@ CAI302::CommandModeQuick(Port &port)
   return port.Write('\x03');
 }
 
+static bool
+WaitCommandPrompt(Port &port)
+{
+  return port.ExpectString("cmd>");
+}
+
 bool
 CAI302::CommandMode(Port &port)
 {
   port.Flush();
-  return CommandModeQuick(port) && port.ExpectString("cmd>");
+  return CommandModeQuick(port) && WaitCommandPrompt(port);
+}
+
+bool
+CAI302::SendCommandQuick(Port &port, const char *cmd)
+{
+  if (!CommandMode(port))
+    return false;
+
+  port.Flush();
+  return WriteString(port, cmd);
+}
+
+bool
+CAI302::SendCommand(Port &port, const char *cmd)
+{
+  return SendCommandQuick(port, cmd) && WaitCommandPrompt(port);
 }
 
 bool
@@ -58,11 +80,7 @@ CAI302::LogModeQuick(Port &port)
 bool
 CAI302::LogMode(Port &port)
 {
-  if (!CommandMode(port))
-    return false;
-
-  port.Flush();
-  return WriteString(port, "LOG 0\r");
+  return SendCommandQuick(port, "LOG 0\r");
 }
 
 static bool
@@ -74,11 +92,7 @@ WaitUploadPrompt(Port &port)
 bool
 CAI302::UploadMode(Port &port)
 {
-  if (!CommandMode(port))
-    return false;
-
-  port.Flush();
-  return WriteString(port, "upl 1\r") && WaitUploadPrompt(port);
+  return SendCommandQuick(port, "UPLOAD 1\r") && WaitUploadPrompt(port);
 }
 
 int
@@ -256,15 +270,61 @@ WaitDownloadPrompt(Port &port)
 bool
 CAI302::DownloadMode(Port &port)
 {
-  if (!CommandMode(port))
-    return false;
-
-  port.Flush();
-  return WriteString(port, "dow 1\r") && WaitDownloadPrompt(port);
+  return SendCommandQuick(port, "DOWNLOAD 1\r") && WaitDownloadPrompt(port);
 }
 
 bool
 CAI302::DownloadCommand(Port &port, const char *command, unsigned timeout_ms)
 {
   return WriteString(port, command) && WaitDownloadPrompt(port);
+}
+
+bool
+CAI302::Reboot(Port &port)
+{
+  return SendCommandQuick(port, "SIF 0 0\r");
+}
+
+bool
+CAI302::PowerOff(Port &port)
+{
+  return SendCommandQuick(port, "DIE\r");
+}
+
+bool
+CAI302::StartLogging(Port &port)
+{
+  return SendCommand(port, "START\r");
+}
+
+bool
+CAI302::StopLogging(Port &port)
+{
+  return SendCommand(port, "STOP\r");
+}
+
+bool
+CAI302::SetVolume(Port &port, unsigned volume)
+{
+  char cmd[16];
+  sprintf(cmd, "VOL %u\r", volume);
+  return SendCommand(port, cmd);
+}
+
+bool
+CAI302::ClearPoints(Port &port)
+{
+  return SendCommand(port, "CLEAR POINTS\r");
+}
+
+bool
+CAI302::ClearPilot(Port &port)
+{
+  return SendCommand(port, "CLEAR PILOT\r");
+}
+
+bool
+CAI302::ClearLog(Port &port)
+{
+  return SendCommand(port, "CLEAR LOG\r");
 }

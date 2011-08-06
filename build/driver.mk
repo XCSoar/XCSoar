@@ -23,6 +23,7 @@ CAI302_SOURCES = \
 	$(DRIVER_SRC_DIR)/CAI302/Settings.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Declare.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Logger.cpp \
+	$(DRIVER_SRC_DIR)/CAI302/Manage.cpp \
 	$(DRIVER_SRC_DIR)/CAI302/Register.cpp
 
 IMI_SOURCES = \

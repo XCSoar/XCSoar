@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/DeviceListDialog.hpp"
+#include "Dialogs/ManageCAI302Dialog.hpp"
 #include "Util/StaticArray.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
@@ -42,7 +43,7 @@ static WndListFrame *list;
 static unsigned current;
 static unsigned font_height;
 
-static WndButton *restart_button, *flight_button;
+static WndButton *restart_button, *flight_button, *manage_button;
 
 static StaticArray<unsigned, NUMDEV> indices;
 
@@ -51,11 +52,14 @@ UpdateButtons()
 {
   if (is_simulator() || current >= indices.size()) {
     restart_button->set_enabled(false);
+    flight_button->set_enabled(false);
+    manage_button->set_enabled(false);
   } else {
     const DeviceDescriptor &device = DeviceList[indices[current]];
 
     restart_button->set_enabled(device.IsConfigured());
     flight_button->set_enabled(device.IsLogger());
+    manage_button->set_enabled(device.IsDriver(_T("CAI 302")));
   }
 }
 
@@ -167,6 +171,25 @@ OnFlightDownloadClicked(gcc_unused WndButton &button)
   ExternalLogger::DownloadFlightFrom(device);
 }
 
+static void
+OnManageClicked(gcc_unused WndButton &button)
+{
+  if (current >= indices.size())
+    return;
+
+  DeviceDescriptor &descriptor = DeviceList[indices[current]];
+  if (!descriptor.IsDriver(_T("CAI 302")) || descriptor.IsBusy())
+    return;
+
+  Device *device = descriptor.GetDevice();
+  if (device == NULL)
+    return;
+
+  descriptor.SetBusy(true);
+  ManageCAI302Dialog(dialog->GetMainWindow(), dialog->GetLook(), *device);
+  descriptor.SetBusy(false);
+}
+
 void
 ShowDeviceList(SingleWindow &parent, const DialogLook &look)
 {
@@ -213,6 +236,7 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look)
   buttons.Add(_("Refresh"), OnRefreshClicked);
   restart_button = buttons.Add(_("Restart"), OnRestartClicked);
   flight_button = buttons.Add(_("Flight download"), OnFlightDownloadClicked);
+  manage_button = buttons.Add(_("Manage"), OnManageClicked);
 
   UpdateButtons();
 

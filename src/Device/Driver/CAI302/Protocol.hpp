@@ -208,6 +208,18 @@ namespace CAI302 {
   CommandMode(Port &port);
 
   /**
+   * Send a command, but don't wait for the next command prompt.
+   */
+  bool
+  SendCommandQuick(Port &port, const char *cmd);
+
+  /**
+   * Send a command, and wait for the next command prompt.
+   */
+  bool
+  SendCommand(Port &port, const char *cmd);
+
+  /**
    * Enter "log" mode, but don't wait for the command prompt.
    */
   bool
@@ -315,6 +327,54 @@ namespace CAI302 {
    */
   bool
   DownloadCommand(Port &port, const char *command, unsigned timeout_ms=2000);
+
+  /**
+   * Restart the CAI302 by sending the command "SIF 0 0".
+   */
+  bool
+  Reboot(Port &port);
+
+  /**
+   * Power off the CAI302 by sending the command "DIE".
+   */
+  bool
+  PowerOff(Port &port);
+
+  /**
+   * Start logging unconditionally.
+   */
+  bool
+  StartLogging(Port &port);
+
+  /**
+   * Stop logging unconditionally.
+   */
+  bool
+  StopLogging(Port &port);
+
+  /**
+   * Set audio volume 0 is loudest, 170 is silent.
+   */
+  bool
+  SetVolume(Port &port, unsigned volume);
+
+  /**
+   * Erase all waypoints.
+   */
+  bool
+  ClearPoints(Port &port);
+
+  /**
+   * Erase the pilot name.
+   */
+  bool
+  ClearPilot(Port &port);
+
+  /**
+   * Erase all log memory.
+   */
+  bool
+  ClearLog(Port &port);
 }
 
 #endif

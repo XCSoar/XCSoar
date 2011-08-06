@@ -136,6 +136,17 @@ public:
   }
 
   /**
+   * Returns the Device object; may be NULL if the device is not open
+   * or if the Device class is not applicable for this object.
+   *
+   * Should only be used by driver-specific code (such as the CAI 302
+   * manager).
+   */
+  Device *GetDevice() {
+    return device;
+  }
+
+  /**
    * When this method fails, the caller is responsible for freeing the
    * Port object.
    */
