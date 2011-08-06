@@ -49,7 +49,7 @@ ButtonPanel::GetButtonRect(unsigned i) const
     r.right = rc.right;
     r.bottom = r.top + height - margin;
   } else {
-    const unsigned width = Layout::Scale(80);
+    const unsigned width = Layout::Scale(58);
     r.left = rc.left + i * width;
     r.top = rc.top;
     r.right = r.left + width - margin;

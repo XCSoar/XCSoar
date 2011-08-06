@@ -253,8 +253,8 @@ BuildIGCFileName(TCHAR *name, const IGCHeader &header, const BrokenDate &date)
             header.flight);
 }
 
-static void
-DownloadFlightFrom(DeviceDescriptor &device)
+void
+ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
   RecordedFlightList flight_list;
   if (!DoReadFlightList(device, flight_list)) {
@@ -311,35 +311,4 @@ DownloadFlightFrom(DeviceDescriptor &device)
   } while (File::Exists(final_path) && ++header.flight < 100);
 
   File::Rename(path, final_path);
-}
-
-void
-ExternalLogger::DownloadFlight()
-{
-  StaticArray<DeviceDescriptor*, NUMDEV> loggers;
-
-  for (unsigned i = 0; i < NUMDEV; ++i)
-    if (DeviceList[i].IsLogger())
-      loggers.append(&DeviceList[i]);
-
-  if (loggers.empty()) {
-    MessageBoxX(_("No logger connected"),
-                _("Download flight"), MB_OK | MB_ICONINFORMATION);
-    return;
-  }
-
-  if (loggers.size() == 1)
-    DownloadFlightFrom(*loggers[0]);
-  else {
-    ComboList combo;
-    for (unsigned i = 0; i < loggers.size(); ++i)
-      combo.Append(i, loggers[i]->GetDisplayName());
-
-    int i = ComboPicker(CommonInterface::main_window, _T("Choose a logger"),
-                        combo, NULL, false);
-    if (i < 0)
-      return;
-
-    DownloadFlightFrom(*loggers[i]);
-  }
 }

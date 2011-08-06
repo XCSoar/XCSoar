@@ -21,28 +21,13 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EXTERNAL_LOGGER_HPP
-#define XCSOAR_EXTERNAL_LOGGER_HPP
+#ifndef XCSOAR_DEVICE_LIST_DIALOG_HPP
+#define XCSOAR_DEVICE_LIST_DIALOG_HPP
 
-#include "Compiler.h"
+struct DialogLook;
+class SingleWindow;
 
-class DeviceDescriptor;
-class OrderedTask;
-
-namespace ExternalLogger {
-  /**
-   * Returns whether a task is declared to the device
-   * @return True if a task is declared to the device, False otherwise
-   */
-  gcc_pure
-  bool IsDeclared();
-
-  void Declare(const OrderedTask& task);
-
-  bool CheckDeclaration();
-
-  void
-  DownloadFlightFrom(DeviceDescriptor &device);
-}
+void
+ShowDeviceList(SingleWindow &parent, const DialogLook &look);
 
 #endif

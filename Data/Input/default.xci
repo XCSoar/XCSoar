@@ -725,8 +725,9 @@ location=5
 mode=Config3
 type=key
 data=7
-event=Logger download
-label=Download IGC$(CheckLogger)
+event=Device list
+event=Mode default
+label=Devices
 location=6
 
 

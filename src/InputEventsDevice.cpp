@@ -21,28 +21,22 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_EXTERNAL_LOGGER_HPP
-#define XCSOAR_EXTERNAL_LOGGER_HPP
+#include "InputEvents.hpp"
+#include "Interface.hpp"
+#include "MainWindow.hpp"
+#include "Look/Look.hpp"
+#include "Dialogs/DeviceListDialog.hpp"
 
-#include "Compiler.h"
+#include <assert.h>
+#include <tchar.h>
+#include <string.h>
 
-class DeviceDescriptor;
-class OrderedTask;
+void
+InputEvents::eventDevice(const TCHAR *misc)
+{
+  assert(misc != NULL);
 
-namespace ExternalLogger {
-  /**
-   * Returns whether a task is declared to the device
-   * @return True if a task is declared to the device, False otherwise
-   */
-  gcc_pure
-  bool IsDeclared();
-
-  void Declare(const OrderedTask& task);
-
-  bool CheckDeclaration();
-
-  void
-  DownloadFlightFrom(DeviceDescriptor &device);
+  if (_tcscmp(misc, _T("list")) == 0)
+    ShowDeviceList(CommonInterface::main_window,
+                   CommonInterface::main_window.look->dialog);
 }
-
-#endif

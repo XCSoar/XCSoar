@@ -111,6 +111,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/Message.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \
 	$(SRC)/Dialogs/JobDialog.cpp \
+	$(SRC)/Dialogs/DeviceListDialog.cpp \
 	$(SRC)/Dialogs/dlgAirspace.cpp \
 	$(SRC)/Dialogs/dlgAirspaceColours.cpp \
 	$(SRC)/Dialogs/dlgAirspacePatterns.cpp \
@@ -342,6 +343,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/InfoBoxes/InfoBoxManager.cpp \
 	$(SRC)/InputEvents.cpp \
 	$(SRC)/InputEventsActions.cpp \
+	$(SRC)/InputEventsDevice.cpp \
 	$(SRC)/InputParser.cpp \
 	$(SRC)/Pages.cpp \
 	$(SRC)/StatusMessage.cpp \
