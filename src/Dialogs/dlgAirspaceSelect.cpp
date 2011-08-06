@@ -76,7 +76,6 @@ static const StaticEnumChoice type_filter_list[] = {
   { NOGLIDER, _T("No gliders") },
   { CTR, _T("CTR") },
   { WAVE, _T("Wave") },
-  { AATASK, _T("AAT") },
   { CLASSE, _T("Class E") },
   { CLASSF, _T("Class F") },
   { 0 }
