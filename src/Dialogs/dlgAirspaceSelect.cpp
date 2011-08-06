@@ -30,6 +30,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "MainWindow.hpp"
 #include "DataField/String.hpp"
+#include "DataField/Enum.hpp"
 #include "Components.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Engine/Airspace/AbstractAirspace.hpp"
@@ -62,24 +63,26 @@ static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150,
 static unsigned DirectionFilterIdx=0;
 static int lastHeading=0;
 
-static const TCHAR *TypeFilter[] = {_T("*"),
-				    _T("Other"),
-				    _T("Restricted areas"),
-				    _T("Prohibited areas"),
-				    _T("Danger areas"),
-				    _T("Class A"),
-				    _T("Class B"),
-				    _T("Class C"),
-				    _T("Class D"),
-				    _T("No gliders"),
-				    _T("CTR"),
-				    _T("Wave"),
-				    _T("AAT"),
-				    _T("Class E"),
-				    _T("Class F"),
+static const StaticEnumChoice type_filter_list[] = {
+  { (unsigned)-1, _T("*") },
+  { OTHER, _T("Other") },
+  { RESTRICT, _T("Restricted areas") },
+  { PROHIBITED, _T("Prohibited areas") },
+  { DANGER, _T("Danger areas") },
+  { CLASSA, _T("Class A") },
+  { CLASSB, _T("Class B") },
+  { CLASSC, _T("Class C") },
+  { CLASSD, _T("Class D") },
+  { NOGLIDER, _T("No gliders") },
+  { CTR, _T("CTR") },
+  { WAVE, _T("Wave") },
+  { AATASK, _T("AAT") },
+  { CLASSE, _T("Class E") },
+  { CLASSF, _T("Class F") },
+  { 0 }
 };
 
-static unsigned TypeFilterIdx=0;
+static int TypeFilterIdx = -1;
 
 static AirspaceSelectInfoVector AirspaceSelectInfo;
 
@@ -103,9 +106,8 @@ static void UpdateList(void)
 {
   AirspaceSelectInfo = airspace_sorter->get_list();
 
-  if (TypeFilterIdx) {
-    airspace_sorter->filter_class(AirspaceSelectInfo, (AirspaceClass_t)(TypeFilterIdx-1));
-  }
+  if (TypeFilterIdx >= 0)
+    airspace_sorter->filter_class(AirspaceSelectInfo, (AirspaceClass_t)TypeFilterIdx);
   
   bool sort_distance = false;
   if (DistanceFilterIdx) {
@@ -137,7 +139,6 @@ static void UpdateList(void)
 static WndProperty *wpName;
 static WndProperty *wpDistance;
 static WndProperty *wpDirection;
-
 
 static void FilterMode(bool direction) {
   if (direction) {
@@ -289,25 +290,13 @@ static void OnFilterDirection(DataField *_Sender,
 
 }
 
-static void OnFilterType(DataField *_Sender,
+static void OnFilterType(DataField *Sender,
                          DataField::DataAccessKind_t Mode) {
-  DataFieldString *Sender = (DataFieldString *)_Sender;
-
   switch(Mode){
     case DataField::daChange:
-    break;
     case DataField::daInc:
-      TypeFilterIdx++;
-      if (TypeFilterIdx > sizeof(TypeFilter)/sizeof(TypeFilter[0])-1)
-        TypeFilterIdx = 0;
-      FilterMode(false);
-      UpdateList();
-    break;
     case DataField::daDec:
-      if (TypeFilterIdx == 0)
-        TypeFilterIdx = sizeof(TypeFilter)/sizeof(TypeFilter[0])-1;
-      else
-        TypeFilterIdx--;
+      TypeFilterIdx = Sender->GetAsInteger();
       FilterMode(false);
       UpdateList();
     break;
@@ -315,8 +304,6 @@ static void OnFilterType(DataField *_Sender,
   case DataField::daSpecial:
     return;
   }
-
-  Sender->Set(TypeFilter[TypeFilterIdx]);
 }
 
 static void
@@ -393,19 +380,19 @@ static bool
 FormKeyDown(WndForm &Sender, unsigned key_code){
 
   WndProperty* wp;
-  unsigned NewIndex = TypeFilterIdx;
+  int NewIndex = TypeFilterIdx;
 
   wp = ((WndProperty *)wf->FindByName(_T("prpFltType")));
 
   switch(key_code) {
     case VK_F1:
-      NewIndex = 0;
+      NewIndex = -1;
     break;
     case VK_F2:
-      NewIndex = 2;
+      NewIndex = RESTRICT;
     break;
     case VK_F3:
-      NewIndex = 3;
+      NewIndex = PROHIBITED;
     break;
 
   default:
@@ -413,10 +400,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code){
   }
 
   if (TypeFilterIdx != NewIndex){
-    TypeFilterIdx = NewIndex;
-    FilterMode(false);
-    UpdateList();
-    wp->GetDataField()->SetAsString(TypeFilter[TypeFilterIdx]);
+    wp->GetDataField()->SetAsInteger(NewIndex);
     wp->RefreshDisplay();
   }
 
@@ -456,6 +440,8 @@ PrepareAirspaceSelectDialog()
   wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
+
+  LoadFormProperty(*wf, _T("prpFltType"), type_filter_list, -1);
 
   wf->SetTimerNotify(OnTimerNotify);
 }

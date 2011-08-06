@@ -16,7 +16,7 @@
   </Edit>
 
   <Edit Name="prpFltType" Caption="Type" X="2" Width="98" Height="36" CaptionWidth="-1">
-    <DataField DataType="string" OnDataAccess="OnFilterType"/>
+    <DataField DataType="enum" OnDataAccess="OnFilterType"/>
   </Edit>
 
   <Button Name="cmdClose" Caption="Close" X="2" Y="-37" Width="75" Height="35" OnClick="CloseClicked" />
