@@ -3,14 +3,14 @@
   <Button Name="cmdFltName" Caption="*" X="2" Y="18" Width="63"  Height="22" />
 
   <Edit Name="prpFltDistance" Caption="Distance" X="2" Width="63" Height="36" CaptionWidth="-1">
-    <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
+    <DataField DataType="enum" OnDataAccess="OnFilterDistance"/>
   </Edit>
   <Edit Name="prpFltDirection" Caption="Direction" X="2" Width="63" Height="36" CaptionWidth="-1">
-    <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
+    <DataField DataType="enum" OnDataAccess="OnFilterDirection"/>
   </Edit>
 
   <Edit Name="prpFltType" Caption="Type" X="2" Width="63" Height="36" CaptionWidth="-1">
-    <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
+    <DataField DataType="enum" OnDataAccess="OnFilterType"/>
   </Edit>
 
   <Button Name="cmdSelect" Caption="Select" X="2" Width="63"  Height="35" />

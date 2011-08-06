@@ -5,15 +5,15 @@
   <Button Name="cmdFltName" Caption="*" X="2" Y="55" Width="75"  Height="22" />
 
   <Edit Name="prpFltType" Caption="Type" X="100" Y="39" Width="98" Height="40" CaptionWidth="-1">
-    <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterType"/>
+    <DataField DataType="enum" OnDataAccess="OnFilterType"/>
   </Edit>
 
   <Edit Name="prpFltDistance" Caption="Distance" X="2" Y="81" Width="98" Height="40" CaptionWidth="-1">
-    <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDistance"/>
+    <DataField DataType="enum" OnDataAccess="OnFilterDistance"/>
   </Edit>
 
   <Edit Name="prpFltDirection" Caption="Direction" X="100" Y="81" Width="98" Height="40" CaptionWidth="-1">
-    <DataField DataType="enum" DisplayFormat="%s" EditFormat="%s" OnDataAccess="OnFilterDirection"/>
+    <DataField DataType="enum" OnDataAccess="OnFilterDirection"/>
   </Edit>
 
   <List Name="frmWaypointList" X="1" Y="123" Width="-1" Height="-1" ItemHeight="18"/>
