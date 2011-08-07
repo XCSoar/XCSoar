@@ -32,6 +32,9 @@
  * to avoid complex and expensive geodesic calculations.
  */
 class GeoEllipse {
+  TaskProjection task_projection;
+  FlatEllipse ell;
+
 public:
   /**
    * Constructor
@@ -65,10 +68,6 @@ public:
    * @return True if line intersects
    */
   bool intersect_extended(const GeoPoint &p, GeoPoint &i1, GeoPoint &i2) const;
-
-private:
-  TaskProjection task_projection;
-  FlatEllipse ell;
 };
 
 
