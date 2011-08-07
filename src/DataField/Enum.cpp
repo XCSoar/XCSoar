@@ -159,7 +159,7 @@ DataFieldEnum::Set(int Value)
 {
   int i = Find(Value);
   if (i >= 0)
-    SetIndex(i);
+    SetIndex(i, false);
 }
 
 void
@@ -173,7 +173,7 @@ DataFieldEnum::SetAsString(const TCHAR *Value)
 {
   int i = Find(Value);
   if (i >= 0)
-    SetIndex(i);
+    SetIndex(i, true);
 }
 
 void
@@ -264,7 +264,7 @@ DataFieldEnum::Find(unsigned id) const
 }
 
 void
-DataFieldEnum::SetIndex(unsigned new_value)
+DataFieldEnum::SetIndex(unsigned new_value, bool invoke_callback)
 {
   assert(new_value < entries.size());
 
@@ -272,7 +272,7 @@ DataFieldEnum::SetIndex(unsigned new_value)
     return;
 
   value = new_value;
-  if (!GetDetachGUI() && mOnDataAccess != NULL)
+  if (invoke_callback && !GetDetachGUI() && mOnDataAccess != NULL)
     mOnDataAccess(this, daChange);
 }
 

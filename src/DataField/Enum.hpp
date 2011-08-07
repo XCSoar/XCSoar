@@ -157,7 +157,7 @@ protected:
   gcc_pure
   int Find(unsigned id) const;
 
-  void SetIndex(unsigned new_value);
+  void SetIndex(unsigned new_value, bool invoke_callback);
 };
 
 #endif
