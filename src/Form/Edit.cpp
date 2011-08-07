@@ -37,7 +37,9 @@ Copyright_License {
 static bool
 CanEditInPlace()
 {
-  return has_keyboard();
+  /* disabled for now, because we don't handle this yet properly:
+     return has_keyboard(); */
+  return false;
 }
 
 bool
