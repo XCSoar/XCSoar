@@ -51,8 +51,7 @@ public:
  *   at current mc
  * 
  */
-class AbortTask : 
-  public UnorderedTask 
+class AbortTask: public UnorderedTask
 {
 public:
   friend class PrintHelper;
@@ -70,9 +69,11 @@ public:
     GlideResult solution;
 
     Alternate(const Waypoint &_waypoint)
-      :waypoint(_waypoint) {
+      :waypoint(_waypoint)
+    {
       solution.Reset();
     }
+
     Alternate(const Waypoint &_waypoint, const GlideResult &_solution)
       :waypoint(_waypoint), solution(_solution) {}
   };
@@ -81,7 +82,8 @@ public:
   typedef std::vector <Alternate> AlternateVector;
 
 protected:
-  struct AlternateTaskPoint : public UnorderedTaskPoint {
+  struct AlternateTaskPoint: public UnorderedTaskPoint
+  {
     GlideResult solution;
 
     AlternateTaskPoint(const Waypoint &waypoint, const TaskBehaviour &tb,
@@ -306,7 +308,7 @@ public:
    * @param reverse Visit task points in reverse order
    *
    */
-  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse = false) const;
 };
 
 #endif

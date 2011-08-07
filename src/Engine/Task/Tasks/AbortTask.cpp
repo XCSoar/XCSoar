@@ -34,12 +34,12 @@ const fixed AbortTask::min_search_range(50000.0);
 const fixed AbortTask::max_search_range(100000.0);
 
 AbortTask::AbortTask(TaskEvents &te, const TaskBehaviour &tb,
-                     const GlidePolar &gp, const Waypoints &wps):
-  UnorderedTask(ABORT, te, tb, gp),
-  waypoints(wps),
-  intersection_test(NULL),
-  active_waypoint(0),
-  polar_safety(gp)
+                     const GlidePolar &gp, const Waypoints &wps)
+  :UnorderedTask(ABORT, te, tb, gp),
+   waypoints(wps),
+   intersection_test(NULL),
+   active_waypoint(0),
+   polar_safety(gp)
 {
   task_points.reserve(32);
 }
@@ -126,18 +126,14 @@ AbortTask::update_polar(const SpeedVector& wind)
 bool
 AbortTask::task_full() const
 {
-  return (task_points.size() >= max_abort);
+  return task_points.size() >= max_abort;
 }
 
-/**
- * Function object used to rank waypoints by arrival time
- */
+/** Function object used to rank waypoints by arrival time */
 struct AbortRank :
   public std::binary_function<AbortTask::Alternate, AbortTask::Alternate, bool>
 {
-  /**
-   * Condition, ranks by arrival time 
-   */
+  /** Condition, ranks by arrival time */
   bool operator()(const AbortTask::Alternate& x, 
                   const AbortTask::Alternate& y) const {
     return x.solution.time_elapsed + x.solution.time_virtual >
@@ -146,8 +142,7 @@ struct AbortRank :
 };
 
 bool 
-AbortTask::is_reachable(const GlideResult &result,
-                        const bool final_glide) const 
+AbortTask::is_reachable(const GlideResult &result, const bool final_glide) const
 {
   return !positive(result.vector.Distance) || 
     (!negative(result.time_elapsed) && result.IsAchievable(final_glide));
@@ -156,10 +151,8 @@ AbortTask::is_reachable(const GlideResult &result,
 bool
 AbortTask::fill_reachable(const AircraftState &state,
                           AlternateVector &approx_waypoints,
-                          const GlidePolar &polar,
-                          const bool only_airfield,
-                          const bool final_glide,
-                          const bool safety)
+                          const GlidePolar &polar, const bool only_airfield,
+                          const bool final_glide, const bool safety)
 {
   if (task_full() || approx_waypoints.empty())
     return false;
@@ -178,15 +171,17 @@ AbortTask::fill_reachable(const AircraftState &state,
     }
 
     UnorderedTaskPoint t(v->waypoint, task_behaviour);
-    const GlideResult result = TaskSolution::glide_solution_remaining(t, state, polar);
+    const GlideResult result =
+        TaskSolution::glide_solution_remaining(t, state, polar);
+
     if (is_reachable(result, final_glide)) {
       bool intersects = false;
       const bool is_reachable_final = is_reachable(result, true);
 
-      if (intersection_test && final_glide && is_reachable_final) {
-        intersects = intersection_test->intersects(AGeoPoint(v->waypoint.Location,
-                                                             result.min_height));
-      }
+      if (intersection_test && final_glide && is_reachable_final)
+        intersects = intersection_test->intersects(
+            AGeoPoint(v->waypoint.Location, result.min_height));
+
       if (!intersects) {
         q.push(Alternate(v->waypoint, result));
         // remove it since it's already in the list now      
@@ -198,6 +193,7 @@ AbortTask::fill_reachable(const AircraftState &state,
         continue; // skip incrementing v since we just erased it
       }
     } 
+
     ++v;
   }
 
@@ -212,6 +208,7 @@ AbortTask::fill_reachable(const AircraftState &state,
 
     q.pop();
   }
+
   return found_final_glide;
 }
 
@@ -219,8 +216,7 @@ AbortTask::fill_reachable(const AircraftState &state,
  * Class to build vector from visited waypoints.
  * Intended to be used temporarily.
  */
-class WaypointVisitorVector: 
-  public WaypointVisitor 
+class WaypointVisitorVector: public WaypointVisitor
 {
 public:
   /**
@@ -230,7 +226,7 @@ public:
    *
    * @return Initialised object
    */
-  WaypointVisitorVector(AbortTask::AlternateVector& wpv):vector(wpv) {};
+  WaypointVisitorVector(AbortTask::AlternateVector& wpv):vector(wpv) {}
 
   /**
    * Visit method, adds result to vector
@@ -260,7 +256,9 @@ AbortTask::update_sample(const AircraftState &state,
   update_polar(state.wind);
   clear();
 
-  const unsigned active_waypoint_on_entry = is_active? active_waypoint: (unsigned)-1;
+  const unsigned active_waypoint_on_entry =
+      is_active ? active_waypoint : (unsigned)-1;
+
   activeTaskPoint = 0; // default to best result if can't find user-set one 
 
   AlternateVector approx_waypoints; 
@@ -269,10 +267,7 @@ AbortTask::update_sample(const AircraftState &state,
   WaypointVisitorVector wvv(approx_waypoints);
   waypoints.visit_within_range(state.location, abort_range(state), wvv);
   if (approx_waypoints.empty()) {
-    /**
-     * \todo
-     * - increase range
-     */
+    /** @todo increase range */
     return false;
   }
 
@@ -295,8 +290,10 @@ AbortTask::update_sample(const AircraftState &state,
   // sort by alt difference
 
   // first try with final glide only
-  m_landable_reachable|=  fill_reachable(state, approx_waypoints, *mode_polar, true, true, true);
-  m_landable_reachable|=  fill_reachable(state, approx_waypoints, *mode_polar, false, true, true);
+  m_landable_reachable |=  fill_reachable(state, approx_waypoints, *mode_polar,
+                                          true, true, true);
+  m_landable_reachable |=  fill_reachable(state, approx_waypoints, *mode_polar,
+                                          false, true, true);
 
   // inform clients that the landable reachable scan has been performed 
   client_update(state, true);
@@ -316,7 +313,6 @@ AbortTask::update_sample(const AircraftState &state,
 
   return false; // nothing to do
 }
-
 
 bool 
 AbortTask::check_transitions(const AircraftState &, const AircraftState&)
@@ -393,4 +389,3 @@ AbortTask::get_task_radius(const GeoPoint& fallback_location) const
   task_projection.update_fast();
   return task_projection.ApproxRadius();
 }
-
