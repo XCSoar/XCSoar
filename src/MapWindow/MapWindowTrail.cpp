@@ -88,6 +88,8 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
 
   fixed value_max, value_min;
 
+  const SETTINGS_MAP &settings_map = SettingsMap();
+
   if (settings_map.SnailType == stAltitude) {
     value_max = fixed(1000);
     value_min = fixed(500);

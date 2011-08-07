@@ -314,7 +314,7 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
   MapWindow::Render(canvas, rc);
 
   if (IsNearSelf()) {
-    if (settings_map.EnableThermalProfile)
+    if (SettingsMap().EnableThermalProfile)
       DrawThermalBand(canvas, rc);
     DrawStallRatio(canvas, rc);
     DrawFlightMode(canvas, rc);
