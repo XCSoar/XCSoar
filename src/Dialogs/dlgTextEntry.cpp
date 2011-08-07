@@ -258,20 +258,6 @@ dlgTextEntryHighscoreType(SingleWindow &parent, TCHAR *text, int width,
 }
 
 bool
-dlgTextEntryShowModal(SingleWindow &parent, tstring &text, int width,
-                      const TCHAR* caption, AllowedCharactersCallback_t accb)
-{
-  TCHAR buf[width];
-  _tcscpy(buf, text.c_str());
-
-  if (!dlgTextEntryShowModal(parent, buf, width, caption, accb))
-    return false;
-
-  text = tstring(buf);
-  return true;
-}
-
-bool
 dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text, int width,
                       const TCHAR* caption, AllowedCharactersCallback_t accb)
 {

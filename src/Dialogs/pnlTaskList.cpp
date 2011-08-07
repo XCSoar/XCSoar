@@ -249,21 +249,20 @@ static void
 RenameTask()
 {
   const TCHAR *oldname = get_cursor_name();
-  tstring newname = oldname;
+  StaticString<40> newname(oldname);
 
-  if (ClearSuffix(newname.begin(), _T(".cup"))) {
+  if (ClearSuffix(newname.buffer(), _T(".cup"))) {
     MessageBoxX(_("Can't rename .CUP files"), _("Rename Error"),
         MB_ICONEXCLAMATION);
     return;
   }
 
-  ClearSuffix(newname.begin(), _T(".tsk"));
+  ClearSuffix(newname.buffer(), _T(".tsk"));
 
-  if (!dlgTextEntryShowModal(*(SingleWindow *)wf->get_root_owner(),
-                             newname, 40))
+  if (!TextEntryDialog(*(SingleWindow *)wf->get_root_owner(), newname))
     return;
 
-  newname += _T(".tsk");
+  newname.append(_T(".tsk"));
 
   TCHAR oldpath[MAX_PATH];
   TCHAR newpath[MAX_PATH];

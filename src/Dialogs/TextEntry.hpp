@@ -25,7 +25,6 @@ Copyright_License {
 #define DIALOGS_TEXT_ENTRY_HPP
 
 #include "Util/StaticString.hpp"
-#include "Util/tstring.hpp"
 
 class SingleWindow;
 
@@ -45,11 +44,6 @@ TextEntryDialog(SingleWindow &parent, StaticString<N> &text,
   return dlgTextEntryShowModal(parent, text.buffer(), text.MAX_SIZE,
                                caption, accb);
 }
-
-bool
-dlgTextEntryShowModal(SingleWindow &parent, tstring &text,
-                      int width, const TCHAR* caption = NULL,
-                      AllowedCharactersCallback_t accb = NULL);
 
 bool
 dlgTextEntryKeyboardShowModal(SingleWindow &parent, TCHAR *text,
