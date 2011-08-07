@@ -238,7 +238,7 @@ public:
   * 
   * @param waypoint Waypoint to check against (replaced)
   * 
-  * @return True if found.  False if appended
+  * @return reference to waypoint in tree (either existing or appended)
   */
   const Waypoint &check_exists_or_append(const Waypoint &waypoint);
 
