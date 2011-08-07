@@ -75,11 +75,6 @@ private:
   PixelRect map_rect;
   bool FullScreen;
 
-  /**
-   * True enables the use of a custom map rect.  Used by dlgTarget.
-   */
-  bool CustomView;
-
   bool airspace_warning_pending;
 
 public:
@@ -157,9 +152,6 @@ public:
   }
 
   void SetFullScreen(bool _full_screen);
-
-  void SetCustomView(PixelRect rc);
-  void LeaveCustomView();
 
   /**
    * A new airspace warning was found.  This method sends the

@@ -53,7 +53,7 @@ MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
    map(NULL), vario(NULL), flarm(NULL), ta(NULL),
    popup(status_messages, *this, CommonInterface::GetUISettings()),
-   FullScreen(false), CustomView(false),
+   FullScreen(false),
    airspace_warning_pending(false)
 {
 }
@@ -557,10 +557,6 @@ MainWindow::SetFullScreen(bool _full_screen)
 
   FullScreen = _full_screen;
 
-  if (CustomView)
-    /* target dialog is active */
-    return;
-
   if (FullScreen)
     InfoBoxManager::Hide();
   else
@@ -572,27 +568,6 @@ MainWindow::SetFullScreen(bool _full_screen)
   }
 
   // the repaint will be triggered by the DrawThread
-}
-
-void
-MainWindow::SetCustomView(PixelRect rc)
-{
-  CustomView = true;
-
-  InfoBoxManager::Hide();
-
-  if (map != NULL)
-    map->fast_move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top);
-}
-
-void
-MainWindow::LeaveCustomView()
-{
-  CustomView = false;
-
-  /* quick hack to force SetFullScreen() to update the MapWindow */
-  FullScreen = !FullScreen;
-  SetFullScreen(!FullScreen);
 }
 
 void
