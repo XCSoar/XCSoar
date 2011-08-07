@@ -31,9 +31,8 @@
  * 2-d ellipse in real-valued projected coordinates, with methods for
  * intersection tests etc.  The ellipse itself need not be axis-aligned.
  */
-struct FlatEllipse 
+class FlatEllipse
 {
-private:
   FlatPoint f1, f2, ap;
   FlatPoint p;
   fixed a;
