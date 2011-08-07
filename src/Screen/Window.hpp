@@ -254,8 +254,10 @@ protected:
    */
 #ifdef NDEBUG
   void assert_thread() const {}
+  void AssertThreadOrUndefined() const {}
 #else
   void assert_thread() const;
+  void AssertThreadOrUndefined() const;
 #endif
 
 #ifdef USE_GDI

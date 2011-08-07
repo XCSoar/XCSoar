@@ -57,6 +57,17 @@ Window::assert_thread() const
 #endif
 }
 
+void
+Window::AssertThreadOrUndefined() const
+{
+#ifdef ENABLE_OPENGL
+  assert(pthread_equal(pthread_self(), OpenGL::thread));
+#elif defined(USE_GDI)
+  assert(hWnd == NULL || !::IsWindow(hWnd) ||
+         ::GetWindowThreadProcessId(hWnd, NULL) == ::GetCurrentThreadId());
+#endif
+}
+
 #endif /* !NDEBUG */
 
 void

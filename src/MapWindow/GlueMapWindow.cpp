@@ -51,7 +51,7 @@ GlueMapWindow::set(ContainerWindow &parent, const PixelRect &rc)
 void
 GlueMapWindow::SetSettingsMap(const SETTINGS_MAP &new_value)
 {
-  assert_thread();
+  AssertThreadOrUndefined();
 
 #ifdef ENABLE_OPENGL
   ReadSettingsMap(new_value);
@@ -64,7 +64,7 @@ GlueMapWindow::SetSettingsMap(const SETTINGS_MAP &new_value)
 void
 GlueMapWindow::SetSettingsComputer(const SETTINGS_COMPUTER &new_value)
 {
-  assert_thread();
+  AssertThreadOrUndefined();
 
 #ifdef ENABLE_OPENGL
   ReadSettingsComputer(new_value);
