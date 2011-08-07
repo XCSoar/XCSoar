@@ -31,6 +31,9 @@
  * \todo better documentation for BBDist hack
  */
 class BBDist {
+  int val[2];
+  int d;
+
 public:
   /**
    * Constructor
@@ -118,9 +121,6 @@ private:
     val[0] = _val;
     val[1] = _val;
   }
-
-  int val[2];
-  int d;  
 };
 
 /**
