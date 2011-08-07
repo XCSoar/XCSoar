@@ -304,9 +304,6 @@ XCSoarInterface::Startup()
   // Initialize Marks
   marks = new Marks();
 
-  // Send the SettingsMap to the DeviceBlackboard
-  SendSettingsMap();
-
   // Show the main and map windows
   LogStartUp(_T("Create map window"));
   main_window.show();

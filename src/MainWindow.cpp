@@ -179,6 +179,8 @@ MainWindow::InitialiseConfigured()
   ta->bring_to_top();
 
   map = new GlueMapWindow(*look);
+  map->SetSettingsComputer(CommonInterface::SettingsComputer());
+  map->SetSettingsMap(CommonInterface::SettingsMap());
   map->set(*this, map_rect);
   map->set_font(Fonts::Map);
 
