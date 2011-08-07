@@ -171,10 +171,7 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
 fixed 
 TaskLeg::leg_distance_nominal() const
 {
-  if (origin())
-    return memo_nominal.calc(origin()->get_location(),
-                             destination.get_location()).Distance;
-  return fixed_zero;
+  return leg_vector_nominal().Distance;
 }
 
 GeoVector
