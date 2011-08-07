@@ -105,6 +105,10 @@ struct GeoVector {
    */
   gcc_pure
   fixed minimum_distance(const GeoPoint &source, const GeoPoint &ref) const;
+
+  inline bool IsValid() const {
+    return !negative(Distance);
+  }
 };
 
 #endif

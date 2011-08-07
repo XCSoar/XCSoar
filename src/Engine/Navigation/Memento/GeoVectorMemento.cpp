@@ -26,7 +26,7 @@ GeoVector
 GeoVectorMemento::calc(const GeoPoint& _origin,
                        const GeoPoint& _destination) const
 {
-  if (negative(value.Distance) ||
+  if (!value.IsValid() ||
       _origin != origin ||
       _destination != destination) {
     origin = _origin;
