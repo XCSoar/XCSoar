@@ -287,6 +287,8 @@ void
 GlueMapWindow::on_paint(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
+  ExchangeBlackboard();
+
   /* update terrain, topography, ... */
   Idle();
 #endif
@@ -301,10 +303,6 @@ GlueMapWindow::on_paint(Canvas &canvas)
 void
 GlueMapWindow::on_paint_buffer(Canvas &canvas)
 {
-#ifdef ENABLE_OPENGL
-  ExchangeBlackboard();
-#endif
-
   MapWindow::on_paint_buffer(canvas);
 
   DrawMapScale(canvas, get_client_rect(), render_projection);
