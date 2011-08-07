@@ -233,8 +233,7 @@ struct GeoPoint {
 /**
  * Extension of GeoPoint for altitude (3d location in spherical space)
  */
-class AGeoPoint: public GeoPoint {
-public:
+struct AGeoPoint: public GeoPoint {
   AGeoPoint(const GeoPoint& p, const short& alt):GeoPoint(p),altitude(alt) {};
   short altitude;                                           /**< Nav reference altitude (m) */
 };
