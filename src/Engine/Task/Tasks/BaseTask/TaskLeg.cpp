@@ -97,20 +97,19 @@ TaskLeg::leg_vector_travelled(const GeoPoint &ref) const
     // this leg totally included
     return memo_travelled.calc(origin()->get_location_travelled(), 
                                destination.get_location_travelled());
-    break;
+
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
     if (!origin())
       return GeoVector(fixed_zero, 
                        ref.bearing(destination.get_location_remaining()));
 
-    if (destination.has_entered()) {
+    if (destination.has_entered())
       return memo_travelled.calc(origin()->get_location_travelled(), 
                                  destination.get_location_travelled());
-    } else {
+    else
       return memo_travelled.calc(origin()->get_location_travelled(), ref);
-    }
-    break;
+
   case OrderedTaskPoint::AFTER_ACTIVE:
     if (!origin())
       return GeoVector(fixed_zero);
@@ -118,6 +117,7 @@ TaskLeg::leg_vector_travelled(const GeoPoint &ref) const
     // this leg may be partially included
     if (origin()->has_entered())
       return memo_travelled.calc(origin()->get_location_travelled(), ref);
+
   default:
     return GeoVector(fixed_zero);
   };
