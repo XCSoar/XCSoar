@@ -280,10 +280,14 @@ MainWindow::ReinitialiseLayout()
     ta->move(0, rc.bottom - sz, sz, sz);
   }
 
-  if (!FullScreen && map != NULL) {
-    map->move(map_rect.left, map_rect.top,
-              map_rect.right - map_rect.left,
-              map_rect.bottom - map_rect.top);
+  if (map != NULL) {
+    if (FullScreen)
+      InfoBoxManager::Hide();
+
+    const PixelRect &current_map = FullScreen ? rc : map_rect;
+    map->move(current_map.left, current_map.top,
+              current_map.right - current_map.left,
+              current_map.bottom - current_map.top);
     map->FullRedraw();
   }
 
