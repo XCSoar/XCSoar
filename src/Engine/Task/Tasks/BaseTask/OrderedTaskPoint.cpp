@@ -32,19 +32,14 @@
 #include <assert.h>
 #include <math.h>
 
-
 OrderedTaskPoint::OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
-                                   const Waypoint & wp, 
-                                   const OrderedTaskBehaviour& to,
-                                   const bool b_scored): 
-  TaskLeg(*this),
-  ScoredTaskPoint(_type, wp, b_scored),
-  ObservationZoneClient(_oz),
-  m_ordered_task_behaviour(to),
-  m_active_state(NOTFOUND_ACTIVE),
-  tp_next(NULL),
-  tp_previous(NULL),
-  flat_bb(FlatGeoPoint(0,0),0) // empty, not initialised!
+                                   const Waypoint &wp,
+                                   const OrderedTaskBehaviour &to,
+                                   const bool b_scored)
+  :TaskLeg(*this), ScoredTaskPoint(_type, wp, b_scored),
+   ObservationZoneClient(_oz), m_ordered_task_behaviour(to),
+   m_active_state(NOTFOUND_ACTIVE), tp_next(NULL), tp_previous(NULL),
+   flat_bb(FlatGeoPoint(0,0),0) // empty, not initialised!
 {
 }
 
@@ -58,16 +53,15 @@ OrderedTaskPoint::set_neighbours(OrderedTaskPoint* _prev,
   update_geometry();
 }
 
-
 /** 
  * Update observation zone geometry (or other internal data) when
  * previous/next turnpoint changes.
  */
-void 
-OrderedTaskPoint::update_geometry() {
+void
+OrderedTaskPoint::update_geometry()
+{
   set_legs(tp_previous, this, tp_next);
 }
-
 
 void
 OrderedTaskPoint::update_oz(const TaskProjection &projection)
@@ -77,33 +71,28 @@ OrderedTaskPoint::update_oz(const TaskProjection &projection)
   SampledTaskPoint::update_oz(projection);
 }
 
-
-bool 
-OrderedTaskPoint::scan_active(OrderedTaskPoint* atp) 
+bool
+OrderedTaskPoint::scan_active(OrderedTaskPoint* atp)
 {
   // reset
   m_active_state = NOTFOUND_ACTIVE;
 
-  if (atp == this) {
+  if (atp == this)
     m_active_state = CURRENT_ACTIVE;
-  } else if (tp_previous 
-             && ((get_previous()->getActiveState() 
-                  == CURRENT_ACTIVE) 
-                 || (get_previous()->getActiveState() 
-                     == AFTER_ACTIVE))) {
+  else if (tp_previous &&
+           (get_previous()->getActiveState() == CURRENT_ACTIVE ||
+               get_previous()->getActiveState() == AFTER_ACTIVE))
     m_active_state = AFTER_ACTIVE;
-  } else {
+  else
     m_active_state = BEFORE_ACTIVE;
-  }
 
-  if (tp_next) { 
+  if (tp_next)
     // propagate to remainder of task
     return get_next()->scan_active(atp);
-  } else {
-    return (m_active_state != BEFORE_ACTIVE) && (m_active_state != NOTFOUND_ACTIVE);
-  }
-}
 
+  return m_active_state != BEFORE_ACTIVE &&
+         m_active_state != NOTFOUND_ACTIVE;
+}
 
 bool
 OrderedTaskPoint::search_boundary_points() const
@@ -124,18 +113,16 @@ OrderedTaskPoint::double_leg_distance(const GeoPoint &ref) const
   assert(tp_next);
 
   return ::DoubleDistance(get_previous()->get_location_remaining(), 
-                          ref, 
-                          get_next()->get_location_remaining());
+                          ref, get_next()->get_location_remaining());
 }
-
 
 bool 
 OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
 {
-  return (get_waypoint() == other->get_waypoint()) &&
-    GetType() == other->GetType() &&
-    get_oz()->equals(other->get_oz()) &&
-    other->get_oz()->equals(get_oz());
+  return get_waypoint() == other->get_waypoint() &&
+         GetType() == other->GetType() &&
+         get_oz()->equals(other->get_oz()) &&
+         other->get_oz()->equals(get_oz());
 }
 
 OrderedTaskPoint* 
@@ -149,23 +136,19 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
   switch (GetType()) {
   case START:
     return new StartPoint(get_oz()->clone(&waypoint->Location),
-                          *waypoint, task_behaviour,
-                          ordered_task_behaviour);
+                          *waypoint, task_behaviour, ordered_task_behaviour);
 
   case AST:
     return new ASTPoint(get_oz()->clone(&waypoint->Location),
-                        *waypoint, task_behaviour,
-                        ordered_task_behaviour);
+                        *waypoint, task_behaviour, ordered_task_behaviour);
 
   case AAT:
     return new AATPoint(get_oz()->clone(&waypoint->Location),
-                        *waypoint, task_behaviour,
-                        ordered_task_behaviour);
+                        *waypoint, task_behaviour, ordered_task_behaviour);
 
   case FINISH:
     return new FinishPoint(get_oz()->clone(&waypoint->Location),
-                           *waypoint, task_behaviour,
-                           ordered_task_behaviour);
+                           *waypoint, task_behaviour, ordered_task_behaviour);
 
   case UNORDERED:
   case ROUTE:
@@ -178,21 +161,22 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
 }
 
 void
-OrderedTaskPoint::scan_projection(TaskProjection& task_projection) const
+OrderedTaskPoint::scan_projection(TaskProjection &task_projection) const
 {
   task_projection.scan_location(get_location());
-#define fixed_steps fixed(0.05)
-  for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps) {
+  #define fixed_steps fixed(0.05)
+
+  for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps) {
     task_projection.scan_location(get_boundary_parametric(t));
   }
 }
 
 void
-OrderedTaskPoint::update_boundingbox(const TaskProjection& task_projection)
+OrderedTaskPoint::update_boundingbox(const TaskProjection &task_projection)
 {
   flat_bb = FlatBoundingBox(task_projection.project(get_location()));
 
-  for (fixed t=fixed_zero; t<= fixed_one; t+= fixed_steps)
+  for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps)
     flat_bb.expand(task_projection.project(get_boundary_parametric(t)));
 
   flat_bb.expand(); // add 1 to fix rounding

@@ -51,44 +51,48 @@ class OrderedTaskPoint :
 
 public:
   /**
-   * States each task point can be in (with respect to which OrderedTaskPoint is
-   * active/selected).
+   * States each task point can be in
+   * (with respect to which OrderedTaskPoint is active/selected).
    */
   enum ActiveState_t {
-    NOTFOUND_ACTIVE = 0,        /**< Active task point was not found, ERROR! */
-    BEFORE_ACTIVE,              /**< This taskpoint is before the active one */
-    CURRENT_ACTIVE,             /**< This taskpoint is currently the active one */
-    AFTER_ACTIVE                /**< This taskpoint is after the active one */
+    /** Active task point was not found, ERROR! */
+    NOTFOUND_ACTIVE = 0,
+    /** This taskpoint is before the active one */
+    BEFORE_ACTIVE,
+    /** This taskpoint is currently the active one */
+    CURRENT_ACTIVE,
+    /** This taskpoint is after the active one */
+    AFTER_ACTIVE
   };
 
 protected:
-  const OrderedTaskBehaviour &m_ordered_task_behaviour; /**< Reference to ordered task behaviour (for task-specific options) */
+  /** Reference to ordered task behaviour (for task-specific options) */
+  const OrderedTaskBehaviour &m_ordered_task_behaviour;
 
 private:
-  ActiveState_t m_active_state; /**< ActiveState determined from scan_active() */
+  /** ActiveState determined from scan_active() */
+  ActiveState_t m_active_state;
 
   OrderedTaskPoint* tp_next;
-
   OrderedTaskPoint* tp_previous;
-
   FlatBoundingBox flat_bb;
 
 public:
-/** 
- * Constructor.
- * Ownership of oz is transferred to this object
- * 
- * @param _oz Observation zone for this task point
- * @param wp Waypoint associated with this task point
- * @param tb Task Behaviour defining options (esp safety heights)
- * @param to OrderedTask Behaviour defining options 
- * @param b_scored Whether distance within OZ is scored 
- * 
- * @return Partially initialised object 
- */
+  /**
+   * Constructor.
+   * Ownership of oz is transferred to this object
+   *
+   * @param _oz Observation zone for this task point
+   * @param wp Waypoint associated with this task point
+   * @param tb Task Behaviour defining options (esp safety heights)
+   * @param to OrderedTask Behaviour defining options
+   * @param b_scored Whether distance within OZ is scored
+   *
+   * @return Partially initialised object
+   */
   OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
-                   const Waypoint & wp, 
-                   const OrderedTaskBehaviour& to,
+                   const Waypoint &wp,
+                   const OrderedTaskBehaviour &to,
                    const bool b_scored=false);
 
   virtual ~OrderedTaskPoint() {}
@@ -106,10 +110,7 @@ public:
                           const OrderedTaskBehaviour &ordered_task_behaviour,
                           const Waypoint* waypoint=NULL) const;
 
-  /** 
-   * Call this when any geometry or OZ parameters are changed
-   * 
-   */
+  /** Call this when any geometry or OZ parameters are changed */
   void update_oz(const TaskProjection &projection);
 
   /** 
@@ -118,148 +119,142 @@ public:
    */
   void update_geometry();
 
-  /**
-   * Is it possible to insert a task point before this one?
-   */
+  /** Is it possible to insert a task point before this one? */
   bool predecessor_allowed() const {
     return GetType() != START;
   }
 
-  /**
-   * Is it possible to insert a task point after this one?
-   */
+  /** Is it possible to insert a task point after this one? */
   bool successor_allowed() const {
     return GetType() != FINISH;
   }
 
-/** 
- * Set previous/next task points.
- * 
- * @param prev Previous (incoming leg's origin) task point
- * @param next Next (outgoing leg's destination) task point
- */
+  /**
+   * Set previous/next task points.
+   *
+   * @param prev Previous (incoming leg's origin) task point
+   * @param next Next (outgoing leg's destination) task point
+   */
   virtual void set_neighbours(OrderedTaskPoint* prev,
                               OrderedTaskPoint* next);
 
-/** 
- * Accessor for previous task point
- * 
- * @return Previous task point
- */
+  /**
+   * Accessor for previous task point
+   *
+   * @return Previous task point
+   */
   OrderedTaskPoint* get_previous() const {
     return tp_previous;
   }
 
-/** 
- * Accessor for next task point
- * 
- * @return Next task point
- */
+  /**
+   * Accessor for next task point
+   *
+   * @return Next task point
+   */
   OrderedTaskPoint* get_next() const {
     return tp_next;
   }
   
-/** 
- * Accessor for activation state of this task point.
- * This is valid only after scan_active() has been called. 
- * 
- * @return Activation state of this task point
- */
+  /**
+   * Accessor for activation state of this task point.
+   * This is valid only after scan_active() has been called.
+   *
+   * @return Activation state of this task point
+   */
   ActiveState_t getActiveState() const {
     return m_active_state;
   }
 
-/** 
- * Scan forward through successors to set the activity
- * state of all connected task points.  Should only be
- * called on the known first task point in the list.
- * 
- * @param atp The current active task point
- * 
- * @return True if the active task point is found
- */
+  /**
+   * Scan forward through successors to set the activity
+   * state of all connected task points.  Should only be
+   * called on the known first task point in the list.
+   *
+   * @param atp The current active task point
+   *
+   * @return True if the active task point is found
+   */
   bool scan_active(OrderedTaskPoint* atp);
 
-/** 
- * Calculate vector remaining from aircraft state.
- * If this task point is after active, uses the planned reference points
- * 
- * (This uses memento values)
- *
- * @param state Aircraft state
- * @return Vector remaining to this taskpoint (or next planned)
- */
+  /**
+   * Calculate vector remaining from aircraft state.
+   * If this task point is after active, uses the planned reference points
+   *
+   * (This uses memento values)
+   *
+   * @param state Aircraft state
+   * @return Vector remaining to this taskpoint (or next planned)
+   */
   const GeoVector get_vector_remaining(const AircraftState &state) const {
     return vector_remaining;
   }
 
-/** 
- * Calculate vector from this task point to the aircraft.
- * If this task point is after active, returns null;
- * if this task point is before active, uses scored/best points.
- *
- * (This uses memento values)
- *
- * 
- * @return Vector from this taskpoint to aircraft (or next planned)
- */
+  /**
+   * Calculate vector from this task point to the aircraft.
+   * If this task point is after active, returns null;
+   * if this task point is before active, uses scored/best points.
+   *
+   * (This uses memento values)
+   *
+   * @return Vector from this taskpoint to aircraft (or next planned)
+   */
   const GeoVector get_vector_travelled(const AircraftState &) const {
     return vector_travelled;
   }
 
-/** 
- * Calculate vector around planned task with this task point as the destination.
- * 
- * @return Vector planned to this taskpoint
- */
+  /**
+   * Calculate vector around planned task with this task point as the destination.
+   *
+   * @return Vector planned to this taskpoint
+   */
   const GeoVector get_vector_planned() const {
     return vector_planned;
   }
 
-/** 
- * Test whether a taskpoint is equivalent to this one
- * 
- * For this abstract orderedtaskpoint, only compare OZ and WP
- *
- * @param other Taskpoint to compare to
- * 
- * @return True if same WP, type and OZ
- */
+  /**
+   * Test whether a taskpoint is equivalent to this one
+   *
+   * For this abstract orderedtaskpoint, only compare OZ and WP
+   *
+   * @param other Taskpoint to compare to
+   *
+   * @return True if same WP, type and OZ
+   */
   virtual bool equals(const OrderedTaskPoint* other) const;
 
-/** 
- * Update a TaskProjection to include this taskpoint and observation zone.
- * 
- * @param task_projection Projection to update
- */
-  void scan_projection(TaskProjection& task_projection) const;
+  /**
+   * Update a TaskProjection to include this taskpoint and observation zone.
+   *
+   * @param task_projection Projection to update
+   */
+  void scan_projection(TaskProjection &task_projection) const;
 
   /**
    * Update the bounding box in flat projected coordinates
    */
-  void update_boundingbox(const TaskProjection& task_projection);
+  void update_boundingbox(const TaskProjection &task_projection);
 
   /**
    * Test whether a boundingbox overlaps with this oz
    */
-  bool boundingbox_overlaps(const FlatBoundingBox& bb) const;
+  bool boundingbox_overlaps(const FlatBoundingBox &bb) const;
 
 protected:
-/** 
- * Calculate distance from previous remaining/planned location to a point,
- * and from that point to the next remaining/planned location.
- * Use of this function facilitates speed-up over simply calculating
- * both distances and adding them.
- * 
- * @param ref Reference location
- * 
- * @return Distance (m)
- */
+  /**
+   * Calculate distance from previous remaining/planned location to a point,
+   * and from that point to the next remaining/planned location.
+   * Use of this function facilitates speed-up over simply calculating
+   * both distances and adding them.
+   *
+   * @param ref Reference location
+   *
+   * @return Distance (m)
+   */
   gcc_pure
   fixed double_leg_distance(const GeoPoint &ref) const;
 
 private:
-
   bool search_nominal_if_unsampled() const;
   bool search_boundary_points() const;
 };
