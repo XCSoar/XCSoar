@@ -110,6 +110,11 @@ private:
 
   bool entry_precondition() const;
 
+  /**
+   * called by isInSector
+   * @param state
+   * @return true if state is within valid height for sector
+   */
   bool is_in_height_limit(const AircraftState &state) const;
 };
 
