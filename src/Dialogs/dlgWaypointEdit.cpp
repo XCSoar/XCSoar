@@ -67,10 +67,10 @@ OnNameClicked(gcc_unused WndButton &button)
 {
   assert(buttonName != NULL);
 
-  TCHAR buff[NAME_SIZE + 1];
-  _tcscpy(buff, global_wpt->Name.c_str());
-  dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                        buff, NAME_SIZE);
+  StaticString<NAME_SIZE + 1> buff(global_wpt->Name.c_str());
+  if (!TextEntryDialog(*(SingleWindow *)button.get_root_owner(), buff))
+    return;
+
   global_wpt->Name = buff;
 
   UpdateButtons();
@@ -81,10 +81,10 @@ OnCommentClicked(gcc_unused WndButton &button)
 {
   assert(buttonComment != NULL);
 
-  TCHAR buff[COMMENT_SIZE+1];
-  _tcscpy(buff, global_wpt->Comment.c_str());
-  dlgTextEntryShowModal(*(SingleWindow *)button.get_root_owner(),
-                        buff, COMMENT_SIZE);
+  StaticString<COMMENT_SIZE + 1> buff(global_wpt->Comment.c_str());
+  if (!TextEntryDialog(*(SingleWindow *)button.get_root_owner(), buff))
+    return;
+
   global_wpt->Comment = buff;
 
   UpdateButtons();

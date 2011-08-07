@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef DIALOGS_TEXT_ENTRY_HPP
 #define DIALOGS_TEXT_ENTRY_HPP
 
+#include "Util/StaticString.hpp"
 #include "Util/tstring.hpp"
 
 class SingleWindow;
@@ -34,6 +35,16 @@ bool
 dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text,
                       int width, const TCHAR* caption = NULL,
                       AllowedCharactersCallback_t accb = NULL);
+
+template<unsigned N>
+static inline bool
+TextEntryDialog(SingleWindow &parent, StaticString<N> &text,
+                const TCHAR *caption=NULL,
+                AllowedCharactersCallback_t accb=NULL)
+{
+  return dlgTextEntryShowModal(parent, text.buffer(), text.MAX_SIZE,
+                               caption, accb);
+}
 
 bool
 dlgTextEntryShowModal(SingleWindow &parent, tstring &text,

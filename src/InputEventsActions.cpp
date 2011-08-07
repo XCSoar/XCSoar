@@ -645,9 +645,10 @@ InputEvents::eventFlarmTraffic(gcc_unused const TCHAR *misc)
 void
 InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
 {
-  TCHAR callsign[4] = _T("");
-  if (!dlgTextEntryShowModal(CommonInterface::main_window, callsign, 4,
-                             _("Competition ID")))
+  StaticString<4> callsign;
+  callsign.clear();
+  if (!TextEntryDialog(CommonInterface::main_window, callsign,
+                       _("Competition ID")))
     return;
 
   const FlarmId *ids[30];
