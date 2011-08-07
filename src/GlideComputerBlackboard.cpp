@@ -32,10 +32,6 @@ Copyright_License {
 GlideComputerBlackboard::GlideComputerBlackboard()
   :ScreenDistanceMeters(fixed(50000))
 {
-  /* avoid valgrind warnings in GlideComputer constructors; the
-     initial SettingsComputer values should better come from the
-     profile, not from the defaults, so this is a hack */
-  settings_computer.SetDefaults();
 }
 
 /**

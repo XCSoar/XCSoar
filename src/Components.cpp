@@ -357,6 +357,7 @@ XCSoarInterface::Startup()
                                      *route_planner,
                                      *airspace_warnings,
                                      task_events);
+  glide_computer->ReadSettingsComputer(SettingsComputer());
   glide_computer->set_terrain(terrain);
   glide_computer->SetLogger(&logger);
   glide_computer->Initialise();
