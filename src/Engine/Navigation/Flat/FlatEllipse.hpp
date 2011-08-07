@@ -33,6 +33,16 @@
  */
 struct FlatEllipse 
 {
+private:
+  FlatPoint f1, f2, ap;
+  FlatPoint p;
+  fixed a;
+  fixed b;
+  Angle theta;
+
+  Angle theta_initial;
+
+public:
   /** 
    * Constructor.
    * 
@@ -80,14 +90,6 @@ struct FlatEllipse
   bool intersect_extended(const FlatPoint &p, FlatPoint &i1, FlatPoint &i2) const;
 
 private:
-  FlatPoint f1, f2, ap;
-  FlatPoint p;
-  fixed a;
-  fixed b;
-  Angle theta;
-
-  Angle theta_initial;
-
   gcc_pure
   fixed ab() const;
 
