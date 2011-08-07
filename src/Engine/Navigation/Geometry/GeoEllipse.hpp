@@ -33,41 +33,38 @@
  */
 class GeoEllipse {
 public:
-/** 
- * Constructor
- * 
- * @param f1 Focus 1
- * @param f2 Focus 2
- * @param p Point on ellipse
- * @param _task_projection Task projection used for internal representation
- */
+  /**
+   * Constructor
+   *
+   * @param f1 Focus 1
+   * @param f2 Focus 2
+   * @param p Point on ellipse
+   * @param _task_projection Task projection used for internal representation
+   */
   GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
-             const GeoPoint &p,
-             const TaskProjection &_task_projection);
+             const GeoPoint &p, const TaskProjection &_task_projection);
 
-/** 
- * Parametric form of ellipse border
- * 
- * @param t Parameter (0,1)
- * 
- * @return Location of point on ellipse
- */
+  /**
+   * Parametric form of ellipse border
+   *
+   * @param t Parameter (0,1)
+   *
+   * @return Location of point on ellipse
+   */
   gcc_pure
   GeoPoint parametric(const fixed t) const;
 
-/** 
- * Calculate where a line from the first focus through a point p
- * intersects with the ellipse. 
- * 
- * @param p Origin of point from which to search
- * @param i1 Location of closest intersection point
- * @param i2 Location of furthest intersection point
- * 
- * @return True if line intersects
- */
-  bool intersect_extended(const GeoPoint &p,
-                          GeoPoint &i1,
-                          GeoPoint &i2) const;
+  /**
+   * Calculate where a line from the first focus through a point p
+   * intersects with the ellipse.
+   *
+   * @param p Origin of point from which to search
+   * @param i1 Location of closest intersection point
+   * @param i2 Location of furthest intersection point
+   *
+   * @return True if line intersects
+   */
+  bool intersect_extended(const GeoPoint &p, GeoPoint &i1, GeoPoint &i2) const;
 
 private:
   TaskProjection task_projection;

@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "GeoEllipse.hpp"
 
 GeoEllipse::GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
@@ -32,14 +33,14 @@ GeoEllipse::GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
 }
 
 GeoPoint 
-GeoEllipse::parametric(const fixed t) const {
+GeoEllipse::parametric(const fixed t) const
+{
   const FlatPoint fp = ell.parametric(t);
   return task_projection.funproject(fp);
 }
 
 bool 
-GeoEllipse::intersect_extended(const GeoPoint &p,
-                               GeoPoint &i1,
+GeoEllipse::intersect_extended(const GeoPoint &p, GeoPoint &i1,
                                GeoPoint &i2) const 
 {
   const FlatPoint pf = task_projection.fproject(p);
@@ -48,8 +49,7 @@ GeoEllipse::intersect_extended(const GeoPoint &p,
     i1 = task_projection.funproject(i1f);
     i2 = task_projection.funproject(i2f);
     return true;
-  } else {
-    return false;
   }
-}
 
+  return false;
+}
