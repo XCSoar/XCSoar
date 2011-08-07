@@ -42,6 +42,11 @@ Copyright_License {
 #include <stdlib.h>
 #include <stdio.h>
 
+/**
+ * Special enum integer value for "filter disabled".
+ */
+static const unsigned WILDCARD = 0x7fff;
+
 static WndForm *wf=NULL;
 static WndListFrame *wAirspaceList=NULL;
 
@@ -50,11 +55,11 @@ static unsigned NameFilterIdx=0;
 
 static fixed distance_filter;
 
-static int direction_filter;
+static unsigned direction_filter = WILDCARD;
 static Angle last_heading;
 
 static const StaticEnumChoice type_filter_list[] = {
-  { (unsigned)-1, _T("*") },
+  { WILDCARD, _T("*") },
   { OTHER, _T("Other") },
   { RESTRICT, _T("Restricted areas") },
   { PROHIBITED, _T("Prohibited areas") },
@@ -71,7 +76,7 @@ static const StaticEnumChoice type_filter_list[] = {
   { 0 }
 };
 
-static int TypeFilterIdx = -1;
+static unsigned TypeFilterIdx = WILDCARD;
 
 static AirspaceSelectInfoVector AirspaceSelectInfo;
 
@@ -95,7 +100,7 @@ static void UpdateList(void)
 {
   AirspaceSelectInfo = airspace_sorter->get_list();
 
-  if (TypeFilterIdx >= 0)
+  if (TypeFilterIdx != WILDCARD)
     airspace_sorter->filter_class(AirspaceSelectInfo, (AirspaceClass_t)TypeFilterIdx);
   
   bool sort_distance = false;
@@ -103,7 +108,7 @@ static void UpdateList(void)
     sort_distance = true;
     airspace_sorter->filter_distance(AirspaceSelectInfo, distance_filter);
   } 
-  if (direction_filter >= 0) {
+  if (direction_filter != WILDCARD) {
     sort_distance = true;
     Angle a = direction_filter == 0
       ? CommonInterface::Calculated().heading
@@ -129,7 +134,7 @@ static WndProperty *wpDirection;
 static void FilterMode(bool direction) {
   if (direction) {
     distance_filter = fixed_minus_one;
-    direction_filter = -1;
+    direction_filter = WILDCARD;
     if (wpDistance) {
       DataFieldEnum &df = *(DataFieldEnum *)wpDistance->GetDataField();
       df.Set(0);
@@ -193,7 +198,7 @@ static void OnFilterDistance(DataField *_Sender,
     case DataField::daChange:
     case DataField::daInc:
     case DataField::daDec:
-    distance_filter = Sender->GetAsInteger() > 0
+    distance_filter = (unsigned)Sender->GetAsInteger() != WILDCARD
       ? fixed(Sender->GetAsInteger())
       : fixed_minus_one;
     FilterMode(false);
@@ -326,13 +331,13 @@ static bool
 FormKeyDown(WndForm &Sender, unsigned key_code){
 
   WndProperty* wp;
-  int NewIndex = TypeFilterIdx;
+  unsigned NewIndex = TypeFilterIdx;
 
   wp = ((WndProperty *)wf->FindByName(_T("prpFltType")));
 
   switch(key_code) {
     case VK_F1:
-      NewIndex = -1;
+      NewIndex = WILDCARD;
     break;
     case VK_F2:
       NewIndex = RESTRICT;
@@ -388,7 +393,7 @@ FillDirectionEnum(DataFieldEnum &df)
 {
   TCHAR buffer[64];
 
-  df.AddChoice((unsigned)-1, _T("*"));
+  df.AddChoice(WILDCARD, _T("*"));
   df.AddChoice(0, GetHeadingString(buffer));
 
   static const unsigned directions[] = {
@@ -400,7 +405,7 @@ FillDirectionEnum(DataFieldEnum &df)
     df.AddChoice(directions[i], buffer);
   }
 
-  df.Set((unsigned)-1);
+  df.Set(WILDCARD);
 }
 
 static void
@@ -431,7 +436,7 @@ PrepareAirspaceSelectDialog()
   FillDirectionEnum(*(DataFieldEnum *)wpDirection->GetDataField());
   wpDirection->RefreshDisplay();
 
-  LoadFormProperty(*wf, _T("prpFltType"), type_filter_list, -1);
+  LoadFormProperty(*wf, _T("prpFltType"), type_filter_list, WILDCARD);
 
   wf->SetTimerNotify(OnTimerNotify);
 }
