@@ -28,19 +28,15 @@ Copyright_License {
 #include "Task/Tasks/AbortTask.hpp"
 #include "RenderTaskPoint.hpp"
 
-RenderTask::RenderTask(RenderTaskPoint& _tpv,
-                       GeoBounds _screen_bounds)
-  :tpv(_tpv),
-   screen_bounds(_screen_bounds)
-{
-}
+RenderTask::RenderTask(RenderTaskPoint &_tpv, GeoBounds _screen_bounds)
+  :tpv(_tpv), screen_bounds(_screen_bounds) {}
 
 void 
-RenderTask::draw_layers(const AbstractTask& task) 
+RenderTask::draw_layers(const AbstractTask &task)
 {
-  for (unsigned i=0; i<4; i++) {
+  for (unsigned i = 0; i < 4; i++) {
     tpv.set_layer((RenderTaskLayer)i);
-    if ((i!= RENDER_TASK_SYMBOLS) && (i!=RENDER_TASK_LEG)) {
+    if (i != RENDER_TASK_SYMBOLS && i != RENDER_TASK_LEG) {
       tpv.set_mode_optional(true);
       task.sp_CAccept(tpv);
     }
@@ -50,14 +46,14 @@ RenderTask::draw_layers(const AbstractTask& task)
 }
 
 void 
-RenderTask::Visit(const AbortTask& task) 
+RenderTask::Visit(const AbortTask &task)
 {
   tpv.set_active_index(task.getActiveIndex());
   draw_layers(task);
 }
 
 void 
-RenderTask::Visit(const OrderedTask& task) 
+RenderTask::Visit(const OrderedTask &task)
 {
   tpv.set_bounding_box(task.get_bounding_box(screen_bounds));
   tpv.set_active_index(task.getActiveIndex());
@@ -65,7 +61,7 @@ RenderTask::Visit(const OrderedTask& task)
 }
 
 void 
-RenderTask::Visit(const GotoTask& task) 
+RenderTask::Visit(const GotoTask &task)
 {
   tpv.set_active_index(0);
   draw_layers(task);
