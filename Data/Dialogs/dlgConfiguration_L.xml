@@ -650,16 +650,26 @@
         Help="This is the time interval between logged points when circling.">
         <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="30" Step="1" />
       </Edit>
-    
-      <Button Name="cmdPilotName" Caption="" X="2" Width="-2" Height="22"/>
-    
-      <Button Name="cmdAircraftType" Caption="" X="2" Width="-2" Height="22"/>
-    
-      <Button Name="cmdAircraftReg" Caption="" X="2" Width="-2" Height="22"/>
-    
-      <Button Name="cmdCompetitionId" Caption="" X="2" Width="-2" Height="22"/>
-    
-      <Button Name="cmdLoggerID" Caption="" Expert="1" X="2" Width="-2" Height="22"/>
+
+      <Edit Name="PilotName" Caption="Pilot name" X="2" Width="-2" Height="22" CaptionWidth="150">
+        <DataField DataType="string"/>
+      </Edit>
+
+      <Edit Name="AircraftType" Caption="Aircraft type" X="2" Width="-2" Height="22" CaptionWidth="150">
+        <DataField DataType="string"/>
+      </Edit>
+
+      <Edit Name="AircraftReg" Caption="Aircraft reg." X="2" Width="-2" Height="22" CaptionWidth="150">
+        <DataField DataType="string"/>
+      </Edit>
+
+      <Edit Name="CompetitionID" Caption="Competition ID" X="2" Width="-2" Height="22" CaptionWidth="150">
+        <DataField DataType="string"/>
+      </Edit>
+
+      <Edit Name="LoggerID" Caption="Logger ID" X="2" Width="-2" Height="22" CaptionWidth="150">
+        <DataField DataType="string"/>
+      </Edit>
     
       <Edit Name="prpLoggerShortName" Caption="Short file name" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="This determines whether the logger uses the short IGC file name or the long IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).">
