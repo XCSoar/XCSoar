@@ -56,12 +56,8 @@ static const fixed DistanceFilter[] = {
 
 static unsigned DistanceFilterIdx=0;
 
-#define DirHDG -1
-
-static int DirectionFilter[] = {0, DirHDG, 360, 30, 60, 90, 120, 150,
-                                180, 210, 240, 270, 300, 330};
-static unsigned DirectionFilterIdx=0;
-static int lastHeading=0;
+static int direction_filter;
+static Angle last_heading;
 
 static const StaticEnumChoice type_filter_list[] = {
   { (unsigned)-1, _T("*") },
@@ -113,15 +109,12 @@ static void UpdateList(void)
     sort_distance = true;
     airspace_sorter->filter_distance(AirspaceSelectInfo, DistanceFilter[DistanceFilterIdx]);
   } 
-  if (DirectionFilterIdx) {
+  if (direction_filter >= 0) {
     sort_distance = true;
-    int a = DirectionFilter[DirectionFilterIdx];
-    if (a == DirHDG) {
-      a = uround(CommonInterface::Calculated().heading.value_degrees());
-      lastHeading = a;
-    }
-    airspace_sorter->filter_direction(AirspaceSelectInfo, 
-                                      Angle::degrees(fixed(a)));
+    Angle a = direction_filter == 0
+      ? CommonInterface::Calculated().heading
+      : Angle::degrees(fixed(direction_filter));
+    airspace_sorter->filter_direction(AirspaceSelectInfo, a);
   }
   if (sort_distance) {
     airspace_sorter->sort_distance(AirspaceSelectInfo);
@@ -142,15 +135,15 @@ static WndProperty *wpDirection;
 static void FilterMode(bool direction) {
   if (direction) {
     DistanceFilterIdx=0;
-    DirectionFilterIdx=0;
+    direction_filter = -1;
     if (wpDistance) {
       DataFieldString *df = (DataFieldString *)wpDistance->GetDataField();
       df->Set(_T("*"));
       wpDistance->RefreshDisplay();
     }
     if (wpDirection) {
-      DataFieldString *df = (DataFieldString *)wpDirection->GetDataField();
-      df->Set(_T("*"));
+      DataFieldEnum &df = *(DataFieldEnum *)wpDirection->GetDataField();
+      df.Set(0);
       wpDirection->RefreshDisplay();
     }
   } else {
@@ -235,58 +228,22 @@ static void OnFilterDistance(DataField *_Sender,
   Sender->Set(sTmp);
 }
 
-
-static void SetDirectionData(DataFieldString *Sender){
-
-  TCHAR sTmp[12];
-
-  if (Sender == NULL){
-    Sender = (DataFieldString *)wpDirection->GetDataField();
-  }
-
-  if (DirectionFilterIdx == 0)
-    _stprintf(sTmp, _T("%c"), '*');
-  else if (DirectionFilterIdx == 1){
-    int a = iround(CommonInterface::Calculated().heading.value_degrees());
-    if (a <=0)
-      a += 360;
-    _stprintf(sTmp, _T("HDG(%d")_T(DEG)_T(")"), a);
-  }else
-    _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
-
-  Sender->Set(sTmp);
-
-}
-
 static void OnFilterDirection(DataField *_Sender,
                               DataField::DataAccessKind_t Mode){
-  DataFieldString *Sender = (DataFieldString *)_Sender;
+  DataFieldEnum &df = *(DataFieldEnum *)_Sender;
 
   switch(Mode){
     case DataField::daChange:
-    break;
     case DataField::daInc:
-      DirectionFilterIdx++;
-      if (DirectionFilterIdx > sizeof(DirectionFilter)/sizeof(DirectionFilter[0])-1)
-        DirectionFilterIdx = 0;
-      FilterMode(false);
-      UpdateList();
-    break;
     case DataField::daDec:
-      if (DirectionFilterIdx == 0)
-        DirectionFilterIdx = sizeof(DirectionFilter)/sizeof(DirectionFilter[0])-1;
-      else
-        DirectionFilterIdx--;
-      FilterMode(false);
-      UpdateList();
+    direction_filter = df.GetAsInteger();
+    FilterMode(false);
+    UpdateList();
     break;
 
   case DataField::daSpecial:
     return;
   }
-
-  SetDirectionData(Sender);
-
 }
 
 static void OnFilterType(DataField *Sender,
@@ -359,15 +316,28 @@ CloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrCancel);
 }
 
+gcc_pure
+static const TCHAR *
+GetHeadingString(TCHAR *buffer)
+{
+  _stprintf(buffer, _T("%s (%u")_T(DEG)_T(")"), _("Heading"),
+            uround(CommonInterface::Calculated().heading.as_bearing().value_degrees()));
+  return buffer;
+}
+
 static void
 OnTimerNotify(gcc_unused WndForm &Sender)
 {
-  if (DirectionFilterIdx == 1){
-    int a;
-    a = (lastHeading - iround(CommonInterface::Calculated().heading.value_degrees()));
-    if (abs(a) > 0){
+  if (direction_filter == 0 && !CommonInterface::Calculated().circling) {
+    Angle a = last_heading - CommonInterface::Calculated().heading;
+    if (a.as_delta().magnitude_degrees() >= fixed(10)) {
+      last_heading = CommonInterface::Calculated().heading;
+
       UpdateList();
-      SetDirectionData(NULL);
+
+      DataFieldEnum &df = *(DataFieldEnum *)wpDirection->GetDataField();
+      TCHAR buffer[64];
+      df.replaceEnumText(0, GetHeadingString(buffer));
       wpDirection->RefreshDisplay();
     }
   }
@@ -418,6 +388,26 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 static void
+FillDirectionEnum(DataFieldEnum &df)
+{
+  TCHAR buffer[64];
+
+  df.AddChoice((unsigned)-1, _T("*"));
+  df.AddChoice(0, GetHeadingString(buffer));
+
+  static const unsigned directions[] = {
+    360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
+  };
+
+  for (unsigned i = 0; i < sizeof(directions) / sizeof(directions[0]); ++i) {
+    _stprintf(buffer, _T("%d")_T(DEG), directions[i]);
+    df.AddChoice(directions[i], buffer);
+  }
+
+  df.Set((unsigned)-1);
+}
+
+static void
 PrepareAirspaceSelectDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
@@ -439,6 +429,8 @@ PrepareAirspaceSelectDialog()
   wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
+  FillDirectionEnum(*(DataFieldEnum *)wpDirection->GetDataField());
+  wpDirection->RefreshDisplay();
 
   LoadFormProperty(*wf, _T("prpFltType"), type_filter_list, -1);
 

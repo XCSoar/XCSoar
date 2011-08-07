@@ -18,7 +18,7 @@
   </Edit>
 
   <Edit Name="prpFltDirection" Caption="Direction" X="100" Y="74" Width="98" Height="40" CaptionWidth="-1">
-    <DataField DataType="string" OnDataAccess="OnFilterDirection"/>
+    <DataField DataType="enum" OnDataAccess="OnFilterDirection"/>
   </Edit>
 
   <List Name="frmAirspaceList" X="1" Y="116" Width="-1" Height="-1" ItemHeight="18"/>
