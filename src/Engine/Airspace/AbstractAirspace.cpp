@@ -214,6 +214,13 @@ AbstractAirspace::get_name_text(const bool concise) const
   }
 }
 
+bool
+AbstractAirspace::MatchNamePrefix(const TCHAR *prefix) const
+{
+  size_t prefix_length = _tcslen(prefix);
+  return _tcsnicmp(Name.c_str(), prefix, prefix_length) == 0;
+}
+
 const tstring 
 AbstractAirspace::get_radio_text() const
 {

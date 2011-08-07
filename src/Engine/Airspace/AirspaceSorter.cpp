@@ -78,6 +78,23 @@ AirspaceSorter::filter_name(AirspaceSelectInfoVector& vec,
   vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceNameFilter), vec.end());
 }
 
+static const TCHAR *name_prefix;
+
+static bool
+AirspaceNamePrefixFilter(const AirspaceSelectInfo& elem1)
+{
+  return !elem1.airspace->MatchNamePrefix(name_prefix);
+}
+
+void
+AirspaceSorter::FilterNamePrefix(AirspaceSelectInfoVector &v,
+                                 const TCHAR *prefix) const
+{
+  name_prefix = prefix;
+  v.erase(std::remove_if(v.begin(), v.end(), AirspaceNamePrefixFilter),
+          v.end());
+}
+
 static Angle Direction;
 
 static bool

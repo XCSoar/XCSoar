@@ -319,6 +319,12 @@ public:
   const tstring get_name_text(const bool concise=false) const;
 
   /**
+   * Returns true if the name begins with the specified string.
+   */
+  gcc_pure
+  bool MatchNamePrefix(const TCHAR *prefix) const;
+
+  /**
    * Produce text version of radio frequency.
    *
    * @return Text version of radio frequency

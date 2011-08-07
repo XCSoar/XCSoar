@@ -69,6 +69,15 @@ public:
  */
   void filter_name(AirspaceSelectInfoVector& vec, const unsigned char c) const;
 
+  /**
+   * Remove airspaces not matching the specifid name prefix
+   *
+   * @param v List of airspaces to filter (read-write)
+   * @param prefix the name prefix
+   */
+  void FilterNamePrefix(AirspaceSelectInfoVector &v,
+                        const TCHAR *prefix) const;
+
 /** 
  * Remove airspaces bearing greater than 18 degrees from supplied direction 
  * 
