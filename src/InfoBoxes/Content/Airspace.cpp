@@ -87,7 +87,7 @@ InfoBoxContentNearestAirspaceHorizontal::Update(InfoBoxWindow &infobox)
   const AbstractAirspace &as = *found->get_airspace();
   const GeoPoint closest = as.closest_point(basic.location);
   SetValueFromDistance(infobox, basic.location.distance(closest));
-  infobox.SetComment(as.get_name_text(true).c_str());
+  infobox.SetComment(as.GetName());
 }
 
 class VerticalAirspaceVisitor : public AirspaceVisitor {
@@ -176,5 +176,5 @@ InfoBoxContentNearestAirspaceVertical::Update(InfoBoxWindow &infobox)
                             sizeof(buffer) / sizeof(buffer[0]), false);
   infobox.SetValue(buffer);
   infobox.SetValueUnit(Units::Current.AltitudeUnit);
-  infobox.SetComment(visitor.GetNearest()->get_name_text(true).c_str());
+  infobox.SetComment(visitor.GetNearest()->GetName());
 }

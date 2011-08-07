@@ -26,13 +26,13 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
     info.Distance = vec.Distance*distance_factor;
     info.Direction = vec.Bearing;
 
-    tstring Name = airspace.get_name_text(true);
+    const TCHAR *name = airspace.GetName();
 
     info.FourChars = 
-      ((Name.c_str()[0] & 0xff) << 24)
-      +((Name.c_str()[1] & 0xff) << 16)
-      +((Name.c_str()[2] & 0xff) << 8)
-      +((Name.c_str()[3] & 0xff));
+      ((name[0] & 0xff) << 24)
+      +((name[1] & 0xff) << 16)
+      +((name[2] & 0xff) << 8)
+      +((name[3] & 0xff));
 
     m_airspaces_all.push_back(info);
   }

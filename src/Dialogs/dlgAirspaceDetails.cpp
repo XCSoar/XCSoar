@@ -51,7 +51,7 @@ OnAcknowledgeClicked(gcc_unused WndButton &Sender)
 
   bool acked = airspace_warnings->get_ack_day(*airspace);
 
-  int answer = MessageBoxX(airspace->get_name_text(true).c_str(), acked ?
+  int answer = MessageBoxX(airspace->GetName(), acked ?
                            _("Enable airspace again?") : _("Acknowledge for day?"),
                            MB_YESNO | MB_ICONQUESTION);
 
@@ -96,7 +96,7 @@ SetValues(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpName"));
   assert(wp != NULL);
-  wp->SetText(airspace->get_name_text(true).c_str());
+  wp->SetText(airspace->GetName());
   wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpRadio"));

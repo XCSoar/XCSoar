@@ -181,7 +181,7 @@ private:
     canvas.select(name_font);
     canvas.text_clipped(rc.left + Layout::FastScale(2),
                         rc.top + Layout::FastScale(2), rc,
-                        airspace.get_name_text(true).c_str());
+                        airspace.GetName());
 
     canvas.select(small_font);
     canvas.text_clipped(rc.left + Layout::FastScale(2),

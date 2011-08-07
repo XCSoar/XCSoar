@@ -302,6 +302,11 @@ public:
   gcc_pure
   const TCHAR *get_type_text(const bool concise=false) const;
 
+  gcc_pure
+  const TCHAR *GetName() const {
+    return Name.c_str();
+  }
+
 /** 
  * Produce text version of name and airspace class.
  * If concise is true, only produces name.
