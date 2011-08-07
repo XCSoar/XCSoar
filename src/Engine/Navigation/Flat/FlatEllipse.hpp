@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef FLATELLIPSE_HPP
 #define FLATELLIPSE_HPP
 
@@ -41,47 +42,42 @@ struct FlatEllipse
    * 
    * @return Initialised object
    */
-  FlatEllipse(const FlatPoint &_f1,
-              const FlatPoint &_f2,
-              const FlatPoint &_ap);
+  FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2, const FlatPoint &_ap);
 
-/** 
- * Dummy constructor for zero-sized ellipse
- * 
- * @return Initialised object
- */
-  FlatEllipse():f1(fixed_zero, fixed_zero),
-                f2(fixed_zero, fixed_zero),
-                ap(fixed_zero, fixed_zero), 
-                p(fixed_zero, fixed_zero),
-                a(fixed_one), b(fixed_one), 
-                theta(Angle::zero()),
-                theta_initial(Angle::zero())
-    {
-    };
+  /**
+   * Dummy constructor for zero-sized ellipse
+   *
+   * @return Initialised object
+   */
+  FlatEllipse()
+    :f1(fixed_zero, fixed_zero),
+     f2(fixed_zero, fixed_zero),
+     ap(fixed_zero, fixed_zero),
+     p(fixed_zero, fixed_zero),
+     a(fixed_one), b(fixed_one),
+     theta(Angle::zero()),
+     theta_initial(Angle::zero()) {}
 
-/** 
- * Parametric representation of ellipse
- * 
- * @param t Parameter [0,1] 
- * 
- * @return Location on ellipse
- */
+  /**
+   * Parametric representation of ellipse
+   *
+   * @param t Parameter [0,1]
+   *
+   * @return Location on ellipse
+   */
   gcc_pure
   FlatPoint parametric(const fixed t) const;
 
-/** 
- * Find intersection of line from focus 1 to p, through the ellipse
- * 
- * @param p Reference point
- * @param i1 Intersection point 1 if found
- * @param i2 Intersection point 2 if found
- * 
- * @return True if line intersects
- */
-  bool intersect_extended(const FlatPoint &p,
-                          FlatPoint &i1,
-                          FlatPoint &i2) const;
+  /**
+   * Find intersection of line from focus 1 to p, through the ellipse
+   *
+   * @param p Reference point
+   * @param i1 Intersection point 1 if found
+   * @param i2 Intersection point 2 if found
+   *
+   * @return True if line intersects
+   */
+  bool intersect_extended(const FlatPoint &p, FlatPoint &i1, FlatPoint &i2) const;
 
 private:
   FlatPoint f1, f2, ap;
@@ -98,10 +94,7 @@ private:
   gcc_pure
   fixed ba() const;
 
-  bool intersect(const FlatLine &line, 
-                 FlatPoint &i1, 
-                 FlatPoint &i2) const;
-
+  bool intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const;
 };
 
 #endif

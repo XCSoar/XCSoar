@@ -29,67 +29,66 @@
 #include "Math/fixed.hpp"
 
 
-FlatEllipse::FlatEllipse(const FlatPoint &_f1,
-                         const FlatPoint &_f2,
-                         const FlatPoint &_ap):
-  f1(_f1),f2(_f2),ap(_ap)
+FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
+                         const FlatPoint &_ap)
+  :f1(_f1),f2(_f2),ap(_ap)
 {
-  const FlatLine f12(f1,f2);
+  const FlatLine f12(f1, f2);
   p = f12.ave();
   theta = f12.angle();
   const fixed csq = f12.dsq();
-  a = (f1.d(ap)+f2.d(ap));
+  a = (f1.d(ap) + f2.d(ap));
   b = half(sqrt(a * a - csq));
   a = half(a);
 
-  // a.sin(t)=ap.x
-  // b.cos(t)=ap.y
+  // a.sin(t) = ap.x
+  // b.cos(t) = ap.y
 
   FlatPoint op = ap;
   op.sub(p);
   op.rotate(-theta);
-  theta_initial = Angle::radians(atan2(op.y*a, op.x*b)).as_delta();
+  theta_initial = Angle::radians(atan2(op.y * a, op.x * b)).as_delta();
 }
 
-fixed 
-FlatEllipse::ab() const {
-  return a/b;
+fixed
+FlatEllipse::ab() const
+{
+  return a / b;
 }
 
-fixed 
-FlatEllipse::ba() const {
-  return b/a;
+fixed
+FlatEllipse::ba() const
+{
+  return b / a;
 }
 
-FlatPoint 
-FlatEllipse::parametric(const fixed t) const {
-  const Angle at = (Angle::radians(fixed_two_pi*t)
-    +theta_initial).as_delta();
+FlatPoint
+FlatEllipse::parametric(const fixed t) const
+{
+  const Angle at = (Angle::radians(fixed_two_pi * t) + theta_initial).as_delta();
 
   fixed cat, sat;
   at.sin_cos(sat, cat);
 
-  FlatPoint res(a*cat,b*sat);
+  FlatPoint res(a * cat, b * sat);
   res.rotate(theta);
   res.add(p);
   return res;
 }
 
 bool 
-FlatEllipse::intersect(const FlatLine &line, 
-                       FlatPoint &i1, 
-                       FlatPoint &i2) const 
+
+FlatEllipse::intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const
 {
   const fixed er = ab();
   const fixed ier = ba();
-  FlatLine s_line = line;  
-  
+  FlatLine s_line = line;
+
   s_line.sub(p);
   s_line.rotate(theta.Reciprocal());
   s_line.mul_y(er);
-  
+
   if (s_line.intersect_czero(a, i1, i2)) {
-    
     i1.mul_y(ier);
     i1.rotate(theta);
     i1.add(p);
@@ -99,27 +98,25 @@ FlatEllipse::intersect(const FlatLine &line,
     i2.add(p);
     
     return true;
-  } else {
-    return false;
   }
+
+  return false;
 }
 
-
-bool FlatEllipse::intersect_extended(const FlatPoint &pe,
-                                     FlatPoint &i1,
-                                     FlatPoint &i2) const
+bool
+FlatEllipse::intersect_extended(const FlatPoint &pe, FlatPoint &i1,
+                                FlatPoint &i2) const
 {
-  const FlatLine l_f1p(f1,pe);
-  const FlatLine l_pf2(pe,f2);
+  const FlatLine l_f1p(f1, pe);
+  const FlatLine l_pf2(pe, f2);
   const Angle ang = l_f1p.angle();
 
-  const fixed d = l_pf2.d()+max(a,b); // max line length
+  const fixed d = l_pf2.d() + max(a, b); // max line length
 
-  fixed can,san;
+  fixed can, san;
   ang.sin_cos(san, can);
 
-  FlatLine e_l(pe,FlatPoint(pe.x+d*can,
-                            pe.y+d*san));
+  FlatLine e_l(pe, FlatPoint(pe.x + d * can, pe.y + d * san));
   // e_l is the line extended from p in direction of f1-p 
   
   return intersect(e_l, i1, i2);
