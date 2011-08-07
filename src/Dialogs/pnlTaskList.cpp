@@ -229,23 +229,35 @@ DeleteTask()
   RefreshView();
 }
 
+static bool
+ClearSuffix(TCHAR *p, const TCHAR *suffix)
+{
+  size_t length = _tcslen(p);
+  size_t suffix_length = _tcslen(suffix);
+  if (length <= suffix_length)
+    return false;
+
+  TCHAR *q = p + length - suffix_length;
+  if (_tcsicmp(q, suffix) != 0)
+    return false;
+
+  *q = _T('\0');
+  return true;
+}
+
 static void
 RenameTask()
 {
   const TCHAR *oldname = get_cursor_name();
   tstring newname = oldname;
-  tstring upperstring = newname;
-  std::transform(upperstring.begin(), upperstring.end(), upperstring.begin(),
-      ::toupper);
 
-  if (upperstring.find(_T(".CUP")) != tstring::npos) {
+  if (ClearSuffix(newname.begin(), _T(".cup"))) {
     MessageBoxX(_("Can't rename .CUP files"), _("Rename Error"),
         MB_ICONEXCLAMATION);
     return;
   }
 
-  if (upperstring.find(_T(".TSK")) != tstring::npos)
-    newname = newname.substr(0, upperstring.find(_T(".TSK")));
+  ClearSuffix(newname.begin(), _T(".tsk"));
 
   if (!dlgTextEntryShowModal(*(SingleWindow *)wf->get_root_owner(),
                              newname, 40))
