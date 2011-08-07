@@ -48,10 +48,10 @@ Copyright_License {
 static const unsigned WILDCARD = 0x7fff;
 
 static WndForm *wf=NULL;
+static WndProperty *wpName;
+static WndProperty *wpDistance;
+static WndProperty *wpDirection;
 static WndListFrame *wAirspaceList=NULL;
-
-static TCHAR NameFilter[] = _T("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
-static unsigned NameFilterIdx=0;
 
 static fixed distance_filter;
 
@@ -118,18 +118,14 @@ static void UpdateList(void)
   if (sort_distance) {
     airspace_sorter->sort_distance(AirspaceSelectInfo);
   }
-  if (NameFilterIdx) {
-    airspace_sorter->filter_name(AirspaceSelectInfo, (NameFilter[NameFilterIdx])&0xff);
-  }
+
+  const TCHAR *name_filter = wpName->GetDataField()->GetAsString();
+  if (!string_is_empty(name_filter))
+    airspace_sorter->FilterNamePrefix(AirspaceSelectInfo, name_filter);
 
   wAirspaceList->SetLength(max((size_t)1, AirspaceSelectInfo.size()));
   wAirspaceList->invalidate();
 }
-
-
-static WndProperty *wpName;
-static WndProperty *wpDistance;
-static WndProperty *wpDirection;
 
 static void FilterMode(bool direction) {
   if (direction) {
@@ -146,10 +142,9 @@ static void FilterMode(bool direction) {
       wpDirection->RefreshDisplay();
     }
   } else {
-    NameFilterIdx=0;
     if (wpName) {
       DataFieldString *df = (DataFieldString *)wpName->GetDataField();
-      df->Set(_T("**"));
+      df->Set(_T(""));
       wpName->RefreshDisplay();
     }
   }
@@ -157,35 +152,17 @@ static void FilterMode(bool direction) {
 
 
 static void OnFilterName(DataField *_Sender, DataField::DataAccessKind_t Mode){
-  DataFieldString *Sender = (DataFieldString *)_Sender;
-
-  TCHAR sTmp[12];
-
   switch(Mode){
     case DataField::daChange:
-    break;
     case DataField::daInc:
-      NameFilterIdx++;
-      if (NameFilterIdx > sizeof(NameFilter)/sizeof(NameFilter[0])-2)
-        NameFilterIdx = 1;
-      FilterMode(true);
-      UpdateList();
-    break;
     case DataField::daDec:
-      if (NameFilterIdx == 0)
-        NameFilterIdx = sizeof(NameFilter)/sizeof(NameFilter[0])-1;
-      else
-        NameFilterIdx--;
-      FilterMode(true);
-      UpdateList();
+    FilterMode(true);
+    UpdateList();
     break;
 
   case DataField::daSpecial:
     return;
   }
-  _stprintf(sTmp, _T("%c*"), NameFilter[NameFilterIdx]);
-  Sender->Set(sTmp);
-
 }
 
 

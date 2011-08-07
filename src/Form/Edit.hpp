@@ -93,33 +93,14 @@ public:
 private:
   const DialogLook &look;
 
-  bool mDialogStyle;
-
-  /** Arrow left bitmap */
-  static Bitmap hBmpLeft32;
-  /** Arrow right bitmap */
-  static Bitmap hBmpRight32;
-  /** Instance counter */
-  static int InstCount;
-
   /** Editor Control */
   Editor edit;
   /** Size of the Editor Control */
   RasterPoint mEditSize;
   /** Position of the Editor Control */
   RasterPoint mEditPos;
-  /** Size of the "up" and "down" buttons */
-  int  mBitmapSize;
   /** Width reserved for the caption of the Control */
   int  mCaptionWidth;
-  /** Coordinates of the "up" button */
-  PixelRect mHitRectUp;
-  /** Coordinates of the "down" button */
-  PixelRect mHitRectDown;
-  /** True if the "down" button is currently pressed */
-  bool mDownDown;
-  /** True if the "up" button is currently pressed */
-  bool mUpDown;
 
   /** Function to call when the Editor data has changed */
   DataChangeCallback_t mOnDataChangeNotify;

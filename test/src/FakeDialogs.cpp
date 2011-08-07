@@ -22,9 +22,18 @@ Copyright_License {
 */
 
 #include "Dialogs/Message.hpp"
+#include "Dialogs/TextEntry.hpp"
 
 int
 MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 {
   return -1;
+}
+
+bool
+dlgTextEntryShowModal(SingleWindow &parent, TCHAR *text,
+                      int width, const TCHAR *caption,
+                      AllowedCharactersCallback_t accb)
+{
+  return false;
 }

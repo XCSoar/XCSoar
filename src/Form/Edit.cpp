@@ -25,11 +25,13 @@ Copyright_License {
 #include "Form/Internal.hpp"
 #include "Look/DialogLook.hpp"
 #include "DataField/Base.hpp"
+#include "DataField/String.hpp"
 #include "Screen/Bitmap.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/Features.hpp"
 #include "Dialogs/ComboPicker.hpp"
+#include "Dialogs/TextEntry.hpp"
 #include "resource.h"
 
 #include <assert.h>
@@ -45,11 +47,8 @@ CanEditInPlace()
 bool
 WndProperty::Editor::on_mouse_down(int x, int y)
 {
-  // if it's an Combopicker field
-  if (parent->mDialogStyle)
-    // call the combopicker routine
-    if (parent->on_mouse_down(x, y))
-      return true;
+  if (parent->on_mouse_down(x, y))
+    return true;
 
 #ifdef USE_GDI
 
@@ -68,7 +67,9 @@ WndProperty::Editor::on_key_check(unsigned key_code) const
 {
   switch (key_code) {
   case VK_RETURN:
-    return parent->mDialogStyle;
+    return is_read_only() ||
+      (parent->mDataField != NULL && parent->mDataField->SupportCombo) ||
+      !CanEditInPlace();
 
   case VK_LEFT:
   case VK_RIGHT:
@@ -83,12 +84,8 @@ bool
 WndProperty::Editor::on_key_down(unsigned key_code)
 {
   // If return key pressed (Compaq uses VKF23)
-  if (key_code == VK_RETURN)
-    // if it's an Combopicker field
-    if (parent->mDialogStyle)
-      // call the combopicker routine
-      if (parent->on_mouse_down(0, 0))
-        return true;
+  if (key_code == VK_RETURN && parent->on_mouse_down(0, 0))
+    return true;
 
   // Check for long key press
   // tmep hack, do not process nav keys
@@ -148,11 +145,6 @@ WndProperty::Editor::on_killfocus()
   return true;
 }
 
-Bitmap WndProperty::hBmpLeft32;
-Bitmap WndProperty::hBmpRight32;
-
-int WndProperty::InstCount = 0;
-
 WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          const TCHAR *Caption,
                          int X, int Y,
@@ -161,9 +153,8 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          const WindowStyle style,
                          const EditWindowStyle edit_style,
                          DataChangeCallback_t DataChangeNotify)
-  :look(_look), mDialogStyle(true), edit(this),
-   mBitmapSize(Layout::Scale(32) / 2), mCaptionWidth(CaptionWidth),
-   mDownDown(false), mUpDown(false),
+  :look(_look), edit(this),
+   mCaptionWidth(CaptionWidth),
    mOnDataChangeNotify(DataChangeNotify),
    mOnClickUpNotify(NULL), mOnClickDownNotify(NULL),
    mDataField(NULL)
@@ -180,23 +171,10 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
 #if defined(USE_GDI) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
 #endif
-
-  if (InstCount == 0) {
-    hBmpLeft32.load(IDB_DLGBUTTONLEFT32);
-    hBmpRight32.load(IDB_DLGBUTTONRIGHT32);
-  }
-
-  InstCount++;
 }
 
 WndProperty::~WndProperty(void)
 {
-  InstCount--;
-  if (InstCount == 0) {
-    hBmpLeft32.reset();
-    hBmpRight32.reset();
-  }
-
   if (mDataField != NULL) {
     if (!mDataField->Unuse()) {
       delete mDataField;
@@ -227,7 +205,7 @@ WndProperty::BeginEditing()
     /* this would display xml file help on a read-only wndproperty if
        it exists */
     OnHelp();
-  } else if (mDialogStyle) {
+  } else if (mDataField != NULL && mDataField->SupportCombo) {
     SingleWindow *root = (SingleWindow *)get_root_owner();
 
     /* if this asserton fails, then there no valid root window could
@@ -235,40 +213,39 @@ WndProperty::BeginEditing()
     assert(root != NULL);
 
     dlgComboPicker(*root, this);
-  } else {
+  } else if (CanEditInPlace()) {
     edit.set_focus();
+  } else if (mDataField != NULL) {
+    const TCHAR *value = mDataField->GetAsString();
+    if (value == NULL)
+      return;
+
+    StaticString<EDITSTRINGSIZE> buffer(value);
+    if (!TextEntryDialog(*(SingleWindow *)get_root_owner(), buffer,
+                         GetCaption()))
+      return;
+
+    mDataField->SetAsString(buffer);
+    RefreshDisplay();
   }
 }
 
 void
 WndProperty::UpdateLayout()
 {
-  mBitmapSize = mDialogStyle || edit.is_read_only() ? 0 : Layout::Scale(16);
-
   const PixelSize size = get_size();
 
   if (mCaptionWidth >= 0) {
-    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)*2
-        - mBitmapSize;
+    mEditSize.x = size.cx - mCaptionWidth - (DEFAULTBORDERPENWIDTH + 1)*2;
     mEditSize.y = size.cy - 2 * (DEFAULTBORDERPENWIDTH + 1);
     mEditPos.x = mCaptionWidth + (DEFAULTBORDERPENWIDTH + 1);
     mEditPos.y = (DEFAULTBORDERPENWIDTH + 1);
   } else {
-    mEditSize.x = size.cx - 2 * (DEFAULTBORDERPENWIDTH + 1 + mBitmapSize);
+    mEditSize.x = size.cx - 2 * (DEFAULTBORDERPENWIDTH + 1);
     mEditSize.y = size.cy / 2;
-    mEditPos.x = mBitmapSize + (DEFAULTBORDERPENWIDTH + 2);
+    mEditPos.x = (DEFAULTBORDERPENWIDTH + 2);
     mEditPos.y = size.cy / 2 - 2 * (DEFAULTBORDERPENWIDTH + 1);
   }
-
-  mHitRectDown.left = mEditPos.x - mBitmapSize;
-  mHitRectDown.top = mEditPos.y + (mEditSize.y) / 2 - (mBitmapSize / 2);
-  mHitRectDown.right = mHitRectDown.left + mBitmapSize;
-  mHitRectDown.bottom = mHitRectDown.top + mBitmapSize;
-
-  mHitRectUp.left = size.cx - (mBitmapSize + 2);
-  mHitRectUp.top = mHitRectDown.top;
-  mHitRectUp.right = mHitRectUp.left + mBitmapSize;
-  mHitRectUp.bottom = mHitRectUp.top + mBitmapSize;
 
   if (edit.defined())
     edit.move(mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y);
@@ -310,54 +287,13 @@ WndProperty::on_resize(unsigned width, unsigned height)
 bool
 WndProperty::on_mouse_down(int x, int y)
 {
-  if (mDialogStyle) {
-    BeginEditing();
-  } else {
-    if (!edit.has_focus()) {
-      if (!edit.is_read_only())
-        edit.set_focus();
-
-      return true;
-    }
-
-    RasterPoint Pos;
-    Pos.x = x;
-    Pos.y = y;
-    //POINTSTOPOINT(Pos, MAKEPOINTS(lParam));
-
-    mDownDown = (PtInRect(&mHitRectDown, Pos) != 0);
-    if (mDownDown) {
-      DecValue();
-      invalidate(mHitRectDown);
-    }
-
-    mUpDown = (PtInRect(&mHitRectUp, Pos) != 0);
-    if (mUpDown) {
-      IncValue();
-      invalidate(mHitRectUp);
-    }
-
-    set_capture();
-  }
-
+  BeginEditing();
   return true;
 }
 
 bool
 WndProperty::on_mouse_up(int x, int y)
 {
-  if (mDialogStyle) {
-  } else {
-    if (mDownDown) {
-      mDownDown = false;
-      invalidate(mHitRectDown);
-    }
-    if (mUpDown) {
-      mUpDown = false;
-      invalidate(mHitRectUp);
-    }
-  }
-  release_capture();
   return true;
 }
 
@@ -426,7 +362,7 @@ WndProperty::on_paint(Canvas &canvas)
       org.x = mEditPos.x;
       org.y = mEditPos.y - tsize.cy;
     } else {
-      org.x = mCaptionWidth - mBitmapSize - (tsize.cx + 1);
+      org.x = mCaptionWidth - (tsize.cx + 1);
       org.y = (get_size().cy - tsize.cy) / 2;
     }
 
@@ -438,20 +374,6 @@ WndProperty::on_paint(Canvas &canvas)
     else
       canvas.text_clipped(org.x, org.y, mCaptionWidth - org.x,
                           mCaption.c_str());
-  }
-
-  // can't but dlgComboPicker here b/c it calls paint when combopicker closes too
-  // so it calls dlgCombopicker on the click/focus handlers for the wndproperty & label
-  if (!mDialogStyle && edit.has_focus() && !edit.is_read_only()) {
-    canvas.stretch(mHitRectDown.left, mHitRectDown.top,
-                   mBitmapSize, mBitmapSize,
-                   hBmpLeft32,
-                   mDownDown ? 32 : 0, 0, 32, 32);
-
-    canvas.stretch(mHitRectUp.left, mHitRectUp.top,
-                   mBitmapSize, mBitmapSize,
-                   hBmpRight32,
-                   mUpDown ? 32 : 0, 0, 32, 32);
   }
 }
 
@@ -483,8 +405,6 @@ WndProperty::SetDataField(DataField *Value)
     Value->Use();
 
     mDataField = Value;
-
-    mDialogStyle = has_pointer() && mDataField->SupportCombo;
 
     UpdateLayout();
 
