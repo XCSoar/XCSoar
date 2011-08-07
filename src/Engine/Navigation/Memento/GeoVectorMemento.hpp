@@ -30,6 +30,15 @@
 /** Memento object to store results of previous GeoVector constructors. */
 class GeoVectorMemento 
 {
+  /** Origin point of saved query */
+  mutable GeoPoint origin;
+
+  /** Destination point of previous query */
+  mutable GeoPoint destination;
+
+  /** GeoVector saved from previous query */
+  mutable GeoVector value;
+
 public:
   /** Constructor, initialises to trigger update on first call. */
   GeoVectorMemento()
@@ -41,16 +50,6 @@ public:
    */
   gcc_pure
   GeoVector calc(const GeoPoint& _origin, const GeoPoint& _destination) const;
-
-private:
-  /** Origin point of saved query */
-  mutable GeoPoint origin;
-
-  /** Destination point of previous query */
-  mutable GeoPoint destination;
-
-  /** GeoVector saved from previous query */
-  mutable GeoVector value;
 };
 
 #endif
