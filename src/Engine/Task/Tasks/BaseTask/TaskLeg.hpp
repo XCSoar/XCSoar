@@ -57,7 +57,7 @@ protected:
 private:
   DistanceMemento memo_max;
   DistanceMemento memo_min;
-  DistanceMemento memo_nominal;
+  GeoVectorMemento memo_nominal;
   GeoVectorMemento memo_planned;
   GeoVectorMemento memo_travelled;
   GeoVectorMemento memo_remaining;
