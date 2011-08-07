@@ -37,6 +37,12 @@ bool operator != (const GeoPoint&g1, const GeoPoint &g2);
  *
  */
 struct GeoVector {
+  /** Distance in meters */
+  fixed Distance;
+
+  /** Bearing (true north) */
+  Angle Bearing;
+
   /**
    * Empty non-initializing constructor
    */
@@ -113,16 +119,6 @@ struct GeoVector {
   gcc_pure
   fixed minimum_distance(const GeoPoint &source,
                          const GeoPoint &ref) const;
-
-  /**
-   * Distance in meters 
-   */
-  fixed Distance;
-
-  /**
-   * Bearing in degrees (true north) 
-   */
-  Angle Bearing;
 };
 
 #endif
