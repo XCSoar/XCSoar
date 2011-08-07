@@ -43,44 +43,31 @@ struct GeoVector {
   /** Bearing (true north) */
   Angle Bearing;
 
-  /**
-   * Empty non-initializing constructor
-   */
+  /** Empty non-initializing constructor */
   GeoVector() {}
 
-  /**
-   * Constructor given supplied distance/bearing 
-   */
-  GeoVector(const fixed distance, const Angle& bearing):
-    Distance(distance),
-    Bearing(bearing)
-  {
-  };
+  /** Constructor given supplied distance/bearing */
+  GeoVector(const fixed distance, const Angle& bearing)
+    :Distance(distance), Bearing(bearing) {}
 
   /**
    * Dummy constructor given distance, 
    * used to allow GeoVector x=0 calls. 
    */
-  GeoVector(const fixed distance):
-    Distance(distance),
-    Bearing(Angle::zero())
-  {
-  }
+  GeoVector(const fixed distance)
+    :Distance(distance), Bearing(Angle::zero()) {}
 
   /**
    * Constructor given start and end location.  
    * Computes Distance/Bearing internally. 
-   *
    */
   GeoVector(const GeoPoint &source, const GeoPoint &target);
 
-  /**
-   * Adds the distance component of a geovector 
-   */
-  GeoVector& operator+= (const GeoVector&g1) {
-    Distance+= g1.Distance;
+  /** Adds the distance component of a geovector */
+  GeoVector& operator+= (const GeoVector &g1) {
+    Distance += g1.Distance;
     return *this;
-  };
+  }
 
   /**
    * Returns the end point of the geovector projected from the start point.  
@@ -108,17 +95,16 @@ struct GeoVector {
   gcc_pure
   GeoPoint intermediate_point(const GeoPoint &source, const fixed distance) const;
 
-/** 
- * Minimum distance from a point on the vector to the reference
- * 
- * @param source Start of vector
- * @param ref Point to test
- * 
- * @return Distance (m)
- */
+  /**
+   * Minimum distance from a point on the vector to the reference
+   *
+   * @param source Start of vector
+   * @param ref Point to test
+   *
+   * @return Distance (m)
+   */
   gcc_pure
-  fixed minimum_distance(const GeoPoint &source,
-                         const GeoPoint &ref) const;
+  fixed minimum_distance(const GeoPoint &source, const GeoPoint &ref) const;
 };
 
 #endif

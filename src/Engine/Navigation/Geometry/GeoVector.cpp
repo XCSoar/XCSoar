@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "GeoVector.hpp"
 #include "Math/Earth.hpp"
 
@@ -27,32 +28,29 @@ GeoVector::GeoVector(const GeoPoint &source, const GeoPoint &target)
   *this = source.distance_bearing(target);
 }
 
-GeoPoint 
+GeoPoint
 GeoVector::end_point(const GeoPoint &source) const
 {
-  if (!positive(Distance)) {
+  if (!positive(Distance))
     return source;
-  } else {
-    return ::FindLatitudeLongitude(source, Bearing, Distance);
-  }
+
+  return ::FindLatitudeLongitude(source, Bearing, Distance);
 }
 
-GeoPoint 
+GeoPoint
 GeoVector::mid_point(const GeoPoint &source) const
 {
-  if (!positive(Distance)) {
+  if (!positive(Distance))
     return source;
-  } else {
-    return ::FindLatitudeLongitude(source, Bearing, half(Distance));
-  }
+
+  return ::FindLatitudeLongitude(source, Bearing, half(Distance));
 }
 
 fixed
 GeoVector::minimum_distance(const GeoPoint &source,
                             const GeoPoint &ref) const
 {
-  const GeoPoint end = end_point(source);
-  return (::CrossTrackError(source, end, ref, NULL));
+  return ::CrossTrackError(source, end_point(source), ref, NULL);
 }
 
 GeoPoint 
@@ -62,8 +60,10 @@ GeoVector::intermediate_point(const GeoPoint &source,
   return source.intermediate_point(end_point(source), distance);
 }
 
-
-bool operator != (const GeoPoint&g1, const GeoPoint &g2) {
-  return (g1.Latitude != g2.Latitude) || (g1.Longitude != g2.Longitude);
+bool
+operator !=(const GeoPoint &g1, const GeoPoint &g2)
+{
+  return g1.Latitude != g2.Latitude ||
+         g1.Longitude != g2.Longitude;
 }
 
