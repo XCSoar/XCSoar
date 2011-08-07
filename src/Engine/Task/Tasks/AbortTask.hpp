@@ -120,7 +120,7 @@ public:
    */
   AbortTask(TaskEvents &te, const TaskBehaviour &tb, const GlidePolar &gp,
             const Waypoints &wps);
-  ~AbortTask();
+  virtual ~AbortTask();
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 
