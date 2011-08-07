@@ -28,6 +28,7 @@ Copyright_License {
 #include "DataField/Boolean.hpp"
 #include "DataField/Float.hpp"
 #include "DataField/Enum.hpp"
+#include "DataField/String.hpp"
 #include "Profile/Profile.hpp"
 
 #include <assert.h>
@@ -156,6 +157,34 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
   ctl->RefreshDisplay();
 }
 
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name,
+                 const TCHAR *value)
+{
+  assert(control_name != NULL);
+  assert(value != NULL);
+
+  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
+  assert(ctl != NULL);
+
+  DataFieldString *df = (DataFieldString *)ctl->GetDataField();
+  assert(df != NULL);
+
+  df->Set(value);
+  ctl->RefreshDisplay();
+}
+
+void
+LoadFormPropertyFromProfile(WndForm &form, const TCHAR *control_name,
+                            const TCHAR *profile_key)
+{
+  TCHAR buffer[512];
+  const TCHAR *value = Profile::Get(profile_key, buffer, 512)
+    ? buffer
+    : _T("");
+  LoadFormProperty(form, control_name, value);
+}
+
 int
 GetFormValueInteger(const WndForm &form, const TCHAR *control_name)
 {
@@ -191,6 +220,21 @@ GetFormValueBoolean(const WndForm &form, const TCHAR *control_name)
   const DataFieldBoolean &df =
     *(const DataFieldBoolean *)control->GetDataField();
   return df.GetAsBoolean();
+}
+
+const TCHAR *
+GetFormValueString(const WndForm &form, const TCHAR *control_name)
+{
+  assert(control_name != NULL);
+
+  const WndProperty *control =
+    (const WndProperty *)form.FindByName(control_name);
+  assert(control != NULL);
+
+  const DataFieldString *df = (const DataFieldString *)control->GetDataField();
+  assert(df != NULL);
+
+  return df->GetAsString();
 }
 
 bool
@@ -442,5 +486,73 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
     return false;
 
   Profile::Set(registry_name, value);
+  return true;
+}
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 TCHAR *buffer, size_t max_size)
+{
+  assert(max_size > 0);
+
+  const TCHAR *value = GetFormValueString(form, control_name);
+  assert(value != NULL);
+
+  size_t length = _tcslen(value);
+  if (length >= max_size)
+    length = max_size - 1;
+
+  if (_tcsncmp(value, buffer, length) == 0 && buffer[length] == _T('\0'))
+    /* not modified */
+    return false;
+
+  std::copy(value, value + length, buffer);
+  buffer[length] = _T('\0');
+  return true;
+}
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 TCHAR *buffer, size_t max_size,
+                 const TCHAR *profile_key)
+{
+  assert(max_size > 0);
+  assert(profile_key != NULL);
+
+  const TCHAR *value = GetFormValueString(form, control_name);
+  assert(value != NULL);
+
+  size_t length = _tcslen(value);
+  if (length >= max_size)
+    length = max_size - 1;
+
+  if (_tcsncmp(value, buffer, length) == 0 && buffer[length] == _T('\0'))
+    /* not modified */
+    return false;
+
+  std::copy(value, value + length, buffer);
+  buffer[length] = _T('\0');
+  Profile::Set(profile_key, buffer);
+  return true;
+}
+
+bool
+SaveFormPropertyToProfile(const WndForm &form, const TCHAR *control_name,
+                          const TCHAR *profile_key)
+{
+  assert(profile_key != NULL);
+
+  const TCHAR *value = GetFormValueString(form, control_name);
+  assert(value != NULL);
+
+  TCHAR buffer[512];
+  const TCHAR *old = Profile::Get(profile_key, buffer, 512)
+    ? buffer
+    : _T("");
+
+  if (_tcscmp(value, old) == 0)
+    return false;
+
+  Profile::Set(profile_key, value);
   return true;
 }

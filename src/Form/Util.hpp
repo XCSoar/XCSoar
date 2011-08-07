@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FORM_UTIL_HPP
 #define XCSOAR_FORM_UTIL_HPP
 
+#include "Util/StaticString.hpp"
 #include "Units/Units.hpp"
 #include "Compiler.h"
 
@@ -78,6 +79,14 @@ void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
                  UnitGroup_t unit_group, fixed value);
 
+void
+LoadFormProperty(WndForm &form, const TCHAR *control_name,
+                 const TCHAR *value);
+
+void
+LoadFormPropertyFromProfile(WndForm &form, const TCHAR *control_name,
+                            const TCHAR *profile_key);
+
 gcc_pure
 int
 GetFormValueInteger(const WndForm &form, const TCHAR *control_name);
@@ -89,6 +98,10 @@ GetFormValueBoolean(const WndForm &form, const TCHAR *control_name);
 gcc_pure
 fixed
 GetFormValueFixed(const WndForm &form, const TCHAR *control_name);
+
+gcc_pure
+const TCHAR *
+GetFormValueString(const WndForm &form, const TCHAR *control_name);
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR* field, bool &value);
@@ -204,5 +217,36 @@ SaveFormPropertyEnum(const WndForm &form, const TCHAR *field, const TCHAR *reg,
   value = (T)value2;
   return true;
 }
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 TCHAR *buffer, size_t max_size);
+
+template<unsigned N>
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 StaticString<N> &value)
+{
+  return SaveFormProperty(form, control_name, value.buffer(), value.MAX_SIZE);
+}
+
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 TCHAR *buffer, size_t max_size,
+                 const TCHAR *profile_key);
+
+template<unsigned N>
+bool
+SaveFormProperty(const WndForm &form, const TCHAR *control_name,
+                 StaticString<N> &value,
+                 const TCHAR *profile_key)
+{
+  return SaveFormProperty(form, control_name, value.buffer(), value.MAX_SIZE,
+                          profile_key);
+}
+
+bool
+SaveFormPropertyToProfile(const WndForm &form, const TCHAR *control_name,
+                          const TCHAR *profile_key);
 
 #endif
