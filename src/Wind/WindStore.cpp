@@ -124,7 +124,7 @@ WindStore::NewWind(const NMEAInfo &info, DerivedInfo &derived,
 
   if (mag < fixed(30)) { // limit to reasonable values
     derived.estimated_wind = SpeedVector(bearing.as_bearing(), mag);
-    derived.estimated_wind_available.Update(info.time);
+    derived.estimated_wind_available.Update(info.clock);
   } else {
     // TODO code: give warning, wind estimate bogus or very strong!
   }
