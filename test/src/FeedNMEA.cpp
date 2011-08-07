@@ -35,40 +35,34 @@ Copyright_License {
 #include <errno.h>
 #include <stdlib.h>
 
-/**
- * Create a pseudo TTY, and symlink it to /tmp/nmea.
- */
+/** Create a pseudo TTY, and symlink it to /tmp/nmea. */
 static int
 open_virtual(const char *symlink_path)
 {
-    int fd, ret;
+  int fd = open("/dev/ptmx", O_RDWR | O_NOCTTY);
+  if (fd < 0) {
+    fprintf(stderr, "failed to open /dev/ptmx: %s\n", strerror(errno));
+    _exit(1);
+  }
 
-    fd = open("/dev/ptmx", O_RDWR|O_NOCTTY);
-    if (fd < 0) {
-        fprintf(stderr, "failed to open /dev/ptmx: %s\n",
-                strerror(errno));
-        _exit(1);
-    }
+  int ret = unlockpt(fd);
+  if (ret < 0) {
+    fprintf(stderr, "failed to unlockpt(): %s\n", strerror(errno));
+    _exit(1);
+  }
 
-    ret = unlockpt(fd);
-    if (ret < 0) {
-        fprintf(stderr, "failed to unlockpt(): %s\n",
-                strerror(errno));
-        _exit(1);
-    }
+  unlink(symlink_path);
+  ret = symlink(ptsname(fd), symlink_path);
+  if (ret < 0) {
+    fprintf(stderr, "symlink() failed: %s\n", strerror(errno));
+    _exit(1);
+  }
 
-    unlink(symlink_path);
-    ret = symlink(ptsname(fd), symlink_path);
-    if (ret < 0) {
-        fprintf(stderr, "symlink() failed: %s\n",
-                strerror(errno));
-        _exit(1);
-    }
-
-    return fd;
+  return fd;
 }
 
-int main(int argc, char **argv)
+int
+main(int argc, char **argv)
 {
   int fd = open_virtual("/tmp/nmea");
 
