@@ -58,8 +58,6 @@ GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points,
   // scan airspace every second
   airspace_clock(fixed_one)
 {
-  rotaryLD.init(SettingsComputer());
-
   // JMW TODO enhancement: seed initial wind store with start conditions
   // SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing, 1);
 }
@@ -78,6 +76,7 @@ GlideComputerAirData::ResetFlight(const bool full)
   thermallocator.Reset();
 
   windanalyser.reset();
+  rotaryLD.init(SettingsComputer());
 }
 
 /**
