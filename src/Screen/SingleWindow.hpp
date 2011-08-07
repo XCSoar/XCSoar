@@ -54,8 +54,7 @@ public:
 #ifndef USE_GDI
 protected:
   gcc_pure
-  bool FilterMouseEvent(int x, int y, Window *allowed,
-                        Window *second_allowed=NULL) const;
+  bool FilterMouseEvent(int x, int y, Window *allowed) const;
 #endif
 
 public:
@@ -66,16 +65,13 @@ public:
    */
 #ifdef ANDROID
   gcc_pure
-  bool FilterEvent(const Event &event, Window *allowed,
-                   Window *second_allowed=NULL) const;
+  bool FilterEvent(const Event &event, Window *allowed) const;
 #elif defined(ENABLE_SDL)
   gcc_pure
-  bool FilterEvent(const SDL_Event &event, Window *allowed,
-                   Window *second_allowed=NULL) const;
+  bool FilterEvent(const SDL_Event &event, Window *allowed) const;
 #else
   gcc_pure
-  bool FilterEvent(const MSG &message, Window *allowed,
-                   Window *second_allowed=NULL) const;
+  bool FilterEvent(const MSG &message, Window *allowed) const;
 #endif
 
 protected:

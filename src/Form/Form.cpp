@@ -369,7 +369,7 @@ check_special_key(ContainerWindow *container, const MSG &msg)
 #endif /* !ENABLE_SDL */
 
 int
-WndForm::ShowModal(Window *mouse_allowed)
+WndForm::ShowModal()
 {
   assert_none_locked();
 
@@ -418,7 +418,7 @@ WndForm::ShowModal(Window *mouse_allowed)
 #endif
 
   while ((mModalResult == 0 || force) && loop.get(event)) {
-    if (!main_window.FilterEvent(event, this, mouse_allowed))
+    if (!main_window.FilterEvent(event, this))
       continue;
 
     // hack to stop exiting immediately

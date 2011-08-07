@@ -42,8 +42,7 @@ IsAncestor(const Window *maybe_ancestor, const Window *w)
 }
 
 bool
-SingleWindow::FilterMouseEvent(int x, int y, Window *allowed,
-                               Window *second_allowed) const
+SingleWindow::FilterMouseEvent(int x, int y, Window *allowed) const
 {
   const ContainerWindow *container = this;
   while (true) {
@@ -53,19 +52,13 @@ SingleWindow::FilterMouseEvent(int x, int y, Window *allowed,
       /* no receiver for the event */
       return false;
 
-    if (child == allowed || child == second_allowed)
+    if (child == allowed)
       /* the event reaches an allowed window: success */
       return true;
 
     const ContainerWindow *next = IsAncestor(allowed, child);
-    if (next == NULL) {
-      if (second_allowed == NULL)
-        return false;
-
-      next = IsAncestor(second_allowed, child);
-      if (next == NULL)
-        return false;
-    }
+    if (next == NULL)
+      return false;
 
     container = next;
   }
@@ -74,8 +67,7 @@ SingleWindow::FilterMouseEvent(int x, int y, Window *allowed,
 #ifndef ANDROID
 
 bool
-SingleWindow::FilterEvent(const SDL_Event &event, Window *allowed,
-                          Window *second_allowed) const
+SingleWindow::FilterEvent(const SDL_Event &event, Window *allowed) const
 {
   assert(allowed != NULL);
 
@@ -83,8 +75,7 @@ SingleWindow::FilterEvent(const SDL_Event &event, Window *allowed,
   case SDL_MOUSEMOTION:
   case SDL_MOUSEBUTTONDOWN:
   case SDL_MOUSEBUTTONUP:
-    return FilterMouseEvent(event.button.x, event.button.y,
-                            allowed, second_allowed);
+    return FilterMouseEvent(event.button.x, event.button.y, allowed);
 
   default:
     return true;

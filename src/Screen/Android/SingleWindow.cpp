@@ -25,8 +25,7 @@ Copyright_License {
 #include "Screen/Android/Event.hpp"
 
 bool
-SingleWindow::FilterEvent(const Event &event, Window *allowed,
-                          Window *second_allowed) const
+SingleWindow::FilterEvent(const Event &event, Window *allowed) const
 {
   assert(allowed != NULL);
 
@@ -34,8 +33,7 @@ SingleWindow::FilterEvent(const Event &event, Window *allowed,
   case Event::MOUSE_MOTION:
   case Event::MOUSE_DOWN:
   case Event::MOUSE_UP:
-    return FilterMouseEvent(event.x, event.y,
-                            allowed, second_allowed);
+    return FilterMouseEvent(event.x, event.y, allowed);
 
   default:
     return true;

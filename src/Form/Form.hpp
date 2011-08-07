@@ -246,7 +246,7 @@ public:
    * @param mouse_allowed a Window which is allowed to get mouse
    * input, even though the dialog is modal (a hack for dlgTarget)
    */
-  int ShowModal(Window *mouse_allowed=NULL);
+  int ShowModal();
 
   const TCHAR *GetCaption() const {
     return mCaption.c_str();

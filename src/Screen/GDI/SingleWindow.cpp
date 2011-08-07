@@ -23,37 +23,17 @@ Copyright_License {
 
 #include "Screen/SingleWindow.hpp"
 #include "Screen/GDI/Event.hpp"
-#include "Asset.hpp"
 
 #include <cassert>
 
-static bool
-is_allowed_map_message(UINT message)
-{
-  return message == WM_LBUTTONDOWN || message == WM_LBUTTONUP ||
-    message == WM_MOUSEMOVE;
-}
-
-static bool
-is_allowed_map(HWND hWnd, UINT message, const Window *window)
-{
-  return !is_altair() && window != NULL && window->identify(hWnd) &&
-    is_allowed_map_message(message);
-}
-
 bool
-SingleWindow::FilterEvent(const MSG &msg, Window *allowed,
-                          Window *second_allowed) const
+SingleWindow::FilterEvent(const MSG &msg, Window *allowed) const
 {
   assert(allowed != NULL);
 
   if (is_user_input(msg.message)) {
     if (allowed->identify_descendant(msg.hwnd))
       /* events to the current modal dialog are allowed */
-      return true;
-
-    if (is_allowed_map(msg.hwnd, msg.message, second_allowed))
-      /* certain events to the specified second Window are allowed */
       return true;
 
     return false;
