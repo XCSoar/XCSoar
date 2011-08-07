@@ -137,12 +137,12 @@ static void FilterMode(bool direction) {
     direction_filter = WILDCARD;
     if (wpDistance) {
       DataFieldEnum &df = *(DataFieldEnum *)wpDistance->GetDataField();
-      df.Set(0);
+      df.Set(WILDCARD);
       wpDistance->RefreshDisplay();
     }
     if (wpDirection) {
       DataFieldEnum &df = *(DataFieldEnum *)wpDirection->GetDataField();
-      df.Set(0);
+      df.Set(WILDCARD);
       wpDirection->RefreshDisplay();
     }
   } else {
