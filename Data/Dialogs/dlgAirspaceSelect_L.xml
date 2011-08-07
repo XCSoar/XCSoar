@@ -8,7 +8,7 @@
   </Edit>
 
   <Edit Name="prpFltDistance" Caption="Distance" X="2" Width="98" Height="36" CaptionWidth="-1">
-    <DataField DataType="string" OnDataAccess="OnFilterDistance"/>
+    <DataField DataType="enum" OnDataAccess="OnFilterDistance"/>
   </Edit>
 
   <Edit Name="prpFltDirection" Caption="Direction" X="2" Width="98" Height="36" CaptionWidth="-1">

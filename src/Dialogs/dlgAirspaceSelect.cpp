@@ -48,13 +48,7 @@ static WndListFrame *wAirspaceList=NULL;
 static TCHAR NameFilter[] = _T("*ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789_");
 static unsigned NameFilterIdx=0;
 
-static const fixed DistanceFilter[] = {
-  fixed_zero, fixed(25.0), fixed(50.0),
-  fixed(75.0), fixed(100.0), fixed(150.0),
-  fixed(250.0), fixed(500.0), fixed(1000.0),
-};
-
-static unsigned DistanceFilterIdx=0;
+static fixed distance_filter;
 
 static int direction_filter;
 static Angle last_heading;
@@ -105,9 +99,9 @@ static void UpdateList(void)
     airspace_sorter->filter_class(AirspaceSelectInfo, (AirspaceClass_t)TypeFilterIdx);
   
   bool sort_distance = false;
-  if (DistanceFilterIdx) {
+  if (positive(distance_filter)) {
     sort_distance = true;
-    airspace_sorter->filter_distance(AirspaceSelectInfo, DistanceFilter[DistanceFilterIdx]);
+    airspace_sorter->filter_distance(AirspaceSelectInfo, distance_filter);
   } 
   if (direction_filter >= 0) {
     sort_distance = true;
@@ -134,11 +128,11 @@ static WndProperty *wpDirection;
 
 static void FilterMode(bool direction) {
   if (direction) {
-    DistanceFilterIdx=0;
+    distance_filter = fixed_minus_one;
     direction_filter = -1;
     if (wpDistance) {
-      DataFieldString *df = (DataFieldString *)wpDistance->GetDataField();
-      df->Set(_T("*"));
+      DataFieldEnum &df = *(DataFieldEnum *)wpDistance->GetDataField();
+      df.Set(0);
       wpDistance->RefreshDisplay();
     }
     if (wpDirection) {
@@ -194,38 +188,21 @@ static void OnFilterName(DataField *_Sender, DataField::DataAccessKind_t Mode){
 static void OnFilterDistance(DataField *_Sender,
                              DataField::DataAccessKind_t Mode) {
   DataFieldString *Sender = (DataFieldString *)_Sender;
-  TCHAR sTmp[12];
 
   switch(Mode){
     case DataField::daChange:
-    break;
     case DataField::daInc:
-      DistanceFilterIdx++;
-      if (DistanceFilterIdx > sizeof(DistanceFilter)/sizeof(DistanceFilter[0])-1)
-        DistanceFilterIdx = 0;
-      FilterMode(false);
-      UpdateList();
-    break;
     case DataField::daDec:
-      if (DistanceFilterIdx == 0)
-        DistanceFilterIdx = sizeof(DistanceFilter)/sizeof(DistanceFilter[0])-1;
-      else
-        DistanceFilterIdx--;
-      FilterMode(false);
-      UpdateList();
+    distance_filter = Sender->GetAsInteger() > 0
+      ? fixed(Sender->GetAsInteger())
+      : fixed_minus_one;
+    FilterMode(false);
+    UpdateList();
     break;
 
   case DataField::daSpecial:
     return;
   }
-
-  if (DistanceFilterIdx == 0)
-    _stprintf(sTmp, _T("%c"), '*');
-  else
-    _stprintf(sTmp, _T("%.0f%s"),
-              (double)DistanceFilter[DistanceFilterIdx],
-              Units::GetDistanceName());
-  Sender->Set(sTmp);
 }
 
 static void OnFilterDirection(DataField *_Sender,
@@ -388,6 +365,25 @@ static CallBackTableEntry CallBackTable[] = {
 };
 
 static void
+FillDistanceEnum(DataFieldEnum &df)
+{
+  df.AddChoice(0, _T("*"));
+
+  static const unsigned distances[] = {
+    25, 50, 75, 100, 150, 250, 500, 1000
+  };
+
+  TCHAR buffer[64];
+  const TCHAR *unit = Units::GetDistanceName();
+  for (unsigned i = 0; i < sizeof(distances) / sizeof(distances[0]); ++i) {
+    _stprintf(buffer, _T("%u %s"), distances[i], unit);
+    df.AddChoice(distances[i], buffer);
+  }
+
+  df.Set(0);
+}
+
+static void
 FillDirectionEnum(DataFieldEnum &df)
 {
   TCHAR buffer[64];
@@ -428,6 +424,9 @@ PrepareAirspaceSelectDialog()
 
   wpName = (WndProperty*)wf->FindByName(_T("prpFltName"));
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
+  FillDistanceEnum(*(DataFieldEnum *)wpDistance->GetDataField());
+  wpDistance->RefreshDisplay();
+
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
   FillDirectionEnum(*(DataFieldEnum *)wpDirection->GetDataField());
   wpDirection->RefreshDisplay();
