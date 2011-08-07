@@ -28,7 +28,7 @@
 #include "Airspace/AirspacePolygon.hpp"
 #include "Math/FastMath.h"
 
-/////////// Airspace query helpers
+// Airspace query helpers
 
 /**
  * Find airspace and location of nearest intercept
@@ -135,7 +135,7 @@ AirspaceRoute::inside_others(const AGeoPoint& origin) const
 }
 
 
-////////// Node generation utilities
+// Node generation utilities
 
 AirspaceRoute::ClearingPair
 AirspaceRoute::find_clearing_pair(const SearchPointVector& spv,
@@ -263,8 +263,6 @@ AirspaceRoute::synchronise(const Airspaces& master,
       dirty = true;
   }
 }
-
-/////////////////////////////
 
 void
 AirspaceRoute::add_nearby_airspace(const RouteAirspaceIntersection &inx,
