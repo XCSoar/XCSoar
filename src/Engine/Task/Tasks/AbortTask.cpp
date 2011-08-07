@@ -80,7 +80,7 @@ AbortTask::getActiveTaskPoint() const
 }
 
 bool
-AbortTask::validTaskPoint(const int index_offset) const
+AbortTask::validTaskPoint(int index_offset) const
 {
   unsigned index = activeTaskPoint + index_offset;
   return (index < task_points.size());
@@ -142,7 +142,7 @@ struct AbortRank :
 };
 
 bool 
-AbortTask::is_reachable(const GlideResult &result, const bool final_glide) const
+AbortTask::is_reachable(const GlideResult &result, bool final_glide) const
 {
   return !positive(result.vector.Distance) || 
     (!negative(result.time_elapsed) && result.IsAchievable(final_glide));
@@ -151,8 +151,8 @@ AbortTask::is_reachable(const GlideResult &result, const bool final_glide) const
 bool
 AbortTask::fill_reachable(const AircraftState &state,
                           AlternateVector &approx_waypoints,
-                          const GlidePolar &polar, const bool only_airfield,
-                          const bool final_glide, const bool safety)
+                          const GlidePolar &polar, bool only_airfield,
+                          bool final_glide, bool safety)
 {
   if (task_full() || approx_waypoints.empty())
     return false;
@@ -243,15 +243,13 @@ private:
 };
 
 void 
-AbortTask::client_update(const AircraftState &state_now,
-                         const bool reachable)
+AbortTask::client_update(const AircraftState &state_now, bool reachable)
 {
   // nothing to do here, it's specialisations that may use this
 }
 
 bool 
-AbortTask::update_sample(const AircraftState &state, 
-                         const bool full_update)
+AbortTask::update_sample(const AircraftState &state, bool full_update)
 {
   update_polar(state.wind);
   clear();
@@ -322,7 +320,7 @@ AbortTask::check_transitions(const AircraftState &, const AircraftState&)
 }
 
 void 
-AbortTask::tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse) const
+AbortTask::tp_CAccept(TaskPointConstVisitor& visitor, bool reverse) const
 {
   if (!reverse) {
     const AlternateTaskVector::const_iterator end = task_points.end();

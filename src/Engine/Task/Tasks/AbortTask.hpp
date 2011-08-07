@@ -160,7 +160,7 @@ public:
    *
    * @param index_offset offset (default 0)
    */
-  bool validTaskPoint(const int index_offset = 0) const;
+  bool validTaskPoint(int index_offset = 0) const;
 
   /**
    * Update internal states when aircraft state advances.
@@ -175,7 +175,7 @@ public:
    * @return True if internal state changes
    */
   bool update_sample(const AircraftState &state_now, 
-                     const bool full_update);
+                     bool full_update);
 
   /**
    * Determine if any landable reachable waypoints were found in the
@@ -209,7 +209,7 @@ public:
 
 protected:
   gcc_pure
-  bool is_reachable(const GlideResult &result, const bool final_glide) const;
+  bool is_reachable(const GlideResult &result, bool final_glide) const;
 
   /**
    * Test whether (and how) transitioning into/out of task points should occur, typically
@@ -270,10 +270,8 @@ protected:
    */
   bool fill_reachable(const AircraftState &state,
                       AlternateVector &approx_waypoints,
-                      const GlidePolar &polar,
-                      const bool only_airfield,
-                      const bool final_glide,
-                      const bool safety);
+                      const GlidePolar &polar, bool only_airfield,
+                      bool final_glide, bool safety);
 
 protected:
   /**
@@ -282,8 +280,7 @@ protected:
    * It's first called after the reachable scan, then may be called again after scanning
    * for unreachable.
    */
-  virtual void client_update(const AircraftState &state_now,
-                             const bool reachable);
+  virtual void client_update(const AircraftState &state_now, bool reachable);
 
 public:
   /**
@@ -291,7 +288,9 @@ public:
    * notify the user about the abort task point being changed via the events.
    *
    */
-  void set_active(const bool _active) { is_active = _active; }
+  void set_active(bool _active) {
+    is_active = _active;
+  }
 
   /**
    * Set external test function to be used for additional intersection tests
@@ -308,7 +307,7 @@ public:
    * @param reverse Visit task points in reverse order
    *
    */
-  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse = false) const;
+  void tp_CAccept(TaskPointConstVisitor& visitor, bool reverse = false) const;
 };
 
 #endif
