@@ -67,6 +67,14 @@ InitView()
     dfe->addEnumText(_("MSL"));
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpFinishHeightRef"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("AGL"));
+    dfe->addEnumText(_("MSL"));
+  }
+
   wp = (WndProperty*)wf->FindByName(_T("prpTaskType"));
   if (wp) {
     const std::vector<TaskBehaviour::Factory_t> factory_types =
@@ -146,6 +154,15 @@ RefreshView()
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpFinishHeightRef"));
+  if (wp) {
+    wp->set_visible(!fai_start_finish);
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->Set(p.finish_min_height_ref);
+    wp->RefreshDisplay();
+  }
+
   wTaskView->invalidate();
 
   // fixed aat_min_time
@@ -191,9 +208,15 @@ ReadValues()
     *task_changed = true;
   }
 
-  unsigned height_ref = GetFormValueInteger(*wf, _T("prpStartHeightRef"));
-  if (height_ref != p.start_max_height_ref) {
-    p.start_max_height_ref = height_ref;
+  unsigned height_ref_start = GetFormValueInteger(*wf, _T("prpStartHeightRef"));
+  if (height_ref_start != p.start_max_height_ref) {
+    p.start_max_height_ref = height_ref_start;
+    *task_changed = true;
+  }
+
+  unsigned height_ref_finish = GetFormValueInteger(*wf, _T("prpFinishHeightRef"));
+  if (height_ref_finish != p.finish_min_height_ref) {
+    p.finish_min_height_ref = height_ref_finish;
     *task_changed = true;
   }
 }

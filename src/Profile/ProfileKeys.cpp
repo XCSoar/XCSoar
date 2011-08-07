@@ -210,6 +210,7 @@ const TCHAR szProfileVoiceInSector[] = _T("VoiceInSector");
 const TCHAR szProfileVoiceAirspace[] = _T("VoiceAirspace");
 
 const TCHAR szProfileFinishMinHeight[] = _T("FinishMinHeight");
+const TCHAR szProfileFinishHeightRef[] = _T("FinishHeightRef");
 const TCHAR szProfileStartMaxHeight[] = _T("StartMaxHeight");
 const TCHAR szProfileStartMaxSpeed[] = _T("StartMaxSpeed");
 const TCHAR szProfileStartMaxHeightMargin[] = _T("StartMaxHeightMargin");

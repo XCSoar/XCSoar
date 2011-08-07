@@ -63,6 +63,16 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
     wp->RefreshDisplay();
   }
 
+  wp = (WndProperty*)wf->FindByName(_T("prpFinishHeightRef"));
+  if (wp) {
+    DataFieldEnum* dfe;
+    dfe = (DataFieldEnum*)wp->GetDataField();
+    dfe->addEnumText(_("AGL"));
+    dfe->addEnumText(_("MSL"));
+    dfe->Set(settings_computer.ordered_defaults.finish_min_height_ref);
+    wp->RefreshDisplay();
+  }
+
   LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                    settings_computer.ordered_defaults.finish_min_height);
 
@@ -114,6 +124,11 @@ TaskRulesConfigPanel::Save()
   changed |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                                   settings_computer.ordered_defaults.finish_min_height,
                                   szProfileFinishMinHeight);
+
+  changed |= SaveFormProperty(*wf, _T("prpFinishHeightRef"),
+                              szProfileFinishHeightRef,
+                              settings_computer.ordered_defaults.finish_min_height_ref);
+
 
   unsigned t = settings_computer.contest;
   changed |= SaveFormProperty(*wf, _T("prpContests"), szProfileOLCRules, t);

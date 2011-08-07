@@ -151,6 +151,7 @@ extern const TCHAR szProfileVoiceInSector[];
 extern const TCHAR szProfileVoiceAirspace[];
 
 extern const TCHAR szProfileFinishMinHeight[];
+extern const TCHAR szProfileFinishHeightRef[];
 extern const TCHAR szProfileStartMaxHeight[];
 extern const TCHAR szProfileStartMaxHeightMargin[];
 extern const TCHAR szProfileStartMaxSpeed[];

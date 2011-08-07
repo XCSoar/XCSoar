@@ -32,6 +32,8 @@ Version 6.2 - not yet released
   - airspace rendering optimised
 * data files
   - auto-detect the character encoding in waypoint/airspace files
+* tasks
+  - allow finish height in MSL or AGL
 
 Version 6.1.5 - not yet released
 * calculations

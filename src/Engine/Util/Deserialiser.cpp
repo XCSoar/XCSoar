@@ -227,6 +227,7 @@ Deserialiser::deserialise(OrderedTaskBehaviour& data)
   m_node.get_attribute(_T("start_max_height"), data.start_max_height);
   m_node.get_attribute(_T("start_max_height_ref"), data.start_max_height_ref);
   m_node.get_attribute(_T("finish_min_height"), data.finish_min_height);
+  m_node.get_attribute(_T("finish_min_height_ref"), data.finish_min_height_ref);
   m_node.get_attribute(_T("fai_finish"), data.fai_finish);
   m_node.get_attribute(_T("min_points"), data.min_points);
   m_node.get_attribute(_T("max_points"), data.max_points);
