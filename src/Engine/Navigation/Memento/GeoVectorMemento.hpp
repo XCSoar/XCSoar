@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef GEOVECTOR_MEMENTO_HPP
 #define GEOVECTOR_MEMENTO_HPP
 
@@ -26,41 +27,29 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Compiler.h"
 
-/**
- * Memento object to store results of previous GeoVector constructors. 
- */
+/** Memento object to store results of previous GeoVector constructors. */
 class GeoVectorMemento 
 {
 public:
-
-  /**
-   * Constructor, initialises to trigger update on first call. 
-   */
-  GeoVectorMemento():
-    value(-fixed_one) {};
+  /** Constructor, initialises to trigger update on first call. */
+  GeoVectorMemento()
+    :value(-fixed_one) {}
 
   /**
    * Returns a GeoVector object from the origin to destination, 
    * from previously saved value if input arguments are identical. 
    */
   gcc_pure
-  GeoVector calc(const GeoPoint& _origin,
-                 const GeoPoint& _destination) const;
-private:
+  GeoVector calc(const GeoPoint& _origin, const GeoPoint& _destination) const;
 
-  /**
-   * Origin point of saved query 
-   */
+private:
+  /** Origin point of saved query */
   mutable GeoPoint origin;
 
-  /**
-   * Destination point of previous query 
-   */
+  /** Destination point of previous query */
   mutable GeoPoint destination;
 
-  /**
-   * GeoVector saved from previous query 
-   */
+  /** GeoVector saved from previous query */
   mutable GeoVector value;
 };
 

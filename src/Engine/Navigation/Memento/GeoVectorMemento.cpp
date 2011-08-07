@@ -19,16 +19,20 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "GeoVectorMemento.hpp"
 
 GeoVector 
 GeoVectorMemento::calc(const GeoPoint& _origin,
                        const GeoPoint& _destination) const
 {
-  if (negative(value.Distance) || (_origin != origin)||(_destination != destination)) {
+  if (negative(value.Distance) ||
+      _origin != origin ||
+      _destination != destination) {
     origin = _origin;
     destination = _destination;
-    value = GeoVector(origin,destination);
-  };
+    value = GeoVector(origin, destination);
+  }
+
   return value;
 }
