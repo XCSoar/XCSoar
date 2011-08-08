@@ -30,6 +30,8 @@ class TopCanvas : public Canvas {
 public:
   void set(unsigned width = 640, unsigned height = 480);
 
+  void OnResize(unsigned width, unsigned height);
+
   void full_screen();
 
   void flip();

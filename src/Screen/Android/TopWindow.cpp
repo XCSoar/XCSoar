@@ -34,7 +34,7 @@ TopWindow::on_resize(unsigned width, unsigned height)
 {
   if (native_view != NULL) {
     native_view->SetSize(width, height);
-    screen.set();
+    screen.OnResize(width, height);
   }
 
   ContainerWindow::on_resize(width, height);

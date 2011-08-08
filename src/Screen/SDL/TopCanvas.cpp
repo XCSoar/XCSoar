@@ -100,6 +100,15 @@ TopCanvas::set(unsigned width, unsigned height)
 }
 
 void
+TopCanvas::OnResize(unsigned width, unsigned height)
+{
+#ifdef ENABLE_OPENGL
+  OpenGL::SetupViewport(width, height);
+  Canvas::set(width, height);
+#endif
+}
+
+void
 TopCanvas::full_screen()
 {
 #if 0 /* disabled for now, for easier development */
