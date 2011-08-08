@@ -54,6 +54,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Cache.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp \
+	$(SCREEN_SRC_DIR)/OpenGL/Buffer.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Surface.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Triangulate.cpp
 else
@@ -94,10 +95,15 @@ GDI_LDLIBS += -Wl,-subsystem,windows
 endif
 endif
 
+ifeq ($(OPENGL)$(findstring ANDROID,$(TARGET)),y)
+# Needed for native VBO support
+OPENGL_CPPFLAGS = -DGL_GLEXT_PROTOTYPES
+endif
+
 SCREEN_OBJS = $(call SRC_TO_OBJ,$(SCREEN_SOURCES))
 
 SCREEN_LIBS = $(TARGET_OUTPUT_DIR)/screen.a
-SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS)
+SCREEN_CPPFLAGS = $(SDL_CPPFLAGS) $(GDI_CPPFLAGS) $(OPENGL_CPPFLAGS)
 SCREEN_LDLIBS = $(SDL_LDLIBS) $(GDI_LDLIBS)
 
 $(SCREEN_OBJS): CPPFLAGS += $(SCREEN_CPPFLAGS)

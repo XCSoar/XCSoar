@@ -40,6 +40,7 @@ Copyright_License {
 
 #ifndef NDEBUG
 #include "Screen/OpenGL/Texture.hpp"
+#include "Screen/OpenGL/Buffer.hpp"
 #endif
 
 #include <assert.h>
@@ -127,6 +128,7 @@ Java_org_xcsoar_NativeView_pauseNative(JNIEnv *env, jobject obj)
   CommonInterface::main_window.pause();
 
   assert(num_textures == 0);
+  assert(num_buffers == 0);
 }
 
 JNIEXPORT void JNICALL
