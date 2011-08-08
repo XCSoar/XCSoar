@@ -130,13 +130,11 @@ mode=default
 type=gce
 data=STARTUP_SIMULATOR
 event=StatusMessage Simulation\r\nnothing is real!
-event=TaskLoad Default.tsk
 
 mode=default
 type=gce
 data=STARTUP_REAL
 event=StatusMessage Maintain effective\r\nLOOKOUT at all times
-event=TaskLoad Default.tsk
 
 mode=default
 type=gce
