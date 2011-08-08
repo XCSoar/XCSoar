@@ -97,14 +97,6 @@ TopCanvas::set(unsigned width, unsigned height)
 #else
   Canvas::set(::SDL_SetVideoMode(width, height, 0, flags));
 #endif
-
-#ifdef ENABLE_OPENGL
-  glDisable(GL_DEPTH_TEST);
-  glDisable(GL_DITHER);
-  glDisable(GL_LIGHTING);
-
-  glEnableClientState(GL_VERTEX_ARRAY);
-#endif
 }
 
 void

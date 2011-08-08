@@ -95,6 +95,12 @@ OpenGL::SetupContext()
 #ifdef ANDROID
   native_view->SetTexturePowerOfTwo(texture_non_power_of_two);
 #endif
+
+  glDisable(GL_DEPTH_TEST);
+  glDisable(GL_DITHER);
+  glDisable(GL_LIGHTING);
+
+  glEnableClientState(GL_VERTEX_ARRAY);
 }
 
 void
