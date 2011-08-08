@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/TopWindow.hpp"
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/Surface.hpp"
+#include "Screen/OpenGL/Shapes.hpp"
 #include "Screen/Android/Event.hpp"
 #include "Android/Main.hpp"
 #include "Android/NativeView.hpp"
@@ -48,6 +49,7 @@ TopWindow::on_pause()
     return;
 
   TextCache::flush();
+  OpenGL::DeinitShapes();
 
   SurfaceDestroyed();
 

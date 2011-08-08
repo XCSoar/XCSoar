@@ -28,6 +28,8 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/VertexArray.hpp"
+#include "Screen/OpenGL/Shapes.hpp"
+#include "Screen/OpenGL/Buffer.hpp"
 #include "Screen/OpenGL/Features.hpp"
 #include "Screen/OpenGL/Compatibility.hpp"
 #include "Screen/Util.hpp"
@@ -236,6 +238,33 @@ Canvas::circle(int x, int y, unsigned radius)
     vertices.bind();
     pen.set();
     glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.SIZE);
+  } else if (OpenGL::vertex_buffer_object) {
+    OpenGL::circle_buffer->Bind();
+    glVertexPointer(2, GL_VALUE, 0, NULL);
+
+    glPushMatrix();
+
+#ifdef HAVE_GLES
+    glTranslatex((GLfixed)x << 16, (GLfixed)y << 16, 0);
+    glScalex((GLfixed)radius << 6, (GLfixed)radius << 6, (GLfixed)1 << 16);
+#else
+    glTranslatef(x, y, 0.);
+    glScalef(radius / 1024., radius / 1024., 1.);
+#endif
+
+    if (!brush.is_hollow()) {
+      brush.set();
+      glDrawArrays(GL_TRIANGLE_FAN, 0, OpenGL::CIRCLE_SIZE);
+    }
+
+    if (pen_over_brush()) {
+      pen.set();
+      glDrawArrays(GL_LINE_LOOP, 0, OpenGL::CIRCLE_SIZE);
+    }
+
+    glPopMatrix();
+
+    OpenGL::circle_buffer->Unbind();
   } else {
     GLCircleVertices vertices(x, y, radius);
     vertices.bind();

@@ -55,6 +55,7 @@ SCREEN_SOURCES += \
 	$(SCREEN_SRC_DIR)/OpenGL/Canvas.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Texture.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Buffer.cpp \
+	$(SCREEN_SRC_DIR)/OpenGL/Shapes.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Surface.cpp \
 	$(SCREEN_SRC_DIR)/OpenGL/Triangulate.cpp
 else

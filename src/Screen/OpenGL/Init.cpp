@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/OpenGL/Globals.hpp"
 #include "Screen/OpenGL/Extension.hpp"
 #include "Screen/OpenGL/Features.hpp"
+#include "Screen/OpenGL/Shapes.hpp"
 
 #ifdef ANDROID
 #include "Android/Main.hpp"
@@ -122,6 +123,8 @@ OpenGL::SetupContext()
   glDisable(GL_LIGHTING);
 
   glEnableClientState(GL_VERTEX_ARRAY);
+
+  InitShapes();
 }
 
 void
@@ -146,5 +149,7 @@ OpenGL::SetupViewport(unsigned width, unsigned height)
 void
 OpenGL::Deinitialise()
 {
+  DeinitShapes();
+
   TextCache::flush();
 }
