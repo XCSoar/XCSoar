@@ -34,7 +34,12 @@ namespace OpenGL {
    * Set up our OpenGL library.  Call after the video mode and the
    * OpenGL context have been set up.
    */
-  void SetupContext(unsigned width, unsigned height);
+  void SetupContext();
+
+  /**
+   * Set up the viewport and the matrices for 2D drawing.
+   */
+  void SetupViewport(unsigned width, unsigned height);
 
   /**
    * Deinitialize our OpenGL library.  Call before shutdown.

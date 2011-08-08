@@ -88,16 +88,32 @@ SupportsNonPowerOfTwoTextures()
 }
 
 void
-OpenGL::SetupContext(unsigned width, unsigned height)
+OpenGL::SetupContext()
 {
-  screen_width = width;
-  screen_height = height;
-
   texture_non_power_of_two = SupportsNonPowerOfTwoTextures();
 
 #ifdef ANDROID
   native_view->SetTexturePowerOfTwo(texture_non_power_of_two);
 #endif
+}
+
+void
+OpenGL::SetupViewport(unsigned width, unsigned height)
+{
+  screen_width = width;
+  screen_height = height;
+
+  glViewport(0, 0, width, height);
+  glMatrixMode(GL_PROJECTION);
+  glLoadIdentity();
+#ifdef HAVE_GLES
+  glOrthox(0, width << 16, height << 16, 0, -(1<<16), 1<<16);
+#else
+  glOrtho(0, width, height, 0, -1, 1);
+#endif
+
+  glMatrixMode(GL_MODELVIEW);
+  glLoadIdentity();
 }
 
 void

@@ -91,25 +91,14 @@ TopCanvas::set(unsigned width, unsigned height)
 #ifndef ANDROID
   ::SDL_SetVideoMode(width, height, 0, flags);
 #endif
-  OpenGL::SetupContext(width, height);
+  OpenGL::SetupContext();
+  OpenGL::SetupViewport(width, height);
   Canvas::set(width, height);
 #else
   Canvas::set(::SDL_SetVideoMode(width, height, 0, flags));
 #endif
 
 #ifdef ENABLE_OPENGL
-  glViewport(0, 0, get_width(), get_height());
-  glMatrixMode(GL_PROJECTION);
-  glLoadIdentity();
-#ifdef HAVE_GLES
-  glOrthox(0, get_width()<<16, get_height()<<16, 0, -(1<<16), 1<<16);
-#else
-  glOrtho(0, get_width(), get_height(), 0, -1, 1);
-#endif
-
-  glMatrixMode(GL_MODELVIEW);
-  glLoadIdentity();
-
   glDisable(GL_DEPTH_TEST);
   glDisable(GL_DITHER);
   glDisable(GL_LIGHTING);
