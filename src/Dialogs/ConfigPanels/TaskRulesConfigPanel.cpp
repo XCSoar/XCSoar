@@ -72,20 +72,18 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                    settings_computer.ordered_defaults.finish_min_height);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpContests"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(ContestToString(OLC_FAI), OLC_FAI);
-    dfe->addEnumText(ContestToString(OLC_Classic), OLC_Classic);
-    dfe->addEnumText(ContestToString(OLC_League), OLC_League);
-    dfe->addEnumText(ContestToString(OLC_Plus), OLC_Plus);
-    dfe->addEnumText(ContestToString(OLC_XContest), OLC_XContest);
-    dfe->addEnumText(ContestToString(OLC_DHVXC), OLC_DHVXC);
-    dfe->addEnumText(ContestToString(OLC_SISAT), OLC_SISAT);
-    dfe->Set(settings_computer.contest);
-    wp->RefreshDisplay();
-  }
+  static const StaticEnumChoice contests_list[] = {
+    { OLC_FAI, N_("OLC_FAI") },
+    { OLC_Classic, N_("OLC_Classic") },
+    { OLC_League, N_("OLC_League") },
+    { OLC_Plus, N_("OLC_Plus") },
+    { OLC_XContest, N_("OLC_XContest") },
+    { OLC_DHVXC, N_("OLC_DHVXC") },
+    { OLC_SISAT, N_("OLC_SISAT") },
+    { 0 }
+  };
+  LoadFormProperty(*wf, _T("prpContests"), contests_list,
+                   settings_computer.contest);
 }
 
 
@@ -125,9 +123,8 @@ TaskRulesConfigPanel::Save()
                               szProfileFinishHeightRef,
                               settings_computer.ordered_defaults.finish_min_height_ref);
 
-  unsigned t = settings_computer.contest;
-  changed |= SaveFormProperty(*wf, _T("prpContests"), szProfileOLCRules, t);
-  settings_computer.contest = (Contests) t;
+  changed |= SaveFormPropertyEnum(*wf, _T("prpContests"), szProfileOLCRules,
+                                  settings_computer.contest);
 
   return changed;
 }
