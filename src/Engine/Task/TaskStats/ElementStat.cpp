@@ -27,8 +27,8 @@
 void
 ElementStat::Reset()
 {
-  TimeStarted = fixed_minus_one;
-  TimeElapsed = TimeRemaining = TimePlanned = fixed_zero;
+  time_started = fixed_minus_one;
+  time_elapsed = time_remaining = time_planned = fixed_zero;
   gradient = fixed_zero;
 
   remaining_effective.Reset();
@@ -44,42 +44,42 @@ ElementStat::Reset()
 }
 
 void
-ElementStat::set_times(const fixed ts, const AircraftState& state)
+ElementStat::SetTimes(const fixed ts, const AircraftState& state)
 {
-  TimeStarted = ts;
-  if (negative(TimeStarted))
+  time_started = ts;
+  if (negative(time_started))
     /* not yet started */
-    TimeElapsed = fixed_zero;
+    time_elapsed = fixed_zero;
   else
-    TimeElapsed = max(state.time - fixed(ts), fixed_zero);
+    time_elapsed = max(state.time - fixed(ts), fixed_zero);
 
   if (solution_remaining.IsDefined()) {
-    TimeRemaining = solution_remaining.time_elapsed;
-    TimePlanned = TimeElapsed + TimeRemaining;
+    time_remaining = solution_remaining.time_elapsed;
+    time_planned = time_elapsed + time_remaining;
   } else {
-    TimeRemaining = TimePlanned = fixed_zero;
+    time_remaining = time_planned = fixed_zero;
   }
 }
 
 void
-ElementStatComputer::reset()
+ElementStatComputer::Reset()
 {
   initialised = false;
 
-  calc_speeds(fixed_zero);
+  CalcSpeeds(fixed_zero);
 }
 
 void 
-ElementStatComputer::calc_speeds(const fixed dt)
+ElementStatComputer::CalcSpeeds(const fixed dt)
 {
-  remaining_effective.calc_speed(data.TimeRemaining);
-  remaining.calc_speed(data.TimeRemaining);
-  planned.calc_speed(data.TimePlanned);
-  travelled.calc_speed(data.TimeElapsed);
-  pirker.calc_speed(data.TimeElapsed);
+  remaining_effective.calc_speed(data.time_remaining);
+  remaining.calc_speed(data.time_remaining);
+  planned.calc_speed(data.time_planned);
+  travelled.calc_speed(data.time_elapsed);
+  pirker.calc_speed(data.time_elapsed);
 
   if (!initialised) {
-    if (positive(dt) && data.TimeElapsed > fixed(15))
+    if (positive(dt) && data.time_elapsed > fixed(15))
       initialised = true;
 
     data.vario.reset(data.solution_remaining);

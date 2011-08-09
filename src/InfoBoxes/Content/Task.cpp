@@ -178,9 +178,9 @@ InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
   // use proper non-terminal next task stats
 
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !XCSoarInterface::Calculated().task_stats.current_leg.achievable() ||
+      !XCSoarInterface::Calculated().task_stats.current_leg.IsAchievable() ||
       !positive(XCSoarInterface::Calculated().task_stats.
-                current_leg.TimeRemaining)) {
+                current_leg.time_remaining)) {
     infobox.SetInvalid();
     return;
   }
@@ -188,7 +188,7 @@ InfoBoxContentNextETE::Update(InfoBoxWindow &infobox)
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
   const int dd = (int)XCSoarInterface::Calculated().
-      task_stats.current_leg.TimeRemaining;
+      task_stats.current_leg.time_remaining;
   Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
   infobox.SetValue(HHMMSSsmart);
@@ -201,7 +201,7 @@ InfoBoxContentNextETA::Update(InfoBoxWindow &infobox)
   // use proper non-terminal next task stats
 
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
-      !XCSoarInterface::Calculated().task_stats.current_leg.achievable()) {
+      !XCSoarInterface::Calculated().task_stats.current_leg.IsAchievable()) {
     infobox.SetInvalid();
     return;
   }
@@ -336,15 +336,15 @@ InfoBoxContentFinalETE::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
-  if (!task_stats.task_valid || !task_stats.total.achievable() ||
-      !positive(task_stats.total.TimeRemaining)) {
+  if (!task_stats.task_valid || !task_stats.total.IsAchievable() ||
+      !positive(task_stats.total.time_remaining)) {
     infobox.SetInvalid();
     return;
   }
 
   TCHAR HHMMSSsmart[32];
   TCHAR SSsmart[32];
-  const int dd = abs((int)task_stats.total.TimeRemaining);
+  const int dd = abs((int)task_stats.total.time_remaining);
   Units::TimeToTextSmart(HHMMSSsmart, SSsmart, dd);
 
   infobox.SetValue(HHMMSSsmart);
@@ -355,7 +355,7 @@ void
 InfoBoxContentFinalETA::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid || !task_stats.total.achievable()) {
+  if (!task_stats.task_valid || !task_stats.total.IsAchievable()) {
     infobox.SetInvalid();
     return;
   }
@@ -578,7 +578,7 @@ InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
-  if (!task_stats.task_valid || !task_stats.total.achievable() ||
+  if (!task_stats.task_valid || !task_stats.total.IsAchievable() ||
       !positive(common_stats.aat_time_remaining)) {
     infobox.SetInvalid();
     return;
@@ -599,14 +599,14 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
-  if (!task_stats.task_valid || !task_stats.total.achievable() ||
-      !positive(task_stats.total.TimeRemaining) ||
+  if (!task_stats.task_valid || !task_stats.total.IsAchievable() ||
+      !positive(task_stats.total.time_remaining) ||
       !positive(common_stats.aat_time_remaining)) {
     infobox.SetInvalid();
     return;
   }
 
-  fixed diff = task_stats.total.TimeRemaining -
+  fixed diff = task_stats.total.time_remaining -
     common_stats.aat_time_remaining;
 
   TCHAR HHMMSSsmart[32];
@@ -622,7 +622,7 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
 
   // Set Color (red/blue/black)
   infobox.SetColor(negative(diff) ? 1 :
-                   task_stats.total.TimeRemaining <
+                   task_stats.total.time_remaining <
                        common_stats.aat_time_remaining + fixed(5) ? 2 : 0);
 }
 

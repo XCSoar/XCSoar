@@ -807,7 +807,7 @@ OrderedTask::calc_min_target(const AircraftState &aircraft,
 {
   if (stats.distance_max > stats.distance_min) {
     // only perform scan if modification is possible
-    const fixed t_rem = max(fixed_zero, t_target - stats.total.TimeElapsed);
+    const fixed t_rem = max(fixed_zero, t_target - stats.total.time_elapsed);
 
     TaskMinTarget bmt(task_points, activeTaskPoint, aircraft, glide_polar, t_rem, taskpoint_start);
     fixed p = bmt.search(fixed_zero);

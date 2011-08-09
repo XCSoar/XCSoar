@@ -138,7 +138,7 @@ TaskManager::update_common_stats_times(const AircraftState &state)
 
     common_stats.aat_time_remaining =
         max(fixed_zero, task_ordered.get_ordered_task_behaviour().aat_min_time -
-                        task_ordered.get_stats().total.TimeElapsed);
+                        task_ordered.get_stats().total.time_elapsed);
 
     if (positive(common_stats.aat_time_remaining))
       common_stats.aat_speed_remaining =
@@ -160,9 +160,9 @@ TaskManager::update_common_stats_times(const AircraftState &state)
     }
 
     common_stats.task_time_remaining =
-        task_ordered.get_stats().total.TimeRemaining;
+        task_ordered.get_stats().total.time_remaining;
     common_stats.task_time_elapsed =
-        task_ordered.get_stats().total.TimeElapsed;
+        task_ordered.get_stats().total.time_elapsed;
 
     const fixed start_max_height =
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height) +

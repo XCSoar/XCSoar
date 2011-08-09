@@ -224,11 +224,11 @@ AbstractTask::update_stats_speeds(const AircraftState &state,
   if (!task_finished()) {
     if (task_started()) {
       const fixed dt = state.time - state_last.time;
-      stats_computer.total.calc_speeds(dt);
-      stats_computer.current_leg.calc_speeds(dt);
+      stats_computer.total.CalcSpeeds(dt);
+      stats_computer.current_leg.CalcSpeeds(dt);
     } else {
-      stats_computer.total.reset();
-      stats_computer.current_leg.reset();
+      stats_computer.total.Reset();
+      stats_computer.current_leg.Reset();
     }
   }
 }
@@ -245,8 +245,8 @@ AbstractTask::update_stats_times(const AircraftState &state)
   // default for tasks with no start time...
   stats.Time = state.time;
   if (!task_finished()) {
-    stats.total.set_times(scan_total_start_time(state), state);
-    stats.current_leg.set_times(scan_leg_start_time(state),state);
+    stats.total.SetTimes(scan_total_start_time(state), state);
+    stats.current_leg.SetTimes(scan_leg_start_time(state),state);
   }
 }
 

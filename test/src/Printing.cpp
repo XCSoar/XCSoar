@@ -418,10 +418,10 @@ std::ostream& operator<< (std::ostream& f,
 std::ostream& operator<< (std::ostream& f, 
                           const ElementStat& es)
 {
-  f << "#  Time started " << es.TimeStarted << " (s)\n";
-  f << "#  Time elapsed " << es.TimeElapsed << " (s)\n";
-  f << "#  Time remaining " << es.TimeRemaining << " (s)\n";
-  f << "#  Time planned " << es.TimePlanned << " (s)\n";
+  f << "#  Time started " << es.time_started << " (s)\n";
+  f << "#  Time elapsed " << es.time_elapsed << " (s)\n";
+  f << "#  Time remaining " << es.time_remaining << " (s)\n";
+  f << "#  Time planned " << es.time_planned << " (s)\n";
   f << "#  Gradient " << es.gradient << "\n";
   f << "#  Remaining: \n";
   f << es.remaining;

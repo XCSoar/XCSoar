@@ -66,8 +66,8 @@ void
 TaskStatsComputer::reset()
 {
   data.reset();
-  total.reset();
-  current_leg.reset();
+  total.Reset();
+  current_leg.Reset();
 }
 
 fixed 

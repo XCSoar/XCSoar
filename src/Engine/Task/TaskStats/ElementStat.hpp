@@ -38,13 +38,13 @@ struct AircraftState;
 struct ElementStat
 {
   /** Time (s) this element was started */
-  fixed TimeStarted;
+  fixed time_started;
   /** Time (s) since element was started */
-  fixed TimeElapsed;
+  fixed time_elapsed;
   /** Time (s) to element completion */
-  fixed TimeRemaining;
+  fixed time_remaining;
   /** Time (s) of overall element */
-  fixed TimePlanned;
+  fixed time_planned;
 
   /** Gradient to element completion */
   fixed gradient;
@@ -81,7 +81,7 @@ struct ElementStat
    * @param ts Start time of this element (s)
    * @param state Aircraft state (to access time)
    */
-  void set_times(const fixed ts, const AircraftState& state);
+  void SetTimes(const fixed ts, const AircraftState& state);
 
   /**
    * Determine whether the task (or subtask) is able to be finished
@@ -89,7 +89,7 @@ struct ElementStat
    *
    * @return True if can finish the task
    */
-  bool achievable() const {
+  bool IsAchievable() const {
     return solution_remaining.validity == GlideResult::RESULT_OK;
   }
 
@@ -121,14 +121,13 @@ public:
    *
    * @param dt Time step of sample (s)
    */
-  void calc_speeds(const fixed dt);
+  void CalcSpeeds(const fixed dt);
 
   /**
    * Reset to uninitialised state, to supress calculation
    * of incremental speeds.
    */
-  void reset();
+  void Reset();
 };
-
 
 #endif

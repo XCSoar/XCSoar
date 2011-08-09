@@ -226,11 +226,11 @@ bool run_flight(TaskManager &task_manager,
   do {
 
     if ((task_manager.getActiveTaskPointIndex() == 1) &&
-        first && (task_manager.get_stats().total.TimeElapsed > fixed_10)) {
-      time_remaining = task_manager.get_stats().total.TimeRemaining;
+        first && (task_manager.get_stats().total.time_elapsed > fixed_10)) {
+      time_remaining = task_manager.get_stats().total.time_remaining;
       first = false;
 
-      time_planned = task_manager.get_stats().total.TimePlanned;
+      time_planned = task_manager.get_stats().total.time_planned;
 
       if (verbose > 1) {
         printf("# time remaining %g\n", time_remaining);
@@ -311,8 +311,8 @@ bool run_flight(TaskManager &task_manager,
   }
   wait_prompt();
 
-  time_elapsed = task_manager.get_stats().total.TimeElapsed;
-  time_planned = task_manager.get_stats().total.TimePlanned;
+  time_elapsed = task_manager.get_stats().total.time_elapsed;
+  time_planned = task_manager.get_stats().total.time_planned;
   calc_cruise_efficiency = task_manager.get_stats().cruise_efficiency;
   calc_effective_mc = task_manager.get_stats().effective_mc;
 

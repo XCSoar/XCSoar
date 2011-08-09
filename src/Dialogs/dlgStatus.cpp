@@ -411,13 +411,13 @@ UpdateValuesTask(void)
   wp = (WndProperty*)wf->FindByName(_T("prpETETime"));
   assert(wp != NULL);
   Units::TimeToTextHHMMSigned(Temp,
-                    task_stats.total.TimeElapsed +
-                    task_stats.total.TimeRemaining);
+                    task_stats.total.time_elapsed +
+                    task_stats.total.time_remaining);
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingTime"));
   assert(wp != NULL);
-  Units::TimeToTextHHMMSigned(Temp, task_stats.total.TimeRemaining);
+  Units::TimeToTextHHMMSigned(Temp, task_stats.total.time_remaining);
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskDistance"));

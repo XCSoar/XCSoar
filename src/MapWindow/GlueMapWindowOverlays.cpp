@@ -268,7 +268,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
     // or above final glide but impeded by obstacle
     int cross_sign = 0;
 
-    if (!Calculated().task_stats.total.achievable())
+    if (!Calculated().task_stats.total.IsAchievable())
       cross_sign = 1;
     if (Calculated().terrain_warning && (Offset>0))
       cross_sign = -1;
