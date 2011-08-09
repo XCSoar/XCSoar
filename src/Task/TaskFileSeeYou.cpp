@@ -501,7 +501,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   if (factType == TaskBehaviour::FACTORY_AAT ||
       factType == TaskBehaviour::FACTORY_RT) {
     beh.start_max_height = task_info.MaxAltStart;
-    beh.start_max_height_ref = 1; //abs
+    beh.start_max_height_ref = hrMSL;
   }
   task->set_ordered_task_behaviour(beh);
 

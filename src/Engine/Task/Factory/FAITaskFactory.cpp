@@ -59,7 +59,7 @@ FAITaskFactory::update_ordered_task_behaviour(OrderedTaskBehaviour& to)
 
   to.start_max_speed = fixed_zero;
   to.start_max_height = 0;
-  to.start_max_height_ref = 0;
+  to.start_max_height_ref = hrAGL;
   to.finish_min_height = 0;
   to.start_requires_arm = false;
 }

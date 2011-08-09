@@ -187,9 +187,11 @@ Serialiser::serialise(const OrderedTaskBehaviour& data)
   m_node.set_attribute(_T("aat_min_time"), data.aat_min_time);
   m_node.set_attribute(_T("start_max_speed"), data.start_max_speed);
   m_node.set_attribute(_T("start_max_height"), data.start_max_height);
-  m_node.set_attribute(_T("start_max_height_ref"), data.start_max_height_ref);
+  m_node.set_attribute(_T("start_max_height_ref"),
+                       height_ref(data.start_max_height_ref));
   m_node.set_attribute(_T("finish_min_height"), data.finish_min_height);
-  m_node.set_attribute(_T("finish_min_height_ref"), data.finish_min_height_ref);
+  m_node.set_attribute(_T("finish_min_height_ref"),
+                       height_ref(data.finish_min_height_ref));
   m_node.set_attribute(_T("fai_finish"), data.fai_finish);
   m_node.set_attribute(_T("min_points"), data.min_points);
   m_node.set_attribute(_T("max_points"), data.max_points);
@@ -206,6 +208,18 @@ Serialiser::serialise(const OrderedTask &task)
   task.tp_CAccept(*this);
   mode_optional_start = true;
   task.sp_CAccept(*this);
+}
+
+const TCHAR*
+Serialiser::height_ref(HeightReferenceType the_height_ref) const
+{
+  switch(the_height_ref) {
+  case hrAGL:
+    return _T("AGL");
+  case hrMSL:
+    return _T("MSL");
+  }
+  return NULL;
 }
 
 const TCHAR* 

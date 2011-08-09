@@ -27,6 +27,10 @@
 struct AircraftState;
 struct TaskStartMargins;
 
+enum HeightReferenceType {
+  hrAGL,
+  hrMSL,
+};
 /**
  * Settings for ordered tasks; most of these are set by
  * the #AbstractTaskFactory but can be overriden
@@ -48,12 +52,12 @@ public:
   fixed start_max_speed;
   /** Maximum height (m) allowed in start sector */
   unsigned start_max_height;
-  /** Reference for max start height (0=AGL, 1=abs) */
-  unsigned start_max_height_ref;
+  /** Reference for max start height */
+  HeightReferenceType start_max_height_ref;
   /** Minimum height AGL (m) allowed to finish */
   unsigned finish_min_height;
-  /** Reference for min finish height (0=AGL, 1=abs) */
-  unsigned finish_min_height_ref;
+  /** Reference for min finish height */
+  HeightReferenceType finish_min_height_ref;
   /** Whether ordered task start and finish requires FAI height rules
    *  and (no) speed rule */
   bool fai_finish;

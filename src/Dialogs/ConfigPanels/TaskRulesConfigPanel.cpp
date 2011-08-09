@@ -38,7 +38,6 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
-  WndProperty *wp;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
   LoadFormProperty(*wf, _T("prpStartMaxSpeed"), ugHorizontalSpeed,
@@ -47,49 +46,43 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpStartMaxSpeedMargin"), ugHorizontalSpeed,
                    settings_computer.start_max_speed_margin);
 
+  static const StaticEnumChoice start_max_height_ref_list[] = {
+    { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point)") },
+    { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level)") },
+    { 0 }
+  };
+  LoadFormProperty(*wf, _T("prpStartHeightRef"), start_max_height_ref_list,
+                   settings_computer.ordered_defaults.start_max_height_ref);
+
   LoadFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
                    settings_computer.ordered_defaults.start_max_height);
 
   LoadFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
                    settings_computer.start_max_height_margin);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("AGL"));
-    dfe->addEnumText(_("MSL"));
-    dfe->Set(settings_computer.ordered_defaults.start_max_height_ref);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFinishHeightRef"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("AGL"));
-    dfe->addEnumText(_("MSL"));
-    dfe->Set(settings_computer.ordered_defaults.finish_min_height_ref);
-    wp->RefreshDisplay();
-  }
+  static const StaticEnumChoice finish_min_height_ref_list[] = {
+    { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point)") },
+    { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level)") },
+    { 0 }
+  };
+  LoadFormProperty(*wf, _T("prpFinishHeightRef"), finish_min_height_ref_list,
+                   settings_computer.ordered_defaults.finish_min_height_ref);
 
   LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                    settings_computer.ordered_defaults.finish_min_height);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpContests"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(ContestToString(OLC_FAI), OLC_FAI);
-    dfe->addEnumText(ContestToString(OLC_Classic), OLC_Classic);
-    dfe->addEnumText(ContestToString(OLC_League), OLC_League);
-    dfe->addEnumText(ContestToString(OLC_Plus), OLC_Plus);
-    dfe->addEnumText(ContestToString(OLC_XContest), OLC_XContest);
-    dfe->addEnumText(ContestToString(OLC_DHVXC), OLC_DHVXC);
-    dfe->addEnumText(ContestToString(OLC_SISAT), OLC_SISAT);
-    dfe->Set(settings_computer.contest);
-    wp->RefreshDisplay();
-  }
+  static const StaticEnumChoice contests_list[] = {
+    { OLC_FAI, N_("OLC_FAI") },
+    { OLC_Classic, N_("OLC_Classic") },
+    { OLC_League, N_("OLC_League") },
+    { OLC_Plus, N_("OLC_Plus") },
+    { OLC_XContest, N_("OLC_XContest") },
+    { OLC_DHVXC, N_("OLC_DHVXC") },
+    { OLC_SISAT, N_("OLC_SISAT") },
+    { 0 }
+  };
+  LoadFormProperty(*wf, _T("prpContests"), contests_list,
+                   settings_computer.contest);
 }
 
 
@@ -99,40 +92,39 @@ TaskRulesConfigPanel::Save()
   bool changed = false;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
 
+  OrderedTaskBehaviour &otb = settings_computer.ordered_defaults;
   changed |= SaveFormProperty(*wf, _T("prpStartMaxSpeed"),
-                                  ugHorizontalSpeed,
-                                  settings_computer.ordered_defaults.start_max_speed,
-                                  szProfileStartMaxSpeed);
+                              ugHorizontalSpeed,
+                              otb.start_max_speed,
+                              szProfileStartMaxSpeed);
 
   changed |= SaveFormProperty(*wf, _T("prpStartMaxSpeedMargin"),
-                                  ugHorizontalSpeed,
-                                  settings_computer.start_max_speed_margin,
-                                  szProfileStartMaxSpeedMargin);
+                              ugHorizontalSpeed,
+                              settings_computer.start_max_speed_margin,
+                              szProfileStartMaxSpeedMargin);
 
   changed |= SaveFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
-                                  settings_computer.ordered_defaults.start_max_height,
-                                  szProfileStartMaxHeight);
+                              otb.start_max_height,
+                              szProfileStartMaxHeight);
 
   changed |= SaveFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
-                                  settings_computer.start_max_height_margin,
-                                  szProfileStartMaxHeightMargin);
+                              settings_computer.start_max_height_margin,
+                              szProfileStartMaxHeightMargin);
 
-  changed |= SaveFormProperty(*wf, _T("prpStartHeightRef"),
-                              szProfileStartHeightRef,
-                              settings_computer.ordered_defaults.start_max_height_ref);
+  changed |= SaveFormPropertyEnum(*wf, _T("prpStartHeightRef"),
+                                  szProfileStartHeightRef,
+                                  otb.start_max_height_ref);
 
   changed |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
-                                  settings_computer.ordered_defaults.finish_min_height,
-                                  szProfileFinishMinHeight);
+                              otb.finish_min_height,
+                              szProfileFinishMinHeight);
 
-  changed |= SaveFormProperty(*wf, _T("prpFinishHeightRef"),
-                              szProfileFinishHeightRef,
-                              settings_computer.ordered_defaults.finish_min_height_ref);
+  changed |= SaveFormPropertyEnum(*wf, _T("prpFinishHeightRef"),
+                                  szProfileFinishHeightRef,
+                                  otb.finish_min_height_ref);
 
-
-  unsigned t = settings_computer.contest;
-  changed |= SaveFormProperty(*wf, _T("prpContests"), szProfileOLCRules, t);
-  settings_computer.contest = (Contests) t;
+  changed |= SaveFormPropertyEnum(*wf, _T("prpContests"), szProfileOLCRules,
+                                  settings_computer.contest);
 
   return changed;
 }

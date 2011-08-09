@@ -225,9 +225,9 @@ Deserialiser::deserialise(OrderedTaskBehaviour& data)
   m_node.get_attribute(_T("aat_min_time"), data.aat_min_time);
   m_node.get_attribute(_T("start_max_speed"), data.start_max_speed);
   m_node.get_attribute(_T("start_max_height"), data.start_max_height);
-  m_node.get_attribute(_T("start_max_height_ref"), data.start_max_height_ref);
+  data.start_max_height_ref = height_ref(_T("start_max_height_ref"));
   m_node.get_attribute(_T("finish_min_height"), data.finish_min_height);
-  m_node.get_attribute(_T("finish_min_height_ref"), data.finish_min_height_ref);
+  data.finish_min_height_ref = height_ref(_T("finish_min_height_ref"));
   m_node.get_attribute(_T("fai_finish"), data.fai_finish);
   m_node.get_attribute(_T("min_points"), data.min_points);
   m_node.get_attribute(_T("max_points"), data.max_points);
@@ -254,6 +254,20 @@ Deserialiser::deserialise(OrderedTask &task)
     delete point_node;
     i++;
   }
+}
+
+HeightReferenceType
+Deserialiser::height_ref(const TCHAR *nodename) const
+{
+  tstring type;
+  if (!m_node.get_attribute(nodename, type)) {
+    return hrAGL;
+  }
+
+  if (_tcscmp(type.c_str(), _T("AGL")) == 0)
+    return hrAGL;
+
+  return hrMSL;
 }
 
 TaskBehaviour::Factory_t

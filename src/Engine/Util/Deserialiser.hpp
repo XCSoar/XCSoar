@@ -97,6 +97,7 @@ protected:
   void deserialise_point(OrderedTask& data);
 
 private:
+  HeightReferenceType height_ref(const TCHAR *nodename) const;
   TaskBehaviour::Factory_t task_factory_type() const;
 };
 

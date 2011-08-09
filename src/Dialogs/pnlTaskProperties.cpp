@@ -59,21 +59,19 @@ InitView()
   if (wp)
     wp->GetDataField()->SetUnits(Units::GetAltitudeName());
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("AGL"));
-    dfe->addEnumText(_("MSL"));
-  }
+  static const StaticEnumChoice start_max_height_ref_list[] = {
+    { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point)") },
+    { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level)") },
+    { 0 }
+  };
+  LoadFormProperty(*wf, _T("prpStartHeightRef"), start_max_height_ref_list, hrAGL);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFinishHeightRef"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("AGL"));
-    dfe->addEnumText(_("MSL"));
-  }
+  static const StaticEnumChoice finish_min_height_ref_list[] = {
+    { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point)") },
+    { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level)") },
+    { 0 }
+  };
+  LoadFormProperty(*wf, _T("prpFinishHeightRef"), finish_min_height_ref_list, hrAGL);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskType"));
   if (wp) {
@@ -91,7 +89,6 @@ InitView()
     }
     wp->RefreshDisplay();
   }
-
 }
 
 static void 
@@ -208,13 +205,15 @@ ReadValues()
     *task_changed = true;
   }
 
-  unsigned height_ref_start = GetFormValueInteger(*wf, _T("prpStartHeightRef"));
+  HeightReferenceType height_ref_start = (HeightReferenceType)
+      GetFormValueInteger(*wf, _T("prpStartHeightRef"));
   if (height_ref_start != p.start_max_height_ref) {
     p.start_max_height_ref = height_ref_start;
     *task_changed = true;
   }
 
-  unsigned height_ref_finish = GetFormValueInteger(*wf, _T("prpFinishHeightRef"));
+  HeightReferenceType height_ref_finish = (HeightReferenceType)
+      GetFormValueInteger(*wf, _T("prpFinishHeightRef"));
   if (height_ref_finish != p.finish_min_height_ref) {
     p.finish_min_height_ref = height_ref_finish;
     *task_changed = true;

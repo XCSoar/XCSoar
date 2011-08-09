@@ -53,9 +53,9 @@ Profile::Load(SectorDefaults &settings)
 void
 Profile::Load(OrderedTaskBehaviour &settings)
 {
-  Get(szProfileFinishHeightRef, settings.finish_min_height_ref);
+  GetEnum(szProfileFinishHeightRef, settings.finish_min_height_ref);
   Get(szProfileFinishMinHeight, settings.finish_min_height);
-  Get(szProfileStartHeightRef, settings.start_max_height_ref);
+  GetEnum(szProfileStartHeightRef, settings.start_max_height_ref);
   Get(szProfileStartMaxHeight, settings.start_max_height);
   Get(szProfileStartMaxSpeed, settings.start_max_speed);
   Get(szProfileAATMinTime, settings.aat_min_time);
