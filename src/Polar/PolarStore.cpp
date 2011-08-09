@@ -218,6 +218,9 @@ static const PolarStore::Item InternalPolars[] =
   // from LK8000
   { _T("VSO-10 Gradient"), 347, 0, 90, -0.78, 130, -1.41, 160, -2.44, 12.0, 44.444, 96 },
   { _T("VT-116 Orlik II"), 335, 0, 80, -0.7, 100, -1.05, 120, -1.65, 12.8, 33.333, 86 },
+
+  // from IDAFlieg
+  { _T("LS-1f"), 345, 80, 100, -0.75, 120, -0.98, 150, -1.6, 9.74, 0.0, 100 },
 };
 
 const PolarStore::Item &
