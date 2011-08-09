@@ -18,6 +18,7 @@
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
 #include "Screen/OpenGL/Features.hpp"
+#include "Screen/OpenGL/Compatibility.hpp"
 #endif
 
 /**
@@ -221,7 +222,7 @@ public:
       dirty = false;
     }
 
-    glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+    OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
     GLEnable scope(GL_TEXTURE_2D);
     dest_canvas.stretch(0, 0, dest_width, dest_height,
                         *texture, 0, 0, width, height);

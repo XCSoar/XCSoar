@@ -28,6 +28,7 @@ Copyright_License {
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Scope.hpp"
+#include "Screen/OpenGL/Compatibility.hpp"
 #endif
 
 void
@@ -83,7 +84,8 @@ MaskedIcon::draw(Canvas &canvas, int x, int y) const
 
   GLEnable scope(GL_TEXTURE_2D);
   texture.bind();
-  glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
+
+  OpenGL::glTexEnvi(GL_TEXTURE_ENV, GL_TEXTURE_ENV_MODE, GL_REPLACE);
 
   GLLogicOp logic_op(GL_OR);
   texture.draw(x - origin.x, y - origin.y, size.cx, size.cy,
