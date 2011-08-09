@@ -24,7 +24,8 @@ Copyright_License {
 // simple code to prevent text writing over map city names
 #include "Screen/LabelBlock.hpp"
 
-void LabelBlock::reset()
+void
+LabelBlock::Bucket::Clear()
 {
   blocks.clear();
 }
@@ -36,15 +37,37 @@ CheckRectOverlap(const PixelRect& rc1, const PixelRect& rc2)
     rc1.top < rc2.bottom && rc1.bottom > rc2.top;
 }
 
-bool LabelBlock::check(const PixelRect rc)
+bool
+LabelBlock::Bucket::Check(const PixelRect rc) const
 {
   for (BlockArray::const_iterator i = blocks.begin(), end = blocks.end();
        i != end; ++i)
     if (CheckRectOverlap(*i, rc))
       return false;
 
-  if (!blocks.full())
-    blocks.append(rc);
+  return true;
+}
 
+void LabelBlock::reset()
+{
+  for (unsigned i = 0; i < BUCKET_COUNT; ++i)
+    buckets[i].Clear();
+}
+
+bool LabelBlock::check(const PixelRect rc)
+{
+  unsigned top = rc.top >> BUCKET_SHIFT;
+  unsigned bottom = rc.bottom >> BUCKET_SHIFT;
+
+  if (top >= BUCKET_COUNT)
+    top = BUCKET_COUNT - 1;
+
+  if (bottom < BUCKET_COUNT && !buckets[bottom].Check(rc))
+    return false;
+
+  if (top < bottom && !buckets[top].Check(rc))
+    return false;
+
+  buckets[top].Add(rc);
   return true;
 }

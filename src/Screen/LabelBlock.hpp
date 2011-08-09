@@ -29,8 +29,44 @@ Copyright_License {
 #include "Compiler.h"
 
 class LabelBlock {
-  typedef StaticArray<PixelRect, 256u> BlockArray;
-  BlockArray blocks;
+#if defined(_WIN32_WCE) && _WIN32_WCE < 0x400
+  /* PPC2000 (ancient hardware, expect small screens) */
+  static const unsigned SCREEN_HEIGHT = 1024;
+  static const unsigned BUCKET_SIZE = 32;
+#elif defined(_WIN32_WCE) || defined(HAVE_GLES)
+  /* embedded (Android or Windows CE) */
+  static const unsigned SCREEN_HEIGHT = 2048;
+  static const unsigned BUCKET_SIZE = 64;
+#else
+  /* desktop, screen may be huge, lots of memory */
+  static const unsigned SCREEN_HEIGHT = 4096;
+  static const unsigned BUCKET_SIZE = 64;
+#endif
+  static const unsigned BUCKET_SHIFT = 7;
+  static const unsigned BUCKET_HEIGHT = 1 << BUCKET_SHIFT;
+  static const unsigned BUCKET_COUNT = SCREEN_HEIGHT / BUCKET_HEIGHT;
+
+  /**
+   * A bucket is responsible for hit tests in one horizontal section
+   * of the screen.
+   */
+  class Bucket {
+    typedef StaticArray<PixelRect, BUCKET_SIZE> BlockArray;
+    BlockArray blocks;
+
+  public:
+    void Clear();
+
+    gcc_pure
+    bool Check(const PixelRect rc) const;
+
+    void Add(const PixelRect rc) {
+      if (!blocks.full())
+        blocks.append(rc);
+    }
+  };
+
+  Bucket buckets[BUCKET_COUNT];
 
 public:
   bool check(const PixelRect rc);
