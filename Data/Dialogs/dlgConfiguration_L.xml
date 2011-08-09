@@ -581,7 +581,7 @@
         </Edit>
         <Edit Name="prpAATTimeMargin" Caption="Optimisation margin" Expert="1" Width="-2" Height="22" CaptionWidth="120"
           Help="Safety margin for AAT task optimisation.  Optimisation seeks to complete the task at the minimum time plus this margin time.">
-          <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" Min="1" Max="30" Step="1"/>
+          <DataField DataType="double" DisplayFormat="%.0f min" EditFormat="%.0f" Min="0" Max="30" Step="1"/>
         </Edit>
       </Panel>
     </Panel>
