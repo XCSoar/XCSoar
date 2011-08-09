@@ -24,6 +24,8 @@ Copyright_License {
 #include "Screen/OpenGL/Cache.hpp"
 #include "Screen/OpenGL/Texture.hpp"
 #include "Screen/OpenGL/Debug.hpp"
+#include "Screen/OpenGL/Point.hpp"
+#include "Screen/Font.hpp"
 #include "Screen/Color.hpp"
 #include "Util/ListHead.hpp"
 
@@ -52,7 +54,6 @@ static TextCache::Map text_cache_map;
 static ListHead text_cache_head = ListHead(ListHead::empty());
 static unsigned text_cache_size = 0;
 
-#ifdef ANDROID
 PixelSize
 TextCache::LookupSize(const Font &font, const char *text)
 {
@@ -78,17 +79,10 @@ TextCache::LookupSize(const Font &font, const char *text)
   size.cy = rendered.texture.get_height();
   return size;
 }
-#endif
 
-#ifdef ANDROID
 GLTexture *
 TextCache::get(const Font *font, Color background_color, Color text_color,
                const char *text)
-#else
-GLTexture *
-TextCache::get(TTF_Font *font, Color background_color, Color text_color,
-               const char *text)
-#endif
 {
   assert(pthread_equal(pthread_self(), OpenGL::thread));
   assert(font != NULL);
@@ -100,15 +94,9 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
   char key[4096];
   snprintf(key, sizeof(key),
            "%s_%u_%u_%02x%02x%02x_%02x%02x%02x_%s",
-#ifdef ANDROID
            font->get_facename(),
            font->get_style(),
            font->get_height(),
-#else  // !ANDROID
-           TTF_FontFaceFamilyName(font),
-           TTF_GetFontStyle(font),
-           TTF_FontHeight(font),
-#endif
            background_color.red(),
            background_color.green(),
            background_color.blue(),
@@ -150,7 +138,8 @@ TextCache::get(TTF_Font *font, Color background_color, Color text_color,
 
   RenderedText *rt = new RenderedText(key, texture_id, size.cx, size.cy);
 #else
-  SDL_Surface *surface = ::TTF_RenderUTF8_Solid(font, text, COLOR_BLACK);
+  SDL_Surface *surface = ::TTF_RenderUTF8_Solid(font->native(), text,
+                                                COLOR_BLACK);
   if (surface == NULL)
     return NULL;
 

@@ -69,7 +69,7 @@ protected:
 
   Pen pen;
   Brush brush;
-  TTF_Font *font;
+  const Font *font;
   Color text_color, background_color;
   enum {
     OPAQUE, TRANSPARENT
@@ -157,7 +157,7 @@ public:
   }
 
   void select(const Font &_font) {
-    font = _font.native();
+    font = &_font;
   }
 
   void set_text_color(const Color c) {
@@ -350,7 +350,7 @@ public:
 
   gcc_pure
   unsigned text_height(const TCHAR *text) const {
-    return font != NULL ? TTF_FontHeight(font) : 0;
+    return font != NULL ? font->get_height() : 0;
   }
 
   void text(int x, int y, const TCHAR *text);

@@ -27,31 +27,24 @@ Copyright_License {
 #include "Compiler.h"
 
 #ifdef ANDROID
-#include "Screen/Font.hpp"
 #include <GLES/gl.h>
 #else
 #include <SDL_opengl.h>
 #include <SDL_ttf.h>
 #endif
 
+struct PixelSize;
 class GLTexture;
 class Font;
 struct Color;
 
 namespace TextCache {
-#ifdef ANDROID
   gcc_pure
   PixelSize LookupSize(const Font &font, const char *text);
-#endif
 
   gcc_pure
-#ifdef ANDROID
   GLTexture *get(const Font *font, Color background_color, Color text_color,
                  const char *text);
-#else
-  GLTexture *get(TTF_Font *font, Color background_color, Color text_color,
-                 const char *text);
-#endif
 
   void flush();
 };

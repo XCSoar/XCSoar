@@ -62,11 +62,7 @@ protected:
 
   Pen pen;
   Brush brush;
-#ifdef ANDROID
   const Font *font;
-#else
-  TTF_Font *font;
-#endif
   Color text_color, background_color;
   enum {
     OPAQUE, TRANSPARENT
@@ -147,11 +143,7 @@ public:
   }
 
   void select(const Font &_font) {
-#ifdef ANDROID
     font = &_font;
-#else
-    font = _font.native();
-#endif
   }
 
   void set_text_color(const Color c) {
@@ -292,11 +284,7 @@ public:
 
   gcc_pure
   unsigned text_height(const TCHAR *text) const {
-#ifdef ANDROID
     return font != NULL ? font->get_height() : 0;
-#else
-    return font != NULL ? TTF_FontHeight(font) : 0;
-#endif
   }
 
   void text(int x, int y, const TCHAR *text);

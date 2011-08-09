@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Bitmap.hpp"
 #include "Util/StringUtil.hpp"
 
-#ifdef ANDROID
+#ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Cache.hpp"
 #endif
 
@@ -180,27 +180,14 @@ Canvas::text_size(const TCHAR *text) const
   if (font == NULL)
     return size;
 
-#ifdef ANDROID
+#ifdef ENABLE_OPENGL
   /* see if the TextCache can handle this request */
   size = TextCache::LookupSize(*font, text);
   if (size.cy > 0)
     return size;
+#endif
 
   return font->TextSize(text);
-#else // !ANDROID
-  int ret, w, h;
-#ifdef UNICODE
-  ret = ::TTF_SizeUNICODE(font, (const Uint16 *)text, &w, &h);
-#else
-  ret = ::TTF_SizeUTF8(font, text, &w, &h);
-#endif
-  if (ret == 0) {
-    size.cx = w;
-    size.cy = h;
-  }
-
-  return size;
-#endif // !ANDROID
 }
 
 #ifndef ENABLE_OPENGL
@@ -214,9 +201,10 @@ Canvas::text(int x, int y, const TCHAR *text)
     return;
 
 #ifdef UNICODE
-  s = ::TTF_RenderUNICODE_Solid(font, (const Uint16 *)text, text_color);
+  s = ::TTF_RenderUNICODE_Solid(font->native(), (const Uint16 *)text,
+                                COLOR_BLACK);
 #else
-  s = ::TTF_RenderUTF8_Solid(font, text, COLOR_BLACK);
+  s = ::TTF_RenderUTF8_Solid(font->native(), text, COLOR_BLACK);
 #endif
   if (s == NULL)
     return;
@@ -243,9 +231,10 @@ Canvas::text_transparent(int x, int y, const TCHAR *text)
     return;
 
 #ifdef UNICODE
-  s = ::TTF_RenderUNICODE_Solid(font, (const Uint16 *)text, text_color);
+  s = ::TTF_RenderUNICODE_Solid(font->native(), (const Uint16 *)text,
+                                COLOR_BLACK);
 #else
-  s = ::TTF_RenderUTF8_Solid(font, text, COLOR_BLACK);
+  s = ::TTF_RenderUTF8_Solid(font->native(), text, COLOR_BLACK);
 #endif
   if (s == NULL)
     return;
@@ -264,11 +253,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
   if (font == NULL)
     return;
 
-#ifdef ANDROID
   int skip = font->get_line_spacing();
-#else
-  int skip = ::TTF_FontLineSkip(font);
-#endif
   int max_lines = (rc->bottom - rc->top + skip - 1) / skip;
 
   size_t len = _tcslen(text);
