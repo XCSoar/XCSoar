@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-04 16:58+0200\n"
-"PO-Revision-Date: 2011-07-15 09:43+0000\n"
-"Last-Translator: Szombathelyi Zoltán <Unknown>\n"
+"PO-Revision-Date: 2011-08-07 14:57+0000\n"
+"Last-Translator: Gabor LIPTAK <Unknown>\n"
 "Language-Team: Hungarian <hu@li.org>\n"
 "Language: hu\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-07-20 18:52+0000\n"
-"X-Generator: Launchpad (build 13468)\n"
+"X-Launchpad-Export-Date: 2011-08-09 19:52+0000\n"
+"X-Generator: Launchpad (build 13628)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:524
 #: src/InputEventsActions.cpp:1454 src/Dialogs/dlgAnalysis.cpp:350
@@ -128,20 +128,20 @@ msgstr "Feladat deklarálva"
 
 #: src/Logger/ExternalLogger.cpp:261
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Hiba a repülési lista letöltésekor"
 
 #: src/Logger/ExternalLogger.cpp:262 src/Logger/ExternalLogger.cpp:268
 #: src/Logger/ExternalLogger.cpp:296 src/Logger/ExternalLogger.cpp:327
 msgid "Download flight"
-msgstr ""
+msgstr "Repülés letöltése"
 
 #: src/Logger/ExternalLogger.cpp:267
 msgid "Logger is empty."
-msgstr ""
+msgstr "A logger üres"
 
 #: src/Logger/ExternalLogger.cpp:295
 msgid "Failed to download flight."
-msgstr ""
+msgstr "Hiba a repülés letöltésekor."
 
 #: src/Replay/IgcReplayGlue.cpp:78
 msgid "Could not open IGC file!"
@@ -2023,42 +2023,34 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:863
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Nearest airspace horizontal"
 msgstr ""
-"Közeli\n"
-"légtér"
 
 #: src/InfoBoxes/Content/Factory.cpp:864
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Near AS H"
-msgstr "Közeli FP"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:865
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The horizontal distance to the nearest airspace"
-msgstr ""
-"A másodlagos légtérfájl neve. Ezzel egy versenyen időleges légtereket adhat "
-"a többihez."
+msgstr "Vízszintes távolság a legközelebbi légtérig"
 
 #: src/InfoBoxes/Content/Factory.cpp:871
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Nearest airspace vertical"
-msgstr ""
-"Közeli\n"
-"légtér"
+msgstr "Legközelebbi légtér függőlegesen"
 
 #: src/InfoBoxes/Content/Factory.cpp:872
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Near AS V"
-msgstr "Közeli FP"
+msgstr "Közeli légtér függ."
 
 #: src/InfoBoxes/Content/Factory.cpp:873
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "The vertical distance to the nearest airspace"
-msgstr ""
-"A másodlagos légtérfájl neve. Ezzel egy versenyen időleges légtereket adhat "
-"a többihez."
+msgstr "Függőleges távolság a legközelebbi légtérig"
 
 #: src/InfoBoxes/Content/Altitude.cpp:95
 #: src/InfoBoxes/Content/Altitude.cpp:105
@@ -2833,7 +2825,7 @@ msgstr "Leállás, feladat mentése..."
 #: src/Device/Descriptor.cpp:135
 #, c-format
 msgid "No such driver: %s"
-msgstr ""
+msgstr "Nemlétező meghajtó: %s"
 
 #: src/Device/Descriptor.cpp:146
 #, c-format
@@ -2841,19 +2833,19 @@ msgid "Unable to open port %s"
 msgstr "A %s port megnyitása sikertelen."
 
 #: src/Device/Descriptor.cpp:409 src/Device/Descriptor.cpp:417
-#, fuzzy, c-format
+#, c-format
 msgid "Declaring to %s"
-msgstr "Feladat deklarálása"
+msgstr ""
 
 #: src/Device/Descriptor.cpp:436
 #, c-format
 msgid "Reading flight list from %s"
-msgstr ""
+msgstr "Repülési lista betöltése %s -ből"
 
 #: src/Device/Descriptor.cpp:454
 #, c-format
 msgid "Downloading flight from %s"
-msgstr ""
+msgstr "Repülés letöltése %s -ből"
 
 #: src/Dialogs/Message.cpp:127
 msgid "OK"
@@ -3008,16 +3000,16 @@ msgstr "Ellenőrző lista"
 
 #: src/Dialogs/dlgChecklist.cpp:151
 msgid "No checklist loaded"
-msgstr ""
+msgstr "Ellenőrző lista nincs betöltve"
 
 #: src/Dialogs/dlgChecklist.cpp:151
 msgid "Create xcsoar-checklist.txt\n"
-msgstr ""
+msgstr "xcsoar-checklist.txt létrehozása\n"
 
 #: src/Dialogs/dlgPlanes.cpp:124
 #, c-format
 msgid "Loading of plane profile \"%s\" failed!"
-msgstr ""
+msgstr "Hiba a repülő tulajdonságok \"%s\" betöltésekor!"
 
 #: src/Dialogs/dlgPlanes.cpp:126 src/Dialogs/dlgPlanes.cpp:162
 #: src/Dialogs/dlgPlanes.cpp:200 src/Dialogs/dlgConfigWaypoints.cpp:87
@@ -3038,7 +3030,7 @@ msgstr "Hiba"
 #: src/Dialogs/dlgPlanes.cpp:135
 #, c-format
 msgid "Plane profile \"%s\" activated."
-msgstr ""
+msgstr "Repülő tulajdonságok %s aktiválva."
 
 #: src/Dialogs/dlgPlanes.cpp:137 src/Dialogs/dlgPlanes.cpp:256
 #: Data/Dialogs/dlgPlanes.xml:10 Data/Dialogs/dlgPlanes_L.xml:10
@@ -3048,22 +3040,21 @@ msgstr "Betöltés"
 
 #: src/Dialogs/dlgPlanes.cpp:161 src/Dialogs/dlgPlanes.cpp:199
 msgid "Please enter the registration of the plane!"
-msgstr ""
+msgstr "Írd be a repülő lajstromjelét!"
 
 #: src/Dialogs/dlgPlanes.cpp:174 src/Dialogs/dlgPlanes.cpp:215
 #, c-format
 msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
-msgstr ""
+msgstr "Repülő profile \"%s\" már létezik. Felülírod?"
 
 #: src/Dialogs/dlgPlanes.cpp:176 src/Dialogs/dlgPlanes.cpp:217
-#, fuzzy
 msgid "Overwrite"
-msgstr "Felülírjam?"
+msgstr "Felülír"
 
 #: src/Dialogs/dlgPlanes.cpp:238
 #, c-format
 msgid "Do you really want to delete plane profile \"%s\"?"
-msgstr ""
+msgstr "Tényleg törölni akarod a repülőgép profil \"%s\"-t?"
 
 #: src/Dialogs/dlgPlanes.cpp:240 Data/Dialogs/dlgConfigWaypoints.xml:9
 #: Data/Dialogs/dlgConfigWaypoints_L.xml:9 Data/Dialogs/dlgPlanes.xml:9
@@ -3075,25 +3066,23 @@ msgstr "Törlés"
 #: src/Dialogs/dlgPlanes.cpp:253
 #, c-format
 msgid "Do you want to load plane profile \"%s\"?"
-msgstr ""
+msgstr "Be akarod töltenia repülőgép profil \"%s\"-t?"
 
 #: src/Dialogs/dlgPlaneDetails.cpp:40 src/Dialogs/dlgPlanePolar.cpp:48
 #: src/Dialogs/dlgPlanePolar.cpp:56
 #, c-format
 msgid "%s: %s"
-msgstr ""
+msgstr "%s: %s"
 
 #: src/Dialogs/dlgPlaneDetails.cpp:40 Data/Dialogs/dlgPlaneDetails.xml:3
 #: Data/Dialogs/dlgPlaneDetails_L.xml:3
-#, fuzzy
 msgid "Plane Details"
-msgstr "Részletek"
+msgstr "Repülő részletek"
 
 #: src/Dialogs/dlgPlanePolar.cpp:48 Data/Dialogs/dlgPlanePolar.xml:3
 #: Data/Dialogs/dlgPlanePolar_L.xml:3
-#, fuzzy
 msgid "Plane Polar"
-msgstr "Gép Poláris"
+msgstr "Repülő poláris"
 
 #: src/Dialogs/dlgPlanePolar.cpp:56 src/Dialogs/dlgConfiguration.cpp:95
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:102
@@ -3147,9 +3136,9 @@ msgid "FLARM And Other Gauges"
 msgstr "FLARM és más műszerek"
 
 #: src/Dialogs/dlgConfiguration.cpp:91
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Vario Gauge"
-msgstr "Varió változások"
+msgstr "Varió kijelző"
 
 #: src/Dialogs/dlgConfiguration.cpp:92
 #, no-c-format
@@ -3248,9 +3237,8 @@ msgid "Name"
 msgstr "Név"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:241
-#, fuzzy
 msgid "Panel name"
-msgstr "Pilóta neve"
+msgstr "Panel név"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:387
 msgid "Content"
@@ -3354,36 +3342,38 @@ msgstr "Súgó"
 
 #: src/Dialogs/dlgNOAAList.cpp:77
 msgid "No METAR available"
-msgstr ""
+msgstr "METAR nem elérhető"
 
 #: src/Dialogs/dlgNOAAList.cpp:90
 msgid ""
 "The list of tracked stations is full. Please remove a station before adding "
 "a new one."
 msgstr ""
+"A követett állomások listája tele van. Távolíts el egy állomást mielőtt egy "
+"másikat hozzáadnál."
 
 #: src/Dialogs/dlgNOAAList.cpp:97
 msgid "Airport ICAO code"
-msgstr ""
+msgstr "Reptér ICAO kód"
 
 #: src/Dialogs/dlgNOAAList.cpp:101
 msgid "Please enter the FOUR letter code of the desired station."
-msgstr ""
+msgstr "Írd be a négybetüs kódját a kívánt állomásnak."
 
 #: src/Dialogs/dlgNOAAList.cpp:108
 msgid ""
 "Please don't use special characters in the four letter code of the desired "
 "station."
-msgstr ""
+msgstr "Ne használj speciális karaktert az állomások négybetűs kódjában"
 
 #: src/Dialogs/dlgNOAAList.cpp:124 src/Dialogs/dlgNOAADetails.cpp:72
 msgid "Download"
-msgstr ""
+msgstr "Letöltés"
 
 #: src/Dialogs/dlgNOAAList.cpp:136 src/Dialogs/dlgNOAADetails.cpp:81
 #, c-format
 msgid "Do you want to remove station %s?"
-msgstr ""
+msgstr "El akarod távolítani a %s állomást?"
 
 #: src/Dialogs/dlgNOAAList.cpp:139 src/Dialogs/dlgNOAADetails.cpp:84
 #: Data/Dialogs/dlgNOAADetails.xml:7 Data/Dialogs/dlgNOAADetails_L.xml:7
@@ -3396,21 +3386,21 @@ msgstr "Törlés"
 
 #: src/Dialogs/dlgNOAAList.cpp:199 src/Dialogs/dlgNOAADetails.cpp:135
 msgid "This function is not available on your platform yet."
-msgstr ""
+msgstr "Ez a funkció még nem elérhető a platformodon."
 
 #: src/Dialogs/dlgNOAADetails.cpp:50
 msgid "No METAR available!"
-msgstr ""
+msgstr "METÁR nem elérhető!"
 
 #: src/Dialogs/dlgNOAADetails.cpp:59
 msgid "No TAF available!"
-msgstr ""
+msgstr "TAF nem elérhető!"
 
 #: src/Dialogs/dlgNOAADetails.cpp:117 Data/Dialogs/dlgNOAADetails.xml:3
 #: Data/Dialogs/dlgNOAADetails_L.xml:3 Data/Dialogs/dlgNOAAList.xml:3
 #: Data/Dialogs/dlgNOAAList_L.xml:3
 msgid "METAR and TAF"
-msgstr ""
+msgstr "METAR és TAF"
 
 #: src/Dialogs/dlgStatus.cpp:59 Data/Dialogs/dlgStatus.xml:2
 #: Data/Dialogs/dlgStatus_L.xml:2 Data/Input/default.xci:892
@@ -3509,14 +3499,12 @@ msgid "Landscape"
 msgstr "Fekvő"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:59
-#, fuzzy
 msgid "Reverse Portrait"
-msgstr "Álló"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:60
-#, fuzzy
 msgid "Reverse Landscape"
-msgstr "Fekvő"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:74
 msgid "8 Top + Bottom (Portrait)"
@@ -3527,9 +3515,8 @@ msgid "8 Bottom (Portrait)"
 msgstr "8 lent (Álló)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:77
-#, fuzzy
 msgid "8 Bottom + Vario (Portrait)"
-msgstr "8 lent (Álló)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:79
 msgid "8 Top (Portrait)"
@@ -3552,9 +3539,8 @@ msgid "9 Right + Vario (Landscape)"
 msgstr "9 jobbra + varió (Fekvő)"
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:85
-#, fuzzy
 msgid "9 Left + Right (Landscape)"
-msgstr "8 balra + jobbra (Fekvő)"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:86
 msgid "5 Right (Square)"
@@ -3585,9 +3571,8 @@ msgid "Top Left"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:101
-#, fuzzy
 msgid "Top Right"
-msgstr "Idő repült"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:102
 msgid "Bottom Left"
@@ -3598,9 +3583,8 @@ msgid "Bottom Right"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:104
-#, fuzzy
 msgid "Centre Top"
-msgstr "Középen"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:105
 msgid "Centre Bottom"
@@ -3734,9 +3718,8 @@ msgid "Use the current target waypoint as basis."
 msgstr "Az aktuális fordulópontot veszi alapul."
 
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:243
-#, fuzzy
 msgid "Polar name"
-msgstr "Poláris W"
+msgstr "Poláris neve"
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:81
 #: src/Dialogs/dlgTaskHelpers.cpp:242
@@ -4092,9 +4075,8 @@ msgid "Task edit"
 msgstr "Feladat szerkesztés"
 
 #: src/Dialogs/pnlTaskEdit.cpp:126
-#, fuzzy
 msgid "Add Turnpoint"
-msgstr "Fordulópont"
+msgstr "Fordulópont hozzáadása"
 
 #: src/Dialogs/pnlTaskList.cpp:168
 msgid "Task not saved"
@@ -4323,24 +4305,20 @@ msgid "Cylinder"
 msgstr "Henger"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:254
-#, fuzzy
 msgid "DAeC Keyhole"
-msgstr "Kulcslyuk"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:258
-#, fuzzy
 msgid "BGA Fixed Course"
-msgstr "BGA rögzített útvonal"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:262
-#, fuzzy
 msgid "BGA Enhanced Option"
-msgstr "BGA könnyített"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:266
-#, fuzzy
 msgid "BGA Start Sector"
-msgstr "BGA startszektor"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:276
 msgid ""
@@ -4611,9 +4589,8 @@ msgid "Comment"
 msgstr "Infó"
 
 #: src/Dialogs/dlgWaypointSelect.cpp:660
-#, fuzzy
 msgid "Waypoint name"
-msgstr "FP címkék"
+msgstr "Fordulópont neve"
 
 #: src/Dialogs/dlgWaypointSelect.cpp:747
 msgid "Choose a filter or click here"
@@ -4690,9 +4667,8 @@ msgstr "Körözés tiltva"
 
 #: Data/Dialogs/dlgWaypointDetails.xml:18
 #: Data/Dialogs/dlgWaypointDetails_L.xml:18
-#, fuzzy
 msgid "Bearing and Distance"
-msgstr "Hátralévő táv"
+msgstr "Irány és távolság"
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid ""
@@ -4716,9 +4692,8 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:596 Data/Dialogs/dlgConfiguration.xml:619
 #: Data/Dialogs/dlgConfiguration_L.xml:597
 #: Data/Dialogs/dlgConfiguration_L.xml:620
-#, fuzzy
 msgid "Bulk baud rate"
-msgstr "Baud"
+msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:13 Data/Dialogs/dlgVario_L.xml:12
 msgid "TE port"
@@ -4781,11 +4756,8 @@ msgid "New"
 msgstr "Új"
 
 #: Data/Dialogs/dlgConfiguration.xml:70 Data/Dialogs/dlgConfiguration_L.xml:70
-#, fuzzy
 msgid "Determines how the screen is rotated with the glider while circling"
-msgstr ""
-"A gép által húzott nyomvonal körözés közbeni, szélirány szerinti eltolását "
-"határozza meg."
+msgstr "Képernyő forgatás megadása termikelés közben"
 
 #: Data/Dialogs/dlgConfiguration.xml:179
 #: Data/Dialogs/dlgConfiguration_L.xml:179
@@ -4855,9 +4827,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:150
 #: Data/Dialogs/dlgConfiguration_L.xml:150
-#, fuzzy
 msgid "Determines how arrival height is displayed in waypoint labels"
-msgstr "Érkezési magasság nem jelenik meg."
+msgstr ""
 
 #: Data/Dialogs/dlgStartTask.xml:12
 msgid "Start Anyway"
@@ -4944,9 +4915,8 @@ msgid "GPS lock"
 msgstr "GPS jel"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:46 Data/Dialogs/dlgPlaneDetails_L.xml:38
-#, fuzzy
 msgid "Dump Time"
-msgstr "Kiengedési idő"
+msgstr ""
 
 #: Data/Dialogs/dlgTextEntry.xml:8
 msgid "A-"
@@ -4975,9 +4945,8 @@ msgstr "Rendben"
 
 #: Data/Dialogs/dlgWaypointDetails.xml:13
 #: Data/Dialogs/dlgWaypointDetails_L.xml:13
-#, fuzzy
 msgid "Radio frequency"
-msgstr "Alapfrekvencia"
+msgstr ""
 
 #: Data/Dialogs/dlgPlaneDetails.xml:53 Data/Dialogs/dlgPlaneDetails_L.xml:45
 msgid "Max. Cruise Speed"
@@ -5248,9 +5217,8 @@ msgid "delta T"
 msgstr "delta Idő"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:32 Data/Dialogs/dlgPlaneDetails_L.xml:26
-#, fuzzy
 msgid "Wing Area"
-msgstr "Szárnyfelület"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:407
 #: Data/Dialogs/dlgConfiguration_L.xml:408
@@ -5372,9 +5340,8 @@ msgid "Low limit of circling dead band"
 msgstr "A körözési holtsáv alsó határa"
 
 #: Data/Dialogs/dlgPlanes.xml:3 Data/Dialogs/dlgPlanes_L.xml:3
-#, fuzzy
 msgid "Planes"
-msgstr "Repülőgép"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:310
 #: Data/Dialogs/dlgConfiguration_L.xml:311
@@ -5404,11 +5371,8 @@ msgstr ""
 "XXX-ABC-01.IGC)"
 
 #: Data/Dialogs/dlgConfiguration_L.xml:65
-#, fuzzy
 msgid "Determines how the screen is rotated with the glider in cruise"
 msgstr ""
-"A gép által húzott nyomvonal körözés közbeni, szélirány szerinti eltolását "
-"határozza meg."
 
 #: Data/Dialogs/dlgSwitches.xml:3
 msgid "Switches"
@@ -5840,7 +5804,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:412
 #: Data/Dialogs/dlgConfiguration_L.xml:413
 msgid "Dry mass"
-msgstr ""
+msgstr "Száraz tömeg"
 
 #: Data/Dialogs/dlgConfiguration.xml:49 Data/Dialogs/dlgConfiguration_L.xml:49
 msgid "The name of the file containing digital elevation terrain data."
@@ -5914,7 +5878,7 @@ msgstr "Alkalmi FP"
 #: Data/Dialogs/dlgConfiguration.xml:145
 #: Data/Dialogs/dlgConfiguration_L.xml:145
 msgid "Determines how labels are displayed with each waypoint"
-msgstr ""
+msgstr "Fordulópont címke megjelenítés megadása"
 
 #: Data/Dialogs/dlgVario.xml:3 Data/Dialogs/dlgVario_L.xml:3
 msgid "Vario Configuration"
@@ -6451,7 +6415,7 @@ msgstr "HT min idő"
 #: Data/Dialogs/dlgNOAADetails.xml:6 Data/Dialogs/dlgNOAADetails_L.xml:6
 #: Data/Dialogs/dlgNOAAList.xml:7 Data/Dialogs/dlgNOAAList_L.xml:7
 msgid "Update"
-msgstr ""
+msgstr "Frissítés"
 
 #: Data/Dialogs/dlgAirspaceDetails.xml:14
 msgid "Top"
@@ -6525,8 +6489,9 @@ msgstr "FLARM autmata bezárása"
 
 #: Data/Dialogs/dlgConfiguration.xml:233
 #: Data/Dialogs/dlgConfiguration_L.xml:233
+#, fuzzy
 msgid "Thermal band"
-msgstr "Termiksáv"
+msgstr "Termikus sáv"
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -6704,7 +6669,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:407
 #: Data/Dialogs/dlgConfiguration_L.xml:408
 msgid "Reference mass"
-msgstr ""
+msgstr "Referencia tömeg"
 
 #: Data/Dialogs/dlgAirspaceWarnings.xml:8
 msgid "ACK Day"
@@ -6818,7 +6783,7 @@ msgstr "Párbeszédablak stílusa"
 #: Data/Dialogs/dlgWaypointDetails.xml:14
 #: Data/Dialogs/dlgWaypointDetails_L.xml:14
 msgid "Runway"
-msgstr ""
+msgstr "Futópálya"
 
 #: Data/Dialogs/dlgStatusAircraft.xml:4 Data/Dialogs/dlgWaypointEdit_L.xml:10
 #: Data/Dialogs/pnlStatusFlight.xml:4
@@ -6844,9 +6809,8 @@ msgstr "Altair Pro felhasználók állítsák ezt a Port1-re"
 
 #: Data/Dialogs/dlgConfiguration.xml:771
 #: Data/Dialogs/dlgConfiguration_L.xml:772
-#, fuzzy
 msgid "Flarm location"
-msgstr "Flarm kontaktus"
+msgstr ""
 
 #: Data/Dialogs/dlgStatusTask.xml:11
 msgid "Speed achieved"
@@ -7025,9 +6989,8 @@ msgid "Trail scaled"
 msgstr "Nyomvonal méretezés"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:39 Data/Dialogs/dlgPlaneDetails_L.xml:33
-#, fuzzy
 msgid "Max. Ballast"
-msgstr "Max. ballaszt"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:791
 #: Data/Dialogs/dlgConfiguration_L.xml:792
@@ -7204,7 +7167,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgPlanePolar.xml:50 Data/Dialogs/dlgPlanePolar_L.xml:38
 msgid "Reference Mass"
-msgstr ""
+msgstr "Referencia tömeg"
 
 #: Data/Dialogs/pnlStatusRules.xml:7
 msgid "Start speed"
@@ -7258,7 +7221,7 @@ msgstr "Tartandó blokk sebesség"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:10
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:11
 msgid "Magenta"
-msgstr ""
+msgstr "Lila"
 
 #: Data/Dialogs/dlgConfiguration.xml:223
 #: Data/Dialogs/dlgConfiguration_L.xml:223
@@ -7647,11 +7610,10 @@ msgstr "Export"
 
 #: Data/Dialogs/dlgConfiguration.xml:233
 #: Data/Dialogs/dlgConfiguration_L.xml:233
-#, fuzzy
 msgid ""
 "This enables the display of the thermal profile (climb band) display on the "
 "map."
-msgstr "A termiksegéd megjelenését szabályozza."
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:829
 #: Data/Dialogs/dlgConfiguration_L.xml:830
@@ -7665,9 +7627,8 @@ msgid "Trail drift"
 msgstr "Sodrás"
 
 #: Data/Dialogs/dlgPlanePolar.xml:57 Data/Dialogs/dlgPlanePolar_L.xml:45
-#, fuzzy
 msgid "Dry Mass"
-msgstr "Tömeg"
+msgstr "Száraz tömeg"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:41
 #: Data/Dialogs/pnlTaskCalculator_L.xml:41
@@ -7973,7 +7934,7 @@ msgstr "Átlagos siklószám mintavétel"
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:9
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:10
 msgid "Yellow"
-msgstr ""
+msgstr "Sárga"
 
 #: Data/Dialogs/dlgConfiguration.xml:679
 #: Data/Dialogs/dlgConfiguration_L.xml:680
@@ -8133,9 +8094,8 @@ msgstr "Feladatban kicserél"
 
 #: Data/Dialogs/dlgConfiguration.xml:771
 #: Data/Dialogs/dlgConfiguration_L.xml:772
-#, fuzzy
 msgid "Choose a location for the flarm"
-msgstr "Válasszon szűrőt vagy kattintson ide"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:155
 #: Data/Dialogs/dlgConfiguration_L.xml:155
@@ -8652,78 +8612,6 @@ msgid ""
 "TAF"
 msgstr ""
 
-#~ msgid "Failed to create TCP socket"
-#~ msgstr "TCP socket létrehozása sikertelen"
-
-#~ msgid "Failed to bind to TCP port %u"
-#~ msgstr "%u TCP port csatlakozása sikertelen"
-
-#~ msgid "Failed to listen on TCP port %u"
-#~ msgstr "%u TCP port megfigyelése sikertelen"
-
-#~ msgid "Configuration saved"
-#~ msgstr "Beállítások elmentve."
-
-#~ msgid "Reading vario settings..."
-#~ msgstr "Varió beállítások beolvasása..."
-
-#~ msgid "Flight"
-#~ msgstr "Repülés"
-
-#~ msgid "System"
-#~ msgstr "Rendszer"
-
-#~ msgid "Task Rules"
-#~ msgstr "Feladat szabályok"
-
-#~ msgid "Times"
-#~ msgstr "Idők"
-
-#~ msgid "Add Waypoint"
-#~ msgstr "FP hozzáadás"
-
-#~ msgid "FAI"
-#~ msgstr "FAI"
-
-#~ msgid "DAeC"
-#~ msgstr "DAeC"
-
-#~ msgid "BGA"
-#~ msgstr "BGA"
-
-#~ msgid "BGAE"
-#~ msgstr "BGAE"
-
-#~ msgid "BGA-S"
-#~ msgstr "BGA-S"
-
-#~ msgid "Unable to change settings on port %s"
-#~ msgstr "A %s port beállítása sikertelen."
-
-#~ msgid "Unable to set serial port timers %s"
-#~ msgstr "A %s port időzítők beállítása sikertelen."
-
-#~ msgid "File Browser"
-#~ msgstr "Fájl böngésző"
-
-#~ msgid "Refresh"
-#~ msgstr "Frissít"
-
-#~ msgid "Volume"
-#~ msgstr "Térfogat"
-
-#~ msgid "Ref. mass; max. ballast"
-#~ msgstr "Ref. tömeg; max. ballaszt"
-
-#~ msgid "Free"
-#~ msgstr "Szabad"
-
-#~ msgid "File type"
-#~ msgstr "Fájl típusa"
-
-#~ msgid "TODO"
-#~ msgstr "[Fejlesztés alatt...]"
-
 #~ msgid "Previous turnpoint"
 #~ msgstr "Előző fordulópont"
 
@@ -8886,6 +8774,9 @@ msgstr ""
 #~ msgid "Min sink"
 #~ msgstr "Min. merülés"
 
+#~ msgid "Configuration saved"
+#~ msgstr "Beállítások elmentve."
+
 #~ msgid "Wind at Altitude"
 #~ msgstr "Szél adott magasságban"
 
@@ -8967,6 +8858,9 @@ msgstr ""
 #~ msgid "Changes to configuration saved."
 #~ msgstr "A beállítások változásai elmentve."
 
+#~ msgid "System"
+#~ msgstr "Rendszer"
+
 #~ msgid "TRUE"
 #~ msgstr "IGAZ"
 
@@ -9033,6 +8927,12 @@ msgstr ""
 #~ msgid "Achieved Speed"
 #~ msgstr "Elért sebesség"
 
+#~ msgid "Refresh"
+#~ msgstr "Frissít"
+
+#~ msgid "Volume"
+#~ msgstr "Térfogat"
+
 #~ msgid "Finish min height"
 #~ msgstr "Cél min magasság"
 
@@ -9053,6 +8953,9 @@ msgstr ""
 
 #~ msgid "Goto"
 #~ msgstr "Menj"
+
+#~ msgid "Free"
+#~ msgstr "Szabad"
 
 #~ msgid "Select pattern"
 #~ msgstr "Válassz mintát"
@@ -9120,12 +9023,6 @@ msgstr ""
 #~ msgid "Final Glide Through Terrain"
 #~ msgstr "Végsiklás terepen át"
 
-#~ msgid "Topology"
-#~ msgstr "Topológia"
-
-#~ msgid "Previous Waypoint"
-#~ msgstr "Előző fordulópont"
-
 #~ msgid ""
 #~ "Arrival altitude at the final task turn point relative to the safety "
 #~ "arrival altitude."
@@ -9175,24 +9072,6 @@ msgstr ""
 #~ "magasságból levonja a gép többletenergiáját, ha a levegőhöz viszonyított "
 #~ "sebesség a MacCready-nél vagy az optimális sebességnél nagyobb."
 
-#~ msgid "None "
-#~ msgstr "Nincs "
-
-#~ msgid "Polar:"
-#~ msgstr "Polár:"
-
-#~ msgid "Final Glide"
-#~ msgstr "Végsiklás"
-
-#~ msgid "Info hide"
-#~ msgstr "Infó rejtése"
-
-#~ msgid "---"
-#~ msgstr "---"
-
-#~ msgid "Info auto"
-#~ msgstr "Infó auto"
-
 #~ msgid "Organiser Battery Low"
 #~ msgstr "A telep lemerült"
 
@@ -9208,9 +9087,6 @@ msgstr ""
 #~ msgid "Layout"
 #~ msgstr "Elrendezés"
 
-#~ msgid "Pages"
-#~ msgstr "Oldalak"
-
 #~ msgid "Waypoint not editable"
 #~ msgstr "Nem szerkeszthető fordulópont"
 
@@ -9223,26 +9099,20 @@ msgstr ""
 #~ msgid "Distance:"
 #~ msgstr "Távolság:"
 
-#~ msgid "True"
-#~ msgstr "IGEN"
+#~ msgid "Flight"
+#~ msgstr "Repülés"
 
-#~ msgid "False"
-#~ msgstr "NEM"
+#~ msgid "Times"
+#~ msgstr "Idők"
+
+#~ msgid "Reading vario settings..."
+#~ msgstr "Varió beállítások beolvasása..."
+
+#~ msgid "Task Rules"
+#~ msgstr "Feladat szabályok"
 
 #~ msgid "Trending Average climb"
 #~ msgstr "Termikátlag követése"
-
-#~ msgid "Full Name"
-#~ msgstr "Teljes név"
-
-#~ msgid "Straight & Terrain glide"
-#~ msgstr "Egyenes & Terepkerülő siklás"
-
-#~ msgid "Rounded Rectangle"
-#~ msgstr "Lekerekített téglalap"
-
-#~ msgid "Orange"
-#~ msgstr "Narancssárga ikon"
 
 #~ msgid "Purple Circle"
 #~ msgstr "Lila kör"
@@ -9250,12 +9120,29 @@ msgstr ""
 #~ msgid "Clear task?"
 #~ msgstr "Töröljem a feladatot?"
 
-#~ msgid ""
-#~ "Draw topographical features (roads, rivers, lakes etc) on the map.  "
-#~ "Requires the topography file to be specified."
-#~ msgstr ""
-#~ "Topográfia (utak, folyók, tavak, stb) megjelenítése a térképen. "
-#~ "Topográfia fájlt meg kell adni hozzá."
+#~ msgid "BGAFixedCourse"
+#~ msgstr "BGA rögzített útvonal"
+
+#~ msgid "Keyhole"
+#~ msgstr "Kulcslyuk"
+
+#~ msgid "FAI"
+#~ msgstr "FAI"
+
+#~ msgid "BGAE"
+#~ msgstr "BGAE"
+
+#~ msgid "BGA"
+#~ msgstr "BGA"
+
+#~ msgid "BGAEnhancedOption"
+#~ msgstr "BGA könnyített"
+
+#~ msgid "Unable to change settings on port %s"
+#~ msgstr "A %s port beállítása sikertelen."
+
+#~ msgid "Unable to set serial port timers %s"
+#~ msgstr "A %s port időzítők beállítása sikertelen."
 
 #~ msgid ""
 #~ "This allows switching on or off the automatic wind algorithm.  When the "
@@ -9273,66 +9160,10 @@ msgstr ""
 #~ "[Mindkettő] A cikkcakkot és a körözést használja."
 
 #~ msgid ""
-#~ "Setting this to \"ON\" will automatically close the FLARM dialog if there "
-#~ "is no traffic. \"Off\" will keep the dialog open even without current "
-#~ "traffic."
-#~ msgstr ""
-#~ "BE állásban automatikusan bezáródik a FLARM ablak, ha nincs forgalom. KI "
-#~ "esetén az ablak nyitva marad, még ha nincs is forgalom."
-
-#~ msgid ""
-#~ "Select the rules used for calculating optimal points for the On-Line "
-#~ "Contest. The implementation  conforms to the official release 2010, "
-#~ "Sept.23.\n"
-#~ "[Sprint] Based on the Classic rules, limited to five points and 150 min. "
-#~ "task time, finish height must not be lower than start height.\n"
-#~ "[Classic] Up to seven points including start and finish, finish height "
-#~ "must not be lower than start height less 1000 meters.\n"
-#~ "[FAI] Conforms to FAI triangle rules. Three turns and common start and "
-#~ "finish. No leg less than 28% of total except for tasks longer than 500km: "
-#~ "No leg less than 25% or larger than 45%.\n"
-#~ "[League] The most recent contest with Sprint task rules.\n"
-#~ "[Plus] A combination of Classic and FAI rules. 30% of the FAI score are "
-#~ "added to the Classic score."
-#~ msgstr ""
-#~ "Válassza ki az Online Verseny optimális pontjai kiszámításának "
-#~ "szabályait. A megvalósítás megfelel a 2010. szeptember 23. hivatalos "
-#~ "kiadványnak.\n"
-#~ "[Sprint] A Classic szabályain alapul, korlátozva öt pontra és 150 percre, "
-#~ "a befutó magasság nem lehet a start magasság alatt.\n"
-#~ "[Classic] A starttal és a céllal együtt legfeljebb hét pont, a befutó "
-#~ "magasság nem lehet 1000 méternél alacsonyabban mint a start magasság.\n"
-#~ "[FAI] Megfelel a FAI háromszög szabályainak. Három forduló, a start és a "
-#~ "cél közös. Egyik szakasz sem lehet az össztáv 28%-nál kisebb, kivéve az "
-#~ "500km feletti távokat, ahol egyik sem lehet 25%-nál kisebb vagy 45%-nál "
-#~ "nagyobb.\n"
-#~ "[League] Ez utóbbi, Sprint szabályokkal.\n"
-#~ "[Plus] A Classic és a FAI kombinációja. A FAI eredmény 30%-át hozzáadják "
-#~ "a Classic eredményhez."
-
-#~ msgid "Clear Task"
-#~ msgstr "Feladat törlése"
-
-#~ msgid "The upper limit for Auto-Zoom distance."
-#~ msgstr "Az automata nagyítás felső határa."
-
-#~ msgid ""
 #~ "Geometry values range 0-7 but in landscape mode only some of them are "
 #~ "really available."
 #~ msgstr ""
 #~ "Elrendezési változatok, de fekvő helyzetben csak némelyikük használható."
-
-#~ msgid "Dry mass; max. ballast"
-#~ msgstr "Száraz tömeg; max. ballaszt"
-
-#~ msgid "Important topography labels"
-#~ msgstr "Fontos térképjel címkék"
-
-#~ msgid "Topography labels"
-#~ msgstr "Térképjel címkék"
-
-#~ msgid "Flarm Iinterface"
-#~ msgstr "FLARM kezelőfelület"
 
 #~ msgid ""
 #~ "Draws digital elevation terrain on the map. This is shaded by the wind "
@@ -9341,57 +9172,6 @@ msgstr ""
 #~ "Árnyalt domborzatot jelenít meg a térképen. Az árnyalás a szélirányra "
 #~ "utal: a szél felőli emelkedők világosabbak, a szél alatti lejtők "
 #~ "sötétebbek."
-
-#~ msgid "Auto. MC mode"
-#~ msgstr "Auto MC mód"
-
-#~ msgid "Auxiliary-1"
-#~ msgstr "Külső-1"
-
-#~ msgid ""
-#~ "This determines whether the glide terrain range is calculated and drawn "
-#~ "as a line on the map area:\n"
-#~ "[Off] Disables display\n"
-#~ "[Line] Draws a dashed line at the glide range\n"
-#~ "[Shade] Shades terrain outside glide range"
-#~ msgstr ""
-#~ "A siklásban elérhető terület kirajzolásának módját határozza meg:\n"
-#~ "[KI] nem kerül kirajzolásra\n"
-#~ "[VONAL] a terület peremét szaggatott vonal jelzi\n"
-#~ "[ÁRNYÉK] a területen kívüli terep árnyékolva lesz"
-
-#~ msgid "Auxiliary-2"
-#~ msgstr "Külső-2"
-
-#~ msgid ""
-#~ "Average efficiency is always calculated in REAL TIME. Here you can decide "
-#~ "on how many seconds of flight this calculation must be done. The real "
-#~ "distance covered second by second in this period is divided by the final "
-#~ "difference of altitude.  So if for example you go and return back to the "
-#~ "same point after 2 minutes, and you have set 2 minutes as period, "
-#~ "averageLD will consider the total distance covered in those two minutes , "
-#~ "and NOT the distance between your position 2 minutes before and your "
-#~ "current position, that in this case could be almost zero! Normally for "
-#~ "gliders a good value is 90-120 seconds, and for paragliders 15 seconds. "
-#~ "Lower values will give as a result pretty much the same as LD Instant , "
-#~ "while higher values will look like LD Cruise. Other commercial "
-#~ "instruments and software use 2 minutes."
-#~ msgstr ""
-#~ "Az átlagos hatékonyság mindig PILLANATNYILAG kerül kiszámításra. Itt "
-#~ "eldöntheti, hogy hány másodpercnyi repülés után kerüljön sor erre a "
-#~ "számításra. Az ez idő alatt másodpercről másodpercre megtett út kerül "
-#~ "elosztásra a végső magasságkülönbséggel. Ha tehát elmegy és visszajön "
-#~ "ugyanarra a pontra két perc után és két percre van az ütem beállítva, az "
-#~ "átlagoló a két perc alatt megtett utat fogja figyelembe venni és NEM a "
-#~ "két perccel ezelőtti és a jelenlegi helyzete közti távolságot, ami ebben "
-#~ "az esetben akár közel nulla is lehet! Normális esetben vitorláknak a "
-#~ "90-120mp a jó érték, függővitorlázóknak 15mp. A gyors ütemezés nagyjából "
-#~ "a pillanatnyi siklószámot eredményezi, a lassú pedig az utazó "
-#~ "siklószámot.  A kereskedelemben kapható műszerek és szoftverek 2 percet "
-#~ "használnak."
-
-#~ msgid "InfoBox values"
-#~ msgstr "Kijelzők értékei"
 
 #~ msgid ""
 #~ "option, if enabled sets the clock of the computer to the GPS time once a "
@@ -9410,22 +9190,8 @@ msgstr ""
 #~ "A manőverezési sebességhatár rögzíthető ezen az oldalon, hogy a "
 #~ "siklókomputer ne utasítson irreális sebességekre."
 
-#~ msgid "FAI start/ finish rules"
-#~ msgstr "FAI start/cél szabályok"
-
-#~ msgid "Auxiliary-3"
-#~ msgstr "Külső-3"
-
 #~ msgid "Gestures"
 #~ msgstr "Gesztusok"
-
-#~ msgid ""
-#~ "When enabled, the glide terrain range is calculated with turning around "
-#~ "terrain obstacles.  If disabled, the range is from straight line paths "
-#~ "from the glider."
-#~ msgstr ""
-#~ "Bekapcsolva az elérhető terület a terepakadályok megkerülésével kerül "
-#~ "kiszámításra. Kikapcsolva az egyenes siklás szerint kerül kiszámításra."
 
 #~ msgid ""
 #~ "The language file defines translations for XCSoar text in English to "
@@ -9434,34 +9200,12 @@ msgstr ""
 #~ "A nyelvi fájlok az XCSoar angol nyelvű szövegét fordítják le más nyelvre. "
 #~ "Ha üresen hagyjuk ezt a mezőt, az XCSoar az angolt használja."
 
-#~ msgid "Auxiliary-5"
-#~ msgstr "Külső-5"
-
-#~ msgid "Auto. close FLARM"
-#~ msgstr "FLARM auto bezárás"
-
-#~ msgid "Auxiliary-4"
-#~ msgstr "Külső-4"
-
 #~ msgid ""
 #~ "Name of file to replay.  Can be an IGC file, a raw NMEA log file, or if "
 #~ "blank, runs the demo."
 #~ msgstr ""
 #~ "A visszajátszandó fájl neve. Lehet IGC fájl, NMEA naplófájl, ha üresen "
 #~ "hagyjuk, lejátsza a demót."
-
-#~ msgid "Topography"
-#~ msgstr "Térképjelek"
-
-#~ msgid ""
-#~ "Marks\n"
-#~ "Clear"
-#~ msgstr ""
-#~ "Jelek\n"
-#~ "törlése"
-
-#~ msgid "Heading"
-#~ msgstr "Orrirány"
 
 #~ msgid ""
 #~ "Determines how the screen is rotated with the glider:\n"
@@ -9495,159 +9239,20 @@ msgstr ""
 #~ msgid "Set speed remaining"
 #~ msgstr "Sebesség a maradék távon"
 
-#~ msgid "Small InfoBox values"
-#~ msgstr "Kijelzők számjegyei"
-
-#~ msgid "Max. Auto-Zoom distance"
-#~ msgstr "Automata nagyítás max. lépték"
-
-#~ msgid ""
-#~ "Determines what is used to shift the glider from the map center:\n"
-#~ "[None] Disable adjustments.\n"
-#~ "[Heading] Use a recent average of the flown heading as basis.\n"
-#~ "[Target]Use the current target waypoint as basis"
-#~ msgstr ""
-#~ "Meghatározza, hogy mi mozdíthatja el a vitorlát a térkép közepéről.\n"
-#~ "[Nincs] Semmilyen hatás.\n"
-#~ "[Orrirány] Az orrirány görgetett átlaga az alap.\n"
-#~ "[Cél] az aktuális útirány az alap."
-
-#~ msgid "Use a recent average of the flown heading as basis."
-#~ msgstr "Az orrirány görgetett átlaga"
-
-#~ msgid ""
-#~ "This enables the display of FLARM traffic on the map window.\n"
-#~ "[Off] FLARM map display disabled\n"
-#~ "[ON/Fixed] FLARM map display enabled with fixed scale.\n"
-#~ "[ON/Scaled] FLARM map display enabled and auto scaled.\n"
-#~ "When auto scaling is enabled, the FLARM targets on the map display are "
-#~ "scaled so that when the map is at large zoom levels, targets are still "
-#~ "visible."
-#~ msgstr ""
-#~ "Engedélyezi a FLARM forgalom megjelenését a térképablakban.\n"
-#~ "[KI] FLARM térkép kikapcsolva \n"
-#~ "[BE/MEREV] FLARM engedélyezve állandó méretben \n"
-#~ "[BE/ARÁNYOS] FLARM egedélyezve arányos méretben \n"
-#~ "Automatikus nagyítás esetén a FLARM célpontok úgy kerülnek méretezésre, "
-#~ "hogy még nagy térképnagyítás mellett is láthatóak maradjanak."
-
-#~ msgid "First Word of Name"
-#~ msgstr "Első szó"
-
-#~ msgid "First 3 Letters"
-#~ msgstr "3 betű"
-
-#~ msgid "First 5 Letters"
-#~ msgstr "5 betű"
-
-#~ msgid ""
-#~ "Determines how labels are displayed with each waypoint:\n"
-#~ "[Full Name] The full name of each waypoint is displayed.\n"
-#~ "[First Word of Name] The first word of the waypoint name is displayed.\n"
-#~ "[First 3 Letters] The first 3 letters of the waypoint name are "
-#~ "displayed.\n"
-#~ "[First 5 Letters] The first 5 letters of the waypoint name are "
-#~ "displayed.\n"
-#~ "[None] No waypoint name is displayed."
-#~ msgstr ""
-#~ "A fordulópont címkék megjelenítését határozza meg:\n"
-#~ "[TELJES NÉV] A fordulópont teljes neve megjelenik.\n"
-#~ "[ELSŐ SZÓ] A név első szava jelenik meg.\n"
-#~ "[3 BETŰ] A név első három betűje jelenik meg.\n"
-#~ "[5 BETŰ] A név első öt betűje jelenik meg.\n"
-#~ "[NINCS] Nem jelenik meg a név."
-
-#~ msgid "Aux-%u"
-#~ msgstr "Külső-%u"
-
-#~ msgid "%s%sdist. %.0f %s (%s)"
-#~ msgstr "%s%stáv %.0f %s (%s)"
-
-#~ msgid "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
-#~ msgstr "%s%s%.0f %s%smax. %.0f %s%smin. %.0f %s (%s)"
+#~ msgid "TODO"
+#~ msgstr "[Fejlesztés alatt...]"
 
 #~ msgid "Final glide bar"
 #~ msgstr "Végsiklás szintjelző"
 
-#~ msgid "Speed remaining Help"
-#~ msgstr "Segesség a maradékon Súgó"
-
 #~ msgid "Speed Remaining Help"
 #~ msgstr "Sebesség a maradékon"
-
-#~ msgid "Turning reach"
-#~ msgstr "Elérhető táv terepen"
-
-#~ msgid "InfoBox Layout"
-#~ msgstr "Kijelzők elrendezése"
-
-#~ msgid ""
-#~ "Determines what is used to shift the glider from the map center:\n"
-#~ "[None] Disable adjustments.\n"
-#~ "[Track] Use a recent average of the ground track as basis.\n"
-#~ "[Target]Use the current target waypoint as basis"
-#~ msgstr ""
-#~ "Milyen szempont szerint kerül áthelyezésre a gépecske a térkép "
-#~ "közepéről:\n"
-#~ "[Nincs] áthelyezés letiltva.\n"
-#~ "[REPIRÁNY] A repirány görgetett átlaga szerint.\n"
-#~ "[ÚTIRÁNY] A pillanatnyi útirány szerint."
 
 #~ msgid "Specifies the file defining the topological features."
 #~ msgstr "A térképjeleket tartalmazó fájl neve."
 
-#~ msgid ""
-#~ "Sets the symbol used for the aircraft.\n"
-#~ "[Simple] Simplified line graphics.\n"
-#~ "[Detailed] Rendered aircraft graphics."
-#~ msgstr ""
-#~ "A gépecske kirajzolásához használt szimbólumot állítja be.\n"
-#~ "[EGYSZERŰ] Egyszerűsített grafika.\n"
-#~ "[RÉSZLETES] Részletezett grafika."
-
-#~ msgid ""
-#~ "Determines how arrival height is displayed in waypoint labels:\n"
-#~ "[None] No arrival height is displayed.\n"
-#~ "[Straight glide] Only glide performance is considered for arrival "
-#~ "height.\n"
-#~ "[Terrain avoidance glide] Glide performance and possible detours around "
-#~ "terrain are considered for arrival height.\n"
-#~ "[Straight & Terrain avoidance glide] Arrival height for straight in glide "
-#~ "and (if available) arrival height considering detours around terrain is "
-#~ "displayed."
-#~ msgstr ""
-#~ "Az érkezési magasság kijelzését szabályozza a fordulópontok címkéiben:\n"
-#~ "[NINCS] Nincs megjelenítve.\n"
-#~ "[EGYENES] A gép képességei szerinti magasság.\n"
-#~ "[TEREPET ELKERÜLŐ] A gép képességei és a terep miatt szükséges kerülők "
-#~ "szerinti magasság.\n"
-#~ "[EGYENES+TEREPKERÜLŐ] Az egyenes siklás szerinti és (ha van) a kerülővel "
-#~ "számított magasság kerül kijelzésre."
-
-#~ msgid ""
-#~ "Determines what waypoint labels are displayed for each waypoint (space "
-#~ "permitting):\n"
-#~ "[All] All waypoints labels will displayed.\n"
-#~ "[Task Waypoints & Landables] All waypoints labels part of a task and all "
-#~ "landables will be displayed.\n"
-#~ "[Task Waypoints] All waypoints labels part of a task will be displayed.\n"
-#~ "[None] No waypoint labels will be displayed."
-#~ msgstr ""
-#~ "A fordulópontok címkéinek megjelenítését szabályozza:\n"
-#~ "[MIND] Minden címke megjelenik.\n"
-#~ "[FELADAT FP & LESZÁLLÓK] A feladat fordulópontjai és a leszállóhelyek "
-#~ "jelennek meg.\n"
-#~ "[FELADAT FP] A feladat fordulópontjai jelennek meg.\n"
-#~ "[NINCS] Semmilyen címke nem jelenik meg."
-
-#~ msgid "Task Waypoints & Landables"
-#~ msgstr "Feladat FP & Leszállók"
-
-#~ msgid "Task Waypoints"
-#~ msgstr "Feladat FP"
-
-#~ msgid "Landable rendering size"
-#~ msgstr "Leszállók mérete"
+#~ msgid "File type"
+#~ msgstr "Fájl típusa"
 
 #~ msgid ""
 #~ "Defines the amount of phong shading in the terrain rendering.  Use large "
@@ -9656,29 +9261,3 @@ msgstr ""
 #~ msgstr ""
 #~ "A domborzat kidomborításának mértéke. Használjon nagy értékeket a lejtők "
 #~ "hangsúlyozására, kisebbeket ha meredek hegyek között repül."
-
-#~ msgid ""
-#~ "If set to \"Simple\", the alternates will only be sorted by waypoint type "
-#~ "(airport/outlanding field) and arrival height. If set to \"Task\" the "
-#~ "sorting will also take the current task direction into account. If set to "
-#~ "\"Home\" the sorting will try to find landing options in the current "
-#~ "direction to the configured home waypoint."
-#~ msgstr ""
-#~ "Kitérők felsorolásának rendezési elve. [EGYSZERŰ] a kitérők csak a "
-#~ "típusuk (reptér/terep) és érkezési magasságuk alapján kerülnek rendezésre "
-#~ "[FELADAT] a rendezés figyelembe veszi az aktuális feladat pontjait "
-#~ "[BÁZISRA] a rendezés a bázisrepülőtér irányában fog keresni "
-#~ "leszállóhelyet."
-
-#~ msgid ""
-#~ "When enabled and Mc is positive, route planning allows climbs between the "
-#~ "aircraft location and destination."
-#~ msgstr ""
-#~ "Ha bekapcsoljuk és az MC érték pozitív, az útvonaltervező emelésekkel "
-#~ "számol a gép helye és az úticél között."
-
-#~ msgid "The handicap factor used for On-Line Contest scoring."
-#~ msgstr "Az Online Verseny során alkamazott handicap tényező."
-
-#~ msgid "Draw topographical features (roads, rivers, lakes etc) on the map."
-#~ msgstr "Topográfia (utak, folyók, tavak, stb) megjelenítése a térképen."
