@@ -1,7 +1,9 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmTurnpoints" Border="0">
-  <List Name="frmTaskPoints" X="80" Y="0" Width="240" Height="148" ItemHeight="18"/>
+  <List Name="frmTaskPoints" X="80" Y="0" Height="148" ItemHeight="18"/>
+
+  <Label Name="frmSummary" X="80" Y="150" Height="38" Border="0"/>
 
   <Button Name="cmdEditTurnpoint" Caption="Edit Point" X="82" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnEditTurnpointClicked"/>
   <Button Name="cmdMakeFinish" Caption="Make Finish" X="142" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnMakeFinish"/>
@@ -9,7 +11,5 @@
   <SymbolButton Name="cmdUp" Caption="^" X="202" Y="188" Width="58" Height="35" OnClick="pnlTaskEdit::OnMoveUpClicked"/>
   <Button Name="cmdNew" Caption="Clear All" X="262" Y="188" Width="57" Height="35" OnClick="pnlTaskEdit::OnClearAllClicked"/>
 
-  <Label Name="frmSummary" X="80" Y="150" Width="243" Height="38" Border="0"/>
   <Canvas Name="frmTaskView" X="0" Y="0" Width="80" Height="53" Border="0" OnPaint="dlgTaskManager::OnTaskPaint" />
-
 </Panel>

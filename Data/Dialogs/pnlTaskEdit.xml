@@ -1,18 +1,17 @@
 <?xml version="1.0"?>
 
 <Panel Name="frmTurnpoints" Border="0">
-  
   <Panel Name="TaskEditTabOffset" Border="0" X="0" Y="76">
-    <List Name="frmTaskPoints" X="2" Y="0" Width="236" Height="129" ItemHeight="18"/>
+    <List Name="frmTaskPoints" Height="-90" ItemHeight="18"/>
 
-    <Button Name="cmdEditTurnpoint" Caption="Edit Point" X="3" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnEditTurnpointClicked"/>
-    <Button Name="cmdMakeFinish" Caption="Make Finish" X="62" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnMakeFinish"/>
-    <SymbolButton Name="cmdDown" Caption="v" X="62" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnMoveDownClicked"/>
-    <SymbolButton Name="cmdUp" Caption="^" X="121" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnMoveUpClicked"/>
-    <Button Name="cmdNew" Caption="Clear All" X="180" Y="131" Width="57" Height="35" OnClick="pnlTaskEdit::OnClearAllClicked"/>
+    <Label Name="frmSummary" Y="-90" Height="55" Border="0"/>
 
-    <Label Name="frmSummary" X="0" Y="168" Width="240" Height="65" Border="0"/>
+    <Button Name="cmdEditTurnpoint" Caption="Edit Point" X="0" Y="-35" Width="60" Height="35" OnClick="pnlTaskEdit::OnEditTurnpointClicked"/>
+    <Button Name="cmdMakeFinish" Caption="Make Finish" X="60" Y="-35" Width="60" Height="35" OnClick="pnlTaskEdit::OnMakeFinish"/>
+    <SymbolButton Name="cmdDown" Caption="v" X="60" Y="-35" Width="60" Height="35" OnClick="pnlTaskEdit::OnMoveDownClicked"/>
+    <SymbolButton Name="cmdUp" Caption="^" X="120" Y="-35" Width="60" Height="35" OnClick="pnlTaskEdit::OnMoveUpClicked"/>
+    <Button Name="cmdNew" Caption="Clear All" X="180" Y="-35" Width="60" Height="35" OnClick="pnlTaskEdit::OnClearAllClicked"/>
   </Panel>
+  
   <Canvas Name="frmTaskView" X="0" Y="0" Width="61" Height="71" Border="0" OnPaint="dlgTaskManager::OnTaskPaint" />
-
 </Panel>
