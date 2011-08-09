@@ -122,10 +122,7 @@ private:
   bool is_positive; // ideally const but then non-copyable
 
 public:
-  /**
-   * Constructor; initialises all to zero
-   *
-   */
+  /** Constructor; initialises all to zero */
   DistanceStatComputer(DistanceStat &_data, const bool is_positive=true);
 
   void calc_speed(fixed time) {
