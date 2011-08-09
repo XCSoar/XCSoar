@@ -5,6 +5,7 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 Version 6.1.5 - not yet released
 * calculations
   - airspace distance miscalculations fixed
+  - fix LS-4 polar
 * Android
   - fix timer crash
 
