@@ -92,35 +92,36 @@ TaskRulesConfigPanel::Save()
   bool changed = false;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
 
+  OrderedTaskBehaviour &otb = settings_computer.ordered_defaults;
   changed |= SaveFormProperty(*wf, _T("prpStartMaxSpeed"),
-                                  ugHorizontalSpeed,
-                                  settings_computer.ordered_defaults.start_max_speed,
-                                  szProfileStartMaxSpeed);
+                              ugHorizontalSpeed,
+                              otb.start_max_speed,
+                              szProfileStartMaxSpeed);
 
   changed |= SaveFormProperty(*wf, _T("prpStartMaxSpeedMargin"),
-                                  ugHorizontalSpeed,
-                                  settings_computer.start_max_speed_margin,
-                                  szProfileStartMaxSpeedMargin);
+                              ugHorizontalSpeed,
+                              settings_computer.start_max_speed_margin,
+                              szProfileStartMaxSpeedMargin);
 
   changed |= SaveFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
-                                  settings_computer.ordered_defaults.start_max_height,
-                                  szProfileStartMaxHeight);
+                              otb.start_max_height,
+                              szProfileStartMaxHeight);
 
   changed |= SaveFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
-                                  settings_computer.start_max_height_margin,
-                                  szProfileStartMaxHeightMargin);
+                              settings_computer.start_max_height_margin,
+                              szProfileStartMaxHeightMargin);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpStartHeightRef"),
-                              szProfileStartHeightRef,
-                              settings_computer.ordered_defaults.start_max_height_ref);
+                                  szProfileStartHeightRef,
+                                  otb.start_max_height_ref);
 
   changed |= SaveFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
-                                  settings_computer.ordered_defaults.finish_min_height,
-                                  szProfileFinishMinHeight);
+                              otb.finish_min_height,
+                              szProfileFinishMinHeight);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpFinishHeightRef"),
-                              szProfileFinishHeightRef,
-                              settings_computer.ordered_defaults.finish_min_height_ref);
+                                  szProfileFinishHeightRef,
+                                  otb.finish_min_height_ref);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpContests"), szProfileOLCRules,
                                   settings_computer.contest);
