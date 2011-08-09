@@ -242,6 +242,12 @@ DeviceDescriptor::IsNMEAOut() const
 }
 
 bool
+DeviceDescriptor::IsManageable() const
+{
+  return Driver != NULL && Driver->IsManageable();
+}
+
+bool
 DeviceDescriptor::IsConnected() const
 {
   ScopeLock protect(device_blackboard.mutex);

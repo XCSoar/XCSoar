@@ -189,6 +189,7 @@ public:
   }
 
   bool IsNMEAOut() const;
+  bool IsManageable() const;
 
   /**
    * Is this device currently busy (i.e. not in normal NMEA receiving
