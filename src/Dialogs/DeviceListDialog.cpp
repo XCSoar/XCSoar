@@ -44,7 +44,7 @@ static WndListFrame *list;
 static unsigned current;
 static unsigned font_height;
 
-static WndButton *restart_button, *flight_button, *manage_button;
+static WndButton *reconnect_button, *flight_button, *manage_button;
 
 static StaticArray<unsigned, NUMDEV> indices;
 
@@ -52,13 +52,13 @@ static void
 UpdateButtons()
 {
   if (is_simulator() || current >= indices.size()) {
-    restart_button->set_enabled(false);
+    reconnect_button->set_enabled(false);
     flight_button->set_enabled(false);
     manage_button->set_enabled(false);
   } else {
     const DeviceDescriptor &device = DeviceList[indices[current]];
 
-    restart_button->set_enabled(device.IsConfigured());
+    reconnect_button->set_enabled(device.IsConfigured());
     flight_button->set_enabled(device.IsLogger());
     manage_button->set_enabled(device.IsManageable());
   }
@@ -158,7 +158,7 @@ OnRefreshClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnRestartClicked(gcc_unused WndButton &button)
+OnReconnectClicked(gcc_unused WndButton &button)
 {
   if (current >= indices.size())
     return;
@@ -244,7 +244,7 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look)
 
   buttons.Add(_("Close"), OnCloseClicked);
   buttons.Add(_("Refresh"), OnRefreshClicked);
-  restart_button = buttons.Add(_("Restart"), OnRestartClicked);
+  reconnect_button = buttons.Add(_("Reconnect"), OnReconnectClicked);
   flight_button = buttons.Add(_("Flight download"), OnFlightDownloadClicked);
   manage_button = buttons.Add(_("Manage"), OnManageClicked);
 
