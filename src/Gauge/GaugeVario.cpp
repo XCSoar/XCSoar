@@ -511,16 +511,14 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
         if (vdiff > DeltaVstep) {
           canvas.rectangle(x, y, x + ARROWXSIZE * 2 + 1, y + ARROWYSIZE - 1);
         } else {
-          RasterPoint Arrow[4];
+          RasterPoint Arrow[3];
           Arrow[0].x = x;
           Arrow[0].y = y;
           Arrow[1].x = x + ARROWXSIZE;
           Arrow[1].y = y + ARROWYSIZE - 1;
           Arrow[2].x = x + 2 * ARROWXSIZE;
           Arrow[2].y = y;
-          Arrow[3].x = x;
-          Arrow[3].y = y;
-          canvas.polygon(Arrow, 4);
+          canvas.polygon(Arrow, 3);
         }
         vdiff -= DeltaVstep;
         y += ARROWYSIZE;
@@ -534,16 +532,14 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
         if (vdiff < -DeltaVstep) {
           canvas.rectangle(x, y + 1, x + ARROWXSIZE * 2 + 1, y - ARROWYSIZE + 2);
         } else {
-          RasterPoint Arrow[4];
+          RasterPoint Arrow[3];
           Arrow[0].x = x;
           Arrow[0].y = y;
           Arrow[1].x = x + ARROWXSIZE;
           Arrow[1].y = y - ARROWYSIZE + 1;
           Arrow[2].x = x + 2 * ARROWXSIZE;
           Arrow[2].y = y;
-          Arrow[3].x = x;
-          Arrow[3].y = y;
-          canvas.polygon(Arrow, 4);
+          canvas.polygon(Arrow, 3);
         }
         vdiff += DeltaVstep;
         y -= ARROWYSIZE;

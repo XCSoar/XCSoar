@@ -70,17 +70,15 @@ WndSymbolButton::on_paint(Canvas &canvas)
   if (ch == '<' || ch == '>') {
     int size = min(rc.right - rc.left, rc.bottom - rc.top) / 5;
 
-    static RasterPoint Arrow[4];
+    RasterPoint Arrow[3];
     Arrow[0].x = (rc.left + rc.right) / 2 + (ch == '<' ? size : -size);
     Arrow[0].y = (rc.top + rc.bottom) / 2 + size;
     Arrow[1].x = (rc.left + rc.right) / 2 + (ch == '<' ? -size : size);
     Arrow[1].y = (rc.top + rc.bottom) / 2;
     Arrow[2].x = (rc.left + rc.right) / 2 + (ch == '<' ? size : -size);
     Arrow[2].y = (rc.top + rc.bottom) / 2 - size;
-    Arrow[3].x = Arrow[0].x;
-    Arrow[3].y = Arrow[0].y;
 
-    canvas.polygon(Arrow, 4);
+    canvas.polygon(Arrow, 3);
   }
 
   // Draw arrow symbols instead of v and ^
