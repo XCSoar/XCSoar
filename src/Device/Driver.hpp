@@ -264,6 +264,12 @@ struct DeviceRegister {
      * Does this driver support switching to a "bulk" baud rate?
      */
     BULK_BAUD_RATE = 0x8,
+
+    /**
+     * Does this driver support additional configuration in form
+     * of a "Manage" dialog?
+     */
+    MANAGE = 0x10,
   };
 
   /**
@@ -307,6 +313,14 @@ struct DeviceRegister {
    */
   bool IsLogger() const {
     return (Flags & LOGGER) != 0;
+  }
+
+  /**
+   * Does this device support additional configuration in form
+   * of a "Manage" dialog?
+   */
+  bool IsManageable() const {
+    return (Flags & MANAGE) != 0;
   }
 
   /**
