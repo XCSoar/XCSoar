@@ -604,9 +604,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   bool valid_location = ReadGeoPoint(line, location);
 
   gps.fix_quality = line.read(0);
-
-  int nSatellites = min(16, line.read(0));
-  gps.satellites_used = nSatellites;
+  gps.satellites_used = min(16, line.read(0));
 
   if (!TimeHasAdvanced(ThisTime, info))
     return true;
