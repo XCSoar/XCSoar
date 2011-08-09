@@ -267,6 +267,7 @@ MainWindow::ReinitialiseLayout()
   Fonts::SizeInfoboxFont(ib_layout.control_width);
 
   InfoBoxManager::Create(rc, ib_layout, look->info_box);
+  InfoBoxManager::ProcessTimer();
   map_rect = ib_layout.remaining;
 
   popup.reset();
