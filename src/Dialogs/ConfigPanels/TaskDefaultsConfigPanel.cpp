@@ -141,49 +141,36 @@ TaskDefaultsConfigPanel::Save()
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
   WndProperty *wp;
 
-  unsigned sdtemp = 0;
-  sdtemp = (unsigned)settings_computer.sector_defaults.start_type;
-  changed |= SaveFormProperty(*wf, _T("prpStartType"),
-                              szProfileStartType,
-                              sdtemp);
-  settings_computer.sector_defaults.start_type =
-      (AbstractTaskFactory::LegalPointType_t)sdtemp;
+  changed |= SaveFormPropertyEnum(*wf, _T("prpStartType"),
+                                  szProfileStartType,
+                                  settings_computer.sector_defaults.start_type);
 
   changed |= SaveFormProperty(*wf, _T("prpStartRadius"),
                               ugDistance,
                               settings_computer.sector_defaults.start_radius,
                               szProfileStartRadius);
 
-  sdtemp = (unsigned)settings_computer.sector_defaults.turnpoint_type;
-  changed |= SaveFormProperty(*wf, _T("prpTurnpointType"),
-                              szProfileTurnpointType,
-                              sdtemp);
-  settings_computer.sector_defaults.turnpoint_type =
-      (AbstractTaskFactory::LegalPointType_t)sdtemp;
+  changed |= SaveFormPropertyEnum(*wf, _T("prpTurnpointType"),
+                                  szProfileTurnpointType,
+                                  settings_computer.sector_defaults.turnpoint_type);
 
   changed |= SaveFormProperty(*wf, _T("prpTurnpointRadius"),
                               ugDistance,
                               settings_computer.sector_defaults.turnpoint_radius,
                               szProfileTurnpointRadius);
 
-  sdtemp = (unsigned)settings_computer.sector_defaults.finish_type;
-  changed |= SaveFormProperty(*wf, _T("prpFinishType"),
-                              szProfileFinishType,
-                              sdtemp);
-  settings_computer.sector_defaults.finish_type =
-      (AbstractTaskFactory::LegalPointType_t)sdtemp;
+  changed |= SaveFormPropertyEnum(*wf, _T("prpFinishType"),
+                                  szProfileFinishType,
+                                  settings_computer.sector_defaults.finish_type);
 
   changed |= SaveFormProperty(*wf, _T("prpFinishRadius"),
                               ugDistance,
                               settings_computer.sector_defaults.finish_radius,
                               szProfileFinishRadius);
 
-  sdtemp = (unsigned)settings_computer.task_type_default;
-  changed |= SaveFormProperty(*wf, _T("prpTaskType"),
-                              szProfileTaskType,
-                              sdtemp);
-  settings_computer.task_type_default =
-      (TaskBehaviour::Factory_t)sdtemp;
+  changed |= SaveFormPropertyEnum(*wf, _T("prpTaskType"),
+                                  szProfileTaskType,
+                                  settings_computer.task_type_default);
 
   unsigned aatminutes = unsigned(settings_computer.ordered_defaults.aat_min_time) / 60;
   wp = (WndProperty*)wf->FindByName(_T("prpAATMinTime"));

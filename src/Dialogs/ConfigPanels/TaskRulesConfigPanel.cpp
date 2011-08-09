@@ -38,7 +38,6 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
-  WndProperty *wp;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
   LoadFormProperty(*wf, _T("prpStartMaxSpeed"), ugHorizontalSpeed,
