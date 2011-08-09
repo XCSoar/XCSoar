@@ -28,7 +28,9 @@
 #include "Waypoint/Waypoints.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Navigation/SpeedVector.hpp"
+
 #include <vector>
+#include <assert.h>
 
 class AbortIntersectionTest {
 public:
@@ -130,6 +132,12 @@ public:
    * @return Number of taskpoints in task
    */
   unsigned task_size() const;
+
+  const UnorderedTaskPoint &GetAlternate(unsigned i) const {
+    assert(i < task_points.size());
+
+    return task_points[i];
+  }
 
   /**
    * Retrieves the active task point sequence.
