@@ -78,7 +78,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
     Arrow[2].x = (rc.left + rc.right) / 2 + (ch == '<' ? size : -size);
     Arrow[2].y = (rc.top + rc.bottom) / 2 - size;
 
-    canvas.polygon(Arrow, 3);
+    canvas.TriangleFan(Arrow, 3);
   }
 
   // Draw arrow symbols instead of v and ^
@@ -97,7 +97,7 @@ WndSymbolButton::on_paint(Canvas &canvas)
     Arrow[2].y = (rc.top + rc.bottom) / 2 +
                  (ch == '^' ? size : -size);
 
-    canvas.polygon(Arrow, 3);
+    canvas.TriangleFan(Arrow, 3);
   }
 
   // Draw symbols instead of + and -

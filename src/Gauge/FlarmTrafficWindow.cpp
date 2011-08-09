@@ -432,7 +432,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     triangle[3].y = triangle[0].y;
 
     // Draw the arrow
-    canvas.polygon(triangle, 4);
+    canvas.TriangleFan(triangle, 4);
 
     return;
   }

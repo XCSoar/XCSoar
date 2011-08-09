@@ -299,7 +299,7 @@ Chart::DrawFilledLine(const fixed xmin, const fixed ymin,
 
   canvas.select(brush);
   canvas.null_pen();
-  canvas.polygon(line, 4);
+  canvas.TriangleFan(line, 4);
 }
 
 void
@@ -344,7 +344,7 @@ Chart::DrawFilledLineGraph(const LeastSquares &lsdata)
     line[2].y = rc.bottom - PaddingBottom;
     line[3].x = line[0].x;
     line[3].y = rc.bottom - PaddingBottom;
-    canvas.polygon(line, 4);
+    canvas.TriangleFan(line, 4);
   }
 }
 
@@ -662,5 +662,5 @@ Chart::DrawDot(const fixed x, const fixed y, const int width)
                           {p.x, p.y+width},
                           {p.x+width, p.y} };
   canvas.null_pen();
-  canvas.polygon(line, 4);
+  canvas.TriangleFan(line, 4);
 }

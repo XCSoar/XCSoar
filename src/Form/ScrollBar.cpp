@@ -157,7 +157,7 @@ ScrollBar::paint(Canvas &canvas) const
     { rc.right - arrow_padding,
       up_arrow_rect.bottom - arrow_padding },
   };
-  canvas.polygon(up_arrow, sizeof(up_arrow) / sizeof(up_arrow[0]));
+  canvas.TriangleFan(up_arrow, sizeof(up_arrow) / sizeof(up_arrow[0]));
 
   PixelRect down_arrow_rect = rc;
   ++down_arrow_rect.left;
@@ -174,7 +174,7 @@ ScrollBar::paint(Canvas &canvas) const
     { rc.right - arrow_padding,
       down_arrow_rect.top + arrow_padding },
   };
-  canvas.polygon(down_arrow, sizeof(down_arrow) / sizeof(down_arrow[0]));
+  canvas.TriangleFan(down_arrow, sizeof(down_arrow) / sizeof(down_arrow[0]));
 
   // ###################
   // ####  Slider   ####

@@ -79,7 +79,7 @@ DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
     diamond[2].y = pt.y + iradius;
     diamond[3].x = pt.x - iradius;
     diamond[3].y = pt.y - 0;
-    canvas.polygon(diamond, sizeof(diamond)/sizeof(diamond[0]));
+    canvas.TriangleFan(diamond, sizeof(diamond)/sizeof(diamond[0]));
   }
 }
 
@@ -106,7 +106,7 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
   runway[2].y = runway[1].y - ly;
   runway[3].x = runway[2].x            + wx;
   runway[3].y = runway[2].y            - wy;
-  canvas.polygon(runway, sizeof(runway)/sizeof(runway[0]));
+  canvas.TriangleFan(runway, sizeof(runway)/sizeof(runway[0]));
 }
 
 

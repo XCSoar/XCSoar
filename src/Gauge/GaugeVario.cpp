@@ -301,7 +301,7 @@ GaugeVario::RenderVarioLine(Canvas &canvas, int i, int sink, bool clear)
     } else {
       canvas.white_brush();
     }
-    canvas.polygon(getPolygon(sink), 3);
+    canvas.TriangleFan(getPolygon(sink), 3);
   }
 }
 
@@ -322,7 +322,7 @@ GaugeVario::RenderNeedle(Canvas &canvas, int i, bool average, bool clear)
   if (average)
     canvas.polyline(getPolygon(i), 3);
   else
-    canvas.polygon(getPolygon(i), 3);
+    canvas.TriangleFan(getPolygon(i), 3);
 }
 
 // TODO code: Optimise vario rendering, this is slow
@@ -518,7 +518,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
           Arrow[1].y = y + ARROWYSIZE - 1;
           Arrow[2].x = x + 2 * ARROWXSIZE;
           Arrow[2].y = y;
-          canvas.polygon(Arrow, 3);
+          canvas.TriangleFan(Arrow, 3);
         }
         vdiff -= DeltaVstep;
         y += ARROWYSIZE;
@@ -539,7 +539,7 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
           Arrow[1].y = y - ARROWYSIZE + 1;
           Arrow[2].x = x + 2 * ARROWXSIZE;
           Arrow[2].y = y;
-          canvas.polygon(Arrow, 3);
+          canvas.TriangleFan(Arrow, 3);
         }
         vdiff += DeltaVstep;
         y -= ARROWYSIZE;

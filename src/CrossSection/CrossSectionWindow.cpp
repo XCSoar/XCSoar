@@ -354,7 +354,7 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
   line[2].y = line[0].y - (line[0].x - line[1].x) / 2;
   line[3].x = (line[1].x + line[0].x) / 2;
   line[3].y = line[0].y;
-  canvas.polygon(line, 4);
+  canvas.TriangleFan(line, 4);
 }
 
 void
