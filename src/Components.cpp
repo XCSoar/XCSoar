@@ -201,7 +201,17 @@ XCSoarInterface::AfterStartup()
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
-  protected_task_manager->task_load_default(&way_points);
+  OrderedTask *defaultTask = protected_task_manager->task_create_default(
+      &way_points);
+  if (defaultTask) {
+    {
+      ScopeSuspendAllThreads suspend;
+      defaultTask->check_duplicate_waypoints(way_points);
+      way_points.optimise();
+    }
+    protected_task_manager->task_commit(*defaultTask);
+    delete defaultTask;
+  }
 
   task_manager->resume();
 

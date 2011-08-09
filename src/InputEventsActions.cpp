@@ -1298,7 +1298,17 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
   if (!string_is_empty(misc)) {
     TCHAR buffer[MAX_PATH];
     LocalPath(buffer, misc);
-    protected_task_manager->task_load(buffer, &way_points);
+
+    OrderedTask *task = protected_task_manager->task_create(buffer, &way_points);
+    if (task) {
+      {
+        ScopeSuspendAllThreads suspend;
+        task->check_duplicate_waypoints(way_points);
+        way_points.optimise();
+      }
+      protected_task_manager->task_commit(*task);
+      delete task;
+    }
   }
 
   trigger_redraw();

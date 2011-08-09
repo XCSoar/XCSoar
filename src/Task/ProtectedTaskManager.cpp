@@ -218,30 +218,16 @@ ProtectedTaskManager::task_create(const TCHAR* path, const Waypoints *waypoints,
   }
   return NULL;
 }
- 
-bool 
-ProtectedTaskManager::task_load(const TCHAR* path, const Waypoints *waypoints,
-                                unsigned index)
-{
-  OrderedTask* task = task_create(path, waypoints, index);
-  if (task != NULL) {
-    ExclusiveLease lease(*this);
-    lease->commit(*task);
-    lease->resume();
-    delete task;
-    return true;
-  }
-  return false;
-}
 
 const TCHAR ProtectedTaskManager::default_task_path[] = _T("Default.tsk");
 
-bool 
-ProtectedTaskManager::task_load_default(const Waypoints *waypoints)
+
+OrderedTask*
+ProtectedTaskManager::task_create_default(const Waypoints *waypoints)
 {
   TCHAR path[MAX_PATH];
   LocalPath(path, default_task_path);
-  return task_load(path, waypoints);
+  return task_create(path, waypoints);
 }
 
 bool 

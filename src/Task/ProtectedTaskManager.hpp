@@ -101,10 +101,11 @@ public:
   bool task_commit(const OrderedTask& that);
 
   bool task_save(const TCHAR* path);
-  bool task_load(const TCHAR* path, const Waypoints *waypoints,
-                 unsigned index = 0);
+
   bool task_save_default();
-  bool task_load_default(const Waypoints *waypoints);
+
+  gcc_malloc
+  OrderedTask* task_create_default(const Waypoints *waypoints);
 
   gcc_malloc
   OrderedTask* task_copy(const OrderedTask& that) const;
