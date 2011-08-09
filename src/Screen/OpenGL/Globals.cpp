@@ -27,6 +27,10 @@ Copyright_License {
 namespace OpenGL {
   bool texture_non_power_of_two;
 
+#ifdef ANDROID
+  bool vertex_buffer_object;
+#endif
+
   unsigned screen_width, screen_height;
 
   int translate_x, translate_y;

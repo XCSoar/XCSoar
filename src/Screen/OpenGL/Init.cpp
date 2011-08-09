@@ -33,6 +33,8 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #endif
 
+#include <string.h>
+
 void
 OpenGL::Initialise()
 {
@@ -75,6 +77,23 @@ SupportsNonPowerOfTwoTexturesGLES()
   return false;
 }
 
+#ifdef ANDROID
+/**
+ * Is it safe to use VBO?
+ */
+gcc_pure
+static bool
+EnableVBO()
+{
+  /* disable VBO on Android with OpenGL/ES 1.0 (that's Android 1.6 and
+     the Android emulator) - on those versions, glDeleteBuffers()
+     crashes instantly, see
+     http://code.google.com/p/android/issues/detail?id=4273 */
+  const char *version = (const char *)glGetString(GL_VERSION);
+  return version != NULL && strstr(version, "ES-CM 1.0") == NULL;
+}
+#endif
+
 /**
  * Does the current OpenGL context support textures with dimensions
  * other than power-of-two?
@@ -94,6 +113,8 @@ OpenGL::SetupContext()
 
 #ifdef ANDROID
   native_view->SetTexturePowerOfTwo(texture_non_power_of_two);
+
+  vertex_buffer_object = EnableVBO();
 #endif
 
   glDisable(GL_DEPTH_TEST);
