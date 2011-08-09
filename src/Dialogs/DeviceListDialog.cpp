@@ -75,6 +75,12 @@ RefreshList()
   list->invalidate();
 }
 
+static bool
+IsFlarm(unsigned index)
+{
+  return device_blackboard.RealState(indices[index]).flarm.IsDetected();
+}
+
 static void
 PaintDevice(Canvas &canvas, const PixelRect rc, unsigned i)
 {
@@ -119,7 +125,7 @@ PaintDevice(Canvas &canvas, const PixelRect rc, unsigned i)
       _tcscat(buffer1, _("Vario"));
     }
 
-    if (basic.flarm.IsDetected())
+    if (IsFlarm(i))
       _tcscat(buffer1, _T("; FLARM"));
 
     canvas.text(rc.left + margin, rc.top + margin + font_height,
