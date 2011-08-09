@@ -47,31 +47,27 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpStartMaxSpeedMargin"), ugHorizontalSpeed,
                    settings_computer.start_max_speed_margin);
 
+  static const StaticEnumChoice start_max_height_ref_list[] = {
+    { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point)") },
+    { hrMSL, N_("MSL"), N_("Reference MSL for start maximum height rule (above sea level)") },
+    { 0 }
+  };
+  LoadFormProperty(*wf, _T("prpStartHeightRef"), start_max_height_ref_list,
+                   settings_computer.ordered_defaults.start_max_height_ref);
+
   LoadFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
                    settings_computer.ordered_defaults.start_max_height);
 
   LoadFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
                    settings_computer.start_max_height_margin);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("AGL"));
-    dfe->addEnumText(_("MSL"));
-    dfe->Set(settings_computer.ordered_defaults.start_max_height_ref);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFinishHeightRef"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("AGL"));
-    dfe->addEnumText(_("MSL"));
-    dfe->Set(settings_computer.ordered_defaults.finish_min_height_ref);
-    wp->RefreshDisplay();
-  }
+  static const StaticEnumChoice finish_min_height_ref_list[] = {
+    { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point)") },
+    { hrMSL, N_("MSL"), N_("Reference MSL for finish minimum height rule (above sea level)") },
+    { 0 }
+  };
+  LoadFormProperty(*wf, _T("prpFinishHeightRef"), finish_min_height_ref_list,
+                   settings_computer.ordered_defaults.finish_min_height_ref);
 
   LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                    settings_computer.ordered_defaults.finish_min_height);
@@ -117,7 +113,7 @@ TaskRulesConfigPanel::Save()
                                   settings_computer.start_max_height_margin,
                                   szProfileStartMaxHeightMargin);
 
-  changed |= SaveFormProperty(*wf, _T("prpStartHeightRef"),
+  changed |= SaveFormPropertyEnum(*wf, _T("prpStartHeightRef"),
                               szProfileStartHeightRef,
                               settings_computer.ordered_defaults.start_max_height_ref);
 
@@ -125,10 +121,9 @@ TaskRulesConfigPanel::Save()
                                   settings_computer.ordered_defaults.finish_min_height,
                                   szProfileFinishMinHeight);
 
-  changed |= SaveFormProperty(*wf, _T("prpFinishHeightRef"),
+  changed |= SaveFormPropertyEnum(*wf, _T("prpFinishHeightRef"),
                               szProfileFinishHeightRef,
                               settings_computer.ordered_defaults.finish_min_height_ref);
-
 
   unsigned t = settings_computer.contest;
   changed |= SaveFormProperty(*wf, _T("prpContests"), szProfileOLCRules, t);

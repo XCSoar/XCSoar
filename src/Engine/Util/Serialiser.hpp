@@ -116,6 +116,7 @@ protected:
 private:
   TaskBehaviour::Factory_t task_factory_type() const;
   const TCHAR* task_factory_type(TaskBehaviour::Factory_t the_type) const;
+  const TCHAR* height_ref(HeightReferenceType the_height_ref) const;
 };
 
 #endif
