@@ -41,6 +41,8 @@ GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
   switch (wp.Type) {
   case Waypoint::wtMountainTop:
     return look.mountain_top_icon;
+  case Waypoint::wtMountainPass:
+    return look.mountain_pass_icon;
   case Waypoint::wtBridge:
     return look.bridge_icon;
   case Waypoint::wtTunnel:

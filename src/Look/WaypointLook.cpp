@@ -32,6 +32,7 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings)
   turn_point_icon.load_big(IDB_TURNPOINT, IDB_TURNPOINT_HD);
   task_turn_point_icon.load_big(IDB_TASKTURNPOINT, IDB_TASKTURNPOINT_HD);
   mountain_top_icon.load_big(IDB_MOUNTAIN_TOP, IDB_MOUNTAIN_TOP_HD);
+  mountain_pass_icon.load_big(IDB_MOUNTAIN_PASS, IDB_MOUNTAIN_PASS_HD);
   bridge_icon.load_big(IDB_BRIDGE, IDB_BRIDGE_HD);
   tunnel_icon.load_big(IDB_TUNNEL, IDB_TUNNEL_HD);
   tower_icon.load_big(IDB_TOWER, IDB_TOWER_HD);

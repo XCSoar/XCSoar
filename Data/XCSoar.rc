@@ -114,6 +114,8 @@ IDB_OUTFIELD_MARGINAL2 BITMAP  DISCARDABLE     "../output/data/icons/alt2_margin
 IDB_OUTFIELD_MARGINAL2_HD BITMAP DISCARDABLE   "../output/data/icons/alt2_marginal_field_160.bmp"
 IDB_OUTFIELD_UNREACHABLE2 BITMAP DISCARDABLE    "../output/data/icons/alt2_landable_field.bmp"
 IDB_OUTFIELD_UNREACHABLE2_HD BITMAP DISCARDABLE "../output/data/icons/alt2_landable_field_160.bmp"
+IDB_MOUNTAIN_PASS       BITMAP  DISCARDABLE     "../output/data/icons/map_pass.bmp"
+IDB_MOUNTAIN_PASS_HD    BITMAP  DISCARDABLE     "../output/data/icons/map_pass_160.bmp"
 IDB_PROGRESSBORDER      BITMAP  DISCARDABLE     "bitmaps/progress_border.bmp"
 IDB_REACHABLE           BITMAP  DISCARDABLE     "../output/data/icons/winpilot_reachable.bmp"
 IDB_REACHABLE_HD        BITMAP  DISCARDABLE     "../output/data/icons/winpilot_reachable_160.bmp"

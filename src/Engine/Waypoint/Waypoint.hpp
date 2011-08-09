@@ -53,6 +53,7 @@ public:
     wtAirfield,
     wtOutlanding,
     wtMountainTop,
+    wtMountainPass,
     wtBridge,
     wtTunnel,
     wtTower,

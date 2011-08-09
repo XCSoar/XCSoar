@@ -144,3 +144,5 @@
 #define IDB_TASKTURNPOINT_HD           5365
 #define IDB_OBSTACLE                    366
 #define IDB_OBSTACLE_HD                5366
+#define IDB_MOUNTAIN_PASS               367
+#define IDB_MOUNTAIN_PASS_HD           5367
