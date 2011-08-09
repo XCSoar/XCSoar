@@ -578,7 +578,8 @@ InfoBoxContentTaskAATime::Update(InfoBoxWindow &infobox)
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
-  if (!task_stats.task_valid || !task_stats.total.IsAchievable() ||
+  if (!common_stats.ordered_has_targets ||
+      !task_stats.task_valid || !task_stats.total.IsAchievable() ||
       !positive(common_stats.aat_time_remaining)) {
     infobox.SetInvalid();
     return;
@@ -599,7 +600,8 @@ InfoBoxContentTaskAATimeDelta::Update(InfoBoxWindow &infobox)
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
-  if (!task_stats.task_valid || !task_stats.total.IsAchievable() ||
+  if (!common_stats.ordered_has_targets ||
+      !task_stats.task_valid || !task_stats.total.IsAchievable() ||
       !positive(task_stats.total.time_remaining) ||
       !positive(common_stats.aat_time_remaining)) {
     infobox.SetInvalid();
@@ -630,7 +632,10 @@ void
 InfoBoxContentTaskAADistance::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+
+  if (!common_stats.ordered_has_targets ||
+      !task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -643,7 +648,10 @@ void
 InfoBoxContentTaskAADistanceMax::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+
+  if (!common_stats.ordered_has_targets ||
+      !task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -656,7 +664,10 @@ void
 InfoBoxContentTaskAADistanceMin::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
-  if (!task_stats.task_valid) {
+  const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
+
+  if (!common_stats.ordered_has_targets ||
+      !task_stats.task_valid) {
     infobox.SetInvalid();
     return;
   }
@@ -671,7 +682,8 @@ InfoBoxContentTaskAASpeed::Update(InfoBoxWindow &infobox)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
-  if (!task_stats.task_valid || !positive(common_stats.aat_speed_remaining)) {
+  if (!common_stats.ordered_has_targets ||
+      !task_stats.task_valid || !positive(common_stats.aat_speed_remaining)) {
     infobox.SetInvalid();
     return;
   }
@@ -690,7 +702,8 @@ InfoBoxContentTaskAASpeedMax::Update(InfoBoxWindow &infobox)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
-  if (!task_stats.task_valid || !positive(common_stats.aat_speed_max)) {
+  if (!common_stats.ordered_has_targets ||
+      !task_stats.task_valid || !positive(common_stats.aat_speed_max)) {
     infobox.SetInvalid();
     return;
   }
@@ -709,7 +722,8 @@ InfoBoxContentTaskAASpeedMin::Update(InfoBoxWindow &infobox)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
 
-  if (!task_stats.task_valid || !positive(common_stats.aat_speed_min)) {
+  if (!common_stats.ordered_has_targets ||
+      !task_stats.task_valid || !positive(common_stats.aat_speed_min)) {
     infobox.SetInvalid();
     return;
   }
