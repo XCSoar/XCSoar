@@ -57,6 +57,7 @@ public:
     wtTunnel,
     wtTower,
     wtPowerPlant,
+    wtObstacle,
   };
 
   /**

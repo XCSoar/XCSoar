@@ -102,6 +102,8 @@ IDB_MAPSCALE_LEFT_HD    BITMAP  DISCARDABLE     "../output/data/icons/scalearrow
 IDB_MAPSCALE_RIGHT_HD   BITMAP  DISCARDABLE     "../output/data/icons/scalearrow_right_160.bmp"
 IDB_MARK                BITMAP  DISCARDABLE     "../output/data/icons/map_flag.bmp"
 IDB_MARK_HD             BITMAP  DISCARDABLE     "../output/data/icons/map_flag_160.bmp"
+IDB_OBSTACLE            BITMAP  DISCARDABLE     "../output/data/icons/map_obstacle.bmp"
+IDB_OBSTACLE_HD         BITMAP  DISCARDABLE     "../output/data/icons/map_obstacle_160.bmp"
 IDB_OUTFIELD_REACHABLE  BITMAP  DISCARDABLE     "../output/data/icons/alt_reachable_field.bmp"
 IDB_OUTFIELD_REACHABLE_HD BITMAP DISCARDABLE    "../output/data/icons/alt_reachable_field_160.bmp"
 IDB_OUTFIELD_MARGINAL BITMAP  DISCARDABLE     "../output/data/icons/alt_marginal_field.bmp"

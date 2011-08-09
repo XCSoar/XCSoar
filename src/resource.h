@@ -142,3 +142,5 @@
 #define IDB_TRAFFIC_ALARM_HD           5364
 #define IDB_TASKTURNPOINT               365
 #define IDB_TASKTURNPOINT_HD           5365
+#define IDB_OBSTACLE                    366
+#define IDB_OBSTACLE_HD                5366

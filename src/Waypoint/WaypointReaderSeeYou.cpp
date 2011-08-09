@@ -248,6 +248,8 @@ WaypointReaderSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
     dest.Type = Waypoint::wtMountainTop;
     break;
   case 8:
+    dest.Type = Waypoint::wtObstacle;
+    break;
   case 11:
   case 16:
     dest.Type = Waypoint::wtTower;

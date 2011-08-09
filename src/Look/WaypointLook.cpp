@@ -36,6 +36,7 @@ WaypointLook::Initialise(const WaypointRendererSettings &settings)
   tunnel_icon.load_big(IDB_TUNNEL, IDB_TUNNEL_HD);
   tower_icon.load_big(IDB_TOWER, IDB_TOWER_HD);
   power_plant_icon.load_big(IDB_POWER_PLANT, IDB_POWER_PLANT_HD);
+  obstacle_icon.load_big(IDB_OBSTACLE, IDB_OBSTACLE_HD);
 
   reachable_brush.set(COLOR_GREEN);
   terrain_unreachable_brush.set(light_color(COLOR_RED));

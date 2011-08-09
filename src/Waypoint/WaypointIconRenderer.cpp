@@ -47,6 +47,8 @@ GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
     return look.tunnel_icon;
   case Waypoint::wtTower:
     return look.tower_icon;
+  case Waypoint::wtObstacle:
+    return look.obstacle_icon;
   case Waypoint::wtPowerPlant:
     return look.power_plant_icon;
   default:
