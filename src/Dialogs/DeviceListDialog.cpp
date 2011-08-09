@@ -59,7 +59,7 @@ UpdateButtons()
 
     restart_button->set_enabled(device.IsConfigured());
     flight_button->set_enabled(device.IsLogger());
-    manage_button->set_enabled(device.IsDriver(_T("CAI 302")));
+    manage_button->set_enabled(device.IsManageable());
   }
 }
 
@@ -178,7 +178,7 @@ OnManageClicked(gcc_unused WndButton &button)
     return;
 
   DeviceDescriptor &descriptor = DeviceList[indices[current]];
-  if (!descriptor.IsDriver(_T("CAI 302")) || descriptor.IsBusy())
+  if (!descriptor.IsManageable() || descriptor.IsBusy())
     return;
 
   Device *device = descriptor.GetDevice();
@@ -186,7 +186,8 @@ OnManageClicked(gcc_unused WndButton &button)
     return;
 
   descriptor.SetBusy(true);
-  ManageCAI302Dialog(dialog->GetMainWindow(), dialog->GetLook(), *device);
+  if (descriptor.IsDriver(_T("CAI 302")))
+    ManageCAI302Dialog(dialog->GetMainWindow(), dialog->GetLook(), *device);
   descriptor.SetBusy(false);
 }
 
