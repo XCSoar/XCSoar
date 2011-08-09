@@ -593,6 +593,11 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/IOIOHelper.cpp
 endif
 
+ifeq ($(DEBUG),y)
+XCSOAR_SOURCES += \
+	$(SRC)/Android/Assert.cpp
+endif
+
 else
 XCSOAR_SOURCES += \
 	$(SRC)/Hardware/Battery.cpp \
