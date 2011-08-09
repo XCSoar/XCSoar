@@ -98,6 +98,12 @@ ParseCommandLine(const TCHAR *CommandLine)
     SCREENHEIGHT = 480;
   }
 
+  pC = _tcsstr(CommandLine, _T("-480x800"));
+  if (pC != NULL) {
+    SCREENWIDTH = 480;
+    SCREENHEIGHT = 800;
+  }
+
   pC = _tcsstr(CommandLine, _T("-480x272"));
   if (pC != NULL) {
     SCREENWIDTH = 480;
