@@ -605,8 +605,6 @@
         <Edit Name="prpComDevice1" Caption="Driver" X="72" Width="-2" Height="22" CaptionWidth="80" Help="Type of primary device. The primary device should be the most reliable GPS data source.">
           <DataField DataType="enum" OnDataAccess="DevicesConfigPanel::OnDeviceAData" />
         </Edit>
-  
-        <Button Name="cmdSetupDeviceA" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="DevicesConfigPanel::OnSetupDeviceAClicked" />
       </Panel>
   
       <Panel Name="frmComm2" X="0" Y="90" Width="-1" Height="90" Border="30">
@@ -629,8 +627,6 @@
           Help="Type of secondary device. The secondary device may be used as backup GPS data or other data e.g. from an intelligent variometer. Generic can be used for GPS sources including FLARM.">
           <DataField DataType="enum" OnDataAccess="DevicesConfigPanel::OnDeviceBData" />
         </Edit>
-  
-        <Button Name="cmdSetupDeviceB" Caption="Setup ..." X="1" Y="43" Width="70" Height="24" OnClick="DevicesConfigPanel::OnSetupDeviceBClicked" />
       </Panel>
   
       <Edit Name="prpSetSystemTimeFromGPS" Caption="Use GPS time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"

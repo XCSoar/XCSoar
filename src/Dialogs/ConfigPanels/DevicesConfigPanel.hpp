@@ -32,8 +32,6 @@ namespace DevicesConfigPanel
   void Init(WndForm *wf);
   bool Save();
 
-  void OnSetupDeviceAClicked(WndButton &button);
-  void OnSetupDeviceBClicked(WndButton &button);
   void OnDeviceAPort(DataField *Sender, DataField::DataAccessKind_t Mode);
   void OnDeviceBPort(DataField *Sender, DataField::DataAccessKind_t Mode);
   void OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode);

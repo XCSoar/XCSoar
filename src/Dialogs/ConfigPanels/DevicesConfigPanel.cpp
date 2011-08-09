@@ -80,43 +80,6 @@ static const unsigned num_port_types =
 
 static DeviceConfig device_config[NUMDEV];
 
-static void
-SetupDevice()
-{
-#ifdef ToDo
-  device.DoSetup();
-  wf->FocusNext(NULL);
-#endif
-
-  // this is a hack, devices dont jet support device dependant setup dialogs
-
-  changed = dlgConfigurationVarioShowModal();
-}
-
-
-void
-DevicesConfigPanel::OnSetupDeviceAClicked(WndButton &button)
-{
-  SetupDevice();
-
-  // this is a hack to get the dialog to retain focus because
-  // the progress dialog in the vario configuration somehow causes
-  // focus problems
-  button.set_focus();
-}
-
-
-void
-DevicesConfigPanel::OnSetupDeviceBClicked(WndButton &button)
-{
-  SetupDevice();
-
-  // this is a hack to get the dialog to retain focus because
-  // the progress dialog in the vario configuration somehow causes
-  // focus problems
-  button.set_focus();
-}
-
 gcc_pure
 static bool
 SupportsBulkBaudRate(const DataField &df)
@@ -179,19 +142,6 @@ DevicesConfigPanel::OnDeviceBPort(DataField *Sender,
                                 *(WndProperty *)wf->FindByName(_T("prpComDevice2")));
 }
 
-static void
-UpdateDeviceSetupButton(unsigned DeviceIdx, const TCHAR *Name)
-{
-  assert(DeviceIdx < 26);
-
-  TCHAR button_name[] = _T("cmdSetupDeviceA");
-  button_name[(sizeof(button_name) / sizeof(button_name[0])) - 2] += DeviceIdx;
-
-  ShowFormControl(*wf, button_name,
-                  Name != NULL && _tcscmp(Name, _T("Vega")) == 0);
-}
-
-
 void
 DevicesConfigPanel::OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
@@ -201,7 +151,6 @@ DevicesConfigPanel::OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t
                                   *(WndProperty *)wf->FindByName(_T("prpComSpeed1")),
                                   *(WndProperty *)wf->FindByName(_T("BulkBaudRate1")),
                                   *(WndProperty *)wf->FindByName(_T("prpComDevice1")));
-    UpdateDeviceSetupButton(0, Sender->GetAsString());
     break;
 
   case DataField::daInc:
@@ -221,7 +170,6 @@ DevicesConfigPanel::OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t
                                   *(WndProperty *)wf->FindByName(_T("prpComSpeed2")),
                                   *(WndProperty *)wf->FindByName(_T("BulkBaudRate2")),
                                   *(WndProperty *)wf->FindByName(_T("prpComDevice2")));
-    UpdateDeviceSetupButton(1, Sender->GetAsString());
     break;
 
   case DataField::daInc:
@@ -444,7 +392,7 @@ static void
 SetupDeviceFields(const DeviceConfig &config,
                   WndProperty *port_field, WndProperty *speed_field,
                   WndProperty &bulk_baud_rate_field,
-                  WndProperty *driver_field, WndButton *setup_button)
+                  WndProperty *driver_field)
 {
   if (port_field != NULL) {
     DataFieldEnum *dfe = (DataFieldEnum *)port_field->GetDataField();
@@ -563,9 +511,6 @@ SetupDeviceFields(const DeviceConfig &config,
     driver_field->RefreshDisplay();
   }
 
-  if (setup_button != NULL)
-    setup_button->set_visible(config.IsVega());
-
   UpdateDeviceControlVisibility(*port_field, *speed_field,
                                 bulk_baud_rate_field,
                                 *driver_field);
@@ -681,15 +626,13 @@ DevicesConfigPanel::Init(WndForm *_wf)
                     (WndProperty*)wf->FindByName(_T("prpComPort1")),
                     (WndProperty*)wf->FindByName(_T("prpComSpeed1")),
                     *(WndProperty *)wf->FindByName(_T("BulkBaudRate1")),
-                    (WndProperty*)wf->FindByName(_T("prpComDevice1")),
-                    (WndButton *)wf->FindByName(_T("cmdSetupDeviceA")));
+                    (WndProperty*)wf->FindByName(_T("prpComDevice1")));
 
   SetupDeviceFields(device_config[1],
                     (WndProperty*)wf->FindByName(_T("prpComPort2")),
                     (WndProperty*)wf->FindByName(_T("prpComSpeed2")),
                     *(WndProperty *)wf->FindByName(_T("BulkBaudRate2")),
-                    (WndProperty*)wf->FindByName(_T("prpComDevice2")),
-                    (WndButton *)wf->FindByName(_T("cmdSetupDeviceB")));
+                    (WndProperty*)wf->FindByName(_T("prpComDevice2")));
 
   LoadFormProperty(*wf, _T("prpSetSystemTimeFromGPS"),
                    CommonInterface::SettingsComputer().SetSystemTimeFromGPS);
