@@ -848,7 +848,9 @@ public:
    * @return number of optional start poitns
    */
   gcc_pure
-  unsigned optional_start_points_size() { return optional_start_points.size(); }
+  unsigned optional_start_points_size() const {
+    return optional_start_points.size();
+  }
 
   /**
    * returns optional start point
