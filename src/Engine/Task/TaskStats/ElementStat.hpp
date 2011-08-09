@@ -35,57 +35,71 @@ struct AircraftState;
  * Common task element statistics.  Used because we separately want to
  * track overall task statistics as well as that of the current leg.
  */
-struct ElementStat {
-  fixed TimeStarted; /**< Time (s) this element was started */
-  fixed TimeElapsed; /**< Time (s) since element was started */
-  fixed TimeRemaining; /**< Time (s) to element completion */
-  fixed TimePlanned; /**< Time (s) of overall element */
-  fixed gradient; /**< Gradient to element completion */
+struct ElementStat
+{
+  /** Time (s) this element was started */
+  fixed TimeStarted;
+  /** Time (s) since element was started */
+  fixed TimeElapsed;
+  /** Time (s) to element completion */
+  fixed TimeRemaining;
+  /** Time (s) of overall element */
+  fixed TimePlanned;
 
-  DistanceStat remaining_effective; /**< Stats for effective remaining distance of element */
-  DistanceStat remaining; /**< Stats for actual remaining distance of element */
-  DistanceStat planned; /**< Stats for overall element distance */
-  DistanceStat travelled; /**< Stats for travelled distance in this element */
-  DistanceStat pirker; /**< Difference beteen planned and remaining_effective */
+  /** Gradient to element completion */
+  fixed gradient;
 
-  GlideResult solution_planned; /**< Glide solution for planned element */
-  GlideResult solution_travelled; /**< Glide solution for travelled element */
-  GlideResult solution_remaining; /**< Glide solution for remaining element */
-  GlideResult solution_mc0; /**< Glide solution for remaining element, MC=0 */
+  /** Stats for effective remaining distance of element */
+  DistanceStat remaining_effective;
+  /** Stats for actual remaining distance of element */
+  DistanceStat remaining;
+  /** Stats for overall element distance */
+  DistanceStat planned;
+  /** Stats for travelled distance in this element */
+  DistanceStat travelled;
+  /** Difference beteen planned and remaining_effective */
+  DistanceStat pirker;
 
-  TaskVario vario; /**< Rate of change of altitude difference (m/s) */ 
+  /** Glide solution for planned element */
+  GlideResult solution_planned;
+  /** Glide solution for travelled element */
+  GlideResult solution_travelled;
+  /** Glide solution for remaining element */
+  GlideResult solution_remaining;
+  /** Glide solution for remaining element, MC=0 */
+  GlideResult solution_mc0;
 
-  /**
-   * Resets all to zero.
-   */
+  /** Rate of change of altitude difference (m/s) */
+  TaskVario vario;
+
+  /** Resets all to zero. */
   void Reset();
 
-/** 
- * Calculate element times
- * 
- * @param ts Start time of this element (s)
- * @param state Aircraft state (to access time)
- */
-  void set_times(const fixed ts, 
-                 const AircraftState& state);
+  /**
+   * Calculate element times
+   *
+   * @param ts Start time of this element (s)
+   * @param state Aircraft state (to access time)
+   */
+  void set_times(const fixed ts, const AircraftState& state);
 
-/** 
- * Determine whether the task (or subtask) is able to be finished
- * (will fail if MC too low, wind too high etc)
- * 
- * @return True if can finish the task
- */
+  /**
+   * Determine whether the task (or subtask) is able to be finished
+   * (will fail if MC too low, wind too high etc)
+   *
+   * @return True if can finish the task
+   */
   bool achievable() const {
     return solution_remaining.validity == GlideResult::RESULT_OK;
   }
 
 #ifdef DO_PRINT
-  friend std::ostream& operator<< (std::ostream& o, 
-                                   const ElementStat& es);
+  friend std::ostream& operator<< (std::ostream &o, const ElementStat &es);
 #endif
 };
 
-class ElementStatComputer {
+class ElementStatComputer
+{
   ElementStat &data;
 
 public:

@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "ElementStat.hpp"
 #include "Navigation/Aircraft.hpp"
 #include <algorithm>
@@ -42,9 +43,8 @@ ElementStat::Reset()
   solution_mc0.Reset();
 }
 
-void 
-ElementStat::set_times(const fixed ts,
-                       const AircraftState& state)
+void
+ElementStat::set_times(const fixed ts, const AircraftState& state)
 {
   TimeStarted = ts;
   if (negative(TimeStarted))
@@ -55,7 +55,7 @@ ElementStat::set_times(const fixed ts,
 
   if (solution_remaining.IsDefined()) {
     TimeRemaining = solution_remaining.time_elapsed;
-    TimePlanned = TimeElapsed+TimeRemaining;
+    TimePlanned = TimeElapsed + TimeRemaining;
   } else {
     TimeRemaining = TimePlanned = fixed_zero;
   }
@@ -79,9 +79,9 @@ ElementStatComputer::calc_speeds(const fixed dt)
   pirker.calc_speed(data.TimeElapsed);
 
   if (!initialised) {
-    if (positive(dt) && data.TimeElapsed > fixed(15)) {
-      initialised=true;
-    }
+    if (positive(dt) && data.TimeElapsed > fixed(15))
+      initialised = true;
+
     data.vario.reset(data.solution_remaining);
     remaining_effective.calc_incremental_speed(fixed_zero);
     remaining.calc_incremental_speed(fixed_zero);
@@ -89,9 +89,9 @@ ElementStatComputer::calc_speeds(const fixed dt)
     travelled.calc_incremental_speed(fixed_zero);
     pirker.calc_incremental_speed(fixed_zero);
     return;
-  } 
+  }
 
-  if (!positive(dt)) 
+  if (!positive(dt))
     return;
 
   remaining.calc_incremental_speed(dt);
@@ -116,6 +116,4 @@ ElementStatComputer::ElementStatComputer(ElementStat &_data)
    planned(data.planned),
    travelled(data.travelled, false),
    pirker(data.pirker, false),
-   initialised(false)
-{
-}
+   initialised(false) {}
