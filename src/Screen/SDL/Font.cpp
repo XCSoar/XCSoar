@@ -132,3 +132,21 @@ Font::reset()
     font = NULL;
   }
 }
+
+PixelSize
+Font::TextSize(const TCHAR *text) const
+{
+  int ret, w, h;
+#ifdef UNICODE
+  ret = ::TTF_SizeUNICODE(font, (const Uint16 *)text, &w, &h);
+#else
+  ret = ::TTF_SizeUTF8(font, text, &w, &h);
+#endif
+  PixelSize size;
+  if (ret == 0) {
+    size.cx = w;
+    size.cy = h;
+  } else
+    size.cx = size.cy = 0;
+  return size;
+}

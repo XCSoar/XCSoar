@@ -39,6 +39,7 @@ Copyright_License {
 #include <windows.h>
 #include <tchar.h>
 
+struct PixelSize;
 class TextUtil;
 
 /**
@@ -97,10 +98,10 @@ public:
   bool set(const LOGFONT &log_font);
   void reset();
 
-  #ifdef ANDROID
   gcc_pure
   PixelSize TextSize(const TCHAR *text) const;
 
+  #ifdef ANDROID
   int text_texture_gl(const TCHAR *text, PixelSize &size,
                       const Color &fg, const Color &bg) const;
   #else // !ANDROID
@@ -136,7 +137,22 @@ public:
   const TCHAR *get_facename() const {
     return facename.c_str();
   }
-  #endif
+#elif defined(ENABLE_SDL)
+  gcc_pure
+  const TCHAR *get_facename() const {
+    return ::TTF_FontFaceFamilyName(font);
+  }
+
+  gcc_pure
+  unsigned get_style() const {
+    return ::TTF_GetFontStyle(font);
+  }
+
+  gcc_pure
+  unsigned get_line_spacing() const {
+    return ::TTF_FontLineSkip(font);
+  }
+#endif
 };
 
 #endif
