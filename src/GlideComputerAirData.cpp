@@ -333,13 +333,9 @@ GlideComputerAirData::UpdateLiftDatabase()
 {
   DerivedInfo &calculated = SetCalculated();
 
-  // Don't update the lift database if we are not in circling mode
-  if (!calculated.circling)
-    return;
-
   // If we just started circling
   // -> reset the database because this is a new thermal
-  if (!LastCalculated().circling)
+  if (!calculated.circling && LastCalculated().circling)
     ResetLiftDatabase();
 
   // Determine the direction in which we are circling
