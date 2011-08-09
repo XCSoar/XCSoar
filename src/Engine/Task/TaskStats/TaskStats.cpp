@@ -54,11 +54,11 @@ TaskStats::calc_flight_mode()
   const bool this_is_final = total.solution_remaining.IsDefined() &&
     positive(total.solution_remaining.altitude_difference + fixed(margin));
 
-  const bool changed = (flight_mode_final_glide != this_is_final);
-  if (changed)
-    flight_mode_final_glide = this_is_final;
+  if (flight_mode_final_glide == this_is_final)
+    return false;
 
-  return changed;
+  flight_mode_final_glide = this_is_final;
+  return true;
 }
 
 void
