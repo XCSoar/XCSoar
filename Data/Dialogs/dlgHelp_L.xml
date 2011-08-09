@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Caption="Help">
-  <Button Caption="Close" X="2" Y="2" Width="60" Height="22" OnClick="OnCloseClicked"/>
-
+  <Button Caption="Close" X="5" Y="180" Width="66" Height="35" OnClick="OnCloseClicked"/>
+  
   <Edit Name="prpHelpText" X="62" Y="2" Width="-2" Height="-2" CaptionWidth="10" ReadOnly="1" MultiLine="1"/>
 </Form>
