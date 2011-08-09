@@ -322,15 +322,4 @@ GlueMapWindow::Render(Canvas &canvas, const PixelRect &rc)
     DrawFinalGlide(canvas, rc);
     DrawGPSStatus(canvas, rc, Basic());
   }
-
-#ifdef DRAWLOAD
-  canvas.select(Fonts::Map);
-  TCHAR load[80];
-  _stprintf(load, _T("draw %d gps %d idle %d"),
-            GetAverageTime(),
-            Calculated().time_process_gps,
-            Calculated().time_process_idle);
-
-  canvas.text(rc.left, rc.top, load);
-#endif
 }

@@ -181,11 +181,6 @@ struct DerivedInfo:
 
   ThermalLocatorInfo thermal_locator;
 
-  /** Time (ms) to process main computer functions */
-  unsigned time_process_gps;
-  /** Time (ms) to process idle computer functions */
-  unsigned time_process_idle;
-
   /** Store of short term history of variables */
   TraceHistory trace_history;
 

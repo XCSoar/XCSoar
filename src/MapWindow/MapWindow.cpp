@@ -182,9 +182,6 @@ MapWindow::on_paint_buffer(Canvas &canvas)
   draw_sw.Finish();
 
 #ifndef ENABLE_OPENGL
-  // Stop the drawing timer and calculate drawing time
-  StopTimer();
-
   /* save the generation number which was active when rendering had
      begun */
   buffer_projection = render_projection;

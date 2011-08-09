@@ -31,26 +31,13 @@ Copyright_License {
 class MapWindowTimer
 {
 public:
-  MapWindowTimer();
   virtual bool RenderTimeAvailable();
-  /**
-   * Returns the average drawing time
-   * @return The average drawing time
-   */
-  int GetAverageTime() const {
-    return timestats_av;
-  }
 
 protected:
   void StartTimer();
-  void StopTimer();
-  void InterruptTimer();
 
 private:
   PeriodClock timestamp_newdata;
-  int timestats_av;
-  bool timestats_dirty;
-  long tottime;
 };
 
 #endif

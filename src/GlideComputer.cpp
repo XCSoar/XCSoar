@@ -87,9 +87,6 @@ GlideComputer::Initialise()
 bool
 GlideComputer::ProcessGPS()
 {
-  PeriodClock clock;
-  clock.update();
-
   const MoreData &basic = Basic();
   DerivedInfo &calculated = SetCalculated();
 
@@ -132,8 +129,6 @@ GlideComputer::ProcessGPS()
   // Update the ConditionMonitors
   ConditionMonitorsUpdate(*this);
 
-  calculated.time_process_gps = clock.elapsed();
-
   return idle_clock.check_update(500);
 }
 
@@ -143,16 +138,12 @@ GlideComputer::ProcessGPS()
 void
 GlideComputer::ProcessIdle()
 {
-  PeriodClock clock;
-  clock.update();
-
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
   DoLogging();
 
   GlideComputerAirData::ProcessIdle();
   GlideComputerTask::ProcessIdle();
-  SetCalculated().time_process_idle = clock.elapsed();
 }
 
 bool

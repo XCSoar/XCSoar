@@ -24,18 +24,6 @@ Copyright_License {
 #include "MapWindowTimer.hpp"
 
 /**
- * Constructor of the MapWindowTimer class
- *
- * Resets all internal fields to the default values
- */
-MapWindowTimer::MapWindowTimer():
-  timestats_av(0),
-  timestats_dirty(false),
-  tottime(0)
-{
-}
-
-/**
  * "Starts" the timer by saving the start time in timestamp_newdata
  */
 void
@@ -43,7 +31,6 @@ MapWindowTimer::StartTimer()
 {
   // Saves the current tick count (time) as start time
   timestamp_newdata.update();
-  timestats_dirty = false;
 }
 
 /**
@@ -61,30 +48,4 @@ MapWindowTimer::RenderTimeAvailable()
     return true;
 
   return false;
-}
-
-/**
- * Interrupts the timer (in case map was panned while drawing)
- */
-void
-MapWindowTimer::InterruptTimer()
-{
-  timestats_dirty = true;
-  // cause to expire
-  timestamp_newdata.update_offset(-700);
-}
-
-/**
- * "Stops" the timer by calculating the total drawing time.
- */
-void
-MapWindowTimer::StopTimer()
-{
-  if (!timestats_dirty) {
-    // Calculates the drawing time with low pass filter
-    tottime = (2 * tottime + timestamp_newdata.elapsed()) / 3;
-    timestats_av = tottime;
-  }
-
-  timestats_dirty = false;
 }
