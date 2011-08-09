@@ -202,7 +202,7 @@ XCSoarInterface::AfterStartup()
   }
 
   OrderedTask *defaultTask = protected_task_manager->task_create_default(
-      &way_points);
+      &way_points, SettingsComputer().task_type_default);
   if (defaultTask) {
     {
       ScopeSuspendAllThreads suspend;

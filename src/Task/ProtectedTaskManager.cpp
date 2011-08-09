@@ -223,11 +223,18 @@ const TCHAR ProtectedTaskManager::default_task_path[] = _T("Default.tsk");
 
 
 OrderedTask*
-ProtectedTaskManager::task_create_default(const Waypoints *waypoints)
+ProtectedTaskManager::task_create_default(const Waypoints *waypoints,
+                                          TaskBehaviour::Factory_t factoryfail)
 {
   TCHAR path[MAX_PATH];
   LocalPath(path, default_task_path);
-  return task_create(path, waypoints);
+  OrderedTask *task = task_create(path, waypoints);
+  if (!task) {
+    task = task_blank();
+    assert(task);
+    task->set_factory(factoryfail);
+  }
+  return task;
 }
 
 bool 

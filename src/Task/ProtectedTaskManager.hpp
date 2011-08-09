@@ -104,8 +104,19 @@ public:
 
   bool task_save_default();
 
+  /**
+   * Creates an ordered task based on the Default.tsk file
+   * Consumer's responsibility to delete task
+   *
+   * @param waypoints waypoint structure
+   * @param failfactory default task type used if Default.tsk is invalid
+   * @return OrderedTask from Default.tsk file or if Default.tsk is invalid
+   * or non-existent, returns empty task with defaults set by
+   * config task defaults
+   */
   gcc_malloc
-  OrderedTask* task_create_default(const Waypoints *waypoints);
+  OrderedTask* task_create_default(const Waypoints *waypoints,
+                                   TaskBehaviour::Factory_t factory);
 
   gcc_malloc
   OrderedTask* task_copy(const OrderedTask& that) const;
