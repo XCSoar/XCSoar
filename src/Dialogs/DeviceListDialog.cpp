@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/DeviceListDialog.hpp"
+#include "Dialogs/Dialogs.h"
 #include "Dialogs/ManageCAI302Dialog.hpp"
 #include "Util/StaticArray.hpp"
 #include "Device/List.hpp"
@@ -194,6 +195,8 @@ OnManageClicked(gcc_unused WndButton &button)
   descriptor.SetBusy(true);
   if (descriptor.IsDriver(_T("CAI 302")))
     ManageCAI302Dialog(dialog->GetMainWindow(), dialog->GetLook(), *device);
+  if (descriptor.IsDriver(_T("Vega")))
+    dlgConfigurationVarioShowModal();
   descriptor.SetBusy(false);
 }
 
