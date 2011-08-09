@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Color.hpp"
 #include "Util/ListHead.hpp"
+#include "Util/Cache.hpp"
 
 #include <map>
 #include <string>
@@ -50,9 +51,31 @@ namespace TextCache {
   typedef std::map<std::string, RenderedText *> Map;
 };
 
+static Cache<std::string, PixelSize, 1024u> size_cache;
 static TextCache::Map text_cache_map;
 static ListHead text_cache_head = ListHead(ListHead::empty());
 static unsigned text_cache_size = 0;
+
+PixelSize
+TextCache::GetSize(const Font &font, const char *text)
+{
+  char key_buffer[4096];
+  snprintf(key_buffer, sizeof(key_buffer),
+           "%s_%u_%u_000000_ffffff_%s",
+           font.get_facename(),
+           font.get_style(),
+           font.get_height(),
+           text);
+
+  const std::string key(key_buffer);
+  const PixelSize *cached = size_cache.Get(key);
+  if (cached != NULL)
+    return *cached;
+
+  PixelSize size = font.TextSize(text);
+  size_cache.Put(key, size);
+  return size;
+}
 
 PixelSize
 TextCache::LookupSize(const Font &font, const char *text)
@@ -172,6 +195,7 @@ TextCache::flush()
 {
   assert(pthread_equal(pthread_self(), OpenGL::thread));
 
+  size_cache.Clear();
   text_cache_map.clear();
 
   for (RenderedText *rt = (RenderedText *)text_cache_head.GetNext();

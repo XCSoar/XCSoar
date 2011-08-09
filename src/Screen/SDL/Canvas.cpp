@@ -185,9 +185,11 @@ Canvas::text_size(const TCHAR *text) const
   size = TextCache::LookupSize(*font, text);
   if (size.cy > 0)
     return size;
-#endif
 
+  return TextCache::GetSize(*font, text);
+#else
   return font->TextSize(text);
+#endif
 }
 
 #ifndef ENABLE_OPENGL

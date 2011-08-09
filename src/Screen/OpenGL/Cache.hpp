@@ -40,6 +40,9 @@ struct Color;
 
 namespace TextCache {
   gcc_pure
+  PixelSize GetSize(const Font &font, const char *text);
+
+  gcc_pure
   PixelSize LookupSize(const Font &font, const char *text);
 
   gcc_pure
