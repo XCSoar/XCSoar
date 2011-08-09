@@ -503,7 +503,7 @@
     
       <Panel Name="frmStartHeight" Expert="1" X="2" Y="49" Width="-2" Height="72" Border="1">  
         <Edit Name="prpStartMaxHeight" Caption="Start max. height" Expert="1" X="0" Y="2" Width="-2" Height="22" CaptionWidth="150"
-           Help="Maximum height above ground while starting the task.  Set to 0 for no limit.">
+           Help="Maximum height based on start height reference (AGL or MSL) while starting the task.  Set to 0 for no limit.">
           <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="50" />
         </Edit>
     
@@ -520,7 +520,7 @@
   
       <Panel Name="frmFinishMinHeight" Expert="1" X="2" Y="120" Width="-2" Height="48" Border="1">  
         <Edit Name="prpFinishMinHeight" Caption="Finish min. height" Expert="1" Y="2" Width="-2" Height="22" CaptionWidth="150"
-          Help="Minimum height above ground while finishing the task.  Set to 0 for no limit.">
+          Help="Minimum height based on finish height reference (AGL or MSL) while finishing the task.  Set to 0 for no limit.">
           <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="50" />
         </Edit>
 
