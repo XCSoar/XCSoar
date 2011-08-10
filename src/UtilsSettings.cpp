@@ -46,6 +46,7 @@ Copyright_License {
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Operation.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "Engine/Task/TaskEvents.hpp"
 #include "Waypoint/WaypointGlue.hpp"
 #include "GlideComputer.hpp"
 #include "Language/LanguageGlue.hpp"
@@ -134,6 +135,21 @@ SettingsLeave()
     // re-load waypoints
     WaypointGlue::LoadWaypoints(way_points, terrain, operation);
     WaypointDetails::ReadFileFromProfile(way_points, operation);
+  }
+
+  if (WaypointFileChanged && protected_task_manager != NULL) {
+    ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
+    TaskEvents task_events;
+    GlidePolar glide_polar(lease->get_glide_polar());
+    OrderedTask *task = lease->clone(task_events,
+                                     XCSoarInterface::SettingsComputer(),
+                                     glide_polar);
+    if (task) {
+      // this must be done in thread lock because it potentially changes the
+      // waypoints database
+      task->check_duplicate_waypoints(way_points);
+      way_points.optimise();
+    }
   }
 
   if (WaypointFileChanged || TerrainFileChanged) {
