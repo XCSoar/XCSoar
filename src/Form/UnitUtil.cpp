@@ -40,6 +40,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 
   Units_t unit = Units::GetUserUnitByGroup(unit_group);
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
+  assert(df.GetType() == DataField::TYPE_REAL);
   df.SetUnits(Units::GetUnitName(unit));
   df.SetAsInteger(iround(Units::ToUserUnit(fixed(value), unit)));
   ctl->RefreshDisplay();
@@ -57,9 +58,10 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 
   Units_t unit = Units::GetUserUnitByGroup(unit_group);
 
-  DataFieldFloat *df = (DataFieldFloat *)ctl->GetDataField();
-  df->SetUnits(Units::GetUnitName(unit));
-  df->SetAsFloat(Units::ToUserUnit(value, unit));
+  DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
+  assert(df.GetType() == DataField::TYPE_REAL);
+  df.SetUnits(Units::GetUnitName(unit));
+  df.SetAsFloat(Units::ToUserUnit(value, unit));
   ctl->RefreshDisplay();
 }
 
@@ -75,6 +77,7 @@ LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
 
   Units_t unit = Units::GetUserUnitByGroup(unit_group);
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
+  assert(df.GetType() == DataField::TYPE_REAL);
   df.SetUnits(Units::GetUnitName(unit));
   df.SetAsInteger(iround(Units::ToUserUnit(fixed(value), unit)));
   ctl->RefreshDisplay();

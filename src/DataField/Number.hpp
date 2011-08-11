@@ -34,7 +34,8 @@ protected:
   StaticString<32> display_format;
 
 protected:
-  NumberDataField(const TCHAR *edit_format, const TCHAR *display_format,
+  NumberDataField(Type type,
+                  const TCHAR *edit_format, const TCHAR *display_format,
                   DataAccessCallback_t OnDataAccess = NULL);
 };
 

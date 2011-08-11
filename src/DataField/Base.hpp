@@ -35,6 +35,15 @@ class ComboList;
 class DataField
 {
 public:
+  enum Type {
+    TYPE_STRING,
+    TYPE_BOOLEAN,
+    TYPE_INTEGER,
+    TYPE_REAL,
+    TYPE_ENUM,
+    TYPE_FILE,
+  };
+
   enum DataAccessKind_t {
     daChange,
     daInc,
@@ -47,6 +56,8 @@ public:
   bool SupportCombo;  // all Types dataField support combolist except DataFieldString.
 
 protected:
+  const Type type;
+
   DataAccessCallback_t mOnDataAccess;
   bool mItemHelp;
 
@@ -56,8 +67,13 @@ private:
   bool mDetachGUI;
 
 public:
-  DataField(DataAccessCallback_t OnDataAccess = NULL);
+  DataField(Type _type,
+            DataAccessCallback_t OnDataAccess = NULL);
   virtual ~DataField(void) {}
+
+  Type GetType() const {
+    return type;
+  }
 
   void Special(void);
   virtual void Inc(void);

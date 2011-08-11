@@ -36,7 +36,7 @@ private:
 public:
   DataFieldString(const TCHAR *Default,
                   DataAccessCallback_t OnDataAccess) :
-    DataField(OnDataAccess) {
+    DataField(TYPE_STRING, OnDataAccess) {
     _tcscpy(mValue, Default);
     SupportCombo = false;
   }

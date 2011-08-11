@@ -92,6 +92,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value)
     return;
 
   DataFieldBoolean &df = *(DataFieldBoolean *)ctl->GetDataField();
+  assert(df.GetType() == DataField::TYPE_BOOLEAN);
   df.Set(value);
   ctl->RefreshDisplay();
 }
@@ -132,6 +133,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
   assert(ctl != NULL);
 
   DataFieldEnum &df = *(DataFieldEnum *)ctl->GetDataField();
+  assert(df.GetType() == DataField::TYPE_ENUM);
   if (list[0].help != NULL)
     df.EnableItemHelp(true);
 
@@ -150,6 +152,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
   assert(ctl != NULL);
 
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
+  assert(df.GetType() == DataField::TYPE_REAL);
   df.Set(value);
   ctl->RefreshDisplay();
 }
@@ -165,6 +168,7 @@ LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
     return;
 
   DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
+  assert(df.GetType() == DataField::TYPE_REAL);
   df.Set(value);
   ctl->RefreshDisplay();
 }
@@ -179,10 +183,10 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
   WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
   assert(ctl != NULL);
 
-  DataFieldString *df = (DataFieldString *)ctl->GetDataField();
-  assert(df != NULL);
+  DataFieldString &df = *(DataFieldString *)ctl->GetDataField();
+  assert(df.GetType() == DataField::TYPE_STRING);
 
-  df->Set(value);
+  df.Set(value);
   ctl->RefreshDisplay();
 }
 
@@ -206,6 +210,7 @@ GetFormValueFixed(const WndForm &form, const TCHAR *control_name)
   assert(control != NULL);
 
   const DataFieldFloat &df = *(const DataFieldFloat *)control->GetDataField();
+  assert(df.GetType() == DataField::TYPE_REAL);
   return df.GetAsFixed();
 }
 
@@ -220,6 +225,7 @@ GetFormValueBoolean(const WndForm &form, const TCHAR *control_name)
 
   const DataFieldBoolean &df =
     *(const DataFieldBoolean *)control->GetDataField();
+  assert(df.GetType() == DataField::TYPE_BOOLEAN);
   return df.GetAsBoolean();
 }
 
@@ -232,10 +238,10 @@ GetFormValueString(const WndForm &form, const TCHAR *control_name)
     (const WndProperty *)form.FindByName(control_name);
   assert(control != NULL);
 
-  const DataFieldString *df = (const DataFieldString *)control->GetDataField();
-  assert(df != NULL);
+  const DataFieldString &df = *(const DataFieldString *)control->GetDataField();
+  assert(df.GetType() == DataField::TYPE_STRING);
 
-  return df->GetAsString();
+  return df.GetAsString();
 }
 
 bool

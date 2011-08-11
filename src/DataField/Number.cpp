@@ -23,10 +23,11 @@ Copyright_License {
 
 #include "DataField/Number.hpp"
 
-NumberDataField::NumberDataField(const TCHAR *_edit_format,
+NumberDataField::NumberDataField(Type type,
+                                 const TCHAR *_edit_format,
                                  const TCHAR *_display_format,
                                  DataAccessCallback_t OnDataAccess)
-  :DataField(OnDataAccess),
+  :DataField(type, OnDataAccess),
    edit_format(_edit_format), display_format(_display_format)
 {
 }

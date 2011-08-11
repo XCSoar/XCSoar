@@ -51,7 +51,7 @@ public:
   DataFieldFloat(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                  fixed Min, fixed Max, fixed Default,
                  fixed Step, int Fine, DataAccessCallback_t OnDataAccess)
-    :NumberDataField(EditFormat, DisplayFormat, OnDataAccess),
+    :NumberDataField(TYPE_REAL, EditFormat, DisplayFormat, OnDataAccess),
      mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine),
      unit(_T(""))
   {
