@@ -28,8 +28,8 @@ ComboList *
 DataFieldBoolean::CreateComboList() const
 {
   ComboList *combo_list = new ComboList();
-  combo_list->Append(false, mTextFalse);
-  combo_list->Append(true, mTextTrue);
+  combo_list->Append(false, false_text);
+  combo_list->Append(true, true_text);
 
   combo_list->ComboPopupItemSavedIndex = GetAsInteger();
   return combo_list;
@@ -53,10 +53,7 @@ DataFieldBoolean::GetAsInteger(void) const
 const TCHAR *
 DataFieldBoolean::GetAsString(void) const
 {
-  if (mValue)
-    return mTextTrue;
-  else
-    return mTextFalse;
+  return mValue ? true_text : false_text;
 }
 
 void
@@ -88,7 +85,7 @@ DataFieldBoolean::SetAsString(const TCHAR *Value)
 {
   const TCHAR *res = GetAsString();
   if (_tcscmp(res, Value) != 0) {
-    SetAsBoolean(_tcscmp(Value, mTextTrue) == 0);
+    SetAsBoolean(true_text.equals(Value));
   }
 }
 

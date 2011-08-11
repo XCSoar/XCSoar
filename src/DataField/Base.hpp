@@ -24,12 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_BASE_HPP
 #define XCSOAR_DATA_FIELD_BASE_HPP
 
+#include "Util/StaticString.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
 
-#define FORMATSIZE 32
-#define UNITSIZE 10
 #define OUTBUFFERSIZE 128
 
 class ComboList;
@@ -50,9 +49,9 @@ public:
 
 protected:
   DataAccessCallback_t mOnDataAccess;
-  TCHAR mEditFormat[FORMATSIZE + 1];
-  TCHAR mDisplayFormat[FORMATSIZE + 1];
-  TCHAR mUnits[UNITSIZE + 1];
+  StaticString<32> edit_format;
+  StaticString<32> display_format;
+  StaticString<8> unit;
   bool mItemHelp;
 
 private:
@@ -81,7 +80,9 @@ public:
   virtual void SetAsInteger(int Value);
   virtual void SetAsString(const TCHAR *Value);
 
-  void SetUnits(const TCHAR *text) { _tcscpy(mUnits, text); }
+  void SetUnits(const TCHAR *text) {
+    unit = text;
+  }
 
   void
   Use(void)

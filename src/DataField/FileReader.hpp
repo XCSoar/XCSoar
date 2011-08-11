@@ -35,6 +35,8 @@ Copyright_License {
  */
 class DataFieldFileReader: public DataField
 {
+  typedef StaticArray<StaticString<32>, 8> PatternList;
+
 public:
   /** FileList item */
   struct Item : private NonCopyable {
@@ -69,13 +71,12 @@ private:
   /**
    * Used to store the value while !loaded.
    */
-  TCHAR postponed_value[512];
+  StaticString<512> postponed_value;
 
   /**
    * Stores the patterns while !loaded.
    */
-  TCHAR postponed_patterns[32][8];
-  unsigned num_postponed_patterns;
+  PatternList postponed_patterns;
 
 public:
   /**

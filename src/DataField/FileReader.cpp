@@ -91,12 +91,11 @@ DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
   :DataField(_T(""), _T(""), OnDataAccess),
    // Set selection to zero
    mValue(0),
-   loaded(false), postponed_sort(false), num_postponed_patterns(0)
+   loaded(false), postponed_sort(false),
+   postponed_value(_T(""))
 {
   // Fill first entry -> always exists and is blank
   files.append();
-
-  postponed_value[0] = _T('\0');
 
   // This type of DataField supports the combolist
   SupportCombo = true;
@@ -105,7 +104,7 @@ DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
 int
 DataFieldFileReader::GetAsInteger(void) const
 {
-  if (!string_is_empty(postponed_value))
+  if (!postponed_value.empty())
     EnsureLoadedDeconst();
 
   return mValue;
@@ -121,9 +120,9 @@ void
 DataFieldFileReader::ScanDirectoryTop(const TCHAR* filter)
 {
   if (!loaded) {
-    if (num_postponed_patterns < sizeof(postponed_patterns) / sizeof(postponed_patterns[0]) &&
-        _tcslen(filter) < sizeof(postponed_patterns[0]) / sizeof(postponed_patterns[0][0])) {
-      _tcscpy(postponed_patterns[num_postponed_patterns++], filter);
+    if (!postponed_patterns.full() &&
+        _tcslen(filter) < PatternList::value_type::MAX_SIZE) {
+      postponed_patterns.append() = filter;
       return;
     } else
       EnsureLoaded();
@@ -139,8 +138,8 @@ void
 DataFieldFileReader::Lookup(const TCHAR *Text)
 {
   if (!loaded) {
-    if (_tcslen(Text) < sizeof(postponed_value) / sizeof(postponed_value[0])) {
-      _tcscpy(postponed_value, Text);
+    if (_tcslen(Text) < postponed_value.MAX_SIZE) {
+      postponed_value = Text;
       return;
     } else
       EnsureLoaded();
@@ -231,7 +230,7 @@ DataFieldFileReader::Set(int Value)
   if (Value > 0)
     EnsureLoaded();
   else
-    postponed_value[0] = _T('\0');
+    postponed_value.clear();
 
   if ((unsigned)Value <= files.size()) {
     mValue = Value;
@@ -356,8 +355,9 @@ DataFieldFileReader::EnsureLoaded()
 
   loaded = true;
 
-  for (unsigned i = 0; i < num_postponed_patterns; ++i)
-    ScanDirectoryTop(postponed_patterns[i]);
+  for (PatternList::const_iterator i = postponed_patterns.begin(),
+         end = postponed_patterns.end(); i != end; ++i)
+    ScanDirectoryTop(*i);
 
   if (postponed_sort)
     Sort();

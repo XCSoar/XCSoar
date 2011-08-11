@@ -42,7 +42,7 @@ const TCHAR *
 DataFieldInteger::GetAsString(void) const
 {
   TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
-  _stprintf(mOutBuf, mEditFormat, mValue);
+  _stprintf(mOutBuf, edit_format, mValue);
   return mOutBuf;
 }
 
@@ -50,7 +50,7 @@ const TCHAR *
 DataFieldInteger::GetAsDisplayString(void) const
 {
   TCHAR *mOutBuf = const_cast<TCHAR *>(this->mOutBuf);
-  _stprintf(mOutBuf, mDisplayFormat, mValue, mUnits);
+  _stprintf(mOutBuf, display_format, mValue, unit.c_str());
   return mOutBuf;
 }
 
@@ -128,9 +128,9 @@ DataFieldInteger::SpeedUp(bool keyup)
 void
 DataFieldInteger::AppendComboValue(ComboList &combo_list, int value) const
 {
-  TCHAR a[16], b[16];
-  _stprintf(a, mEditFormat, value);
-  _stprintf(b, mDisplayFormat, value, mUnits);
+  TCHAR a[edit_format.MAX_SIZE], b[display_format.MAX_SIZE];
+  _stprintf(a, edit_format, value);
+  _stprintf(b, display_format, value, unit.c_str());
   combo_list.Append(combo_list.size(), a, b);
 }
 

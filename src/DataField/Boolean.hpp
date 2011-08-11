@@ -30,16 +30,16 @@ class DataFieldBoolean: public DataField
 {
 private:
   bool mValue;
-  TCHAR mTextTrue[FORMATSIZE+1];
-  TCHAR mTextFalse[FORMATSIZE+1];
+
+  StaticString<32> true_text;
+  StaticString<32> false_text;
 
 public:
   DataFieldBoolean(bool Default, const TCHAR *TextTrue, const TCHAR *TextFalse,
                    DataAccessCallback_t OnDataAccess)
     :DataField(_T(""), _T(""), OnDataAccess),
-     mValue(Default) {
-    _tcscpy(mTextTrue, TextTrue);
-    _tcscpy(mTextFalse, TextFalse);
+     mValue(Default),
+     true_text(TextTrue), false_text(TextFalse) {
     SupportCombo = true;
   }
 

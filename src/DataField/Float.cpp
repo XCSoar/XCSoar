@@ -46,14 +46,14 @@ DataFieldFloat::GetAsFixed() const
 const TCHAR *
 DataFieldFloat::GetAsString() const
 {
-  _stprintf(mOutBuf, mEditFormat, (double)mValue);
+  _stprintf(mOutBuf, edit_format, (double)mValue);
   return mOutBuf;
 }
 
 const TCHAR *
 DataFieldFloat::GetAsDisplayString() const
 {
-  _stprintf(mOutBuf, mDisplayFormat, (double)mValue, mUnits);
+  _stprintf(mOutBuf, display_format, (double)mValue, unit.c_str());
   return mOutBuf;
 }
 
