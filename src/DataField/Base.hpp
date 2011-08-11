@@ -97,7 +97,6 @@ public:
   }
   virtual void EnableItemHelp(bool value) {};
 
-  void SetDisplayFormat(TCHAR *Value);
   // allows combolist to iterate all values
   void SetDisableSpeedUp(bool bDisable) { mDisableSpeedup = bDisable; }
   bool GetDisableSpeedUp(void) { return mDisableSpeedup; }

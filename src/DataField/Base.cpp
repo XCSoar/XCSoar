@@ -91,12 +91,6 @@ DataField::SetAsString(gcc_unused const TCHAR *Value)
 }
 
 void
-DataField::SetDisplayFormat(TCHAR *Value)
-{
-  _tcscpy(mDisplayFormat, Value);
-}
-
-void
 DataField::CopyString(TCHAR * szbuffOut, bool bFormatted)
 {
   const TCHAR *src = bFormatted ? GetAsDisplayString() : GetAsString();
