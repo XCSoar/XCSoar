@@ -103,7 +103,7 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
     df.EnableItemHelp(true);
 
   df.AddChoices(list);
-  df.SetAsInteger(value);
+  df.Set(value);
 
   ctl->RefreshDisplay();
 }
