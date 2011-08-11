@@ -39,10 +39,10 @@ Copyright_License {
 #include <algorithm>
 
 TopographyFileRenderer::TopographyFileRenderer(const TopographyFile &_file)
-  :file(_file), pen(file.get_pen_width(), file.get_color()),
-   brush(file.get_color())
+  :file(_file), pen(file.GetPenWidth(), file.GetColor()),
+   brush(file.GetColor())
 {
-  if (file.get_icon() == IDB_TOWN)
+  if (file.GetIcon() == IDB_TOWN)
     icon.load_big(IDB_TOWN, IDB_TOWN_HD);
 }
 
@@ -51,7 +51,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
                             const WindowProjection &projection) const
 {
   fixed map_scale = projection.GetMapScale();
-  if (!file.is_visible(map_scale))
+  if (!file.IsVisible(map_scale))
     return;
 
   // TODO code: only draw inside screen!
@@ -69,8 +69,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   // get drawing info
 
 #ifdef ENABLE_OPENGL
-  const unsigned level = file.thinning_level(map_scale);
-  const unsigned min_distance = file.min_point_distance(level);
+  const unsigned level = file.GetThinningLevel(map_scale);
+  const unsigned min_distance = file.GetMinimumPointDistance(level);
 
 #ifndef HAVE_GLES
   float opengl_matrix[16];
@@ -262,9 +262,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
                                   const SETTINGS_MAP &settings_map) const
 {
   fixed map_scale = projection.GetMapScale();
-  if (!file.is_visible(map_scale))
-    return;
-  if (!file.is_label_visible(map_scale))
+  if (!file.IsVisible(map_scale) || !file.IsLabelVisible(map_scale))
     return;
 
   // TODO code: only draw inside screen!
@@ -272,7 +270,7 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
   // we already do an outer visibility test, but may need a test
   // in screen coords
 
-  canvas.select(file.is_label_important(map_scale) ?
+  canvas.select(file.IsLabelImportant(map_scale) ?
                 Fonts::MapLabelImportant : Fonts::MapLabel);
   canvas.set_text_color(Color(0x20, 0x20, 0x20));
   canvas.background_transparent();

@@ -53,7 +53,7 @@ TopographyStore::ScanVisibility(const WindowProjection &m_projection,
   // to make sure eventually everything gets refreshed
   unsigned num_updated = 0;
   for (unsigned i = 0; i < files.size(); ++i) {
-    if (files[i]->updateCache(m_projection)) {
+    if (files[i]->Update(m_projection)) {
       ++num_updated;
       if (num_updated >= max_update)
         break;

@@ -39,44 +39,43 @@ Copyright_License {
 #include <ctype.h> // needed for Wine
 
 TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
-                           fixed _threshold,
-                           fixed _labelThreshold,
-                           fixed _labelImportantThreshold,
-                           const Color thecolor,
-                           int _label_field, int _icon,
-                           int _pen_width)
+                               fixed _threshold,
+                               fixed _label_threshold,
+                               fixed _important_label_threshold,
+                               const Color thecolor,
+                               int _label_field, int _icon,
+                               int _pen_width)
   :dir(_dir), label_field(_label_field), icon(_icon),
    pen_width(_pen_width),
-   color(thecolor), scaleThreshold(_threshold),
-   labelThreshold(_labelThreshold),
-   labelImportantThreshold(_labelImportantThreshold)
+   color(thecolor), scale_threshold(_threshold),
+   label_threshold(_label_threshold),
+   important_label_threshold(_important_label_threshold)
 {
-  if (msShapefileOpen(&shpfile, "rb", dir, filename, 0) == -1)
+  if (msShapefileOpen(&file, "rb", dir, filename, 0) == -1)
     return;
 
-  if (shpfile.numshapes == 0) {
-    msShapefileClose(&shpfile);
+  if (file.numshapes == 0) {
+    msShapefileClose(&file);
     return;
   }
 
-  shpCache.resize_discard(shpfile.numshapes);
+  shapes.resize_discard(file.numshapes);
+  std::fill(shapes.begin(), shapes.end(), (XShape *)NULL);
 
   if (dir != NULL)
     ++dir->refcount;
 
   cache_bounds.west = cache_bounds.east =
     cache_bounds.south = cache_bounds.north = Angle::zero();
-
-  std::fill(shpCache.begin(), shpCache.end(), (XShape *)NULL);
 }
 
 TopographyFile::~TopographyFile()
 {
-  if (!IsValid())
+  if (IsEmpty())
     return;
 
   ClearCache();
-  msShapefileClose(&shpfile);
+  msShapefileClose(&file);
 
   if (dir != NULL) {
     --dir->refcount;
@@ -87,9 +86,9 @@ TopographyFile::~TopographyFile()
 void
 TopographyFile::ClearCache()
 {
-  for (unsigned i = 0; i < shpCache.size(); i++) {
-    delete shpCache[i];
-    shpCache[i] = NULL;
+  for (unsigned i = 0; i < shapes.size(); i++) {
+    delete shapes[i];
+    shapes[i] = NULL;
   }
 }
 
@@ -106,12 +105,12 @@ ConvertRect(const GeoBounds &br)
 }
 
 bool
-TopographyFile::updateCache(const WindowProjection &map_projection)
+TopographyFile::Update(const WindowProjection &map_projection)
 {
-  if (!IsValid())
+  if (IsEmpty())
     return false;
 
-  if (map_projection.GetMapScale() > scaleThreshold)
+  if (map_projection.GetMapScale() > scale_threshold)
     /* not visible, don't update cache now */
     return false;
 
@@ -126,27 +125,27 @@ TopographyFile::updateCache(const WindowProjection &map_projection)
   rectObj deg_bounds = ConvertRect(cache_bounds);
 
   // Test which shapes are inside the given bounds and save the
-  // status to shpfile.status
-  msShapefileWhichShapes(&shpfile, dir, deg_bounds, 0);
+  // status to file.status
+  msShapefileWhichShapes(&file, dir, deg_bounds, 0);
 
   // If not a single shape is inside the bounds
-  if (!shpfile.status) {
+  if (!file.status) {
     // ... clear the whole buffer
     ClearCache();
     return false;
   }
 
   // Iterate through the shapefile entries
-  for (int i = 0; i < shpfile.numshapes; i++) {
-    if (!msGetBit(shpfile.status, i)) {
+  for (int i = 0; i < file.numshapes; i++) {
+    if (!msGetBit(file.status, i)) {
       // If the shape is outside the bounds
       // delete the shape from the cache
-      delete shpCache[i];
-      shpCache[i] = NULL;
-    } else if (shpCache[i] == NULL) {
+      delete shapes[i];
+      shapes[i] = NULL;
+    } else if (shapes[i] == NULL) {
       // If the shape is inside the bounds and if the
       // shape isn't cached yet -> cache the shape
-      shpCache[i] = new XShape(&shpfile, i, label_field);
+      shapes[i] = new XShape(&file, i, label_field);
     }
   }
 
@@ -156,11 +155,11 @@ TopographyFile::updateCache(const WindowProjection &map_projection)
 unsigned
 TopographyFile::GetSkipSteps(fixed map_scale) const
 {
-  if (map_scale * 4 > scaleThreshold * 3)
+  if (map_scale * 4 > scale_threshold * 3)
     return 4;
-  if (map_scale * 2 > scaleThreshold)
+  if (map_scale * 2 > scale_threshold)
     return 3;
-  if (map_scale * 4 > scaleThreshold)
+  if (map_scale * 4 > scale_threshold)
     return 2;
   return 1;
 }
@@ -168,28 +167,28 @@ TopographyFile::GetSkipSteps(fixed map_scale) const
 #ifdef ENABLE_OPENGL
 
 unsigned
-TopographyFile::thinning_level(fixed map_scale) const
+TopographyFile::GetThinningLevel(fixed map_scale) const
 {
-  if (map_scale * 2 > scaleThreshold)
+  if (map_scale * 2 > scale_threshold)
     return 3;
-  if (map_scale * 3 > scaleThreshold)
+  if (map_scale * 3 > scale_threshold)
     return 2;
-  if (map_scale * 4 > scaleThreshold)
+  if (map_scale * 4 > scale_threshold)
     return 1;
 
   return 0;
 }
 
 unsigned
-TopographyFile::min_point_distance(unsigned level) const
+TopographyFile::GetMinimumPointDistance(unsigned level) const
 {
   switch (level) {
     case 1:
-      return fixed(4) * scaleThreshold / Layout::Scale(30);
+      return fixed(4) * scale_threshold / Layout::Scale(30);
     case 2:
-      return fixed(6) * scaleThreshold / Layout::Scale(30);
+      return fixed(6) * scale_threshold / Layout::Scale(30);
     case 3:
-      return fixed(9) * scaleThreshold / Layout::Scale(30);
+      return fixed(9) * scale_threshold / Layout::Scale(30);
   }
   return 1;
 }

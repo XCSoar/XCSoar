@@ -47,9 +47,9 @@ class TopographyFile : private NonCopyable {
 
   struct zzip_dir *dir;
 
-  shapefileObj shpfile;
+  shapefileObj file;
 
-  XShapePointerArray shpCache;
+  XShapePointerArray shapes;
 
   int label_field, icon, pen_width;
 
@@ -59,20 +59,20 @@ class TopographyFile : private NonCopyable {
    * The threshold value for the visibility check. If the current scale
    * is below this value the contents of this TopographyFile will be drawn.
    */
-  fixed scaleThreshold;
+  fixed scale_threshold;
 
   /**
    * The threshold value for label rendering. If the current scale
    * is below this value no labels of this TopographyFile will be drawn.
    */
-  fixed labelThreshold;
+  fixed label_threshold;
 
   /**
    * The threshold value for label rendering in important style . If the current
    * scale is below this value labels of this TopographyFile will be drawn
    * in standard style
    */
-  fixed labelImportantThreshold;
+  fixed important_label_threshold;
 
   /**
    * The current scope of the shape cache.  If the screen exceeds this
@@ -124,73 +124,57 @@ public:
    * @param label_field The field in which the labels should be searched
    * @param icon the resource id of the icon, 0 for no icon
    * @param pen_width The pen width used for line drawing
-   * @param labelThreshold the zoom threshold for label rendering
-   * @param labelImportantThreshold labels below this zoom threshold will
+   * @param label_threshold the zoom threshold for label rendering
+   * @param important_label_threshold labels below this zoom threshold will
    * be renderd in default style
    * @return
    */
   TopographyFile(struct zzip_dir *dir, const char *shpname,
-               fixed threshold, fixed labelThreshold,
-               fixed labelImportantThreshold,
-               const Color color,
-               int label_field=-1, int icon=0,
-               int pen_width=1);
+                 fixed threshold, fixed label_threshold,
+                 fixed important_label_threshold,
+                 const Color color,
+                 int label_field=-1, int icon=0,
+                 int pen_width=1);
 
   /**
    * The destructor clears the cache and closes the shapefile
    */
   ~TopographyFile();
 
-  bool IsValid() const {
-    return shpCache.size() > 0;
+  bool IsEmpty() const {
+    return shapes.size() == 0;
   }
 
-  bool is_visible(fixed map_scale) const {
-    return map_scale <= scaleThreshold;
+  bool IsVisible(fixed map_scale) const {
+    return map_scale <= scale_threshold;
   }
 
-  bool is_label_visible(fixed map_scale) const {
-    return map_scale <= labelThreshold;
+  bool IsLabelVisible(fixed map_scale) const {
+    return map_scale <= label_threshold;
   }
 
-  bool is_label_important(fixed map_scale) const {
-    return map_scale <= labelImportantThreshold;
+  bool IsLabelImportant(fixed map_scale) const {
+    return map_scale <= important_label_threshold;
   }
 
-  int get_label_field() const {
-    return label_field;
-  }
-
-  int get_icon() const {
+  int GetIcon() const {
     return icon;
   }
 
-  Color get_color() const {
+  Color GetColor() const {
     return color;
   }
 
-  int get_pen_width() const {
+  int GetPenWidth() const {
     return pen_width;
   }
 
-  bool empty() const {
-    return shpCache.size() == 0;
-  }
-
-  unsigned size() const {
-    return shpCache.size();
-  }
-
-  XShape *operator[](unsigned i) const {
-    return shpCache[i];
-  }
-
   const_iterator begin() const {
-    return shpCache.begin();
+    return shapes.begin();
   }
 
   const_iterator end() const {
-    return shpCache.end();
+    return shapes.end();
   }
 
   gcc_pure
@@ -200,18 +184,20 @@ public:
   /**
    * @return thinning level, range: 0 .. XShape::THINNING_LEVELS-1
    */
-  unsigned thinning_level(fixed map_scale) const;
+  gcc_pure
+  unsigned GetThinningLevel(fixed map_scale) const;
 
   /**
    * @return minimum distance between points in ShapePoint coordinates
    */
-  unsigned min_point_distance(unsigned level) const;
+  gcc_pure
+  unsigned GetMinimumPointDistance(unsigned level) const;
 #endif
 
   /**
    * @return true if new data from the topography file has been loaded
    */
-  bool updateCache(const WindowProjection &map_projection);
+  bool Update(const WindowProjection &map_projection);
 
 protected:
   void ClearCache();
