@@ -32,6 +32,8 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Screen/Color.hpp"
 
+#include <assert.h>
+
 struct GeoPoint;
 class Canvas;
 class WindowProjection;
@@ -42,13 +44,29 @@ class XShape;
 struct zzip_dir;
 
 class TopographyFile : private NonCopyable {
-  typedef AllocatedArray<XShape *> XShapePointerArray;
+  struct ShapeList {
+    struct NotNull {
+      bool operator()(const ShapeList &x) const {
+        return x.shape != NULL;
+      }
+    };
+
+    const ShapeList *next;
+
+    const XShape *shape;
+
+    ShapeList() {}
+    ShapeList(const XShape *_shape):shape(_shape) {}
+  };
+
+  typedef AllocatedArray<ShapeList> XShapePointerArray;
 
   struct zzip_dir *dir;
 
   shapefileObj file;
 
   XShapePointerArray shapes;
+  const ShapeList *first;
 
   int label_field, icon, pen_width;
 
@@ -80,39 +98,41 @@ class TopographyFile : private NonCopyable {
   GeoBounds cache_bounds;
 
 public:
-  typedef XShapePointerArray::const_iterator const_iterator;
-
-  /*
   class const_iterator {
     friend class TopographyFile;
 
-    XShapePointerArray::const_iterator i;
+    const ShapeList *current;
 
-    const_iterator(XShapePointerArray::const_iterator _i):i(_i) {}
+    const_iterator(const ShapeList *p):current(p) {}
 
   public:
     const_iterator &operator++() {
-      ++i;
+      assert(current != NULL);
+
+      current = current->next;
       return *this;
     }
 
     const XShape &operator*() const {
-      return **i;
+      assert(current != NULL);
+
+      return *current->shape;
     }
 
     const XShape *operator->() const {
-      return *i;
+      assert(current != NULL);
+
+      return current->shape;
     }
 
     bool operator==(const const_iterator &other) const {
-      return i == other.i;
+      return current == other.current;
     }
 
     bool operator!=(const const_iterator &other) const {
-      return i == other.i;
+      return !(*this == other);
     }
   };
-  */
 
 public:
   /**
@@ -169,11 +189,11 @@ public:
   }
 
   const_iterator begin() const {
-    return shapes.begin();
+    return const_iterator(first);
   }
 
   const_iterator end() const {
-    return shapes.end();
+    return const_iterator(NULL);
   }
 
   gcc_pure

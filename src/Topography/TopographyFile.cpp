@@ -38,7 +38,8 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
                                const Color thecolor,
                                int _label_field, int _icon,
                                int _pen_width)
-  :dir(_dir), label_field(_label_field), icon(_icon),
+  :dir(_dir), first(NULL),
+   label_field(_label_field), icon(_icon),
    pen_width(_pen_width),
    color(thecolor), scale_threshold(_threshold),
    label_threshold(_label_threshold),
@@ -53,7 +54,7 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
   }
 
   shapes.resize_discard(file.numshapes);
-  std::fill(shapes.begin(), shapes.end(), (XShape *)NULL);
+  std::fill(shapes.begin(), shapes.end(), ShapeList(NULL));
 
   if (dir != NULL)
     ++dir->refcount;
@@ -80,8 +81,8 @@ void
 TopographyFile::ClearCache()
 {
   for (unsigned i = 0; i < shapes.size(); i++) {
-    delete shapes[i];
-    shapes[i] = NULL;
+    delete shapes[i].shape;
+    shapes[i].shape = NULL;
   }
 }
 
@@ -133,14 +134,36 @@ TopographyFile::Update(const WindowProjection &map_projection)
     if (!msGetBit(file.status, i)) {
       // If the shape is outside the bounds
       // delete the shape from the cache
-      delete shapes[i];
-      shapes[i] = NULL;
-    } else if (shapes[i] == NULL) {
+      delete shapes[i].shape;
+      shapes[i].shape = NULL;
+    } else if (shapes[i].shape == NULL) {
       // If the shape is inside the bounds and if the
       // shape isn't cached yet -> cache the shape
-      shapes[i] = new XShape(&file, i, label_field);
+      shapes[i].shape = new XShape(&file, i, label_field);
     }
   }
+
+  ShapeList::NotNull not_null;
+  XShapePointerArray::iterator end = shapes.end(), it = shapes.begin();
+  it = std::find_if(it, end, not_null);
+  if (it != shapes.end()) {
+    ShapeList *current = &*it;
+    first = current;
+
+    while (true) {
+      ++it;
+      it = std::find_if(it, end, not_null);
+      if (it == end) {
+        current->next = NULL;
+        break;
+      }
+
+      ShapeList *next = &*it;
+      current->next = next;
+      current = next;
+    }
+  } else
+    first = NULL;
 
   return true;
 }
