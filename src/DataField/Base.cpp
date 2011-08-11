@@ -31,7 +31,6 @@ enum { ComboPopupITEMMAX = 100 };
 
 DataField::DataField(DataAccessCallback_t OnDataAccess)
   :mOnDataAccess(OnDataAccess),
-   unit(_T("")),
    mItemHelp(false), mUsageCounter(0), mDisableSpeedup(false), mDetachGUI(false)
 {
 }

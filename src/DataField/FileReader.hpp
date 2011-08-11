@@ -27,6 +27,7 @@ Copyright_License {
 #include "DataField/Base.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Util/StaticArray.hpp"
+#include "Util/StaticString.hpp"
 
 /**
  * #DataField specialisation that supplies options as a list of

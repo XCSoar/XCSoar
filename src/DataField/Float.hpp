@@ -38,6 +38,9 @@ private:
   PeriodClock last_step;
   int mSpeedup;
   int mFine;
+
+  StaticString<8> unit;
+
   mutable TCHAR mOutBuf[OUTBUFFERSIZE+1];
 
 protected:
@@ -49,9 +52,14 @@ public:
                  fixed Min, fixed Max, fixed Default,
                  fixed Step, int Fine, DataAccessCallback_t OnDataAccess)
     :NumberDataField(EditFormat, DisplayFormat, OnDataAccess),
-     mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine)
+     mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine),
+     unit(_T(""))
   {
     SupportCombo=true;
+  }
+
+  void SetUnits(const TCHAR *text) {
+    unit = text;
   }
 
   void Inc(void);

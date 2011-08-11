@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_BASE_HPP
 #define XCSOAR_DATA_FIELD_BASE_HPP
 
-#include "Util/StaticString.hpp"
 #include "Compiler.h"
 
 #include <tchar.h>
@@ -49,7 +48,6 @@ public:
 
 protected:
   DataAccessCallback_t mOnDataAccess;
-  StaticString<8> unit;
   bool mItemHelp;
 
 private:
@@ -76,10 +74,6 @@ public:
 
   virtual void SetAsInteger(int Value);
   virtual void SetAsString(const TCHAR *Value);
-
-  void SetUnits(const TCHAR *text) {
-    unit = text;
-  }
 
   void
   Use(void)

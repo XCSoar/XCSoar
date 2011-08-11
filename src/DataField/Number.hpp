@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_NUMBER_HPP
 #define XCSOAR_DATA_FIELD_NUMBER_HPP
 
+#include "Util/StaticString.hpp"
 #include "DataField/Base.hpp"
 #include "Compiler.h"
 
