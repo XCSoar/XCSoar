@@ -66,7 +66,7 @@ PaintSelector(Canvas &canvas, const PixelRect rc,
                    rc.right - 1, rc.bottom - 1,
                    rc.right - SELECTORWIDTH - 1, rc.bottom - 1);
 
-  canvas.two_lines(SELECTORWIDTH + 1, rc.bottom - 1,
+  canvas.two_lines(rc.left + SELECTORWIDTH + 1, rc.bottom - 1,
                    rc.left, rc.bottom - 1,
                    rc.left, rc.bottom - SELECTORWIDTH - 2);
 
