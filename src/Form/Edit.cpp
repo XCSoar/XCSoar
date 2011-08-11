@@ -186,9 +186,38 @@ WndProperty::~WndProperty(void)
 }
 
 void
-WndProperty::SetText(const TCHAR *Value)
+WndProperty::SetText(const TCHAR *Value, bool convert_line_breaks)
 {
+#ifdef USE_GDI
+  if (!convert_line_breaks) {
+    edit.set_text(Value);
+    return;
+  }
+
+  // Replace \n by \r\r\n to enable usage of line-breaks in edit control
+  unsigned size = _tcslen(Value);
+  TCHAR buffer[size * sizeof(TCHAR) * 3];
+  const TCHAR* p2 = Value;
+  TCHAR* p3 = buffer;
+  for (;*p2 != _T('\0'); p2++) {
+    if (*p2 == _T('\n')) {
+      *p3 = _T('\r');
+      p3++;
+      *p3 = _T('\r');
+      p3++;
+      *p3 = _T('\n');
+    } else if (*p2 == _T('\r')) {
+      continue;
+    } else {
+      *p3 = *p2;
+    }
+    p3++;
+  }
+  *p3 = _T('\0');
+  edit.set_text(buffer);
+#else
   edit.set_text(Value);
+#endif
 }
 
 void

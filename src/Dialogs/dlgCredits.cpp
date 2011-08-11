@@ -140,31 +140,7 @@ LoadTextFromResource(const TCHAR* name, const TCHAR* control)
   const char *buffer2 = buffer;
 #endif
 
-#ifdef USE_GDI
-  // Replace \n by \r\r\n to enable usage of line-breaks in edit control
-  TCHAR buffer3[sizeof(buffer2) * 3];
-  const TCHAR* p2 = buffer2;
-  TCHAR* p3 = buffer3;
-  for (;*p2 != _T('\0'); p2++) {
-    if (*p2 == _T('\n')) {
-      *p3 = _T('\r');
-      p3++;
-      *p3 = _T('\r');
-      p3++;
-      *p3 = _T('\n');
-    } else if (*p2 == _T('\r')) {
-      continue;
-    } else {
-      *p3 = *p2;
-    }
-    p3++;
-  }
-  *p3 = _T('\0');
-#else
-  const TCHAR *buffer3 = buffer2;
-#endif
-
-  ((WndProperty *)wf->FindByName(control))->SetText(buffer3);
+  ((WndProperty *)wf->FindByName(control))->SetText(buffer2, true);
 }
 
 static CallBackTableEntry CallBackTable[] = {
