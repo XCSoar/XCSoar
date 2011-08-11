@@ -47,17 +47,6 @@ static void
 InitView()
 {
   WndProperty* wp;
-  wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxSpeed")));
-  if (wp)
-    wp->GetDataField()->SetUnits(Units::GetSpeedName());
-
-  wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxHeight")));
-  if (wp)
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-
-  wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
-  if (wp)
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
 
   static const StaticEnumChoice start_max_height_ref_list[] = {
     { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point)") },
@@ -94,7 +83,6 @@ InitView()
 static void 
 RefreshView()
 {
-  WndProperty* wp;
   const TaskBehaviour::Factory_t ftype = ordered_task->get_factory_type();
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
@@ -103,62 +91,28 @@ RefreshView()
 
   LoadFormProperty(*wf, _T("prpTaskType"),(int)ftype);
 
-  wp = ((WndProperty*)wf->FindByName(_T("prpMinTime")));
-  if (wp) {
-    wp->set_visible(aat_types);
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(p.aat_min_time/60);
-    wp->RefreshDisplay();
-  }
+  ShowFormControl(*wf, _T("prpMinTime"), aat_types);
+  LoadFormProperty(*wf, _T("prpMinTime"), p.aat_min_time / 60);
 
-  wp = ((WndProperty*)wf->FindByName(_T("prpFAIFinishHeight")));
-  if (wp) {
-    DataFieldBoolean &df = *(DataFieldBoolean *)wp->GetDataField();
-    df.SetAsBoolean(p.fai_finish);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpFAIFinishHeight"), p.fai_finish);
 
-  wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxSpeed")));
-  if (wp) {
-    wp->set_visible(!fai_start_finish);
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserSpeed(p.start_max_speed));
-    wp->RefreshDisplay();
-  }
+  ShowFormControl(*wf, _T("prpStartMaxSpeed"), !fai_start_finish);
+  LoadFormProperty(*wf, _T("prpStartMaxSpeed"),
+                   ugHorizontalSpeed, p.start_max_speed);
 
-  wp = ((WndProperty*)wf->FindByName(_T("prpStartMaxHeight")));
-  if (wp) {
-    wp->set_visible(!fai_start_finish);
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserAltitude(fixed(p.start_max_height)));
-    wp->RefreshDisplay();
-  }
+  ShowFormControl(*wf, _T("prpStartMaxHeight"), !fai_start_finish);
+  LoadFormProperty(*wf, _T("prpStartMaxHeight"),
+                   ugAltitude, p.start_max_height);
 
-  wp = ((WndProperty*)wf->FindByName(_T("prpFinishMinHeight")));
-  if (wp) {
-    wp->set_visible(!fai_start_finish);
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserAltitude(fixed(p.finish_min_height)));
-    wp->RefreshDisplay();
-  }
+  ShowFormControl(*wf, _T("prpFinishMinHeight"), !fai_start_finish);
+  LoadFormProperty(*wf, _T("prpFinishMinHeight"),
+                   ugAltitude, p.finish_min_height);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpStartHeightRef"));
-  if (wp) {
-    wp->set_visible(!fai_start_finish);
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(p.start_max_height_ref);
-    wp->RefreshDisplay();
-  }
+  ShowFormControl(*wf, _T("prpStartHeightRef"), !fai_start_finish);
+  LoadFormProperty(*wf, _T("prpStartHeightRef"), p.start_max_height_ref);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFinishHeightRef"));
-  if (wp) {
-    wp->set_visible(!fai_start_finish);
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(p.finish_min_height_ref);
-    wp->RefreshDisplay();
-  }
+  ShowFormControl(*wf, _T("prpFinishHeightRef"), !fai_start_finish);
+  LoadFormProperty(*wf, _T("prpFinishHeightRef"), p.finish_min_height_ref);
 
   wTaskView->invalidate();
 
@@ -172,11 +126,8 @@ ReadValues()
 {
   OrderedTaskBehaviour &p = ordered_task->get_ordered_task_behaviour();
 
-  TaskBehaviour::Factory_t newtype = (TaskBehaviour::Factory_t)
-      GetFormValueInteger(*wf, _T("prpTaskType"));
-  if (newtype != ordered_task->get_factory_type()) {
-    *task_changed = true;
-  }
+  TaskBehaviour::Factory_t newtype = ordered_task->get_factory_type();
+  *task_changed |= SaveFormPropertyEnum(*wf, _T("prpTaskType"), newtype);
 
   fixed min_time = GetFormValueFixed(*wf, _T("prpMinTime")) * 60;
   if (min_time != p.aat_min_time) {

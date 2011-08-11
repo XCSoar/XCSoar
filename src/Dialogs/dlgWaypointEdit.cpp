@@ -234,12 +234,7 @@ SetValues()
     break;
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
-  assert(wp != NULL);
-  wp->GetDataField()->SetAsInteger(iround(
-      Units::ToUserAltitude(global_wpt->Altitude)));
-  wp->GetDataField()->SetUnits(Units::GetAltitudeName());
-  wp->RefreshDisplay();
+  LoadFormProperty(*wf, _T("prpAltitude"), ugAltitude, global_wpt->Altitude);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   assert(wp != NULL);

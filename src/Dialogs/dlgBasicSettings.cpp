@@ -100,18 +100,14 @@ ShowAltitude(fixed altitude)
 
   last = altitude;
 
-  WndProperty &wp = *(WndProperty *)wf->FindByName(_T("prpAltitude"));
-  DataFieldFloat &df = *(DataFieldFloat *)wp.GetDataField();
-  df.SetAsFloat(Units::ToUserAltitude(altitude));
-  wp.RefreshDisplay();
-  wp.show();
+  LoadFormProperty(*wf, _T("prpAltitude"), ugAltitude, altitude);
+  ShowFormControl(*wf, _T("prpAltitude"), true);
 }
 
 static void
 HideAltitude()
 {
-  WndProperty &wp = *(WndProperty *)wf->FindByName(_T("prpAltitude"));
-  wp.hide();
+  ShowFormControl(*wf, _T("prpAltitude"), false);
 }
 
 static void
@@ -302,11 +298,6 @@ dlgBasicSettingsShowModal()
     df.SetUnits(Units::GetTemperatureName());
     df.Set(Units::ToUserTemperature(Units::ToSysUnit(fixed(CuSonde::maxGroundTemperature),
                                                      unGradCelcius)));
-    wp->RefreshDisplay();
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpAltitude"));
-  if (wp) {
-    wp->GetDataField()->SetUnits(Units::GetAltitudeName());
     wp->RefreshDisplay();
   }
 

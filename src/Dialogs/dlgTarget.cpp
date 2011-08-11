@@ -275,42 +275,21 @@ RefreshCalculator()
   }
 
   // update outputs
-  fixed speedach = XCSoarInterface::Calculated().task_stats.total.travelled.get_speed();
-
   fixed aattimeEst = XCSoarInterface::Calculated().common_stats.task_time_remaining +
       XCSoarInterface::Calculated().common_stats.task_time_elapsed;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAATEst"));// Same as infobox
-  if (wp) {
-    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
-    df->Set(aattimeEst / fixed(60));
-    wp->RefreshDisplay();
-    wp->set_visible(!nodisplay);
-  }
-  wp = (WndProperty*)wf->FindByName(_T("prpAATDelta")); // same as infobox
-  if (wp) {
-    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
-    df->Set((aattimeEst - aatTime) / fixed(60));
-    wp->RefreshDisplay();
-    wp->set_visible(!nodisplay);
+  ShowOptionalFormControl(*wf, _T("prpAATEst"), !nodisplay);
+  ShowFormControl(*wf, _T("prpAATDelta"), !nodisplay);
+  if (!nodisplay) {
+    LoadOptionalFormProperty(*wf, _T("prpAATEst"), aattimeEst / fixed(60));
+    LoadFormProperty(*wf, _T("prpAATDelta"), (aattimeEst - aatTime) / 60);
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpSpeedRemaining"));
-  if (wp) {
-    DataFieldFloat *df = (DataFieldFloat *)wp->GetDataField();
-    df->Set(Units::ToUserTaskSpeed(
-       XCSoarInterface::Calculated().task_stats.total.remaining_effective.get_speed()));
-    wp->GetDataField()->SetUnits(Units::GetTaskSpeedName());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpSpeedAchieved"));
-  if (wp) {
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserTaskSpeed(speedach));
-    df.SetUnits(Units::GetTaskSpeedName());
-    wp->RefreshDisplay();
-  }
+  const ElementStat &total = CommonInterface::Calculated().task_stats.total;
+  LoadFormProperty(*wf, _T("prpSpeedRemaining"), ugTaskSpeed,
+                   total.remaining_effective.get_speed());
+  LoadOptionalFormProperty(*wf, _T("prpSpeedAchieved"), ugTaskSpeed,
+                           total.travelled.get_speed());
 }
 
 static void

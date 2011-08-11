@@ -59,11 +59,7 @@ dlgHelpShowModal(SingleWindow &parent,
   _stprintf(fullcaption,_T("%s: %s"), _("Help"), Caption);
   wf->SetCaption(fullcaption);
 
-  WndProperty* wp = (WndProperty*)wf->FindByName(_T("prpHelpText"));
-  if (wp) {
-    wp->SetText(HelpText);
-    wp->RefreshDisplay();
-  }
+  SetFormMultiLineValue(*wf, _T("prpHelpText"), HelpText);
 
   wf->ShowModal();
 

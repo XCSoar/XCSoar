@@ -47,7 +47,6 @@ Update()
 {
   const NMEAInfo &basic = CommonInterface::Basic();
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
-  WndProperty* wp;
   TCHAR Text[100];
 
   if (teamcode_info.teammate_available && basic.track_available) {
@@ -64,46 +63,25 @@ Update()
     _tcscpy(Text, _T("---"));
   }
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRelBearing"));
-  if (wp) {
-    wp->SetText(Text);
-    wp->RefreshDisplay();
-  }
+  SetFormValue(*wf, _T("prpRelBearing"), Text);
 
   if (teamcode_info.teammate_available) {
-    wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(teamcode_info.teammate_vector.Bearing.value_degrees());
-    wp->RefreshDisplay();
+    LoadFormProperty(*wf, _T("prpBearing"),
+                     teamcode_info.teammate_vector.Bearing.value_degrees());
+    LoadFormProperty(*wf, _T("prpRange"), ugDistance,
+                     teamcode_info.teammate_vector.Distance);
   }
 
-  if (teamcode_info.teammate_available) {
-    wp = (WndProperty*)wf->FindByName(_T("prpRange"));
-    DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.SetAsFloat(Units::ToUserDistance(teamcode_info.teammate_vector.Distance));
-    wp->RefreshDisplay();
-  }
+  SetFormValue(*wf, _T("prpOwnCode"),
+               teamcode_info.own_teammate_code.GetCode());
+  SetFormValue(*wf, _T("prpMateCode"),
+               CommonInterface::SettingsComputer().TeammateCode.GetCode());
 
-  wp = (WndProperty*)wf->FindByName(_T("prpOwnCode"));
-  if (wp) {
-    CopyString(Text, XCSoarInterface::Calculated().own_teammate_code.GetCode(), 6);
-    wp->SetText(Text);
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpMateCode"));
-  if (wp) {
-    wp->SetText(XCSoarInterface::SettingsComputer().TeammateCode.GetCode());
-    wp->RefreshDisplay();
-  }
-
-  wp = (WndProperty*)wf->FindByName(_T("prpFlarmLock"));
-  if (wp) {
-    wp->SetText(XCSoarInterface::SettingsComputer().TeamFlarmTracking ?
-                XCSoarInterface::SettingsComputer().TeamFlarmCNTarget.c_str()
-                : _T(""));
-    wp->RefreshDisplay();
-  }
+  const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
+  SetFormValue(*wf, _T("prpFlarmLock"),
+               settings.TeamFlarmTracking
+               ? settings.TeamFlarmCNTarget.c_str()
+               : _T(""));
 }
 
 static void
@@ -205,7 +183,6 @@ static CallBackTableEntry CallBackTable[] = {
 void
 dlgTeamCodeShowModal(void)
 {
-  WndProperty* wp = NULL;
   WndButton *buttonCode = NULL;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
@@ -223,11 +200,6 @@ dlgTeamCodeShowModal(void)
   WndButton* cmdSetWaypoint = ((WndButton *)wf->FindByName(_T("cmdSetWaypoint")));
   assert(cmdSetWaypoint != NULL);
   cmdSetWaypoint->SetOnClickNotify(OnSetWaypointClicked);
-
-  // Set unit for range
-  wp = (WndProperty*)wf->FindByName(_T("prpRange"));
-  if (wp)
-    wp->GetDataField()->SetUnits(Units::GetDistanceName());
 
   Update();
 
