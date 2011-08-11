@@ -745,7 +745,32 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   assert(wImage != NULL);
   assert(wDetails != NULL);
 
+#ifdef USE_GDI
+  // Replace \n by \r\r\n to enable usage of line-breaks in edit control
+  unsigned size = _tcslen(selected_waypoint->Details.c_str());
+  TCHAR buffer2[size * sizeof(TCHAR) * 3];
+  const TCHAR* p2 = selected_waypoint->Details.c_str();
+  TCHAR* p3 = buffer2;
+  for (;*p2 != _T('\0'); p2++) {
+    if (*p2 == _T('\n')) {
+      *p3 = _T('\r');
+      p3++;
+      *p3 = _T('\r');
+      p3++;
+      *p3 = _T('\n');
+    } else if (*p2 == _T('\r')) {
+      continue;
+    } else {
+      *p3 = *p2;
+    }
+    p3++;
+  }
+  *p3 = _T('\0');
+  wDetails->SetText(buffer2);
+#else
   wDetails->SetText(selected_waypoint->Details.c_str());
+#endif
+
   wCommand->hide();
   wImage->SetOnPaintNotify(OnImagePaint);
 
