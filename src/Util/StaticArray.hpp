@@ -41,6 +41,7 @@ template<class T, unsigned max>
 class StaticArray {
 public:
   typedef unsigned size_type;
+  typedef T value_type;
   typedef T *iterator;
   typedef const T *const_iterator;
 
