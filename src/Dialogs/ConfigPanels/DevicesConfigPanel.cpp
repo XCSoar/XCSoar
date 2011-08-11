@@ -257,7 +257,7 @@ CompareRegistryValue(const RegistryKey &registry,
 {
   TCHAR real_value[64];
   return registry.get_value(name, real_value, 64) &&
-    _tcscmp(value, real_value) == 0;
+    _tcsicmp(value, real_value) == 0;
 }
 
 gcc_pure
