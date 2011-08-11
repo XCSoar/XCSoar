@@ -108,14 +108,16 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     if (gcc_likely(cshape == NULL))
       continue;
 
-    if (!projection.GetScreenBounds().overlaps(cshape->get_bounds()))
+    const XShape &shape = *cshape;
+
+    if (!projection.GetScreenBounds().overlaps(shape.get_bounds()))
       continue;
 
 #ifdef ENABLE_OPENGL
-    const ShapePoint *points = cshape->get_points();
+    const ShapePoint *points = shape.get_points();
 
     const ShapePoint translation =
-      cshape->shape_translation(projection.GetGeoLocation());
+      shape.shape_translation(projection.GetGeoLocation());
     glPushMatrix();
 #ifdef HAVE_GLES
     glTranslatex(translation.x, translation.y, 0);
@@ -123,12 +125,12 @@ TopographyFileRenderer::Paint(Canvas &canvas,
     glTranslatef(translation.x, translation.y, 0.);
 #endif
 #else // !ENABLE_OPENGL
-    const unsigned short *lines = cshape->get_lines();
-    const unsigned short *end_lines = lines + cshape->get_number_of_lines();
-    const GeoPoint *points = cshape->get_points();
+    const unsigned short *lines = shape.get_lines();
+    const unsigned short *end_lines = lines + shape.get_number_of_lines();
+    const GeoPoint *points = shape.get_points();
 #endif
 
-    switch (cshape->get_type()) {
+    switch (shape.get_type()) {
     case MS_SHAPE_POINT:
       if (!icon.defined())
         break;
@@ -137,7 +139,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
       // TODO: for now i assume there is only one point for point-XShapes
       {
         RasterPoint sc;
-        if (projection.GeoToScreenIfVisible(cshape->get_center(), sc)) {
+        if (projection.GeoToScreenIfVisible(shape.get_center(), sc)) {
 #ifndef HAVE_GLES
           glPushMatrix();
           glLoadMatrixf(opengl_matrix);
@@ -171,13 +173,13 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 
         const GLushort *indices, *count;
         if (level == 0 ||
-            (indices = cshape->get_indices(level, min_distance, count)) == NULL) {
-          count = cshape->get_lines();
-          const GLushort *end_count = count + cshape->get_number_of_lines();
+            (indices = shape.get_indices(level, min_distance, count)) == NULL) {
+          count = shape.get_lines();
+          const GLushort *end_count = count + shape.get_number_of_lines();
           for (int offset = 0; count < end_count; offset += *count++)
             glDrawArrays(GL_LINE_STRIP, offset, *count);
         } else {
-          const GLushort *end_count = count + cshape->get_number_of_lines();
+          const GLushort *end_count = count + shape.get_number_of_lines();
           for (; count < end_count; indices += *count++)
             glDrawElements(GL_LINE_STRIP, *count, GL_UNSIGNED_SHORT, indices);
         }
@@ -203,7 +205,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #ifdef ENABLE_OPENGL
       {
         const GLushort *index_count;
-        const GLushort *triangles = cshape->get_indices(level, min_distance,
+        const GLushort *triangles = shape.get_indices(level, min_distance,
                                                         index_count);
 
 #ifdef HAVE_GLES
@@ -292,22 +294,24 @@ TopographyFileRenderer::PaintLabels(Canvas &canvas,
     if (gcc_likely(cshape == NULL))
       continue;
 
-    const TCHAR *label = cshape->get_label();
+    const XShape &shape = *cshape;
+
+    const TCHAR *label = shape.get_label();
     if (label == NULL)
       continue;
 
-    if (!projection.GetScreenBounds().overlaps(cshape->get_bounds()))
+    if (!projection.GetScreenBounds().overlaps(shape.get_bounds()))
       continue;
 
-    const unsigned short *lines = cshape->get_lines();
-    const unsigned short *end_lines = lines + cshape->get_number_of_lines();
+    const unsigned short *lines = shape.get_lines();
+    const unsigned short *end_lines = lines + shape.get_number_of_lines();
 #ifdef ENABLE_OPENGL
-    const ShapePoint *points = cshape->get_points();
+    const ShapePoint *points = shape.get_points();
 
     Matrix2D m2(m1);
-    m2.Translatex(cshape->shape_translation(projection.GetGeoLocation()));
+    m2.Translatex(shape.shape_translation(projection.GetGeoLocation()));
 #else
-    const GeoPoint *points = cshape->get_points();
+    const GeoPoint *points = shape.get_points();
 #endif
 
     for (; lines < end_lines; ++lines) {
