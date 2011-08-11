@@ -31,7 +31,6 @@ Copyright_License {
 #include "Util/AllocatedArray.hpp"
 #include "Math/fixed.hpp"
 #include "Screen/Color.hpp"
-#include "Screen/Fonts.hpp"
 
 struct GeoPoint;
 class Canvas;

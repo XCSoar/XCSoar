@@ -24,19 +24,12 @@ Copyright_License {
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
 #include "WindowProjection.hpp"
-#include "Screen/Graphics.hpp"
-#include "Screen/LabelBlock.hpp"
-#include "SettingsMap.hpp"
-#include "Navigation/GeoPoint.hpp"
 #include "Screen/Layout.hpp"
-#include "shapelib/mapserver.h"
 
 #include <zzip/lib.h>
 
 #include <algorithm>
 #include <stdlib.h>
-#include <tchar.h>
-#include <ctype.h> // needed for Wine
 
 TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
                                fixed _threshold,
