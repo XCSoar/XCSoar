@@ -664,7 +664,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunTask \
 	ViewImage \
 	RunCanvas RunMapWindow \
-	RunDialog RunListControl RunTextEntry \
+	RunDialog RunListControl RunTextEntry RunNumberEntry RunTimeEntry \
 	RunTerminal \
 	RunRenderOZ \
 	RunWindArrowRenderer \
@@ -1762,6 +1762,49 @@ RUN_TEXT_ENTRY_SOURCES = \
 RUN_TEXT_ENTRY_LDADD = $(RESOURCE_BINARY)
 RUN_TEXT_ENTRY_DEPENDS = DATA_FIELD FORM SCREEN EVENT IO OS THREAD MATH UTIL ZLIB TIME
 $(eval $(call link-program,RunTextEntry,RUN_TEXT_ENTRY))
+
+RUN_NUMBER_ENTRY_SOURCES = \
+	$(SRC)/Dialogs/NumberEntry.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/KineticManager.cpp \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/XML/Node.cpp \
+	$(SRC)/XML/Parser.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeListPicker.cpp \
+	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/RunNumberEntry.cpp
+RUN_NUMBER_ENTRY_LDADD = $(RESOURCE_BINARY)
+RUN_NUMBER_ENTRY_DEPENDS = DATA_FIELD FORM SCREEN EVENT IO OS THREAD MATH UTIL ZLIB TIME
+$(eval $(call link-program,RunNumberEntry,RUN_NUMBER_ENTRY))
+
+RUN_TIME_ENTRY_SOURCES = \
+	$(SRC)/Dialogs/TimeEntry.cpp \
+	$(SRC)/Dialogs/DialogSettings.cpp \
+	$(SRC)/Hardware/Display.cpp \
+	$(SRC)/Screen/Layout.cpp \
+	$(SRC)/ResourceLoader.cpp \
+	$(SRC)/Look/DialogLook.cpp \
+	$(SRC)/Look/ButtonLook.cpp \
+	$(SRC)/Units/Descriptor.cpp \
+	$(TEST_SRC_DIR)/Fonts.cpp \
+	$(TEST_SRC_DIR)/FakeBlank.cpp \
+	$(TEST_SRC_DIR)/FakeAsset.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/FakeListPicker.cpp \
+	$(TEST_SRC_DIR)/FakeHelpDialog.cpp \
+	$(TEST_SRC_DIR)/RunTimeEntry.cpp
+RUN_TIME_ENTRY_LDADD = $(RESOURCE_BINARY)
+RUN_TIME_ENTRY_DEPENDS = DATA_FIELD FORM SCREEN EVENT IO OS THREAD MATH UTIL ZLIB TIME
+$(eval $(call link-program,RunTimeEntry,RUN_TIME_ENTRY))
 
 RUN_TERMINAL_SOURCES = \
 	$(SRC)/Hardware/Display.cpp \

@@ -255,6 +255,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgTaskHelpers.cpp \
 	$(SRC)/Dialogs/dlgTarget.cpp \
 	\
+	$(SRC)/Dialogs/NumberEntry.cpp \
 	$(SRC)/Dialogs/dlgTeamCode.cpp \
 	$(SRC)/Dialogs/dlgTextEntry.cpp \
 	$(SRC)/Dialogs/dlgTextEntry_Keyboard.cpp \
