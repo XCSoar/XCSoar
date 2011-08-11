@@ -49,15 +49,17 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
    pen_width(_pen_width),
    color(thecolor), scaleThreshold(_threshold),
    labelThreshold(_labelThreshold),
-   labelImportantThreshold(_labelImportantThreshold),
-   shapefileopen(false)
+   labelImportantThreshold(_labelImportantThreshold)
 {
   if (msShapefileOpen(&shpfile, "rb", dir, filename, 0) == -1)
     return;
 
-  shpCache.resize_discard(shpfile.numshapes);
+  if (shpfile.numshapes == 0) {
+    msShapefileClose(&shpfile);
+    return;
+  }
 
-  shapefileopen = true;
+  shpCache.resize_discard(shpfile.numshapes);
 
   if (dir != NULL)
     ++dir->refcount;
@@ -70,7 +72,7 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
 
 TopographyFile::~TopographyFile()
 {
-  if (!shapefileopen)
+  if (!IsValid())
     return;
 
   ClearCache();
@@ -106,7 +108,7 @@ ConvertRect(const GeoBounds &br)
 bool
 TopographyFile::updateCache(const WindowProjection &map_projection)
 {
-  if (!shapefileopen)
+  if (!IsValid())
     return false;
 
   if (map_projection.GetMapScale() > scaleThreshold)

@@ -74,8 +74,6 @@ class TopographyFile : private NonCopyable {
    */
   fixed labelImportantThreshold;
 
-  bool shapefileopen;
-
   /**
    * The current scope of the shape cache.  If the screen exceeds this
    * rectangle, then we need to update the cache.
@@ -142,6 +140,10 @@ public:
    * The destructor clears the cache and closes the shapefile
    */
   ~TopographyFile();
+
+  bool IsValid() const {
+    return shpCache.size() > 0;
+  }
 
   bool is_visible(fixed map_scale) const {
     return map_scale <= scaleThreshold;
