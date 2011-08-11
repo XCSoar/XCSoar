@@ -39,7 +39,12 @@ Copyright_License {
 #include <windows.h>
 #include <tchar.h>
 
+#ifdef USE_GDI
+#include "Screen/Point.hpp"
+#else
 struct PixelSize;
+#endif
+
 class TextUtil;
 
 /**
