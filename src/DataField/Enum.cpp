@@ -165,7 +165,9 @@ DataFieldEnum::Set(int Value)
 void
 DataFieldEnum::SetAsInteger(int Value)
 {
-  Set(Value);
+  int i = Find(Value);
+  if (i >= 0)
+    SetIndex(i, true);
 }
 
 void
