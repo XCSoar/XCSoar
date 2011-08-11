@@ -72,7 +72,32 @@ NextPage(int Step)
   }
   wf->SetCaption(buffer);
 
-  wDetails->SetText(ChecklistText[page]);
+#ifdef USE_GDI
+  // Replace \n by \r\r\n to enable usage of line-breaks in edit control
+  unsigned size = _tcslen(ChecklistText[page]);
+  TCHAR buffer2[size * sizeof(TCHAR) * 3];
+  const TCHAR* p2 = ChecklistText[page];
+  TCHAR* p3 = buffer2;
+  for (;*p2 != _T('\0'); p2++) {
+    if (*p2 == _T('\n')) {
+      *p3 = _T('\r');
+      p3++;
+      *p3 = _T('\r');
+      p3++;
+      *p3 = _T('\n');
+    } else if (*p2 == _T('\r')) {
+      continue;
+    } else {
+      *p3 = *p2;
+    }
+    p3++;
+  }
+  *p3 = _T('\0');
+#else
+  const TCHAR *buffer2 = ChecklistText[page];
+#endif
+
+  wDetails->SetText(buffer2);
 }
 
 static void
