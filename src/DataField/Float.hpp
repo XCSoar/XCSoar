@@ -24,12 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_FLOAT_HPP
 #define XCSOAR_DATA_FIELD_FLOAT_HPP
 
-#include "DataField/Base.hpp"
+#include "DataField/Number.hpp"
 #include "PeriodClock.hpp"
 #include "Math/fixed.hpp"
 
-class DataFieldFloat: 
-public DataField
+class DataFieldFloat : public NumberDataField
 {
 private:
   fixed mValue;
@@ -49,7 +48,7 @@ public:
   DataFieldFloat(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
                  fixed Min, fixed Max, fixed Default,
                  fixed Step, int Fine, DataAccessCallback_t OnDataAccess)
-    :DataField(EditFormat, DisplayFormat, OnDataAccess),
+    :NumberDataField(EditFormat, DisplayFormat, OnDataAccess),
      mValue(Default), mMin(Min), mMax(Max), mStep(Step), mFine(Fine)
   {
     SupportCombo=true;

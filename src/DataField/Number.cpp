@@ -21,39 +21,12 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_STRING_HPP
-#define XCSOAR_DATA_FIELD_STRING_HPP
+#include "DataField/Number.hpp"
 
-#include "DataField/Base.hpp"
-
-#define EDITSTRINGSIZE 32
-
-class DataFieldString: public DataField
+NumberDataField::NumberDataField(const TCHAR *_edit_format,
+                                 const TCHAR *_display_format,
+                                 DataAccessCallback_t OnDataAccess)
+  :DataField(OnDataAccess),
+   edit_format(_edit_format), display_format(_display_format)
 {
-private:
-  TCHAR mValue[EDITSTRINGSIZE];
-
-public:
-  DataFieldString(const TCHAR *Default,
-                  DataAccessCallback_t OnDataAccess) :
-    DataField(OnDataAccess) {
-    _tcscpy(mValue, Default);
-    SupportCombo = false;
-  }
-
-  virtual void SetAsString(const TCHAR *Value);
-
-  #if defined(__BORLANDC__)
-  #pragma warn -hid
-  #endif
-
-  void Set(const TCHAR *Value);
-
-  #if defined(__BORLANDC__)
-  #pragma warn +hid
-  #endif
-
-  virtual const TCHAR *GetAsString(void) const;
-};
-
-#endif
+}

@@ -49,8 +49,6 @@ public:
 
 protected:
   DataAccessCallback_t mOnDataAccess;
-  StaticString<32> edit_format;
-  StaticString<32> display_format;
   StaticString<8> unit;
   bool mItemHelp;
 
@@ -60,8 +58,7 @@ private:
   bool mDetachGUI;
 
 public:
-  DataField(const TCHAR *EditFormat, const TCHAR *DisplayFormat,
-            DataAccessCallback_t OnDataAccess = NULL);
+  DataField(DataAccessCallback_t OnDataAccess = NULL);
   virtual ~DataField(void) {}
 
   void Special(void);

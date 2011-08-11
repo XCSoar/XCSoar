@@ -78,7 +78,7 @@ private:
 
 public:
   DataFieldEnum(DataAccessCallback_t OnDataAccess) :
-    DataField(_T(""), _T(""), OnDataAccess),
+    DataField(OnDataAccess),
     value(0)
   {
     SupportCombo = true;

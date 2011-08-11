@@ -21,39 +21,20 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DATA_FIELD_STRING_HPP
-#define XCSOAR_DATA_FIELD_STRING_HPP
+#ifndef XCSOAR_DATA_FIELD_NUMBER_HPP
+#define XCSOAR_DATA_FIELD_NUMBER_HPP
 
 #include "DataField/Base.hpp"
+#include "Compiler.h"
 
-#define EDITSTRINGSIZE 32
+class NumberDataField : public DataField {
+protected:
+  StaticString<32> edit_format;
+  StaticString<32> display_format;
 
-class DataFieldString: public DataField
-{
-private:
-  TCHAR mValue[EDITSTRINGSIZE];
-
-public:
-  DataFieldString(const TCHAR *Default,
-                  DataAccessCallback_t OnDataAccess) :
-    DataField(OnDataAccess) {
-    _tcscpy(mValue, Default);
-    SupportCombo = false;
-  }
-
-  virtual void SetAsString(const TCHAR *Value);
-
-  #if defined(__BORLANDC__)
-  #pragma warn -hid
-  #endif
-
-  void Set(const TCHAR *Value);
-
-  #if defined(__BORLANDC__)
-  #pragma warn +hid
-  #endif
-
-  virtual const TCHAR *GetAsString(void) const;
+protected:
+  NumberDataField(const TCHAR *edit_format, const TCHAR *display_format,
+                  DataAccessCallback_t OnDataAccess = NULL);
 };
 
 #endif

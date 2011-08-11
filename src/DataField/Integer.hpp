@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_DATA_FIELD_INTEGER_HPP
 #define XCSOAR_DATA_FIELD_INTEGER_HPP
 
-#include "DataField/Base.hpp"
+#include "DataField/Number.hpp"
 #include "PeriodClock.hpp"
 
-class DataFieldInteger: public DataField
+class DataFieldInteger : public NumberDataField
 {
 private:
   int mValue;
@@ -44,7 +44,7 @@ protected:
 public:
   DataFieldInteger(TCHAR *EditFormat, TCHAR *DisplayFormat, int Min, int Max,
                    int Default, int Step, DataAccessCallback_t OnDataAccess)
-    :DataField(EditFormat, DisplayFormat, OnDataAccess),
+    :NumberDataField(EditFormat, DisplayFormat, OnDataAccess),
      mValue(Default), mMin(Min), mMax(Max), mStep(Step) {
     SupportCombo = true;
   }

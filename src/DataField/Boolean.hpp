@@ -37,7 +37,7 @@ private:
 public:
   DataFieldBoolean(bool Default, const TCHAR *TextTrue, const TCHAR *TextFalse,
                    DataAccessCallback_t OnDataAccess)
-    :DataField(_T(""), _T(""), OnDataAccess),
+    :DataField(OnDataAccess),
      mValue(Default),
      true_text(TextTrue), false_text(TextFalse) {
     SupportCombo = true;

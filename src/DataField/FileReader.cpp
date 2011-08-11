@@ -88,7 +88,7 @@ DataFieldFileReader::Item::~Item()
 }
 
 DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
-  :DataField(_T(""), _T(""), OnDataAccess),
+  :DataField(OnDataAccess),
    // Set selection to zero
    mValue(0),
    loaded(false), postponed_sort(false),
