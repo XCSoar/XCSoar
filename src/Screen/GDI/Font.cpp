@@ -24,6 +24,7 @@ Copyright_License {
 #include "Screen/Font.hpp"
 #include "Screen/Debug.hpp"
 #include "Screen/BufferCanvas.hpp"
+#include "Screen/AnyCanvas.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>
@@ -65,6 +66,14 @@ Font::set(const LOGFONT &log_font)
   calculate_heights();
 
   return true;
+}
+
+PixelSize
+Font::TextSize(const TCHAR *text) const
+{
+  AnyCanvas canvas;
+  canvas.select(*this);
+  return canvas.text_size(text);
 }
 
 void
