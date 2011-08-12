@@ -40,9 +40,6 @@ struct WindMeasurement
   }
 };
 
-/** maximum number of windmeasurements in the list. */
-#define MAX_MEASUREMENTS 200
-
 /**
  * The WindMeasurementList is a list that can contain and
  * process windmeasurements.
@@ -51,7 +48,7 @@ struct WindMeasurement
 class WindMeasurementList
 {
 protected:
-  StaticArray<WindMeasurement, MAX_MEASUREMENTS> measurements;
+  StaticArray<WindMeasurement, 200> measurements;
 
 public:
   /**
