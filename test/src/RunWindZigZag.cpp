@@ -91,6 +91,7 @@ int main(int argc, char **argv)
 
   MoreData data, last;
   data.Reset();
+  last = data;
 
   static DerivedInfo calculated;
   static SETTINGS_COMPUTER settings_computer;
@@ -103,12 +104,13 @@ int main(int argc, char **argv)
   WindZigZagGlue wind_zig_zag;
 
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-    last = data;
-
     TrimRight(buffer);
 
     if (device == NULL || !device->ParseNMEA(buffer, data))
       parser.ParseNMEAString_Internal(buffer, data);
+
+    if (data.location_available == last.location_available)
+      continue;
 
     computer.Compute(data, last, calculated, settings_computer);
     calculated.flight.Moving(data.time);
@@ -121,6 +123,8 @@ int main(int argc, char **argv)
              (double)data.ground_speed,
              (double)data.true_airspeed,
              (int)data.track.value_degrees());
+
+    last = data;
   }
 }
 
