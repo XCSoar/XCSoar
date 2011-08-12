@@ -185,13 +185,6 @@ private:
   std::pair<fixed, fixed> correlation(const ZZBeta& beta) const;
 
   /**
-   * Convenience routine, return squared value
-   */
-  static fixed sqr(const fixed &v) {
-    return v*v;
-  }
-
-  /**
    * Function to be optimised (minimised)
    * This is the sum of squared errors between TAS and estimated TAS
    */
