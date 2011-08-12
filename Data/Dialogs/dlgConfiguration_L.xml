@@ -779,8 +779,8 @@
         <DataField DataType="enum" />
       </Edit>
 
-      <Edit Name="prpAppFlarmLocation" Caption="Flarm location" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
-        Help="Choose a location for the flarm">
+      <Edit Name="prpAppFlarmLocation" Caption="Flarm display location" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+        Help="Choose a location for the flarm display">
         <DataField DataType="enum"/>
       </Edit>
 
