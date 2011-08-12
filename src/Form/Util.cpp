@@ -123,41 +123,6 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
 
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, int value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return;
-
-  Units_t unit = Units::GetUserUnitByGroup(unit_group);
-  DataField *df = ctl->GetDataField();
-  df->SetUnits(Units::GetUnitName(unit));
-  df->SetAsInteger(iround(Units::ToUserUnit(fixed(value), unit)));
-  ctl->RefreshDisplay();
-}
-
-void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, fixed value)
-{
-  assert(control_name != NULL);
-
-  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
-  if (ctl == NULL)
-    return;
-
-  Units_t unit = Units::GetUserUnitByGroup(unit_group);
-
-  DataFieldFloat *df = (DataFieldFloat *)ctl->GetDataField();
-  df->SetUnits(Units::GetUnitName(unit));
-  df->SetAsFloat(Units::ToUserUnit(value, unit));
-  ctl->RefreshDisplay();
-}
-
-void
-LoadFormProperty(WndForm &form, const TCHAR *control_name,
                  const TCHAR *value)
 {
   assert(control_name != NULL);
@@ -314,36 +279,6 @@ SaveFormProperty(WndForm &form, const TCHAR *control_name, double &value)
   return true;
 }
 #endif
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, unsigned &value,
-                 const TCHAR *registry_name)
-{
-  int value2 = value;
-  if (SaveFormProperty(form, control_name, unit_group, value2,
-                       registry_name)) {
-    value = value2;
-    return true;
-  } else
-    return false;
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, fixed &value)
-{
-  assert(control_name != NULL);
-
-  fixed new_value = GetFormValueFixed(form, control_name);
-  Units_t unit = Units::GetUserUnitByGroup(unit_group);
-  new_value = Units::ToSysUnit(new_value, unit);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  return true;
-}
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
