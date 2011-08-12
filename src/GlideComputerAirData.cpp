@@ -212,7 +212,8 @@ GlideComputerAirData::Heading()
   DerivedInfo &calculated = SetCalculated();
   const SpeedVector wind = calculated.wind;
 
-  if ((positive(basic.ground_speed) || wind.is_non_zero()) &&
+  if (calculated.wind_available &&
+      (positive(basic.ground_speed) || wind.is_non_zero()) &&
       calculated.flight.flying) {
     fixed x0 = basic.track.fastsine() * basic.ground_speed;
     fixed y0 = basic.track.fastcosine() * basic.ground_speed;
@@ -859,7 +860,8 @@ GlideComputerAirData::ThermalSources()
       !calculated.last_thermal.IsDefined())
     return;
 
-  if (calculated.wind.norm / calculated.last_thermal.lift_rate > fixed(10.0)) {
+  if (calculated.wind_available &&
+      calculated.wind.norm / calculated.last_thermal.lift_rate > fixed(10.0)) {
     // thermal strength is so weak compared to wind that source estimate
     // is unlikely to be reliable, so don't calculate or remember it
     return;
