@@ -40,6 +40,13 @@ class WndForm;
 void
 ShowFormControl(WndForm &form, const TCHAR *control_name, bool visible);
 
+/**
+ * Show or hide a named form control that may not exist in some layouts.
+ */
+void
+ShowOptionalFormControl(WndForm &form, const TCHAR *control_name,
+                        bool visible);
+
 void SetFormControlEnabled(WndForm &form, const TCHAR *control_name,
                            bool enabled);
 
@@ -65,8 +72,16 @@ void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value);
 
 void
+LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
+                         fixed value);
+
+void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,
                  UnitGroup_t unit_group, int value);
+
+void
+LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
+                         UnitGroup_t unit_group, fixed value);
 
 static inline void
 LoadFormProperty(WndForm &form, const TCHAR *control_name,

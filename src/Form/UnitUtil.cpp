@@ -63,6 +63,23 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
   ctl->RefreshDisplay();
 }
 
+void
+LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
+                         UnitGroup_t unit_group, fixed value)
+{
+  assert(control_name != NULL);
+
+  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
+  if (ctl == NULL)
+    return;
+
+  Units_t unit = Units::GetUserUnitByGroup(unit_group);
+  DataField *df = ctl->GetDataField();
+  df->SetUnits(Units::GetUnitName(unit));
+  df->SetAsInteger(iround(Units::ToUserUnit(fixed(value), unit)));
+  ctl->RefreshDisplay();
+}
+
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  UnitGroup_t unit_group, unsigned &value,

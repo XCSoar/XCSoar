@@ -41,6 +41,15 @@ ShowFormControl(WndForm &form, const TCHAR *control_name, bool visible)
 }
 
 void
+ShowOptionalFormControl(WndForm &form, const TCHAR *control_name,
+                        bool visible)
+{
+  Window *window = form.FindByName(control_name);
+  if (window != NULL)
+    window->set_visible(visible);
+}
+
+void
 SetFormControlEnabled(WndForm &form, const TCHAR *control_name, bool enabled)
 {
   Window *window = form.FindByName(control_name);
@@ -109,6 +118,20 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
 
 void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, fixed value)
+{
+  assert(control_name != NULL);
+
+  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
+  assert(ctl != NULL);
+
+  DataFieldFloat &df = *(DataFieldFloat *)ctl->GetDataField();
+  df.Set(value);
+  ctl->RefreshDisplay();
+}
+
+void
+LoadOptionalFormProperty(WndForm &form, const TCHAR *control_name,
+                         fixed value)
 {
   assert(control_name != NULL);
 
