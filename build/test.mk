@@ -711,7 +711,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	lxn2igc \
 	RunIGCWriter \
-	RunCirclingWind RunWindZigZag \
+	RunCirclingWind RunWindZigZag RunWindEKF \
 	RunCanvas RunMapWindow \
 	RunDialog RunListControl \
 	RunRenderOZ \
@@ -1470,6 +1470,20 @@ RUN_WIND_ZIG_ZAG_LDADD = \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
 $(TARGET_BIN_DIR)/RunWindZigZag$(TARGET_EXEEXT): $(RUN_WIND_ZIG_ZAG_OBJS) $(RUN_WIND_ZIG_ZAG_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_WIND_EKF_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Wind/WindEKF.cpp \
+	$(TEST_SRC_DIR)/RunWindEKF.cpp
+RUN_WIND_EKF_OBJS = $(call SRC_TO_OBJ,$(RUN_WIND_EKF_SOURCES))
+RUN_WIND_EKF_LDADD = \
+	$(DEBUG_REPLAY_LDADD) \
+	$(DRIVER_LIBS) \
+	$(MATH_LIBS) \
+	$(UTIL_LIBS)
+$(TARGET_BIN_DIR)/RunWindEKF$(TARGET_EXEEXT): $(RUN_WIND_EKF_OBJS) $(RUN_WIND_EKF_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
