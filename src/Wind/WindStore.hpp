@@ -61,6 +61,7 @@ public:
    */
   void NewWind(const NMEAInfo &info, DerivedInfo &derived, Vector& wind);
 
+  gcc_pure
   const Vector GetWind(fixed Time, fixed h, bool &found) const;
 
   /** Clear as if never flown */

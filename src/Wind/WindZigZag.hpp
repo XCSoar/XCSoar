@@ -143,19 +143,24 @@ public:
    * Operator used by newuoa optimiser to evaluate function to be
    * minimised
    */
+  gcc_pure
   double operator()(int n, double* x) const {
     return fmin(ZZBeta((fixed)x[0], (fixed)x[1]));
   }
 
 protected:
 
+  gcc_pure
   bool full() const;
+
+  gcc_pure
   bool back_in_time(const unsigned time) const;
 
   /**
    * Determine whether the time and angle satisfy criterion for
    * adding it to the list
    */
+  gcc_pure
   bool do_append(const unsigned time, const Angle &ang) const;
 
   /**
@@ -170,6 +175,7 @@ protected:
   void append(const ZZObs &o);
 
 private:
+  gcc_pure
   unsigned size() const {
     return obs.size();
   }
@@ -182,12 +188,14 @@ private:
    */
   void prune_worst(const ZZBeta &beta);
 
+  gcc_pure
   std::pair<fixed, fixed> correlation(const ZZBeta& beta) const;
 
   /**
    * Function to be optimised (minimised)
    * This is the sum of squared errors between TAS and estimated TAS
    */
+  gcc_pure
   fixed fmin(const ZZBeta& beta) const;
 
   /**
@@ -198,17 +206,20 @@ private:
   /**
    * Find error
    */
+  gcc_pure
   fixed relative_error_squared(const ZZBeta& beta) const;
 
   /**
    * Calculate quality of fit of wind estimate beta in
    * XCSoar's wind quality measure (0-5)
    */
+  gcc_pure
   int quality(const ZZBeta& beta, const bool circling) const;
 
   /**
    * Find item in list with worst squared error
    */
+  gcc_pure
   ObsList::iterator find_worst(const ZZBeta& beta);
 };
 

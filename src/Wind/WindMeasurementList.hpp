@@ -31,6 +31,7 @@ struct WindMeasurement
   long time;                    /**< Time of fix */
   fixed altitude;               /**< Altitude of fix */
 
+  gcc_pure
   int Score(long _time) const {
     // Calculate the score of this item. The item with the highest
     // score is the least important one.  We may need to adjust the
@@ -56,6 +57,7 @@ public:
    * if no valid vector could be calculated (for instance: too little or
    * too low quality data).
    */
+  gcc_pure
   const Vector getWind(fixed Time, fixed alt, bool &found) const;
 
   /** Adds the windvector vector with quality quality to the list. */
@@ -68,6 +70,7 @@ protected:
    * getLeastImportantItem is called to identify the item that should be
    * removed if the list is too full. Reimplemented from LimitedList.
    */
+  gcc_pure
   unsigned int getLeastImportantItem(fixed Time);
 };
 
