@@ -58,6 +58,31 @@ SetFormControlEnabled(WndForm &form, const TCHAR *control_name, bool enabled)
 }
 
 void
+SetFormValue(WndForm &form, const TCHAR *control_name, const TCHAR *value)
+{
+  assert(control_name != NULL);
+  assert(value != NULL);
+
+  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
+  assert(ctl != NULL);
+
+  ctl->SetText(value);
+}
+
+void
+SetFormMultiLineValue(WndForm &form, const TCHAR *control_name,
+                      const TCHAR *value)
+{
+  assert(control_name != NULL);
+  assert(value != NULL);
+
+  WndProperty *ctl = (WndProperty *)form.FindByName(control_name);
+  assert(ctl != NULL);
+
+  ctl->SetText(value, true);
+}
+
+void
 LoadFormProperty(WndForm &form, const TCHAR *control_name, bool value)
 {
   assert(control_name != NULL);

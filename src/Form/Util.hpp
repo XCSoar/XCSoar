@@ -51,6 +51,16 @@ void SetFormControlEnabled(WndForm &form, const TCHAR *control_name,
                            bool enabled);
 
 /**
+ * Set a form control to the specified value (without a DataField).
+ */
+void
+SetFormValue(WndForm &form, const TCHAR *control_name, const TCHAR *value);
+
+void
+SetFormMultiLineValue(WndForm &form, const TCHAR *control_name,
+                      const TCHAR *value);
+
+/**
  * Loads the specified value into the form.
  *
  * @param form the form
