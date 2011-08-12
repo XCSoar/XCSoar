@@ -91,6 +91,7 @@ int main(int argc, char **argv)
 
   MoreData data, last;
   data.Reset();
+  data.UpdateClock();
   last = data;
 
   static DerivedInfo calculated;
@@ -106,6 +107,8 @@ int main(int argc, char **argv)
   while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
     TrimRight(buffer);
 
+    if (data.time_available)
+      data.clock = data.time;
     if (device == NULL || !device->ParseNMEA(buffer, data))
       parser.ParseNMEAString_Internal(buffer, data);
 
