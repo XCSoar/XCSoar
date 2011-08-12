@@ -76,6 +76,7 @@ GlideComputerAirData::ResetFlight(const bool full)
   thermallocator.Reset();
 
   windanalyser.reset();
+  wind_zig_zag.reset();
   rotaryLD.init(SettingsComputer());
 }
 
