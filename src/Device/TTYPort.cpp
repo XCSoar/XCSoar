@@ -249,7 +249,7 @@ TTYPort::SetBaudrate(unsigned BaudRate)
   attr.c_iflag &= ~(IGNBRK | BRKINT | PARMRK | ISTRIP | INLCR | IGNCR | ICRNL | IXON);
   attr.c_oflag &= ~OPOST;
   attr.c_lflag &= ~(ECHO | ECHONL | ICANON | ISIG | IEXTEN);
-  attr.c_cflag &= ~(CSIZE | PARENB | CRTSCTS | IXON | IXOFF);
+  attr.c_cflag &= ~(CSIZE | PARENB | CRTSCTS);
   attr.c_cflag |= (CS8 | CLOCAL);
   attr.c_cc[VMIN] = 0;
   attr.c_cc[VTIME] = 1;
