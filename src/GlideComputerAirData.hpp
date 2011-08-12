@@ -47,13 +47,10 @@ class GlideComputerAirData: virtual public GlideComputerBlackboard {
   Airspaces &airspace_database;
   const RasterTerrain *terrain;
 
-public:
   GlideRatioCalculator rotaryLD;
 
-protected:
   ProtectedAirspaceWarningManager &m_airspace;
 
-private:
   ThermalLocator thermallocator;
 
   // TODO: protect with a Mutex
