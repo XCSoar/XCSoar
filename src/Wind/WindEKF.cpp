@@ -263,7 +263,8 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   // @todo accuracy: correct TAS for vertical speed if dynamic pullup
 
   // reset if flight hasnt started or airspeed instrument not available
-  if (!derived.flight.flying || !basic.airspeed_available) {
+  if (!derived.flight.flying ||
+      !basic.airspeed_available || !basic.airspeed_real) {
     reset();
     return Result(0);
   }
