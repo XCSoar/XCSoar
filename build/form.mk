@@ -19,6 +19,7 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Tabbed.cpp \
 	$(FORM_SRC_DIR)/TabBar.cpp \
 	$(FORM_SRC_DIR)/Keyboard.cpp \
+	$(FORM_SRC_DIR)/ProfileUtil.cpp \
 	$(FORM_SRC_DIR)/Util.cpp
 
 FORM_OBJS = $(call SRC_TO_OBJ,$(FORM_SOURCES))

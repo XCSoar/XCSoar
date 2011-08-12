@@ -29,7 +29,6 @@ Copyright_License {
 #include "DataField/Float.hpp"
 #include "DataField/Enum.hpp"
 #include "DataField/String.hpp"
-#include "Profile/Profile.hpp"
 
 #include <assert.h>
 
@@ -174,17 +173,6 @@ LoadFormProperty(WndForm &form, const TCHAR *control_name,
   ctl->RefreshDisplay();
 }
 
-void
-LoadFormPropertyFromProfile(WndForm &form, const TCHAR *control_name,
-                            const TCHAR *profile_key)
-{
-  TCHAR buffer[512];
-  const TCHAR *value = Profile::Get(profile_key, buffer, 512)
-    ? buffer
-    : _T("");
-  LoadFormProperty(form, control_name, value);
-}
-
 int
 GetFormValueInteger(const WndForm &form, const TCHAR *control_name)
 {
@@ -245,19 +233,6 @@ SaveFormProperty(const WndForm &form, const TCHAR *field, bool &value)
     return false;
 
   value = new_value;
-  return true;
-}
-
-bool
-SaveFormPropertyNegated(const WndForm &form, const TCHAR *field,
-                        const TCHAR *profile_key, bool &value)
-{
-  bool new_value = !GetFormValueBoolean(form, field);
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  Profile::Set(profile_key, value);
   return true;
 }
 
@@ -342,111 +317,6 @@ SaveFormProperty(WndForm &form, const TCHAR *control_name, double &value)
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 bool &value, const TCHAR *registry_name)
-{
-  assert(control_name != NULL);
-  assert(registry_name != NULL);
-
-  if (!SaveFormProperty(form, control_name, value))
-    return false;
-
-  Profile::Set(registry_name, value);
-  return true;
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
-                 bool &value)
-{
-  if (SaveFormProperty(form, field, value)) {
-    Profile::Set(reg, value);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
-                 unsigned int &value)
-{
-  if (SaveFormProperty(form, field, value)) {
-    Profile::Set(reg, value);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
-                 int &value)
-{
-  if (SaveFormProperty(form, field, value)) {
-    Profile::Set(reg, value);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
-                 short &value)
-{
-  if (SaveFormProperty(form, field, value)) {
-    Profile::Set(reg, value);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
-                 uint8_t &value)
-{
-  if (SaveFormProperty(form, field, value)) {
-    Profile::Set(reg, value);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *field, const TCHAR *reg,
-                 uint16_t &value)
-{
-  if (SaveFormProperty(form, field, value)) {
-    Profile::Set(reg, value);
-    return true;
-  } else {
-    return false;
-  }
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, int &value,
-                 const TCHAR *registry_name)
-{
-  assert(control_name != NULL);
-  assert(registry_name != NULL);
-
-  Units_t unit = Units::GetUserUnitByGroup(unit_group);
-  int new_value = GetFormValueInteger(form, control_name);
-  new_value = iround(Units::ToSysUnit(fixed(new_value), unit));
-  if (new_value == value)
-    return false;
-
-  value = new_value;
-  Profile::Set(registry_name, new_value);
-  return true;
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  UnitGroup_t unit_group, unsigned &value,
                  const TCHAR *registry_name)
 {
@@ -477,20 +347,6 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 
 bool
 SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 UnitGroup_t unit_group, fixed &value,
-                 const TCHAR *registry_name)
-{
-  assert(registry_name != NULL);
-
-  if (!SaveFormProperty(form, control_name, unit_group, value))
-    return false;
-
-  Profile::Set(registry_name, value);
-  return true;
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
                  TCHAR *buffer, size_t max_size)
 {
   assert(max_size > 0);
@@ -508,51 +364,5 @@ SaveFormProperty(const WndForm &form, const TCHAR *control_name,
 
   std::copy(value, value + length, buffer);
   buffer[length] = _T('\0');
-  return true;
-}
-
-bool
-SaveFormProperty(const WndForm &form, const TCHAR *control_name,
-                 TCHAR *buffer, size_t max_size,
-                 const TCHAR *profile_key)
-{
-  assert(max_size > 0);
-  assert(profile_key != NULL);
-
-  const TCHAR *value = GetFormValueString(form, control_name);
-  assert(value != NULL);
-
-  size_t length = _tcslen(value);
-  if (length >= max_size)
-    length = max_size - 1;
-
-  if (_tcsncmp(value, buffer, length) == 0 && buffer[length] == _T('\0'))
-    /* not modified */
-    return false;
-
-  std::copy(value, value + length, buffer);
-  buffer[length] = _T('\0');
-  Profile::Set(profile_key, buffer);
-  return true;
-}
-
-bool
-SaveFormPropertyToProfile(const WndForm &form, const TCHAR *control_name,
-                          const TCHAR *profile_key)
-{
-  assert(profile_key != NULL);
-
-  const TCHAR *value = GetFormValueString(form, control_name);
-  assert(value != NULL);
-
-  TCHAR buffer[512];
-  const TCHAR *old = Profile::Get(profile_key, buffer, 512)
-    ? buffer
-    : _T("");
-
-  if (_tcscmp(value, old) == 0)
-    return false;
-
-  Profile::Set(profile_key, value);
   return true;
 }
