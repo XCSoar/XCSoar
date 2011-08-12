@@ -48,7 +48,6 @@ class GlideComputerAirData: virtual public GlideComputerBlackboard {
   const RasterTerrain *terrain;
 
 public:
-  WindAnalyser   windanalyser; // JMW TODO, private and lock-protected
   GlideRatioCalculator rotaryLD;
 
 protected:
@@ -56,6 +55,10 @@ protected:
 
 private:
   ThermalLocator thermallocator;
+
+  // TODO: protect with a Mutex
+  WindAnalyser windanalyser;
+
   WindZigZagGlue wind_zig_zag;
   GPSClock airspace_clock;
 
@@ -74,6 +77,10 @@ public:
   void ProcessIdle();
 
   void SetWindEstimate(const SpeedVector wind, const int quality = 3); // JMW check
+
+  const WindStore &GetWindStore() const {
+    return windanalyser.windstore;
+  }
 
 protected:
   void ResetFlight(const bool full=true);

@@ -208,7 +208,7 @@ ChartControl::on_paint(Canvas &canvas)
     break;
   case ANALYSIS_PAGE_WIND:
     fs.RenderWind(canvas, rcgfx, basic,
-                  glide_computer->windanalyser.windstore);
+                  glide_computer->GetWindStore());
     break;
   case ANALYSIS_PAGE_POLAR:
     fs.RenderGlidePolar(canvas, rcgfx, calculated.climb_history,
