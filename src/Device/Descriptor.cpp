@@ -132,7 +132,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
   if (driver == NULL) {
     TCHAR msg[256];
-    _sntprintf(msg, 256, _("No such driver: %s"), config.driver_name.c_str());
+    _sntprintf(msg, 256, _T("%s: %s"), _("No such driver"), config.driver_name.c_str());
     env.SetErrorMessage(msg);
     return false;
   }
