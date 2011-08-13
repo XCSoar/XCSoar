@@ -37,7 +37,7 @@ Copyright_License {
 #include "Protection.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
-#include "GlideComputer.hpp"
+#include "Computer/GlideComputer.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 

@@ -26,7 +26,7 @@ Copyright_License {
 #include "Gauge/GlueGaugeVario.hpp"
 #include "Interface.hpp"
 #include "Components.hpp"
-#include "GlideComputer.hpp"
+#include "Computer/GlideComputer.hpp"
 #include "CalculationThread.hpp"
 #include "MergeThread.hpp"
 #include "DrawThread.hpp"

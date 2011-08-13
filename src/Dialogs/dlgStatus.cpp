@@ -33,7 +33,6 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "LocalTime.hpp"
 #include "MainWindow.hpp"
-#include "GlideComputer.hpp"
 #include "Components.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"

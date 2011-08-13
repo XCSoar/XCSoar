@@ -767,7 +767,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/BasicComputer.cpp \
+	$(SRC)/Computer/BasicComputer.cpp \
 	$(SRC)/Engine/Util/Filter.cpp \
 	$(SRC)/Engine/Util/DiffFilter.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
@@ -1879,14 +1879,14 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Renderer/ThermalBandRenderer.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/AutoQNH.cpp \
-	$(SRC)/BasicComputer.cpp \
-	$(SRC)/GlideComputer.cpp \
-	$(SRC)/GlideComputerBlackboard.cpp \
-	$(SRC)/GlideComputerTask.cpp \
-	$(SRC)/GlideComputerRoute.cpp \
-	$(SRC)/GlideComputerInterface.cpp \
-	$(SRC)/GlideComputerAirData.cpp \
-	$(SRC)/GlideComputerStats.cpp \
+	$(SRC)/Computer/BasicComputer.cpp \
+	$(SRC)/Computer/GlideComputer.cpp \
+	$(SRC)/Computer/GlideComputerBlackboard.cpp \
+	$(SRC)/Computer/GlideComputerTask.cpp \
+	$(SRC)/Computer/GlideComputerRoute.cpp \
+	$(SRC)/Computer/GlideComputerAirData.cpp \
+	$(SRC)/Computer/GlideComputerStats.cpp \
+	$(SRC)/Computer/GlideComputerInterface.cpp \
 	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/SettingsMap.cpp \

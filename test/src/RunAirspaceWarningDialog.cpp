@@ -34,7 +34,7 @@ Copyright_License {
 #include "Airspace/AirspaceWarningManager.hpp"
 #include "Engine/Airspace/Airspaces.hpp"
 #include "Waypoint/Waypoints.hpp"
-#include "GlideComputerInterface.hpp"
+#include "Computer/GlideComputerInterface.hpp"
 #include "Task/TaskManager.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Screen/Layout.hpp"

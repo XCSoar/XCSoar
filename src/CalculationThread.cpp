@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "CalculationThread.hpp"
-#include "GlideComputer.hpp"
+#include "Computer/GlideComputer.hpp"
 #include "Protection.hpp"
 #include "Screen/Blank.hpp"
 #include "DeviceBlackboard.hpp"

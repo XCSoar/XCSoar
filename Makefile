@@ -242,13 +242,13 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/FLARM/Friends.cpp \
 	$(SRC)/FLARM/FlarmComputer.cpp \
-	$(SRC)/GlideComputer.cpp \
-	$(SRC)/GlideComputerBlackboard.cpp \
-	$(SRC)/GlideComputerAirData.cpp \
-	$(SRC)/GlideComputerInterface.cpp \
-	$(SRC)/GlideComputerStats.cpp \
-	$(SRC)/GlideComputerRoute.cpp \
-	$(SRC)/GlideComputerTask.cpp \
+	$(SRC)/Computer/GlideComputer.cpp \
+	$(SRC)/Computer/GlideComputerBlackboard.cpp \
+	$(SRC)/Computer/GlideComputerAirData.cpp \
+	$(SRC)/Computer/GlideComputerStats.cpp \
+	$(SRC)/Computer/GlideComputerRoute.cpp \
+	$(SRC)/Computer/GlideComputerTask.cpp \
+	$(SRC)/Computer/GlideComputerInterface.cpp \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/Logger/Logger.cpp \
 	$(SRC)/Logger/LoggerFRecord.cpp \
@@ -393,7 +393,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/HorizonRenderer.cpp \
 	$(SRC)/DrawThread.cpp \
 	\
-	$(SRC)/BasicComputer.cpp \
+	$(SRC)/Computer/BasicComputer.cpp \
 	$(SRC)/AutoQNH.cpp \
 	$(SRC)/DeviceBlackboard.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \

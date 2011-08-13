@@ -23,7 +23,6 @@
 
 #include "CrossSectionWindow.hpp"
 #include "Components.hpp"
-#include "GlideComputer.hpp"
 #include "Interface.hpp"
 #include "Screen/Fonts.hpp"
 #include "Screen/Chart.hpp"

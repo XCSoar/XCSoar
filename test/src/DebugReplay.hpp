@@ -28,7 +28,7 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Device/Parser.hpp"
-#include "BasicComputer.hpp"
+#include "Computer/BasicComputer.hpp"
 
 class NLineReader;
 class Device;

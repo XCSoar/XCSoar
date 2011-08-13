@@ -29,7 +29,7 @@ Copyright_License {
 #include "Math/SunEphemeris.hpp"
 #include "LocalTime.hpp"
 #include "InputEvents.hpp"
-#include "GlideComputer.hpp"
+#include "Computer/GlideComputer.hpp"
 #include "Language/Language.hpp"
 #include "Units/Units.hpp"
 

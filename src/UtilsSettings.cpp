@@ -48,7 +48,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Task/TaskEvents.hpp"
 #include "Waypoint/WaypointGlue.hpp"
-#include "GlideComputer.hpp"
+#include "Computer/GlideComputer.hpp"
 #include "Language/LanguageGlue.hpp"
 
 #if defined(__BORLANDC__)  // due to compiler bug

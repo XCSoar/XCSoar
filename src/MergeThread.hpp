@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_MERGE_THREAD_HPP
 
 #include "Thread/WorkerThread.hpp"
-#include "BasicComputer.hpp"
+#include "Computer/BasicComputer.hpp"
 #include "FLARM/FlarmComputer.hpp"
 #include "NMEA/MoreData.hpp"
 
