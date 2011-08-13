@@ -43,7 +43,6 @@ WindStore::reset()
   windlist.Reset();
   updated = true;
   _lastAltitude = fixed_zero;
-  _lastWind = Vector();
 }
 
 void
@@ -73,23 +72,14 @@ WindStore::GetWind(fixed Time, fixed h, bool &found) const
 }
 
 void
-WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived)
+WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived) const
 {
   bool found;
   Vector CurWind = windlist.getWind(info.time, info.NavAltitude, found);
 
   if (found) {
-    if ((fabs(CurWind.x - _lastWind.x) > fixed_one)
-        || (fabs(CurWind.y - _lastWind.y) > fixed_one)
-        || updated) {
-      _lastWind = CurWind;
-
-      updated = false;
-      _lastAltitude = info.NavAltitude;
-
-      NewWind(info, derived, CurWind);
-    }
-  } // otherwise, don't change anything
+    NewWind(info, derived, CurWind);
+  }
 }
 
 void

@@ -36,7 +36,6 @@ struct DerivedInfo;
  */
 class WindStore
 {
-  Vector _lastWind;
   fixed _lastAltitude;
   WindMeasurementList windlist;
   bool updated;
@@ -76,7 +75,7 @@ private:
    * Recalculates the wind from the stored measurements.
    * May result in a NewWind signal.
    */
-  void recalculateWind(const MoreData &info, DerivedInfo &derived);
+  void recalculateWind(const MoreData &info, DerivedInfo &derived) const;
 };
 
 #endif
