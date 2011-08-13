@@ -674,28 +674,9 @@ GlideComputerAirData::PercentCircling(const fixed Rate)
 void
 GlideComputerAirData::TurnRate()
 {
-  const NMEAInfo &basic = Basic();
-  DerivedInfo &calculated = SetCalculated();
-
-  // Calculate turn rate
-
-  if (!basic.time_available || !LastBasic().time_available ||
-      !calculated.flight.flying) {
-    calculated.turn_rate = fixed_zero;
-    calculated.turn_rate_heading = fixed_zero;
-    return;
-  }
-
-  // Calculate time passed since last calculation
-  if (!time_advanced())
-    return;
-
-  const fixed dT = time_delta();
-
-  calculated.turn_rate =
-    (basic.track - LastBasic().track).as_delta().value_degrees() / dT;
-  calculated.turn_rate_heading =
-    (calculated.heading - LastCalculated().heading).as_delta().value_degrees() / dT;
+  circling_computer.TurnRate(SetCalculated(),
+                             Basic(), LastBasic(),
+                             Calculated(), LastCalculated());
 }
 
 /**
@@ -705,154 +686,22 @@ GlideComputerAirData::TurnRate()
 void
 GlideComputerAirData::Turning()
 {
-  DerivedInfo &calculated = SetCalculated();
+  circling_computer.Turning(SetCalculated(),
+                            Basic(), LastBasic(),
+                            Calculated(), LastCalculated(),
+                            SettingsComputer());
 
-  // You can't be circling unless you're flying
-  if (!calculated.flight.flying || !time_advanced())
-    return;
+  fixed Rate = Calculated().turn_rate_smoothed;
 
-  // JMW limit rate to 50 deg per second otherwise a big spike
-  // will cause spurious lock on circling for a long time
-  fixed Rate = max(fixed(-50), min(fixed(50), calculated.turn_rate));
-
-  // average rate, to detect essing
-  // TODO: use rotary buffer
-  static fixed rate_history[60];
-  fixed rate_ave = fixed_zero;
-  for (int i = 59; i > 0; i--) {
-    rate_history[i] = rate_history[i - 1];
-    rate_ave += rate_history[i];
-  }
-  rate_history[0] = Rate;
-  rate_ave /= 60;
-
-  // Make the turn rate more smooth using the LowPassFilter
-  Rate = LowPassFilter(LastCalculated().turn_rate_smoothed, Rate, fixed(0.3));
-  calculated.turn_rate_smoothed = Rate;
-
-  // Determine which direction we are circling
-  bool LEFT = false;
-  if (negative(Rate)) {
-    LEFT = true;
-    Rate *= -1;
-  }
+  if (LastCalculated().turn_mode == WAITCLIMB &&
+      Calculated().turn_mode == CLIMB)
+    OnSwitchClimbMode(true, Rate);
+  else if (LastCalculated().turn_mode == WAITCRUISE &&
+           Calculated().turn_mode == CRUISE)
+    OnSwitchClimbMode(false, Rate);
 
   // Calculate circling time percentage and call thermal band calculation
-  PercentCircling(Rate);
-
-  // Force cruise or climb mode if external device says so
-  bool forcecruise = false;
-  bool forcecircling = false;
-  if (SettingsComputer().EnableExternalTriggerCruise && !Basic().gps.replay) {
-    switch (Basic().switch_state.flight_mode) {
-    case SwitchInfo::MODE_UNKNOWN:
-      forcecircling = false;
-      forcecruise = false;
-      break;
-
-    case SwitchInfo::MODE_CIRCLING:
-      forcecircling = true;
-      forcecruise = false;
-      break;
-
-    case SwitchInfo::MODE_CRUISE:
-      forcecircling = false;
-      forcecruise = true;
-      break;
-    }
-  }
-
-  switch (calculated.turn_mode) {
-  case CRUISE:
-    // If (in cruise mode and beginning of circling detected)
-    if ((Rate >= MinTurnRate) || (forcecircling)) {
-      // Remember the start values of the turn
-      calculated.turn_start_time = Basic().time;
-      calculated.turn_start_location = Basic().location;
-      calculated.turn_start_altitude = Basic().NavAltitude;
-      calculated.turn_start_energy_height = Basic().EnergyHeight;
-      calculated.turn_mode = WAITCLIMB;
-    }
-    if (!forcecircling)
-      break;
-
-  case WAITCLIMB:
-    if (forcecruise) {
-      calculated.turn_mode = CRUISE;
-      break;
-    }
-    if ((Rate >= MinTurnRate) || (forcecircling)) {
-      if (((Basic().time - calculated.turn_start_time) > CruiseClimbSwitch)
-          || forcecircling) {
-        // yes, we are certain now that we are circling
-        calculated.circling = true;
-
-        // JMW Transition to climb
-        calculated.turn_mode = CLIMB;
-
-        // Remember the start values of the climbing period
-        calculated.climb_start_location = calculated.turn_start_location;
-        calculated.climb_start_altitude = calculated.turn_start_altitude
-            + calculated.turn_start_energy_height;
-        calculated.climb_start_time = calculated.turn_start_time;
-
-        // consider code: InputEvents GCE - Move this to InputEvents
-        // Consider a way to take the CircleZoom and other logic
-        // into InputEvents instead?
-        // JMW: NO.  Core functionality must be built into the
-        // main program, unable to be overridden.
-        OnSwitchClimbMode(true, LEFT);
-      }
-    } else {
-      // nope, not turning, so go back to cruise
-      calculated.turn_mode = CRUISE;
-    }
-    break;
-
-  case CLIMB:
-    if ((Rate < MinTurnRate) || (forcecruise)) {
-      // Remember the end values of the turn
-      calculated.turn_start_time = Basic().time;
-      calculated.turn_start_location = Basic().location;
-      calculated.turn_start_altitude = Basic().NavAltitude;
-      calculated.turn_start_energy_height = Basic().EnergyHeight;
-
-      // JMW Transition to cruise, due to not properly turning
-      calculated.turn_mode = WAITCRUISE;
-    }
-    if (!forcecruise)
-      break;
-
-  case WAITCRUISE:
-    if (forcecircling) {
-      calculated.turn_mode = CLIMB;
-      break;
-    }
-    if((Rate < MinTurnRate) || forcecruise) {
-      if (((Basic().time - calculated.turn_start_time) > ClimbCruiseSwitch)
-          || forcecruise) {
-        // yes, we are certain now that we are cruising again
-        calculated.circling = false;
-
-        // Transition to cruise
-        calculated.turn_mode = CRUISE;
-        calculated.cruise_start_location = calculated.turn_start_location;
-        calculated.cruise_start_altitude = calculated.turn_start_altitude;
-        calculated.cruise_start_time = calculated.turn_start_time;
-
-        OnSwitchClimbMode(false, LEFT);
-      }
-    } else {
-      // nope, we are circling again
-      // JMW Transition back to climb, because we are turning again
-      calculated.turn_mode = CLIMB;
-    }
-    break;
-
-  default:
-    // error, go to cruise
-    calculated.turn_mode = CRUISE;
-  }
+  PercentCircling(fabs(Rate));
 }
 
 void

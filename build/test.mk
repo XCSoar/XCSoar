@@ -1880,6 +1880,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/GlideRatio.cpp \
 	$(SRC)/AutoQNH.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \
+	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \
 	$(SRC)/Computer/GlideComputerTask.cpp \
