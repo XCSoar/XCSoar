@@ -185,7 +185,6 @@ WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived)
   }
 
   first = false;
-  windstore.SlotAltitude(info, derived);
 }
 
 void
