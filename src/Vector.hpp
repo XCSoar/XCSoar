@@ -41,7 +41,8 @@ struct Vector {
     y *= speed.norm;
   }
 
-  fixed Magnitude() {
+  gcc_pure
+  fixed Magnitude() const {
     return hypot(x, y);
   }
 };
