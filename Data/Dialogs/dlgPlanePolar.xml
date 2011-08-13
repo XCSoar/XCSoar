@@ -10,19 +10,19 @@
     <Label Caption="Polar V" X="2" Y="6" Height="-2" Width="-132" />
 
     <Edit Name="V1Edit" X="-127" Y="2" Width="-2" Height="-2">
-      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarChanged" />
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="1" OnDataAccess="PolarChanged" />
     </Edit>
   </Panel>
 
   <Panel Height="26">
     <Edit Name="V2Edit" X="-127" Y="2" Width="-2" Height="-2">
-      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarChanged" />
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="1" OnDataAccess="PolarChanged" />
     </Edit>
   </Panel>
 
   <Panel Height="26">
     <Edit Name="V3Edit" X="-127" Y="2" Width="-2" Height="-2">
-      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="200" Step="1" OnDataAccess="PolarChanged" />
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="1" OnDataAccess="PolarChanged" />
     </Edit>
   </Panel>
 
