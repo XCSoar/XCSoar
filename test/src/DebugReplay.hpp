@@ -45,7 +45,7 @@ class DebugReplay {
 
   SETTINGS_COMPUTER settings_computer;
   MoreData basic, last_basic;
-  DerivedInfo calculated;
+  DerivedInfo calculated, last_calculated;
 
 public:
   DebugReplay(NLineReader *reader, const DeviceRegister *driver);
@@ -53,11 +53,27 @@ public:
 
   bool Next();
 
+  const SETTINGS_COMPUTER &SettingsComputer() const {
+    return settings_computer;
+  }
+
   const MoreData &Basic() const {
     return basic;
   }
 
+  const MoreData &LastBasic() const {
+    return last_basic;
+  }
+
   const DerivedInfo &Calculated() const {
+    return calculated;
+  }
+
+  const DerivedInfo &LastCalculated() const {
+    return last_calculated;
+  }
+
+  DerivedInfo &SetCalculated() {
     return calculated;
   }
 };

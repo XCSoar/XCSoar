@@ -711,7 +711,7 @@ DEBUG_PROGRAM_NAMES = \
 	RunDeviceDriver RunDeclare RunFlightList RunDownloadFlight \
 	lxn2igc \
 	RunIGCWriter \
-	RunWindZigZag \
+	RunCirclingWind RunWindZigZag \
 	RunCanvas RunMapWindow \
 	RunDialog RunListControl \
 	RunRenderOZ \
@@ -1441,6 +1441,21 @@ RUN_IGC_WRITER_LDADD = \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
 $(TARGET_BIN_DIR)/RunIGCWriter$(TARGET_EXEEXT): $(RUN_IGC_WRITER_OBJS) $(RUN_IGC_WRITER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+RUN_CIRCLING_WIND_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Computer/CirclingComputer.cpp \
+	$(SRC)/Wind/WindAnalyser.cpp \
+	$(TEST_SRC_DIR)/RunCirclingWind.cpp
+RUN_CIRCLING_WIND_OBJS = $(call SRC_TO_OBJ,$(RUN_CIRCLING_WIND_SOURCES))
+RUN_CIRCLING_WIND_LDADD = \
+	$(DEBUG_REPLAY_LDADD) \
+	$(DRIVER_LIBS) \
+	$(MATH_LIBS) \
+	$(UTIL_LIBS)
+$(TARGET_BIN_DIR)/RunCirclingWind$(TARGET_EXEEXT): $(RUN_CIRCLING_WIND_OBJS) $(RUN_CIRCLING_WIND_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

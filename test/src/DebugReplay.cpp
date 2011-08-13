@@ -53,6 +53,7 @@ bool
 DebugReplay::Next()
 {
   last_basic = basic;
+  last_calculated = calculated;
 
   const char *line;
   while ((line = reader->read()) != NULL) {
