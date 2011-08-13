@@ -737,6 +737,60 @@ endif
 
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
 
+DEBUG_REPLAY_SOURCES = \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/NullPort.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Register.cpp \
+	$(SRC)/Device/Parser.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Info.cpp \
+	$(SRC)/NMEA/MoreData.cpp \
+	$(SRC)/NMEA/Acceleration.cpp \
+	$(SRC)/NMEA/ExternalSettings.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/NMEA/Derived.cpp \
+	$(SRC)/NMEA/VarioInfo.cpp \
+	$(SRC)/NMEA/ClimbInfo.cpp \
+	$(SRC)/NMEA/ClimbHistory.cpp \
+	$(SRC)/NMEA/CirclingInfo.cpp \
+	$(SRC)/NMEA/ThermalBand.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(SRC)/IO/CSVLine.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Operation.cpp \
+	$(SRC)/Engine/Navigation/TraceHistory.cpp \
+	$(SRC)/FLARM/State.cpp \
+	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Traffic.cpp \
+	$(SRC)/BasicComputer.cpp \
+	$(SRC)/Engine/Util/Filter.cpp \
+	$(SRC)/Engine/Util/DiffFilter.cpp \
+	$(SRC)/Engine/Math/Earth.cpp \
+	$(SRC)/Engine/Atmosphere/Pressure.cpp \
+	$(SRC)/Engine/Navigation/Aircraft.cpp \
+	$(SRC)/Engine/Navigation/GeoPoint.cpp \
+	$(SRC)/Engine/Navigation/Geometry/GeoVector.cpp \
+	$(SRC)/Engine/GlideSolvers/GlideResult.cpp \
+	$(SRC)/Engine/Task/TaskBehaviour.cpp \
+	$(SRC)/Engine/Task/OrderedTaskBehaviour.cpp \
+	$(SRC)/Engine/Task/TaskStats/TaskStats.cpp \
+	$(SRC)/Engine/Task/TaskStats/CommonStats.cpp \
+	$(SRC)/Engine/Task/TaskStats/ElementStat.cpp \
+	$(SRC)/Engine/Task/TaskStats/DistanceStat.cpp \
+	$(SRC)/Engine/Task/TaskStats/TaskVario.cpp \
+	$(SRC)/Compatibility/string.c \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeProfile.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/DebugReplay.cpp
+DEBUG_REPLAY_LDADD = \
+	$(IO_LIBS)
+
 BENCHMARK_PROJECTION_SOURCES = \
 	$(SRC)/Projection.cpp \
 	$(TEST_SRC_DIR)/BenchmarkProjection.cpp
@@ -1391,50 +1445,12 @@ $(TARGET_BIN_DIR)/RunIGCWriter$(TARGET_EXEEXT): $(RUN_IGC_WRITER_OBJS) $(RUN_IGC
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_WIND_ZIG_ZAG_SOURCES = \
-	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/Units/Units.cpp \
-	$(SRC)/Device/Port.cpp \
-	$(SRC)/Device/NullPort.cpp \
-	$(SRC)/Device/Driver.cpp \
-	$(SRC)/Device/Register.cpp \
-	$(SRC)/Device/Parser.cpp \
-	$(SRC)/Device/Internal.cpp \
-	$(SRC)/Device/Declaration.cpp \
-	$(SRC)/SettingsComputer.cpp \
-	$(SRC)/BasicComputer.cpp \
-	$(SRC)/NMEA/InputLine.cpp \
-	$(SRC)/NMEA/Info.cpp \
-	$(SRC)/NMEA/MoreData.cpp \
-	$(SRC)/NMEA/Acceleration.cpp \
-	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/NMEA/Checksum.cpp \
-	$(SRC)/NMEA/Derived.cpp \
-	$(SRC)/NMEA/VarioInfo.cpp \
-	$(SRC)/NMEA/ClimbInfo.cpp \
-	$(SRC)/NMEA/ClimbHistory.cpp \
-	$(SRC)/NMEA/CirclingInfo.cpp \
-	$(SRC)/NMEA/ThermalBand.cpp \
-	$(SRC)/NMEA/ThermalLocator.cpp \
-	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
-	$(SRC)/Engine/Navigation/TraceHistory.cpp \
-	$(SRC)/FLARM/State.cpp \
-	$(SRC)/IO/CSVLine.cpp \
-	$(SRC)/FLARM/FlarmCalculations.cpp \
-	$(SRC)/ClimbAverageCalculator.cpp \
+	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Wind/WindZigZag.cpp \
-	$(SRC)/Compatibility/string.c \
-	$(SRC)/OS/Clock.cpp \
-	$(SRC)/Operation.cpp \
-	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
-	$(TEST_SRC_DIR)/FakeGeoid.cpp \
-	$(TEST_SRC_DIR)/DebugReplay.cpp \
 	$(TEST_SRC_DIR)/RunWindZigZag.cpp
 RUN_WIND_ZIG_ZAG_OBJS = $(call SRC_TO_OBJ,$(RUN_WIND_ZIG_ZAG_SOURCES))
 RUN_WIND_ZIG_ZAG_LDADD = \
-	$(IO_LIBS) \
-	$(ENGINE_LIBS) \
+	$(DEBUG_REPLAY_LDADD) \
 	$(DRIVER_LIBS) \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)

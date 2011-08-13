@@ -30,6 +30,7 @@ Copyright_License {
 #include <stdio.h>
 
 Waypoints way_points;
+Waypoints::Waypoints() {}
 
 /*
  * Fake InputEvents.cpp
