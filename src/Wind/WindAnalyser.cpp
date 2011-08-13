@@ -70,17 +70,6 @@ a number of windmeasurements and calculates a weighted average based on quality.
   #define DEBUG_WIND
 #endif
 
-WindAnalyser::WindAnalyser()
-  :circleCount(0), circleLeft(false),
-   active(false),
-   circleDeg(0),
-   last_track(Angle::zero()),
-   pastHalfway(false),
-   curModeOK(false),
-   first(true)
-{
-}
-
 void
 WindAnalyser::reset()
 {

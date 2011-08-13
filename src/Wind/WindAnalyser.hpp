@@ -70,8 +70,6 @@ class WindAnalyser
   StaticArray<Sample, 50> windsamples;
 
 public:
-  WindAnalyser();
-
   /**
    * Clear as if never flown
    */
@@ -96,8 +94,6 @@ public:
    */
   void slot_newSample(const MoreData &info, DerivedInfo &derived,
                       WindStore &wind_store);
-
-  //void calcThermalDrift();
 
 private:
   void _calcWind(const MoreData &info, DerivedInfo &derived,
