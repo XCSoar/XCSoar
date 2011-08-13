@@ -356,6 +356,11 @@ struct NMEAInfo {
 
   void UpdateClock();
 
+  gcc_pure
+  bool HasTimeAdvancedSince(const NMEAInfo &last) const {
+    return time_available && last.time_available && time > last.time;
+  }
+
   bool MovementDetected() const {
     return ground_speed_available && ground_speed > fixed_two;
   }

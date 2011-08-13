@@ -294,8 +294,7 @@ BasicComputer::Compute(MoreData &data, const MoreData &last,
                        const DerivedInfo &calculated,
                        const SETTINGS_COMPUTER &settings_computer)
 {
-  if (!data.time_available || !last.time_available ||
-      data.time <= last.time)
+  if (!data.HasTimeAdvancedSince(last))
     return;
 
   ComputeTrack(data, last);
