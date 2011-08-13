@@ -56,7 +56,7 @@ Copyright_License {
 //   Alternates: e_Alternate_1_Name,e_Alternate_2_Name,e_Alternate_1_GR
 //   Experimental: e_Experimental1,e_Experimental2
 const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
-  // 0
+  // e_HeightGPS
   {
     N_("Height GPS"),
     N_("H GPS"),
@@ -65,7 +65,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_FlightLevel, // Flight Level
   },
 
-  // 1
+  // e_HeightAGL
   {
     N_("Height AGL"),
     N_("H AGL"),
@@ -74,7 +74,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_HeightGPS, // H GPS
   },
 
-  // 2
+  // e_Thermal_30s
   {
     N_("Thermal last 30 s"),
     N_("TC 30s"),
@@ -83,7 +83,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_VerticalSpeed_Netto, // Netto
   },
 
-  // 3
+  // e_Bearing
   {
     N_("Bearing"),
     N_("Bearing"),
@@ -92,7 +92,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Speed, // V TAS
   },
 
-  // 4
+  // e_LD_Instantaneous
   {
     N_("L/D instantaneous"),
     N_("L/D Inst"),
@@ -101,7 +101,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     71, // LD Avg
   },
 
-  // 5
+  // e_LD_Cruise
   {
     N_("L/D cruise"),
     N_("L/D Cru"),
@@ -110,7 +110,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_LD_Instantaneous, // LD Inst
   },
 
-  // 6
+  // e_Speed_GPS
   {
     N_("Speed ground"),
     N_("V Gnd"),
@@ -119,7 +119,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Bearing, // Bearing
   },
 
-  // 7
+  // e_TL_Avg
   {
     N_("Last thermal average"),
     N_("TL Avg"),
@@ -128,7 +128,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Thermal_30s, // TC 30s
   },
 
-  // 8
+  // e_TL_Gain
   {
     N_("Last thermal gain"),
     N_("TL Gain"),
@@ -137,7 +137,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_TL_Avg, // TL Avg
   },
 
-  // 9
+  // e_TL_Time
   {
     N_("Last thermal time"),
     N_("TL Time"),
@@ -146,7 +146,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_TL_Gain, // TL Gain
   },
 
-  // 10
+  // e_MacCready
   {
     N_("MacCready setting"),
     N_("MC"),
@@ -155,7 +155,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Act_Speed, // V Opt
   },
 
-  // 11
+  // e_WP_Distance
   {
     N_("Next distance"),
     N_("WP Dist"),
@@ -164,7 +164,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     73, // OLC
   },
 
-  // 12
+  // e_WP_AltDiff
   {
     N_("Next altitude difference"),
     N_("WP AltD"),
@@ -173,7 +173,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_Distance, // WP Dist
   },
 
-  // 13
+  // e_WP_AltReq
   {
     N_("Next altitude required"),
     N_("WP AltR"),
@@ -182,7 +182,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_AltDiff, // WP AltD
   },
 
-  // 14
+  // e_WP_Name
   {
     N_("Next waypoint"),
     N_("Next"),
@@ -191,7 +191,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_RH_Trend, // RH Trend
   },
 
-  // 15
+  // e_Fin_AltDiff
   {
     N_("Final altitude difference"),
     N_("Fin AltD"),
@@ -200,7 +200,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_AltReq, // WP AltR
   },
 
-  // 16
+  // e_Fin_AltReq
   {
     N_("Final altitude required"),
     N_("Fin AltR"),
@@ -209,7 +209,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Fin_AltDiff, // Fin AltD
   },
 
-  // 17
+  // e_SpeedTaskAvg
   {
     N_("Speed task average"),
     N_("VTask Avg"),
@@ -218,7 +218,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Fin_AltReq, // Fin AltR
   },
 
-  // 18
+  // e_Fin_Distance
   {
     N_("Final distance"),
     N_("Fin Dist"),
@@ -227,7 +227,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_CC_Speed, // V Task Ach
   },
 
-  // 19
+  // e_Fin_LD
   {
     N_("Final L/D"),
     N_("Fin LD"),
@@ -236,7 +236,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_LD_Cruise, // LD Cruise
   },
 
-  // 20
+  // e_H_Terrain
   {
     N_("Terrain elevation"),
     N_("H GND"),
@@ -245,7 +245,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_HeightAGL, // H AGL
   },
 
-  // 21
+  // e_Thermal_Avg
   {
     N_("Thermal average"),
     N_("TC Avg"),
@@ -254,7 +254,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_TL_Time, // TL Time
   },
 
-  // 22
+  // e_Thermal_Gain
   {
     N_("Thermal gain"),
     N_("TC Gain"),
@@ -263,7 +263,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Thermal_Avg, // TC Avg
   },
 
-  // 23
+  // e_Track_GPS
   {
     N_("Track"),
     N_("Track"),
@@ -272,7 +272,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Speed_GPS, // V Gnd
   },
 
-  // 24
+  // e_VerticalSpeed_GPS
   {
     N_("Vario"),
     N_("Vario"),
@@ -281,7 +281,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Climb_Avg, // TC All
   },
 
-  // 25
+  // e_WindSpeed_Est
   {
     N_("Wind speed"),
     N_("Wind V"),
@@ -290,7 +290,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Home_Temperature, // Max Temp
   },
 
-  // 26
+  // e_WindBearing_Est
   {
     N_("Wind bearing"),
     N_("Wind B"),
@@ -299,7 +299,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WindSpeed_Est, // Wind V
   },
 
-  // 27
+  // e_AA_Time
   {
     N_("AA time"),
     N_("AA Time"),
@@ -308,7 +308,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Fin_Distance, // Fin Dis
   },
 
-  // 28
+  // e_AA_DistanceMax
   {
     N_("AA max. distance "),
     N_("AA Dmax"),
@@ -317,7 +317,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_AA_TimeDiff, // AA dTime
   },
 
-  // 29
+  // e_AA_DistanceMin
   {
     N_("AA min. distance"),
     N_("AA Dmin"),
@@ -326,7 +326,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_AA_DistanceMax, // AA Dmax
   },
 
-  // 30
+  // e_AA_SpeedMax
   {
     N_("AA speed max. distance"),
     N_("AA Vmax"),
@@ -335,7 +335,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_AA_DistanceMin, // AA Dmin
   },
 
-  // 31
+  // e_AA_SpeedMin
   {
     N_("AA speed min. distance"),
     N_("AA Vmin"),
@@ -344,7 +344,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_AA_SpeedMax, // AA Vmax
   },
 
-  // 32
+  // e_AirSpeed_Ext
   {
     N_("Airspeed IAS"),
     N_("V IAS"),
@@ -353,7 +353,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Track_GPS, // Track
   },
 
-  // 33
+  // e_H_Baro
   {
     N_("Height barometric"),
     N_("H Baro"),
@@ -362,7 +362,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_H_Terrain, // H Gnd
   },
 
-  // 34
+  // e_WP_Speed_MC
   {
     N_("Speed MacCready"),
     N_("V MC"),
@@ -371,7 +371,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_MacCready, // MC
   },
 
-  // 35
+  // e_Climb_Perc
   {
     N_("Percentage climb"),
     N_("% Climb"),
@@ -380,7 +380,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_Speed_MC, // V MC
   },
 
-  // 36
+  // e_TimeSinceTakeoff
   {
     N_("Time of flight"),
     N_("Time Flt"),
@@ -389,7 +389,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_Name, // Next
   },
 
-  // 37
+  // e_Load_G
   {
     N_("G load"),
     N_("G"),
@@ -398,7 +398,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_AirSpeed_Ext, // Track
   },
 
-  // 38
+  // e_WP_LD
   {
     N_("Next L/D"),
     N_("WP LD"),
@@ -407,7 +407,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Fin_GR, // Final GR
   },
 
-  // 39
+  // e_TimeLocal
   {
     N_("Time local"),
     N_("Time loc"),
@@ -416,7 +416,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_TimeSinceTakeoff, // Time flt
   },
 
-  // 40
+  // e_TimeUTC
   {
     N_("Time UTC"),
     N_("Time UTC"),
@@ -425,7 +425,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_TimeLocal, // Time local
   },
 
-  // 41
+  // e_Fin_Time
   {
     N_("Task time to go"),
     N_("Fin ETE"),
@@ -434,7 +434,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_TimeUTC, // Time UTC
   },
 
-  // 42
+  // e_WP_Time
   {
     N_("Next time to go"),
     N_("WP ETE"),
@@ -443,7 +443,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Fin_Time, // Fin ETE
   },
 
-  // 43
+  // e_Act_Speed
   {
     N_("Speed dolphin"),
     N_("V Opt"),
@@ -452,7 +452,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Climb_Perc, // % Climb
   },
 
-  // 44
+  // e_VerticalSpeed_Netto
   {
     N_("Netto vario"),
     N_("Netto"),
@@ -461,7 +461,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_VerticalSpeed_GPS, // Vario
   },
 
-  // 45
+  // e_Fin_TimeLocal
   {
     N_("Task arrival time"),
     N_("Fin ETA"),
@@ -470,7 +470,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_Time, // WP ETE
   },
 
-  // 46
+  // e_WP_TimeLocal
   {
     N_("Next arrival time"),
     N_("WP ETA"),
@@ -479,7 +479,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Fin_TimeLocal, // Fin ETA
   },
 
-  // 47
+  // e_WP_BearingDiff
   {
     N_("Bearing difference"),
     N_("Brng D"),
@@ -488,7 +488,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Load_G, // G load
   },
 
-  // 48
+  // e_Temperature
   {
     N_("Outside air temperature"),
     N_("OAT"),
@@ -497,7 +497,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WindBearing_Est, // Wind B
   },
 
-  // 49
+  // e_HumidityRel
   {
     N_("Relative humidity"),
     N_("Rel Hum"),
@@ -506,7 +506,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Temperature, // OAT
   },
 
-  // 50
+  // e_Home_Temperature
   {
     N_("Forecast temperature"),
     N_("Max Temp"),
@@ -515,7 +515,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_HumidityRel, // RelHum
   },
 
-  // 51
+  // e_Fin_AA_Distance
   {
     N_("AA distance around target"),
     N_("AA Dtgt"),
@@ -524,7 +524,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_AA_SpeedMin, // AA Vmin
   },
 
-  // 52
+  // e_AA_SpeedAvg
   {
     N_("AA speed around target"),
     N_("AA Vtgt"),
@@ -533,7 +533,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Fin_AA_Distance, // AA Dtgt
   },
 
-  // 53
+  // e_LD
   {
     N_("L/D vario"),
     N_("LD Vario"),
@@ -542,7 +542,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_LD, // Next LD
   },
 
-  // 54
+  // e_Speed
   {
     N_("Airspeed TAS"),
     N_("V TAS"),
@@ -551,7 +551,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_BearingDiff, // Bearing Diff
   },
 
-  // 55
+  // e_Team_Code
   {
     N_("Team code"),
     N_("TeamCode"),
@@ -560,7 +560,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Team_Range, // Team Range
   },
 
-  // 56
+  // e_Team_Bearing
   {
     N_("Team bearing"),
     N_("Tm Brng"),
@@ -569,7 +569,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Team_Code, // Team Code
   },
 
-  // 57
+  // e_Team_BearingDiff
   {
     N_("Team bearing difference"),
     N_("Team Bd"),
@@ -578,7 +578,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Team_Bearing, // Team Bearing
   },
 
-  // 58
+  // e_Team_Range
   {
     N_("Team range"),
     N_("Team Dis"),
@@ -587,7 +587,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Team_BearingDiff, // Team Bearing Diff
   },
 
-  // 59
+  // e_CC_SpeedInst
   {
     N_("Speed task instantaneous"),
     N_("V Tsk Ins"),
@@ -596,7 +596,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_SpeedTaskAvg, // V Task Av
   },
 
-  // 60
+  // e_Home_Distance
   {
     N_("Distance home"),
     N_("Home Dis"),
@@ -605,7 +605,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_AA_SpeedAvg, // AA Vtgt
   },
 
-  // 61
+  // e_CC_Speed
   {
     N_("Speed task achieved"),
     N_("V Tsk Ach"),
@@ -614,7 +614,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_CC_SpeedInst, // V Task Inst
   },
 
-  // 62
+  // e_AA_TimeDiff
   {
     N_("AA delta time"),
     N_("AA dT"),
@@ -623,7 +623,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_AA_Time, // AA Time
   },
 
-  // 63
+  // e_Climb_Avg
   {
     N_("Thermal average over all"),
     N_("TC All"),
@@ -632,7 +632,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Thermal_Gain, // TC Gain
   },
 
-  // 64
+  // e_RH_Trend
   {
     N_("Task req. total height trend"),
     N_("RH Trend"),
@@ -641,7 +641,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_TimeLocal, // WP ETA
   },
 
-  // 65
+  // e_Battery
   {
 #ifndef GNAV
     N_("Battery percent"),
@@ -654,7 +654,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_CPU_Load, // CPU
   },
 
-  // 66
+  // e_Fin_GR
   {
     N_("Final GR"),
     N_("Fin GR"),
@@ -663,7 +663,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Fin_LD, // Fin LD
   },
 
-  // 67
+  // e_Alternate_1_Name
   {
     N_("Alternate 1 name"),
     N_("Altrn 1"),
@@ -672,7 +672,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Alternate_1_GR, // Altern1 GR
   },
 
-  // 68
+  // e_Alternate_2_Name
   {
     N_("Alternate 2 name"),
     N_("Altrn 2"),
@@ -681,7 +681,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Alternate_1_Name, // Altern1 name
   },
 
-  // 69 
+  // e_Alternate_1_GR
   {
     N_("Alternate 1 GR"),
     N_("Altrn1 GR"),
@@ -690,7 +690,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Alternate_2_Name, // Altern2 name
   },
 
-  // 70
+  // e_H_QFE
   {
     N_("QFE GPS"),
     N_("QFE GPS"),
@@ -699,7 +699,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_H_Baro, // H Baro
   },
 
-  // 71
+  // e_LD_Avg
   {
     N_("L/D average"),
     N_("L/D Avg"),
@@ -708,7 +708,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_LD, // LD Vario
   },
 
-  // 72
+  // e_Experimental
   {
     N_("Experimental 1"),
     N_("Exp1"),
@@ -717,7 +717,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Experimental2, // Exp2
   },
 
-  // 73
+  // e_OC_Distance
   {
     N_("On-Line Contest distance"),
     N_("OLC"),
@@ -726,7 +726,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Home_Distance, // Home Dis
   },
 
-  // 74
+  // e_Experimental2
   {
     N_("Experimental 2"),
     N_("Exp2"),
@@ -735,7 +735,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Experimental1, // Exp1
   },
 
-  // 75
+  // e_CPU_Load
   {
     N_("CPU load"),
     N_("CPU"),
@@ -744,7 +744,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_Battery, // Battery
   },
 
-  // 76
+  // e_WP_H
   {
     N_("Next altitude arrival"),
     N_("WP AltA"),
@@ -753,7 +753,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_WP_AltDiff, // WP AltD
   },
 
-  // 77
+  // e_Free_RAM
   {
     N_("Free RAM"),
     N_("Free RAM"),
@@ -762,7 +762,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     75, // CPU Load
   },
 
-  // 78
+  // e_FlightLevel
   {
     N_("Flight level"),
     N_("Flight Level"),
@@ -771,7 +771,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     70, // QFE GPS
   },
 
-  // 79
+  // e_Barogram
   {
     N_("Barogram"),
     N_("Barogram"),
@@ -780,7 +780,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     79, // QFE GPS
   },
 
-  // 80
+  // e_Vario_spark
   {
     N_("Vario trace"),
     N_("Vario"),
@@ -789,7 +789,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     79, // QFE GPS
   },
 
-  // 81
+  // e_NettoVario_spark
   {
     N_("Netto vario trace"),
     N_("Netto"),
@@ -798,7 +798,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     79, // QFE GPS
   },
   
-  // 82
+  // e_CirclingAverage_spark
   {
     N_("Thermal circling trace"),
     N_("TC Circling"),
@@ -807,7 +807,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     79, // QFE GPS
   },
 
-  // 83
+  // e_ThermalBand
   {
     N_("Climb band"),
     N_("Climb band"),
@@ -816,7 +816,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     79, // QFE GPS
   },
 
-  // 84
+  // e_TaskProgress
   {
     N_("Task progress"),
     N_("Progress"),
@@ -825,7 +825,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     79, // QFE GPS
   },
 
-  // 85
+  // e_TaskMaxHeightTime
   {
     N_("Time under max. start height"),
     N_("Start Height"),
@@ -834,6 +834,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_TaskMaxHeightTime,
   },
 
+  // e_Fin_ETE_VMG
   {
     N_("Task time to go (gnd spd)"),
     N_("Fin ETE VMG"),
@@ -842,6 +843,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
     e_TimeUTC, // Time UTC
   },
 
+  // e_WP_ETE_VMG
   {
     N_("Next time to go (gnd spd)"),
     N_("WP ETE VMG"),
