@@ -1401,6 +1401,7 @@ RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Declaration.cpp \
+	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/BasicComputer.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
@@ -1408,6 +1409,15 @@ RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(SRC)/NMEA/Acceleration.cpp \
 	$(SRC)/NMEA/ExternalSettings.cpp \
 	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/NMEA/Derived.cpp \
+	$(SRC)/NMEA/VarioInfo.cpp \
+	$(SRC)/NMEA/ClimbInfo.cpp \
+	$(SRC)/NMEA/ClimbHistory.cpp \
+	$(SRC)/NMEA/CirclingInfo.cpp \
+	$(SRC)/NMEA/ThermalBand.cpp \
+	$(SRC)/NMEA/ThermalLocator.cpp \
+	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
+	$(SRC)/Engine/Navigation/TraceHistory.cpp \
 	$(SRC)/FLARM/State.cpp \
 	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
@@ -1419,6 +1429,7 @@ RUN_WIND_ZIG_ZAG_SOURCES = \
 	$(TEST_SRC_DIR)/FakeMessage.cpp \
 	$(TEST_SRC_DIR)/FakeProfile.cpp \
 	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/DebugReplay.cpp \
 	$(TEST_SRC_DIR)/RunWindZigZag.cpp
 RUN_WIND_ZIG_ZAG_OBJS = $(call SRC_TO_OBJ,$(RUN_WIND_ZIG_ZAG_SOURCES))
 RUN_WIND_ZIG_ZAG_LDADD = \
