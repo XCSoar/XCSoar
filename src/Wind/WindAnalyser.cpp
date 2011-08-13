@@ -179,8 +179,7 @@ WindAnalyser::slot_Altitude(const MoreData &info, DerivedInfo &derived)
 }
 
 void
-WindAnalyser::slot_newFlightMode(const NMEAInfo &info,
-                                 const DerivedInfo &derived,
+WindAnalyser::slot_newFlightMode(const DerivedInfo &derived,
                                  bool left, int marker)
 {
   // we are inactive by default

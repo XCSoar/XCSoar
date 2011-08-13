@@ -618,7 +618,7 @@ GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
 
   // Tell the windanalyser of the new flight mode
   if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
-    windanalyser.slot_newFlightMode(Basic(), Calculated(), left, 0);
+    windanalyser.slot_newFlightMode(Calculated(), left, 0);
 }
 
 /**
