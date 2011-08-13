@@ -68,8 +68,6 @@ OnVegaDemoW(DataField *Sender, DataField::DataAccessKind_t Mode)
     VegaWriteDemo();
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }
@@ -86,8 +84,6 @@ OnVegaDemoV(DataField *Sender, DataField::DataAccessKind_t Mode)
     VegaWriteDemo();
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }
@@ -102,8 +98,6 @@ OnVegaDemoAudioClimb(DataField *Sender, DataField::DataAccessKind_t Mode)
     VegaWriteDemo();
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }

@@ -46,8 +46,6 @@ public:
 
   enum DataAccessKind_t {
     daChange,
-    daInc,
-    daDec,
     daSpecial,
   };
 

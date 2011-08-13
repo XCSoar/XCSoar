@@ -143,8 +143,6 @@ UnitsConfigPanel::OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mod
     UpdateUnitsTitle();
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }
@@ -177,8 +175,6 @@ UnitsConfigPanel::OnUTCData(DataField *Sender, DataField::DataAccessKind_t Mode)
     SetLocalTime(ival);
     break;
   }
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }

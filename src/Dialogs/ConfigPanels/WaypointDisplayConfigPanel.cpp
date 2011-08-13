@@ -143,8 +143,6 @@ WaypointDisplayConfigPanel::OnRenderingTypeData(DataField *Sender,
                                                 DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daChange: {
     UpdateVisibilities();
     break;

@@ -267,8 +267,6 @@ PolarConfigPanel::OnFieldData(DataField *Sender, DataField::DataAccessKind_t Mod
     UpdatePolarInvalidLabel();
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }

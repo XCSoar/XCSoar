@@ -153,8 +153,6 @@ DevicesConfigPanel::OnDeviceAData(DataField *Sender, DataField::DataAccessKind_t
                                   *(WndProperty *)wf->FindByName(_T("prpComDevice1")));
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }
@@ -172,8 +170,6 @@ DevicesConfigPanel::OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t
                                   *(WndProperty *)wf->FindByName(_T("prpComDevice2")));
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }

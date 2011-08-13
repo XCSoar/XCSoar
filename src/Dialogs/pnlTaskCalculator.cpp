@@ -195,10 +195,6 @@ pnlTaskCalculator::OnMacCreadyData(DataField *Sender, DataField::DataAccessKind_
     ActionInterface::SetMacCready(MACCREADY);
     RefreshCalculator();
     break;
-
-  case DataField::daInc:
-  case DataField::daDec:
-    return;
   }
 }
 
@@ -228,10 +224,6 @@ pnlTaskCalculator::OnCruiseEfficiencyData(DataField *Sender, DataField::DataAcce
     }
 #endif
     break;
-
-  case DataField::daInc:
-  case DataField::daDec:
-    return;
   }
 }
 

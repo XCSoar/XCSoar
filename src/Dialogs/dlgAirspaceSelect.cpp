@@ -154,8 +154,6 @@ static void FilterMode(bool direction) {
 static void OnFilterName(DataField *_Sender, DataField::DataAccessKind_t Mode){
   switch(Mode){
     case DataField::daChange:
-    case DataField::daInc:
-    case DataField::daDec:
     FilterMode(true);
     UpdateList();
     break;
@@ -173,8 +171,6 @@ static void OnFilterDistance(DataField *_Sender,
 
   switch(Mode){
     case DataField::daChange:
-    case DataField::daInc:
-    case DataField::daDec:
     distance_filter = (unsigned)Sender->GetAsInteger() != WILDCARD
       ? fixed(Sender->GetAsInteger())
       : fixed_minus_one;
@@ -193,8 +189,6 @@ static void OnFilterDirection(DataField *_Sender,
 
   switch(Mode){
     case DataField::daChange:
-    case DataField::daInc:
-    case DataField::daDec:
     direction_filter = df.GetAsInteger();
     FilterMode(false);
     UpdateList();
@@ -209,8 +203,6 @@ static void OnFilterType(DataField *Sender,
                          DataField::DataAccessKind_t Mode) {
   switch(Mode){
     case DataField::daChange:
-    case DataField::daInc:
-    case DataField::daDec:
       TypeFilterIdx = Sender->GetAsInteger();
       FilterMode(false);
       UpdateList();

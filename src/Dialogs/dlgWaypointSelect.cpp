@@ -686,8 +686,6 @@ OnFilterDistance(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daChange:
-  case DataField::daInc:
-  case DataField::daDec:
     filter_data.distance_index = Sender->GetAsInteger();
     UpdateList();
     break;
@@ -702,8 +700,6 @@ OnFilterDirection(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daChange:
-  case DataField::daInc:
-  case DataField::daDec:
     filter_data.direction_index = Sender->GetAsInteger();
     UpdateList();
     break;
@@ -718,8 +714,6 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   switch (Mode) {
   case DataField::daChange:
-  case DataField::daInc:
-  case DataField::daDec:
     filter_data.type_index = (type_filter)Sender->GetAsInteger();
     UpdateList();
     break;

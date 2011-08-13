@@ -141,8 +141,6 @@ OnQnhData(DataField *_Sender, DataField::DataAccessKind_t Mode)
     RefreshAltitudeControl();
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }
@@ -215,10 +213,6 @@ OnBallastData(DataField *Sender, DataField::DataAccessKind_t Mode)
     SetButtons();
     SetBallast();
     break;
-
-  case DataField::daInc:
-  case DataField::daDec:
-    return;
   }
 }
 
@@ -233,8 +227,6 @@ OnBugsData(DataField *_Sender, DataField::DataAccessKind_t Mode)
     changed = true;
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }
@@ -250,8 +242,6 @@ OnTempData(DataField *_Sender, DataField::DataAccessKind_t Mode)
                                                       unGradCelcius));
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }

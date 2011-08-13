@@ -241,8 +241,6 @@ InfoBoxContentAltitude::PnlSetupOnQNH(DataField *_Sender, DataField::DataAccessK
     device_blackboard.SetQNH(Sender->GetAsFixed());
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }

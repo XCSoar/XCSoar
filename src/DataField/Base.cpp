@@ -46,15 +46,11 @@ DataField::Special(void)
 void
 DataField::Inc(void)
 {
-  if (mOnDataAccess != NULL)
-    mOnDataAccess(this, daInc);
 }
 
 void
 DataField::Dec(void)
 {
-  if (mOnDataAccess != NULL)
-    mOnDataAccess(this, daDec);
 }
 
 int

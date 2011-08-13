@@ -159,8 +159,6 @@ OnUseCustomFontData(DataField *Sender, DataField::DataAccessKind_t Mode)
 
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }

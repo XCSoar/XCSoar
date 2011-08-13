@@ -236,8 +236,6 @@ PolarChanged(gcc_unused DataField *Sender, DataField::DataAccessKind_t Mode)
     UpdateInvalidLabel();
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }

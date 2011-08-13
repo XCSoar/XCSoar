@@ -69,8 +69,6 @@ static void OnAutoData(DataField *Sender, DataField::DataAccessKind_t Mode){
       UpdateValues();
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }
@@ -85,8 +83,6 @@ static void OnBrightnessData(DataField *Sender,
       UpdateValues();
     break;
 
-  case DataField::daInc:
-  case DataField::daDec:
   case DataField::daSpecial:
     return;
   }
