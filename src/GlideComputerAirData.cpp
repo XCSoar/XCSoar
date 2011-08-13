@@ -147,13 +147,9 @@ GlideComputerAirData::Wind()
       WindAnalyser::Result result =
         windanalyser.NewSample(Basic(), calculated);
       if (result.IsValid())
-        wind_store.SlotMeasurement(Basic(), calculated,
+        wind_store.SlotMeasurement(Basic(),
                                    result.wind, result.quality);
     }
-
-    // generate new wind vector if altitude changes or a new
-    // estimate is available
-    wind_store.SlotAltitude(Basic(), calculated);
   }
 
   // update zigzag wind
@@ -165,6 +161,9 @@ GlideComputerAirData::Wind()
     if (result.quality > 0)
       SetWindEstimate(result.wind, result.quality);
   }
+
+  if (SettingsComputer().AutoWindMode)
+    wind_store.SlotAltitude(Basic(), calculated);
 }
 
 void
@@ -205,7 +204,7 @@ GlideComputerAirData::SetWindEstimate(const SpeedVector wind,
                                       const int quality)
 {
   Vector v_wind = Vector(wind);
-  wind_store.SlotMeasurement(Basic(), SetCalculated(), v_wind, quality);
+  wind_store.SlotMeasurement(Basic(), v_wind, quality);
 }
 
 /**

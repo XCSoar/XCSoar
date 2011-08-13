@@ -49,7 +49,7 @@ public:
    * measurement is. Higher quality measurements are more important in the
    * end result and stay in the store longer.
    */
-  void SlotMeasurement(const MoreData &info, DerivedInfo &derived,
+  void SlotMeasurement(const MoreData &info,
       Vector windvector, int quality);
 
   /**

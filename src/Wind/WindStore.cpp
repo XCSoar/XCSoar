@@ -47,13 +47,11 @@ WindStore::reset()
 }
 
 void
-WindStore::SlotMeasurement(const MoreData &info, DerivedInfo &derived,
+WindStore::SlotMeasurement(const MoreData &info,
                            Vector windvector, int quality)
 {
   updated = true;
   windlist.addMeasurement(info.time, windvector, info.NavAltitude, quality);
-  //we may have a new wind value, so make sure it's emitted if needed!
-  recalculateWind(info, derived);
 }
 
 void
