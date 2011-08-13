@@ -33,21 +33,20 @@ struct DerivedInfo;
 class WindStore;
 
 /**
- * The windanalyser analyses the list of flightsamples looking
- * for windspeed and direction.
- */
-struct WindSample
-{
-  Vector v;
-  fixed t;
-  fixed mag;
-};
-
-/**
  * Class to provide wind estimates from circling
  */
 class WindAnalyser
 {
+  /**
+   * The windanalyser analyses the list of flightsamples looking for
+   * windspeed and direction.
+   */
+  struct Sample {
+    Vector v;
+    fixed t;
+    fixed mag;
+  };
+
   //we are counting the number of circles, the first onces are probably not very round
   int circleCount;
   //true=left, false=right
@@ -68,7 +67,7 @@ class WindAnalyser
   fixed climbstarttime;
   fixed climbendtime;
 
-  StaticArray<WindSample, 50> windsamples;
+  StaticArray<Sample, 50> windsamples;
 
 public:
   WindAnalyser();

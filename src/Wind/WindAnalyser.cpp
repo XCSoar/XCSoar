@@ -123,7 +123,7 @@ WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived,
   curVector = Vector(SpeedVector(info.track, info.ground_speed));
 
   if (!windsamples.full()) {
-    WindSample &sample = windsamples.append();
+    Sample &sample = windsamples.append();
     sample.v = curVector;
     sample.t = info.time;
     sample.mag = info.ground_speed;
