@@ -1156,7 +1156,9 @@ XMLNode::parseString(const TCHAR *lpszXML, XMLResults *pResults)
 static bool
 read_text_file(const char *path, tstring &buffer)
 {
-  FileLineReader reader(path);
+  /* auto-detect the character encoding, to be able to parse XCSoar
+     6.0 task files */
+  FileLineReader reader(path, ConvertLineReader::AUTO);
   if (reader.error())
     return false;
 
