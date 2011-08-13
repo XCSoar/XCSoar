@@ -37,6 +37,7 @@ Copyright_License {
 #include "BasicComputer.hpp"
 #include "Wind/WindZigZag.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "IO/FileLineReader.hpp"
 #include "Args.hpp"
 
 #include <stdio.h>
@@ -61,7 +62,7 @@ InputEvents::processNmea(unsigned key)
 
 int main(int argc, char **argv)
 {
-  Args args(argc, argv, "DRIVER");
+  Args args(argc, argv, "DRIVER FILE");
   const tstring driver_name = args.ExpectNextT();
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
@@ -69,6 +70,8 @@ int main(int argc, char **argv)
     _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
     return 1;
   }
+
+  const char *input_file = args.ExpectNext();
 
   args.ExpectEnd();
 
@@ -93,17 +96,21 @@ int main(int argc, char **argv)
   BasicComputer computer;
 
   printf("# time quality wind_bearing (deg) wind_speed (m/s) grndspeed (m/s) tas (m/s) bearing (deg)\n");
-  char buffer[1024];
 
   WindZigZagGlue wind_zig_zag;
 
-  while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-    TrimRight(buffer);
+  FileLineReaderA reader(input_file);
+  if (reader.error()){
+    fprintf(stderr, "Failed to open %s\n", input_file);
+    return 1;
+  }
 
+  const char *line;
+  while ((line = reader.read()) != NULL) {
     if (data.time_available)
       data.clock = data.time;
-    if (device == NULL || !device->ParseNMEA(buffer, data))
-      parser.ParseNMEAString_Internal(buffer, data);
+    if (device == NULL || !device->ParseNMEA(line, data))
+      parser.ParseNMEAString_Internal(line, data);
 
     if (data.location_available == last.location_available)
       continue;
