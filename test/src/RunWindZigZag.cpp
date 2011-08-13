@@ -35,9 +35,9 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "Thread/Trigger.hpp"
 #include "BasicComputer.hpp"
-#include "OS/PathName.hpp"
 #include "Wind/WindZigZag.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Args.hpp"
 
 #include <stdio.h>
 
@@ -61,23 +61,16 @@ InputEvents::processNmea(unsigned key)
 
 int main(int argc, char **argv)
 {
-  if (argc != 2) {
-    fprintf(stderr, "Usage: %s DRIVER\n"
-            "Where DRIVER is one of:\n", argv[0]);
+  Args args(argc, argv, "DRIVER");
+  const tstring driver_name = args.ExpectNextT();
 
-    const TCHAR *name;
-    for (unsigned i = 0; (name = GetDriverNameByIndex(i)) != NULL; ++i)
-      _ftprintf(stderr, _T("\t%s\n"), name);
-
-    return 1;
-  }
-
-  PathName driver_name(argv[1]);
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
+  const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());
   if (driver == NULL) {
-    fprintf(stderr, "No such driver: %s\n", argv[1]);
+    _ftprintf(stderr, _T("No such driver: %s\n"), driver_name.c_str());
     return 1;
   }
+
+  args.ExpectEnd();
 
   DeviceConfig config;
   config.Clear();
