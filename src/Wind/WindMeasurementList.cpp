@@ -1,22 +1,4 @@
-/***********************************************************************
-**
-**   WindMeasurementList.cpp
-**
-**   This file is part of Cumulus
-**
-************************************************************************
-**
-**   Copyright (c):  2002 by André Somers
-**
-**   This file is distributed under the terms of the General Public
-**   Licence. See the file COPYING for more information.
-**
-**   $Id$
-**
-***********************************************************************/
 /*
-NOTE: Some portions copyright as above
-
 Copyright_License {
 
   XCSoar Glide Computer - http://www.xcsoar.org/
@@ -38,6 +20,9 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
+/* This library was originally imported from Cumulus
+   http://kflog.org/cumulus/ */
 
 #include "Wind/WindMeasurementList.hpp"
 #include "Math/FastMath.h"
