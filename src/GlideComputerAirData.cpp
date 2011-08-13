@@ -143,8 +143,13 @@ GlideComputerAirData::Wind()
 
   if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) {
 
-    if (calculated.turn_mode == CLIMB)
-      windanalyser.slot_newSample(Basic(), calculated, wind_store);
+    if (calculated.turn_mode == CLIMB) {
+      WindAnalyser::Result result =
+        windanalyser.NewSample(Basic(), calculated);
+      if (result.IsValid())
+        wind_store.SlotMeasurement(Basic(), calculated,
+                                   result.wind, result.quality);
+    }
 
     // generate new wind vector if altitude changes or a new
     // estimate is available

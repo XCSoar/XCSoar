@@ -25,7 +25,6 @@ Copyright_License {
    http://kflog.org/cumulus/ */
 
 #include "Wind/WindAnalyser.hpp"
-#include "Wind/WindStore.hpp"
 #include "Math/Constants.h"
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
@@ -83,13 +82,12 @@ WindAnalyser::reset()
   first = true;
 }
 
-void
-WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived,
-                             WindStore &wind_store)
+WindAnalyser::Result
+WindAnalyser::NewSample(const MoreData &info, DerivedInfo &derived)
 {
   if (!active)
     // only work if we are in active mode
-    return;
+    return Result(0);
 
   Vector curVector;
 
@@ -127,10 +125,11 @@ WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived,
   if (first || (info.ground_speed > maxVector.Magnitude()))
     maxVector = curVector;
 
+  Result result(0);
   if (fullCircle) { //we have completed a full circle!
     if (!windsamples.full())
       // calculate the wind for this circle, only if it is valid
-      _calcWind(info, derived, wind_store);
+      result = _calcWind(info, derived);
 
     fullCircle = false;
 
@@ -160,6 +159,8 @@ WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived,
   }
 
   first = false;
+
+  return result;
 }
 
 void
@@ -192,16 +193,15 @@ WindAnalyser::slot_newFlightMode(const DerivedInfo &derived,
   windsamples.clear();
 }
 
-void
-WindAnalyser::_calcWind(const MoreData &info, DerivedInfo &derived,
-                        WindStore &wind_store)
+WindAnalyser::Result
+WindAnalyser::_calcWind(const MoreData &info, DerivedInfo &derived)
 {
   if (windsamples.empty())
-    return;
+    return Result(0);
 
   // reject if average time step greater than 2.0 seconds
   if ((windsamples.last().t - windsamples[0].t) / (windsamples.size() - 1) > fixed_two)
-    return;
+    return Result(0);
 
   // find average
   fixed av = fixed_zero;
@@ -280,18 +280,20 @@ WindAnalyser::_calcWind(const MoreData &info, DerivedInfo &derived,
   if (circleCount < 2)
     quality--;
   if (circleCount < 1)
-    return;
+    return Result(0);
 
   quality = min(quality, 5); //5 is maximum quality, make sure we honour that.
+
+  if (quality < 1)
+    //measurment quality too low
+    return Result(0);
 
   Vector a(-mag * maxVector.x / windsamples[jmax].mag,
            -mag * maxVector.y / windsamples[jmax].mag);
 
-  if (quality < 1)
-    //measurment quality too low
-    return;
-
-  if (a.SquareMagnitude() < fixed(30 * 30))
+  if (a.SquareMagnitude() >= fixed(30 * 30))
     // limit to reasonable values (60 knots), reject otherwise
-    wind_store.SlotMeasurement(info, derived, a, quality);
+    return Result(0);
+
+  return Result(quality, a);
 }

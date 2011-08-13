@@ -30,7 +30,6 @@ Copyright_License {
 
 struct MoreData;
 struct DerivedInfo;
-class WindStore;
 
 /**
  * Class to provide wind estimates from circling
@@ -70,6 +69,20 @@ class WindAnalyser
   StaticArray<Sample, 50> windsamples;
 
 public:
+  struct Result {
+    unsigned quality;
+    Vector wind;
+
+    Result() {}
+    Result(int _quality):quality(_quality) {}
+    Result(int _quality, Vector _wind)
+      :quality(_quality), wind(_wind) {}
+
+    bool IsValid() const {
+      return quality > 0;
+    }
+  };
+
   /**
    * Clear as if never flown
    */
@@ -92,12 +105,10 @@ public:
   /**
    * Called if a new sample is available in the samplelist.
    */
-  void slot_newSample(const MoreData &info, DerivedInfo &derived,
-                      WindStore &wind_store);
+  Result NewSample(const MoreData &info, DerivedInfo &derived);
 
 private:
-  void _calcWind(const MoreData &info, DerivedInfo &derived,
-                 WindStore &wind_store);
+  Result _calcWind(const MoreData &info, DerivedInfo &derived);
 };
 
 #endif
