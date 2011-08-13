@@ -94,7 +94,7 @@ WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived)
 
 void
 WindStore::NewWind(const NMEAInfo &info, DerivedInfo &derived,
-    Vector &wind)
+                   Vector &wind) const
 {
   fixed mag = hypot(wind.x, wind.y);
   Angle bearing;
