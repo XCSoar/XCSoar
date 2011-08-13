@@ -77,6 +77,7 @@ GlideComputerAirData::ResetFlight(const bool full)
 
   windanalyser.reset();
   wind_zig_zag.reset();
+  wind_store.reset();
   rotaryLD.init(SettingsComputer());
 }
 
@@ -143,11 +144,11 @@ GlideComputerAirData::Wind()
   if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) {
 
     if (calculated.turn_mode == CLIMB)
-      windanalyser.slot_newSample(Basic(), calculated);
+      windanalyser.slot_newSample(Basic(), calculated, wind_store);
 
     // generate new wind vector if altitude changes or a new
     // estimate is available
-    windanalyser.slot_Altitude(Basic(), calculated);
+    wind_store.SlotAltitude(Basic(), calculated);
   }
 
   // update zigzag wind
@@ -199,7 +200,7 @@ GlideComputerAirData::SetWindEstimate(const SpeedVector wind,
                                       const int quality)
 {
   Vector v_wind = Vector(wind);
-  windanalyser.slot_newEstimate(Basic(), SetCalculated(), v_wind, quality);
+  wind_store.SlotMeasurement(Basic(), SetCalculated(), v_wind, quality);
 }
 
 /**

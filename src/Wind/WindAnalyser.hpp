@@ -25,11 +25,12 @@ Copyright_License {
 #define WINDANALYSER_H
 
 #include "Vector.hpp"
-#include "Wind/WindStore.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Util/StaticArray.hpp"
 
 struct MoreData;
+struct DerivedInfo;
+class WindStore;
 
 /**
  * The windanalyser analyses the list of flightsamples looking
@@ -72,8 +73,6 @@ class WindAnalyser
   StaticArray<WindSample, MAXWINDSAMPLES> windsamples;
 
 public:
-  WindStore windstore;
-
   WindAnalyser();
 
   /**
@@ -98,18 +97,14 @@ public:
   /**
    * Called if a new sample is available in the samplelist.
    */
-  void slot_newSample(const MoreData &info, DerivedInfo &derived);
-
-  // used to update output if altitude changes
-  void slot_Altitude(const MoreData &info, DerivedInfo &derived);
-
-  void slot_newEstimate(const MoreData &info, DerivedInfo &derived,
-      Vector v, int quality);
+  void slot_newSample(const MoreData &info, DerivedInfo &derived,
+                      WindStore &wind_store);
 
   //void calcThermalDrift();
 
 private:
-  void _calcWind(const MoreData &info, DerivedInfo &derived);
+  void _calcWind(const MoreData &info, DerivedInfo &derived,
+                 WindStore &wind_store);
 };
 
 #endif

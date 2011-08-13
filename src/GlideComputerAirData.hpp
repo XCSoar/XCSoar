@@ -29,6 +29,7 @@ Copyright_License {
 #include "ThermalLocator.hpp"
 #include "Wind/WindAnalyser.hpp"
 #include "Wind/WindZigZag.hpp"
+#include "Wind/WindStore.hpp"
 #include "GPSClock.hpp"
 #include "Util/WindowFilter.hpp"
 
@@ -55,6 +56,7 @@ class GlideComputerAirData: virtual public GlideComputerBlackboard {
 
   // TODO: protect with a Mutex
   WindAnalyser windanalyser;
+  WindStore wind_store;
 
   WindZigZagGlue wind_zig_zag;
   GPSClock airspace_clock;
@@ -76,7 +78,7 @@ public:
   void SetWindEstimate(const SpeedVector wind, const int quality = 3); // JMW check
 
   const WindStore &GetWindStore() const {
-    return windanalyser.windstore;
+    return wind_store;
   }
 
 protected:

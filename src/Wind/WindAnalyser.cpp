@@ -25,6 +25,7 @@ Copyright_License {
    http://kflog.org/cumulus/ */
 
 #include "Wind/WindAnalyser.hpp"
+#include "Wind/WindStore.hpp"
 #include "Math/Constants.h"
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
@@ -90,12 +91,12 @@ WindAnalyser::reset()
   last_track = Angle::zero();
   pastHalfway = false;
   curModeOK = false;
-  windstore.reset();
   first = true;
 }
 
 void
-WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived)
+WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived,
+                             WindStore &wind_store)
 {
   if (!active)
     // only work if we are in active mode
@@ -140,7 +141,7 @@ WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived)
   if (fullCircle) { //we have completed a full circle!
     if (!windsamples.full())
       // calculate the wind for this circle, only if it is valid
-      _calcWind(info, derived);
+      _calcWind(info, derived, wind_store);
 
     fullCircle = false;
 
@@ -170,12 +171,6 @@ WindAnalyser::slot_newSample(const MoreData &info, DerivedInfo &derived)
   }
 
   first = false;
-}
-
-void
-WindAnalyser::slot_Altitude(const MoreData &info, DerivedInfo &derived)
-{
-  windstore.SlotAltitude(info, derived);
 }
 
 void
@@ -209,7 +204,8 @@ WindAnalyser::slot_newFlightMode(const DerivedInfo &derived,
 }
 
 void
-WindAnalyser::_calcWind(const MoreData &info, DerivedInfo &derived)
+WindAnalyser::_calcWind(const MoreData &info, DerivedInfo &derived,
+                        WindStore &wind_store)
 {
   if (windsamples.empty())
     return;
@@ -308,18 +304,5 @@ WindAnalyser::_calcWind(const MoreData &info, DerivedInfo &derived)
 
   if (a.SquareMagnitude() < fixed(30 * 30))
     // limit to reasonable values (60 knots), reject otherwise
-    slot_newEstimate(info, derived, a, quality);
-}
-
-void
-WindAnalyser::slot_newEstimate(const MoreData &info,
-                               DerivedInfo &derived,
-                               Vector a, int quality)
-{
-  #ifdef DEBUG_WIND
-  LogDebug(_T("%f %f %d # %s"), (double)a.x, (double)a.y, quality,
-           quality >= 6 ? "external wind" : "wind circling");
-  #endif
-
-  windstore.SlotMeasurement(info, derived, a, quality);
+    wind_store.SlotMeasurement(info, derived, a, quality);
 }
