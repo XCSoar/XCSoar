@@ -43,8 +43,6 @@ struct WindSample
   fixed mag;
 };
 
-#define MAXWINDSAMPLES 50
-
 /**
  * Class to provide wind estimates from circling
  */
@@ -70,7 +68,7 @@ class WindAnalyser
   fixed climbstarttime;
   fixed climbendtime;
 
-  StaticArray<WindSample, MAXWINDSAMPLES> windsamples;
+  StaticArray<WindSample, 50> windsamples;
 
 public:
   WindAnalyser();
