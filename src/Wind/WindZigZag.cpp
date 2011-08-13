@@ -77,7 +77,8 @@ WindZigZagGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
 
   // reset if flight hasnt started or airspeed instrument not available
   if (!derived.flight.flying ||
-      !basic.airspeed_available || !basic.airspeed_real) {
+      !basic.airspeed_available || !basic.airspeed_real ||
+      basic.true_airspeed < fixed_one) {
     reset();
     return Result(0);
   }
