@@ -83,7 +83,7 @@ WindAnalyser::reset()
 }
 
 WindAnalyser::Result
-WindAnalyser::NewSample(const MoreData &info, DerivedInfo &derived)
+WindAnalyser::NewSample(const MoreData &info)
 {
   if (!active)
     // only work if we are in active mode
@@ -129,7 +129,7 @@ WindAnalyser::NewSample(const MoreData &info, DerivedInfo &derived)
   if (fullCircle) { //we have completed a full circle!
     if (!windsamples.full())
       // calculate the wind for this circle, only if it is valid
-      result = _calcWind(info, derived);
+      result = _calcWind();
 
     fullCircle = false;
 
@@ -194,7 +194,7 @@ WindAnalyser::slot_newFlightMode(const DerivedInfo &derived,
 }
 
 WindAnalyser::Result
-WindAnalyser::_calcWind(const MoreData &info, DerivedInfo &derived)
+WindAnalyser::_calcWind()
 {
   if (windsamples.empty())
     return Result(0);

@@ -105,10 +105,10 @@ public:
   /**
    * Called if a new sample is available in the samplelist.
    */
-  Result NewSample(const MoreData &info, DerivedInfo &derived);
+  Result NewSample(const MoreData &info);
 
 private:
-  Result _calcWind(const MoreData &info, DerivedInfo &derived);
+  Result _calcWind();
 };
 
 #endif

@@ -145,7 +145,7 @@ GlideComputerAirData::Wind()
 
     if (calculated.turn_mode == CLIMB) {
       WindAnalyser::Result result =
-        windanalyser.NewSample(Basic(), calculated);
+        windanalyser.NewSample(Basic());
       if (result.IsValid())
         wind_store.SlotMeasurement(Basic(),
                                    result.wind, result.quality);
