@@ -21,6 +21,8 @@ Copyright_License {
 }
 */
 
+/* this algorithm is obsolete, it has been replaced by WindEKF */
+
 #ifndef WINDZIGZAG_HPP
 #define WINDZIGZAG_HPP
 

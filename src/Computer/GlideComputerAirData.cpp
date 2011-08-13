@@ -76,7 +76,7 @@ GlideComputerAirData::ResetFlight(const bool full)
   thermallocator.Reset();
 
   windanalyser.reset();
-  wind_zig_zag.reset();
+  wind_ekf.reset();
   wind_store.reset();
   rotaryLD.init(SettingsComputer());
 }
@@ -156,7 +156,7 @@ GlideComputerAirData::Wind()
   if ((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG) &&
       Basic().airspeed_available && Basic().airspeed_real &&
       Basic().true_airspeed > SettingsComputer().glide_polar_task.GetVTakeoff()) {
-    WindZigZagGlue::Result result = wind_zig_zag.Update(Basic(), calculated);
+    WindEKFGlue::Result result = wind_ekf.Update(Basic(), calculated);
 
     if (result.quality > 0)
       SetWindEstimate(result.wind, result.quality);
