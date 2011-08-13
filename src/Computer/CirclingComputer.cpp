@@ -77,17 +77,6 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   // will cause spurious lock on circling for a long time
   fixed Rate = max(fixed(-50), min(fixed(50), calculated.turn_rate));
 
-  // average rate, to detect essing
-  // TODO: use rotary buffer
-  static fixed rate_history[60];
-  fixed rate_ave = fixed_zero;
-  for (int i = 59; i > 0; i--) {
-    rate_history[i] = rate_history[i - 1];
-    rate_ave += rate_history[i];
-  }
-  rate_history[0] = Rate;
-  rate_ave /= 60;
-
   // Make the turn rate more smooth using the LowPassFilter
   Rate = LowPassFilter(last_calculated.turn_rate_smoothed, Rate, fixed(0.3));
   circling_info.turn_rate_smoothed = Rate;
