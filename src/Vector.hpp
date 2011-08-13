@@ -42,6 +42,11 @@ struct Vector {
   }
 
   gcc_pure
+  fixed SquareMagnitude() const {
+    return sqr(x) + sqr(y);
+  }
+
+  gcc_pure
   fixed Magnitude() const {
     return hypot(x, y);
   }

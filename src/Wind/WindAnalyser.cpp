@@ -307,7 +307,7 @@ WindAnalyser::_calcWind(const MoreData &info, DerivedInfo &derived)
     //measurment quality too low
     return;
 
-  if (a.x * a.x + a.y * a.y < fixed(30 * 30))
+  if (a.SquareMagnitude() < fixed(30 * 30))
     // limit to reasonable values (60 knots), reject otherwise
     slot_newEstimate(info, derived, a, quality);
 }
