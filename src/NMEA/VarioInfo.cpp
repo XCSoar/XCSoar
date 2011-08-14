@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "VarioInfo.hpp"
-#include "Defines.h"
+#include "GlideRatio.hpp"
 
 #include <algorithm>
 

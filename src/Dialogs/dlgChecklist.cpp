@@ -28,7 +28,6 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "UtilsText.hpp"
 #include "MainWindow.hpp"
-#include "Defines.h"
 #include "StringUtil.hpp"
 #include "IO/DataFile.hpp"
 #include "Compiler.h"

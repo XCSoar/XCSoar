@@ -24,9 +24,11 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "Math/LowPassFilter.hpp"
 #include "SettingsComputer.hpp"
-#include "Defines.h"
 
 #include <assert.h>
+
+/** over this, show INVALID_GR */
+static const int MAXEFFICIENCYSHOW = 200;
 
 void
 GlideRatioCalculator::init(const SETTINGS_COMPUTER &settings)

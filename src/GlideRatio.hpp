@@ -28,6 +28,8 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
+static const unsigned INVALID_GR = 999;
+
 struct SETTINGS_COMPUTER;
 
 enum AverEffTime_t {

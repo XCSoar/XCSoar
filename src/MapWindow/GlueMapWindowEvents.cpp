@@ -26,7 +26,6 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "Screen/Key.h"
 #include "Screen/Layout.hpp"
-#include "Defines.h"
 #include "Simulator.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "DeviceBlackboard.hpp"
