@@ -35,7 +35,7 @@ static DeviceConfig config;
 static NullPort port;
 
 DebugReplay::DebugReplay(NLineReader *_reader)
-  :reader(_reader)
+  :reader(_reader), glide_polar(fixed_one)
 {
   settings_computer.SetDefaults();
   basic.Reset();
@@ -52,7 +52,8 @@ DebugReplay::Compute()
 {
   computer.Fill(basic, settings_computer);
   computer.Compute(basic, last_basic, calculated, settings_computer);
-  calculated.flight.Moving(basic.time);
+  flying_computer.Compute(glide_polar, basic, last_basic, calculated,
+                          calculated.flight);
 }
 
 class DebugReplayNMEA : public DebugReplay {

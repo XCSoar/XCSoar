@@ -769,13 +769,17 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/FLARM/Traffic.cpp \
 	$(SRC)/Computer/BasicComputer.cpp \
+	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Engine/Util/Filter.cpp \
 	$(SRC)/Engine/Util/DiffFilter.cpp \
+	$(SRC)/Engine/Util/ZeroFinder.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
 	$(SRC)/Engine/Atmosphere/Pressure.cpp \
 	$(SRC)/Engine/Navigation/Aircraft.cpp \
 	$(SRC)/Engine/Navigation/GeoPoint.cpp \
 	$(SRC)/Engine/Navigation/Geometry/GeoVector.cpp \
+	$(SRC)/Engine/GlideSolvers/GlidePolar.cpp \
+	$(SRC)/Engine/GlideSolvers/PolarCoefficients.cpp \
 	$(SRC)/Engine/GlideSolvers/GlideResult.cpp \
 	$(SRC)/Engine/Route/Config.cpp \
 	$(SRC)/Engine/Task/TaskBehaviour.cpp \

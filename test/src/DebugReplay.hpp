@@ -28,6 +28,8 @@ Copyright_License {
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
 #include "Computer/BasicComputer.hpp"
+#include "Computer/FlyingComputer.hpp"
+#include "Engine/GlideSolvers/GlidePolar.hpp"
 
 class NLineReader;
 class Device;
@@ -38,7 +40,10 @@ class DebugReplay {
 protected:
   NLineReader *reader;
 
+  GlidePolar glide_polar;
+
   BasicComputer computer;
+  FlyingComputer flying_computer;
 
   SETTINGS_COMPUTER settings_computer;
   MoreData basic, last_basic;
