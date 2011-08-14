@@ -1403,23 +1403,8 @@ $(TARGET_BIN_DIR)/lxn2igc$(TARGET_EXEEXT): $(LXN2IGC_OBJS) $(LXN2IGC_LDADD) | $(
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_IGC_WRITER_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Version.cpp \
-	$(SRC)/FLARM/FlarmId.cpp \
-	$(SRC)/FLARM/State.cpp \
-	$(SRC)/FLARM/Traffic.cpp \
-	$(SRC)/Units/Units.cpp \
-	$(SRC)/Device/Port.cpp \
-	$(SRC)/Device/NullPort.cpp \
-	$(SRC)/Device/Driver.cpp \
-	$(SRC)/Device/Register.cpp \
-	$(SRC)/Device/Parser.cpp \
-	$(SRC)/Device/Internal.cpp \
-	$(SRC)/NMEA/InputLine.cpp \
-	$(SRC)/NMEA/ExternalSettings.cpp \
-	$(SRC)/NMEA/Info.cpp \
-	$(SRC)/NMEA/Acceleration.cpp \
-	$(SRC)/NMEA/Checksum.cpp \
-	$(SRC)/IO/CSVLine.cpp \
 	$(SRC)/FLARM/FlarmCalculations.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/Logger/IGCWriter.cpp \
@@ -1428,15 +1413,11 @@ RUN_IGC_WRITER_SOURCES = \
 	$(SRC)/Logger/LoggerEPE.cpp \
 	$(SRC)/Logger/MD5.cpp \
 	$(SRC)/Compatibility/string.c \
-	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Operation.cpp \
-	$(TEST_SRC_DIR)/FakeMessage.cpp \
-	$(TEST_SRC_DIR)/FakeProfile.cpp \
-	$(TEST_SRC_DIR)/FakeGeoid.cpp \
 	$(TEST_SRC_DIR)/RunIGCWriter.cpp
 RUN_IGC_WRITER_OBJS = $(call SRC_TO_OBJ,$(RUN_IGC_WRITER_SOURCES))
 RUN_IGC_WRITER_LDADD = \
-	$(IO_LIBS) \
+	$(DEBUG_REPLAY_LDADD) \
 	$(ENGINE_LIBS) \
 	$(DRIVER_LIBS) \
 	$(MATH_LIBS) \

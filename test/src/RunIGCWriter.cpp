@@ -21,18 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Device/NullPort.hpp"
-#include "Device/Driver.hpp"
-#include "Device/Register.hpp"
-#include "Device/Parser.hpp"
-#include "Device/device.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
-#include "DeviceBlackboard.hpp"
 #include "OS/PathName.hpp"
-#include "Protection.hpp"
 #include "Logger/IGCWriter.hpp"
-#include "Profile/DeviceConfig.hpp"
+#include "DebugReplay.hpp"
+#include "Args.hpp"
 
 #include <stdio.h>
 
@@ -54,59 +48,30 @@ InputEvents::processNmea(unsigned key)
 
 int main(int argc, char **argv)
 {
-  if (argc != 3) {
-    fprintf(stderr, "Usage: %s DRIVER FILE.igc\n"
-            "Where DRIVER is one of:\n", argv[0]);
+  Args args(argc, argv, "DRIVER INFILE OUTFILE");
+  DebugReplay *replay = CreateDebugReplay(args);
+  if (replay == NULL)
+    return EXIT_FAILURE;
 
-    const TCHAR *name;
-    for (unsigned i = 0; (name = GetDriverNameByIndex(i)) != NULL; ++i)
-      _ftprintf(stderr, _T("\t%s\n"), name);
+  const char *output_file = args.ExpectNext();
+  args.ExpectEnd();
 
-    return 1;
-  }
+  while (!replay->Basic().time_available)
+    if (!replay->Next())
+      return 0;
 
-  PathName driver_name(argv[1]);
-  const struct DeviceRegister *driver = FindDriverByName(driver_name);
-  if (driver == NULL) {
-    fprintf(stderr, "No such driver: %s\n", argv[1]);
-    return 1;
-  }
+  const TCHAR *driver_name = _T("Unknown");
 
-  DeviceConfig config;
-  config.Clear();
-
-  NullPort port;
-  Device *device = driver->CreateOnPort != NULL
-    ? driver->CreateOnPort(config, &port)
-    : NULL;
-
-  NMEAParser parser;
-
-  NMEAInfo data;
-  data.Reset();
-
-  char buffer[1024];
-  for (unsigned i = 0; i < 10 &&
-         fgets(buffer, sizeof(buffer), stdin) != NULL; ++i)
-    if (device == NULL || !device->ParseNMEA(buffer, data))
-      parser.ParseNMEAString_Internal(buffer, data);
-
-  PathName igc_path(argv[2]);
-  IGCWriter writer(igc_path, data);
-  writer.header(data.date_time_utc,
+  PathName igc_path(output_file);
+  IGCWriter writer(igc_path, replay->Basic());
+  writer.header(replay->Basic().date_time_utc,
                 _T("Manfred Mustermann"), _T("Ventus"),
                 _T("D-1234"), _T("Foo"), driver_name);
 
   GPSClock log_clock(fixed(1));
-  while (fgets(buffer, sizeof(buffer), stdin) != NULL) {
-    TrimRight(buffer);
-
-    if (device == NULL || !device->ParseNMEA(buffer, data))
-      parser.ParseNMEAString_Internal(buffer, data);
-
-    if (log_clock.check_advance(data.time))
-      writer.LogPoint(data);
-  }
+  while (replay->Next())
+    if (log_clock.check_advance(replay->Basic().time))
+      writer.LogPoint(replay->Basic());
 
   writer.flush();
 }
