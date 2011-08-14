@@ -29,6 +29,7 @@ Copyright_License {
 #include "Device/NullPort.hpp"
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
+#include "Replay/IGCParser.hpp"
 
 static DeviceConfig config;
 static NullPort port;
@@ -102,9 +103,76 @@ DebugReplayNMEA::Next()
   return false;
 }
 
+class DebugReplayIGC : public DebugReplay {
+public:
+  DebugReplayIGC(NLineReader *reader)
+    :DebugReplay(reader) {}
+
+  virtual bool Next();
+
+protected:
+  void CopyFromFix(const IGCFix &fix);
+};
+
+bool
+DebugReplayIGC::Next()
+{
+  last_basic = basic;
+  last_calculated = calculated;
+
+  const char *line;
+  while ((line = reader->read()) != NULL) {
+    if (line[0] == 'B') {
+      IGCFix fix;
+      if (IGCParseFix(line, fix)) {
+        CopyFromFix(fix);
+
+        Compute();
+        return true;
+      }
+    }
+  }
+
+  return false;
+}
+
+void
+DebugReplayIGC::CopyFromFix(const IGCFix &fix)
+{
+  basic.clock = basic.time = fix.time;
+  basic.time_available.Update(basic.clock);
+  basic.date_time_utc.year = 2011;
+  basic.date_time_utc.month = 6;
+  basic.date_time_utc.day = 5;
+  basic.date_time_utc.hour = (unsigned)(fix.time / 3600);
+  basic.date_time_utc.minute = (unsigned)(fix.time / 60) % 60;
+  basic.date_time_utc.second = (unsigned)fix.time % 60;
+  basic.connected.Update(basic.clock);
+  basic.location = fix.location;
+  basic.location_available.Update(basic.clock);
+  basic.gps_altitude = fix.gps_altitude;
+  basic.gps_altitude_available.Update(basic.clock);
+  basic.pressure_altitude = basic.baro_altitude = fix.pressure_altitude;
+  basic.pressure_altitude_available.Update(basic.clock);
+  basic.baro_altitude_available.Update(basic.clock);
+}
+
 DebugReplay *
 CreateDebugReplay(Args &args)
 {
+  if (!args.IsEmpty() && strstr(args.PeekNext(), ".igc") != NULL) {
+    const char *input_file = args.ExpectNext();
+
+    FileLineReaderA *reader = new FileLineReaderA(input_file);
+    if (reader->error()) {
+      delete reader;
+      fprintf(stderr, "Failed to open %s\n", input_file);
+      return NULL;
+    }
+
+    return new DebugReplayIGC(reader);
+  }
+
   const tstring driver_name = args.ExpectNextT();
 
   const struct DeviceRegister *driver = FindDriverByName(driver_name.c_str());

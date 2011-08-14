@@ -744,6 +744,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/SettingsComputer.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
