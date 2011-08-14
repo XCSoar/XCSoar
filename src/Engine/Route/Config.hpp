@@ -26,14 +26,6 @@
 #include "Math/fixed.hpp"
 
 struct RoutePlannerConfig {
-  RoutePlannerConfig():
-    mode(rpNone), // default disable while experimental
-    allow_climb(true),
-    use_ceiling(false),
-    safety_height_terrain(150.0),
-    reach_calc_mode(rmStraight),
-    reach_polar_mode(rpmSafety) {}
-
   enum Mode {
     rpNone=0,
     rpTerrain,
@@ -66,6 +58,8 @@ struct RoutePlannerConfig {
 
   /** Whether reach/abort calculations will use the task or safety polar */
   PolarMode reach_polar_mode;
+
+  void SetDefaults();
 
   bool terrain_enabled() const {
     return (mode== rpTerrain) || (mode== rpBoth);

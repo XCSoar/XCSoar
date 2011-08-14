@@ -127,6 +127,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Visitors/ObservationZoneVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Task/Visitors/TaskPointVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Task/Visitors/TaskVisitor.cpp \
+	$(ENGINE_SRC_DIR)/Route/Config.cpp \
 	$(ENGINE_SRC_DIR)/Route/RoutePlanner.cpp \
 	$(ENGINE_SRC_DIR)/Route/AirspaceRoute.cpp \
 	$(ENGINE_SRC_DIR)/Route/TerrainRoute.cpp \

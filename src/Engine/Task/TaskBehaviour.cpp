@@ -22,30 +22,50 @@
 
 #include "TaskBehaviour.hpp"
 
-TaskBehaviour::TaskBehaviour():
-    optimise_targets_range(true),
-    optimise_targets_bearing(true),
-    optimise_targets_margin(300),
-    auto_mc(false),
-    auto_mc_mode(AUTOMC_CLIMBAVERAGE),
-    calc_cruise_efficiency(true),
-    calc_effective_mc(true),
-    calc_glide_required(true),
-    goto_nonlandable(true),
-    risk_gamma(0.0),
-    enable_olc(false),
-    contest(OLC_Plus),
-    contest_handicap(100),
-    safety_mc(fixed_half),
-    safety_height_arrival(300.0),
-    task_type_default(FACTORY_RT),
-    enable_trace(true),
-    abort_task_mode(atmSimple) {}
+void
+SectorDefaults::SetDefaults()
+{
+  start_type = AbstractTaskFactory::START_CYLINDER;
+  start_radius = fixed(1000);
+  turnpoint_type = AbstractTaskFactory::AST_CYLINDER;
+  turnpoint_radius = fixed(500);
+  finish_type = AbstractTaskFactory::FINISH_CYLINDER;
+  finish_radius = fixed(1000);
+}
+
+void
+TaskStartMargins::SetDefaults()
+{
+  start_max_speed_margin = fixed_zero;
+  start_max_height_margin = 0u;
+}
 
 void
 TaskBehaviour::SetDefaults()
 {
+  TaskStartMargins::SetDefaults();
+
+  optimise_targets_range = true;
+  optimise_targets_bearing = true;
+  optimise_targets_margin = 300;
+  auto_mc = false;
+  auto_mc_mode = AUTOMC_CLIMBAVERAGE;
+  calc_cruise_efficiency = true;
+  calc_effective_mc = true;
+  calc_glide_required = true;
+  goto_nonlandable = true;
+  risk_gamma = fixed_zero;
   enable_olc = true;
+  contest = OLC_Plus;
+  contest_handicap = 100;
+  safety_mc = fixed_half;
+  safety_height_arrival = fixed(300);
+  task_type_default = FACTORY_RT;
+  sector_defaults.SetDefaults();
+  ordered_defaults.SetDefaults();
+  route_planner.SetDefaults();
+  enable_trace = true;
+  abort_task_mode = atmSimple;
 }
 
 void

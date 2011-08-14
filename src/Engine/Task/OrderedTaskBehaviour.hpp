@@ -39,7 +39,6 @@ class OrderedTaskBehaviour
 {
 public:
   friend class Serialiser;
-  OrderedTaskBehaviour();
 
   /**
    * Option to enable calculation of scores, and protect against
@@ -71,6 +70,8 @@ public:
   bool is_closed;
   /** Whether start points needs to be armed */
   bool start_requires_arm;
+
+  void SetDefaults();
 
   /**
    * Check whether aircraft speed is within start speed limits

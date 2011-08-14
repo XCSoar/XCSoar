@@ -776,6 +776,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Engine/Navigation/GeoPoint.cpp \
 	$(SRC)/Engine/Navigation/Geometry/GeoVector.cpp \
 	$(SRC)/Engine/GlideSolvers/GlideResult.cpp \
+	$(SRC)/Engine/Route/Config.cpp \
 	$(SRC)/Engine/Task/TaskBehaviour.cpp \
 	$(SRC)/Engine/Task/OrderedTaskBehaviour.cpp \
 	$(SRC)/Engine/Task/TaskStats/TaskStats.cpp \

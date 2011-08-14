@@ -42,14 +42,6 @@ enum AbortTaskMode {
  */
 struct SectorDefaults
 {
-  SectorDefaults() :
-    start_type(AbstractTaskFactory::START_CYLINDER), start_radius(1000),
-        turnpoint_type(AbstractTaskFactory::AST_CYLINDER),
-        turnpoint_radius(500),
-        finish_type(AbstractTaskFactory::FINISH_CYLINDER), finish_radius(1000)
-  {
-  }
-
   /** default start type for new tasks */
   AbstractTaskFactory::LegalPointType_t start_type;
   /** default start radius or line length for new tasks */
@@ -62,6 +54,8 @@ struct SectorDefaults
   AbstractTaskFactory::LegalPointType_t finish_type;
   /** default finish radius or line length for new tasks */
   fixed finish_radius;
+
+  void SetDefaults();
 };
 
 struct TaskStartMargins {
@@ -70,8 +64,7 @@ struct TaskStartMargins {
   /** Margin in maximum height (m) allowed in start sector */
   unsigned start_max_height_margin;
 
-  TaskStartMargins()
-    :start_max_speed_margin(fixed_zero), start_max_height_margin(0u) {}
+  void SetDefaults();
 };
 
 /**
@@ -81,11 +74,6 @@ struct TaskStartMargins {
 class TaskBehaviour : public TaskStartMargins
 {
 public:
-  /**
-   * Constructor, sets default task behaviour
-   */
-  TaskBehaviour();
-
   /**
    * Enumeration of factory types.  This is the set of
    * types of ordered task that can be created.
