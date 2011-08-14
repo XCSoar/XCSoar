@@ -39,7 +39,6 @@ SafetyFactorsConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
-  WndProperty *wp;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
   LoadFormProperty(*wf, _T("prpSafetyAltitudeArrival"), ugAltitude,
@@ -48,16 +47,15 @@ SafetyFactorsConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
                    settings_computer.route_planner.safety_height_terrain);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAbortTaskMode"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Simple"));
-    dfe->addEnumText(_("Task"));
-    dfe->addEnumText(_("Home"));
-    dfe->Set(settings_computer.abort_task_mode);
-    wp->RefreshDisplay();
-  }
+  static const StaticEnumChoice abort_task_mode_list[] = {
+    { atmSimple, N_("Simple") },
+    { atmTask, N_("Task") },
+    { atmHome, N_("Home") },
+    { 0 }
+  };
+
+  LoadFormProperty(*wf, _T("prpAbortTaskMode"), abort_task_mode_list,
+                   settings_computer.abort_task_mode);
 
   LoadFormProperty(*wf, _T("prpSafetyMacCready"), ugVerticalSpeed,
                    settings_computer.safety_mc);
@@ -81,16 +79,9 @@ SafetyFactorsConfigPanel::Save()
                               settings_computer.route_planner.safety_height_terrain,
                               szProfileSafetyAltitudeTerrain);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAbortTaskMode"));
-  if (wp) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    if ((int)settings_computer.abort_task_mode != df.GetAsInteger()) {
-      settings_computer.abort_task_mode = (AbortTaskMode)df.GetAsInteger();
-      Profile::Set(szProfileAbortTaskMode,
-                   (unsigned)settings_computer.abort_task_mode);
-      changed = true;
-    }
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpAbortTaskMode"),
+                                  szProfileAbortTaskMode,
+                                  settings_computer.abort_task_mode);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
