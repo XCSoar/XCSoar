@@ -193,6 +193,14 @@ struct SETTINGS_FEATURES {
   void SetDefaults();
 };
 
+enum AverEffTime_t {
+  ae15seconds,
+  ae30seconds,
+  ae60seconds,
+  ae90seconds,
+  ae2minutes,
+  ae3minutes,
+};
 
 struct SETTINGS_COMPUTER: 
   public SETTINGS_WIND,
@@ -207,7 +215,7 @@ struct SETTINGS_COMPUTER:
 {
   bool EnableExternalTriggerCruise;
 
-  short AverEffTime;
+  AverEffTime_t AverEffTime;
 
   /** Update system time from GPS time */
   bool SetSystemTimeFromGPS;

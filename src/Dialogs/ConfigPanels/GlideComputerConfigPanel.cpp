@@ -126,7 +126,8 @@ GlideComputerConfigPanel::Save(bool &requirerestart)
   wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime")); // VENTA6
   if (wp) {
     if (settings_computer.AverEffTime != wp->GetDataField()->GetAsInteger()) {
-      settings_computer.AverEffTime = wp->GetDataField()->GetAsInteger();
+      settings_computer.AverEffTime =
+        (AverEffTime_t)wp->GetDataField()->GetAsInteger();
       Profile::Set(szProfileAverEffTime,
                    settings_computer.AverEffTime);
       changed = true;

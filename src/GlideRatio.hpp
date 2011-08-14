@@ -32,15 +32,6 @@ static const unsigned INVALID_GR = 999;
 
 struct SETTINGS_COMPUTER;
 
-enum AverEffTime_t {
-  ae15seconds,
-  ae30seconds,
-  ae60seconds,
-  ae90seconds,
-  ae2minutes,
-  ae3minutes,
-};
-
 class GlideRatioCalculator : private NonCopyable {
   struct record {
     unsigned distance;

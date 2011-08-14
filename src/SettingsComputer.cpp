@@ -120,7 +120,7 @@ SETTINGS_COMPUTER::SetDefaults()
   SETTINGS_PLACES_OF_INTEREST::SetDefaults();
 
   EnableExternalTriggerCruise =false;
-  AverEffTime = 0;
+  AverEffTime = ae30seconds;
   SetSystemTimeFromGPS = is_altair() && is_embedded();
   UTCOffset = GetSystemUTCOffset();
   pressure.SetStandardPressure();

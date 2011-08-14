@@ -113,9 +113,7 @@ Profile::Load(SETTINGS_COMPUTER &settings)
   Get(szProfileEnableExternalTriggerCruise,
       settings.EnableExternalTriggerCruise);
 
-  unsigned Temp;
-  if (Get(szProfileAverEffTime, Temp))
-    settings.AverEffTime = Temp;
+  GetEnum(szProfileAverEffTime, settings.AverEffTime);
 
   Get(szProfileSetSystemTimeFromGPS, settings.SetSystemTimeFromGPS);
   Get(szProfileUTCOffset, settings.UTCOffset);
