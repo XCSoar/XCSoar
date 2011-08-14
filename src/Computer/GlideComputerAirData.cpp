@@ -75,6 +75,8 @@ GlideComputerAirData::ResetFlight(const bool full)
   wind_ekf.reset();
   wind_store.reset();
   rotaryLD.init(SettingsComputer());
+
+  flying_computer.Reset();
 }
 
 /**

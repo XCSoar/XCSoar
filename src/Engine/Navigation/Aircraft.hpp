@@ -121,11 +121,6 @@ struct VarioState
  */
 struct FlyingState
 {
-private:
-  int  time_on_ground;
-  int  time_in_flight;
-
-public:
   /** True if airborne, False otherwise */
   bool flying;
   /** Detects when glider is on ground for several seconds */
@@ -138,24 +133,6 @@ public:
 
   /** Reset flying state as if never flown */
   void Reset();
-
-  /**
-   * Update flying state when moving 
-   *
-   * @param time Time the aircraft is moving
-   */
-  void Moving(const fixed time);
-
-  /**
-   * Update flying state when stationary 
-   *
-   * @param time Time the aircraft is stationary
-   * @param on_ground Whether the aircraft is known to be on the ground
-   */
-  void Stationary(const fixed time);
-
-private:
-  void Check(const fixed time);
 };
 
 /**

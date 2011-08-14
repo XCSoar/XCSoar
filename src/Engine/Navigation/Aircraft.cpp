@@ -55,69 +55,7 @@ AltitudeState::CalcThermalDriftFactor() const
 void
 FlyingState::Reset()
 {
-  time_in_flight = 0;
-  time_on_ground = 0;
   flying = false;
   on_ground = false;
   flight_time = takeoff_time = fixed_zero;
-}
-
-void
-FlyingState::Moving(const fixed time)
-{
-  // Increase InFlight countdown for further evaluation
-  if (time_in_flight < 60)
-    time_in_flight++;
-
-  // We are moving so we are certainly not on the ground
-  time_on_ground = 0;
-
-  // Update flying state
-  Check(time);
-}
-
-void
-FlyingState::Stationary(const fixed time)
-{
-  // Decrease InFlight countdown for further evaluation
-  if (time_in_flight)
-    time_in_flight--;
-
-  if (time_on_ground<30)
-    time_on_ground++;
-
-  // Update flying state
-  Check(time);
-}
-
-void
-FlyingState::Check(const fixed time)
-{
-  // Logic to detect takeoff and landing is as follows:
-  //   detect takeoff when above threshold speed for 10 seconds
-  //
-  //   detect landing when below threshold speed for 30 seconds
-
-  if (!flying) {
-    // We are moving for 10sec now
-    if (time_in_flight > 10) {
-      // We certainly must be flying after 10sec movement
-      flying = true;
-      takeoff_time = time;
-      flight_time = fixed_zero;
-    }
-  } else {
-    // update time of flight
-    flight_time = time - takeoff_time;
-
-    // We are not moving anymore for 60sec now
-    if (time_in_flight == 0)
-      // We are probably not flying anymore
-      flying = false;
-  }
-
-  // If we are not certainly flying we are probably on the ground
-  // To make sure that we are, wait for 10sec to make sure there
-  // is no more movement
-  on_ground = (!flying) && (time_on_ground > 10);
 }

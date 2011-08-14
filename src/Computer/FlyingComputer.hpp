@@ -24,17 +24,47 @@ Copyright_License {
 #ifndef XCSOAR_FLYING_COMPUTER_HPP
 #define XCSOAR_FLYING_COMPUTER_HPP
 
+#include "Math/fixed.hpp"
+
 class GlidePolar;
 struct NMEAInfo;
 struct DerivedInfo;
+struct AircraftState;
 struct FlyingState;
 
 class FlyingComputer {
+  unsigned short time_on_ground;
+  unsigned short time_in_flight;
+
 public:
+  void Reset();
+
   void Compute(const GlidePolar &glide_polar,
                const NMEAInfo &basic, const NMEAInfo &last_basic,
                const DerivedInfo &calculated,
                FlyingState &flying);
+
+  void Compute(const GlidePolar &glide_polar,
+               const AircraftState &state,
+               FlyingState &flying);
+
+protected:
+  void Check(FlyingState &state, fixed time);
+
+  /**
+   * Update flying state when moving 
+   *
+   * @param time Time the aircraft is moving
+   */
+  void Moving(FlyingState &state, fixed time);
+
+  /**
+   * Update flying state when stationary 
+   *
+   * @param time Time the aircraft is stationary
+   * @param on_ground Whether the aircraft is known to be on the ground
+   */
+  void Stationary(FlyingState &state, fixed time);
 };
 
 #endif

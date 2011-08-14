@@ -4,6 +4,8 @@
 #include "Replay/IgcReplay.hpp"
 #include "Task/TaskManager.hpp"
 #include "UtilsText.hpp"
+#include "Computer/FlyingComputer.hpp"
+
 #include <fstream>
 
 #include "Util/Deserialiser.hpp"
@@ -124,16 +126,15 @@ test_replay()
 //  uncomment this to manually go to first tp
 //  task_manager.incrementActiveTaskPoint(1);
 
+  FlyingComputer flying_computer;
+  flying_computer.Reset();
+
   while (sim.Update()) {
     if (sim.state.time>time_last) {
 
       n_samples++;
 
-      if (sim.state.ground_speed> glide_polar.GetVTakeoff()) {
-        sim.state.Moving(sim.state.time);
-      } else {
-        sim.state.Stationary(sim.state.time);
-      }
+      flying_computer.Compute(glide_polar, sim.state, sim.state);
 
       task_manager.update(sim.state, state_last);
       task_manager.update_idle(sim.state);

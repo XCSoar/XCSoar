@@ -4,6 +4,8 @@
 #include "Replay/IgcReplay.hpp"
 #include "Task/TaskManager.hpp"
 #include "UtilsText.hpp"
+#include "Computer/FlyingComputer.hpp"
+
 #include <fstream>
 
 ContestResult official_score_classic,
@@ -182,16 +184,15 @@ test_replay(const Contests olc_type,
 
   fixed time_last = sim.state.time;
 
+  FlyingComputer flying_computer;
+  flying_computer.Reset();
+
   while (sim.Update()) {
     if (sim.state.time>time_last) {
 
       n_samples++;
 
-      if (sim.state.ground_speed> glide_polar.GetVTakeoff()) {
-        sim.state.Moving(sim.state.time);
-      } else {
-        sim.state.Stationary(sim.state.time);
-      }
+      flying_computer.Compute(glide_polar, sim.state, sim.state);
 
       task_manager.update(sim.state, state_last);
       task_manager.update_idle(sim.state);

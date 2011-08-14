@@ -1,4 +1,5 @@
 TEST_SRC = \
+	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/Replay/IgcReplay.cpp \
 	$(SRC)/Replay/TaskAutoPilot.cpp \

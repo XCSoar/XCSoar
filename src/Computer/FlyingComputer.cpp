@@ -27,6 +27,72 @@ Copyright_License {
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 
 void
+FlyingComputer::Reset()
+{
+  time_on_ground = time_in_flight = 0;
+}
+
+void
+FlyingComputer::Check(FlyingState &state, fixed time)
+{
+  // Logic to detect takeoff and landing is as follows:
+  //   detect takeoff when above threshold speed for 10 seconds
+  //
+  //   detect landing when below threshold speed for 30 seconds
+
+  if (!state.flying) {
+    // We are moving for 10sec now
+    if (time_in_flight > 10) {
+      // We certainly must be flying after 10sec movement
+      state.flying = true;
+      state.takeoff_time = time;
+      state.flight_time = fixed_zero;
+    }
+  } else {
+    // update time of flight
+    state.flight_time = time - state.takeoff_time;
+
+    // We are not moving anymore for 60sec now
+    if (time_in_flight == 0)
+      // We are probably not flying anymore
+      state.flying = false;
+  }
+
+  // If we are not certainly flying we are probably on the ground
+  // To make sure that we are, wait for 10sec to make sure there
+  // is no more movement
+  state.on_ground = !state.flying && time_on_ground > 10;
+}
+
+void
+FlyingComputer::Moving(FlyingState &state, fixed time)
+{
+  // Increase InFlight countdown for further evaluation
+  if (time_in_flight < 60)
+    time_in_flight++;
+
+  // We are moving so we are certainly not on the ground
+  time_on_ground = 0;
+
+  // Update flying state
+  Check(state, time);
+}
+
+void
+FlyingComputer::Stationary(FlyingState &state, fixed time)
+{
+  // Decrease InFlight countdown for further evaluation
+  if (time_in_flight)
+    time_in_flight--;
+
+  if (time_on_ground < 30)
+    time_on_ground++;
+
+  // Update flying state
+  Check(state, time);
+}
+
+void
 FlyingComputer::Compute(const GlidePolar &glide_polar,
                         const NMEAInfo &basic, const NMEAInfo &last_basic,
                         const DerivedInfo &calculated,
@@ -46,7 +112,18 @@ FlyingComputer::Compute(const GlidePolar &glide_polar,
 
   if (speed > glide_polar.GetVTakeoff() ||
       (calculated.altitude_agl_valid && calculated.altitude_agl > fixed(300)))
-    flying.Moving(basic.time);
+    Moving(flying, basic.time);
   else
-    flying.Stationary(basic.time);
+    Stationary(flying, basic.time);
+}
+
+void
+FlyingComputer::Compute(const GlidePolar &glide_polar,
+                        const AircraftState &state,
+                        FlyingState &flying)
+{
+  if (state.ground_speed > glide_polar.GetVTakeoff())
+    Moving(flying, state.time);
+  else
+    Stationary(flying, state.time);
 }

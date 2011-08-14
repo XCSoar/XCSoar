@@ -50,9 +50,10 @@ AircraftSim::Start(const GeoPoint& location_start,
   state_last.location = location_last;
 
   // start with aircraft moving since this isn't a real replay (no time on ground)
-  for (unsigned i=0; i<10; i++) {
-    state.Moving(state.time);
-  }
+  state.flying = true;
+  state.takeoff_time = state.time;
+  state.flight_time = fixed_zero;
+  state.on_ground = false;
 }
 
 
@@ -73,7 +74,6 @@ AircraftSim::integrate(const Angle& heading, const fixed timestep)
   state.location = v;
   state.altitude += state.vario*timestep;
   state.time += timestep;
-  state.Moving(state.time);
 }
 
 

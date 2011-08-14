@@ -40,6 +40,8 @@ DebugReplay::DebugReplay(NLineReader *_reader)
   settings_computer.SetDefaults();
   basic.Reset();
   calculated.Reset();
+
+  flying_computer.Reset();
 }
 
 DebugReplay::~DebugReplay()
