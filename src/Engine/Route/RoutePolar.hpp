@@ -23,7 +23,7 @@
 #define ROUTEPOLAR_HPP
 
 #include <limits.h>
-#include "Task/TaskBehaviour.hpp"
+#include "Config.hpp"
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Navigation/SearchPoint.hpp"

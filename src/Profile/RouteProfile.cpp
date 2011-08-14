@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Profile/RouteProfile.hpp"
 #include "Profile/Profile.hpp"
-#include "Task/TaskBehaviour.hpp"
+#include "Engine/Route/Config.hpp"
 
 void
 Profile::Load(RoutePlannerConfig &settings)

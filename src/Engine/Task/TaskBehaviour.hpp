@@ -26,6 +26,7 @@
 #include "Tasks/PathSolvers/Contests.hpp"
 #include "OrderedTaskBehaviour.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
+#include "Engine/Route/Config.hpp"
 
 struct AircraftState;
 
@@ -33,59 +34,6 @@ enum AbortTaskMode {
   atmSimple,
   atmTask,
   atmHome,
-};
-
-struct RoutePlannerConfig {
-  RoutePlannerConfig():
-    mode(rpNone), // default disable while experimental
-    allow_climb(true),
-    use_ceiling(false),
-    safety_height_terrain(150.0),
-    reach_calc_mode(rmStraight),
-    reach_polar_mode(rpmSafety) {}
-
-  enum Mode {
-    rpNone=0,
-    rpTerrain,
-    rpAirspace,
-    rpBoth
-  };
-
-  enum PolarMode {
-    rpmTask=0,
-    rpmSafety
-  };
-
-  enum ReachMode {
-    rmOff=0,
-    rmStraight,
-    rmTurning
-  };
-
-  Mode mode;
-  bool allow_climb;
-  bool use_ceiling;
-
-  /** Minimum height above terrain for arrival height at non-landable waypoint,
-      and for terrain clearance en-route (m) */
-  fixed safety_height_terrain;
-
-  /** Whether to allow turns around obstacles in reach calculations, or just
-      straight line */
-  ReachMode reach_calc_mode;
-
-  /** Whether reach/abort calculations will use the task or safety polar */
-  PolarMode reach_polar_mode;
-
-  bool terrain_enabled() const {
-    return (mode== rpTerrain) || (mode== rpBoth);
-  }
-  bool airspace_enabled() const {
-    return (mode== rpAirspace) || (mode== rpBoth);
-  }
-  bool reach_enabled() const {
-    return reach_calc_mode != rmOff;
-  }
 };
 
 /**

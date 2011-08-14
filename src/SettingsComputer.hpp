@@ -28,6 +28,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/Atmosphere/Pressure.hpp"
+#include "Engine/Route/Config.hpp"
 #include "Util/StaticString.hpp"
 #include "Task/TaskBehaviour.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
