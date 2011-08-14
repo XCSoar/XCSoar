@@ -235,7 +235,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   ProtectedAirspaceWarningManager airspace_warnings(airspace_warning);
 
   ProtectedTaskManager protected_task_manager(task_manager,
-                                              blackboard.SettingsComputer(),
+                                              blackboard.SettingsComputer().task,
                                               task_events);
 
   RoutePlannerGlue route_planner(task_manager.get_glide_polar(),

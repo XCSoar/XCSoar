@@ -53,16 +53,15 @@ void
 GlideComputerRoute::ProcessRoute(const MoreData &basic,
                                  DerivedInfo &calculated,
                                  const DerivedInfo &last_calculated,
-                                 const SETTINGS_COMPUTER &settings_computer,
+                                 const RoutePlannerConfig &config,
                                  const GlidePolar &glide_polar,
                                  const GlidePolar &safety_polar)
 {
   protected_route_planner.SetPolars(glide_polar, safety_polar,
                                     calculated.wind);
 
-  Reach(basic, calculated, settings_computer);
-  TerrainWarning(basic, calculated, last_calculated,
-                 settings_computer.route_planner);
+  Reach(basic, calculated, config);
+  TerrainWarning(basic, calculated, last_calculated, config);
 }
 
 void
@@ -116,7 +115,7 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
 
 void
 GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
-                          const SETTINGS_COMPUTER &settings_computer)
+                          const RoutePlannerConfig &config)
 {
   if (!calculated.terrain_valid) {
     /* without valid terrain information, we cannot calculate
@@ -125,8 +124,7 @@ GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
     return;
   }
 
-  const bool do_solve = (settings_computer.route_planner.reach_enabled() &&
-                         terrain != NULL);
+  const bool do_solve = config.reach_enabled() && terrain != NULL;
 
   const AircraftState state = ToAircraftState(basic, calculated);
   const AGeoPoint start (state.location, state.altitude);

@@ -116,7 +116,6 @@ SETTINGS_COMPUTER::SetDefaults()
   SETTINGS_VOICE::SetDefaults();
   SETTINGS_PLACES_OF_INTEREST::SetDefaults();
   SETTINGS_FEATURES::SetDefaults();
-  TaskBehaviour::SetDefaults();
   SETTINGS_PLACES_OF_INTEREST::SetDefaults();
 
   EnableExternalTriggerCruise =false;
@@ -126,4 +125,5 @@ SETTINGS_COMPUTER::SetDefaults()
   pressure.SetStandardPressure();
   pressure_available.Clear();
   airspace.SetDefaults();
+  task.SetDefaults();
 }

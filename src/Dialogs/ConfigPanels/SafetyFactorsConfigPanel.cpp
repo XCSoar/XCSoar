@@ -40,12 +40,13 @@ SafetyFactorsConfigPanel::Init(WndForm *_wf)
   assert(_wf != NULL);
   wf = _wf;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+  const TaskBehaviour &task_behaviour = settings_computer.task;
 
   LoadFormProperty(*wf, _T("prpSafetyAltitudeArrival"), ugAltitude,
-                   settings_computer.safety_height_arrival);
+                   task_behaviour.safety_height_arrival);
 
   LoadFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
-                   settings_computer.route_planner.safety_height_terrain);
+                   task_behaviour.route_planner.safety_height_terrain);
 
   static const StaticEnumChoice abort_task_mode_list[] = {
     { atmSimple, N_("Simple") },
@@ -55,12 +56,12 @@ SafetyFactorsConfigPanel::Init(WndForm *_wf)
   };
 
   LoadFormProperty(*wf, _T("prpAbortTaskMode"), abort_task_mode_list,
-                   settings_computer.abort_task_mode);
+                   task_behaviour.abort_task_mode);
 
   LoadFormProperty(*wf, _T("prpSafetyMacCready"), ugVerticalSpeed,
-                   settings_computer.safety_mc);
+                   task_behaviour.safety_mc);
 
-  LoadFormProperty(*wf, _T("prpRiskGamma"), settings_computer.risk_gamma);
+  LoadFormProperty(*wf, _T("prpRiskGamma"), task_behaviour.risk_gamma);
 }
 
 
@@ -70,27 +71,28 @@ SafetyFactorsConfigPanel::Save()
   bool changed = false;
   WndProperty *wp;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
+  TaskBehaviour &task_behaviour = settings_computer.task;
 
   changed |= SaveFormProperty(*wf, _T("prpSafetyAltitudeArrival"), ugAltitude,
-                              settings_computer.safety_height_arrival,
+                              task_behaviour.safety_height_arrival,
                               szProfileSafetyAltitudeArrival);
 
   changed |= SaveFormProperty(*wf, _T("prpSafetyAltitudeTerrain"), ugAltitude,
-                              settings_computer.route_planner.safety_height_terrain,
+                              task_behaviour.route_planner.safety_height_terrain,
                               szProfileSafetyAltitudeTerrain);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpAbortTaskMode"),
                                   szProfileAbortTaskMode,
-                                  settings_computer.abort_task_mode);
+                                  task_behaviour.abort_task_mode);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSafetyMacCready"));
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     fixed val = Units::ToSysVSpeed(df.GetAsFixed());
-    if (settings_computer.safety_mc != val) {
-      settings_computer.safety_mc = val;
+    if (task_behaviour.safety_mc != val) {
+      task_behaviour.safety_mc = val;
       Profile::Set(szProfileSafetyMacCready,
-                    iround(settings_computer.safety_mc*10));
+                    iround(task_behaviour.safety_mc*10));
       changed = true;
     }
   }
@@ -99,10 +101,9 @@ SafetyFactorsConfigPanel::Save()
   if (wp) {
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
     fixed val = df.GetAsFixed();
-    if (settings_computer.risk_gamma != val) {
-      settings_computer.risk_gamma = val;
-      Profile::Set(szProfileRiskGamma,
-                    iround(settings_computer.risk_gamma*10));
+    if (task_behaviour.risk_gamma != val) {
+      task_behaviour.risk_gamma = val;
+      Profile::Set(szProfileRiskGamma, iround(task_behaviour.risk_gamma * 10));
       changed = true;
     }
   }

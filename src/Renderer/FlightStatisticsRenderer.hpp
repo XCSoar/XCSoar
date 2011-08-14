@@ -32,6 +32,7 @@ struct NMEAInfo;
 struct DerivedInfo;
 class ClimbHistory;
 class TracePointVector;
+struct TaskBehaviour;
 struct SETTINGS_COMPUTER;
 struct SETTINGS_MAP;
 class Canvas;
@@ -126,7 +127,7 @@ public:
 
   void CaptionTempTrace(TCHAR *sTmp) const;
   void CaptionTask(TCHAR *sTmp, const DerivedInfo &derived) const;
-  void CaptionOLC(TCHAR *sTmp, const SETTINGS_COMPUTER &settings_computer,
+  void CaptionOLC(TCHAR *sTmp, const TaskBehaviour &task_behaviour,
                   const DerivedInfo &derived) const;
 };
 

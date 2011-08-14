@@ -233,7 +233,7 @@ TargetMapWindow::DrawWaypoints(Canvas &canvas)
 
   way_point_renderer.render(canvas, label_block,
                             projection, settings,
-                            SettingsComputer(),
+                            SettingsComputer().task,
                             task, NULL);
 }
 

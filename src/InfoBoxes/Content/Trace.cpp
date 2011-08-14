@@ -178,7 +178,7 @@ InfoBoxContentThermalBand::on_custom_paint(InfoBoxWindow &infobox, Canvas &canva
                                 CommonInterface::SettingsComputer(),
                                 canvas,
                                 infobox.get_value_and_comment_rect(),
-                                XCSoarInterface::SettingsComputer());
+                                XCSoarInterface::SettingsComputer().task);
 }
 
 void

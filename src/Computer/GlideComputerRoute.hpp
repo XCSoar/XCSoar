@@ -29,7 +29,6 @@ Copyright_License {
 
 struct MoreData;
 struct DerivedInfo;
-struct SETTINGS_COMPUTER;
 struct RoutePlannerConfig;
 class ProtectedRoutePlanner;
 class RoutePlannerGlue;
@@ -53,7 +52,7 @@ protected:
   void ResetFlight();
   void ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
                     const DerivedInfo &last_calculated,
-                    const SETTINGS_COMPUTER &settings_computer,
+                    const RoutePlannerConfig &config,
                     const GlidePolar &glide_polar,
                     const GlidePolar &safety_polar);
 
@@ -66,7 +65,7 @@ private:
                       const RoutePlannerConfig &config);
 
   void Reach(const MoreData &basic, DerivedInfo &calculated,
-             const SETTINGS_COMPUTER &settings_computer);
+             const RoutePlannerConfig &config);
 };
 
 #endif

@@ -224,9 +224,10 @@ replace_in_task(const Waypoint &wp)
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEvents task_events;
   GlidePolar glide_polar(task_manager->get_glide_polar());
-  OrderedTask *task = task_manager->clone(task_events,
-                                          XCSoarInterface::SettingsComputer(),
-                                          glide_polar);
+  OrderedTask *task =
+    task_manager->clone(task_events,
+                        XCSoarInterface::SettingsComputer().task,
+                        glide_polar);
 
   task_edit_result result = replace_in_task(task, wp);
   if (result == SUCCESS)
@@ -325,9 +326,10 @@ insert_in_task(const Waypoint &wp)
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEvents task_events;
   GlidePolar glide_polar(task_manager->get_glide_polar());
-  OrderedTask *task = task_manager->clone(task_events,
-                                          XCSoarInterface::SettingsComputer(),
-                                          glide_polar);
+  OrderedTask *task =
+    task_manager->clone(task_events,
+                        XCSoarInterface::SettingsComputer().task,
+                        glide_polar);
 
   task_edit_result result = insert_in_task(task, wp);
   if (result == SUCCESS)
@@ -406,9 +408,10 @@ append_to_task(const Waypoint &wp)
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEvents task_events;
   GlidePolar glide_polar(task_manager->get_glide_polar());
-  OrderedTask *task = task_manager->clone(task_events,
-                                          XCSoarInterface::SettingsComputer(),
-                                          glide_polar);
+  OrderedTask *task =
+    task_manager->clone(task_events,
+                        XCSoarInterface::SettingsComputer().task,
+                        glide_polar);
 
   task_edit_result result = append_to_task(task, wp);
   if (result == SUCCESS)
@@ -536,9 +539,10 @@ remove_from_task(const Waypoint &wp)
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   TaskEvents task_events;
   GlidePolar glide_polar(task_manager->get_glide_polar());
-  OrderedTask *task = task_manager->clone(task_events,
-                                          XCSoarInterface::SettingsComputer(),
-                                          glide_polar);
+  OrderedTask *task =
+    task_manager->clone(task_events,
+                        XCSoarInterface::SettingsComputer().task,
+                        glide_polar);
 
   task_edit_result result = remove_from_task(task, wp);
   if (result == SUCCESS)
@@ -692,7 +696,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     GlidePolar glide_polar = settings_computer.glide_polar_task;
     const GlidePolar &safety_polar = calculated.glide_polar_safety;
 
-    UnorderedTaskPoint t(way_point, settings_computer);
+    UnorderedTaskPoint t(way_point, settings_computer.task);
 
     // alt reqd at current mc
 

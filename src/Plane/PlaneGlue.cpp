@@ -111,7 +111,7 @@ void
 PlaneGlue::Synchronize(const Plane &plane, SETTINGS_COMPUTER &settings,
                        GlidePolar &gp)
 {
-  settings.contest_handicap = plane.handicap;
+  settings.task.contest_handicap = plane.handicap;
 
   PolarCoefficients pc = PolarCoefficients::From3VW(plane.v1, plane.v2, plane.v3,
                                                     plane.w1, plane.w2, plane.w3);

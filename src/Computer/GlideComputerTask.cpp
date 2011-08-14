@@ -61,7 +61,7 @@ GlideComputerTask::ProcessBasicTask()
 
   ProtectedTaskManager::ExclusiveLease task(m_task);
 
-  task->set_task_behaviour(SettingsComputer());
+  task->set_task_behaviour(SettingsComputer().task);
 
   if (time_advanced() && basic.location_available) {
     const AircraftState current_as = ToAircraftState(basic, Calculated());
@@ -98,7 +98,7 @@ GlideComputerTask::ProcessMoreTask()
   }
 
   GlideComputerRoute::ProcessRoute(Basic(), SetCalculated(), LastCalculated(),
-                                   SettingsComputer(),
+                                   SettingsComputer().task.route_planner,
                                    glide_polar, safety_polar);
 
   if (SettingsComputer().EnableBlockSTF)

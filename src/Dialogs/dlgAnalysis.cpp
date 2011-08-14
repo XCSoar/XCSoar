@@ -201,7 +201,7 @@ ChartControl::on_paint(Canvas &canvas)
                              calculated,
                              settings_computer,
                              canvas, rcgfx,
-                             settings_computer,
+                             settings_computer.task,
                              false,
                              &otb);
   }
@@ -356,11 +356,10 @@ Update(void)
 
   case ANALYSIS_PAGE_OLC:
     _stprintf(sTmp, _T("%s: %s"), _("Analysis"),
-        ContestToString(settings_computer.contest));
+              ContestToString(settings_computer.task.contest));
     wf->SetCaption(sTmp);
     SetCalcCaption(_T(""));
-    fs.CaptionOLC(sTmp, settings_computer,
-                  calculated);
+    fs.CaptionOLC(sTmp, settings_computer.task, calculated);
     wInfo->SetCaption(sTmp);
     break;
 

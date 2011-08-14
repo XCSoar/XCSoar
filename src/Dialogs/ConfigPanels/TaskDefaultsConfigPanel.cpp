@@ -44,9 +44,9 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
   wf = _wf;
   WndProperty *wp;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+  const TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTask* temptask = protected_task_manager->task_blank();
   temptask->set_factory(TaskBehaviour::FACTORY_RT);
-
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartType"));
   if (wp) {
@@ -58,14 +58,14 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
     for (unsigned i = 0; i < point_types.size(); i++) {
       dfe->addEnumText(OrderedTaskPointName(point_types[i]), (unsigned)point_types[i],
           OrderedTaskPointDescription(point_types[i]));
-      if (point_types[i] == settings_computer.sector_defaults.start_type)
+      if (point_types[i] == task_behaviour.sector_defaults.start_type)
         dfe->Set((unsigned)point_types[i]);
     }
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpStartRadius"), ugDistance,
-                   settings_computer.sector_defaults.start_radius);
+                   task_behaviour.sector_defaults.start_radius);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFinishType"));
   if (wp) {
@@ -77,14 +77,14 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
     for (unsigned i = 0; i < point_types.size(); i++) {
       dfe->addEnumText(OrderedTaskPointName(point_types[i]), (unsigned)point_types[i],
           OrderedTaskPointDescription(point_types[i]));
-      if (point_types[i] == settings_computer.sector_defaults.finish_type)
+      if (point_types[i] == task_behaviour.sector_defaults.finish_type)
         dfe->Set((unsigned)point_types[i]);
     }
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpFinishRadius"), ugDistance,
-                   settings_computer.sector_defaults.finish_radius);
+                   task_behaviour.sector_defaults.finish_radius);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTurnpointType"));
   if (wp) {
@@ -97,7 +97,7 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
       dfe->addEnumText(OrderedTaskPointName(point_types[i]),
           (unsigned)point_types[i],
           OrderedTaskPointDescription(point_types[i]));
-      if (point_types[i] == settings_computer.sector_defaults.turnpoint_type) {
+      if (point_types[i] == task_behaviour.sector_defaults.turnpoint_type) {
         dfe->Set((unsigned)point_types[i]);
       }
     }
@@ -105,7 +105,7 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
   }
 
   LoadFormProperty(*wf, _T("prpTurnpointRadius"), ugDistance,
-                   settings_computer.sector_defaults.turnpoint_radius);
+                   task_behaviour.sector_defaults.turnpoint_radius);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskType"));
   if (wp) {
@@ -118,17 +118,17 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
       dfe->addEnumText(OrderedTaskFactoryName(factory_types[i]),
           (unsigned)factory_types[i], OrderedTaskFactoryDescription(
               factory_types[i]));
-      if (factory_types[i] == settings_computer.task_type_default)
+      if (factory_types[i] == task_behaviour.task_type_default)
         dfe->Set((unsigned)factory_types[i]);
     }
     wp->RefreshDisplay();
   }
 
   LoadFormProperty(*wf, _T("prpAATMinTime"),
-                   (unsigned)(settings_computer.ordered_defaults.aat_min_time / 60));
+                   (unsigned)(task_behaviour.ordered_defaults.aat_min_time / 60));
 
   LoadFormProperty(*wf, _T("prpAATTimeMargin"),
-                   (unsigned)(settings_computer.optimise_targets_margin / 60));
+                   (unsigned)(task_behaviour.optimise_targets_margin / 60));
 
   delete temptask;
 }
@@ -139,53 +139,54 @@ TaskDefaultsConfigPanel::Save()
 {
   bool changed = false;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
+  TaskBehaviour &task_behaviour = settings_computer.task;
   WndProperty *wp;
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpStartType"),
                                   szProfileStartType,
-                                  settings_computer.sector_defaults.start_type);
+                                  task_behaviour.sector_defaults.start_type);
 
   changed |= SaveFormProperty(*wf, _T("prpStartRadius"),
                               ugDistance,
-                              settings_computer.sector_defaults.start_radius,
+                              task_behaviour.sector_defaults.start_radius,
                               szProfileStartRadius);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpTurnpointType"),
                                   szProfileTurnpointType,
-                                  settings_computer.sector_defaults.turnpoint_type);
+                                  task_behaviour.sector_defaults.turnpoint_type);
 
   changed |= SaveFormProperty(*wf, _T("prpTurnpointRadius"),
                               ugDistance,
-                              settings_computer.sector_defaults.turnpoint_radius,
+                              task_behaviour.sector_defaults.turnpoint_radius,
                               szProfileTurnpointRadius);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpFinishType"),
                                   szProfileFinishType,
-                                  settings_computer.sector_defaults.finish_type);
+                                  task_behaviour.sector_defaults.finish_type);
 
   changed |= SaveFormProperty(*wf, _T("prpFinishRadius"),
                               ugDistance,
-                              settings_computer.sector_defaults.finish_radius,
+                              task_behaviour.sector_defaults.finish_radius,
                               szProfileFinishRadius);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpTaskType"),
                                   szProfileTaskType,
-                                  settings_computer.task_type_default);
+                                  task_behaviour.task_type_default);
 
-  unsigned aatminutes = unsigned(settings_computer.ordered_defaults.aat_min_time) / 60;
+  unsigned aatminutes = unsigned(task_behaviour.ordered_defaults.aat_min_time) / 60;
   wp = (WndProperty*)wf->FindByName(_T("prpAATMinTime"));
   if (aatminutes != (unsigned)wp->GetDataField()->GetAsInteger()) {
     aatminutes = wp->GetDataField()->GetAsInteger();
-    settings_computer.ordered_defaults.aat_min_time = fixed(aatminutes * 60);
+    task_behaviour.ordered_defaults.aat_min_time = fixed(aatminutes * 60);
     Profile::Set(szProfileAATMinTime, aatminutes * 60);
     changed = true;
   }
 
-  unsigned aatmargin = settings_computer.optimise_targets_margin/60;
+  unsigned aatmargin = task_behaviour.optimise_targets_margin/60;
   wp = (WndProperty*)wf->FindByName(_T("prpAATTimeMargin"));
   if (aatmargin != (unsigned)wp->GetDataField()->GetAsInteger()) {
     aatmargin = wp->GetDataField()->GetAsInteger();
-    settings_computer.optimise_targets_margin = aatmargin * 60;
+    task_behaviour.optimise_targets_margin = aatmargin * 60;
     Profile::Set(szProfileAATTimeMargin, aatmargin * 60);
     changed = true;
   }

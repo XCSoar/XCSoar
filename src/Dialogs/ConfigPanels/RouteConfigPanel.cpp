@@ -72,7 +72,8 @@ RouteConfigPanel::Init(WndForm *_wf)
   wf = _wf;
 
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
-  const RoutePlannerConfig &route_planner = settings_computer.route_planner;
+  const RoutePlannerConfig &route_planner =
+    settings_computer.task.route_planner;
 
   static const StaticEnumChoice final_glide_terrain_list[] = {
     { SETTINGS_FEATURES::FGT_OFF, N_("Off") },
@@ -96,10 +97,10 @@ RouteConfigPanel::Init(WndForm *_wf)
                    route_planner.mode);
 
   LoadFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
-                   settings_computer.route_planner.allow_climb);
+                   route_planner.allow_climb);
 
   LoadFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
-                   settings_computer.route_planner.use_ceiling);
+                   route_planner.use_ceiling);
 
   static const StaticEnumChoice turning_reach_list[] = {
     { RoutePlannerConfig::rmOff, N_("Off") },
@@ -120,8 +121,8 @@ RouteConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpReachPolarMode"), reach_polar_list,
                    route_planner.reach_polar_mode);
 
-  ShowRouteControls(settings_computer.route_planner.mode != RoutePlannerConfig::rpNone);
-  ShowReachControls(settings_computer.route_planner.reach_calc_mode != RoutePlannerConfig::rmOff);
+  ShowRouteControls(route_planner.mode != RoutePlannerConfig::rpNone);
+  ShowReachControls(route_planner.reach_calc_mode != RoutePlannerConfig::rmOff);
 }
 
 
@@ -130,7 +131,7 @@ RouteConfigPanel::Save()
 {
   bool changed = false;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
-  RoutePlannerConfig &route_planner = settings_computer.route_planner;
+  RoutePlannerConfig &route_planner = settings_computer.task.route_planner;
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpRoutePlannerMode"),
                                   szProfileRoutePlannerMode,
@@ -146,11 +147,11 @@ RouteConfigPanel::Save()
 
   changed |= SaveFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
                               szProfileRoutePlannerAllowClimb,
-                              settings_computer.route_planner.allow_climb);
+                              route_planner.allow_climb);
 
   changed |= SaveFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
                               szProfileRoutePlannerUseCeiling,
-                              settings_computer.route_planner.use_ceiling);
+                              route_planner.use_ceiling);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpTurningReach"),
                                   szProfileTurningReach,

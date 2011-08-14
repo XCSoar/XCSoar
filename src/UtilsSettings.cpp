@@ -142,7 +142,7 @@ SettingsLeave()
     TaskEvents task_events;
     GlidePolar glide_polar(lease->get_glide_polar());
     OrderedTask *task = lease->clone(task_events,
-                                     XCSoarInterface::SettingsComputer(),
+                                     XCSoarInterface::SettingsComputer().task,
                                      glide_polar);
     if (task) {
       // this must be done in thread lock because it potentially changes the
@@ -177,7 +177,7 @@ SettingsLeave()
 
   if (protected_task_manager != NULL) {
     ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
-    lease->set_contest(XCSoarInterface::SettingsComputer().contest);
+    lease->set_contest(XCSoarInterface::SettingsComputer().task.contest);
   }
 
   if (DevicePortChanged)

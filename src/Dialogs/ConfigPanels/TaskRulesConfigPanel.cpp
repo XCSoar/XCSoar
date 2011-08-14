@@ -39,12 +39,13 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
   assert(_wf != NULL);
   wf = _wf;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+  const TaskBehaviour &task_behaviour = settings_computer.task;
 
   LoadFormProperty(*wf, _T("prpStartMaxSpeed"), ugHorizontalSpeed,
-                   settings_computer.ordered_defaults.start_max_speed);
+                   task_behaviour.ordered_defaults.start_max_speed);
 
   LoadFormProperty(*wf, _T("prpStartMaxSpeedMargin"), ugHorizontalSpeed,
-                   settings_computer.start_max_speed_margin);
+                   task_behaviour.start_max_speed_margin);
 
   static const StaticEnumChoice start_max_height_ref_list[] = {
     { hrAGL, N_("AGL"), N_("Reference AGL for start maximum height rule (above start point)") },
@@ -52,13 +53,13 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
   LoadFormProperty(*wf, _T("prpStartHeightRef"), start_max_height_ref_list,
-                   settings_computer.ordered_defaults.start_max_height_ref);
+                   task_behaviour.ordered_defaults.start_max_height_ref);
 
   LoadFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
-                   settings_computer.ordered_defaults.start_max_height);
+                   task_behaviour.ordered_defaults.start_max_height);
 
   LoadFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
-                   settings_computer.start_max_height_margin);
+                   task_behaviour.start_max_height_margin);
 
   static const StaticEnumChoice finish_min_height_ref_list[] = {
     { hrAGL, N_("AGL"), N_("Reference AGL for finish minimum height rule (above finish point)") },
@@ -66,10 +67,10 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
   LoadFormProperty(*wf, _T("prpFinishHeightRef"), finish_min_height_ref_list,
-                   settings_computer.ordered_defaults.finish_min_height_ref);
+                   task_behaviour.ordered_defaults.finish_min_height_ref);
 
   LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
-                   settings_computer.ordered_defaults.finish_min_height);
+                   task_behaviour.ordered_defaults.finish_min_height);
 
   static const StaticEnumChoice contests_list[] = {
     { OLC_FAI, N_("OLC_FAI") },
@@ -82,7 +83,7 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
     { 0 }
   };
   LoadFormProperty(*wf, _T("prpContests"), contests_list,
-                   settings_computer.contest);
+                   task_behaviour.contest);
 }
 
 
@@ -91,8 +92,9 @@ TaskRulesConfigPanel::Save()
 {
   bool changed = false;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
+  TaskBehaviour &task_behaviour = settings_computer.task;
 
-  OrderedTaskBehaviour &otb = settings_computer.ordered_defaults;
+  OrderedTaskBehaviour &otb = task_behaviour.ordered_defaults;
   changed |= SaveFormProperty(*wf, _T("prpStartMaxSpeed"),
                               ugHorizontalSpeed,
                               otb.start_max_speed,
@@ -100,7 +102,7 @@ TaskRulesConfigPanel::Save()
 
   changed |= SaveFormProperty(*wf, _T("prpStartMaxSpeedMargin"),
                               ugHorizontalSpeed,
-                              settings_computer.start_max_speed_margin,
+                              task_behaviour.start_max_speed_margin,
                               szProfileStartMaxSpeedMargin);
 
   changed |= SaveFormProperty(*wf, _T("prpStartMaxHeight"), ugAltitude,
@@ -108,7 +110,7 @@ TaskRulesConfigPanel::Save()
                               szProfileStartMaxHeight);
 
   changed |= SaveFormProperty(*wf, _T("prpStartMaxHeightMargin"), ugAltitude,
-                              settings_computer.start_max_height_margin,
+                              task_behaviour.start_max_height_margin,
                               szProfileStartMaxHeightMargin);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpStartHeightRef"),
@@ -124,7 +126,7 @@ TaskRulesConfigPanel::Save()
                                   otb.finish_min_height_ref);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpContests"), szProfileOLCRules,
-                                  settings_computer.contest);
+                                  task_behaviour.contest);
 
   return changed;
 }

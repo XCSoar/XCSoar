@@ -202,7 +202,7 @@ XCSoarInterface::AfterStartup()
   }
 
   OrderedTask *defaultTask = protected_task_manager->task_create_default(
-      &way_points, SettingsComputer().task_type_default);
+      &way_points, SettingsComputer().task.task_type_default);
   if (defaultTask) {
     {
       ScopeSuspendAllThreads suspend;
@@ -339,7 +339,7 @@ XCSoarInterface::Startup()
 
   protected_task_manager =
     new ProtectedTaskManager(*task_manager,
-                             XCSoarInterface::SettingsComputer(),
+                             XCSoarInterface::SettingsComputer().task,
                              task_events);
 
   route_planner = new RoutePlannerGlue(task_manager->get_glide_polar(),
@@ -376,12 +376,12 @@ XCSoarInterface::Startup()
 
   GlidePolar &gp = SetSettingsComputer().glide_polar_task;
   gp = GlidePolar(fixed_zero);
-  gp.SetMC(SettingsComputer().safety_mc);
+  gp.SetMC(SettingsComputer().task.safety_mc);
   PlaneGlue::FromProfile(SetSettingsComputer().plane);
   PlaneGlue::Synchronize(SettingsComputer().plane, SetSettingsComputer(), gp);
   task_manager->set_glide_polar(gp);
 
-  task_manager->set_contest(SettingsComputer().contest);
+  task_manager->set_contest(SettingsComputer().task.contest);
 
   // Read the topography file(s)
   topography = new TopographyStore();

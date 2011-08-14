@@ -384,7 +384,7 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
 
   // Set Color (red/black)
   infobox.SetColor(calculated.altitude_agl <
-      XCSoarInterface::SettingsComputer().route_planner.safety_height_terrain ? 1 : 0);
+      XCSoarInterface::SettingsComputer().task.route_planner.safety_height_terrain ? 1 : 0);
 }
 
 void

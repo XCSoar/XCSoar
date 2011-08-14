@@ -788,7 +788,8 @@ GlideComputerAirData::WorkingBand()
   const DerivedInfo &calculated = Calculated();
   ThermalBandInfo &tbi = SetCalculated().thermal_band;
 
-  const fixed h_safety = SettingsComputer().route_planner.safety_height_terrain +
+  const fixed h_safety =
+    SettingsComputer().task.route_planner.safety_height_terrain +
     Calculated().GetTerrainBaseFallback();
 
   tbi.working_band_height = Basic().TEAltitude - h_safety;

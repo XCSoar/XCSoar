@@ -390,10 +390,10 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
 
 void
 FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
-                                     const SETTINGS_COMPUTER &settings_computer,
+                                     const TaskBehaviour &task_behaviour,
                                      const DerivedInfo &derived) const
 {
-  if (settings_computer.contest == OLC_Plus) {
+  if (task_behaviour.contest == OLC_Plus) {
     const ContestResult& result =
         derived.contest_stats.get_contest_result(2);
 
@@ -418,8 +418,8 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
               _("Time"), timetext1,
               _("Speed"), (int)Units::ToUserTaskSpeed(result.speed),
               Units::GetTaskSpeedName());
-  } else if (settings_computer.contest == OLC_DHVXC ||
-             settings_computer.contest == OLC_XContest) {
+  } else if (task_behaviour.contest == OLC_DHVXC ||
+             task_behaviour.contest == OLC_XContest) {
     const ContestResult& result_free =
         derived.contest_stats.get_contest_result(0);
 
@@ -443,7 +443,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
               Units::GetTaskSpeedName());
   } else {
     unsigned result_index;
-    switch (settings_computer.contest) {
+    switch (task_behaviour.contest) {
       case OLC_League:
         result_index = 0;
         break;

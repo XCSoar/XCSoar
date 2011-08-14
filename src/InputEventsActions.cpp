@@ -776,14 +776,14 @@ InputEvents::eventPlaySound(const TCHAR *misc)
 void
 InputEvents::eventMacCready(const TCHAR *misc)
 {
-  SETTINGS_COMPUTER &settings_computer =
-    CommonInterface::SetSettingsComputer();
-
   if (protected_task_manager == NULL)
     return;
 
-  const GlidePolar &polar = settings_computer.glide_polar_task;
+  const GlidePolar &polar =
+    CommonInterface::SettingsComputer().glide_polar_task;
   fixed mc = polar.GetMC();
+
+  TaskBehaviour &task_behaviour = CommonInterface::SetSettingsComputer().task;
 
   if (_tcscmp(misc, _T("up")) == 0) {
     mc = std::min(mc + fixed_one / 10, fixed(5));
@@ -792,16 +792,16 @@ InputEvents::eventMacCready(const TCHAR *misc)
     mc = std::max(mc - fixed_one / 10, fixed_zero);
     ActionInterface::SetMacCready(mc);
   } else if (_tcscmp(misc, _T("auto toggle")) == 0) {
-    settings_computer.auto_mc = !settings_computer.auto_mc;
-    Profile::Set(szProfileAutoMc, settings_computer.auto_mc);
+    task_behaviour.auto_mc = !task_behaviour.auto_mc;
+    Profile::Set(szProfileAutoMc, task_behaviour.auto_mc);
   } else if (_tcscmp(misc, _T("auto on")) == 0) {
-    settings_computer.auto_mc = true;
+    task_behaviour.auto_mc = true;
     Profile::Set(szProfileAutoMc, true);
   } else if (_tcscmp(misc, _T("auto off")) == 0) {
-    settings_computer.auto_mc = false;
+    task_behaviour.auto_mc = false;
     Profile::Set(szProfileAutoMc, false);
   } else if (_tcscmp(misc, _T("auto show")) == 0) {
-    if (settings_computer.auto_mc) {
+    if (task_behaviour.auto_mc) {
       Message::AddMessage(_("Auto. MacCready on"));
     } else {
       Message::AddMessage(_("Auto. MacCready off"));

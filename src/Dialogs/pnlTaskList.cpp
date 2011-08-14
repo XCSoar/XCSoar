@@ -304,7 +304,7 @@ pnlTaskList::OnNewTaskClicked(gcc_unused WndButton &Sender)
       (MessageBoxX(_("Create new task?"), _("Task New"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     (*active_task)->clear();
-    (*active_task)->set_factory(XCSoarInterface::SettingsComputer().task_type_default);
+    (*active_task)->set_factory(XCSoarInterface::SettingsComputer().task.task_type_default);
     *task_modified = true;
     wTabBar->SetCurrentPage(dlgTaskManager::GetPropertiesTab());
     wTabBar->set_focus();

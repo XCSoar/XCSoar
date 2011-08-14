@@ -129,7 +129,7 @@ bool
 InfoBoxContentMacCready::PnlSetupPreShow(TabBarControl::EventType EventType)
 {
 
-  if (XCSoarInterface::SettingsComputer().auto_mc)
+  if (XCSoarInterface::SettingsComputer().task.auto_mc)
     ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("MANUAL"));
   else
     ((WndButton *)dlgInfoBoxAccess::GetWindowForm()->FindByName(_T("cmdMode")))->SetCaption(_("AUTO"));
@@ -146,7 +146,7 @@ InfoBoxContentMacCready::PnlSetupOnSetup(gcc_unused WndButton &Sender) {
 void
 InfoBoxContentMacCready::PnlSetupOnMode(gcc_unused WndButton &Sender)
 {
-  if (XCSoarInterface::SettingsComputer().auto_mc)
+  if (XCSoarInterface::SettingsComputer().task.auto_mc)
     Sender.SetCaption(_("AUTO"));
   else
     Sender.SetCaption(_("MANUAL"));
@@ -208,7 +208,7 @@ InfoBoxContentMacCready::Update(InfoBoxWindow &infobox)
   SetVSpeed(infobox, settings_computer.glide_polar_task.GetMC());
 
   // Set Comment
-  if (XCSoarInterface::SettingsComputer().auto_mc)
+  if (XCSoarInterface::SettingsComputer().task.auto_mc)
     infobox.SetComment(_("AUTO"));
   else
     infobox.SetComment(_("MANUAL"));
@@ -223,37 +223,37 @@ InfoBoxContentMacCready::HandleKey(const InfoBoxKeyCodes keycode)
   const SETTINGS_COMPUTER &settings_computer =
     CommonInterface::SettingsComputer();
   const GlidePolar &polar = settings_computer.glide_polar_task;
+  TaskBehaviour &task_behaviour = CommonInterface::SetSettingsComputer().task;
   fixed mc = polar.GetMC();
 
   switch (keycode) {
   case ibkUp:
     mc = std::min(mc + fixed_one / 10, fixed(5));
     ActionInterface::SetMacCready(mc);
-    XCSoarInterface::SetSettingsComputer().auto_mc = false;
+    task_behaviour.auto_mc = false;
     Profile::Set(szProfileAutoMc, false);
     return true;
 
   case ibkDown:
     mc = std::max(mc - fixed_one / 10, fixed_zero);
     ActionInterface::SetMacCready(mc);
-    XCSoarInterface::SetSettingsComputer().auto_mc = false;
+    task_behaviour.auto_mc = false;
     Profile::Set(szProfileAutoMc, false);
     return true;
 
   case ibkLeft:
-    XCSoarInterface::SetSettingsComputer().auto_mc = false;
+    task_behaviour.auto_mc = false;
     Profile::Set(szProfileAutoMc, false);
     return true;
 
   case ibkRight:
-    XCSoarInterface::SetSettingsComputer().auto_mc = true;
+    task_behaviour.auto_mc = true;
     Profile::Set(szProfileAutoMc, true);
     return true;
 
   case ibkEnter:
-    XCSoarInterface::SetSettingsComputer().auto_mc =
-        !XCSoarInterface::SettingsComputer().auto_mc;
-    Profile::Set(szProfileAutoMc, XCSoarInterface::SettingsComputer().auto_mc);
+    task_behaviour.auto_mc = !task_behaviour.auto_mc;
+    Profile::Set(szProfileAutoMc, task_behaviour.auto_mc);
     return true;
   }
   return false;

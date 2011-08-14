@@ -460,7 +460,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
                              SettingsComputer(),
                              canvas,
                              tb_rect,
-                             SettingsComputer(),
+                             SettingsComputer().task,
                              true,
                              &task_manager->get_ordered_task_behaviour());
   } else {
@@ -469,7 +469,7 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
                              SettingsComputer(),
                              canvas,
                              tb_rect,
-                             SettingsComputer(),
+                             SettingsComputer().task,
                              true);
   }
 }

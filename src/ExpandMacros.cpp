@@ -306,8 +306,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
   if (_tcsstr(OutBuffer, _T("$(CheckAutoMc)"))) {
     if (!calculated.task_stats.task_valid
-        && ((settings_computer.auto_mc_mode==TaskBehaviour::AUTOMC_FINALGLIDE)
-            || (settings_computer.auto_mc_mode==TaskBehaviour::AUTOMC_BOTH)))
+        && ((settings_computer.task.auto_mc_mode==TaskBehaviour::AUTOMC_FINALGLIDE)
+            || (settings_computer.task.auto_mc_mode==TaskBehaviour::AUTOMC_BOTH)))
       invalid = true;
 
     ReplaceInString(OutBuffer, _T("$(CheckAutoMc)"), _T(""), Size);
@@ -536,7 +536,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                     gettext(labels[(i + 1) % n]), Size);
   }
 
-  CondReplaceInString(SettingsComputer().auto_mc,
+  CondReplaceInString(SettingsComputer().task.auto_mc,
                       OutBuffer, _T("$(MacCreadyToggleActionName)"),
                       _("Manual"), _("Auto"), Size);
   CondReplaceInString(GetUIState().auxiliary_enabled,

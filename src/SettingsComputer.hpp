@@ -208,8 +208,7 @@ struct SETTINGS_COMPUTER:
   public SETTINGS_TEAMCODE,
   public SETTINGS_VOICE,
   public SETTINGS_PLACES_OF_INTEREST,
-  public SETTINGS_FEATURES,
-  public TaskBehaviour
+  public SETTINGS_FEATURES
 {
   bool EnableExternalTriggerCruise;
 
@@ -232,6 +231,8 @@ struct SETTINGS_COMPUTER:
 
   AirspaceComputerSettings airspace;
   Plane plane;
+
+  TaskBehaviour task;
 
   void SetDefaults();
 };

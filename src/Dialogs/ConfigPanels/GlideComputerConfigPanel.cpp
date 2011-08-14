@@ -62,7 +62,7 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
   };
 
   LoadFormProperty(*wf, _T("prpAutoMcMode"), auto_mc_list,
-                   settings_computer.auto_mc_mode);
+                   settings_computer.task.auto_mc_mode);
 
   LoadFormProperty(*wf, _T("prpBlockSTF"),
                    settings_computer.EnableBlockSTF);
@@ -103,7 +103,7 @@ GlideComputerConfigPanel::Save(bool &requirerestart)
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpAutoMcMode"),
                                   szProfileAutoMcMode,
-                                  settings_computer.auto_mc_mode);
+                                  settings_computer.task.auto_mc_mode);
 
   changed |= SaveFormProperty(*wf, _T("prpBlockSTF"),
                               szProfileBlockSTF,
