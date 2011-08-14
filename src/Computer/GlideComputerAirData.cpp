@@ -44,8 +44,6 @@ using std::min;
 using std::max;
 
 static const fixed MinTurnRate(4);
-static const fixed CruiseClimbSwitch(15);
-static const fixed ClimbCruiseSwitch(10);
 static const fixed THERMAL_TIME_MIN(45);
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points,
