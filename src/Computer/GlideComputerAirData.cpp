@@ -343,7 +343,7 @@ GlideComputerAirData::UpdateLiftDatabase()
     ResetLiftDatabase();
 
   // Determine the direction in which we are circling
-  bool left = negative(calculated.turn_rate_smoothed);
+  bool left = calculated.TurningLeft();
 
   // Depending on the direction set the step size sign for the
   // following loop
@@ -692,10 +692,10 @@ GlideComputerAirData::Turning()
 
   if (LastCalculated().turn_mode == WAITCLIMB &&
       Calculated().turn_mode == CLIMB)
-    OnSwitchClimbMode(true, Rate);
+    OnSwitchClimbMode(true, Calculated().TurningLeft());
   else if (LastCalculated().turn_mode == WAITCRUISE &&
            Calculated().turn_mode == CRUISE)
-    OnSwitchClimbMode(false, Rate);
+    OnSwitchClimbMode(false, Calculated().TurningLeft());
 
   // Calculate circling time percentage and call thermal band calculation
   PercentCircling(fabs(Rate));

@@ -98,6 +98,10 @@ struct CirclingInfo
   fixed total_height_gain;
 
   void Clear();
+
+  bool TurningLeft() const {
+    return negative(turn_rate_smoothed);
+  }
 };
 
 #endif

@@ -106,7 +106,7 @@ ThermalAssistantWindow::on_resize(unsigned width, unsigned height)
 bool
 ThermalAssistantWindow::LeftTurn() const
 {
-  return negative(derived.turn_rate_smoothed);
+  return derived.TurningLeft();
 }
 
 void
