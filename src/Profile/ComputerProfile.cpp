@@ -108,7 +108,6 @@ Profile::Load(SETTINGS_COMPUTER &settings)
   Load((SETTINGS_VOICE &)settings);
   Load((SETTINGS_PLACES_OF_INTEREST &)settings);
   Load((SETTINGS_FEATURES &)settings);
-  Load((TaskBehaviour &)settings);
 
   Get(szProfileEnableExternalTriggerCruise,
       settings.EnableExternalTriggerCruise);
@@ -119,4 +118,6 @@ Profile::Load(SETTINGS_COMPUTER &settings)
   Get(szProfileUTCOffset, settings.UTCOffset);
   if (settings.UTCOffset > 12 * 3600)
     settings.UTCOffset -= 24 * 3600;
+
+  Load(settings.task);
 }
