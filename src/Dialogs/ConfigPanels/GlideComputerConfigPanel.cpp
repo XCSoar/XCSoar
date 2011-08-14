@@ -38,33 +38,31 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
-  WndProperty *wp;
+
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoWind"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Manual"));
-    dfe->addEnumText(_("Circling"));
-    dfe->addEnumText(_("ZigZag"));
-    dfe->addEnumText(_("Both"));
-    dfe->Set(settings_computer.AutoWindMode);
-    wp->RefreshDisplay();
-  }
+  static const StaticEnumChoice auto_wind_list[] = {
+    { D_AUTOWIND_NONE, N_("Manual") },
+    { D_AUTOWIND_CIRCLING, N_("Circling") },
+    { D_AUTOWIND_ZIGZAG, N_("ZigZag") },
+    { D_AUTOWIND_CIRCLING|D_AUTOWIND_ZIGZAG, N_("Both") },
+    { 0 }
+  };
+
+  LoadFormProperty(*wf, _T("prpAutoWind"), auto_wind_list,
+                   settings_computer.AutoWindMode);
 
   LoadFormProperty(*wf, _T("prpExternalWind"), settings_computer.ExternalWind);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAutoMcMode"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Final glide"));
-    dfe->addEnumText(_("Trending average climb"));
-    dfe->addEnumText(_("Both"));
-    dfe->Set((int)settings_computer.auto_mc_mode);
-    wp->RefreshDisplay();
-  }
+  static const StaticEnumChoice auto_mc_list[] = {
+    { TaskBehaviour::AUTOMC_FINALGLIDE, N_("Final glide") },
+    { TaskBehaviour::AUTOMC_CLIMBAVERAGE, N_("Trending average climb") },
+    { TaskBehaviour::AUTOMC_BOTH, N_("Both") },
+    { 0 }
+  };
+
+  LoadFormProperty(*wf, _T("prpAutoMcMode"), auto_mc_list,
+                   settings_computer.auto_mc_mode);
 
   LoadFormProperty(*wf, _T("prpBlockSTF"),
                    settings_computer.EnableBlockSTF);
@@ -75,20 +73,18 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpEnableExternalTriggerCruise"),
                    settings_computer.EnableExternalTriggerCruise);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_T("15 s"));
-    dfe->addEnumText(_T("30 s"));
-    dfe->addEnumText(_T("60 s"));
-    dfe->addEnumText(_T("90 s"));
-    dfe->addEnumText(_T("2 min"));
-    dfe->addEnumText(_T("3 min"));
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->Set(settings_computer.AverEffTime);
-    wp->RefreshDisplay();
-  }
+  static const StaticEnumChoice aver_eff_list[] = {
+    { ae15seconds, _T("15 s") },
+    { ae30seconds, _T("30 s") },
+    { ae60seconds, _T("60 s") },
+    { ae90seconds, _T("90 s") },
+    { ae2minutes, _T("2 min") },
+    { ae3minutes, _T("3 min") },
+    { 0 }
+  };
+
+  LoadFormProperty(*wf, _T("prpAverEffTime"), aver_eff_list,
+                   settings_computer.AverEffTime);
 }
 
 
@@ -96,7 +92,6 @@ bool
 GlideComputerConfigPanel::Save(bool &requirerestart)
 {
   bool changed = false;
-  WndProperty *wp;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
 
   changed |= SaveFormProperty(*wf, _T("prpAutoWind"), szProfileAutoWind,
@@ -123,17 +118,9 @@ GlideComputerConfigPanel::Save(bool &requirerestart)
                               szProfileEnableExternalTriggerCruise,
                               settings_computer.EnableExternalTriggerCruise);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime")); // VENTA6
-  if (wp) {
-    if (settings_computer.AverEffTime != wp->GetDataField()->GetAsInteger()) {
-      settings_computer.AverEffTime =
-        (AverEffTime_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAverEffTime,
-                   settings_computer.AverEffTime);
-      changed = true;
-      requirerestart = true;
-    }
-  }
+  changed |= requirerestart |=
+    SaveFormPropertyEnum(*wf, _T("prpAverEffTime"),
+                         settings_computer.AverEffTime);
 
   return changed;
 }
