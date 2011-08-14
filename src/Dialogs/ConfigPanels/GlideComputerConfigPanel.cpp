@@ -120,7 +120,7 @@ GlideComputerConfigPanel::Save(bool &requirerestart)
 
   changed |= requirerestart |=
     SaveFormPropertyEnum(*wf, _T("prpAverEffTime"),
-                         settings_computer.AverEffTime);
+                         szProfileAverEffTime, settings_computer.AverEffTime);
 
   return changed;
 }
