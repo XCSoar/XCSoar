@@ -43,7 +43,8 @@ Look::InitialiseConfigured(const UISettings &settings)
   dialog.Initialise(Fonts::MapBold, Fonts::Map,
                     Fonts::MapBold, Fonts::MapBold);
   vario.Initialise(settings.info_boxes.inverse,
-                   settings.info_boxes.use_colors);
+                   settings.info_boxes.use_colors,
+                   Fonts::Title, Fonts::CDI);
   chart.Initialise();
   thermal_band.Initialise(settings.info_boxes.inverse);
   trace_history.Initialise(settings.info_boxes.inverse);

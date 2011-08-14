@@ -29,6 +29,8 @@ Copyright_License {
 #include "Screen/Pen.hpp"
 #include "Screen/Bitmap.hpp"
 
+class Font;
+
 struct VarioLook {
   bool inverse, colors;
 
@@ -45,7 +47,10 @@ struct VarioLook {
 
   Bitmap climb_bitmap;
 
-  void Initialise(bool inverse, bool colors);
+  const Font *text_font, *value_font;
+
+  void Initialise(bool inverse, bool colors,
+                  const Font &text_font, const Font &value_font);
 };
 
 #endif

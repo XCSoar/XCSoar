@@ -27,7 +27,8 @@ Copyright_License {
 #include "resource.h"
 
 void
-VarioLook::Initialise(bool _inverse, bool _colors)
+VarioLook::Initialise(bool _inverse, bool _colors,
+                      const Font &_text_font, const Font &_value_font)
 {
   inverse = _inverse;
   colors = _colors;
@@ -58,4 +59,7 @@ VarioLook::Initialise(bool _inverse, bool _colors)
   background_x = inverse ? 58 : 0;
 
   climb_bitmap.load(inverse ? IDB_CLIMBSMALLINV : IDB_CLIMBSMALL);
+
+  text_font = &_text_font;
+  value_font = &_value_font;
 }
