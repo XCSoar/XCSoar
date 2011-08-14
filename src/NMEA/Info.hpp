@@ -361,6 +361,11 @@ struct NMEAInfo {
     return time_available && last.time_available && time > last.time;
   }
 
+  gcc_pure
+  bool HasTimeRetreatedSince(const NMEAInfo &last) const {
+    return !last.time_available || (time_available && time < last.time);
+  }
+
   bool MovementDetected() const {
     return ground_speed_available && ground_speed > fixed_two;
   }
