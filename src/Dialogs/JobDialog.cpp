@@ -91,7 +91,9 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
                0, 0, parent.get_width(), parent.get_height(),
                caption);
 
-  ProgressWindowOperation progress(form);
+  ContainerWindow &client_area = form.GetClientAreaWindow();
+
+  ProgressWindowOperation progress(client_area);
   DialogJobThread thread(progress, job, form);
   thread.Start();
 
@@ -100,8 +102,8 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
     ButtonWindowStyle style;
     style.tab_stop();
 
-    PixelRect rc = form.get_client_rect();
-    cancel_button.set(form, _("Cancel"),
+    PixelRect rc = client_area.get_client_rect();
+    cancel_button.set(client_area, _("Cancel"),
                       rc.right - Layout::Scale(80), rc.top + Layout::Scale(2),
                       Layout::Scale(78), Layout::Scale(35),
                       style);
