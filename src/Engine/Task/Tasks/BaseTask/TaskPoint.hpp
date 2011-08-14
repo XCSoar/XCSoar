@@ -28,7 +28,7 @@
 #include "Navigation/Aircraft.hpp"
 
 struct GeoVector;
-class TaskBehaviour;
+struct TaskBehaviour;
 
 /**
  * Base class for all task points 

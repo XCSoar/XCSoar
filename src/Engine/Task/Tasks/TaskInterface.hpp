@@ -29,7 +29,7 @@ struct AircraftState;
 struct GeoPoint;
 struct GeoVector;
 
-class TaskBehaviour;
+struct TaskBehaviour;
 class TaskStats;
 class TaskWaypoint;
 class TaskPoint;

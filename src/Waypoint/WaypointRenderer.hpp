@@ -33,7 +33,7 @@ class LabelBlock;
 class MapWindowProjection;
 class Waypoints;
 class GlidePolar;
-class TaskBehaviour;
+struct TaskBehaviour;
 class ProtectedTaskManager;
 class ProtectedRoutePlanner;
 

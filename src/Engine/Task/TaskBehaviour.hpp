@@ -71,9 +71,7 @@ struct TaskStartMargins {
  *  Class defining options for task system.
  *  Typical uses might be default values, and simple aspects of task behaviour.
  */
-class TaskBehaviour : public TaskStartMargins
-{
-public:
+struct TaskBehaviour : public TaskStartMargins {
   /**
    * Enumeration of factory types.  This is the set of
    * types of ordered task that can be created.

@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_TASK_PROFILE_HPP
 #define XCSOAR_TASK_PROFILE_HPP
 
-class TaskBehaviour;
+struct TaskBehaviour;
 
 namespace Profile {
   void Load(TaskBehaviour &settings);

@@ -24,7 +24,7 @@
 
 #include "TaskAdvance.hpp"
 
-class OrderedTaskBehaviour;
+struct OrderedTaskBehaviour;
 
 /**
  * Class used to control advancement through an OrderedTask

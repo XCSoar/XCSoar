@@ -30,7 +30,7 @@
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Compiler.h"
 
-class OrderedTaskBehaviour;
+struct OrderedTaskBehaviour;
 
 /**
  *  Abstract compound specialisation of TaskLeg and ScoredTaskPoint,

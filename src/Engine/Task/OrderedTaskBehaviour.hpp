@@ -31,15 +31,12 @@ enum HeightReferenceType {
   hrAGL,
   hrMSL,
 };
+
 /**
  * Settings for ordered tasks; most of these are set by
  * the #AbstractTaskFactory but can be overriden
  */
-class OrderedTaskBehaviour
-{
-public:
-  friend class Serialiser;
-
+struct OrderedTaskBehaviour {
   /**
    * Option to enable calculation of scores, and protect against
    * task changes if flight/task has started

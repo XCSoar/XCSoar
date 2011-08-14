@@ -30,7 +30,6 @@
 
 class TaskPointConstVisitor;
 class AbortTask;
-class TaskBehaviour;
 class TaskEvents;
 class GlidePolar;
 

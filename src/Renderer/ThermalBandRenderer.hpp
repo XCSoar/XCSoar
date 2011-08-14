@@ -34,8 +34,8 @@ class Canvas;
 struct MoreData;
 struct DerivedInfo;
 struct SETTINGS_COMPUTER;
-class OrderedTaskBehaviour;
-class TaskBehaviour;
+struct OrderedTaskBehaviour;
+struct TaskBehaviour;
 
 class ThermalBandRenderer {
   const ThermalBandLook &look;
