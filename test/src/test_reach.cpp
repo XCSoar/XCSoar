@@ -48,9 +48,6 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
 
   bool retval= true;
 
-  RoutePlannerConfig config;
-  config.mode = RoutePlannerConfig::rpBoth;
-
   short horigin = map.GetHeight(origin)+1000;
   AGeoPoint aorigin(origin, horigin);
 
