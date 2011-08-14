@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Form/Button.hpp"
-#include "Screen/Fonts.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/Key.h"
 
 WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
@@ -37,7 +37,7 @@ WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
     mOnRightNotify(RightFunction)
 {
   set(parent, Caption, X, Y, Width, Height, style);
-  set_font(Fonts::MapBold);
+  set_font(*look.button_font);
 }
 
 bool

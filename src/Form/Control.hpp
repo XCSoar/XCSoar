@@ -45,9 +45,6 @@ protected:
   StaticString<254> mCaption;
 
 private:
-  /** Font of the Control */
-  const Font *mhFont;
-
   /** Helptext of the Control */
   TCHAR *mHelpText;
 
@@ -102,30 +99,6 @@ public:
    */
   void SetOnHelpCallback(OnHelpCallback_t Function) {
     mOnHelpCallback = Function;
-  }
-
-  /**
-   * Returns the Control's font
-   * @return The Control's font
-   */
-  const Font *GetFont() const {
-    return mhFont;
-  }
-
-  /**
-   * Sets the Control's font
-   * @param font The new font
-   * @return The old font
-   */
-  virtual void SetFont(const Font &font);
-
-  /**
-   * Sets the Control's font
-   * @param font The new font
-   * @return The old font
-   */
-  void SetFont(const Font *font) {
-    SetFont(*font);
   }
 
   /**

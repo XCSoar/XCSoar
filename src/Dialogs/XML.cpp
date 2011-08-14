@@ -696,7 +696,7 @@ LoadChild(WndForm &form, ContainerWindow &parent,
 
     style.tab_stop();
 
-    window = new CheckBoxControl(parent, Caption,
+    window = new CheckBoxControl(parent, *xml_dialog_look, Caption,
                                  pos.x, pos.y, size.cx, size.cy,
                                  style,
                                  ClickCallback);
@@ -831,7 +831,7 @@ LoadChild(WndForm &form, ContainerWindow &parent,
       flipOrientation = true;
 
     style.control_parent();
-    TabBarControl *tabbar = new TabBarControl(parent,
+    TabBarControl *tabbar = new TabBarControl(parent, *xml_dialog_look,
                                               pos.x, pos.y, size.cx, size.cy,
                                               style, flipOrientation);
     window = tabbar;

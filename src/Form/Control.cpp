@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Form/Control.hpp"
 #include "Form/Internal.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Dialogs/Dialogs.h"
@@ -33,7 +32,6 @@ Copyright_License {
 #include <stdlib.h>
 
 WindowControl::WindowControl() :
-    mhFont(&Fonts::Map),
     mHelpText(NULL),
     mOnHelpCallback(NULL)
 {
@@ -61,16 +59,6 @@ WindowControl::SetCaption(const TCHAR *Value)
 
   if (!mCaption.equals(Value)) {
     mCaption = Value;
-    invalidate();
-  }
-}
-
-void
-WindowControl::SetFont(const Font &Value)
-{
-  if (mhFont != &Value) {
-    // todo
-    mhFont = &Value;
     invalidate();
   }
 }

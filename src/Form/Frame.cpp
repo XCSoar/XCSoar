@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "Form/Frame.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/VirtualCanvas.hpp"
 #include "Look/DialogLook.hpp"
 
@@ -31,7 +30,7 @@ WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
                    const WindowStyle style)
   :look(_look),
    caption_color(look.text_color),
-   font(&Fonts::Map),
+   font(look.text_font),
    mCaptionStyle(DT_EXPANDTABS | DT_LEFT | DT_NOCLIP | DT_WORDBREAK)
 {
   text.clear();

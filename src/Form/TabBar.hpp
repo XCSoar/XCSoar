@@ -24,10 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_FORM_TABBAR_HPP
 #define XCSOAR_FORM_TABBAR_HPP
 
-
 #include "Util/StaticArray.hpp"
 #include "Form/Tabbed.hpp"
 
+struct DialogLook;
 class Bitmap;
 class WndOwnerDrawFrame;
 class ContainerWindow;
@@ -76,7 +76,7 @@ public:
  * @param style
  * @return
  */
-  TabBarControl(ContainerWindow &parent,
+  TabBarControl(ContainerWindow &parent, const DialogLook &look,
                 int x, int y, unsigned width, unsigned height,
                 const WindowStyle style = WindowStyle(),
                 bool _flipOrientation = false,
@@ -194,6 +194,7 @@ class TabDisplay: PaintWindow
 {
 protected:
   TabBarControl& theTabBar;
+  const DialogLook &look;
   bool dragging; // tracks that mouse is down and captured
   int downindex; // index of tab where mouse down occurred
   bool dragoffbutton; // set by mouse_move
@@ -209,7 +210,8 @@ public:
  * @param width Width of tab bar box in the parent window
  * @param height Height of tab bar box in the parent window
  */
- TabDisplay(TabBarControl& _theTabBar, unsigned left, unsigned top,
+  TabDisplay(TabBarControl& _theTabBar, const DialogLook &look,
+             unsigned left, unsigned top,
      unsigned width, unsigned height, bool _flipOrientation = false);
 
 public:

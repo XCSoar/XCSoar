@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/CheckBox.hpp"
 
+struct DialogLook;
 class ContainerWindow;
 
 /**
@@ -48,7 +49,8 @@ public:
    * @param Function The function that should be called
    * when the button is clicked
    */
-  CheckBoxControl(ContainerWindow &parent, const TCHAR *Caption,
+  CheckBoxControl(ContainerWindow &parent, const DialogLook &look,
+                  const TCHAR *Caption,
                   int X, int Y, unsigned Width, unsigned Height,
                   const CheckBoxStyle style,
                   ClickNotifyCallback_t Function = NULL);

@@ -25,7 +25,6 @@ Copyright_License {
 #include "Look/DialogLook.hpp"
 #include "StringUtil.hpp"
 #include "Screen/ButtonWindow.hpp"
-#include "Screen/Fonts.hpp"
 
 #include <assert.h>
 #include <string.h>
@@ -214,5 +213,5 @@ KeyboardControl::add_button(const TCHAR* caption)
   ButtonWindow *button = &buttons[num_buttons++];
   button->set(*this, caption, (unsigned)caption[0],
               0, 0, button_width, button_height);
-  button->set_font(Fonts::MapBold);
+  button->set_font(*look.button_font);
 }

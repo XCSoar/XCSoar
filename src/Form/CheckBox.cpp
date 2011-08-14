@@ -22,16 +22,18 @@ Copyright_License {
 */
 
 #include "Form/CheckBox.hpp"
-#include "Screen/Fonts.hpp"
+#include "Look/DialogLook.hpp"
 
-CheckBoxControl::CheckBoxControl(ContainerWindow &parent, const TCHAR *Caption,
+CheckBoxControl::CheckBoxControl(ContainerWindow &parent,
+                                 const DialogLook &look,
+                                 const TCHAR *Caption,
                                  int X, int Y, unsigned Width, unsigned Height,
                                  const CheckBoxStyle style,
                                  ClickNotifyCallback_t Function) :
   mOnClickNotify(Function)
 {
   set(parent, Caption, X, Y, Width, Height, style);
-  set_font(Fonts::Map);
+  set_font(*look.text_font);
 }
 
 bool

@@ -166,7 +166,7 @@ WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
   edit.set(*this, mEditPos.x, mEditPos.y, mEditSize.x, mEditSize.y, edit_style);
   edit.install_wndproc();
 
-  edit.set_font(*GetFont());
+  edit.set_font(*look.text_font);
 
 #if defined(USE_GDI) && !defined(NDEBUG)
   ::SetWindowText(hWnd, Caption);
@@ -218,13 +218,6 @@ WndProperty::SetText(const TCHAR *Value, bool convert_line_breaks)
 #else
   edit.set_text(Value);
 #endif
-}
-
-void
-WndProperty::SetFont(const Font &Value)
-{
-  WindowControl::SetFont(Value);
-  edit.set_font(Value);
 }
 
 void
@@ -382,7 +375,7 @@ WndProperty::on_paint(Canvas &canvas)
                           ? look.focused.text_color
                           : look.text_color);
     canvas.background_transparent();
-    canvas.select(*GetFont());
+    canvas.select(*look.text_font);
 
     PixelSize tsize = canvas.text_size(mCaption.c_str());
 

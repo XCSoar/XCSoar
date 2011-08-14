@@ -22,8 +22,8 @@ Copyright_License {
 */
 
 #include "Form/TabBar.hpp"
+#include "Look/DialogLook.hpp"
 #include "Screen/PaintWindow.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
 #include "Screen/Icon.hpp"
@@ -33,7 +33,7 @@ Copyright_License {
 #include <assert.h>
 
 
-TabBarControl::TabBarControl(ContainerWindow &_parent,
+TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                 int x, int y, unsigned _width, unsigned _height,
                 const WindowStyle style, bool _flipOrientation,
                 bool _clientOverlapTabs):
@@ -46,7 +46,9 @@ TabBarControl::TabBarControl(ContainerWindow &_parent,
                 clientOverlapTabs(_clientOverlapTabs),
                 setting_up(true)
 {
-  theTabDisplay = new TabDisplay(*this, x, y, _width, _height, flipOrientation);
+  theTabDisplay = new TabDisplay(*this, look,
+                                 x, y, _width, _height,
+                                 flipOrientation);
 }
 
 TabBarControl::~TabBarControl()
@@ -269,10 +271,11 @@ TabBarControl::GetTabWidth()
 }
 
 // TabDisplay Functions
-TabDisplay::TabDisplay(TabBarControl& _theTabBar,
+TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
     unsigned left, unsigned top, unsigned width, unsigned height, bool _flipOrientation) :
   PaintWindow(),
   theTabBar(_theTabBar),
+  look(_look),
   dragging(false),
   downindex(-1),
   dragoffbutton(false),
@@ -287,7 +290,8 @@ void
 TabDisplay::on_paint(Canvas &canvas)
 {
   canvas.clear(COLOR_BLACK);
-  canvas.select(Fonts::MapBold);
+  canvas.select(*look.button_font);
+
   const unsigned CaptionStyle = DT_EXPANDTABS | DT_CENTER | DT_NOCLIP
       | DT_WORDBREAK;
 
