@@ -29,9 +29,6 @@ Copyright_License {
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/Atmosphere/Pressure.hpp"
 #include "Util/StaticString.hpp"
-
-#include <tchar.h>
-
 #include "Task/TaskBehaviour.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 #include "NMEA/Validity.hpp"
