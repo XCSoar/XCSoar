@@ -86,8 +86,6 @@ CreateDebugReplay(Args &args)
 
   const char *input_file = args.ExpectNext();
 
-  args.ExpectEnd();
-
   FileLineReaderA *reader = new FileLineReaderA(input_file);
   if (reader->error()) {
     delete reader;
