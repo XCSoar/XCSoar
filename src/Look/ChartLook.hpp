@@ -28,6 +28,8 @@ Copyright_License {
 
 #include <assert.h>
 
+class Font;
+
 struct ChartLook {
   enum Style {
     STYLE_BLUETHIN,
@@ -40,7 +42,9 @@ struct ChartLook {
 
   Pen pens[STYLE_COUNT];
 
-  void Initialise();
+  const Font *axis_label_font;
+
+  void Initialise(const Font &axis_label_font);
 
   const Pen &GetPen(Style style) const {
     unsigned i = (unsigned)style;

@@ -45,7 +45,7 @@ Look::InitialiseConfigured(const UISettings &settings)
   vario.Initialise(settings.info_boxes.inverse,
                    settings.info_boxes.use_colors,
                    Fonts::Title, Fonts::CDI);
-  chart.Initialise();
+  chart.Initialise(Fonts::MapLabel);
   thermal_band.Initialise(settings.info_boxes.inverse);
   trace_history.Initialise(settings.info_boxes.inverse);
   waypoint.Initialise(settings.map.waypoint);

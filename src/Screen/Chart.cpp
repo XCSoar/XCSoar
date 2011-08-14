@@ -23,7 +23,6 @@ Copyright_License {
 
 #include "Screen/Chart.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Fonts.hpp"
 #include "Screen/Layout.hpp"
 #include "Language/Language.hpp"
 #include "Math/FastMath.h"
@@ -184,7 +183,7 @@ Chart::DrawNoData()
 void
 Chart::DrawXLabel(const TCHAR *text)
 {
-  canvas.select(Fonts::MapLabel);
+  canvas.select(*look.axis_label_font);
 
   PixelSize tsize = canvas.text_size(text);
   int x = rc.right - tsize.cx - IBLSCALE(3);
@@ -197,7 +196,7 @@ Chart::DrawXLabel(const TCHAR *text)
 void
 Chart::DrawYLabel(const TCHAR *text)
 {
-  canvas.select(Fonts::MapLabel);
+  canvas.select(*look.axis_label_font);
 
   PixelSize tsize = canvas.text_size(text);
   int x = max(2, (int)(rc.left - tsize.cx));
