@@ -72,16 +72,8 @@ GlideComputerConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpEnableNavBaroAltitude"),
                    settings_computer.EnableNavBaroAltitude);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpEnableExternalTriggerCruise"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Flap"));
-    dfe->addEnumText(_("SC"));
-    dfe->Set(settings_computer.EnableExternalTriggerCruise);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpEnableExternalTriggerCruise"),
+                   settings_computer.EnableExternalTriggerCruise);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAverEffTime"));
   if (wp) {

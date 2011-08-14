@@ -305,7 +305,7 @@
     
       <Edit Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
         Help="When Vega variometer is connected and this option is true, the positive flap setting switches the flight mode between circling and cruise.">
-        <DataField DataType="enum" />
+        <DataField DataType="boolean"/>
       </Edit>
     
       <Edit Name="prpAverEffTime" Caption="L/D average period" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
