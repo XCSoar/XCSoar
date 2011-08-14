@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Dialogs/JobDialog.hpp"
+#include "Look/DialogLook.hpp"
 #include "Form/Form.hpp"
 #include "Screen/ProgressWindow.hpp"
 #include "Screen/SingleWindow.hpp"
@@ -104,6 +105,7 @@ JobDialog(SingleWindow &parent, const DialogLook &dialog_look,
                       rc.right - Layout::Scale(80), rc.top + Layout::Scale(2),
                       Layout::Scale(78), Layout::Scale(35),
                       style);
+    cancel_button.set_font(*dialog_look.button_font);
     cancel_button.bring_to_top();
   }
 
