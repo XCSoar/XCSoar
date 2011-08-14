@@ -77,6 +77,11 @@ struct CirclingInfo
   /** Current TurnMode (Cruise, Climb or somewhere between) */
   CirclingMode turn_mode;
 
+  /**
+   * True if the turn rate is above the threshold for circling.
+   */
+  bool turning;
+
   /** True if in circling mode, False otherwise */
   bool circling;
 

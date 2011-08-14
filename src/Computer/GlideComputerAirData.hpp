@@ -142,7 +142,7 @@ private:
   void LastThermalStats();
   void WorkingBand();
   void ThermalBand();
-  void PercentCircling(const fixed Rate);
+  void PercentCircling();
   void TurnRate();
   void Turning();
   void ProcessSun();

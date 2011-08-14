@@ -26,6 +26,7 @@ Copyright_License {
 void
 CirclingInfo::Clear()
 {
+  turning = false;
   circling = false;
 
   turn_rate = turn_rate_heading = fixed_zero;

@@ -80,11 +80,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   // Make the turn rate more smooth using the LowPassFilter
   Rate = LowPassFilter(last_calculated.turn_rate_smoothed, Rate, fixed(0.3));
   circling_info.turn_rate_smoothed = Rate;
-
-  // Determine which direction we are circling
-  if (negative(Rate)) {
-    Rate *= -1;
-  }
+  circling_info.turning = fabs(Rate) >= MinTurnRate;
 
   // Force cruise or climb mode if external device says so
   bool forcecruise = false;
@@ -111,7 +107,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
   switch (calculated.turn_mode) {
   case CRUISE:
     // If (in cruise mode and beginning of circling detected)
-    if ((Rate >= MinTurnRate) || (forcecircling)) {
+    if (circling_info.turning || forcecircling) {
       // Remember the start values of the turn
       circling_info.turn_start_time = basic.time;
       circling_info.turn_start_location = basic.location;
@@ -127,7 +123,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       circling_info.turn_mode = CRUISE;
       break;
     }
-    if ((Rate >= MinTurnRate) || (forcecircling)) {
+    if (circling_info.turning || forcecircling) {
       if (((basic.time - calculated.turn_start_time) > CruiseClimbSwitch)
           || forcecircling) {
         // yes, we are certain now that we are circling
@@ -149,7 +145,7 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
     break;
 
   case CLIMB:
-    if ((Rate < MinTurnRate) || (forcecruise)) {
+    if (!circling_info.turning || forcecruise) {
       // Remember the end values of the turn
       circling_info.turn_start_time = basic.time;
       circling_info.turn_start_location = basic.location;
@@ -167,7 +163,8 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       circling_info.turn_mode = CLIMB;
       break;
     }
-    if((Rate < MinTurnRate) || forcecruise) {
+
+    if (!circling_info.turning || forcecruise) {
       if (((basic.time - circling_info.turn_start_time) > ClimbCruiseSwitch)
           || forcecruise) {
         // yes, we are certain now that we are cruising again

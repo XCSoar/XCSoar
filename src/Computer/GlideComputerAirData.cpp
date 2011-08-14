@@ -43,7 +43,6 @@ Copyright_License {
 using std::min;
 using std::max;
 
-static const fixed MinTurnRate(4);
 static const fixed THERMAL_TIME_MIN(45);
 
 GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points,
@@ -628,7 +627,7 @@ GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
  * @param Rate Current turn rate
  */
 void
-GlideComputerAirData::PercentCircling(const fixed Rate)
+GlideComputerAirData::PercentCircling()
 {
   DerivedInfo &calculated = SetCalculated();
 
@@ -640,7 +639,7 @@ GlideComputerAirData::PercentCircling(const fixed Rate)
   // to prevent bad stats due to flap switches and dolphin soaring
 
   // if (Circling)
-  if (calculated.circling && (Rate > MinTurnRate)) {
+  if (calculated.circling && calculated.turning) {
     // Add one second to the circling time
     // timeCircling += (Basic->Time-LastTime);
     calculated.time_climb += fixed_one;
@@ -688,8 +687,6 @@ GlideComputerAirData::Turning()
                             Calculated(), LastCalculated(),
                             SettingsComputer());
 
-  fixed Rate = Calculated().turn_rate_smoothed;
-
   if (LastCalculated().turn_mode == WAITCLIMB &&
       Calculated().turn_mode == CLIMB)
     OnSwitchClimbMode(true, Calculated().TurningLeft());
@@ -698,7 +695,7 @@ GlideComputerAirData::Turning()
     OnSwitchClimbMode(false, Calculated().TurningLeft());
 
   // Calculate circling time percentage and call thermal band calculation
-  PercentCircling(fabs(Rate));
+  PercentCircling();
 }
 
 void
