@@ -82,12 +82,10 @@ WndButton::on_key_check(unsigned key_code) const
     return true;
 
   case VK_LEFT:
-    if (mOnLeftNotify)
-      return true;
+    return mOnLeftNotify != NULL;
 
   case VK_RIGHT:
-    if (mOnRightNotify)
-      return true;
+    return mOnRightNotify != NULL;
 
   default:
     return false;
