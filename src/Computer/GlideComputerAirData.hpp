@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "GlideComputerBlackboard.hpp"
 #include "GlideRatio.hpp"
+#include "FlyingComputer.hpp"
 #include "CirclingComputer.hpp"
 #include "ThermalLocator.hpp"
 #include "Wind/WindAnalyser.hpp"
@@ -52,6 +53,8 @@ class GlideComputerAirData: virtual public GlideComputerBlackboard {
   GlideRatioCalculator rotaryLD;
 
   ProtectedAirspaceWarningManager &m_airspace;
+
+  FlyingComputer flying_computer;
 
   CirclingComputer circling_computer;
 

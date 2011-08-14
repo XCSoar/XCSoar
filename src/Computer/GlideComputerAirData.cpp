@@ -541,27 +541,8 @@ GlideComputerAirData::ProcessIdle()
 void
 GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
 {
-  const NMEAInfo &basic = Basic();
-  DerivedInfo &calculated = SetCalculated();
-
-  if (time_retreated())
-    calculated.flight.Reset();
-
-  // GPS not lost
-  if (!basic.location_available)
-    return;
-
-  // Speed too high for being on the ground
-  const fixed speed = basic.airspeed_available
-    ? std::max(basic.true_airspeed, basic.ground_speed)
-    : basic.ground_speed;
-
-  if (speed > glide_polar.GetVTakeoff() ||
-      (calculated.altitude_agl_valid && calculated.altitude_agl > fixed(300))) {
-    calculated.flight.Moving(basic.time);
-  } else {
-    calculated.flight.Stationary(basic.time);
-  }
+  flying_computer.Compute(glide_polar, Basic(), LastBasic(),
+                          Calculated(), SetCalculated().flight);
 }
 
 /**
