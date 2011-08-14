@@ -27,16 +27,14 @@ Copyright_License {
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/NullPort.hpp"
+#include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
 
 static DeviceConfig config;
 static NullPort port;
 
-DebugReplay::DebugReplay(NLineReader *_reader, const DeviceRegister *driver)
-  :reader(_reader),
-   device(driver->CreateOnPort != NULL
-          ? driver->CreateOnPort(config, &port)
-          : NULL)
+DebugReplay::DebugReplay(NLineReader *_reader)
+  :reader(_reader)
 {
   settings_computer.SetDefaults();
   basic.Reset();
@@ -45,12 +43,45 @@ DebugReplay::DebugReplay(NLineReader *_reader, const DeviceRegister *driver)
 
 DebugReplay::~DebugReplay()
 {
-  delete device;
   delete reader;
 }
 
+void
+DebugReplay::Compute()
+{
+  computer.Fill(basic, settings_computer);
+  computer.Compute(basic, last_basic, calculated, settings_computer);
+  calculated.flight.Moving(basic.time);
+}
+
+class DebugReplayNMEA : public DebugReplay {
+  Device *device;
+
+  NMEAParser parser;
+
+public:
+  DebugReplayNMEA(NLineReader *reader, const DeviceRegister *driver);
+  ~DebugReplayNMEA();
+
+  virtual bool Next();
+};
+
+DebugReplayNMEA::DebugReplayNMEA(NLineReader *_reader,
+                                 const DeviceRegister *driver)
+  :DebugReplay(_reader),
+   device(driver->CreateOnPort != NULL
+          ? driver->CreateOnPort(config, &port)
+          : NULL)
+{
+}
+
+DebugReplayNMEA::~DebugReplayNMEA()
+{
+  delete device;
+}
+
 bool
-DebugReplay::Next()
+DebugReplayNMEA::Next()
 {
   last_basic = basic;
   last_calculated = calculated;
@@ -63,9 +94,7 @@ DebugReplay::Next()
       parser.ParseNMEAString_Internal(line, basic);
 
     if (basic.location_available != last_basic.location_available) {
-      computer.Fill(basic, settings_computer);
-      computer.Compute(basic, last_basic, calculated, settings_computer);
-      calculated.flight.Moving(basic.time);
+      Compute();
       return true;
     }
   }
@@ -93,5 +122,5 @@ CreateDebugReplay(Args &args)
     return NULL;
   }
 
-  return new DebugReplay(reader, driver);
+  return new DebugReplayNMEA(reader, driver);
 }

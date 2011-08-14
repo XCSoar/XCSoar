@@ -27,7 +27,6 @@ Copyright_License {
 #include "SettingsComputer.hpp"
 #include "NMEA/MoreData.hpp"
 #include "NMEA/Derived.hpp"
-#include "Device/Parser.hpp"
 #include "Computer/BasicComputer.hpp"
 
 class NLineReader;
@@ -36,11 +35,9 @@ struct DeviceRegister;
 class Args;
 
 class DebugReplay {
+protected:
   NLineReader *reader;
 
-  Device *device;
-
-  NMEAParser parser;
   BasicComputer computer;
 
   SETTINGS_COMPUTER settings_computer;
@@ -48,10 +45,10 @@ class DebugReplay {
   DerivedInfo calculated, last_calculated;
 
 public:
-  DebugReplay(NLineReader *reader, const DeviceRegister *driver);
-  ~DebugReplay();
+  DebugReplay(NLineReader *reader);
+  virtual ~DebugReplay();
 
-  bool Next();
+  virtual bool Next() = 0;
 
   const SETTINGS_COMPUTER &SettingsComputer() const {
     return settings_computer;
@@ -76,6 +73,9 @@ public:
   DerivedInfo &SetCalculated() {
     return calculated;
   }
+
+protected:
+  void Compute();
 };
 
 DebugReplay *
