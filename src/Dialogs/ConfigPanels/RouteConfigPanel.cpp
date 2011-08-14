@@ -70,31 +70,30 @@ RouteConfigPanel::Init(WndForm *_wf)
 {
   assert(_wf != NULL);
   wf = _wf;
-  WndProperty *wp;
+
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
+  const RoutePlannerConfig &route_planner = settings_computer.route_planner;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpFinalGlideTerrain"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"), SETTINGS_COMPUTER::FGT_OFF);
-    dfe->addEnumText(_("Line"), SETTINGS_COMPUTER::FGT_LINE);
-    dfe->addEnumText(_("Shade"), SETTINGS_COMPUTER::FGT_SHADE);
-    dfe->Set(settings_computer.FinalGlideTerrain);
-    wp->RefreshDisplay();
-  }
+  static const StaticEnumChoice final_glide_terrain_list[] = {
+    { SETTINGS_FEATURES::FGT_OFF, N_("Off") },
+    { SETTINGS_FEATURES::FGT_LINE, N_("Line") },
+    { SETTINGS_FEATURES::FGT_SHADE, N_("Shade") },
+    { 0 }
+  };
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRoutePlannerMode"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("None"));
-    dfe->addEnumText(_("Terrain"));
-    dfe->addEnumText(_("Airspace"));
-    dfe->addEnumText(_("Both"));
-    dfe->Set(settings_computer.route_planner.mode);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpFinalGlideTerrain"), final_glide_terrain_list,
+                   settings_computer.FinalGlideTerrain);
+
+  static const StaticEnumChoice route_mode_list[] = {
+    { RoutePlannerConfig::rpNone, N_("None") },
+    { RoutePlannerConfig::rpTerrain, N_("Terrain") },
+    { RoutePlannerConfig::rpAirspace, N_("Airspace") },
+    { RoutePlannerConfig::rpBoth, N_("Both") },
+    { 0 }
+  };
+
+  LoadFormProperty(*wf, _T("prpRoutePlannerMode"), route_mode_list,
+                   route_planner.mode);
 
   LoadFormProperty(*wf, _T("prpRoutePlannerAllowClimb"),
                    settings_computer.route_planner.allow_climb);
@@ -102,26 +101,24 @@ RouteConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpRoutePlannerUseCeiling"),
                    settings_computer.route_planner.use_ceiling);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTurningReach"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("Straight"));
-    dfe->addEnumText(_("Turning"));
-    dfe->Set(settings_computer.route_planner.reach_calc_mode);
-    wp->RefreshDisplay();
-  }
+  static const StaticEnumChoice turning_reach_list[] = {
+    { RoutePlannerConfig::rmOff, N_("Off") },
+    { RoutePlannerConfig::rmStraight, N_("Straight") },
+    { RoutePlannerConfig::rmTurning, N_("Turning") },
+    { 0 }
+  };
 
-  wp = (WndProperty*)wf->FindByName(_T("prpReachPolarMode"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Task"));
-    dfe->addEnumText(_("Safety MC"));
-    dfe->Set(settings_computer.route_planner.reach_polar_mode);
-    wp->RefreshDisplay();
-  }
+  LoadFormProperty(*wf, _T("prpTurningReach"), turning_reach_list,
+                   route_planner.reach_calc_mode);
+
+  static const StaticEnumChoice reach_polar_list[] = {
+    { RoutePlannerConfig::rpmTask, N_("Task") },
+    { RoutePlannerConfig::rpmSafety, N_("Safety MC") },
+    { 0 }
+  };
+
+  LoadFormProperty(*wf, _T("prpReachPolarMode"), reach_polar_list,
+                   route_planner.reach_polar_mode);
 
   ShowRouteControls(settings_computer.route_planner.mode != RoutePlannerConfig::rpNone);
   ShowReachControls(settings_computer.route_planner.reach_calc_mode != RoutePlannerConfig::rmOff);
@@ -132,31 +129,16 @@ bool
 RouteConfigPanel::Save()
 {
   bool changed = false;
-  WndProperty *wp;
   SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SetSettingsComputer();
+  RoutePlannerConfig &route_planner = settings_computer.route_planner;
 
-  wp = (WndProperty*)wf->FindByName(_T("prpRoutePlannerMode"));
-  if (wp) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    if ((int)settings_computer.route_planner.mode != df.GetAsInteger()) {
-      settings_computer.route_planner.mode = (RoutePlannerConfig::Mode)df.GetAsInteger();
-      Profile::Set(szProfileRoutePlannerMode,
-                   (unsigned)settings_computer.route_planner.mode);
-      changed = true;
-    }
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpRoutePlannerMode"),
+                                  szProfileRoutePlannerMode,
+                                  route_planner.mode);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpReachPolarMode"));
-  if (wp) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    if ((int)settings_computer.route_planner.reach_polar_mode != df.GetAsInteger()) {
-      settings_computer.route_planner.reach_polar_mode =
-        (RoutePlannerConfig::PolarMode)df.GetAsInteger();
-      Profile::Set(szProfileReachPolarMode,
-                   (unsigned)settings_computer.route_planner.reach_polar_mode);
-      changed = true;
-    }
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpReachPolarMode"),
+                                  szProfileReachPolarMode,
+                                  route_planner.reach_polar_mode);
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpFinalGlideTerrain"),
                                   szProfileFinalGlideTerrain,
@@ -170,17 +152,9 @@ RouteConfigPanel::Save()
                               szProfileRoutePlannerUseCeiling,
                               settings_computer.route_planner.use_ceiling);
 
-  wp = (WndProperty*)wf->FindByName(_T("prpTurningReach"));
-  if (wp) {
-    DataFieldEnum &df = *(DataFieldEnum *)wp->GetDataField();
-    if ((int)settings_computer.route_planner.reach_calc_mode != df.GetAsInteger()) {
-      settings_computer.route_planner.reach_calc_mode =
-        (RoutePlannerConfig::ReachMode)df.GetAsInteger();
-      Profile::Set(szProfileTurningReach,
-                   (unsigned)settings_computer.route_planner.reach_calc_mode);
-      changed = true;
-    }
-  }
+  changed |= SaveFormPropertyEnum(*wf, _T("prpTurningReach"),
+                                  szProfileTurningReach,
+                                  route_planner.reach_calc_mode);
 
   return changed;
 }
