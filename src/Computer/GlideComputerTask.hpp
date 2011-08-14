@@ -30,10 +30,11 @@ Copyright_License {
 class ProtectedTaskManager;
 
 class GlideComputerTask: 
-  GlideComputerRoute,
   virtual public GlideComputerBlackboard 
 {
   ProtectedTaskManager &m_task;
+
+  GlideComputerRoute route;
 
 public:
   GlideComputerTask(ProtectedTaskManager& task,

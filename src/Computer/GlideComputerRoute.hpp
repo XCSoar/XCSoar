@@ -48,7 +48,6 @@ public:
   GlideComputerRoute(ProtectedRoutePlanner &_protected_route_planner,
                      const RoutePlannerGlue &_route_planner);
 
-protected:
   void ResetFlight();
   void ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
                     const DerivedInfo &last_calculated,

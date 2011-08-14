@@ -37,8 +37,8 @@ using std::max;
 GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
                                      ProtectedRoutePlanner &protected_route_planner,
                                      const RoutePlannerGlue &route_planner):
-  GlideComputerRoute(protected_route_planner, route_planner),
-  m_task(task)
+  m_task(task),
+  route(protected_route_planner, route_planner)
 {}
 
 void
@@ -50,7 +50,7 @@ void
 GlideComputerTask::ResetFlight(const bool full)
 {
   m_task.reset();
-  GlideComputerRoute::ResetFlight();
+  route.ResetFlight();
 }
 
 void
@@ -97,9 +97,9 @@ GlideComputerTask::ProcessMoreTask()
     safety_polar = task->get_safety_polar();
   }
 
-  GlideComputerRoute::ProcessRoute(Basic(), SetCalculated(), LastCalculated(),
-                                   SettingsComputer().task.route_planner,
-                                   glide_polar, safety_polar);
+  route.ProcessRoute(Basic(), SetCalculated(), LastCalculated(),
+                     SettingsComputer().task.route_planner,
+                     glide_polar, safety_polar);
 
   if (SettingsComputer().EnableBlockSTF)
     SetCalculated().V_stf = Calculated().common_stats.V_block;
@@ -133,5 +133,5 @@ GlideComputerTask::OnTakeoff()
 
 void 
 GlideComputerTask::set_terrain(const RasterTerrain* _terrain) {
-  GlideComputerRoute::set_terrain(_terrain);
+  route.set_terrain(_terrain);
 }
