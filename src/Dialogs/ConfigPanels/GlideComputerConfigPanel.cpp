@@ -101,10 +101,9 @@ GlideComputerConfigPanel::Save(bool &requirerestart)
                               szProfileExternalWind,
                               settings_computer.ExternalWind);
 
-  int auto_mc_mode = (int)settings_computer.auto_mc_mode;
-  changed |= SaveFormProperty(*wf, _T("prpAutoMcMode"), szProfileAutoMcMode,
-                              auto_mc_mode);
-  settings_computer.auto_mc_mode = (TaskBehaviour::AutoMCMode_t)auto_mc_mode;
+  changed |= SaveFormPropertyEnum(*wf, _T("prpAutoMcMode"),
+                                  szProfileAutoMcMode,
+                                  settings_computer.auto_mc_mode);
 
   changed |= SaveFormProperty(*wf, _T("prpBlockSTF"),
                               szProfileBlockSTF,
