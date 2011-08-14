@@ -32,6 +32,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "OS/PathName.hpp"
 #include "OS/FileUtil.hpp"
+#include "Look/DialogLook.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -41,12 +42,6 @@ Copyright_License {
 #endif
 
 void VisitDataFiles(const TCHAR* filter, File::Visitor &visitor) {}
-
-Font Fonts::Map;
-Font Fonts::MapBold;
-Font Fonts::Title;
-Font Fonts::CDI;
-Font Fonts::InfoBox;
 
 #ifndef WIN32
 int main(int argc, char **argv)
@@ -100,6 +95,13 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                   0, 0, screen_width, screen_height);
   main_window.show();
 
+  Fonts::Initialize();
+
+  DialogLook dialog_look;
+  dialog_look.Initialise(Fonts::MapBold, Fonts::Map,
+                         Fonts::MapBold, Fonts::MapBold);
+  SetXMLDialogLook(dialog_look);
+
   WndForm *form = LoadDialog(NULL, main_window, argv[1]);
   if (form == NULL) {
     fprintf(stderr, "Failed to load resource '%s'\n",
@@ -109,6 +111,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   form->ShowModal();
   delete form;
+
+  Fonts::Deinitialize();
 
   return 0;
 }

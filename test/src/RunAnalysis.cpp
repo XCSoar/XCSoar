@@ -34,6 +34,7 @@ Copyright_License {
 #include "Terrain/RasterWeather.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "WaypointGlue.hpp"
+#include "Dialogs/XML.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/Task.hpp"
 #include "Dialogs/Dialogs.h"
@@ -275,6 +276,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Look *look = new Look();
   look->Initialise();
   look->InitialiseConfigured(blackboard.GetUISettings());
+
+  SetXMLDialogLook(look->dialog);
 
   main_window.show();
 

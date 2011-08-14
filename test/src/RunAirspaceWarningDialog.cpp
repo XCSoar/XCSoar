@@ -25,6 +25,8 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Screen/Init.hpp"
 #include "Interface.hpp"
+#include "Look/DialogLook.hpp"
+#include "Dialogs/XML.hpp"
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/AirspaceWarningDialog.hpp"
 #include "UtilsSystem.hpp"
@@ -113,6 +115,11 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   Layout::Initialize(640, 480);
 
   Fonts::Initialize();
+
+  DialogLook dialog_look;
+  dialog_look.Initialise(Fonts::MapBold, Fonts::Map,
+                         Fonts::MapBold, Fonts::MapBold);
+  SetXMLDialogLook(dialog_look);
 
   dlgAirspaceWarningsShowModal(main_window);
 
