@@ -132,7 +132,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
   const struct DeviceRegister *driver = FindDriverByName(config.driver_name);
   if (driver == NULL) {
     TCHAR msg[256];
-    _sntprintf(msg, 256, _T("%s: %s"), _("No such driver"), config.driver_name.c_str());
+    _sntprintf(msg, 256, _T("%s: %s."), _("No such driver"), config.driver_name.c_str());
     env.SetErrorMessage(msg);
     return false;
   }
@@ -143,7 +143,7 @@ DeviceDescriptor::Open(OperationEnvironment &env)
     const TCHAR *name = config.GetPortName(name_buffer, 64);
 
     TCHAR msg[256];
-    _sntprintf(msg, 256, _("Unable to open port %s"), name);
+    _sntprintf(msg, 256, _T("%s: %s."), _("Unable to open port"), name);
     env.SetErrorMessage(msg);
     return false;
   }
@@ -201,7 +201,7 @@ DeviceDescriptor::AutoReopen(OperationEnvironment &env)
     return;
 
   TCHAR buffer[64];
-  LogStartUp(_T("Restarting device %s"), config.GetPortName(buffer, 64));
+  LogStartUp(_T("Reconnecting to device %s"), config.GetPortName(buffer, 64));
 
   InputEvents::processGlideComputer(GCE_COMMPORT_RESTART);
   Reopen(env);
@@ -418,7 +418,7 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
 
   TCHAR text[60];
 
-  _stprintf(text, _("Declaring to %s"), Driver->display_name);
+  _stprintf(text, _T("%s: %s."), _("Sending declaration"), Driver->display_name);
   env.SetText(text);
 
   Com->StopRxThread();
@@ -426,7 +426,7 @@ DeviceDescriptor::Declare(const struct Declaration &declaration,
   bool result = device != NULL && device->Declare(declaration, env);
 
   if (device_blackboard.IsFLARM(index)) {
-    _stprintf(text, _("Declaring to %s"), _T("FLARM"));
+    _stprintf(text, _T("%s: FLARM."), _("Sending declaration"));
     env.SetText(text);
     result = FlarmDeclare(Com, declaration, env) || result;
   }
@@ -445,7 +445,7 @@ DeviceDescriptor::ReadFlightList(RecordedFlightList &flight_list,
     return false;
 
   TCHAR text[60];
-  _stprintf(text, _("Reading flight list from %s"), Driver->display_name);
+  _stprintf(text, _T("%s: %s."), _("Reading flight list"), Driver->display_name);
   env.SetText(text);
 
   Com->StopRxThread();
@@ -463,7 +463,7 @@ DeviceDescriptor::DownloadFlight(const RecordedFlightInfo &flight,
     return false;
 
   TCHAR text[60];
-  _stprintf(text, _("Downloading flight from %s"), Driver->display_name);
+  _stprintf(text, _T("%s: %s."), _("Downloading flight log"), Driver->display_name);
   env.SetText(text);
 
   Com->StopRxThread();
