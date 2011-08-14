@@ -121,12 +121,13 @@ public:
    */
   virtual bool on_clicked();
 
+private:
   /**
    * Called when the Left (Right) key is pressed
    * Only called if callback have been explicitly set
    */
-  virtual bool on_left();
-  virtual bool on_right();
+  bool on_left();
+  bool on_right();
 
 protected:
   virtual bool on_key_check(unsigned key_code) const;
