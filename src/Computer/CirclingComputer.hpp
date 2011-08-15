@@ -30,6 +30,11 @@ struct MoreData;
 struct DerivedInfo;
 struct SETTINGS_COMPUTER;
 
+/**
+ * Detect when the aircraft begins or ends circling.
+ *
+ * Dependencies: #FlyingComputer.
+ */
 class CirclingComputer {
 public:
   /**

@@ -33,6 +33,11 @@ struct NMEAInfo;
 struct MoreData;
 struct DerivedInfo;
 
+/**
+ * Calculate the wind vector.
+ *
+ * Dependencies: #FlyingComputer, #CirclingComputer.
+ */
 class WindComputer {
   bool last_circling;
 

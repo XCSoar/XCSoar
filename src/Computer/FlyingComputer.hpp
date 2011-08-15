@@ -32,6 +32,11 @@ struct DerivedInfo;
 struct AircraftState;
 struct FlyingState;
 
+/**
+ * Detect takeoff and landing.
+ *
+ * Dependencies: #FlyingComputer.
+ */
 class FlyingComputer {
   unsigned short time_on_ground;
   unsigned short time_in_flight;
