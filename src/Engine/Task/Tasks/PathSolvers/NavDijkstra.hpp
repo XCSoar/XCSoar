@@ -36,8 +36,6 @@ Copyright_License {
 extern long count_dijkstra_queries;
 #endif
 
-typedef Dijkstra<ScanTaskPoint> DijkstraTaskPoint;
-
 /**
  * Abstract class for A* /Dijkstra searches of nav points, managing
  * edges in multiple stages (corresponding to turn points).
@@ -55,7 +53,7 @@ protected:
     MAX_STAGES = 16,
   };
 
-  DijkstraTaskPoint dijkstra;
+  Dijkstra<ScanTaskPoint> dijkstra;
 
   /** Number of stages in search */
   unsigned num_stages;
