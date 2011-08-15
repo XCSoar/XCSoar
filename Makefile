@@ -244,6 +244,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/FLARM/FlarmComputer.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
+	$(SRC)/Computer/WindComputer.cpp \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \
 	$(SRC)/Computer/GlideComputerAirData.cpp \

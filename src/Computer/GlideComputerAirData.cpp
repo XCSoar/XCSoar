@@ -71,12 +71,10 @@ GlideComputerAirData::ResetFlight(const bool full)
 
   thermallocator.Reset();
 
-  circling_wind.reset();
-  wind_ekf.reset();
-  wind_store.reset();
   rotaryLD.init(SettingsComputer());
 
   flying_computer.Reset();
+  wind_computer.Reset();
 }
 
 /**
@@ -134,75 +132,15 @@ GlideComputerAirData::ProcessVertical()
 void
 GlideComputerAirData::Wind()
 {
-  DerivedInfo &calculated = SetCalculated();
-
-  if (!calculated.flight.flying || !time_advanced())
-    return;
-
-  if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) {
-
-    if (calculated.turn_mode == CLIMB) {
-      CirclingWind::Result result =
-        circling_wind.NewSample(Basic());
-      if (result.IsValid())
-        wind_store.SlotMeasurement(Basic(),
-                                   result.wind, result.quality);
-    }
-  }
-
-  // update zigzag wind
-  if ((SettingsComputer().AutoWindMode & D_AUTOWIND_ZIGZAG) &&
-      Basic().airspeed_available && Basic().airspeed_real &&
-      Basic().true_airspeed > SettingsComputer().glide_polar_task.GetVTakeoff()) {
-    WindEKFGlue::Result result = wind_ekf.Update(Basic(), calculated);
-
-    if (result.quality > 0)
-      SetWindEstimate(result.wind, result.quality);
-  }
-
-  if (SettingsComputer().AutoWindMode)
-    wind_store.SlotAltitude(Basic(), calculated);
+  wind_computer.Compute(SettingsComputer(),
+                        Basic(), LastBasic(),
+                        SetCalculated());
 }
 
 void
 GlideComputerAirData::SelectWind()
 {
-  const NMEAInfo &basic = Basic();
-  DerivedInfo &calculated = SetCalculated();
-
-  if (basic.external_wind_available && SettingsComputer().ExternalWind) {
-    // external wind available
-    calculated.wind = basic.external_wind;
-    calculated.wind_available = basic.external_wind_available;
-
-  } else if (SettingsComputer().ManualWindAvailable && SettingsComputer().AutoWindMode == 0) {
-    // manual wind only if available and desired
-    calculated.wind = SettingsComputer().ManualWind;
-    calculated.wind_available.Update(basic.clock);
-
-  } else if (calculated.estimated_wind_available.Modified(SettingsComputer().ManualWindAvailable)
-             && SettingsComputer().AutoWindMode) {
-    // auto wind when available and newer than manual wind
-    calculated.wind = calculated.estimated_wind;
-    calculated.wind_available = calculated.estimated_wind_available;
-
-  } else if (SettingsComputer().ManualWindAvailable
-             && SettingsComputer().AutoWindMode) {
-    // manual wind overrides auto wind if available
-    calculated.wind = SettingsComputer().ManualWind;
-    calculated.wind_available = SettingsComputer().ManualWindAvailable;
-
-  } else
-   // no wind available
-   calculated.wind_available.Clear();
-}
-
-void
-GlideComputerAirData::SetWindEstimate(const SpeedVector wind,
-                                      const int quality)
-{
-  Vector v_wind = Vector(wind);
-  wind_store.SlotMeasurement(Basic(), v_wind, quality);
+  wind_computer.Select(SettingsComputer(), Basic(), SetCalculated());
 }
 
 /**
@@ -599,10 +537,6 @@ void
 GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
 {
   rotaryLD.init(SettingsComputer());
-
-  // Tell the windanalyser of the new flight mode
-  if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
-    circling_wind.slot_newFlightMode(Calculated(), left, 0);
 }
 
 /**

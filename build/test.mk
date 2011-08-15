@@ -1900,6 +1900,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/BasicComputer.cpp \
 	$(SRC)/Computer/FlyingComputer.cpp \
 	$(SRC)/Computer/CirclingComputer.cpp \
+	$(SRC)/Computer/WindComputer.cpp \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \
 	$(SRC)/Computer/GlideComputerTask.cpp \

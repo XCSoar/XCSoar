@@ -28,10 +28,8 @@ Copyright_License {
 #include "GlideRatio.hpp"
 #include "FlyingComputer.hpp"
 #include "CirclingComputer.hpp"
+#include "WindComputer.hpp"
 #include "ThermalLocator.hpp"
-#include "Wind/CirclingWind.hpp"
-#include "Wind/WindEKF.hpp"
-#include "Wind/WindStore.hpp"
 #include "GPSClock.hpp"
 #include "Util/WindowFilter.hpp"
 
@@ -55,15 +53,10 @@ class GlideComputerAirData: virtual public GlideComputerBlackboard {
   ProtectedAirspaceWarningManager &m_airspace;
 
   FlyingComputer flying_computer;
-
   CirclingComputer circling_computer;
+  WindComputer wind_computer;
 
   ThermalLocator thermallocator;
-
-  // TODO: protect with a Mutex
-  CirclingWind circling_wind;
-  WindEKFGlue wind_ekf;
-  WindStore wind_store;
 
   GPSClock airspace_clock;
 
@@ -81,10 +74,8 @@ public:
 
   void ProcessIdle();
 
-  void SetWindEstimate(const SpeedVector wind, const int quality = 3); // JMW check
-
   const WindStore &GetWindStore() const {
-    return wind_store;
+    return wind_computer.GetWindStore();
   }
 
 protected:
