@@ -181,19 +181,19 @@ Logger::guiStopLogger(const NMEAInfo &gps_info,
 void
 Logger::LoggerDeviceDeclare(const OrderedTask& task)
 {
-  return ExternalLogger::Declare(task);
+  ExternalLogger::Declare(task);
 }
 
 void
 Logger::LoggerNote(const TCHAR *text)
 {
   Poco::ScopedRWLock protect(lock, true);
-  return _logger.LoggerNote(text);
+  _logger.LoggerNote(text);
 }
 
 void
 Logger::clearBuffer()
 {
   Poco::ScopedRWLock protect(lock, true);
-  return _logger.clearBuffer();
+  _logger.clearBuffer();
 }
