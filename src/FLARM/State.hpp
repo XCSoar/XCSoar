@@ -48,6 +48,12 @@ struct FLARM_STATE
   /** Transmit status */
   bool tx;
 
+  /**
+   * Is there new FLARM traffic present?
+   * @see traffic
+   */
+  bool NewTraffic;
+
   /** GPS status */
   GPSStatus gps;
 
@@ -58,12 +64,6 @@ struct FLARM_STATE
   Validity available;
   /** Flarm traffic information */
   StaticArray<FLARM_TRAFFIC, FLARM_MAX_TRAFFIC> traffic;
-
-  /**
-   * Is there new FLARM traffic present?
-   * @see traffic
-   */
-  bool NewTraffic;
 
 public:
   void clear();
