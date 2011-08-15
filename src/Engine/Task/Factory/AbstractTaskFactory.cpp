@@ -308,35 +308,35 @@ AbstractTaskFactory::createPoint(const LegalPointType_t type,
 
   switch (type) {
   case START_SECTOR:
-    return createStart(new FAISectorZone(wp.Location, false), wp);
+    return createStart(new FAISectorZone(wp.location, false), wp);
   case START_LINE:
-    return createStart(new LineSectorZone(wp.Location, start_radius), wp);
+    return createStart(new LineSectorZone(wp.location, start_radius), wp);
   case START_CYLINDER:
-    return createStart(new CylinderZone(wp.Location, start_radius), wp);
+    return createStart(new CylinderZone(wp.location, start_radius), wp);
   case START_BGA:
-    return createStart(new BGAStartSectorZone(wp.Location), wp);
+    return createStart(new BGAStartSectorZone(wp.location), wp);
   case FAI_SECTOR:
-    return createAST(new FAISectorZone(wp.Location, true), wp);
+    return createAST(new FAISectorZone(wp.location, true), wp);
   case KEYHOLE_SECTOR:
-    return createAST(new KeyholeZone(wp.Location), wp);
+    return createAST(new KeyholeZone(wp.location), wp);
   case BGAFIXEDCOURSE_SECTOR:
-    return createAST(new BGAFixedCourseZone(wp.Location), wp);
+    return createAST(new BGAFixedCourseZone(wp.location), wp);
   case BGAENHANCEDOPTION_SECTOR:
-    return createAST(new BGAEnhancedOptionZone(wp.Location), wp);
+    return createAST(new BGAEnhancedOptionZone(wp.location), wp);
   case AST_CYLINDER:
-    return createAST(new CylinderZone(wp.Location, turnpoint_radius), wp);
+    return createAST(new CylinderZone(wp.location, turnpoint_radius), wp);
   case AAT_CYLINDER:
-    return createAAT(new CylinderZone(wp.Location, turnpoint_radius), wp);
+    return createAAT(new CylinderZone(wp.location, turnpoint_radius), wp);
   case AAT_SEGMENT:
-    return createAAT(new SectorZone(wp.Location, turnpoint_radius), wp);
+    return createAAT(new SectorZone(wp.location, turnpoint_radius), wp);
   case AAT_ANNULAR_SECTOR:
-    return createAAT(new AnnularSectorZone(wp.Location, turnpoint_radius), wp);
+    return createAAT(new AnnularSectorZone(wp.location, turnpoint_radius), wp);
   case FINISH_SECTOR:
-    return createFinish(new FAISectorZone(wp.Location, false), wp);
+    return createFinish(new FAISectorZone(wp.location, false), wp);
   case FINISH_LINE:
-    return createFinish(new LineSectorZone(wp.Location, finish_radius), wp);
+    return createFinish(new LineSectorZone(wp.location, finish_radius), wp);
   case FINISH_CYLINDER:
-    return createFinish(new CylinderZone(wp.Location, finish_radius), wp);
+    return createFinish(new CylinderZone(wp.location, finish_radius), wp);
   }
 
   assert(1);
@@ -914,7 +914,7 @@ AbstractTaskFactory::is_closed() const
   const Waypoint& wp_finish =
       m_task.get_tp(m_task.task_size() - 1)->get_waypoint();
 
-  return (wp_start.Location == wp_finish.Location);
+  return (wp_start.location == wp_finish.location);
 }
 
 bool 

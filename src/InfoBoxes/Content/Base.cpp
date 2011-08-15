@@ -41,15 +41,15 @@ void FillInfoBoxWaypointName(InfoBoxWindow& infobox, const Waypoint* way_point,
   } else {
     switch (XCSoarInterface::SettingsMap().waypoint.display_text_type) {
     case DISPLAYFIRSTTHREE:
-      CopyString(tmp, way_point->Name.c_str(), 4);
+      CopyString(tmp, way_point->name.c_str(), 4);
       break;
 
     case DISPLAYFIRSTFIVE:
-      CopyString(tmp, way_point->Name.c_str(), 6);
+      CopyString(tmp, way_point->name.c_str(), 6);
       break;
 
     default:
-      CopyString(tmp, way_point->Name.c_str(), sizeof(tmp) / sizeof(TCHAR));
+      CopyString(tmp, way_point->name.c_str(), sizeof(tmp) / sizeof(TCHAR));
       break;
     }
   }

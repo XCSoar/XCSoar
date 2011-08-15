@@ -77,7 +77,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   canvas.select(name_font);
   canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2), rc,
-                      way_point.Name.c_str());
+                      way_point.name.c_str());
 
   // Draw distance and arrival altitude
   TCHAR tmp[255], dist[20], alt[20];

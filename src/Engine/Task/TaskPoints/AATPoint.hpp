@@ -59,8 +59,8 @@ public:
            const TaskBehaviour &tb,
            const OrderedTaskBehaviour& to) : 
     IntermediateTaskPoint(AAT, _oz, wp, tb, to, true),
-    m_target_location(wp.Location),
-    m_target_save(wp.Location),
+    m_target_location(wp.location),
+    m_target_save(wp.location),
     m_target_locked(false)
     {
     }

@@ -38,40 +38,40 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
 
   Waypoint wp = waypoints.create(GeoPoint(Angle::degrees(fixed_zero),
                                           Angle::degrees(fixed_zero)));
-  wp.Type = Waypoint::wtAirfield;
-  wp.Altitude = fixed(0.25);
+  wp.type = Waypoint::wtAirfield;
+  wp.altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed_zero), 
                                  Angle::degrees(fixed_one)));
-  wp.Type = Waypoint::wtAirfield;
-  wp.Altitude = fixed(0.25);
+  wp.type = Waypoint::wtAirfield;
+  wp.altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed_one), 
                                  Angle::degrees(fixed_one)));
-  wp.Name = _T("Hello");
-  wp.Type = Waypoint::wtAirfield;
-  wp.Altitude = fixed_half;
+  wp.name = _T("Hello");
+  wp.type = Waypoint::wtAirfield;
+  wp.altitude = fixed_half;
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed(0.8)), 
                                  Angle::degrees(fixed(0.5))));
-  wp.Name = _T("Unk");
-  wp.Type = Waypoint::wtAirfield;
-  wp.Altitude = fixed(0.25);
+  wp.name = _T("Unk");
+  wp.type = Waypoint::wtAirfield;
+  wp.altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed_one), 
                                  Angle::degrees(fixed_zero)));
-  wp.Type = Waypoint::wtAirfield;
-  wp.Altitude = fixed(0.25);
+  wp.type = Waypoint::wtAirfield;
+  wp.altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed_zero), 
                                  Angle::degrees(fixed(0.23))));
-  wp.Type = Waypoint::wtAirfield;
-  wp.Altitude = fixed(0.25);
+  wp.type = Waypoint::wtAirfield;
+  wp.altitude = fixed(0.25);
   waypoints.append(wp);
 
   for (unsigned i=0; i<(unsigned)std::max((int)n-6,0); i++) {
@@ -80,8 +80,8 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
     double z = rand()% std::max(terrain_height,1);
     wp = waypoints.create(GeoPoint(Angle::degrees(fixed(x/1000.0)), 
                                    Angle::degrees(fixed(y/1000.0))));
-    wp.Type = Waypoint::wtNormal;
-    wp.Altitude = fixed(z);
+    wp.type = Waypoint::wtNormal;
+    wp.altitude = fixed(z);
     waypoints.append(wp);
   }
   waypoints.optimise();

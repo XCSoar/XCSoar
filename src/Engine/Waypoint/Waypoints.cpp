@@ -93,16 +93,16 @@ Waypoints::WaypointNameTree::VisitNormalisedPrefix(const TCHAR *prefix,
 void
 Waypoints::WaypointNameTree::Add(const Waypoint &wp)
 {
-  TCHAR normalized_name[wp.Name.length() + 1];
-  normalize_search_string(normalized_name, wp.Name.c_str());
+  TCHAR normalized_name[wp.name.length() + 1];
+  normalize_search_string(normalized_name, wp.name.c_str());
   add(normalized_name, &wp);
 }
 
 void
 Waypoints::WaypointNameTree::Remove(const Waypoint &wp)
 {
-  TCHAR normalized_name[wp.Name.length() + 1];
-  normalize_search_string(normalized_name, wp.Name.c_str());
+  TCHAR normalized_name[wp.name.length() + 1];
+  normalize_search_string(normalized_name, wp.name.c_str());
   remove(normalized_name, &wp);
 }
 
@@ -148,11 +148,11 @@ Waypoints::append(const Waypoint &_wp)
       waypoint_tree.ClearBounds();
     }
   } else if (empty())
-    task_projection.reset(wp.Location);
+    task_projection.reset(wp.location);
 
-  wp.Flags.Watched = (wp.FileNum == 3);
+  wp.flags.watched = (wp.file_num == 3);
 
-  task_projection.scan_location(wp.Location);
+  task_projection.scan_location(wp.location);
   wp.id = next_id++;
 
   const Waypoint &new_wp = waypoint_tree.Add(wp);
@@ -218,7 +218,7 @@ Waypoints::lookup_location(const GeoPoint &loc, const fixed range) const
   if (!wp)
     return NULL;
 
-  if (wp->Location == loc)
+  if (wp->location == loc)
     return wp;
   else if (positive(range) && (wp->IsCloseTo(loc, range)))
     return wp;
@@ -232,7 +232,7 @@ Waypoints::find_home()
   for (const_iterator found = waypoint_tree.begin();
        found != waypoint_tree.end(); ++found) {
     const Waypoint &wp = *found;
-    if (wp.Flags.Home) {
+    if (wp.flags.home) {
       m_home = &wp;
       return &wp;
     }
@@ -252,7 +252,7 @@ Waypoints::set_home(const unsigned id)
 
     if (wp.id == id) {
       m_home = &wp;
-      wp.Flags.Home = true;
+      wp.flags.home = true;
       return true;
     }
   }
@@ -352,7 +352,7 @@ Waypoints::create(const GeoPoint &location)
   Waypoint edit_waypoint(location);
 
   // first waypoint, put into primary file (this will be auto-generated)
-  edit_waypoint.FileNum = 1;
+  edit_waypoint.file_num = 1;
   edit_waypoint.original_id = 0;
   return edit_waypoint;
 }
@@ -360,8 +360,8 @@ Waypoints::create(const GeoPoint &location)
 const Waypoint &
 Waypoints::check_exists_or_append(const Waypoint &waypoint)
 {
-  const Waypoint* found = lookup_name(waypoint.Name);
-  if (found && found->IsCloseTo(waypoint.Location, fixed(100))) {
+  const Waypoint* found = lookup_name(waypoint.name);
+  if (found && found->IsCloseTo(waypoint.location, fixed(100))) {
     return *found;
   }
 
@@ -374,10 +374,10 @@ Waypoints::generate_takeoff_point(const GeoPoint& location,
 {
   // fallback: create a takeoff point
   Waypoint to_point(location, true);
-  to_point.Altitude = terrain_alt;
-  to_point.FileNum = -1;
-  to_point.Name = _T("(takeoff)");
-  to_point.Type = Waypoint::wtOutlanding;
+  to_point.altitude = terrain_alt;
+  to_point.file_num = -1;
+  to_point.name = _T("(takeoff)");
+  to_point.type = Waypoint::wtOutlanding;
   return to_point;
 }
 

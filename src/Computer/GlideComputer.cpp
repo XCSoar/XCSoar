@@ -162,7 +162,7 @@ GlideComputer::DetermineTeamCodeRefLocation()
   if (wp == NULL)
     return TeamCodeRefFound = false;
 
-  TeamCodeRefLocation = wp->Location;
+  TeamCodeRefLocation = wp->location;
   return TeamCodeRefFound = true;
 }
 

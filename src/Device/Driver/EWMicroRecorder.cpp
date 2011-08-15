@@ -207,7 +207,7 @@ EWMicroRecorderWriteWaypoint(Port &port,
   TCHAR NoS, EoW;
 
   // prepare latitude
-  tmp = way_point.Location.Latitude.value_degrees();
+  tmp = way_point.location.Latitude.value_degrees();
   NoS = _T('N');
   if (tmp < 0)
     {
@@ -219,7 +219,7 @@ EWMicroRecorderWriteWaypoint(Port &port,
   MinLat = (tmp - DegLat) * 60 * 1000;
 
   // prepare long
-  tmp = way_point.Location.Longitude.value_degrees();
+  tmp = way_point.location.Longitude.value_degrees();
   EoW = _T('E');
   if (tmp < 0)
     {
@@ -235,7 +235,7 @@ EWMicroRecorderWriteWaypoint(Port &port,
                         EWType,
                         DegLat, (int)MinLat, NoS,
                         DegLon, (int)MinLon, EoW,
-                        way_point.Name.c_str());
+                        way_point.name.c_str());
 }
 
 static bool

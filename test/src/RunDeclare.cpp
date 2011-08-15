@@ -64,8 +64,8 @@ MakeWaypoint(const TCHAR *name, int altitude,
                     Angle::degrees(fixed(51.051944444444445)));
   Waypoint wp(GeoPoint(Angle::degrees(fixed(longitude)),
                        Angle::degrees(fixed(latitude))));
-  wp.Name = name;
-  wp.Altitude = fixed(altitude);
+  wp.name = name;
+  wp.altitude = fixed(altitude);
   return wp;
 }
 

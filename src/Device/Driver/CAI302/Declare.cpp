@@ -62,7 +62,7 @@ cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point)
   double tmp, MinLat, MinLon;
   char NoS, EoW;
 
-  tmp = way_point.Location.Latitude.value_degrees();
+  tmp = way_point.location.Latitude.value_degrees();
   NoS = 'N';
   if (tmp < 0) {
     NoS = 'S';
@@ -71,7 +71,7 @@ cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point)
   DegLat = (int)tmp;
   MinLat = (tmp - DegLat) * 60;
 
-  tmp = way_point.Location.Longitude.value_degrees();
+  tmp = way_point.location.Longitude.value_degrees();
   EoW = 'E';
   if (tmp < 0) {
     EoW = 'W';
@@ -81,7 +81,7 @@ cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point)
   MinLon = (tmp - DegLon) * 60;
 
   char Name[13];
-  convert_string(Name, sizeof(Name), way_point.Name.c_str());
+  convert_string(Name, sizeof(Name), way_point.name.c_str());
 
   char szTmp[128];
   sprintf(szTmp, "D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r",
@@ -89,7 +89,7 @@ cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point)
           DegLat, MinLat, NoS,
           DegLon, MinLon, EoW,
           Name,
-          (int)way_point.Altitude);
+          (int)way_point.altitude);
 
   return CAI302::DownloadCommand(port, szTmp);
 }

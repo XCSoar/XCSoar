@@ -26,35 +26,35 @@
 void
 Waypoint::Flags::SetDefaultFlags(bool turnpoint)
 {
-  TurnPoint = turnpoint;
-  Home = false;
-  StartPoint = false;
-  FinishPoint = false;
-  Watched = false;
+  turn_point = turnpoint;
+  home = false;
+  start_point = false;
+  finish_point = false;
+  watched = false;
 }
 
 Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
-  Location(_location),
+  location(_location),
 #ifndef NDEBUG
   flat_location_initialised(false),
 #endif
-  Type(wtNormal)
+  type(wtNormal)
 {
-  Flags.SetDefaultFlags(is_turnpoint);
+  flags.SetDefaultFlags(is_turnpoint);
   runway.Clear();
   radio_frequency.Clear();
 }
 
 bool
-Waypoint::IsCloseTo(const GeoPoint &location, const fixed range) const
+Waypoint::IsCloseTo(const GeoPoint &_location, const fixed range) const
 {
-  return Location.distance(location) <= range;
+  return location.distance(_location) <= range;
 }
 
 void
 Waypoint::Project(const TaskProjection &task_projection)
 {
-  flat_location = task_projection.project(Location);
+  flat_location = task_projection.project(location);
 
 #ifndef NDEBUG
   flat_location_initialised = true;

@@ -75,7 +75,7 @@ SetAirfieldDetails(Waypoints &way_points, const TCHAR *name,
     return;
 
   Waypoint new_wp(*wp);
-  new_wp.Details = Details.c_str();
+  new_wp.details = Details.c_str();
   way_points.replace(*wp, new_wp);
   way_points.optimise();
 }

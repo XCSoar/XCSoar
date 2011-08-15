@@ -34,7 +34,7 @@ public:
 
   virtual void Visit(const Waypoint& wp) {
     if (verbose) {
-      _tprintf(_T("# visiting wp %d, '%s'\n"), wp.id, wp.Name.c_str());
+      _tprintf(_T("# visiting wp %d, '%s'\n"), wp.id, wp.name.c_str());
     }
     count++;
   }
@@ -68,7 +68,7 @@ test_range(const Waypoints& waypoints, const double range)
   const Waypoint *r = waypoints.lookup_id(3);
   if (r) {
     WaypointVisitorPrint v;
-    waypoints.visit_within_range(r->Location, fixed(range), v);
+    waypoints.visit_within_range(r->location, fixed(range), v);
     return v.count;
   } else {
     return 0;
@@ -82,7 +82,7 @@ test_nearest(const Waypoints& waypoints)
   if (!r)
     return false;
 
-  r = waypoints.get_nearest(r->Location, fixed_zero);
+  r = waypoints.get_nearest(r->location, fixed_zero);
   if (!r)
     return false;
 
@@ -155,10 +155,10 @@ test_replace(Waypoints& waypoints, unsigned id)
   if (wp== NULL) {
     return false;
   }
-  tstring oldName = wp->Name;
+  tstring oldName = wp->name;
 
   Waypoint copy = *wp;
-  copy.Name = _T("Fred");
+  copy.name = _T("Fred");
   waypoints.replace(*wp,copy);
   waypoints.optimise();
 
@@ -166,7 +166,7 @@ test_replace(Waypoints& waypoints, unsigned id)
   if (wp== NULL) {
     return false;
   }
-  return (wp->Name != oldName) && (wp->Name == _T("Fred"));
+  return (wp->name != oldName) && (wp->name == _T("Fred"));
 }
 
 int main(int argc, char** argv)

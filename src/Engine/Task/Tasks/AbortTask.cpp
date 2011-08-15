@@ -180,7 +180,7 @@ AbortTask::fill_reachable(const AircraftState &state,
 
       if (intersection_test && final_glide && is_reachable_final)
         intersects = intersection_test->intersects(
-            AGeoPoint(v->waypoint.Location, result.min_height));
+            AGeoPoint(v->waypoint.location, result.min_height));
 
       if (!intersects) {
         q.push(Alternate(v->waypoint, result));
@@ -347,7 +347,7 @@ AbortTask::get_vector_home(const AircraftState &state) const
 {
   const Waypoint *home_waypoint = waypoints.GetHome();
   if (home_waypoint)
-    return GeoVector(state.location, home_waypoint->Location);
+    return GeoVector(state.location, home_waypoint->location);
 
   return GeoVector(fixed_zero);
 }

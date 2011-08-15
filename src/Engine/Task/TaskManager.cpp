@@ -489,7 +489,7 @@ TaskManager::get_ordered_taskpoint_name(unsigned TPindex) const
    return buff;
 
  if (active_task == &task_ordered && TPindex < task_size())
-   CopyString(buff, task_ordered.getTaskPoint(TPindex)->get_waypoint().Name.c_str(),
+   CopyString(buff, task_ordered.getTaskPoint(TPindex)->get_waypoint().name.c_str(),
               NAME_SIZE + 1);
 
  return buff;

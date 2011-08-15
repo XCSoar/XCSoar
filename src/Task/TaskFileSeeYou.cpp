@@ -320,30 +320,30 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
 
   if (factType == TaskBehaviour::FACTORY_RT &&
       isIntermediate && isKeyhole(turnpoint_infos))
-    oz = new KeyholeZone(wp->Location);
+    oz = new KeyholeZone(wp->location);
 
   else if (factType == TaskBehaviour::FACTORY_RT &&
       isIntermediate && isBGAEnhancedOptionZone(turnpoint_infos))
-    oz = new BGAEnhancedOptionZone(wp->Location);
+    oz = new BGAEnhancedOptionZone(wp->location);
 
   else if (factType == TaskBehaviour::FACTORY_RT &&
       isIntermediate && isBGAFixedCourseZone(turnpoint_infos))
-    oz = new BGAFixedCourseZone(wp->Location);
+    oz = new BGAFixedCourseZone(wp->location);
 
   else if (!isIntermediate && turnpoint_infos.Line) // special case "Line"
-    oz = new LineSectorZone(wp->Location, turnpoint_infos.Radius1);
+    oz = new LineSectorZone(wp->location, turnpoint_infos.Radius1);
 
   // special case "Cylinder"
   else if (fabs(turnpoint_infos.Angle1.value_degrees() - fixed(180)) < fixed(1) )
-    oz = new CylinderZone(wp->Location, turnpoint_infos.Radius1);
+    oz = new CylinderZone(wp->location, turnpoint_infos.Radius1);
 
   else if (factType == TaskBehaviour::FACTORY_RT) {
 
     // XCSoar does not support fixed sectors for RT
     if (turnpoint_infos.Style == SeeYouTurnpointInformation::Fixed)
-      oz = new CylinderZone(wp->Location, turnpoint_infos.Radius1);
+      oz = new CylinderZone(wp->location, turnpoint_infos.Radius1);
     else
-      oz = new FAISectorZone(wp->Location, isIntermediate);
+      oz = new FAISectorZone(wp->location, isIntermediate);
 
   } else if (isIntermediate) { //AAT intermediate point
     Angle A12adj = turnpoint_infos.Angle12.Reciprocal();
@@ -356,22 +356,22 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
       break;
     }
     case SeeYouTurnpointInformation::Symmetrical: {
-      const Angle ap = wps[pos - 1]->Location.bearing(wp->Location);
-      const Angle an = wps[pos + 1]->Location.bearing(wp->Location);
+      const Angle ap = wps[pos - 1]->location.bearing(wp->location);
+      const Angle an = wps[pos + 1]->location.bearing(wp->location);
       A12adj = ap.HalfAngle(an).Reciprocal();
       break;
     }
 
     case SeeYouTurnpointInformation::ToNextPoint: {
-      A12adj = wps[pos + 1]->Location.bearing(wp->Location);
+      A12adj = wps[pos + 1]->location.bearing(wp->location);
       break;
     }
     case SeeYouTurnpointInformation::ToPreviousPoint: {
-      A12adj = wps[pos - 1]->Location.bearing(wp->Location);
+      A12adj = wps[pos - 1]->location.bearing(wp->location);
       break;
     }
     case SeeYouTurnpointInformation::ToStartPoint: {
-      A12adj = wps[0]->Location.bearing(wp->Location);
+      A12adj = wps[0]->location.bearing(wp->location);
       break;
     }
     }
@@ -383,15 +383,15 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
 
     if (turnpoint_infos.Radius2 > fixed_zero &&
         (turnpoint_infos.Angle2.as_bearing().value_degrees()) < fixed_one) {
-      oz = new AnnularSectorZone(wp->Location, turnpoint_infos.Radius1,
+      oz = new AnnularSectorZone(wp->location, turnpoint_infos.Radius1,
           RadialStart, RadialEnd, turnpoint_infos.Radius2);
     } else {
-      oz = new SectorZone(wp->Location, turnpoint_infos.Radius1,
+      oz = new SectorZone(wp->location, turnpoint_infos.Radius1,
           RadialStart, RadialEnd);
     }
 
   } else { // catch-all
-    oz = new CylinderZone(wp->Location, turnpoint_infos.Radius1);
+    oz = new CylinderZone(wp->location, turnpoint_infos.Radius1);
   }
 
   return oz;
@@ -512,22 +512,22 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
       return NULL;
 
     // Try to find waypoint by name
-    const Waypoint* wp = waypoints->lookup_name(file_wp->Name);
+    const Waypoint* wp = waypoints->lookup_name(file_wp->name);
 
     // If waypoint by name found and closer than 10m to the original
     if (wp != NULL &&
-        wp->Location.distance(file_wp->Location) <= fixed_ten) {
+        wp->location.distance(file_wp->location) <= fixed_ten) {
       // Use this waypoint for the task
       wpsInTask[i] = wp;
       continue;
     }
 
     // Try finding the closest waypoint to the original one
-    wp = waypoints->get_nearest(file_wp->Location, fixed_ten);
+    wp = waypoints->get_nearest(file_wp->location, fixed_ten);
 
     // If closest waypoint found and closer than 10m to the original
     if (wp != NULL &&
-        wp->Location.distance(file_wp->Location) <= fixed_ten) {
+        wp->location.distance(file_wp->location) <= fixed_ten) {
       // Use this waypoint for the task
       wpsInTask[i] = wp;
       continue;

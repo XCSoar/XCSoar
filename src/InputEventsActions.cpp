@@ -1554,8 +1554,8 @@ InputEvents::eventAddWaypoint(const TCHAR *misc)
     }
   } else {
     Waypoint edit_waypoint = way_points.create(basic.location);
-    edit_waypoint.Altitude = calculated.terrain_altitude;
-    if (!dlgWaypointEditShowModal(edit_waypoint) || edit_waypoint.Name.empty()) {
+    edit_waypoint.altitude = calculated.terrain_altitude;
+    if (!dlgWaypointEditShowModal(edit_waypoint) || edit_waypoint.name.empty()) {
       trigger_redraw();
       return;
     }

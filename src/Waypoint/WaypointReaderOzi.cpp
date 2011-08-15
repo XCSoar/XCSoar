@@ -103,21 +103,21 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
   location.normalize(); // ensure longitude is within -180:180
 
   Waypoint new_waypoint(location);
-  new_waypoint.FileNum = file_num;
+  new_waypoint.file_num = file_num;
 
   long value;
   new_waypoint.original_id = (ParseNumber(params[0], value) ? value : 0);
 
-  if (!ParseString(params[1], new_waypoint.Name))
+  if (!ParseString(params[1], new_waypoint.name))
     return false;
 
   if (ParseNumber(params[14], value) && value != -777)
-    new_waypoint.Altitude = Units::ToSysUnit(fixed(value), unFeet);
+    new_waypoint.altitude = Units::ToSysUnit(fixed(value), unFeet);
   else
     CheckAltitude(new_waypoint);
 
   // Description (Characters 35-44)
-  ParseString(params[11], new_waypoint.Comment);
+  ParseString(params[11], new_waypoint.comment);
 
   way_points.append(new_waypoint);
   return true;

@@ -707,8 +707,8 @@ TestDeclare(const struct DeviceRegister &driver)
   const GeoPoint gp(Angle::degrees(fixed(7.7061111111111114)),
                     Angle::degrees(fixed(51.051944444444445)));
   Waypoint wp(gp);
-  wp.Name = _T("Foo");
-  wp.Altitude = fixed(123);
+  wp.name = _T("Foo");
+  wp.altitude = fixed(123);
   declaration.append(wp);
   declaration.append(wp);
   declaration.append(wp);

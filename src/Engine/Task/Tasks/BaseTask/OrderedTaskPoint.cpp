@@ -135,19 +135,19 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
 
   switch (GetType()) {
   case START:
-    return new StartPoint(get_oz()->clone(&waypoint->Location),
+    return new StartPoint(get_oz()->clone(&waypoint->location),
                           *waypoint, task_behaviour, ordered_task_behaviour);
 
   case AST:
-    return new ASTPoint(get_oz()->clone(&waypoint->Location),
+    return new ASTPoint(get_oz()->clone(&waypoint->location),
                         *waypoint, task_behaviour, ordered_task_behaviour);
 
   case AAT:
-    return new AATPoint(get_oz()->clone(&waypoint->Location),
+    return new AATPoint(get_oz()->clone(&waypoint->location),
                         *waypoint, task_behaviour, ordered_task_behaviour);
 
   case FINISH:
-    return new FinishPoint(get_oz()->clone(&waypoint->Location),
+    return new FinishPoint(get_oz()->clone(&waypoint->location),
                            *waypoint, task_behaviour, ordered_task_behaviour);
 
   case UNORDERED:

@@ -37,7 +37,7 @@ Copyright_License {
 class DumpVisitor : public WaypointVisitor {
 public:
   void Visit(const Waypoint &wp) {
-    _ftprintf(stdout, _T("%s\n"), wp.Name.c_str());
+    _ftprintf(stdout, _T("%s\n"), wp.name.c_str());
   }
 };
 

@@ -113,7 +113,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
   }
 
   if (_tcscmp(type.c_str(), _T("Line")) == 0) {
-    LineSectorZone *ls = new LineSectorZone(wp.Location);
+    LineSectorZone *ls = new LineSectorZone(wp.location);
 
     fixed length;
     if (m_node.get_attribute(_T("length"), length))
@@ -121,7 +121,7 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 
     return ls;
   } else if (_tcscmp(type.c_str(), _T("Cylinder")) == 0) {
-    CylinderZone *ls = new CylinderZone(wp.Location);
+    CylinderZone *ls = new CylinderZone(wp.location);
 
     fixed radius;
     if (m_node.get_attribute(_T("radius"), radius))
@@ -135,11 +135,11 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
     SectorZone *ls;
 
     if (m_node.get_attribute(_T("inner_radius"), inner_radius)) {
-      AnnularSectorZone *als = new AnnularSectorZone(wp.Location);
+      AnnularSectorZone *als = new AnnularSectorZone(wp.location);
       als->setInnerRadius(inner_radius);
       ls = als;
     } else
-      ls = new SectorZone(wp.Location);
+      ls = new SectorZone(wp.location);
 
     if (m_node.get_attribute(_T("radius"), radius))
       ls->setRadius(radius);
@@ -150,15 +150,15 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 
     return ls;
   } else if (_tcscmp(type.c_str(), _T("FAISector")) == 0)
-    return new FAISectorZone(wp.Location, is_turnpoint);
+    return new FAISectorZone(wp.location, is_turnpoint);
   else if (_tcscmp(type.c_str(), _T("Keyhole")) == 0)
-    return new KeyholeZone(wp.Location);
+    return new KeyholeZone(wp.location);
   else if (_tcscmp(type.c_str(), _T("BGAStartSector")) == 0)
-    return new BGAStartSectorZone(wp.Location);
+    return new BGAStartSectorZone(wp.location);
   else if (_tcscmp(type.c_str(), _T("BGAFixedCourse")) == 0)
-    return new BGAFixedCourseZone(wp.Location);
+    return new BGAFixedCourseZone(wp.location);
   else if (_tcscmp(type.c_str(), _T("BGAEnhancedOption")) == 0)
-    return new BGAEnhancedOptionZone(wp.Location);
+    return new BGAEnhancedOptionZone(wp.location);
 
   assert(1);
   return NULL;
@@ -194,7 +194,7 @@ Deserialiser::deserialise_waypoint()
 
     // If waypoint by name found and closer than 10m to the original
     if (from_database != NULL &&
-        from_database->Location.distance(loc) <= fixed_ten)
+        from_database->location.distance(loc) <= fixed_ten)
       // Use this waypoint for the task
       return new Waypoint(*from_database);
 
@@ -203,17 +203,17 @@ Deserialiser::deserialise_waypoint()
 
     // If closest waypoint found and closer than 10m to the original
     if (from_database != NULL &&
-        from_database->Location.distance(loc) <= fixed_ten)
+        from_database->location.distance(loc) <= fixed_ten)
       // Use this waypoint for the task
       return new Waypoint(*from_database);
   }
 
   // Create a new waypoint from the original one
   Waypoint *wp = new Waypoint(loc);
-  wp->Name = name;
+  wp->name = name;
   m_node.get_attribute(_T("id"), wp->id);
-  m_node.get_attribute(_T("comment"), wp->Comment);
-  m_node.get_attribute(_T("altitude"), wp->Altitude);
+  m_node.get_attribute(_T("comment"), wp->comment);
+  m_node.get_attribute(_T("altitude"), wp->altitude);
 
   return wp;
 }

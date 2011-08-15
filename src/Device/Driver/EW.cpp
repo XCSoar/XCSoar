@@ -223,7 +223,7 @@ EWDevice::AddWaypoint(const Waypoint &way_point)
     return false;
   }
 
-  CopyString(IDString, way_point.Name.c_str(), 7); // copy at most 6 chars
+  CopyString(IDString, way_point.name.c_str(), 7); // copy at most 6 chars
 
   while (_tcslen(IDString) < 6)                   // fill up with spaces
     _tcscat(IDString, _T(" "));
@@ -233,7 +233,7 @@ EWDevice::AddWaypoint(const Waypoint &way_point)
   #endif
 
   // prepare lat
-    tmp = way_point.Location.Latitude.value_degrees();
+    tmp = way_point.location.Latitude.value_degrees();
   NoS = 'N';
   if (tmp < 0)
     {
@@ -245,7 +245,7 @@ EWDevice::AddWaypoint(const Waypoint &way_point)
 
 
   // prepare long
-  tmp = way_point.Location.Longitude.value_degrees();
+  tmp = way_point.location.Longitude.value_degrees();
   EoW = 'E';
   if (tmp < 0)
     {

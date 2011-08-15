@@ -149,7 +149,7 @@ struct WaypointSelectInfoVector :
 
     info.way_point = &way_point;
 
-    const GeoVector vec(Location, way_point.Location);
+    const GeoVector vec(Location, way_point.location);
 
     info.Distance = vec.Distance;
     info.Direction = vec.Bearing;
@@ -321,7 +321,7 @@ public:
     if (t_size == 0)
       return true;
 
-    const GeoPoint &p = wp.Location;
+    const GeoPoint &p = wp.location;
     // replace start
     if (t_index == 0) {
       assert(t_size <= 4 && t_size > 0);
@@ -490,10 +490,10 @@ private:
       return FAITriPtVali->isFAITrianglePoint(wp, fixed_one);
 
     case tfFile1:
-      return wp.FileNum == 1;
+      return wp.file_num == 1;
 
     case tfFile2:
-      return wp.FileNum == 2;
+      return wp.file_num == 2;
 
     case tfLastUsed:
       return false;
@@ -513,7 +513,7 @@ private:
     int a = DirectionFilter[filter_data.direction_index];
     Angle angle = (a == DirHDG) ? heading : Angle::degrees(fixed(a));
 
-    const GeoVector vec(location, wp.Location);
+    const GeoVector vec(location, wp.location);
     fixed DirectionErr = (vec.Bearing - angle).as_delta().magnitude_degrees();
 
     return DirectionErr < fixed(18);
@@ -522,7 +522,7 @@ private:
   static bool
   compare_name(const Waypoint &wp, const TCHAR *name)
   {
-    return _tcsnicmp(wp.Name.c_str(), name, _tcslen(name)) == 0;
+    return _tcsnicmp(wp.name.c_str(), name, _tcslen(name)) == 0;
   }
 
 public:
@@ -769,14 +769,14 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2),
                       left - (rc.left + line_height + Layout::FastScale(4)),
-                      waypoint.Name.c_str());
+                      waypoint.name.c_str());
 
   // Draw details line
   canvas.select(small_font);
 
   {
     TCHAR alt[16];
-    Units::FormatUserAltitude(waypoint.Altitude, alt,
+    Units::FormatUserAltitude(waypoint.altitude, alt,
                               sizeof(alt) / sizeof(alt[0]));
     _stprintf(buffer, _T("%s: %s"), _T("Altitude"), alt);
   }
@@ -789,9 +789,9 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     _tcscat(buffer, _T(" MHz"));
   }
 
-  if (!waypoint.Comment.empty()) {
+  if (!waypoint.comment.empty()) {
     _tcscat(buffer, _T(" - "));
-    _tcscat(buffer, waypoint.Comment.c_str());
+    _tcscat(buffer, waypoint.comment.c_str());
   }
 
   canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),

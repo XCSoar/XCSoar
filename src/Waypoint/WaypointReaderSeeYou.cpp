@@ -91,18 +91,18 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   location.normalize(); // ensure longitude is within -180:180
 
   Waypoint new_waypoint(location);
-  new_waypoint.FileNum = file_num;
+  new_waypoint.file_num = file_num;
   new_waypoint.original_id = 0;
 
   // Name (e.g. "Some Turnpoint")
   if (*params[iName] == _T('\0'))
     return false;
-  new_waypoint.Name = params[iName];
+  new_waypoint.name = params[iName];
 
   // Elevation (e.g. 458.0m)
   /// @todo configurable behaviour
   if (iElevation >= n_params ||
-      !parseAltitude(params[iElevation], new_waypoint.Altitude))
+      !parseAltitude(params[iElevation], new_waypoint.altitude))
     CheckAltitude(new_waypoint);
 
   // Style (e.g. 5)
@@ -136,7 +136,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   }
 
   if (iDescription < n_params)
-    new_waypoint.Comment = params[iDescription];
+    new_waypoint.comment = params[iDescription];
 
   way_points.append(new_waypoint);
   return true;
@@ -236,38 +236,38 @@ WaypointReaderSeeYou::parseStyle(const TCHAR* src, Waypoint &dest)
   // Update flags
   switch (style) {
   case 3:
-    dest.Type = Waypoint::wtOutlanding;
+    dest.type = Waypoint::wtOutlanding;
     break;
   case 2:
   case 4:
   case 5:
-    dest.Type = Waypoint::wtAirfield;
+    dest.type = Waypoint::wtAirfield;
     break;
   case 6:
-    dest.Type = Waypoint::wtMountainPass;
+    dest.type = Waypoint::wtMountainPass;
     break;
   case 7:
-    dest.Type = Waypoint::wtMountainTop;
+    dest.type = Waypoint::wtMountainTop;
     break;
   case 8:
-    dest.Type = Waypoint::wtObstacle;
+    dest.type = Waypoint::wtObstacle;
     break;
   case 11:
   case 16:
-    dest.Type = Waypoint::wtTower;
+    dest.type = Waypoint::wtTower;
     break;
   case 13:
-    dest.Type = Waypoint::wtTunnel;
+    dest.type = Waypoint::wtTunnel;
     break;
   case 14:
-    dest.Type = Waypoint::wtBridge;
+    dest.type = Waypoint::wtBridge;
     break;
   case 15:
-    dest.Type = Waypoint::wtPowerPlant;
+    dest.type = Waypoint::wtPowerPlant;
     break;
   }
 
-  dest.Flags.TurnPoint = true;
+  dest.flags.turn_point = true;
 
   return true;
 }

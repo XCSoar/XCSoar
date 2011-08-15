@@ -83,7 +83,7 @@ AutoQNH::CalculateQNH(const NMEAInfo &basic, DerivedInfo &calculated,
   next_wp = way_points.lookup_location(basic.location, fixed(1000));
 
   if (next_wp && next_wp->IsAirport())
-    CalculateQNH(basic, calculated, pressure, next_wp->Altitude);
+    CalculateQNH(basic, calculated, pressure, next_wp->altitude);
   else if (calculated.terrain_valid)
     CalculateQNH(basic, calculated, pressure, calculated.terrain_altitude);
   else

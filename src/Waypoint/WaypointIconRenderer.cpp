@@ -38,7 +38,7 @@ GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
   if (small_icons && !in_task)
     return look.small_icon;
 
-  switch (wp.Type) {
+  switch (wp.type) {
   case Waypoint::wtMountainTop:
     return look.mountain_top_icon;
   case Waypoint::wtMountainPass:

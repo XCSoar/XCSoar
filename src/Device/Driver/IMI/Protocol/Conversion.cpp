@@ -114,13 +114,13 @@ void
 IMI::ConvertWaypoint(const Waypoint &wp, TWaypoint &imiWp)
 {
   // set name
-  ConvertToChar(wp.Name.c_str(), imiWp.name, sizeof(imiWp.name));
+  ConvertToChar(wp.name.c_str(), imiWp.name, sizeof(imiWp.name));
 
   // set latitude
-  imiWp.lat = AngleConverter(wp.Location.Latitude).value;
+  imiWp.lat = AngleConverter(wp.location.Latitude).value;
 
   // set longitude
-  imiWp.lon = AngleConverter(wp.Location.Longitude).value;
+  imiWp.lon = AngleConverter(wp.location.Longitude).value;
 }
 
 void

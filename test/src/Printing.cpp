@@ -447,7 +447,7 @@ std::ostream& operator<< (std::ostream& f,
 std::ostream& operator<< (std::ostream& f, 
                           const Waypoint& wp)
 {
-  f << wp.Location.Longitude << " " << wp.Location.Latitude << "\n";
+  f << wp.location.Longitude << " " << wp.location.Latitude << "\n";
   return f;
 }
 

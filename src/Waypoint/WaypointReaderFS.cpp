@@ -187,18 +187,18 @@ WaypointReaderFS::ParseLine(const TCHAR* line, const unsigned linenum,
     return false;
 
   Waypoint new_waypoint(location);
-  new_waypoint.FileNum = file_num;
+  new_waypoint.file_num = file_num;
   new_waypoint.original_id = 0;
 
-  if (!ParseString(line, new_waypoint.Name, 8))
+  if (!ParseString(line, new_waypoint.name, 8))
     return false;
 
-  if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.Altitude))
+  if (!ParseAltitude(line + (is_utm ? 32 : 41), new_waypoint.altitude))
     CheckAltitude(new_waypoint);
 
   // Description (Characters 35-44)
   if (len > (is_utm ? 38 : 47))
-    ParseString(line + (is_utm ? 38 : 47), new_waypoint.Comment);
+    ParseString(line + (is_utm ? 38 : 47), new_waypoint.comment);
 
   way_points.append(new_waypoint);
   return true;

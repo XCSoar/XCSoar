@@ -36,7 +36,7 @@ WaypointWriter::Save(TextWriter &writer)
   for (Waypoints::const_iterator it = waypoints.begin();
        it != waypoints.end(); ++it) {
     const Waypoint& wp = *it;
-    if (wp.FileNum == file_number)
+    if (wp.file_num == file_number)
       WriteWaypoint(writer, wp);
   }
 }
@@ -48,15 +48,15 @@ WaypointWriter::WriteWaypoint(TextWriter &writer, const Waypoint& wp)
   writer.printf("%u,", wp.original_id > 0 ? wp.original_id : wp.id);
 
   // Write the latitude
-  WriteAngle(writer, wp.Location.Latitude, true);
+  WriteAngle(writer, wp.location.Latitude, true);
   writer.write(',');
 
   // Write the longitude id
-  WriteAngle(writer, wp.Location.Longitude, false);
+  WriteAngle(writer, wp.location.Longitude, false);
   writer.write(',');
 
   // Write the altitude id
-  WriteAltitude(writer, wp.Altitude);
+  WriteAltitude(writer, wp.altitude);
   writer.write(',');
 
   // Write the waypoint flags
@@ -64,11 +64,11 @@ WaypointWriter::WriteWaypoint(TextWriter &writer, const Waypoint& wp)
   writer.write(',');
 
   // Write the waypoint name
-  writer.write(wp.Name.c_str());
+  writer.write(wp.name.c_str());
   writer.write(',');
 
   // Write the waypoint description
-  writer.writeln(wp.Comment.c_str());
+  writer.writeln(wp.comment.c_str());
 }
 
 void
@@ -104,23 +104,23 @@ WaypointWriter::WriteFlags(TextWriter &writer, const Waypoint &wp)
 {
   if (wp.IsAirport())
     writer.write('A');
-  if (wp.Flags.TurnPoint)
+  if (wp.flags.turn_point)
     writer.write('T');
   if (wp.IsLandable())
     writer.write('L');
-  if (wp.Flags.Home)
+  if (wp.flags.home)
     writer.write('H');
-  if (wp.Flags.StartPoint)
+  if (wp.flags.start_point)
     writer.write('S');
-  if (wp.Flags.FinishPoint)
+  if (wp.flags.finish_point)
     writer.write('F');
 
   // set as turnpoint by default if nothing else
-  if (!wp.Flags.TurnPoint &&
+  if (!wp.flags.turn_point &&
       !wp.IsLandable() &&
-      !wp.Flags.Home &&
-      !wp.Flags.StartPoint &&
-      !wp.Flags.FinishPoint)
+      !wp.flags.home &&
+      !wp.flags.start_point &&
+      !wp.flags.finish_point)
     writer.write('T');
 }
 

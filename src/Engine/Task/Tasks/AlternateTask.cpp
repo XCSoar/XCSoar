@@ -102,7 +102,7 @@ AlternateTask::client_update(const AircraftState &state_now,
     const TaskWaypoint& tp = *i;
     const Waypoint& wp_alt = tp.get_waypoint();
     const fixed dist_divert =
-        ::DoubleDistance(state_now.location, wp_alt.Location, destination);
+        ::DoubleDistance(state_now.location, wp_alt.location, destination);
     const fixed delta = dist_straight - dist_divert;
 
     q.push(Divert(wp_alt, i->solution, delta));
@@ -144,7 +144,7 @@ AlternateTask::set_task_destination_home(const AircraftState &state_now)
   // (which ends up equivalent to sorting by distance)
   const Waypoint *home_waypoint = waypoints.GetHome();
   if (home_waypoint)
-    destination = home_waypoint->Location;
+    destination = home_waypoint->location;
   else
     destination = state_now.location;
 }

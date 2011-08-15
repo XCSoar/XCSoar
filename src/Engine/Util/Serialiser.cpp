@@ -169,14 +169,14 @@ Serialiser::serialise(const GeoPoint& data)
 void 
 Serialiser::serialise(const Waypoint& data)
 {
-  m_node.set_attribute(_T("name"), data.Name);
+  m_node.set_attribute(_T("name"), data.name);
   m_node.set_attribute(_T("id"), data.id);
-  m_node.set_attribute(_T("comment"), data.Comment);
-  m_node.set_attribute(_T("altitude"), data.Altitude);
+  m_node.set_attribute(_T("comment"), data.comment);
+  m_node.set_attribute(_T("altitude"), data.altitude);
 
   DataNode* child = m_node.add_child(_T("Location"));
   Serialiser ser(*child, waypoints);
-  ser.serialise(data.Location);
+  ser.serialise(data.location);
   delete child;
 }
 

@@ -94,7 +94,7 @@ NextPage(int Step)
       break;
 
     case 1:
-      if (selected_waypoint->Details.empty()) 
+      if (selected_waypoint->details.empty()) 
         page += Step;
       else
         page_ok = true;
@@ -586,7 +586,7 @@ OnActivatePanClicked(gcc_unused WndButton &button)
   if (map_window == NULL)
     return;
 
-  map_window->PanTo(selected_waypoint->Location);
+  map_window->PanTo(selected_waypoint->location);
   XCSoarInterface::main_window.SetFullScreen(true);
   InputEvents::setMode(InputEvents::MODE_PAN);
   wf->SetModalResult(mrOK);
@@ -633,12 +633,12 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     Directory = _T("");
 
   TCHAR sTmp[128];
-  _stprintf(sTmp, _T("%s: '%s'"), wf->GetCaption(), selected_waypoint->Name.c_str());
+  _stprintf(sTmp, _T("%s: '%s'"), wf->GetCaption(), selected_waypoint->name.c_str());
   wf->SetCaption(sTmp);
 
   WndProperty *wp;
   wp = ((WndProperty *)wf->FindByName(_T("prpWpComment")));
-  wp->SetText(selected_waypoint->Comment.c_str());
+  wp->SetText(selected_waypoint->comment.c_str());
 
   TCHAR *radio_frequency;
   if (selected_waypoint->radio_frequency.IsDefined() &&
@@ -658,18 +658,18 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     ((WndProperty *)wf->FindByName(_T("Runway")))->SetText(sTmp);
   }
 
-  TCHAR *location = Units::FormatGeoPoint(selected_waypoint->Location,
+  TCHAR *location = Units::FormatGeoPoint(selected_waypoint->location,
                                           sTmp, 128);
   if (location != NULL)
     ((WndProperty *)wf->FindByName(_T("Location")))->SetText(location);
 
-  Units::FormatUserAltitude(selected_waypoint->Altitude, sTmp, sizeof(sTmp)-1);
+  Units::FormatUserAltitude(selected_waypoint->altitude, sTmp, sizeof(sTmp)-1);
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))
     ->SetText(sTmp);
 
   if (basic.connected) {
     SunEphemeris sun;
-    sun.CalcSunTimes(selected_waypoint->Location,
+    sun.CalcSunTimes(selected_waypoint->location,
                      basic.date_time_utc,
                      fixed(GetUTCOffset()) / 3600);
 
@@ -681,7 +681,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   }
 
   if (basic.location_available) {
-    GeoVector gv = basic.location.distance_bearing(selected_waypoint->Location);
+    GeoVector gv = basic.location.distance_bearing(selected_waypoint->location);
 
     TCHAR DistanceText[MAX_PATH];
     Units::FormatUserDistance(gv.Distance, DistanceText, 10);
@@ -749,7 +749,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   assert(wImage != NULL);
   assert(wDetails != NULL);
 
-  wDetails->SetText(selected_waypoint->Details.c_str(), true);
+  wDetails->SetText(selected_waypoint->details.c_str(), true);
   wCommand->hide();
   wImage->SetOnPaintNotify(OnImagePaint);
 

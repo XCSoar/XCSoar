@@ -80,11 +80,11 @@ struct Declaration {
 
   gcc_pure
   const TCHAR *get_name(const unsigned i) const {
-    return TurnPoints[i].waypoint.Name.c_str();
+    return TurnPoints[i].waypoint.name.c_str();
   }
 
   const GeoPoint &get_location(const unsigned i) const {
-    return TurnPoints[i].waypoint.Location;
+    return TurnPoints[i].waypoint.location;
   }
 
   gcc_pure

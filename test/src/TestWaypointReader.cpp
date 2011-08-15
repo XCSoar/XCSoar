@@ -203,14 +203,14 @@ TestWaypointFile(const TCHAR* filename, Waypoints &way_points, unsigned num_wps)
 static const Waypoint*
 GetWaypoint(const Waypoint org_wp, const Waypoints &way_points)
 {
-  const Waypoint *wp = way_points.lookup_name(org_wp.Name);
+  const Waypoint *wp = way_points.lookup_name(org_wp.name);
   if (!ok1(wp != NULL)) {
     skip(2, 0, "waypoint not found");
     return NULL;
   }
-  if(!ok1(wp->Location.distance(org_wp.Location) <= fixed(1000)))
-    printf("%f %f\n", (double)wp->Location.Latitude.value_degrees(), (double)wp->Location.Longitude.value_degrees());
-  ok1(fabs(wp->Altitude - org_wp.Altitude) < fixed_half);
+  if(!ok1(wp->location.distance(org_wp.location) <= fixed(1000)))
+    printf("%f %f\n", (double)wp->location.Latitude.value_degrees(), (double)wp->location.Longitude.value_degrees());
+  ok1(fabs(wp->altitude - org_wp.altitude) < fixed_half);
 
   return wp;
 }
@@ -223,12 +223,12 @@ TestWinPilotWaypoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Type == ((!org_wp.IsLandable()) ?
-                    Waypoint::wtNormal : (enum Waypoint::Type)org_wp.Type));
-  ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
-  ok1(wp->Flags.Home == org_wp.Flags.Home);
-  ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
-  ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
+  ok1(wp->type == ((!org_wp.IsLandable()) ?
+                    Waypoint::wtNormal : (Waypoint::Type)org_wp.type));
+  ok1(wp->flags.turn_point == org_wp.flags.turn_point);
+  ok1(wp->flags.home == org_wp.flags.home);
+  ok1(wp->flags.start_point == org_wp.flags.start_point);
+  ok1(wp->flags.finish_point == org_wp.flags.finish_point);
   ok1(wp->runway.IsDirectionDefined() == org_wp.runway.IsDirectionDefined() &&
       (!wp->runway.IsDirectionDefined() ||
        wp->runway.GetDirectionDegrees() == org_wp.runway.GetDirectionDegrees()));
@@ -259,13 +259,13 @@ TestSeeYouWaypoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Type == org_wp.Type);
-  ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
+  ok1(wp->type == org_wp.type);
+  ok1(wp->flags.turn_point == org_wp.flags.turn_point);
   // No home waypoints in a SeeYou file
   //ok1(wp->Flags.Home == org_wp.Flags.Home);
-  ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
-  ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
-  ok1(wp->Comment == org_wp.Comment);
+  ok1(wp->flags.start_point == org_wp.flags.start_point);
+  ok1(wp->flags.finish_point == org_wp.flags.finish_point);
+  ok1(wp->comment == org_wp.comment);
   ok1(wp->runway.IsDirectionDefined() == org_wp.runway.IsDirectionDefined() &&
       (!wp->runway.IsDirectionDefined() ||
        wp->runway.GetDirectionDegrees() == org_wp.runway.GetDirectionDegrees()));
@@ -299,12 +299,12 @@ TestZanderWaypoint(const Waypoint org_wp, const Waypoint *wp)
     return;
   }
 
-  ok1(wp->Type == ((!org_wp.IsLandable()) ?
-                    Waypoint::wtNormal : (enum Waypoint::Type)org_wp.Type));
-  ok1(wp->Flags.TurnPoint == org_wp.Flags.TurnPoint);
-  ok1(wp->Flags.Home == org_wp.Flags.Home);
-  ok1(wp->Flags.StartPoint == org_wp.Flags.StartPoint);
-  ok1(wp->Flags.FinishPoint == org_wp.Flags.FinishPoint);
+  ok1(wp->type == ((!org_wp.IsLandable()) ?
+                    Waypoint::wtNormal : (Waypoint::Type)org_wp.type));
+  ok1(wp->flags.turn_point == org_wp.flags.turn_point);
+  ok1(wp->flags.home == org_wp.flags.home);
+  ok1(wp->flags.start_point == org_wp.flags.start_point);
+  ok1(wp->flags.finish_point == org_wp.flags.finish_point);
 }
 
 static void
@@ -319,9 +319,9 @@ TestZander(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    if (it->Name.length() > 12)
-      it->Name = it->Name.erase(12);
-    trim_inplace(it->Name);
+    if (it->name.length() > 12)
+      it->name = it->name.erase(12);
+    trim_inplace(it->name);
     const Waypoint *wp = GetWaypoint(*it, way_points);
     TestZanderWaypoint(*it, wp);
   }
@@ -339,9 +339,9 @@ TestFS(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    if (it->Name.length() > 8)
-      it->Name = it->Name.erase(8);
-    trim_inplace(it->Name);
+    if (it->name.length() > 8)
+      it->name = it->name.erase(8);
+    trim_inplace(it->name);
     GetWaypoint(*it, way_points);
   }
 }
@@ -358,9 +358,9 @@ TestFS_UTM(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    if (it->Name.length() > 8)
-      it->Name = it->Name.erase(8);
-    trim_inplace(it->Name);
+    if (it->name.length() > 8)
+      it->name = it->name.erase(8);
+    trim_inplace(it->name);
     GetWaypoint(*it, way_points);
   }
 }
@@ -377,7 +377,7 @@ TestOzi(wp_vector org_wp)
 
   wp_vector::iterator it;
   for (it = org_wp.begin(); it < org_wp.end(); it++) {
-    trim_inplace(it->Name);
+    trim_inplace(it->name);
     GetWaypoint(*it, way_points);
   }
 }
@@ -394,17 +394,17 @@ CreateOriginalWaypoints()
   loc.Longitude = Angle::degrees(fixed(7.7061111111111114));
 
   Waypoint wp(loc);
-  wp.Altitude = fixed(488);
-  wp.Name = _T("Bergneustadt");
-  wp.Comment = _T("Rabbit holes, 20\" ditch south end of rwy");
+  wp.altitude = fixed(488);
+  wp.name = _T("Bergneustadt");
+  wp.comment = _T("Rabbit holes, 20\" ditch south end of rwy");
   wp.runway.SetDirection(Angle::degrees(fixed(40)));
   wp.runway.SetLength(590);
 
-  wp.Type = Waypoint::wtAirfield;
-  wp.Flags.TurnPoint = true;
-  wp.Flags.Home = true;
-  wp.Flags.StartPoint = false;
-  wp.Flags.FinishPoint = false;
+  wp.type = Waypoint::wtAirfield;
+  wp.flags.turn_point = true;
+  wp.flags.home = true;
+  wp.flags.start_point = false;
+  wp.flags.finish_point = false;
   org_wp.push_back(wp);
 
   // Aconcagua
@@ -412,15 +412,15 @@ CreateOriginalWaypoints()
   loc.Longitude = Angle::dms(fixed(70), fixed(0), fixed(42)).flipped();
 
   Waypoint wp2(loc);
-  wp2.Altitude = fixed(6962);
-  wp2.Name = _T("Aconcagua");
-  wp2.Comment = _T("Highest mountain in south-america");
+  wp2.altitude = fixed(6962);
+  wp2.name = _T("Aconcagua");
+  wp2.comment = _T("Highest mountain in south-america");
 
-  wp2.Type = Waypoint::wtMountainTop;
-  wp2.Flags.TurnPoint = true;
-  wp2.Flags.Home = false;
-  wp2.Flags.StartPoint = false;
-  wp2.Flags.FinishPoint = false;
+  wp2.type = Waypoint::wtMountainTop;
+  wp2.flags.turn_point = true;
+  wp2.flags.home = false;
+  wp2.flags.start_point = false;
+  wp2.flags.finish_point = false;
   org_wp.push_back(wp2);
 
   // Golden Gate Bridge
@@ -428,15 +428,15 @@ CreateOriginalWaypoints()
   loc.Longitude = Angle::dms(fixed(122), fixed(28), fixed(42)).flipped();
 
   Waypoint wp3(loc);
-  wp3.Altitude = fixed(227);
-  wp3.Name = _T("Golden Gate Bridge");
-  wp3.Comment = _T("");
+  wp3.altitude = fixed(227);
+  wp3.name = _T("Golden Gate Bridge");
+  wp3.comment = _T("");
 
-  wp3.Type = Waypoint::wtBridge;
-  wp3.Flags.TurnPoint = true;
-  wp3.Flags.Home = false;
-  wp3.Flags.StartPoint = false;
-  wp3.Flags.FinishPoint = false;
+  wp3.type = Waypoint::wtBridge;
+  wp3.flags.turn_point = true;
+  wp3.flags.home = false;
+  wp3.flags.start_point = false;
+  wp3.flags.finish_point = false;
   org_wp.push_back(wp3);
 
   // Red Square
@@ -444,16 +444,16 @@ CreateOriginalWaypoints()
   loc.Longitude = Angle::dms(fixed(37), fixed(37), fixed(12));
 
   Waypoint wp4(loc);
-  wp4.Altitude = fixed(123);
-  wp4.Name = _T("Red Square");
+  wp4.altitude = fixed(123);
+  wp4.name = _T("Red Square");
   wp4.runway.SetDirection(Angle::degrees(fixed(90)));
   wp4.runway.SetLength(Units::ToSysUnit(fixed(0.01), unStatuteMiles));
 
-  wp4.Type = Waypoint::wtOutlanding;
-  wp4.Flags.TurnPoint = true;
-  wp4.Flags.Home = false;
-  wp4.Flags.StartPoint = false;
-  wp4.Flags.FinishPoint = false;
+  wp4.type = Waypoint::wtOutlanding;
+  wp4.flags.turn_point = true;
+  wp4.flags.home = false;
+  wp4.flags.start_point = false;
+  wp4.flags.finish_point = false;
   org_wp.push_back(wp4);
 
   // Sydney Opera
@@ -461,15 +461,15 @@ CreateOriginalWaypoints()
   loc.Longitude = Angle::dms(fixed(151), fixed(12), fixed(55));
 
   Waypoint wp5(loc);
-  wp5.Altitude = fixed(5);
-  wp5.Name = _T("Sydney Opera");
-  wp5.Comment = _T("");
+  wp5.altitude = fixed(5);
+  wp5.name = _T("Sydney Opera");
+  wp5.comment = _T("");
 
-  wp5.Type = Waypoint::wtNormal;
-  wp5.Flags.TurnPoint = true;
-  wp5.Flags.Home = false;
-  wp5.Flags.StartPoint = false;
-  wp5.Flags.FinishPoint = false;
+  wp5.type = Waypoint::wtNormal;
+  wp5.flags.turn_point = true;
+  wp5.flags.home = false;
+  wp5.flags.start_point = false;
+  wp5.flags.finish_point = false;
   org_wp.push_back(wp5);
 
   return org_wp;

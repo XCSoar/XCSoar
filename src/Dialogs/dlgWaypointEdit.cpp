@@ -52,13 +52,13 @@ UpdateButtons()
 
   assert(buttonName != NULL);
   _stprintf(text, _T("%s: %s"), _("Name"),
-            global_wpt->Name.empty() ? _("(blank)") : global_wpt->Name.c_str());
+            global_wpt->name.empty() ? _("(blank)") : global_wpt->name.c_str());
   buttonName->SetCaption(text);
 
   assert(buttonComment != NULL);
   _stprintf(text, _T("%s: %s"), _("Comment"),
-            global_wpt->Comment.empty() ?
-            _("(blank)") : global_wpt->Comment.c_str());
+            global_wpt->comment.empty() ?
+            _("(blank)") : global_wpt->comment.c_str());
   buttonComment->SetCaption(text);
 }
 
@@ -67,11 +67,11 @@ OnNameClicked(gcc_unused WndButton &button)
 {
   assert(buttonName != NULL);
 
-  StaticString<NAME_SIZE + 1> buff(global_wpt->Name.c_str());
+  StaticString<NAME_SIZE + 1> buff(global_wpt->name.c_str());
   if (!TextEntryDialog(*(SingleWindow *)button.get_root_owner(), buff))
     return;
 
-  global_wpt->Name = buff;
+  global_wpt->name = buff;
 
   UpdateButtons();
 }
@@ -81,11 +81,11 @@ OnCommentClicked(gcc_unused WndButton &button)
 {
   assert(buttonComment != NULL);
 
-  StaticString<COMMENT_SIZE + 1> buff(global_wpt->Comment.c_str());
+  StaticString<COMMENT_SIZE + 1> buff(global_wpt->comment.c_str());
   if (!TextEntryDialog(*(SingleWindow *)button.get_root_owner(), buff))
     return;
 
-  global_wpt->Comment = buff;
+  global_wpt->comment = buff;
 
   UpdateButtons();
 }
@@ -171,7 +171,7 @@ SetValues()
   bool sign;
   int dd,mm,ss;
 
-  Units::LongitudeToDMS(global_wpt->Location.Longitude, &dd, &mm, &ss, &sign);
+  Units::LongitudeToDMS(global_wpt->location.Longitude, &dd, &mm, &ss, &sign);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLongitudeSign"));
   assert(wp != NULL);
@@ -201,7 +201,7 @@ SetValues()
     break;
   }
 
-  Units::LatitudeToDMS(global_wpt->Location.Latitude, &dd, &mm, &ss, &sign);
+  Units::LatitudeToDMS(global_wpt->location.Latitude, &dd, &mm, &ss, &sign);
 
   LoadFormProperty(*wf, _T("prpLatitudeD"), dd);
 
@@ -234,7 +234,7 @@ SetValues()
     break;
   }
 
-  LoadFormProperty(*wf, _T("prpAltitude"), ugAltitude, global_wpt->Altitude);
+  LoadFormProperty(*wf, _T("prpAltitude"), ugAltitude, global_wpt->altitude);
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   assert(wp != NULL);
@@ -287,7 +287,7 @@ GetValues()
   if (!sign)
     num = -num;
 
-  global_wpt->Location.Longitude = Angle::degrees(fixed(num));
+  global_wpt->location.Longitude = Angle::degrees(fixed(num));
 
   sign = GetFormValueInteger(*wf, _T("prpLatitudeSign")) == 1;
   dd = GetFormValueInteger(*wf, _T("prpLatitudeD"));
@@ -313,26 +313,26 @@ GetValues()
   if (!sign)
     num = -num;
 
-  global_wpt->Location.Latitude = Angle::degrees(fixed(num));
+  global_wpt->location.Latitude = Angle::degrees(fixed(num));
 
   ss = GetFormValueInteger(*wf, _T("prpAltitude"));
-  global_wpt->Altitude = (ss == 0 && terrain != NULL)
-    ? fixed(terrain->GetTerrainHeight(global_wpt->Location))
+  global_wpt->altitude = (ss == 0 && terrain != NULL)
+    ? fixed(terrain->GetTerrainHeight(global_wpt->location))
     : Units::ToSysAltitude(fixed(ss));
 
   wp = (WndProperty*)wf->FindByName(_T("prpFlags"));
   assert(wp != NULL);
   switch(wp->GetDataField()->GetAsInteger()) {
   case 1:
-    global_wpt->Flags.TurnPoint = true;
-    global_wpt->Type = Waypoint::wtAirfield;
+    global_wpt->flags.turn_point = true;
+    global_wpt->type = Waypoint::wtAirfield;
     break;
   case 2:
-    global_wpt->Type = Waypoint::wtOutlanding;
+    global_wpt->type = Waypoint::wtOutlanding;
     break;
   default:
-    global_wpt->Type = Waypoint::wtNormal;
-    global_wpt->Flags.TurnPoint = true;
+    global_wpt->type = Waypoint::wtNormal;
+    global_wpt->flags.turn_point = true;
   };
 }
 

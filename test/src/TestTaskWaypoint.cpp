@@ -70,17 +70,17 @@ TaskWaypointTest::Run()
 {
   GeoPoint gp(Angle::degrees(fixed(20)), Angle::degrees(fixed(50)));
   Waypoint wp(gp);
-  wp.Name = _T("Test");
-  wp.Altitude = fixed(42);
+  wp.name = _T("Test");
+  wp.altitude = fixed(42);
 
   DummyTaskWaypoint tw(TaskPoint::AST, wp);
 
   const Waypoint &wp2 = tw.get_waypoint();
-  ok1(wp2.Name == _T("Test"));
+  ok1(wp2.name == _T("Test"));
   ok1(equals(tw.GetBaseElevation(), 42));
-  ok1(equals(tw.GetBaseElevation(), wp2.Altitude));
-  ok1(equals(wp2.Location.Latitude, gp.Latitude));
-  ok1(equals(wp2.Location.Longitude, gp.Longitude));
+  ok1(equals(tw.GetBaseElevation(), wp2.altitude));
+  ok1(equals(wp2.location.Latitude, gp.Latitude));
+  ok1(equals(wp2.location.Longitude, gp.Longitude));
   ok1(equals(tw.get_location().Latitude, gp.Latitude));
   ok1(equals(tw.get_location().Longitude, gp.Longitude));
 }

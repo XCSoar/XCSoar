@@ -49,12 +49,12 @@ static void
 OnWaypointNewClicked(gcc_unused WndButton &Sender)
 {
   Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().location);
-  edit_waypoint.Altitude = XCSoarInterface::Calculated().terrain_valid
+  edit_waypoint.altitude = XCSoarInterface::Calculated().terrain_valid
     ? XCSoarInterface::Calculated().terrain_altitude
     : XCSoarInterface::Basic().NavAltitude;
 
   if (dlgWaypointEditShowModal(edit_waypoint) &&
-      edit_waypoint.Name.size()) {
+      edit_waypoint.name.size()) {
     WaypointsNeedSave = true;
 
     ScopeSuspendAllThreads suspend;
@@ -104,7 +104,7 @@ OnWaypointDeleteClicked(gcc_unused WndButton &Sender)
   int res;
   res = dlgWaypointSelect(XCSoarInterface::Basic().location);
   if (res != -1){
-    if(MessageBoxX(way_points.get(res).Name,
+    if(MessageBoxX(way_points.get(res).name,
                    _("Delete Waypoint?"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES) {
       Waypoint &waypoint = way_points.set(res);

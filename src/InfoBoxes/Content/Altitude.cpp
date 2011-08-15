@@ -431,7 +431,7 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 
   const Waypoint *home_waypoint = way_points.GetHome();
   if (home_waypoint)
-    Value -= home_waypoint->Altitude;
+    Value -= home_waypoint->altitude;
 
   // Set Value
   Units::FormatUserAltitude(Value, sTmp,

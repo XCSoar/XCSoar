@@ -93,7 +93,7 @@ void
 SETTINGS_PLACES_OF_INTEREST::SetHome(const Waypoint &wp)
 {
   HomeWaypoint = wp.id;
-  HomeLocation = wp.Location;
+  HomeLocation = wp.location;
   HomeLocationAvailable = true;
 }
 

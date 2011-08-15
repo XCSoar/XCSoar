@@ -78,9 +78,9 @@ struct VisibleWaypoint {
   void CalculateReachability(const RoutePlannerGlue &route_planner,
                              const TaskBehaviour &task_behaviour)
   {
-    const fixed elevation = waypoint->Altitude +
+    const fixed elevation = waypoint->altitude +
       task_behaviour.safety_height_arrival;
-    const AGeoPoint p_dest (waypoint->Location, elevation);
+    const AGeoPoint p_dest (waypoint->location, elevation);
     if (route_planner.find_positive_arrival(p_dest, arrival_height_terrain,
                                             arrival_height_glide)) {
       const short h_base = iround(elevation);
@@ -150,20 +150,20 @@ protected:
   {
     Buffer[0] = _T('\0');
 
-    if (way_point.Name.length() >= NAME_SIZE - 20)
+    if (way_point.name.length() >= NAME_SIZE - 20)
       return;
 
     switch (settings.display_text_type) {
     case DISPLAYNAME:
-      _tcscpy(Buffer, way_point.Name.c_str());
+      _tcscpy(Buffer, way_point.name.c_str());
       break;
 
     case DISPLAYFIRSTFIVE:
-      CopyString(Buffer, way_point.Name.c_str(), 6);
+      CopyString(Buffer, way_point.name.c_str(), 6);
       break;
 
     case DISPLAYFIRSTTHREE:
-      CopyString(Buffer, way_point.Name.c_str(), 4);
+      CopyString(Buffer, way_point.name.c_str(), 4);
       break;
 
     case DISPLAYNONE:
@@ -171,7 +171,7 @@ protected:
       break;
 
     case DISPLAYUNTILSPACE:
-      _tcscpy(Buffer, way_point.Name.c_str());
+      _tcscpy(Buffer, way_point.name.c_str());
       TCHAR *tmp;
       tmp = _tcsstr(Buffer, _T(" "));
       if (tmp != NULL)
@@ -191,10 +191,10 @@ protected:
   {
     FormatTitle(buffer, way_point);
 
-    if (!way_point.IsLandable() && !way_point.Flags.Watched)
+    if (!way_point.IsLandable() && !way_point.flags.watched)
       return;
 
-    if (arrival_height_glide <= 0 && !way_point.Flags.Watched)
+    if (arrival_height_glide <= 0 && !way_point.flags.watched)
       return;
 
     if (settings.arrival_height_display == WP_ARRIVAL_HEIGHT_NONE)
@@ -233,7 +233,7 @@ protected:
   DrawWaypoint(Canvas &canvas, const VisibleWaypoint &vwp)
   {
     const Waypoint &way_point = *vwp.waypoint;
-    bool watchedWaypoint = way_point.Flags.Watched;
+    bool watchedWaypoint = way_point.flags.watched;
 
     vwp.DrawSymbol(settings, look, canvas,
                    projection.GetMapScale() > fixed(4000),
@@ -298,7 +298,7 @@ protected:
       return;
 
     RasterPoint sc;
-    if (!projection.GeoToScreenIfVisible(way_point.Location, sc))
+    if (!projection.GeoToScreenIfVisible(way_point.location, sc))
       return;
 
     VisibleWaypoint &vwp = waypoints.append();
@@ -355,7 +355,7 @@ public:
       VisibleWaypoint &vwp = waypoints[i];
       const Waypoint &way_point = *vwp.waypoint;
 
-      if (way_point.IsLandable() || way_point.Flags.Watched)
+      if (way_point.IsLandable() || way_point.flags.watched)
         vwp.CalculateReachability(lease, task_behaviour);
     }
   }

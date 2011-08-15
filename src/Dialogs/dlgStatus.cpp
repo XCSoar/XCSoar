@@ -270,11 +270,11 @@ UpdateValuesFlight(void)
 
   if (nearest_waypoint) {
     GeoVector vec(basic.location,
-                  nearest_waypoint->Location);
+                  nearest_waypoint->location);
 
     wp = (WndProperty*)wf->FindByName(_T("prpNear"));
     assert(wp != NULL);
-    wp->SetText(nearest_waypoint->Name.c_str());
+    wp->SetText(nearest_waypoint->name.c_str());
 
     wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
     assert(wp != NULL);

@@ -69,15 +69,15 @@ public:
    */
   struct Flags {
     /** If waypoint can be used as a turnpoint */
-    bool TurnPoint:1;
+    bool turn_point:1;
     /** If waypoint is to be used as home */
-    bool Home:1;
+    bool home:1;
     /** If waypoint is marked as a potential start point */
-    bool StartPoint:1;
+    bool start_point:1;
     /** If waypoint is marked as a potential finish point */
-    bool FinishPoint:1;
+    bool finish_point:1;
     /** If waypoint is watched, i.e. displayed with arrival height in map */
-    bool Watched:1;
+    bool watched:1;
 
     /**
      * Set default flags (all off except turnpoint)
@@ -96,7 +96,7 @@ public:
   unsigned original_id;
 
   /** Geodetic location */
-  GeoPoint Location;
+  GeoPoint location;
 
   /** Flat projected location */
   FlatGeoPoint flat_location;
@@ -106,7 +106,7 @@ public:
 #endif
 
   /** Height AMSL (m) of waypoint terrain */
-  fixed Altitude;
+  fixed altitude;
 
   /** Main runway */
   Runway runway;
@@ -114,18 +114,18 @@ public:
   RadioFrequency radio_frequency;
 
   /** Type of the waypoint */
-  TinyEnum<enum Type> Type;
+  TinyEnum<Type> type;
   /** Flag types of this waypoint */
-  struct Flags Flags;
+  Flags flags;
   /** File number to store waypoint in (0,1), -1 to delete/ignore */
-  int8_t FileNum;
+  int8_t file_num;
 
   /** Name of waypoint */
-  tstring Name;
+  tstring name;
   /** Additional comment text for waypoint */
-  tstring Comment;
+  tstring comment;
   /** Airfield or additional (long) details */
-  tstring Details;
+  tstring details;
 
   /**
    * Constructor for real waypoints
@@ -143,7 +143,7 @@ public:
   bool
   IsLandable() const
   {
-    return (Type == wtAirfield || Type == wtOutlanding);
+    return (type == wtAirfield || type == wtOutlanding);
   }
 
   /**
@@ -154,7 +154,7 @@ public:
   bool
   IsAirport() const
   {
-    return Type == wtAirfield;
+    return type == wtAirfield;
   }
 
   /**
@@ -165,7 +165,7 @@ public:
   bool
   IsTurnpoint() const
   {
-    return Flags.TurnPoint;
+    return flags.turn_point;
   }
 
   /**
@@ -176,7 +176,7 @@ public:
   bool
   IsStartpoint() const
   {
-    return Flags.StartPoint;
+    return flags.start_point;
   }
 
   /**
@@ -187,7 +187,7 @@ public:
   bool
   IsFinishpoint() const
   {
-    return Flags.FinishPoint;
+    return flags.finish_point;
   }
 
   /**
@@ -233,7 +233,7 @@ public:
    * @return True if close to reference location
    */
   bool
-  IsCloseTo(const GeoPoint &location, const fixed range) const;
+  IsCloseTo(const GeoPoint &_location, const fixed range) const;
 
 public:
 #ifdef DO_PRINT

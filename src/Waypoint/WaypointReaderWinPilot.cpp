@@ -75,22 +75,22 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
   location.normalize(); // ensure longitude is within -180:180
 
   Waypoint new_waypoint(location);
-  new_waypoint.FileNum = file_num;
+  new_waypoint.file_num = file_num;
   new_waypoint.original_id = _tcstoul(params[0], NULL, 0);
 
   // Name (e.g. KAMPLI)
   if (*params[5] == _T('\0'))
     return false;
-  new_waypoint.Name=params[5];
+  new_waypoint.name=params[5];
 
   // Altitude (e.g. 458M)
   /// @todo configurable behaviour
-  if (!parseAltitude(params[3], new_waypoint.Altitude))
+  if (!parseAltitude(params[3], new_waypoint.altitude))
     CheckAltitude(new_waypoint);
 
   if (n_params > 6) {
     // Description (e.g. 119.750 Airport)
-    new_waypoint.Comment=params[6];
+    new_waypoint.comment=params[6];
     if (welt2000_format)
       parseRunwayDirection(params[6], new_waypoint.runway);
   }
@@ -230,29 +230,29 @@ WaypointReaderWinPilot::parseFlags(const TCHAR* src, Waypoint &dest)
     switch (src[i]) {
     case 'A':
     case 'a':
-      dest.Type = Waypoint::wtAirfield;
+      dest.type = Waypoint::wtAirfield;
       break;
     case 'T':
     case 't':
-      dest.Flags.TurnPoint = true;
+      dest.flags.turn_point = true;
       break;
     case 'L':
     case 'l':
       // Don't downgrade!
-      if (dest.Type != Waypoint::wtAirfield)
-        dest.Type = Waypoint::wtOutlanding;
+      if (dest.type != Waypoint::wtAirfield)
+        dest.type = Waypoint::wtOutlanding;
       break;
     case 'H':
     case 'h':
-      dest.Flags.Home = true;
+      dest.flags.home = true;
       break;
     case 'S':
     case 's':
-      dest.Flags.StartPoint = true;
+      dest.flags.start_point = true;
       break;
     case 'F':
     case 'f':
-      dest.Flags.FinishPoint = true;
+      dest.flags.finish_point = true;
       break;
     }
   }

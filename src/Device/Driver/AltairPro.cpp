@@ -252,9 +252,9 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
 
   if (waypoint != NULL){
 
-    CopyString(Name, waypoint->Name.c_str(), dim(Name));
+    CopyString(Name, waypoint->name.c_str(), dim(Name));
 
-    tmp = waypoint->Location.Latitude.value_degrees();
+    tmp = waypoint->location.Latitude.value_degrees();
 
     if(tmp < 0){
       NoS = 'S';
@@ -266,7 +266,7 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
     MinLat *= 60;
     MinLat *= 1000;
 
-    tmp = waypoint->Location.Longitude.value_degrees();
+    tmp = waypoint->location.Longitude.value_degrees();
 
     if (tmp < 0){
       EoW = 'W';
