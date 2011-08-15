@@ -34,8 +34,6 @@ struct FlyingState;
 
 /**
  * Detect takeoff and landing.
- *
- * Dependencies: #FlyingComputer.
  */
 class FlyingComputer {
   unsigned short time_on_ground;
