@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_NMEA_INFO_H
 #define XCSOAR_NMEA_INFO_H
 
+#include "Util/TinyEnum.hpp"
 #include "NMEA/Validity.hpp"
 #include "NMEA/ExternalSettings.hpp"
 #include "NMEA/Acceleration.hpp"
@@ -38,6 +39,14 @@ Copyright_License {
  */
 struct SwitchInfo
 {
+  enum FlightMode {
+    MODE_UNKNOWN,
+    MODE_CIRCLING,
+    MODE_CRUISE,
+  };
+
+  TinyEnum<FlightMode> flight_mode;
+
   bool airbrake_locked;
   bool flap_positive;
   bool flap_neutral;
@@ -49,13 +58,6 @@ struct SwitchInfo
   bool user_switch_up;
   bool user_switch_middle;
   bool user_switch_down;
-
-  enum {
-    MODE_UNKNOWN,
-    MODE_CIRCLING,
-    MODE_CRUISE,
-  } flight_mode;
-
   bool flap_landing;
   // bool stall;
 

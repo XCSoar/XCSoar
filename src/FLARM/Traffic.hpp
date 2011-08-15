@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_FLARM_TRAFFIC_HPP
 #define XCSOAR_FLARM_TRAFFIC_HPP
 
+#include "Util/TinyEnum.hpp"
 #include "FlarmId.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "NMEA/Validity.hpp"
@@ -125,10 +126,10 @@ struct FLARM_TRAFFIC {
   /** (if exists) Name of the FLARM target */
   StaticString<10> name;
 
-  AlarmType alarm_level;
+  TinyEnum<AlarmType> alarm_level;
 
   /** Type of the aircraft */
-  AircraftType type;
+  TinyEnum<AircraftType> type;
 
   /** Average climb rate over 30s */
   fixed climb_rate_avg30s;

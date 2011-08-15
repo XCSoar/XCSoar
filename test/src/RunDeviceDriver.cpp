@@ -149,8 +149,8 @@ Dump(const NMEAInfo &basic)
   const FLARM_STATE &flarm = basic.flarm;
   if (flarm.available) {
     printf("FLARM rx=%u tx=%u\n", flarm.rx, flarm.tx);
-    printf("FLARM gps=%u\n", flarm.gps);
-    printf("FLARM alarm=%u\n", flarm.alarm_level);
+    printf("FLARM gps=%u\n", (unsigned)flarm.gps);
+    printf("FLARM alarm=%u\n", (unsigned)flarm.alarm_level);
     printf("FLARM traffic=%u new=%d\n",
            flarm.traffic.size(), flarm.NewTraffic);
   }

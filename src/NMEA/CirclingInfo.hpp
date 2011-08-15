@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CIRCLING_INFO_HPP
 #define XCSOAR_CIRCLING_INFO_HPP
 
+#include "Util/TinyEnum.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Math/fixed.hpp"
 
@@ -75,7 +76,7 @@ struct CirclingInfo
   fixed turn_start_energy_height;
 
   /** Current TurnMode (Cruise, Climb or somewhere between) */
-  CirclingMode turn_mode;
+  TinyEnum<CirclingMode> turn_mode;
 
   /**
    * True if the turn rate is above the threshold for circling.

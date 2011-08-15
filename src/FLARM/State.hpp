@@ -27,6 +27,7 @@ Copyright_License {
 #include "FLARM/Traffic.hpp"
 #include "NMEA/Validity.hpp"
 #include "Util/StaticArray.hpp"
+#include "Util/TinyEnum.hpp"
 
 /**
  * Received FLARM data, cached
@@ -55,10 +56,10 @@ struct FLARM_STATE
   bool NewTraffic;
 
   /** GPS status */
-  GPSStatus gps;
+  TinyEnum<GPSStatus> gps;
 
   /** Alarm level of FLARM (0-3) */
-  FLARM_TRAFFIC::AlarmType alarm_level;
+  TinyEnum<FLARM_TRAFFIC::AlarmType> alarm_level;
 
   /** Is FLARM information available? */
   Validity available;
