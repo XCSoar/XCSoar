@@ -71,7 +71,7 @@ GlideComputerAirData::ResetFlight(const bool full)
 
   thermallocator.Reset();
 
-  windanalyser.reset();
+  circling_wind.reset();
   wind_ekf.reset();
   wind_store.reset();
   rotaryLD.init(SettingsComputer());
@@ -142,8 +142,8 @@ GlideComputerAirData::Wind()
   if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING) {
 
     if (calculated.turn_mode == CLIMB) {
-      WindAnalyser::Result result =
-        windanalyser.NewSample(Basic());
+      CirclingWind::Result result =
+        circling_wind.NewSample(Basic());
       if (result.IsValid())
         wind_store.SlotMeasurement(Basic(),
                                    result.wind, result.quality);
@@ -602,7 +602,7 @@ GlideComputerAirData::OnSwitchClimbMode(bool isclimb, bool left)
 
   // Tell the windanalyser of the new flight mode
   if (SettingsComputer().AutoWindMode & D_AUTOWIND_CIRCLING)
-    windanalyser.slot_newFlightMode(Calculated(), left, 0);
+    circling_wind.slot_newFlightMode(Calculated(), left, 0);
 }
 
 /**

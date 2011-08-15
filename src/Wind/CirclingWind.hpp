@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef WINDANALYSER_H
-#define WINDANALYSER_H
+#ifndef XCSOAR_CIRCLING_WIND_HPP
+#define XCSOAR_CIRCLING_WIND_HPP
 
 #include "Vector.hpp"
 #include "Navigation/GeoPoint.hpp"
@@ -34,7 +34,7 @@ struct DerivedInfo;
 /**
  * Class to provide wind estimates from circling
  */
-class WindAnalyser
+class CirclingWind
 {
   /**
    * The windanalyser analyses the list of flightsamples looking for

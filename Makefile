@@ -301,7 +301,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointRendererSettings.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Weather/NOAAGlue.cpp \
-	$(SRC)/Wind/WindAnalyser.cpp \
+	$(SRC)/Wind/CirclingWind.cpp \
 	$(SRC)/Wind/WindMeasurementList.cpp \
 	$(SRC)/Wind/WindStore.cpp \
 	$(SRC)/Wind/WindEKF.cpp \

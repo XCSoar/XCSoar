@@ -1434,7 +1434,7 @@ $(TARGET_BIN_DIR)/RunIGCWriter$(TARGET_EXEEXT): $(RUN_IGC_WRITER_OBJS) $(RUN_IGC
 RUN_CIRCLING_WIND_SOURCES = \
 	$(DEBUG_REPLAY_SOURCES) \
 	$(SRC)/Computer/CirclingComputer.cpp \
-	$(SRC)/Wind/WindAnalyser.cpp \
+	$(SRC)/Wind/CirclingWind.cpp \
 	$(TEST_SRC_DIR)/RunCirclingWind.cpp
 RUN_CIRCLING_WIND_OBJS = $(call SRC_TO_OBJ,$(RUN_CIRCLING_WIND_SOURCES))
 RUN_CIRCLING_WIND_LDADD = \
@@ -1833,7 +1833,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Task/RoutePlannerGlue.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
-	$(SRC)/Wind/WindAnalyser.cpp \
+	$(SRC)/Wind/CirclingWind.cpp \
 	$(SRC)/Wind/WindStore.cpp \
 	$(SRC)/Wind/WindMeasurementList.cpp \
 	$(SRC)/Wind/WindEKF.cpp \

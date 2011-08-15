@@ -24,7 +24,7 @@ Copyright_License {
 /* This library was originally imported from Cumulus
    http://kflog.org/cumulus/ */
 
-#include "Wind/WindAnalyser.hpp"
+#include "Wind/CirclingWind.hpp"
 #include "Math/Constants.h"
 #include "Math/FastMath.h"
 #include "LogFile.hpp"
@@ -66,7 +66,7 @@ a number of windmeasurements and calculates a weighted average based on quality.
 */
 
 void
-WindAnalyser::reset()
+CirclingWind::reset()
 {
   circleCount = 0;
   circleLeft = false;
@@ -78,8 +78,8 @@ WindAnalyser::reset()
   first = true;
 }
 
-WindAnalyser::Result
-WindAnalyser::NewSample(const MoreData &info)
+CirclingWind::Result
+CirclingWind::NewSample(const MoreData &info)
 {
   if (!active)
     // only work if we are in active mode
@@ -160,7 +160,7 @@ WindAnalyser::NewSample(const MoreData &info)
 }
 
 void
-WindAnalyser::slot_newFlightMode(const DerivedInfo &derived,
+CirclingWind::slot_newFlightMode(const DerivedInfo &derived,
                                  bool left, int marker)
 {
   // we are inactive by default
@@ -189,8 +189,8 @@ WindAnalyser::slot_newFlightMode(const DerivedInfo &derived,
   windsamples.clear();
 }
 
-WindAnalyser::Result
-WindAnalyser::_calcWind()
+CirclingWind::Result
+CirclingWind::_calcWind()
 {
   if (windsamples.empty())
     return Result(0);

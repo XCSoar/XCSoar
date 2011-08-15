@@ -24,7 +24,7 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "InputEvents.hpp"
 #include "Computer/CirclingComputer.hpp"
-#include "Wind/WindAnalyser.hpp"
+#include "Wind/CirclingWind.hpp"
 #include "Args.hpp"
 #include "DebugReplay.hpp"
 
@@ -59,7 +59,7 @@ int main(int argc, char **argv)
   printf("# time quality wind_bearing (deg) wind_speed (m/s)\n");
 
   CirclingComputer circling_computer;
-  WindAnalyser circling_wind;
+  CirclingWind circling_wind;
 
   while (replay->Next()) {
     circling_computer.TurnRate(replay->SetCalculated(),
@@ -78,7 +78,7 @@ int main(int argc, char **argv)
                                        negative(replay->Calculated().turn_rate_smoothed),
                                        0);
 
-    WindAnalyser::Result result = circling_wind.NewSample(replay->Basic());
+    CirclingWind::Result result = circling_wind.NewSample(replay->Basic());
     if (result.quality > 0) {
       fixed mag = hypot(result.wind.x, result.wind.y);
 

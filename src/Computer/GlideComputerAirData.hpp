@@ -29,7 +29,7 @@ Copyright_License {
 #include "FlyingComputer.hpp"
 #include "CirclingComputer.hpp"
 #include "ThermalLocator.hpp"
-#include "Wind/WindAnalyser.hpp"
+#include "Wind/CirclingWind.hpp"
 #include "Wind/WindEKF.hpp"
 #include "Wind/WindStore.hpp"
 #include "GPSClock.hpp"
@@ -61,7 +61,7 @@ class GlideComputerAirData: virtual public GlideComputerBlackboard {
   ThermalLocator thermallocator;
 
   // TODO: protect with a Mutex
-  WindAnalyser windanalyser;
+  CirclingWind circling_wind;
   WindEKFGlue wind_ekf;
   WindStore wind_store;
 
