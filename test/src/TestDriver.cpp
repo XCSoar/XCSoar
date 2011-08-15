@@ -700,19 +700,19 @@ TestDeclare(const struct DeviceRegister &driver)
   ok1(device != NULL);
 
   Declaration declaration(NULL);
-  declaration.PilotName = _T("Foo Bar");
-  declaration.AircraftType = _T("Cirrus");
-  declaration.AircraftReg = _T("D-3003");
-  declaration.CompetitionId = _T("33");
+  declaration.pilot_name = _T("Foo Bar");
+  declaration.aircraft_type = _T("Cirrus");
+  declaration.aircraft_registration = _T("D-3003");
+  declaration.competition_id = _T("33");
   const GeoPoint gp(Angle::degrees(fixed(7.7061111111111114)),
                     Angle::degrees(fixed(51.051944444444445)));
   Waypoint wp(gp);
   wp.name = _T("Foo");
   wp.altitude = fixed(123);
-  declaration.append(wp);
-  declaration.append(wp);
-  declaration.append(wp);
-  declaration.append(wp);
+  declaration.Append(wp);
+  declaration.Append(wp);
+  declaration.Append(wp);
+  declaration.Append(wp);
 
   for (unsigned i = 0; i < 1024; ++i) {
     inject_port_fault = i;

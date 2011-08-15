@@ -242,8 +242,8 @@ static bool
 DeclareInner(Port &port, const Declaration &declaration,
              OperationEnvironment &env)
 {
-  assert(declaration.size() >= 2);
-  assert(declaration.size() <= 12);
+  assert(declaration.Size() >= 2);
+  assert(declaration.Size() <= 12);
 
   char user_data[2500];
 
@@ -259,15 +259,16 @@ DeclareInner(Port &port, const Declaration &declaration,
 
   port.Write("USER DETAILS\r\n--------------\r\n\r\n");
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Pilot Name:"), declaration.PilotName.c_str());
+                        _T("Pilot Name:"), declaration.pilot_name.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Competition ID:"),
-                        declaration.CompetitionId.c_str());
+                        declaration.competition_id.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
                         _T("Aircraft Type:"),
-                        declaration.AircraftType.c_str());
+                        declaration.aircraft_type.c_str());
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
-                        _T("Aircraft ID:"), declaration.AircraftReg.c_str());
+                        _T("Aircraft ID:"),
+                        declaration.aircraft_registration.c_str());
   port.Write("\r\nFLIGHT DECLARATION\r\n-------------------\r\n\r\n");
 
   EWMicroRecorderPrintf(port, _T("%-15s %s\r\n"),
@@ -277,21 +278,21 @@ DeclareInner(Port &port, const Declaration &declaration,
     if (env.IsCancelled())
       return false;
 
-    if (i+1>= declaration.size()) {
+    if (i+1>= declaration.Size()) {
       EWMicroRecorderPrintf(port, _T("%-17s %s\r\n"),
                _T("TP LatLon:"), _T("0000000N00000000E TURN POINT"));
     } else {
-      const Waypoint &wp = declaration.get_waypoint(i);
+      const Waypoint &wp = declaration.GetWaypoint(i);
       if (i == 0) {
         EWMicroRecorderWriteWaypoint(port, wp, _T("Take Off LatLong:"));
         EWMicroRecorderWriteWaypoint(port, wp, _T("Start LatLon:"));
-      } else if (i + 1 < declaration.size()) {
+      } else if (i + 1 < declaration.Size()) {
         EWMicroRecorderWriteWaypoint(port, wp, _T("TP LatLon:"));
       }
     }
   }
 
-  const Waypoint &wp = declaration.get_last_waypoint();
+  const Waypoint &wp = declaration.GetLastWaypoint();
   EWMicroRecorderWriteWaypoint(port, wp, _T("Finish LatLon:"));
   EWMicroRecorderWriteWaypoint(port, wp, _T("Land LatLon:"));
 
@@ -308,7 +309,7 @@ EWMicroRecorderDevice::Declare(const Declaration &declaration,
                                OperationEnvironment &env)
 {
   // Must have at least two, max 12 waypoints
-  if (declaration.size() < 2 || declaration.size() > 12)
+  if (declaration.Size() < 2 || declaration.Size() > 12)
     return false;
 
   /* during tests, the EW has taken up to one second to respond to

@@ -426,17 +426,17 @@ LoggerImpl::StartLogger(const NMEAInfo &gps_info,
     Profile::GetDeviceConfig(0, device_config);
 
   writer->header(gps_info.date_time_utc,
-                 decl.PilotName, decl.AircraftType, decl.AircraftReg,
+                 decl.pilot_name, decl.aircraft_type, decl.aircraft_registration,
                  strAssetNumber, device_config.driver_name);
 
-  if (decl.size()) {
+  if (decl.Size()) {
     BrokenDateTime FirstDateTime = !PreTakeoffBuffer.empty()
       ? PreTakeoffBuffer.peek().DateTime
       : gps_info.date_time_utc;
-    writer->StartDeclaration(FirstDateTime, decl.size());
+    writer->StartDeclaration(FirstDateTime, decl.Size());
 
-    for (unsigned i = 0; i< decl.size(); ++i)
-      writer->AddDeclaration(decl.get_location(i), decl.get_name(i));
+    for (unsigned i = 0; i< decl.Size(); ++i)
+      writer->AddDeclaration(decl.GetLocation(i), decl.GetName(i));
 
     writer->EndDeclaration();
   }

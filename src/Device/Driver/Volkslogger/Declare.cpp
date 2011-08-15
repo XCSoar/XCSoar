@@ -95,7 +95,7 @@ CopyTurnPoint(VLAPI_DATA::DCLWPT &dest, const Declaration::TurnPoint &src)
 static bool
 DeclareInner(VLAPI &vl, const Declaration &declaration)
 {
-  assert(declaration.size() >= 2);
+  assert(declaration.Size() >= 2);
 
   if (vl.open(20, 38400L) != VLA_ERR_NOERR ||
       vl.read_info() != VLA_ERR_NOERR)
@@ -106,15 +106,15 @@ DeclareInner(VLAPI &vl, const Declaration &declaration)
 
   CopyToNarrowBuffer(vl.declaration.flightinfo.pilot,
 		     sizeof(vl.declaration.flightinfo.pilot),
-                     declaration.PilotName);
+                     declaration.pilot_name);
 
   CopyToNarrowBuffer(vl.declaration.flightinfo.gliderid,
                      sizeof(vl.declaration.flightinfo.gliderid),
-                     declaration.AircraftReg);
+                     declaration.aircraft_registration);
 
   CopyToNarrowBuffer(vl.declaration.flightinfo.glidertype,
                      sizeof(vl.declaration.flightinfo.glidertype),
-                     declaration.AircraftType);
+                     declaration.aircraft_type);
 
   const Waypoint *home = way_points.GetHome();
   if (home != NULL)
@@ -122,17 +122,17 @@ DeclareInner(VLAPI &vl, const Declaration &declaration)
 
   // start..
   CopyTurnPoint(vl.declaration.task.startpoint,
-                declaration.TurnPoints.front());
+                declaration.turnpoints.front());
 
   // rest of task...
-  const unsigned n = std::min(declaration.size() - 2, 12u);
+  const unsigned n = std::min(declaration.Size() - 2, 12u);
   for (unsigned i = 0; i < n; ++i)
     CopyTurnPoint(vl.declaration.task.turnpoints[i],
-                  declaration.TurnPoints[i + 1]);
+                  declaration.turnpoints[i + 1]);
 
   // Finish
   CopyTurnPoint(vl.declaration.task.finishpoint,
-                declaration.TurnPoints.back());
+                declaration.turnpoints.back());
 
   vl.declaration.task.nturnpoints = n;
 
@@ -143,7 +143,7 @@ bool
 VolksloggerDevice::Declare(const Declaration &declaration,
                            OperationEnvironment &env)
 {
-  if (declaration.size() < 2)
+  if (declaration.Size() < 2)
     return false;
 
   env.SetText(_T("Comms with Volkslogger"));

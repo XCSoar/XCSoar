@@ -128,9 +128,9 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
   env.Sleep(50);
 
   char sPilot[13], sGliderType[9], sGliderID[9];
-  convert_string(sPilot, sizeof(sPilot), declaration.PilotName);
-  convert_string(sGliderType, sizeof(sGliderType), declaration.AircraftType);
-  convert_string(sGliderID, sizeof(sGliderID), declaration.AircraftReg);
+  convert_string(sPilot, sizeof(sPilot), declaration.pilot_name);
+  convert_string(sGliderType, sizeof(sGliderType), declaration.aircraft_type);
+  convert_string(sGliderID, sizeof(sGliderID), declaration.aircraft_registration);
 
   // build string (field 4-5 are GPS info, no idea what to write)
   sprintf(sTmp, "%-12s%-8s%-8s%-12s%-12s%-6s\r",
@@ -184,8 +184,8 @@ EWDevice::DeclareInner(const struct Declaration &declaration,
     if (!port->ExpectString("OK\r"))
       return false;
   }
-  for (unsigned j = 0; j < declaration.size(); ++j)
-    if (!AddWaypoint(declaration.get_waypoint(j)))
+  for (unsigned j = 0; j < declaration.Size(); ++j)
+    if (!AddWaypoint(declaration.GetWaypoint(j)))
       return false;
 
   return true;

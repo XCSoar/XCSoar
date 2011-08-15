@@ -114,27 +114,28 @@ IMI::DeclarationWrite(Port &port, const Declaration &decl)
   memset(&imiDecl, 0, sizeof(imiDecl));
 
   // idecl.date ignored - will be set by FR
-  ConvertToChar(decl.PilotName, imiDecl.header.plt,
+  ConvertToChar(decl.pilot_name, imiDecl.header.plt,
                   sizeof(imiDecl.header.plt));
-  ConvertToChar(decl.AircraftType, imiDecl.header.gty,
+  ConvertToChar(decl.aircraft_type, imiDecl.header.gty,
                   sizeof(imiDecl.header.gty));
-  ConvertToChar(decl.AircraftReg, imiDecl.header.gid,
+  ConvertToChar(decl.aircraft_registration, imiDecl.header.gid,
                   sizeof(imiDecl.header.gid));
-  ConvertToChar(decl.CompetitionId, imiDecl.header.cid,
+  ConvertToChar(decl.competition_id, imiDecl.header.cid,
                   sizeof(imiDecl.header.cid));
   ConvertToChar(_T("XCSOARTASK"), imiDecl.header.tskName,
                   sizeof(imiDecl.header.tskName));
 
-  ConvertWaypoint(decl.TurnPoints[0].waypoint, imiDecl.wp[0]);
+  ConvertWaypoint(decl.turnpoints[0].waypoint, imiDecl.wp[0]);
 
-  for (unsigned i = 0; i < decl.size(); i++) {
-    ConvertWaypoint(decl.TurnPoints[i].waypoint, imiDecl.wp[i + 1]);
-    ConvertOZ(decl.TurnPoints[i], i == 0, i == decl.size() - 1,
+  unsigned size = decl.Size();
+  for (unsigned i = 0; i < size; i++) {
+    ConvertWaypoint(decl.turnpoints[i].waypoint, imiDecl.wp[i + 1]);
+    ConvertOZ(decl.turnpoints[i], i == 0, i == size - 1,
               imiDecl.wp[i + 1]);
   }
 
-  ConvertWaypoint(decl.TurnPoints[decl.size() - 1].waypoint,
-              imiDecl.wp[decl.size() + 1]);
+  ConvertWaypoint(decl.turnpoints[size - 1].waypoint,
+              imiDecl.wp[size + 1]);
 
   // send declaration for current task
   return SendRet(port, MSG_DECLARATION, &imiDecl, sizeof(imiDecl),

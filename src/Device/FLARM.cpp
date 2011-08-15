@@ -68,24 +68,24 @@ FlarmDeclareInternal(Port *port, const Declaration &declaration,
                      OperationEnvironment &env)
 {
   TCHAR Buffer[256];
-  unsigned size = declaration.size();
+  unsigned size = declaration.Size();
 
   env.SetProgressRange(6 + size);
   env.SetProgressPosition(0);
 
-  _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"), declaration.PilotName.c_str());
+  _stprintf(Buffer, _T("PFLAC,S,PILOT,%s"), declaration.pilot_name.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
   env.SetProgressPosition(1);
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), declaration.AircraftReg.c_str());
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERID,%s"), declaration.aircraft_registration.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
   env.SetProgressPosition(2);
 
-  _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"), declaration.AircraftType.c_str());
+  _stprintf(Buffer, _T("PFLAC,S,GLIDERTYPE,%s"), declaration.aircraft_type.c_str());
   if (!FlarmDeclareSetGet(port, Buffer))
     return false;
 
@@ -108,7 +108,7 @@ FlarmDeclareInternal(Port *port, const Declaration &declaration,
     double tmp, MinLat, MinLon;
     char NoS, EoW;
 
-    tmp = declaration.get_location(i).Latitude.value_degrees();
+    tmp = declaration.GetLocation(i).Latitude.value_degrees();
     if (tmp < 0) {
       NoS = 'S';
       tmp = -tmp;
@@ -118,7 +118,7 @@ FlarmDeclareInternal(Port *port, const Declaration &declaration,
     DegLat = (int)tmp;
     MinLat = (tmp - DegLat) * 60 * 1000;
 
-    tmp = declaration.get_location(i).Longitude.value_degrees();
+    tmp = declaration.GetLocation(i).Longitude.value_degrees();
     if (tmp < 0) {
       EoW = 'W';
       tmp = -tmp;
@@ -129,7 +129,7 @@ FlarmDeclareInternal(Port *port, const Declaration &declaration,
     MinLon = (tmp - DegLon) * 60 * 1000;
 
     _stprintf(Buffer, _T("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
-              MinLat, NoS, DegLon, MinLon, EoW, declaration.get_name(i));
+              MinLat, NoS, DegLon, MinLon, EoW, declaration.GetName(i));
 
     if (!FlarmDeclareSetGet(port, Buffer))
       return false;

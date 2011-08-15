@@ -27,7 +27,7 @@ Copyright_License {
 #include "Task/Tasks/OrderedTask.hpp"
 
 gcc_pure
-static enum Declaration::TurnPoint::shape
+static Declaration::TurnPoint::Shape
 get_shape(const OrderedTaskPoint &tp)
 {
   const ObservationZonePoint *oz = tp.get_oz();
@@ -67,5 +67,5 @@ Declaration::Declaration(const OrderedTask* task)
 {
   if (task)
     for (unsigned i = 0; i < task->task_size(); i++)
-      TurnPoints.push_back(*task->getTaskPoint(i));
+      turnpoints.push_back(*task->getTaskPoint(i));
 }

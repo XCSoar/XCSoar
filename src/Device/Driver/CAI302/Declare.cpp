@@ -100,7 +100,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 {
   using CAI302::UploadShort;
   using CAI302::DownloadCommand;
-  unsigned size = declaration.size();
+  unsigned size = declaration.Size();
 
   port.SetRxTimeout(500);
 
@@ -141,9 +141,9 @@ DeclareInner(Port &port, const Declaration &declaration,
     return false;
 
   char PilotName[25], GliderType[13], GliderID[13];
-  convert_string(PilotName, sizeof(PilotName), declaration.PilotName);
-  convert_string(GliderType, sizeof(GliderType), declaration.AircraftType);
-  convert_string(GliderID, sizeof(GliderID), declaration.AircraftReg);
+  convert_string(PilotName, sizeof(PilotName), declaration.pilot_name);
+  convert_string(GliderType, sizeof(GliderType), declaration.aircraft_type);
+  convert_string(GliderID, sizeof(GliderID), declaration.aircraft_registration);
 
   char szTmp[255];
   sprintf(szTmp, "O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r",
@@ -188,7 +188,7 @@ DeclareInner(Port &port, const Declaration &declaration,
   env.SetProgressPosition(6);
 
   for (unsigned i = 0; i < size; ++i) {
-    if (!cai302DeclAddWaypoint(port, 128 + i, declaration.get_waypoint(i)) ||
+    if (!cai302DeclAddWaypoint(port, 128 + i, declaration.GetWaypoint(i)) ||
         env.IsCancelled())
       return false;
 

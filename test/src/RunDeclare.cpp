@@ -126,16 +126,16 @@ int main(int argc, char **argv)
   }
 
   Declaration declaration(NULL);
-  declaration.PilotName = _T("Foo Bar");
-  declaration.AircraftType = _T("Cirrus");
-  declaration.AircraftReg = _T("D-3003");
-  declaration.CompetitionId = _T("33");
+  declaration.pilot_name = _T("Foo Bar");
+  declaration.aircraft_type = _T("Cirrus");
+  declaration.aircraft_registration = _T("D-3003");
+  declaration.competition_id = _T("33");
 
-  declaration.append(MakeWaypoint(_T("Bergneustadt"), 488,
+  declaration.Append(MakeWaypoint(_T("Bergneustadt"), 488,
                                   7.7061111111111114, 51.051944444444445));
-  declaration.append(MakeWaypoint(_T("Foo"), 488, 8, 52));
-  declaration.append(MakeWaypoint(_T("Bar"), 488, 7.5, 50));
-  declaration.append(MakeWaypoint(_T("Bergneustadt"), 488,
+  declaration.Append(MakeWaypoint(_T("Foo"), 488, 8, 52));
+  declaration.Append(MakeWaypoint(_T("Bar"), 488, 7.5, 50));
+  declaration.Append(MakeWaypoint(_T("Bergneustadt"), 488,
                                   7.7061111111111114, 51.051944444444445));
 
   if (device->Declare(declaration, env))

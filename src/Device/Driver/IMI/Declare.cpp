@@ -30,7 +30,8 @@ bool
 IMIDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
 {
   // verify WP number
-  if (declaration.size() < 2 || declaration.size() > 13)
+  unsigned size = declaration.Size();
+  if (size < 2 || size > 13)
     return false;
 
   bool success = Connect(env) && !env.IsCancelled();

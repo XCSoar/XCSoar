@@ -124,9 +124,9 @@ Logger::guiStartLogger(const NMEAInfo& gps_info,
       TCHAR TaskMessage[1024];
       _tcscpy(TaskMessage, _T("Start Logger With Declaration\r\n"));
       
-      if (decl.size()) {
-        for (unsigned i = 0; i< decl.size(); ++i) {
-          _tcscat(TaskMessage, decl.get_name(i));
+      if (decl.Size()) {
+        for (unsigned i = 0; i< decl.Size(); ++i) {
+          _tcscat(TaskMessage, decl.GetName(i));
           _tcscat(TaskMessage, _T("\r\n"));
         }
       } else {

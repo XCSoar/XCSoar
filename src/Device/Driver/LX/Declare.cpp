@@ -50,13 +50,13 @@ static void
 LoadPilotInfo(LX::Pilot &lxDevice_Pilot, const Declaration &declaration)
 {
   memset((void*)lxDevice_Pilot.unknown1, 0, sizeof(lxDevice_Pilot.unknown1));
-  copy_space_padded(lxDevice_Pilot.PilotName, declaration.PilotName,
+  copy_space_padded(lxDevice_Pilot.PilotName, declaration.pilot_name,
                     sizeof(lxDevice_Pilot.PilotName));
-  copy_space_padded(lxDevice_Pilot.GliderType, declaration.AircraftType,
+  copy_space_padded(lxDevice_Pilot.GliderType, declaration.aircraft_type,
                     sizeof(lxDevice_Pilot.GliderType));
-  copy_space_padded(lxDevice_Pilot.GliderID, declaration.AircraftReg,
+  copy_space_padded(lxDevice_Pilot.GliderID, declaration.aircraft_registration,
                     sizeof(lxDevice_Pilot.GliderID));
-  copy_space_padded(lxDevice_Pilot.CompetitionID, declaration.CompetitionId,
+  copy_space_padded(lxDevice_Pilot.CompetitionID, declaration.competition_id,
                     sizeof(lxDevice_Pilot.CompetitionID));
   memset((void*)lxDevice_Pilot.unknown2, 0, sizeof(lxDevice_Pilot.unknown2));
 }
@@ -75,10 +75,10 @@ AngleToLX(Angle value)
 static bool
 LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
 {
-  if (declaration.size() > 10)
+  if (declaration.Size() > 10)
     return false;
 
-  if (declaration.size() < 2)
+  if (declaration.Size() < 2)
       return false;
 
   memset((void*)lxDevice_Declaration.unknown1, 0,
@@ -106,7 +106,7 @@ LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
   lxDevice_Declaration.monthuser = lxDevice_Declaration.monthinput;
   lxDevice_Declaration.yearuser = lxDevice_Declaration.yearinput;
   lxDevice_Declaration.taskid = 0;
-  lxDevice_Declaration.numtps = declaration.size();
+  lxDevice_Declaration.numtps = declaration.Size();
 
   for (unsigned i = 0; i < LX::NUMTPS; i++) {
     if (i == 0) { // takeoff
@@ -117,17 +117,17 @@ LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
         sizeof(lxDevice_Declaration.WaypointNames[i]));
 
 
-    } else if (i <= declaration.size()) {
+    } else if (i <= declaration.Size()) {
       lxDevice_Declaration.tptypes[i] = 1;
       lxDevice_Declaration.Longitudes[i] =
-        AngleToLX(declaration.get_location(i - 1).Longitude);
+        AngleToLX(declaration.GetLocation(i - 1).Longitude);
       lxDevice_Declaration.Latitudes[i] =
-        AngleToLX(declaration.get_location(i - 1).Latitude);
+        AngleToLX(declaration.GetLocation(i - 1).Latitude);
       copy_space_padded(lxDevice_Declaration.WaypointNames[i],
-                        declaration.get_name(i - 1),
+                        declaration.GetName(i - 1),
                         sizeof(lxDevice_Declaration.WaypointNames[i]));
 
-    } else if (i == declaration.size() + 1) { // landing
+    } else if (i == declaration.Size() + 1) { // landing
       lxDevice_Declaration.tptypes[i] = 2;
       lxDevice_Declaration.Longitudes[i] = 0;
       lxDevice_Declaration.Latitudes[i] = 0;
@@ -212,7 +212,7 @@ DeclareInner(Port &port, const Declaration &declaration,
 bool
 LXDevice::Declare(const Declaration &declaration, OperationEnvironment &env)
 {
-  if (declaration.size() < 2 || declaration.size() > 12)
+  if (declaration.Size() < 2 || declaration.Size() > 12)
     return false;
 
   const unsigned old_baud_rate = bulk_baud_rate != 0

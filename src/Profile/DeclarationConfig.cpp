@@ -29,8 +29,8 @@ Copyright_License {
 void
 Profile::GetDeclarationConfig(Declaration &declaration, const Plane &plane)
 {
-  Profile::Get(szProfilePilotName, declaration.PilotName);
-  declaration.AircraftType = plane.type;
-  declaration.AircraftReg = plane.registration;
-  declaration.CompetitionId = plane.competition_id;
+  Profile::Get(szProfilePilotName, declaration.pilot_name);
+  declaration.aircraft_type = plane.type;
+  declaration.aircraft_registration = plane.registration;
+  declaration.competition_id = plane.competition_id;
 }

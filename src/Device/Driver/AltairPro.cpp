@@ -115,15 +115,15 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration)
 {
   TCHAR Buffer[256];
 
-  _stprintf(Buffer, _T("PDVSC,S,Pilot,%s"), declaration.PilotName.c_str());
+  _stprintf(Buffer, _T("PDVSC,S,Pilot,%s"), declaration.pilot_name.c_str());
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 
-  _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), declaration.AircraftReg.c_str());
+  _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), declaration.aircraft_registration.c_str());
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 
-  _stprintf(Buffer, _T("PDVSC,S,GliderType,%s"), declaration.AircraftType.c_str());
+  _stprintf(Buffer, _T("PDVSC,S,GliderType,%s"), declaration.aircraft_type.c_str());
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 
@@ -136,36 +136,32 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration)
    * DeclFlightDate
    */
 
-  if (declaration.size() > 1){
-
+  if (declaration.Size() > 1) {
     PutTurnPoint(_T("DeclTakeoff"), NULL);
     PutTurnPoint(_T("DeclLanding"), NULL);
 
-    PutTurnPoint(_T("DeclStart"), &declaration.get_first_waypoint());
-    PutTurnPoint(_T("DeclFinish"), &declaration.get_last_waypoint());
+    PutTurnPoint(_T("DeclStart"), &declaration.GetFirstWaypoint());
+    PutTurnPoint(_T("DeclFinish"), &declaration.GetLastWaypoint());
 
     for (unsigned int index=1; index <= 10; index++){
       TCHAR TurnPointPropertyName[32];
       _stprintf(TurnPointPropertyName, _T("DeclTurnPoint%d"), index);
 
-      if (index < declaration.size() - 1) {
-        PutTurnPoint(TurnPointPropertyName, &declaration.get_waypoint(index));
+      if (index < declaration.Size() - 1) {
+        PutTurnPoint(TurnPointPropertyName, &declaration.GetWaypoint(index));
       } else {
         PutTurnPoint(TurnPointPropertyName, NULL);
       }
-
     }
-
   }
 
   _stprintf(Buffer, _T("PDVSC,S,DeclAction,DECLARE"));
   if (!PropertySetGet(port, Buffer, dim(Buffer)))
     return false;
 
-  if (_tcscmp(&Buffer[9], _T("LOCKED")) == 0){
+  if (_tcscmp(&Buffer[9], _T("LOCKED")) == 0)
     // FAILED! try to declare a task on a airborn recorder
     return false;
-  }
 
   // Buffer holds the declaration ticket.
   // but no one is intresting in that

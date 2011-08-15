@@ -37,16 +37,14 @@ class OrderedTaskPoint;
 
 struct Declaration {
   struct TurnPoint {
-    enum shape {
+    enum Shape {
       CYLINDER,
       SECTOR,
       LINE,
     };
 
     Waypoint waypoint;
-
-    enum shape shape;
-
+    Shape shape;
     unsigned radius;
 
     TurnPoint(const Waypoint &_waypoint)
@@ -54,42 +52,42 @@ struct Declaration {
     TurnPoint(const OrderedTaskPoint &tp);
   };
 
-  StaticString<64> PilotName;
-  StaticString<32> AircraftType;
-  StaticString<32> AircraftReg;
-  StaticString<8> CompetitionId;
-  std::vector<TurnPoint> TurnPoints;
+  StaticString<64> pilot_name;
+  StaticString<32> aircraft_type;
+  StaticString<32> aircraft_registration;
+  StaticString<8> competition_id;
+  std::vector<TurnPoint> turnpoints;
 
   Declaration(const OrderedTask* task);
 
-  void append(const Waypoint &waypoint) {
-    TurnPoints.push_back(waypoint);
+  void Append(const Waypoint &waypoint) {
+    turnpoints.push_back(waypoint);
   }
 
-  const Waypoint &get_waypoint(unsigned i) const {
-    return TurnPoints[i].waypoint;
+  const Waypoint &GetWaypoint(unsigned i) const {
+    return turnpoints[i].waypoint;
   }
 
-  const Waypoint &get_first_waypoint() const {
-    return TurnPoints.front().waypoint;
+  const Waypoint &GetFirstWaypoint() const {
+    return turnpoints.front().waypoint;
   }
 
-  const Waypoint &get_last_waypoint() const {
-    return TurnPoints.back().waypoint;
-  }
-
-  gcc_pure
-  const TCHAR *get_name(const unsigned i) const {
-    return TurnPoints[i].waypoint.name.c_str();
-  }
-
-  const GeoPoint &get_location(const unsigned i) const {
-    return TurnPoints[i].waypoint.location;
+  const Waypoint &GetLastWaypoint() const {
+    return turnpoints.back().waypoint;
   }
 
   gcc_pure
-  unsigned size() const {
-    return TurnPoints.size();
+  const TCHAR *GetName(const unsigned i) const {
+    return turnpoints[i].waypoint.name.c_str();
+  }
+
+  const GeoPoint &GetLocation(const unsigned i) const {
+    return turnpoints[i].waypoint.location;
+  }
+
+  gcc_pure
+  unsigned Size() const {
+    return turnpoints.size();
   }
 };
 
