@@ -38,7 +38,7 @@ Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
 #ifndef NDEBUG
   flat_location_initialised(false),
 #endif
-  type(wtNormal)
+  type(TYPE_NORMAL)
 {
   flags.SetDefaultFlags(is_turnpoint);
   runway.Clear();

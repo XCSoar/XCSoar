@@ -38,39 +38,39 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
 
   Waypoint wp = waypoints.create(GeoPoint(Angle::degrees(fixed_zero),
                                           Angle::degrees(fixed_zero)));
-  wp.type = Waypoint::wtAirfield;
+  wp.type = Waypoint::TYPE_AIRFIELD;
   wp.altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed_zero), 
                                  Angle::degrees(fixed_one)));
-  wp.type = Waypoint::wtAirfield;
+  wp.type = Waypoint::TYPE_AIRFIELD;
   wp.altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed_one), 
                                  Angle::degrees(fixed_one)));
   wp.name = _T("Hello");
-  wp.type = Waypoint::wtAirfield;
+  wp.type = Waypoint::TYPE_AIRFIELD;
   wp.altitude = fixed_half;
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed(0.8)), 
                                  Angle::degrees(fixed(0.5))));
   wp.name = _T("Unk");
-  wp.type = Waypoint::wtAirfield;
+  wp.type = Waypoint::TYPE_AIRFIELD;
   wp.altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed_one), 
                                  Angle::degrees(fixed_zero)));
-  wp.type = Waypoint::wtAirfield;
+  wp.type = Waypoint::TYPE_AIRFIELD;
   wp.altitude = fixed(0.25);
   waypoints.append(wp);
 
   wp = waypoints.create(GeoPoint(Angle::degrees(fixed_zero), 
                                  Angle::degrees(fixed(0.23))));
-  wp.type = Waypoint::wtAirfield;
+  wp.type = Waypoint::TYPE_AIRFIELD;
   wp.altitude = fixed(0.25);
   waypoints.append(wp);
 
@@ -80,7 +80,7 @@ bool setup_waypoints(Waypoints &waypoints, const unsigned n)
     double z = rand()% std::max(terrain_height,1);
     wp = waypoints.create(GeoPoint(Angle::degrees(fixed(x/1000.0)), 
                                    Angle::degrees(fixed(y/1000.0))));
-    wp.type = Waypoint::wtNormal;
+    wp.type = Waypoint::TYPE_NORMAL;
     wp.altitude = fixed(z);
     waypoints.append(wp);
   }

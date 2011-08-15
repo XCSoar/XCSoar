@@ -47,16 +47,16 @@ class TaskProjection;
  */
 struct Waypoint {
   enum Type {
-    wtNormal,
-    wtAirfield,
-    wtOutlanding,
-    wtMountainTop,
-    wtMountainPass,
-    wtBridge,
-    wtTunnel,
-    wtTower,
-    wtPowerPlant,
-    wtObstacle,
+    TYPE_NORMAL,
+    TYPE_AIRFIELD,
+    TYPE_OUTLANDING,
+    TYPE_MOUNTAIN_TOP,
+    TYPE_MOUNTAIN_PASS,
+    TYPE_BRIDGE,
+    TYPE_TUNNEL,
+    TYPE_TOWER,
+    TYPE_POWERPLANT,
+    TYPE_OBSTACLE,
   };
 
   /**
@@ -140,7 +140,7 @@ struct Waypoint {
   bool
   IsLandable() const
   {
-    return (type == wtAirfield || type == wtOutlanding);
+    return (type == TYPE_AIRFIELD || type == TYPE_OUTLANDING);
   }
 
   /**
@@ -151,7 +151,7 @@ struct Waypoint {
   bool
   IsAirport() const
   {
-    return type == wtAirfield;
+    return type == TYPE_AIRFIELD;
   }
 
   /**

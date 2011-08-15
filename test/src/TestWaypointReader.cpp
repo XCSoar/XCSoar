@@ -224,7 +224,7 @@ TestWinPilotWaypoint(const Waypoint org_wp, const Waypoint *wp)
   }
 
   ok1(wp->type == ((!org_wp.IsLandable()) ?
-                    Waypoint::wtNormal : (Waypoint::Type)org_wp.type));
+                    Waypoint::TYPE_NORMAL : (Waypoint::Type)org_wp.type));
   ok1(wp->flags.turn_point == org_wp.flags.turn_point);
   ok1(wp->flags.home == org_wp.flags.home);
   ok1(wp->flags.start_point == org_wp.flags.start_point);
@@ -300,7 +300,7 @@ TestZanderWaypoint(const Waypoint org_wp, const Waypoint *wp)
   }
 
   ok1(wp->type == ((!org_wp.IsLandable()) ?
-                    Waypoint::wtNormal : (Waypoint::Type)org_wp.type));
+                    Waypoint::TYPE_NORMAL : (Waypoint::Type)org_wp.type));
   ok1(wp->flags.turn_point == org_wp.flags.turn_point);
   ok1(wp->flags.home == org_wp.flags.home);
   ok1(wp->flags.start_point == org_wp.flags.start_point);
@@ -400,7 +400,7 @@ CreateOriginalWaypoints()
   wp.runway.SetDirection(Angle::degrees(fixed(40)));
   wp.runway.SetLength(590);
 
-  wp.type = Waypoint::wtAirfield;
+  wp.type = Waypoint::TYPE_AIRFIELD;
   wp.flags.turn_point = true;
   wp.flags.home = true;
   wp.flags.start_point = false;
@@ -416,7 +416,7 @@ CreateOriginalWaypoints()
   wp2.name = _T("Aconcagua");
   wp2.comment = _T("Highest mountain in south-america");
 
-  wp2.type = Waypoint::wtMountainTop;
+  wp2.type = Waypoint::TYPE_MOUNTAIN_TOP;
   wp2.flags.turn_point = true;
   wp2.flags.home = false;
   wp2.flags.start_point = false;
@@ -432,7 +432,7 @@ CreateOriginalWaypoints()
   wp3.name = _T("Golden Gate Bridge");
   wp3.comment = _T("");
 
-  wp3.type = Waypoint::wtBridge;
+  wp3.type = Waypoint::TYPE_BRIDGE;
   wp3.flags.turn_point = true;
   wp3.flags.home = false;
   wp3.flags.start_point = false;
@@ -449,7 +449,7 @@ CreateOriginalWaypoints()
   wp4.runway.SetDirection(Angle::degrees(fixed(90)));
   wp4.runway.SetLength(Units::ToSysUnit(fixed(0.01), unStatuteMiles));
 
-  wp4.type = Waypoint::wtOutlanding;
+  wp4.type = Waypoint::TYPE_OUTLANDING;
   wp4.flags.turn_point = true;
   wp4.flags.home = false;
   wp4.flags.start_point = false;
@@ -465,7 +465,7 @@ CreateOriginalWaypoints()
   wp5.name = _T("Sydney Opera");
   wp5.comment = _T("");
 
-  wp5.type = Waypoint::wtNormal;
+  wp5.type = Waypoint::TYPE_NORMAL;
   wp5.flags.turn_point = true;
   wp5.flags.home = false;
   wp5.flags.start_point = false;

@@ -230,7 +230,7 @@ WaypointReaderWinPilot::parseFlags(const TCHAR* src, Waypoint &dest)
     switch (src[i]) {
     case 'A':
     case 'a':
-      dest.type = Waypoint::wtAirfield;
+      dest.type = Waypoint::TYPE_AIRFIELD;
       break;
     case 'T':
     case 't':
@@ -239,8 +239,8 @@ WaypointReaderWinPilot::parseFlags(const TCHAR* src, Waypoint &dest)
     case 'L':
     case 'l':
       // Don't downgrade!
-      if (dest.type != Waypoint::wtAirfield)
-        dest.type = Waypoint::wtOutlanding;
+      if (dest.type != Waypoint::TYPE_AIRFIELD)
+        dest.type = Waypoint::TYPE_OUTLANDING;
       break;
     case 'H':
     case 'h':

@@ -167,19 +167,19 @@ WaypointReaderZander::parseFlags(const TCHAR* src, Waypoint &dest)
     dest.flags.turn_point = true;
   } else if ((src[0] == 'H' || src[0] == 'h') &&
              (src[1] == 'A' || src[1] == 'a')) {
-    dest.type = Waypoint::wtAirfield;
+    dest.type = Waypoint::TYPE_AIRFIELD;
     dest.flags.turn_point = true;
     dest.flags.home = true;
   } else if ((src[0] == 'W' || src[0] == 'w') &&
              (src[1] == 'A' || src[1] == 'a')) {
-    dest.type = Waypoint::wtAirfield;
+    dest.type = Waypoint::TYPE_AIRFIELD;
     dest.flags.turn_point = true;
   } else if ((src[0] == 'L' || src[0] == 'l') &&
              (src[1] == 'F' || src[1] == 'f')) {
-    dest.type = Waypoint::wtOutlanding;
+    dest.type = Waypoint::TYPE_OUTLANDING;
   } else if ((src[0] == 'W' || src[0] == 'w') &&
              (src[1] == 'L' || src[1] == 'l')) {
-    dest.type = Waypoint::wtOutlanding;
+    dest.type = Waypoint::TYPE_OUTLANDING;
     dest.flags.turn_point = true;
   } else {
     return false;
@@ -196,7 +196,7 @@ WaypointReaderZander::parseFlagsFromDescription(const TCHAR* src,
   // (usually the description of an airport is the frequency)
 
   if (src[0] == '1') {
-    dest.type = Waypoint::wtAirfield;
+    dest.type = Waypoint::TYPE_AIRFIELD;
     dest.flags.turn_point = true;
     return true;
   }

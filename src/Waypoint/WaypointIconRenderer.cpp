@@ -39,19 +39,19 @@ GetWaypointIcon(const WaypointLook &look, const Waypoint &wp,
     return look.small_icon;
 
   switch (wp.type) {
-  case Waypoint::wtMountainTop:
+  case Waypoint::TYPE_MOUNTAIN_TOP:
     return look.mountain_top_icon;
-  case Waypoint::wtMountainPass:
+  case Waypoint::TYPE_MOUNTAIN_PASS:
     return look.mountain_pass_icon;
-  case Waypoint::wtBridge:
+  case Waypoint::TYPE_BRIDGE:
     return look.bridge_icon;
-  case Waypoint::wtTunnel:
+  case Waypoint::TYPE_TUNNEL:
     return look.tunnel_icon;
-  case Waypoint::wtTower:
+  case Waypoint::TYPE_TOWER:
     return look.tower_icon;
-  case Waypoint::wtObstacle:
+  case Waypoint::TYPE_OBSTACLE:
     return look.obstacle_icon;
-  case Waypoint::wtPowerPlant:
+  case Waypoint::TYPE_POWERPLANT:
     return look.power_plant_icon;
   default:
     if (in_task) {
