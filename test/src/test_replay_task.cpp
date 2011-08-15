@@ -84,7 +84,7 @@ test_replay()
   task_manager.set_glide_polar(glide_polar);
 
   TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
-  task_behaviour.all_off();
+  task_behaviour.auto_mc = true;
   task_behaviour.enable_trace = false;
   task_manager.set_task_behaviour(task_behaviour);
 

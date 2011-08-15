@@ -146,7 +146,7 @@ test_replay(const Contests olc_type,
   sim.SetFilename(szFilename);
 
   TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
-  task_behaviour.enable_olc = false;
+  task_behaviour.enable_olc = true;
   load_scores(task_behaviour.contest_handicap);
   task_manager.set_task_behaviour(task_behaviour);
 
