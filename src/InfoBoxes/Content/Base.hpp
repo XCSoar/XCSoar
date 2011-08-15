@@ -33,7 +33,7 @@ Copyright_License {
 #include "fixed.hpp"
 
 class InfoBoxWindow;
-class Waypoint;
+struct Waypoint;
 class Angle;
 
 class InfoBoxContent

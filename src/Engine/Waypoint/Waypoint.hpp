@@ -45,10 +45,7 @@ class TaskProjection;
  * - consider having a static factory method provide the ID automatically
  *   so we know they will be unique.
  */
-class Waypoint {
-public:
-  friend class Serialiser;
-
+struct Waypoint {
   enum Type {
     wtNormal,
     wtAirfield,
@@ -235,7 +232,6 @@ public:
   bool
   IsCloseTo(const GeoPoint &_location, const fixed range) const;
 
-public:
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, const Waypoint& wp);
 #endif

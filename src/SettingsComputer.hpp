@@ -40,7 +40,7 @@ Copyright_License {
 
 #include <stdint.h>
 
-class Waypoint;
+struct Waypoint;
 
 // control of calculations, these only changed by user interface
 // but are used read-only by calculations

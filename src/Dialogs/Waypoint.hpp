@@ -27,7 +27,7 @@ Copyright_License {
 #include <stddef.h>
 
 struct GeoPoint;
-class Waypoint;
+struct Waypoint;
 class Waypoints;
 class SingleWindow;
 class OrderedTask;

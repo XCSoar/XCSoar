@@ -51,7 +51,7 @@ class RasterTerrain;
 class RasterWeather;
 class Marks;
 class Waypoints;
-class Waypoint;
+struct Waypoint;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;

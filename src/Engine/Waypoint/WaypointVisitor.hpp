@@ -22,7 +22,7 @@
 #ifndef Waypoint_VISITOR_HPP
 #define Waypoint_VISITOR_HPP
 
-class Waypoint;
+struct Waypoint;
 
 /**
  * Generic visitor for objects in the Waypoints container

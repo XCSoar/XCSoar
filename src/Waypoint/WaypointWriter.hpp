@@ -27,7 +27,7 @@ Copyright_License {
 
 #include "fixed.hpp"
 
-class Waypoint;
+struct Waypoint;
 class Waypoints;
 class TextWriter;
 class Angle;

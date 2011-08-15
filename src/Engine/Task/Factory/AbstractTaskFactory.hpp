@@ -40,7 +40,7 @@ struct TaskBehaviour;
 struct OrderedTaskBehaviour;
 class OrderedTaskPoint;
 class ObservationZonePoint;
-class Waypoint;
+struct Waypoint;
 
 /**
  * AbstractTaskFactory is a class used as a sort of wizard

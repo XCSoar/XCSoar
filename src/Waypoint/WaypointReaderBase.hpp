@@ -27,7 +27,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-class Waypoint;
+struct Waypoint;
 class Waypoints;
 class RasterTerrain;
 class TLineReader;

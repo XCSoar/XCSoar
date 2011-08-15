@@ -33,7 +33,7 @@ Copyright_License {
 struct WaypointRendererSettings;
 struct WaypointLook;
 class Canvas;
-class Waypoint;
+struct Waypoint;
 
 class WaypointIconRenderer
 {

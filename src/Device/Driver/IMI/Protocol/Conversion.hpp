@@ -31,7 +31,7 @@ Copyright_License {
 
 class Angle;
 struct BrokenDateTime;
-class Waypoint;
+struct Waypoint;
 
 namespace IMI
 {

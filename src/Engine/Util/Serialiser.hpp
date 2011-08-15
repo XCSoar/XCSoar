@@ -27,7 +27,7 @@
 #include "Task/Tasks/OrderedTask.hpp"
 
 class DataNode;
-class Waypoint;
+struct Waypoint;
 class Waypoints;
 
 /**

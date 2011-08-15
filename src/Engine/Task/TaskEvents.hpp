@@ -23,7 +23,7 @@
 #define TASKEVENTS_HPP
 
 class TaskWaypoint;
-class Waypoint;
+struct Waypoint;
 
 /**
  * Class used to provide feedback based on events that can be triggered

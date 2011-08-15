@@ -28,7 +28,7 @@ Copyright_License {
 #include "Math/fixed.hpp"
 #include "Compiler.h"
 
-class Waypoint;
+struct Waypoint;
 
 class MapWindowProjection:
   public WindowProjection
