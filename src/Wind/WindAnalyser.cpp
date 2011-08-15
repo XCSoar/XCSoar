@@ -65,10 +65,6 @@ Some of the errors made here will be averaged-out by the WindStore, wich keeps
 a number of windmeasurements and calculates a weighted average based on quality.
 */
 
-#ifndef NDEBUG
-  #define DEBUG_WIND
-#endif
-
 void
 WindAnalyser::reset()
 {
