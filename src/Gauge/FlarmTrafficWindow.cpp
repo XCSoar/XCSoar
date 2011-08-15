@@ -271,22 +271,21 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Set the arrow color depending on alarm level
   switch (traffic.alarm_level) {
-  case 1:
+  case FLARM_TRAFFIC::ALARM_LOW:
     canvas.hollow_brush();
     canvas.select(look.hpWarning);
     canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
     canvas.select(look.hbWarning);
     break;
-  case 2:
-  case 3:
+  case FLARM_TRAFFIC::ALARM_IMPORTANT:
+  case FLARM_TRAFFIC::ALARM_URGENT:
     canvas.hollow_brush();
     canvas.select(look.hpAlarm);
     canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
     canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 10 : 19));
     canvas.select(look.hbAlarm);
     break;
-  case 0:
-  case 4:
+  case FLARM_TRAFFIC::ALARM_NONE:
     if (WarningMode()) {
       canvas.hollow_brush();
       canvas.select(look.hpPassive);

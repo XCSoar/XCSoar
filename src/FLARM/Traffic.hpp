@@ -32,6 +32,13 @@ Copyright_License {
 #include <tchar.h>
 
 struct FLARM_TRAFFIC {
+  enum AlarmType {
+    ALARM_NONE = 0,
+    ALARM_LOW = 1,
+    ALARM_IMPORTANT = 2,
+    ALARM_URGENT = 3,
+  };
+
   /**
    * FLARM aircraft types
    * @see http://www.flarm.com/support/manual/FLARM_DataportManual_v4.06E.pdf
@@ -119,7 +126,7 @@ struct FLARM_TRAFFIC {
   StaticString<10> name;
 
   unsigned short id_type;
-  unsigned short alarm_level;
+  AlarmType alarm_level;
 
   /** Type of the aircraft */
   AircraftType type;
@@ -132,7 +139,7 @@ struct FLARM_TRAFFIC {
   }
 
   bool HasAlarm() const {
-    return (alarm_level > 0 && alarm_level < 4);
+    return alarm_level != ALARM_NONE;
   }
 
   /**

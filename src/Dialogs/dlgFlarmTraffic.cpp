@@ -287,16 +287,14 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 
   // Set the text color and background
   switch (traffic.alarm_level) {
-  case 1:
+  case FLARM_TRAFFIC::ALARM_LOW:
     canvas.set_text_color(look.hcWarning);
     break;
-  case 2:
-  case 3:
+  case FLARM_TRAFFIC::ALARM_IMPORTANT:
+  case FLARM_TRAFFIC::ALARM_URGENT:
     canvas.set_text_color(look.hcAlarm);
     break;
-  case 4:
-  case 0:
-  default:
+  case FLARM_TRAFFIC::ALARM_NONE:
     canvas.set_text_color(look.hcStandard);
     break;
   }

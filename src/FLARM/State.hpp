@@ -37,14 +37,23 @@ struct FLARM_STATE
     FLARM_MAX_TRAFFIC = 15,
   };
 
+  enum GPSStatus {
+    GPS_NONE = 0,
+    GPS_2D = 1,
+    GPS_3D = 2,
+  };
+
   /** Number of received FLARM devices */
   unsigned short rx;
   /** Transmit status */
   unsigned short tx;
+
   /** GPS status */
-  unsigned short gps;
+  GPSStatus gps;
+
   /** Alarm level of FLARM (0-3) */
-  unsigned short alarm_level;
+  FLARM_TRAFFIC::AlarmType alarm_level;
+
   /** Is FLARM information available? */
   Validity available;
   /** Flarm traffic information */

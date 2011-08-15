@@ -130,15 +130,14 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // Select brush depending on AlarmLevel
     switch (traffic.alarm_level) {
-    case 1:
+    case FLARM_TRAFFIC::ALARM_LOW:
       canvas.select(traffic_look.warning_brush);
       break;
-    case 2:
-    case 3:
+    case FLARM_TRAFFIC::ALARM_IMPORTANT:
+    case FLARM_TRAFFIC::ALARM_URGENT:
       canvas.select(traffic_look.alarm_brush);
       break;
-    case 0:
-    case 4:
+    case FLARM_TRAFFIC::ALARM_NONE:
       canvas.select(traffic_look.safe_brush);
       break;
     }
