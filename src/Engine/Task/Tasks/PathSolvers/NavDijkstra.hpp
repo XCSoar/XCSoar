@@ -50,12 +50,11 @@ template <class T>
 class NavDijkstra: 
   private NonCopyable 
 {
-public:
+protected:
   enum {
     MAX_STAGES = 16,
   };
 
-protected:
   DijkstraTaskPoint dijkstra;
 
   /** Number of stages in search */
@@ -63,7 +62,7 @@ protected:
   T solution[MAX_STAGES];
   bool solution_valid;
 
-public:
+protected:
   /** 
    * Constructor
    * 
@@ -79,6 +78,7 @@ public:
     set_stages(_num_stages);
   }
 
+public:
   /**
    * Test whether two points (as previous search locations) are significantly
    * different to warrant a new search
@@ -95,6 +95,7 @@ public:
     return a1.flat_distance(a2)> dist_threshold;
   }
 
+protected:
   /** 
    * Set the number of stages to search for, and clear the solution
    * array
@@ -107,7 +108,6 @@ public:
     }
   }
 
-protected:
   /** 
    * Determine whether a finished path is valid
    * 
