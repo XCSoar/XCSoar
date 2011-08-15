@@ -24,6 +24,7 @@
 #define WAYPOINT_HPP
 
 #include "Util/tstring.hpp"
+#include "Util/TinyEnum.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Flat/FlatGeoPoint.hpp"
 #include "RadioFrequency.hpp"
@@ -113,7 +114,7 @@ public:
   RadioFrequency radio_frequency;
 
   /** Type of the waypoint */
-  enum Type Type;
+  TinyEnum<enum Type> Type;
   /** Flag types of this waypoint */
   struct Flags Flags;
   /** File number to store waypoint in (0,1), -1 to delete/ignore */
