@@ -123,7 +123,7 @@ TestFLARM()
   ok1(parser.ParseNMEAString_Internal("$PFLAU,3,1,1,1,0*50",
                                       nmea_info));
   ok1(nmea_info.flarm.rx == 3);
-  ok1(nmea_info.flarm.tx == 1);
+  ok1(nmea_info.flarm.tx);
   ok1(nmea_info.flarm.gps == 1);
   ok1(nmea_info.flarm.alarm_level == 0);
   ok1(nmea_info.flarm.GetActiveTrafficCount() == 0);

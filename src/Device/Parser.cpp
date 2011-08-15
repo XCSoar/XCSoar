@@ -761,7 +761,7 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed clock)
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
   flarm.rx = line.read(0);
-  flarm.tx = line.read(0);
+  flarm.tx = line.read(false);
   flarm.gps = (FLARM_STATE::GPSStatus)line.read(FLARM_STATE::GPS_NONE);
   line.skip();
   flarm.alarm_level = (FLARM_TRAFFIC::AlarmType)

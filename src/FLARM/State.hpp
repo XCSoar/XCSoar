@@ -46,7 +46,7 @@ struct FLARM_STATE
   /** Number of received FLARM devices */
   unsigned short rx;
   /** Transmit status */
-  unsigned short tx;
+  bool tx;
 
   /** GPS status */
   GPSStatus gps;
