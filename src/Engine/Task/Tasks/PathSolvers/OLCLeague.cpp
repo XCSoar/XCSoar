@@ -55,12 +55,13 @@ OLCLeague::reset()
 bool
 OLCLeague::solve(bool exhaustive)
 {
-  TracePointVector trace;
-  trace_master.get_trace_edges(trace);
-
-  if (trace.size()!=2) {
+  if (trace_master.size() < 2)
     return false;
-  }
+
+  const TracePoint trace[2] = {
+    trace_master.front(),
+    trace_master.back(),
+  };
 
   if (!finish_altitude_valid(trace[0], trace[1])) {
     return false;

@@ -360,15 +360,3 @@ Trace::GetTracePoints(TracePointVector &v, unsigned min_time,
     i.NextSquareRange(sq_range, end);
   } while (i != end);
 }
-
-void
-Trace::get_trace_edges(TracePointVector &v) const
-{
-  v.clear();
-
-  if (size() >= 2) {
-    v.reserve(2);
-    v.push_back(static_cast<const TraceDelta *>(chronological_list.GetNext())->point);
-    v.push_back(static_cast<const TraceDelta *>(chronological_list.GetPrevious())->point);
-  }
-}

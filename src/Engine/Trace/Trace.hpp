@@ -336,12 +336,17 @@ public:
   void GetTracePoints(TracePointVector &v, unsigned min_time,
                       const GeoPoint &location, fixed resolution) const;
 
-  /**
-   * Retrieve a vector of the earliest and latest trace points
-   * 
-   * @param iov Vector of trace points
-   */
-  void get_trace_edges(TracePointVector& iov) const;
+  const TracePoint &front() const {
+    assert(!empty());
+
+    return static_cast<const TraceDelta *>(chronological_list.GetNext())->point;
+  }
+
+  const TracePoint &back() const {
+    assert(!empty());
+
+    return static_cast<const TraceDelta *>(chronological_list.GetPrevious())->point;
+  }
 
 private:
   gcc_pure

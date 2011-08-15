@@ -132,10 +132,17 @@ OLCSprint::update_trace() {
   // the number of trace acquisitions and solution starts by 50%.  In practice the number
   // will be lower than this but the fewer wasted cpu cycles the better.
 
-  TracePointVector e;
-  trace_master.get_trace_edges(e);
+  if (trace_master.size() < 2) {
+    clear_trace();
+    return;
+  }
 
-  if ((e.size()<2) || !finish_altitude_valid(e[0], e[1])) {
+  const TracePoint e[2] = {
+    trace_master.front(),
+    trace_master.back(),
+  };
+
+  if (!finish_altitude_valid(e[0], e[1])) {
     clear_trace();
     return;
   }
