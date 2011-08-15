@@ -31,6 +31,8 @@
 class XContestFree: 
   public ContestDijkstra
 {
+  const bool is_dhv;
+
 public:
   friend class XContest;
   XContestFree(const Trace &_trace,
@@ -41,8 +43,6 @@ protected:
   virtual fixed calc_score() const;
 
   void set_weightings();
-private:
-  const bool is_dhv;
 };
 
 #endif

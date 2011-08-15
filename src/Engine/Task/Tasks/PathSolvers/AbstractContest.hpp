@@ -36,6 +36,14 @@ class TracePoint;
  */
 class AbstractContest
 {
+protected:
+  const Trace &trace_master;
+
+private:
+  const unsigned &contest_handicap;
+  const unsigned m_finish_alt_diff;
+  ContestResult best_result;
+
 public:
   /**
    * Constructor
@@ -119,7 +127,6 @@ protected:
   bool finish_altitude_valid(const TracePoint& start,
                              const TracePoint& finish) const;
 
-  const Trace &trace_master;
   virtual bool save_solution();
 
   /**
@@ -131,11 +138,6 @@ protected:
    * @return Handicap adjusted score
    */
   fixed apply_handicap(const fixed& unhandicapped_score, const bool shifted=false) const;
-
-private:
-  const unsigned &contest_handicap;
-  const unsigned m_finish_alt_diff;
-  ContestResult best_result;
 };
 
 #endif

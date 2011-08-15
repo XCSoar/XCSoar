@@ -32,6 +32,12 @@
 class OLCLeague:
   public AbstractContest
 {
+  ContestTraceVector solution_classic;
+
+  ContestTraceVector best_solution;
+  ContestTraceVector solution;
+  bool solution_found;
+
 public:
   OLCLeague(const Trace &_trace,
     const unsigned& _handicap);
@@ -65,12 +71,6 @@ public:
 
 protected:
   virtual bool save_solution();
-  ContestTraceVector solution_classic;
-
-private:
-  ContestTraceVector best_solution;
-  ContestTraceVector solution;
-  bool solution_found;
 };
 
 #endif

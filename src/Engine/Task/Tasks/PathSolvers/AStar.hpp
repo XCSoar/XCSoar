@@ -45,6 +45,9 @@ extern long count_astar_links;
 #define ASTAR_QUEUE_SIZE 1024
 
 struct AStarPriorityValue {
+  unsigned g; /** Actual edge value */
+  unsigned h; /** Heuristic cost to goal */
+
   AStarPriorityValue(unsigned _g=0):g(_g),h(0) {
   }
   AStarPriorityValue(const unsigned _g, const unsigned _h):g(_g),h(_h) {
@@ -54,8 +57,6 @@ struct AStarPriorityValue {
     return is_min ? *this : AStarPriorityValue(ASTAR_MINMAX_OFFSET - g,
                                                ASTAR_MINMAX_OFFSET - h);
   }
-  unsigned g; /** Actual edge value */
-  unsigned h; /** Heuristic cost to goal */
 
   gcc_pure
   unsigned f() const {
@@ -81,6 +82,52 @@ struct AStarPriorityValue {
  */
 template <class Node, bool m_min=true>
 class AStar {
+#ifdef ASTAR_TR1
+  typedef std::tr1::unordered_map<Node, AStarPriorityValue> node_value_map;
+#else
+  typedef std::map<Node, AStarPriorityValue> node_value_map;
+#endif
+
+  typedef typename node_value_map::iterator node_value_iterator;
+  typedef typename node_value_map::const_iterator node_value_const_iterator;
+
+#ifdef ASTAR_TR1
+  typedef std::tr1::unordered_map<Node, Node> node_parent_map;
+#else
+  typedef std::map<Node, Node> node_parent_map;
+#endif
+
+  typedef typename node_parent_map::iterator node_parent_iterator;
+  typedef typename node_parent_map::const_iterator node_parent_const_iterator;
+
+  typedef std::pair<AStarPriorityValue, node_value_iterator> NodeValue;
+
+  struct Rank : public std::binary_function<NodeValue, NodeValue, bool> {
+    gcc_pure
+    bool operator()(const NodeValue& x, const NodeValue& y) const {
+      return x.first.f() > y.first.f();
+    }
+  };
+
+  /**
+   * Stores the value of each node.  It is updated by push(), if a
+   * value lower than the current one is found.
+   */
+  node_value_map node_values;
+
+  /**
+   * Stores the predecessor of each node.  It is maintained by
+   * set_predecessor().
+   */
+  node_parent_map node_parents;
+
+  /**
+   * A sorted list of all possible node paths, lowest distance first.
+   */
+  reservable_priority_queue<NodeValue, std::vector<NodeValue>, Rank> q;
+
+  node_value_iterator cur;
+
 public:
 
   /**
@@ -275,52 +322,6 @@ private:
       // -> Replace the according parent node with the new one
       it->second = parent;
   }
-
-#ifdef ASTAR_TR1
-  typedef std::tr1::unordered_map<Node, AStarPriorityValue> node_value_map;
-#else
-  typedef std::map<Node, AStarPriorityValue> node_value_map;
-#endif
-
-  typedef typename node_value_map::iterator node_value_iterator;
-  typedef typename node_value_map::const_iterator node_value_const_iterator;
-
-#ifdef ASTAR_TR1
-  typedef std::tr1::unordered_map<Node, Node> node_parent_map;
-#else
-  typedef std::map<Node, Node> node_parent_map;
-#endif
-
-  typedef typename node_parent_map::iterator node_parent_iterator;
-  typedef typename node_parent_map::const_iterator node_parent_const_iterator;
-
-  typedef std::pair<AStarPriorityValue, node_value_iterator> NodeValue;
-
-  struct Rank : public std::binary_function<NodeValue, NodeValue, bool> {
-    gcc_pure
-    bool operator()(const NodeValue& x, const NodeValue& y) const {
-      return x.first.f() > y.first.f();
-    }
-  };
-
-  /**
-   * Stores the value of each node.  It is updated by push(), if a
-   * value lower than the current one is found.
-   */
-  node_value_map node_values;
-
-  /**
-   * Stores the predecessor of each node.  It is maintained by
-   * set_predecessor().
-   */
-  node_parent_map node_parents;
-
-  /**
-   * A sorted list of all possible node paths, lowest distance first.
-   */
-  reservable_priority_queue<NodeValue, std::vector<NodeValue>, Rank> q;
-
-  node_value_iterator cur;
 };
 
 #endif

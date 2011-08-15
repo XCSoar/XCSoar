@@ -48,6 +48,55 @@ extern long count_dijkstra_links;
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
 template <class Node> class Dijkstra {
+  typedef std::map<Node, unsigned, std::less<Node>,
+                   GlobalSliceAllocator<std::pair<Node, unsigned>, 256u> > node_value_map;
+  typedef typename node_value_map::iterator node_value_iterator;
+
+  typedef std::map<Node, Node, std::less<Node>,
+                   GlobalSliceAllocator<std::pair<Node, Node>, 256u> > node_parent_map;
+  typedef typename node_parent_map::iterator node_parent_iterator;
+  typedef typename node_parent_map::const_iterator node_parent_const_iterator;
+
+  struct Value {
+    unsigned edge_value;
+
+    node_value_iterator iterator;
+
+    Value(unsigned _edge_value, node_value_iterator _iterator)
+      :edge_value(_edge_value), iterator(_iterator) {}
+  };
+
+  struct Rank : public std::binary_function<Value, Value, bool> {
+    gcc_pure
+    bool operator()(const Value& x, const Value& y) const {
+      return x.edge_value > y.edge_value;
+    }
+  };
+
+  /**
+   * Stores the value of each node.  It is updated by push(), if a
+   * value lower than the current one is found.
+   */
+  node_value_map node_values;
+
+  /**
+   * Stores the predecessor of each node.  It is maintained by
+   * set_predecessor().
+   */
+  node_parent_map node_parents;
+
+  /**
+   * A sorted list of all possible node paths, lowest distance first.
+   */
+#ifdef USE_RESERVABLE
+  reservable_priority_queue<Value, std::vector<Value>, Rank> q;
+#else
+  std::priority_queue<Value, std::vector<Value>, Rank> q;
+#endif
+
+  node_value_iterator cur;
+  const bool m_min;
+
 public:
   /**
    * Default constructor
@@ -190,7 +239,6 @@ public:
   }
 
 private:
-
   /** 
    * Return edge value adjusted for flipping if maximim is sought ---
    * result is metric to be minimised
@@ -247,55 +295,6 @@ private:
       // -> Replace the according parent node with the new one
       it->second = parent; 
   }
-
-  typedef std::map<Node, unsigned, std::less<Node>,
-                   GlobalSliceAllocator<std::pair<Node, unsigned>, 256u> > node_value_map;
-  typedef typename node_value_map::iterator node_value_iterator;
-
-  typedef std::map<Node, Node, std::less<Node>,
-                   GlobalSliceAllocator<std::pair<Node, Node>, 256u> > node_parent_map;
-  typedef typename node_parent_map::iterator node_parent_iterator;
-  typedef typename node_parent_map::const_iterator node_parent_const_iterator;
-
-  struct Value {
-    unsigned edge_value;
-
-    node_value_iterator iterator;
-
-    Value(unsigned _edge_value, node_value_iterator _iterator)
-      :edge_value(_edge_value), iterator(_iterator) {}
-  };
-
-  struct Rank : public std::binary_function<Value, Value, bool> {
-    gcc_pure
-    bool operator()(const Value& x, const Value& y) const {
-      return x.edge_value > y.edge_value;
-    }
-  };
-
-  /**
-   * Stores the value of each node.  It is updated by push(), if a
-   * value lower than the current one is found.
-   */
-  node_value_map node_values;
-
-  /**
-   * Stores the predecessor of each node.  It is maintained by
-   * set_predecessor().
-   */
-  node_parent_map node_parents;
-
-  /**
-   * A sorted list of all possible node paths, lowest distance first.
-   */
-#ifdef USE_RESERVABLE
-  reservable_priority_queue<Value, std::vector<Value>, Rank> q;
-#else
-  std::priority_queue<Value, std::vector<Value>, Rank> q;
-#endif
-
-  node_value_iterator cur;
-  const bool m_min;
 };
 
 #endif

@@ -55,6 +55,14 @@ public:
     MAX_STAGES = 16,
   };
 
+protected:
+  DijkstraTaskPoint dijkstra;
+
+  /** Number of stages in search */
+  unsigned num_stages;
+  T solution[MAX_STAGES];
+  bool solution_valid;
+
 public:
   /** 
    * Constructor
@@ -100,9 +108,6 @@ public:
   }
 
 protected:
-
-  DijkstraTaskPoint dijkstra;
-
   /** 
    * Determine whether a finished path is valid
    * 
@@ -235,11 +240,6 @@ protected:
       p = dijkstra.get_predecessor(p);
     } while (p.stage_number != p_last.stage_number);
   }
-
-  /** Number of stages in search */
-  unsigned num_stages;
-  T solution[MAX_STAGES];
-  bool solution_valid;
 };
 
 #endif

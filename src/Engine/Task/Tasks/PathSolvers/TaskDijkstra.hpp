@@ -48,6 +48,13 @@ class OrderedTask;
 class TaskDijkstra: 
   public NavDijkstra<SearchPoint>
 {
+protected:
+  OrderedTask &task;
+  unsigned active_stage;
+
+private:
+  unsigned sp_sizes[MAX_STAGES];
+
 public:
   /**
    * Constructor
@@ -71,16 +78,11 @@ protected:
 
   void add_start_edges(const SearchPoint &loc);
 
-  OrderedTask& task;
-  unsigned active_stage;
-
 private:
   void calculate_sizes();
   unsigned get_size(const unsigned stage) const;
 
   void add_edges(const ScanTaskPoint &curNode);
-
-  unsigned sp_sizes[MAX_STAGES];
 };
 
 #endif

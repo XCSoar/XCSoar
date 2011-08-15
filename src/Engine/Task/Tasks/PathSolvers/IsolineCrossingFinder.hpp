@@ -34,6 +34,9 @@ class AATPoint;
 class IsolineCrossingFinder:
   public ZeroFinder
 {
+  const AATPoint &aap;
+  const GeoEllipse &ell;
+
 public:
   /**
    * Constructor.  After construction, call solve() to perform the search.
@@ -64,10 +67,6 @@ public:
    * @return Parameter value of isoline intersection
    */
   fixed solve();
-
-private:
-  const AATPoint &aap;
-  const GeoEllipse &ell;
 };
 
 #endif

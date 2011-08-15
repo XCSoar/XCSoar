@@ -31,6 +31,13 @@
 class OLCTriangle: 
   public ContestDijkstra
 {
+protected:
+  bool is_closed;
+  bool is_complete;
+  unsigned first_tp;
+  unsigned best_d;
+  bool is_fai;
+
 public:
   OLCTriangle(const Trace &_trace,
               const unsigned &_handicap,
@@ -54,16 +61,9 @@ protected:
 
   void add_edges(const ScanTaskPoint &curNode);
 
-  bool is_closed;
-  bool is_complete;
-  unsigned first_tp;
-  unsigned best_d;
-
   void start_search();
 
   bool update_score();
-
-  bool is_fai;
 
 private:
   void add_start_edges();

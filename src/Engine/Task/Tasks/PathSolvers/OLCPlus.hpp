@@ -32,6 +32,11 @@
 class OLCPlus:
   public AbstractContest
 {
+  ContestTraceVector solution_classic;
+  ContestTraceVector solution_fai;
+  ContestResult result_classic;
+  ContestResult result_fai;
+
 public:
   OLCPlus(const Trace &_trace, const unsigned &_handicap);
 
@@ -59,12 +64,6 @@ public:
   ContestResult& get_result_fai() {
     return result_fai;
   }
-
-protected:
-  ContestTraceVector solution_classic;
-  ContestTraceVector solution_fai;
-  ContestResult result_classic;
-  ContestResult result_fai;
 };
 
 #endif
