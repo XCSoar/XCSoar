@@ -131,9 +131,11 @@ FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
         traffic.track = vec.Bearing;
 
       // Calculate the turn rate
-      if (!traffic.turn_rate_received)
+      if (!traffic.turn_rate_received) {
+        Angle turn_rate = traffic.track - last_traffic->track;
         traffic.turn_rate =
-          (traffic.track - last_traffic->track).as_delta().value_degrees() / dt;
+          turn_rate.as_delta().value_degrees() / dt;
+      }
 
       // Calculate the speed [m/s]
       if (!traffic.speed_received)

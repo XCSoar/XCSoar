@@ -29,6 +29,10 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "NMEA/Validity.hpp"
 #include "Util/StaticString.hpp"
+#include "Rough/RoughAltitude.hpp"
+#include "Rough/RoughDistance.hpp"
+#include "Rough/RoughSpeed.hpp"
+#include "Rough/RoughAngle.hpp"
 
 #include <tchar.h>
 
@@ -94,16 +98,19 @@ struct FLARM_TRAFFIC {
   GeoPoint location;
 
   /** Distance from our plane to the FLARM target */
-  fixed distance;
+  RoughDistance distance;
 
   /** TrackBearing of the FLARM target */
-  Angle track;
+  RoughAngle track;
 
   /** Speed of the FLARM target */
-  fixed speed;
+  RoughSpeed speed;
 
   /** Altitude of the FLARM target */
-  fixed altitude;
+  RoughAltitude altitude;
+
+  /** Altidude-based distance of the FLARM target */
+  RoughAltitude relative_altitude;
 
   /** Turnrate of the FLARM target */
   fixed turn_rate;
@@ -116,9 +123,6 @@ struct FLARM_TRAFFIC {
 
   /** Longitude-based distance of the FLARM target */
   fixed relative_east;
-
-  /** Altidude-based distance of the FLARM target */
-  fixed relative_altitude;
 
   /** FLARM id of the FLARM target */
   FlarmId id;
