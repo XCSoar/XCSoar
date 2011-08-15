@@ -38,6 +38,7 @@ Copyright_License {
 #include "Device/device.hpp"
 #include "Pages.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 #include "Net/Features.hpp"
 #include "UIState.hpp"
 
@@ -530,7 +531,7 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
                                            N_("Task & Landables"),
                                            N_("Task"),
                                            N_("None") };
-    static const unsigned int n = sizeof(labels)/sizeof(labels[0]);
+    static const unsigned int n = ARRAY_SIZE(labels);
     unsigned int i = SettingsMap().waypoint.label_selection;
     ReplaceInString(OutBuffer, _T("$(MapLabelsToggleActionName)"),
                     gettext(labels[(i + 1) % n]), Size);

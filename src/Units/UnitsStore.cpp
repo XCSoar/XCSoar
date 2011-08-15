@@ -24,6 +24,7 @@ Copyright_License {
 #include "Units/UnitsStore.hpp"
 #include "Units/Units.hpp"
 #include "Language/Language.hpp"
+#include "Util/Macros.hpp"
 
 struct UnitStoreItem
 {
@@ -88,5 +89,5 @@ Units::Store::Read(unsigned i)
 unsigned
 Units::Store::Count()
 {
-  return sizeof(Presets) / sizeof(Presets[0]);
+  return ARRAY_SIZE(Presets);
 }

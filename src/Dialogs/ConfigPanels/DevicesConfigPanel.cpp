@@ -40,6 +40,7 @@ Copyright_License {
 #include "DevicesConfigPanel.hpp"
 #include "Language/Language.hpp"
 #include "Compatibility/string.h"
+#include "Util/Macros.hpp"
 
 #ifdef _WIN32_WCE
 #include "Config/Registry.hpp"
@@ -75,8 +76,7 @@ static const struct {
 };
 
 /** the number of fixed port types (excludes Serial, Bluetooth and IOIOUart) */
-static const unsigned num_port_types =
-  sizeof(port_types) / sizeof(port_types[0]) - 1;
+static const unsigned num_port_types = ARRAY_SIZE(port_types) - 1;
 
 static DeviceConfig device_config[NUMDEV];
 

@@ -37,6 +37,7 @@ Copyright_License {
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "UIState.hpp"
 #include "Interface.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdio.h>
 
@@ -282,7 +283,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
     }
 
     Units::FormatUserAltitude(Calculated().task_stats.total.solution_remaining.altitude_difference,
-                              Value, sizeof(Value) / sizeof(Value[0]),
+                              Value, ARRAY_SIZE(Value),
                               false);
 
     if (Offset >= 0)

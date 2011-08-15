@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Screen/Pen.hpp"
 #include "Screen/Brush.hpp"
+#include "Util/Macros.hpp"
 
 class Font;
 
@@ -51,7 +52,7 @@ struct InfoBoxLook {
   Color get_color(int i, Color default_color) const {
     if (i < 0)
       return colors[0];
-    else if (i >= 1 && (unsigned)i < sizeof(colors) / sizeof(colors[0]))
+    else if (i >= 1 && (unsigned)i < ARRAY_SIZE(colors))
       return colors[i];
     else
       return default_color;

@@ -26,6 +26,7 @@ Copyright_License {
 #include "Look/AircraftLook.hpp"
 #include "Math/Screen.hpp"
 #include "SettingsMap.hpp"
+#include "Util/Macros.hpp"
 
 static void
 DrawMirroredPolygon(const RasterPoint *src, RasterPoint *dst, unsigned points,
@@ -63,7 +64,7 @@ DrawDetailedAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
       {-5, 18},
       {0, 18},
     };
-    const unsigned AIRCRAFT_POINTS = sizeof(Aircraft) / sizeof(Aircraft[0]);
+    const unsigned AIRCRAFT_POINTS = ARRAY_SIZE(Aircraft);
     RasterPoint buffer[2 * AIRCRAFT_POINTS];
 
     if (settings_map.terrain.enable) {
@@ -85,7 +86,7 @@ DrawDetailedAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
       {-1, -2},
       {0, -1},
     };
-    const unsigned CANOPY_POINTS = sizeof(Canopy) / sizeof(Canopy[0]);
+    const unsigned CANOPY_POINTS = ARRAY_SIZE(Canopy);
     RasterPoint buffer[2 * CANOPY_POINTS];
 
     canvas.select(look.canopy_pen);
@@ -139,10 +140,8 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
     {0, -5},
    };
 
-  const unsigned AIRCRAFT_POINTS_LARGE =
-                            sizeof(AircraftLarge) / sizeof(AircraftLarge[0]);
-  const unsigned AIRCRAFT_POINTS_SMALL =
-                            sizeof(AircraftSmall) / sizeof(AircraftSmall[0]);
+  const unsigned AIRCRAFT_POINTS_LARGE = ARRAY_SIZE(AircraftLarge);
+  const unsigned AIRCRAFT_POINTS_SMALL = ARRAY_SIZE(AircraftSmall);
 
   const RasterPoint *Aircraft = large ? AircraftLarge : AircraftSmall;
   const unsigned AircraftPoints = large ?

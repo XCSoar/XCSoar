@@ -25,6 +25,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "IO/TextWriter.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdlib.h>
 
@@ -34,7 +35,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
 {
   TCHAR ctemp[4096];
   const TCHAR *params[20];
-  static const unsigned int max_params=sizeof(params)/sizeof(params[0]);
+  static const unsigned int max_params = ARRAY_SIZE(params);
   static bool welt2000_format = false;
   size_t n_params;
 
@@ -54,7 +55,7 @@ WaypointReaderWinPilot::ParseLine(const TCHAR* line, const unsigned linenum,
     return true;
   }
 
-  if (_tcslen(line) >= sizeof(ctemp) / sizeof(ctemp[0]))
+  if (_tcslen(line) >= ARRAY_SIZE(ctemp))
     /* line too long for buffer */
     return false;
 

@@ -28,6 +28,7 @@ Copyright_License {
 #include "Screen/Window.hpp"
 #include "resource.h"
 #include "Asset.hpp"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 
@@ -157,7 +158,7 @@ ScrollBar::paint(Canvas &canvas) const
     { rc.right - arrow_padding,
       up_arrow_rect.bottom - arrow_padding },
   };
-  canvas.TriangleFan(up_arrow, sizeof(up_arrow) / sizeof(up_arrow[0]));
+  canvas.TriangleFan(up_arrow, ARRAY_SIZE(up_arrow));
 
   PixelRect down_arrow_rect = rc;
   ++down_arrow_rect.left;
@@ -174,7 +175,7 @@ ScrollBar::paint(Canvas &canvas) const
     { rc.right - arrow_padding,
       down_arrow_rect.top + arrow_padding },
   };
-  canvas.TriangleFan(down_arrow, sizeof(down_arrow) / sizeof(down_arrow[0]));
+  canvas.TriangleFan(down_arrow, ARRAY_SIZE(down_arrow));
 
   // ###################
   // ####  Slider   ####

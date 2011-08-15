@@ -25,6 +25,7 @@ Copyright_License {
 #include "Waypoint/Waypoints.hpp"
 #include "IO/LineReader.hpp"
 #include "Units/Units.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdio.h>
 
@@ -77,10 +78,10 @@ WaypointReaderOzi::ParseLine(const TCHAR* line, const unsigned linenum,
 
   TCHAR ctemp[255];
   const TCHAR *params[20];
-  static const unsigned int max_params = sizeof(params) / sizeof(params[0]);
+  static const unsigned int max_params = ARRAY_SIZE(params);
   size_t n_params;
 
-  if (_tcslen(line) >= sizeof(ctemp) / sizeof(ctemp[0]))
+  if (_tcslen(line) >= ARRAY_SIZE(ctemp))
     /* line too long for buffer */
     return false;
 

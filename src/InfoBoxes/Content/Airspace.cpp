@@ -33,6 +33,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspacePolygon.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Util/Macros.hpp"
 
 struct NearestAirspace {
   const AbstractAirspace *airspace;
@@ -221,7 +222,7 @@ InfoBoxContentNearestAirspaceVertical::Update(InfoBoxWindow &infobox)
 
   TCHAR buffer[32];
   Units::FormatUserArrival(nearest.distance, buffer,
-                           sizeof(buffer) / sizeof(buffer[0]), false);
+                           ARRAY_SIZE(buffer), false);
   infobox.SetValue(buffer);
   infobox.SetValueUnit(Units::Current.AltitudeUnit);
   infobox.SetComment(nearest.airspace->GetName());

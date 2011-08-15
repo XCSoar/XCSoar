@@ -24,6 +24,7 @@ Copyright_License {
 #include "MapWindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "Waypoint/Waypoint.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdlib.h>
 #include <math.h>
@@ -46,8 +47,7 @@ static const unsigned ScaleList[] = {
   1000000,
 };
 
-static const unsigned ScaleListCount =
-  sizeof(ScaleList) / sizeof(ScaleList[0]);
+static const unsigned ScaleListCount = ARRAY_SIZE(ScaleList);
 
 bool
 MapWindowProjection::WaypointInScaleFilter(const Waypoint &way_point) const

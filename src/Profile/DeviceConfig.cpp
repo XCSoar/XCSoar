@@ -25,6 +25,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "Asset.hpp"
 #include "Language/Language.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdio.h>
 
@@ -143,7 +144,7 @@ ReadPortType(unsigned n)
   TCHAR name[64], value[64];
 
   MakeDeviceSettingName(name, _T("Port"), n, _T("Type"));
-  if (!Profile::Get(name, value, sizeof(value) / sizeof(value[0])))
+  if (!Profile::Get(name, value, ARRAY_SIZE(value)))
     return n == 0
       ? (is_android()
          ? DeviceConfig::INTERNAL
@@ -223,7 +224,7 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
     MakeDeviceSettingName(buffer, _T("Speed"), n, _T("Index"));
     unsigned speed_index;
     if (Get(buffer, speed_index) &&
-        speed_index < sizeof(speed_index_table) / sizeof(speed_index_table[0]))
+        speed_index < ARRAY_SIZE(speed_index_table))
       config.baud_rate = speed_index_table[speed_index];
     else if (is_altair())
       config.baud_rate = 38400;

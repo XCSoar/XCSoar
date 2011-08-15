@@ -102,6 +102,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "NMEA/Aircraft.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "Compiler.h"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -809,7 +810,7 @@ InputEvents::eventMacCready(const TCHAR *misc)
   } else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
     Units::FormatUserVSpeed(mc,
-                            Temp, sizeof(Temp) / sizeof(Temp[0]),
+                            Temp, ARRAY_SIZE(Temp),
                             false);
     Message::AddMessage(_("MacCready "), Temp);
   }
@@ -1464,7 +1465,7 @@ InputEvents::eventDeclutterLabels(const TCHAR *misc)
                                      N_("Task & Landables"),
                                      N_("Task"),
                                      N_("None")};
-  static const unsigned int n=sizeof(msg)/sizeof(msg[0]);
+  static const unsigned int n=ARRAY_SIZE(msg);
   static const TCHAR *const actions[n] = {_T("all"),
                                           _T("task+landables"),
                                           _T("task"),

@@ -48,7 +48,6 @@ static AllowedCharactersCallback_t AllowedCharactersCallback;
 static unsigned int cursor = 0;
 static unsigned int max_width = MAX_TEXTENTRY;
 static TCHAR edittext[MAX_TEXTENTRY];
-#define MAXENTRYLETTERS (sizeof(EntryLetters)/sizeof(EntryLetters[0])-1)
 
 static void
 UpdateAllowedCharacters()

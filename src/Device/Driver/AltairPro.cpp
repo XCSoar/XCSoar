@@ -30,6 +30,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Waypoint/Waypoint.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdio.h>
 #include <string.h>
@@ -39,7 +40,6 @@ Copyright_License {
 #include <windows.h>
 #endif
 
-#define dim(x)            (sizeof(x)/sizeof(x[0]))
 #define DECELWPNAMESIZE   24                        // max size of taskpoint name
 #define DECELWPSIZE       DECELWPNAMESIZE + 25      // max size of WP declaration
 
@@ -116,15 +116,15 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration)
   TCHAR Buffer[256];
 
   _stprintf(Buffer, _T("PDVSC,S,Pilot,%s"), declaration.pilot_name.c_str());
-  if (!PropertySetGet(port, Buffer, dim(Buffer)))
+  if (!PropertySetGet(port, Buffer, ARRAY_SIZE(Buffer)))
     return false;
 
   _stprintf(Buffer, _T("PDVSC,S,GliderID,%s"), declaration.aircraft_registration.c_str());
-  if (!PropertySetGet(port, Buffer, dim(Buffer)))
+  if (!PropertySetGet(port, Buffer, ARRAY_SIZE(Buffer)))
     return false;
 
   _stprintf(Buffer, _T("PDVSC,S,GliderType,%s"), declaration.aircraft_type.c_str());
-  if (!PropertySetGet(port, Buffer, dim(Buffer)))
+  if (!PropertySetGet(port, Buffer, ARRAY_SIZE(Buffer)))
     return false;
 
   /* TODO currently not supported by XCSOAR
@@ -156,7 +156,7 @@ AltairProDevice::DeclareInternal(const struct Declaration &declaration)
   }
 
   _stprintf(Buffer, _T("PDVSC,S,DeclAction,DECLARE"));
-  if (!PropertySetGet(port, Buffer, dim(Buffer)))
+  if (!PropertySetGet(port, Buffer, ARRAY_SIZE(Buffer)))
     return false;
 
   if (_tcscmp(&Buffer[9], _T("LOCKED")) == 0)
@@ -248,7 +248,7 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
 
   if (waypoint != NULL){
 
-    CopyString(Name, waypoint->name.c_str(), dim(Name));
+    CopyString(Name, waypoint->name.c_str(), ARRAY_SIZE(Name));
 
     tmp = waypoint->location.Latitude.value_degrees();
 
@@ -290,7 +290,7 @@ AltairProDevice::PutTurnPoint(const TCHAR *propertyName, const Waypoint *waypoin
             DegLat, MinLat, NoS, DegLon, MinLon, EoW, Name
   );
 
-  PropertySetGet(port, Buffer, dim(Buffer));
+  PropertySetGet(port, Buffer, ARRAY_SIZE(Buffer));
 
 }
 

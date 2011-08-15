@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "MapWindowLabels.hpp"
 #include "MapWindow.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdlib.h>
 #include <assert.h>
@@ -81,7 +82,7 @@ WaypointLabelList::Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
       || (Y > (int)height + WPCIRCLESIZE))
     return;
 
-  if (num_labels >= sizeof(labels) / sizeof(labels[0]))
+  if (num_labels >= ARRAY_SIZE(labels))
     return;
 
   Label *E = &labels[num_labels++];

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Conversion.hpp"
 #include "Checksum.hpp"
 #include "DateTime.hpp"
+#include "Util/Macros.hpp"
 
 #include <cstdio>
 
@@ -82,7 +83,8 @@ static const IMI::IMICHAR* devices[] =
 const IMI::IMICHAR*
 IMI::GetDeviceName(unsigned i)
 {
-  return (i > sizeof(devices) / sizeof(devices[0])) ? UNKNOWN : devices[i];
+  return i >= ARRAY_SIZE(devices)
+    ? UNKNOWN : devices[i];
 }
 
 static const IMI::IMICHAR* gpsModules[] =
@@ -95,8 +97,8 @@ static const IMI::IMICHAR* gpsModules[] =
 const IMI::IMICHAR*
 IMI::GetGPSName(unsigned i)
 {
-  return (i > sizeof(gpsModules) / sizeof(gpsModules[0])) ? UNKNOWN
-                                                          : gpsModules[i];
+  return i >= ARRAY_SIZE(gpsModules)
+    ? UNKNOWN : gpsModules[i];
 }
 
 static const IMI::IMICHAR* sensors[] =
@@ -110,7 +112,8 @@ const IMI::IMICHAR*
 IMI::GetSensorName(unsigned i)
 {
   i &= (~IMINO_ENL_MASK);
-  return (i > sizeof(sensors) / sizeof(sensors[0])) ? UNKNOWN : sensors[i];
+  return i >= ARRAY_SIZE(sensors)
+    ? UNKNOWN : sensors[i];
 }
 
 static unsigned

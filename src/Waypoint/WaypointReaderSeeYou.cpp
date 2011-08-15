@@ -24,6 +24,7 @@ Copyright_License {
 #include "WaypointReaderSeeYou.hpp"
 #include "Units/Units.hpp"
 #include "Waypoint/Waypoints.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdio.h>
 
@@ -33,7 +34,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
 {
   TCHAR ctemp[4096];
   const TCHAR *params[20];
-  static const unsigned int max_params = sizeof(params) / sizeof(params[0]);
+  static const unsigned int max_params = ARRAY_SIZE(params);
   size_t n_params;
 
   const unsigned iName = 0;
@@ -52,7 +53,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     // -> return without error condition
     return true;
 
-  if (_tcslen(line) >= sizeof(ctemp) / sizeof(ctemp[0]))
+  if (_tcslen(line) >= ARRAY_SIZE(ctemp))
     /* line too long for buffer */
     return false;
 

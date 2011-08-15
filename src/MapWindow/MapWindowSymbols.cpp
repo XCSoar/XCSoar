@@ -29,10 +29,10 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "Units/Units.hpp"
 #include "Look/TaskLook.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
-
 
 void
 MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
@@ -156,10 +156,10 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
   RasterPoint Arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
                     {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
 
-  PolygonRotateShift(Arrow, sizeof(Arrow) / sizeof(Arrow[0]),
+  PolygonRotateShift(Arrow, ARRAY_SIZE(Arrow),
                      aircraft_pos.x, aircraft_pos.y, angle);
 
-  canvas.polygon(Arrow, sizeof(Arrow) / sizeof(Arrow[0]));
+  canvas.polygon(Arrow, ARRAY_SIZE(Arrow));
 }
 
 void

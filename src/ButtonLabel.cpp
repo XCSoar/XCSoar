@@ -25,6 +25,7 @@ Copyright_License {
 #include "MenuBar.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 
@@ -69,7 +70,7 @@ ButtonLabel::SetLabelText(unsigned index, const TCHAR *text)
 
     TCHAR s[100];
 
-    bool greyed = ExpandMacros(text, s, sizeof(s) / sizeof(s[0]));
+    bool greyed = ExpandMacros(text, s, ARRAY_SIZE(s));
 
     if ((s[0] == _T('\0')) || (s[0] == _T(' '))) {
       bar->HideButton(index);

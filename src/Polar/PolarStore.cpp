@@ -24,6 +24,7 @@ Copyright_License {
 #include "Polar/PolarStore.hpp"
 #include "Polar/Polar.hpp"
 #include "Units/Units.hpp"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 
@@ -233,5 +234,5 @@ PolarStore::GetItem(unsigned i)
 unsigned
 PolarStore::Count()
 {
-  return sizeof(InternalPolars) / sizeof(InternalPolars[0]);
+  return ARRAY_SIZE(InternalPolars);
 }

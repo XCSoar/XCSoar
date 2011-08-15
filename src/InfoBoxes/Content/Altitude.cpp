@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "InfoBoxes/Content/Altitude.hpp"
-
 #include "InfoBoxes/InfoBoxWindow.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Units/UnitsFormatter.hpp"
@@ -41,6 +40,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "DataField/Float.hpp"
 #include "DataField/Base.hpp"
+#include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -308,12 +308,12 @@ InfoBoxContentAltitudeGPS::Update(InfoBoxWindow &infobox)
 
   // Set Value
   Units::FormatUserAltitude(basic.gps_altitude, sTmp,
-                            sizeof(sTmp) / sizeof(sTmp[0]), false);
+                            ARRAY_SIZE(sTmp), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
   Units::FormatAlternateUserAltitude(basic.gps_altitude, sTmp,
-                                     sizeof(sTmp) / sizeof(sTmp[0]));
+                                     ARRAY_SIZE(sTmp));
   infobox.SetComment(sTmp);
 
   // Set Unit
@@ -371,12 +371,12 @@ InfoBoxContentAltitudeAGL::Update(InfoBoxWindow &infobox)
 
   // Set Value
   Units::FormatUserAltitude(calculated.altitude_agl, sTmp,
-                            sizeof(sTmp) / sizeof(sTmp[0]), false);
+                            ARRAY_SIZE(sTmp), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
   Units::FormatAlternateUserAltitude(calculated.altitude_agl, sTmp,
-                                     sizeof(sTmp) / sizeof(sTmp[0]));
+                                     ARRAY_SIZE(sTmp));
   infobox.SetComment(sTmp);
 
   // Set Unit
@@ -404,12 +404,12 @@ InfoBoxContentAltitudeBaro::Update(InfoBoxWindow &infobox)
 
   // Set Value
   Units::FormatUserAltitude(basic.baro_altitude, sTmp,
-                            sizeof(sTmp) / sizeof(sTmp[0]), false);
+                            ARRAY_SIZE(sTmp), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
   Units::FormatAlternateUserAltitude(basic.baro_altitude, sTmp,
-                                     sizeof(sTmp) / sizeof(sTmp[0]));
+                                     ARRAY_SIZE(sTmp));
   infobox.SetComment(sTmp);
 
   // Set Unit
@@ -435,12 +435,12 @@ InfoBoxContentAltitudeQFE::Update(InfoBoxWindow &infobox)
 
   // Set Value
   Units::FormatUserAltitude(Value, sTmp,
-                            sizeof(sTmp) / sizeof(sTmp[0]), false);
+                            ARRAY_SIZE(sTmp), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
   Units::FormatAlternateUserAltitude(Value, sTmp,
-                                     sizeof(sTmp) / sizeof(sTmp[0]));
+                                     ARRAY_SIZE(sTmp));
   infobox.SetComment(sTmp);
 
   // Set Unit
@@ -508,12 +508,12 @@ InfoBoxContentTerrainHeight::Update(InfoBoxWindow &infobox)
 
   // Set Value
   Units::FormatUserAltitude(calculated.terrain_altitude, sTmp,
-                            sizeof(sTmp) / sizeof(sTmp[0]), false);
+                            ARRAY_SIZE(sTmp), false);
   infobox.SetValue(sTmp);
 
   // Set Comment
   Units::FormatAlternateUserAltitude(calculated.terrain_altitude, sTmp,
-                                     sizeof(sTmp) / sizeof(sTmp[0]));
+                                     ARRAY_SIZE(sTmp));
   infobox.SetComment(sTmp);
 
   // Set Unit

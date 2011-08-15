@@ -44,6 +44,7 @@ Copyright_License {
 #include "Device/Driver/Flytec.hpp"
 #include "Device/Driver/ILEC.hpp"
 #include "Device/Driver/Westerboer.hpp"
+#include "Util/Macros.hpp"
 
 /** NULL terminated array of available device drivers. */
 static const struct DeviceRegister *const DeviceRegister[] = {
@@ -73,7 +74,7 @@ static const struct DeviceRegister *const DeviceRegister[] = {
 };
 
 enum {
-  DeviceRegisterCount = sizeof(DeviceRegister) / sizeof(DeviceRegister[0]) - 1
+  DeviceRegisterCount = ARRAY_SIZE(DeviceRegister) - 1
 };
 
 const TCHAR *

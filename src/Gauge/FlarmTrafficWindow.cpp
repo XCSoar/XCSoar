@@ -30,6 +30,7 @@
 #include "Math/Screen.hpp"
 #include "Language/Language.hpp"
 #include "Screen/Graphics.hpp"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -637,13 +638,13 @@ FlarmTrafficWindow::PaintRadarBackground(Canvas &canvas) const
 
   TCHAR distance_string[10];
   Units::FormatUserDistance(distance, distance_string,
-                            sizeof(distance_string) / sizeof(distance_string[0]));
+                            ARRAY_SIZE(distance_string));
   PixelSize s = canvas.text_size(distance_string);
   canvas.text(radar_mid.x - s.cx / 2,
               radar_mid.y + radius - s.cy * 0.75, distance_string);
 
   Units::FormatUserDistance(distance / 2, distance_string,
-                            sizeof(distance_string) / sizeof(distance_string[0]));
+                            ARRAY_SIZE(distance_string));
   s = canvas.text_size(distance_string);
   canvas.text(radar_mid.x - s.cx / 2,
               radar_mid.y + radius / 2 - s.cy * 0.75, distance_string);

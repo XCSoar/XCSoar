@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "Profile/Profile.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdio.h>
 
@@ -239,8 +240,7 @@ static InfoBoxLayout::Geometry
 InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
                                 unsigned width, unsigned height)
 {
-  if ((unsigned)geometry >=
-      sizeof(geometry_counts) / sizeof(geometry_counts[0]))
+  if ((unsigned)geometry >= ARRAY_SIZE(geometry_counts))
     /* out of range */
     geometry = ibTop4Bottom4;
 

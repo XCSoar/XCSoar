@@ -21,6 +21,7 @@
 */
 
 #include "Logger/LoggerGRecord.hpp"
+#include "Util/Macros.hpp"
 
 #include <stdio.h>
 
@@ -51,7 +52,7 @@ main(int argc, char **argv)
   g.SetFileName(path);
 
   char data[1024];
-  if (!g.ReadGRecordFromFile(data, sizeof(data) / sizeof(data[0]))) {
+  if (!g.ReadGRecordFromFile(data, ARRAY_SIZE(data))) {
     fprintf(stderr, "Error\n");
     return 2;
   }

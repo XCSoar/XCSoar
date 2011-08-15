@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Screen/ButtonWindow.hpp"
+#include "Util/Macros.hpp"
 
 #include <commctrl.h>
 
@@ -56,7 +57,7 @@ ButtonWindow::set_text(const TCHAR *_text) {
   }
 
   TCHAR buffer[256]; /* should be large enough for buttons */
-  static unsigned const int buffer_size=sizeof(buffer)/sizeof(buffer[0]);
+  static unsigned const int buffer_size = ARRAY_SIZE(buffer);
 
   TCHAR const *s=_text;
   TCHAR *d=buffer;
@@ -83,7 +84,6 @@ ButtonWindow::get_text() const
 
   TCHAR buffer[256]; /* should be large enough for buttons */
 
-  int length = GetWindowText(hWnd, buffer,
-                             sizeof(buffer) / sizeof(buffer[0]));
+  int length = GetWindowText(hWnd, buffer, ARRAY_SIZE(buffer));
   return tstring(buffer, length);
 }

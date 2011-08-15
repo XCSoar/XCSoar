@@ -25,6 +25,7 @@ Copyright_License {
 #include "Language/Language.hpp"
 #include "StringUtil.hpp"
 #include "Util/UTF8.hpp"
+#include "Util/Macros.hpp"
 
 #if defined(HAVE_POSIX) && !defined(ANDROID)
 
@@ -97,7 +98,7 @@ gettext(const TCHAR* text)
   // Convert the translated char string to TCHAR
   TCHAR translation2[strlen(translation) + 1];
   if (::MultiByteToWideChar(CP_UTF8, 0, translation, -1, translation2,
-                            sizeof(translation2) / sizeof(translation2[0])) <= 0)
+                            ARRAY_SIZE(translation2)) <= 0)
     return text;
 
   // Add the translated TCHAR string to the cache map for the next time

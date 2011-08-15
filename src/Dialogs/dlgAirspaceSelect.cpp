@@ -37,6 +37,7 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Busy.hpp"
 #include "Compiler.h"
+#include "Util/Macros.hpp"
 
 #include <assert.h>
 #include <stdlib.h>
@@ -349,7 +350,7 @@ FillDistanceEnum(DataFieldEnum &df)
 
   TCHAR buffer[64];
   const TCHAR *unit = Units::GetDistanceName();
-  for (unsigned i = 0; i < sizeof(distances) / sizeof(distances[0]); ++i) {
+  for (unsigned i = 0; i < ARRAY_SIZE(distances); ++i) {
     _stprintf(buffer, _T("%u %s"), distances[i], unit);
     df.AddChoice(distances[i], buffer);
   }
@@ -369,7 +370,7 @@ FillDirectionEnum(DataFieldEnum &df)
     360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
   };
 
-  for (unsigned i = 0; i < sizeof(directions) / sizeof(directions[0]); ++i) {
+  for (unsigned i = 0; i < ARRAY_SIZE(directions); ++i) {
     _stprintf(buffer, _T("%d")_T(DEG), directions[i]);
     df.AddChoice(directions[i], buffer);
   }

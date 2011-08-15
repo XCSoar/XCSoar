@@ -35,6 +35,7 @@ Copyright_License {
 #include "Asset.hpp"
 #include "StringUtil.hpp"
 #include "Interface.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 
@@ -52,7 +53,7 @@ static TCHAR edittext[MAX_TEXTENTRY];
 
 static TCHAR EntryLetters[] = _T(" ABCDEFGHIJKLMNOPQRSTUVWXYZ1234567890.-");
 
-#define MAXENTRYLETTERS (sizeof(EntryLetters) / sizeof(EntryLetters[0]) - 1)
+#define MAXENTRYLETTERS (ARRAY_SIZE(EntryLetters) - 1)
 
 static void
 OnCloseClicked(gcc_unused WndButton &button)

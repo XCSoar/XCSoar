@@ -32,6 +32,7 @@ Copyright_License {
 #include "NMEA/InputLine.hpp"
 #include "Units/Units.hpp"
 #include "Compiler.h"
+#include "Util/Macros.hpp"
 
 #include <tchar.h>
 #include <stdio.h>
@@ -305,7 +306,7 @@ PDTSM(NMEAInputLine &line, gcc_unused NMEAInfo &info)
 #ifdef _UNICODE
   TCHAR buffer[strlen(message)];
   if (MultiByteToWideChar(CP_ACP, 0, message, -1,
-                          buffer, sizeof(buffer) / sizeof(buffer[0])) <= 0)
+                          buffer, ARRAY_SIZE(buffer)) <= 0)
     return false;
 #else
   const char *buffer = message;
@@ -344,7 +345,7 @@ VegaDevice::ParseNMEA(const char *String, NMEAInfo &info)
 #ifdef _UNICODE
     TCHAR buffer[strlen(message)];
     if (MultiByteToWideChar(CP_ACP, 0, message, -1,
-                            buffer, sizeof(buffer) / sizeof(buffer[0])) <= 0)
+                            buffer, ARRAY_SIZE(buffer)) <= 0)
       return false;
 #else
     const char *buffer = message;

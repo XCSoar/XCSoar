@@ -63,6 +63,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "MapWindow/MapWindowProjection.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Language/Language.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -224,7 +225,7 @@ InputEvents::readFile()
       #include "InputEvents_altair.cpp"
       apply_defaults(default_modes,
                      default_events,
-                     sizeof(default_events) / sizeof(default_events[0]),
+                     ARRAY_SIZE(default_events),
                      default_gesture2event,
                      default_key2event, default_gc2event, default_n2event,
                      default_labels);
@@ -232,7 +233,7 @@ InputEvents::readFile()
       #include "InputEvents_default.cpp"
       apply_defaults(default_modes,
                      default_events,
-                     sizeof(default_events) / sizeof(default_events[0]),
+                     ARRAY_SIZE(default_events),
                      default_gesture2event,
                      default_key2event, default_gc2event, default_n2event,
                      default_labels);

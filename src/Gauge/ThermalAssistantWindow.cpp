@@ -22,7 +22,7 @@
 */
 
 #include "ThermalAssistantWindow.hpp"
-
+#include "Util/Macros.hpp"
 #include "NMEA/Derived.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
@@ -212,14 +212,12 @@ ThermalAssistantWindow::PaintRadarBackground(Canvas &canvas) const
   canvas.background_opaque();
 
   TCHAR lift_string[10];
-  Units::FormatUserVSpeed(max_lift, lift_string,
-                            sizeof(lift_string) / sizeof(lift_string[0]));
+  Units::FormatUserVSpeed(max_lift, lift_string, ARRAY_SIZE(lift_string));
   PixelSize s = canvas.text_size(lift_string);
   canvas.text(mid.x - s.cx / 2,
               mid.y + radius - s.cy * 0.75, lift_string);
 
-  Units::FormatUserVSpeed(fixed_zero, lift_string,
-                            sizeof(lift_string) / sizeof(lift_string[0]));
+  Units::FormatUserVSpeed(fixed_zero, lift_string, ARRAY_SIZE(lift_string));
   s = canvas.text_size(lift_string);
   canvas.text(mid.x - s.cx / 2,
               mid.y + radius / 2 - s.cy * 0.75, lift_string);

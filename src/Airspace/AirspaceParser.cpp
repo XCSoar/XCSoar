@@ -29,6 +29,7 @@ Copyright_License {
 #include "Dialogs/Message.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
+#include "Util/Macros.hpp"
 #include "Math/Earth.hpp"
 #include "IO/LineReader.hpp"
 #include "Airspace/AirspacePolygon.hpp"
@@ -167,7 +168,7 @@ ReadAltitude(const TCHAR *Text_, AIRSPACE_ALT *Alt)
   TCHAR Text[128];
   bool fHasUnit = false;
 
-  CopyString(Text, Text_, sizeof(Text) / sizeof(Text[0]));
+  CopyString(Text, Text_, ARRAY_SIZE(Text));
 
   _tcsupr(Text);
 

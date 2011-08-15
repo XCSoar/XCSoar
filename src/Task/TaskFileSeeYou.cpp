@@ -22,7 +22,7 @@
  */
 
 #include "Task/TaskFileSeeYou.hpp"
-
+#include "Util/Macros.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointReaderSeeYou.hpp"
@@ -235,7 +235,7 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
   const TCHAR *params[20];
   TCHAR *line;
   int TPIndex = 0;
-  const unsigned int max_params = sizeof(params) / sizeof(params[0]);
+  const unsigned int max_params = ARRAY_SIZE(params);
   while ((line = reader.read()) != NULL &&
          line[0] != _T('\"') && line[0] != _T(',')) {
     const size_t n_params = WaypointReaderBase::

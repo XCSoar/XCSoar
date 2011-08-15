@@ -40,6 +40,7 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 #include "Dialogs/dlgInfoBoxAccess.hpp"
 #include "Dialogs/dlgAnalysis.hpp"
+#include "Util/Macros.hpp"
 
 static PixelRect
 get_spark_rect(const InfoBoxWindow &infobox)
@@ -93,7 +94,7 @@ InfoBoxContentSpark::label_vspeed(InfoBoxWindow &infobox,
 
   TCHAR sTmp[32];
   Units::FormatUserVSpeed(var.last(), sTmp,
-                          sizeof(sTmp) / sizeof(sTmp[0]));
+                          ARRAY_SIZE(sTmp));
   infobox.SetComment(sTmp);
 
   infobox.SetValue(_T(""));
@@ -126,7 +127,7 @@ InfoBoxContentBarogram::Update(InfoBoxWindow &infobox)
   TCHAR sTmp[32];
 
   Units::FormatUserAltitude(basic.NavAltitude, sTmp,
-                            sizeof(sTmp) / sizeof(sTmp[0]));
+                            ARRAY_SIZE(sTmp));
   infobox.SetComment(sTmp);
 
   infobox.SetValue(_T(""));

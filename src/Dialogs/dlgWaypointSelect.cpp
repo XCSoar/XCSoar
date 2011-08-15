@@ -45,6 +45,7 @@ Copyright_License {
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
+#include "Util/Macros.hpp"
 
 #include <algorithm>
 #include <list>
@@ -185,8 +186,7 @@ InitializeDirection(bool bOnlyHeading)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpDirection->GetDataField();
     if (!bOnlyHeading) {
-      for (unsigned int i = 0;
-           i < sizeof(DirectionFilter) / sizeof(DirectionFilter[0]); i++)
+      for (unsigned int i = 0; i < ARRAY_SIZE(DirectionFilter); i++)
         dfe->addEnumText(GetDirectionData(i));
 
       dfe->SetAsInteger(filter_data.direction_index);
@@ -211,8 +211,7 @@ PrepareData(void)
     DataFieldEnum* dfe;
     dfe = (DataFieldEnum*)wpDistance->GetDataField();
     dfe->addEnumText(_T("*"));
-    for (unsigned i = 1;
-         i < sizeof(DistanceFilter) / sizeof(DistanceFilter[0]); i++) {
+    for (unsigned i = 1; i < ARRAY_SIZE(DistanceFilter); i++) {
       _stprintf(sTmp, _T("%.0f%s"), (double)DistanceFilter[i],
                 Units::GetDistanceName());
       dfe->addEnumText(sTmp);
@@ -608,8 +607,7 @@ static const TCHAR *
 WaypointNameAllowedCharacters(const TCHAR *prefix)
 {
   static TCHAR buffer[256];
-  return way_points.suggest_name_prefix(prefix, buffer,
-                                        sizeof(buffer) / sizeof(buffer[0]));
+  return way_points.suggest_name_prefix(prefix, buffer, ARRAY_SIZE(buffer));
 }
 
 static void

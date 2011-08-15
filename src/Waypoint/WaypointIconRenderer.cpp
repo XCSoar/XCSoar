@@ -29,6 +29,7 @@ Copyright_License {
 #include "WaypointRenderer.hpp"
 #include "WaypointRendererSettings.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
+#include "Util/Macros.hpp"
 
 gcc_pure
 static const MaskedIcon &
@@ -79,7 +80,7 @@ DrawLandableBase(Canvas &canvas, const RasterPoint& pt, bool airport,
     diamond[2].y = pt.y + iradius;
     diamond[3].x = pt.x - iradius;
     diamond[3].y = pt.y - 0;
-    canvas.TriangleFan(diamond, sizeof(diamond)/sizeof(diamond[0]));
+    canvas.TriangleFan(diamond, ARRAY_SIZE(diamond));
   }
 }
 
@@ -106,7 +107,7 @@ DrawLandableRunway(Canvas &canvas, const RasterPoint &pt,
   runway[2].y = runway[1].y - ly;
   runway[3].x = runway[2].x            + wx;
   runway[3].y = runway[2].y            - wy;
-  canvas.TriangleFan(runway, sizeof(runway)/sizeof(runway[0]));
+  canvas.TriangleFan(runway, ARRAY_SIZE(runway));
 }
 
 
