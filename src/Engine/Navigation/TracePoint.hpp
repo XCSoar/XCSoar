@@ -62,6 +62,10 @@ public:
    */
   TracePoint(const AircraftState &state);
 
+  void Clear() {
+    time = (unsigned)(0 - 1);
+  }
+
   bool Defined() const {
     return time != (unsigned)(0 - 1);
   }

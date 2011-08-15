@@ -48,7 +48,7 @@ OLCLeague::reset()
   solution.clear();
   solution_classic.clear();
   for (unsigned i=0; i<5; ++i) {
-    solution.append(TracePoint());
+    solution.append().Clear();
   }
 }
 

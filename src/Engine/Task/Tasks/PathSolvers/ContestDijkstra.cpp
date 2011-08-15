@@ -76,7 +76,7 @@ ContestDijkstra::master_is_updated()
   assert(num_stages <= MAX_STAGES);
 
   if (trace_master.empty()) {
-    last_point.time = Trace::null_time;
+    last_point.Clear();
     return true;
   }
 
@@ -180,7 +180,9 @@ ContestDijkstra::reset()
   solution_found = false;
   dijkstra.clear();
   clear_trace();
-  last_point.time = Trace::null_time;
+  last_point.Clear();
+  solution[num_stages - 1].Clear();
+
   AbstractContest::reset();
 
   count_olc_solve = 0;
