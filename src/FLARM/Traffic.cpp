@@ -45,7 +45,6 @@ FLARM_TRAFFIC::Update(const FLARM_TRAFFIC &other)
   relative_north = other.relative_north;
   relative_east = other.relative_east;
   relative_altitude = other.relative_altitude;
-  id_type = other.id_type;
   track = other.track;
   track_received = other.track_received;
   turn_rate = other.turn_rate;

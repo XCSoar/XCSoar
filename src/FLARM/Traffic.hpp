@@ -125,7 +125,6 @@ struct FLARM_TRAFFIC {
   /** (if exists) Name of the FLARM target */
   StaticString<10> name;
 
-  unsigned short id_type;
   AlarmType alarm_level;
 
   /** Type of the aircraft */

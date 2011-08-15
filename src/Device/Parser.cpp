@@ -809,7 +809,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
     return true;
   traffic.relative_altitude = value;
 
-  traffic.id_type = line.read(0);
+  line.skip(); /* id type */
 
   // 5 id, 6 digit hex
   char id_string[16];

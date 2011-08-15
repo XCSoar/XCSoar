@@ -144,7 +144,6 @@ TestFLARM()
     ok1(equals(traffic->relative_north, 100));
     ok1(equals(traffic->relative_east, -150));
     ok1(equals(traffic->relative_altitude, 10));
-    ok1(traffic->id_type == 2);
     ok1(equals(traffic->track, 123));
     ok1(traffic->track_received);
     ok1(equals(traffic->turn_rate, 13));
@@ -171,7 +170,6 @@ TestFLARM()
     ok1(equals(traffic->relative_north, 20));
     ok1(equals(traffic->relative_east, 10));
     ok1(equals(traffic->relative_altitude, 24));
-    ok1(traffic->id_type == 2);
     ok1(!traffic->track_received);
     ok1(!traffic->turn_rate_received);
     ok1(!traffic->speed_received);
@@ -756,7 +754,7 @@ TestFlightList(const struct DeviceRegister &driver)
 
 int main(int argc, char **argv)
 {
-  plan_tests(376);
+  plan_tests(374);
 
   TestGeneric();
   TestFLARM();
