@@ -367,16 +367,6 @@ public:
   }
 
   /**
-   * Check if this point is invalid
-   *
-   * @return True if point is invalid
-   */
-  gcc_pure
-  static bool is_null(const TracePoint& tp) {
-    return tp.time == null_time;
-  }
-
-  /**
    * Get last point added to store
    *
    * @return Last point added

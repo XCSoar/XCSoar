@@ -194,7 +194,7 @@ ContestDijkstra::calc_time() const
 {
   assert(num_stages <= MAX_STAGES);
 
-  if (Trace::is_null(solution[num_stages-1]))
+  if (!solution[num_stages-1].Defined())
     return fixed_zero;
   else 
     return fixed(solution[num_stages - 1].time - solution[0].time);
