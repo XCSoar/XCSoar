@@ -230,13 +230,13 @@ protected:
    */
   void find_solution(const ScanTaskPoint &destination) {
     ScanTaskPoint p(destination); 
-    ScanTaskPoint p_last(p);
+    unsigned last_stage_number;
 
     do {
       solution[p.stage_number] = get_point(p);
-      p_last = p;
+      last_stage_number = p.stage_number;
       p = dijkstra.get_predecessor(p);
-    } while (p.stage_number != p_last.stage_number);
+    } while (p.stage_number != last_stage_number);
   }
 };
 
