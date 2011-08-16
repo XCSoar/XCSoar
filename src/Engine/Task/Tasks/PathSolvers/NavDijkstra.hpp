@@ -90,7 +90,7 @@ public:
   gcc_pure
   static bool distance_is_significant(const T& a1, const T& a2,
                                       const unsigned dist_threshold = 1) {
-    return a1.flat_distance(a2)> dist_threshold;
+    return a1.FlatSquareDistance(a2) > (dist_threshold * dist_threshold);
   }
 
 protected:
