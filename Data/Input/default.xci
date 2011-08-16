@@ -728,6 +728,13 @@ event=Mode default
 label=Devices
 location=6
 
+mode=Config3
+type=key
+data=8
+event=Setup Plane
+event=Mode default
+label=Setup Plane
+location=7
 
 # -------------
 # mode=Vario1
