@@ -60,7 +60,6 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
    m_active_index(0),
    m_layer(RENDER_TASK_OZ_SHADE),
    m_location(location),
-   bb_screen(FlatGeoPoint(0,0),0), // uninitialised!
    mode_optional_start(false)
 {
 }

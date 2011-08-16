@@ -41,6 +41,11 @@ public:
   friend class TaskProjection;
 
   /**
+   * Non-initialising constructor.
+   */
+  FlatBoundingBox() {}
+
+  /**
    * Constructor given bounds
    *
    * @param ll Lower left location
