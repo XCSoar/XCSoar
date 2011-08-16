@@ -94,14 +94,13 @@ TestOLC(const char *filename)
                fix.gps_altitude, fix.pressure_altitude,
                fix.time);
 
-    olc_classic.update_idle();
-    olc_fai.update_idle();
     olc_sprint.update_idle();
-    olc_league.update_idle();
-    olc_plus.update_idle();
   }
 
   olc_classic.solve_exhaustive();
+  olc_fai.solve_exhaustive();
+  olc_league.solve_exhaustive();
+  olc_plus.solve_exhaustive();
 
   putchar('\n');
 
