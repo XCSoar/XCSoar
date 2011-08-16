@@ -37,12 +37,9 @@ public:
 
 public:
   /**
-   * Dummy constructor for null object
-   *
-   * @return Null object
+   * Non-initialising constructor.
    */
-  TracePoint():
-    time(0 - 1) {};
+  TracePoint() {}
 
   /**
    * Constructor for a TracePoint which is only used as parameter to
