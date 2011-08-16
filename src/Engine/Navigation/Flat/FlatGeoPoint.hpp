@@ -37,11 +37,9 @@ struct FlatGeoPoint {
   int Latitude;
 
   /**
-   * Constructor (default) at origin
-   *
-   * @return Initialised object at origin
+   * Non-initialising constructor.
    */
-  FlatGeoPoint():Longitude(0),Latitude(0) {};
+  FlatGeoPoint() {};
 
   /**
    * Constructor at specified location (x,y)
