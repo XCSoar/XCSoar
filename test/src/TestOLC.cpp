@@ -123,6 +123,14 @@ TestOLC(const char *filename)
   std::cout << "plus\n";
   PrintHelper::print(olc_plus.get_stats().get_contest_result());
 
+  olc_classic.reset();
+  olc_fai.reset();
+  olc_sprint.reset();
+  olc_league.reset();
+  olc_plus.reset();
+  sprint_trace.clear();
+  full_trace.clear();
+
   return 0;
 }
 
