@@ -39,6 +39,26 @@ class ContestDijkstra:
   public AbstractContest,
   public NavDijkstra<TracePoint>
 {
+  bool solution_found;
+  bool trace_dirty;
+  TracePoint last_point;
+
+  TracePointVector trace; // working trace for solver
+
+protected:
+  /** Number of points in current trace set */
+  unsigned n_points;
+
+  /** Weightings applied to each leg distance */
+  unsigned m_weightings[MAX_STAGES];
+
+  ContestTraceVector best_solution;
+
+public: // instrumentation
+  static unsigned long count_olc_solve;
+  static unsigned long count_olc_trace;
+  static unsigned count_olc_size;
+
 public:
   /**
    * Constructor
@@ -76,15 +96,10 @@ public:
   virtual bool solve(bool exhaustive);
 
 protected:
-  /** Number of points in current trace set */
-  unsigned n_points;
-
   /** Update working trace from master --- never to be done during a solution! */
   virtual void update_trace();
 
   void clear_trace();
-
-  TracePointVector trace; // working trace for solver
 
   /**
    * Determine if a trace point can be added to the search list
@@ -104,9 +119,6 @@ protected:
    */
   virtual void set_weightings();
 
-  /** Weightings applied to each leg distance */
-  unsigned m_weightings[MAX_STAGES];
-
   /**
    * Retrieve weighting of specified leg
    * @param index Index of leg
@@ -121,19 +133,9 @@ protected:
 
   virtual bool save_solution();
 
-  ContestTraceVector best_solution;
-
 private:
-  bool solution_found;
-  bool trace_dirty;
   virtual void add_start_edges();
-  TracePoint last_point;
   bool master_is_updated();
-
-public: // instrumentation
-  static unsigned long count_olc_solve;
-  static unsigned long count_olc_trace;
-  static unsigned count_olc_size;
 };
 
 #endif
