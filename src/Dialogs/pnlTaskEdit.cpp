@@ -115,62 +115,69 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   const unsigned line_height = rc.bottom - rc.top;
 
-  TCHAR sTmp[120];
+  TCHAR buffer[120];
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
-  canvas.select(name_font);
 
   // Draw "Add turnpoint" label
   if (DrawListIndex == ordered_task->task_size()) {
-    _stprintf(sTmp, _T("  (%s)"), _("Add Turnpoint"));
+    canvas.select(name_font);
+    _stprintf(buffer, _T("  (%s)"), _("Add Turnpoint"));
     canvas.text(rc.left + line_height + Layout::FastScale(2),
-                rc.top + line_height / 2 - name_font.get_height() / 2, sTmp);
+                rc.top + line_height / 2 - name_font.get_height() / 2, buffer);
     return;
   }
 
   const OrderedTaskPoint &tp = *ordered_task->getTaskPoint(DrawListIndex);
   GeoVector leg = tp.leg_vector_nominal();
-  bool show_leg_information = leg.Distance > fixed(0.01);
+  bool show_leg_info = leg.Distance > fixed(0.01);
 
   // Draw icon
-  RasterPoint pt = { rc.left + line_height / 2,
-                     rc.top + line_height / 2};
+  RasterPoint pt = { rc.left + line_height / 2, rc.top + line_height / 2};
   WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint,
                            CommonInterface::main_window.look->waypoint,
                            canvas);
-  wir.Draw(tp.get_waypoint(), pt,
-           WaypointIconRenderer::Unreachable, true);
 
-  // Draw leg distance
-  if (show_leg_information) {
-    TCHAR dist[20];
-    Units::FormatUserDistance(leg.Distance, dist, 20, true);
-    canvas.text_clipped(rc.right - Layout::FastScale(2) - canvas.text_width(dist),
-                        rc.top + Layout::FastScale(2), rc, dist);
-  }
+  wir.Draw(tp.get_waypoint(), pt, WaypointIconRenderer::Unreachable, true);
 
-  // Draw turnpoint name
-  OrderedTaskPointLabel(tp, DrawListIndex, sTmp);
-  canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2), rc, sTmp);
+  // Y-Coordinate of the second row
+  unsigned top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
 
-  // Draw details line
+  // Use small font for details
   canvas.select(small_font);
 
-  OrderedTaskPointRadiusLabel(*tp.get_oz(), sTmp);
-  if (!string_is_empty(sTmp))
-    canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
-                        rc.top + name_font.get_height() + Layout::FastScale(4),
-                        rc, sTmp);
+  unsigned leg_info_width = 0;
+  if (show_leg_info) {
+    // Draw leg distance
+    Units::FormatUserDistance(leg.Distance, buffer, 120, true);
+    unsigned width = leg_info_width = canvas.text_width(buffer);
+    canvas.text(rc.right - Layout::FastScale(2) - width,
+                rc.top + Layout::FastScale(2) +
+                (name_font.get_height() - small_font.get_height()) / 2, buffer);
 
-  if (show_leg_information) {
-    _stprintf(sTmp, _T("%s: %.0f" DEG "T"),
-              _("Bearing"), (double)leg.Bearing.value_degrees());
-    canvas.text_clipped(rc.right - Layout::FastScale(2) - canvas.text_width(sTmp),
-                        rc.top + name_font.get_height() + Layout::FastScale(4),
-                        rc, sTmp);
+    // Draw leg bearing
+    _stprintf(buffer, _T("%.0f" DEG " T"), (double)leg.Bearing.value_degrees());
+    width = canvas.text_width(buffer);
+    canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
+
+    if (width > leg_info_width)
+      leg_info_width = width;
+
+    leg_info_width += Layout::FastScale(2);
   }
+
+  // Draw details line
+  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  OrderedTaskPointRadiusLabel(*tp.get_oz(), buffer);
+  if (!string_is_empty(buffer))
+    canvas.text_clipped(left, top2, rc.right - leg_info_width - left, buffer);
+
+  // Draw turnpoint name
+  canvas.select(name_font);
+  OrderedTaskPointLabel(tp, DrawListIndex, buffer);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2),
+                      rc.right - leg_info_width - left, buffer);
 }
 
 void
