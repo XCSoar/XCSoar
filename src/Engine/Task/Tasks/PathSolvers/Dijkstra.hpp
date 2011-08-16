@@ -215,20 +215,6 @@ public:
     q.reserve(size);
   }
 
-  /**
-   * Obtain the value of this node (accumulated distance to this node)
-   * Returns 0 on failure to find the node.
-   */
-  gcc_pure
-  unsigned get_node_value(const Node &node) const {
-    node_value_iterator it = node_values.find(node);
-    if (it == node_values.end()) {
-      return 0;
-    } else {
-      return it->second;
-    }
-  }
-
 private:
   /** 
    * Return edge value adjusted for flipping if maximim is sought ---
