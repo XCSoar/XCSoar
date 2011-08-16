@@ -72,14 +72,14 @@ TaskRulesConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpFinishMinHeight"), ugAltitude,
                    task_behaviour.ordered_defaults.finish_min_height);
 
-  static const StaticEnumChoice contests_list[] = {
-    { OLC_FAI, N_("OLC_FAI") },
-    { OLC_Classic, N_("OLC_Classic") },
-    { OLC_League, N_("OLC_League") },
-    { OLC_Plus, N_("OLC_Plus") },
-    { OLC_XContest, N_("OLC_XContest") },
-    { OLC_DHVXC, N_("OLC_DHVXC") },
-    { OLC_SISAT, N_("OLC_SISAT") },
+  const StaticEnumChoice contests_list[] = {
+    { OLC_FAI, ContestToString(OLC_FAI) },
+    { OLC_Classic, ContestToString(OLC_Classic) },
+    { OLC_League, ContestToString(OLC_League) },
+    { OLC_Plus, ContestToString(OLC_Plus) },
+    { OLC_XContest, ContestToString(OLC_XContest) },
+    { OLC_DHVXC, ContestToString(OLC_DHVXC) },
+    { OLC_SISAT, ContestToString(OLC_SISAT) },
     { 0 }
   };
   LoadFormProperty(*wf, _T("prpContests"), contests_list,
