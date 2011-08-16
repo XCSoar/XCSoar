@@ -175,7 +175,7 @@ public:
    * @param pn Predecessor of destination node
    * @param e Edge distance
    */
-  void link(const Node &node, const Node &parent, const unsigned &edge_value = 1) {
+  void link(const Node &node, const Node &parent, unsigned edge_value) {
 #ifdef INSTRUMENT_TASK
     count_dijkstra_links++;
 #endif
