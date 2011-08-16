@@ -742,6 +742,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     return;
   }
 
+  TCHAR buffer[256];
   assert(i < WaypointSelectInfo.size());
 
   const struct WaypointSelectInfo &info = WaypointSelectInfo[i];
@@ -755,35 +756,40 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
                            canvas);
   wir.Draw(waypoint, pt);
 
-  // Draw distance and bearing
-  TCHAR buffer[256];
-  Units::FormatUserDistance(info.Distance, buffer,
-                            sizeof(buffer) / sizeof(buffer[0]));
-  _stprintf(buffer + _tcslen(buffer), _T(" %.0f" DEG "T"),
-            (double)info.Direction.value_degrees());
+  // Y-Coordinate of the second row
+  unsigned top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
 
-  unsigned left = rc.right - Layout::FastScale(2) - canvas.text_width(buffer);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, buffer);
-
-  // Draw waypoint name
-  canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2),
-                      left - (rc.left + line_height + Layout::FastScale(4)),
-                      waypoint.name.c_str());
-
-  // Draw details line
+  // Use small font for details
   canvas.select(small_font);
 
+  // Draw leg distance
+  Units::FormatUserDistance(info.Distance, buffer, 256, true);
+  unsigned width = canvas.text_width(buffer);
+  unsigned leg_info_width = width;
+  canvas.text(rc.right - Layout::FastScale(2) - width,
+              rc.top + Layout::FastScale(2) +
+              (name_font.get_height() - small_font.get_height()) / 2, buffer);
+
+  // Draw leg bearing
+  _stprintf(buffer, _T(" %.0f" DEG " T"), (double)info.Direction.value_degrees());
+  width = canvas.text_width(buffer);
+  canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
+
+  if (width > leg_info_width)
+    leg_info_width = width;
+
+  leg_info_width += Layout::FastScale(2);
+
+  // Draw details line
   {
     TCHAR alt[16];
-    Units::FormatUserAltitude(waypoint.altitude, alt,
-                              sizeof(alt) / sizeof(alt[0]));
+    Units::FormatUserAltitude(waypoint.altitude, alt, 16);
     _stprintf(buffer, _T("%s: %s"), _T("Altitude"), alt);
   }
 
   if (waypoint.radio_frequency.IsDefined()) {
     TCHAR radio[16];
-    waypoint.radio_frequency.Format(radio, sizeof(radio) / sizeof(radio[0]));
+    waypoint.radio_frequency.Format(radio, 16);
     _tcscat(buffer, _T(" - "));
     _tcscat(buffer, radio);
     _tcscat(buffer, _T(" MHz"));
@@ -794,9 +800,13 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     _tcscat(buffer, waypoint.comment.c_str());
   }
 
-  canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
-                      rc, buffer);
+  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  canvas.text_clipped(left, top2, rc.right - leg_info_width - left, buffer);
+
+  // Draw waypoint name
+  canvas.select(name_font);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2),
+                      rc.right - leg_info_width - left, waypoint.name.c_str());
 }
 
 static void
