@@ -116,8 +116,6 @@ class Trace : private NonCopyable
       assert(elim_distance != null_delta);
     }
 
-    void foo() {}
-
     /**
      * Is this the first or the last point?
      */
