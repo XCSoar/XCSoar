@@ -42,7 +42,7 @@ Net::Request::Request(Session &_session, const TCHAR *url,
 
   Java::String j_url(env, url);
   jobject url_object = env->NewObject(url_class.get(), url_ctor, j_url.get());
-  if (url_object == NULL) {
+  if (env->ExceptionOccurred() || url_object == NULL) {
     env->ExceptionClear();
     input_stream = NULL;
     return;
@@ -54,7 +54,7 @@ Net::Request::Request(Session &_session, const TCHAR *url,
 
   jobject connection = env->CallObjectMethod(url_object, url_open);
   env->DeleteLocalRef(url_object);
-  if (connection == NULL) {
+  if (env->ExceptionOccurred() || connection == NULL) {
     env->ExceptionClear();
     input_stream = NULL;
     return;
@@ -67,8 +67,9 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   assert(get_input_stream != NULL);
 
   input_stream = env->CallObjectMethod(connection, get_input_stream);
-  if (input_stream == NULL) {
+  if (env->ExceptionOccurred() || input_stream == NULL) {
     env->ExceptionClear();
+    input_stream = NULL;
     return;
   }
 
