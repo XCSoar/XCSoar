@@ -143,7 +143,7 @@ protected:
   gcc_pure
   bool is_final(const ScanTaskPoint &sp) const {
     assert(num_stages <= MAX_STAGES);
-    return sp.stage_number + 1 == num_stages;
+    return (unsigned)(sp.stage_number + 1) == num_stages;
   }
 
   /** 

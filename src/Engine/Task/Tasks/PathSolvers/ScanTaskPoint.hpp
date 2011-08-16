@@ -24,15 +24,17 @@ Copyright_License {
 #ifndef SCANTASKPOINT_HPP
 #define SCANTASKPOINT_HPP
 
+#include <stdint.h>
+
 /**
  * A reference to a trace/search point: first element is the stage
  * number (turn point number); second element is the index in the
  * #TracePointVector / #SearchPointVector.
  */
 struct ScanTaskPoint {
-  unsigned stage_number;
+  uint16_t stage_number;
 
-  unsigned point_index;
+  uint16_t point_index;
 
   ScanTaskPoint(unsigned _stage_number, unsigned _point_index)
     :stage_number(_stage_number), point_index(_point_index) {}
