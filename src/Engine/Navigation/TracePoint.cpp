@@ -1,5 +1,7 @@
 #include "TracePoint.hpp"
 #include "TaskProjection.hpp"
+#include "Aircraft.hpp"
+
 #include <limits.h>
 
 TracePoint::TracePoint(const AircraftState &state):

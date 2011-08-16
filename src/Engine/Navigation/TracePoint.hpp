@@ -2,11 +2,12 @@
 #define TRACE_POINT_HPP
 
 #include "SearchPoint.hpp"
-#include "Aircraft.hpp"
 #include "Compiler.h"
 #include "FastMath.h"
 
 #include <vector>
+
+struct AircraftState;
 
 /**
  * Class for points used in traces (snail trail, OLC scans)
