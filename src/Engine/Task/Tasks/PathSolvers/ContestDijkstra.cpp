@@ -137,10 +137,6 @@ ContestDijkstra::solve(bool exhaustive)
   }
 
   assert(num_stages <= MAX_STAGES);
-  if (n_points < num_stages) {
-    update_trace();
-    return true;
-  }
 
   if (dijkstra.empty()) {
 
@@ -160,6 +156,9 @@ ContestDijkstra::solve(bool exhaustive)
     if (dijkstra.empty()) {
       return true;
     }
+  } else if (n_points < num_stages) {
+    update_trace();
+    return true;
   }
 
   count_olc_solve++;
