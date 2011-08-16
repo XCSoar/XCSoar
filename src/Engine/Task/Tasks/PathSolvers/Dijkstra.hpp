@@ -39,9 +39,6 @@ extern long count_dijkstra_links;
 
 #define DIJKSTRA_QUEUE_SIZE 20000
 
-//uncomment this line to reserve space in queue
-#define USE_RESERVABLE
-
 /**
  * Dijkstra search algorithm.
  * Modifications by John Wharington to track optimal solution
@@ -88,11 +85,7 @@ template <class Node> class Dijkstra {
   /**
    * A sorted list of all possible node paths, lowest distance first.
    */
-#ifdef USE_RESERVABLE
   reservable_priority_queue<Value, std::vector<Value>, Rank> q;
-#else
-  std::priority_queue<Value, std::vector<Value>, Rank> q;
-#endif
 
   node_value_iterator cur;
   const bool m_min;
@@ -219,9 +212,7 @@ public:
    * Reserve queue size (if available)
    */
   void reserve(unsigned size) {
-#ifdef USE_RESERVABLE
     q.reserve(size);
-#endif
   }
 
   /**
