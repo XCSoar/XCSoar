@@ -146,7 +146,7 @@ LoadClicked(gcc_unused WndButton &button)
 }
 
 static void
-CancelClicked(gcc_unused WndButton &button)
+CloseClicked(gcc_unused WndButton &button)
 {
   dialog->SetModalResult(mrCancel);
 }
@@ -259,7 +259,7 @@ ListItemSelected(unsigned i)
 
 static CallBackTableEntry CallBackTable[] = {
    DeclareCallBackEntry(LoadClicked),
-   DeclareCallBackEntry(CancelClicked),
+   DeclareCallBackEntry(CloseClicked),
    DeclareCallBackEntry(NewClicked),
    DeclareCallBackEntry(EditClicked),
    DeclareCallBackEntry(DeleteClicked),

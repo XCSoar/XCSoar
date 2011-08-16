@@ -8,6 +8,6 @@
     <Button Name="EditButton" Caption="Edit" X="55" Y="0" Height="30" Width="55" OnClick="EditClicked" />
     <Button Name="DeleteButton" Caption="Delete" X="110" Y="0" Height="30" Width="55" OnClick="DeleteClicked" />
     <Button Name="LoadButton" Caption="Load" X="-110" Y="0" Height="30" Width="55" OnClick="LoadClicked" />
-    <Button Name="CancelButton" Caption="Cancel" X="-55" Y="0" Height="30" Width="55" OnClick="CancelClicked" />
+    <Button Name="CloseButton" Caption="Close" X="-55" Y="0" Height="30" Width="55" OnClick="CloseClicked" />
   </Panel>
 </Form>
