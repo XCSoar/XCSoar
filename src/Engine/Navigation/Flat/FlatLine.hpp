@@ -29,8 +29,12 @@
  * Defines an infinite line in real-valued cartesian coordinates,
  * with intersection methods.
  */
-struct FlatLine 
+class FlatLine 
 {
+  FlatPoint p1;
+  FlatPoint p2;
+
+public:
   /**
    * Constructor given known start/end points
    *
@@ -145,9 +149,6 @@ struct FlatLine
   fixed dot(const FlatLine& that) const;
 
 private:
-  FlatPoint p1;
-  FlatPoint p2;
-
   gcc_pure
   fixed dx() const;
 

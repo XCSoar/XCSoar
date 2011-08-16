@@ -31,6 +31,11 @@
  * Integer projected (flat-earth) version of Geodetic coordinates
  */
 struct FlatGeoPoint {
+  /** Projected x (Longitude) value [undefined units] */
+  int Longitude;
+  /** Projected y (Latitude) value [undefined units] */
+  int Latitude;
+
   /**
    * Constructor (default) at origin
    *
@@ -48,11 +53,6 @@ struct FlatGeoPoint {
    */
   FlatGeoPoint(const int x, const int y):
     Longitude(x),Latitude(y) {};
-
-  /** Projected x (Longitude) value [undefined units] */
-  int Longitude;
-  /** Projected y (Latitude) value [undefined units] */
-  int Latitude;
 
   /**
    * Find distance from one point to another

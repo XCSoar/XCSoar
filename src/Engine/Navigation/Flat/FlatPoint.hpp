@@ -31,6 +31,11 @@
  */
 struct FlatPoint 
 {
+  /** X location */
+  fixed x;
+  /** Y location */
+  fixed y;
+
   /**
    * Constructor given known location
    *
@@ -47,11 +52,6 @@ struct FlatPoint
    * @return Initialised object
    */
   FlatPoint(): x(fixed_zero), y(fixed_zero) {}
-
-  /** X location */
-  fixed x;
-  /** Y location */
-  fixed y;
 
   /**
    * Calculate cross product of two points

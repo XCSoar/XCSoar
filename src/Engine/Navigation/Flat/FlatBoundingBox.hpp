@@ -34,6 +34,9 @@
  * For use in kd-tree storage of 2-d objects.
  */
 class FlatBoundingBox {
+  FlatGeoPoint bb_ll;
+  FlatGeoPoint bb_ur;
+
 public:
   friend class TaskProjection;
 
@@ -204,13 +207,6 @@ public:
     bb_ll.Latitude--;
     bb_ur.Latitude++;
   }
-
-private:
-  FlatGeoPoint bb_ll;
-  FlatGeoPoint bb_ur;
-
-  /** @link dependency */
-  /*#  BBDist lnkBBDist; */
 };
 
 #endif

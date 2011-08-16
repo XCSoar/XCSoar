@@ -32,6 +32,11 @@
  */
 class FlatRay {
 public:
+  const FlatGeoPoint point; /**< Origin of ray */
+  const FlatGeoPoint vector; /**< Vector representing ray direction and length */
+  const fixed fx; /**< speedups for box intersection test */
+  const fixed fy; /**< speedups for box intersection test */
+
   /**
    * Constructor given start/end locations
    *
@@ -43,11 +48,6 @@ public:
     point(from),vector(to-from),
     fx(vector.Longitude!=0? 1.0/vector.Longitude:0),
     fy(vector.Latitude!=0? 1.0/vector.Latitude:0) {};
-
-  const FlatGeoPoint point; /**< Origin of ray */
-  const FlatGeoPoint vector; /**< Vector representing ray direction and length */
-  const fixed fx; /**< speedups for box intersection test */
-  const fixed fy; /**< speedups for box intersection test */
 
   /**
    * Test whether two rays intersect
