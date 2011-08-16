@@ -66,7 +66,7 @@ public:
     time = (unsigned)(0 - 1);
   }
 
-  bool Defined() const {
+  bool IsDefined() const {
     return time != (unsigned)(0 - 1);
   }
 

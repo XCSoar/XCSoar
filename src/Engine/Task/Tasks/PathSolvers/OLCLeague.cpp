@@ -141,7 +141,7 @@ OLCLeague::calc_score() const
 fixed 
 OLCLeague::calc_time() const
 {
-  if (!solution[4].Defined())
+  if (!solution[4].IsDefined())
     return fixed_zero;
   else 
     return fixed(solution[4].time - solution[0].time);
