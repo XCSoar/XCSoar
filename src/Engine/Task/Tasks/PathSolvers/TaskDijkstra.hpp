@@ -67,6 +67,9 @@ public:
                const bool do_reserve=false);
 
 protected:
+  gcc_pure
+  const SearchPoint &GetPointFast(const ScanTaskPoint &sp) const;
+
   const SearchPoint &get_point(const ScanTaskPoint &sp) const;
   bool run();
   virtual void save() = 0;
@@ -77,6 +80,33 @@ protected:
   bool refresh_task();
 
   void add_start_edges(const SearchPoint &loc);
+
+  /** 
+   * Distance function for free point
+   * 
+   * @param curNode Destination node
+   * @param currentLocation Origin location
+   * 
+   * @return Distance (flat) from origin to destination
+   */
+  gcc_pure
+  unsigned distance(const ScanTaskPoint &curNode,
+                    const SearchPoint &currentLocation) const {
+    return GetPointFast(curNode).flat_distance(currentLocation);
+  }
+
+  /** 
+   * Distance function for edges
+   * 
+   * @param s1 Origin node
+   * @param s2 Destination node
+   * 
+   * @return Distance (flat) from origin to destination
+   */
+  gcc_pure
+  unsigned distance(const ScanTaskPoint &s1, const ScanTaskPoint &s2) const {
+    return GetPointFast(s1).flat_distance(GetPointFast(s2));
+  }
 
 private:
   void calculate_sizes();

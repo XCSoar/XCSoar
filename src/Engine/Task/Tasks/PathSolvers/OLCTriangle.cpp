@@ -97,8 +97,8 @@ OLCTriangle::path_closed() const
        ++start.point_index) {
 
     const fixed d_this =
-      get_point(start).get_location().distance(
-        get_point(end).get_location());
+      GetPointFast(start).get_location().distance(
+        GetPointFast(end).get_location());
 
     if (!positive(d_min) || (d_this < d_min)) {
       d_min = d_this;
@@ -247,7 +247,7 @@ OLCTriangle::add_edges(const ScanTaskPoint& origin)
     // give first leg points to penultimate node
     TriangleSecondLeg sl(is_fai, solution[0], solution[1]);
     for (; destination.point_index < n_points-1; ++destination.point_index) {
-      TriangleSecondLeg::Result result = sl.Calculate(get_point(destination),
+      TriangleSecondLeg::Result result = sl.Calculate(GetPointFast(destination),
                                                       best_d);
       const unsigned d = result.leg_distance;
       if (d) {
@@ -296,7 +296,7 @@ OLCTriangle::calc_time() const
 
   const ScanTaskPoint start(0, 0);
   const ScanTaskPoint end(0, n_points-1);
-  return fixed(get_point(end).time - get_point(start).time);
+  return fixed(GetPointFast(end).time - GetPointFast(start).time);
 }
 
 

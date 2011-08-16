@@ -27,6 +27,8 @@ Copyright_License {
 #include "AbstractContest.hpp"
 #include "NavDijkstra.hpp"
 
+#include <assert.h>
+
 /**
  * Abstract class for contest searches using dijkstra algorithm
  *
@@ -96,6 +98,12 @@ public:
   virtual bool solve(bool exhaustive);
 
 protected:
+  gcc_pure
+  const TracePoint &GetPointFast(const ScanTaskPoint &sp) const {
+    assert(sp.point_index < n_points);
+    return trace[sp.point_index];
+  }
+
   /** Update working trace from master --- never to be done during a solution! */
   virtual void update_trace();
 
@@ -132,6 +140,33 @@ protected:
   virtual void start_search();
 
   virtual bool save_solution();
+
+  /** 
+   * Distance function for free point
+   * 
+   * @param curNode Destination node
+   * @param currentLocation Origin location
+   * 
+   * @return Distance (flat) from origin to destination
+   */
+  gcc_pure
+  unsigned distance(const ScanTaskPoint &curNode,
+                    const TracePoint &currentLocation) const {
+    return GetPointFast(curNode).flat_distance(currentLocation);
+  }
+
+  /** 
+   * Distance function for edges
+   * 
+   * @param s1 Origin node
+   * @param s2 Destination node
+   * 
+   * @return Distance (flat) from origin to destination
+   */
+  gcc_pure
+  unsigned distance(const ScanTaskPoint &s1, const ScanTaskPoint &s2) const {
+    return GetPointFast(s1).flat_distance(GetPointFast(s2));
+  }
 
 private:
   virtual void add_start_edges();

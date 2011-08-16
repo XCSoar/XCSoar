@@ -55,6 +55,12 @@ TaskDijkstra::get_size(const unsigned stage) const
 }
 
 const SearchPoint &
+TaskDijkstra::GetPointFast(const ScanTaskPoint &sp) const
+{
+  return task.get_tp_search_points(sp.stage_number)[sp.point_index];
+}
+
+const SearchPoint &
 TaskDijkstra::get_point(const ScanTaskPoint &sp) const
 {
   return task.get_tp_search_points(sp.stage_number)[sp.point_index];

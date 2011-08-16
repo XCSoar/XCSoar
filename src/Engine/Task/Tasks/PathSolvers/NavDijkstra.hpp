@@ -197,33 +197,6 @@ protected:
   }
 
   /** 
-   * Distance function for free point
-   * 
-   * @param curNode Destination node
-   * @param currentLocation Origin location
-   * 
-   * @return Distance (flat) from origin to destination
-   */
-  gcc_pure
-  unsigned distance(const ScanTaskPoint &curNode,
-                    const T &currentLocation) const {
-    return get_point(curNode).flat_distance(currentLocation);
-  }
-
-  /** 
-   * Distance function for edges
-   * 
-   * @param s1 Origin node
-   * @param s2 Destination node
-   * 
-   * @return Distance (flat) from origin to destination
-   */
-  gcc_pure
-  unsigned distance(const ScanTaskPoint &s1, const ScanTaskPoint &s2) const {
-    return get_point(s1).flat_distance(get_point(s2));
-  }
-
-  /** 
    * Determine optimal solution by backtracing the Dijkstra tree
    * 
    * @param destination Terminal point to query

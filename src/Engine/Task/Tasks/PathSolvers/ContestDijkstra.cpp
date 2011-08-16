@@ -242,7 +242,7 @@ ContestDijkstra::add_start_edges()
 
   for (; destination.point_index != n_points; ++destination.point_index) {
     // only add points that are valid for the finish
-    solution[0] = get_point(destination);
+    solution[0] = GetPointFast(destination);
     if (admit_candidate(end)) {
       dijkstra.link(destination, destination, 0);
     }
@@ -274,8 +274,7 @@ ContestDijkstra::add_edges(const ScanTaskPoint& origin)
 const TracePoint &
 ContestDijkstra::get_point(const ScanTaskPoint &sp) const
 {
-  assert(sp.point_index < n_points);
-  return trace[sp.point_index];
+  return GetPointFast(sp);
 }
 
 unsigned
@@ -292,7 +291,7 @@ ContestDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
   if (!is_final(candidate))
     return true;
   else
-    return finish_altitude_valid(solution[0], get_point(candidate));
+    return finish_altitude_valid(solution[0], GetPointFast(candidate));
 }
 
 bool
