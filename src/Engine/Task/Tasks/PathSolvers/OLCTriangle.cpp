@@ -111,58 +111,73 @@ OLCTriangle::path_closed() const
   return false;
 }
 
+class TriangleSecondLeg {
+  const bool is_fai;
+  const TracePoint a, b;
+  const unsigned df_1;
 
-unsigned 
-OLCTriangle::second_leg_distance(const ScanTaskPoint &destination,
-  unsigned &best) const
+public:
+  TriangleSecondLeg(bool _fai, const TracePoint &_a, const TracePoint &_b)
+    :is_fai(_fai), a(_a), b(_b), df_1(a.flat_distance(b)) {}
+
+  struct Result {
+    unsigned leg_distance, total_distance;
+
+    Result(unsigned _leg, unsigned _total)
+      :leg_distance(_leg), total_distance(_total) {}
+  };
+
+  gcc_pure
+  Result Calculate(const TracePoint &c, unsigned best) const;
+};
+
+TriangleSecondLeg::Result
+TriangleSecondLeg::Calculate(const TracePoint &c, unsigned best) const
 {
   // this is a heuristic to remove invalid triangles
   // we do as much of this in flat projection for speed
 
-  const unsigned df_1 = solution[0].flat_distance(solution[1]);
-  const unsigned df_2 = solution[1].flat_distance(solution[2]);
-  const unsigned df_3 = solution[2].flat_distance(solution[0]);
+  const unsigned df_2 = b.flat_distance(c);
+  const unsigned df_3 = c.flat_distance(a);
   const unsigned df_total = df_1+df_2+df_3;
 
   // require some distance!
   if (df_total<20) {
-    return 0;
+    return Result(0, 0);
   }
 
   // no point scanning if worst than best
   if (df_total<= best) {
-    return 0;
+    return Result(0, 0);
   }
 
   const unsigned shortest = min(df_1, min(df_2, df_3));
 
   // require all legs to have distance
   if (!shortest) {
-    return 0;
+    return Result(0, 0);
   }
 
   if (is_fai && (shortest*4<df_total)) { // fails min < 25% worst-case rule!
-    return 0;
+    return Result(0, 0);
   }
 
   const unsigned d = df_3+df_2;
 
   // without FAI rules, allow any triangle
   if (!is_fai) {
-    best = df_total;
-    return d;
+    return Result(d, df_total);
   }
 
   if (shortest*25>=df_total*7) { 
     // passes min > 28% rule,
     // this automatically means we pass max > 45% worst-case
-    best = df_total;
-    return d;
+    return Result(d, df_total);
   }
 
   const unsigned longest = max(df_1, max(df_2, df_3));
   if (longest*20>df_total*9) { // fails max > 45% worst-case rule!
-    return 0;
+    return Result(0, 0);
   }
 
   // passed basic tests, now detailed ones
@@ -170,11 +185,11 @@ OLCTriangle::second_leg_distance(const ScanTaskPoint &destination,
   // find accurate min leg distance
   fixed leg(0);
   if (df_1 == shortest) {
-    leg = leg_distance(0);
+    leg = a.get_location().distance(b.get_location());
   } else if (df_2 == shortest) {
-    leg = leg_distance(1);
+    leg = b.get_location().distance(c.get_location());
   } else if (df_3 == shortest) {
-    leg = leg_distance(2);
+    leg = c.get_location().distance(a.get_location());
   }
 
   // estimate total distance by scaling.
@@ -184,10 +199,10 @@ OLCTriangle::second_leg_distance(const ScanTaskPoint &destination,
   const fixed d_total((df_total*leg)/shortest);
   if (d_total>=fixed(500000)) {
     // long distance, ok that it failed 28% rule
-    best = df_total;
-    return d;
+    return Result(d, df_total);
   }
-  return 0;
+
+  return Result(0, 0);
 }
 
 
@@ -226,14 +241,18 @@ OLCTriangle::add_edges(const ScanTaskPoint& origin)
 
     }
     break;
-  case 2:
+  case 2: {
     find_solution(origin);
 
     // give first leg points to penultimate node
+    TriangleSecondLeg sl(is_fai, solution[0], solution[1]);
     for (; destination.point_index < n_points-1; ++destination.point_index) {
-      solution[2] = get_point(destination);
-      const unsigned d = second_leg_distance(destination, best_d);
+      TriangleSecondLeg::Result result = sl.Calculate(get_point(destination),
+                                                      best_d);
+      const unsigned d = result.leg_distance;
       if (d) {
+        best_d = result.total_distance;
+
         dijkstra.link(destination, origin,
                       get_weighting(origin.stage_number) * d);
 
@@ -245,6 +264,7 @@ OLCTriangle::add_edges(const ScanTaskPoint& origin)
         first_tp = origin.point_index;
       }
     }
+  }
     break;
   case 3:
     // dummy just to close the triangle

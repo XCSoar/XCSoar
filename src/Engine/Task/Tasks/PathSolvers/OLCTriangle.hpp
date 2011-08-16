@@ -56,9 +56,6 @@ protected:
 
   bool path_closed() const;
 
-  unsigned second_leg_distance(const ScanTaskPoint &dest,
-    unsigned &best) const;
-
   void add_edges(const ScanTaskPoint &curNode);
 
   void start_search();
