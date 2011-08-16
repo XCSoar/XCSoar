@@ -126,6 +126,16 @@ public:
   }
 
   /**
+   * Calculate the "flat" square distance.  This is cheaper than
+   * flat_distance(), because it does not need to calculate the square
+   * root.
+   */
+  gcc_pure
+  unsigned FlatSquareDistance(const SearchPoint& sp) const {
+    return flatLocation.distance_sq_to(sp.flatLocation);
+  }
+
+  /**
    * Rank two points according to longitude, then latitude
    *
    * @param other Point to compare to
