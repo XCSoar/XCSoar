@@ -45,21 +45,25 @@ extern long count_dijkstra_links;
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
 template <class Node> class Dijkstra {
-  typedef std::map<Node, unsigned, std::less<Node>,
-                   GlobalSliceAllocator<std::pair<Node, unsigned>, 256u> > node_value_map;
-  typedef typename node_value_map::iterator node_value_iterator;
+  struct Edge {
+    Node parent;
 
-  typedef std::map<Node, Node, std::less<Node>,
-                   GlobalSliceAllocator<std::pair<Node, Node>, 256u> > node_parent_map;
-  typedef typename node_parent_map::iterator node_parent_iterator;
-  typedef typename node_parent_map::const_iterator node_parent_const_iterator;
+    unsigned value;
+
+    Edge(Node _parent, unsigned _value):parent(_parent), value(_value) {}
+  };
+
+  typedef std::map<Node, Edge, std::less<Node>,
+                   GlobalSliceAllocator<std::pair<Node, unsigned>, 256u> > edge_map;
+  typedef typename edge_map::iterator edge_iterator;
+  typedef typename edge_map::const_iterator edge_const_iterator;
 
   struct Value {
     unsigned edge_value;
 
-    node_value_iterator iterator;
+    edge_iterator iterator;
 
-    Value(unsigned _edge_value, node_value_iterator _iterator)
+    Value(unsigned _edge_value, edge_iterator _iterator)
       :edge_value(_edge_value), iterator(_iterator) {}
   };
 
@@ -71,23 +75,17 @@ template <class Node> class Dijkstra {
   };
 
   /**
-   * Stores the value of each node.  It is updated by push(), if a
-   * value lower than the current one is found.
+   * Stores the predecessor and value of each node.  It is updated by
+   * push(), if a value lower than the current one is found.
    */
-  node_value_map node_values;
-
-  /**
-   * Stores the predecessor of each node.  It is maintained by
-   * set_predecessor().
-   */
-  node_parent_map node_parents;
+  edge_map edges;
 
   /**
    * A sorted list of all possible node paths, lowest distance first.
    */
   reservable_priority_queue<Value, std::vector<Value>, Rank> q;
 
-  node_value_iterator cur;
+  edge_iterator cur;
   const bool m_min;
 
 public:
@@ -131,10 +129,8 @@ public:
     while (!q.empty())
       q.pop();
 
-    // Clear the node_parent_map
-    node_parents.clear();
-    // Clear the node_value_map
-    node_values.clear();
+    // Clear edge_map
+    edges.clear();
   }
 
   /**
@@ -167,7 +163,7 @@ public:
 
     do
       q.pop();
-    while (!q.empty() && q.top().iterator->second < q.top().edge_value);
+    while (!q.empty() && q.top().iterator->second.value < q.top().edge_value);
 
     return cur->first;
   }
@@ -183,7 +179,7 @@ public:
 #ifdef INSTRUMENT_TASK
     count_dijkstra_links++;
 #endif
-    push(node, parent, cur->second + adjust_edge_value(edge_value)); 
+    push(node, parent, cur->second.value + adjust_edge_value(edge_value)); 
   }
 
   /**
@@ -196,8 +192,8 @@ public:
   gcc_pure
   Node get_predecessor(const Node &node) const {
     // Try to find the given node in the node_parent_map
-    node_parent_const_iterator it = node_parents.find(node);
-    if (it == node_parents.end())
+    edge_const_iterator it = edges.find(node);
+    if (it == edges.end())
       // first entry
       // If the node wasn't found
       // -> Return the given node itself
@@ -205,7 +201,7 @@ public:
     else
       // If the node was found
       // -> Return the parent node
-      return (it->second); 
+      return it->second.parent;
   }
 
   /**
@@ -233,44 +229,24 @@ private:
    * @param e Edge distance (previous to this)
    */
   void push(const Node &node, const Node &parent, const unsigned &edge_value = 0) {
-    // Try to find the given node n in the node_value_map
-    node_value_iterator it = node_values.find(node);
-    if (it == node_values.end()) {
+    // Try to find the given node n in the edge_map
+    edge_iterator it = edges.find(node);
+    if (it == edges.end()) {
       // first entry
       // If the node wasn't found
-      // -> Insert a new node into the node_value_map
-      it = node_values.insert(std::make_pair(node, edge_value)).first;
-
-      // Remember the parent node
-      set_predecessor(node, parent);
-    } else if (it->second > edge_value) {
+      // -> Insert a new node
+      it = edges.insert(std::make_pair(node, Edge(parent,
+                                                        edge_value))).first;
+    } else if (it->second.value > edge_value) {
       // If the node was found and the new value is smaller
       // -> Replace the value with the new one
-      it->second = edge_value;
-      // replace, it's bigger
-
-      // Remember the new parent node
-      set_predecessor(node, parent);
+      it->second = Edge(parent, edge_value);
     } else
       // If the node was found but the new value is higher or equal
       // -> Don't use this new leg
       return;
 
     q.push(Value(edge_value, it));
-  }
-
-  void set_predecessor(const Node &node, const Node &parent) {
-    // Try to find the given node in the node_parent_map
-    node_parent_iterator it = node_parents.find(node);
-    if (it == node_parents.end())
-      // first entry
-      // If the node wasn't found
-      // -> Insert a new node into the node_parent_map
-      node_parents.insert(std::make_pair(node, parent));
-    else
-      // If the node was found
-      // -> Replace the according parent node with the new one
-      it->second = parent; 
   }
 };
 
