@@ -91,7 +91,7 @@ ContestDijkstra::master_is_updated()
 
   const bool updated = !last_point.IsDefined() ||
     ((last_master.time > last_point.time + threshold_delta_t_trace)
-     && (last_master.approx_dist(last_point) > threshold_distance_trace));
+     && (last_master.flat_distance(last_point) > threshold_distance_trace));
 
   // need an update if there's insufficient data in the buffer, or if
   // the update was significant

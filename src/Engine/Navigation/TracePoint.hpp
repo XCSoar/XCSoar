@@ -3,7 +3,6 @@
 
 #include "SearchPoint.hpp"
 #include "Compiler.h"
-#include "FastMath.h"
 
 #include <vector>
 
@@ -84,34 +83,6 @@ public:
     return fixed(vario) / 256;
   }
 
-  /** 
-   * Calculate approximate squared (flat projected) distance between this point
-   * and another
-   * 
-   * @param tp Point to calculate distance to
-   * 
-   * @return Approximate squared distance
-   */
-  gcc_pure
-  unsigned approx_sq_dist(const TracePoint& tp) const {
-    return dsqr(get_flatLocation().Longitude - tp.get_flatLocation().Longitude) +
-      dsqr(get_flatLocation().Latitude - tp.get_flatLocation().Latitude);
-  }
-
-  /** 
-   * Calculate approximate (flat projected) distance between this point
-   * and another
-   * 
-   * @param tp Point to calculate distance to
-   * 
-   * @return Approximate distance
-   */
-  gcc_pure
-  unsigned approx_dist(const TracePoint& tp) const {
-    return (unsigned)lhypot(get_flatLocation().Longitude - tp.get_flatLocation().Longitude,
-                            get_flatLocation().Latitude - tp.get_flatLocation().Latitude);
-  }
-
   /**
    * Function object used to provide access to coordinate values by kd-tree
    */
@@ -158,12 +129,6 @@ public:
    */
   bool operator==(TracePoint const &a) const {
     return time == a.time; 
-  }
-
-private:
-  gcc_const
-  static inline unsigned dsqr(const int d) {
-    return d * d;
   }
 };
 
