@@ -35,9 +35,7 @@ struct GeoVector;
  */
 struct GeoPoint {
   /**
-   * Constructor (origin)
-   *
-   * @return Point initialised at origin
+   * Non-initialising constructor.
    */
   GeoPoint() {}
 
