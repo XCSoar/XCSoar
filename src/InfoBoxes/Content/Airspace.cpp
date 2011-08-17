@@ -33,6 +33,24 @@ Copyright_License {
 #include "Engine/Airspace/AirspacePolygon.hpp"
 #include "Units/UnitsFormatter.hpp"
 
+struct NearestAirspace {
+  const AbstractAirspace *airspace;
+
+  /**
+   * The horizontal or vertical distance [m], depending on which
+   * function filled this object.
+   */
+  fixed distance;
+
+  NearestAirspace():airspace(NULL) {}
+  NearestAirspace(const AbstractAirspace &_airspace, fixed _distance)
+    :airspace(&_airspace), distance(_distance) {}
+
+  bool IsDefined() const {
+    return airspace != NULL;
+  }
+};
+
 class HorizontalAirspaceCondition : public AirspacePredicate {
   const AirspaceWarningConfig &config;
   GeoPoint location;
@@ -64,30 +82,40 @@ public:
   }
 };
 
-void
-InfoBoxContentNearestAirspaceHorizontal::Update(InfoBoxWindow &infobox)
+gcc_pure
+static NearestAirspace
+FindNearestHorizontalAirspace()
 {
   const MoreData &basic = CommonInterface::Basic();
-  if (!basic.location_available) {
+  if (!basic.location_available)
     /* can't check for airspaces without a GPS fix */
-    infobox.SetInvalid();
-    return;
-  }
+    return NearestAirspace();
 
   /* find the nearest airspace */
   HorizontalAirspaceCondition condition(CommonInterface::SettingsComputer().airspace.warnings,
                                         basic, CommonInterface::Calculated());
-  const Airspace *found = airspace_database.find_nearest(basic.location, condition);
-  if (found == NULL) {
+  const Airspace *airspace = airspace_database.find_nearest(basic.location, condition);
+  if (airspace == NULL)
+    return NearestAirspace();
+
+  const AbstractAirspace &as = *airspace->get_airspace();
+
+  /* calculate distance to the nearest point */
+  const GeoPoint closest = as.closest_point(basic.location);
+  return NearestAirspace(as, basic.location.distance(closest));
+}
+
+void
+InfoBoxContentNearestAirspaceHorizontal::Update(InfoBoxWindow &infobox)
+{
+  NearestAirspace nearest = FindNearestHorizontalAirspace();
+  if (!nearest.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
 
-  /* calculate distance to the nearest point */
-  const AbstractAirspace &as = *found->get_airspace();
-  const GeoPoint closest = as.closest_point(basic.location);
-  SetValueFromDistance(infobox, basic.location.distance(closest));
-  infobox.SetComment(as.GetName());
+  SetValueFromDistance(infobox, nearest.distance);
+  infobox.SetComment(nearest.airspace->GetName());
 }
 
 class VerticalAirspaceVisitor : public AirspaceVisitor {
@@ -149,32 +177,40 @@ public:
   }
 };
 
-void
-InfoBoxContentNearestAirspaceVertical::Update(InfoBoxWindow &infobox)
+gcc_pure
+static NearestAirspace
+FindNearestVerticalAirspace()
 {
   const MoreData &basic = CommonInterface::Basic();
-
   if (!basic.location_available ||
-      (!basic.baro_altitude_available && !basic.gps_altitude_available)) {
+      (!basic.baro_altitude_available && !basic.gps_altitude_available))
     /* can't check for airspaces without a GPS fix and altitude
        value */
-    infobox.SetInvalid();
-    return;
-  }
+    return NearestAirspace();
 
   /* find the nearest airspace */
   VerticalAirspaceVisitor visitor(CommonInterface::SettingsComputer().airspace.warnings,
                                   basic, CommonInterface::Calculated());
   airspace_database.visit_inside(basic.location, visitor);
-  if (visitor.GetNearest() == NULL) {
+  if (visitor.GetNearest() == NULL)
+    return NearestAirspace();
+
+  return NearestAirspace(*visitor.GetNearest(), visitor.GetNearestDelta());
+}
+
+void
+InfoBoxContentNearestAirspaceVertical::Update(InfoBoxWindow &infobox)
+{
+  NearestAirspace nearest = FindNearestVerticalAirspace();
+  if (!nearest.IsDefined()) {
     infobox.SetInvalid();
     return;
   }
 
   TCHAR buffer[32];
-  Units::FormatUserAltitude(visitor.GetNearestDelta(), buffer,
+  Units::FormatUserAltitude(nearest.distance, buffer,
                             sizeof(buffer) / sizeof(buffer[0]), false);
   infobox.SetValue(buffer);
   infobox.SetValueUnit(Units::Current.AltitudeUnit);
-  infobox.SetComment(visitor.GetNearest()->GetName());
+  infobox.SetComment(nearest.airspace->GetName());
 }
