@@ -40,7 +40,7 @@ protected:
   const Trace &trace_master;
 
 private:
-  const unsigned &contest_handicap;
+  unsigned contest_handicap;
   const unsigned m_finish_alt_diff;
   ContestResult best_result;
 
@@ -53,8 +53,11 @@ public:
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
   AbstractContest(const Trace &_trace,
-                  const unsigned &_handicap,
                   const unsigned finish_alt_diff = 1000);
+
+  void SetHandicap(unsigned _handicap) {
+    contest_handicap = _handicap;
+  }
 
   /**
    * Calculate the scored values of the Contest path

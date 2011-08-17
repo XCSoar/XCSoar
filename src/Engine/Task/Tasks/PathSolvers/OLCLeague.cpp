@@ -23,9 +23,8 @@
 #include "Trace/Trace.hpp"
 #include <assert.h>
 
-OLCLeague::OLCLeague(const Trace &_trace,
-                     const unsigned &_handicap):
-  AbstractContest(_trace, _handicap, 0)
+OLCLeague::OLCLeague(const Trace &_trace):
+  AbstractContest(_trace, 0)
 {
   reset();
 }

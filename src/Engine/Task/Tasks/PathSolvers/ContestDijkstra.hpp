@@ -70,7 +70,6 @@ public:
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
   ContestDijkstra(const Trace &_trace, 
-                  const unsigned &_handicap,
                   const unsigned n_legs,
                   const unsigned finish_alt_diff = 1000);
 

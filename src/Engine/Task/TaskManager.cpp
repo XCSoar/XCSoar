@@ -38,7 +38,6 @@ TaskManager::TaskManager(TaskEvents &te,
   task_goto(te, task_behaviour, m_glide_polar, wps),
   task_abort(te, task_behaviour, m_glide_polar, wps),
   contest_manager(task_behaviour.contest, 
-                  task_behaviour.contest_handicap,
                   trace_full, trace_sprint),
   mode(MODE_NULL),
   active_task(NULL) {
@@ -53,6 +52,8 @@ TaskManager::set_task_behaviour(const TaskBehaviour& behaviour)
   task_ordered.SetTaskBehaviour(behaviour);
   task_goto.SetTaskBehaviour(behaviour);
   task_abort.SetTaskBehaviour(behaviour);
+
+  contest_manager.SetHandicap(behaviour.contest_handicap);
 }
 
 TaskManager::TaskMode_t 

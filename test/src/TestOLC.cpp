@@ -41,22 +41,12 @@ static Trace sprint_trace(0, 9000, 50);
 static Trace full_trace(60);
 static Trace sprint_trace(0, 9000, 300);
 #endif
-unsigned handicap = 100;
 
-ContestManager olc_classic(OLC_Classic, handicap, 
-                           full_trace, sprint_trace);
-
-ContestManager olc_fai(OLC_FAI, handicap,
-                       full_trace, sprint_trace);
-
-ContestManager olc_sprint(OLC_Sprint, handicap, 
-                          full_trace, sprint_trace);
-
-ContestManager olc_league(OLC_League, handicap, 
-                          full_trace, sprint_trace);
-
-ContestManager olc_plus(OLC_Plus, handicap, 
-                        full_trace, sprint_trace);
+ContestManager olc_classic(OLC_Classic, full_trace, sprint_trace);
+ContestManager olc_fai(OLC_FAI, full_trace, sprint_trace);
+ContestManager olc_sprint(OLC_Sprint, full_trace, sprint_trace);
+ContestManager olc_league(OLC_League, full_trace, sprint_trace);
+ContestManager olc_plus(OLC_Plus, full_trace, sprint_trace);
 
 static void
 on_advance(const GeoPoint &loc, const fixed speed,
@@ -128,8 +118,8 @@ TestOLC(const char *filename)
   olc_sprint.reset();
   olc_league.reset();
   olc_plus.reset();
-  sprint_trace.clear();
   full_trace.clear();
+  sprint_trace.clear();
 
   return 0;
 }

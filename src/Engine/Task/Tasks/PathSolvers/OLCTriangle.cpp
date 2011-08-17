@@ -42,9 +42,8 @@
 */
 
 OLCTriangle::OLCTriangle(const Trace &_trace,
-                         const unsigned &_handicap,
                          const bool _is_fai):
-  ContestDijkstra(_trace, _handicap, 3, 1000),
+  ContestDijkstra(_trace, 3, 1000),
   is_closed(false),
   is_complete(false),
   first_tp(0),

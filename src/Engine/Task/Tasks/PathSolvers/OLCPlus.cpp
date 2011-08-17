@@ -25,8 +25,8 @@
 #include "Trace/Trace.hpp"
 #include <assert.h>
 
-OLCPlus::OLCPlus(const Trace &_trace, const unsigned &_handicap):
-  AbstractContest(_trace, _handicap, 0)
+OLCPlus::OLCPlus(const Trace &_trace):
+  AbstractContest(_trace, 0)
 {
   reset();
 }

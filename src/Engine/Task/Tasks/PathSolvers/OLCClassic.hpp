@@ -32,8 +32,7 @@ class OLCClassic:
   public ContestDijkstra
 {
 public:
-  OLCClassic(const Trace &_trace,
-             const unsigned &_handicap);
+  OLCClassic(const Trace &_trace);
 
 protected:
   void set_weightings();

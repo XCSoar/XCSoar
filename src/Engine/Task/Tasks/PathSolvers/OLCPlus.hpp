@@ -38,7 +38,7 @@ class OLCPlus:
   ContestResult result_fai;
 
 public:
-  OLCPlus(const Trace &_trace, const unsigned &_handicap);
+  OLCPlus(const Trace &_trace);
 
   virtual void copy_solution(ContestTraceVector &vec) const;
 

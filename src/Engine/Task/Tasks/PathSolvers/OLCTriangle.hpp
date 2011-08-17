@@ -40,7 +40,6 @@ protected:
 
 public:
   OLCTriangle(const Trace &_trace,
-              const unsigned &_handicap,
               const bool _is_fai=true);
 
   void reset();

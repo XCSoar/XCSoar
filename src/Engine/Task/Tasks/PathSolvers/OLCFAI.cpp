@@ -21,9 +21,8 @@
  */
 #include "OLCFAI.hpp"
 
-OLCFAI::OLCFAI(const Trace &_trace,
-  const unsigned &_handicap):
-  OLCTriangle(_trace, _handicap, true)
+OLCFAI::OLCFAI(const Trace &_trace):
+  OLCTriangle(_trace, true)
 {}
 
 fixed

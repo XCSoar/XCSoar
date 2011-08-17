@@ -23,9 +23,8 @@
 #include "XContestFree.hpp"
 
 XContestFree::XContestFree(const Trace &_trace,
-                           const unsigned &_handicap,
                            const bool _is_dhv):
-  ContestDijkstra(_trace, _handicap, 4, 1000),
+  ContestDijkstra(_trace, 4, 1000),
   is_dhv(_is_dhv) {}
 
 void 

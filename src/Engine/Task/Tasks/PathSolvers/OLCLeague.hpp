@@ -39,8 +39,7 @@ class OLCLeague:
   bool solution_found;
 
 public:
-  OLCLeague(const Trace &_trace,
-    const unsigned& _handicap);
+  OLCLeague(const Trace &_trace);
 
   bool score(ContestResult &result);
 

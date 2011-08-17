@@ -38,7 +38,6 @@ class XContestTriangle:
 public:
   friend class XContest;
   XContestTriangle(const Trace &_trace,
-                   const unsigned &_handicap,
                    const bool _is_dhv=false);
 
   virtual bool solve(bool exhaustive);

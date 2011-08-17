@@ -25,26 +25,39 @@
 #include "Trace/Trace.hpp"
 
 ContestManager::ContestManager(const Contests _contest,
-                               const unsigned &_handicap,
                                const Trace& trace_full,
                                const Trace& trace_sprint):
   contest(_contest),
   trace_full(trace_full),
   trace_sprint(trace_sprint),
-  olc_sprint(trace_sprint, _handicap),
-  olc_fai(trace_full, _handicap),
-  olc_classic(trace_full, _handicap),
-  olc_league(trace_sprint, _handicap),
-  olc_plus(trace_full, _handicap),
-  olc_xcontest_free(trace_full, _handicap, false),
-  olc_xcontest_triangle(trace_full, _handicap, false),
-  olc_dhvxc_free(trace_full, _handicap, true),
-  olc_dhvxc_triangle(trace_full, _handicap, true),
-  olc_sisat(trace_full, _handicap)
+  olc_sprint(trace_sprint),
+  olc_fai(trace_full),
+  olc_classic(trace_full),
+  olc_league(trace_sprint),
+  olc_plus(trace_full),
+  olc_xcontest_free(trace_full, false),
+  olc_xcontest_triangle(trace_full, false),
+  olc_dhvxc_free(trace_full, true),
+  olc_dhvxc_triangle(trace_full, true),
+  olc_sisat(trace_full)
 {
   reset();
 }
 
+void
+ContestManager::SetHandicap(unsigned handicap)
+{
+  olc_sprint.SetHandicap(handicap);
+  olc_fai.SetHandicap(handicap);
+  olc_classic.SetHandicap(handicap);
+  olc_league.SetHandicap(handicap);
+  olc_plus.SetHandicap(handicap);
+  olc_xcontest_free.SetHandicap(handicap);
+  olc_xcontest_triangle.SetHandicap(handicap);
+  olc_dhvxc_free.SetHandicap(handicap);
+  olc_dhvxc_triangle.SetHandicap(handicap);
+  olc_sisat.SetHandicap(handicap);
+}
 
 bool
 ContestManager::run_contest(AbstractContest &the_contest, 

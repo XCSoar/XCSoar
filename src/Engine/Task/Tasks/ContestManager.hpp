@@ -72,13 +72,14 @@ public:
    * containing 2.5 hour flight history for scanning
    */
   ContestManager(const Contests _contest,
-                 const unsigned &_handicap,
                  const Trace &trace_full,
                  const Trace &trace_sprint);
 
   void set_contest(Contests _contest) {
     contest = _contest;
   }
+
+  void SetHandicap(unsigned handicap);
 
   /**
    * Update internal states (non-essential) for housework,

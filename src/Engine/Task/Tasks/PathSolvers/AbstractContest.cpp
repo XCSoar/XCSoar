@@ -27,10 +27,9 @@ Copyright_License {
 
 
 AbstractContest::AbstractContest(const Trace &_trace,
-                                 const unsigned &_handicap,
                                  const unsigned finish_alt_diff):
   trace_master(_trace),
-  contest_handicap(_handicap),
+  contest_handicap(100),
   m_finish_alt_diff(finish_alt_diff)
 {
   reset();

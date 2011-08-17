@@ -36,8 +36,7 @@ public:
   /**
    * Constructor
    */
-  OLCSISAT(const Trace &_trace,
-           const unsigned &_handicap);
+  OLCSISAT(const Trace &_trace);
 
 protected:
   virtual fixed calc_score() const;

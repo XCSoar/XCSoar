@@ -32,8 +32,8 @@ class OLCFAI:
   public OLCTriangle
 {
 public:
-  OLCFAI(const Trace &_trace,
-         const unsigned &_handicap);
+  OLCFAI(const Trace &_trace);
+
 protected:
   virtual fixed calc_score() const;
 

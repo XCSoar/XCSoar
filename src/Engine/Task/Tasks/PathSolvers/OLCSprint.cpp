@@ -51,9 +51,8 @@
     potentially implement as circular buffer (emulate as dequeue)
 */
 
-OLCSprint::OLCSprint(const Trace &_trace,
-                     const unsigned &_handicap):
-  ContestDijkstra(_trace, _handicap, 4, 0) {}
+OLCSprint::OLCSprint(const Trace &_trace):
+  ContestDijkstra(_trace, 4, 0) {}
 
 void
 OLCSprint::reset()

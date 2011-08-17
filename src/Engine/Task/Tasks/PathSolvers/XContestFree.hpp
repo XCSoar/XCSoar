@@ -36,7 +36,6 @@ class XContestFree:
 public:
   friend class XContest;
   XContestFree(const Trace &_trace,
-               const unsigned &_handicap,
                const bool _is_dhv=false);
 
 protected:

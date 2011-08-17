@@ -23,9 +23,8 @@
 #include "XContestTriangle.hpp"
 
 XContestTriangle::XContestTriangle(const Trace &_trace,
-                                   const unsigned &_handicap,
                                    const bool _is_dhv):
-  OLCTriangle(_trace, _handicap),
+  OLCTriangle(_trace),
   is_dhv(_is_dhv) {}
 
 fixed

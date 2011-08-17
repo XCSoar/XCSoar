@@ -37,10 +37,9 @@ unsigned ContestDijkstra::count_olc_size = 0;
 #define CONTEST_QUEUE_SIZE DIJKSTRA_QUEUE_SIZE
 
 ContestDijkstra::ContestDijkstra(const Trace &_trace,
-                                 const unsigned &_handicap,
                                  const unsigned n_legs,
                                  const unsigned finish_alt_diff):
-  AbstractContest(_trace, _handicap, finish_alt_diff),
+  AbstractContest(_trace, finish_alt_diff),
   NavDijkstra<TracePoint>(false, n_legs + 1, 0),
    solution_found(false)
 {
