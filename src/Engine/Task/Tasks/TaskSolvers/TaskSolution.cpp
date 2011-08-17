@@ -21,9 +21,11 @@
  */
 
 #include "TaskSolution.hpp"
-#include "GlideSolvers/GlidePolar.hpp"
 #include "GlideSolvers/MacCready.hpp"
-#include <algorithm>
+#include "GlideSolvers/GlideResult.hpp"
+#include "GlideSolvers/GlideState.hpp"
+#include "Navigation/Aircraft.hpp"
+#include "Task/Tasks/BaseTask/TaskPoint.hpp"
 
 GlideResult 
 TaskSolution::glide_solution_remaining(const TaskPoint& taskpoint,

@@ -22,12 +22,12 @@
 #ifndef TASK_SOLUTION_HPP
 #define TASK_SOLUTION_HPP
 
-#include "GlideSolvers/GlideState.hpp"
-#include "GlideSolvers/GlideResult.hpp"
+#include "Math/fixed.hpp"
 
+struct GlideResult;
+struct AircraftState;
 class GlidePolar;
-
-#include "Task/Tasks/BaseTask/TaskPoint.hpp"
+class TaskPoint;
 
 /**
  * Utility class for calculating glide solutions for individual points and whole tasks
