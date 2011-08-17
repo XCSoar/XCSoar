@@ -55,14 +55,49 @@ static bool AutoClose = true;
 static const AbstractAirspace* CursorAirspace = NULL; // Current list cursor airspace
 static const AbstractAirspace* FocusAirspace = NULL;  // Current action airspace
 
+static const AbstractAirspace *
+GetSelectedAirspace()
+{
+  return has_pointer() || FocusAirspace == NULL
+    ? CursorAirspace
+    : FocusAirspace;
+}
+
+static void
+UpdateButtons()
+{
+  const AbstractAirspace *airspace = GetSelectedAirspace();
+  if (airspace == NULL) {
+    wbAck1->set_visible(false);
+    wbAck2->set_visible(false);
+    wbAck->set_visible(false);
+    wbEnable->set_visible(false);
+    return;
+  }
+
+  ProtectedAirspaceWarningManager::ExclusiveLease lease(*airspace_warnings);
+  const AirspaceWarning &warning = lease->get_warning(*airspace);
+
+  wbAck1->set_visible(warning.get_ack_expired() &&
+                      warning.get_warning_state() != AirspaceWarning::WARNING_INSIDE);
+  wbAck2->set_visible(!warning.get_ack_day());
+  wbAck->set_visible(warning.get_ack_expired() &&
+                     warning.get_warning_state() == AirspaceWarning::WARNING_INSIDE);
+  wbEnable->set_visible(!warning.get_ack_expired());
+}
+
 static void
 AirspaceWarningCursorCallback(unsigned i)
 {
+  {
   ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
   const AirspaceWarning *warning = lease->get_warning(i);
   CursorAirspace = (warning != NULL)
     ? &warning->get_airspace()
     : NULL;
+  }
+
+  UpdateButtons();
 }
 
 static void
@@ -74,14 +109,6 @@ OnAirspaceListEnter(gcc_unused unsigned i)
     FocusAirspace = CursorAirspace;
   else if (CursorAirspace != NULL)
     dlgAirspaceDetails(*CursorAirspace);
-}
-
-static const AbstractAirspace *
-GetSelectedAirspace()
-{
-  return has_pointer() || FocusAirspace == NULL
-    ? CursorAirspace
-    : FocusAirspace;
 }
 
 static bool
@@ -119,6 +146,7 @@ Ack()
   if (airspace != NULL) {
     airspace_warnings->acknowledge_inside(*airspace, true);
     wAirspaceList->invalidate();
+    UpdateButtons();
     AutoHide();
   }
 }
@@ -137,6 +165,7 @@ Ack1()
   if (airspace != NULL) {
     airspace_warnings->acknowledge_warning(*airspace, true);
     wAirspaceList->invalidate();
+    UpdateButtons();
     AutoHide();
   }
 }
@@ -155,6 +184,7 @@ Ack2()
   if (airspace != NULL) {
     airspace_warnings->acknowledge_day(*airspace, true);
     wAirspaceList->invalidate();
+    UpdateButtons();
     AutoHide();
   }
 }
@@ -185,6 +215,7 @@ Enable()
   }
 
   wAirspaceList->invalidate();
+  UpdateButtons();
 }
 
 static void
@@ -239,12 +270,6 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
 {
   TCHAR sTmp[128];
   const int paint_rc_margin = 2;   ///< This constant defines the margin that should be respected for renderring within the paint_rc area.
-
-  bool ack1_vis;
-  bool ack2_vis;
-  bool ack_vis;
-  bool enable_vis;
-  bool update_vis = false;
 
   {
     ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
@@ -368,32 +393,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     
     if (!warning.get_ack_expired())
       canvas.set_text_color(old_text_color);
-        
-    if (CursorAirspace == &as) {
-      update_vis = true;
-      if (!warning.get_ack_expired()) {
-        ack1_vis = false;
-        ack_vis = false;
-      } else {
-        if (warning.get_warning_state() == 
-            AirspaceWarning::WARNING_INSIDE) {
-          ack_vis = true;
-          ack1_vis = false;
-        } else {
-          ack_vis = false;
-          ack1_vis = true;
-        }
-      }
-      ack2_vis = !warning.get_ack_day();
-      enable_vis = !warning.get_ack_expired();
-    }
   } // close scope
-  if (update_vis) {
-    wbAck1->set_visible(ack1_vis);
-    wbAck2->set_visible(ack2_vis);
-    wbAck->set_visible(ack_vis);
-    wbEnable->set_visible(enable_vis);
-  }
 }
 
 static void
@@ -418,7 +418,7 @@ update_list()
     CursorAirspace = NULL;
   }
   wAirspaceList->invalidate();
-
+  UpdateButtons();
   AutoHide();
 }
 
