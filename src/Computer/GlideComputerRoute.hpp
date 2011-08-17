@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_GLIDE_COMPUTER_ROUTE_HPP
 #define XCSOAR_GLIDE_COMPUTER_ROUTE_HPP
 
+#include "Task/ProtectedRoutePlanner.hpp"
 #include "Engine/Route/RoutePlanner.hpp"
 #include "GPSClock.hpp"
 
@@ -36,8 +37,8 @@ class RasterTerrain;
 class GlidePolar;
 
 class GlideComputerRoute {
-  ProtectedRoutePlanner &protected_route_planner;
-  const RoutePlannerGlue &route_planner;
+  RoutePlannerGlue route_planner;
+  ProtectedRoutePlanner protected_route_planner;
 
   GPSClock route_clock;
   GPSClock reach_clock;
@@ -45,8 +46,19 @@ class GlideComputerRoute {
   const RasterTerrain *terrain;
 
 public:
-  GlideComputerRoute(ProtectedRoutePlanner &_protected_route_planner,
-                     const RoutePlannerGlue &_route_planner);
+  GlideComputerRoute(const Airspaces &airspace_database);
+
+  /**
+   * Returns a reference to the unprotected route planner object,
+   * which must not be used outside of the calculation thread.
+   */
+  const RoutePlannerGlue &GetRoutePlanner() const {
+    return route_planner;
+  }
+
+  const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
+    return protected_route_planner;
+  }
 
   void ResetFlight();
   void ProcessRoute(const MoreData &basic, DerivedInfo &calculated,

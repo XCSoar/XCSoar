@@ -33,10 +33,9 @@ Copyright_License {
 
 #include <algorithm>
 
-GlideComputerRoute::GlideComputerRoute(ProtectedRoutePlanner &_protected_route_planner,
-                                       const RoutePlannerGlue &_route_planner)
-  :protected_route_planner(_protected_route_planner),
-   route_planner(_route_planner),
+GlideComputerRoute::GlideComputerRoute(const Airspaces &airspace_database)
+  :route_planner(airspace_database),
+   protected_route_planner(route_planner, airspace_database),
    route_clock(fixed(5)),
    reach_clock(fixed(5)),
    terrain(NULL)

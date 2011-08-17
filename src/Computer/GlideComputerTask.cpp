@@ -35,11 +35,12 @@ using std::max;
 // call any event
 
 GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
-                                     ProtectedRoutePlanner &protected_route_planner,
-                                     const RoutePlannerGlue &route_planner):
+                                     const Airspaces &airspace_database):
   m_task(task),
-  route(protected_route_planner, route_planner)
-{}
+  route(airspace_database)
+{
+  task.SetRoutePlanner(&route.GetRoutePlanner());
+}
 
 void
 GlideComputerTask::Initialise()

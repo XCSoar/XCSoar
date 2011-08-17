@@ -45,12 +45,10 @@ static PeriodClock last_team_code_update;
 GlideComputer::GlideComputer(const Waypoints &_way_points,
                              Airspaces &_airspace_database,
                              ProtectedTaskManager &task,
-                             ProtectedRoutePlanner &protected_route_planner,
-                             const RoutePlannerGlue &route_planner,
                              ProtectedAirspaceWarningManager &airspace,
                              GlideComputerTaskEvents& events):
   GlideComputerAirData(_way_points, _airspace_database, airspace),
-  GlideComputerTask(task, protected_route_planner, route_planner),
+  GlideComputerTask(task, _airspace_database),
   way_points(_way_points), protected_task_manager(task),
   TeamCodeRefId(-1)
 {

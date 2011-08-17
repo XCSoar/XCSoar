@@ -239,15 +239,10 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                                               blackboard.SettingsComputer().task,
                                               task_events);
 
-  RoutePlannerGlue route_planner(airspace_database);
-  ProtectedRoutePlanner protected_route_planner(route_planner,
-                                                airspace_database);
-
   LoadFiles(airspace_database);
 
   GlideComputer glide_computer(way_points, airspace_database,
                                protected_task_manager,
-                               protected_route_planner, route_planner,
                                airspace_warnings,
                                task_events);
   glide_computer.set_terrain(terrain);

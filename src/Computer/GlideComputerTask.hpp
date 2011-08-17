@@ -38,8 +38,11 @@ class GlideComputerTask:
 
 public:
   GlideComputerTask(ProtectedTaskManager& task,
-                    ProtectedRoutePlanner &protected_route_planner,
-                    const RoutePlannerGlue &route_planner);
+                    const Airspaces &airspace_database);
+
+  const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
+    return route.GetProtectedRoutePlanner();
+  }
 
 protected:
 
