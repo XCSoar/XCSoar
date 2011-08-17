@@ -71,10 +71,6 @@ TaskLeg::leg_vector_remaining(const GeoPoint &ref) const
                                destination.get_location_remaining());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
-    if (!origin())
-      return GeoVector(fixed_zero, 
-                       ref.bearing(destination.get_location_remaining()));
-
     // this leg partially included
     return memo_remaining.calc(ref, destination.get_location_remaining());
     break;
