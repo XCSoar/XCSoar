@@ -84,6 +84,8 @@ TopographyFile::ClearCache()
     delete shapes[i].shape;
     shapes[i].shape = NULL;
   }
+
+  first = NULL;
 }
 
 gcc_pure
