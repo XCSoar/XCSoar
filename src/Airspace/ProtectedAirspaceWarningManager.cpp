@@ -44,13 +44,6 @@ ProtectedAirspaceWarningManager::clear_warnings()
   lease->acknowledge_all();
 }
 
-size_t
-ProtectedAirspaceWarningManager::warning_size() const
-{
-  Lease lease(*this);
-  return lease->size();
-}
-
 bool
 ProtectedAirspaceWarningManager::warning_empty() const
 {

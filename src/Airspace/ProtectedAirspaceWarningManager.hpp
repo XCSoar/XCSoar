@@ -46,7 +46,6 @@ public:
   void acknowledge_inside(const AbstractAirspace& airspace,
                           const bool set=true);
 
-  size_t warning_size() const;
   bool warning_empty() const;
   int get_warning_index(const AbstractAirspace& airspace) const;
 
