@@ -560,7 +560,7 @@ std::ostream& operator<< (std::ostream& f,
 std::ostream& operator<< (std::ostream& f, 
                           const AirspaceWarning& aw)
 {
-  AirspaceWarning::AirspaceWarningState state = aw.get_warning_state();
+  AirspaceWarning::State state = aw.get_warning_state();
   f << "# warning ";
   switch(state) {
   case AirspaceWarning::WARNING_CLEAR:

@@ -49,7 +49,7 @@ void AirspaceWarning::save_state()
 }
 
 void 
-AirspaceWarning::update_solution(const AirspaceWarningState state,
+AirspaceWarning::update_solution(const State state,
                                  AirspaceInterceptSolution& solution)
 {
   if (state_accepted(state)) {

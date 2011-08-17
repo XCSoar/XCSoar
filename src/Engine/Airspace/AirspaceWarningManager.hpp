@@ -257,7 +257,7 @@ private:
   bool update_predicted(const AircraftState& state, 
                         const GeoPoint &location_predicted,
                         const AirspaceAircraftPerformance &perf,
-                        const AirspaceWarning::AirspaceWarningState& warning_state,
+                        const AirspaceWarning::State warning_state,
                         const fixed max_time);
 };
 

@@ -346,7 +346,7 @@ class AirspaceWarningPrint: public AirspaceWarningVisitor
 {
 public:
   AirspaceWarningPrint(const char* fname,
-                       const AirspaceWarning::AirspaceWarningState state):m_state(state) {
+                       const AirspaceWarning::State state):m_state(state) {
     fout = new std::ofstream(fname);
   }
   ~AirspaceWarningPrint() {
@@ -360,7 +360,7 @@ public:
   }
 private:
   std::ofstream *fout;
-  AirspaceWarning::AirspaceWarningState m_state;
+  AirspaceWarning::State m_state;
 };
 
 void print_warnings() {

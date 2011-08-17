@@ -197,7 +197,7 @@ public:
   AirspaceIntersectionWarningVisitor(const AircraftState &state,
                                      const AirspaceAircraftPerformance &perf,
                                      AirspaceWarningManager &warning_manager,
-                                     const AirspaceWarning::AirspaceWarningState warning_state,
+                                     const AirspaceWarning::State warning_state,
                                      const fixed max_time,
                                      const fixed max_alt = -fixed_one):
     m_state(state),
@@ -269,7 +269,7 @@ private:
   const AircraftState m_state;
   const AirspaceAircraftPerformance &m_perf;
   AirspaceWarningManager &m_warning_manager;
-  const AirspaceWarning::AirspaceWarningState m_warning_state;
+  const AirspaceWarning::State m_warning_state;
   const fixed m_max_time;
   bool m_found;
   const fixed m_max_alt;
@@ -290,7 +290,7 @@ bool
 AirspaceWarningManager::update_predicted(const AircraftState& state, 
                                          const GeoPoint &location_predicted,
                                          const AirspaceAircraftPerformance &perf,
-                                         const AirspaceWarning::AirspaceWarningState& warning_state,
+                                         const AirspaceWarning::State warning_state,
                                          const fixed max_time) 
 {
   // this is the time limit of intrusions, beyond which we are not interested.

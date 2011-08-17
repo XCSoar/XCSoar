@@ -41,7 +41,7 @@ public:
   /**
    * Enumeration of airspace warning types
    */
-  enum AirspaceWarningState {
+  enum State {
     WARNING_CLEAR=0, /**< No warning active */
     WARNING_TASK, /**< Warning that task intersects airspace */
     WARNING_FILTER, /**< Warning that filtered state intersects airspace */
@@ -51,8 +51,8 @@ public:
 
 private:
   const AbstractAirspace& m_airspace;
-  AirspaceWarningState m_state;
-  AirspaceWarningState m_state_last;
+  State m_state;
+  State m_state_last;
   AirspaceInterceptSolution m_solution;
 
   unsigned m_acktime_warning;
@@ -84,7 +84,7 @@ public:
    * @param solution Intercept vector (to outside if currently inside,
    * otherwise to inside)
    */
-  void update_solution(const AirspaceWarningState state,
+  void update_solution(const State state,
                        AirspaceInterceptSolution& solution);
 
   /**
@@ -94,7 +94,7 @@ public:
    * @param state New warning state
    */
   gcc_pure
-  bool state_accepted(const AirspaceWarningState state) const {
+  bool state_accepted(const State state) const {
     return state >= m_state;
   }
 
@@ -121,7 +121,7 @@ public:
    *
    * @return Warning state
    */
-  const AirspaceWarningState& get_warning_state() const {
+  State get_warning_state() const {
     return m_state;
   }
 
