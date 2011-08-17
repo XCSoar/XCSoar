@@ -70,6 +70,8 @@ class AirspaceWarningManager:
   AirspaceWarningList m_warnings;
 
 public:
+  typedef AirspaceWarningList::const_iterator const_iterator;
+
   /** 
    * Default constructor
    * 
@@ -193,6 +195,16 @@ public:
  */
   size_t size() const {
     return m_warnings.size();
+  }
+
+  gcc_pure
+  const_iterator begin() const {
+    return m_warnings.begin();
+  }
+
+  gcc_pure
+  const_iterator end() const {
+    return m_warnings.end();
   }
 
 /** 

@@ -41,9 +41,6 @@ public:
   void reset(const AircraftState& as);
   void clear_warnings();
 
-  // warning manager
-  void visit_warnings(AirspaceWarningVisitor& visitor) const;
-
   bool get_ack_day(const AbstractAirspace& airspace);
   void acknowledge_day(const AbstractAirspace& airspace,
                        const bool set=true);

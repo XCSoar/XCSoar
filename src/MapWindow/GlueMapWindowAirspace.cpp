@@ -31,16 +31,16 @@ Copyright_License {
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceWarning.hpp"
-#include "Airspace/AirspaceWarningVisitor.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Language/Language.hpp"
 
 #include <algorithm>
 
-class AirspaceWarningCopy2 : public AirspaceWarningVisitor
+class AirspaceWarningCopy2
 {
 public:
   void Visit(const AirspaceWarning& as) {
@@ -51,6 +51,17 @@ public:
 
     if (!as.get_ack_expired())
       ids_acked.checked_append(&as.get_airspace());
+  }
+
+  void Visit(const AirspaceWarningManager &awm) {
+    for (AirspaceWarningManager::const_iterator i = awm.begin(),
+           end = awm.end(); i != end; ++i)
+      Visit(*i);
+  }
+
+  void Visit(const ProtectedAirspaceWarningManager &awm) {
+    const ProtectedAirspaceWarningManager::Lease lease(awm);
+    Visit(lease);
   }
 
   bool is_warning(const AbstractAirspace& as) const {
@@ -217,7 +228,7 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
 
   AirspaceWarningCopy2 awc;
   if (airspace_warnings != NULL)
-    airspace_warnings->visit_warnings(awc);
+    awc.Visit(*airspace_warnings);
 
   AirspaceDetailsDialogVisitor airspace_copy_popup(*(SingleWindow *)get_root_owner(),
                                                    location);

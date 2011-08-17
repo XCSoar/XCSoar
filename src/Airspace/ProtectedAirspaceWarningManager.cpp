@@ -24,13 +24,6 @@
 #include "Airspace/AirspaceWarningManager.hpp"
 
 void
-ProtectedAirspaceWarningManager::visit_warnings(AirspaceWarningVisitor& visitor) const
-{
-  Lease lease(*this);
-  lease->visit_warnings(visitor);
-}
-
-void
 ProtectedAirspaceWarningManager::clear()
 {
   ExclusiveLease lease(*this);

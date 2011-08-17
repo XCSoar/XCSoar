@@ -34,8 +34,8 @@ Copyright_License {
 #include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/AirspaceWarning.hpp"
-#include "Airspace/AirspaceWarningVisitor.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
+#include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "MapDrawHelper.hpp"
 #include "Screen/Layout.hpp"
 #include "NMEA/Aircraft.hpp"
@@ -44,8 +44,7 @@ Copyright_License {
 #include "Screen/OpenGL/Scope.hpp"
 #endif
 
-class AirspaceWarningCopy: 
-  public AirspaceWarningVisitor
+class AirspaceWarningCopy
 {
 private:
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
@@ -62,6 +61,17 @@ public:
 
     if (!as.get_ack_expired())
       ids_acked.checked_append(&as.get_airspace());
+  }
+
+  void Visit(const AirspaceWarningManager &awm) {
+    for (AirspaceWarningManager::const_iterator i = awm.begin(),
+           end = awm.end(); i != end; ++i)
+      Visit(*i);
+  }
+
+  void Visit(const ProtectedAirspaceWarningManager &awm) {
+    const ProtectedAirspaceWarningManager::Lease lease(awm);
+    Visit(lease);
   }
 
   const StaticArray<GeoPoint,32> &get_locations() const {
@@ -449,7 +459,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 
   AirspaceWarningCopy awc;
   if (airspace_warnings != NULL)
-    airspace_warnings->visit_warnings(awc);
+    awc.Visit(*airspace_warnings);
 
   const AirspaceMapVisible visible(settings_computer.airspace,
                                    settings_map.airspace,

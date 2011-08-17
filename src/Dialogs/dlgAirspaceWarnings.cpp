@@ -88,11 +88,10 @@ static bool
 HasWarning()
 {
   ProtectedAirspaceWarningManager::Lease lease(*airspace_warnings);
-  for (unsigned i = 0; i < lease->size(); ++i) {
-    const AirspaceWarning *warning = lease->get_warning(i);
-    if (warning != NULL && warning->get_ack_expired())
+  for (AirspaceWarningManager::const_iterator i = lease->begin(),
+         end = lease->end(); i != end; ++i)
+    if (i->get_ack_expired())
       return true;
-  }
 
   return false;
 }
