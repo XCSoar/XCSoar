@@ -144,7 +144,7 @@ public class InternalGPS
     Bundle extras = location.getExtras();
 
     setLocation(location.getTime(),
-                extras != null ? extras.getInt("satellites", 1) : 1,
+                extras != null ? extras.getInt("satellites", -1) : -1,
                 location.getLongitude(), location.getLatitude(),
                 location.hasAltitude(), location.getAltitude(),
                 location.hasBearing(), location.getBearing(),

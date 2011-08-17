@@ -88,7 +88,9 @@ struct GPSState
    */
   int fix_quality;
 
-  /** Number of satellites used for gps fix */
+  /**
+   * Number of satellites used for gps fix.  -1 means "unknown".
+   */
   int satellites_used;
 
   /** GPS Satellite ids */

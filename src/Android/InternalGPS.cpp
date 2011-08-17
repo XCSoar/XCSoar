@@ -131,10 +131,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.gps.android_internal_gps = true;
   basic.location = GeoPoint(Angle::degrees(fixed(longitude)),
                             Angle::degrees(fixed(latitude)));
-  if (n_satellites > 0)
-    basic.location_available.Update(basic.clock);
-  else
-    basic.location_available.Clear();
+  basic.location_available.Update(basic.clock);
 
   if (hasAltitude) {
     fixed GeoidSeparation = LookupGeoidSeparation(basic.location);

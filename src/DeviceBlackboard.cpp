@@ -113,7 +113,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
 
   basic.clock = t;
   basic.connected.Update(basic.clock);
-  basic.gps.satellites_used = 6;
+  basic.gps.satellites_used = -1;
   basic.acceleration.available = false;
   basic.location = loc;
   basic.location_available.Update(t);

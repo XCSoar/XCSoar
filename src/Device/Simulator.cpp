@@ -98,7 +98,7 @@ Simulator::Process(NMEAInfo &basic)
 
   basic.UpdateClock();
   basic.connected.Update(basic.clock);
-  basic.gps.satellites_used = 6;
+  basic.gps.satellites_used = -1;
   basic.gps.simulator = true;
   basic.gps.real = false;
 

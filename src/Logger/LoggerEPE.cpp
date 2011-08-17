@@ -163,7 +163,8 @@ IGCWriter::GetSIU(const NMEAInfo& gps_info)
 
   case 1:
   case 2:
-    iSIU = gps_info.gps.satellites_used;
+    if (gps_info.gps.satellites_used >= 0)
+      iSIU = gps_info.gps.satellites_used;
     break;
 
   default:

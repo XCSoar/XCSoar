@@ -49,7 +49,7 @@ GPSState::Reset()
 #ifdef ANDROID
   android_internal_gps = false;
 #endif
-  satellites_used = 0;
+  satellites_used = -1;
   replay = false;
 }
 

@@ -535,10 +535,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
 
   if (!GGAAvailable) {
     // update SatInUse, some GPS receiver don't emit GGA sentence
-    if (!gpsValid)
-      gps.satellites_used = 0;
-    else
-      gps.satellites_used = -1;
+    gps.satellites_used = -1;
   }
 
   info.gps.real = real;
@@ -604,7 +601,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   bool valid_location = ReadGeoPoint(line, location);
 
   gps.fix_quality = line.read(0);
-  gps.satellites_used = min(16, line.read(0));
+  gps.satellites_used = min(16, line.read(-1));
 
   if (!TimeHasAdvanced(ThisTime, info))
     return true;

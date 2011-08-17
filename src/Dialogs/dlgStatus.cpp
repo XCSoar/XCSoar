@@ -87,8 +87,8 @@ UpdateValuesSystem()
     wp->SetText(_("Disconnected"));
   else if (!basic.location_available)
     wp->SetText(_("Fix invalid"));
-  else if (gps.satellites_used == 0)
-    wp->SetText(_("No fix"));
+  else if (!basic.gps_altitude_available)
+    wp->SetText(_("2D fix"));
   else
     wp->SetText(_("3D fix"));
 
@@ -105,7 +105,7 @@ UpdateValuesSystem()
     wp->SetText(Temp);
   } else
     // valid but unknown number of sats
-    wp->SetText(_T(">3"));
+    wp->SetText(_("Unknown"));
 
   wp->RefreshDisplay();
 
