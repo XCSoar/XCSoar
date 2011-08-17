@@ -170,12 +170,21 @@ static void
 Enable()
 {
   const AbstractAirspace *airspace = GetSelectedAirspace();
-  if (airspace != NULL) {
-    airspace_warnings->acknowledge_inside(*airspace, false);
-    airspace_warnings->acknowledge_warning(*airspace, false);
-    airspace_warnings->acknowledge_day(*airspace, false);
-    wAirspaceList->invalidate();
+  if (airspace == NULL)
+    return;
+
+  {
+    ProtectedAirspaceWarningManager::ExclusiveLease lease(*airspace_warnings);
+    AirspaceWarning *w = lease->get_warning_ptr(*airspace);
+    if (w == NULL)
+      return;
+
+    w->acknowledge_inside(false);
+    w->acknowledge_warning(false);
+    w->acknowledge_day(false);
   }
+
+  wAirspaceList->invalidate();
 }
 
 static void

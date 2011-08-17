@@ -26,11 +26,8 @@
 #include "Thread/Guard.hpp"
 
 struct AircraftState;
-class AirspaceWarning;
 class AirspaceWarningManager;
-class AirspaceWarningVisitor;
 class AbstractAirspace;
-class AtmosphericPressure;
 
 class ProtectedAirspaceWarningManager : public Guard<AirspaceWarningManager> {
 public:
