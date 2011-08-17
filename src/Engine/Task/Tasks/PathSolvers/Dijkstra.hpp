@@ -228,7 +228,7 @@ private:
    * @param pn Previous node
    * @param e Edge distance (previous to this)
    */
-  void push(const Node &node, const Node &parent, const unsigned &edge_value = 0) {
+  void push(const Node &node, const Node &parent, unsigned edge_value=0) {
     // Try to find the given node n in the edge_map
     edge_iterator it = edges.find(node);
     if (it == edges.end()) {
