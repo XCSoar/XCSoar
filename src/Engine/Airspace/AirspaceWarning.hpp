@@ -94,7 +94,9 @@ public:
    * @param state New warning state
    */
   gcc_pure
-  bool state_accepted(const AirspaceWarningState state) const;
+  bool state_accepted(const AirspaceWarningState state) const {
+    return state >= m_state;
+  }
 
   /**
    * Determine whether during last update, the state of this warning
@@ -166,7 +168,9 @@ public:
    * @return True if acknowledged
    */
   gcc_pure
-  bool get_ack_day() const;
+  bool get_ack_day() const {
+    return m_ack_day;
+  }
 
   /**
    * Acknowledge an airspace warning
@@ -187,7 +191,9 @@ public:
    *
    * @param set Whether to set or cancel acknowledgement
    */
-  void acknowledge_day(const bool set=true);
+  void acknowledge_day(const bool set=true) {
+    m_ack_day = set;
+  }
 
   /**
    * Ranking operator for warnings

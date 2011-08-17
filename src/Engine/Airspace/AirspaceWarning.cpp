@@ -113,12 +113,6 @@ AirspaceWarning::changed_state() const
   return false;
 }
 
-bool 
-AirspaceWarning::state_accepted(const AirspaceWarningState state) const
-{
-  return (state >= m_state);
-}
-
 bool
 AirspaceWarning::get_ack_expired() const
 {
@@ -156,18 +150,6 @@ AirspaceWarning::acknowledge_warning(const bool set)
     m_acktime_warning = null_acktime;
   else
     m_acktime_warning = 0;
-}
-
-void 
-AirspaceWarning::acknowledge_day(const bool set)
-{
-  m_ack_day = set;
-}
-
-bool 
-AirspaceWarning::get_ack_day() const
-{
-  return m_ack_day;
 }
 
 bool 
