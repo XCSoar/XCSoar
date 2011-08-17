@@ -60,6 +60,14 @@ public:
     return protected_route_planner;
   }
 
+  /**
+   * Release all references to airspace objects from the "master"
+   * container.  Call this before modifying the container.
+   */
+  void ClearAirspaces() {
+    route_planner.reset();
+  }
+
   void ResetFlight();
   void ProcessRoute(const MoreData &basic, DerivedInfo &calculated,
                     const DerivedInfo &last_calculated,

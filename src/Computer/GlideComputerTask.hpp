@@ -44,6 +44,10 @@ public:
     return route.GetProtectedRoutePlanner();
   }
 
+  void ClearAirspaces() {
+    route.ClearAirspaces();
+  }
+
 protected:
 
   void Initialise();

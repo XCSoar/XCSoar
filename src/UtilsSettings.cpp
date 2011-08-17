@@ -169,6 +169,10 @@ SettingsLeave()
   if (AirspaceFileChanged) {
     if (airspace_warnings != NULL)
       airspace_warnings->clear();
+
+    if (glide_computer != NULL)
+      glide_computer->ClearAirspaces();
+
     airspace_database.clear();
     ReadAirspace(airspace_database, terrain,
                  CommonInterface::SettingsComputer().pressure,
