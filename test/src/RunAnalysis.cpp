@@ -239,8 +239,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
                                               blackboard.SettingsComputer().task,
                                               task_events);
 
-  RoutePlannerGlue route_planner(task_manager.get_glide_polar(),
-                                 airspace_database);
+  RoutePlannerGlue route_planner(airspace_database);
   ProtectedRoutePlanner protected_route_planner(route_planner,
                                                 airspace_database);
 

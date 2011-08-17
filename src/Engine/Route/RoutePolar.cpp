@@ -143,13 +143,6 @@ RoutePolars::msl_intercept(const int index, const AGeoPoint& p, const TaskProjec
 }
 
 
-RoutePolars::RoutePolars(const GlidePolar& polar,
-                         const SpeedVector& wind)
-{
-  initialise(polar, wind);
-}
-
-
 void
 RoutePolars::initialise(const GlidePolar& polar,
                         const SpeedVector& wind)

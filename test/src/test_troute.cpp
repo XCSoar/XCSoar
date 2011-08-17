@@ -38,7 +38,8 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
 {
   GlidePolar polar(mc);
   SpeedVector wind(Angle::degrees(fixed(0)), mwind);
-  TerrainRoute route(polar, wind);
+  TerrainRoute route;
+  route.update_polar(polar, polar, wind);
   route.set_terrain(&map);
 
   GeoPoint origin(map.GetMapCenter());

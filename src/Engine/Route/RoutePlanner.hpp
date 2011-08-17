@@ -159,15 +159,11 @@ public:
   friend class PrintHelper;
 
   /**
-   * Constructor with initialisation of performance model and wind environment.
+   * Constructor without initialisation of performance model and wind environment.
    * Call update_polar to update the aircraft performance model or wind estimate
-   * after initialisation as required.
-   *
-   * @param polar Aircraft performance model
-   * @param wind Wind setting
+   * after initialisation.
    */
-  RoutePlanner(const GlidePolar& polar,
-               const SpeedVector& wind);
+  RoutePlanner();
 
   /**
    * Set terrain database

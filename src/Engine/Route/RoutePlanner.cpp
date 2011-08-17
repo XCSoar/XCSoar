@@ -26,10 +26,7 @@
 #include "Math/FastMath.h"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 
-RoutePlanner::RoutePlanner(const GlidePolar& polar,
-                           const SpeedVector& wind):
-  rpolars_route(polar, wind),
-  rpolars_reach(polar, wind),
+RoutePlanner::RoutePlanner():
   terrain(NULL),
   m_planner(0),
   m_reach_polar_mode(RoutePlannerConfig::rpmTask)

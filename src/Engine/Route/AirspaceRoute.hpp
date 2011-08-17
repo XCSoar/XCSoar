@@ -29,9 +29,7 @@ class AirspaceRoute: public RoutePlanner {
 public:
   friend class PrintHelper;
 
-  AirspaceRoute(const GlidePolar& polar,
-                const SpeedVector& wind,
-                const Airspaces& master);
+  AirspaceRoute(const Airspaces& master);
   virtual ~AirspaceRoute();
 
   void synchronise(const Airspaces& master,

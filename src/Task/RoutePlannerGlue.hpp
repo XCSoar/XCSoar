@@ -31,8 +31,7 @@ class RoutePlannerGlue {
   AirspaceRoute m_planner;
 
 public:
-  RoutePlannerGlue(const GlidePolar& polar,
-                   const Airspaces& master);
+  RoutePlannerGlue(const Airspaces& master);
 
   void set_terrain(const RasterTerrain *_terrain);
 

@@ -117,7 +117,8 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
     SpeedVector wind(Angle::degrees(fixed(0)), fixed(0.0));
     GlidePolar polar(fixed_one);
 
-    AirspaceRoute route(polar, wind, *airspaces);
+    AirspaceRoute route(*airspaces);
+    route.update_polar(polar, polar, wind);
     route.set_terrain(&map);
     RoutePlannerConfig config;
     config.mode = RoutePlannerConfig::rpBoth;

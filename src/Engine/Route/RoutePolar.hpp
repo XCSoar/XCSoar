@@ -271,7 +271,10 @@ private:
  */
 class RoutePolars {
 public:
-  RoutePolars(const GlidePolar& polar, const SpeedVector& wind);
+  /**
+   * Non-initialising constructor.
+   */
+  RoutePolars() {}
 
   /**
    * Re-initialise performance tables when polar or wind changes

@@ -342,8 +342,8 @@ XCSoarInterface::Startup()
                              XCSoarInterface::SettingsComputer().task,
                              task_events);
 
-  route_planner = new RoutePlannerGlue(task_manager->get_glide_polar(),
-                                       airspace_database);
+  route_planner = new RoutePlannerGlue(airspace_database);
+
   protected_route_planner = new ProtectedRoutePlanner(*route_planner,
                                                       airspace_database);
 

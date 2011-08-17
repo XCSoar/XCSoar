@@ -27,10 +27,9 @@
 #include "NMEA/Derived.hpp"
 #include <assert.h>
 
-RoutePlannerGlue::RoutePlannerGlue(const GlidePolar& polar,
-                                   const Airspaces& master):
+RoutePlannerGlue::RoutePlannerGlue(const Airspaces& master):
   terrain(NULL),
-  m_planner(polar, SpeedVector(Angle::degrees(fixed_zero), fixed_zero), master)
+  m_planner(master)
 {
 }
 
