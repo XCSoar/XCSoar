@@ -102,30 +102,6 @@ AirspaceWarningManager::get_warning_ptr(const AbstractAirspace& airspace)
   return NULL;
 }
 
-const AirspaceWarning* 
-AirspaceWarningManager::get_warning(const unsigned index) const
-{
-  unsigned i = 0;
-  for (AirspaceWarningList::const_iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it, ++i)
-    if (i == index)
-      return &(*it);
-
-  return NULL;
-}
-
-int
-AirspaceWarningManager::get_warning_index(const AbstractAirspace& airspace) const
-{
-  unsigned i = 0;
-  for (AirspaceWarningList::const_iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it, ++i)
-    if (&(it->get_airspace()) == &airspace)
-      return i;
-
-  return -1;
-}
-
 bool 
 AirspaceWarningManager::update(const AircraftState& state,
                                const bool circling,

@@ -47,7 +47,6 @@ public:
                           const bool set=true);
 
   bool warning_empty() const;
-  int get_warning_index(const AbstractAirspace& airspace) const;
 
   void reset_warning(const AircraftState& as);
   bool update_warning(const AircraftState &state, const bool circling, const unsigned dt);

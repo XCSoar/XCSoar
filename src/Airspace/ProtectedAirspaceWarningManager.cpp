@@ -51,13 +51,6 @@ ProtectedAirspaceWarningManager::warning_empty() const
   return lease->empty();
 }
 
-int
-ProtectedAirspaceWarningManager::get_warning_index(const AbstractAirspace& airspace) const
-{
-  Lease lease(*this);
-  return lease->get_warning_index(airspace);
-}
-
 bool
 ProtectedAirspaceWarningManager::get_ack_day(const AbstractAirspace& airspace)
 {
