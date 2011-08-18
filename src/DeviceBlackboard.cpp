@@ -113,6 +113,7 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
 
   basic.clock = t;
   basic.connected.Update(basic.clock);
+  basic.ProvideTime(t);
   basic.gps.satellites_used = -1;
   basic.acceleration.available = false;
   basic.location = loc;
@@ -127,8 +128,6 @@ DeviceBlackboard::SetLocation(const GeoPoint &loc,
   basic.gps_altitude_available.Update(t);
   basic.ProvidePressureAltitude(baroalt);
   basic.ProvideBaroAltitudeTrue(baroalt);
-  basic.time = t;
-  basic.time_available.Update(basic.clock);
   basic.total_energy_vario_available.Clear();
   basic.netto_vario_available.Clear();
   basic.external_wind_available.Clear();

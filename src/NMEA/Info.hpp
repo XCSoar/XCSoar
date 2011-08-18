@@ -386,6 +386,8 @@ struct NMEAInfo {
     gps_altitude_available.Clear();
   }
 
+  void ProvideTime(fixed time);
+
   /**
    * Provide a "true" barometric altitude, but only use it if the
    * previous altitude was not present or the same/lower priority.
