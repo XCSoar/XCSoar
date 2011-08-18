@@ -138,6 +138,16 @@ public:
     CopyString(data + len, new_value, MAX_SIZE - len);
   }
 
+  bool Append(TCHAR ch) {
+    size_t l = length();
+    if (l >= MAX_SIZE - 1)
+      return false;
+
+    data[l] = ch;
+    data[l + 1] = _T('\0');
+    return true;
+  }
+
   const TCHAR *c_str() const {
     return get();
   }
