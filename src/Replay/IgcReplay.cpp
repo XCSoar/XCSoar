@@ -133,6 +133,11 @@ IgcReplay::Update()
       return false;
     }
 
+    if (fix.pressure_altitude == fixed_zero && positive(fix.gps_altitude))
+      /* no pressure altitude was recorded - fall back to GPS
+         altitude */
+      fix.pressure_altitude = fix.gps_altitude;
+
     if (positive(fix.time))
       cli.Update(fix.time, fix.location,
                  fix.gps_altitude, fix.pressure_altitude);
