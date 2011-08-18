@@ -73,6 +73,11 @@ ProcessTimer::AirspaceProcessTimer()
 
   const AirspaceWarningsInfo &warnings =
     CommonInterface::Calculated().airspace_warnings;
+
+  if (previous.Modified(warnings.latest))
+    /* time warp, reset */
+    previous.Clear();
+
   if (warnings.latest.Modified(previous)) {
     previous = warnings.latest;
     CommonInterface::main_window.SendAirspaceWarning();
@@ -186,6 +191,10 @@ MacCreadyProcessTimer()
 
   const NMEAInfo &basic = CommonInterface::Basic();
   const DerivedInfo &calculated = CommonInterface::Calculated();
+
+  if (last_auto_mac_cready.Modified(calculated.auto_mac_cready_available))
+    /* time warp, reset */
+    last_auto_mac_cready.Clear();
 
   if (basic.settings.mac_cready_available.Modified(last_external_settings.mac_cready_available)) {
     ActionInterface::SetMacCready(basic.settings.mac_cready, false);
