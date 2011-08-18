@@ -55,7 +55,7 @@ AircraftStateFilter::Update(const AircraftState &state)
 {
   fixed dt = state.time - last_state.time;
 
-  if (negative(dt)) {
+  if (negative(dt) || dt > fixed(60)) {
     Reset(state);
     return;
   }
@@ -66,7 +66,7 @@ AircraftStateFilter::Update(const AircraftState &state)
   GeoVector vec(last_state.location, state.location);
 
   const fixed MACH_1 = fixed_int_constant(343);
-  if (vec.Distance / dt > MACH_1) {
+  if (vec.Distance > fixed(1000) || vec.Distance / dt > MACH_1) {
     Reset(state);
     return;
   }
