@@ -50,6 +50,8 @@ Copyright_License {
 #include <tchar.h>
 #include <stdio.h>
 
+InterfaceBlackboard CommonInterface::blackboard;
+
 ProtectedAirspaceWarningManager *airspace_warnings;
 
 void dlgAirspaceDetails(const AbstractAirspace& the_airspace) {}

@@ -1955,7 +1955,9 @@ RUN_AIRSPACE_WARNING_DIALOG_SOURCES = \
 	$(SRC)/Poco/RWLock.cpp \
 	$(SRC)/xmlParser.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
+	$(SRC)/DateTime.cpp \
 	$(SRC)/Units/Units.cpp \
+	$(SRC)/Units/UnitsFormatter.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Dialogs/XML.cpp \
 	$(SRC)/Dialogs/ListPicker.cpp \

@@ -25,6 +25,7 @@ Copyright_License {
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Internal.hpp"
 #include "Units/Units.hpp"
+#include "Units/UnitsFormatter.hpp"
 #include "Components.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Key.h"
@@ -349,9 +350,22 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   if (warning.state != AirspaceWarning::WARNING_INSIDE &&
       warning.state > AirspaceWarning::WARNING_CLEAR) {
 
-    _stprintf(sTmp, _T("%d secs dist %d m"),
-              (int)solution.elapsed_time,
-              (int)solution.distance);
+    _stprintf(sTmp, _T("%d secs"),
+              (int)solution.elapsed_time);
+
+    if (positive(solution.distance))
+      _stprintf(sTmp + _tcslen(sTmp), _T(" dist %d m"),
+                (int)solution.distance);
+    else {
+      /* the airspace is right above or below us - show the vertical
+         distance */
+      _tcscat(sTmp, _T(" vertical "));
+
+      fixed delta = solution.altitude - CommonInterface::Basic().NavAltitude;
+      Units::FormatUserArrival(delta,
+                               sTmp + _tcslen(sTmp), 128 - _tcslen(sTmp),
+                               true);
+    }
 
     canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
                         paint_rc.top + IBLSCALE(TextTop + TextHeight),

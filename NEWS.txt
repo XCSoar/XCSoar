@@ -28,6 +28,7 @@ Version 6.2 - not yet released
   - multiple flarm team mates and teams possible
   - nearest airspace distance info boxes
   - better font for large info box values
+  - airspace warnings: show vertical distance if above/below
 * map
   - redraw terrain only if needed
   - airspace rendering optimised
