@@ -51,17 +51,25 @@ struct NearestAirspace {
   }
 };
 
+gcc_pure
+static bool
+CheckAirspace(const AbstractAirspace &airspace)
+{
+  const AirspaceWarningConfig &config =
+    CommonInterface::SettingsComputer().airspace.warnings;
+
+  return config.class_enabled(airspace.get_type());
+}
+
 class HorizontalAirspaceCondition : public AirspacePredicate {
-  const AirspaceWarningConfig &config;
   GeoPoint location;
   AltitudeState altitude;
   bool altitude_available;
 
 public:
-  HorizontalAirspaceCondition(const AirspaceWarningConfig &_config,
-                              const MoreData &basic,
+  HorizontalAirspaceCondition(const MoreData &basic,
                               const DerivedInfo &calculated)
-    :config(_config), location(basic.location),
+    :location(basic.location),
      altitude_available(basic.baro_altitude_available ||
                         basic.gps_altitude_available)
   {
@@ -72,7 +80,7 @@ public:
   }
 
   virtual bool operator()(const AbstractAirspace &airspace) const {
-    return config.class_enabled(airspace.get_type()) &&
+    return CheckAirspace(airspace) &&
       /* skip airspaces that we already entered */
       !airspace.inside(location) &&
       /* check altitude; hard-coded margin of 50m (for now) */
@@ -92,8 +100,7 @@ FindNearestHorizontalAirspace()
     return NearestAirspace();
 
   /* find the nearest airspace */
-  HorizontalAirspaceCondition condition(CommonInterface::SettingsComputer().airspace.warnings,
-                                        basic, CommonInterface::Calculated());
+  HorizontalAirspaceCondition condition(basic, CommonInterface::Calculated());
   const Airspace *airspace = airspace_database.find_nearest(basic.location, condition);
   if (airspace == NULL)
     return NearestAirspace();
@@ -119,7 +126,6 @@ InfoBoxContentNearestAirspaceHorizontal::Update(InfoBoxWindow &infobox)
 }
 
 class VerticalAirspaceVisitor : public AirspaceVisitor {
-  const AirspaceWarningConfig &config;
   GeoPoint location;
   AltitudeState altitude;
 
@@ -127,10 +133,9 @@ class VerticalAirspaceVisitor : public AirspaceVisitor {
   fixed nearest_delta;
 
 public:
-  VerticalAirspaceVisitor(const AirspaceWarningConfig &_config,
-                          const MoreData &basic,
+  VerticalAirspaceVisitor(const MoreData &basic,
                           const DerivedInfo &calculated)
-    :config(_config), location(basic.location),
+    :location(basic.location),
      nearest(NULL), nearest_delta(100000) {
     assert(basic.baro_altitude_available || basic.gps_altitude_available);
     altitude.altitude = basic.NavAltitude;
@@ -139,7 +144,7 @@ public:
 
 protected:
   void Check(const AbstractAirspace &airspace) {
-    if (!config.class_enabled(airspace.get_type()))
+    if (!CheckAirspace(airspace))
       return;
 
     /* check delta below */
@@ -189,8 +194,7 @@ FindNearestVerticalAirspace()
     return NearestAirspace();
 
   /* find the nearest airspace */
-  VerticalAirspaceVisitor visitor(CommonInterface::SettingsComputer().airspace.warnings,
-                                  basic, CommonInterface::Calculated());
+  VerticalAirspaceVisitor visitor(basic, CommonInterface::Calculated());
   airspace_database.visit_inside(basic.location, visitor);
   if (visitor.GetNearest() == NULL)
     return NearestAirspace();
