@@ -72,7 +72,8 @@ GestureManager::Update(int x, int y)
     return;
 
   // Return if we are still in the same direction
-  gesture.Append(direction);
+  if (gesture.empty() || gesture.last() != direction)
+    gesture.Append(direction);
 }
 
 void
