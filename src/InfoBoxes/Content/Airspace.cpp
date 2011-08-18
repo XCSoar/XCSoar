@@ -158,7 +158,7 @@ protected:
     /* check delta below */
     fixed base = airspace.get_base().get_altitude(altitude);
     fixed base_delta = base - altitude.altitude;
-    if (!negative(base_delta) && base_delta < nearest_delta) {
+    if (!negative(base_delta) && base_delta < fabs(nearest_delta)) {
       nearest = &airspace;
       nearest_delta = base_delta;
     }
@@ -166,9 +166,9 @@ protected:
     /* check delta above */
     fixed top = airspace.get_top().get_altitude(altitude);
     fixed top_delta = altitude.altitude - top;
-    if (!negative(top_delta) && top_delta < nearest_delta) {
+    if (!negative(top_delta) && top_delta < fabs(nearest_delta)) {
       nearest = &airspace;
-      nearest_delta = top_delta;
+      nearest_delta = -top_delta;
     }
   }
 
@@ -220,8 +220,8 @@ InfoBoxContentNearestAirspaceVertical::Update(InfoBoxWindow &infobox)
   }
 
   TCHAR buffer[32];
-  Units::FormatUserAltitude(nearest.distance, buffer,
-                            sizeof(buffer) / sizeof(buffer[0]), false);
+  Units::FormatUserArrival(nearest.distance, buffer,
+                           sizeof(buffer) / sizeof(buffer[0]), false);
   infobox.SetValue(buffer);
   infobox.SetValueUnit(Units::Current.AltitudeUnit);
   infobox.SetComment(nearest.airspace->GetName());

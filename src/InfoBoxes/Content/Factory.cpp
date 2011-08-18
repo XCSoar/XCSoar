@@ -870,7 +870,7 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
   {
     N_("Nearest airspace vertical"),
     N_("Near AS V"),
-    N_("The vertical distance to the nearest airspace"),
+    N_("The vertical distance to the nearest airspace.  A positive value means the airspace is above you, and negative means the airspace is below you."),
     e_NearestAirspaceHorizontal,
     e_NearestAirspaceHorizontal,
   },
