@@ -30,6 +30,7 @@
 #ifndef GESTURE_MANAGER_HPP
 #define GESTURE_MANAGER_HPP
 
+#include "Util/StaticString.hpp"
 #include "Screen/Point.hpp"
 
 #include <tchar.h>
@@ -66,7 +67,7 @@ protected:
   /** Position of the last mouse_move event */
   RasterPoint drag_last;
   /** The gesture string */
-  TCHAR gesture[11];
+  StaticString<11> gesture;
 
   /** The threshold distance in px for edge detection */
   int threshold;

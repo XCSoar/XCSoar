@@ -72,12 +72,7 @@ GestureManager::Update(int x, int y)
     return;
 
   // Return if we are still in the same direction
-  size_t length = _tcslen(gesture);
-  if (length < sizeof(gesture) / sizeof(gesture[0]) - 1 &&
-      gesture[length - 1] != direction) {
-    gesture[length] = direction;
-    gesture[length + 1] = _T('\0');
-  }
+  gesture.Append(direction);
 }
 
 void
@@ -88,7 +83,7 @@ GestureManager::Start(int x, int y, int _threshold)
   drag_last.y = y;
 
   // Reset gesture
-  _tcscpy(gesture, _T(""));
+  gesture.clear();
 
   // Set threshold
   threshold = _threshold;
@@ -97,8 +92,7 @@ GestureManager::Start(int x, int y, int _threshold)
 const TCHAR*
 GestureManager::Finish()
 {
-  if (string_is_empty(gesture))
-    return NULL;
-
-  return gesture;
+  return gesture.empty()
+    ? NULL
+    : gesture.c_str();
 }
