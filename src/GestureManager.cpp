@@ -34,7 +34,7 @@
 
 #include <algorithm>
 
-static gcc_const char
+static gcc_const TCHAR
 getDirection(int dx, int dy)
 {
   if (dy < 0 && -dy >= abs(dx) * 2)
@@ -65,7 +65,7 @@ GestureManager::Update(int x, int y)
   drag_last.y = y;
 
   // Get current dragging direction
-  char direction = getDirection(dx, dy);
+  TCHAR direction = getDirection(dx, dy);
 
   // Return if we are in an unclear direction
   if (direction == '\0')
