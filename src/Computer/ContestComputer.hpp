@@ -21,49 +21,31 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_GLIDECOMPUTER_TASK_HPP)
-#define XCSOAR_GLIDECOMPUTER_TASK_HPP
+#ifndef XCSOAR_CONTEST_COMPUTER_HPP
+#define XCSOAR_CONTEST_COMPUTER_HPP
 
-#include "GlideComputerBlackboard.hpp"
-#include "GlideComputerRoute.hpp"
-#include "ContestComputer.hpp"
+#include "Engine/Task/Tasks/ContestManager.hpp"
 
-class ProtectedTaskManager;
+struct SETTINGS_COMPUTER;
+struct DerivedInfo;
+class Trace;
 
-class GlideComputerTask: 
-  virtual public GlideComputerBlackboard 
-{
-  ProtectedTaskManager &m_task;
-
-  GlideComputerRoute route;
-
-  ContestComputer contest;
+class ContestComputer {
+  ContestManager contest_manager;
 
 public:
-  GlideComputerTask(ProtectedTaskManager& task,
-                    const Airspaces &airspace_database);
+  ContestComputer(const Trace &trace_full, const Trace &trace_sprint)
+    :contest_manager(OLC_Sprint, trace_full, trace_sprint) {}
 
-  const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
-    return route.GetProtectedRoutePlanner();
+  void Reset() {
+    contest_manager.reset();
   }
 
-  void ClearAirspaces() {
-    route.ClearAirspaces();
-  }
+  void Solve(const SETTINGS_COMPUTER &settings_computer,
+             DerivedInfo &calculated);
 
-protected:
-
-  void Initialise();
-  void ProcessBasicTask();
-  void ProcessMoreTask();
-  void ResetFlight(const bool full=true);
-
-  void set_terrain(const RasterTerrain* _terrain);
-
-  virtual void OnTakeoff();
-
-protected:
-  void ProcessIdle();
- };
+  bool SolveExhaustive(const SETTINGS_COMPUTER &settings_computer,
+                       DerivedInfo &calculated);
+};
 
 #endif

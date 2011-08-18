@@ -442,8 +442,6 @@ bool test_olc(int n_wind, Contests olc_type)
     task_behaviour.enable_trace = false;
   task_manager.set_task_behaviour(task_behaviour);
 
-  task_manager.set_contest(olc_type);
-
   task_manager.set_glide_polar(glide_polar);
   test_task(task_manager, waypoints, 1);
 

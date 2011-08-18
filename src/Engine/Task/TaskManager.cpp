@@ -37,8 +37,6 @@ TaskManager::TaskManager(TaskEvents &te,
   task_ordered(te, task_behaviour, m_glide_polar, true),
   task_goto(te, task_behaviour, m_glide_polar, wps),
   task_abort(te, task_behaviour, m_glide_polar, wps),
-  contest_manager(task_behaviour.contest, 
-                  trace_full, trace_sprint),
   mode(MODE_NULL),
   active_task(NULL) {
   null_stats.reset();
@@ -52,8 +50,6 @@ TaskManager::set_task_behaviour(const TaskBehaviour& behaviour)
   task_ordered.SetTaskBehaviour(behaviour);
   task_goto.SetTaskBehaviour(behaviour);
   task_abort.SetTaskBehaviour(behaviour);
-
-  contest_manager.SetHandicap(behaviour.contest_handicap);
 }
 
 TaskManager::TaskMode_t 
@@ -341,24 +337,12 @@ TaskManager::update_idle(const AircraftState& state)
 
     if (task_behaviour.enable_olc)
       retval |= trace_sprint.optimise_if_old();
-
-    // If contest optimization is enabled
-    // -> Optimize
-    if (task_behaviour.enable_olc)
-      retval |= contest_manager.update_idle();
   }
 
   if (active_task)
     retval |= active_task->update_idle(state);
 
   return retval;
-}
-
-bool
-TaskManager::score_exhaustive()
-{
-  return task_behaviour.enable_olc &&
-    contest_manager.solve_exhaustive();
 }
 
 const TaskStats& 
@@ -396,7 +380,6 @@ TaskManager::reset()
   task_ordered.reset();
   task_goto.reset();
   task_abort.reset();
-  contest_manager.reset();
   common_stats.reset();
   m_glide_polar.SetCruiseEfficiency(fixed_one);
   trace_full.clear();

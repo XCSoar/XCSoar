@@ -368,8 +368,6 @@ XCSoarInterface::Startup()
   PlaneGlue::Synchronize(SettingsComputer().plane, SetSettingsComputer(), gp);
   task_manager->set_glide_polar(gp);
 
-  task_manager->set_contest(SettingsComputer().task.contest);
-
   // Read the topography file(s)
   topography = new TopographyStore();
   LoadConfiguredTopography(*topography, operation);

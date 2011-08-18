@@ -27,6 +27,7 @@
 #include "Task/TaskManager.hpp"
 #include "Compiler.h"
 
+class Trace;
 class GlidePolar;
 class RoutePlannerGlue;
 
@@ -62,6 +63,16 @@ public:
     {}
   
   ~ProtectedTaskManager();
+
+  const Trace &GetTrace() {
+    UnprotectedLease lease(*this);
+    return lease->GetTrace();
+  }
+
+  const Trace &GetSprintTrace() {
+    UnprotectedLease lease(*this);
+    return lease->GetSprintTrace();
+  }
 
   // common accessors for ui and calc clients
   void set_glide_polar(const GlidePolar& glide_polar);

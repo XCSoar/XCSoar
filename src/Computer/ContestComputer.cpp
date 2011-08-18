@@ -21,49 +21,38 @@ Copyright_License {
 }
 */
 
-#if !defined(XCSOAR_GLIDECOMPUTER_TASK_HPP)
-#define XCSOAR_GLIDECOMPUTER_TASK_HPP
-
-#include "GlideComputerBlackboard.hpp"
-#include "GlideComputerRoute.hpp"
 #include "ContestComputer.hpp"
+#include "SettingsComputer.hpp"
+#include "NMEA/Derived.hpp"
 
-class ProtectedTaskManager;
-
-class GlideComputerTask: 
-  virtual public GlideComputerBlackboard 
+void
+ContestComputer::Solve(const SETTINGS_COMPUTER &settings_computer,
+                       DerivedInfo &calculated)
 {
-  ProtectedTaskManager &m_task;
+  if (!settings_computer.task.enable_olc)
+    return;
 
-  GlideComputerRoute route;
+  contest_manager.SetHandicap(settings_computer.task.contest_handicap);
+  contest_manager.set_contest(settings_computer.task.contest);
 
-  ContestComputer contest;
+  contest_manager.update_idle();
 
-public:
-  GlideComputerTask(ProtectedTaskManager& task,
-                    const Airspaces &airspace_database);
+  calculated.contest_stats = contest_manager.get_stats();
+}
 
-  const ProtectedRoutePlanner &GetProtectedRoutePlanner() const {
-    return route.GetProtectedRoutePlanner();
-  }
+bool
+ContestComputer::SolveExhaustive(const SETTINGS_COMPUTER &settings_computer,
+                                 DerivedInfo &calculated)
+{
+  if (!settings_computer.task.enable_olc)
+    return false;
 
-  void ClearAirspaces() {
-    route.ClearAirspaces();
-  }
+  contest_manager.SetHandicap(settings_computer.task.contest_handicap);
+  contest_manager.set_contest(settings_computer.task.contest);
 
-protected:
+  bool result = contest_manager.solve_exhaustive();
 
-  void Initialise();
-  void ProcessBasicTask();
-  void ProcessMoreTask();
-  void ResetFlight(const bool full=true);
+  calculated.contest_stats = contest_manager.get_stats();
 
-  void set_terrain(const RasterTerrain* _terrain);
-
-  virtual void OnTakeoff();
-
-protected:
-  void ProcessIdle();
- };
-
-#endif
+  return result;
+}

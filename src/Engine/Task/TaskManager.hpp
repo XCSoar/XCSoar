@@ -28,7 +28,6 @@
 #include "Tasks/AlternateTask.hpp"
 #include "Tasks/GotoTask.hpp"
 #include "Tasks/OrderedTask.hpp"
-#include "Tasks/ContestManager.hpp"
 #include "TaskStats/TaskStats.hpp"
 #include "TaskStats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
@@ -193,8 +192,6 @@ public:
   bool update_auto_mc(const AircraftState& state_now,
                       const fixed fallback_mc);
 
-  bool score_exhaustive();
-
   /**
    * Accessor for statistics of active task
    *
@@ -211,16 +208,6 @@ public:
   gcc_pure
   const CommonStats& get_common_stats() const {
     return common_stats;
-  }
-
-  /**
-   * Accessor for contest statistics
-   *
-   * @return Statistics
-   */
-  gcc_pure
-  const ContestStatistics& get_contest_stats() const {
-    return contest_manager.get_stats();
   }
 
   /**
@@ -374,16 +361,16 @@ public:
     return task_abort.get_safety_polar();
   }
 
-  void set_contest(Contests contest) {
-    contest_manager.set_contest(contest);
-  }
-
   /**
    * Retrieve trace vector
    *
    */
   const Trace &GetTrace() const {
     return trace_full;
+  }
+
+  const Trace &GetSprintTrace() const {
+    return trace_sprint;
   }
 
   /**
@@ -593,8 +580,6 @@ private:
   GotoTask task_goto;
   
   AlternateTask task_abort;
-
-  ContestManager contest_manager;
 
   TaskMode_t mode;
   AbstractTask* active_task;

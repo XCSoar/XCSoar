@@ -37,7 +37,8 @@ using std::max;
 GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
                                      const Airspaces &airspace_database):
   m_task(task),
-  route(airspace_database)
+  route(airspace_database),
+  contest(task.GetTrace(), task.GetSprintTrace())
 {
   task.SetRoutePlanner(&route.GetRoutePlanner());
 }
@@ -52,6 +53,7 @@ GlideComputerTask::ResetFlight(const bool full)
 {
   m_task.reset();
   route.ResetFlight();
+  contest.Reset();
 }
 
 void
@@ -82,7 +84,6 @@ GlideComputerTask::ProcessBasicTask()
 
   SetCalculated().task_stats = task->get_stats();
   SetCalculated().common_stats = task->get_common_stats();
-  SetCalculated().contest_stats = task->get_contest_stats();
 
   SetCalculated().glide_polar_safety = task->get_safety_polar();
 }
@@ -116,6 +117,8 @@ GlideComputerTask::ProcessMoreTask()
 void
 GlideComputerTask::ProcessIdle()
 {
+  contest.Solve(SettingsComputer(), SetCalculated());
+
   const AircraftState as = ToAircraftState(Basic(), Calculated());
   ProtectedTaskManager::ExclusiveLease task(m_task);
   task->update_idle(as);

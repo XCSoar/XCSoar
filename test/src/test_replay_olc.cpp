@@ -5,6 +5,7 @@
 #include "Task/TaskManager.hpp"
 #include "UtilsText.hpp"
 #include "Computer/FlyingComputer.hpp"
+#include "Engine/Task/Tasks/ContestManager.hpp"
 
 #include <fstream>
 
@@ -138,8 +139,6 @@ test_replay(const Contests olc_type,
 
   task_manager.set_glide_polar(glide_polar);
 
-  task_manager.set_contest(olc_type);
-
   ReplayLoggerSim sim;
   TCHAR szFilename[MAX_PATH];
   ConvertCToT(szFilename, replay_file.c_str());
@@ -187,6 +186,11 @@ test_replay(const Contests olc_type,
   FlyingComputer flying_computer;
   flying_computer.Reset();
 
+  ContestManager contest_manager(olc_type,
+                                 task_manager.GetTrace(),
+                                 task_manager.GetSprintTrace());
+  contest_manager.SetHandicap(task_behaviour.contest_handicap);
+
   while (sim.Update()) {
     if (sim.state.time>time_last) {
 
@@ -196,6 +200,8 @@ test_replay(const Contests olc_type,
 
       task_manager.update(sim.state, state_last);
       task_manager.update_idle(sim.state);
+
+      contest_manager.update_idle();
   
       state_last = sim.state;
 
@@ -212,13 +218,13 @@ test_replay(const Contests olc_type,
   };
   sim.Stop();
 
-  task_manager.score_exhaustive();
+  contest_manager.solve_exhaustive();
 
   if (verbose) {
     distance_counts();
   }
   return compare_scores(official_score, 
-                        task_manager.get_contest_stats().get_contest_result(0));
+                        contest_manager.get_stats().get_contest_result(0));
 }
 
 

@@ -179,11 +179,6 @@ SettingsLeave()
                  operation);
   }
 
-  if (protected_task_manager != NULL) {
-    ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
-    lease->set_contest(XCSoarInterface::SettingsComputer().task.contest);
-  }
-
   if (DevicePortChanged)
     devRestart();
 

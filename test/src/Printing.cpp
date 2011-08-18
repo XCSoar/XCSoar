@@ -318,15 +318,6 @@ void PrintHelper::taskmanager_print(TaskManager& task, const AircraftState &stat
   }
 
   trace_print(task.trace_full, state.location);
-
-  contestmanager_print(task.contest_manager);
-
-  std::ofstream fs("results/res-stats-common.txt");
-  const ContestResult& score = task.get_contest_stats().get_contest_result();
-  fs << "#   score " << score.score << "\n";
-  fs << "#   distance " << score.distance/fixed(1000) << " (km)\n";
-  fs << "#   speed " << score.speed*fixed(3.6) << " (kph)\n";
-  fs << "#   time " << score.time << " (sec)\n";
 }
 
 #include "Math/Earth.hpp"
@@ -587,7 +578,6 @@ std::ostream& operator<< (std::ostream& f,
 
   return f;
 }
-
 
 void
 PrintHelper::contestmanager_print(const ContestManager& man)  
