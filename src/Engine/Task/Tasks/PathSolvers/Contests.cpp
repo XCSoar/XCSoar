@@ -22,27 +22,24 @@ Copyright_License {
 */
 
 #include "Contests.hpp"
+#include "Util/Macros.hpp"
+
+static const TCHAR *contest_to_string[] = {
+  _T("OLC Sprint"),
+  _T("OLC FAI"),
+  _T("OLC Classic"),
+  _T("OLC League"),
+  _T("OLC Plus"),
+  _T("XContest"),
+  _T("DHV-XC"),
+  _T("SIS-AT"),
+};
 
 const TCHAR*
 ContestToString(Contests contest)
 {
-  switch (contest) {
-  case OLC_Sprint:
-    return _T("OLC Sprint");
-  case OLC_FAI:
-    return _T("OLC FAI");
-  case OLC_Classic:
-    return _T("OLC Classic");
-  case OLC_League:
-    return _T("OLC League");
-  case OLC_Plus:
-    return _T("OLC Plus");
-  case OLC_XContest:
-    return _T("XContest");
-  case OLC_DHVXC:
-    return _T("DHV-XC");
-  case OLC_SISAT:
-    return _T("SIS-AT");
-  }
-  return NULL;
+  unsigned i = (unsigned)contest;
+  return i < ARRAY_SIZE(contest_to_string)
+    ? contest_to_string[i]
+    : NULL;
 }
