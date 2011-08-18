@@ -37,6 +37,7 @@ class ChartProjection:
   public WindowProjection
 {
 public:
+  ChartProjection() {}
 
   ChartProjection(const PixelRect &rc,
                   const TaskManager &task,
@@ -53,6 +54,14 @@ public:
   ChartProjection(const PixelRect &rc,
                   const TracePointVector& trace,
                   const GeoPoint &fallback_loc);
+
+  void Set(const PixelRect &rc,
+           const TaskManager &task,
+           const GeoPoint &fallback_loc);
+
+  void Set(const PixelRect &rc,
+           const OrderedTask &task,
+           const GeoPoint &fallback_loc);
 
 private:
   void set_projection(const PixelRect &rc,
