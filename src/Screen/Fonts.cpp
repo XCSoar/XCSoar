@@ -167,7 +167,6 @@ Fonts::Initialize()
 {
   InitialiseLogFonts();
 
-  InfoBoxSmall.set(LogInfoBoxSmall);
   Title.set(LogTitle);
   CDI.set(LogCDI);
   MapLabel.set(LogMapLabel);
@@ -184,6 +183,11 @@ Fonts::SizeInfoboxFont(unsigned control_width)
   if (!is_altair())
     SizeLogFont(lf, control_width, _T("1234m"));
   InfoBox.set(lf);
+
+  lf = LogInfoBoxSmall;
+  if (!is_altair())
+    SizeLogFont(lf, control_width, _T("12345m"));
+  InfoBoxSmall.set(lf);
 }
 
 void
