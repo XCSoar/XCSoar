@@ -50,6 +50,7 @@ Copyright_License {
 #include "Renderer/RenderObservationZone.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Screen/Chart.hpp"
+#include "Computer/TraceComputer.hpp"
 
 #include <algorithm>
 
@@ -477,30 +478,40 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                              const DerivedInfo &calculated,
                              const SETTINGS_COMPUTER &settings_computer,
                              const SETTINGS_MAP &settings_map,
-                             const TaskManager &task_manager) const
+                                     const ProtectedTaskManager &_task_manager,
+                                     const TraceComputer *trace_computer) const
 {
   Chart chart(chart_look, canvas, rc);
 
-  const OrderedTask &task = task_manager.get_ordered_task();
+  ChartProjection proj;
 
-  if (!task.check_task()) {
-    chart.DrawNoData();
-    return;
+  {
+    ProtectedTaskManager::Lease task_manager(_task_manager);
+    const OrderedTask &task = task_manager->get_ordered_task();
+
+    if (!task.check_task()) {
+      chart.DrawNoData();
+      return;
+    }
+
+    proj.Set(rc, task, nmea_info.location);
+
+    RenderObservationZone ozv(task_look, airspace_look);
+    RenderTaskPoint tpv(canvas, NULL, proj, settings_map, task_look,
+                        task.get_task_projection(),
+                        ozv, false, true, nmea_info.location);
+    ::RenderTask dv(tpv, proj.GetScreenBounds());
+    dv.Visit(task);
   }
 
-  ChartProjection proj(rc, task, nmea_info.location);
-
-  RenderObservationZone ozv(task_look, airspace_look);
-  RenderTaskPoint tpv(canvas, NULL, proj, settings_map, task_look,
-                      task.get_task_projection(),
-                      ozv, false, true, nmea_info.location);
-  ::RenderTask dv(tpv, proj.GetScreenBounds());
-  dv.Visit(task);
-
-  TracePointVector trace;
-  task_manager.get_trace_points(trace);
-  canvas.select(Graphics::TracePen);
-  DrawTrace(canvas, proj, trace);
+  if (trace_computer != NULL) {
+    TracePointVector trace;
+    trace_computer->LockedCopyTo(trace, 0,
+                                 proj.GetGeoScreenCenter(),
+                                 proj.DistancePixelsToMeters(3));
+    canvas.select(Graphics::TracePen);
+    DrawTrace(canvas, proj, trace);
+  }
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
   DrawAircraft(canvas, settings_map, aircraft_look,

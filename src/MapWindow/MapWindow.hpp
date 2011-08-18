@@ -55,6 +55,7 @@ struct Waypoint;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
 class ProtectedTaskManager;
+class GlideComputer;
 class GlidePolar;
 class ContainerWindow;
 class WaypointLabelList;
@@ -134,6 +135,7 @@ protected:
 
   ProtectedTaskManager *task;
   const ProtectedRoutePlanner *route_planner;
+  const GlideComputer *glide_computer;
 
   Marks *marks;
 
@@ -195,6 +197,10 @@ public:
 
   void SetRoutePlanner(const ProtectedRoutePlanner *_route_planner) {
     route_planner = _route_planner;
+  }
+
+  void SetGlideComputer(const GlideComputer *_gc) {
+    glide_computer = _gc;
   }
 
   void set_airspaces(Airspaces *_airspace_database,

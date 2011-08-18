@@ -220,19 +220,19 @@ ChartControl::on_paint(Canvas &canvas)
     break;
   case ANALYSIS_PAGE_TASK:
     if (protected_task_manager != NULL) {
-      ProtectedTaskManager::Lease task(*protected_task_manager);
+      const TraceComputer *trace_computer = glide_computer != NULL
+        ? &glide_computer->GetTraceComputer()
+        : NULL;
       fs.RenderTask(canvas, rcgfx, basic, calculated,
                     settings_computer, settings_map,
-                    task);
+                    *protected_task_manager,
+                    trace_computer);
     }
     break;
   case ANALYSIS_PAGE_OLC:
-    if (protected_task_manager != NULL) {
+    if (glide_computer != NULL) {
       TracePointVector trace;
-      {
-        ProtectedTaskManager::Lease task(*protected_task_manager);
-        task->get_trace_points(trace);
-      }
+      glide_computer->LockedCopyTraceTo(trace);
 
       fs.RenderOLC(canvas, rcgfx, basic, calculated,
                    settings_computer, settings_map,

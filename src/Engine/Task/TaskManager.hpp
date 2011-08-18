@@ -32,7 +32,6 @@
 #include "TaskStats/CommonStats.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "TaskBehaviour.hpp"
-#include "Trace/Trace.hpp"
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 
@@ -362,27 +361,6 @@ public:
   }
 
   /**
-   * Retrieve trace vector
-   *
-   */
-  const Trace &GetTrace() const {
-    return trace_full;
-  }
-
-  const Trace &GetSprintTrace() const {
-    return trace_sprint;
-  }
-
-  /**
-   * Retrieve olc trace vector
-   *
-   * @param iov Vector of trace points reduced for OLC
-   */
-  void get_trace_points(TracePointVector &iov) const {
-    trace_full.get_trace_points(iov);
-  }
-
-  /**
    * Accesses ordered task start state
    *
    * @return State at task start (or null state if not started)
@@ -569,9 +547,6 @@ public:
 
 private:
   GlidePolar m_glide_polar;
-
-  Trace trace_full;
-  Trace trace_sprint;
 
   TaskBehaviour task_behaviour;
 

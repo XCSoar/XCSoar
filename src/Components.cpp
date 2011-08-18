@@ -433,6 +433,7 @@ XCSoarInterface::Startup()
     map_window->set_way_points(&way_points);
     map_window->set_task(protected_task_manager);
     map_window->SetRoutePlanner(&glide_computer->GetProtectedRoutePlanner());
+    map_window->SetGlideComputer(glide_computer);
     map_window->set_airspaces(&airspace_database, airspace_warnings);
 
     map_window->set_topography(topography);

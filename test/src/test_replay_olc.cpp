@@ -1,11 +1,11 @@
 #include "test_debug.hpp"
 #include "harness_aircraft.hpp"
-#include "TaskEventsPrint.hpp"
 #include "Replay/IgcReplay.hpp"
-#include "Task/TaskManager.hpp"
+#include "Computer/TraceComputer.hpp"
 #include "UtilsText.hpp"
 #include "Computer/FlyingComputer.hpp"
 #include "Engine/Task/Tasks/ContestManager.hpp"
+#include "SettingsComputer.hpp"
 
 #include <fstream>
 
@@ -130,24 +130,17 @@ test_replay(const Contests olc_type,
   std::ofstream f("results/res-sample.txt");
 
   GlidePolar glide_polar(fixed_two);
-  Waypoints waypoints;
   AircraftState state_last;
-
-  TaskEventsPrint default_events(verbose);
-  TaskManager task_manager(default_events,
-                           waypoints);
-
-  task_manager.set_glide_polar(glide_polar);
 
   ReplayLoggerSim sim;
   TCHAR szFilename[MAX_PATH];
   ConvertCToT(szFilename, replay_file.c_str());
   sim.SetFilename(szFilename);
 
-  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
-  task_behaviour.enable_olc = true;
-  load_scores(task_behaviour.contest_handicap);
-  task_manager.set_task_behaviour(task_behaviour);
+  SETTINGS_COMPUTER settings_computer;
+  settings_computer.SetDefaults();
+  settings_computer.task.enable_olc = true;
+  load_scores(settings_computer.task.contest_handicap);
 
   if (verbose) {
     switch (olc_type) {
@@ -186,10 +179,12 @@ test_replay(const Contests olc_type,
   FlyingComputer flying_computer;
   flying_computer.Reset();
 
+  TraceComputer trace_computer;
+
   ContestManager contest_manager(olc_type,
-                                 task_manager.GetTrace(),
-                                 task_manager.GetSprintTrace());
-  contest_manager.SetHandicap(task_behaviour.contest_handicap);
+                                 trace_computer.GetFull(),
+                                 trace_computer.GetSprint());
+  contest_manager.SetHandicap(settings_computer.task.contest_handicap);
 
   while (sim.Update()) {
     if (sim.state.time>time_last) {
@@ -198,8 +193,8 @@ test_replay(const Contests olc_type,
 
       flying_computer.Compute(glide_polar, sim.state, sim.state);
 
-      task_manager.update(sim.state, state_last);
-      task_manager.update_idle(sim.state);
+      trace_computer.Update(settings_computer, sim.state);
+      trace_computer.Idle(settings_computer, sim.state);
 
       contest_manager.update_idle();
   
@@ -210,7 +205,7 @@ test_replay(const Contests olc_type,
         f.flush();
       }
       if (do_print) {
-        PrintHelper::taskmanager_print(task_manager, sim.state);
+        PrintHelper::trace_print(trace_computer.GetFull(), sim.state.location);
       }
       do_print = (++print_counter % output_skip ==0) && verbose;
     }

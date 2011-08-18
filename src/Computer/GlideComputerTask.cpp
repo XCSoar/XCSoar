@@ -38,7 +38,7 @@ GlideComputerTask::GlideComputerTask(ProtectedTaskManager &task,
                                      const Airspaces &airspace_database):
   m_task(task),
   route(airspace_database),
-  contest(task.GetTrace(), task.GetSprintTrace())
+  contest(trace.GetFull(), trace.GetSprint())
 {
   task.SetRoutePlanner(&route.GetRoutePlanner());
 }
@@ -53,6 +53,7 @@ GlideComputerTask::ResetFlight(const bool full)
 {
   m_task.reset();
   route.ResetFlight();
+  trace.Reset();
   contest.Reset();
 }
 
@@ -61,6 +62,9 @@ GlideComputerTask::ProcessBasicTask()
 {
   const MoreData &basic = Basic();
   DerivedInfo &derived = SetCalculated();
+
+  if (time_advanced() && basic.location_available)
+    trace.Update(SettingsComputer(), ToAircraftState(basic, derived));
 
   ProtectedTaskManager::ExclusiveLease task(m_task);
 
@@ -117,9 +121,14 @@ GlideComputerTask::ProcessMoreTask()
 void
 GlideComputerTask::ProcessIdle()
 {
+  const MoreData &basic = Basic();
+
   contest.Solve(SettingsComputer(), SetCalculated());
 
-  const AircraftState as = ToAircraftState(Basic(), Calculated());
+  const AircraftState as = ToAircraftState(basic, Calculated());
+
+  trace.Idle(SettingsComputer(), as);
+
   ProtectedTaskManager::ExclusiveLease task(m_task);
   task->update_idle(as);
 }

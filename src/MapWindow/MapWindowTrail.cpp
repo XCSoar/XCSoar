@@ -25,7 +25,7 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Graphics.hpp"
-#include "Task/ProtectedTaskManager.hpp"
+#include "Computer/GlideComputer.hpp"
 
 #include <algorithm>
 
@@ -57,24 +57,15 @@ void
 MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
                      unsigned min_time, bool enable_traildrift) const
 {
-  if (SettingsMap().trail_length == TRAIL_OFF || task == NULL)
+  if (SettingsMap().trail_length == TRAIL_OFF || glide_computer == NULL)
     return;
 
   const WindowProjection &projection = render_projection;
 
   TracePointVector trace;
-
-  {
-    ProtectedTaskManager::Lease lease(*task);
-    const Trace &src = lease->GetTrace();
-    if (src.empty())
-      return;
-
-    src.GetTracePoints(trace, min_time,
-                       projection.GetGeoScreenCenter(),
-                       projection.DistancePixelsToMeters(3));
-  }
-
+  glide_computer->LockedCopyTraceTo(trace, min_time,
+                                    projection.GetGeoScreenCenter(),
+                                    projection.DistancePixelsToMeters(3));
   if (trace.empty())
     return;
 

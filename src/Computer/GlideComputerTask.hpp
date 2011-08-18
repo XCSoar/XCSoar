@@ -25,7 +25,9 @@ Copyright_License {
 #define XCSOAR_GLIDECOMPUTER_TASK_HPP
 
 #include "GlideComputerBlackboard.hpp"
+#include "TraceComputer.hpp"
 #include "GlideComputerRoute.hpp"
+#include "TraceComputer.hpp"
 #include "ContestComputer.hpp"
 
 class ProtectedTaskManager;
@@ -36,6 +38,8 @@ class GlideComputerTask:
   ProtectedTaskManager &m_task;
 
   GlideComputerRoute route;
+
+  TraceComputer trace;
 
   ContestComputer contest;
 
@@ -49,6 +53,19 @@ public:
 
   void ClearAirspaces() {
     route.ClearAirspaces();
+  }
+
+  const TraceComputer &GetTraceComputer() const {
+    return trace;
+  }
+
+  void LockedCopyTraceTo(TracePointVector &v) const {
+    trace.LockedCopyTo(v);
+  }
+
+  void LockedCopyTraceTo(TracePointVector &v, unsigned min_time,
+                         const GeoPoint &location, fixed resolution) const {
+    trace.LockedCopyTo(v, min_time, location, resolution);
   }
 
 protected:

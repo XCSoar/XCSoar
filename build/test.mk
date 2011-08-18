@@ -1573,6 +1573,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMap.cpp \
 	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
 	$(SRC)/Task/TaskFileSeeYou.cpp \
@@ -1902,6 +1903,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/CirclingComputer.cpp \
 	$(SRC)/Computer/WindComputer.cpp \
 	$(SRC)/Computer/ContestComputer.cpp \
+	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Computer/GlideComputer.cpp \
 	$(SRC)/Computer/GlideComputerBlackboard.cpp \
 	$(SRC)/Computer/GlideComputerTask.cpp \

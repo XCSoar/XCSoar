@@ -43,6 +43,7 @@ class GlidePolar;
 class Chart;
 class TaskManager;
 class ProtectedTaskManager;
+class TraceComputer;
 class FlightStatistics;
 struct ContestStatistics;
 struct ChartLook;
@@ -114,7 +115,8 @@ public:
                   const DerivedInfo &derived_info,
                   const SETTINGS_COMPUTER &settings_computer,
                   const SETTINGS_MAP &settings_map,
-                  const TaskManager &task) const;
+                  const ProtectedTaskManager &task,
+                  const TraceComputer *trace_computer) const;
 
   void RenderSpeed(Canvas &canvas, const PixelRect rc,
                    const NMEAInfo &nmea_info,

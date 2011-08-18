@@ -316,8 +316,6 @@ void PrintHelper::taskmanager_print(TaskManager& task, const AircraftState &stat
       orderedtask_print(task.task_ordered, state);
     }
   }
-
-  trace_print(task.trace_full, state.location);
 }
 
 #include "Math/Earth.hpp"

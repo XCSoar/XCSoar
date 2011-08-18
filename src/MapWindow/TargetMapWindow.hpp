@@ -46,7 +46,7 @@ class TopographyRenderer;
 class Waypoints;
 class Airspaces;
 class ProtectedTaskManager;
-class OrderedTaskPoint;
+class GlideComputer;
 
 class TargetMapWindow : public BufferWindow {
   const TaskLook &task_look;
@@ -71,6 +71,7 @@ class TargetMapWindow : public BufferWindow {
   WaypointRenderer way_point_renderer;
 
   ProtectedTaskManager *task;
+  const GlideComputer *glide_computer;
 
   unsigned target_index;
 
@@ -104,6 +105,10 @@ public:
 
   void SetTask(ProtectedTaskManager *_task) {
     task = _task;
+  }
+
+  void SetGlideComputer(const GlideComputer *_gc) {
+    glide_computer = _gc;
   }
 
   void SetTarget(unsigned index);

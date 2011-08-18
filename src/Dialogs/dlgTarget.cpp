@@ -71,6 +71,7 @@ OnCreateMap(ContainerWindow &parent, int left, int top,
   map->SetAirspaces(&airspace_database);
   map->SetWaypoints(&way_points);
   map->SetTask(protected_task_manager);
+  map->SetGlideComputer(glide_computer);
   map->set(parent, left, top, width, height, style);
 
   return map;

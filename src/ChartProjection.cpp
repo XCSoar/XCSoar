@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "ChartProjection.hpp"
 #include "Engine/Task/TaskManager.hpp"
+#include "Engine/Navigation/TracePoint.hpp"
 
 ChartProjection::ChartProjection(const PixelRect &rc,
                                  const TaskManager &task,

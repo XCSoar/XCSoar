@@ -5,6 +5,11 @@ TEST_SRC = \
 	$(SRC)/Replay/TaskAutoPilot.cpp \
 	$(SRC)/Replay/AircraftSim.cpp \
 	$(SRC)/UtilsText.cpp \
+	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/Computer/TraceComputer.cpp \
+	$(SRC)/OS/Clock.cpp \
+	$(SRC)/Thread/Mutex.cpp \
+	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/test_debug.cpp \
 	$(TEST_SRC_DIR)/harness_aircraft.cpp \

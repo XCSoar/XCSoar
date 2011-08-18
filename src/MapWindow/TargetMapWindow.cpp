@@ -37,6 +37,7 @@ Copyright_License {
 #include "Engine/Math/Earth.hpp"
 #include "Units/Units.hpp"
 #include "Interface.hpp"
+#include "Computer/GlideComputer.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Scope.hpp"
@@ -241,23 +242,17 @@ void
 TargetMapWindow::RenderTrail(Canvas &canvas,
                              const RasterPoint aircraft_pos) const
 {
-  if (task == NULL)
+  if (glide_computer == NULL)
     return;
 
   unsigned min_time = max(0, (int)Basic().time - 600);
 
   TracePointVector trace;
-
-  {
-    ProtectedTaskManager::Lease lease(*task);
-    const Trace &src = lease->GetTrace();
-    if (src.empty())
-      return;
-
-    src.GetTracePoints(trace, min_time,
-                       projection.GetGeoScreenCenter(),
-                       projection.DistancePixelsToMeters(4));
-  }
+  glide_computer->LockedCopyTraceTo(trace, min_time,
+                                    projection.GetGeoScreenCenter(),
+                                    projection.DistancePixelsToMeters(4));
+  if (trace.empty())
+    return;
 
   canvas.select(Graphics::TracePen);
   DrawTraceVector(canvas, projection, trace);

@@ -32,8 +32,6 @@
 TaskManager::TaskManager(TaskEvents &te,
                          const Waypoints &wps): 
   m_glide_polar(fixed_zero),
-  trace_full(60),
-  trace_sprint(0, 9000, 300),
   task_ordered(te, task_behaviour, m_glide_polar, true),
   task_goto(te, task_behaviour, m_glide_polar, wps),
   task_abort(te, task_behaviour, m_glide_polar, wps),
@@ -288,15 +286,6 @@ TaskManager::update(const AircraftState &state,
   if (state_last.time > state.time)
     reset();
 
-  if (state.flying) {
-    // either olc or basic trace requires trace_full
-    if (task_behaviour.enable_olc || task_behaviour.enable_trace)
-      trace_full.append(state);
-    // only olc requires trace_sprint
-    if (task_behaviour.enable_olc)
-      trace_sprint.append(state);
-  }
-
   if (task_ordered.task_size() > 1)
     // always update ordered task
     retval |= task_ordered.update(state, state_last);
@@ -328,16 +317,6 @@ bool
 TaskManager::update_idle(const AircraftState& state)
 {
   bool retval = false;
-
-  if (state.flying) {
-    // Update the Traces even if contest
-    // optimization is not _currently_ enabled
-    if (task_behaviour.enable_olc || task_behaviour.enable_trace)
-      retval |= trace_full.optimise_if_old();
-
-    if (task_behaviour.enable_olc)
-      retval |= trace_sprint.optimise_if_old();
-  }
 
   if (active_task)
     retval |= active_task->update_idle(state);
@@ -382,8 +361,6 @@ TaskManager::reset()
   task_abort.reset();
   common_stats.reset();
   m_glide_polar.SetCruiseEfficiency(fixed_one);
-  trace_full.clear();
-  trace_sprint.clear();
 }
 
 unsigned 
