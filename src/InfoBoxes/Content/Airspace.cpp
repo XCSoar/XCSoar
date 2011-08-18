@@ -31,6 +31,7 @@ Copyright_License {
 #include "Engine/Airspace/AirspaceVisitor.hpp"
 #include "Engine/Airspace/AirspaceCircle.hpp"
 #include "Engine/Airspace/AirspacePolygon.hpp"
+#include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Units/UnitsFormatter.hpp"
 
 struct NearestAirspace {
@@ -53,12 +54,19 @@ struct NearestAirspace {
 
 gcc_pure
 static bool
+IsAcked(const AbstractAirspace &airspace)
+{
+  return airspace_warnings != NULL && airspace_warnings->get_ack_day(airspace);
+}
+
+gcc_pure
+static bool
 CheckAirspace(const AbstractAirspace &airspace)
 {
   const AirspaceWarningConfig &config =
     CommonInterface::SettingsComputer().airspace.warnings;
 
-  return config.class_enabled(airspace.get_type());
+  return config.class_enabled(airspace.get_type()) && !IsAcked(airspace);
 }
 
 class HorizontalAirspaceCondition : public AirspacePredicate {
