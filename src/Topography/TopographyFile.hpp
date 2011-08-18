@@ -115,6 +115,7 @@ public:
 
     const XShape &operator*() const {
       assert(current != NULL);
+      assert(current->shape != NULL);
 
       return *current->shape;
     }
