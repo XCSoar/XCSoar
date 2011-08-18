@@ -295,6 +295,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
        item, otherwise exit immediately */
     canvas.text(paint_rc.left + IBLSCALE(paint_rc_margin),
                 paint_rc.top + IBLSCALE(paint_rc_margin), _("No Warnings"));
+    return;
   }
 
   assert(i < warning_list.size());
