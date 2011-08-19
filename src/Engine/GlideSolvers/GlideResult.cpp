@@ -69,6 +69,15 @@ GlideResult::CalcCruiseBearing()
 void
 GlideResult::Add(const GlideResult &s2) 
 {
+  if (s2.validity > validity)
+    /* downgrade the validity */
+    validity = s2.validity;
+
+  if (!IsOkOrPartial())
+    /* the other attributes are not valid if validity is not OK or
+       PARTIAL */
+    return;
+
   time_elapsed += s2.time_elapsed;
   height_glide += s2.height_glide;
   height_climb += s2.height_climb;
