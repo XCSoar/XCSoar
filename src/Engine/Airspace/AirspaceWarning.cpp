@@ -24,9 +24,6 @@ Copyright_License {
 #include "AirspaceWarning.hpp"
 
 #include <assert.h>
-#include <limits.h>
-
-const unsigned AirspaceWarning::null_acktime = UINT_MAX;
 
 AirspaceWarning::AirspaceWarning(const AbstractAirspace& the_airspace):
   m_airspace(the_airspace),
