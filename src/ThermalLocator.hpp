@@ -70,6 +70,14 @@ private:
     fixed recency_weight;
   };
 
+  /** Circular buffer of points */
+  Point points[TLOCATOR_NMAX];
+
+  /** Index of next point to add */
+  unsigned n_index;
+  /** Number of points in buffer */
+  unsigned n_points;
+
 public:
   /** 
    * Default constructor.  Initialises object
@@ -105,14 +113,6 @@ private:
 
   void Drift(const fixed t_0, const TaskProjection& projection,
              const GeoPoint& traildrift);
-
-  /** Circular buffer of points */
-  Point points[TLOCATOR_NMAX];
-
-  /** Index of next point to add */
-  unsigned n_index;
-  /** Number of points in buffer */
-  unsigned n_points;
 };
 
 #endif
