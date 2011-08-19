@@ -630,24 +630,6 @@ $(TARGET_BIN_DIR)/TestWaypointReader$(TARGET_EXEEXT): $(TEST_WAY_POINT_FILE_OBJS
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) $(ZZIP_LDFLAGS) -o $@
 
-TEST_OLC_SOURCES = \
-	$(SRC)/Math/fixed.cpp \
-	$(SRC)/Math/Angle.cpp \
-	$(SRC)/Math/FastMath.cpp \
-	$(SRC)/Replay/IGCParser.cpp \
-	$(SRC)/Util/StringUtil.cpp \
-	$(SRC)/Util/UTF8.cpp \
-	$(TEST_SRC_DIR)/FakeTerrain.cpp \
-	$(TEST_SRC_DIR)/Printing.cpp \
-	$(TEST_SRC_DIR)/ContestPrinting.cpp \
-	$(TEST_SRC_DIR)/TestOLC.cpp 
-TEST_OLC_OBJS = $(call SRC_TO_OBJ,$(TEST_OLC_SOURCES))
-TEST_OLC_LDADD = $(UTIL_LIBS) $(MATH_LIBS) $(IO_LIBS) $(ENGINE_LIBS)
-$(TARGET_BIN_DIR)/TestOLC$(TARGET_EXEEXT): CPPFLAGS += -DDO_PRINT
-$(TARGET_BIN_DIR)/TestOLC$(TARGET_EXEEXT): $(TEST_OLC_OBJS) $(TEST_OLC_LDADD) | $(TARGET_BIN_DIR)/dirstamp
-	@$(NQ)echo "  LINK    $@"
-	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
-
 TEST_TRACE_SOURCES = \
 	$(TEST_SRC_DIR)/tap.c \
 	$(SRC)/Math/fixed.cpp \
@@ -1470,6 +1452,49 @@ RUN_WIND_EKF_LDADD = \
 	$(MATH_LIBS) \
 	$(UTIL_LIBS)
 $(TARGET_BIN_DIR)/RunWindEKF$(TARGET_EXEEXT): $(RUN_WIND_EKF_OBJS) $(RUN_WIND_EKF_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_OLC_SOURCES = \
+	$(DEBUG_REPLAY_SOURCES) \
+	$(SRC)/Math/fixed.cpp \
+	$(SRC)/Math/Angle.cpp \
+	$(SRC)/Math/FastMath.cpp \
+	$(SRC)/Replay/IGCParser.cpp \
+	$(SRC)/Util/StringUtil.cpp \
+	$(SRC)/Util/UTF8.cpp \
+	$(SRC)/NMEA/Aircraft.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/SearchPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/SearchPointVector.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/TracePoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatGeoPoint.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
+	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/ContestManager.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/Contests.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/AbstractContest.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/ContestDijkstra.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCLeague.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSprint.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCClassic.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCTriangle.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCFAI.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCPlus.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContestFree.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContestTriangle.cpp \
+	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSISAT.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/ContestPrinting.cpp \
+	$(TEST_SRC_DIR)/TestOLC.cpp
+TEST_OLC_OBJS = $(call SRC_TO_OBJ,$(TEST_OLC_SOURCES))
+TEST_OLC_LDADD = $(UTIL_LIBS) $(MATH_LIBS) \
+	$(DRIVER_LIBS) \
+	$(DEBUG_REPLAY_LDADD)
+$(TARGET_BIN_DIR)/TestOLC$(TARGET_EXEEXT): CPPFLAGS += -DDO_PRINT
+$(TARGET_BIN_DIR)/TestOLC$(TARGET_EXEEXT): $(TEST_OLC_OBJS) $(TEST_OLC_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 

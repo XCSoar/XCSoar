@@ -20,13 +20,14 @@
 }
 */
 
-#include "Replay/IGCParser.hpp"
-#include "IO/FileLineReader.hpp"
 #include "Engine/Math/Earth.hpp"
 #include "Engine/Trace/Trace.hpp"
 #include "Engine/Task/Tasks/ContestManager.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Printing.hpp"
+#include "Args.hpp"
+#include "DebugReplay.hpp"
+#include "NMEA/Aircraft.hpp"
 
 #include <assert.h>
 #include <stdio.h>
@@ -48,49 +49,22 @@ ContestManager olc_sprint(OLC_Sprint, full_trace, sprint_trace);
 ContestManager olc_league(OLC_League, full_trace, sprint_trace);
 ContestManager olc_plus(OLC_Plus, full_trace, sprint_trace);
 
-static void
-on_advance(const GeoPoint &loc, const fixed speed,
-           const Angle bearing, const fixed alt,
-           const fixed baroalt, const fixed t)
-{
-  AircraftState new_state;
-  new_state.location = loc;
-  new_state.ground_speed = speed;
-  new_state.altitude = alt;
-  new_state.track = bearing;
-  new_state.time = t;
-  new_state.altitude_agl = alt;
-
-  full_trace.append(new_state);
-  sprint_trace.append(new_state);
-
-  full_trace.optimise_if_old();
-  sprint_trace.optimise_if_old();
-}
-
 static int
-TestOLC(const char *filename)
+TestOLC(DebugReplay &replay)
 {
-  FileLineReaderA reader(filename);
-  if (reader.error()) {
-    fprintf(stderr, "Failed to open %s\n", filename);
-    return EXIT_FAILURE;
-  }
-
-  char *line;
-  for (int i = 1; (line = reader.read()) != NULL; i++) {
+  for (int i = 1; replay.Next(); i++) {
     if (i % 500 == 0) {
       putchar('.');
       fflush(stdout);
     }
 
-    IGCFix fix;
-    if (!IGCParseFix(line, fix))
-      continue;
+    const AircraftState state =
+      ToAircraftState(replay.Basic(), replay.Calculated());
+    full_trace.append(state);
+    sprint_trace.append(state);
 
-    on_advance(fix.location, fixed(30), Angle::zero(),
-               fix.gps_altitude, fix.pressure_altitude,
-               fix.time);
+    full_trace.optimise_if_old();
+    sprint_trace.optimise_if_old();
 
     olc_sprint.update_idle();
   }
@@ -127,7 +101,14 @@ TestOLC(const char *filename)
 
 int main(int argc, char **argv)
 {
-  assert(argc >= 2);
+  Args args(argc, argv, "DRIVER FILE");
+  DebugReplay *replay = CreateDebugReplay(args);
+  if (replay == NULL)
+    return EXIT_FAILURE;
 
-  return TestOLC(argv[1]);
+  args.ExpectEnd();
+
+  int result = TestOLC(*replay);
+  delete replay;
+  return result;
 }
