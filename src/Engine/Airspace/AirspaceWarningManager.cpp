@@ -109,11 +109,6 @@ AirspaceWarningManager::update(const AircraftState& state,
 {
   bool changed = false;
 
-  // save old state
-  for (AirspaceWarningList::iterator it = m_warnings.begin();
-       it != m_warnings.end(); ++it)
-    it->save_state();
-
   // update warning states
   if (m_airspaces.empty()) {
     // no airspaces, so drop all warnings if any
@@ -122,13 +117,18 @@ AirspaceWarningManager::update(const AircraftState& state,
       return true;
     }
     return false;
-  } else {
-    // check from strongest to weakest alerts
-    update_inside(state);
-    update_glide(state);
-    update_filter(state, circling);
-    update_task(state);
   }
+
+  // save old state
+  for (AirspaceWarningList::iterator it = m_warnings.begin();
+       it != m_warnings.end(); ++it)
+    it->save_state();
+
+  // check from strongest to weakest alerts
+  update_inside(state);
+  update_glide(state);
+  update_filter(state, circling);
+  update_task(state);
 
   // action changes
   for (AirspaceWarningList::iterator it = m_warnings.begin();
