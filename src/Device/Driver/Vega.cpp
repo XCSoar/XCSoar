@@ -277,7 +277,7 @@ PDVVT(NMEAInputLine &line, NMEA_INFO *GPS_INFO)
   fixed value;
   GPS_INFO->TemperatureAvailable = line.read_checked(value);
   if (GPS_INFO->TemperatureAvailable)
-    GPS_INFO->OutsideAirTemperature = Units::ToSysUnit(value / 10, unGradCelcius);
+    GPS_INFO->OutsideAirTemperature = value / 10;
 
   GPS_INFO->HumidityAvailable = line.read_checked(GPS_INFO->RelativeHumidity);
 
