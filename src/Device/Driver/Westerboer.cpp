@@ -95,7 +95,7 @@ PWES0(NMEAInputLine &line, NMEAInfo &info)
   }
 
   if (line.read_checked(i)) {
-    info.temperature = fixed(i) / 10;
+    info.temperature = Units::ToSysUnit(fixed(i) / 10, unGradCelcius);
     info.temperature_available = true;
   }
 

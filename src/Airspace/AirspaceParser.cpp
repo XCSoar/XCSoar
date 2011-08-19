@@ -719,6 +719,8 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
 
   bearing_to = Bearing(temp_area.Center, to);
 
+  temp_area.points.push_back(from);
+
   GeoPoint TempPoint;
   while ((bearing_to - bearing_from).magnitude_degrees() > fixed_7_5) {
     bearing_from += BearingStep;
@@ -726,6 +728,8 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
     TempPoint = FindLatitudeLongitude(temp_area.Center, bearing_from, radius);
     temp_area.points.push_back(TempPoint);
   }
+
+  temp_area.points.push_back(to);
 
   return true;
 }

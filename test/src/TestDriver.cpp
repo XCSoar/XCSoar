@@ -580,7 +580,7 @@ TestWesterboer()
   ok1(nmea_info.voltage_available);
   ok1(equals(nmea_info.voltage, 12.8));
   ok1(nmea_info.temperature_available);
-  ok1(equals(nmea_info.temperature, 29.5));
+  ok1(equals(nmea_info.temperature, 29.5 + 273.15));
 
   ok1(device->ParseNMEA("$PWES1,20,21,0,030,1,6,385,10*1a", nmea_info));
   ok1(nmea_info.settings.mac_cready_available);

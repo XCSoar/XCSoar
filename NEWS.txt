@@ -38,8 +38,13 @@ Version 6.2 - not yet released
   - allow finish height in MSL or AGL
 
 Version 6.1.5 - not yet released
+* data files
+  - fixed arcs in TNP airspace files
+* devices
+  - fixed temperature reading from Altair/Vega and Westerboer devices
 * calculations
   - airspace distance miscalculations fixed
+  - fixed builtin polars with points above 200 km/h
 * Android
   - fix timer crash
 

@@ -286,7 +286,7 @@ PDVVT(NMEAInputLine &line, NMEAInfo &info)
   fixed value;
   info.temperature_available = line.read_checked(value);
   if (info.temperature_available)
-    info.temperature = Units::ToSysUnit(value / 10, unGradCelcius);
+    info.temperature = value / 10;
 
   info.humidity_available = line.read_checked(info.humidity);
 
