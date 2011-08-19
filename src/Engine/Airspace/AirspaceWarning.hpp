@@ -24,6 +24,7 @@
 #define AIRSPACE_WARNING_HPP
 
 #include "AirspaceInterceptSolution.hpp"
+#include "Util/TinyEnum.hpp"
 #include "Compiler.h"
 
 #ifdef DO_PRINT
@@ -51,8 +52,8 @@ public:
 
 private:
   const AbstractAirspace& m_airspace;
-  State m_state;
-  State m_state_last;
+  TinyEnum<State> m_state;
+  TinyEnum<State> m_state_last;
   AirspaceInterceptSolution m_solution;
 
   unsigned m_acktime_warning;
