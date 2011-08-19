@@ -27,14 +27,14 @@
 static inline double
 thermal_fn(int x)
 {
-  return exp((-0.2/TLOCATOR_NMAX)*pow((double)x, 1.5));
+  return exp((-0.2/ThermalLocator::TLOCATOR_NMAX)*pow((double)x, 1.5));
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(TLOCATOR_NMAX);
+  plan_tests(ThermalLocator::TLOCATOR_NMAX);
 
-  for (unsigned i = 0; i < TLOCATOR_NMAX; ++i)
+  for (unsigned i = 0; i < ThermalLocator::TLOCATOR_NMAX; ++i)
     ok1((int)(thermal_fn(i) * 1024 * 1024) ==
         (int)(thermal_recency_fn(i) * 1024 * 1024));
 

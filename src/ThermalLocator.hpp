@@ -30,10 +30,6 @@ Copyright_License {
 #include "Navigation/SpeedVector.hpp"
 
 class TaskProjection;
-
-#define TLOCATOR_NMIN 5
-#define TLOCATOR_NMAX 60
-
 struct ThermalLocatorInfo;
 
 /**
@@ -41,6 +37,10 @@ struct ThermalLocatorInfo;
  * when circling.
  */
 class ThermalLocator {
+public:
+  static const unsigned TLOCATOR_NMIN = 5;
+  static const unsigned TLOCATOR_NMAX = 60;
+
 private:
   /** Class used to hold thermal estimate samples */
   struct Point 
