@@ -54,7 +54,7 @@ For Linux/Unix, you need:
 For Android, you need:
 
 - Android SDK (http://developer.android.com/sdk/)
-- Android NDK r5b (http://developer.android.com/sdk/ndk/)
+- Android NDK r5c (http://developer.android.com/sdk/ndk/)
 - Ogg Vorbis (http://www.vorbis.com/)
 
 To compile, run:
