@@ -46,10 +46,10 @@ Copyright_License {
 
 #define fixed_7_5 fixed(7.5)
 
-enum asFileType {
-  ftUnknown,
-  ftOpenAir,
-  ftTNP
+enum AirspaceFileType {
+  AFT_UNKNOWN,
+  AFT_OPENAIR,
+  AFT_TNP
 };
 
 static const int k_nAreaCount = 14;
@@ -812,18 +812,18 @@ ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
   return true;
 }
 
-static asFileType
+static AirspaceFileType
 DetectFileType(const TCHAR *line)
 {
   if (string_after_prefix_ci(line, _T("INCLUDE=")) ||
       string_after_prefix_ci(line, _T("TYPE=")))
-    return ftTNP;
+    return AFT_TNP;
 
   const TCHAR *p = string_after_prefix_ci(line, _T("AC"));
   if (p != NULL && (string_is_empty(p) || *p == _T(' ')))
-    return ftOpenAir;
+    return AFT_OPENAIR;
 
-  return ftUnknown;
+  return AFT_UNKNOWN;
 }
 
 bool
@@ -839,7 +839,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader,
   long file_size = reader.size();
 
   TempAirspaceType temp_area;
-  asFileType filetype = ftUnknown;
+  AirspaceFileType filetype = AFT_UNKNOWN;
 
   TCHAR *line;
   TCHAR *comment;
@@ -857,19 +857,19 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader,
     if (string_is_empty(line))
       continue;
 
-    if (filetype == ftUnknown) {
+    if (filetype == AFT_UNKNOWN) {
       filetype = DetectFileType(line);
-      if (filetype == ftUnknown)
+      if (filetype == AFT_UNKNOWN)
         continue;
     }
 
     // Parse the line
-    if (filetype == ftOpenAir)
+    if (filetype == AFT_OPENAIR)
       if (!ParseLine(airspace_database, line, temp_area) &&
           !ShowParseWarning(LineCount, line))
         return false;
 
-    if (filetype == ftTNP)
+    if (filetype == AFT_TNP)
       if (!ParseLineTNP(airspace_database, line, temp_area, ignore) &&
           !ShowParseWarning(LineCount, line))
         return false;
@@ -882,7 +882,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader,
   if (LineCount == 0)
     return false;
 
-  if (filetype == ftUnknown) {
+  if (filetype == AFT_UNKNOWN) {
     MessageBoxX(_("Unknown Filetype."), _("Airspace"), MB_OK);
     return false;
   }
