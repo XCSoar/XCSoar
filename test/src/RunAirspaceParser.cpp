@@ -36,16 +36,17 @@ int main(int argc, char **argv)
     return 1;
   }
 
-  Airspaces airspaces;
-
   FileLineReader reader(argv[1], ConvertLineReader::AUTO);
   if (reader.error()) {
     fprintf(stderr, "Failed to open input file\n");
     return 1;
   }
 
+  Airspaces airspaces;
+  AirspaceParser parser(airspaces);
+
   NullOperationEnvironment operation;
-  if (!ReadAirspace(airspaces, reader, operation)) {
+  if (!parser.Parse(reader, operation)) {
     fprintf(stderr, "Failed to parse input file\n");
     return 1;
   }

@@ -827,8 +827,7 @@ DetectFileType(const TCHAR *line)
 }
 
 bool
-ReadAirspace(Airspaces &airspace_database, TLineReader &reader,
-             OperationEnvironment &operation)
+AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
 {
   int LineCount = 0;
   bool ignore = false;
@@ -865,12 +864,12 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader,
 
     // Parse the line
     if (filetype == AFT_OPENAIR)
-      if (!ParseLine(airspace_database, line, temp_area) &&
+      if (!ParseLine(airspaces, line, temp_area) &&
           !ShowParseWarning(LineCount, line))
         return false;
 
     if (filetype == AFT_TNP)
-      if (!ParseLineTNP(airspace_database, line, temp_area, ignore) &&
+      if (!ParseLineTNP(airspaces, line, temp_area, ignore) &&
           !ShowParseWarning(LineCount, line))
         return false;
 
@@ -889,7 +888,7 @@ ReadAirspace(Airspaces &airspace_database, TLineReader &reader,
 
   // Process final area (if any)
   if (!temp_area.Waiting)
-    temp_area.AddPolygon(airspace_database);
+    temp_area.AddPolygon(airspaces);
 
   return true;
 }

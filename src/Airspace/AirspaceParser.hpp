@@ -28,8 +28,14 @@ class Airspaces;
 class TLineReader;
 class OperationEnvironment;
 
-bool
-ReadAirspace(Airspaces &airspace_database, TLineReader &reader,
-             OperationEnvironment &operation);
+class AirspaceParser
+{
+  Airspaces &airspaces;
+
+public:
+  AirspaceParser(Airspaces &_airspaces): airspaces(_airspaces) {}
+
+  bool Parse(TLineReader &reader, OperationEnvironment &operation);
+};
 
 #endif

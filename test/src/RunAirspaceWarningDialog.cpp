@@ -63,7 +63,8 @@ LoadFiles(Airspaces &airspace_database)
 
   TLineReader *reader = OpenConfiguredTextFile(szProfileAirspaceFile);
   if (reader != NULL) {
-    ReadAirspace(airspace_database, *reader, operation);
+    AirspaceParser parser(airspace_database);
+    parser.Parse(*reader, operation);
     delete reader;
 
     airspace_database.optimise();
