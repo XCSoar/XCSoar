@@ -391,25 +391,10 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 }
 
 static void
-CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
+AddArc(const GeoPoint Start, const GeoPoint End, TempAirspaceType &temp_area)
 {
   // 5 or -5, depending on direction
   const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
-
-  // Read start coordinates
-  GeoPoint Start;
-  if (!ReadCoords(&Text[3], Start))
-    return;
-
-  // Skip comma character
-  const TCHAR* Comma = _tcschr(Text, ',');
-  if (!Comma)
-    return;
-
-  // Read end coordinates
-  GeoPoint End;
-  if (!ReadCoords(&Comma[1], End))
-    return;
 
   // Determine start bearing and radius
   const GeoVector v = temp_area.Center.distance_bearing(Start);
@@ -433,6 +418,27 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   // Add last polygon point
   TempPoint = End;
   temp_area.points.push_back(TempPoint);
+}
+
+static void
+CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
+{
+  // Read start coordinates
+  GeoPoint Start;
+  if (!ReadCoords(&Text[3], Start))
+    return;
+
+  // Skip comma character
+  const TCHAR* Comma = _tcschr(Text, ',');
+  if (!Comma)
+    return;
+
+  // Read end coordinates
+  GeoPoint End;
+  if (!ReadCoords(&Comma[1], End))
+    return;
+
+  AddArc(Start, End, temp_area);
 }
 
 static AirspaceClass_t
@@ -697,6 +703,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
     return false;
   if ((parameter = string_after_prefix_ci(parameter, _T(" CENTRE="))) == NULL)
     return false;
+
   ParseCoordsTNP(parameter, temp_area.Center);
 
   if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
@@ -706,30 +713,11 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
     return false;
   if ((parameter = string_after_prefix_ci(parameter, _T(" TO="))) == NULL)
     return false;
+
   GeoPoint to;
   ParseCoordsTNP(parameter, to);
 
-  Angle bearing_to;
-
-  const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
-
-  const GeoVector v = temp_area.Center.distance_bearing(from);
-  const fixed radius = v.Distance;
-  Angle bearing_from = v.Bearing;
-
-  bearing_to = Bearing(temp_area.Center, to);
-
-  temp_area.points.push_back(from);
-
-  GeoPoint TempPoint;
-  while ((bearing_to - bearing_from).magnitude_degrees() > fixed_7_5) {
-    bearing_from += BearingStep;
-    bearing_from = bearing_from.as_bearing();
-    TempPoint = FindLatitudeLongitude(temp_area.Center, bearing_from, radius);
-    temp_area.points.push_back(TempPoint);
-  }
-
-  temp_area.points.push_back(to);
+  AddArc(from, to, temp_area);
 
   return true;
 }
