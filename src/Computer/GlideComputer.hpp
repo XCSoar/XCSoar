@@ -49,7 +49,6 @@ class GlideComputer:
   WarningComputer warning_computer;
 
   const Waypoints &way_points;
-  ProtectedTaskManager &protected_task_manager;
 
   int TeamCodeRefId;
   bool TeamCodeRefFound;

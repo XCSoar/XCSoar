@@ -50,7 +50,7 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
   GlideComputerAirData(_way_points),
   GlideComputerTask(task, _airspace_database),
   warning_computer(_airspace_database, airspace),
-  way_points(_way_points), protected_task_manager(task),
+  way_points(_way_points),
   TeamCodeRefId(-1)
 {
   events.set_computer(*this);
