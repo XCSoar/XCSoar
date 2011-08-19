@@ -2,7 +2,7 @@
 SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
-Version 6.1.5 - not yet released
+Version 6.1.5 - 2011/08/20
 * data files
   - fixed arcs in TNP airspace files
 * devices
