@@ -110,9 +110,6 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
       acc_gr = gr;
     else if (i > m_start)
       acc_gr.Add(gr);
-
-    if (gr.validity != GlideResult::RESULT_OK)
-      i = max(m_start, 1) - 1; // quick exit
   }
 
   if (m_end > m_start)
