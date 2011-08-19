@@ -66,7 +66,7 @@ ThermalLocator::AddPoint(const fixed t, const GeoPoint &location, const fixed w)
 
   n_index = (n_index + 1) % TLOCATOR_NMAX;
 
-  if (n_points + 1 < TLOCATOR_NMAX)
+  if (n_points < TLOCATOR_NMAX)
     n_points++;
 }
 
