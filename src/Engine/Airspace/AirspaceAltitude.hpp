@@ -17,46 +17,50 @@ enum AirspaceAltBase_t {
 /**
  *  Structure to hold airspace altitude boundary data
  */
-struct AIRSPACE_ALT
+struct AirspaceAltitude
 {
-  fixed Altitude; /**< Altitude AMSL (m) resolved from type */
-  fixed FL; /**< Flight level (100ft) for FL-referenced boundary */
-  fixed AGL; /**< Height above terrain (m) for ground-referenced boundary */
-  AirspaceAltBase_t Base; /**< Type of airspace boundary */
+  /** Altitude AMSL (m) resolved from type */
+  fixed altitude;
+  /** Flight level (100ft) for FL-referenced boundary */
+  fixed flight_level;
+  /** Height above terrain (m) for ground-referenced boundary */
+  fixed altitude_above_terrain;
+  /** Type of airspace boundary */
+  AirspaceAltBase_t type;
 
   /** 
    * Constructor.  Initialises to zero.
    * 
    * @return Initialised blank object
    */
-  AIRSPACE_ALT():Altitude(fixed_zero),
-                 FL(fixed_zero),
-                 AGL(fixed_zero),
-                 Base(abUndef) {};
+  AirspaceAltitude():altitude(fixed_zero),
+                 flight_level(fixed_zero),
+                 altitude_above_terrain(fixed_zero),
+                 type(abUndef) {};
 
   /**
    * Get Altitude AMSL (m) resolved from type.  For AGL types, this assumes the terrain height
    * is the terrain height at the aircraft.
    */
-  fixed get_altitude(const AltitudeState& state) const;
+  fixed GetAltitude(const AltitudeState& state) const;
 
   /**
    * Is this altitude reference at or above the aircraft state?
    */
-  bool is_above  (const AltitudeState& state, const fixed margin=fixed_zero) const;
+  bool IsAbove(const AltitudeState& state, const fixed margin = fixed_zero) const;
 
   /**
    * Is this altitude reference at or below the aircraft state?
    */
-  bool is_below  (const AltitudeState& state, const fixed margin=fixed_zero) const;
+  bool IsBelow(const AltitudeState& state, const fixed margin = fixed_zero) const;
 
 /** 
  * Test whether airspace boundary is the terrain
  * 
  * @return True if this altitude limit is the terrain
  */
-  bool is_terrain() const {
-    return (!positive(AGL) && (Base==abAGL));
+  bool IsTerrain() const {
+    return (!positive(altitude_above_terrain) && (type==abAGL));
   }
 
 /** 
@@ -66,7 +70,7 @@ struct AIRSPACE_ALT
  * 
  * @param alt Height of terrain at airspace center
  */
-  void set_ground_level(const fixed alt);
+  void SetGroundLevel(const fixed alt);
 
 /** 
  * Set atmospheric pressure (QNH) for flight-level based
@@ -75,7 +79,7 @@ struct AIRSPACE_ALT
  * 
  * @param press Atmospheric pressure model (to obtain QNH)
  */
-  void set_flight_level(const AtmosphericPressure &press);
+  void SetFlightLevel(const AtmosphericPressure &press);
 
 /** 
  * Generate text form of airspace altitude boundary
@@ -84,7 +88,7 @@ struct AIRSPACE_ALT
  * 
  * @return String version of altitude reference
  */
-  const tstring get_as_text(const bool concise=false) const;
+  const tstring GetAsText(const bool concise = false) const;
 
 /** 
  * Generate text form of airspace altitude boundary with user units
@@ -93,13 +97,11 @@ struct AIRSPACE_ALT
  * 
  * @return String version of altitude reference
  */
-  const tstring get_as_text_units(const bool concise=false) const;
+  const tstring GetAsTextUnits(const bool concise = false) const;
 
-  static bool SortHighest(const AIRSPACE_ALT& a,
-                          const AIRSPACE_ALT& b) {
-    return a.Altitude > b.Altitude;
+  static bool SortHighest(const AirspaceAltitude &a, const AirspaceAltitude &b) {
+    return a.altitude > b.altitude;
   }
-
 };
 
 #endif

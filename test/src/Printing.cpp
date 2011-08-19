@@ -491,12 +491,12 @@ std::ostream& operator<< (std::ostream& f,
   f << "# circle\n";
   for (double t=0; t<=360; t+= 30) {
     GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius);
-    f << l.Longitude << " " << l.Latitude << " " << as.get_base().Altitude << "\n";
+    f << l.Longitude << " " << l.Latitude << " " << as.get_base().altitude << "\n";
   }
   f << "\n";
   for (double t=0; t<=360; t+= 30) {
     GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius);
-    f << l.Longitude << " " << l.Latitude << " " << as.get_top().Altitude << "\n";
+    f << l.Longitude << " " << l.Latitude << " " << as.get_top().altitude << "\n";
   }
   f << "\n";
   f << "\n";
@@ -512,13 +512,13 @@ std::ostream& operator<< (std::ostream& f,
   for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
     GeoPoint l = v->get_location();
-    f << l.Longitude << " " << l.Latitude << " " << as.get_base().Altitude << "\n";
+    f << l.Longitude << " " << l.Latitude << " " << as.get_base().altitude << "\n";
   }
   f << "\n";
   for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
     GeoPoint l = v->get_location();
-    f << l.Longitude << " " << l.Latitude << " " << as.get_top().Altitude << "\n";
+    f << l.Longitude << " " << l.Latitude << " " << as.get_top().altitude << "\n";
   }
   f << "\n";
   f << "\n";

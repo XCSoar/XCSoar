@@ -35,10 +35,10 @@ static void
 airspace_random_properties(AbstractAirspace& as)
 {
   AirspaceClass_t Type = (AirspaceClass_t)(rand()%14);
-  AIRSPACE_ALT base;
-  AIRSPACE_ALT top;
-  base.Altitude = fixed(rand()%4000);
-  top.Altitude = base.Altitude+fixed(rand()%3000);
+  AirspaceAltitude base;
+  AirspaceAltitude top;
+  base.altitude = fixed(rand()%4000);
+  top.altitude = base.altitude+fixed(rand()%3000);
   as.set_properties(_T("hello"), Type, base, top);
 }
 

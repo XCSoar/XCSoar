@@ -37,8 +37,8 @@ AbstractAirspace::~AbstractAirspace() {}
 bool 
 AbstractAirspace::inside(const AircraftState& state) const
 {
-  return m_base.is_below(state) &&
-    m_top.is_above(state) &&
+  return m_base.IsBelow(state) &&
+    m_top.IsAbove(state) &&
     inside(state.location);
 }
 
@@ -46,16 +46,16 @@ AbstractAirspace::inside(const AircraftState& state) const
 void 
 AbstractAirspace::set_ground_level(const fixed alt) 
 {
-  m_base.set_ground_level(alt);
-  m_top.set_ground_level(alt);
+  m_base.SetGroundLevel(alt);
+  m_top.SetGroundLevel(alt);
 }
 
 
 void 
 AbstractAirspace::set_flight_level(const AtmosphericPressure &press) 
 {
-  m_base.set_flight_level(press);
-  m_top.set_flight_level(press);
+  m_base.SetFlightLevel(press);
+  m_top.SetFlightLevel(press);
 }
 
 
@@ -68,8 +68,8 @@ AbstractAirspace::intercept_vertical(const AircraftState &state,
   solution.distance = distance;
   solution.elapsed_time = perf.solution_vertical(solution.distance, 
                                                  state.altitude,
-                                                 m_base.get_altitude(state), 
-                                                 m_top.get_altitude(state),
+                                                 m_base.GetAltitude(state),
+                                                 m_top.GetAltitude(state),
                                                  solution.altitude);
   return solution;
 }
@@ -84,12 +84,12 @@ AbstractAirspace::intercept_horizontal(const AircraftState &state,
 {
   AirspaceInterceptSolution solution;
 
-  if (lower && m_base.is_terrain()) {
+  if (lower && m_base.IsTerrain()) {
     // impossible to be lower than terrain
     return solution;
   }
 
-  solution.altitude = lower? m_base.get_altitude(state): m_top.get_altitude(state);
+  solution.altitude = lower? m_base.GetAltitude(state): m_top.GetAltitude(state);
   solution.elapsed_time = perf.solution_horizontal(distance_start, 
                                                    distance_end,
                                                    state.altitude,
@@ -147,7 +147,7 @@ AbstractAirspace::intercept(const AircraftState &state,
   }
   
   // search bottom wall
-  if (!m_base.is_terrain()) {
+  if (!m_base.IsTerrain()) {
     solution_candidate = intercept_horizontal(state, perf, distance_start, distance_end, true);
     if (solution_candidate.valid() && 
         ((solution_candidate.elapsed_time < solution_this.elapsed_time) ||
@@ -248,8 +248,8 @@ const tstring
 AbstractAirspace::get_vertical_text() const
 {
   return 
-    _T("Base: ") + m_base.get_as_text(false) +
-    _T(" Top: ") + m_top.get_as_text(false);
+    _T("Base: ") + m_base.GetAsText(false) +
+    _T(" Top: ") + m_top.GetAsText(false);
 }
 
 

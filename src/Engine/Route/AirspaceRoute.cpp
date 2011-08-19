@@ -65,8 +65,8 @@ public:
                                                RoutePoint(proj.project(point), link.second.altitude),
                                                proj);
 
-    if ((l.second.altitude< (short)as.get_base().Altitude) ||
-        (l.second.altitude> (short)as.get_top().Altitude))
+    if ((l.second.altitude< (short)as.get_base().altitude) ||
+        (l.second.altitude> (short)as.get_top().altitude))
       return;
 
     if (negative(min_distance) || (l.d < min_distance)) {

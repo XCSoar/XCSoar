@@ -61,8 +61,8 @@ public:
   const enum shape shape;
 
 protected:
-  AIRSPACE_ALT m_base; /**< Base of airspace */
-  AIRSPACE_ALT m_top; /**< Top of airspace */
+  AirspaceAltitude m_base; /**< Base of airspace */
+  AirspaceAltitude m_top; /**< Top of airspace */
   tstring Name; /**< Airspace name (identifier) */
   tstring Radio; /**< Radio frequency (optional) */
   AirspaceClass_t Type; /**< Airspace class */
@@ -183,8 +183,8 @@ public:
    */
   void set_properties(const tstring &_Name,
                       const AirspaceClass_t _Type,
-                      const AIRSPACE_ALT &_base,
-                      const AIRSPACE_ALT &_top) {
+                      const AirspaceAltitude &_base,
+                      const AirspaceAltitude &_top) {
     Name = _Name;
     Type = _Type;
     m_base = _base;
@@ -225,11 +225,11 @@ public:
  * @return True if base is 0 AGL
  */
   bool is_base_terrain() const {
-    return m_base.is_terrain();
+    return m_base.IsTerrain();
   }
 
-  const AIRSPACE_ALT& get_base() const { return m_base; }
-  const AIRSPACE_ALT& get_top() const { return m_top; }
+  const AirspaceAltitude& get_base() const { return m_base; }
+  const AirspaceAltitude& get_top() const { return m_top; }
 
 /** 
  * Get base altitude
@@ -237,7 +237,7 @@ public:
  * @return Altitude AMSL (m) of base
  */
   fixed get_base_altitude(const AltitudeState& state) const {
-    return m_base.get_altitude(state);
+    return m_base.GetAltitude(state);
   }
 
 /** 
@@ -246,7 +246,7 @@ public:
  * @return Altitude AMSL (m) of top
  */
   fixed get_top_altitude(const AltitudeState& state) const {
-    return m_top.get_altitude(state);
+    return m_top.GetAltitude(state);
   }
 
 /**

@@ -42,14 +42,14 @@ AirspaceVisible::altitude_visible(const AbstractAirspace& airspace) const
   case ALLON:
     return true;
   case CLIP:
-    return airspace.get_base().get_altitude(m_state) <= fixed(renderer_settings.clip_altitude);
+    return airspace.get_base().GetAltitude(m_state) <= fixed(renderer_settings.clip_altitude);
   case AUTO:
-    return airspace.get_base().is_below(m_state, fixed(computer_settings.warnings.AltWarningMargin))
-      && airspace.get_top().is_above(m_state, fixed(computer_settings.warnings.AltWarningMargin));
+    return airspace.get_base().IsBelow(m_state, fixed(computer_settings.warnings.AltWarningMargin))
+      && airspace.get_top().IsAbove(m_state, fixed(computer_settings.warnings.AltWarningMargin));
   case ALLBELOW:
-    return airspace.get_base().is_below(m_state, fixed(computer_settings.warnings.AltWarningMargin));
+    return airspace.get_base().IsBelow(m_state, fixed(computer_settings.warnings.AltWarningMargin));
   case INSIDE:
-    return (airspace.get_base().is_below(m_state) && airspace.get_top().is_above(m_state));
+    return (airspace.get_base().IsBelow(m_state) && airspace.get_top().IsAbove(m_state));
 
   case ALLOFF:
     return false;

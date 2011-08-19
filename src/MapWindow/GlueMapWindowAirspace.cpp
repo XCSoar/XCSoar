@@ -180,7 +180,7 @@ private:
 
   static bool CompareAirspaceBase(const AbstractAirspace *a,
                                   const AbstractAirspace *b) {
-    return AIRSPACE_ALT::SortHighest(a->get_base(), b->get_base());
+    return AirspaceAltitude::SortHighest(a->get_base(), b->get_base());
   }
 
   static void PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx) {

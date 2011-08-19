@@ -41,8 +41,8 @@ AirspacePredicateAircraftInside::operator()(const AbstractAirspace& t) const
 bool
 AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
 {
-  return (int)t.get_top().Altitude >= h_min &&
-    (int)t.get_base().Altitude <= h_max;
+  return (int)t.get_top().altitude >= h_min &&
+    (int)t.get_base().altitude <= h_max;
 }
 
 bool

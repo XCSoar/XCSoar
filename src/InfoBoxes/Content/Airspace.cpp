@@ -94,8 +94,8 @@ public:
       !airspace.inside(location) &&
       /* check altitude; hard-coded margin of 50m (for now) */
       (!altitude_available ||
-       (airspace.get_base().is_below(altitude, fixed(50)) &&
-        airspace.get_top().is_above(altitude, fixed(50))));
+       (airspace.get_base().IsBelow(altitude, fixed(50)) &&
+        airspace.get_top().IsAbove(altitude, fixed(50))));
   }
 };
 
@@ -157,7 +157,7 @@ protected:
       return;
 
     /* check delta below */
-    fixed base = airspace.get_base().get_altitude(altitude);
+    fixed base = airspace.get_base().GetAltitude(altitude);
     fixed base_delta = base - altitude.altitude;
     if (!negative(base_delta) && base_delta < fabs(nearest_delta)) {
       nearest = &airspace;
@@ -165,7 +165,7 @@ protected:
     }
 
     /* check delta above */
-    fixed top = airspace.get_top().get_altitude(altitude);
+    fixed top = airspace.get_top().GetAltitude(altitude);
     fixed top_delta = altitude.altitude - top;
     if (!negative(top_delta) && top_delta < fabs(nearest_delta)) {
       nearest = &airspace;
