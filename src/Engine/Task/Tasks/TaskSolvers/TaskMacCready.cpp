@@ -112,6 +112,11 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
       acc_gr.Add(gr);
   }
 
+  if (!acc_gr.IsOkOrPartial())
+    /* no values - cannot do the additional calculations below, bail
+       out */
+    return acc_gr;
+
   aircraft_predict.altitude = aircraft_start.altitude;
   fixed alt_difference = aircraft_start.altitude - m_minHs[m_start];
 
