@@ -140,10 +140,12 @@ MacCready::solve_cruise(const GlideState &task) const
   const fixed t_cl = t_cr * rho +
       (negative(task.altitude_difference) ? t_cl1 : fixed_zero);
 
+  const fixed sink_glide = t_cr * S;
+
   result.time_elapsed = t;
   result.height_climb = t_cl * mc;
-  result.height_glide = t_cr * S - result.height_climb;
-  result.altitude_difference -= result.height_climb + result.height_glide;
+  result.height_glide = sink_glide - result.height_climb;
+  result.altitude_difference -= sink_glide;
   result.effective_wind_speed *= rhoplusone;
 
   result.validity = GlideResult::RESULT_OK;
