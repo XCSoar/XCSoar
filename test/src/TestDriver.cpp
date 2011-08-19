@@ -557,7 +557,7 @@ TestWesterboer()
   ok1(nmea_info.SupplyBatteryVoltageAvailable);
   ok1(equals(nmea_info.SupplyBatteryVoltage, 12.8));
   ok1(nmea_info.TemperatureAvailable);
-  ok1(equals(nmea_info.OutsideAirTemperature, 29.5));
+  ok1(equals(nmea_info.OutsideAirTemperature, 29.5 + 273.15));
 
   ok1(device->ParseNMEA("$PWES1,20,21*21", &nmea_info));
   ok1(nmea_info.settings.mac_cready_available);

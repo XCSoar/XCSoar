@@ -94,7 +94,7 @@ PWES0(NMEAInputLine &line, NMEA_INFO &info)
   }
 
   if (line.read_checked(i)) {
-    info.OutsideAirTemperature = fixed(i) / 10;
+    info.OutsideAirTemperature = Units::ToSysUnit(fixed(i) / 10, unGradCelcius);
     info.TemperatureAvailable = true;
   }
 
