@@ -882,7 +882,7 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
     return false;
 
   if (filetype == AFT_UNKNOWN) {
-    MessageBoxX(_("Unknown Filetype."), _("Airspace"), MB_OK);
+    operation.SetErrorMessage(_("Unknown airspace filetype"));
     return false;
   }
 
