@@ -11,6 +11,9 @@ TEST_SRC = \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
+	$(TEST_SRC_DIR)/AirspacePrinting.cpp \
+	$(TEST_SRC_DIR)/TaskPrinting.cpp \
+	$(TEST_SRC_DIR)/ContestPrinting.cpp \
 	$(TEST_SRC_DIR)/test_debug.cpp \
 	$(TEST_SRC_DIR)/harness_aircraft.cpp \
 	$(TEST_SRC_DIR)/harness_airspace.cpp \
