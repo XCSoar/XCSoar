@@ -31,7 +31,7 @@ AirspaceAltitude::GetAsTextUnits(const bool concise) const
   TCHAR buffer[64];
 
   switch (type) {
-  case abAGL:
+  case AGL:
     if (!positive(altitude_above_terrain)) {
       _tcscpy(buffer, _T("GND"));
     } else {
@@ -39,19 +39,19 @@ AirspaceAltitude::GetAsTextUnits(const bool concise) const
                 iround(Units::ToUserAltitude(altitude_above_terrain)), Units::GetAltitudeName());
     }
     break;
-  case abFL:
+  case FL:
     _stprintf(buffer, _T("FL%d"), (int)flight_level);
     break;
-  case abMSL:
+  case MSL:
     _stprintf(buffer, _T("%d %s"),
               iround(Units::ToUserAltitude(altitude)), Units::GetAltitudeName());
     break;
-  case abUndef:
+  case UNDEFINED:
   default:
     buffer[0] = _T('\0');
     break;
   };
-  if (!concise && type!=abMSL && positive(altitude)) {
+  if (!concise && type != MSL && positive(altitude)) {
     TCHAR second[64];
     _stprintf(second, _T(" %d %s"),
               iround(Units::ToUserAltitude(altitude)), Units::GetAltitudeName());

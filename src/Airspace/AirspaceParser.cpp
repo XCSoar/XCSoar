@@ -175,7 +175,7 @@ ReadAltitude(const TCHAR *Text_, AirspaceAltitude *Alt)
   Alt->altitude = fixed_zero;
   Alt->flight_level = fixed_zero;
   Alt->altitude_above_terrain = fixed_zero;
-  Alt->type = abUndef;
+  Alt->type = AirspaceAltitude::UNDEFINED;
 
   const TCHAR *p = Text;
   while (true) {
@@ -186,9 +186,9 @@ ReadAltitude(const TCHAR *Text_, AirspaceAltitude *Alt)
       TCHAR *endptr;
       fixed d = fixed(_tcstod(p, &endptr));
 
-      if (Alt->type == abFL)
+      if (Alt->type == AirspaceAltitude::FL)
         Alt->flight_level = d;
-      else if (Alt->type == abAGL)
+      else if (Alt->type == AirspaceAltitude::AGL)
         Alt->altitude_above_terrain = d;
       else
         Alt->altitude = d;
@@ -196,7 +196,7 @@ ReadAltitude(const TCHAR *Text_, AirspaceAltitude *Alt)
       p = endptr;
     } else if (_tcsncmp(p, _T("GND"), 3) == 0) {
       // JMW support XXXGND as valid, equivalent to XXXAGL
-      Alt->type = abAGL;
+      Alt->type = AirspaceAltitude::AGL;
       if (Alt->altitude > fixed_zero) {
         Alt->altitude_above_terrain = Alt->altitude;
         Alt->altitude = fixed_zero;
@@ -209,7 +209,7 @@ ReadAltitude(const TCHAR *Text_, AirspaceAltitude *Alt)
 
       p += 3;
     } else if (_tcsncmp(p, _T("SFC"), 3) == 0) {
-      Alt->type = abAGL;
+      Alt->type = AirspaceAltitude::AGL;
       Alt->flight_level = fixed_zero;
       Alt->altitude = fixed_zero;
       Alt->altitude_above_terrain = fixed_minus_one;
@@ -218,7 +218,7 @@ ReadAltitude(const TCHAR *Text_, AirspaceAltitude *Alt)
       p += 3;
     } else if (_tcsncmp(p, _T("FL"), 2) == 0) {
       // this parses "FL=150" and "FL150"
-      Alt->type = abFL;
+      Alt->type = AirspaceAltitude::FL;
       fHasUnit = true;
 
       p += 2;
@@ -230,7 +230,7 @@ ReadAltitude(const TCHAR *Text_, AirspaceAltitude *Alt)
       if (*p == _T('T'))
         ++p;
     } else if (_tcsncmp(p, _T("MSL"), 3) == 0) {
-      Alt->type = abMSL;
+      Alt->type = AirspaceAltitude::MSL;
 
       p += 3;
     } else if (*p == _T('M')) {
@@ -239,22 +239,22 @@ ReadAltitude(const TCHAR *Text_, AirspaceAltitude *Alt)
 
       ++p;
     } else if (_tcsncmp(p, _T("AGL"), 3) == 0) {
-      Alt->type = abAGL;
+      Alt->type = AirspaceAltitude::AGL;
       Alt->altitude_above_terrain = Alt->altitude;
       Alt->altitude = fixed_zero;
 
       p += 3;
     } else if (_tcsncmp(p, _T("STD"), 3) == 0) {
-      if (Alt->type != abUndef) {
+      if (Alt->type != AirspaceAltitude::UNDEFINED) {
         // warning! multiple base tags
       }
-      Alt->type = abFL;
+      Alt->type = AirspaceAltitude::FL;
       Alt->flight_level = Units::ToUserUnit(Alt->altitude, unFlightLevel);
 
       p += 3;
     } else if (_tcsncmp(p, _T("UNL"), 3) == 0) {
       // JMW added Unlimited (used by WGC2008)
-      Alt->type = abMSL;
+      Alt->type = AirspaceAltitude::MSL;
       Alt->altitude_above_terrain = fixed_minus_one;
       Alt->altitude = fixed(50000);
 
@@ -265,16 +265,16 @@ ReadAltitude(const TCHAR *Text_, AirspaceAltitude *Alt)
       ++p;
   }
 
-  if (!fHasUnit && (Alt->type != abFL)) {
+  if (!fHasUnit && (Alt->type != AirspaceAltitude::FL)) {
     // ToDo warning! no unit defined use feet or user alt unit
     // Alt->Altitude = Units::ToSysAltitude(Alt->Altitude);
     Alt->altitude = Units::ToSysUnit(Alt->altitude, unFeet);
     Alt->altitude_above_terrain = Units::ToSysUnit(Alt->altitude_above_terrain, unFeet);
   }
 
-  if (Alt->type == abUndef)
+  if (Alt->type == AirspaceAltitude::UNDEFINED)
     // ToDo warning! no base defined use MSL
-    Alt->type = abMSL;
+    Alt->type = AirspaceAltitude::MSL;
 }
 
 static bool

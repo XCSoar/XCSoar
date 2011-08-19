@@ -7,18 +7,19 @@
 class AtmosphericPressure;
 struct AltitudeState;
 
-enum AirspaceAltBase_t {
-  abUndef,
-  abMSL,
-  abAGL,
-  abFL
-};
 
 /**
  *  Structure to hold airspace altitude boundary data
  */
 struct AirspaceAltitude
 {
+  enum Type {
+    UNDEFINED,
+    MSL,
+    AGL,
+    FL
+  };
+
   /** Altitude AMSL (m) resolved from type */
   fixed altitude;
   /** Flight level (100ft) for FL-referenced boundary */
@@ -26,7 +27,7 @@ struct AirspaceAltitude
   /** Height above terrain (m) for ground-referenced boundary */
   fixed altitude_above_terrain;
   /** Type of airspace boundary */
-  AirspaceAltBase_t type;
+  Type type;
 
   /** 
    * Constructor.  Initialises to zero.
@@ -36,7 +37,7 @@ struct AirspaceAltitude
   AirspaceAltitude():altitude(fixed_zero),
                  flight_level(fixed_zero),
                  altitude_above_terrain(fixed_zero),
-                 type(abUndef) {};
+                 type(UNDEFINED) {};
 
   /**
    * Get Altitude AMSL (m) resolved from type.  For AGL types, this assumes the terrain height
@@ -60,7 +61,7 @@ struct AirspaceAltitude
  * @return True if this altitude limit is the terrain
  */
   bool IsTerrain() const {
-    return (!positive(altitude_above_terrain) && (type==abAGL));
+    return (!positive(altitude_above_terrain) && (type==AGL));
   }
 
 /** 
