@@ -30,7 +30,6 @@ Copyright_License {
 #include "CirclingComputer.hpp"
 #include "WindComputer.hpp"
 #include "ThermalLocator.hpp"
-#include "GPSClock.hpp"
 #include "Util/WindowFilter.hpp"
 
 class Waypoints;
@@ -45,12 +44,9 @@ class ProtectedAirspaceWarningManager;
 
 class GlideComputerAirData: virtual public GlideComputerBlackboard {
   const Waypoints &way_points;
-  Airspaces &airspace_database;
   const RasterTerrain *terrain;
 
   GlideRatioCalculator rotaryLD;
-
-  ProtectedAirspaceWarningManager &m_airspace;
 
   FlyingComputer flying_computer;
   CirclingComputer circling_computer;
@@ -58,21 +54,15 @@ class GlideComputerAirData: virtual public GlideComputerBlackboard {
 
   ThermalLocator thermallocator;
 
-  GPSClock airspace_clock;
-
   WindowFilter<30> vario_30s_filter;
   WindowFilter<30> netto_30s_filter;
 
 public:
-  GlideComputerAirData(const Waypoints &way_points,
-                       Airspaces &airspace_database,
-                       ProtectedAirspaceWarningManager &_awm);
+  GlideComputerAirData(const Waypoints &way_points);
 
   void set_terrain(const RasterTerrain* _terrain) {
     terrain = _terrain;
   }
-
-  void ProcessIdle();
 
   const WindStore &GetWindStore() const {
     return wind_computer.GetWindStore();
@@ -116,7 +106,6 @@ private:
   void TerrainHeight();
   void FlightState(const GlidePolar& glide_polar);
   void TakeoffLanding();
-  void AirspaceWarning();
   void ThermalSources();
 
   /**

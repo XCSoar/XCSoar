@@ -32,8 +32,6 @@ Copyright_License {
 #include "Atmosphere/CuSonde.hpp"
 #include "ThermalBase.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
-#include "Engine/Airspace/Airspaces.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "AutoQNH.hpp"
 #include "Math/SunEphemeris.hpp"
@@ -45,14 +43,9 @@ using std::max;
 
 static const fixed THERMAL_TIME_MIN(45);
 
-GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points,
-                                           Airspaces &_airspace_database,
-                                           ProtectedAirspaceWarningManager &awm)
-  :way_points(_way_points), airspace_database(_airspace_database),
-   terrain(NULL),
-  m_airspace(awm),
-  // scan airspace every second
-  airspace_clock(fixed_one)
+GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points)
+  :way_points(_way_points),
+   terrain(NULL)
 {
   // JMW TODO enhancement: seed initial wind store with start conditions
   // SetWindEstimate(Calculated().WindSpeed, Calculated().WindBearing, 1);
@@ -61,9 +54,6 @@ GlideComputerAirData::GlideComputerAirData(const Waypoints &_way_points,
 void
 GlideComputerAirData::ResetFlight(const bool full)
 {
-  const AircraftState as = ToAircraftState(Basic(), Calculated());
-  m_airspace.reset_warning(as);
-
   vario_30s_filter.reset();
   netto_30s_filter.reset();
 
@@ -471,14 +461,6 @@ GlideComputerAirData::FlightTimes()
 }
 
 void
-GlideComputerAirData::ProcessIdle()
-{
-  if (airspace_clock.check_advance(Basic().time)
-      && SettingsComputer().airspace.enable_warnings)
-    AirspaceWarning();
-}
-
-void
 GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
 {
   flying_computer.Compute(glide_polar, Basic(), LastBasic(),
@@ -515,22 +497,6 @@ GlideComputerAirData::OnTakeoff()
 
   // save stats in case we never finish
   SaveFinish();
-}
-
-void
-GlideComputerAirData::AirspaceWarning()
-{
-  if (!time_advanced())
-    return;
-
-  airspace_database.set_flight_levels(SettingsComputer().pressure);
-
-  AirspaceActivity day (Calculated().date_time_local.day_of_week);
-  airspace_database.set_activity(day);
-
-  const AircraftState as = ToAircraftState(Basic(), Calculated());
-  if (m_airspace.update_warning(as, Calculated().circling, (unsigned)iround(time_delta())))
-    SetCalculated().airspace_warnings.latest.Update(Basic().clock);
 }
 
 void

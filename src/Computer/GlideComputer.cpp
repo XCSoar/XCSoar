@@ -47,8 +47,9 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
                              ProtectedTaskManager &task,
                              ProtectedAirspaceWarningManager &airspace,
                              GlideComputerTaskEvents& events):
-  GlideComputerAirData(_way_points, _airspace_database, airspace),
+  GlideComputerAirData(_way_points),
   GlideComputerTask(task, _airspace_database),
+  warning_computer(_airspace_database, airspace),
   way_points(_way_points), protected_task_manager(task),
   TeamCodeRefId(-1)
 {
@@ -67,6 +68,8 @@ GlideComputer::ResetFlight(const bool full)
   GlideComputerAirData::ResetFlight(full);
   GlideComputerTask::ResetFlight(full);
   GlideComputerStats::ResetFlight(full);
+
+  warning_computer.Reset(Basic(), Calculated());
 }
 
 /**
@@ -140,8 +143,11 @@ GlideComputer::ProcessIdle()
   // (snail trail, stats, olc, ...)
   DoLogging();
 
-  GlideComputerAirData::ProcessIdle();
   GlideComputerTask::ProcessIdle();
+
+  if (time_advanced())
+    warning_computer.Update(SettingsComputer(), Basic(), LastBasic(),
+                            Calculated(), SetCalculated().airspace_warnings);
 }
 
 bool

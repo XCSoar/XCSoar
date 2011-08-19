@@ -30,6 +30,7 @@ Copyright_License {
 #include "GlideComputerAirData.hpp"
 #include "GlideComputerStats.hpp"
 #include "GlideComputerTask.hpp"
+#include "WarningComputer.hpp"
 #include "Compiler.h"
 
 class Waypoints;
@@ -45,6 +46,8 @@ class GlideComputer:
     public GlideComputerAirData, public GlideComputerTask,
     public GlideComputerStats
 {
+  WarningComputer warning_computer;
+
   const Waypoints &way_points;
   ProtectedTaskManager &protected_task_manager;
 
