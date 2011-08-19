@@ -21,30 +21,11 @@ Copyright_License {
 }
 */
 
-#include "Engine/Waypoint/Waypoints.hpp"
-#include "InputEvents.hpp"
 #include "Wind/WindZigZag.hpp"
 #include "Args.hpp"
 #include "DebugReplay.hpp"
 
 #include <stdio.h>
-
-Waypoints way_points;
-Waypoints::Waypoints() {}
-
-/*
- * Fake InputEvents.cpp
- */
-
-bool
-InputEvents::processNmea(unsigned key)
-{
-  return true;
-}
-
-/*
- * The actual code.
- */
 
 int main(int argc, char **argv)
 {
