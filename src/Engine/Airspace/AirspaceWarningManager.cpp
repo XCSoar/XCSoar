@@ -111,11 +111,8 @@ AirspaceWarningManager::update(const AircraftState& state,
 
   // update warning states
   if (m_airspaces.empty()) {
-    // no airspaces, so drop all warnings if any
-    if (!m_warnings.empty()) {
-      m_warnings.clear();
-      return true;
-    }
+    // no airspaces, no warnings possible
+    assert(m_warnings.empty());
     return false;
   }
 
