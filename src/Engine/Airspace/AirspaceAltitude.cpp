@@ -19,13 +19,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "AirspaceAltitude.hpp"
 #include "Atmosphere/Pressure.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "FastMath.h"
 #include <stdio.h>
 
-void 
+void
 AirspaceAltitude::SetFlightLevel(const AtmosphericPressure &press)
 {
   static const fixed fl_feet_to_m(30.48);
@@ -33,25 +34,25 @@ AirspaceAltitude::SetFlightLevel(const AtmosphericPressure &press)
     altitude = press.PressureAltitudeToQNHAltitude(flight_level * fl_feet_to_m);
 }
 
-void 
+void
 AirspaceAltitude::SetGroundLevel(const fixed alt)
 {
   if (type == AGL)
-    altitude = altitude_above_terrain+alt;
+    altitude = altitude_above_terrain + alt;
 }
 
-const tstring 
+const tstring
 AirspaceAltitude::GetAsText(const bool concise) const
 {
   TCHAR buffer[64];
 
   switch (type) {
   case AGL:
-    if (!positive(altitude_above_terrain)) {
+    if (!positive(altitude_above_terrain))
       _tcscpy(buffer, _T("GND"));
-    } else {
+    else
       _stprintf(buffer, _T("%d AGL"), iround(altitude_above_terrain));
-    }
+
     break;
   case FL:
     _stprintf(buffer, _T("FL%d"), iround(flight_level));
@@ -63,23 +64,26 @@ AirspaceAltitude::GetAsText(const bool concise) const
   default:
     buffer[0] = _T('\0');
     break;
-  };
+  }
+
   if (!concise && type != MSL && positive(altitude)) {
     TCHAR second[64];
     _stprintf(second, _T(" %d"), iround(altitude));
     return tstring(buffer) + second;
-  } else
-    return tstring(buffer);
+  }
+
+  return tstring(buffer);
 }
 
-
-bool AirspaceAltitude::IsAbove(const AltitudeState& state,
-                              const fixed margin) const {
+bool
+AirspaceAltitude::IsAbove(const AltitudeState &state, const fixed margin) const
+{
   return GetAltitude(state) >= state.altitude - margin;
 }
 
-bool AirspaceAltitude::IsBelow(const AltitudeState& state,
-                              const fixed margin) const {
+bool
+AirspaceAltitude::IsBelow(const AltitudeState &state, const fixed margin) const
+{
   return GetAltitude(state) <= state.altitude + margin ||
     /* special case: GND is always "below" the aircraft, even if the
        aircraft's AGL altitude turns out to be negative due to terrain
@@ -87,7 +91,9 @@ bool AirspaceAltitude::IsBelow(const AltitudeState& state,
     (type == AGL && !positive(altitude_above_terrain));
 }
 
-fixed AirspaceAltitude::GetAltitude(const AltitudeState& state) const {
+fixed
+AirspaceAltitude::GetAltitude(const AltitudeState& state) const
+{
   return (type == AGL) ?
          altitude_above_terrain + (state.altitude - state.altitude_agl) : altitude;
 }
