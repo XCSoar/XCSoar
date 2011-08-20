@@ -348,7 +348,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   }
 
   if (warning.state != AirspaceWarning::WARNING_INSIDE &&
-      warning.state > AirspaceWarning::WARNING_CLEAR) {
+      warning.state > AirspaceWarning::WARNING_CLEAR &&
+      solution.IsValid()) {
 
     _stprintf(sTmp, _T("%d secs"),
               (int)solution.elapsed_time);
