@@ -203,12 +203,9 @@ AbstractAirspace::GetTypeText(const bool concise) const
 }
 
 const tstring 
-AbstractAirspace::GetNameText(const bool concise) const
+AbstractAirspace::GetNameText() const
 {
-  if (concise)
-    return name;
-  else
-    return name + _T(" ") + AirspaceClassAsText(type);
+  return name + _T(" ") + AirspaceClassAsText(type);
 }
 
 bool

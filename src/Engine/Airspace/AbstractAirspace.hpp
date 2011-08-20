@@ -319,14 +319,11 @@ public:
 
   /**
    * Produce text version of name and airspace class.
-   * If concise is true, only produces name.
-   *
-   * @param concise Whether to use short form or long form
    *
    * @return Text version of name/type
    */
   gcc_pure
-  const tstring GetNameText(const bool concise = false) const;
+  const tstring GetNameText() const;
 
   /**
    * Returns true if the name begins with the specified string.

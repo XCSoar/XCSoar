@@ -305,7 +305,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   const AbstractAirspace &as = *warning.airspace;
   const AirspaceInterceptSolution &solution = warning.solution;
 
-  tstring sName = as.GetNameText(false);
+  tstring sName = as.GetNameText();
   tstring sTop = as.GetTopText(true);
   tstring sBase = as.GetBaseText(true);
   tstring sType = as.GetTypeText(true);
