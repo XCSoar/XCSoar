@@ -65,7 +65,7 @@ protected:
   AirspaceAltitude m_top; /**< Top of airspace */
   tstring Name; /**< Airspace name (identifier) */
   tstring Radio; /**< Radio frequency (optional) */
-  AirspaceClass_t Type; /**< Airspace class */
+  AirspaceClass Type; /**< Airspace class */
   const TaskProjection* m_task_projection; /**< Task projection (owned by container) that can be used for query speedups */
   SearchPointVector m_border; /**< Actual border */
   mutable SearchPointVector m_clearance; /**< Convex clearance border */
@@ -182,7 +182,7 @@ public:
    * @param _top Upper limit
    */
   void set_properties(const tstring &_Name,
-                      const AirspaceClass_t _Type,
+                      const AirspaceClass _Type,
                       const AirspaceAltitude &_base,
                       const AirspaceAltitude &_top) {
     Name = _Name;
@@ -215,7 +215,7 @@ public:
    * 
    * @return Type/class of airspace
    */
-  AirspaceClass_t get_type() const {
+  AirspaceClass get_type() const {
     return Type;
   }
 

@@ -5,8 +5,9 @@
 
 #include <tchar.h>
 
-enum AirspaceClass_t {
-  OTHER= 0,
+enum AirspaceClass 
+{
+  OTHER = 0,
   RESTRICT,
   PROHIBITED,
   DANGER,
@@ -27,7 +28,7 @@ enum AirspaceClass_t {
 
 gcc_const
 const TCHAR *
-airspace_class_as_text(const AirspaceClass_t item,
+airspace_class_as_text(const AirspaceClass item,
                        const bool consise=false);
 
 #endif

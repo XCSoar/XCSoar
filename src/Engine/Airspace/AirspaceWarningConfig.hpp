@@ -51,7 +51,7 @@ struct AirspaceWarningConfig {
     class_warnings[AATASK] = false;
   }
 
-  bool class_enabled(AirspaceClass_t cls) const {
+  bool class_enabled(AirspaceClass cls) const {
     assert(cls >= 0 && cls < AIRSPACECLASSCOUNT);
 
     return class_warnings[cls];

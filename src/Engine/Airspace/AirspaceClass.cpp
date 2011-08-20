@@ -2,7 +2,7 @@
 #include <assert.h>
 
 const TCHAR *
-airspace_class_as_text(const AirspaceClass_t item,
+airspace_class_as_text(const AirspaceClass item,
                        const bool concise)
 {
   switch(item) {

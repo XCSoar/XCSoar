@@ -59,7 +59,7 @@ public:
  * @param vec List of airspaces to filter (read-write)
  * @param t Class of airspace to match
  */
-  void filter_class(AirspaceSelectInfoVector& vec, const AirspaceClass_t t) const;
+  void filter_class(AirspaceSelectInfoVector& vec, const AirspaceClass t) const;
 
 /** 
  * Remove airspaces not matching supplied initial character 

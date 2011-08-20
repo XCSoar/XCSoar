@@ -46,7 +46,7 @@ AirspaceSorter::get_list() const
   return m_airspaces_all;
 }
 
-static AirspaceClass_t MatchClass;
+static AirspaceClass MatchClass;
 
 static bool 
 AirspaceClassFilter(const AirspaceSelectInfo& elem1) 
@@ -55,7 +55,7 @@ AirspaceClassFilter(const AirspaceSelectInfo& elem1)
 }
 
 void
-AirspaceSorter::filter_class(AirspaceSelectInfoVector& vec, const AirspaceClass_t t) const
+AirspaceSorter::filter_class(AirspaceSelectInfoVector& vec, const AirspaceClass t) const
 {
   MatchClass = t;
   vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceClassFilter), vec.end());

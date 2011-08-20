@@ -91,7 +91,7 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 
   canvas.text_clipped(rc.left + Layout::FastScale(2),
       rc.top + Layout::FastScale(2), x0 - Layout::FastScale(10),
-                      airspace_class_as_text((AirspaceClass_t)i, false));
+                      airspace_class_as_text((AirspaceClass)i, false));
 }
 
 static bool changed = false;

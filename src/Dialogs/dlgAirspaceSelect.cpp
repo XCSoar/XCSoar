@@ -102,7 +102,7 @@ static void UpdateList(void)
   AirspaceSelectInfo = airspace_sorter->get_list();
 
   if (TypeFilterIdx != WILDCARD)
-    airspace_sorter->filter_class(AirspaceSelectInfo, (AirspaceClass_t)TypeFilterIdx);
+    airspace_sorter->filter_class(AirspaceSelectInfo, (AirspaceClass)TypeFilterIdx);
   
   bool sort_distance = false;
   if (positive(distance_filter)) {

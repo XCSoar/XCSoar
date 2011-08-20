@@ -101,7 +101,7 @@ struct TempAirspaceType
   // General
   tstring Name;
   tstring Radio;
-  AirspaceClass_t Type;
+  AirspaceClass Type;
   AirspaceAltitude Base;
   AirspaceAltitude Top;
   AirspaceActivity days_of_operation;
@@ -441,12 +441,12 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   AddArc(Start, End, temp_area);
 }
 
-static AirspaceClass_t
+static AirspaceClass
 ParseType(const TCHAR* text)
 {
   for (int i = 0; i < k_nAreaCount; i++)
     if (string_after_prefix(text, k_strAreaStart[i]))
-      return (AirspaceClass_t)k_nAreaType[i];
+      return (AirspaceClass)k_nAreaType[i];
 
   return OTHER;
 }
@@ -591,7 +591,7 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
   return true;
 }
 
-static AirspaceClass_t
+static AirspaceClass
 ParseClassTNP(const TCHAR* text)
 {
   if (text[0] == _T('A'))
@@ -618,7 +618,7 @@ ParseClassTNP(const TCHAR* text)
   return OTHER;
 }
 
-static AirspaceClass_t
+static AirspaceClass
 ParseTypeTNP(const TCHAR* text)
 {
   if (_tcsicmp(text, _T("C")) == 0 ||
