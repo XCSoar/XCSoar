@@ -226,6 +226,7 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
   const Waypoints way_points;
 
   InterfaceBlackboard blackboard;
+  blackboard.SetSettingsComputer().SetDefaults();
 
   GlideComputerTaskEvents task_events;
   TaskManager task_manager(task_events, way_points);
