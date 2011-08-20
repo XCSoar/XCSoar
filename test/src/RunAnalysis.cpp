@@ -151,6 +151,7 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
     basic.clock = fix.time;
     basic.connected.Update(basic.clock);
     basic.time = fix.time;
+    basic.time_available.Update(basic.clock);
     basic.date_time_utc.year = 2011;
     basic.date_time_utc.month = 6;
     basic.date_time_utc.day = 5;
