@@ -29,27 +29,29 @@
 /**
  *  Structure to hold data for intercepts between aircraft and airspace.
  *  (interior or exterior)
- *
  */
-struct AirspaceInterceptSolution {
-  GeoPoint location; /**< Location of intercept point */
-  fixed distance;  /**< Distance from observer to intercept point (m) */
-  fixed altitude; /**< Altitude AMSL (m) of intercept point */
-  fixed elapsed_time; /**< Estimated time (s) for observer to reach intercept point */
+struct AirspaceInterceptSolution
+{
+  /** Location of intercept point */
+  GeoPoint location;
+  /** Distance from observer to intercept point (m) */
+  fixed distance;
+  /** Altitude AMSL (m) of intercept point */
+  fixed altitude;
+  /** Estimated time (s) for observer to reach intercept point */
+  fixed elapsed_time;
 
-  /**
-   *  Constructor, initialises to invalid solution
-   */
+  /** Constructor, initialises to invalid solution */
   AirspaceInterceptSolution():
     distance(-fixed_one),
     altitude(-fixed_one),
     elapsed_time(-fixed_one) {};
 
-/** 
- * Determine whether this solution is valid
- * 
- * @return True if solution is valid
- */
+  /**
+   * Determine whether this solution is valid
+   *
+   * @return True if solution is valid
+   */
   bool valid() const {
     return !negative(elapsed_time);
   };
