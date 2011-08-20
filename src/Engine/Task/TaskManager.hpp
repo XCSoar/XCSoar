@@ -48,6 +48,32 @@ class TaskManager:
   private NonCopyable
 {
 public:
+  /**
+   * Enumeration of task modes
+   */
+  enum TaskMode_t {
+    MODE_NULL = 0,
+    MODE_ORDERED,
+    MODE_ABORT,
+    MODE_GOTO
+  };
+
+private:
+  GlidePolar m_glide_polar;
+
+  TaskBehaviour task_behaviour;
+  OrderedTask task_ordered;
+  GotoTask task_goto;
+  AlternateTask task_abort;
+
+  TaskMode_t mode;
+  AbstractTask* active_task;
+
+  TaskStats null_stats;
+
+  CommonStats common_stats;
+
+public:
   friend class Serialiser;
   friend class PrintHelper;
 
@@ -121,16 +147,6 @@ public:
   const AbortTask::AlternateVector &getAlternates() const {
     return task_abort.getAlternates();
   }
-
-  /**
-   * Enumeration of task modes
-   */
-  enum TaskMode_t {
-    MODE_NULL = 0,
-    MODE_ORDERED,
-    MODE_ABORT,
-    MODE_GOTO
-  };
 
   /** Reset the tasks (as if never flown) */
   void reset();
@@ -546,24 +562,7 @@ public:
   void takeoff_autotask(const GeoPoint &ref, const fixed terrain_alt);
 
 private:
-  GlidePolar m_glide_polar;
-
-  TaskBehaviour task_behaviour;
-
-  OrderedTask task_ordered;
-
-  GotoTask task_goto;
-  
-  AlternateTask task_abort;
-
-  TaskMode_t mode;
-  AbstractTask* active_task;
-    
-  TaskStats null_stats;
-
   TaskMode_t set_mode(const TaskMode_t mode);
-
-  CommonStats common_stats;
 
   void update_common_stats(const AircraftState &state);
   void update_common_stats_times(const AircraftState &state);
