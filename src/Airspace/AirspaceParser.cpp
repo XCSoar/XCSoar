@@ -858,9 +858,6 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
       operation.SetProgressPosition(reader.tell() * 1024 / file_size);
   }
 
-  if (LineCount == 0)
-    return false;
-
   if (filetype == AFT_UNKNOWN) {
     operation.SetErrorMessage(_("Unknown airspace filetype"));
     return false;
