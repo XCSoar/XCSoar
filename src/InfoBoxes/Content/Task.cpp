@@ -60,7 +60,7 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!XCSoarInterface::Basic().track_available ||
       !XCSoarInterface::Calculated().task_stats.task_valid ||
-      !solution_remaining.IsDefined() ||
+      !solution_remaining.IsOkOrPartial() ||
       solution_remaining. vector.Distance <= fixed(10)) {
     infobox.SetInvalid();
     return;
@@ -379,7 +379,7 @@ InfoBoxContentFinalAltitudeDiff::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
-      !task_stats.total.solution_remaining.IsDefined()) {
+      !task_stats.total.solution_remaining.IsOkOrPartial()) {
     infobox.SetInvalid();
     return;
   }
@@ -399,7 +399,7 @@ InfoBoxContentFinalAltitudeRequire::Update(InfoBoxWindow &infobox)
 {
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   if (!task_stats.task_valid ||
-      !task_stats.total.solution_remaining.IsDefined()) {
+      !task_stats.total.solution_remaining.IsOkOrPartial()) {
     infobox.SetInvalid();
     return;
   }

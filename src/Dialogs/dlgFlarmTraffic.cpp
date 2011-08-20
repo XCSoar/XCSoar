@@ -564,7 +564,7 @@ Update()
               XCSoarInterface::SettingsComputer());
 
   wdf->UpdateTaskDirection(XCSoarInterface::Calculated().task_stats.task_valid &&
-                           XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.IsDefined(),
+                           XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining.IsOkOrPartial(),
                            XCSoarInterface::Calculated().task_stats.
                            current_leg.solution_remaining.cruise_track_bearing);
 
