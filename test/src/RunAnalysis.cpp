@@ -148,7 +148,7 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
     if (!IGCParseFix(line, fix))
       continue;
 
-    basic.UpdateClock();
+    basic.clock = fix.time;
     basic.connected.Update(basic.clock);
     basic.time = fix.time;
     basic.date_time_utc.year = 2011;
