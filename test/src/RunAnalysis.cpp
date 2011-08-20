@@ -159,12 +159,12 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
     basic.date_time_utc.second = (unsigned)fix.time % 60;
 
     basic.location = fix.location;
-    basic.location_available.Update(fix.time);
+    basic.location_available.Update(basic.clock);
     basic.gps_altitude = fix.gps_altitude;
-    basic.gps_altitude_available.Update(fix.time);
+    basic.gps_altitude_available.Update(basic.clock);
     basic.pressure_altitude = basic.baro_altitude = fix.pressure_altitude;
-    basic.pressure_altitude_available.Update(fix.time);
-    basic.baro_altitude_available.Update(fix.time);
+    basic.pressure_altitude_available.Update(basic.clock);
+    basic.baro_altitude_available.Update(basic.clock);
 
     basic_computer.Fill(basic, blackboard.SettingsComputer());
     basic_computer.Compute(basic, last, glide_computer.Calculated(),
