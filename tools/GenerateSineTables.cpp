@@ -13,7 +13,7 @@
 static inline double
 thermal_fn(int x)
 {
-  return exp((-0.2/TLOCATOR_NMAX)*pow((double)x, 1.5));
+  return exp((-0.2/ThermalLocator::TLOCATOR_NMAX)*pow((double)x, 1.5));
 }
 
 static inline double
@@ -96,14 +96,14 @@ main(int argc, char **argv)
   puts("#endif");
   puts("};");
 
-  printf("#define THERMALRECENCY_SIZE %d\n", TLOCATOR_NMAX);
+  printf("#define THERMALRECENCY_SIZE %d\n", ThermalLocator::TLOCATOR_NMAX);
   puts("#ifdef FIXED_MATH");
   printf("const unsigned THERMALRECENCY[] = {\n");
-  for (unsigned i = 0; i < TLOCATOR_NMAX; i++)
+  for (unsigned i = 0; i < ThermalLocator::TLOCATOR_NMAX; i++)
     printf("  %u,\n", (unsigned)(thermal_fn(i) * (double)fixed::resolution));
   puts("#else");
-  printf("const fixed THERMALRECENCY[%d] = {", TLOCATOR_NMAX);
-  for (unsigned i = 0; i < TLOCATOR_NMAX; i++)
+  printf("const fixed THERMALRECENCY[%d] = {", ThermalLocator::TLOCATOR_NMAX);
+  for (unsigned i = 0; i < ThermalLocator::TLOCATOR_NMAX; i++)
     printf("  fixed(%.20e),\n", thermal_fn(i));
   puts("#endif");
   puts("};");
