@@ -67,7 +67,7 @@ CheckAirspace(const AbstractAirspace &airspace)
   const AirspaceWarningConfig &config =
     CommonInterface::SettingsComputer().airspace.warnings;
 
-  return config.class_enabled(airspace.get_type()) && !IsAcked(airspace);
+  return config.class_enabled(airspace.GetType()) && !IsAcked(airspace);
 }
 
 class HorizontalAirspaceCondition : public AirspacePredicate {
@@ -91,11 +91,11 @@ public:
   virtual bool operator()(const AbstractAirspace &airspace) const {
     return CheckAirspace(airspace) &&
       /* skip airspaces that we already entered */
-      !airspace.inside(location) &&
+      !airspace.Inside(location) &&
       /* check altitude; hard-coded margin of 50m (for now) */
       (!altitude_available ||
-       (airspace.get_base().IsBelow(altitude, fixed(50)) &&
-        airspace.get_top().IsAbove(altitude, fixed(50))));
+       (airspace.GetBase().IsBelow(altitude, fixed(50)) &&
+        airspace.GetTop().IsAbove(altitude, fixed(50))));
   }
 };
 
@@ -117,7 +117,7 @@ FindNearestHorizontalAirspace()
   const AbstractAirspace &as = *airspace->get_airspace();
 
   /* calculate distance to the nearest point */
-  const GeoPoint closest = as.closest_point(basic.location);
+  const GeoPoint closest = as.ClosestPoint(basic.location);
   return NearestAirspace(as, basic.location.distance(closest));
 }
 
@@ -157,7 +157,7 @@ protected:
       return;
 
     /* check delta below */
-    fixed base = airspace.get_base().GetAltitude(altitude);
+    fixed base = airspace.GetBase().GetAltitude(altitude);
     fixed base_delta = base - altitude.altitude;
     if (!negative(base_delta) && base_delta < fabs(nearest_delta)) {
       nearest = &airspace;
@@ -165,7 +165,7 @@ protected:
     }
 
     /* check delta above */
-    fixed top = airspace.get_top().GetAltitude(altitude);
+    fixed top = airspace.GetTop().GetAltitude(altitude);
     fixed top_delta = altitude.altitude - top;
     if (!negative(top_delta) && top_delta < fabs(nearest_delta)) {
       nearest = &airspace;

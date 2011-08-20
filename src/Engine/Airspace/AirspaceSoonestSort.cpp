@@ -5,10 +5,10 @@
 AirspaceInterceptSolution 
 AirspaceSoonestSort::solve_intercept(const AbstractAirspace &a) const
 {
-  const GeoPoint loc = a.closest_point(m_state.location);
+  const GeoPoint loc = a.ClosestPoint(m_state.location);
 
   AirspaceInterceptSolution sol;
-  bool valid = a.intercept(m_state, m_perf, sol, loc, loc);
+  bool valid = a.Intercept(m_state, m_perf, sol, loc, loc);
 
   if (sol.elapsed_time > m_max_time) {
     valid = false;

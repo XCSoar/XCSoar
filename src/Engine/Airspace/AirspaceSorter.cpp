@@ -20,7 +20,7 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
 
     info.airspace = &airspace;
 
-    const GeoPoint closest_loc = airspace.closest_point(Location);
+    const GeoPoint closest_loc = airspace.ClosestPoint(Location);
     const GeoVector vec(Location, closest_loc);
 
     info.Distance = vec.Distance*distance_factor;
@@ -51,7 +51,7 @@ static AirspaceClass MatchClass;
 static bool 
 AirspaceClassFilter(const AirspaceSelectInfo& elem1) 
 {
-  return elem1.airspace->get_type() != MatchClass;
+  return elem1.airspace->GetType() != MatchClass;
 }
 
 void

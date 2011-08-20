@@ -30,10 +30,10 @@ Airspace::destroy()
 
 Airspace::Airspace(AbstractAirspace& airspace,
                    const TaskProjection& tp):
-  FlatBoundingBox(airspace.get_bounding_box(tp)),
+  FlatBoundingBox(airspace.GetBoundingBox(tp)),
   pimpl_airspace(&airspace)
 {
-  pimpl_airspace->set_task_projection(tp);
+  pimpl_airspace->SetTaskProjection(tp);
 }
 
 
@@ -41,7 +41,7 @@ bool
 Airspace::inside(const AircraftState &loc) const
 {
   if (pimpl_airspace) {
-    return pimpl_airspace->inside(loc);
+    return pimpl_airspace->Inside(loc);
   } else {
     return false;
   }
@@ -52,7 +52,7 @@ bool
 Airspace::inside(const GeoPoint &loc) const
 {
   if (pimpl_airspace) {
-    return pimpl_airspace->inside(loc);
+    return pimpl_airspace->Inside(loc);
   } else {
     return false;
   }
@@ -67,11 +67,11 @@ Airspace::intersects(const FlatRay& ray) const
 
 
 AirspaceIntersectionVector
-Airspace::intersects(const GeoPoint& g1, 
+Airspace::intersects(const GeoPoint& g1,
                      const GeoVector &vec) const
 {
   if (pimpl_airspace) {
-    return pimpl_airspace->intersects(g1, vec);
+    return pimpl_airspace->Intersects(g1, vec);
   } else {
     AirspaceIntersectionVector null;
     return null;
@@ -82,7 +82,7 @@ void
 Airspace::set_ground_level(const fixed alt) const
 {
   if (pimpl_airspace) 
-    pimpl_airspace->set_ground_level(alt);
+    pimpl_airspace->SetGroundLevel(alt);
   else
     assert(1);
 }
@@ -91,7 +91,7 @@ void
 Airspace::set_flight_level(const AtmosphericPressure &press) const
 {
   if (pimpl_airspace) 
-    pimpl_airspace->set_flight_level(press);
+    pimpl_airspace->SetFlightLevel(press);
   else
     assert(1);
 }
@@ -100,7 +100,7 @@ void
 Airspace::set_activity(const AirspaceActivity mask) const
 {
   if (pimpl_airspace)
-    pimpl_airspace->set_activity(mask);
+    pimpl_airspace->SetActivity(mask);
   else
     assert(1);
 }
@@ -109,7 +109,7 @@ void
 Airspace::clear_clearance() const
 {
   if (pimpl_airspace)
-    pimpl_airspace->clear_clearance();
+    pimpl_airspace->ClearClearance();
   else
     assert(1);
 }

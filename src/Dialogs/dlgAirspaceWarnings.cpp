@@ -305,10 +305,10 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   const AbstractAirspace &as = *warning.airspace;
   const AirspaceInterceptSolution &solution = warning.solution;
 
-  tstring sName = as.get_name_text(false);
-  tstring sTop = as.get_top_text(true);
-  tstring sBase = as.get_base_text(true);
-  tstring sType = as.get_type_text(true);
+  tstring sName = as.GetNameText(false);
+  tstring sTop = as.GetTopText(true);
+  tstring sBase = as.GetBaseText(true);
+  tstring sType = as.GetTypeText(true);
 
   const int TextHeight = 12, TextTop = 1;
 

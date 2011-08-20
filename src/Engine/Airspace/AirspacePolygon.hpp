@@ -55,7 +55,7 @@ public:
  * 
  * @return Location of reference point
  */
-  const GeoPoint get_center() const;
+  const GeoPoint GetCenter() const;
 
   /** 
    * Checks whether an aircraft is inside the airspace.
@@ -65,7 +65,7 @@ public:
    * 
    * @return true if aircraft is inside airspace boundary
    */
-  bool inside(const GeoPoint &loc) const;
+  bool Inside(const GeoPoint &loc) const;
 
   /** 
    * Checks whether a line intersects with the airspace.
@@ -76,10 +76,10 @@ public:
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
-  AirspaceIntersectionVector intersects(const GeoPoint& g1, 
+  AirspaceIntersectionVector Intersects(const GeoPoint& g1, 
                                         const GeoVector &vec) const;
 
-  GeoPoint closest_point(const GeoPoint& loc) const;
+  GeoPoint ClosestPoint(const GeoPoint& loc) const;
 
 public:
 #ifdef DO_PRINT

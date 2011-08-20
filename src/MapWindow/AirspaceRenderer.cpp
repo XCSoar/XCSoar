@@ -78,13 +78,13 @@ public:
     return locs;
   }
   bool is_warning(const AbstractAirspace& as) const {
-    return as.is_active() && find(as, ids_warning);
+    return as.IsActive() && find(as, ids_warning);
   }
   bool is_acked(const AbstractAirspace& as) const {
-    return (!as.is_active()) || find(as, ids_acked);
+    return (!as.IsActive()) || find(as, ids_acked);
   }
   bool is_inside(const AbstractAirspace& as) const {
-    return as.is_active() && find(as, ids_inside);
+    return as.IsActive() && find(as, ids_inside);
   }
 
   void visit_warned(AirspaceVisitor &visitor) {
@@ -165,8 +165,8 @@ public:
 
 public:
   void Visit(const AirspaceCircle& airspace) {
-    RasterPoint screen_center = projection.GeoToScreen(airspace.get_center());
-    unsigned screen_radius = projection.GeoToScreenDistance(airspace.get_radius());
+    RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
+    unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
     GLEnable stencil(GL_STENCIL_TEST);
 
     {
@@ -179,7 +179,7 @@ public:
         canvas.circle(screen_center.x, screen_center.y, screen_radius);
       } else {
         // draw a ring inside the circle
-        Color color = airspace_look.colors[settings.colours[airspace.get_type()]];
+        Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
         Pen pen_donut(pen_thick.get_width()/2, color.with_alpha(90));
         canvas.hollow_brush();
         canvas.select(pen_donut);
@@ -194,7 +194,7 @@ public:
   }
 
   void Visit(const AirspacePolygon& airspace) {
-    if (!prepare_polygon(airspace.get_points()))
+    if (!prepare_polygon(airspace.GetPoints()))
       return;
 
     bool fill_airspace = m_warnings.is_warning(airspace) ||
@@ -238,7 +238,7 @@ private:
     if (settings.black_outline)
       canvas.black_pen();
     else
-      canvas.select(airspace_look.pens[airspace.get_type()]);
+      canvas.select(airspace_look.pens[airspace.GetType()]);
     canvas.hollow_brush();
   }
 
@@ -252,7 +252,7 @@ private:
     glStencilOp(GL_KEEP, GL_KEEP, GL_KEEP);
     glColorMask(GL_TRUE, GL_TRUE, GL_TRUE, GL_TRUE);
 
-    Color color = airspace_look.colors[settings.colours[airspace.get_type()]];
+    Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
     canvas.select(Brush(color.with_alpha(90)));
     canvas.null_pen();
   }
@@ -326,8 +326,8 @@ public:
     buffer_render_start();
     set_buffer_pens(airspace);
 
-    RasterPoint center = m_proj.GeoToScreen(airspace.get_center());
-    unsigned radius = m_proj.GeoToScreenDistance(airspace.get_radius());
+    RasterPoint center = m_proj.GeoToScreen(airspace.GetCenter());
+    unsigned radius = m_proj.GeoToScreenDistance(airspace.GetRadius());
     draw_circle(m_buffer, center, radius);
   }
 
@@ -337,7 +337,7 @@ public:
 
     buffer_render_start();
     set_buffer_pens(airspace);
-    draw_search_point_vector(m_buffer, airspace.get_points());
+    draw_search_point_vector(m_buffer, airspace.GetPoints());
   }
 
   void draw_intercepts() {
@@ -346,7 +346,7 @@ public:
 
 private:
   void set_buffer_pens(const AbstractAirspace &airspace) {
-    const unsigned color_index = settings.colours[airspace.get_type()];
+    const unsigned color_index = settings.colours[airspace.GetType()];
 
 #ifndef HAVE_HATCHED_BRUSH
     m_buffer.select(airspace_look.solid_brushes[color_index]);
@@ -361,7 +361,7 @@ private:
       m_buffer.set_text_color(light_color(airspace_look.colors[color_index]));
 
       // get brush, can be solid or a 1bpp bitmap
-      m_buffer.select(airspace_look.brushes[settings.brushes[airspace.get_type()]]);
+      m_buffer.select(airspace_look.brushes[settings.brushes[airspace.GetType()]]);
 
       m_buffer.background_opaque();
       m_buffer.set_background_color(COLOR_WHITE);
@@ -410,18 +410,18 @@ public:
 protected:
   void setup_canvas(const AbstractAirspace &airspace) {
     if (!black)
-      canvas.select(airspace_look.pens[airspace.get_type()]);
+      canvas.select(airspace_look.pens[airspace.GetType()]);
   }
 
 public:
   void Visit(const AirspaceCircle& airspace) {
     setup_canvas(airspace);
-    circle(airspace.get_center(), airspace.get_radius());
+    circle(airspace.GetCenter(), airspace.GetRadius());
   }
 
   void Visit(const AirspacePolygon& airspace) {
     setup_canvas(airspace);
-    draw(airspace.get_points());
+    draw(airspace.GetPoints());
   }
 };
 

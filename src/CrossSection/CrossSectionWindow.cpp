@@ -153,7 +153,7 @@ public:
   void
   Render(const AbstractAirspace& as)
   {
-    int type = as.get_type();
+    int type = as.GetType();
     if (type <= 0)
       return;
 
@@ -175,11 +175,11 @@ public:
 
     PixelRect rcd;
     // Calculate top and bottom coordinate
-    rcd.top = chart.screenY(as.get_top_altitude(state));
-    if (as.is_base_terrain())
+    rcd.top = chart.screenY(as.GetTopAltitude(state));
+    if (as.IsBaseTerrain())
       rcd.bottom = chart.screenY(fixed_zero);
     else
-      rcd.bottom = chart.screenY(as.get_base_altitude(state));
+      rcd.bottom = chart.screenY(as.GetBaseAltitude(state));
 
     // Iterate through the intersections
     for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();

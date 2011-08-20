@@ -35,14 +35,14 @@ AirspacePredicateAircraftInside::AirspacePredicateAircraftInside(const AircraftS
 bool 
 AirspacePredicateAircraftInside::operator()(const AbstractAirspace& t) const
 {
-  return t.inside(m_state);
+  return t.Inside(m_state);
 }
 
 bool
 AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
 {
-  return (int)t.get_top().altitude >= h_min &&
-    (int)t.get_base().altitude <= h_max;
+  return (int)t.GetTop().altitude >= h_min &&
+    (int)t.GetBase().altitude <= h_max;
 }
 
 bool
@@ -50,5 +50,5 @@ AirspacePredicateHeightRangeExcludeTwo::operator()(const AbstractAirspace& t) co
 {
   if (!check_height(t))
     return false;
-  return !t.inside(p1) && !t.inside(p2);
+  return !t.Inside(p1) && !t.Inside(p2);
 }

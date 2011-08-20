@@ -15,7 +15,7 @@ AirspaceIntersectionVisitor::intercept(const AbstractAirspace& as,
   for (AirspaceIntersectionVector::const_iterator it = m_intersections.begin();
        it != m_intersections.end(); ++it) {
 
-    as.intercept(state, perf, solution, it->first, it->second);
+    as.Intercept(state, perf, solution, it->first, it->second);
 
     if (!all) {
       return solution;

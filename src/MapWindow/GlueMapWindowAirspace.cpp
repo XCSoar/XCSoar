@@ -136,7 +136,7 @@ public:
   }
 
   void visit_general(const AbstractAirspace& as) {
-    if (as.inside(m_location))
+    if (as.Inside(m_location))
       airspaces.checked_append(&as);
   }
 
@@ -180,7 +180,7 @@ private:
 
   static bool CompareAirspaceBase(const AbstractAirspace *a,
                                   const AbstractAirspace *b) {
-    return AirspaceAltitude::SortHighest(a->get_base(), b->get_base());
+    return AirspaceAltitude::SortHighest(a->GetBase(), b->GetBase());
   }
 
   static void PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx) {
@@ -197,7 +197,7 @@ private:
     canvas.select(small_font);
     canvas.text_clipped(rc.left + Layout::FastScale(2),
                         rc.top + name_font.get_height() + Layout::FastScale(4),
-                        rc, airspace.get_type_text(true));
+                        rc, airspace.GetTypeText(true));
 
     PixelSize size = canvas.text_size(_T("9999 m AGL"));
     unsigned altitude_width = size.cx;
@@ -205,11 +205,11 @@ private:
 
     canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                         rc.top + Layout::FastScale(2), rc,
-                        airspace.get_top_text(true).c_str());
+                        airspace.GetTopText(true).c_str());
 
     canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                         rc.top + altitude_height + Layout::FastScale(4) / 2,
-                        rc, airspace.get_base_text(true).c_str());
+                        rc, airspace.GetBaseText(true).c_str());
   }
 };
 

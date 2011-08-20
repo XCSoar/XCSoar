@@ -62,13 +62,13 @@ AirspaceAltitude::GetAsTextUnits(const bool concise) const
 
 
 const tstring 
-AbstractAirspace::get_base_text(const bool concise) const
+AbstractAirspace::GetBaseText(const bool concise) const
 {
-  return m_base.GetAsTextUnits(concise);
+  return altitude_base.GetAsTextUnits(concise);
 }
 
 const tstring 
-AbstractAirspace::get_top_text(const bool concise) const
+AbstractAirspace::GetTopText(const bool concise) const
 {
-  return m_top.GetAsTextUnits(concise);
+  return altitude_top.GetAsTextUnits(concise);
 }

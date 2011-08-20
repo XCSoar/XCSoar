@@ -134,9 +134,9 @@ struct TempAirspaceType
   AddPolygon(Airspaces &airspace_database)
   {
     AbstractAirspace *as = new AirspacePolygon(points);
-    as->set_properties(Name, Type, Base, Top);
-    as->set_radio(Radio);
-    as->set_days(days_of_operation);
+    as->SetProperties(Name, Type, Base, Top);
+    as->SetRadio(Radio);
+    as->SetDays(days_of_operation);
     airspace_database.insert(as);
   }
 
@@ -144,9 +144,9 @@ struct TempAirspaceType
   AddCircle(Airspaces &airspace_database)
   {
     AbstractAirspace *as = new AirspaceCircle(Center, Radius);
-    as->set_properties(Name, Type, Base, Top);
-    as->set_radio(Radio);
-    as->set_days(days_of_operation);
+    as->SetProperties(Name, Type, Base, Top);
+    as->SetRadio(Radio);
+    as->SetDays(days_of_operation);
     airspace_database.insert(as);
   }
 };

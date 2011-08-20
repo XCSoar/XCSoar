@@ -39,7 +39,7 @@ airspace_random_properties(AbstractAirspace& as)
   AirspaceAltitude top;
   base.altitude = fixed(rand()%4000);
   top.altitude = base.altitude+fixed(rand()%3000);
-  as.set_properties(_T("hello"), Type, base, top);
+  as.SetProperties(_T("hello"), Type, base, top);
 }
 
 
@@ -123,8 +123,8 @@ public:
   }
   virtual void visit_general(const AbstractAirspace& as) {
     if (do_report) {
-      *fout << "# Name: " << as.get_name_text().c_str()
-            << " " << as.get_vertical_text().c_str()
+      *fout << "# Name: " << as.GetNameText().c_str()
+            << " " << as.GetVerticalText().c_str()
             << "\n";
     }
   }
@@ -227,7 +227,7 @@ public:
       delete fout;
   }
   virtual void closest(const AbstractAirspace& as) {
-    GeoPoint c = as.closest_point(state.location);
+    GeoPoint c = as.ClosestPoint(state.location);
     if (fout) {
       *fout << "# closest point\n";
       *fout << c.Longitude << " " << c.Latitude << " " << "\n";
@@ -236,7 +236,7 @@ public:
     AirspaceInterceptSolution solution;
     GeoVector vec(state.location, c);
     vec.Distance = fixed(20000); // set big distance (for testing)
-    if (as.intercept(state, vec, m_perf, solution)) {
+    if (as.Intercept(state, vec, m_perf, solution)) {
       if (fout) {
         *fout << "# intercept in " << solution.elapsed_time << " h " << solution.altitude << "\n";
       }

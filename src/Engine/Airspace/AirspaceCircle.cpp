@@ -46,13 +46,13 @@ AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius):
 }
 
 bool 
-AirspaceCircle::inside(const GeoPoint &loc) const
+AirspaceCircle::Inside(const GeoPoint &loc) const
 {
   return (loc.distance(m_center) <= m_radius);
 }
 
 AirspaceIntersectionVector
-AirspaceCircle::intersects(const GeoPoint& start, const GeoVector &vec) const
+AirspaceCircle::Intersects(const GeoPoint& start, const GeoVector &vec) const
 {
   const GeoPoint end = vec.end_point(start);
   AirspaceIntersectSort sorter(start, end, *this);
@@ -63,7 +63,7 @@ AirspaceCircle::intersects(const GeoPoint& start, const GeoVector &vec) const
   const FlatPoint f_end = m_task_projection->fproject(end);
   const FlatLine line(f_start, f_end);
 
-  if (inside(start))
+  if (Inside(start))
     sorter.add(fixed_zero, start);
 
   FlatPoint f_p1, f_p2;
@@ -90,7 +90,7 @@ AirspaceCircle::intersects(const GeoPoint& start, const GeoVector &vec) const
 }
 
 GeoPoint 
-AirspaceCircle::closest_point(const GeoPoint& loc) const
+AirspaceCircle::ClosestPoint(const GeoPoint& loc) const
 {
   // Calculate distance from center point
   const fixed d = loc.distance(m_center);

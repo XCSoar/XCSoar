@@ -61,7 +61,7 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint>& pts,
 
 
 const GeoPoint 
-AirspacePolygon::get_center() const
+AirspacePolygon::GetCenter() const
 {
   if (m_border.empty()) {
     return GeoPoint(Angle::zero(), Angle::zero());
@@ -71,14 +71,14 @@ AirspacePolygon::get_center() const
 }
 
 bool 
-AirspacePolygon::inside(const GeoPoint &loc) const
+AirspacePolygon::Inside(const GeoPoint &loc) const
 {
   return PolygonInterior(loc, m_border);
 }
 
 
 AirspaceIntersectionVector
-AirspacePolygon::intersects(const GeoPoint& start, 
+AirspacePolygon::Intersects(const GeoPoint& start,
                             const GeoVector &vec) const
 {
   const GeoPoint end = vec.end_point(start);
@@ -101,7 +101,7 @@ AirspacePolygon::intersects(const GeoPoint& start,
 
 
 GeoPoint 
-AirspacePolygon::closest_point(const GeoPoint& loc) const
+AirspacePolygon::ClosestPoint(const GeoPoint& loc) const
 {
   const FlatGeoPoint p = m_task_projection->project(loc);
   const FlatGeoPoint pb = nearest_point(m_border, p);

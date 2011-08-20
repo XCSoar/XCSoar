@@ -65,8 +65,8 @@ public:
                                                RoutePoint(proj.project(point), link.second.altitude),
                                                proj);
 
-    if ((l.second.altitude< (short)as.get_base().altitude) ||
-        (l.second.altitude> (short)as.get_top().altitude))
+    if ((l.second.altitude< (short)as.GetBase().altitude) ||
+        (l.second.altitude> (short)as.GetTop().altitude))
       return;
 
     if (negative(min_distance) || (l.d < min_distance)) {
@@ -265,7 +265,7 @@ void
 AirspaceRoute::add_nearby_airspace(const RouteAirspaceIntersection &inx,
                                    const RouteLink &e)
 {
-  const SearchPointVector& fat = inx.first->get_clearance();
+  const SearchPointVector& fat = inx.first->GetClearance();
   const ClearingPair p = get_pairs(fat, e.first, e.second);
   const ClearingPair pb = get_backup_pairs(fat, e.first, inx.second);
 

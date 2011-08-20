@@ -52,20 +52,19 @@ typedef std::vector< std::pair<GeoPoint,GeoPoint> > AirspaceIntersectionVector;
  */
 class AbstractAirspace {
 public:
-
-  enum shape {
+  enum Shape {
     CIRCLE,
     POLYGON,
   };
 
-  const enum shape shape;
+  const Shape shape;
 
 protected:
-  AirspaceAltitude m_base; /**< Base of airspace */
-  AirspaceAltitude m_top; /**< Top of airspace */
-  tstring Name; /**< Airspace name (identifier) */
-  tstring Radio; /**< Radio frequency (optional) */
-  AirspaceClass Type; /**< Airspace class */
+  AirspaceAltitude altitude_base; /**< Base of airspace */
+  AirspaceAltitude altitude_top; /**< Top of airspace */
+  tstring name; /**< Airspace name (identifier) */
+  tstring radio; /**< Radio frequency (optional) */
+  AirspaceClass type; /**< Airspace class */
   const TaskProjection* m_task_projection; /**< Task projection (owned by container) that can be used for query speedups */
   SearchPointVector m_border; /**< Actual border */
   mutable SearchPointVector m_clearance; /**< Convex clearance border */
@@ -74,7 +73,7 @@ protected:
   AirspaceActivity days_of_operation;
 
 public:
-  AbstractAirspace(enum shape _shape):shape(_shape), active(true) {}
+  AbstractAirspace(enum Shape _shape):shape(_shape), active(true) {}
   virtual ~AbstractAirspace();
 
   /** 
@@ -85,15 +84,14 @@ public:
    * 
    * @return Enclosing bounding box
    */
-  const FlatBoundingBox
-    get_bounding_box(const TaskProjection& task_projection);
+  const FlatBoundingBox GetBoundingBox(const TaskProjection& task_projection);
 
 /** 
  * Set task projection for internal use
  * 
  * @param task_projection Global task projection (owned by Airspaces)
  */
-  void set_task_projection(const TaskProjection& task_projection) {
+  void SetTaskProjection(const TaskProjection& task_projection) {
     m_task_projection = &task_projection;
   };
 
@@ -104,7 +102,7 @@ public:
  * @return Location of reference point
  */
   gcc_pure
-  virtual const GeoPoint get_center() const = 0;
+  virtual const GeoPoint GetCenter() const = 0;
 
   /** 
    * Checks whether an observer is inside the airspace (no altitude taken into account)
@@ -115,7 +113,7 @@ public:
    * @return true if observer is inside airspace boundary
    */
   gcc_pure
-  virtual bool inside(const GeoPoint &loc) const = 0;
+  virtual bool Inside(const GeoPoint &loc) const = 0;
 
   /** 
    * Checks whether an observer is inside the airspace (altitude is taken into account)
@@ -126,7 +124,7 @@ public:
    * @return true if aircraft is inside airspace boundaries
    */
   gcc_pure
-  virtual bool inside(const AircraftState& state) const;
+  virtual bool Inside(const AircraftState& state) const;
 
   /** 
    * Checks whether a line intersects with the airspace.
@@ -138,7 +136,7 @@ public:
    * @return Vector of intersection pairs if the line intersects the airspace
    */
   gcc_pure
-  virtual AirspaceIntersectionVector intersects(const GeoPoint& g1, 
+  virtual AirspaceIntersectionVector Intersects(const GeoPoint& g1, 
                                                 const GeoVector &vec) const = 0;
 
 /** 
@@ -149,29 +147,28 @@ public:
  * @return Location of closest point of boundary to reference 
  */
   gcc_pure
-  virtual GeoPoint closest_point(const GeoPoint& loc) const
-    = 0;
+  virtual GeoPoint ClosestPoint(const GeoPoint &loc) const = 0;
 
   /** 
    * Set terrain altitude for AGL-referenced airspace altitudes 
    * 
    * @param alt Height above MSL of terrain (m) at center
    */
-  void set_ground_level(const fixed alt);
+  void SetGroundLevel(const fixed alt);
 
   /** 
    * Set QNH pressure for FL-referenced airspace altitudes 
    * 
    * @param press Atmospheric pressure model and QNH
    */
-  void set_flight_level(const AtmosphericPressure &press);
+  void SetFlightLevel(const AtmosphericPressure &press);
 
   /**
    * Set activity based on day mask
    *
    * @param days Mask of activity
    */
-  void set_activity(const AirspaceActivity mask) const;
+  void SetActivity(const AirspaceActivity mask) const;
 
   /**
    * Set fundamental properties of airspace
@@ -181,15 +178,15 @@ public:
    * @param _base Lower limit
    * @param _top Upper limit
    */
-  void set_properties(const tstring &_Name,
-                      const AirspaceClass _Type,
-                      const AirspaceAltitude &_base,
-                      const AirspaceAltitude &_top) {
-    Name = _Name;
-    Type = _Type;
-    m_base = _base;
-    m_top = _top;
-    Radio = _T("");
+  void SetProperties(const tstring &_Name,
+                     const AirspaceClass _Type,
+                     const AirspaceAltitude &_base,
+                     const AirspaceAltitude &_top) {
+    name = _Name;
+    type = _Type;
+    altitude_base = _base;
+    altitude_top = _top;
+    radio = _T("");
   }
 
   /**
@@ -197,8 +194,8 @@ public:
    *
    * @param _Radio Radio frequency of airspace
    */
-  void set_radio(const tstring &_Radio) {
-    Radio = _Radio;
+  void SetRadio(const tstring &_Radio) {
+    radio = _Radio;
   }
 
   /**
@@ -206,7 +203,7 @@ public:
    *
    * @param _active New activation setting of airspace
    */
-  void set_days(const AirspaceActivity mask) {
+  void SetDays(const AirspaceActivity mask) {
     days_of_operation = mask;
   }
 
@@ -215,8 +212,8 @@ public:
    * 
    * @return Type/class of airspace
    */
-  AirspaceClass get_type() const {
-    return Type;
+  AirspaceClass GetType() const {
+    return type;
   }
 
 /** 
@@ -224,20 +221,20 @@ public:
  * 
  * @return True if base is 0 AGL
  */
-  bool is_base_terrain() const {
-    return m_base.IsTerrain();
+  bool IsBaseTerrain() const {
+    return altitude_base.IsTerrain();
   }
 
-  const AirspaceAltitude& get_base() const { return m_base; }
-  const AirspaceAltitude& get_top() const { return m_top; }
+  const AirspaceAltitude& GetBase() const { return altitude_base; }
+  const AirspaceAltitude& GetTop() const { return altitude_top; }
 
 /** 
  * Get base altitude
  * 
  * @return Altitude AMSL (m) of base
  */
-  fixed get_base_altitude(const AltitudeState& state) const {
-    return m_base.GetAltitude(state);
+  fixed GetBaseAltitude(const AltitudeState& state) const {
+    return altitude_base.GetAltitude(state);
   }
 
 /** 
@@ -245,8 +242,8 @@ public:
  * 
  * @return Altitude AMSL (m) of top
  */
-  fixed get_top_altitude(const AltitudeState& state) const {
-    return m_top.GetAltitude(state);
+  fixed GetTopAltitude(const AltitudeState& state) const {
+    return altitude_top.GetAltitude(state);
   }
 
 /**
@@ -263,7 +260,7 @@ public:
  * @param loc_end Location of last point on/in airspace to query (if provided)
  * @return True if intercept found
  */
-  bool intercept(const AircraftState &state,
+  bool Intercept(const AircraftState &state,
                  const AirspaceAircraftPerformance& perf,
                  AirspaceInterceptSolution &solution,
                  const GeoPoint& loc_start,
@@ -282,7 +279,7 @@ public:
  * @param solution Solution of intercept (set if intercept possible, else untouched)
  * @return True if intercept found
  */
-  bool intercept(const AircraftState &state,
+  bool Intercept(const AircraftState &state,
                  const GeoVector& vec,
                  const AirspaceAircraftPerformance& perf,
                  AirspaceInterceptSolution &solution) const;
@@ -300,11 +297,11 @@ public:
  * @return Text version of class
  */
   gcc_pure
-  const TCHAR *get_type_text(const bool concise=false) const;
+  const TCHAR *GetTypeText(const bool concise=false) const;
 
   gcc_pure
   const TCHAR *GetName() const {
-    return Name.c_str();
+    return name.c_str();
   }
 
 /** 
@@ -316,7 +313,7 @@ public:
  * @return Text version of name/type
  */
   gcc_pure
-  const tstring get_name_text(const bool concise=false) const;
+  const tstring GetNameText(const bool concise=false) const;
 
   /**
    * Returns true if the name begins with the specified string.
@@ -330,7 +327,7 @@ public:
    * @return Text version of radio frequency
    */
   gcc_pure
-  const tstring get_radio_text() const;
+  const tstring GetRadioText() const;
 
 /** 
  * Produce text version of base+top altitude (no units).
@@ -340,7 +337,7 @@ public:
  * @return Text version of base altitude
  */
   gcc_pure
-  const tstring get_vertical_text() const;
+  const tstring GetVerticalText() const;
 
 /** 
  * Produce text version of base altitude with units.
@@ -350,7 +347,7 @@ public:
  * @return Text version of base altitude
  */
   gcc_pure
-  const tstring get_base_text(const bool concise=false) const;
+  const tstring GetBaseText(const bool concise=false) const;
 
 /** 
  * Produce text version of top altitude with units.
@@ -360,7 +357,7 @@ public:
  * @return Text version of top altitude
  */
   gcc_pure
-  const tstring get_top_text(const bool concise=false) const;
+  const tstring GetTopText(const bool concise=false) const;
 
   /**
    * Accessor for airspace shape
@@ -370,7 +367,7 @@ public:
    *
    * @return border of airspace
    */
-  const SearchPointVector& get_points() const {
+  const SearchPointVector& GetPoints() const {
     return m_border;
   }
 
@@ -381,19 +378,19 @@ public:
    * from within a visit method.
    */
   gcc_pure
-  const SearchPointVector& get_clearance() const;
-  void clear_clearance() const;
+  const SearchPointVector& GetClearance() const;
+  void ClearClearance() const;
 
   gcc_pure
-  bool is_active() const {
+  bool IsActive() const {
     return active;
-  };
+  }
 
 protected:
 /**
  * Project border.
  */
-  virtual void project(const TaskProjection& tp);
+  virtual void Project(const TaskProjection& tp);
 
 private:
 
@@ -409,9 +406,9 @@ private:
  * @return Solution of intercept 
  */
   gcc_pure
-  AirspaceInterceptSolution intercept_vertical(const AircraftState &state,
-                                               const AirspaceAircraftPerformance& perf,
-                                               const fixed& distance) const;
+  AirspaceInterceptSolution InterceptVertical(const AircraftState &state,
+                                              const AirspaceAircraftPerformance &perf,
+                                              const fixed &distance) const;
 
 /**
  * Find time/distance to specified horizontal boundary from an observer
@@ -427,11 +424,11 @@ private:
  * @return Solution of intercept 
  */
   gcc_pure
-  AirspaceInterceptSolution intercept_horizontal(const AircraftState &state,
-                                                 const AirspaceAircraftPerformance& perf,
-                                                 const fixed& distance_start,
-                                                 const fixed& distance_end,
-                                                 const bool lower=true) const;
+  AirspaceInterceptSolution InterceptHorizontal(const AircraftState &state,
+                                                const AirspaceAircraftPerformance &perf,
+                                                const fixed &distance_start,
+                                                const fixed &distance_end,
+                                                const bool lower = true) const;
 };
 
 #endif

@@ -30,7 +30,7 @@ Copyright_License {
 bool
 AirspaceVisible::type_visible(const AbstractAirspace& airspace) const
 {
-  return renderer_settings.display[airspace.get_type()];
+  return renderer_settings.display[airspace.GetType()];
 }
 
 bool
@@ -42,14 +42,14 @@ AirspaceVisible::altitude_visible(const AbstractAirspace& airspace) const
   case ALLON:
     return true;
   case CLIP:
-    return airspace.get_base().GetAltitude(m_state) <= fixed(renderer_settings.clip_altitude);
+    return airspace.GetBase().GetAltitude(m_state) <= fixed(renderer_settings.clip_altitude);
   case AUTO:
-    return airspace.get_base().IsBelow(m_state, fixed(computer_settings.warnings.AltWarningMargin))
-      && airspace.get_top().IsAbove(m_state, fixed(computer_settings.warnings.AltWarningMargin));
+    return airspace.GetBase().IsBelow(m_state, fixed(computer_settings.warnings.AltWarningMargin))
+      && airspace.GetTop().IsAbove(m_state, fixed(computer_settings.warnings.AltWarningMargin));
   case ALLBELOW:
-    return airspace.get_base().IsBelow(m_state, fixed(computer_settings.warnings.AltWarningMargin));
+    return airspace.GetBase().IsBelow(m_state, fixed(computer_settings.warnings.AltWarningMargin));
   case INSIDE:
-    return (airspace.get_base().IsBelow(m_state) && airspace.get_top().IsAbove(m_state));
+    return (airspace.GetBase().IsBelow(m_state) && airspace.GetTop().IsAbove(m_state));
 
   case ALLOFF:
     return false;

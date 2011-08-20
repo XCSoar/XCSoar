@@ -29,12 +29,12 @@ AirspaceNearestSort::populate_queue(const Airspaces &airspaces,
 AirspaceInterceptSolution
 AirspaceNearestSort::solve_intercept(const AbstractAirspace &a) const
 {
-  if (a.inside(m_location)) {
+  if (a.Inside(m_location)) {
     AirspaceInterceptSolution null_sol;
     return null_sol;
   } else {
     AirspaceInterceptSolution sol;
-    sol.location = a.closest_point(m_location);
+    sol.location = a.ClosestPoint(m_location);
     sol.distance = sol.location.distance(m_location);
     return sol;
   }

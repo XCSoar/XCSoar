@@ -17,7 +17,7 @@ AirspaceIntersectSort::empty() const
 bool
 AirspaceIntersectSort::top(GeoPoint &p) const
 {
-  if (m_airspace->inside(m_start)) {
+  if (m_airspace->Inside(m_start)) {
     p = m_start;
     return true;
   }
@@ -46,7 +46,7 @@ AirspaceIntersectSort::all()
     // when inside, checking midpoint is ok, otherwise we should
     // check just beyond the last location
 
-    if (m_airspace->inside(p_mid)) {
+    if (m_airspace->Inside(p_mid)) {
       res.push_back(std::make_pair(p_last, p_this));
       waiting = false;
     } else {

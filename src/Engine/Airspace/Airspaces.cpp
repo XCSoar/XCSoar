@@ -271,9 +271,9 @@ Airspaces::insert(AbstractAirspace* asp)
 
   if (m_owner) {
     if (empty())
-      task_projection.reset(asp->get_center());
+      task_projection.reset(asp->GetCenter());
 
-    task_projection.scan_location(asp->get_center());
+    task_projection.scan_location(asp->GetCenter());
   }
 
   tmp_as.push_back(asp);
@@ -409,7 +409,7 @@ Airspaces::synchronise_in_range(const Airspaces& master,
         break;
       }
     }
-    if (!found && other->is_active()) {
+    if (!found && other->IsActive()) {
       insert(v->get_airspace());
       changed = true;
     }

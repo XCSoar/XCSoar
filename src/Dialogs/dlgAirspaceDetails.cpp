@@ -101,28 +101,28 @@ SetValues(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpRadio"));
   assert(wp != NULL);
-  wp->SetText(airspace->get_radio_text().c_str());
+  wp->SetText(airspace->GetRadioText().c_str());
   wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpType"));
   assert(wp != NULL);
-  wp->SetText(airspace->get_type_text());
+  wp->SetText(airspace->GetTypeText());
   wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpTop"));
   assert(wp != NULL);
-  wp->SetText(airspace->get_top_text().c_str());
+  wp->SetText(airspace->GetTopText().c_str());
   wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpBase"));
   assert(wp != NULL);
-  wp->SetText(airspace->get_base_text().c_str());
+  wp->SetText(airspace->GetBaseText().c_str());
   wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpRange"));
   assert(wp != NULL);
   const GeoPoint &ac_loc = XCSoarInterface::Basic().location;
-  const GeoPoint closest_loc = airspace->closest_point(ac_loc);
+  const GeoPoint closest_loc = airspace->ClosestPoint(ac_loc);
   const GeoVector vec(ac_loc, closest_loc);
   TCHAR buf[80];
   _stprintf(buf, _T("%d%s"), (int)Units::ToUserDistance(vec.Distance),

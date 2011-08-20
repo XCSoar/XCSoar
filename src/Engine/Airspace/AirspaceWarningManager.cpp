@@ -190,10 +190,10 @@ public:
  * @param airspace Airspace corresponding to current intersection
  */
   void intersection(const AbstractAirspace& airspace) {
-    if (!airspace.is_active())
+    if (!airspace.IsActive())
       return; // ignore inactive airspaces completely
 
-    if (!m_warning_manager.get_config().class_enabled(airspace.get_type()) ||
+    if (!m_warning_manager.get_config().class_enabled(airspace.GetType()) ||
         exclude_alt(airspace))
       return;
 
@@ -203,7 +203,7 @@ public:
       AirspaceInterceptSolution solution;
 
       if (mode_inside) {
-        airspace.intercept(m_state, m_perf, solution, m_state.location, m_state.location);
+        airspace.Intercept(m_state, m_perf, solution, m_state.location, m_state.location);
       } else {
         solution = intercept(airspace, m_state, m_perf);
       }
@@ -252,7 +252,7 @@ private:
     if (!positive(m_max_alt)) {
       return false;
     }
-    return (airspace.get_base_altitude(m_state)> m_max_alt);
+    return (airspace.GetBaseAltitude(m_state)> m_max_alt);
   }
 
 
@@ -361,19 +361,19 @@ AirspaceWarningManager::update_inside(const AircraftState& state)
 
     const AbstractAirspace& airspace = *it->get_airspace();
 
-    if (!airspace.is_active())
+    if (!airspace.IsActive())
       continue; // ignore inactive airspaces
 
-    if (!config.class_enabled(airspace.get_type()))
+    if (!config.class_enabled(airspace.GetType()))
       continue;
 
     AirspaceWarning& warning = get_warning(airspace);
 
     if (warning.state_accepted(AirspaceWarning::WARNING_INSIDE)) {
-      GeoPoint c = airspace.closest_point(state.location);
+      GeoPoint c = airspace.ClosestPoint(state.location);
       GeoVector vector_exit(state.location, c);
       AirspaceInterceptSolution solution;
-      airspace.intercept(state, vector_exit, m_perf_glide, solution); 
+      airspace.Intercept(state, vector_exit, m_perf_glide, solution); 
 
       warning.update_solution(AirspaceWarning::WARNING_INSIDE, solution);
       found = true;

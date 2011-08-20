@@ -239,11 +239,11 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     
   canvas.text_clipped(rc.left + Layout::FastScale(2),
                       rc.top + Layout::FastScale(2),
-                      x1 - Layout::FastScale(5), airspace.get_name_text(false).c_str());
+                      x1 - Layout::FastScale(5), airspace.GetNameText(false).c_str());
     
   // left justified
   canvas.text(rc.left + x1, rc.top + Layout::FastScale(2), 
-              airspace.get_type_text(true));
+              airspace.GetTypeText(true));
     
   TCHAR sTmp[12];
 
