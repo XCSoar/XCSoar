@@ -43,9 +43,7 @@ struct AirspaceInterceptSolution
 
   /** Constructor, initialises to invalid solution */
   AirspaceInterceptSolution():
-    distance(-fixed_one),
-    altitude(-fixed_one),
-    elapsed_time(-fixed_one) {};
+    elapsed_time(-fixed_one) {}
 
   /**
    * Determine whether this solution is valid
