@@ -462,6 +462,60 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
 
   // Only return expected lines
   switch (line[0]) {
+  case _T('D'):
+  case _T('d'):
+    switch (line[1]) {
+    case _T('P'):
+    case _T('p'):
+      value = value_after_space(line + 2);
+      if (value == NULL)
+        break;
+
+    {
+      GeoPoint TempPoint;
+      if (!ReadCoords(value, TempPoint))
+        return false;
+
+      temp_area.points.push_back(TempPoint);
+      break;
+    }
+
+    case _T('C'):
+    case _T('c'):
+      temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(&line[2], NULL)),
+                                          unNauticalMiles);
+      temp_area.AddCircle(airspace_database);
+      temp_area.reset();
+      break;
+
+    case _T('A'):
+    case _T('a'):
+      CalculateSector(line, temp_area);
+      break;
+
+    case _T('B'):
+    case _T('b'):
+      CalculateArc(line, temp_area);
+      break;
+
+    default:
+      return true;
+    }
+    break;
+
+  case _T('V'):
+  case _T('v'):
+    // Need to set these while in count mode, or DB/DA will crash
+    if (string_after_prefix_ci(&line[2], _T("X="))) {
+      if (!ReadCoords(&line[4],temp_area.Center))
+        return false;
+    } else if (string_after_prefix_ci(&line[2], _T("D=-"))) {
+      temp_area.Rotation = -1;
+    } else if (string_after_prefix_ci(&line[2], _T("D=+"))) {
+      temp_area.Rotation = +1;
+    }
+    break;
+
   case _T('A'):
   case _T('a'):
     switch (line[1]) {
@@ -487,13 +541,6 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
         temp_area.Name = value;
       break;
 
-    case _T('R'):
-    case _T('r'):
-      value = value_after_space(line + 2);
-      if (value != NULL)
-        temp_area.Radio = value;
-      break;
-
     case _T('L'):
     case _T('l'):
       value = value_after_space(line + 2);
@@ -508,66 +555,20 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
         ReadAltitude(value, &temp_area.Top);
       break;
 
-    default:
-      return true;
-    }
-
-    break;
-
-  case _T('D'):
-  case _T('d'):
-    switch (line[1]) {
-    case _T('A'):
-    case _T('a'):
-      CalculateSector(line, temp_area);
-      break;
-
-    case _T('B'):
-    case _T('b'):
-      CalculateArc(line, temp_area);
-      break;
-
-    case _T('C'):
-    case _T('c'):
-      temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(&line[2], NULL)),
-                                          unNauticalMiles);
-      temp_area.AddCircle(airspace_database);
-      temp_area.reset();
-      break;
-
-    case _T('P'):
-    case _T('p'):
+    case _T('R'):
+    case _T('r'):
       value = value_after_space(line + 2);
-      if (value == NULL)
-        break;
-
-    {
-      GeoPoint TempPoint;
-      if (!ReadCoords(value, TempPoint))
-        return false;
-
-      temp_area.points.push_back(TempPoint);
+      if (value != NULL)
+        temp_area.Radio = value;
       break;
-    }
+
     default:
       return true;
     }
+
     break;
 
-  case _T('V'):
-  case _T('v'):
-    // Need to set these while in count mode, or DB/DA will crash
-    if (string_after_prefix_ci(&line[2], _T("X="))) {
-      if (!ReadCoords(&line[4],temp_area.Center))
-        return false;
-    } else if (string_after_prefix_ci(&line[2], _T("D=-"))) {
-      temp_area.Rotation = -1;
-    } else if (string_after_prefix_ci(&line[2], _T("D=+"))) {
-      temp_area.Rotation = +1;
-    }
-    break;
   }
-
   return true;
 }
 
@@ -739,33 +740,7 @@ ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
   if (ignore)
     return true;
 
-  if ((parameter = string_after_prefix_ci(line, _T("TITLE="))) != NULL) {
-    temp_area.Name = parameter;
-  } else if ((parameter = string_after_prefix_ci(line, _T("RADIO="))) != NULL) {
-    temp_area.Radio = parameter;
-  } else if ((parameter = string_after_prefix_ci(line, _T("ACTIVE="))) != NULL) {
-    if (_tcsicmp(parameter, _T("WEEKEND")) == 0)
-      temp_area.days_of_operation.set_weekend();
-    else if (_tcsicmp(parameter, _T("WEEKDAY")) == 0)
-      temp_area.days_of_operation.set_weekdays();
-    else if (_tcsicmp(parameter, _T("EVERYDAY")) == 0)
-      temp_area.days_of_operation.set_all();
-  } else if ((parameter = string_after_prefix_ci(line, _T("TYPE="))) != NULL) {
-    if (!temp_area.Waiting)
-      temp_area.AddPolygon(airspace_database);
-
-    temp_area.reset();
-
-    temp_area.Type = ParseTypeTNP(parameter);
-    temp_area.Waiting = false;
-  } else if ((parameter = string_after_prefix_ci(line, _T("CLASS="))) != NULL) {
-    if (temp_area.Type == OTHER)
-      temp_area.Type = ParseClassTNP(parameter);
-  } else if ((parameter = string_after_prefix_ci(line, _T("TOPS="))) != NULL) {
-    ReadAltitude(parameter, &temp_area.Top);
-  } else if ((parameter = string_after_prefix_ci(line, _T("BASE="))) != NULL) {
-    ReadAltitude(parameter, &temp_area.Base);
-  } else if ((parameter = string_after_prefix_ci(line, _T("POINT="))) != NULL) {
+  if ((parameter = string_after_prefix_ci(line, _T("POINT="))) != NULL) {
     GeoPoint TempPoint;
     if (!ParseCoordsTNP(parameter, TempPoint))
       return false;
@@ -787,6 +762,32 @@ ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
     temp_area.Rotation = -1;
     if (!ParseArcTNP(parameter, temp_area))
       return false;
+  } else if ((parameter = string_after_prefix_ci(line, _T("TITLE="))) != NULL) {
+    temp_area.Name = parameter;
+  } else if ((parameter = string_after_prefix_ci(line, _T("TYPE="))) != NULL) {
+    if (!temp_area.Waiting)
+      temp_area.AddPolygon(airspace_database);
+
+    temp_area.reset();
+
+    temp_area.Type = ParseTypeTNP(parameter);
+    temp_area.Waiting = false;
+  } else if ((parameter = string_after_prefix_ci(line, _T("CLASS="))) != NULL) {
+    if (temp_area.Type == OTHER)
+      temp_area.Type = ParseClassTNP(parameter);
+  } else if ((parameter = string_after_prefix_ci(line, _T("TOPS="))) != NULL) {
+    ReadAltitude(parameter, &temp_area.Top);
+  } else if ((parameter = string_after_prefix_ci(line, _T("BASE="))) != NULL) {
+    ReadAltitude(parameter, &temp_area.Base);
+  } else if ((parameter = string_after_prefix_ci(line, _T("RADIO="))) != NULL) {
+    temp_area.Radio = parameter;
+  } else if ((parameter = string_after_prefix_ci(line, _T("ACTIVE="))) != NULL) {
+    if (_tcsicmp(parameter, _T("WEEKEND")) == 0)
+      temp_area.days_of_operation.set_weekend();
+    else if (_tcsicmp(parameter, _T("WEEKDAY")) == 0)
+      temp_area.days_of_operation.set_weekdays();
+    else if (_tcsicmp(parameter, _T("EVERYDAY")) == 0)
+      temp_area.days_of_operation.set_all();
   }
 
   return true;
