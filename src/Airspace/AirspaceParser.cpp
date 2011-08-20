@@ -809,7 +809,6 @@ DetectFileType(const TCHAR *line)
 bool
 AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
 {
-  int LineCount = 0;
   bool ignore = false;
 
   // Create and init ProgressDialog
@@ -822,11 +821,9 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
 
   TCHAR *line;
   TCHAR *comment;
-  // Iterate through the lines
-  while ((line = reader.read()) != NULL) {
-    // Increase line counter
-    LineCount++;
 
+  // Iterate through the lines
+  for (unsigned LineCount = 1; (line = reader.read()) != NULL; LineCount++) {
     // Strip comments
     comment = _tcschr(line, _T('*'));
     if (comment != NULL)
