@@ -52,7 +52,7 @@ struct AirspaceInterceptSolution
    *
    * @return True if solution is valid
    */
-  bool valid() const {
+  bool IsValid() const {
     return !negative(elapsed_time);
   };
 };

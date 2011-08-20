@@ -183,7 +183,7 @@ public:
     }
 
     AirspaceInterceptSolution solution = intercept(as, m_state, m_perf);
-    if (solution.valid()) {
+    if (solution.IsValid()) {
       *iout << "# intercept " << solution.elapsed_time << " h " << solution.altitude << "\n";
       *iout << solution.location.Longitude << " " << solution.location.Latitude << " " << "\n\n";
     }

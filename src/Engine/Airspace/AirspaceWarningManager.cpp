@@ -207,7 +207,7 @@ public:
       } else {
         solution = intercept(airspace, m_state, m_perf);
       }
-      if (!solution.valid())
+      if (!solution.IsValid())
         return;
       if (solution.elapsed_time > m_max_time)
         return;
