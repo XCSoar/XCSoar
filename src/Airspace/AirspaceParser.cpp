@@ -52,8 +52,7 @@ enum AirspaceFileType {
   AFT_TNP
 };
 
-static const int k_nAreaCount = 14;
-static const TCHAR* k_strAreaStart[k_nAreaCount] = {
+static const TCHAR* k_strAreaStart[] = {
   _T("R"),
   _T("Q"),
   _T("P"),
@@ -70,7 +69,7 @@ static const TCHAR* k_strAreaStart[k_nAreaCount] = {
   _T("G"),
 };
 
-static const int k_nAreaType[k_nAreaCount] = {
+static const int k_nAreaType[] = {
   RESTRICT,
   DANGER,
   PROHIBITED,
@@ -444,7 +443,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 static AirspaceClass
 ParseType(const TCHAR* text)
 {
-  for (int i = 0; i < k_nAreaCount; i++)
+  for (unsigned i = 0; i < ARRAY_SIZE(k_nAreaType); i++)
     if (string_after_prefix(text, k_strAreaStart[i]))
       return (AirspaceClass)k_nAreaType[i];
 
