@@ -36,6 +36,7 @@ Copyright_License {
 #include "Airspace/AirspaceCircle.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
 #include "Compatibility/string.h"
+#include "Engine/Airspace/AirspaceClass.hpp"
 
 #include <math.h>
 #include <tchar.h>
@@ -52,38 +53,27 @@ enum AirspaceFileType {
   AFT_TNP
 };
 
-static const TCHAR* k_strAreaStart[] = {
-  _T("R"),
-  _T("Q"),
-  _T("P"),
-  _T("CTR"),
-  _T("A"),
-  _T("B"),
-  _T("C"),
-  _T("D"),
-  _T("GP"),
-  _T("W"),
-  _T("E"),
-  _T("F"),
-  _T("TMZ"),
-  _T("G"),
+struct AirspaceClassStringCouple
+{
+  const TCHAR *string;
+  AirspaceClass type;
 };
 
-static const int k_nAreaType[] = {
-  RESTRICT,
-  DANGER,
-  PROHIBITED,
-  CTR,
-  CLASSA,
-  CLASSB,
-  CLASSC,
-  CLASSD,
-  NOGLIDER,
-  WAVE,
-  CLASSE,
-  CLASSF,
-  TMZ,
-  CLASSG,
+static const AirspaceClassStringCouple airspace_class_strings[] = {
+  { _T("R"), RESTRICT },
+  { _T("Q"), DANGER },
+  { _T("P"), PROHIBITED },
+  { _T("CTR"), CTR },
+  { _T("A"), CLASSA },
+  { _T("B"), CLASSB },
+  { _T("C"), CLASSC },
+  { _T("D"), CLASSD },
+  { _T("GP"), NOGLIDER },
+  { _T("W"), WAVE },
+  { _T("E"), CLASSE },
+  { _T("F"), CLASSF },
+  { _T("TMZ"), TMZ },
+  { _T("G"), CLASSG },
 };
 
 // this can now be called multiple times to load several airspaces.
@@ -443,9 +433,9 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 static AirspaceClass
 ParseType(const TCHAR* text)
 {
-  for (unsigned i = 0; i < ARRAY_SIZE(k_nAreaType); i++)
-    if (string_after_prefix(text, k_strAreaStart[i]))
-      return (AirspaceClass)k_nAreaType[i];
+  for (unsigned i = 0; i < ARRAY_SIZE(airspace_class_strings); i++)
+    if (string_after_prefix(text, airspace_class_strings[i].string))
+      return airspace_class_strings[i].type;
 
   return OTHER;
 }
