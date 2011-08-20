@@ -50,7 +50,6 @@ enum AirspaceClass
 
 gcc_const
 const TCHAR *
-airspace_class_as_text(const AirspaceClass item,
-                       const bool consise=false);
+AirspaceClassAsText(const AirspaceClass item, const bool consise = false);
 
 #endif

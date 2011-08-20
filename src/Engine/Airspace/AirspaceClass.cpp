@@ -62,11 +62,11 @@ static const TCHAR *airspace_class_short_names[] = {
 };
 
 const TCHAR *
-airspace_class_as_text(const AirspaceClass item, const bool concise)
+AirspaceClassAsText(const AirspaceClass item, const bool short_name)
 {
   unsigned i = (unsigned)item;
 
-  if (!concise)
+  if (!short_name)
     return i < ARRAY_SIZE(airspace_class_names) ?
            airspace_class_names[i] : NULL;
 
