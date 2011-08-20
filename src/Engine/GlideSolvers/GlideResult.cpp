@@ -73,6 +73,11 @@ GlideResult::Add(const GlideResult &s2)
     /* downgrade the validity */
     validity = s2.validity;
 
+  if (!IsDefined())
+    return;
+
+  vector.Distance += s2.vector.Distance;
+
   if (!IsOkOrPartial())
     /* the other attributes are not valid if validity is not OK or
        PARTIAL */
@@ -81,7 +86,6 @@ GlideResult::Add(const GlideResult &s2)
   time_elapsed += s2.time_elapsed;
   height_glide += s2.height_glide;
   height_climb += s2.height_climb;
-  vector.Distance += s2.vector.Distance;
   distance_to_final += s2.distance_to_final;
   time_virtual += s2.time_virtual;
 
