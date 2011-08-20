@@ -239,15 +239,15 @@ public:
   }
 
   void deallocate(T *t, const size_type n) {
-    return allocator.deallocate(t, n);
+    allocator.deallocate(t, n);
   }
 
   void construct(T *t, const T &val) {
-    return allocator.construct(t, val);
+    allocator.construct(t, val);
   }
 
   void destroy(T *t) {
-    return allocator.destroy(t);
+    allocator.destroy(t);
   }
 };
 
