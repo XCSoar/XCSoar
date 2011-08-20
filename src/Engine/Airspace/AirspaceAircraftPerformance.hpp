@@ -32,110 +32,111 @@
  *  Class used for simplified/idealised performace
  *  of aircraft speed as a function of glide slope.
  */
-class AirspaceAircraftPerformance {
+class AirspaceAircraftPerformance
+{
 protected:
   fixed m_tolerance_vertical; /**< Tolerance in vertical max speeds (m/s) */
 
 public:
 
-/** 
- * Default constructor.
- * Note that search mechanism will fail if descent_rate and climb_rate are zero
- * without tolerance being positive.
- * 
- * @param tolerance Tolerance of vertical speeds (m/s)
- */
+  /**
+   * Default constructor.
+   * Note that search mechanism will fail if descent_rate and climb_rate are zero
+   * without tolerance being positive.
+   *
+   * @param tolerance Tolerance of vertical speeds (m/s)
+   */
   AirspaceAircraftPerformance(const fixed tolerance=fixed_zero):m_tolerance_vertical(tolerance) {};
 
-/** 
- * Set tolerance of vertical speeds
- * 
- * @param val New value of tolerance, positive (m/s)
- */
+  /**
+   * Set tolerance of vertical speeds
+   *
+   * @param val New value of tolerance, positive (m/s)
+   */
   void set_tolerance_vertical(const fixed val) {
     m_tolerance_vertical = val;
   }
 
-/** 
- * Return nominal speed
- * 
- * @return Nominal cruise speed (m/s)
- */
+  /**
+   * Return nominal speed
+   *
+   * @return Nominal cruise speed (m/s)
+   */
   gcc_pure
   virtual fixed get_cruise_speed() const = 0;
 
-/** 
- * Return nominal descent rate
- * 
- * @return Nominal descent speed (m/s, positive down)
- */
+  /**
+   * Return nominal descent rate
+   *
+   * @return Nominal descent speed (m/s, positive down)
+   */
   gcc_pure
   virtual fixed get_cruise_descent() const = 0;
 
-/** 
- * Return descent rate limit (above nominal descent rate) 
- * 
- * @return Max descent speed (m/s, positive down)
- */
+  /**
+   * Return descent rate limit (above nominal descent rate)
+   *
+   * @return Max descent speed (m/s, positive down)
+   */
   gcc_pure
   virtual fixed get_descent_rate() const = 0;
 
-/** 
- * Return climb rate limit (above nominal descent rate) 
- * 
- * @return Max climb rate (m/s, positive up)
- */
+  /**
+   * Return climb rate limit (above nominal descent rate)
+   *
+   * @return Max climb rate (m/s, positive up)
+   */
   gcc_pure
   virtual fixed get_climb_rate() const = 0;
 
-/** 
- * Return maximum speed achievable by this model
- * 
- * @return Speed (m/s)
- */
+  /**
+   * Return maximum speed achievable by this model
+   *
+   * @return Speed (m/s)
+   */
   gcc_pure
   virtual fixed get_max_speed() const = 0;
 
-/** 
- * Find minimum intercept time to a point
- * 
- * @param distance Distance to point (m)
- * @param dh Relative height of observer above point (m)
- * 
- * @return Time to intercept (s) or -1 if failed
- */
+  /**
+   * Find minimum intercept time to a point
+   *
+   * @param distance Distance to point (m)
+   * @param dh Relative height of observer above point (m)
+   *
+   * @return Time to intercept (s) or -1 if failed
+   */
   gcc_pure
   virtual fixed solution_general(const fixed& distance,
                                  const fixed& dh) const;
 
-/** 
- * Find time to intercept a target with a height band, set distance
- * 
- * @param distance Lateral distance to travel (m)
- * @param altitude Altitude of observer (m)
- * @param base Height of base (m)
- * @param top  Height of top (m)
- * @param intercept_alt If intercept possible, this is the soonest height
- * 
- * @return Time of intercept (s)
- */
+  /**
+   * Find time to intercept a target with a height band, set distance
+   *
+   * @param distance Lateral distance to travel (m)
+   * @param altitude Altitude of observer (m)
+   * @param base Height of base (m)
+   * @param top  Height of top (m)
+   * @param intercept_alt If intercept possible, this is the soonest height
+   *
+   * @return Time of intercept (s)
+   */
   fixed solution_vertical(const fixed& distance,
                           const fixed& altitude,
                           const fixed& base,
                           const fixed& top,
                           fixed& intercept_alt) const;
 
-/** 
- * Find time to intercept a target with a distance band, set height 
- * 
- * @param distance_min Min distance to travel (m)
- * @param distance_max Max distance to travel (m)
- * @param altitude Altitude of observer (m)
- * @param h  Height of target (m)
- * @param intercept_distance If intercept possible, this is the distance to the soonest point
- * 
- * @return Time of intercept (s)
- */
+  /**
+   * Find time to intercept a target with a distance band, set height
+   *
+   * @param distance_min Min distance to travel (m)
+   * @param distance_max Max distance to travel (m)
+   * @param altitude Altitude of observer (m)
+   * @param h  Height of target (m)
+   * @param intercept_distance If intercept possible, this is the distance to the soonest point
+   *
+   * @return Time of intercept (s)
+   */
   fixed solution_horizontal(const fixed& distance_min,
                             const fixed& distance_max,
                             const fixed& altitude,
@@ -154,7 +155,6 @@ private:
 /** 
  * Simplified aircraft performance model used for testing of
  * airspace warning system with minimal dependencies.
- * 
  */
 class AirspaceAircraftPerformanceSimple:
   public AirspaceAircraftPerformance 
@@ -164,16 +164,13 @@ class AirspaceAircraftPerformanceSimple:
   fixed climb_rate;
   fixed descent_rate;
 
-/** 
- * Constructor.  Initialises current to experimental values.
- * Intended to be specialised for a real aircraft performance model.
- * 
- */
 protected:
-  AirspaceAircraftPerformanceSimple():v_ld(30.0),s_ld(2.0),
-                                      climb_rate(10.0),
-                                      descent_rate(10.0)
-    {};
+  /**
+   * Constructor.  Initialises current to experimental values.
+   * Intended to be specialised for a real aircraft performance model.
+   */
+  AirspaceAircraftPerformanceSimple()
+    :v_ld(30.0), s_ld(2.0), climb_rate(10.0), descent_rate(10.0) {}
 
 public:
   virtual fixed get_cruise_speed() const {
@@ -208,17 +205,15 @@ class AirspaceAircraftPerformanceGlide:
   public AirspaceAircraftPerformance
 {
 public:
-/** 
- * Constructor.
- * 
- * @param polar Polar to take data from
- * 
- * @return Initialised object
- */
-  AirspaceAircraftPerformanceGlide(const GlidePolar& polar):
-    m_glide_polar(polar) {
-
-  };
+  /**
+   * Constructor.
+   *
+   * @param polar Polar to take data from
+   *
+   * @return Initialised object
+   */
+  AirspaceAircraftPerformanceGlide(const GlidePolar &polar)
+    :m_glide_polar(polar) {}
 
   virtual fixed get_cruise_speed() const {
     return m_glide_polar.GetVBestLD();
@@ -241,7 +236,8 @@ public:
   }
 
 protected:
-  const GlidePolar &m_glide_polar; /**< Glide polar used for speed model */
+  /** Glide polar used for speed model */
+  const GlidePolar &m_glide_polar;
 };
 
 
@@ -257,18 +253,16 @@ class AirspaceAircraftPerformanceStateFilter:
   const AircraftStateFilter &m_state_filter;
 
 public:
-/** 
- * Constructor.
- * 
- * @param filter Filter to retrieve state information from
- * 
- * @return Initialised object
- */
-  AirspaceAircraftPerformanceStateFilter(const AircraftStateFilter& filter):
-    AirspaceAircraftPerformance(fixed(0.01)),
-    m_state_filter(filter) {
-
-  }
+  /**
+   * Constructor.
+   *
+   * @param filter Filter to retrieve state information from
+   *
+   * @return Initialised object
+   */
+  AirspaceAircraftPerformanceStateFilter(const AircraftStateFilter& filter)
+    :AirspaceAircraftPerformance(fixed(0.01)),
+     m_state_filter(filter) {}
 
   virtual fixed get_cruise_speed() const {
     return m_state_filter.GetSpeed();
@@ -291,7 +285,6 @@ public:
   }
 };
 
-
 class TaskManager;
 
 /**
@@ -311,15 +304,15 @@ class AirspaceAircraftPerformanceTask:
   fixed m_climb_rate;
 
 public:
-/** 
- * Constructor.
- * 
- * @param state Aircraft state at query
- * @param polar Polar
- * @param task Task to retrieve plan from
- * 
- * @return Initialised object
- */
+  /**
+   * Constructor.
+   *
+   * @param state Aircraft state at query
+   * @param polar Polar
+   * @param task Task to retrieve plan from
+   *
+   * @return Initialised object
+   */
   AirspaceAircraftPerformanceTask(const AircraftState &state,
                                   const GlidePolar& polar,
                                   const TaskManager& task);
