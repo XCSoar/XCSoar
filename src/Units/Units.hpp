@@ -115,7 +115,7 @@ namespace Units
    * Returns the user-specified coordinate format
    * @return The user-specified coordinate format
    */
-  gcc_const
+  gcc_pure
   CoordinateFormats_t GetCoordinateFormat();
   /**
    * Sets the user-specified coordinate format
@@ -127,7 +127,7 @@ namespace Units
    * Returns the user-specified unit for a horizontal distance
    * @return The user-specified unit for a horizontal distance
    */
-  gcc_const
+  gcc_pure
   Units_t GetUserDistanceUnit();
   /**
    * Sets the user-specified unit for a horizontal distance
@@ -139,7 +139,7 @@ namespace Units
    * Returns the user-specified unit for an altitude
    * @return The user-specified unit for an altitude
    */
-  gcc_const
+  gcc_pure
   Units_t GetUserAltitudeUnit();
 
   /**
@@ -152,7 +152,7 @@ namespace Units
    * Returns the user-specified unit for a temperature
    * @return The user-specified unit for a temperature
    */
-  gcc_const
+  gcc_pure
   Units_t GetUserTemperatureUnit();
 
   /**
@@ -165,7 +165,7 @@ namespace Units
    * Returns the user-specified unit for a horizontal speed
    * @return The user-specified unit for a horizontal speed
    */
-  gcc_const
+  gcc_pure
   Units_t GetUserSpeedUnit();
 
   /**
@@ -178,7 +178,7 @@ namespace Units
    * Returns the user-specified unit for a task speed
    * @return The user-specified unit for a task speed
    */
-  gcc_const
+  gcc_pure
   Units_t GetUserTaskSpeedUnit();
 
   /**
@@ -191,7 +191,7 @@ namespace Units
    * Returns the user-specified unit for a vertical speed
    * @return The user-specified unit for a vertical speed
    */
-  gcc_const
+  gcc_pure
   Units_t GetUserVerticalSpeedUnit();
 
   /**
@@ -204,7 +204,7 @@ namespace Units
    * Returns the user-specified unit for a wind speed
    * @return The user-specified unit for a wind speed
    */
-  gcc_const
+  gcc_pure
   Units_t GetUserWindSpeedUnit();
 
   /**
@@ -213,7 +213,7 @@ namespace Units
    */
   void SetUserWindSpeedUnit(Units_t NewUnit);
 
-  gcc_const
+  gcc_pure
   Units_t GetUserUnitByGroup(UnitGroup_t UnitGroup);
 
   /**
@@ -240,22 +240,22 @@ namespace Units
   void LatitudeToDMS(Angle Latitude,
                      int *dd, int *mm, int *ss, bool *north);
 
-  gcc_const
+  gcc_pure
   const TCHAR *GetSpeedName();
 
-  gcc_const
+  gcc_pure
   const TCHAR *GetVerticalSpeedName();
 
-  gcc_const
+  gcc_pure
   const TCHAR *GetDistanceName();
 
-  gcc_const
+  gcc_pure
   const TCHAR *GetAltitudeName();
 
-  gcc_const
+  gcc_pure
   const TCHAR *GetTemperatureName();
 
-  gcc_const
+  gcc_pure
   const TCHAR *GetTaskSpeedName();
 
   /**
