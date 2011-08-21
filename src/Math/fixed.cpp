@@ -19,9 +19,6 @@ void sin_cos(const double&theta, double*s, double*c)
 
 #else
 
-const unsigned fixed::resolution_shift;
-const fixed::value_t fixed::resolution;
-
 fixed::value_t const internal_pi=0x3243f6a8;
 fixed::value_t const internal_two_pi=0x6487ed51;
 fixed::value_t const internal_half_pi=0x1921fb54;
