@@ -142,6 +142,7 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
   basic.Reset();
   last.Reset();
 
+  unsigned i = 0;
   char *line;
   while ((line = reader.read()) != NULL) {
     IGCFix fix;
@@ -172,8 +173,12 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
                            blackboard.SettingsComputer());
 
     glide_computer.ReadBlackboard(basic);
-    if (glide_computer.ProcessGPS())
+    glide_computer.ProcessGPS();
+
+    if (++i == 8) {
+      i = 0;
       glide_computer.ProcessIdle();
+    }
 
     last = basic;
   }
