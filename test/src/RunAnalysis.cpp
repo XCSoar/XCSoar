@@ -183,6 +183,8 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
     last = basic;
   }
 
+  glide_computer.ProcessExhaustive();
+
   blackboard.ReadBlackboardBasic(glide_computer.Basic());
   blackboard.ReadBlackboardCalculated(glide_computer.Calculated());
 }

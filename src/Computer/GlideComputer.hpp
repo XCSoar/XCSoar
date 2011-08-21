@@ -75,7 +75,11 @@ public:
   }
 
   bool ProcessGPS(); // returns true if idle needs processing
-  void ProcessIdle();
+  void ProcessIdle(bool exhaustive=false);
+
+  void ProcessExhaustive() {
+    ProcessIdle(true);
+  }
 
   void OnStartTask();
   void OnFinishTask();

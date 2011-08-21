@@ -137,13 +137,13 @@ GlideComputer::ProcessGPS()
  * Process slow calculations. Called by the CalculationThread.
  */
 void
-GlideComputer::ProcessIdle()
+GlideComputer::ProcessIdle(bool exhaustive)
 {
   // Log GPS fixes for internal usage
   // (snail trail, stats, olc, ...)
   DoLogging();
 
-  GlideComputerTask::ProcessIdle();
+  GlideComputerTask::ProcessIdle(exhaustive);
 
   if (time_advanced())
     warning_computer.Update(SettingsComputer(), Basic(), LastBasic(),

@@ -119,11 +119,14 @@ GlideComputerTask::ProcessMoreTask()
 }
 
 void
-GlideComputerTask::ProcessIdle()
+GlideComputerTask::ProcessIdle(bool exhaustive)
 {
   const MoreData &basic = Basic();
 
-  contest.Solve(SettingsComputer(), SetCalculated());
+  if (exhaustive)
+    contest.SolveExhaustive(SettingsComputer(), SetCalculated());
+  else
+    contest.Solve(SettingsComputer(), SetCalculated());
 
   const AircraftState as = ToAircraftState(basic, Calculated());
 

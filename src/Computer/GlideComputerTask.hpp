@@ -80,7 +80,7 @@ protected:
   virtual void OnTakeoff();
 
 protected:
-  void ProcessIdle();
- };
+  void ProcessIdle(bool exhaustive=false);
+};
 
 #endif
