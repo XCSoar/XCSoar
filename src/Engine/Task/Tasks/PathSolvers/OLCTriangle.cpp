@@ -241,10 +241,10 @@ OLCTriangle::add_edges(const ScanTaskPoint& origin)
     }
     break;
   case 2: {
-    find_solution(origin);
+    ScanTaskPoint previous = dijkstra.get_predecessor(origin);
 
     // give first leg points to penultimate node
-    TriangleSecondLeg sl(is_fai, solution[0], solution[1]);
+    TriangleSecondLeg sl(is_fai, GetPointFast(previous), GetPointFast(origin));
     for (; destination.point_index < n_points-1; ++destination.point_index) {
       TriangleSecondLeg::Result result = sl.Calculate(GetPointFast(destination),
                                                       best_d);
