@@ -138,7 +138,7 @@ public:
    *
    * @return Distance on axis
    */
-    distance_type operator() (const int &a, const int &b, 
+    distance_type operator() (const int a, const int b,
                               const size_t dim) const 
       {
         int val = 0;

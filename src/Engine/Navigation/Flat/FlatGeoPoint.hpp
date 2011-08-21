@@ -183,9 +183,9 @@ struct FlatGeoPoint {
  */
 class AFlatGeoPoint: public FlatGeoPoint {
 public:
-  AFlatGeoPoint(const int &x, const int& y, const short &alt):
+  AFlatGeoPoint(const int x, const int y, const short alt):
     FlatGeoPoint(x,y),altitude(alt) {};
-  AFlatGeoPoint(const FlatGeoPoint& p, const short &alt):FlatGeoPoint(p),altitude(alt) {};
+  AFlatGeoPoint(const FlatGeoPoint &p, const short alt):FlatGeoPoint(p),altitude(alt) {};
   AFlatGeoPoint():FlatGeoPoint(0,0),altitude(0) {};
   short altitude;                                           /**< Nav reference altitude (m) */
 
