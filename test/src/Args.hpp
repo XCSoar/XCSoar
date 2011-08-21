@@ -63,7 +63,8 @@ public:
   }
 
 #ifdef WIN32
-  Args(const TCHAR *_cmdline) {
+  Args(const TCHAR *_cmdline, const char *_usage)
+    :usage(_usage) {
     NarrowPathName convert(_cmdline);
     cmdline = strdup(convert);
 

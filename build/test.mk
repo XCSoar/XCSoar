@@ -1953,15 +1953,29 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/IO/ConfiguredFile.cpp \
 	$(SRC)/Operation.cpp \
+	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/NullPort.cpp \
+	$(SRC)/Device/Register.cpp \
+	$(SRC)/Device/Driver.cpp \
+	$(SRC)/Device/Internal.cpp \
+	$(SRC)/Device/Parser.cpp \
+	$(SRC)/NMEA/InputLine.cpp \
+	$(SRC)/NMEA/Checksum.cpp \
+	$(SRC)/FLARM/FlarmId.cpp \
+	$(SRC)/FLARM/Traffic.cpp \
 	$(TEST_SRC_DIR)/FakeAsset.cpp \
 	$(TEST_SRC_DIR)/FakeBlank.cpp \
 	$(TEST_SRC_DIR)/FakeDialogs.cpp \
 	$(TEST_SRC_DIR)/FakeLanguage.cpp \
 	$(TEST_SRC_DIR)/FakeLogFile.cpp \
+	$(TEST_SRC_DIR)/FakeMessage.cpp \
+	$(TEST_SRC_DIR)/FakeGeoid.cpp \
+	$(TEST_SRC_DIR)/DebugReplay.cpp \
 	$(TEST_SRC_DIR)/RunAnalysis.cpp
 RUN_ANALYSIS_OBJS = $(call SRC_TO_OBJ,$(RUN_ANALYSIS_SOURCES))
 RUN_ANALYSIS_BIN = $(TARGET_BIN_DIR)/RunAnalysis$(TARGET_EXEEXT)
 RUN_ANALYSIS_LDADD = \
+	$(DRIVER_LIBS) \
 	$(PROFILE_LIBS) \
 	$(FORM_LIBS) \
 	$(SCREEN_LIBS) \

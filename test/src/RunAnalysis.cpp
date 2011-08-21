@@ -56,10 +56,11 @@ Copyright_License {
 #include "Task/TaskFile.hpp"
 #include "LocalPath.hpp"
 #include "InterfaceBlackboard.hpp"
-#include "Replay/IGCParser.hpp"
+#include "DebugReplay.hpp"
 #include "IO/FileLineReader.hpp"
 #include "Operation.hpp"
 #include "Look/Look.hpp"
+#include "Args.hpp"
 
 #ifdef WIN32
 #include <shellapi.h>
@@ -103,6 +104,14 @@ ThermalLocator::Process(const bool circling,
                         const SpeedVector wind,
                         ThermalLocatorInfo& therm) {}
 
+Waypoints way_points;
+
+bool
+InputEvents::processNmea(unsigned key)
+{
+  return true;
+}
+
 int GetUTCOffset() { return 0; }
 
 void
@@ -127,50 +136,12 @@ LoadFiles(Airspaces &airspace_database)
 }
 
 static void
-LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
-        InterfaceBlackboard &blackboard)
+LoadReplay(DebugReplay *replay, GlideComputer &glide_computer,
+           InterfaceBlackboard &blackboard)
 {
-  FileLineReaderA reader(path);
-  if (reader.error()) {
-    fprintf(stderr, "Failed to open input file\n");
-    exit(EXIT_FAILURE);
-  }
-
-  BasicComputer basic_computer;
-
-  MoreData basic, last;
-  basic.Reset();
-  last.Reset();
-
   unsigned i = 0;
-  char *line;
-  while ((line = reader.read()) != NULL) {
-    IGCFix fix;
-    if (!IGCParseFix(line, fix))
-      continue;
-
-    basic.clock = fix.time;
-    basic.connected.Update(basic.clock);
-    basic.time = fix.time;
-    basic.time_available.Update(basic.clock);
-    basic.date_time_utc.year = 2011;
-    basic.date_time_utc.month = 6;
-    basic.date_time_utc.day = 5;
-    basic.date_time_utc.hour = (unsigned)(fix.time / 3600);
-    basic.date_time_utc.minute = (unsigned)(fix.time / 60) % 60;
-    basic.date_time_utc.second = (unsigned)fix.time % 60;
-
-    basic.location = fix.location;
-    basic.location_available.Update(basic.clock);
-    basic.gps_altitude = fix.gps_altitude;
-    basic.gps_altitude_available.Update(basic.clock);
-    basic.pressure_altitude = basic.baro_altitude = fix.pressure_altitude;
-    basic.pressure_altitude_available.Update(basic.clock);
-    basic.baro_altitude_available.Update(basic.clock);
-
-    basic_computer.Fill(basic, blackboard.SettingsComputer());
-    basic_computer.Compute(basic, last, glide_computer.Calculated(),
-                           blackboard.SettingsComputer());
+  while (replay->Next()) {
+    const MoreData &basic = replay->Basic();
 
     glide_computer.ReadBlackboard(basic);
     glide_computer.ProcessGPS();
@@ -179,8 +150,6 @@ LoadIGC(const TCHAR *path, GlideComputer &glide_computer,
       i = 0;
       glide_computer.ProcessIdle();
     }
-
-    last = basic;
   }
 
   glide_computer.ProcessExhaustive();
@@ -203,29 +172,15 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 #endif
 {
 #ifdef WIN32
-#ifndef _WIN32_WCE
-  /* on Windows (non-CE), the lpCmdLine argument is narrow, and we
-     have to use GetCommandLine() to get the UNICODE string */
-  LPCTSTR lpCmdLine = GetCommandLine();
-#endif
-
-#ifdef _WIN32_WCE
-  int argc = 2;
-
-  WCHAR arg0[] = _T("");
-  LPWSTR argv[] = { arg0, lpCmdLine, NULL };
+  Args args(GetCommandLine(), "DRIVER FILE");
 #else
-  int argc;
-  LPWSTR* argv = CommandLineToArgvW(lpCmdLine, &argc);
+  Args args(argc, argv, "DRIVER FILE");
 #endif
-#endif
-
-  if (argc != 2) {
-    fprintf(stderr, "Usage: RunAnalysis FILE.igc\n");
+  DebugReplay *replay = CreateDebugReplay(args);
+  if (replay == NULL)
     return EXIT_FAILURE;
-  }
 
-  const TCHAR *path = argv[1];
+  args.ExpectEnd();
 
   InitialiseDataPath();
   Profile::SetFiles(_T(""));
@@ -261,7 +216,8 @@ WinMain(HINSTANCE hInstance, HINSTANCE hPrevInstance,
 
   ScreenGlobalInit screen_init;
 
-  LoadIGC(path, glide_computer, blackboard);
+  LoadReplay(replay, glide_computer, blackboard);
+  delete replay;
 
 #ifdef WIN32
   ResourceLoader::Init(hInstance);
