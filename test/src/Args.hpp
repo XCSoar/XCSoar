@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef ARGS_HPP
 #define ARGS_HPP
 
-#ifdef _UNICODE
+#if defined(_UNICODE) || defined(WIN32)
 #include "OS/PathName.hpp"
 #endif
 #include "Util/tstring.hpp"
@@ -39,6 +39,10 @@ class Args {
   std::list<char *> args;
   const char *name, *usage;
 
+#ifdef WIN32
+  char *cmdline;
+#endif
+
   gcc_noreturn
   void UsageError() {
     fprintf(stderr, "Usage: %s %s\n", name, usage);
@@ -52,7 +56,40 @@ public:
     assert(usage != NULL);
 
     std::copy(argv + 1, argv + argc, std::back_inserter(args));
+
+#ifdef WIN32
+    cmdline = NULL;
+#endif
   }
+
+#ifdef WIN32
+  Args(const TCHAR *_cmdline) {
+    NarrowPathName convert(_cmdline);
+    cmdline = strdup(convert);
+
+    char *p = cmdline;
+    name = p;
+    while (true) {
+      char *space = strchr(p, ' ');
+      if (space == NULL)
+        break;
+
+      *space++ = 0;
+      while (*space == ' ')
+        ++space;
+
+      if (*space == 0)
+        break;
+
+      p = space;
+      args.push_back(p);
+    }
+  }
+
+  ~Args() {
+    delete[] cmdline;
+  }
+#endif
 
   bool IsEmpty() const {
     return args.empty();
