@@ -28,6 +28,7 @@
 #include "AirspaceActivity.hpp"
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/SearchPointVector.hpp"
+#include "Util/TinyEnum.hpp"
 #include "Compiler.h"
 
 #ifdef DO_PRINT
@@ -55,9 +56,15 @@ public:
     POLYGON,
   };
 
-  const Shape shape;
+  const TinyEnum<Shape> shape;
 
 protected:
+  /** Airspace class */
+  TinyEnum<AirspaceClass> type;
+
+  bool m_is_convex;
+  mutable bool active;
+
   /** Base of airspace */
   AirspaceAltitude altitude_base;
 
@@ -70,9 +77,6 @@ protected:
   /** Radio frequency (optional) */
   tstring radio;
 
-  /** Airspace class */
-  AirspaceClass type;
-
   /** Task projection (owned by container) that can be used for query speedups */
   const TaskProjection* m_task_projection;
 
@@ -82,12 +86,10 @@ protected:
   /** Convex clearance border */
   mutable SearchPointVector m_clearance;
 
-  bool m_is_convex;
-  mutable bool active;
   AirspaceActivity days_of_operation;
 
 public:
-  AbstractAirspace(enum Shape _shape):shape(_shape), active(true) {}
+  AbstractAirspace(Shape _shape):shape(_shape), active(true) {}
   virtual ~AbstractAirspace();
 
   /** 
