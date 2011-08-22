@@ -161,7 +161,8 @@ ReadAltitude(const TCHAR *Text, AirspaceAltitude *Alt)
   Alt->altitude_above_terrain = fixed_zero;
   Alt->type = AirspaceAltitude::UNDEFINED;
 
-  for (const TCHAR *p = Text; *p != _T('\0'); ++p) {
+  const TCHAR *p = Text;
+  while (true) {
     while (*p == _T(' '))
       ++p;
 
@@ -242,7 +243,10 @@ ReadAltitude(const TCHAR *Text, AirspaceAltitude *Alt)
       Alt->altitude = fixed(50000);
 
       p += 3;
-    }
+    } else if (*p == _T('\0'))
+      break;
+    else
+      ++p;
   }
 
   if (!fHasUnit && (Alt->type != AirspaceAltitude::FL)) {
