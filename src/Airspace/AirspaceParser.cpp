@@ -607,6 +607,10 @@ ParseTypeTNP(const TCHAR* text)
       _tcsicmp(text, _T("GSEC")) == 0)
     return WAVE;
 
+  if (_tcsicmp(text, _T("T")) == 0 ||
+      _tcsicmp(text, _T("TMZ")) == 0)
+    return TMZ;
+
   return OTHER;
 }
 
