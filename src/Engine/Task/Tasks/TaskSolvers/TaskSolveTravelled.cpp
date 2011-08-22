@@ -29,7 +29,7 @@ TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps
                                        const GlidePolar &gp,
                                        const fixed _xmin, 
                                        const fixed _xmax):
-  ZeroFinder(fixed(_xmin), fixed(_xmax), fixed(TOLERANCE_CRUISE_EFFICIENCY)),
+  ZeroFinder(_xmin, _xmax, fixed(TOLERANCE_CRUISE_EFFICIENCY)),
   aircraft(_aircraft),
   tm(tps, activeTaskPoint, gp)
 {
