@@ -56,7 +56,7 @@ protected:
   const bool m_boundary_scored;
 
 private:
-  SearchPointVector m_nominal_point;
+  SearchPointVector m_nominal_points;
   SearchPointVector m_sampled_points;
   SearchPointVector m_boundary_points;
   SearchPoint m_search_max;

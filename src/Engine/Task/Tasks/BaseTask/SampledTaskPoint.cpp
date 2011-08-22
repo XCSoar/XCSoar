@@ -30,7 +30,7 @@ SampledTaskPoint::SampledTaskPoint(enum type _type, const Waypoint & wp,
    m_search_min(get_location()),
    m_search_reference(get_location())
 {
-  m_nominal_point.push_back(m_search_reference);
+  m_nominal_points.push_back(m_search_reference);
 }
 
 // SAMPLES
@@ -109,7 +109,7 @@ SampledTaskPoint::update_projection(const TaskProjection &projection)
   m_search_max.project(projection);
   m_search_min.project(projection);
   m_search_reference.project(projection);
-  m_nominal_point.project(projection);
+  m_nominal_points.project(projection);
   m_sampled_points.project(projection);
   m_boundary_points.project(projection);
 }
@@ -133,7 +133,7 @@ SampledTaskPoint::get_search_points() const
     // this adds a point in case the waypoint was skipped
     // this is a crude way of handling the situation --- may be best
     // to de-rate the score in some way
-    return m_nominal_point;
+    return m_nominal_points;
 
   return m_boundary_points;
 }
