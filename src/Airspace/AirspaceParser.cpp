@@ -672,7 +672,8 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   if ((parameter = string_after_prefix_ci(parameter, _T(" CENTRE="))) == NULL)
     return false;
 
-  ParseCoordsTNP(parameter, temp_area.Center);
+  if (!ParseCoordsTNP(parameter, temp_area.Center))
+    return false;
 
   if ((parameter = _tcsstr(parameter, _T(" "))) == NULL)
     return false;
@@ -683,7 +684,8 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
     return false;
 
   GeoPoint to;
-  ParseCoordsTNP(parameter, to);
+  if (!ParseCoordsTNP(parameter, to))
+    return false;
 
   temp_area.AppendArc(from, to);
 
