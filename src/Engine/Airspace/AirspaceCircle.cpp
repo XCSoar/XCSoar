@@ -28,19 +28,17 @@
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "AirspaceIntersectSort.hpp"
 
-AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius):
-  AbstractAirspace(CIRCLE),
-  m_center(loc), 
-  m_radius(_radius)
+AirspaceCircle::AirspaceCircle(const GeoPoint &loc, const fixed _radius)
+  :AbstractAirspace(CIRCLE), m_center(loc), m_radius(_radius)
 {
   m_is_convex = true;
 
   // @todo: find better enclosing radius as fn of NUM_SEGMENTS
   #define NUM_SEGMENTS 12
   m_border.reserve(NUM_SEGMENTS);
-  for (unsigned i=0; i<=12; ++i) {
-    const Angle angle = Angle::degrees(fixed(i*360/NUM_SEGMENTS));
-    const GeoPoint p = GeoVector(m_radius*fixed(1.1), angle).end_point(m_center);
+  for (unsigned i = 0; i <= 12; ++i) {
+    const Angle angle = Angle::degrees(fixed(i * 360 / NUM_SEGMENTS));
+    const GeoPoint p = GeoVector(m_radius * fixed(1.1), angle).end_point(m_center);
     m_border.push_back(SearchPoint(p));
   }
 }
@@ -52,7 +50,7 @@ AirspaceCircle::Inside(const GeoPoint &loc) const
 }
 
 AirspaceIntersectionVector
-AirspaceCircle::Intersects(const GeoPoint& start, const GeoVector &vec) const
+AirspaceCircle::Intersects(const GeoPoint &start, const GeoVector &vec) const
 {
   const GeoPoint end = vec.end_point(start);
   AirspaceIntersectSort sorter(start, end, *this);
@@ -89,7 +87,7 @@ AirspaceCircle::Intersects(const GeoPoint& start, const GeoVector &vec) const
   return sorter.all();
 }
 
-GeoPoint 
+GeoPoint
 AirspaceCircle::ClosestPoint(const GeoPoint& loc) const
 {
   // Calculate distance from center point

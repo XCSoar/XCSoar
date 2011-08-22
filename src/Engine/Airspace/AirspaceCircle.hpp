@@ -32,14 +32,12 @@
 /**
  * Airspace object defined by the area within a distance (radius) from a center point 
  */
-class AirspaceCircle: 
-    public AbstractAirspace 
+class AirspaceCircle: public AbstractAirspace
 {
   const GeoPoint m_center;
   const fixed m_radius;
 
 public:
-
   /** 
    * Constructor
    * 
@@ -79,7 +77,7 @@ public:
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
-  AirspaceIntersectionVector Intersects(const GeoPoint& g1, 
+  AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                         const GeoVector &vec) const;
 
   /**
@@ -90,14 +88,14 @@ public:
    *
    * @return Closest GeoPoint in the AirspaceCircle
    */
-  GeoPoint ClosestPoint(const GeoPoint& loc) const;
+  GeoPoint ClosestPoint(const GeoPoint &loc) const;
 
   /**
    * Accessor for radius
    *
    * @return Radius of circle (m)
    */
-  const fixed& GetRadius() const {
+  const fixed &GetRadius() const {
     return m_radius;
   }
 
