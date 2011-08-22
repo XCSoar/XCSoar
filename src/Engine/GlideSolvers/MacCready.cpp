@@ -259,6 +259,12 @@ MacCready::solve(const GlideState &task) const
  */
 class MacCreadyVopt: public ZeroFinder
 {
+  GlideResult res;
+  const GlideState &task;
+  const MacCready &mac;
+  const fixed inv_mc;
+  const bool allow_partial;
+
 public:
   /**
    * Constructor
@@ -308,13 +314,6 @@ public:
     find_min(vinit);
     return res;
   }
-
-private:
-  GlideResult res;
-  const GlideState &task;
-  const MacCready &mac;
-  const fixed inv_mc;
-  const bool allow_partial;
 };
 
 GlideResult
