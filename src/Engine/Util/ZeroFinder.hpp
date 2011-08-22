@@ -32,6 +32,20 @@
  *
  */
 class ZeroFinder {
+  /** machine tolerance */
+  static const fixed epsilon;
+  /** sqrt of machine tolerance */
+  static const fixed sqrt_epsilon;
+  static const fixed r;
+
+protected:
+  /** min value of search range */
+  const fixed xmin;
+  /** max value of search range */
+  const fixed xmax;
+  /** search tolerance in x */
+  const fixed tolerance;
+
 public:
   /**
    * Constructor of zero finder search algorithm
@@ -77,23 +91,9 @@ public:
    */
   fixed find_min(const fixed xstart);
 
-protected:
-  /** min value of search range */
-  const fixed xmin;
-  /** max value of search range */
-  const fixed xmax;
-  /** search tolerance in x */
-  const fixed tolerance;
-
 private:
   fixed find_zero_actual(const fixed xstart);
   fixed find_min_actual(const fixed xstart);
-
-  /** machine tolerance */
-  static const fixed epsilon;
-  /** sqrt of machine tolerance */
-  static const fixed sqrt_epsilon;
-  static const fixed r;
 
   /**
    * Tolerance in f of minimisation routine at x
