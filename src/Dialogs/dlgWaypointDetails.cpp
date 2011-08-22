@@ -43,6 +43,7 @@ Copyright_License {
 #include "Components.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "Task/TaskManager.hpp"
+#include "Task/MapTaskManager.hpp"
 #include "Task/Tasks/TaskSolvers/TaskSolution.hpp"
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/ProtectedTaskManager.hpp"
@@ -56,12 +57,6 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 
-enum task_edit_result {
-  SUCCESS,
-  UNMODIFIED,
-  INVALID,
-  NOTASK
-};
 
 static int page = 0;
 static WndForm *wf = NULL;
@@ -186,55 +181,12 @@ OnGotoClicked(gcc_unused WndButton &button)
 
   assert(selected_waypoint != NULL);
 
-  protected_task_manager->do_goto(*selected_waypoint);
+  MapTaskManager mtm;
+
+  mtm.do_goto(*selected_waypoint);
   wf->SetModalResult(mrOK);
 
   CommonInterface::main_window.full_redraw();
-}
-
-static task_edit_result
-replace_in_task(OrderedTask *task, const Waypoint &wp)
-{
-  { // this must be done in thread lock because it potentially changes the
-    // waypoints database
-    ScopeSuspendAllThreads suspend;
-    task->check_duplicate_waypoints(way_points);
-    way_points.optimise();
-  }
-
-  if (task->TaskSize()==0)
-    return NOTASK;
-
-  unsigned i = task->getActiveIndex();
-  if (i >= task->TaskSize())
-    return UNMODIFIED;
-
-  task->relocate(i, wp);
-
-  if (!task->check_task())
-    return INVALID;
-
-  return SUCCESS;
-}
-
-static task_edit_result
-replace_in_task(const Waypoint &wp)
-{
-  assert(protected_task_manager != NULL);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  TaskEvents task_events;
-  GlidePolar glide_polar(task_manager->get_glide_polar());
-  OrderedTask *task =
-    task_manager->clone(task_events,
-                        XCSoarInterface::SettingsComputer().task,
-                        glide_polar);
-
-  task_edit_result result = replace_in_task(task, wp);
-  if (result == SUCCESS)
-    task_manager->commit(*task);
-
-  delete task;
-  return result;
 }
 
 static void
@@ -243,21 +195,23 @@ OnReplaceClicked(gcc_unused WndButton &button)
   if (protected_task_manager == NULL)
     return;
 
-  switch (replace_in_task(*selected_waypoint)) {
-  case SUCCESS:
+  MapTaskManager mtm;
+
+  switch (mtm.replace_in_task(*selected_waypoint)) {
+  case MapTaskManager::SUCCESS:
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
-  case NOTASK:
+  case MapTaskManager::NOTASK:
     MessageBoxX(_("No task defined."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
-  case UNMODIFIED:
+  case MapTaskManager::UNMODIFIED:
     MessageBoxX(_("No active task point."), _("Replace in task"),
                 MB_OK | MB_ICONINFORMATION);
     break;
 
-  case INVALID:
+  case MapTaskManager::INVALID:
     MessageBoxX(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
@@ -284,141 +238,55 @@ OnNewHomeClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-static task_edit_result
-insert_in_task(OrderedTask *task, const Waypoint &wp)
-{
-  if (task->TaskSize()==0)
-    return NOTASK;
-
-  int i = task->getActiveIndex();
-  /* skip all start points */
-  while (true) {
-    if (i >= (int)task->TaskSize())
-      return UNMODIFIED;
-
-    const TaskPoint *tp = task->get_tp(i);
-    if (tp == NULL || tp->IsIntermediatePoint())
-      break;
-
-    ++i;
-  }
-
-  const AbstractTaskFactory &factory = task->get_factory();
-  OrderedTaskPoint *tp = (OrderedTaskPoint *)factory.createIntermediate(wp);
-  if (tp == NULL)
-    return UNMODIFIED;
-
-  bool success = task->insert(*tp, i);
-  delete tp;
-  if (!success)
-    return UNMODIFIED;
-
-  if (!task->check_task())
-    return INVALID;
-
-  return SUCCESS;
-}
-
-static task_edit_result
-insert_in_task(const Waypoint &wp)
-{
-  assert(protected_task_manager != NULL);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  TaskEvents task_events;
-  GlidePolar glide_polar(task_manager->get_glide_polar());
-  OrderedTask *task =
-    task_manager->clone(task_events,
-                        XCSoarInterface::SettingsComputer().task,
-                        glide_polar);
-
-  task_edit_result result = insert_in_task(task, wp);
-  if (result == SUCCESS)
-    task_manager->commit(*task);
-
-  delete task;
-  return result;
-}
-
 static void
 OnInsertInTaskClicked(gcc_unused WndButton &button)
 {
   if (protected_task_manager == NULL)
     return;
 
-  switch (insert_in_task(*selected_waypoint)) {
-  case SUCCESS:
+  MapTaskManager mtm;
+
+  switch (mtm.insert_in_task(*selected_waypoint)) {
+  case MapTaskManager::SUCCESS:
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
 
-  case NOTASK:
+  case MapTaskManager::NOTASK:
     MessageBoxX(_("No task defined."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
-  case UNMODIFIED:
-  case INVALID:
+  case MapTaskManager::UNMODIFIED:
+  case MapTaskManager::INVALID:
     MessageBoxX(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
   }
 }
 
-static task_edit_result
-append_to_task(OrderedTask *task, const Waypoint &wp)
+static void
+OnAppendInTaskClicked(gcc_unused WndButton &button)
 {
-  if (task->TaskSize()==0)
-    return NOTASK;
+  if (protected_task_manager == NULL)
+    return;
 
-  int i = task->TaskSize() - 1;
-  /* skip all finish points */
-  while (i >= 0) {
-    const OrderedTaskPoint *tp = task->get_tp(i);
-    if (tp == NULL)
-      break;
+  MapTaskManager mtm;
 
-    if (tp->successor_allowed()) {
-      ++i;
-      break;
-    }
-
-    --i;
+  switch (mtm.append_to_task(*selected_waypoint)) {
+  case MapTaskManager::SUCCESS:
+    protected_task_manager->task_save_default();
+    wf->SetModalResult(mrOK);
+    break;
+  case MapTaskManager::NOTASK:
+    MessageBoxX(_("No task defined."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
+  case MapTaskManager::UNMODIFIED:
+  case MapTaskManager::INVALID:
+    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
+                MB_OK | MB_ICONEXCLAMATION);
+    break;
   }
-
-  const AbstractTaskFactory &factory = task->get_factory();
-  OrderedTaskPoint *tp = (OrderedTaskPoint *)factory.createIntermediate(wp);
-  if (tp == NULL)
-    return UNMODIFIED;
-
-  bool success = i >= 0 ? task->insert(*tp, i) : task->append(*tp);
-  delete tp;
-
-  if (!success)
-    return UNMODIFIED;
-
-  if (!task->check_task())
-    return INVALID;
-
-  return SUCCESS;
-}
-
-static task_edit_result
-append_to_task(const Waypoint &wp)
-{
-  assert(protected_task_manager != NULL);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  TaskEvents task_events;
-  GlidePolar glide_polar(task_manager->get_glide_polar());
-  OrderedTask *task =
-    task_manager->clone(task_events,
-                        XCSoarInterface::SettingsComputer().task,
-                        glide_polar);
-
-  task_edit_result result = append_to_task(task, wp);
-  if (result == SUCCESS)
-    task_manager->commit(*task);
-
-  delete task;
-  return result;
 }
 
 #if 0
@@ -477,102 +345,28 @@ OnGotoAndClearTaskClicked(gcc_unused WndButton &button)
 #endif
 
 static void
-OnAppendInTaskClicked(gcc_unused WndButton &button)
-{
-  if (protected_task_manager == NULL)
-    return;
-
-  switch (append_to_task(*selected_waypoint)) {
-  case SUCCESS:
-    protected_task_manager->task_save_default();
-    wf->SetModalResult(mrOK);
-    break;
-  case NOTASK:
-    MessageBoxX(_("No task defined."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  case UNMODIFIED:
-  case INVALID:
-    MessageBoxX(_("Task would not be valid after the change."), _("Error"),
-                MB_OK | MB_ICONEXCLAMATION);
-    break;
-  }
-}
-
-static task_edit_result
-remove_from_task(OrderedTask *task, const Waypoint &wp)
-{
-  if (task->TaskSize()==0)
-    return NOTASK;
-
-  { // this must be done in thread lock because it potentially changes the
-    // waypoints database
-    ScopeSuspendAllThreads suspend;
-    task->check_duplicate_waypoints(way_points);
-    way_points.optimise();
-  }
-
-  bool modified = false;
-  for (unsigned i = task->TaskSize(); i--;) {
-    const OrderedTaskPoint *tp = task->get_tp(i);
-    assert(tp != NULL);
-
-    if (tp->GetWaypoint() == wp) {
-      task->remove(i);
-      modified = true;
-    }
-  }
-
-  if (!modified)
-    return UNMODIFIED;
-
-  if (!task->check_task())
-    return INVALID;
-
-  return SUCCESS;
-}
-
-static task_edit_result
-remove_from_task(const Waypoint &wp)
-{
-  assert(protected_task_manager != NULL);
-  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  TaskEvents task_events;
-  GlidePolar glide_polar(task_manager->get_glide_polar());
-  OrderedTask *task =
-    task_manager->clone(task_events,
-                        XCSoarInterface::SettingsComputer().task,
-                        glide_polar);
-
-  task_edit_result result = remove_from_task(task, wp);
-  if (result == SUCCESS)
-    task_manager->commit(*task);
-
-  delete task;
-  return result;
-}
-
-static void
 OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 {
   if (protected_task_manager == NULL)
     return;
 
-  switch (remove_from_task(*selected_waypoint)) {
-  case SUCCESS:
+  MapTaskManager mtm;
+
+  switch (mtm.remove_from_task(*selected_waypoint)) {
+  case MapTaskManager::SUCCESS:
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
     break;
-  case NOTASK:
+  case MapTaskManager::NOTASK:
     MessageBoxX(_("No task defined."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
-  case UNMODIFIED:
+  case MapTaskManager::UNMODIFIED:
     MessageBoxX(_("Waypoint not in task."), _("Remove from task"),
                 MB_OK | MB_ICONINFORMATION);
     break;
 
-  case INVALID:
+  case MapTaskManager::INVALID:
     MessageBoxX(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
