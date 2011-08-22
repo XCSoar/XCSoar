@@ -138,6 +138,8 @@ GlidePolar::SinkRate(const fixed V, const fixed n) const
  */
 class GlidePolarVopt: public ZeroFinder
 {
+  const GlidePolar &polar;
+
 public:
   /**
    * Constructor.
@@ -166,9 +168,6 @@ public:
   {
     return -V/polar.MSinkRate(V);
   }
-
-private:
-  const GlidePolar &polar;
 };
 #endif
 
@@ -194,6 +193,8 @@ GlidePolar::UpdateBestLD()
  */
 class GlidePolarMinSink: public ZeroFinder
 {
+  const GlidePolar &polar;
+
 public:
   /**
    * Constructor.
@@ -214,9 +215,6 @@ public:
   {
     return polar.SinkRate(V);
   }
-
-private:
-  const GlidePolar &polar;
 };
 #endif
 
@@ -257,6 +255,10 @@ GlidePolar::IsGlidePossible(const GlideState &task) const
  */
 class GlidePolarSpeedToFly: public ZeroFinder
 {
+  const GlidePolar &polar;
+  const fixed& m_net_sink_rate;
+  const fixed& m_head_wind;
+
 public:
   /**
    * Constructor.
@@ -305,11 +307,6 @@ public:
     fixed Vopt = find_min(Vstart);
     return Vopt + m_head_wind;
   }
-
-private:
-  const GlidePolar &polar;
-  const fixed& m_net_sink_rate;
-  const fixed& m_head_wind;
 };
 
 fixed
