@@ -64,11 +64,11 @@ OrderedTaskPoint::update_geometry()
 }
 
 void
-OrderedTaskPoint::update_oz(const TaskProjection &projection)
+OrderedTaskPoint::UpdateOZ(const TaskProjection &projection)
 {
   update_geometry();
 
-  SampledTaskPoint::update_oz(projection);
+  SampledTaskPoint::UpdateOZ(projection);
 }
 
 bool
@@ -95,13 +95,13 @@ OrderedTaskPoint::scan_active(OrderedTaskPoint* atp)
 }
 
 bool
-OrderedTaskPoint::search_boundary_points() const
+OrderedTaskPoint::SearchBoundaryPoints() const
 {
   return m_active_state == AFTER_ACTIVE;
 }
 
 bool
-OrderedTaskPoint::search_nominal_if_unsampled() const
+OrderedTaskPoint::SearchNominalIfUnsampled() const
 {
   return m_active_state == BEFORE_ACTIVE;
 }

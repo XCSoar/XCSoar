@@ -59,7 +59,7 @@ PrintHelper::aatpoint_print(std::ostream& f,
 
       AATIsolineSegment seg(tp, projection);
       fixed tdist = tp.get_previous()->GetLocationRemaining().distance(
-        tp.get_location_min());
+        tp.GetLocationMin());
       fixed rdist = tp.get_previous()->GetLocationRemaining().distance(
         tp.get_location_target());
 
@@ -136,11 +136,11 @@ PrintHelper::sampledtaskpoint_print_samples(std::ostream& f,
                                             const SampledTaskPoint& tp,
                                             const AircraftState &state) 
 {
-  const unsigned n= tp.get_search_points().size();
+  const unsigned n= tp.GetSearchPoints().size();
   f << "#   Search points\n";
   if (tp.HasEntered()) {
     for (unsigned i=0; i<n; i++) {
-      const GeoPoint loc = tp.get_search_points()[i].get_location();
+      const GeoPoint loc = tp.GetSearchPoints()[i].get_location();
       f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
     }
   }
@@ -254,16 +254,16 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AircraftState &state)
   f2 << "#### Max task\n";
   for (unsigned i=0; i<task.task_points.size(); i++) {
     OrderedTaskPoint *tp = task.task_points[i];
-    f2 <<  tp->get_location_max().Longitude << " " 
-       <<  tp->get_location_max().Latitude << "\n";
+    f2 <<  tp->GetLocationMax().Longitude << " " 
+       <<  tp->GetLocationMax().Latitude << "\n";
   }
 
   std::ofstream f3("results/res-min.txt");
   f3 << "#### Min task\n";
   for (unsigned i=0; i<task.task_points.size(); i++) {
     OrderedTaskPoint *tp = task.task_points[i];
-    f3 <<  tp->get_location_min().Longitude << " " 
-       <<  tp->get_location_min().Latitude << "\n";
+    f3 <<  tp->GetLocationMin().Longitude << " " 
+       <<  tp->GetLocationMin().Latitude << "\n";
   }
 
   std::ofstream f4("results/res-rem.txt");

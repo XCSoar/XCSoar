@@ -56,7 +56,7 @@ public:
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 
-  void reset();
+  void Reset();
 
   /**
    * Set previous/next taskpoints in sequence.

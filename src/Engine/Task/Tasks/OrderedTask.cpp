@@ -76,7 +76,7 @@ UpdateObservationZones(OrderedTask::OrderedTaskPointVector &points,
   OrderedTask::OrderedTaskPointVector::iterator end = points.end();
   for (OrderedTask::OrderedTaskPointVector::iterator i = points.begin();
        i != end; ++i)
-    (*i)->update_oz(task_projection);
+    (*i)->UpdateOZ(task_projection);
 }
 
 void
@@ -393,8 +393,8 @@ OrderedTask::check_transition_point(OrderedTaskPoint& point,
   if (is_start) 
     update_start_transition(state, point);
   
-  return nearby ? point.update_sample_near(state, task_events, task_projection) :
-                  point.update_sample_far(state, task_events, task_projection);
+  return nearby ? point.UpdateSampleNear(state, task_events, task_projection) :
+                  point.UpdateSampleFar(state, task_events, task_projection);
 }
 
 // ADDITIONAL FUNCTIONS
@@ -769,7 +769,7 @@ OrderedTask::allow_incremental_boundary_stats(const AircraftState &aircraft) con
   if (activeTaskPoint>0) {
     in_sector |= task_points[activeTaskPoint-1]->isInSector(aircraft);
   }
-  return (task_points[activeTaskPoint]->is_boundary_scored() || !in_sector);
+  return (task_points[activeTaskPoint]->IsBoundaryScored() || !in_sector);
 }
 
 bool
@@ -914,7 +914,7 @@ Reset(OrderedTask::OrderedTaskPointVector &points)
     const OrderedTask::OrderedTaskPointVector::iterator end = points.end();
     for (OrderedTask::OrderedTaskPointVector::iterator it = points.begin();
          it != end; ++it)
-      (*it)->reset();
+      (*it)->Reset();
 }
 
 void
@@ -979,7 +979,7 @@ OrderedTask::distance_is_significant(const GeoPoint &location,
 const SearchPointVector& 
 OrderedTask::get_tp_search_points(unsigned tp) const 
 {
-  return task_points[tp]->get_search_points();
+  return task_points[tp]->GetSearchPoints();
 }
 
 void 
@@ -988,20 +988,20 @@ OrderedTask::set_tp_search_min(unsigned tp, const SearchPoint &sol)
   if (!tp && !task_points[0]->has_exited())
     return;
 
-  task_points[tp]->set_search_min(sol);
+  task_points[tp]->SetSearchMin(sol);
 }
 
 void 
 OrderedTask::set_tp_search_achieved(unsigned tp, const SearchPoint &sol) 
 {
-  if (task_points[tp]->has_sampled())
+  if (task_points[tp]->HasSampled())
     set_tp_search_min(tp, sol);
 }
 
 void 
 OrderedTask::set_tp_search_max(unsigned tp, const SearchPoint &sol) 
 {
-  task_points[tp]->set_search_max(sol);
+  task_points[tp]->SetSearchMax(sol);
 }
 
 unsigned 
@@ -1024,7 +1024,7 @@ OrderedTask::update_start_transition(const AircraftState &state, OrderedTaskPoin
     // distance from state to that point to next tp point
     taskpoint_start->find_best_start(state, *task_points[1], task_projection);
   } else if (!start.has_exited() && !start.isInSector(state)) {
-    start.reset();
+    start.Reset();
     // reset on invalid transition to outside
     // point to nominal start point
   }
@@ -1399,7 +1399,7 @@ OrderedTask::update_summary(TaskSummary& ordered_summary) const
     if (i==0) {
       tsp.achieved = task_points[i]->has_exited();
     } else {
-      tsp.achieved = task_points[i]->has_sampled();
+      tsp.achieved = task_points[i]->HasSampled();
     }
     ordered_summary.append(tsp);
   }

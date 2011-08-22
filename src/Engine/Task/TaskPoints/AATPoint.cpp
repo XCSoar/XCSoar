@@ -31,10 +31,10 @@ const GeoPoint&
 AATPoint::GetLocationRemaining() const
 {
   if (getActiveState() == BEFORE_ACTIVE) {
-    if (has_sampled()) {
-      return get_location_max();
+    if (HasSampled()) {
+      return GetLocationMax();
     } else {
-      return get_location_min();
+      return GetLocationMin();
     }
   } else {
     return m_target_location;
@@ -42,11 +42,11 @@ AATPoint::GetLocationRemaining() const
 }
 
 bool 
-AATPoint::update_sample_near(const AircraftState& state,
+AATPoint::UpdateSampleNear(const AircraftState& state,
                              TaskEvents &task_events,
                              const TaskProjection &projection)
 {
-  bool retval = OrderedTaskPoint::update_sample_near(state, task_events,
+  bool retval = OrderedTaskPoint::UpdateSampleNear(state, task_events,
                                                      projection);
 
   if (retval)
@@ -59,13 +59,13 @@ AATPoint::update_sample_near(const AircraftState& state,
 
 
 bool 
-AATPoint::update_sample_far(const AircraftState& state,
+AATPoint::UpdateSampleFar(const AircraftState& state,
                             TaskEvents &task_events,
                             const TaskProjection &projection)
 {
   // the orderedtaskpoint::update_sample_far does nothing for now
   // but we are calling this in case that changes.
-  return OrderedTaskPoint::update_sample_far(state, task_events,
+  return OrderedTaskPoint::UpdateSampleFar(state, task_events,
                                              projection)
     || check_target(state, true);
 }
@@ -106,7 +106,7 @@ AATPoint::check_target_inside(const AircraftState& state)
 
   if (close_to_target(state)) {
     if (positive(double_leg_distance(state.location)
-                 -double_leg_distance(get_location_max()))) {
+                 -double_leg_distance(GetLocationMax()))) {
       // no improvement available
       return false;
     } else {
@@ -161,13 +161,13 @@ AATPoint::SetRange(const fixed p, const bool force_if_current)
   switch (getActiveState()) {
   case CURRENT_ACTIVE:
     if (!HasEntered() || force_if_current) {
-      m_target_location = get_location_min().interpolate(get_location_max(),p);
+      m_target_location = GetLocationMin().interpolate(GetLocationMax(),p);
       return true;
     }
     return false;
   case AFTER_ACTIVE:
     if (getActiveState() == AFTER_ACTIVE) {
-      m_target_location = get_location_min().interpolate(get_location_max(),p);
+      m_target_location = GetLocationMin().interpolate(GetLocationMax(),p);
       return true;
     }
   default:
@@ -196,7 +196,7 @@ AATPoint::set_target(const fixed range, const fixed radial,
   const FlatPoint fprev = proj.fproject(get_previous()->GetLocationRemaining());
   const FlatPoint floc = proj.fproject(GetLocation());
   const FlatLine flb (fprev,floc);
-  const FlatLine fradius (floc,proj.fproject(get_location_min()));
+  const FlatLine fradius (floc,proj.fproject(GetLocationMin()));
   const fixed bearing = fixed_minus_one * flb.angle().value_degrees();
   const fixed radius = fradius.d();
 
@@ -227,7 +227,7 @@ AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
       fprev.bearing(floc)).as_bearing();
 
   const fixed d = floc.distance(get_location_target());
-  const fixed radius = floc.distance(get_location_min());
+  const fixed radius = floc.distance(GetLocationMin());
   const fixed rangeraw = min(fixed_one, d / radius);
 
   radial = radialraw.as_delta().value_degrees();
@@ -251,9 +251,9 @@ AATPoint::equals(const OrderedTaskPoint* other) const
 }
 
 void
-AATPoint::reset()
+AATPoint::Reset()
 {
-  IntermediateTaskPoint::reset();
+  IntermediateTaskPoint::Reset();
   m_deadzone.clear();
 }
 
@@ -269,8 +269,8 @@ AATPoint::update_deadzone(const TaskProjection &projection)
   // with the inclusion of all points on the boundary closer than
   // the max double distance to the sample polygon
   
-  m_deadzone = SearchPointVector(get_sample_points().begin(),
-                                 get_sample_points().end());
+  m_deadzone = SearchPointVector(GetSamplePoints().begin(),
+                                 GetSamplePoints().end());
 
   // do nothing if no samples (could happen if not achieved properly)
   if (m_deadzone.empty())
@@ -284,14 +284,14 @@ AATPoint::update_deadzone(const TaskProjection &projection)
 
   // find max distance
   unsigned dmax = 0;
-  for (SearchPointVector::const_iterator it = get_sample_points().begin();
-       it != get_sample_points().end(); ++it) {
+  for (SearchPointVector::const_iterator it = GetSamplePoints().begin();
+       it != GetSamplePoints().end(); ++it) {
     unsigned dd = pnext.flat_distance(*it) + pprevious.flat_distance(*it);
     dmax = std::max(dd, dmax);
   }
 
   // now add boundary points closer than dmax
-  const SearchPointVector& boundary = get_boundary_points();
+  const SearchPointVector& boundary = GetBoundaryPoints();
   for (SearchPointVector::const_iterator it = boundary.begin();
        it != boundary.end(); ++it) {
     unsigned dd = pnext.flat_distance(*it) + pprevious.flat_distance(*it);

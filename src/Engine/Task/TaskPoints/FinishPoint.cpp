@@ -42,9 +42,9 @@ FinishPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 }
 
 void 
-FinishPoint::reset()
+FinishPoint::Reset()
 {
-  OrderedTaskPoint::reset();
+  OrderedTaskPoint::Reset();
   fai_finish_height = fixed_zero;
 }
 

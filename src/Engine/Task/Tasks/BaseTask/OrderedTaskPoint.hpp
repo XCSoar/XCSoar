@@ -111,7 +111,7 @@ public:
                           const Waypoint* waypoint=NULL) const;
 
   /** Call this when any geometry or OZ parameters are changed */
-  void update_oz(const TaskProjection &projection);
+  void UpdateOZ(const TaskProjection &projection);
 
   /** 
    * Update observation zone geometry (or other internal data) when
@@ -255,8 +255,8 @@ protected:
   fixed double_leg_distance(const GeoPoint &ref) const;
 
 private:
-  bool search_nominal_if_unsampled() const;
-  bool search_boundary_points() const;
+  bool SearchNominalIfUnsampled() const;
+  bool SearchBoundaryPoints() const;
 };
 
 

@@ -65,7 +65,7 @@ public:
     {
     }
 
-  virtual void reset();
+  virtual void Reset();
 
 /** 
  * Retrieve location to be used for remaining task
@@ -93,7 +93,7 @@ public:
  * 
  * @return True if internal state changed
  */
-  bool update_sample_near(const AircraftState& state,
+  bool UpdateSampleNear(const AircraftState& state,
                           TaskEvents &task_events,
                           const TaskProjection &projection);
 
@@ -107,7 +107,7 @@ public:
  * 
  * @return True if internal state changed
  */
-  bool update_sample_far(const AircraftState& state,
+  bool UpdateSampleFar(const AircraftState& state,
                          TaskEvents &task_events,
                          const TaskProjection &projection);
 

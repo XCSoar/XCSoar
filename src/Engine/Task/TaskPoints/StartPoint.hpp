@@ -107,7 +107,7 @@ public:
    *
    * @return True if internal state changed
    */
-  bool update_sample_near(const AircraftState& state,
+  bool UpdateSampleNear(const AircraftState& state,
                           TaskEvents &task_events,
                           const TaskProjection &projection);
 

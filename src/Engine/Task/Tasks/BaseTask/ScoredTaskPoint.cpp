@@ -26,7 +26,7 @@ ScoredTaskPoint::ScoredTaskPoint(Type _type,
                                  const bool b_scored): 
   SampledTaskPoint(_type, wp, b_scored)
 {
-  reset();
+  Reset();
 }
 
 bool 
@@ -51,7 +51,7 @@ ScoredTaskPoint::transition_exit(const AircraftState & ref_now,
   bool exited = check_transition_exit(ref_now, ref_last);
   if (exited) {
     if (score_last_exit()) {
-      clear_sample_all_but_last(ref_last, projection);
+      ClearSampleAllButLast(ref_last, projection);
       m_state_entered = ref_last;
       m_state_exited = ref_now;
      } else {
@@ -65,14 +65,14 @@ ScoredTaskPoint::transition_exit(const AircraftState & ref_now,
 const GeoPoint &
 ScoredTaskPoint::get_location_travelled() const
 {
-  return get_location_min();
+  return GetLocationMin();
 }
 
 const GeoPoint &
 ScoredTaskPoint::get_location_scored() const
 {
   if (m_boundary_scored || !HasEntered()) {
-    return get_location_min();
+    return GetLocationMin();
   } else {
     return GetLocation();
   }
@@ -81,13 +81,13 @@ ScoredTaskPoint::get_location_scored() const
 const GeoPoint &
 ScoredTaskPoint::GetLocationRemaining() const
 {
-  return get_location_min();
+  return GetLocationMin();
 }
 
 void 
-ScoredTaskPoint::reset()
+ScoredTaskPoint::Reset()
 {
-  SampledTaskPoint::reset();
+  SampledTaskPoint::Reset();
   m_state_entered.time = fixed_minus_one;
   m_state_exited.time = fixed_minus_one;
 }

@@ -185,8 +185,8 @@ fixed
 TaskLeg::leg_distance_max() const
 {
   if (origin())
-    return memo_max.Distance(origin()->get_location_max(), 
-                             destination.get_location_max());
+    return memo_max.Distance(origin()->GetLocationMax(), 
+                             destination.GetLocationMax());
   return fixed_zero;
 }
 
@@ -194,8 +194,8 @@ fixed
 TaskLeg::leg_distance_min() const
 {
   if (origin())
-    return memo_min.Distance(origin()->get_location_min(), 
-                             destination.get_location_min());
+    return memo_min.Distance(origin()->GetLocationMin(), 
+                             destination.GetLocationMin());
   return fixed_zero;
 }
 

@@ -64,7 +64,7 @@ StartPoint::set_neighbours(OrderedTaskPoint* _prev,
 
 
 bool 
-StartPoint::update_sample_near(const AircraftState& state,
+StartPoint::UpdateSampleNear(const AircraftState& state,
                                TaskEvents &task_events,
                                const TaskProjection &projection)
 {
@@ -73,7 +73,7 @@ StartPoint::update_sample_near(const AircraftState& state,
       task_events.warning_start_speed();
     }
   }
-  return OrderedTaskPoint::update_sample_near(state, task_events, projection);
+  return OrderedTaskPoint::UpdateSampleNear(state, task_events, projection);
 }
 
 void 
@@ -128,7 +128,7 @@ StartPoint::find_best_start(const AircraftState &state,
 
   StartPointBestStart solver(*this, state.location,
                              next.GetLocationRemaining());
-  set_search_min(solver.solve(), projection);
+  SetSearchMin(solver.solve(), projection);
 }
 
 

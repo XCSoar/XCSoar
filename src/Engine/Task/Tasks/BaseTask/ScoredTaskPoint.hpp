@@ -61,7 +61,7 @@ public:
    * Reset the task (as if never flown)
    * 
    */
-  virtual void reset();
+  virtual void Reset();
 
 /** 
  * Test whether aircraft has entered the OZ

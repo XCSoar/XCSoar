@@ -194,7 +194,7 @@ RenderTaskPoint::draw_deadzone(const AATPoint& tp)
     map_canvas.draw(tp.get_deadzone());
   } else {
     // scoring deadzone is just the samples convex hull
-    map_canvas.draw(tp.get_sample_points());
+    map_canvas.draw(tp.GetSamplePoints());
   }
 }
 
@@ -284,7 +284,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
         // scoring deadzone should include the area to the next destination
         ? atp.get_deadzone()
         // scoring deadzone is just the samples convex hull
-        : atp.get_sample_points();
+        : atp.GetSamplePoints();
 
       /* need at least 3 points to draw the polygon */
       if (dead_zone.size() >= 3) {
