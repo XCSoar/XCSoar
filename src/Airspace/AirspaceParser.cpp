@@ -138,6 +138,36 @@ struct TempAirspaceType
     as->SetDays(days_of_operation);
     airspace_database.insert(as);
   }
+
+  void
+  AppendArc(const GeoPoint Start, const GeoPoint End)
+  {
+    // 5 or -5, depending on direction
+    const Angle BearingStep = Angle::degrees(Rotation * fixed(5));
+
+    // Determine start bearing and radius
+    const GeoVector v = Center.distance_bearing(Start);
+    Angle StartBearing = v.Bearing;
+    const fixed Radius = v.Distance;
+
+    // Determine end bearing
+    Angle EndBearing = Bearing(Center, End);
+
+    // Add first polygon point
+    GeoPoint TempPoint = Start;
+    points.push_back(TempPoint);
+
+    // Add intermediate polygon points
+    while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
+      StartBearing = (StartBearing + BearingStep).as_bearing();
+      TempPoint = FindLatitudeLongitude(Center, StartBearing, Radius);
+      points.push_back(TempPoint);
+    }
+
+    // Add last polygon point
+    TempPoint = End;
+    points.push_back(TempPoint);
+  }
 };
 
 static bool
@@ -354,36 +384,6 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 }
 
 static void
-AddArc(const GeoPoint Start, const GeoPoint End, TempAirspaceType &temp_area)
-{
-  // 5 or -5, depending on direction
-  const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
-
-  // Determine start bearing and radius
-  const GeoVector v = temp_area.Center.distance_bearing(Start);
-  Angle StartBearing = v.Bearing;
-  const fixed Radius = v.Distance;
-
-  // Determine end bearing
-  Angle EndBearing = Bearing(temp_area.Center, End);
-
-  // Add first polygon point
-  GeoPoint TempPoint = Start;
-  temp_area.points.push_back(TempPoint);
-
-  // Add intermediate polygon points
-  while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
-    StartBearing = (StartBearing + BearingStep).as_bearing();
-    TempPoint = FindLatitudeLongitude(temp_area.Center, StartBearing, Radius);
-    temp_area.points.push_back(TempPoint);
-  }
-
-  // Add last polygon point
-  TempPoint = End;
-  temp_area.points.push_back(TempPoint);
-}
-
-static void
 CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   // Read start coordinates
@@ -401,7 +401,7 @@ CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
   if (!ReadCoords(&Comma[1], End))
     return;
 
-  AddArc(Start, End, temp_area);
+  temp_area.AppendArc(Start, End);
 }
 
 static AirspaceClass
@@ -685,7 +685,7 @@ ParseArcTNP(const TCHAR *Text, TempAirspaceType &temp_area)
   GeoPoint to;
   ParseCoordsTNP(parameter, to);
 
-  AddArc(from, to, temp_area);
+  temp_area.AppendArc(from, to);
 
   return true;
 }
