@@ -165,6 +165,25 @@ struct TempAirspaceType
     // Add last polygon point
     points.push_back(End);
   }
+
+  void
+  AppendArc(Angle Start, Angle End)
+  {
+    // 5 or -5, depending on direction
+    const Angle BearingStep = Angle::degrees(Rotation * fixed(5));
+
+    // Add first polygon point
+    points.push_back(FindLatitudeLongitude(Center, Start, Radius));
+
+    // Add intermediate polygon points
+    while ((End - Start).magnitude_degrees() > fixed_7_5) {
+      Start = (Start + BearingStep).as_bearing();
+      points.push_back(FindLatitudeLongitude(Center, Start, Radius));
+    }
+
+    // Add last polygon point
+    points.push_back(FindLatitudeLongitude(Center, End, Radius));
+  }
 };
 
 static bool
@@ -358,26 +377,13 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
 static void
 CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 {
-  // 5 or -5, depending on direction
-  const Angle BearingStep = Angle::degrees(temp_area.Rotation * fixed(5));
-
   // Determine radius and start/end bearing
   TCHAR *Stop;
-  fixed Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
+  temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
   Angle StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop))).as_bearing();
   Angle EndBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop))).as_bearing();
 
-  // Add intermediate polygon points
-  GeoPoint TempPoint;
-  while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
-    TempPoint = FindLatitudeLongitude(temp_area.Center, StartBearing, Radius);
-    temp_area.points.push_back(TempPoint);
-    StartBearing = (StartBearing + BearingStep).as_bearing();
-  }
-
-  // Add last polygon point
-  TempPoint = FindLatitudeLongitude(temp_area.Center, EndBearing, Radius);
-  temp_area.points.push_back(TempPoint);
+  temp_area.AppendArc(StartBearing, EndBearing);
 }
 
 static bool
