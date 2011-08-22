@@ -37,6 +37,10 @@
 class TaskGlideRequired: 
   public ZeroFinder
 {
+  TaskMacCreadyRemaining tm;
+  GlideResult res;
+  const AircraftState &aircraft;
+
 public:
 /** 
  * Constructor for ordered task points
@@ -72,10 +76,6 @@ public:
  * @return Solution sink rate (m/s, down positive)
  */
   virtual fixed search(const fixed s);
-private:
-  TaskMacCreadyRemaining tm;
-  GlideResult res;
-  const AircraftState &aircraft;
 };
 
 #endif

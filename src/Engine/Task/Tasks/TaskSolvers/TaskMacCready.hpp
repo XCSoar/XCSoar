@@ -51,6 +51,15 @@
 class TaskMacCready:
   private NonCopyable 
 {
+protected:
+  const std::vector<TaskPoint*> m_tps; /**< The TaskPoints in the task */
+  std::vector<GlideResult> m_gs; /**< Glide solutions for each leg */
+  std::vector<fixed> m_minHs; /**< Minimum altitude for each taskpoint (m) */
+  const unsigned m_activeTaskPoint; /**< Active task point (local copy for speed) */
+  int m_start; /**< TaskPoint sequence index of first taskpoint included in scan */
+  int m_end; /**< TaskPoint sequence index of last taskpoint included in scan */
+  GlidePolar m_glide_polar; /**< Glide polar used for computations */
+
 public:
 /** 
  * Constructor for ordered task points
@@ -196,15 +205,6 @@ private:
  * @param state Aircraft state
  */
   void clearance_heights(const AircraftState &state);
-
-protected:
-  const std::vector<TaskPoint*> m_tps; /**< The TaskPoints in the task */
-  std::vector<GlideResult> m_gs; /**< Glide solutions for each leg */
-  std::vector<fixed> m_minHs; /**< Minimum altitude for each taskpoint (m) */
-  const unsigned m_activeTaskPoint; /**< Active task point (local copy for speed) */
-  int m_start; /**< TaskPoint sequence index of first taskpoint included in scan */
-  int m_end; /**< TaskPoint sequence index of last taskpoint included in scan */
-  GlidePolar m_glide_polar; /**< Glide polar used for computations */
 };
 
 #endif

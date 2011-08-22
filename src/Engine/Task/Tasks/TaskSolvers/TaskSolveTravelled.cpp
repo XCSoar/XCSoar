@@ -30,8 +30,8 @@ TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps
                                        const fixed _xmin, 
                                        const fixed _xmax):
   ZeroFinder(fixed(_xmin), fixed(_xmax), fixed(TOLERANCE_CRUISE_EFFICIENCY)),
-  tm(tps,activeTaskPoint,gp),
-  aircraft(_aircraft) 
+  aircraft(_aircraft),
+  tm(tps, activeTaskPoint, gp)
 {
   dt = aircraft.time-tps[0]->get_state_entered().time;
   if (positive(dt)) {

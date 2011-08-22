@@ -31,6 +31,14 @@
 class TaskSolveTravelled: 
   public ZeroFinder
 {
+  GlideResult res;
+  const AircraftState &aircraft;
+  fixed inv_dt;
+  fixed dt;
+
+protected:
+  TaskMacCreadyTravelled tm; /**< Travelled calculator */
+
 public:
 /** 
  * Constructor for ordered task points
@@ -65,14 +73,6 @@ public:
  * @return Value producing same travelled time
  */
   virtual fixed search(const fixed ce);
-
-protected:
-  TaskMacCreadyTravelled tm; /**< Travelled calculator */
-private:
-  GlideResult res;
-  const AircraftState &aircraft;
-  fixed inv_dt;
-  fixed dt;
 };
 
 #endif

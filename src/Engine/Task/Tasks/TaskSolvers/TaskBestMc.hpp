@@ -36,6 +36,10 @@
 class TaskBestMc: 
   public ZeroFinder
 {
+  TaskMacCreadyRemaining tm;
+  GlideResult res;
+  const AircraftState &aircraft;
+
 public:
 /** 
  * Constructor for ordered task points
@@ -85,11 +89,6 @@ public:
   virtual fixed search(const fixed mc);
 
   virtual bool search(const fixed mc, fixed& result);
-
-private:
-  TaskMacCreadyRemaining tm;
-  GlideResult res;
-  const AircraftState &aircraft;
 };
 
 #endif

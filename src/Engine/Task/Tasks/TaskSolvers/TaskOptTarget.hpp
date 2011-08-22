@@ -39,6 +39,13 @@
 class TaskOptTarget: 
   public ZeroFinder
 {
+  TaskMacCreadyRemaining tm; /**< Object to calculate remaining task statistics */
+  GlideResult res; /**< Glide solution used in search */
+  const AircraftState &aircraft; /**< Observer */
+  StartPoint *tp_start; /**< Start of task */
+  AATPoint &tp_current; /**< Active AATPoint */
+  AATIsolineSegment iso; /**< Isoline for active AATPoint target */
+
 public:
 /** 
  * Constructor for ordered task points
@@ -84,12 +91,6 @@ public:
 
 private:
   void set_target(const fixed p); /**< Sets target location along isoline */
-  TaskMacCreadyRemaining tm; /**< Object to calculate remaining task statistics */
-  GlideResult res; /**< Glide solution used in search */
-  const AircraftState &aircraft; /**< Observer */
-  StartPoint *tp_start; /**< Start of task */
-  AATPoint &tp_current; /**< Active AATPoint */
-  AATIsolineSegment iso; /**< Isoline for active AATPoint target */
 };
 
 

@@ -40,6 +40,13 @@
 class TaskMinTarget: 
   public ZeroFinder
 {
+  TaskMacCreadyRemaining tm;
+  GlideResult res;
+  const AircraftState &aircraft;
+  const fixed t_remaining;
+  StartPoint *tp_start;
+  bool force_current;
+
 public:
 /** 
  * Constructor for ordered task points
@@ -83,12 +90,6 @@ public:
   virtual fixed search(const fixed p);
 private:
   void set_range(const fixed p);
-  TaskMacCreadyRemaining tm;
-  GlideResult res;
-  const AircraftState &aircraft;
-  const fixed t_remaining;
-  StartPoint *tp_start;
-  bool force_current;
 };
 
 #endif
