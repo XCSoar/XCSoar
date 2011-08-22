@@ -27,48 +27,40 @@
 class FlatRay;
 class FlatBoundingBox;
 
-typedef std::vector<SearchPoint> SearchPointVector;
+class SearchPointVector: public std::vector<SearchPoint> {
+public:
+  SearchPointVector() {}
+  SearchPointVector(const_iterator begin, const_iterator end)
+    :std::vector<SearchPoint>(begin, end) {}
 
-bool prune_interior(SearchPointVector& spv);
-bool is_convex(const SearchPointVector& spv);
+  bool prune_interior();
+  bool is_convex() const;
 
-/**
- * Apply convex pruning algorithm with increasing tolerance
- * until the trace is smaller than the given size
- *
- * @return True if input was modified
- */
-bool
-thin_to_size(SearchPointVector& spv, const unsigned max_size);
+  /**
+   * Apply convex pruning algorithm with increasing tolerance
+   * until the trace is smaller than the given size
+   *
+   * @return True if input was modified
+   */
+  bool thin_to_size(const unsigned max_size);
 
-void project(SearchPointVector& spv, const TaskProjection& tp);
+  void project(const TaskProjection &tp);
 
-FlatGeoPoint nearest_point(const SearchPointVector& spv, 
-                           const FlatGeoPoint &p);
+  FlatGeoPoint nearest_point(const FlatGeoPoint &p) const;
 
-/**
- * Find iterator of nearest point, assuming polygon is convex
- */
-SearchPointVector::const_iterator
-nearest_index_convex(const SearchPointVector& spv,
-                     const FlatGeoPoint &p);
+  /** Find iterator of nearest point, assuming polygon is convex */
+  const_iterator nearest_index_convex(const FlatGeoPoint &p) const;
 
-bool intersects(const SearchPointVector& spv,
-                const FlatRay& ray);
+  bool intersects(const FlatRay &ray) const;
 
-FlatBoundingBox
-compute_boundingbox(const SearchPointVector& spv);
+  FlatBoundingBox compute_boundingbox() const;
 
-/**
- * increment iterator, wrapping around to start if required
- */
-void
-circular_next(SearchPointVector::const_iterator &i, const SearchPointVector& spv);
 
-/**
- * decreement iterator, wrapping around to last item if required
- */
-void
-circular_previous(SearchPointVector::const_iterator &i, const SearchPointVector& spv);
+  /** increment iterator, wrapping around to start if required */
+  void circular_next(SearchPointVector::const_iterator &i) const;
+
+  /** decreement iterator, wrapping around to last item if required */
+  void circular_previous(SearchPointVector::const_iterator &i) const;
+};
 
 #endif

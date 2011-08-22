@@ -27,40 +27,39 @@
 #include <functional>
 
 bool 
-prune_interior(SearchPointVector& spv)
+SearchPointVector::prune_interior()
 {
-  GrahamScan gs(spv);
+  GrahamScan gs(*this);
   return gs.prune_interior();
 }
 
 bool
-thin_to_size(SearchPointVector& spv, const unsigned max_size)
+SearchPointVector::thin_to_size(const unsigned max_size)
 {
   const fixed tolerance = fixed(1.0e-8);
-  unsigned i=2;
+  unsigned i = 2;
   bool retval = false;
-  while (spv.size()> max_size) {
-    GrahamScan gs(spv, tolerance*i);
-    retval|= gs.prune_interior();
-    i*= i;
+  while (size() > max_size) {
+    GrahamScan gs(*this, tolerance * i);
+    retval |= gs.prune_interior();
+    i *= i;
   }
   return retval;
 }
 
 bool 
-is_convex(const SearchPointVector& spv)
+SearchPointVector::is_convex() const
 {
-  SearchPointVector copy = spv;
+  SearchPointVector copy = *this;
   GrahamScan gs(copy);
   return !gs.prune_interior();
 }
 
 void 
-project(SearchPointVector& spv, const TaskProjection& tp)
+SearchPointVector::project(const TaskProjection& tp)
 {
-  for (SearchPointVector::iterator i = spv.begin(); i!= spv.end(); ++i) {
+  for (iterator i = begin(); i != end(); ++i)
     i->project(tp);
-  }
 }
 
 static FlatGeoPoint
@@ -120,18 +119,16 @@ nearest_point_nonconvex(const SearchPointVector& spv, const FlatGeoPoint &p3)
 }
 
 SearchPointVector::const_iterator
-nearest_index_convex(const SearchPointVector& spv, const FlatGeoPoint &p3)
+SearchPointVector::nearest_index_convex(const FlatGeoPoint &p3) const
 {
-  unsigned distance_min = 0-1;
+  unsigned distance_min = 0 - 1;
 
-  SearchPointVector::const_iterator i_best = spv.end();
+  const_iterator i_best = end();
 
   // find nearest point in vector
-  for (SearchPointVector::const_iterator i = spv.begin(); 
-       i!= spv.end(); ++i) {
-
+  for (const_iterator i = begin(); i != end(); ++i) {
     unsigned d_this = p3.distance_sq_to(i->get_flatLocation());
-    if (d_this<distance_min) {
+    if (d_this < distance_min) {
       distance_min = d_this;
       i_best = i;
     }
@@ -139,27 +136,24 @@ nearest_index_convex(const SearchPointVector& spv, const FlatGeoPoint &p3)
   return i_best;
 }
 
-FlatGeoPoint nearest_point(const SearchPointVector& spv, 
-                            const FlatGeoPoint &p3)
+FlatGeoPoint
+SearchPointVector::nearest_point(const FlatGeoPoint &p3) const
 {
   // special case
-  if (spv.empty()) {
+  if (empty())
     return p3; // really should be error
-  } else if (spv.size()==1) {
-    return spv[0].get_flatLocation();
-  }
 
-  return nearest_point_nonconvex(spv,p3);
+  if (size() == 1)
+    return (*this)[0].get_flatLocation();
+
+  return nearest_point_nonconvex(*this, p3);
 }
 
-bool intersects(const SearchPointVector& spv,
-                const FlatRay& ray)
+bool
+SearchPointVector::intersects(const FlatRay &ray) const
 {
-  for (SearchPointVector::const_iterator it= spv.begin();
-       it+1 != spv.end(); ++it) {
-
-    const FlatRay r_seg(it->get_flatLocation(),
-                        (it+1)->get_flatLocation());
+  for (const_iterator it = begin(); it + 1 != end(); ++it) {
+    const FlatRay r_seg(it->get_flatLocation(), (it + 1)->get_flatLocation());
 
     if (r_seg.intersects_distinct(ray))
       return true;
@@ -168,34 +162,31 @@ bool intersects(const SearchPointVector& spv,
 }
 
 FlatBoundingBox
-compute_boundingbox(const SearchPointVector& spv)
+SearchPointVector::compute_boundingbox() const
 {
-  if (spv.empty())
+  if (empty())
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
 
-  FlatBoundingBox bb(spv[0].get_flatLocation());
-  for (SearchPointVector::const_iterator v = spv.begin();
-       v != spv.end(); ++v)
+  FlatBoundingBox bb((*this)[0].get_flatLocation());
+  for (const_iterator v = begin(); v != end(); ++v)
     bb.expand(v->get_flatLocation());
   bb.expand(); // add 1 to fix rounding
   return bb;
 }
 
-
 void
-circular_next(SearchPointVector::const_iterator &i, const SearchPointVector& spv)
+SearchPointVector::circular_next(SearchPointVector::const_iterator &i) const
 {
   i++;
-  if (i==spv.end())
-    i= spv.begin();
+  if (i == end())
+    i = begin();
 }
 
 void
-circular_previous(SearchPointVector::const_iterator &i, const SearchPointVector& spv)
+SearchPointVector::circular_previous(SearchPointVector::const_iterator &i) const
 {
-  if (i== spv.begin()) {
-    i = spv.begin()+spv.size()-1;
-  } else {
+  if (i == begin())
+    i = begin() + size() - 1;
+  else
     i--;
-  }
 }

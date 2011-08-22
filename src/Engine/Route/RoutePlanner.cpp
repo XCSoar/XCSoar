@@ -485,7 +485,7 @@ RoutePlanner::hull_extended(const RoutePoint& p)
 
   SearchPoint ps(p, task_projection);
   m_search_hull.push_back(ps);
-  prune_interior(m_search_hull);
+  m_search_hull.prune_interior();
   return true;
 }
 

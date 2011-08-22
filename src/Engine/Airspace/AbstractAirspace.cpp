@@ -244,14 +244,14 @@ AbstractAirspace::GetVerticalText() const
 void
 AbstractAirspace::Project(const TaskProjection &task_projection)
 {
-  ::project(m_border, task_projection);
+  m_border.project(task_projection);
 }
 
 const FlatBoundingBox
 AbstractAirspace::GetBoundingBox(const TaskProjection& task_projection)
 {
   Project(task_projection);
-  return compute_boundingbox(m_border);
+  return m_border.compute_boundingbox();
 }
 
 const SearchPointVector&
@@ -266,9 +266,9 @@ AbstractAirspace::GetClearance() const
 
   m_clearance = m_border;
   if (!m_is_convex)
-    prune_interior(m_clearance);
+    m_clearance.prune_interior();
 
-  FlatBoundingBox bb = ::compute_boundingbox(m_clearance);
+  FlatBoundingBox bb = m_clearance.compute_boundingbox();
   FlatGeoPoint center = bb.get_center();
 
   for (SearchPointVector::iterator i= m_clearance.begin();
