@@ -154,19 +154,16 @@ struct TempAirspaceType
     Angle EndBearing = Bearing(Center, End);
 
     // Add first polygon point
-    GeoPoint TempPoint = Start;
-    points.push_back(TempPoint);
+    points.push_back(Start);
 
     // Add intermediate polygon points
     while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
       StartBearing = (StartBearing + BearingStep).as_bearing();
-      TempPoint = FindLatitudeLongitude(Center, StartBearing, Radius);
-      points.push_back(TempPoint);
+      points.push_back(FindLatitudeLongitude(Center, StartBearing, Radius));
     }
 
     // Add last polygon point
-    TempPoint = End;
-    points.push_back(TempPoint);
+    points.push_back(End);
   }
 };
 
