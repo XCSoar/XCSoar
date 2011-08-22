@@ -25,8 +25,14 @@
 #include <list>
 
 #include "Util/NonCopyable.hpp"
-#include "Navigation/SearchPointVector.hpp"
+#include "Math/fixed.hpp"
 #include "Compiler.h"
+
+#include <vector>
+
+class SearchPointVector;
+class SearchPoint;
+struct GeoPoint;
 
 /**
  * Class used to build convex hulls from vector.  This ensures

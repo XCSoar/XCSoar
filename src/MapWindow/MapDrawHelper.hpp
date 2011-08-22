@@ -26,7 +26,6 @@ Copyright_License {
 
 #ifndef ENABLE_OPENGL
 
-#include "Navigation/SearchPointVector.hpp"
 #include "Screen/Point.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Util/AllocatedArray.hpp"
@@ -35,6 +34,7 @@ class Canvas;
 class Projection;
 class WindowProjection;
 struct AirspaceRendererSettings;
+class SearchPointVector;
 
 /**
  * Utility class to draw multilayer items on a canvas with stencil masking

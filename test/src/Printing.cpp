@@ -30,6 +30,7 @@
 #include "Task/Tasks/BaseTask/TaskPoint.hpp"
 #include "Task/Tasks/BaseTask/SampledTaskPoint.hpp"
 #include "Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
+#include "Navigation/SearchPointVector.hpp"
 #include "Trace/Trace.hpp"
 
 #ifdef FIXED_MATH

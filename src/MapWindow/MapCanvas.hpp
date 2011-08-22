@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_MAP_CANVAS_HPP
 #define XCSOAR_MAP_CANVAS_HPP
 
-#include "Navigation/SearchPointVector.hpp"
 #include "Screen/Point.hpp"
 #include "Geo/GeoClip.hpp"
 #include "Util/AllocatedArray.hpp"
@@ -32,6 +31,7 @@ Copyright_License {
 class Canvas;
 class Projection;
 struct GeoPoint;
+class SearchPointVector;
 
 /**
  * A wrapper of #Canvas which draws to geographic coordinates

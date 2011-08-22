@@ -81,7 +81,9 @@ public:
   static void print(const FlatTriangleFan& r, const unsigned depth);
 };
 
-#include "Navigation/SearchPointVector.hpp"
+struct FlatGeoPoint;
+class SearchPoint;
+class SearchPointVector;
 class AbstractAirspace;
 
 void write_point(const SearchPoint& sp, const FlatGeoPoint& p, const char* name);

@@ -21,7 +21,6 @@
  */
 #include "RoutePlanner.hpp"
 #include "Terrain/RasterMap.hpp"
-#include "Navigation/SearchPointVector.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Math/FastMath.h"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
