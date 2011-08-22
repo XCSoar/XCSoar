@@ -150,7 +150,7 @@ public:
    *
    * @return Initialised object (no search yet)
    */
-  GlidePolarVopt(const GlidePolar &_polar, const fixed& vmin, const fixed &vmax):
+  GlidePolarVopt(const GlidePolar &_polar, const fixed vmin, const fixed vmax):
     ZeroFinder(vmin, vmax, fixed(TOLERANCE_POLAR_BESTLD)),
     polar(_polar)
   {
@@ -204,7 +204,7 @@ public:
    *
    * @return Initialised object (no search yet)
    */
-  GlidePolarMinSink(const GlidePolar &_polar, const fixed &vmax):
+  GlidePolarMinSink(const GlidePolar &_polar, const fixed vmax):
     ZeroFinder(fixed_one, vmax, fixed(TOLERANCE_POLAR_MINSINK)),
     polar(_polar)
   {
@@ -256,8 +256,8 @@ GlidePolar::IsGlidePossible(const GlideState &task) const
 class GlidePolarSpeedToFly: public ZeroFinder
 {
   const GlidePolar &polar;
-  const fixed& m_net_sink_rate;
-  const fixed& m_head_wind;
+  const fixed m_net_sink_rate;
+  const fixed m_head_wind;
 
 public:
   /**
@@ -271,8 +271,9 @@ public:
    *
    * @return Initialised object (no search yet)
    */
-  GlidePolarSpeedToFly(const GlidePolar &_polar, const fixed& net_sink_rate,
-      const fixed& head_wind, const fixed& vmin, const fixed &vmax) :
+  GlidePolarSpeedToFly(const GlidePolar &_polar, const fixed net_sink_rate,
+                       const fixed head_wind, const fixed vmin,
+                       const fixed vmax) :
     ZeroFinder(max(fixed_one, vmin - head_wind), vmax - head_wind,
                fixed(TOLERANCE_POLAR_DOLPHIN)),
     polar(_polar),
