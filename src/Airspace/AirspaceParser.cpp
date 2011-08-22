@@ -152,7 +152,7 @@ ShowParseWarning(int line, const TCHAR* str)
 }
 
 static void
-ReadAltitude(const TCHAR *Text, AirspaceAltitude *Alt)
+ReadAltitude(const TCHAR *Text, AirspaceAltitude &Alt)
 {
   Units_t unit = unFeet;
   enum { MSL, AGL, SFC, FL, STD, UNLIMITED } type = MSL;
@@ -202,40 +202,40 @@ ReadAltitude(const TCHAR *Text, AirspaceAltitude *Alt)
   }
 
   if (type == FL) {
-    Alt->type = AirspaceAltitude::FL;
-    Alt->flight_level = altitude;
+    Alt.type = AirspaceAltitude::FL;
+    Alt.flight_level = altitude;
     return;
   }
 
   if (type == UNLIMITED) {
-    Alt->type = AirspaceAltitude::MSL;
-    Alt->altitude = fixed(50000);
+    Alt.type = AirspaceAltitude::MSL;
+    Alt.altitude = fixed(50000);
     return;
   }
 
   if (type == SFC) {
-    Alt->type = AirspaceAltitude::AGL;
-    Alt->altitude_above_terrain = fixed_minus_one;
+    Alt.type = AirspaceAltitude::AGL;
+    Alt.altitude_above_terrain = fixed_minus_one;
     return;
   }
 
   // For MSL, AGL and STD we convert the altitude to meters
   altitude = Units::ToSysUnit(altitude, unit);
   if (type == MSL) {
-    Alt->type = AirspaceAltitude::MSL;
-    Alt->altitude = altitude;
+    Alt.type = AirspaceAltitude::MSL;
+    Alt.altitude = altitude;
     return;
   }
 
   if (type == AGL) {
-    Alt->type = AirspaceAltitude::AGL;
-    Alt->altitude_above_terrain = altitude;
+    Alt.type = AirspaceAltitude::AGL;
+    Alt.altitude_above_terrain = altitude;
     return;
   }
 
   if (type == STD) {
-    Alt->type = AirspaceAltitude::FL;
-    Alt->flight_level = Units::ToUserUnit(altitude, unFlightLevel);
+    Alt.type = AirspaceAltitude::FL;
+    Alt.flight_level = Units::ToUserUnit(altitude, unFlightLevel);
     return;
   }
 }
@@ -528,14 +528,14 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
     case _T('l'):
       value = value_after_space(line + 2);
       if (value != NULL)
-        ReadAltitude(value, &temp_area.Base);
+        ReadAltitude(value, temp_area.Base);
       break;
 
     case _T('H'):
     case _T('h'):
       value = value_after_space(line + 2);
       if (value != NULL)
-        ReadAltitude(value, &temp_area.Top);
+        ReadAltitude(value, temp_area.Top);
       break;
 
     case _T('R'):
@@ -759,9 +759,9 @@ ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
     if (temp_area.Type == OTHER)
       temp_area.Type = ParseClassTNP(parameter);
   } else if ((parameter = string_after_prefix_ci(line, _T("TOPS="))) != NULL) {
-    ReadAltitude(parameter, &temp_area.Top);
+    ReadAltitude(parameter, temp_area.Top);
   } else if ((parameter = string_after_prefix_ci(line, _T("BASE="))) != NULL) {
-    ReadAltitude(parameter, &temp_area.Base);
+    ReadAltitude(parameter, temp_area.Base);
   } else if ((parameter = string_after_prefix_ci(line, _T("RADIO="))) != NULL) {
     temp_area.Radio = parameter;
   } else if ((parameter = string_after_prefix_ci(line, _T("ACTIVE="))) != NULL) {
