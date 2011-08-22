@@ -68,7 +68,8 @@ TEST_NAMES = \
 	TestPlanes \
 	TestTaskPoint \
 	TestTaskWaypoint \
-	TestZeroFinder
+	TestZeroFinder \
+  TestAirspaceParser
 
 TESTS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(TEST_NAMES))
 
@@ -78,6 +79,27 @@ TEST_TEST_OVERWRITING_RING_BUFFER_SOURCES = \
 TEST_TEST_OVERWRITING_RING_BUFFER_OBJS = $(call SRC_TO_OBJ,$(TEST_TEST_OVERWRITING_RING_BUFFER_SOURCES))
 TEST_TEST_OVERWRITING_RING_BUFFER_LDADD = $(MATH_LIBS)
 $(TARGET_BIN_DIR)/TestOverwritingRingBuffer$(TARGET_EXEEXT): $(TEST_TEST_OVERWRITING_RING_BUFFER_OBJS) $(TEST_TEST_OVERWRITING_RING_BUFFER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
+	@$(NQ)echo "  LINK    $@"
+	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+
+TEST_AIRSPACE_PARSER_SOURCES = \
+	$(SRC)/Airspace/AirspaceParser.cpp \
+	$(SRC)/Units/Units.cpp \
+	$(SRC)/Operation.cpp \
+	$(TEST_SRC_DIR)/FakeDialogs.cpp \
+	$(TEST_SRC_DIR)/FakeTerrain.cpp \
+	$(TEST_SRC_DIR)/FakeLanguage.cpp \
+	$(TEST_SRC_DIR)/tap.c \
+	$(TEST_SRC_DIR)/TestAirspaceParser.cpp
+TEST_AIRSPACE_PARSER_OBJS = $(call SRC_TO_OBJ,$(TEST_AIRSPACE_PARSER_SOURCES))
+TEST_AIRSPACE_PARSER_LDADD = \
+	$(FAKE_LIBS) \
+	$(ENGINE_LIBS) \
+	$(IO_LIBS) \
+	$(ZZIP_LIBS) \
+	$(MATH_LIBS) \
+	$(UTIL_LIBS)
+$(TARGET_BIN_DIR)/TestAirspaceParser$(TARGET_EXEEXT): $(TEST_AIRSPACE_PARSER_OBJS) $(TEST_AIRSPACE_PARSER_LDADD) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  LINK    $@"
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
