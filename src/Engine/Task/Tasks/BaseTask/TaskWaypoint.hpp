@@ -48,7 +48,7 @@ public:
    *
    * @return Initialised object
    */
-  TaskWaypoint(enum type _type, const Waypoint & wp)
+  TaskWaypoint(Type _type, const Waypoint & wp)
     :TaskPoint(_type, wp.location, wp.altitude),
      m_waypoint(wp) {}
 

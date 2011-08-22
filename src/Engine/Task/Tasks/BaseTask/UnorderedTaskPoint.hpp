@@ -48,20 +48,20 @@ public:
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb);
 
-  const GeoVector get_vector_remaining(const AircraftState &) const;
+  const GeoVector GetVectorRemaining(const AircraftState &) const;
 
-  const GeoVector get_vector_planned() const;
+  const GeoVector GetVectorPlanned() const;
 
-  const GeoVector get_vector_travelled(const AircraftState &) const;
+  const GeoVector GetVectorTravelled(const AircraftState &) const;
 
-  bool has_entered() const {
+  bool HasEntered() const {
     return false;
   }
 
-  const AircraftState& get_state_entered() const;
+  const AircraftState& GetEnteredState() const;
 
   gcc_pure
-  fixed get_elevation() const;
+  fixed GetElevation() const;
 };
 
 #endif

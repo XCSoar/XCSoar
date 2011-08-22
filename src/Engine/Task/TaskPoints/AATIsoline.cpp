@@ -22,8 +22,8 @@
 #include "AATIsoline.hpp"
 
 AATIsoline::AATIsoline(const AATPoint& ap, const TaskProjection &projection):
-  ell(ap.get_previous()->get_location_remaining(),
-      ap.get_next()->get_location_remaining(),
+  ell(ap.get_previous()->GetLocationRemaining(),
+      ap.get_next()->GetLocationRemaining(),
       ap.get_location_target(),
       projection)
 {

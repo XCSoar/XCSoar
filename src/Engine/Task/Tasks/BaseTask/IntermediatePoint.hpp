@@ -53,7 +53,7 @@ public:
  * @return Partially-initialised object
  */
 
-  IntermediateTaskPoint(enum type _type, ObservationZonePoint* _oz,
+  IntermediateTaskPoint(enum Type _type, ObservationZonePoint* _oz,
                     const Waypoint & wp, 
                     const TaskBehaviour& tb,
                     const OrderedTaskBehaviour& to,
@@ -73,7 +73,7 @@ public:
  * @return Minimum allowable elevation of task point
  */
   gcc_pure
-  fixed get_elevation() const;
+  fixed GetElevation() const;
 
 };
 #endif //INTERMEDIATEPOINT_H

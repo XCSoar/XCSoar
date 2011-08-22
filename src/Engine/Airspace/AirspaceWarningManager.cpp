@@ -306,7 +306,7 @@ AirspaceWarningManager::update_task(const AircraftState& state)
   }
 
   AirspaceAircraftPerformanceTask perf_task(state, m_glide_polar, m_task);
-  const GeoPoint location_tp = m_task.getActiveTaskPoint()->get_location_remaining();
+  const GeoPoint location_tp = m_task.getActiveTaskPoint()->GetLocationRemaining();
   const fixed time_remaining = m_task.get_stats().current_leg.solution_remaining.time_elapsed; 
 
   return update_predicted(state, location_tp, perf_task,

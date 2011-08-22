@@ -53,8 +53,8 @@ TaskLeg::leg_vector_planned() const
   if (!origin()) {
     return GeoVector(fixed_zero);
   } else {
-    return memo_planned.calc(origin()->get_location_remaining(), 
-                             destination.get_location_remaining());
+    return memo_planned.calc(origin()->GetLocationRemaining(), 
+                             destination.GetLocationRemaining());
   }
 }
 
@@ -67,12 +67,12 @@ TaskLeg::leg_vector_remaining(const GeoPoint &ref) const
       return GeoVector(fixed_zero);
 
     // this leg totally included
-    return memo_remaining.calc(origin()->get_location_remaining(), 
-                               destination.get_location_remaining());
+    return memo_remaining.calc(origin()->GetLocationRemaining(), 
+                               destination.GetLocationRemaining());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
-    return memo_remaining.calc(ref, destination.get_location_remaining());
+    return memo_remaining.calc(ref, destination.GetLocationRemaining());
     break;
   case OrderedTaskPoint::BEFORE_ACTIVE:
     // this leg not included
@@ -98,9 +98,9 @@ TaskLeg::leg_vector_travelled(const GeoPoint &ref) const
     // this leg partially included
     if (!origin())
       return GeoVector(fixed_zero, 
-                       ref.bearing(destination.get_location_remaining()));
+                       ref.bearing(destination.GetLocationRemaining()));
 
-    if (destination.has_entered())
+    if (destination.HasEntered())
       return memo_travelled.calc(origin()->get_location_travelled(), 
                                  destination.get_location_travelled());
     else
@@ -111,7 +111,7 @@ TaskLeg::leg_vector_travelled(const GeoPoint &ref) const
       return GeoVector(fixed_zero);
 
     // this leg may be partially included
-    if (origin()->has_entered())
+    if (origin()->HasEntered())
       return memo_travelled.calc(origin()->get_location_travelled(), ref);
 
   default:
@@ -136,7 +136,7 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
-    if (destination.has_entered()) {
+    if (destination.HasEntered()) {
       max(fixed_zero,
                origin()->get_location_scored().distance( 
                  destination.get_location_scored())
@@ -151,7 +151,7 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
     // this leg may be partially included
-    if (origin()->has_entered()) {
+    if (origin()->HasEntered()) {
       return max(fixed_zero,
                       memo_travelled.calc(origin()->get_location_scored(), 
                                           ref).Distance
@@ -176,8 +176,8 @@ TaskLeg::leg_vector_nominal() const
   if (!origin()) {
     return GeoVector(fixed_zero);
   } else {
-    return memo_nominal.calc(origin()->get_location(),
-                             destination.get_location());
+    return memo_nominal.calc(origin()->GetLocation(),
+                             destination.GetLocation());
   }
 }
 

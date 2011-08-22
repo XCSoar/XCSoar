@@ -31,30 +31,30 @@ class DummyTaskWaypoint: public TaskWaypoint
 public:
   friend class TaskWaypointTest;
 
-  DummyTaskWaypoint(enum type _type, const Waypoint & wp)
+  DummyTaskWaypoint(Type _type, const Waypoint & wp)
     :TaskWaypoint(_type, wp) {}
 
-  virtual const GeoVector get_vector_remaining(const AircraftState &) const {
+  virtual const GeoVector GetVectorRemaining(const AircraftState &) const {
     return GeoVector();
   }
 
-  virtual const GeoVector get_vector_planned() const {
+  virtual const GeoVector GetVectorPlanned() const {
     return GeoVector();
   }
 
-  virtual const GeoVector get_vector_travelled(const AircraftState &) const {
+  virtual const GeoVector GetVectorTravelled(const AircraftState &) const {
     return GeoVector();
   }
 
-  virtual bool has_entered() const {
+  virtual bool HasEntered() const {
     return false;
   }
 
-  virtual const AircraftState& get_state_entered() const {
+  virtual const AircraftState& GetEnteredState() const {
     return dummy_state;
   }
 
-  virtual fixed get_elevation() const {
+  virtual fixed GetElevation() const {
     return fixed_zero;
   }
 };
@@ -81,8 +81,8 @@ TaskWaypointTest::Run()
   ok1(equals(tw.GetBaseElevation(), wp2.altitude));
   ok1(equals(wp2.location.Latitude, gp.Latitude));
   ok1(equals(wp2.location.Longitude, gp.Longitude));
-  ok1(equals(tw.get_location().Latitude, gp.Latitude));
-  ok1(equals(tw.get_location().Longitude, gp.Longitude));
+  ok1(equals(tw.GetLocation().Latitude, gp.Latitude));
+  ok1(equals(tw.GetLocation().Longitude, gp.Longitude));
 }
 
 int main(int argc, char **argv)

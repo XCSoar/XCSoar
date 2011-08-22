@@ -61,7 +61,7 @@ TaskOptTarget::valid(const fixed tp)
 fixed 
 TaskOptTarget::search(const fixed tp) 
 {
-  if (tp_current.target_is_locked()) {
+  if (tp_current.IsTargetLocked()) {
     // can't move, don't bother
     return -fixed_one;
   }

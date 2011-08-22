@@ -90,7 +90,7 @@ public:
    *
    * @return Partially initialised object
    */
-  OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
+  OrderedTaskPoint(enum Type _type, ObservationZonePoint* _oz,
                    const Waypoint &wp,
                    const OrderedTaskBehaviour &to,
                    const bool b_scored=false);
@@ -186,7 +186,7 @@ public:
    * @param state Aircraft state
    * @return Vector remaining to this taskpoint (or next planned)
    */
-  const GeoVector get_vector_remaining(const AircraftState &state) const {
+  const GeoVector GetVectorRemaining(const AircraftState &state) const {
     return vector_remaining;
   }
 
@@ -199,7 +199,7 @@ public:
    *
    * @return Vector from this taskpoint to aircraft (or next planned)
    */
-  const GeoVector get_vector_travelled(const AircraftState &) const {
+  const GeoVector GetVectorTravelled(const AircraftState &) const {
     return vector_travelled;
   }
 
@@ -208,7 +208,7 @@ public:
    *
    * @return Vector planned to this taskpoint
    */
-  const GeoVector get_vector_planned() const {
+  const GeoVector GetVectorPlanned() const {
     return vector_planned;
   }
 

@@ -330,19 +330,19 @@ public:
         return true;
 
       case 2:
-        return p.distance(task->get_tp(1)->get_location()) > minFAILeg;
+        return p.distance(task->get_tp(1)->GetLocation()) > minFAILeg;
 
       default: // size == 3 or 4
-        if (!isFAIAngle(p, task->get_tp(1)->get_location(),
-                        task->get_tp(2)->get_location(), right))
+        if (!isFAIAngle(p, task->get_tp(1)->GetLocation(),
+                        task->get_tp(2)->GetLocation(), right))
           return false;
         if (t_size == 3) {
-          return TestFAITriangle(p.distance(task->get_tp(1)->get_location()),
+          return TestFAITriangle(p.distance(task->get_tp(1)->GetLocation()),
                                  leg2,
-                                 task->get_tp(2)->get_location().distance(p));
+                                 task->get_tp(2)->GetLocation().distance(p));
         } else if (t_size == 4) {
           return (wp == task->get_tp(3)->get_waypoint()) &&
-                 TestFAITriangle(p.distance(task->get_tp(1)->get_location()),
+                 TestFAITriangle(p.distance(task->get_tp(1)->GetLocation()),
                                  leg2,
                                  leg3);
         }
@@ -353,43 +353,43 @@ public:
       assert(t_size > 0);
 
       if (t_size <= 2)
-        return p.distance(task->get_tp(0)->get_location()) > minFAILeg;
+        return p.distance(task->get_tp(0)->GetLocation()) > minFAILeg;
 
       // size == 3 or 4
-      if (!isFAIAngle(task->get_tp(0)->get_location(),
+      if (!isFAIAngle(task->get_tp(0)->GetLocation(),
                       p,
-                      task->get_tp(2)->get_location(), right))
+                      task->get_tp(2)->GetLocation(), right))
         return false;
 
       if (t_size == 3) {
-        return TestFAITriangle(p.distance(task->get_tp(0)->get_location()),
-                               p.distance(task->get_tp(2)->get_location()),
-                               task->get_tp(2)->get_location().
-                                  distance(task->get_tp(0)->get_location()));
+        return TestFAITriangle(p.distance(task->get_tp(0)->GetLocation()),
+                               p.distance(task->get_tp(2)->GetLocation()),
+                               task->get_tp(2)->GetLocation().
+                                  distance(task->get_tp(0)->GetLocation()));
       } else if (t_size == 4) {
-        return TestFAITriangle(p.distance(task->get_tp(0)->get_location()),
-                               p.distance(task->get_tp(2)->get_location()),
+        return TestFAITriangle(p.distance(task->get_tp(0)->GetLocation()),
+                               p.distance(task->get_tp(2)->GetLocation()),
                                leg3);
       }
     }
     // append or replace point #2
     if (t_index == 2) {
       assert(t_size >= 2);
-      if (!isFAIAngle(task->get_tp(0)->get_location(),
-                      task->get_tp(1)->get_location(),
+      if (!isFAIAngle(task->get_tp(0)->GetLocation(),
+                      task->get_tp(1)->GetLocation(),
                       p, right))
         return false;
 
       if (t_size < 4) { // no finish point yet
         return TestFAITriangle(leg1,
-                               p.distance(task->get_tp(1)->get_location()),
-                               p.distance(task->get_tp(0)->get_location()));
+                               p.distance(task->get_tp(1)->GetLocation()),
+                               p.distance(task->get_tp(0)->GetLocation()));
 
       } else { // already finish point(#3) exists
         return (task->get_tp(0)->get_waypoint() == task->get_tp(3)->get_waypoint()) &&
                 TestFAITriangle(leg1,
-                                p.distance(task->get_tp(1)->get_location()),
-                                p.distance(task->get_tp(0)->get_location()));
+                                p.distance(task->get_tp(1)->GetLocation()),
+                                p.distance(task->get_tp(0)->GetLocation()));
       }
     }
     // append or replace finish
@@ -398,7 +398,7 @@ public:
       return (wp == task->get_tp(0)->get_waypoint()) &&
               TestFAITriangle(leg1,
                               leg2,
-                              p.distance(task->get_tp(2)->get_location()));
+                              p.distance(task->get_tp(2)->GetLocation()));
     }
     return true;
   }
@@ -416,11 +416,11 @@ private:
     if (ordered_task) {
       t_size = task->task_size();
       leg1 = (t_size > 1) ? task->getTaskPoint(1)->
-              get_vector_planned().Distance : fixed_zero;
+              GetVectorPlanned().Distance : fixed_zero;
       leg2 = (t_size > 2) ? task->getTaskPoint(2)->
-              get_vector_planned().Distance : fixed_zero;
+              GetVectorPlanned().Distance : fixed_zero;
       leg3 = (t_size > 3) ? task->getTaskPoint(3)->
-              get_vector_planned().Distance : fixed_zero;
+              GetVectorPlanned().Distance : fixed_zero;
     } else {
       leg1 = leg2 = leg3 = fixed_zero;
       t_size = 0;

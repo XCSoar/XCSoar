@@ -55,7 +55,7 @@ bool
 TaskMacCreadyRemaining::has_targets() const
 {
   for (int i = m_start; i <= m_end; i++) {
-    if (m_tps[i]->has_target() && !m_tps[i]->target_is_locked()) {
+    if (m_tps[i]->HasTarget() && !m_tps[i]->IsTargetLocked()) {
       return true;
     }
   }
@@ -69,12 +69,12 @@ TaskMacCreadyRemaining::set_range(const fixed tp, const bool force_current)
   // first try to modify targets without regard to current inside (unless forced)
   bool modified = force_current;
   for (int i = m_start; i <= m_end; i++) {
-    modified |= m_tps[i]->set_range(tp,false);
+    modified |= m_tps[i]->SetRange(tp,false);
   }
   if (!force_current && !modified) {
     // couldn't modify remaining targets, so force move even if inside
     for (int i = m_start; i <= m_end; i++) {
-      if (m_tps[i]->set_range(tp,true)) {
+      if (m_tps[i]->SetRange(tp,true)) {
         // quick exit
         return;
       }
@@ -87,7 +87,7 @@ void
 TaskMacCreadyRemaining::target_save()
 {
   for (int i = m_start; i <= m_end; i++) {
-      m_tps[i]->target_save();
+      m_tps[i]->SaveTarget();
   }
 }
 
@@ -95,6 +95,6 @@ void
 TaskMacCreadyRemaining::target_restore()
 {
   for (int i = m_start; i <= m_end; i++) {
-      m_tps[i]->target_restore();
+      m_tps[i]->RestoreTarget();
   }
 }

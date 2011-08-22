@@ -42,8 +42,8 @@ TaskMacCreadyTravelled::tp_solution(const unsigned i,
 const AircraftState 
 TaskMacCreadyTravelled::get_aircraft_start(const AircraftState &aircraft) const
 {
-  if (m_tps[0]->has_entered()) {
-    return m_tps[0]->get_state_entered();
+  if (m_tps[0]->HasEntered()) {
+    return m_tps[0]->GetEnteredState();
   } else {
     return aircraft;
   }

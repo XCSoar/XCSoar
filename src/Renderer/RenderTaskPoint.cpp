@@ -76,9 +76,9 @@ RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp)
   
   if (m_layer == RENDER_TASK_LEG) {
     if (m_index>0) {
-      draw_task_line(m_last_point, tp.get_location_remaining());
+      draw_task_line(m_last_point, tp.GetLocationRemaining());
     }
-    m_last_point = tp.get_location_remaining();
+    m_last_point = tp.GetLocationRemaining();
   }
   
   if (visible && (m_layer == RENDER_TASK_OZ_OUTLINE)) {
@@ -89,7 +89,7 @@ RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp)
 bool 
 RenderTaskPoint::do_draw_target(const TaskPoint &tp) const
 {
-  if (!tp.has_target()) {
+  if (!tp.HasTarget()) {
     return false;
   }
   return draw_all || point_current();
@@ -102,7 +102,7 @@ RenderTaskPoint::draw_bearing(const TaskPoint &tp)
     return;
 
   canvas.select(task_look.bearing_pen);
-  map_canvas.offset_line(m_location, tp.get_location_remaining());
+  map_canvas.offset_line(m_location, tp.GetLocationRemaining());
 }
 
 void 
@@ -238,7 +238,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
   switch (tp.GetType()) {
   case TaskPoint::UNORDERED:
     if (m_layer == RENDER_TASK_LEG)
-      draw_task_line(m_location, tp.get_location_remaining());
+      draw_task_line(m_location, tp.GetLocationRemaining());
 
     if (m_layer == RENDER_TASK_SYMBOLS)
       draw_bearing(tp);

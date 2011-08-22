@@ -51,11 +51,11 @@ FinishPoint::reset()
 bool 
 FinishPoint::entry_precondition() const
 {
-  return get_previous() != NULL && get_previous()->has_entered();
+  return get_previous() != NULL && get_previous()->HasEntered();
 }
 
 fixed
-FinishPoint::get_elevation() const
+FinishPoint::GetElevation() const
 {
   const fixed nominal_elevation = GetBaseElevation() + safety_height_arrival;
 

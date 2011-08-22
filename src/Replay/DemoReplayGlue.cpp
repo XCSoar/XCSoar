@@ -54,7 +54,7 @@ public:
     return task->task_size();
   }
   GeoPoint getActiveTaskPointLocation() const {
-    return task->getActiveTaskPoint()->get_location();
+    return task->getActiveTaskPoint()->GetLocation();
   }
   bool has_entered(unsigned index) const {
     AbstractTaskFactory &fact = task->get_factory();
@@ -65,7 +65,7 @@ public:
   }
   fixed target_height() const {
     if (task->getActiveTaskPoint()) {
-      return max(floor_alt, task->getActiveTaskPoint()->get_elevation());
+      return max(floor_alt, task->getActiveTaskPoint()->GetElevation());
     } else {
       return floor_alt;
     }

@@ -69,7 +69,7 @@ IsTaskLegVisible(const OrderedTaskPoint &tp)
   case TaskPoint::FINISH:
   case TaskPoint::AAT:
   case TaskPoint::AST:
-    return tp.has_entered();
+    return tp.HasEntered();
 
   case TaskPoint::UNORDERED:
   case TaskPoint::ROUTE:
@@ -100,7 +100,7 @@ static void DrawLegs(Chart& chart,
     if (!IsTaskLegVisible(tp))
       continue;
 
-    fixed x = tp.get_state_entered().time - start_time;
+    fixed x = tp.GetEnteredState().time - start_time;
     if (!negative(x)) {
       x /= 3600;
       chart.DrawLine(x, chart.getYmin(), x, chart.getYmax(),

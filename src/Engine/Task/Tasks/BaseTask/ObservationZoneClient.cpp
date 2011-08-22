@@ -70,7 +70,7 @@ ObservationZoneClient::set_legs(const TaskPoint *previous,
                                 const TaskPoint *current,
                                 const TaskPoint *next)
 {
-  m_oz->set_legs(previous != NULL ? &previous->get_location() : NULL,
-                 current != NULL ? &current->get_location() : NULL,
-                 next != NULL ? &next->get_location() : NULL);
+  m_oz->set_legs(previous != NULL ? &previous->GetLocation() : NULL,
+                 current != NULL ? &current->GetLocation() : NULL,
+                 next != NULL ? &next->GetLocation() : NULL);
 }

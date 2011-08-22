@@ -72,7 +72,7 @@ public:
  * 
  * @return Location 
  */
-  const GeoPoint& get_location_remaining() const;
+  const GeoPoint& GetLocationRemaining() const;
 
 /** 
  * Retrieve polygon of "scoring deadzone", the area in which
@@ -125,20 +125,20 @@ public:
  * 
  * @return True if target is locked
  */
-  bool target_is_locked() const {
+  bool IsTargetLocked() const {
     return m_target_locked;
   }
 
 /**
  * Save local copy of target in case optimisation fails
  */
-    void target_save() {
+    void SaveTarget() {
         m_target_save = m_target_location;
     }
 /**
  * Set target from local copy
  */
-    void target_restore() {
+    void RestoreTarget() {
         m_target_location = m_target_save;
     }
 
@@ -195,7 +195,7 @@ public:
  *
  * @return True if target was moved
  */
-  bool set_range(const fixed p, const bool force_if_current);
+  bool SetRange(const fixed p, const bool force_if_current);
 
 /** 
  * Test whether aircraft has travelled close to isoline of target within threshold

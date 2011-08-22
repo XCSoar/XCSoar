@@ -90,7 +90,7 @@ OrderedTask::update_geometry()
   // scan location of task points
   for (unsigned i = 0; i < task_points.size(); ++i) {
     if (i == 0)
-      task_projection.reset(task_points[i]->get_location());
+      task_projection.reset(task_points[i]->GetLocation());
 
     task_points[i]->scan_projection(task_projection);
   }
@@ -117,8 +117,8 @@ OrderedTask::update_geometry()
 
   // update stats so data can be used during task construction
   /// @todo this should only be done if not flying! (currently done with has_entered)
-  if (!taskpoint_start->has_entered()) {
-    GeoPoint loc = taskpoint_start->get_location();
+  if (!taskpoint_start->HasEntered()) {
+    GeoPoint loc = taskpoint_start->GetLocation();
     update_stats_distances(loc, true);
     if (has_finish()) {
       /// @todo: call AbstractTask::update stats methods with fake state
@@ -133,7 +133,7 @@ fixed
 OrderedTask::scan_total_start_time(const AircraftState &)
 {
   if (taskpoint_start)
-    return taskpoint_start->get_state_entered().time;
+    return taskpoint_start->GetEnteredState().time;
 
   return fixed_zero;
 }
@@ -142,7 +142,7 @@ fixed
 OrderedTask::scan_leg_start_time(const AircraftState &)
 {
   if (activeTaskPoint)
-    return task_points[activeTaskPoint-1]->get_state_entered().time;
+    return task_points[activeTaskPoint-1]->GetEnteredState().time;
 
   return -fixed_one;
 }
@@ -570,7 +570,7 @@ OrderedTask::append(const OrderedTaskPoint &new_tp)
     set_neighbours(task_points.size() - 2);
   else {
     // give it a value when we have one tp so it is not uninitialised
-    m_location_min_last = new_tp.get_location();
+    m_location_min_last = new_tp.GetLocation();
   }
 
   set_neighbours(task_points.size() - 1);
@@ -826,13 +826,13 @@ OrderedTask::calc_gradient(const AircraftState &state) const
   fixed distance = fixed_zero;
   for (unsigned i = activeTaskPoint; i < task_points.size(); i++)
     // Sum up the leg distances
-    distance += task_points[i]->get_vector_remaining(state).Distance;
+    distance += task_points[i]->GetVectorRemaining(state).Distance;
 
   if (!distance)
     return fixed_zero;
 
   // Calculate gradient to the last turnpoint of the remaining task
-  return (state.altitude - task_points[task_points.size() - 1]->get_elevation()) / distance;
+  return (state.altitude - task_points[task_points.size() - 1]->GetElevation()) / distance;
 }
 
 // Constructors/destructors
@@ -944,7 +944,7 @@ bool
 OrderedTask::task_finished() const
 {
   if (taskpoint_finish)
-    return (taskpoint_finish->has_entered());
+    return (taskpoint_finish->HasEntered());
 
   return false;
 }
@@ -1035,7 +1035,7 @@ AircraftState
 OrderedTask::get_start_state() const
 {
   if (has_start() && task_started()) 
-    return taskpoint_start->get_state_entered();
+    return taskpoint_start->GetEnteredState();
 
   // @todo: modify this for optional start?
 
@@ -1047,7 +1047,7 @@ AircraftState
 OrderedTask::get_finish_state() const
 {
   if (has_finish() && task_finished()) 
-    return taskpoint_finish->get_state_entered();
+    return taskpoint_finish->GetEnteredState();
 
   AircraftState null_state;
   return null_state;
@@ -1057,7 +1057,7 @@ bool
 OrderedTask::has_targets() const
 {
   for (unsigned i = 0; i < task_points.size(); ++i)
-    if (task_points[i]->has_target())
+    if (task_points[i]->HasTarget())
       return true;
 
   return false;
@@ -1067,7 +1067,7 @@ fixed
 OrderedTask::get_finish_height() const
 {
   if (taskpoint_finish)
-    return taskpoint_finish->get_elevation();
+    return taskpoint_finish->GetElevation();
 
   return fixed_zero;
 }
@@ -1395,7 +1395,7 @@ OrderedTask::update_summary(TaskSummary& ordered_summary) const
   ordered_summary.active = activeTaskPoint;
   for (unsigned i = 0; i < task_points.size(); ++i) {    
     TaskSummaryPoint tsp;
-    tsp.d_planned = task_points[i]->get_vector_planned().Distance;
+    tsp.d_planned = task_points[i]->GetVectorPlanned().Distance;
     if (i==0) {
       tsp.achieved = task_points[i]->has_exited();
     } else {

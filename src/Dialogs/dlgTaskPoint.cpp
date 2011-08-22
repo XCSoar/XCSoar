@@ -307,7 +307,7 @@ static void
 OnRelocateClicked(gcc_unused WndButton &Sender)
 {
   const GeoPoint &gpBearing = (active_index ?
-                               ordered_task->get_tp(active_index - 1)->get_location() :
+                               ordered_task->get_tp(active_index - 1)->GetLocation() :
                                XCSoarInterface::Basic().location);
 
   const Waypoint *wp = dlgWaypointSelect(wf->GetMainWindow(), gpBearing,

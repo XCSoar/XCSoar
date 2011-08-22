@@ -165,7 +165,7 @@ UnorderedTask::scan_distance_remaining(const GeoPoint &location)
   if (!tp) {
     return fixed_zero;
   }
-  return tp->distance(location);
+  return tp->Distance(location);
 }
 
 fixed 
@@ -181,7 +181,7 @@ UnorderedTask::get_finish_height() const
   if (!tp) {
     return fixed_zero;
   }
-  return tp->get_elevation();
+  return tp->GetElevation();
 }
 
 GeoPoint 
@@ -191,7 +191,7 @@ UnorderedTask::get_task_center(const GeoPoint& fallback_location) const
   if (!tp) {
     return fallback_location;
   } else {
-    return tp->get_location().interpolate(fallback_location, fixed_half);
+    return tp->GetLocation().interpolate(fallback_location, fixed_half);
   }
 }
 
@@ -202,7 +202,7 @@ UnorderedTask::get_task_radius(const GeoPoint& fallback_location) const
   if (!tp) {
     return fixed_zero;
   } else {
-    return half(tp->get_location().distance(fallback_location));
+    return half(tp->GetLocation().distance(fallback_location));
   }
 }
 

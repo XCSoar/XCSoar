@@ -22,13 +22,13 @@
 #include "SampledTaskPoint.hpp"
 #include "Navigation/ConvexHull/PolygonInterior.hpp"
 
-SampledTaskPoint::SampledTaskPoint(enum type _type, const Waypoint & wp,
+SampledTaskPoint::SampledTaskPoint(Type _type, const Waypoint & wp,
                                    const bool b_scored)
   :TaskWaypoint(_type, wp),
    m_boundary_scored(b_scored),
-   m_search_max(get_location()),
-   m_search_min(get_location()),
-   m_search_reference(get_location())
+   m_search_max(GetLocation()),
+   m_search_min(GetLocation()),
+   m_search_reference(GetLocation())
 {
   m_nominal_points.push_back(m_search_reference);
 }

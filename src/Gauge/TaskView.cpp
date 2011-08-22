@@ -72,7 +72,7 @@ PaintTaskPoint(Canvas &canvas, const PixelRect &rc,
                const AirspaceLook &airspace_look,
                const RasterTerrain *terrain)
 {
-  ChartProjection projection(rc, point, point.get_location());
+  ChartProjection projection(rc, point, point.GetLocation());
   PaintTask(canvas, projection, task, location, settings_map,
             task_look, airspace_look, terrain);
 }

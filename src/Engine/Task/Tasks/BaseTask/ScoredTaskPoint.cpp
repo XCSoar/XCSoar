@@ -21,7 +21,7 @@
  */
 #include "ScoredTaskPoint.hpp"
 
-ScoredTaskPoint::ScoredTaskPoint(enum type _type,
+ScoredTaskPoint::ScoredTaskPoint(Type _type,
                                  const Waypoint & wp, 
                                  const bool b_scored): 
   SampledTaskPoint(_type, wp, b_scored)
@@ -35,7 +35,7 @@ ScoredTaskPoint::transition_enter(const AircraftState & ref_now,
 {
   bool entered = check_transition_enter(ref_now, ref_last);
   if (entered && entry_precondition()) {
-    if (!score_first_entry() || !has_entered()) {
+    if (!score_first_entry() || !HasEntered()) {
       m_state_entered = ref_now;
       return true;
     }
@@ -71,15 +71,15 @@ ScoredTaskPoint::get_location_travelled() const
 const GeoPoint &
 ScoredTaskPoint::get_location_scored() const
 {
-  if (m_boundary_scored || !has_entered()) {
+  if (m_boundary_scored || !HasEntered()) {
     return get_location_min();
   } else {
-    return get_location();
+    return GetLocation();
   }
 }
 
 const GeoPoint &
-ScoredTaskPoint::get_location_remaining() const
+ScoredTaskPoint::GetLocationRemaining() const
 {
   return get_location_min();
 }

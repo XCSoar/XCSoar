@@ -132,7 +132,7 @@ AlternateTask::set_task_destination(const AircraftState &state_now,
   // if we have a target, use that, otherwise use the aircraft location
   // (which ends up equivalent to sorting by distance)
   if (_target)
-    destination = _target->get_location_remaining();
+    destination = _target->GetLocationRemaining();
   else
     destination = state_now.location;
 }

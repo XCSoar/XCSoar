@@ -32,7 +32,7 @@
 #include <assert.h>
 #include <math.h>
 
-OrderedTaskPoint::OrderedTaskPoint(enum type _type, ObservationZonePoint* _oz,
+OrderedTaskPoint::OrderedTaskPoint(enum Type _type, ObservationZonePoint* _oz,
                                    const Waypoint &wp,
                                    const OrderedTaskBehaviour &to,
                                    const bool b_scored)
@@ -112,8 +112,8 @@ OrderedTaskPoint::double_leg_distance(const GeoPoint &ref) const
   assert(tp_previous);
   assert(tp_next);
 
-  return ::DoubleDistance(get_previous()->get_location_remaining(), 
-                          ref, get_next()->get_location_remaining());
+  return ::DoubleDistance(get_previous()->GetLocationRemaining(), 
+                          ref, get_next()->GetLocationRemaining());
 }
 
 bool 
@@ -163,7 +163,7 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
 void
 OrderedTaskPoint::scan_projection(TaskProjection &task_projection) const
 {
-  task_projection.scan_location(get_location());
+  task_projection.scan_location(GetLocation());
   #define fixed_steps fixed(0.05)
 
   for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps) {
@@ -174,7 +174,7 @@ OrderedTaskPoint::scan_projection(TaskProjection &task_projection) const
 void
 OrderedTaskPoint::update_boundingbox(const TaskProjection &task_projection)
 {
-  flat_bb = FlatBoundingBox(task_projection.project(get_location()));
+  flat_bb = FlatBoundingBox(task_projection.project(GetLocation()));
 
   for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps)
     flat_bb.expand(task_projection.project(get_boundary_parametric(t)));

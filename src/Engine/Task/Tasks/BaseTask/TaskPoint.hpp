@@ -38,7 +38,7 @@ class TaskPoint
 public:
   friend class PrintHelper;
 
-  enum type {
+  enum Type {
     UNORDERED,
     START,
     AST,
@@ -48,7 +48,7 @@ public:
   };
 
 private:
-  enum type type;
+  Type type;
 
   GeoPoint location;
 
@@ -69,7 +69,7 @@ public:
    *
    * @return Initialised object
    */
-  TaskPoint(enum type _type, const GeoPoint &_location,
+  TaskPoint(Type _type, const GeoPoint &_location,
             const fixed _elevation) :
     type(_type), location(_location),
     elevation(_elevation) {}
@@ -79,7 +79,7 @@ public:
    */
   virtual ~TaskPoint() {};
 
-  enum type GetType() const {
+  Type GetType() const {
     return type;
   }
 
@@ -98,7 +98,7 @@ public:
    * @return Location
    */
   gcc_pure
-  virtual const GeoPoint& get_location_remaining() const {
+  virtual const GeoPoint& GetLocationRemaining() const {
     return location;
   }
 
@@ -108,7 +108,7 @@ public:
    * @return Vector for task leg
    */
   gcc_pure
-  virtual const GeoVector get_vector_remaining(const AircraftState &) const = 0;
+  virtual const GeoVector GetVectorRemaining(const AircraftState &) const = 0;
 
   /**
    * Calculate vector from aircraft to destination
@@ -116,7 +116,7 @@ public:
    * @return Vector for task leg
    */
   gcc_pure
-  virtual const GeoVector get_vector_planned() const = 0;
+  virtual const GeoVector GetVectorPlanned() const = 0;
 
   /**
    * Calculate vector travelled along this leg
@@ -124,7 +124,7 @@ public:
    * @return Vector for task leg
    */
   gcc_pure
-  virtual const GeoVector get_vector_travelled(const AircraftState &) const = 0;
+  virtual const GeoVector GetVectorTravelled(const AircraftState &) const = 0;
 
   /**
    * Dummy null method.
@@ -137,7 +137,7 @@ public:
    *
    * @return True if target was moved
    */
-  virtual bool set_range(const fixed p, const bool force_if_current) {
+  virtual bool SetRange(const fixed p, const bool force_if_current) {
     return false;
   }
 
@@ -151,7 +151,7 @@ public:
    *    or False if target is unlocked or tp has no target
    */
   gcc_pure
-  virtual bool target_is_locked() const {
+  virtual bool IsTargetLocked() const {
     return false;
   }
 
@@ -161,18 +161,18 @@ public:
    * @return True if task point has a target (can have range set)
    */
   gcc_pure
-  bool has_target() const {
+  bool HasTarget() const {
     return type == AAT;
   }
 
   /**
    * Save local copy of target in case optimisation fails
    */
-  virtual void target_save() {}
+  virtual void SaveTarget() {}
   /**
    * Restore target from local copy
    */
-  virtual void target_restore() {}
+  virtual void RestoreTarget() {}
 
   /**
    * Check whether aircraft has entered the observation zone.
@@ -180,7 +180,7 @@ public:
    * @return True if observation zone has been entered
    */
   gcc_pure
-  virtual bool has_entered() const = 0;
+  virtual bool HasEntered() const = 0;
 
   /**
    * Recall aircraft state where it entered the observation zone.
@@ -188,7 +188,7 @@ public:
    * @return State at entry, or null if never entered
    */
   gcc_pure
-  virtual const AircraftState& get_state_entered() const = 0;
+  virtual const AircraftState& GetEnteredState() const = 0;
 
   /**
    * Retrieve elevation of taskpoint, taking into account
@@ -197,19 +197,19 @@ public:
    * @return Minimum allowable elevation of task point
    */
   gcc_pure
-  virtual fixed get_elevation() const = 0;
+  virtual fixed GetElevation() const = 0;
 
   /**
    * distance from this to the reference
    */
-  fixed distance(const GeoPoint & ref) const {
+  fixed Distance(const GeoPoint &ref) const {
     return location.distance(ref);
   }
 
   /**
    * The actual location
    */
-  const GeoPoint & get_location() const {
+  const GeoPoint &GetLocation() const {
     return location;
   }
 };

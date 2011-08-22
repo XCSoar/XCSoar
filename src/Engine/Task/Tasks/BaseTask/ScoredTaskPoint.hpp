@@ -51,7 +51,7 @@ public:
  * 
  * @return Partially initialised object
  */
-  ScoredTaskPoint(enum type _type,
+  ScoredTaskPoint(Type _type,
                   const Waypoint & wp, 
                   const bool b_scored);
 
@@ -68,7 +68,7 @@ public:
  * 
  * @return True if aircraft has entered the OZ
  */
-  bool has_entered() const {
+  bool HasEntered() const {
     return m_state_entered.time > fixed_zero;
   }
 
@@ -86,7 +86,7 @@ public:
  * 
  * @return State on entry
  */
-  const AircraftState& get_state_entered() const {
+  const AircraftState& GetEnteredState() const {
     return m_state_entered;
   }
 
@@ -140,7 +140,7 @@ public:
  * @return Location 
  */
   gcc_pure
-  virtual const GeoPoint& get_location_remaining() const;
+  virtual const GeoPoint& GetLocationRemaining() const;
 
 private:
 /** 

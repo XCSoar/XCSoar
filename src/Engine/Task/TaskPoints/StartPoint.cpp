@@ -46,7 +46,7 @@ StartPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 }
 
 fixed
-StartPoint::get_elevation() const
+StartPoint::GetElevation() const
 {
   // no need for safety height at start?
   return GetBaseElevation();
@@ -127,7 +127,7 @@ StartPoint::find_best_start(const AircraftState &state,
   };
 
   StartPointBestStart solver(*this, state.location,
-                             next.get_location_remaining());
+                             next.GetLocationRemaining());
   set_search_min(solver.solve(), projection);
 }
 

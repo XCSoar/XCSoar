@@ -31,31 +31,31 @@ class DummyTaskPoint: public TaskPoint
 public:
   friend class TaskPointTest;
 
-  DummyTaskPoint(enum type _type, const GeoPoint &_location,
+  DummyTaskPoint(Type _type, const GeoPoint &_location,
                  const fixed _elevation)
     :TaskPoint(_type, _location, _elevation) {}
 
-  virtual const GeoVector get_vector_remaining(const AircraftState &) const {
+  virtual const GeoVector GetVectorRemaining(const AircraftState &) const {
     return GeoVector();
   }
 
-  virtual const GeoVector get_vector_planned() const {
+  virtual const GeoVector GetVectorPlanned() const {
     return GeoVector();
   }
 
-  virtual const GeoVector get_vector_travelled(const AircraftState &) const {
+  virtual const GeoVector GetVectorTravelled(const AircraftState &) const {
     return GeoVector();
   }
 
-  virtual bool has_entered() const {
+  virtual bool HasEntered() const {
     return false;
   }
 
-  virtual const AircraftState& get_state_entered() const {
+  virtual const AircraftState& GetEnteredState() const {
     return dummy_state;
   }
 
-  virtual fixed get_elevation() const {
+  virtual fixed GetElevation() const {
     return fixed_zero;
   }
 };
@@ -80,22 +80,22 @@ TaskPointTest::Run()
   ok1(tp1.IsIntermediatePoint());
   ok1(tp1.GetType() == TaskPoint::AST);
   ok1(equals(tp1.GetBaseElevation(), 1234));
-  ok1(!tp1.has_target());
-  ok1(equals(tp1.distance(gp2), gp1.distance(gp2)));
-  ok1(equals(tp1.get_location().Latitude, gp1.Latitude));
-  ok1(equals(tp1.get_location().Longitude, gp1.Longitude));
+  ok1(!tp1.HasTarget());
+  ok1(equals(tp1.Distance(gp2), gp1.distance(gp2)));
+  ok1(equals(tp1.GetLocation().Latitude, gp1.Latitude));
+  ok1(equals(tp1.GetLocation().Longitude, gp1.Longitude));
 
   ok1(tp2.IsIntermediatePoint());
   ok1(tp2.GetType() == TaskPoint::AAT);
-  ok1(tp2.has_target());
+  ok1(tp2.HasTarget());
 
   ok1(!tp3.IsIntermediatePoint());
   ok1(tp3.GetType() == TaskPoint::START);
-  ok1(!tp3.has_target());
+  ok1(!tp3.HasTarget());
 
   ok1(!tp4.IsIntermediatePoint());
   ok1(tp4.GetType() == TaskPoint::FINISH);
-  ok1(!tp4.has_target());
+  ok1(!tp4.HasTarget());
 }
 
 int main(int argc, char **argv)

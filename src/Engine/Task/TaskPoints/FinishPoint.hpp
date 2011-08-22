@@ -94,7 +94,7 @@ public:
    *
    * @return Minimum allowable elevation of finish point
    */
-  fixed get_elevation() const;
+  fixed GetElevation() const;
 
   /** 
    * Set FAI finish height

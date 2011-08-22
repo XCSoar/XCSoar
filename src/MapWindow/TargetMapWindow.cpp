@@ -184,7 +184,7 @@ protected:
       return;
 
     RasterPoint sc;
-    if (m_proj.GeoToScreenIfVisible(tp.get_location_remaining(), sc))
+    if (m_proj.GeoToScreenIfVisible(tp.GetLocationRemaining(), sc))
       task_look.target_icon.draw(canvas, sc.x, sc.y);
   }
 };
@@ -355,7 +355,7 @@ TargetMapWindow::SetTarget(unsigned index)
     if (tp == NULL)
       return;
 
-    location = tp->get_location();
+    location = tp->GetLocation();
     radius = std::max(GetRadius(*tp) * fixed(1.3), fixed(2000));
   }
 

@@ -36,27 +36,27 @@ UnorderedTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 }
 
 const GeoVector 
-UnorderedTaskPoint::get_vector_remaining(const AircraftState &ref) const
+UnorderedTaskPoint::GetVectorRemaining(const AircraftState &ref) const
 {
-  return GeoVector(ref.location, get_location_remaining());
+  return GeoVector(ref.location, GetLocationRemaining());
 }
 
 // These are dummies, never get called usually
 
 const GeoVector 
-UnorderedTaskPoint::get_vector_planned() const
+UnorderedTaskPoint::GetVectorPlanned() const
 {
   return GeoVector(fixed_zero);
 }
 
 const GeoVector 
-UnorderedTaskPoint::get_vector_travelled(const AircraftState &ref) const
+UnorderedTaskPoint::GetVectorTravelled(const AircraftState &ref) const
 {
   return GeoVector(fixed_zero);
 }
 
 const AircraftState& 
-UnorderedTaskPoint::get_state_entered() const 
+UnorderedTaskPoint::GetEnteredState() const 
 {
   // this should never get called
   static const AircraftState null_state;
@@ -65,7 +65,7 @@ UnorderedTaskPoint::get_state_entered() const
 
 
 fixed 
-UnorderedTaskPoint::get_elevation() const
+UnorderedTaskPoint::GetElevation() const
 {
   return GetBaseElevation() + safety_height_arrival;
 }

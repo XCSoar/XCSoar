@@ -23,7 +23,7 @@
 #include "IntermediatePoint.hpp"
 #include "Task/TaskBehaviour.hpp"
 
-IntermediateTaskPoint::IntermediateTaskPoint(enum type _type,
+IntermediateTaskPoint::IntermediateTaskPoint(enum Type _type,
                                              ObservationZonePoint *_oz,
                                              const Waypoint &wp,
                                              const TaskBehaviour &tb,
@@ -39,7 +39,7 @@ IntermediateTaskPoint::SetTaskBehaviour(const TaskBehaviour &tb)
 }
 
 fixed
-IntermediateTaskPoint::get_elevation() const
+IntermediateTaskPoint::GetElevation() const
 {
   return GetBaseElevation() + safety_height_terrain;
 }

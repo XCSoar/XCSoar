@@ -61,7 +61,7 @@ TaskMacCready::clearance_heights(const AircraftState &aircraft)
   // set min heights (earliest climb possible)
   fixed minH = get_min_height(aircraft);
   for (int i = m_end; i >= m_start; --i) {
-    minH = max(minH, m_tps[i]->get_elevation());
+    minH = max(minH, m_tps[i]->GetElevation());
     m_minHs[i] = minH;
   }
   // set min heights (ensure clearance possible for latest glide)

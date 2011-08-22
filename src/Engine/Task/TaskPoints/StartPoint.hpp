@@ -117,7 +117,7 @@ public:
    *
    * @return Minimum allowable elevation of start point
    */
-  fixed get_elevation() const;
+  fixed GetElevation() const;
 
   /**
    * Search for the min point on the boundary from

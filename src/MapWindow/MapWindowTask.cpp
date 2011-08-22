@@ -61,7 +61,7 @@ protected:
       return;
 
     RasterPoint sc;
-    if (m_proj.GeoToScreenIfVisible(tp.get_location_remaining(), sc))
+    if (m_proj.GeoToScreenIfVisible(tp.GetLocationRemaining(), sc))
       task_look.target_icon.draw(canvas, sc.x, sc.y);
   }
 };
@@ -150,7 +150,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   if (!tp) 
     return;
 
-  GeoPoint target = tp->get_location_remaining();
+  GeoPoint target = tp->GetLocationRemaining();
   GeoVector vec(Basic().location, target);
 
   if ((Basic().track - vec.Bearing).as_delta().magnitude_degrees() < fixed(10))

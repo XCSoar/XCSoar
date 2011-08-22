@@ -360,7 +360,7 @@ AbortTask::get_task_center(const GeoPoint& fallback_location) const
 
   TaskProjection task_projection;
   for (unsigned i = 0; i < task_points.size(); ++i) {
-    const GeoPoint location = task_points[i].get_location();
+    const GeoPoint location = task_points[i].GetLocation();
     if (i == 0)
       task_projection.reset(location);
     else
@@ -378,7 +378,7 @@ AbortTask::get_task_radius(const GeoPoint& fallback_location) const
 
   TaskProjection task_projection;
   for (unsigned i = 0; i < task_points.size(); ++i) {
-    const GeoPoint location = task_points[i].get_location();
+    const GeoPoint location = task_points[i].GetLocation();
     if (i == 0)
       task_projection.reset(location);
     else

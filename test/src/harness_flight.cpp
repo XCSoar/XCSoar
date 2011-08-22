@@ -106,7 +106,7 @@ public:
     return task_manager.task_size();
   }
   GeoPoint getActiveTaskPointLocation() const {
-    return task_manager.getActiveTaskPoint()->get_location();
+    return task_manager.getActiveTaskPoint()->GetLocation();
   }
   bool has_entered(unsigned index) const {
     AbstractTaskFactory &fact = task_manager.get_factory();
@@ -117,7 +117,7 @@ public:
   }
   fixed target_height() const {
     if (task_manager.getActiveTaskPoint()) {
-      return max(fixed_300, task_manager.getActiveTaskPoint()->get_elevation());
+      return max(fixed_300, task_manager.getActiveTaskPoint()->GetElevation());
     } else {
       return fixed_300;
     }

@@ -28,7 +28,7 @@
 #include <assert.h>
 
 const GeoPoint&
-AATPoint::get_location_remaining() const
+AATPoint::GetLocationRemaining() const
 {
   if (getActiveState() == BEFORE_ACTIVE) {
     if (has_sampled()) {
@@ -152,7 +152,7 @@ AATPoint::check_target_outside(const AircraftState& state)
 
 
 bool
-AATPoint::set_range(const fixed p, const bool force_if_current)
+AATPoint::SetRange(const fixed p, const bool force_if_current)
 {
   if (m_target_locked) {
     return false;
@@ -160,7 +160,7 @@ AATPoint::set_range(const fixed p, const bool force_if_current)
 
   switch (getActiveState()) {
   case CURRENT_ACTIVE:
-    if (!has_entered() || force_if_current) {
+    if (!HasEntered() || force_if_current) {
       m_target_location = get_location_min().interpolate(get_location_max(),p);
       return true;
     }
@@ -193,8 +193,8 @@ AATPoint::set_target(const fixed range, const fixed radial,
   fixed oldradial = fixed_zero;
   get_target_range_radial(oldrange, oldradial);
 
-  const FlatPoint fprev = proj.fproject(get_previous()->get_location_remaining());
-  const FlatPoint floc = proj.fproject(get_location());
+  const FlatPoint fprev = proj.fproject(get_previous()->GetLocationRemaining());
+  const FlatPoint floc = proj.fproject(GetLocation());
   const FlatLine flb (fprev,floc);
   const FlatLine fradius (floc,proj.fproject(get_location_min()));
   const fixed bearing = fixed_minus_one * flb.angle().value_degrees();
@@ -221,8 +221,8 @@ AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
 {
   const fixed oldrange = range;
 
-  const GeoPoint fprev = get_previous()->get_location_remaining();
-  const GeoPoint floc = get_location();
+  const GeoPoint fprev = get_previous()->GetLocationRemaining();
+  const GeoPoint floc = GetLocation();
   const Angle radialraw = (floc.bearing(get_location_target()) -
       fprev.bearing(floc)).as_bearing();
 
@@ -277,9 +277,9 @@ AATPoint::update_deadzone(const TaskProjection &projection)
     return;
 
   // previous and next targets
-  const SearchPoint pnext(get_next()->get_location_remaining(),
+  const SearchPoint pnext(get_next()->GetLocationRemaining(),
                           projection);
-  const SearchPoint pprevious(get_previous()->get_location_remaining(),
+  const SearchPoint pprevious(get_previous()->GetLocationRemaining(),
                               projection);
 
   // find max distance

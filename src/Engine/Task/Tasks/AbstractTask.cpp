@@ -275,12 +275,12 @@ AbstractTask::leg_gradient(const AircraftState &aircraft) const
     return fixed_zero;
 
   // Get the distance to the next turnpoint
-  const fixed d = tp->get_vector_remaining(aircraft).Distance;
+  const fixed d = tp->GetVectorRemaining(aircraft).Distance;
   if (!d)
     return fixed_zero;
 
   // Calculate the geometric gradient (height divided by distance)
-  return (aircraft.altitude - tp->get_elevation()) / d;
+  return (aircraft.altitude - tp->GetElevation()) / d;
 }
 
 bool 

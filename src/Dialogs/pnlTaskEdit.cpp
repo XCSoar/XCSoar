@@ -202,7 +202,7 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
       dlgWaypointSelect(wf->GetMainWindow(),
                         ordered_task->task_size() > 0 ?
                           ordered_task->get_tp(ordered_task->
-                              task_size() - 1)->get_location() :
+                              task_size() - 1)->GetLocation() :
                           XCSoarInterface::Basic().location,
                         ordered_task, ItemIndex);
     if (!way_point)

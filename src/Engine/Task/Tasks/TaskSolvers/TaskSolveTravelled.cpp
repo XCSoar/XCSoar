@@ -33,7 +33,7 @@ TaskSolveTravelled::TaskSolveTravelled(const std::vector<OrderedTaskPoint*>& tps
   aircraft(_aircraft),
   tm(tps, activeTaskPoint, gp)
 {
-  dt = aircraft.time-tps[0]->get_state_entered().time;
+  dt = aircraft.time-tps[0]->GetEnteredState().time;
   if (positive(dt)) {
     inv_dt = fixed_one/dt;
   } else {

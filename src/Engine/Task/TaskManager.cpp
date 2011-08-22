@@ -162,7 +162,7 @@ TaskManager::update_common_stats_times(const AircraftState &state)
     const fixed start_max_height =
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height) +
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height_ref
-              == hrMSL ? 0 : task_ordered.get_tp(0)->get_elevation());
+              == hrMSL ? 0 : task_ordered.get_tp(0)->GetElevation());
     if (positive(start_max_height) && state.flying) {
       if (!positive(common_stats.TimeUnderStartMaxHeight) &&
           state.altitude < start_max_height) {
@@ -379,7 +379,7 @@ TaskManager::random_point_in_task(const unsigned index, const fixed mag) const
     return task_ordered.getTaskPoint(index)->randomPointInSector(mag);
 
   if (index <= task_size())
-    return active_task->getActiveTaskPoint()->get_location();
+    return active_task->getActiveTaskPoint()->GetLocation();
 
   GeoPoint null_location(Angle::zero(), Angle::zero());
   return null_location;
@@ -497,7 +497,7 @@ TaskManager::target_is_locked(const unsigned TPindex) const
 
   const AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
   if (ap)
-    return ap->target_is_locked();
+    return ap->IsTargetLocked();
 
  return false;
 }
@@ -510,7 +510,7 @@ TaskManager::has_target(const unsigned TPindex) const
 
   const AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
   if (ap)
-    return ap->has_target();
+    return ap->HasTarget();
 
  return false;
 }
