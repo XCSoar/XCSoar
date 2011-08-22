@@ -380,25 +380,26 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
   temp_area.points.push_back(TempPoint);
 }
 
-static void
+static bool
 CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   // Read start coordinates
   GeoPoint Start;
   if (!ReadCoords(&Text[3], Start))
-    return;
+    return false;
 
   // Skip comma character
   const TCHAR* Comma = _tcschr(Text, ',');
   if (!Comma)
-    return;
+    return false;
 
   // Read end coordinates
   GeoPoint End;
   if (!ReadCoords(&Comma[1], End))
-    return;
+    return false;
 
   temp_area.AppendArc(Start, End);
+  return true;
 }
 
 static AirspaceClass
@@ -475,8 +476,7 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
 
     case _T('B'):
     case _T('b'):
-      CalculateArc(line, temp_area);
-      break;
+      return CalculateArc(line, temp_area);
 
     default:
       return true;
