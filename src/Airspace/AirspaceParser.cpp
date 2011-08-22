@@ -53,6 +53,12 @@ enum AirspaceFileType {
   AFT_TNP
 };
 
+struct AirspaceClassCharCouple
+{
+  const TCHAR character;
+  AirspaceClass type;
+};
+
 struct AirspaceClassStringCouple
 {
   const TCHAR *string;
@@ -74,6 +80,34 @@ static const AirspaceClassStringCouple airspace_class_strings[] = {
   { _T("F"), CLASSF },
   { _T("TMZ"), TMZ },
   { _T("G"), CLASSG },
+};
+
+static const AirspaceClassCharCouple airspace_tnp_class_chars[] = {
+  { _T('A'), CLASSA },
+  { _T('B'), CLASSB },
+  { _T('C'), CLASSC },
+  { _T('D'), CLASSD },
+  { _T('E'), CLASSE },
+  { _T('F'), CLASSF },
+  { _T('G'), CLASSG },
+};
+
+static const AirspaceClassStringCouple airspace_tnp_type_strings[] = {
+  { _T("C"), CTR },
+  { _T("CTA"), CTR },
+  { _T("CTR"), CTR },
+  { _T("CTA/CTR"), CTR },
+  { _T("CTR/CTA"), CTR },
+  { _T("R"), RESTRICT },
+  { _T("RESTRICTED"), RESTRICT },
+  { _T("P"), PROHIBITED },
+  { _T("PROHIBITED"), PROHIBITED },
+  { _T("D"), DANGER },
+  { _T("DANGER"), DANGER },
+  { _T("G"), WAVE },
+  { _T("GSEC"), WAVE },
+  { _T("T"), TMZ },
+  { _T("TMZ"), TMZ },
 };
 
 // this can now be called multiple times to load several airspaces.
@@ -561,26 +595,9 @@ ParseLine(Airspaces &airspace_database, const TCHAR *line,
 static AirspaceClass
 ParseClassTNP(const TCHAR* text)
 {
-  if (text[0] == _T('A'))
-    return CLASSA;
-
-  if (text[0] == _T('B'))
-    return CLASSB;
-
-  if (text[0] == _T('C'))
-    return CLASSC;
-
-  if (text[0] == _T('D'))
-    return CLASSD;
-
-  if (text[0] == _T('E'))
-    return CLASSE;
-
-  if (text[0] == _T('F'))
-    return CLASSF;
-
-  if (text[0] == _T('G'))
-    return CLASSG;
+  for (unsigned i = 0; i < ARRAY_SIZE(airspace_tnp_class_chars); i++)
+    if (text[0] == airspace_tnp_class_chars[i].character)
+      return airspace_tnp_class_chars[i].type;
 
   return OTHER;
 }
@@ -588,31 +605,9 @@ ParseClassTNP(const TCHAR* text)
 static AirspaceClass
 ParseTypeTNP(const TCHAR* text)
 {
-  if (_tcsicmp(text, _T("C")) == 0 ||
-      _tcsicmp(text, _T("CTA")) == 0 ||
-      _tcsicmp(text, _T("CTA")) == 0 ||
-      _tcsicmp(text, _T("CTA/CTR")) == 0)
-    return CTR;
-
-  if (_tcsicmp(text, _T("R")) == 0 ||
-      _tcsicmp(text, _T("RESTRICTED")) == 0)
-    return RESTRICT;
-
-  if (_tcsicmp(text, _T("P")) == 0 ||
-      _tcsicmp(text, _T("PROHIBITED")) == 0)
-    return PROHIBITED;
-
-  if (_tcsicmp(text, _T("D")) == 0 ||
-      _tcsicmp(text, _T("DANGER")) == 0)
-    return DANGER;
-
-  if (_tcsicmp(text, _T("G")) == 0 ||
-      _tcsicmp(text, _T("GSEC")) == 0)
-    return WAVE;
-
-  if (_tcsicmp(text, _T("T")) == 0 ||
-      _tcsicmp(text, _T("TMZ")) == 0)
-    return TMZ;
+  for (unsigned i = 0; i < ARRAY_SIZE(airspace_tnp_type_strings); i++)
+    if (_tcsicmp(text, airspace_tnp_type_strings[i].string) == 0)
+      return airspace_tnp_type_strings[i].type;
 
   return OTHER;
 }
