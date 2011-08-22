@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "AirspacePolygon.hpp"
 #include "Math/Earth.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
@@ -29,26 +30,26 @@
 
 #include <assert.h>
 
-AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint>& pts,
-  const bool prune)
+AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts,
+                                 const bool prune)
   :AbstractAirspace(POLYGON)
 {
-  if (pts.size()<2) {
+  if (pts.size() < 2) {
     m_is_convex = true;
   } else {
     m_border.reserve(pts.size() + 1);
 
     for (std::vector<GeoPoint>::const_iterator v = pts.begin();
-         v != pts.end(); ++v) {
+         v != pts.end(); ++v)
       m_border.push_back(SearchPoint(*v));
-    }
+
     // ensure airspace is closed
     GeoPoint p_start = pts[0];
-    GeoPoint p_end = *(pts.end()-1);
-    if (p_start != p_end) {
+    GeoPoint p_end = *(pts.end() - 1);
+    if (p_start != p_end)
       m_border.push_back(SearchPoint(p_start));
-    }
-    
+
+
     if (prune) {
       // only for testing
       prune_interior(m_border);
@@ -59,15 +60,13 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint>& pts,
   }
 }
 
-
 const GeoPoint 
 AirspacePolygon::GetCenter() const
 {
-  if (m_border.empty()) {
+  if (m_border.empty())
     return GeoPoint(Angle::zero(), Angle::zero());
-  } else {
-    return m_border[0].get_location();
-  }
+
+  return m_border[0].get_location();
 }
 
 bool 
@@ -76,10 +75,8 @@ AirspacePolygon::Inside(const GeoPoint &loc) const
   return PolygonInterior(loc, m_border);
 }
 
-
 AirspaceIntersectionVector
-AirspacePolygon::Intersects(const GeoPoint& start,
-                            const GeoVector &vec) const
+AirspacePolygon::Intersects(const GeoPoint &start, const GeoVector &vec) const
 {
   const GeoPoint end = vec.end_point(start);
   const FlatRay ray(m_task_projection->project(start),
@@ -87,21 +84,20 @@ AirspacePolygon::Intersects(const GeoPoint& start,
 
   AirspaceIntersectSort sorter(start, end, *this);
 
-  for (SearchPointVector::const_iterator it= m_border.begin();
-       it+1 != m_border.end(); ++it) {
+  for (SearchPointVector::const_iterator it = m_border.begin();
+       it + 1 != m_border.end(); ++it) {
 
-    const FlatRay r_seg(it->get_flatLocation(), 
-                        (it+1)->get_flatLocation());
+    const FlatRay r_seg(it->get_flatLocation(), (it + 1)->get_flatLocation());
     fixed t;
     if (ray.intersects_distinct(r_seg, t))
       sorter.add(t, m_task_projection->unproject(ray.parametric(t)));
   }
+
   return sorter.all();
 }
 
-
 GeoPoint 
-AirspacePolygon::ClosestPoint(const GeoPoint& loc) const
+AirspacePolygon::ClosestPoint(const GeoPoint &loc) const
 {
   const FlatGeoPoint p = m_task_projection->project(loc);
   const FlatGeoPoint pb = nearest_point(m_border, p);

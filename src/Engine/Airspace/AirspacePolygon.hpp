@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef AIRSPACEPOLYGON_HPP
 #define AIRSPACEPOLYGON_HPP
 
@@ -29,10 +30,7 @@
 #include <iostream>
 #endif
 
-/**
- * General polygon form airspace
- *
- */
+/** General polygon form airspace */
 class AirspacePolygon: 
   public AbstractAirspace 
 {
@@ -46,15 +44,14 @@ public:
    *
    * @return Initialised airspace object
    */
-  AirspacePolygon(const std::vector<GeoPoint>& pts,
-    const bool prune = false);
+  AirspacePolygon(const std::vector<GeoPoint> &pts, const bool prune = false);
 
-/** 
- * Get arbitrary center or reference point for use in determining
- * overall center location of all airspaces
- * 
- * @return Location of reference point
- */
+  /**
+   * Get arbitrary center or reference point for use in determining
+   * overall center location of all airspaces
+   *
+   * @return Location of reference point
+   */
   const GeoPoint GetCenter() const;
 
   /** 
@@ -76,10 +73,10 @@ public:
    * 
    * @return Vector of intersection pairs if the line intersects the airspace
    */
-  AirspaceIntersectionVector Intersects(const GeoPoint& g1, 
+  AirspaceIntersectionVector Intersects(const GeoPoint &g1,
                                         const GeoVector &vec) const;
 
-  GeoPoint ClosestPoint(const GeoPoint& loc) const;
+  GeoPoint ClosestPoint(const GeoPoint &loc) const;
 
 public:
 #ifdef DO_PRINT
