@@ -597,11 +597,11 @@ ParseTypeTNP(const TCHAR* text)
 
   if (_tcsicmp(text, _T("P")) == 0 ||
       _tcsicmp(text, _T("PROHIBITED")) == 0)
-    return RESTRICT;
+    return PROHIBITED;
 
   if (_tcsicmp(text, _T("D")) == 0 ||
       _tcsicmp(text, _T("DANGER")) == 0)
-    return RESTRICT;
+    return DANGER;
 
   if (_tcsicmp(text, _T("G")) == 0 ||
       _tcsicmp(text, _T("GSEC")) == 0)
