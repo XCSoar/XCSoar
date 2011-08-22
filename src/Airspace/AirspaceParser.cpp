@@ -739,6 +739,7 @@ ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
       return false;
 
     temp_area.AddCircle(airspace_database);
+    temp_area.reset();
   } else if ((parameter =
       string_after_prefix_ci(line, _T("CLOCKWISE "))) != NULL) {
     temp_area.Rotation = 1;
