@@ -108,6 +108,9 @@ static const AirspaceClassStringCouple airspace_tnp_type_strings[] = {
   { _T("GSEC"), WAVE },
   { _T("T"), TMZ },
   { _T("TMZ"), TMZ },
+  { _T("CYR"), RESTRICT },
+  { _T("CYD"), DANGER },
+  { _T("CYA"), CLASSF },
 };
 
 // this can now be called multiple times to load several airspaces.
