@@ -798,7 +798,8 @@ static AirspaceFileType
 DetectFileType(const TCHAR *line)
 {
   if (string_after_prefix_ci(line, _T("INCLUDE=")) ||
-      string_after_prefix_ci(line, _T("TYPE=")))
+      string_after_prefix_ci(line, _T("TYPE=")) ||
+      string_after_prefix_ci(line, _T("TITLE=")))
     return AFT_TNP;
 
   const TCHAR *p = string_after_prefix_ci(line, _T("AC"));
