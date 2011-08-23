@@ -220,14 +220,13 @@ IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime, const int ntp)
 
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
-  char start[] = "C0000000N00000000ETAKEOFF";
-  char temp[100];
 
   // JMW added task start declaration line
 
   // LGCSTKF013945TAKEOFF DETECTED
 
   // IGC GNSS specification 3.6.1
+  char temp[100];
   sprintf(temp, "C%02u%02u%02u%02u%02u%02u0000000000%02d",
           // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
           FirstDateTime.day,
@@ -239,9 +238,10 @@ IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime, const int ntp)
           ntp - 2);
 
   writeln(temp);
+
   // takeoff line
   // IGC GNSS specification 3.6.3
-  writeln(start);
+  writeln("C0000000N00000000ETAKEOFF");
 }
 
 void
