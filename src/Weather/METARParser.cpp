@@ -162,14 +162,15 @@ ParseWind(const TCHAR *token, ParsedMETAR &parsed)
 }
 
 static bool
+DetectCAVOK(const TCHAR *token)
+{
+  return (_tcslen(token) == 5 && _tcsicmp(token, _T("CAVOK")) == 0);
+}
+
+static bool
 DetectVisibilityToken(const TCHAR *token)
 {
-  unsigned length = _tcslen(token);
-
-  if (length == 5 && _tcsicmp(token, _T("CAVOK")) == 0)
-    return true;
-
-  if (length != 4)
+  if (_tcslen(token) != 4)
     return false;
 
   for (unsigned i = 0; i < 4; ++i)
@@ -183,11 +184,6 @@ static bool
 ParseVisibility(const TCHAR *token, ParsedMETAR &parsed)
 {
   assert(DetectVisibilityToken(token));
-
-  if (_tcsicmp(token, _T("CAVOK")) == 0) {
-    parsed.cavok = true;
-    return true;
-  }
 
   TCHAR *endptr;
   parsed.visibility = _tcstol(token, &endptr, 10);
@@ -402,10 +398,14 @@ METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
   }
 
   // Parse Visibility
-  if ((token = line.Next()) != NULL)
+  if ((token = line.Next()) != NULL) {
     if (DetectVisibilityToken(token))
       if (!ParseVisibility(token, parsed))
         return false;
+
+    if (DetectCAVOK(token))
+      parsed.cavok = true;
+  }
 
   // Parse Temperatures
   while ((token = line.Next()) != NULL) {
