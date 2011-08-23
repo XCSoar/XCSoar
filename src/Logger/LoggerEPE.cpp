@@ -151,9 +151,7 @@ IGCWriter::GetEPE(const NMEAInfo& gps_info)
 
   return dEPE;
 }
-/* GetSIU
- * returns Satellites in use if logger fix quality is a valid gps
- */
+
 int
 IGCWriter::GetSIU(const NMEAInfo& gps_info)
 {

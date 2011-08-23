@@ -83,6 +83,7 @@ private:
   static const char *GetHFFXARecord();
   static const char *GetIRecord();
   static fixed GetEPE(const NMEAInfo &gps_info);
+  /** Satellites in use if logger fix quality is a valid gps */
   static int GetSIU(const NMEAInfo &gps_info);
 
 public:
