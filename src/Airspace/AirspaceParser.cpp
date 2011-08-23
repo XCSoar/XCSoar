@@ -409,7 +409,7 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
 }
 
 static void
-CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
+ParseArcBearings(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   // Determine radius and start/end bearing
   TCHAR *Stop;
@@ -421,7 +421,7 @@ CalculateSector(const TCHAR *Text, TempAirspaceType &temp_area)
 }
 
 static bool
-CalculateArc(const TCHAR *Text, TempAirspaceType &temp_area)
+ParseArcPoints(const TCHAR *Text, TempAirspaceType &temp_area)
 {
   // Read start coordinates
   GeoPoint Start;
@@ -516,12 +516,12 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
 
     case _T('A'):
     case _T('a'):
-      CalculateSector(line, temp_area);
+      ParseArcBearings(line, temp_area);
       break;
 
     case _T('B'):
     case _T('b'):
-      return CalculateArc(line, temp_area);
+      return ParseArcPoints(line, temp_area);
 
     default:
       return true;
