@@ -26,8 +26,8 @@
 #include <string.h>
 
 static const uint32_t k[64] = {
-  //k[i] := floor(abs(sin(i)) × (2 pow 32))
-  // RLD should be sin(i+1) but want compatibility
+  // k[i] := floor(abs(sin(i)) * (2 pow 32))
+  // RLD should be sin(i + 1) but want compatibility
   3614090360UL, // k=0
   3905402710UL, // k=1
   606105819UL, // k=2
@@ -104,54 +104,53 @@ static const uint32_t r[64] = {
 static inline uint32_t
 leftrotate(uint32_t x, uint32_t c)
 {
-    return (x << c) | (x >> (32-c));
+    return (x << c) | (x >> (32 - c));
 }
 
 void
 MD5::InitKey(uint32_t h0in, uint32_t h1in, uint32_t h2in, uint32_t h3in)
 {
-  h0=h0in;
-  h1=h1in;
-  h2=h2in;
-  h3=h3in;
-  MessageLenBits=0;
+  h0 = h0in;
+  h1 = h1in;
+  h2 = h2in;
+  h3 = h3in;
+  MessageLenBits = 0;
 }
+
 void
 MD5::InitDigest(void)
 {
-  memset(buff512bits,0,64);
+  memset(buff512bits, 0, 64);
 
-  MessageLenBits=0;
-  a=0; b=0; c=0; d=0;
-  h0=0; h1=0; h2=0; h3=0;
-  f=0; g=0;
-
-
+  MessageLenBits = 0;
+  a = b = c = d = 0;
+  h0 = h1 = h2 = h3 = 0;
+  f = g = 0;
 }
 
-/*
-* Version 1.0.0 first posted to OLC 8/23/2008 supressed 0x0D only, and used Key#1
-* Version 1.0.2 which uses the correct suppression filter from IGC spec and uses key #2
-* This is the version we want to use, but we're reverting to 1.0.0 until OLC can upgrade to 1.0.3
-* Validation program 1.0.3 is backwards compatible and reads either 1.0.0 or 1.0.2
-*/
+
 bool
-MD5::IsValidIGCChar(char c) //returns 1 if Valid IGC Char
-{//                                  else 0
+MD5::IsValidIGCChar(char c)
+{
+  /*
+   * Version 1.0.0 first posted to OLC 8/23/2008 supressed 0x0D only, and used Key#1
+   * Version 1.0.2 which uses the correct suppression filter from IGC spec and uses key #2
+   * This is the version we want to use, but we're reverting to 1.0.0 until OLC can upgrade to 1.0.3
+   * Validation program 1.0.3 is backwards compatible and reads either 1.0.0 or 1.0.2
+   */
 
   // 1.0.2 filtering (and use key #2, 3 or 4 b/c key #1 used by 1.0.0 has a dupe in it
 
-    if ( c >=0x20  && c <= 0x7E &&
-    c != 0x0D &&
-    c != 0x0A &&
-    c != 0x24 &&
-    c != 0x2A &&
-    c != 0x2C &&
-    c != 0x21 &&
-    c != 0x5C &&
-    c != 0x5E &&
-    c != 0x7E
-       )
+    if (c >= 0x20 && c <= 0x7E &&
+        c != 0x0D &&
+        c != 0x0A &&
+        c != 0x24 &&
+        c != 0x2A &&
+        c != 0x2C &&
+        c != 0x21 &&
+        c != 0x5C &&
+        c != 0x5E &&
+        c != 0x7E)
       return true;
     else
       return false;
@@ -160,64 +159,61 @@ MD5::IsValidIGCChar(char c) //returns 1 if Valid IGC Char
 void
 MD5::AppendString(const unsigned char *szin, int bSkipInvalidIGCCharsFlag) // must be NULL-terminated string!
 {
-  size_t iLen = strlen((const char * )szin);
+  size_t iLen = strlen((const char *)szin);
   int BuffLeftover = (MessageLenBits / 8) % 64;
 
   MessageLenBits += ((uint32_t)iLen * 8);
 
   for (size_t i = 0; i < iLen; i++) {
-    if (bSkipInvalidIGCCharsFlag == 1 && !IsValidIGCChar(szin[i]) ) { // skip OD because when saved to file, OD OA comes back as OA only
+    if (bSkipInvalidIGCCharsFlag == 1 && !IsValidIGCChar(szin[i]))
+      // skip OD because when saved to file, OD OA comes back as OA only
       MessageLenBits -= 8; //subtract it out of the buffer pointer
-    }
     else {
-      buff512bits[BuffLeftover++] =szin[i];  //
-      if (BuffLeftover * 8 == 512 ) { // we have a full buffer
+      buff512bits[BuffLeftover++] = szin[i];  //
+      if (BuffLeftover * 8 == 512) { // we have a full buffer
         Process512(buff512bits);
-        BuffLeftover=0; //and reset buffer
+        BuffLeftover = 0; //and reset buffer
       }
     }
   }
 }
 
-
 void
 MD5::Finalize(void)
 {
-
   // append "0" bits until message length in bits ? 448 (mod 512)
   int BuffLeftover = (MessageLenBits / 8) % 64;
   // need at least 64 bits (8 bytes) for length bits at end
 
-
-  if (BuffLeftover < (64 - 8) ) {
+  if (BuffLeftover < (64 - 8)) {
     // append "1" bit to end of buffer
     buff512bits[BuffLeftover] = 0x80;
 
     // pad with 56 - len to get exactly
-    for (int i=BuffLeftover+1; i < 64; i++) { // clear out rest of buffer too
+    for (int i = BuffLeftover + 1; i < 64; i++)
+      // clear out rest of buffer too
       buff512bits[i] = 0;
-    }
 
     // exactly 64 bits left for message size bits
 
     // ready to append message length
-  }
-  else { // >= 56 bits already in buffer
+  } else {
+    // >= 56 bits already in buffer
 
     // append "1" bit to end of buffer
     buff512bits[BuffLeftover] = 0x80;
 
     // fill buffer w/ 0's and process
-    for (int i=BuffLeftover+1; i < 64; i++ ) {
+    for (int i = BuffLeftover + 1; i < 64; i++ )
       buff512bits[i] = 0;
-    }
 
     Process512(buff512bits);
 
     // now  load 1st 56 bytes of buffer w/ all 0's,
-    for (int i=0; i < 64; i++) {// clear out rest of buffer too
+    for (int i = 0; i < 64; i++)
+      // clear out rest of buffer too
       buff512bits[i] = 0;
-    }
+
     // ready to append message length
   }
 
@@ -230,42 +226,40 @@ MD5::Finalize(void)
   buff512bits[56] = (unsigned char)(MessageLenBits & 0x000000FF);
 
   Process512(buff512bits);
-
 }
 
 void
 MD5::Process512(const unsigned char *s512in)
-{ // assume exactly 512 bytes
+{
+  // assume exactly 512 bytes
 
-//Initialize hash value for this chunk:
-  a=h0;
-  b=h1;
-  c=h2;
-  d=h3;
+  // Initialize hash value for this chunk:
+  a = h0;
+  b = h1;
+  c = h2;
+  d = h3;
 
   // copy the 64 chars into the 16 uint32_ts
   uint32_t w[16];
-  for (int j=0; j < 16; j++) {
-    w[j] = (((uint32_t)s512in[(j*4)+3]) << 24) |
-          (((uint32_t)s512in[(j*4)+2]) << 16) |
-          (((uint32_t)s512in[(j*4)+1]) << 8) |
-          ((uint32_t)s512in[(j*4)]);
+  for (int j = 0; j < 16; j++) {
+    w[j] = (((uint32_t)s512in[(j * 4) + 3]) << 24) |
+           (((uint32_t)s512in[(j * 4) + 2]) << 16) |
+           (((uint32_t)s512in[(j * 4) + 1]) << 8) |
+           ((uint32_t)s512in[(j * 4)]);
   }
-//Main loop:
-  for (int i=0; i < 64; i++) {
+
+  // Main loop:
+  for (int i = 0; i < 64; i++) {
     if (i <= 15) {
       f = (b & c) | ((~b) & d);
       g = i;
-    }
-    else if (i <= 31) {
+    } else if (i <= 31) {
       f = (d & b) | ((~d) & c);
-      g = (5*i + 1) % 16;
-    }
-    else if (i <= 47) {
+      g = (5 * i + 1) % 16;
+    } else if (i <= 47) {
       f = b ^ c ^ d;
       g = (3 * i + 5) % 16;
-    }
-    else {
+    } else {
       f = c ^ (b | (~d));
       g = (7 * i) % 16;
     }
@@ -273,23 +267,21 @@ MD5::Process512(const unsigned char *s512in)
     uint32_t temp = d;
     d = c;
     c = b;
-    b = b + leftrotate((a + f + k[i] + w[g]) , r[i]);
+    b = b + leftrotate((a + f + k[i] + w[g]), r[i]);
     a = temp;
   }
 
-
-  //Add this chunk's hash to result so far:
+  // Add this chunk's hash to result so far:
   h0 = h0 + a;
   h1 = h1 + b;
   h2 = h2 + c;
   h3 = h3 + d;
 }
 
-
-
 int
 MD5::GetDigest(char *buffer)
-{ // extract 4 bytes from each uint32_t
+{
+  // extract 4 bytes from each uint32_t
   unsigned char digest[16];
 
   digest[0] = (unsigned char) (h0 & 0xFF);
@@ -312,10 +304,8 @@ MD5::GetDigest(char *buffer)
   digest[14] = (unsigned char)((h3 >> 16) & 0xFF);
   digest[15] = (unsigned char)((h3 >> 24) & 0xFF);
 
-  int i;
-  for (i = 0; i < 16; i++) {
+  for (int i = 0; i < 16; i++)
     sprintf(buffer + i * 2, "%02x", digest[i]);
-  }
 
   return 1;
 }
