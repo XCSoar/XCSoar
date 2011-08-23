@@ -479,10 +479,15 @@ value_after_space(const TCHAR *p)
 }
 
 static bool
-ParseLine(Airspaces &airspace_database, const TCHAR *line,
+ParseLine(Airspaces &airspace_database, TCHAR *line,
           TempAirspaceType &temp_area)
 {
   const TCHAR *value;
+
+  // Strip comments
+  TCHAR *comment = _tcschr(line, _T('*'));
+  if (comment != NULL)
+    *comment = _T('\0');
 
   // Only return expected lines
   switch (line[0]) {
@@ -714,9 +719,14 @@ ParseCircleTNP(const TCHAR *Text, TempAirspaceType &temp_area)
 }
 
 static bool
-ParseLineTNP(Airspaces &airspace_database, const TCHAR *line,
+ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
              TempAirspaceType &temp_area, bool &ignore)
 {
+  // Strip comments
+  TCHAR *comment = _tcschr(line, _T('*'));
+  if (comment != NULL)
+    *comment = _T('\0');
+
   const TCHAR* parameter;
   if ((parameter = string_after_prefix_ci(line, _T("INCLUDE="))) != NULL) {
     if (_tcsicmp(parameter, _T("YES")) == 0)
@@ -812,15 +822,9 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
   AirspaceFileType filetype = AFT_UNKNOWN;
 
   TCHAR *line;
-  TCHAR *comment;
 
   // Iterate through the lines
   for (unsigned LineCount = 1; (line = reader.read()) != NULL; LineCount++) {
-    // Strip comments
-    comment = _tcschr(line, _T('*'));
-    if (comment != NULL)
-      *comment = _T('\0');
-
     // Skip empty line
     if (string_is_empty(line))
       continue;
