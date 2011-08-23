@@ -23,8 +23,6 @@
 #include "Math/Earth.hpp"
 #include "TestUtil.hpp"
 
-#include <assert.h>
-
 static void
 TestLinearDistance()
 {
