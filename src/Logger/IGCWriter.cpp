@@ -214,7 +214,8 @@ IGCWriter::header(const BrokenDateTime &DateTime,
 }
 
 void
-IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime, const int ntp)
+IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime,
+                            const int number_of_turnpoints)
 {
   assert(FirstDateTime.Plausible());
 
@@ -235,7 +236,7 @@ IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime, const int ntp)
           FirstDateTime.hour,
           FirstDateTime.minute,
           FirstDateTime.second,
-          ntp - 2);
+          number_of_turnpoints - 2);
 
   writeln(temp);
 
