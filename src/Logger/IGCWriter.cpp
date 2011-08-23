@@ -217,13 +217,6 @@ IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime,
 {
   assert(FirstDateTime.Plausible());
 
-  // TODO bug: this is causing problems with some analysis software
-  // maybe it's because the date and location fields are bogus
-
-  // JMW added task start declaration line
-
-  // LGCSTKF013945TAKEOFF DETECTED
-
   // IGC GNSS specification 3.6.1
   char buffer[100];
   sprintf(buffer, "C%02u%02u%02u%02u%02u%02u0000000000%02d",
@@ -240,7 +233,7 @@ IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime,
 
   // takeoff line
   // IGC GNSS specification 3.6.3
-  writeln("C0000000N00000000ETAKEOFF");
+  writeln("C00000000N000000000ETAKEOFF");
 }
 
 void
@@ -248,7 +241,7 @@ IGCWriter::EndDeclaration(void)
 {
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
-  const char start[] = "C0000000N00000000ELANDING";
+  const char start[] = "C00000000N000000000ELANDING";
   writeln(start);
 }
 
