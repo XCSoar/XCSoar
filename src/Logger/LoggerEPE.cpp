@@ -139,23 +139,16 @@ IGCWriter::GetEPE(const NMEAInfo& gps_info)
    * 8 = Simulation mode
    */
 
-  fixed dEPE = fixed_zero;
-
   switch (gps_info.gps.fix_quality) {
-
   case 1:
-    dEPE = (int)gps_info.gps.hdop * fixed(18.2);
-    break;
+    return (int)gps_info.gps.hdop * fixed(18.2);
 
   case 2:
-    dEPE = (int)gps_info.gps.hdop * fixed_four;
-    break;
+    return (int)gps_info.gps.hdop * fixed_four;
 
   default:
-    break;
+    return fixed_zero;
   }
-
-  return dEPE;
 }
 
 int
