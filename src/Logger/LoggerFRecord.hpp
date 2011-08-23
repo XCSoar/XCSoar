@@ -27,6 +27,7 @@ Copyright_License {
 #include "GPSClock.hpp"
 
 struct BrokenTime;
+struct GPSState;
 
 class LoggerFRecord {
   GPSClock frecord_clock;
@@ -38,7 +39,7 @@ public:
     :frecord_clock(fixed_270) // 4.5 minutes
   {}
 
-  const char *update(const int SatelliteIDs[],
+  const char *update(const GPSState &gps,
                      const BrokenTime &broken_time, fixed Time,
                      bool NAVWarning);
   void reset();

@@ -319,7 +319,7 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
     Simulator = true;
 
   if (!Simulator) {
-    const char *f_record_line = frecord.update(gps_info.gps.satellite_ids,
+    const char *f_record_line = frecord.update(gps_info.gps,
                                                gps_info.date_time_utc,
                                                gps_info.time,
                                                !gps_info.location_available);

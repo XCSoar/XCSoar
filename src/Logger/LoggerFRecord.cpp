@@ -58,23 +58,21 @@ LoggerFRecord::reset()
 }
 
 const char *
-LoggerFRecord::update(const int SatelliteIDs[],
+LoggerFRecord::update(const GPSState &gps,
                       const BrokenTime &broken_time, fixed Time,
                       bool NAVWarning)
 { 
   char szFRecord[sizeof(szLastFRecord)];
   int eof=0;
-  int iNumberSatellites=0;
   
   sprintf(szFRecord,"F%02u%02u%02u",
           broken_time.hour, broken_time.minute, broken_time.second);
   eof=7;
 
   for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i) {
-    if (SatelliteIDs[i] > 0){
-      sprintf(szFRecord+eof, "%02d",SatelliteIDs[i]);
+    if (gps.satellite_ids[i] > 0){
+      sprintf(szFRecord+eof, "%02d", gps.satellite_ids[i]);
       eof +=2;
-      iNumberSatellites++;
     }
   }
   sprintf(szFRecord+ eof,"\r\n");
@@ -82,9 +80,8 @@ LoggerFRecord::update(const int SatelliteIDs[],
   DetectFRecordChange = DetectFRecordChange ||
     strcmp(szFRecord + 7, szLastFRecord + 7);
   
-  if (iNumberSatellites < 3 || NAVWarning) {
+  if (gps.satellites_used < 3 || NAVWarning) 
     frecord_clock.set_dt(fixed(30)); // accelerate to 30 seconds if bad signal
-  }
    
   if (!frecord_clock.check_advance(fixed(Time)) || !DetectFRecordChange)
     return NULL;
