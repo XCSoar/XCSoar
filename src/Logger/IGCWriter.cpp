@@ -240,8 +240,7 @@ IGCWriter::EndDeclaration(void)
 {
   // TODO bug: this is causing problems with some analysis software
   // maybe it's because the date and location fields are bogus
-  const char start[] = "C00000000N000000000ELANDING";
-  writeln(start);
+  writeln("C00000000N000000000ELANDING");
 }
 
 void
