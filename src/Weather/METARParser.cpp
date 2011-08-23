@@ -35,7 +35,13 @@ protected:
 
 public:
   METARLine(const TCHAR *line)
-    :start(_tcsdup(line)), data(start), end(start + _tcslen(line)) {}
+    :start(_tcsdup(line)), data(start), end(start + _tcslen(line))
+  {
+    if (start != end && *(end - 1) == _T('=')) {
+      end--;
+      *end = _T('\0');
+    }
+  }
 
   ~METARLine() {
     free(start);
