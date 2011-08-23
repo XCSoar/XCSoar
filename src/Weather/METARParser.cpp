@@ -216,6 +216,51 @@ ParseTemperatures(const TCHAR *token, ParsedMETAR &parsed)
 }
 
 static bool
+DetectAdditionalTemperaturesToken(const TCHAR *token)
+{
+  if (_tcslen(token) != 9)
+    return false;
+
+  if (token[0] != _T('T') && token[0] != _T('t'))
+    return false;
+
+  for (unsigned i = 1; i < 9; ++i) {
+    if (!_istdigit(token[i]))
+      return false;
+  }
+
+  return true;
+}
+
+static bool
+ParseAdditionalTemperatures(const TCHAR *token, ParsedMETAR &parsed)
+{
+  assert(DetectAdditionalTemperaturesToken(token));
+
+  // Skip 'T'
+  token++;
+
+  TCHAR *endptr;
+  long temperature_code = _tcstol(token, &endptr, 10);
+  if (endptr == NULL || endptr == token)
+    return false;
+
+  int temperature = (int)(temperature_code / 10000);
+  int dew_point = temperature_code - temperature * 10000;
+
+  if (temperature >= 1000)
+    temperature = -temperature + 1000;
+
+  if (dew_point >= 1000)
+    dew_point = -dew_point + 1000;
+
+  parsed.temperature = Units::ToSysUnit(fixed(temperature) / 10, unGradCelcius);
+  parsed.dew_point = Units::ToSysUnit(fixed(dew_point) / 10, unGradCelcius);
+  parsed.temperatures_available = true;
+  return true;
+}
+
+static bool
 DetectQNHToken(const TCHAR *token)
 {
   unsigned length = _tcslen(token);
@@ -321,6 +366,16 @@ METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
   while ((token = line.Next()) != NULL) {
     if (DetectQNHToken(token)) {
       if (!ParseQNH(token, parsed))
+        return false;
+
+      break;
+    }
+  }
+
+  // Parse Temperatures
+  while ((token = line.Next()) != NULL) {
+    if (DetectAdditionalTemperaturesToken(token)) {
+      if (!ParseAdditionalTemperatures(token, parsed))
         return false;
 
       break;

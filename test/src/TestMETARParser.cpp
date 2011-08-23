@@ -65,8 +65,8 @@ main(int argc, char **argv)
   ok1(equals(parsed.wind.norm, Units::ToSysUnit(fixed(11), unKnots)));
   ok1(equals(parsed.wind.bearing, 40));
   ok1(parsed.temperatures_available);
-  ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(-2), unGradCelcius)));
-  ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(-2), unGradCelcius)));
+  ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(-1.7), unGradCelcius)));
+  ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(-1.7), unGradCelcius)));
 
   return exit_status();
 }
