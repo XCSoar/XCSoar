@@ -58,6 +58,34 @@ public:
 };
 
 static bool
+DetectTimeCodeToken(const TCHAR *token)
+{
+  if (_tcslen(token) != 7)
+    return false;
+
+  return token[6] == _T('Z') || token[6] == _T('z');
+}
+
+static bool
+ParseTimeCode(const TCHAR *token, ParsedMETAR &parsed)
+{
+  assert(DetectTimeCodeToken(token));
+
+  TCHAR *endptr;
+  unsigned time_code = _tcstod(token, &endptr);
+  if (endptr == NULL || endptr == token)
+    return false;
+
+  parsed.day_of_month = (int)(time_code / 10000);
+  time_code -= parsed.day_of_month * 10000;
+  parsed.hour = (int)(time_code / 100);
+  time_code -= parsed.hour * 100;
+  parsed.minute = time_code;
+
+  return true;
+}
+
+static bool
 DetectQNHToken(const TCHAR *token)
 {
   unsigned length = _tcslen(token);
@@ -121,19 +149,10 @@ METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
   if ((token = line.Next()) == NULL)
     return false;
 
-  if (_tcslen(token) < 6)
+  if (!DetectTimeCodeToken(token))
     return false;
 
-  TCHAR *endptr;
-  unsigned time_code = _tcstod(token, &endptr);
-  if (endptr == NULL || endptr == token)
-    return false;
-
-  parsed.day_of_month = (int)(time_code / 10000);
-  time_code -= parsed.day_of_month * 10000;
-  parsed.hour = (int)(time_code / 100);
-  time_code -= parsed.hour * 100;
-  parsed.minute = time_code;
+  ParseTimeCode(token, parsed);
 
   // Parse QNH
   while ((token = line.Next()) != NULL) {
