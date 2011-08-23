@@ -185,18 +185,18 @@ IGCWriter::header(const BrokenDateTime &DateTime,
   assert(DateTime.Plausible());
 
   char datum[] = "HFDTM100Datum: WGS-84";
-  char temp[100];
+  char buffer[100];
 
   // Flight recorder ID number MUST go first..
-  sprintf(temp, "AXCS%c%c%c",
+  sprintf(buffer, "AXCS%c%c%c",
           (char)strAssetNumber[0],
           (char)strAssetNumber[1],
           (char)strAssetNumber[2]);
-  writeln(temp);
+  writeln(buffer);
 
-  sprintf(temp, "HFDTE%02u%02u%02u",
+  sprintf(buffer, "HFDTE%02u%02u%02u",
           DateTime.day, DateTime.month, DateTime.year % 100);
-  writeln(temp);
+  writeln(buffer);
 
   if (!Simulator)
     writeln(GetHFFXARecord());
@@ -227,8 +227,8 @@ IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime,
   // LGCSTKF013945TAKEOFF DETECTED
 
   // IGC GNSS specification 3.6.1
-  char temp[100];
-  sprintf(temp, "C%02u%02u%02u%02u%02u%02u0000000000%02d",
+  char buffer[100];
+  sprintf(buffer, "C%02u%02u%02u%02u%02u%02u0000000000%02d",
           // DD  MM  YY  HH  MM  SS  DD  MM  YY IIII TT
           FirstDateTime.day,
           FirstDateTime.month,
@@ -238,7 +238,7 @@ IGCWriter::StartDeclaration(const BrokenDateTime &FirstDateTime,
           FirstDateTime.second,
           number_of_turnpoints - 2);
 
-  writeln(temp);
+  writeln(buffer);
 
   // takeoff line
   // IGC GNSS specification 3.6.3
