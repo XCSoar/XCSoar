@@ -122,8 +122,6 @@ struct TempAirspaceType
     reset();
   }
 
-  bool Waiting;
-
   // General
   tstring Name;
   tstring Radio;
@@ -153,7 +151,6 @@ struct TempAirspaceType
     Center.Latitude = Angle::zero();
     Rotation = 1;
     Radius = fixed_zero;
-    Waiting = true;
   }
 
   void
@@ -553,13 +550,12 @@ ParseLine(Airspaces &airspace_database, TCHAR *line,
       if (value == NULL)
         break;
 
-      if (!temp_area.Waiting)
+      if (!temp_area.points.empty())
         temp_area.AddPolygon(airspace_database);
 
       temp_area.reset();
 
       temp_area.Type = ParseType(value);
-      temp_area.Waiting = false;
       break;
 
     case _T('N'):
@@ -766,13 +762,12 @@ ParseLineTNP(Airspaces &airspace_database, TCHAR *line,
   } else if ((parameter = string_after_prefix_ci(line, _T("TITLE="))) != NULL) {
     temp_area.Name = parameter;
   } else if ((parameter = string_after_prefix_ci(line, _T("TYPE="))) != NULL) {
-    if (!temp_area.Waiting)
+    if (!temp_area.points.empty())
       temp_area.AddPolygon(airspace_database);
 
     temp_area.reset();
 
     temp_area.Type = ParseTypeTNP(parameter);
-    temp_area.Waiting = false;
   } else if ((parameter = string_after_prefix_ci(line, _T("CLASS="))) != NULL) {
     if (temp_area.Type == OTHER)
       temp_area.Type = ParseClassTNP(parameter);
@@ -858,7 +853,7 @@ AirspaceParser::Parse(TLineReader &reader, OperationEnvironment &operation)
   }
 
   // Process final area (if any)
-  if (!temp_area.Waiting)
+  if (!temp_area.points.empty())
     temp_area.AddPolygon(airspaces);
 
   return true;
