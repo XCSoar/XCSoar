@@ -47,7 +47,7 @@ Copyright_License {
  */
 
 const char *
-IGCWriter::GetHFFXARecord(void)
+IGCWriter::GetHFFXARecord()
 {
   /*
    * HFFXA Record
@@ -65,7 +65,7 @@ IGCWriter::GetHFFXARecord(void)
 }
 
 const char *
-IGCWriter::GetIRecord(void)
+IGCWriter::GetIRecord()
 {
   /*
    * I Record
