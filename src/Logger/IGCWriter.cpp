@@ -182,7 +182,6 @@ IGCWriter::header(const BrokenDateTime &DateTime,
 
   assert(DateTime.Plausible());
 
-  char datum[] = "HFDTM100Datum: WGS-84";
   char buffer[100];
 
   // Flight recorder ID number MUST go first..
@@ -205,7 +204,7 @@ IGCWriter::header(const BrokenDateTime &DateTime,
   write_tstring("HFFTYFR TYPE:XCSOAR,XCSOAR ", XCSoar_VersionStringOld);
   write_tstring("HFGPS: ", driver_name);
 
-  writeln(datum);
+  writeln("HFDTM100Datum: WGS-84");
 
   if (!Simulator)
     writeln(GetIRecord());
