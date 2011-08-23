@@ -55,6 +55,9 @@ enum Units_t {
   unKelvin,
   unGradCelcius, // K = C° + 273,15
   unGradFahrenheit, // K = (°F + 459,67) / 1,8
+  unHectoPascal,
+  unTorr,
+  unInchMercurial,
 
   /**
    * The sentinel: the number of units in this enum.
