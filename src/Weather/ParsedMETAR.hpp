@@ -42,15 +42,21 @@ struct ParsedMETAR
   bool qnh_available;
   bool wind_available;
   bool temperatures_available;
+  bool visibility_available;
+
+  bool cavok;
 
   AtmosphericPressure qnh;
   SpeedVector wind;
   fixed temperature, dew_point;
+  unsigned visibility;
 
   void Reset() {
     qnh_available = false;
     wind_available = false;
     temperatures_available = false;
+    visibility_available = false;
+    cavok = false;
   }
 };
 

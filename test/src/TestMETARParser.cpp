@@ -29,7 +29,7 @@
 int
 main(int argc, char **argv)
 {
-  plan_tests(37);
+  plan_tests(44);
 
   METAR metar;
 
@@ -51,6 +51,9 @@ main(int argc, char **argv)
     ok1(parsed.temperatures_available);
     ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(23), unGradCelcius)));
     ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(18), unGradCelcius)));
+    ok1(parsed.visibility_available);
+    ok1(parsed.visibility == 9999);
+    ok1(!parsed.cavok);
   }
   {
     ParsedMETAR parsed;
@@ -70,6 +73,8 @@ main(int argc, char **argv)
     ok1(parsed.temperatures_available);
     ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(-1.7), unGradCelcius)));
     ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(-1.7), unGradCelcius)));
+    ok1(!parsed.visibility_available);
+    ok1(!parsed.cavok);
   }
   {
     ParsedMETAR parsed;
@@ -87,6 +92,8 @@ main(int argc, char **argv)
     ok1(parsed.temperatures_available);
     ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(21), unGradCelcius)));
     ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(17), unGradCelcius)));
+    ok1(!parsed.visibility_available);
+    ok1(parsed.cavok);
   }
 
   return exit_status();
