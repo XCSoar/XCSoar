@@ -27,6 +27,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 #include <tchar.h>
+#include <cctype>
 
 class METARLine {
 protected:
@@ -143,6 +144,72 @@ ParseWind(const TCHAR *token, ParsedMETAR &parsed)
 }
 
 static bool
+DetectTemperaturesToken(const TCHAR *token)
+{
+  unsigned length = _tcslen(token);
+
+  bool minus_possible = true;
+  bool divider_found = false;
+
+  for (unsigned i = 0; i < length; i++) {
+    if (_istdigit(token[i]))
+      continue;
+
+    if (token[i] == _T('/')) {
+      divider_found = true;
+      minus_possible = true;
+      continue;
+    }
+
+    if (minus_possible && (token[i] == _T('M') || token[i] == _T('m')))
+      continue;
+
+    return false;
+  }
+
+  return divider_found;
+}
+
+static const TCHAR *
+ParseTemperature(const TCHAR *token, fixed &temperature)
+{
+  bool negative = (token[0] == _T('M') || token[0] == _T('m'));
+  if (negative)
+    token++;
+
+  TCHAR *endptr;
+  int _temperature = _tcstod(token, &endptr);
+  if (endptr == NULL || endptr == token)
+    return NULL;
+
+  if (negative)
+    _temperature = -_temperature;
+
+  temperature = Units::ToSysUnit(fixed(_temperature), unGradCelcius);
+  return endptr;
+}
+
+static bool
+ParseTemperatures(const TCHAR *token, ParsedMETAR &parsed)
+{
+  assert(DetectTemperaturesToken(token));
+
+  if ((token = ParseTemperature(token, parsed.temperature)) == NULL)
+    return false;
+
+  if (*token != _T('/'))
+    return false;
+
+  token++;
+
+  if ((token = ParseTemperature(token, parsed.dew_point)) == NULL)
+    return false;
+
+  parsed.temperatures_available = true;
+  return true;
+}
+
+static bool
 DetectQNHToken(const TCHAR *token)
 {
   unsigned length = _tcslen(token);
@@ -228,6 +295,16 @@ METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
   while ((token = line.Next()) != NULL) {
     if (DetectWindToken(token)) {
       if (!ParseWind(token, parsed))
+        return false;
+
+      break;
+    }
+  }
+
+  // Parse Temperatures
+  while ((token = line.Next()) != NULL) {
+    if (DetectTemperaturesToken(token)) {
+      if (!ParseTemperatures(token, parsed))
         return false;
 
       break;

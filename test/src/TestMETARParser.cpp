@@ -29,7 +29,7 @@
 int
 main(int argc, char **argv)
 {
-  plan_tests(20);
+  plan_tests(26);
 
   METAR metar;
   ParsedMETAR parsed;
@@ -47,6 +47,9 @@ main(int argc, char **argv)
   ok1(parsed.wind_available);
   ok1(equals(parsed.wind.norm, 7));
   ok1(equals(parsed.wind.bearing, 310));
+  ok1(parsed.temperatures_available);
+  ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(23), unGradCelcius)));
+  ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(18), unGradCelcius)));
 
   metar.content = _T("METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=");
   if (!ok1(METARParser::Parse(metar, parsed)))
@@ -61,6 +64,9 @@ main(int argc, char **argv)
   ok1(parsed.wind_available);
   ok1(equals(parsed.wind.norm, Units::ToSysUnit(fixed(11), unKnots)));
   ok1(equals(parsed.wind.bearing, 40));
+  ok1(parsed.temperatures_available);
+  ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(-2), unGradCelcius)));
+  ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(-2), unGradCelcius)));
 
   return exit_status();
 }
