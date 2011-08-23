@@ -58,6 +58,23 @@ public:
 };
 
 static bool
+DetectICAOCodeToken(const TCHAR *token)
+{
+  if (_tcslen(token) != 4)
+    return false;
+
+  for (unsigned i = 0; i < 4; i++) {
+    if ((token[i] >= 'A' && token[i] <= 'Z') ||
+        (token[i] >= 'a' && token[i] <= 'z')) {
+      // okay
+    } else
+      return false;
+  }
+
+  return true;
+}
+
+static bool
 DetectTimeCodeToken(const TCHAR *token)
 {
   if (_tcslen(token) != 7)
@@ -131,19 +148,14 @@ METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
 
   METARLine line(metar.content.begin());
   const TCHAR *token;
-  if ((token = line.Next()) == NULL)
-    return false;
-
-  // Skip METAR header if it exists
-  if (_tcsicmp(token, _T("METAR")) == 0)
-    if ((token = line.Next()) == NULL)
-      return false;
 
   // Parse four-letter ICAO code
-  if (_tcslen(token) != 4)
-    return false;
-
-  parsed.icao_code = token;
+  while ((token = line.Next()) != NULL) {
+    if (DetectICAOCodeToken(token)) {
+      parsed.icao_code = token;
+      break;
+    }
+  }
 
   // Parse day of month, hour and minute
   if ((token = line.Next()) == NULL)
