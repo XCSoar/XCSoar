@@ -50,7 +50,7 @@ const char *
 IGCWriter::GetHFFXARecord(void)
 {
   /*
-   * HFXA Record
+   * HFFXA Record
    * From FAI_Tech_Spec_Gnss.pdf
    * Fix Data Accuracy Category. When used in the header record, this is a general
    * indication of potential fix accuracy and indicates a category of receiver capability
