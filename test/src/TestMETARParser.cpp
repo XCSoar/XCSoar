@@ -29,44 +29,65 @@
 int
 main(int argc, char **argv)
 {
-  plan_tests(26);
+  plan_tests(37);
 
   METAR metar;
-  ParsedMETAR parsed;
 
-  metar.content = _T("EDDL 231050Z 31007MPS 9999 FEW020 SCT130 23/18 Q1015 NOSIG");
-  if (!ok1(METARParser::Parse(metar, parsed)))
-    return exit_status();
+  {
+    ParsedMETAR parsed;
+    metar.content = _T("EDDL 231050Z 31007MPS 9999 FEW020 SCT130 23/18 Q1015 NOSIG");
+    if (!ok1(METARParser::Parse(metar, parsed)))
+      return exit_status();
 
-  ok1(parsed.icao_code == _T("EDDL"));
-  ok1(parsed.day_of_month == 23);
-  ok1(parsed.hour == 10);
-  ok1(parsed.minute == 50);
-  ok1(parsed.qnh_available);
-  ok1(equals(parsed.qnh.get_QNH(), 1015));
-  ok1(parsed.wind_available);
-  ok1(equals(parsed.wind.norm, 7));
-  ok1(equals(parsed.wind.bearing, 310));
-  ok1(parsed.temperatures_available);
-  ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(23), unGradCelcius)));
-  ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(18), unGradCelcius)));
+    ok1(parsed.icao_code == _T("EDDL"));
+    ok1(parsed.day_of_month == 23);
+    ok1(parsed.hour == 10);
+    ok1(parsed.minute == 50);
+    ok1(parsed.qnh_available);
+    ok1(equals(parsed.qnh.get_QNH(), 1015));
+    ok1(parsed.wind_available);
+    ok1(equals(parsed.wind.norm, 7));
+    ok1(equals(parsed.wind.bearing, 310));
+    ok1(parsed.temperatures_available);
+    ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(23), unGradCelcius)));
+    ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(18), unGradCelcius)));
+  }
+  {
+    ParsedMETAR parsed;
+    metar.content = _T("METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=");
+    if (!ok1(METARParser::Parse(metar, parsed)))
+      return exit_status();
 
-  metar.content = _T("METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=");
-  if (!ok1(METARParser::Parse(metar, parsed)))
-    return exit_status();
+    ok1(parsed.icao_code == _T("KTTN"));
+    ok1(parsed.day_of_month == 5);
+    ok1(parsed.hour == 18);
+    ok1(parsed.minute == 53);
+    ok1(parsed.qnh_available);
+    ok1(equals(parsed.qnh.get_QNH(), Units::ToSysUnit(fixed(3006), unInchMercurial)));
+    ok1(parsed.wind_available);
+    ok1(equals(parsed.wind.norm, Units::ToSysUnit(fixed(11), unKnots)));
+    ok1(equals(parsed.wind.bearing, 40));
+    ok1(parsed.temperatures_available);
+    ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(-1.7), unGradCelcius)));
+    ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(-1.7), unGradCelcius)));
+  }
+  {
+    ParsedMETAR parsed;
+    metar.content = _T("METAR EDJA 231950Z VRB01KT CAVOK 21/17 Q1017=");
+    if (!ok1(METARParser::Parse(metar, parsed)))
+      return exit_status();
 
-  ok1(parsed.icao_code == _T("KTTN"));
-  ok1(parsed.day_of_month == 5);
-  ok1(parsed.hour == 18);
-  ok1(parsed.minute == 53);
-  ok1(parsed.qnh_available);
-  ok1(equals(parsed.qnh.get_QNH(), Units::ToSysUnit(fixed(3006), unInchMercurial)));
-  ok1(parsed.wind_available);
-  ok1(equals(parsed.wind.norm, Units::ToSysUnit(fixed(11), unKnots)));
-  ok1(equals(parsed.wind.bearing, 40));
-  ok1(parsed.temperatures_available);
-  ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(-1.7), unGradCelcius)));
-  ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(-1.7), unGradCelcius)));
+    ok1(parsed.icao_code == _T("EDJA"));
+    ok1(parsed.day_of_month == 23);
+    ok1(parsed.hour == 19);
+    ok1(parsed.minute == 50);
+    ok1(parsed.qnh_available);
+    ok1(equals(parsed.qnh.get_QNH(), 1017));
+    ok1(!parsed.wind_available);
+    ok1(parsed.temperatures_available);
+    ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(21), unGradCelcius)));
+    ok1(equals(parsed.dew_point, Units::ToSysUnit(fixed(17), unGradCelcius)));
+  }
 
   return exit_status();
 }

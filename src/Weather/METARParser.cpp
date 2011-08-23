@@ -115,19 +115,31 @@ DetectWindToken(const TCHAR *token)
 {
   unsigned length = _tcslen(token);
 
-  if (length == 8)
-    return _tcsicmp(token + 5, _T("MPS")) == 0;
+  if (length != 8 && length != 7)
+    return false;
 
-  if (length == 7)
-    return _tcsicmp(token + 5, _T("KT")) == 0;
+  if (_tcsicmp(token + 5, _T("MPS")) != 0 &&
+      _tcsicmp(token + 5, _T("KT")) != 0)
+    return false;
 
-  return false;
+  bool variable = (_tcsnicmp(token, _T("VRB"), 3) == 0);
+
+  for (unsigned i = variable ? 3 : 0; i < 5; ++i)
+    if (!_istdigit(token[i]))
+      return false;
+
+  return true;
 }
 
 static bool
 ParseWind(const TCHAR *token, ParsedMETAR &parsed)
 {
   assert(DetectWindToken(token));
+
+  // variable wind directions
+  if (_tcsnicmp(token, _T("VRB"), 3) == 0)
+    // parsing okay but don't provide wind
+    return true;
 
   TCHAR *endptr;
   unsigned wind_code = _tcstod(token, &endptr);
