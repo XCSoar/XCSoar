@@ -29,7 +29,7 @@
 int
 main(int argc, char **argv)
 {
-  plan_tests(8);
+  plan_tests(14);
 
   METAR metar;
   ParsedMETAR parsed;
@@ -39,6 +39,9 @@ main(int argc, char **argv)
     return exit_status();
 
   ok1(parsed.icao_code == _T("EDDL"));
+  ok1(parsed.day_of_month == 23);
+  ok1(parsed.hour == 10);
+  ok1(parsed.minute == 50);
   ok1(parsed.qnh_available);
   ok1(equals(parsed.qnh.get_QNH(), 1015));
 
@@ -47,6 +50,9 @@ main(int argc, char **argv)
     return exit_status();
 
   ok1(parsed.icao_code == _T("KTTN"));
+  ok1(parsed.day_of_month == 5);
+  ok1(parsed.hour == 18);
+  ok1(parsed.minute == 53);
   ok1(parsed.qnh_available);
   ok1(equals(parsed.qnh.get_QNH(), Units::ToSysUnit(fixed(3006), unInchMercurial)));
 
