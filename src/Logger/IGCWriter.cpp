@@ -160,28 +160,26 @@ IGCWriter::write_tstring(const char *a, const TCHAR *b)
   return writeln(buffer);
 }
 
-/*
- HFDTE141203  <- should be UTC, same as time in filename
- HFFXA100
- HFPLTPILOT:JOHN WHARINGTON
- HFGTYGLIDERTYPE:LS 3
- HFGIDGLIDERID:VH-WUE
- HFDTM100GPSDATUM:WGS84
- HFRFWFIRMWAREVERSION:3.6
- HFRHWHARDWAREVERSION:3.4
- HFFTYFR TYPE:GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0
- HFCIDCOMPETITIONID:WUE
- HFCCLCOMPETITIONCLASS:FAI
- HFCIDCOMPETITIONID:WUE
- HFCCLCOMPETITIONCLASS:15M
-*/
-
 void
 IGCWriter::header(const BrokenDateTime &DateTime,
                   const TCHAR *pilot_name, const TCHAR *aircraft_model,
                   const TCHAR *aircraft_registration,
                   const TCHAR *strAssetNumber, const TCHAR *driver_name)
 {
+  /*
+   * HFDTE141203  <- should be UTC, same as time in filename
+   * HFFXA100
+   * HFPLTPILOT:JOHN WHARINGTON
+   * HFGTYGLIDERTYPE:LS 3
+   * HFGIDGLIDERID:VH-WUE
+   * HFDTM100GPSDATUM:WGS84
+   * HFRFWFIRMWAREVERSION:3.6
+   * HFRHWHARDWAREVERSION:3.4
+   * HFFTYFR TYPE:GARRECHT INGENIEURGESELLSCHAFT,VOLKSLOGGER 1.0
+   * HFCIDCOMPETITIONID:WUE
+   * HFCCLCOMPETITIONCLASS:FAI
+   */
+
   assert(DateTime.Plausible());
 
   char datum[] = "HFDTM100Datum: WGS-84";
