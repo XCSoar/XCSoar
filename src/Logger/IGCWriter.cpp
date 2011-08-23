@@ -319,11 +319,12 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
     Simulator = true;
 
   if (!Simulator) {
-    const char *p = frecord.update(gps_info.gps.satellite_ids,
-                                   gps_info.date_time_utc, gps_info.time,
-                                   !gps_info.location_available);
-    if (p != NULL)
-      writeln(p);
+    const char *f_record_line = frecord.update(gps_info.gps.satellite_ids,
+                                               gps_info.date_time_utc,
+                                               gps_info.time,
+                                               !gps_info.location_available);
+    if (f_record_line != NULL)
+      writeln(f_record_line);
   }
 
   if (!LastValidPoint.Initialized &&
