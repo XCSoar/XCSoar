@@ -157,19 +157,12 @@ IGCWriter::GetEPE(const NMEAInfo& gps_info)
 int
 IGCWriter::GetSIU(const NMEAInfo& gps_info)
 {
-  int iSIU=0;
-
   switch (gps_info.gps.fix_quality) {
-
   case 1:
   case 2:
     if (gps_info.gps.satellites_used >= 0)
-      iSIU = gps_info.gps.satellites_used;
-    break;
-
-  default:
-    break;
+      return gps_info.gps.satellites_used;
   }
 
-  return iSIU;
+  return 0;
 }
