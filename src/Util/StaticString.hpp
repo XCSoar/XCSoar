@@ -157,7 +157,7 @@ public:
   }
 
   bool operator ==(const TCHAR *value) const {
-    return (_tcscmp(data, value) == 0);
+    return equals(value);
   }
 
   void operator =(const TCHAR *new_value) {
