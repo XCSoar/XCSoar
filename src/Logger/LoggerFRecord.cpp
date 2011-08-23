@@ -63,19 +63,18 @@ LoggerFRecord::update(const GPSState &gps,
                       bool NAVWarning)
 { 
   char szFRecord[sizeof(szLastFRecord)];
-  int eof=0;
   
   sprintf(szFRecord,"F%02u%02u%02u",
           broken_time.hour, broken_time.minute, broken_time.second);
-  eof=7;
+  unsigned length = 7;
 
   for (unsigned i = 0; i < GPSState::MAXSATELLITES; ++i) {
     if (gps.satellite_ids[i] > 0){
-      sprintf(szFRecord+eof, "%02d", gps.satellite_ids[i]);
-      eof +=2;
+      sprintf(szFRecord + length, "%02d", gps.satellite_ids[i]);
+      length += 2;
     }
   }
-  sprintf(szFRecord+ eof,"\r\n");
+  sprintf(szFRecord + length,"\r\n");
 
   DetectFRecordChange = DetectFRecordChange ||
     strcmp(szFRecord + 7, szLastFRecord + 7);
