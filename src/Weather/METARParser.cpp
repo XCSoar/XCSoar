@@ -24,6 +24,7 @@ Copyright_License {
 #include "METARParser.hpp"
 #include "METAR.hpp"
 #include "ParsedMETAR.hpp"
+#include "Units/Units.hpp"
 
 #include <tchar.h>
 
@@ -111,6 +112,10 @@ DetectQNHToken(const TCHAR *token)
   if (token[0] == _T('Q') || token[0] == _T('q'))
     return length <= 5 && length >= 4;
 
+  // American style
+  if (token[0] == _T('A') || token[0] == _T('a'))
+    return length == 5;
+
   return false;
 }
 
@@ -129,6 +134,20 @@ ParseQNH(const TCHAR *token, ParsedMETAR &parsed)
       return false;
 
     parsed.qnh.set_QNH(fixed(hpa));
+    parsed.qnh_available = true;
+    return true;
+  }
+
+  // American style (inHg)
+  if (token[0] == _T('A') || token[0] == _T('a')) {
+    token++;
+
+    TCHAR *endptr;
+    unsigned inch_hg = _tcstod(token, &endptr);
+    if (endptr == NULL || endptr == token)
+      return false;
+
+    parsed.qnh.set_QNH(Units::ToSysUnit(fixed(inch_hg), unInchMercurial));
     parsed.qnh_available = true;
     return true;
   }

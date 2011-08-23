@@ -23,12 +23,13 @@
 #include "Weather/METARParser.hpp"
 #include "Weather/METAR.hpp"
 #include "Weather/ParsedMETAR.hpp"
+#include "Units/Units.hpp"
 #include "TestUtil.hpp"
 
 int
 main(int argc, char **argv)
 {
-  plan_tests(7);
+  plan_tests(8);
 
   METAR metar;
   ParsedMETAR parsed;
@@ -46,7 +47,8 @@ main(int argc, char **argv)
     return exit_status();
 
   ok1(parsed.icao_code == _T("KTTN"));
-  ok1(!parsed.qnh_available);
+  ok1(parsed.qnh_available);
+  ok1(equals(parsed.qnh.get_QNH(), Units::ToSysUnit(fixed(3006), unInchMercurial)));
 
   return exit_status();
 }

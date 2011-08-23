@@ -85,6 +85,7 @@ $(TARGET_BIN_DIR)/TestOverwritingRingBuffer$(TARGET_EXEEXT): $(TEST_OVERWRITING_
 
 TEST_METAR_PARSER_SOURCES = \
 	$(SRC)/Weather/METARParser.cpp \
+	$(SRC)/Units/Units.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(ENGINE_SRC_DIR)/Atmosphere/Pressure.cpp \
 	$(TEST_SRC_DIR)/tap.c \
