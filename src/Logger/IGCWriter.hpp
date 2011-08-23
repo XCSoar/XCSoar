@@ -52,7 +52,7 @@ class IGCWriter {
 
   /**
    * If at least one GPS fix came from the simulator
-   * (NMEA_INFO.Simulator), the this flag is true, and signing is
+   * (NMEA_INFO.Simulator), then this flag is true, and signing is
    * disabled.
    */
   bool Simulator;
