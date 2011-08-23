@@ -66,7 +66,7 @@ main(int argc, char **argv)
     ok1(parsed.hour == 18);
     ok1(parsed.minute == 53);
     ok1(parsed.qnh_available);
-    ok1(equals(parsed.qnh.get_QNH(), Units::ToSysUnit(fixed(3006), unInchMercurial)));
+    ok1(equals(parsed.qnh.get_QNH(), Units::ToSysUnit(fixed(30.06), unInchMercurial)));
     ok1(parsed.wind_available);
     ok1(equals(parsed.wind.norm, Units::ToSysUnit(fixed(11), unKnots)));
     ok1(equals(parsed.wind.bearing, 40));

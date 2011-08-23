@@ -353,7 +353,7 @@ ParseQNH(const TCHAR *token, ParsedMETAR &parsed)
     if (endptr == NULL || endptr == token)
       return false;
 
-    parsed.qnh.set_QNH(Units::ToSysUnit(fixed(inch_hg), unInchMercurial));
+    parsed.qnh.set_QNH(Units::ToSysUnit(fixed(inch_hg) / 100, unInchMercurial));
     parsed.qnh_available = true;
     return true;
   }
