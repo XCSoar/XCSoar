@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef PARSED_METAR_HPP
 #define PARSED_METAR_HPP
 
+#include "Engine/Navigation/SpeedVector.hpp"
 #include "Engine/Atmosphere/Pressure.hpp"
 #include "Util/StaticString.hpp"
 
@@ -39,10 +40,14 @@ struct ParsedMETAR
   uint8_t hour, minute;
 
   bool qnh_available;
+  bool wind_available;
+
   AtmosphericPressure qnh;
+  SpeedVector wind;
 
   void Reset() {
     qnh_available = false;
+    wind_available = false;
   }
 };
 

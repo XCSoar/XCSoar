@@ -104,6 +104,45 @@ ParseTimeCode(const TCHAR *token, ParsedMETAR &parsed)
 }
 
 static bool
+DetectWindToken(const TCHAR *token)
+{
+  unsigned length = _tcslen(token);
+
+  if (length == 8)
+    return _tcsicmp(token + 5, _T("MPS")) == 0;
+
+  if (length == 7)
+    return _tcsicmp(token + 5, _T("KT")) == 0;
+
+  return false;
+}
+
+static bool
+ParseWind(const TCHAR *token, ParsedMETAR &parsed)
+{
+  assert(DetectWindToken(token));
+
+  TCHAR *endptr;
+  unsigned wind_code = _tcstod(token, &endptr);
+  if (endptr == NULL || endptr == token)
+    return false;
+
+  unsigned bearing = (int)(wind_code / 100);
+  wind_code -= bearing * 100;
+
+  if (_tcsicmp(endptr, _T("MPS")) == 0)
+    parsed.wind.norm = fixed(wind_code);
+  else if (_tcsicmp(endptr, _T("KT")) == 0)
+    parsed.wind.norm = Units::ToSysUnit(fixed(wind_code), unKnots);
+  else
+    return false;
+
+  parsed.wind.bearing = Angle::degrees(fixed(bearing));
+  parsed.wind_available = true;
+  return true;
+}
+
+static bool
 DetectQNHToken(const TCHAR *token)
 {
   unsigned length = _tcslen(token);
@@ -184,6 +223,16 @@ METARParser::Parse(const METAR &metar, ParsedMETAR &parsed)
     return false;
 
   ParseTimeCode(token, parsed);
+
+  // Parse Wind
+  while ((token = line.Next()) != NULL) {
+    if (DetectWindToken(token)) {
+      if (!ParseWind(token, parsed))
+        return false;
+
+      break;
+    }
+  }
 
   // Parse QNH
   while ((token = line.Next()) != NULL) {

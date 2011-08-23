@@ -29,12 +29,12 @@
 int
 main(int argc, char **argv)
 {
-  plan_tests(14);
+  plan_tests(20);
 
   METAR metar;
   ParsedMETAR parsed;
 
-  metar.content = _T("EDDL 231050Z 31007KT 9999 FEW020 SCT130 23/18 Q1015 NOSIG");
+  metar.content = _T("EDDL 231050Z 31007MPS 9999 FEW020 SCT130 23/18 Q1015 NOSIG");
   if (!ok1(METARParser::Parse(metar, parsed)))
     return exit_status();
 
@@ -44,6 +44,9 @@ main(int argc, char **argv)
   ok1(parsed.minute == 50);
   ok1(parsed.qnh_available);
   ok1(equals(parsed.qnh.get_QNH(), 1015));
+  ok1(parsed.wind_available);
+  ok1(equals(parsed.wind.norm, 7));
+  ok1(equals(parsed.wind.bearing, 310));
 
   metar.content = _T("METAR KTTN 051853Z 04011KT 1/2SM VCTS SN FZFG BKN003 OVC010 M02/M02 A3006 RMK AO2 TSB40 SLP176 P0002 T10171017=");
   if (!ok1(METARParser::Parse(metar, parsed)))
@@ -55,6 +58,9 @@ main(int argc, char **argv)
   ok1(parsed.minute == 53);
   ok1(parsed.qnh_available);
   ok1(equals(parsed.qnh.get_QNH(), Units::ToSysUnit(fixed(3006), unInchMercurial)));
+  ok1(parsed.wind_available);
+  ok1(equals(parsed.wind.norm, Units::ToSysUnit(fixed(11), unKnots)));
+  ok1(equals(parsed.wind.bearing, 40));
 
   return exit_status();
 }
