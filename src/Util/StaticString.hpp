@@ -168,6 +168,10 @@ public:
     return append(new_value);
   }
 
+  void operator +=(TCHAR ch) {
+    return Append(ch);
+  }
+
   /**
    * Don't use - not thread safe.
    */
