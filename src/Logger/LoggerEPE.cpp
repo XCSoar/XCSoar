@@ -141,10 +141,10 @@ IGCWriter::GetEPE(const NMEAInfo& gps_info)
 
   switch (gps_info.gps.fix_quality) {
   case 1:
-    return (int)gps_info.gps.hdop * fixed(18.2);
+    return gps_info.gps.hdop * fixed(18.2);
 
   case 2:
-    return (int)gps_info.gps.hdop * fixed_four;
+    return gps_info.gps.hdop * fixed_four;
 
   default:
     return fixed_zero;
