@@ -82,8 +82,7 @@ TaskPointTest::Run()
   ok1(equals(tp1.GetBaseElevation(), 1234));
   ok1(!tp1.HasTarget());
   ok1(equals(tp1.Distance(gp2), gp1.distance(gp2)));
-  ok1(equals(tp1.GetLocation().Latitude, gp1.Latitude));
-  ok1(equals(tp1.GetLocation().Longitude, gp1.Longitude));
+  ok1(equals(tp1.GetLocation(), gp1));
 
   ok1(tp2.IsIntermediatePoint());
   ok1(tp2.GetType() == TaskPoint::AAT);
@@ -100,7 +99,7 @@ TaskPointTest::Run()
 
 int main(int argc, char **argv)
 {
-  plan_tests(16);
+  plan_tests(15);
 
   TaskPointTest test;
   test.Run();
