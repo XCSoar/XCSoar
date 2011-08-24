@@ -137,7 +137,7 @@ RefreshView()
 
   SetFormControlEnabled(*wf, _T("butPrevious"), active_index > 0);
   SetFormControlEnabled(*wf, _T("butNext"),
-                        active_index < (ordered_task->task_size() - 1));
+                        active_index < (ordered_task->TaskSize() - 1));
 
   WndButton* wb;
   wb = (WndButton*)wf->FindByName(_T("cmdOptionalStarts"));
@@ -342,7 +342,7 @@ OnPreviousClicked(gcc_unused WndButton &Sender)
 static void
 OnNextClicked(gcc_unused WndButton &Sender)
 {
-  if (active_index < (ordered_task->task_size() - 1)) {
+  if (active_index < (ordered_task->TaskSize() - 1)) {
     next_previous=1;
     wf->SetModalResult(mrOK);
   }

@@ -106,7 +106,7 @@ OnOptionalStartListEnter(unsigned ItemIndex)
 
   if (index_optional_starts < ordered_task->optional_start_points_size()) {
     const Waypoint* way_point = dlgWaypointSelect(wf->GetMainWindow(),
-        ordered_task->task_size() > 0 ? ordered_task->get_tp(0)->GetLocation()
+        ordered_task->TaskSize() > 0 ? ordered_task->get_tp(0)->GetLocation()
             : XCSoarInterface::Basic().location);
     if (!way_point)
       return;
@@ -119,7 +119,7 @@ OnOptionalStartListEnter(unsigned ItemIndex)
     AbstractTaskFactory &factory = ordered_task->get_factory();
     const Waypoint* way_point =
         dlgWaypointSelect(wf->GetMainWindow(),
-                          ordered_task->task_size() > 0 ?
+                          ordered_task->TaskSize() > 0 ?
                           ordered_task->get_tp(0)->GetLocation() :
                           XCSoarInterface::Basic().location);
     if (!way_point)
@@ -176,7 +176,7 @@ dlgTaskOptionalStarts(SingleWindow &parent, OrderedTask** task)
   wOptionalStartPoints = (WndListFrame*)wf->FindByName(_T("frmOptionalStarts"));
   assert(wOptionalStartPoints != NULL);
 
-  RealStartExists = ordered_task->task_size();
+  RealStartExists = ordered_task->TaskSize();
 
   wOptionalStartPoints->SetActivateCallback(OnOptionalStartListEnter);
   wOptionalStartPoints->SetPaintItemCallback(OnOptionalStartPaintListItem);

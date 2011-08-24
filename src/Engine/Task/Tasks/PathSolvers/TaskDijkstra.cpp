@@ -32,7 +32,7 @@ TaskDijkstra::TaskDijkstra(OrderedTask& _task, bool is_min, const bool do_reserv
 bool
 TaskDijkstra::refresh_task()
 {
-  set_stages(task.task_size());
+  set_stages(task.TaskSize());
   if (num_stages < 2)
     return false;
 

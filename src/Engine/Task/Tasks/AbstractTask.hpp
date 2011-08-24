@@ -80,7 +80,7 @@ public:
    * @param tb Global task behaviour settings
    * @param gp Global glide polar used for navigation calculations
    */
-  AbstractTask(enum type _type, TaskEvents &te,
+  AbstractTask(enum Type _type, TaskEvents &te,
                const TaskBehaviour &tb,
                const GlidePolar &gp);
 
@@ -108,7 +108,7 @@ public:
    * @return Task statistics reference
    */
   gcc_pure
-  virtual const TaskStats& get_stats() const {
+  virtual const TaskStats& GetStats() const {
     return stats;
   }
 
@@ -148,7 +148,7 @@ public:
    *
    * @return True if internal state changed
    */
-  bool update(const AircraftState &state_now, const AircraftState &state_last);
+  bool Update(const AircraftState &state_now, const AircraftState &state_last);
     
   /**
    * Update internal states (non-essential) for housework, or where functions
@@ -158,7 +158,7 @@ public:
    *
    * @return True if internal state changed
    */
-  virtual bool update_idle(const AircraftState& state_now);
+  virtual bool UpdateIdle(const AircraftState& state_now);
 
   /** 
    * Update auto MC.  Internally uses TaskBehaviour to determine settings

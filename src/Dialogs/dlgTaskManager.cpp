@@ -138,7 +138,7 @@ dlgTaskManager::CommitTaskChanges()
 
   task_modified |= active_task->get_factory().CheckAddFinish();
 
-  if (!active_task->task_size() || active_task->check_task()) {
+  if (!active_task->TaskSize() || active_task->check_task()) {
 
     { // this must be done in thread lock because it potentially changes the
       // waypoints database

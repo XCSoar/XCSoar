@@ -300,7 +300,7 @@ pnlTaskList::OnBrowseClicked(gcc_unused WndButton &Sender)
 void
 pnlTaskList::OnNewTaskClicked(gcc_unused WndButton &Sender)
 {
-  if (((*active_task)->task_size() < 2) ||
+  if (((*active_task)->TaskSize() < 2) ||
       (MessageBoxX(_("Create new task?"), _("Task New"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     (*active_task)->clear();

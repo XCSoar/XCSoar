@@ -300,7 +300,7 @@ OrderedTask::check_transitions(const AircraftState &state,
         
         if (i + 1 < n_task) {
           i++;
-          setActiveTaskPoint(i);
+          SetActiveTaskPoint(i);
           taskpoint_start->scan_active(task_points[activeTaskPoint]);
           
           task_events.active_advanced(*task_points[i], i);
@@ -400,9 +400,9 @@ OrderedTask::check_transition_point(OrderedTaskPoint& point,
 // ADDITIONAL FUNCTIONS
 
 bool 
-OrderedTask::update_idle(const AircraftState& state)
+OrderedTask::UpdateIdle(const AircraftState& state)
 {
-  bool retval = AbstractTask::update_idle(state);
+  bool retval = AbstractTask::UpdateIdle(state);
 
   if (has_start()
       && (task_behaviour.optimise_targets_range)
@@ -671,7 +671,7 @@ OrderedTask::replace_optional_start(const OrderedTaskPoint &new_tp,
 
 
 void 
-OrderedTask::setActiveTaskPoint(unsigned index)
+OrderedTask::SetActiveTaskPoint(unsigned index)
 {
   if (index < task_points.size()) {
     if (activeTaskPoint != index)
@@ -684,7 +684,7 @@ OrderedTask::setActiveTaskPoint(unsigned index)
 }
 
 TaskWaypoint*
-OrderedTask::getActiveTaskPoint() const
+OrderedTask::GetActiveTaskPoint() const
 {
   if (activeTaskPoint < task_points.size())
     return task_points[activeTaskPoint];
@@ -693,7 +693,7 @@ OrderedTask::getActiveTaskPoint() const
 }
 
 bool 
-OrderedTask::validTaskPoint(const int index_offset) const
+OrderedTask::IsValidTaskPoint(const int index_offset) const
 {
   unsigned index = activeTaskPoint + index_offset;
   return (index < task_points.size());
@@ -928,7 +928,7 @@ OrderedTask::reset()
   stats.task_finished = false;
   stats.task_started = false;
   task_advance.reset();
-  setActiveTaskPoint(0);
+  SetActiveTaskPoint(0);
 }
 
 const OrderedTaskPoint* 
@@ -1005,7 +1005,7 @@ OrderedTask::set_tp_search_max(unsigned tp, const SearchPoint &sol)
 }
 
 unsigned 
-OrderedTask::task_size() const 
+OrderedTask::TaskSize() const 
 {
   return task_points.size();
 }
@@ -1150,14 +1150,14 @@ OrderedTask::commit(const OrderedTask& that)
   m_ordered_behaviour = that.m_ordered_behaviour;
 
   // remove if that task is smaller than this one
-  while (task_size() > that.task_size()) {
-    remove(task_size() - 1);
+  while (TaskSize() > that.TaskSize()) {
+    remove(TaskSize() - 1);
     modified = true;
   }
 
   // ensure each task point made identical
-  for (unsigned i = 0; i < that.task_size(); ++i) {
-    if (i >= task_size()) {
+  for (unsigned i = 0; i < that.TaskSize(); ++i) {
+    if (i >= TaskSize()) {
       // that task is larger than this
       append(*that.task_points[i]);
       modified = true;
@@ -1212,7 +1212,7 @@ OrderedTask::relocate_optional_start(const unsigned position, const Waypoint& wa
 bool
 OrderedTask::relocate(const unsigned position, const Waypoint& waypoint) 
 {
-  if (position >= task_size())
+  if (position >= TaskSize())
     return false;
 
   OrderedTaskPoint *new_tp = task_points[position]->clone(task_behaviour,
@@ -1311,7 +1311,7 @@ OrderedTask::clear()
 OrderedTaskPoint* 
 OrderedTask::get_tp(const unsigned position)
 {
-  if (position >= task_size())
+  if (position >= TaskSize())
     return NULL;
 
   return task_points[position];
@@ -1320,7 +1320,7 @@ OrderedTask::get_tp(const unsigned position)
 FlatBoundingBox 
 OrderedTask::get_bounding_box(const GeoBounds& bounds) const
 {
-  if (!task_size()) {
+  if (!TaskSize()) {
     // undefined!
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
   }
@@ -1339,7 +1339,7 @@ OrderedTask::get_bounding_box(const GeoBounds& bounds) const
 FlatBoundingBox 
 OrderedTask::get_bounding_box(const GeoPoint& point) const
 {
-  if (!task_size()) {
+  if (!TaskSize()) {
     // undefined!
     return FlatBoundingBox(FlatGeoPoint(0,0),FlatGeoPoint(0,0));
   }
@@ -1349,7 +1349,7 @@ OrderedTask::get_bounding_box(const GeoPoint& point) const
 void 
 OrderedTask::rotateOptionalStarts()
 {
-  if (!task_size())
+  if (!TaskSize())
     return;
   if (!optional_start_points.size()) 
     return;

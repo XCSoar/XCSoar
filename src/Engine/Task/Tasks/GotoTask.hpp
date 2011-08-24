@@ -63,21 +63,21 @@ public:
  * 
  * @return Number of taskpoints in task
  */
-  unsigned task_size() const;
+  unsigned TaskSize() const;
 
 /** 
  * Retrieves the active task point sequence.
  * 
  * @return Index of active task point sequence
  */
-  TaskWaypoint* getActiveTaskPoint() const;
+  TaskWaypoint* GetActiveTaskPoint() const;
 
 /** 
  * Set active task point index
  * 
  * @param index Desired active index of task sequence
  */
-  void setActiveTaskPoint(unsigned index);
+  void SetActiveTaskPoint(unsigned index);
 
 /**
  * Determine whether active task point optionally shifted points to
@@ -85,7 +85,7 @@ public:
  *
  * @param index_offset offset (default 0)
  */
-  bool validTaskPoint(const int index_offset=0) const;
+  bool IsValidTaskPoint(const int index_offset=0) const;
 
 /** 
  * Sets go to task point to specified waypoint. 

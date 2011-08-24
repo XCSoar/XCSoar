@@ -202,11 +202,11 @@ replace_in_task(OrderedTask *task, const Waypoint &wp)
     way_points.optimise();
   }
 
-  if (task->task_size()==0)
+  if (task->TaskSize()==0)
     return NOTASK;
 
   unsigned i = task->getActiveIndex();
-  if (i >= task->task_size())
+  if (i >= task->TaskSize())
     return UNMODIFIED;
 
   task->relocate(i, wp);
@@ -287,13 +287,13 @@ OnNewHomeClicked(gcc_unused WndButton &button)
 static task_edit_result
 insert_in_task(OrderedTask *task, const Waypoint &wp)
 {
-  if (task->task_size()==0)
+  if (task->TaskSize()==0)
     return NOTASK;
 
   int i = task->getActiveIndex();
   /* skip all start points */
   while (true) {
-    if (i >= (int)task->task_size())
+    if (i >= (int)task->TaskSize())
       return UNMODIFIED;
 
     const TaskPoint *tp = task->get_tp(i);
@@ -366,10 +366,10 @@ OnInsertInTaskClicked(gcc_unused WndButton &button)
 static task_edit_result
 append_to_task(OrderedTask *task, const Waypoint &wp)
 {
-  if (task->task_size()==0)
+  if (task->TaskSize()==0)
     return NOTASK;
 
-  int i = task->task_size() - 1;
+  int i = task->TaskSize() - 1;
   /* skip all finish points */
   while (i >= 0) {
     const OrderedTaskPoint *tp = task->get_tp(i);
@@ -446,7 +446,7 @@ ordered_task_size()
   ProtectedTaskManager::Lease task_manager(*protected_task_manager);
   const OrderedTask &ot = task_manager->get_ordered_task();
   if (ot.check_task())
-    return ot.task_size();
+    return ot.TaskSize();
 
   return 0;
 }
@@ -502,7 +502,7 @@ OnAppendInTaskClicked(gcc_unused WndButton &button)
 static task_edit_result
 remove_from_task(OrderedTask *task, const Waypoint &wp)
 {
-  if (task->task_size()==0)
+  if (task->TaskSize()==0)
     return NOTASK;
 
   { // this must be done in thread lock because it potentially changes the
@@ -513,7 +513,7 @@ remove_from_task(OrderedTask *task, const Waypoint &wp)
   }
 
   bool modified = false;
-  for (unsigned i = task->task_size(); i--;) {
+  for (unsigned i = task->TaskSize(); i--;) {
     const OrderedTaskPoint *tp = task->get_tp(i);
     assert(tp != NULL);
 

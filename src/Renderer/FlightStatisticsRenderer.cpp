@@ -95,7 +95,7 @@ static void DrawLegs(Chart& chart,
     : calculated.flight.takeoff_time;
 
   const OrderedTask &task = task_manager.get_ordered_task();
-  for (unsigned i = 0, n = task.task_size(); i < n; ++i) {
+  for (unsigned i = 0, n = task.TaskSize(); i < n; ++i) {
     const OrderedTaskPoint &tp = *task.getTaskPoint(i);
     if (!IsTaskLegVisible(tp))
       continue;

@@ -146,7 +146,7 @@ AbstractTaskFactory::createStart(const Waypoint &wp) const
 IntermediateTaskPoint* 
 AbstractTaskFactory::createIntermediate(const Waypoint &wp) const
 {
-  if (get_ordered_task_behaviour().homogeneous_tps && m_task.task_size() > 1) {
+  if (get_ordered_task_behaviour().homogeneous_tps && m_task.TaskSize() > 1) {
     LegalPointType_t type = getType(*m_task.get_tp(1));
     if (validIntermediateType(type))
       return createIntermediate(type, wp);
@@ -382,9 +382,9 @@ AbstractTaskFactory::append(const OrderedTaskPoint &new_tp,
     return false;
 
   if (auto_mutate) {
-    if (!m_task.task_size()) {
+    if (!m_task.TaskSize()) {
       // empty task, so add as a start point
-      if (validType(new_tp, m_task.task_size())) {
+      if (validType(new_tp, m_task.TaskSize())) {
         // candidate is ok, so add it
         return m_task.append(new_tp);
       } else {
@@ -401,13 +401,13 @@ AbstractTaskFactory::append(const OrderedTaskPoint &new_tp,
     if (m_task.has_finish()) {
       // old finish must be mutated into an intermediate point
       IntermediateTaskPoint* sp = createIntermediate(m_task.getTaskPoint(
-          m_task.task_size() - 1)->get_waypoint());
+          m_task.TaskSize() - 1)->get_waypoint());
 
-      m_task.replace(*sp, m_task.task_size()-1);
+      m_task.replace(*sp, m_task.TaskSize()-1);
       delete sp;
     }
 
-    if (validType(new_tp, m_task.task_size()))
+    if (validType(new_tp, m_task.TaskSize()))
       // ok to append directly
       return m_task.append(new_tp);
 
@@ -437,7 +437,7 @@ AbstractTaskFactory::replace(const OrderedTaskPoint &new_tp,
       // candidate must be transformed into a startpoint
       tp = createStart(new_tp.get_waypoint());
     } else if (is_position_finish(position) &&
-               position + 1 == m_task.task_size()) {
+               position + 1 == m_task.TaskSize()) {
       // this point must be mutated into a finish
       tp = createFinish(new_tp.get_waypoint());
     } else {
@@ -458,7 +458,7 @@ AbstractTaskFactory::insert(const OrderedTaskPoint &new_tp,
                             const unsigned position,
                             const bool auto_mutate)
 {
-  if (position >= m_task.task_size())
+  if (position >= m_task.TaskSize())
     return append(new_tp, auto_mutate);
 
   if (auto_mutate) {
@@ -501,13 +501,13 @@ bool
 AbstractTaskFactory::remove(const unsigned position, 
                             const bool auto_mutate)
 {
-  if (position >= m_task.task_size())
+  if (position >= m_task.TaskSize())
     return false;
 
   if (auto_mutate) {
     if (position == 0) {
       // special case, remove start point..
-      if (m_task.task_size() == 1) {
+      if (m_task.TaskSize() == 1) {
         return m_task.remove(0);
       } else {
         // create new start point from next point
@@ -516,7 +516,7 @@ AbstractTaskFactory::remove(const unsigned position,
         delete sp;
         return success;
       }
-    } else if (is_position_finish(position - 1) && (position + 1 == m_task.task_size())) {
+    } else if (is_position_finish(position - 1) && (position + 1 == m_task.TaskSize())) {
       // create new finish from previous point
       FinishPoint* sp = createFinish(
           m_task.getTaskPoint(position - 1)->get_waypoint());
@@ -545,9 +545,9 @@ AbstractTaskFactory::has_entered(unsigned position) const
 bool 
 AbstractTaskFactory::swap(const unsigned position, const bool auto_mutate)
 {
-  if (m_task.task_size() <= 1)
+  if (m_task.TaskSize() <= 1)
     return false;
-  if (position >= m_task.task_size() - 1)
+  if (position >= m_task.TaskSize() - 1)
     return false;
 
   const OrderedTaskPoint* orig = m_task.getTaskPoint(position+1);
@@ -588,10 +588,10 @@ AbstractTaskFactory::is_position_intermediate(const unsigned position) const
 
   if (get_ordered_task_behaviour().is_fixed_size())
     return (position + 1 < get_ordered_task_behaviour().max_points);
-  else if (m_task.task_size() < get_ordered_task_behaviour().min_points)
+  else if (m_task.TaskSize() < get_ordered_task_behaviour().min_points)
     return true;
   else
-    return (position <= m_task.task_size());
+    return (position <= m_task.TaskSize());
 }
 
 bool 
@@ -608,7 +608,7 @@ AbstractTaskFactory::is_position_finish(const unsigned position) const
   if (get_ordered_task_behaviour().is_fixed_size())
     return (position + 1 == get_ordered_task_behaviour().max_points);
   else
-    return (position + 1 >= m_task.task_size());
+    return (position + 1 >= m_task.TaskSize());
 }
 
 bool
@@ -731,15 +731,15 @@ AbstractTaskFactory::getValidationErrors()
 bool
 AbstractTaskFactory::CheckAddFinish()
 {
- if (m_task.task_size() < 2)
+ if (m_task.TaskSize() < 2)
    return false;
 
  if (m_task.has_finish())
    return false;
 
- FinishPoint *fp = createFinish(m_task.get_tp(m_task.task_size() - 1)->get_waypoint());
+ FinishPoint *fp = createFinish(m_task.get_tp(m_task.TaskSize() - 1)->get_waypoint());
  assert(fp);
- remove(m_task.task_size() - 1, false);
+ remove(m_task.TaskSize() - 1, false);
  append(*fp, false);
  delete fp;
 
@@ -752,7 +752,7 @@ AbstractTaskFactory::validateFAIOZs()
   clearValidationErrors();
   bool valid = true;
 
-  for (unsigned i = 0; i < m_task.task_size() && valid; i++) {
+  for (unsigned i = 0; i < m_task.TaskSize() && valid; i++) {
     const OrderedTaskPoint *tp = m_task.get_tp(i);
     const fixed ozsize = GetOZSize(tp->get_oz());
 
@@ -833,16 +833,16 @@ AbstractTaskFactory::validate()
   }
 
   if (get_ordered_task_behaviour().is_fixed_size()) {
-    if (m_task.task_size() != get_ordered_task_behaviour().max_points) {
+    if (m_task.TaskSize() != get_ordered_task_behaviour().max_points) {
       addValidationError(INCORRECT_NUMBER_TURNPOINTS);
       valid = false;
     }
   } else {
-    if (m_task.task_size() < get_ordered_task_behaviour().min_points) {
+    if (m_task.TaskSize() < get_ordered_task_behaviour().min_points) {
       addValidationError(UNDER_MIN_TURNPOINTS);
       valid = false;
     }
-    if (m_task.task_size() > get_ordered_task_behaviour().max_points) {
+    if (m_task.TaskSize() > get_ordered_task_behaviour().max_points) {
       addValidationError(EXCEEDS_MAX_TURNPOINTS);
       valid = false;
     }
@@ -865,7 +865,7 @@ AbstractTaskFactory::getValidIntermediateTypes(unsigned position) const
     return v;
 
   if (get_ordered_task_behaviour().homogeneous_tps &&
-      position > 1 && m_task.task_size() > 1) {
+      position > 1 && m_task.TaskSize() > 1) {
     LegalPointType_t type = getType(*m_task.get_tp(1));
     if (validIntermediateType(type)) {
       v.push_back(type);
@@ -907,12 +907,12 @@ AbstractTaskFactory::getValidFinishTypes() const
 bool 
 AbstractTaskFactory::is_closed() const
 {
-  if (m_task.task_size() < 3)
+  if (m_task.TaskSize() < 3)
     return false;
 
   const Waypoint& wp_start = m_task.get_tp(0)->get_waypoint();
   const Waypoint& wp_finish =
-      m_task.get_tp(m_task.task_size() - 1)->get_waypoint();
+      m_task.get_tp(m_task.TaskSize() - 1)->get_waypoint();
 
   return (wp_start.location == wp_finish.location);
 }
@@ -920,7 +920,7 @@ AbstractTaskFactory::is_closed() const
 bool 
 AbstractTaskFactory::is_unique() const
 {
-  const unsigned size = m_task.task_size();
+  const unsigned size = m_task.TaskSize();
   for (unsigned i = 0; i + 1 < size; i++) {
     const Waypoint& wp_0 = m_task.get_tp(i)->get_waypoint();
 
@@ -942,7 +942,7 @@ AbstractTaskFactory::is_homogeneous() const
 {
   bool valid = true;
 
-  const unsigned size = m_task.task_size();
+  const unsigned size = m_task.TaskSize();
 
   if (size > 2) {
     LegalPointType_t homogtype = getType(*m_task.get_tp(1));
@@ -968,7 +968,7 @@ AbstractTaskFactory::remove_excess_tps_per_task_type()
 {
   bool changed = false;
   unsigned maxtp = get_ordered_task_behaviour().max_points;
-  while (maxtp < m_task.task_size()) {
+  while (maxtp < m_task.TaskSize()) {
     remove(maxtp, false);
     changed = true;
   }
@@ -980,7 +980,7 @@ AbstractTaskFactory::mutate_tps_to_task_type()
 {
   bool changed = remove_excess_tps_per_task_type();
 
-  for (unsigned int i = 0; i < m_task.task_size(); i++) {
+  for (unsigned int i = 0; i < m_task.TaskSize(); i++) {
     OrderedTaskPoint *tp = m_task.get_tp(i);
     if (!validType(*tp, i) ||
         (m_task.get_factory_type() == TaskBehaviour::FACTORY_FAI_GENERAL)) {
@@ -1035,22 +1035,22 @@ AbstractTaskFactory::mutate_tps_to_task_type()
 bool
 AbstractTaskFactory::mutate_closed_finish_per_task_type()
 {
-  if (m_task.task_size() < 2)
+  if (m_task.TaskSize() < 2)
     return false;
 
-  if (!is_position_finish(m_task.task_size() - 1))
+  if (!is_position_finish(m_task.TaskSize() - 1))
     return false;
 
   bool changed = false;
 
   if (get_ordered_task_behaviour().is_closed) {
     if (!is_closed()) {
-      OrderedTaskPoint *tp = m_task.get_tp(m_task.task_size() - 1);
+      OrderedTaskPoint *tp = m_task.get_tp(m_task.TaskSize() - 1);
       assert(tp);
       if (tp->GetType() == TaskPoint::FINISH) {
         FinishPoint *fp = createFinish(m_task.get_tp(0)->get_waypoint());
         assert(fp);
-        remove(m_task.task_size() - 1, false);
+        remove(m_task.TaskSize() - 1, false);
         append(*fp, false);
         delete fp;
         changed = true;
@@ -1064,7 +1064,7 @@ bool
 AbstractTaskFactory::append_optional_start(const Waypoint& wp)
 {
   OrderedTaskPoint* tp = NULL;
-  if (m_task.task_size())
+  if (m_task.TaskSize())
     tp = m_task.get_tp(0)->clone(m_behaviour, m_task.get_ordered_task_behaviour(), &wp);
   else
     tp = createStart(wp);
@@ -1129,7 +1129,7 @@ AbstractTaskFactory::TestFAITriangle()
   if (!is_unique())
     return false;
 
-  if (m_task.task_size() != 4)
+  if (m_task.TaskSize() != 4)
     return false;
 
   const fixed d1 = m_task.getTaskPoint(1)->GetVectorPlanned().Distance;

@@ -102,7 +102,7 @@ static bool
 TaskSummaryShape(OrderedTask* task, TCHAR* text)
 {
   bool FAIShape = false;
-  switch (task->task_size()) {
+  switch (task->TaskSize()) {
   case 0:
     text[0] = '\0';
     break;
@@ -138,7 +138,7 @@ TaskSummaryShape(OrderedTask* task, TCHAR* text)
     break;
 
   default:
-    _stprintf(text, _("%d legs"), task->task_size() - 1);
+    _stprintf(text, _("%d legs"), task->TaskSize() - 1);
     break;
   }
   return FAIShape;
@@ -146,7 +146,7 @@ TaskSummaryShape(OrderedTask* task, TCHAR* text)
 void
 OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
 {
-  const TaskStats &stats = task->get_stats();
+  const TaskStats &stats = task->GetStats();
   TCHAR summary_shape[100];
   bool FAIShape = TaskSummaryShape(task, summary_shape);
   if (FAIShape || task->get_factory_type() == TaskBehaviour::FACTORY_FAI_GENERAL) {
@@ -168,7 +168,7 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
     linebreak[2] = 0;
   }
 
-  if (!task->task_size()) {
+  if (!task->TaskSize()) {
     _stprintf(text, _("Task is empty (%s)"),
              OrderedTaskFactoryName(task->get_factory_type()));
   } else {

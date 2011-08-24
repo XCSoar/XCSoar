@@ -133,12 +133,12 @@ void task_report(TaskManager& task_manager, const char* text)
       TaskPointVisitorPrint tpv;
       task->tp_CAccept(tpv);
       printf("# - dist nominal %g\n",
-             (double)task->get_stats().distance_nominal);
+             (double)task->GetStats().distance_nominal);
 
       if (task->type == TaskInterface::ORDERED &&
-          task->get_stats().distance_max > task->get_stats().distance_min) {
-        printf("# - dist max %g\n", (double)task->get_stats().distance_max);
-        printf("# - dist min %g\n", (double)task->get_stats().distance_min);
+          task->GetStats().distance_max > task->GetStats().distance_min) {
+        printf("# - dist max %g\n", (double)task->GetStats().distance_max);
+        printf("# - dist min %g\n", (double)task->GetStats().distance_min);
       }
     }
 

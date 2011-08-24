@@ -140,40 +140,40 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   } else if (task_manager->is_mode(TaskManager::MODE_ABORT)) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
-      if (!task->validTaskPoint(1))
+      if (!task->IsValidTaskPoint(1))
         invalid = true;
 
-      CondReplaceInString(task->validTaskPoint(1) && !task->validTaskPoint(2),
+      CondReplaceInString(task->IsValidTaskPoint(1) && !task->IsValidTaskPoint(2),
                           OutBuffer,
                           _T("$(WaypointNext)"),
                           _("Furthest Landpoint"),
                           _("Next Landpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
-      if (!task->validTaskPoint(-1))
+      if (!task->IsValidTaskPoint(-1))
         invalid = true;
 
-      CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
+      CondReplaceInString(task->IsValidTaskPoint(-1) && !task->IsValidTaskPoint(-2),
                           OutBuffer,
                           _T("$(WaypointPrevious)"),
                           _("Closest Landpoint"),
                           _("Previous Landpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
-      if (!task->validTaskPoint(1))
+      if (!task->IsValidTaskPoint(1))
         invalid = true;
 
-      CondReplaceInString(task->validTaskPoint(1) && !task->validTaskPoint(2),
+      CondReplaceInString(task->IsValidTaskPoint(1) && !task->IsValidTaskPoint(2),
                           OutBuffer,
                           _T("$(WaypointNextArm)"),
                           _("Furthest Landpoint"),
                           _("Next Landpoint"), Size);
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
-      if (!task->validTaskPoint(-1))
+      if (!task->IsValidTaskPoint(-1))
         invalid = true;
 
-      CondReplaceInString(task->validTaskPoint(-1) && !task->validTaskPoint(-2),
+      CondReplaceInString(task->IsValidTaskPoint(-1) && !task->IsValidTaskPoint(-2),
                           OutBuffer,
                           _T("$(WaypointPreviousArm)"),
                           _("Closest Landpoint"),
@@ -182,13 +182,13 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
   } else { // ordered task mode
 
-    const bool next_is_final = task->validTaskPoint(1) && !task->validTaskPoint(2);
-    const bool previous_is_start = task->validTaskPoint(-1) && !task->validTaskPoint(-2);
+    const bool next_is_final = task->IsValidTaskPoint(1) && !task->IsValidTaskPoint(2);
+    const bool previous_is_start = task->IsValidTaskPoint(-1) && !task->IsValidTaskPoint(-2);
     const bool has_optional_starts = calculated.common_stats.ordered_has_optional_starts;
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       // Waypoint\nNext
-      if (!task->validTaskPoint(1))
+      if (!task->IsValidTaskPoint(1))
         invalid = true;
 
       CondReplaceInString(next_is_final,
@@ -199,7 +199,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPrevious)"))) {
 
-      if (has_optional_starts && !task->validTaskPoint(-1)) {
+      if (has_optional_starts && !task->IsValidTaskPoint(-1)) {
         ReplaceInString(OutBuffer, _T("$(WaypointPrevious)"), _("Next Startpoint"), Size);
       } else {
 
@@ -209,7 +209,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                             _("Start Turnpoint"),
                             _("Previous Turnpoint"), Size);
 
-        if (!task->validTaskPoint(-1))
+        if (!task->IsValidTaskPoint(-1))
           invalid = true;
       }
 
@@ -226,7 +226,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                             _T("$(WaypointNextArm)"),
                             _("Finish Turnpoint"),
                             _("Next Turnpoint"), Size);
-        if (!task->validTaskPoint(1))
+        if (!task->IsValidTaskPoint(1))
           invalid = true;
         break;
       case TaskAdvance::START_DISARMED:
@@ -245,7 +245,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
       case TaskAdvance::START_DISARMED:
       case TaskAdvance::TURN_DISARMED:
 
-        if (has_optional_starts && !task->validTaskPoint(-1)) {
+        if (has_optional_starts && !task->IsValidTaskPoint(-1)) {
           ReplaceInString(OutBuffer, _T("$(WaypointPreviousArm)"), _("Next Startpoint"), Size);
         } else {
 
@@ -255,7 +255,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
                               _("Start Turnpoint"),
                               _("Previous Turnpoint"), Size);
 
-          if (!task->validTaskPoint(-1))
+          if (!task->IsValidTaskPoint(-1))
             invalid = true;
         }
 

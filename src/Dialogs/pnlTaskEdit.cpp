@@ -60,17 +60,17 @@ UpdateButtons()
   // Todo check if point is already finish
   ShowFormControl(*wf, _T("cmdMakeFinish"),
                   index > 0 &&
-                  (index == ordered_task->task_size() - 1) &&
+                  (index == ordered_task->TaskSize() - 1) &&
                   !ordered_task->has_finish());
 
   ShowFormControl(*wf, _T("cmdDown"),
-                  (int)index < ((int)(ordered_task->task_size()) - 1));
+                  (int)index < ((int)(ordered_task->TaskSize()) - 1));
 
   ShowFormControl(*wf, _T("cmdUp"),
-                  index > 0 && index < ordered_task->task_size());
+                  index > 0 && index < ordered_task->TaskSize());
 
   ShowFormControl(*wf, _T("cmdEditTurnpoint"),
-                  index < ordered_task->task_size());
+                  index < ordered_task->TaskSize());
 }
 
 void
@@ -79,9 +79,9 @@ pnlTaskEdit::RefreshView()
   UpdateButtons();
 
   if (!ordered_task->is_max_size())
-    wTaskPoints->SetLength(ordered_task->task_size()+1);
+    wTaskPoints->SetLength(ordered_task->TaskSize()+1);
   else
-    wTaskPoints->SetLength(ordered_task->task_size());
+    wTaskPoints->SetLength(ordered_task->TaskSize());
 
   wTaskView->invalidate();
   wTaskPoints->invalidate();
@@ -96,10 +96,10 @@ pnlTaskEdit::RefreshView()
 void
 pnlTaskEdit::OnClearAllClicked(gcc_unused WndButton &Sender)
 {
-  if ((ordered_task->task_size() < 2) ||
+  if ((ordered_task->TaskSize() < 2) ||
       (MessageBoxX(_("Clear all points?"), _("Task edit"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
-    while (ordered_task->task_size())
+    while (ordered_task->TaskSize())
       ordered_task->remove(0);
 
     *task_modified = true;
@@ -111,7 +111,7 @@ void
 pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                                  unsigned DrawListIndex)
 {
-  assert(DrawListIndex <= ordered_task->task_size());
+  assert(DrawListIndex <= ordered_task->TaskSize());
 
   const unsigned line_height = rc.bottom - rc.top;
 
@@ -121,7 +121,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   const Font &small_font = Fonts::MapLabel;
 
   // Draw "Add turnpoint" label
-  if (DrawListIndex == ordered_task->task_size()) {
+  if (DrawListIndex == ordered_task->TaskSize()) {
     canvas.select(name_font);
     _stprintf(buffer, _T("  (%s)"), _("Add Turnpoint"));
     canvas.text(rc.left + line_height + Layout::FastScale(2),
@@ -189,7 +189,7 @@ pnlTaskEdit::OnEditTurnpointClicked(gcc_unused WndButton &Sender)
 void
 pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
 {
-  if (ItemIndex < ordered_task->task_size()) {
+  if (ItemIndex < ordered_task->TaskSize()) {
     if (dlgTaskPointShowModal(wf->GetMainWindow(), &ordered_task, ItemIndex)) {
       *task_modified = true;
       RefreshView();
@@ -200,9 +200,9 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
     AbstractTaskFactory &factory = ordered_task->get_factory();
     const Waypoint* way_point =
       dlgWaypointSelect(wf->GetMainWindow(),
-                        ordered_task->task_size() > 0 ?
+                        ordered_task->TaskSize() > 0 ?
                           ordered_task->get_tp(ordered_task->
-                              task_size() - 1)->GetLocation() :
+                              TaskSize() - 1)->GetLocation() :
                           XCSoarInterface::Basic().location,
                         ordered_task, ItemIndex);
     if (!way_point)
@@ -268,7 +268,7 @@ MoveDown()
     return;
 
   unsigned index = wTaskPoints->GetCursorIndex();
-  if (index >= ordered_task->task_size())
+  if (index >= ordered_task->TaskSize())
     return;
 
   if (!ordered_task->get_factory().swap(index, true))

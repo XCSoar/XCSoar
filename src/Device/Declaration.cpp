@@ -66,6 +66,6 @@ Declaration::TurnPoint::TurnPoint(const OrderedTaskPoint &tp)
 Declaration::Declaration(const OrderedTask* task)
 {
   if (task)
-    for (unsigned i = 0; i < task->task_size(); i++)
+    for (unsigned i = 0; i < task->TaskSize(); i++)
       turnpoints.push_back(*task->getTaskPoint(i));
 }

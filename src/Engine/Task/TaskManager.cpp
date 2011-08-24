@@ -60,14 +60,14 @@ TaskManager::set_mode(const TaskMode_t the_mode)
     break;
 
   case (MODE_ORDERED):
-    if (task_ordered.task_size()) {
+    if (task_ordered.TaskSize()) {
       active_task = &task_ordered;
       mode = MODE_ORDERED;
       break;
     }
 
   case (MODE_GOTO):
-    if (task_goto.getActiveTaskPoint()) {
+    if (task_goto.GetActiveTaskPoint()) {
       active_task = &task_goto;
       mode = MODE_GOTO;
       break;
@@ -85,7 +85,7 @@ void
 TaskManager::setActiveTaskPoint(unsigned index)
 {
   if (active_task)
-    active_task->setActiveTaskPoint(index);
+    active_task->SetActiveTaskPoint(index);
 }
 
 unsigned 
@@ -117,7 +117,7 @@ TaskWaypoint*
 TaskManager::getActiveTaskPoint() const
 {
   if (active_task) 
-    return active_task->getActiveTaskPoint();
+    return active_task->GetActiveTaskPoint();
 
   return NULL;
 }
@@ -125,19 +125,19 @@ TaskManager::getActiveTaskPoint() const
 void
 TaskManager::update_common_stats_times(const AircraftState &state)
 {
-  if (task_ordered.task_size() > 1) {
-    common_stats.task_started = task_ordered.get_stats().task_started;
-    common_stats.task_finished = task_ordered.get_stats().task_finished;
+  if (task_ordered.TaskSize() > 1) {
+    common_stats.task_started = task_ordered.GetStats().task_started;
+    common_stats.task_finished = task_ordered.GetStats().task_finished;
 
     common_stats.ordered_has_targets = task_ordered.has_targets();
 
     common_stats.aat_time_remaining =
         max(fixed_zero, task_ordered.get_ordered_task_behaviour().aat_min_time -
-                        task_ordered.get_stats().total.time_elapsed);
+                        task_ordered.GetStats().total.time_elapsed);
 
     if (positive(common_stats.aat_time_remaining))
       common_stats.aat_speed_remaining =
-          fixed(task_ordered.get_stats().total.remaining.get_distance()) /
+          fixed(task_ordered.GetStats().total.remaining.get_distance()) /
           common_stats.aat_time_remaining;
     else
       common_stats.aat_speed_remaining = -fixed_one;
@@ -146,18 +146,18 @@ TaskManager::update_common_stats_times(const AircraftState &state)
 
     if (positive(aat_min_time)) {
       common_stats.aat_speed_max =
-          task_ordered.get_stats().distance_max / aat_min_time;
+          task_ordered.GetStats().distance_max / aat_min_time;
       common_stats.aat_speed_min =
-          task_ordered.get_stats().distance_min / aat_min_time;
+          task_ordered.GetStats().distance_min / aat_min_time;
     } else {
       common_stats.aat_speed_max = -fixed_one;
       common_stats.aat_speed_min = -fixed_one;
     }
 
     common_stats.task_time_remaining =
-        task_ordered.get_stats().total.time_remaining;
+        task_ordered.GetStats().total.time_remaining;
     common_stats.task_time_elapsed =
-        task_ordered.get_stats().total.time_elapsed;
+        task_ordered.GetStats().total.time_elapsed;
 
     const fixed start_max_height =
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height) +
@@ -191,7 +191,7 @@ TaskManager::update_common_stats_waypoints(const AircraftState &state)
 
   common_stats.next_solution.Reset();
   if (active_task) {
-    const TaskWaypoint* tp= active_task->getActiveTaskPoint();
+    const TaskWaypoint* tp= active_task->GetActiveTaskPoint();
     if (tp != NULL) {
       // must make an UnorderedTaskPoint here so we pick up arrival height requirements
       UnorderedTaskPoint fp(tp->get_waypoint(), task_behaviour);
@@ -217,13 +217,13 @@ TaskManager::update_common_stats_task(const AircraftState &state)
     common_stats.ordered_has_optional_starts = false;
   }
 
-  if (active_task && active_task->get_stats().task_valid) {
-    common_stats.active_has_next = active_task->validTaskPoint(1);
-    common_stats.active_has_previous = active_task->validTaskPoint(-1);
-    common_stats.next_is_last = active_task->validTaskPoint(1) &&
-                                !active_task->validTaskPoint(2);
-    common_stats.previous_is_first = active_task->validTaskPoint(-1) &&
-                                     !active_task->validTaskPoint(-2);
+  if (active_task && active_task->GetStats().task_valid) {
+    common_stats.active_has_next = active_task->IsValidTaskPoint(1);
+    common_stats.active_has_previous = active_task->IsValidTaskPoint(-1);
+    common_stats.next_is_last = active_task->IsValidTaskPoint(1) &&
+                                !active_task->IsValidTaskPoint(2);
+    common_stats.previous_is_first = active_task->IsValidTaskPoint(-1) &&
+                                     !active_task->IsValidTaskPoint(-2);
     common_stats.active_taskpoint_index = this->active_task->getActiveTaskPointIndex();
   } else {
     common_stats.active_has_next = false;
@@ -286,9 +286,9 @@ TaskManager::update(const AircraftState &state,
   if (state_last.time > state.time)
     reset();
 
-  if (task_ordered.task_size() > 1)
+  if (task_ordered.TaskSize() > 1)
     // always update ordered task
-    retval |= task_ordered.update(state, state_last);
+    retval |= task_ordered.Update(state, state_last);
 
   // inform the abort task whether it is running as the task or not  
   task_abort.set_active(active_task == &task_abort);
@@ -300,13 +300,13 @@ TaskManager::update(const AircraftState &state,
   else
     task_abort.set_task_destination(state, getActiveTaskPoint());
 
-  retval |= task_abort.update(state, state_last);
+  retval |= task_abort.Update(state, state_last);
 
   if (active_task 
       && (active_task != &task_ordered)
       && (active_task != &task_abort))
     // update mode task for any that have not yet run
-    retval |= active_task->update(state, state_last);
+    retval |= active_task->Update(state, state_last);
 
   update_common_stats(state);
 
@@ -319,7 +319,7 @@ TaskManager::update_idle(const AircraftState& state)
   bool retval = false;
 
   if (active_task)
-    retval |= active_task->update_idle(state);
+    retval |= active_task->UpdateIdle(state);
 
   return retval;
 }
@@ -328,7 +328,7 @@ const TaskStats&
 TaskManager::get_stats() const
 {
   if (active_task)
-    return active_task->get_stats();
+    return active_task->GetStats();
 
   return null_stats;
 }
@@ -367,7 +367,7 @@ unsigned
 TaskManager::task_size() const
 {
   if (active_task)
-    return active_task->task_size();
+    return active_task->TaskSize();
 
   return 0;
 }
@@ -379,7 +379,7 @@ TaskManager::random_point_in_task(const unsigned index, const fixed mag) const
     return task_ordered.getTaskPoint(index)->randomPointInSector(mag);
 
   if (index <= task_size())
-    return active_task->getActiveTaskPoint()->GetLocation();
+    return active_task->GetActiveTaskPoint()->GetLocation();
 
   GeoPoint null_location(Angle::zero(), Angle::zero());
   return null_location;
@@ -582,7 +582,7 @@ TaskManager::commit(const OrderedTask& other)
 {
   bool retval = task_ordered.commit(other);
 
-  if (other.task_size()) {
+  if (other.TaskSize()) {
     // if valid, resume the task
     switch (mode) {
     case MODE_NULL:

@@ -49,7 +49,7 @@ RenderTask::DrawLayers(const AbstractTask &task)
       }
 
       tpv.SetModeOptional(false);
-      for (unsigned j = 0, end = task.task_size(); j < end; ++j)
+      for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
         tpv.Draw(*ordered_task.getTaskPoint(j));
 
       break;
@@ -59,7 +59,7 @@ RenderTask::DrawLayers(const AbstractTask &task)
       const AbortTask &abort_task = (const AbortTask &)task;
 
       tpv.SetModeOptional(false);
-      for (unsigned j = 0, end = abort_task.task_size(); j < end; ++j)
+      for (unsigned j = 0, end = abort_task.TaskSize(); j < end; ++j)
         tpv.Draw(abort_task.GetAlternate(j));
 
       break;
@@ -67,7 +67,7 @@ RenderTask::DrawLayers(const AbstractTask &task)
 
     case TaskInterface::GOTO:
       tpv.SetModeOptional(false);
-      tpv.Draw(*task.getActiveTaskPoint());
+      tpv.Draw(*task.GetActiveTaskPoint());
       break;
     }
   }

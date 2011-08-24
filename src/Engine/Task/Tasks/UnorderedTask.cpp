@@ -25,7 +25,7 @@
 #include "TaskSolvers/TaskGlideRequired.hpp"
 #include "TaskSolvers/TaskSolution.hpp"
 
-UnorderedTask::UnorderedTask(const enum type _type, TaskEvents &te,
+UnorderedTask::UnorderedTask(const enum Type _type, TaskEvents &te,
                              const TaskBehaviour &tb,
                              const GlidePolar &gp):
   AbstractTask(_type, te, tb, gp)
@@ -36,7 +36,7 @@ UnorderedTask::UnorderedTask(const enum type _type, TaskEvents &te,
 bool 
 UnorderedTask::calc_mc_best(const AircraftState &aircraft, fixed& best) const
 {
-  TaskPoint *tp = getActiveTaskPoint();
+  TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
     best = glide_polar.GetMC();
     return false;
@@ -48,13 +48,13 @@ UnorderedTask::calc_mc_best(const AircraftState &aircraft, fixed& best) const
 bool
 UnorderedTask::check_task() const
 {
-  return (getActiveTaskPoint()!=NULL);
+  return (GetActiveTaskPoint()!=NULL);
 }
 
 fixed 
 UnorderedTask::calc_glide_required(const AircraftState &aircraft) const
 {
-  TaskPoint *tp = getActiveTaskPoint();
+  TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
     return fixed_zero;
   }
@@ -70,7 +70,7 @@ UnorderedTask::glide_solution_remaining(const AircraftState &state,
 {
   GlideResult res;
 
-  TaskPoint* tp = getActiveTaskPoint();
+  TaskPoint* tp = GetActiveTaskPoint();
   if (tp) {
     res = TaskSolution::glide_solution_remaining(*tp, state, polar);
     res.CalcDeferred(state);
@@ -161,7 +161,7 @@ UnorderedTask::scan_distance_travelled(const GeoPoint &location)
 fixed 
 UnorderedTask::scan_distance_remaining(const GeoPoint &location)
 {
-  TaskPoint *tp = getActiveTaskPoint();
+  TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
     return fixed_zero;
   }
@@ -177,7 +177,7 @@ UnorderedTask::calc_gradient(const AircraftState &state) const
 fixed
 UnorderedTask::get_finish_height() const
 {
-  TaskPoint *tp = getActiveTaskPoint();
+  TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
     return fixed_zero;
   }
@@ -187,7 +187,7 @@ UnorderedTask::get_finish_height() const
 GeoPoint 
 UnorderedTask::get_task_center(const GeoPoint& fallback_location) const
 {
-  TaskPoint *tp = getActiveTaskPoint();
+  TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
     return fallback_location;
   } else {
@@ -198,7 +198,7 @@ UnorderedTask::get_task_center(const GeoPoint& fallback_location) const
 fixed 
 UnorderedTask::get_task_radius(const GeoPoint& fallback_location) const
 {
-  TaskPoint *tp = getActiveTaskPoint();
+  TaskPoint *tp = GetActiveTaskPoint();
   if (!tp) {
     return fixed_zero;
   } else {

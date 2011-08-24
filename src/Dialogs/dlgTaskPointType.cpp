@@ -128,9 +128,9 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type)
       else
         way_point =
           dlgWaypointSelect(wf->GetMainWindow(),
-                              ordered_task->task_size() > 0 ?
+                              ordered_task->TaskSize() > 0 ?
                               ordered_task->get_tp(ordered_task->
-                                  task_size() - 1)->GetLocation() :
+                                  TaskSize() - 1)->GetLocation() :
                               XCSoarInterface::Basic().location);
       if (!way_point)
         return false;

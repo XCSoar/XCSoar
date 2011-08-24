@@ -50,20 +50,20 @@ GotoTask::~GotoTask()
 }
 
 TaskWaypoint*
-GotoTask::getActiveTaskPoint() const
+GotoTask::GetActiveTaskPoint() const
 { 
   return tp;
 }
 
 bool 
-GotoTask::validTaskPoint(const int index_offset) const
+GotoTask::IsValidTaskPoint(const int index_offset) const
 {
   return (index_offset == 0 && tp != NULL);
 }
 
 
 void 
-GotoTask::setActiveTaskPoint(unsigned index)
+GotoTask::SetActiveTaskPoint(unsigned index)
 {
   // nothing to do
 }
@@ -105,7 +105,7 @@ GotoTask::tp_CAccept(TaskPointConstVisitor& visitor,
 }
 
 unsigned 
-GotoTask::task_size() const
+GotoTask::TaskSize() const
 {
   return tp ? 1 : 0;
 }

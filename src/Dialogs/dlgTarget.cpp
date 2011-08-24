@@ -437,7 +437,7 @@ GetTaskData()
   const AbstractTask *at = task_manager->get_active_task();
 
   ActiveTaskPointOnEntry = task_manager->getActiveTaskPointIndex();
-  TaskSize = at->task_size();
+  TaskSize = at->TaskSize();
 }
 
 /*

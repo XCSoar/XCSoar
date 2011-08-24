@@ -175,7 +175,7 @@ public:
    * @return Active task point
    */
   gcc_pure
-  TaskWaypoint* getActiveTaskPoint() const;
+  TaskWaypoint* GetActiveTaskPoint() const;
 
   /**
    * Retrieves the active task point index.
@@ -202,7 +202,7 @@ public:
    * @param index_offset offset (default 0)
    */
   gcc_pure
-  bool validTaskPoint(const int index_offset=0) const;
+  bool IsValidTaskPoint(const int index_offset=0) const;
 
   /**
    * Check if task has a single StartPoint
@@ -229,7 +229,7 @@ public:
    *
    * @param desired Desired active index of task sequence
    */
-  void setActiveTaskPoint(unsigned desired);
+  void SetActiveTaskPoint(unsigned desired);
 
   /**
    * Cycle through optional start points, replacing actual task start point
@@ -395,14 +395,14 @@ public:
    *
    * @return True if internal state changed
    */
-  bool update_idle(const AircraftState& state_now);
+  bool UpdateIdle(const AircraftState& state_now);
 
   /**
    * Return size of task
    *
    * @return Number of task points in task
    */
-  unsigned task_size() const;
+  unsigned TaskSize() const;
 
   /**
    * Determine whether the task is full according to the factory in use
@@ -410,7 +410,7 @@ public:
    * @return True if task is full
    */
   bool is_max_size() const {
-    return task_size() == m_ordered_behaviour.max_points;
+    return TaskSize() == m_ordered_behaviour.max_points;
   }
 
   /**

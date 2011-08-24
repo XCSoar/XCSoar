@@ -41,15 +41,15 @@ class TaskPoint;
  */
 class TaskInterface {
 public:
-  enum type {
+  enum Type {
     ORDERED,
     ABORT,
     GOTO,
   };
 
-  const enum type type;
+  const Type type;
 
-  TaskInterface(const enum type _type):type(_type) {}
+  TaskInterface(const Type _type):type(_type) {}
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) = 0;
 
@@ -59,7 +59,7 @@ public:
  * @return Number of taskpoints in task
  */
   gcc_pure
-  virtual unsigned task_size() const = 0;
+  virtual unsigned TaskSize() const = 0;
 
 /** 
  * Set index in sequence of active task point.  Concrete classes providing
@@ -67,7 +67,7 @@ public:
  * 
  * @param new_index Desired sequence index of active task point
  */
-  virtual void setActiveTaskPoint(unsigned new_index) = 0;
+  virtual void SetActiveTaskPoint(unsigned new_index) = 0;
 
 /** 
  * Accessor for active task point.  Typically could be used
@@ -76,7 +76,7 @@ public:
  * @return Active task point
  */  
   gcc_pure
-  virtual TaskWaypoint* getActiveTaskPoint() const = 0;
+  virtual TaskWaypoint* GetActiveTaskPoint() const = 0;
 
 /**
  * Determine whether active task point optionally shifted points to
@@ -85,7 +85,7 @@ public:
  * @param index_offset offset (default 0)
  */
   gcc_pure
-  virtual bool validTaskPoint(const int index_offset=0) const = 0;
+  virtual bool IsValidTaskPoint(const int index_offset = 0) const = 0;
 
 /** 
  * Accessor for task statistics for this task
@@ -93,7 +93,7 @@ public:
  * @return Task statistics reference
  */
   gcc_pure
-  virtual const TaskStats& get_stats() const = 0;
+  virtual const TaskStats &GetStats() const = 0;
 
 /** 
  * Update internal states as flight progresses.  This may perform
@@ -105,8 +105,8 @@ public:
  * 
  * @return True if internal state changed
  */
-  virtual bool update(const AircraftState& state_now, 
-                      const AircraftState& state_last) = 0;
+  virtual bool Update(const AircraftState &state_now,
+                      const AircraftState &state_last) = 0;
 
 /** 
  * Update internal states (non-essential) for housework, or where functions are slow
@@ -116,6 +116,6 @@ public:
  * 
  * @return True if internal state changed
  */
-  virtual bool update_idle(const AircraftState &state_now) = 0;
+  virtual bool UpdateIdle(const AircraftState &state_now) = 0;
 };
 #endif //TASKINTERFACE_H

@@ -34,7 +34,7 @@ GlueMapWindow::isInAnyActiveSector(const GeoPoint &gp)
   if (at == NULL)
     return -1;
 
-  const unsigned TaskSize = at->task_size();
+  const unsigned TaskSize = at->TaskSize();
   const unsigned ActiveIndex = task_manager->getActiveTaskPointIndex();
 
   if (task_manager->get_mode() != TaskManager::MODE_ORDERED)

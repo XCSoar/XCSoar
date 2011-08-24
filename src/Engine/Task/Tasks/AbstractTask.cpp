@@ -28,7 +28,7 @@
 #include "Task/TaskEvents.hpp"
 #include "Task/TaskBehaviour.hpp"
 
-AbstractTask::AbstractTask(enum type _type, TaskEvents &te,
+AbstractTask::AbstractTask(enum Type _type, TaskEvents &te,
                            const TaskBehaviour &tb, const GlidePolar &gp)
   :TaskInterface(_type),
    activeTaskPoint(0),
@@ -86,7 +86,7 @@ AbstractTask::update_auto_mc(GlidePolar &glide_polar,
 }
 
 bool 
-AbstractTask::update_idle(const AircraftState &state)
+AbstractTask::UpdateIdle(const AircraftState &state)
 {
   if (task_started() && task_behaviour.calc_cruise_efficiency) {
     fixed val = fixed_one;
@@ -195,7 +195,7 @@ AbstractTask::update_glide_solutions(const AircraftState &state)
 }
 
 bool
-AbstractTask::update(const AircraftState &state, 
+AbstractTask::Update(const AircraftState &state, 
                      const AircraftState &state_last)
 {
   stats.task_valid = check_task();
@@ -270,7 +270,7 @@ fixed
 AbstractTask::leg_gradient(const AircraftState &aircraft) const
 {
   // Get next turnpoint
-  const TaskWaypoint *tp = getActiveTaskPoint();
+  const TaskWaypoint *tp = GetActiveTaskPoint();
   if (!tp)
     return fixed_zero;
 

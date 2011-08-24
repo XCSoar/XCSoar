@@ -131,7 +131,7 @@ public:
    *
    * @return Number of taskpoints in task
    */
-  unsigned task_size() const;
+  unsigned TaskSize() const;
 
   const UnorderedTaskPoint &GetAlternate(unsigned i) const {
     assert(i < task_points.size());
@@ -144,7 +144,7 @@ public:
    *
    * @return Index of active task point sequence
    */
-  TaskWaypoint* getActiveTaskPoint() const;
+  TaskWaypoint* GetActiveTaskPoint() const;
 
   /**
    * Retrieves the active task point index.
@@ -160,7 +160,7 @@ public:
    *
    * @param index Desired active index of task sequence
    */
-  void setActiveTaskPoint(unsigned index);
+  void SetActiveTaskPoint(unsigned index);
 
   /**
    * Determine whether active task point optionally shifted points to
@@ -168,7 +168,7 @@ public:
    *
    * @param index_offset offset (default 0)
    */
-  bool validTaskPoint(int index_offset = 0) const;
+  bool IsValidTaskPoint(int index_offset = 0) const;
 
   /**
    * Update internal states when aircraft state advances.

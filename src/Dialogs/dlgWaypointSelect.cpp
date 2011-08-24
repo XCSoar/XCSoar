@@ -414,7 +414,7 @@ private:
     FAITrianglePointInvalid = false;
 
     if (ordered_task) {
-      t_size = task->task_size();
+      t_size = task->TaskSize();
       leg1 = (t_size > 1) ? task->getTaskPoint(1)->
               GetVectorPlanned().Distance : fixed_zero;
       leg2 = (t_size > 2) ? task->getTaskPoint(2)->
