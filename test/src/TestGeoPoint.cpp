@@ -32,52 +32,43 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(57);
+  plan_tests(46);
 
   // test constructor
   GeoPoint p1(Angle::degrees(fixed(345.32)), Angle::degrees(fixed(-6.332)));
-  ok1(equals(p1.Longitude, 345.32));
-  ok1(equals(p1.Latitude, -6.332));
+  ok1(equals(p1, -6.332, 345.32));
 
   // test normalize()
   p1.normalize();
-  ok1(equals(p1.Longitude, -14.68));
-  ok1(equals(p1.Latitude, -6.332));
+  ok1(equals(p1, -6.332, -14.68));
 
   // test parametric()
   GeoPoint p2(Angle::degrees(fixed_two), Angle::degrees(fixed_one));
   GeoPoint p3 = p1.parametric(p2, fixed(5));
-  ok1(equals(p3.Longitude, -4.68));
-  ok1(equals(p3.Latitude, -1.332));
+  ok1(equals(p3, -1.332, -4.68));
 
   // test interpolate
   GeoPoint p4 = p1.interpolate(p3, fixed_half);
-  ok1(equals(p4.Longitude, -9.68));
-  ok1(equals(p4.Latitude, -3.832));
+  ok1(equals(p4, -3.832, -9.68));
 
   GeoPoint p5 = p1.interpolate(p3, fixed(0.25));
-  ok1(equals(p5.Longitude, -12.18));
-  ok1(equals(p5.Latitude, -5.082));
+  ok1(equals(p5, -5.082, -12.18));
 
   // test *
   GeoPoint p6 = p2 * fixed(3.5);
-  ok1(equals(p6.Longitude, 7));
-  ok1(equals(p6.Latitude, 3.5));
+  ok1(equals(p6, 3.5, 7));
 
   // test +
   p6 = p6 + p2;
-  ok1(equals(p6.Longitude, 9));
-  ok1(equals(p6.Latitude, 4.5));
+  ok1(equals(p6, 4.5, 9));
 
   // test +=
   p6 += p2;
-  ok1(equals(p6.Longitude, 11));
-  ok1(equals(p6.Latitude, 5.5));
+  ok1(equals(p6, 5.5, 11));
 
   // test -
   p6 = p6 - p2;
-  ok1(equals(p6.Longitude, 9));
-  ok1(equals(p6.Latitude, 4.5));
+  ok1(equals(p6, 4.5, 9));
 
   // test sort()
   ok1(!p1.sort(p3));
@@ -130,12 +121,10 @@ int main(int argc, char **argv)
   // test intermediate_point()
   GeoPoint p7(Angle::degrees(fixed_zero), Angle::degrees(fixed_zero));
   GeoPoint p8 = p7.intermediate_point(p2, fixed(100000));
-  ok1(equals(p8.Longitude, 0.804342));
-  ok1(equals(p8.Latitude, 0.402274));
+  ok1(equals(p8, 0.402274, 0.804342));
   ok1(equals(p8.distance(p7), 100000));
   GeoPoint p9 = p7.intermediate_point(p2, fixed(100000000));
-  ok1(equals(p9.Longitude, p2.Longitude));
-  ok1(equals(p9.Latitude, p2.Latitude));
+  ok1(equals(p9, p2));
 
   // test projected_distance()
   ok1(equals(p8.projected_distance(p7, p2), 100000));
