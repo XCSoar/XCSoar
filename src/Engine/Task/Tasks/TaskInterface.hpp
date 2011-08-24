@@ -39,7 +39,8 @@ class TaskPoint;
  *  the functionality all tasks should have, and also provides some convenience
  *  methods that will be common to all tasks.
  */
-class TaskInterface {
+class TaskInterface
+{
 public:
   enum Type {
     ORDERED,
@@ -53,69 +54,70 @@ public:
 
   virtual void SetTaskBehaviour(const TaskBehaviour &tb) = 0;
 
-/** 
- * Size of task
- * 
- * @return Number of taskpoints in task
- */
+  /**
+   * Size of task
+   *
+   * @return Number of taskpoints in task
+   */
   gcc_pure
   virtual unsigned TaskSize() const = 0;
 
-/** 
- * Set index in sequence of active task point.  Concrete classes providing
- * this method should ensure the index is valid.
- * 
- * @param new_index Desired sequence index of active task point
- */
+  /**
+   * Set index in sequence of active task point.  Concrete classes providing
+   * this method should ensure the index is valid.
+   *
+   * @param new_index Desired sequence index of active task point
+   */
   virtual void SetActiveTaskPoint(unsigned new_index) = 0;
 
-/** 
- * Accessor for active task point.  Typically could be used
- * to access information about the task point for user feedback.
- * 
- * @return Active task point
- */  
+  /**
+   * Accessor for active task point.  Typically could be used
+   * to access information about the task point for user feedback.
+   *
+   * @return Active task point
+   */
   gcc_pure
   virtual TaskWaypoint* GetActiveTaskPoint() const = 0;
 
-/**
- * Determine whether active task point optionally shifted points to
- * a valid task point.
- *
- * @param index_offset offset (default 0)
- */
+  /**
+   * Determine whether active task point optionally shifted points to
+   * a valid task point.
+   *
+   * @param index_offset offset (default 0)
+   */
   gcc_pure
   virtual bool IsValidTaskPoint(const int index_offset = 0) const = 0;
 
-/** 
- * Accessor for task statistics for this task
- * 
- * @return Task statistics reference
- */
+  /**
+   * Accessor for task statistics for this task
+   *
+   * @return Task statistics reference
+   */
   gcc_pure
   virtual const TaskStats &GetStats() const = 0;
 
-/** 
- * Update internal states as flight progresses.  This may perform
- * callbacks to the task_events, and advance the active task point
- * based on task_behaviour.
- * 
- * @param state_now Aircraft state at this time step
- * @param state_last Aircraft state at previous time step
- * 
- * @return True if internal state changed
- */
+  /**
+   * Update internal states as flight progresses.  This may perform
+   * callbacks to the task_events, and advance the active task point
+   * based on task_behaviour.
+   *
+   * @param state_now Aircraft state at this time step
+   * @param state_last Aircraft state at previous time step
+   *
+   * @return True if internal state changed
+   */
   virtual bool Update(const AircraftState &state_now,
                       const AircraftState &state_last) = 0;
 
-/** 
- * Update internal states (non-essential) for housework, or where functions are slow
- * and would cause loss to real-time performance.
- * 
- * @param state_now Aircraft state at this time step
- * 
- * @return True if internal state changed
- */
+  /**
+   * Update internal states (non-essential) for housework, or where functions are slow
+   * and would cause loss to real-time performance.
+   *
+   * @param state_now Aircraft state at this time step
+   *
+   * @return True if internal state changed
+   */
   virtual bool UpdateIdle(const AircraftState &state_now) = 0;
 };
+
 #endif //TASKINTERFACE_H
