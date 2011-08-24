@@ -31,7 +31,7 @@ Copyright_License {
 using namespace std;
 
 static bool
-TestConnection(const TCHAR *url, const TCHAR *path)
+Download(const TCHAR *url, const TCHAR *path)
 {
   cout << "Creating Session ... ";
   Net::Session session;
@@ -80,7 +80,7 @@ main(int argc, char *argv[])
   Net::Initialise();
 
   PathName url(argv[1]);
-  TestConnection(url, argc > 2 ? (const TCHAR *)PathName(argv[2]) : NULL);
+  Download(url, argc > 2 ? (const TCHAR *)PathName(argv[2]) : NULL);
 
   Net::Deinitialise();
 
