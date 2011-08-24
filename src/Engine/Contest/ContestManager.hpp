@@ -105,10 +105,8 @@ public:
   }
 
 private:
-  bool RunContest(AbstractContest &_contest,
-                  ContestResult &result,
-                  ContestTraceVector &solution,
-                  bool exhaustive);
+  static bool RunContest(AbstractContest &_contest, ContestResult &result,
+                         ContestTraceVector &solution, bool exhaustive);
 };
 
 #endif
