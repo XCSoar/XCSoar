@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef ONLINE_CONTEST_HPP
 #define ONLINE_CONTEST_HPP
 
@@ -38,7 +39,8 @@ class Trace;
 /**
  * Special task holder for Online Contest calculations
  */
-class ContestManager {
+class ContestManager
+{
   friend class PrintHelper;
 
   Contests contest;
@@ -71,8 +73,7 @@ public:
    * containing 2.5 hour flight history for scanning
    */
   ContestManager(const Contests _contest,
-                 const Trace &trace_full,
-                 const Trace &trace_sprint);
+                 const Trace &trace_full, const Trace &trace_sprint);
 
   void set_contest(Contests _contest) {
     contest = _contest;
@@ -88,7 +89,7 @@ public:
    * after a number of iterations (incremental search)
    * @return True if internal state changed
    */
-  bool update_idle(bool exhaustive=false);
+  bool update_idle(bool exhaustive = false);
 
   bool solve_exhaustive() {
     return update_idle(true);
@@ -99,12 +100,12 @@ public:
    */
   void reset();
 
-  const ContestStatistics& get_stats() const {
+  const ContestStatistics &get_stats() const {
     return stats;
   }
 
 private:
-  bool run_contest(AbstractContest& the_contest, 
+  bool run_contest(AbstractContest &the_contest,
                    ContestResult &contest_result,
                    ContestTraceVector &contest_solution,
                    bool exhaustive);
