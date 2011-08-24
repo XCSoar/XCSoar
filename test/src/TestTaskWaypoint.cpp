@@ -79,15 +79,13 @@ TaskWaypointTest::Run()
   ok1(wp2.name == _T("Test"));
   ok1(equals(tw.GetBaseElevation(), 42));
   ok1(equals(tw.GetBaseElevation(), wp2.altitude));
-  ok1(equals(wp2.location.Latitude, gp.Latitude));
-  ok1(equals(wp2.location.Longitude, gp.Longitude));
-  ok1(equals(tw.GetLocation().Latitude, gp.Latitude));
-  ok1(equals(tw.GetLocation().Longitude, gp.Longitude));
+  ok1(equals(wp2.location, gp));
+  ok1(equals(tw.GetLocation(), gp));
 }
 
 int main(int argc, char **argv)
 {
-  plan_tests(7);
+  plan_tests(5);
 
   TaskWaypointTest test;
   test.Run();
