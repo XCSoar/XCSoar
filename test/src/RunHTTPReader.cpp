@@ -27,10 +27,11 @@ Copyright_License {
 #include "OS/PathName.hpp"
 
 #include <iostream>
+#include <stdio.h>
 using namespace std;
 
 static bool
-TestConnection(const TCHAR *url)
+TestConnection(const TCHAR *url, const TCHAR *path)
 {
   cout << "Creating Session ... ";
   Net::Session session;
@@ -47,9 +48,18 @@ TestConnection(const TCHAR *url)
   cout << "Reading Response:" << endl;
   cout << "-------------------------------------------------" << endl;
 
+  FILE *file = path ? _tfopen(path, _T("wb")) : NULL;
+
   char buffer[256];
-  while (request.Read(buffer, sizeof(buffer)))
+  while (request.Read(buffer, sizeof(buffer))) {
     cout << buffer;
+
+    if (file != NULL)
+      fputs(buffer, file);
+  }
+
+  if (file != NULL)
+    fclose(file);
 
   cout << "-------------------------------------------------" << endl;
 
@@ -59,17 +69,18 @@ TestConnection(const TCHAR *url)
 int
 main(int argc, char *argv[])
 {
-  if (argc != 2) {
-    cout << "Usage: " << argv[0] << " <url>" << endl;
+  if (argc < 2) {
+    cout << "Usage: " << argv[0] << " <url> [<filename>]" << endl;
     cout << "   <url> is the absolute url of the resource you are requesting" << endl << endl;
-    cout << "   Example: " << argv[0] << " http://www.domain.com/docs/readme.htm" << endl;
+    cout << "   <filename> is the path where the requested file should be saved (optional)" << endl << endl;
+    cout << "   Example: " << argv[0] << " http://www.domain.com/docs/readme.htm readme.htm" << endl;
     return 1;
   }
 
   Net::Initialise();
 
   PathName url(argv[1]);
-  TestConnection(url);
+  TestConnection(url, argc > 2 ? (const TCHAR *)PathName(argv[2]) : NULL);
 
   Net::Deinitialise();
 
