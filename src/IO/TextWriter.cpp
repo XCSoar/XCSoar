@@ -31,24 +31,14 @@ Copyright_License {
 #endif
 
 TextWriter::TextWriter(const char *path, bool append)
-{
-  file = fopen(path, append ? "ab" : "wb");
-}
+  :file(path, append ? "ab" : "wb") {}
 
 #ifdef _UNICODE
 
 TextWriter::TextWriter(const TCHAR *path, bool append)
-{
-  file = _tfopen(path, append ? _T("ab") : _T("wb"));
-}
+  :file(path, append ? _T("ab") : _T("wb")) {}
 
 #endif
-
-TextWriter::~TextWriter()
-{
-  if (file != NULL)
-    fclose(file);
-}
 
 #ifdef _UNICODE
 

@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_IO_TEXT_WRITER_HPP
 #define XCSOAR_IO_TEXT_WRITER_HPP
 
+#include "FileHandle.hpp"
 #include "Compiler.h"
 #include "Util/ReusableArray.hpp"
 
@@ -45,7 +46,7 @@ Copyright_License {
  */
 class TextWriter {
 private:
-  FILE *file;
+  FileHandle file;
 
 #ifdef _UNICODE
   ReusableArray<TCHAR> format_buffer;
@@ -63,14 +64,12 @@ public:
   TextWriter(const TCHAR *path, bool append=false);
 #endif
 
-  ~TextWriter();
-
   /**
    * Returns true if opening the file has failed.  This must be
    * checked before calling any other method.
    */
   bool error() const {
-    return file == NULL;
+    return !file.IsOpen();
   }
 
   /**
@@ -80,14 +79,14 @@ public:
    * cache.
    */
   bool flush() {
-    return fflush(file) == 0;
+    return file.Flush();
   }
 
   /**
    * Write one character.
    */
   void write(char ch) {
-    putc(ch, file);
+    file.Write((int)ch);
   }
 
   /**
@@ -105,14 +104,14 @@ public:
    * Write a chunk of text to the file.
    */
   bool write(const char *s, size_t length) {
-    return fwrite(s, sizeof(*s), length, file) == length;
+    return file.Write(s, sizeof(*s), length) == length;
   }
 
   /**
    * Write a string to the file.
    */
   bool write(const char *s) {
-    return fputs(s, file) >= 0;
+    return file.Write(s) >= 0;
   }
 
   /**
@@ -133,7 +132,7 @@ public:
 #endif
 
   void vprintf(const char *fmt, va_list ap) {
-    vfprintf(file, fmt, ap);
+    file.WriteFormatted(fmt, ap);
   }
 
   void vprintfln(const char *fmt, va_list ap) {
