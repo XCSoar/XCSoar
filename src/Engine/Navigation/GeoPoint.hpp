@@ -34,6 +34,9 @@ struct GeoVector;
  * Geodetic coordinate expressed as Longitude and Latitude angles.
  */
 struct GeoPoint {
+  Angle Longitude;
+  Angle Latitude;
+
   /**
    * Non-initialising constructor.
    */
@@ -49,9 +52,6 @@ struct GeoPoint {
    */
   GeoPoint(const Angle &_Longitude, const Angle &_Latitude) :
     Longitude(_Longitude), Latitude(_Latitude) {}
-
-  Angle Longitude; /**< Longitude (deg) */
-  Angle Latitude; /**< Latitude (deg) */
 
   /**
    * Normalize the values, so this object can be used properly in
