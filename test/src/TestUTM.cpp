@@ -29,7 +29,7 @@
 
 int main(int argc, char **argv)
 {
-  plan_tests(6);
+  plan_tests(5);
 
   GeoPoint p(Angle::degrees(fixed(7)), Angle::degrees(fixed(50)));
   UTM u = UTM::FromGeoPoint(p);
@@ -44,8 +44,7 @@ int main(int argc, char **argv)
 
   p = u.ToGeoPoint();
 
-  ok1(equals(p.Longitude, 7));
-  ok1(equals(p.Latitude, 50));
+  ok1(equals(p, 50, 7));
 
   printf("lon: %f - lat: %f\n", (double)p.Longitude.value_degrees(),
          (double)p.Latitude.value_degrees());
