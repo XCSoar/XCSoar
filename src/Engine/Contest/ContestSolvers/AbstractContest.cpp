@@ -34,7 +34,6 @@ AbstractContest::AbstractContest(const Trace &_trace,
   Reset();
 }
 
-
 void
 AbstractContest::Reset()
 {
@@ -51,14 +50,12 @@ AbstractContest::Score(ContestResult &result)
   return false;
 }
 
-
 bool 
 AbstractContest::UpdateScore()
 {
   // for normal contests, nothing needs to be done
   return false;
 }
-
 
 bool
 AbstractContest::SaveSolution()
@@ -93,12 +90,11 @@ AbstractContest::ApplyHandicap(const fixed& unhandicapped_score,
                                 const bool shifted) const
 {
   assert(handicap != 0);
-  if (handicap == 0) {
+  if (handicap == 0)
     return unhandicapped_score;
-  }
-  if (shifted) {
-    return (200*unhandicapped_score/(100+handicap));
-  } else {
-    return (100*unhandicapped_score/handicap);
-  }
+
+  if (shifted)
+    return (200 * unhandicapped_score / (100 + handicap));
+
+  return (100 * unhandicapped_score / handicap);
 }
