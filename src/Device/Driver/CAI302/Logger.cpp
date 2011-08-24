@@ -26,8 +26,8 @@ Copyright_License {
 #include "Device/Port.hpp"
 #include "Operation.hpp"
 #include "OS/ByteOrder.hpp"
+#include "IO/BinaryWriter.hpp"
 
-#include <stdio.h>
 #include <stdlib.h>
 
 static void
@@ -109,7 +109,7 @@ CAI302Device::ReadFlightList(RecordedFlightList &flight_list,
 
 static bool
 DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
-                    FILE *file, OperationEnvironment &env)
+                    BinaryWriter &writer, OperationEnvironment &env)
 {
   assert(flight.internal.cai302 < 64);
 
@@ -154,8 +154,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
       return false;
     }
 
-    size_t written = fwrite(data, 1, valid_bytes, file);
-    if (written != valid_bytes) {
+    if (!writer.Write(data, 1, valid_bytes)) {
       free(allocated);
       return false;
     }
@@ -173,8 +172,7 @@ DownloadFlightInner(Port &port, const RecordedFlightInfo &flight,
   if (valid_bytes > sizeof(signature.signature))
     return false;
 
-  size_t written = fwrite(signature.signature, 1, valid_bytes, file);
-  if (written != valid_bytes)
+  if (!writer.Write(signature.signature, 1, valid_bytes))
     return false;
 
   return true;
@@ -187,12 +185,11 @@ CAI302Device::DownloadFlight(const RecordedFlightInfo &flight,
 {
   assert(flight.internal.cai302 < 64);
 
-  FILE *file = _tfopen(path, _T("wb"));
-  if (file == NULL)
+  BinaryWriter writer(path);
+  if (writer.HasError())
     return false;
 
-  bool success = DownloadFlightInner(*port, flight, file, env);
-  fclose(file);
+  bool success = DownloadFlightInner(*port, flight, writer, env);
 
   port->SetRxTimeout(500);
 
