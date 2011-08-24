@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_CONTEST_COMPUTER_HPP
 #define XCSOAR_CONTEST_COMPUTER_HPP
 
-#include "Engine/Task/Tasks/ContestManager.hpp"
+#include "Engine/Contest/ContestManager.hpp"
 
 struct SETTINGS_COMPUTER;
 struct DerivedInfo;

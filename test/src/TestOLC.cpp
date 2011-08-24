@@ -22,7 +22,7 @@
 
 #include "Engine/Math/Earth.hpp"
 #include "Engine/Trace/Trace.hpp"
-#include "Engine/Task/Tasks/ContestManager.hpp"
+#include "Contest/ContestManager.hpp"
 #include "Engine/Navigation/Aircraft.hpp"
 #include "Printing.hpp"
 #include "Args.hpp"

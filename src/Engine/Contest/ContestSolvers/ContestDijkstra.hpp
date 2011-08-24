@@ -25,7 +25,7 @@ Copyright_License {
 #define OLC_DIJKSTRA_HPP
 
 #include "AbstractContest.hpp"
-#include "NavDijkstra.hpp"
+#include "Task/Tasks/PathSolvers/NavDijkstra.hpp"
 
 #include <assert.h>
 

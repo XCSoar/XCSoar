@@ -23,7 +23,7 @@
 #ifndef TASK_BEHAVIOUR_HPP
 #define TASK_BEHAVIOUR_HPP
 
-#include "Tasks/PathSolvers/Contests.hpp"
+#include "Contest/ContestSolvers/Contests.hpp"
 #include "OrderedTaskBehaviour.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Engine/Route/Config.hpp"

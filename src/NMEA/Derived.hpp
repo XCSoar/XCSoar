@@ -29,7 +29,7 @@ Copyright_License {
 #include "Navigation/SpeedVector.hpp"
 #include "Task/TaskStats/TaskStats.hpp"
 #include "Task/TaskStats/CommonStats.hpp"
-#include "Task/TaskStats/ContestStatistics.hpp"
+#include "Contest/ContestStatistics.hpp"
 #include "NMEA/VarioInfo.hpp"
 #include "NMEA/ClimbInfo.hpp"
 #include "NMEA/CirclingInfo.hpp"

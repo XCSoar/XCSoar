@@ -67,7 +67,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/Tasks/GotoTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/OrderedTask.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/UnorderedTask.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/ContestManager.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/IntermediatePoint.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ObservationZoneClient.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/BaseTask/ObservationZonePoint.cpp \
@@ -90,21 +90,21 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/BGAFixedCourseZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/BGAEnhancedOptionZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/AnnularSectorZone.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/Contests.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/AbstractContest.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/Contests.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/AbstractContest.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstra.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstraMin.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/TaskDijkstraMax.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/ContestDijkstra.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCLeague.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSprint.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCClassic.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCTriangle.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCFAI.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCPlus.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContestFree.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContestTriangle.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSISAT.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/ContestDijkstra.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCLeague.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCSprint.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCClassic.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCTriangle.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCFAI.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCPlus.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/XContestFree.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/XContestTriangle.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCSISAT.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/IsolineCrossingFinder.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCready.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/TaskSolvers/TaskMacCreadyTravelled.cpp \

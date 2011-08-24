@@ -1508,19 +1508,19 @@ TEST_OLC_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/ContestManager.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/Contests.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/AbstractContest.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/ContestDijkstra.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCLeague.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSprint.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCClassic.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCTriangle.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCFAI.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCPlus.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContestFree.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/XContestTriangle.cpp \
-	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/OLCSISAT.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/Contests.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/AbstractContest.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/ContestDijkstra.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCLeague.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCSprint.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCClassic.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCTriangle.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCFAI.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCPlus.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/XContestFree.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/XContestTriangle.cpp \
+	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/OLCSISAT.cpp \
 	$(TEST_SRC_DIR)/FakeTerrain.cpp \
 	$(TEST_SRC_DIR)/Printing.cpp \
 	$(TEST_SRC_DIR)/ContestPrinting.cpp \

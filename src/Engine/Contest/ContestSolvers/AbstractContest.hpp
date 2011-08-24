@@ -23,9 +23,9 @@
 #ifndef ABSTRACT_CONTEST_HPP
 #define ABSTRACT_CONTEST_HPP
 
-#include "ScanTaskPoint.hpp"
+#include "Task/Tasks/PathSolvers/ScanTaskPoint.hpp"
 #include "Math/fixed.hpp"
-#include "Task/TaskStats/ContestResult.hpp"
+#include "../ContestResult.hpp"
 
 class Trace;
 class TracePoint;

@@ -22,7 +22,6 @@ Copyright_License {
 */
 
 #include "ContestDijkstra.hpp"
-#include "Task/TaskStats/ContestResult.hpp"
 #include "Trace/Trace.hpp"
 
 

@@ -4,7 +4,7 @@
 #include "Computer/TraceComputer.hpp"
 #include "UtilsText.hpp"
 #include "Computer/FlyingComputer.hpp"
-#include "Engine/Task/Tasks/ContestManager.hpp"
+#include "Engine/Contest/ContestManager.hpp"
 #include "SettingsComputer.hpp"
 
 #include <fstream>

@@ -22,7 +22,7 @@
 #include "Printing.hpp"
 #include <fstream>
 
-#include "Task/Tasks/ContestManager.hpp"
+#include "Contest/ContestManager.hpp"
 #include "Trace/Trace.hpp"
 
 void

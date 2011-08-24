@@ -23,7 +23,7 @@
 #include "test_debug.hpp"
 #include "harness_task.hpp"
 #include "harness_flight.hpp"
-#include "Task/Tasks/PathSolvers/ContestDijkstra.hpp"
+#include "Contest/ContestSolvers/ContestDijkstra.hpp"
 #include <stdlib.h>
 #include <stdio.h>
 

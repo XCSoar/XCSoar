@@ -23,16 +23,16 @@
 #define ONLINE_CONTEST_HPP
 
 #include "Navigation/Aircraft.hpp"
-#include "PathSolvers/OLCSprint.hpp"
-#include "PathSolvers/OLCFAI.hpp"
-#include "PathSolvers/OLCClassic.hpp"
-#include "PathSolvers/OLCLeague.hpp"
-#include "PathSolvers/OLCPlus.hpp"
-#include "PathSolvers/XContestFree.hpp"
-#include "PathSolvers/XContestTriangle.hpp"
-#include "PathSolvers/OLCSISAT.hpp"
-#include "PathSolvers/Contests.hpp"
-#include "Task/TaskStats/ContestStatistics.hpp"
+#include "ContestSolvers/OLCSprint.hpp"
+#include "ContestSolvers/OLCFAI.hpp"
+#include "ContestSolvers/OLCClassic.hpp"
+#include "ContestSolvers/OLCLeague.hpp"
+#include "ContestSolvers/OLCPlus.hpp"
+#include "ContestSolvers/XContestFree.hpp"
+#include "ContestSolvers/XContestTriangle.hpp"
+#include "ContestSolvers/OLCSISAT.hpp"
+#include "ContestSolvers/Contests.hpp"
+#include "ContestStatistics.hpp"
 
 class Trace;
 
