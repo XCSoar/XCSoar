@@ -22,7 +22,6 @@
 #ifndef ONLINE_CONTEST_HPP
 #define ONLINE_CONTEST_HPP
 
-#include "Navigation/Aircraft.hpp"
 #include "ContestSolvers/OLCSprint.hpp"
 #include "ContestSolvers/OLCFAI.hpp"
 #include "ContestSolvers/OLCClassic.hpp"
