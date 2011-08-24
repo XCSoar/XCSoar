@@ -47,8 +47,6 @@ struct ContestResult
   }
 };
 
-#define MAX_CONTEST_VECTOR 10
-
-class ContestTraceVector: public StaticArray<TracePoint, MAX_CONTEST_VECTOR> {};
+class ContestTraceVector: public StaticArray<TracePoint, 10> {};
 
 #endif
