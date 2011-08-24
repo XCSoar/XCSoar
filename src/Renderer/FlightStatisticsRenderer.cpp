@@ -382,7 +382,7 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
   canvas.select(Graphics::TracePen);
   DrawTrace(canvas, proj, trace);
   for (unsigned i=0; i< 3; ++i) {
-    if (contest.get_contest_result(i).defined()) {
+    if (contest.get_contest_result(i).IsDefined()) {
       canvas.select(Graphics::ContestPen[i]);
       DrawTrace(canvas, proj, contest.get_contest_solution(i));
     }

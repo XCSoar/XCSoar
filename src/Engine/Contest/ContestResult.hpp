@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #ifndef CONTEST_RESULT_HPP
 #define CONTEST_RESULT_HPP
 
@@ -36,13 +37,14 @@ struct ContestResult
   /** Speed (m/s) of optimised OLC path */
   fixed speed;
 
-  void reset() {
+  void Reset() {
     score = fixed_zero;
     distance = fixed_zero;
     time = fixed_zero;
     speed = fixed_zero;
   }
-  bool defined() const {
+
+  bool IsDefined() const {
     return positive(score);
   }
 };

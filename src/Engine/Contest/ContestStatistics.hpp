@@ -31,7 +31,7 @@ struct ContestStatistics {
   void reset() {
     for (unsigned i = 0; i < 3; ++i) {
       solution[i].clear();
-      result[i].reset();
+      result[i].Reset();
     }
   }
 
@@ -62,7 +62,7 @@ struct ContestStatistics {
     fixed best = fixed_zero;
     int i_best = 0;
     for (int i = 0; i < 3; ++i) {
-      if (result[i].defined() && (result[i].score > best)) {
+      if (result[i].IsDefined() && (result[i].score > best)) {
         // Better scored solution found
         i_best = i;
         best = result[i].score;

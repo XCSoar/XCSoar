@@ -37,7 +37,7 @@ AbstractContest::AbstractContest(const Trace &_trace,
 void
 AbstractContest::Reset()
 {
-  best_result.reset();
+  best_result.Reset();
 }
 
 bool
