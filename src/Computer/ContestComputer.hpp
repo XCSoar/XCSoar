@@ -38,7 +38,7 @@ public:
     :contest_manager(OLC_Sprint, trace_full, trace_sprint) {}
 
   void Reset() {
-    contest_manager.reset();
+    contest_manager.Reset();
   }
 
   void Solve(const SETTINGS_COMPUTER &settings_computer,

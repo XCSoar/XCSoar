@@ -33,11 +33,11 @@ ContestComputer::Solve(const SETTINGS_COMPUTER &settings_computer,
     return;
 
   contest_manager.SetHandicap(settings_computer.task.contest_handicap);
-  contest_manager.set_contest(settings_computer.task.contest);
+  contest_manager.SetContest(settings_computer.task.contest);
 
-  contest_manager.update_idle();
+  contest_manager.UpdateIdle();
 
-  calculated.contest_stats = contest_manager.get_stats();
+  calculated.contest_stats = contest_manager.GetStats();
 }
 
 bool
@@ -48,11 +48,11 @@ ContestComputer::SolveExhaustive(const SETTINGS_COMPUTER &settings_computer,
     return false;
 
   contest_manager.SetHandicap(settings_computer.task.contest_handicap);
-  contest_manager.set_contest(settings_computer.task.contest);
+  contest_manager.SetContest(settings_computer.task.contest);
 
-  bool result = contest_manager.solve_exhaustive();
+  bool result = contest_manager.SolveExhaustive();
 
-  calculated.contest_stats = contest_manager.get_stats();
+  calculated.contest_stats = contest_manager.GetStats();
 
   return result;
 }

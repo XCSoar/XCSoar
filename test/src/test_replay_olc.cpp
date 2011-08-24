@@ -196,7 +196,7 @@ test_replay(const Contests olc_type,
       trace_computer.Update(settings_computer, sim.state);
       trace_computer.Idle(settings_computer, sim.state);
 
-      contest_manager.update_idle();
+      contest_manager.UpdateIdle();
   
       state_last = sim.state;
 
@@ -213,13 +213,13 @@ test_replay(const Contests olc_type,
   };
   sim.Stop();
 
-  contest_manager.solve_exhaustive();
+  contest_manager.SolveExhaustive();
 
   if (verbose) {
     distance_counts();
   }
   return compare_scores(official_score, 
-                        contest_manager.get_stats().get_contest_result(0));
+                        contest_manager.GetStats().get_contest_result(0));
 }
 
 

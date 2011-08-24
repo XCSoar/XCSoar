@@ -41,7 +41,7 @@ ContestManager::ContestManager(const Contests _contest,
   olc_dhvxc_triangle(trace_full, true),
   olc_sisat(trace_full)
 {
-  reset();
+  Reset();
 }
 
 void
@@ -60,88 +60,95 @@ ContestManager::SetHandicap(unsigned handicap)
 }
 
 bool
-ContestManager::run_contest(AbstractContest &the_contest, 
-                            ContestResult &contest_result,
-                            ContestTraceVector &contest_solution,
-                            bool exhaustive)
+ContestManager::RunContest(AbstractContest &_contest,
+                           ContestResult &result,
+                           ContestTraceVector &solution,
+                           bool exhaustive)
 {
   // run solver, return immediately if further processing is required
   // by subsequent calls
-  if (!the_contest.solve(exhaustive))
+  if (!_contest.solve(exhaustive))
     return false;
 
   // if no improved solution was found, must have finished processing
   // with invalid data
-  if (!the_contest.score(contest_result))
+  if (!_contest.score(result))
     return true;
 
   // solver finished and improved solution was found.  save solution
   // and retrieve new trace.
 
-  the_contest.copy_solution(contest_solution);
+  _contest.copy_solution(solution);
 
   return true;
 }
 
 bool 
-ContestManager::update_idle(bool exhaustive)
+ContestManager::UpdateIdle(bool exhaustive)
 {
   bool retval = false;
 
   switch (contest) {
   case OLC_Sprint:
-    retval = run_contest(olc_sprint, stats.result[0],
+    retval = RunContest(olc_sprint, stats.result[0],
                          stats.solution[0], exhaustive);
     break;
+
   case OLC_FAI:
-    retval = run_contest(olc_fai, stats.result[0],
+    retval = RunContest(olc_fai, stats.result[0],
                          stats.solution[0], exhaustive);
     break;
+
   case OLC_Classic:
-    retval = run_contest(olc_classic, stats.result[0],
+    retval = RunContest(olc_classic, stats.result[0],
                          stats.solution[0], exhaustive);
     break;
+
   case OLC_League:
-    retval = run_contest(olc_classic, stats.result[1],
+    retval = RunContest(olc_classic, stats.result[1],
                          stats.solution[1], exhaustive);
 
     olc_league.get_solution_classic() = stats.solution[1];
 
-    retval |= run_contest(olc_league, stats.result[0],
+    retval |= RunContest(olc_league, stats.result[0],
                           stats.solution[0], exhaustive);
     break;
+
   case OLC_Plus:
-    retval = run_contest(olc_classic, stats.result[0],
+    retval = RunContest(olc_classic, stats.result[0],
                          stats.solution[0], exhaustive);
 
     olc_plus.get_result_classic() = stats.result[0];
     olc_plus.get_solution_classic() = stats.solution[0];
 
-    retval |= run_contest(olc_fai, stats.result[1],
+    retval |= RunContest(olc_fai, stats.result[1],
                           stats.solution[1], exhaustive);
 
     olc_plus.get_result_fai() = stats.result[1];
     olc_plus.get_solution_fai() = stats.solution[1];
 
     if (retval) 
-      run_contest(olc_plus, stats.result[2],
+      RunContest(olc_plus, stats.result[2],
                   stats.solution[2], exhaustive);
 
     break;
+
   case OLC_XContest:
-    retval = run_contest(olc_xcontest_free, stats.result[0],
+    retval = RunContest(olc_xcontest_free, stats.result[0],
                          stats.solution[0], exhaustive);
-    retval |= run_contest(olc_xcontest_triangle, stats.result[1],
+    retval |= RunContest(olc_xcontest_triangle, stats.result[1],
                           stats.solution[1], exhaustive);
     break;
+
   case OLC_DHVXC:
-    retval = run_contest(olc_dhvxc_free, stats.result[0],
+    retval = RunContest(olc_dhvxc_free, stats.result[0],
                          stats.solution[0], exhaustive);
-    retval |= run_contest(olc_dhvxc_triangle, stats.result[1],
+    retval |= RunContest(olc_dhvxc_triangle, stats.result[1],
                           stats.solution[1], exhaustive);
     break;
+
   case OLC_SISAT:
-    retval = run_contest(olc_sisat, stats.result[0],
+    retval = RunContest(olc_sisat, stats.result[0],
                          stats.solution[0], exhaustive);
     break;
   };
@@ -150,7 +157,7 @@ ContestManager::update_idle(bool exhaustive)
 }
 
 void
-ContestManager::reset()
+ContestManager::Reset()
 {
   stats.reset();
   olc_sprint.reset();

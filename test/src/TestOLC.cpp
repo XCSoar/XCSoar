@@ -66,32 +66,32 @@ TestOLC(DebugReplay &replay)
     full_trace.optimise_if_old();
     sprint_trace.optimise_if_old();
 
-    olc_sprint.update_idle();
+    olc_sprint.UpdateIdle();
   }
 
-  olc_classic.solve_exhaustive();
-  olc_fai.solve_exhaustive();
-  olc_league.solve_exhaustive();
-  olc_plus.solve_exhaustive();
+  olc_classic.SolveExhaustive();
+  olc_fai.SolveExhaustive();
+  olc_league.SolveExhaustive();
+  olc_plus.SolveExhaustive();
 
   putchar('\n');
 
   std::cout << "classic\n";
-  PrintHelper::print(olc_classic.get_stats().get_contest_result());
+  PrintHelper::print(olc_classic.GetStats().get_contest_result());
   std::cout << "league\n";
-  PrintHelper::print(olc_league.get_stats().get_contest_result());
+  PrintHelper::print(olc_league.GetStats().get_contest_result());
   std::cout << "fai\n";
-  PrintHelper::print(olc_fai.get_stats().get_contest_result());
+  PrintHelper::print(olc_fai.GetStats().get_contest_result());
   std::cout << "sprint\n";
-  PrintHelper::print(olc_sprint.get_stats().get_contest_result());
+  PrintHelper::print(olc_sprint.GetStats().get_contest_result());
   std::cout << "plus\n";
-  PrintHelper::print(olc_plus.get_stats().get_contest_result());
+  PrintHelper::print(olc_plus.GetStats().get_contest_result());
 
-  olc_classic.reset();
-  olc_fai.reset();
-  olc_sprint.reset();
-  olc_league.reset();
-  olc_plus.reset();
+  olc_classic.Reset();
+  olc_fai.Reset();
+  olc_sprint.Reset();
+  olc_league.Reset();
+  olc_plus.Reset();
   full_trace.clear();
   sprint_trace.clear();
 

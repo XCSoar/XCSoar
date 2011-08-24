@@ -75,7 +75,7 @@ public:
   ContestManager(const Contests _contest,
                  const Trace &trace_full, const Trace &trace_sprint);
 
-  void set_contest(Contests _contest) {
+  void SetContest(Contests _contest) {
     contest = _contest;
   }
 
@@ -89,26 +89,26 @@ public:
    * after a number of iterations (incremental search)
    * @return True if internal state changed
    */
-  bool update_idle(bool exhaustive = false);
+  bool UpdateIdle(bool exhaustive = false);
 
-  bool solve_exhaustive() {
-    return update_idle(true);
+  bool SolveExhaustive() {
+    return UpdateIdle(true);
   }
 
   /** 
    * Reset the task (as if never flown)
    */
-  void reset();
+  void Reset();
 
-  const ContestStatistics &get_stats() const {
+  const ContestStatistics &GetStats() const {
     return stats;
   }
 
 private:
-  bool run_contest(AbstractContest &the_contest,
-                   ContestResult &contest_result,
-                   ContestTraceVector &contest_solution,
-                   bool exhaustive);
+  bool RunContest(AbstractContest &_contest,
+                  ContestResult &result,
+                  ContestTraceVector &solution,
+                  bool exhaustive);
 };
 
 #endif
