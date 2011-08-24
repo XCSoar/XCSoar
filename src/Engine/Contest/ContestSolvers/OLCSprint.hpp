@@ -37,10 +37,10 @@ public:
    */
   OLCSprint(const Trace &_trace);
 
-  void reset();
+  void Reset();
 
 protected:
-  fixed calc_score() const;
+  fixed CalcScore() const;
 
   void add_edges(const ScanTaskPoint &origin);
 

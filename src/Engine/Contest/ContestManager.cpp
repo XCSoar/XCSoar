@@ -67,18 +67,18 @@ ContestManager::RunContest(AbstractContest &_contest,
 {
   // run solver, return immediately if further processing is required
   // by subsequent calls
-  if (!_contest.solve(exhaustive))
+  if (!_contest.Solve(exhaustive))
     return false;
 
   // if no improved solution was found, must have finished processing
   // with invalid data
-  if (!_contest.score(result))
+  if (!_contest.Score(result))
     return true;
 
   // solver finished and improved solution was found.  save solution
   // and retrieve new trace.
 
-  _contest.copy_solution(solution);
+  _contest.CopySolution(solution);
 
   return true;
 }
@@ -160,16 +160,16 @@ void
 ContestManager::Reset()
 {
   stats.reset();
-  olc_sprint.reset();
-  olc_fai.reset();
-  olc_classic.reset();
-  olc_league.reset();
-  olc_plus.reset();
-  olc_xcontest_free.reset();
-  olc_xcontest_triangle.reset();
-  olc_dhvxc_free.reset();
-  olc_dhvxc_triangle.reset();
-  olc_sisat.reset();
+  olc_sprint.Reset();
+  olc_fai.Reset();
+  olc_classic.Reset();
+  olc_league.Reset();
+  olc_plus.Reset();
+  olc_xcontest_free.Reset();
+  olc_xcontest_triangle.Reset();
+  olc_dhvxc_free.Reset();
+  olc_dhvxc_triangle.Reset();
+  olc_sisat.Reset();
 }
 
 /*

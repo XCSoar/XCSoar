@@ -40,17 +40,17 @@ class OLCPlus:
 public:
   OLCPlus(const Trace &_trace);
 
-  virtual void copy_solution(ContestTraceVector &vec) const;
+  virtual void CopySolution(ContestTraceVector &vec) const;
 
 protected:
-  virtual fixed calc_distance() const;
-  virtual fixed calc_score() const;
-  virtual fixed calc_time() const;
+  virtual fixed CalcDistance() const;
+  virtual fixed CalcScore() const;
+  virtual fixed CalcTime() const;
 
 public:
-  virtual void reset();
+  virtual void Reset();
 
-  bool solve(bool exhaustive);
+  bool Solve(bool exhaustive);
 
   ContestTraceVector& get_solution_classic() {
     return solution_classic;

@@ -40,13 +40,13 @@ public:
   XContestTriangle(const Trace &_trace,
                    const bool _is_dhv=false);
 
-  virtual bool solve(bool exhaustive);
+  virtual bool Solve(bool exhaustive);
 
   void swap_mode();
 
 protected:
-  virtual fixed calc_score() const;
-  virtual fixed calc_distance() const;
+  virtual fixed CalcScore() const;
+  virtual fixed CalcDistance() const;
 };
 
 #endif

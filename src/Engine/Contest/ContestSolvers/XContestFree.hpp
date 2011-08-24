@@ -39,7 +39,7 @@ public:
                const bool _is_dhv=false);
 
 protected:
-  virtual fixed calc_score() const;
+  virtual fixed CalcScore() const;
 
   void set_weightings();
 };

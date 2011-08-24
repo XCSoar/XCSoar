@@ -26,13 +26,13 @@
 OLCLeague::OLCLeague(const Trace &_trace):
   AbstractContest(_trace, 0)
 {
-  reset();
+  Reset();
 }
 
 bool
-OLCLeague::save_solution()
+OLCLeague::SaveSolution()
 {
-  if (AbstractContest::save_solution()) {
+  if (AbstractContest::SaveSolution()) {
     best_solution = solution;
     return true;
   }
@@ -40,9 +40,9 @@ OLCLeague::save_solution()
 }
 
 void
-OLCLeague::reset()
+OLCLeague::Reset()
 {
-  AbstractContest::reset();
+  AbstractContest::Reset();
   solution_found = false;
   solution.clear();
   solution_classic.clear();
@@ -52,7 +52,7 @@ OLCLeague::reset()
 }
 
 bool
-OLCLeague::solve(bool exhaustive)
+OLCLeague::Solve(bool exhaustive)
 {
   if (trace_master.size() < 2)
     return false;
@@ -62,7 +62,7 @@ OLCLeague::solve(bool exhaustive)
     trace_master.back(),
   };
 
-  if (!finish_altitude_valid(trace[0], trace[1])) {
+  if (!IsFinishAltitudeValid(trace[0], trace[1])) {
     return false;
   }
 
@@ -99,18 +99,18 @@ OLCLeague::solve(bool exhaustive)
 
 
 bool 
-OLCLeague::score(ContestResult &result)
+OLCLeague::Score(ContestResult &result)
 {
   if (solution_found) {
-    save_solution();
-    return AbstractContest::score(result);
+    SaveSolution();
+    return AbstractContest::Score(result);
   }
   return false;
 }
 
 
 void 
-OLCLeague::copy_solution(ContestTraceVector &vec) const
+OLCLeague::CopySolution(ContestTraceVector &vec) const
 {
   vec.clear();
   if (solution_found) {
@@ -120,7 +120,7 @@ OLCLeague::copy_solution(ContestTraceVector &vec) const
 
 
 fixed 
-OLCLeague::calc_distance() const 
+OLCLeague::CalcDistance() const 
 {
   fixed dist = fixed_zero;
   for (unsigned i = 0; i < 4; ++i)
@@ -131,14 +131,14 @@ OLCLeague::calc_distance() const
 
 
 fixed 
-OLCLeague::calc_score() const
+OLCLeague::CalcScore() const
 {
-  return apply_handicap(calc_distance()/fixed(2500), true);
+  return ApplyHandicap(CalcDistance()/fixed(2500), true);
 }
 
 
 fixed 
-OLCLeague::calc_time() const
+OLCLeague::CalcTime() const
 {
   if (!solution[4].IsDefined())
     return fixed_zero;

@@ -41,7 +41,7 @@ OLCSISAT::OLCSISAT(const Trace &_trace)
 */
 
 fixed
-OLCSISAT::calc_score() const
+OLCSISAT::CalcScore() const
 {
   // build convex hull from solution
   SearchPointVector spv;
@@ -68,8 +68,8 @@ OLCSISAT::calc_score() const
   const fixed V = G - R;
 
   // S = total distance
-  const fixed S = calc_distance();
+  const fixed S = CalcDistance();
 
-  return apply_handicap((V + fixed(3) * S) * fixed(0.00025));
+  return ApplyHandicap((V + fixed(3) * S) * fixed(0.00025));
 }
 

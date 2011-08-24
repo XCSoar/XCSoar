@@ -55,9 +55,9 @@ OLCSprint::OLCSprint(const Trace &_trace):
   ContestDijkstra(_trace, 4, 0) {}
 
 void
-OLCSprint::reset()
+OLCSprint::Reset()
 {
-  ContestDijkstra::reset();
+  ContestDijkstra::Reset();
 }
 
 unsigned
@@ -115,9 +115,9 @@ OLCSprint::add_edges(const ScanTaskPoint &origin)
 }
 
 fixed
-OLCSprint::calc_score() const
+OLCSprint::CalcScore() const
 {
-  return apply_handicap(calc_distance()/fixed(2500), true);
+  return ApplyHandicap(CalcDistance()/fixed(2500), true);
 }
 
 void
@@ -141,7 +141,7 @@ OLCSprint::update_trace() {
     trace_master.back(),
   };
 
-  if (!finish_altitude_valid(e[0], e[1])) {
+  if (!IsFinishAltitudeValid(e[0], e[1])) {
     clear_trace();
     return;
   }

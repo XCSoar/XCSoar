@@ -39,7 +39,7 @@ public:
   OLCSISAT(const Trace &_trace);
 
 protected:
-  virtual fixed calc_score() const;
+  virtual fixed CalcScore() const;
 };
 
 #endif

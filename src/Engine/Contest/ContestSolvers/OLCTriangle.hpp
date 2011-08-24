@@ -42,14 +42,14 @@ public:
   OLCTriangle(const Trace &_trace,
               const bool _is_fai=true);
 
-  void reset();
+  void Reset();
 
 protected:
-  virtual bool save_solution();
+  virtual bool SaveSolution();
 
-  virtual fixed calc_score() const;
-  virtual fixed calc_distance() const;
-  virtual fixed calc_time() const;
+  virtual fixed CalcScore() const;
+  virtual fixed CalcDistance() const;
+  virtual fixed CalcTime() const;
 
   fixed leg_distance(unsigned i) const;
 
@@ -59,7 +59,7 @@ protected:
 
   void start_search();
 
-  bool update_score();
+  bool UpdateScore();
 
 private:
   void add_start_edges();

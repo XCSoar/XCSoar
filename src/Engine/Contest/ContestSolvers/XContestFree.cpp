@@ -37,10 +37,10 @@ XContestFree::set_weightings()
 }
 
 fixed
-XContestFree::calc_score() const
+XContestFree::CalcScore() const
 {
   // DHV-XC: 1.5 points per km
   // XContest: 1.0 points per km 
   const fixed score_factor = is_dhv? fixed(0.0015): fixed(0.0010);
-  return apply_handicap(calc_distance()*score_factor);
+  return ApplyHandicap(CalcDistance()*score_factor);
 }

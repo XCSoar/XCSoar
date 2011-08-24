@@ -28,13 +28,13 @@
 OLCPlus::OLCPlus(const Trace &_trace):
   AbstractContest(_trace, 0)
 {
-  reset();
+  Reset();
 }
 
 void
-OLCPlus::reset()
+OLCPlus::Reset()
 {
-  AbstractContest::reset();
+  AbstractContest::Reset();
   solution_classic.clear();
   solution_fai.clear();
   result_classic.reset();
@@ -42,32 +42,32 @@ OLCPlus::reset()
 }
 
 bool
-OLCPlus::solve(bool exhaustive)
+OLCPlus::Solve(bool exhaustive)
 {
-  return save_solution();
+  return SaveSolution();
 }
 
 void 
-OLCPlus::copy_solution(ContestTraceVector &vec) const
+OLCPlus::CopySolution(ContestTraceVector &vec) const
 {
   vec = solution_classic;
 }
 
 fixed 
-OLCPlus::calc_distance() const 
+OLCPlus::CalcDistance() const 
 {
   return result_classic.distance;
 }
 
 fixed 
-OLCPlus::calc_score() const
+OLCPlus::CalcScore() const
 {
-  return apply_handicap((result_classic.distance +
+  return ApplyHandicap((result_classic.distance +
                          fixed(0.3) * result_fai.distance) * fixed(0.001));
 }
 
 fixed 
-OLCPlus::calc_time() const
+OLCPlus::CalcTime() const
 {
   return result_classic.time;
 }

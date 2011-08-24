@@ -40,8 +40,8 @@ protected:
   const Trace &trace_master;
 
 private:
-  unsigned contest_handicap;
-  const unsigned m_finish_alt_diff;
+  unsigned handicap;
+  const unsigned finish_alt_diff;
   ContestResult best_result;
 
 public:
@@ -53,10 +53,10 @@ public:
    * @param finish_alt_diff Maximum height loss from start to finish (m)
    */
   AbstractContest(const Trace &_trace,
-                  const unsigned finish_alt_diff = 1000);
+                  const unsigned _finish_alt_diff = 1000);
 
   void SetHandicap(unsigned _handicap) {
-    contest_handicap = _handicap;
+    handicap = _handicap;
   }
 
   /**
@@ -67,14 +67,14 @@ public:
    *
    * @return True is solution was found, False otherwise
    */
-  virtual bool score(ContestResult &result);
+  virtual bool Score(ContestResult &result);
 
   /**
    * Copy the best Contest path solution
    *
    * @param vec output vector
    */
-  virtual void copy_solution(ContestTraceVector &vec) const = 0;
+  virtual void CopySolution(ContestTraceVector &vec) const = 0;
 
 protected:
   /**
@@ -82,7 +82,7 @@ protected:
    *
    * @return Distance (m)
    */
-  virtual fixed calc_distance() const = 0;
+  virtual fixed CalcDistance() const = 0;
 
   /**
    * Calculate score of best path
@@ -91,20 +91,20 @@ protected:
    * 
    * @return Score (pts)
    */
-  virtual fixed calc_score() const = 0;
+  virtual fixed CalcScore() const = 0;
 
   /**
    * Calculate elapsed time of best path
    *
    * @return Distance (m)
    */
-  virtual fixed calc_time() const = 0;
+  virtual fixed CalcTime() const = 0;
 
 public:
   /**
    * Reset the optimiser as if never flown
    */
-  virtual void reset();
+  virtual void Reset();
 
   /**
    * Update the solver.  The solver is incremental, so this method can
@@ -114,23 +114,23 @@ public:
    * after a number of iterations (incremental search)
    * @return True if solver completed in this call
    */
-  virtual bool solve(bool exhaustive) = 0;
+  virtual bool Solve(bool exhaustive) = 0;
 
 protected:
 
-  /**
+  /**Applied naming convention
    * Perform check on whether score needs to be
    * updated (even if score isn't improved, due to
    * new conditions occuring, e.g. closure of path)
    *
    * @return true if score is updated
    */
-  virtual bool update_score();
+  virtual bool UpdateScore();
 
-  bool finish_altitude_valid(const TracePoint& start,
+  bool IsFinishAltitudeValid(const TracePoint& start,
                              const TracePoint& finish) const;
 
-  virtual bool save_solution();
+  virtual bool SaveSolution();
 
   /**
    * Apply handicap.
@@ -140,7 +140,7 @@ protected:
    *
    * @return Handicap adjusted score
    */
-  fixed apply_handicap(const fixed& unhandicapped_score, const bool shifted=false) const;
+  fixed ApplyHandicap(const fixed& unhandicapped_score, const bool shifted=false) const;
 };
 
 #endif

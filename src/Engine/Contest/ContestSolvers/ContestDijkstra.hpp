@@ -73,20 +73,20 @@ public:
                   const unsigned n_legs,
                   const unsigned finish_alt_diff = 1000);
 
-  bool score(ContestResult &result);
+  bool Score(ContestResult &result);
 
-  virtual void copy_solution(ContestTraceVector &vec) const;
+  virtual void CopySolution(ContestTraceVector &vec) const;
 
 protected:
-  virtual fixed calc_distance() const;
-  virtual fixed calc_score() const;
-  virtual fixed calc_time() const;
+  virtual fixed CalcDistance() const;
+  virtual fixed CalcScore() const;
+  virtual fixed CalcTime() const;
 
 public:
   /**
    * Reset the optimiser as if never flown
    */
-  virtual void reset();
+  virtual void Reset();
 
   /**
    * Update the solver.  The solver is incremental, so this method can
@@ -94,7 +94,7 @@ public:
    *
    * @return True if solver completed in this call
    */
-  virtual bool solve(bool exhaustive);
+  virtual bool Solve(bool exhaustive);
 
 protected:
   gcc_pure
@@ -138,7 +138,7 @@ protected:
    */
   virtual void start_search();
 
-  virtual bool save_solution();
+  virtual bool SaveSolution();
 
   /** 
    * Distance function for free point

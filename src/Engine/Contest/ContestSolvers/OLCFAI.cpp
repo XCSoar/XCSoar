@@ -26,8 +26,8 @@ OLCFAI::OLCFAI(const Trace &_trace):
 {}
 
 fixed
-OLCFAI::calc_score() const
+OLCFAI::CalcScore() const
 {
   // 0.3 points per km
-  return apply_handicap(calc_distance()*fixed(0.0003));
+  return ApplyHandicap(CalcDistance()*fixed(0.0003));
 }

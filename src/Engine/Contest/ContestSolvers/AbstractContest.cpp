@@ -26,25 +26,25 @@ Copyright_License {
 
 
 AbstractContest::AbstractContest(const Trace &_trace,
-                                 const unsigned finish_alt_diff):
+                                 const unsigned _finish_alt_diff):
   trace_master(_trace),
-  contest_handicap(100),
-  m_finish_alt_diff(finish_alt_diff)
+  handicap(100),
+  finish_alt_diff(_finish_alt_diff)
 {
-  reset();
+  Reset();
 }
 
 
 void
-AbstractContest::reset()
+AbstractContest::Reset()
 {
   best_result.reset();
 }
 
 bool
-AbstractContest::score(ContestResult &result)
+AbstractContest::Score(ContestResult &result)
 {
-  if (positive(calc_time())) {
+  if (positive(CalcTime())) {
     result = best_result;
     return true;
   }
@@ -53,7 +53,7 @@ AbstractContest::score(ContestResult &result)
 
 
 bool 
-AbstractContest::update_score()
+AbstractContest::UpdateScore()
 {
   // for normal contests, nothing needs to be done
   return false;
@@ -61,15 +61,15 @@ AbstractContest::update_score()
 
 
 bool
-AbstractContest::save_solution()
+AbstractContest::SaveSolution()
 {
-  const fixed score = calc_score();
+  const fixed score = CalcScore();
   const bool improved = (score>best_result.score);
 
   if (improved) {
     best_result.score = score;
-    best_result.distance = calc_distance();
-    best_result.time = calc_time();
+    best_result.distance = CalcDistance();
+    best_result.time = CalcTime();
     if (positive(best_result.time))
       best_result.speed = best_result.distance / best_result.time;
     else
@@ -80,24 +80,24 @@ AbstractContest::save_solution()
 }
 
 bool
-AbstractContest::finish_altitude_valid(const TracePoint& start,
+AbstractContest::IsFinishAltitudeValid(const TracePoint& start,
                                        const TracePoint& finish) const
 {
-  return finish.GetIntegerAltitude() + (int)m_finish_alt_diff >=
+  return finish.GetIntegerAltitude() + (int)finish_alt_diff >=
     start.GetIntegerAltitude();
 }
 
 fixed 
-AbstractContest::apply_handicap(const fixed& unhandicapped_score,
+AbstractContest::ApplyHandicap(const fixed& unhandicapped_score,
                                 const bool shifted) const
 {
-  assert(contest_handicap != 0);
-  if (contest_handicap == 0) {
+  assert(handicap != 0);
+  if (handicap == 0) {
     return unhandicapped_score;
   }
   if (shifted) {
-    return (200*unhandicapped_score/(100+contest_handicap));
+    return (200*unhandicapped_score/(100+handicap));
   } else {
-    return (100*unhandicapped_score/contest_handicap);
+    return (100*unhandicapped_score/handicap);
   }
 }

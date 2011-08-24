@@ -28,7 +28,7 @@ XContestTriangle::XContestTriangle(const Trace &_trace,
   is_dhv(_is_dhv) {}
 
 fixed
-XContestTriangle::calc_score() const
+XContestTriangle::CalcScore() const
 {
   // DHV-XC: 2.0 or 1.75 points per km for FAI vs non-FAI triangle
   // XContest: 1.4 or 1.2 points per km for FAI vs non-FAI triangle
@@ -37,13 +37,13 @@ XContestTriangle::calc_score() const
     (is_fai? fixed(0.002): fixed(0.00175))
     :(is_fai? fixed(0.0014): fixed(0.0012));
 
-  return apply_handicap(calc_distance()*score_factor);
+  return ApplyHandicap(CalcDistance()*score_factor);
 }
 
 fixed
-XContestTriangle::calc_distance() const
+XContestTriangle::CalcDistance() const
 {
-  const fixed d_triangle = OLCTriangle::calc_distance();
+  const fixed d_triangle = OLCTriangle::CalcDistance();
   if (!positive(d_triangle))
     return fixed_zero;
 
@@ -62,9 +62,9 @@ XContestTriangle::calc_distance() const
 }
 
 bool 
-XContestTriangle::solve(bool exhaustive)
+XContestTriangle::Solve(bool exhaustive)
 {
-  if (!ContestDijkstra::solve(exhaustive))
+  if (!ContestDijkstra::Solve(exhaustive))
     return false;
 
   best_d = 0; // reset heuristic

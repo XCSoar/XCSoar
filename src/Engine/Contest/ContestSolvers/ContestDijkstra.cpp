@@ -43,7 +43,7 @@ ContestDijkstra::ContestDijkstra(const Trace &_trace,
   NavDijkstra<TracePoint>(false, n_legs + 1, 0),
    solution_found(false)
 {
-  reset();
+  Reset();
 }
 
 void
@@ -56,13 +56,13 @@ ContestDijkstra::set_weightings()
 
 
 bool
-ContestDijkstra::score(ContestResult &result)
+ContestDijkstra::Score(ContestResult &result)
 {
   assert(num_stages <= MAX_STAGES);
 
   if (n_points < num_stages)
     return false;
-  if (AbstractContest::score(result)) {
+  if (AbstractContest::Score(result)) {
     solution_found = true;
     return true;
   }
@@ -128,7 +128,7 @@ ContestDijkstra::update_trace()
 
 
 bool
-ContestDijkstra::solve(bool exhaustive)
+ContestDijkstra::Solve(bool exhaustive)
 {
   if (dijkstra.empty()) {
     set_weightings();
@@ -164,7 +164,7 @@ ContestDijkstra::solve(bool exhaustive)
   count_olc_size = max(count_olc_size, dijkstra.queue_size());
 
   if (distance_general(exhaustive ? 0 - 1 : 25)) {
-    save_solution();
+    SaveSolution();
     update_trace();
     return true;
   }
@@ -173,7 +173,7 @@ ContestDijkstra::solve(bool exhaustive)
 }
 
 void
-ContestDijkstra::reset()
+ContestDijkstra::Reset()
 {
   solution_found = false;
   dijkstra.clear();
@@ -181,7 +181,7 @@ ContestDijkstra::reset()
   last_point.Clear();
   solution[num_stages - 1].Clear();
 
-  AbstractContest::reset();
+  AbstractContest::Reset();
 
   count_olc_solve = 0;
   count_olc_trace = 0;
@@ -190,7 +190,7 @@ ContestDijkstra::reset()
 
 
 fixed
-ContestDijkstra::calc_time() const
+ContestDijkstra::CalcTime() const
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -201,7 +201,7 @@ ContestDijkstra::calc_time() const
 }
 
 fixed
-ContestDijkstra::calc_distance() const
+ContestDijkstra::CalcDistance() const
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -213,7 +213,7 @@ ContestDijkstra::calc_distance() const
 }
 
 fixed
-ContestDijkstra::calc_score() const
+ContestDijkstra::CalcScore() const
 {
   assert(num_stages <= MAX_STAGES);
 
@@ -225,7 +225,7 @@ ContestDijkstra::calc_score() const
   #define fixed_fifth fixed(0.0002)
   score *= fixed_fifth;
 
-  return apply_handicap(score);
+  return ApplyHandicap(score);
 }
 
 void
@@ -290,15 +290,15 @@ ContestDijkstra::admit_candidate(const ScanTaskPoint &candidate) const
   if (!is_final(candidate))
     return true;
   else
-    return finish_altitude_valid(solution[0], GetPointFast(candidate));
+    return IsFinishAltitudeValid(solution[0], GetPointFast(candidate));
 }
 
 bool
-ContestDijkstra::save_solution()
+ContestDijkstra::SaveSolution()
 {
   assert(num_stages <= MAX_STAGES);
 
-  if (AbstractContest::save_solution()) {
+  if (AbstractContest::SaveSolution()) {
     best_solution.clear();
     for (unsigned i=0; i<num_stages; ++i) {
       best_solution.append(solution[i]);
@@ -310,7 +310,7 @@ ContestDijkstra::save_solution()
 
 
 void
-ContestDijkstra::copy_solution(ContestTraceVector &vec) const
+ContestDijkstra::CopySolution(ContestTraceVector &vec) const
 {
   assert(num_stages <= MAX_STAGES);
 

@@ -52,9 +52,9 @@ OLCTriangle::OLCTriangle(const Trace &_trace,
 
 
 void 
-OLCTriangle::reset()
+OLCTriangle::Reset()
 {
-  ContestDijkstra::reset();
+  ContestDijkstra::Reset();
   is_complete = false;
   is_closed = false;
   first_tp = 0;
@@ -277,7 +277,7 @@ OLCTriangle::add_edges(const ScanTaskPoint& origin)
 
 
 fixed
-OLCTriangle::calc_distance() const
+OLCTriangle::CalcDistance() const
 {
   if (is_complete) {
     return leg_distance(0)+leg_distance(1)+leg_distance(2);
@@ -288,7 +288,7 @@ OLCTriangle::calc_distance() const
 
 
 fixed
-OLCTriangle::calc_time() const
+OLCTriangle::CalcTime() const
 {
   if (!n_points)
     return fixed_zero;
@@ -300,10 +300,10 @@ OLCTriangle::calc_time() const
 
 
 fixed
-OLCTriangle::calc_score() const
+OLCTriangle::CalcScore() const
 {
   // one point per km
-  return apply_handicap(calc_distance()*fixed(0.001));
+  return ApplyHandicap(CalcDistance()*fixed(0.001));
 }
 
 void
@@ -313,7 +313,7 @@ OLCTriangle::start_search()
 
 
 bool 
-OLCTriangle::update_score()
+OLCTriangle::UpdateScore()
 {
   // RESERVED FOR FUTURE USE: DO NOT DELETE
   /*
@@ -331,11 +331,11 @@ OLCTriangle::update_score()
 }
 
 bool
-OLCTriangle::save_solution()
+OLCTriangle::SaveSolution()
 {
   assert(num_stages <= MAX_STAGES);
 
-  if (AbstractContest::save_solution()) {
+  if (AbstractContest::SaveSolution()) {
     best_solution.clear();
 
     best_solution.append(solution[3]);
