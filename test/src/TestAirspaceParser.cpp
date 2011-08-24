@@ -97,8 +97,8 @@ TestOpenAir()
 
       const AirspaceCircle &circle = (const AirspaceCircle &)airspace;
       ok1(equals(circle.GetRadius(), Units::ToSysUnit(fixed(5), unNauticalMiles)));
-      ok1(equals(circle.GetCenter().Latitude, Angle::degrees(fixed(1.091667))));
-      ok1(equals(circle.GetCenter().Longitude, Angle::degrees(fixed(0.091667))));
+      ok1(equals(circle.GetCenter(), 
+                 Angle::degrees(fixed(1.091667)), Angle::degrees(fixed(0.091667))));
     } else if (_tcscmp(_T("Polygon-Test"), airspace.GetName()) == 0) {
       if (!ok1(airspace.shape == AbstractAirspace::POLYGON))
         continue;
@@ -109,25 +109,20 @@ TestOpenAir()
       if (!ok1(points.size() == 5))
         continue;
 
-      ok1(equals(points[0].get_location().Latitude,
-                 Angle::dms(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[0].get_location().Longitude,
+      ok1(equals(points[0].get_location(),
+                 Angle::dms(fixed(1), fixed(30), fixed(30)),
                  Angle::dms(fixed(1), fixed(30), fixed(30)).flipped()));
-      ok1(equals(points[1].get_location().Latitude,
+      ok1(equals(points[1].get_location(),
+                 Angle::dms(fixed(1), fixed(30), fixed(30)),
                  Angle::dms(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[1].get_location().Longitude,
+      ok1(equals(points[2].get_location(),
+                 Angle::dms(fixed(1), fixed(30), fixed(30)).flipped(),
                  Angle::dms(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[2].get_location().Latitude,
+      ok1(equals(points[3].get_location(),
+                 Angle::dms(fixed(1), fixed(30), fixed(30)).flipped(),
                  Angle::dms(fixed(1), fixed(30), fixed(30)).flipped()));
-      ok1(equals(points[2].get_location().Longitude,
-                 Angle::dms(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[3].get_location().Latitude,
-                 Angle::dms(fixed(1), fixed(30), fixed(30)).flipped()));
-      ok1(equals(points[3].get_location().Longitude,
-                 Angle::dms(fixed(1), fixed(30), fixed(30)).flipped()));
-      ok1(equals(points[4].get_location().Latitude,
-                 Angle::dms(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[4].get_location().Longitude,
+      ok1(equals(points[4].get_location(),
+                 Angle::dms(fixed(1), fixed(30), fixed(30)),
                  Angle::dms(fixed(1), fixed(30), fixed(30)).flipped()));
     } else if (_tcscmp(_T("Radio-Test"), airspace.GetName()) == 0) {
       ok1(_tcscmp(_T("130.125 MHz"), airspace.GetRadioText().c_str()) == 0);
@@ -208,8 +203,8 @@ TestTNP()
 
       const AirspaceCircle &circle = (const AirspaceCircle &)airspace;
       ok1(equals(circle.GetRadius(), Units::ToSysUnit(fixed(5), unNauticalMiles)));
-      ok1(equals(circle.GetCenter().Latitude, Angle::degrees(fixed(1.091667))));
-      ok1(equals(circle.GetCenter().Longitude, Angle::degrees(fixed(0.091667))));
+      ok1(equals(circle.GetCenter(), 
+                 Angle::degrees(fixed(1.091667)), Angle::degrees(fixed(0.091667))));
     } else if (_tcscmp(_T("Polygon-Test"), airspace.GetName()) == 0) {
       if (!ok1(airspace.shape == AbstractAirspace::POLYGON))
         continue;
@@ -220,25 +215,20 @@ TestTNP()
       if (!ok1(points.size() == 5))
         continue;
 
-      ok1(equals(points[0].get_location().Latitude,
-                 Angle::dms(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[0].get_location().Longitude,
+      ok1(equals(points[0].get_location(),
+                 Angle::dms(fixed(1), fixed(30), fixed(30)),
                  Angle::dms(fixed(1), fixed(30), fixed(30)).flipped()));
-      ok1(equals(points[1].get_location().Latitude,
+      ok1(equals(points[1].get_location(),
+                 Angle::dms(fixed(1), fixed(30), fixed(30)),
                  Angle::dms(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[1].get_location().Longitude,
+      ok1(equals(points[2].get_location(),
+                 Angle::dms(fixed(1), fixed(30), fixed(30)).flipped(),
                  Angle::dms(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[2].get_location().Latitude,
+      ok1(equals(points[3].get_location(),
+                 Angle::dms(fixed(1), fixed(30), fixed(30)).flipped(),
                  Angle::dms(fixed(1), fixed(30), fixed(30)).flipped()));
-      ok1(equals(points[2].get_location().Longitude,
-                 Angle::dms(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[3].get_location().Latitude,
-                 Angle::dms(fixed(1), fixed(30), fixed(30)).flipped()));
-      ok1(equals(points[3].get_location().Longitude,
-                 Angle::dms(fixed(1), fixed(30), fixed(30)).flipped()));
-      ok1(equals(points[4].get_location().Latitude,
-                 Angle::dms(fixed(1), fixed(30), fixed(30))));
-      ok1(equals(points[4].get_location().Longitude,
+      ok1(equals(points[4].get_location(),
+                 Angle::dms(fixed(1), fixed(30), fixed(30)),
                  Angle::dms(fixed(1), fixed(30), fixed(30)).flipped()));
     } else if (_tcscmp(_T("Radio-Test"), airspace.GetName()) == 0) {
       ok1(_tcscmp(_T("130.125 MHz"), airspace.GetRadioText().c_str()) == 0);
@@ -285,7 +275,7 @@ TestTNP()
 
 int main(int argc, char **argv)
 {
-  plan_tests(113);
+  plan_tests(101);
 
   TestOpenAir();
   TestTNP();
