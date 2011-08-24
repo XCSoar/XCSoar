@@ -180,7 +180,7 @@ protected:
   void
   draw_target(const TaskPoint &tp)
   {
-    if (!do_draw_target(tp))
+    if (!DoDrawTarget(tp))
       return;
 
     RasterPoint sc;

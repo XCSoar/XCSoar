@@ -44,78 +44,78 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                                  const TaskLook &_task_look,
                                  const TaskProjection &_task_projection,
                                  RenderObservationZone &_ozv,
-                                 const bool draw_bearing,
+                                 bool _draw_bearing,
                                  bool _draw_all,
-                                 const GeoPoint &location)
+                                 const GeoPoint &_location)
   :canvas(_canvas), buffer(_buffer), m_proj(_projection),
    map_canvas(_canvas, _projection,
               _projection.GetScreenBounds().scale(fixed(1.1))),
-   m_settings_map(_settings_map),
+   settings_map(_settings_map),
    task_look(_task_look),
    task_projection(_task_projection),
-   m_draw_bearing(draw_bearing),
+   draw_bearing(_draw_bearing),
    draw_all(_draw_all),
-   m_index(0),
+   index(0),
    ozv(_ozv),
-   m_active_index(0),
-   m_layer(RENDER_TASK_OZ_SHADE),
-   m_location(location),
+   active_index(0),
+   layer(RENDER_TASK_OZ_SHADE),
+   location(_location),
    mode_optional_start(false)
 {
 }
 
 void 
-RenderTaskPoint::draw_ordered(const OrderedTaskPoint& tp) 
+RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp)
 {
   const bool visible = tp.boundingbox_overlaps(bb_screen);
 
-  if (visible && (m_layer == RENDER_TASK_OZ_SHADE)) {
+  if (visible && (layer == RENDER_TASK_OZ_SHADE)) {
     // draw shaded part of observation zone
-    draw_oz_background(canvas, tp);
+    DrawOZBackground(canvas, tp);
   }
   
-  if (m_layer == RENDER_TASK_LEG) {
-    if (m_index>0) {
-      draw_task_line(m_last_point, tp.GetLocationRemaining());
+  if (layer == RENDER_TASK_LEG) {
+    if (index>0) {
+      DrawTaskLine(last_point, tp.GetLocationRemaining());
     }
-    m_last_point = tp.GetLocationRemaining();
+    last_point = tp.GetLocationRemaining();
   }
   
-  if (visible && (m_layer == RENDER_TASK_OZ_OUTLINE)) {
-    draw_oz_foreground(tp);
+  if (visible && (layer == RENDER_TASK_OZ_OUTLINE)) {
+    DrawOZForeground(tp);
   }
 }
 
 bool 
-RenderTaskPoint::do_draw_target(const TaskPoint &tp) const
+RenderTaskPoint::DoDrawTarget(const TaskPoint &tp) const
 {
   if (!tp.HasTarget()) {
     return false;
   }
-  return draw_all || point_current();
+  return draw_all || PointCurrent();
 }
 
 void 
-RenderTaskPoint::draw_bearing(const TaskPoint &tp) 
+RenderTaskPoint::DrawBearing(const TaskPoint &tp) 
 {
-  if (!do_draw_bearing(tp)) 
+  if (!DoDrawBearing(tp)) 
     return;
 
   canvas.select(task_look.bearing_pen);
-  map_canvas.offset_line(m_location, tp.GetLocationRemaining());
+  map_canvas.offset_line(location, tp.GetLocationRemaining());
 }
 
 void 
-RenderTaskPoint::draw_target(const TaskPoint &tp) 
+RenderTaskPoint::DrawTarget(const TaskPoint &tp) 
 {
-  if (!do_draw_target(tp)) 
+  if (!DoDrawTarget(tp)) 
     return;
 }
 
 void 
-RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end) 
+RenderTaskPoint::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
 {
-  canvas.select(leg_active()
+  canvas.select(LegActive()
                 ? task_look.leg_active_pen
                 : task_look.leg_inactive_pen);
   canvas.background_transparent();
@@ -142,9 +142,9 @@ RenderTaskPoint::draw_task_line(const GeoPoint& start, const GeoPoint& end)
 }
 
 void 
-RenderTaskPoint::draw_isoline(const AATPoint& tp) 
+RenderTaskPoint::DrawIsoline(const AATPoint &tp)
 {
-  if (!tp.valid() || !do_draw_isoline(tp))
+  if (!tp.valid() || !DoDrawIsoline(tp))
     return;
 
   AATIsolineSegment seg(tp, task_projection);
@@ -172,9 +172,9 @@ RenderTaskPoint::draw_isoline(const AATPoint& tp)
 }
 
 void 
-RenderTaskPoint::draw_deadzone(const AATPoint& tp) 
+RenderTaskPoint::DrawDeadzone(const AATPoint &tp)
 {
-  if (!do_draw_deadzone(tp) || is_ancient_hardware()) {
+  if (!DoDrawDeadzone(tp) || is_ancient_hardware()) {
     return;
   }
   /*
@@ -189,7 +189,7 @@ RenderTaskPoint::draw_deadzone(const AATPoint& tp)
   canvas.white_brush();
   canvas.white_pen();
   
-  if (point_current()) {
+  if (PointCurrent()) {
     // scoring deadzone should include the area to the next destination
     map_canvas.draw(tp.get_deadzone());
   } else {
@@ -199,31 +199,31 @@ RenderTaskPoint::draw_deadzone(const AATPoint& tp)
 }
 
 void 
-RenderTaskPoint::draw_oz_background(Canvas &canvas, const OrderedTaskPoint& tp)
+RenderTaskPoint::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp)
 {
   ozv.set_layer(RenderObservationZone::LAYER_SHADE);
 
-  if (ozv.draw_style(canvas, m_settings_map.airspace, m_index - m_active_index)) {
+  if (ozv.draw_style(canvas, settings_map.airspace, index - active_index)) {
     ozv.Draw(canvas, m_proj, *tp.get_oz());
     ozv.un_draw_style(canvas);
   }
 }
 
 void 
-RenderTaskPoint::draw_oz_foreground(const OrderedTaskPoint& tp) 
+RenderTaskPoint::DrawOZForeground(const OrderedTaskPoint &tp)
 {
-  int offset = m_index - m_active_index;
+  int offset = index - active_index;
   if (mode_optional_start) {
     offset = -1; // render optional starts as deactivated
   }
   ozv.set_layer(RenderObservationZone::LAYER_INACTIVE);
-  if (ozv.draw_style(canvas, m_settings_map.airspace, offset)) {
+  if (ozv.draw_style(canvas, settings_map.airspace, offset)) {
     ozv.Draw(canvas, m_proj, *tp.get_oz());
     ozv.un_draw_style(canvas);
   }
 
   ozv.set_layer(RenderObservationZone::LAYER_ACTIVE);
-  if (ozv.draw_style(canvas, m_settings_map.airspace, offset)) {
+  if (ozv.draw_style(canvas, settings_map.airspace, offset)) {
     ozv.Draw(canvas, m_proj, *tp.get_oz());
     ozv.un_draw_style(canvas);
   }
@@ -237,42 +237,42 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
 
   switch (tp.GetType()) {
   case TaskPoint::UNORDERED:
-    if (m_layer == RENDER_TASK_LEG)
-      draw_task_line(m_location, tp.GetLocationRemaining());
+    if (layer == RENDER_TASK_LEG)
+      DrawTaskLine(location, tp.GetLocationRemaining());
 
-    if (m_layer == RENDER_TASK_SYMBOLS)
-      draw_bearing(tp);
+    if (layer == RENDER_TASK_SYMBOLS)
+      DrawBearing(tp);
 
-    m_index++;
+    index++;
     break;
 
   case TaskPoint::START:
-    m_index = 0;
+    index = 0;
 
-    draw_ordered(otp);
-    if (m_layer == RENDER_TASK_SYMBOLS) {
-      draw_bearing(tp);
-      draw_target(tp);
+    DrawOrdered(otp);
+    if (layer == RENDER_TASK_SYMBOLS) {
+      DrawBearing(tp);
+      DrawTarget(tp);
     }
 
     break;
 
   case TaskPoint::AST:
-    m_index++;
+    index++;
 
-    draw_ordered(otp);
-    if (m_layer == RENDER_TASK_SYMBOLS) {
-      draw_bearing(tp);
-      draw_target(tp);
+    DrawOrdered(otp);
+    if (layer == RENDER_TASK_SYMBOLS) {
+      DrawBearing(tp);
+      DrawTarget(tp);
     }
     break;
 
   case TaskPoint::AAT:
-    m_index++;
+    index++;
 
 #ifndef ENABLE_OPENGL
-    if (m_layer == RENDER_TASK_OZ_SHADE && buffer != NULL &&
-        do_draw_deadzone(tp) && !is_ancient_hardware()) {
+    if (layer == RENDER_TASK_OZ_SHADE && buffer != NULL &&
+        DoDrawDeadzone(tp) && !is_ancient_hardware()) {
       // Draw clear area on top indicating part of OZ already travelled in
       // This provides a simple and intuitive visual representation of
       // where in the OZ to go to increase scoring distance.
@@ -280,7 +280,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
       if (!atp.boundingbox_overlaps(bb_screen))
         return;
 
-      const SearchPointVector &dead_zone = point_current()
+      const SearchPointVector &dead_zone = PointCurrent()
         // scoring deadzone should include the area to the next destination
         ? atp.get_deadzone()
         // scoring deadzone is just the samples convex hull
@@ -291,7 +291,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
         buffer->clear_white();
 
         /* draw the background shade into the buffer */
-        draw_oz_background(*buffer, atp);
+        DrawOZBackground(*buffer, atp);
 
         /* now erase the dead zone by drawing a white polygon over it */
         buffer->null_pen();
@@ -308,8 +308,8 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
     }
 #endif
 
-    draw_ordered(otp);
-    if (m_layer == RENDER_TASK_OZ_SHADE) {
+    DrawOrdered(otp);
+    if (layer == RENDER_TASK_OZ_SHADE) {
       // Draw clear area on top indicating part of OZ already travelled in
       // This provides a simple and intuitive visual representation of
       // where in the OZ to go to increase scoring distance.
@@ -320,21 +320,21 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
       //draw_deadzone(tp);
     }
 
-    if (m_layer == RENDER_TASK_SYMBOLS) {
-      draw_isoline(atp);
-      draw_bearing(tp);
-      draw_target(tp);
+    if (layer == RENDER_TASK_SYMBOLS) {
+      DrawIsoline(atp);
+      DrawBearing(tp);
+      DrawTarget(tp);
     }
 
     break;
 
   case TaskPoint::FINISH:
-    m_index++;
+    index++;
 
-    draw_ordered(otp);
-    if (m_layer == RENDER_TASK_SYMBOLS) {
-      draw_bearing(tp);
-      draw_target(tp);
+    DrawOrdered(otp);
+    if (layer == RENDER_TASK_SYMBOLS) {
+      DrawBearing(tp);
+      DrawTarget(tp);
     }
     break;
 

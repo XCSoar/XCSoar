@@ -45,24 +45,25 @@ enum RenderTaskLayer {
   RENDER_TASK_SYMBOLS,
 };
 
-class RenderTaskPoint {
+class RenderTaskPoint
+{
 protected:
   Canvas &canvas, *buffer;
   const WindowProjection &m_proj;
   MapCanvas map_canvas;
-  const SETTINGS_MAP &m_settings_map;
+  const SETTINGS_MAP &settings_map;
   const TaskLook &task_look;
   const TaskProjection &task_projection;
 
-  const bool m_draw_bearing;
+  const bool draw_bearing;
   const bool draw_all;
 
-  GeoPoint m_last_point;
-  unsigned m_index;
+  GeoPoint last_point;
+  unsigned index;
   RenderObservationZone &ozv;
-  unsigned m_active_index;
-  RenderTaskLayer m_layer;
-  const GeoPoint m_location;
+  unsigned active_index;
+  RenderTaskLayer layer;
+  const GeoPoint location;
   FlatBoundingBox bb_screen;
   bool mode_optional_start;
 
@@ -73,63 +74,63 @@ public:
                   const TaskLook &task_look,
                   const TaskProjection &_task_projection,
                   RenderObservationZone &_ozv,
-                  const bool draw_bearing,
-                  bool draw_all,
-                  const GeoPoint &location);
+                  bool _draw_bearing,
+                  bool _draw_all,
+                  const GeoPoint &_location);
 
-  void set_layer(RenderTaskLayer set) {
-    m_layer = set;
-    m_index = 0;
+  void SetLayer(RenderTaskLayer set) {
+    layer = set;
+    index = 0;
   }
 
-  void set_active_index(unsigned active_index) {
-    m_active_index = active_index;
+  void SetActiveIndex(unsigned _active_index) {
+    active_index = _active_index;
   }
 
-  void set_bounding_box(const FlatBoundingBox& bb) {
+  void SetBoundingBox(const FlatBoundingBox &bb) {
     bb_screen = bb;
   }
 
-  void set_mode_optional(const bool mode) {
+  void SetModeOptional(const bool mode) {
     mode_optional_start = mode;
   }
 
   void Draw(const TaskPoint &tp);
 
 protected:
-  void draw_ordered(const OrderedTaskPoint& tp);
+  void DrawOrdered(const OrderedTaskPoint &tp);
 
-  bool leg_active() const {
-    return m_index >= m_active_index;
+  bool LegActive() const {
+    return index >= active_index;
   }
 
-  bool point_past() const {
-    return m_index < m_active_index;
+  bool PointPast() const {
+    return index < active_index;
   }
 
-  bool point_current() const {
-    return m_index == m_active_index;
+  bool PointCurrent() const {
+    return index == active_index;
   }
 
-  bool do_draw_deadzone(const TaskPoint& tp) const {
-    return point_current() || point_past();
+  bool DoDrawDeadzone(const TaskPoint &tp) const {
+    return PointCurrent() || PointPast();
   }
 
-  bool do_draw_bearing(const TaskPoint &tp) const {
-    return m_draw_bearing && point_current();
+  bool DoDrawBearing(const TaskPoint &tp) const {
+    return draw_bearing && PointCurrent();
   }
 
   gcc_pure
-  bool do_draw_target(const TaskPoint &tp) const;
+  bool DoDrawTarget(const TaskPoint &tp) const;
 
-  bool do_draw_isoline(const TaskPoint &tp) const {
-    return do_draw_target(tp);
+  bool DoDrawIsoline(const TaskPoint &tp) const {
+    return DoDrawTarget(tp);
   }
 
-  void draw_bearing(const TaskPoint &tp);
-  virtual void draw_target(const TaskPoint &tp);
-  void draw_task_line(const GeoPoint& start, const GeoPoint& end);
-  void draw_isoline(const AATPoint& tp);
+  void DrawBearing(const TaskPoint &tp);
+  virtual void DrawTarget(const TaskPoint &tp);
+  void DrawTaskLine(const GeoPoint &start, const GeoPoint &end);
+  void DrawIsoline(const AATPoint &tp);
   /**
    * Clear the part of the OZ background (shaded area) over which
    * the aircraft has flown.
@@ -138,9 +139,9 @@ protected:
    *
    * @param tp
    */
-  void draw_deadzone(const AATPoint& tp);
-  void draw_oz_background(Canvas &canvas, const OrderedTaskPoint& tp);
-  void draw_oz_foreground(const OrderedTaskPoint& tp);
+  void DrawDeadzone(const AATPoint &tp);
+  void DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp);
+  void DrawOZForeground(const OrderedTaskPoint &tp);
 };
 
 

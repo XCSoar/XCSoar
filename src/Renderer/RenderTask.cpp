@@ -35,20 +35,20 @@ void
 RenderTask::DrawLayers(const AbstractTask &task)
 {
   for (unsigned i = 0; i < 4; i++) {
-    tpv.set_layer((RenderTaskLayer)i);
+    tpv.SetLayer((RenderTaskLayer)i);
 
     switch (task.type) {
     case TaskInterface::ORDERED: {
       const OrderedTask &ordered_task = (const OrderedTask &)task;
       if (i != RENDER_TASK_SYMBOLS && i != RENDER_TASK_LEG) {
-        tpv.set_mode_optional(true);
+        tpv.SetModeOptional(true);
 
         for (unsigned j = 0, end = ordered_task.optional_start_points_size();
              j < end; ++j)
           tpv.Draw(*ordered_task.get_optional_start(j));
       }
 
-      tpv.set_mode_optional(false);
+      tpv.SetModeOptional(false);
       for (unsigned j = 0, end = task.task_size(); j < end; ++j)
         tpv.Draw(*ordered_task.getTaskPoint(j));
 
@@ -58,7 +58,7 @@ RenderTask::DrawLayers(const AbstractTask &task)
     case TaskInterface::ABORT: {
       const AbortTask &abort_task = (const AbortTask &)task;
 
-      tpv.set_mode_optional(false);
+      tpv.SetModeOptional(false);
       for (unsigned j = 0, end = abort_task.task_size(); j < end; ++j)
         tpv.Draw(abort_task.GetAlternate(j));
 
@@ -66,7 +66,7 @@ RenderTask::DrawLayers(const AbstractTask &task)
     }
 
     case TaskInterface::GOTO:
-      tpv.set_mode_optional(false);
+      tpv.SetModeOptional(false);
       tpv.Draw(*task.getActiveTaskPoint());
       break;
     }
@@ -76,21 +76,21 @@ RenderTask::DrawLayers(const AbstractTask &task)
 void 
 RenderTask::Visit(const AbortTask &task)
 {
-  tpv.set_active_index(task.getActiveIndex());
+  tpv.SetActiveIndex(task.getActiveIndex());
   DrawLayers(task);
 }
 
 void 
 RenderTask::Visit(const OrderedTask &task)
 {
-  tpv.set_bounding_box(task.get_bounding_box(screen_bounds));
-  tpv.set_active_index(task.getActiveIndex());
+  tpv.SetBoundingBox(task.get_bounding_box(screen_bounds));
+  tpv.SetActiveIndex(task.getActiveIndex());
   DrawLayers(task);
 }
 
 void 
 RenderTask::Visit(const GotoTask &task)
 {
-  tpv.set_active_index(0);
+  tpv.SetActiveIndex(0);
   DrawLayers(task);
 }
