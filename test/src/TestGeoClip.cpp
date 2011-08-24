@@ -32,12 +32,6 @@ make_geo_point(int longitude, int latitude)
                   Angle::degrees(fixed(latitude)));
 }
 
-static inline bool
-equals(const GeoPoint a, const GeoPoint b)
-{
-  return equals(a.Longitude, b.Longitude) && equals(a.Latitude, b.Latitude);
-}
-
 static void
 test_clip_line(const GeoClip &clip, GeoPoint a, GeoPoint b,
                const GeoPoint a2, const GeoPoint b2)

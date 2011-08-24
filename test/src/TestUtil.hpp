@@ -23,6 +23,7 @@
 #ifndef XCSOAR_TEST_UTIL_HPP
 #define XCSOAR_TEST_UTIL_HPP
 
+#include "Engine/Navigation/GeoPoint.hpp"
 #include "Math/Angle.hpp"
 
 extern "C" {
@@ -96,6 +97,24 @@ static inline bool
 equals(const Angle a, const Angle b)
 {
   return equals(a.value_degrees(), b.value_degrees());
+}
+
+static inline bool
+equals(const GeoPoint a, double lat, double lon)
+{
+  return equals(a.Latitude, lat) && equals(a.Longitude, lon);
+}
+
+static inline bool
+equals(const GeoPoint a, const Angle lat, const Angle lon)
+{
+  return equals(a.Latitude, lat) && equals(a.Longitude, lon);
+}
+
+static inline bool
+equals(const GeoPoint a, const GeoPoint b)
+{
+  return equals(a.Latitude, b.Latitude) && equals(a.Longitude, b.Longitude);
 }
 
 #endif
