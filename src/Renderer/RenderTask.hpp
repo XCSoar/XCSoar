@@ -45,7 +45,7 @@ public:
   void Visit(const GotoTask &task);
 
 protected:
-  void draw_layers(const AbstractTask& task);
+  void DrawLayers(const AbstractTask &task);
 };
 
 #endif

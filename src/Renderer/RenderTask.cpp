@@ -32,7 +32,7 @@ RenderTask::RenderTask(RenderTaskPoint &_tpv, GeoBounds _screen_bounds)
   :tpv(_tpv), screen_bounds(_screen_bounds) {}
 
 void 
-RenderTask::draw_layers(const AbstractTask &task)
+RenderTask::DrawLayers(const AbstractTask &task)
 {
   for (unsigned i = 0; i < 4; i++) {
     tpv.set_layer((RenderTaskLayer)i);
@@ -77,7 +77,7 @@ void
 RenderTask::Visit(const AbortTask &task)
 {
   tpv.set_active_index(task.getActiveIndex());
-  draw_layers(task);
+  DrawLayers(task);
 }
 
 void 
@@ -85,12 +85,12 @@ RenderTask::Visit(const OrderedTask &task)
 {
   tpv.set_bounding_box(task.get_bounding_box(screen_bounds));
   tpv.set_active_index(task.getActiveIndex());
-  draw_layers(task);
+  DrawLayers(task);
 }
 
 void 
 RenderTask::Visit(const GotoTask &task)
 {
   tpv.set_active_index(0);
-  draw_layers(task);
+  DrawLayers(task);
 }
