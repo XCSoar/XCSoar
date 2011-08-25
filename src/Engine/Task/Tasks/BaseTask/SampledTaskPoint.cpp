@@ -40,29 +40,28 @@ SampledTaskPoint::UpdateSampleNear(const AircraftState& state,
                                      TaskEvents &task_events,
                                      const TaskProjection &projection)
 {
-  if (IsInSector(state)) {
-    // if sample is inside sample polygon
-    if (PolygonInterior(state.location, sampled_points))
-      // return false (no update required)
-      return false;
+  if (!IsInSector(state))
+    // return false (no update required)
+    return false;
 
-    // add sample to polygon
-    SearchPoint sp(state.location, projection);
-    sampled_points.push_back(sp);
+  // if sample is inside sample polygon
+  if (PolygonInterior(state.location, sampled_points))
+    // return false (no update required)
+    return false;
 
-    // re-compute convex hull
-    bool retval = sampled_points.prune_interior();
+  // add sample to polygon
+  SearchPoint sp(state.location, projection);
+  sampled_points.push_back(sp);
 
-    // only return true if hull changed
-    // return true; (update required)
-    return sampled_points.thin_to_size(64) || retval;
+  // re-compute convex hull
+  bool retval = sampled_points.prune_interior();
 
-    // thin to size is used here to ensure the sampled points vector
-    // size is bounded to reasonable values for AAT calculations.
-  }
+  // only return true if hull changed
+  // return true; (update required)
+  return sampled_points.thin_to_size(64) || retval;
 
-  // return false (no update required)
-  return false;
+  // thin to size is used here to ensure the sampled points vector
+  // size is bounded to reasonable values for AAT calculations.
 }
 
 void 
