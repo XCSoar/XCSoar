@@ -32,7 +32,9 @@ Copyright_License {
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/METAR.hpp"
+#include "Weather/ParsedMETAR.hpp"
 #include "Weather/TAF.hpp"
+#include "Units/UnitsFormatter.hpp"
 #include "Screen/Layout.hpp"
 
 #include <stdio.h>
@@ -43,13 +45,45 @@ static unsigned station_index;
 static void
 Update()
 {
-  tstring metar_taf;
+  tstring metar_taf = _T("");
+
+  ParsedMETAR parsed;
+  if (NOAAStore::GetParsedMETAR(station_index, parsed)) {
+    TCHAR buffer[256];
+
+    if (parsed.temperatures_available) {
+      _stprintf(buffer, _T("%s: %.1f" DEG "C\n"), _("Temperature"),
+                (double)Units::ToUserTemperature(parsed.temperature));
+      metar_taf += buffer;
+
+      _stprintf(buffer, _T("%s: %.1f" DEG "C\n\n"), _("Dew point"),
+                (double)Units::ToUserTemperature(parsed.dew_point));
+      metar_taf += buffer;
+    }
+
+    if (parsed.wind_available) {
+      TCHAR buffer2[16];
+      Units::FormatUserWindSpeed(parsed.wind.norm, buffer2, 16);
+
+      _stprintf(buffer, _T("%s: %.0f" DEG " %s\n\n"), _("Wind"),
+                (double)parsed.wind.bearing.value_degrees(), buffer2);
+
+      metar_taf += buffer;
+    }
+
+    if (parsed.qnh_available) {
+      _stprintf(buffer, _T("%s: %.0f hPa\n\n"), _("QNH"),
+                (double)parsed.qnh.GetQNH());
+
+      metar_taf += buffer;
+    }
+  }
 
   METAR metar;
   if (!NOAAStore::GetMETAR(station_index, metar)) {
-    metar_taf = _("No METAR available!");
+    metar_taf += _("No METAR available!");
   } else {
-    metar_taf = metar.content.c_str();
+    metar_taf += metar.content.c_str();
   }
 
   metar_taf += _T("\n\n");
