@@ -82,7 +82,7 @@ Serialiser::serialise(const OrderedTaskPoint& data, const TCHAR* name)
 
   DataNode* wchild = child->add_child(_T("Waypoint"));
   Serialiser wser(*wchild, waypoints);
-  wser.serialise(data.get_waypoint());
+  wser.serialise(data.GetWaypoint());
   delete wchild;
 
   DataNode* ochild = child->add_child(_T("ObservationZone"));

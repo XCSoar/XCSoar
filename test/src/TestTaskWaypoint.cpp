@@ -75,7 +75,7 @@ TaskWaypointTest::Run()
 
   DummyTaskWaypoint tw(TaskPoint::AST, wp);
 
-  const Waypoint &wp2 = tw.get_waypoint();
+  const Waypoint &wp2 = tw.GetWaypoint();
   ok1(wp2.name == _T("Test"));
   ok1(equals(tw.GetBaseElevation(), 42));
   ok1(equals(tw.GetBaseElevation(), wp2.altitude));

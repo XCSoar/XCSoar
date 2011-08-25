@@ -119,7 +119,7 @@ OrderedTaskPoint::double_leg_distance(const GeoPoint &ref) const
 bool 
 OrderedTaskPoint::equals(const OrderedTaskPoint* other) const
 {
-  return get_waypoint() == other->get_waypoint() &&
+  return GetWaypoint() == other->GetWaypoint() &&
          GetType() == other->GetType() &&
          get_oz()->equals(other->get_oz()) &&
          other->get_oz()->equals(get_oz());
@@ -131,7 +131,7 @@ OrderedTaskPoint::clone(const TaskBehaviour &task_behaviour,
                         const Waypoint* waypoint) const
 {
   if (waypoint == NULL)
-    waypoint = &get_waypoint();
+    waypoint = &GetWaypoint();
 
   switch (GetType()) {
   case START:

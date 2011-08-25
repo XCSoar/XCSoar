@@ -203,19 +203,19 @@ OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* name)
 {
   switch (tp.GetType()) {
   case TaskPoint::START:
-    _stprintf(name, _T("S:  %s"), tp.get_waypoint().name.c_str());
+    _stprintf(name, _T("S:  %s"), tp.GetWaypoint().name.c_str());
     break;
 
   case TaskPoint::AST:
-    _stprintf(name, _T("T%d: %s"), index, tp.get_waypoint().name.c_str());
+    _stprintf(name, _T("T%d: %s"), index, tp.GetWaypoint().name.c_str());
     break;
 
   case TaskPoint::AAT:
-    _stprintf(name, _T("A%d: %s"), index, tp.get_waypoint().name.c_str());
+    _stprintf(name, _T("A%d: %s"), index, tp.GetWaypoint().name.c_str());
     break;
 
   case TaskPoint::FINISH:
-    _stprintf(name, _T("F:  %s"), tp.get_waypoint().name.c_str());
+    _stprintf(name, _T("F:  %s"), tp.GetWaypoint().name.c_str());
     break;
 
   default:

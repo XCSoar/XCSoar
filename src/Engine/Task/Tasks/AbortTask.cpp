@@ -65,7 +65,7 @@ AbortTask::SetActiveTaskPoint(unsigned index)
 {
   if (index < task_points.size()) {
     activeTaskPoint = index;
-    active_waypoint = task_points[index].get_waypoint().id;
+    active_waypoint = task_points[index].GetWaypoint().id;
   }
 }
 
@@ -203,7 +203,7 @@ AbortTask::fill_reachable(const AircraftState &state,
                                              top.solution));
 
     const int i = task_points.size() - 1;
-    if (task_points[i].get_waypoint().id == active_waypoint)
+    if (task_points[i].GetWaypoint().id == active_waypoint)
       activeTaskPoint = i;
 
     q.pop();
@@ -304,7 +304,7 @@ AbortTask::update_sample(const AircraftState &state, bool full_update)
 
   if (task_points.size()) {
     const TaskWaypoint &task_point = task_points[activeTaskPoint];
-    active_waypoint = task_point.get_waypoint().id;
+    active_waypoint = task_point.GetWaypoint().id;
     if (is_active && (active_waypoint_on_entry != active_waypoint))
       task_events.active_changed(task_point);
   }

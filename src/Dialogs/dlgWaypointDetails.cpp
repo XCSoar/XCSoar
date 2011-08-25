@@ -517,7 +517,7 @@ remove_from_task(OrderedTask *task, const Waypoint &wp)
     const OrderedTaskPoint *tp = task->get_tp(i);
     assert(tp != NULL);
 
-    if (tp->get_waypoint() == wp) {
+    if (tp->GetWaypoint() == wp) {
       task->remove(i);
       modified = true;
     }

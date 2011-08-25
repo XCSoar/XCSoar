@@ -188,7 +188,7 @@ RefreshView()
   wfrm = ((WndFrame*)wf->FindByName(_T("lblLocation")));
   if (wfrm) {
     TCHAR buff[100];
-    _stprintf(buff, _T("%s %s"), bufNamePrefix, tp->get_waypoint().name.c_str());
+    _stprintf(buff, _T("%s %s"), bufNamePrefix, tp->GetWaypoint().name.c_str());
     wfrm->SetCaption(buff);
   }
 
@@ -300,7 +300,7 @@ OnDetailsClicked(gcc_unused WndButton &Sender)
 {
   OrderedTaskPoint* task_point = ordered_task->get_tp(active_index);
   if (task_point)
-    dlgWaypointDetailsShowModal(wf->GetMainWindow(), task_point->get_waypoint(), false);
+    dlgWaypointDetailsShowModal(wf->GetMainWindow(), task_point->GetWaypoint(), false);
 }
 
 static void

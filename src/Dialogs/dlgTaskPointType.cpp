@@ -124,7 +124,7 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type)
     } else {
       if (factory.validFinishType(type) &&
           ordered_task->get_ordered_task_behaviour().is_closed)
-        way_point = &(ordered_task->get_tp(0)->get_waypoint());
+        way_point = &(ordered_task->get_tp(0)->GetWaypoint());
       else
         way_point =
           dlgWaypointSelect(wf->GetMainWindow(),
@@ -200,7 +200,7 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
 
   point = ordered_task->get_tp(active_index);
   if (point)
-    way_point = &point->get_waypoint();
+    way_point = &point->GetWaypoint();
   else
     way_point = NULL;
 

@@ -139,7 +139,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                            CommonInterface::main_window.look->waypoint,
                            canvas);
 
-  wir.Draw(tp.get_waypoint(), pt, WaypointIconRenderer::Unreachable, true);
+  wir.Draw(tp.GetWaypoint(), pt, WaypointIconRenderer::Unreachable, true);
 
   // Y-Coordinate of the second row
   unsigned top2 = rc.top + name_font.get_height() + Layout::FastScale(4);

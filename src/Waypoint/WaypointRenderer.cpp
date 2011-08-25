@@ -315,31 +315,31 @@ public:
   void
   Visit(const UnorderedTaskPoint& tp)
   {
-    AddWaypoint(tp.get_waypoint(), true);
+    AddWaypoint(tp.GetWaypoint(), true);
   }
 
   void
   Visit(const StartPoint& tp)
   {
-    AddWaypoint(tp.get_waypoint(), true);
+    AddWaypoint(tp.GetWaypoint(), true);
   }
 
   void
   Visit(const FinishPoint& tp)
   {
-    AddWaypoint(tp.get_waypoint(), true);
+    AddWaypoint(tp.GetWaypoint(), true);
   }
 
   void
   Visit(const AATPoint& tp)
   {
-    AddWaypoint(tp.get_waypoint(), true);
+    AddWaypoint(tp.GetWaypoint(), true);
   }
 
   void
   Visit(const ASTPoint& tp)
   {
-    AddWaypoint(tp.get_waypoint(), true);
+    AddWaypoint(tp.GetWaypoint(), true);
   }
 
 

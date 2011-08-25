@@ -194,7 +194,7 @@ TaskManager::update_common_stats_waypoints(const AircraftState &state)
     const TaskWaypoint* tp= active_task->GetActiveTaskPoint();
     if (tp != NULL) {
       // must make an UnorderedTaskPoint here so we pick up arrival height requirements
-      UnorderedTaskPoint fp(tp->get_waypoint(), task_behaviour);
+      UnorderedTaskPoint fp(tp->GetWaypoint(), task_behaviour);
       GlidePolar polar = m_glide_polar; 
       // @todo: consider change to task_abort.get_safety_polar(); 
       common_stats.next_solution = TaskSolution::glide_solution_remaining(fp, state, polar);
@@ -450,7 +450,7 @@ TaskManager::get_ordered_taskpoint_name(unsigned TPindex) const
    return buff;
 
  if (active_task == &task_ordered && TPindex < task_size())
-   CopyString(buff, task_ordered.getTaskPoint(TPindex)->get_waypoint().name.c_str(),
+   CopyString(buff, task_ordered.getTaskPoint(TPindex)->GetWaypoint().name.c_str(),
               NAME_SIZE + 1);
 
  return buff;

@@ -54,7 +54,7 @@ void
 TaskEventsPrint::active_changed(const TaskWaypoint &tp)
 {
   if (verbose) {
-    printf("#- active changed to wp %d\n", tp.get_waypoint().id);
+    printf("#- active changed to wp %d\n", tp.GetWaypoint().id);
   }
 }
 

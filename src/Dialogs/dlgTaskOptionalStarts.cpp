@@ -76,13 +76,13 @@ OnOptionalStartPaintListItem(Canvas &canvas, const PixelRect rc,
     if (DrawListIndex == 0 && RealStartExists) {
       const OrderedTaskPoint *tp = ordered_task->get_tp(0);
       assert(tp);
-      _stprintf(tmp,_T("*%s"), tp->get_waypoint().name.c_str());
+      _stprintf(tmp,_T("*%s"), tp->GetWaypoint().name.c_str());
 
     } else {
       const OrderedTaskPoint *tp =
           ordered_task->get_optional_start(index_optional_starts);
       assert(tp);
-      _tcscpy(tmp,tp->get_waypoint().name.c_str());
+      _tcscpy(tmp,tp->GetWaypoint().name.c_str());
     }
 
     canvas.text(rc.left + Layout::FastScale(2),

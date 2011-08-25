@@ -62,7 +62,7 @@ AbstractTaskFactory::createMutatedPoint(const OrderedTaskPoint &tp,
                                         const LegalPointType_t newtype) const
 {
   fixed ozsize = GetOZSize(tp.get_oz());
-  return createPoint(newtype, tp.get_waypoint(), ozsize, ozsize, ozsize);
+  return createPoint(newtype, tp.GetWaypoint(), ozsize, ozsize, ozsize);
 }
 
 AbstractTaskFactory::LegalPointType_t
@@ -389,7 +389,7 @@ AbstractTaskFactory::append(const OrderedTaskPoint &new_tp,
         return m_task.append(new_tp);
       } else {
         // candidate must be transformed into a startpoint
-        StartPoint* sp = createStart(new_tp.get_waypoint());
+        StartPoint* sp = createStart(new_tp.GetWaypoint());
         bool success = m_task.append(*sp);
         delete sp;
         return success;
@@ -401,7 +401,7 @@ AbstractTaskFactory::append(const OrderedTaskPoint &new_tp,
     if (m_task.has_finish()) {
       // old finish must be mutated into an intermediate point
       IntermediateTaskPoint* sp = createIntermediate(m_task.getTaskPoint(
-          m_task.TaskSize() - 1)->get_waypoint());
+          m_task.TaskSize() - 1)->GetWaypoint());
 
       m_task.replace(*sp, m_task.TaskSize()-1);
       delete sp;
@@ -412,7 +412,7 @@ AbstractTaskFactory::append(const OrderedTaskPoint &new_tp,
       return m_task.append(new_tp);
 
     // this point must be mutated into a finish
-    FinishPoint* sp = createFinish(new_tp.get_waypoint());
+    FinishPoint* sp = createFinish(new_tp.GetWaypoint());
     bool success = m_task.append(*sp);
     delete sp;
     return success;
@@ -435,14 +435,14 @@ AbstractTaskFactory::replace(const OrderedTaskPoint &new_tp,
     OrderedTaskPoint *tp;
     if (position == 0) {
       // candidate must be transformed into a startpoint
-      tp = createStart(new_tp.get_waypoint());
+      tp = createStart(new_tp.GetWaypoint());
     } else if (is_position_finish(position) &&
                position + 1 == m_task.TaskSize()) {
       // this point must be mutated into a finish
-      tp = createFinish(new_tp.get_waypoint());
+      tp = createFinish(new_tp.GetWaypoint());
     } else {
       // this point must be mutated into an intermediate
-      tp = createIntermediate(new_tp.get_waypoint());
+      tp = createIntermediate(new_tp.GetWaypoint());
     }
 
     bool success = m_task.replace(*tp, position);
@@ -466,7 +466,7 @@ AbstractTaskFactory::insert(const OrderedTaskPoint &new_tp,
       if (m_task.has_start()) {
         // old start must be mutated into an intermediate point
         IntermediateTaskPoint* sp =
-            createIntermediate(m_task.getTaskPoint(0)->get_waypoint());
+            createIntermediate(m_task.getTaskPoint(0)->GetWaypoint());
         m_task.replace(*sp, 0);
         delete sp;
       }
@@ -475,7 +475,7 @@ AbstractTaskFactory::insert(const OrderedTaskPoint &new_tp,
         return m_task.insert(new_tp, 0);
       } else {
         // candidate must be transformed into a startpoint
-        StartPoint* sp = createStart(new_tp.get_waypoint());
+        StartPoint* sp = createStart(new_tp.GetWaypoint());
         bool success = m_task.insert(*sp, 0);
         delete sp;
         return success;
@@ -486,7 +486,7 @@ AbstractTaskFactory::insert(const OrderedTaskPoint &new_tp,
         return m_task.insert(new_tp, position);
       } else {
         // candidate must be transformed into a intermediatepoint
-        IntermediateTaskPoint* sp = createIntermediate(new_tp.get_waypoint());
+        IntermediateTaskPoint* sp = createIntermediate(new_tp.GetWaypoint());
         bool success = m_task.insert(*sp, position);
         delete sp;
         return success;
@@ -511,7 +511,7 @@ AbstractTaskFactory::remove(const unsigned position,
         return m_task.remove(0);
       } else {
         // create new start point from next point
-        StartPoint* sp = createStart(m_task.getTaskPoint(1)->get_waypoint());
+        StartPoint* sp = createStart(m_task.getTaskPoint(1)->GetWaypoint());
         bool success = m_task.remove(0) && m_task.replace(*sp, 0);
         delete sp;
         return success;
@@ -519,7 +519,7 @@ AbstractTaskFactory::remove(const unsigned position,
     } else if (is_position_finish(position - 1) && (position + 1 == m_task.TaskSize())) {
       // create new finish from previous point
       FinishPoint* sp = createFinish(
-          m_task.getTaskPoint(position - 1)->get_waypoint());
+          m_task.getTaskPoint(position - 1)->GetWaypoint());
       bool success = m_task.remove(position) &&
         m_task.replace(*sp, position - 1);
       delete sp;
@@ -737,7 +737,7 @@ AbstractTaskFactory::CheckAddFinish()
  if (m_task.has_finish())
    return false;
 
- FinishPoint *fp = createFinish(m_task.get_tp(m_task.TaskSize() - 1)->get_waypoint());
+ FinishPoint *fp = createFinish(m_task.get_tp(m_task.TaskSize() - 1)->GetWaypoint());
  assert(fp);
  remove(m_task.TaskSize() - 1, false);
  append(*fp, false);
@@ -910,9 +910,9 @@ AbstractTaskFactory::is_closed() const
   if (m_task.TaskSize() < 3)
     return false;
 
-  const Waypoint& wp_start = m_task.get_tp(0)->get_waypoint();
+  const Waypoint& wp_start = m_task.get_tp(0)->GetWaypoint();
   const Waypoint& wp_finish =
-      m_task.get_tp(m_task.TaskSize() - 1)->get_waypoint();
+      m_task.get_tp(m_task.TaskSize() - 1)->GetWaypoint();
 
   return (wp_start.location == wp_finish.location);
 }
@@ -922,13 +922,13 @@ AbstractTaskFactory::is_unique() const
 {
   const unsigned size = m_task.TaskSize();
   for (unsigned i = 0; i + 1 < size; i++) {
-    const Waypoint& wp_0 = m_task.get_tp(i)->get_waypoint();
+    const Waypoint& wp_0 = m_task.get_tp(i)->GetWaypoint();
 
     for (unsigned j = i + 1; j < size; j++) {
       if (i == 0 && j + 1 == size) {
         // start point can be similar to finish point
       } else {
-        const Waypoint& wp_1 = m_task.get_tp(j)->get_waypoint();
+        const Waypoint& wp_1 = m_task.get_tp(j)->GetWaypoint();
         if (wp_1 == wp_0)
           return false;
       }
@@ -1048,7 +1048,7 @@ AbstractTaskFactory::mutate_closed_finish_per_task_type()
       OrderedTaskPoint *tp = m_task.get_tp(m_task.TaskSize() - 1);
       assert(tp);
       if (tp->GetType() == TaskPoint::FINISH) {
-        FinishPoint *fp = createFinish(m_task.get_tp(0)->get_waypoint());
+        FinishPoint *fp = createFinish(m_task.get_tp(0)->GetWaypoint());
         assert(fp);
         remove(m_task.TaskSize() - 1, false);
         append(*fp, false);
@@ -1083,7 +1083,7 @@ AbstractTaskFactory::append_optional_start(const OrderedTaskPoint &new_tp,
 {
   if (auto_mutate && !validType(new_tp, 0)) {
     // candidate must be transformed into a startpoint of appropriate type
-    StartPoint* sp = createStart(new_tp.get_waypoint());
+    StartPoint* sp = createStart(new_tp.GetWaypoint());
     bool success = m_task.append_optional_start(*sp);
     delete sp;
     return success;

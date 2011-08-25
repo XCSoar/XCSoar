@@ -35,7 +35,7 @@ class TaskWaypoint :
   friend class PrintHelper;
 
   /** local copy of waypoint */
-  Waypoint m_waypoint;
+  Waypoint waypoint;
 
 public:
   /**
@@ -50,7 +50,7 @@ public:
    */
   TaskWaypoint(Type _type, const Waypoint & wp)
     :TaskPoint(_type, wp.location, wp.altitude),
-     m_waypoint(wp) {}
+     waypoint(wp) {}
 
   /**
    * Recall waypoint associated with this task point.
@@ -60,8 +60,8 @@ public:
    * @return Copy of waypoint associated with this task point
    */
   gcc_pure
-  const Waypoint& get_waypoint() const {
-    return m_waypoint;
+  const Waypoint &GetWaypoint() const {
+    return waypoint;
   }
 };
 

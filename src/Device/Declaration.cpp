@@ -58,7 +58,7 @@ get_radius(const OrderedTaskPoint &tp)
 }
 
 Declaration::TurnPoint::TurnPoint(const OrderedTaskPoint &tp)
-  :waypoint(tp.get_waypoint()),
+  :waypoint(tp.GetWaypoint()),
    shape(get_shape(tp)), radius(get_radius(tp))
 {
 }

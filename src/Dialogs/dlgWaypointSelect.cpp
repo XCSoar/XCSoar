@@ -341,7 +341,7 @@ public:
                                  leg2,
                                  task->get_tp(2)->GetLocation().distance(p));
         } else if (t_size == 4) {
-          return (wp == task->get_tp(3)->get_waypoint()) &&
+          return (wp == task->get_tp(3)->GetWaypoint()) &&
                  TestFAITriangle(p.distance(task->get_tp(1)->GetLocation()),
                                  leg2,
                                  leg3);
@@ -386,7 +386,7 @@ public:
                                p.distance(task->get_tp(0)->GetLocation()));
 
       } else { // already finish point(#3) exists
-        return (task->get_tp(0)->get_waypoint() == task->get_tp(3)->get_waypoint()) &&
+        return (task->get_tp(0)->GetWaypoint() == task->get_tp(3)->GetWaypoint()) &&
                 TestFAITriangle(leg1,
                                 p.distance(task->get_tp(1)->GetLocation()),
                                 p.distance(task->get_tp(0)->GetLocation()));
@@ -395,7 +395,7 @@ public:
     // append or replace finish
     if (t_index == 3) {
       assert (t_size == 3 || t_size == 4);
-      return (wp == task->get_tp(0)->get_waypoint()) &&
+      return (wp == task->get_tp(0)->GetWaypoint()) &&
               TestFAITriangle(leg1,
                               leg2,
                               p.distance(task->get_tp(2)->GetLocation()));
