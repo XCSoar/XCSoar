@@ -30,25 +30,22 @@
 const GeoPoint&
 AATPoint::GetLocationRemaining() const
 {
-  if (getActiveState() == BEFORE_ACTIVE) {
-    if (HasSampled()) {
-      return GetLocationMax();
-    } else {
-      return GetLocationMin();
-    }
-  } else {
+  if (getActiveState() != BEFORE_ACTIVE)
     return m_target_location;
-  }
+
+  if (HasSampled())
+    return GetLocationMax();
+
+  return GetLocationMin();
 }
 
 bool 
 AATPoint::UpdateSampleNear(const AircraftState& state,
-                             TaskEvents &task_events,
-                             const TaskProjection &projection)
+                           TaskEvents &task_events,
+                           const TaskProjection &projection)
 {
   bool retval = OrderedTaskPoint::UpdateSampleNear(state, task_events,
-                                                     projection);
-
+                                                   projection);
   if (retval)
     update_deadzone(projection);
 
@@ -57,32 +54,28 @@ AATPoint::UpdateSampleNear(const AircraftState& state,
   return retval;
 }
 
-
 bool 
 AATPoint::UpdateSampleFar(const AircraftState& state,
-                            TaskEvents &task_events,
-                            const TaskProjection &projection)
+                          TaskEvents &task_events,
+                          const TaskProjection &projection)
 {
   // the orderedtaskpoint::update_sample_far does nothing for now
   // but we are calling this in case that changes.
-  return OrderedTaskPoint::UpdateSampleFar(state, task_events,
-                                             projection)
-    || check_target(state, true);
+  return OrderedTaskPoint::UpdateSampleFar(state, task_events, projection) ||
+         check_target(state, true);
 }
 
-
 bool
-AATPoint::check_target(const AircraftState& state, const bool known_outside) 
+AATPoint::check_target(const AircraftState &state, const bool known_outside)
 {
-  if ((getActiveState() == CURRENT_ACTIVE) && (m_target_locked)) {
+  if (getActiveState() == CURRENT_ACTIVE && m_target_locked)
     return false;
-  }
+
   bool moved = false;
-  if (!known_outside && isInSector(state)) {
+  if (!known_outside && isInSector(state))
     moved = check_target_inside(state);
-  } else {
+  else
     moved = check_target_outside(state);
-  }
 
   return moved;
 }
@@ -93,9 +86,8 @@ AATPoint::close_to_target(const AircraftState& state, const fixed threshold) con
   if (!valid())
     return false;
 
-  return (double_leg_distance(state.location)
-          -double_leg_distance(m_target_location)
-          > -threshold);
+  return (double_leg_distance(state.location) -
+          double_leg_distance(m_target_location) > -threshold);
 }
 
 bool
@@ -104,18 +96,16 @@ AATPoint::check_target_inside(const AircraftState& state)
   // target must be moved if d(p_last,t)+d(t,p_next) 
   //    < d(p_last,state)+d(state,p_next)
 
-  if (close_to_target(state)) {
-    if (positive(double_leg_distance(state.location)
-                 -double_leg_distance(GetLocationMax()))) {
-      // no improvement available
-      return false;
-    } else {
-      m_target_location = state.location;
-      return true;
-    }
-  } else {
+  if (!close_to_target(state))
     return false;
-  }
+
+  if (positive(double_leg_distance(state.location) -
+               double_leg_distance(GetLocationMax())))
+    // no improvement available
+    return false;
+
+  m_target_location = state.location;
+  return true;
 }
 
 bool
@@ -150,13 +140,11 @@ AATPoint::check_target_outside(const AircraftState& state)
 */
 }
 
-
 bool
 AATPoint::SetRange(const fixed p, const bool force_if_current)
 {
-  if (m_target_locked) {
+  if (m_target_locked)
     return false;
-  }
 
   switch (getActiveState()) {
   case CURRENT_ACTIVE:
@@ -165,24 +153,24 @@ AATPoint::SetRange(const fixed p, const bool force_if_current)
       return true;
     }
     return false;
+
   case AFTER_ACTIVE:
     if (getActiveState() == AFTER_ACTIVE) {
       m_target_location = GetLocationMin().interpolate(GetLocationMax(),p);
       return true;
     }
+    return false;
+
   default:
     return false;
   }
-  return false;
 }
-
 
 void 
 AATPoint::set_target(const GeoPoint &loc, const bool override_lock)
 {
-  if (override_lock || !m_target_locked) {
+  if (override_lock || !m_target_locked)
     m_target_location = loc;
-  }
 }
 
 void
@@ -239,15 +227,14 @@ AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
     radial = fixed_zero;
 }
 
-
 bool
-AATPoint::equals(const OrderedTaskPoint* other) const
+AATPoint::equals(const OrderedTaskPoint *other) const
 {
   const AATPoint &tp = (const AATPoint &)*other;
 
   return OrderedTaskPoint::equals(other) &&
-    m_target_locked == tp.m_target_locked &&
-    m_target_location == tp.m_target_location;
+         m_target_locked == tp.m_target_locked &&
+         m_target_location == tp.m_target_location;
 }
 
 void
@@ -295,7 +282,7 @@ AATPoint::update_deadzone(const TaskProjection &projection)
   for (SearchPointVector::const_iterator it = boundary.begin();
        it != boundary.end(); ++it) {
     unsigned dd = pnext.flat_distance(*it) + pprevious.flat_distance(*it);
-    if (dd< dmax)
+    if (dd < dmax)
       m_deadzone.push_back(*it);
   }
 
