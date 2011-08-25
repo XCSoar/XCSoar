@@ -389,6 +389,34 @@ Units::FormatUserSpeed(fixed Speed, TCHAR *Buffer, size_t size,
 }
 
 bool
+Units::FormatUserWindSpeed(fixed Speed, TCHAR *Buffer, size_t size,
+                           bool IncludeUnit, bool Precision)
+{
+  int prec;
+  TCHAR sTmp[32];
+  const UnitDescriptor_t *pU = &UnitDescriptors[Current.WindSpeedUnit];
+
+  Speed = Speed * pU->ToUserFact;
+
+  prec = 0;
+  if (Precision && Speed < fixed(100))
+    prec = 1;
+
+  if (IncludeUnit)
+    _stprintf(sTmp, _T("%.*f%s"), prec, (double)Speed, pU->Name);
+  else
+    _stprintf(sTmp, _T("%.*f"), prec, (double)Speed);
+
+  if (_tcslen(sTmp) < size - 1) {
+    _tcscpy(Buffer, sTmp);
+    return true;
+  } else {
+    CopyString(Buffer, sTmp, size);
+    return false;
+  }
+}
+
+bool
 Units::FormatUserVSpeed(fixed Speed, TCHAR *Buffer, size_t size,
                         bool IncludeUnit)
 {

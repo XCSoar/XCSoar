@@ -113,6 +113,16 @@ namespace Units
                        bool IncludeUnit = true, bool Precision = true);
 
   /**
+   * Converts a double-based Speed into a formatted string
+   * @param Speed The double-based Speed
+   * @param Buffer Buffer string to write to (pointer)
+   * @param size Size of the Buffer
+   * @return True if Buffer long enough, False otherwise
+   */
+  bool FormatUserWindSpeed(fixed speed, TCHAR *buffer, size_t size,
+                           bool IncludeUnit = true, bool Precision = true);
+
+  /**
    * Converts a double-based vertical Speed into a formatted string
    * @param Speed The double-based vertical Speed
    * @param Buffer Buffer string to write to (pointer)
