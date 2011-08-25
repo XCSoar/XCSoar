@@ -616,6 +616,7 @@ endif
 
 ifeq ($(HAVE_NET),y)
 XCSOAR_SOURCES += \
+	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp
 endif

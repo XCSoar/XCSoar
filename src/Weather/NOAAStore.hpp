@@ -27,6 +27,7 @@ Copyright_License {
 #include <tchar.h>
 
 struct METAR;
+struct ParsedMETAR;
 struct TAF;
 class JobRunner;
 
@@ -80,6 +81,27 @@ namespace NOAAStore
    * False if no METAR data was available
    */
   bool GetMETAR(const char *code, METAR &metar);
+
+  /**
+   * Transfers the downloaded and parsed METAR into the given reference
+   * if available. The processing is deferred until the first
+   * call after an update.
+   * @param index Index of the station in the array
+   * @param metar Destination ParsedMETAR struct
+   * @return True if the data was available,
+   * False if no METAR data was available
+   */
+  bool GetParsedMETAR(unsigned index, ParsedMETAR &metar);
+  /**
+   * Transfers the downloaded and parsed METAR into the given reference
+   * if available. The processing is deferred until the first
+   * call after an update.
+   * @param code Four letter code of the station/airport (upper case)
+   * @param metar Destination ParsedMETAR struct
+   * @return True if the data was available,
+   * False if no METAR data was available
+   */
+  bool GetParsedMETAR(const char *code, ParsedMETAR &metar);
 
   /**
    * Transfers the downloaded TAF into the given reference if available
