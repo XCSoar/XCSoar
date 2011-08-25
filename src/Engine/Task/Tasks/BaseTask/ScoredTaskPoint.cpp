@@ -21,17 +21,15 @@
  */
 #include "ScoredTaskPoint.hpp"
 
-ScoredTaskPoint::ScoredTaskPoint(Type _type,
-                                 const Waypoint & wp, 
-                                 const bool b_scored): 
+ScoredTaskPoint::ScoredTaskPoint(Type _type, const Waypoint & wp, bool b_scored):
   SampledTaskPoint(_type, wp, b_scored)
 {
   Reset();
 }
 
 bool 
-ScoredTaskPoint::TransitionEnter(const AircraftState & ref_now, 
-                                  const AircraftState & ref_last)
+ScoredTaskPoint::TransitionEnter(const AircraftState &ref_now,
+                                 const AircraftState &ref_last)
 {
   if (!CheckEnterTransition(ref_now, ref_last))
     return false;
@@ -43,9 +41,9 @@ ScoredTaskPoint::TransitionEnter(const AircraftState & ref_now,
 }
 
 bool 
-ScoredTaskPoint::TransitionExit(const AircraftState & ref_now, 
-                                 const AircraftState &ref_last,
-                                 const TaskProjection &projection)
+ScoredTaskPoint::TransitionExit(const AircraftState &ref_now,
+                                const AircraftState &ref_last,
+                                const TaskProjection &projection)
 {
   if (!CheckExitTransition(ref_now, ref_last))
     return false;
@@ -61,7 +59,6 @@ ScoredTaskPoint::TransitionExit(const AircraftState & ref_now,
   return true;
 }
 
-
 const GeoPoint &
 ScoredTaskPoint::GetLocationTravelled() const
 {
@@ -71,11 +68,10 @@ ScoredTaskPoint::GetLocationTravelled() const
 const GeoPoint &
 ScoredTaskPoint::GetLocationScored() const
 {
-  if (boundary_scored || !HasEntered()) {
+  if (boundary_scored || !HasEntered())
     return GetLocationMin();
-  } else {
-    return GetLocation();
-  }
+
+  return GetLocation();
 }
 
 const GeoPoint &
