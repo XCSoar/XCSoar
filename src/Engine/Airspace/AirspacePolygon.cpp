@@ -51,10 +51,10 @@ AirspacePolygon::AirspacePolygon(const std::vector<GeoPoint> &pts,
 
     if (prune) {
       // only for testing
-      m_border.prune_interior();
+      m_border.PruneInterior();
       m_is_convex = true;
     } else {
-      m_is_convex = m_border.is_convex();
+      m_is_convex = m_border.IsConvex();
     }
   }
 }
@@ -99,6 +99,6 @@ GeoPoint
 AirspacePolygon::ClosestPoint(const GeoPoint &loc) const
 {
   const FlatGeoPoint p = m_task_projection->project(loc);
-  const FlatGeoPoint pb = m_border.nearest_point(p);
+  const FlatGeoPoint pb = m_border.NearestPoint(p);
   return m_task_projection->unproject(pb);
 }

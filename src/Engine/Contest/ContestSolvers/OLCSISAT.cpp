@@ -48,7 +48,7 @@ OLCSISAT::CalcScore() const
   for (unsigned i = 0; i < num_stages; ++i)
     spv.push_back(solution[i]);
 
-  spv.prune_interior();
+  spv.PruneInterior();
 
   // now add leg distances making up the convex hull
   fixed G = fixed_zero;

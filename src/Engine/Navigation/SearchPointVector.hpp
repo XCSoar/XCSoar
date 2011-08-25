@@ -36,8 +36,8 @@ public:
   SearchPointVector(const_iterator begin, const_iterator end)
     :std::vector<SearchPoint>(begin, end) {}
 
-  bool prune_interior();
-  bool is_convex() const;
+  bool PruneInterior();
+  bool IsConvex() const;
 
   /**
    * Apply convex pruning algorithm with increasing tolerance
@@ -45,25 +45,25 @@ public:
    *
    * @return True if input was modified
    */
-  bool thin_to_size(const unsigned max_size);
+  bool ThinToSize(const unsigned max_size);
 
-  void project(const TaskProjection &tp);
+  void Project(const TaskProjection &tp);
 
-  FlatGeoPoint nearest_point(const FlatGeoPoint &p) const;
+  FlatGeoPoint NearestPoint(const FlatGeoPoint &p) const;
 
   /** Find iterator of nearest point, assuming polygon is convex */
-  const_iterator nearest_index_convex(const FlatGeoPoint &p) const;
+  const_iterator NearestIndexConvex(const FlatGeoPoint &p) const;
 
-  bool intersects(const FlatRay &ray) const;
+  bool IntersectsWith(const FlatRay &ray) const;
 
-  FlatBoundingBox compute_boundingbox() const;
+  FlatBoundingBox CalculateBoundingbox() const;
 
 
   /** increment iterator, wrapping around to start if required */
-  void circular_next(SearchPointVector::const_iterator &i) const;
+  void NextCircular(SearchPointVector::const_iterator &i) const;
 
   /** decreement iterator, wrapping around to last item if required */
-  void circular_previous(SearchPointVector::const_iterator &i) const;
+  void PreviousCircular(SearchPointVector::const_iterator &i) const;
 
   /** Is the given GeoPoint inside the polygon of SearchPoints? */
   bool IsInside(const GeoPoint &pt) const;

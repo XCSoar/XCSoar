@@ -54,11 +54,11 @@ SampledTaskPoint::UpdateSampleNear(const AircraftState& state,
   sampled_points.push_back(sp);
 
   // re-compute convex hull
-  bool retval = sampled_points.prune_interior();
+  bool retval = sampled_points.PruneInterior();
 
   // only return true if hull changed
   // return true; (update required)
-  return sampled_points.thin_to_size(64) || retval;
+  return sampled_points.ThinToSize(64) || retval;
 
   // thin to size is used here to ensure the sampled points vector
   // size is bounded to reasonable values for AAT calculations.
@@ -92,7 +92,7 @@ SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
       boundary_points.push_back(sp);
     }
 
-    boundary_points.prune_interior();
+    boundary_points.PruneInterior();
   } else {
     boundary_points.push_back(search_reference);
   }
@@ -108,9 +108,9 @@ SampledTaskPoint::UpdateProjection(const TaskProjection &projection)
   search_max.project(projection);
   search_min.project(projection);
   search_reference.project(projection);
-  nominal_points.project(projection);
-  sampled_points.project(projection);
-  boundary_points.project(projection);
+  nominal_points.Project(projection);
+  sampled_points.Project(projection);
+  boundary_points.Project(projection);
 }
 
 void

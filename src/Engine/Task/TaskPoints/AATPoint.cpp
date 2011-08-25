@@ -286,5 +286,5 @@ AATPoint::update_deadzone(const TaskProjection &projection)
   }
 
   // convert to convex polygon
-  m_deadzone.prune_interior();
+  m_deadzone.PruneInterior();
 }

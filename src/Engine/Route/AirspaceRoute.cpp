@@ -154,7 +154,7 @@ AirspaceRoute::find_clearing_pair(const SearchPointVector& spv,
     AFlatGeoPoint pborder(i->get_flatLocation(), dest.altitude); // @todo alt!
     const FlatRay ray(pborder, dest);
 
-    if (spv.intersects(ray)) {
+    if (spv.IntersectsWith(ray)) {
       j++;
       if (j==1) {
         i = start;
@@ -173,9 +173,9 @@ AirspaceRoute::find_clearing_pair(const SearchPointVector& spv,
     }
 
     if (backwards)
-      spv.circular_previous(i);
+      spv.PreviousCircular(i);
     else
-      spv.circular_next(i);
+      spv.NextCircular(i);
   }
   return p;
 }
@@ -186,9 +186,9 @@ AirspaceRoute::get_pairs(const SearchPointVector& spv,
                          const RoutePoint &dest) const
 {
   SearchPointVector::const_iterator i_closest =
-    spv.nearest_index_convex(start);
+    spv.NearestIndexConvex(start);
   SearchPointVector::const_iterator i_furthest =
-    spv.nearest_index_convex(dest);
+    spv.NearestIndexConvex(dest);
   ClearingPair p = find_clearing_pair(spv, i_closest, i_furthest, start);
   return p;
 }
@@ -198,15 +198,15 @@ AirspaceRoute::get_backup_pairs(const SearchPointVector& spv,
                                 const RoutePoint &_start,
                                 const RoutePoint &intc) const
 {
-  SearchPointVector::const_iterator start = spv.nearest_index_convex(intc);
+  SearchPointVector::const_iterator start = spv.NearestIndexConvex(intc);
   ClearingPair p(intc, intc);
 
   SearchPointVector::const_iterator i_left = start;
-  spv.circular_next(i_left);
+  spv.NextCircular(i_left);
   p.first = AFlatGeoPoint(i_left->get_flatLocation(), _start.altitude); // @todo alt!
 
   SearchPointVector::const_iterator i_right = start;
-  spv.circular_previous(i_right);
+  spv.PreviousCircular(i_right);
   p.second = AFlatGeoPoint(i_right->get_flatLocation(), _start.altitude); // @todo alt!
 
   return p;
