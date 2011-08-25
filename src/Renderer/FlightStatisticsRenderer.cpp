@@ -64,7 +64,7 @@ IsTaskLegVisible(const OrderedTaskPoint &tp)
 {
   switch (tp.GetType()) {
   case TaskPoint::START:
-    return tp.has_exited();
+    return tp.HasExited();
 
   case TaskPoint::FINISH:
   case TaskPoint::AAT:

@@ -376,12 +376,12 @@ OrderedTask::check_transition_point(OrderedTaskPoint& point,
 {
   const bool nearby = point.boundingbox_overlaps(bb_now) || point.boundingbox_overlaps(bb_last);
 
-  if (nearby && point.transition_enter(state, state_last)) {
+  if (nearby && point.TransitionEnter(state, state_last)) {
     transition_enter = true;
     task_events.transition_enter(point);
   }
   
-  if (nearby && point.transition_exit(state, state_last, task_projection)) {
+  if (nearby && point.TransitionExit(state, state_last, task_projection)) {
     transition_exit = true;
     task_events.transition_exit(point);
     
@@ -954,7 +954,7 @@ OrderedTask::task_started(bool soft) const
 {
   if (taskpoint_start) {
     // have we really started?
-    if (taskpoint_start->has_exited()) 
+    if (taskpoint_start->HasExited()) 
       return true;
 
     // if soft starts allowed, consider started if we progressed to next tp
@@ -985,7 +985,7 @@ OrderedTask::get_tp_search_points(unsigned tp) const
 void 
 OrderedTask::set_tp_search_min(unsigned tp, const SearchPoint &sol) 
 {
-  if (!tp && !task_points[0]->has_exited())
+  if (!tp && !task_points[0]->HasExited())
     return;
 
   task_points[tp]->SetSearchMin(sol);
@@ -1023,7 +1023,7 @@ OrderedTask::update_start_transition(const AircraftState &state, OrderedTaskPoin
     // find boundary point that produces shortest
     // distance from state to that point to next tp point
     taskpoint_start->find_best_start(state, *task_points[1], task_projection);
-  } else if (!start.has_exited() && !start.IsInSector(state)) {
+  } else if (!start.HasExited() && !start.IsInSector(state)) {
     start.Reset();
     // reset on invalid transition to outside
     // point to nominal start point
@@ -1397,7 +1397,7 @@ OrderedTask::update_summary(TaskSummary& ordered_summary) const
     TaskSummaryPoint tsp;
     tsp.d_planned = task_points[i]->GetVectorPlanned().Distance;
     if (i==0) {
-      tsp.achieved = task_points[i]->has_exited();
+      tsp.achieved = task_points[i]->HasExited();
     } else {
       tsp.achieved = task_points[i]->HasSampled();
     }

@@ -132,7 +132,7 @@ public:
                        const TaskProjection &projection);
 
 private:
-  bool score_last_exit() const {
+  bool ScoreLastExit() const {
     return true;
   }
 };

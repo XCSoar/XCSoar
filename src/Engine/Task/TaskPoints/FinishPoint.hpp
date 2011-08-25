@@ -104,11 +104,11 @@ public:
   void set_fai_finish_height(const fixed height);
 
 private:
-  bool score_first_entry() const {
+  bool ScoreFirstEntry() const {
     return true;
   }
 
-  bool entry_precondition() const;
+  bool EntryPrecondition() const;
 
   /**
    * called by isInSector

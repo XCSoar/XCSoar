@@ -49,7 +49,7 @@ FinishPoint::Reset()
 }
 
 bool 
-FinishPoint::entry_precondition() const
+FinishPoint::EntryPrecondition() const
 {
   return get_previous() != NULL && get_previous()->HasEntered();
 }

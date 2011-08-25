@@ -38,8 +38,8 @@
 class ScoredTaskPoint:
   public SampledTaskPoint
 {
-  AircraftState m_state_entered;
-  AircraftState m_state_exited;
+  AircraftState state_entered;
+  AircraftState state_exited;
 
 public:
 /** 
@@ -69,7 +69,7 @@ public:
  * @return True if aircraft has entered the OZ
  */
   bool HasEntered() const {
-    return m_state_entered.time > fixed_zero;
+    return state_entered.time > fixed_zero;
   }
 
 /** 
@@ -77,8 +77,8 @@ public:
  * 
  * @return True if aircraft has exited the OZ
  */
-  bool has_exited() const {
-    return m_state_exited.time > fixed_zero;
+  bool HasExited() const {
+    return state_exited.time > fixed_zero;
   }
 
 /** 
@@ -87,7 +87,7 @@ public:
  * @return State on entry
  */
   const AircraftState& GetEnteredState() const {
-    return m_state_entered;
+    return state_entered;
   }
 
 /** 
@@ -99,7 +99,7 @@ public:
  * 
  * @return True if observation zone is entered now
  */
-  bool transition_enter(const AircraftState &ref_now,
+  bool TransitionEnter(const AircraftState &ref_now,
                         const AircraftState &ref_last);
 
 /** 
@@ -111,7 +111,7 @@ public:
  * 
  * @return True if observation zone is exited now
  */
-  bool transition_exit(const AircraftState &ref_now,
+  bool TransitionExit(const AircraftState &ref_now,
                        const AircraftState &ref_last,
                        const TaskProjection &projection);
 
@@ -121,7 +121,7 @@ public:
  * @return Location 
  */
   gcc_pure
-  const GeoPoint& get_location_scored() const;
+  const GeoPoint& GetLocationScored() const;
 
 /** 
  * Retrieve location to be used for the task already travelled.
@@ -130,7 +130,7 @@ public:
  * @return Location 
  */
   gcc_pure
-  const GeoPoint& get_location_travelled() const;
+  const GeoPoint& GetLocationTravelled() const;
 
 /** 
  * Retrieve location to be used for remaining task.
@@ -148,8 +148,8 @@ private:
  * 
  * @param state State at entry
  */
-  void set_state_entered(const AircraftState& state) {
-    m_state_entered = state;
+  void SetStateEntered(const AircraftState& state) {
+    state_entered = state;
   }
 
 /** 
@@ -157,22 +157,22 @@ private:
  * 
  * @param state State at exit
  */
-  void set_state_exited(const AircraftState& state) {
-    m_state_exited = state;
+  void SetStateExited(const AircraftState& state) {
+    state_exited = state;
   }
 
   gcc_pure
-  virtual bool entry_precondition() const {
+  virtual bool EntryPrecondition() const {
     return true;
   }
 
   gcc_pure
-  virtual bool score_last_exit() const {
+  virtual bool ScoreLastExit() const {
     return false;
   }
 
   gcc_pure
-  virtual bool score_first_entry() const {
+  virtual bool ScoreFirstEntry() const {
     return false;
   }
 };

@@ -30,13 +30,13 @@ ScoredTaskPoint::ScoredTaskPoint(Type _type,
 }
 
 bool 
-ScoredTaskPoint::transition_enter(const AircraftState & ref_now, 
+ScoredTaskPoint::TransitionEnter(const AircraftState & ref_now, 
                                   const AircraftState & ref_last)
 {
   bool entered = CheckEnterTransition(ref_now, ref_last);
-  if (entered && entry_precondition()) {
-    if (!score_first_entry() || !HasEntered()) {
-      m_state_entered = ref_now;
+  if (entered && EntryPrecondition()) {
+    if (!ScoreFirstEntry() || !HasEntered()) {
+      state_entered = ref_now;
       return true;
     }
   }
@@ -44,18 +44,18 @@ ScoredTaskPoint::transition_enter(const AircraftState & ref_now,
 }
 
 bool 
-ScoredTaskPoint::transition_exit(const AircraftState & ref_now, 
+ScoredTaskPoint::TransitionExit(const AircraftState & ref_now, 
                                  const AircraftState &ref_last,
                                  const TaskProjection &projection)
 {
   bool exited = CheckExitTransition(ref_now, ref_last);
   if (exited) {
-    if (score_last_exit()) {
+    if (ScoreLastExit()) {
       ClearSampleAllButLast(ref_last, projection);
-      m_state_entered = ref_last;
-      m_state_exited = ref_now;
+      state_entered = ref_last;
+      state_exited = ref_now;
      } else {
-      m_state_exited = ref_last;
+      state_exited = ref_last;
     }
   }
   return exited;
@@ -63,13 +63,13 @@ ScoredTaskPoint::transition_exit(const AircraftState & ref_now,
 
 
 const GeoPoint &
-ScoredTaskPoint::get_location_travelled() const
+ScoredTaskPoint::GetLocationTravelled() const
 {
   return GetLocationMin();
 }
 
 const GeoPoint &
-ScoredTaskPoint::get_location_scored() const
+ScoredTaskPoint::GetLocationScored() const
 {
   if (boundary_scored || !HasEntered()) {
     return GetLocationMin();
@@ -88,6 +88,6 @@ void
 ScoredTaskPoint::Reset()
 {
   SampledTaskPoint::Reset();
-  m_state_entered.time = fixed_minus_one;
-  m_state_exited.time = fixed_minus_one;
+  state_entered.time = fixed_minus_one;
+  state_exited.time = fixed_minus_one;
 }
