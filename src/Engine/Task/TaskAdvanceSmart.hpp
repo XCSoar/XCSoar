@@ -31,6 +31,13 @@ struct OrderedTaskBehaviour;
 class TaskAdvanceSmart: 
   public TaskAdvance
 {
+protected:
+  /** active advance state */
+  TaskAdvanceState_t m_state;
+
+private:
+  const OrderedTaskBehaviour &m_task_behaviour;
+
 public:
   /** 
    * Constructor.  Sets defaults to auto-mode
@@ -56,12 +63,6 @@ public:
 
 protected:
   void update_state();
-
-  /** active advance state */
-  TaskAdvanceState_t m_state;
-
-private:
-  const OrderedTaskBehaviour &m_task_behaviour;
 };
 
 #endif
