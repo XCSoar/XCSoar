@@ -25,7 +25,6 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
-#include "Screen/Pen.hpp"
 #include "MapWindow/MapCanvas.hpp"
 #include "Compiler.h"
 
