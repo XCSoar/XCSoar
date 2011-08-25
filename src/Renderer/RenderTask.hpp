@@ -43,9 +43,6 @@ public:
   void Visit(const AbortTask &task);
   void Visit(const OrderedTask &task);
   void Visit(const GotoTask &task);
-
-protected:
-  void DrawLayers(const AbstractTask &task);
 };
 
 #endif

@@ -32,52 +32,16 @@ RenderTask::RenderTask(RenderTaskPoint &_tpv, GeoBounds _screen_bounds)
   :tpv(_tpv), screen_bounds(_screen_bounds) {}
 
 void 
-RenderTask::DrawLayers(const AbstractTask &task)
-{
-  for (unsigned i = 0; i < 4; i++) {
-    tpv.SetLayer((RenderTaskLayer)i);
-
-    switch (task.type) {
-    case TaskInterface::ORDERED: {
-      const OrderedTask &ordered_task = (const OrderedTask &)task;
-      if (i != RENDER_TASK_SYMBOLS && i != RENDER_TASK_LEG) {
-        tpv.SetModeOptional(true);
-
-        for (unsigned j = 0, end = ordered_task.optional_start_points_size();
-             j < end; ++j)
-          tpv.Draw(*ordered_task.get_optional_start(j));
-      }
-
-      tpv.SetModeOptional(false);
-      for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
-        tpv.Draw(*ordered_task.getTaskPoint(j));
-
-      break;
-    }
-
-    case TaskInterface::ABORT: {
-      const AbortTask &abort_task = (const AbortTask &)task;
-
-      tpv.SetModeOptional(false);
-      for (unsigned j = 0, end = abort_task.TaskSize(); j < end; ++j)
-        tpv.Draw(abort_task.GetAlternate(j));
-
-      break;
-    }
-
-    case TaskInterface::GOTO:
-      tpv.SetModeOptional(false);
-      tpv.Draw(*task.GetActiveTaskPoint());
-      break;
-    }
-  }
-}
-
-void 
 RenderTask::Visit(const AbortTask &task)
 {
   tpv.SetActiveIndex(task.getActiveIndex());
-  DrawLayers(task);
+  for (unsigned i = 0; i < 4; i++) {
+    tpv.SetLayer((RenderTaskLayer)i);
+
+    tpv.SetModeOptional(false);
+    for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
+      tpv.Draw(task.GetAlternate(j));
+  }
 }
 
 void 
@@ -85,12 +49,30 @@ RenderTask::Visit(const OrderedTask &task)
 {
   tpv.SetBoundingBox(task.get_bounding_box(screen_bounds));
   tpv.SetActiveIndex(task.getActiveIndex());
-  DrawLayers(task);
+  for (unsigned i = 0; i < 4; i++) {
+    tpv.SetLayer((RenderTaskLayer)i);
+
+    if (i != RENDER_TASK_SYMBOLS && i != RENDER_TASK_LEG) {
+      tpv.SetModeOptional(true);
+
+      for (unsigned j = 0, end = task.optional_start_points_size(); j < end; ++j)
+        tpv.Draw(*task.get_optional_start(j));
+    }
+
+    tpv.SetModeOptional(false);
+    for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
+      tpv.Draw(*task.getTaskPoint(j));
+  }
 }
 
 void 
 RenderTask::Visit(const GotoTask &task)
 {
   tpv.SetActiveIndex(0);
-  DrawLayers(task);
+  for (unsigned i = 0; i < 4; i++) {
+    tpv.SetLayer((RenderTaskLayer)i);
+
+    tpv.SetModeOptional(false);
+    tpv.Draw(*task.GetActiveTaskPoint());
+  }
 }
