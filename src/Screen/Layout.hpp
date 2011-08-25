@@ -170,6 +170,4 @@ namespace Layout
   }
 }
 
-#define IBLSCALE(x) Layout::Scale(x)
-
 #endif

@@ -36,7 +36,7 @@ TaskProgressRenderer::DrawTaskProgress(const TaskSummary& summary,
                                        const PixelRect &rc, bool inverse)
 {
   const int radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2 - 
-                     IBLSCALE(3);
+                     Layout::Scale(3);
   RasterPoint center;
   center.x = (rc.left + rc.right) / 2;
   center.y = (rc.bottom + rc.top) / 2;
@@ -69,21 +69,21 @@ TaskProgressRenderer::DrawTaskProgress(const TaskSummary& summary,
       else
         canvas.select(Graphics::hbOrange);
 
-      w = IBLSCALE(3);
+      w = Layout::Scale(3);
     } else if (i < summary.active) {
       if (it->achieved)
         canvas.select(Graphics::hbGreen);
       else
         canvas.select(Graphics::hbNotReachableTerrain);
 
-      w = IBLSCALE(2);
+      w = Layout::Scale(2);
     } else {
       if (it->achieved)
         canvas.select(Graphics::hbGreen);
       else
         canvas.select(Graphics::hbLightGray);
 
-      w = IBLSCALE(1);
+      w = Layout::Scale(1);
     }
     
     canvas.rectangle(x - w, y - w, x + w, y + w);

@@ -294,8 +294,8 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     /* the warnings were emptied between the opening of the dialog and
        this refresh, so only need to display "No Warnings" for top
        item, otherwise exit immediately */
-    canvas.text(paint_rc.left + IBLSCALE(paint_rc_margin),
-                paint_rc.top + IBLSCALE(paint_rc_margin), _("No Warnings"));
+    canvas.text(paint_rc.left + Layout::Scale(paint_rc_margin),
+                paint_rc.top + Layout::Scale(paint_rc_margin), _("No Warnings"));
     return;
   }
 
@@ -334,16 +334,16 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     _stprintf(sTmp, _T("%-20s"), sName.c_str());
 
     canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
-                        paint_rc.top + IBLSCALE(TextTop),
+                        paint_rc.top + Layout::Scale(TextTop),
                         rcTextClip, sTmp);
 
     _stprintf(sTmp, _T("%-20s"), sTop.c_str());
     canvas.text(paint_rc.left + Col1LeftScreenCoords,
-                paint_rc.top + IBLSCALE(TextTop), sTmp);
+                paint_rc.top + Layout::Scale(TextTop), sTmp);
 
     _stprintf(sTmp, _T("%-20s"), sBase.c_str());
     canvas.text(paint_rc.left + Col1LeftScreenCoords,
-                paint_rc.top + IBLSCALE(TextTop + TextHeight),
+                paint_rc.top + Layout::Scale(TextTop + TextHeight),
                 sTmp);
   }
 
@@ -369,7 +369,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
     }
 
     canvas.text_clipped(paint_rc.left + Col0LeftScreenCoords,
-                        paint_rc.top + IBLSCALE(TextTop + TextHeight),
+                        paint_rc.top + Layout::Scale(TextTop + TextHeight),
                         rcTextClip, sTmp);
   }
 

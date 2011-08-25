@@ -51,7 +51,7 @@ MapCanvas::offset_line(GeoPoint a, GeoPoint b)
   RasterPoint pts[3];
   pts[0] = projection.GeoToScreen(a);
   pts[1] = projection.GeoToScreen(b);
-  ScreenClosestPoint(pts[0], pts[1], pts[0], &pts[2], IBLSCALE(20));
+  ScreenClosestPoint(pts[0], pts[1], pts[0], &pts[2], Layout::Scale(20));
   canvas.line(pts[2], pts[1]);
 }
 

@@ -176,22 +176,22 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
     if (Offset < -60)
       Offset = -60;
 
-    Offset = IBLSCALE(Offset);
+    Offset = Layout::Scale(Offset);
     if (Offset < 0)
-      GlideBar[1].y = IBLSCALE(9);
+      GlideBar[1].y = Layout::Scale(9);
 
     if (Offset0 > 60)
       Offset0 = 60;
     if (Offset0 < -60)
       Offset0 = -60;
 
-    Offset0 = IBLSCALE(Offset0);
+    Offset0 = Layout::Scale(Offset0);
     if (Offset0 < 0)
-      GlideBar0[1].y = IBLSCALE(9);
+      GlideBar0[1].y = Layout::Scale(9);
 
     for (i = 0; i < 6; i++) {
       GlideBar[i].y += y0;
-      GlideBar[i].x = IBLSCALE(GlideBar[i].x) + rc.left;
+      GlideBar[i].x = Layout::Scale(GlideBar[i].x) + rc.left;
     }
 
     GlideBar[0].y -= Offset;
@@ -200,7 +200,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 
     for (i = 0; i < 6; i++) {
       GlideBar0[i].y += y0;
-      GlideBar0[i].x = IBLSCALE(GlideBar0[i].x) + rc.left;
+      GlideBar0[i].x = Layout::Scale(GlideBar0[i].x) + rc.left;
     }
 
     GlideBar0[0].y -= Offset0;
@@ -212,7 +212,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
       if (Offset0 != Offset) {
         int dy = (GlideBar0[0].y - GlideBar[0].y) +
             (GlideBar0[0].y - GlideBar0[3].y);
-        dy = max(IBLSCALE(3), dy);
+        dy = max(Layout::Scale(3), dy);
         GlideBar[3].y = GlideBar0[0].y - dy;
         GlideBar[4].y = GlideBar0[1].y - dy;
         GlideBar[5].y = GlideBar0[2].y - dy;
@@ -229,7 +229,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
       GlideBar0[4].y = GlideBar[1].y;
       GlideBar0[5].y = GlideBar[2].y;
 
-      if (abs(Offset0 - Offset) < IBLSCALE(4))
+      if (abs(Offset0 - Offset) < Layout::Scale(4))
         Offset = Offset0;
     }
 
@@ -287,11 +287,11 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
                               false);
 
     if (Offset >= 0)
-      Offset = GlideBar[2].y + Offset + IBLSCALE(5);
+      Offset = GlideBar[2].y + Offset + Layout::Scale(5);
     else if (Offset0 > 0)
-      Offset = GlideBar0[1].y - IBLSCALE(15);
+      Offset = GlideBar0[1].y - Layout::Scale(15);
     else
-      Offset = GlideBar[2].y + Offset - IBLSCALE(15);
+      Offset = GlideBar[2].y + Offset - Layout::Scale(15);
 
     canvas.set_text_color(COLOR_BLACK);
     canvas.set_background_color(COLOR_WHITE);
@@ -321,27 +321,27 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             sizeof(ScaleInfo) / sizeof(TCHAR), false);
   PixelSize TextSize = canvas.text_size(ScaleInfo);
 
-  Height = Fonts::MapBold.get_capital_height() + IBLSCALE(2);
+  Height = Fonts::MapBold.get_capital_height() + Layout::Scale(2);
   // 2: add 1pix border
 
-  canvas.fill_rectangle(IBLSCALE(4), rc.bottom - Height,
-                        TextSize.cx + IBLSCALE(16), rc.bottom,
+  canvas.fill_rectangle(Layout::Scale(4), rc.bottom - Height,
+                        TextSize.cx + Layout::Scale(16), rc.bottom,
                         COLOR_WHITE);
 
   canvas.background_transparent();
   canvas.set_text_color(COLOR_BLACK);
 
-  canvas.text(IBLSCALE(7),
-              rc.bottom - Fonts::MapBold.get_ascent_height() - IBLSCALE(1),
+  canvas.text(Layout::Scale(7),
+              rc.bottom - Fonts::MapBold.get_ascent_height() - Layout::Scale(1),
               ScaleInfo);
 
   Graphics::hBmpMapScaleLeft.draw(canvas, 0, rc.bottom - Height);
-  Graphics::hBmpMapScaleRight.draw(canvas, IBLSCALE(14) + TextSize.cx,
+  Graphics::hBmpMapScaleRight.draw(canvas, Layout::Scale(14) + TextSize.cx,
                                    rc.bottom - Height);
 
   const UnitSymbol *symbol = GetUnitSymbol(Unit);
   if (symbol != NULL)
-    symbol->draw(canvas, IBLSCALE(8) + TextSize.cx, rc.bottom - Height);
+    symbol->draw(canvas, Layout::Scale(8) + TextSize.cx, rc.bottom - Height);
 
   ScaleInfo[0] = '\0';
   if (SettingsMap().AutoZoom)
@@ -449,9 +449,9 @@ GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
 
   PixelRect tb_rect;
   tb_rect.left = rc.left;
-  tb_rect.right = rc.left+IBLSCALE(20);
-  tb_rect.top = IBLSCALE(4);
-  tb_rect.bottom = tb_rect.top+(rc.bottom-rc.top)/2-IBLSCALE(30);
+  tb_rect.right = rc.left+Layout::Scale(20);
+  tb_rect.top = Layout::Scale(4);
+  tb_rect.bottom = tb_rect.top+(rc.bottom-rc.top)/2-Layout::Scale(30);
 
   const ThermalBandRenderer &renderer = thermal_band_renderer;
   if (task != NULL) {

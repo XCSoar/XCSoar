@@ -186,7 +186,7 @@ Chart::DrawXLabel(const TCHAR *text)
   canvas.select(*look.axis_label_font);
 
   PixelSize tsize = canvas.text_size(text);
-  int x = rc.right - tsize.cx - IBLSCALE(3);
+  int x = rc.right - tsize.cx - Layout::Scale(3);
   int y = rc.bottom - tsize.cy;
 
   canvas.background_transparent();
@@ -428,7 +428,7 @@ Chart::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
         canvas.background_transparent();
-        canvas.text(xmin, ymax - IBLSCALE(17), unit_text);
+        canvas.text(xmin, ymax - Layout::Scale(17), unit_text);
 
         next_text = xmin + canvas.text_size(unit_text).cx + Layout::FastScale(2);
       }
@@ -456,7 +456,7 @@ Chart::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
         FormatTicText(unit_text, xval * unit_step / tic_step, unit_step);
 
         canvas.background_transparent();
-        canvas.text(xmin, ymax - IBLSCALE(17), unit_text);
+        canvas.text(xmin, ymax - Layout::Scale(17), unit_text);
       }
     }
   }
@@ -506,7 +506,7 @@ Chart::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
         canvas.background_transparent();
-        canvas.text(xmin + IBLSCALE(8), ymin, unit_text);
+        canvas.text(xmin + Layout::Scale(8), ymin, unit_text);
       }
     }
   }
@@ -531,7 +531,7 @@ Chart::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
         FormatTicText(unit_text, yval * unit_step / tic_step, unit_step);
 
         canvas.background_transparent();
-        canvas.text(xmin + IBLSCALE(8), ymin, unit_text);
+        canvas.text(xmin + Layout::Scale(8), ymin, unit_text);
       }
     }
   }

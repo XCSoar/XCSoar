@@ -317,14 +317,14 @@ FlightStatisticsRenderer::RenderGlidePolar(Canvas &canvas, const PixelRect rc,
 
   _stprintf(text, _T("%s: %d kg"), _("Mass"),
             (int)glide_polar.GetTotalMass());
-  canvas.text(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(55), text);
+  canvas.text(rc.left + Layout::Scale(30), rc.bottom - Layout::Scale(55), text);
 
   fixed wl = glide_polar.GetWingLoading();
   if ( wl != fixed_zero )
   {
     _stprintf(text, _T("%s: %.1f kg/m2"), _("Wing loading"), (double)wl);
 
-    canvas.text(rc.left + IBLSCALE(30), rc.bottom - IBLSCALE(40), text);
+    canvas.text(rc.left + Layout::Scale(30), rc.bottom - Layout::Scale(40), text);
   }
 }
 

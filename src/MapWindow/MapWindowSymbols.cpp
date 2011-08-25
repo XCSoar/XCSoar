@@ -120,8 +120,8 @@ MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
     return;
 
   RasterPoint Start;
-  Start.y = IBLSCALE(19) + rc.top;
-  Start.x = rc.right - IBLSCALE(19);
+  Start.y = Layout::Scale(19) + rc.top;
+  Start.x = rc.right - Layout::Scale(19);
 
   RasterPoint Arrow[5] = { { 0, -13 }, { -6, 10 }, { 0, 4 }, { 6, 10 }, { 0, -13 } };
 

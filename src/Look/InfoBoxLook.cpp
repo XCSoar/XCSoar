@@ -44,7 +44,7 @@ InfoBoxLook::Initialise(bool _inverse, bool use_colors)
 
   Color border_color = Color(128, 128, 128);
   border_pen.set(BORDER_WIDTH, border_color);
-  selector_pen.set(IBLSCALE(1) + 2, value.fg_color);
+  selector_pen.set(Layout::Scale(1) + 2, value.fg_color);
 
   value.font = &Fonts::InfoBox;
   title.font = &Fonts::Title;

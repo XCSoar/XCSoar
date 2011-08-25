@@ -45,8 +45,8 @@ GetButtonPosition(unsigned i, PixelRect rc, int *x, int *y, int *sizex, int *siz
     *sizey = hheight - margin * 2;
 
     if (i == 0) {
-      *sizex = IBLSCALE(52);
-      *sizey = IBLSCALE(37);
+      *sizex = Layout::Scale(52);
+      *sizey = Layout::Scale(37);
       *x = rc.left - (*sizex); // JMW make it offscreen for now
       *y = rc.bottom - (*sizey);
     } else if (i < 5) {
@@ -63,12 +63,12 @@ GetButtonPosition(unsigned i, PixelRect rc, int *x, int *y, int *sizex, int *siz
       *sizey = hheight - margin * 2;
 
       *x = rc.right - hwidth + margin;
-      int k = rc.bottom - rc.top - IBLSCALE(46);
+      int k = rc.bottom - rc.top - Layout::Scale(46);
 
       if (is_altair()) {
         k = rc.bottom - rc.top;
         // JMW need upside down button order for rotated Altair
-        *y = rc.bottom - (i - 5) * k / 5 - (*sizey) - IBLSCALE(20);
+        *y = rc.bottom - (i - 5) * k / 5 - (*sizey) - Layout::Scale(20);
       } else {
         *y = rc.top + (i - 5) * hheight + margin;
       }

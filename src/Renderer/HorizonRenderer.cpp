@@ -33,7 +33,7 @@ DrawHorizon(Canvas &canvas, const PixelRect &rc,
   RasterPoint center;
   center.y = (rc.top+rc.bottom)/2;
   center.x = (rc.left+rc.right)/2;
-  const int radius = min(rc.right-rc.left,rc.bottom-rc.top)/2-IBLSCALE(1);
+  const int radius = min(rc.right-rc.left,rc.bottom-rc.top)/2-Layout::Scale(1);
 
   /*
   FEATURE TEMPORARILY DISABLED DUE TO USE OF XCSOAR IN FAI COMPETITIONS
@@ -49,9 +49,9 @@ DrawHorizon(Canvas &canvas, const PixelRect &rc,
   is the case or not.
   */
 
-  Pen hpHorizonSky(IBLSCALE(1), dark_color(Graphics::skyColor));
+  Pen hpHorizonSky(Layout::Scale(1), dark_color(Graphics::skyColor));
   Brush hbHorizonSky(Graphics::skyColor);
-  Pen hpHorizonGround(IBLSCALE(1), dark_color(Graphics::GroundColor));
+  Pen hpHorizonGround(Layout::Scale(1), dark_color(Graphics::GroundColor));
 
 #define fixed_div fixed(1.0 / 50.0)
 #define fixed_89 fixed_int_constant(89)
@@ -75,14 +75,14 @@ DrawHorizon(Canvas &canvas, const PixelRect &rc,
   canvas.segment(center.x, center.y, radius, alpha1, alpha2, true);
 
   // draw aircraft symbol
-  Pen aircraft_pen(IBLSCALE(2), COLOR_BLACK);
+  Pen aircraft_pen(Layout::Scale(2), COLOR_BLACK);
   canvas.select(aircraft_pen);
   canvas.line(center.x + radius / 2, center.y, center.x - radius / 2, center.y);
   canvas.line(center.x, center.y - radius / 4, center.x, center.y);
 
   // draw 45 degree dash marks
-  const unsigned rr2p = uround(radius * fixed_sqrt_half) + IBLSCALE(1);
-  const unsigned rr2n = rr2p - IBLSCALE(2);
+  const unsigned rr2p = uround(radius * fixed_sqrt_half) + Layout::Scale(1);
+  const unsigned rr2n = rr2p - Layout::Scale(2);
   canvas.line(center.x + rr2p, center.y - rr2p, center.x + rr2n, center.y - rr2n);
   canvas.line(center.x - rr2p, center.y - rr2p, center.x - rr2n, center.y - rr2n);
 }

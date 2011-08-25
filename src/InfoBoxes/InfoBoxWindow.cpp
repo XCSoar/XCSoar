@@ -43,7 +43,7 @@ Copyright_License {
 
 using std::max;
 
-#define SELECTORWIDTH IBLSCALE(5)
+#define SELECTORWIDTH Layout::Scale(5)
 
 InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, int Height,
                  int border_flags,
@@ -208,23 +208,23 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   canvas.TextAutoClipped(x, y, mTitle.c_str());
 
-  if (settings.border_style == apIbTab && halftextwidth > IBLSCALE(3)) {
+  if (settings.border_style == apIbTab && halftextwidth > Layout::Scale(3)) {
     int ytop = recTitle.top + font.get_capital_height() / 2;
-    int ytopedge = ytop + IBLSCALE(2);
-    int ybottom = recTitle.top + IBLSCALE(6) + font.get_capital_height();
+    int ytopedge = ytop + Layout::Scale(2);
+    int ybottom = recTitle.top + Layout::Scale(6) + font.get_capital_height();
 
     canvas.select(look.border_pen);
 
     RasterPoint tab[8];
     tab[0].x = tab[1].x = recTitle.left;
     tab[0].y = tab[7].y = ybottom;
-    tab[2].x = recTitle.left + IBLSCALE(2);
+    tab[2].x = recTitle.left + Layout::Scale(2);
     tab[2].y = tab[5].y = tab[3].y = tab[4].y = ytop;
     tab[1].y = tab[6].y = ytopedge;
-    tab[5].x = recTitle.right - IBLSCALE(2);
+    tab[5].x = recTitle.right - Layout::Scale(2);
     tab[6].x = tab[7].x = recTitle.right;
-    tab[3].x = recTitle.left + halftextwidth - IBLSCALE(1);
-    tab[4].x = recTitle.right - halftextwidth + IBLSCALE(1);
+    tab[3].x = recTitle.left + halftextwidth - Layout::Scale(1);
+    tab[4].x = recTitle.right - halftextwidth + Layout::Scale(1);
 
     canvas.polyline(tab, 4);
     canvas.polyline(tab + 4, 4);

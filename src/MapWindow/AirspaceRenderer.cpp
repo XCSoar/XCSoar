@@ -152,7 +152,7 @@ public:
      airspace_look(_airspace_look),
      m_warnings(warnings),
      settings(_settings),
-     pen_thick(IBLSCALE(10), Color(0x00, 0x00, 0x00))
+     pen_thick(Layout::Scale(10), Color(0x00, 0x00, 0x00))
   {
     glStencilMask(0xff);
     glClear(GL_STENCIL_BUFFER_BIT);
@@ -301,8 +301,8 @@ public:
     :MapDrawHelper(_helper),
      airspace_look(_airspace_look),
      m_warnings(warnings),
-     pen_thick(Pen::SOLID, IBLSCALE(10), Color(0x00, 0x00, 0x00)),
-     pen_medium(Pen::SOLID, IBLSCALE(3), Color(0x00, 0x00, 0x00))
+     pen_thick(Pen::SOLID, Layout::Scale(10), Color(0x00, 0x00, 0x00)),
+     pen_medium(Pen::SOLID, Layout::Scale(3), Color(0x00, 0x00, 0x00))
   {
     switch (settings.fill_mode) {
     case AirspaceRendererSettings::AS_FILL_DEFAULT:

@@ -121,8 +121,8 @@ InfoBoxFullWindow::on_paint(Canvas &canvas)
     }
 
     assert(InfoBoxes[i] != NULL);
-    InfoBoxes[i]->PaintInto(canvas, IBLSCALE(x), IBLSCALE(y),
-                            IBLSCALE(rw), IBLSCALE(rh));
+    InfoBoxes[i]->PaintInto(canvas, Layout::Scale(x), Layout::Scale(y),
+                            Layout::Scale(rw), Layout::Scale(rh));
   }
 }
 

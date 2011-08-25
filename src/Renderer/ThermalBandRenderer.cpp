@@ -140,21 +140,21 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
     chart.get_canvas().white_brush();
   else
     chart.get_canvas().black_brush();
-  chart.DrawDot(settings_computer.glide_polar_task.GetMC(), h, IBLSCALE(2));
+  chart.DrawDot(settings_computer.glide_polar_task.GetMC(), h, Layout::Scale(2));
 
   /*
   RasterPoint GliderBand[5] = { { 0, 0 }, { 23, 0 }, { 22, 0 }, { 24, 0 }, { 0, 0 } };
-  GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (fixed_one - hglider)) + rc.top;
+  GliderBand[0].y = Layout::Scale(4) + iround(TBSCALEY * (fixed_one - hglider)) + rc.top;
   GliderBand[1].y = GliderBand[0].y;
   GliderBand[1].x =
-      max(iround((mc / Wmax) * IBLSCALE(TBSCALEX)), IBLSCALE(4)) + rc.left;
+      max(iround((mc / Wmax) * Layout::Scale(TBSCALEX)), Layout::Scale(4)) + rc.left;
 
-  GliderBand[2].x = GliderBand[1].x - IBLSCALE(4);
-  GliderBand[2].y = GliderBand[0].y - IBLSCALE(4);
+  GliderBand[2].x = GliderBand[1].x - Layout::Scale(4);
+  GliderBand[2].y = GliderBand[0].y - Layout::Scale(4);
   GliderBand[3].x = GliderBand[1].x;
   GliderBand[3].y = GliderBand[1].y;
-  GliderBand[4].x = GliderBand[1].x - IBLSCALE(4);
-  GliderBand[4].y = GliderBand[0].y + IBLSCALE(4);
+  GliderBand[4].x = GliderBand[1].x - Layout::Scale(4);
+  GliderBand[4].y = GliderBand[0].y + Layout::Scale(4);
 
   canvas.select(look.pen);
 
@@ -163,7 +163,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
 
   if (draw_start_height) {
     canvas.select(Graphics::hpFinalGlideBelow);
-    GliderBand[0].y = IBLSCALE(4) + iround(TBSCALEY * (fixed_one - hstart)) + rc.top;
+    GliderBand[0].y = Layout::Scale(4) + iround(TBSCALEY * (fixed_one - hstart)) + rc.top;
     GliderBand[1].y = GliderBand[0].y;
     canvas.polyline(GliderBand, 2);
   }
@@ -211,7 +211,7 @@ ThermalBandRenderer::DrawThermalBandSpark(const MoreData &basic,
 {
   Chart chart(chart_look, canvas, rc);
   chart.PaddingBottom = 0;
-  chart.PaddingLeft = IBLSCALE(3);
+  chart.PaddingLeft = Layout::Scale(3);
   scale_chart(calculated, settings_computer, chart);
   _DrawThermalBand(basic, calculated, settings_computer,
                    chart, task_props, true, NULL);

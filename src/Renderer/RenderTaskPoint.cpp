@@ -132,7 +132,7 @@ RenderTaskPoint::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
   const Angle ang = Angle::radians(atan2(fixed(p_end.x - p_start.x),
                                          fixed(p_start.y - p_end.y))).as_bearing();
 
-  ScreenClosestPoint(p_start, p_end, m_proj.GetScreenOrigin(), &p_p, IBLSCALE(25));
+  ScreenClosestPoint(p_start, p_end, m_proj.GetScreenOrigin(), &p_p, Layout::Scale(25));
   PolygonRotateShift(Arrow, 2, p_p.x, p_p.y, ang);
   Arrow[2] = Arrow[1];
   Arrow[1] = p_p;

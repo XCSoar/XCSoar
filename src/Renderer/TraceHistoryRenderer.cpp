@@ -129,7 +129,7 @@ TraceHistoryRenderer::render_filled_posneg(Chart &chart,
     chart.get_canvas().white_brush();
   else
     chart.get_canvas().black_brush();
-  chart.DrawDot(x_last, y_last, IBLSCALE(2));
+  chart.DrawDot(x_last, y_last, Layout::Scale(2));
 }
 
 void

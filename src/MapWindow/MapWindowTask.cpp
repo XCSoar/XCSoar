@@ -123,7 +123,7 @@ MapWindow::DrawTask(Canvas &canvas)
     for (Route::const_iterator i = route.begin(); i!= route.end(); ++i, ++pp) {
       *pp = render_projection.GeoToScreen(*i);
     }
-    ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], &p[r_size-1], IBLSCALE(20));
+    ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], &p[r_size-1], Layout::Scale(20));
     canvas.polyline(p, r_size);
   }
 }
