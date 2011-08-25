@@ -75,7 +75,7 @@ class TargetMapWindow : public BufferWindow {
 
   unsigned target_index;
 
-  enum drag_mode {
+  enum DragMode {
     DRAG_NONE,
     DRAG_TARGET,
   } drag_mode;

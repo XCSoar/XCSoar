@@ -157,7 +157,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
   int click_time = mouse_down_clock.elapsed();
   mouse_down_clock.reset();
 
-  enum drag_mode old_drag_mode = drag_mode;
+  DragMode old_drag_mode = drag_mode;
   drag_mode = DRAG_NONE;
 
   switch (old_drag_mode) {

@@ -63,7 +63,7 @@ TargetMapWindow::on_mouse_up(int x, int y)
   if (drag_mode != DRAG_NONE)
     release_capture();
 
-  enum drag_mode old_drag_mode = drag_mode;
+  DragMode old_drag_mode = drag_mode;
   drag_mode = DRAG_NONE;
 
   switch (old_drag_mode) {

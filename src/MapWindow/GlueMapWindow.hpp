@@ -68,7 +68,7 @@ class GlueMapWindow : public MapWindow {
 
   PeriodClock mouse_down_clock;
 
-  enum drag_mode {
+  enum DragMode {
     DRAG_NONE,
     DRAG_PAN,
     DRAG_GESTURE,
