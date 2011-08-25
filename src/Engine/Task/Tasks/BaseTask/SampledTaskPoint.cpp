@@ -25,12 +25,12 @@
 SampledTaskPoint::SampledTaskPoint(Type _type, const Waypoint & wp,
                                    const bool b_scored)
   :TaskWaypoint(_type, wp),
-   m_boundary_scored(b_scored),
-   m_search_max(GetLocation()),
-   m_search_min(GetLocation()),
-   m_search_reference(GetLocation())
+   boundary_scored(b_scored),
+   search_max(GetLocation()),
+   search_min(GetLocation()),
+   search_reference(GetLocation())
 {
-  m_nominal_points.push_back(m_search_reference);
+  nominal_points.push_back(search_reference);
 }
 
 // SAMPLES
@@ -42,20 +42,20 @@ SampledTaskPoint::UpdateSampleNear(const AircraftState& state,
 {
   if (IsInSector(state)) {
     // if sample is inside sample polygon
-    if (PolygonInterior(state.location, m_sampled_points))
+    if (PolygonInterior(state.location, sampled_points))
       // return false (no update required)
       return false;
 
     // add sample to polygon
     SearchPoint sp(state.location, projection);
-    m_sampled_points.push_back(sp);
+    sampled_points.push_back(sp);
 
     // re-compute convex hull
-    bool retval = m_sampled_points.prune_interior();
+    bool retval = sampled_points.prune_interior();
 
     // only return true if hull changed
     // return true; (update required)
-    return m_sampled_points.thin_to_size(64) || retval;
+    return sampled_points.thin_to_size(64) || retval;
 
     // thin to size is used here to ensure the sampled points vector
     // size is bounded to reasonable values for AAT calculations.
@@ -70,9 +70,9 @@ SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
                                             const TaskProjection &projection)
 {
   if (HasSampled()) {
-    m_sampled_points.clear();
+    sampled_points.clear();
     SearchPoint sp(ref_last.location, projection);
-    m_sampled_points.push_back(sp);
+    sampled_points.push_back(sp);
   }
 }
 
@@ -83,19 +83,19 @@ SampledTaskPoint::ClearSampleAllButLast(const AircraftState& ref_last,
 void 
 SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
 { 
-  m_search_max = m_search_reference;
-  m_search_min = m_search_reference;
-  m_boundary_points.clear();
+  search_max = search_reference;
+  search_min = search_reference;
+  boundary_points.clear();
 
-  if (m_boundary_scored) {
+  if (boundary_scored) {
     for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps) {
       SearchPoint sp(GetBoundaryParametric(t));
-      m_boundary_points.push_back(sp);
+      boundary_points.push_back(sp);
     }
 
-    m_boundary_points.prune_interior();
+    boundary_points.prune_interior();
   } else {
-    m_boundary_points.push_back(m_search_reference);
+    boundary_points.push_back(search_reference);
   }
 
   UpdateProjection(projection);
@@ -106,36 +106,36 @@ SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
 void 
 SampledTaskPoint::UpdateProjection(const TaskProjection &projection)
 {
-  m_search_max.project(projection);
-  m_search_min.project(projection);
-  m_search_reference.project(projection);
-  m_nominal_points.project(projection);
-  m_sampled_points.project(projection);
-  m_boundary_points.project(projection);
+  search_max.project(projection);
+  search_min.project(projection);
+  search_reference.project(projection);
+  nominal_points.project(projection);
+  sampled_points.project(projection);
+  boundary_points.project(projection);
 }
 
 void
 SampledTaskPoint::Reset() 
 {
-  m_sampled_points.clear();
+  sampled_points.clear();
 }
 
 const SearchPointVector& 
 SampledTaskPoint::GetSearchPoints() const
 {
   if (SearchBoundaryPoints())
-    return m_boundary_points;
+    return boundary_points;
 
   if (HasSampled())
-    return m_sampled_points;
+    return sampled_points;
 
   if (SearchNominalIfUnsampled())
     // this adds a point in case the waypoint was skipped
     // this is a crude way of handling the situation --- may be best
     // to de-rate the score in some way
-    return m_nominal_points;
+    return nominal_points;
 
-  return m_boundary_points;
+  return boundary_points;
 }
 
 void 

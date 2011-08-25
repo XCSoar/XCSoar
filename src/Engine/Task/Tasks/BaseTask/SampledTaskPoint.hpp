@@ -53,15 +53,15 @@ protected:
    * Whether boundaries are used in scoring distance,
    * or just the reference point
    */
-  const bool m_boundary_scored;
+  const bool boundary_scored;
 
 private:
-  SearchPointVector m_nominal_points;
-  SearchPointVector m_sampled_points;
-  SearchPointVector m_boundary_points;
-  SearchPoint m_search_max;
-  SearchPoint m_search_min;
-  SearchPoint m_search_reference;
+  SearchPointVector nominal_points;
+  SearchPointVector sampled_points;
+  SearchPointVector boundary_points;
+  SearchPoint search_max;
+  SearchPoint search_min;
+  SearchPoint search_reference;
 
 public:
   /**
@@ -69,16 +69,15 @@ public:
    * Must be followed by update_oz() after task geometry is modified.
    *
    * @param wp Waypoint associated with this task point
-   * @param tb Task Behaviour defining options (esp safety heights)
-   * @param b_scored Whether distance within OZ is scored
+   * @param is_scored Whether distance within OZ is scored
    *
    * @return Partially initialised object
    */
-  SampledTaskPoint(Type _type,
-                   const Waypoint & wp,
-                   const bool b_scored);
+  SampledTaskPoint(Type type,
+                   const Waypoint &wp,
+                   const bool is_scored);
 
-  virtual ~SampledTaskPoint() {};
+  virtual ~SampledTaskPoint() {}
 
   /** Reset the task (as if never flown) */
   virtual void Reset();
@@ -91,7 +90,7 @@ public:
    */
   gcc_pure
   const GeoPoint &GetLocationMax() const {
-    return m_search_max.get_location();
+    return search_max.get_location();
   };
 
   /**
@@ -101,7 +100,7 @@ public:
    * @return Location of minimum distance node
    */
   const GeoPoint &GetLocationMin() const {
-    return m_search_min.get_location();
+    return search_min.get_location();
   };
 
   /**
@@ -145,7 +144,7 @@ public:
    */
   gcc_pure
   bool HasSampled() const {
-    return !m_sampled_points.empty();
+    return !sampled_points.empty();
   }
 
   /**
@@ -155,11 +154,11 @@ public:
    */
   gcc_pure
   const SearchPointVector &GetSamplePoints() const {
-    return m_sampled_points;
+    return sampled_points;
   }
 
   bool IsBoundaryScored() const {
-    return m_boundary_scored;
+    return boundary_scored;
   }
 
 protected:
@@ -182,7 +181,7 @@ protected:
    * Retrieve boundary points polygon
    */
   const SearchPointVector& GetBoundaryPoints() const {
-    return m_boundary_points;
+    return boundary_points;
   }
 
 private:
@@ -227,7 +226,7 @@ private:
    * @param locmax Location of max distance node
    */
   void SetSearchMax(const SearchPoint &locmax) {
-    m_search_max = locmax;
+    search_max = locmax;
   }
 
   /**
@@ -237,7 +236,7 @@ private:
    * @param locmin Location of min distance node
    */
   void SetSearchMin(const SearchPoint &locmin) {
-    m_search_min = locmin;
+    search_min = locmin;
   }
 
   /** Clear all sample points. */
