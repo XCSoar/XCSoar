@@ -101,8 +101,8 @@ ExternalSettings::EliminateRedundant(const ExternalSettings &other,
       !last.CompareBugs(bugs))
     bugs_available.Clear();
 
-  if (qnh_available && other.CompareQNH(qnh.get_QNH()) &&
-      !last.CompareQNH(qnh.get_QNH()))
+  if (qnh_available && other.CompareQNH(qnh.GetQNH()) &&
+      !last.CompareQNH(qnh.GetQNH()))
     qnh_available.Clear();
 }
 

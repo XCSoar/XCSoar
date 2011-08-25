@@ -34,7 +34,7 @@ Copyright_License {
 class AtmosphericPressure 
 {
   /** Pressure at sea level, hPa */
-  fixed m_QNH;
+  fixed qnh;
 
 public:
   /**
@@ -46,13 +46,13 @@ public:
   /**
    * @param qnh the QNH in hPa
    */
-  AtmosphericPressure(fixed qnh):m_QNH(qnh) {}
+  AtmosphericPressure(fixed _qnh):qnh(_qnh) {}
 
   /**
    * Configure the standard pressure (1013.25 hPa);
    */
   void SetStandardPressure() {
-    set_QNH(fixed(1013.25));
+    SetQNH(fixed(1013.25));
   }
 
   /**
@@ -60,8 +60,8 @@ public:
    *
    * @param set New value of QNH (hPa)
    */
-  void set_QNH(const fixed set) {
-    m_QNH = set;
+  void SetQNH(const fixed _qnh) {
+    qnh = _qnh;
   }
 
   /**
@@ -69,8 +69,8 @@ public:
    *
    * @return QNH value (hPa)
    */
-  fixed get_QNH() const {
-    return m_QNH;
+  fixed GetQNH() const {
+    return qnh;
   }
 
   /**

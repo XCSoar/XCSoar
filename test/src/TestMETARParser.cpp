@@ -44,7 +44,7 @@ main(int argc, char **argv)
     ok1(parsed.hour == 10);
     ok1(parsed.minute == 50);
     ok1(parsed.qnh_available);
-    ok1(equals(parsed.qnh.get_QNH(), 1015));
+    ok1(equals(parsed.qnh.GetQNH(), 1015));
     ok1(parsed.wind_available);
     ok1(equals(parsed.wind.norm, 7));
     ok1(equals(parsed.wind.bearing, 310));
@@ -66,7 +66,7 @@ main(int argc, char **argv)
     ok1(parsed.hour == 18);
     ok1(parsed.minute == 53);
     ok1(parsed.qnh_available);
-    ok1(equals(parsed.qnh.get_QNH(), Units::ToSysUnit(fixed(30.06), unInchMercurial)));
+    ok1(equals(parsed.qnh.GetQNH(), Units::ToSysUnit(fixed(30.06), unInchMercurial)));
     ok1(parsed.wind_available);
     ok1(equals(parsed.wind.norm, Units::ToSysUnit(fixed(11), unKnots)));
     ok1(equals(parsed.wind.bearing, 40));
@@ -87,7 +87,7 @@ main(int argc, char **argv)
     ok1(parsed.hour == 19);
     ok1(parsed.minute == 50);
     ok1(parsed.qnh_available);
-    ok1(equals(parsed.qnh.get_QNH(), 1017));
+    ok1(equals(parsed.qnh.GetQNH(), 1017));
     ok1(!parsed.wind_available);
     ok1(parsed.temperatures_available);
     ok1(equals(parsed.temperature, Units::ToSysUnit(fixed(21), unGradCelcius)));

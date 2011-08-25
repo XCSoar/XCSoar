@@ -387,7 +387,7 @@ DeviceDescriptor::PutStandbyFrequency(RadioFrequency frequency)
 bool
 DeviceDescriptor::PutQNH(const AtmosphericPressure &value)
 {
-  if (device == NULL || settings_sent.CompareQNH(value.get_QNH()))
+  if (device == NULL || settings_sent.CompareQNH(value.GetQNH()))
     return true;
 
   if (!device->PutQNH(value))

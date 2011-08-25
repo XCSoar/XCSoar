@@ -83,7 +83,7 @@ Dump(const ExternalSettings &settings)
     printf("Bugs=%.1f\n", (double)settings.bugs);
 
   if (settings.qnh_available)
-    printf("QNH=%f\n", (double)settings.qnh.get_QNH());
+    printf("QNH=%f\n", (double)settings.qnh.GetQNH());
 }
 
 static void

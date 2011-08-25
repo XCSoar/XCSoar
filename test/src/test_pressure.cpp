@@ -28,19 +28,19 @@ static bool
 test_find_qnh()
 {
   AtmosphericPressure pres;
-  pres.set_QNH(pres.FindQNHFromPressureAltitude(fixed(100), fixed(100)));
-  return fabs(pres.get_QNH()-fixed(1013.25))<fixed(0.01);
+  pres.SetQNH(pres.FindQNHFromPressureAltitude(fixed(100), fixed(100)));
+  return fabs(pres.GetQNH()-fixed(1013.25))<fixed(0.01);
 }
 
 static bool
 test_find_qnh2()
 {
   AtmosphericPressure pres;
-  pres.set_QNH(pres.FindQNHFromPressureAltitude(fixed(100), fixed(120)));
+  pres.SetQNH(pres.FindQNHFromPressureAltitude(fixed(100), fixed(120)));
   if (verbose) {
-    printf("%g\n",FIXED_DOUBLE(pres.get_QNH()));
+    printf("%g\n",FIXED_DOUBLE(pres.GetQNH()));
   }
-  return fabs(pres.get_QNH()-fixed(1015.6))<fixed(0.1);
+  return fabs(pres.GetQNH()-fixed(1015.6))<fixed(0.1);
   // example, QNH=1014, ps=100203
   // alt= 100
   // alt_known = 120
@@ -62,7 +62,7 @@ static bool
 test_qnh_round()
 {
   AtmosphericPressure pres;
-  pres.set_QNH(pres.FindQNHFromPressureAltitude(fixed(100), fixed(120)));
+  pres.SetQNH(pres.FindQNHFromPressureAltitude(fixed(100), fixed(120)));
   fixed h0 = pres.PressureAltitudeToQNHAltitude(fixed(100));
   if (verbose) {
     printf("%g\n",FIXED_DOUBLE(h0));
@@ -74,8 +74,8 @@ static bool
 test_qnh_round2()
 {
   AtmosphericPressure pres;
-  pres.set_QNH(pres.FindQNHFromPressureAltitude(fixed(100), fixed(120)));
-  fixed p0 = pres.get_QNH()*100;
+  pres.SetQNH(pres.FindQNHFromPressureAltitude(fixed(100), fixed(120)));
+  fixed p0 = pres.GetQNH()*100;
   fixed h0 = pres.StaticPressureToQNHAltitude(p0);
   if (verbose) {
     printf("%g %g\n",FIXED_DOUBLE(p0),FIXED_DOUBLE(h0));

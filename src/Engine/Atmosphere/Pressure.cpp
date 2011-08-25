@@ -37,12 +37,12 @@ Copyright_License {
 #define k7 fixed(1.0 / 0.234969)
 
 AtmosphericPressure::AtmosphericPressure():
-  m_QNH(fixed_101325) {}
+  qnh(fixed_101325) {}
 
 fixed
 AtmosphericPressure::QNHAltitudeToStaticPressure(const fixed alt) const
 {
-  return hpa_to_pa * pow((pow(m_QNH, k1) - k2 * alt), inv_k1);
+  return hpa_to_pa * pow((pow(qnh, k1) - k2 * alt), inv_k1);
 }
 
 fixed
@@ -55,7 +55,7 @@ AtmosphericPressure::PressureAltitudeToStaticPressure(const fixed alt)
 fixed
 AtmosphericPressure::StaticPressureToQNHAltitude(const fixed ps) const
 {
-  return (pow(m_QNH, k1) - pow(ps * pa_to_hpa, k1)) * inv_k2;
+  return (pow(qnh, k1) - pow(ps * pa_to_hpa, k1)) * inv_k2;
 }
 
 fixed

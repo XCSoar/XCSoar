@@ -324,8 +324,8 @@ Airspaces::~Airspaces()
 void 
 Airspaces::set_flight_levels(const AtmosphericPressure &press)
 {
-  if (press.get_QNH() != m_QNH) {
-    m_QNH = press.get_QNH();
+  if (press.GetQNH() != m_QNH) {
+    m_QNH = press.GetQNH();
 
     for (AirspaceTree::iterator v = airspace_tree.begin();
          v != airspace_tree.end(); ++v) {
