@@ -28,6 +28,8 @@ Copyright_License {
 #include "Compiler.h"
 #include "Util/ReusableArray.hpp"
 
+#include <assert.h>
+#include <string.h>
 #include <stddef.h>
 #include <stdarg.h>
 #include <stdio.h>
@@ -79,6 +81,7 @@ public:
    * cache.
    */
   bool flush() {
+    assert(file.IsOpen());
     return file.Flush();
   }
 
@@ -86,6 +89,10 @@ public:
    * Write one character.
    */
   void write(char ch) {
+    assert(file.IsOpen());
+    assert(ch != '\r');
+    assert(ch != '\n');
+
     file.Write((int)ch);
   }
 
@@ -93,10 +100,12 @@ public:
    * Finish the current line.
    */
   bool newline() {
+    assert(file.IsOpen());
+
 #ifndef HAVE_POSIX
-    write('\r');
+    file.Write((int)'\r');
 #endif
-    write('\n');
+    file.Write((int)'\n');
     return true;
   }
 
@@ -104,6 +113,10 @@ public:
    * Write a chunk of text to the file.
    */
   bool write(const char *s, size_t length) {
+    assert(file.IsOpen());
+    assert(memchr(s, '\r', length) == NULL);
+    assert(memchr(s, '\n', length) == NULL);
+
     return file.Write(s, sizeof(*s), length) == length;
   }
 
@@ -111,6 +124,10 @@ public:
    * Write a string to the file.
    */
   bool write(const char *s) {
+    assert(file.IsOpen());
+    assert(strchr(s, '\r') == NULL);
+    assert(strchr(s, '\n') == NULL);
+
     return file.Write(s) >= 0;
   }
 
@@ -132,6 +149,10 @@ public:
 #endif
 
   void vprintf(const char *fmt, va_list ap) {
+    assert(file.IsOpen());
+    assert(strchr(fmt, '\r') == NULL);
+    assert(strchr(fmt, '\n') == NULL);
+
     file.WriteFormatted(fmt, ap);
   }
 

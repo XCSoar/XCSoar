@@ -23,9 +23,6 @@ Copyright_License {
 
 #include "TextWriter.hpp"
 
-#include <assert.h>
-#include <string.h>
-
 #ifdef _UNICODE
 #include <windows.h>
 #endif
