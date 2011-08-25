@@ -1511,6 +1511,7 @@ TEST_OLC_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/TaskProjection.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
+	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestManager.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/Contests.cpp \

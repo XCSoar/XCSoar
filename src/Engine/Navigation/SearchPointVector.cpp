@@ -23,6 +23,7 @@
 #include "Navigation/ConvexHull/GrahamScan.hpp"
 #include "Navigation/Flat/FlatRay.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "ConvexHull/PolygonInterior.hpp"
 #include <algorithm>
 #include <functional>
 
@@ -189,4 +190,16 @@ SearchPointVector::circular_previous(SearchPointVector::const_iterator &i) const
     i = begin() + size() - 1;
   else
     i--;
+}
+
+bool
+SearchPointVector::IsInside(const GeoPoint &pt) const
+{
+  return PolygonInterior(pt, *this);
+}
+
+bool
+SearchPointVector::IsInside(const FlatGeoPoint &pt) const
+{
+  return PolygonInterior(pt, *this);
 }

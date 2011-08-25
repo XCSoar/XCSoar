@@ -19,11 +19,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef SEARCHPOINTVECTOR_HPP
 #define SEARCHPOINTVECTOR_HPP
 
 #include "SearchPoint.hpp"
+
 #include <vector>
+
 class FlatRay;
 class FlatBoundingBox;
 
@@ -61,6 +64,11 @@ public:
 
   /** decreement iterator, wrapping around to last item if required */
   void circular_previous(SearchPointVector::const_iterator &i) const;
+
+  /** Is the given GeoPoint inside the polygon of SearchPoints? */
+  bool IsInside(const GeoPoint &pt) const;
+  /** Is the given FlatGeoPoint inside the polygon of SearchPoints? */
+  bool IsInside(const FlatGeoPoint &pt) const;
 };
 
 #endif

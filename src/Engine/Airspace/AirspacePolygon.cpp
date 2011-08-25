@@ -24,7 +24,6 @@
 #include "Math/Earth.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
-#include "Navigation/ConvexHull/PolygonInterior.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "AirspaceIntersectSort.hpp"
 
@@ -72,7 +71,7 @@ AirspacePolygon::GetCenter() const
 bool 
 AirspacePolygon::Inside(const GeoPoint &loc) const
 {
-  return PolygonInterior(loc, m_border);
+  return m_border.IsInside(loc);
 }
 
 AirspaceIntersectionVector

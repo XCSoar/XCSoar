@@ -19,11 +19,11 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "RoutePlanner.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Math/FastMath.h"
-#include "Navigation/ConvexHull/PolygonInterior.hpp"
 
 RoutePlanner::RoutePlanner():
   terrain(NULL),
@@ -479,7 +479,7 @@ RoutePlanner::on_solve(const AGeoPoint& origin,
 bool
 RoutePlanner::hull_extended(const RoutePoint& p)
 {
-  if (PolygonInterior(p, m_search_hull))
+  if (m_search_hull.IsInside(p))
     return false;
 
   SearchPoint ps(p, task_projection);

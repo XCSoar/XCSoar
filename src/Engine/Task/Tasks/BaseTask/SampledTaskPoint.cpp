@@ -18,9 +18,9 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
+
 #include "SampledTaskPoint.hpp"
-#include "Navigation/ConvexHull/PolygonInterior.hpp"
 
 SampledTaskPoint::SampledTaskPoint(Type _type, const Waypoint & wp,
                                    const bool b_scored)
@@ -45,7 +45,7 @@ SampledTaskPoint::UpdateSampleNear(const AircraftState& state,
     return false;
 
   // if sample is inside sample polygon
-  if (PolygonInterior(state.location, sampled_points))
+  if (sampled_points.IsInside(state.location))
     // return false (no update required)
     return false;
 
