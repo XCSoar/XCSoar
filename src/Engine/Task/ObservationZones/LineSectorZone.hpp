@@ -68,19 +68,19 @@ public:
  * 
  * @return True if constraints are satisfied
  */
-  bool transition_constraint(const AircraftState & ref_now, 
+  bool TransitionConstraint(const AircraftState & ref_now, 
                              const AircraftState & ref_last) const {
-    return CylinderZone::isInSector(ref_now) && CylinderZone::isInSector(ref_last);
+    return CylinderZone::IsInSector(ref_now) && CylinderZone::IsInSector(ref_last);
   }
 
-  GeoPoint get_boundary_parametric(fixed t) const;  
+  GeoPoint GetBoundaryParametric(fixed t) const;  
 
 /** 
  * Distance reduction for scoring when outside this OZ
  * 
  * @return Distance (m) to subtract from score
  */
-  fixed score_adjustment() const;
+  fixed ScoreAdjustment() const;
 
 /** 
  * Set length property
@@ -107,7 +107,7 @@ public:
    * @return False for line start sectors
    */
   gcc_pure
-  virtual bool canStartThroughTop() const { return false; }
+  virtual bool CanStartThroughTop() const { return false; }
 };
 
 #endif

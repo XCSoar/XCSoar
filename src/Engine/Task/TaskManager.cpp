@@ -466,12 +466,12 @@ TaskManager::isInSector (const unsigned TPindex, const AircraftState &ref,
   if (AATOnly) {
     const AATPoint *ap = task_ordered.get_AAT_task_point(TPindex);
     if (ap)
-      return ap->isInSector(ref);
+      return ap->IsInSector(ref);
   }
   else {
     const OrderedTaskPoint *p = task_ordered.getTaskPoint(TPindex);
     if (p)
-      return p->isInSector(ref);
+      return p->IsInSector(ref);
   }
 
   return false;

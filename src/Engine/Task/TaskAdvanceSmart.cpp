@@ -51,7 +51,7 @@ TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
         m_state = TaskAdvance::START_ARMED;
       } else {
         m_state = TaskAdvance::START_DISARMED;
-        if (sp->isInSector(state)) 
+        if (sp->IsInSector(state)) 
           m_request_armed = true;
       }
       return m_armed && m_state_ready;

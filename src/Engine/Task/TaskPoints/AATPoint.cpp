@@ -72,7 +72,7 @@ AATPoint::check_target(const AircraftState &state, const bool known_outside)
     return false;
 
   bool moved = false;
-  if (!known_outside && isInSector(state))
+  if (!known_outside && IsInSector(state))
     moved = check_target_inside(state);
   else
     moved = check_target_outside(state);

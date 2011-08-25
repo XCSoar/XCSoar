@@ -68,7 +68,7 @@ public:
    *
    * @return True if reference point is inside sector
    */
-  virtual bool isInSector(const AircraftState &ref) const
+  virtual bool IsInSector(const AircraftState &ref) const
   {
     return distance(ref.location)<=Radius;
   }  
@@ -80,14 +80,14 @@ public:
    *
    * @return Point on boundary
    */
-  GeoPoint get_boundary_parametric(fixed t) const;
+  GeoPoint GetBoundaryParametric(fixed t) const;
 
   /**
    * Distance reduction for scoring when outside this OZ
    *
    * @return Distance (m) to subtract from score
    */
-  virtual fixed score_adjustment() const;
+  virtual fixed ScoreAdjustment() const;
 
   /**
    * Check transition constraints (always true for cylinders)
@@ -97,7 +97,7 @@ public:
    *
    * @return True if constraints are satisfied
    */
-  virtual bool transition_constraint(const AircraftState & ref_now, 
+  virtual bool TransitionConstraint(const AircraftState & ref_now, 
                                      const AircraftState & ref_last) const {
     return true;
   }

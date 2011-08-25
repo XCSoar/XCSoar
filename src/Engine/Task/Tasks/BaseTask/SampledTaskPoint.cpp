@@ -40,7 +40,7 @@ SampledTaskPoint::UpdateSampleNear(const AircraftState& state,
                                      TaskEvents &task_events,
                                      const TaskProjection &projection)
 {
-  if (isInSector(state)) {
+  if (IsInSector(state)) {
     // if sample is inside sample polygon
     if (PolygonInterior(state.location, m_sampled_points))
       // return false (no update required)
@@ -89,7 +89,7 @@ SampledTaskPoint::UpdateOZ(const TaskProjection &projection)
 
   if (m_boundary_scored) {
     for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps) {
-      SearchPoint sp(get_boundary_parametric(t));
+      SearchPoint sp(GetBoundaryParametric(t));
       m_boundary_points.push_back(sp);
     }
 

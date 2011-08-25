@@ -74,7 +74,7 @@ public:
    *
    * @return True if aircraft is inside observation zone
    */
-  bool isInSector(const AircraftState &ref) const;
+  bool IsInSector(const AircraftState &ref) const;
 
   /** 
    * Check if aircraft has transitioned to inside sector
@@ -85,7 +85,7 @@ public:
    *
    * @return True if aircraft now inside (and was outside)
    */
-  bool check_transition_enter(const AircraftState & ref_now, 
+  bool CheckEnterTransition(const AircraftState & ref_now, 
                               const AircraftState & ref_last) const;
 
   /**

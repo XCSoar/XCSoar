@@ -114,10 +114,10 @@ PrintHelper::orderedtaskpoint_print_boundary(std::ostream& f,
 {
   f << "#   Boundary points\n";
   for (double t=0; t<= 1.0; t+= 0.05) {
-    GeoPoint loc = tp.get_boundary_parametric(fixed(t));
+    GeoPoint loc = tp.GetBoundaryParametric(fixed(t));
     f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
   }
-  GeoPoint loc = tp.get_boundary_parametric(fixed_zero);
+  GeoPoint loc = tp.GetBoundaryParametric(fixed_zero);
   f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
   f << "\n";
 }

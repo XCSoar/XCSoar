@@ -132,7 +132,7 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
       max(fixed_zero,
                origin()->get_location_scored().distance(
                  destination.get_location_scored())
-               -origin()->score_adjustment()-destination.score_adjustment());
+               -origin()->ScoreAdjustment()-destination.ScoreAdjustment());
     break;
   case OrderedTaskPoint::CURRENT_ACTIVE:
     // this leg partially included
@@ -140,13 +140,13 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
       max(fixed_zero,
                origin()->get_location_scored().distance( 
                  destination.get_location_scored())
-               -origin()->score_adjustment()-destination.score_adjustment());
+               -origin()->ScoreAdjustment()-destination.ScoreAdjustment());
     } else {
       return 
         max(fixed_zero,
                  ref.projected_distance(origin()->get_location_scored(), 
                                         destination.get_location_scored())
-                 -origin()->score_adjustment());
+                 -origin()->ScoreAdjustment());
     }
     break;
   case OrderedTaskPoint::AFTER_ACTIVE:
@@ -155,7 +155,7 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
       return max(fixed_zero,
                       memo_travelled.calc(origin()->get_location_scored(), 
                                           ref).Distance
-                      -origin()->score_adjustment());
+                      -origin()->ScoreAdjustment());
     }
   default:
     return fixed_zero;

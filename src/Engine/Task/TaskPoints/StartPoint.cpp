@@ -68,7 +68,7 @@ StartPoint::UpdateSampleNear(const AircraftState& state,
                                TaskEvents &task_events,
                                const TaskProjection &projection)
 {
-  if (isInSector(state)) {
+  if (IsInSector(state)) {
     if (!m_ordered_task_behaviour.check_start_speed(state, margins)) {
       task_events.warning_start_speed();
     }
@@ -122,7 +122,7 @@ StartPoint::find_best_start(const AircraftState &state,
         pp+= fixed_one;
       }
       pp = fmod(pp,fixed_one);
-      return m_start.get_boundary_parametric(pp);
+      return m_start.GetBoundaryParametric(pp);
     }
   };
 
@@ -133,9 +133,9 @@ StartPoint::find_best_start(const AircraftState &state,
 
 
 bool 
-StartPoint::isInSector(const AircraftState &state) const
+StartPoint::IsInSector(const AircraftState &state) const
 {
-  if (!ObservationZoneClient::isInSector(state)) 
+  if (!ObservationZoneClient::IsInSector(state)) 
     return false;
 
   return m_ordered_task_behaviour.check_start_height(state, margins,
@@ -143,7 +143,7 @@ StartPoint::isInSector(const AircraftState &state) const
 }
 
 bool 
-StartPoint::check_transition_exit(const AircraftState & ref_now, 
+StartPoint::CheckExitTransition(const AircraftState & ref_now, 
                                   const AircraftState & ref_last) const
 {
   const bool now_in_height = 
@@ -157,15 +157,15 @@ StartPoint::check_transition_exit(const AircraftState & ref_now,
 
   if (now_in_height && last_in_height) {
     // both within height limit, so use normal location checks
-    return ObservationZone::check_transition_exit(ref_now, ref_last);
+    return ObservationZone::CheckExitTransition(ref_now, ref_last);
   }
-  if (!transition_constraint(ref_now, ref_last)) {
+  if (!TransitionConstraint(ref_now, ref_last)) {
     // don't allow vertical crossings for line OZ's
     return false;
   }
 
   // transition inside sector to above 
   return !now_in_height && last_in_height 
-    && ObservationZoneClient::isInSector(ref_last)
-    && ObservationZoneClient::canStartThroughTop();
+    && ObservationZoneClient::IsInSector(ref_last)
+    && ObservationZoneClient::CanStartThroughTop();
 }

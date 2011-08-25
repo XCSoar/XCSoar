@@ -24,7 +24,7 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 
 GeoPoint 
-KeyholeZone::get_boundary_parametric(fixed t) const
+KeyholeZone::GetBoundaryParametric(fixed t) const
 { 
   const fixed sweep = (getEndRadial() - getStartRadial()).as_bearing().value_radians();
   const fixed small_sweep = fixed_two_pi-sweep;
@@ -52,13 +52,13 @@ KeyholeZone::get_boundary_parametric(fixed t) const
 }
 
 fixed 
-KeyholeZone::score_adjustment() const
+KeyholeZone::ScoreAdjustment() const
 {
   return fixed(500);
 }
 
 bool 
-KeyholeZone::isInSector(const AircraftState &ref) const
+KeyholeZone::IsInSector(const AircraftState &ref) const
 {
   GeoVector f(get_location(), ref.location);
 

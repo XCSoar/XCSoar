@@ -765,9 +765,9 @@ OrderedTask::allow_incremental_boundary_stats(const AircraftState &aircraft) con
   if (!activeTaskPoint)
     return false;
   assert(task_points[activeTaskPoint]);
-  bool in_sector = task_points[activeTaskPoint]->isInSector(aircraft);
+  bool in_sector = task_points[activeTaskPoint]->IsInSector(aircraft);
   if (activeTaskPoint>0) {
-    in_sector |= task_points[activeTaskPoint-1]->isInSector(aircraft);
+    in_sector |= task_points[activeTaskPoint-1]->IsInSector(aircraft);
   }
   return (task_points[activeTaskPoint]->IsBoundaryScored() || !in_sector);
 }
@@ -1023,7 +1023,7 @@ OrderedTask::update_start_transition(const AircraftState &state, OrderedTaskPoin
     // find boundary point that produces shortest
     // distance from state to that point to next tp point
     taskpoint_start->find_best_start(state, *task_points[1], task_projection);
-  } else if (!start.has_exited() && !start.isInSector(state)) {
+  } else if (!start.has_exited() && !start.IsInSector(state)) {
     start.Reset();
     // reset on invalid transition to outside
     // point to nominal start point

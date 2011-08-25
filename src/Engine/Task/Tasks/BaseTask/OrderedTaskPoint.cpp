@@ -167,7 +167,7 @@ OrderedTaskPoint::scan_projection(TaskProjection &task_projection) const
   #define fixed_steps fixed(0.05)
 
   for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps) {
-    task_projection.scan_location(get_boundary_parametric(t));
+    task_projection.scan_location(GetBoundaryParametric(t));
   }
 }
 
@@ -177,7 +177,7 @@ OrderedTaskPoint::update_boundingbox(const TaskProjection &task_projection)
   flat_bb = FlatBoundingBox(task_projection.project(GetLocation()));
 
   for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps)
-    flat_bb.expand(task_projection.project(get_boundary_parametric(t)));
+    flat_bb.expand(task_projection.project(GetBoundaryParametric(t)));
 
   flat_bb.expand(); // add 1 to fix rounding
 }

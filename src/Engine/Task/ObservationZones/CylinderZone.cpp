@@ -28,13 +28,13 @@
 #include <algorithm>
 
 fixed 
-CylinderZone::score_adjustment() const
+CylinderZone::ScoreAdjustment() const
 {
   return Radius;
 }
 
 GeoPoint 
-CylinderZone::get_boundary_parametric(fixed t) const
+CylinderZone::GetBoundaryParametric(fixed t) const
 { 
   return GeoVector(Radius,
                    Angle::radians(t * fixed_two_pi)).end_point(get_location());
@@ -59,6 +59,6 @@ CylinderZone::randomPointInSector(const fixed mag) const
     fixed dis = fixed((0.1 + (rand() % 90) / 100.0)) * dmag;
     GeoVector vec(dis, dir);
     ac.location = vec.end_point(get_location());
-  } while (!isInSector(ac));
+  } while (!IsInSector(ac));
   return ac.location;
 }

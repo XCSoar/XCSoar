@@ -221,7 +221,7 @@ public:
     *
     * @return Distance reduction once achieved
     */
-  virtual fixed score_adjustment() const {
+  virtual fixed ScoreAdjustment() const {
     return fixed_zero;
   }
 

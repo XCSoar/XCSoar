@@ -120,7 +120,7 @@ public:
    *
    * @return True if reference point is inside sector
    */
-  virtual bool isInSector(const AircraftState &ref) const;
+  virtual bool IsInSector(const AircraftState &ref) const;
 
   /**
    * Get point on boundary from parametric representation
@@ -129,14 +129,14 @@ public:
    *
    * @return Point on boundary
    */
-  GeoPoint get_boundary_parametric(fixed t) const;  
+  GeoPoint GetBoundaryParametric(fixed t) const;  
 
   /**
    * Distance reduction for scoring when outside this OZ
    *
    * @return Distance (m) to subtract from score
    */
-  virtual fixed score_adjustment() const;
+  virtual fixed ScoreAdjustment() const;
 
   /**
    * Test whether an OZ is equivalent to this one

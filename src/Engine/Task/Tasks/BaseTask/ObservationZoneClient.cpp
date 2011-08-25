@@ -29,15 +29,15 @@ ObservationZoneClient::~ObservationZoneClient() {
 }
 
 bool
-ObservationZoneClient::isInSector(const AircraftState &ref) const
+ObservationZoneClient::IsInSector(const AircraftState &ref) const
 {
-  return m_oz->isInSector(ref);
+  return m_oz->IsInSector(ref);
 }
 
 bool
-ObservationZoneClient::canStartThroughTop() const
+ObservationZoneClient::CanStartThroughTop() const
 {
-  return m_oz->canStartThroughTop();
+  return m_oz->CanStartThroughTop();
 }
 
 GeoPoint
@@ -47,22 +47,22 @@ ObservationZoneClient::randomPointInSector(const fixed mag) const
 }
 
 fixed
-ObservationZoneClient::score_adjustment() const
+ObservationZoneClient::ScoreAdjustment() const
 {
-  return m_oz->score_adjustment();
+  return m_oz->ScoreAdjustment();
 }
 
 GeoPoint
-ObservationZoneClient::get_boundary_parametric(fixed t) const
+ObservationZoneClient::GetBoundaryParametric(fixed t) const
 {
-  return m_oz->get_boundary_parametric(t);
+  return m_oz->GetBoundaryParametric(t);
 }
 
 bool
-ObservationZoneClient::transition_constraint(const AircraftState & ref_now,
+ObservationZoneClient::TransitionConstraint(const AircraftState & ref_now,
                                              const AircraftState & ref_last) const
 {
-  return m_oz->transition_constraint(ref_now, ref_last);
+  return m_oz->TransitionConstraint(ref_now, ref_last);
 }
 
 void 

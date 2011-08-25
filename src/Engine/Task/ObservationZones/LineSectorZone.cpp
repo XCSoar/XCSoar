@@ -22,13 +22,13 @@
 #include "LineSectorZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-GeoPoint LineSectorZone::get_boundary_parametric(fixed t) const
+GeoPoint LineSectorZone::GetBoundaryParametric(fixed t) const
 { 
   return SectorStart.interpolate(SectorEnd,t);
 }
 
 fixed
-LineSectorZone::score_adjustment() const
+LineSectorZone::ScoreAdjustment() const
 {
   return fixed_zero;
 }

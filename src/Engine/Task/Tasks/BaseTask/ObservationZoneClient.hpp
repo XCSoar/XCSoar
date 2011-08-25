@@ -62,14 +62,14 @@ public:
  * 
  * @return True if aircraft is inside observation zone
  */
-  virtual bool isInSector(const AircraftState &ref) const;
+  virtual bool IsInSector(const AircraftState &ref) const;
 
   /**
    * If zone when used for start can trigger task start via vertical exit
    *
    * @return True if zone type can have a valid start through top
    */
-  virtual bool canStartThroughTop() const;
+  virtual bool CanStartThroughTop() const;
 
   /**
  * Generate a random location inside the OZ (to be used for testing)
@@ -86,7 +86,7 @@ public:
  * 
  * @return Distance reduction once achieved
  */
-  virtual fixed score_adjustment() const;
+  virtual fixed ScoreAdjustment() const;
 
 /** 
  * Calculate boundary point from parametric border
@@ -95,7 +95,7 @@ public:
  * 
  * @return Boundary point
  */
-  GeoPoint get_boundary_parametric(fixed t) const;
+  GeoPoint GetBoundaryParametric(fixed t) const;
 
 protected:
 
@@ -107,7 +107,7 @@ protected:
  * 
  * @return True if constraints are satisfied
  */
-  virtual bool transition_constraint(const AircraftState & ref_now, 
+  virtual bool TransitionConstraint(const AircraftState & ref_now, 
                                      const AircraftState & ref_last) const;
 
 /**

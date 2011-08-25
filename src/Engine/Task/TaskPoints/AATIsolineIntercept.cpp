@@ -37,11 +37,11 @@ AATIsolineIntercept::intercept(const AATPoint &ap,
   if (ell.intersect_extended(state.location,
                              s1.location, s2.location)) 
   {
-    if (ap.isInSector(s1)) {
+    if (ap.IsInSector(s1)) {
       ip = s1.location;
       return true;
     }
-    if (ap.isInSector(s2)) {
+    if (ap.IsInSector(s2)) {
       ip = s2.location;
       return true;
     }

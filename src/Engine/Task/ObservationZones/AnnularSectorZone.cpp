@@ -24,7 +24,7 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 
 GeoPoint
-AnnularSectorZone::get_boundary_parametric(fixed t) const
+AnnularSectorZone::GetBoundaryParametric(fixed t) const
 {
   const Angle sweep = (EndRadial-StartRadial).as_bearing();
   const fixed c0 = sweep.value_radians()*InnerRadius;
@@ -53,7 +53,7 @@ AnnularSectorZone::get_boundary_parametric(fixed t) const
 }
 
 bool
-AnnularSectorZone::isInSector(const AircraftState &ref) const
+AnnularSectorZone::IsInSector(const AircraftState &ref) const
 {
   GeoVector f(get_location(), ref.location);
 

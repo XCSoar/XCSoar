@@ -43,7 +43,7 @@ public:
    * @return True if reference point is inside sector
    */
   gcc_pure
-  virtual bool isInSector(const AircraftState &ref) const = 0;
+  virtual bool IsInSector(const AircraftState &ref) const = 0;
 
   /**
    * If zone when used for start can trigger task start via vertical exit
@@ -51,7 +51,9 @@ public:
    * @return True if zone type can have a valid start through top
    */
   gcc_pure
-  virtual bool canStartThroughTop() const { return true; }
+  virtual bool CanStartThroughTop() const {
+    return true;
+  }
 
   /**
    * Check transition constraints
@@ -62,8 +64,8 @@ public:
    * @return True if constraints are satisfied
    */
   gcc_pure
-  virtual bool transition_constraint(const AircraftState &ref_now,
-                                     const AircraftState &ref_last) const = 0;
+  virtual bool TransitionConstraint(const AircraftState &ref_now,
+                                    const AircraftState &ref_last) const = 0;
 
   /** 
    * Check if aircraft has transitioned to inside sector
@@ -74,11 +76,11 @@ public:
    * @return True if aircraft now inside (and was outside)
    */
   gcc_pure
-  virtual bool check_transition_enter(const AircraftState &ref_now,
-                                      const AircraftState &ref_last) const {
-    return isInSector(ref_now) &&
-           !isInSector(ref_last) &&
-           transition_constraint(ref_now, ref_last);
+  virtual bool CheckEnterTransition(const AircraftState &ref_now,
+                                    const AircraftState &ref_last) const {
+    return IsInSector(ref_now) &&
+           !IsInSector(ref_last) &&
+           TransitionConstraint(ref_now, ref_last);
   }
 
   /** 
@@ -90,9 +92,9 @@ public:
    * @return True if aircraft now outside (and was inside)
    */
   gcc_pure
-  virtual bool check_transition_exit(const AircraftState &ref_now,
-                                     const AircraftState &ref_last) const {
-    return check_transition_enter(ref_last, ref_now);
+  virtual bool CheckExitTransition(const AircraftState &ref_now,
+                                   const AircraftState &ref_last) const {
+    return CheckEnterTransition(ref_last, ref_now);
   }
 
   /**
@@ -103,7 +105,7 @@ public:
    * @return Point on boundary
    */
   gcc_pure
-  virtual GeoPoint get_boundary_parametric(fixed t) const = 0;
+  virtual GeoPoint GetBoundaryParametric(fixed t) const = 0;
 
   /**
    * Distance reduction for scoring when outside this OZ
@@ -113,7 +115,7 @@ public:
    * @return Distance (m) to subtract from score
    */
   gcc_pure
-  virtual fixed score_adjustment() const = 0;
+  virtual fixed ScoreAdjustment() const = 0;
 };
 
 #endif
