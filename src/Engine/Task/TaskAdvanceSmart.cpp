@@ -27,7 +27,7 @@
 #include "Navigation/Aircraft.hpp"
 #include "OrderedTaskBehaviour.hpp"
 
-TaskAdvanceSmart::TaskAdvanceSmart(const OrderedTaskBehaviour& behaviour):
+TaskAdvanceSmart::TaskAdvanceSmart(const OrderedTaskBehaviour &behaviour):
   TaskAdvance(),
   m_state(TaskAdvance::MANUAL),
   m_task_behaviour(behaviour)
@@ -37,14 +37,12 @@ TaskAdvanceSmart::TaskAdvanceSmart(const OrderedTaskBehaviour& behaviour):
 bool 
 TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
                                    const AircraftState &state,
-                                   const bool x_enter, 
-                                   const bool x_exit)
+                                   const bool x_enter, const bool x_exit)
 {
   const bool m_state_ready = state_ready(tp, state, x_enter, x_exit);
 
-  if (m_armed) {
+  if (m_armed) 
     m_request_armed = false;
-  }
 
   if (tp.GetType() == TaskPoint::START) {
     const StartPoint *sp = (const StartPoint *)&tp;
@@ -53,9 +51,8 @@ TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
         m_state = TaskAdvance::START_ARMED;
       } else {
         m_state = TaskAdvance::START_DISARMED;
-        if (sp->isInSector(state)) {
+        if (sp->isInSector(state)) 
           m_request_armed = true;
-        }
       }
       return m_armed && m_state_ready;
     } else {
@@ -67,18 +64,17 @@ TaskAdvanceSmart::ready_to_advance(const TaskPoint &tp,
       m_state = TaskAdvance::TURN_ARMED;
     } else {
       m_state = TaskAdvance::TURN_DISARMED;
-      if (m_state_ready) {
+      if (m_state_ready)
         m_request_armed = true;
-      }
     }
     return m_armed && m_state_ready;
   } else if (tp.IsIntermediatePoint()) {
     m_state = TaskAdvance::AUTO;
     return m_state_ready;
   } 
+  
   return false;
 }
-
 
 TaskAdvance::TaskAdvanceState_t 
 TaskAdvanceSmart::get_advance_state() const
@@ -91,24 +87,24 @@ TaskAdvanceSmart::update_state()
 {
   switch (m_state) {
   case TaskAdvance::START_ARMED:
-    if (!m_armed) {
+    if (!m_armed)
       m_state = TaskAdvance::START_DISARMED;
-    }
+
     return;
   case TaskAdvance::START_DISARMED:
-    if (m_armed) {
+    if (m_armed)
       m_state = TaskAdvance::START_ARMED;
-    }
+
     return;
   case TaskAdvance::TURN_ARMED:
-    if (!m_armed) {
+    if (!m_armed)
       m_state = TaskAdvance::TURN_DISARMED;
-    }
+
     return;
   case TaskAdvance::TURN_DISARMED:
-    if (m_armed) {
+    if (m_armed)
       m_state = TaskAdvance::TURN_ARMED;
-    }
+
     return;
   default:
     break;

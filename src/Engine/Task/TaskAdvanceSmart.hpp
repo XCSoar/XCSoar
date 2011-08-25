@@ -18,7 +18,8 @@
   along with this program; if not, write to the Free Software
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
- */
+*/
+ 
 #ifndef TASKADVANCESMART_HPP
 #define TASKADVANCESMART_HPP
 
@@ -26,47 +27,41 @@
 
 struct OrderedTaskBehaviour;
 
-/**
- * Class used to control advancement through an OrderedTask
- */
+/** Class used to control advancement through an OrderedTask */
 class TaskAdvanceSmart: 
   public TaskAdvance
 {
 public:
-/** 
- * Constructor.  Sets defaults to auto-mode
- */
+  /** 
+   * Constructor.  Sets defaults to auto-mode
+   */
   TaskAdvanceSmart(const OrderedTaskBehaviour &task_behaviour);
 
   TaskAdvance::TaskAdvanceState_t get_advance_state() const;
 
-/** 
- * Determine whether all conditions are satisfied for a turnpoint
- * to auto-advance based on condition of the turnpoint, transition
- * characteristics and advance mode.
- * 
- * @param tp The task point to check for satisfaction
- * @param state current aircraft state
- * @param x_enter whether this step transitioned enter to this tp
- * @param x_exit whether this step transitioned exit to this tp
- * 
- * @return true if this tp is ready to advance
- */
-  bool ready_to_advance(const TaskPoint &tp,
-                        const AircraftState &state,
-                        const bool x_enter, 
-                        const bool x_exit);
+  /** 
+   * Determine whether all conditions are satisfied for a turnpoint
+   * to auto-advance based on condition of the turnpoint, transition
+   * characteristics and advance mode.
+   * 
+   * @param tp The task point to check for satisfaction
+   * @param state current aircraft state
+   * @param x_enter whether this step transitioned enter to this tp
+   * @param x_exit whether this step transitioned exit to this tp
+   * 
+   * @return true if this tp is ready to advance
+   */
+  bool ready_to_advance(const TaskPoint &tp, const AircraftState &state,
+                        const bool x_enter, const bool x_exit);
 
 protected:
-
   void update_state();
 
-  TaskAdvanceState_t m_state;       /**< active advance state */
+  /** active advance state */
+  TaskAdvanceState_t m_state;
 
 private:
   const OrderedTaskBehaviour &m_task_behaviour;
-
 };
-
 
 #endif
