@@ -12,10 +12,6 @@
 #ifndef __IMGDECMP_H__
 #define __IMGDECMP_H__
 
-#ifdef __cplusplus
-extern "C" {
-#endif // __cplusplus
-
 struct IImageRender;
 
 typedef void (CALLBACK *PROGRESSFUNC)(IImageRender *pRender, BOOL bComplete, LPARAM lParam);
@@ -39,20 +35,5 @@ typedef struct tagDecompressImageInfo {
 	COLORREF                crTransparentOverride;  // If this color is not (UINT)-1, it will override the
 											// transparent color in the image with this color. (GIF ONLY)
 } DecompressImageInfo;
-
-#define IMGDECOMP_E_NOIMAGE             0x800b0100
-
-COLORREF *
-GetHalftonePalette();
-
-COLORREF *
-Get332Palette();
-
-HRESULT
-DecompressImageIndirect(DecompressImageInfo *pParams);
-
-#ifdef __cplusplus
-};
-#endif // __cplusplus
 
 #endif // !__IMGDECMP_H__
