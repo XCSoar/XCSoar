@@ -104,8 +104,7 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
   PixelScalar halftextwidth = (title_rect.left + title_rect.right - tsize.cx) / 2;
   PixelScalar x = max(PixelScalar(1),
                       PixelScalar(title_rect.left + halftextwidth));
-  PixelScalar y = title_rect.top + 1 + font.GetCapitalHeight() -
-    font.GetAscentHeight();
+  PixelScalar y = title_rect.top;
 
   canvas.TextAutoClipped(x, y, data.title);
 
@@ -239,8 +238,7 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
   PixelScalar x = max(PixelScalar(1),
                       PixelScalar((comment_rect.left + comment_rect.right
                                    - tsize.cx) / 2));
-  PixelScalar y = comment_rect.top + 1 + font.GetCapitalHeight()
-    - font.GetAscentHeight();
+  PixelScalar y = comment_rect.top;
 
   canvas.TextAutoClipped(x, y, data.comment);
 }
@@ -397,12 +395,10 @@ InfoBoxWindow::OnResize(UPixelScalar width, UPixelScalar height)
     rc.bottom -= look.BORDER_WIDTH;
 
   title_rect = rc;
-  title_rect.bottom = rc.top + look.title.font->GetCapitalHeight() + 2;
+  title_rect.bottom = rc.top + look.title.font->GetHeight();
 
   comment_rect = rc;
-  comment_rect.top = comment_rect.bottom
-    - (look.comment.font->GetCapitalHeight() + 2);
-
+  comment_rect.top = comment_rect.bottom - (look.comment.font->GetHeight() + 2);
   value_rect = rc;
   value_rect.top = title_rect.bottom;
   value_rect.bottom = comment_rect.top;
