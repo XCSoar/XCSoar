@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #ifndef XCSOAR_OS_MEMINFO_HPP
+#define XCSOAR_OS_MEMINFO_HPP
 
 unsigned long SystemFreeRAM();
 
