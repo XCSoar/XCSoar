@@ -1,11 +1,12 @@
 <?xml version="1.0"?>
 
 <Form Caption="METAR and TAF">
-  <List Name="StationList" X="1" Y="1" Width="-1" Height="-35"/>
+  <List Name="StationList" X="0" Y="0" Width="-1" Height="-70"/>
 
-  <Button Caption="Add" X="0" Y="-35" Width="60" Height="35" OnClick="AddClicked"/>
-  <Button Caption="Update" X="60" Y="-35" Width="60" Height="35" OnClick="UpdateClicked"/>
-  <Button Caption="Remove" X="120" Y="-35" Width="60" Height="35" OnClick="RemoveClicked"/>
+  <Button Caption="Add" X="0" Y="-70" Width="80" Height="35" OnClick="AddClicked"/>
+  <Button Caption="Update" X="80" Y="-70" Width="80" Height="35" OnClick="UpdateClicked"/>
+  <Button Caption="Remove" X="160" Y="-70" Width="80" Height="35" OnClick="RemoveClicked"/>
   
-  <Button Caption="Close" X="180" Y="-35" Width="60" Height="35" OnClick="CloseClicked"/>
+  <Button Caption="Details" X="0" Y="-35" Width="120" Height="35" OnClick="DetailsClicked"/>
+  <Button Caption="Close" X="120" Y="-35" Width="120" Height="35" OnClick="CloseClicked"/>
 </Form>

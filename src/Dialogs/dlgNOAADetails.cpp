@@ -52,12 +52,14 @@ Update()
     TCHAR buffer[256];
 
     if (parsed.temperatures_available) {
-      _stprintf(buffer, _T("%s: %.1f" DEG "C\n"), _("Temperature"),
-                (double)Units::ToUserTemperature(parsed.temperature));
+      _stprintf(buffer, _T("%s: %.1f %s\n"), _("Temperature"),
+                (double)Units::ToUserTemperature(parsed.temperature),
+                Units::GetTemperatureName());
       metar_taf += buffer;
 
-      _stprintf(buffer, _T("%s: %.1f" DEG "C\n\n"), _("Dew point"),
-                (double)Units::ToUserTemperature(parsed.dew_point));
+      _stprintf(buffer, _T("%s: %.1f %s\n\n"), _("Dew point"),
+                (double)Units::ToUserTemperature(parsed.dew_point),
+                Units::GetTemperatureName());
       metar_taf += buffer;
     }
 
