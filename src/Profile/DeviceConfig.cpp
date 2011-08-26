@@ -37,7 +37,7 @@ DeviceConfig::IsAvailable() const
     return false;
 
   case SERIAL:
-    return !is_android();
+    return true;
 
   case RFCOMM:
     return is_android();

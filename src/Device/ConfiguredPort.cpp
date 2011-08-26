@@ -37,7 +37,9 @@ Copyright_License {
 #ifdef IOIOLIB
 #include "Device/AndroidIOIOUartPort.hpp"
 #endif
-#elif defined(HAVE_POSIX)
+#endif
+
+#if defined(HAVE_POSIX)
 #include "Device/TTYPort.hpp"
 #else
 #include "Device/SerialPort.hpp"
@@ -158,9 +160,6 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
   }
   }
 
-#ifdef ANDROID
-  return NULL;
-#else
   if (path == NULL)
     return NULL;
 
@@ -175,5 +174,4 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
   }
 
   return Com;
-#endif
 }
