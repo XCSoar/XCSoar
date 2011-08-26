@@ -82,22 +82,6 @@ public:
         window_style);
   }
 
-  int get_left() const {
-    return 0;
-  }
-
-  int get_top() const {
-    return 0;
-  }
-
-  int get_right() const {
-    return get_left() + get_width();
-  }
-
-  int get_bottom() const {
-    return get_top() + get_height();
-  }
-
   /**
    * Invalidates the visible area and schedules a repaint (which will
    * occur in the main thread).
