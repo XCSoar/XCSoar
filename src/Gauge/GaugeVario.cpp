@@ -80,28 +80,28 @@ GaugeVario::GaugeVario(const FullBlackboard &_blackboard,
 
   unit_symbol = GetUnitSymbol(Units::Current.VerticalSpeedUnit);
 
-  xoffset = get_right();
-  yoffset = get_height() / 2 + get_top();
-
   hide();
 }
 
 void
 GaugeVario::on_paint_buffer(Canvas &canvas)
 {
+  const PixelRect rc = get_client_rect();
+  const unsigned width = rc.right - rc.left;
+  const unsigned height = rc.bottom - rc.top;
+
   if (!is_persistent() || !layout_initialised) {
     unsigned ValueHeight = 4 + look.value_font->get_capital_height()
       + look.text_font->get_capital_height();
 
     orgMiddle.y = yoffset - ValueHeight / 2;
-    orgMiddle.x = get_right();
+    orgMiddle.x = rc.right;
     orgTop.y = orgMiddle.y - ValueHeight;
-    orgTop.x = get_right();
+    orgTop.x = rc.right;
     orgBottom.y = orgMiddle.y + ValueHeight;
-    orgBottom.x = get_right();
+    orgBottom.x = rc.right;
 
-    canvas.stretch(0, 0, 
-                   get_width(), get_height(),
+    canvas.stretch(rc.left, rc.top, width, height,
                    look.background_bitmap,
                    look.background_x, 0, 58, 120);
 
@@ -128,7 +128,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   }
 
   if (ShowSpeedToFly)
-    RenderSpeedToFly(canvas, get_right() - 11, get_height() / 2);
+    RenderSpeedToFly(canvas, rc.right - 11, (rc.top + rc.bottom) / 2);
   else
     RenderClimb(canvas);
 
@@ -235,8 +235,9 @@ GaugeVario::MakeAllPolygons()
 void
 GaugeVario::RenderClimb(Canvas &canvas)
 {
-  int x = get_right() - Layout::Scale(14);
-  int y = get_bottom() - Layout::Scale(24);
+  const PixelRect rc = get_client_rect();
+  int x = rc.right - Layout::Scale(14);
+  int y = rc.bottom - Layout::Scale(24);
 
   if (!dirty)
     return;
@@ -447,14 +448,16 @@ GaugeVario::RenderSpeedToFly(Canvas &canvas, int x, int y)
   const int ARROWYSIZE = Layout::Scale(3);
   const int ARROWXSIZE = Layout::Scale(7);
 
+  const PixelRect rc = get_client_rect();
+
   int nary = NARROWS * ARROWYSIZE;
-  int ytop = get_top() + YOFFSET + nary; // JMW
-  int ybottom = get_bottom() - YOFFSET - nary - Layout::FastScale(1);
+  int ytop = rc.top + YOFFSET + nary; // JMW
+  int ybottom = rc.bottom - YOFFSET - nary - Layout::FastScale(1);
 
   ytop += Layout::Scale(14);
   ybottom -= Layout::Scale(14);
 
-  x = get_right() - 2 * ARROWXSIZE;
+  x = rc.right - 2 * ARROWXSIZE;
 
   // only draw speed command if flying and vario is not circling
   if ((Calculated().flight.flying)
@@ -558,18 +561,19 @@ GaugeVario::RenderBallast(Canvas &canvas)
   static RasterPoint orgValue = {-1,-1};
 
   if (!ballast_initialised) { // ontime init, origin and background rect
+    const PixelRect rc = get_client_rect();
 
     PixelSize tSize;
 
     // position of ballast label
     orgLabel.x = 1;
-    orgLabel.y = get_top() + 2
+    orgLabel.y = rc.top + 2
       + look.text_font->get_capital_height() * 2
       - look.text_font->get_ascent_height();
 
     // position of ballast value
     orgValue.x = 1;
-    orgValue.y = get_top() + 1
+    orgValue.y = rc.top + 1
       + look.text_font->get_capital_height()
       - look.text_font->get_ascent_height();
 
@@ -658,15 +662,16 @@ GaugeVario::RenderBugs(Canvas &canvas)
   static RasterPoint orgValue = {-1,-1};
 
   if (!bugs_initialised) {
+    const PixelRect rc = get_client_rect();
     PixelSize tSize;
 
     orgLabel.x = 1;
-    orgLabel.y = get_bottom() - 2
+    orgLabel.y = rc.bottom - 2
       - look.text_font->get_capital_height()
       - look.text_font->get_ascent_height();
 
     orgValue.x = 1;
-    orgValue.y = get_bottom() - 1
+    orgValue.y = rc.bottom - 1
       - look.text_font->get_ascent_height();
 
     recLabelBk.left = orgLabel.x;
