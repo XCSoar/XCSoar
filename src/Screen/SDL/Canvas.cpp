@@ -256,11 +256,12 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
     return;
 
   int skip = font->get_line_spacing();
-  int max_lines = (rc->bottom - rc->top + skip - 1) / skip;
+  unsigned max_lines = (format & DT_CALCRECT) ? -1 :
+                       (rc->bottom - rc->top + skip - 1) / skip;
 
   size_t len = _tcslen(text);
   TCHAR *duplicated = new TCHAR[len + 1], *p = duplicated;
-  int lines = 1;
+  unsigned lines = 1;
   for (const TCHAR *i = text; *i != _T('\0'); ++i) {
     TCHAR ch = *i;
     if (ch == _T('\n')) {
@@ -306,6 +307,12 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
           break;
       }
     }
+  }
+
+  if (format & DT_CALCRECT) {
+    rc->bottom = rc->top + lines * skip;
+    delete[] duplicated;
+    return;
   }
 
   int y = (format & DT_VCENTER) && lines < max_lines

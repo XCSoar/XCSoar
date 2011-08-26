@@ -37,6 +37,7 @@ enum {
   DT_NOPREFIX = 0x40,
   DT_VCENTER = 0x80,
   DT_RIGHT = 0x100,
+  DT_CALCRECT = 0x400,
 };
 
 static inline void
