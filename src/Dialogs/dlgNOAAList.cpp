@@ -152,11 +152,24 @@ CloseClicked(gcc_unused WndButton &Sender)
 }
 
 static void
-ListItemSelected(unsigned index)
+OpenDetails(unsigned index)
 {
   assert(index < NOAAStore::Count());
   dlgNOAADetailsShowModal(*(SingleWindow *)wf->get_root_owner(), index);
   UpdateList();
+}
+
+static void
+DetailsClicked(gcc_unused WndButton &Sender)
+{
+  if (station_list->GetLength() > 0)
+    OpenDetails(station_list->GetCursorIndex());
+}
+
+static void
+ListItemSelected(unsigned index)
+{
+  OpenDetails(index);
 }
 
 static CallBackTableEntry CallBackTable[] = {
@@ -166,6 +179,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(UpdateClicked),
   DeclareCallBackEntry(RemoveClicked),
   DeclareCallBackEntry(CloseClicked),
+  DeclareCallBackEntry(DetailsClicked),
   DeclareCallBackEntry(NULL)
 };
 
