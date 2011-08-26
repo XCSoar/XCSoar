@@ -40,34 +40,11 @@ IsUnimodemPort(const RegistryKey &registry)
   return CompareRegistryValue(registry, _T("Tsp"), _T("Unimodem.dll"));
 }
 
-/**
- * Bluetooth driver found in hx4700.
- */
 gcc_pure
 static bool
-IsWidcommSerialPort(const RegistryKey &registry)
+IsCOMPrefix(const RegistryKey &registry)
 {
-  return CompareRegistryValue(registry, _T("Dll"), _T("btcedrivers.dll")) &&
-    CompareRegistryValue(registry, _T("Prefix"), _T("COM"));
-}
-
-/**
- * Internal GPS found in Wayteq x950.
- */
-gcc_pure
-static bool
-IsYFCommuxPort(const RegistryKey &registry)
-{
-  return CompareRegistryValue(registry, _T("Dll"), _T("commux.dll")) &&
-    CompareRegistryValue(registry, _T("Prefix"), _T("COM"));
-}
-
-gcc_pure
-static bool
-IsGPSPort(const RegistryKey &registry)
-{
-  return CompareRegistryValue(registry, _T("Dll"), _T("GPS.Dll")) &&
-    CompareRegistryValue(registry, _T("Prefix"), _T("COM"));
+  return CompareRegistryValue(registry, _T("Prefix"), _T("COM"));
 }
 
 gcc_pure
@@ -78,8 +55,7 @@ IsSerialPort(const TCHAR *key)
   if (registry.error())
     return false;
 
-  return IsUnimodemPort(registry) || IsWidcommSerialPort(registry) ||
-    IsYFCommuxPort(registry) || IsGPSPort(registry);
+  return IsUnimodemPort(registry) || IsCOMPrefix(registry);
 }
 
 gcc_pure
