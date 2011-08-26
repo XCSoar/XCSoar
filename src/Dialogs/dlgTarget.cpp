@@ -489,12 +489,14 @@ drawBtnNext()
   if (is_altair()) { // altair already has < and > buttons on WndProperty
     btnNext->set_visible(false);
   } else {
-    const PixelRect rcP = wpTaskPoint->get_position();
+    PixelRect rcP = wpTaskPoint->get_position();
+    rcP.right -= btnNext->get_width() + 1;
+
     wpTaskPoint->move(rcP.left, rcP.top,
-                      rcP.right - rcP.left - btnNext->get_width() - 1,
+                      rcP.right - rcP.left,
                       rcP.bottom - rcP.top);
     const PixelRect rcB = btnNext->get_position();
-    btnNext->move(wpTaskPoint->get_right() + 1, rcB.top);
+    btnNext->move(rcP.right + 1, rcB.top);
   }
 }
 
