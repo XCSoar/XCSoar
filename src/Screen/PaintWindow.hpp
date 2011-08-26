@@ -98,14 +98,6 @@ public:
     return get_top() + get_height();
   }
 
-  int get_hmiddle() const {
-    return (get_left() + get_right()) / 2;
-  }
-
-  int get_vmiddle() const {
-    return (get_top() + get_bottom()) / 2;
-  }
-
   /**
    * Invalidates the visible area and schedules a repaint (which will
    * occur in the main thread).

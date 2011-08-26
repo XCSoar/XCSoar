@@ -304,14 +304,6 @@ public:
     return get_top() + get_height();
   }
 
-  int get_hmiddle() const {
-    return (get_left() + get_right()) / 2;
-  }
-
-  int get_vmiddle() const {
-    return (get_top() + get_bottom()) / 2;
-  }
-
   int get_text_style() const {
     return text_style;
   }
