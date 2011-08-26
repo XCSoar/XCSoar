@@ -121,7 +121,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r5c
+  ANDROID_NDK ?= $(HOME)/opt/android-ndk-r6
 
   ANDROID_PLATFORM = android-8
   ANDROID_ARCH = arm
@@ -327,7 +327,6 @@ endif
 
 ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS := $(ANDROID_TARGET_ROOT)/usr/lib/libstdc++.so
-  TARGET_LDLIBS += $(ANDROID_NDK)/sources/cxx-stl/stlport/libs/$(ANDROID_ABI3)/libstlport_static.a
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libGLESv1_CM.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libc.so $(ANDROID_TARGET_ROOT)/usr/lib/libm.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/liblog.so
