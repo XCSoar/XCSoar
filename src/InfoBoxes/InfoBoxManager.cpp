@@ -522,7 +522,7 @@ InfoBoxManager::Create(PixelRect rc, const InfoBoxLayout::Layout &_layout,
                   rc.right - rc.left, rc.bottom - rc.top, style);
 
   // create infobox windows
-  for (unsigned i = 0; i < layout.count; i++) {
+  for (unsigned i = layout.count; i-- > 0;) {
     const PixelRect &rc = layout.positions[i];
     int Border = GetInfoBoxBorder(i);
 
