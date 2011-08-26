@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Form/Frame.hpp"
-#include "Screen/VirtualCanvas.hpp"
+#include "Screen/AnyCanvas.hpp"
 #include "Look/DialogLook.hpp"
 
 WndFrame::WndFrame(ContainerWindow &parent, const DialogLook &_look,
@@ -56,18 +56,14 @@ WndFrame::SetText(const TCHAR *_text)
 unsigned
 WndFrame::GetTextHeight()
 {
-#ifdef USE_GDI
   PixelRect rc = get_client_rect();
   ::InflateRect(&rc, -2, -2); // todo border width
 
-  VirtualCanvas canvas(1, 1);
+  AnyCanvas canvas;
   canvas.select(*font);
   canvas.formatted_text(&rc, text.c_str(), mCaptionStyle | DT_CALCRECT);
 
   return rc.bottom - rc.top;
-#else
-  return font->get_height(); // XXX implement properly
-#endif
 }
 
 void
