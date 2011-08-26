@@ -78,7 +78,7 @@ unsigned long FindFreeSpace(const TCHAR *path) {
   struct statvfs s;
   if (statvfs(path, &s) < 0)
     return 0;
-  return s.f_bsize * s.f_bavail;
+  return s.f_bsize * s.f_bavail / 1024;
 #endif
 #else /* !HAVE_POSIX */
   ULARGE_INTEGER FreeBytesAvailableToCaller;
