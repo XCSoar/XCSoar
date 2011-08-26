@@ -23,8 +23,6 @@
 
 #include "MemInfo.hpp"
 
-#ifdef WIN32
-
 #include <windows.h>
 
 unsigned long
@@ -41,13 +39,3 @@ SystemFreeRAM()
 
   return memInfo.dwAvailPhys;
 }
-
-#else
-
-unsigned long
-SystemFreeRAM()
-{
-  return 64*1024*1024;
-}
-
-#endif

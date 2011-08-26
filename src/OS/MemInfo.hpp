@@ -24,6 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_OS_MEMINFO_HPP
 #define XCSOAR_OS_MEMINFO_HPP
 
+#ifdef _WIN32_WCE
+#define HAVE_MEM_INFO
+
 unsigned long SystemFreeRAM();
+
+#endif
 
 #endif

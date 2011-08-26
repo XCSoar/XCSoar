@@ -143,6 +143,7 @@ InfoBoxContentCPULoad::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentFreeRAM::Update(InfoBoxWindow &infobox)
 {
+#ifdef HAVE_MEM_INFO
   TCHAR tmp[32];
   TCHAR unit;
   unsigned long freeRAM = SystemFreeRAM();
@@ -160,6 +161,9 @@ InfoBoxContentFreeRAM::Update(InfoBoxWindow &infobox)
     unit = _T('B');
   _stprintf(tmp, _T("%.1f%c"), f, unit);
   infobox.SetValue(tmp);
+#else
+  infobox.SetInvalid();
+#endif
 }
 
 void

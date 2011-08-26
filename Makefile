@@ -457,7 +457,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/CommandLine.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/OS/SystemLoad.cpp \
-	$(SRC)/OS/MemInfo.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/FileMapping.cpp \
 	$(SRC)/OS/PathName.cpp \
@@ -576,6 +575,7 @@ endif
 
 ifeq ($(HAVE_CE),y)
 XCSOAR_SOURCES += \
+	$(SRC)/OS/MemInfo.cpp \
 	$(SRC)/Device/Windows/Enumerator.cpp \
 	$(SRC)/Device/Widcomm.cpp
 endif
