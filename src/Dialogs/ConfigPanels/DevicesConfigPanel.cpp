@@ -43,7 +43,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 
 #ifdef _WIN32_WCE
-#include "Config/Registry.hpp"
+#include "Device/Windows/Enumerator.hpp"
 #endif
 
 #ifdef ANDROID
@@ -246,100 +246,20 @@ DetectSerialPorts(DataFieldEnum &dfe)
 
 #elif defined(_WIN32_WCE)
 
-gcc_pure
-static bool
-CompareRegistryValue(const RegistryKey &registry,
-                     const TCHAR *name, const TCHAR *value)
-{
-  TCHAR real_value[64];
-  return registry.get_value(name, real_value, 64) &&
-    _tcsicmp(value, real_value) == 0;
-}
-
-gcc_pure
-static bool
-IsUnimodemPort(const RegistryKey &registry)
-{
-  return CompareRegistryValue(registry, _T("Tsp"), _T("Unimodem.dll"));
-}
-
-gcc_pure
-static bool
-IsWidcommSerialPort(const RegistryKey &registry)
-{
-  return CompareRegistryValue(registry, _T("Dll"), _T("btcedrivers.dll")) &&
-    CompareRegistryValue(registry, _T("Prefix"), _T("COM"));
-}
-
-gcc_pure
-static bool
-IsYFCommuxPort(const RegistryKey &registry)
-{
-  return CompareRegistryValue(registry, _T("Dll"), _T("commux.dll")) &&
-    CompareRegistryValue(registry, _T("Prefix"), _T("COM"));
-}
-
-gcc_pure
-static bool
-IsGPSPort(const RegistryKey &registry)
-{
-  return CompareRegistryValue(registry, _T("Dll"), _T("GPS.Dll")) &&
-    CompareRegistryValue(registry, _T("Prefix"), _T("COM"));
-}
-
-gcc_pure
-static bool
-IsSerialPort(const TCHAR *key)
-{
-  RegistryKey registry(HKEY_LOCAL_MACHINE, key, true);
-  if (registry.error())
-    return false;
-
-  return IsUnimodemPort(registry) || IsWidcommSerialPort(registry) ||
-    IsYFCommuxPort(registry) || IsGPSPort(registry);
-}
-
-gcc_pure
-static bool
-GetDeviceFriendlyName(const TCHAR *key, TCHAR *buffer, size_t max_size)
-{
-  RegistryKey registry(HKEY_LOCAL_MACHINE, key, true);
-  return !registry.error() &&
-    registry.get_value(_T("FriendlyName"), buffer, max_size);
-}
-
 static bool
 DetectSerialPorts(DataFieldEnum &dfe)
 {
-  RegistryKey drivers_active(HKEY_LOCAL_MACHINE, _T("Drivers\\Active"), true);
-  if (drivers_active.error())
+  PortEnumerator enumerator;
+  if (enumerator.Error())
     return false;
 
   unsigned sort_start = dfe.Count();
 
   bool found = false;
-  TCHAR key_name[64], device_key[64], device_name[64];
-  for (unsigned i = 0; drivers_active.enum_key(i, key_name, 64); ++i) {
-    RegistryKey device(drivers_active, key_name, true);
-
-    if (!device.error() &&
-        device.get_value(_T("Key"), device_key, 64) &&
-        IsSerialPort(device_key) &&
-        device.get_value(_T("Name"), device_name, 64)) {
-      TCHAR display_name[256];
-      _tcscpy(display_name, device_name);
-      size_t length = _tcslen(display_name);
-      if (GetDeviceFriendlyName(device_key, display_name + length + 2,
-                                256 - length - 3)) {
-        /* build a string in the form: "COM1: (Friendly Name)" */
-        display_name[length] = _T(' ');
-        display_name[length + 1] = _T('(');
-        _tcscat(display_name, _T(")"));
-      }
-
-      AddPort(dfe, DeviceConfig::SERIAL, device_name, display_name);
-      found = true;
-    }
+  while (enumerator.Next()) {
+    AddPort(dfe, DeviceConfig::SERIAL, enumerator.GetName(),
+            enumerator.GetDisplayName());
+    found = true;
   }
 
   if (found)
