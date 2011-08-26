@@ -28,7 +28,9 @@ class GLArrayBuffer;
 
 namespace OpenGL {
   static const unsigned CIRCLE_SIZE = 32;
-  extern GLArrayBuffer *circle_buffer;
+  static const unsigned SMALL_CIRCLE_SIZE = 8;
+
+  extern GLArrayBuffer *circle_buffer, *small_circle_buffer;
 
   void InitShapes();
   void DeinitShapes();

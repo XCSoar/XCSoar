@@ -28,9 +28,10 @@ Copyright_License {
 #include "Math/FastMath.h"
 
 static RasterPoint circle_data[OpenGL::CIRCLE_SIZE];
+static RasterPoint small_circle_data[OpenGL::SMALL_CIRCLE_SIZE];
 
 namespace OpenGL {
-  GLArrayBuffer *circle_buffer;
+  GLArrayBuffer *circle_buffer, *small_circle_buffer;
 }
 
 void
@@ -59,6 +60,19 @@ OpenGL::InitShapes()
 
   circle_buffer = new GLArrayBuffer();
   circle_buffer->Load(sizeof(circle_data), circle_data);
+
+  p = small_circle_data;
+  p2 = circle_data;
+  for (unsigned i = 0; i < SMALL_CIRCLE_SIZE; ++i) {
+    p->x = p2->x >> 2;
+    p->y = p2->y >> 2;
+
+    ++p;
+    p2 += CIRCLE_SIZE / SMALL_CIRCLE_SIZE;
+  }
+
+  small_circle_buffer = new GLArrayBuffer();
+  small_circle_buffer->Load(sizeof(small_circle_data), small_circle_data);
 }
 
 void

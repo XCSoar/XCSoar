@@ -238,7 +238,38 @@ Canvas::circle(int x, int y, unsigned radius)
     vertices.bind();
     pen.set();
     glDrawArrays(GL_TRIANGLE_STRIP, 0, vertices.SIZE);
+  } else if (OpenGL::vertex_buffer_object && radius < 16) {
+    /* draw a "small" circle with VBO */
+
+    OpenGL::small_circle_buffer->Bind();
+    glVertexPointer(2, GL_VALUE, 0, NULL);
+
+    glPushMatrix();
+
+#ifdef HAVE_GLES
+    glTranslatex((GLfixed)x << 16, (GLfixed)y << 16, 0);
+    glScalex((GLfixed)radius << 8, (GLfixed)radius << 8, (GLfixed)1 << 16);
+#else
+    glTranslatef(x, y, 0.);
+    glScalef(radius / 256., radius / 256., 1.);
+#endif
+
+    if (!brush.is_hollow()) {
+      brush.set();
+      glDrawArrays(GL_TRIANGLE_FAN, 0, OpenGL::SMALL_CIRCLE_SIZE);
+    }
+
+    if (pen_over_brush()) {
+      pen.set();
+      glDrawArrays(GL_LINE_LOOP, 0, OpenGL::SMALL_CIRCLE_SIZE);
+    }
+
+    glPopMatrix();
+
+    OpenGL::small_circle_buffer->Unbind();
   } else if (OpenGL::vertex_buffer_object) {
+    /* draw a "big" circle with VBO */
+
     OpenGL::circle_buffer->Bind();
     glVertexPointer(2, GL_VALUE, 0, NULL);
 
