@@ -97,9 +97,9 @@ unsigned long FindFreeSpace(const TCHAR *path) {
 void
 StartupLogFreeRamAndStorage()
 {
-  int freeram = SystemFreeRAM() / 1024;
-  int freestorage = FindFreeSpace(GetPrimaryDataPath());
-  LogStartUp(_T("Free ram %d; free storage %d"), freeram, freestorage);
+  unsigned long freeram = SystemFreeRAM() / 1024;
+  unsigned long freestorage = FindFreeSpace(GetPrimaryDataPath());
+  LogStartUp(_T("Free ram %lu KB; free storage %lu KB"), freeram, freestorage);
 }
 
 /**
