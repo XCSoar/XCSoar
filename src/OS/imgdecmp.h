@@ -16,7 +16,7 @@
 extern "C" {
 #endif // __cplusplus
 
-#include "imgrendr.h"
+struct IImageRender;
 
 typedef void (CALLBACK *PROGRESSFUNC)(IImageRender *pRender, BOOL bComplete, LPARAM lParam);
 typedef DWORD (CALLBACK *GETDATAFUNC)(LPSTR szBuffer, DWORD dwBufferMax, LPARAM lParam);
