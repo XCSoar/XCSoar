@@ -91,6 +91,7 @@ DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
   :DataField(TYPE_FILE, OnDataAccess),
    // Set selection to zero
    mValue(0),
+   nullable(true),
    loaded(false), postponed_sort(false),
    postponed_value(_T(""))
 {
@@ -99,6 +100,17 @@ DataFieldFileReader::DataFieldFileReader(DataAccessCallback_t OnDataAccess)
 
   // This type of DataField supports the combolist
   SupportCombo = true;
+}
+
+void
+DataFieldFileReader::SetNotNullable()
+{
+  assert(nullable);
+  assert(!loaded);
+  assert(files.size() == 1);
+
+  nullable = false;
+  files.clear();
 }
 
 int
@@ -170,7 +182,8 @@ DataFieldFileReader::GetPathFile(void) const
   if (!loaded)
     return postponed_value;
 
-  if (mValue > 0 && mValue < files.size())
+  const unsigned first = nullable;
+  if (mValue >= first && mValue < files.size())
     return files[mValue].mTextPathFile;
 
   return _T("");
@@ -278,7 +291,8 @@ DataFieldFileReader::Sort(void)
   }
 
   // Sort the filelist (except for the first (empty) element)
-  qsort(files.begin() + 1, files.size() - 1, sizeof(Item),
+  const unsigned skip = nullable;
+  qsort(files.begin() + skip, files.size() - skip, sizeof(Item),
         DataFieldFileReaderCompare);
   /* by the way, we're not using std::sort() here, because this
      function would require the Item class to be copyable */

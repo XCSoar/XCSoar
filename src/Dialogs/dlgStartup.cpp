@@ -85,11 +85,12 @@ dlgStartupShowModal()
 
   ((WndButton *)wf->FindByName(_T("cmdQuit")))->SetOnClickNotify(OnQuit);
 
+  dfe->SetNotNullable();
   dfe->ScanDirectoryTop(_T("*.prf"));
   dfe->Lookup(Profile::GetPath());
   wp->RefreshDisplay();
 
-  if (dfe->GetNumFiles() <= 2) {
+  if (dfe->GetNumFiles() <= 1) {
     delete wf;
     delete logo;
     return true;
