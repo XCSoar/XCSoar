@@ -9,7 +9,7 @@
   </Edit>
   <SymbolButton Name="btnNext" Caption=">" X="-120" Y="2" Width="29" Height="29" OnClick="OnNextClicked" />
 
-  <Button Name="btnIsLocked" Caption="Locked" X="-118" Y="35" Width="-2" Height="32" OnClick="OnIsLockedClicked" />
+  <CheckBox Name="chkbOptimized" Caption="Optimized" X="-118" Y="35" Width="-2" Height="14" OnClick="OnOptimized"/>
 
   <Edit Name="prpRange" Caption="Range" X="-120" Y="71" Height="27" CaptionWidth="50"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">

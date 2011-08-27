@@ -37,6 +37,7 @@ Copyright_License {
 #include "Task/Tasks/AbstractTask.hpp"
 #include "Units/Units.hpp"
 #include "Form/SymbolButton.hpp"
+#include "Form/CheckBox.hpp"
 #include "Asset.hpp"
 #include "InputEvents.hpp"
 
@@ -47,7 +48,7 @@ using std::max;
 
 static WndForm *wf = NULL;
 static TargetMapWindow *map;
-static WndButton *btnIsLocked = NULL;
+static CheckBoxControl *chkbOptimized = NULL;
 static WndSymbolButton *btnNext = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
 static unsigned TaskSize = 0;
@@ -243,8 +244,10 @@ RefreshCalculator()
     aatTime = lease->get_ordered_task_behaviour().aat_min_time;
   }
 
-  if (btnIsLocked)
-    btnIsLocked->set_enabled(bAAT);
+  if (chkbOptimized) {
+    chkbOptimized->set_visible(bAAT);
+    chkbOptimized->set_checked(!IsLocked);
+  }
 
   LockCalculatorUI();
 
@@ -268,11 +271,6 @@ RefreshCalculator()
     df->Set(rTemp);
     wp->RefreshDisplay();
     wp->set_visible(!nodisplay);
-  }
-
-  if (btnIsLocked) {
-    btnIsLocked->SetCaption(IsLocked ? _T("Unlock") : _T("Lock"));
-    btnIsLocked->set_visible(!nodisplay);
   }
 
   // update outputs
@@ -300,9 +298,9 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 }
 
 static void
-OnIsLockedClicked(gcc_unused WndButton &Sender)
+OnOptimized(CheckBoxControl &control)
 {
-  IsLocked = !IsLocked;
+  IsLocked = !control.get_checked();
   protected_task_manager->target_lock(target_point, IsLocked);
   RefreshCalculator();
 }
@@ -425,7 +423,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnRangeData),
   DeclareCallBackEntry(OnRadialData),
   DeclareCallBackEntry(OnOKClicked),
-  DeclareCallBackEntry(OnIsLockedClicked),
+  DeclareCallBackEntry(OnOptimized),
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(NULL)
 };
@@ -516,8 +514,8 @@ dlgTargetShowModal(int TargetPoint)
     target_point = TargetPoint;
   InitTargetPoints();
 
-  btnIsLocked = (WndButton*)wf->FindByName(_T("btnIsLocked"));
-  assert(btnIsLocked != NULL);
+  chkbOptimized = (CheckBoxControl*)wf->FindByName(_T("chkbOptimized"));
+  assert(chkbOptimized != NULL);
 
   drawBtnNext();
 

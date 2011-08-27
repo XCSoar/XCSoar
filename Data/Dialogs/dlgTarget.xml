@@ -29,7 +29,7 @@
     <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" Min="-92" Max="92" Step="5" OnDataAccess="OnRadialData"/>
   </Edit>
 
-  <Button Name="btnIsLocked" Caption="Locked" X="-62" Y="54" Width="60" Height="43" OnClick="OnIsLockedClicked" />
+  <CheckBox Name="chkbOptimized" Caption="Optimized" X="-62" Y="54" Width="60" Height="14" OnClick="OnOptimized"/>
 
   <Custom Name="map" X="1" Y="103" Width="-1" Height="-1" Border="1" OnCreate="OnCreateMap"/>
 </Form>
