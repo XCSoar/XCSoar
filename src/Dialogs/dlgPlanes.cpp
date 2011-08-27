@@ -103,8 +103,14 @@ OnPlaneListPaint(Canvas &canvas, const PixelRect rc, unsigned i)
 
   canvas.select(name_font);
 
-  canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2), rc, list[i].name);
+  if (Profile::GetPathIsEqual(_T("PlanePath"), list[i].path)) {
+    TCHAR buffer[256];
+    _stprintf(buffer, _T("%s - %s"), list[i].name.c_str(), _("Active"));
+    canvas.text_clipped(rc.left + Layout::FastScale(2),
+                        rc.top + Layout::FastScale(2), rc, buffer);
+  } else
+    canvas.text_clipped(rc.left + Layout::FastScale(2),
+                        rc.top + Layout::FastScale(2), rc, list[i].name);
 
   canvas.select(details_font);
 
