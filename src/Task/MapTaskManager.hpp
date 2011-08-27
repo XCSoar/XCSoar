@@ -25,32 +25,46 @@
 
 #include "Waypoint/Waypoint.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
+#include "Task/TaskEvents.hpp"
 
 
 /**
- * Supports changing the task from the Map UI
+ * Appends wp to current Ordered task and activates the ordered task if
+ * the current ordered task is valid.
+ * If the current ordered task is invalid or empty, then
+ * either creates a Goto task with the selected waypoint, or if in Goto mode
+ * already, it creates an ordered task from the previous Goto point and the
+ * selected waypoint.
  */
 class MapTaskManager
 {
 public:
+  MapTaskManager();
   enum task_edit_result {
     SUCCESS,
     UNMODIFIED,
     INVALID,
     NOTASK,
+    MUTATED_TO_GOTO,
+    MUTATED_FROM_GOTO,
   };
 
   task_edit_result append_to_task(const Waypoint &wp);
   task_edit_result insert_in_task(const Waypoint &wp);
   task_edit_result replace_in_task(const Waypoint &wp);
   task_edit_result remove_from_task(const Waypoint &wp);
-  bool do_goto(const Waypoint&wp);
 
 private:
   task_edit_result append_to_task(OrderedTask *task, const Waypoint &wp);
   task_edit_result insert_in_task(OrderedTask *task, const Waypoint &wp);
   task_edit_result replace_in_task(OrderedTask *task, const Waypoint &wp);
   task_edit_result remove_from_task(OrderedTask *task, const Waypoint &wp);
+  task_edit_result mutate_from_goto(OrderedTask *task, const Waypoint &WPFinish,
+                                    const Waypoint &WPStart);
+
+private:
+  TaskEvents task_events;
+  TaskBehaviour task_behaviour;
 };
 
 #endif

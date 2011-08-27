@@ -181,9 +181,7 @@ OnGotoClicked(gcc_unused WndButton &button)
 
   assert(selected_waypoint != NULL);
 
-  MapTaskManager mtm;
-
-  mtm.do_goto(*selected_waypoint);
+  protected_task_manager->do_goto(*selected_waypoint);
   wf->SetModalResult(mrOK);
 
   CommonInterface::main_window.full_redraw();
@@ -214,6 +212,9 @@ OnReplaceClicked(gcc_unused WndButton &button)
   case MapTaskManager::INVALID:
     MessageBoxX(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
+    break;
+  case MapTaskManager::MUTATED_TO_GOTO:
+  case MapTaskManager::MUTATED_FROM_GOTO:
     break;
   }
 }
@@ -261,6 +262,16 @@ OnInsertInTaskClicked(gcc_unused WndButton &button)
     MessageBoxX(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
     break;
+  case MapTaskManager::MUTATED_TO_GOTO:
+    MessageBoxX(_("Created Goto Task."), _("Success"),
+                MB_OK | MB_ICONEXCLAMATION);
+    wf->SetModalResult(mrOK);
+    break;
+  case MapTaskManager::MUTATED_FROM_GOTO:
+    MessageBoxX(_("Created 2-point task from Goto Task."), _("Success"),
+                MB_OK | MB_ICONEXCLAMATION);
+    wf->SetModalResult(mrOK);
+    break;
   }
 }
 
@@ -285,6 +296,16 @@ OnAppendInTaskClicked(gcc_unused WndButton &button)
   case MapTaskManager::INVALID:
     MessageBoxX(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
+    break;
+  case MapTaskManager::MUTATED_TO_GOTO:
+    MessageBoxX(_("Created Goto Task."), _("Success"),
+                MB_OK | MB_ICONEXCLAMATION);
+    wf->SetModalResult(mrOK);
+    break;
+  case MapTaskManager::MUTATED_FROM_GOTO:
+    MessageBoxX(_("Created 2-point task from Goto Task."), _("Success"),
+                MB_OK | MB_ICONEXCLAMATION);
+    wf->SetModalResult(mrOK);
     break;
   }
 }
@@ -369,6 +390,9 @@ OnRemoveFromTaskClicked(gcc_unused WndButton &button)
   case MapTaskManager::INVALID:
     MessageBoxX(_("Task would not be valid after the change."), _("Error"),
                 MB_OK | MB_ICONEXCLAMATION);
+    break;
+  case MapTaskManager::MUTATED_FROM_GOTO:
+  case MapTaskManager::MUTATED_TO_GOTO:
     break;
   }
 }
