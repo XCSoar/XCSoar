@@ -80,6 +80,12 @@ PlaneGlue::FromProfile(Plane &plane)
 void
 PlaneGlue::ToProfile(const Plane &plane)
 {
+  StaticString<MAX_PATH> plane_path;
+  if (Profile::GetPath(_T("PlanePath"), plane_path.buffer())) {
+    PlaneGlue::WriteFile(plane, plane_path.c_str());
+    return;
+  }
+
   Profile::Set(szProfileAircraftReg, plane.registration);
   Profile::Set(szProfileCompetitionId, plane.competition_id);
   Profile::Set(szProfileAircraftType, plane.type);
