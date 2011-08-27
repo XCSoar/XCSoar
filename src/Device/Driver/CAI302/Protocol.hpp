@@ -29,6 +29,7 @@ Copyright_License {
 #include <stdint.h>
 
 class Port;
+struct GeoPoint;
 
 #define CtrlC 0x03
 
@@ -137,8 +138,8 @@ namespace CAI302 {
 
   /** Structure for CAI302 glider data */
   struct Polar {
-    uint8_t glider_type[12];
-    uint8_t glider_id[12];
+    char glider_type[12];
+    char glider_id[12];
     uint8_t best_ld;
     uint8_t best_glide_speed;
     uint8_t two_ms_sink_at_speed;
@@ -327,6 +328,19 @@ namespace CAI302 {
    */
   bool
   DownloadCommand(Port &port, const char *command, unsigned timeout_ms=2000);
+
+  bool
+  DownloadPilot(Port &port, const Pilot &data);
+
+  bool
+  DownloadPolar(Port &port, const Polar &data);
+
+  bool
+  DeclareTP(Port &port, unsigned i, const GeoPoint &location,
+            int altitude, const char *name);
+
+  bool
+  DeclareSave(Port &port);
 
   /**
    * Restart the CAI302 by sending the command "SIF 0 0".

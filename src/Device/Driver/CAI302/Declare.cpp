@@ -58,40 +58,12 @@ convert_string(char *dest, size_t size, const TCHAR *src)
 static bool
 cai302DeclAddWaypoint(Port &port, int DeclIndex, const Waypoint &way_point)
 {
-  int DegLat, DegLon;
-  double tmp, MinLat, MinLon;
-  char NoS, EoW;
-
-  tmp = way_point.location.Latitude.value_degrees();
-  NoS = 'N';
-  if (tmp < 0) {
-    NoS = 'S';
-    tmp = -tmp;
-  }
-  DegLat = (int)tmp;
-  MinLat = (tmp - DegLat) * 60;
-
-  tmp = way_point.location.Longitude.value_degrees();
-  EoW = 'E';
-  if (tmp < 0) {
-    EoW = 'W';
-    tmp = -tmp;
-  }
-  DegLon = (int)tmp;
-  MinLon = (tmp - DegLon) * 60;
-
   char Name[13];
   convert_string(Name, sizeof(Name), way_point.name.c_str());
 
-  char szTmp[128];
-  sprintf(szTmp, "D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r",
-          DeclIndex,
-          DegLat, MinLat, NoS,
-          DegLon, MinLon, EoW,
-          Name,
-          (int)way_point.altitude);
-
-  return CAI302::DownloadCommand(port, szTmp);
+  return CAI302::DeclareTP(port, DeclIndex, way_point.location,
+                           (int)way_point.altitude,
+                           Name);
 }
 
 static bool
@@ -99,7 +71,6 @@ DeclareInner(Port &port, const Declaration &declaration,
              gcc_unused OperationEnvironment &env)
 {
   using CAI302::UploadShort;
-  using CAI302::DownloadCommand;
   unsigned size = declaration.Size();
 
   port.SetRxTimeout(500);
@@ -140,55 +111,27 @@ DeclareInner(Port &port, const Declaration &declaration,
   if (!CAI302::DownloadMode(port) || env.IsCancelled())
     return false;
 
-  char PilotName[25], GliderType[13], GliderID[13];
-  convert_string(PilotName, sizeof(PilotName), declaration.pilot_name);
+  char GliderType[13], GliderID[13];
   convert_string(GliderType, sizeof(GliderType), declaration.aircraft_type);
   convert_string(GliderID, sizeof(GliderID), declaration.aircraft_registration);
 
-  char szTmp[255];
-  sprintf(szTmp, "O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r",
-          PilotName,
-          pilot.old_units,
-          pilot.old_temperatur_units,
-          pilot.sink_tone,
-          pilot.total_energy_final_glide,
-          pilot.show_final_glide_altitude_difference,
-          pilot.map_datum,
-          FromBE16(pilot.approach_radius),
-          FromBE16(pilot.arrival_radius),
-          FromBE16(pilot.enroute_logging_interval),
-          FromBE16(pilot.close_logging_interval),
-          FromBE16(pilot.time_between_flight_logs),
-          FromBE16(pilot.minimum_speed_to_force_flight_logging),
-          pilot.stf_dead_band,
-          pilot.reserved_vario,
-          FromBE16(pilot.unit_word),
-          FromBE16(pilot.margin_height));
-
-  if (!DownloadCommand(port, szTmp) || env.IsCancelled())
+  convert_string(pilot.name, sizeof(pilot.name), declaration.pilot_name);
+  if (!CAI302::DownloadPilot(port, pilot) || env.IsCancelled())
     return false;
 
   env.SetProgressPosition(5);
 
-  sprintf(szTmp, "G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r",
-          GliderType,
-          GliderID,
-          polar.best_ld,
-          polar.best_glide_speed,
-          polar.two_ms_sink_at_speed,
-          FromBE16(polar.weight_in_litres),
-          FromBE16(polar.ballast_capacity),
-          0,
-          FromBE16(polar.config_word),
-          FromBE16(polar.wing_area));
-
-  if (!DownloadCommand(port, szTmp) || env.IsCancelled())
+  convert_string(polar.glider_type, sizeof(polar.glider_type),
+                 declaration.aircraft_type);
+  convert_string(polar.glider_id, sizeof(polar.glider_id),
+                 declaration.aircraft_registration);
+  if (!CAI302::DownloadPolar(port, polar) || env.IsCancelled())
     return false;
 
   env.SetProgressPosition(6);
 
   for (unsigned i = 0; i < size; ++i) {
-    if (!cai302DeclAddWaypoint(port, 128 + i, declaration.GetWaypoint(i)) ||
+    if (!cai302DeclAddWaypoint(port, i, declaration.GetWaypoint(i)) ||
         env.IsCancelled())
       return false;
 
@@ -196,7 +139,7 @@ DeclareInner(Port &port, const Declaration &declaration,
   }
 
   port.SetRxTimeout(1500); // D,255 takes more than 800ms
-  return DownloadCommand(port, "D,255\r");
+  return CAI302::DeclareSave(port);
 }
 
 bool

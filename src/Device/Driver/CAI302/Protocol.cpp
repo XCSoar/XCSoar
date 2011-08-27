@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Protocol.hpp"
 #include "Device/Port.hpp"
+#include "OS/ByteOrder.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 
 #include <algorithm>
 #include <assert.h>
@@ -277,6 +279,97 @@ bool
 CAI302::DownloadCommand(Port &port, const char *command, unsigned timeout_ms)
 {
   return WriteString(port, command) && WaitDownloadPrompt(port);
+}
+
+bool
+CAI302::DownloadPilot(Port &port, const Pilot &pilot)
+{
+  char buffer[256];
+  snprintf(buffer, sizeof(buffer),
+           "O,%-24s,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d,%d\r",
+           pilot.name,
+           pilot.old_units,
+           pilot.old_temperatur_units,
+           pilot.sink_tone,
+           pilot.total_energy_final_glide,
+           pilot.show_final_glide_altitude_difference,
+           pilot.map_datum,
+           FromBE16(pilot.approach_radius),
+           FromBE16(pilot.arrival_radius),
+           FromBE16(pilot.enroute_logging_interval),
+           FromBE16(pilot.close_logging_interval),
+           FromBE16(pilot.time_between_flight_logs),
+           FromBE16(pilot.minimum_speed_to_force_flight_logging),
+           pilot.stf_dead_band,
+           pilot.reserved_vario,
+           FromBE16(pilot.unit_word),
+           FromBE16(pilot.margin_height));
+
+  return DownloadCommand(port, buffer);
+}
+
+bool
+CAI302::DownloadPolar(Port &port, const Polar &polar)
+{
+  char buffer[256];
+  snprintf(buffer, sizeof(buffer),
+           "G,%-12s,%-12s,%d,%d,%d,%d,%d,%d,%d,%d\r",
+           polar.glider_type,
+           polar.glider_id,
+           polar.best_ld,
+           polar.best_glide_speed,
+           polar.two_ms_sink_at_speed,
+           FromBE16(polar.weight_in_litres),
+           FromBE16(polar.ballast_capacity),
+           0,
+           FromBE16(polar.config_word),
+           FromBE16(polar.wing_area));
+
+  return DownloadCommand(port, buffer);
+}
+
+bool
+CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
+                  int altitude, const char *name)
+{
+  int DegLat, DegLon;
+  double tmp, MinLat, MinLon;
+  char NoS, EoW;
+
+  tmp = location.Latitude.value_degrees();
+  NoS = 'N';
+  if (tmp < 0) {
+    NoS = 'S';
+    tmp = -tmp;
+  }
+  DegLat = (int)tmp;
+  MinLat = (tmp - DegLat) * 60;
+
+  tmp = location.Longitude.value_degrees();
+  EoW = 'E';
+  if (tmp < 0) {
+    EoW = 'W';
+    tmp = -tmp;
+  }
+  DegLon = (int)tmp;
+  MinLon = (tmp - DegLon) * 60;
+
+  char buffer[256];
+  snprintf(buffer, sizeof(buffer),
+           "D,%d,%02d%07.4f%c,%03d%07.4f%c,%s,%d\r",
+           128 + i,
+           DegLat, MinLat, NoS,
+           DegLon, MinLon, EoW,
+           name,
+           altitude);
+
+  return DownloadCommand(port, buffer);
+}
+
+bool
+CAI302::DeclareSave(Port &port)
+{
+  return DownloadCommand(port, "D,255\r");
 }
 
 bool
