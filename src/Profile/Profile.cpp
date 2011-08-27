@@ -37,7 +37,13 @@ Copyright_License {
 
 #define XCSPROFILE "xcsoar-registry.prf"
 
-TCHAR startProfileFile[MAX_PATH];
+static TCHAR startProfileFile[MAX_PATH];
+
+const TCHAR *
+Profile::GetPath()
+{
+  return startProfileFile;
+}
 
 void
 Profile::Load()

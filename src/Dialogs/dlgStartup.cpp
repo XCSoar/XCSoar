@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
+#include "Profile/Profile.hpp"
 #include "Screen/Layout.hpp"
 #include "Gauge/LogoView.hpp"
 #include "DataField/FileReader.hpp"
@@ -36,8 +37,6 @@ Copyright_License {
 
 static WndForm *wf = NULL;
 static LogoView *logo;
-
-extern TCHAR startProfileFile[];
 
 static void
 OnLogoPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
@@ -87,7 +86,7 @@ dlgStartupShowModal()
   ((WndButton *)wf->FindByName(_T("cmdQuit")))->SetOnClickNotify(OnQuit);
 
   dfe->ScanDirectoryTop(_T("*.prf"));
-  dfe->Lookup(startProfileFile);
+  dfe->Lookup(Profile::GetPath());
   wp->RefreshDisplay();
 
   if (dfe->GetNumFiles() <= 2) {

@@ -38,6 +38,12 @@ namespace Profile
   using namespace ProfileMap;
 
   /**
+   * Returns the absolute path of the current profile file.
+   */
+  gcc_pure
+  const TCHAR *GetPath();
+
+  /**
    * Loads the profile files
    */
   void Load();
