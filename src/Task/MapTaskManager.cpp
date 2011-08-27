@@ -224,13 +224,6 @@ MapTaskManager::insert_in_task(const Waypoint &wp)
 MapTaskManager::task_edit_result
 MapTaskManager::replace_in_task(OrderedTask *task, const Waypoint &wp)
 {
-  { // this must be done in thread lock because it potentially changes the
-    // waypoints database
-    ScopeSuspendAllThreads suspend;
-    task->check_duplicate_waypoints(way_points);
-    way_points.optimise();
-  }
-
   if (task->TaskSize()==0)
     return NOTASK;
 
@@ -268,13 +261,6 @@ MapTaskManager::remove_from_task(OrderedTask *task, const Waypoint &wp)
 {
   if (task->TaskSize()==0)
     return NOTASK;
-
-  { // this must be done in thread lock because it potentially changes the
-    // waypoints database
-    ScopeSuspendAllThreads suspend;
-    task->check_duplicate_waypoints(way_points);
-    way_points.optimise();
-  }
 
   int TPIndex = index_of_point_in_task(task, wp);
   if (TPIndex >= 0)
