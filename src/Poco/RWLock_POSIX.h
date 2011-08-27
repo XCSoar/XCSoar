@@ -42,6 +42,8 @@
 
 #include "Util/NonCopyable.hpp"
 #include "Poco/Foundation.h"
+#include "Thread/Mutex.hpp"
+
 #include <pthread.h>
 #include <errno.h>
 
@@ -76,12 +78,20 @@ inline void RWLockImpl::readLockImpl()
 #else
 	{}
 #endif
+
+#ifndef NDEBUG
+	++thread_locks_held;
+#endif
 }
 
 
 inline bool RWLockImpl::tryReadLockImpl()
 {
 	int rc = pthread_rwlock_tryrdlock(&_rwl);
+#ifndef NDEBUG
+	if (rc == 0)
+		++thread_locks_held;
+#endif
 	if (rc == 0)
 		return true;
 	else if (rc == EBUSY)
@@ -106,12 +116,19 @@ inline void RWLockImpl::writeLockImpl()
 	{}
 #endif
 
+#ifndef NDEBUG
+	++thread_locks_held;
+#endif
 }
 
 
 inline bool RWLockImpl::tryWriteLockImpl()
 {
 	int rc = pthread_rwlock_trywrlock(&_rwl);
+#ifndef NDEBUG
+	if (rc == 0)
+		++thread_locks_held;
+#endif
 	if (rc == 0)
 		return true;
 	else if (rc == EBUSY)
@@ -134,6 +151,10 @@ inline void RWLockImpl::unlockImpl()
 		throw SystemException("cannot unlock mutex");
 #else
 	{}
+#endif
+
+#ifndef NDEBUG
+	--thread_locks_held;
 #endif
 }
 
