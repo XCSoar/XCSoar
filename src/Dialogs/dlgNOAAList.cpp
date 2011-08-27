@@ -40,6 +40,7 @@ Copyright_License {
 #include "Weather/NOAAGlue.hpp"
 #include "Weather/NOAAStore.hpp"
 #include "Weather/METAR.hpp"
+#include "Util/StaticArray.hpp"
 #include "MainWindow.hpp"
 #include "Compiler.h"
 
@@ -48,32 +49,56 @@ Copyright_License {
 static WndForm *wf;
 static WndListFrame *station_list;
 
+struct NOAAListItem
+{
+  StaticString<5> code;
+  unsigned index;
+
+  bool operator<(const NOAAListItem &i2) const {
+    return _tcscmp(code, i2.code) == -1;
+  }
+};
+
+static StaticArray<NOAAListItem, 20> list;
+
 static void
 UpdateList()
 {
-  station_list->SetLength(NOAAStore::Count());
+  list.clear();
+
+  unsigned len = NOAAStore::Count();
+  for (unsigned i = 0; i < len; ++i) {
+    NOAAListItem item;
+    item.code = NOAAStore::GetCodeT(i);
+    item.index = i;
+    list.push_back(item);
+  }
+
+  if (len > 1)
+    std::sort(list.begin(), list.end());
+
+  station_list->SetLength(len);
   station_list->invalidate();
 }
 
 static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
-  assert(index < NOAAStore::Count());
+  assert(index < list.size());
 
   const Font &code_font = Fonts::MapBold;
   const Font &details_font = Fonts::MapLabel;
 
   canvas.select(code_font);
 
-  const TCHAR *code = NOAAStore::GetCodeT(index);
   canvas.text_clipped(rc.left + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2), rc, code);
+                      rc.top + Layout::FastScale(2), rc, list[index].code);
 
   canvas.select(details_font);
 
   METAR metar;
   const TCHAR *tmp;
-  if (!NOAAStore::GetMETAR(index, metar))
+  if (!NOAAStore::GetMETAR(list[index].index, metar))
     tmp = _("No METAR available");
   else
     tmp = metar.content.c_str();
@@ -130,16 +155,16 @@ static void
 RemoveClicked(gcc_unused WndButton &Sender)
 {
   unsigned index = station_list->GetCursorIndex();
-  assert(index < NOAAStore::Count());
+  assert(index < list.size());
 
   TCHAR tmp[256];
   _stprintf(tmp, _("Do you want to remove station %s?"),
-            NOAAStore::GetCodeT(index));
+            list[index].code.c_str());
 
   if (MessageBoxX(tmp, _("Remove"), MB_YESNO) == IDNO)
     return;
 
-  NOAAStore::RemoveStation(index);
+  NOAAStore::RemoveStation(list[index].index);
   NOAAStore::SaveToProfile();
 
   UpdateList();
@@ -154,8 +179,9 @@ CloseClicked(gcc_unused WndButton &Sender)
 static void
 OpenDetails(unsigned index)
 {
-  assert(index < NOAAStore::Count());
-  dlgNOAADetailsShowModal(*(SingleWindow *)wf->get_root_owner(), index);
+  assert(index < list.size());
+  dlgNOAADetailsShowModal(*(SingleWindow *)wf->get_root_owner(),
+                          list[index].index);
   UpdateList();
 }
 
