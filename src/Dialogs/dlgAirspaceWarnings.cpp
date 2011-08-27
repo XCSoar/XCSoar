@@ -99,15 +99,20 @@ UpdateButtons()
     return;
   }
 
-  ProtectedAirspaceWarningManager::ExclusiveLease lease(*airspace_warnings);
-  const AirspaceWarning &warning = lease->get_warning(*airspace);
+  bool ack_expired, ack_day, inside;
 
-  wbAck1->set_visible(warning.get_ack_expired() &&
-                      warning.get_warning_state() != AirspaceWarning::WARNING_INSIDE);
-  wbAck2->set_visible(!warning.get_ack_day());
-  wbAck->set_visible(warning.get_ack_expired() &&
-                     warning.get_warning_state() == AirspaceWarning::WARNING_INSIDE);
-  wbEnable->set_visible(!warning.get_ack_expired());
+  {
+    ProtectedAirspaceWarningManager::ExclusiveLease lease(*airspace_warnings);
+    const AirspaceWarning &warning = lease->get_warning(*airspace);
+    ack_expired = warning.get_ack_expired();
+    ack_day = warning.get_ack_day();
+    inside = warning.get_warning_state() == AirspaceWarning::WARNING_INSIDE;
+  }
+
+  wbAck1->set_visible(ack_expired && !inside);
+  wbAck2->set_visible(!ack_day);
+  wbAck->set_visible(ack_expired && inside);
+  wbEnable->set_visible(!ack_expired);
 }
 
 static void
