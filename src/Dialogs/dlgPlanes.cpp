@@ -204,7 +204,7 @@ EditClicked(gcc_unused WndButton &button)
     StaticString<42> filename(plane.registration);
     filename += _T(".xcp");
 
-    if (!(filename == old_filename)) {
+    if (filename != old_filename) {
       StaticString<MAX_PATH> path;
       DirName(old_path, path.buffer());
       path += _T("/");

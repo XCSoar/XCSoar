@@ -160,6 +160,10 @@ public:
     return equals(value);
   }
 
+  bool operator !=(const TCHAR *value) const {
+    return !equals(value);
+  }
+
   StaticString<max> &operator =(const TCHAR *new_value) {
     set(new_value);
     return *this;
