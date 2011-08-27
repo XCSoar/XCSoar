@@ -1,18 +1,18 @@
 <?xml version="1.0"?>
 
 <Form Caption="Configuration">
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="35" Y="240" Width="35" Height="28" OnClick="OnNextClicked" />
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="240" Width="35" Height="28" OnClick="OnPrevClicked" />
-  <Button Name="cmdClose" Caption="Close" X="5" Y="270" Width="60" Height="28" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="45" Y="-72" Width="40" Height="35" OnClick="OnNextClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-72" Width="40" Height="35" OnClick="OnPrevClicked" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="80" Height="35" />
 
-  <CheckBox Name="Expert" Caption="Expert" X="70" Y="270" Width="100" Height="28" OnClick="OnUserLevel"/>
+  <CheckBox Name="Expert" Caption="Expert" X="95" Y="-37" Width="65" Height="35" OnClick="OnUserLevel"/>
 
-  <Button Name="cmdFonts" Caption="Fonts" X="75" Y="240" Width="60" Height="28" />
-  <Button Name="cmdWaypoints" Caption="Waypts." X="75" Y="240" Width="60" Height="28" />
+  <Button Name="cmdFonts" Caption="Fonts" X="95" Y="-72" Width="80" Height="35" />
+  <Button Name="cmdWaypoints" Caption="Waypts." X="95" Y="-72" Width="80" Height="35" />
 
-  <Button Name="cmdLoadPolarFile" Caption="Import" X="113" Y="240" Width="60" Height="28" OnClick="PolarConfigPanel::OnLoadFromFile" />
-  <Button Name="cmdSavePolarFile" Caption="Export" X="175" Y="240" Width="60" Height="28" OnClick="PolarConfigPanel::OnExport" />
-  <Button Name="cmdLoadInternalPolar" Caption="List" X="175" Y="270" Width="60" Height="28" OnClick="PolarConfigPanel::OnLoadInternal" />
+  <Button Name="cmdLoadPolarFile" Caption="Import" X="-144" Y="-72" Width="70" Height="35" OnClick="PolarConfigPanel::OnLoadFromFile" />
+  <Button Name="cmdSavePolarFile" Caption="Export" X="-72" Y="-72" Width="70" Height="35" OnClick="PolarConfigPanel::OnExport" />
+  <Button Name="cmdLoadInternalPolar" Caption="List" X="-72" Y="-37" Width="70" Height="35" OnClick="PolarConfigPanel::OnLoadInternal" />
 
   <Tabbed Name="tabbed" X="0" Y="0" Width="0" Height="222">
     <Panel Name="frmSite">
@@ -583,7 +583,7 @@
     </Panel>
 
     <Panel Name="frmComm">
-      <Panel Name="frmComm1" X="1" Y="1" Width="-1" Height="90" Border="30">
+      <Panel Name="frmComm1" X="2" Y="2" Width="-1" Height="90" Border="30">
         <Label Caption="Device A" X="2" Y="2" Width="70" Height="36"/>
   
         <Edit Name="prpComPort1" Caption="Port" X="62" Y="1" Width="-2" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 3">
@@ -603,7 +603,7 @@
         </Edit>
       </Panel>
   
-      <Panel Name="frmComm2" X="1" Y="90" Width="-1" Height="90" Border="30">
+      <Panel Name="frmComm2" X="2" Y="91" Width="-1" Height="90" Border="30">
         <Label Caption="Device B" X="2" Y="2" Width="70" Height="36"/>
   
         <Edit Name="prpComPort2" Caption="Port" X="62" Y="1" Width="-2" Height="22" CaptionWidth="80" Help="Altair Pro users should set this to Port 1.">
