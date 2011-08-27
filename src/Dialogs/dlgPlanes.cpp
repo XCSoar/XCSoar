@@ -33,6 +33,7 @@ Copyright_License {
 #include "LocalPath.hpp"
 #include "MainWindow.hpp"
 #include "Components.hpp"
+#include "Profile/Profile.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 
 #include <vector>
@@ -127,6 +128,7 @@ Load(unsigned i)
     return;
   }
 
+  Profile::SetPath(_T("PlanePath"), list[i].path);
   PlaneGlue::Synchronize(settings.plane, settings, settings.glide_polar_task);
   if (protected_task_manager != NULL)
     protected_task_manager->set_glide_polar(settings.glide_polar_task);
