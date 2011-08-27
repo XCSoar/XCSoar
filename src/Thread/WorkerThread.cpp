@@ -50,6 +50,15 @@ WorkerThread::Run()
        CheckStoppedOrSuspended() */
     event_trigger.Reset();
 
+    if (IsCommandPending()) {
+      /* just in case we got another suspend/stop command after
+         CheckStoppedOrSuspended() returned and before the trigger got
+         reset: restore the trigger and skip this iteration, to fix
+         the race condition */
+      event_trigger.Signal();
+      continue;
+    }
+
     /* do the actual work */
     if (period_min > 0)
       clock.update();

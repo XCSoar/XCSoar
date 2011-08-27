@@ -123,6 +123,21 @@ SuspensibleThread::Resume()
 }
 
 bool
+SuspensibleThread::IsCommandPending()
+{
+  assert(Thread::IsInside());
+
+#ifdef HAVE_POSIX
+  mutex.Lock();
+  bool result = stop_received || suspend_received;
+  mutex.Unlock();
+  return result;
+#else
+  return stop_trigger.Test() || suspend_trigger.Test();
+#endif
+}
+
+bool
 SuspensibleThread::CheckStoppedOrSuspended()
 {
   assert(Thread::IsInside());

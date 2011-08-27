@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_THREAD_SUSPENSIBLE_THREAD_HPP
 #define XCSOAR_THREAD_SUSPENSIBLE_THREAD_HPP
 
+#include "Compiler.h"
 #include "Thread/Thread.hpp"
 
 #ifdef HAVE_POSIX
@@ -71,6 +72,12 @@ public:
   void Resume();
 
 protected:
+  /**
+   * Has a suspend or stop command been received?
+   */
+  gcc_pure
+  bool IsCommandPending();
+
   /**
    * Handles the "suspend" and "stop" commands.
    *

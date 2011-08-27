@@ -59,6 +59,15 @@ DrawThread::Run()
 
       trigger.Reset();
 
+      if (IsCommandPending()) {
+        /* just in case we got another suspend/stop command after
+           CheckStoppedOrSuspended() returned and before the trigger
+           got reset: restore the trigger and skip this iteration, to
+           fix the race condition */
+        trigger.Signal();
+        continue;
+      }
+
       // Get data from the DeviceBlackboard
       map.ExchangeBlackboard();
 
