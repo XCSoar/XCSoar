@@ -125,6 +125,17 @@ Profile::GetPath(const TCHAR *key, TCHAR *value)
   return true;
 }
 
+bool
+Profile::GetPathIsEqual(const TCHAR *key, const TCHAR *value)
+{
+  TCHAR saved[MAX_PATH];
+  if (!Get(key, saved, MAX_PATH))
+    return false;
+
+  ExpandLocalPath(saved);
+  return _tcscmp(saved, value) == 0;
+}
+
 void
 Profile::SetPath(const TCHAR *key, const TCHAR *value)
 {
