@@ -193,9 +193,7 @@ OnReplaceClicked(gcc_unused WndButton &button)
   if (protected_task_manager == NULL)
     return;
 
-  MapTaskManager mtm;
-
-  switch (mtm.replace_in_task(*selected_waypoint)) {
+  switch (MapTaskManager::replace_in_task(*selected_waypoint)) {
   case MapTaskManager::SUCCESS:
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
@@ -245,9 +243,7 @@ OnInsertInTaskClicked(gcc_unused WndButton &button)
   if (protected_task_manager == NULL)
     return;
 
-  MapTaskManager mtm;
-
-  switch (mtm.insert_in_task(*selected_waypoint)) {
+  switch (MapTaskManager::insert_in_task(*selected_waypoint)) {
   case MapTaskManager::SUCCESS:
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
@@ -281,9 +277,7 @@ OnAppendInTaskClicked(gcc_unused WndButton &button)
   if (protected_task_manager == NULL)
     return;
 
-  MapTaskManager mtm;
-
-  switch (mtm.append_to_task(*selected_waypoint)) {
+  switch (MapTaskManager::append_to_task(*selected_waypoint)) {
   case MapTaskManager::SUCCESS:
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
@@ -371,9 +365,7 @@ OnRemoveFromTaskClicked(gcc_unused WndButton &button)
   if (protected_task_manager == NULL)
     return;
 
-  MapTaskManager mtm;
-
-  switch (mtm.remove_from_task(*selected_waypoint)) {
+  switch (MapTaskManager::remove_from_task(*selected_waypoint)) {
   case MapTaskManager::SUCCESS:
     protected_task_manager->task_save_default();
     wf->SetModalResult(mrOK);
@@ -433,11 +425,9 @@ ShowTaskCommands()
   if (protected_task_manager == NULL)
     return;
 
-  MapTaskManager mtm;
-
   WndButton *wb = ((WndButton *)wf->FindByName(_T("cmdRemoveFromTask")));
   if (wb)
-    wb->set_visible(mtm.index_of_point_in_task(*selected_waypoint) >= 0);
+    wb->set_visible(MapTaskManager::index_of_point_in_task(*selected_waypoint) >= 0);
 }
 
 void 
