@@ -427,6 +427,19 @@ static CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(NULL)
 };
 
+static void
+ShowTaskCommands()
+{
+  if (protected_task_manager == NULL)
+    return;
+
+  MapTaskManager mtm;
+
+  WndButton *wb = ((WndButton *)wf->FindByName(_T("cmdRemoveFromTask")));
+  if (wb)
+    wb->set_visible(mtm.index_of_point_in_task(*selected_waypoint) >= 0);
+}
+
 void 
 dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
                             bool allow_navigation)
@@ -583,6 +596,8 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     assert(butnav);
     butnav->hide();
   }
+
+  ShowTaskCommands();
 
   WndButton *wb;
 

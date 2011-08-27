@@ -54,6 +54,13 @@ public:
   task_edit_result replace_in_task(const Waypoint &wp);
   task_edit_result remove_from_task(const Waypoint &wp);
 
+  /**
+   * @param wp
+   * @return TurnPointIndex if MODE_ORDERED and wp is in task
+   * else returns -1
+   */
+  int index_of_point_in_task(const Waypoint &wp);
+
 private:
   task_edit_result append_to_task(OrderedTask *task, const Waypoint &wp);
   task_edit_result insert_in_task(OrderedTask *task, const Waypoint &wp);
@@ -61,7 +68,7 @@ private:
   task_edit_result remove_from_task(OrderedTask *task, const Waypoint &wp);
   task_edit_result mutate_from_goto(OrderedTask *task, const Waypoint &WPFinish,
                                     const Waypoint &WPStart);
-
+  int index_of_point_in_task(OrderedTask *task, const Waypoint &wp);
 private:
   TaskEvents task_events;
   TaskBehaviour task_behaviour;

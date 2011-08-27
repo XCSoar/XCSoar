@@ -276,18 +276,11 @@ MapTaskManager::remove_from_task(OrderedTask *task, const Waypoint &wp)
     way_points.optimise();
   }
 
-  bool modified = false;
-  for (unsigned i = task->TaskSize(); i--;) {
-    const OrderedTaskPoint *tp = task->get_tp(i);
-    assert(tp != NULL);
+  int TPIndex = index_of_point_in_task(task, wp);
+  if (TPIndex >= 0)
+    task->remove(TPIndex);
 
-    if (tp->GetWaypoint() == wp) {
-      task->remove(i);
-      modified = true;
-    }
-  }
-
-  if (!modified)
+  if (TPIndex == -1)
     return UNMODIFIED;
 
   if (!task->check_task())
@@ -313,3 +306,39 @@ MapTaskManager::remove_from_task(const Waypoint &wp)
   return result;
 }
 
+int
+MapTaskManager::index_of_point_in_task(OrderedTask *task, const Waypoint &wp)
+{
+  if (task->TaskSize() == 0)
+    return -1;
+
+  unsigned i = task->getActiveIndex();
+  if (i >= task->TaskSize())
+    return -1;
+
+  int TPindex = -1;
+  for (unsigned i = task->TaskSize(); i--;) {
+    const OrderedTaskPoint *tp = task->get_tp(i);
+    assert(tp != NULL);
+
+    if (tp->GetWaypoint() == wp) {
+      TPindex = i;
+      break;
+    }
+  }
+  return TPindex;
+}
+
+int
+MapTaskManager::index_of_point_in_task(const Waypoint &wp)
+{
+  assert(protected_task_manager != NULL);
+  ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
+  if (task_manager->get_mode() == TaskManager::MODE_ORDERED) {
+    OrderedTask *task = task_manager->clone(task_events,
+                                            task_behaviour,
+                                            task_manager->get_glide_polar());
+    return index_of_point_in_task(task, wp);
+  }
+  return -1;
+}
