@@ -9,6 +9,7 @@ HAVE_CE := n
 HAVE_FPU := y
 XSCALE := n
 ARMV7 := n
+X86 := n
 FAT_BINARY := n
 
 HAVE_POSIX := n
@@ -33,6 +34,12 @@ endif
 
 ifeq ($(TARGET),ANDROID7)
   ARMV7 := y
+  TARGET_FLAVOR := $(TARGET)
+  override TARGET = ANDROID
+endif
+
+ifeq ($(TARGET),ANDROID86)
+  X86 := y
   TARGET_FLAVOR := $(TARGET)
   override TARGET = ANDROID
 endif
@@ -134,17 +141,27 @@ ifeq ($(TARGET),ANDROID)
     ANDROID_ABI3 = armeabi
   endif
 
+  ANDROID_ABI4 = $(ANDROID_ABI2)
+
   ANDROID_NDK_PLATFORM = $(ANDROID_NDK)/platforms/$(ANDROID_PLATFORM)
   ANDROID_TARGET_ROOT = $(ANDROID_NDK_PLATFORM)/arch-$(ANDROID_ARCH)
   ANDROID_TOOLCHAIN = $(ANDROID_NDK)/toolchains/$(ANDROID_ABI2)-$(ANDROID_GCC_VERSION)/prebuilt/linux-x86
-  TCPATH = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI2)-
+  TCPATH = $(ANDROID_TOOLCHAIN)/bin/$(ANDROID_ABI4)-
 
+  ifeq ($(X86),y)
+    ANDROID_PLATFORM := android-9
+    ANDROID_ARCH := x86
+    ANDROID_ABI2 := x86
+    ANDROID_ABI4 := i686-android-linux
+    HAVE_FPU := y
+  else
   ifeq ($(ARMV7),y)
     TARGET_ARCH += -march=armv7-a -mfloat-abi=softfp -mfpu=vfp -mthumb-interwork
     HAVE_FPU := y
   else
     TARGET_ARCH += -march=armv5te -mtune=xscale -msoft-float -mthumb-interwork
     HAVE_FPU := n
+  endif
   endif
 
   TARGET_ARCH += -fpic -ffunction-sections -funwind-tables -fstack-protector -fno-short-enums
@@ -229,6 +246,11 @@ ifeq ($(TARGET),ANDROID)
   TARGET_CPPFLAGS += -isystem $(ANDROID_NDK)/sources/cxx-stl/stlport/stlport
   TARGET_CPPFLAGS += -DANDROID
   CXXFLAGS += -D__STDC_VERSION__=199901L
+
+  ifeq ($(X86),y)
+    # On NDK r6, the macro _BYTE_ORDER never gets defined - workaround:
+    TARGET_CPPFLAGS += -D_BYTE_ORDER=_LITTLE_ENDIAN
+  endif
 endif
 
 ####### compiler target
@@ -330,7 +352,7 @@ ifeq ($(TARGET),ANDROID)
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libGLESv1_CM.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libc.so $(ANDROID_TARGET_ROOT)/usr/lib/libm.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/liblog.so
-  TARGET_LDLIBS += $(ANDROID_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI2)/$(ANDROID_GCC_VERSION)/libgcc.a
+  TARGET_LDLIBS += $(ANDROID_TOOLCHAIN)/lib/gcc/$(ANDROID_ABI4)/$(ANDROID_GCC_VERSION)/libgcc.a
 endif
 
 ######## output files
