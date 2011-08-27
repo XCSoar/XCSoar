@@ -76,6 +76,7 @@ namespace Profile
    */
   bool GetPath(const TCHAR *key, TCHAR *value);
   void SetPath(const TCHAR *key, const TCHAR *value);
+  bool GetPathIsEqual(const TCHAR *key, const TCHAR *value);
 
   /**
    * Load a GeoPoint from the profile.
