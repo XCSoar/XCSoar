@@ -38,17 +38,12 @@ Copyright_License {
 #define XCSPROFILE "xcsoar-registry.prf"
 
 TCHAR startProfileFile[MAX_PATH];
-TCHAR defaultProfileFile[MAX_PATH];
 
 void
 Profile::Load()
 {
   LogStartUp(_T("Loading profiles"));
-  // load registry backup if it exists
-  LoadFile(defaultProfileFile);
-
-  if (_tcscmp(startProfileFile, defaultProfileFile) != 0)
-    LoadFile(startProfileFile);
+  LoadFile(startProfileFile);
 }
 
 void
@@ -73,7 +68,7 @@ void
 Profile::Save()
 {
   LogStartUp(_T("Saving profiles"));
-  SaveFile(defaultProfileFile);
+  SaveFile(startProfileFile);
 }
 
 void
@@ -98,23 +93,20 @@ Profile::SaveFile(const TCHAR *szFile)
 void
 Profile::SetFiles(const TCHAR* override)
 {
-  // Set the default profile file
-  LocalPath(defaultProfileFile, _T(XCSPROFILE));
-
-  if (is_altair() && !File::Exists(defaultProfileFile)) {
-    /* backwards compatibility with old Altair firmware */
-    LocalPath(defaultProfileFile, _T("config/")_T(XCSPROFILE));
-    if (!File::Exists(defaultProfileFile))
-      LocalPath(defaultProfileFile, _T(XCSPROFILE));
+  if (!string_is_empty(override)) {
+    CopyString(startProfileFile, override, MAX_PATH);
+    return;
   }
 
-  // Set the profile file to load at startup
-  // -> to the default file
-  _tcscpy(startProfileFile, defaultProfileFile);
+  // Set the default profile file
+  LocalPath(startProfileFile, _T(XCSPROFILE));
 
-  // -> to the given filename (if exists)
-  if (!string_is_empty(override))
-    CopyString(startProfileFile, override, MAX_PATH);
+  if (is_altair() && !File::Exists(startProfileFile)) {
+    /* backwards compatibility with old Altair firmware */
+    LocalPath(startProfileFile, _T("config/")_T(XCSPROFILE));
+    if (!File::Exists(startProfileFile))
+      LocalPath(startProfileFile, _T(XCSPROFILE));
+  }
 }
 
 bool

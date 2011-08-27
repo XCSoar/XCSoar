@@ -29,6 +29,8 @@ Version 6.2 - not yet released
   - nearest airspace distance info boxes
   - better font for large info box values
   - airspace warnings: show vertical distance if above/below
+  - profiles are not incremental anymore; initial support for editable
+    user profiles
 * map
   - redraw terrain only if needed
   - airspace rendering optimised
