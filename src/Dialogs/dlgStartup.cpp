@@ -104,7 +104,7 @@ dlgStartupShowModal()
 
   const TCHAR *path = dfe->GetPathFile();
   if (!string_is_empty(path)) {
-    _tcscpy(startProfileFile, path);
+    Profile::SetFiles(path);
 
     /* When a profile from a secondary data path is used, this path
        becomes the primary data path */
