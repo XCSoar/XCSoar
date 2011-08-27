@@ -160,16 +160,19 @@ public:
     return equals(value);
   }
 
-  void operator =(const TCHAR *new_value) {
-    return set(new_value);
+  StaticString<max> &operator =(const TCHAR *new_value) {
+    set(new_value);
+    return *this;
   }
 
-  void operator +=(const TCHAR *new_value) {
-    return append(new_value);
+  StaticString<max> &operator +=(const TCHAR *new_value) {
+    append(new_value);
+    return *this;
   }
 
-  void operator +=(TCHAR ch) {
-    return Append(ch);
+  StaticString<max> &operator +=(TCHAR ch) {
+    Append(ch);
+    return *this;
   }
 
   /**
