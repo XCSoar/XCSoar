@@ -62,6 +62,20 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(NULL)
 };
 
+static void
+SelectProfile(const TCHAR *path)
+{
+  if (string_is_empty(path))
+    return;
+
+  Profile::SetFiles(path);
+
+  /* When a profile from a secondary data path is used, this path
+     becomes the primary data path */
+  TCHAR temp[MAX_PATH];
+  SetPrimaryDataPath(DirName(path, temp));
+}
+
 bool
 dlgStartupShowModal()
 {
@@ -91,6 +105,8 @@ dlgStartupShowModal()
   wp->RefreshDisplay();
 
   if (dfe->GetNumFiles() <= 1) {
+    SelectProfile(dfe->GetPathFile());
+
     delete wf;
     delete logo;
     return true;
@@ -102,15 +118,7 @@ dlgStartupShowModal()
     return false;
   }
 
-  const TCHAR *path = dfe->GetPathFile();
-  if (!string_is_empty(path)) {
-    Profile::SetFiles(path);
-
-    /* When a profile from a secondary data path is used, this path
-       becomes the primary data path */
-    TCHAR temp[MAX_PATH];
-    SetPrimaryDataPath(DirName(path, temp));
-  }
+  SelectProfile(dfe->GetPathFile());
 
   delete wf;
   delete logo;
