@@ -170,7 +170,7 @@ DataFieldFileReader::GetPathFile(void) const
   if (!loaded)
     return postponed_value;
 
-  if (mValue > 0 && mValue <= files.size())
+  if (mValue > 0 && mValue < files.size())
     return files[mValue].mTextPathFile;
 
   return _T("");
@@ -232,7 +232,7 @@ DataFieldFileReader::Set(int Value)
   else
     postponed_value.clear();
 
-  if ((unsigned)Value <= files.size()) {
+  if ((unsigned)Value < files.size()) {
     mValue = Value;
     if (mOnDataAccess != NULL)
       mOnDataAccess(this, daChange);
