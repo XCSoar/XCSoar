@@ -264,7 +264,11 @@ MapTaskManager::remove_from_task(OrderedTask *task, const Waypoint &wp)
 
   int TPIndex = index_of_point_in_task(task, wp);
   if (TPIndex >= 0)
-    task->remove(TPIndex);
+    task->get_factory().remove(TPIndex);
+
+  // if finish was removed
+  if (TPIndex == (int)task->TaskSize())
+    task->get_factory().CheckAddFinish();
 
   if (TPIndex == -1)
     return UNMODIFIED;
