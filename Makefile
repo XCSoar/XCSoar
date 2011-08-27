@@ -134,6 +134,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/DeviceListDialog.cpp \
 	$(SRC)/Dialogs/PortMonitor.cpp \
 	$(SRC)/Dialogs/ManageCAI302Dialog.cpp \
+	$(SRC)/Dialogs/CAI302/UnitsEditor.cpp \
 	$(SRC)/Dialogs/ManageFlarmDialog.cpp \
 	$(SRC)/Dialogs/Vega/VegaParametersWidget.cpp \
 	$(SRC)/Dialogs/Vega/VegaConfigurationDialog.cpp \

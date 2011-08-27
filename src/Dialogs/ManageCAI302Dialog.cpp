@@ -24,13 +24,20 @@ Copyright_License {
 #include "Dialogs/ManageCAI302Dialog.hpp"
 #include "Dialogs/WidgetDialog.hpp"
 #include "Dialogs/Message.hpp"
+#include "CAI302/UnitsEditor.hpp"
 #include "Form/RowFormWidget.hpp"
 #include "Language/Language.hpp"
 #include "Operation/MessageOperationEnvironment.hpp"
 #include "Device/Driver/CAI302/Internal.hpp"
+#include "Device/Driver/CAI302/Protocol.hpp"
+#include "Util/Macros.hpp"
+#include "OS/ByteOrder.hpp"
+
+#include <vector>
 
 class ManageCAI302Widget : public RowFormWidget, private ActionListener {
   enum Controls {
+    Units,
     StartLogger,
     StopLogger,
     DeleteAllFlights,
@@ -54,16 +61,37 @@ private:
 void
 ManageCAI302Widget::Prepare(ContainerWindow &parent, const PixelRect &rc)
 {
+  AddButton(_("Units"), this, Units);
   AddButton(_("Start Logger"), this, StartLogger);
   AddButton(_("Stop Logger"), this, StopLogger);
   AddButton(_("Delete all flights"), this, DeleteAllFlights);
   AddButton(_("Reboot"), this, Reboot);
 }
 
+static void
+EditUnits(const DialogLook &look, CAI302Device &device)
+{
+  CAI302::Pilot data;
+
+  MessageOperationEnvironment env;
+  if (!device.ReadActivePilot(data, env))
+    return;
+
+  CAI302UnitsEditor widget(look, data);
+  if (!DefaultWidgetDialog(_("Units"), widget))
+    return;
+
+  device.WriteActivePilot(widget.GetData(), env);
+}
+
 void
 ManageCAI302Widget::OnAction(int id)
 {
   switch (id) {
+  case Units:
+    EditUnits(GetLook(), device);
+    break;
+
   case StartLogger:
     {
       MessageOperationEnvironment env;
