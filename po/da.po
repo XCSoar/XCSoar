@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-27 16:42+0200\n"
-"PO-Revision-Date: 2011-04-08 17:02+0000\n"
+"PO-Revision-Date: 2011-08-22 20:29+0000\n"
 "Last-Translator: Morten Jensen <Unknown>\n"
 "Language-Team: Danish <da@li.org>\n"
 "Language: da\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-04-09 07:04+0000\n"
-"X-Generator: Launchpad (build 12757)\n"
+"X-Launchpad-Export-Date: 2011-08-27 14:44+0000\n"
+"X-Generator: Launchpad (build 13794)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:532
 #: src/InputEventsActions.cpp:1466 src/Dialogs/dlgAnalysis.cpp:350
@@ -95,14 +95,12 @@ msgid "Stop Logger"
 msgstr "Stop logger"
 
 #: src/Logger/ExternalLogger.cpp:91
-#, fuzzy
 msgid "Declare task?"
-msgstr "Deklarere opgave"
+msgstr "Deklarere opgave?"
 
 #: src/Logger/ExternalLogger.cpp:94
-#, fuzzy
 msgid "Task declared!"
-msgstr "Opgave Deklarerede"
+msgstr "Opgave deklarerede!"
 
 #: src/Logger/ExternalLogger.cpp:98
 msgid ""
@@ -202,9 +200,8 @@ msgid "Finish Turnpoint"
 msgstr ""
 
 #: src/ExpandMacros.cpp:203 src/ExpandMacros.cpp:249
-#, fuzzy
 msgid "Next Startpoint"
-msgstr "Næste vendepunkt"
+msgstr ""
 
 #: src/ExpandMacros.cpp:209 src/ExpandMacros.cpp:255
 msgid "Start Turnpoint"
@@ -849,9 +846,9 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:314
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "AA max. distance "
-msgstr "Næste distance"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:315
 #, no-c-format
@@ -2209,9 +2206,8 @@ msgid "Map and InfoBoxes "
 msgstr ""
 
 #: src/Pages.cpp:199
-#, fuzzy
 msgid "Info Auto"
-msgstr "Auto"
+msgstr ""
 
 #: src/Pages.cpp:201
 msgid "Map and InfoBoxes (Auto)"
@@ -2678,9 +2674,8 @@ msgid "Airspeed"
 msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:136
-#, fuzzy
 msgid "Not connected"
-msgstr "Ingen forbindelse til logger"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:216 src/Dialogs/dlgConfiguration.cpp:99
 #: Data/Input/default.xci:728
@@ -3112,9 +3107,8 @@ msgid "Name"
 msgstr ""
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:241
-#, fuzzy
 msgid "Panel name"
-msgstr "Fuld"
+msgstr ""
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:387
 msgid "Content"
@@ -3557,9 +3551,8 @@ msgid "Use the current target waypoint as basis."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:243
-#, fuzzy
 msgid "Polar name"
-msgstr "Fuld"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:80
 #: src/Dialogs/dlgTaskHelpers.cpp:242
@@ -3758,9 +3751,8 @@ msgid "ft/min"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:63
-#, fuzzy
 msgid "Full name"
-msgstr "Fuld"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/WaypointDisplayConfigPanel.cpp:63
 msgid "The full name of each waypoint is displayed."
@@ -3908,9 +3900,8 @@ msgid "Calculator"
 msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:303 src/Dialogs/dlgTaskManager.cpp:331
-#, fuzzy
 msgid "Turn Points"
-msgstr "Næste vendepunkt"
+msgstr ""
 
 #: src/Dialogs/dlgTaskManager.cpp:312 src/Dialogs/dlgTaskManager.cpp:340
 msgid "Rules"
@@ -3921,9 +3912,8 @@ msgid "Task has been modified"
 msgstr ""
 
 #: src/Dialogs/pnlTaskManagerClose.cpp:45
-#, fuzzy
 msgid "Task unchanged"
-msgstr "Opgave Deklarerede"
+msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:100
 msgid "Clear all points?"
@@ -3934,9 +3924,8 @@ msgid "Task edit"
 msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:126
-#, fuzzy
 msgid "Add Turnpoint"
-msgstr "Næste vendepunkt"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:168
 msgid "Task not saved"
@@ -3975,9 +3964,8 @@ msgid "Create new task?"
 msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:304
-#, fuzzy
 msgid "Task New"
-msgstr "Opgave"
+msgstr ""
 
 #: src/Dialogs/pnlTaskCalculator.cpp:259
 msgid "Calculator excludes unsaved task changes!"
@@ -4508,9 +4496,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgWaypointDetails.xml:18
 #: Data/Dialogs/dlgWaypointDetails_L.xml:18
-#, fuzzy
 msgid "Bearing and Distance"
-msgstr "Næste distance"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid ""
@@ -4712,9 +4699,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:280
 #: Data/Dialogs/dlgConfiguration_L.xml:281
-#, fuzzy
 msgid "Auto wind"
-msgstr "Auto"
+msgstr ""
 
 #: Data/Dialogs/dlgConfigFonts.xml:3 Data/Dialogs/dlgConfigFonts_L.xml:3
 msgid "Font Configuration"
@@ -6636,9 +6622,8 @@ msgid "Finish height ref."
 msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:90 Data/Dialogs/dlgConfiguration_L.xml:90
-#, fuzzy
 msgid "Max. auto zoom distance"
-msgstr "Næste distance"
+msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid ""
@@ -6962,9 +6947,8 @@ msgid "Browse"
 msgstr ""
 
 #: Data/Dialogs/pnlTaskList.xml:6 Data/Dialogs/pnlTaskList_L.xml:10
-#, fuzzy
 msgid "New Task"
-msgstr "Opgave"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:730
 #: Data/Dialogs/dlgConfiguration_L.xml:734
@@ -8108,10 +8092,6 @@ msgid ""
 "METAR\n"
 "TAF"
 msgstr ""
-
-#, fuzzy
-#~ msgid "Declaring to %s"
-#~ msgstr "Deklarere opgave"
 
 #~ msgid "Declare Task?"
 #~ msgstr "Deklarere opgave?"
