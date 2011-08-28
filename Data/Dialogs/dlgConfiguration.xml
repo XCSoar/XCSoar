@@ -5,7 +5,7 @@
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-72" Width="40" Height="35" OnClick="OnPrevClicked" />
   <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="80" Height="35" />
 
-  <CheckBox Name="Expert" Caption="Expert" X="95" Y="-37" Width="65" Height="35" OnClick="OnUserLevel"/>
+  <CheckBox Name="Expert" Caption="Expert" X="95" Y="-30" Width="65" Height="20" OnClick="OnUserLevel"/>
 
   <Button Name="cmdFonts" Caption="Fonts" X="95" Y="-72" Width="80" Height="35" />
   <Button Name="cmdWaypoints" Caption="Waypts." X="95" Y="-72" Width="80" Height="35" />
