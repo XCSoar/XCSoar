@@ -253,6 +253,28 @@ BuildIGCFileName(TCHAR *name, const IGCHeader &header, const BrokenDate &date)
             header.flight);
 }
 
+/**
+ *
+ * @param list list of flights from the logger
+ * @param flight the flight
+ * @return 1-99 Flight number of the day per section 2.5 of the
+ * FAI IGC tech gnss spec Appendix 1
+ * (spec says 35 flights - this handles up to 99 flights per day)
+ */
+static unsigned
+GetFlightNumber(RecordedFlightList &flight_list, const RecordedFlightInfo &theFlight)
+{
+  unsigned FlightNumber = 1;
+  for (unsigned i = 0; i < flight_list.size(); ++i) {
+    const RecordedFlightInfo &flight = flight_list[i];
+    if (theFlight.date == flight.date &&
+        (theFlight.start_time.GetSecondOfDay() >
+         flight.start_time.GetSecondOfDay()))
+      FlightNumber++;
+  }
+  return FlightNumber;
+}
+
 void
 ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
 {
@@ -302,7 +324,8 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
   IGCHeader header;
   BrokenDate date;
   ReadIGCMetaData(path, header, date);
-
+  if (header.flight == 0)
+    header.flight = GetFlightNumber(flight_list, flight_list[i]);
   TCHAR name[64];
   TCHAR final_path[MAX_PATH];
   do {
