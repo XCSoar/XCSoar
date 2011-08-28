@@ -328,10 +328,11 @@ ExternalLogger::DownloadFlightFrom(DeviceDescriptor &device)
     header.flight = GetFlightNumber(flight_list, flight_list[i]);
   TCHAR name[64];
   TCHAR final_path[MAX_PATH];
-  do {
-    BuildIGCFileName(name, header, date);
-    LocalPath(final_path, _T("logs"), name);
-  } while (File::Exists(final_path) && ++header.flight < 100);
+  BuildIGCFileName(name, header, date);
+  LocalPath(final_path, _T("logs"), name);
+
+  if (File::Exists(final_path))
+    File::Delete(final_path);
 
   File::Rename(path, final_path);
 }
