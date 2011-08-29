@@ -84,4 +84,15 @@ Copyright_License {
 
 #endif /* ! GCC_UNUSED >= 40300 */
 
+#ifndef __cplusplus
+/* plain C99 has "restrict" */
+#define gcc_restrict restrict
+#elif GCC_VERSION >= 30000
+/* "__restrict__" is a GCC extension for C++ */
+#define gcc_restrict __restrict__
+#else
+/* disable it on other compilers */
+#define gcc_restrict
+#endif
+
 #endif

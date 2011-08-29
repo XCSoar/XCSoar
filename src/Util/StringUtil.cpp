@@ -56,7 +56,8 @@ string_after_prefix_ci(const TCHAR *string, const TCHAR *prefix)
 }
 
 TCHAR *
-CopyString(TCHAR *dest, const TCHAR *src, size_t size)
+CopyString(TCHAR *gcc_restrict dest, const TCHAR *gcc_restrict src,
+           size_t size)
 {
   size_t length = _tcslen(src);
   if (length >= size)
@@ -110,7 +111,8 @@ TrimRight(char *p)
 #endif
 
 TCHAR *
-normalize_search_string(TCHAR *dest, const TCHAR *src)
+normalize_search_string(TCHAR *gcc_restrict dest,
+                        const TCHAR *gcc_restrict src)
 {
   TCHAR *retval = dest;
 

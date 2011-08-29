@@ -89,7 +89,8 @@ FindNonASCIIOrZero(const char *p)
 }
 
 const char *
-Latin1ToUTF8(const char *src, char *buffer, size_t buffer_size)
+Latin1ToUTF8(const char *gcc_restrict src, char *gcc_restrict buffer,
+             size_t buffer_size)
 {
   const char *p = FindNonASCIIOrZero(src);
   if (*p == 0)

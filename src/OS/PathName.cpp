@@ -53,7 +53,7 @@ BaseName(const TCHAR *path)
 }
 
 const TCHAR *
-DirName(const TCHAR *path, TCHAR *buffer)
+DirName(const TCHAR *gcc_restrict path, TCHAR *gcc_restrict buffer)
 {
   const TCHAR *p = LastSeparator(path);
   if (p == NULL || p == path)

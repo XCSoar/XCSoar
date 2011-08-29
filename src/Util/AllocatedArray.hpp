@@ -30,6 +30,8 @@
 #ifndef XCSOAR_ALLOCATED_ARRAY_HPP
 #define XCSOAR_ALLOCATED_ARRAY_HPP
 
+#include "Compiler.h"
+
 #include <assert.h>
 #include <algorithm>
 
@@ -40,7 +42,7 @@ template<class T>
 class AllocatedArray {
 protected:
   unsigned the_size;
-  T *data;
+  T *gcc_restrict data;
 
 public:
   typedef T *iterator;

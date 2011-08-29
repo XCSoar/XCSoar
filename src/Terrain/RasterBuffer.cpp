@@ -114,7 +114,7 @@ public:
 
 void
 RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
-                                 short *buffer, unsigned size,
+                                 short *gcc_restrict buffer, unsigned size,
                                  bool interpolate) const
 {
   assert(ax < get_width() << 8);
@@ -145,10 +145,10 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   } else if (gcc_likely(dx > 0)) {
     /* no interpolation needed, forward scan */
 
-    const short *src = get_data_at(ax >> 8, y >> 8);
+    const short *gcc_restrict src = get_data_at(ax >> 8, y >> 8);
 
     PixelIterator iterator(dx >> 8, size);
-    short *end = buffer + size;
+    short *gcc_restrict end = buffer + size;
     while (true) {
       *buffer++ = *src;
       if (buffer >= end)
@@ -158,7 +158,7 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
   } else {
     /* no interpolation needed */
 
-    const short *src = get_data_at(0, y >> 8);
+    const short *gcc_restrict src = get_data_at(0, y >> 8);
 
     --size;
     for (int i = 0; (unsigned)i <= size; ++i) {
@@ -171,7 +171,8 @@ RasterBuffer::ScanHorizontalLine(unsigned ax, unsigned bx, unsigned y,
 
 void
 RasterBuffer::ScanLine(unsigned ax, unsigned ay, unsigned bx, unsigned by,
-                       short *buffer, unsigned size, bool interpolate) const
+                       short *gcc_restrict buffer,
+                       unsigned size, bool interpolate) const
 {
   assert(ax < get_width() << 8);
   assert(ay < get_height() << 8);

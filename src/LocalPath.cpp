@@ -67,7 +67,7 @@ Copyright_License {
 /**
  * The absolute location of the XCSoarData directory.
  */
-static TCHAR *data_path;
+static TCHAR *gcc_restrict data_path;
 static size_t data_path_length;
 
 const TCHAR *
@@ -89,7 +89,7 @@ SetPrimaryDataPath(const TCHAR *path)
 }
 
 void
-LocalPath(TCHAR *buffer, const TCHAR *file)
+LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict file)
 {
   assert(data_path != NULL);
 
@@ -99,7 +99,8 @@ LocalPath(TCHAR *buffer, const TCHAR *file)
 }
 
 TCHAR *
-LocalPath(TCHAR *buffer, const TCHAR *subdir, const TCHAR *name)
+LocalPath(TCHAR *gcc_restrict buffer, const TCHAR *gcc_restrict subdir,
+          const TCHAR *gcc_restrict name)
 {
   assert(data_path != NULL);
   assert(subdir != NULL);
@@ -268,7 +269,7 @@ fgrep(const char *fname, const char *string)
  * @return a buffer which may be used to build the path
  */
 static const TCHAR *
-GetHomeDataPath(TCHAR *buffer, bool create=false)
+GetHomeDataPath(TCHAR *gcc_restrict buffer, bool create=false)
 {
   if (is_android())
     /* hard-coded path for Android */
