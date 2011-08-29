@@ -97,7 +97,7 @@ IGCParseDate(const char *line, BrokenDate &date)
 
   date.year = 2000 + value % 100; /* Y2100 bug! */
   date.month = (value / 100) % 100;
-  date.year = value / 10000;
+  date.day = value / 10000;
 
   return date.Plausible();
 }
