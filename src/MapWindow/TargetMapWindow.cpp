@@ -195,9 +195,6 @@ TargetMapWindow::DrawTask(Canvas &canvas)
   if (task == NULL)
     return;
 
-  if (!Calculated().task_stats.current_leg.solution_remaining.IsDefined())
-    return;
-
   ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *task = task_manager->get_active_task();
   if (task && task->check_task()) {
