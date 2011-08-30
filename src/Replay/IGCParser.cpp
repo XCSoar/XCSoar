@@ -125,11 +125,11 @@ IGCParseFix(const char *buffer, IGCFix &fix)
 
   fixed Latitude = fixed(DegLat) + fixed(MinLat) / 60000;
   if (NoS == 'S')
-    Latitude *= -1;
+    Latitude = -Latitude;
 
   fixed Longitude = fixed(DegLon) + fixed(MinLon) / 60000;
   if (EoW == 'W')
-    Longitude *= -1;
+    Longitude = -Longitude;
 
   fix.location.Latitude = Angle::degrees(Latitude);
   fix.location.Longitude = Angle::degrees(Longitude);
