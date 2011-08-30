@@ -157,8 +157,8 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
   if (m_proj.GeoToScreenDistance(seg.parametric(fixed_zero).
                                     distance(seg.parametric(fixed_one)))>2) {
     
-    RasterPoint screen[20];
-    for (unsigned i = 0; i < 20; ++i) {
+    RasterPoint screen[21];
+    for (unsigned i = 0; i < 21; ++i) {
       fixed t = i * fixed_twentieth;
       GeoPoint ga = seg.parametric(t);
       screen[i] = m_proj.GeoToScreen(ga);
@@ -166,7 +166,7 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
 
     canvas.select(task_look.isoline_pen);
     canvas.background_transparent();
-    canvas.polyline(screen, 20);
+    canvas.polyline(screen, 21);
     canvas.background_opaque();
   }
 }
