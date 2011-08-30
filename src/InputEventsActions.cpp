@@ -1421,12 +1421,12 @@ void
 InputEvents::eventAdjustForecastTemperature(const TCHAR *misc)
 {
   if (_tcscmp(misc, _T("+")) == 0)
-    CuSonde::adjustForecastTemperature(1.0);
+    CuSonde::adjustForecastTemperature(fixed_one);
   else if (_tcscmp(misc, _T("-")) == 0)
-    CuSonde::adjustForecastTemperature(-1.0);
+    CuSonde::adjustForecastTemperature(fixed_minus_one);
   else if (_tcscmp(misc, _T("show")) == 0) {
     TCHAR Temp[100];
-    _stprintf(Temp, _T("%f"), CuSonde::maxGroundTemperature);
+    _stprintf(Temp, _T("%f"), (double)CuSonde::maxGroundTemperature);
     Message::AddMessage(_("Forecast temperature"), Temp);
   }
 }

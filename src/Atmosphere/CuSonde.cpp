@@ -38,18 +38,18 @@ Copyright_License {
  * @see http://en.wikipedia.org/wiki/Lapse_rate#Dry_adiabatic_lapse_rate
  * @see http://pds-atmospheres.nmsu.edu/education_and_outreach/encyclopedia/adiabatic_lapse_rate.htm
  */
-#define DALR -0.00974
+#define DALR fixed(-0.00974)
 
 /** ThermalIndex threshold in degrees C */
-#define TITHRESHOLD -1.6
+#define TITHRESHOLD fixed(-1.6)
 
 using std::max;
 
-unsigned short CuSonde::last_level=0;
-double CuSonde::thermalHeight = 0;
-double CuSonde::cloudBase = 0;
-double CuSonde::hGround = 0;
-double CuSonde::maxGroundTemperature = 25.0;
+unsigned short CuSonde::last_level=fixed_zero;
+fixed CuSonde::thermalHeight = fixed_zero;
+fixed CuSonde::cloudBase = fixed_zero;
+fixed CuSonde::hGround = fixed_zero;
+fixed CuSonde::maxGroundTemperature = fixed(25);
 CuSonde::Level CuSonde::cslevels[NUM_LEVELS];
 
 // TODO accuracy: recalculate thermal index etc if maxGroundTemp changes
@@ -59,15 +59,15 @@ CuSonde::Level CuSonde::cslevels[NUM_LEVELS];
  * @param val New predicted maximum ground temperature in degrees C
  */
 void
-CuSonde::setForecastTemperature(double val)
+CuSonde::setForecastTemperature(fixed val)
 {
   maxGroundTemperature = val;
 
   unsigned zlevel = 0;
 
   // set these to invalid, so old values must be overwritten
-  cloudBase = -1;
-  thermalHeight = -1;
+  cloudBase = fixed_minus_one;
+  thermalHeight = fixed_minus_one;
 
   // iterate through all levels
   for (unsigned level = 0; level < NUM_LEVELS; level++) {
@@ -97,7 +97,7 @@ CuSonde::setForecastTemperature(double val)
  * @param delta Degrees C to be added to the maximum ground temperature
  */
 void
-CuSonde::adjustForecastTemperature(double delta)
+CuSonde::adjustForecastTemperature(fixed delta)
 {
   setForecastTemperature(maxGroundTemperature + delta);
 }
@@ -182,27 +182,27 @@ CuSonde::findThermalHeight(unsigned short level)
     return;
 
   // Delta of ThermalIndex
-  double dti = cslevels[level + 1].thermalIndex - cslevels[level].thermalIndex;
+  fixed dti = cslevels[level + 1].thermalIndex - cslevels[level].thermalIndex;
 
   // Reset estimated ThermalHeight
-  cslevels[level].thermalHeight = -1;
+  cslevels[level].thermalHeight = fixed_minus_one;
 
-  if (fabs(dti) < 1.0e-3)
+  if (fabs(dti) < fixed(0.001))
     return;
 
   // ti = dlevel * dti + ti0;
   // (-1.6 - ti0)/dti = dlevel;
 
-  double dlevel = (TITHRESHOLD - cslevels[level].thermalIndex) / dti;
-  double dthermalheight = (level + dlevel) * HEIGHT_STEP;
+  fixed dlevel = (TITHRESHOLD - cslevels[level].thermalIndex) / dti;
+  fixed dthermalheight = (fixed(level) + dlevel) * HEIGHT_STEP;
 
-  if ((dlevel > 1.0)
+  if ((dlevel > fixed_one)
       && (level + 2u < NUM_LEVELS)
       && (cslevels[level + 2].nmeasurements > 0))
       // estimated point should be in next level.
       return;
 
-  if (dlevel > 0.0) {
+  if (positive(dlevel)) {
     // set the level thermal height to the calculated value
     cslevels[level].thermalHeight = dthermalheight;
 
@@ -210,7 +210,7 @@ CuSonde::findThermalHeight(unsigned short level)
     thermalHeight = dthermalheight;
 
 #ifdef DEBUG_CUSONDE
-    LogDebug(_T("%g # thermal height \r\n"), thermalHeight);
+    LogDebug(_T("%g # thermal height \r\n"), (double)thermalHeight);
 #endif
   }
 }
@@ -228,28 +228,28 @@ CuSonde::findCloudBase(unsigned short level)
   if (cslevels[level].nmeasurements == 0)
     return;
 
-  double dti = (cslevels[level + 1].tempDry - cslevels[level + 1].dewpoint)
+  fixed dti = (cslevels[level + 1].tempDry - cslevels[level + 1].dewpoint)
                - (cslevels[level].tempDry - cslevels[level].dewpoint);
 
   // Reset estimated CloudBase
-  cslevels[level].cloudBase = -1;
+  cslevels[level].cloudBase = fixed_minus_one;
 
-  if (fabs(dti) < 1.0e-3)
+  if (fabs(dti) < fixed(0.001))
     return;
 
   // ti = dlevel * dti + ti0;
   // (-3 - ti0)/dti = dlevel;
 
-  double dlevel = -(cslevels[level].tempDry - cslevels[level].dewpoint) / dti;
-  double dcloudbase = (level + dlevel) * HEIGHT_STEP;
+  fixed dlevel = -(cslevels[level].tempDry - cslevels[level].dewpoint) / dti;
+  fixed dcloudbase = (fixed(level) + dlevel) * HEIGHT_STEP;
 
-  if ((dlevel > 1.0)
+  if ((dlevel > fixed_one)
       && (level + 2u < NUM_LEVELS)
       && (cslevels[level + 2].nmeasurements > 0))
     // estimated point should be in next level.
     return;
 
-  if (dlevel > 0.0) {
+  if (positive(dlevel)) {
     // set the level cloudbase to the calculated value
     cslevels[level].cloudBase = dcloudbase;
 
@@ -257,7 +257,7 @@ CuSonde::findCloudBase(unsigned short level)
     cloudBase = dcloudbase;
 
 #ifdef DEBUG_CUSONDE
-    LogDebug(_T("%g # cloud base \r\n"), cloudBase);
+    LogDebug(_T("%g # cloud base \r\n"), (double)cloudBase);
 #endif
   }
 }
@@ -268,12 +268,12 @@ CuSonde::findCloudBase(unsigned short level)
  * @param t Temperature in degrees C
  */
 void
-CuSonde::Level::updateTemps(double rh, double t)
+CuSonde::Level::updateTemps(fixed rh, fixed t)
 {
-  double logEx, adewpoint;
+  fixed logEx, adewpoint;
 
-  logEx = 0.66077 + 7.5 * t / (237.3 + t) + (log10(rh) - 2);
-  adewpoint = (logEx - 0.66077) * 237.3 / (0.66077 + 7.5 - logEx);
+  logEx = fixed(0.66077) + fixed(7.5) * t / (fixed(237.3) + t) + (fixed(log10(rh)) - fixed_two);
+  adewpoint = (logEx - fixed(0.66077)) * fixed(237.3) / (fixed(0.66077) + fixed(7.5) - logEx);
 
   // update statistics
   if (0) { // averaging method disabled for now
@@ -304,7 +304,7 @@ CuSonde::Level::updateTemps(double rh, double t)
 void
 CuSonde::Level::updateThermalIndex(unsigned short level, bool newdata)
 {
-  double hlevel = level * HEIGHT_STEP;
+  fixed hlevel = fixed(level * HEIGHT_STEP);
 
   // Calculate the dry temperature at altitude = hlevel
   tempDry = DALR * (hlevel - CuSonde::hGround) + CuSonde::maxGroundTemperature;
@@ -315,7 +315,8 @@ CuSonde::Level::updateThermalIndex(unsigned short level, bool newdata)
 #ifdef DEBUG_CUSONDE
   if (newdata)
     LogDebug(_T("%g %g %g %g # temp measurement \r\n"),
-             hlevel, airTemp, dewpoint, thermalIndex);
+             (double)hlevel, (double)airTemp, (double)dewpoint, 
+             (double)thermalIndex);
 #endif
 }
 

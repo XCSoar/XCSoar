@@ -71,8 +71,7 @@ void
 InfoBoxContentTemperatureForecast::Update(InfoBoxWindow &infobox)
 {
   // Set Value
-  SetValueFromFixed(infobox, _T("%2.1f")_T(DEG),
-                    fixed(CuSonde::maxGroundTemperature));
+  SetValueFromFixed(infobox, _T("%2.1f")_T(DEG), CuSonde::maxGroundTemperature);
 }
 
 bool
@@ -80,11 +79,11 @@ InfoBoxContentTemperatureForecast::HandleKey(const InfoBoxKeyCodes keycode)
 {
   switch(keycode) {
   case ibkUp:
-    CuSonde::adjustForecastTemperature(0.5);
+    CuSonde::adjustForecastTemperature(fixed_half);
     return true;
 
   case ibkDown:
-    CuSonde::adjustForecastTemperature(-0.5);
+    CuSonde::adjustForecastTemperature(-fixed_half);
     return true;
 
   default:
