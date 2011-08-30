@@ -272,8 +272,9 @@ CuSonde::Level::updateTemps(fixed rh, fixed t)
 {
   fixed logEx, adewpoint;
 
-  logEx = fixed(0.66077) + fixed(7.5) * t / (fixed(237.3) + t) + (fixed(log10(rh)) - fixed_two);
-  adewpoint = (logEx - fixed(0.66077)) * fixed(237.3) / (fixed(0.66077) + fixed(7.5) - logEx);
+  logEx = fixed(7.5) * t / (fixed(237.3) + t) +
+          (fixed(log10((double)rh)) - fixed_two);
+  adewpoint = logEx * fixed(237.3) / (fixed(7.5) - logEx);
 
   // update statistics
   if (nmeasurements == 0) {
