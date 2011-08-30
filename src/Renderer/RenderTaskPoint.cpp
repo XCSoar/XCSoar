@@ -148,19 +148,19 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
     return;
 
   AATIsolineSegment seg(tp, task_projection);
-  if (!seg.valid()) {
+  if (!seg.IsValid()) {
     return;
   }
 
   #define fixed_twentieth fixed(1.0 / 20.0)
   
-  if (m_proj.GeoToScreenDistance(seg.parametric(fixed_zero).
-                                    distance(seg.parametric(fixed_one)))>2) {
+  if (m_proj.GeoToScreenDistance(seg.Parametric(fixed_zero).
+                                    distance(seg.Parametric(fixed_one)))>2) {
     
     RasterPoint screen[21];
     for (unsigned i = 0; i < 21; ++i) {
       fixed t = i * fixed_twentieth;
-      GeoPoint ga = seg.parametric(t);
+      GeoPoint ga = seg.Parametric(t);
       screen[i] = m_proj.GeoToScreen(ga);
     }
 

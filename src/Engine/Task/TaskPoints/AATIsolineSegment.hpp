@@ -55,7 +55,7 @@ public:
    *
    * @return True if segment is valid
    */
-  bool valid() const;
+  bool IsValid() const;
 
   /**
    * Parametric representation of points on the isoline segment.
@@ -64,7 +64,7 @@ public:
    *
    * @return Location of point on isoline segment
    */
-  GeoPoint parametric(const fixed t) const;
+  GeoPoint Parametric(const fixed t) const;
 };
 
 #endif

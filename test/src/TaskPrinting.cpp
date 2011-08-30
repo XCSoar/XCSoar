@@ -64,9 +64,9 @@ PrintHelper::aatpoint_print(std::ostream& f,
         tp.get_location_target());
 
       bool filter_backtrack = true;
-      if (seg.valid()) {
+      if (seg.IsValid()) {
         for (double t = 0.0; t<=1.0; t+= 1.0/20) {
-          GeoPoint ga = seg.parametric(fixed(t));
+          GeoPoint ga = seg.Parametric(fixed(t));
           fixed dthis = tp.get_previous()->GetLocationRemaining().distance(ga);
           if (!filter_backtrack 
               || (dthis>=tdist)
@@ -76,7 +76,7 @@ PrintHelper::aatpoint_print(std::ostream& f,
           }
         }
       } else {
-        GeoPoint ga = seg.parametric(fixed_zero);
+        GeoPoint ga = seg.Parametric(fixed_zero);
         f << ga.Longitude << " " << ga.Latitude << "\n";
       }
       f << "\n";

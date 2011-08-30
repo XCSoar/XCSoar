@@ -42,13 +42,13 @@ AATIsolineSegment::AATIsolineSegment(const AATPoint &ap,
 }
 
 bool
-AATIsolineSegment::valid() const
+AATIsolineSegment::IsValid() const
 {
   return t_up > t_down + fixed(TOLERANCE_ISOLINE_CROSSING) * 2;
 }
 
 GeoPoint
-AATIsolineSegment::parametric(const fixed t) const
+AATIsolineSegment::Parametric(const fixed t) const
 {
   const fixed r = t * (t_up - t_down) + t_down;
   return ell.parametric(r);
