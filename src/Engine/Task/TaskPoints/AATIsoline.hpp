@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef AATISOLINE_HPP
 #define AATISOLINE_HPP
 
@@ -36,14 +37,15 @@
 class AATIsoline
 {
 protected:
-  const GeoEllipse ell; /**< ellipse representing the isoline segment */
+  /** ellipse representing the isoline segment */
+  const GeoEllipse ell;
 
 public:
-    /** 
-     * Constructor.
-     * 
-     * @param ap The AAT point for which to calculate the Isoline
-     */
+  /**
+   * Constructor.
+   *
+   * @param ap The AAT point for which to calculate the Isoline
+   */
   AATIsoline(const AATPoint &ap, const TaskProjection &projection);
 };
 

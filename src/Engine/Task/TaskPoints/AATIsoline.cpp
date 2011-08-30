@@ -19,13 +19,10 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "AATIsoline.hpp"
 
-AATIsoline::AATIsoline(const AATPoint& ap, const TaskProjection &projection):
-  ell(ap.get_previous()->GetLocationRemaining(),
-      ap.get_next()->GetLocationRemaining(),
-      ap.get_location_target(),
-      projection)
-{
-}
-
+AATIsoline::AATIsoline(const AATPoint& ap, const TaskProjection &projection)
+  :ell(ap.get_previous()->GetLocationRemaining(),
+       ap.get_next()->GetLocationRemaining(),
+       ap.get_location_target(), projection) {}
