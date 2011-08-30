@@ -112,6 +112,12 @@ struct BrokenTime {
       second == other.second;
   }
 
+  bool operator>(const BrokenTime &other) const {
+    return hour > other.hour ||
+      (hour == other.hour && (minute > other.minute ||
+                              (minute == other.minute && second > other.second)));
+  }
+
   /**
    * Does this object contain plausible values?
    */

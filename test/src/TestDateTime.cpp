@@ -77,6 +77,18 @@ TestTime()
   ok1(!(BrokenTime(12, 15, 30) == BrokenTime(12, 16, 30)));
   ok1(!(BrokenTime(12, 15, 30) == BrokenTime(13, 15, 30)));
 
+  ok1(!(BrokenTime(12, 15, 30) > BrokenTime(12, 15, 30)));
+  ok1(!(BrokenTime(12, 15, 30) > BrokenTime(12, 15, 31)));
+  ok1(BrokenTime(12, 15, 31) > BrokenTime(12, 15, 30));
+
+  ok1(!(BrokenTime(12, 15, 30) > BrokenTime(12, 15, 30)));
+  ok1(!(BrokenTime(12, 15, 30) > BrokenTime(2010, 16, 30)));
+  ok1(BrokenTime(12, 16, 30) > BrokenTime(12, 15, 30));
+
+  ok1(!(BrokenTime(12, 15, 30) > BrokenTime(12, 15, 30)));
+  ok1(!(BrokenTime(12, 15, 30) > BrokenTime(13, 15, 30)));
+  ok1(BrokenTime(13, 15, 30) > BrokenTime(12, 15, 30));
+
   ok1(BrokenTime(23, 59, 59).Plausible());
   ok1(BrokenTime(0, 0, 0).Plausible());
   ok1(!BrokenTime(24, 0, 0).Plausible());
@@ -121,7 +133,7 @@ TestDateTime()
 
 int main(int argc, char **argv)
 {
-  plan_tests(67);
+  plan_tests(76);
 
   TestDate();
   TestTime();
