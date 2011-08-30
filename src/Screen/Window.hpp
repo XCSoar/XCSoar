@@ -80,6 +80,7 @@ public:
      ex_style(0), double_clicks(false), custom_painting(false) {}
 #endif /* USE_GDI */
 
+  /** The window is initially not visible. */
   void hide() {
 #ifndef USE_GDI
     visible = false;
@@ -88,6 +89,10 @@ public:
 #endif
   }
 
+  /**
+   * The window is initially disabled.
+   * A disabled window cannot receive input from the user.
+   */
   void disable() {
 #ifndef USE_GDI
     enabled = false;
@@ -96,6 +101,11 @@ public:
 #endif
   }
 
+  /**
+   * The window is a control that can receive the keyboard focus when the
+   * user presses the TAB key. Pressing the TAB key changes the keyboard
+   * focus to the next control with the WS_TABSTOP style.
+   */
   void tab_stop() {
 #ifndef USE_GDI
     m_tab_stop = true;
@@ -104,6 +114,11 @@ public:
 #endif
   }
 
+  /**
+   * If the search for the next control with the WS_TABSTOP style encounters
+   * a window with the WS_EX_CONTROLPARENT style, the system recursively
+   * searches the window's children.
+   */
   void control_parent() {
 #ifndef USE_GDI
     m_control_parent = true;
@@ -112,12 +127,14 @@ public:
 #endif
   }
 
+  /** The window has a thin-line border. */
   void border() {
 #ifdef USE_GDI
     style |= WS_BORDER;
 #endif
   }
 
+  /** The window has a sunken 3D border. */
   void sunken_edge() {
     border();
 #ifdef USE_GDI
@@ -125,6 +142,7 @@ public:
 #endif
   }
 
+  /** The window has a vertical scroll bar. */
   void vscroll() {
 #ifdef USE_GDI
     style |= WS_VSCROLL;
