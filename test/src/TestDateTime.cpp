@@ -25,14 +25,107 @@
 
 #include <stdio.h>
 
-int main(int argc, char **argv)
+static void
+TestDate()
 {
-  plan_tests(4);
+  ok1(BrokenDate(2010, 1, 2).year == 2010);
+  ok1(BrokenDate(2010, 1, 2).month == 1);
+  ok1(BrokenDate(2010, 1, 2).day == 2);
 
+  ok1(BrokenDate(2010, 1, 1) == BrokenDate(2010, 1, 1));
+  ok1(!(BrokenDate(2010, 1, 1) == BrokenDate(2010, 1, 2)));
+  ok1(!(BrokenDate(2010, 1, 1) == BrokenDate(2010, 2, 1)));
+  ok1(!(BrokenDate(2010, 1, 1) == BrokenDate(2011, 1, 1)));
+
+  ok1(!(BrokenDate(2010, 1, 1) > BrokenDate(2010, 1, 1)));
+  ok1(!(BrokenDate(2010, 1, 1) > BrokenDate(2010, 1, 2)));
+  ok1(BrokenDate(2010, 1, 2) > BrokenDate(2010, 1, 1));
+
+  ok1(!(BrokenDate(2010, 1, 1) > BrokenDate(2010, 1, 1)));
+  ok1(!(BrokenDate(2010, 1, 1) > BrokenDate(2010, 1, 2)));
+  ok1(BrokenDate(2010, 2, 1) > BrokenDate(2010, 1, 1));
+
+  ok1(!(BrokenDate(2010, 1, 1) > BrokenDate(2010, 1, 1)));
+  ok1(!(BrokenDate(2010, 1, 1) > BrokenDate(2011, 1, 1)));
+  ok1(BrokenDate(2011, 1, 1) > BrokenDate(2010, 1, 1));
+
+  ok1(BrokenDate(2011, 1, 1).Plausible());
+  ok1(BrokenDate(2011, 12, 31).Plausible());
+  ok1(BrokenDate(2500, 1, 1).Plausible());
+  ok1(BrokenDate(1800, 1, 1).Plausible());
+  ok1(!BrokenDate(2501, 1, 1).Plausible());
+  ok1(!BrokenDate(1799, 1, 1).Plausible());
+  ok1(!BrokenDate(2011, 1, 0).Plausible());
+  ok1(!BrokenDate(2011, 0, 1).Plausible());
+  ok1(!BrokenDate(2011, 13, 1).Plausible());
+  ok1(!BrokenDate(2011, 1, 32).Plausible());
+}
+
+static void
+TestTime()
+{
+  ok1(BrokenTime(12, 15).hour == 12);
+  ok1(BrokenTime(12, 15).minute == 15);
+  ok1(BrokenTime(12, 15).second == 0);
+
+  ok1(BrokenTime(12, 15, 30).hour == 12);
+  ok1(BrokenTime(12, 15, 30).minute == 15);
+  ok1(BrokenTime(12, 15, 30).second == 30);
+
+  ok1(BrokenTime(12, 15, 30) == BrokenTime(12, 15, 30));
+  ok1(!(BrokenTime(12, 15, 30) == BrokenTime(12, 15, 31)));
+  ok1(!(BrokenTime(12, 15, 30) == BrokenTime(12, 16, 30)));
+  ok1(!(BrokenTime(12, 15, 30) == BrokenTime(13, 15, 30)));
+
+  ok1(BrokenTime(23, 59, 59).Plausible());
+  ok1(BrokenTime(0, 0, 0).Plausible());
+  ok1(!BrokenTime(24, 0, 0).Plausible());
+  ok1(!BrokenTime(12, 60, 1).Plausible());
+  ok1(!BrokenTime(12, 15, 60).Plausible());
+
+  ok1(BrokenTime(12, 15, 30).GetSecondOfDay() == 44130);
+  ok1(BrokenTime::FromSecondOfDay(44130) == BrokenTime(12, 15, 30));
+  ok1(BrokenTime::FromSecondOfDayChecked(130530) == BrokenTime(12, 15, 30));
+}
+
+static void
+TestDateTime()
+{
+  ok1(BrokenDateTime(2010, 1, 2).year == 2010);
+  ok1(BrokenDateTime(2010, 1, 2).month == 1);
+  ok1(BrokenDateTime(2010, 1, 2).day == 2);
+  ok1(BrokenDateTime(2010, 1, 2).hour == 0);
+  ok1(BrokenDateTime(2010, 1, 2).minute == 0);
+  ok1(BrokenDateTime(2010, 1, 2).second == 0);
+
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15).year == 2010);
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15).month == 1);
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15).day == 2);
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15).hour == 12);
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15).minute == 15);
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15).second == 0);
+
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15, 30).year == 2010);
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15, 30).month == 1);
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15, 30).day == 2);
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15, 30).hour == 12);
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15, 30).minute == 15);
+  ok1(BrokenDateTime(2010, 1, 2, 12, 15, 30).second == 30);
+
+  ok1(BrokenDateTime(2010, 2, 28, 23, 0, 0) == BrokenDateTime(2010, 2, 28, 23, 0, 0));
   ok1(BrokenDateTime(2010, 2, 28, 23, 0, 0) + 3600 == BrokenDateTime(2010, 3, 1));
   ok1(BrokenDateTime(2010, 2, 28, 23, 59, 59) + 1 == BrokenDateTime(2010, 3, 1));
   ok1(BrokenDateTime(2010, 2, 28, 23, 59, 59) + 2 == BrokenDateTime(2010, 3, 1, 0, 0, 1));
   ok1(BrokenDateTime(2010, 12, 31, 23, 59, 59) + 1 == BrokenDateTime(2011, 1, 1));
+}
+
+int main(int argc, char **argv)
+{
+  plan_tests(67);
+
+  TestDate();
+  TestTime();
+  TestDateTime();
 
   return exit_status();
 }
