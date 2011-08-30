@@ -34,19 +34,23 @@ protected:
   TCHAR *start, *data, *end;
 
 public:
+  /** Constructor. Duplicates the const input to be able to tokenize it. */
   METARLine(const TCHAR *line)
     :start(_tcsdup(line)), data(start), end(start + _tcslen(line))
   {
+    // Trim possible = character at the end (End-of-METAR character)
     if (start != end && *(end - 1) == _T('=')) {
       end--;
       *end = _T('\0');
     }
   }
 
+  /** Destructor. Frees the duplicated input string memory. */
   ~METARLine() {
     free(start);
   }
 
+  /** Returns the next token or NULL if no token is left. (Seperator is ' ') */
   const TCHAR *Next() {
     if (data >= end)
       return NULL;
@@ -65,6 +69,7 @@ public:
   }
 };
 
+/** Detects a token with exactly 4 letters */
 static bool
 DetectICAOCodeToken(const TCHAR *token)
 {
@@ -82,6 +87,7 @@ DetectICAOCodeToken(const TCHAR *token)
   return true;
 }
 
+/** Detects a token with exactly 6 digits and a Z (Zulu = UTC) at the end */
 static bool
 DetectTimeCodeToken(const TCHAR *token)
 {
@@ -110,6 +116,10 @@ ParseTimeCode(const TCHAR *token, ParsedMETAR &parsed)
   return true;
 }
 
+/** 
+ * Detects a token with exactly 5 digits and MPS or KT at the end. 
+ * If the wind direction varies VRB is also valid. 
+ */
 static bool
 DetectWindToken(const TCHAR *token)
 {
@@ -161,12 +171,14 @@ ParseWind(const TCHAR *token, ParsedMETAR &parsed)
   return true;
 }
 
+/** Detects a CAVOK token */
 static bool
 DetectCAVOK(const TCHAR *token)
 {
   return (_tcslen(token) == 5 && _tcsicmp(token, _T("CAVOK")) == 0);
 }
 
+/** Detects a token with exactly 5 digits */
 static bool
 DetectVisibilityToken(const TCHAR *token)
 {
@@ -194,6 +206,10 @@ ParseVisibility(const TCHAR *token, ParsedMETAR &parsed)
   return true;
 }
 
+/** 
+ * Detects a token with two pairs of two digits seperated by a slash. 
+ * If the temperatures are negative a 'M' is a valid prefix.
+ */
 static bool
 DetectTemperaturesToken(const TCHAR *token)
 {
@@ -260,6 +276,7 @@ ParseTemperatures(const TCHAR *token, ParsedMETAR &parsed)
   return true;
 }
 
+/** Detects a token beginning with a 'T' and followed by 8 digits */
 static bool
 DetectAdditionalTemperaturesToken(const TCHAR *token)
 {
@@ -305,6 +322,7 @@ ParseAdditionalTemperatures(const TCHAR *token, ParsedMETAR &parsed)
   return true;
 }
 
+/** Detects a token beginning with either 'Q' or 'A' and followed by 4 digits */
 static bool
 DetectQNHToken(const TCHAR *token)
 {
