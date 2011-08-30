@@ -142,14 +142,14 @@ DebugReplayIGC::Next()
 void
 DebugReplayIGC::CopyFromFix(const IGCFix &fix)
 {
-  basic.clock = basic.time = fix.time;
+  basic.clock = basic.time = fixed(fix.time.GetSecondOfDay());
   basic.time_available.Update(basic.clock);
   basic.date_time_utc.year = 2011;
   basic.date_time_utc.month = 6;
   basic.date_time_utc.day = 5;
-  basic.date_time_utc.hour = (unsigned)(fix.time / 3600);
-  basic.date_time_utc.minute = (unsigned)(fix.time / 60) % 60;
-  basic.date_time_utc.second = (unsigned)fix.time % 60;
+  basic.date_time_utc.hour = fix.time.hour;
+  basic.date_time_utc.minute = fix.time.minute;
+  basic.date_time_utc.second = fix.time.second;
   basic.connected.Update(basic.clock);
   basic.location = fix.location;
   basic.location_available.Update(basic.clock);

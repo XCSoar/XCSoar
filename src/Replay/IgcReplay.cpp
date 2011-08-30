@@ -138,8 +138,8 @@ IgcReplay::Update()
          altitude */
       fix.pressure_altitude = fix.gps_altitude;
 
-    if (positive(fix.time))
-      cli.Update(fix.time, fix.location,
+    if (fix.time.Plausible())
+      cli.Update(fixed(fix.time.GetSecondOfDay()), fix.location,
                  fix.gps_altitude, fix.pressure_altitude);
   }
 

@@ -27,10 +27,9 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 #include "Math/fixed.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
+#include "DateTime.hpp"
 
 #include <tchar.h>
-
-struct BrokenDate;
 
 struct IGCHeader {
   /**
@@ -50,7 +49,7 @@ struct IGCHeader {
 };
 
 struct IGCFix {
-  fixed time;
+  BrokenTime time;
 
   GeoPoint location;
 

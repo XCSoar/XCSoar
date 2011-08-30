@@ -143,6 +143,6 @@ IGCParseFix(const char *buffer, IGCFix &fix)
     fix.gps_altitude = fix.pressure_altitude;
   }
 
-  fix.time = fixed(Hour * 3600 + Minute * 60 + Second);
+  fix.time = BrokenTime(Hour, Minute, Second);
   return true;
 }

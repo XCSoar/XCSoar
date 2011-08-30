@@ -51,15 +51,10 @@ public:
   }
 
   void print_flight() {
-    unsigned takeoff_hour = (unsigned)takeoff.time / 3600;
-    unsigned takeoff_minute = (unsigned)takeoff.time / 60 % 60;
-    unsigned landing_hour = (unsigned)landing.time / 3600;
-    unsigned landing_minute = (unsigned)landing.time / 60 % 60;
-
     _tprintf(_T("%s,%04u-%02u-%02u,%02u:%02u,%02u:%02u\n"), name.c_str(),
              year, month, day,
-             takeoff_hour, takeoff_minute,
-             landing_hour, landing_minute);
+             takeoff.time.hour, takeoff.time.minute,
+             landing.time.hour, landing.time.minute);
   }
 
   void fix(const IGCFix &fix);
@@ -71,7 +66,7 @@ FlightCheck::fix(const IGCFix &fix)
 {
   if (previous_valid && fix.time > previous.time) {
     fixed distance = fix.location.distance(previous.location);
-    fixed speed = distance / (fix.time - previous.time);
+    fixed speed = distance / (fix.time.GetSecondOfDay() - previous.time.GetSecondOfDay());
     if (speed > fixed(15)) {
       if (fast_count == 0)
         fast = fix;

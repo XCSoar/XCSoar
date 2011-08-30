@@ -87,7 +87,7 @@ TestTrace(const char *filename, unsigned ntrace, bool output=false)
     on_advance(trace,
                fix.location, fixed(30), Angle::zero(),
                fix.gps_altitude, fix.pressure_altitude,
-               fix.time);
+               fixed(fix.time.GetSecondOfDay()));
   }
   putchar('\n');
   printf("# samples %d\n", i);
