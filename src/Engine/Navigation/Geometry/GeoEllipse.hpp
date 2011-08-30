@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef GEOELLIPSE_HPP
 #define GEOELLIPSE_HPP
 
@@ -31,7 +32,8 @@
  * a point on the ellipse.  Internally uses a flat-earth projection
  * to avoid complex and expensive geodesic calculations.
  */
-class GeoEllipse {
+class GeoEllipse
+{
   TaskProjection task_projection;
   FlatEllipse ell;
 

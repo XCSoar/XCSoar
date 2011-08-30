@@ -23,12 +23,10 @@
 #include "GeoEllipse.hpp"
 
 GeoEllipse::GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
-                       const GeoPoint &p,
-                       const TaskProjection &_task_projection): 
-  task_projection(_task_projection)
+                       const GeoPoint &p, const TaskProjection &_task_projection)
+  :task_projection(_task_projection)
 {
-  ell = FlatEllipse(task_projection.fproject(f1),
-                    task_projection.fproject(f2),
+  ell = FlatEllipse(task_projection.fproject(f1), task_projection.fproject(f2),
                     task_projection.fproject(p));
 }
 
