@@ -276,21 +276,15 @@ CuSonde::Level::updateTemps(fixed rh, fixed t)
   adewpoint = (logEx - fixed(0.66077)) * fixed(237.3) / (fixed(0.66077) + fixed(7.5) - logEx);
 
   // update statistics
-  if (0) { // averaging method disabled for now
-    nmeasurements++;
-    dewpoint = (adewpoint + dewpoint * (nmeasurements - 1)) / nmeasurements;
-    airTemp = (t + airTemp * (nmeasurements - 1)) / nmeasurements;
+  if (nmeasurements == 0) {
+    dewpoint = adewpoint;
+    airTemp = t;
   } else {
-    if (nmeasurements == 0) {
-      dewpoint = adewpoint;
-      airTemp = t;
-    } else {
-      dewpoint = (adewpoint + dewpoint) / 2;
-      airTemp = (t + airTemp) / 2;
-    }
-
-    nmeasurements++;
+    dewpoint = (adewpoint + dewpoint) / 2;
+    airTemp = (t + airTemp) / 2;
   }
+
+  nmeasurements++;
 }
 
 /**
