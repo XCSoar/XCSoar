@@ -19,11 +19,11 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef AATISOLINESEGMENT_HPP
 #define AATISOLINESEGMENT_HPP
 
 #include "AATIsoline.hpp"
-
 
 /**
  *  Specialisation of AATIsoline such that the segment of
@@ -40,30 +40,30 @@ class AATIsolineSegment: public AATIsoline
   fixed t_down;
 
 public:
-    /** 
-     * Constructor.  This performs the search for the isoline
-     * segment and so is slow.
-     * 
-     * @param ap The AAT point for which the isoline is sought
-     * 
-     * @return Initialised object
-     */
-  AATIsolineSegment(const AATPoint& ap, const TaskProjection &projection);
+  /**
+   * Constructor.  This performs the search for the isoline
+   * segment and so is slow.
+   *
+   * @param ap The AAT point for which the isoline is sought
+   *
+   * @return Initialised object
+   */
+  AATIsolineSegment(const AATPoint &ap, const TaskProjection &projection);
 
-/** 
- * Test whether segment is valid (nonzero length)
- * 
- * @return True if segment is valid
- */
+  /**
+   * Test whether segment is valid (nonzero length)
+   *
+   * @return True if segment is valid
+   */
   bool valid() const;
 
-/** 
- * Parametric representation of points on the isoline segment.
- * 
- * @param t Parameter (0,1)
- * 
- * @return Location of point on isoline segment
- */
+  /**
+   * Parametric representation of points on the isoline segment.
+   *
+   * @param t Parameter (0,1)
+   *
+   * @return Location of point on isoline segment
+   */
   GeoPoint parametric(const fixed t) const;
 };
 

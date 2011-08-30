@@ -19,22 +19,22 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "AATIsolineSegment.hpp"
 #include "Task/Tasks/PathSolvers/IsolineCrossingFinder.hpp"
 #include "Util/Tolerances.hpp"
 
-
-AATIsolineSegment::AATIsolineSegment(const AATPoint& ap,
-                                     const TaskProjection &projection):
-  AATIsoline(ap, projection)
+AATIsolineSegment::AATIsolineSegment(const AATPoint &ap,
+                                     const TaskProjection &projection)
+  :AATIsoline(ap, projection)
 {
   IsolineCrossingFinder icf_up(ap, ell, fixed_zero, fixed_half);
   IsolineCrossingFinder icf_down(ap, ell, -fixed_half, fixed_zero);
- 
+
   t_up = icf_up.solve();
   t_down = icf_down.solve();
 
-  if ((t_up<-fixed_half) || (t_down<-fixed_half)) {
+  if ((t_up < -fixed_half) || (t_down < -fixed_half)) {
     t_up = fixed_zero;
     t_down = fixed_zero;
     // single solution only
@@ -47,9 +47,9 @@ AATIsolineSegment::valid() const
   return t_up > t_down + fixed(TOLERANCE_ISOLINE_CROSSING) * 2;
 }
 
-GeoPoint 
+GeoPoint
 AATIsolineSegment::parametric(const fixed t) const
 {
-  const fixed r = t*(t_up-t_down)+t_down;
+  const fixed r = t * (t_up - t_down) + t_down;
   return ell.parametric(r);
 }
