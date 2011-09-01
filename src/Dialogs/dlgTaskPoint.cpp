@@ -43,6 +43,10 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scissor.hpp"
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 
@@ -272,6 +276,11 @@ OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     canvas.clear_white();
     return;
   }
+
+#ifdef ENABLE_OPENGL
+  /* enable clipping */
+  GLCanvasScissor scissor(canvas);
+#endif
 
   const Look &look = *CommonInterface::main_window.look;
   PaintTaskPoint(canvas, rc, *ordered_task, *tp,

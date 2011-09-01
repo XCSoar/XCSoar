@@ -42,6 +42,10 @@ Copyright_License {
 #include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scissor.hpp"
+#endif
+
 #include <assert.h>
 #include <stdio.h>
 
@@ -109,6 +113,11 @@ dlgTaskManager::TaskViewRestore(WndOwnerDrawFrame *wTaskView)
 void
 dlgTaskManager::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
+#ifdef ENABLE_OPENGL
+  /* enable clipping */
+  GLCanvasScissor scissor(canvas);
+#endif
+
   const Look &look = *CommonInterface::main_window.look;
   PaintTask(canvas, Sender->get_client_rect(), *active_task,
             XCSoarInterface::Basic().location,

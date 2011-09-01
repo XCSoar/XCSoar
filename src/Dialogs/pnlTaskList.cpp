@@ -38,6 +38,10 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Simulator.hpp"
 
+#ifdef ENABLE_OPENGL
+#include "Screen/OpenGL/Scissor.hpp"
+#endif
+
 #include <assert.h>
 
 static WndForm *wf = NULL;
@@ -109,6 +113,11 @@ pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
     canvas.clear_white();
     return;
   }
+
+#ifdef ENABLE_OPENGL
+  /* enable clipping */
+  GLCanvasScissor scissor(canvas);
+#endif
 
   const Look &look = *CommonInterface::main_window.look;
   PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
