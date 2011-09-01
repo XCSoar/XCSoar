@@ -218,6 +218,18 @@ struct GeoPoint {
   }
 
   /**
+   * Test whether two points are not co-located
+   *
+   * @param other Point to compare
+   *
+   * @return True if coincident
+   */
+  gcc_pure
+  bool operator !=(const GeoPoint &other) const {
+    return !equals(other);
+  }
+  
+  /**
    * Rank two points according to longitude, then latitude
    *
    * @param other Point to compare to

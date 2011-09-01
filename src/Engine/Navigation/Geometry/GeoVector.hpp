@@ -27,9 +27,6 @@
 
 struct GeoPoint;
 
-gcc_pure
-bool operator != (const GeoPoint&g1, const GeoPoint &g2);
-
 /**
  * A constant bearing vector in lat/lon coordinates.  
  * Should later be extended to handle

@@ -59,11 +59,3 @@ GeoVector::intermediate_point(const GeoPoint &source,
 {
   return source.intermediate_point(end_point(source), distance);
 }
-
-bool
-operator !=(const GeoPoint &g1, const GeoPoint &g2)
-{
-  return g1.Latitude != g2.Latitude ||
-         g1.Longitude != g2.Longitude;
-}
-
