@@ -103,8 +103,6 @@ get_task_to_display()
 void
 pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  PixelRect rc = Sender->get_client_rect();
-
   OrderedTask* ordered_task = get_task_to_display();
 
   if (ordered_task == NULL) {
@@ -113,7 +111,8 @@ pnlTaskList::OnTaskPaint(WndOwnerDrawFrame *Sender, Canvas &canvas)
   }
 
   const Look &look = *CommonInterface::main_window.look;
-  PaintTask(canvas, rc, *ordered_task, XCSoarInterface::Basic().location,
+  PaintTask(canvas, Sender->get_client_rect(), *ordered_task,
+            XCSoarInterface::Basic().location,
             XCSoarInterface::SettingsMap(),
             look.task, look.airspace,
             terrain);
