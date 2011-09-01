@@ -24,10 +24,15 @@ Copyright_License {
 #ifndef DLGTASKMANAGER_HPP
 #define DLGTASKMANAGER_HPP
 
-#include "Dialogs/Internal.hpp"
-#include "DataField/Enum.hpp"
-#include "Components.hpp"
-#include "Gauge/TaskView.hpp"
+#include "DataField/Base.hpp"
+#include "Form/TabBar.hpp"
+
+struct CallBackTableEntry;
+class OrderedTask;
+class SingleWindow;
+class WndForm;
+class WndButton;
+class WndOwnerDrawFrame;
 
 class dlgTaskManager
 {

@@ -39,9 +39,9 @@ Copyright_License {
 #include "Protection.hpp"
 #include "Look/Look.hpp"
 #include "MainWindow.hpp"
-
 #include "Form/TabBar.hpp"
 #include "Form/Panel.hpp"
+
 #include <assert.h>
 #include <stdio.h>
 
