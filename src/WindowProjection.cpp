@@ -43,6 +43,8 @@ WindowProjection::GeoToScreenIfVisible(const GeoPoint &loc, RasterPoint &sc) con
 bool
 WindowProjection::ScreenVisible(const RasterPoint &P) const
 {
+  assert(screen_size_initialised);
+
   return P.x >= 0 && (unsigned)P.x < screen_width &&
     P.y >= 0 && (unsigned)P.y < screen_height;
 }
@@ -62,6 +64,8 @@ WindowProjection::GetGeoScreenCenter() const
 void
 WindowProjection::UpdateScreenBounds()
 {
+  assert(screen_size_initialised);
+
   GeoBounds sb(ScreenToGeo(0, 0));
   sb.merge(ScreenToGeo(screen_width, 0));
   sb.merge(ScreenToGeo(screen_width, screen_height));
