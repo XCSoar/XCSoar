@@ -46,12 +46,6 @@ AltitudeState::AltitudeState():
 {
 }
 
-fixed 
-AltitudeState::CalcThermalDriftFactor() const
-{
-  return sigmoid(altitude_agl / 100);
-}
-
 void
 FlyingState::Reset()
 {
