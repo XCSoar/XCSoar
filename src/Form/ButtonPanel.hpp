@@ -35,6 +35,7 @@ class ButtonPanel {
   StaticArray<WndButton *, 8u> buttons;
 
   PixelRect rc, remaining;
+  unsigned child_size, row_capacity, row_count;
 
   bool vertical;
 
@@ -42,7 +43,7 @@ public:
   ButtonPanel(ContainerWindow &parent, const DialogLook &look);
   ~ButtonPanel();
 
-  void Resized(const PixelRect &area);
+  void Resized(const PixelRect &area, unsigned count=0);
 
   const PixelRect &GetRemainingRect() const {
     return remaining;
