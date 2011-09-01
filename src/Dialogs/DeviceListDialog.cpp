@@ -218,6 +218,12 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look)
   ContainerWindow &client_area = dialog->GetClientAreaWindow();
 
   ButtonPanel buttons(client_area, look);
+  buttons.Add(_("Close"), OnCloseClicked);
+  buttons.Add(_("Refresh"), OnRefreshClicked);
+  reconnect_button = buttons.Add(_("Reconnect"), OnReconnectClicked);
+  flight_button = buttons.Add(_("Flight download"), OnFlightDownloadClicked);
+  manage_button = buttons.Add(_("Manage"), OnManageClicked);
+
   const PixelRect rc = buttons.GetRemainingRect();
 
   /* create the list */
@@ -240,13 +246,7 @@ ShowDeviceList(SingleWindow &parent, const DialogLook &look)
 
   RefreshList();
 
-  /* create buttons */
-
-  buttons.Add(_("Close"), OnCloseClicked);
-  buttons.Add(_("Refresh"), OnRefreshClicked);
-  reconnect_button = buttons.Add(_("Reconnect"), OnReconnectClicked);
-  flight_button = buttons.Add(_("Flight download"), OnFlightDownloadClicked);
-  manage_button = buttons.Add(_("Manage"), OnManageClicked);
+  /* update buttons */
 
   UpdateButtons();
 
