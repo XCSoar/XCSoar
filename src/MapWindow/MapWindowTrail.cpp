@@ -61,6 +61,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
     return;
 
   const WindowProjection &projection = render_projection;
+  const GeoBounds bounds = projection.GetScreenBounds().scale(fixed_four);
 
   TracePointVector trace;
   glide_computer->LockedCopyTraceTo(trace, min_time,
@@ -106,8 +107,15 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
   for (TracePointVector::const_iterator it = trace.begin(), end = trace.end();
        it != end; ++it) {
     const fixed dt = Basic().time - fixed(it->time);
-    RasterPoint pt = projection.GeoToScreen(it->get_location().
-        parametric(traildrift, dt * it->drift_factor / 256));
+    const GeoPoint gp =
+      it->get_location().parametric(traildrift, dt * it->drift_factor / 256);
+    if (!bounds.inside(gp)) {
+      /* the point is outside of the MapWindow; don't paint it */
+      last_valid = false;
+      continue;
+    }
+
+    RasterPoint pt = projection.GeoToScreen(gp);
 
     if (last_valid) {
       if (settings_map.SnailType == stAltitude) {
