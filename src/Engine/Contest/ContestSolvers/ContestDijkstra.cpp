@@ -147,6 +147,12 @@ ContestDijkstra::Solve(bool exhaustive)
     if (!trace_dirty) {
       return true;
     }
+  } else if (n_points < num_stages) {
+    update_trace();
+    return true;
+  }
+
+  if (trace_dirty) {
     trace_dirty = false;
 
     dijkstra.restart(ScanTaskPoint(0, 0));
@@ -155,9 +161,6 @@ ContestDijkstra::Solve(bool exhaustive)
     if (dijkstra.empty()) {
       return true;
     }
-  } else if (n_points < num_stages) {
-    update_trace();
-    return true;
   }
 
   count_olc_solve++;
