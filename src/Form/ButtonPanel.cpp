@@ -53,7 +53,7 @@ ButtonPanel::GetButtonRect(unsigned i) const
     r.right = r.left + width - margin;
     r.bottom = r.top + height - margin;
   } else {
-    const unsigned width = Layout::Scale(58);
+    const unsigned width = Layout::Scale(75);
     const unsigned height = Layout::Scale(32);
 
     r.left = rc.left + column * width;
@@ -87,7 +87,7 @@ ButtonPanel::Resized(const PixelRect &area, unsigned count)
   if (count == 0)
     count = buttons.size();
 
-  child_size = vertical ? Layout::Scale(30) : Layout::Scale(58);
+  child_size = vertical ? Layout::Scale(30) : Layout::Scale(75);
   unsigned row_height = vertical ? Layout::Scale(80) : Layout::Scale(32);
 
   unsigned pixel_size = vertical
