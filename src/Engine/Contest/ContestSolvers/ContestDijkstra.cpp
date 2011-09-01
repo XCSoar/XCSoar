@@ -147,6 +147,10 @@ ContestDijkstra::Solve(bool exhaustive)
     if (!trace_dirty) {
       return true;
     }
+  } else if (exhaustive) {
+    update_trace();
+    if (n_points < num_stages)
+      return true;
   } else if (n_points < num_stages) {
     update_trace();
     return true;
