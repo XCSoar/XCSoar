@@ -103,8 +103,8 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
 
   RasterPoint last_point;
   bool last_valid = false;
-  for (TracePointVector::const_iterator it = trace.begin();
-       it != trace.end(); ++it) {
+  for (TracePointVector::const_iterator it = trace.begin(), end = trace.end();
+       it != end; ++it) {
     const fixed dt = Basic().time - fixed(it->time);
     RasterPoint pt = projection.GeoToScreen(it->get_location().
         parametric(traildrift, dt * it->drift_factor / 256));
