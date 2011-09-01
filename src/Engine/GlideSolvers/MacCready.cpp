@@ -301,7 +301,7 @@ public:
   f(const fixed V)
   {
     res = mac.solve_glide(task, V, allow_partial);
-    return res.CalcVSpeed(inv_mc) * fixed_360;
+    return res.CalcVInvSpeed(inv_mc) * fixed_360;
   }
   
   /**

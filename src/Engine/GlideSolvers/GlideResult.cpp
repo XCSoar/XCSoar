@@ -99,7 +99,7 @@ GlideResult::Add(const GlideResult &s2)
 #define fixed_bignum fixed_int_constant(1000000) // error condition
 
 fixed
-GlideResult::CalcVSpeed(const fixed inv_mc)
+GlideResult::CalcVInvSpeed(const fixed inv_mc)
 {
   if (!IsOkOrPartial()) {
     time_virtual = fixed_zero;
