@@ -102,13 +102,14 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
   }
 
   RasterPoint last_point;
+  bool last_valid = false;
   for (TracePointVector::const_iterator it = trace.begin();
        it != trace.end(); ++it) {
     const fixed dt = Basic().time - fixed(it->time);
     RasterPoint pt = projection.GeoToScreen(it->get_location().
         parametric(traildrift, dt * it->drift_factor / 256));
 
-    if (it != trace.begin()) {
+    if (last_valid) {
       if (settings_map.SnailType == stAltitude) {
         int index = (it->GetAltitude() - value_min) / (value_max - value_min) *
                     (NUMSNAILCOLORS - 1);
@@ -128,6 +129,7 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
       canvas.line_piece(last_point, pt);
     }
     last_point = pt;
+    last_valid = true;
   }
 
   canvas.line(last_point, aircraft_pos);
