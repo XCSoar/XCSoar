@@ -40,8 +40,7 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/Globals.hpp"
+#include "Screen/OpenGL/Scissor.hpp"
 #else
 #include "Screen/WindowCanvas.hpp"
 #endif
@@ -260,9 +259,7 @@ TargetMapWindow::on_paint_buffer(Canvas &canvas)
 {
 #ifdef ENABLE_OPENGL
   /* enable clipping */
-  GLScissor scissor(OpenGL::translate_x,
-                    OpenGL::screen_height - OpenGL::translate_y - canvas.get_height() - 1,
-                    canvas.get_width(), canvas.get_height());
+  GLCanvasScissor scissor(canvas);
 #endif
 
   // Calculate screen position of the aircraft

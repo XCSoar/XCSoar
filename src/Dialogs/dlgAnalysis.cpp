@@ -46,8 +46,7 @@ Copyright_License {
 #include "GestureManager.hpp"
 
 #ifdef ENABLE_OPENGL
-#include "Screen/OpenGL/Scope.hpp"
-#include "Screen/OpenGL/Globals.hpp"
+#include "Screen/OpenGL/Scissor.hpp"
 #endif
 
 #include <stdio.h>
@@ -164,9 +163,7 @@ ChartControl::on_paint(Canvas &canvas)
 
 #ifdef ENABLE_OPENGL
   /* enable clipping */
-  GLScissor scissor(OpenGL::translate_x,
-                    OpenGL::screen_height - OpenGL::translate_y - canvas.get_height() - 1,
-                    canvas.get_width(), canvas.get_height());
+  GLCanvasScissor scissor(canvas);
 #endif
 
   canvas.clear(COLOR_WHITE);
