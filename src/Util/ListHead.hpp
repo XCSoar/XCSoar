@@ -337,6 +337,61 @@ public:
 
     return this;
   }
+
+  class const_reverse_iterator {
+    friend class ListHead;
+
+    const ListHead *current;
+
+    const_reverse_iterator(const ListHead *_current):current(_current) {}
+
+  public:
+    typedef std::bidirectional_iterator_tag iterator_category;
+    typedef ptrdiff_t difference_type;
+    typedef const ListHead value_type;
+    typedef const ListHead *pointer;
+    typedef const ListHead &reference;
+
+    const_reverse_iterator() {}
+
+    reference operator*() const {
+      return *current;
+    }
+
+    pointer operator->() const {
+      return current;
+    }
+
+    const_reverse_iterator &operator++() {
+      current = current->prev;
+      return *this;
+    }
+
+    const_reverse_iterator &operator--() {
+      current = current->next;
+      return *this;
+    }
+
+    bool operator==(const const_reverse_iterator &other) const {
+      return current == other.current;
+    }
+
+    bool operator!=(const const_reverse_iterator &other) const {
+      return current != other.current;
+    }
+  };
+
+  const_reverse_iterator rbegin() const {
+    assert(type == HEAD);
+
+    return prev;
+  }
+
+  const_reverse_iterator rend() const {
+    assert(type == HEAD);
+
+    return this;
+  }
 };
 
 #endif
