@@ -293,6 +293,10 @@ public:
    */
   void clear();
 
+  unsigned GetMaxSize() const {
+    return m_max_points;
+  }
+
   /**
    * Size of traces (in tree, not in temporary store) ---
    * must call optimise() before this for it to be accurate.
