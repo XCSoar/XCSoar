@@ -180,7 +180,6 @@ MacCready::solve_glide(const GlideState &task, const fixed Vset, const fixed S,
 
     // S/Vn > dh/task.Distance
     if (S * task.vector.Distance > Vndh) {
-      result.validity = GlideResult::RESULT_PARTIAL;
       if (negative(task.altitude_difference))
         // insufficient height, and can't climb
         result.vector.Distance = fixed_zero;
@@ -236,7 +235,8 @@ MacCready::solve(const GlideState &task) const
 
   // calc first final glide part
   GlideResult result_fg = optimise_glide(task, true);
-  if (result_fg.validity == GlideResult::RESULT_OK)
+  if (result_fg.validity == GlideResult::RESULT_OK &&
+      !positive(task.vector.Distance - result_fg.vector.Distance))
     // whole task final glided
     return result_fg;
 

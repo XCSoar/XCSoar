@@ -95,6 +95,13 @@ public:
    * with no climb component (pure glide).  This is used internally to
    * determine the optimum speed for this glide component.
    *
+   * If allow_partial=true and the task.altitiude_difference is insufficient
+   * to glide to the destination, then result.vector.Distance is redueced to
+   * reachable partial glide and the result represents this partial glide.
+   * If allow_partial=false then the result represents the glide the full
+   * distance to the Destination regardless of the task.altitude_difference
+   * (result.altitude_difference may be negative).
+
    * @param task The task for which a solution is desired
    * @param V The airspeed the glider will be travelling
    * @param allow_partial Return after glide exhausted
