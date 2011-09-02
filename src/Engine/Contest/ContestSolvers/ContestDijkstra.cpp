@@ -106,6 +106,7 @@ ContestDijkstra::update_trace()
   if (!master_is_updated())
     return;
 
+  trace.reserve(trace_master.GetMaxSize());
   trace_master.get_trace_points(trace);
   n_points = trace.size();
   trace_dirty = true;
