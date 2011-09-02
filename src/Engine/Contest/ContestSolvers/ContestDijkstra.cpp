@@ -70,35 +70,24 @@ ContestDijkstra::Score(ContestResult &result)
 }
 
 bool
-ContestDijkstra::master_is_updated()
+ContestDijkstra::master_is_updated() const
 {
   assert(num_stages <= MAX_STAGES);
 
-  if (trace_master.empty()) {
-    last_point.Clear();
+  if (trace_master.empty() || n_points < num_stages)
     return true;
-  }
 
   // find min distance and time step within this trace
   const unsigned threshold_delta_t_trace = trace_master.average_delta_time();
   const unsigned threshold_distance_trace = trace_master.average_delta_distance();
 
-  const bool insufficient = (n_points < num_stages);
   const TracePoint &last_master = trace_master.back();
+  const TracePoint &last_point = trace.back();
 
   // update trace if time and distance are greater than significance thresholds
 
-  const bool updated = !last_point.IsDefined() ||
-    ((last_master.time > last_point.time + threshold_delta_t_trace)
-     && (last_master.flat_distance(last_point) > threshold_distance_trace));
-
-  // need an update if there's insufficient data in the buffer, or if
-  // the update was significant
-
-  if (insufficient || updated) {
-    last_point = last_master;
-  }
-  return insufficient || updated;
+  return last_master.time > last_point.time + threshold_delta_t_trace &&
+    last_master.flat_distance(last_point) > threshold_distance_trace;
 }
 
 
@@ -185,7 +174,6 @@ ContestDijkstra::Reset()
   solution_found = false;
   dijkstra.clear();
   clear_trace();
-  last_point.Clear();
   solution[num_stages - 1].Clear();
 
   AbstractContest::Reset();

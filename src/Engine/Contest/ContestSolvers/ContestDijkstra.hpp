@@ -43,7 +43,6 @@ class ContestDijkstra:
 {
   bool solution_found;
   bool trace_dirty;
-  TracePoint last_point;
 
   TracePointVector trace; // working trace for solver
 
@@ -169,7 +168,9 @@ protected:
 
 private:
   virtual void add_start_edges();
-  bool master_is_updated();
+
+  gcc_pure
+  bool master_is_updated() const;
 };
 
 #endif
