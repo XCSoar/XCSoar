@@ -49,6 +49,18 @@ DebugReplay::~DebugReplay()
   delete reader;
 }
 
+long
+DebugReplay::Size() const
+{
+  return reader->size();
+}
+
+long
+DebugReplay::Tell() const
+{
+  return reader->tell();
+}
+
 void
 DebugReplay::Compute()
 {

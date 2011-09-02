@@ -53,6 +53,12 @@ public:
   DebugReplay(NLineReader *reader);
   virtual ~DebugReplay();
 
+  gcc_pure
+  long Size() const;
+
+  gcc_pure
+  long Tell() const;
+
   virtual bool Next() = 0;
 
   const SETTINGS_COMPUTER &SettingsComputer() const {
