@@ -33,9 +33,8 @@ class TaskPoint;
  * Utility class for calculating glide solutions for individual points and whole tasks
  * This is used to de-couple the task system from glide calculations
  */
-class TaskSolution
+namespace TaskSolution
 {
-public:
 /** 
  * Compute optimal glide solution from aircraft to destination.
  * 
@@ -45,10 +44,10 @@ public:
  * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
  * @return GlideResult of task leg
  */
-  static GlideResult glide_solution_remaining(const TaskPoint& taskpoint,
-                                              const AircraftState &state, 
-                                              const GlidePolar &polar,
-                                              const fixed minH=fixed_zero);
+  GlideResult glide_solution_remaining(const TaskPoint& taskpoint,
+                                       const AircraftState &state,
+                                       const GlidePolar &polar,
+                                       const fixed minH=fixed_zero);
 
 /** 
  * Compute optimal glide solution from aircraft to destination, with
@@ -61,10 +60,10 @@ public:
  * @param S Sink rate (m/s, positive down)
  * @return GlideResult of task leg
  */
-  static GlideResult glide_solution_sink(const TaskPoint& taskpoint,
-                                         const AircraftState &state, 
-                                         const GlidePolar &polar,
-                                         const fixed S);
+  GlideResult glide_solution_sink(const TaskPoint& taskpoint,
+                                  const AircraftState &state,
+                                  const GlidePolar &polar,
+                                  const fixed S);
 
 /** 
  * Compute optimal glide solution from previous point to aircraft towards destination.
@@ -76,10 +75,10 @@ public:
  * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
  * @return GlideResult of task leg
  */
-  static GlideResult glide_solution_travelled(const TaskPoint& taskpoint,
-                                              const AircraftState &state, 
-                                              const GlidePolar &polar,
-                                              const fixed minH=fixed_zero);
+  GlideResult glide_solution_travelled(const TaskPoint& taskpoint,
+                                       const AircraftState &state,
+                                       const GlidePolar &polar,
+                                       const fixed minH=fixed_zero);
 
 /** 
  * Compute optimal glide solution from aircraft to destination, or modified
@@ -91,10 +90,10 @@ public:
  * @param minH Minimum height at destination over-ride (max of this or the task points's elevation is used)
  * @return GlideResult of task leg
  */
-  static GlideResult glide_solution_planned(const TaskPoint& taskpoint,
-                                            const AircraftState &state, 
-                                            const GlidePolar &polar,
-                                            const fixed minH=fixed_zero);
+  GlideResult glide_solution_planned(const TaskPoint& taskpoint,
+                                     const AircraftState &state,
+                                     const GlidePolar &polar,
+                                     const fixed minH=fixed_zero);
 };
 
 #endif
