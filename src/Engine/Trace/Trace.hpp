@@ -369,18 +369,6 @@ public:
     return m_average_delta_time;
   }
 
-  /**
-   * Get last point added to store
-   *
-   * @return Last point added
-   */
-  gcc_pure
-  const TracePoint& get_last_point() const {
-    assert(!empty());
-
-    return static_cast<const TraceDelta *>(chronological_list.GetPrevious())->point;
-  }
-
 public:
   class const_iterator {
     friend class Trace;

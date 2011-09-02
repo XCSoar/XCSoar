@@ -60,7 +60,7 @@ Trace::get_recent_time(const unsigned t) const
   if (empty())
     return 0;
 
-  const TracePoint &last = get_last_point();
+  const TracePoint &last = back();
   if (last.time > t)
     return last.time - t;
 
@@ -216,12 +216,12 @@ Trace::append(const AircraftState& state)
     // first point determines origin for flat projection
     task_projection.reset(state.location);
     task_projection.update_fast();
-  } else if (state.time < fixed(get_last_point().time)) {
+  } else if (state.time < fixed(back().time)) {
     // gone back in time, must reset. (shouldn't get here!)
     assert(1);
     clear();
     return;
-  } else if ((unsigned)state.time - get_last_point().time < 2)
+  } else if ((unsigned)state.time - back().time < 2)
     // only add one item per two seconds
     return;
 
@@ -243,7 +243,7 @@ Trace::get_min_time() const
   if (empty() || m_max_time == null_time)
     return 0;
 
-  unsigned last_time = get_last_point().time;
+  unsigned last_time = back().time;
   if (last_time == null_time || last_time <= m_max_time)
     return 0;
 

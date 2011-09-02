@@ -84,7 +84,7 @@ ContestDijkstra::master_is_updated()
   const unsigned threshold_distance_trace = trace_master.average_delta_distance();
 
   const bool insufficient = (n_points < num_stages);
-  const TracePoint& last_master = trace_master.get_last_point();
+  const TracePoint &last_master = trace_master.back();
 
   // update trace if time and distance are greater than significance thresholds
 
