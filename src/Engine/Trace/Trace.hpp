@@ -436,6 +436,53 @@ public:
     return chronological_list.end();
   }
 
+  class const_reverse_iterator {
+    friend class Trace;
+
+    ListHead::const_reverse_iterator iterator;
+
+    const_reverse_iterator(ListHead::const_reverse_iterator _iterator)
+      :iterator(_iterator) {}
+
+  public:
+    typedef std::forward_iterator_tag iterator_category;
+    typedef TracePoint value_type;
+    typedef TracePoint *pointer;
+    typedef TracePoint &reference;
+    typedef ptrdiff_t difference_type;
+
+    const TracePoint &operator*() const {
+      const TraceDelta &td = (const TraceDelta &)*iterator;
+      return td.point;
+    }
+
+    const TracePoint *operator->() const {
+      const TraceDelta &td = (const TraceDelta &)*iterator;
+      return &td.point;
+    }
+
+    const_reverse_iterator &operator++() {
+      ++iterator;
+      return *this;
+    }
+
+    bool operator==(const const_reverse_iterator &other) const {
+      return iterator == other.iterator;
+    }
+
+    bool operator!=(const const_reverse_iterator &other) const {
+      return iterator != other.iterator;
+    }
+  };
+
+  const_reverse_iterator rbegin() const {
+    return chronological_list.rbegin();
+  }
+
+  const_reverse_iterator rend() const {
+    return chronological_list.rend();
+  }
+
   gcc_pure
   unsigned ProjectRange(const GeoPoint &location, fixed distance) const {
     return task_projection.project_range(location, distance);
