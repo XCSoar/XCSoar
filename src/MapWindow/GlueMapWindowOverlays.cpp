@@ -160,7 +160,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
   int i;
 
   if (Calculated().task_stats.task_valid &&
-      Calculated().task_stats.total.solution_remaining.IsOkOrPartial() &&
+      Calculated().task_stats.total.solution_remaining.IsOk() &&
       Calculated().task_stats.total.solution_mc0.IsDefined()) {
     const int y0 = ((rc.bottom - rc.top) / 2) + rc.top;
 
@@ -442,7 +442,7 @@ GlueMapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
 void
 GlueMapWindow::DrawThermalBand(Canvas &canvas, const PixelRect &rc) const
 {
-  if (Calculated().task_stats.total.solution_remaining.IsOkOrPartial() &&
+  if (Calculated().task_stats.total.solution_remaining.IsOk() &&
       Calculated().task_stats.total.solution_remaining.altitude_difference > fixed(50)
       && GetDisplayMode() == DM_FINAL_GLIDE)
     return;

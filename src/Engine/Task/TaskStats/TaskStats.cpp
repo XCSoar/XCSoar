@@ -51,7 +51,7 @@ TaskStats::calc_flight_mode()
   const int margin =
       (flight_mode_final_glide ? 1 : 0) * flight_mode_height_margin;
 
-  const bool this_is_final = total.solution_remaining.IsOkOrPartial() &&
+  const bool this_is_final = total.solution_remaining.IsOk() &&
     positive(total.solution_remaining.altitude_difference + fixed(margin));
 
   if (flight_mode_final_glide == this_is_final)

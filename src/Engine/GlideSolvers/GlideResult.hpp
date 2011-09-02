@@ -44,8 +44,6 @@ struct GlideResult {
   enum GlideResultValidity {
     /** Solution is achievable */
     RESULT_OK = 0,
-    /** Solution is partially achievable */
-    RESULT_PARTIAL,
     /** Wind is too strong to allow progress */
     RESULT_WIND_EXCESSIVE,
     /** Expected climb rate is too low to allow progress */
@@ -132,9 +130,9 @@ struct GlideResult {
    * @return True if task is at least partially achievable
    */
   bool
-  IsOkOrPartial() const
+  IsOk() const
   {
-    return (validity == RESULT_OK) || (validity == RESULT_PARTIAL);
+    return (validity == RESULT_OK);
   }
 
   /**

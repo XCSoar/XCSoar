@@ -112,7 +112,7 @@ TaskMacCready::glide_solution(const AircraftState &aircraft)
       acc_gr.Add(gr);
   }
 
-  if (!acc_gr.IsOkOrPartial())
+  if (!acc_gr.IsOk())
     /* no values - cannot do the additional calculations below, bail
        out */
     return acc_gr;

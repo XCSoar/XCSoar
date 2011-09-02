@@ -78,7 +78,7 @@ GlideResult::Add(const GlideResult &s2)
 
   vector.Distance += s2.vector.Distance;
 
-  if (!IsOkOrPartial())
+  if (!IsOk())
     /* the other attributes are not valid if validity is not OK or
        PARTIAL */
     return;
@@ -101,7 +101,7 @@ GlideResult::Add(const GlideResult &s2)
 fixed
 GlideResult::CalcVInvSpeed(const fixed inv_mc)
 {
-  if (!IsOkOrPartial()) {
+  if (!IsOk()) {
     time_virtual = fixed_zero;
     return fixed_bignum;
   }

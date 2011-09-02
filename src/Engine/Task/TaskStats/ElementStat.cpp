@@ -98,7 +98,7 @@ ElementStatComputer::CalcSpeeds(const fixed dt)
   planned.calc_incremental_speed(dt);
   travelled.calc_incremental_speed(dt);
 
-  if (data.solution_remaining.IsOkOrPartial()) {
+  if (data.solution_remaining.IsOk()) {
     remaining_effective.calc_incremental_speed(dt);
     pirker.calc_incremental_speed(dt);
     data.vario.update(data.solution_remaining, fixed(dt));
