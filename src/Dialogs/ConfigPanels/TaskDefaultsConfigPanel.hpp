@@ -30,6 +30,8 @@ namespace TaskDefaultsConfigPanel
 {
   void Init(WndForm *wf);
   bool Save();
+  void OnStartType(DataField *Sender, DataField::DataAccessKind_t Mode);
+  void OnFinishType(DataField *Sender, DataField::DataAccessKind_t Mode);
 };
 
 #endif /* TASKDEFAULTSCONFIGPANEL_HPP */

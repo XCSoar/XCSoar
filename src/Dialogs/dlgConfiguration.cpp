@@ -211,6 +211,8 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(TerrainDisplayConfigPanel::OnEnableTerrain),
   DeclareCallBackEntry(RouteConfigPanel::OnRouteMode),
   DeclareCallBackEntry(RouteConfigPanel::OnReachMode),
+  DeclareCallBackEntry(TaskDefaultsConfigPanel::OnStartType),
+  DeclareCallBackEntry(TaskDefaultsConfigPanel::OnFinishType),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAPort),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBPort),
   DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAData),

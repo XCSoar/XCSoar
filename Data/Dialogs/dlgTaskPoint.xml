@@ -21,7 +21,7 @@
       <Canvas Name="frmTaskView" X="2" Y="42" Width="90" Height="92" Border="1" OnPaint="OnTaskPaint" />
 
       <Panel Name="frmOZLine" X="107" Y="41" Width="126" Height="80">
-        <Edit Name="prpOZLineLength" Caption="Length" Height="25" CaptionWidth="60" Help="Length of the OZ line.">
+        <Edit Name="prpOZLineLength" Caption="Gate Width" Height="25" CaptionWidth="60" Help="Width of the start/finish gate.">
          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1" OnDataAccess="OnOZData"/>
         </Edit>
      </Panel>

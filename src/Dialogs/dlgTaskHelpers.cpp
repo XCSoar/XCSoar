@@ -239,7 +239,7 @@ OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius)
     break;
 
   case ObservationZonePoint::LINE:
-    _stprintf(radius,_T("%s  - %s: %.1f%s"), _("Line"), _("Length"),
+    _stprintf(radius,_T("%s  - %s: %.1f%s"), _("Line"), _("Gate Width"),
               (double)Units::ToUserDistance(((const LineSectorZone &)ozp).getLength()),
               Units::GetDistanceName());
     break;
@@ -275,7 +275,7 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
   case AbstractTaskFactory::START_SECTOR:
     return _("A 90 degree sector with 1km radius. Cross corner edge from inside area to start");
   case AbstractTaskFactory::START_LINE:
-    return _("A straight line.  Cross line from inside area to start");
+    return _("A straight line start gate.  Cross start gate from inside area to start");
   case AbstractTaskFactory::START_CYLINDER:
     return _("A cylinder.  Exit area to start");
   case AbstractTaskFactory::START_BGA:
@@ -299,7 +299,7 @@ OrderedTaskPointDescription(AbstractTaskFactory::LegalPointType_t type)
   case AbstractTaskFactory::FINISH_SECTOR:
     return _("A 90 degree sector with 1km radius.  Cross edge to finish");
   case AbstractTaskFactory::FINISH_LINE:
-    return _("Cross line into area to finish");
+    return _("Cross finish gate line into area to finish");
   case AbstractTaskFactory::FINISH_CYLINDER:
     return _("Enter cylinder to finish");
   default:

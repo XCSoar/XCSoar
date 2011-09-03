@@ -36,6 +36,32 @@ Copyright_License {
 
 static WndForm* wf = NULL;
 
+static void
+SetStartLabel()
+{
+  assert(wf);
+  WndProperty *wp = NULL;
+  wp = (WndProperty*)wf->FindByName(_T("prpStartRadius"));
+  assert(wp);
+  if (GetFormValueInteger(*wf, _T("prpStartType")) == AbstractTaskFactory::START_LINE)
+    wp->SetCaption(_T("Gate Width"));
+  else
+    wp->SetCaption(_T("Radius"));
+}
+
+static void
+SetFinishLabel()
+{
+  assert(wf);
+  WndProperty *wp = NULL;
+
+  wp = (WndProperty*)wf->FindByName(_T("prpFinishRadius"));
+  assert(wp);
+  if (GetFormValueInteger(*wf, _T("prpFinishType")) == AbstractTaskFactory::FINISH_LINE)
+    wp->SetCaption(_T("Gate Width"));
+  else
+    wp->SetCaption(_T("Radius"));
+}
 
 void
 TaskDefaultsConfigPanel::Init(WndForm *_wf)
@@ -130,9 +156,23 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
   LoadFormProperty(*wf, _T("prpAATTimeMargin"),
                    (unsigned)(task_behaviour.optimise_targets_margin / 60));
 
+  SetStartLabel();
+  SetFinishLabel();
+
   delete temptask;
 }
 
+void
+TaskDefaultsConfigPanel::OnStartType(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  SetStartLabel();
+}
+
+void
+TaskDefaultsConfigPanel::OnFinishType(DataField *Sender, DataField::DataAccessKind_t Mode)
+{
+  SetFinishLabel();
+}
 
 bool
 TaskDefaultsConfigPanel::Save()

@@ -536,10 +536,10 @@
       <Panel Name="frmTaskDefaultsStart" X="2" Y="2" Width="-2" Height="48" Border="1">  
         <Edit Name="prpStartType" Caption="Start point" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
           Help="Default start type for new tasks you create.">
-          <DataField DataType="enum" OnDataAccess="OnTaskDefaultsStartType"/>
+          <DataField DataType="enum" OnDataAccess="TaskDefaultsConfigPanel::OnStartType"/>
         </Edit>
         <Edit Name="prpStartRadius" Caption="Length/Radius" Width="-2" Height="22" CaptionWidth="120" 
-       	  Help="Default radius or length of the start zone for new tasks.">
+       	  Help="Default radius or gate width of the start zone for new tasks.">
           <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1"/>
         </Edit>
       </Panel>
@@ -547,10 +547,10 @@
       <Panel Name="frmTaskFinish" X="2" Y="49" Width="-2" Height="48" Border="1">    
         <Edit Name="prpFinishType" Caption="Finish point" X="0" Y="2" Width="-2" Height="22" CaptionWidth="120"
           Help="Default finish type for new tasks you create.">
-          <DataField DataType="enum" OnDataAccess="OnTaskDefaultsFinishType"/>
+          <DataField DataType="enum" OnDataAccess="TaskDefaultsConfigPanel::OnFinishType"/>
         </Edit>
         <Edit Name="prpFinishRadius" Caption="Length/Radius" Width="-2" Height="22" CaptionWidth="120" 
-          Help="Default radius or length of the finish zone in new tasks.">
+          Help="Default radius or gate width of the finish zone in new tasks.">
           <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.1" Max="100" Step="0.5" Fine="1"/>
         </Edit>
       </Panel>
