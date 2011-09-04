@@ -356,9 +356,9 @@ const InfoBoxFactory::InfoBoxMetaData InfoBoxFactory::MetaData[NUM_TYPES] = {
 
   // e_H_Baro
   {
-    N_("Height barometric"),
-    N_("H Baro"),
-    N_("This is the barometric altitude obtained from a GPS equipped with pressure sensor, or a supported external intelligent vario."),
+    N_("Barometric altitude"),
+    N_("Alt. Baro."),
+    N_("This is the barometric altitude obtained from a device equipped with a pressure sensor."),
     e_H_QFE, // QFE GPS
     e_H_Terrain, // H Gnd
   },
