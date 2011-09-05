@@ -33,7 +33,7 @@ EventLoop::get(SDL_Event &event)
 {
   if (bulk) {
     if (::SDL_PollEvent(&event))
-      return event.type != SDL_QUIT;
+      return true;
 
     /* that was the last event for now, refresh the screen now */
     top_window.refresh();
@@ -42,7 +42,7 @@ EventLoop::get(SDL_Event &event)
 
   if (::SDL_WaitEvent(&event)) {
     bulk = true;
-    return event.type != SDL_QUIT;
+    return true;
   }
 
   return false;

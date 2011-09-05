@@ -232,6 +232,9 @@ TopWindow::on_event(const SDL_Event &event)
       return false;
 
     return on_mouse_up(event.button.x, event.button.y);
+
+  case SDL_QUIT:
+    return on_close();
   }
 
   return false;

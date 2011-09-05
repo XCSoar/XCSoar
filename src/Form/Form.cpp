@@ -418,6 +418,13 @@ WndForm::ShowModal()
 #endif
 
   while ((mModalResult == 0 || force) && loop.get(event)) {
+#if defined(ENABLE_SDL) && !defined(ANDROID)
+    if (event.type == SDL_QUIT) {
+      mModalResult = mrCancel;
+      continue;
+    }
+#endif
+
     if (!main_window.FilterEvent(event, this))
       continue;
 
