@@ -33,5 +33,14 @@ PaintCanvas::PaintCanvas(Window &_window)
 
 PaintCanvas::~PaintCanvas()
 {
+  /* Select stock objects into the DC, to unreference the custom
+     brushes and pens.  Older Windows CE versions (specifically
+     PPC2000/2002) are known to be leaky when the DC is not cleaned
+     up.  We don't need to change the bitmap selection, because a
+     PaintCanvas should never have a selected bitmap. */
+  white_brush();
+  black_pen();
+  select_stock(SYSTEM_FONT);
+
   window.EndPaint(&ps);
 }
