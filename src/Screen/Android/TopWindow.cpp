@@ -184,7 +184,7 @@ TopWindow::event_loop()
 
   EventLoop loop(*event_queue, *this);
   Event event;
-  while (loop.get(event))
+  while (defined() && loop.get(event))
     loop.dispatch(event);
 
   return 0;
