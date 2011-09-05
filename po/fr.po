@@ -8,15 +8,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-27 16:42+0200\n"
-"PO-Revision-Date: 2011-08-25 14:34+0000\n"
-"Last-Translator: Matthieu GAULON <Unknown>\n"
+"PO-Revision-Date: 2011-08-31 10:01+0000\n"
+"Last-Translator: Titi <Unknown>\n"
 "Language-Team: French <fr@li.org>\n"
 "Language: fr\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-08-27 14:44+0000\n"
-"X-Generator: Launchpad (build 13794)\n"
+"X-Launchpad-Export-Date: 2011-09-05 06:28+0000\n"
+"X-Generator: Launchpad (build 13830)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:532
 #: src/InputEventsActions.cpp:1466 src/Dialogs/dlgAnalysis.cpp:350
@@ -1178,7 +1178,7 @@ msgid ""
 "Estimated time required to complete task, assuming performance of ideal "
 "MacCready cruise/climb cycle."
 msgstr ""
-"Temps requis estimer pour finir la tâche, en tenant compte des meilleurs "
+"Temps requis estimer pour finir le circuit, en tenant compte des meilleurs "
 "performances du McCready en transition/spirale."
 
 #: src/InfoBoxes/Content/Factory.cpp:440
@@ -1255,7 +1255,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:467
 #, no-c-format
 msgid "Task arrival time"
-msgstr "Temps pour terminer la tache"
+msgstr "Heure d'arrivée du circuit"
 
 #: src/InfoBoxes/Content/Factory.cpp:468
 #, no-c-format
@@ -4225,7 +4225,7 @@ msgstr "Course"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:50
 msgid "FAI badges/records"
-msgstr ""
+msgstr "badges/records FAI"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:52 src/Dialogs/dlgTaskHelpers.cpp:133
 msgid "FAI triangle"
@@ -4237,7 +4237,7 @@ msgstr "Aller-retour FAI"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:56
 msgid "FAI goal"
-msgstr ""
+msgstr "but FAI"
 
 #: src/Dialogs/dlgTaskHelpers.cpp:58
 msgid "AAT"
@@ -4664,6 +4664,8 @@ msgid ""
 "Sample Text\n"
 "123"
 msgstr ""
+"Exemple de Texte\n"
+"123"
 
 #: src/Dialogs/dlgFontEdit.cpp:89
 msgid "Font not found."
@@ -4905,7 +4907,7 @@ msgstr "Activer l'annonce vocale de changement de point de virage du circuit"
 
 #: Data/Dialogs/dlgConfigPage.xml:3 Data/Dialogs/dlgConfigPage_L.xml:3
 msgid "Page Configuration"
-msgstr ""
+msgstr "Page de configuration"
 
 #: Data/Dialogs/dlgConfiguration.xml:433
 #: Data/Dialogs/dlgConfiguration_L.xml:434
@@ -5617,7 +5619,7 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:164
 #: Data/Dialogs/dlgConfiguration_L.xml:164
 msgid "Landable symbols"
-msgstr ""
+msgstr "Symboles terrains posables"
 
 #: Data/Dialogs/dlgConfiguration.xml:332
 msgid ""
@@ -5625,6 +5627,9 @@ msgid ""
 "calculations, in task abort mode and for determining arrival altitude at "
 "airfields."
 msgstr ""
+"Le réglage MacCready utilisé, quand le MC de sécurité est activé pour le "
+"calcul du local, en mode annulation de circuit et pour déterminer l'altitude "
+"d'arrivée sur les aérodromes."
 
 #: Data/Dialogs/dlgTarget.xml:32 Data/Dialogs/dlgTarget_L.xml:12
 msgid "Locked"
@@ -5670,7 +5675,7 @@ msgstr "Rotation de l'écran sur les appareils qui le supportent."
 
 #: Data/Dialogs/dlgVario.xml:311 Data/Dialogs/dlgVario_L.xml:310
 msgid "Urgent min. volume"
-msgstr ""
+msgstr "Volume min. urgent"
 
 #: Data/Dialogs/dlgConfiguration.xml:13 Data/Dialogs/dlgConfiguration_L.xml:10
 #: Data/Dialogs/dlgPlanePolar.xml:65 Data/Dialogs/dlgPlanePolar_L.xml:53
@@ -5685,7 +5690,7 @@ msgstr "Mode de remplissage de l'espace aérien"
 #: Data/Dialogs/dlgConfiguration.xml:783
 #: Data/Dialogs/dlgConfiguration_L.xml:787
 msgid "Determines whether tabbed dialogs use text or icons"
-msgstr ""
+msgstr "Détermine si les onglets utilisent du texte ou des icônes."
 
 #: Data/Dialogs/dlgStartTask.xml:3
 msgid "Task Start"
@@ -5717,6 +5722,11 @@ msgid ""
 "[Auto] Display track bearing if there is a significant difference to plane "
 "heading."
 msgstr ""
+"Afficher la route sur la carte (la projection au sol de la route).\n"
+"[Off] Désactiver l'affichage de la route.\n"
+"[On] Toujours afficher la route.\n"
+"[Auto] Afficher la route si il y a une différence significative avec la "
+"trajectoire du planeur."
 
 #: Data/Dialogs/dlgConfiguration.xml:21 Data/Dialogs/dlgConfiguration_L.xml:21
 msgid ""
@@ -5728,7 +5738,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgVario.xml:422 Data/Dialogs/dlgVario_L.xml:421
 msgid "V flap"
-msgstr ""
+msgstr "V volets"
 
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:11
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:12
@@ -5739,7 +5749,7 @@ msgstr "Effacer"
 
 #: Data/Dialogs/dlgConfigFonts.xml:22 Data/Dialogs/dlgConfigFonts_L.xml:22
 msgid "Topography labels, normal"
-msgstr ""
+msgstr "Étiquettes de topographie, normal"
 
 #: Data/Dialogs/pnlTaskCalculator.xml:22
 #: Data/Dialogs/pnlTaskCalculator_L.xml:22
@@ -5832,7 +5842,7 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:49 Data/Dialogs/dlgConfiguration_L.xml:49
 msgid "The name of the file containing digital elevation terrain data."
-msgstr ""
+msgstr "Le nom du fichier contenant les données d'élévation du terrain."
 
 #: Data/Dialogs/dlgConfiguration.xml:695
 #: Data/Dialogs/dlgConfiguration_L.xml:699
@@ -5932,6 +5942,8 @@ msgid ""
 "Maximum speed above maximum start speed to tolerate.  Set to 0 for no "
 "tolerance."
 msgstr ""
+"La vitesse maximum tolérée au-dessus de la vitesse maximum de départ. Mettre "
+"à 0 pour aucune tolérance."
 
 #: Data/Dialogs/dlgTaskPoint.xml:40 Data/Dialogs/dlgTaskPoint_L.xml:39
 msgid "Start radial of the OZ area"
@@ -5959,7 +5971,7 @@ msgstr "Italique"
 
 #: Data/Dialogs/dlgVario.xml:81 Data/Dialogs/dlgVario_L.xml:80
 msgid "Time scale used for vario averager."
-msgstr ""
+msgstr "Échelle de temps utilisée pour la moyenne du vario."
 
 #: Data/Dialogs/dlgVario.xml:41 Data/Dialogs/dlgVario_L.xml:40
 msgid "FLARM connected"
@@ -6027,7 +6039,7 @@ msgstr "Quitter"
 #: Data/Dialogs/dlgConfiguration.xml:798
 #: Data/Dialogs/dlgConfiguration_L.xml:802
 msgid "Inverse InfoBoxes"
-msgstr ""
+msgstr "Inverser InfoBoxes"
 
 #: Data/Dialogs/dlgVario.xml:440 Data/Dialogs/dlgVario_L.xml:439
 msgid "LED bright"
@@ -6045,7 +6057,7 @@ msgstr "Heure décollage"
 
 #: Data/Dialogs/dlgConfigFonts.xml:10 Data/Dialogs/dlgConfigFonts_L.xml:10
 msgid "InfoBox titles"
-msgstr ""
+msgstr "Titres des InfoBoxes"
 
 #: Data/Dialogs/dlgConfiguration.xml:36 Data/Dialogs/dlgConfiguration_L.xml:36
 msgid ""
@@ -6069,6 +6081,8 @@ msgid ""
 "Maximum height above maximum start height to tolerate.  Set to 0 for no "
 "tolerance."
 msgstr ""
+"La hauteur maximum à tolérer au-dessus de la hauteur maximum de départ. "
+"Mettre à 0 pour aucune tolérance."
 
 #: Data/Dialogs/dlgVario.xml:81 Data/Dialogs/dlgVario_L.xml:80
 msgid "Climb averager scale"
@@ -6100,6 +6114,9 @@ msgid ""
 "calculations, in task abort mode, for determining arrival altitude at "
 "airfields."
 msgstr ""
+"Le réglage MacCready utilisé, quand le MC de sécurité est activé pour le "
+"calcul du local en mode annulation de circuit, pour déterminer l'altitude "
+"d'arrivée sur les aérodromes."
 
 #: Data/Dialogs/dlgConfiguration.xml:808
 #: Data/Dialogs/dlgConfiguration_L.xml:812
@@ -6116,6 +6133,8 @@ msgid ""
 "Enable voice announcement that the glider is within the task observation "
 "sector."
 msgstr ""
+"Activer l'annonce vocale prévenant que le planeur est dans le secteur "
+"d'observation du circuit."
 
 #: Data/Dialogs/dlgVario.xml:37 Data/Dialogs/dlgVario_L.xml:36
 msgid "Baud rate Vega"
@@ -6138,16 +6157,18 @@ msgid ""
 "Determines what waypoint labels are displayed for each waypoint (space "
 "permitting)"
 msgstr ""
+"Détermine quelle étiquette est affichée pour chaque point de virage (selon "
+"l'espace disponible)"
 
 #: Data/Dialogs/dlgConfiguration.xml:117
 #: Data/Dialogs/dlgConfiguration_L.xml:117
 msgid "Sets the type of the snail trail display."
-msgstr ""
+msgstr "Choisit le type de la trace en spirale à afficher."
 
 #: Data/Dialogs/dlgConfiguration.xml:710
 #: Data/Dialogs/dlgConfiguration_L.xml:714
 msgid "Units used for task speeds."
-msgstr ""
+msgstr "Unités utilisées pour les vitesses du circuit."
 
 #: Data/Dialogs/dlgConfiguration.xml:351
 #: Data/Dialogs/dlgConfiguration_L.xml:352
@@ -6162,11 +6183,11 @@ msgstr ""
 
 #: Data/Dialogs/dlgPlaneDetails.xml:5 Data/Dialogs/dlgPlaneDetails_L.xml:5
 msgid "Registration"
-msgstr ""
+msgstr "Immatriculation"
 
 #: Data/Dialogs/dlgBasicSettings.xml:27
 msgid "Max. temp."
-msgstr ""
+msgstr "Temp. max."
 
 #: Data/Dialogs/dlgVario.xml:135 Data/Dialogs/dlgVario_L.xml:134
 msgid "Low limit of cruise dead band"
@@ -6175,7 +6196,7 @@ msgstr ""
 #: Data/Dialogs/dlgFlarmTrafficDetails.xml:8
 #: Data/Dialogs/dlgFlarmTrafficDetails_L.xml:9
 msgid "Blue"
-msgstr ""
+msgstr "Bleu"
 
 #: Data/Dialogs/dlgConfiguration.xml:247
 #: Data/Dialogs/dlgConfiguration_L.xml:247
@@ -6197,7 +6218,7 @@ msgstr "Sélectionner"
 
 #: Data/Dialogs/dlgVoice.xml:6
 msgid "Climb rate"
-msgstr ""
+msgstr "Taux de montée"
 
 #: Data/Dialogs/dlgVario.xml:317 Data/Dialogs/dlgVario_L.xml:316
 msgid "Max. objects reported"
@@ -6232,6 +6253,8 @@ msgid ""
 "Calibration factor applied to static pressure used in total energy "
 "calculation."
 msgstr ""
+"Coefficient de calibration appliqué à la pression statique utilisée pour le "
+"calcul de l'énergie totale."
 
 #: Data/Dialogs/dlgTaskOptionalStarts.xml:3
 #: Data/Dialogs/dlgTaskOptionalStarts_L.xml:3
@@ -6248,6 +6271,8 @@ msgid ""
 "A list of possible InfoBox layouts. Do some trials to find the best for your "
 "screen size."
 msgstr ""
+"Une liste de mises en page possibles pour les InfoBoxes. Faites des essais "
+"pour trouver la meilleure pour votre taille d'écran."
 
 #: Data/Dialogs/dlgTaskPointType.xml:3 Data/Dialogs/dlgTaskPointType_L.xml:3
 msgid "Task Point Type"
@@ -6260,11 +6285,11 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration.xml:285
 #: Data/Dialogs/dlgConfiguration_L.xml:286
 msgid "External wind"
-msgstr ""
+msgstr "Vent externe"
 
 #: Data/Dialogs/dlgFontEdit.xml:16
 msgid "Italic font"
-msgstr ""
+msgstr "Caractères italiques"
 
 #: Data/Dialogs/dlgConfiguration.xml:10 Data/Dialogs/dlgConfiguration_L.xml:6
 msgid "Fonts"
