@@ -6,15 +6,15 @@ msgstr ""
 "Project-Id-Version: xcsoar\n"
 "Report-Msgid-Bugs-To: \n"
 "POT-Creation-Date: 2011-08-27 16:42+0200\n"
-"PO-Revision-Date: 2011-05-13 18:11+0000\n"
-"Last-Translator: Mirek Jezek <Unknown>\n"
+"PO-Revision-Date: 2011-08-28 06:56+0000\n"
+"Last-Translator: Karel Srot <Unknown>\n"
 "Language-Team: Czech <cs@li.org>\n"
 "Language: cs\n"
 "MIME-Version: 1.0\n"
 "Content-Type: text/plain; charset=UTF-8\n"
 "Content-Transfer-Encoding: 8bit\n"
-"X-Launchpad-Export-Date: 2011-05-15 08:36+0000\n"
-"X-Generator: Launchpad (build 13037)\n"
+"X-Launchpad-Export-Date: 2011-09-05 06:28+0000\n"
+"X-Generator: Launchpad (build 13830)\n"
 
 #: src/Task/TaskStore.cpp:75 src/ExpandMacros.cpp:532
 #: src/InputEventsActions.cpp:1466 src/Dialogs/dlgAnalysis.cpp:350
@@ -96,17 +96,19 @@ msgstr "Záznam ukončen"
 
 #: src/Logger/ExternalLogger.cpp:91
 msgid "Declare task?"
-msgstr ""
+msgstr "Deklarovat úlohu?"
 
 #: src/Logger/ExternalLogger.cpp:94
 msgid "Task declared!"
-msgstr ""
+msgstr "Úloha deklarována!"
 
 #: src/Logger/ExternalLogger.cpp:98
 msgid ""
 "Error occured,\n"
 "Task NOT declared!"
 msgstr ""
+"Došlo k chybě,\n"
+"úloha nebyla deklarována!"
 
 #: src/Logger/ExternalLogger.cpp:124
 msgid "No logger connected"
@@ -126,20 +128,20 @@ msgstr "Trať deklarována"
 
 #: src/Logger/ExternalLogger.cpp:261
 msgid "Failed to download flight list."
-msgstr ""
+msgstr "Nepodařilo se stáhnout seznam letů."
 
 #: src/Logger/ExternalLogger.cpp:262 src/Logger/ExternalLogger.cpp:268
 #: src/Logger/ExternalLogger.cpp:296
 msgid "Download flight"
-msgstr ""
+msgstr "Stáhnout let"
 
 #: src/Logger/ExternalLogger.cpp:267
 msgid "Logger is empty."
-msgstr ""
+msgstr "Záznam je prázdný"
 
 #: src/Logger/ExternalLogger.cpp:295
 msgid "Failed to download flight."
-msgstr ""
+msgstr "Nepodařilo se stáhnout let."
 
 #: src/Replay/IgcReplayGlue.cpp:78
 msgid "Could not open IGC file!"
@@ -159,11 +161,11 @@ msgstr ""
 
 #: src/Gauge/ThermalAssistantWindow.cpp:254
 msgid "Not Circling"
-msgstr ""
+msgstr "Netočím termiku"
 
 #: src/Gauge/FlarmTrafficWindow.cpp:222
 msgid "No Traffic"
-msgstr ""
+msgstr "Žádný provoz"
 
 #: src/Waypoint/WaypointDetailsReader.cpp:144
 msgid "Loading Airfield Details File..."
@@ -181,19 +183,19 @@ msgstr "Předchozí otočnák"
 
 #: src/ExpandMacros.cpp:149 src/ExpandMacros.cpp:169
 msgid "Furthest Landpoint"
-msgstr ""
+msgstr "Nejvzdálenější místo přistání"
 
 #: src/ExpandMacros.cpp:150 src/ExpandMacros.cpp:170
 msgid "Next Landpoint"
-msgstr ""
+msgstr "Další místo přistání"
 
 #: src/ExpandMacros.cpp:159 src/ExpandMacros.cpp:179
 msgid "Closest Landpoint"
-msgstr ""
+msgstr "Nejbližší místo přistání"
 
 #: src/ExpandMacros.cpp:160 src/ExpandMacros.cpp:180
 msgid "Previous Landpoint"
-msgstr ""
+msgstr "Předchozí místo přistání"
 
 #: src/ExpandMacros.cpp:197 src/ExpandMacros.cpp:227
 msgid "Finish Turnpoint"
@@ -509,7 +511,7 @@ msgstr ""
 msgid ""
 "Total altitude gain/loss in the last thermal divided by the time spent "
 "circling."
-msgstr "Celkový zisk/ztráta výšky dělená časem stráveným kroužením."
+msgstr "Celkový zisk/ztráta výšky dělená časem stráveným točením."
 
 #: src/InfoBoxes/Content/Factory.cpp:134
 #, no-c-format
@@ -539,7 +541,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:145
 #, no-c-format
 msgid "Time spent circling in the last thermal."
-msgstr "Doba strávená kroužením v poslední termice"
+msgstr "Doba strávená posledním točením termiky"
 
 #: src/InfoBoxes/Content/Factory.cpp:152
 #, no-c-format
@@ -1743,7 +1745,7 @@ msgstr ""
 #: src/InfoBoxes/Content/Factory.cpp:804
 #, no-c-format
 msgid "Thermal circling trace"
-msgstr ""
+msgstr "Stopa točení termiky"
 
 #: src/InfoBoxes/Content/Factory.cpp:805
 #, no-c-format
@@ -1856,16 +1858,14 @@ msgid ""
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:865
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Nearest airspace horizontal"
 msgstr ""
-"Nejbližší\n"
-"Waypoint"
 
 #: src/InfoBoxes/Content/Factory.cpp:866
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Near AS H"
-msgstr "Blízko"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:867
 #, no-c-format
@@ -1878,9 +1878,9 @@ msgid "Nearest airspace vertical"
 msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:874
-#, fuzzy, no-c-format
+#, no-c-format
 msgid "Near AS V"
-msgstr "Blízko"
+msgstr ""
 
 #: src/InfoBoxes/Content/Factory.cpp:875
 #, no-c-format
@@ -1976,7 +1976,7 @@ msgstr ""
 #: src/Dialogs/dlgWindSettings.cpp:100 Data/Dialogs/dlgVegaDemo.xml:14
 #, no-c-format
 msgid "Circling"
-msgstr "Kroužení"
+msgstr "Točení"
 
 #: src/InfoBoxes/Content/Weather.cpp:221
 #: src/Dialogs/ConfigPanels/GlideComputerConfigPanel.cpp:47
@@ -2624,9 +2624,8 @@ msgid "Unable to open port"
 msgstr ""
 
 #: src/Device/Descriptor.cpp:421 src/Device/Descriptor.cpp:429
-#, fuzzy
 msgid "Sending declaration"
-msgstr "Výška terénu"
+msgstr ""
 
 #: src/Device/Descriptor.cpp:448
 msgid "Reading flight list"
@@ -2685,23 +2684,20 @@ msgid "Connected"
 msgstr "Připojeno"
 
 #: src/Dialogs/DeviceListDialog.cpp:111
-#, fuzzy
 msgid "GPS fix"
-msgstr "Chybí GPS zaměření"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:116
-#, fuzzy
 msgid "Baro"
-msgstr "Barogram"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:121 Data/Dialogs/dlgVegaDemo.xml:10
 msgid "Airspeed"
 msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:136
-#, fuzzy
 msgid "Not connected"
-msgstr "Logger nepřipojen"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:216 src/Dialogs/dlgConfiguration.cpp:99
 #: Data/Input/default.xci:728
@@ -2759,14 +2755,12 @@ msgid "Refresh"
 msgstr "Obnovit"
 
 #: src/Dialogs/DeviceListDialog.cpp:247
-#, fuzzy
 msgid "Reconnect"
-msgstr "Odpojen"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:248
-#, fuzzy
 msgid "Flight download"
-msgstr "Přehrávání záznamu"
+msgstr ""
 
 #: src/Dialogs/DeviceListDialog.cpp:249 src/Dialogs/dlgTaskManager.cpp:308
 #: src/Dialogs/dlgTaskManager.cpp:336
@@ -2817,9 +2811,8 @@ msgid "No Match!"
 msgstr ""
 
 #: src/Dialogs/dlgAirspaceSelect.cpp:275
-#, fuzzy
 msgid "Heading"
-msgstr "Přistání"
+msgstr ""
 
 #: src/Dialogs/dlgAirspaceWarnings.cpp:298
 msgid "No Warnings"
@@ -2952,9 +2945,8 @@ msgid "A plane profile \"%s\" already exists. Do you want to overwrite it?"
 msgstr ""
 
 #: src/Dialogs/dlgPlanes.cpp:176 src/Dialogs/dlgPlanes.cpp:217
-#, fuzzy
 msgid "Overwrite"
-msgstr "Přepsat?"
+msgstr ""
 
 #: src/Dialogs/dlgPlanes.cpp:238
 #, c-format
@@ -2981,15 +2973,13 @@ msgstr ""
 
 #: src/Dialogs/dlgPlaneDetails.cpp:40 Data/Dialogs/dlgPlaneDetails.xml:3
 #: Data/Dialogs/dlgPlaneDetails_L.xml:3
-#, fuzzy
 msgid "Plane Details"
-msgstr "Detaily"
+msgstr ""
 
 #: src/Dialogs/dlgPlanePolar.cpp:48 Data/Dialogs/dlgPlanePolar.xml:3
 #: Data/Dialogs/dlgPlanePolar_L.xml:3
-#, fuzzy
 msgid "Plane Polar"
-msgstr "Polára větroně"
+msgstr ""
 
 #: src/Dialogs/dlgPlanePolar.cpp:56 src/Dialogs/dlgConfiguration.cpp:95
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:102
@@ -3139,9 +3129,8 @@ msgid "Name"
 msgstr "Jméno"
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:241
-#, fuzzy
 msgid "Panel name"
-msgstr "Jméno pilota"
+msgstr ""
 
 #: src/Dialogs/dlgConfigInfoboxes.cpp:387
 msgid "Content"
@@ -3466,9 +3455,8 @@ msgid "Top Left"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:96
-#, fuzzy
 msgid "Top Right"
-msgstr "Doba letu"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:97
 msgid "Bottom Left"
@@ -3479,9 +3467,8 @@ msgid "Bottom Right"
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:99
-#, fuzzy
 msgid "Centre Top"
-msgstr "Střed"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/LayoutConfigPanel.cpp:100
 msgid "Centre Bottom"
@@ -3587,9 +3574,8 @@ msgid "Use the current target waypoint as basis."
 msgstr ""
 
 #: src/Dialogs/ConfigPanels/PolarConfigPanel.cpp:243
-#, fuzzy
 msgid "Polar name"
-msgstr "Složka s polárou"
+msgstr ""
 
 #: src/Dialogs/ConfigPanels/RouteConfigPanel.cpp:80
 #: src/Dialogs/dlgTaskHelpers.cpp:242
@@ -3961,9 +3947,8 @@ msgid "Task edit"
 msgstr ""
 
 #: src/Dialogs/pnlTaskEdit.cpp:126
-#, fuzzy
 msgid "Add Turnpoint"
-msgstr "Následující otočnák"
+msgstr ""
 
 #: src/Dialogs/pnlTaskList.cpp:168
 msgid "Task not saved"
@@ -4014,14 +3999,12 @@ msgid "(Add Alternate Start)"
 msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:147
-#, fuzzy
 msgid "Enable Alternate Starts"
-msgstr "Alternativní místa startu"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:150
-#, fuzzy
 msgid "Edit Alternates"
-msgstr "Alternativní"
+msgstr ""
 
 #: src/Dialogs/dlgTaskPoint.cpp:287
 msgid "Remove task point?"
@@ -4189,9 +4172,8 @@ msgid "BGA Enhanced Option"
 msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:266
-#, fuzzy
 msgid "BGA Start Sector"
-msgstr "FAI Sektor"
+msgstr ""
 
 #: src/Dialogs/dlgTaskHelpers.cpp:276
 msgid ""
@@ -4462,9 +4444,8 @@ msgid "Comment"
 msgstr "Komentář"
 
 #: src/Dialogs/dlgWaypointSelect.cpp:658
-#, fuzzy
 msgid "Waypoint name"
-msgstr "Popisky waypointů"
+msgstr ""
 
 #: src/Dialogs/dlgWaypointSelect.cpp:739
 msgid "Choose a filter or click here"
@@ -4538,9 +4519,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgWaypointDetails.xml:18
 #: Data/Dialogs/dlgWaypointDetails_L.xml:18
-#, fuzzy
 msgid "Bearing and Distance"
-msgstr "Zbývající vzdálenost"
+msgstr ""
 
 #: Data/Dialogs/dlgVoice.xml:18
 msgid ""
@@ -4763,9 +4743,8 @@ msgid "GPS lock"
 msgstr "GPS zachycen"
 
 #: Data/Dialogs/dlgPlaneDetails.xml:46 Data/Dialogs/dlgPlaneDetails_L.xml:38
-#, fuzzy
 msgid "Dump Time"
-msgstr "Doba vypuštění zátěže"
+msgstr ""
 
 #: Data/Dialogs/dlgTextEntry.xml:8
 msgid "A-"
@@ -6212,9 +6191,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:233
 #: Data/Dialogs/dlgConfiguration_L.xml:233
-#, fuzzy
 msgid "Thermal band"
-msgstr "Výška stoupáku"
+msgstr ""
 
 #: Data/Dialogs/dlgSwitches.xml:23
 msgid "Gear down"
@@ -6663,14 +6641,12 @@ msgstr ""
 #: Data/Dialogs/dlgConfiguration_L.xml:527
 #: Data/Dialogs/pnlTaskProperties.xml:30
 #: Data/Dialogs/pnlTaskProperties_L.xml:31
-#, fuzzy
 msgid "Finish height ref."
-msgstr "FAI cílová výška"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:90 Data/Dialogs/dlgConfiguration_L.xml:90
-#, fuzzy
 msgid "Max. auto zoom distance"
-msgstr "Vzdálenost k otočáku"
+msgstr ""
 
 #: Data/Dialogs/dlgLoggerReplay.xml:6
 msgid ""
@@ -6688,9 +6664,8 @@ msgid "Trail scaled"
 msgstr ""
 
 #: Data/Dialogs/dlgPlaneDetails.xml:39 Data/Dialogs/dlgPlaneDetails_L.xml:33
-#, fuzzy
 msgid "Max. Ballast"
-msgstr "Zátěž"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:798
 #: Data/Dialogs/dlgConfiguration_L.xml:802
@@ -7415,9 +7390,8 @@ msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:290
 #: Data/Dialogs/dlgConfiguration_L.xml:291
-#, fuzzy
 msgid "Auto MC mode"
-msgstr "Auto MacCready ZAP"
+msgstr ""
 
 #: Data/Dialogs/dlgConfiguration.xml:174
 #: Data/Dialogs/dlgConfiguration_L.xml:174
@@ -8155,37 +8129,6 @@ msgid ""
 "TAF"
 msgstr ""
 
-#, fuzzy
-#~ msgid "Declaring to %s"
-#~ msgstr "Deklarovat trať"
-
-#~ msgid "Setup ..."
-#~ msgstr "Nastavení ..."
-
-#~ msgid "Configuration saved"
-#~ msgstr "Konfigurace uložena"
-
-#~ msgid "System"
-#~ msgstr "Systém"
-
-#~ msgid "Task Rules"
-#~ msgstr "Pravidla úlohy"
-
-#~ msgid "Add Waypoint"
-#~ msgstr "Přidat waypoint"
-
-#~ msgid "File Browser"
-#~ msgstr "Prohlížeč souborů"
-
-#~ msgid "Volume"
-#~ msgstr "Hlasitost"
-
-#~ msgid "Free"
-#~ msgstr "Volný"
-
-#~ msgid "File type"
-#~ msgstr "Typ souboru"
-
 #~ msgid "Declare Task?"
 #~ msgstr "Deklarovat trať?"
 
@@ -8301,6 +8244,9 @@ msgstr ""
 #~ msgid "Min sink"
 #~ msgstr "Min opadání"
 
+#~ msgid "Configuration saved"
+#~ msgstr "Konfigurace uložena"
+
 #~ msgid "Wind at Altitude"
 #~ msgstr "Vítr ve výšce"
 
@@ -8376,8 +8322,17 @@ msgstr ""
 #~ msgid "White outline"
 #~ msgstr "Bílé obrysy"
 
+#~ msgid "Alternate"
+#~ msgstr "Alternativní"
+
 #~ msgid "Changes to configuration saved."
 #~ msgstr "Změny v nastavení uloženy."
+
+#~ msgid "System"
+#~ msgstr "Systém"
+
+#~ msgid "Task Rules"
+#~ msgstr "Pravidla úlohy"
 
 #~ msgid "TRUE"
 #~ msgstr "PRAVDA"
@@ -8387,6 +8342,9 @@ msgstr ""
 
 #~ msgid "add waypoint"
 #~ msgstr "přidat waypoint"
+
+#~ msgid "FAI Sector"
+#~ msgstr "FAI Sektor"
 
 #~ msgid "Append to task"
 #~ msgstr "Připojit k úloze"
@@ -8439,6 +8397,9 @@ msgstr ""
 #~ msgid "Achieved Speed"
 #~ msgstr "Dosažená Rychlost"
 
+#~ msgid "Volume"
+#~ msgstr "Hlasitost"
+
 #~ msgid "Set speed remaining"
 #~ msgstr "Nastavit zbývající rychlost"
 
@@ -8451,14 +8412,26 @@ msgstr ""
 #~ msgid "Customize Fonts"
 #~ msgstr "Upravit fonty"
 
+#~ msgid "Polar file"
+#~ msgstr "Složka s polárou"
+
 #~ msgid "Start alt"
 #~ msgstr "Výška startu"
+
+#~ msgid "FAI finish height"
+#~ msgstr "FAI cílová výška"
 
 #~ msgid "Goto"
 #~ msgstr "Jít na"
 
+#~ msgid "Free"
+#~ msgstr "Volný"
+
 #~ msgid "Select pattern"
 #~ msgstr "Vybrat vzor"
+
+#~ msgid "Setup ..."
+#~ msgstr "Nastavení ..."
 
 #~ msgid "Dialog boxes"
 #~ msgstr "Boxy s dialogy"
@@ -8474,6 +8447,9 @@ msgstr ""
 
 #~ msgid "Topology display"
 #~ msgstr "Zobrazení topologie"
+
+#~ msgid "File type"
+#~ msgstr "Typ souboru"
 
 #~ msgid "Start height ref"
 #~ msgstr "Výška startu ref"
@@ -8502,9 +8478,6 @@ msgstr ""
 #~ msgid "Below Final Glide"
 #~ msgstr "Výška nestačí na dokluz"
 
-#~ msgid "Topology"
-#~ msgstr "Topologie"
-
 #~ msgid "Waiting for GPS Connection"
 #~ msgstr "Čekám na připojení GPS"
 
@@ -8519,30 +8492,6 @@ msgstr ""
 
 #~ msgid "Waiting for GPS Fix"
 #~ msgstr "Čekám na sigál GPS"
-
-#~ msgid "None "
-#~ msgstr "Žádná "
-
-#~ msgid "Units:"
-#~ msgstr "Jednotky:"
-
-#~ msgid "InfoBox values"
-#~ msgstr "InfoBox hodnoty"
-
-#~ msgid "Final Glide"
-#~ msgstr "Finální dokluz"
-
-#~ msgid "True"
-#~ msgstr "PRAVDA"
-
-#~ msgid "False"
-#~ msgstr "CHYBNÝ"
-
-#~ msgid "Orange"
-#~ msgstr "Oranžová"
-
-#~ msgid "Clear Task"
-#~ msgstr "Vymazat úlohu"
 
 #~ msgid ""
 #~ "Error occured,\n"
