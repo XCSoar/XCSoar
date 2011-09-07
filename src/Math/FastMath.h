@@ -71,7 +71,7 @@ gcc_const
 static inline int
 NATIVE_TO_INT(fixed x)
 {
-  return uround(fast_mult(INT_ANGLE_MULT, 8, x, 2)) & 0xfff;
+  return iround(fast_mult(INT_ANGLE_MULT, 8, x, 2)) & 0xfff;
 }
 
 gcc_const
