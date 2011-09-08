@@ -316,7 +316,7 @@ Canvas::formatted_text(PixelRect *rc, const TCHAR *text, unsigned format) {
   }
 
   int y = (format & DT_VCENTER) && lines < max_lines
-    ? (rc->top + rc->bottom - lines * skip) / 2
+    ? (PixelScalar)(rc->top + rc->bottom - lines * skip) / 2
     : rc->top;
   for (size_t i = 0; i < len; i += _tcslen(duplicated + i) + 1) {
     if (duplicated[i] != _T('\0')) {
