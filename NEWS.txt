@@ -20,9 +20,12 @@ Version 6.2 - not yet released
   - PosiGraph: task declaration
   - device declaration can be cancelled
   - reconnect individual devices after failure or timeout
+  - device manager dialog, with manual reconnect
 * calculations
   - dry mass is seperated from the polar reference mass
   - airspace distance miscalculations fixed
+  - new wind algorithm "EKF", replacing ZigZag
+  - OLC calculation speedup
 * user interface
   - added support for reverse portrait/landscape screen orientations
   - multiple flarm team mates and teams possible
@@ -32,8 +35,9 @@ Version 6.2 - not yet released
   - profiles are not incremental anymore; initial support for editable
     user profiles
   - MacCready InfoBox: scale increments according to user unit
+  - METAR and TAF
 * map
-  - redraw terrain only if needed
+  - redraw terrain only if needed (saves battery power)
   - airspace rendering optimised
 * data files
   - auto-detect the character encoding in waypoint/airspace files
