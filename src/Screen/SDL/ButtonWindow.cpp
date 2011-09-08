@@ -50,6 +50,18 @@ ButtonWindow::set_down(bool _down)
 }
 
 bool
+ButtonWindow::on_key_check(unsigned key_code) const
+{
+  switch (key_code) {
+  case VK_RETURN:
+    return true;
+
+  default:
+    return PaintWindow::on_key_check(key_code);
+  }
+}
+
+bool
 ButtonWindow::on_key_down(unsigned key_code)
 {
   switch (key_code) {
