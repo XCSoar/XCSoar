@@ -33,6 +33,8 @@ Copyright_License {
 #define RASTER_POINT_SIZE 8
 #endif
 
+typedef GLvalue PixelScalar;
+
 struct RasterPoint {
   GLvalue x, y;
 };

@@ -28,6 +28,8 @@ Copyright_License {
 
 #define RASTER_POINT_SIZE 4
 
+typedef Sint16 PixelScalar;
+
 struct RasterPoint {
   Sint16 x, y;
 };
