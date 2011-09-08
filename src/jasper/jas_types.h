@@ -72,6 +72,8 @@
 
 #include <jasper/jas_config.h>
 
+#ifdef JASPER_DISABLED
+
 #if !defined(JAS_CONFIGURE)
 
 #if defined(WIN32) || defined(HAVE_WINDOWS_H)
@@ -91,6 +93,8 @@
 #endif
 
 #endif
+
+#endif /* JASPER_DISABLED */
 
 #if defined(HAVE_STDLIB_H)
 #include <stdlib.h>
