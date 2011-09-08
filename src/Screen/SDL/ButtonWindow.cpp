@@ -69,7 +69,7 @@ ButtonWindow::on_key_down(unsigned key_code)
   case VK_SPACE:
     set_down(false);
 
-    if (id != 0 && parent != NULL)
+    if (!on_clicked() && id != 0 && parent != NULL)
       parent->on_command(id, 0);
     return true;
 
