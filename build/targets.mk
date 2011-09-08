@@ -214,6 +214,7 @@ endif
 
 ifeq ($(TARGET),WINE)
   TARGET_CPPFLAGS += -D__WINE__
+  TARGET_CPPFLAGS += -DWINE_STRICT_PROTOTYPES
   # -mno-cygwin
 endif
 
