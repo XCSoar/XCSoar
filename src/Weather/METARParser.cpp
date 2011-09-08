@@ -25,9 +25,16 @@ Copyright_License {
 #include "METAR.hpp"
 #include "ParsedMETAR.hpp"
 #include "Units/Units.hpp"
+#include "Compatibility/string.h"
 
 #include <tchar.h>
 #include <cctype>
+
+#include <windows.h>
+#if defined(WIN32)
+#include <windows.h> // to have IsTextUnicode, MultiByteToWideChar, WideCharToMultiByte
+                     // to handle unicode files
+#endif
 
 class METARLine {
 protected:
