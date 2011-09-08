@@ -30,12 +30,6 @@ Copyright_License {
 #include <tchar.h>
 #include <cctype>
 
-#include <windows.h>
-#if defined(WIN32)
-#include <windows.h> // to have IsTextUnicode, MultiByteToWideChar, WideCharToMultiByte
-                     // to handle unicode files
-#endif
-
 class METARLine {
 protected:
   TCHAR *start, *data, *end;
