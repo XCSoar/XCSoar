@@ -24,6 +24,7 @@ Copyright_License {
 #include "Form/Button.hpp"
 #include "Look/DialogLook.hpp"
 #include "Screen/Key.h"
+#include "Asset.hpp"
 
 WndButton::WndButton(ContainerWindow &parent, const DialogLook &_look,
     const TCHAR *Caption, int X, int Y, int Width, int Height,
@@ -78,9 +79,6 @@ bool
 WndButton::on_key_check(unsigned key_code) const
 {
   switch (key_code) {
-  case VK_RETURN:
-    return true;
-
   case VK_LEFT:
     return mOnLeftNotify != NULL;
 
@@ -96,19 +94,15 @@ bool
 WndButton::on_key_down(unsigned key_code)
 {
   switch (key_code) {
-#ifdef GNAV
-  // JMW added this to make data entry easier
-  case VK_F4:
-#endif
-  case VK_RETURN:
-    return on_clicked();
-
   case VK_LEFT:
     return on_left();
 
   case VK_RIGHT:
     return on_right();
   }
+
+  if (is_altair() && key_code == VK_RETURN)
+    key_code = VK_F4;
 
   return ButtonWindow::on_key_down(key_code);
 }
