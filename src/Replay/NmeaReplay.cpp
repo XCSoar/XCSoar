@@ -106,15 +106,14 @@ NmeaReplay::Update()
 
   for (fixed i = fixed_one; i <= TimeScale; i += fixed_one) {
     Enabled = ReadUntilRMC(i != TimeScale);
-    if (!Enabled)
+    if (!Enabled) {
+      Stop();
       return false;
+    }
   }
 
-  if (!Enabled) {
-    Stop();
-  }
-
-  return Enabled;
+  assert(Enabled);
+  return true;
 }
 
 bool
