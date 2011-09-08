@@ -290,6 +290,12 @@ TargetMapWindow::on_paint_buffer(Canvas &canvas)
     DrawAircraft(canvas, SettingsMap(), aircraft_look,
                  Calculated().heading - projection.GetScreenAngle(),
                  aircraft_pos);
+}
+
+void
+TargetMapWindow::on_paint(Canvas &canvas)
+{
+  BufferWindow::on_paint(canvas);
 
   if (drag_mode == DRAG_TARGET)
     TargetPaintDrag(canvas, drag_last);

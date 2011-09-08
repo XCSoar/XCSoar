@@ -193,6 +193,7 @@ protected:
   virtual bool on_resize(unsigned width, unsigned height);
 
   virtual void on_paint_buffer(Canvas& canvas);
+  virtual void on_paint(Canvas& canvas);
 
   virtual bool on_cancel_mode();
 

@@ -89,7 +89,10 @@ TargetMapWindow::on_mouse_move(int x, int y, unsigned keys)
     if (isInSector(x, y)) {
       drag_last.x = x;
       drag_last.y = y;
-      invalidate();
+
+      /* no full repaint: copy the map from the buffer, draw dragged
+         icon on top */
+      PaintWindow::invalidate();
     }
     return true;
   }
