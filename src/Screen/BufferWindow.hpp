@@ -37,6 +37,18 @@ class BufferWindow : public PaintWindow {
 #ifndef ENABLE_OPENGL
 private:
   BufferCanvas buffer;
+
+  /**
+   * Is the buffer dirty, i.e. does it need a full repaint with
+   * on_paint_buffer()?
+   */
+  bool dirty;
+
+public:
+  void invalidate() {
+    dirty = true;
+    PaintWindow::invalidate();
+  }
 #endif
 
 protected:

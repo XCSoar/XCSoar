@@ -33,6 +33,8 @@ BufferWindow::on_create()
   if (!PaintWindow::on_create())
     return false;
 
+  dirty = true;
+
   WindowCanvas a_canvas(*this);
   buffer.set(a_canvas);
   return true;
@@ -52,6 +54,7 @@ BufferWindow::on_resize(unsigned width, unsigned height)
 {
   buffer.resize(width, height);
   PaintWindow::on_resize(width, height);
+  invalidate();
   return true;
 }
 
@@ -64,7 +67,11 @@ BufferWindow::on_paint(Canvas &canvas)
   /* paint directly on OpenGL */
   on_paint_buffer(canvas);
 #else
-  on_paint_buffer(buffer);
+  if (dirty) {
+    dirty = false;
+    on_paint_buffer(buffer);
+  }
+
   canvas.copy(buffer);
 #endif
 }
