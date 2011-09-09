@@ -35,9 +35,13 @@ LIBNET_SOURCES += \
 	$(SRC)/Net/Java/Request.cpp
 endif
 
+ifeq ($(HAVE_NET),y)
+
 LIBNET_OBJS = $(call SRC_TO_OBJ,$(LIBNET_SOURCES))
 LIBNET_LIBS = $(TARGET_OUTPUT_DIR)/libnet.a
 
 $(LIBNET_LIBS): $(LIBNET_OBJS)
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
+
+endif
