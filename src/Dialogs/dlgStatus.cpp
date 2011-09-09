@@ -501,9 +501,6 @@ dlgStatusShowModal(int start_page)
   Window* wFlight = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_FLIGHT"));
   assert(wFlight);
 
-  const unsigned xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
-  const unsigned yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
-
   Window* wSystem = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_SYSTEM"));
   assert(wSystem);
 
@@ -530,17 +527,6 @@ dlgStatusShowModal(int start_page)
 
   wTabBar->AddClient(wTimes, _T("Times"), false, TimesIcon, NULL,
                      OnTabUpdate, SetTitle);
-
-  wFlight->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
-                wf->GetClientAreaWindow().get_height() - yoffset);
-  wSystem->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
-                wf->GetClientAreaWindow().get_height() - yoffset);
-  wTask->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
-                wf->GetClientAreaWindow().get_height() - yoffset);
-  wRules->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
-                wf->GetClientAreaWindow().get_height() - yoffset);
-  wTimes->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
-                wf->GetClientAreaWindow().get_height() - yoffset);
 
   /* restore previous page */
 
