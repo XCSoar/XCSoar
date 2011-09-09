@@ -3,6 +3,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 ============================================================================
 
 Version 6.2.1 - not yet released
+* Mac OS X
+  - fix clock query
 
 Version 6.2 - 2011/09/08
 * devices
