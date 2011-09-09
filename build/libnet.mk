@@ -12,7 +12,9 @@ LIBNET_SOURCES += \
 LIBNET_LDLIBS = -lwininet
 endif
 
-ifeq ($(TARGET),UNIX)
+# don't link with CURL on Mac OS X, to keep the dynamic library
+# dependencies low
+ifeq ($(TARGET)$(findstring $(shell uname -s),Darwin),UNIX)
 HAVE_NET := y
 
 LIBNET_SOURCES += \
