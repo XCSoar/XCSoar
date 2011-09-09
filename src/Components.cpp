@@ -402,7 +402,9 @@ XCSoarInterface::Startup()
   // Read the FLARM details file
   FlarmDetails::Load();
 
+#ifdef HAVE_NET
   NOAAStore::LoadFromProfile();
+#endif
 
 #ifndef DISABLEAUDIOVARIO
   /*
