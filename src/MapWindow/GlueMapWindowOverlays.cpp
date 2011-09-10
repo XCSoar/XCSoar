@@ -310,7 +310,6 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
   fixed MapWidth;
   TCHAR ScaleInfo[80];
 
-  int Height;
   Units_t Unit;
 
   MapWidth = projection.GetScreenWidthMeters();
@@ -320,7 +319,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             sizeof(ScaleInfo) / sizeof(TCHAR), true);
   PixelSize TextSize = canvas.text_size(ScaleInfo);
 
-  Height = Fonts::MapBold.get_capital_height() + Layout::Scale(2);
+  int Height = Fonts::MapBold.get_capital_height() + Layout::Scale(2);
   // 2: add 1pix border
 
   canvas.fill_rectangle(Layout::Scale(4), rc.bottom - Height,
