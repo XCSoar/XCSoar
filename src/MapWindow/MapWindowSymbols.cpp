@@ -103,14 +103,14 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
 
   canvas.set_text_color(COLOR_BLACK);
 
-  TextInBoxMode_t TextInBoxMode;
-  TextInBoxMode.Align = Center;
-  TextInBoxMode.Mode = Outlined;
+  TextInBoxMode_t style;
+  style.Align = Center;
+  style.Mode = Outlined;
 
   if (Arrow[5].y >= Arrow[6].y)
-    TextInBox(canvas, sTmp, Arrow[5].x - kx, Arrow[5].y, TextInBoxMode, rc);
+    TextInBox(canvas, sTmp, Arrow[5].x - kx, Arrow[5].y, style, rc);
   else
-    TextInBox(canvas, sTmp, Arrow[6].x - kx, Arrow[6].y, TextInBoxMode, rc);
+    TextInBox(canvas, sTmp, Arrow[6].x - kx, Arrow[6].y, style, rc);
 }
 
 void
