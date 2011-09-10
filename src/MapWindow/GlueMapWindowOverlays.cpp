@@ -161,7 +161,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
       !Calculated().task_stats.total.solution_mc0.IsDefined())
     return;
 
-  const int y0 = ((rc.bottom - rc.top) / 2) + rc.top;
+  const int y0 = (rc.bottom + rc.top) / 2;
 
   // 60 units is size, div by 8 means 60*8 = 480 meters.
   int Offset = ((int)Calculated().task_stats.total.solution_remaining.altitude_difference) / 8;
