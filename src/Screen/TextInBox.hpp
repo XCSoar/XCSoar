@@ -52,24 +52,24 @@ enum RenderMode
   RoundedBlack
 };
 
-struct TextInBoxMode_t
+struct TextInBoxMode
 {
   RenderMode Mode;
   TextAlign Align;
   bool Bold;
   bool MoveInView;
 
-  TextInBoxMode_t() :
+  TextInBoxMode() :
     Mode(Simple), Align(Left), Bold(false), MoveInView(false) {}
 };
 
 bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
-               TextInBoxMode_t Mode, const PixelRect &MapRect,
+               TextInBoxMode Mode, const PixelRect &MapRect,
                LabelBlock *label_block=NULL);
 
 bool
 TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
-          TextInBoxMode_t Mode,
+          TextInBoxMode Mode,
           unsigned screen_width, unsigned screen_height,
           LabelBlock *label_block=NULL);
 

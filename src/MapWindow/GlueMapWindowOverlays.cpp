@@ -79,7 +79,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
   x += icon->get_size().cx + Layout::FastScale(4);
   y = rc.bottom - Layout::FastScale(34);
 
-  TextInBoxMode_t mode;
+  TextInBoxMode mode;
   mode.Mode = RoundedBlack;
   mode.Bold = true;
 
@@ -293,7 +293,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
   canvas.set_text_color(COLOR_BLACK);
   canvas.set_background_color(COLOR_WHITE);
 
-  TextInBoxMode_t style;
+  TextInBoxMode style;
   style.Mode = RoundedBlack;
   style.Bold = true;
   style.MoveInView = true;

@@ -91,7 +91,7 @@ RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y,
 // returns true if really wrote something
 bool
 TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
-          TextInBoxMode_t Mode, const PixelRect &MapRect,
+          TextInBoxMode Mode, const PixelRect &MapRect,
           LabelBlock *label_block)
 {
   PixelRect brect;
@@ -162,7 +162,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 
 bool
 TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
-          TextInBoxMode_t Mode,
+          TextInBoxMode Mode,
           unsigned screen_width, unsigned screen_height,
           LabelBlock *label_block)
 {

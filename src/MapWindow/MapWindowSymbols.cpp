@@ -103,7 +103,7 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
 
   canvas.set_text_color(COLOR_BLACK);
 
-  TextInBoxMode_t style;
+  TextInBoxMode style;
   style.Align = Center;
   style.Mode = Outlined;
 

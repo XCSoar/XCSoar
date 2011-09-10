@@ -259,7 +259,7 @@ protected:
       break;
     }
 
-    TextInBoxMode_t text_mode;
+    TextInBoxMode text_mode;
     if (vwp.reachable != WaypointRenderer::Unreachable &&
         way_point.IsLandable()) {
       text_mode.Mode = settings.landable_render_mode;

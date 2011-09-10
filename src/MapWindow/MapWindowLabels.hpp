@@ -36,7 +36,7 @@ public:
   struct Label{
     TCHAR Name[NAME_SIZE+1];
     RasterPoint Pos;
-    TextInBoxMode_t Mode;
+    TextInBoxMode Mode;
     int AltArivalAGL;
     bool inTask;
     bool isLandable;
@@ -54,7 +54,7 @@ public:
   WaypointLabelList(unsigned _width, unsigned _height)
     :width(_width), height(_height), num_labels(0) {}
 
-  void Add(const TCHAR *Name, int X, int Y, TextInBoxMode_t Mode,
+  void Add(const TCHAR *Name, int X, int Y, TextInBoxMode Mode,
            int AltArivalAGL, bool inTask, bool isLandable, bool isAirport,
            bool isWatchedWaypoint);
   void Sort();
