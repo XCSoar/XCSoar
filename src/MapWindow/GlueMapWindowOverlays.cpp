@@ -293,11 +293,11 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
   canvas.set_text_color(COLOR_BLACK);
   canvas.set_background_color(COLOR_WHITE);
 
-  TextInBoxMode_t TextInBoxMode;
-  TextInBoxMode.Mode = RoundedBlack;
-  TextInBoxMode.Bold = true;
-  TextInBoxMode.MoveInView = true;
-  TextInBox(canvas, Value, 0, (int)Offset, TextInBoxMode, rc);
+  TextInBoxMode_t style;
+  style.Mode = RoundedBlack;
+  style.Bold = true;
+  style.MoveInView = true;
+  TextInBox(canvas, Value, 0, (int)Offset, style, rc);
 }
 
 void
