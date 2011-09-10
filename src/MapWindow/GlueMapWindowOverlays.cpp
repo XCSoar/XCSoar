@@ -307,12 +307,11 @@ void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             const MapWindowProjection &projection) const
 {
-  fixed MapWidth;
   TCHAR ScaleInfo[80];
 
   Units_t Unit;
 
-  MapWidth = projection.GetScreenWidthMeters();
+  fixed MapWidth = projection.GetScreenWidthMeters();
 
   canvas.select(Fonts::MapBold);
   Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
