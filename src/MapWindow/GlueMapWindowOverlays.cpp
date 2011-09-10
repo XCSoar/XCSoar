@@ -168,8 +168,6 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 
   // 60 units is size, div by 8 means 60*8 = 480 meters.
   Offset = ((int)Calculated().task_stats.total.solution_remaining.altitude_difference) / 8;
-
-  // JMW OLD_TASK this is broken now
   Offset0 = ((int)Calculated().task_stats.total.solution_mc0.altitude_difference) / 8;
   // TODO feature: should be an angle if in final glide mode
 
