@@ -307,14 +307,14 @@ void
 GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             const MapWindowProjection &projection) const
 {
-  TCHAR ScaleInfo[80];
+  TCHAR buffer[80];
 
   fixed MapWidth = projection.GetScreenWidthMeters();
 
   canvas.select(Fonts::MapBold);
-  Units::FormatUserMapScale(MapWidth, ScaleInfo,
-                            sizeof(ScaleInfo) / sizeof(TCHAR), true);
-  PixelSize TextSize = canvas.text_size(ScaleInfo);
+  Units::FormatUserMapScale(MapWidth, buffer,
+                            sizeof(buffer) / sizeof(TCHAR), true);
+  PixelSize TextSize = canvas.text_size(buffer);
 
   int Height = Fonts::MapBold.get_capital_height() + Layout::Scale(2);
   // 2: add 1pix border
@@ -328,61 +328,61 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   canvas.text(Layout::Scale(7),
               rc.bottom - Fonts::MapBold.get_ascent_height() - Layout::Scale(1),
-              ScaleInfo);
+              buffer);
 
   Graphics::hBmpMapScaleLeft.draw(canvas, 0, rc.bottom - Height);
   Graphics::hBmpMapScaleRight.draw(canvas, Layout::Scale(9) + TextSize.cx,
                                    rc.bottom - Height);
 
-  ScaleInfo[0] = '\0';
+  buffer[0] = '\0';
   if (SettingsMap().AutoZoom)
-    _tcscat(ScaleInfo, _T("AUTO "));
+    _tcscat(buffer, _T("AUTO "));
 
   switch (follow_mode) {
   case FOLLOW_SELF:
     break;
 
   case FOLLOW_PAN:
-    _tcscat(ScaleInfo, _T("PAN "));
+    _tcscat(buffer, _T("PAN "));
     break;
   }
 
   const UIState &ui_state = CommonInterface::GetUIState();
   if (ui_state.auxiliary_enabled) {
-    _tcscat(ScaleInfo, InfoBoxManager::GetCurrentPanelName());
-    _tcscat(ScaleInfo, _T(" "));
+    _tcscat(buffer, InfoBoxManager::GetCurrentPanelName());
+    _tcscat(buffer, _T(" "));
   }
 
   if (Basic().gps.replay)
-    _tcscat(ScaleInfo, _T("REPLAY "));
+    _tcscat(buffer, _T("REPLAY "));
   else if (Basic().gps.simulator) {
-    _tcscat(ScaleInfo, _("Simulator"));
-    _tcscat(ScaleInfo, _T(" "));
+    _tcscat(buffer, _("Simulator"));
+    _tcscat(buffer, _T(" "));
   }
 
   if (SettingsComputer().BallastTimerActive) {
     TCHAR TEMP[20];
     _stprintf(TEMP, _T("BALLAST %d LITERS "),
               (int)SettingsComputer().glide_polar_task.GetBallastLitres());
-    _tcscat(ScaleInfo, TEMP);
+    _tcscat(buffer, TEMP);
   }
 
   if (weather != NULL && weather->GetParameter() > 0) {
     const TCHAR *label = weather->ItemLabel(weather->GetParameter());
     if (label != NULL)
-      _tcscat(ScaleInfo, label);
+      _tcscat(buffer, label);
   }
 
-  if (ScaleInfo[0]) {
+  if (buffer[0]) {
     int y = rc.bottom - Height;
 
     canvas.select(Fonts::Title);
     canvas.background_opaque();
     canvas.set_background_color(COLOR_WHITE);
 
-    TextSize = canvas.text_size(ScaleInfo);
+    TextSize = canvas.text_size(buffer);
     y-= TextSize.cy;
-    canvas.text(0, y, ScaleInfo);
+    canvas.text(0, y, buffer);
   }
 }
 
