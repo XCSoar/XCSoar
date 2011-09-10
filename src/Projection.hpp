@@ -51,26 +51,27 @@ Copyright_License {
  * ScreenRotation: By calling SetScreenAngle() the rotation angle for the
  * conversions can be set.
  */
-class Projection {
+class Projection
+{
   /** This is the geographical location that the ScreenOrigin is mapped to */
-  GeoPoint GeoLocation;
+  GeoPoint geo_location;
 
   /**
    * This is the point that the ScreenRotation will rotate around.
    * It is also the point that the GeoLocation points to.
    */
-  RasterPoint ScreenOrigin;
+  RasterPoint screen_origin;
 
   /**
    * FastIntegerRotation instance for fast
    * rotation in the conversion functions
    */
-  FastIntegerRotation ScreenRotation;
+  FastIntegerRotation screen_rotation;
 
   /** The earth's radius in screen coordinates (px) */
-  fixed DrawScale;
+  fixed draw_scale;
   /** Inverted value of DrawScale for faster calculations */
-  fixed InvDrawScale;
+  fixed inv_draw_scale;
 
   /** This is the scaling factor in px/m */
   fixed scale;
@@ -95,7 +96,7 @@ public:
    */
   gcc_pure
   Angle PixelsToAngle(int pixels) const {
-    return Angle::radians(pixels * InvDrawScale);
+    return Angle::radians(pixels * inv_draw_scale);
   }
 
   /**
@@ -103,7 +104,7 @@ public:
    */
   gcc_pure
   fixed AngleToPixels(Angle angle) const {
-    return fast_mult(angle.value_radians(), DrawScale, 12);
+    return fast_mult(angle.value_radians(), draw_scale, 12);
   }
 
   /**
@@ -136,7 +137,7 @@ public:
    * @return The origin/rotation center in screen coordinates
    */
   const RasterPoint &GetScreenOrigin() const {
-    return ScreenOrigin;
+    return screen_origin;
   }
 
   /**
@@ -145,8 +146,8 @@ public:
    * @param y Screen coordinate in y-direction
    */
   void SetScreenOrigin(int x, int y) {
-    ScreenOrigin.x = x;
-    ScreenOrigin.y = y;
+    screen_origin.x = x;
+    screen_origin.y = y;
   }
 
   /**
@@ -154,7 +155,7 @@ public:
    * @param pt Screen coordinate
    */
   void SetScreenOrigin(RasterPoint pt) {
-    ScreenOrigin = pt;
+    screen_origin = pt;
   }
 
   /**
@@ -162,7 +163,7 @@ public:
    * @return GeoPoint at the ScreenOrigin
    */
   const GeoPoint &GetGeoLocation() const {
-    return GeoLocation;
+    return geo_location;
   }
 
   /**
@@ -170,7 +171,7 @@ public:
    * @param g The new GeoPoint
    */
   void SetGeoLocation(GeoPoint g) {
-    GeoLocation = g;
+    geo_location = g;
   }
 
   /**
@@ -187,7 +188,7 @@ public:
    * @return Screen rotation angle
    */
   Angle GetScreenAngle() const {
-    return ScreenRotation.GetAngle();
+    return screen_rotation.GetAngle();
   }
 
   /**
@@ -195,7 +196,7 @@ public:
    * @param angle New screen rotation angle
    */
   void SetScreenAngle(Angle angle) {
-    ScreenRotation.SetAngle(angle);
+    screen_rotation.SetAngle(angle);
   }
 
   /**
@@ -203,7 +204,7 @@ public:
    * rotation angle and the specified screen row.
    */
   FastRowRotation GetScreenAngleRotation(int y) const {
-    return FastRowRotation(ScreenRotation, y);
+    return FastRowRotation(screen_rotation, y);
   }
 
 protected:

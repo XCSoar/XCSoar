@@ -27,12 +27,12 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 
 Projection::Projection() :
-  GeoLocation(Angle::zero(), Angle::zero()),
-  ScreenRotation(Angle::zero())
+  geo_location(Angle::zero(), Angle::zero()),
+  screen_rotation(Angle::zero())
 {
   SetScale(fixed_one);
-  ScreenOrigin.x = 0;
-  ScreenOrigin.y = 0;
+  screen_origin.x = 0;
+  screen_origin.y = 0;
 }
 
 fixed
@@ -51,12 +51,12 @@ GeoPoint
 Projection::ScreenToGeo(int x, int y) const
 {
   const FastIntegerRotation::Pair p =
-    ScreenRotation.Rotate(x - ScreenOrigin.x, y - ScreenOrigin.y);
+    screen_rotation.Rotate(x - screen_origin.x, y - screen_origin.y);
 
   GeoPoint g(PixelsToAngle(p.first), PixelsToAngle(p.second));
 
-  g.Latitude = GeoLocation.Latitude - g.Latitude;
-  g.Longitude = GeoLocation.Longitude + g.Longitude * g.Latitude.invfastcosine();
+  g.Latitude = geo_location.Latitude - g.Latitude;
+  g.Longitude = geo_location.Longitude + g.Longitude * g.Latitude.invfastcosine();
 
   return g;
 }
@@ -64,16 +64,16 @@ Projection::ScreenToGeo(int x, int y) const
 RasterPoint
 Projection::GeoToScreen(const GeoPoint &g) const
 {
-  const GeoPoint d = GeoLocation-g;
+  const GeoPoint d = geo_location-g;
 
   const FastIntegerRotation::Pair p =
-    ScreenRotation.Rotate((int)fast_mult(g.Latitude.fastcosine(),
+    screen_rotation.Rotate((int)fast_mult(g.Latitude.fastcosine(),
                                          AngleToPixels(d.Longitude), 16),
                           (int)AngleToPixels(d.Latitude));
 
   RasterPoint sc;
-  sc.x = ScreenOrigin.x - p.first;
-  sc.y = ScreenOrigin.y + p.second;
+  sc.x = screen_origin.x - p.first;
+  sc.y = screen_origin.y + p.second;
   return sc;
 }
 
@@ -83,9 +83,9 @@ Projection::SetScale(const fixed _scale)
   scale = _scale;
 
   // Calculate earth radius in pixels
-  DrawScale = fixed_earth_r * scale;
+  draw_scale = fixed_earth_r * scale;
   // Save inverted value for faster calculations
-  InvDrawScale = fixed_one / DrawScale;
+  inv_draw_scale = fixed_one / draw_scale;
 }
 
 int
