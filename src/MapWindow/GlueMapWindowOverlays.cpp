@@ -317,14 +317,14 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 
   canvas.select(Fonts::MapBold);
   Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
-                            sizeof(ScaleInfo) / sizeof(TCHAR), false);
+                            sizeof(ScaleInfo) / sizeof(TCHAR), true);
   PixelSize TextSize = canvas.text_size(ScaleInfo);
 
   Height = Fonts::MapBold.get_capital_height() + Layout::Scale(2);
   // 2: add 1pix border
 
   canvas.fill_rectangle(Layout::Scale(4), rc.bottom - Height,
-                        TextSize.cx + Layout::Scale(16), rc.bottom,
+                        TextSize.cx + Layout::Scale(11), rc.bottom,
                         COLOR_WHITE);
 
   canvas.background_transparent();
@@ -335,12 +335,8 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
               ScaleInfo);
 
   Graphics::hBmpMapScaleLeft.draw(canvas, 0, rc.bottom - Height);
-  Graphics::hBmpMapScaleRight.draw(canvas, Layout::Scale(14) + TextSize.cx,
+  Graphics::hBmpMapScaleRight.draw(canvas, Layout::Scale(9) + TextSize.cx,
                                    rc.bottom - Height);
-
-  const UnitSymbol *symbol = GetUnitSymbol(Unit);
-  if (symbol != NULL)
-    symbol->draw(canvas, Layout::Scale(8) + TextSize.cx, rc.bottom - Height);
 
   ScaleInfo[0] = '\0';
   if (SettingsMap().AutoZoom)
