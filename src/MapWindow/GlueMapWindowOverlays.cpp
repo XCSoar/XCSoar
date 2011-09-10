@@ -156,10 +156,6 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
 
   TCHAR Value[10];
 
-  int Offset;
-  int Offset0;
-  int i;
-
   if (!Calculated().task_stats.task_valid ||
       !Calculated().task_stats.total.solution_remaining.IsOk() ||
       !Calculated().task_stats.total.solution_mc0.IsDefined())
@@ -168,8 +164,8 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
   const int y0 = ((rc.bottom - rc.top) / 2) + rc.top;
 
   // 60 units is size, div by 8 means 60*8 = 480 meters.
-  Offset = ((int)Calculated().task_stats.total.solution_remaining.altitude_difference) / 8;
-  Offset0 = ((int)Calculated().task_stats.total.solution_mc0.altitude_difference) / 8;
+  int Offset = ((int)Calculated().task_stats.total.solution_remaining.altitude_difference) / 8;
+  int Offset0 = ((int)Calculated().task_stats.total.solution_mc0.altitude_difference) / 8;
   // TODO feature: should be an angle if in final glide mode
 
   if (Offset > 60)
@@ -190,7 +186,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
   if (Offset0 < 0)
     GlideBar0[1].y = Layout::Scale(9);
 
-  for (i = 0; i < 6; i++) {
+  for (unsigned i = 0; i < 6; i++) {
     GlideBar[i].y += y0;
     GlideBar[i].x = Layout::Scale(GlideBar[i].x) + rc.left;
   }
@@ -199,7 +195,7 @@ GlueMapWindow::DrawFinalGlide(Canvas &canvas, const PixelRect &rc) const
   GlideBar[1].y -= Offset;
   GlideBar[2].y -= Offset;
 
-  for (i = 0; i < 6; i++) {
+  for (unsigned i = 0; i < 6; i++) {
     GlideBar0[i].y += y0;
     GlideBar0[i].x = Layout::Scale(GlideBar0[i].x) + rc.left;
   }
