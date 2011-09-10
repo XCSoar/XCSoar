@@ -122,8 +122,9 @@ GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
     return;
 
   const FLARM_STATE &flarm = Basic().flarm;
-  if (!flarm.available || (flarm.GetActiveTrafficCount()==0))
+  if (!flarm.available || flarm.GetActiveTrafficCount() == 0)
     return;
+
   switch (flarm.alarm_level) {
   case 0:
     bmp = &Graphics::hBmpTrafficSafe;
