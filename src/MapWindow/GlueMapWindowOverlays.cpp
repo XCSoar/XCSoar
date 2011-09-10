@@ -309,12 +309,10 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
 {
   TCHAR ScaleInfo[80];
 
-  Units_t Unit;
-
   fixed MapWidth = projection.GetScreenWidthMeters();
 
   canvas.select(Fonts::MapBold);
-  Units::FormatUserMapScale(&Unit, MapWidth, ScaleInfo,
+  Units::FormatUserMapScale(MapWidth, ScaleInfo,
                             sizeof(ScaleInfo) / sizeof(TCHAR), true);
   PixelSize TextSize = canvas.text_size(ScaleInfo);
 

@@ -99,7 +99,7 @@ namespace Units
   bool FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
                           bool IncludeUnit = true);
 
-  bool FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
+  bool FormatUserMapScale(fixed Distance, TCHAR *Buffer,
                           size_t size, bool IncludeUnit = true);
 
   /**

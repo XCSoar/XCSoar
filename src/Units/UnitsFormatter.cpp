@@ -306,7 +306,7 @@ Units::FormatUserDistance(fixed Distance, TCHAR *Buffer, size_t size,
 }
 
 bool
-Units::FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
+Units::FormatUserMapScale(fixed Distance, TCHAR *Buffer,
                           size_t size, bool IncludeUnit)
 {
   int prec;
@@ -314,9 +314,6 @@ Units::FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
   TCHAR sTmp[32];
 
   const UnitDescriptor_t *pU = &UnitDescriptors[Current.DistanceUnit];
-
-  if (Unit != NULL)
-    *Unit = Current.DistanceUnit;
 
   value = Distance * pU->ToUserFact; // + pU->ToUserOffset;
 
@@ -331,16 +328,12 @@ Units::FormatUserMapScale(Units_t *Unit, fixed Distance, TCHAR *Buffer,
     prec = 2;
     if (Current.DistanceUnit == unKiloMeter) {
       prec = 0;
-      if (Unit != NULL)
-        *Unit = unMeter;
       pU = &UnitDescriptors[unMeter];
       value = Distance * pU->ToUserFact;
     }
     if (Current.DistanceUnit == unNauticalMiles ||
         Current.DistanceUnit == unStatuteMiles) {
       prec = 0;
-      if (Unit != NULL)
-        *Unit = unFeet;
       pU = &UnitDescriptors[unFeet];
       value = Distance * pU->ToUserFact;
     }
