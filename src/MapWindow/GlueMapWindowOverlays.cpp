@@ -377,9 +377,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
     canvas.background_opaque();
     canvas.set_background_color(COLOR_WHITE);
 
-    TextSize = canvas.text_size(buffer);
-    y-= TextSize.cy;
-    canvas.text(0, y, buffer);
+    canvas.text(0, y - canvas.text_size(buffer).cy, buffer);
   }
 }
 
