@@ -53,7 +53,7 @@ MapWindow::MapWindow(const WaypointLook &_waypoint_look,
    traffic_look(_traffic_look),
    way_point_renderer(NULL, _waypoint_look),
    airspace_renderer(_airspace_look),
-   task(NULL), route_planner(NULL),
+   task(NULL), route_planner(NULL), glide_computer(NULL),
    marks(NULL),
    compass_visible(true)
 #ifndef ENABLE_OPENGL
