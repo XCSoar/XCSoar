@@ -43,6 +43,13 @@ ProgressGlue::Create(const TCHAR *text)
 }
 
 void
+ProgressGlue::Resize(unsigned width, unsigned height)
+{
+  if (global_progress_window != NULL)
+    global_progress_window->move(0, 0, width, height);
+}
+
+void
 ProgressGlue::Close()
 {
   delete global_progress_window;

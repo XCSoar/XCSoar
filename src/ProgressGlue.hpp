@@ -33,6 +33,8 @@ namespace ProgressGlue {
    */
   void Create(const TCHAR *text);
 
+  void Resize(unsigned width, unsigned height);
+
   /**
    * Closes the ProgressWindow
    */

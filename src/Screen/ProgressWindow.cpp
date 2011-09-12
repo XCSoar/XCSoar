@@ -126,6 +126,31 @@ ProgressWindow::step()
   progress_bar.step();
 }
 
+bool
+ProgressWindow::on_resize(unsigned width, unsigned height)
+{
+  ContainerWindow::on_resize(width, height);
+
+  // Make progress bar height proportional to window height
+  unsigned progress_height = height / 20;
+  unsigned progress_horizontal_border = progress_height / 2;
+  progress_border_height = progress_height * 2;
+
+  if (message.defined())
+    message.move(0, height - progress_border_height - text_height - (height/48),
+                 width, text_height);
+
+  if (progress_bar.defined())
+    progress_bar.move(progress_horizontal_border,
+                      height - progress_border_height + progress_horizontal_border,
+                      width - progress_height,
+                      progress_height);
+
+  invalidate();
+
+  return true;
+}
+
 void
 ProgressWindow::on_paint(Canvas &canvas)
 {
