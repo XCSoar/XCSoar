@@ -50,14 +50,15 @@ class StatusMessageList;
  * - Optional logging of all messages to file
  * - Thread locking so available from any thread
  */
-class PopupMessage : public EditWindow {
+class PopupMessage : public EditWindow
+{
 public:
   enum {
-    MSG_UNKNOWN=0,
-    MSG_AIRSPACE=1,
-    MSG_USERINTERFACE=2,
-    MSG_GLIDECOMPUTER=3,
-    MSG_COMMS=4
+    MSG_UNKNOWN = 0,
+    MSG_AIRSPACE = 1,
+    MSG_USERINTERFACE = 2,
+    MSG_GLIDECOMPUTER = 3,
+    MSG_COMMS = 4,
   };
 
 private:
@@ -72,7 +73,8 @@ private:
     StaticString<256u> text;
 
     Message()
-      :type(MSG_UNKNOWN), tstart(0), texpiry(0) {
+      :type(MSG_UNKNOWN), tstart(0), texpiry(0)
+    {
       text.clear();
     }
 
@@ -131,27 +133,22 @@ public:
   bool Render();
 
 protected:
-  /**
-   * Caller must hold the lock.
-   */
+  /** Caller must hold the lock. */
   void AddMessage(int tshow, int type, const TCHAR *Text);
 
 public:
   void AddMessage(const TCHAR* text, const TCHAR *data=NULL);
 
   /**
-   * Repeats last non-visible message of specified type (or any
-   * message type=0).
+   * Repeats last non-visible message of specified type
+   * (or any message type=0).
    */
   void Repeat(int type);
 
-  /**
-   * Clears all visible messages (of specified type or if type=0,
-   * all).
-   */
+  /** Clears all visible messages (of specified type or if type=0, all). */
   bool Acknowledge(int type);
 
- private:
+private:
   void Resize();
   int GetEmptySlot();
 

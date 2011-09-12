@@ -136,7 +136,9 @@ PopupMessage::on_mouse_down(int x, int y)
   return true;
 }
 
-void PopupMessage::Resize() {
+void
+PopupMessage::Resize()
+{
   PixelRect rthis;
 
   if (*msgText == _T('\0')) {
@@ -178,10 +180,11 @@ void PopupMessage::Resize() {
          rthis.bottom - rthis.top);
     show_on_top();
   }
-
 }
 
-bool PopupMessage::Render() {
+bool
+PopupMessage::Render()
+{
   if (!globalRunningEvent.Test())
     return false;
 
@@ -204,7 +207,7 @@ bool PopupMessage::Render() {
   for (unsigned i = 0; i < MAXMESSAGES; ++i)
     changed = messages[i].Update(fpsTime) || changed;
 
-  static bool doresize= false;
+  static bool doresize = false;
 
   if (!changed) {
     mutex.Unlock();
@@ -222,8 +225,8 @@ bool PopupMessage::Render() {
   // text box
 
   doresize = true;
-  msgText[0]= _T('\0');
-  nvisible=0;
+  msgText[0] = _T('\0');
+  nvisible = 0;
   for (unsigned i = 0; i < MAXMESSAGES; ++i)
     if (messages[i].AppendTo(msgText, fpsTime))
       nvisible++;
@@ -235,25 +238,24 @@ bool PopupMessage::Render() {
   return true;
 }
 
-
-
-int PopupMessage::GetEmptySlot() {
+int
+PopupMessage::GetEmptySlot()
+{
   // find oldest message that is no longer visible
 
   // todo: make this more robust with respect to message types and if can't
   // find anything to remove..
   int i;
-  int tmin=0;
-  int imin=0;
-  for (i=0; i<MAXMESSAGES; i++) {
-    if ((i==0) || (messages[i].tstart<tmin)) {
+  int tmin = 0;
+  int imin = 0;
+  for (i = 0; i < MAXMESSAGES; i++) {
+    if (i == 0 || messages[i].tstart < tmin) {
       tmin = messages[i].tstart;
       imin = i;
     }
   }
   return imin;
 }
-
 
 void
 PopupMessage::AddMessage(int tshow, int type, const TCHAR *Text)
@@ -265,10 +267,12 @@ PopupMessage::AddMessage(int tshow, int type, const TCHAR *Text)
   messages[i].Set(type, tshow, Text, fpsTime);
 }
 
-void PopupMessage::Repeat(int type) {
+void
+PopupMessage::Repeat(int type)
+{
   int i;
-  int tmax=0;
-  int imax= -1;
+  int tmax = 0;
+  int imax = -1;
 
   mutex.Lock();
 
@@ -276,18 +280,16 @@ void PopupMessage::Repeat(int type) {
 
   // find most recent non-visible message
 
-  for (i=0; i<MAXMESSAGES; i++) {
-
-    if ((messages[i].texpiry < fpsTime)
-	&&(messages[i].tstart > tmax)
-	&&((messages[i].type == type)|| (type==0))) {
+  for (i = 0; i < MAXMESSAGES; i++) {
+    if (messages[i].texpiry < fpsTime &&
+        messages[i].tstart > tmax &&
+        (messages[i].type == type || type == 0)) {
       imax = i;
       tmax = messages[i].tstart;
     }
-
   }
 
-  if (imax>=0) {
+  if (imax >= 0) {
     messages[imax].tstart = fpsTime;
     messages[imax].texpiry = messages[imax].tstart;
   }
@@ -295,17 +297,19 @@ void PopupMessage::Repeat(int type) {
   mutex.Unlock();
 }
 
-bool PopupMessage::Acknowledge(int type) {
+bool
+PopupMessage::Acknowledge(int type)
+{
   ScopeLock protect(mutex);
   int i;
   int fpsTime = clock.elapsed();
 
-  for (i=0; i<MAXMESSAGES; i++) {
-    if ((messages[i].texpiry> messages[i].tstart)
-	&& ((type==0)||(type==messages[i].type))) {
+  for (i = 0; i < MAXMESSAGES; i++) {
+    if (messages[i].texpiry > messages[i].tstart &&
+        (type == 0 || type == messages[i].type)) {
       // message was previously visible, so make it expire now.
-      messages[i].texpiry = fpsTime-1;
-	  return true;
+      messages[i].texpiry = fpsTime - 1;
+      return true;
     }
   }
   return false;
@@ -324,7 +328,9 @@ bool PopupMessage::Acknowledge(int type) {
 //
 // TODO code: (need to discuss) Consider moving almost all this functionality into AddMessage ?
 
-void PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data) {
+void
+PopupMessage::AddMessage(const TCHAR* text, const TCHAR *data)
+{
   ScopeLock protect(mutex);
 
   StatusMessageSTRUCT LocalMessage = status_messages.First();
