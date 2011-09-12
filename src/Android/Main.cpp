@@ -112,6 +112,8 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
   if (event_queue == NULL)
     return;
 
+  CommonInterface::main_window.AnnounceResize(width, height);
+
   event_queue->purge(Event::RESIZE);
 
   Event event(Event::RESIZE, width, height);
