@@ -66,7 +66,7 @@ DebugReplay::Compute()
 {
   computer.Fill(basic, settings_computer);
   computer.Compute(basic, last_basic, calculated, settings_computer);
-  flying_computer.Compute(glide_polar, basic, last_basic, calculated,
+  flying_computer.Compute(glide_polar.GetVTakeoff(), basic, last_basic, calculated,
                           calculated.flight);
 }
 

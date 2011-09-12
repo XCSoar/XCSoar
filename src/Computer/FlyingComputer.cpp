@@ -93,7 +93,7 @@ FlyingComputer::Stationary(FlyingState &state, fixed time)
 }
 
 void
-FlyingComputer::Compute(const GlidePolar &glide_polar,
+FlyingComputer::Compute(fixed takeoff_speed,
                         const NMEAInfo &basic, const NMEAInfo &last_basic,
                         const DerivedInfo &calculated,
                         FlyingState &flying)
@@ -110,7 +110,7 @@ FlyingComputer::Compute(const GlidePolar &glide_polar,
     ? std::max(basic.true_airspeed, basic.ground_speed)
     : basic.ground_speed;
 
-  if (speed > glide_polar.GetVTakeoff() ||
+  if (speed > takeoff_speed ||
       (calculated.altitude_agl_valid && calculated.altitude_agl > fixed(300)))
     Moving(flying, basic.time);
   else
@@ -118,11 +118,11 @@ FlyingComputer::Compute(const GlidePolar &glide_polar,
 }
 
 void
-FlyingComputer::Compute(const GlidePolar &glide_polar,
+FlyingComputer::Compute(fixed takeoff_speed,
                         const AircraftState &state,
                         FlyingState &flying)
 {
-  if (state.ground_speed > glide_polar.GetVTakeoff())
+  if (state.ground_speed > takeoff_speed)
     Moving(flying, state.time);
   else
     Stationary(flying, state.time);

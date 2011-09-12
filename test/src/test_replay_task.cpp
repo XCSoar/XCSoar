@@ -134,7 +134,7 @@ test_replay()
 
       n_samples++;
 
-      flying_computer.Compute(glide_polar, sim.state, sim.state);
+      flying_computer.Compute(glide_polar.GetVTakeoff(), sim.state, sim.state);
 
       task_manager.update(sim.state, state_last);
       task_manager.update_idle(sim.state);

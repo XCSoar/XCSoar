@@ -26,7 +26,6 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-class GlidePolar;
 struct NMEAInfo;
 struct DerivedInfo;
 struct AircraftState;
@@ -42,12 +41,12 @@ class FlyingComputer {
 public:
   void Reset();
 
-  void Compute(const GlidePolar &glide_polar,
+  void Compute(fixed takeoff_speed,
                const NMEAInfo &basic, const NMEAInfo &last_basic,
                const DerivedInfo &calculated,
                FlyingState &flying);
 
-  void Compute(const GlidePolar &glide_polar,
+  void Compute(fixed takeoff_speed,
                const AircraftState &state,
                FlyingState &flying);
 

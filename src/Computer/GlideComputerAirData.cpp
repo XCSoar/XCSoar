@@ -463,7 +463,7 @@ GlideComputerAirData::FlightTimes()
 void
 GlideComputerAirData::FlightState(const GlidePolar& glide_polar)
 {
-  flying_computer.Compute(glide_polar, Basic(), LastBasic(),
+  flying_computer.Compute(glide_polar.GetVTakeoff(), Basic(), LastBasic(),
                           Calculated(), SetCalculated().flight);
 }
 
