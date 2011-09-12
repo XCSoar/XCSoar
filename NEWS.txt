@@ -4,6 +4,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.2.1 - not yet released
 * faster METAR and TAF download
+* Android
+  - fix hang on quit
 * Mac OS X
   - fix clock query
   - store data in ~/XCSoarData

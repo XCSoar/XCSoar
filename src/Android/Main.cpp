@@ -95,6 +95,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   Graphics::Deinitialise();
   delete sound_util;
   delete event_queue;
+  event_queue = NULL;
   delete native_view;
 
   OpenGL::Deinitialise();
