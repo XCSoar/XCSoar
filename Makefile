@@ -139,8 +139,6 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgHelp.cpp \
 	$(SRC)/Dialogs/dlgInfoBoxAccess.cpp \
 	$(SRC)/Dialogs/dlgLoggerReplay.cpp \
-	$(SRC)/Dialogs/dlgNOAAList.cpp \
-	$(SRC)/Dialogs/dlgNOAADetails.cpp \
 	$(SRC)/Dialogs/dlgSimulatorPrompt.cpp \
 	$(SRC)/Dialogs/dlgStartup.cpp \
 	$(SRC)/Dialogs/dlgStatus.cpp \
@@ -196,11 +194,16 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/dlgFontEdit.cpp \
 	$(SRC)/Dialogs/dlgCredits.cpp \
 
+ifeq ($(HAVE_NET),y)
+DIALOG_SOURCES += \
+	$(SRC)/Dialogs/dlgNOAAList.cpp \
+	$(SRC)/Dialogs/dlgNOAADetails.cpp
+endif
+
 
 XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \
 	$(IO_SRC_DIR)/DataFile.cpp \
-	$(SRC)/Net/ToBuffer.cpp \
 	$(SRC)/Airspace/ProtectedAirspaceWarningManager.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
@@ -305,7 +308,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointRenderer.cpp \
 	$(SRC)/Waypoint/WaypointRendererSettings.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
-	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Wind/CirclingWind.cpp \
 	$(SRC)/Wind/WindMeasurementList.cpp \
 	$(SRC)/Wind/WindStore.cpp \
@@ -618,6 +620,8 @@ endif
 
 ifeq ($(HAVE_NET),y)
 XCSOAR_SOURCES += \
+	$(SRC)/Net/ToBuffer.cpp \
+	$(SRC)/Weather/NOAAGlue.cpp \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp

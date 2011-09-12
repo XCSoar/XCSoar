@@ -48,6 +48,7 @@ Copyright_License {
 #include "Look/Look.hpp"
 #include "Profile/ProfileKeys.hpp"
 #include "Profile/Profile.hpp"
+#include "ProgressGlue.hpp"
 
 MainWindow::MainWindow(const StatusMessageList &status_messages)
   :look(NULL),
@@ -110,8 +111,9 @@ MainWindow::Initialise()
   LogStartUp(_T("Initialise fonts"));
   Fonts::Initialize();
 
-  delete look;
-  look = new Look();
+  if (look == NULL)
+    look = new Look();
+
   look->Initialise();
 }
 
@@ -435,6 +437,8 @@ MainWindow::on_resize(unsigned width, unsigned height)
 
     map->BringToBottom();
   }
+
+  ProgressGlue::Resize(width, height);
 
   return true;
 }

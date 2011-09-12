@@ -4,6 +4,16 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.3 - not yet released
 
+Version 6.2.1 - not yet released
+* faster METAR and TAF download
+* Android
+  - fix hang on quit
+  - fix screen corruption when rotating the progress screen
+  - fix startup crash with manual display orientation
+* Mac OS X
+  - fix clock query
+  - store data in ~/XCSoarData
+
 Version 6.2 - 2011/09/08
 * devices
   - Android IOIO

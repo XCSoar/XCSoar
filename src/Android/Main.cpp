@@ -95,6 +95,7 @@ Java_org_xcsoar_NativeView_deinitializeNative(JNIEnv *env, jobject obj)
   Graphics::Deinitialise();
   delete sound_util;
   delete event_queue;
+  event_queue = NULL;
   delete native_view;
 
   OpenGL::Deinitialise();
@@ -110,6 +111,8 @@ Java_org_xcsoar_NativeView_resizedNative(JNIEnv *env, jobject obj,
 {
   if (event_queue == NULL)
     return;
+
+  CommonInterface::main_window.AnnounceResize(width, height);
 
   event_queue->purge(Event::RESIZE);
 

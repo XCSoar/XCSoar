@@ -178,6 +178,23 @@ public:
   bool on_event(const SDL_Event &event);
 #endif
 
+#ifdef ANDROID
+  /**
+   * The Android OpenGL surface has been resized; notify the TopWindow
+   * that this has happened.  The caller should also submit the RESIZE
+   * event to the event queue.  This method is thread-safe.
+   */
+  void AnnounceResize(unsigned width, unsigned height);
+
+  /**
+   * Synchronously update the size of the TopWindow to the new OpenGL
+   * surface dimensions.
+   */
+  void RefreshSize();
+#else
+  void RefreshSize() {}
+#endif
+
 protected:
   virtual bool on_activate();
   virtual bool on_deactivate();

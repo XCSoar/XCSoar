@@ -103,6 +103,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "FLARM/FlarmDetails.hpp"
 #include "Compiler.h"
 #include "Util/Macros.hpp"
+#include "Net/Features.hpp"
 
 #include <assert.h>
 #include <ctype.h>
@@ -1884,6 +1885,8 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
 void
 InputEvents::eventWeather(const TCHAR *misc)
 {
+#ifdef HAVE_NET
   if (_tcscmp(misc, _T("list")) == 0)
     dlgNOAAListShowModal(XCSoarInterface::main_window);
+#endif
 }

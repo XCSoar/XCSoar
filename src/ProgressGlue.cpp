@@ -31,6 +31,8 @@ static ProgressWindow *global_progress_window;
 void
 ProgressGlue::Create(const TCHAR *text)
 {
+  CommonInterface::main_window.RefreshSize();
+
   if (global_progress_window == NULL)
     global_progress_window = new ProgressWindow(XCSoarInterface::main_window);
 
@@ -38,6 +40,13 @@ ProgressGlue::Create(const TCHAR *text)
   global_progress_window->set_pos(0);
 
   CommonInterface::main_window.refresh();
+}
+
+void
+ProgressGlue::Resize(unsigned width, unsigned height)
+{
+  if (global_progress_window != NULL)
+    global_progress_window->move(0, 0, width, height);
 }
 
 void
@@ -54,6 +63,7 @@ ProgressGlue::Step()
     return;
 
   global_progress_window->step();
+  CommonInterface::main_window.RefreshSize();
   CommonInterface::main_window.refresh();
 }
 
@@ -64,6 +74,7 @@ ProgressGlue::SetValue(unsigned value)
     return;
 
   global_progress_window->set_pos(value);
+  CommonInterface::main_window.RefreshSize();
   CommonInterface::main_window.refresh();
 }
 

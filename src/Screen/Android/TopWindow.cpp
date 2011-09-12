@@ -30,6 +30,32 @@ Copyright_License {
 #include "Android/NativeView.hpp"
 #include "PeriodClock.hpp"
 
+void
+TopWindow::AnnounceResize(unsigned width, unsigned height)
+{
+  ScopeLock protect(paused_mutex);
+  resized = true;
+  new_width = width;
+  new_height = height;
+}
+
+void
+TopWindow::RefreshSize()
+{
+  unsigned width, height;
+
+  {
+    ScopeLock protect(paused_mutex);
+    if (!resized)
+      return;
+
+    width = new_width;
+    height = new_height;
+  }
+
+  resize(width, height);
+}
+
 bool
 TopWindow::on_resize(unsigned width, unsigned height)
 {
@@ -143,18 +169,11 @@ TopWindow::on_event(const Event &event)
     return on_mouse_up(event.x, event.y);
 
   case Event::RESIZE:
-    if (!surface_valid) {
+    if (!surface_valid)
       /* postpone the resize if we're paused; the real resize will be
          handled by TopWindow::refresh() as soon as XCSoar is
          resumed */
-
-      paused_mutex.Lock();
-      resized = true;
-      new_width = event.x;
-      new_height = event.y;
-      paused_mutex.Unlock();
       return true;
-    }
 
     /* it seems the first page flip after a display orientation change
        is ignored on Android (tested on a Dell Streak / Android

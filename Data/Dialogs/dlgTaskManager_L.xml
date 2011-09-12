@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 
 <Form Caption="Task Manager">
-  <TabBar Name="TabBar" X="0" Y="52" Width="80" Height="176" OnClick="dlgTaskManager::OnTabBarClicked">
+  <TabBar Name="TabBar" X="0" Y="52" Width="80" Height="176">
   </TabBar>
 </Form>

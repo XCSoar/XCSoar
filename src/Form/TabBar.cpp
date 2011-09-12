@@ -111,8 +111,8 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
     w->move(rc.left , rc.top, rc.right - rc.left , rc.bottom - rc.top);
   } else {
     if (Layout::landscape ^ flipOrientation)
-      w->move(rc.left + theTabDisplay->GetTabHeight(), rc.top,
-              rc.right - rc.left - theTabDisplay->GetTabHeight(),
+      w->move(rc.left + theTabDisplay->GetTabWidth(), rc.top,
+              rc.right - rc.left - theTabDisplay->GetTabWidth(),
               rc.bottom - rc.top);
     else
       w->move(rc.left, rc.top + theTabDisplay->GetTabHeight(),

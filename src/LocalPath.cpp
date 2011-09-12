@@ -279,7 +279,14 @@ GetHomeDataPath(TCHAR *buffer, bool create=false)
   const TCHAR *home = getenv("HOME");
   if (home != NULL) {
     _tcscpy(buffer, home);
+#ifdef __APPLE__
+    /* Mac OS X users are not used to dot-files in their home
+       directory - make it a little bit easier for them to find the
+       files */
+    _tcscat(buffer, _T("/XCSoarData"));
+#else
     _tcscat(buffer, _T("/.xcsoar"));
+#endif
     return buffer;
   } else
     return _T("/etc/xcsoar");

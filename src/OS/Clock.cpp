@@ -43,7 +43,12 @@ MonotonicClockMS()
   clock_gettime(CLOCK_MONOTONIC, &ts);
   return ts.tv_sec * 1000 + ts.tv_nsec / 1000000;
 #elif defined(__APPLE__) /* OS X does not define CLOCK_MONOTONIC */
-  return mach_absolute_time();
+  static mach_timebase_info_data_t base;
+  if (base.denom == 0)
+    (void)mach_timebase_info(&base);
+
+  return (unsigned)((mach_absolute_time() * base.numer)
+                    / (1000000 * base.denom));
 #else
   /* we have no monotonic clock, fall back to gettimeofday() */
   struct timeval tv;
