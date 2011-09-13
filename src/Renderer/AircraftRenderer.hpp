@@ -24,12 +24,12 @@ Copyright_License {
 #ifndef XCSOAR_AIRCRAFT_RENDERER_HPP
 #define XCSOAR_AIRCRAFT_RENDERER_HPP
 
-#include "Math/Angle.hpp"
 #include "Screen/Point.hpp"
 
 struct SETTINGS_MAP;
 struct AircraftLook;
 class Canvas;
+class Angle;
 
 void
 DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,

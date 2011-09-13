@@ -27,6 +27,7 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "SettingsMap.hpp"
 #include "Util/Macros.hpp"
+#include "Math/Angle.hpp"
 
 static void
 DrawMirroredPolygon(const RasterPoint *src, RasterPoint *dst, unsigned points,
