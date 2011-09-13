@@ -42,7 +42,6 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
     return;
 
   TCHAR sTmp[12];
-  PixelSize tsize = { 0, 0 };
 
   if (!Calculated().wind_available)
     return;
@@ -54,15 +53,14 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
     return;
 
   canvas.select(Fonts::MapBold);
-  tsize = canvas.text_size(_T("99"));
-  tsize.cx = tsize.cx / 2;
+  unsigned tsize = canvas.text_size(_T("99")).cx / 2;
 
   canvas.select(Graphics::hpWind);
   canvas.select(Graphics::hbWind);
 
   int wmag = iround(4 * wind.norm);
 
-  int kx = tsize.cx / Layout::FastScale(1) / 2;
+  int kx = tsize / Layout::FastScale(1) / 2;
 
   RasterPoint Arrow[7] = {
       { 0, -20 },
