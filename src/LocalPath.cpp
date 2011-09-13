@@ -35,7 +35,7 @@ Copyright_License {
 #include <assert.h>
 #include <stdio.h>
 #include <stdlib.h>
-#include <windows.h> // for MAX_PATH
+#include <windef.h> // for MAX_PATH
 #ifdef WIN32
 #include <shlobj.h>
 #endif
