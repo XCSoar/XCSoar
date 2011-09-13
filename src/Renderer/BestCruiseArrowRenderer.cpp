@@ -23,14 +23,10 @@ Copyright_License {
 
 #include "BestCruiseArrowRenderer.hpp"
 #include "Screen/Canvas.hpp"
-#include "Screen/Graphics.hpp"
-#include "Screen/Fonts.hpp"
-#include "Screen/Layout.hpp"
 #include "Look/TaskLook.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Screen.hpp"
 #include "NMEA/Derived.hpp"
-#include "Units/Units.hpp"
 #include "SettingsMap.hpp"
 #include "Util/Macros.hpp"
 
