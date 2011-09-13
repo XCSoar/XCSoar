@@ -25,8 +25,8 @@ Copyright_License {
 #define HORIZON_RENDERER_HPP
 
 #include "Screen/Point.hpp"
-#include "NMEA/Info.hpp"
 
+struct NMEAInfo;
 class Canvas;
 
 namespace HorizonRenderer

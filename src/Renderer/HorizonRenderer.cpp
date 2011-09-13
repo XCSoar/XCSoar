@@ -25,6 +25,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Graphics.hpp"
+#include "NMEA/Info.hpp"
 
 void
 HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
