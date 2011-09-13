@@ -30,6 +30,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Look/TaskLook.hpp"
 #include "Util/Macros.hpp"
+#include "Renderer/BestCruiseArrowRenderer.hpp"
 #include "Renderer/CompassRenderer.hpp"
 #include "Renderer/TrackLineRenderer.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
@@ -56,29 +57,10 @@ MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
 void
 MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
-  if (!Basic().location_available ||
-      !Calculated().task_stats.task_valid ||
-      !Calculated().task_stats.current_leg.solution_remaining.IsOk() ||
-      Calculated().task_stats.current_leg.solution_remaining.vector.Distance
-      < fixed(0.010))
-    return;
-
-  if (Calculated().turn_mode == CLIMB)
-    return;
-
-  canvas.select(task_look.best_cruise_track_pen);
-  canvas.select(task_look.best_cruise_track_brush);
-
-  const Angle angle = Calculated().task_stats.current_leg.solution_remaining.cruise_track_bearing
-                    - render_projection.GetScreenAngle();
-
-  RasterPoint Arrow[] = { { -1, -40 }, { -1, -62 }, { -6, -62 }, {  0, -70 },
-                    {  6, -62 }, {  1, -62 }, {  1, -40 }, { -1, -40 } };
-
-  PolygonRotateShift(Arrow, ARRAY_SIZE(Arrow),
-                     aircraft_pos.x, aircraft_pos.y, angle);
-
-  canvas.polygon(Arrow, ARRAY_SIZE(Arrow));
+  if (Basic().location_available)
+    BestCruiseArrowRenderer::Draw(canvas, task_look,
+                                  render_projection.GetScreenAngle(),
+                                  aircraft_pos, Calculated());
 }
 
 void
