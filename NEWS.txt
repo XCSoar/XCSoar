@@ -4,6 +4,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.2.1 - not yet released
 * faster METAR and TAF download
+* devices
+  - FLARM: clear old barometric altitude as soon as FLARM is detected
 * Android
   - fix hang on quit
   - fix screen corruption when rotating the progress screen

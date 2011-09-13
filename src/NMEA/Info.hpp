@@ -236,6 +236,14 @@ struct NMEAInfo {
   Validity pressure_altitude_available;
 
   /**
+   * Is the barometric altitude given by a "weak" source?  This is
+   * used to clear the PGRMZ barometric altitude when a FLARM is
+   * detected, to switch from barometric altitude to pressure
+   * altitude.
+   */
+  bool baro_altitude_weak;
+
+  /**
    * Is the pressure altitude given by a "weak" source?  This is used
    * to choose vendor-specific NMEA sentences over a semi-generic one
    * like PGRMZ.  Needed when Vega is improperly muxed with FLARM, to
@@ -394,7 +402,30 @@ struct NMEAInfo {
    */
   void ProvideBaroAltitudeTrue(fixed value) {
     baro_altitude = value;
+    baro_altitude_weak = false;
     baro_altitude_available.Update(clock);
+  }
+
+  /**
+   * Same as ProvideBaroAltitudeTrue(), but don't overwrite a "strong"
+   * value.
+   */
+  void ProvideWeakBaroAltitude(fixed value) {
+    if (baro_altitude_available && !baro_altitude_weak)
+      /* don't overwrite "strong" value */
+      return;
+
+    baro_altitude = value;
+    baro_altitude_weak = true;
+    baro_altitude_available.Update(clock);
+  }
+
+  /**
+   * Clear the barometric altitude value if it is "weak".
+   */
+  void ClearWeakBaroAltitude() {
+    if (baro_altitude_available && baro_altitude_weak)
+      baro_altitude_available.Clear();
   }
 
   /**
@@ -419,6 +450,14 @@ struct NMEAInfo {
     pressure_altitude = value;
     pressure_altitude_weak = true;
     pressure_altitude_available.Update(clock);
+  }
+
+  /**
+   * Clear the pressure altitude value if it is "weak".
+   */
+  void ClearWeakPressureAltitude() {
+    if (pressure_altitude_available && pressure_altitude_weak)
+      pressure_altitude_available.Clear();
   }
 
   /**
