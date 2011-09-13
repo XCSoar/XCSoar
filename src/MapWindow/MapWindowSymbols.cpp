@@ -32,6 +32,7 @@ Copyright_License {
 #include "Util/Macros.hpp"
 #include "Renderer/CompassRenderer.hpp"
 #include "Renderer/TrackLineRenderer.hpp"
+#include "Renderer/WindArrowRenderer.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -40,74 +41,9 @@ void
 MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
                     const PixelRect &rc) const
 {
-  if (IsPanning())
-    return;
-
-  if (!Calculated().wind_available)
-    return;
-
-  const SpeedVector wind = Calculated().wind;
-
-  if (wind.norm < fixed_one)
-    // JMW don't bother drawing it if not significant
-    return;
-
-  canvas.select(Fonts::MapBold);
-  unsigned tsize = canvas.text_size(_T("99")).cx / 2;
-
-  canvas.select(Graphics::hpWind);
-  canvas.select(Graphics::hbWind);
-
-  int wmag = iround(4 * wind.norm);
-
-  int kx = tsize / Layout::FastScale(1) / 2;
-
-  RasterPoint Arrow[7] = {
-      { 0, -20 },
-      { -6, -26 },
-      { 0, -20 },
-      { 6, -26 },
-      { 0, -20 },
-      { 8 + kx, -24 },
-      { -8 - kx, -24 }
-  };
-
-  for (int i = 1; i < 4; i++)
-    Arrow[i].y -= wmag;
-
-  PolygonRotateShift(Arrow, 7, Start.x, Start.y,
-                     wind.bearing - render_projection.GetScreenAngle());
-
-  canvas.polygon(Arrow, 5);
-
-  if (SettingsMap().WindArrowStyle == 1) {
-    RasterPoint Tail[2] = {
-      { 0, Layout::FastScale(-20) },
-      { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
-    };
-
-    Angle angle = (wind.bearing - render_projection.GetScreenAngle()).as_bearing();
-    PolygonRotateShift(Tail, 2, Start.x, Start.y, angle);
-
-    // optionally draw dashed line
-    Pen dash_pen(Pen::DASH, 1, COLOR_BLACK);
-    canvas.select(dash_pen);
-    canvas.line(Tail[0], Tail[1]);
-  }
-
-  TCHAR sTmp[12];
-  _stprintf(sTmp, _T("%i"), iround(Units::ToUserWindSpeed(wind.norm)));
-
-  canvas.set_text_color(COLOR_BLACK);
-
-  TextInBoxMode style;
-  style.Align = Center;
-  style.Mode = Outlined;
-
-  if (Arrow[5].y >= Arrow[6].y)
-    TextInBox(canvas, sTmp, Arrow[5].x - kx, Arrow[5].y, style, rc);
-  else
-    TextInBox(canvas, sTmp, Arrow[6].x - kx, Arrow[6].y, style, rc);
+  if (!IsPanning())
+    WindArrowRenderer::Draw(canvas, render_projection.GetScreenAngle(),
+                            Start, rc, Calculated(), SettingsMap());
 }
 
 void
