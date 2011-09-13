@@ -41,16 +41,16 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const PixelRect rc, bool with_tail)
 {
   canvas.select(Fonts::MapBold);
-  unsigned tsize = canvas.text_size(_T("99")).cx / 2;
+  unsigned text_width = canvas.text_size(_T("99")).cx / 2;
 
   canvas.select(Graphics::hpWind);
   canvas.select(Graphics::hbWind);
 
   int wmag = iround(4 * wind.norm);
 
-  int kx = tsize / Layout::FastScale(1) / 2;
+  int kx = text_width / Layout::FastScale(1) / 2;
 
-  RasterPoint Arrow[7] = {
+  RasterPoint arrow[7] = {
       { 0, -20 },
       { -6, -26 },
       { 0, -20 },
@@ -61,23 +61,23 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   };
 
   for (int i = 1; i < 4; i++)
-    Arrow[i].y -= wmag;
+    arrow[i].y -= wmag;
 
-  PolygonRotateShift(Arrow, 7, pos.x, pos.y, wind.bearing - screen_angle);
+  PolygonRotateShift(arrow, 7, pos.x, pos.y, wind.bearing - screen_angle);
 
-  canvas.polygon(Arrow, 5);
+  canvas.polygon(arrow, 5);
 
   if (with_tail) {
-    RasterPoint Tail[2] = {
+    RasterPoint tail[2] = {
       { 0, Layout::FastScale(-20) },
       { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
     };
 
-    PolygonRotateShift(Tail, 2, pos.x, pos.y, wind.bearing - screen_angle);
+    PolygonRotateShift(tail, 2, pos.x, pos.y, wind.bearing - screen_angle);
 
     // optionally draw dashed line
     canvas.select(Graphics::hpWindTail);
-    canvas.line(Tail[0], Tail[1]);
+    canvas.line(tail[0], tail[1]);
   }
 
   TCHAR sTmp[12];
@@ -89,10 +89,10 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   style.Align = Center;
   style.Mode = Outlined;
 
-  if (Arrow[5].y >= Arrow[6].y)
-    TextInBox(canvas, sTmp, Arrow[5].x - kx, Arrow[5].y, style, rc);
+  if (arrow[5].y >= arrow[6].y)
+    TextInBox(canvas, sTmp, arrow[5].x - kx, arrow[5].y, style, rc);
   else
-    TextInBox(canvas, sTmp, Arrow[6].x - kx, Arrow[6].y, style, rc);
+    TextInBox(canvas, sTmp, arrow[6].x - kx, arrow[6].y, style, rc);
 }
 
 void
