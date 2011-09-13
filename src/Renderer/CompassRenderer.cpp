@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Screen.hpp"
+#include "Util/Macros.hpp"
 
 void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
@@ -37,6 +38,6 @@ CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.select(Graphics::hbCompass);
 
   // North arrow
-  PolygonRotateShift(arrow, 5, pos.x, pos.y, -screen_angle);
-  canvas.polygon(arrow, 5);
+  PolygonRotateShift(arrow, ARRAY_SIZE(arrow), pos.x, pos.y, -screen_angle);
+  canvas.polygon(arrow, ARRAY_SIZE(arrow));
 }
