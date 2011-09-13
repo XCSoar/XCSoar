@@ -26,7 +26,7 @@ Copyright_License {
 #include "SettingsMap.hpp"
 #include "WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
-#include "MapCanvas.hpp"
+#include "MapWindow/MapCanvas.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/AirspacePolygon.hpp"
@@ -36,7 +36,7 @@ Copyright_License {
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
-#include "MapDrawHelper.hpp"
+#include "MapWindow/MapDrawHelper.hpp"
 #include "Screen/Layout.hpp"
 #include "NMEA/Aircraft.hpp"
 

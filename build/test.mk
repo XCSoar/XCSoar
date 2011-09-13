@@ -1604,7 +1604,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
-	$(SRC)/MapWindow/AirspaceRenderer.cpp \
 	$(SRC)/MapWindow/MapWindowBlackboard.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
 	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
@@ -1624,6 +1623,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/RenderTask.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
+	$(SRC)/Renderer/AirspaceRenderer.cpp \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \

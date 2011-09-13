@@ -27,7 +27,7 @@ Copyright_License {
 #include "Util/StaticArray.hpp"
 #include "MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"
-#include "AirspaceRenderer.hpp"
+#include "Renderer/AirspaceRenderer.hpp"
 #include "Screen/DoubleBufferWindow.hpp"
 #ifndef ENABLE_OPENGL
 #include "Screen/BufferCanvas.hpp"
