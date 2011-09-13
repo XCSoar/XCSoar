@@ -376,6 +376,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
 	$(SRC)/Renderer/CompassRenderer.cpp \
+	$(SRC)/Renderer/TrackLineRenderer.cpp \
 	$(SRC)/ChartProjection.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \

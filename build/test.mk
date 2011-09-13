@@ -1625,6 +1625,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
 	$(SRC)/Renderer/CompassRenderer.cpp \
+	$(SRC)/Renderer/TrackLineRenderer.cpp \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \

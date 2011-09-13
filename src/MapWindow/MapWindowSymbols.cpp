@@ -31,6 +31,7 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Util/Macros.hpp"
 #include "Renderer/CompassRenderer.hpp"
+#include "Renderer/TrackLineRenderer.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -147,21 +148,7 @@ MapWindow::DrawBestCruiseTrack(Canvas &canvas, const RasterPoint aircraft_pos) c
 void
 MapWindow::DrawTrackBearing(Canvas &canvas, const RasterPoint aircraft_pos) const
 {
-  if (!Basic().location_available ||
-      SettingsMap().DisplayTrackBearing == dtbOff ||
-      Calculated().circling)
-    return;
-
-  if (SettingsMap().DisplayTrackBearing == dtbAuto &&
-      (Basic().track - Calculated().heading).as_delta().magnitude_degrees() < fixed(5))
-    return;
-
-  RasterPoint end;
-  fixed x,y;
-  (Basic().track - render_projection.GetScreenAngle()).sin_cos(x, y);
-  end.x = aircraft_pos.x + iround(x * fixed_int_constant(400));
-  end.y = aircraft_pos.y - iround(y * fixed_int_constant(400));
-
-  canvas.select(Graphics::hpTrackBearingLine);
-  canvas.line(aircraft_pos, end);
+  if (Basic().location_available)
+    TrackLineRenderer::Draw(canvas, render_projection.GetScreenAngle(),
+                            aircraft_pos, Basic(), Calculated(), SettingsMap());
 }
