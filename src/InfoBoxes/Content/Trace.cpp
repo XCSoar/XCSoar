@@ -194,10 +194,10 @@ InfoBoxContentThermalBand::Update(InfoBoxWindow &infobox)
 void
 InfoBoxContentTaskProgress::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
-  TaskProgressRenderer::DrawTaskProgress(CommonInterface::Calculated().common_stats.
-                                         ordered_summary,
-                                         canvas, infobox.get_value_and_comment_rect(),
-                                         infobox.GetLook().inverse);
+  TaskProgressRenderer::Draw(CommonInterface::Calculated().
+                             common_stats.ordered_summary,
+                             canvas, infobox.get_value_and_comment_rect(),
+                             infobox.GetLook().inverse);
 }
 
 void

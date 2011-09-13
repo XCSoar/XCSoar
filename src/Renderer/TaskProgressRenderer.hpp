@@ -31,8 +31,8 @@ struct TaskSummary;
 
 namespace TaskProgressRenderer
 {
-  void DrawTaskProgress(const TaskSummary &summary, Canvas &canvas,
-                        const PixelRect &rc, bool inverse);
+  void Draw(const TaskSummary &summary, Canvas &canvas,
+            const PixelRect &rc, bool inverse);
 }
 
 #endif

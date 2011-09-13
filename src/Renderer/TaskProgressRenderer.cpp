@@ -31,9 +31,8 @@ Copyright_License {
 #include <algorithm>
 
 void 
-TaskProgressRenderer::DrawTaskProgress(const TaskSummary& summary,
-                                       Canvas &canvas, 
-                                       const PixelRect &rc, bool inverse)
+TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
+                           const PixelRect &rc, bool inverse)
 {
   const int radius = std::min(rc.right - rc.left, rc.bottom - rc.top) / 2 - 
                      Layout::Scale(3);
