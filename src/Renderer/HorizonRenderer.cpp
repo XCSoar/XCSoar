@@ -28,8 +28,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 
 void
-HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
-                      const NMEAInfo &Basic)
+HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc, const NMEAInfo &Basic)
 {
   /*
   This feature of having a backup artificial horizon based on inferred
@@ -44,9 +43,10 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   */
 
   RasterPoint center;
-  center.y = (rc.top+rc.bottom)/2;
-  center.x = (rc.left+rc.right)/2;
-  const int radius = min(rc.right-rc.left,rc.bottom-rc.top)/2-Layout::Scale(1);
+  center.y = (rc.top + rc.bottom) / 2;
+  center.x = (rc.left + rc.right) / 2;
+  const int radius = min(rc.right - rc.left, rc.bottom - rc.top) / 2 -
+                     Layout::Scale(1);
 
   Pen hpHorizonSky(Layout::Scale(1), dark_color(Graphics::skyColor));
   Brush hbHorizonSky(Graphics::skyColor);
@@ -55,10 +55,10 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
 #define fixed_div fixed(1.0 / 50.0)
 #define fixed_89 fixed_int_constant(89)
 
-  fixed phi = max(-fixed_89, min(fixed_89,
-      Basic.acceleration.bank_angle.value_degrees()));
-  fixed alpha = fixed_rad_to_deg * acos(max(-fixed_one, min(fixed_one,
-      Basic.acceleration.pitch_angle.value_degrees() * fixed_div)));
+  fixed phi = max(-fixed_89,
+                  min(fixed_89, Basic.acceleration.bank_angle.value_degrees()));
+  fixed alpha = fixed_rad_to_deg * acos(max(-fixed_one,min(fixed_one,
+                  Basic.acceleration.pitch_angle.value_degrees() * fixed_div)));
   fixed sphi = fixed_180 - phi;
   Angle alpha1 = Angle::degrees(sphi - alpha);
   Angle alpha2 = Angle::degrees(sphi + alpha);
@@ -82,6 +82,8 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   // draw 45 degree dash marks
   const unsigned rr2p = uround(radius * fixed_sqrt_half) + Layout::Scale(1);
   const unsigned rr2n = rr2p - Layout::Scale(2);
-  canvas.line(center.x + rr2p, center.y - rr2p, center.x + rr2n, center.y - rr2n);
-  canvas.line(center.x - rr2p, center.y - rr2p, center.x - rr2n, center.y - rr2n);
+  canvas.line(center.x + rr2p, center.y - rr2p,
+              center.x + rr2n, center.y - rr2n);
+  canvas.line(center.x - rr2p, center.y - rr2p,
+              center.x - rr2n, center.y - rr2n);
 }
