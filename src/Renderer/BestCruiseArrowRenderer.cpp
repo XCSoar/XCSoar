@@ -56,16 +56,17 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
                               const Angle screen_angle, const RasterPoint pos,
                               const DerivedInfo &calculated)
 {
-  if (!calculated.task_stats.task_valid ||
-      !calculated.task_stats.current_leg.solution_remaining.IsOk() ||
-      calculated.task_stats.current_leg.solution_remaining.vector.Distance
-      < fixed(0.010))
+  if (calculated.turn_mode == CLIMB ||
+      !calculated.task_stats.task_valid)
     return;
 
-  if (calculated.turn_mode == CLIMB)
+  const GlideResult &solution =
+      calculated.task_stats.current_leg.solution_remaining;
+
+  if (!solution.IsOk() ||
+      solution.vector.Distance < fixed(0.010))
     return;
 
   BestCruiseArrowRenderer::Draw(canvas, look, screen_angle,
-                                calculated.task_stats.current_leg.
-                                solution_remaining.cruise_track_bearing, pos);
+                                solution.cruise_track_bearing, pos);
 }
