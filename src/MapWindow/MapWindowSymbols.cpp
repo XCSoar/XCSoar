@@ -115,11 +115,7 @@ MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
   if (!compass_visible)
     return;
 
-  RasterPoint Start;
-  Start.y = Layout::Scale(19) + rc.top;
-  Start.x = rc.right - Layout::Scale(19);
-
-  CompassRenderer::Draw(canvas, render_projection.GetScreenAngle(), Start);
+  CompassRenderer::Draw(canvas, render_projection.GetScreenAngle(), rc);
 }
 
 void

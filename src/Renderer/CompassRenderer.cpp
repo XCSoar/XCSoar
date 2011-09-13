@@ -24,9 +24,21 @@ Copyright_License {
 #include "CompassRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Graphics.hpp"
+#include "Screen/Layout.hpp"
 #include "Math/Angle.hpp"
 #include "Math/Screen.hpp"
 #include "Util/Macros.hpp"
+
+void
+CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,
+                      const PixelRect rc)
+{
+  RasterPoint pos;
+  pos.y = Layout::Scale(19) + rc.top;
+  pos.x = rc.right - Layout::Scale(19);
+
+  Draw(canvas, screen_angle, pos);
+}
 
 void
 CompassRenderer::Draw(Canvas &canvas, const Angle screen_angle,

@@ -32,6 +32,7 @@ class Angle;
 namespace CompassRenderer
 {
   void Draw(Canvas &canvas, const Angle screen_angle, const RasterPoint pos);
+  void Draw(Canvas &canvas, const Angle screen_angle, const PixelRect rc);
 }
 
 #endif
