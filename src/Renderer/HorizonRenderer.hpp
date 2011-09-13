@@ -29,7 +29,9 @@ Copyright_License {
 
 class Canvas;
 
-void DrawHorizon(Canvas &canvas, const PixelRect &rc,
-              const NMEAInfo &Basic);
+namespace HorizonRenderer
+{
+  void Draw(Canvas &canvas, const PixelRect &rc, const NMEAInfo &Basic);
+}
 
 #endif

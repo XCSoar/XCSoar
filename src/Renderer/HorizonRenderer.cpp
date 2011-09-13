@@ -27,8 +27,8 @@ Copyright_License {
 #include "Screen/Graphics.hpp"
 
 void
-DrawHorizon(Canvas &canvas, const PixelRect &rc,
-            const NMEAInfo &Basic)
+HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
+                      const NMEAInfo &Basic)
 {
   RasterPoint center;
   center.y = (rc.top+rc.bottom)/2;

@@ -170,7 +170,7 @@ void
 InfoBoxContentHorizon::on_custom_paint(InfoBoxWindow &infobox, Canvas &canvas)
 {
   if (CommonInterface::Basic().acceleration.available) {
-    DrawHorizon(canvas, infobox.get_value_and_comment_rect(),
+    HorizonRenderer::Draw(canvas, infobox.get_value_and_comment_rect(),
                 CommonInterface::Basic());
   }
 }
