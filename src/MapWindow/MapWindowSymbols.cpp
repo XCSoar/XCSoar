@@ -22,21 +22,10 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Screen/Fonts.hpp"
-#include "Screen/TextInBox.hpp"
-#include "Screen/Graphics.hpp"
-#include "Screen/Layout.hpp"
-#include "Math/Screen.hpp"
-#include "Units/Units.hpp"
-#include "Look/TaskLook.hpp"
-#include "Util/Macros.hpp"
 #include "Renderer/BestCruiseArrowRenderer.hpp"
 #include "Renderer/CompassRenderer.hpp"
 #include "Renderer/TrackLineRenderer.hpp"
 #include "Renderer/WindArrowRenderer.hpp"
-
-#include <stdlib.h>
-#include <stdio.h>
 
 void
 MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
