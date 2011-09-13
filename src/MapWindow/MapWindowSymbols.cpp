@@ -42,7 +42,7 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
     return;
 
   TCHAR sTmp[12];
-  static PixelSize tsize = { 0, 0 };
+  PixelSize tsize = { 0, 0 };
 
   if (!Calculated().wind_available)
     return;
@@ -53,11 +53,9 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
     // JMW don't bother drawing it if not significant
     return;
 
-  if (tsize.cx == 0) {
-    canvas.select(Fonts::MapBold);
-    tsize = canvas.text_size(_T("99"));
-    tsize.cx = tsize.cx / 2;
-  }
+  canvas.select(Fonts::MapBold);
+  tsize = canvas.text_size(_T("99"));
+  tsize.cx = tsize.cx / 2;
 
   canvas.select(Graphics::hpWind);
   canvas.select(Graphics::hbWind);
