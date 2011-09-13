@@ -25,9 +25,7 @@ Copyright_License {
 #define TASK_PROGRESS_RENDERER_HPP
 
 #include "Screen/Point.hpp"
-#include "Math/fixed.hpp"
 
-class Chart;
 class Canvas;
 struct TaskSummary;
 
