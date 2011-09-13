@@ -26,6 +26,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Screen/Layout.hpp"
 #include "Screen/Point.hpp"
+
 #include <math.h>
 
 // note these use static vars! not thread-safe
@@ -55,7 +56,7 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
         proj = mag12 / 2;
       }
     }
-    const fixed f = min(fixed_one, max(fixed_zero, fixed(proj)/mag12));
+    const fixed f = min(fixed_one, max(fixed_zero, fixed(proj) / mag12));
     // location of 'closest' point
     p4->x = lround(v12x * f) + p1.x;
     p4->y = lround(v12y * f) + p1.y;
@@ -65,11 +66,13 @@ ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
   }
 }
 
-static int roundshift(int x) {
-  if (x>0) {
-    x+= 512;
-  } else if (x<0) {
-    x-= 512;
+static int
+roundshift(int x)
+{
+  if (x > 0) {
+    x += 512;
+  } else if (x < 0) {
+    x -= 512;
   }
   return x >> 10;
 }
@@ -98,8 +101,8 @@ PolygonRotateShift(RasterPoint *poly, const int n, const int xs, const int ys,
       cost = Layout::FastScale(angle.ifastcosine());
       sint = Layout::FastScale(angle.ifastsine());
     } else {
-      cost = Layout::FastScale(angle.ifastcosine()/2);
-      sint = Layout::FastScale(angle.ifastsine()/2);
+      cost = Layout::FastScale(angle.ifastcosine() / 2);
+      sint = Layout::FastScale(angle.ifastsine() / 2);
     }
   }
 
@@ -109,8 +112,8 @@ PolygonRotateShift(RasterPoint *poly, const int n, const int xs, const int ys,
   while (p < pe) {
     int x = p->x;
     int y = p->y;
-    p->x = roundshift(x * cost - y * sint ) + xs;
-    p->y = roundshift(y * cost + x * sint ) + ys;
+    p->x = roundshift(x * cost - y * sint) + xs;
+    p->y = roundshift(y * cost + x * sint) + ys;
     p++;
   }
 }
