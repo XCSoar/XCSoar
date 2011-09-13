@@ -31,14 +31,7 @@ void
 HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
                       const NMEAInfo &Basic)
 {
-  RasterPoint center;
-  center.y = (rc.top+rc.bottom)/2;
-  center.x = (rc.left+rc.right)/2;
-  const int radius = min(rc.right-rc.left,rc.bottom-rc.top)/2-Layout::Scale(1);
-
   /*
-  FEATURE TEMPORARILY DISABLED DUE TO USE OF XCSOAR IN FAI COMPETITIONS
-
   This feature of having a backup artificial horizon based on inferred
   orientation from GPS and vario data is useful, and reasonably well
   tested, but has the issue of potentially invalidating use of XCSoar in
@@ -49,6 +42,11 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc,
   violates the rule.  We need to seek clarification as to whether this
   is the case or not.
   */
+
+  RasterPoint center;
+  center.y = (rc.top+rc.bottom)/2;
+  center.x = (rc.left+rc.right)/2;
+  const int radius = min(rc.right-rc.left,rc.bottom-rc.top)/2-Layout::Scale(1);
 
   Pen hpHorizonSky(Layout::Scale(1), dark_color(Graphics::skyColor));
   Brush hbHorizonSky(Graphics::skyColor);
