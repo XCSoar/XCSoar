@@ -65,7 +65,7 @@ namespace Graphics {
 
   extern Brush hBackgroundBrush;
 
-  extern Pen hpWind;
+  extern Pen hpWind, hpWindTail;
   extern Pen hpCompass;
   extern Pen hpFinalGlideAbove;
   extern Pen hpFinalGlideBelow;

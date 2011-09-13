@@ -76,8 +76,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     PolygonRotateShift(Tail, 2, pos.x, pos.y, wind.bearing - screen_angle);
 
     // optionally draw dashed line
-    Pen dash_pen(Pen::DASH, 1, COLOR_BLACK);
-    canvas.select(dash_pen);
+    canvas.select(Graphics::hpWindTail);
     canvas.line(Tail[0], Tail[1]);
   }
 

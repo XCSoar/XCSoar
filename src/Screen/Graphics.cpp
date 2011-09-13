@@ -52,6 +52,7 @@ MaskedIcon Graphics::hGPSStatus1, Graphics::hGPSStatus2;
 MaskedIcon Graphics::hBmpTrafficSafe, Graphics::hBmpTrafficWarning, Graphics::hBmpTrafficAlarm;
 
 Pen Graphics::hpWind;
+Pen Graphics::hpWindTail;
 Pen Graphics::hpCompass;
 Pen Graphics::hpFinalGlideAbove;
 Pen Graphics::hpFinalGlideBelow;
@@ -124,6 +125,7 @@ Graphics::Initialise()
 #endif
 
   hpWind.set(Layout::Scale(1), dark_color(COLOR_GRAY));
+  hpWindTail.set(Pen::DASH, 1, COLOR_BLACK);
   hbWind.set(COLOR_GRAY);
 
   hBmpMapScaleLeft.load_big(IDB_MAPSCALE_LEFT, IDB_MAPSCALE_LEFT_HD, false);
@@ -282,6 +284,7 @@ Graphics::Deinitialise()
   hbFinalGlideAbove.reset();
 
   hpWind.reset();
+  hpWindTail.reset();
 
   hpCompass.reset();
 
