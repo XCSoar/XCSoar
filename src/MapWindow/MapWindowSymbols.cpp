@@ -41,8 +41,6 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
   if (IsPanning())
     return;
 
-  TCHAR sTmp[12];
-
   if (!Calculated().wind_available)
     return;
 
@@ -95,6 +93,7 @@ MapWindow::DrawWind(Canvas &canvas, const RasterPoint &Start,
     canvas.line(Tail[0], Tail[1]);
   }
 
+  TCHAR sTmp[12];
   _stprintf(sTmp, _T("%i"), iround(Units::ToUserWindSpeed(wind.norm)));
 
   canvas.set_text_color(COLOR_BLACK);
