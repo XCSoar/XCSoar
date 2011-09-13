@@ -30,6 +30,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "Look/TaskLook.hpp"
 #include "Util/Macros.hpp"
+#include "Renderer/CompassRenderer.hpp"
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -118,15 +119,7 @@ MapWindow::DrawCompass(Canvas &canvas, const PixelRect &rc) const
   Start.y = Layout::Scale(19) + rc.top;
   Start.x = rc.right - Layout::Scale(19);
 
-  RasterPoint Arrow[5] = { { 0, -13 }, { -6, 10 }, { 0, 4 }, { 6, 10 }, { 0, -13 } };
-
-  canvas.select(Graphics::hpCompass);
-  canvas.select(Graphics::hbCompass);
-
-  // North arrow
-  PolygonRotateShift(Arrow, 5, Start.x, Start.y,
-                     -render_projection.GetScreenAngle());
-  canvas.polygon(Arrow, 5);
+  CompassRenderer::Draw(canvas, render_projection.GetScreenAngle(), Start);
 }
 
 void
