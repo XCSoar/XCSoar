@@ -161,9 +161,9 @@ DrawSimpleAircraft(Canvas &canvas, const AircraftLook &look,
 }
 
 void
-DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
-             const AircraftLook &look,
-             const Angle angle, const RasterPoint aircraft_pos)
+AircraftRenderer::Draw(Canvas &canvas, const SETTINGS_MAP &settings_map,
+                       const AircraftLook &look,
+                       const Angle angle, const RasterPoint aircraft_pos)
 {
   switch (settings_map.aircraft_symbol) {
   case acDetailed:

@@ -376,8 +376,8 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
   ChartProjection proj(rc, trace, nmea_info.location);
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
-  DrawAircraft(canvas, settings_map, aircraft_look,
-               calculated.heading, aircraft_pos);
+  AircraftRenderer::Draw(canvas, settings_map, aircraft_look,
+                         calculated.heading, aircraft_pos);
 
   canvas.select(Graphics::TracePen);
   DrawTrace(canvas, proj, trace);
@@ -514,8 +514,8 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
   }
 
   RasterPoint aircraft_pos = proj.GeoToScreen(nmea_info.location);
-  DrawAircraft(canvas, settings_map, aircraft_look,
-               calculated.heading, aircraft_pos);
+  AircraftRenderer::Draw(canvas, settings_map, aircraft_look,
+                         calculated.heading, aircraft_pos);
 }
 
 

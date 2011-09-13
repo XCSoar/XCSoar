@@ -287,9 +287,9 @@ TargetMapWindow::on_paint_buffer(Canvas &canvas)
 
   // Finally, draw you!
   if (Basic().connected)
-    DrawAircraft(canvas, SettingsMap(), aircraft_look,
-                 Calculated().heading - projection.GetScreenAngle(),
-                 aircraft_pos);
+    AircraftRenderer::Draw(canvas, SettingsMap(), aircraft_look,
+                           Calculated().heading - projection.GetScreenAngle(),
+                           aircraft_pos);
 }
 
 void

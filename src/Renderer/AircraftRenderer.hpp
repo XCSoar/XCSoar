@@ -31,9 +31,11 @@ struct AircraftLook;
 class Canvas;
 class Angle;
 
-void
-DrawAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
-             const AircraftLook &look,
-             const Angle angle, const RasterPoint aircraft_pos);
+namespace AircraftRenderer
+{
+  void Draw(Canvas &canvas, const SETTINGS_MAP &settings_map,
+            const AircraftLook &look,
+            const Angle angle, const RasterPoint aircraft_pos);
+}
 
 #endif

@@ -168,9 +168,9 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
 
   // Finally, draw you!
   if (Basic().connected)
-    DrawAircraft(canvas, SettingsMap(), aircraft_look,
-                 Calculated().heading - render_projection.GetScreenAngle(),
-                 aircraft_pos);
+    AircraftRenderer::Draw(canvas, SettingsMap(), aircraft_look,
+                           Calculated().heading - render_projection.GetScreenAngle(),
+                           aircraft_pos);
 
   // Render compass
   DrawCompass(canvas, rc);
