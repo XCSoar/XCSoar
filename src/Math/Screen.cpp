@@ -22,6 +22,7 @@ Copyright_License {
 */
 
 #include "Math/Screen.hpp"
+#include "Math/Angle.hpp"
 #include "Math/FastMath.h"
 #include "Screen/Layout.hpp"
 #include "Screen/Point.hpp"

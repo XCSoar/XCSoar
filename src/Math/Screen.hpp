@@ -28,8 +28,9 @@ Copyright_License {
 #ifndef XCSOAR_MATH_SCREEN_HPP
 #define XCSOAR_MATH_SCREEN_HPP
 
-#include "Math/Angle.hpp"
 #include "Screen/Point.hpp"
+
+class Angle;
 
 void ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
                         const RasterPoint &p3, RasterPoint *p4, int offset);
