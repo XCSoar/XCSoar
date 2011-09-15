@@ -102,6 +102,9 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
     value_min = max(fixed(-5.0), value_min);
   }
 
+  bool scaled_trail = settings.SnailScaling &&
+                      projection.GetMapScale() <= fixed_int_constant(6000);
+
   RasterPoint last_point;
   bool last_valid = false;
   for (TracePointVector::const_iterator it = trace.begin(), end = trace.end();
@@ -129,8 +132,7 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
           ? - it->GetVario() / value_min
           : it->GetVario() / value_max ;
 
-        if (!settings.SnailScaling ||
-            projection.GetMapScale() > fixed_int_constant(6000))
+        if (!scaled_trail)
           canvas.select(Graphics::hpSnail[GetSnailColorIndex(colour_vario)]);
         else
           canvas.select(Graphics::hpSnailVario[GetSnailColorIndex(colour_vario)]);
