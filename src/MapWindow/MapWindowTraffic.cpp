@@ -52,7 +52,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
   if (!flarm.available)
     return;
 
-  const MapWindowProjection &projection = render_projection;
+  const WindowProjection &projection = render_projection;
 
   // if zoomed in too far out, dont draw traffic since it will be too close to
   // the glider and so will be meaningless (serves only to clutter, cant help
