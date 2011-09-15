@@ -1627,6 +1627,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/BestCruiseArrowRenderer.cpp \
 	$(SRC)/Renderer/CompassRenderer.cpp \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
+	$(SRC)/Renderer/TrailRenderer.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/Screen.cpp \

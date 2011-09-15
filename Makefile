@@ -378,6 +378,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/BestCruiseArrowRenderer.cpp \
 	$(SRC)/Renderer/CompassRenderer.cpp \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
+	$(SRC)/Renderer/TrailRenderer.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/ChartProjection.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \

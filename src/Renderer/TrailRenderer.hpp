@@ -21,21 +21,24 @@ Copyright_License {
 }
 */
 
-#include "MapWindow.hpp"
-#include "Renderer/TrailRenderer.hpp"
+#ifndef XCSOAR_TRAIL_RENDERER_HPP
+#define XCSOAR_TRAIL_RENDERER_HPP
 
-void
-MapWindow::RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const
+#include "Screen/Point.hpp"
+
+class Canvas;
+class GlideComputer;
+class WindowProjection;
+struct NMEAInfo;
+struct DerivedInfo;
+struct SETTINGS_MAP;
+
+namespace TrailRenderer
 {
-  unsigned min_time = max(0, (int)Basic().time - 600);
-  DrawTrail(canvas, aircraft_pos, min_time);
+  void Draw(Canvas &canvas, const GlideComputer &glide_computer,
+            const WindowProjection &projection, unsigned min_time,
+            bool enable_traildrift, const RasterPoint pos, const NMEAInfo &basic,
+            const DerivedInfo &calculated, const SETTINGS_MAP &settings);
 }
 
-void
-MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
-                     unsigned min_time, bool enable_traildrift) const
-{
-  if (glide_computer)
-    TrailRenderer::Draw(canvas, *glide_computer, render_projection, min_time,
-                        enable_traildrift, aircraft_pos, Basic(), Calculated(), SettingsMap());
-}
+#endif
