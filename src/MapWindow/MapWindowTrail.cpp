@@ -70,8 +70,11 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
   if (trace.empty())
     return;
 
-  GeoPoint traildrift(Angle::zero(), Angle::zero());
-  if (enable_traildrift && Calculated().wind_available) {
+  if (!Calculated().wind_available)
+    enable_traildrift = false;
+
+  GeoPoint traildrift;
+  if (enable_traildrift) {
     GeoPoint tp1 = FindLatitudeLongitude(Basic().location,
                                          Calculated().wind.bearing,
                                          Calculated().wind.norm);
@@ -107,8 +110,9 @@ MapWindow::DrawTrail(Canvas &canvas, const RasterPoint aircraft_pos,
   for (TracePointVector::const_iterator it = trace.begin(), end = trace.end();
        it != end; ++it) {
     const fixed dt = Basic().time - fixed(it->time);
-    const GeoPoint gp =
-      it->get_location().parametric(traildrift, dt * it->drift_factor / 256);
+    const GeoPoint gp = enable_traildrift ?
+      it->get_location().parametric(traildrift, dt * it->drift_factor / 256) :
+      it->get_location();
     if (!bounds.inside(gp)) {
       /* the point is outside of the MapWindow; don't paint it */
       last_valid = false;
