@@ -234,9 +234,7 @@ public:
   }
 
   void round_rectangle(int left, int top, int right, int bottom,
-                       unsigned ellipse_width, unsigned ellipse_height) {
-    rectangle(left, top, right, bottom); // XXX
-  }
+                       unsigned ellipse_width, unsigned ellipse_height);
 
   void raised_edge(PixelRect &rc);
 

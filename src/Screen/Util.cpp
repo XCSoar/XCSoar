@@ -161,3 +161,19 @@ KeyHole(Canvas &canvas, long x, long y, int radius,
 
   return true;
 }
+
+void
+RoundRect(Canvas &canvas, int left, int top, int right, int bottom, int radius)
+{
+  int npoly = 0;
+  RasterPoint pt[66*4];
+
+  segment_poly(pt, left + radius, top + radius, radius, 3072, 4095, npoly);
+  segment_poly(pt, right - radius, top + radius, radius, 0, 1023, npoly);
+  segment_poly(pt, right - radius, bottom - radius, radius, 1024, 2047, npoly);
+  segment_poly(pt, left + radius, bottom - radius, radius, 2048, 3071, npoly);
+
+  assert(npoly <= 66*4);
+  if (npoly)
+    canvas.polygon(pt, npoly);
+}

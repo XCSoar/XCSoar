@@ -49,4 +49,7 @@ KeyHole(Canvas &canvas, long x, long y, int radius,
         Angle start, Angle end,
         int inner_radius);
 
+void
+RoundRect(Canvas &canvas, int left, int top, int right, int bottom, int radius);
+
 #endif

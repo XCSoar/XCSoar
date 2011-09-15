@@ -834,4 +834,12 @@ Canvas::copy_and(int dest_x, int dest_y,
            src.native(), src_x, src_y);
 }
 
+void
+Canvas::round_rectangle(int left, int top, int right, int bottom,
+                        unsigned ellipse_width, unsigned ellipse_height)
+{
+  unsigned radius = std::min(ellipse_width, ellipse_height) / 2;
+  ::RoundRect(*this, left, top, right, bottom, radius);
+}
+
 #endif /* !OPENGL */
