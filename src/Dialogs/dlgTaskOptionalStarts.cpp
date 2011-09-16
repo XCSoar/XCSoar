@@ -39,7 +39,6 @@ static WndListFrame* wOptionalStartPoints = NULL;
 static bool task_modified = false;
 static OrderedTask* ordered_task = NULL;
 static bool RealStartExists = false;
-static AbstractTaskFactory::LegalPointVector point_types;
 
 static void
 OnCloseClicked(gcc_unused WndButton &Sender)
