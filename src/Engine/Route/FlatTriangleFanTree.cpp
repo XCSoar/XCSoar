@@ -321,12 +321,12 @@ FlatTriangleFanTree::accept_in_range(const FlatBoundingBox& bb,
     return;
 
   if (bb.overlaps(bb_self)) {
-    visitor.start_fan();
+    visitor.StartFan();
     for (VertexVector::const_iterator it = vs.begin(), end = vs.end();
          it != end; ++it) {
-      visitor.add_point(task_proj.unproject(*it));
+      visitor.AddPoint(task_proj.unproject(*it));
     }
-    visitor.end_fan();
+    visitor.EndFan();
   }
   for (LeafVector::const_iterator it = children.begin(), end = children.end();
        it != end; ++it) {

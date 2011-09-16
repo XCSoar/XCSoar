@@ -36,9 +36,9 @@ struct ReachFanParms;
 
 class TriangleFanVisitor {
 public:
-  virtual void start_fan() = 0;
-  virtual void add_point(const GeoPoint& p) = 0;
-  virtual void end_fan() = 0;
+  virtual void StartFan() = 0;
+  virtual void AddPoint(const GeoPoint& p) = 0;
+  virtual void EndFan() = 0;
 };
 
 class FlatTriangleFanTree: public FlatTriangleFan {

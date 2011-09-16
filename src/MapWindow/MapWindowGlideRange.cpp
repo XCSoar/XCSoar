@@ -210,18 +210,18 @@ public:
   {
   }
 
-  virtual void start_fan() {
+  virtual void StartFan() {
     // Clear the GeoPointVector for the next TriangleFan
     g.clear();
   }
 
-  virtual void add_point(const GeoPoint& p) {
+  virtual void AddPoint(const GeoPoint& p) {
     // Add a new GeoPoint to the current TriangleFan
     g.append(p);
   }
 
   virtual void
-  end_fan()
+  EndFan()
   {
     if (fans.full())
       return;
