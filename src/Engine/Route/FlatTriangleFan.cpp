@@ -29,34 +29,37 @@ FlatTriangleFan::calc_bb()
 
   VertexVector::const_iterator it = vs.begin(), end = vs.end();
   bb_self = FlatBoundingBox(*it);
-  for (++it; it != end; ++it) {
+  for (++it; it != end; ++it)
     bb_self.expand(*it);
-  }
 }
 
-
 void
-FlatTriangleFan::add_point(const FlatGeoPoint &p) {
-  if (!vs.empty()) {
-    if (p == vs.back())
-      return; // dont add duplicates
-  }
+FlatTriangleFan::add_point(const FlatGeoPoint &p)
+{
+  // avoid duplicates
+  if (!vs.empty() && p == vs.back())
+    return;
+
   vs.push_back(p);
 }
 
 bool
-FlatTriangleFan::is_inside(const FlatGeoPoint &p) const {
+FlatTriangleFan::is_inside(const FlatGeoPoint &p) const
+{
   if (!bb_self.is_inside(p))
     return false;
 
-  int c=0;
-  for (VertexVector::const_iterator i= vs.begin(), j=vs.end()-1;
-       i!= vs.end(); j = i++) {
-    if ((i->Latitude>p.Latitude) == (j->Latitude>p.Latitude))
+  int c = 0;
+  for (VertexVector::const_iterator i = vs.begin(), j = vs.end() - 1;
+       i != vs.end(); j = i++) {
+    if ((i->Latitude > p.Latitude) == (j->Latitude > p.Latitude))
       continue;
-    if (( p.Longitude < (j->Longitude-i->Longitude)*(p.Latitude-i->Latitude)/(j->Latitude-i->Latitude)
-          + i->Longitude))
+
+    if ((p.Longitude < (j->Longitude - i->Longitude) *
+                       (p.Latitude - i->Latitude) /
+                       (j->Latitude - i->Latitude) + i->Longitude))
       c = !c;
   }
-  return (c>0);
+
+  return c > 0;
 }
