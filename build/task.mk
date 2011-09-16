@@ -132,6 +132,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Route/TerrainRoute.cpp \
 	$(ENGINE_SRC_DIR)/Route/RoutePolar.cpp \
 	$(ENGINE_SRC_DIR)/Route/FlatTriangleFan.cpp \
+	$(ENGINE_SRC_DIR)/Route/FlatTriangleFanTree.cpp \
 	$(ENGINE_SRC_DIR)/Route/ReachFan.cpp \
 	$(ENGINE_SRC_DIR)/Trace/Trace.cpp \
 	$(ENGINE_SRC_DIR)/Waypoint/Waypoint.cpp \
