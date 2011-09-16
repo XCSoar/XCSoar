@@ -39,6 +39,9 @@ namespace TrailRenderer
             const WindowProjection &projection, unsigned min_time,
             bool enable_traildrift, const RasterPoint pos, const NMEAInfo &basic,
             const DerivedInfo &calculated, const SETTINGS_MAP &settings);
+
+  void Draw(Canvas &canvas, const GlideComputer &glide_computer,
+            const WindowProjection &projection, unsigned min_time);
 }
 
 #endif

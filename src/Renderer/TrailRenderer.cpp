@@ -30,6 +30,7 @@ Copyright_License {
 #include "Computer/GlideComputer.hpp"
 #include "WindowProjection.hpp"
 #include "Engine/Math/Earth.hpp"
+#include "Util/AllocatedArray.hpp"
 
 #include <algorithm>
 
@@ -144,4 +145,34 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
   }
 
   canvas.line(last_point, pos);
+}
+
+static void
+DrawTraceVector(Canvas &canvas, const Projection &projection,
+                const TracePointVector &trace)
+{
+  static AllocatedArray<RasterPoint> points;
+  points.grow_discard(trace.size());
+
+  unsigned n = 0;
+  for (TracePointVector::const_iterator i = trace.begin(), end = trace.end();
+       i != end; ++i)
+    points[n++] = projection.GeoToScreen(i->get_location());
+
+  canvas.polyline(points.begin(), n);
+}
+
+void
+TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
+                    const WindowProjection &projection, unsigned min_time)
+{
+  TracePointVector trace;
+  glide_computer.LockedCopyTraceTo(trace, min_time,
+                                   projection.GetGeoScreenCenter(),
+                                   projection.DistancePixelsToMeters(4));
+  if (trace.empty())
+    return;
+
+  canvas.select(Graphics::TracePen);
+  DrawTraceVector(canvas, projection, trace);
 }

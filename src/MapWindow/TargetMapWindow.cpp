@@ -33,6 +33,7 @@ Copyright_License {
 #include "Renderer/RenderTaskPoint.hpp"
 #include "Renderer/RenderObservationZone.hpp"
 #include "Renderer/AircraftRenderer.hpp"
+#include "Renderer/TrailRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Engine/Math/Earth.hpp"
 #include "Units/Units.hpp"
@@ -131,21 +132,6 @@ TargetMapWindow::RenderTopographyLabels(Canvas &canvas)
                                     SettingsMap());
 }
 
-static void
-DrawTraceVector(Canvas &canvas, const Projection &projection,
-                const TracePointVector &trace)
-{
-  static AllocatedArray<RasterPoint> points;
-  points.grow_discard(trace.size());
-
-  unsigned n = 0;
-  for (TracePointVector::const_iterator i = trace.begin(), end = trace.end();
-       i != end; ++i)
-    points[n++] = projection.GeoToScreen(i->get_location());
-
-  canvas.polyline(points.begin(), n);
-}
-
 void
 TargetMapWindow::RenderAirspace(Canvas &canvas)
 {
@@ -241,16 +227,7 @@ TargetMapWindow::RenderTrail(Canvas &canvas) const
     return;
 
   unsigned min_time = max(0, (int)Basic().time - 600);
-
-  TracePointVector trace;
-  glide_computer->LockedCopyTraceTo(trace, min_time,
-                                    projection.GetGeoScreenCenter(),
-                                    projection.DistancePixelsToMeters(4));
-  if (trace.empty())
-    return;
-
-  canvas.select(Graphics::TracePen);
-  DrawTraceVector(canvas, projection, trace);
+  TrailRenderer::Draw(canvas, *glide_computer, projection, min_time);
 }
 
 void
