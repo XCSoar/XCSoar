@@ -37,7 +37,7 @@ struct ReachFanParms;
 class TriangleFanVisitor {
 public:
   virtual void StartFan() = 0;
-  virtual void AddPoint(const GeoPoint& p) = 0;
+  virtual void AddPoint(const GeoPoint &p) = 0;
   virtual void EndFan() = 0;
 };
 
@@ -63,47 +63,43 @@ public:
     depth(_depth),
     gaps_filled(false) {};
 
-  void clear() {
+  void Clear() {
     FlatTriangleFan::clear();
     children.clear();
   }
 
-  void calc_bb();
+  void CalcBB();
 
   gcc_pure
-  bool is_inside_tree(const FlatGeoPoint &p, const bool include_children=true) const;
+  bool IsInsideTree(const FlatGeoPoint &p,
+                    const bool include_children = true) const;
 
-  void fill_reach(const AFlatGeoPoint &origin, ReachFanParms& parms);
-  void dummy_reach(const AFlatGeoPoint &origin);
+  void FillReach(const AFlatGeoPoint &origin, ReachFanParms &parms);
+  void DummyReach(const AFlatGeoPoint &origin);
 
-  void fill_reach(const AFlatGeoPoint &origin,
-                  const int index_low, const int index_high,
-                  ReachFanParms& parms);
+  void FillReach(const AFlatGeoPoint &origin,
+                 const int index_low, const int index_high,
+                 ReachFanParms &parms);
 
-  bool fill_depth(const AFlatGeoPoint &origin,
-                  ReachFanParms& parms);
+  bool FillDepth(const AFlatGeoPoint &origin, ReachFanParms &parms);
+  void FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms);
 
-  void fill_gaps(const AFlatGeoPoint &origin,
-                 ReachFanParms& parms);
+  bool CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
+                const RouteLink &e_2, ReachFanParms &parms);
 
-  bool check_gap(const AFlatGeoPoint& n,
-                 const RouteLink& e_1,
-                 const RouteLink& e_2,
-                 ReachFanParms& parms);
+  bool FindPositiveArrival(const FlatGeoPoint &n,
+                           const ReachFanParms &parms,
+                           short &arrival_height) const;
 
-  bool find_positive_arrival(const FlatGeoPoint& n,
-                             const ReachFanParms& parms,
-                             short& arrival_height) const;
+  void AcceptInRange(const FlatBoundingBox &bb,
+                     const TaskProjection &task_proj,
+                     TriangleFanVisitor &visitor) const;
 
-  void accept_in_range(const FlatBoundingBox& bb,
-                       const TaskProjection& task_proj,
-                       TriangleFanVisitor& visitor) const;
-
-  void update_terrain_base(const FlatGeoPoint& origin,
-                           ReachFanParms& parms);
+  void UpdateTerrainBase(const FlatGeoPoint &origin, ReachFanParms &parms);
 
   gcc_pure
-  short direct_arrival(const FlatGeoPoint& dest, const ReachFanParms& parms) const;
+  short DirectArrival(const FlatGeoPoint &dest,
+                      const ReachFanParms &parms) const;
 };
 
 #endif

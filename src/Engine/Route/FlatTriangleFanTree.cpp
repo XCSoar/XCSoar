@@ -48,20 +48,20 @@ too_close(const FlatGeoPoint& p1, const FlatGeoPoint& p2)
 }
 
 void
-FlatTriangleFanTree::calc_bb() {
+FlatTriangleFanTree::CalcBB() {
   FlatTriangleFan::calc_bb();
 
   bb_children = bb_self;
 
   for (LeafVector::iterator it = children.begin(), end = children.end();
        it != end; ++it) {
-    it->calc_bb();
+    it->CalcBB();
     bb_children.expand(it->bb_children);
   }
 }
 
 bool
-FlatTriangleFanTree::is_inside_tree(const FlatGeoPoint &p, const bool include_children) const {
+FlatTriangleFanTree::IsInsideTree(const FlatGeoPoint &p, const bool include_children) const {
   if (include_children) {
     if (!bb_children.is_inside(p))
       return false;
@@ -78,7 +78,7 @@ FlatTriangleFanTree::is_inside_tree(const FlatGeoPoint &p, const bool include_ch
 
   for (LeafVector::const_iterator it = children.begin(), end= children.end();
        it != end; ++it) {
-    if (it->is_inside_tree(p, true))
+    if (it->IsInsideTree(p, true))
       return true;
   }
   // should never get here!
@@ -88,31 +88,31 @@ FlatTriangleFanTree::is_inside_tree(const FlatGeoPoint &p, const bool include_ch
 /////////////
 
 void
-FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
+FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
                                 ReachFanParms& parms) {
   gaps_filled = false;
 
-  fill_reach(origin, 0, ROUTEPOLAR_POINTS+1, parms);
+  FillReach(origin, 0, ROUTEPOLAR_POINTS+1, parms);
 
   for (parms.set_depth=0; parms.set_depth< REACH_MAX_DEPTH; ++parms.set_depth) {
-    if (!fill_depth(origin, parms)) {
+    if (!FillDepth(origin, parms)) {
       break; // stop searching
     }
   }
   // this boundingbox update visits the tree recursively
-  calc_bb();
+  CalcBB();
 }
 
 void
-FlatTriangleFanTree::dummy_reach(const AFlatGeoPoint &ao)
+FlatTriangleFanTree::DummyReach(const AFlatGeoPoint &ao)
 {
   add_point(ao);
-  calc_bb();
+  CalcBB();
   height = ao.altitude;
 }
 
 bool
-FlatTriangleFanTree::fill_depth(const AFlatGeoPoint &origin,
+FlatTriangleFanTree::FillDepth(const AFlatGeoPoint &origin,
                                 ReachFanParms& parms)
 {
   if (depth == parms.set_depth) {
@@ -125,13 +125,13 @@ FlatTriangleFanTree::fill_depth(const AFlatGeoPoint &origin,
     if (parms.fan_counter>REACH_MAX_FANS)
       return false;
 
-    fill_gaps(origin, parms);
+    FillGaps(origin, parms);
 
   } else if (depth< parms.set_depth) {
 
     for (LeafVector::iterator it = children.begin(), end = children.end();
          it != end; ++it) {
-      if (!it->fill_depth(origin, parms))
+      if (!it->FillDepth(origin, parms))
         return false; // stop searching
     }
   }
@@ -139,7 +139,7 @@ FlatTriangleFanTree::fill_depth(const AFlatGeoPoint &origin,
 }
 
 void
-FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
+FlatTriangleFanTree::FillReach(const AFlatGeoPoint &origin,
                                 const int index_low, const int index_high,
                                 ReachFanParms& parms) {
   const AGeoPoint ao (parms.task_proj.unproject(origin), origin.altitude);
@@ -163,7 +163,7 @@ FlatTriangleFanTree::fill_reach(const AFlatGeoPoint &origin,
 }
 
 void
-FlatTriangleFanTree::fill_gaps(const AFlatGeoPoint &origin,
+FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin,
                                ReachFanParms& parms)
 {
   // worth checking for gaps?
@@ -179,7 +179,7 @@ FlatTriangleFanTree::fill_gaps(const AFlatGeoPoint &origin,
 
       const RouteLink e(RoutePoint(*x, 0), o, parms.task_proj);
       // check if children need to be added
-      check_gap(origin, e_last, e, parms);
+      CheckGap(origin, e_last, e, parms);
 
       e_last = e;
     }
@@ -187,7 +187,7 @@ FlatTriangleFanTree::fill_gaps(const AFlatGeoPoint &origin,
 }
 
 void
-FlatTriangleFanTree::update_terrain_base(const FlatGeoPoint& o, ReachFanParms& parms)
+FlatTriangleFanTree::UpdateTerrainBase(const FlatGeoPoint& o, ReachFanParms& parms)
 {
   if (!parms.terrain) {
     parms.terrain_base = 0;
@@ -212,7 +212,7 @@ FlatTriangleFanTree::update_terrain_base(const FlatGeoPoint& o, ReachFanParms& p
 
 
 bool
-FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
+FlatTriangleFanTree::CheckGap(const AFlatGeoPoint& n,
                                const RouteLink& e_1,
                                const RouteLink& e_2,
                                ReachFanParms& parms)
@@ -256,7 +256,7 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
     // altitude calculated from pure glide from n to x
     const AFlatGeoPoint x(px, h);
 
-    child.fill_reach(x, index_left, index_right, parms);
+    child.FillReach(x, index_left, index_right, parms);
 
     // prune child if empty or single spike
     if (child.vs.size() > 3) {
@@ -275,7 +275,7 @@ FlatTriangleFanTree::check_gap(const AFlatGeoPoint& n,
 }
 
 short
-FlatTriangleFanTree::direct_arrival(const FlatGeoPoint& dest, const ReachFanParms& parms) const
+FlatTriangleFanTree::DirectArrival(const FlatGeoPoint& dest, const ReachFanParms& parms) const
 {
   assert(!vs.empty());
   const AFlatGeoPoint n (vs[0], height);
@@ -283,7 +283,7 @@ FlatTriangleFanTree::direct_arrival(const FlatGeoPoint& dest, const ReachFanParm
 }
 
 bool
-FlatTriangleFanTree::find_positive_arrival(const FlatGeoPoint& n,
+FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint& n,
                                            const ReachFanParms& parms,
                                            short& arrival_height) const
 {
@@ -306,14 +306,14 @@ FlatTriangleFanTree::find_positive_arrival(const FlatGeoPoint& n,
 
   for (LeafVector::const_iterator it = children.begin(), end = children.end();
        it != end; ++it) {
-    if (it->find_positive_arrival(n, parms, arrival_height))
+    if (it->FindPositiveArrival(n, parms, arrival_height))
       retval = true;
   }
   return retval;
 }
 
 void
-FlatTriangleFanTree::accept_in_range(const FlatBoundingBox& bb,
+FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox& bb,
                                      const TaskProjection& task_proj,
                                      TriangleFanVisitor& visitor) const
 {
@@ -330,6 +330,6 @@ FlatTriangleFanTree::accept_in_range(const FlatBoundingBox& bb,
   }
   for (LeafVector::const_iterator it = children.begin(), end = children.end();
        it != end; ++it) {
-    it->accept_in_range(bb, task_proj, visitor);
+    it->AcceptInRange(bb, task_proj, visitor);
   }
 }

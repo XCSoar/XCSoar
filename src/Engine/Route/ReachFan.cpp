@@ -26,7 +26,7 @@
 #include "ReachFanParms.hpp"
 
 void ReachFan::reset() {
-  root.clear();
+  root.Clear();
   terrain_base = 0;
 }
 
@@ -51,14 +51,14 @@ bool ReachFan::solve(const AGeoPoint origin,
   if (!RasterBuffer::is_invalid(h) &&
       (origin.altitude <= h2 + rpolars.safety_height())) {
     terrain_base = h2;
-    root.dummy_reach(ao);
+    root.DummyReach(ao);
     return false;
   }
 
   if (do_solve) {
-    root.fill_reach(ao, parms);
+    root.FillReach(ao, parms);
   } else {
-    root.dummy_reach(ao);
+    root.DummyReach(ao);
   }
 
   if (!RasterBuffer::is_invalid(h)) {
@@ -69,7 +69,7 @@ bool ReachFan::solve(const AGeoPoint origin,
     parms.terrain_counter = 0;
   }
   if (parms.terrain) {
-    root.update_terrain_base(ao, parms);
+    root.UpdateTerrainBase(ao, parms);
   }
   terrain_base = parms.terrain_base;
   return true;
@@ -82,7 +82,7 @@ ReachFan::is_inside(const GeoPoint origin, const bool turning) const
   if (root.empty())
     return false;
   const FlatGeoPoint p = task_proj.project(origin);
-  return root.is_inside_tree(p, turning);
+  return root.IsInsideTree(p, turning);
 }
 
 bool
@@ -102,7 +102,7 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
 
   // first calculate direct (terrain-independent height)
 
-  arrival_height_direct = root.direct_arrival(d, parms);
+  arrival_height_direct = root.DirectArrival(d, parms);
 
   // if can't reach even with no terrain, exit early
 
@@ -114,7 +114,7 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
   // now calculate turning solution
 
   arrival_height_reach = dest.altitude-1;
-  root.find_positive_arrival(d, parms, arrival_height_reach);
+  root.FindPositiveArrival(d, parms, arrival_height_reach);
 
   return true;
 }
@@ -127,5 +127,5 @@ ReachFan::accept_in_range(const GeoBounds& bounds,
     return;
 
   const FlatBoundingBox bb = task_proj.project(bounds);
-  root.accept_in_range(bb, task_proj, visitor);
+  root.AcceptInRange(bb, task_proj, visitor);
 }
