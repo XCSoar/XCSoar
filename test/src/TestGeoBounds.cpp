@@ -74,5 +74,5 @@ int main(int argc, char **argv)
   ok1(equals(b.north, 6));
   ok1(equals(b.south, 4));
 
-  return exit_status();;
+  return exit_status();
 }

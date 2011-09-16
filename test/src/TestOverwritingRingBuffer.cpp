@@ -57,5 +57,5 @@ int main(int argc, char **argv)
   ok1(buffer.shift() == 5);
   ok1(buffer.empty());
 
-  return exit_status();;
+  return exit_status();
 }
