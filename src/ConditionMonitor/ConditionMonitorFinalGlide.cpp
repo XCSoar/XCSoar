@@ -68,7 +68,7 @@ ConditionMonitorFinalGlide::Notify()
 {
   if (tad > fixed_one)
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
-  if (tad < fixed(-1))
+  if (tad < fixed_minus_one)
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_BELOW);
 }
 
