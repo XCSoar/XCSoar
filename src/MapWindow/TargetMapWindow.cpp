@@ -235,8 +235,7 @@ TargetMapWindow::DrawWaypoints(Canvas &canvas)
 }
 
 void
-TargetMapWindow::RenderTrail(Canvas &canvas,
-                             const RasterPoint aircraft_pos) const
+TargetMapWindow::RenderTrail(Canvas &canvas) const
 {
   if (glide_computer == NULL)
     return;
@@ -280,7 +279,7 @@ TargetMapWindow::on_paint_buffer(Canvas &canvas)
   DrawWaypoints(canvas);
 
   // Render the snail trail
-  RenderTrail(canvas, aircraft_pos);
+  RenderTrail(canvas);
 
   // Render topography on top of airspace, to keep the text readable
   RenderTopographyLabels(canvas);

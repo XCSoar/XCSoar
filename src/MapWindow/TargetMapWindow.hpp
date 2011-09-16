@@ -138,7 +138,7 @@ private:
    */
   void RenderAirspace(Canvas &canvas);
 
-  void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
+  void RenderTrail(Canvas &canvas) const;
 
   void DrawWaypoints(Canvas &canvas);
 
