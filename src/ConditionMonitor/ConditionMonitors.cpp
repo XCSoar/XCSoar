@@ -26,6 +26,7 @@ Copyright_License {
 #include "ConditionMonitor.hpp"
 #include "ConditionMonitorAATTime.hpp"
 #include "ConditionMonitorFinalGlide.hpp"
+#include "ConditionMonitorGlideTerrain.hpp"
 #include "ConditionMonitorStartRules.hpp"
 #include "ConditionMonitorSunset.hpp"
 #include "ConditionMonitorWind.hpp"
@@ -40,45 +41,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 #include <math.h>
-
-class ConditionMonitorGlideTerrain: public ConditionMonitor
-{
-public:
-  ConditionMonitorGlideTerrain():ConditionMonitor(60 * 5, 1)
-  {
-  }
-
-protected:
-  bool
-  CheckCondition(const GlideComputer& cmp)
-  {
-    if (!cmp.Calculated().flight.flying ||
-        !cmp.Calculated().task_stats.task_valid)
-      return false;
-
-    const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
-    if (!res.IsFinalGlide() || !res.IsAchievable(true)) {
-      // only give message about terrain warnings if above final glide
-      return false;
-    }
-
-    const GeoPoint null_point(Angle::zero(),
-                              Angle::zero());
-    return (cmp.Calculated().terrain_warning);
-  }
-
-  void
-  Notify(void)
-  {
-    InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_TERRAIN);
-  }
-
-  void
-  SaveLast(void)
-  {
-  }
-};
-
 
 class ConditionMonitorLandableReachable: public ConditionMonitor
 {
