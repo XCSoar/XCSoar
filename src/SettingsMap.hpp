@@ -29,7 +29,7 @@ Copyright_License {
 #include "Navigation/GeoPoint.hpp"
 #include "Airspace/AirspaceClass.hpp"
 #include "Airspace/AirspaceRendererSettings.hpp"
-#include "Waypoint/WaypointRendererSettings.hpp"
+#include "Renderer/WaypointRendererSettings.hpp"
 #include "Terrain/TerrainSettings.hpp"
 
 enum AircraftSymbol_t {

@@ -304,9 +304,6 @@ XCSOAR_SOURCES := \
 	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
-	$(SRC)/Waypoint/WaypointIconRenderer.cpp \
-	$(SRC)/Waypoint/WaypointRenderer.cpp \
-	$(SRC)/Waypoint/WaypointRendererSettings.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Wind/CirclingWind.cpp \
 	$(SRC)/Wind/WindMeasurementList.cpp \
@@ -380,6 +377,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/FinalGlideBarRenderer.cpp \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
 	$(SRC)/Renderer/TrailRenderer.cpp \
+	$(SRC)/Renderer/WaypointIconRenderer.cpp \
+	$(SRC)/Renderer/WaypointRenderer.cpp \
+	$(SRC)/Renderer/WaypointRendererSettings.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/ChartProjection.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \

@@ -33,7 +33,7 @@ Copyright_License {
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Look/Look.hpp"
-#include "WaypointIconRenderer.hpp"
+#include "Renderer/WaypointIconRenderer.hpp"
 #include "Language/Language.hpp"
 
 #include <stdio.h>

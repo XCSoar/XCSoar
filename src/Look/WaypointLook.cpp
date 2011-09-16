@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "WaypointLook.hpp"
-#include "Waypoint/WaypointRendererSettings.hpp"
+#include "Renderer/WaypointRendererSettings.hpp"
 #include "resource.h"
 
 void

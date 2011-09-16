@@ -34,7 +34,7 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
-#include "Waypoint/WaypointIconRenderer.hpp"
+#include "Renderer/WaypointIconRenderer.hpp"
 #include "Components.hpp"
 #include "Compiler.h"
 #include "DataField/Enum.hpp"

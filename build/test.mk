@@ -1629,6 +1629,8 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/FinalGlideBarRenderer.cpp \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
 	$(SRC)/Renderer/TrailRenderer.cpp \
+	$(SRC)/Renderer/WaypointIconRenderer.cpp \
+	$(SRC)/Renderer/WaypointRenderer.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/Marks.cpp \
 	$(SRC)/Math/Screen.cpp \
@@ -1689,8 +1691,6 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Waypoint/WaypointReaderWinPilot.cpp \
 	$(SRC)/Waypoint/WaypointReaderSeeYou.cpp \
 	$(SRC)/Waypoint/WaypointReaderZander.cpp \
-	$(SRC)/Waypoint/WaypointIconRenderer.cpp \
-	$(SRC)/Waypoint/WaypointRenderer.cpp \
 	$(SRC)/Waypoint/WaypointWriter.cpp \
 	$(SRC)/Compatibility/fmode.c \
 	$(SRC)/xmlParser.cpp \

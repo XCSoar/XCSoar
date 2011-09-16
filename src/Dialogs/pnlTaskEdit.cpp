@@ -34,7 +34,7 @@ Copyright_License {
 #include "Screen/SingleWindow.hpp"
 #include "Form/TabBar.hpp"
 #include "Units/UnitsFormatter.hpp"
-#include "Waypoint/WaypointIconRenderer.hpp"
+#include "Renderer/WaypointIconRenderer.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
 
