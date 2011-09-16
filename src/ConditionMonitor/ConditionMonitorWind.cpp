@@ -44,11 +44,8 @@ ConditionMonitorWind::CheckCondition(const GlideComputer &cmp)
   if (mag_change > Units::ToSysUnit(fixed(5), unKnots))
     return true;
 
-  if ((wind.norm > Units::ToSysUnit(fixed(10), unKnots))
-      && (dir_change > fixed(45)))
-    return true;
-
-  return false;
+  return wind.norm > Units::ToSysUnit(fixed(10), unKnots) &&
+         dir_change > fixed(45);
 }
 
 void
