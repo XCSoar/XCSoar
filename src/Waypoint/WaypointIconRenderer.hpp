@@ -24,8 +24,6 @@ Copyright_License {
 #ifndef XCSOAR_WAYPOINT_ICON_RENDERER_HPP
 #define XCSOAR_WAYPOINT_ICON_RENDERER_HPP
 
-//#include "Screen/Canvas.hpp"
-
 #include "fixed.hpp"
 #include "Screen/Point.hpp"
 #include "Math/Angle.hpp"
