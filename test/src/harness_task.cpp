@@ -918,9 +918,8 @@ bool test_task(TaskManager& task_manager,
   case 7:
     return test_task_random(task_manager,waypoints,n_points);
   default:
-    return "unknown";
-    break;
-  };
+    return false;
+  }
 }
 
 
@@ -945,8 +944,7 @@ const char* task_name(int test_num)
     return "random";
   default:
     return "unknown";
-    break;
-  };
+  }
 }
 
 
