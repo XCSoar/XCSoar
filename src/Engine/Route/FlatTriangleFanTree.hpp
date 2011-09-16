@@ -34,14 +34,16 @@ struct RouteLink;
 class AFlatGeoPoint;
 struct ReachFanParms;
 
-class TriangleFanVisitor {
+class TriangleFanVisitor
+{
 public:
   virtual void StartFan() = 0;
   virtual void AddPoint(const GeoPoint &p) = 0;
   virtual void EndFan() = 0;
 };
 
-class FlatTriangleFanTree: public FlatTriangleFan {
+class FlatTriangleFanTree: public FlatTriangleFan
+{
 public:
   static const unsigned REACH_MAX_FANS = 300;
 
@@ -57,11 +59,11 @@ protected:
 public:
   friend class PrintHelper;
 
-  FlatTriangleFanTree(const unsigned char _depth=0):
-    FlatTriangleFan(),
-    bb_children(FlatGeoPoint(0,0)),
-    depth(_depth),
-    gaps_filled(false) {};
+  FlatTriangleFanTree(const unsigned char _depth = 0)
+    :FlatTriangleFan(),
+     bb_children(FlatGeoPoint(0,0)),
+     depth(_depth),
+     gaps_filled(false) {}
 
   void Clear() {
     FlatTriangleFan::clear();
