@@ -239,6 +239,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/ConditionMonitor/ConditionMonitorAATTime.cpp \
 	$(SRC)/ConditionMonitor/ConditionMonitorFinalGlide.cpp \
 	$(SRC)/ConditionMonitor/ConditionMonitorGlideTerrain.cpp \
+	$(SRC)/ConditionMonitor/ConditionMonitorLandableReachable.cpp \
 	$(SRC)/ConditionMonitor/ConditionMonitorStartRules.cpp \
 	$(SRC)/ConditionMonitor/ConditionMonitorSunset.cpp \
 	$(SRC)/ConditionMonitor/ConditionMonitorWind.cpp \

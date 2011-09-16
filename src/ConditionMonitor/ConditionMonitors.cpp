@@ -27,6 +27,7 @@ Copyright_License {
 #include "ConditionMonitorAATTime.hpp"
 #include "ConditionMonitorFinalGlide.hpp"
 #include "ConditionMonitorGlideTerrain.hpp"
+#include "ConditionMonitorLandableReachable.hpp"
 #include "ConditionMonitorStartRules.hpp"
 #include "ConditionMonitorSunset.hpp"
 #include "ConditionMonitorWind.hpp"
@@ -41,48 +42,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 #include <math.h>
-
-class ConditionMonitorLandableReachable: public ConditionMonitor
-{
-  bool last_reachable;
-  bool now_reachable;
-
-public:
-  ConditionMonitorLandableReachable()
-    :ConditionMonitor(60 * 5, 1), last_reachable(false)
-  {
-  }
-
-protected:
-  bool
-  CheckCondition(const GlideComputer& cmp)
-  {
-    if (!cmp.Calculated().flight.flying)
-      return false;
-
-    now_reachable = cmp.Calculated().common_stats.landable_reachable;
-
-    if (!now_reachable && last_reachable) {
-      // warn when becoming unreachable
-      return true;
-    } else {
-      return false;
-    }
-  }
-
-  void
-  Notify(void)
-  {
-    InputEvents::processGlideComputer(GCE_LANDABLE_UNREACHABLE);
-  }
-
-  void
-  SaveLast(void)
-  {
-    last_reachable = now_reachable;
-  }
-};
-
 
 ConditionMonitorWind cm_wind;
 ConditionMonitorFinalGlide cm_finalglide;
