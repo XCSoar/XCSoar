@@ -24,6 +24,7 @@ Copyright_License {
 
 #include "ConditionMonitors.hpp"
 #include "ConditionMonitor.hpp"
+#include "ConditionMonitorFinalGlide.hpp"
 #include "ConditionMonitorWind.hpp"
 #include "Message.hpp"
 #include "Device/device.hpp"
@@ -36,71 +37,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 #include <math.h>
-
-class ConditionMonitorFinalGlide: public ConditionMonitor
-{
-  fixed tad;
-  fixed last_tad;
-
-public:
-  ConditionMonitorFinalGlide()
-    :ConditionMonitor(60 * 5, 1), tad(fixed_zero)
-  {
-  }
-
-protected:
-  bool
-  CheckCondition(const GlideComputer& cmp)
-  {
-    if (!cmp.Calculated().flight.flying || !cmp.Calculated().task_stats.task_valid)
-      return false;
-
-    const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
-
-    // TODO: use low pass filter
-    tad = res.altitude_difference * fixed(0.2) + fixed(0.8) * tad;
-
-    bool BeforeFinalGlide = !res.IsFinalGlide();
-
-    if (BeforeFinalGlide) {
-      Interval_Notification = fixed(60 * 5);
-      if ((tad > fixed(50)) && (last_tad < fixed(-50)))
-        // report above final glide early
-        return true;
-      else if (tad < fixed(-50))
-        last_tad = tad;
-    } else {
-      Interval_Notification = fixed(60);
-      if (res.IsFinalGlide()) {
-        if ((last_tad < fixed(-50)) && (tad > fixed_one))
-          // just reached final glide, previously well below
-          return true;
-
-        if ((last_tad > fixed_one) && (tad < fixed(-50))) {
-          // dropped well below final glide, previously above
-          last_tad = tad;
-          return true; // JMW this was true before
-        }
-      }
-    }
-    return false;
-  }
-
-  void
-  Notify(void)
-  {
-    if (tad > fixed_one)
-      InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_ABOVE);
-    if (tad < fixed(-1))
-      InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE_BELOW);
-  }
-
-  void
-  SaveLast(void)
-  {
-    last_tad = tad;
-  }
-};
 
 class ConditionMonitorSunset: public ConditionMonitor
 {

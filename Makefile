@@ -236,6 +236,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Atmosphere/CuSonde.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
 	$(SRC)/ConditionMonitor/ConditionMonitor.cpp \
+	$(SRC)/ConditionMonitor/ConditionMonitorFinalGlide.cpp \
 	$(SRC)/ConditionMonitor/ConditionMonitorWind.cpp \
 	$(SRC)/ConditionMonitor/ConditionMonitors.cpp \
 	$(SRC)/DateTime.cpp \
