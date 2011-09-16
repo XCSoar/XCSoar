@@ -24,9 +24,35 @@ Copyright_License {
 #ifndef XCSOAR_CONDITION_MONITOR_HPP
 #define XCSOAR_CONDITION_MONITOR_HPP
 
+#include "fixed.hpp"
+
 class GlideComputer;
 
-void
-ConditionMonitorsUpdate(const GlideComputer& cmp);
+/**
+ * Base class for system to monitor changes in state and issue
+ * warnings or informational messages based on various conditions.
+ */
+class ConditionMonitor
+{
+protected:
+  fixed LastTime_Notification;
+  fixed LastTime_Check;
+  fixed Interval_Notification;
+  fixed Interval_Check;
+
+public:
+  ConditionMonitor(unsigned _interval_notification,
+                   unsigned _interval_check);
+
+  void Update(const GlideComputer &cmp);
+
+private:
+  virtual bool CheckCondition(const GlideComputer& cmp) = 0;
+  virtual void Notify() = 0;
+  virtual void SaveLast() = 0;
+
+  bool Ready_Time_Notification(fixed T);
+  bool Ready_Time_Check(fixed T, bool *restart);
+};
 
 #endif

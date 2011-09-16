@@ -22,6 +22,7 @@ Copyright_License {
 
 */
 
+#include "ConditionMonitors.hpp"
 #include "ConditionMonitor.hpp"
 #include "Message.hpp"
 #include "Device/device.hpp"
@@ -34,92 +35,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 #include <math.h>
-
-// TODO: JMW: make this use GPSClock (code re-use)
-
-/**
- * Base class for system to monitor changes in state and issue
- * warnings or informational messages based on various conditions.
- */
-class ConditionMonitor
-{
-protected:
-  fixed LastTime_Notification;
-  fixed LastTime_Check;
-  fixed Interval_Notification;
-  fixed Interval_Check;
-
-public:
-  ConditionMonitor(unsigned _interval_notification,
-                   unsigned _interval_check)
-    :LastTime_Notification(-1), LastTime_Check(-1),
-     Interval_Notification(_interval_notification),
-     Interval_Check(_interval_check)
-  {
-  }
-
-  void
-  Update(const GlideComputer& cmp)
-  {
-    if (!cmp.Calculated().flight.flying)
-      return;
-
-    bool restart = false;
-    const fixed Time = cmp.Basic().time;
-    if (Ready_Time_Check(Time, &restart)) {
-      LastTime_Check = Time;
-      if (CheckCondition(cmp)) {
-        if (Ready_Time_Notification(Time) && !restart) {
-          LastTime_Notification = Time;
-          Notify();
-          SaveLast();
-        }
-      }
-
-      if (restart)
-        SaveLast();
-    }
-  }
-
-private:
-
-  virtual bool CheckCondition(const GlideComputer& cmp) = 0;
-  virtual void Notify(void) = 0;
-  virtual void SaveLast(void) = 0;
-
-  bool
-  Ready_Time_Notification(fixed T)
-  {
-    if (!positive(T))
-      return false;
-
-    if (negative(LastTime_Notification) || T < LastTime_Notification)
-      return true;
-
-    if (T >= LastTime_Notification + Interval_Notification)
-      return true;
-
-    return false;
-  }
-
-  bool
-  Ready_Time_Check(fixed T, bool *restart)
-  {
-    if (!positive(T))
-      return false;
-
-    if (negative(LastTime_Check) || T < LastTime_Check) {
-      LastTime_Notification = fixed_minus_one;
-      *restart = true;
-      return true;
-    }
-
-    if (T >= LastTime_Check + Interval_Check)
-      return true;
-
-    return false;
-  }
-};
 
 /**
  * #ConditionMonitor to track/warn on significant changes in wind speed

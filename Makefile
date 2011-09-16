@@ -235,7 +235,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/VerboseOperationEnvironment.cpp \
 	$(SRC)/Atmosphere/CuSonde.cpp \
 	$(SRC)/ClimbAverageCalculator.cpp \
-	$(SRC)/ConditionMonitor.cpp \
+	$(SRC)/ConditionMonitor/ConditionMonitor.cpp \
+	$(SRC)/ConditionMonitor/ConditionMonitors.cpp \
 	$(SRC)/DateTime.cpp \
 	$(SRC)/Plane/PlaneGlue.cpp \
 	$(SRC)/Plane/PlaneFileGlue.cpp \
