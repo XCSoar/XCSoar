@@ -40,11 +40,8 @@ ConditionMonitorAATTime::CheckCondition(const GlideComputer& cmp)
       cmp.Calculated().common_stats.task_finished)
     return false;
 
-  if (cmp.Calculated().common_stats.task_time_remaining <
-      cmp.Calculated().common_stats.aat_time_remaining)
-    return true;
-  else
-    return false;
+  return (cmp.Calculated().common_stats.task_time_remaining <
+          cmp.Calculated().common_stats.aat_time_remaining);
 }
 
 void
