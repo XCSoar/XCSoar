@@ -64,7 +64,6 @@ namespace InfoBoxManager
   static bool first;
 
   unsigned GetCurrentType(unsigned box);
-  void SetCurrentType(unsigned box, char type);
 
   void DisplayInfoBox();
   void InfoBoxDrawIfDirty();
