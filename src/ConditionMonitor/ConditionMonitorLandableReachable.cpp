@@ -34,12 +34,8 @@ ConditionMonitorLandableReachable::CheckCondition(const GlideComputer& cmp)
 
   now_reachable = cmp.Calculated().common_stats.landable_reachable;
 
-  if (!now_reachable && last_reachable) {
-    // warn when becoming unreachable
-    return true;
-  } else {
-    return false;
-  }
+  // warn when becoming unreachable
+  return (!now_reachable && last_reachable);
 }
 
 void
