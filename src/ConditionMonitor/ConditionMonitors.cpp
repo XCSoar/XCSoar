@@ -26,6 +26,7 @@ Copyright_License {
 #include "ConditionMonitor.hpp"
 #include "ConditionMonitorAATTime.hpp"
 #include "ConditionMonitorFinalGlide.hpp"
+#include "ConditionMonitorStartRules.hpp"
 #include "ConditionMonitorSunset.hpp"
 #include "ConditionMonitorWind.hpp"
 #include "Message.hpp"
@@ -39,60 +40,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 #include <math.h>
-
-/**
- * Checks whether aircraft in start sector is within height/speed rules
- */
-class ConditionMonitorStartRules: public ConditionMonitor
-{
-  bool withinMargin;
-
-public:
-  ConditionMonitorStartRules()
-    :ConditionMonitor(60, 1), withinMargin(false)
-  {
-  }
-
-protected:
-  bool
-  CheckCondition(const GlideComputer& cmp)
-  {
-#ifdef OLD_TASK // start condition warnings
-    if (!task.Valid()
-        || !cmp.Basic().flying
-        || (task.getActiveIndex() > 0)
-        || !task.ValidTaskPoint(task.getActiveIndex() + 1))
-      return false;
-
-    if (cmp.Calculated().LegDistanceToGo > task.getSettings().StartRadius)
-      return false;
-
-    if (cmp.ValidStartSpeed(task.getSettings().StartMaxSpeedMargin)
-        && cmp.InsideStartHeight(task.getSettings().StartMaxHeightMargin))
-      withinMargin = true;
-    else
-      withinMargin = false;
-    }
-    return !(cmp.ValidStartSpeed() && cmp.InsideStartHeight());
-#else
-    return false;
-#endif
-  }
-
-  void
-  Notify(void)
-  {
-    if (withinMargin)
-      Message::AddMessage(_("Start rules slightly violated\nbut within margin"));
-    else
-      Message::AddMessage(_("Start rules violated"));
-  }
-
-  void
-  SaveLast(void)
-  {
-  }
-};
 
 class ConditionMonitorGlideTerrain: public ConditionMonitor
 {
