@@ -29,8 +29,6 @@
 extern Airspaces *airspaces;
 
 extern double time_elapsed;
-extern double time_planned;
-extern double time_remaining;
 extern double calc_cruise_efficiency;
 extern double calc_effective_mc;
 
