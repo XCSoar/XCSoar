@@ -26,6 +26,7 @@
 #include "Navigation/Flat/FlatBoundingBox.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Util/SliceAllocator.hpp"
+#include "FlatTriangleFan.hpp"
 
 #include <vector>
 #include <list>
@@ -37,40 +38,6 @@ struct GeoBounds;
 struct RouteLink;
 
 struct ReachFanParms;
-
-class FlatTriangleFan {
-public:
-  typedef std::vector<FlatGeoPoint> VertexVector;
-protected:
-  VertexVector vs;
-  FlatBoundingBox bb_self;
-  short height;
-
-public:
-  FlatTriangleFan():
-    bb_self(FlatGeoPoint(0,0)), height(0) {};
-
-  friend class PrintHelper;
-
-  void calc_bb();
-
-  void add_point(const FlatGeoPoint &p);
-
-  gcc_pure
-  bool is_inside(const FlatGeoPoint &p) const;
-
-  void clear() {
-    vs.clear();
-  }
-
-  gcc_pure
-  bool empty() const {
-    return vs.empty();
-  }
-  short get_height() const {
-    return height;
-  }
-};
 
 class TriangleFanVisitor;
 

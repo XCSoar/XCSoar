@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "ReachFan.hpp"
 #include "Route/RoutePolar.hpp"
 #include "Terrain/RasterMap.hpp"
@@ -73,16 +74,6 @@ static bool too_close(const FlatGeoPoint& p1, const FlatGeoPoint& p2)
   return dmax < REACH_MIN_STEP;
 }
 
-void FlatTriangleFan::calc_bb() {
-  assert(!vs.empty());
-
-  VertexVector::const_iterator it = vs.begin(), end = vs.end();
-  bb_self = FlatBoundingBox(*it);
-  for (++it; it != end; ++it) {
-    bb_self.expand(*it);
-  }
-}
-
 void
 FlatTriangleFanTree::calc_bb() {
   FlatTriangleFan::calc_bb();
@@ -95,36 +86,6 @@ FlatTriangleFanTree::calc_bb() {
     bb_children.expand(it->bb_children);
   }
 }
-
-//////////
-
-void
-FlatTriangleFan::add_point(const FlatGeoPoint &p) {
-  if (!vs.empty()) {
-    if (p == vs.back())
-      return; // dont add duplicates
-  }
-  vs.push_back(p);
-}
-
-//////////
-
-bool
-FlatTriangleFan::is_inside(const FlatGeoPoint &p) const {
-  if (!bb_self.is_inside(p))
-    return false;
-
-  int c=0;
-  for (VertexVector::const_iterator i= vs.begin(), j=vs.end()-1;
-       i!= vs.end(); j = i++) {
-    if ((i->Latitude>p.Latitude) == (j->Latitude>p.Latitude))
-      continue;
-    if (( p.Longitude < (j->Longitude-i->Longitude)*(p.Latitude-i->Latitude)/(j->Latitude-i->Latitude)
-          + i->Longitude))
-      c = !c;
-  }
-  return (c>0);
-};
 
 bool
 FlatTriangleFanTree::is_inside_tree(const FlatGeoPoint &p, const bool include_children) const {

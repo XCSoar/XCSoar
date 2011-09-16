@@ -20,6 +20,7 @@ HOT_SOURCES = \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/GrahamScan.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/ConvexHull/PolygonInterior.cpp \
 	$(ENGINE_SRC_DIR)/Navigation/Flat/FlatRay.cpp \
+	$(ENGINE_SRC_DIR)/Route/FlatTriangleFan.cpp \
 	$(ENGINE_SRC_DIR)/Route/ReachFan.cpp \
 	$(ENGINE_SRC_DIR)/Route/RoutePolar.cpp \
 	$(ENGINE_SRC_DIR)/Task/Tasks/PathSolvers/ContestDijkstra.cpp \
