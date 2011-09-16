@@ -61,8 +61,6 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
   if (settings.trail_length == TRAIL_OFF)
     return;
 
-  const GeoBounds bounds = projection.GetScreenBounds().scale(fixed_four);
-
   TracePointVector trace;
   glide_computer.LockedCopyTraceTo(trace, min_time,
                                    projection.GetGeoScreenCenter(),
@@ -105,6 +103,8 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
 
   bool scaled_trail = settings.SnailScaling &&
                       projection.GetMapScale() <= fixed_int_constant(6000);
+
+  const GeoBounds bounds = projection.GetScreenBounds().scale(fixed_four);
 
   RasterPoint last_point;
   bool last_valid = false;
