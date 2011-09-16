@@ -49,7 +49,7 @@ FlatTriangleFan::is_inside(const FlatGeoPoint &p) const
   if (!bb_self.is_inside(p))
     return false;
 
-  int c = 0;
+  bool inside = false;
   for (VertexVector::const_iterator i = vs.begin(), j = vs.end() - 1;
        i != vs.end(); j = i++) {
     if ((i->Latitude > p.Latitude) == (j->Latitude > p.Latitude))
@@ -58,8 +58,8 @@ FlatTriangleFan::is_inside(const FlatGeoPoint &p) const
     if ((p.Longitude < (j->Longitude - i->Longitude) *
                        (p.Latitude - i->Latitude) /
                        (j->Latitude - i->Latitude) + i->Longitude))
-      c = !c;
+      inside = !inside;
   }
 
-  return c > 0;
+  return inside;
 }
