@@ -24,6 +24,7 @@ Copyright_License {
 
 #include "ConditionMonitors.hpp"
 #include "ConditionMonitor.hpp"
+#include "ConditionMonitorWind.hpp"
 #include "Message.hpp"
 #include "Device/device.hpp"
 #include "Protection.hpp"
@@ -35,57 +36,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 #include <math.h>
-
-/**
- * #ConditionMonitor to track/warn on significant changes in wind speed
- * 
- */
-class ConditionMonitorWind: public ConditionMonitor
-{
-  SpeedVector wind;
-  SpeedVector last_wind;
-
-public:
-  ConditionMonitorWind():ConditionMonitor(60 * 5, 10)
-  {
-  }
-
-protected:
-  bool
-  CheckCondition(const GlideComputer& cmp)
-  {
-    wind = cmp.Calculated().wind;
-
-    if (!cmp.Calculated().flight.flying) {
-      last_wind = wind;
-      return false;
-    }
-
-    fixed mag_change = fabs(wind.norm - last_wind.norm);
-    fixed dir_change = (wind.bearing - last_wind.bearing).as_delta().magnitude_degrees();
-
-    if (mag_change > Units::ToSysUnit(fixed(5), unKnots))
-      return true;
-
-    if ((wind.norm > Units::ToSysUnit(fixed(10), unKnots)) &&
-        (dir_change > fixed(45)))
-      return true;
-
-    return false;
-  }
-
-  void
-  Notify(void)
-  {
-    Message::AddMessage(_("Significant wind change"));
-  }
-
-  void
-  SaveLast(void)
-  {
-    last_wind = wind;
-  }
-};
 
 class ConditionMonitorFinalGlide: public ConditionMonitor
 {
