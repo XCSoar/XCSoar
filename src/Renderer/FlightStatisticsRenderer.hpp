@@ -95,13 +95,6 @@ public:
 
   void RenderTemperature(Canvas &canvas, const PixelRect rc) const;
 
-
-  void RenderTrace(Canvas &canvas, const PixelRect rc,
-                   const NMEAInfo &nmea_info,
-                   const SETTINGS_COMPUTER &settings_computer,
-                   const SETTINGS_MAP &settings_map,
-                   const TracePointVector& trace) const;
-
   void RenderOLC(Canvas &canvas, const PixelRect rc,
                  const NMEAInfo &nmea_info,
                  const DerivedInfo &calculated,
