@@ -24,6 +24,7 @@ Copyright_License {
 
 #include "ConditionMonitors.hpp"
 #include "ConditionMonitor.hpp"
+#include "ConditionMonitorAATTime.hpp"
 #include "ConditionMonitorFinalGlide.hpp"
 #include "ConditionMonitorSunset.hpp"
 #include "ConditionMonitorWind.hpp"
@@ -38,47 +39,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 #include <math.h>
-
-/** Checks whether arrival time will be less than AAT time */
-class ConditionMonitorAATTime: public ConditionMonitor
-{
-public:
-  ConditionMonitorAATTime():ConditionMonitor(60 * 15, 10)
-  {
-  }
-
-protected:
-  bool
-  CheckCondition(const GlideComputer& cmp)
-  {
-    if (!cmp.Calculated().flight.flying ||
-        !cmp.Calculated().task_stats.task_valid ||
-        !cmp.Calculated().common_stats.mode_ordered ||
-        !cmp.Calculated().common_stats.ordered_valid ||
-        !cmp.Calculated().common_stats.ordered_has_targets ||
-        !cmp.Calculated().common_stats.task_started ||
-        !cmp.Calculated().common_stats.active_has_next ||
-        cmp.Calculated().common_stats.task_finished)
-      return false;
-
-    if (cmp.Calculated().common_stats.task_time_remaining < 
-        cmp.Calculated().common_stats.aat_time_remaining)
-      return true;
-    else
-      return false;
-  }
-
-  void
-  Notify(void)
-  {
-    Message::AddMessage(_("Expect early task arrival"));
-  }
-
-  void
-  SaveLast(void)
-  {
-  }
-};
 
 /**
  * Checks whether aircraft in start sector is within height/speed rules
