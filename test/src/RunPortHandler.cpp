@@ -63,4 +63,6 @@ int main(int argc, char **argv)
 
   while (true)
     Sleep(10000);
+
+  return EXIT_SUCCESS;
 }

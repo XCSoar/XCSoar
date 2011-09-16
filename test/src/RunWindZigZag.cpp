@@ -55,5 +55,7 @@ int main(int argc, char **argv)
   }
 
   delete replay;
+
+  return EXIT_SUCCESS;
 }
 

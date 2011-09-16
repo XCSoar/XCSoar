@@ -56,4 +56,6 @@ int main(int argc, char **argv)
       writer.LogPoint(replay->Basic());
 
   writer.flush();
+
+  return EXIT_SUCCESS;
 }

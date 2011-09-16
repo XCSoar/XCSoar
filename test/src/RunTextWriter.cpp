@@ -43,4 +43,6 @@ int main(int argc, char **argv)
 
   writer.writeln("An ASCII line: ü");
   writer.writeln(_T("A UNICODE line: ü"));
+
+  return EXIT_SUCCESS;
 }

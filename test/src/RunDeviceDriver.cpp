@@ -203,4 +203,6 @@ int main(int argc, char **argv)
   }
 
   Dump(data);
+
+  return EXIT_SUCCESS;
 }

@@ -51,4 +51,6 @@ int main(int argc, char **argv)
 
     writer.writeln(line);
   }
+
+  return EXIT_SUCCESS;
 }
