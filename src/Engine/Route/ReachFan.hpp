@@ -39,7 +39,12 @@ struct RouteLink;
 
 struct ReachFanParms;
 
-class TriangleFanVisitor;
+class TriangleFanVisitor {
+public:
+  virtual void start_fan() = 0;
+  virtual void add_point(const GeoPoint& p) = 0;
+  virtual void end_fan() = 0;
+};
 
 class FlatTriangleFanTree: public FlatTriangleFan {
 public:
@@ -104,13 +109,6 @@ public:
 
   gcc_pure
   short direct_arrival(const FlatGeoPoint& dest, const ReachFanParms& parms) const;
-};
-
-class TriangleFanVisitor {
-public:
-  virtual void start_fan() = 0;
-  virtual void add_point(const GeoPoint& p) = 0;
-  virtual void end_fan() = 0;
 };
 
 class ReachFan {
