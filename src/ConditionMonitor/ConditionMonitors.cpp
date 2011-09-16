@@ -31,17 +31,6 @@ Copyright_License {
 #include "ConditionMonitorStartRules.hpp"
 #include "ConditionMonitorSunset.hpp"
 #include "ConditionMonitorWind.hpp"
-#include "Message.hpp"
-#include "Device/device.hpp"
-#include "Protection.hpp"
-#include "Math/SunEphemeris.hpp"
-#include "LocalTime.hpp"
-#include "InputEvents.hpp"
-#include "Computer/GlideComputer.hpp"
-#include "Language/Language.hpp"
-#include "Units/Units.hpp"
-
-#include <math.h>
 
 ConditionMonitorWind cm_wind;
 ConditionMonitorFinalGlide cm_finalglide;
@@ -50,6 +39,7 @@ ConditionMonitorAATTime cm_aattime;
 ConditionMonitorStartRules cm_startrules;
 ConditionMonitorGlideTerrain cm_glideterrain;
 ConditionMonitorLandableReachable cm_landablereachable;
+
 void
 ConditionMonitorsUpdate(const GlideComputer& cmp)
 {
