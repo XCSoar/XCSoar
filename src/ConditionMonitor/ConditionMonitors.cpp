@@ -25,6 +25,7 @@ Copyright_License {
 #include "ConditionMonitors.hpp"
 #include "ConditionMonitor.hpp"
 #include "ConditionMonitorFinalGlide.hpp"
+#include "ConditionMonitorSunset.hpp"
 #include "ConditionMonitorWind.hpp"
 #include "Message.hpp"
 #include "Device/device.hpp"
@@ -37,49 +38,6 @@ Copyright_License {
 #include "Units/Units.hpp"
 
 #include <math.h>
-
-class ConditionMonitorSunset: public ConditionMonitor
-{
-  SunEphemeris sun;
-
-public:
-  ConditionMonitorSunset():ConditionMonitor(60 * 30, 60)
-  {
-  }
-
-protected:
-  bool
-  CheckCondition(const GlideComputer& cmp)
-  {
-    if (!cmp.Basic().location_available ||
-        !cmp.Calculated().flight.flying || HaveCondorDevice() ||
-        !cmp.Calculated().task_stats.task_valid)
-      return false;
-  
-    const GlideResult& res = cmp.Calculated().task_stats.total.solution_remaining;
-
-    /// @todo should be destination location
-
-    sun.CalcSunTimes(cmp.Basic().location, cmp.Basic().date_time_utc,
-                     fixed(GetUTCOffset()) / 3600);
-    fixed d1((res.time_elapsed + fixed(DetectCurrentTime(cmp.Basic()))) / 3600);
-    fixed d0(DetectCurrentTime(cmp.Basic()) / 3600);
-
-    bool past_sunset = (d1 > sun.TimeOfSunSet) && (d0 < sun.TimeOfSunSet);
-    return past_sunset;
-  }
-
-  void
-  Notify(void)
-  {
-    Message::AddMessage(_("Expect arrival past sunset"));
-  }
-
-  void
-  SaveLast(void)
-  {
-  }
-};
 
 /** Checks whether arrival time will be less than AAT time */
 class ConditionMonitorAATTime: public ConditionMonitor
