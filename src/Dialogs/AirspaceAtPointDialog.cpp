@@ -109,14 +109,11 @@ class AirspaceDetailsDialogVisitor:
   public AirspaceVisitor
 {
   static const AirspaceDetailsDialogVisitor *instance;
-  SingleWindow &parent_window;
   StaticArray<const AbstractAirspace *, 32> airspaces;
 
 public:
-  AirspaceDetailsDialogVisitor(SingleWindow &_parent_window,
-                               const GeoPoint &location)
-    :parent_window(_parent_window),
-    m_location(location) {}
+  AirspaceDetailsDialogVisitor(const GeoPoint &location)
+    :m_location(location) {}
 
   void Visit(const AirspacePolygon& as) {
     visit_general(as);
@@ -135,7 +132,7 @@ public:
     std::sort(airspaces.begin(), airspaces.end(), CompareAirspaceBase);
   }
 
-  void display() {
+  void display(SingleWindow &parent_window) {
     if (airspaces.empty())
       return;
 
@@ -236,7 +233,7 @@ ShowAirspaceAtPointDialog(SingleWindow &parent, const GeoPoint &location,
   settings = &renderer_settings;
   look = &renderer.GetLook();
 
-  AirspaceDetailsDialogVisitor airspace_copy_popup(parent, location);
+  AirspaceDetailsDialogVisitor airspace_copy_popup(location);
   const AirspaceMapVisible visible(computer_settings, renderer_settings,
                                    ToAircraftState(basic, calculated), awc);
 
@@ -244,7 +241,7 @@ ShowAirspaceAtPointDialog(SingleWindow &parent, const GeoPoint &location,
                                         airspace_copy_popup, visible);
 
   airspace_copy_popup.sort();
-  airspace_copy_popup.display();
+  airspace_copy_popup.display(parent);
 
   return airspace_copy_popup.found();
 }
