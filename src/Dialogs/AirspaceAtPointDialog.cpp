@@ -141,14 +141,10 @@ class AirspaceListBuilderVisitor:
 
 public:
   void Visit(const AirspacePolygon& as) {
-    visit_general(as);
+    airspaces.checked_append(&as);
   }
 
   void Visit(const AirspaceCircle& as) {
-    visit_general(as);
-  }
-
-  void visit_general(const AbstractAirspace& as) {
     airspaces.checked_append(&as);
   }
 
