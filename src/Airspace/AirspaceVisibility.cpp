@@ -28,13 +28,13 @@ Copyright_License {
 #include "Airspace/AirspaceRendererSettings.hpp"
 
 bool
-AirspaceVisiblePredicate::type_visible(const AbstractAirspace& airspace) const
+AirspaceVisiblePredicate::IsTypeVisible(const AbstractAirspace& airspace) const
 {
   return renderer_settings.display[airspace.GetType()];
 }
 
 bool
-AirspaceVisiblePredicate::altitude_visible(const AbstractAirspace& airspace) const
+AirspaceVisiblePredicate::IsAltitudeVisible(const AbstractAirspace& airspace) const
 {
   /// @todo airspace visibility did use ToMSL(..., map.Calculated().TerrainAlt); 
 
@@ -42,14 +42,14 @@ AirspaceVisiblePredicate::altitude_visible(const AbstractAirspace& airspace) con
   case ALLON:
     return true;
   case CLIP:
-    return airspace.GetBase().GetAltitude(m_state) <= fixed(renderer_settings.clip_altitude);
+    return airspace.GetBase().GetAltitude(state) <= fixed(renderer_settings.clip_altitude);
   case AUTO:
-    return airspace.GetBase().IsBelow(m_state, fixed(computer_settings.warnings.AltWarningMargin))
-      && airspace.GetTop().IsAbove(m_state, fixed(computer_settings.warnings.AltWarningMargin));
+    return airspace.GetBase().IsBelow(state, fixed(computer_settings.warnings.AltWarningMargin))
+      && airspace.GetTop().IsAbove(state, fixed(computer_settings.warnings.AltWarningMargin));
   case ALLBELOW:
-    return airspace.GetBase().IsBelow(m_state, fixed(computer_settings.warnings.AltWarningMargin));
+    return airspace.GetBase().IsBelow(state, fixed(computer_settings.warnings.AltWarningMargin));
   case INSIDE:
-    return (airspace.GetBase().IsBelow(m_state) && airspace.GetTop().IsAbove(m_state));
+    return (airspace.GetBase().IsBelow(state) && airspace.GetTop().IsAbove(state));
 
   case ALLOFF:
     return false;
