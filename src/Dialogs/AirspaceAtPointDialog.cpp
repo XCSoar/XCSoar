@@ -119,6 +119,12 @@ public:
   }
 };
 
+static bool
+CompareAirspaceBase(const AbstractAirspace *a, const AbstractAirspace *b)
+{
+  return AirspaceAltitude::SortHighest(a->GetBase(), b->GetBase());
+}
+
 /**
  * Class to display airspace details dialog
  */
@@ -155,12 +161,6 @@ public:
   const AbstractAirspace *operator[](unsigned index) const {
     assert(index < airspaces.size());
     return airspaces[index];
-  }
-
-private:
-  static bool CompareAirspaceBase(const AbstractAirspace *a,
-                                  const AbstractAirspace *b) {
-    return AirspaceAltitude::SortHighest(a->GetBase(), b->GetBase());
   }
 };
 
