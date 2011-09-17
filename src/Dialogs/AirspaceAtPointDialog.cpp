@@ -79,22 +79,22 @@ public:
 
 class AirspaceAtPointPredicate: public AirspaceVisiblePredicate
 {
-  const AirspaceWarningList &m_warnings;
+  const AirspaceWarningList &warnings;
   const GeoPoint location;
 
 public:
   AirspaceAtPointPredicate(const AirspaceComputerSettings &_computer_settings,
                            const AirspaceRendererSettings &_renderer_settings,
                            const AircraftState& _state,
-                           const AirspaceWarningList &warnings,
+                           const AirspaceWarningList &_warnings,
                            const GeoPoint _location):
     AirspaceVisiblePredicate(_computer_settings, _renderer_settings, _state),
-    m_warnings(warnings), location(_location) {}
+    warnings(_warnings), location(_location) {}
 
   bool condition(const AbstractAirspace& airspace) const {
     if (!AirspaceVisiblePredicate::condition(airspace) &&
-        !m_warnings.is_inside(airspace) &&
-        !m_warnings.is_warning(airspace))
+        !warnings.is_inside(airspace) &&
+        !warnings.is_warning(airspace))
       return false;
 
     return airspace.Inside(location);
