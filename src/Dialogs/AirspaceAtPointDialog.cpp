@@ -47,6 +47,7 @@ class AirspaceListBuilderVisitor;
 
 static const AirspaceLook *look;
 static const AirspaceRendererSettings *settings;
+static StaticArray<const AbstractAirspace *, 32> list;
 
 class AirspaceWarningList
 {
@@ -131,9 +132,13 @@ CompareAirspaceBase(const AbstractAirspace *a, const AbstractAirspace *b)
 class AirspaceListBuilderVisitor:
   public AirspaceVisitor
 {
-  StaticArray<const AbstractAirspace *, 32> airspaces;
+  StaticArray<const AbstractAirspace *, 32> &airspaces;
 
 public:
+  AirspaceListBuilderVisitor(
+      StaticArray<const AbstractAirspace *, 32> &_airspaces)
+    :airspaces(_airspaces) {}
+
   void Visit(const AirspacePolygon& as) {
     airspaces.checked_append(&as);
   }
@@ -141,30 +146,7 @@ public:
   void Visit(const AirspaceCircle& as) {
     airspaces.checked_append(&as);
   }
-
-  void sort() {
-    std::sort(airspaces.begin(), airspaces.end(), CompareAirspaceBase);
-  }
-
-  void clear() {
-    airspaces.clear();
-  }
-
-  bool empty() const {
-    return airspaces.empty();
-  }
-
-  unsigned size() const {
-    return airspaces.size();
-  }
-
-  const AbstractAirspace *operator[](unsigned index) const {
-    assert(index < airspaces.size());
-    return airspaces[index];
-  }
 };
-
-static AirspaceListBuilderVisitor list;
 
 static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
@@ -260,8 +242,10 @@ ShowAirspaceAtPointDialog(SingleWindow &parent, const GeoPoint &location,
                                      ToAircraftState(basic, calculated),
                                      warnings, location);
 
-  airspace_database->visit_within_range(location, fixed(100.0), list, predicate);
-  list.sort();
+  AirspaceListBuilderVisitor list_builder(list);
+  airspace_database->visit_within_range(location, fixed(100.0),
+                                        list_builder, predicate);
+  std::sort(list.begin(), list.end(), CompareAirspaceBase);
 
   ShowDialog(parent);
 
