@@ -17,6 +17,7 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Airspace/Predicate/AirspacePredicate.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/Predicate/AirspacePredicateAircraftInside.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/Predicate/AirspacePredicateHeightRange.cpp \
+	$(ENGINE_SRC_DIR)/Airspace/Predicate/AirspacePredicateInside.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceIntersectionVisitor.cpp \
 	$(ENGINE_SRC_DIR)/Airspace/AirspaceWarningManager.cpp \

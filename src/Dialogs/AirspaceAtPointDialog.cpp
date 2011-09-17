@@ -32,6 +32,7 @@ Copyright_License {
 #include "Airspace/AirspaceVisitor.hpp"
 #include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/AirspaceVisibility.hpp"
+#include "Airspace/Predicate/AirspacePredicateInside.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
@@ -93,24 +94,11 @@ public:
   }
 };
 
-class AirspaceInsidePredicate: public AirspacePredicate
-{
-  const GeoPoint location;
-
-public:
-  AirspaceInsidePredicate(const GeoPoint _location)
-    :location(_location) {}
-
-  bool condition(const AbstractAirspace& airspace) const {
-    return airspace.Inside(location);
-  }
-};
-
 class AirspaceAtPointPredicate: public AirspacePredicate
 {
   AirspaceVisiblePredicate visible_predicate;
   AirspaceWarningPredicate warning_predicate;
-  AirspaceInsidePredicate inside_predicate;
+  AirspacePredicateInside inside_predicate;
 
 public:
   AirspaceAtPointPredicate(const AirspaceComputerSettings &_computer_settings,
