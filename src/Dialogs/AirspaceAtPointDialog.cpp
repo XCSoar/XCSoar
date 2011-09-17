@@ -68,11 +68,11 @@ public:
     Fill(lease);
   }
 
-  bool is_warning(const AbstractAirspace& as) const {
+  bool ContainsWarning(const AbstractAirspace& as) const {
     return ids_warning.contains(&as);
   }
 
-  bool is_inside(const AbstractAirspace& as) const {
+  bool ContainsInside(const AbstractAirspace& as) const {
     return ids_inside.contains(&as);
   }
 };
@@ -93,8 +93,8 @@ public:
 
   bool condition(const AbstractAirspace& airspace) const {
     if (!AirspaceVisiblePredicate::condition(airspace) &&
-        !warnings.is_inside(airspace) &&
-        !warnings.is_warning(airspace))
+        !warnings.ContainsInside(airspace) &&
+        !warnings.ContainsWarning(airspace))
       return false;
 
     return airspace.Inside(location);
