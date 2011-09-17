@@ -45,25 +45,25 @@ Copyright_License {
 static const AirspaceLook *look;
 static const AirspaceRendererSettings *settings;
 
-class AirspaceWarningCopy2
+class AirspaceWarningList
 {
 public:
-  void Visit(const AirspaceWarning& as) {
+  void Add(const AirspaceWarning& as) {
     if (as.get_warning_state() == AirspaceWarning::WARNING_INSIDE)
       ids_inside.checked_append(&as.get_airspace());
     else if (as.get_warning_state() > AirspaceWarning::WARNING_CLEAR)
       ids_warning.checked_append(&as.get_airspace());
   }
 
-  void Visit(const AirspaceWarningManager &awm) {
+  void Fill(const AirspaceWarningManager &awm) {
     for (AirspaceWarningManager::const_iterator i = awm.begin(),
            end = awm.end(); i != end; ++i)
-      Visit(*i);
+      Add(*i);
   }
 
-  void Visit(const ProtectedAirspaceWarningManager &awm) {
+  void Fill(const ProtectedAirspaceWarningManager &awm) {
     const ProtectedAirspaceWarningManager::Lease lease(awm);
-    Visit(lease);
+    Fill(lease);
   }
 
   bool is_warning(const AbstractAirspace& as) const {
@@ -84,7 +84,7 @@ public:
   AirspaceAtPointPredicate(const AirspaceComputerSettings &_computer_settings,
                            const AirspaceRendererSettings &_renderer_settings,
                            const AircraftState& _state,
-                           const AirspaceWarningCopy2 &warnings,
+                           const AirspaceWarningList &warnings,
                            const GeoPoint _location):
     AirspaceVisiblePredicate(_computer_settings, _renderer_settings, _state),
     m_warnings(warnings), location(_location) {}
@@ -99,7 +99,7 @@ public:
   }
 
 private:
-  const AirspaceWarningCopy2 &m_warnings;
+  const AirspaceWarningList &m_warnings;
   const GeoPoint location;
 };
 
@@ -222,9 +222,9 @@ ShowAirspaceAtPointDialog(SingleWindow &parent, const GeoPoint &location,
   const ProtectedAirspaceWarningManager *airspace_warnings =
     renderer.GetAirspaceWarnings();
 
-  AirspaceWarningCopy2 awc;
+  AirspaceWarningList awc;
   if (airspace_warnings != NULL)
-    awc.Visit(*airspace_warnings);
+    awc.Fill(*airspace_warnings);
 
   settings = &renderer_settings;
   look = &renderer.GetLook();
