@@ -90,10 +90,9 @@ class AirspaceMapVisible: public AirspaceVisible
 public:
   AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
                      const AirspaceRendererSettings &_renderer_settings,
-                     const AircraftState& _state, const bool& _border,
+                     const AircraftState& _state,
                      const AirspaceWarningCopy2 &warnings):
     AirspaceVisible(_computer_settings, _renderer_settings, _state),
-    m_border(_border),
     m_warnings(warnings) {}
 
   virtual bool operator()(const AbstractAirspace& airspace) const {
@@ -107,7 +106,6 @@ public:
   }
 
 private:
-  const bool &m_border;
   const AirspaceWarningCopy2 &m_warnings;
 };
 
@@ -234,8 +232,7 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
                                                    location);
   const AirspaceMapVisible visible(SettingsComputer().airspace,
                                    SettingsMap().airspace,
-                                   ToAircraftState(Basic(), Calculated()),
-                                   false, awc);
+                                   ToAircraftState(Basic(), Calculated()), awc);
 
   airspace_database->visit_within_range(location, fixed(100.0),
                                         airspace_copy_popup, visible);
