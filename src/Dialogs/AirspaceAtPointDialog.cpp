@@ -93,11 +93,24 @@ public:
   }
 };
 
+class AirspaceInsidePredicate: public AirspacePredicate
+{
+  const GeoPoint location;
+
+public:
+  AirspaceInsidePredicate(const GeoPoint _location)
+    :location(_location) {}
+
+  bool condition(const AbstractAirspace& airspace) const {
+    return airspace.Inside(location);
+  }
+};
+
 class AirspaceAtPointPredicate: public AirspacePredicate
 {
   AirspaceVisiblePredicate visible_predicate;
   AirspaceWarningPredicate warning_predicate;
-  const GeoPoint location;
+  AirspaceInsidePredicate inside_predicate;
 
 public:
   AirspaceAtPointPredicate(const AirspaceComputerSettings &_computer_settings,
@@ -107,16 +120,14 @@ public:
                            const GeoPoint _location)
     :visible_predicate(_computer_settings, _renderer_settings, _state),
      warning_predicate(_warnings),
-     location(_location) {}
+     inside_predicate(_location) {}
 
   bool condition(const AbstractAirspace& airspace) const {
     // Airspace should be visible or have a warning/inside status
     // and airspace needs to be at specified location
 
-    if (!visible_predicate(airspace) && !warning_predicate(airspace))
-      return false;
-
-    return airspace.Inside(location);
+    return (visible_predicate(airspace) || warning_predicate(airspace)) &&
+           inside_predicate(airspace);
   }
 };
 
