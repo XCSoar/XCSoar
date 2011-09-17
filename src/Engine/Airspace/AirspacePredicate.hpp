@@ -41,7 +41,9 @@ public:
    * @return True if condition met
    */
   gcc_pure
-  virtual bool operator()(const AbstractAirspace& t) const = 0;
+  bool operator()(const AbstractAirspace& t) const {
+    return condition(t);
+  }
 
   /**
    * Test condition (calls operator() method)
@@ -49,9 +51,7 @@ public:
    * @return True if condition met
    */
   gcc_pure
-  bool condition(const AbstractAirspace&t) const {
-    return (*this)(t);
-  }
+  virtual bool condition(const AbstractAirspace&t) const = 0;
 
   /** Convenience condition, useful for default conditions */
   static const AirspacePredicateTrue always_true;
@@ -63,7 +63,7 @@ public:
 class AirspacePredicateTrue: public AirspacePredicate
 {
 public:
-  bool operator()(const AbstractAirspace& t) const {
+  bool condition(const AbstractAirspace& t) const {
     return true;
   }
 };
@@ -85,7 +85,7 @@ public:
    */
   AirspacePredicateAircraftInside(const AircraftState& state);
 
-  bool operator()(const AbstractAirspace& t) const;
+  bool condition(const AbstractAirspace& t) const;
 };
 
 /**
@@ -108,7 +108,7 @@ public:
   AirspacePredicateHeightRange(const short _h_min, const short _h_max):
     h_min(_h_min), h_max(_h_max) {};
 
-  bool operator()( const AbstractAirspace& t ) const {
+  bool condition( const AbstractAirspace& t ) const {
     return check_height(t);
   }
 protected:
@@ -137,7 +137,7 @@ public:
                                          const AGeoPoint& _p1, const AGeoPoint& _p2):
     AirspacePredicateHeightRange(_h_min, _h_max), p1(_p1), p2(_p2) {};
 
-  bool operator()( const AbstractAirspace& t ) const;
+  bool condition( const AbstractAirspace& t ) const;
 };
 
 #endif

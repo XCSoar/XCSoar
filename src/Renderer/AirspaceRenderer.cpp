@@ -120,12 +120,8 @@ public:
     :AirspaceVisible(_computer_settings, _renderer_settings, _state),
      m_warnings(warnings) {}
 
-  virtual bool operator()(const AbstractAirspace& airspace) const {
-    return condition(airspace);
-  }
-
   bool condition(const AbstractAirspace& airspace) const {
-    return parent_condition(airspace) 
+    return AirspaceVisible::condition(airspace)
       || m_warnings.is_inside(airspace)
       || m_warnings.is_warning(airspace);
   }

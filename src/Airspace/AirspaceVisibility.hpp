@@ -24,11 +24,7 @@ public:
     m_state(_state)
     {};
 
-  virtual bool operator()( const AbstractAirspace& airspace ) const { 
-    return parent_condition(airspace);
-  }
-
-  bool parent_condition(const AbstractAirspace& airspace) const {
+  virtual bool condition( const AbstractAirspace& airspace ) const {
     return type_visible(airspace) && altitude_visible(airspace);
   }
 
