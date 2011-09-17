@@ -21,16 +21,22 @@ Copyright_License {
 }
 */
 
-#include "GlueMapWindow.hpp"
-#include "Dialogs/AirspaceAtPointDialog.hpp"
-#include "Screen/SingleWindow.hpp"
+#ifndef XCSOAR_AIRSPACE_AT_POINT_DIALOG_HPP
+#define XCSOAR_AIRSPACE_AT_POINT_DIALOG_HPP
 
-bool
-GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
-{
-  return ShowAirspaceAtPointDialog(*(SingleWindow *)get_root_owner(), location,
-                                   airspace_renderer,
-                                   SettingsComputer().airspace,
-                                   SettingsMap().airspace, Basic(),
-                                   Calculated());
-}
+class SingleWindow;
+struct GeoPoint;
+class AirspaceRenderer;
+struct AirspaceComputerSettings;
+struct AirspaceRendererSettings;
+struct MoreData;
+struct DerivedInfo;
+
+bool ShowAirspaceAtPointDialog(SingleWindow &parent, const GeoPoint &location,
+                               const AirspaceRenderer &renderer,
+                               const AirspaceComputerSettings &computer_settings,
+                               const AirspaceRendererSettings &renderer_settings,
+                               const MoreData &basic,
+                               const DerivedInfo &calculated);
+
+#endif
