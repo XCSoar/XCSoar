@@ -63,19 +63,14 @@ public:
   }
 
   bool is_warning(const AbstractAirspace& as) const {
-    return find(as, ids_warning);
+    return ids_warning.contains(&as);
   }
 
   bool is_inside(const AbstractAirspace& as) const {
-    return find(as, ids_inside);
+    return ids_inside.contains(&as);
   }
 
 private:
-  bool find(const AbstractAirspace& as,
-            const StaticArray<const AbstractAirspace *,64> &list) const {
-    return list.contains(&as);
-  }
-
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning;
 };
 
