@@ -47,6 +47,8 @@ static const AirspaceRendererSettings *settings;
 
 class AirspaceWarningList
 {
+  StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning;
+
 public:
   void Add(const AirspaceWarning& as) {
     if (as.get_warning_state() == AirspaceWarning::WARNING_INSIDE)
@@ -73,13 +75,13 @@ public:
   bool is_inside(const AbstractAirspace& as) const {
     return ids_inside.contains(&as);
   }
-
-private:
-  StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning;
 };
 
 class AirspaceAtPointPredicate: public AirspaceVisiblePredicate
 {
+  const AirspaceWarningList &m_warnings;
+  const GeoPoint location;
+
 public:
   AirspaceAtPointPredicate(const AirspaceComputerSettings &_computer_settings,
                            const AirspaceRendererSettings &_renderer_settings,
@@ -97,10 +99,6 @@ public:
 
     return airspace.Inside(location);
   }
-
-private:
-  const AirspaceWarningList &m_warnings;
-  const GeoPoint location;
 };
 
 /**
