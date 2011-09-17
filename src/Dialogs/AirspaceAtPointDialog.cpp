@@ -38,8 +38,12 @@ Copyright_License {
 #include "NMEA/Aircraft.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
 #include "Language/Language.hpp"
+#include "Renderer/AirspacePreviewRenderer.hpp"
 
 #include <algorithm>
+
+static const AirspaceLook *look;
+static const AirspaceRendererSettings *settings;
 
 class AirspaceWarningCopy2
 {
@@ -171,18 +175,27 @@ private:
   }
 
   static void PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx) {
+    const unsigned line_height = rc.bottom - rc.top;
+
     const AbstractAirspace &airspace = *instance->airspaces[idx];
+
+    RasterPoint pt = { rc.left + line_height / 2,
+                       rc.top + line_height / 2};
+    unsigned radius = std::min(line_height / 2  - Layout::FastScale(4),
+                               (unsigned)Layout::FastScale(10));
+    AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
+                                  *settings, *look);
 
     const Font &name_font = Fonts::MapBold;
     const Font &small_font = Fonts::MapLabel;
 
+    unsigned left = rc.left + line_height + Layout::FastScale(2);
     canvas.select(name_font);
-    canvas.text_clipped(rc.left + Layout::FastScale(2),
-                        rc.top + Layout::FastScale(2), rc,
+    canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
                         airspace.GetName());
 
     canvas.select(small_font);
-    canvas.text_clipped(rc.left + Layout::FastScale(2),
+    canvas.text_clipped(left,
                         rc.top + name_font.get_height() + Layout::FastScale(4),
                         rc, airspace.GetTypeText(false));
 
@@ -219,6 +232,9 @@ ShowAirspaceAtPointDialog(SingleWindow &parent, const GeoPoint &location,
   AirspaceWarningCopy2 awc;
   if (airspace_warnings != NULL)
     awc.Visit(*airspace_warnings);
+
+  settings = &renderer_settings;
+  look = &renderer.GetLook();
 
   AirspaceDetailsDialogVisitor airspace_copy_popup(parent, location);
   const AirspaceMapVisible visible(computer_settings, renderer_settings,

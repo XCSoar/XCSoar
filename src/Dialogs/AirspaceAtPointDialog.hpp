@@ -31,6 +31,7 @@ struct AirspaceComputerSettings;
 struct AirspaceRendererSettings;
 struct MoreData;
 struct DerivedInfo;
+struct AirspaceLook;
 
 bool ShowAirspaceAtPointDialog(SingleWindow &parent, const GeoPoint &location,
                                const AirspaceRenderer &renderer,
