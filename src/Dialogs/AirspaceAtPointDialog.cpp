@@ -184,7 +184,7 @@ private:
     canvas.select(small_font);
     canvas.text_clipped(rc.left + Layout::FastScale(2),
                         rc.top + name_font.get_height() + Layout::FastScale(4),
-                        rc, airspace.GetTypeText(true));
+                        rc, airspace.GetTypeText(false));
 
     PixelSize size = canvas.text_size(_T("9999 m AGL"));
     unsigned altitude_width = size.cx;
