@@ -78,24 +78,29 @@ private:
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning;
 };
 
-class AirspaceMapVisible: public AirspaceVisible
+class AirspaceAtPointPredicate: public AirspaceVisible
 {
 public:
-  AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
-                     const AirspaceRendererSettings &_renderer_settings,
-                     const AircraftState& _state,
-                     const AirspaceWarningCopy2 &warnings):
+  AirspaceAtPointPredicate(const AirspaceComputerSettings &_computer_settings,
+                           const AirspaceRendererSettings &_renderer_settings,
+                           const AircraftState& _state,
+                           const AirspaceWarningCopy2 &warnings,
+                           const GeoPoint _location):
     AirspaceVisible(_computer_settings, _renderer_settings, _state),
-    m_warnings(warnings) {}
+    m_warnings(warnings), location(_location) {}
 
   bool condition(const AbstractAirspace& airspace) const {
-    return AirspaceVisible::condition(airspace)
-      || m_warnings.is_inside(airspace)
-      || m_warnings.is_warning(airspace);
+    if (!AirspaceVisible::condition(airspace) &&
+        !m_warnings.is_inside(airspace) &&
+        !m_warnings.is_warning(airspace))
+      return false;
+
+    return airspace.Inside(location);
   }
 
 private:
   const AirspaceWarningCopy2 &m_warnings;
+  const GeoPoint location;
 };
 
 /**
@@ -108,9 +113,6 @@ class AirspaceDetailsDialogVisitor:
   StaticArray<const AbstractAirspace *, 32> airspaces;
 
 public:
-  AirspaceDetailsDialogVisitor(const GeoPoint &location)
-    :m_location(location) {}
-
   void Visit(const AirspacePolygon& as) {
     visit_general(as);
   }
@@ -120,8 +122,7 @@ public:
   }
 
   void visit_general(const AbstractAirspace& as) {
-    if (as.Inside(m_location))
-      airspaces.checked_append(&as);
+    airspaces.checked_append(&as);
   }
 
   void sort() {
@@ -160,7 +161,6 @@ public:
   }
 
 private:
-  const GeoPoint &m_location;
 
   static bool CompareAirspaceBase(const AbstractAirspace *a,
                                   const AbstractAirspace *b) {
@@ -229,9 +229,10 @@ ShowAirspaceAtPointDialog(SingleWindow &parent, const GeoPoint &location,
   settings = &renderer_settings;
   look = &renderer.GetLook();
 
-  AirspaceDetailsDialogVisitor airspace_copy_popup(location);
-  const AirspaceMapVisible visible(computer_settings, renderer_settings,
-                                   ToAircraftState(basic, calculated), awc);
+  AirspaceDetailsDialogVisitor airspace_copy_popup;
+  const AirspaceAtPointPredicate visible(computer_settings, renderer_settings,
+                                         ToAircraftState(basic, calculated), awc,
+                                         location);
 
   airspace_database->visit_within_range(location, fixed(100.0),
                                         airspace_copy_popup, visible);
