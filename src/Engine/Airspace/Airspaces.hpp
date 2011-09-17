@@ -24,7 +24,7 @@
 
 #include "AirspacesInterface.hpp"
 #include "AirspaceActivity.hpp"
-#include "AirspacePredicate.hpp"
+#include "Predicate/AirspacePredicate.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Navigation/TaskProjection.hpp"
 #include "Compiler.h"

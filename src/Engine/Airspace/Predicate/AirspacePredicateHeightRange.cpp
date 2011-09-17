@@ -20,16 +20,21 @@
 }
  */
 
-#include "AirspacePredicateAircraftInside.hpp"
-#include "Navigation/Aircraft.hpp"
-#include "AbstractAirspace.hpp"
+#include "AirspacePredicateHeightRange.hpp"
+#include "../AbstractAirspace.hpp"
 
-AirspacePredicateAircraftInside::AirspacePredicateAircraftInside(
-    const AircraftState &_state)
-  :state(_state) {}
-
-bool 
-AirspacePredicateAircraftInside::condition(const AbstractAirspace &airspace) const
+bool
+AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
 {
-  return airspace.Inside(state);
+  return (int)t.GetTop().altitude >= h_min &&
+         (int)t.GetBase().altitude <= h_max;
+}
+
+bool
+AirspacePredicateHeightRangeExcludeTwo::condition(const AbstractAirspace& t) const
+{
+  if (!check_height(t))
+    return false;
+
+  return !t.Inside(p1) && !t.Inside(p2);
 }

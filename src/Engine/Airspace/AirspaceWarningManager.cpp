@@ -26,7 +26,7 @@
 #include "AirspacePolygon.hpp"
 #include "AirspaceIntersectionVisitor.hpp"
 #include "AirspaceWarningVisitor.hpp"
-#include "AirspacePredicateAircraftInside.hpp"
+#include "Predicate/AirspacePredicateAircraftInside.hpp"
 #include "Task/TaskManager.hpp"
 
 #define CRUISE_FILTER_FACT fixed_half

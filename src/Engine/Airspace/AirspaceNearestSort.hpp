@@ -2,7 +2,7 @@
 #define AIRSPACE_NEAREST_SORT_HPP
 
 #include "Navigation/GeoPoint.hpp"
-#include "AirspacePredicate.hpp"
+#include "Predicate/AirspacePredicate.hpp"
 #include <queue>
 #include "Navigation/Aircraft.hpp"
 #include "Airspace.hpp"
