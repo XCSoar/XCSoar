@@ -5,6 +5,13 @@
 
 #include <algorithm>
 
+
+static AirspaceClass MatchClass;
+static unsigned char MatchChar = 0;
+static const TCHAR *name_prefix;
+static Angle Direction;
+static fixed MaxDistance;
+
 AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
                                const GeoPoint &Location,
                                const fixed distance_factor)
@@ -45,8 +52,6 @@ AirspaceSorter::get_list() const
   return m_airspaces_all;
 }
 
-static AirspaceClass MatchClass;
-
 static bool
 AirspaceClassFilter(const AirspaceSelectInfo& elem1)
 {
@@ -61,8 +66,6 @@ AirspaceSorter::filter_class(AirspaceSelectInfoVector& vec,
   vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceClassFilter),
             vec.end());
 }
-
-static unsigned char MatchChar = 0;
 
 static bool
 AirspaceNameFilter(const AirspaceSelectInfo& elem1)
@@ -79,8 +82,6 @@ AirspaceSorter::filter_name(AirspaceSelectInfoVector& vec,
             vec.end());
 }
 
-static const TCHAR *name_prefix;
-
 static bool
 AirspaceNamePrefixFilter(const AirspaceSelectInfo& elem1)
 {
@@ -95,8 +96,6 @@ AirspaceSorter::FilterNamePrefix(AirspaceSelectInfoVector &v,
   v.erase(std::remove_if(v.begin(), v.end(), AirspaceNamePrefixFilter),
           v.end());
 }
-
-static Angle Direction;
 
 static bool
 AirspaceDirectionFilter(const AirspaceSelectInfo& elem1)
@@ -113,8 +112,6 @@ AirspaceSorter::filter_direction(AirspaceSelectInfoVector& vec,
   vec.erase(std::remove_if(vec.begin(), vec.end(), AirspaceDirectionFilter),
             vec.end());
 }
-
-static fixed MaxDistance;
 
 static bool
 AirspaceDistanceFilter(const AirspaceSelectInfo& elem1)
