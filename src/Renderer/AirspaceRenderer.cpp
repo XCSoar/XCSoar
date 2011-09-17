@@ -110,16 +110,14 @@ private:
 class AirspaceMapVisible: public AirspaceVisible
 {
 private:
-  const bool &m_border;
   const AirspaceWarningCopy& m_warnings;
 
 public:
   AirspaceMapVisible(const AirspaceComputerSettings &_computer_settings,
                      const AirspaceRendererSettings &_renderer_settings,
-                     const AircraftState& _state, const bool& _border,
+                     const AircraftState& _state,
                      const AirspaceWarningCopy& warnings)
     :AirspaceVisible(_computer_settings, _renderer_settings, _state),
-     m_border(_border),
      m_warnings(warnings) {}
 
   virtual bool operator()(const AbstractAirspace& airspace) const {
@@ -463,8 +461,7 @@ AirspaceRenderer::Draw(Canvas &canvas,
 
   const AirspaceMapVisible visible(settings_computer.airspace,
                                    settings_map.airspace,
-                                   ToAircraftState(basic, calculated),
-                                   false, awc);
+                                   ToAircraftState(basic, calculated), awc);
 
 #ifdef ENABLE_OPENGL
   AirspaceVisitorRenderer renderer(canvas, projection, airspace_look, awc,
