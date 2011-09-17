@@ -132,19 +132,19 @@ CompareAirspaceBase(const AbstractAirspace *a, const AbstractAirspace *b)
 class AirspaceListBuilderVisitor:
   public AirspaceVisitor
 {
-  StaticArray<const AbstractAirspace *, 32> &airspaces;
+  StaticArray<const AbstractAirspace *, 32> &list;
 
 public:
   AirspaceListBuilderVisitor(
-      StaticArray<const AbstractAirspace *, 32> &_airspaces)
-    :airspaces(_airspaces) {}
+      StaticArray<const AbstractAirspace *, 32> &_list)
+    :list(_list) {}
 
-  void Visit(const AirspacePolygon& as) {
-    airspaces.checked_append(&as);
+  void Visit(const AirspacePolygon &airspace) {
+    list.checked_append(&airspace);
   }
 
-  void Visit(const AirspaceCircle& as) {
-    airspaces.checked_append(&as);
+  void Visit(const AirspaceCircle &airspace) {
+    list.checked_append(&airspace);
   }
 };
 
