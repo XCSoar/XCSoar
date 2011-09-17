@@ -92,6 +92,9 @@ public:
     warnings(_warnings), location(_location) {}
 
   bool condition(const AbstractAirspace& airspace) const {
+    // Airspace should be visible or have a warning/inside status
+    // and airspace needs to be at specified location
+
     if (!AirspaceVisiblePredicate::condition(airspace) &&
         !warnings.ContainsInside(airspace) &&
         !warnings.ContainsWarning(airspace))
