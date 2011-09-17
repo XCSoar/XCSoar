@@ -79,7 +79,9 @@ class GlueMapWindow : public MapWindow {
   RasterPoint drag_start, drag_last;
   GestureManager gestures;
   bool ignore_single_click;
-  bool dragOverMinDist; /* <// if mouse pan drag has moved over ~10 pixels */
+
+  /** if mouse pan drag has moved over ~10 pixels */
+  bool dragOverMinDist;
 
   ZoomClimb_t zoomclimb;
 
