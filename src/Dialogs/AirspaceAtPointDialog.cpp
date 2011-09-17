@@ -186,16 +186,15 @@ private:
                         rc.top + name_font.get_height() + Layout::FastScale(4),
                         rc, airspace.GetTypeText(false));
 
-    PixelSize size = canvas.text_size(_T("9999 m AGL"));
-    unsigned altitude_width = size.cx;
-    unsigned altitude_height = size.cy;
-
+    unsigned altitude_width = canvas.text_width(airspace.GetTopText(true).c_str());
     canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                        rc.top + Layout::FastScale(2), rc,
+                        rc.top + name_font.get_height() -
+                        small_font.get_height() + Layout::FastScale(2), rc,
                         airspace.GetTopText(true).c_str());
 
+    altitude_width = canvas.text_width(airspace.GetBaseText(true).c_str());
     canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                        rc.top + altitude_height + Layout::FastScale(4) / 2,
+                        rc.top + name_font.get_height() + Layout::FastScale(4),
                         rc, airspace.GetBaseText(true).c_str());
   }
 };
