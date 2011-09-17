@@ -48,9 +48,6 @@ public:
       ids_inside.checked_append(&as.get_airspace());
     else if (as.get_warning_state() > AirspaceWarning::WARNING_CLEAR)
       ids_warning.checked_append(&as.get_airspace());
-
-    if (!as.get_ack_expired())
-      ids_acked.checked_append(&as.get_airspace());
   }
 
   void Visit(const AirspaceWarningManager &awm) {
@@ -68,10 +65,6 @@ public:
     return find(as, ids_warning);
   }
 
-  bool is_acked(const AbstractAirspace& as) const {
-    return find(as, ids_acked);
-  }
-
   bool is_inside(const AbstractAirspace& as) const {
     return find(as, ids_inside);
   }
@@ -82,7 +75,7 @@ private:
     return list.contains(&as);
   }
 
-  StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning, ids_acked;
+  StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning;
 };
 
 class AirspaceMapVisible: public AirspaceVisible
