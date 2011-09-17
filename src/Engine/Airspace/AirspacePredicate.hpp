@@ -69,26 +69,6 @@ public:
 };
 
 /**
- * Convenience predicate for conditions always true
- */
-class AirspacePredicateAircraftInside: public AirspacePredicate
-{
-  const AircraftState& m_state;
-
-public:
-  /**
-   * Constructor
-   *
-   * @param state State to check interior
-   *
-   * @return Initialised object
-   */
-  AirspacePredicateAircraftInside(const AircraftState& state);
-
-  bool condition(const AbstractAirspace& t) const;
-};
-
-/**
  * Convenience predicate for height within a specified range
  */
 class AirspacePredicateHeightRange: public AirspacePredicate

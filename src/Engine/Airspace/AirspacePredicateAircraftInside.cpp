@@ -19,25 +19,17 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
-#include "AirspacePredicate.hpp"
+
+#include "AirspacePredicateAircraftInside.hpp"
 #include "Navigation/Aircraft.hpp"
 #include "AbstractAirspace.hpp"
 
-/* needs explicit initialization, or clang will complain */
-const AirspacePredicateTrue AirspacePredicate::always_true =
-  AirspacePredicateTrue();
+AirspacePredicateAircraftInside::AirspacePredicateAircraftInside(
+    const AircraftState &_state)
+  :state(_state) {}
 
-bool
-AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
+bool 
+AirspacePredicateAircraftInside::condition(const AbstractAirspace &airspace) const
 {
-  return (int)t.GetTop().altitude >= h_min &&
-    (int)t.GetBase().altitude <= h_max;
-}
-
-bool
-AirspacePredicateHeightRangeExcludeTwo::condition(const AbstractAirspace& t) const
-{
-  if (!check_height(t))
-    return false;
-  return !t.Inside(p1) && !t.Inside(p2);
+  return airspace.Inside(state);
 }
