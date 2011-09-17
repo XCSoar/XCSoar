@@ -28,13 +28,13 @@ Copyright_License {
 #include "Airspace/AirspaceRendererSettings.hpp"
 
 bool
-AirspaceVisible::type_visible(const AbstractAirspace& airspace) const
+AirspaceVisiblePredicate::type_visible(const AbstractAirspace& airspace) const
 {
   return renderer_settings.display[airspace.GetType()];
 }
 
 bool
-AirspaceVisible::altitude_visible(const AbstractAirspace& airspace) const
+AirspaceVisiblePredicate::altitude_visible(const AbstractAirspace& airspace) const
 {
   /// @todo airspace visibility did use ToMSL(..., map.Calculated().TerrainAlt); 
 

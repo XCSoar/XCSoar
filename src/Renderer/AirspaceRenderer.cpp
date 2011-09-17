@@ -107,7 +107,7 @@ private:
 };
 
 
-class AirspaceMapVisible: public AirspaceVisible
+class AirspaceMapVisible: public AirspaceVisiblePredicate
 {
 private:
   const AirspaceWarningCopy& m_warnings;
@@ -117,11 +117,11 @@ public:
                      const AirspaceRendererSettings &_renderer_settings,
                      const AircraftState& _state,
                      const AirspaceWarningCopy& warnings)
-    :AirspaceVisible(_computer_settings, _renderer_settings, _state),
+    :AirspaceVisiblePredicate(_computer_settings, _renderer_settings, _state),
      m_warnings(warnings) {}
 
   bool condition(const AbstractAirspace& airspace) const {
-    return AirspaceVisible::condition(airspace)
+    return AirspaceVisiblePredicate::condition(airspace)
       || m_warnings.is_inside(airspace)
       || m_warnings.is_warning(airspace);
   }

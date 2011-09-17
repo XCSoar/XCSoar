@@ -1234,7 +1234,7 @@ InputEvents::eventNearestAirspaceDetails(gcc_unused const TCHAR *misc)
 
   const AircraftState aircraft_state =
     ToAircraftState(basic, calculated);
-  AirspaceVisible visible(settings_computer.airspace,
+  AirspaceVisiblePredicate visible(settings_computer.airspace,
                           CommonInterface::SettingsMap().airspace,
                           aircraft_state);
   GlidePolar polar = settings_computer.glide_polar_task;

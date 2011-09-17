@@ -78,7 +78,7 @@ private:
   StaticArray<const AbstractAirspace *,64> ids_inside, ids_warning;
 };
 
-class AirspaceAtPointPredicate: public AirspaceVisible
+class AirspaceAtPointPredicate: public AirspaceVisiblePredicate
 {
 public:
   AirspaceAtPointPredicate(const AirspaceComputerSettings &_computer_settings,
@@ -86,11 +86,11 @@ public:
                            const AircraftState& _state,
                            const AirspaceWarningCopy2 &warnings,
                            const GeoPoint _location):
-    AirspaceVisible(_computer_settings, _renderer_settings, _state),
+    AirspaceVisiblePredicate(_computer_settings, _renderer_settings, _state),
     m_warnings(warnings), location(_location) {}
 
   bool condition(const AbstractAirspace& airspace) const {
-    if (!AirspaceVisible::condition(airspace) &&
+    if (!AirspaceVisiblePredicate::condition(airspace) &&
         !m_warnings.is_inside(airspace) &&
         !m_warnings.is_warning(airspace))
       return false;
