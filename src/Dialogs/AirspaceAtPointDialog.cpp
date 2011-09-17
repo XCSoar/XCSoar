@@ -240,18 +240,18 @@ ShowAirspaceAtPointDialog(SingleWindow &parent, const GeoPoint &location,
   const ProtectedAirspaceWarningManager *airspace_warnings =
     renderer.GetAirspaceWarnings();
 
-  AirspaceWarningList awc;
+  AirspaceWarningList warnings;
   if (airspace_warnings != NULL)
-    awc.Fill(*airspace_warnings);
+    warnings.Fill(*airspace_warnings);
 
   settings = &renderer_settings;
   look = &renderer.GetLook();
 
-  const AirspaceAtPointPredicate visible(computer_settings, renderer_settings,
-                                         ToAircraftState(basic, calculated), awc,
-                                         location);
+  AirspaceAtPointPredicate predicate(computer_settings, renderer_settings,
+                                     ToAircraftState(basic, calculated),
+                                     warnings, location);
 
-  airspace_database->visit_within_range(location, fixed(100.0), list, visible);
+  airspace_database->visit_within_range(location, fixed(100.0), list, predicate);
   list.sort();
 
   ShowDialog(parent);
