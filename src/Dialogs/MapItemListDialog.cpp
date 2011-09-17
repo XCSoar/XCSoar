@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Dialogs/AirspaceAtPointDialog.hpp"
+#include "Dialogs/MapItemListDialog.hpp"
 #include "Util/StaticArray.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
@@ -216,7 +216,7 @@ ShowDialog(SingleWindow &parent)
 }
 
 bool
-ShowAirspaceAtPointDialog(SingleWindow &parent, const GeoPoint &location,
+ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
                           const AirspaceRenderer &renderer,
                           const AirspaceComputerSettings &computer_settings,
                           const AirspaceRendererSettings &renderer_settings,

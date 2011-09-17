@@ -22,13 +22,13 @@ Copyright_License {
 */
 
 #include "GlueMapWindow.hpp"
-#include "Dialogs/AirspaceAtPointDialog.hpp"
+#include "Dialogs/MapItemListDialog.hpp"
 #include "Screen/SingleWindow.hpp"
 
 bool
 GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
 {
-  return ShowAirspaceAtPointDialog(*(SingleWindow *)get_root_owner(), location,
+  return ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), location,
                                    airspace_renderer,
                                    SettingsComputer().airspace,
                                    SettingsMap().airspace, Basic(),

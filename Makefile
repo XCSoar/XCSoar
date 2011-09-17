@@ -113,7 +113,7 @@ DIALOG_SOURCES = \
 	$(SRC)/Dialogs/JobDialog.cpp \
 	$(SRC)/Dialogs/DeviceListDialog.cpp \
 	$(SRC)/Dialogs/ManageCAI302Dialog.cpp \
-	$(SRC)/Dialogs/AirspaceAtPointDialog.cpp \
+	$(SRC)/Dialogs/MapItemListDialog.cpp \
 	$(SRC)/Dialogs/dlgAirspace.cpp \
 	$(SRC)/Dialogs/dlgAirspaceColours.cpp \
 	$(SRC)/Dialogs/dlgAirspacePatterns.cpp \
