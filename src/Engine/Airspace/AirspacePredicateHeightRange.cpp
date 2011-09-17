@@ -20,8 +20,21 @@
 }
  */
 
-#include "AirspacePredicate.hpp"
+#include "AirspacePredicateHeightRange.hpp"
+#include "AbstractAirspace.hpp"
 
-/* needs explicit initialization, or clang will complain */
-const AirspacePredicateTrue AirspacePredicate::always_true =
-  AirspacePredicateTrue();
+bool
+AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
+{
+  return (int)t.GetTop().altitude >= h_min &&
+         (int)t.GetBase().altitude <= h_max;
+}
+
+bool
+AirspacePredicateHeightRangeExcludeTwo::condition(const AbstractAirspace& t) const
+{
+  if (!check_height(t))
+    return false;
+
+  return !t.Inside(p1) && !t.Inside(p2);
+}

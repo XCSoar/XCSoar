@@ -19,12 +19,14 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "AirspaceRoute.hpp"
 #include "Navigation/SearchPointVector.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Airspace/AirspaceIntersectionVisitor.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspacePolygon.hpp"
+#include "Airspace/AirspacePredicateHeightRange.hpp"
 #include "Math/FastMath.h"
 
 // Airspace query helpers
