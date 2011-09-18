@@ -46,8 +46,8 @@ Copyright_License {
 struct MapItem;
 typedef StaticArray<MapItem *, 32> MapItemList;
 
-static const AirspaceLook *look;
-static const AirspaceRendererSettings *settings;
+static const AirspaceLook *airspace_look;
+static const AirspaceRendererSettings *airspace_renderer_settings;
 static MapItemList list;
 
 struct MapItem
@@ -185,7 +185,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     unsigned radius = std::min(line_height / 2  - Layout::FastScale(4),
                                (unsigned)Layout::FastScale(10));
     AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
-                                  *settings, *look);
+                                  *airspace_renderer_settings, *airspace_look);
 
     const Font &name_font = Fonts::MapBold;
     const Font &small_font = Fonts::MapLabel;
@@ -259,8 +259,8 @@ ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
   if (airspace_warnings != NULL)
     warnings.Fill(*airspace_warnings);
 
-  settings = &renderer_settings;
-  look = &renderer.GetLook();
+  airspace_renderer_settings = &renderer_settings;
+  airspace_look = &renderer.GetLook();
 
   AirspaceAtPointPredicate predicate(computer_settings, renderer_settings,
                                      ToAircraftState(basic, calculated),
