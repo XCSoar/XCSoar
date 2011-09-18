@@ -150,14 +150,27 @@ SelectAction(const MapItem &item, SingleWindow &parent)
 }
 
 static void
-ShowDialog(SingleWindow &parent)
+ShowMapItemListDialog(SingleWindow &parent,
+                      const MapItemList &_list,
+                      const AirspaceLook &_airspace_look,
+                      const AirspaceRendererSettings &airspace_settings,
+                      const WaypointLook &_waypoint_look,
+                      const WaypointRendererSettings &waypoint_settings)
 {
-  if (list->empty())
+  if (_list.empty())
     return;
+
+  list = &_list;
+
+  airspace_renderer_settings = &airspace_settings;
+  airspace_look = &_airspace_look;
+  waypoint_renderer_settings = &waypoint_settings;
+  waypoint_look = &_waypoint_look;
 
   switch (list->size()) {
   case 0:
     /* no (visible) airspace here */
+    assert(false);
     break;
 
   case 1:
@@ -175,25 +188,6 @@ ShowDialog(SingleWindow &parent)
     if (i >= 0)
       SelectAction(*(*list)[i], parent);
   }
-}
-
-static void
-ShowMapItemListDialog(SingleWindow &parent,
-                      const MapItemList &_list,
-                      const AirspaceLook &_airspace_look,
-                      const AirspaceRendererSettings &airspace_settings,
-                      const WaypointLook &_waypoint_look,
-                      const WaypointRendererSettings &waypoint_settings)
-{
-  list = &_list;
-
-  airspace_renderer_settings = &airspace_settings;
-  airspace_look = &_airspace_look;
-  waypoint_renderer_settings = &waypoint_settings;
-  waypoint_look = &_waypoint_look;
-
-  // Show the list dialog
-  ShowDialog(parent);
 }
 
 bool
