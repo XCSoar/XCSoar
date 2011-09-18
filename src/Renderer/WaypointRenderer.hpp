@@ -67,6 +67,10 @@ public:
               const TaskBehaviour &task_behaviour,
               const ProtectedTaskManager *task,
               const ProtectedRoutePlanner *route_planner);
+
+  const WaypointLook &GetLook() const {
+    return look;
+  }
 };
 
 #endif
