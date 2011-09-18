@@ -26,6 +26,8 @@ Copyright_License {
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
 #include "MapWindow/MapItem.hpp"
+#include "Look/AircraftLook.hpp"
+#include "Renderer/AircraftRenderer.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Airspace/AbstractAirspace.hpp"
@@ -33,12 +35,16 @@ Copyright_License {
 #include "Renderer/WaypointIconRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Language/Language.hpp"
 #include "SettingsMap.hpp"
 
 #include <cstdio>
 
 namespace MapItemListRenderer
 {
+  void Draw(Canvas &canvas, const PixelRect rc, const SelfMapItem &item,
+            const AircraftLook &look, const SETTINGS_MAP &settings);
+
   void Draw(Canvas &canvas, const PixelRect rc, const AirspaceMapItem &item,
             const AirspaceLook &look,
             const AirspaceRendererSettings &renderer_settings);
@@ -46,6 +52,34 @@ namespace MapItemListRenderer
   void Draw(Canvas &canvas, const PixelRect rc, const WaypointMapItem &item,
             const WaypointLook &look,
             const WaypointRendererSettings &renderer_settings);
+}
+
+void
+MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          const SelfMapItem &item, const AircraftLook &look,
+                          const SETTINGS_MAP &settings)
+{
+  const unsigned line_height = rc.bottom - rc.top;
+
+  RasterPoint pt = { rc.left + line_height / 2,
+                     rc.top + line_height / 2};
+  AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
+
+  const Font &name_font = Fonts::MapBold;
+  const Font &small_font = Fonts::MapLabel;
+
+  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  canvas.select(name_font);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
+                      _("Your Position"));
+
+  TCHAR buffer[128];
+  Units::FormatGeoPoint(item.location, buffer, 128);
+
+  canvas.select(small_font);
+  canvas.text_clipped(left,
+                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc, buffer);
 }
 
 void
@@ -141,11 +175,15 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 void
 MapItemListRenderer::Draw(
     Canvas &canvas, const PixelRect rc, const MapItem &item,
+    const AircraftLook &aircraft_look,
     const AirspaceLook &airspace_look,
     const WaypointLook &waypoint_look,
     const SETTINGS_MAP &settings)
 {
   switch (item.type) {
+  case MapItem::SELF:
+    Draw(canvas, rc, (const SelfMapItem &)item, aircraft_look, settings);
+    break;
   case MapItem::AIRSPACE:
     Draw(canvas, rc, (const AirspaceMapItem &)item, airspace_look,
          settings.airspace);

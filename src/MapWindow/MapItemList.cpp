@@ -29,6 +29,12 @@ Copyright_License {
 static bool
 CompareMapItems(const MapItem *a, const MapItem *b)
 {
+  if (a->type == MapItem::SELF)
+    return true;
+
+  if (b->type == MapItem::SELF)
+    return false;
+
   if (a->type == MapItem::WAYPOINT &&
       ((const WaypointMapItem *)a)->waypoint.IsAirport())
     return true;

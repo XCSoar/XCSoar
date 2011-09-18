@@ -34,6 +34,11 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
   MapItemList list;
   MapItemListBuilder builder(list, location);
 
+  fixed range = visible_projection.DistancePixelsToMeters(Layout::Scale(10));
+
+  if (Basic().location_available)
+    builder.AddSelfIfNear(Basic().location, Calculated().heading, range);
+
   const Airspaces *airspace_database = airspace_renderer.GetAirspaces();
   if (airspace_database)
     builder.AddVisibleAirspace(*airspace_database,
@@ -43,15 +48,14 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
                                Calculated());
 
   if (way_points)
-    builder.AddWaypoints(
-        *way_points,
-        visible_projection.DistancePixelsToMeters(Layout::Scale(10)));
+    builder.AddWaypoints(*way_points, range);
 
   // Sort the list of map items
   list.Sort();
 
   // Show the list dialog
   ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), list,
+                        aircraft_look,
                         airspace_renderer.GetLook(),
                         way_point_renderer.GetLook(),
                         SettingsMap());

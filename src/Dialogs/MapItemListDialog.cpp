@@ -33,6 +33,7 @@ Copyright_License {
 #include "MapWindow/MapItemListBuilder.hpp"
 #include "Renderer/MapItemListRenderer.hpp"
 
+static const AircraftLook *aircraft_look;
 static const AirspaceLook *airspace_look;
 static const WaypointLook *waypoint_look;
 static const SETTINGS_MAP *settings;
@@ -42,7 +43,7 @@ static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   const MapItem &item = *(*list)[idx];
-  MapItemListRenderer::Draw(canvas, rc, item,
+  MapItemListRenderer::Draw(canvas, rc, item, *aircraft_look,
                             *airspace_look, *waypoint_look, *settings);
 }
 
@@ -50,6 +51,9 @@ void
 ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
 {
   switch (item.type) {
+  case MapItem::SELF:
+    break;
+
   case MapItem::AIRSPACE:
     dlgAirspaceDetails(*((const AirspaceMapItem &)item).airspace);
     break;
@@ -63,6 +67,7 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
 void
 ShowMapItemListDialog(SingleWindow &parent,
                       const MapItemList &_list,
+                      const AircraftLook &_aircraft_look,
                       const AirspaceLook &_airspace_look,
                       const WaypointLook &_waypoint_look,
                       const SETTINGS_MAP &_settings)
@@ -83,6 +88,7 @@ ShowMapItemListDialog(SingleWindow &parent,
                            Fonts::MapLabel.get_height();
     list = &_list;
 
+    aircraft_look = &_aircraft_look;
     airspace_look = &_airspace_look;
     waypoint_look = &_waypoint_look;
     settings = &_settings;

@@ -144,6 +144,14 @@ public:
 };
 
 void
+MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, const Angle &bearing,
+                                  fixed range)
+{
+  if (location.distance(self) < range)
+    list.checked_append(new SelfMapItem(self, bearing));
+}
+
+void
 MapItemListBuilder::AddWaypoints(const Waypoints &waypoints, fixed range)
 {
   WaypointListBuilderVisitor waypoint_list_builder(list);

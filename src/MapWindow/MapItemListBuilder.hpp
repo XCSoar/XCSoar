@@ -27,6 +27,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 
 class MapItemList;
+class Angle;
 class Airspaces;
 class ProtectedAirspaceWarningManager;
 struct AirspaceComputerSettings;
@@ -44,6 +45,7 @@ public:
   MapItemListBuilder(MapItemList &_list, GeoPoint _location)
     :list(_list), location(_location) {}
 
+  void AddSelfIfNear(const GeoPoint &self, const Angle &bearing, fixed range);
   void AddWaypoints(const Waypoints &waypoints, fixed range);
   void AddVisibleAirspace(const Airspaces &airspaces,
                           const ProtectedAirspaceWarningManager *warning_manager,

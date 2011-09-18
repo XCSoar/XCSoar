@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_MAP_ITEM_HPP
 
 #include "Util/StaticArray.hpp"
+#include "Engine/Navigation/GeoPoint.hpp"
 
 class AbstractAirspace;
 struct Waypoint;
@@ -32,12 +33,22 @@ struct Waypoint;
 struct MapItem
 {
   enum Type {
+    SELF,
     AIRSPACE,
     WAYPOINT,
   } type;
 
 protected:
   MapItem(Type _type):type(_type) {}
+};
+
+struct SelfMapItem: public MapItem
+{
+  GeoPoint location;
+  Angle bearing;
+
+  SelfMapItem(const GeoPoint &_location, const Angle &_bearing)
+    :MapItem(SELF), location(_location), bearing(_bearing) {}
 };
 
 struct AirspaceMapItem: public MapItem

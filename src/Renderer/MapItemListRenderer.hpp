@@ -28,6 +28,7 @@ Copyright_License {
 
 class Canvas;
 struct MapItem;
+struct AircraftLook;
 struct AirspaceLook;
 struct WaypointLook;
 struct SETTINGS_MAP;
@@ -35,6 +36,7 @@ struct SETTINGS_MAP;
 namespace MapItemListRenderer
 {
   void Draw(Canvas &canvas, const PixelRect rc, const MapItem &item,
+            const AircraftLook &aircraft_look,
             const AirspaceLook &airspace_look,
             const WaypointLook &waypoint_look,
             const SETTINGS_MAP &settings);
