@@ -25,18 +25,36 @@ Copyright_License {
 #include "Dialogs/MapItemListDialog.hpp"
 #include "Screen/SingleWindow.hpp"
 #include "Screen/Layout.hpp"
+#include "MapWindow/MapItemList.hpp"
+#include "MapWindow/MapItemListBuilder.hpp"
 
 bool
 GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
 {
-  return ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), location,
-                                   airspace_renderer,
-                                   SettingsComputer().airspace,
-                                   SettingsMap().airspace,
-                                   way_points,
-                                   way_point_renderer.GetLook(),
-                                   SettingsMap().waypoint,
-                                   Basic(),
-                                   Calculated(),
-                                   visible_projection.DistancePixelsToMeters(Layout::Scale(10)));
+  MapItemList list;
+  MapItemListBuilder builder(list, location);
+
+  const Airspaces *airspace_database = airspace_renderer.GetAirspaces();
+  if (airspace_database)
+    builder.AddVisibleAirspace(*airspace_database,
+                               airspace_renderer.GetAirspaceWarnings(),
+                               SettingsComputer().airspace,
+                               SettingsMap().airspace, Basic(),
+                               Calculated());
+
+  if (way_points)
+    builder.AddWaypoints(
+        *way_points,
+        visible_projection.DistancePixelsToMeters(Layout::Scale(10)));
+
+  // Sort the list of map items
+  list.Sort();
+
+  // Show the list dialog
+  ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), list,
+                        airspace_renderer.GetLook(), SettingsMap().airspace,
+                        way_point_renderer.GetLook(), SettingsMap().waypoint);
+
+  // Save function result for later
+  return !list.empty();
 }

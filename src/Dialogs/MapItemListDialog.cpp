@@ -27,12 +27,7 @@ Copyright_License {
 #include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Waypoint.hpp"
-#include "Airspace/Airspaces.hpp"
-#include "Airspace/ProtectedAirspaceWarningManager.hpp"
-#include "Engine/Airspace/AirspaceWarningManager.hpp"
-#include "Renderer/AirspaceRenderer.hpp"
 #include "Language/Language.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
 #include "MapWindow/MapItem.hpp"
 #include "MapWindow/MapItemList.hpp"
 #include "MapWindow/MapItemListBuilder.hpp"
@@ -102,39 +97,4 @@ ShowMapItemListDialog(SingleWindow &parent,
     if (i >= 0)
       ShowMapItemDialog(*_list[i], parent);
   }
-}
-
-bool
-ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
-                          const AirspaceRenderer &renderer,
-                          const AirspaceComputerSettings &computer_settings,
-                          const AirspaceRendererSettings &renderer_settings,
-                          const Waypoints *waypoints,
-                          const WaypointLook &_waypoint_look,
-                          const WaypointRendererSettings &waypoint_settings,
-                          const MoreData &basic, const DerivedInfo &calculated,
-                          fixed range)
-{
-  MapItemList list;
-  MapItemListBuilder builder(list, location);
-
-  const Airspaces *airspace_database = renderer.GetAirspaces();
-  if (airspace_database)
-    builder.AddVisibleAirspace(*airspace_database,
-                               renderer.GetAirspaceWarnings(),
-                               computer_settings, renderer_settings, basic,
-                               calculated);
-
-  if (waypoints)
-    builder.AddWaypoints(*waypoints, range);
-
-  // Sort the list of map items
-  list.Sort();
-
-  // Show the list dialog
-  ShowMapItemListDialog(parent, list, renderer.GetLook(), renderer_settings,
-                        _waypoint_look, waypoint_settings);
-
-  // Save function result for later
-  return !list.empty();
 }
