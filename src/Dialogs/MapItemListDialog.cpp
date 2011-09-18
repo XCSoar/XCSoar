@@ -87,12 +87,43 @@ struct WaypointMapItem: public MapItem
     :MapItem(WAYPOINT), waypoint(_waypoint) {}
 };
 
+static bool
+CompareMapItems(const MapItem *a, const MapItem *b)
+{
+  if (a->type == MapItem::WAYPOINT &&
+      ((const WaypointMapItem *)a)->waypoint.IsAirport())
+    return true;
+
+  if (b->type == MapItem::WAYPOINT &&
+      ((const WaypointMapItem *)b)->waypoint.IsAirport())
+    return false;
+
+  if (a->type == MapItem::WAYPOINT &&
+      ((const WaypointMapItem *)a)->waypoint.IsLandable())
+    return true;
+
+  if (b->type == MapItem::WAYPOINT &&
+      ((const WaypointMapItem *)b)->waypoint.IsLandable())
+    return false;
+
+  if (a->type == MapItem::AIRSPACE && b->type == MapItem::AIRSPACE)
+    return AirspaceAltitude::SortHighest(
+        ((const AirspaceMapItem *)a)->airspace->GetBase(),
+        ((const AirspaceMapItem *)b)->airspace->GetBase());
+
+  return a->type < b->type;
+}
+
 class MapItemList: public StaticArray<MapItem *, 32>
 {
 public:
   ~MapItemList() {
     for (iterator it = begin(), it_end = end(); it != it_end; ++it)
       delete *it;
+  }
+
+  void Sort() {
+    std::sort(begin(), end(), CompareMapItems);
   }
 };
 
@@ -166,33 +197,6 @@ public:
            inside_predicate(airspace);
   }
 };
-
-static bool
-CompareMapItems(const MapItem *a, const MapItem *b)
-{
-  if (a->type == MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)a)->waypoint.IsAirport())
-    return true;
-
-  if (b->type == MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)b)->waypoint.IsAirport())
-    return false;
-
-  if (a->type == MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)a)->waypoint.IsLandable())
-    return true;
-
-  if (b->type == MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)b)->waypoint.IsLandable())
-    return false;
-
-  if (a->type == MapItem::AIRSPACE && b->type == MapItem::AIRSPACE)
-    return AirspaceAltitude::SortHighest(
-        ((const AirspaceMapItem *)a)->airspace->GetBase(),
-        ((const AirspaceMapItem *)b)->airspace->GetBase());
-
-  return a->type < b->type;
-}
 
 /**
  * Class to display airspace details dialog
@@ -428,7 +432,7 @@ ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
     builder.AddWaypoints(*waypoints, range);
 
   // Sort the list of map items
-  std::sort(list.begin(), list.end(), CompareMapItems);
+  list.Sort();
 
   // Show the list dialog
   ShowMapItemListDialog(parent, list, renderer.GetLook(), renderer_settings,
