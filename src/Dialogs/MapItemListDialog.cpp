@@ -43,9 +43,30 @@ Copyright_License {
 
 #include <algorithm>
 
+struct MapItem;
+typedef StaticArray<MapItem *, 32> MapItemList;
+
 static const AirspaceLook *look;
 static const AirspaceRendererSettings *settings;
-static StaticArray<const AbstractAirspace *, 32> list;
+static MapItemList list;
+
+struct MapItem
+{
+  enum Type {
+    AIRSPACE,
+  } type;
+
+protected:
+  MapItem(Type _type):type(_type) {}
+};
+
+struct AirspaceMapItem: public MapItem
+{
+  const AbstractAirspace *airspace;
+
+  AirspaceMapItem(const AbstractAirspace *_airspace)
+    :MapItem(AIRSPACE), airspace(_airspace) {}
+};
 
 class AirspaceWarningList
 {
@@ -119,9 +140,14 @@ public:
 };
 
 static bool
-CompareAirspaceBase(const AbstractAirspace *a, const AbstractAirspace *b)
+CompareAirspaceBase(const MapItem *a, const MapItem *b)
 {
-  return AirspaceAltitude::SortHighest(a->GetBase(), b->GetBase());
+  if (a->type == MapItem::AIRSPACE && b->type == MapItem::AIRSPACE)
+    return AirspaceAltitude::SortHighest(
+        ((const AirspaceMapItem *)a)->airspace->GetBase(),
+        ((const AirspaceMapItem *)b)->airspace->GetBase());
+
+  return false;
 }
 
 /**
@@ -130,19 +156,17 @@ CompareAirspaceBase(const AbstractAirspace *a, const AbstractAirspace *b)
 class AirspaceListBuilderVisitor:
   public AirspaceVisitor
 {
-  StaticArray<const AbstractAirspace *, 32> &list;
+  MapItemList &list;
 
 public:
-  AirspaceListBuilderVisitor(
-      StaticArray<const AbstractAirspace *, 32> &_list)
-    :list(_list) {}
+  AirspaceListBuilderVisitor(MapItemList &_list):list(_list) {}
 
   void Visit(const AirspacePolygon &airspace) {
-    list.checked_append(&airspace);
+    list.checked_append(new AirspaceMapItem(&airspace));
   }
 
   void Visit(const AirspaceCircle &airspace) {
-    list.checked_append(&airspace);
+    list.checked_append(new AirspaceMapItem(&airspace));
   }
 };
 
@@ -151,38 +175,42 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   const unsigned line_height = rc.bottom - rc.top;
 
-  const AbstractAirspace &airspace = *list[idx];
+  const MapItem &map_item = *list[idx];
+  if (map_item.type == MapItem::AIRSPACE) {
+    const AirspaceMapItem &airspace_map_item = (const AirspaceMapItem &)map_item;
+    const AbstractAirspace &airspace = *airspace_map_item.airspace;
 
-  RasterPoint pt = { rc.left + line_height / 2,
-                     rc.top + line_height / 2};
-  unsigned radius = std::min(line_height / 2  - Layout::FastScale(4),
-                             (unsigned)Layout::FastScale(10));
-  AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
-                                *settings, *look);
+    RasterPoint pt = { rc.left + line_height / 2,
+                       rc.top + line_height / 2};
+    unsigned radius = std::min(line_height / 2  - Layout::FastScale(4),
+                               (unsigned)Layout::FastScale(10));
+    AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
+                                  *settings, *look);
 
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
+    const Font &name_font = Fonts::MapBold;
+    const Font &small_font = Fonts::MapLabel;
 
-  unsigned left = rc.left + line_height + Layout::FastScale(2);
-  canvas.select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
-                      airspace.GetName());
+    unsigned left = rc.left + line_height + Layout::FastScale(2);
+    canvas.select(name_font);
+    canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
+                        airspace.GetName());
 
-  canvas.select(small_font);
-  canvas.text_clipped(left,
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
-                      rc, airspace.GetTypeText(false));
+    canvas.select(small_font);
+    canvas.text_clipped(left,
+                        rc.top + name_font.get_height() + Layout::FastScale(4),
+                        rc, airspace.GetTypeText(false));
 
-  unsigned altitude_width = canvas.text_width(airspace.GetTopText(true).c_str());
-  canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                      rc.top + name_font.get_height() -
-                      small_font.get_height() + Layout::FastScale(2), rc,
-                      airspace.GetTopText(true).c_str());
+    unsigned altitude_width = canvas.text_width(airspace.GetTopText(true).c_str());
+    canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
+                        rc.top + name_font.get_height() -
+                        small_font.get_height() + Layout::FastScale(2), rc,
+                        airspace.GetTopText(true).c_str());
 
-  altitude_width = canvas.text_width(airspace.GetBaseText(true).c_str());
-  canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
-                      rc, airspace.GetBaseText(true).c_str());
+    altitude_width = canvas.text_width(airspace.GetBaseText(true).c_str());
+    canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
+                        rc.top + name_font.get_height() + Layout::FastScale(4),
+                        rc, airspace.GetBaseText(true).c_str());
+  }
 }
 
 static void
@@ -198,7 +226,7 @@ ShowDialog(SingleWindow &parent)
 
   case 1:
     /* only one airspace, show it */
-    dlgAirspaceDetails(*list[0]);
+    dlgAirspaceDetails(*((const AirspaceMapItem &)list[0]).airspace);
     break;
 
   default:
@@ -209,7 +237,7 @@ ShowDialog(SingleWindow &parent)
                        list.size(), 0, line_height, PaintListItem);
     assert(i >= -1 && i < (int)list.size());
     if (i >= 0)
-      dlgAirspaceDetails(*list[i]);
+      dlgAirspaceDetails(*((const AirspaceMapItem &)list[i]).airspace);
   }
 }
 
@@ -223,8 +251,6 @@ ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
   const Airspaces *airspace_database = renderer.GetAirspaces();
   if (airspace_database == NULL)
     return false;
-
-  list.clear();
 
   const ProtectedAirspaceWarningManager *airspace_warnings =
     renderer.GetAirspaceWarnings();
@@ -243,9 +269,22 @@ ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
   AirspaceListBuilderVisitor list_builder(list);
   airspace_database->visit_within_range(location, fixed(100.0),
                                         list_builder, predicate);
+
+  // Sort the list of map items
   std::sort(list.begin(), list.end(), CompareAirspaceBase);
 
+  // Show the list dialog
   ShowDialog(parent);
 
-  return !list.empty();
+  // Save function result for later
+  bool result = !list.empty();
+
+  // Free map item list
+  for (MapItemList::iterator it = list.begin(), it_end = list.end();
+       it != it_end; ++it)
+    delete *it;
+
+  list.clear();
+
+  return result;
 }
