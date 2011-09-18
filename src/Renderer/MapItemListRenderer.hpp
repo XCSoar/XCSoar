@@ -29,17 +29,15 @@ Copyright_License {
 class Canvas;
 struct MapItem;
 struct AirspaceLook;
-struct AirspaceRendererSettings;
 struct WaypointLook;
-struct WaypointRendererSettings;
+struct SETTINGS_MAP;
 
 namespace MapItemListRenderer
 {
   void Draw(Canvas &canvas, const PixelRect rc, const MapItem &item,
             const AirspaceLook &airspace_look,
-            const AirspaceRendererSettings &airspace_renderer_settings,
             const WaypointLook &waypoint_look,
-            const WaypointRendererSettings &waypoint_renderer_settings);
+            const SETTINGS_MAP &settings);
 }
 
 #endif

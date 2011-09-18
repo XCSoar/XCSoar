@@ -52,8 +52,9 @@ GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
 
   // Show the list dialog
   ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), list,
-                        airspace_renderer.GetLook(), SettingsMap().airspace,
-                        way_point_renderer.GetLook(), SettingsMap().waypoint);
+                        airspace_renderer.GetLook(),
+                        way_point_renderer.GetLook(),
+                        SettingsMap());
 
   // Save function result for later
   return !list.empty();

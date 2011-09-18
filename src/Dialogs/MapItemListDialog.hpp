@@ -28,17 +28,15 @@ class SingleWindow;
 struct MapItem;
 class MapItemList;
 struct AirspaceLook;
-struct AirspaceRendererSettings;
 struct WaypointLook;
-struct WaypointRendererSettings;
+struct SETTINGS_MAP;
 
 void ShowMapItemDialog(const MapItem &item, SingleWindow &parent);
 
 void ShowMapItemListDialog(SingleWindow &parent,
                            const MapItemList &_list,
                            const AirspaceLook &_airspace_look,
-                           const AirspaceRendererSettings &airspace_settings,
                            const WaypointLook &_waypoint_look,
-                           const WaypointRendererSettings &waypoint_settings);
+                           const SETTINGS_MAP &_settings);
 
 #endif

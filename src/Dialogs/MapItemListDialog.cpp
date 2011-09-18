@@ -34,9 +34,8 @@ Copyright_License {
 #include "Renderer/MapItemListRenderer.hpp"
 
 static const AirspaceLook *airspace_look;
-static const AirspaceRendererSettings *airspace_renderer_settings;
 static const WaypointLook *waypoint_look;
-static const WaypointRendererSettings *waypoint_renderer_settings;
+static const SETTINGS_MAP *settings;
 static const MapItemList *list;
 
 static void
@@ -44,8 +43,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   const MapItem &item = *(*list)[idx];
   MapItemListRenderer::Draw(canvas, rc, item,
-                            *airspace_look, *airspace_renderer_settings,
-                            *waypoint_look, *waypoint_renderer_settings);
+                            *airspace_look, *waypoint_look, *settings);
 }
 
 void
@@ -66,9 +64,8 @@ void
 ShowMapItemListDialog(SingleWindow &parent,
                       const MapItemList &_list,
                       const AirspaceLook &_airspace_look,
-                      const AirspaceRendererSettings &airspace_settings,
                       const WaypointLook &_waypoint_look,
-                      const WaypointRendererSettings &waypoint_settings)
+                      const SETTINGS_MAP &_settings)
 {
   switch (_list.size()) {
   case 0:
@@ -86,10 +83,9 @@ ShowMapItemListDialog(SingleWindow &parent,
                            Fonts::MapLabel.get_height();
     list = &_list;
 
-    airspace_renderer_settings = &airspace_settings;
     airspace_look = &_airspace_look;
-    waypoint_renderer_settings = &waypoint_settings;
     waypoint_look = &_waypoint_look;
+    settings = &_settings;
 
     int i = ListPicker(parent, _("Map elements at this location"),
                        _list.size(), 0, line_height, PaintListItem);

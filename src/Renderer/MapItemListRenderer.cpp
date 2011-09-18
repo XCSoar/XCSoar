@@ -27,14 +27,13 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "MapWindow/MapItem.hpp"
 #include "Look/AirspaceLook.hpp"
-#include "Airspace/AirspaceRendererSettings.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Look/WaypointLook.hpp"
-#include "Renderer/WaypointRendererSettings.hpp"
 #include "Renderer/WaypointIconRenderer.hpp"
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "SettingsMap.hpp"
 
 #include <cstdio>
 
@@ -143,18 +142,17 @@ void
 MapItemListRenderer::Draw(
     Canvas &canvas, const PixelRect rc, const MapItem &item,
     const AirspaceLook &airspace_look,
-    const AirspaceRendererSettings &airspace_renderer_settings,
     const WaypointLook &waypoint_look,
-    const WaypointRendererSettings &waypoint_renderer_settings)
+    const SETTINGS_MAP &settings)
 {
   switch (item.type) {
   case MapItem::AIRSPACE:
     Draw(canvas, rc, (const AirspaceMapItem &)item, airspace_look,
-         airspace_renderer_settings);
+         settings.airspace);
     break;
   case MapItem::WAYPOINT:
     Draw(canvas, rc, (const WaypointMapItem &)item, waypoint_look,
-         waypoint_renderer_settings);
+         settings.waypoint);
     break;
   }
 }
