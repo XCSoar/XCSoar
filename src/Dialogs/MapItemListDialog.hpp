@@ -24,11 +24,16 @@ Copyright_License {
 #ifndef XCSOAR_AIRSPACE_AT_POINT_DIALOG_HPP
 #define XCSOAR_AIRSPACE_AT_POINT_DIALOG_HPP
 
+#include "Math/fixed.hpp"
+
 class SingleWindow;
 struct GeoPoint;
 class AirspaceRenderer;
 struct AirspaceComputerSettings;
 struct AirspaceRendererSettings;
+class Waypoints;
+struct WaypointLook;
+struct WaypointRendererSettings;
 struct MoreData;
 struct DerivedInfo;
 struct AirspaceLook;
@@ -37,7 +42,10 @@ bool ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
                                const AirspaceRenderer &renderer,
                                const AirspaceComputerSettings &computer_settings,
                                const AirspaceRendererSettings &renderer_settings,
+                               const Waypoints *waypoints,
+                               const WaypointLook &_waypoint_look,
+                               const WaypointRendererSettings &waypoint_settings,
                                const MoreData &basic,
-                               const DerivedInfo &calculated);
+                               const DerivedInfo &calculated, fixed range);
 
 #endif

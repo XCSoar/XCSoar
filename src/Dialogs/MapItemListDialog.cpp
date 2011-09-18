@@ -27,6 +27,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Airspace.hpp"
+#include "Dialogs/Waypoint.hpp"
 #include "Airspace/AirspacePolygon.hpp"
 #include "Airspace/AirspaceCircle.hpp"
 #include "Airspace/AirspaceVisitor.hpp"
@@ -40,20 +41,31 @@ Copyright_License {
 #include "Renderer/AirspaceRenderer.hpp"
 #include "Language/Language.hpp"
 #include "Renderer/AirspacePreviewRenderer.hpp"
+#include "Renderer/WaypointRendererSettings.hpp"
+#include "Renderer/WaypointIconRenderer.hpp"
+#include "Look/WaypointLook.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
+#include "Engine/Waypoint/WaypointVisitor.hpp"
+#include "Engine/Waypoint/Waypoints.hpp"
+#include "Units/UnitsFormatter.hpp"
 
 #include <algorithm>
+#include <cstdio>
 
 struct MapItem;
 typedef StaticArray<MapItem *, 32> MapItemList;
 
 static const AirspaceLook *airspace_look;
 static const AirspaceRendererSettings *airspace_renderer_settings;
+static const WaypointLook *waypoint_look;
+static const WaypointRendererSettings *waypoint_renderer_settings;
 static MapItemList list;
 
 struct MapItem
 {
   enum Type {
     AIRSPACE,
+    WAYPOINT,
   } type;
 
 protected:
@@ -66,6 +78,14 @@ struct AirspaceMapItem: public MapItem
 
   AirspaceMapItem(const AbstractAirspace *_airspace)
     :MapItem(AIRSPACE), airspace(_airspace) {}
+};
+
+struct WaypointMapItem: public MapItem
+{
+  const Waypoint &waypoint;
+
+  WaypointMapItem(const Waypoint &_waypoint)
+    :MapItem(WAYPOINT), waypoint(_waypoint) {}
 };
 
 class AirspaceWarningList
@@ -142,6 +162,22 @@ public:
 static bool
 CompareAirspaceBase(const MapItem *a, const MapItem *b)
 {
+  if (a->type == MapItem::WAYPOINT &&
+      ((const WaypointMapItem *)a)->waypoint.IsAirport())
+    return true;
+
+  if (b->type == MapItem::WAYPOINT &&
+      ((const WaypointMapItem *)b)->waypoint.IsAirport())
+    return false;
+
+  if (a->type == MapItem::WAYPOINT &&
+      ((const WaypointMapItem *)a)->waypoint.IsLandable())
+    return true;
+
+  if (b->type == MapItem::WAYPOINT &&
+      ((const WaypointMapItem *)b)->waypoint.IsLandable())
+    return false;
+
   if (a->type == MapItem::AIRSPACE && b->type == MapItem::AIRSPACE)
     return AirspaceAltitude::SortHighest(
         ((const AirspaceMapItem *)a)->airspace->GetBase(),
@@ -167,6 +203,19 @@ public:
 
   void Visit(const AirspaceCircle &airspace) {
     list.checked_append(new AirspaceMapItem(&airspace));
+  }
+};
+
+class WaypointListBuilderVisitor:
+  public WaypointVisitor
+{
+  MapItemList &list;
+
+public:
+  WaypointListBuilderVisitor(MapItemList &_list):list(_list) {}
+
+  void Visit(const Waypoint &waypoint) {
+    list.checked_append(new WaypointMapItem(waypoint));
   }
 };
 
@@ -210,6 +259,48 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
     canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                         rc.top + name_font.get_height() + Layout::FastScale(4),
                         rc, airspace.GetBaseText(true).c_str());
+  } else if (map_item.type == MapItem::WAYPOINT) {
+    const WaypointMapItem &waypoint_map_item = (const WaypointMapItem &)map_item;
+    const Waypoint &waypoint = waypoint_map_item.waypoint;
+
+    RasterPoint pt = { rc.left + line_height / 2,
+                       rc.top + line_height / 2};
+    WaypointIconRenderer wir(*waypoint_renderer_settings, *waypoint_look,
+                             canvas);
+    wir.Draw(waypoint, pt);
+
+    const Font &name_font = Fonts::MapBold;
+    const Font &small_font = Fonts::MapLabel;
+
+    unsigned left = rc.left + line_height + Layout::FastScale(2);
+    canvas.select(name_font);
+    canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
+                        waypoint.name.c_str());
+
+    TCHAR buffer[256];
+    {
+      TCHAR alt[16];
+      Units::FormatUserAltitude(waypoint.altitude, alt, 16);
+      _stprintf(buffer, _T("%s: %s"), _T("Altitude"), alt);
+    }
+
+    if (waypoint.radio_frequency.IsDefined()) {
+      TCHAR radio[16];
+      waypoint.radio_frequency.Format(radio, 16);
+      _tcscat(buffer, _T(" - "));
+      _tcscat(buffer, radio);
+      _tcscat(buffer, _T(" MHz"));
+    }
+
+    if (!waypoint.comment.empty()) {
+      _tcscat(buffer, _T(" - "));
+      _tcscat(buffer, waypoint.comment.c_str());
+    }
+
+    canvas.select(small_font);
+    canvas.text_clipped(left,
+                        rc.top + name_font.get_height() + Layout::FastScale(4),
+                        rc, buffer);
   }
 }
 
@@ -218,6 +309,9 @@ SelectAction(const MapItem &item, SingleWindow &parent)
 {
   if (item.type == MapItem::AIRSPACE)
     dlgAirspaceDetails(*((const AirspaceMapItem &)item).airspace);
+  else if (item.type == MapItem::WAYPOINT)
+    dlgWaypointDetailsShowModal(parent,
+                                ((const WaypointMapItem &)item).waypoint);
 }
 
 static void
@@ -253,29 +347,38 @@ ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
                           const AirspaceRenderer &renderer,
                           const AirspaceComputerSettings &computer_settings,
                           const AirspaceRendererSettings &renderer_settings,
-                          const MoreData &basic, const DerivedInfo &calculated)
+                          const Waypoints *waypoints,
+                          const WaypointLook &_waypoint_look,
+                          const WaypointRendererSettings &waypoint_settings,
+                          const MoreData &basic, const DerivedInfo &calculated,
+                          fixed range)
 {
-  const Airspaces *airspace_database = renderer.GetAirspaces();
-  if (airspace_database == NULL)
-    return false;
-
-  const ProtectedAirspaceWarningManager *airspace_warnings =
-    renderer.GetAirspaceWarnings();
-
-  AirspaceWarningList warnings;
-  if (airspace_warnings != NULL)
-    warnings.Fill(*airspace_warnings);
-
   airspace_renderer_settings = &renderer_settings;
   airspace_look = &renderer.GetLook();
+  waypoint_renderer_settings = &waypoint_settings;
+  waypoint_look = &_waypoint_look;
 
-  AirspaceAtPointPredicate predicate(computer_settings, renderer_settings,
-                                     ToAircraftState(basic, calculated),
-                                     warnings, location);
+  const Airspaces *airspace_database = renderer.GetAirspaces();
+  if (airspace_database) {
+    const ProtectedAirspaceWarningManager *airspace_warnings =
+      renderer.GetAirspaceWarnings();
 
-  AirspaceListBuilderVisitor list_builder(list);
-  airspace_database->visit_within_range(location, fixed(100.0),
-                                        list_builder, predicate);
+    AirspaceWarningList warnings;
+    if (airspace_warnings != NULL)
+      warnings.Fill(*airspace_warnings);
+
+    AirspaceAtPointPredicate predicate(computer_settings, renderer_settings,
+                                       ToAircraftState(basic, calculated),
+                                       warnings, location);
+
+    AirspaceListBuilderVisitor list_builder(list);
+    airspace_database->visit_within_range(location, range, list_builder, predicate);
+  }
+
+  if (waypoints) {
+    WaypointListBuilderVisitor waypoint_list_builder(list);
+    waypoints->visit_within_range(location, range, waypoint_list_builder);
+  }
 
   // Sort the list of map items
   std::sort(list.begin(), list.end(), CompareAirspaceBase);
