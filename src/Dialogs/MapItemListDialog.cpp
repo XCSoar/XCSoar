@@ -140,7 +140,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 }
 
 static void
-SelectAction(const MapItem &item, SingleWindow &parent)
+ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
 {
   if (item.type == MapItem::AIRSPACE)
     dlgAirspaceDetails(*((const AirspaceMapItem &)item).airspace);
@@ -168,7 +168,7 @@ ShowMapItemListDialog(SingleWindow &parent,
 
   case 1:
     /* only one airspace, show it */
-    SelectAction(*_list[0], parent);
+    ShowMapItemDialog(*_list[0], parent);
     break;
 
   default:
@@ -186,7 +186,7 @@ ShowMapItemListDialog(SingleWindow &parent,
                        _list.size(), 0, line_height, PaintListItem);
     assert(i >= -1 && i < (int)_list.size());
     if (i >= 0)
-      SelectAction(*_list[i], parent);
+      ShowMapItemDialog(*_list[i], parent);
   }
 }
 
