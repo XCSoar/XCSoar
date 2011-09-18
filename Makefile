@@ -392,6 +392,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/WaypointRendererSettings.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
 	$(SRC)/ChartProjection.cpp \
+	$(SRC)/MapWindow/MapItemList.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
 	$(SRC)/MapWindow/MapWindowGlideRange.cpp \

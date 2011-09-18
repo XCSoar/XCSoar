@@ -48,84 +48,17 @@ Copyright_License {
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "MapWindow/MapItem.hpp"
+#include "MapWindow/MapItemList.hpp"
 
 #include <algorithm>
 #include <cstdio>
-
-class MapItemList;
 
 static const AirspaceLook *airspace_look;
 static const AirspaceRendererSettings *airspace_renderer_settings;
 static const WaypointLook *waypoint_look;
 static const WaypointRendererSettings *waypoint_renderer_settings;
 static const MapItemList *list;
-
-struct MapItem
-{
-  enum Type {
-    AIRSPACE,
-    WAYPOINT,
-  } type;
-
-protected:
-  MapItem(Type _type):type(_type) {}
-};
-
-struct AirspaceMapItem: public MapItem
-{
-  const AbstractAirspace *airspace;
-
-  AirspaceMapItem(const AbstractAirspace *_airspace)
-    :MapItem(AIRSPACE), airspace(_airspace) {}
-};
-
-struct WaypointMapItem: public MapItem
-{
-  const Waypoint &waypoint;
-
-  WaypointMapItem(const Waypoint &_waypoint)
-    :MapItem(WAYPOINT), waypoint(_waypoint) {}
-};
-
-static bool
-CompareMapItems(const MapItem *a, const MapItem *b)
-{
-  if (a->type == MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)a)->waypoint.IsAirport())
-    return true;
-
-  if (b->type == MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)b)->waypoint.IsAirport())
-    return false;
-
-  if (a->type == MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)a)->waypoint.IsLandable())
-    return true;
-
-  if (b->type == MapItem::WAYPOINT &&
-      ((const WaypointMapItem *)b)->waypoint.IsLandable())
-    return false;
-
-  if (a->type == MapItem::AIRSPACE && b->type == MapItem::AIRSPACE)
-    return AirspaceAltitude::SortHighest(
-        ((const AirspaceMapItem *)a)->airspace->GetBase(),
-        ((const AirspaceMapItem *)b)->airspace->GetBase());
-
-  return a->type < b->type;
-}
-
-class MapItemList: public StaticArray<MapItem *, 32>
-{
-public:
-  ~MapItemList() {
-    for (iterator it = begin(), it_end = end(); it != it_end; ++it)
-      delete *it;
-  }
-
-  void Sort() {
-    std::sort(begin(), end(), CompareMapItems);
-  }
-};
 
 class AirspaceWarningList
 {
