@@ -147,7 +147,7 @@ CompareAirspaceBase(const MapItem *a, const MapItem *b)
         ((const AirspaceMapItem *)a)->airspace->GetBase(),
         ((const AirspaceMapItem *)b)->airspace->GetBase());
 
-  return false;
+  return a->type < b->type;
 }
 
 /**
