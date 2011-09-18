@@ -43,8 +43,6 @@ Copyright_License {
 
 #include <algorithm>
 
-class AirspaceListBuilderVisitor;
-
 static const AirspaceLook *look;
 static const AirspaceRendererSettings *settings;
 static StaticArray<const AbstractAirspace *, 32> list;
