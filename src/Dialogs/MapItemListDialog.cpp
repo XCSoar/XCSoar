@@ -53,7 +53,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
                             *waypoint_look, *waypoint_renderer_settings);
 }
 
-static void
+void
 ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
 {
   switch (item.type) {
@@ -67,7 +67,7 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
   }
 }
 
-static void
+void
 ShowMapItemListDialog(SingleWindow &parent,
                       const MapItemList &_list,
                       const AirspaceLook &_airspace_look,

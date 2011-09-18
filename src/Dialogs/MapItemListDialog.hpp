@@ -37,6 +37,17 @@ struct WaypointRendererSettings;
 struct MoreData;
 struct DerivedInfo;
 struct AirspaceLook;
+struct MapItem;
+class MapItemList;
+
+void ShowMapItemDialog(const MapItem &item, SingleWindow &parent);
+
+void ShowMapItemListDialog(SingleWindow &parent,
+                           const MapItemList &_list,
+                           const AirspaceLook &_airspace_look,
+                           const AirspaceRendererSettings &airspace_settings,
+                           const WaypointLook &_waypoint_look,
+                           const WaypointRendererSettings &waypoint_settings);
 
 bool ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
                                const AirspaceRenderer &renderer,
