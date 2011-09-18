@@ -59,7 +59,7 @@ static const AirspaceLook *airspace_look;
 static const AirspaceRendererSettings *airspace_renderer_settings;
 static const WaypointLook *waypoint_look;
 static const WaypointRendererSettings *waypoint_renderer_settings;
-static MapItemList list;
+static const MapItemList *list;
 
 struct MapItem
 {
@@ -224,7 +224,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   const unsigned line_height = rc.bottom - rc.top;
 
-  const MapItem &map_item = *list[idx];
+  const MapItem &map_item = *(*list)[idx];
   if (map_item.type == MapItem::AIRSPACE) {
     const AirspaceMapItem &airspace_map_item = (const AirspaceMapItem &)map_item;
     const AbstractAirspace &airspace = *airspace_map_item.airspace;
@@ -317,17 +317,17 @@ SelectAction(const MapItem &item, SingleWindow &parent)
 static void
 ShowDialog(SingleWindow &parent)
 {
-  if (list.empty())
+  if (list->empty())
     return;
 
-  switch (list.size()) {
+  switch (list->size()) {
   case 0:
     /* no (visible) airspace here */
     break;
 
   case 1:
     /* only one airspace, show it */
-    SelectAction(*list[0], parent);
+    SelectAction(*(*list)[0], parent);
     break;
 
   default:
@@ -335,11 +335,30 @@ ShowDialog(SingleWindow &parent)
     unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
                            Fonts::MapLabel.get_height();
     int i = ListPicker(parent, _("Airspaces at this location"),
-                       list.size(), 0, line_height, PaintListItem);
-    assert(i >= -1 && i < (int)list.size());
+                       list->size(), 0, line_height, PaintListItem);
+    assert(i >= -1 && i < (int)list->size());
     if (i >= 0)
-      SelectAction(*list[i], parent);
+      SelectAction(*(*list)[i], parent);
   }
+}
+
+static void
+ShowMapItemListDialog(SingleWindow &parent,
+                      const MapItemList &_list,
+                      const AirspaceLook &_airspace_look,
+                      const AirspaceRendererSettings &airspace_settings,
+                      const WaypointLook &_waypoint_look,
+                      const WaypointRendererSettings &waypoint_settings)
+{
+  list = &_list;
+
+  airspace_renderer_settings = &airspace_settings;
+  airspace_look = &_airspace_look;
+  waypoint_renderer_settings = &waypoint_settings;
+  waypoint_look = &_waypoint_look;
+
+  // Show the list dialog
+  ShowDialog(parent);
 }
 
 bool
@@ -353,10 +372,7 @@ ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
                           const MoreData &basic, const DerivedInfo &calculated,
                           fixed range)
 {
-  airspace_renderer_settings = &renderer_settings;
-  airspace_look = &renderer.GetLook();
-  waypoint_renderer_settings = &waypoint_settings;
-  waypoint_look = &_waypoint_look;
+  MapItemList list;
 
   const Airspaces *airspace_database = renderer.GetAirspaces();
   if (airspace_database) {
@@ -384,7 +400,8 @@ ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
   std::sort(list.begin(), list.end(), CompareAirspaceBase);
 
   // Show the list dialog
-  ShowDialog(parent);
+  ShowMapItemListDialog(parent, list, renderer.GetLook(), renderer_settings,
+                        _waypoint_look, waypoint_settings);
 
   // Save function result for later
   bool result = !list.empty();
