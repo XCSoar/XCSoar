@@ -27,26 +27,16 @@ Copyright_License {
 #include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Airspace.hpp"
 #include "Dialogs/Waypoint.hpp"
-#include "Airspace/AbstractAirspace.hpp"
-#include "Airspace/AirspaceWarning.hpp"
 #include "Airspace/Airspaces.hpp"
 #include "Airspace/ProtectedAirspaceWarningManager.hpp"
 #include "Engine/Airspace/AirspaceWarningManager.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
 #include "Language/Language.hpp"
-#include "Renderer/AirspacePreviewRenderer.hpp"
-#include "Renderer/WaypointRendererSettings.hpp"
-#include "Renderer/WaypointIconRenderer.hpp"
-#include "Look/WaypointLook.hpp"
-#include "Engine/Waypoint/Waypoint.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
-#include "Units/UnitsFormatter.hpp"
 #include "MapWindow/MapItem.hpp"
 #include "MapWindow/MapItemList.hpp"
 #include "MapWindow/MapItemListBuilder.hpp"
-
-#include <algorithm>
-#include <cstdio>
+#include "Renderer/MapItemListRenderer.hpp"
 
 static const AirspaceLook *airspace_look;
 static const AirspaceRendererSettings *airspace_renderer_settings;
@@ -57,86 +47,10 @@ static const MapItemList *list;
 static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
-  const unsigned line_height = rc.bottom - rc.top;
-
-  const MapItem &map_item = *(*list)[idx];
-  if (map_item.type == MapItem::AIRSPACE) {
-    const AirspaceMapItem &airspace_map_item = (const AirspaceMapItem &)map_item;
-    const AbstractAirspace &airspace = *airspace_map_item.airspace;
-
-    RasterPoint pt = { rc.left + line_height / 2,
-                       rc.top + line_height / 2};
-    unsigned radius = std::min(line_height / 2  - Layout::FastScale(4),
-                               (unsigned)Layout::FastScale(10));
-    AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
-                                  *airspace_renderer_settings, *airspace_look);
-
-    const Font &name_font = Fonts::MapBold;
-    const Font &small_font = Fonts::MapLabel;
-
-    unsigned left = rc.left + line_height + Layout::FastScale(2);
-    canvas.select(name_font);
-    canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
-                        airspace.GetName());
-
-    canvas.select(small_font);
-    canvas.text_clipped(left,
-                        rc.top + name_font.get_height() + Layout::FastScale(4),
-                        rc, airspace.GetTypeText(false));
-
-    unsigned altitude_width = canvas.text_width(airspace.GetTopText(true).c_str());
-    canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                        rc.top + name_font.get_height() -
-                        small_font.get_height() + Layout::FastScale(2), rc,
-                        airspace.GetTopText(true).c_str());
-
-    altitude_width = canvas.text_width(airspace.GetBaseText(true).c_str());
-    canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
-                        rc.top + name_font.get_height() + Layout::FastScale(4),
-                        rc, airspace.GetBaseText(true).c_str());
-  } else if (map_item.type == MapItem::WAYPOINT) {
-    const WaypointMapItem &waypoint_map_item = (const WaypointMapItem &)map_item;
-    const Waypoint &waypoint = waypoint_map_item.waypoint;
-
-    RasterPoint pt = { rc.left + line_height / 2,
-                       rc.top + line_height / 2};
-    WaypointIconRenderer wir(*waypoint_renderer_settings, *waypoint_look,
-                             canvas);
-    wir.Draw(waypoint, pt);
-
-    const Font &name_font = Fonts::MapBold;
-    const Font &small_font = Fonts::MapLabel;
-
-    unsigned left = rc.left + line_height + Layout::FastScale(2);
-    canvas.select(name_font);
-    canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
-                        waypoint.name.c_str());
-
-    TCHAR buffer[256];
-    {
-      TCHAR alt[16];
-      Units::FormatUserAltitude(waypoint.altitude, alt, 16);
-      _stprintf(buffer, _T("%s: %s"), _T("Altitude"), alt);
-    }
-
-    if (waypoint.radio_frequency.IsDefined()) {
-      TCHAR radio[16];
-      waypoint.radio_frequency.Format(radio, 16);
-      _tcscat(buffer, _T(" - "));
-      _tcscat(buffer, radio);
-      _tcscat(buffer, _T(" MHz"));
-    }
-
-    if (!waypoint.comment.empty()) {
-      _tcscat(buffer, _T(" - "));
-      _tcscat(buffer, waypoint.comment.c_str());
-    }
-
-    canvas.select(small_font);
-    canvas.text_clipped(left,
-                        rc.top + name_font.get_height() + Layout::FastScale(4),
-                        rc, buffer);
-  }
+  const MapItem &item = *(*list)[idx];
+  MapItemListRenderer::Draw(canvas, rc, item,
+                            *airspace_look, *airspace_renderer_settings,
+                            *waypoint_look, *waypoint_renderer_settings);
 }
 
 static void
