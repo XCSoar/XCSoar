@@ -34,6 +34,8 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
                               const AirspaceRendererSettings &settings,
                               const AirspaceLook &look)
 {
+  canvas.hollow_brush();
+
   if (settings.black_outline)
     canvas.black_pen();
   else
