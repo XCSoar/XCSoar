@@ -334,7 +334,7 @@ ShowDialog(SingleWindow &parent)
     /* more than one airspace: show a list */
     unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
                            Fonts::MapLabel.get_height();
-    int i = ListPicker(parent, _("Airspaces at this location"),
+    int i = ListPicker(parent, _("Map elements at this location"),
                        list->size(), 0, line_height, PaintListItem);
     assert(i >= -1 && i < (int)list->size());
     if (i >= 0)
