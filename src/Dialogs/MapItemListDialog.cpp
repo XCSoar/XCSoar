@@ -56,11 +56,15 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 static void
 ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
 {
-  if (item.type == MapItem::AIRSPACE)
+  switch (item.type) {
+  case MapItem::AIRSPACE:
     dlgAirspaceDetails(*((const AirspaceMapItem &)item).airspace);
-  else if (item.type == MapItem::WAYPOINT)
+    break;
+  case MapItem::WAYPOINT:
     dlgWaypointDetailsShowModal(parent,
                                 ((const WaypointMapItem &)item).waypoint);
+    break;
+  }
 }
 
 static void
