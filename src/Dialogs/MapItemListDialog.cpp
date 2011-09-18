@@ -160,7 +160,7 @@ public:
 };
 
 static bool
-CompareAirspaceBase(const MapItem *a, const MapItem *b)
+CompareMapItems(const MapItem *a, const MapItem *b)
 {
   if (a->type == MapItem::WAYPOINT &&
       ((const WaypointMapItem *)a)->waypoint.IsAirport())
@@ -397,7 +397,7 @@ ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
   }
 
   // Sort the list of map items
-  std::sort(list.begin(), list.end(), CompareAirspaceBase);
+  std::sort(list.begin(), list.end(), CompareMapItems);
 
   // Show the list dialog
   ShowMapItemListDialog(parent, list, renderer.GetLook(), renderer_settings,
