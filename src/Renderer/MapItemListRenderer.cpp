@@ -150,7 +150,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   {
     TCHAR alt[16];
     Units::FormatUserAltitude(waypoint.altitude, alt, 16);
-    _stprintf(buffer, _T("%s: %s"), _T("Altitude"), alt);
+    _stprintf(buffer, _T("%s: %s"), _("Altitude"), alt);
   }
 
   if (waypoint.radio_frequency.IsDefined()) {
