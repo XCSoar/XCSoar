@@ -147,10 +147,14 @@ MapItemListRenderer::Draw(
     const WaypointLook &waypoint_look,
     const WaypointRendererSettings &waypoint_renderer_settings)
 {
-  if (item.type == MapItem::AIRSPACE)
+  switch (item.type) {
+  case MapItem::AIRSPACE:
     Draw(canvas, rc, (const AirspaceMapItem &)item, airspace_look,
          airspace_renderer_settings);
-  else if (item.type == MapItem::WAYPOINT)
+    break;
+  case MapItem::WAYPOINT:
     Draw(canvas, rc, (const WaypointMapItem &)item, waypoint_look,
          waypoint_renderer_settings);
+    break;
+  }
 }
