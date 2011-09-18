@@ -160,14 +160,7 @@ ShowMapItemListDialog(SingleWindow &parent,
   if (_list.empty())
     return;
 
-  list = &_list;
-
-  airspace_renderer_settings = &airspace_settings;
-  airspace_look = &_airspace_look;
-  waypoint_renderer_settings = &waypoint_settings;
-  waypoint_look = &_waypoint_look;
-
-  switch (list->size()) {
+  switch (_list.size()) {
   case 0:
     /* no (visible) airspace here */
     assert(false);
@@ -175,18 +168,25 @@ ShowMapItemListDialog(SingleWindow &parent,
 
   case 1:
     /* only one airspace, show it */
-    SelectAction(*(*list)[0], parent);
+    SelectAction(*_list[0], parent);
     break;
 
   default:
     /* more than one airspace: show a list */
     unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
                            Fonts::MapLabel.get_height();
+    list = &_list;
+
+    airspace_renderer_settings = &airspace_settings;
+    airspace_look = &_airspace_look;
+    waypoint_renderer_settings = &waypoint_settings;
+    waypoint_look = &_waypoint_look;
+
     int i = ListPicker(parent, _("Map elements at this location"),
-                       list->size(), 0, line_height, PaintListItem);
-    assert(i >= -1 && i < (int)list->size());
+                       _list.size(), 0, line_height, PaintListItem);
+    assert(i >= -1 && i < (int)_list.size());
     if (i >= 0)
-      SelectAction(*(*list)[i], parent);
+      SelectAction(*_list[i], parent);
   }
 }
 
