@@ -71,22 +71,18 @@ ShowMapItemListDialog(SingleWindow &parent,
                       const WaypointLook &_waypoint_look,
                       const WaypointRendererSettings &waypoint_settings)
 {
-  if (_list.empty())
-    return;
-
   switch (_list.size()) {
   case 0:
-    /* no (visible) airspace here */
-    assert(false);
-    break;
+    /* no map items in the list */
+    return;
 
   case 1:
-    /* only one airspace, show it */
+    /* only one map item, show it */
     ShowMapItemDialog(*_list[0], parent);
     break;
 
   default:
-    /* more than one airspace: show a list */
+    /* more than one map item: show a list */
     unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
                            Fonts::MapLabel.get_height();
     list = &_list;
