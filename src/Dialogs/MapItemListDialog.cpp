@@ -227,6 +227,40 @@ public:
   }
 };
 
+class MapItemListBuilder
+{
+  MapItemList &list;
+  GeoPoint location;
+
+public:
+  MapItemListBuilder(MapItemList &_list, GeoPoint _location)
+    :list(_list), location(_location) {}
+
+  void AddWaypoints(const Waypoints &waypoints, fixed range) {
+    WaypointListBuilderVisitor waypoint_list_builder(list);
+    waypoints.visit_within_range(location, range, waypoint_list_builder);
+  }
+
+  void
+  AddVisibleAirspace(const Airspaces &airspaces,
+                     const ProtectedAirspaceWarningManager *warning_manager,
+                     const AirspaceComputerSettings &computer_settings,
+                     const AirspaceRendererSettings &renderer_settings,
+                     const MoreData &basic, const DerivedInfo &calculated)
+  {
+    AirspaceWarningList warnings;
+    if (warning_manager != NULL)
+      warnings.Fill(*warning_manager);
+
+    AirspaceAtPointPredicate predicate(computer_settings, renderer_settings,
+                                       ToAircraftState(basic, calculated),
+                                       warnings, location);
+
+    AirspaceListBuilderVisitor builder(list);
+    airspaces.visit_within_range(location, fixed(100.0), builder, predicate);
+  }
+};
+
 static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
@@ -381,28 +415,17 @@ ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
                           fixed range)
 {
   MapItemList list;
+  MapItemListBuilder builder(list, location);
 
   const Airspaces *airspace_database = renderer.GetAirspaces();
-  if (airspace_database) {
-    const ProtectedAirspaceWarningManager *airspace_warnings =
-      renderer.GetAirspaceWarnings();
+  if (airspace_database)
+    builder.AddVisibleAirspace(*airspace_database,
+                               renderer.GetAirspaceWarnings(),
+                               computer_settings, renderer_settings, basic,
+                               calculated);
 
-    AirspaceWarningList warnings;
-    if (airspace_warnings != NULL)
-      warnings.Fill(*airspace_warnings);
-
-    AirspaceAtPointPredicate predicate(computer_settings, renderer_settings,
-                                       ToAircraftState(basic, calculated),
-                                       warnings, location);
-
-    AirspaceListBuilderVisitor list_builder(list);
-    airspace_database->visit_within_range(location, range, list_builder, predicate);
-  }
-
-  if (waypoints) {
-    WaypointListBuilderVisitor waypoint_list_builder(list);
-    waypoints->visit_within_range(location, range, waypoint_list_builder);
-  }
+  if (waypoints)
+    builder.AddWaypoints(*waypoints, range);
 
   // Sort the list of map items
   std::sort(list.begin(), list.end(), CompareMapItems);
