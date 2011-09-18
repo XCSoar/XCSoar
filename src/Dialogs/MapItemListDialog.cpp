@@ -52,8 +52,7 @@ Copyright_License {
 #include <algorithm>
 #include <cstdio>
 
-struct MapItem;
-typedef StaticArray<MapItem *, 32> MapItemList;
+class MapItemList;
 
 static const AirspaceLook *airspace_look;
 static const AirspaceRendererSettings *airspace_renderer_settings;
@@ -86,6 +85,15 @@ struct WaypointMapItem: public MapItem
 
   WaypointMapItem(const Waypoint &_waypoint)
     :MapItem(WAYPOINT), waypoint(_waypoint) {}
+};
+
+class MapItemList: public StaticArray<MapItem *, 32>
+{
+public:
+  ~MapItemList() {
+    for (iterator it = begin(), it_end = end(); it != it_end; ++it)
+      delete *it;
+  }
 };
 
 class AirspaceWarningList
@@ -404,14 +412,5 @@ ShowMapItemListDialog(SingleWindow &parent, const GeoPoint &location,
                         _waypoint_look, waypoint_settings);
 
   // Save function result for later
-  bool result = !list.empty();
-
-  // Free map item list
-  for (MapItemList::iterator it = list.begin(), it_end = list.end();
-       it != it_end; ++it)
-    delete *it;
-
-  list.clear();
-
-  return result;
+  return !list.empty();
 }
