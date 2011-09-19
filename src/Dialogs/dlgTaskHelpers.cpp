@@ -199,23 +199,23 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
 }
 
 void
-OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* name)
+OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* buffer)
 {
   switch (tp.GetType()) {
   case TaskPoint::START:
-    _stprintf(name, _T("S:  %s"), tp.GetWaypoint().name.c_str());
+    _stprintf(buffer, _T("S:  %s"), tp.GetWaypoint().name.c_str());
     break;
 
   case TaskPoint::AST:
-    _stprintf(name, _T("T%d: %s"), index, tp.GetWaypoint().name.c_str());
+    _stprintf(buffer, _T("T%d: %s"), index, tp.GetWaypoint().name.c_str());
     break;
 
   case TaskPoint::AAT:
-    _stprintf(name, _T("A%d: %s"), index, tp.GetWaypoint().name.c_str());
+    _stprintf(buffer, _T("A%d: %s"), index, tp.GetWaypoint().name.c_str());
     break;
 
   case TaskPoint::FINISH:
-    _stprintf(name, _T("F:  %s"), tp.GetWaypoint().name.c_str());
+    _stprintf(buffer, _T("F:  %s"), tp.GetWaypoint().name.c_str());
     break;
 
   default:
@@ -224,46 +224,46 @@ OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* name)
 }
 
 void
-OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius)
+OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* buffer)
 {
   switch (ozp.shape) {
   case ObservationZonePoint::FAI_SECTOR:
-    _stprintf(radius,_("FAI quadrant"));
+    _stprintf(buffer,_("FAI quadrant"));
     break;
 
   case ObservationZonePoint::SECTOR:
   case ObservationZonePoint::ANNULAR_SECTOR:
-    _stprintf(radius,_T("%s  - %s: %.1f%s"), _("Sector"), _("Radius"),
+    _stprintf(buffer,_T("%s  - %s: %.1f%s"), _("Sector"), _("Radius"),
               (double)Units::ToUserDistance(((const SectorZone &)ozp).getRadius()),
               Units::GetDistanceName());
     break;
 
   case ObservationZonePoint::LINE:
-    _stprintf(radius,_T("%s  - %s: %.1f%s"), _("Line"), _("Gate Width"),
+    _stprintf(buffer,_T("%s  - %s: %.1f%s"), _("Line"), _("Gate Width"),
               (double)Units::ToUserDistance(((const LineSectorZone &)ozp).getLength()),
               Units::GetDistanceName());
     break;
 
   case ObservationZonePoint::CYLINDER:
-    _stprintf(radius,_T("%s  - %s: %.1f%s"), _("Cylinder"), _("Radius"),
+    _stprintf(buffer,_T("%s  - %s: %.1f%s"), _("Cylinder"), _("Radius"),
               (double)Units::ToUserDistance(((const CylinderZone &)ozp).getRadius()),
               Units::GetDistanceName());
     break;
 
   case ObservationZonePoint::KEYHOLE:
-    _stprintf(radius,_("DAeC Keyhole"));
+    _stprintf(buffer,_("DAeC Keyhole"));
     break;
 
   case ObservationZonePoint::BGAFIXEDCOURSE:
-    _stprintf(radius,_("BGA Fixed Course"));
+    _stprintf(buffer,_("BGA Fixed Course"));
     break;
 
   case ObservationZonePoint::BGAENHANCEDOPTION:
-    _stprintf(radius,_("BGA Enhanced Option"));
+    _stprintf(buffer,_("BGA Enhanced Option"));
     break;
 
   case ObservationZonePoint::BGA_START:
-    _stprintf(radius,_("BGA Start Sector"));
+    _stprintf(buffer,_("BGA Start Sector"));
     break;
   }
 }
