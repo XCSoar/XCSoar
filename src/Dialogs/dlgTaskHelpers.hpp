@@ -27,6 +27,7 @@ Copyright_License {
 
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "Task/TaskBehaviour.hpp"
+#include "Task/Tasks/BaseTask/TaskPoint.hpp"
 
 class SingleWindow;
 
@@ -40,7 +41,8 @@ const TCHAR* OrderedTaskFactoryName(TaskBehaviour::Factory_t type);
  * @param linebreaks True if each summary item should be separated with a line break
  */
 void OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks);
-void OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* name);
+void OrderedTaskPointLabel(TaskPoint::Type type, const TCHAR *name,
+                           unsigned index, TCHAR* buffer);
 void OrderedTaskPointRadiusLabel(const ObservationZonePoint &ozp, TCHAR* radius);
 bool OrderedTaskSave(SingleWindow &parent,
                      const OrderedTask& task, bool noask=false);

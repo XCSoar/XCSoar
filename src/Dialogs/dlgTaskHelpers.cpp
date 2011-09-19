@@ -199,23 +199,24 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
 }
 
 void
-OrderedTaskPointLabel(const OrderedTaskPoint &tp, unsigned index, TCHAR* buffer)
+OrderedTaskPointLabel(TaskPoint::Type type, const TCHAR *name,
+                      unsigned index, TCHAR* buffer)
 {
-  switch (tp.GetType()) {
+  switch (type) {
   case TaskPoint::START:
-    _stprintf(buffer, _T("S:  %s"), tp.GetWaypoint().name.c_str());
+    _stprintf(buffer, _T("S:  %s"), name);
     break;
 
   case TaskPoint::AST:
-    _stprintf(buffer, _T("T%d: %s"), index, tp.GetWaypoint().name.c_str());
+    _stprintf(buffer, _T("T%d: %s"), index, name);
     break;
 
   case TaskPoint::AAT:
-    _stprintf(buffer, _T("A%d: %s"), index, tp.GetWaypoint().name.c_str());
+    _stprintf(buffer, _T("A%d: %s"), index, name);
     break;
 
   case TaskPoint::FINISH:
-    _stprintf(buffer, _T("F:  %s"), tp.GetWaypoint().name.c_str());
+    _stprintf(buffer, _T("F:  %s"), name);
     break;
 
   default:

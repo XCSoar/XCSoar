@@ -175,7 +175,8 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   // Draw turnpoint name
   canvas.select(name_font);
-  OrderedTaskPointLabel(tp, DrawListIndex, buffer);
+  OrderedTaskPointLabel(tp.GetType(), tp.GetWaypoint().name.c_str(),
+                        DrawListIndex, buffer);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2),
                       rc.right - leg_info_width - left, buffer);
 }
