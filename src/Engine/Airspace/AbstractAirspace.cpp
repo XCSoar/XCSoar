@@ -25,6 +25,7 @@
 #include "AirspaceAircraftPerformance.hpp"
 #include "AirspaceInterceptSolution.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Geo/GeoBounds.hpp"
 
 #include <assert.h>
 
@@ -252,6 +253,12 @@ AbstractAirspace::GetBoundingBox(const TaskProjection& task_projection)
 {
   Project(task_projection);
   return m_border.CalculateBoundingbox();
+}
+
+GeoBounds
+AbstractAirspace::GetGeoBounds() const
+{
+  return m_border.CalculateGeoBounds();
 }
 
 const SearchPointVector&

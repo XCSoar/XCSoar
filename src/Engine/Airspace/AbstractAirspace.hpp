@@ -102,6 +102,8 @@ public:
    */
   const FlatBoundingBox GetBoundingBox(const TaskProjection& task_projection);
 
+  GeoBounds GetGeoBounds() const;
+
   /**
    * Set task projection for internal use
    *
