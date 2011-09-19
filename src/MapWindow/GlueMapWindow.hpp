@@ -164,7 +164,7 @@ public:
   int isInAnyActiveSector(const GeoPoint &gp);
 
 private:
-  bool AirspaceDetailsAtPoint(const GeoPoint &location);
+  bool ShowMapItems(const GeoPoint &location);
 
 protected:
   // events

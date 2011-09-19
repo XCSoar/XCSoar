@@ -29,7 +29,7 @@ Copyright_License {
 #include "MapWindow/MapItemListBuilder.hpp"
 
 bool
-GlueMapWindow::AirspaceDetailsAtPoint(const GeoPoint &location)
+GlueMapWindow::ShowMapItems(const GeoPoint &location)
 {
   MapItemList list;
   MapItemListBuilder builder(list, location);
