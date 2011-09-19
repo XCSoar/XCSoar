@@ -47,7 +47,7 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Projection.hpp"
-#include "Airspace/AirspaceRendererSettings.hpp"
+#include "Renderer/AirspaceRendererSettings.hpp"
 #include "ResourceLoader.hpp"
 
 enum {

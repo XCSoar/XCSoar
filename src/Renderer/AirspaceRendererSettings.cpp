@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Airspace/AirspaceRendererSettings.hpp"
+#include "AirspaceRendererSettings.hpp"
 
 #include <algorithm>
 

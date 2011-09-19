@@ -25,7 +25,7 @@ Copyright_License {
 #include "Airspace/AirspaceVisibility.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
-#include "Airspace/AirspaceRendererSettings.hpp"
+#include "Renderer/AirspaceRendererSettings.hpp"
 
 bool
 AirspaceVisiblePredicate::IsTypeVisible(const AbstractAirspace& airspace) const

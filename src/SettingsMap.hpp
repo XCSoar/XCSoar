@@ -28,7 +28,7 @@ Copyright_License {
 
 #include "Navigation/GeoPoint.hpp"
 #include "Airspace/AirspaceClass.hpp"
-#include "Airspace/AirspaceRendererSettings.hpp"
+#include "Renderer/AirspaceRendererSettings.hpp"
 #include "Renderer/WaypointRendererSettings.hpp"
 #include "Terrain/TerrainSettings.hpp"
 

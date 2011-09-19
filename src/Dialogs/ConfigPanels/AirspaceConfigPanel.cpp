@@ -33,7 +33,7 @@ Copyright_License {
 #include "Profile/ProfileKeys.hpp"
 #include "Language/Language.hpp"
 #include "Airspace/AirspaceComputerSettings.hpp"
-#include "Airspace/AirspaceRendererSettings.hpp"
+#include "Renderer/AirspaceRendererSettings.hpp"
 
 static WndForm* wf = NULL;
 

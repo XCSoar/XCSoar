@@ -26,7 +26,7 @@
 
 #include "Screen/PaintWindow.hpp"
 #include "Blackboard.hpp"
-#include "Airspace/AirspaceRendererSettings.hpp"
+#include "Renderer/AirspaceRendererSettings.hpp"
 
 struct MoreData;
 struct CrossSectionLook;

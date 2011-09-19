@@ -25,7 +25,7 @@ Copyright_License {
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Airspace/AbstractAirspace.hpp"
-#include "Airspace/AirspaceRendererSettings.hpp"
+#include "Renderer/AirspaceRendererSettings.hpp"
 #include "Look/AirspaceLook.hpp"
 
 void
