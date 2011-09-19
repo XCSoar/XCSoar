@@ -35,6 +35,13 @@ Copyright_License {
 
 #include <cstdio>
 
+namespace WaypointListRenderer
+{
+  void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
+            const GeoVector *vector, const WaypointLook &look,
+            const WaypointRendererSettings &settings);
+}
+
 static void
 FormatWaypointDetails(TCHAR *buffer, const Waypoint &waypoint)
 {
@@ -61,33 +68,21 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const Waypoint &waypoint, const WaypointLook &look,
                            const WaypointRendererSettings &renderer_settings)
 {
-  const unsigned line_height = rc.bottom - rc.top;
-
-  RasterPoint pt = { rc.left + line_height / 2,
-                     rc.top + line_height / 2};
-  WaypointIconRenderer wir(renderer_settings, look, canvas);
-  wir.Draw(waypoint, pt);
-
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
-
-  unsigned left = rc.left + line_height + Layout::FastScale(2);
-  canvas.select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
-                      waypoint.name.c_str());
-
-  TCHAR buffer[256];
-  FormatWaypointDetails(buffer, waypoint);
-
-  canvas.select(small_font);
-  canvas.text_clipped(left,
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
-                      rc, buffer);
+  Draw(canvas, rc, waypoint, NULL, look, renderer_settings);
 }
 
 void
 WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const Waypoint &waypoint, const GeoVector &vector,
+                           const WaypointLook &look,
+                           const WaypointRendererSettings &settings)
+{
+  Draw(canvas, rc, waypoint, &vector, look, settings);
+}
+
+void
+WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                           const Waypoint &waypoint, const GeoVector *vector,
                            const WaypointLook &look,
                            const WaypointRendererSettings &settings)
 {
@@ -112,22 +107,25 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.select(small_font);
 
   // Draw leg distance
-  Units::FormatUserDistance(vector.Distance, buffer, 256, true);
-  unsigned width = canvas.text_width(buffer);
-  unsigned leg_info_width = width;
-  canvas.text(rc.right - Layout::FastScale(2) - width,
-              rc.top + Layout::FastScale(2) +
-              (name_font.get_height() - small_font.get_height()) / 2, buffer);
+  unsigned leg_info_width = 0;
+  if (vector) {
+    Units::FormatUserDistance(vector->Distance, buffer, 256, true);
+    unsigned width = leg_info_width = canvas.text_width(buffer);
+    canvas.text(rc.right - Layout::FastScale(2) - width,
+                rc.top + Layout::FastScale(2) +
+                (name_font.get_height() - small_font.get_height()) / 2, buffer);
 
-  // Draw leg bearing
-  _stprintf(buffer, _T(" %.0f" DEG " T"), (double)vector.Bearing.value_degrees());
-  width = canvas.text_width(buffer);
-  canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
+    // Draw leg bearing
+    _stprintf(buffer, _T(" %.0f" DEG " T"),
+              (double)vector->Bearing.value_degrees());
+    width = canvas.text_width(buffer);
+    canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
 
-  if (width > leg_info_width)
-    leg_info_width = width;
+    if (width > leg_info_width)
+      leg_info_width = width;
 
-  leg_info_width += Layout::FastScale(2);
+    leg_info_width += Layout::FastScale(2);
+  }
 
   // Draw details line
   FormatWaypointDetails(buffer, waypoint);
