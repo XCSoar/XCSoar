@@ -45,7 +45,7 @@ DrawMirroredPolygon(const RasterPoint *src, RasterPoint *dst, unsigned points,
 
 
 static void
-DrawDetailedAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
+DrawDetailedAircraft(Canvas &canvas, bool inverse,
                      const AircraftLook &look,
                      const Angle angle,
                      const RasterPoint aircraft_pos)
@@ -68,7 +68,7 @@ DrawDetailedAircraft(Canvas &canvas, const SETTINGS_MAP &settings_map,
     const unsigned AIRCRAFT_POINTS = ARRAY_SIZE(Aircraft);
     RasterPoint buffer[2 * AIRCRAFT_POINTS];
 
-    if (settings_map.terrain.enable) {
+    if (!inverse) {
       canvas.white_brush();
       canvas.select(look.aircraft_pen);
     } else {
@@ -167,7 +167,8 @@ AircraftRenderer::Draw(Canvas &canvas, const SETTINGS_MAP &settings_map,
 {
   switch (settings_map.aircraft_symbol) {
   case acDetailed:
-    DrawDetailedAircraft(canvas, settings_map, look, angle, aircraft_pos);
+    DrawDetailedAircraft(canvas, !settings_map.terrain.enable,
+                         look, angle, aircraft_pos);
     break;
   case acSimpleLarge:
     DrawSimpleAircraft(canvas, look, angle, aircraft_pos, true);
