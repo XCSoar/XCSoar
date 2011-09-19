@@ -35,6 +35,7 @@ struct AirspaceRendererSettings;
 class Waypoints;
 struct MoreData;
 struct DerivedInfo;
+class ProtectedTaskManager;
 
 class MapItemListBuilder
 {
@@ -52,6 +53,7 @@ public:
                           const AirspaceComputerSettings &computer_settings,
                           const AirspaceRendererSettings &renderer_settings,
                           const MoreData &basic, const DerivedInfo &calculated);
+  void AddTaskOZs(const ProtectedTaskManager &task);
 };
 
 #endif

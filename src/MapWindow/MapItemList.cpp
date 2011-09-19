@@ -51,6 +51,10 @@ CompareMapItems(const MapItem *a, const MapItem *b)
       ((const WaypointMapItem *)b)->waypoint.IsLandable())
     return false;
 
+  if (a->type == MapItem::TASK_OZ && b->type == MapItem::TASK_OZ)
+    return ((const TaskOZMapItem *)a)->index <
+           ((const TaskOZMapItem *)b)->index;
+
   if (a->type == MapItem::AIRSPACE && b->type == MapItem::AIRSPACE)
     return AirspaceAltitude::SortHighest(
         ((const AirspaceMapItem *)a)->airspace->GetBase(),

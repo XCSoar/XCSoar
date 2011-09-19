@@ -26,6 +26,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Dialogs/ListPicker.hpp"
 #include "Dialogs/Airspace.hpp"
+#include "Dialogs/Task.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Language/Language.hpp"
 #include "MapWindow/MapItem.hpp"
@@ -60,6 +61,9 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
   case MapItem::WAYPOINT:
     dlgWaypointDetailsShowModal(parent,
                                 ((const WaypointMapItem &)item).waypoint);
+    break;
+  case MapItem::TASK_OZ:
+    dlgTargetShowModal(((const TaskOZMapItem &)item).index);
     break;
   }
 }

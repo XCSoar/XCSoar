@@ -32,8 +32,11 @@ Copyright_License {
 #include "Renderer/AirspacePreviewRenderer.hpp"
 #include "Airspace/AbstractAirspace.hpp"
 #include "Renderer/WaypointListRenderer.hpp"
+#include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/UnitsFormatter.hpp"
+#include "Dialogs/dlgTaskHelpers.hpp"
 #include "Language/Language.hpp"
+#include "Util/StringUtil.hpp"
 #include "SettingsMap.hpp"
 
 #include <cstdio>
@@ -50,6 +53,8 @@ namespace MapItemListRenderer
   void Draw(Canvas &canvas, const PixelRect rc, const WaypointMapItem &item,
             const WaypointLook &look,
             const WaypointRendererSettings &renderer_settings);
+
+  void Draw(Canvas &canvas, const PixelRect rc, const TaskOZMapItem &item);
 }
 
 void
@@ -131,6 +136,40 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 }
 
 void
+MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          const TaskOZMapItem &item)
+{
+  const unsigned line_height = rc.bottom - rc.top;
+
+  const Waypoint &waypoint = item.waypoint;
+
+  const Font &name_font = Fonts::MapBold;
+  const Font &small_font = Fonts::MapLabel;
+  canvas.select(name_font);
+
+  TCHAR buffer[256];
+
+  // Y-Coordinate of the second row
+  unsigned top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
+
+  // Use small font for details
+  canvas.select(small_font);
+
+  // Draw details line
+  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  OrderedTaskPointRadiusLabel(*item.oz, buffer);
+  if (!string_is_empty(buffer))
+    canvas.text_clipped(left, top2, rc.right - left, buffer);
+
+  // Draw waypoint name
+  canvas.select(name_font);
+  OrderedTaskPointLabel(item.tp_type, waypoint.name.c_str(),
+                        item.index, buffer);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2),
+                      rc.right - left, buffer);
+}
+
+void
 MapItemListRenderer::Draw(
     Canvas &canvas, const PixelRect rc, const MapItem &item,
     const AircraftLook &aircraft_look,
@@ -149,6 +188,9 @@ MapItemListRenderer::Draw(
   case MapItem::WAYPOINT:
     Draw(canvas, rc, (const WaypointMapItem &)item, waypoint_look,
          settings.waypoint);
+    break;
+  case MapItem::TASK_OZ:
+    Draw(canvas, rc, (const TaskOZMapItem &)item);
     break;
   }
 }

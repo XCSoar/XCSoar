@@ -36,6 +36,7 @@ Copyright_License {
 #include "Engine/Waypoint/WaypointVisitor.hpp"
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "NMEA/Aircraft.hpp"
+#include "Task/ProtectedTaskManager.hpp"
 #include "MapItem.hpp"
 #include "MapItemList.hpp"
 
@@ -176,4 +177,29 @@ MapItemListBuilder::AddVisibleAirspace(
 
   AirspaceListBuilderVisitor builder(list);
   airspaces.visit_within_range(location, fixed(100.0), builder, predicate);
+}
+
+void
+MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
+{
+  ProtectedTaskManager::Lease task_manager(task);
+  if (task_manager->get_mode() != TaskManager::MODE_ORDERED)
+    return;
+
+  const OrderedTask &ordered_task = task_manager->get_ordered_task();
+
+  AircraftState a;
+  a.location = location;
+
+  for (unsigned i = 0, size = ordered_task.TaskSize(); i < size; i++) {
+    const OrderedTaskPoint *task_point = ordered_task.getTaskPoint(i);
+    if (!task_point || !task_point->IsInSector(a))
+      continue;
+
+    task_point->GetType();
+    const ObservationZonePoint *oz = task_point->get_oz();
+    if (oz)
+      list.checked_append(new TaskOZMapItem(i, *oz, task_point->GetType(),
+                                            task_point->GetWaypoint()));
+  }
 }

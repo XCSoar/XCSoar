@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Util/StaticArray.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
+#include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
+#include "Engine/Task/Tasks/BaseTask/TaskPoint.hpp"
 
 class AbstractAirspace;
 struct Waypoint;
@@ -34,6 +36,7 @@ struct MapItem
 {
   enum Type {
     SELF,
+    TASK_OZ,
     AIRSPACE,
     WAYPOINT,
   } type;
@@ -49,6 +52,23 @@ struct SelfMapItem: public MapItem
 
   SelfMapItem(const GeoPoint &_location, const Angle &_bearing)
     :MapItem(SELF), location(_location), bearing(_bearing) {}
+};
+
+struct TaskOZMapItem: public MapItem
+{
+  int index;
+  const ObservationZonePoint *oz;
+  TaskPoint::Type tp_type;
+  const Waypoint &waypoint;
+
+  TaskOZMapItem(int _index, const ObservationZonePoint &_oz,
+                TaskPoint::Type _tp_type, const Waypoint &_waypoint)
+    :MapItem(TASK_OZ), index(_index), oz(_oz.clone()),
+     tp_type(_tp_type), waypoint(_waypoint) {}
+
+  ~TaskOZMapItem() {
+    delete oz;
+  }
 };
 
 struct AirspaceMapItem: public MapItem

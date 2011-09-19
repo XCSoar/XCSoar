@@ -39,6 +39,9 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
   if (Basic().location_available)
     builder.AddSelfIfNear(Basic().location, Calculated().heading, range);
 
+  if (task)
+    builder.AddTaskOZs(*task);
+
   const Airspaces *airspace_database = airspace_renderer.GetAirspaces();
   if (airspace_database)
     builder.AddVisibleAirspace(*airspace_database,
