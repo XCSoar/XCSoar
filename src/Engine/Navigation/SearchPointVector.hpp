@@ -29,6 +29,7 @@
 
 class FlatRay;
 class FlatBoundingBox;
+struct GeoBounds;
 
 class SearchPointVector: public std::vector<SearchPoint> {
 public:
@@ -57,7 +58,7 @@ public:
   bool IntersectsWith(const FlatRay &ray) const;
 
   FlatBoundingBox CalculateBoundingbox() const;
-
+  GeoBounds CalculateGeoBounds() const;
 
   /** increment iterator, wrapping around to start if required */
   void NextCircular(SearchPointVector::const_iterator &i) const;

@@ -23,6 +23,7 @@
 #include "Navigation/ConvexHull/GrahamScan.hpp"
 #include "Navigation/Flat/FlatRay.hpp"
 #include "Navigation/Flat/FlatBoundingBox.hpp"
+#include "Geo/GeoBounds.hpp"
 #include "ConvexHull/PolygonInterior.hpp"
 #include <algorithm>
 #include <functional>
@@ -172,6 +173,19 @@ SearchPointVector::CalculateBoundingbox() const
   for (const_iterator v = begin(); v != end(); ++v)
     bb.expand(v->get_flatLocation());
   bb.expand(); // add 1 to fix rounding
+  return bb;
+}
+
+GeoBounds
+SearchPointVector::CalculateGeoBounds() const
+{
+  if (empty())
+    return GeoBounds(GeoPoint(Angle::zero(), Angle::zero()));
+
+  GeoBounds bb((*this)[0].get_location());
+  for (const_iterator v = begin(); v != end(); ++v)
+    bb.merge(v->get_location());
+
   return bb;
 }
 
