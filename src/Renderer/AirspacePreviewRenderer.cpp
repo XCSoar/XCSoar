@@ -24,9 +24,53 @@ Copyright_License {
 #include "AirspacePreviewRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
-#include "Airspace/AbstractAirspace.hpp"
+#include "Airspace/AirspacePolygon.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Look/AirspaceLook.hpp"
+#include "Geo/GeoBounds.hpp"
+#include "WindowProjection.hpp"
+#include "Asset.hpp"
+
+#include <vector>
+
+static void
+DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
+            const RasterPoint pt, unsigned radius)
+{
+  if (is_ancient_hardware()) {
+    canvas.rectangle(pt.x - radius, pt.y - radius,
+                     pt.x + radius, pt.y + radius);
+    return;
+  }
+
+  GeoBounds bounds = airspace.GetGeoBounds();
+  GeoPoint center = bounds.center();
+
+  fixed geo_heigth = GeoPoint(center.Longitude, bounds.north).distance(
+                     GeoPoint(center.Longitude, bounds.south));
+  fixed geo_width = GeoPoint(bounds.west, center.Latitude).distance(
+                    GeoPoint(bounds.east, center.Latitude));
+
+  fixed geo_size = std::max(geo_heigth, geo_width);
+
+  WindowProjection projection;
+  projection.SetScreenSize(radius * 2, radius * 2);
+  projection.SetScreenOrigin(pt.x, pt.y);
+  projection.SetGeoLocation(center);
+  projection.SetScale(fixed(radius * 2) / geo_size);
+  projection.SetScreenAngle(Angle::zero());
+  projection.UpdateScreenBounds();
+
+  const SearchPointVector &border = airspace.GetPoints();
+
+  std::vector<RasterPoint> pts;
+  pts.reserve(border.size());
+  for (SearchPointVector::const_iterator it = border.begin(),
+       it_end = border.end(); it != it_end; ++it)
+    pts.push_back(projection.GeoToScreen(it->get_location()));
+
+  canvas.polygon(&pts[0], (unsigned)pts.size());
+}
 
 void
 AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
@@ -44,6 +88,5 @@ AirspacePreviewRenderer::Draw(Canvas &canvas, const AbstractAirspace &airspace,
   if (airspace.shape == AbstractAirspace::CIRCLE)
     canvas.circle(pt.x, pt.y, radius);
   else
-    canvas.rectangle(pt.x - radius, pt.y - radius,
-                     pt.x + radius, pt.y + radius);
+    DrawPolygon(canvas, (const AirspacePolygon &)airspace, pt, radius);
 }

@@ -33,11 +33,7 @@ struct AirspaceLook;
 
 namespace AirspacePreviewRenderer
 {
-  /**
-   * Draw a scaled preview of the given airspace
-   * @todo fill interior with hatched brush or half transparent color
-   * @todo real scaled outline for polygon airspaces
-   */
+  /** Draw a scaled preview of the given airspace */
   void Draw(Canvas &canvas, const AbstractAirspace &airspace,
             const RasterPoint pt, unsigned radius,
             const AirspaceRendererSettings &settings,
