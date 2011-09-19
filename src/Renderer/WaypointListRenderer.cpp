@@ -35,6 +35,27 @@ Copyright_License {
 
 #include <cstdio>
 
+static void
+FormatWaypointDetails(TCHAR *buffer, const Waypoint &waypoint)
+{
+  TCHAR alt[16];
+  Units::FormatUserAltitude(waypoint.altitude, alt, 16);
+  _stprintf(buffer, _T("%s: %s"), _("Altitude"), alt);
+
+  if (waypoint.radio_frequency.IsDefined()) {
+    TCHAR radio[16];
+    waypoint.radio_frequency.Format(radio, 16);
+    _tcscat(buffer, _T(" - "));
+    _tcscat(buffer, radio);
+    _tcscat(buffer, _T(" MHz"));
+  }
+
+  if (!waypoint.comment.empty()) {
+    _tcscat(buffer, _T(" - "));
+    _tcscat(buffer, waypoint.comment.c_str());
+  }
+}
+
 void
 WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const Waypoint &waypoint, const WaypointLook &look,
@@ -56,24 +77,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                       waypoint.name.c_str());
 
   TCHAR buffer[256];
-  {
-    TCHAR alt[16];
-    Units::FormatUserAltitude(waypoint.altitude, alt, 16);
-    _stprintf(buffer, _T("%s: %s"), _("Altitude"), alt);
-  }
-
-  if (waypoint.radio_frequency.IsDefined()) {
-    TCHAR radio[16];
-    waypoint.radio_frequency.Format(radio, 16);
-    _tcscat(buffer, _T(" - "));
-    _tcscat(buffer, radio);
-    _tcscat(buffer, _T(" MHz"));
-  }
-
-  if (!waypoint.comment.empty()) {
-    _tcscat(buffer, _T(" - "));
-    _tcscat(buffer, waypoint.comment.c_str());
-  }
+  FormatWaypointDetails(buffer, waypoint);
 
   canvas.select(small_font);
   canvas.text_clipped(left,
@@ -126,24 +130,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   leg_info_width += Layout::FastScale(2);
 
   // Draw details line
-  {
-    TCHAR alt[16];
-    Units::FormatUserAltitude(waypoint.altitude, alt, 16);
-    _stprintf(buffer, _T("%s: %s"), _("Altitude"), alt);
-  }
-
-  if (waypoint.radio_frequency.IsDefined()) {
-    TCHAR radio[16];
-    waypoint.radio_frequency.Format(radio, 16);
-    _tcscat(buffer, _T(" - "));
-    _tcscat(buffer, radio);
-    _tcscat(buffer, _T(" MHz"));
-  }
-
-  if (!waypoint.comment.empty()) {
-    _tcscat(buffer, _T(" - "));
-    _tcscat(buffer, waypoint.comment.c_str());
-  }
+  FormatWaypointDetails(buffer, waypoint);
 
   unsigned left = rc.left + line_height + Layout::FastScale(2);
   canvas.text_clipped(left, top2, rc.right - leg_info_width - left, buffer);
