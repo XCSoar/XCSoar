@@ -37,6 +37,52 @@ Copyright_License {
 
 void
 WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                           const Waypoint &waypoint, const WaypointLook &look,
+                           const WaypointRendererSettings &renderer_settings)
+{
+  const unsigned line_height = rc.bottom - rc.top;
+
+  RasterPoint pt = { rc.left + line_height / 2,
+                     rc.top + line_height / 2};
+  WaypointIconRenderer wir(renderer_settings, look, canvas);
+  wir.Draw(waypoint, pt);
+
+  const Font &name_font = Fonts::MapBold;
+  const Font &small_font = Fonts::MapLabel;
+
+  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  canvas.select(name_font);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
+                      waypoint.name.c_str());
+
+  TCHAR buffer[256];
+  {
+    TCHAR alt[16];
+    Units::FormatUserAltitude(waypoint.altitude, alt, 16);
+    _stprintf(buffer, _T("%s: %s"), _("Altitude"), alt);
+  }
+
+  if (waypoint.radio_frequency.IsDefined()) {
+    TCHAR radio[16];
+    waypoint.radio_frequency.Format(radio, 16);
+    _tcscat(buffer, _T(" - "));
+    _tcscat(buffer, radio);
+    _tcscat(buffer, _T(" MHz"));
+  }
+
+  if (!waypoint.comment.empty()) {
+    _tcscat(buffer, _T(" - "));
+    _tcscat(buffer, waypoint.comment.c_str());
+  }
+
+  canvas.select(small_font);
+  canvas.text_clipped(left,
+                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc, buffer);
+}
+
+void
+WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const Waypoint &waypoint, const GeoVector &vector,
                            const WaypointLook &look,
                            const WaypointRendererSettings &settings)

@@ -34,6 +34,11 @@ struct WaypointRendererSettings;
 
 namespace WaypointListRenderer
 {
+
+  void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
+            const WaypointLook &look,
+            const WaypointRendererSettings &renderer_settings);
+
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
             const GeoVector &vector, const WaypointLook &look,
             const WaypointRendererSettings &settings);
