@@ -42,7 +42,7 @@ int main(int argc, char **argv)
 
   g.Latitude = Angle::degrees(fixed(6));
   g.Longitude = Angle::degrees(fixed(8));
-  b.merge(g);
+  b.extend(g);
 
   ok1(equals(b.east, 8));
   ok1(equals(b.west, 2));

@@ -67,9 +67,9 @@ WindowProjection::UpdateScreenBounds()
   assert(screen_size_initialised);
 
   GeoBounds sb(ScreenToGeo(0, 0));
-  sb.merge(ScreenToGeo(screen_width, 0));
-  sb.merge(ScreenToGeo(screen_width, screen_height));
-  sb.merge(ScreenToGeo(0, screen_height));
+  sb.extend(ScreenToGeo(screen_width, 0));
+  sb.extend(ScreenToGeo(screen_width, screen_height));
+  sb.extend(ScreenToGeo(0, screen_height));
 
   screenbounds_latlon = sb;
 }

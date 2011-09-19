@@ -48,7 +48,7 @@ struct GeoBounds {
     return west == east && north == south;
   }
 
-  void merge(const GeoPoint pt) {
+  void extend(const GeoPoint pt) {
     if (pt.Longitude < west)
       west = pt.Longitude;
     if (pt.Latitude > north)
