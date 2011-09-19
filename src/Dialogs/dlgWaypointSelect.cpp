@@ -34,18 +34,17 @@ Copyright_License {
 #include "OS/PathName.hpp"
 #include "Waypoint/Waypoints.hpp"
 #include "Waypoint/WaypointVisitor.hpp"
-#include "Renderer/WaypointIconRenderer.hpp"
 #include "Components.hpp"
 #include "Compiler.h"
 #include "DataField/Enum.hpp"
 #include "LogFile.hpp"
 #include "StringUtil.hpp"
-#include "Units/UnitsFormatter.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "MainWindow.hpp"
 #include "Look/Look.hpp"
 #include "Util/Macros.hpp"
+#include "Renderer/WaypointListRenderer.hpp"
 
 #include <algorithm>
 #include <list>
@@ -724,15 +723,12 @@ OnFilterType(DataField *Sender, DataField::DataAccessKind_t Mode)
 static void
 OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
 {
-  const unsigned line_height = rc.bottom - rc.top;
-
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
-  canvas.select(name_font);
-
   if (WaypointSelectInfo.empty()) {
     assert(i == 0);
 
+    const unsigned line_height = rc.bottom - rc.top;
+    const Font &name_font = Fonts::MapBold;
+    canvas.select(name_font);
     canvas.text(rc.left + line_height + Layout::FastScale(2),
                 rc.top + line_height / 2 - name_font.get_height() / 2,
                 filter_data.defined() || way_points.empty() ?
@@ -740,71 +736,14 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     return;
   }
 
-  TCHAR buffer[256];
   assert(i < WaypointSelectInfo.size());
 
   const struct WaypointSelectInfo &info = WaypointSelectInfo[i];
-  const Waypoint &waypoint = *info.way_point;
 
-  // Draw icon
-  RasterPoint pt = { rc.left + line_height / 2,
-                     rc.top + line_height / 2};
-  WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint,
-                           CommonInterface::main_window.look->waypoint,
-                           canvas);
-  wir.Draw(waypoint, pt);
-
-  // Y-Coordinate of the second row
-  unsigned top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
-
-  // Use small font for details
-  canvas.select(small_font);
-
-  // Draw leg distance
-  Units::FormatUserDistance(info.Distance, buffer, 256, true);
-  unsigned width = canvas.text_width(buffer);
-  unsigned leg_info_width = width;
-  canvas.text(rc.right - Layout::FastScale(2) - width,
-              rc.top + Layout::FastScale(2) +
-              (name_font.get_height() - small_font.get_height()) / 2, buffer);
-
-  // Draw leg bearing
-  _stprintf(buffer, _T(" %.0f" DEG " T"), (double)info.Direction.value_degrees());
-  width = canvas.text_width(buffer);
-  canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
-
-  if (width > leg_info_width)
-    leg_info_width = width;
-
-  leg_info_width += Layout::FastScale(2);
-
-  // Draw details line
-  {
-    TCHAR alt[16];
-    Units::FormatUserAltitude(waypoint.altitude, alt, 16);
-    _stprintf(buffer, _T("%s: %s"), _("Altitude"), alt);
-  }
-
-  if (waypoint.radio_frequency.IsDefined()) {
-    TCHAR radio[16];
-    waypoint.radio_frequency.Format(radio, 16);
-    _tcscat(buffer, _T(" - "));
-    _tcscat(buffer, radio);
-    _tcscat(buffer, _T(" MHz"));
-  }
-
-  if (!waypoint.comment.empty()) {
-    _tcscat(buffer, _T(" - "));
-    _tcscat(buffer, waypoint.comment.c_str());
-  }
-
-  unsigned left = rc.left + line_height + Layout::FastScale(2);
-  canvas.text_clipped(left, top2, rc.right - leg_info_width - left, buffer);
-
-  // Draw waypoint name
-  canvas.select(name_font);
-  canvas.text_clipped(left, rc.top + Layout::FastScale(2),
-                      rc.right - leg_info_width - left, waypoint.name.c_str());
+  WaypointListRenderer::Draw(canvas, rc, *info.way_point,
+                             GeoVector(info.Distance, info.Direction),
+                             CommonInterface::main_window.look->waypoint,
+                             CommonInterface::SettingsMap().waypoint);
 }
 
 static void

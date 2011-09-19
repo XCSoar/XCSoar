@@ -388,6 +388,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/MapItemListRenderer.cpp \
 	$(SRC)/Renderer/TrackLineRenderer.cpp \
 	$(SRC)/Renderer/TrailRenderer.cpp \
+	$(SRC)/Renderer/WaypointListRenderer.cpp \
 	$(SRC)/Renderer/WaypointIconRenderer.cpp \
 	$(SRC)/Renderer/WaypointRenderer.cpp \
 	$(SRC)/Renderer/WaypointRendererSettings.cpp \
