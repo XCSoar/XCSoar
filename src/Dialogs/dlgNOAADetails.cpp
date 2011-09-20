@@ -47,44 +47,12 @@ Update()
 {
   tstring metar_taf = _T("");
 
-  ParsedMETAR parsed;
-  if (NOAAStore::GetParsedMETAR(station_index, parsed)) {
-    TCHAR buffer[256];
-
-    if (parsed.temperatures_available) {
-      _stprintf(buffer, _T("%s: %.1f %s\n"), _("Temperature"),
-                (double)Units::ToUserTemperature(parsed.temperature),
-                Units::GetTemperatureName());
-      metar_taf += buffer;
-
-      _stprintf(buffer, _T("%s: %.1f %s\n\n"), _("Dew point"),
-                (double)Units::ToUserTemperature(parsed.dew_point),
-                Units::GetTemperatureName());
-      metar_taf += buffer;
-    }
-
-    if (parsed.wind_available) {
-      TCHAR buffer2[16];
-      Units::FormatUserWindSpeed(parsed.wind.norm, buffer2, 16);
-
-      _stprintf(buffer, _T("%s: %.0f" DEG " %s\n\n"), _("Wind"),
-                (double)parsed.wind.bearing.value_degrees(), buffer2);
-
-      metar_taf += buffer;
-    }
-
-    if (parsed.qnh_available) {
-      _stprintf(buffer, _T("%s: %.0f hPa\n\n"), _("QNH"),
-                (double)parsed.qnh.GetQNH());
-
-      metar_taf += buffer;
-    }
-  }
-
   METAR metar;
   if (!NOAAStore::GetMETAR(station_index, metar)) {
     metar_taf += _("No METAR available!");
   } else {
+    metar_taf += metar.decoded.c_str();
+    metar_taf += _T("\n\n");
     metar_taf += metar.content.c_str();
   }
 
