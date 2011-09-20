@@ -926,7 +926,7 @@ type=key
 data=0
 event=ThermalAssistant
 event=Mode default
-label=Thermal Assistant
+label=Thermal Assistant$(CheckCircling)
 location=9
 
 # -------------

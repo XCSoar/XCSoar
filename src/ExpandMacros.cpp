@@ -385,6 +385,12 @@ ButtonLabel::ExpandMacros(const TCHAR *In, TCHAR *OutBuffer, size_t Size)
     ReplaceInString(OutBuffer, _T("$(CheckFLARM)"), _T(""), Size);
   }
 
+  if (_tcsstr(OutBuffer, _T("$(CheckCircling)"))) {
+    if (!Calculated().circling)
+      invalid = true;
+    ReplaceInString(OutBuffer, _T("$(CheckCircling)"), _T(""), Size);
+  }
+
   if (_tcsstr(OutBuffer, _T("$(CheckVega)"))) {
     if (devVarioFindVega()== NULL)
       invalid = true;
