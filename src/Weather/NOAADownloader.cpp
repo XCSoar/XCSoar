@@ -41,6 +41,7 @@ namespace NOAADownloader
    * otherwise the pointer to the next character after the parsed string portion
    */
   const char *ParseDateTime(const char *buffer, BrokenDateTime &dest);
+  bool ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest);
 
   void AppendToContentString(const char *buffer, METAR::ContentString &content);
 }
@@ -96,6 +97,50 @@ NOAADownloader::ParseDateTime(const char *buffer, BrokenDateTime &dest)
   return p_end;
 }
 
+bool
+NOAADownloader::ParseDecodedDateTime(const char *buffer, BrokenDateTime &dest)
+{
+  char *p_end, *p;
+  BrokenDateTime dt;
+  long unsigned tmp;
+
+  // Parse year
+  tmp = strtoul(buffer, &p_end, 10);
+  if (buffer == p_end || *p_end != '.')
+    return false;
+
+  dt.year = tmp;
+  p = p_end + 1;
+
+  // Parse month
+  tmp = strtoul(p, &p_end, 10);
+  if (p == p_end || *p_end != '.')
+    return false;
+
+  dt.month = tmp;
+  p = p_end + 1;
+
+  // Parse day
+  tmp = strtoul(p, &p_end, 10);
+  if (p == p_end || *p_end != ' ')
+    return false;
+
+  dt.day = tmp;
+  p = p_end + 1;
+
+  // Parse hour and minute
+  tmp = strtoul(p, &p_end, 10);
+  if (p == p_end)
+    return false;
+
+  dt.second = 0;
+  dt.minute = tmp % 100;
+  dt.hour = (tmp - dt.minute) / 100;
+
+  dest = dt;
+  return true;
+}
+
 void
 NOAADownloader::AppendToContentString(const char *buffer,
                                       METAR::ContentString &content)
@@ -127,7 +172,7 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
 #endif
 
   // Build file url
-  char url[256] = "http://weather.noaa.gov/pub/data/observations/metar/stations/";
+  char url[256] = "http://weather.noaa.gov/pub/data/observations/metar/decoded/";
   strcat(url, code);
   strcat(url, ".TXT");
   PathName path(url);
@@ -148,14 +193,20 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   /*
    * Example:
    *
-   * 2011/07/01 10:20
-   * EDDL 011020Z 31004KT 270V340 9999 SCT032TCU SCT050 17/09 Q1022 TEMPO SHRA
+   * Duesseldorf, Germany (EDDL) 51-18N 006-46E 41M
+   * Sep 20, 2011 - 03:50 PM EDT / 2011.09.20 1950 UTC
+   * Wind: from the SW (220 degrees) at 10 MPH (9 KT):0
+   * Visibility: greater than 7 mile(s):0
+   * Sky conditions: mostly cloudy
+   * Temperature: 60 F (16 C)
+   * Dew Point: 51 F (11 C)
+   * Relative Humidity: 72%
+   * Pressure (altimeter): 30.21 in. Hg (1023 hPa)
+   * ob: EDDL 201950Z 22009KT 9999 FEW035 BKN038 16/11 Q1023 NOSIG
+   * cycle: 20
    */
 
-  // Parse date and time of last update
-  const char *p = ParseDateTime(buffer, metar.last_update);
-  if (p == buffer)
-    return false;
+  char *p = buffer;
 
   // Skip characters until line feed or string end
   while (*p != '\n' && *p != 0)
@@ -164,15 +215,37 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   if (*p == 0)
     return false;
 
-  // p is now at the first character after the line feed
-  p++;
+  // Skip characters until slash or string end
+  while (*p != '/' && *p != 0)
+    p++;
 
   if (*p == 0)
     return false;
 
-  // Read rest of the response into the content string
+  p++;
+
+  if (*p == 0 || !ParseDecodedDateTime(p, metar.last_update))
+    return false;
+
+  // Search for line feed followed by "ob:"
+  char *ob = strstr(p, "\nob:");
+  if (ob == NULL)
+    return false;
+
+  ob += 4;
+  while (*ob == ' ' && *ob != 0)
+    ob++;
+
+  p = ob;
+  // Skip characters until line feed or string end
+  while (*p != '\n' && *p != '\r' && *p != 0)
+    p++;
+
+  if (*p != 0)
+    *p = 0;
+
   metar.content.clear();
-  AppendToContentString(p, metar.content);
+  AppendToContentString(ob, metar.content);
 
   // Trim the content string
   TrimRight(metar.content.buffer());
