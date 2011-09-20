@@ -92,6 +92,7 @@ Copyright_License {
 #include "Weather/NOAAGlue.hpp"
 #include "Plane/PlaneGlue.hpp"
 #include "UIState.hpp"
+#include "Net/Features.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "DrawThread.hpp"
