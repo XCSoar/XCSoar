@@ -49,9 +49,11 @@ DisplayMETAR(unsigned index)
          (unsigned)metar.last_update.minute,
          (unsigned)metar.last_update.second);
 
-  if (!metar.content.empty()) {
+  if (!metar.content.empty())
     _tprintf(_T("%s\n"), metar.content.c_str());
-  }
+
+  if (!metar.decoded.empty())
+    _tprintf(_T("%s\n"), metar.decoded.c_str());
 }
 
 static void

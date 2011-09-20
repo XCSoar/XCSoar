@@ -232,6 +232,8 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   if (ob == NULL)
     return false;
 
+  *ob = 0;
+
   ob += 4;
   while (*ob == ' ' && *ob != 0)
     ob++;
@@ -247,8 +249,12 @@ NOAADownloader::DownloadMETAR(const char *code, METAR &metar,
   metar.content.clear();
   AppendToContentString(ob, metar.content);
 
-  // Trim the content string
+  metar.decoded.clear();
+  AppendToContentString(buffer, metar.decoded);
+
+  // Trim the content strings
   TrimRight(metar.content.buffer());
+  TrimRight(metar.decoded.buffer());
 
   return true;
 }

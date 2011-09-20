@@ -33,6 +33,7 @@ struct METAR
 
   BrokenDateTime last_update;
   ContentString content;
+  ContentString decoded;
 
   void clear() {
     last_update.year = 0;
@@ -43,6 +44,7 @@ struct METAR
     last_update.minute = 0;
     last_update.second = 0;
     content.clear();
+    decoded.clear();
   }
 };
 
