@@ -41,10 +41,8 @@ namespace NOAAStore
 
     bool metar_available;
     bool taf_available;
-    bool metar_parsed;
 
     METAR metar;
-    ParsedMETAR parsed;
     TAF taf;
   };
 
@@ -97,7 +95,6 @@ NOAAStore::AddStation(const char *code)
 
   // Reset available flags
   item.metar_available = false;
-  item.metar_parsed = false;
   item.taf_available = false;
 
   return true;
@@ -197,38 +194,6 @@ NOAAStore::GetMETAR(const char *code, METAR &metar)
 }
 
 bool
-NOAAStore::GetParsedMETAR(unsigned index, ParsedMETAR &metar)
-{
-  assert(index < stations.size());
-  if (!stations[index].metar_available)
-    return false;
-
-  if (!stations[index].metar_parsed &&
-      !METARParser::Parse(stations[index].metar, stations[index].parsed))
-    return false;
-
-  stations[index].metar_parsed = true;
-  metar = stations[index].parsed;
-  return true;
-}
-
-bool
-NOAAStore::GetParsedMETAR(const char *code, ParsedMETAR &metar)
-{
-#ifndef NDEBUG
-  assert(strlen(code) == 4);
-  for (unsigned i = 0; i < 4; i++)
-    assert(code[i] >= 'A' && code[i] <= 'Z');
-#endif
-
-  unsigned index = GetStationIndex(code);
-  if (index == (unsigned)-1)
-    return false;
-
-  return GetParsedMETAR(index, metar);
-}
-
-bool
 NOAAStore::GetTAF(unsigned index, TAF &taf)
 {
   assert(index < stations.size());
@@ -263,10 +228,8 @@ NOAAStore::UpdateStation(unsigned index, JobRunner &runner)
 
   bool metar_downloaded =
     NOAADownloader::DownloadMETAR(code, stations[index].metar, runner);
-  if (metar_downloaded) {
+  if (metar_downloaded)
     stations[index].metar_available = true;
-    stations[index].metar_parsed = false;
-  }
 
   bool taf_downloaded =
     NOAADownloader::DownloadTAF(code, stations[index].taf, runner);
