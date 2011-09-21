@@ -25,9 +25,9 @@ Copyright_License {
 
 #include <assert.h>
 
-#ifdef HAVE_POSIX
 #include <time.h>
-#else
+
+#ifndef HAVE_POSIX
 #include <windows.h>
 #endif
 
@@ -100,19 +100,6 @@ timegm(struct tm *tm)
 }
 #endif
 
-int64_t
-BrokenDateTime::ToUnixTimeUTC() const
-{
-  struct tm tm;
-  tm.tm_year = year - 1900;
-  tm.tm_mon = month - 1;
-  tm.tm_mday = day;
-  tm.tm_hour = hour;
-  tm.tm_min = minute;
-  tm.tm_sec = second;
-  return ::timegm(&tm);
-}
-
 #else /* !HAVE_POSIX */
 
 static const BrokenDateTime
@@ -167,7 +154,54 @@ ToFileTime(const BrokenDateTime &dt)
   return ft;
 }
 
-#endif /* !HAVE_POSIX */
+static bool
+IsLeapYear(unsigned y)
+{
+    y += 1900;
+    return (y % 4) == 0 && ((y % 100) != 0 || (y % 400) == 0);
+}
+
+static time_t
+timegm (struct tm *tm)
+{
+  static const unsigned ndays[] = {
+    31, 28, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31
+  };
+
+  time_t res = 0;
+
+  for (int year = 70; year < tm->tm_year; ++year)
+    res += IsLeapYear(year) ? 366 : 365;
+
+  for (int month = 0; month < tm->tm_mon; ++month)
+    res += ndays[month];
+
+  if (tm->tm_mon > 1 && IsLeapYear(tm->tm_year))
+    res++;
+
+  res += tm->tm_mday - 1;
+  res *= 24;
+  res += tm->tm_hour;
+  res *= 60;
+  res += tm->tm_min;
+  res *= 60;
+  res += tm->tm_sec;
+  return res;
+}
+#endif
+
+int64_t
+BrokenDateTime::ToUnixTimeUTC() const
+{
+  struct tm tm;
+  tm.tm_year = year - 1900;
+  tm.tm_mon = month - 1;
+  tm.tm_mday = day;
+  tm.tm_hour = hour;
+  tm.tm_min = minute;
+  tm.tm_sec = second;
+  return ::timegm(&tm);
+}
 
 const BrokenDateTime
 BrokenDateTime::NowUTC()

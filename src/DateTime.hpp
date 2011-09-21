@@ -184,10 +184,10 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    */
   gcc_const
   static BrokenDateTime FromUnixTimeUTC(int64_t t);
+#endif
 
   gcc_pure
   int64_t ToUnixTimeUTC() const;
-#endif
 
   /**
    * Returns the current system date and time, in UTC.
