@@ -51,6 +51,20 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                                  flipOrientation);
 }
 
+TabBarControl::TabBarControl(ContainerWindow &_parent, unsigned _tabLineHeight,
+                             const DialogLook &look,
+                             int x, int y, unsigned _width, unsigned _height,
+                             const WindowStyle style):
+                             TabbedControl(_parent, x, 0, _parent.get_width() - x,
+                                           _parent.get_height(), style),
+                             theTabDisplay(NULL),
+                             TabLineHeight(Layout::Scale(_tabLineHeight)),
+                             flipOrientation(!Layout::landscape),
+                             clientOverlapTabs(true),
+                             setting_up(true)
+{
+}
+
 TabBarControl::~TabBarControl()
 {
   delete theTabDisplay;

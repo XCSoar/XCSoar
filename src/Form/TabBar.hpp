@@ -68,7 +68,7 @@ private:
 
 public:
 /**
- *
+ * Constructor used for stand-alone TabBarControl
  * @param parent
  * @param x, y Location of the tab bar (unused)
  * @param width, height.  Size of the tab bar
@@ -80,6 +80,21 @@ public:
                 const WindowStyle style = WindowStyle(),
                 bool _flipOrientation = false,
                 bool _clientOverlapTabs = false);
+
+  /**
+   * Constructor called by inherited class TabMenuControl
+   * that creates its own TabDisplay object
+   * @param _parent
+   * @param _tabLineHeight
+   * @param look
+   * @param x, y, _width, _height
+   * @param style
+   */
+  TabBarControl(ContainerWindow &parent, unsigned _tabLineHeight,
+                const DialogLook &look,
+                int x, int y, unsigned width, unsigned height,
+                const WindowStyle style);
+
   ~TabBarControl();
 
 private:
