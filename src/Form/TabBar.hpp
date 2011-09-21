@@ -32,6 +32,7 @@ class Bitmap;
 class WndOwnerDrawFrame;
 class ContainerWindow;
 class TabDisplay;
+class OneTabButton;
 
 /** TabBarControl displays tabs that show/hide the windows
  * associated with each tab.  For example a "Panel" control.
@@ -50,8 +51,6 @@ public:
   typedef bool (*PreShowNotifyCallback_t)(EventType _EventType);
   typedef void (*PostShowNotifyCallback_t)(void);
   typedef void (*ReClickNotifyCallback_t)(void);
-
-  class OneTabButton;
 
 protected:
   TabDisplay * theTabDisplay;
@@ -85,62 +84,6 @@ public:
 
 private:
 #define TabLineHeightInitUnscaled (unsigned)5
-
-public:
-/**
- * OneTabButton class holds display and callbacks data for a single tab
- */
-  class OneTabButton {
-  public:
-    TCHAR Caption[MAX_PATH];
-    bool IsButtonOnly;
-    const Bitmap *bmp;
-    PixelRect butSize;
-
-    /**
-   * Called before the tab is hidden.
-   * @returns  True if ok and tab may change.  False if click should be ignored
-   */
-    PreHideNotifyCallback_t PreHideFunction;
-
-    /**
-     * Called immediately after tab is clicked, before it is displayed.
-     * @returns  True if ok and tab may change.  False if click should be ignored
-     */
-    PreShowNotifyCallback_t PreShowFunction;
-
-    /**
-     * Called immediately after tab is made active and shown
-     */
-    PostShowNotifyCallback_t PostShowFunction;
-
-    /**
-     * Called if tab is clicked while it is the currently displayed tab
-     */
-    ReClickNotifyCallback_t ReClickFunction;
-
-  public:
-    OneTabButton(const TCHAR* _Caption,
-                bool _IsButtonOnly,
-                const Bitmap *_bmp,
-                PreHideNotifyCallback_t _PreHideFunction,
-                PreShowNotifyCallback_t _PreShowFunction,
-                PostShowNotifyCallback_t _PostShowFunction,
-                ReClickNotifyCallback_t _ReClickFunction):
-                  IsButtonOnly(_IsButtonOnly),
-                  bmp(_bmp),
-                  PreHideFunction(_PreHideFunction),
-                  PreShowFunction(_PreShowFunction),
-                  PostShowFunction(_PostShowFunction),
-                  ReClickFunction(_ReClickFunction)
-    {
-      _tcscpy(Caption, _Caption);
-      butSize.left = 0;
-      butSize.top = 0;
-      butSize.right = 0;
-      butSize.bottom = 0;
-    };
-  };
 
 public:
 /** adds a tab to the TabBar
@@ -245,4 +188,60 @@ protected:
   virtual bool on_mouse_move(int x, int y, unsigned keys);
   void drag_end();
 };
+
+/**
+ * OneTabButton class holds display and callbacks data for a single tab
+ */
+class OneTabButton {
+public:
+  TCHAR Caption[MAX_PATH];
+  bool IsButtonOnly;
+  const Bitmap *bmp;
+  PixelRect butSize;
+
+  /**
+ * Called before the tab is hidden.
+ * @returns  True if ok and tab may change.  False if click should be ignored
+ */
+  TabBarControl::PreHideNotifyCallback_t PreHideFunction;
+
+  /**
+   * Called immediately after tab is clicked, before it is displayed.
+   * @returns  True if ok and tab may change.  False if click should be ignored
+   */
+  TabBarControl::PreShowNotifyCallback_t PreShowFunction;
+
+  /**
+   * Called immediately after tab is made active and shown
+   */
+  TabBarControl::PostShowNotifyCallback_t PostShowFunction;
+
+  /**
+   * Called if tab is clicked while it is the currently displayed tab
+   */
+  TabBarControl::ReClickNotifyCallback_t ReClickFunction;
+
+public:
+  OneTabButton(const TCHAR* _Caption,
+               bool _IsButtonOnly,
+               const Bitmap *_bmp,
+               TabBarControl::PreHideNotifyCallback_t _PreHideFunction,
+               TabBarControl::PreShowNotifyCallback_t _PreShowFunction,
+               TabBarControl::PostShowNotifyCallback_t _PostShowFunction,
+               TabBarControl::ReClickNotifyCallback_t _ReClickFunction):
+                 IsButtonOnly(_IsButtonOnly),
+                 bmp(_bmp),
+                 PreHideFunction(_PreHideFunction),
+                 PreShowFunction(_PreShowFunction),
+                 PostShowFunction(_PostShowFunction),
+                 ReClickFunction(_ReClickFunction)
+  {
+    _tcscpy(Caption, _Caption);
+    butSize.left = 0;
+    butSize.top = 0;
+    butSize.right = 0;
+    butSize.bottom = 0;
+  };
+};
+
 #endif
