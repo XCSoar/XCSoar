@@ -156,7 +156,7 @@ protected:
  * TabDisplay uses a pointer to TabBarControl
  * to show/hide the appropriate pages in the Container Class
  */
-class TabDisplay: PaintWindow
+class TabDisplay: public PaintWindow
 {
 protected:
   TabBarControl& theTabBar;
