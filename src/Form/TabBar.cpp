@@ -241,14 +241,14 @@ const PixelRect
   PixelRect rc;
 
   if (Layout::landscape ^ flipOrientation) {
-    const unsigned but_width =
+    const unsigned but_height =
        (theTabDisplay->GetTabHeight() - finalmargin) / buttons.size() - margin;
 
     rc.left = 0;
     rc.right = theTabDisplay->GetTabWidth() - TabLineHeight;
 
-    rc.top = finalmargin + (margin + but_width) * i;
-    rc.bottom = rc.top + but_width;
+    rc.top = finalmargin + (margin + but_height) * i;
+    rc.bottom = rc.top + but_height;
 
   } else {
     const unsigned portraitRows = (buttons.size() > 4) ? 2 : 1;
