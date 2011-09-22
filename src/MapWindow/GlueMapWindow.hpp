@@ -117,6 +117,8 @@ class GlueMapWindow : public MapWindow {
 
   ThermalBandRenderer thermal_band_renderer;
 
+  timer_t map_item_timer;
+
 public:
   GlueMapWindow(const Look &look);
 
@@ -189,6 +191,7 @@ protected:
   virtual bool on_cancel_mode();
   virtual void on_paint(Canvas &canvas);
   virtual void on_paint_buffer(Canvas& canvas);
+  bool on_timer(timer_t id);
 
 private:
   void DrawMapScale(Canvas &canvas, const PixelRect &rc,

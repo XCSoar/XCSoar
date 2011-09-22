@@ -58,6 +58,11 @@ GlueMapWindow::on_setfocus()
 bool
 GlueMapWindow::on_mouse_double(int x, int y)
 {
+  if (map_item_timer) {
+    kill_timer(map_item_timer);
+    map_item_timer = NULL;
+  }
+
   mouse_down_clock.update();
 
   if (IsPanning())
@@ -102,6 +107,11 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
 bool
 GlueMapWindow::on_mouse_down(int x, int y)
 {
+  if (map_item_timer) {
+    kill_timer(map_item_timer);
+    map_item_timer = NULL;
+  }
+
   // Ignore single click event if double click detected
   if (ignore_single_click || drag_mode != DRAG_NONE)
     return true;
@@ -208,9 +218,10 @@ GlueMapWindow::on_mouse_up(int x, int y)
     break;
   }
 
-  if (!dragOverMinDist &&
-      ShowMapItems(drag_start_geopoint))
+  if (!dragOverMinDist) {
+    map_item_timer = set_timer(1002, 200);
     return true;
+  }
 
   return false;
 }
@@ -218,6 +229,11 @@ GlueMapWindow::on_mouse_up(int x, int y)
 bool
 GlueMapWindow::on_mouse_wheel(int x, int y, int delta)
 {
+  if (map_item_timer) {
+    kill_timer(map_item_timer);
+    map_item_timer = NULL;
+  }
+
   if (drag_mode != DRAG_NONE)
     return true;
 
@@ -240,6 +256,11 @@ GlueMapWindow::on_mouse_gesture(const TCHAR* gesture)
 bool
 GlueMapWindow::on_key_down(unsigned key_code)
 {
+  if (map_item_timer) {
+    kill_timer(map_item_timer);
+    map_item_timer = NULL;
+  }
+
   if (is_altair() && key_code == 0xF5) {
     XCSoarInterface::SignalShutdown(false);
     return true;
@@ -289,6 +310,18 @@ GlueMapWindow::on_paint_buffer(Canvas &canvas)
   MapWindow::on_paint_buffer(canvas);
 
   DrawMapScale(canvas, get_client_rect(), render_projection);
+}
+
+bool
+GlueMapWindow::on_timer(timer_t id)
+{
+  if (id != map_item_timer)
+    return false;
+
+  kill_timer(map_item_timer);
+  map_item_timer = NULL;
+  ShowMapItems(drag_start_geopoint);
+  return true;
 }
 
 void
