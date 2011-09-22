@@ -1,5 +1,97 @@
 \chapter{Installation}\label{cha:installation}
 
+\section{Compatibility}
+
+\subsection{Devices for running XCSoar}
+
+XCSoar runs on the following platforms:
+
+\begin{itemize}
+\item mobile phones and tablets with Android 1.6 or newer \\
+  Example: Dell Streak, Samsung Galaxy S II, HTC Desire HD,
+  Motorola Xoom
+\item PDAs with Pocket PC 2000, 2002, 2003 \\
+  Example: iPaq 3800, iPaq 3900
+\item PDAs with Windows Mobile \\
+  Example: iPaq hx4700, Dell Axim x51v
+\item PNAs with Windows CE 3.0 or newer \\
+  Example: HP314, Mio400
+\item Triadis Altair
+\item LX MiniMap
+\item Windows 2000 or newer
+\item Linux
+\end{itemize}
+
+\subsection{Sensors, Loggers, Varios}
+
+XCSoar is compatible with any GPS emitting NMEA data.  Most modern
+Android devices have a built-in GPS, but sometimes it is favorable to
+connect to an external device:
+
+\begin{itemize}
+\item an airspeed indicator allows quick and exact wind estimates
+\item a vario improves the thermal assistant
+\item a task can be declared to an IGC logger, and after landing, the
+  flight log can be downloaded
+\item some varios allow synchronising the MacCready setting with
+  XCSoar
+\end{itemize}
+
+\begin{figure}
+\begin{tabular}{l|cccc}
+
+Product & Airspeed & Vario & Declaration & Download \\
+
+\hline
+
+Borgelt B50 & $\surd$ \\
+
+CAI 302 & $\surd$ & $\surd$ & $\surd$ & $\surd$ \\
+
+CAI GPS Nav \\
+
+Condor & $\surd$ \\
+
+Digifly Leonardo & $\surd$ & $\surd$ \\
+
+EW Logger &&& $\surd$ \\
+
+EW microRecorder &&& $\surd$ \\
+
+Flymaster F1 && $\surd$ \\
+
+Flytec 5030 & $\surd$ & $\surd$ \\
+
+ILEC SN10 & & $\surd$ \\
+
+IMI ERIXX &&& $\surd$ & $\surd$ \\
+
+LX20, Colibri &&& $\surd$ & $\surd$ \\
+
+LX 5000, 7000 & $\surd$ & $\surd$ & $\surd$ \\
+
+PosiGraph &&& $\surd$ \\
+
+Triadis Altair &&& $\surd$ \\
+
+Triadis Vega & $\surd$ & $\surd$ \\
+
+Volkslogger &&& $\surd$ \\
+
+Westerboer VW1150 & $\surd$ & $\surd$ \\
+
+Zander / SDI & $\surd$ & $\surd$ \\
+
+\end{tabular}
+\caption{Supported external devices and some of their features}
+\end{figure}
+
+While most Windows CE based devices have a serial port, such legacy
+hardware is not present in modern Android devices.  Those can either
+use Bluetooth or the Android IOIO board.  To use Bluetooth, you need
+to connect the external device to a Bluetooth-to-Serial adapter, such
+as the K6-Bt or the Glidertools VFBT-1.
+
 \section{Downloading XCSoar}
 The software is available as a free download from the XCSoar website
 ~\xcsoarwebsite. Follow the links to the download section.
