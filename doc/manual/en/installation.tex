@@ -103,20 +103,71 @@ use Bluetooth or the Android IOIO board.  To use Bluetooth, you need
 to connect the external device to a Bluetooth-to-Serial adapter, such
 as the K6-Bt or the Glidertools VFBT-1.
 
-\section{Downloading XCSoar}
-The software is available as a free download from the XCSoar website
-~\xcsoarwebsite. Follow the links to the download section.
 
-\subsection*{Pocket PC versions}
-Download the relevant package for your Pocket PC operating system
-version and save it to disk:
+\section{Software installation}
+
+The software is available as a free download from the XCSoar website
+~\xcsoarwebsite.  This section describes which file should be
+downloaded, and how to install it.
+
+\subsection*{On Android}
+
+Obtain XCSoar from Google's Android market, or install the \verb|apk|
+file manually.  Copy the data files on the SD card in the directory
+\verb|XCSoarData|.
+
+\subsection*{On a PDA (Windows Mobile, PocketPC)}
+
+Choose one of the targets:
+
 \begin{description}
-\item[Pocket PC 2000] For Pocket PC 2002 and older
-\item[Windows Mobile 2003] For Windows Mobile 2003 (or Pocket PC 2003)
-\item[Windows Mobile 5] For Windows Mobile 5 and 6
+\item[\texttt{PPC2000}] Pocket PC 2000/2002, Windows CE 3.0
+\item[\texttt{PPC2003}] Pocket PC 2003, Windows CE 4.0
+\item[\texttt{WM5}] Windows Mobile 5 or newer
+\item[\texttt{WM5X}] Windows Mobile 5 or newer with XScale CPU or
+  better (e.g. hx4700)
 \end{description}
 
-\subsection*{Data files location}
+Download the program file \verb|XCSoar.exe| to a SD card.  You can
+launch it with the File Explorer.
+
+Another method to install XCSoar on a PDA is the CAB file.  Download
+it to the SD card.  Use the File Explorer to install it.  After the
+installation, the XCSoar `FLY' and `SIM' launcher icons will be
+visible on the Today screen.
+
+\begin{center}
+\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/XCS_Today.png}
+\end{center}
+
+\subsection*{On a PNA (Windows CE)}
+
+Download the program file \verb|XCSoar.exe| (target ``WM5'') to a SD
+card.  You can launch it with the File Explorer.
+
+\subsection*{On a Windows PC}
+
+Download the program file \verb|XCSoar.exe| (target ``PC'') to your
+hard disk.
+
+\subsection*{On Unix/Linux}
+
+The file downloaded is \verb|xcsoar_XXX.deb|, where \verb|XXX| includes
+the version number and platform, e.g. \verb|xcsoar_6.0.4_i386.deb|.
+The is a Debian package and can be installed using 
+\begin{center}
+\verb|sudo dpkg -i xcsoar_XXX.deb|.
+\end{center}
+Use \verb|dpkg-query -L xcsoar| to see where the executable and 
+other files are installed,
+Additional data files must be placed in the directory
+\verb|~/.xcsoar/XCSoarData/|.
+If \verb|~/.xcsoar| does not exist, it will be created the first time
+that \verb|xcsoar| is run.
+
+
+\section{Data files}
+
 To be able to use XCSoar's advanced features, additional data files, such as
 terrain, topography, special use airspace, waypoints etc.\ are needed. The files
 that can be used with XCSoar are described in Chapter~\ref{cha:data-files}.
@@ -165,60 +216,6 @@ created/modified while XCSoar is running, such as task files
 (\texttt{*.tsk}) and flight logs.
 
 
-
-
-\section{Installation}
-
-\subsection*{Installation of Pocket PC version from a Pocket PC CAB file}
-
-You can download the CAB file appropriate for your organiser and
-install it onto a nonvolatile storage card like a Compact Flash or
-Secure Digital card. Place it in your organiser. Use the File Manager
-on your organiser to find the CAB and click on it to execute
-it. Follow the on-screen instructions, the CAB file will be deleted
-after installation.
-
-Alternatively you can download the CAB file from Sourceforge through
-your Internet Explorer on your organiser and install it that way.
-
-After the installation, the XCSoar `FLY' and `SIM' launcher icons will
-be visible on the Today screen.
-
-\begin{center}
-\includegraphics[angle=0,width=0.6\linewidth,keepaspectratio='true']{figures/XCS_Today.png}
-\end{center}
-
-\tip It is generally a good idea to keep the CAB file on the storage card
-so that if the organiser's power fails and the memory is lost, XCSoar
-can be reinstalled.
-
-\subsection*{Installation of PC version}
-
-Download the program file \verb|XCSoar.exe| to your hard disk.
-
-\subsection*{Installation on Unix/Linux}
-
-The file downloaded is \verb|xcsoar_XXX.deb|, where \verb|XXX| includes
-the version number and platform, e.g. \verb|xcsoar_6.0.4_i386.deb|.
-The is a Debian package and can be installed using 
-\begin{center}
-\verb|sudo dpkg -i xcsoar_XXX.deb|.
-\end{center}
-Use \verb|dpkg-query -L xcsoar| to see where the executable and 
-other files are installed,
-Additional data files must be placed in the directory
-\verb|~/.xcsoar/XCSoarData/|.
-If \verb|~/.xcsoar| does not exist, it will be created the first time
-that \verb|xcsoar| is run.
-
-
-\subsection*{Installation on Android}
-
-Obtain XCSoar from Google's Android market, or install the \verb|apk|
-file manually.  Copy the data files on the SD card in the directory
-\verb|XCSoarData|.
-
-
 \section{Running XCSoar}
 %\subsection*{Fly and simulator modes}
 
@@ -229,15 +226,6 @@ Two modes are available inside the XCSoar application:
 \item[SIM] This starts XCSoar in simulator mode, no serial communications
   are attempted.
 \end{description}
-
-\subsection*{XCSoar Pocket PC version}
-The program can be run in either of two modes by pressing the `FLY' or
-`SIM' launcher on the Today screen. If the application is started directly from
-the explorer a dialog is asking you which mode you want to start.
-
-\tip It is recommended that on Pocket PC devices, no other programs
- are running while XCSoar is used in flights.  This gives the best
- possible performance and responsiveness of the program.
 
 \subsection*{Altair version}
 XCSoar starts up automatically when Altair is powered on.
