@@ -181,14 +181,8 @@ so that XCSoar knows where to look for data files:
 \texttt{XCSoarData} must be located in your personal folder (``\texttt{My
 Documents}'')
 \item[Windows Mobile PDA/PNA]
-\begin{itemize}
-\item If you start XCSoar from a SD card, it is always in the root of
-  that SD card (e.g. ``\texttt{SD Card/XCSoarData}'')
-\item If \texttt{XCSoarData} already exists on any SD card inserted
-  at XCSoar start\-up, this one is used.
-\item If none of the above applies, then it is in your personal folder
-  (``\texttt{My Documents/}'')
-\end{itemize}
+\texttt{XCSoarData} is on the SD card.  If there is no SD card, then
+XCSoar looks for it in \texttt{My Documents}.
 \item[Unix/Linux]
 The directory is called \verb|.xcsoar| in the user's home directory.
 \item[Android Devices]
@@ -197,9 +191,6 @@ The directory is called \verb|.xcsoar| in the user's home directory.
 If XCSoarData exists on an USB drive, that one is used, otherwise the
 internal storage is used.
 \end{description}
-
-For embedded devices it is recommended to create \texttt{XCSoarData} on a SD
-card, because you can easily update the data files using your PC.
 
 
 XCSoar will generate a number of additional files at run time.  These
