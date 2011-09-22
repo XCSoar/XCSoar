@@ -166,3 +166,25 @@ and then selecting the page `System'.
 
 All dynamic values (e.g.\ battery voltage, number of satellites in
 view) are updated continuously.
+
+
+\section{Managing external devices}
+
+The device management dialog can be accessed from the configuration
+menu (third page).  It shows a list of configured external devices,
+and it lists what information they provide.
+
+The button ``Reconnect'' attempts to reconnect to the selected
+device.  XCSoar reconnects to a failed device periodically, but
+sometimes, it might be desirable to trigger that manually.
+
+The button ``Flight download'' is only available with supported IGC
+loggers (see \label{sec:supported-varios} for a list).  Upon clicking,
+XCSoar retrieves a list of flights, and asks you to select one.  The
+IGC file will be downloaded to the ``\texttt{logs}'' directory inside
+\texttt{XCSoarData}.
+
+The button ``Manage'' is enabled when a Vega or a CAI 302 is
+connected.  It provides access to special features of these devices,
+such as clearing the CAI 302 flight memory, which is needed sometimes
+to work around a Cambridge firmware bug.
