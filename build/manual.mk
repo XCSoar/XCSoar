@@ -46,8 +46,10 @@ manual: \
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+ifeq ($(DEBUG),n)
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $(<F)
+endif
 	$(TEX_RUN) $(<F)
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-developer-manual.tex $(TEX_INCLUDES_EN) \
@@ -58,8 +60,10 @@ $(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf: $(DOC)/manual/en/XCSoar-develo
 
 $(MANUAL_OUTPUT_DIR)/XCSoar-Handbuch.pdf: $(DOC)/manual/de/XCSoar-Handbuch.tex $(DOC)/manual/de/Blitzeinstieg.tex $(TEX_INCLUDES_DE) \
 	$(FIGURES_DE) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
+ifeq ($(DEBUG),n)
 	# run TeX twice to make sure that all references are resolved
 	$(TEX_RUN) $(<F)
+endif
 	$(TEX_RUN) $(<F)
 
 $(SVG_ICONS): $(GENERATED_DIR)/icons/%.pdf: $(topdir)/Data/icons/%.svg | $(GENERATED_DIR)/icons/dirstamp
