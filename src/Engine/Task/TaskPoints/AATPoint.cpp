@@ -45,9 +45,6 @@ AATPoint::UpdateSampleNear(const AircraftState& state,
 {
   bool retval = OrderedTaskPoint::UpdateSampleNear(state, task_events,
                                                    projection);
-  if (retval)
-    update_deadzone(projection);
-
   retval |= check_target(state, false);
 
   return retval;
@@ -240,51 +237,4 @@ void
 AATPoint::Reset()
 {
   IntermediateTaskPoint::Reset();
-  m_deadzone.clear();
-}
-
-void
-AATPoint::update_deadzone(const TaskProjection &projection)
-{
-  // deadzone must be updated
-
-  assert(get_next());
-  assert(get_previous());
-  
-  // the deadzone is the convex hull formed from the sampled points
-  // with the inclusion of all points on the boundary closer than
-  // the max double distance to the sample polygon
-  
-  m_deadzone = SearchPointVector(GetSamplePoints().begin(),
-                                 GetSamplePoints().end());
-
-  // do nothing if no samples (could happen if not achieved properly)
-  if (m_deadzone.empty())
-    return;
-
-  // previous and next targets
-  const SearchPoint pnext(get_next()->GetLocationRemaining(),
-                          projection);
-  const SearchPoint pprevious(get_previous()->GetLocationRemaining(),
-                              projection);
-
-  // find max distance
-  unsigned dmax = 0;
-  for (SearchPointVector::const_iterator it = GetSamplePoints().begin();
-       it != GetSamplePoints().end(); ++it) {
-    unsigned dd = pnext.flat_distance(*it) + pprevious.flat_distance(*it);
-    dmax = std::max(dd, dmax);
-  }
-
-  // now add boundary points closer than dmax
-  const SearchPointVector& boundary = GetBoundaryPoints();
-  for (SearchPointVector::const_iterator it = boundary.begin();
-       it != boundary.end(); ++it) {
-    unsigned dd = pnext.flat_distance(*it) + pprevious.flat_distance(*it);
-    if (dd < dmax)
-      m_deadzone.push_back(*it);
-  }
-
-  // convert to convex polygon
-  m_deadzone.PruneInterior();
 }

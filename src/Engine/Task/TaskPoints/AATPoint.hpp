@@ -44,7 +44,6 @@ class AATPoint: public IntermediateTaskPoint
   GeoPoint m_target_save;
   /**< Whether target can float */
   bool m_target_locked;
-  SearchPointVector m_deadzone;
 
 public:
   /**
@@ -77,17 +76,6 @@ public:
    * @return Location
    */
   const GeoPoint& GetLocationRemaining() const;
-
-  /**
-   * Retrieve polygon of "scoring deadzone", the area in which
-   * flight inside this area results in no additional scoring points.
-   *
-   * @return Vector of deadzone points representing a closed polygon
-   */
-  gcc_pure
-  const SearchPointVector& get_deadzone() const {
-    return m_deadzone;
-  }
   
   /**
    * Update sample if nearby
@@ -268,11 +256,5 @@ private:
    * @return True if same WP, type and OZ
    */
   bool equals(const OrderedTaskPoint* other) const;
-
-  /**
-   * Calculates the deadzone. Complexity is O(n+m) where n is number of
-   * points in the boundary polygon, m is number of points in sample polygon
-   */
-  void update_deadzone(const TaskProjection &projection);
 };
 #endif

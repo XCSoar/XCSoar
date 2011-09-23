@@ -112,10 +112,6 @@ protected:
     return index == active_index;
   }
 
-  bool DoDrawDeadzone(const TaskPoint &tp) const {
-    return PointCurrent() || PointPast();
-  }
-
   bool DoDrawBearing(const TaskPoint &tp) const {
     return draw_bearing && PointCurrent();
   }
@@ -131,15 +127,6 @@ protected:
   virtual void DrawTarget(const TaskPoint &tp);
   void DrawTaskLine(const GeoPoint &start, const GeoPoint &end);
   void DrawIsoline(const AATPoint &tp);
-  /**
-   * Clear the part of the OZ background (shaded area) over which
-   * the aircraft has flown.
-   * The samples polygon is a convex hull, flying inside the polygon
-   * cannot possibly result in greater scored distance.
-   *
-   * @param tp
-   */
-  void DrawDeadzone(const AATPoint &tp);
   void DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp);
   void DrawOZForeground(const OrderedTaskPoint &tp);
 };
