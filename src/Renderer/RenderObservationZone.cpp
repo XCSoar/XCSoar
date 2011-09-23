@@ -43,14 +43,10 @@ RenderObservationZone::RenderObservationZone(
 {
 }
 
-bool 
+void
 RenderObservationZone::draw_style(Canvas &canvas, Layer layer, int offset) const
 {
   if (layer == LAYER_SHADE) {
-    if (offset < 0)
-      /* past task point */
-      return false;
-
     Color color = airspace_look.colors[settings.colours[AATASK]];
 #ifdef ENABLE_OPENGL
     glEnable(GL_BLEND);
@@ -70,7 +66,7 @@ RenderObservationZone::draw_style(Canvas &canvas, Layer layer, int offset) const
 
     canvas.null_pen();
     
-    return true;
+    return;
   }
 
   canvas.hollow_brush();
@@ -82,8 +78,6 @@ RenderObservationZone::draw_style(Canvas &canvas, Layer layer, int offset) const
     canvas.select(task_look.oz_current_pen);
   else
     canvas.select(task_look.oz_active_pen);
-
-  return true;
 }
 
 void
@@ -103,8 +97,10 @@ RenderObservationZone::Draw(Canvas &canvas, Layer layer,
                             const Projection &projection,
                             const ObservationZonePoint &_oz, int offset)
 {
-  if (!draw_style(canvas, layer, offset))
+  if (layer == LAYER_SHADE && offset < 0)
     return;
+
+  draw_style(canvas, layer, offset);
 
   switch (_oz.shape) {
   case ObservationZonePoint::LINE:
