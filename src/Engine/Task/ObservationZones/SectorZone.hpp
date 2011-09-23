@@ -33,6 +33,15 @@ class SectorZone:
   public CylinderZone 
 {
 protected:
+  /** Location of far end point of start radial */
+  GeoPoint SectorStart;
+  /** Location of far end point of end radial */
+  GeoPoint SectorEnd;
+
+  Angle StartRadial;
+  Angle EndRadial;
+
+protected:
   SectorZone(enum shape _shape, const GeoPoint &loc,
              const fixed _radius = fixed(10000.0),
              const Angle _startRadial = Angle::zero(),
@@ -181,14 +190,6 @@ protected:
    * @return True if that is within the start/end radials
    */
   virtual bool angleInSector(const Angle that) const;
-
-  /** Location of far end point of start radial */
-  GeoPoint SectorStart;
-  /** Location of far end point of end radial */
-  GeoPoint SectorEnd;
-
-  Angle StartRadial;
-  Angle EndRadial;
 };
 
 #endif
