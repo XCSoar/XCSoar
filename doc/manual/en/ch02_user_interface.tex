@@ -101,7 +101,7 @@ The escape key on PC, or the PWR/ESC button on Altair, can
 also be used to close the current menu.
 
 Menu buttons appear greyed out if the corresponding function is not available. 
-For example, the ``Waypoint lookup'' function will appear grey if there are no waypoints loaded.
+For example, the ``Waypoint list'' function will appear grey if there are no waypoints loaded.
 
 Several menu button labels have dynamic text based on context, in
 order to make it clearer as to what happens when the button is
@@ -121,9 +121,9 @@ on Altair, from top to bottom:
 \begin{jspecs}
 \item[\bmenu{Nav}] Actions for navigation control, primarily cross-country
 gliding tasks.
-\item[\bmenu{Display}] Actions to control the display
+\item[\bmenu{Display}] Actions to control the display.
 \item[\bmenu{Config}] Configuration of XCSoar, connected devices, and in-flight
-settings
+settings.
 \item[\bmenu{Info}] Activates various informational dialog windows.
 \end{jspecs}
 
@@ -151,15 +151,16 @@ important for modifying AAT tasks. }
 \subsection*{Display menu}
 \jindent{\bmenut{Zoom}{In}}{ Zooms in the map display. }
 \jindent{\bmenut{Zoom}{Out}}{ Zooms out the map display. }
-\jindent{\bmenut{Mark}{Drop}}{ Drops a marker at the current glider location. }
-\jindent{\bmenut{Full Scrn}{On}}{ Toggles the full screen map display. }
-\jindent{\bmenut{Pan}{On}}{ Activates pan map mode. }
 \jindent{\bmenut{Zoom}{Auto}}{ Toggles automatic/manual zooming. }
+\jindent{\bmenut{Mark}{Drop}}{ Drops a marker at the current glider location. }
+\jindent{\bmenut{Pan}{On}}{ Activates pan map mode. }
+\jindent{\bmenut{Labels}{On}}{ Displays map labels, MID labels, or none. }
 \jindent{\bmenut{Trail}{Full}}{ Selects a display option out of Full,
 Long, Short, Off. }
 \jindent{\bmenut{Terrain}{On}}{ Toggles display of terrain. }
 \jindent{\bmenut{Topology}{On}}{ Toggles display of topology. }
-\jindent{\bmenut{Labels}{On}}{ Displays map labels, MID labels, or none. }
+\jindent{\bmenut{Info}{Auto}}{  Steps through InfoBox grids.  }
+
 
 \subsection*{Configuration menu (Config)}
 \jindent{\bmenut{MC}{$+$}}{ Increases MacCready value. }
@@ -177,25 +178,29 @@ recorder. }
 \jindent{\bmenus{Replay}}{ Displays the IGC/NMEA logger replay dialog. }
 \jindent{\bmenut{Raw}{Logger}}{ Activates the raw NMEA logger (usually only used
 for debugging). }
+\jindent{\bmenus{Devices}}{  Displays the Device connection dialog.  }
+\jindent{\bmenus{Setup Plane}}{  Displays the selection dialog for plane profiles.  }
 
 \subsection*{Information menu (Info)}
-\jindent{\bmenut{Waypoint}{Details}}{ Displays the waypoint details dialog of
-the active task waypoint. }
-\jindent{\bmenut{Nearest}{Waypoint}}{ Displays the waypoint details dialog of
-the waypoint nearest to the aircraft. }
+\jindent{\bmenut{FLARM}{Radar}}{ Opens the full screen FLARM radar dialog. }
+\jindent{\bmenut{METAR}{TAF}}{  Displays the METAR/TAF dialog.  }
 \jindent{\bmenut{Nearest}{Airspace}}{ Displays details of the airspace nearest
 to the aircraft. }
+\jindent{\bmenut{Waypoint}{Details}}{ Displays the waypoint details dialog of
+the active task waypoint. }
 \jindent{\bmenut{Check}{List}}{ Displays the check list dialog. }
 \jindent{\bmenus{Analysis}}{ Displays the analysis/statistics dialog. }
 \jindent{\bmenus{Status}}{ Displays the status dialog. }
 \jindent{\bmenus{Weather}}{ Displays the weather forecast dialog. }
 \jindent{\bmenut{Team}{Code}}{ Opens the team code dialog. }
-\jindent{\bmenut{Aux Info}{On}}{ Toggles the infobox display between normal
-(flight-mode specific) or auxiliary infobox display. }
-\jindent{\bmenut{Message}{Repeat}}{ Repeats the last status message. }
-\jindent{\bmenut{FLARM}{Radar}}{ Opens the full screen FLARM radar dialog. }
+\jindent{\bmenut{FLARM}{Details}}{Opens the FLARM details dialog.  }
 \jindent{\bmenut{Thermal}{Assistant}}{ Opens the full screen thermal assistant
 dialog. }
+\jindent{\bmenus{Credits}}{  Displays version information and developer team details.  }
+\jindent{\bmenut{Nearest}{Waypoint}}{ Displays details of the waypoint nearest
+to the aircraft. }
+\jindent{\bmenut{Message}{Repeat}}{ Repeats the last status message. }
+
 
 \subsection*{Variometer sub-menu (Vario) of the Configuration menu}
  The functions in this sub-menu require the Vega intelligent
@@ -221,7 +226,6 @@ well as certain speech announcements by the Vega intelligent variometer. }
 \jindent{\bmenut{Nearest}{Waypoint}}{ Displays the waypoint details dialog of 
 the waypoint nearest to the aircraft, or if in pan mode, nearest to the  
 cross-hairs at the center of the screen. }
-\jindent{\bmenut{Marks}{clear}}{ Clear all previously propped marks. }
 
 \subsection*{Default buttons}
 
@@ -292,15 +296,13 @@ A selection of key dynamic menu items is presented below:
 \begin{description}
 \item[\bmenu{Next turnpoint}]  
   Greyed out if the task is cleared, or if the active turnpoint is the
-  finish. If on the turnpoint prior to the finish, this displays
-  ``Waypoint finish''.
+  finish. If the currently active turnpoint is the turnpoint prior to the finish, this displays  ``Waypoint finish''.
 \item[\bmenu{Previous turnpoint}]  
   Greyed out if the task is cleared, or if the active turnpoint is the
   start and there are no multiple start points.  If there are multiple
   start points and the active turnpoint is the start, then this
   displays ``Cycle start'' to allow selection between the various
-  start points.  If on the first turnpoint after the start, this
-  displays ``Waypoint Start''.
+  start points.  If the active turnpoint is the first turnpoint after the start, this displays ``Waypoint Start''.
 \item[\bmenu{Labels}]  
   This now displays ``Labels On'', ``Labels MID'' or ``Labels Off''.
 \item[\bmenu{Task calculator}]  
@@ -311,7 +313,7 @@ A selection of key dynamic menu items is presented below:
   not armed.  Displays ``Arm Cancel'' if the trigger is armed.
   Displays ``Arm turn'' if the active turnpoint is past the start.
 \item[\bmenu{Task Edit}]
-  Greyed out if in task abort or no waypoint database.
+  Greyed out if there is no waypoint database.
 \end{description}
 
 \section{{\InfoBox}es}
@@ -333,50 +335,36 @@ InfoBoxes to the right of the map display.
 
 \subsection*{Screen display modes}
 
-The main display can be presented with the map area and InfoBoxes, or
-a full-screen map.  The screen mode can be toggled between the following:
-\begin{itemize}
-\item Small map area, with flight-mode specific {\InfoBox}es
-\item Small map area, showing auxiliary {\InfoBox}es.
-\item Full-screen map area, with {\InfoBox}es hidden.
-\end{itemize}
+XC Soar allows the pilot to define various sets of InfoBoxes that are appropriate to various stages of flight (e.g. when circling in a thermal, flying between thermals, on final glide, etc.). XC Soar can be configured to automatically switch from one InfoBox display to another based on the mode of flight, or you can manually scroll through the various InfoBox displays, including a display with a full-screen map and no InfoBoxes at all.
 
-This is performed by selecting the menu:
-\begin{quote}
-\bmenu{Display}\blink\bmenu{Full Scrn On}
-\end{quote}
-At any time the InfoBoxes may be toggled between auxiliary and normal from
-the menu:
-\begin{quote}
-\bmenu{Info}\blink\bmenu{Info}\blink\bmenu{Aux Info On}
-\end{quote}
+To toggle through the various InfoBox displays, using a touchscreen:
 \gesture{Right} 
-If a touchscreen is available, you also can switch through the three display
-modes by gesture R.
-When auxiliary {\InfoBox}es are displayed, the word `AUX' appears at the
-lower left corner of the map area.
+or
+\gesture{Left}
+
 
 \subsection*{Modifying {\InfoBox} values}
 (This section applies only when a touchscreen or mouse is present.)
 
-Some {\InfoBox} values can be changed by the user by selecting the
-{\InfoBox} with the touchscreen or mouse.  Examples of InfoBoxes that can
+Some {\InfoBox} values can be changed by the user by selecting (i.e. long-pressing) the
+{\InfoBox} with the touchscreen or mouse.  This brings up a set of {\InfoBox}es:
+
+\begin{description}
+\item[\bmenu{Edit}]  
+  Allows the pilot to adjust the {\InfoBox} setting (e.g. raise or lower the McCready setting)
+
+\item[\bmenu{Setup}]
+	Allows you to change the behavior of the setting related to the {\InfoBox} (for example, changing from Auto to Manual McCready setting mode) or choose to setup of the {\InfoBox} itself (that is, choosing \bmenu{Setup InfoBox} will display a list dialog of all available {\InfoBox}es from which to choose.
+
+\end{description}
+
+
+Examples of {\InfoBox}es that can
 be adjusted include the MacCready setting, and the wind speed.
-The procedure for adjusting {\InfoBox} values is as follows:
-\begin{enumerate}
-\item Highlight the item you wish to modify, by touching the {\InfoBox}. The box
-title border will change colour indicating it is selected.
-\item Press the up/down/left/right or enter button on the device
-to change the value.  Different {\InfoBox}es allow different buttons to
-be used.
-\item The value is now changed.
-\item After about 10 seconds without further button pressing, the {\InfoBox}
-will be deactivated so there is no risk of accidental adjustment later.
-\end{enumerate}
 
 \subsection*{Changing {\InfoBox}es}
 {\InfoBox}es can either be changed by calling the configuration dialog from the
-menu \bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Setup System} or by
+menu \bmenu{Config}\blink\bmenu{Config}\blink\bmenu{Setup System} Screen 21, "InfoBox Modes" or by
 performing a long press on the {\InfoBox} that should be changed. In the second case a list dialog opens,
 giving you all available {\InfoBox}es to choose from.
 
@@ -466,6 +454,8 @@ airspace used on the map display
 \item[Airspace filter] Controls enabling and disabling the display and warnings
 of each airspace class
 \item[Team code] Allows transfer of coordinates between team mates via a code
+\item[Devices]  Allows setup of various external devices (e.g. glide computers, FLARM, etc.).
+\item[Setup Plane]  Allows easy reconfiguration of the plane-dependant settings (e.g. polar, competition ID, etc.) by choosing from a list of previously-created plane profiles.
 \end{description}
 
 These dialogs are described in later chapters. with the exception of the
@@ -491,7 +481,7 @@ knob on Altair) may be used to scroll through the text. Clicking the
 \subsection*{Status dialog}
 The status dialog is a multipage dialog giving overview information on the 
 aircraft, system, task, rules and times. Pressing the \button{$<$} and
-\button{$>$} buttons select the previous/next page.
+\button{$>$} buttons select the previous/next page.  Note that the values in the Status dialog are static once the particular dialog page is displayed. That is, position, times, etc. do not update while the page is displayed.  To see the updated values, it is necessary to select a different dialog, then return to the previous dialog to see the new values.
 
 This dialog is accessed via the menu under 
 \begin{quote}
@@ -615,10 +605,10 @@ dialog.
 \begin{itemize}
 \item U: Zoom in
 \item D: Zoom out
-\item L: Toggle map mode (Normal, Aux. InfoBoxes, Fullscreen)
-\item R: Drop marker
+\item L: Toggle map mode prograde (Normal, Aux. InfoBoxes, Fullscreen)
+\item R: Toggle map mode retrograde (Fullscreen, InfoBoxes, Aux., Normal)
 \item DU: Show the menu
-\item DR: Show the GoTo dialog
+\item DR: Show the Select Waypoint dialog
 \end{itemize}
 
 
