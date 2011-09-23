@@ -36,17 +36,16 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
 
-RenderObservationZone::RenderObservationZone(const TaskLook &_task_look,
-                                             const AirspaceLook &_airspace_look)
-  :task_look(_task_look), airspace_look(_airspace_look),
+RenderObservationZone::RenderObservationZone(
+    const TaskLook &_task_look, const AirspaceLook &_airspace_look,
+    const AirspaceRendererSettings &_settings)
+  :task_look(_task_look), airspace_look(_airspace_look), settings(_settings),
    layer(LAYER_SHADE)
 {
 }
 
 bool 
-RenderObservationZone::draw_style(Canvas &canvas,
-                                  const AirspaceRendererSettings &settings,
-                                  int offset) const
+RenderObservationZone::draw_style(Canvas &canvas, int offset) const
 {
   if (layer == LAYER_SHADE) {
     if (offset < 0)

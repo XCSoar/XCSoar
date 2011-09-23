@@ -84,7 +84,7 @@ class OZWindow : public PaintWindow {
 
 public:
   OZWindow(const TaskLook &task_look, const AirspaceLook &airspace_look)
-    :roz(task_look, airspace_look), oz(NULL) {
+    :roz(task_look, airspace_look, airspace_renderer_settings), oz(NULL) {
     projection.SetGeoLocation(location);
     set_shape(ObservationZonePoint::LINE);
   }
@@ -172,19 +172,19 @@ OZWindow::on_paint(Canvas &canvas)
   const int offset = 0;
 
   roz.set_layer(RenderObservationZone::LAYER_SHADE);
-  if (roz.draw_style(canvas, airspace_renderer_settings, offset)) {
+  if (roz.draw_style(canvas, offset)) {
     roz.Draw(canvas, projection, *oz);
     roz.un_draw_style(canvas);
   }
 
   roz.set_layer(RenderObservationZone::LAYER_INACTIVE);
-  if (roz.draw_style(canvas, airspace_renderer_settings, offset)) {
+  if (roz.draw_style(canvas, offset)) {
     roz.Draw(canvas, projection, *oz);
     roz.un_draw_style(canvas);
   }
 
   roz.set_layer(RenderObservationZone::LAYER_ACTIVE);
-  if (roz.draw_style(canvas, airspace_renderer_settings, offset)) {
+  if (roz.draw_style(canvas, offset)) {
     roz.Draw(canvas, projection, *oz);
     roz.un_draw_style(canvas);
   }

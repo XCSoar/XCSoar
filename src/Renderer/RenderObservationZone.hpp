@@ -55,12 +55,14 @@ public:
 protected:
   const TaskLook &task_look;
   const AirspaceLook &airspace_look;
+  const AirspaceRendererSettings &settings;
 
   enum layer layer;
 
 public:
   RenderObservationZone(const TaskLook &task_look,
-                        const AirspaceLook &airspace_look);
+                        const AirspaceLook &airspace_look,
+                        const AirspaceRendererSettings &_settings);
 
   void Draw(Canvas &canvas, const Projection &projection,
             const ObservationZonePoint &oz) const;
@@ -77,8 +79,7 @@ public:
    * means it is a "past" task point
    * @return false if nothing is to be drawn in this layer
    */
-  bool draw_style(Canvas &canvas, const AirspaceRendererSettings &settings,
-                  int offset) const;
+  bool draw_style(Canvas &canvas, int offset) const;
 
   /**
    * Cleans up the settings after drawing has been finished.  This
