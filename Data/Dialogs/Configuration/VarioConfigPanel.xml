@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmVarioAppearance">
+
+  <Edit Name="prpAppGaugeVarioSpeedToFly" Caption="Speed arrows" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Whether to show speed command arrows on the vario gauge.  When shown, in cruise mode, arrows point up to command slow down; arrows point down to command speed up.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAppGaugeVarioAvgText" Caption="Show average" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Whether to show the average climb rate.  In cruise mode, this switches to showing the average netto airmass rate.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAppGaugeVarioMc" Caption="Show MacReady" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Whether to show the MacCready setting.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAppGaugeVarioBugs" Caption="Show bugs" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Whether to show the bugs percentage.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAppGaugeVarioBallast" Caption="Show ballast" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Whether to show the ballast percentage.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAppGaugeVarioGross" Caption="Show gross" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Whether to show the gross climb rate.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAppAveNeedle" Caption="Averager needle" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="If true, the vario gauge will display a hollow averager needle.  During cruise, this needle displays the average netto value.  During circling, this needle displays the average gross value.">
+    <DataField DataType="boolean"/>
+  </Edit>
+    
+</Panel>

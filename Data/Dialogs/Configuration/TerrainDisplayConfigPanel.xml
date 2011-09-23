@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmTerrain">
+  <Edit Name="prpEnableTerrain" Caption="Terrain display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw a digital elevation terrain on the map.">
+    <DataField DataType="boolean" OnDataAccess="TerrainDisplayConfigPanel::OnEnableTerrain"/>
+  </Edit>
+
+  <Edit Name="prpEnableTopography" Caption="Topography display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw topographical features (roads, rivers, lakes etc.) on the map.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpTerrainContrast" Caption="Terrain contrast" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Defines the amount of Phong shading in the terrain rendering.  Use large values to emphasise terrain slope, smaller values if flying in steep mountains.">
+    <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5"/>
+  </Edit>
+
+  <Edit Name="prpTerrainBrightness" Caption="Terrain brightness" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Defines the brightness (whiteness) of the terrain rendering.  This controls the average illumination of the terrain.">
+    <DataField DataType="double" DisplayFormat="%.0f" EditFormat="%.0f" Min="0" Max="100" Step="5"/>
+  </Edit>
+
+  <Edit Name="prpTerrainRamp" Caption="Terrain colors" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Defines the color ramp used in terrain rendering.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpSlopeShadingType" Caption="Slope shading" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="The terrain can be shaded among slopes to indicate either wind direction, sun position or a fixed shading from north-east.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+</Panel>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmWaypoints">
+  <Edit Name="prpWaypointLabels" Caption="Label format" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Determines how labels are displayed with each waypoint">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpWaypointArrivalHeightDisplay" Caption="Arrival height" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Determines how arrival height is displayed in waypoint labels">
+    <DataField DataType="enum" />
+  </Edit>
+
+  <Edit Name="prpWaypointLabelStyle" Caption="Label style" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100">
+    <DataField DataType="enum" />
+  </Edit>
+
+  <Edit Name="prpWaypointLabelSelection" Caption="Label visibility" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Determines what waypoint labels are displayed for each waypoint (space permitting)">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpAppIndLandable" Caption="Landable symbols" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Three styles are available: Purple circles (WinPilot style), a high contrast (monochrome) style, or orange. The rendering differs for landable field and airport. All styles mark the waypoints within reach green.">
+    <DataField DataType="enum" />
+  </Edit>
+
+  <Edit Name="prpAppUseSWLandablesRendering" Caption="Detailed landables" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="[Off] Display fixed icons for landables.&#10;[On] Show landables with variable information like runway length and heading.">
+    <DataField DataType="boolean" OnDataAccess="WaypointDisplayConfigPanel::OnRenderingTypeData" />
+  </Edit>
+
+  <Edit Name="prpAppLandableRenderingScale" Caption="Landable size" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="A percentage to select the size landables are displayed on the map.">
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="50" Max="200" Step="10" />
+  </Edit>
+
+  <Edit Name="prpAppScaleRunwayLength" Caption="Scale runway length" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="[Off] Display fixed length for runways.&#10;[On] Scale displayed runway length based on real length">
+    <DataField DataType="boolean" />
+  </Edit>
+</Panel>
+

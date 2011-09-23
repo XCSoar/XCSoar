@@ -1,0 +1,33 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmDisplay">
+  <Edit Name="prpOrientationCruise" Caption="Cruise orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Determines how the screen is rotated with the glider in cruise">
+    <DataField DataType="enum" OnDataAccess="MapDisplayConfigPanel::OnShiftTypeData" />
+  </Edit>
+
+  <Edit Name="prpOrientationCircling" Caption="Circling orientation" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Determines how the screen is rotated with the glider while circling">
+    <DataField DataType="enum" />
+  </Edit>
+
+  <Edit Name="prpCirclingZoom" Caption="Circling zoom" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="If enabled, then the map will zoom in automatically when entering circling mode and zoom out automatically when leaving circling mode.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpMapShiftBias" Caption="Map shift reference" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Determines what is used to shift the glider from the map center">
+    <DataField DataType="enum" OnDataAccess="MapDisplayConfigPanel::OnShiftTypeData" />
+  </Edit>
+
+  <Edit Name="prpGliderScreenPosition" Caption="Glider position offset" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Defines the location of the glider drawn on the screen in percent from the screen edge.">
+    <DataField DataType="double" DisplayFormat="%.0f %%" EditFormat="%.0f" Min="10" Max="50" Step="5"/>
+  </Edit>
+
+  <Edit Name="prpMaxAutoZoomDistance" Caption="Max. auto zoom distance" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="The upper limit for auto zoom distance.">
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="20" Max="250" Step="10" />
+  </Edit>
+</Panel>

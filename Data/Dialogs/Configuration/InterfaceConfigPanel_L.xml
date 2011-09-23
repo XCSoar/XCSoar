@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmInterface">
+  <Edit Name="prpInputFile" Caption="Events" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="The Input Events file defines the menu system and how XCSoar responds to button presses and events from external devices.">
+    <DataField DataType="filereader" />
+  </Edit>
+
+  <Edit Name="prpLanguageFile" Caption="Language" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="The language options selects translations for English texts to other languages. Select English for a native interface or Automatic to localise XCSoar according to the system settings.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpStatusFile" Caption="Status message" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="The status file can be used to define sounds to be played when certain events occur, and how long various status messages will appear on screen.">
+    <DataField DataType="filereader" />
+  </Edit>
+
+  <Edit Name="prpMenuTimeout" Caption="Menu timeout" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This determines how long menus will appear on screen if the user does not make any button presses or interacts with the computer.">
+    <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="60" Step="1" />
+  </Edit>
+
+  <Edit Name="prpDebounceTimeout" Caption="Debounce time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This is the minimum interval between the system recognising key presses. Set this to a low value for a more responsive user interface; if it is too low, then accidental multiple key presses can occur.">
+    <DataField DataType="double" DisplayFormat="%.0f ms" EditFormat="%.0f" Min="0" Max="1000" Step="25" />
+  </Edit>
+
+  <Edit Name="prpTextInput" Caption="Text input style" Expert="1"  X="2"   Width="246" Height="22" CaptionWidth="150"
+    Help="Determines how the user is prompted for text input (filename, teamcode etc.)">
+    <DataField DataType="enum" />
+  </Edit>
+
+  <Edit Name="prpAutoBlank" Caption="Auto. blank" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="This determines whether to blank the display after a long period of inactivity when operating on internal battery power.">
+    <DataField DataType="boolean" />
+  </Edit>
+
+</Panel>

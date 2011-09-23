@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmGlideComputer">
+  <Edit Name="prpAutoWind" Caption="Auto wind" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This allows switching on or off the automatic wind algorithm.  When the algorithm is switched off, the pilot is responsible for setting the wind estimate.&#10;[Circling] Requires only a GPS source.&#10;[ZigZag] Requires an intelligent vario with airspeed output.&#10;[Both] Use ZigZag and circling.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpExternalWind" Caption="External wind" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="If enabled, then the wind vector received from external devices overrides XCSoar's internal wind calculation.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAutoMcMode" Caption="Auto MC mode" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This option defines which auto MacCready algorithm is used.&#10;[Final glide] adjusts MC for fastest arrival.  For OLC sprint tasks, the MacCready is adjusted in order to cover the greatest distance in the remaining time and reach the finish height.&#10;[Trending Average] sets MC to the trending average climb rate based on all climbs.&#10;[Both] Uses trending average during task, then fastest arrival when in final glide mode.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpBlockSTF" Caption="Block speed to fly" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+  Help="If enabled, the command speed in cruise is set to the MacCready speed to fly in no vertical air-mass movement. If disabled, the command speed in cruise is set to the dolphin speed to fly, equivalent to the MacCready speed with vertical air-mass movement.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpEnableNavBaroAltitude" Caption="Nav. by baro altitude" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+  Help="When enabled and if connected to a barometric altimeter, barometric altitude is used for all navigation functions. Otherwise GPS altitude is used.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpEnableExternalTriggerCruise" Caption="Flap forces cruise" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="When Vega variometer is connected and this option is true, the positive flap setting switches the flight mode between circling and cruise.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAverEffTime" Caption="L/D average period" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Here you can decide on how many seconds of flight this calculation must be done. Normally for gliders a good value is 90-120 seconds, and for paragliders 15 seconds.">
+    <DataField DataType="enum"/>
+  </Edit>      
+</Panel>

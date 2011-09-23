@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<Panel Name="Symbols">
+  <Edit Name="prpDisplayTrackBearing" Caption="Track bearing" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Display the track bearing (ground track projection) on the map.&#10;[Off] Disable display of track bearing.&#10;[On] Always display track bearing.&#10;[Auto] Display track bearing if there is a significant difference to plane heading.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpEnableFLARMMap" Caption="FLARM traffic" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This enables the display of FLARM traffic on the map window.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpTrail" Caption="Trail length" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Determines whether and how long a snail trail is drawn behind the glider">
+    <DataField DataType="enum" OnDataAccess="SymbolsConfigPanel::OnTrailLength"/>
+  </Edit>
+
+  <Edit Name="prpTrailDrift" Caption="Trail drift" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Determines whether the snail trail is drifted with the wind when displayed in circling mode.">
+    <DataField DataType="boolean" />
+  </Edit>
+
+  <Edit Name="prpSnailType" Caption="Trail type" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Sets the type of the snail trail display.">
+    <DataField DataType="enum" />
+  </Edit>
+
+  <Edit Name="prpSnailWidthScale" Caption="Trail scaled" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="If set to ON the snail trail width is scaled according to the vario signal.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpDetourCostMarker" Caption="Detour cost markers" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+     Help="If the aircraft heading deviates from the current waypoint, markers are displayed at points ahead of the aircraft. The value of each marker is the extra distance required to reach that point as a percentage of straight-line distance to the waypoint.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAircraftSymbol" Caption="Aircraft symbol" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Sets the symbol used for the aircraft.&#10;[Simple] Simplified line graphics, black with white contours.&#10;[Simple (large)] Enlarged simple graphics.&#10;[Detailed] Rendered aircraft graphics.">
+    <DataField DataType="enum" />
+  </Edit>
+
+  <Edit Name="prpWindArrowStyle" Caption="Wind arrow" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Determines the way the wind arrow is drawn on the map.&#10;[Arrow head] Draws an arrow head only&#10;[Full arrow] Draws an arrow head with a dashed arrow line">
+    <DataField DataType="enum" />
+  </Edit>
+
+</Panel>

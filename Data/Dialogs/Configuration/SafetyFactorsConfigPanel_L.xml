@@ -1,0 +1,28 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmSafety">
+  <Edit Name="prpSafetyAltitudeArrival" Caption="Arrival height" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="The height above terrain that the glider should arrive at for a safe landing.">
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="100"/>
+  </Edit>
+
+  <Edit Name="prpSafetyAltitudeTerrain" Caption="Terrain height" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="The height above terrain that the glider must clear during final glide.">
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="100"/>
+  </Edit>
+
+  <Edit Name="prpAbortTaskMode" Caption="Alternates mode" X="2" Width="-2" Height="22" CaptionWidth="150" 
+    Help="Determines sorting of alternates in the alternates dialog and in abort mode:&#10;[Simple] The alternates will only be sorted by waypoint type (airport/outlanding field) and arrival height.&#10;[Task] The sorting will also take the current task direction into account.&#10;[Home] The sorting will try to find landing options in the current direction to the configured home waypoint.">
+    <DataField DataType="enum" />
+  </Edit>
+
+  <Edit Name="prpSafetyMacCready" Caption="Safety MC" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="The MacCready setting used, when safety MC is enabled for reach calculations, in task abort mode, for determining arrival altitude at airfields.">
+    <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="10" Step="0.1" />
+  </Edit>
+
+  <Edit Name="prpRiskGamma" Caption="STF risk factor" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="The STF risk factor reduces the MacCready setting used to calculate speed to fly as the glider gets low, in order to compensate for risk.  Set to 0.0 for no compensation, 1.0 scales MC linearly with height.">
+    <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0" Max="1" Step="0.1"/>
+  </Edit>
+</Panel>

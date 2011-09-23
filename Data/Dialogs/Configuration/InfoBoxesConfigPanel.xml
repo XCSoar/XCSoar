@@ -1,0 +1,12 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmInfoBoxes">
+  <Button Name="cmdInfoBoxesPanel0" X="2" Width="-2" Height="22"/>
+  <Button Name="cmdInfoBoxesPanel1" X="2" Width="-2" Height="22"/>
+  <Button Name="cmdInfoBoxesPanel2" X="2" Width="-2" Height="22"/>
+  <Button Name="cmdInfoBoxesPanel3" Expert="1" X="2" Width="-2" Height="22"/>
+  <Button Name="cmdInfoBoxesPanel4" Expert="1" X="2" Width="-2" Height="22"/>
+  <Button Name="cmdInfoBoxesPanel5" Expert="1" X="2" Width="-2" Height="22"/>
+  <Button Name="cmdInfoBoxesPanel6" Expert="1" X="2" Width="-2" Height="22"/>
+  <Button Name="cmdInfoBoxesPanel7" Expert="1" X="2" Width="-2" Height="22"/>
+</Panel>

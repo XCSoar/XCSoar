@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<Panel>
+  <Edit Name="prpDisplayOrientation" Caption="Display orientation" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Rotate the display on devices that support it.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpAppInfoBoxGeom" Caption="Infobox geometry" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="A list of possible InfoBox layouts. Do some trials to find the best for your screen size.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpAppFlarmLocation" Caption="Flarm display location" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Choose a location for the flarm display">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpTabDialogStyle" Caption="Tab dialog style"  X="2" Width="-2" Height="22" CaptionWidth="100"
+  Help="Determines whether tabbed dialogs use text or icons">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpAppStatusMessageAlignment" Caption="Msg. window" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Defines the alignment of the status message box, either centered or in the top left corner.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpDialogStyle" Caption="Dialog style" Expert="1"  X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Determines display size of dialogs.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpAppInverseInfoBox" Caption="Inverse InfoBoxes" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="If true, the InfoBoxes are white on black, otherwise black on white.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAppInfoBoxColors" Caption="Colored InfoBoxes" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="If true, certain InfoBoxes will have coloured text.  For example, the active waypoint infobox will be blue when the glider is above final glide.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpAppInfoBoxBorder" Caption="InfoBox border" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Two styles for infobox borders are available:&#10;[Box] Draws boxes around each infobox.&#10;[Tab] Draws a tab at the top of the infobox across the title.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+</Panel>

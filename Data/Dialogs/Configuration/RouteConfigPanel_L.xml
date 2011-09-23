@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmRoute">
+
+  <Panel X="2" Y="2" Width="-2" Height="72" Border="1">    
+  <Edit Name="prpRoutePlannerMode" Caption="Route mode" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="If set to &quot;None&quot;, neither airspace or terrain is used for route planning.  If set to &quot;Terrain&quot;, routes will avoid terrain; if set to &quot;Airspace&quot;, routes will avoid airspace.  If set to &quot;Both&quot;, routes will avoid airspace and terrain.">
+    <DataField DataType="enum" OnDataAccess="RouteConfigPanel::OnRouteMode"/>
+  </Edit>
+
+  <Edit Name="prpRoutePlannerAllowClimb" Caption="Route climb" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="When enabled and MC is positive, route planning allows climbs between the aircraft location and destination.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpRoutePlannerUseCeiling" Caption="Route ceiling" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="When enabled, route planning climbs are limited to ceiling defined by greater of current aircraft altitude plus 500 m and the thermal ceiling.  If disabled, climbs are unlimited.">
+    <DataField DataType="boolean"/>
+  </Edit>
+  </Panel>
+
+  <Panel X="2" Y="76" Width="-2" Height="72" Border="1">    
+
+  <Edit Name="prpTurningReach" Caption="Reach mode" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="How calculations are performed of the reach of the glider with respect to terrain.&#10;[Off] Reach calculations disabled.&#10;[Straight] The reach is from straight line paths from the glider.&#10;[Turning] The reach is calculated allowing turns around terrain obstacles.">
+    <DataField DataType="enum" OnDataAccess="RouteConfigPanel::OnReachMode"/>
+  </Edit>
+
+  <Edit Name="prpFinalGlideTerrain" Caption="Reach display" X="2" Width="-2" Height="22" CaptionWidth="150"
+   Help="This determines whether the glide reach is drawn as a line on the map area:&#10;[Off] Disables display&#10;[Line] Draws a dashed line at the glide reach&#10;[Shade] Shades terrain outside glide reach">
+   <DataField DataType="enum" />
+ </Edit>
+
+  <Edit Name="prpReachPolarMode" Caption="Reach polar" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+   Help="This determines the glide performance used in reach, landable arrival, abort and alternate calculations:&#10;[Task] Uses task glide polar&#10;[Safety MC] Uses safety MacCready value">
+   <DataField DataType="enum" />
+ </Edit>
+  </Panel>
+
+</Panel>

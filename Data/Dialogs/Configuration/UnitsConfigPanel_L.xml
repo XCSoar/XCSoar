@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmUnits">
+  <Panel Name="pnlUnitsDetails" X="2" Y="2" Border="30" Height="156" Width="-2">
+    <Label Name="lblUnitsSetting" Caption="Units" X="2" Y="2" Height="16" Width="-112" />
+    <Button Name="cmdLoadUnitsPreset" Caption="Load Preset" X="-112" Y="2" Width="108" Height="20" OnClick="UnitsConfigPanel::OnLoadPreset" />
+
+    <Edit Name="prpUnitsSpeed" Caption="Aircraft/Wind speed" X="2" Width="-2" Height="22" CaptionWidth="150"
+      Help="Units used for airspeed and ground speed.  A separate unit is available for task speeds.">
+      <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+    </Edit>
+
+    <Edit Name="prpUnitsDistance" Caption="Distance" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Units used for horizontal distances e.g. range to waypoint, distance to go.">
+      <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+    </Edit>
+
+    <Edit Name="prpUnitsLift" Caption="Lift" X="2" Width="-2" Height="22" CaptionWidth="150"
+      Help="Units used for vertical speeds (variometer)">
+      <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+    </Edit>
+
+    <Edit Name="prpUnitsAltitude" Caption="Altitude" X="2" Width="-2" Height="22" CaptionWidth="150"
+      Help="Units used for altitude and heights.">
+      <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+    </Edit>
+
+    <Edit Name="prpUnitsTemperature" Caption="Temperature" X="2" Width="-2" Height="22" CaptionWidth="150"
+      Help="Units used for temperature.">
+      <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData"/>
+    </Edit>
+
+    <Edit Name="prpUnitsTaskSpeed" Caption="Task speed" X="2" Width="-2" Height="22" CaptionWidth="150"
+      Help="Units used for task speeds.">
+      <DataField DataType="enum" OnDataAccess="UnitsConfigPanel::OnFieldData" />
+    </Edit>
+  </Panel>
+
+  <Edit Name="prpUnitsLatLon" Caption="Lat./Lon." X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Units used for latitude and longitude.">
+    <DataField DataType="enum" />
+  </Edit>
+
+  <Edit Name="prpUTCOffset" Caption="UTC offset" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="The UTC offset field allows the UTC local time offset to be specified.  The local time is displayed below in order to make it easier to verify the correct offset has been entered.">
+    <DataField DataType="double" DisplayFormat="%.1f" EditFormat="%.1f" Min="-13" Max="13" Step="0.5" OnDataAccess="UnitsConfigPanel::OnUTCData" />
+  </Edit>
+
+  <Edit Name="prpLocalTime" Caption="Local time" X="2" Width="-2" Height="22" CaptionWidth="150" ReadOnly="1" />
+</Panel>

@@ -1,0 +1,25 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmGauges">
+
+  <Edit Name="prpEnableFLARMGauge" Caption="FLARM radar" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This enables the display of the FLARM radar gauge. The track bearing of the target relative to the track bearing of the aircraft is displayed as an arrow head, and a triangle pointing up or down shows the relative altitude of the target relative to you. In all modes, the color of the target indicates the threat level.">
+    <DataField DataType="boolean"/>
+  </Edit>
+  
+  <Edit Name="prpAutoCloseFlarmDialog" Caption="Auto close FLARM" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Setting this to &quot;On&quot; will automatically close the FLARM dialog if there is no traffic. &quot;Off&quot; will keep the dialog open even without current traffic.">
+    <DataField DataType="boolean"/>
+  </Edit>
+  
+  <Edit Name="prpEnableTAGauge" Caption="Thermal assistant" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This enables the display of the thermal assistant gauge.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpEnableThermalProfile" Caption="Thermal band" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This enables the display of the thermal profile (climb band) display on the map.">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+</Panel>

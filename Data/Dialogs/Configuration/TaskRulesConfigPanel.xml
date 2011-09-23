@@ -1,0 +1,49 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmTaskRules">
+
+  <Panel Name="frmTaskDefaultsSpeed"  Expert="1" X="2" Y="2" Width="-2" Height="48" Border="1">  
+    <Edit Name="prpStartMaxSpeed" Caption="Start max. speed" Expert="1" X="0" Y="2" Width="-2" Height="22" CaptionWidth="150"
+      Help="Maximum speed allowed in start observation zone.  Set to 0 for no limit.">
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5"/>
+    </Edit>
+    <Edit Name="prpStartMaxSpeedMargin" Caption="Start max. speed margin" Expert="1" Width="-2" Height="22" CaptionWidth="150"
+      Help="Maximum speed above maximum start speed to tolerate.  Set to 0 for no tolerance.">
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="300" Step="5"/>
+    </Edit>
+  </Panel>
+
+  <Panel Name="frmTaskDefaultsHeight"  Expert="1" X="2" Y="49" Width="-2" Height="72" Border="1">  
+    <Edit Name="prpStartMaxHeight" Caption="Start max. height" Expert="1" X="0" Y="2" Width="-2" Height="22" CaptionWidth="150"
+      Help="Maximum height based on start height reference (AGL or MSL) while starting the task.  Set to 0 for no limit.">
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="50"/>
+    </Edit>
+
+    <Edit Name="prpStartMaxHeightMargin" Caption="Start max. height margin" Expert="1" Width="-2" Height="22" CaptionWidth="150"
+      Help="Maximum height above maximum start height to tolerate.  Set to 0 for no tolerance.">
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="50"/>
+    </Edit>
+
+    <Edit Name="prpStartHeightRef" Caption="Start height ref." Expert="1" Width="-2" Height="22" CaptionWidth="150"
+      Help="Reference used for start max height rule&#10;[MSL] Reference is altitude above mean sea level&#10;[AGL] Reference is the height above the start point">
+        <DataField DataType="enum"/>
+    </Edit>
+  </Panel>
+
+  <Panel Name="frmFinishMinHeight" Expert="1" X="2" Y="120" Width="-2" Height="48" Border="1">  
+    <Edit Name="prpFinishMinHeight" Caption="Finish min. height" Expert="1" Y="2" Width="-2" Height="22" CaptionWidth="150"
+      Help="Minimum height based on finish height reference (AGL or MSL) while finishing the task.  Set to 0 for no limit.">
+      <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="50" />
+    </Edit>
+
+    <Edit Name="prpFinishHeightRef" Caption="Finish height ref." Expert="1" Width="-2" Height="22" CaptionWidth="150"
+      Help="Reference used for finish min height rule&#10;[MSL] Reference is altitude above mean sea level&#10;[AGL] Reference is the height above the finish point">
+      <DataField DataType="enum"/>
+    </Edit>
+  </Panel>
+
+  <Edit Name="prpContests" Caption="On-Line Contest" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Select the rules used for calculating optimal points for the On-Line Contest. The implementation  conforms to the official release 2010, Sept.23.&#10;[Classic] Up to seven points including start and finish, finish height must not be lower than start height less 1000 meters.&#10;[FAI] Conforms to FAI triangle rules. Three turns and common start and finish. No leg less than 28% of total except for tasks longer than 500km: No leg less than 25% or larger than 45%.&#10;[League] The most recent contest with Sprint task rules.&#10;[Plus] A combination of Classic and FAI rules. 30% of the FAI score are added to the Classic score.">
+    <DataField DataType="enum"/>
+  </Edit>
+</Panel>

@@ -1,0 +1,47 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmSite">
+  <Edit Name="prpDataPath" X="2" Width="-2" Height="22"/>
+
+  <Edit Name="prpMapFile" Caption="Map database" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="The name of the file (.xcm) containing terrain, topography, and optionally waypoints, their details and airspaces.">
+    <DataField DataType="filereader"/>
+  </Edit>
+
+  <Edit Name="prpWaypointFile" Caption="Waypoints" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Primary waypoints file.  Supported file types are Cambridge/WinPilot files (.dat), Zander files (.wpz) or SeeYou files (.cup).">
+    <DataField DataType="filereader"/>
+  </Edit>
+
+  <Edit Name="prpAdditionalWaypointFile" Caption="More waypoints" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="Secondary waypoints file.  This may be used to add waypoints for a competition.">
+    <DataField DataType="filereader"/>
+  </Edit>
+
+  <Edit Name="prpWatchedWaypointFile" Caption="Watched waypoints" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+  Help="Waypoint file containing special waypoints for which additional computations like calculation of arrival height in map display always takes place. Useful for waypoints like known reliable thermal sources (e.g. powerplants) or mountain passes.">
+    <DataField DataType="filereader" />
+  </Edit>
+
+  <Edit Name="prpAirspaceFile" Caption="Airspaces" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the primary airspace file.">
+    <DataField DataType="filereader"/>
+  </Edit>
+
+  <Edit Name="prpAdditionalAirspaceFile" Caption="More airspaces" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100" Help="The file name of the secondary airspace file.">
+    <DataField DataType="filereader"/>
+  </Edit>
+
+  <Edit Name="prpTerrainFile" Caption="Terrain file" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="The name of the file containing digital elevation terrain data.">
+    <DataField DataType="filereader"/>
+  </Edit>
+
+  <Edit Name="prpTopographyFile" Caption="Topography file" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100" Help="Specifies the file defining the topographical features.">
+    <DataField DataType="filereader"/>
+  </Edit>
+
+  <Edit Name="prpAirfieldFile" Caption="Waypoint details" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="100"
+    Help="The file may contain extracts from enroute supplements or other contributed information about individual waypoints and airfields.">
+    <DataField DataType="filereader"/>
+  </Edit>
+</Panel>

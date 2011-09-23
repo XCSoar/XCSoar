@@ -1,0 +1,44 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmAirspace">
+  <Button Name="cmdAirspaceColours" Caption="Colours" X="100" Y="2" Width="70" Height="22" OnClick="AirspaceConfigPanel::OnAirspaceColoursClicked" />
+  <Button Name="cmdAirspaceMode" Caption="Filter" X="170" Y="2" Width="70" Height="22" OnClick="AirspaceConfigPanel::OnAirspaceModeClicked" />
+
+  <Edit Name="prpAirspaceDisplay" Caption="Airspace display" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Controls filtering of airspace for display and warnings.  The airspace filter button also allows filtering of display and warnings independently for each airspace class.&#10;[All on] All is displayed.&#10;[Clip] Only airspace below the clip altitude.&#10;[Auto] All within a margin of the glider.&#10;[All below] All airspace below the glider.">
+    <DataField DataType="enum" OnDataAccess="AirspaceConfigPanel::OnAirspaceDisplay"/>
+  </Edit>
+
+  <Edit Name="prpClipAltitude" Caption="Clip altitude" X="2" Width="-2" Height="22" CaptionWidth="150"
+   Help="For clip airspace mode, this is the altitude below which airspace is displayed.">
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="20000" Step="100" />
+  </Edit>
+
+  <Edit Name="prpAltWarningMargin" Caption="Margin" X="2" Width="-2" Height="22" CaptionWidth="150" Help="For auto airspace mode, this is the altitude above/below which airspace is included.">
+    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.0f" Min="0" Max="10000" Step="100" />
+  </Edit>
+
+  <Edit Name="prpAirspaceWarnings" Caption="Warnings" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Enable/disable all airspace warnings.">
+    <DataField DataType="boolean" OnDataAccess="AirspaceConfigPanel::OnAirspaceWarning"/>
+  </Edit>
+
+  <Edit Name="prpWarningTime" Caption="Warning time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time before an airspace incursion is estimated at which the system will warn the pilot.">
+    <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="1000" Step="5" />
+  </Edit>
+
+  <Edit Name="prpAcknowledgementTime" Caption="Acknowledge time" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150" Help="This is the time period in which an acknowledged airspace warning will not be repeated.">
+    <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="10" Max="1000" Step="5" />
+  </Edit>
+
+  <Edit Name="prpAirspaceOutline" Caption="Use black outline" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Draw a black outline around each airspace rather than the airspace color">
+    <DataField DataType="boolean" />
+  </Edit>  
+
+  <Edit Name="prpAirspaceFillMode" Caption="Airspace fill mode" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150" Help="Specifies the mode for filling the airspace area.">
+    <DataField DataType="enum"/>
+  </Edit>
+
+  <Edit Name="prpAirspaceTransparency" Caption="Airspace transparency" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+        Help="If enabled, then airspaces are filled transparently.">
+    <DataField DataType="boolean"/>
+  </Edit>
+</Panel>

@@ -1,0 +1,43 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmLogger">
+  <Edit Name="prpLoggerTimeStepCruise" Caption="Time step cruise" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This is the time interval between logged points when not circling.">
+    <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="30" Step="1"/>
+  </Edit>
+
+  <Edit Name="prpLoggerTimeStepCircling" Caption="Time step circling" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This is the time interval between logged points when circling.">
+    <DataField DataType="double" DisplayFormat="%.0f s" EditFormat="%.0f" Min="1" Max="30" Step="1"/>
+  </Edit>
+
+  <Edit Name="PilotName" Caption="Pilot name" X="2" Width="-2" Height="22" CaptionWidth="150">
+    <DataField DataType="string"/>
+  </Edit>
+
+  <Edit Name="AircraftType" Caption="Aircraft type" X="2" Width="-2" Height="22" CaptionWidth="150">
+    <DataField DataType="string"/>
+  </Edit>
+
+  <Edit Name="AircraftReg" Caption="Aircraft reg." X="2" Width="-2" Height="22" CaptionWidth="150">
+    <DataField DataType="string"/>
+  </Edit>
+
+  <Edit Name="CompetitionID" Caption="Competition ID" X="2" Width="-2" Height="22" CaptionWidth="150">
+    <DataField DataType="string"/>
+  </Edit>
+
+  <Edit Name="LoggerID" Caption="Logger ID" X="2" Width="-2" Height="22" CaptionWidth="150">
+    <DataField DataType="string"/>
+  </Edit>
+
+  <Edit Name="prpLoggerShortName" Caption="Short file name" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="This determines whether the logger uses the short IGC file name or the long IGC file name. Example short name (81HXABC1.IGC), long name (2008-01-18-XXX-ABC-01.IGC).">
+    <DataField DataType="boolean"/>
+  </Edit>
+
+  <Edit Name="prpDisableAutoLogger" Caption="Auto. logger" Expert="1" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Enables the automatic starting and stopping of logger on takeoff and landing respectively. Disable when flying paragliders.">
+    <DataField DataType="boolean"/>
+  </Edit>
+</Panel>

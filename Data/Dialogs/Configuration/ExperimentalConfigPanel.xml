@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<Panel Name="frmSpecials">
+  <Edit Name="prpAppInfoBoxModel" Caption="Device model" X="2" Width="-2" Height="22" CaptionWidth="150"
+    Help="Select your PNA model to make full use of its hardware capabilities. If it is not included, use Generic type.">
+    <DataField DataType="enum"/>
+  </Edit>
+</Panel>
