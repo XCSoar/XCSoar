@@ -41,7 +41,7 @@ class SectorZone;
  */
 class RenderObservationZone {
 public:
-  enum layer {
+  enum Layer {
     /** the background shade */
     LAYER_SHADE,
 
@@ -57,7 +57,7 @@ protected:
   const AirspaceLook &airspace_look;
   const AirspaceRendererSettings &settings;
 
-  enum layer layer;
+  Layer layer;
 
 public:
   RenderObservationZone(const TaskLook &task_look,
@@ -67,7 +67,7 @@ public:
   void Draw(Canvas &canvas, const Projection &projection,
             const ObservationZonePoint &oz) const;
 
-  void set_layer(enum layer _layer) {
+  void set_layer(Layer _layer) {
     layer = _layer;
   }
 
