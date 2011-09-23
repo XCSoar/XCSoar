@@ -57,8 +57,6 @@ protected:
   const AirspaceLook &airspace_look;
   const AirspaceRendererSettings &settings;
 
-  Layer layer;
-
 public:
   RenderObservationZone(const TaskLook &task_look,
                         const AirspaceLook &airspace_look,
@@ -68,10 +66,6 @@ public:
             const ObservationZonePoint &oz, int offset);
 
 private:
-  void set_layer(Layer _layer) {
-    layer = _layer;
-  }
-
   /**
    * Configure brush and pen on the Canvas for the current layer.
    *
@@ -80,13 +74,13 @@ private:
    * means it is a "past" task point
    * @return false if nothing is to be drawn in this layer
    */
-  bool draw_style(Canvas &canvas, int offset) const;
+  bool draw_style(Canvas &canvas, Layer layer, int offset) const;
 
   /**
    * Cleans up the settings after drawing has been finished.  This
    * method must be invoked if draw_style() has returned true.
    */
-  void un_draw_style(Canvas &canvas) const;
+  void un_draw_style(Canvas &canvas, Layer layer) const;
 };
 
 #endif

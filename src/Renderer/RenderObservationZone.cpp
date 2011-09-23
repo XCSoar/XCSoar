@@ -39,13 +39,12 @@ Copyright_License {
 RenderObservationZone::RenderObservationZone(
     const TaskLook &_task_look, const AirspaceLook &_airspace_look,
     const AirspaceRendererSettings &_settings)
-  :task_look(_task_look), airspace_look(_airspace_look), settings(_settings),
-   layer(LAYER_SHADE)
+  :task_look(_task_look), airspace_look(_airspace_look), settings(_settings)
 {
 }
 
 bool 
-RenderObservationZone::draw_style(Canvas &canvas, int offset) const
+RenderObservationZone::draw_style(Canvas &canvas, Layer layer, int offset) const
 {
   if (layer == LAYER_SHADE) {
     if (offset < 0)
@@ -88,7 +87,7 @@ RenderObservationZone::draw_style(Canvas &canvas, int offset) const
 }
 
 void
-RenderObservationZone::un_draw_style(Canvas &canvas) const
+RenderObservationZone::un_draw_style(Canvas &canvas, Layer layer) const
 {
   if (layer == LAYER_SHADE) {
 #ifdef ENABLE_OPENGL
@@ -104,8 +103,7 @@ RenderObservationZone::Draw(Canvas &canvas, Layer layer,
                             const Projection &projection,
                             const ObservationZonePoint &_oz, int offset)
 {
-  set_layer(layer);
-  if (!draw_style(canvas, offset))
+  if (!draw_style(canvas, layer, offset))
     return;
 
   switch (_oz.shape) {
@@ -187,5 +185,5 @@ RenderObservationZone::Draw(Canvas &canvas, Layer layer,
 
   }
 
-  un_draw_style(canvas);
+  un_draw_style(canvas, layer);
 }
