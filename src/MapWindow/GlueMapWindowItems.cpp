@@ -61,7 +61,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
                         aircraft_look,
                         airspace_renderer.GetLook(),
                         way_point_renderer.GetLook(),
-                        SettingsMap());
+                        task_look, SettingsMap());
 
   // Save function result for later
   return !list.empty();

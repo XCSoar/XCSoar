@@ -30,6 +30,7 @@ class MapItemList;
 struct AircraftLook;
 struct AirspaceLook;
 struct WaypointLook;
+struct TaskLook;
 struct SETTINGS_MAP;
 
 void ShowMapItemDialog(const MapItem &item, SingleWindow &parent);
@@ -39,6 +40,7 @@ void ShowMapItemListDialog(SingleWindow &parent,
                            const AircraftLook &_aircraft_look,
                            const AirspaceLook &_airspace_look,
                            const WaypointLook &_waypoint_look,
+                           const TaskLook &_task_look,
                            const SETTINGS_MAP &_settings);
 
 #endif

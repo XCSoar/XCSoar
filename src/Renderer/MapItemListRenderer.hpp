@@ -31,6 +31,7 @@ struct MapItem;
 struct AircraftLook;
 struct AirspaceLook;
 struct WaypointLook;
+struct TaskLook;
 struct SETTINGS_MAP;
 
 namespace MapItemListRenderer
@@ -39,6 +40,7 @@ namespace MapItemListRenderer
             const AircraftLook &aircraft_look,
             const AirspaceLook &airspace_look,
             const WaypointLook &waypoint_look,
+            const TaskLook &task_look,
             const SETTINGS_MAP &settings);
 }
 

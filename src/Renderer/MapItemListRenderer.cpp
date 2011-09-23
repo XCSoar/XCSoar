@@ -35,6 +35,8 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoint.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Dialogs/dlgTaskHelpers.hpp"
+#include "Renderer/OZPreviewRenderer.hpp"
+#include "Look/TaskLook.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
 #include "SettingsMap.hpp"
@@ -54,7 +56,9 @@ namespace MapItemListRenderer
             const WaypointLook &look,
             const WaypointRendererSettings &renderer_settings);
 
-  void Draw(Canvas &canvas, const PixelRect rc, const TaskOZMapItem &item);
+  void Draw(Canvas &canvas, const PixelRect rc, const TaskOZMapItem &item,
+            const TaskLook &look, const AirspaceLook &airspace_look,
+            const AirspaceRendererSettings &airspace_settings);
 }
 
 void
@@ -137,11 +141,21 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
-                          const TaskOZMapItem &item)
+                          const TaskOZMapItem &item,
+                          const TaskLook &look, const AirspaceLook &airspace_look,
+                          const AirspaceRendererSettings &airspace_settings)
 {
   const unsigned line_height = rc.bottom - rc.top;
 
+  const ObservationZonePoint &oz = *item.oz;
   const Waypoint &waypoint = item.waypoint;
+
+  RasterPoint pt = { rc.left + line_height / 2,
+                     rc.top + line_height / 2};
+  unsigned radius = std::min(line_height / 2  - Layout::FastScale(4),
+                             (unsigned)Layout::FastScale(10));
+  OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
+                          airspace_settings, airspace_look);
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
@@ -175,6 +189,7 @@ MapItemListRenderer::Draw(
     const AircraftLook &aircraft_look,
     const AirspaceLook &airspace_look,
     const WaypointLook &waypoint_look,
+    const TaskLook &task_look,
     const SETTINGS_MAP &settings)
 {
   switch (item.type) {
@@ -190,7 +205,8 @@ MapItemListRenderer::Draw(
          settings.waypoint);
     break;
   case MapItem::TASK_OZ:
-    Draw(canvas, rc, (const TaskOZMapItem &)item);
+    Draw(canvas, rc, (const TaskOZMapItem &)item, task_look, airspace_look,
+         settings.airspace);
     break;
   }
 }

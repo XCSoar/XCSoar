@@ -37,6 +37,7 @@ Copyright_License {
 static const AircraftLook *aircraft_look;
 static const AirspaceLook *airspace_look;
 static const WaypointLook *waypoint_look;
+static const TaskLook *task_look;
 static const SETTINGS_MAP *settings;
 static const MapItemList *list;
 
@@ -44,8 +45,8 @@ static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   const MapItem &item = *(*list)[idx];
-  MapItemListRenderer::Draw(canvas, rc, item, *aircraft_look,
-                            *airspace_look, *waypoint_look, *settings);
+  MapItemListRenderer::Draw(canvas, rc, item, *aircraft_look, *airspace_look,
+                            *waypoint_look, *task_look, *settings);
 }
 
 void
@@ -74,6 +75,7 @@ ShowMapItemListDialog(SingleWindow &parent,
                       const AircraftLook &_aircraft_look,
                       const AirspaceLook &_airspace_look,
                       const WaypointLook &_waypoint_look,
+                      const TaskLook &_task_look,
                       const SETTINGS_MAP &_settings)
 {
   switch (_list.size()) {
@@ -95,6 +97,7 @@ ShowMapItemListDialog(SingleWindow &parent,
     aircraft_look = &_aircraft_look;
     airspace_look = &_airspace_look;
     waypoint_look = &_waypoint_look;
+    task_look = &_task_look;
     settings = &_settings;
 
     int i = ListPicker(parent, _("Map elements at this location"),
