@@ -33,6 +33,8 @@
 class FAISectorZone: 
   public SymmetricSectorZone 
 {
+  const bool m_is_turnpoint;
+
 public:  
   /** 
    * Constructor
@@ -58,9 +60,6 @@ public:
       return new FAISectorZone(get_location(), m_is_turnpoint);
     }
   }
-
-private:
-  const bool m_is_turnpoint;
 };
 
 #endif
