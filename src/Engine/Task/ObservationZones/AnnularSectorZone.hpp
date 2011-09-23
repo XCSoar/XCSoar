@@ -29,6 +29,8 @@
 class AnnularSectorZone:
   public SectorZone
 {
+  fixed InnerRadius;
+
 protected:
   AnnularSectorZone(enum shape _shape, const GeoPoint &loc,
                     const fixed _radiusOuter = fixed(10000.0),
@@ -125,9 +127,6 @@ public:
    * @return True if same type and OZ parameters
    */
   virtual bool equals(const ObservationZonePoint* other) const;
-
-private:
-  fixed InnerRadius;
 };
 
 #endif
