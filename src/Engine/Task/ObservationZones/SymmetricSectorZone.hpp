@@ -32,6 +32,8 @@
 class SymmetricSectorZone: 
   public SectorZone 
 {
+  const Angle SectorAngle;
+
 protected:
 /** 
  * Constructor.
@@ -80,9 +82,6 @@ public:
   Angle getSectorAngle() const {
     return SectorAngle;
   }
-
-private:
-  const Angle SectorAngle;
 };
 
 
