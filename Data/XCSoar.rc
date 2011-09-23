@@ -76,8 +76,6 @@ IDB_DLGBUTTONLEFT32     BITMAP  DISCARDABLE     "bitmaps/dialog_button_left_32x3
 IDB_DLGBUTTONRIGHT32    BITMAP  DISCARDABLE     "bitmaps/dialog_button_right_32x32.bmp"
 IDB_FINALGLIDE          BITMAP  DISCARDABLE     "../output/data/icons/mode_finalglide.bmp"
 IDB_FINALGLIDE_HD       BITMAP  DISCARDABLE     "../output/data/icons/mode_finalglide_160.bmp"
-IDB_FLARMTRAFFIC        BITMAP  DISCARDABLE     "../output/data/icons/map_flarm.bmp"
-IDB_FLARMTRAFFIC_HD     BITMAP  DISCARDABLE     "../output/data/icons/map_flarm_160.bmp"
 IDB_TRAFFIC_SAFE        BITMAP  DISCARDABLE     "../output/data/icons/flarm_traffic.bmp"
 IDB_TRAFFIC_SAFE_HD     BITMAP  DISCARDABLE     "../output/data/icons/flarm_traffic_160.bmp"
 IDB_TRAFFIC_WARNING     BITMAP  DISCARDABLE     "../output/data/icons/flarm_warning.bmp"

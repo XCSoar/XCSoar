@@ -36,5 +36,4 @@ TrafficLook::Initialise()
   alarm_brush.set(alarm_color);
 
   teammate_icon.load_big(IDB_TEAMMATE_POS, IDB_TEAMMATE_POS_HD);
-  alert_icon.load_big(IDB_FLARMTRAFFIC, IDB_FLARMTRAFFIC_HD);
 }

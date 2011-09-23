@@ -36,8 +36,6 @@
 #define IDB_LOGGER_HD                  5271
 #define IDB_LOGGEROFF                   272
 #define IDB_LOGGEROFF_HD               5272
-#define IDB_FLARMTRAFFIC                278
-#define IDB_FLARMTRAFFIC_HD            5278
 #define IDB_AIRSPACE3                   280
 #define IDB_DLGBUTTONLEFT32             282
 #define IDB_UNIT_KM                     284

@@ -111,10 +111,6 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
       }
     }
 
-    // If FLARM alarm draw alarm icon below corresponding target
-    if ((traffic.alarm_level > 0) && (traffic.alarm_level < 4))
-      traffic_look.alert_icon.draw(canvas, sc);
-
     // Fill the Arrow array with a normal arrow pointing north
     Arrow[0].x = -4;
     Arrow[0].y = 6;

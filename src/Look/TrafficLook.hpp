@@ -39,7 +39,6 @@ struct TrafficLook {
   Brush alarm_brush;
 
   MaskedIcon teammate_icon;
-  MaskedIcon alert_icon;
 
   void Initialise();
 };
