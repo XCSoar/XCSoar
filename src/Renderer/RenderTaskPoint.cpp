@@ -167,12 +167,8 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
 void
 RenderTaskPoint::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp)
 {
-  ozv.set_layer(RenderObservationZone::LAYER_SHADE);
-
-  if (ozv.draw_style(canvas, index - active_index)) {
-    ozv.Draw(canvas, m_proj, *tp.get_oz());
-    ozv.un_draw_style(canvas);
-  }
+  ozv.Draw(canvas, RenderObservationZone::LAYER_SHADE, m_proj, *tp.get_oz(),
+           index - active_index);
 }
 
 void 
@@ -182,17 +178,10 @@ RenderTaskPoint::DrawOZForeground(const OrderedTaskPoint &tp)
   if (mode_optional_start)
     offset = -1; // render optional starts as deactivated
 
-  ozv.set_layer(RenderObservationZone::LAYER_INACTIVE);
-  if (ozv.draw_style(canvas, offset)) {
-    ozv.Draw(canvas, m_proj, *tp.get_oz());
-    ozv.un_draw_style(canvas);
-  }
-
-  ozv.set_layer(RenderObservationZone::LAYER_ACTIVE);
-  if (ozv.draw_style(canvas, offset)) {
-    ozv.Draw(canvas, m_proj, *tp.get_oz());
-    ozv.un_draw_style(canvas);
-  }
+  ozv.Draw(canvas, RenderObservationZone::LAYER_INACTIVE, m_proj, *tp.get_oz(),
+           offset);
+  ozv.Draw(canvas, RenderObservationZone::LAYER_ACTIVE, m_proj, *tp.get_oz(),
+           offset);
 }
 
 void

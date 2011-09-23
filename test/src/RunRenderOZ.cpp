@@ -171,23 +171,9 @@ OZWindow::on_paint(Canvas &canvas)
 
   const int offset = 0;
 
-  roz.set_layer(RenderObservationZone::LAYER_SHADE);
-  if (roz.draw_style(canvas, offset)) {
-    roz.Draw(canvas, projection, *oz);
-    roz.un_draw_style(canvas);
-  }
-
-  roz.set_layer(RenderObservationZone::LAYER_INACTIVE);
-  if (roz.draw_style(canvas, offset)) {
-    roz.Draw(canvas, projection, *oz);
-    roz.un_draw_style(canvas);
-  }
-
-  roz.set_layer(RenderObservationZone::LAYER_ACTIVE);
-  if (roz.draw_style(canvas, offset)) {
-    roz.Draw(canvas, projection, *oz);
-    roz.un_draw_style(canvas);
-  }
+  roz.Draw(canvas, RenderObservationZone::LAYER_SHADE, projection, *oz, offset);
+  roz.Draw(canvas, RenderObservationZone::LAYER_INACTIVE, projection, *oz, offset);
+  roz.Draw(canvas, RenderObservationZone::LAYER_ACTIVE, projection, *oz, offset);
 }
 
 static void

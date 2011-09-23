@@ -100,9 +100,14 @@ RenderObservationZone::un_draw_style(Canvas &canvas) const
 }
 
 void
-RenderObservationZone::Draw(Canvas &canvas, const Projection &projection,
-                            const ObservationZonePoint &_oz) const
+RenderObservationZone::Draw(Canvas &canvas, Layer layer,
+                            const Projection &projection,
+                            const ObservationZonePoint &_oz, int offset)
 {
+  set_layer(layer);
+  if (!draw_style(canvas, offset))
+    return;
+
   switch (_oz.shape) {
   case ObservationZonePoint::LINE:
   case ObservationZonePoint::FAI_SECTOR: {
@@ -181,4 +186,6 @@ RenderObservationZone::Draw(Canvas &canvas, const Projection &projection,
   }
 
   }
+
+  un_draw_style(canvas);
 }

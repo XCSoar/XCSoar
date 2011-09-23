@@ -64,9 +64,10 @@ public:
                         const AirspaceLook &airspace_look,
                         const AirspaceRendererSettings &_settings);
 
-  void Draw(Canvas &canvas, const Projection &projection,
-            const ObservationZonePoint &oz) const;
+  void Draw(Canvas &canvas, Layer _layer, const Projection &projection,
+            const ObservationZonePoint &oz, int offset);
 
+private:
   void set_layer(Layer _layer) {
     layer = _layer;
   }
