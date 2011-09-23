@@ -75,15 +75,15 @@ RenderObservationZone::draw_style(Canvas &canvas,
     return true;
   } else {
     canvas.hollow_brush();
-    if (layer == LAYER_ACTIVE && offset >= 0) {
-      if (offset == 0)
-        /* current task point */
-        canvas.select(task_look.oz_current_pen);
-      else
-        canvas.select(task_look.oz_active_pen);
-    } else {
+
+    if (layer != LAYER_ACTIVE || offset < 0)
       canvas.select(task_look.oz_inactive_pen);
-    }
+    else if (offset == 0)
+      /* current task point */
+      canvas.select(task_look.oz_current_pen);
+    else
+      canvas.select(task_look.oz_active_pen);
+
     return true;
   }
 }
