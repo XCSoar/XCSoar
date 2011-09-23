@@ -33,6 +33,10 @@
  */
 class CylinderZone : public ObservationZonePoint {
 protected:
+  /** radius (m) of OZ */
+  fixed Radius;
+
+protected:
   CylinderZone(enum shape _shape, const GeoPoint &loc,
                const fixed _radius=fixed(10000.0)):
     ObservationZonePoint(_shape, loc),
@@ -138,10 +142,6 @@ public:
    * @return Location of point
    */
   virtual GeoPoint randomPointInSector(const fixed mag) const;
-
-protected:
-  /** radius (m) of OZ */
-  fixed Radius;
 };
 
 #endif
