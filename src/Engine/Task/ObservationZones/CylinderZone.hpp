@@ -44,6 +44,10 @@ protected:
   {
   }
 
+  CylinderZone(const CylinderZone &other, const GeoPoint &reference):
+    ObservationZonePoint((const ObservationZonePoint &)other, reference),
+    Radius(other.Radius) {}
+
 public:
   /**
    * Constructor.
@@ -61,9 +65,9 @@ public:
 
   virtual ObservationZonePoint* clone(const GeoPoint * _location = 0) const {
     if (_location) {
-      return new CylinderZone(*_location, Radius);
+      return new CylinderZone(*this, *_location);
     } else {
-      return new CylinderZone(get_location(), Radius);
+      return new CylinderZone(*this, get_location());
     }
   }
 

@@ -42,6 +42,10 @@ protected:
     {
     }
 
+  AnnularSectorZone(const AnnularSectorZone &other, const GeoPoint &reference)
+    :SectorZone((const SectorZone &)other, reference),
+     InnerRadius(other.InnerRadius) {}
+
 public:
   /**
    * Constructor
@@ -66,9 +70,9 @@ public:
 
   virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
-      return new AnnularSectorZone(*_location, Radius, StartRadial, EndRadial, InnerRadius);
+      return new AnnularSectorZone(*this, *_location);
     } else {
-      return new AnnularSectorZone(get_location(), Radius, StartRadial, EndRadial, InnerRadius);
+      return new AnnularSectorZone(*this, get_location());
     }
   }
 

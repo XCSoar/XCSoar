@@ -35,6 +35,10 @@ class FAISectorZone:
 {
   const bool m_is_turnpoint;
 
+  FAISectorZone(const FAISectorZone &other, const GeoPoint &reference)
+    :SymmetricSectorZone((const SymmetricSectorZone &)other, reference),
+     m_is_turnpoint(other.m_is_turnpoint) {}
+
 public:  
   /** 
    * Constructor
@@ -55,9 +59,9 @@ public:
 
   ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
-      return new FAISectorZone(*_location, m_is_turnpoint);
+      return new FAISectorZone(*this, *_location);
     } else {
-      return new FAISectorZone(get_location(), m_is_turnpoint);
+      return new FAISectorZone(*this, get_location());
     }
   }
 };

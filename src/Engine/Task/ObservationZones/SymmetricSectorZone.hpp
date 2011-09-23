@@ -50,6 +50,11 @@ protected:
     SectorZone(_shape, loc, radius),
     SectorAngle(angle) {}
 
+  SymmetricSectorZone(const SymmetricSectorZone &other,
+                      const GeoPoint &reference):
+    SectorZone((const SectorZone &)other, reference),
+    SectorAngle(other.SectorAngle) {}
+
 public:
   virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const = 0;
 

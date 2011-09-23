@@ -35,6 +35,9 @@
 class LineSectorZone: 
   public SymmetricSectorZone 
 {
+  LineSectorZone(const LineSectorZone &other, const GeoPoint &reference)
+    :SymmetricSectorZone((const SymmetricSectorZone &)other, reference) {}
+
 public:
 /** 
  * Constructor
@@ -53,9 +56,9 @@ public:
 
   ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
-      return new LineSectorZone(*_location, getLength());
+      return new LineSectorZone(*this, *_location);
     } else {
-      return new LineSectorZone(get_location(), getLength());
+      return new LineSectorZone(*this, get_location());
     }
   }
 

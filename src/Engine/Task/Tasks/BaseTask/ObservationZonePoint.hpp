@@ -57,6 +57,11 @@ public:
 private:
   GeoPoint reference;
 
+protected:
+  ObservationZonePoint(const ObservationZonePoint &other,
+                       const GeoPoint &_reference)
+    :shape(other.shape), reference(_reference) {}
+
 public:
   /**
    * Constructor

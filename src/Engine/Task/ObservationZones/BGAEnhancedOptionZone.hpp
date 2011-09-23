@@ -33,6 +33,12 @@
 class BGAEnhancedOptionZone: 
   public KeyholeZone
 {
+protected:
+  BGAEnhancedOptionZone(const BGAEnhancedOptionZone &other,
+                        const GeoPoint &reference):
+    KeyholeZone((const KeyholeZone &)other, reference) {}
+
+
 public:  
   /** 
    * Constructor
@@ -50,9 +56,9 @@ public:
 
   ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
-      return new BGAEnhancedOptionZone(*_location);
+      return new BGAEnhancedOptionZone(*this, *_location);
     } else {
-      return new BGAEnhancedOptionZone(get_location());
+      return new BGAEnhancedOptionZone(*this, get_location());
     }
   }
 };

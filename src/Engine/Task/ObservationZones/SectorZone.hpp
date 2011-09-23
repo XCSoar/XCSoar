@@ -52,6 +52,13 @@ protected:
     {
     }
 
+  SectorZone(const SectorZone &other, const GeoPoint &reference):
+    CylinderZone((const CylinderZone &)other, reference),
+    SectorStart(other.SectorStart),
+    SectorEnd(other.SectorEnd),
+    StartRadial(other.StartRadial),
+    EndRadial(other.EndRadial) {}
+
 public:
   /**
    * Constructor
@@ -76,9 +83,9 @@ public:
 
   virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const {
     if (_location) {
-      return new SectorZone(*_location, Radius, StartRadial, EndRadial);
+      return new SectorZone(*this, *_location);
     } else {
-      return new SectorZone(get_location(), Radius, StartRadial, EndRadial);
+      return new SectorZone(*this, get_location());
     }
   }
 

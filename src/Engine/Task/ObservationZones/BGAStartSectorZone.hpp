@@ -33,6 +33,9 @@
 class BGAStartSectorZone:
   public SymmetricSectorZone 
 {
+  BGAStartSectorZone(const BGAStartSectorZone &other, const GeoPoint &reference)
+    :SymmetricSectorZone((const SymmetricSectorZone &)other, reference) {}
+
 public:  
   /** 
    * Constructor
@@ -49,9 +52,9 @@ public:
 
   ObservationZonePoint* clone(const GeoPoint * _location = 0) const {
     if (_location) {
-      return new BGAStartSectorZone(*_location);
+      return new BGAStartSectorZone(*this, *_location);
     } else {
-      return new BGAStartSectorZone(get_location());
+      return new BGAStartSectorZone(*this, get_location());
     }
   }
 };

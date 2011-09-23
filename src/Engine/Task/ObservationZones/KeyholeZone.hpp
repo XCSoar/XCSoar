@@ -46,6 +46,10 @@ protected:
               const fixed radius=fixed(10000.0),
               const Angle angle=Angle::radians(fixed_half_pi)):
     SymmetricSectorZone(_shape, loc, radius, angle) {}
+
+  KeyholeZone(const KeyholeZone &other, const GeoPoint &reference):
+    SymmetricSectorZone((const SymmetricSectorZone &)other, reference) {}
+
 public:  
   /** 
    * Constructor
@@ -64,9 +68,9 @@ public:
 
   ObservationZonePoint* clone(const GeoPoint * _location = 0) const {
     if (_location) {
-      return new KeyholeZone(*_location);
+      return new KeyholeZone(*this, *_location);
     } else {
-      return new KeyholeZone(get_location());
+      return new KeyholeZone(*this, get_location());
     }
   }
 
