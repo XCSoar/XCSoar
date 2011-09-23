@@ -78,10 +78,8 @@ MapWindow::DrawTask(Canvas &canvas)
   bool draw_bearing = Basic().track_available;
   bool draw_route = draw_bearing;
 
-  const Route& route = Calculated().planned_route;
-
   if (draw_bearing) {
-    if (route.size()>2) {
+    if (Calculated().planned_route.size()>2) {
       draw_bearing = false;
     } else {
       draw_route = false;
@@ -115,19 +113,25 @@ MapWindow::DrawTask(Canvas &canvas)
     ((TaskVisitor &)dv).Visit(*task);
   }
 
-  if (draw_route) {
-    canvas.select(task_look.bearing_pen);
-    const int r_size = route.size();
-    RasterPoint p[r_size];
-    RasterPoint* pp = &p[0];
-    for (Route::const_iterator i = route.begin(); i!= route.end(); ++i, ++pp) {
-      *pp = render_projection.GeoToScreen(*i);
-    }
-    ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], &p[r_size-1], Layout::Scale(20));
-    canvas.polyline(p, r_size);
-  }
+  if (draw_route)
+    DrawRoute(canvas);
 }
 
+void
+MapWindow::DrawRoute(Canvas &canvas)
+{
+  const Route& route = Calculated().planned_route;
+
+  canvas.select(task_look.bearing_pen);
+  const int r_size = route.size();
+  RasterPoint p[r_size];
+  RasterPoint* pp = &p[0];
+  for (Route::const_iterator i = route.begin(); i!= route.end(); ++i, ++pp) {
+    *pp = render_projection.GeoToScreen(*i);
+  }
+  ScreenClosestPoint(p[r_size-1], p[r_size-2], p[r_size-1], &p[r_size-1], Layout::Scale(20));
+  canvas.polyline(p, r_size);
+}
 
 void
 MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)

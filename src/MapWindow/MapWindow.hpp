@@ -252,6 +252,7 @@ public:
   virtual void RenderTrail(Canvas &canvas, const RasterPoint aircraft_pos) const;
   void DrawTeammate(Canvas &canvas) const;
   void DrawTask(Canvas &canvas);
+  void DrawRoute(Canvas &canvas);
   void DrawTaskOffTrackIndicator(Canvas &canvas);
   virtual void DrawThermalEstimate(Canvas &canvas) const;
 
