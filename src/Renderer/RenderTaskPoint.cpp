@@ -108,8 +108,6 @@ RenderTaskPoint::DrawBearing(const TaskPoint &tp)
 void 
 RenderTaskPoint::DrawTarget(const TaskPoint &tp) 
 {
-  if (!DoDrawTarget(tp)) 
-    return;
 }
 
 void 
