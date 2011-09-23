@@ -69,29 +69,27 @@ RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp)
 {
   const bool visible = tp.boundingbox_overlaps(bb_screen);
 
-  if (visible && (layer == RENDER_TASK_OZ_SHADE)) {
+  if (visible && (layer == RENDER_TASK_OZ_SHADE))
     // draw shaded part of observation zone
     DrawOZBackground(canvas, tp);
-  }
   
   if (layer == RENDER_TASK_LEG) {
-    if (index>0) {
+    if (index > 0)
       DrawTaskLine(last_point, tp.GetLocationRemaining());
-    }
+
     last_point = tp.GetLocationRemaining();
   }
   
-  if (visible && (layer == RENDER_TASK_OZ_OUTLINE)) {
+  if (visible && (layer == RENDER_TASK_OZ_OUTLINE))
     DrawOZForeground(tp);
-  }
 }
 
 bool 
 RenderTaskPoint::DoDrawTarget(const TaskPoint &tp) const
 {
-  if (!tp.HasTarget()) {
+  if (!tp.HasTarget())
     return false;
-  }
+
   return draw_all || PointCurrent();
 }
 
@@ -113,9 +111,8 @@ RenderTaskPoint::DrawTarget(const TaskPoint &tp)
 void 
 RenderTaskPoint::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
 {
-  canvas.select(LegActive()
-                ? task_look.leg_active_pen
-                : task_look.leg_inactive_pen);
+  canvas.select(LegActive() ? task_look.leg_active_pen :
+                              task_look.leg_inactive_pen);
   canvas.background_transparent();
   map_canvas.line(start, end);
   canvas.background_opaque();
@@ -146,15 +143,13 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
     return;
 
   AATIsolineSegment seg(tp, task_projection);
-  if (!seg.IsValid()) {
+  if (!seg.IsValid())
     return;
-  }
 
   #define fixed_twentieth fixed(1.0 / 20.0)
   
   if (m_proj.GeoToScreenDistance(seg.Parametric(fixed_zero).
-                                    distance(seg.Parametric(fixed_one)))>2) {
-    
+                                    distance(seg.Parametric(fixed_one))) > 2) {
     RasterPoint screen[21];
     for (unsigned i = 0; i < 21; ++i) {
       fixed t = i * fixed_twentieth;
@@ -172,28 +167,19 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
 void 
 RenderTaskPoint::DrawDeadzone(const AATPoint &tp)
 {
-  if (!DoDrawDeadzone(tp) || is_ancient_hardware()) {
+  if (!DoDrawDeadzone(tp) || is_ancient_hardware())
     return;
-  }
-  /*
-    canvas.set_text_color(Graphics::Colours[m_settings_map.
-    iAirspaceColour[1]]);
-    // get brush, can be solid or a 1bpp bitmap
-    canvas.select(Graphics::hAirspaceBrushes[m_settings_map.
-    iAirspaceBrush[1]]);
-    */
 
   // erase where aircraft has been
   canvas.white_brush();
   canvas.white_pen();
   
-  if (PointCurrent()) {
+  if (PointCurrent())
     // scoring deadzone should include the area to the next destination
     map_canvas.draw(tp.get_deadzone());
-  } else {
+  else
     // scoring deadzone is just the samples convex hull
     map_canvas.draw(tp.GetSamplePoints());
-  }
 }
 
 void 
@@ -211,9 +197,9 @@ void
 RenderTaskPoint::DrawOZForeground(const OrderedTaskPoint &tp)
 {
   int offset = index - active_index;
-  if (mode_optional_start) {
+  if (mode_optional_start)
     offset = -1; // render optional starts as deactivated
-  }
+
   ozv.set_layer(RenderObservationZone::LAYER_INACTIVE);
   if (ozv.draw_style(canvas, settings_map.airspace, offset)) {
     ozv.Draw(canvas, m_proj, *tp.get_oz());
