@@ -20,7 +20,8 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
-#if !defined(XCSOAR_RENDER_TASK_POINT_HPP)
+
+#ifndef XCSOAR_RENDER_TASK_POINT_HPP
 #define XCSOAR_RENDER_TASK_POINT_HPP
 
 #include "Navigation/GeoPoint.hpp"
