@@ -30,8 +30,7 @@
  *  A 90 degree sector centered at the bisector of incoming/outgoing legs
  * \todo This really should have infinite length
  */
-class FAISectorZone: 
-  public SymmetricSectorZone 
+class FAISectorZone: public SymmetricSectorZone
 {
   const bool m_is_turnpoint;
 
@@ -48,21 +47,19 @@ public:
    * 
    * @return Initialised object
    */
-  FAISectorZone(const GeoPoint loc, const bool is_turnpoint=true):
-    SymmetricSectorZone(FAI_SECTOR, loc,
-                        fixed(1000.0 * (is_turnpoint ? 10 : 1)),
-                        Angle::radians(fixed_half_pi)),
-    m_is_turnpoint(is_turnpoint)
+  FAISectorZone(const GeoPoint loc, const bool is_turnpoint = true)
+    :SymmetricSectorZone(FAI_SECTOR, loc, fixed(1000.0 * (is_turnpoint ? 10 : 1)),
+                         Angle::radians(fixed_half_pi)),
+     m_is_turnpoint(is_turnpoint)
   {
     updateSector();
   }
 
-  ObservationZonePoint* clone(const GeoPoint * _location=0) const {
-    if (_location) {
+  ObservationZonePoint* clone(const GeoPoint *_location = NULL) const {
+    if (_location)
       return new FAISectorZone(*this, *_location);
-    } else {
-      return new FAISectorZone(*this, get_location());
-    }
+
+    return new FAISectorZone(*this, get_location());
   }
 };
 
