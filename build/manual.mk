@@ -23,8 +23,8 @@ SVG_ICON_LIST = \
 	gps_disconnected
 SVG_ICONS = $(patsubst %,$(MANUAL_OUTPUT_DIR)/icons/%.pdf,$(SVG_ICON_LIST))
 
-SVG_FIGURES_SHARED = $(wildcard $(DOC)/manual/shared/figures/*.svg)
-SVG_FIGURES = $(patsubst $(DOC)/manual/shared/figures/%.svg,$(MANUAL_OUTPUT_DIR)/figures/%.pdf,$(SVG_FIGURES_SHARED))
+SVG_FIGURES_SHARED = $(wildcard $(DOC)/manual/figures/*.svg)
+SVG_FIGURES = $(patsubst $(DOC)/manual/figures/%.svg,$(MANUAL_OUTPUT_DIR)/figures/%.pdf,$(SVG_FIGURES_SHARED))
 
 SVG_GRAPHICS_DATA = $(wildcard $(topdir)/Data/graphics/*.svg)
 SVG_GRAPHICS = $(patsubst $(topdir)/Data/graphics/%.svg,$(MANUAL_OUTPUT_DIR)/graphics/%.pdf,$(SVG_GRAPHICS_DATA))
@@ -32,7 +32,7 @@ SVG_GRAPHICS = $(patsubst $(topdir)/Data/graphics/%.svg,$(MANUAL_OUTPUT_DIR)/gra
 TEX_INCLUDES_DE =  $(wildcard $(DOC)/manual/*.sty) $(wildcard $(DOC)/manual/de/*.sty)
 FIGURES_DE = $(DOC)/manual/de/Bilder/*.png
  
-TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(DOC)/manual/shared:$(MANUAL_OUTPUT_DIR):.:"
+TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(MANUAL_OUTPUT_DIR):.:"
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
 
@@ -70,7 +70,7 @@ endif
 $(SVG_ICONS): $(MANUAL_OUTPUT_DIR)/icons/%.pdf: $(topdir)/Data/icons/%.svg | $(MANUAL_OUTPUT_DIR)/icons/dirstamp
 	rsvg-convert -a -f pdf -w 32 $< -o $@
 
-$(SVG_FIGURES): $(MANUAL_OUTPUT_DIR)/figures/%.pdf: $(topdir)/doc/manual/shared/figures/%.svg | $(MANUAL_OUTPUT_DIR)/figures/dirstamp
+$(SVG_FIGURES): $(MANUAL_OUTPUT_DIR)/figures/%.pdf: $(topdir)/doc/manual/figures/%.svg | $(MANUAL_OUTPUT_DIR)/figures/dirstamp
 	rsvg-convert -a -f pdf $< -o $@
 
 $(SVG_GRAPHICS): $(MANUAL_OUTPUT_DIR)/graphics/%.pdf: $(topdir)/Data/graphics/%.svg | $(MANUAL_OUTPUT_DIR)/graphics/dirstamp
