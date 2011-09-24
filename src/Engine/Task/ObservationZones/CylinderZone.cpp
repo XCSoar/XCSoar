@@ -27,17 +27,17 @@
 #include <stdlib.h>
 #include <algorithm>
 
-fixed 
+fixed
 CylinderZone::ScoreAdjustment() const
 {
   return Radius;
 }
 
-GeoPoint 
+GeoPoint
 CylinderZone::GetBoundaryParametric(fixed t) const
-{ 
-  return GeoVector(Radius,
-                   Angle::radians(t * fixed_two_pi)).end_point(get_location());
+{
+  return GeoVector(Radius, Angle::radians(t * fixed_two_pi)).
+           end_point(get_location());
 }
 
 bool
@@ -45,14 +45,14 @@ CylinderZone::equals(const ObservationZonePoint* other) const
 {
   const CylinderZone* z = (const CylinderZone*)other;
 
-  return ObservationZonePoint::equals(other) &&
-         Radius == z->getRadius();
+  return ObservationZonePoint::equals(other) && Radius == z->getRadius();
 }
 
 GeoPoint
 CylinderZone::randomPointInSector(const fixed mag) const
 {
   AircraftState ac;
+
   do {
     Angle dir = Angle::degrees(fixed(rand() % 360));
     fixed dmag = max(min(Radius, fixed(100.0)), Radius * mag);
@@ -60,5 +60,6 @@ CylinderZone::randomPointInSector(const fixed mag) const
     GeoVector vec(dis, dir);
     ac.location = vec.end_point(get_location());
   } while (!IsInSector(ac));
+
   return ac.location;
 }

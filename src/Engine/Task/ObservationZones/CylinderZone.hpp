@@ -31,22 +31,20 @@
  * Observation zone represented as a circular area with specified
  * radius from a center point
  */
-class CylinderZone : public ObservationZonePoint {
+class CylinderZone : public ObservationZonePoint
+{
 protected:
   /** radius (m) of OZ */
   fixed Radius;
 
 protected:
   CylinderZone(enum shape _shape, const GeoPoint &loc,
-               const fixed _radius=fixed(10000.0)):
-    ObservationZonePoint(_shape, loc),
-    Radius(_radius)
-  {
-  }
+               const fixed _radius = fixed(10000.0))
+    :ObservationZonePoint(_shape, loc), Radius(_radius) {}
 
-  CylinderZone(const CylinderZone &other, const GeoPoint &reference):
-    ObservationZonePoint((const ObservationZonePoint &)other, reference),
-    Radius(other.Radius) {}
+  CylinderZone(const CylinderZone &other, const GeoPoint &reference)
+    :ObservationZonePoint((const ObservationZonePoint &)other, reference),
+     Radius(other.Radius) {}
 
 public:
   /**
@@ -57,18 +55,14 @@ public:
    *
    * @return Initialised object
    */
-  CylinderZone(const GeoPoint &loc, const fixed _radius=fixed(10000.0)):
-    ObservationZonePoint(CYLINDER, loc),
-    Radius(_radius)
-  {
-  }
+  CylinderZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0))
+    :ObservationZonePoint(CYLINDER, loc), Radius(_radius) {}
 
-  virtual ObservationZonePoint* clone(const GeoPoint * _location = 0) const {
-    if (_location) {
+  virtual ObservationZonePoint* clone(const GeoPoint * _location = NULL) const {
+    if (_location)
       return new CylinderZone(*this, *_location);
-    } else {
-      return new CylinderZone(*this, get_location());
-    }
+
+    return new CylinderZone(*this, get_location());
   }
 
   /** 
@@ -78,7 +72,7 @@ public:
    */
   virtual bool IsInSector(const AircraftState &ref) const
   {
-    return distance(ref.location)<=Radius;
+    return distance(ref.location) <= Radius;
   }  
 
   /**
@@ -106,7 +100,7 @@ public:
    * @return True if constraints are satisfied
    */
   virtual bool TransitionConstraint(const AircraftState & ref_now, 
-                                     const AircraftState & ref_last) const {
+                                    const AircraftState & ref_last) const {
     return true;
   }
 
