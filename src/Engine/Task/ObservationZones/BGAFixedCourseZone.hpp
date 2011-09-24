@@ -30,8 +30,7 @@
  *  A 90 degree 20km sector centered at the bisector of incoming/outgoing legs,
  *  with 500m cylinder
  */
-class BGAFixedCourseZone: 
-  public KeyholeZone
+class BGAFixedCourseZone: public KeyholeZone
 {
   BGAFixedCourseZone(const BGAFixedCourseZone &other, const GeoPoint &reference)
     :KeyholeZone((const KeyholeZone &)other, reference) {}
@@ -44,18 +43,17 @@ public:
    * 
    * @return Initialised object
    */
-  BGAFixedCourseZone(const GeoPoint loc):
-    KeyholeZone(BGAFIXEDCOURSE, loc, fixed(20000.0))
+  BGAFixedCourseZone(const GeoPoint loc)
+    :KeyholeZone(BGAFIXEDCOURSE, loc, fixed(20000.0))
   {
     updateSector();
   }
 
-  ObservationZonePoint* clone(const GeoPoint * _location=0) const {
-    if (_location) {
+  ObservationZonePoint* clone(const GeoPoint *_location = NULL) const {
+    if (_location)
       return new BGAFixedCourseZone(*this, *_location);
-    } else {
-      return new BGAFixedCourseZone(*this, get_location());
-    }
+
+    return new BGAFixedCourseZone(*this, get_location());
   }
 };
 
