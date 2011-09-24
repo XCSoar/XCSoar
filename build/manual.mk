@@ -1,4 +1,4 @@
-MANUAL_OUTPUT_DIR = $(OUT)/all/manual
+MANUAL_OUTPUT_DIR = $(OUT)/manual
 GENERATED_DIR = $(OUT)/all/tex
 TEX_FILES_EN = $(wildcard $(DOC)/manual/en/*.tex)
 TEX_INCLUDES_EN = $(wildcard $(DOC)/manual/*.sty) $(wildcard $(DOC)/manual/en/*.sty)
