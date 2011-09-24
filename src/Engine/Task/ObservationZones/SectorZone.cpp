@@ -23,29 +23,29 @@
 #include "SectorZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-GeoPoint 
+GeoPoint
 SectorZone::GetBoundaryParametric(fixed t) const
 {
-  const Angle sweep = (EndRadial-StartRadial).as_bearing();
+  const Angle sweep = (EndRadial - StartRadial).as_bearing();
   const fixed l = Radius;
-  const fixed c1 = sweep.value_radians()*Radius;
-  const fixed tt = t*(c1+2*l);
+  const fixed c1 = sweep.value_radians() * Radius;
+  const fixed tt = t * (c1 + 2 * l);
   Angle a;
   fixed d;
-  if (tt<l) {
-    d = (tt/l)*Radius;
+  if (tt < l) {
+    d = (tt / l) * Radius;
     a = StartRadial;
-  } else if (tt<l+c1) {
+  } else if (tt < l + c1) {
     d = Radius;
-    a = StartRadial+Angle::radians(((tt-l)/c1)*sweep.value_radians());
+    a = StartRadial + Angle::radians(((tt - l) / c1) * sweep.value_radians());
   } else {
-    d = Radius-(tt-l-c1)/l*Radius;
+    d = Radius - (tt - l - c1) / l * Radius;
     a = EndRadial;
   }
   return GeoVector(d, a).end_point(get_location());
 }
 
-fixed 
+fixed
 SectorZone::ScoreAdjustment() const
 {
   return fixed_zero;
@@ -63,7 +63,7 @@ SectorZone::IsInSector(const AircraftState &ref) const
 {
   GeoVector f(get_location(), ref.location);
 
-  return (f.Distance <= Radius) && angleInSector(f.Bearing);
+  return f.Distance <= Radius && angleInSector(f.Bearing);
 }
 
 void

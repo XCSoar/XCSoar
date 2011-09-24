@@ -27,10 +27,10 @@
 #include "CylinderZone.hpp"
 
 /**
- * Sector of finite radius, defined by segment interior to supplied start/end radials 
+ * Sector of finite radius, defined by segment interior
+ * to supplied start/end radials
  */
-class SectorZone: 
-  public CylinderZone 
+class SectorZone: public CylinderZone
 {
 protected:
   /** Location of far end point of start radial */
@@ -45,19 +45,14 @@ protected:
   SectorZone(enum shape _shape, const GeoPoint &loc,
              const fixed _radius = fixed(10000.0),
              const Angle _startRadial = Angle::zero(),
-             const Angle _endRadial = Angle::radians(fixed_two_pi)):
-    CylinderZone(_shape, loc, _radius),
-    StartRadial(_startRadial),
-    EndRadial(_endRadial) 
-    {
-    }
+             const Angle _endRadial = Angle::radians(fixed_two_pi))
+    :CylinderZone(_shape, loc, _radius),
+     StartRadial(_startRadial), EndRadial(_endRadial) {}
 
-  SectorZone(const SectorZone &other, const GeoPoint &reference):
-    CylinderZone((const CylinderZone &)other, reference),
-    SectorStart(other.SectorStart),
-    SectorEnd(other.SectorEnd),
-    StartRadial(other.StartRadial),
-    EndRadial(other.EndRadial) {}
+  SectorZone(const SectorZone &other, const GeoPoint &reference)
+    :CylinderZone((const CylinderZone &)other, reference),
+     SectorStart(other.SectorStart), SectorEnd(other.SectorEnd),
+     StartRadial(other.StartRadial), EndRadial(other.EndRadial) {}
 
 public:
   /**
@@ -70,23 +65,20 @@ public:
    *
    * @return Initialised object
    */
-  SectorZone(const GeoPoint &loc, 
-             const fixed _radius=fixed(10000.0),
+  SectorZone(const GeoPoint &loc, const fixed _radius = fixed(10000.0),
              const Angle _startRadial = Angle::zero(),
-             const Angle _endRadial = Angle::radians(fixed_two_pi)):
-    CylinderZone(SECTOR, loc, _radius),
-    StartRadial(_startRadial),
-    EndRadial(_endRadial) 
+             const Angle _endRadial = Angle::radians(fixed_two_pi))
+    :CylinderZone(SECTOR, loc, _radius),
+     StartRadial(_startRadial), EndRadial(_endRadial)
   {
     updateSector();
   }
 
-  virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const {
-    if (_location) {
+  virtual ObservationZonePoint* clone(const GeoPoint * _location = NULL) const {
+    if (_location)
       return new SectorZone(*this, *_location);
-    } else {
-      return new SectorZone(*this, get_location());
-    }
+
+    return new SectorZone(*this, get_location());
   }
 
   /**
