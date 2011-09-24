@@ -307,6 +307,61 @@ TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
 }
 
 void
+TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
+                        const TCHAR *caption, const PixelRect &rc,
+                        bool isButtonOnly, const Bitmap *bmp,
+                        const bool isDown, bool inverse)
+{
+
+  PixelRect rcTextFinal = rc;
+  const unsigned buttonheight = rc.bottom - rc.top;
+  const int textwidth = canvas.text_width(caption);
+  const int textheight = canvas.text_height(caption);
+  unsigned textheightoffset = 0;
+
+  if (textwidth > (rc.right - rc.left)) // assume 2 lines
+    textheightoffset = max(0, (int)(buttonheight - textheight * 2) / 2);
+  else
+    textheightoffset = max(0, (int)(buttonheight - textheight) / 2);
+
+  rcTextFinal.top += textheightoffset;
+
+  //button-only formatting
+  if (isButtonOnly
+      && !isDown) {
+    canvas.draw_button(rc, false);
+    canvas.background_transparent();
+  } else {
+    canvas.fill_rectangle(rc, canvas.get_background_color());
+  }
+  if (bmp != NULL) {
+
+    const int offsetx = (rc.right - rc.left - bmp->get_size().cx / 2) / 2;
+    const int offsety = (rc.bottom - rc.top - bmp->get_size().cy) / 2;
+
+    if (inverse) // black background
+      canvas.copy_not(rc.left + offsetx,
+                  rc.top + offsety,
+                  bmp->get_size().cx / 2,
+                  bmp->get_size().cy,
+                  *bmp,
+                  bmp->get_size().cx / 2, 0);
+
+    else
+      canvas.copy(rc.left + offsetx,
+                  rc.top + offsety,
+                  bmp->get_size().cx / 2,
+                  bmp->get_size().cy,
+                  *bmp,
+                  bmp->get_size().cx / 2, 0);
+
+  } else {
+    canvas.formatted_text(&rcTextFinal, caption,
+        CaptionStyle);
+  }
+}
+
+void
 TabDisplay::on_paint(Canvas &canvas)
 {
   canvas.clear(COLOR_BLACK);
@@ -335,54 +390,12 @@ TabDisplay::on_paint(Canvas &canvas)
       canvas.set_background_color(COLOR_WHITE);
     }
     const PixelRect &rc = theTabBar.GetButtonSize(i);
-
-    PixelRect rcTextFinal = rc;
-    const unsigned buttonheight = rc.bottom - rc.top;
-    const int textwidth = canvas.text_width(theTabBar.GetButtonCaption(i));
-    const int textheight = canvas.text_height(theTabBar.GetButtonCaption(i));
-    unsigned textheightoffset = 0;
-
-    if (textwidth > (rc.right - rc.left)) // assume 2 lines
-      textheightoffset = max(0, (int)(buttonheight - textheight * 2) / 2);
-    else
-      textheightoffset = max(0, (int)(buttonheight - textheight) / 2);
-
-    rcTextFinal.top += textheightoffset;
-
-    //button-only formatting
-    if (theTabBar.GetButtonIsButtonOnly(i)
-        && (int)i != downindex) {
-      canvas.draw_button(rc, false);
-      canvas.background_transparent();
-    } else {
-      canvas.fill_rectangle(rc, canvas.get_background_color());
-    }
-    if (theTabBar.GetButtonIcon(i) != NULL) {
-
-      const Bitmap *bmp = theTabBar.GetButtonIcon(i);
-      const int offsetx = (rc.right - rc.left - bmp->get_size().cx / 2) / 2;
-      const int offsety = (rc.bottom - rc.top - bmp->get_size().cy) / 2;
-
-      if (inverse) // black background
-        canvas.copy_not(rc.left + offsetx,
-                    rc.top + offsety,
-                    bmp->get_size().cx / 2,
-                    bmp->get_size().cy,
-                    *bmp,
-                    bmp->get_size().cx / 2, 0);
-
-      else
-        canvas.copy(rc.left + offsetx,
-                    rc.top + offsety,
-                    bmp->get_size().cx / 2,
-                    bmp->get_size().cy,
-                    *bmp,
-                    bmp->get_size().cx / 2, 0);
-
-    } else {
-      canvas.formatted_text(&rcTextFinal, theTabBar.GetButtonCaption(i),
-          CaptionStyle);
-    }
+    PaintButton(canvas, CaptionStyle,
+                theTabBar.GetButtonCaption(i),
+                rc,
+                theTabBar.GetButtonIsButtonOnly(i),
+                theTabBar.GetButtonIcon(i),
+                (int)i == downindex, inverse);
   }
   if (has_focus()) {
     PixelRect rcFocus;

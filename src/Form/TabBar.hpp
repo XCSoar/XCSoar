@@ -193,6 +193,14 @@ protected:
   virtual void on_paint(Canvas &canvas);
   //ToDo: support function buttons
 
+  /**
+   * Paints one button
+   */
+  void PaintButton(Canvas &canvas, const unsigned CaptionStyle,
+                   const TCHAR *caption, const PixelRect &rc,
+                   bool isButtonOnly, const Bitmap *bmp,
+                   const bool isDown, bool inverse);
+
 /**
  * track key presses to navigate without mouse
  * @param key_code
