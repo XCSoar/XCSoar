@@ -43,6 +43,11 @@ manual: \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-developer-manual.pdf \
 	$(MANUAL_OUTPUT_DIR)/XCSoar-Handbuch.pdf
 
+# Generate a redistributable ZIP file that allows manual editors
+# without the full XCSoar development chain to compile the XCSoar
+# manual.  It contains all generated files.
+manual-dev-dist: $(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip
+
 $(MANUAL_OUTPUT_DIR)/XCSoar-manual.pdf: $(DOC)/manual/en/XCSoar-manual.tex \
 	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) \
 	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS) | $(MANUAL_OUTPUT_DIR)/dirstamp
@@ -76,3 +81,15 @@ $(SVG_FIGURES): $(MANUAL_OUTPUT_DIR)/figures/%.pdf: $(topdir)/doc/manual/figures
 
 $(SVG_GRAPHICS): $(MANUAL_OUTPUT_DIR)/graphics/%.pdf: $(topdir)/Data/graphics/%.svg | $(MANUAL_OUTPUT_DIR)/graphics/dirstamp
 	rsvg-convert -a -f pdf $< -o $@
+
+$(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: T=$(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev
+$(MANUAL_OUTPUT_DIR)/XCSoar-manual-dev.zip: VERSION.txt \
+	$(TEX_FILES_EN) $(TEX_INCLUDES_EN) \
+	$(FIGURES_EN) $(SVG_ICONS) $(SVG_FIGURES) $(SVG_GRAPHICS)
+	rm -rf $(T)
+	mkdir $(T) $(T)/figures
+	echo $(GIT_COMMIT_ID) >$(T)/git.txt
+	cp VERSION.txt $(TEX_FILES_EN) $(TEX_INCLUDES_EN) $(T)/
+	cp $(FIGURES_EN) $(SVG_FIGURES) $(T)/figures
+	cp -r $(MANUAL_OUTPUT_DIR)/graphics $(MANUAL_OUTPUT_DIR)/icons $(T)/
+	cd $(@D) && zip -r XCSoar-manual-dev.zip XCSoar-manual-dev
