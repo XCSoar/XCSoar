@@ -127,6 +127,9 @@ TopographyFileRenderer::Paint(Canvas &canvas,
 #endif
 
     switch (shape.get_type()) {
+    case MS_SHAPE_NULL:
+      break;
+
     case MS_SHAPE_POINT:
       if (!icon.defined())
         break;

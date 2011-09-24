@@ -110,8 +110,8 @@ public:
   }
 #endif
 
-  int get_type() const {
-    return type;
+  MS_SHAPE_TYPE get_type() const {
+    return (MS_SHAPE_TYPE)type;
   }
 
   unsigned get_number_of_lines() const {
