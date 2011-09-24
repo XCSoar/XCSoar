@@ -1,5 +1,4 @@
 MANUAL_OUTPUT_DIR = $(OUT)/manual
-GENERATED_DIR = $(OUT)/all/tex
 TEX_FILES_EN = $(wildcard $(DOC)/manual/en/*.tex)
 TEX_INCLUDES_EN = $(wildcard $(DOC)/manual/*.sty) $(wildcard $(DOC)/manual/en/*.sty)
 FIGURES_EN = $(DOC)/manual/en/figures/*.png
@@ -22,18 +21,18 @@ SVG_ICON_LIST = \
 	map_flag \
 	gps_acquiring \
 	gps_disconnected
-SVG_ICONS = $(patsubst %,$(GENERATED_DIR)/icons/%.pdf,$(SVG_ICON_LIST))
+SVG_ICONS = $(patsubst %,$(MANUAL_OUTPUT_DIR)/icons/%.pdf,$(SVG_ICON_LIST))
 
 SVG_FIGURES_SHARED = $(wildcard $(DOC)/manual/shared/figures/*.svg)
-SVG_FIGURES = $(patsubst $(DOC)/manual/shared/figures/%.svg,$(GENERATED_DIR)/figures/%.pdf,$(SVG_FIGURES_SHARED))
+SVG_FIGURES = $(patsubst $(DOC)/manual/shared/figures/%.svg,$(MANUAL_OUTPUT_DIR)/figures/%.pdf,$(SVG_FIGURES_SHARED))
 
 SVG_GRAPHICS_DATA = $(wildcard $(topdir)/Data/graphics/*.svg)
-SVG_GRAPHICS = $(patsubst $(topdir)/Data/graphics/%.svg,$(GENERATED_DIR)/graphics/%.pdf,$(SVG_GRAPHICS_DATA))
+SVG_GRAPHICS = $(patsubst $(topdir)/Data/graphics/%.svg,$(MANUAL_OUTPUT_DIR)/graphics/%.pdf,$(SVG_GRAPHICS_DATA))
 
 TEX_INCLUDES_DE =  $(wildcard $(DOC)/manual/*.sty) $(wildcard $(DOC)/manual/de/*.sty)
 FIGURES_DE = $(DOC)/manual/de/Bilder/*.png
  
-TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(DOC)/manual/shared:$(GENERATED_DIR):.:"
+TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(DOC)/manual/shared:$(MANUAL_OUTPUT_DIR):.:"
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
 
@@ -68,11 +67,11 @@ ifeq ($(DEBUG),n)
 endif
 	$(TEX_RUN) $<
 
-$(SVG_ICONS): $(GENERATED_DIR)/icons/%.pdf: $(topdir)/Data/icons/%.svg | $(GENERATED_DIR)/icons/dirstamp
+$(SVG_ICONS): $(MANUAL_OUTPUT_DIR)/icons/%.pdf: $(topdir)/Data/icons/%.svg | $(MANUAL_OUTPUT_DIR)/icons/dirstamp
 	rsvg-convert -a -f pdf -w 32 $< -o $@
 
-$(SVG_FIGURES): $(GENERATED_DIR)/figures/%.pdf: $(topdir)/doc/manual/shared/figures/%.svg | $(GENERATED_DIR)/figures/dirstamp
+$(SVG_FIGURES): $(MANUAL_OUTPUT_DIR)/figures/%.pdf: $(topdir)/doc/manual/shared/figures/%.svg | $(MANUAL_OUTPUT_DIR)/figures/dirstamp
 	rsvg-convert -a -f pdf $< -o $@
 
-$(SVG_GRAPHICS): $(GENERATED_DIR)/graphics/%.pdf: $(topdir)/Data/graphics/%.svg | $(GENERATED_DIR)/graphics/dirstamp
+$(SVG_GRAPHICS): $(MANUAL_OUTPUT_DIR)/graphics/%.pdf: $(topdir)/Data/graphics/%.svg | $(MANUAL_OUTPUT_DIR)/graphics/dirstamp
 	rsvg-convert -a -f pdf $< -o $@
