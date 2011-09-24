@@ -15,7 +15,7 @@ and a finish point.  The task points are to be flown in order.
 \item[Abort task] Provides options to fly to the nearest landing points.
 \end{description}
 
-Note that in goto and abort modes, the ordered task is retained an may be resumed
+Note that in goto and abort modes, the ordered task is retained and may be resumed
 later, preserving any statistics about achievement in the task.
 
 \section{Goto tasks}
@@ -80,14 +80,14 @@ themselves.
 
 XCSoar saves the current task when shutting down and loads it at
 startup, thereby allowing the task to be entered early in the day,
-then turning off the glide computer until ready for flight.
+then the device running XC Soar can be turned off until flight time.
 
 Task waypoints are preserved even if the waypoint
 file is changed.  This means, if you save a task, then change the
 waypoint file, then load the task again, new waypoints are generated
 for any waypoints that are missing in the new waypoint file.
 
-\section{Waypoint details dialog}
+\section{Waypoint Info dialog}
 %Several ways of selecting a waypoint are available:
 %\begin{itemize}
 %\item Touch its name or the waypoint symbol on the map screen if it is visible.
@@ -98,14 +98,14 @@ for any waypoints that are missing in the new waypoint file.
 %\end{itemize}
 %The display will now show the waypoint details dialog.
 
-The waypoint details dialog describes a waypoint in detail and has
-navigation functions such as GoTo, Insert.
+The waypoint info. dialog describes a waypoint in detail and has
+navigation functions such as GoTo, Insert or append to the task, and set the waypoint as the new home..
 
 This may be accessed several ways:
 \begin{itemize}
 \item
-From the task editor, menu \bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Edit}
-and select a waypoint, then press the button with waypoints name on it.
+From the task editor, menu \bmenu{Nav}\blink\bmenu{Task}\blink\bmenu{Turn Points}
+and highligh a waypoint, then tap the highlighted waypoint again to display the Task point dialog, then press the \bmenu{Details} \InfoBox.
 
 \item 
 From the menu \bmenu{Info}\blink\bmenu{Waypoint details} to show the
@@ -119,6 +119,11 @@ nearest the pan cursor.
 \item
 From the waypoint selector, menu \bmenu{Nav}\blink\bmenu{Waypoint
 List} and select a waypoint to show the details of that waypoint.
+
+\item
+If the waypoint is visible on the screen, touch its name or the waypoint symbol
+
+
 \end{itemize}
 
 The waypoint details dialog contains two major pages (accessed via the
@@ -126,33 +131,35 @@ The waypoint details dialog contains two major pages (accessed via the
 details to the waypoint they will by shown on extra pages.
 
 \subsection*{Waypoint details}
-This page contains text describing the waypoint's location, elevation
-and local sunset. Last not least a button \button{GoTo} to directly initiate
+This page contains text describing the waypoint's location, radio frequency and runway information (if this information is in the waypoint file) elevation, local sunset, bearing and distance to the waypoint, and the altitude required to reach the waypoint as described below. In addition, there is a button \button{GoTo} to directly initiate
 navigating to this waypoint. The button cancels the current task. 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails0.png}
 \end{center}
 
-This page also shows three forms of altitude difference (additional
+As mentioned above, the Waypoint info dialog also shows three forms of altitude difference (additional
 altitude required to reach the waypoint at the safety height) for
 the corresponding waypoint:
 \begin{description}
 \item[Alt diff MC 0] Altitude difference at MC setting of 0
-\item[Alt diff MC safety] Altitude difference at the abort/safety MacCready setting
+\item[Alt diff MC safety] Altitude difference at the abort/safety MacCready setting (see \ref{sec:Safety factors})
 \item[Alt diff MC current] Altitude difference at the current MacCready setting
 \end{description}
 
+From the main Waypoint Info screen, you can access the second page by using the "$<$-" and "$-$>" buttons in the bottom left corner of the page.
 \subsection*{Task menu}  
 This page contains a column of buttons allowing various actions to be performed:
 \begin{description}
-\item[\button{Replace in task}] replaces the active waypoint in the task.
-\item[\button{Insert in task}] inserts the waypoint before the active waypoint in
+\item[\button{Replace in task}] replaces the active waypoint in the task with the selected waypoint.
+\item[\button{Insert in task}] inserts the selected waypoint before the active waypoint in
   the task.
-\item[\button{Append to task}] adds the waypoint to the end of the task.
-\item[\button{Remove from task}] removes the waypoint from the task.
+\item[\button{Append to task}] adds the selected waypoint to the end of the task.
+\item[\button{Remove from task}] removes the selected waypoint from the task.  Note that this option is only visible if the selected waypoint is included in the active task.
 \item[\button{Set as new home}] sets the waypoint as the home airfield.
 \item[\button{Set teamcode}] sets the waypoint as reference waypoint for
   team code coordinates.
+%I don't see this last box, but I don't have FLARM.  Is this box only visible if you have FLARM, or was it removed?%
+
 
 \end{description}
 
@@ -172,6 +179,8 @@ contacts.
 \subsection*{Satellite image}
 This page shows a satellite image of the
 waypoint.
+
+%I don't have a screen for the Satellite image.  Has this feature been removed, or is it because I haven't loaded the satellite images into the waypoint datafile?  Where is this documented?%
 
 \begin{center}
 \includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-waypointdetails2.pdf}
@@ -201,6 +210,7 @@ individually or not at all.
    An additional special direction ``HDG(0°)'' filters waypoints within 30
    degrees to either side of the heading of the glider.  This allows the pilot to point the glider at a group of
   waypoints and quickly find them.
+%Filtering by heading doesn't seem to work as described. Need more explanation here.%
 \item[Type] Filters out waypoints that are not of the specified type
 (Landable point, Airport or Turnpoint) or that appear in the specified File~1 or
 File~2 (primary or secondary waypoint file respectively).
@@ -223,117 +233,67 @@ use it brings up the waypoint details dialog for the selected
 waypoint.
 
 \section{Task manager}\label{sec:task-manager-dialog}
-\begin{it}The task manager is target of major rework and thus the description
-possibly comes short compared to its functionality. Version 6.1 of XCSoar will hopefully
-leverage the rate of change at the task editor and the manual will be more
-complete at this point.\end{it}
+\begin{it}The task manager has undergone significant redesign compared with earlier versions of XC Soar.\end{it}
 
 The task manager is used to edit, view, load, save to file, and declare cross
 country tasks. It is accessed via the menu
 \begin{quote}
-\bmenu{Nav}\blink\bmenu{Nav}\blink\bmenu{Task Edit}
+\bmenu{Nav}\blink\bmenu{Task}
 \end{quote} 
 
-The task manager's primary page is an overview. It gives a graphical
-view of the active task, lets you enter into the task editor, or task browser.
-Further you can backup the current task with the \button{Save as} button, and 
-send the task to a connected intelligent logger device with the \button{Declare}
-button.
+The task manager's primary page is an calculator. It shows various calculations related to the active task, as described in detail below.  In addition, there are buttons for \button{Calculator}, \button{Turn Points}, \button{Manage}, and \button{Rules}, as well as a button to \button{Close} the task manager.
 
-\subsection*{Task browser}
-The \button{Browse} button enters the task browser. On the left side it displays a thumbnail of
-the selected task, its type and task distance.  The right side lists all
-tasks XCSoar found on your system, including an item for the current active
-task. This could be handy to save the active task to a different file and thus
-make a backup before modifying it.  Not to mention, the active task can not be
-renamed or deleted. To remove any active task from XCSoar you have to enter the
-editor and ``clear'' it there.
+\subsection*{Turn Points}
+The \button{Turn Points} button displays an ordered list of the points in the current active task.  If there are no waypoints in the active task, there will be only an option to "Add Turnpoint."  By highlighting (tapping) the "Add Turnpoint" function, then tapping in the highlighted region, the waypoint selector is displayed, as described above.  Highlighting a waypoint from the list and then tapping on the highlighted region adds the waypoint to the task.
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskbrowser.png}
-\end{center}
+\subsection*{Manage}
+Tapping on the \button{Manage} button displays the task manager's management screen.  There are four options, each of which is accessed by tapping on the relevant button:
 
-The task browser dialogs has the following buttons on the
-top of the form:
-\begin{description}
-\item[\button{Load}] Loads the selected task file and closes the dialog and
-returns to the task overview page.
-\item[\button{Rename}] Opens the text editor, allowing the
-file name to be changed.  If the Chancel button or ESC button in the
-text editor is pressed, the task will be unchanged.
-\item[\button{Delete}] Removes the task entirely from the system.
-\end{description}
+\begin{itemize}
+\item \button{New Task} Clears the current task and resets the task rules to the default values.
+\item \button{Declare}  If an external logger is connected, this will allow uploading the  active task to the logger and declaring it.
+\item \button{Browse} Displays a list of all the saved tasks, allowing the pilot to load a previously saved task.  Note that this option will overwrite the current active task.
+\item \button{Save}  Saves the current active task.  Upon tapping the \button{Save} button the pilot will be prompted to enter a file name for the task to be saved.
+\end{itemize}
 
+\subsection*{Rules}
+The values in the \button{Rules} menu depend on the task type selected.  Clicking any existing value will bring up another menu allowing the pilot to select a different value for this rule.  Task types are discussed in more detail below.
 
-\subsection*{Task editor}
-The \button{Edit} button enters the task editor. It comprises a list of 
-waypoints on the right side of the form. All means to add, change, or
-delete waypoints to the list composing the task are accessible through this
-side of the form. By pressing the ``(add waypoint)'' a propor selection of
-waypoint types according to the task type is presented. Selecting a waypoint
-type leads directly to the already described waypoint selector dialog (see
-Section~\ref{sec:waypoint-selector-dialog}).
-
-The type of task and the total distance of the task is shown below the waypoint
-list.
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit0.png}
-\end{center}
-
-The left side of the form gives all means to manipulate the task entirely. You
-can create a new one, review the task properties, and clear the task entirely. A
-graphical fullscreen overview is shown by taping on the task thumbnail view.
-
-The up and down button below allow to reorder the waypoint list. This is handy
-to e.g. flip the round trip direction of a triangle course by changing the
-turning point sequence.
+Also, tapping on the \button{Rules} button again after it is highlighted allows toggling between a "thumbnail" view of the task map and a larger view of the task.
 
 \subsection*{Task types}
-By pressing the \button{New} button a selction of task types is presented to
-choose  from.
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit1.png}
-\end{center}
-On the list of task types the type of the active task is marked with a ``*'' in
-fornt of it. The set of task types largly covers the typically used
-international FAI task set and also a ``Mixed'' type to describe virtually any
-intended flight. The ``Touring`` type is a simple way to enter as less
-as possible into the system and have a maximal casual cross country support by
-XCSoar.  On the left side of the form a short description is given to the
-selected task type.
+XC Soar currently defines three different task types: Racing, AAT, and FAI badges/records.
 
-Since the manual does not intend to rephrase FAI rules or tasks you better refer
-to the online source  \url{http://www.fai.org}. 
+A brief description of the task types is included below, but this manual does not intend to rephrase FAI rules or contest task types.  The reader is encouraged to become thoroughly familiar with each task type by referring to contest rules or FAI rules, which are available at \url{http://www.fai.org}. 
 
+\begin{itemize}
+    \item Racing (also known as an "assigned task").  The racing task involves flight around each specified turnpoint in the specified order.  Selecting the racing task type allows the pilot to enter the following parameters (note: if the option "FAI start/finish rules" is set to "On" then none of the options are available %Why is this?%:
+\begin{itemize}
+    \item Start max. speed: This is the maximum speed allowed in the start observation zone.  This should be set to 0 if there is no limit.
+		\item Start max. height: This is the maximum height above the start height reference (AGL or MSL) at which a task can be started.  This  should be set to 0 for no limit.
+	\item Start height referece: This specifies whether the maximum start height is referenced to ground level of the start point ("AGL") or Mean Sea Level ("MSL")
+	\item Finish Minimum Height: This is the minimum height based on the finish reference (AGL or MSL) at which a task can be finished.  This should be set to 0 for no limit.
+	\item Finish height referece: This specifies whether the minimum finish height is referenced to ground level of the finish point ("AGL") or Mean Sea Level ("MSL")
+	\item FAI start/finish rules: If enabled, this task type has no max start height or max start speed.  Finish height reference is set to AGL and finish height is 1000m below the start height %Is this description correct?%
+\end{itemize}
+\item AAT (also known as "Turn Area Task,"or TAT).  This is a task through assigned areas (restricted to cylinder or sector observation zones).  A minimum task time applies.  Rules options for this task type include:
+\begin{itemize}
+    \item AAT minimum time:  This is the required minimum time for the task.  Refer to contest rules or consult an expert for penalties associated with finishing prior to the minimum time.  The time in this option is given in minutes.
+	\item Start maximum speed: Same meaning as in the racing task type, above
+	\item Start maximum height: Same meaning as in the racing task type, above
+	\item Start height reference: Same meaning as in the racing task type, above
+	\item Finish minimum height: Same meaning as in the racing task type, above
+	\item Finish height reference: Same meaning as in the racing task type, above
+	\item FAI start/finish rules: Same meaning as in the racing task type, above
+\end{itemize}
+\item FAI badges/records.  This task type allows only FAI start, finish, and turn point types.
+\end{itemize}
 
-\subsection*{Task properties}
-By pressing the \button{Properties} button a summary with the important
-parameters of the task is reached.  If applicable values are taken from the
-default rules configuration page \config{taskrules}.  For FAI tasks only the
-finish height option applies. For the AAT the most important setting is the
-minimum task time, which can be set here.
+Once the appropriate task type has been selected and start and finish rules have been defined as described above, it is necessary to define the properties of each waypoint in the task.  Waypoints can be start points, turnpoints, or finish points.
 
-\begin{center}
-\includegraphics[angle=0,width=0.8\linewidth,keepaspectratio='true']{figures/dialog-taskedit2.png}
-\end{center}
+This is defined by tapping the \button{Turn Points} button from the Task Manager.  This brings up the list of waypoints in the task (if any).  Highlighting any waypoint on the list and either tapping it again or pressing the \button{Edit Point} button brings up the waypoint definition pressing the \button{Change type} button  will bring up a menu of the various task point types available.  Definitions of each point type are shown below the list.
 
-The task properies dialogs contain several fields:
-\begin{description}
-\item[AAT min time]  (Only for AAT) Minimum AAT task time in minutes.
-\item[Task scoring]  Internal flag, which determines whether accurate scoring
-measurements of the task is required or not. It can not be modified.
-\item[Start max speed]  Maximum speed allowed in start observation zone.  Set to
-0 for no limit.
-\item[Start max height]  Maximum height while starting the task.  Set to 0 for
-no limit.
-\item[Start height ref]  Reference used for start max height rule. ``MSL''
-reference is altitude above mean sea level, ``AGL'' reference is the height
-above ground at the start point.
-\item[Finish min height]  Minimum height above ground while finishing the task. 
-Set to 0 for no limit.
-\item[FAI finish height]  (Only for FAI tasks) If enabled, this option requires
-the minimum height above ground for finish to be greater than 1000m below the start height.
-\end{description}
+%Need to add a section describing how to start the task%
 
 \section{Advancing and restarting tasks}\label{sec:advanc-rest-tasks}
 At all times one waypoint in the task is designated as the active
