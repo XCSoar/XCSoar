@@ -1,4 +1,4 @@
-TARGETS = PC PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID ANDROID7 ANDROIDFAT CYGWIN
+TARGETS = PC WIN64 PPC2000 PPC2003 PPC2003X WM5 WM5X ALTAIR WINE UNIX ANDROID ANDROID7 ANDROIDFAT CYGWIN
 
 # These targets are built when you don't specify the TARGET variable.
 DEFAULT_TARGETS = PC PPC2000 PPC2003 WM5 ALTAIR WINE
@@ -7,6 +7,7 @@ TARGET_FLAVOR := $(TARGET)
 
 HAVE_CE := n
 HAVE_FPU := y
+X64 := auto
 XSCALE := n
 ARMV7 := n
 X86 := n
@@ -19,6 +20,12 @@ HAVE_MSVCRT := y
 TARGET_ARCH :=
 
 # virtual targets ("flavors")
+
+ifeq ($(TARGET),WIN64)
+  X64 := y
+  TARGET_FLAVOR := $(TARGET)
+  override TARGET = PC
+endif
 
 ifeq ($(TARGET),PPC2003X)
   XSCALE := y
@@ -69,12 +76,17 @@ ifeq ($(TARGET),PPC2003)
 endif
 
 ifeq ($(TARGET),PC)
-  TCPATH := i586-mingw32msvc-
+  ifeq ($(X64),y)
+    TCPATH := amd64-mingw32msvc-
+    TARGET_ARCH += -m64
+  else
+    TCPATH := i586-mingw32msvc-
+    TARGET_ARCH += -march=i586
+  endif
+
   ifeq ($(WINHOST),y)
     TCPATH :=
   endif
-
-  TARGET_ARCH += -march=i586
 
   WINVER = 0x0500
 endif
