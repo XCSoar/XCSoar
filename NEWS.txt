@@ -6,6 +6,8 @@ Version 6.2.1 - not yet released
 * faster METAR and TAF download
 * devices
   - FLARM: clear old barometric altitude as soon as FLARM is detected
+* user interface
+  - show validation errors before task declaration
 * Android
   - fix hang on quit
   - fix screen corruption when rotating the progress screen

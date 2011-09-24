@@ -358,6 +358,14 @@ pnlTaskList::OnTaskCursorCallback(gcc_unused unsigned i)
 bool
 pnlTaskList::OnDeclareClicked(gcc_unused WndButton &Sender)
 {
+  if (!(*active_task)->check_task()) {
+    const AbstractTaskFactory::TaskValidationErrorVector errors =
+      (*active_task)->get_factory().getValidationErrors();
+    MessageBoxX(getTaskValidationErrors(errors), _("Declare task"),
+                MB_ICONEXCLAMATION);
+    return false;
+  }
+
   logger.LoggerDeviceDeclare(**active_task);
   return false;
 }
