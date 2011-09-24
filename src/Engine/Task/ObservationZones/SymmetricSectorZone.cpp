@@ -23,31 +23,27 @@
 #include "SymmetricSectorZone.hpp"
 #include "Navigation/GeoPoint.hpp"
 
-void SymmetricSectorZone::set_legs(const GeoPoint *previous,
-                                   const GeoPoint *current,
-                                   const GeoPoint *next)
+void
+SymmetricSectorZone::set_legs(const GeoPoint *previous, const GeoPoint *current,
+                              const GeoPoint *next)
 {
   Angle biSector;
-  if (!next && previous) { 
+  if (!next && previous)
     // final
     biSector = previous->bearing(*current);
-  } else if (next && previous) {
+  else if (next && previous)
     // intermediate
-    biSector = previous->bearing(*current).
-      BiSector(current->bearing(*next));
-  } else if (next && !previous) {
+    biSector = previous->bearing(*current).BiSector(current->bearing(*next));
+  else if (next && !previous)
     // start
     biSector = next->bearing(*current);
-  } else {
+  else
     // single point
     biSector = Angle::zero();
-  }
 
   setStartRadial((biSector - SectorAngle.half()).as_bearing());
   setEndRadial((biSector + SectorAngle.half()).as_bearing());
 }
-
-
 
 bool
 SymmetricSectorZone::equals(const ObservationZonePoint* other) const

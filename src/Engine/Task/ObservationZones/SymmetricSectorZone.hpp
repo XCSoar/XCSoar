@@ -26,58 +26,52 @@
 
 #include "SectorZone.hpp"
 
-/**
- * Segment centered on bisector of incoming/outgoing legs 
- */
-class SymmetricSectorZone: 
-  public SectorZone 
+/** Segment centered on bisector of incoming/outgoing legs */
+class SymmetricSectorZone: public SectorZone
 {
   const Angle SectorAngle;
 
 protected:
-/** 
- * Constructor.
- * 
- * @param loc Tip of sector location
- * @param radius Radius (m) of sector
- * @param angle Angle subtended by start/end radials
- * 
- * @return Initialised object
- */
+  /**
+   * Constructor.
+   *
+   * @param loc Tip of sector location
+   * @param radius Radius (m) of sector
+   * @param angle Angle subtended by start/end radials
+   *
+   * @return Initialised object
+   */
   SymmetricSectorZone(Shape _shape, const GeoPoint &loc,
                       const fixed radius=fixed(10000.0),
-                      const Angle angle=Angle::radians(fixed_half_pi)):
-    SectorZone(_shape, loc, radius),
-    SectorAngle(angle) {}
+                      const Angle angle=Angle::radians(fixed_half_pi))
+    :SectorZone(_shape, loc, radius), SectorAngle(angle) {}
 
   SymmetricSectorZone(const SymmetricSectorZone &other,
-                      const GeoPoint &reference):
-    SectorZone((const SectorZone &)other, reference),
-    SectorAngle(other.SectorAngle) {}
+                      const GeoPoint &reference)
+    :SectorZone((const SectorZone &)other, reference),
+     SectorAngle(other.SectorAngle) {}
 
 public:
-  virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const = 0;
+  virtual ObservationZonePoint* clone(const GeoPoint *_location = NULL) const = 0;
 
-/** 
- * Update radials when previous/next legs are modified.
- * 
- * @param previous Previous task point (origin of inbound leg)
- * @param current Taskpoint this is located at
- * @param next Following task point (destination of outbound leg)
- */
-  virtual void set_legs(const GeoPoint *previous,
-                        const GeoPoint *current,
+  /**
+   * Update radials when previous/next legs are modified.
+   *
+   * @param previous Previous task point (origin of inbound leg)
+   * @param current Taskpoint this is located at
+   * @param next Following task point (destination of outbound leg)
+   */
+  virtual void set_legs(const GeoPoint *previous, const GeoPoint *current,
                         const GeoPoint *next);
 
-/** 
- * Test whether an OZ is equivalent to this one
- * 
- * @param other OZ to compare to
- * 
- * @return True if same type and OZ parameters
- */
-
-  virtual bool equals(const ObservationZonePoint* other) const;
+  /**
+   * Test whether an OZ is equivalent to this one
+   *
+   * @param other OZ to compare to
+   *
+   * @return True if same type and OZ parameters
+   */
+  virtual bool equals(const ObservationZonePoint *other) const;
 
   /** 
    * Accessor for angle of sector (angle between start/end radials)
