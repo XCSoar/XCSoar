@@ -42,7 +42,7 @@ protected:
   Angle EndRadial;
 
 protected:
-  SectorZone(enum shape _shape, const GeoPoint &loc,
+  SectorZone(Shape _shape, const GeoPoint &loc,
              const fixed _radius = fixed(10000.0),
              const Angle _startRadial = Angle::zero(),
              const Angle _endRadial = Angle::radians(fixed_two_pi))

@@ -38,7 +38,7 @@ protected:
   fixed Radius;
 
 protected:
-  CylinderZone(enum shape _shape, const GeoPoint &loc,
+  CylinderZone(Shape _shape, const GeoPoint &loc,
                const fixed _radius = fixed(10000.0))
     :ObservationZonePoint(_shape, loc), Radius(_radius) {}
 

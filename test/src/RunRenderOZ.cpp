@@ -93,7 +93,7 @@ public:
     delete oz;
   }
 
-  void set_shape(enum ObservationZonePoint::shape shape) {
+  void set_shape(ObservationZonePoint::Shape shape) {
     if (oz != NULL && shape == oz->shape)
       return;
 
@@ -191,7 +191,7 @@ oz_type_cursor_callback(unsigned idx)
 {
   assert(idx < NUM_OZ_TYPES);
 
-  oz_window->set_shape((enum ObservationZonePoint::shape)idx);
+  oz_window->set_shape((ObservationZonePoint::Shape)idx);
 }
 
 class TestWindow : public SingleWindow {

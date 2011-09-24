@@ -40,7 +40,7 @@ class ObservationZonePoint:
 public:
   friend class Serialiser;
 
-  enum shape {
+  enum Shape {
     LINE,
     CYLINDER,
     SECTOR,
@@ -52,7 +52,7 @@ public:
     ANNULAR_SECTOR,
   };
 
-  const enum shape shape;
+  const Shape shape;
 
 private:
   GeoPoint reference;
@@ -70,7 +70,7 @@ public:
    *
    * @return Initialised object
    */
-  ObservationZonePoint(enum shape _shape, const GeoPoint & _location)
+  ObservationZonePoint(Shape _shape, const GeoPoint & _location)
     :shape(_shape), reference(_location) {}
 
   /**

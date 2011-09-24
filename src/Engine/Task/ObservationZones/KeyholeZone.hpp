@@ -42,7 +42,7 @@ protected:
  *
  * @return Initialised object
  */
-  KeyholeZone(enum shape _shape, const GeoPoint &loc,
+  KeyholeZone(Shape _shape, const GeoPoint &loc,
               const fixed radius=fixed(10000.0),
               const Angle angle=Angle::radians(fixed_half_pi)):
     SymmetricSectorZone(_shape, loc, radius, angle) {}

@@ -32,7 +32,7 @@ class AnnularSectorZone:
   fixed InnerRadius;
 
 protected:
-  AnnularSectorZone(enum shape _shape, const GeoPoint &loc,
+  AnnularSectorZone(Shape _shape, const GeoPoint &loc,
                     const fixed _radiusOuter = fixed(10000.0),
                     const Angle _startRadial = Angle::zero(),
                     const Angle _endRadial = Angle::radians(fixed_two_pi),

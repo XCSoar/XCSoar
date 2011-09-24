@@ -44,7 +44,7 @@ protected:
  * 
  * @return Initialised object
  */
-  SymmetricSectorZone(enum shape _shape, const GeoPoint &loc,
+  SymmetricSectorZone(Shape _shape, const GeoPoint &loc,
                       const fixed radius=fixed(10000.0),
                       const Angle angle=Angle::radians(fixed_half_pi)):
     SectorZone(_shape, loc, radius),
