@@ -108,13 +108,8 @@ TabBarControl::GetButtonIcon(unsigned i)
   return buttons[i]->bmp;
 }
 
-unsigned
-TabBarControl::AddClient(Window *w, const TCHAR* Caption,
-    bool IsButtonOnly, const Bitmap *bmp,
-    PreHideNotifyCallback_t PreHideFunction,
-    PreShowNotifyCallback_t PreShowFunction,
-    PostShowNotifyCallback_t PostShowFunction,
-    ReClickNotifyCallback_t ReClickFunction)
+void
+TabBarControl::AddClientWindow(Window *w)
 {
   if (GetCurrentPage() != buttons.size())
     w->hide();
@@ -133,6 +128,17 @@ TabBarControl::AddClient(Window *w, const TCHAR* Caption,
               rc.right - rc.left,
               rc.bottom - rc.top - theTabDisplay->GetTabHeight());
   }
+}
+
+unsigned
+TabBarControl::AddClient(Window *w, const TCHAR* Caption,
+    bool IsButtonOnly, const Bitmap *bmp,
+    PreHideNotifyCallback_t PreHideFunction,
+    PreShowNotifyCallback_t PreShowFunction,
+    PostShowNotifyCallback_t PostShowFunction,
+    ReClickNotifyCallback_t ReClickFunction)
+{
+  AddClientWindow(w);
 
   OneTabButton *b = new OneTabButton(Caption, IsButtonOnly, bmp,
       PreHideFunction, PreShowFunction, PostShowFunction, ReClickFunction);

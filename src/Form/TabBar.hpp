@@ -140,6 +140,14 @@ public:
   bool GetButtonIsButtonOnly(unsigned i);
   unsigned GetTabLineHeight() {return TabLineHeight; }
   void SetClientOverlapTabs(bool value) {clientOverlapTabs = value; }
+
+protected:
+  /**
+   * adds the window the the tabbed control and sizes it
+   * @param w
+   */
+  void AddClientWindow(Window *w);
+
 };
 
 /**
