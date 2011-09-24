@@ -30,8 +30,7 @@
  * A 180 degree sector centered at the inverse of the outgoing leg
  * @see http://www.gliding.co.uk/forms/competitionrules2010.pdf - page 11
  */
-class BGAStartSectorZone:
-  public SymmetricSectorZone 
+class BGAStartSectorZone: public SymmetricSectorZone
 {
   BGAStartSectorZone(const BGAStartSectorZone &other, const GeoPoint &reference)
     :SymmetricSectorZone((const SymmetricSectorZone &)other, reference) {}
@@ -44,18 +43,17 @@ public:
    * 
    * @return Initialised object
    */
-  BGAStartSectorZone(const GeoPoint loc):
-    SymmetricSectorZone(BGA_START, loc, fixed(5000.0), Angle::radians(fixed_pi))
+  BGAStartSectorZone(const GeoPoint loc)
+    :SymmetricSectorZone(BGA_START, loc, fixed(5000.0), Angle::radians(fixed_pi))
   {
     updateSector();
   }
 
   ObservationZonePoint* clone(const GeoPoint * _location = 0) const {
-    if (_location) {
+    if (_location)
       return new BGAStartSectorZone(*this, *_location);
-    } else {
-      return new BGAStartSectorZone(*this, get_location());
-    }
+
+    return new BGAStartSectorZone(*this, get_location());
   }
 };
 
