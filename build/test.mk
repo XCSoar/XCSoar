@@ -1619,7 +1619,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindow/MapWindowWaypoints.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/MapWindow/MapDrawHelper.cpp \
-	$(SRC)/Renderer/RenderObservationZone.cpp \
+	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/RenderTask.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
@@ -1800,7 +1800,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Notify.cpp \
-	$(SRC)/Renderer/RenderObservationZone.cpp \
+	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Look/DialogLook.cpp \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Screen/Layout.cpp \
@@ -1929,7 +1929,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/ChartProjection.cpp \
 	$(SRC)/Renderer/RenderTask.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
-	$(SRC)/Renderer/RenderObservationZone.cpp \
+	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/MapWindow/MapCanvas.cpp \

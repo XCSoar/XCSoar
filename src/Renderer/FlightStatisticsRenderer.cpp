@@ -47,7 +47,7 @@ Copyright_License {
 #include "ChartProjection.hpp"
 #include "Renderer/RenderTask.hpp"
 #include "Renderer/RenderTaskPoint.hpp"
-#include "Renderer/RenderObservationZone.hpp"
+#include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
 #include "Screen/Chart.hpp"
 #include "Computer/TraceComputer.hpp"
@@ -496,7 +496,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
     proj.Set(rc, task, nmea_info.location);
 
-    RenderObservationZone ozv(task_look, airspace_look, settings_map.airspace);
+    OZRenderer ozv(task_look, airspace_look, settings_map.airspace);
     RenderTaskPoint tpv(canvas, NULL, proj, settings_map, task_look,
                         task.get_task_projection(),
                         ozv, false, true, nmea_info.location);

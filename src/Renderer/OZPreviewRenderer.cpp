@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "OZPreviewRenderer.hpp"
-#include "RenderObservationZone.hpp"
+#include "OZRenderer.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Features.hpp"
 #include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
@@ -39,7 +39,7 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
                         const AirspaceRendererSettings &airspace_settings,
                         const AirspaceLook &airspace_look)
 {
-  RenderObservationZone ozv(look, airspace_look, airspace_settings);
+  OZRenderer ozv(look, airspace_look, airspace_settings);
 
   WindowProjection projection;
   projection.SetScreenSize(radius * 2, radius * 2);
@@ -49,7 +49,7 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
   projection.SetScreenAngle(Angle::zero());
   projection.UpdateScreenBounds();
 
-  ozv.Draw(canvas, RenderObservationZone::LAYER_SHADE, projection, oz, 1);
-  ozv.Draw(canvas, RenderObservationZone::LAYER_INACTIVE, projection, oz, 1);
-  ozv.Draw(canvas, RenderObservationZone::LAYER_ACTIVE, projection, oz, 1);
+  ozv.Draw(canvas, OZRenderer::LAYER_SHADE, projection, oz, 1);
+  ozv.Draw(canvas, OZRenderer::LAYER_INACTIVE, projection, oz, 1);
+  ozv.Draw(canvas, OZRenderer::LAYER_ACTIVE, projection, oz, 1);
 }

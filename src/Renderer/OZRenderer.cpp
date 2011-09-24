@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "RenderObservationZone.hpp"
+#include "OZRenderer.hpp"
 #include "Task/ObservationZones/LineSectorZone.hpp"
 #include "Task/ObservationZones/FAISectorZone.hpp"
 #include "Task/ObservationZones/KeyholeZone.hpp"
@@ -36,7 +36,7 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Look/AirspaceLook.hpp"
 
-RenderObservationZone::RenderObservationZone(
+OZRenderer::OZRenderer(
     const TaskLook &_task_look, const AirspaceLook &_airspace_look,
     const AirspaceRendererSettings &_settings)
   :task_look(_task_look), airspace_look(_airspace_look), settings(_settings)
@@ -44,7 +44,7 @@ RenderObservationZone::RenderObservationZone(
 }
 
 void
-RenderObservationZone::draw_style(Canvas &canvas, Layer layer, int offset) const
+OZRenderer::draw_style(Canvas &canvas, Layer layer, int offset) const
 {
   if (layer == LAYER_SHADE) {
     Color color = airspace_look.colors[settings.colours[AATASK]];
@@ -81,7 +81,7 @@ RenderObservationZone::draw_style(Canvas &canvas, Layer layer, int offset) const
 }
 
 void
-RenderObservationZone::un_draw_style(Canvas &canvas, Layer layer) const
+OZRenderer::un_draw_style(Canvas &canvas, Layer layer) const
 {
   if (layer == LAYER_SHADE) {
 #ifdef ENABLE_OPENGL
@@ -93,7 +93,7 @@ RenderObservationZone::un_draw_style(Canvas &canvas, Layer layer) const
 }
 
 void
-RenderObservationZone::Draw(Canvas &canvas, Layer layer,
+OZRenderer::Draw(Canvas &canvas, Layer layer,
                             const Projection &projection,
                             const ObservationZonePoint &_oz, int offset)
 {

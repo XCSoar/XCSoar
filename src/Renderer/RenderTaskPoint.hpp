@@ -31,7 +31,7 @@ Copyright_License {
 
 class Canvas;
 class WindowProjection;
-class RenderObservationZone;
+class OZRenderer;
 class TaskPoint;
 class OrderedTaskPoint;
 class AATPoint;
@@ -60,7 +60,7 @@ protected:
 
   GeoPoint last_point;
   unsigned index;
-  RenderObservationZone &ozv;
+  OZRenderer &ozv;
   unsigned active_index;
   RenderTaskLayer layer;
   const GeoPoint location;
@@ -73,7 +73,7 @@ public:
                   const SETTINGS_MAP &_settings_map,
                   const TaskLook &task_look,
                   const TaskProjection &_task_projection,
-                  RenderObservationZone &_ozv,
+                  OZRenderer &_ozv,
                   bool _draw_bearing,
                   bool _draw_all,
                   const GeoPoint &_location);

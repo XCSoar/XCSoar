@@ -33,7 +33,7 @@ Copyright_License {
 #include "Task/TaskPoints/FinishPoint.hpp"
 #include "Look/TaskLook.hpp"
 #include "Math/Screen.hpp"
-#include "RenderObservationZone.hpp"
+#include "OZRenderer.hpp"
 #include "NMEA/Info.hpp"
 #include "SettingsMap.hpp"
 #include "Asset.hpp"
@@ -43,7 +43,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                                  const SETTINGS_MAP &_settings_map,
                                  const TaskLook &_task_look,
                                  const TaskProjection &_task_projection,
-                                 RenderObservationZone &_ozv,
+                                 OZRenderer &_ozv,
                                  bool _draw_bearing,
                                  bool _draw_all,
                                  const GeoPoint &_location)
@@ -167,7 +167,7 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
 void
 RenderTaskPoint::DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp)
 {
-  ozv.Draw(canvas, RenderObservationZone::LAYER_SHADE, m_proj, *tp.get_oz(),
+  ozv.Draw(canvas, OZRenderer::LAYER_SHADE, m_proj, *tp.get_oz(),
            index - active_index);
 }
 
@@ -178,9 +178,9 @@ RenderTaskPoint::DrawOZForeground(const OrderedTaskPoint &tp)
   if (mode_optional_start)
     offset = -1; // render optional starts as deactivated
 
-  ozv.Draw(canvas, RenderObservationZone::LAYER_INACTIVE, m_proj, *tp.get_oz(),
+  ozv.Draw(canvas, OZRenderer::LAYER_INACTIVE, m_proj, *tp.get_oz(),
            offset);
-  ozv.Draw(canvas, RenderObservationZone::LAYER_ACTIVE, m_proj, *tp.get_oz(),
+  ozv.Draw(canvas, OZRenderer::LAYER_ACTIVE, m_proj, *tp.get_oz(),
            offset);
 }
 

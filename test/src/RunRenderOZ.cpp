@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 /*
- * This program demonstrates the RenderObservationZone library.  It
+ * This program demonstrates the OZRenderer library.  It
  * shows a list of shapes, and draws the selected shape on the right.
  *
  */
@@ -37,7 +37,7 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Form/List.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
-#include "Renderer/RenderObservationZone.hpp"
+#include "Renderer/OZRenderer.hpp"
 #include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 #include "Engine/Task/ObservationZones/LineSectorZone.hpp"
 #include "Engine/Task/ObservationZones/FAISectorZone.hpp"
@@ -78,7 +78,7 @@ static GeoPoint next(Angle::degrees(fixed(10.2)),
 static AirspaceRendererSettings airspace_renderer_settings;
 
 class OZWindow : public PaintWindow {
-  RenderObservationZone roz;
+  OZRenderer roz;
   ObservationZonePoint *oz;
   Projection projection;
 
@@ -171,9 +171,9 @@ OZWindow::on_paint(Canvas &canvas)
 
   const int offset = 0;
 
-  roz.Draw(canvas, RenderObservationZone::LAYER_SHADE, projection, *oz, offset);
-  roz.Draw(canvas, RenderObservationZone::LAYER_INACTIVE, projection, *oz, offset);
-  roz.Draw(canvas, RenderObservationZone::LAYER_ACTIVE, projection, *oz, offset);
+  roz.Draw(canvas, OZRenderer::LAYER_SHADE, projection, *oz, offset);
+  roz.Draw(canvas, OZRenderer::LAYER_INACTIVE, projection, *oz, offset);
+  roz.Draw(canvas, OZRenderer::LAYER_ACTIVE, projection, *oz, offset);
 }
 
 static void

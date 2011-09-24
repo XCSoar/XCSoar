@@ -28,7 +28,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "Renderer/RenderTask.hpp"
 #include "Renderer/RenderTaskPoint.hpp"
-#include "Renderer/RenderObservationZone.hpp"
+#include "Renderer/OZRenderer.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"
 #include "Look/TaskLook.hpp"
@@ -44,7 +44,7 @@ public:
                      const SETTINGS_MAP &_settings_map,
                      const TaskLook &task_look,
                      const TaskProjection &_task_projection,
-                     RenderObservationZone &_ozv,
+                     OZRenderer &_ozv,
                      const bool draw_bearing,
                      bool draw_all,
                      const GeoPoint &location):
@@ -90,7 +90,7 @@ MapWindow::DrawTask(Canvas &canvas)
   const AbstractTask *task = task_manager->get_active_task();
   if (task && task->check_task()) {
 
-    RenderObservationZone ozv(task_look, airspace_renderer.GetLook(),
+    OZRenderer ozv(task_look, airspace_renderer.GetLook(),
                               SettingsMap().airspace);
     RenderTaskPointMap tpv(canvas,
 #ifdef ENABLE_OPENGL

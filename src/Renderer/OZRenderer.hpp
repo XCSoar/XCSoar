@@ -39,7 +39,7 @@ class SectorZone;
 /**
  * Utility class to render an ObzervationZonePoint to a canvas
  */
-class RenderObservationZone {
+class OZRenderer {
 public:
   enum Layer {
     /** the background shade */
@@ -58,7 +58,7 @@ protected:
   const AirspaceRendererSettings &settings;
 
 public:
-  RenderObservationZone(const TaskLook &task_look,
+  OZRenderer(const TaskLook &task_look,
                         const AirspaceLook &airspace_look,
                         const AirspaceRendererSettings &_settings);
 
