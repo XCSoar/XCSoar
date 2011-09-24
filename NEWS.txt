@@ -16,6 +16,7 @@ Version 6.3 - not yet released
   - LX: send QNH to device
   - LX: send keep-alives while in flight list
   - send/receive bugs setting to/from device, if driver support it
+  - support for K6-Bt baud rate switching
 * map
   - airspace rendering fixed
   - show new map items list on click

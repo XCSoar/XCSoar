@@ -24,6 +24,7 @@ Copyright_License {
 #include "ConfiguredPort.hpp"
 #include "NullPort.hpp"
 #include "TCPPort.hpp"
+#include "K6BtPort.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Simulator.hpp"
 #include "LogFile.hpp"
@@ -68,8 +69,17 @@ detect_gps(TCHAR *path, size_t path_max_size)
 #endif
 }
 
-Port *
-OpenPort(const DeviceConfig &config, Port::Handler &handler)
+static Port *
+WrapPort(const DeviceConfig &config, Port::Handler &handler, Port *port)
+{
+  if (config.k6bt && config.MaybeBluetooth())
+    port = new K6BtPort(port, config.baud_rate,handler);
+
+  return port;
+}
+
+static Port *
+OpenPortInternal(const DeviceConfig &config, Port::Handler &handler)
 {
   if (is_simulator())
     return new NullPort(handler);
@@ -174,4 +184,13 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
   }
 
   return Com;
+}
+
+Port *
+OpenPort(const DeviceConfig &config, Port::Handler &handler)
+{
+  Port *port = OpenPortInternal(config, handler);
+  if (port != NULL)
+    port = WrapPort(config, handler, port);
+  return port;
 }

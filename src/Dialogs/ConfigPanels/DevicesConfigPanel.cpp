@@ -37,6 +37,7 @@ Copyright_License {
 #include "Device/List.hpp"
 #include "Device/Parser.hpp"
 #include "Device/Driver.hpp"
+#include "Device/device.hpp"
 #include "Asset.hpp"
 #include "Protection.hpp"
 #include "DevicesConfigPanel.hpp"

@@ -118,6 +118,11 @@ struct DeviceConfig {
   unsigned tcp_port;
 
   /**
+   * Use the K6-Bt protocol?
+   */
+  bool k6bt;
+
+  /**
    * Should XCSoar send MC value, bug, ballast, etc. to the device
    */
   bool sync_to_device;
@@ -256,6 +261,7 @@ struct DeviceConfig {
     driver_name.clear();
     sync_from_device = true;
     sync_to_device = true;
+    k6bt = false;
     ignore_checksum = false;
   }
 

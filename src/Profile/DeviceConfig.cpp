@@ -233,6 +233,9 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("SyncToDevice"));
   Get(buffer, config.sync_to_device);
 
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("K6Bt"));
+  Get(buffer, config.k6bt);
+
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("IgnoreChecksum"));
   if (!Get(buffer, config.ignore_checksum))
     Get(szProfileIgnoreNMEAChecksum, config.ignore_checksum);
@@ -294,6 +297,9 @@ Profile::SetDeviceConfig(unsigned n, const DeviceConfig &config)
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("SyncToDevice"));
   Set(buffer, config.sync_to_device);
+
+  MakeDeviceSettingName(buffer, _T("Port"), n, _T("K6Bt"));
+  Set(buffer, config.k6bt);
 
   MakeDeviceSettingName(buffer, _T("Port"), n, _T("IgnoreChecksum"));
   Set(buffer, config.ignore_checksum);

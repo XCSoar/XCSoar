@@ -44,7 +44,9 @@
 #endif
 
 enum ControlIndex {
-  Port, BaudRate, BulkBaudRate, TCPPort, Driver, SyncFromDevice, SyncToDevice,
+  Port, BaudRate, BulkBaudRate, TCPPort, Driver,
+  SyncFromDevice, SyncToDevice,
+  K6Bt,
   IgnoreCheckSum,
 };
 
@@ -387,6 +389,12 @@ DeviceEditWidget::SetConfig(const DeviceConfig &_config)
   sync_to_df.Set(config.sync_to_device);
   sync_to_control.RefreshDisplay();
 
+  WndProperty &k6bt_control = GetControl(K6Bt);
+  DataFieldBoolean &k6bt_df =
+      *(DataFieldBoolean *)k6bt_control.GetDataField();
+  k6bt_df.Set(config.k6bt);
+  k6bt_control.RefreshDisplay();
+
   WndProperty &ignore_checksum_control = GetControl(IgnoreCheckSum);
   DataFieldBoolean &ignore_checksum_df =
       *(DataFieldBoolean *)ignore_checksum_control.GetDataField();
@@ -457,11 +465,15 @@ void
 DeviceEditWidget::UpdateVisibilities()
 {
   const DeviceConfig::PortType type = GetPortType(GetDataField(Port));
+  const bool maybe_bluetooth =
+    DeviceConfig::MaybeBluetooth(type, GetDataField(Port).GetAsString());
+  const bool k6bt = maybe_bluetooth && GetValueBoolean(K6Bt);
+  const bool uses_speed = DeviceConfig::UsesSpeed(type) || k6bt;
 
-  SetRowAvailable(BaudRate, DeviceConfig::UsesSpeed(type));
-  SetRowAvailable(BulkBaudRate, DeviceConfig::UsesSpeed(type) &&
+  SetRowAvailable(BaudRate, uses_speed);
+  SetRowAvailable(BulkBaudRate, uses_speed &&
                   DeviceConfig::UsesDriver(type));
-  SetRowVisible(BulkBaudRate, DeviceConfig::UsesSpeed(type) &&
+  SetRowVisible(BulkBaudRate, uses_speed &&
                 DeviceConfig::UsesDriver(type) &&
                 SupportsBulkBaudRate(GetDataField(Driver)));
   SetRowAvailable(TCPPort, DeviceConfig::UsesTCPPort(type));
@@ -470,6 +482,7 @@ DeviceEditWidget::UpdateVisibilities()
                 CanReceiveSettings(GetDataField(Driver)));
   SetRowVisible(SyncToDevice, DeviceConfig::UsesDriver(type) &&
                 CanSendSettings(GetDataField(Driver)));
+  SetRowAvailable(K6Bt, maybe_bluetooth);
   SetRowVisible(IgnoreCheckSum, DeviceConfig::UsesDriver(type));
 }
 
@@ -526,6 +539,11 @@ DeviceEditWidget::Prepare(ContainerWindow &parent, const PixelRect &rc)
                "like the MacCready value, bugs and ballast to the device."),
              config.sync_to_device, this);
   SetExpertRow(SyncToDevice);
+
+  AddBoolean(_T("K6Bt"),
+             _("Enable this if you use a K6Bt to connect the device."),
+             config.k6bt, this);
+  SetExpertRow(K6Bt);
 
   AddBoolean(_("Ignore checksum"),
              _("If your GPS device outputs invalid NMEA checksums, this will "
@@ -603,7 +621,10 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
 
   changed |= FinishPortField(config, (const DataFieldEnum &)GetDataField(Port));
 
-  if (config.UsesSpeed()) {
+  if (config.MaybeBluetooth())
+    changed |= SaveValue(K6Bt, config.k6bt);
+
+  if (config.UsesSpeed() || (config.MaybeBluetooth() && config.k6bt)) {
     changed |= SaveValue(BaudRate, config.baud_rate);
     changed |= SaveValue(BulkBaudRate, config.bulk_baud_rate);
   }
@@ -632,7 +653,8 @@ DeviceEditWidget::Save(bool &_changed, bool &require_restart)
 void
 DeviceEditWidget::OnModified(DataField &df)
 {
-  if (IsDataField(Port, df) || IsDataField(Driver, df))
+  if (IsDataField(Port, df) || IsDataField(Driver, df) ||
+      IsDataField(K6Bt, df))
     UpdateVisibilities();
 
   if (listener != NULL)

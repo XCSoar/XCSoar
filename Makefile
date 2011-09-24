@@ -693,6 +693,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Port/TCPPort.cpp \
+	$(SRC)/Device/Port/K6BtPort.cpp \
 	$(SRC)/Device/Port/LineHandler.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(DIALOG_SOURCES)
