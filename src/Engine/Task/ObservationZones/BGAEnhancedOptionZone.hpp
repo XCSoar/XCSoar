@@ -30,14 +30,12 @@
  *  A 180 degree 10km sector centered at the bisector of incoming/outgoing legs,
  *  with 500m cylinder
  */
-class BGAEnhancedOptionZone: 
-  public KeyholeZone
+class BGAEnhancedOptionZone: public KeyholeZone
 {
 protected:
   BGAEnhancedOptionZone(const BGAEnhancedOptionZone &other,
-                        const GeoPoint &reference):
-    KeyholeZone((const KeyholeZone &)other, reference) {}
-
+                        const GeoPoint &reference)
+    :KeyholeZone((const KeyholeZone &)other, reference) {}
 
 public:  
   /** 
@@ -47,19 +45,18 @@ public:
    * 
    * @return Initialised object
    */
-  BGAEnhancedOptionZone(const GeoPoint loc):
-    KeyholeZone(BGAENHANCEDOPTION, loc, fixed(10000.0),
-                Angle::radians(fixed_pi))
+  BGAEnhancedOptionZone(const GeoPoint loc)
+    :KeyholeZone(BGAENHANCEDOPTION, loc, fixed(10000.0),
+                 Angle::radians(fixed_pi))
   {
     updateSector();
   }
 
-  ObservationZonePoint* clone(const GeoPoint * _location=0) const {
-    if (_location) {
+  ObservationZonePoint* clone(const GeoPoint *_location = NULL) const {
+    if (_location)
       return new BGAEnhancedOptionZone(*this, *_location);
-    } else {
-      return new BGAEnhancedOptionZone(*this, get_location());
-    }
+
+    return new BGAEnhancedOptionZone(*this, get_location());
   }
 };
 
