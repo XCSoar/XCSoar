@@ -33,7 +33,7 @@ SVG_GRAPHICS = $(patsubst $(topdir)/Data/graphics/%.svg,$(GENERATED_DIR)/graphic
 TEX_INCLUDES_DE =  $(wildcard $(DOC)/manual/*.sty) $(wildcard $(DOC)/manual/de/*.sty)
 FIGURES_DE = $(DOC)/manual/de/Bilder/*.png
  
-TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(DOC)/manual/shared:.:"
+TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(DOC)/manual/shared:$(GENERATED_DIR):.:"
 TEX_FLAGS = -halt-on-error -interaction=nonstopmode
 TEX_RUN = $(TEX_VARS) pdflatex $(TEX_FLAGS) -output-directory $(@D)
 
