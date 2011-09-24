@@ -27,28 +27,27 @@
 #include "SymmetricSectorZone.hpp"
 
 /**
- * A (default) 90 degree 10km sector centered at the bisector of incoming/outgoing legs,
- * with 500m cylinder
+ * A (default) 90 degree 10km sector centered at the bisector of
+ * incoming/outgoing legs, with 500m cylinder
  */
-class KeyholeZone: 
-  public SymmetricSectorZone 
+class KeyholeZone: public SymmetricSectorZone
 {
 protected:
-/**
- * Constructor.
- *
- * @param loc Tip of sector location
- * @param radius Radius (m) of sector
- *
- * @return Initialised object
- */
+  /**
+   * Constructor.
+   *
+   * @param loc Tip of sector location
+   * @param radius Radius (m) of sector
+   *
+   * @return Initialised object
+   */
   KeyholeZone(Shape _shape, const GeoPoint &loc,
-              const fixed radius=fixed(10000.0),
-              const Angle angle=Angle::radians(fixed_half_pi)):
-    SymmetricSectorZone(_shape, loc, radius, angle) {}
+              const fixed radius = fixed(10000.0),
+              const Angle angle = Angle::radians(fixed_half_pi))
+    :SymmetricSectorZone(_shape, loc, radius, angle) {}
 
-  KeyholeZone(const KeyholeZone &other, const GeoPoint &reference):
-    SymmetricSectorZone((const SymmetricSectorZone &)other, reference) {}
+  KeyholeZone(const KeyholeZone &other, const GeoPoint &reference)
+    :SymmetricSectorZone((const SymmetricSectorZone &)other, reference) {}
 
 public:  
   /** 
@@ -59,19 +58,17 @@ public:
    * 
    * @return Initialised object
    */
-  KeyholeZone(const GeoPoint loc, const fixed radius=fixed(10000.0)):
-    SymmetricSectorZone(KEYHOLE, loc, radius,
-                        Angle::radians(fixed_half_pi))
+  KeyholeZone(const GeoPoint loc, const fixed radius = fixed(10000.0))
+    :SymmetricSectorZone(KEYHOLE, loc, radius, Angle::radians(fixed_half_pi))
   {
     updateSector();
   }
 
-  ObservationZonePoint* clone(const GeoPoint * _location = 0) const {
-    if (_location) {
+  ObservationZonePoint* clone(const GeoPoint * _location = NULL) const {
+    if (_location)
       return new KeyholeZone(*this, *_location);
-    } else {
-      return new KeyholeZone(*this, get_location());
-    }
+
+    return new KeyholeZone(*this, get_location());
   }
 
   /** 

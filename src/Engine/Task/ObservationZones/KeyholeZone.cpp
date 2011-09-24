@@ -23,35 +23,44 @@
 #include "KeyholeZone.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-GeoPoint 
+GeoPoint
 KeyholeZone::GetBoundaryParametric(fixed t) const
-{ 
+{
   const fixed sweep = (getEndRadial() - getStartRadial()).as_bearing().value_radians();
-  const fixed small_sweep = fixed_two_pi-sweep;
+  const fixed small_sweep = fixed_two_pi - sweep;
   const fixed SmallRadius = fixed(500);
-  const fixed c1 = sweep*Radius; // length of sector element
-  const fixed c2 = small_sweep*SmallRadius*fixed(5); // length of cylinder element
-  const fixed l = (Radius-SmallRadius)*fixed(0.2); // length of straight elements
-  const fixed tt = t*(c1+l+l+c2); // total distance
+  // length of sector element
+  const fixed c1 = sweep * Radius;
+  // length of cylinder element
+  const fixed c2 = small_sweep * SmallRadius * fixed(5);
+  // length of straight elements
+  const fixed l = (Radius - SmallRadius) * fixed(0.2);
+  // total distance
+  const fixed tt = t * (c1 + l + l + c2);
+
   Angle a;
   fixed d;
-  if (tt<l) { // first straight element
-    d = (tt/l)*(Radius-SmallRadius)+SmallRadius;
+  if (tt < l) {
+    // first straight element
+    d = (tt / l) * (Radius - SmallRadius) + SmallRadius;
     a = getStartRadial();
-  } else if (tt<l+c1) { // sector element
+  } else if (tt < l + c1) {
+    // sector element
     d = Radius;
-    a = getStartRadial() + Angle::radians((tt-l)/c1*sweep);
-  } else if (tt<l+l+c1) { // second straight element
-    d = (fixed_one-(tt-l-c1)/l)*(Radius-SmallRadius)+SmallRadius;
+    a = getStartRadial() + Angle::radians((tt - l) / c1 * sweep);
+  } else if (tt < l + l + c1) {
+    // second straight element
+    d = (fixed_one - (tt - l - c1) / l) * (Radius - SmallRadius) + SmallRadius;
     a = getEndRadial();
-  } else { // cylinder element
+  } else {
+    // cylinder element
     d = SmallRadius;
-    a = getEndRadial() + Angle::radians((tt-l-l-c1)/c2*small_sweep);
+    a = getEndRadial() + Angle::radians((tt - l - l - c1) / c2 * small_sweep);
   }
   return GeoVector(d, a).end_point(get_location());
 }
 
-fixed 
+fixed
 KeyholeZone::ScoreAdjustment() const
 {
   return fixed(500);
