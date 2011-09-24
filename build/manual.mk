@@ -1,7 +1,7 @@
 MANUAL_OUTPUT_DIR = $(OUT)/manual
 TEX_FILES_EN = $(wildcard $(DOC)/manual/en/*.tex)
 TEX_INCLUDES_EN = $(wildcard $(DOC)/manual/*.sty) $(wildcard $(DOC)/manual/en/*.sty)
-FIGURES_EN = $(DOC)/manual/en/figures/*.png
+FIGURES_EN = $(DOC)/manual/en/figures/*.png $(DOC)/manual/en/figures/*.pdf
 
 SVG_ICON_LIST = \
 	alt2_landable_airport \
