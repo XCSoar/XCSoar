@@ -36,11 +36,9 @@ protected:
                     const fixed _radiusOuter = fixed(10000.0),
                     const Angle _startRadial = Angle::zero(),
                     const Angle _endRadial = Angle::radians(fixed_two_pi),
-                    const fixed _InnerRadius = fixed(0.0)):
-    SectorZone(_shape, loc, _radiusOuter, _startRadial, _endRadial),
-    InnerRadius(_InnerRadius)
-    {
-    }
+                    const fixed _InnerRadius = fixed(0.0))
+    :SectorZone(_shape, loc, _radiusOuter, _startRadial, _endRadial),
+     InnerRadius(_InnerRadius) {}
 
   AnnularSectorZone(const AnnularSectorZone &other, const GeoPoint &reference)
     :SectorZone((const SectorZone &)other, reference),
@@ -61,19 +59,18 @@ public:
                     const fixed _radiusOuter=fixed(10000.0),
                     const Angle _startRadial = Angle::zero(),
                     const Angle _endRadial = Angle::radians(fixed_two_pi),
-                    const fixed _InnerRadius = fixed(0.0)):
-    SectorZone(ANNULAR_SECTOR, loc, _radiusOuter, _startRadial, _endRadial),
-    InnerRadius(_InnerRadius)
+                    const fixed _InnerRadius = fixed(0.0))
+    :SectorZone(ANNULAR_SECTOR, loc, _radiusOuter, _startRadial, _endRadial),
+     InnerRadius(_InnerRadius)
   {
     updateSector();
   }
 
-  virtual ObservationZonePoint* clone(const GeoPoint * _location=0) const {
-    if (_location) {
+  virtual ObservationZonePoint* clone(const GeoPoint * _location = NULL) const {
+    if (_location)
       return new AnnularSectorZone(*this, *_location);
-    } else {
-      return new AnnularSectorZone(*this, get_location());
-    }
+
+    return new AnnularSectorZone(*this, get_location());
   }
 
   /**

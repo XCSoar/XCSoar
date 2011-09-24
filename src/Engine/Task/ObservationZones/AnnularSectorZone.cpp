@@ -26,24 +26,25 @@
 GeoPoint
 AnnularSectorZone::GetBoundaryParametric(fixed t) const
 {
-  const Angle sweep = (EndRadial-StartRadial).as_bearing();
-  const fixed c0 = sweep.value_radians()*InnerRadius;
-  const fixed l = Radius-InnerRadius;
-  const fixed c1 = sweep.value_radians()*Radius;
-  const fixed tt = t*(c0+c1+2*l);
+  const Angle sweep = (EndRadial - StartRadial).as_bearing();
+  const fixed c0 = sweep.value_radians() * InnerRadius;
+  const fixed l = Radius - InnerRadius;
+  const fixed c1 = sweep.value_radians() * Radius;
+  const fixed tt = t * (c0 + c1 + 2 * l);
   Angle a;
   fixed d;
-  if (tt< c0) {
+  if (tt < c0) {
     d = InnerRadius;
-    a = Angle::radians((tt/c0)*sweep.value_radians())+StartRadial;
-  } else if (positive(l) && (tt<c0+l)) {
-    d = (tt-c0)/l*(Radius-InnerRadius)+InnerRadius;
+    a = Angle::radians((tt / c0) * sweep.value_radians()) + StartRadial;
+  } else if (positive(l) && (tt < c0 + l)) {
+    d = (tt - c0) / l * (Radius - InnerRadius) + InnerRadius;
     a = EndRadial;
-  } else if (tt<c0+l+c1) {
+  } else if (tt < c0 + l + c1) {
     d = Radius;
-    a = EndRadial-Angle::radians(((tt-c0-l)/c1)*sweep.value_radians());
+    a = EndRadial
+        - Angle::radians(((tt - c0 - l) / c1) * sweep.value_radians());
   } else if (positive(l)) {
-    d = (tt-c0-l-c1)/l*(InnerRadius-Radius)+Radius;
+    d = (tt - c0 - l - c1) / l * (InnerRadius - Radius) + Radius;
     a = StartRadial;
   } else {
     d = InnerRadius;
@@ -57,7 +58,9 @@ AnnularSectorZone::IsInSector(const AircraftState &ref) const
 {
   GeoVector f(get_location(), ref.location);
 
-  return (f.Distance <= Radius) && (f.Distance >= InnerRadius) && angleInSector(f.Bearing);
+  return (f.Distance <= Radius) &&
+         (f.Distance >= InnerRadius) &&
+         angleInSector(f.Bearing);
 }
 
 bool
@@ -65,6 +68,5 @@ AnnularSectorZone::equals(const ObservationZonePoint* other) const
 {
   const AnnularSectorZone *z = (const AnnularSectorZone *)other;
 
-  return SectorZone::equals(other) &&
-    InnerRadius == z->InnerRadius;
+  return SectorZone::equals(other) && InnerRadius == z->InnerRadius;
 }
