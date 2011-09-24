@@ -1,6 +1,7 @@
 MANUAL_OUTPUT_DIR = $(OUT)/manual
+TEX_INCLUDES = $(wildcard $(DOC)/manual/*.tex) $(wildcard $(DOC)/manual/*.sty)
 TEX_FILES_EN = $(wildcard $(DOC)/manual/en/*.tex)
-TEX_INCLUDES_EN = $(wildcard $(DOC)/manual/*.sty) $(wildcard $(DOC)/manual/en/*.sty)
+TEX_INCLUDES_EN = $(TEX_INCLUDES) $(wildcard $(DOC)/manual/en/*.sty)
 FIGURES_EN = $(DOC)/manual/en/figures/*.png $(DOC)/manual/en/figures/*.pdf
 
 SVG_ICON_LIST = \
@@ -29,7 +30,7 @@ SVG_FIGURES = $(patsubst $(DOC)/manual/figures/%.svg,$(MANUAL_OUTPUT_DIR)/figure
 SVG_GRAPHICS_DATA = $(wildcard $(topdir)/Data/graphics/*.svg)
 SVG_GRAPHICS = $(patsubst $(topdir)/Data/graphics/%.svg,$(MANUAL_OUTPUT_DIR)/graphics/%.pdf,$(SVG_GRAPHICS_DATA))
 
-TEX_INCLUDES_DE =  $(wildcard $(DOC)/manual/*.sty) $(wildcard $(DOC)/manual/de/*.sty)
+TEX_INCLUDES_DE =  $(TEX_INCLUDES) $(wildcard $(DOC)/manual/de/*.sty)
 FIGURES_DE = $(DOC)/manual/de/Bilder/*.png
  
 TEX_VARS = TEXINPUTS="$(<D):$(DOC)/manual:$(MANUAL_OUTPUT_DIR):.:"
