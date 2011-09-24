@@ -91,7 +91,6 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/SymmetricSectorZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/KeyholeZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/BGAFixedCourseZone.cpp \
-	$(ENGINE_SRC_DIR)/Task/ObservationZones/BGAEnhancedOptionZone.cpp \
 	$(ENGINE_SRC_DIR)/Task/ObservationZones/AnnularSectorZone.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/Contests.cpp \
 	$(ENGINE_SRC_DIR)/Contest/ContestSolvers/AbstractContest.cpp \
