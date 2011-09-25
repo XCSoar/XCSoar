@@ -212,8 +212,8 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
     {200, 0x00, 0x00, 0xff},
   };
 
-  int iwidth;
-  int minwidth = Layout::Scale(2);
+  PixelScalar iwidth;
+  PixelScalar minwidth = Layout::Scale(2);
 
   for (int i = 0; i < NUMSNAILCOLORS; i++) {
     short ih = i * 200 / (NUMSNAILCOLORS - 1);
@@ -227,8 +227,9 @@ Graphics::InitSnailTrail(const SETTINGS_MAP &settings_map)
         !settings_map.SnailScaling)
       iwidth = minwidth;
     else
-      iwidth = max(minwidth, (i - NUMSNAILCOLORS / 2) *
-                             Layout::Scale(16) / NUMSNAILCOLORS);
+      iwidth = max(minwidth,
+                   PixelScalar((i - NUMSNAILCOLORS / 2) *
+                               Layout::Scale(16) / NUMSNAILCOLORS));
 
     hpSnail[i].set(minwidth, color);
     hpSnailVario[i].set(iwidth, color);

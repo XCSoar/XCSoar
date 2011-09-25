@@ -95,21 +95,22 @@ MapItemListRenderer::Draw(
     const AirspaceLook &look,
     const AirspaceRendererSettings &renderer_settings)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const PixelScalar line_height = rc.bottom - rc.top;
 
   const AbstractAirspace &airspace = *item.airspace;
 
   RasterPoint pt = { rc.left + line_height / 2,
                      rc.top + line_height / 2};
-  unsigned radius = std::min(line_height / 2  - Layout::FastScale(4),
-                             (unsigned)Layout::FastScale(10));
+  PixelScalar radius = std::min(PixelScalar(line_height / 2
+                                            - Layout::FastScale(4)),
+                                Layout::FastScale(10));
   AirspacePreviewRenderer::Draw(canvas, airspace, pt, radius,
                                 renderer_settings, look);
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
 
-  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
                       airspace.GetName());
@@ -145,15 +146,16 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const TaskLook &look, const AirspaceLook &airspace_look,
                           const AirspaceRendererSettings &airspace_settings)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const PixelScalar line_height = rc.bottom - rc.top;
 
   const ObservationZonePoint &oz = *item.oz;
   const Waypoint &waypoint = item.waypoint;
 
   RasterPoint pt = { rc.left + line_height / 2,
                      rc.top + line_height / 2};
-  unsigned radius = std::min(line_height / 2  - Layout::FastScale(4),
-                             (unsigned)Layout::FastScale(10));
+  PixelScalar radius = std::min(PixelScalar(line_height / 2
+                                            - Layout::FastScale(4)),
+                                Layout::FastScale(10));
   OZPreviewRenderer::Draw(canvas, oz, pt, radius, look,
                           airspace_settings, airspace_look);
 

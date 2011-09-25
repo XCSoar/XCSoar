@@ -94,7 +94,7 @@ FinalGlideBarRenderer::Draw(Canvas &canvas, const PixelRect &rc, const DerivedIn
   if ((Offset < 0) && (Offset0 < 0)) {
     // both below
     if (Offset0 != Offset) {
-      int dy = (GlideBar0[0].y - GlideBar[0].y) +
+      PixelScalar dy = (GlideBar0[0].y - GlideBar[0].y) +
           (GlideBar0[0].y - GlideBar0[3].y);
       dy = max(Layout::Scale(3), dy);
       GlideBar[3].y = GlideBar0[0].y - dy;

@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_LAYOUT_HPP
 #define XCSOAR_SCREEN_LAYOUT_HPP
 
+#include "Screen/Point.hpp"
 #include "Math/fixed.hpp"
 #include "Asset.hpp"
 #include "Compiler.h"
@@ -76,45 +77,18 @@ namespace Layout
   }
 
   gcc_const
-  static inline int
-  Scale(int x)
+  static inline PixelScalar
+  Scale(PixelScalar x)
   {
     if (!ScaleSupported())
       return x;
 
-    return (x * (int)scale_1024) >> 10;
+    return ((int)x * (int)scale_1024) >> 10;
   }
 
   gcc_const
-  static inline unsigned
-  Scale(unsigned x)
-  {
-    if (!ScaleSupported())
-      return x;
-
-    return (x * scale_1024) >> 10;
-  }
-
-  gcc_const
-  static inline long
-  Scale(long x)
-  {
-    return Scale((int)x);
-  }
-
-  gcc_const
-  static inline double
-  Scale(double x)
-  {
-    if (!ScaleSupported())
-      return x;
-
-    return x * scale_1024 / 1024.;
-  }
-
-  gcc_const
-  static inline int
-  FastScale(int x)
+  static inline PixelScalar
+  FastScale(PixelScalar x)
   {
     if (!ScaleSupported())
       return x;
@@ -123,23 +97,13 @@ namespace Layout
   }
 
   gcc_const
-  static inline int
-  SmallScale(int x)
+  static inline PixelScalar
+  SmallScale(PixelScalar x)
   {
     if (!ScaleSupported())
       return x;
 
     return (x * (int)small_scale) >> 10;
-  }
-
-  gcc_const
-  static inline unsigned
-  SmallScale(unsigned x)
-  {
-    if (!ScaleSupported())
-      return x;
-
-    return (x * small_scale) >> 10;
   }
 
   /**
@@ -149,22 +113,8 @@ namespace Layout
    * circle.
    */
   gcc_const
-  static inline int
-  ScaleY(int y)
-  {
-    return y;
-  }
-
-  gcc_const
-  static inline unsigned
-  ScaleY(unsigned y)
-  {
-    return y;
-  }
-
-  gcc_const
-  static inline fixed
-  ScaleY(fixed y)
+  static inline PixelScalar
+  ScaleY(PixelScalar y)
   {
     return y;
   }
