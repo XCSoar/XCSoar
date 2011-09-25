@@ -67,6 +67,7 @@ Net::Request::Request(Session &_session, const TCHAR *url,
   assert(get_input_stream != NULL);
 
   input_stream = env->CallObjectMethod(connection, get_input_stream);
+  env->DeleteLocalRef(connection);
   if (env->ExceptionOccurred() || input_stream == NULL) {
     env->ExceptionClear();
     input_stream = NULL;
