@@ -50,7 +50,7 @@ WndButton::on_clicked()
     return true;
   }
 
-  return false;
+  return ButtonWindow::on_clicked();
 }
 
 bool
@@ -86,7 +86,7 @@ WndButton::on_key_check(unsigned key_code) const
     return mOnRightNotify != NULL;
 
   default:
-    return false;
+    return ButtonWindow::on_key_check(key_code);
   }
 }
 
