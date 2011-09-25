@@ -42,6 +42,7 @@ Copyright_License {
 #include "Form/List.hpp"
 #include "Form/Tabbed.hpp"
 #include "Form/TabBar.hpp"
+#include "Form/TabMenu.hpp"
 #include "Form/Panel.hpp"
 #include "Form/Keyboard.hpp"
 #include "Form/CheckBox.hpp"
@@ -835,6 +836,18 @@ LoadChild(WndForm &form, ContainerWindow &parent,
                                               pos.x, pos.y, size.cx, size.cy,
                                               style, flipOrientation);
     window = tabbar;
+
+    // TabMenuControl (TabMenu)
+    } else if (_tcscmp(node.getName(), _T("TabMenu")) == 0) {
+      // Create the TabMenuControl
+
+      style.control_parent();
+      TabMenuControl *tabmenu = new TabMenuControl(parent, form,
+                                                   LookUpTable,
+                                                   *xml_dialog_look, Caption,
+                                                   pos.x, pos.y, size.cx, size.cy,
+                                                   style);
+      window = tabmenu;
 
   } else if (_tcscmp(node.getName(), _T("Custom")) == 0) {
     // Create a custom Window object with a callback

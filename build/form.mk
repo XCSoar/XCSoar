@@ -18,6 +18,7 @@ FORM_SOURCES = \
 	$(FORM_SRC_DIR)/Edit.cpp \
 	$(FORM_SRC_DIR)/Tabbed.cpp \
 	$(FORM_SRC_DIR)/TabBar.cpp \
+	$(FORM_SRC_DIR)/TabMenu.cpp \
 	$(FORM_SRC_DIR)/Keyboard.cpp \
 	$(FORM_SRC_DIR)/UnitUtil.cpp \
 	$(FORM_SRC_DIR)/ProfileUtil.cpp \
