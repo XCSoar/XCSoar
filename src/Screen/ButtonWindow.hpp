@@ -200,6 +200,10 @@ public:
   void set_text(const TCHAR *text);
 
   const tstring get_text() const;
+
+protected:
+  virtual bool on_key_check(unsigned key_code) const;
+  virtual bool on_key_down(unsigned key_code);
 };
 
 #endif /* USE_GDI */

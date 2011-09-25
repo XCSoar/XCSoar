@@ -98,3 +98,31 @@ ButtonWindow::get_text() const
   int length = GetWindowText(hWnd, buffer, ARRAY_SIZE(buffer));
   return tstring(buffer, length);
 }
+
+bool
+ButtonWindow::on_key_check(unsigned key_code) const
+{
+  switch (key_code) {
+  case VK_RETURN:
+    return true;
+
+  default:
+    return BaseButtonWindow::on_key_check(key_code);
+  }
+}
+
+bool
+ButtonWindow::on_key_down(unsigned key_code)
+{
+  switch (key_code) {
+#ifdef GNAV
+  case VK_F4:
+#endif
+  case VK_RETURN:
+    Click();
+    return true;
+
+  default:
+    return BaseButtonWindow::on_key_down(key_code);
+  }
+}

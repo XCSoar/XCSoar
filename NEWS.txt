@@ -8,6 +8,8 @@ Version 6.2.1 - not yet released
   - FLARM: clear old barometric altitude as soon as FLARM is detected
 * user interface
   - show validation errors before task declaration
+* Windows / Altair
+  - restore the "Enter" key in dialogs (knob click on Altair)
 * Android
   - fix hang on quit
   - fix screen corruption when rotating the progress screen
