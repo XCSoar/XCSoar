@@ -285,6 +285,20 @@ PolarConfigPanel::SetVisible(bool active)
     buttonExport->set_visible(active);
 }
 
+bool
+PolarConfigPanel::PreShow(TabBarControl::EventType)
+{
+  PolarConfigPanel::SetVisible(true);
+  return true;
+}
+
+bool
+PolarConfigPanel::PreHide()
+{
+  PolarConfigPanel::SetVisible(false);
+  return true;
+}
+
 void
 PolarConfigPanel::Init(WndForm *_wf)
 {

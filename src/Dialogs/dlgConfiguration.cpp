@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Dialogs/Dialogs.h"
 #include "Dialogs/Internal.hpp"
+#include "Form/TabMenu.hpp"
 #include "Screen/Busy.hpp"
 #include "Screen/Key.h"
 #include "Form/CheckBox.hpp"
@@ -31,6 +32,7 @@ Copyright_License {
 #include "Profile/Profile.hpp"
 #include "DataField/FileReader.hpp"
 #include "LogFile.hpp"
+#include "Util/Macros.hpp"
 #include "ConfigPanels/PagesConfigPanel.hpp"
 #include "ConfigPanels/PolarConfigPanel.hpp"
 #include "ConfigPanels/UnitsConfigPanel.hpp"
@@ -56,77 +58,47 @@ Copyright_License {
 
 #include <assert.h>
 
-enum config_page {
-  PAGE_SITE_FILES,
-  PAGE_MAP_PROJECTION,
-  PAGE_MAP_ELEMENTS,
-  PAGE_WAYPOINTS,
-  PAGE_TERRAIN,
-  PAGE_GAUGES,
-  PAGE_VARIO,
-  PAGE_GLIDE_COMPUTER,
-  PAGE_SAFETY_FACTORS,
-  PAGE_ROUTE,
-  PAGE_POLAR,
-  PAGE_AIRSPACE,
-  PAGE_TASK_RULES,
-  PAGE_TASK_DEFAULTS,
-  PAGE_DEVICES,
-  PAGE_LOGGER,
-  PAGE_UNITS,
-  PAGE_USER_INTERFACE,
-  PAGE_LAYOUT,
-  PAGE_DISPLAY_PAGES,
-  PAGE_INFOBOX_MODES,
-  PAGE_EXPERIMENTAL,
-};
-
-static const TCHAR *const captions[] = {
-  N_("Site Files"),
-  N_("Map Projection"),
-  N_("Map Elements"),
-  N_("Waypoint Display"),
-  N_("Terrain Display"),
-  N_("FLARM And Other Gauges"),
-  N_("Vario Gauge"),
-  N_("Glide Computer"),
-  N_("Safety Factors"),
-  N_("Route"),
-  N_("Polar"),
-  N_("Airspace"),
-  N_("Default Task Rules"),
-  N_("Default Task Turnpoint Types"),
-  N_("Devices"),
-  N_("Logger"),
-  N_("Units"),
-  N_("User Interface"),
-  N_("Interface Appearance"),
-  N_("InfoBox Pages"),
-  N_("InfoBox Modes"),
-  N_("Experimental Features"),
-};
-
-
-static config_page current_page;
+static unsigned current_page;
 static WndForm *wf = NULL;
-TabbedControl *configuration_tabbed;
 
-static void
-PageSwitched()
-{
-  current_page = (config_page)configuration_tabbed->GetCurrentPage();
+static TabMenuControl* wTabMenu = NULL;
 
-  TCHAR caption[64];
-  _sntprintf(caption, 64, _T("%u %s"),
-             (unsigned)current_page + 1,
-             gettext(captions[(unsigned)current_page]));
-  wf->SetCaption(caption);
+const TCHAR *main_menu_captions[] = {
+  N_("Site Files"),
+  N_("Map Display"),
+  N_("Glide Computer"),
+  N_("Gauges"),
+  N_("Task Defaults"),
+  N_("Look"),
+  N_("Setup"),
+};
 
-  InterfaceConfigPanel::SetVisible(current_page == PAGE_USER_INTERFACE);
-  SiteConfigPanel::SetVisible(current_page == PAGE_SITE_FILES);
-  PolarConfigPanel::SetVisible(current_page == PAGE_POLAR);
-}
-
+static const TabMenuControl::PageItem pages[] = {
+  {N_("Site Files"), 0, SiteConfigPanel::PreShow, SiteConfigPanel::PreHide, N_("IDR_XML_SITECONFIGPANEL")},
+  {N_("Orientation"), 1, NULL, NULL, N_("IDR_XML_MAPDISPLAYCONFIGPANEL")},
+  {N_("Elements"), 1, NULL, NULL, N_("IDR_XML_SYMBOLSCONFIGPANEL")},
+  {N_("Waypoint"), 1, NULL, NULL, N_("IDR_XML_WAYPOINTDISPLAYCONFIGPANEL")},
+  {N_("Terrain"), 1, NULL, NULL, N_("IDR_XML_TERRAINDISPLAYCONFIGPANEL")},
+  {N_("Airspace"), 1, NULL, NULL, N_("IDR_XML_AIRSPACECONFIGPANEL")},
+  {N_("Safety Factors"), 2, NULL, NULL, N_("IDR_XML_SAFETYFACTORSCONFIGPANEL")},
+  {N_("Glide Computer"), 2, NULL, NULL, N_("IDR_XML_GLIDECOMPUTERCONFIGPANEL")},
+  {N_("Route"), 2, NULL, NULL, N_("IDR_XML_ROUTECONFIGPANEL")},
+  {N_("FLARM, Other"), 3, NULL, NULL, N_("IDR_XML_GAUGESCONFIGPANEL")},
+  {N_("Vario"), 3, NULL, NULL, N_("IDR_XML_VARIOCONFIGPANEL")},
+  {N_("Task Rules"), 4, NULL, NULL, N_("IDR_XML_TASKRULESCONFIGPANEL")},
+  {N_("Turnpoint Types"), 4, NULL, NULL, N_("IDR_XML_TASKDEFAULTSCONFIGPANEL")},
+  {N_("Lanugage, Input"), 5, InterfaceConfigPanel::PreShow, InterfaceConfigPanel::PreHide, N_("IDR_XML_INTERFACECONFIGPANEL")},
+  {N_("Screen Layout"), 5, NULL, NULL, N_("IDR_XML_LAYOUTCONFIGPANEL")},
+  {N_("InfoBox Pages"), 5, NULL, NULL, N_("IDR_XML_PAGESCONFIGPANEL")},
+  {N_("InfoBox Modes"), 5, NULL, NULL, N_("IDR_XML_INFOBOXESCONFIGPANEL")},
+  {N_("Devices"), 6, NULL, NULL, N_("IDR_XML_DEVICESCONFIGPANEL")},
+  {N_("Polar"), 6, PolarConfigPanel::PreShow, PolarConfigPanel::PreHide, N_("IDR_XML_POLARCONFIGPANEL")},
+  {N_("Logger"), 6, NULL, NULL, N_("IDR_XML_LOGGERCONFIGPANEL")},
+  {N_("Units"), 6, NULL, NULL, N_("IDR_XML_UNITSCONFIGPANEL")},
+#ifdef HAVE_MODEL_TYPE
+  {N_("Experimental Features"), 6, NULL, NULL, N_("IDR_XML_EXPERIMENTALCONFIGPANEL")},
+#endif
+};
 
 static void
 OnUserLevel(CheckBoxControl &control)
@@ -140,29 +112,25 @@ OnUserLevel(CheckBoxControl &control)
 static void
 OnNextClicked(gcc_unused WndButton &button)
 {
-  configuration_tabbed->NextPage();
-  if (!have_model_type() &&
-      (config_page)configuration_tabbed->GetCurrentPage() == PAGE_EXPERIMENTAL)
-    configuration_tabbed->NextPage();
-
-  PageSwitched();
+  wTabMenu->NextPage();
 }
 
 static void
 OnPrevClicked(gcc_unused WndButton &button)
 {
-  configuration_tabbed->PreviousPage();
-  if (!have_model_type() &&
-      (config_page)configuration_tabbed->GetCurrentPage() == PAGE_EXPERIMENTAL)
-    configuration_tabbed->PreviousPage();
-
-  PageSwitched();
+  wTabMenu->PreviousPage();
 }
 
+/**
+ * close dialog from menu page.  from content, goes to menu page
+ */
 static void
 OnCloseClicked(gcc_unused WndButton &button)
 {
-  wf->SetModalResult(mrOK);
+  if (wTabMenu->IsCurrentPageTheMenu())
+    wf->SetModalResult(mrOK);
+  else
+    wTabMenu->GotoMenuPage();
 }
 
 static bool
@@ -174,12 +142,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   case '6':
 #endif
     ((WndButton *)wf->FindByName(_T("cmdPrev")))->set_focus();
-    configuration_tabbed->PreviousPage();
-    if (!have_model_type() &&
-        (config_page)configuration_tabbed->GetCurrentPage() == PAGE_EXPERIMENTAL)
-      configuration_tabbed->PreviousPage();
-
-    PageSwitched();
+    wTabMenu->PreviousPage();
     return true;
 
   case VK_RIGHT:
@@ -187,12 +150,7 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   case '7':
 #endif
     ((WndButton *)wf->FindByName(_T("cmdNext")))->set_focus();
-    configuration_tabbed->NextPage();
-    if (!have_model_type() &&
-        (config_page)configuration_tabbed->GetCurrentPage() == PAGE_EXPERIMENTAL)
-      configuration_tabbed->NextPage();
-
-    PageSwitched();
+    wTabMenu->NextPage();
     return true;
 
   default:
@@ -259,6 +217,19 @@ setVariables()
 }
 
 static void
+PrepareConfigurationMenu()
+{
+  assert (wf != NULL);
+
+  wTabMenu = (TabMenuControl*)wf->FindByName(_T("TabMenu"));
+  assert(wTabMenu != NULL);
+  wTabMenu->InitMenu(pages,
+                     ARRAY_SIZE(pages),
+                     main_menu_captions,
+                     ARRAY_SIZE(main_menu_captions));
+}
+
+static void
 PrepareConfigurationDialog()
 {
   gcc_unused ScopeBusyIndicator busy;
@@ -280,14 +251,17 @@ PrepareConfigurationDialog()
 
   ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
-  configuration_tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
-  assert(configuration_tabbed != NULL);
+  PrepareConfigurationMenu(); // this will change when we break out the XML into panels
 
   setVariables();
 
   /* restore previous page */
-  configuration_tabbed->SetCurrentPage((unsigned)current_page);
-  PageSwitched();
+  static bool Initialized = false;
+  if (!Initialized) {
+    current_page = wTabMenu->GotoMenuPage();
+    Initialized = true;
+  }
+  wTabMenu->SetCurrentPage(current_page);
 }
 
 void dlgConfigurationShowModal(void)
@@ -300,7 +274,7 @@ void dlgConfigurationShowModal(void)
   }
 
   /* save page number for next time this dialog is opened */
-  current_page = (config_page)configuration_tabbed->GetCurrentPage();
+  current_page = wTabMenu->GetLastContentPage();
 
   // TODO enhancement: implement a cancel button that skips all this
   // below after exit.

@@ -25,6 +25,7 @@ Copyright_License {
 #define POLARCONFIGPANEL_HPP
 
 #include "DataField/Base.hpp"
+#include "Form/TabBar.hpp"
 
 class WndForm;
 class WndButton;
@@ -35,6 +36,8 @@ namespace PolarConfigPanel
   bool Save();
 
   void SetVisible(bool active);
+  bool PreShow(TabBarControl::EventType);
+  bool PreHide();
 
   void OnLoadInternal(WndButton &button);
   void OnLoadFromFile(WndButton &button);

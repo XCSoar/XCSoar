@@ -44,6 +44,19 @@ SiteConfigPanel::SetVisible(bool active)
     buttonWaypoints->set_visible(active);
 }
 
+bool
+SiteConfigPanel::PreShow(TabBarControl::EventType)
+{
+  SiteConfigPanel::SetVisible(true);
+  return true;
+}
+
+bool
+SiteConfigPanel::PreHide()
+{
+  SiteConfigPanel::SetVisible(false);
+  return true;
+}
 
 static void
 OnWaypoints(gcc_unused WndButton &button)

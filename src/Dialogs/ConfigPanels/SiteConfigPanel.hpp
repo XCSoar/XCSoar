@@ -26,6 +26,7 @@ Copyright_License {
 
 #include "Form/Form.hpp"
 #include "Form/Button.hpp"
+#include "Form/TabBar.hpp"
 
 namespace SiteConfigPanel
 {
@@ -33,6 +34,8 @@ namespace SiteConfigPanel
   bool Save();
 
   void SetVisible(bool active);
+  bool PreShow(TabBarControl::EventType);
+  bool PreHide();
 };
 
 #endif /* SITECONFIGPANEL_HPP */

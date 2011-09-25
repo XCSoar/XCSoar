@@ -54,6 +54,19 @@ InterfaceConfigPanel::SetVisible(bool active)
     buttonFonts->set_visible(active);
 }
 
+bool
+InterfaceConfigPanel::PreShow(TabBarControl::EventType)
+{
+  InterfaceConfigPanel::SetVisible(true);
+  return true;
+}
+
+bool
+InterfaceConfigPanel::PreHide()
+{
+  InterfaceConfigPanel::SetVisible(false);
+  return true;
+}
 
 static void
 OnFonts(gcc_unused WndButton &button)

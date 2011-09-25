@@ -25,6 +25,7 @@ Copyright_License {
 #define INTERFACECONFIGPANEL_HPP
 
 #include "Form/Form.hpp"
+#include "Form/TabBar.hpp"
 
 namespace InterfaceConfigPanel
 {
@@ -32,6 +33,8 @@ namespace InterfaceConfigPanel
   bool Save(bool &requirerestart);
 
   void SetVisible(bool active);
+  bool PreHide();
+  bool PreShow(TabBarControl::EventType);
 };
 
 #endif /* INTERFACECONFIGPANEL_HPP */
