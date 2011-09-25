@@ -156,6 +156,11 @@ public:
         left, top, width, height, style);
   }
 
+  gcc_pure
+  unsigned GetID() const {
+    return ::GetWindowLong(hWnd, GWL_ID);
+  }
+
   /**
    * The button was clicked, and its action shall be triggered.
    */
