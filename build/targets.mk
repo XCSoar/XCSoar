@@ -7,7 +7,7 @@ TARGET_FLAVOR := $(TARGET)
 
 HAVE_CE := n
 HAVE_FPU := y
-X64 := auto
+X64 := n
 XSCALE := n
 ARMV7 := n
 X86 := n
