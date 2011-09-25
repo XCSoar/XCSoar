@@ -27,26 +27,26 @@ Copyright_License {
 
 #ifdef ENABLE_SDL
 
-VirtualCanvas::VirtualCanvas(unsigned _width, unsigned _height)
+VirtualCanvas::VirtualCanvas(UPixelScalar _width, UPixelScalar _height)
 {
   set(_width, _height);
 }
 
 VirtualCanvas::VirtualCanvas(const Canvas &canvas,
-                             unsigned _width, unsigned _height)
+                             UPixelScalar _width, UPixelScalar _height)
 {
   set(_width, _height);
 }
 
 #else /* !ENABLE_SDL */
 
-VirtualCanvas::VirtualCanvas(unsigned _width, unsigned _height)
+VirtualCanvas::VirtualCanvas(UPixelScalar _width, UPixelScalar _height)
   :Canvas(::CreateCompatibleDC(NULL), _width, _height)
 {
 }
 
 VirtualCanvas::VirtualCanvas(const Canvas &canvas,
-                             unsigned _width, unsigned _height)
+                             UPixelScalar _width, UPixelScalar _height)
   :Canvas(::CreateCompatibleDC(canvas), _width, _height)
 {
   assert(canvas.defined());
@@ -64,10 +64,10 @@ VirtualCanvas::~VirtualCanvas()
 #endif /* !OPENGL */
 
 void
-VirtualCanvas::set(unsigned _width, unsigned _height)
+VirtualCanvas::set(UPixelScalar _width, UPixelScalar _height)
 {
-  assert(_width < 0x1000000);
-  assert(_height < 0x1000000);
+  assert((PixelScalar)_width >= 0);
+  assert((PixelScalar)_height >= 0);
 
 #ifdef ENABLE_OPENGL
   Canvas::set(_width, _height);
@@ -94,7 +94,8 @@ VirtualCanvas::set(unsigned _width, unsigned _height)
 }
 
 void
-VirtualCanvas::set(const Canvas &canvas, unsigned _width, unsigned _height)
+VirtualCanvas::set(const Canvas &canvas,
+                   UPixelScalar _width, UPixelScalar _height)
 {
   assert(canvas.defined());
 

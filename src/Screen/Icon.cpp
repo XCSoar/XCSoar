@@ -71,7 +71,7 @@ MaskedIcon::CalculateLayout(bool center)
 }
 
 void
-MaskedIcon::draw(Canvas &canvas, int x, int y) const
+MaskedIcon::draw(Canvas &canvas, PixelScalar x, PixelScalar y) const
 {
   assert(defined());
 

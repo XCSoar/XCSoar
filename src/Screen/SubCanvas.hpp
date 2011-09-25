@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_SUB_CANVAS_HPP
 
 #include "Screen/Canvas.hpp"
+#include "Screen/Point.hpp"
 
 #ifdef ENABLE_OPENGL
 #include "Screen/OpenGL/Globals.hpp"
@@ -45,7 +46,8 @@ class SubCanvas : public Canvas {
 #endif
 
 public:
-  SubCanvas(Canvas &canvas, int _x, int _y, unsigned _width, unsigned _height)
+  SubCanvas(Canvas &canvas, PixelScalar _x, PixelScalar _y,
+            UPixelScalar _width, UPixelScalar _height)
 #ifdef ENABLE_OPENGL
     :relative_x(_x), relative_y(_y)
 #endif

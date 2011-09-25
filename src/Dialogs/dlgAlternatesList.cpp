@@ -52,14 +52,14 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
   assert(index < alternates.size());
 
-  const unsigned line_height = rc.bottom - rc.top;
+  const PixelScalar line_height = rc.bottom - rc.top;
 
   const Waypoint &way_point = alternates[index].waypoint;
   const GlideResult& solution = alternates[index].solution;
 
   // Draw icon
-  RasterPoint pt = { rc.left + line_height / 2,
-                     rc.top + line_height / 2};
+  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
+                     PixelScalar(rc.top + line_height / 2) };
 
   WaypointIconRenderer::Reachability reachable =
       positive(solution.altitude_difference) ?

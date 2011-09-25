@@ -29,13 +29,13 @@ Copyright_License {
  * Returns minimum width that is greater then the given width and
  * that is acceptable as image width (not all numbers are acceptable)
  */
-static inline unsigned
-CorrectedWidth(unsigned nWidth)
+static inline UPixelScalar
+CorrectedWidth(UPixelScalar nWidth)
 {
   return ((nWidth + 3) / 4) * 4;
 }
 
-RawBitmap::RawBitmap(unsigned nWidth, unsigned nHeight)
+RawBitmap::RawBitmap(UPixelScalar nWidth, UPixelScalar nHeight)
   :width(nWidth), height(nHeight),
    corrected_width(CorrectedWidth(nWidth))
 #ifdef ENABLE_OPENGL

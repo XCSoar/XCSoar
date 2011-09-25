@@ -30,7 +30,7 @@ Copyright_License {
 #include <assert.h>
 
 bool
-Font::set(const TCHAR* facename, int height, bool bold, bool italic)
+Font::set(const TCHAR* facename, UPixelScalar height, bool bold, bool italic)
 {
   LOGFONT font;
   memset((char *)&font, 0, sizeof(LOGFONT));
@@ -106,10 +106,10 @@ Font::calculate_heights()
     rec.bottom = tm.tmHeight;
     buffer.text_opaque(0, 0, rec, _T("M"));
 
-    int top = tm.tmHeight, bottom = 0;
+    UPixelScalar top = tm.tmHeight, bottom = 0;
 
-    for (int x = 0; x < tm.tmAveCharWidth; ++x) {
-      for (int y = 0; y < tm.tmHeight; ++y) {
+    for (UPixelScalar x = 0; x < (UPixelScalar)tm.tmAveCharWidth; ++x) {
+      for (UPixelScalar y = 0; y < (UPixelScalar)tm.tmHeight; ++y) {
         if (buffer.get_pixel(x, y) != white) {
           if (top > y)
             top = y;

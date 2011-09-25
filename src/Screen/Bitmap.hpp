@@ -57,7 +57,7 @@ protected:
 #ifdef ENABLE_OPENGL
   unsigned id;
   GLTexture *texture;
-  unsigned width, height;
+  UPixelScalar width, height;
 #elif defined(ENABLE_SDL)
   SDL_Surface *surface;
 #else
@@ -98,11 +98,11 @@ public:
   }
 
 #ifdef ENABLE_OPENGL
-  unsigned get_width() const {
+  UPixelScalar get_width() const {
     return width;
   }
 
-  unsigned get_height() const {
+  UPixelScalar get_height() const {
     return height;
   }
 #endif

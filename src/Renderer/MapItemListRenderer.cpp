@@ -66,16 +66,16 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const SelfMapItem &item, const AircraftLook &look,
                           const SETTINGS_MAP &settings)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const PixelScalar line_height = rc.bottom - rc.top;
 
-  RasterPoint pt = { rc.left + line_height / 2,
-                     rc.top + line_height / 2};
+  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
+                     (PixelScalar)(rc.top + line_height / 2) };
   AircraftRenderer::Draw(canvas, settings, look, item.bearing, pt);
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
 
-  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.select(name_font);
   canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
                       _("Your Position"));
@@ -99,8 +99,8 @@ MapItemListRenderer::Draw(
 
   const AbstractAirspace &airspace = *item.airspace;
 
-  RasterPoint pt = { rc.left + line_height / 2,
-                     rc.top + line_height / 2};
+  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
+                     PixelScalar(rc.top + line_height / 2) };
   PixelScalar radius = std::min(PixelScalar(line_height / 2
                                             - Layout::FastScale(4)),
                                 Layout::FastScale(10));
@@ -120,7 +120,8 @@ MapItemListRenderer::Draw(
                       rc.top + name_font.get_height() + Layout::FastScale(4),
                       rc, airspace.GetTypeText(false));
 
-  unsigned altitude_width = canvas.text_width(airspace.GetTopText(true).c_str());
+  PixelScalar altitude_width =
+    canvas.text_width(airspace.GetTopText(true).c_str());
   canvas.text_clipped(rc.right - altitude_width - Layout::FastScale(4),
                       rc.top + name_font.get_height() -
                       small_font.get_height() + Layout::FastScale(2), rc,
@@ -151,8 +152,8 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   const ObservationZonePoint &oz = *item.oz;
   const Waypoint &waypoint = item.waypoint;
 
-  RasterPoint pt = { rc.left + line_height / 2,
-                     rc.top + line_height / 2};
+  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
+                     PixelScalar(rc.top + line_height / 2) };
   PixelScalar radius = std::min(PixelScalar(line_height / 2
                                             - Layout::FastScale(4)),
                                 Layout::FastScale(10));

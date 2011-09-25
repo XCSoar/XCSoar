@@ -42,7 +42,7 @@ Font::set(const LOGFONT &log)
  * reference in textUtilObject member.
  */
 bool
-Font::set(const TCHAR *facename, int height, bool bold, bool italic)
+Font::set(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
 {
   assert(IsScreenInitialized());
 

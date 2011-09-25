@@ -44,7 +44,7 @@ protected:
   PixelSize size;
 
 public:
-  void load(unsigned id, unsigned width, unsigned height) {
+  void load(unsigned id, UPixelScalar width, UPixelScalar height) {
     bitmap.load(id);
     size.cx = width;
     size.cy = height;
@@ -74,7 +74,7 @@ public:
     return size;
   }
 
-  void draw(Canvas& canvas, const int x, const int y) const;
+  void draw(Canvas& canvas, PixelScalar x, PixelScalar y) const;
 };
 
 void

@@ -31,9 +31,9 @@ namespace OpenGL {
   bool vertex_buffer_object;
 #endif
 
-  unsigned screen_width, screen_height;
+  UPixelScalar screen_width, screen_height;
 
-  int translate_x, translate_y;
+  PixelScalar translate_x, translate_y;
 
 #ifndef NDEBUG
   pthread_t thread;

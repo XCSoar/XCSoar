@@ -46,9 +46,9 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   canvas.select(Graphics::hpWind);
   canvas.select(Graphics::hbWind);
 
-  int wmag = iround(4 * wind.norm);
+  PixelScalar wmag = iround(4 * wind.norm);
 
-  int kx = text_width / Layout::FastScale(1) / 2;
+  PixelScalar kx = text_width / Layout::FastScale(1) / 2;
 
   RasterPoint arrow[7] = {
       { 0, -20 },
@@ -56,8 +56,8 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
       { 0, -20 },
       { 6, -26 },
       { 0, -20 },
-      { 8 + kx, -24 },
-      { -8 - kx, -24 }
+      { (PixelScalar)(8 + kx), -24 },
+      { (PixelScalar)(-8 - kx), -24 }
   };
 
   for (int i = 1; i < 4; i++)
@@ -70,7 +70,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
   if (with_tail) {
     RasterPoint tail[2] = {
       { 0, Layout::FastScale(-20) },
-      { 0, Layout::FastScale(-26 - min(20, wmag) * 3) },
+      { 0, Layout::FastScale(-26 - min(PixelScalar(20), wmag) * 3) },
     };
 
     PolygonRotateShift(tail, 2, pos.x, pos.y, wind.bearing - screen_angle);

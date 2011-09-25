@@ -86,7 +86,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const WaypointLook &look,
                            const WaypointRendererSettings &settings)
 {
-  const unsigned line_height = rc.bottom - rc.top;
+  const PixelScalar line_height = rc.bottom - rc.top;
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
@@ -95,13 +95,13 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TCHAR buffer[256];
 
   // Draw icon
-  RasterPoint pt = { rc.left + line_height / 2,
-                     rc.top + line_height / 2};
+  RasterPoint pt = { (PixelScalar)(rc.left + line_height / 2),
+                     (PixelScalar)(rc.top + line_height / 2) };
   WaypointIconRenderer wir(settings, look, canvas);
   wir.Draw(waypoint, pt);
 
   // Y-Coordinate of the second row
-  unsigned top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
+  PixelScalar top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
 
   // Use small font for details
   canvas.select(small_font);

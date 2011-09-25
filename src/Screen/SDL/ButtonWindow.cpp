@@ -159,7 +159,8 @@ ButtonWindow::on_paint(Canvas &canvas)
     canvas.rectangle(-1, -1, canvas.get_width(), canvas.get_height());
   }
 
-  PixelRect rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
+  PixelRect rc = { 2, 2, PixelScalar(canvas.get_width() - 4),
+                   PixelScalar(canvas.get_height() - 4) };
   if (down) {
     rc.left += Layout::FastScale(1);
     rc.top += Layout::FastScale(1);

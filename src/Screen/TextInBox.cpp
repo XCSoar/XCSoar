@@ -39,7 +39,7 @@ TextInBoxMoveInView(PixelRect &brect, const PixelRect &MapRect)
   // If label is above maprect
   if (MapRect.top > brect.top) {
     // Move label down into maprect
-    int d = MapRect.top - brect.top;
+    UPixelScalar d = MapRect.top - brect.top;
     brect.top += d;
     brect.bottom += d;
     offset.y += d;
@@ -47,7 +47,7 @@ TextInBoxMoveInView(PixelRect &brect, const PixelRect &MapRect)
 
   // If label is right of maprect
   if (MapRect.right < brect.right) {
-    int d = MapRect.right - brect.right;
+    UPixelScalar d = MapRect.right - brect.right;
     brect.right += d;
     brect.left += d;
     offset.x += d;
@@ -55,7 +55,7 @@ TextInBoxMoveInView(PixelRect &brect, const PixelRect &MapRect)
 
   // If label is below maprect
   if (MapRect.bottom < brect.bottom) {
-    int d = MapRect.bottom - brect.bottom;
+    UPixelScalar d = MapRect.bottom - brect.bottom;
     brect.top += d;
     brect.bottom += d;
     offset.y += d;
@@ -63,7 +63,7 @@ TextInBoxMoveInView(PixelRect &brect, const PixelRect &MapRect)
 
   // If label is left of maprect
   if (MapRect.left > brect.left) {
-    int d = MapRect.left - brect.left;
+    UPixelScalar d = MapRect.left - brect.left;
     brect.right += d;
     brect.left += d;
     offset.x += d;
@@ -73,7 +73,8 @@ TextInBoxMoveInView(PixelRect &brect, const PixelRect &MapRect)
 }
 
 static void
-RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y,
+RenderShadowedText(Canvas &canvas, const TCHAR* text,
+                   PixelScalar x, PixelScalar y,
                    bool inverted)
 {
   canvas.background_transparent();
@@ -90,7 +91,7 @@ RenderShadowedText(Canvas &canvas, const TCHAR* text, int x, int y,
 
 // returns true if really wrote something
 bool
-TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
+TextInBox(Canvas &canvas, const TCHAR* Value, PixelScalar x, PixelScalar y,
           TextInBoxMode Mode, const PixelRect &MapRect,
           LabelBlock *label_block)
 {
@@ -161,7 +162,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, int x, int y,
 }
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
+TextInBox(Canvas &canvas, const TCHAR *Value, PixelScalar x, PixelScalar y,
           TextInBoxMode Mode,
           unsigned screen_width, unsigned screen_height,
           LabelBlock *label_block)

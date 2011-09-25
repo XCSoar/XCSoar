@@ -28,7 +28,7 @@ Copyright_License {
 #include <algorithm>
 
 void
-BufferCanvas::grow(unsigned _width, unsigned _height)
+BufferCanvas::grow(UPixelScalar _width, UPixelScalar _height)
 {
   resize(std::max(get_width(), _width), std::max(get_height(), _height));
 }

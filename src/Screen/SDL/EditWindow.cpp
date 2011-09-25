@@ -26,8 +26,8 @@ Copyright_License {
 #include "Screen/Features.hpp"
 
 void
-EditWindow::set(ContainerWindow &parent, int left, int top,
-                unsigned width, unsigned height,
+EditWindow::set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
+                UPixelScalar width, UPixelScalar height,
                 const EditWindowStyle style)
 {
   read_only = style.is_read_only;
@@ -38,7 +38,8 @@ EditWindow::set(ContainerWindow &parent, int left, int top,
 void
 EditWindow::on_paint(Canvas &canvas)
 {
-  PixelRect rc = { 2, 2, canvas.get_width()-4, canvas.get_height()-4 };
+  PixelRect rc = { 2, 2, PixelScalar(canvas.get_width() - 4),
+                   PixelScalar(canvas.get_height() - 4) };
 
   if (is_enabled()) {
     if (is_read_only())

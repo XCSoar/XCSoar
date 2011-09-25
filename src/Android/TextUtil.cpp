@@ -117,7 +117,8 @@ TextUtil::getTextBounds(const char *text) const
     extent[1] = 0;
   }
 
-  PixelSize size = { extent[0], extent[1] };
+  PixelSize size = { PixelScalar(extent[0]),
+                     PixelScalar(extent[1]) };
   return size;
 }
 

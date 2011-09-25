@@ -35,21 +35,23 @@ Copyright_License {
 class Canvas;
 
 bool
-Segment(Canvas &canvas, long x, long y, int radius,
+Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
         Angle start, Angle end,
         bool horizon=false);
 
 bool
-Annulus(Canvas &canvas, long x, long y, int radius,
+Annulus(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
         Angle start, Angle end,
-        int inner_radius);
+        UPixelScalar inner_radius);
 
 bool
-KeyHole(Canvas &canvas, long x, long y, int radius,
+KeyHole(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
         Angle start, Angle end,
-        int inner_radius);
+        UPixelScalar inner_radius);
 
 void
-RoundRect(Canvas &canvas, int left, int top, int right, int bottom, int radius);
+RoundRect(Canvas &canvas, PixelScalar left, PixelScalar top,
+          PixelScalar right, PixelScalar bottom,
+          UPixelScalar radius);
 
 #endif

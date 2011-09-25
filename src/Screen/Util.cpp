@@ -27,9 +27,9 @@ Copyright_License {
 
 static 
 void segment_poly(RasterPoint* pt,
-                  const long x,
-                  const long y,
-                  const int radius,
+                  const PixelScalar x,
+                  const PixelScalar y,
+                  const UPixelScalar radius,
                   const int istart,
                   const int iend,
                   int &npoly,
@@ -72,7 +72,7 @@ void segment_poly(RasterPoint* pt,
 }
 
 bool
-Segment(Canvas &canvas, long x, long y, int radius,
+Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
         Angle start, Angle end, bool horizon)
 {
   // dont draw if out of view
@@ -107,8 +107,8 @@ Segment(Canvas &canvas, long x, long y, int radius,
                    
 
 bool
-Annulus(Canvas &canvas, long x, long y, int radius,
-        Angle start, Angle end, int inner_radius)
+Annulus(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
+        Angle start, Angle end, UPixelScalar inner_radius)
 {
   // dont draw if out of view
   PixelRect rc, bounds;
@@ -135,8 +135,8 @@ Annulus(Canvas &canvas, long x, long y, int radius,
 }
 
 bool
-KeyHole(Canvas &canvas, long x, long y, int radius,
-        Angle start, Angle end, int inner_radius)
+KeyHole(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
+        Angle start, Angle end, UPixelScalar inner_radius)
 {
   // dont draw if out of view
   PixelRect rc, bounds;
@@ -163,7 +163,9 @@ KeyHole(Canvas &canvas, long x, long y, int radius,
 }
 
 void
-RoundRect(Canvas &canvas, int left, int top, int right, int bottom, int radius)
+RoundRect(Canvas &canvas, PixelScalar left, PixelScalar top,
+          PixelScalar right, PixelScalar bottom,
+          UPixelScalar radius)
 {
   int npoly = 0;
   RasterPoint pt[66*4];

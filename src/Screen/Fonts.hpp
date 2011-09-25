@@ -20,8 +20,11 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #ifndef XCSOAR_FONTS_HPP
 #define XCSOAR_FONTS_HPP
+
+#include "Screen/Point.hpp"
 
 #include <tchar.h>
 
@@ -40,7 +43,7 @@ namespace Fonts
   extern Font MapLabelImportant;
 
   void Initialize();
-  void SizeInfoboxFont(unsigned control_width);
+  void SizeInfoboxFont(UPixelScalar control_width);
   void LoadCustom();
   void Deinitialize();
 

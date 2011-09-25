@@ -64,8 +64,8 @@ class Canvas : private NonCopyable {
 protected:
   SDL_Surface *surface;
 
-  int x_offset, y_offset;
-  unsigned width, height;
+  PixelScalar x_offset, y_offset;
+  UPixelScalar width, height;
 
   Pen pen;
   Brush brush;
@@ -109,11 +109,11 @@ public:
     return surface != NULL;
   }
 
-  unsigned get_width() const {
+  UPixelScalar get_width() const {
     return width;
   }
 
-  unsigned get_height() const {
+  UPixelScalar get_height() const {
     return height;
   }
 
@@ -184,20 +184,23 @@ public:
     background_mode = TRANSPARENT;
   }
 
-  void outline_rectangle(int left, int top, int right, int bottom,
+  void outline_rectangle(PixelScalar left, PixelScalar top,
+                         PixelScalar right, PixelScalar bottom,
                          Color color) {
     ::rectangleColor(surface, left + x_offset, top + y_offset,
                      right + x_offset, bottom + y_offset, color.gfx_color());
   }
 
-  void rectangle(int left, int top, int right, int bottom) {
+  void rectangle(PixelScalar left, PixelScalar top,
+                 PixelScalar right, PixelScalar bottom) {
     fill_rectangle(left, top, right, bottom, brush);
 
     if (pen_over_brush())
       outline_rectangle(left, top, right, bottom, pen.get_color());
   }
 
-  void fill_rectangle(int left, int top, int right, int bottom,
+  void fill_rectangle(PixelScalar left, PixelScalar top,
+                      PixelScalar right, PixelScalar bottom,
                       const HWColor color) {
     if (left >= right || top >= bottom)
       return;
@@ -212,12 +215,14 @@ public:
     SDL_FillRect(surface, &r, color);
   }
 
-  void fill_rectangle(int left, int top, int right, int bottom,
+  void fill_rectangle(PixelScalar left, PixelScalar top,
+                      PixelScalar right, PixelScalar bottom,
                       const Color color) {
     fill_rectangle(left, top, right, bottom, map(color));
   }
 
-  void fill_rectangle(int left, int top, int right, int bottom,
+  void fill_rectangle(PixelScalar left, PixelScalar top,
+                      PixelScalar right, PixelScalar bottom,
                       const Brush &brush) {
     if (brush.is_hollow())
       return;
@@ -257,8 +262,9 @@ public:
     clear(COLOR_WHITE);
   }
 
-  void round_rectangle(int left, int top, int right, int bottom,
-                       unsigned ellipse_width, unsigned ellipse_height);
+  void round_rectangle(PixelScalar left, PixelScalar top,
+                       PixelScalar right, PixelScalar bottom,
+                       UPixelScalar ellipse_width, UPixelScalar ellipse_height);
 
   void raised_edge(PixelRect &rc) {
     Pen bright(1, Color(240, 240, 240));
@@ -284,7 +290,7 @@ public:
     polygon(points, num_points);
   }
 
-  void line(int ax, int ay, int bx, int by) {
+  void line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by) {
     ax += x_offset;
     bx += x_offset;
     ay += y_offset;
@@ -310,7 +316,9 @@ public:
     line(a.x, a.y, b.x, b.y);
   }
 
-  void two_lines(int ax, int ay, int bx, int by, int cx, int cy)
+  void two_lines(PixelScalar ax, PixelScalar ay,
+                 PixelScalar bx, PixelScalar by,
+                 PixelScalar cx, PixelScalar cy)
   {
     line(ax, ay, bx, by);
     line(bx, by, cx, cy);
@@ -321,15 +329,17 @@ public:
     two_lines(a.x, a.y, b.x, b.y, c.x, c.y);
   }
 
-  void circle(int x, int y, unsigned radius);
+  void circle(PixelScalar x, PixelScalar y, UPixelScalar radius);
 
-  void segment(int x, int y, unsigned radius,
+  void segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                Angle start, Angle end, bool horizon=false);
 
-  void annulus(int x, int y, unsigned small_radius, unsigned big_radius,
+  void annulus(PixelScalar x, PixelScalar y,
+               UPixelScalar small_radius, UPixelScalar big_radius,
                Angle start, Angle end);
 
-  void keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
+  void keyhole(PixelScalar x, PixelScalar y,
+               UPixelScalar small_radius, UPixelScalar big_radius,
                Angle start, Angle end);
 
   void draw_focus(PixelRect rc) {
@@ -346,28 +356,31 @@ public:
   const PixelSize text_size(const TCHAR *text) const;
 
   gcc_pure
-  unsigned text_width(const TCHAR *text) const {
+  UPixelScalar text_width(const TCHAR *text) const {
     return text_size(text).cx;
   }
 
   gcc_pure
-  unsigned text_height(const TCHAR *text) const {
+  UPixelScalar text_height(const TCHAR *text) const {
     return font != NULL ? font->get_height() : 0;
   }
 
-  void text(int x, int y, const TCHAR *text);
-  void text(int x, int y, const TCHAR *text, size_t length);
+  void text(PixelScalar x, PixelScalar y, const TCHAR *text);
+  void text(PixelScalar x, PixelScalar y, const TCHAR *text, size_t length);
 
-  void text_transparent(int x, int y, const TCHAR *text);
+  void text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text);
 
-  void text_opaque(int x, int y, const PixelRect &rc, const TCHAR *text);
+  void text_opaque(PixelScalar x, PixelScalar y, const PixelRect &rc,
+                   const TCHAR *text);
 
-  void text_clipped(int x, int y, const PixelRect &rc, const TCHAR *text) {
+  void text_clipped(PixelScalar x, PixelScalar y, const PixelRect &rc,
+                    const TCHAR *text) {
     // XXX
     this->text(x, y, text);
   }
 
-  void text_clipped(int x, int y, unsigned width, const TCHAR *text) {
+  void text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
+                    const TCHAR *text) {
     // XXX
     this->text(x, y, text);
   }
@@ -375,33 +388,33 @@ public:
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(int x, int y, const TCHAR *t) {
+  void TextAutoClipped(PixelScalar x, PixelScalar y, const TCHAR *t) {
     text(x, y, t);
   }
 
   void formatted_text(PixelRect *rc, const TCHAR *text, unsigned format);
 
-  void copy(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            SDL_Surface *surface, int src_x, int src_y);
+  void copy(PixelScalar dest_x, PixelScalar dest_y,
+            UPixelScalar dest_width, UPixelScalar dest_height,
+            SDL_Surface *surface, PixelScalar src_x, PixelScalar src_y);
 
-  void copy(int dest_x, int dest_y, SDL_Surface *surface) {
+  void copy(PixelScalar dest_x, PixelScalar dest_y, SDL_Surface *surface) {
     copy(dest_x, dest_y, surface->w, surface->h, surface, 0, 0);
   }
 
-  void copy(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            const Canvas &src, int src_x, int src_y) {
+  void copy(PixelScalar dest_x, PixelScalar dest_y,
+            UPixelScalar dest_width, UPixelScalar dest_height,
+            const Canvas &src, PixelScalar src_x, PixelScalar src_y) {
     copy(dest_x, dest_y, dest_width, dest_height,
          src.surface, src_x, src_y);
   }
 
-  void copy(const Canvas &src, int src_x, int src_y);
+  void copy(const Canvas &src, PixelScalar src_x, PixelScalar src_y);
   void copy(const Canvas &src);
 
-  void copy(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            const Bitmap &src, int src_x, int src_y);
+  void copy(PixelScalar dest_x, PixelScalar dest_y,
+            UPixelScalar dest_width, UPixelScalar dest_height,
+            const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
   void copy(const Bitmap &src);
 
   void copy_transparent_white(const Canvas &src);
@@ -410,71 +423,71 @@ public:
   void stretch_transparent(const Bitmap &src, Color key);
   void invert_stretch_transparent(const Bitmap &src, Color key);
 
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
                SDL_Surface *src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height);
 
   void stretch(SDL_Surface *src) {
     stretch(0, 0, get_width(), get_height(),
             src, 0, 0, src->w, src->h);
   }
 
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
                const Canvas &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height) {
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height) {
     stretch(dest_x, dest_y, dest_width, dest_height,
             src.surface,
             src_x, src_y, src_width, src_height);
   }
 
   void stretch(const Canvas &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height);
 
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height);
+  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src);
 
   void stretch(const Bitmap &src) {
     stretch(0, 0, width, height, src);
   }
 
-  void copy_not(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                SDL_Surface *src, int src_x, int src_y);
+  void copy_not(PixelScalar dest_x, PixelScalar dest_y,
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_not(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Bitmap &src, int src_x, int src_y);
+  void copy_not(PixelScalar dest_x, PixelScalar dest_y,
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_or(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               SDL_Surface *src, int src_x, int src_y);
+  void copy_or(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_or(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y);
+  void copy_or(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void copy_or(const Bitmap &src) {
     copy_or(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
-  void copy_and(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                SDL_Surface *src, int src_x, int src_y);
+  void copy_and(PixelScalar dest_x, PixelScalar dest_y,
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                SDL_Surface *src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_and(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Canvas &src, int src_x, int src_y) {
+  void copy_and(PixelScalar dest_x, PixelScalar dest_y,
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                const Canvas &src, PixelScalar src_x, PixelScalar src_y) {
     copy_and(dest_x, dest_y, dest_width, dest_height,
              src.surface, src_x, src_y);
   }
@@ -483,18 +496,18 @@ public:
     copy_and(0, 0, src.get_width(), src.get_height(), src, 0, 0);
   }
 
-  void copy_and(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Bitmap &src, int src_x, int src_y);
+  void copy_and(PixelScalar dest_x, PixelScalar dest_y,
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void copy_and(const Bitmap &src) {
     copy_and(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
-  void scale_copy(int dest_x, int dest_y,
+  void scale_copy(PixelScalar dest_x, PixelScalar dest_y,
                   const Bitmap &src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height);
+                  PixelScalar src_x, PixelScalar src_y,
+                  UPixelScalar src_width, UPixelScalar src_height);
 };
 
 #endif

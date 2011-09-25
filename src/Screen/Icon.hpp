@@ -59,7 +59,7 @@ public:
     bitmap.reset();
   }
 
-  void draw(Canvas &canvas, int x, int y) const;
+  void draw(Canvas &canvas, PixelScalar x, PixelScalar y) const;
   void draw(Canvas &canvas, RasterPoint pt) const {
     draw(canvas, pt.x, pt.y);
   }

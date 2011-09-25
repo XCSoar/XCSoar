@@ -31,6 +31,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
 #define XCSOAR_SCREEN_OPENGL_GLOBALS_HPP
 
+#include "Screen/OpenGL/Point.hpp"
+
 #ifndef NDEBUG
 #include <pthread.h>
 #endif
@@ -60,12 +62,12 @@ namespace OpenGL {
   /**
    * The dimensions of the screen in pixels.
    */
-  extern unsigned screen_width, screen_height;
+  extern UPixelScalar screen_width, screen_height;
 
   /**
    * The current SubCanvas translation in pixels.
    */
-  extern int translate_x, translate_y;
+  extern PixelScalar translate_x, translate_y;
 };
 
 #endif

@@ -95,9 +95,9 @@ class RawBitmap
 #endif
 {
 protected:
-  const unsigned int width;
-  const unsigned int height;
-  const unsigned int corrected_width;
+  const UPixelScalar width;
+  const UPixelScalar height;
+  const UPixelScalar corrected_width;
   BGRColor *buffer;
 
 #ifdef ENABLE_OPENGL
@@ -133,7 +133,7 @@ public:
    * @param nHeight Height of the buffer
    * @param clr Fill color of the buffer
    */
-  RawBitmap(unsigned width, unsigned height);
+  RawBitmap(UPixelScalar width, UPixelScalar height);
 
 #ifdef ENABLE_OPENGL
   virtual
@@ -183,7 +183,7 @@ public:
    * points array directly (using GetPointsArray function).
    * @return Real width of the screen buffer
    */
-  unsigned GetCorrectedWidth() const {
+  UPixelScalar GetCorrectedWidth() const {
     return corrected_width;
   }
 
@@ -191,7 +191,7 @@ public:
    * Returns the screen buffer width
    * @return The screen buffer width
    */
-  unsigned GetWidth() const {
+  UPixelScalar GetWidth() const {
     return width;
   }
 
@@ -199,12 +199,12 @@ public:
    * Returns screen buffer height
    * @return The screen buffer height
    */
-  unsigned GetHeight() const {
+  UPixelScalar GetHeight() const {
     return height;
   }
 
-  void stretch_to(unsigned width, unsigned height, Canvas &dest_canvas,
-                  unsigned dest_width, unsigned dest_height) const {
+  void stretch_to(UPixelScalar width, UPixelScalar height, Canvas &dest_canvas,
+                  UPixelScalar dest_width, UPixelScalar dest_height) const {
 #ifdef ENABLE_OPENGL
     texture->bind();
 

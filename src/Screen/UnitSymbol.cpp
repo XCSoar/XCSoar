@@ -77,7 +77,7 @@ GetUnitSymbol(Units_t unit)
 
 
 void 
-UnitSymbol::draw(Canvas& canvas, const int x, const int y) const
+UnitSymbol::draw(Canvas& canvas, PixelScalar x, PixelScalar y) const
 {
   const RasterPoint BmpPos = get_origin(UnitSymbol::NORMAL);
   const PixelSize size = get_size();

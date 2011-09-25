@@ -42,19 +42,20 @@ protected:
 
 public:
   BufferCanvas():bitmap(NULL) {}
-  BufferCanvas(const Canvas &canvas, unsigned _width, unsigned _height);
+  BufferCanvas(const Canvas &canvas,
+               UPixelScalar _width, UPixelScalar _height);
   ~BufferCanvas();
 
-  void set(const Canvas &canvas, unsigned _width, unsigned _height);
+  void set(const Canvas &canvas, UPixelScalar _width, UPixelScalar _height);
   void set(const Canvas &canvas);
   void reset();
 
-  void resize(unsigned _width, unsigned _height);
+  void resize(UPixelScalar _width, UPixelScalar _height);
 
   /**
    * Similar to resize(), but never shrinks the buffer.
    */
-  void grow(unsigned _width, unsigned _height);
+  void grow(UPixelScalar _width, UPixelScalar _height);
 };
 
 #endif

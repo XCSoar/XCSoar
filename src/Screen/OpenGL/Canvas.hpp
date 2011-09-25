@@ -57,8 +57,8 @@ class Canvas : private NonCopyable {
   friend class SubCanvas;
 
 protected:
-  int x_offset, y_offset;
-  unsigned width, height;
+  PixelScalar x_offset, y_offset;
+  UPixelScalar width, height;
 
   Pen pen;
   Brush brush;
@@ -77,11 +77,11 @@ public:
   Canvas()
     :x_offset(0), y_offset(0), width(0), height(0),
      font(NULL), background_mode(OPAQUE) {}
-  Canvas(unsigned _width, unsigned _height)
+  Canvas(UPixelScalar _width, UPixelScalar _height)
     :width(_width), height(_height),
      font(NULL), background_mode(OPAQUE) {}
 
-  void set(unsigned _width, unsigned _height) {
+  void set(UPixelScalar _width, UPixelScalar _height) {
     width = _width;
     height = _height;
   }
@@ -102,11 +102,11 @@ public:
     return true;
   }
 
-  unsigned get_width() const {
+  UPixelScalar get_width() const {
     return width;
   }
 
-  unsigned get_height() const {
+  UPixelScalar get_height() const {
     return height;
   }
 
@@ -170,17 +170,20 @@ public:
     background_mode = TRANSPARENT;
   }
 
-  void rectangle(int left, int top, int right, int bottom) {
+  void rectangle(PixelScalar left, PixelScalar top,
+                 PixelScalar right, PixelScalar bottom) {
     fill_rectangle(left, top, right, bottom, brush);
 
     if (pen_over_brush())
       outline_rectangle(left, top, right, bottom);
   }
 
-  void fill_rectangle(int left, int top, int right, int bottom,
+  void fill_rectangle(PixelScalar left, PixelScalar top,
+                      PixelScalar right, PixelScalar bottom,
                       const Color color);
 
-  void fill_rectangle(int left, int top, int right, int bottom,
+  void fill_rectangle(PixelScalar left, PixelScalar top,
+                      PixelScalar right, PixelScalar bottom,
                       const Brush &brush) {
     if (!brush.is_hollow())
       fill_rectangle(left, top, right, bottom, brush.get_color());
@@ -198,14 +201,17 @@ public:
    * Draw a rectangle outline with the current OpenGL color and
    * settings.
    */
-  void OutlineRectangleGL(int left, int top, int right, int bottom);
+  void OutlineRectangleGL(PixelScalar left, PixelScalar top,
+                          PixelScalar right, PixelScalar bottom);
 
-  void outline_rectangle(int left, int top, int right, int bottom) {
+  void outline_rectangle(PixelScalar left, PixelScalar top,
+                         PixelScalar right, PixelScalar bottom) {
     pen.set();
     OutlineRectangleGL(left, top, right, bottom);
   }
 
-  void outline_rectangle(int left, int top, int right, int bottom,
+  void outline_rectangle(PixelScalar left, PixelScalar top,
+                         PixelScalar right, PixelScalar bottom,
                          Color color) {
     color.set();
 #ifdef HAVE_GLES
@@ -233,8 +239,10 @@ public:
     clear(COLOR_WHITE);
   }
 
-  void round_rectangle(int left, int top, int right, int bottom,
-                       unsigned ellipse_width, unsigned ellipse_height);
+  void round_rectangle(PixelScalar left, PixelScalar top,
+                       PixelScalar right, PixelScalar bottom,
+                       UPixelScalar ellipse_width,
+                       UPixelScalar ellipse_height);
 
   void raised_edge(PixelRect &rc);
 
@@ -248,7 +256,7 @@ public:
    */
   void TriangleFan(const RasterPoint *points, unsigned num_points);
 
-  void line(int ax, int ay, int bx, int by);
+  void line(PixelScalar ax, PixelScalar ay, PixelScalar bx, PixelScalar by);
 
   void line(const RasterPoint a, const RasterPoint b) {
     line(a.x, a.y, b.x, b.y);
@@ -256,19 +264,23 @@ public:
 
   void line_piece(const RasterPoint a, const RasterPoint b);
 
-  void two_lines(int ax, int ay, int bx, int by, int cx, int cy);
+  void two_lines(PixelScalar ax, PixelScalar ay,
+                 PixelScalar bx, PixelScalar by,
+                 PixelScalar cx, PixelScalar cy);
   void two_lines(const RasterPoint a, const RasterPoint b,
                  const RasterPoint c);
 
-  void circle(int x, int y, unsigned radius);
+  void circle(PixelScalar x, PixelScalar y, UPixelScalar radius);
 
-  void segment(int x, int y, unsigned radius,
+  void segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
                Angle start, Angle end, bool horizon=false);
 
-  void annulus(int x, int y, unsigned small_radius, unsigned big_radius,
+  void annulus(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
+               UPixelScalar big_radius,
                Angle start, Angle end);
 
-  void keyhole(int x, int y, unsigned small_radius, unsigned big_radius,
+  void keyhole(PixelScalar x, PixelScalar y, UPixelScalar small_radius,
+               UPixelScalar big_radius,
                Angle start, Angle end);
 
   void draw_focus(PixelRect rc);
@@ -282,35 +294,38 @@ public:
   const PixelSize text_size(const TCHAR *text) const;
 
   gcc_pure
-  unsigned text_width(const TCHAR *text) const {
+  UPixelScalar text_width(const TCHAR *text) const {
     return text_size(text).cx;
   }
 
   gcc_pure
-  unsigned text_height(const TCHAR *text) const {
+  UPixelScalar text_height(const TCHAR *text) const {
     return font != NULL ? font->get_height() : 0;
   }
 
-  void text(int x, int y, const TCHAR *text);
-  void text(int x, int y, const TCHAR *text, size_t length);
+  void text(PixelScalar x, PixelScalar y, const TCHAR *text);
+  void text(PixelScalar x, PixelScalar y, const TCHAR *text, size_t length);
 
-  void text_transparent(int x, int y, const TCHAR *text);
+  void text_transparent(PixelScalar x, PixelScalar y, const TCHAR *text);
 
-  void text_opaque(int x, int y, const PixelRect &rc, const TCHAR *text);
+  void text_opaque(PixelScalar x, PixelScalar y, const PixelRect &rc,
+                   const TCHAR *text);
 
-  void text_clipped(int x, int y, const PixelRect &rc, const TCHAR *text) {
+  void text_clipped(PixelScalar x, PixelScalar y, const PixelRect &rc,
+                    const TCHAR *text) {
     // XXX
 
     if (x < rc.right)
       text_clipped(x, y, rc.right - x, text);
   }
 
-  void text_clipped(int x, int y, unsigned width, const TCHAR *text);
+  void text_clipped(PixelScalar x, PixelScalar y, UPixelScalar width,
+                    const TCHAR *text);
 
   /**
    * Render text, clip it within the bounds of this Canvas.
    */
-  void TextAutoClipped(int x, int y, const TCHAR *t) {
+  void TextAutoClipped(PixelScalar x, PixelScalar y, const TCHAR *t) {
     if (x < (int)get_width())
       text_clipped(x, y, get_width() - x, t);
   }
@@ -321,62 +336,62 @@ public:
    * Draws a texture.  The caller is responsible for binding it and
    * enabling GL_TEXTURE_2D.
    */
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
                const GLTexture &texture,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height);
 
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
                const GLTexture &texture);
 
 
-  void copy(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            const Bitmap &src, int src_x, int src_y);
+  void copy(PixelScalar dest_x, PixelScalar dest_y,
+            UPixelScalar dest_width, UPixelScalar dest_height,
+            const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
   void copy(const Bitmap &src);
 
   void stretch_transparent(const Bitmap &src, Color key);
   void invert_stretch_transparent(const Bitmap &src, Color key);
 
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src,
-               int src_x, int src_y,
-               unsigned src_width, unsigned src_height);
-  void stretch(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
+               PixelScalar src_x, PixelScalar src_y,
+               UPixelScalar src_width, UPixelScalar src_height);
+  void stretch(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
                const Bitmap &src);
 
   void stretch(const Bitmap &src) {
     stretch(0, 0, width, height, src);
   }
 
-  void copy_or(int dest_x, int dest_y,
-               unsigned dest_width, unsigned dest_height,
-               const Bitmap &src, int src_x, int src_y);
+  void copy_or(PixelScalar dest_x, PixelScalar dest_y,
+               UPixelScalar dest_width, UPixelScalar dest_height,
+               const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void copy_or(const Bitmap &src) {
     copy_or(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
-  void copy_not(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Bitmap &src, int src_x, int src_y);
+  void copy_not(PixelScalar dest_x, PixelScalar dest_y,
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
-  void copy_and(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                const Bitmap &src, int src_x, int src_y);
+  void copy_and(PixelScalar dest_x, PixelScalar dest_y,
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                const Bitmap &src, PixelScalar src_x, PixelScalar src_y);
 
   void copy_and(const Bitmap &src) {
     copy_and(0, 0, get_width(), get_height(), src, 0, 0);
   }
 
-  void scale_copy(int dest_x, int dest_y,
+  void scale_copy(PixelScalar dest_x, PixelScalar dest_y,
                   const Bitmap &src,
-                  int src_x, int src_y,
-                  unsigned src_width, unsigned src_height);
+                  PixelScalar src_x, PixelScalar src_y,
+                  UPixelScalar src_width, UPixelScalar src_height);
 };
 
 #endif

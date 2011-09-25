@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_SCREEN_OPENGL_TEXTURE_HPP
 
 #include "Screen/OpenGL/Features.hpp"
+#include "Screen/OpenGL/Point.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>
@@ -46,7 +47,7 @@ extern unsigned num_textures;
 class GLTexture {
 protected:
   GLuint id;
-  unsigned width, height;
+  UPixelScalar width, height;
 
 #ifndef HAVE_OES_DRAW_TEXTURE
   /**
@@ -58,7 +59,7 @@ protected:
 
 public:
 #ifdef ANDROID
-  GLTexture(GLuint _id, unsigned _width, unsigned _height)
+  GLTexture(GLuint _id, UPixelScalar _width, UPixelScalar _height)
     :id(_id), width(_width), height(_height) {
 #ifndef NDEBUG
     ++num_textures;
@@ -69,7 +70,7 @@ public:
   /**
    * Create a texture with undefined content.
    */
-  GLTexture(unsigned _width, unsigned _height);
+  GLTexture(UPixelScalar _width, UPixelScalar _height);
 
 #ifndef ANDROID
   GLTexture(SDL_Surface *surface) {
@@ -87,11 +88,11 @@ public:
 #endif
   }
 
-  unsigned get_width() const {
+  UPixelScalar get_width() const {
     return width;
   }
 
-  unsigned get_height() const {
+  UPixelScalar get_height() const {
     return height;
   }
 
@@ -129,12 +130,12 @@ public:
     glBindTexture(GL_TEXTURE_2D, id);
   }
 
-  void draw(int dest_x, int dest_y,
-            unsigned dest_width, unsigned dest_height,
-            int src_x, int src_y,
-            unsigned src_width, unsigned src_height) const;
+  void draw(PixelScalar dest_x, PixelScalar dest_y,
+            UPixelScalar dest_width, UPixelScalar dest_height,
+            PixelScalar src_x, PixelScalar src_y,
+            UPixelScalar src_width, UPixelScalar src_height) const;
 
-  void draw(int dest_x, int dest_y) const {
+  void draw(PixelScalar dest_x, PixelScalar dest_y) const {
     draw(dest_x, dest_y, width, height,
          0, 0, width, height);
   }

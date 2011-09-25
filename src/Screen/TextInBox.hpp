@@ -24,11 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_TEXT_IN_BOX_HPP
 #define XCSOAR_SCREEN_TEXT_IN_BOX_HPP
 
-#ifdef WIN32
 #include "Screen/Point.hpp"
-#else
-struct PixelRect;
-#endif
 
 #include <tchar.h>
 
@@ -63,12 +59,13 @@ struct TextInBoxMode
     Mode(Simple), Align(Left), Bold(false), MoveInView(false) {}
 };
 
-bool TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
+bool TextInBox(Canvas &canvas, const TCHAR *Value,
+               PixelScalar x, PixelScalar y,
                TextInBoxMode Mode, const PixelRect &MapRect,
                LabelBlock *label_block=NULL);
 
 bool
-TextInBox(Canvas &canvas, const TCHAR *Value, int x, int y,
+TextInBox(Canvas &canvas, const TCHAR *Value, PixelScalar x, PixelScalar y,
           TextInBoxMode Mode,
           unsigned screen_width, unsigned screen_height,
           LabelBlock *label_block=NULL);

@@ -25,7 +25,8 @@ Copyright_License {
 
 #include <assert.h>
 
-BufferCanvas::BufferCanvas(const Canvas &canvas, unsigned _width, unsigned _height)
+BufferCanvas::BufferCanvas(const Canvas &canvas,
+                           UPixelScalar _width, UPixelScalar _height)
   :VirtualCanvas(canvas, _width, _height)
 {
   bitmap = ::CreateCompatibleBitmap(canvas, width, height);
@@ -37,7 +38,8 @@ BufferCanvas::~BufferCanvas()
   reset();
 }
 
-void BufferCanvas::set(const Canvas &canvas, unsigned _width, unsigned _height)
+void BufferCanvas::set(const Canvas &canvas,
+                       UPixelScalar _width, UPixelScalar _height)
 {
   assert(canvas.defined());
 
@@ -60,7 +62,7 @@ void BufferCanvas::reset()
     ::DeleteObject(bitmap);
 }
 
-void BufferCanvas::resize(unsigned _width, unsigned _height)
+void BufferCanvas::resize(UPixelScalar _width, UPixelScalar _height)
 {
   assert(dc != NULL);
 

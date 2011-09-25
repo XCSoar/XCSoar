@@ -53,7 +53,7 @@ LOGFONT LogMapLabel;
 LOGFONT LogMapLabelImportant;
 
 static void
-InitialiseLogfont(LOGFONT* font, const TCHAR* facename, int height,
+InitialiseLogfont(LOGFONT* font, const TCHAR* facename, UPixelScalar height,
                   bool bold = false, bool italic = false,
                   bool variable_pitch = true)
 {
@@ -93,7 +93,7 @@ LoadAltairLogFonts()
 }
 
 static void
-SizeLogFont(LOGFONT &logfont, unsigned width, const TCHAR* str)
+SizeLogFont(LOGFONT &logfont, UPixelScalar width, const TCHAR* str)
 {
   // JMW algorithm to auto-size info window font.
   // this is still required in case title font property doesn't exist.
@@ -122,9 +122,9 @@ InitialiseLogFonts()
   }
 
 #ifndef USE_GDI
-  int FontHeight = Layout::SmallScale(is_android() ? 30 : 24);
+  UPixelScalar FontHeight = Layout::SmallScale(is_android() ? 30 : 24);
 #else
-  int FontHeight = Layout::SmallScale(35);
+  UPixelScalar FontHeight = Layout::SmallScale(35);
 #endif
 
   // oversize first so can then scale down
@@ -140,23 +140,23 @@ InitialiseLogFonts()
 
   // new font for CDI Scale
   InitialiseLogfont(&LogCDI, Fonts::GetStandardFontFace(),
-                    (int)(FontHeight * 0.6), false, false, false);
+                    UPixelScalar(FontHeight * 0.6), false, false, false);
 
   // new font for map labels
   InitialiseLogfont(&LogMapLabel, Fonts::GetStandardFontFace(),
-                    (int)(FontHeight * 0.39), false, true);
+                    UPixelScalar(FontHeight * 0.39), false, true);
 
   // new font for map labels big/medium cities
   InitialiseLogfont(&LogMapLabelImportant, Fonts::GetStandardFontFace(),
-                    (int)(FontHeight * 0.39), true, true);
+                    UPixelScalar(FontHeight * 0.39), true, true);
 
   // new font for map labels
   InitialiseLogfont(&LogMap, Fonts::GetStandardFontFace(),
-                    (int)(FontHeight * 0.507));
+                    UPixelScalar(FontHeight * 0.507));
 
   // Font for map bold text
   InitialiseLogfont(&LogMapBold, Fonts::GetStandardFontFace(),
-                    (int)(FontHeight * 0.507), true);
+                    UPixelScalar(FontHeight * 0.507), true);
 
   InitialiseLogfont(&LogInfoBoxSmall, Fonts::GetStandardFontFace(),
                     Layout::Scale(20));
@@ -176,7 +176,7 @@ Fonts::Initialize()
 }
 
 void
-Fonts::SizeInfoboxFont(unsigned control_width)
+Fonts::SizeInfoboxFont(UPixelScalar control_width)
 {
   LOGFONT lf = LogInfoBox;
 

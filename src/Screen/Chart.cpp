@@ -159,8 +159,8 @@ Chart::DrawLabel(const TCHAR *text, const fixed xv, const fixed yv)
 {
   PixelSize tsize = canvas.text_size(text);
 
-  int x = (int)((xv - x_min) * xscale) + rc.left - tsize.cx / 2 + PaddingLeft;
-  int y = (int)((y_max - yv) * yscale) + rc.top - tsize.cy / 2;
+  PixelScalar x = PixelScalar((xv - x_min) * xscale) + rc.left - tsize.cx / 2 + PaddingLeft;
+  PixelScalar y = PixelScalar((y_max - yv) * yscale) + rc.top - tsize.cy / 2;
 
   canvas.background_transparent();
   canvas.text(x, y, text);
@@ -173,8 +173,8 @@ Chart::DrawNoData()
 
   PixelSize tsize = canvas.text_size(text);
 
-  int x = (int)(rc.left + rc.right - tsize.cx) / 2;
-  int y = (int)(rc.top + rc.bottom - tsize.cy) / 2;
+  PixelScalar x = (rc.left + rc.right - tsize.cx) / 2;
+  PixelScalar y = (rc.top + rc.bottom - tsize.cy) / 2;
 
   canvas.background_transparent();
   canvas.text(x, y, text);
@@ -186,8 +186,8 @@ Chart::DrawXLabel(const TCHAR *text)
   canvas.select(*look.axis_label_font);
 
   PixelSize tsize = canvas.text_size(text);
-  int x = rc.right - tsize.cx - Layout::Scale(3);
-  int y = rc.bottom - tsize.cy;
+  PixelScalar x = rc.right - tsize.cx - Layout::Scale(3);
+  PixelScalar y = rc.bottom - tsize.cy;
 
   canvas.background_transparent();
   canvas.text(x, y, text);
@@ -199,8 +199,8 @@ Chart::DrawYLabel(const TCHAR *text)
   canvas.select(*look.axis_label_font);
 
   PixelSize tsize = canvas.text_size(text);
-  int x = max(2, (int)(rc.left - tsize.cx));
-  int y = rc.top;
+  PixelScalar x = max(PixelScalar(2), PixelScalar(rc.left - tsize.cx));
+  PixelScalar y = rc.top;
 
   canvas.background_transparent();
   canvas.text(x, y, text);
@@ -318,7 +318,7 @@ Chart::DrawBarChart(const LeastSquares &lsdata)
   canvas.select(green_brush);
   canvas.null_pen();
 
-  int xmin, ymin, xmax, ymax;
+  PixelScalar xmin, ymin, xmax, ymax;
 
   for (int i = 0; i < lsdata.sum_n; i++) {
     xmin = (fixed(i) + fixed(1.2)) * xscale + fixed(rc.left + PaddingLeft);
@@ -396,10 +396,10 @@ Chart::DrawXGrid(fixed tic_step, const fixed zero, const Pen &pen,
 
   RasterPoint line[2];
 
-  int xmin, ymin, xmax, ymax;
+  PixelScalar xmin, ymin, xmax, ymax;
 
   /** the minimum next position of the text, to avoid overlapping */
-  int next_text = rc.left;
+  PixelScalar next_text = rc.left;
 
   /* increase tic step so graph not too crowded */
   while ((x_max-x_min)/tic_step > fixed_ten) {
@@ -478,7 +478,7 @@ Chart::DrawYGrid(fixed tic_step, const fixed zero, const Pen &pen,
 
   RasterPoint line[2];
 
-  int xmin, ymin, xmax, ymax;
+  PixelScalar xmin, ymin, xmax, ymax;
 
   /* increase tic step so graph not too crowded */
   while ((y_max-y_min)/tic_step > fixed_ten) {
@@ -651,15 +651,15 @@ Chart::DrawFilledY(const std::vector< std::pair<fixed, fixed> > &vals,
 }
 
 void
-Chart::DrawDot(const fixed x, const fixed y, const int width)
+Chart::DrawDot(const fixed x, const fixed y, const PixelScalar width)
 {
   RasterPoint p;
-  p.x = (int)((x - x_min) * xscale) + rc.left + PaddingLeft;
-  p.y = (int)((y_max - y) * yscale) + rc.top;
-  RasterPoint line[4] = { {p.x, p.y-width},
-                          {p.x-width, p.y},
-                          {p.x, p.y+width},
-                          {p.x+width, p.y} };
+  p.x = (PixelScalar)((x - x_min) * xscale) + rc.left + PaddingLeft;
+  p.y = (PixelScalar)((y_max - y) * yscale) + rc.top;
+  RasterPoint line[4] = { { p.x, PixelScalar(p.y - width) },
+                          { PixelScalar(p.x - width), p.y },
+                          { p.x, PixelScalar(p.y + width) },
+                          { PixelScalar(p.x + width), p.y } };
   canvas.null_pen();
   canvas.TriangleFan(line, 4);
 }

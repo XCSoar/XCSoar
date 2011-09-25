@@ -26,8 +26,9 @@ Copyright_License {
 #include <commctrl.h>
 
 void
-EditWindow::set(ContainerWindow &parent, int left, int top,
-                unsigned width, unsigned height,
+EditWindow::set(ContainerWindow &parent,
+                PixelScalar left, PixelScalar top,
+                UPixelScalar width, UPixelScalar height,
                 const EditWindowStyle style) {
   Window::set(&parent, WC_EDIT, NULL,
               left, top, width, height, style);

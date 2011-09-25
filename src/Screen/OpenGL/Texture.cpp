@@ -125,7 +125,7 @@ load_surface_into_texture(const SDL_Surface *surface)
   } else
     return false;
 
-  unsigned pitch = surface->pitch / fmt->BytesPerPixel;
+  UPixelScalar pitch = surface->pitch / fmt->BytesPerPixel;
   load_texture_auto_align(GL_RGB, pitch, surface->h,
                           format, type, surface->pixels);
   return true;
@@ -133,7 +133,7 @@ load_surface_into_texture(const SDL_Surface *surface)
 
 #endif
 
-GLTexture::GLTexture(unsigned _width, unsigned _height)
+GLTexture::GLTexture(UPixelScalar _width, UPixelScalar _height)
   :width(_width), height(_height)
 #ifndef HAVE_OES_DRAW_TEXTURE
   , allocated_width(validate_texture_size(_width)),
@@ -209,10 +209,10 @@ GLTexture::load(SDL_Surface *src)
 #endif
 
 void
-GLTexture::draw(int dest_x, int dest_y,
-                unsigned dest_width, unsigned dest_height,
-                int src_x, int src_y,
-                unsigned src_width, unsigned src_height) const
+GLTexture::draw(PixelScalar dest_x, PixelScalar dest_y,
+                UPixelScalar dest_width, UPixelScalar dest_height,
+                PixelScalar src_x, PixelScalar src_y,
+                UPixelScalar src_width, UPixelScalar src_height) const
 {
 #ifdef HAVE_OES_DRAW_TEXTURE
   const GLint rect[4] = { src_x, src_y + src_height, src_width,
@@ -223,7 +223,7 @@ GLTexture::draw(int dest_x, int dest_y,
   /* glDrawTexiOES() circumvents the projection settings, thus we must
      roll our own translation */
   glDrawTexiOES(OpenGL::translate_x + dest_x,
-                (int)OpenGL::screen_height - OpenGL::translate_y - dest_y - (int)dest_height,
+                OpenGL::screen_height - OpenGL::translate_y - dest_y - dest_height,
                 0, dest_width, dest_height);
 #else
   GLfloat x0 = (GLfloat)src_x / allocated_width;

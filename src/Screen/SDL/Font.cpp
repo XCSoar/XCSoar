@@ -63,7 +63,7 @@ Font::Initialise()
 }
 
 bool
-Font::_set(const char *file, int ptsize, bool bold, bool italic)
+Font::_set(const char *file, UPixelScalar ptsize, bool bold, bool italic)
 {
   assert(IsScreenInitialized());
 
@@ -86,7 +86,7 @@ Font::_set(const char *file, int ptsize, bool bold, bool italic)
 }
 
 bool
-Font::set(const TCHAR *facename, int height, bool bold, bool italic)
+Font::set(const TCHAR *facename, UPixelScalar height, bool bold, bool italic)
 {
   LOGFONT lf;
   lf.lfWeight = bold ? 700 : 500;

@@ -95,8 +95,8 @@ class EditWindow : public Window {
 #endif
 
 public:
-  void set(ContainerWindow &parent, int left, int top,
-           unsigned width, unsigned height,
+  void set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const EditWindowStyle style);
 
   unsigned get_row_count() const {

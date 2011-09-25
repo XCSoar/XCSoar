@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_FONT_HPP
 #define XCSOAR_SCREEN_FONT_HPP
 
+#include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Compiler.h"
 
@@ -38,12 +39,6 @@ Copyright_License {
 
 #include <windows.h>
 #include <tchar.h>
-
-#ifdef USE_GDI
-#include "Screen/Point.hpp"
-#else
-struct PixelSize;
-#endif
 
 class TextUtil;
 
@@ -70,7 +65,7 @@ protected:
   void calculate_heights();
   #ifndef ANDROID
   #ifdef ENABLE_SDL
-  bool _set(const char *file, int ptsize, bool bold = false,
+  bool _set(const char *file, UPixelScalar ptsize, bool bold = false,
             bool italic = false);
   #endif
   #endif
@@ -98,7 +93,7 @@ public:
     #endif
   }
 
-  bool set(const TCHAR *facename, int height, bool bold = false,
+  bool set(const TCHAR *facename, UPixelScalar height, bool bold = false,
            bool italic = false);
   bool set(const LOGFONT &log_font);
   void reset();
@@ -123,17 +118,17 @@ public:
   #endif
   #endif // !ANDROID
 
-  unsigned get_height() const {
+  UPixelScalar get_height() const {
     return height;
   }
-  unsigned get_ascent_height() const {
+  UPixelScalar get_ascent_height() const {
     return ascent_height;
   }
-  unsigned get_capital_height() const {
+  UPixelScalar get_capital_height() const {
     return capital_height;
   }
   #ifdef ANDROID
-  unsigned get_line_spacing() const {
+  UPixelScalar get_line_spacing() const {
     return line_spacing;
   }
   unsigned get_style() const {
@@ -154,7 +149,7 @@ public:
   }
 
   gcc_pure
-  unsigned get_line_spacing() const {
+  UPixelScalar get_line_spacing() const {
     return ::TTF_FontLineSkip(font);
   }
 #endif
