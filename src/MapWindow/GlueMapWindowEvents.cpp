@@ -60,7 +60,7 @@ GlueMapWindow::on_mouse_double(int x, int y)
 {
   if (map_item_timer) {
     kill_timer(map_item_timer);
-    map_item_timer = NULL;
+    map_item_timer = 0;
   }
 
   mouse_down_clock.update();
@@ -109,7 +109,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
 {
   if (map_item_timer) {
     kill_timer(map_item_timer);
-    map_item_timer = NULL;
+    map_item_timer = 0;
   }
 
   // Ignore single click event if double click detected
@@ -231,7 +231,7 @@ GlueMapWindow::on_mouse_wheel(int x, int y, int delta)
 {
   if (map_item_timer) {
     kill_timer(map_item_timer);
-    map_item_timer = NULL;
+    map_item_timer = 0;
   }
 
   if (drag_mode != DRAG_NONE)
