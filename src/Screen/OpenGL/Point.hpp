@@ -34,6 +34,7 @@ Copyright_License {
 #endif
 
 typedef GLvalue PixelScalar;
+typedef GLuvalue UPixelScalar;
 
 struct RasterPoint {
   GLvalue x, y;

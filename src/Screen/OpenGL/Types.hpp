@@ -34,6 +34,7 @@ Copyright_License {
  * A position component in the OpenGL surface.
  */
 typedef GLshort GLvalue;
+typedef GLushort GLuvalue;
 static const GLenum GL_VALUE = GL_SHORT;
 
 #else
@@ -44,6 +45,7 @@ static const GLenum GL_VALUE = GL_SHORT;
  * A position component in the OpenGL surface.
  */
 typedef GLint GLvalue;
+typedef GLuint GLuvalue;
 static const GLenum GL_VALUE = GL_INT;
 
 #endif

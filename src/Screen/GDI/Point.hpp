@@ -32,5 +32,6 @@ Copyright_License {
 #define PixelRect tagRECT
 
 typedef LONG PixelScalar;
+typedef ULONG UPixelScalar;
 
 #endif
