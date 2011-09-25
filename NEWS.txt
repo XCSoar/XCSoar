@@ -13,6 +13,7 @@ Version 6.2.1 - not yet released
   - fix screen corruption when rotating the progress screen
   - fix startup crash with manual display orientation
   - fix memory leak in network code
+  - implement timeout in network code
 * Mac OS X
   - fix clock query
   - store data in ~/XCSoarData

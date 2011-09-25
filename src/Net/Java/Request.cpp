@@ -33,8 +33,6 @@ Net::Request::Request(Session &_session, const TCHAR *url,
                       unsigned long timeout)
   :env(Java::GetEnv())
 {
-  // XXX implement timeout
-
   Java::Class url_class(env, "java/net/URL");
   jmethodID url_ctor = env->GetMethodID(url_class.get(), "<init>",
                                         "(Ljava/lang/String;)V");
@@ -52,24 +50,36 @@ Net::Request::Request(Session &_session, const TCHAR *url,
                                         "()Ljava/net/URLConnection;");
   assert(url_open != NULL);
 
-  jobject connection = env->CallObjectMethod(url_object, url_open);
+  connection = env->CallObjectMethod(url_object, url_open);
   env->DeleteLocalRef(url_object);
   if (env->ExceptionOccurred() || connection == NULL) {
     env->ExceptionClear();
+    connection = NULL;
     input_stream = NULL;
     return;
   }
 
   Java::Class connection_class(env, env->GetObjectClass(connection));
+
+  set_timeout_method = env->GetMethodID(connection_class.get(),
+                                        "setConnectTimeout", "(I)V");
+  assert(set_timeout_method != NULL);
+  env->CallVoidMethod(connection, set_timeout_method, (jint)timeout);
+
+  set_timeout_method = env->GetMethodID(connection_class.get(),
+                                        "setReadTimeout", "(I)V");
+  assert(set_timeout_method != NULL);
+
   jmethodID get_input_stream = env->GetMethodID(connection_class.get(),
                                                 "getInputStream",
                                                 "()Ljava/io/InputStream;");
   assert(get_input_stream != NULL);
 
   input_stream = env->CallObjectMethod(connection, get_input_stream);
-  env->DeleteLocalRef(connection);
   if (env->ExceptionOccurred() || input_stream == NULL) {
     env->ExceptionClear();
+    env->DeleteLocalRef(connection);
+    connection = NULL;
     input_stream = NULL;
     return;
   }
@@ -83,6 +93,9 @@ Net::Request::Request(Session &_session, const TCHAR *url,
 
 Net::Request::~Request()
 {
+  if (connection != NULL)
+    env->DeleteLocalRef(connection);
+
   if (input_stream != NULL) {
     env->CallVoidMethod(input_stream, close_method);
     env->ExceptionClear();
@@ -100,9 +113,10 @@ Net::Request::Created() const
 size_t
 Net::Request::Read(void *buffer, size_t buffer_size, unsigned long timeout)
 {
-  // XXX implement timeout
-
+  assert(connection != NULL);
   assert(input_stream != NULL);
+
+  env->CallVoidMethod(connection, set_timeout_method, (jint)timeout);
 
   Java::LocalRef<jbyteArray> array(env,
                                    (jbyteArray)env->NewByteArray(buffer_size));
