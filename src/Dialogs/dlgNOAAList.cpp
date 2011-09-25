@@ -221,7 +221,7 @@ dlgNOAAListShowModal(SingleWindow &parent)
                   _T("IDR_XML_NOAA_LIST"));
   assert(wf != NULL);
 
-  unsigned item_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
+  UPixelScalar item_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
                          Fonts::MapLabel.get_height();
 
   station_list = (WndListFrame *)wf->FindByName(_T("StationList"));

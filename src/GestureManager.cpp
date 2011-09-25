@@ -50,7 +50,7 @@ getDirection(int dx, int dy)
 }
 
 void
-GestureManager::Update(int x, int y)
+GestureManager::Update(PixelScalar x, PixelScalar y)
 {
   // Calculate deltas
   int dx = x - drag_last.x;
@@ -77,7 +77,7 @@ GestureManager::Update(int x, int y)
 }
 
 void
-GestureManager::Start(int x, int y, int _threshold)
+GestureManager::Start(PixelScalar x, PixelScalar y, int _threshold)
 {
   // Reset last position
   drag_last.x = x;

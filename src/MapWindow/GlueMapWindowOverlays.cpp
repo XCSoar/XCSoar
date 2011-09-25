@@ -72,8 +72,8 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
     return; // early exit
   }
 
-  int x = rc.left + Layout::FastScale(2);
-  int y = rc.bottom - Layout::FastScale(35);
+  PixelScalar x = rc.left + Layout::FastScale(2);
+  PixelScalar y = rc.bottom - Layout::FastScale(35);
   icon->draw(canvas, x, y);
 
   x += icon->get_size().cx + Layout::FastScale(4);
@@ -89,7 +89,7 @@ GlueMapWindow::DrawGPSStatus(Canvas &canvas, const PixelRect &rc,
 void
 GlueMapWindow::DrawFlightMode(Canvas &canvas, const PixelRect &rc) const
 {
-  int offset = 0;
+  PixelScalar offset = 0;
 
   // draw logger status
   if (logger != NULL && logger->isLoggerActive()) {
@@ -163,7 +163,7 @@ GlueMapWindow::DrawMapScale(Canvas &canvas, const PixelRect &rc,
                             sizeof(buffer) / sizeof(TCHAR), true);
   PixelSize TextSize = canvas.text_size(buffer);
 
-  int Height = Fonts::MapBold.get_capital_height() + Layout::Scale(2);
+  UPixelScalar Height = Fonts::MapBold.get_capital_height() + Layout::Scale(2);
   // 2: add 1pix border
 
   canvas.fill_rectangle(Layout::Scale(4), rc.bottom - Height,
@@ -317,7 +317,7 @@ GlueMapWindow::DrawStallRatio(Canvas &canvas, const PixelRect &rc) const
   if (Basic().stall_ratio_available) {
     // JMW experimental, display stall sensor
     fixed s = max(fixed_zero, min(fixed_one, Basic().stall_ratio));
-    long m = (long)((rc.bottom - rc.top) * s * s);
+    PixelScalar m((rc.bottom - rc.top) * s * s);
 
     canvas.black_pen();
     canvas.line(rc.right - 1, rc.bottom - m, rc.right - 11, rc.bottom - m);

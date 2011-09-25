@@ -71,7 +71,8 @@ class TextWindow : public Window {
 
 public:
   void set(ContainerWindow &parent, const TCHAR *text,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const TextWindowStyle style=TextWindowStyle());
 
   void set_text(const TCHAR *_text) {

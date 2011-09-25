@@ -282,7 +282,7 @@ dlgPlanesShowModal(SingleWindow &parent)
                       _T("IDR_XML_PLANES_L") : _T("IDR_XML_PLANES"));
   assert(dialog != NULL);
 
-  unsigned item_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
+  UPixelScalar item_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
                          Fonts::MapLabel.get_height();
 
   plane_list = (WndListFrame*)dialog->FindByName(_T("List"));

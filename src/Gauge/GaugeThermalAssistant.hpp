@@ -36,14 +36,15 @@ class ContainerWindow;
 class GaugeThermalAssistant : public ThermalAssistantWindow {
 public:
   GaugeThermalAssistant(ContainerWindow &parent,
-                        int left, int top, unsigned width, unsigned height,
+                        PixelScalar left, PixelScalar top,
+                        UPixelScalar width, UPixelScalar height,
                         WindowStyle style=WindowStyle());
 
   void Update(const bool enabled, const Angle direction,
               const DerivedInfo &derived);
 
 protected:
-  bool on_mouse_down(int x, int y);
+  bool on_mouse_down(PixelScalar x, PixelScalar y);
 };
 
 #endif

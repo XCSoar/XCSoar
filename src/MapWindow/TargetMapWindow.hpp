@@ -89,8 +89,8 @@ public:
                   const AircraftLook &aircraft_look);
   virtual ~TargetMapWindow();
 
-  void set(ContainerWindow &parent, int left, int top,
-           unsigned width, unsigned height, WindowStyle style);
+  void set(ContainerWindow &parent, PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height, WindowStyle style);
 
   void SetTerrain(RasterTerrain *terrain);
   void SetTopograpgy(TopographyStore *topography);
@@ -190,16 +190,16 @@ private:
 protected:
   virtual bool on_create();
   virtual bool on_destroy();
-  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
 
   virtual void on_paint_buffer(Canvas& canvas);
   virtual void on_paint(Canvas& canvas);
 
   virtual bool on_cancel_mode();
 
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
 };
 
 #endif

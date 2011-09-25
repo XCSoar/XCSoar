@@ -55,7 +55,7 @@ GlueMapWindow::on_setfocus()
 }
 
 bool
-GlueMapWindow::on_mouse_double(int x, int y)
+GlueMapWindow::on_mouse_double(PixelScalar x, PixelScalar y)
 {
   if (map_item_timer) {
     kill_timer(map_item_timer);
@@ -73,7 +73,7 @@ GlueMapWindow::on_mouse_double(int x, int y)
 }
 
 bool
-GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
+GlueMapWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   /* allow a bigger threshold on touch screens */
   const int threshold = is_embedded() ? 50 : 10;
@@ -104,7 +104,7 @@ GlueMapWindow::on_mouse_move(int x, int y, unsigned keys)
 }
 
 bool
-GlueMapWindow::on_mouse_down(int x, int y)
+GlueMapWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   if (map_item_timer) {
     kill_timer(map_item_timer);
@@ -152,7 +152,7 @@ GlueMapWindow::on_mouse_down(int x, int y)
 }
 
 bool
-GlueMapWindow::on_mouse_up(int x, int y)
+GlueMapWindow::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   if (drag_mode != DRAG_NONE)
     release_capture();
@@ -226,7 +226,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
 }
 
 bool
-GlueMapWindow::on_mouse_wheel(int x, int y, int delta)
+GlueMapWindow::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
 {
   if (map_item_timer) {
     kill_timer(map_item_timer);

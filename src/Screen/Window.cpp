@@ -169,32 +169,32 @@ Window::on_close()
 }
 
 bool
-Window::on_resize(unsigned width, unsigned height)
+Window::on_resize(UPixelScalar width, UPixelScalar height)
 {
   return false;
 }
 
 bool
-Window::on_mouse_move(int x, int y, unsigned keys)
+Window::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   /* not handled here */
   return false;
 }
 
 bool
-Window::on_mouse_down(int x, int y)
+Window::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   return false;
 }
 
 bool
-Window::on_mouse_up(int x, int y)
+Window::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   return false;
 }
 
 bool
-Window::on_mouse_double(int x, int y)
+Window::on_mouse_double(PixelScalar x, PixelScalar y)
 {
 #ifndef USE_GDI
   if (!double_clicks)
@@ -205,7 +205,7 @@ Window::on_mouse_double(int x, int y)
 }
 
 bool
-Window::on_mouse_wheel(int x, int y, int delta)
+Window::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
 {
   return false;
 }

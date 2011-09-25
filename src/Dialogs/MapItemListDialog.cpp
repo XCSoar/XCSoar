@@ -90,7 +90,7 @@ ShowMapItemListDialog(SingleWindow &parent,
 
   default:
     /* more than one map item: show a list */
-    unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
+    UPixelScalar line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
                            Fonts::MapLabel.get_height();
     list = &_list;
 

@@ -34,7 +34,8 @@ Copyright_License {
 
 void
 Window::set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
-            int left, int top, unsigned width, unsigned height,
+            PixelScalar left, PixelScalar top,
+            UPixelScalar width, UPixelScalar height,
             const WindowStyle window_style)
 {
   assert(IsScreenInitialized());

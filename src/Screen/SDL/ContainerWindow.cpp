@@ -228,7 +228,7 @@ ContainerWindow::on_destroy()
 }
 
 bool
-ContainerWindow::on_mouse_move(int x, int y, unsigned keys)
+ContainerWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   Window *child = event_child_at(x, y);
   if (child != NULL) {
@@ -240,7 +240,7 @@ ContainerWindow::on_mouse_move(int x, int y, unsigned keys)
 }
 
 bool
-ContainerWindow::on_mouse_down(int x, int y)
+ContainerWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   Window *child = event_child_at(x, y);
   if (child != NULL) {
@@ -252,7 +252,7 @@ ContainerWindow::on_mouse_down(int x, int y)
 }
 
 bool
-ContainerWindow::on_mouse_up(int x, int y)
+ContainerWindow::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   Window *child = event_child_at(x, y);
   if (child != NULL) {
@@ -264,7 +264,7 @@ ContainerWindow::on_mouse_up(int x, int y)
 }
 
 bool
-ContainerWindow::on_mouse_double(int x, int y)
+ContainerWindow::on_mouse_double(PixelScalar x, PixelScalar y)
 {
   Window *child = event_child_at(x, y);
   if (child != NULL) {
@@ -276,7 +276,7 @@ ContainerWindow::on_mouse_double(int x, int y)
 }
 
 bool
-ContainerWindow::on_mouse_wheel(int x, int y, int delta)
+ContainerWindow::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
 {
   Window *child = event_child_at(x, y);
   if (child != NULL) {
@@ -360,7 +360,7 @@ ContainerWindow::bring_child_to_top(Window &child) {
 }
 
 Window *
-ContainerWindow::child_at(int x, int y)
+ContainerWindow::child_at(PixelScalar x, PixelScalar y)
 {
   for (std::list<Window*>::const_iterator i = children.begin();
        i != children.end(); ++i) {
@@ -375,7 +375,7 @@ ContainerWindow::child_at(int x, int y)
 }
 
 Window *
-ContainerWindow::event_child_at(int x, int y)
+ContainerWindow::event_child_at(PixelScalar x, PixelScalar y)
 {
   if (capture)
     /* if this window is capturing the mouse, events must go exactly

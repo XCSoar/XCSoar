@@ -189,7 +189,7 @@ private:
   }
 
 protected:
-  virtual bool on_mouse_down(int x, int y) {
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y) {
     if (SingleWindow::on_mouse_down(x, y))
       return true;
 

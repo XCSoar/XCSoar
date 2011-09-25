@@ -89,7 +89,8 @@ static CallBackTableEntry CallBackTable[] = {
 
 int
 ListPicker(SingleWindow &parent, const TCHAR *caption,
-           unsigned num_items, unsigned initial_value, unsigned item_height,
+           unsigned num_items, unsigned initial_value,
+           UPixelScalar item_height,
            WndListFrame::PaintItemCallback_t paint_callback, bool update,
            ListHelpCallback_t _help_callback,
            ItemHelpCallback_t _itemhelp_callback)
@@ -122,7 +123,7 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
     wItemHelp = (WndFrame *)wf->FindByName(_T("lblItemHelp"));
     assert(wItemHelp);
     wItemHelp->set_visible(true);
-    const unsigned help_height = wItemHelp->get_height();
+    const UPixelScalar help_height = wItemHelp->get_height();
     const PixelRect rc = list_control->get_position();
     assert(rc.bottom - rc.top - help_height - 10 > 0);
     list_control->move(rc.left, rc.top, rc.right - rc.left, rc.bottom - rc.top - help_height - 10);

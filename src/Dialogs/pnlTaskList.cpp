@@ -372,11 +372,12 @@ pnlTaskList::OnDeclareClicked(gcc_unused WndButton &Sender)
 
 bool
 pnlTaskList::OnTaskViewClick(gcc_unused WndOwnerDrawFrame *Sender,
-                             gcc_unused int x, gcc_unused int y)
+                             gcc_unused PixelScalar x,
+                             gcc_unused PixelScalar y)
 {
   if (!fullscreen) {
-    const unsigned xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
-    const unsigned yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
+    const UPixelScalar xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
+    const UPixelScalar yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
     wTaskView->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
                     wf->GetClientAreaWindow().get_height() - yoffset);
     fullscreen = true;

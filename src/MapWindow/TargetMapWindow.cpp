@@ -94,8 +94,10 @@ TargetMapWindow::~TargetMapWindow()
 }
 
 void
-TargetMapWindow::set(ContainerWindow &parent, int left, int top,
-                     unsigned width, unsigned height, WindowStyle style)
+TargetMapWindow::set(ContainerWindow &parent,
+                     PixelScalar left, PixelScalar top,
+                     UPixelScalar width, UPixelScalar height,
+                     WindowStyle style)
 {
   projection.SetFreeMapScale(fixed_int_constant(5000));
 
@@ -310,7 +312,7 @@ TargetMapWindow::SetTarget(unsigned index)
 }
 
 bool
-TargetMapWindow::on_resize(unsigned width, unsigned height)
+TargetMapWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   BufferWindow::on_resize(width, height);
 

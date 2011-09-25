@@ -167,13 +167,13 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TCHAR buffer[256];
 
   // Y-Coordinate of the second row
-  unsigned top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
+  UPixelScalar top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
 
   // Use small font for details
   canvas.select(small_font);
 
   // Draw details line
-  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  UPixelScalar left = rc.left + line_height + Layout::FastScale(2);
   OrderedTaskPointRadiusLabel(*item.oz, buffer);
   if (!string_is_empty(buffer))
     canvas.text_clipped(left, top2, rc.right - left, buffer);

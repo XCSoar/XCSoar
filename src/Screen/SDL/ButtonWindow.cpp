@@ -28,7 +28,8 @@ Copyright_License {
 
 void
 ButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-                  int left, int top, unsigned width, unsigned height,
+                  PixelScalar left, PixelScalar top,
+                  UPixelScalar width, UPixelScalar height,
                   const ButtonWindowStyle style)
 {
   reset();
@@ -79,7 +80,7 @@ ButtonWindow::on_key_down(unsigned key_code)
 }
 
 bool
-ButtonWindow::on_mouse_move(int x, int y, unsigned keys)
+ButtonWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
     set_down(x >= 0 && y >= 0 &&
@@ -90,7 +91,7 @@ ButtonWindow::on_mouse_move(int x, int y, unsigned keys)
 }
 
 bool
-ButtonWindow::on_mouse_down(int x, int y)
+ButtonWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   if (is_tab_stop())
     set_focus();
@@ -102,7 +103,7 @@ ButtonWindow::on_mouse_down(int x, int y)
 }
 
 bool
-ButtonWindow::on_mouse_up(int x, int y)
+ButtonWindow::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   if (!dragging)
     return true;

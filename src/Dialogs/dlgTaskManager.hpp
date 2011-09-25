@@ -82,7 +82,8 @@ public:
    * @param y
    * @return
    */
-  static bool OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y);
+  static bool OnTaskViewClick(WndOwnerDrawFrame *Sender,
+                              PixelScalar x, PixelScalar y);
 
   /**
    * different for landscape and for portrait mode
@@ -247,7 +248,8 @@ public:
   static void OnSaveClicked(WndButton &Sender);
   static void OnLoadClicked(WndButton &Sender);
   static bool OnDeclareClicked(WndButton &Sender);
-  static bool OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y);
+  static bool OnTaskViewClick(WndOwnerDrawFrame *Sender,
+                              PixelScalar x, PixelScalar y);
   static void OnDeleteClicked(WndButton &Sender);
   static void OnRenameClicked(WndButton &Sender);
   static void OnTaskListEnter(unsigned ItemIndex);

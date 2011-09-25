@@ -115,7 +115,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   _stprintf(buffer, _T("%s: %s - %s: %s"), _("Distance"), dist,
             _("Arrival Alt"), alt);
 
-  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  UPixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.text_clipped(left, top2, rc, buffer);
 
   // Draw waypoint name
@@ -150,10 +150,10 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   canvas.select(small_font);
 
   // Draw leg distance
-  unsigned leg_info_width = 0;
+  UPixelScalar leg_info_width = 0;
   if (vector) {
     Units::FormatUserDistance(vector->distance, buffer, 256, true);
-    unsigned width = leg_info_width = canvas.text_width(buffer);
+    UPixelScalar width = leg_info_width = canvas.text_width(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width,
                 rc.top + Layout::FastScale(2) +
                 (name_font.get_height() - small_font.get_height()) / 2, buffer);
@@ -173,7 +173,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw details line
   FormatWaypointDetails(buffer, waypoint);
 
-  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.text_clipped(left, top2, rc.right - leg_info_width - left, buffer);
 
   // Draw waypoint name

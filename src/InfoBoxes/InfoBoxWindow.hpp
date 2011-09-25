@@ -107,7 +107,8 @@ private:
   void Paint(Canvas &canvas);
 
 public:
-  void PaintInto(Canvas &dest, int xoff, int yoff, int width, int height);
+  void PaintInto(Canvas &dest, PixelScalar xoff, PixelScalar yoff,
+                 UPixelScalar width, UPixelScalar height);
 
   /**
    * Sets the unit of the InfoBox value
@@ -185,7 +186,9 @@ public:
    * @param Width Width of the InfoBox
    * @param Height Height of the InfoBox
    */
-  InfoBoxWindow(ContainerWindow &Parent, int X, int Y, int Width, int Height,
+  InfoBoxWindow(ContainerWindow &Parent,
+                PixelScalar x, PixelScalar y,
+                UPixelScalar Width, UPixelScalar Height,
           int border_flags,
                 const InfoBoxSettings &settings,
           const InfoBoxLook &_look);
@@ -232,9 +235,9 @@ protected:
    * @param y y-Coordinate where the mouse button was pressed
    * @return True if the event has been handled, False otherwise
    */
-  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
 
-  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
 
   /**
    * This event handler is called when a mouse button is double clicked over
@@ -243,9 +246,9 @@ protected:
    * @param y y-Coordinate where the mouse button was pressed
    * @return True if the event has been handled, False otherwise
    */
-  virtual bool on_mouse_double(int x, int y);
+  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
 
-  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
 
   /**
    * This event handler is called when the InfoBox needs to be repainted

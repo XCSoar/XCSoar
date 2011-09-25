@@ -45,8 +45,9 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static Window *
-OnCreateThermalAssistantControl(ContainerWindow &parent, int left, int top,
-                            unsigned width, unsigned height,
+OnCreateThermalAssistantControl(ContainerWindow &parent,
+                                PixelScalar left, PixelScalar top,
+                                UPixelScalar width, UPixelScalar height,
                             const WindowStyle style)
 {
   wta = new ThermalAssistantWindow(Layout::FastScale(10), false);

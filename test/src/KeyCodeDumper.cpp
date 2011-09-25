@@ -62,7 +62,7 @@ protected:
   }
 
 protected:
-  virtual bool on_mouse_down(int x, int y) {
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y) {
     set_focus();
     return true;
   }
@@ -137,7 +137,8 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(int left, int top, unsigned width, unsigned height) {
+  void set(PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height) {
     SingleWindow::set(_T("KeyCodeDumper"), _T("KeyCodeDumper"),
                       left, top, width, height);
 
@@ -154,7 +155,7 @@ public:
   }
 
 protected:
-  virtual bool on_resize(unsigned width, unsigned height) {
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height) {
     SingleWindow::on_resize(width, height);
     key_code_dumper.move(0, 0, width, (height + 1) / 2);
     close_button.move(0, (height + 1) / 2, width, height / 2);

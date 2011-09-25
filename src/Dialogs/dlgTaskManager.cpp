@@ -82,11 +82,12 @@ dlgTaskManager::SetTitle()
 }
 
 bool
-dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender, int x, int y)
+dlgTaskManager::OnTaskViewClick(WndOwnerDrawFrame *Sender,
+                                PixelScalar x, PixelScalar y)
 {
   if (!fullscreen) {
-    const unsigned xoffset = (Layout::landscape ? wTabBar->GetTabWidth() : 0);
-    const unsigned yoffset = (!Layout::landscape ? wTabBar->GetTabHeight() : 0);
+    const UPixelScalar xoffset = Layout::landscape ? wTabBar->GetTabWidth() : 0;
+    const UPixelScalar yoffset = !Layout::landscape ? wTabBar->GetTabHeight() : 0;
     Sender->move(xoffset, yoffset, wf->GetClientAreaWindow().get_width() - xoffset,
                     wf->GetClientAreaWindow().get_height() - yoffset);
     fullscreen = true;
@@ -261,7 +262,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
     WndOwnerDrawFrame* wBlackRect =
         (WndOwnerDrawFrame*)wf->FindByName(_T("frmBlackRect"));
     assert(wBlackRect);
-    const unsigned TabLineHeight = wTabBar->GetTabLineHeight();
+    const UPixelScalar TabLineHeight = wTabBar->GetTabLineHeight();
     wBlackRect->move(0,
                      wTabBar->GetTabHeight() - TabLineHeight - Layout::Scale(1),
                      wf->get_width() - wTabBar->GetTabWidth() + Layout::Scale(3),

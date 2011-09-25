@@ -53,12 +53,11 @@ OnAirspacePaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     CommonInterface::SettingsMap().airspace;
   const AirspaceLook &look = CommonInterface::main_window.look->airspace;
 
-  int w1, w2, x0;
-  int w0 = rc.right - rc.left - Layout::FastScale(4);
+  PixelScalar w0 = rc.right - rc.left - Layout::FastScale(4);
 
-  w1 = canvas.text_width(_("Warn")) + Layout::FastScale(10);
-  w2 = canvas.text_width(_("Display")) + Layout::FastScale(10);
-  x0 = w0 - w1 - w2;
+  PixelScalar w1 = canvas.text_width(_("Warn")) + Layout::FastScale(10);
+  PixelScalar w2 = canvas.text_width(_("Display")) + Layout::FastScale(10);
+  PixelScalar x0 = w0 - w1 - w2;
 
   if (colormode) {
     canvas.white_pen();

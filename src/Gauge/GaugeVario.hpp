@@ -71,9 +71,9 @@ public:
   bool ShowAveNeedle;
 
 private:
-  int nlength0, nlength1, nwidth, nline;
-  int xoffset;
-  int yoffset;
+  const UPixelScalar nlength0, nlength1, nwidth, nline;
+  PixelScalar xoffset;
+  PixelScalar yoffset;
 
   bool dirty;
 
@@ -99,7 +99,8 @@ private:
 public:
   GaugeVario(const FullBlackboard &blackboard,
              ContainerWindow &parent, const VarioLook &look,
-             int left, int top, unsigned width, unsigned height,
+             PixelScalar left, PixelScalar top,
+             UPixelScalar width, UPixelScalar height,
              const WindowStyle style=WindowStyle());
 
 protected:
@@ -116,15 +117,15 @@ protected:
   }
 
 protected:
-  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
   virtual void on_paint_buffer(Canvas &canvas);
 
 private:
   void RenderZero(Canvas &canvas);
-  void RenderValue(Canvas &canvas, int x, int y,
+  void RenderValue(Canvas &canvas, PixelScalar x, PixelScalar y,
                    DrawInfo_t *diValue, DrawInfo_t *diLabel,
                    fixed Value, const TCHAR *Label);
-  void RenderSpeedToFly(Canvas &canvas, int x, int y);
+  void RenderSpeedToFly(Canvas &canvas, PixelScalar x, PixelScalar y);
   void RenderBallast(Canvas &canvas);
   void RenderBugs(Canvas &canvas);
   int  ValueToNeedlePos(fixed Value);

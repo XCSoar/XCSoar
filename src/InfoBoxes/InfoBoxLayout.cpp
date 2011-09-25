@@ -43,11 +43,11 @@ namespace InfoBoxLayout
 
   gcc_const
   static Geometry
-  ValidateGeometry(Geometry geometry, unsigned width, unsigned height);
+  ValidateGeometry(Geometry geometry, UPixelScalar width, UPixelScalar height);
 
   gcc_pure
   static Geometry
-  LoadGeometryFromProfile(unsigned width, unsigned height);
+  LoadGeometryFromProfile(UPixelScalar width, UPixelScalar height);
 
   static void
   CalcInfoBoxSizes(Layout &layout,
@@ -63,10 +63,10 @@ InfoBoxLayout::Init(PixelRect rc)
 
 static int
 MakeTopRow(const InfoBoxLayout::Layout &layout,
-           PixelRect *p, unsigned n, int left, int top)
+           PixelRect *p, unsigned n, PixelScalar left, PixelScalar top)
 {
   PixelRect *const end = p + n;
-  const int bottom = top + layout.control_height;
+  const PixelScalar bottom = top + layout.control_height;
   while (p < end) {
     p->left = left;
     left += layout.control_width;
@@ -82,19 +82,19 @@ MakeTopRow(const InfoBoxLayout::Layout &layout,
 
 static int
 MakeBottomRow(const InfoBoxLayout::Layout &layout,
-              PixelRect *p, unsigned n, int left, int bottom)
+              PixelRect *p, unsigned n, PixelScalar left, PixelScalar bottom)
 {
-  int top = bottom - layout.control_height;
+  PixelScalar top = bottom - layout.control_height;
   MakeTopRow(layout, p, n, left, top);
   return top;
 }
 
 static int
 MakeLeftColumn(const InfoBoxLayout::Layout &layout,
-               PixelRect *p, unsigned n, int left, int top)
+               PixelRect *p, unsigned n, PixelScalar left, PixelScalar top)
 {
   PixelRect *const end = p + n;
-  const int right = left + layout.control_width;
+  const PixelScalar right = left + layout.control_width;
   while (p < end) {
     p->left = left;
     p->right = right;
@@ -110,9 +110,9 @@ MakeLeftColumn(const InfoBoxLayout::Layout &layout,
 
 static int
 MakeRightColumn(const InfoBoxLayout::Layout &layout,
-                PixelRect *p, unsigned n, int right, int top)
+                PixelRect *p, unsigned n, PixelScalar right, PixelScalar top)
 {
-  int left = right - layout.control_width;
+  PixelScalar left = right - layout.control_width;
   MakeLeftColumn(layout, p, n, left, top);
   return left;
 }
@@ -238,7 +238,7 @@ InfoBoxLayout::Calculate(PixelRect rc, Geometry geometry)
 
 static InfoBoxLayout::Geometry
 InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
-                                unsigned width, unsigned height)
+                                UPixelScalar width, UPixelScalar height)
 {
   if ((unsigned)geometry >= ARRAY_SIZE(geometry_counts))
     /* out of range */
@@ -315,7 +315,7 @@ InfoBoxLayout::ValidateGeometry(InfoBoxLayout::Geometry geometry,
 }
 
 InfoBoxLayout::Geometry
-InfoBoxLayout::LoadGeometryFromProfile(unsigned width, unsigned height)
+InfoBoxLayout::LoadGeometryFromProfile(UPixelScalar width, UPixelScalar height)
 {
   unsigned tmp;
   Geometry geometry = Profile::Get(szProfileInfoBoxGeometry, tmp)

@@ -111,7 +111,7 @@ dlgFlarmDetailsListShowModal(SingleWindow &parent, const TCHAR *title,
   assert(count > 0);
 
   array = _array;
-  unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
+  UPixelScalar line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
                          Fonts::MapLabel.get_height();
   int index = ListPicker(parent, title, count, 0, line_height, PaintListItem, true);
   return (index < 0 || index >= (int)count) ? NULL : array[index];

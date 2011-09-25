@@ -46,7 +46,7 @@ ScrollBar::ScrollBar()
 void
 ScrollBar::set(const PixelSize size)
 {
-  unsigned width;
+  UPixelScalar width;
 
   // if the device has a pointer (mouse/touchscreen/etc.)
   if (has_pointer()) {
@@ -71,13 +71,13 @@ ScrollBar::reset()
 }
 
 void
-ScrollBar::set_slider(unsigned size, unsigned view_size,
-                                    unsigned origin)
+ScrollBar::set_slider(UPixelScalar size, UPixelScalar view_size,
+                      UPixelScalar origin)
 {
-  const int netto_height = get_netto_height();
+  const PixelScalar netto_height = get_netto_height();
 
   // If (no size) slider fills the whole area (no scrolling)
-  int height = size > 0
+  PixelScalar height = size > 0
     ? (int)(netto_height * view_size / size)
     : netto_height;
   // Prevent the slider from getting to small
@@ -85,10 +85,10 @@ ScrollBar::set_slider(unsigned size, unsigned view_size,
     height = get_width();
 
   // Calculate highest origin (counted in ListItems)
-  int max_origin = size - view_size;
+  PixelScalar max_origin = size - view_size;
 
   // Move the slider to the appropriate position
-  int top = (max_origin > 0) ?
+  PixelScalar top = (max_origin > 0) ?
       ((netto_height - height) * origin / max_origin) : 0;
 
   // Prevent the slider from getting to big
@@ -103,12 +103,12 @@ ScrollBar::set_slider(unsigned size, unsigned view_size,
   rc_slider.bottom = rc_slider.top + height;
 }
 
-unsigned
-ScrollBar::to_origin(unsigned size, unsigned view_size,
-                                   int y) const
+UPixelScalar
+ScrollBar::to_origin(UPixelScalar size, UPixelScalar view_size,
+                     PixelScalar y) const
 {
   // Calculate highest origin (counted in ListItems)
-  int max_origin = size - view_size;
+  PixelScalar max_origin = size - view_size;
   if (max_origin <= 0)
     return 0;
 
@@ -116,8 +116,8 @@ ScrollBar::to_origin(unsigned size, unsigned view_size,
   if (y < 0)
     return 0;
 
-  unsigned origin = y * max_origin / get_scroll_height();
-  return min(origin, (unsigned)max_origin);
+  UPixelScalar origin = y * max_origin / get_scroll_height();
+  return min(origin, (UPixelScalar)max_origin);
 }
 
 void
@@ -140,7 +140,8 @@ ScrollBar::paint(Canvas &canvas) const
   // ####  Buttons  ####
   // ###################
 
-  PixelScalar arrow_padding = max(get_width() / 4, 4);
+  UPixelScalar arrow_padding = max(UPixelScalar(get_width() / 4),
+                                   UPixelScalar(4));
   canvas.black_brush();
 
   PixelRect up_arrow_rect = rc;
@@ -199,7 +200,7 @@ ScrollBar::paint(Canvas &canvas) const
 }
 
 void
-ScrollBar::drag_begin(Window *w, unsigned y)
+ScrollBar::drag_begin(Window *w, UPixelScalar y)
 {
   // Make sure that we are not dragging already
   assert(!dragging);
@@ -223,9 +224,9 @@ ScrollBar::drag_end(Window *w)
   w->release_capture();
 }
 
-unsigned
-ScrollBar::drag_move(unsigned size, unsigned view_size,
-                                   int y) const
+UPixelScalar
+ScrollBar::drag_move(UPixelScalar size, UPixelScalar view_size,
+                     PixelScalar y) const
 {
   assert(dragging);
 

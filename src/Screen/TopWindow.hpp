@@ -75,7 +75,7 @@ class TopWindow : public ContainerWindow {
    */
   bool resized;
 
-  unsigned new_width, new_height;
+  UPixelScalar new_width, new_height;
 #endif
 
 #else /* USE_GDI */
@@ -109,7 +109,8 @@ public:
   static bool find(const TCHAR *cls, const TCHAR *text);
 
   void set(const TCHAR *cls, const TCHAR *text,
-           int left, int top, unsigned width, unsigned height);
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height);
 
 #ifdef _WIN32_WCE
   void reset();
@@ -184,7 +185,7 @@ public:
    * that this has happened.  The caller should also submit the RESIZE
    * event to the event queue.  This method is thread-safe.
    */
-  void AnnounceResize(unsigned width, unsigned height);
+  void AnnounceResize(UPixelScalar width, UPixelScalar height);
 
   /**
    * Synchronously update the size of the TopWindow to the new OpenGL
@@ -207,7 +208,7 @@ protected:
 #endif /* !ENABLE_SDL */
 
 #ifdef ANDROID
-  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
 
   /**
    * @see Event::PAUSE

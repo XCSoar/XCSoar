@@ -192,8 +192,8 @@ protected:
   ContainerWindow *parent;
 
 private:
-  int left, top;
-  unsigned width, height;
+  PixelScalar left, top;
+  UPixelScalar width, height;
 
 private:
   const Font *font;
@@ -298,27 +298,27 @@ public:
     parent = NULL;
   }
 
-  int get_top() const {
+  PixelScalar get_top() const {
     return top;
   }
 
-  int get_left() const {
+  PixelScalar get_left() const {
     return left;
   }
 
-  unsigned get_width() const {
+  UPixelScalar get_width() const {
     return width;
   }
 
-  unsigned get_height() const {
+  UPixelScalar get_height() const {
     return height;
   }
 
-  int get_right() const {
+  PixelScalar get_right() const {
     return get_left() + get_width();
   }
 
-  int get_bottom() const {
+  PixelScalar get_bottom() const {
     return get_top() + get_height();
   }
 
@@ -326,18 +326,19 @@ public:
     return text_style;
   }
 #else /* USE_GDI */
-  unsigned get_width() const {
+  UPixelScalar get_width() const {
     return get_size().cx;
   }
 
-  unsigned get_height() const {
+  UPixelScalar get_height() const {
     return get_size().cy;
   }
 #endif
 
 #ifndef USE_GDI
   void set(ContainerWindow *parent,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const WindowStyle window_style=WindowStyle());
 
   void set(ContainerWindow *parent, const PixelRect rc,
@@ -347,7 +348,8 @@ public:
   }
 #else
   void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const WindowStyle window_style=WindowStyle());
 
   void set(ContainerWindow *parent, const TCHAR *cls, const TCHAR *text,
@@ -376,7 +378,7 @@ public:
   gcc_pure
   ContainerWindow *get_root_owner();
 
-  void move(int left, int top) {
+  void move(PixelScalar left, PixelScalar top) {
     assert_none_locked();
     assert_thread();
 
@@ -391,7 +393,8 @@ public:
 #endif
   }
 
-  void move(int left, int top, unsigned width, unsigned height) {
+  void move(PixelScalar left, PixelScalar top,
+            UPixelScalar width, UPixelScalar height) {
     assert_none_locked();
     assert_thread();
 
@@ -413,7 +416,8 @@ public:
    * Like move(), but does not trigger a synchronous redraw.  The
    * caller is responsible for redrawing.
    */
-  void fast_move(int left, int top, unsigned width, unsigned height) {
+  void fast_move(PixelScalar left, PixelScalar top,
+                 UPixelScalar width, UPixelScalar height) {
     assert_none_locked();
     assert_thread();
 
@@ -426,7 +430,7 @@ public:
 #endif
   }
 
-  void resize(unsigned width, unsigned height) {
+  void resize(UPixelScalar width, UPixelScalar height) {
     assert_none_locked();
     assert_thread();
 
@@ -785,7 +789,7 @@ public:
     ::EndPaint(hWnd, ps);
   }
 
-  void scroll(int dx, int dy, const PixelRect &rc) {
+  void scroll(PixelScalar dx, PixelScalar dy, const PixelRect &rc) {
     ::ScrollWindowEx(hWnd, dx, dy, &rc, NULL, NULL, NULL, SW_INVALIDATE);
   }
 
@@ -861,12 +865,12 @@ public:
 
   virtual bool on_destroy();
   virtual bool on_close();
-  virtual bool on_resize(unsigned width, unsigned height);
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
-  virtual bool on_mouse_double(int x, int y);
-  virtual bool on_mouse_wheel(int x, int y, int delta);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
 
   /**
    * Checks if the window wishes to handle a special key, like cursor

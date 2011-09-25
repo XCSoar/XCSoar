@@ -42,7 +42,8 @@ IsAncestor(const Window *maybe_ancestor, const Window *w)
 }
 
 bool
-SingleWindow::FilterMouseEvent(int x, int y, Window *allowed) const
+SingleWindow::FilterMouseEvent(PixelScalar x, PixelScalar y,
+                               Window *allowed) const
 {
   const ContainerWindow *container = this;
   while (true) {

@@ -62,11 +62,13 @@ public:
   CheckBox():checked(false), dragging(false), pressed(false) {}
 
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           int left, int top, UPixelScalar width, UPixelScalar height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const CheckBoxStyle style=CheckBoxStyle());
 
   void set(ContainerWindow &parent, const TCHAR *text,
-           int left, int top, UPixelScalar width, UPixelScalar height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const CheckBoxStyle style=CheckBoxStyle()) {
     set(parent, text, 0, left, top, width, height, style);
   }
@@ -81,9 +83,9 @@ protected:
   void set_pressed(bool value);
 
   virtual bool on_key_down(unsigned key_code);
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
   virtual bool on_setfocus();
   virtual bool on_killfocus();
   virtual bool on_cancel_mode();
@@ -102,13 +104,15 @@ protected:
 class CheckBox : public BaseButtonWindow {
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           int left, int top, UPixelScalar width, UPixelScalar height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const CheckBoxStyle style=CheckBoxStyle()) {
     BaseButtonWindow::set(parent, text, id, left, top, width, height, style);
   }
 
   void set(ContainerWindow &parent, const TCHAR *text,
-           int left, int top, UPixelScalar width, UPixelScalar height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const CheckBoxStyle style=CheckBoxStyle()) {
     BaseButtonWindow::set(parent, text, left, top, width, height, style);
   }

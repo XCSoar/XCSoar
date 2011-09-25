@@ -102,9 +102,9 @@ protected:
 protected:
   virtual bool on_create();
   virtual void on_paint(Canvas &canvas);
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
   bool on_mouse_gesture(const TCHAR* gesture);
 };
 
@@ -583,7 +583,8 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 }
 
 bool
-FlarmTrafficControl::on_mouse_move(int x, int y, gcc_unused unsigned keys)
+FlarmTrafficControl::on_mouse_move(PixelScalar x, PixelScalar y,
+                                   gcc_unused unsigned keys)
 {
   gestures.Update(x, y);
 
@@ -591,7 +592,7 @@ FlarmTrafficControl::on_mouse_move(int x, int y, gcc_unused unsigned keys)
 }
 
 bool
-FlarmTrafficControl::on_mouse_down(int x, int y)
+FlarmTrafficControl::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   gestures.Start(x, y, Layout::Scale(20));
 
@@ -599,7 +600,7 @@ FlarmTrafficControl::on_mouse_down(int x, int y)
 }
 
 bool
-FlarmTrafficControl::on_mouse_up(int x, int y)
+FlarmTrafficControl::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   const TCHAR *gesture = gestures.Finish();
   if (gesture && on_mouse_gesture(gesture))
@@ -647,8 +648,9 @@ FlarmTrafficControl::on_mouse_gesture(const TCHAR* gesture)
 }
 
 static Window *
-OnCreateFlarmTrafficControl(ContainerWindow &parent, int left, int top,
-                            unsigned width, unsigned height,
+OnCreateFlarmTrafficControl(ContainerWindow &parent,
+                            PixelScalar left, PixelScalar top,
+                            UPixelScalar width, UPixelScalar height,
                             const WindowStyle style)
 {
   const Look &look = *CommonInterface::main_window.look;

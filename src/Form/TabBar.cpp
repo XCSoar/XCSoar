@@ -34,7 +34,8 @@ Copyright_License {
 
 
 TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
-                int x, int y, unsigned _width, unsigned _height,
+                             PixelScalar x, PixelScalar y,
+                             UPixelScalar _width, UPixelScalar _height,
                 const WindowStyle style, bool _flipOrientation,
                 bool _clientOverlapTabs):
                 TabbedControl(_parent, 0, 0, _parent.get_width(), _parent.get_height(), style),
@@ -51,9 +52,11 @@ TabBarControl::TabBarControl(ContainerWindow &_parent, const DialogLook &look,
                                  flipOrientation);
 }
 
-TabBarControl::TabBarControl(ContainerWindow &_parent, unsigned _tabLineHeight,
+TabBarControl::TabBarControl(ContainerWindow &_parent,
+                             UPixelScalar _tabLineHeight,
                              const DialogLook &look,
-                             int x, int y, unsigned _width, unsigned _height,
+                             PixelScalar x, PixelScalar y,
+                             UPixelScalar _width, UPixelScalar _height,
                              const WindowStyle style):
                              TabbedControl(_parent, x, 0, _parent.get_width() - x,
                                            _parent.get_height(), style),
@@ -225,7 +228,7 @@ const PixelRect
   if (buttons[i]->butSize.left < buttons[i]->butSize.right)
     return buttons[i]->butSize;
 
-  const unsigned margin = 1;
+  const UPixelScalar margin = 1;
 
   /*
   bool partialTab = false;
@@ -234,14 +237,14 @@ const PixelRect
     partialTab = true;
   */
 
-  const unsigned finalmargin = 1; //partialTab ? TabLineHeight - 1 * margin : margin;
+  const UPixelScalar finalmargin = 1; //partialTab ? TabLineHeight - 1 * margin : margin;
   // Todo make the final margin display on either beginning or end of tab bar
   // depending on position of tab bar
 
   PixelRect rc;
 
   if (Layout::landscape ^ flipOrientation) {
-    const unsigned but_height =
+    const UPixelScalar but_height =
        (theTabDisplay->GetTabHeight() - finalmargin) / buttons.size() - margin;
 
     rc.left = 0;
@@ -260,10 +263,10 @@ const PixelRect
 
     const unsigned row = (i > (portraitColumnsRow0 - 1)) ? 1 : 0;
 
-    const unsigned rowheight = (theTabDisplay->GetTabHeight() - TabLineHeight)
+    const UPixelScalar rowheight = (theTabDisplay->GetTabHeight() - TabLineHeight)
         / portraitRows - margin;
 
-    const unsigned but_width =
+    const UPixelScalar but_width =
           (theTabDisplay->GetTabWidth() - finalmargin) /
           ((row == 0) ? portraitColumnsRow0 : portraitColumnsRow1) - margin;
 
@@ -278,13 +281,13 @@ const PixelRect
   return buttons[i]->butSize;
 }
 
-unsigned
+UPixelScalar
 TabBarControl::GetTabHeight()
 {
   return theTabDisplay->GetTabHeight();
 }
 
-unsigned
+UPixelScalar
 TabBarControl::GetTabWidth()
 {
   return theTabDisplay->GetTabWidth();
@@ -292,7 +295,9 @@ TabBarControl::GetTabWidth()
 
 // TabDisplay Functions
 TabDisplay::TabDisplay(TabBarControl& _theTabBar, const DialogLook &_look,
-    unsigned left, unsigned top, unsigned width, unsigned height, bool _flipOrientation) :
+                       PixelScalar left, PixelScalar top,
+                       UPixelScalar width, UPixelScalar height,
+                       bool _flipOrientation) :
   PaintWindow(),
   theTabBar(_theTabBar),
   look(_look),
@@ -314,10 +319,10 @@ TabDisplay::PaintButton(Canvas &canvas, const unsigned CaptionStyle,
 {
 
   PixelRect rcTextFinal = rc;
-  const unsigned buttonheight = rc.bottom - rc.top;
+  const UPixelScalar buttonheight = rc.bottom - rc.top;
   const int textwidth = canvas.text_width(caption);
   const int textheight = canvas.text_height(caption);
-  unsigned textheightoffset = 0;
+  UPixelScalar textheightoffset = 0;
 
   if (textwidth > (rc.right - rc.left)) // assume 2 lines
     textheightoffset = max(0, (int)(buttonheight - textheight * 2) / 2);
@@ -508,7 +513,7 @@ TabDisplay::on_key_down(unsigned key_code)
 }
 
 bool
-TabDisplay::on_mouse_down(int x, int y)
+TabDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   drag_end();
 
@@ -534,7 +539,7 @@ TabDisplay::on_mouse_down(int x, int y)
 }
 
 bool
-TabDisplay::on_mouse_up(int x, int y)
+TabDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   RasterPoint Pos;
   Pos.x = x;
@@ -562,7 +567,7 @@ TabDisplay::on_mouse_up(int x, int y)
 }
 
 bool
-TabDisplay::on_mouse_move(int x, int y, unsigned keys)
+TabDisplay::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (downindex == -1)
     return false;

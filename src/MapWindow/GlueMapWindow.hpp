@@ -53,7 +53,7 @@ class OffsetHistory {
 protected:
   OffsetHistory() : pos(0) { reset(); }
   void reset();
-  void add(int x, int y);
+  void add(PixelScalar x, PixelScalar y);
   void add(const RasterPoint &p) { add(p.x, p.y); }
   RasterPoint average() const;
 
@@ -170,11 +170,11 @@ private:
 
 protected:
   // events
-  virtual bool on_mouse_double(int x, int y);
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
-  virtual bool on_mouse_wheel(int x, int y, int delta);
+  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
 
   /**
    * This event handler gets called when a gesture has

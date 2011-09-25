@@ -53,7 +53,7 @@ class WndProperty : public WindowControl {
      * The on_mouse_down event is called when the mouse is pressed over the button
      * (derived from Window)
      */
-    virtual bool on_mouse_down(int x, int y);
+    virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
 
     virtual bool on_key_check(unsigned key_code) const;
 
@@ -126,7 +126,8 @@ public:
    */
   WndProperty(ContainerWindow &parent, const DialogLook &look,
               const TCHAR *Caption,
-              int X, int Y, int Width, int Height, int CaptionWidth,
+              PixelScalar x, PixelScalar y,
+              int Width, int Height, int CaptionWidth,
               const WindowStyle style,
               const EditWindowStyle edit_style,
               DataChangeCallback_t DataChangeNotify);
@@ -156,18 +157,18 @@ public:
   void BeginEditing();
 
 protected:
-  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
 
   /**
    * The on_mouse_down event is called when the mouse is pressed over the button
    * (derived from Window)
    */
-  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
   /**
    * The on_mouse_up event is called when the mouse is released over the button
    * (derived from Window)
    */
-  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
 
 public:
   /**

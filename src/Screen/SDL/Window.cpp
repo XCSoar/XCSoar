@@ -34,14 +34,13 @@ Copyright_License {
 
 void
 Window::set(ContainerWindow *parent,
-            int left, int top, unsigned width, unsigned height,
+            PixelScalar left, PixelScalar top,
+            UPixelScalar width, UPixelScalar height,
             const WindowStyle window_style)
 {
   assert(IsScreenInitialized());
-  assert(width > 0);
-  assert(width < 0x1000000);
-  assert(height > 0);
-  assert(height < 0x1000000);
+  assert(width < 0x8000);
+  assert(height < 0x8000);
 
   double_clicks = window_style.double_clicks;
 

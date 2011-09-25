@@ -35,11 +35,13 @@ class ContainerWindow;
 class WndOwnerDrawFrame : public PaintWindow {
 public:
   typedef void (*OnPaintCallback_t)(WndOwnerDrawFrame *Sender, Canvas &canvas);
-  typedef bool (*OnMouseDownCallback_t)(WndOwnerDrawFrame *Sender, int x, int y);
+  typedef bool (*OnMouseDownCallback_t)(WndOwnerDrawFrame *Sender,
+                                        PixelScalar x, PixelScalar y);
 
 public:
   WndOwnerDrawFrame(ContainerWindow &parent,
-                    int X, int Y, int Width, int Height,
+                    PixelScalar x, PixelScalar y,
+                    UPixelScalar width, UPixelScalar height,
                     const WindowStyle style,
                     OnPaintCallback_t OnPaintCallback);
 
@@ -78,7 +80,7 @@ protected:
   virtual void on_paint(Canvas &canvas);
 
   /** from class Window */
-  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
 };
 
 #endif

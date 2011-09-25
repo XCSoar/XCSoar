@@ -39,7 +39,8 @@ TabMenuControl::TabMenuControl(ContainerWindow &_parent,
                                WndForm &_form,
                                CallBackTableEntry *_look_up_table,
                                const DialogLook &look, const TCHAR * _caption,
-                               int x, int y, unsigned _width, unsigned _height,
+                               PixelScalar x, PixelScalar y,
+                               UPixelScalar _width, UPixelScalar _height,
                                const WindowStyle style):
                                TabBarControl(_parent, 1, look,
                                              x, y, _width, _height,
@@ -202,32 +203,32 @@ TabMenuControl::GetPageNum(const unsigned main_menu_index,
     return GetMenuPage();
 }
 
-unsigned
+UPixelScalar
 TabMenuControl::GetTabHeight()
 {
   return GetMenuButtonHeight() * TabMenuControl::MAX_MAIN_MENU_ITEMS
       + GetTabLineHeight() * 2;
 }
 
-unsigned
+UPixelScalar
 TabMenuControl::GetMenuButtonHeight()
 {
   return Layout::Scale(31);
 }
 
-unsigned
+UPixelScalar
 TabMenuControl::GetButtonVerticalOffset()
 {
   if (!Layout::landscape) {
     PixelRect rc = get_client_rect();
-    const unsigned spaceUnderButtons = Layout::Scale(80);
+    const UPixelScalar spaceUnderButtons = Layout::Scale(80);
     return (rc.bottom - spaceUnderButtons - GetTabHeight()) / 2;
   }
   else
     return 0;
 }
 
-unsigned
+UPixelScalar
 TabMenuControl::GetMenuButtonWidth()
 {
   return (theTabDisplay->GetTabWidth() - TabLineHeight) / 2;
@@ -244,9 +245,9 @@ TabMenuControl::GetMainMenuButtonSize(unsigned i)
   if (MainMenuButtons[i]->butSize.left < MainMenuButtons[i]->butSize.right)
     return MainMenuButtons[i]->butSize;
   PixelRect &rc = MainMenuButtons[i]->butSize;
-  const unsigned margin = Layout::Scale(1);
-  const unsigned finalmargin = Layout::Scale(1);
-  const unsigned butHeight = GetMenuButtonHeight();
+  const UPixelScalar margin = Layout::Scale(1);
+  const UPixelScalar finalmargin = Layout::Scale(1);
+  const UPixelScalar butHeight = GetMenuButtonHeight();
   rc.top = finalmargin + (margin + butHeight) * i;
   rc.top += GetButtonVerticalOffset();
   rc.bottom = rc.top + butHeight;
@@ -277,18 +278,18 @@ TabMenuControl::GetSubMenuButtonSize(unsigned page)
 
   PixelRect &rc = buttons[page]->butSize;
 
-  const unsigned margin = Layout::Scale(1);
-  const unsigned finalmargin = Layout::Scale(1);
+  const UPixelScalar margin = Layout::Scale(1);
+  const UPixelScalar finalmargin = Layout::Scale(1);
   const unsigned subMenuItemCount = butMain->NumSubMenus();
-  const unsigned tabHeight = GetTabHeight();
-  const unsigned butHeight = GetMenuButtonHeight();
-  const unsigned itemHeight = butHeight + margin;
-  const unsigned SubMenuHeight = itemHeight * subMenuItemCount + finalmargin;
-  const unsigned topMainMenuItem = item.main_menu_index * itemHeight +
+  const UPixelScalar tabHeight = GetTabHeight();
+  const UPixelScalar butHeight = GetMenuButtonHeight();
+  const UPixelScalar itemHeight = butHeight + margin;
+  const UPixelScalar SubMenuHeight = itemHeight * subMenuItemCount + finalmargin;
+  const UPixelScalar topMainMenuItem = item.main_menu_index * itemHeight +
       finalmargin;
-  const unsigned offset = Layout::Scale(2);
-  const unsigned topMainMenuItemWOffset = topMainMenuItem + offset;
-  const unsigned subMenuTop =
+  const UPixelScalar offset = Layout::Scale(2);
+  const UPixelScalar topMainMenuItemWOffset = topMainMenuItem + offset;
+  const UPixelScalar subMenuTop =
       (topMainMenuItemWOffset + SubMenuHeight <= tabHeight) ?
        topMainMenuItemWOffset : tabHeight - SubMenuHeight - offset;
 
@@ -430,8 +431,8 @@ TabMenuControl::GetPageItem(unsigned page)
 // TabMenuDisplay Functions
 TabMenuDisplay::TabMenuDisplay(TabBarControl& _theTabBar,
                                const DialogLook &_look,
-                               unsigned left, unsigned top,
-                               unsigned width, unsigned height,
+                               PixelScalar left, PixelScalar top,
+                               UPixelScalar width, UPixelScalar height,
                                bool _flipOrientation) :
                                TabDisplay(_theTabBar, _look, left, top, width,
                                           height, _flipOrientation),
@@ -450,7 +451,7 @@ TabMenuDisplay::SetSelectedIndex(TabMenuControl::menu_tab_index di)
 }
 
 bool
-TabMenuDisplay::on_mouse_down(int x, int y)
+TabMenuDisplay::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   drag_end();
   RasterPoint Pos;
@@ -475,7 +476,7 @@ TabMenuDisplay::on_mouse_down(int x, int y)
 }
 
 bool
-TabMenuDisplay::on_mouse_up(int x, int y)
+TabMenuDisplay::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   RasterPoint Pos;
   Pos.x = x;
@@ -521,7 +522,7 @@ TabMenuDisplay::GetDownButtonRC()
 }
 
 bool
-TabMenuDisplay::on_mouse_move(int x, int y, unsigned keys)
+TabMenuDisplay::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (DownIndex.MainIndex == TabMenuControl::NO_MAIN_MENU
       && DownIndex.SubIndex == TabMenuControl::NO_SUB_MENU)
@@ -544,10 +545,10 @@ void
 TabMenuDisplay::PaintMainMenuBorder(Canvas &canvas)
 {
   TabMenuControl &tb = GetTabMenuBar();
-  const unsigned bwidth = tb.GetTabLineHeight();
+  const UPixelScalar bwidth = tb.GetTabLineHeight();
 
   const PixelRect rcFirst = tb.GetMainMenuButtonSize(0);
-  const unsigned menuBottom = tb.GetMainMenuButtonSize(
+  const UPixelScalar menuBottom = tb.GetMainMenuButtonSize(
       tb.GetNumMainMenuItems() - 1).bottom;
   const PixelRect rcBlackBorder = { PixelScalar(rcFirst.left - bwidth),
                                     PixelScalar(rcFirst.top - bwidth),
@@ -606,8 +607,8 @@ void
 TabMenuDisplay::PaintSubMenuBorder(Canvas &canvas, const OneMainMenuButton *butMain)
 {
   TabMenuControl &tb = GetTabMenuBar();
-  const unsigned bwidth =  tb.GetTabLineHeight();
-  const unsigned subTop = tb.GetSubMenuButtonSize(butMain->FirstPageIndex).top;
+  const UPixelScalar bwidth =  tb.GetTabLineHeight();
+  const UPixelScalar subTop = tb.GetSubMenuButtonSize(butMain->FirstPageIndex).top;
   const PixelRect bLast = tb.GetSubMenuButtonSize(butMain->LastPageIndex);
   const PixelRect rcBlackBorder = { PixelScalar(bLast.left - bwidth),
                                     PixelScalar(subTop - bwidth),

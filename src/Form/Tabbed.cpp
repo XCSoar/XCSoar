@@ -26,7 +26,8 @@ Copyright_License {
 #include <assert.h>
 
 TabbedControl::TabbedControl(ContainerWindow &parent,
-                             int x, int y, unsigned width, unsigned height,
+                             PixelScalar x, PixelScalar y,
+                             UPixelScalar width, UPixelScalar height,
                              const WindowStyle style)
   :current(0)
 {
@@ -81,7 +82,7 @@ TabbedControl::PreviousPage()
 }
 
 bool
-TabbedControl::on_resize(unsigned width, unsigned height)
+TabbedControl::on_resize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::on_resize(width, height);
 

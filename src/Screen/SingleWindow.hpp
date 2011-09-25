@@ -54,7 +54,7 @@ public:
 #ifndef USE_GDI
 protected:
   gcc_pure
-  bool FilterMouseEvent(int x, int y, Window *allowed) const;
+  bool FilterMouseEvent(PixelScalar x, PixelScalar y, Window *allowed) const;
 #endif
 
 public:

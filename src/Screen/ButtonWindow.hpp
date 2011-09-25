@@ -77,11 +77,13 @@ public:
 
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const ButtonWindowStyle style=ButtonWindowStyle());
 
   void set(ContainerWindow &parent, const TCHAR *text,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const ButtonWindowStyle style=ButtonWindowStyle()) {
     set(parent, text, 0, left, top, width, height, style);
   }
@@ -114,9 +116,9 @@ public:
 protected:
   bool on_key_check(unsigned key_code) const;
   virtual bool on_key_down(unsigned key_code);
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
   virtual bool on_setfocus();
   virtual bool on_killfocus();
   virtual bool on_cancel_mode();
@@ -146,11 +148,13 @@ public:
 
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const WindowStyle style);
 
   void set(ContainerWindow &parent, const TCHAR *text,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const WindowStyle style) {
     set(parent, text, COMMAND_BOUNCE_ID,
         left, top, width, height, style);
@@ -179,13 +183,15 @@ protected:
 class ButtonWindow : public BaseButtonWindow {
 public:
   void set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const ButtonWindowStyle style=ButtonWindowStyle()) {
     BaseButtonWindow::set(parent, text, id, left, top, width, height, style);
   }
 
   void set(ContainerWindow &parent, const TCHAR *text,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const ButtonWindowStyle style=ButtonWindowStyle()) {
     BaseButtonWindow::set(parent, text, left, top, width, height, style);
   }

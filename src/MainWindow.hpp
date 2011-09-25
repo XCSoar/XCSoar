@@ -101,7 +101,8 @@ protected:
 
 public:
   void set(const TCHAR *text,
-           int left, int top, unsigned width, unsigned height);
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height);
 
   void Initialise();
   void InitialiseConfigured();
@@ -174,7 +175,7 @@ public:
   DisplayMode GetDisplayMode() const;
 
 protected:
-  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
   bool on_activate();
   bool on_setfocus();
   bool on_timer(timer_t id);

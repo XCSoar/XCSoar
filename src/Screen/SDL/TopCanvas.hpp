@@ -28,9 +28,9 @@ Copyright_License {
 
 class TopCanvas : public Canvas {
 public:
-  void set(unsigned width = 640, unsigned height = 480);
+  void set(UPixelScalar width = 640, UPixelScalar height = 480);
 
-  void OnResize(unsigned width, unsigned height);
+  void OnResize(UPixelScalar width, UPixelScalar height);
 
   void full_screen();
 

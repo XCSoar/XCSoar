@@ -29,12 +29,14 @@ Copyright_License {
 #include <assert.h>
 
 static void
-GetButtonPosition(unsigned i, PixelRect rc, int *x, int *y, int *sizex, int *sizey)
+GetButtonPosition(unsigned i, PixelRect rc,
+                  PixelScalar *x, PixelScalar *y,
+                  UPixelScalar *sizex, UPixelScalar *sizey)
 {
-  unsigned hwidth = rc.right - rc.left;
-  unsigned hheight = rc.bottom - rc.top;
+  UPixelScalar hwidth = rc.right - rc.left;
+  UPixelScalar hheight = rc.bottom - rc.top;
 
-  const unsigned margin = Layout::FastScale(2);
+  const UPixelScalar margin = Layout::FastScale(2);
 
   if (hheight > hwidth) {
     // portrait
@@ -59,7 +61,7 @@ GetButtonPosition(unsigned i, PixelRect rc, int *x, int *y, int *sizex, int *siz
 
       *sizex = hwidth - margin * 2;
       *x = rc.right - hwidth + margin;
-      int k = rc.bottom - rc.top - Layout::Scale(46);
+      PixelScalar k = rc.bottom - rc.top - Layout::Scale(46);
 
       if (is_altair()) {
         k = rc.bottom - rc.top;
@@ -120,7 +122,6 @@ MenuBar::Button::on_message(HWND hWnd, UINT message,
 MenuBar::MenuBar(ContainerWindow &parent)
 {
   const PixelRect rc = parent.get_client_rect();
-  int x, y, xsize, ysize;
 
   ButtonWindowStyle style;
   style.hide();
@@ -128,6 +129,8 @@ MenuBar::MenuBar(ContainerWindow &parent)
   style.multiline();
 
   for (unsigned i = 0; i < MAX_BUTTONS; ++i) {
+    PixelScalar x, y;
+    UPixelScalar xsize, ysize;
     GetButtonPosition(i, rc, &x, &y, &xsize, &ysize);
     buttons[i].set(parent, _T(""), i, x, y, xsize, ysize,
                    style);

@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_PROGRESS_GLUE_HPP
 #define XCSOAR_PROGRESS_GLUE_HPP
 
+#include "Screen/Point.hpp"
+
 #include <tchar.h>
 
 namespace ProgressGlue {
@@ -33,7 +35,7 @@ namespace ProgressGlue {
    */
   void Create(const TCHAR *text);
 
-  void Resize(unsigned width, unsigned height);
+  void Resize(UPixelScalar width, UPixelScalar height);
 
   /**
    * Closes the ProgressWindow

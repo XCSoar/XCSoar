@@ -50,22 +50,22 @@ public:
   ScrollBar();
 
   /** Returns the width of the ScrollBar */
-  int get_width() const {
+  PixelScalar get_width() const {
     return rc.right - rc.left;
   }
 
   /** Returns the height of the ScrollBar */
-  int get_height() const {
+  PixelScalar get_height() const {
     return rc.bottom - rc.top;
   }
 
   /** Returns the height of the slider */
-  int get_slider_height() const {
+  PixelScalar get_slider_height() const {
     return rc_slider.bottom - rc_slider.top;
   }
 
   /** Returns the height of the scrollable area of the ScrollBar */
-  int get_netto_height() const {
+  PixelScalar get_netto_height() const {
     return get_height() - 2 * get_width() - 1;
   }
 
@@ -73,7 +73,7 @@ public:
    * Returns the height of the visible scroll area of the ScrollBar
    * (the area thats not covered with the slider)
    */
-  int get_scroll_height() const {
+  PixelScalar get_scroll_height() const {
     return get_netto_height() - get_slider_height();
   }
 
@@ -92,7 +92,7 @@ public:
    * @param size Size of the client area including the ScrollBar
    * @return The x-Coordinate of the ScrollBar
    */
-  unsigned get_left(const PixelSize size) const {
+  UPixelScalar get_left(const PixelSize size) const {
     return defined() ? rc.left : size.cx;
   }
 
@@ -122,7 +122,7 @@ public:
    * @return True if the given y-Coordinate is on the up arrow,
    * False otherwise
    */
-  bool in_up_arrow(int y) const {
+  bool in_up_arrow(PixelScalar y) const {
     return y < rc.top + get_width();
   }
 
@@ -132,7 +132,7 @@ public:
    * @return True if the given y-Coordinate is on the down arrow,
    * False otherwise
    */
-  bool in_down_arrow(int y) const {
+  bool in_down_arrow(PixelScalar y) const {
     return y >= rc.bottom - get_width();
   }
 
@@ -142,7 +142,7 @@ public:
    * @return True if the given y-Coordinate is above the slider area,
    * False otherwise
    */
-  bool above_slider(int y) const {
+  bool above_slider(PixelScalar y) const {
     return y < rc_slider.top;
   }
 
@@ -152,7 +152,7 @@ public:
    * @return True if the given y-Coordinate is below the slider area,
    * False otherwise
    */
-  bool below_slider(int y) const {
+  bool below_slider(PixelScalar y) const {
     return y >= rc_slider.bottom;
   }
 
@@ -166,9 +166,11 @@ public:
   void reset();
 
   /** Calculates the size and position of the slider */
-  void set_slider(unsigned size, unsigned view_size, unsigned origin);
+  void set_slider(UPixelScalar size, UPixelScalar view_size,
+                  UPixelScalar origin);
   /** Calculates the new origin out of the given y-Coordinate of the drag */
-  unsigned to_origin(unsigned size, unsigned view_size, int y) const;
+  UPixelScalar to_origin(UPixelScalar size, UPixelScalar view_size,
+                         PixelScalar y) const;
 
   /** Paints the ScollBar */
   void paint(Canvas &canvas) const;
@@ -184,7 +186,7 @@ public:
    * @param w The Window object the ScrollBar is belonging to
    * @param y y-Coordinate
    */
-  void drag_begin(Window *w, unsigned y);
+  void drag_begin(Window *w, UPixelScalar y);
   /**
    * Should be called when stopping to drag
    * (Called by WndListFrame::on_mouse_up)
@@ -198,7 +200,8 @@ public:
    * @param y y-Coordinate
    * @return "Value" of the ScrollBar
    */
-  unsigned drag_move(unsigned size, unsigned view_size, int y) const;
+  UPixelScalar drag_move(UPixelScalar size, UPixelScalar view_size,
+                         PixelScalar y) const;
 };
 
 #endif

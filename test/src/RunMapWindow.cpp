@@ -140,7 +140,8 @@ public:
   }
 #endif /* USE_GDI */
 
-  void set(int left, int top, unsigned width, unsigned height) {
+  void set(PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height) {
     SingleWindow::set(_T("RunMapWindow"), _T("RunMapWindow"),
                       left, top, width, height);
 

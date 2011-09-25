@@ -34,8 +34,9 @@ Copyright_License {
  * @param height Height of window (pixels)
  */
 GaugeThermalAssistant::GaugeThermalAssistant(ContainerWindow &parent,
-                                             int left, int top,
-                                             unsigned width, unsigned height,
+                                             PixelScalar left, PixelScalar top,
+                                             UPixelScalar width,
+                                             UPixelScalar height,
                                              WindowStyle style)
   :ThermalAssistantWindow(5, true)
 {
@@ -62,7 +63,7 @@ GaugeThermalAssistant::Update(const bool enabled, const Angle direction,
  * @return
  */
 bool
-GaugeThermalAssistant::on_mouse_down(int x, int y)
+GaugeThermalAssistant::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   dlgThermalAssistantShowModal();
   return true;

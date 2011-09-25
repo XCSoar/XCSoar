@@ -33,7 +33,7 @@ class Angle;
 void ScreenClosestPoint(const RasterPoint &p1, const RasterPoint &p2,
                         const RasterPoint &p3, RasterPoint *p4, int offset);
 
-void PolygonRotateShift(RasterPoint *poly, int n, int x, int y,
+void PolygonRotateShift(RasterPoint *poly, int n, PixelScalar x, PixelScalar y,
                         Angle angle, const bool scale = true);
 
 #endif

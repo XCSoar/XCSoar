@@ -45,7 +45,9 @@ using std::max;
 
 #define SELECTORWIDTH Layout::Scale(5)
 
-InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent, int X, int Y, int Width, int Height,
+InfoBoxWindow::InfoBoxWindow(ContainerWindow &_parent,
+                             PixelScalar X, PixelScalar Y,
+                             UPixelScalar Width, UPixelScalar Height,
                  int border_flags,
                              const InfoBoxSettings &_settings,
                  const InfoBoxLook &_look)
@@ -201,17 +203,19 @@ InfoBoxWindow::PaintTitle(Canvas &canvas)
 
   PixelSize tsize = canvas.text_size(mTitle.c_str());
 
-  int halftextwidth = (recTitle.left + recTitle.right - tsize.cx) / 2;
-  int x = max(1, (int)recTitle.left + halftextwidth);
-  int y = recTitle.top + 1 + font.get_capital_height() -
+  PixelScalar halftextwidth = (recTitle.left + recTitle.right - tsize.cx) / 2;
+  PixelScalar x = max(PixelScalar(1),
+                      PixelScalar(recTitle.left + halftextwidth));
+  PixelScalar y = recTitle.top + 1 + font.get_capital_height() -
     font.get_ascent_height();
 
   canvas.TextAutoClipped(x, y, mTitle.c_str());
 
   if (settings.border_style == apIbTab && halftextwidth > Layout::Scale(3)) {
-    int ytop = recTitle.top + font.get_capital_height() / 2;
-    int ytopedge = ytop + Layout::Scale(2);
-    int ybottom = recTitle.top + Layout::Scale(6) + font.get_capital_height();
+    PixelScalar ytop = recTitle.top + font.get_capital_height() / 2;
+    PixelScalar ytopedge = ytop + Layout::Scale(2);
+    PixelScalar ybottom = recTitle.top + Layout::Scale(6)
+      + font.get_capital_height();
 
     canvas.select(look.border_pen);
 
@@ -240,8 +244,8 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
   canvas.set_text_color(look.get_value_color(colorValue));
 
   canvas.select(*look.value.font);
-  unsigned ascent_height = look.value.font->get_ascent_height();
-  unsigned capital_height = look.value.font->get_capital_height();
+  UPixelScalar ascent_height = look.value.font->get_ascent_height();
+  UPixelScalar capital_height = look.value.font->get_capital_height();
 
   PixelSize tsize = canvas.text_size(mValue.c_str());
   if (tsize.cx > recValue.right - recValue.left) {
@@ -260,10 +264,11 @@ InfoBoxWindow::PaintValue(Canvas &canvas)
     unit_size.cy = 0;
   }
 
-  int x = max(1, (int)(recValue.left + recValue.right - tsize.cx
-                   - Layout::FastScale(unit_size.cx)) / 2);
+  PixelScalar x = max(PixelScalar(1),
+                      PixelScalar((recValue.left + recValue.right - tsize.cx
+                                   - Layout::FastScale(unit_size.cx)) / 2));
 
-  int y = recValue.top + 1 - ascent_height +
+  PixelScalar y = recValue.top + 1 - ascent_height +
     (recValue.bottom - recValue.top + capital_height) / 2;
 
   canvas.TextAutoClipped(x, y, mValue.c_str());
@@ -301,8 +306,10 @@ InfoBoxWindow::PaintComment(Canvas &canvas)
 
   PixelSize tsize = canvas.text_size(mComment);
 
-  int x = max(1, (int)(recComment.left + recComment.right - tsize.cx) / 2);
-  int y = recComment.top + 1 + font.get_capital_height()
+  PixelScalar x = max(PixelScalar(1),
+                      PixelScalar((recComment.left + recComment.right
+                                   - tsize.cx) / 2));
+  PixelScalar y = recComment.top + 1 + font.get_capital_height()
     - font.get_ascent_height();
 
   canvas.TextAutoClipped(x, y, mComment);
@@ -313,7 +320,7 @@ InfoBoxWindow::PaintSelector(Canvas &canvas)
 {
   canvas.select(look.selector_pen);
 
-  const unsigned width = canvas.get_width(), height = canvas.get_height();
+  const UPixelScalar width = canvas.get_width(), height = canvas.get_height();
 
   canvas.two_lines(width - SELECTORWIDTH - 1, 0,
                    width - 1, 0,
@@ -349,7 +356,8 @@ InfoBoxWindow::Paint(Canvas &canvas)
   if (mBorderKind != 0) {
     canvas.select(look.border_pen);
 
-    const unsigned width = canvas.get_width(), height = canvas.get_height();
+    const UPixelScalar width = canvas.get_width(),
+      height = canvas.get_height();
 
     if (mBorderKind & BORDERTOP) {
       canvas.line(0, 0, width - 1, 0);
@@ -370,7 +378,8 @@ InfoBoxWindow::Paint(Canvas &canvas)
 }
 
 void
-InfoBoxWindow::PaintInto(Canvas &dest, int xoff, int yoff, int width, int height)
+InfoBoxWindow::PaintInto(Canvas &dest, PixelScalar xoff, PixelScalar yoff,
+                         UPixelScalar width, UPixelScalar height)
 {
 #ifdef ENABLE_OPENGL
   SubCanvas canvas(dest, xoff, yoff, width, height);
@@ -437,7 +446,7 @@ InfoBoxWindow::GetDialogContent()
 }
 
 bool
-InfoBoxWindow::on_resize(unsigned width, unsigned height)
+InfoBoxWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::on_resize(width, height);
 
@@ -494,7 +503,7 @@ InfoBoxWindow::on_key_down(unsigned key_code)
 }
 
 bool
-InfoBoxWindow::on_mouse_down(int x, int y)
+InfoBoxWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   click_clock.update();
 
@@ -504,7 +513,7 @@ InfoBoxWindow::on_mouse_down(int x, int y)
 }
 
 bool
-InfoBoxWindow::on_mouse_up(int x, int y)
+InfoBoxWindow::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   if (!has_focus()) return PaintWindow::on_mouse_up(x, y);
 
@@ -516,7 +525,7 @@ InfoBoxWindow::on_mouse_up(int x, int y)
 }
 
 bool
-InfoBoxWindow::on_mouse_double(int x, int y)
+InfoBoxWindow::on_mouse_double(PixelScalar x, PixelScalar y)
 {
   if (!is_altair()) {
     // JMW capture double click, so infoboxes double clicked also bring up menu

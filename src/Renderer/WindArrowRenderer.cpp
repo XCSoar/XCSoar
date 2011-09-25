@@ -41,7 +41,7 @@ WindArrowRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const PixelRect rc, bool with_tail)
 {
   canvas.select(Fonts::MapBold);
-  unsigned text_width = canvas.text_size(_T("99")).cx / 2;
+  UPixelScalar text_width = canvas.text_size(_T("99")).cx / 2;
 
   canvas.select(Graphics::hpWind);
   canvas.select(Graphics::hbWind);

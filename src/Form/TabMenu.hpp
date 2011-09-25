@@ -95,7 +95,8 @@ public:
   TabMenuControl(ContainerWindow &parent,
                  WndForm &_form, CallBackTableEntry *_look_up_table,
                  const DialogLook &look, const TCHAR * Caption,
-                 int x, int y, unsigned width, unsigned height,
+                 PixelScalar x, PixelScalar y,
+                 UPixelScalar width, UPixelScalar height,
                  const WindowStyle style = WindowStyle());
   ~TabMenuControl();
 
@@ -188,7 +189,7 @@ public:
   /**
    * overloads from TabBarControl.
    */
-  unsigned GetTabHeight();
+  UPixelScalar GetTabHeight();
 
   /**
    * @return last content page shown (0 to (NumPages-1))
@@ -274,17 +275,17 @@ protected:
   /**
    * @return Height of any item in Main or Sub menu
    */
-  unsigned GetMenuButtonHeight();
+  UPixelScalar GetMenuButtonHeight();
 
   /**
    * @return Width of any item in Main or Sub menu
    */
-  unsigned GetMenuButtonWidth();
+  UPixelScalar GetMenuButtonWidth();
 
   /**
    * @return for portrait mode, puts menu near vertical center of screen
    */
-  unsigned GetButtonVerticalOffset();
+  UPixelScalar GetButtonVerticalOffset();
 
   /**
    * hides all buttons etc for all content pages
@@ -309,8 +310,9 @@ public:
 class TabMenuDisplay : public TabDisplay {
 public:
   TabMenuDisplay(TabBarControl& _theTabBar, const DialogLook &look,
-                 unsigned left, unsigned top,
-                 unsigned width, unsigned height, bool _flipOrientation = false);
+                 PixelScalar left, PixelScalar top,
+                 UPixelScalar width, UPixelScalar height,
+                 bool _flipOrientation = false);
 
   void SetSelectedIndex(TabMenuControl::menu_tab_index di);
 protected:
@@ -320,9 +322,9 @@ protected:
    * @return Rect of button holding down pointer capture
    */
   const PixelRect& GetDownButtonRC();
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-  virtual bool on_mouse_up(int x, int y);
-  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
 
   /**
    * canvas is the tabmenu which is the full content window, no content

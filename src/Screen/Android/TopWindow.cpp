@@ -31,7 +31,7 @@ Copyright_License {
 #include "PeriodClock.hpp"
 
 void
-TopWindow::AnnounceResize(unsigned width, unsigned height)
+TopWindow::AnnounceResize(UPixelScalar width, UPixelScalar height)
 {
   ScopeLock protect(paused_mutex);
   resized = true;
@@ -42,7 +42,7 @@ TopWindow::AnnounceResize(unsigned width, unsigned height)
 void
 TopWindow::RefreshSize()
 {
-  unsigned width, height;
+  UPixelScalar width, height;
 
   {
     ScopeLock protect(paused_mutex);
@@ -57,7 +57,7 @@ TopWindow::RefreshSize()
 }
 
 bool
-TopWindow::on_resize(unsigned width, unsigned height)
+TopWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   if (native_view != NULL) {
     native_view->SetSize(width, height);

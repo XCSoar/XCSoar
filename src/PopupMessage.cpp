@@ -128,7 +128,7 @@ PopupMessage::set(const PixelRect _rc)
 }
 
 bool
-PopupMessage::on_mouse_down(int x, int y)
+PopupMessage::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   // acknowledge with click/touch
   Acknowledge(0);
@@ -152,15 +152,15 @@ PopupMessage::Resize()
 
     int linecount = max((unsigned)nvisible, max((unsigned)1, get_row_count()));
 
-    int width =// min((rc.right-rc.left)*0.8,tsize.cx);
-      (int)((rc.right-rc.left)*0.9);
-    int height = min((int)((rc.bottom-rc.top) * 0.8),
-                     (int)tsize.cy * (linecount + 1));
-    int h1 = height/2;
-    int h2 = height-h1;
+    PixelScalar width =// min((rc.right-rc.left)*0.8,tsize.cx);
+      (PixelScalar)((rc.right - rc.left) * 0.9);
+    PixelScalar height = min((PixelScalar)((rc.bottom-rc.top) * 0.8),
+                             (PixelScalar)(tsize.cy * (linecount + 1)));
+    PixelScalar h1 = height / 2;
+    PixelScalar h2 = height - h1;
 
-    int midx = (rc.right+rc.left)/2;
-    int midy = (rc.bottom+rc.top)/2;
+    PixelScalar midx = (rc.right + rc.left) / 2;
+    PixelScalar midy = (rc.bottom + rc.top) / 2;
 
     if (settings.popup_message_position == smAlignTopLeft){
       rthis.top = 0;

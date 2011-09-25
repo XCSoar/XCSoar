@@ -35,7 +35,8 @@ Copyright_License {
  * @param height Height of window (pixels)
  */
 GaugeFLARM::GaugeFLARM(ContainerWindow &parent,
-                       int left, int top, unsigned width, unsigned height,
+                       PixelScalar left, PixelScalar top,
+                       UPixelScalar width, UPixelScalar height,
                        const FlarmTrafficLook &look,
                        const WindowStyle style)
   :FlarmTrafficWindow(look, 1, true),
@@ -70,7 +71,7 @@ GaugeFLARM::Update(bool enable, const NMEAInfo &gps_info,
  * @param y y-Coordinate of the click
  */
 bool
-GaugeFLARM::on_mouse_down(int x, int y)
+GaugeFLARM::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   dlgFlarmTrafficShowModal();
   return true;

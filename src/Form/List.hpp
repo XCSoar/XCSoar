@@ -49,7 +49,7 @@ protected:
   ScrollBar scroll_bar;
 
   /** The height of one item on the screen, in pixels. */
-  unsigned item_height;
+  UPixelScalar item_height;
   /** The number of items in the list. */
   unsigned length;
   /** The index of the topmost item currently being displayed. */
@@ -77,9 +77,10 @@ public:
    * @param _item_height Height of an item of the ListFrameControl
    */
   WndListFrame(ContainerWindow &parent, const DialogLook &look,
-               int X, int Y, int Width, int Height,
+               PixelScalar x, PixelScalar y,
+               UPixelScalar Width, UPixelScalar Height,
                const WindowStyle style,
-               unsigned _item_height);
+               UPixelScalar _item_height);
 
   /** Sets the function to call when a ListItem is chosen */
   void SetActivateCallback(ActivateCallback_t cb) {
@@ -96,7 +97,7 @@ public:
     PaintItemCallback = cb;
   }
 
-  void SetItemHeight(unsigned _item_height);
+  void SetItemHeight(UPixelScalar _item_height);
 
   /**
    * Returns the number of items in the list
@@ -175,7 +176,7 @@ protected:
    * The on_resize event is called when the Control is resized
    * (derived from Window)
    */
-  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
 
   virtual bool on_setfocus();
   virtual bool on_killfocus();
@@ -184,22 +185,22 @@ protected:
    * The on_mouse_down event is called when the mouse is pressed over the button
    * (derived from Window)
    */
-  virtual bool on_mouse_down(int x, int y);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
   /**
    * The on_mouse_up event is called when the mouse is released over the button
    * (derived from Window)
    */
-  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
   /**
    * The on_mouse_move event is called when the mouse is moved over the button
    * (derived from Window)
    */
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
   /**
    * The on_mouse_wheel event is called when the mouse wheel is turned
    * (derived from Window)
    */
-  virtual bool on_mouse_wheel(int x, int y, int delta);
+  virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
 
   virtual bool on_key_check(unsigned key_code) const;
 

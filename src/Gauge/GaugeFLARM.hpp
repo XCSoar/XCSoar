@@ -39,7 +39,8 @@ public:
 
 public:
   GaugeFLARM(ContainerWindow &parent,
-             int left, int top, unsigned width, unsigned height,
+             PixelScalar left, PixelScalar top,
+             UPixelScalar width, UPixelScalar height,
              const FlarmTrafficLook &look,
              const WindowStyle style=WindowStyle());
 
@@ -47,7 +48,7 @@ public:
               const SETTINGS_TEAMCODE &settings);
 
 protected:
-  bool on_mouse_down(int x, int y);
+  bool on_mouse_down(PixelScalar x, PixelScalar y);
 };
 
 #endif

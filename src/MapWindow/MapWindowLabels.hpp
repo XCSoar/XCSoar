@@ -46,16 +46,16 @@ public:
   };
 
 protected:
-  unsigned width, height;
+  UPixelScalar width, height;
   PixelRect bounds;
   Label labels[128];
   unsigned num_labels;
 
 public:
-  WaypointLabelList(unsigned _width, unsigned _height)
+  WaypointLabelList(UPixelScalar _width, UPixelScalar _height)
     :width(_width), height(_height), num_labels(0) {}
 
-  void Add(const TCHAR *Name, int X, int Y, TextInBoxMode Mode,
+  void Add(const TCHAR *Name, PixelScalar X, PixelScalar Y, TextInBoxMode Mode,
            RoughAltitude AltArivalAGL,
            bool inTask, bool isLandable, bool isAirport,
            bool isWatchedWaypoint);

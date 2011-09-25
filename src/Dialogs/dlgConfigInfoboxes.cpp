@@ -44,8 +44,8 @@ Copyright_License {
 
 class InfoBoxPreview : public PaintWindow {
 protected:
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_double(int x, int y);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
   virtual void on_paint(Canvas &canvas);
 };
 
@@ -150,14 +150,14 @@ OnContentAccess(DataField *Sender, DataField::DataAccessKind_t Mode)
 }
 
 bool
-InfoBoxPreview::on_mouse_down(int x, int y)
+InfoBoxPreview::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   SetCurrentInfoBox(this - previews);
   return true;
 }
 
 bool
-InfoBoxPreview::on_mouse_double(int x, int y)
+InfoBoxPreview::on_mouse_double(PixelScalar x, PixelScalar y)
 {
   edit_content->BeginEditing();
   return true;
@@ -350,12 +350,12 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
   else
     edit_style.sunken_edge();
 
-  const int x = rc.left;
-  const unsigned width = rc.right - rc.left - Layout::FastScale(2);
-  const unsigned height = Layout::Scale(22);
-  const unsigned caption_width = Layout::Scale(60);
+  const PixelScalar x = rc.left;
+  const UPixelScalar width = rc.right - rc.left - Layout::FastScale(2);
+  const UPixelScalar height = Layout::Scale(22);
+  const UPixelScalar caption_width = Layout::Scale(60);
 
-  int y = rc.top;
+  PixelScalar y = rc.top;
 
   ButtonWindowStyle button_style;
   button_style.tab_stop();
@@ -403,10 +403,10 @@ dlgConfigInfoboxesShowModal(SingleWindow &parent,
 
   RefreshEditContent();
 
-  const unsigned button_width = Layout::Scale(60);
-  const unsigned button_height = Layout::Scale(28);
-  const int button_y = rc.bottom - button_height;
-  int button_x = rc.left;
+  const UPixelScalar button_width = Layout::Scale(60);
+  const UPixelScalar button_height = Layout::Scale(28);
+  const PixelScalar button_y = rc.bottom - button_height;
+  PixelScalar button_x = rc.left;
   WndButton *close_button =
     new WndButton(client_area, dialog_look, _("Close"),
                   button_x, button_y, button_width, button_height,

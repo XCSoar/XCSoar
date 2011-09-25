@@ -50,7 +50,7 @@ BufferWindow::on_destroy()
 }
 
 bool
-BufferWindow::on_resize(unsigned width, unsigned height)
+BufferWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   buffer.resize(width, height);
   PaintWindow::on_resize(width, height);

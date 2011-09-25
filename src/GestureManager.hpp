@@ -57,11 +57,11 @@ public:
   /**
    * Starts the GestureManager at the given coordinates
    */
-  void Start(int x, int y, int _threshold);
+  void Start(PixelScalar x, PixelScalar y, int _threshold);
   /**
    * Adds new coordinates to the GestureManager
    */
-  void Update(int x, int y);
+  void Update(PixelScalar x, PixelScalar y);
 
 protected:
   /** Position of the last mouse_move event */

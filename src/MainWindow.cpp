@@ -93,7 +93,8 @@ MainWindow::register_class(HINSTANCE hInstance)
 
 void
 MainWindow::set(const TCHAR* text,
-                int left, int top, unsigned width, unsigned height)
+                PixelScalar left, PixelScalar top,
+                UPixelScalar width, UPixelScalar height)
 {
   SingleWindow::set(_T("XCSoarMain"), text, left, top, width, height);
 }
@@ -173,8 +174,8 @@ MainWindow::InitialiseConfigured()
   flarm->bring_to_top();
   ReinitialiseLayout_flarm(rc, ib_layout);
 
-  unsigned sz = std::min(ib_layout.control_height,
-                         ib_layout.control_width) * 2;
+  UPixelScalar sz = std::min(ib_layout.control_height,
+                             ib_layout.control_width) * 2;
 
   ta = new GaugeThermalAssistant(*this, 0, rc.bottom - sz, sz, sz,
                                  hidden_border);
@@ -280,8 +281,8 @@ MainWindow::ReinitialiseLayout()
   ReinitialiseLayout_flarm(rc, ib_layout);
 
   if (ta != NULL) {
-    unsigned sz = std::min(ib_layout.control_height,
-                           ib_layout.control_width) * 2;
+    UPixelScalar sz = std::min(ib_layout.control_height,
+                               ib_layout.control_width) * 2;
     ta->move(0, rc.bottom - sz, sz, sz);
   }
 
@@ -418,7 +419,7 @@ MainWindow::full_redraw()
 // Windows event handlers
 
 bool
-MainWindow::on_resize(unsigned width, unsigned height)
+MainWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   SingleWindow::on_resize(width, height);
 

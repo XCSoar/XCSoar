@@ -45,7 +45,7 @@ CanEditInPlace()
 }
 
 bool
-WndProperty::Editor::on_mouse_down(int x, int y)
+WndProperty::Editor::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   if (parent->on_mouse_down(x, y))
     return true;
@@ -147,7 +147,7 @@ WndProperty::Editor::on_killfocus()
 
 WndProperty::WndProperty(ContainerWindow &parent, const DialogLook &_look,
                          const TCHAR *Caption,
-                         int X, int Y,
+                         PixelScalar X, PixelScalar Y,
                          int Width, int Height,
                          int CaptionWidth,
                          const WindowStyle style,
@@ -299,7 +299,7 @@ WndProperty::on_editor_killfocus()
 }
 
 bool
-WndProperty::on_resize(unsigned width, unsigned height)
+WndProperty::on_resize(UPixelScalar width, UPixelScalar height)
 {
   WindowControl::on_resize(width, height);
   UpdateLayout();
@@ -307,14 +307,14 @@ WndProperty::on_resize(unsigned width, unsigned height)
 }
 
 bool
-WndProperty::on_mouse_down(int x, int y)
+WndProperty::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   BeginEditing();
   return true;
 }
 
 bool
-WndProperty::on_mouse_up(int x, int y)
+WndProperty::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   return true;
 }

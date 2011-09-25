@@ -36,7 +36,7 @@ TargetMapWindow::on_cancel_mode()
 }
 
 bool
-TargetMapWindow::on_mouse_down(int x, int y)
+TargetMapWindow::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   // Ignore single click event if double click detected
   if (drag_mode != DRAG_NONE)
@@ -58,7 +58,7 @@ TargetMapWindow::on_mouse_down(int x, int y)
 }
 
 bool
-TargetMapWindow::on_mouse_up(int x, int y)
+TargetMapWindow::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   if (drag_mode != DRAG_NONE)
     release_capture();
@@ -79,7 +79,7 @@ TargetMapWindow::on_mouse_up(int x, int y)
 }
 
 bool
-TargetMapWindow::on_mouse_move(int x, int y, unsigned keys)
+TargetMapWindow::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   switch (drag_mode) {
   case DRAG_NONE:

@@ -315,14 +315,14 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
   tstring sBase = as.GetBaseText(true);
   tstring sType = as.GetTypeText(true);
 
-  const int TextHeight = 12, TextTop = 1;
+  const UPixelScalar TextHeight = 12, TextTop = 1;
 
   const int statusColWidth = canvas.text_width(_T("inside"));     //<-- word "inside" is used as the etalon, because it is longer than "near" and currently (9.4.2011) there is no other possibility for the status text.
   const int heightColWidth = canvas.text_width(_T("1888 m AGL")); // <-- "1888" is used in order to have enough space for 4-digit heights with "AGL"
 
 
   /// Dynamic columns scaling - "name" column is flexible, altitude and state columns are fixed-width.
-  const int Col0LeftScreenCoords = Layout::FastScale(paint_rc_margin),
+  const PixelScalar Col0LeftScreenCoords = Layout::FastScale(paint_rc_margin),
     Col2LeftScreenCoords = paint_rc.right - Layout::FastScale(paint_rc_margin) - (statusColWidth + 2 * Layout::FastScale(paint_rc_margin)),
     Col1LeftScreenCoords = Col2LeftScreenCoords - Layout::FastScale(paint_rc_margin) - heightColWidth;
 

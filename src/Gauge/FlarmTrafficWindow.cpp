@@ -60,7 +60,7 @@ FlarmTrafficWindow::WarningMode() const
 }
 
 bool
-FlarmTrafficWindow::on_resize(unsigned width, unsigned height)
+FlarmTrafficWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::on_resize(width, height);
 
@@ -420,7 +420,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     // Calculate size of the output string
     PixelSize tsize = canvas.text_size(buffer);
 
-    int dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
+    UPixelScalar dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
 
     // Draw string
     canvas.text(sc[i].x + dist, sc[i].y - tsize.cy / 2, buffer);
@@ -550,12 +550,10 @@ FlarmTrafficWindow::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.select(look.plane_pen);
 
-  int x1, y1, x2, y2;
-
-  x1 = Layout::FastScale(small ? 5 : 10);
-  y1 = -Layout::FastScale(small ? 1 : 2);
-  x2 = -Layout::FastScale(small ? 5 : 10);
-  y2 = -Layout::FastScale(small ? 1 : 2);
+  PixelScalar x1 = Layout::FastScale(small ? 5 : 10);
+  PixelScalar y1 = -Layout::FastScale(small ? 1 : 2);
+  PixelScalar x2 = -Layout::FastScale(small ? 5 : 10);
+  PixelScalar y2 = -Layout::FastScale(small ? 1 : 2);
 
   if (enable_north_up) {
     FastIntegerRotation::Pair p = fir.Rotate(x1, y1);

@@ -86,7 +86,8 @@ roundshift(int x)
  * @param angle Angle of rotation
  */
 void
-PolygonRotateShift(RasterPoint *poly, const int n, const int xs, const int ys,
+PolygonRotateShift(RasterPoint *poly, const int n,
+                   const PixelScalar xs, const PixelScalar ys,
                    Angle angle, const bool scale)
 {
   static Angle lastangle = Angle::Native(-fixed_one);

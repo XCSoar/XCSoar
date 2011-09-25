@@ -43,7 +43,7 @@ ProgressGlue::Create(const TCHAR *text)
 }
 
 void
-ProgressGlue::Resize(unsigned width, unsigned height)
+ProgressGlue::Resize(UPixelScalar width, UPixelScalar height)
 {
   if (global_progress_window != NULL)
     global_progress_window->move(0, 0, width, height);

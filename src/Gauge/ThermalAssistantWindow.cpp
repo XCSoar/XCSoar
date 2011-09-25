@@ -64,7 +64,7 @@ ThermalAssistantWindow::on_create()
   hbPolygon.set(hcPolygonBrush);
 #endif /* !OPENGL */
 
-  int width = Layout::FastScale(small ? 1 : 2);
+  UPixelScalar width = Layout::FastScale(small ? 1 : 2);
 #ifdef ENABLE_OPENGL
   hpPolygon.set(width, hcPolygonPen.with_alpha(128));
 #else /* !OPENGL */
@@ -91,7 +91,7 @@ ThermalAssistantWindow::on_destroy()
 }
 
 bool
-ThermalAssistantWindow::on_resize(unsigned width, unsigned height)
+ThermalAssistantWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   BufferWindow::on_resize(width, height);
 
@@ -176,7 +176,7 @@ ThermalAssistantWindow::PaintRadarPlane(Canvas &canvas) const
 {
   canvas.select(hpPlane);
 
-  int x = mid.x + (LeftTurn() ? radius : -radius);
+  PixelScalar x = mid.x + (LeftTurn() ? radius : -radius);
 
   canvas.line(x + Layout::FastScale(small ? 5 : 10),
               mid.y - Layout::FastScale(small ? 1 : 2),

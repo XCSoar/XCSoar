@@ -55,7 +55,7 @@ public:
 protected:
   TabDisplay * theTabDisplay;
   StaticArray<OneTabButton *, 32> buttons;
-  const unsigned int TabLineHeight;
+  const UPixelScalar TabLineHeight;
   bool flipOrientation;
   /** if false (default) Client rectangle is adjacent to tabs
    *  if true, Client rectangle overlaps tabs (for advanced drawing)
@@ -76,7 +76,8 @@ public:
  * @return
  */
   TabBarControl(ContainerWindow &parent, const DialogLook &look,
-                int x, int y, unsigned width, unsigned height,
+                PixelScalar x, PixelScalar y,
+                UPixelScalar width, UPixelScalar height,
                 const WindowStyle style = WindowStyle(),
                 bool _flipOrientation = false,
                 bool _clientOverlapTabs = false);
@@ -90,9 +91,10 @@ public:
    * @param x, y, _width, _height
    * @param style
    */
-  TabBarControl(ContainerWindow &parent, unsigned _tabLineHeight,
+  TabBarControl(ContainerWindow &parent, UPixelScalar _tabLineHeight,
                 const DialogLook &look,
-                int x, int y, unsigned width, unsigned height,
+                PixelScalar x, PixelScalar y,
+                UPixelScalar width, UPixelScalar height,
                 const WindowStyle style);
 
   ~TabBarControl();
@@ -125,8 +127,8 @@ public:
   void NextPage(EventType EventType = TabBarControl::MouseOrButton);
   void PreviousPage(EventType EventType = TabBarControl::MouseOrButton);
   unsigned GetTabCount() { return buttons.size(); }
-  unsigned GetTabHeight();
-  unsigned GetTabWidth();
+  UPixelScalar GetTabHeight();
+  UPixelScalar GetTabWidth();
 
 /**
  * calculates the size and position of ith button
@@ -140,7 +142,7 @@ public:
   bool GetButtonIsButtonOnly(unsigned i);
   const StaticArray<OneTabButton *, 32>
       &GetTabButtons() { return buttons; }
-  unsigned GetTabLineHeight() {return TabLineHeight; }
+  UPixelScalar GetTabLineHeight() {return TabLineHeight; }
   void SetClientOverlapTabs(bool value) {clientOverlapTabs = value; }
 
 protected:
@@ -179,13 +181,14 @@ public:
  * @param height Height of tab bar box in the parent window
  */
   TabDisplay(TabBarControl& _theTabBar, const DialogLook &look,
-             unsigned left, unsigned top,
-     unsigned width, unsigned height, bool _flipOrientation = false);
+             PixelScalar left, PixelScalar top,
+             UPixelScalar width, UPixelScalar height,
+             bool _flipOrientation = false);
 
 public:
   void trigger_invalidate() { invalidate(); }
-  unsigned GetTabHeight() { return this->get_height(); }
-  unsigned GetTabWidth() { return this->get_width(); }
+  UPixelScalar GetTabHeight() { return this->get_height(); }
+  UPixelScalar GetTabWidth() { return this->get_width(); }
 
 protected:
 /**
@@ -216,9 +219,9 @@ protected:
 /**
  * track mouse clicks
  */
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
   void drag_end();
 };
 

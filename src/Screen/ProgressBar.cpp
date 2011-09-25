@@ -48,7 +48,8 @@ ProgressBarStyle::smooth()
 
 void
 ProgressBar::set(ContainerWindow &parent,
-                 int left, int top, unsigned width, unsigned height,
+                 PixelScalar left, PixelScalar top,
+                 UPixelScalar width, UPixelScalar height,
                  const ProgressBarStyle style)
 {
   Window::set(&parent,

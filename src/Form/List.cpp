@@ -44,9 +44,10 @@ using std::min;
 using std::max;
 
 WndListFrame::WndListFrame(ContainerWindow &parent, const DialogLook &_look,
-                           int X, int Y, int Width, int Height,
+                           PixelScalar X, PixelScalar Y,
+                           UPixelScalar Width, UPixelScalar Height,
                            const WindowStyle style,
-                           unsigned _item_height)
+                           UPixelScalar _item_height)
   :look(_look),
   item_height(_item_height),
   length(0), origin(0), items_visible(Height / item_height),
@@ -74,7 +75,7 @@ WndListFrame::show_or_hide_scroll_bar()
 }
 
 bool
-WndListFrame::on_resize(unsigned width, unsigned height)
+WndListFrame::on_resize(UPixelScalar width, UPixelScalar height)
 {
   PaintWindow::on_resize(width, height);
   items_visible = height / item_height;
@@ -165,7 +166,7 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
 }
 
 void
-WndListFrame::SetItemHeight(unsigned _item_height)
+WndListFrame::SetItemHeight(UPixelScalar _item_height)
 {
   item_height = _item_height;
   items_visible = get_size().cy / item_height;
@@ -392,7 +393,7 @@ WndListFrame::on_key_down(unsigned key_code)
 }
 
 bool
-WndListFrame::on_mouse_up(int x, int y)
+WndListFrame::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   if (scroll_bar.is_dragging()) {
     scroll_bar.drag_end(this);
@@ -414,7 +415,7 @@ WndListFrame::drag_end()
 }
 
 bool
-WndListFrame::on_mouse_move(int x, int y, unsigned keys)
+WndListFrame::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.is_dragging()) {
@@ -431,7 +432,7 @@ WndListFrame::on_mouse_move(int x, int y, unsigned keys)
 }
 
 bool
-WndListFrame::on_mouse_down(int x, int y)
+WndListFrame::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   // End any previous drag
   scroll_bar.drag_end(this);
@@ -493,7 +494,7 @@ WndListFrame::on_mouse_down(int x, int y)
 }
 
 bool
-WndListFrame::on_mouse_wheel(int x, int y, int delta)
+WndListFrame::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
 {
   scroll_bar.drag_end(this);
   drag_end();

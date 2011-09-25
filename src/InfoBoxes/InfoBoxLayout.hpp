@@ -64,7 +64,7 @@ namespace InfoBoxLayout
   };
 
   struct Layout {
-    unsigned control_width, control_height;
+    UPixelScalar control_width, control_height;
 
     unsigned count;
     PixelRect positions[InfoBoxSettings::Panel::MAX_CONTENTS];

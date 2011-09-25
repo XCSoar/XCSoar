@@ -42,7 +42,7 @@ OffsetHistory::reset()
 }
 
 void
-OffsetHistory::add(int x, int y)
+OffsetHistory::add(PixelScalar x, PixelScalar y)
 {
   RasterPoint point;
   point.x = x;

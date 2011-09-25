@@ -34,7 +34,8 @@ static const TCHAR keyboard_letters[] =
 
 KeyboardControl::KeyboardControl(ContainerWindow &parent,
                                  const DialogLook &_look,
-                                 int x, int y, unsigned width, unsigned height,
+                                 PixelScalar x, PixelScalar y,
+                                 UPixelScalar width, UPixelScalar height,
                                  OnCharacterCallback_t function,
                                  const WindowStyle _style)
   :look(_look),
@@ -90,7 +91,7 @@ KeyboardControl::get_button(TCHAR ch)
  * @param top     Number of pixels from the top (in screen pixels)
  */
 void
-KeyboardControl::move_button(TCHAR ch, int left, int top)
+KeyboardControl::move_button(TCHAR ch, PixelScalar left, PixelScalar top)
 {
   ButtonWindow *kb = get_button(ch);
   if (kb)
@@ -107,7 +108,7 @@ KeyboardControl::move_button(TCHAR ch, int left, int top)
  */
 void
 KeyboardControl::resize_button(TCHAR ch,
-                               unsigned int width, unsigned int height)
+                               UPixelScalar width, UPixelScalar height)
 {
   ButtonWindow *kb = get_button(ch);
   if (kb)
@@ -136,7 +137,8 @@ KeyboardControl::set_buttons_size()
 }
 
 void
-KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row, int offset)
+KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row,
+                                     PixelScalar offset)
 {
   if (string_is_empty(buttons))
     return;
@@ -191,7 +193,7 @@ KeyboardControl::on_command(unsigned id, unsigned code)
 }
 
 bool
-KeyboardControl::on_resize(unsigned width, unsigned height)
+KeyboardControl::on_resize(UPixelScalar width, UPixelScalar height)
 {
   set_buttons_size();
   resize_buttons();

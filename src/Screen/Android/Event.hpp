@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Thread/Mutex.hpp"
 #include "Thread/Cond.hpp"
+#include "Screen/Point.hpp"
 
 #include <queue>
 
@@ -78,7 +79,7 @@ struct Event {
 
   void *ptr;
 
-  int x, y;
+  PixelScalar x, y;
 
   Event() {}
   Event(enum type _type):type(_type) {}
@@ -86,7 +87,8 @@ struct Event {
   Event(enum type _type, unsigned _param, void *_ptr)
     :type(_type), param(_param), ptr(_ptr) {}
   Event(enum type _type, void *_ptr):type(_type), ptr(_ptr) {}
-  Event(enum type _type, int _x, int _y):type(_type), x(_x), y(_y) {}
+  Event(enum type _type, PixelScalar _x, PixelScalar _y)
+    :type(_type), x(_x), y(_y) {}
 };
 
 static inline bool

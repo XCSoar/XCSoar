@@ -37,7 +37,7 @@ Copyright_License {
 #include <assert.h>
 
 void
-TopCanvas::set(unsigned width, unsigned height)
+TopCanvas::set(UPixelScalar width, UPixelScalar height)
 {
 #ifndef ANDROID
   Uint32 flags = SDL_ANYFORMAT;
@@ -100,7 +100,7 @@ TopCanvas::set(unsigned width, unsigned height)
 }
 
 void
-TopCanvas::OnResize(unsigned width, unsigned height)
+TopCanvas::OnResize(UPixelScalar width, UPixelScalar height)
 {
 #ifdef ENABLE_OPENGL
   OpenGL::SetupViewport(width, height);

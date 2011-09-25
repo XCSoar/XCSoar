@@ -31,7 +31,7 @@ Copyright_License {
 #endif
 
 bool
-MapWindow::on_resize(unsigned width, unsigned height)
+MapWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   DoubleBufferWindow::on_resize(width, height);
 
@@ -99,8 +99,8 @@ MapWindow::on_paint(Canvas &canvas)
 
     /* do the projection */
 
-    const unsigned buffer_width = buffer_projection.GetScreenWidth();
-    const unsigned buffer_height = buffer_projection.GetScreenHeight();
+    const UPixelScalar buffer_width = buffer_projection.GetScreenWidth();
+    const UPixelScalar buffer_height = buffer_projection.GetScreenHeight();
 
     const RasterPoint top_left =
       visible_projection.GeoToScreen(buffer_projection.ScreenToGeo(0, 0));

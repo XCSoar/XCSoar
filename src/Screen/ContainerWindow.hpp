@@ -64,11 +64,11 @@ protected:
 
 #ifndef USE_GDI
   virtual bool on_destroy();
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
-  virtual bool on_mouse_double(int x, int y);
-  virtual bool on_mouse_wheel(int x, int y, int delta);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_double(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_wheel(PixelScalar x, PixelScalar y, int delta);
   virtual void on_paint(Canvas &canvas);
 #else /* USE_GDI */
   virtual LRESULT on_message(HWND hWnd, UINT message,
@@ -95,14 +95,14 @@ public:
    * Locate a child window by its relative coordinates.
    */
   gcc_pure
-  Window *child_at(int x, int y);
+  Window *child_at(PixelScalar x, PixelScalar y);
 
   /**
    * Locates the child which should get a mouse event.  Prefers the
    * captured child.
    */
   gcc_pure
-  Window *event_child_at(int x, int y);
+  Window *event_child_at(PixelScalar x, PixelScalar y);
 
   void set_active_child(Window &child);
   virtual void set_focus();

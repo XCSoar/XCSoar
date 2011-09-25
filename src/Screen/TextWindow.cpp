@@ -29,7 +29,8 @@ Copyright_License {
 
 void
 TextWindow::set(ContainerWindow &parent, const TCHAR *_text,
-                int left, int top, unsigned width, unsigned height,
+                PixelScalar left, PixelScalar top,
+                UPixelScalar width, UPixelScalar height,
                 const TextWindowStyle style)
 {
 #ifndef USE_GDI

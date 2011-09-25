@@ -183,7 +183,7 @@ WndForm::FilterAdvanced(bool advanced)
 }
 
 bool
-WndForm::on_resize(unsigned width, unsigned height)
+WndForm::on_resize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::on_resize(width, height);
   UpdateLayout();
@@ -576,12 +576,12 @@ WndForm::ReinitialiseLayout()
     mModalResult = mrChangeLayout;
   } else {
     // reposition dialog to fit into TopWindow
-    int left = get_left();
-    int top = get_top();
+    PixelScalar left = get_left();
+    PixelScalar top = get_top();
 
-    if (get_right() > (int) main_window.get_width())
+    if (get_right() > (PixelScalar) main_window.get_width())
       left = main_window.get_width() - get_width();
-    if (get_bottom() > (int) main_window.get_height())
+    if (get_bottom() > (PixelScalar) main_window.get_height())
       top = main_window.get_height() - get_height();
 
     if (left != get_left() || top != get_top())

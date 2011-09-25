@@ -368,7 +368,7 @@ public:
 };
 
 static void
-MapWaypointLabelRender(Canvas &canvas, unsigned width, unsigned height,
+MapWaypointLabelRender(Canvas &canvas, UPixelScalar width, UPixelScalar height,
                        LabelBlock &label_block,
                        WaypointLabelList &labels)
 {

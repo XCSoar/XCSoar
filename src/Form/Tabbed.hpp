@@ -34,7 +34,8 @@ protected:
 
 public:
   TabbedControl(ContainerWindow &parent,
-                int x, int y, unsigned width, unsigned height,
+                PixelScalar x, PixelScalar y,
+                UPixelScalar width, UPixelScalar height,
                 const WindowStyle style=WindowStyle());
 
   void AddClient(Window *w);
@@ -48,7 +49,7 @@ public:
   void PreviousPage();
 
 protected:
-  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
 };
 
 #endif

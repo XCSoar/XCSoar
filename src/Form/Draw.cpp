@@ -25,7 +25,8 @@ Copyright_License {
 #include "Screen/ContainerWindow.hpp"
 
 WndOwnerDrawFrame::WndOwnerDrawFrame(ContainerWindow &parent,
-                                     int X, int Y, int Width, int Height,
+                                     PixelScalar X, PixelScalar Y,
+                                     UPixelScalar Width, UPixelScalar Height,
                                      const WindowStyle style,
                                      OnPaintCallback_t OnPaintCallback)
   :mOnPaintCallback(OnPaintCallback),
@@ -44,7 +45,7 @@ WndOwnerDrawFrame::on_paint(Canvas &canvas)
 }
 
 bool
-WndOwnerDrawFrame::on_mouse_down(int x, int y)
+WndOwnerDrawFrame::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   if (mOnMouseDownCallback)
     return mOnMouseDownCallback(this, x, y);

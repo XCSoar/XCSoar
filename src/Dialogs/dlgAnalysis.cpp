@@ -91,9 +91,9 @@ public:
     :CrossSectionWindow(look, airspace_look, chart_look) {}
 
 protected:
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
 };
 
 class ChartControl: public PaintWindow
@@ -105,7 +105,9 @@ class ChartControl: public PaintWindow
   const ThermalBandLook &thermal_band_look;
 
 public:
-  ChartControl(ContainerWindow &parent, int X, int Y, int Width, int Height,
+  ChartControl(ContainerWindow &parent,
+               PixelScalar x, PixelScalar y,
+               UPixelScalar Width, UPixelScalar Height,
                const WindowStyle style,
                const ChartLook &chart_look,
                const AirspaceLook &airspace_look,
@@ -114,15 +116,17 @@ public:
                const ThermalBandLook &thermal_band_look);
 
 protected:
-  virtual bool on_mouse_move(int x, int y, unsigned keys);
-  virtual bool on_mouse_down(int x, int y);
-  virtual bool on_mouse_up(int x, int y);
+  virtual bool on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys);
+  virtual bool on_mouse_down(PixelScalar x, PixelScalar y);
+  virtual bool on_mouse_up(PixelScalar x, PixelScalar y);
 
   virtual void on_paint(Canvas &canvas);
 };
 
-ChartControl::ChartControl(ContainerWindow &parent, int X, int Y,
-                           int Width, int Height, const WindowStyle style,
+ChartControl::ChartControl(ContainerWindow &parent,
+                           PixelScalar X, PixelScalar Y,
+                           UPixelScalar Width, UPixelScalar Height,
+                           const WindowStyle style,
                            const ChartLook &_chart_look,
                            const AirspaceLook &_airspace_look,
                            const AircraftLook &_aircraft_look,
@@ -413,21 +417,21 @@ OnGesture(const TCHAR* gesture)
 }
 
 bool
-ChartControl::on_mouse_down(int x, int y)
+ChartControl::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   gestures.Start(x, y, Layout::Scale(20));
   return true;
 }
 
 bool
-ChartControl::on_mouse_move(int x, int y, unsigned keys)
+ChartControl::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   gestures.Update(x, y);
   return true;
 }
 
 bool
-ChartControl::on_mouse_up(int x, int y)
+ChartControl::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   const TCHAR* gesture = gestures.Finish();
   if (gesture != NULL)
@@ -437,21 +441,21 @@ ChartControl::on_mouse_up(int x, int y)
 }
 
 bool
-CrossSectionControl::on_mouse_down(int x, int y)
+CrossSectionControl::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   gestures.Start(x, y, Layout::Scale(20));
   return true;
 }
 
 bool
-CrossSectionControl::on_mouse_move(int x, int y, unsigned keys)
+CrossSectionControl::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   gestures.Update(x, y);
   return true;
 }
 
 bool
-CrossSectionControl::on_mouse_up(int x, int y)
+CrossSectionControl::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   const TCHAR* gesture = gestures.Finish();
   if (gesture != NULL)
@@ -541,8 +545,9 @@ OnCalcClicked(gcc_unused WndButton &Sender)
 }
 
 static Window *
-OnCreateCrossSectionControl(ContainerWindow &parent, int left, int top,
-                            unsigned width, unsigned height,
+OnCreateCrossSectionControl(ContainerWindow &parent,
+                            PixelScalar left, PixelScalar top,
+                            UPixelScalar width, UPixelScalar height,
                             const WindowStyle style)
 {
   csw = new CrossSectionControl(look->cross_section, look->airspace,
@@ -555,8 +560,9 @@ OnCreateCrossSectionControl(ContainerWindow &parent, int left, int top,
 }
 
 static Window *
-OnCreateChartControl(ContainerWindow &parent, int left, int top,
-                     unsigned width, unsigned height,
+OnCreateChartControl(ContainerWindow &parent,
+                     PixelScalar left, PixelScalar top,
+                     UPixelScalar width, UPixelScalar height,
                      const WindowStyle style)
 {
   return new ChartControl(parent, left, top, width, height, style,

@@ -38,7 +38,7 @@ LogoView::LogoView()
 void
 LogoView::draw(Canvas &canvas, const PixelRect &rc)
 {
-  const unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
+  const UPixelScalar width = rc.right - rc.left, height = rc.bottom - rc.top;
 
   // Load logo
   Bitmap &bitmap_logo = (width >= 290 && height >= 170) ||
@@ -56,18 +56,18 @@ LogoView::draw(Canvas &canvas, const PixelRect &rc)
   // Determine title image size
   PixelSize title_size = bitmap_title.get_size();
 
-  int logox, logoy, titlex, titley;
+  PixelScalar logox, logoy, titlex, titley;
 
   bool hidetitle = false;
 
   // Determine logo and title positions
-  if ((unsigned)(logo_size.cx + title_size.cy + title_size.cx) <= width) {
+  if ((UPixelScalar)(logo_size.cx + title_size.cy + title_size.cx) <= width) {
     // Landscape
     logox = (width - (logo_size.cx + title_size.cy + title_size.cx)) / 2;
     logoy = (height - logo_size.cy) / 2;
     titlex = logox + logo_size.cx + title_size.cy;
     titley = (height - title_size.cy) / 2;
-  } else if ((unsigned)(logo_size.cy + title_size.cy * 2) <= height) {
+  } else if ((UPixelScalar)(logo_size.cy + title_size.cy * 2) <= height) {
     // Portrait
     logox = (width - logo_size.cx) / 2;
     logoy = (height - (logo_size.cy + title_size.cy * 2)) / 2;

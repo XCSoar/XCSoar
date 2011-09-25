@@ -68,10 +68,9 @@ int
 MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 {
   WndFrame *wText = NULL;
-  int X, Y, Width, Height;
   WndButton *wButtons[10];
   int ButtonCount = 0;
-  int i, x, d, w, h, res;
+  int i, res;
 
   assert(lpText != NULL);
 
@@ -81,13 +80,13 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
 
   const PixelRect rc = XCSoarInterface::main_window.get_client_rect();
 
-  Width = Layout::Scale(200);
-  Height = Layout::Scale(160);
+  UPixelScalar Width = Layout::Scale(200);
+  UPixelScalar Height = Layout::Scale(160);
 
-  X = Y = 0;
+  PixelScalar X = 0, Y = 0;
 
-  w = Layout::Scale(60);
-  h = Layout::Scale(32);
+  UPixelScalar w = Layout::Scale(60);
+  UPixelScalar h = Layout::Scale(32);
 
   // Create dialog
   WindowStyle style;
@@ -107,7 +106,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   wText->SetCaption(lpText);
   wText->SetAlignCenter();
 
-  unsigned text_height = wText->GetTextHeight();
+  UPixelScalar text_height = wText->GetTextHeight();
   wText->resize(Width, text_height + Layout::Scale(2));
 
   Height = wf.GetTitleHeight() + Layout::Scale(10) + text_height + h;
@@ -115,7 +114,7 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
   Y = ((rc.bottom - rc.top) - Height) / 2;
   wf.move(X, Y, Width, Height);
 
-  int y = Layout::Scale(6) + text_height;
+  PixelScalar y = Layout::Scale(6) + text_height;
 
   // Create buttons
   WindowStyle button_style;
@@ -174,8 +173,8 @@ MessageBoxX(const TCHAR *lpText, const TCHAR *lpCaption, unsigned uType)
     ButtonCount++;
   }
 
-  d = Width / (ButtonCount);
-  x = d / 2 - w / 2;
+  UPixelScalar d = Width / (ButtonCount);
+  PixelScalar x = d / 2 - w / 2;
 
   // Move buttons to the right positions
   for (i = 0; i < ButtonCount; i++) {

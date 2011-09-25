@@ -45,7 +45,8 @@ public:
 
 public:
   void set(ContainerWindow &parent,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const ProgressBarStyle style=ProgressBarStyle());
 
   void set(ContainerWindow &parent, const PixelRect rc,

@@ -49,7 +49,8 @@ protected:
 
   public:
     void set(ContainerWindow &parent, const TCHAR *text, unsigned _index,
-             int left, int top, unsigned width, unsigned height,
+             PixelScalar left, PixelScalar top,
+             UPixelScalar width, UPixelScalar height,
              ButtonWindowStyle style=ButtonWindowStyle()) {
       index = _index;
 

@@ -48,7 +48,7 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
   team_brush_yellow.set(Color(0xFF, 0xE8, 0));
   team_brush_magenta.set(Color(0xFF, 0, 0xCB));
 
-  int width = Layout::FastScale(small ? 1 : 2);
+  UPixelScalar width = Layout::FastScale(small ? 1 : 2);
   warning_pen.set(width, warning_color);
   alarm_pen.set(width, alarm_color);
   default_pen.set(width, default_color);

@@ -164,7 +164,7 @@ TextInBox(Canvas &canvas, const TCHAR* Value, PixelScalar x, PixelScalar y,
 bool
 TextInBox(Canvas &canvas, const TCHAR *Value, PixelScalar x, PixelScalar y,
           TextInBoxMode Mode,
-          unsigned screen_width, unsigned screen_height,
+          UPixelScalar screen_width, UPixelScalar screen_height,
           LabelBlock *label_block)
 {
   PixelRect rc;

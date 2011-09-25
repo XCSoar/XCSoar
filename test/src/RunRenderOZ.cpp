@@ -154,7 +154,7 @@ public:
 protected:
   virtual void on_paint(Canvas &canvas);
 
-  virtual bool on_resize(unsigned width, unsigned height) {
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height) {
     PaintWindow::on_resize(width, height);
     projection.SetScale(fixed(width) / 21000);
     projection.SetScreenOrigin(width / 2, height / 2);
@@ -231,7 +231,8 @@ public:
 #endif /* USE_GDI */
 
   void set(const DialogLook &look,
-           int left, int top, unsigned width, unsigned height) {
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height) {
     SingleWindow::set(_T("RunRenderOZ"), _T("RunRenderOZ"),
                       left, top, width, height);
 

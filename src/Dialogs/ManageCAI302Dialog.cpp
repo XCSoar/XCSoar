@@ -99,13 +99,13 @@ ManageCAI302Dialog(SingleWindow &parent, const DialogLook &look,
 
   /* create the command buttons */
 
-  const unsigned margin = Layout::Scale(2);
-  const unsigned height = Layout::Scale(32);
+  const UPixelScalar margin = Layout::Scale(2);
+  const UPixelScalar height = Layout::Scale(32);
 
   ButtonWindowStyle button_style;
   button_style.tab_stop();
 
-  unsigned y = rc.top + margin;
+  PixelScalar y = rc.top + margin;
   WndButton *button;
 
   button = new WndButton(client_area, look, _("Start Logger"),

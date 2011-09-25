@@ -81,8 +81,8 @@ OnClose(gcc_unused WndButton &button)
 static void
 OnLogoPaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 {
-  const unsigned width = canvas.get_width();
-  unsigned x = Layout::FastScale(10), y = x;
+  const UPixelScalar width = canvas.get_width();
+  PixelScalar x = Layout::FastScale(10), y = x;
 
   canvas.clear_white();
 

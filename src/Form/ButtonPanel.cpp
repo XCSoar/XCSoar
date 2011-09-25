@@ -42,19 +42,19 @@ ButtonPanel::GetButtonRect(unsigned i) const
 {
   unsigned row = i / row_capacity;
   unsigned column = i % row_capacity;
-  unsigned margin = Layout::Scale(1);
+  UPixelScalar margin = Layout::Scale(1);
   PixelRect r;
   if (vertical) {
-    const unsigned width = Layout::Scale(80);
-    const unsigned height = Layout::Scale(30);
+    const UPixelScalar width = Layout::Scale(80);
+    const UPixelScalar height = Layout::Scale(30);
 
     r.left = rc.left + row * width;
     r.top = rc.top + column * height;
     r.right = r.left + width - margin;
     r.bottom = r.top + height - margin;
   } else {
-    const unsigned width = Layout::Scale(75);
-    const unsigned height = Layout::Scale(32);
+    const UPixelScalar width = Layout::Scale(75);
+    const UPixelScalar height = Layout::Scale(32);
 
     r.left = rc.left + column * width;
     r.top = rc.top + height * row;
@@ -80,7 +80,7 @@ ButtonPanel::Resized(const PixelRect &area, unsigned count)
 {
   rc = remaining = area;
 
-  const unsigned margin = Layout::Scale(2);
+  const UPixelScalar margin = Layout::Scale(2);
   const bool landscape = area.right - area.left > area.bottom - area.top;
   vertical = landscape;
 
@@ -88,9 +88,9 @@ ButtonPanel::Resized(const PixelRect &area, unsigned count)
     count = buttons.size();
 
   child_size = vertical ? Layout::Scale(30) : Layout::Scale(75);
-  unsigned row_height = vertical ? Layout::Scale(80) : Layout::Scale(32);
+  UPixelScalar row_height = vertical ? Layout::Scale(80) : Layout::Scale(32);
 
-  unsigned pixel_size = vertical
+  UPixelScalar pixel_size = vertical
     ? (area.bottom - area.top)
     : (area.right - area.left);
   row_capacity = pixel_size / child_size;

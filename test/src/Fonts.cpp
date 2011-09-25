@@ -60,9 +60,9 @@ InitialiseFonts()
   const TCHAR *face = _T("Tahoma");
 
 #ifndef USE_GDI
-  int FontHeight = Layout::SmallScale(is_android() ? 30 : 24);
+  UPixelScalar FontHeight = Layout::SmallScale(is_android() ? 30 : 24);
 #else
-  int FontHeight = Layout::SmallScale(35);
+  UPixelScalar FontHeight = Layout::SmallScale(35);
 #endif
 
   LOGFONT lf;

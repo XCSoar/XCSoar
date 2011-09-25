@@ -42,7 +42,7 @@ Copyright_License {
 static WndForm *dialog;
 static WndListFrame *list;
 static unsigned current;
-static unsigned font_height;
+static UPixelScalar font_height;
 
 static WndButton *reconnect_button, *flight_button, *manage_button;
 
@@ -87,7 +87,7 @@ PaintDevice(Canvas &canvas, const PixelRect rc, unsigned i)
 {
   const DeviceDescriptor &device = DeviceList[indices[i]];
 
-  const unsigned margin = Layout::Scale(1);
+  const UPixelScalar margin = Layout::Scale(1);
 
   TCHAR buffer1[256], buffer2[256];
   const DeviceConfig &config = device.GetConfig();
@@ -203,7 +203,7 @@ OnManageClicked(gcc_unused WndButton &button)
 void
 ShowDeviceList(SingleWindow &parent, const DialogLook &look)
 {
-  unsigned margin = Layout::Scale(2);
+  UPixelScalar margin = Layout::Scale(2);
 
   /* create the dialog */
 

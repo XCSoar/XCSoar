@@ -28,7 +28,8 @@ Copyright_License {
 
 void
 BaseButtonWindow::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-                      int left, int top, unsigned width, unsigned height,
+                      PixelScalar left, PixelScalar top,
+                      UPixelScalar width, UPixelScalar height,
                       const WindowStyle style)
 {
   Window::set(&parent, WC_BUTTON, text,

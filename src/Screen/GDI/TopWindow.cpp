@@ -61,7 +61,8 @@ TopWindow::find(const TCHAR *cls, const TCHAR *text)
 
 void
 TopWindow::set(const TCHAR *cls, const TCHAR *text,
-                int left, int top, unsigned width, unsigned height)
+               PixelScalar left, PixelScalar top,
+               UPixelScalar width, UPixelScalar height)
 {
   WindowStyle style;
   style.popup();

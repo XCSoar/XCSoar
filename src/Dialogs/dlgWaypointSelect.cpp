@@ -726,7 +726,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
   if (WaypointSelectInfo.empty()) {
     assert(i == 0);
 
-    const unsigned line_height = rc.bottom - rc.top;
+    const UPixelScalar line_height = rc.bottom - rc.top;
     const Font &name_font = Fonts::MapBold;
     canvas.select(name_font);
     canvas.text(rc.left + line_height + Layout::FastScale(2),
@@ -867,7 +867,7 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
   assert(wWaypointList != NULL);
   wWaypointList->SetActivateCallback(OnWaypointListEnter);
   wWaypointList->SetPaintItemCallback(OnPaintListItem);
-  unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
+  UPixelScalar line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
                          Fonts::MapLabel.get_height();
   wWaypointList->SetItemHeight(line_height);
 

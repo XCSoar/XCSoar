@@ -59,8 +59,8 @@ static unsigned target_point = 0;
 static bool IsLocked = true;
 
 static Window *
-OnCreateMap(ContainerWindow &parent, int left, int top,
-            unsigned width, unsigned height,
+OnCreateMap(ContainerWindow &parent, PixelScalar left, PixelScalar top,
+            UPixelScalar width, UPixelScalar height,
             const WindowStyle style)
 {
   const Look &look = *CommonInterface::main_window.look;

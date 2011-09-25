@@ -41,7 +41,8 @@ enum {
 };
 
 static inline void
-SetRect(PixelRect *rc, int left, int top, int right, int bottom)
+SetRect(PixelRect *rc, PixelScalar left, PixelScalar top,
+        PixelScalar right, PixelScalar bottom)
 {
   rc->left = left;
   rc->top = top;
@@ -65,7 +66,7 @@ CopyRect(PixelRect *dest, const PixelRect *src)
 }
 
 static inline void
-InflateRect(PixelRect *rc, int dx, int dy)
+InflateRect(PixelRect *rc, PixelScalar dx, PixelScalar dy)
 {
   rc->left -= dx;
   rc->top -= dy;
@@ -74,7 +75,7 @@ InflateRect(PixelRect *rc, int dx, int dy)
 }
 
 static inline void
-OffsetRect(PixelRect *rc, int dx, int dy)
+OffsetRect(PixelRect *rc, PixelScalar dx, PixelScalar dy)
 {
   rc->left += dx;
   rc->top += dy;

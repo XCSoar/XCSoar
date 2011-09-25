@@ -143,16 +143,16 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   wir.Draw(tp.GetWaypoint(), pt, WaypointIconRenderer::Unreachable, true);
 
   // Y-Coordinate of the second row
-  unsigned top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
+  PixelScalar top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
 
   // Use small font for details
   canvas.select(small_font);
 
-  unsigned leg_info_width = 0;
+  UPixelScalar leg_info_width = 0;
   if (show_leg_info) {
     // Draw leg distance
     Units::FormatUserDistance(leg.distance, buffer, 120, true);
-    unsigned width = leg_info_width = canvas.text_width(buffer);
+    UPixelScalar width = leg_info_width = canvas.text_width(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width,
                 rc.top + Layout::FastScale(2) +
                 (name_font.get_height() - small_font.get_height()) / 2, buffer);
@@ -169,7 +169,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   }
 
   // Draw details line
-  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   OrderedTaskPointRadiusLabel(*tp.get_oz(), buffer);
   if (!string_is_empty(buffer))
     canvas.text_clipped(left, top2, rc.right - leg_info_width - left, buffer);
@@ -371,8 +371,8 @@ pnlTaskEdit::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
   assert(wSummary);
   TaskSummaryRect = wSummary->get_position();
 
-  unsigned line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
-                         Fonts::MapLabel.get_height();
+  UPixelScalar line_height = Fonts::MapBold.get_height() + Layout::Scale(6) +
+    Fonts::MapLabel.get_height();
   wTaskPoints->SetItemHeight(line_height);
   wTaskPoints->SetActivateCallback(OnTaskListEnter);
   wTaskPoints->SetPaintItemCallback(OnTaskPaintListItem);

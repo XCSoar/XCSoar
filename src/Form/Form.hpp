@@ -256,7 +256,7 @@ public:
   void SetCaption(const TCHAR *Value);
 
   /** from class Window */
-  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
   virtual bool on_destroy();
   virtual bool on_timer(timer_t id);
 

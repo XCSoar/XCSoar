@@ -85,8 +85,9 @@ struct ControlPosition: public RasterPoint
  * Callback type for the "Custom" element, attribute "OnCreate".
  */
 typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
-                                          int left, int top,
-                                          unsigned width, unsigned height,
+                                          PixelScalar left, PixelScalar top,
+                                          UPixelScalar width,
+                                          UPixelScalar height,
                                           const WindowStyle style);
 
 static Window *
@@ -781,7 +782,7 @@ LoadChild(WndForm &form, ContainerWindow &parent,
   // ListBoxControl (WndListFrame)
   } else if (_tcscmp(node.getName(), _T("List")) == 0){
     // Determine ItemHeight of the list items
-    unsigned item_height =
+    UPixelScalar item_height =
       Layout::Scale(StringToIntDflt(node.getAttribute(_T("ItemHeight")), 18));
 
     // Create the ListBoxControl

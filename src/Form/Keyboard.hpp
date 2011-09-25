@@ -59,8 +59,8 @@ public:
    * @param height Height of the Control
    */
   KeyboardControl(ContainerWindow &parent, const DialogLook &look,
-                  int x, int y,
-                  unsigned width, unsigned height,
+                  PixelScalar x, PixelScalar y,
+                  UPixelScalar width, UPixelScalar height,
                   OnCharacterCallback_t function,
                   const WindowStyle _style = WindowStyle());
 
@@ -76,19 +76,20 @@ public:
 protected:
   virtual void on_paint(Canvas &canvas);
   virtual bool on_command(unsigned id, unsigned code);
-  virtual bool on_resize(unsigned width, unsigned height);
+  virtual bool on_resize(UPixelScalar width, UPixelScalar height);
 
 private:
-  unsigned button_width;
-  unsigned button_height;
+  UPixelScalar button_width;
+  UPixelScalar button_height;
 
   ButtonWindow *get_button(TCHAR ch);
 
-  void move_button(TCHAR ch, int left, int top);
-  void resize_button(TCHAR ch, unsigned int width, unsigned int height);
+  void move_button(TCHAR ch, PixelScalar left, PixelScalar top);
+  void resize_button(TCHAR ch, UPixelScalar width, UPixelScalar height);
   void resize_buttons();
   void set_buttons_size();
-  void move_buttons_to_row(const TCHAR* buttons, int row, int offset_left = 0);
+  void move_buttons_to_row(const TCHAR* buttons, int row,
+                           PixelScalar offset_left = 0);
   void move_buttons();
 
   bool is_landscape();

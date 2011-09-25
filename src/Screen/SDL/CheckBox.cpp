@@ -30,7 +30,8 @@ Copyright_License {
 
 void
 CheckBox::set(ContainerWindow &parent, const TCHAR *text, unsigned id,
-              int left, int top, UPixelScalar width, UPixelScalar height,
+              PixelScalar left, PixelScalar top,
+              UPixelScalar width, UPixelScalar height,
               const CheckBoxStyle style)
 {
   reset();
@@ -80,7 +81,7 @@ CheckBox::on_key_down(unsigned key_code)
 }
 
 bool
-CheckBox::on_mouse_move(int x, int y, unsigned keys)
+CheckBox::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
 {
   if (dragging) {
     set_pressed(x >= 0 && y >= 0 &&
@@ -91,7 +92,7 @@ CheckBox::on_mouse_move(int x, int y, unsigned keys)
 }
 
 bool
-CheckBox::on_mouse_down(int x, int y)
+CheckBox::on_mouse_down(PixelScalar x, PixelScalar y)
 {
   if (is_tab_stop())
     set_focus();
@@ -103,7 +104,7 @@ CheckBox::on_mouse_down(int x, int y)
 }
 
 bool
-CheckBox::on_mouse_up(int x, int y)
+CheckBox::on_mouse_up(PixelScalar x, PixelScalar y)
 {
   if (!dragging)
     return true;

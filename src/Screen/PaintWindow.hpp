@@ -51,26 +51,30 @@ public:
   using Window::set;
 
   void set(ContainerWindow &parent,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const WindowStyle style=WindowStyle()) {
     set(&parent, left, top, width, height, style);
   }
 #else /* USE_GDI */
   void set(ContainerWindow *parent, const TCHAR *cls,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const WindowStyle style=WindowStyle()) {
     Window::set(parent, cls, NULL,
                 left, top, width, height, style);
   }
 
   void set(ContainerWindow &parent, const TCHAR *cls,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const WindowStyle style=WindowStyle()) {
     set(&parent, cls, left, top, width, height, style);
   }
 
   void set(ContainerWindow &parent,
-           int left, int top, unsigned width, unsigned height,
+           PixelScalar left, PixelScalar top,
+           UPixelScalar width, UPixelScalar height,
            const WindowStyle style=WindowStyle()) {
     set(parent, _T("PaintWindow"), left, top, width, height, style);
   }

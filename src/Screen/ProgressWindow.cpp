@@ -39,7 +39,7 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
   style.hide();
   set(parent, rc, style);
 
-  unsigned width = rc.right - rc.left, height = rc.bottom - rc.top;
+  UPixelScalar width = rc.right - rc.left, height = rc.bottom - rc.top;
 
   // Load progress bar background
   bitmap_progress_border.load(IDB_PROGRESSBORDER);
@@ -54,8 +54,8 @@ ProgressWindow::ProgressWindow(ContainerWindow &parent)
 #endif
 
   // Make progress bar height proportional to window height
-  unsigned progress_height = height / 20;
-  unsigned progress_horizontal_border = progress_height / 2;
+  UPixelScalar progress_height = height / 20;
+  UPixelScalar progress_horizontal_border = progress_height / 2;
   progress_border_height = progress_height * 2;
 
   // Initialize message text field
@@ -127,13 +127,13 @@ ProgressWindow::step()
 }
 
 bool
-ProgressWindow::on_resize(unsigned width, unsigned height)
+ProgressWindow::on_resize(UPixelScalar width, UPixelScalar height)
 {
   ContainerWindow::on_resize(width, height);
 
   // Make progress bar height proportional to window height
-  unsigned progress_height = height / 20;
-  unsigned progress_horizontal_border = progress_height / 2;
+  UPixelScalar progress_height = height / 20;
+  UPixelScalar progress_horizontal_border = progress_height / 2;
   progress_border_height = progress_height * 2;
 
   if (message.defined())
@@ -157,8 +157,8 @@ ProgressWindow::on_paint(Canvas &canvas)
   canvas.clear(background_color);
 
   // Determine window size
-  int window_width = canvas.get_width();
-  int window_height = canvas.get_height();
+  UPixelScalar window_width = canvas.get_width();
+  UPixelScalar window_height = canvas.get_height();
 
   PixelRect logo_rect;
   logo_rect.left = 0;
