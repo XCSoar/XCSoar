@@ -165,6 +165,12 @@ public:
    * The button was clicked, and its action shall be triggered.
    */
   virtual bool on_clicked();
+
+protected:
+  /**
+   * Synthesise a click.
+   */
+  void Click();
 };
 
 /**

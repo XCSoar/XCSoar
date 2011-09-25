@@ -47,6 +47,17 @@ BaseButtonWindow::on_clicked()
 }
 
 void
+BaseButtonWindow::Click()
+{
+  if (on_clicked())
+    return;
+
+  unsigned id = GetID();
+  if (id != 0)
+    ::SendMessage(::GetParent(hWnd), WM_COMMAND, id, 0);
+}
+
+void
 ButtonWindow::set_text(const TCHAR *_text) {
   assert_none_locked();
   assert_thread();
