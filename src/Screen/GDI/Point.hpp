@@ -31,4 +31,6 @@ Copyright_License {
 #define PixelSize tagSIZE
 #define PixelRect tagRECT
 
+typedef LONG PixelScalar;
+
 #endif
