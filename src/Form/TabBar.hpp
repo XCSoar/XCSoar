@@ -138,6 +138,8 @@ public:
   const TCHAR* GetButtonCaption(unsigned i);
   const Bitmap* GetButtonIcon(unsigned i);
   bool GetButtonIsButtonOnly(unsigned i);
+  const StaticArray<OneTabButton *, 32>
+      &GetTabButtons() { return buttons; }
   unsigned GetTabLineHeight() {return TabLineHeight; }
   void SetClientOverlapTabs(bool value) {clientOverlapTabs = value; }
 
