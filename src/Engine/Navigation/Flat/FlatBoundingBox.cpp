@@ -25,6 +25,8 @@
 #include "Math/fixed.hpp"
 #include "Math/FastMath.h"
 
+#include <algorithm>
+
 unsigned
 FlatBoundingBox::distance(const FlatBoundingBox &f) const
 {
@@ -37,14 +39,6 @@ FlatBoundingBox::distance(const FlatBoundingBox &f) const
                        bb_ll.Latitude - f.bb_ur.Latitude));
 
   return lhypot(dx, dy);
-}
-
-static void
-swap(fixed &t1, fixed &t2)
-{
-  fixed t3 = t1;
-  t1 = t2;
-  t2 = t3;
 }
 
 bool
@@ -65,7 +59,7 @@ FlatBoundingBox::intersects(const FlatRay& ray) const
     fixed t2 = (bb_ur.Longitude - ray.point.Longitude) * ray.fx;
     // make t1 be intersection with near plane, t2 with far plane
     if (t1 > t2)
-      swap(t1, t2);
+      std::swap(t1, t2);
 
     tmin = max(tmin, t1);
     tmax = min(tmax, t2);
@@ -87,7 +81,7 @@ FlatBoundingBox::intersects(const FlatRay& ray) const
     fixed t2 = (bb_ur.Latitude - ray.point.Latitude) * ray.fy;
     // make t1 be intersection with near plane, t2 with far plane
     if (t1 > t2)
-      swap(t1, t2);
+      std::swap(t1, t2);
 
     tmin = max(tmin, t1);
     tmax = min(tmax, t2);
