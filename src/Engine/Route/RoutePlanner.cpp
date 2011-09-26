@@ -219,7 +219,7 @@ RoutePlanner::FindSolution(const RoutePoint &final, Route &this_route) const
         const fixed f = (fixed)(p_last.altitude - p.altitude) / vh;
         const GeoPoint gp(task_projection.unproject(p));
         const GeoPoint gp_last(task_projection.unproject(p_last));
-        const AGeoPoint gp_int(gp.interpolate(gp_last, f), p_last.altitude);
+        const AGeoPoint gp_int(gp.Interpolate(gp_last, f), p_last.altitude);
         this_route.insert(this_route.begin(), gp_int);
         // @todo: assert check_clearance?
       }

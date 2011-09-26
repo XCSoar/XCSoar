@@ -140,8 +140,8 @@ CalculateAzimuth(const GeoPoint &Location, const BrokenTime &time,
   Angle t = Angle::degrees(fixed(15)) * T;
 
   return Angle::radians(-atan2(dec.cos() * t.sin(),
-                               Location.Latitude.cos() * dec.sin() -
-                               Location.Latitude.sin() * dec.cos() * t.cos()));
+                               Location.latitude.cos() * dec.sin() -
+                               Location.latitude.sin() * dec.cos() * t.cos()));
 }
 
 /**
@@ -182,8 +182,8 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
 
   fixed equation = fixed(1440) * (fixed_one - LL / fixed_two_pi);
 
-  Angle HourAngle = GetHourAngle(Location.Latitude, Delta);
-  Angle HourAngleTwilight = GetHourAngleTwilight(Location.Latitude, Delta);
+  Angle HourAngle = GetHourAngle(Location.latitude, Delta);
+  Angle HourAngleTwilight = GetHourAngleTwilight(Location.latitude, Delta);
 
   Azimuth = CalculateAzimuth(Location, date_time, TimeZone, Delta);
 
@@ -198,7 +198,7 @@ SunEphemeris::CalcSunTimes(const GeoPoint &Location,
     DayLength = fixed_zero;
 
   TimeOfSunRise = fixed(12) - HourAngle.value_hours() + TimeZone
-    - Location.Longitude.value_degrees() / 15 + equation / 60;
+    - Location.longitude.value_degrees() / 15 + equation / 60;
 
   if (TimeOfSunRise > fixed(24))
     TimeOfSunRise -= fixed(24);

@@ -167,8 +167,8 @@ Deserialiser::deserialise_oz(const Waypoint& wp, const bool is_turnpoint)
 void 
 Deserialiser::deserialise(GeoPoint& data)
 {
-  m_node.get_attribute(_T("longitude"), data.Longitude);
-  m_node.get_attribute(_T("latitude"), data.Latitude);
+  m_node.get_attribute(_T("longitude"), data.longitude);
+  m_node.get_attribute(_T("latitude"), data.latitude);
 }
 
 Waypoint*
@@ -194,7 +194,7 @@ Deserialiser::deserialise_waypoint()
 
     // If waypoint by name found and closer than 10m to the original
     if (from_database != NULL &&
-        from_database->location.distance(loc) <= fixed_ten)
+        from_database->location.Distance(loc) <= fixed_ten)
       // Use this waypoint for the task
       return new Waypoint(*from_database);
 
@@ -203,7 +203,7 @@ Deserialiser::deserialise_waypoint()
 
     // If closest waypoint found and closer than 10m to the original
     if (from_database != NULL &&
-        from_database->location.distance(loc) <= fixed_ten)
+        from_database->location.Distance(loc) <= fixed_ten)
       // Use this waypoint for the task
       return new Waypoint(*from_database);
   }

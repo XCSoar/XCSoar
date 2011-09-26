@@ -45,8 +45,8 @@ PrintHelper::aatpoint_print(std::ostream& f,
   switch(item) {
   case 0:
     orderedtaskpoint_print(f, tp, state, item);
-    f << "#   Target " << tp.m_target_location.Longitude << "," 
-      << tp.m_target_location.Latitude << "\n";
+    f << "#   Target " << tp.m_target_location.longitude << ","
+      << tp.m_target_location.latitude << "\n";
     break;
 
   case 1:
@@ -58,26 +58,26 @@ PrintHelper::aatpoint_print(std::ostream& f,
       // prev max or target changes
 
       AATIsolineSegment seg(tp, projection);
-      fixed tdist = tp.get_previous()->GetLocationRemaining().distance(
+      fixed tdist = tp.get_previous()->GetLocationRemaining().Distance(
         tp.GetLocationMin());
-      fixed rdist = tp.get_previous()->GetLocationRemaining().distance(
+      fixed rdist = tp.get_previous()->GetLocationRemaining().Distance(
         tp.get_location_target());
 
       bool filter_backtrack = true;
       if (seg.IsValid()) {
         for (double t = 0.0; t<=1.0; t+= 1.0/20) {
           GeoPoint ga = seg.Parametric(fixed(t));
-          fixed dthis = tp.get_previous()->GetLocationRemaining().distance(ga);
+          fixed dthis = tp.get_previous()->GetLocationRemaining().Distance(ga);
           if (!filter_backtrack 
               || (dthis>=tdist)
               || (dthis>=rdist)) {
             /// @todo unless double dist is better than current
-            f << ga.Longitude << " " << ga.Latitude << "\n";
+            f << ga.longitude << " " << ga.latitude << "\n";
           }
         }
       } else {
         GeoPoint ga = seg.Parametric(fixed_zero);
-        f << ga.Longitude << " " << ga.Latitude << "\n";
+        f << ga.longitude << " " << ga.latitude << "\n";
       }
       f << "\n";
 
@@ -115,10 +115,10 @@ PrintHelper::orderedtaskpoint_print_boundary(std::ostream& f,
   f << "#   Boundary points\n";
   for (double t=0; t<= 1.0; t+= 0.05) {
     GeoPoint loc = tp.GetBoundaryParametric(fixed(t));
-    f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
+    f << "     " << loc.longitude << " " << loc.latitude << "\n";
   }
   GeoPoint loc = tp.GetBoundaryParametric(fixed_zero);
-  f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
+  f << "     " << loc.longitude << " " << loc.latitude << "\n";
   f << "\n";
 }
 
@@ -141,7 +141,7 @@ PrintHelper::sampledtaskpoint_print_samples(std::ostream& f,
   if (tp.HasEntered()) {
     for (unsigned i=0; i<n; i++) {
       const GeoPoint loc = tp.GetSearchPoints()[i].get_location();
-      f << "     " << loc.Longitude << " " << loc.Latitude << "\n";
+      f << "     " << loc.longitude << " " << loc.latitude << "\n";
     }
   }
   f << "\n";
@@ -153,8 +153,8 @@ PrintHelper::taskpoint_print(std::ostream& f, const TaskPoint& tp,
                              const AircraftState &state) 
 {
   f << "# Task point \n";
-  f << "#   Location " << tp.GetLocation().Longitude << "," <<
-    tp.GetLocation().Latitude << "\n";
+  f << "#   Location " << tp.GetLocation().longitude << "," <<
+    tp.GetLocation().latitude << "\n";
 }
 
 
@@ -254,24 +254,24 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AircraftState &state)
   f2 << "#### Max task\n";
   for (unsigned i=0; i<task.task_points.size(); i++) {
     OrderedTaskPoint *tp = task.task_points[i];
-    f2 <<  tp->GetLocationMax().Longitude << " " 
-       <<  tp->GetLocationMax().Latitude << "\n";
+    f2 <<  tp->GetLocationMax().longitude << " "
+       <<  tp->GetLocationMax().latitude << "\n";
   }
 
   std::ofstream f3("results/res-min.txt");
   f3 << "#### Min task\n";
   for (unsigned i=0; i<task.task_points.size(); i++) {
     OrderedTaskPoint *tp = task.task_points[i];
-    f3 <<  tp->GetLocationMin().Longitude << " " 
-       <<  tp->GetLocationMin().Latitude << "\n";
+    f3 <<  tp->GetLocationMin().longitude << " "
+       <<  tp->GetLocationMin().latitude << "\n";
   }
 
   std::ofstream f4("results/res-rem.txt");
   f4 << "#### Remaining task\n";
   for (unsigned i=0; i<task.task_points.size(); i++) {
     OrderedTaskPoint *tp = task.task_points[i];
-    f4 <<  tp->GetLocationRemaining().Longitude << " " 
-       <<  tp->GetLocationRemaining().Latitude << "\n";
+    f4 <<  tp->GetLocationRemaining().longitude << " "
+       <<  tp->GetLocationRemaining().latitude << "\n";
   }
 }
 
@@ -286,9 +286,9 @@ void PrintHelper::aborttask_print(AbortTask& task, const AircraftState &state)
     GeoPoint l = task.task_points[i].GetLocation();
     f1 << "## point " << i << " ###################\n";
     if (i==task.activeTaskPoint) {
-      f1 << state.location.Longitude << " " << state.location.Latitude << "\n";
+      f1 << state.location.longitude << " " << state.location.latitude << "\n";
     }
-    f1 << l.Longitude << " " << l.Latitude << "\n";
+    f1 << l.longitude << " " << l.latitude << "\n";
     f1 << "\n";
   }
 }

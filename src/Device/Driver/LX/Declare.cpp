@@ -120,9 +120,9 @@ LoadTask(LX::Declaration &lxDevice_Declaration, const Declaration &declaration)
     } else if (i <= declaration.Size()) {
       lxDevice_Declaration.tptypes[i] = 1;
       lxDevice_Declaration.Longitudes[i] =
-        AngleToLX(declaration.GetLocation(i - 1).Longitude);
+        AngleToLX(declaration.GetLocation(i - 1).longitude);
       lxDevice_Declaration.Latitudes[i] =
-        AngleToLX(declaration.GetLocation(i - 1).Latitude);
+        AngleToLX(declaration.GetLocation(i - 1).latitude);
       copy_space_padded(lxDevice_Declaration.WaypointNames[i],
                         declaration.GetName(i - 1),
                         sizeof(lxDevice_Declaration.WaypointNames[i]));

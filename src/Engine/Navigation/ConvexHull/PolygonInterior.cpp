@@ -40,8 +40,8 @@
 inline static int
 isLeft( const GeoPoint &P0, const GeoPoint &P1, const GeoPoint &P2 )
 {
-    return ( (P1.Longitude - P0.Longitude) * (P2.Latitude - P0.Latitude)
-             - (P2.Longitude - P0.Longitude) * (P1.Latitude - P0.Latitude) ).sign();
+    return ( (P1.longitude - P0.longitude) * (P2.latitude - P0.latitude)
+             - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude) ).sign();
 }
 
 inline static int
@@ -77,13 +77,13 @@ PolygonInterior( const GeoPoint &P, const std::vector<SearchPoint>& V)
 
   // loop through all edges of the polygon
   for (int i=0; i<n; ++i) {   // edge from V[i] to V[i+1]
-    if (V[i].get_location().Latitude <= P.Latitude) {         // start y <= P.Latitude
-      if (V[i+1].get_location().Latitude > P.Latitude)      // an upward crossing
+    if (V[i].get_location().latitude <= P.latitude) {         // start y <= P.Latitude
+      if (V[i+1].get_location().latitude > P.latitude)      // an upward crossing
         if (isLeft( V[i].get_location(), V[i+1].get_location(), P)>0)  // P left of edge
           ++wn;            // have a valid up intersect
     }
     else {                       // start y > P.Latitude (no test needed)
-      if (V[i+1].get_location().Latitude <= P.Latitude)     // a downward crossing
+      if (V[i+1].get_location().latitude <= P.latitude)     // a downward crossing
         if (isLeft( V[i].get_location(), V[i+1].get_location(), P)<0)  // P right of edge
           --wn;            // have a valid down intersect
     }

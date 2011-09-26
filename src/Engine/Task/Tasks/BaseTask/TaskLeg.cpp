@@ -98,7 +98,7 @@ TaskLeg::leg_vector_travelled(const GeoPoint &ref) const
     // this leg partially included
     if (!origin())
       return GeoVector(fixed_zero, 
-                       ref.bearing(destination.GetLocationRemaining()));
+                       ref.Bearing(destination.GetLocationRemaining()));
 
     if (destination.HasEntered())
       return memo_travelled.calc(origin()->GetLocationTravelled(), 
@@ -130,7 +130,7 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
     // this leg totally included
     return 
       max(fixed_zero,
-               origin()->GetLocationScored().distance(
+               origin()->GetLocationScored().Distance(
                  destination.GetLocationScored())
                -origin()->ScoreAdjustment()-destination.ScoreAdjustment());
     break;
@@ -138,13 +138,13 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
     // this leg partially included
     if (destination.HasEntered()) {
       max(fixed_zero,
-               origin()->GetLocationScored().distance( 
+               origin()->GetLocationScored().Distance( 
                  destination.GetLocationScored())
                -origin()->ScoreAdjustment()-destination.ScoreAdjustment());
     } else {
       return 
         max(fixed_zero,
-                 ref.projected_distance(origin()->GetLocationScored(), 
+                 ref.ProjectedDistance(origin()->GetLocationScored(), 
                                         destination.GetLocationScored())
                  -origin()->ScoreAdjustment());
     }

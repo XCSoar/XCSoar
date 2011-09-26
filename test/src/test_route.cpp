@@ -54,10 +54,10 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
       for (unsigned j = 0; j < ny; ++j) {
         fixed fx = (fixed)i / (nx - 1) * fixed(2.0) - fixed_one;
         fixed fy = (fixed)j / (ny - 1) * fixed(2.0) - fixed_one;
-        GeoPoint x(origin.Longitude + Angle::degrees(fixed(0.2) + fixed(0.7) * fx),
-                   origin.Latitude + Angle::degrees(fixed(0.9) * fy));
+        GeoPoint x(origin.longitude + Angle::degrees(fixed(0.2) + fixed(0.7) * fx),
+                   origin.latitude + Angle::degrees(fixed(0.9) * fy));
         short h = map.GetInterpolatedHeight(x);
-        fout << x.Longitude.value_degrees() << " " << x.Latitude.value_degrees()
+        fout << x.longitude.value_degrees() << " " << x.latitude.value_degrees()
              << " " << h << "\n";
       }
 
@@ -136,7 +136,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     bool sol = false;
     for (int i = 0; i < NUM_SOL; i++) {
-      loc_end.Latitude += Angle::degrees(fixed(0.1));
+      loc_end.latitude += Angle::degrees(fixed(0.1));
       loc_end.altitude = map.GetHeight(loc_end) + 100;
       route.synchronise(*airspaces, loc_start, loc_end);
       if (route.Solve(loc_start, loc_end, config)) {

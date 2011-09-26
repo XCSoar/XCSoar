@@ -32,8 +32,8 @@ TestGeoScreenCouple(const Projection prj, const GeoPoint geo,
   ok1(tmp_pt.y == y);
 
   GeoPoint tmp_geo = prj.ScreenToGeo(x, y);
-  ok1(equals(tmp_geo.Latitude, geo.Latitude));
-  ok1(equals(tmp_geo.Longitude, geo.Longitude));
+  ok1(equals(tmp_geo.latitude, geo.latitude));
+  ok1(equals(tmp_geo.longitude, geo.longitude));
 }
 
 static void

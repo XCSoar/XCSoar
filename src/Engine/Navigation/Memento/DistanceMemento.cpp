@@ -28,7 +28,7 @@ DistanceMemento::Distance(const GeoPoint& _origin,
   if (negative(value) || (_origin != origin)||(_destination != destination)) {
     origin = _origin;
     destination = _destination;
-    value = origin.distance(destination);
+    value = origin.Distance(destination);
   };
   return value;
 }

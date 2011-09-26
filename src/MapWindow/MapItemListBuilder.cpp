@@ -148,7 +148,7 @@ void
 MapItemListBuilder::AddSelfIfNear(const GeoPoint &self, const Angle &bearing,
                                   fixed range)
 {
-  if (location.distance(self) < range)
+  if (location.Distance(self) < range)
     list.checked_append(new SelfMapItem(self, bearing));
 }
 

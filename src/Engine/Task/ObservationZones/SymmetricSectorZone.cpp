@@ -30,13 +30,13 @@ SymmetricSectorZone::set_legs(const GeoPoint *previous, const GeoPoint *current,
   Angle biSector;
   if (!next && previous)
     // final
-    biSector = previous->bearing(*current);
+    biSector = previous->Bearing(*current);
   else if (next && previous)
     // intermediate
-    biSector = previous->bearing(*current).BiSector(current->bearing(*next));
+    biSector = previous->Bearing(*current).BiSector(current->Bearing(*next));
   else if (next && !previous)
     // start
-    biSector = next->bearing(*current);
+    biSector = next->Bearing(*current);
   else
     // single point
     biSector = Angle::zero();

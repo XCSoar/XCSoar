@@ -101,8 +101,8 @@ TestGeneric()
   ok1(nmea_info.date_time_utc.hour == 8);
   ok1(nmea_info.date_time_utc.minute == 23);
   ok1(nmea_info.date_time_utc.second == 11);
-  ok1(equals(nmea_info.location.Longitude, 7.693));
-  ok1(equals(nmea_info.location.Latitude, 51.059));
+  ok1(equals(nmea_info.location.longitude, 7.693));
+  ok1(equals(nmea_info.location.latitude, 51.059));
   ok1(!nmea_info.baro_altitude_available);
 
   /* baro altitude (proprietary Garmin sentence) */

@@ -54,12 +54,12 @@ protected:
 
   gcc_pure
   GeoPoint import_point(GeoPoint pt) const {
-    return GeoPoint(import_longitude(pt.Longitude), pt.Latitude);
+    return GeoPoint(import_longitude(pt.longitude), pt.latitude);
   }
 
   gcc_pure
   GeoPoint export_point(GeoPoint pt) const {
-    return GeoPoint(pt.Longitude + west, pt.Latitude);
+    return GeoPoint(pt.longitude + west, pt.latitude);
   }
 
   /**

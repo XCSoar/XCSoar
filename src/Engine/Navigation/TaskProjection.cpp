@@ -55,10 +55,10 @@ void TaskProjection::scan_location(const GeoPoint &ref)
 {
   assert(initialised);
 
-  location_min.Longitude = min(ref.Longitude, location_min.Longitude);
-  location_max.Longitude = max(ref.Longitude, location_max.Longitude);
-  location_min.Latitude = min(ref.Latitude, location_min.Latitude);
-  location_max.Latitude = max(ref.Latitude, location_max.Latitude);
+  location_min.longitude = min(ref.longitude, location_min.longitude);
+  location_max.longitude = max(ref.longitude, location_max.longitude);
+  location_min.latitude = min(ref.latitude, location_min.latitude);
+  location_max.latitude = max(ref.latitude, location_max.latitude);
 }
 
 bool
@@ -68,13 +68,13 @@ TaskProjection::update_fast()
 
   GeoPoint old_loc = location_mid;
 
-  location_mid.Longitude =
-    location_max.Longitude.Fraction(location_min.Longitude, fixed_half);
-  location_mid.Latitude =
-    location_max.Latitude.Fraction(location_min.Latitude, fixed_half);
-  cos_midloc = location_mid.Latitude.fastcosine() * fixed_scale;
+  location_mid.longitude =
+    location_max.longitude.Fraction(location_min.longitude, fixed_half);
+  location_mid.latitude =
+    location_max.latitude.Fraction(location_min.latitude, fixed_half);
+  cos_midloc = location_mid.latitude.fastcosine() * fixed_scale;
   r_cos_midloc = fixed_one/cos_midloc;
-  approx_scale = unproject(FlatGeoPoint(0,-1)).distance(unproject(FlatGeoPoint(0,1))) / 2;
+  approx_scale = unproject(FlatGeoPoint(0,-1)).Distance(unproject(FlatGeoPoint(0,1))) / 2;
 
   return !(old_loc == location_mid);
 }
@@ -84,9 +84,9 @@ TaskProjection::fproject(const GeoPoint& tp) const
 {
   assert(initialised);
 
-  return FlatPoint((tp.Longitude - location_mid.Longitude)
+  return FlatPoint((tp.longitude - location_mid.longitude)
                    .as_delta().value_native() * cos_midloc,
-                   (tp.Latitude - location_mid.Latitude)
+                   (tp.latitude - location_mid.latitude)
                    .as_delta().value_native() * fixed_scale);
 }
 
@@ -96,8 +96,8 @@ TaskProjection::funproject(const FlatPoint& fp) const
   assert(initialised);
 
   GeoPoint tp;
-  tp.Longitude = (Angle::native(fp.x*r_cos_midloc)+location_mid.Longitude).as_delta();
-  tp.Latitude = (Angle::native(fp.y*inv_scale)+location_mid.Latitude).as_delta();
+  tp.longitude = (Angle::native(fp.x*r_cos_midloc)+location_mid.longitude).as_delta();
+  tp.latitude = (Angle::native(fp.y*inv_scale)+location_mid.latitude).as_delta();
   return tp;
 }
 
@@ -119,8 +119,8 @@ TaskProjection::unproject(const FlatGeoPoint& fp) const
   assert(initialised);
 
   GeoPoint tp;
-  tp.Longitude = Angle::native(fixed(fp.Longitude)*r_cos_midloc) + location_mid.Longitude;
-  tp.Latitude = Angle::native(fixed(fp.Latitude)*inv_scale) + location_mid.Latitude;
+  tp.longitude = Angle::native(fixed(fp.Longitude)*r_cos_midloc) + location_mid.longitude;
+  tp.latitude = Angle::native(fixed(fp.Latitude)*inv_scale) + location_mid.latitude;
   return tp;
 }
 
@@ -148,8 +148,8 @@ TaskProjection::ApproxRadius() const
 {
   assert(initialised);
 
-  return max(location_mid.distance(location_max),
-             location_mid.distance(location_min));
+  return max(location_mid.Distance(location_max),
+             location_mid.Distance(location_min));
 }
 
 GeoBounds

@@ -145,14 +145,14 @@ AATPoint::SetRange(const fixed p, const bool force_if_current)
   switch (getActiveState()) {
   case CURRENT_ACTIVE:
     if (!HasEntered() || force_if_current) {
-      m_target_location = GetLocationMin().interpolate(GetLocationMax(),p);
+      m_target_location = GetLocationMin().Interpolate(GetLocationMax(),p);
       return true;
     }
     return false;
 
   case AFTER_ACTIVE:
     if (getActiveState() == AFTER_ACTIVE) {
-      m_target_location = GetLocationMin().interpolate(GetLocationMax(),p);
+      m_target_location = GetLocationMin().Interpolate(GetLocationMax(),p);
       return true;
     }
     return false;
@@ -207,11 +207,11 @@ AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
 
   const GeoPoint fprev = get_previous()->GetLocationRemaining();
   const GeoPoint floc = GetLocation();
-  const Angle radialraw = (floc.bearing(get_location_target()) -
-      fprev.bearing(floc)).as_bearing();
+  const Angle radialraw = (floc.Bearing(get_location_target()) -
+      fprev.Bearing(floc)).as_bearing();
 
-  const fixed d = floc.distance(get_location_target());
-  const fixed radius = floc.distance(GetLocationMin());
+  const fixed d = floc.Distance(get_location_target());
+  const fixed radius = floc.Distance(GetLocationMin());
   const fixed rangeraw = min(fixed_one, d / radius);
 
   radial = radialraw.as_delta().value_degrees();

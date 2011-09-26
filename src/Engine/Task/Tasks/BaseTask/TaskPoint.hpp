@@ -203,7 +203,7 @@ public:
    * distance from this to the reference
    */
   fixed Distance(const GeoPoint &ref) const {
-    return location.distance(ref);
+    return location.Distance(ref);
   }
 
   /**

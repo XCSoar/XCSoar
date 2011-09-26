@@ -88,7 +88,7 @@ RasterRenderer::ScanMap(const RasterMap &map, const WindowProjection &projection
                                               y + quantisation_pixels);
 
   // Geographical edge length of pixel in the MapWindow center in meters
-  pixel_size = fixed_sqrt_half * Gmid.distance(Gneighbor);
+  pixel_size = fixed_sqrt_half * Gmid.Distance(Gneighbor);
 
   // set resolution
 

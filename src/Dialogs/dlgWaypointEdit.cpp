@@ -171,7 +171,7 @@ SetValues()
   bool sign;
   int dd,mm,ss;
 
-  Units::LongitudeToDMS(global_wpt->location.Longitude, &dd, &mm, &ss, &sign);
+  Units::LongitudeToDMS(global_wpt->location.longitude, &dd, &mm, &ss, &sign);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLongitudeSign"));
   assert(wp != NULL);
@@ -201,7 +201,7 @@ SetValues()
     break;
   }
 
-  Units::LatitudeToDMS(global_wpt->location.Latitude, &dd, &mm, &ss, &sign);
+  Units::LatitudeToDMS(global_wpt->location.latitude, &dd, &mm, &ss, &sign);
 
   LoadFormProperty(*wf, _T("prpLatitudeD"), dd);
 
@@ -287,7 +287,7 @@ GetValues()
   if (!sign)
     num = -num;
 
-  global_wpt->location.Longitude = Angle::degrees(fixed(num));
+  global_wpt->location.longitude = Angle::degrees(fixed(num));
 
   sign = GetFormValueInteger(*wf, _T("prpLatitudeSign")) == 1;
   dd = GetFormValueInteger(*wf, _T("prpLatitudeD"));
@@ -313,7 +313,7 @@ GetValues()
   if (!sign)
     num = -num;
 
-  global_wpt->location.Latitude = Angle::degrees(fixed(num));
+  global_wpt->location.latitude = Angle::degrees(fixed(num));
 
   ss = GetFormValueInteger(*wf, _T("prpAltitude"));
   global_wpt->altitude = (ss == 0 && terrain != NULL)

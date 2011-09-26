@@ -48,11 +48,11 @@ WaypointWriter::WriteWaypoint(TextWriter &writer, const Waypoint& wp)
   writer.printf("%u,", wp.original_id > 0 ? wp.original_id : wp.id);
 
   // Write the latitude
-  WriteAngle(writer, wp.location.Latitude, true);
+  WriteAngle(writer, wp.location.latitude, true);
   writer.write(',');
 
   // Write the longitude id
-  WriteAngle(writer, wp.location.Longitude, false);
+  WriteAngle(writer, wp.location.longitude, false);
   writer.write(',');
 
   // Write the altitude id

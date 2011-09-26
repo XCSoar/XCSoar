@@ -41,7 +41,7 @@ AirspaceIntersectSort::all()
     const GeoPoint p_this = m_q.top().second;
     const GeoPoint p_mid = start
       ? p_last
-      : p_last.interpolate(p_this, fixed_half);
+      : p_last.Interpolate(p_this, fixed_half);
 
     // when inside, checking midpoint is ok, otherwise we should
     // check just beyond the last location

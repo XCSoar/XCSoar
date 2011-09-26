@@ -40,8 +40,8 @@ int main(int argc, char **argv)
 
   ok1(b.empty());
 
-  g.Latitude = Angle::degrees(fixed(6));
-  g.Longitude = Angle::degrees(fixed(8));
+  g.latitude = Angle::degrees(fixed(6));
+  g.longitude = Angle::degrees(fixed(8));
   b.extend(g);
 
   ok1(equals(b.east, 8));
@@ -52,8 +52,8 @@ int main(int argc, char **argv)
   ok1(!b.empty());
 
   g = b.center();
-  ok1(equals(g.Latitude, 5));
-  ok1(equals(g.Longitude, 5));
+  ok1(equals(g.latitude, 5));
+  ok1(equals(g.longitude, 5));
 
   ok1(b.inside(Angle::degrees(fixed(7)), Angle::degrees(fixed(4.5))));
   ok1(!b.inside(Angle::degrees(fixed(9)), Angle::degrees(fixed(4.5))));

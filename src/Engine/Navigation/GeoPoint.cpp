@@ -25,31 +25,31 @@
 #include "Math/Earth.hpp"
 
 GeoPoint 
-GeoPoint::parametric(const GeoPoint &delta, const fixed t) const
+GeoPoint::Parametric(const GeoPoint &delta, const fixed t) const
 {
   return (*this) + delta * t;
 }
 
 GeoPoint 
-GeoPoint::interpolate(const GeoPoint &end, const fixed t) const
+GeoPoint::Interpolate(const GeoPoint &end, const fixed t) const
 {
   return (*this) + (end - (*this)) * t;
 }
 
 fixed
-GeoPoint::distance(const GeoPoint &other) const
+GeoPoint::Distance(const GeoPoint &other) const
 {
   return ::Distance(*this, other);
 }
 
 Angle
-GeoPoint::bearing(const GeoPoint &other) const
+GeoPoint::Bearing(const GeoPoint &other) const
 {
   return ::Bearing(*this, other);
 }
 
 GeoVector
-GeoPoint::distance_bearing(const GeoPoint &other) const
+GeoPoint::DistanceBearing(const GeoPoint &other) const
 {
   GeoVector gv;
   ::DistanceBearing(*this, other, &gv.Distance, &gv.Bearing);
@@ -57,31 +57,31 @@ GeoPoint::distance_bearing(const GeoPoint &other) const
 }
 
 fixed 
-GeoPoint::projected_distance(const GeoPoint &from,
+GeoPoint::ProjectedDistance(const GeoPoint &from,
                              const GeoPoint &to) const
 {
   return ::ProjectedDistance(from, to, *this);
 }
 
 bool 
-GeoPoint::equals(const GeoPoint &other) const
+GeoPoint::Equals(const GeoPoint &other) const
 {
-  return (Longitude == other.Longitude) && (Latitude == other.Latitude);
+  return (longitude == other.longitude) && (latitude == other.latitude);
 }
 
 bool 
-GeoPoint::sort(const GeoPoint &sp) const
+GeoPoint::Sort(const GeoPoint &sp) const
 {
-  if (Longitude < sp.Longitude)
+  if (longitude < sp.longitude)
     return false;
-  else if (Longitude == sp.Longitude)
-    return Latitude > sp.Latitude;
+  else if (longitude == sp.longitude)
+    return latitude > sp.latitude;
   else
     return true;
 }
 
 GeoPoint 
-GeoPoint::intermediate_point(const GeoPoint &destination, 
+GeoPoint::IntermediatePoint(const GeoPoint &destination, 
                              const fixed distance) const
 {
   return ::IntermediatePoint(*this, destination, distance);

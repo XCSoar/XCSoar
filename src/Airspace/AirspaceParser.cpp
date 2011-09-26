@@ -147,8 +147,8 @@ struct TempAirspaceType
     Radio = _T("");
     Type = OTHER;
     points.clear();
-    Center.Longitude = Angle::zero();
-    Center.Latitude = Angle::zero();
+    Center.longitude = Angle::zero();
+    Center.latitude = Angle::zero();
     Rotation = 1;
     Radius = fixed_zero;
   }
@@ -180,12 +180,12 @@ struct TempAirspaceType
     const Angle BearingStep = Angle::degrees(Rotation * fixed(5));
 
     // Determine start bearing and radius
-    const GeoVector v = Center.distance_bearing(Start);
+    const GeoVector v = Center.DistanceBearing(Start);
     Angle StartBearing = v.Bearing;
     const fixed Radius = v.Distance;
 
     // Determine end bearing
-    Angle EndBearing = Center.bearing(End);
+    Angle EndBearing = Center.Bearing(End);
 
     // Add first polygon point
     points.push_back(Start);
@@ -354,7 +354,7 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
     }
   }
 
-  point.Latitude = Angle::degrees(fixed(deg));
+  point.latitude = Angle::degrees(fixed(deg));
 
   if (*Stop == ' ')
     Stop++;
@@ -363,7 +363,7 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
     return false;
 
   if ((*Stop == 'S') || (*Stop == 's'))
-    point.Latitude.flip();
+    point.latitude.flip();
 
   Stop++;
   if (*Stop == '\0')
@@ -393,7 +393,7 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
     }
   }
 
-  point.Longitude = Angle::degrees(fixed(deg));
+  point.longitude = Angle::degrees(fixed(deg));
 
   if (*Stop == ' ')
     Stop++;
@@ -402,9 +402,9 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
     return false;
 
   if ((*Stop == 'W') || (*Stop == 'w'))
-    point.Longitude.flip();
+    point.longitude.flip();
 
-  point.normalize(); // ensure longitude is within -180:180
+  point.Normalize(); // ensure longitude is within -180:180
   return true;
 }
 
@@ -641,9 +641,9 @@ ParseCoordsTNP(const TCHAR *Text, GeoPoint &point)
   min = labs((sec - deg * 10000) / 100);
   sec = sec - min * 100 - deg * 10000;
 
-  point.Latitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
+  point.latitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
   if (negative)
-    point.Latitude.flip();
+    point.latitude.flip();
 
   negative = false;
 
@@ -658,11 +658,11 @@ ParseCoordsTNP(const TCHAR *Text, GeoPoint &point)
   min = labs((sec - deg * 10000) / 100);
   sec = sec - min * 100 - deg * 10000;
 
-  point.Longitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
+  point.longitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
   if (negative)
-    point.Longitude.flip();
+    point.longitude.flip();
 
-  point.normalize(); // ensure longitude is within -180:180
+  point.Normalize(); // ensure longitude is within -180:180
 
   return true;
 }

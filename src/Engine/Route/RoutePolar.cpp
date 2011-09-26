@@ -403,7 +403,7 @@ RoutePolars::intersection(const AGeoPoint& origin,
   const fixed p = fixed(h_diff)/fixed(vh);
 
   // location of start of glide
-  const GeoPoint p_glide = destination.interpolate(origin, p);
+  const GeoPoint p_glide = destination.Interpolate(origin, p);
 
   // intersects during cruise-climb?
   intx = map->Intersection(origin, origin.altitude-safety_height(),

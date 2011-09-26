@@ -46,8 +46,8 @@ int main(int argc, char **argv)
 
   ok1(equals(p, 50, 7));
 
-  printf("lon: %f - lat: %f\n", (double)p.Longitude.value_degrees(),
-         (double)p.Latitude.value_degrees());
+  printf("lon: %f - lat: %f\n", (double)p.longitude.value_degrees(),
+         (double)p.latitude.value_degrees());
 
   return exit_status();
 }

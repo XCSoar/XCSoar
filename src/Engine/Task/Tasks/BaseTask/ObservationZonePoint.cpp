@@ -25,6 +25,6 @@
 bool
 ObservationZonePoint::equals(const ObservationZonePoint* other) const
 {
-  return shape == other->shape && get_location().equals(other->get_location());
+  return shape == other->shape && get_location().Equals(other->get_location());
 }
 

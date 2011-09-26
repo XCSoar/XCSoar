@@ -112,7 +112,7 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
        it != end; ++it) {
     const fixed dt = basic.time - fixed(it->time);
     const GeoPoint gp = enable_traildrift ?
-      it->get_location().parametric(traildrift, dt * it->drift_factor / 256) :
+      it->get_location().Parametric(traildrift, dt * it->drift_factor / 256) :
       it->get_location();
     if (!bounds.inside(gp)) {
       /* the point is outside of the MapWindow; don't paint it */

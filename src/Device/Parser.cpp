@@ -208,8 +208,8 @@ ReadGeoPoint(NMEAInputLine &line, GeoPoint &value_r)
 {
   GeoPoint value;
 
-  bool latitude_valid = ReadLatitude(line, value.Latitude);
-  bool longitude_valid = ReadLongitude(line, value.Longitude);
+  bool latitude_valid = ReadLatitude(line, value.latitude);
+  bool longitude_valid = ReadLongitude(line, value.longitude);
   if (latitude_valid && longitude_valid) {
     value_r = value;
     return true;

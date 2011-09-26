@@ -293,10 +293,10 @@ XShape::geo_to_shape(const GeoPoint &origin, const GeoPoint &point) const
   const GeoPoint d = point-origin;
 
   ShapePoint pt;
-  pt.x = fast_mult(point.Latitude.fastcosine(),
-                   fast_mult(d.Longitude.value_radians(), fixed_earth_r, 12),
+  pt.x = fast_mult(point.latitude.fastcosine(),
+                   fast_mult(d.longitude.value_radians(), fixed_earth_r, 12),
                    16);
-  pt.y = -fast_mult(d.Latitude.value_radians(), fixed_earth_r, 12);
+  pt.y = -fast_mult(d.latitude.value_radians(), fixed_earth_r, 12);
   return pt;
 }
 

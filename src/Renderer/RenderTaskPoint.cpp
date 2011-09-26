@@ -149,7 +149,7 @@ RenderTaskPoint::DrawIsoline(const AATPoint &tp)
   #define fixed_twentieth fixed(1.0 / 20.0)
   
   if (m_proj.GeoToScreenDistance(seg.Parametric(fixed_zero).
-                                    distance(seg.Parametric(fixed_one))) > 2) {
+                                    Distance(seg.Parametric(fixed_one))) > 2) {
     RasterPoint screen[21];
     for (unsigned i = 0; i < 21; ++i) {
       fixed t = i * fixed_twentieth;

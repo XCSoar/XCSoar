@@ -502,7 +502,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   }
 
   if (basic.location_available) {
-    GeoVector gv = basic.location.distance_bearing(selected_waypoint->location);
+    GeoVector gv = basic.location.DistanceBearing(selected_waypoint->location);
 
     TCHAR DistanceText[MAX_PATH];
     Units::FormatUserDistance(gv.Distance, DistanceText, 10);

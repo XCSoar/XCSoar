@@ -322,7 +322,7 @@ RasterWeather::SetViewCenter(const GeoPoint &location, fixed radius)
   Poco::ScopedRWLock protect(lock, true);
 
   /* only update the RasterMap if the center was moved far enough */
-  if (center.distance(location) < fixed(1000))
+  if (center.Distance(location) < fixed(1000))
     return;
 
   weather_map->SetViewCenter(location, radius);

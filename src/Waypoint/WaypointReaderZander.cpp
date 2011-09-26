@@ -47,14 +47,14 @@ WaypointReaderZander::ParseLine(const TCHAR* line, const unsigned linenum,
   GeoPoint location;
 
   // Latitude (Characters 13-20 // DDMMSS(N/S))
-  if (!parseAngle(line + 13, location.Latitude, true))
+  if (!parseAngle(line + 13, location.latitude, true))
     return false;
 
   // Longitude (Characters 21-29 // DDDMMSS(E/W))
-  if (!parseAngle(line + 21, location.Longitude, false))
+  if (!parseAngle(line + 21, location.longitude, false))
     return false;
 
-  location.normalize(); // ensure longitude is within -180:180
+  location.Normalize(); // ensure longitude is within -180:180
 
   Waypoint new_waypoint(location);
   new_waypoint.file_num = file_num;

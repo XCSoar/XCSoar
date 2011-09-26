@@ -45,8 +45,8 @@ Profile::GetGeoPoint(const TCHAR *key, GeoPoint &value)
       longitude < -90.0 || longitude > 90.0)
     return false;
 
-  value.Longitude = Angle::degrees(fixed(longitude));
-  value.Latitude = Angle::degrees(fixed(latitude));
+  value.longitude = Angle::degrees(fixed(longitude));
+  value.latitude = Angle::degrees(fixed(latitude));
   return true;
 }
 
@@ -55,7 +55,7 @@ Profile::SetGeoPoint(const TCHAR *key, const GeoPoint &value)
 {
   TCHAR buffer[128];
   _sntprintf(buffer, 128, _T("%f %f"),
-             (double)value.Longitude.value_degrees(),
-             (double)value.Latitude.value_degrees());
+             (double)value.longitude.value_degrees(),
+             (double)value.latitude.value_degrees());
   return Set(key, buffer);
 }

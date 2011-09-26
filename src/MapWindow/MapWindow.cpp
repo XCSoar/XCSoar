@@ -130,7 +130,7 @@ MapWindow::UpdateTerrain()
   GeoPoint location = visible_projection.GetGeoScreenCenter();
   fixed radius = visible_projection.GetScreenWidthMeters() / 2;
   if (terrain_radius >= radius &&
-      terrain_center.distance(location) < fixed(1000))
+      terrain_center.Distance(location) < fixed(1000))
     return false;
 
   // always service terrain even if it's not used by the map,

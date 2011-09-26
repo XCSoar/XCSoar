@@ -102,19 +102,19 @@ equals(const Angle a, const Angle b)
 static inline bool
 equals(const GeoPoint a, double lat, double lon)
 {
-  return equals(a.Latitude, lat) && equals(a.Longitude, lon);
+  return equals(a.latitude, lat) && equals(a.longitude, lon);
 }
 
 static inline bool
 equals(const GeoPoint a, const Angle lat, const Angle lon)
 {
-  return equals(a.Latitude, lat) && equals(a.Longitude, lon);
+  return equals(a.latitude, lat) && equals(a.longitude, lon);
 }
 
 static inline bool
 equals(const GeoPoint a, const GeoPoint b)
 {
-  return equals(a.Latitude, b.Latitude) && equals(a.Longitude, b.Longitude);
+  return equals(a.latitude, b.latitude) && equals(a.longitude, b.longitude);
 }
 
 #endif

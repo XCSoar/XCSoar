@@ -29,8 +29,8 @@ TestLinearDistance()
   const GeoPoint lon_start(Angle::degrees(fixed(90)),
                            Angle::degrees(fixed_zero));
   for (unsigned i = 0; i < 180; i += 5) {
-    const GeoPoint lon_end(lon_start.Longitude + Angle::degrees(fixed(i)),
-                           lon_start.Latitude);
+    const GeoPoint lon_end(lon_start.longitude + Angle::degrees(fixed(i)),
+                           lon_start.latitude);
     fixed distance = Distance(lon_start, lon_end);
 
     double min = 111100 * i;
@@ -42,8 +42,8 @@ TestLinearDistance()
   const GeoPoint lat_start(Angle::degrees(fixed_zero),
                            Angle::degrees(fixed_zero));
   for (unsigned i = 0; i < 90; i += 5) {
-    const GeoPoint lat_end(lat_start.Longitude,
-                           lat_start.Latitude + Angle::degrees(fixed(i)));
+    const GeoPoint lat_end(lat_start.longitude,
+                           lat_start.latitude + Angle::degrees(fixed(i)));
     fixed distance = Distance(lat_start, lat_end);
 
     double min = 111100 * i;
@@ -80,8 +80,8 @@ int main(int argc, char **argv)
   distance = ProjectedDistance(a, b, b);
   ok1(distance > fixed(9120) && distance < fixed(9140));
 
-  const GeoPoint middle(a.Longitude.Fraction(b.Longitude, fixed_half),
-                        a.Latitude.Fraction(b.Latitude, fixed_half));
+  const GeoPoint middle(a.longitude.Fraction(b.longitude, fixed_half),
+                        a.latitude.Fraction(b.latitude, fixed_half));
   distance = ProjectedDistance(a, b, middle);
   ok1(distance > fixed(9100/2) && distance < fixed(9140/2));
 

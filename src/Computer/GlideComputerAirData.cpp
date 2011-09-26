@@ -351,7 +351,7 @@ GlideComputerAirData::LD()
   }
 
   if (time_advanced()) {
-    fixed DistanceFlown = Basic().location.distance(LastBasic().location);
+    fixed DistanceFlown = Basic().location.Distance(LastBasic().location);
 
     calculated.ld =
       UpdateLD(calculated.ld, DistanceFlown,
@@ -384,7 +384,7 @@ GlideComputerAirData::CruiseLD()
       calculated.cruise_start_time = Basic().time;
     } else {
       fixed DistanceFlown =
-          Basic().location.distance(calculated.cruise_start_location);
+          Basic().location.Distance(calculated.cruise_start_location);
 
       calculated.cruise_ld =
           UpdateLD(calculated.cruise_ld, DistanceFlown,

@@ -81,7 +81,7 @@ TaskPointTest::Run()
   ok1(tp1.GetType() == TaskPoint::AST);
   ok1(equals(tp1.GetBaseElevation(), 1234));
   ok1(!tp1.HasTarget());
-  ok1(equals(tp1.Distance(gp2), gp1.distance(gp2)));
+  ok1(equals(tp1.Distance(gp2), gp1.Distance(gp2)));
   ok1(equals(tp1.GetLocation(), gp1));
 
   ok1(tp2.IsIntermediatePoint());

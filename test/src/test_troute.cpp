@@ -57,10 +57,10 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
       for (unsigned j=0; j< ny; ++j) {
         fixed fx = (fixed)i/(nx-1)*fixed_two-fixed_one;
         fixed fy = (fixed)j/(ny-1)*fixed_two-fixed_one;
-        GeoPoint x(origin.Longitude+Angle::degrees(fixed(0.6)*fx),
-                   origin.Latitude+Angle::degrees(fixed(0.4)*fy));
+        GeoPoint x(origin.longitude+Angle::degrees(fixed(0.6)*fx),
+                   origin.latitude+Angle::degrees(fixed(0.4)*fy));
         short h = map.GetInterpolatedHeight(x);
-        fout << x.Longitude.value_degrees() << " " << x.Latitude.value_degrees() << " " << h << "\n";
+        fout << x.longitude.value_degrees() << " " << x.latitude.value_degrees() << " " << h << "\n";
       }
       fout << "\n";
     }

@@ -78,11 +78,11 @@ ParseLocation(const TCHAR *src, GeoPoint &p)
   if (!ParseAngle(src + 17, lon))
     return false;
 
-  p.Longitude = lon;
-  p.Latitude = lat;
+  p.longitude = lon;
+  p.latitude = lat;
 
   // ensure longitude is within -180:180
-  p.normalize();
+  p.Normalize();
 
   return true;
 }
@@ -113,7 +113,7 @@ ParseLocationUTM(const TCHAR *src, GeoPoint &p)
   p = u.ToGeoPoint();
 
   // ensure longitude is within -180:180
-  p.normalize();
+  p.Normalize();
 
   return true;
 }

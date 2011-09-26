@@ -51,12 +51,12 @@ RasterProjection::pixel_distance(const GeoPoint &location, unsigned pixels) cons
   };
 
   Angle distance = width_to_angle(fixed_sqrt_two * FACTOR * pixels);
-  GeoPoint p = GeoPoint(location.Longitude + distance, location.Latitude);
-  fixed x = location.distance(p);
+  GeoPoint p = GeoPoint(location.longitude + distance, location.latitude);
+  fixed x = location.Distance(p);
 
   distance = height_to_angle(fixed_sqrt_two * FACTOR * pixels);
-  p = GeoPoint(location.Longitude, location.Latitude + distance);
-  fixed y = location.distance(p);
+  p = GeoPoint(location.longitude, location.latitude + distance);
+  fixed y = location.Distance(p);
 
   return max(x, y) / FACTOR;
 }

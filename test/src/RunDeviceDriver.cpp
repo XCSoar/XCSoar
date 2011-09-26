@@ -57,11 +57,11 @@ InputEvents::processNmea(unsigned key)
 static void
 Dump(GeoPoint location)
 {
-  int latitude = (int)(location.Latitude.value_degrees() * 3600);
+  int latitude = (int)(location.latitude.value_degrees() * 3600);
   char north_or_south = latitude < 0 ? 'S' : 'N';
   latitude = abs(latitude);
 
-  int longitude = (int)(location.Longitude.value_degrees() * 3600);
+  int longitude = (int)(location.longitude.value_degrees() * 3600);
   char east_or_west = latitude < 0 ? 'W' : 'E';
   longitude = abs(longitude);
 

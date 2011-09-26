@@ -30,26 +30,26 @@ gcc_const
 static GeoPoint
 clip_longitude(const GeoPoint origin, const GeoPoint pt, Angle at)
 {
-  Angle dx = pt.Longitude - origin.Longitude;
-  Angle dy = pt.Latitude - origin.Latitude;
+  Angle dx = pt.longitude - origin.longitude;
+  Angle dy = pt.latitude - origin.latitude;
 
-  Angle ex = at - origin.Longitude;
+  Angle ex = at - origin.longitude;
   Angle ey = ex * (dy.value_native() / dx.value_native());
 
-  return GeoPoint(at, origin.Latitude + ey);
+  return GeoPoint(at, origin.latitude + ey);
 }
 
 gcc_const
 static GeoPoint
 clip_latitude(const GeoPoint origin, const GeoPoint pt, Angle at)
 {
-  Angle dx = pt.Longitude - origin.Longitude;
-  Angle dy = pt.Latitude - origin.Latitude;
+  Angle dx = pt.longitude - origin.longitude;
+  Angle dy = pt.latitude - origin.latitude;
 
-  Angle ey = at - origin.Latitude;
+  Angle ey = at - origin.latitude;
   Angle ex = ey * (dx.value_native() / dy.value_native());
 
-  return GeoPoint(origin.Longitude + ex, at);
+  return GeoPoint(origin.longitude + ex, at);
 }
 
 bool
@@ -57,25 +57,25 @@ GeoClip::clip_point(const GeoPoint &origin, GeoPoint &pt) const
 {
   const Angle zero = Angle::zero();
 
-  if (pt.Longitude < zero) {
-    if (origin.Longitude <= zero)
+  if (pt.longitude < zero) {
+    if (origin.longitude <= zero)
       return false;
 
     pt = clip_longitude(origin, pt, zero);
-  } else if (pt.Longitude > width) {
-    if (origin.Longitude >= width)
+  } else if (pt.longitude > width) {
+    if (origin.longitude >= width)
       return false;
 
     pt = clip_longitude(origin, pt, width);
   }
 
-  if (pt.Latitude < south) {
-    if (origin.Latitude <= south)
+  if (pt.latitude < south) {
+    if (origin.latitude <= south)
       return false;
 
     pt = clip_latitude(origin, pt, south);
-  } else if (pt.Latitude > north) {
-    if (origin.Latitude >= north)
+  } else if (pt.latitude > north) {
+    if (origin.latitude >= north)
       return false;
 
     pt = clip_latitude(origin, pt, north);
@@ -105,15 +105,15 @@ clip_vertex_longitude(const Angle west, const Angle east,
 {
   unsigned num_insert = 0;
 
-  if (pt.Longitude < west) {
-    if (prev.Longitude <= west) {
-      if (next.Longitude <= west)
+  if (pt.longitude < west) {
+    if (prev.longitude <= west) {
+      if (next.longitude <= west)
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_longitude(next, pt, west);
     } else {
-      if (next.Longitude > west) {
+      if (next.longitude > west) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_longitude(next, pt, west);
@@ -122,15 +122,15 @@ clip_vertex_longitude(const Angle west, const Angle east,
 
       pt = clip_longitude(prev, pt, west);
     }
-  } else if (pt.Longitude > east) {
-    if (prev.Longitude >= east) {
-      if (next.Longitude >= east)
+  } else if (pt.longitude > east) {
+    if (prev.longitude >= east) {
+      if (next.longitude >= east)
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_longitude(next, pt, east);
     } else {
-      if (next.Longitude < east) {
+      if (next.longitude < east) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_longitude(next, pt, east);
@@ -151,15 +151,15 @@ clip_vertex_latitude(const Angle south, const Angle north,
 {
   unsigned num_insert = 0;
 
-  if (pt.Latitude < south) {
-    if (prev.Latitude <= south) {
-      if (next.Latitude <= south)
+  if (pt.latitude < south) {
+    if (prev.latitude <= south) {
+      if (next.latitude <= south)
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_latitude(next, pt, south);
     } else {
-      if (next.Latitude > south) {
+      if (next.latitude > south) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_latitude(next, pt, south);
@@ -168,15 +168,15 @@ clip_vertex_latitude(const Angle south, const Angle north,
 
       pt = clip_latitude(prev, pt, south);
     }
-  } else if (pt.Latitude > north) {
-    if (prev.Latitude >= north) {
-      if (next.Latitude >= north)
+  } else if (pt.latitude > north) {
+    if (prev.latitude >= north) {
+      if (next.latitude >= north)
         /* all three outside, middle one can be deleted */
         return 0;
 
       pt = clip_latitude(next, pt, north);
     } else {
-      if (next.Latitude < north) {
+      if (next.latitude < north) {
         /* both neighbours are inside, clip both lines and insert a
            new vertex */
         insert = clip_latitude(next, pt, north);

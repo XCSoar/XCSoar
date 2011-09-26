@@ -289,8 +289,8 @@ public:
   isFAIAngle(const GeoPoint &p0, const GeoPoint &p1, const GeoPoint &p2,
              const fixed right)
   {
-    const Angle a01 = p0.bearing(p1);
-    const Angle a21 = p2.bearing(p1);
+    const Angle a01 = p0.Bearing(p1);
+    const Angle a21 = p2.Bearing(p1);
     const fixed diff = (a01 - a21).as_delta().value_degrees();
 
     if (positive(right))
@@ -329,19 +329,19 @@ public:
         return true;
 
       case 2:
-        return p.distance(task->get_tp(1)->GetLocation()) > minFAILeg;
+        return p.Distance(task->get_tp(1)->GetLocation()) > minFAILeg;
 
       default: // size == 3 or 4
         if (!isFAIAngle(p, task->get_tp(1)->GetLocation(),
                         task->get_tp(2)->GetLocation(), right))
           return false;
         if (t_size == 3) {
-          return TestFAITriangle(p.distance(task->get_tp(1)->GetLocation()),
+          return TestFAITriangle(p.Distance(task->get_tp(1)->GetLocation()),
                                  leg2,
-                                 task->get_tp(2)->GetLocation().distance(p));
+                                 task->get_tp(2)->GetLocation().Distance(p));
         } else if (t_size == 4) {
           return (wp == task->get_tp(3)->GetWaypoint()) &&
-                 TestFAITriangle(p.distance(task->get_tp(1)->GetLocation()),
+                 TestFAITriangle(p.Distance(task->get_tp(1)->GetLocation()),
                                  leg2,
                                  leg3);
         }
@@ -352,7 +352,7 @@ public:
       assert(t_size > 0);
 
       if (t_size <= 2)
-        return p.distance(task->get_tp(0)->GetLocation()) > minFAILeg;
+        return p.Distance(task->get_tp(0)->GetLocation()) > minFAILeg;
 
       // size == 3 or 4
       if (!isFAIAngle(task->get_tp(0)->GetLocation(),
@@ -361,13 +361,13 @@ public:
         return false;
 
       if (t_size == 3) {
-        return TestFAITriangle(p.distance(task->get_tp(0)->GetLocation()),
-                               p.distance(task->get_tp(2)->GetLocation()),
+        return TestFAITriangle(p.Distance(task->get_tp(0)->GetLocation()),
+                               p.Distance(task->get_tp(2)->GetLocation()),
                                task->get_tp(2)->GetLocation().
-                                  distance(task->get_tp(0)->GetLocation()));
+                                  Distance(task->get_tp(0)->GetLocation()));
       } else if (t_size == 4) {
-        return TestFAITriangle(p.distance(task->get_tp(0)->GetLocation()),
-                               p.distance(task->get_tp(2)->GetLocation()),
+        return TestFAITriangle(p.Distance(task->get_tp(0)->GetLocation()),
+                               p.Distance(task->get_tp(2)->GetLocation()),
                                leg3);
       }
     }
@@ -381,14 +381,14 @@ public:
 
       if (t_size < 4) { // no finish point yet
         return TestFAITriangle(leg1,
-                               p.distance(task->get_tp(1)->GetLocation()),
-                               p.distance(task->get_tp(0)->GetLocation()));
+                               p.Distance(task->get_tp(1)->GetLocation()),
+                               p.Distance(task->get_tp(0)->GetLocation()));
 
       } else { // already finish point(#3) exists
         return (task->get_tp(0)->GetWaypoint() == task->get_tp(3)->GetWaypoint()) &&
                 TestFAITriangle(leg1,
-                                p.distance(task->get_tp(1)->GetLocation()),
-                                p.distance(task->get_tp(0)->GetLocation()));
+                                p.Distance(task->get_tp(1)->GetLocation()),
+                                p.Distance(task->get_tp(0)->GetLocation()));
       }
     }
     // append or replace finish
@@ -397,7 +397,7 @@ public:
       return (wp == task->get_tp(0)->GetWaypoint()) &&
               TestFAITriangle(leg1,
                               leg2,
-                              p.distance(task->get_tp(2)->GetLocation()));
+                              p.Distance(task->get_tp(2)->GetLocation()));
     }
     return true;
   }

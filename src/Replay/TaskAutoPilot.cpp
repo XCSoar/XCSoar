@@ -106,7 +106,7 @@ TaskAutoPilot::get_start_location(const TaskAccessor& task, bool previous)
   if (!previous && (task.is_ordered())) {
     // set start location to 200 meters directly behind start
     // (otherwise start may fail to trigger)
-    Angle brg = w[0].bearing(w[1]);
+    Angle brg = w[0].Bearing(w[1]);
     return GeoVector(fixed(200), brg).end_point(w[1]);
   } else {
     return w[0];
@@ -202,7 +202,7 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
     }
 
   } else {
-    bearing = state.location.bearing(target(task));
+    bearing = state.location.Bearing(target(task));
   }
 
   if (positive(state.wind.norm) && positive(state.true_airspeed)) {
@@ -270,7 +270,7 @@ TaskAutoPilot::far_from_target(const TaskAccessor& task, const AircraftState& st
   // are we considered close to the target?
 
   if (task.is_empty())
-    return w[0].distance(state.location)>state.ground_speed;
+    return w[0].Distance(state.location)>state.ground_speed;
 
   bool d_far = (task.leg_stats().remaining.get_distance() > fixed(100));
 
@@ -283,7 +283,7 @@ TaskAutoPilot::far_from_target(const TaskAccessor& task, const AircraftState& st
   if (current_has_target(task))
     return d_far || !entered;
 
-  fixed dc = w[0].distance(state.location);
+  fixed dc = w[0].Distance(state.location);
   if (awp==0) {
     return (dc>state.ground_speed);
   }

@@ -121,7 +121,7 @@ test_azimuth()
     ok1(equals(sun.Azimuth, test_data1[hour]));
   }
 
-  location.Latitude.flip();
+  location.latitude.flip();
 
   for(int hour = 0; hour < 24; hour++) {
     dt.hour = hour;

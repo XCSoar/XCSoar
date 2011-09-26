@@ -95,8 +95,8 @@ public:
 
     const Record r0 = Interpolate(time - fixed(0.05));
     const Record r1 = Interpolate(time + fixed(0.05));
-    return GeoVector(p[1].loc.distance(p[2].loc)/
-                     (p[2].t-p[1].t), r0.loc.bearing(r1.loc));
+    return GeoVector(p[1].loc.Distance(p[2].loc)/
+                     (p[2].t-p[1].t), r0.loc.Bearing(r1.loc));
   }
 
   gcc_pure
@@ -129,11 +129,11 @@ public:
                         t * u3 - t * u2};
 
     Record r;
-    r.loc.Latitude = p[0].loc.Latitude * c[0] + p[1].loc.Latitude * c[1]
-      + p[2].loc.Latitude * c[2] + p[3].loc.Latitude * c[3];
+    r.loc.latitude = p[0].loc.latitude * c[0] + p[1].loc.latitude * c[1]
+      + p[2].loc.latitude * c[2] + p[3].loc.latitude * c[3];
 
-    r.loc.Longitude = p[0].loc.Longitude * c[0] + p[1].loc.Longitude * c[1]
-      + p[2].loc.Longitude * c[2] + p[3].loc.Longitude * c[3];
+    r.loc.longitude = p[0].loc.longitude * c[0] + p[1].loc.longitude * c[1]
+      + p[2].loc.longitude * c[2] + p[3].loc.longitude * c[3];
 
     r.alt = p[0].alt * c[0] + p[1].alt * c[1] +
       p[2].alt * c[2] + p[3].alt * c[3];

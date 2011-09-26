@@ -303,13 +303,13 @@ GlueMapWindow::UpdateProjection()
     /* no-op - the Projection's location is updated manually */
   } else if (GetDisplayMode() == DM_CIRCLING &&
            calculated.thermal_locator.estimate_valid) {
-    const fixed d_t = calculated.thermal_locator.estimate_location.distance(basic.location);
+    const fixed d_t = calculated.thermal_locator.estimate_location.Distance(basic.location);
     if (!positive(d_t)) {
       SetLocation(basic.location);
     } else {
       const fixed d_max = visible_projection.GetMapScale() * fixed_two;
       const fixed t = std::min(d_t, d_max)/d_t;
-      SetLocation(basic.location.interpolate(calculated.thermal_locator.estimate_location,
+      SetLocation(basic.location.Interpolate(calculated.thermal_locator.estimate_location,
                                                t));
     }
   } else

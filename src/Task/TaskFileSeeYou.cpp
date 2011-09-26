@@ -356,22 +356,22 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
       break;
     }
     case SeeYouTurnpointInformation::Symmetrical: {
-      const Angle ap = wps[pos - 1]->location.bearing(wp->location);
-      const Angle an = wps[pos + 1]->location.bearing(wp->location);
+      const Angle ap = wps[pos - 1]->location.Bearing(wp->location);
+      const Angle an = wps[pos + 1]->location.Bearing(wp->location);
       A12adj = ap.HalfAngle(an).Reciprocal();
       break;
     }
 
     case SeeYouTurnpointInformation::ToNextPoint: {
-      A12adj = wps[pos + 1]->location.bearing(wp->location);
+      A12adj = wps[pos + 1]->location.Bearing(wp->location);
       break;
     }
     case SeeYouTurnpointInformation::ToPreviousPoint: {
-      A12adj = wps[pos - 1]->location.bearing(wp->location);
+      A12adj = wps[pos - 1]->location.Bearing(wp->location);
       break;
     }
     case SeeYouTurnpointInformation::ToStartPoint: {
-      A12adj = wps[0]->location.bearing(wp->location);
+      A12adj = wps[0]->location.Bearing(wp->location);
       break;
     }
     }
@@ -516,7 +516,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
     // If waypoint by name found and closer than 10m to the original
     if (wp != NULL &&
-        wp->location.distance(file_wp->location) <= fixed_ten) {
+        wp->location.Distance(file_wp->location) <= fixed_ten) {
       // Use this waypoint for the task
       wpsInTask[i] = wp;
       continue;
@@ -527,7 +527,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
     // If closest waypoint found and closer than 10m to the original
     if (wp != NULL &&
-        wp->location.distance(file_wp->location) <= fixed_ten) {
+        wp->location.Distance(file_wp->location) <= fixed_ten) {
       // Use this waypoint for the task
       wpsInTask[i] = wp;
       continue;

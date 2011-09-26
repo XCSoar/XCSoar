@@ -48,7 +48,7 @@ Waypoint::Waypoint(const GeoPoint &_location, const bool is_turnpoint):
 bool
 Waypoint::IsCloseTo(const GeoPoint &_location, const fixed range) const
 {
-  return location.distance(_location) <= range;
+  return location.Distance(_location) <= range;
 }
 
 void

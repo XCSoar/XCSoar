@@ -35,7 +35,7 @@ AirspaceNearestSort::solve_intercept(const AbstractAirspace &a) const
   } else {
     AirspaceInterceptSolution sol;
     sol.location = a.ClosestPoint(m_location);
-    sol.distance = sol.location.distance(m_location);
+    sol.distance = sol.location.Distance(m_location);
     return sol;
   }
 }

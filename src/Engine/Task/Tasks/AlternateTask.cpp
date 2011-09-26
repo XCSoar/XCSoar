@@ -95,7 +95,7 @@ AlternateTask::client_update(const AircraftState &state_now,
   reservable_priority_queue<Divert, DivertVector, AlternateRank> q;
   q.reserve(task_points.size());
 
-  const fixed dist_straight = state_now.location.distance(destination);
+  const fixed dist_straight = state_now.location.Distance(destination);
 
   const AlternateTaskVector::const_iterator end = task_points.end();
   for (AlternateTaskVector::const_iterator i = task_points.begin(); i != end; ++i) {

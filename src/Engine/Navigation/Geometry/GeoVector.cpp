@@ -25,7 +25,7 @@
 
 GeoVector::GeoVector(const GeoPoint &source, const GeoPoint &target)
 {
-  *this = source.distance_bearing(target);
+  *this = source.DistanceBearing(target);
 }
 
 GeoPoint
@@ -57,5 +57,5 @@ GeoPoint
 GeoVector::intermediate_point(const GeoPoint &source, 
                               const fixed distance) const
 {
-  return source.intermediate_point(end_point(source), distance);
+  return source.IntermediatePoint(end_point(source), distance);
 }

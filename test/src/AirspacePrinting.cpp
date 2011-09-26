@@ -32,12 +32,12 @@ std::ostream& operator<< (std::ostream& f,
   f << "# circle\n";
   for (double t=0; t<=360; t+= 30) {
     GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius);
-    f << l.Longitude << " " << l.Latitude << " " << as.GetBase().altitude << "\n";
+    f << l.longitude << " " << l.latitude << " " << as.GetBase().altitude << "\n";
   }
   f << "\n";
   for (double t=0; t<=360; t+= 30) {
     GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius);
-    f << l.Longitude << " " << l.Latitude << " " << as.GetTop().altitude << "\n";
+    f << l.longitude << " " << l.latitude << " " << as.GetTop().altitude << "\n";
   }
   f << "\n";
   f << "\n";
@@ -53,13 +53,13 @@ std::ostream& operator<< (std::ostream& f,
   for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
     GeoPoint l = v->get_location();
-    f << l.Longitude << " " << l.Latitude << " " << as.GetBase().altitude << "\n";
+    f << l.longitude << " " << l.latitude << " " << as.GetBase().altitude << "\n";
   }
   f << "\n";
   for (std::vector<SearchPoint>::const_iterator v = as.m_border.begin();
        v != as.m_border.end(); ++v) {
     GeoPoint l = v->get_location();
-    f << l.Longitude << " " << l.Latitude << " " << as.GetTop().altitude << "\n";
+    f << l.longitude << " " << l.latitude << " " << as.GetTop().altitude << "\n";
   }
   f << "\n";
   f << "\n";
@@ -111,7 +111,7 @@ std::ostream& operator<< (std::ostream& f,
   };
 
   const AirspaceInterceptSolution &solution = aw.get_solution();
-  f << "# intercept " << solution.location.Longitude << " " << solution.location.Latitude
+  f << "# intercept " << solution.location.longitude << " " << solution.location.latitude
     << " dist " << solution.distance << " alt " << solution.altitude << " time "
     << solution.elapsed_time << "\n";
 

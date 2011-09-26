@@ -44,12 +44,12 @@ FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
     Angle delta_lon = Angle::degrees(fixed(0.01));
 
     GeoPoint plat = basic.location;
-    plat.Latitude += delta_lat;
+    plat.latitude += delta_lat;
     GeoPoint plon = basic.location;
-    plon.Longitude += delta_lon;
+    plon.longitude += delta_lon;
 
-    fixed dlat = basic.location.distance(plat);
-    fixed dlon = basic.location.distance(plon);
+    fixed dlat = basic.location.Distance(plat);
+    fixed dlon = basic.location.Distance(plon);
 
     if (positive(fabs(dlat)) && positive(fabs(dlon))) {
       FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
@@ -75,13 +75,13 @@ FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
     // Calculate Location
     traffic.location_available = basic.location_available;
     if (traffic.location_available) {
-      traffic.location.Latitude =
+      traffic.location.latitude =
           Angle::degrees(traffic.relative_north * FLARM_NorthingToLatitude) +
-          basic.location.Latitude;
+          basic.location.latitude;
 
-      traffic.location.Longitude =
+      traffic.location.longitude =
           Angle::degrees(traffic.relative_east * FLARM_EastingToLongitude) +
-          basic.location.Longitude;
+          basic.location.longitude;
     }
 
     // Calculate absolute altitude
@@ -124,7 +124,7 @@ FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
         traffic.location_available &&
         last_traffic->location_available) {
       // Calculate the GeoVector between now and the last contact
-      GeoVector vec = last_traffic->location.distance_bearing(traffic.location);
+      GeoVector vec = last_traffic->location.DistanceBearing(traffic.location);
 
       if (!traffic.track_received)
         traffic.track = vec.Bearing;

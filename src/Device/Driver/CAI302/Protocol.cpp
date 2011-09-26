@@ -336,7 +336,7 @@ CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
   double tmp, MinLat, MinLon;
   char NoS, EoW;
 
-  tmp = location.Latitude.value_degrees();
+  tmp = location.latitude.value_degrees();
   NoS = 'N';
   if (tmp < 0) {
     NoS = 'S';
@@ -345,7 +345,7 @@ CAI302::DeclareTP(Port &port, unsigned i, const GeoPoint &location,
   DegLat = (int)tmp;
   MinLat = (tmp - DegLat) * 60;
 
-  tmp = location.Longitude.value_degrees();
+  tmp = location.longitude.value_degrees();
   EoW = 'E';
   if (tmp < 0) {
     EoW = 'W';

@@ -233,7 +233,7 @@ EWDevice::AddWaypoint(const Waypoint &way_point)
   #endif
 
   // prepare lat
-    tmp = way_point.location.Latitude.value_degrees();
+    tmp = way_point.location.latitude.value_degrees();
   NoS = 'N';
   if (tmp < 0)
     {
@@ -245,7 +245,7 @@ EWDevice::AddWaypoint(const Waypoint &way_point)
 
 
   // prepare long
-  tmp = way_point.location.Longitude.value_degrees();
+  tmp = way_point.location.longitude.value_degrees();
   EoW = 'E';
   if (tmp < 0)
     {

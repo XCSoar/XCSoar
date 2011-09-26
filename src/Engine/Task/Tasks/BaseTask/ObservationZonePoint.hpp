@@ -113,7 +113,7 @@ public:
    * distance from this to the reference
    */
   fixed distance(const GeoPoint & ref) const {
-    return reference.distance(ref);
+    return reference.Distance(ref);
   }
 
   /**

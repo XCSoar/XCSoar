@@ -118,7 +118,7 @@ ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
       !last.location_available)
     return;
 
-  const GeoVector v = last.location.distance_bearing(basic.location);
+  const GeoVector v = last.location.DistanceBearing(basic.location);
   if (v.Distance >= fixed_one)
     basic.track = v.Bearing;
 }
@@ -138,7 +138,7 @@ ComputeGroundSpeed(NMEAInfo &basic, const NMEAInfo &last)
     return;
 
   fixed t = basic.time - last.time;
-  fixed d = basic.location.distance(last.location);
+  fixed d = basic.location.Distance(last.location);
   basic.ground_speed = d / t;
 }
 

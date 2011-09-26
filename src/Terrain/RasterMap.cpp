@@ -84,10 +84,10 @@ RasterMap::SetViewCenter(const GeoPoint &location, fixed radius)
 
   const GeoBounds &bounds = raster_tile_cache.GetBounds();
 
-  int x = angle_to_pixel(location.Longitude, bounds.west, bounds.east,
+  int x = angle_to_pixel(location.longitude, bounds.west, bounds.east,
                          raster_tile_cache.GetWidth());
 
-  int y = angle_to_pixel(location.Latitude, bounds.north, bounds.south,
+  int y = angle_to_pixel(location.latitude, bounds.north, bounds.south,
                          raster_tile_cache.GetHeight());
 
   raster_tile_cache.UpdateTiles(path, x, y,
@@ -117,7 +117,7 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
 
   const short invalid = RasterBuffer::TERRAIN_INVALID;
 
-  const fixed total_distance = start.distance(end);
+  const fixed total_distance = start.Distance(end);
   if (!positive(total_distance)) {
     std::fill(buffer, buffer + size, invalid);
     return;
@@ -133,9 +133,9 @@ RasterMap::ScanLine(const GeoPoint &start, const GeoPoint &end,
   }
 
   fixed clipped_start_distance =
-    std::max(clipped_start.distance(start), fixed_zero);
+    std::max(clipped_start.Distance(start), fixed_zero);
   fixed clipped_end_distance =
-    std::max(clipped_end.distance(start), fixed_zero);
+    std::max(clipped_end.Distance(start), fixed_zero);
 
   /* calculate the offsets of the clipped range within the buffer */
 

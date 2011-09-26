@@ -67,8 +67,8 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
     AbstractAirspace* as;
     if (rand()%4!=0) {
       GeoPoint c;
-      c.Longitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.Longitude;
-      c.Latitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.Latitude;
+      c.longitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
+      c.latitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
       fixed radius(10000.0*(0.2+(rand()%12)/12.0));
       as = new AirspaceCircle(c,radius);
     } else {
@@ -77,14 +77,14 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
       // random points
       const unsigned num = rand()%10+5;
       GeoPoint c;
-      c.Longitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.Longitude;
-      c.Latitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.Latitude;
+      c.longitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
+      c.latitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
       
       std::vector<GeoPoint> pts;
       for (unsigned j=0; j<num; j++) {
         GeoPoint p=c;
-        p.Longitude += Angle::degrees(fixed((rand()%200)/1000.0));
-        p.Latitude += Angle::degrees(fixed((rand()%200)/1000.0));
+        p.longitude += Angle::degrees(fixed((rand()%200)/1000.0));
+        p.latitude += Angle::degrees(fixed((rand()%200)/1000.0));
         pts.push_back(p);
       }
       as = new AirspacePolygon(pts,true);
@@ -178,14 +178,14 @@ public:
          it != m_intersections.end(); ++it) {
       const GeoPoint start = (it->first);
       const GeoPoint end = (it->second);
-      *fout << start.Longitude << " " << start.Latitude << " " << "\n";
-      *fout << end.Longitude << " " << end.Latitude << " " << "\n\n";
+      *fout << start.longitude << " " << start.latitude << " " << "\n";
+      *fout << end.longitude << " " << end.latitude << " " << "\n\n";
     }
 
     AirspaceInterceptSolution solution = intercept(as, m_state, m_perf);
     if (solution.IsValid()) {
       *iout << "# intercept " << solution.elapsed_time << " h " << solution.altitude << "\n";
-      *iout << solution.location.Longitude << " " << solution.location.Latitude << " " << "\n\n";
+      *iout << solution.location.longitude << " " << solution.location.latitude << " " << "\n\n";
     }
   }
   virtual void Visit(const AirspaceCircle& as) {
@@ -230,8 +230,8 @@ public:
     GeoPoint c = as.ClosestPoint(state.location);
     if (fout) {
       *fout << "# closest point\n";
-      *fout << c.Longitude << " " << c.Latitude << " " << "\n";
-      *fout << state.location.Longitude << " " << state.location.Latitude << " " << "\n\n";
+      *fout << c.longitude << " " << c.latitude << " " << "\n";
+      *fout << state.location.longitude << " " << state.location.latitude << " " << "\n\n";
     }
     AirspaceInterceptSolution solution;
     GeoVector vec(state.location, c);

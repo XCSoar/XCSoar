@@ -141,14 +141,14 @@ CirclingWind::NewSample(const MoreData &info)
       startcircle--;
 
     if (startcircle == 1) {
-      climbstartpos = GeoPoint(info.location.Longitude,
-                               info.location.Latitude);
+      climbstartpos = GeoPoint(info.location.longitude,
+                               info.location.latitude);
       climbstarttime = info.time;
       startcircle = 0;
     }
 
-    climbendpos = GeoPoint(info.location.Longitude,
-                           info.location.Latitude);
+    climbendpos = GeoPoint(info.location.longitude,
+                           info.location.latitude);
     climbendtime = info.time;
 
     //no need to reset fullCircle, it will automaticly be reset in the next itteration.

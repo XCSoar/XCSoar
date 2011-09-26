@@ -168,7 +168,7 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
 TCHAR *
 Units::FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
 {
-  if (!LatitudeToString(location.Latitude, buffer, size))
+  if (!LatitudeToString(location.latitude, buffer, size))
     return NULL;
 
   TCHAR *end = buffer + size, *p = buffer + _tcslen(buffer);
@@ -177,7 +177,7 @@ Units::FormatGeoPoint(const GeoPoint &location, TCHAR *buffer, size_t size)
 
   *p++ = _T(' ');
 
-  if (!LongitudeToString(location.Longitude, p, end - p))
+  if (!LongitudeToString(location.longitude, p, end - p))
     return NULL;
 
   return buffer;

@@ -144,7 +144,7 @@ public:
    */
   gcc_pure
   bool sort (const SearchPoint &other) const {
-    return reference.sort(other.reference);
+    return reference.Sort(other.reference);
   }
 
   /**
@@ -159,7 +159,7 @@ public:
    * distance from this to the reference
    */
   fixed distance(const GeoPoint & ref) const {
-    return reference.distance(ref);
+    return reference.Distance(ref);
   }
 
   /**

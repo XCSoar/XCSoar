@@ -186,8 +186,8 @@ public:
          it != m_intersections.end(); ++it) {
       const GeoPoint p_start = it->first;
       const GeoPoint p_end = it->second;
-      const fixed distance_start = start.distance(p_start);
-      const fixed distance_end = start.distance(p_end);
+      const fixed distance_start = start.Distance(p_start);
+      const fixed distance_end = start.Distance(p_end);
 
       // Determine left and right coordinate
       rcd.left = chart.screenX(distance_start);

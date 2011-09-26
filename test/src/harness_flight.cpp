@@ -243,8 +243,8 @@ bool run_flight(TaskManager &task_manager,
 
       const AircraftState state = aircraft.get_state();
       f4 << state.time << " "
-         <<  state.location.Longitude << " "
-         <<  state.location.Latitude << " "
+         <<  state.location.longitude << " "
+         <<  state.location.latitude << " "
          <<  state.altitude << "\n";
 
       f4.flush();
@@ -302,8 +302,8 @@ bool run_flight(TaskManager &task_manager,
 
     const AircraftState state = aircraft.get_state();
     f4 << state.time << " "
-       <<  state.location.Longitude << " "
-       <<  state.location.Latitude << " "
+       <<  state.location.longitude << " "
+       <<  state.location.latitude << " "
        <<  state.altitude << "\n";
     f4 << "\n";
     f4.flush();

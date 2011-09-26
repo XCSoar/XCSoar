@@ -162,8 +162,8 @@ Serialiser::Visit(const CylinderZone& data)
 void 
 Serialiser::serialise(const GeoPoint& data)
 {
-  m_node.set_attribute(_T("longitude"), data.Longitude);
-  m_node.set_attribute(_T("latitude"), data.Latitude);
+  m_node.set_attribute(_T("longitude"), data.longitude);
+  m_node.set_attribute(_T("latitude"), data.latitude);
 }
 
 void 

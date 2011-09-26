@@ -84,8 +84,8 @@ void GrahamScan::partition_points()
   for (std::list<SearchPoint>::iterator i = raw_points.begin(); 
        i != raw_points.end(); ) {
 
-    if ((loclast.Longitude != (*i).get_location().Longitude)
-        ||(loclast.Latitude != (*i).get_location().Latitude)) {
+    if ((loclast.longitude != (*i).get_location().longitude)
+        ||(loclast.latitude != (*i).get_location().latitude)) {
       loclast = (*i).get_location();
 
       int dir = direction( left->get_location(), right->get_location(), 
@@ -185,8 +185,8 @@ int GrahamScan::direction( const GeoPoint& p0,
                            const GeoPoint& p2,
                            const fixed& tolerance)
 {
-  return (( (p0.Longitude - p1.Longitude ) * (p2.Latitude - p1.Latitude ) )
-          - ( (p2.Longitude - p1.Longitude ) * (p0.Latitude - p1.Latitude ) )).sign(tolerance);
+  return (( (p0.longitude - p1.longitude ) * (p2.latitude - p1.latitude ) )
+          - ( (p2.longitude - p1.longitude ) * (p0.latitude - p1.latitude ) )).sign(tolerance);
 }
 
 

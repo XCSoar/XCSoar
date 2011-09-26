@@ -239,9 +239,9 @@ UpdateValuesFlight(void)
   TCHAR sLongitude[16];
   TCHAR sLatitude[16];
 
-  Units::LongitudeToString(basic.location.Longitude,
+  Units::LongitudeToString(basic.location.longitude,
                            sLongitude, sizeof(sLongitude)-1);
-  Units::LatitudeToString(basic.location.Latitude,
+  Units::LatitudeToString(basic.location.latitude,
                           sLatitude, sizeof(sLatitude)-1);
 
   wp = (WndProperty*)wf->FindByName(_T("prpLongitude"));

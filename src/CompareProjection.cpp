@@ -36,13 +36,13 @@ static fixed
 SimpleSquareDistance(const GeoPoint &a, const GeoPoint &b,
                      const fixed latitude_cos)
 {
-  return hypot((a.Longitude - b.Longitude).as_delta().value_native(),
-               (a.Latitude - b.Latitude).as_delta().value_native() * latitude_cos);
+  return hypot((a.longitude - b.longitude).as_delta().value_native(),
+               (a.latitude - b.latitude).as_delta().value_native() * latitude_cos);
 }
 
 CompareProjection::CompareProjection(const WindowProjection &projection)
   :corners(projection),
-   latitude_cos(corners.top_left.Latitude.fastcosine()),
+   latitude_cos(corners.top_left.latitude.fastcosine()),
    max_delta(SimpleSquareDistance(corners.top_left, corners.top_right,
                                   latitude_cos) /
              (projection.GetScreenWidth() * projection.GetScreenWidth()))

@@ -82,14 +82,14 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
   GeoPoint location;
 
   // Latitude (e.g. 5115.900N)
-  if (!parseAngle(params[iLatitude], location.Latitude, true))
+  if (!parseAngle(params[iLatitude], location.latitude, true))
     return false;
 
   // Longitude (e.g. 00715.900W)
-  if (!parseAngle(params[iLongitude], location.Longitude, false))
+  if (!parseAngle(params[iLongitude], location.longitude, false))
     return false;
 
-  location.normalize(); // ensure longitude is within -180:180
+  location.Normalize(); // ensure longitude is within -180:180
 
   Waypoint new_waypoint(location);
   new_waypoint.file_num = file_num;

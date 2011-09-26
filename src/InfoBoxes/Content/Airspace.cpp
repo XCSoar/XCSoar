@@ -118,7 +118,7 @@ FindNearestHorizontalAirspace()
 
   /* calculate distance to the nearest point */
   const GeoPoint closest = as.ClosestPoint(basic.location);
-  return NearestAirspace(as, basic.location.distance(closest));
+  return NearestAirspace(as, basic.location.Distance(closest));
 }
 
 void

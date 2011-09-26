@@ -59,8 +59,8 @@ public:
 
   gcc_pure RasterLocation
   project(const GeoPoint &location) const {
-    const unsigned x = ((int)(location.Longitude.value_native() * x_scale)) - left;
-    const unsigned y = top - ((int)(location.Latitude.value_native() * y_scale));
+    const unsigned x = ((int)(location.longitude.value_native() * x_scale)) - left;
+    const unsigned y = top - ((int)(location.latitude.value_native() * y_scale));
 
     return RasterLocation(x, y);
   }
@@ -75,8 +75,8 @@ public:
 
   gcc_pure RasterLocation
   project_coarse(const GeoPoint &location) const {
-    const int x = ((int)(location.Longitude.value_native() * x_scale)) - left;
-    const int y = top - ((int)(location.Latitude.value_native() * y_scale));
+    const int x = ((int)(location.longitude.value_native() * x_scale)) - left;
+    const int y = top - ((int)(location.latitude.value_native() * y_scale));
 
     return RasterLocation(x >> 8, y >> 8);
   }

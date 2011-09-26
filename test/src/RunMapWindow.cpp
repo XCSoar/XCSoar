@@ -215,8 +215,8 @@ GenerateBlackboard(MapWindow &map, const SETTINGS_MAP &settings_map)
   nmea_info.clock = fixed_one;
   nmea_info.time = fixed(1297230000);
   nmea_info.connected.Update(nmea_info.clock);
-  nmea_info.location.Latitude = Angle::degrees(fixed(51.2));
-  nmea_info.location.Longitude = Angle::degrees(fixed(7.7));
+  nmea_info.location.latitude = Angle::degrees(fixed(51.2));
+  nmea_info.location.longitude = Angle::degrees(fixed(7.7));
   nmea_info.location_available.Update(nmea_info.clock);
   nmea_info.track = Angle::degrees(fixed_90);
   nmea_info.track_available.Update(nmea_info.clock);

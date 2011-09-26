@@ -46,10 +46,10 @@ DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
   GeoBounds bounds = airspace.GetGeoBounds();
   GeoPoint center = bounds.center();
 
-  fixed geo_heigth = GeoPoint(center.Longitude, bounds.north).distance(
-                     GeoPoint(center.Longitude, bounds.south));
-  fixed geo_width = GeoPoint(bounds.west, center.Latitude).distance(
-                    GeoPoint(bounds.east, center.Latitude));
+  fixed geo_heigth = GeoPoint(center.longitude, bounds.north).Distance(
+                     GeoPoint(center.longitude, bounds.south));
+  fixed geo_width = GeoPoint(bounds.west, center.latitude).Distance(
+                    GeoPoint(bounds.east, center.latitude));
 
   fixed geo_size = std::max(geo_heigth, geo_width);
 

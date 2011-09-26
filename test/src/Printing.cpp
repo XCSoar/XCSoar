@@ -45,7 +45,7 @@ std::ostream& operator<<(std::ostream& os,fixed const& value)
 std::ostream& operator<< (std::ostream& f, 
                           const Waypoint& wp)
 {
-  f << wp.location.Longitude << " " << wp.location.Latitude << "\n";
+  f << wp.location.longitude << " " << wp.location.latitude << "\n";
   return f;
 }
 
@@ -96,8 +96,8 @@ static void
 PrintTracePoint(const TracePoint &point, std::ofstream& fs)
 {
   fs << point.time
-     << " " << point.get_location().Longitude
-     << " " << point.get_location().Latitude
+     << " " << point.get_location().longitude
+     << " " << point.get_location().latitude
      << " " << point.GetAltitude()
      << " " << point.GetVario()
      << "\n";
@@ -125,8 +125,8 @@ std::ostream& operator<< (std::ostream& o, const Angle& a)
 void write_point(const SearchPoint& sp, const FlatGeoPoint& p, const char* name)
 {
   printf("%g %g %d %d # %s\n",
-         (double)sp.get_location().Longitude.value_degrees(),
-         (double)sp.get_location().Latitude.value_degrees(),
+         (double)sp.get_location().longitude.value_degrees(),
+         (double)sp.get_location().latitude.value_degrees(),
          p.Longitude,
          p.Latitude,
          name);
@@ -150,16 +150,16 @@ void PrintHelper::print_route(RoutePlanner& r)
   for (Route::const_iterator i = r.solution_route.begin();
        i!= r.solution_route.end(); ++i) {
     printf("%.6g %.6g %d # solution\n",
-           (double)i->Longitude.value_degrees(),
-           (double)i->Latitude.value_degrees(),
+           (double)i->longitude.value_degrees(),
+           (double)i->latitude.value_degrees(),
            0);
   }
   printf("# solution\n");
   for (Route::const_iterator i = r.solution_route.begin();
        i!= r.solution_route.end(); ++i) {
     printf("%.6g %.6g %d # solution\n",
-           (double)i->Longitude.value_degrees(),
-           (double)i->Latitude.value_degrees(),
+           (double)i->longitude.value_degrees(),
+           (double)i->latitude.value_degrees(),
            i->altitude);
   }
   printf("# solution\n");

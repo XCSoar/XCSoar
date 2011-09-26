@@ -38,25 +38,25 @@ struct GeoBounds {
 
   GeoBounds() {}
   GeoBounds(const GeoPoint pt)
-    :west(pt.Longitude), north(pt.Latitude),
-     east(pt.Longitude), south(pt.Latitude) {}
+    :west(pt.longitude), north(pt.latitude),
+     east(pt.longitude), south(pt.latitude) {}
   GeoBounds(const GeoPoint _north_west, const GeoPoint _south_east)
-    :west(_north_west.Longitude), north(_north_west.Latitude),
-     east(_south_east.Longitude), south(_south_east.Latitude) {}
+    :west(_north_west.longitude), north(_north_west.latitude),
+     east(_south_east.longitude), south(_south_east.latitude) {}
 
   bool empty() const {
     return west == east && north == south;
   }
 
   void extend(const GeoPoint pt) {
-    if (pt.Longitude < west)
-      west = pt.Longitude;
-    if (pt.Latitude > north)
-      north = pt.Latitude;
-    if (pt.Longitude > east)
-      east = pt.Longitude;
-    if (pt.Latitude < south)
-      south = pt.Latitude;
+    if (pt.longitude < west)
+      west = pt.longitude;
+    if (pt.latitude > north)
+      north = pt.latitude;
+    if (pt.longitude > east)
+      east = pt.longitude;
+    if (pt.latitude < south)
+      south = pt.latitude;
   }
 
   bool inside(Angle longitude, Angle latitude) const {
@@ -64,7 +64,7 @@ struct GeoBounds {
   }
 
   bool inside(const GeoPoint pt) const {
-    return inside(pt.Longitude, pt.Latitude);
+    return inside(pt.longitude, pt.latitude);
   }
 
   bool inside(const GeoBounds &interior) const {

@@ -49,7 +49,7 @@ test_location(const Waypoints& waypoints, bool good)
 {
   GeoPoint loc(Angle::zero(), Angle::zero());
   if (!good) {
-    loc.Longitude = Angle::degrees(fixed(-23.4));
+    loc.longitude = Angle::degrees(fixed(-23.4));
   }
   const Waypoint *r = waypoints.lookup_location(loc);
   if (r) {

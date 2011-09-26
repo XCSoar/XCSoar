@@ -74,7 +74,7 @@ OLCTriangle::leg_distance(const unsigned index) const
     solution[index+1].get_location():
     solution[0].get_location();
 
-  return p_start.distance(p_dest);
+  return p_start.Distance(p_dest);
 }
 
 
@@ -96,7 +96,7 @@ OLCTriangle::path_closed() const
        ++start.point_index) {
 
     const fixed d_this =
-      GetPointFast(start).get_location().distance(
+      GetPointFast(start).get_location().Distance(
         GetPointFast(end).get_location());
 
     if (!positive(d_min) || (d_this < d_min)) {
@@ -184,11 +184,11 @@ TriangleSecondLeg::Calculate(const TracePoint &c, unsigned best) const
   // find accurate min leg distance
   fixed leg(0);
   if (df_1 == shortest) {
-    leg = a.get_location().distance(b.get_location());
+    leg = a.get_location().Distance(b.get_location());
   } else if (df_2 == shortest) {
-    leg = b.get_location().distance(c.get_location());
+    leg = b.get_location().Distance(c.get_location());
   } else if (df_3 == shortest) {
-    leg = c.get_location().distance(a.get_location());
+    leg = c.get_location().Distance(a.get_location());
   }
 
   // estimate total distance by scaling.

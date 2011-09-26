@@ -87,26 +87,26 @@ UTM::CalculateZoneLetter(const Angle latitude)
 unsigned char
 UTM::CalculateZoneNumber(const GeoPoint &p)
 {
-  if (p.Latitude.value_degrees() <= fixed(64) &&
-      p.Latitude.value_degrees() >= fixed(56) &&
-      p.Longitude.value_degrees() <= fixed(12) &&
-      p.Longitude.value_degrees() >= fixed(3))
+  if (p.latitude.value_degrees() <= fixed(64) &&
+      p.latitude.value_degrees() >= fixed(56) &&
+      p.longitude.value_degrees() <= fixed(12) &&
+      p.longitude.value_degrees() >= fixed(3))
     return 32;
 
-  if (p.Latitude.value_degrees() <= fixed(84) &&
-      p.Latitude.value_degrees() >= fixed(72) &&
-      p.Longitude.value_degrees() >= fixed_zero) {
-    if (p.Longitude.value_degrees() <= fixed(9))
+  if (p.latitude.value_degrees() <= fixed(84) &&
+      p.latitude.value_degrees() >= fixed(72) &&
+      p.longitude.value_degrees() >= fixed_zero) {
+    if (p.longitude.value_degrees() <= fixed(9))
       return 31;
-    if (p.Longitude.value_degrees() <= fixed(21))
+    if (p.longitude.value_degrees() <= fixed(21))
       return 33;
-    if (p.Longitude.value_degrees() <= fixed(33))
+    if (p.longitude.value_degrees() <= fixed(33))
       return 35;
-    if (p.Longitude.value_degrees() <= fixed(42))
+    if (p.longitude.value_degrees() <= fixed(42))
       return 37;
   }
 
-  return (int)floor((p.Longitude.value_degrees() + fixed_180) / 6) + 1;
+  return (int)floor((p.longitude.value_degrees() + fixed_180) / 6) + 1;
 }
 
 Angle
@@ -117,21 +117,21 @@ UTM::GetCentralMeridian(unsigned char zone_number)
 
 UTM
 UTM::FromGeoPoint(const GeoPoint &p) {
-  double lat = p.Latitude.value_radians();
-  double _sin = p.Latitude.sin();
-  double _cos = p.Latitude.cos();
+  double lat = p.latitude.value_radians();
+  double _sin = p.latitude.sin();
+  double _cos = p.latitude.cos();
   double _tan = _sin / _cos;
   double tan2 = _tan * _tan;
   double tan4 = tan2 * tan2;
 
   UTM utm;
   utm.zone_number = CalculateZoneNumber(p);
-  utm.zone_letter = CalculateZoneLetter(p.Latitude);
+  utm.zone_letter = CalculateZoneLetter(p.latitude);
 
   double n = r / sqrt(1 - e * _sin * _sin);
   double c = e_p2 * _cos * _cos;
 
-  double a = _cos * (double)(p.Longitude.value_radians() -
+  double a = _cos * (double)(p.longitude.value_radians() -
                              GetCentralMeridian(utm.zone_number).value_radians());
   double a2 = a * a;
   double a3 = a * a2;
@@ -150,7 +150,7 @@ UTM::FromGeoPoint(const GeoPoint &p) {
   utm.northing = fixed(k0 * (m + n * _tan *
       (a2 / 2 +  a4 / 24 * (5 - tan2 + 9 * c + 4 * c * c) +
        a6 / 720 * (61 - 58 * tan2 + tan4 + 600 * c - 330 * e_p2))));
-  if (negative(p.Latitude.value_native()))
+  if (negative(p.latitude.value_native()))
     utm.northing += fixed(10000000);
 
   return utm;

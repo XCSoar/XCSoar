@@ -42,8 +42,8 @@ int main(int argc, char **argv)
   EstimateThermalBase(location, altitude, average, wind,
                       ground_location, ground_alt);
 
-  ok1(equals(ground_location.Longitude.value_degrees(), 7.114186));
-  ok1(equals(ground_location.Latitude.value_degrees(), 45.046563));
+  ok1(equals(ground_location.longitude.value_degrees(), 7.114186));
+  ok1(equals(ground_location.latitude.value_degrees(), 45.046563));
   ok1(equals(ground_alt, 0));
 
   return exit_status();

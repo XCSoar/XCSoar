@@ -191,7 +191,7 @@ UnorderedTask::get_task_center(const GeoPoint& fallback_location) const
   if (!tp) {
     return fallback_location;
   } else {
-    return tp->GetLocation().interpolate(fallback_location, fixed_half);
+    return tp->GetLocation().Interpolate(fallback_location, fixed_half);
   }
 }
 
@@ -202,7 +202,7 @@ UnorderedTask::get_task_radius(const GeoPoint& fallback_location) const
   if (!tp) {
     return fixed_zero;
   } else {
-    return half(tp->GetLocation().distance(fallback_location));
+    return half(tp->GetLocation().Distance(fallback_location));
   }
 }
 

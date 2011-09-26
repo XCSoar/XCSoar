@@ -56,7 +56,7 @@ bool
 GlideComputerStats::DoLogging()
 {
   /// @todo consider putting this sanity check inside Parser
-  if (Basic().location.distance(LastBasic().location) > fixed(200))
+  if (Basic().location.Distance(LastBasic().location) > fixed(200))
     // prevent bad fixes from being logged or added to OLC store
     return false;
 

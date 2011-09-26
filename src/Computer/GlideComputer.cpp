@@ -185,7 +185,7 @@ GlideComputer::CalculateOwnTeamCode()
     return;
 
   // Get bearing and distance to the reference waypoint
-  const GeoVector v = TeamCodeRefLocation.distance_bearing(Basic().location);
+  const GeoVector v = TeamCodeRefLocation.DistanceBearing(Basic().location);
 
   // Save teamcode to Calculated
   SetCalculated().own_teammate_code.Update(v.Bearing, v.Distance);
@@ -209,12 +209,12 @@ ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
 
   // Set Teammate location to FLARM contact location
   teamcode_info.teammate_location = traffic->location;
-  teamcode_info.teammate_vector = location.distance_bearing(traffic->location);
+  teamcode_info.teammate_vector = location.DistanceBearing(traffic->location);
   teamcode_info.teammate_available = true;
 
   // Calculate distance and bearing from teammate to reference waypoint
 
-  GeoVector v = reference_location.distance_bearing(traffic->location);
+  GeoVector v = reference_location.DistanceBearing(traffic->location);
 
   // Calculate TeamCode and save it in Calculated
   teamcode_info.flarm_teammate_code.Update(v.Bearing, v.Distance);
@@ -230,7 +230,7 @@ ComputeTeamCode(const GeoPoint &location, const GeoPoint &reference_location,
   // Calculate bearing and distance to teammate
   teamcode_info.teammate_location = team_code.GetLocation(reference_location);
   teamcode_info.teammate_vector =
-    location.distance_bearing(teamcode_info.teammate_location);
+    location.DistanceBearing(teamcode_info.teammate_location);
   teamcode_info.teammate_available = true;
 }
 

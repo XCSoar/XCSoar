@@ -34,8 +34,8 @@ struct GeoVector;
  * Geodetic coordinate expressed as Longitude and Latitude angles.
  */
 struct GeoPoint {
-  Angle Longitude;
-  Angle Latitude;
+  Angle longitude;
+  Angle latitude;
 
   /**
    * Non-initialising constructor.
@@ -50,16 +50,16 @@ struct GeoPoint {
    *
    * @return Initialised object
    */
-  GeoPoint(const Angle &_Longitude, const Angle &_Latitude) :
-    Longitude(_Longitude), Latitude(_Latitude) {}
+  GeoPoint(const Angle &_longitude, const Angle &_latitude) :
+    longitude(_longitude), latitude(_latitude) {}
 
   /**
    * Normalize the values, so this object can be used properly in
    * calculations, without unintended side effects (such as -1 degrees
    * vs 359 degrees).  This modification is in-place.
    */
-  GeoPoint &normalize() {
-    Longitude = Longitude.as_delta();
+  GeoPoint &Normalize() {
+    longitude = longitude.as_delta();
     return *this;
   }
 
@@ -72,7 +72,7 @@ struct GeoPoint {
    * @return Location of point
    */
   gcc_pure
-  GeoPoint parametric(const GeoPoint &delta, const fixed t) const;
+  GeoPoint Parametric(const GeoPoint &delta, const fixed t) const;
 
   /**
    * Find location interpolated from this point towards end
@@ -83,7 +83,7 @@ struct GeoPoint {
    * @return Location of point
    */
   gcc_pure
-  GeoPoint interpolate(const GeoPoint &end, const fixed t) const;
+  GeoPoint Interpolate(const GeoPoint &end, const fixed t) const;
 
   /**
    * Multiply a point by a factor (used for deltas)
@@ -95,8 +95,8 @@ struct GeoPoint {
   gcc_pure
   GeoPoint operator* (const fixed x) const {
     GeoPoint res = *this;
-    res.Longitude *= x;
-    res.Latitude *= x;
+    res.longitude *= x;
+    res.latitude *= x;
     return res;
   };
 
@@ -110,8 +110,8 @@ struct GeoPoint {
   gcc_pure
   GeoPoint operator+ (const GeoPoint &delta) const {
     GeoPoint res = *this;
-    res.Longitude += delta.Longitude;
-    res.Latitude += delta.Latitude;
+    res.longitude += delta.longitude;
+    res.latitude += delta.latitude;
     return res;
   };
 
@@ -123,8 +123,8 @@ struct GeoPoint {
    * @return Modified point
    */
   const GeoPoint& operator+= (const GeoPoint &delta) {
-    Longitude += delta.Longitude;
-    Latitude += delta.Latitude;
+    longitude += delta.longitude;
+    latitude += delta.latitude;
     return *this;
   };
 
@@ -138,9 +138,9 @@ struct GeoPoint {
   gcc_pure
   GeoPoint operator- (const GeoPoint &delta) const {
     GeoPoint res = *this;
-    res.Longitude -= delta.Longitude;
-    res.Latitude -= delta.Latitude;
-    return res.normalize();
+    res.longitude -= delta.longitude;
+    res.latitude -= delta.latitude;
+    return res.Normalize();
   };
 
   /**
@@ -151,7 +151,7 @@ struct GeoPoint {
    * @return Distance (m)
    */
   gcc_pure
-  fixed distance(const GeoPoint &other) const;
+  fixed Distance(const GeoPoint &other) const;
 
   /**
    * Calculate great circle initial bearing from this to the other
@@ -161,13 +161,13 @@ struct GeoPoint {
    * @return Bearing (deg)
    */
   gcc_pure
-  Angle bearing(const GeoPoint &other) const;
+  Angle Bearing(const GeoPoint &other) const;
 
   /**
    * Calculate great circle distance and initial bearing from this to the other
    */
   gcc_pure
-  GeoVector distance_bearing(const GeoPoint &other) const;
+  GeoVector DistanceBearing(const GeoPoint &other) const;
 
   /**
    * Find distance along a great-circle path that this point
@@ -179,8 +179,7 @@ struct GeoPoint {
    * @return Distance (m) along from-to line
    */
   gcc_pure
-  fixed projected_distance(const GeoPoint &from,
-                           const GeoPoint &to) const;
+  fixed ProjectedDistance(const GeoPoint &from, const GeoPoint &to) const;
 
   /**
    * Find point a set distance along a great-circle path towards
@@ -192,8 +191,8 @@ struct GeoPoint {
    * @return Location of point
    */
   gcc_pure
-  GeoPoint intermediate_point(const GeoPoint &destination, 
-                              const fixed distance) const;
+  GeoPoint IntermediatePoint(const GeoPoint &destination,
+                             const fixed distance) const;
 
   /**
    * Test whether two points are co-located
@@ -203,7 +202,7 @@ struct GeoPoint {
    * @return True if coincident
    */
   gcc_pure
-  bool equals(const GeoPoint &other) const;
+  bool Equals(const GeoPoint &other) const;
 
   /**
    * Test whether two points are co-located
@@ -214,7 +213,7 @@ struct GeoPoint {
    */
   gcc_pure
   bool operator== (const GeoPoint &other) const {
-    return equals(other);
+    return Equals(other);
   }
 
   /**
@@ -226,7 +225,7 @@ struct GeoPoint {
    */
   gcc_pure
   bool operator !=(const GeoPoint &other) const {
-    return !equals(other);
+    return !Equals(other);
   }
   
   /**
@@ -237,7 +236,7 @@ struct GeoPoint {
    * @return True if this point is further left (or if equal, lower) than the other
    */
   gcc_pure
-  bool sort (const GeoPoint &other) const;
+  bool Sort(const GeoPoint &other) const;
 };
 
 /**
