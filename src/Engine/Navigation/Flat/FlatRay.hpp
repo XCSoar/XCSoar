@@ -58,7 +58,7 @@ public:
    * @return Parameter [0,1] of vector on this ray that intersection occurs (or -1 if fail)
    */
   gcc_pure
-  fixed intersects(const FlatRay &that) const;
+  fixed Intersects(const FlatRay &that) const;
 
   /**
    * Parametric form of ray
@@ -68,22 +68,20 @@ public:
    * @return Location of end point
    */
   gcc_pure
-  FlatGeoPoint parametric(const fixed t) const;
+  FlatGeoPoint Parametric(const fixed t) const;
 
   /**
    * Determine if two rays intersect away from their nodes
    */
   gcc_pure
-  bool
-  intersects_distinct(const FlatRay& that) const;
+  bool IntersectsDistinct(const FlatRay& that) const;
 
   // as above, but if true, also calculates t parameter
-  bool
-  intersects_distinct(const FlatRay& that, fixed& t) const;
+  bool IntersectsDistinct(const FlatRay& that, fixed& t) const;
 
 private:
   gcc_pure
-  std::pair<int, int> intersects_ratio(const FlatRay &that) const;
+  std::pair<int, int> IntersectsRatio(const FlatRay &that) const;
 };
 
 #endif

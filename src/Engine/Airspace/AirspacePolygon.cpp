@@ -88,8 +88,8 @@ AirspacePolygon::Intersects(const GeoPoint &start, const GeoVector &vec) const
 
     const FlatRay r_seg(it->get_flatLocation(), (it + 1)->get_flatLocation());
     fixed t;
-    if (ray.intersects_distinct(r_seg, t))
-      sorter.add(t, m_task_projection->unproject(ray.parametric(t)));
+    if (ray.IntersectsDistinct(r_seg, t))
+      sorter.add(t, m_task_projection->unproject(ray.Parametric(t)));
   }
 
   return sorter.all();

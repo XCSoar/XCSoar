@@ -157,7 +157,7 @@ SearchPointVector::IntersectsWith(const FlatRay &ray) const
   for (const_iterator it = begin(); it + 1 != end(); ++it) {
     const FlatRay r_seg(it->get_flatLocation(), (it + 1)->get_flatLocation());
 
-    if (r_seg.intersects_distinct(ray))
+    if (r_seg.IntersectsDistinct(ray))
       return true;
   }
   return false;

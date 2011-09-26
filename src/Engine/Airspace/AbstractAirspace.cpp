@@ -284,7 +284,7 @@ AbstractAirspace::GetClearance() const
     FlatRay r(center, p);
     int mag = hypot(r.vector.Longitude, r.vector.Latitude);
     int mag_new = mag + RADIUS;
-    p = r.parametric((fixed)mag_new / mag);
+    p = r.Parametric((fixed)mag_new / mag);
     *i = SearchPoint(m_task_projection->unproject(p));
     i->project(*m_task_projection);
   }

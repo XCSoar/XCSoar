@@ -32,7 +32,7 @@
  * adapted from line_line_intersection
  */
 std::pair<int, int>
-FlatRay::intersects_ratio(const FlatRay &that) const
+FlatRay::IntersectsRatio(const FlatRay &that) const
 {
   std::pair<int, int> r;
   r.second = vector.CrossProduct(that.vector);
@@ -60,7 +60,7 @@ FlatRay::intersects_ratio(const FlatRay &that) const
 }
 
 FlatGeoPoint
-FlatRay::parametric(const fixed t) const
+FlatRay::Parametric(const fixed t) const
 {
   FlatGeoPoint p = point;
   p.Longitude += iround(vector.Longitude * t);
@@ -69,27 +69,27 @@ FlatRay::parametric(const fixed t) const
 }
 
 fixed
-FlatRay::intersects(const FlatRay &that) const
+FlatRay::Intersects(const FlatRay &that) const
 {
-  std::pair<int, int> r = intersects_ratio(that);
+  std::pair<int, int> r = IntersectsRatio(that);
   if (r.second == 0)
     return -fixed_one;
   return ((fixed)r.first) / r.second;
 }
 
 bool
-FlatRay::intersects_distinct(const FlatRay& that) const
+FlatRay::IntersectsDistinct(const FlatRay& that) const
 {
-  std::pair<int, int> r = intersects_ratio(that);
+  std::pair<int, int> r = IntersectsRatio(that);
   return (r.second != 0) &&
          (sgn(r.second) * r.first > 0) &&
          (abs(r.first) < abs(r.second));
 }
 
 bool
-FlatRay::intersects_distinct(const FlatRay& that, fixed& t) const
+FlatRay::IntersectsDistinct(const FlatRay& that, fixed& t) const
 {
-  std::pair<int, int> r = intersects_ratio(that);
+  std::pair<int, int> r = IntersectsRatio(that);
   if (r.second != 0 &&
       sgn(r.second) * r.first > 0 &&
       abs(r.first) < abs(r.second)) {
