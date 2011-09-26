@@ -25,10 +25,8 @@
 #include "Navigation/TaskProjection.hpp"
 #include "Math/FastMath.h"
 
-RoutePlanner::RoutePlanner():
-  terrain(NULL),
-  m_planner(0),
-  m_reach_polar_mode(RoutePlannerConfig::rpmTask)
+RoutePlanner::RoutePlanner()
+  :terrain(NULL), m_planner(0), m_reach_polar_mode(RoutePlannerConfig::rpmTask)
 #ifndef PLANNER_SET
   , m_unique(50000)
 #endif
@@ -39,8 +37,8 @@ RoutePlanner::RoutePlanner():
 void
 RoutePlanner::reset()
 {
-  origin_last = AFlatGeoPoint(0,0,0);
-  destination_last = AFlatGeoPoint(0,0,0);
+  origin_last = AFlatGeoPoint(0, 0, 0);
+  destination_last = AFlatGeoPoint(0, 0, 0);
   dirty = true;
   solution_route.clear();
   m_planner.clear();
@@ -52,22 +50,20 @@ RoutePlanner::reset()
 }
 
 void
-RoutePlanner::get_solution(Route& route) const
+RoutePlanner::get_solution(Route &route) const
 {
   route = solution_route;
 }
 
 bool
-RoutePlanner::solve_reach(const AGeoPoint& origin, const bool do_solve)
+RoutePlanner::solve_reach(const AGeoPoint &origin, const bool do_solve)
 {
   return reach.solve(origin, rpolars_reach, terrain, do_solve);
 }
 
 bool
-RoutePlanner::solve(const AGeoPoint& origin,
-                    const AGeoPoint& destination,
-                    const RoutePlannerConfig& config,
-                    const short h_ceiling)
+RoutePlanner::solve(const AGeoPoint &origin, const AGeoPoint &destination,
+                    const RoutePlannerConfig &config, const short h_ceiling)
 {
   on_solve(origin, destination);
   rpolars_route.set_config(config, std::max(destination.altitude, origin.altitude),
@@ -78,8 +74,11 @@ RoutePlanner::solve(const AGeoPoint& origin,
   m_reach_polar_mode = config.reach_polar_mode;
 
   {
-    const AFlatGeoPoint s_origin(task_projection.project(origin), origin.altitude);
-    const AFlatGeoPoint s_destination(task_projection.project(destination), destination.altitude);
+    const AFlatGeoPoint s_origin(task_projection.project(origin),
+                                 origin.altitude);
+
+    const AFlatGeoPoint s_destination(task_projection.project(destination),
+                                      destination.altitude);
 
     if (!(s_origin == origin_last) || !(s_destination == destination_last))
       dirty = true;
@@ -114,10 +113,10 @@ RoutePlanner::solve(const AGeoPoint& origin,
   if (!rpolars_route.achievable(e_test))
     return false;
 
-  count_dij=0;
-  count_airspace=0;
-  count_terrain=0;
-  count_supressed=0;
+  count_dij = 0;
+  count_airspace = 0;
+  count_terrain = 0;
+  count_supressed = 0;
 
   bool retval = false;
   m_planner.restart(start);
@@ -141,7 +140,7 @@ RoutePlanner::solve(const AGeoPoint& origin,
     { // copy improving solutions
       Route this_solution;
       unsigned d = find_solution(node, this_solution);
-      if (d< best_d) {
+      if (d < best_d) {
         best_d = d;
         solution_route = this_solution;
       }
@@ -161,16 +160,17 @@ RoutePlanner::solve(const AGeoPoint& origin,
     }
 
   }
+
   count_unique = m_unique.size();
 
   if (retval) {
     // correct solution for rounding
     assert(solution_route.size()>=2);
-    for (unsigned i=0; i< solution_route.size(); ++i) {
+    for (unsigned i = 0; i < solution_route.size(); ++i) {
       FlatGeoPoint p(task_projection.project(solution_route[i]));
-      if (p== origin_last) {
+      if (p == origin_last) {
         solution_route[i] = AGeoPoint(origin, solution_route[i].altitude);
-      } else if (p== destination_last) {
+      } else if (p == destination_last) {
         solution_route[i] = AGeoPoint(destination, solution_route[i].altitude);
       }
     }
@@ -183,13 +183,12 @@ RoutePlanner::solve(const AGeoPoint& origin,
 
   m_planner.clear();
   m_unique.clear();
-//  m_search_hull.clear();
+  // m_search_hull.clear();
   return retval;
 }
 
-
 unsigned
-RoutePlanner::find_solution(const RoutePoint &final, Route& this_route) const
+RoutePlanner::find_solution(const RoutePoint &final, Route &this_route) const
 {
   // we are iterating from goal (aircraft) backwards to start (target)
 
@@ -204,26 +203,27 @@ RoutePlanner::find_solution(const RoutePoint &final, Route& this_route) const
     p_last = p;
     p = m_planner.get_predecessor(p);
 
-    if (p== p_last) {
+    if (p == p_last) {
       finished = true;
       continue;
     }
 
-    if ((p.altitude< p_last.altitude) && !((FlatGeoPoint)p == (FlatGeoPoint)p_last)) {
+    if (p.altitude < p_last.altitude &&
+        !((FlatGeoPoint)p == (FlatGeoPoint)p_last)) {
       // create intermediate point for part cruise, part glide
 
       const RouteLink l(p, p_last, task_projection);
       const short vh = rpolars_route.calc_vheight(l);
       assert(vh>0);
-      if (vh> p_last.altitude-p.altitude) { // climb was cut off
-        const fixed f = (fixed)(p_last.altitude-p.altitude)/vh;
+      if (vh > p_last.altitude - p.altitude) { // climb was cut off
+        const fixed f = (fixed)(p_last.altitude - p.altitude) / vh;
         const GeoPoint gp(task_projection.unproject(p));
         const GeoPoint gp_last(task_projection.unproject(p_last));
         const AGeoPoint gp_int(gp.interpolate(gp_last, f), p_last.altitude);
         this_route.insert(this_route.begin(), gp_int);
         // @todo: assert check_clearance?
       }
-    } else if (p.altitude> p_last.altitude) {
+    } else if (p.altitude > p_last.altitude) {
       // create intermediate point for jump at end
       const AGeoPoint gp_int(task_projection.unproject(p_last), p.altitude);
       this_route.insert(this_route.begin(), gp_int);
@@ -232,14 +232,10 @@ RoutePlanner::find_solution(const RoutePoint &final, Route& this_route) const
     this_route.insert(this_route.begin(),
                       AGeoPoint(task_projection.unproject(p), p.altitude));
     // @todo: assert check_clearance
-
   } while (!finished);
 
   return m_planner.get_node_value(final).h;
 }
-
-
-////////////////
 
 bool
 RoutePlanner::link_cleared(const RouteLink &e)
@@ -249,13 +245,13 @@ RoutePlanner::link_cleared(const RouteLink &e)
   if (!rpolars_route.achievable(e, true))
     return false;
 
-  if (!((FlatGeoPoint)e.second == m_astar_goal))  {
-    assert(e.second.altitude>= e.first.altitude);
-  }
+  if (!((FlatGeoPoint)e.second == m_astar_goal))
+    assert(e.second.altitude >= e.first.altitude);
 
   const unsigned g = rpolars_route.calc_time(e);
-  if (g== UINT_MAX)
-    return false; // not achievable
+  if (g == UINT_MAX)
+    // not achievable
+    return false;
 
   const RouteLink e_rem(e.second, m_astar_goal, task_projection);
   if (!rpolars_route.achievable(e_rem))
@@ -263,13 +259,14 @@ RoutePlanner::link_cleared(const RouteLink &e)
 
   const unsigned h = rpolars_route.calc_time(e_rem);
   if (h == UINT_MAX)
-    return false; // not achievable
+    // not achievable
+    return false;
 
-  assert (!(e.first==e.second));
+  assert(!(e.first==e.second));
 
   count_dij++;
-  AStarPriorityValue v((is_final? RoutePolars::round_time(g+h) : g), 
-                       (is_final? 0 : RoutePolars::round_time(h)));
+  AStarPriorityValue v((is_final ? RoutePolars::round_time(g+h) : g),
+                       (is_final ? 0 : RoutePolars::round_time(h)));
   // add one to tie-break towards lower number of links
 
   m_planner.reserve(ASTAR_QUEUE_SIZE);
@@ -284,6 +281,7 @@ RoutePlanner::set_unique(const RouteLinkBase &e)
     m_unique.insert(e);
     return true;
   }
+
   count_supressed++;
   return false;
 }
@@ -296,24 +294,23 @@ RoutePlanner::add_candidate(const RouteLinkBase& e)
   if (!set_unique(e))
     return;
 
-  const RouteLink c_link = rpolars_route.generate_intermediate(e.first, e.second, task_projection);
+  const RouteLink c_link =
+      rpolars_route.generate_intermediate(e.first, e.second, task_projection);
 
   m_links.push(c_link);
-  return;
 }
 
 void
-RoutePlanner::add_candidate(const RouteLink& e)
+RoutePlanner::add_candidate(const RouteLink &e)
 {
   if (!set_unique(e))
     return;
 
   m_links.push(e);
-  return;
 }
 
 void
-RoutePlanner::add_shortcut(const RoutePoint& node)
+RoutePlanner::add_shortcut(const RoutePoint &node)
 {
   const RoutePoint previous = m_planner.get_predecessor(node);
   if (previous == node)
@@ -331,18 +328,18 @@ RoutePlanner::add_shortcut(const RoutePoint& node)
   } while (ok);
 
   RouteLink r_shortcut(pre, node, task_projection);
-  if (pre.altitude> node.altitude) return;
-  assert(pre.altitude<= node.altitude);
+  if (pre.altitude > node.altitude)
+    return;
+
+  assert(pre.altitude <= node.altitude);
 
   RoutePoint inx;
   const short vh = rpolars_route.calc_vheight(r_shortcut);
-  if (!rpolars_route.can_climb()) {
-    r_shortcut.second.altitude = r_shortcut.first.altitude+vh;
-  }
+  if (!rpolars_route.can_climb())
+    r_shortcut.second.altitude = r_shortcut.first.altitude + vh;
 
-  if (check_clearance(r_shortcut, inx)) {
+  if (check_clearance(r_shortcut, inx))
     link_cleared(r_shortcut);
-  }
 }
 
 void
@@ -353,20 +350,23 @@ RoutePlanner::add_edges(const RouteLink &e)
   if (!check_clearance(e, inx)) {
     if (!this_short)
       add_nearby(e);
+
     return;
   }
+
   if (!rpolars_route.achievable(e))
     return;
+
   if (!this_short)
     link_cleared(e);
+
   add_shortcut(e.second);
-  return;
 }
 
 void
-RoutePlanner::update_polar(const GlidePolar& task_polar,
-                           const GlidePolar& safety_polar,
-                           const SpeedVector& wind)
+RoutePlanner::update_polar(const GlidePolar &task_polar,
+                           const GlidePolar &safety_polar,
+                           const SpeedVector &wind)
 {
   rpolars_route.initialise(task_polar, wind);
   switch (m_reach_polar_mode) {
@@ -387,30 +387,30 @@ RoutePlanner::update_polar(const GlidePolar& task_polar,
   - or do shortcut checks at end of add_edges loop
 */
 
-//////////////////
-
 bool
 RoutePlanner::check_clearance_terrain(const RouteLink &e, RoutePoint& inp) const
 {
   if (!terrain || !terrain->isMapLoaded())
     return true;
+
   count_terrain++;
-  if (rpolars_route.check_clearance(e, terrain, task_projection, inp))
-    return true;
-  return false;
+  return rpolars_route.check_clearance(e, terrain, task_projection, inp);
 }
 
 void
-RoutePlanner::add_nearby_terrain_sweep(const RoutePoint& p, const RouteLink &c_link, const int sign)
+RoutePlanner::add_nearby_terrain_sweep(const RoutePoint& p,
+                                       const RouteLink &c_link, const int sign)
 {
   // dont add if no distance
-  if ((FlatGeoPoint)c_link.first == (FlatGeoPoint)p) return;
+  if ((FlatGeoPoint)c_link.first == (FlatGeoPoint)p)
+    return;
 
   // make short link neighbouring last intercept
-  RouteLink link_divert = rpolars_route.neighbour_link(c_link.first, p, task_projection, sign);
+  RouteLink link_divert = rpolars_route.neighbour_link(c_link.first, p,
+                                                       task_projection, sign);
 
   // dont add directions 90 degrees away from target
-  if (link_divert.dot(c_link)<=0)
+  if (link_divert.dot(c_link) <= 0)
     return;
 
   // ensure the target is achievable due to climb constraints
@@ -427,7 +427,7 @@ RoutePlanner::add_nearby_terrain_sweep(const RoutePoint& p, const RouteLink &c_l
 void
 RoutePlanner::add_nearby_terrain(const RoutePoint &p, const RouteLink& e)
 {
-  RouteLink c_link (e.first, p, task_projection);
+  RouteLink c_link(e.first, p, task_projection);
 
   // dont process at all if too short
   if (c_link.is_short())
@@ -448,10 +448,10 @@ RoutePlanner::add_nearby_terrain(const RoutePoint &p, const RouteLink& e)
       // if this link was shooting directly for goal, try both directions
       add_nearby_terrain_sweep(p, e, 1);
       add_nearby_terrain_sweep(p, e, -1);
-    }  else if (e.dot(end)>0) {
+    } else if (e.dot(end) > 0) {
       // this link was already deflecting, so keep deflecting in same direction
       // until we get 90 degrees to goal (no backtracking)
-      add_nearby_terrain_sweep(p, e, e.cross(end)>0? 1:-1);
+      add_nearby_terrain_sweep(p, e, e.cross(end) > 0 ? 1 : -1);
     }
   }
 
@@ -469,15 +469,14 @@ RoutePlanner::add_nearby_terrain(const RoutePoint &p, const RouteLink& e)
 }
 
 void
-RoutePlanner::on_solve(const AGeoPoint& origin,
-                       const AGeoPoint& destination)
+RoutePlanner::on_solve(const AGeoPoint &origin, const AGeoPoint &destination)
 {
   task_projection.reset(origin);
   task_projection.update_fast();
 }
 
 bool
-RoutePlanner::hull_extended(const RoutePoint& p)
+RoutePlanner::hull_extended(const RoutePoint &p)
 {
   if (m_search_hull.IsInside(p))
     return false;
@@ -490,8 +489,7 @@ RoutePlanner::hull_extended(const RoutePoint& p)
 
 bool
 RoutePlanner::intersection(const AGeoPoint& origin,
-                           const AGeoPoint& destination,
-                           GeoPoint& intx) const
+                           const AGeoPoint& destination, GeoPoint& intx) const
 {
   TaskProjection proj;
   proj.reset(origin);
@@ -512,5 +510,4 @@ RoutePlanner::intersection(const AGeoPoint& origin,
   - AirspaceRoute synchronise method to disable/ignore airspaces that are
     acknowledged in the airspace warning manager.
   - more documentation
-  
  */

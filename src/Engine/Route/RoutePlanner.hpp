@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef ROUTE_PLANNER_HPP
 #define ROUTE_PLANNER_HPP
 
@@ -44,17 +45,17 @@
 
 namespace std
 {
-    namespace tr1
+  namespace tr1
+  {
+    template <>
+    struct hash<RouteLinkBase> : public unary_function<RouteLinkBase, size_t>
     {
-        template <>
-        struct hash<RouteLinkBase> : public unary_function<RouteLinkBase, size_t>
-        {
-          gcc_pure
-          size_t operator()(const RouteLinkBase& __val) const {
-            return std::tr1::_Fnv_hash<sizeof(size_t)>::hash ((const char*)&__val, sizeof(__val));
-          }
-        };
-    }
+      gcc_pure
+      size_t operator()(const RouteLinkBase& __val) const {
+        return std::tr1::_Fnv_hash<sizeof(size_t)>::hash ((const char*)&__val, sizeof(__val));
+      }
+    };
+  }
 }
 
 #endif
@@ -107,40 +108,53 @@ typedef std::vector<AGeoPoint> Route;
  * and releasing locks each time, we assume the hookup to the main program
  * (RoutePlannerGlue) is responsible for locking the RasterMap on solve() calls.
  */
-
 class RoutePlanner {
 protected:
   typedef std::pair<AFlatGeoPoint, AFlatGeoPoint> ClearingPair;
 
-  bool dirty; /**< Whether an updated solution is required */
-  TaskProjection task_projection; /**< Task projection used for flat-earth representation */
-  RoutePolars rpolars_route; /**< Aircraft performance model */
-  RoutePolars rpolars_reach; /**< Aircraft performance model */
-  const RasterMap *terrain; /**< Terrain raster */
-  short h_min; /**< Minimum height scanned during solution (m) */
-  short h_max; /**< Maxmimum height scanned during solution (m) */
+  /** Whether an updated solution is required */
+  bool dirty;
+  /** Task projection used for flat-earth representation */
+  TaskProjection task_projection;
+  /** Aircraft performance model */
+  RoutePolars rpolars_route;
+  /** Aircraft performance model */
+  RoutePolars rpolars_reach;
+  /** Terrain raster */
+  const RasterMap *terrain;
+  /** Minimum height scanned during solution (m) */
+  short h_min;
+  /** Maxmimum height scanned during solution (m) */
+  short h_max;
   GlidePolar glide_polar_reach;
 
 private:
-  AStar<RoutePoint> m_planner; /**< A* search algorithm */
-  SearchPointVector m_search_hull; /**< Convex hull of search to date,
-                                    used by terrain node generator to prevent
-                                    backtracking */
+  /** A* search algorithm */
+  AStar<RoutePoint> m_planner;
+  /**
+   * Convex hull of search to date, used by terrain node
+   * generator to prevent backtracking
+   */
+  SearchPointVector m_search_hull;
 
 #ifdef PLANNER_SET
   typedef std::set< RouteLinkBase> RouteLinkSet;
 #else
   typedef std::tr1::unordered_set< RouteLinkBase > RouteLinkSet;
 #endif
-  RouteLinkSet m_unique; /**<  Links that have been visited during solution */
+  /** Links that have been visited during solution */
+  RouteLinkSet m_unique;
   typedef std::queue< RouteLink> RouteLinkQueue;
-  RouteLinkQueue m_links; /**< Link candidates to be processed for intersection
-                           * tests */
+  /** Link candidates to be processed for intersection tests */
+  RouteLinkQueue m_links;
 
-  Route solution_route; /**< Result route found by solve() method */
+  /** Result route found by solve() method */
+  Route solution_route;
 
-  AFlatGeoPoint origin_last; /**< Origin at last call to solve() */
-  AFlatGeoPoint destination_last; /**< Destination at last call to solve() */
+  /** Origin at last call to solve() */
+  AFlatGeoPoint origin_last;
+  /** Destination at last call to solve() */
+  AFlatGeoPoint destination_last;
 
   ReachFan reach;
 
@@ -169,7 +183,7 @@ public:
    * Set terrain database
    * @param terrain RasterMap to be used for terrain intersection tests
    */
-  void set_terrain(const RasterMap* _terrain) {
+  void set_terrain(const RasterMap *_terrain) {
     terrain = _terrain;
   }
 
@@ -185,10 +199,10 @@ public:
    *
    * @return True if new solution was found
    */
-  bool solve(const AGeoPoint& origin,
-             const AGeoPoint& destination,
-             const RoutePlannerConfig& config,
-             const short h_ceiling=SHRT_MAX);
+  bool solve(const AGeoPoint &origin,
+             const AGeoPoint &destination,
+             const RoutePlannerConfig &config,
+             const short h_ceiling = SHRT_MAX);
 
   /**
    * Solve reach footprint
@@ -198,13 +212,11 @@ public:
    *
    * @return True if reach was scanned
    */
-  bool solve_reach(const AGeoPoint& origin, const bool do_solve=true);
+  bool solve_reach(const AGeoPoint &origin, const bool do_solve = true);
 
-  /**
-   * Visit reach
-   */
-  void accept_in_range(const GeoBounds& bounds,
-                       TriangleFanVisitor& visitor) const {
+  /** Visit reach */
+  void accept_in_range(const GeoBounds &bounds,
+                       TriangleFanVisitor &visitor) const {
     reach.accept_in_range(bounds, visitor);
   }
 
@@ -223,13 +235,10 @@ public:
    * @param polar Glide performance model used for reach planning
    * @param wind Wind estimate
    */
-  void update_polar(const GlidePolar& polar,
-                    const GlidePolar& safety_polar,
-                    const SpeedVector& wind);
+  void update_polar(const GlidePolar &polar, const GlidePolar &safety_polar,
+                    const SpeedVector &wind);
 
-  /**
-   * Reset the optimiser as if never flown and clear temporary buffers.
-   */
+  /** Reset the optimiser as if never flown and clear temporary buffers. */
   virtual void reset();
 
   /**
@@ -242,8 +251,7 @@ public:
    *
    * @return true if terrain intersects
    */
-  bool intersection(const AGeoPoint& origin,
-                    const AGeoPoint& destination,
+  bool intersection(const AGeoPoint& origin, const AGeoPoint& destination,
                     GeoPoint& intx) const;
 
   /**
@@ -257,9 +265,8 @@ public:
    *
    * @return true if check was successful
    */
-  bool find_positive_arrival(const AGeoPoint& dest,
-                             short& arrival_height_reach,
-                             short& arrival_height_direct) const {
+  bool find_positive_arrival(const AGeoPoint &dest, short &arrival_height_reach,
+                             short &arrival_height_direct) const {
     return reach.find_positive_arrival(dest, rpolars_reach, arrival_height_reach,
                                        arrival_height_direct);
   }
@@ -275,7 +282,9 @@ protected:
    *
    * @return True if solution is trivial
    */
-  virtual bool is_trivial() const { return !dirty; }
+  virtual bool is_trivial() const {
+    return !dirty;
+  }
 
   /**
    * Add a link to candidates for search
