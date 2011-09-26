@@ -69,7 +69,7 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
   SetCommentFromWaypointName(infobox, &alternate->waypoint);
 
   // Set Value
-  Angle Value = alternate->solution.vector.Bearing -
+  Angle Value = alternate->solution.vector.bearing -
     XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);

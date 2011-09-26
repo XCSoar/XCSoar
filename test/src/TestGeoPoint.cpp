@@ -115,8 +115,8 @@ int main(int argc, char **argv)
   // test distance_bearing()
   // note: should be the same output as bearing() and distance()
   GeoVector v = p2.DistanceBearing(p6);
-  ok1(equals(v.Distance, 869326.653160));
-  ok1(equals(v.Bearing, 63.272424));
+  ok1(equals(v.distance, 869326.653160));
+  ok1(equals(v.bearing, 63.272424));
 
   // test intermediate_point()
   GeoPoint p7(Angle::degrees(fixed_zero), Angle::degrees(fixed_zero));
@@ -139,17 +139,17 @@ int main(int argc, char **argv)
 
   v = l1.DistanceBearing(l2);
   printf("Dist %g bearing %d\n",
-         FIXED_DOUBLE(v.Distance), FIXED_INT(v.Bearing.value_degrees()));
+         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.value_degrees()));
   // 116090 @ 343
 
   v = l1.DistanceBearing(l3);
   printf("Dist %g bearing %d\n",
-         FIXED_DOUBLE(v.Distance), FIXED_INT(v.Bearing.value_degrees()));
-  ok(positive(v.Distance) && v.Distance < fixed_two, "earth distance short", 0);
+         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.value_degrees()));
+  ok(positive(v.distance) && v.distance < fixed_two, "earth distance short", 0);
 
   v = l1.DistanceBearing(l4);
   printf("Dist %g bearing %d\n",
-         FIXED_DOUBLE(v.Distance), FIXED_INT(v.Bearing.value_degrees()));
+         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.value_degrees()));
 
   return exit_status();
 }

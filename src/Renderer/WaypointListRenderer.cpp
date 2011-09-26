@@ -109,7 +109,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   // Draw leg distance
   unsigned leg_info_width = 0;
   if (vector) {
-    Units::FormatUserDistance(vector->Distance, buffer, 256, true);
+    Units::FormatUserDistance(vector->distance, buffer, 256, true);
     unsigned width = leg_info_width = canvas.text_width(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width,
                 rc.top + Layout::FastScale(2) +
@@ -117,7 +117,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
     // Draw leg bearing
     _stprintf(buffer, _T(" %.0f" DEG " T"),
-              (double)vector->Bearing.value_degrees());
+              (double)vector->bearing.value_degrees());
     width = canvas.text_width(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
 

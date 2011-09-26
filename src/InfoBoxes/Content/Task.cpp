@@ -44,13 +44,13 @@ InfoBoxContentBearing::Update(InfoBoxWindow &infobox)
     XCSoarInterface::Calculated().task_stats.current_leg.solution_remaining;
   if (!XCSoarInterface::Calculated().task_stats.task_valid ||
       !solution_remaining.IsDefined() ||
-      solution_remaining.vector.Distance <= fixed(10)) {
+      solution_remaining.vector.distance <= fixed(10)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
-  infobox.SetValue(solution_remaining.vector.Bearing, _T("T"));
+  infobox.SetValue(solution_remaining.vector.bearing, _T("T"));
 }
 
 void
@@ -61,14 +61,14 @@ InfoBoxContentBearingDiff::Update(InfoBoxWindow &infobox)
   if (!XCSoarInterface::Basic().track_available ||
       !XCSoarInterface::Calculated().task_stats.task_valid ||
       !solution_remaining.IsOk() ||
-      solution_remaining. vector.Distance <= fixed(10)) {
+      solution_remaining. vector.distance <= fixed(10)) {
     infobox.SetInvalid();
     return;
   }
 
   // Set Value
   Angle Value =
-    solution_remaining.vector.Bearing - XCSoarInterface::Basic().track;
+    solution_remaining.vector.bearing - XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);
 }
@@ -105,14 +105,14 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   if (!XCSoarInterface::Basic().track_available ||
       !XCSoarInterface::Calculated().task_stats.task_valid ||
       !solution_remaining.IsDefined() ||
-      solution_remaining.vector.Distance <= fixed(10)) {
+      solution_remaining.vector.distance <= fixed(10)) {
     infobox.SetValueInvalid();
     return;
   }
 
   // Set Value
   Angle Value =
-    solution_remaining.vector.Bearing - XCSoarInterface::Basic().track;
+    solution_remaining.vector.bearing - XCSoarInterface::Basic().track;
 
   SetValueBearingDifference(infobox, Value);
 
@@ -163,10 +163,10 @@ InfoBoxContentNextDistance::Update(InfoBoxWindow &infobox)
   }
 
   // Set Value
-  SetValueFromDistance(infobox, solution_remaining.vector.Distance);
+  SetValueFromDistance(infobox, solution_remaining.vector.distance);
 
   if (XCSoarInterface::Basic().track_available) {
-    Angle bd = solution_remaining.vector.Bearing - XCSoarInterface::Basic().track;
+    Angle bd = solution_remaining.vector.bearing - XCSoarInterface::Basic().track;
     SetCommentBearingDifference(infobox, bd);
   } else
     infobox.SetCommentInvalid();
@@ -327,7 +327,7 @@ InfoBoxContentFinalDistance::Update(InfoBoxWindow &infobox)
 
   // Set Value
   SetValueFromDistance(infobox, common_stats.task_finished ?
-                                task_stats.current_leg.solution_remaining.vector.Distance :
+                                task_stats.current_leg.solution_remaining.vector.distance :
                                 task_stats.total.remaining.get_distance());
 }
 
@@ -519,10 +519,10 @@ InfoBoxContentHomeDistance::Update(InfoBoxWindow &infobox)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
 
   // Set Value
-  SetValueFromDistance(infobox, common_stats.vector_home.Distance);
+  SetValueFromDistance(infobox, common_stats.vector_home.distance);
 
   if (XCSoarInterface::Basic().track_available) {
-    Angle bd = common_stats.vector_home.Bearing - XCSoarInterface::Basic().track;
+    Angle bd = common_stats.vector_home.bearing - XCSoarInterface::Basic().track;
     SetCommentBearingDifference(infobox, bd);
   } else
     infobox.SetCommentInvalid();

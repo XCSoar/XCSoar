@@ -127,7 +127,7 @@ FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
       GeoVector vec = last_traffic->location.DistanceBearing(traffic.location);
 
       if (!traffic.track_received)
-        traffic.track = vec.Bearing;
+        traffic.track = vec.bearing;
 
       // Calculate the turn rate
       if (!traffic.turn_rate_received) {
@@ -138,7 +138,7 @@ FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
 
       // Calculate the speed [m/s]
       if (!traffic.speed_received)
-        traffic.speed = vec.Distance / dt;
+        traffic.speed = vec.distance / dt;
     } else {
       // Since the time difference is zero (or negative)
       // we can just copy the old values

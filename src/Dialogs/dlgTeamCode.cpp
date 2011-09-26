@@ -50,7 +50,7 @@ Update()
   TCHAR Text[100];
 
   if (teamcode_info.teammate_available && basic.track_available) {
-    double Value = (teamcode_info.teammate_vector.Bearing - basic.track)
+    double Value = (teamcode_info.teammate_vector.bearing - basic.track)
       .as_delta().value_degrees();
 
     if (Value > 1)
@@ -67,9 +67,9 @@ Update()
 
   if (teamcode_info.teammate_available) {
     LoadFormProperty(*wf, _T("prpBearing"),
-                     teamcode_info.teammate_vector.Bearing.value_degrees());
+                     teamcode_info.teammate_vector.bearing.value_degrees());
     LoadFormProperty(*wf, _T("prpRange"), ugDistance,
-                     teamcode_info.teammate_vector.Distance);
+                     teamcode_info.teammate_vector.distance);
   }
 
   SetFormValue(*wf, _T("prpOwnCode"),

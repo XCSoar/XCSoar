@@ -57,7 +57,7 @@ KeyholeZone::GetBoundaryParametric(fixed t) const
     d = SmallRadius;
     a = getEndRadial() + Angle::radians((tt - l - l - c1) / c2 * small_sweep);
   }
-  return GeoVector(d, a).end_point(get_location());
+  return GeoVector(d, a).EndPoint(get_location());
 }
 
 fixed
@@ -71,6 +71,6 @@ KeyholeZone::IsInSector(const AircraftState &ref) const
 {
   GeoVector f(get_location(), ref.location);
 
-  return f.Distance <= fixed(500) ||
-         (f.Distance <= Radius && angleInSector(f.Bearing));
+  return f.distance <= fixed(500) ||
+         (f.distance <= Radius && angleInSector(f.bearing));
 }

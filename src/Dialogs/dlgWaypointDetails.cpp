@@ -505,10 +505,10 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     GeoVector gv = basic.location.DistanceBearing(selected_waypoint->location);
 
     TCHAR DistanceText[MAX_PATH];
-    Units::FormatUserDistance(gv.Distance, DistanceText, 10);
+    Units::FormatUserDistance(gv.distance, DistanceText, 10);
 
     _sntprintf(sTmp, 128, _T("%d")_T(DEG)_T(" %s"),
-               iround(gv.Bearing.value_degrees()),
+               iround(gv.bearing.value_degrees()),
                DistanceText);
     ((WndProperty *)wf->FindByName(_T("BearingDistance")))->SetText(sTmp);
   }

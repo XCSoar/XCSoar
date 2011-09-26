@@ -255,7 +255,7 @@ AirspaceRoute::synchronise(const Airspaces& master,
   h_max = std::max(origin.altitude, std::max(destination.altitude, h_max));
   // @todo: have margin for h_max to allow for climb
   AirspacePredicateHeightRangeExcludeTwo condition(h_min, h_max, origin, destination);
-  if (m_airspaces.synchronise_in_range(master, vector.mid_point(origin), vector.Distance/2, condition))
+  if (m_airspaces.synchronise_in_range(master, vector.MidPoint(origin), vector.distance/2, condition))
   {
     if (m_airspaces.size())
       dirty = true;

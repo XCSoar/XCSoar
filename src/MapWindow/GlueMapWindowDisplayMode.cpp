@@ -213,7 +213,7 @@ GlueMapWindow::UpdateScreenAngle()
   if (orientation == TARGETUP &&
       calculated.task_stats.current_leg.solution_remaining.IsDefined())
     visible_projection.SetScreenAngle(calculated.task_stats.current_leg.
-                                      solution_remaining.vector.Bearing);
+                                      solution_remaining.vector.bearing);
   else if (orientation == NORTHUP || !basic.track_available)
     visible_projection.SetScreenAngle(Angle::zero());
   else
@@ -286,7 +286,7 @@ GlueMapWindow::UpdateProjection()
       } else if (settings_map.MapShiftBias == MAP_SHIFT_BIAS_TARGET) {
         if (calculated.task_stats.current_leg.solution_remaining.IsDefined())
           calculated.task_stats.current_leg.solution_remaining
-                      .vector.Bearing.Reciprocal().sin_cos(x, y);
+                      .vector.bearing.Reciprocal().sin_cos(x, y);
       }
       fixed gspFactor = (fixed) (50 - settings_map.GliderScreenPosition) / 100;
       offset.x = x * (rc.right - rc.left) * gspFactor;

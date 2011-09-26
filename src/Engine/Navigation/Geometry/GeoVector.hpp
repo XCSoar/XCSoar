@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef GEO_VECTOR_HPP
 #define GEO_VECTOR_HPP
 
@@ -35,24 +36,24 @@ struct GeoPoint;
  */
 struct GeoVector {
   /** Distance in meters */
-  fixed Distance;
+  fixed distance;
 
   /** Bearing (true north) */
-  Angle Bearing;
+  Angle bearing;
 
   /** Empty non-initializing constructor */
   GeoVector() {}
 
   /** Constructor given supplied distance/bearing */
-  GeoVector(const fixed distance, const Angle& bearing)
-    :Distance(distance), Bearing(bearing) {}
+  GeoVector(const fixed _distance, const Angle &_bearing)
+    :distance(_distance), bearing(_bearing) {}
 
   /**
    * Dummy constructor given distance, 
    * used to allow GeoVector x=0 calls. 
    */
-  GeoVector(const fixed distance)
-    :Distance(distance), Bearing(Angle::zero()) {}
+  GeoVector(const fixed _distance)
+    :distance(_distance), bearing(Angle::zero()) {}
 
   /**
    * Constructor given start and end location.  
@@ -62,7 +63,7 @@ struct GeoVector {
 
   /** Adds the distance component of a geovector */
   GeoVector& operator+= (const GeoVector &g1) {
-    Distance += g1.Distance;
+    distance += g1.distance;
     return *this;
   }
 
@@ -71,7 +72,7 @@ struct GeoVector {
    * Assumes constant bearing. 
    */
   gcc_pure
-  GeoPoint end_point(const GeoPoint &source) const;
+  GeoPoint EndPoint(const GeoPoint &source) const;
 
   /**
    * Returns the end point of the geovector projected from the start point.  
@@ -80,7 +81,7 @@ struct GeoVector {
    * @param source start of vector
    * @return location of end point
    */
-  GeoPoint mid_point(const GeoPoint &source) const;
+  GeoPoint MidPoint(const GeoPoint &source) const;
   
   /**
    * Returns the location of a point from source along vector at distance
@@ -90,7 +91,7 @@ struct GeoVector {
    * @return location of point
    */
   gcc_pure
-  GeoPoint intermediate_point(const GeoPoint &source, const fixed distance) const;
+  GeoPoint IntermediatePoint(const GeoPoint &source, const fixed distance) const;
 
   /**
    * Minimum distance from a point on the vector to the reference
@@ -101,10 +102,10 @@ struct GeoVector {
    * @return Distance (m)
    */
   gcc_pure
-  fixed minimum_distance(const GeoPoint &source, const GeoPoint &ref) const;
+  fixed MinimumDistance(const GeoPoint &source, const GeoPoint &ref) const;
 
   inline bool IsValid() const {
-    return !negative(Distance);
+    return !negative(distance);
   }
 };
 

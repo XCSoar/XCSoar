@@ -66,13 +66,13 @@ AircraftStateFilter::Update(const AircraftState &state)
   GeoVector vec(last_state.location, state.location);
 
   const fixed MACH_1 = fixed_int_constant(343);
-  if (vec.Distance > fixed(1000) || vec.Distance / dt > MACH_1) {
+  if (vec.distance > fixed(1000) || vec.distance / dt > MACH_1) {
     Reset(state);
     return;
   }
 
-  x += vec.Bearing.sin() * vec.Distance;
-  y += vec.Bearing.cos() * vec.Distance;
+  x += vec.bearing.sin() * vec.distance;
+  y += vec.bearing.cos() * vec.distance;
 
   v_x = x_low_pass.update(x_diff_filter.update(x));
   v_y = y_low_pass.update(y_diff_filter.update(y));
@@ -112,6 +112,6 @@ AircraftStateFilter::GetPredictedState(const fixed &in_time) const
   state_next.vario = GetClimbRate();
   state_next.altitude = last_state.altitude + state_next.vario * in_time;
   state_next.location = GeoVector(state_next.ground_speed * in_time,
-                                  GetBearing()).end_point(last_state.location);
+                                  GetBearing()).EndPoint(last_state.location);
   return state_next;
 }

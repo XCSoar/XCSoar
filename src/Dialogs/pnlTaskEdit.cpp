@@ -131,7 +131,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 
   const OrderedTaskPoint &tp = *ordered_task->getTaskPoint(DrawListIndex);
   GeoVector leg = tp.leg_vector_nominal();
-  bool show_leg_info = leg.Distance > fixed(0.01);
+  bool show_leg_info = leg.distance > fixed(0.01);
 
   // Draw icon
   RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
@@ -151,14 +151,14 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
   unsigned leg_info_width = 0;
   if (show_leg_info) {
     // Draw leg distance
-    Units::FormatUserDistance(leg.Distance, buffer, 120, true);
+    Units::FormatUserDistance(leg.distance, buffer, 120, true);
     unsigned width = leg_info_width = canvas.text_width(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width,
                 rc.top + Layout::FastScale(2) +
                 (name_font.get_height() - small_font.get_height()) / 2, buffer);
 
     // Draw leg bearing
-    _stprintf(buffer, _T("%.0f" DEG " T"), (double)leg.Bearing.value_degrees());
+    _stprintf(buffer, _T("%.0f" DEG " T"), (double)leg.bearing.value_degrees());
     width = canvas.text_width(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
 

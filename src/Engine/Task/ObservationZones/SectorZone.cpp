@@ -42,7 +42,7 @@ SectorZone::GetBoundaryParametric(fixed t) const
     d = Radius - (tt - l - c1) / l * Radius;
     a = EndRadial;
   }
-  return GeoVector(d, a).end_point(get_location());
+  return GeoVector(d, a).EndPoint(get_location());
 }
 
 fixed
@@ -54,8 +54,8 @@ SectorZone::ScoreAdjustment() const
 void 
 SectorZone::updateSector() 
 {
-  SectorStart = GeoVector(Radius, StartRadial).end_point(get_location());
-  SectorEnd = GeoVector(Radius, EndRadial).end_point(get_location());
+  SectorStart = GeoVector(Radius, StartRadial).EndPoint(get_location());
+  SectorEnd = GeoVector(Radius, EndRadial).EndPoint(get_location());
 }
 
 bool 
@@ -63,7 +63,7 @@ SectorZone::IsInSector(const AircraftState &ref) const
 {
   GeoVector f(get_location(), ref.location);
 
-  return f.Distance <= Radius && angleInSector(f.Bearing);
+  return f.distance <= Radius && angleInSector(f.bearing);
 }
 
 void

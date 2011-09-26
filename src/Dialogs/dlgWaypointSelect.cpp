@@ -151,8 +151,8 @@ struct WaypointSelectInfoVector :
 
     const GeoVector vec(Location, way_point.location);
 
-    info.Distance = vec.Distance;
-    info.Direction = vec.Bearing;
+    info.Distance = vec.distance;
+    info.Direction = vec.bearing;
 
     std::vector<WaypointSelectInfo>::push_back(info);
   }
@@ -415,11 +415,11 @@ private:
     if (ordered_task) {
       t_size = task->TaskSize();
       leg1 = (t_size > 1) ? task->getTaskPoint(1)->
-              GetVectorPlanned().Distance : fixed_zero;
+              GetVectorPlanned().distance : fixed_zero;
       leg2 = (t_size > 2) ? task->getTaskPoint(2)->
-              GetVectorPlanned().Distance : fixed_zero;
+              GetVectorPlanned().distance : fixed_zero;
       leg3 = (t_size > 3) ? task->getTaskPoint(3)->
-              GetVectorPlanned().Distance : fixed_zero;
+              GetVectorPlanned().distance : fixed_zero;
     } else {
       leg1 = leg2 = leg3 = fixed_zero;
       t_size = 0;
@@ -512,7 +512,7 @@ private:
     Angle angle = (a == DirHDG) ? heading : Angle::degrees(fixed(a));
 
     const GeoVector vec(location, wp.location);
-    fixed DirectionErr = (vec.Bearing - angle).as_delta().magnitude_degrees();
+    fixed DirectionErr = (vec.bearing - angle).as_delta().magnitude_degrees();
 
     return DirectionErr < fixed(18);
   }

@@ -83,7 +83,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     AirspaceAircraftPerformanceGlide perf(glide_polar);
 
     GeoVector vec(loc_start, loc_end);
-    fixed range = fixed(10000) + vec.Distance / 2;
+    fixed range = fixed(10000) + vec.distance / 2;
 
     state.location = loc_start;
     state.altitude = fixed(loc_start.altitude);
@@ -93,12 +93,12 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
       // dummy
 
       // real one, see if items changed
-      as_route.synchronise_in_range(*airspaces, vec.mid_point(loc_start), range);
+      as_route.synchronise_in_range(*airspaces, vec.MidPoint(loc_start), range);
       int size_1 = as_route.size();
       if (verbose)
         printf("# route airspace size %d\n", size_1);
 
-      as_route.synchronise_in_range(*airspaces, vec.mid_point(loc_start), fixed_one);
+      as_route.synchronise_in_range(*airspaces, vec.MidPoint(loc_start), fixed_one);
       int size_2 = as_route.size();
       if (verbose)
         printf("# route airspace size %d\n", size_2);
@@ -106,7 +106,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
       ok(size_2 < size_1, "shrink as", 0);
 
       // go back
-      as_route.synchronise_in_range(*airspaces, vec.mid_point(loc_end), range);
+      as_route.synchronise_in_range(*airspaces, vec.MidPoint(loc_end), range);
       int size_3 = as_route.size();
       if (verbose)
         printf("# route airspace size %d\n", size_3);
@@ -114,7 +114,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
       ok(size_3 >= size_2, "grow as", 0);
 
       // and again
-      as_route.synchronise_in_range(*airspaces, vec.mid_point(loc_start), range);
+      as_route.synchronise_in_range(*airspaces, vec.MidPoint(loc_start), range);
       int size_4 = as_route.size();
       if (verbose)
         printf("# route airspace size %d\n", size_4);

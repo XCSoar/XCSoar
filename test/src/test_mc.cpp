@@ -237,7 +237,7 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
 
   hfile << (double)W << " "
         << (double)Wangle << " "
-        << (double)gr.vector.Bearing.value_degrees() << " "
+        << (double)gr.vector.bearing.value_degrees() << " "
         << (double)gr.cruise_track_bearing.value_degrees() << " "
         << "\n";
 }

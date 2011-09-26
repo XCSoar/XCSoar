@@ -52,7 +52,7 @@ GeoVector
 GeoPoint::DistanceBearing(const GeoPoint &other) const
 {
   GeoVector gv;
-  ::DistanceBearing(*this, other, &gv.Distance, &gv.Bearing);
+  ::DistanceBearing(*this, other, &gv.distance, &gv.bearing);
   return gv;
 }
 

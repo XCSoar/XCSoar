@@ -278,13 +278,13 @@ UpdateValuesFlight(void)
 
     wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
     assert(wp != NULL);
-    _stprintf(Temp, _T("%d")_T(DEG), (int)vec.Bearing.value_degrees());
+    _stprintf(Temp, _T("%d")_T(DEG), (int)vec.bearing.value_degrees());
     wp->SetText(Temp);
 
     wp = (WndProperty*)wf->FindByName(_T("prpDistance"));
     assert(wp != NULL);
     TCHAR DistanceText[MAX_PATH];
-    Units::FormatUserDistance(vec.Distance, DistanceText, 10);
+    Units::FormatUserDistance(vec.distance, DistanceText, 10);
     wp->SetText(DistanceText);
   } else {
     wp = (WndProperty*)wf->FindByName(_T("prpNear"));

@@ -154,7 +154,7 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
     if (origin()->HasEntered()) {
       return max(fixed_zero,
                       memo_travelled.calc(origin()->GetLocationScored(), 
-                                          ref).Distance
+                                          ref).distance
                       -origin()->ScoreAdjustment());
     }
   default:
@@ -167,7 +167,7 @@ TaskLeg::leg_distance_scored(const GeoPoint &ref) const
 fixed 
 TaskLeg::leg_distance_nominal() const
 {
-  return leg_vector_nominal().Distance;
+  return leg_vector_nominal().distance;
 }
 
 GeoVector
@@ -203,7 +203,7 @@ fixed
 TaskLeg::scan_distance_travelled(const GeoPoint &ref) 
 {
   vector_travelled = leg_vector_travelled(ref);
-  return vector_travelled.Distance +
+  return vector_travelled.distance +
          (next() ? next()->scan_distance_travelled(ref) : fixed_zero);
 }
 
@@ -211,7 +211,7 @@ fixed
 TaskLeg::scan_distance_remaining(const GeoPoint &ref) 
 {
   vector_remaining = leg_vector_remaining(ref);
-  return vector_remaining.Distance +
+  return vector_remaining.distance +
          (next() ? next()->scan_distance_remaining(ref) : fixed_zero);
 }
 
@@ -219,7 +219,7 @@ fixed
 TaskLeg::scan_distance_planned() 
 {
   vector_planned = leg_vector_planned();
-  return vector_planned.Distance +
+  return vector_planned.distance +
          (next() ? next()->scan_distance_planned() : fixed_zero);
 }
 

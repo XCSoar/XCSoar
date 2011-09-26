@@ -97,12 +97,12 @@ PrintHelper::orderedtaskpoint_print(std::ostream& f,
     sampledtaskpoint_print(f,tp,state);
     orderedtaskpoint_print_boundary(f,tp,state);
     f << "# Entered " << tp.GetEnteredState().time << "\n";
-    f << "# Bearing travelled " << tp.vector_travelled.Bearing << "\n";
-    f << "# Distance travelled " << tp.vector_travelled.Distance << "\n";
-    f << "# Bearing remaining " << tp.vector_remaining.Bearing << "\n";
-    f << "# Distance remaining " << tp.vector_remaining.Distance << "\n";
-    f << "# Bearing planned " << tp.vector_planned.Bearing << "\n";
-    f << "# Distance planned " << tp.vector_planned.Distance << "\n";
+    f << "# Bearing travelled " << tp.vector_travelled.bearing << "\n";
+    f << "# Distance travelled " << tp.vector_travelled.distance << "\n";
+    f << "# Bearing remaining " << tp.vector_remaining.bearing << "\n";
+    f << "# Distance remaining " << tp.vector_remaining.distance << "\n";
+    f << "# Bearing planned " << tp.vector_planned.bearing << "\n";
+    f << "# Distance planned " << tp.vector_planned.distance << "\n";
   }
 }
 
@@ -343,8 +343,8 @@ std::ostream& operator<< (std::ostream& f,
     f << "#     Solution NOT OK\n";
   }
   f << "#    Altitude Difference " << gl.altitude_difference << " (m)\n";
-  f << "#    Distance            " << gl.vector.Distance << " (m)\n";
-  f << "#    TrackBearing        " << gl.vector.Bearing << " (deg)\n";
+  f << "#    Distance            " << gl.vector.distance << " (m)\n";
+  f << "#    TrackBearing        " << gl.vector.bearing << " (deg)\n";
   f << "#    CruiseTrackBearing  " <<  gl.cruise_track_bearing << " (deg)\n";
   f << "#    VOpt                " <<  gl.v_opt << " (m/s)\n";
   f << "#    HeightClimb         " <<  gl.height_climb << " (m)\n";
@@ -352,7 +352,7 @@ std::ostream& operator<< (std::ostream& f,
   f << "#    TimeElapsed         " <<  gl.time_elapsed << " (s)\n";
   f << "#    TimeVirtual         " <<  gl.time_virtual << " (s)\n";
   if (positive(gl.time_elapsed)) {
-    f << "#    Vave remaining      " <<  gl.vector.Distance/gl.time_elapsed << " (m/s)\n";
+    f << "#    Vave remaining      " <<  gl.vector.distance/gl.time_elapsed << " (m/s)\n";
   }
   f << "#    EffectiveWindSpeed  " <<  gl.effective_wind_speed << " (m/s)\n";
   f << "#    EffectiveWindAngle  " <<  gl.effective_wind_angle << " (deg)\n";

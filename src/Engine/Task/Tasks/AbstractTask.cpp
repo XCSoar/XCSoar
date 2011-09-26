@@ -180,15 +180,15 @@ AbstractTask::update_glide_solutions(const AircraftState &state)
 
   if (stats.current_leg.solution_remaining.IsDefined())
     stats.current_leg.remaining.set_distance(
-        stats.current_leg.solution_remaining.vector.Distance);
+        stats.current_leg.solution_remaining.vector.distance);
 
   if (stats.current_leg.solution_travelled.IsDefined())
     stats.current_leg.travelled.set_distance(
-        stats.current_leg.solution_travelled.vector.Distance);
+        stats.current_leg.solution_travelled.vector.distance);
 
   if (stats.current_leg.solution_planned.IsDefined())
     stats.current_leg.planned.set_distance(
-        stats.current_leg.solution_planned.vector.Distance);
+        stats.current_leg.solution_planned.vector.distance);
 
   stats.total.gradient = ::AngleToGradient(calc_gradient(state));
   stats.current_leg.gradient = ::AngleToGradient(leg_gradient(state));
@@ -275,7 +275,7 @@ AbstractTask::leg_gradient(const AircraftState &aircraft) const
     return fixed_zero;
 
   // Get the distance to the next turnpoint
-  const fixed d = tp->GetVectorRemaining(aircraft).Distance;
+  const fixed d = tp->GetVectorRemaining(aircraft).distance;
   if (!d)
     return fixed_zero;
 

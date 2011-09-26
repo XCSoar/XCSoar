@@ -1132,9 +1132,9 @@ AbstractTaskFactory::TestFAITriangle()
   if (m_task.TaskSize() != 4)
     return false;
 
-  const fixed d1 = m_task.getTaskPoint(1)->GetVectorPlanned().Distance;
-  const fixed d2 = m_task.getTaskPoint(2)->GetVectorPlanned().Distance;
-  const fixed d3 = m_task.getTaskPoint(3)->GetVectorPlanned().Distance;
+  const fixed d1 = m_task.getTaskPoint(1)->GetVectorPlanned().distance;
+  const fixed d2 = m_task.getTaskPoint(2)->GetVectorPlanned().distance;
+  const fixed d3 = m_task.getTaskPoint(3)->GetVectorPlanned().distance;
 
   return TestFAITriangle(d1, d2, d3);
 }

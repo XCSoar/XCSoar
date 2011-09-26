@@ -148,7 +148,7 @@ IgcReplay::Update()
 
   const CatmullRomInterpolator::Record r = cli.Interpolate(t_simulation);
   const GeoVector v = cli.GetVector(t_simulation);
-  on_advance(r.loc, v.Distance, v.Bearing, r.alt, r.palt, t_simulation);
+  on_advance(r.loc, v.distance, v.bearing, r.alt, r.palt, t_simulation);
 
   return true;
 }

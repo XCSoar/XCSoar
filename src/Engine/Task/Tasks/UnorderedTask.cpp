@@ -107,8 +107,8 @@ UnorderedTask::glide_solution_planned(const AircraftState &state,
 
   total = res;
   leg = res;
-  total_remaining_effective.set_distance(res.vector.Distance);
-  leg_remaining_effective.set_distance(res.vector.Distance);
+  total_remaining_effective.set_distance(res.vector.distance);
+  leg_remaining_effective.set_distance(res.vector.distance);
 }
 
 

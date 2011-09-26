@@ -114,7 +114,7 @@ GlideComputerTask::ProcessMoreTask()
 
   if (Calculated().task_stats.current_leg.solution_remaining.IsDefined()) {
     const GeoVector &v = Calculated().task_stats.current_leg.solution_remaining.vector;
-    SetCalculated().auto_zoom_distance = v.Distance;
+    SetCalculated().auto_zoom_distance = v.distance;
   }
 }
 

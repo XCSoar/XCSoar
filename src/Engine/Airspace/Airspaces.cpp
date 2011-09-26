@@ -93,11 +93,11 @@ Airspaces::visit_intersecting(const GeoPoint &loc,
   if (empty()) return; // nothing to do
 
   FlatRay ray(task_projection.project(loc), 
-              task_projection.project(vec.end_point(loc)));
+              task_projection.project(vec.EndPoint(loc)));
 
-  GeoPoint c = vec.mid_point(loc);
+  GeoPoint c = vec.MidPoint(loc);
   Airspace bb_target(c, task_projection);
-  int mrange = task_projection.project_range(c, vec.Distance / 2);
+  int mrange = task_projection.project_range(c, vec.distance / 2);
   IntersectingAirspaceVisitorAdapter adapter(loc, vec, ray, visitor);
   airspace_tree.visit_within_range(bb_target, -mrange, adapter);
 

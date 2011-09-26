@@ -87,7 +87,7 @@ RefreshCalculator(void)
   }
 
   fixed rPlanned = XCSoarInterface::Calculated().task_stats.total.solution_planned.IsDefined()
-    ? XCSoarInterface::Calculated().task_stats.total.solution_planned.vector.Distance
+    ? XCSoarInterface::Calculated().task_stats.total.solution_planned.vector.distance
     : fixed_zero;
 
   wp = (WndProperty*)wf->FindByName(_T("prpDistance"));

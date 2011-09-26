@@ -826,7 +826,7 @@ OrderedTask::calc_gradient(const AircraftState &state) const
   fixed distance = fixed_zero;
   for (unsigned i = activeTaskPoint; i < task_points.size(); i++)
     // Sum up the leg distances
-    distance += task_points[i]->GetVectorRemaining(state).Distance;
+    distance += task_points[i]->GetVectorRemaining(state).distance;
 
   if (!distance)
     return fixed_zero;
@@ -1395,7 +1395,7 @@ OrderedTask::update_summary(TaskSummary& ordered_summary) const
   ordered_summary.active = activeTaskPoint;
   for (unsigned i = 0; i < task_points.size(); ++i) {    
     TaskSummaryPoint tsp;
-    tsp.d_planned = task_points[i]->GetVectorPlanned().Distance;
+    tsp.d_planned = task_points[i]->GetVectorPlanned().distance;
     if (i==0) {
       tsp.achieved = task_points[i]->HasExited();
     } else {

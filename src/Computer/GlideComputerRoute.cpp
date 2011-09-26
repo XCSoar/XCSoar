@@ -81,7 +81,7 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
 
   if (terrain) {
     if (sol.IsDefined()) {
-      const AGeoPoint dest(v.end_point(start), sol.min_height);
+      const AGeoPoint dest(v.EndPoint(start), sol.min_height);
       bool dirty = route_clock.check_advance(basic.time);
 
       if (!dirty) {

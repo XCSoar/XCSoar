@@ -28,7 +28,7 @@ AircraftState::GetPredictedState(const fixed &in_time) const
 {
   AircraftState state_next = *this;
   GeoVector vec(ground_speed * in_time, track);
-  state_next.location = vec.end_point(location);
+  state_next.location = vec.EndPoint(location);
   state_next.altitude += vario * in_time;
   return state_next;
 }

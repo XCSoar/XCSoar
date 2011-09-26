@@ -101,14 +101,14 @@ public:
    * @param range Range to draw [m]
    */
   void set_range(fixed range) {
-    vec.Distance = range;
+    vec.distance = range;
   }
   /**
    * Set CrossSection direction
    * @param bearing Direction to draw
    */
   void set_direction(Angle bearing) {
-    vec.Bearing = bearing;
+    vec.bearing = bearing;
   }
   /**
    * Set CrossSection start point

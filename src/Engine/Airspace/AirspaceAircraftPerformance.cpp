@@ -253,7 +253,7 @@ AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AircraftS
   assert(task.getActiveTaskPoint());
 
   const GlideResult &solution = task.get_stats().current_leg.solution_remaining;
-  const fixed leg_distance = solution.vector.Distance;
+  const fixed leg_distance = solution.vector.distance;
   const fixed time_remaining = solution.time_elapsed;
 
   if (positive(time_remaining)) {

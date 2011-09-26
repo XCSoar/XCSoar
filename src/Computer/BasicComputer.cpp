@@ -119,8 +119,8 @@ ComputeTrack(NMEAInfo &basic, const NMEAInfo &last)
     return;
 
   const GeoVector v = last.location.DistanceBearing(basic.location);
-  if (v.Distance >= fixed_one)
-    basic.track = v.Bearing;
+  if (v.distance >= fixed_one)
+    basic.track = v.bearing;
 }
 
 static void

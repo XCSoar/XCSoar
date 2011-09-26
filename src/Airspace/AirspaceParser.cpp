@@ -181,8 +181,8 @@ struct TempAirspaceType
 
     // Determine start bearing and radius
     const GeoVector v = Center.DistanceBearing(Start);
-    Angle StartBearing = v.Bearing;
-    const fixed Radius = v.Distance;
+    Angle StartBearing = v.bearing;
+    const fixed Radius = v.distance;
 
     // Determine end bearing
     Angle EndBearing = Center.Bearing(End);

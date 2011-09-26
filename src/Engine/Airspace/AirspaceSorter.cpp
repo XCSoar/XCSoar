@@ -30,8 +30,8 @@ AirspaceSorter::AirspaceSorter(const Airspaces &airspaces,
     const GeoPoint closest_loc = airspace.ClosestPoint(Location);
     const GeoVector vec(Location, closest_loc);
 
-    info.Distance = vec.Distance * distance_factor;
-    info.Direction = vec.Bearing;
+    info.Distance = vec.distance * distance_factor;
+    info.Direction = vec.bearing;
 
     const TCHAR *name = airspace.GetName();
 

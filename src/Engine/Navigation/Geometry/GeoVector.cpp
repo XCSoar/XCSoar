@@ -29,33 +29,33 @@ GeoVector::GeoVector(const GeoPoint &source, const GeoPoint &target)
 }
 
 GeoPoint
-GeoVector::end_point(const GeoPoint &source) const
+GeoVector::EndPoint(const GeoPoint &source) const
 {
-  if (!positive(Distance))
+  if (!positive(distance))
     return source;
 
-  return ::FindLatitudeLongitude(source, Bearing, Distance);
+  return ::FindLatitudeLongitude(source, bearing, distance);
 }
 
 GeoPoint
-GeoVector::mid_point(const GeoPoint &source) const
+GeoVector::MidPoint(const GeoPoint &source) const
 {
-  if (!positive(Distance))
+  if (!positive(distance))
     return source;
 
-  return ::FindLatitudeLongitude(source, Bearing, half(Distance));
+  return ::FindLatitudeLongitude(source, bearing, half(distance));
 }
 
 fixed
-GeoVector::minimum_distance(const GeoPoint &source,
+GeoVector::MinimumDistance(const GeoPoint &source,
                             const GeoPoint &ref) const
 {
-  return ::CrossTrackError(source, end_point(source), ref, NULL);
+  return ::CrossTrackError(source, EndPoint(source), ref, NULL);
 }
 
 GeoPoint 
-GeoVector::intermediate_point(const GeoPoint &source, 
+GeoVector::IntermediatePoint(const GeoPoint &source,
                               const fixed distance) const
 {
-  return source.IntermediatePoint(end_point(source), distance);
+  return source.IntermediatePoint(EndPoint(source), distance);
 }

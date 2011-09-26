@@ -188,7 +188,7 @@ GlideComputer::CalculateOwnTeamCode()
   const GeoVector v = TeamCodeRefLocation.DistanceBearing(Basic().location);
 
   // Save teamcode to Calculated
-  SetCalculated().own_teammate_code.Update(v.Bearing, v.Distance);
+  SetCalculated().own_teammate_code.Update(v.bearing, v.distance);
 }
 
 static void
@@ -217,7 +217,7 @@ ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
   GeoVector v = reference_location.DistanceBearing(traffic->location);
 
   // Calculate TeamCode and save it in Calculated
-  teamcode_info.flarm_teammate_code.Update(v.Bearing, v.Distance);
+  teamcode_info.flarm_teammate_code.Update(v.bearing, v.distance);
   teamcode_info.flarm_teammate_code_available = true;
   teamcode_info.flarm_teammate_code_current = true;
 }
@@ -270,12 +270,12 @@ GlideComputer::CheckTeammateRange()
 
   // Hysteresis for GlideComputerEvent
   // If (closer than 100m to the teammates last position and "event" not reset)
-  if (Calculated().teammate_vector.Distance < fixed(100) &&
+  if (Calculated().teammate_vector.distance < fixed(100) &&
       InTeamSector == false) {
     InTeamSector = true;
     // Raise GCE_TEAM_POS_REACHED event
     InputEvents::processGlideComputer(GCE_TEAM_POS_REACHED);
-  } else if (Calculated().teammate_vector.Distance > fixed(300)) {
+  } else if (Calculated().teammate_vector.distance > fixed(300)) {
     // Reset "event" when distance is greater than 300m again
     InTeamSector = false;
   }

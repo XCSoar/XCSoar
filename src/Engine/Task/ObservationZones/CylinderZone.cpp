@@ -37,7 +37,7 @@ GeoPoint
 CylinderZone::GetBoundaryParametric(fixed t) const
 {
   return GeoVector(Radius, Angle::radians(t * fixed_two_pi)).
-           end_point(get_location());
+           EndPoint(get_location());
 }
 
 bool
@@ -58,7 +58,7 @@ CylinderZone::randomPointInSector(const fixed mag) const
     fixed dmag = max(min(Radius, fixed(100.0)), Radius * mag);
     fixed dis = fixed((0.1 + (rand() % 90) / 100.0)) * dmag;
     GeoVector vec(dis, dir);
-    ac.location = vec.end_point(get_location());
+    ac.location = vec.EndPoint(get_location());
   } while (!IsInSector(ac));
 
   return ac.location;

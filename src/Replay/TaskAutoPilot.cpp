@@ -107,7 +107,7 @@ TaskAutoPilot::get_start_location(const TaskAccessor& task, bool previous)
     // set start location to 200 meters directly behind start
     // (otherwise start may fail to trigger)
     Angle brg = w[0].Bearing(w[1]);
-    return GeoVector(fixed(200), brg).end_point(w[1]);
+    return GeoVector(fixed(200), brg).EndPoint(w[1]);
   } else {
     return w[0];
   }
@@ -195,9 +195,9 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
   Angle bearing;
 
   if (current_has_target(task)) {
-    bearing = stat.solution_remaining.vector.Bearing;
+    bearing = stat.solution_remaining.vector.bearing;
 
-    if (parms.enable_bestcruisetrack && (stat.solution_remaining.vector.Distance>fixed_1000)) {
+    if (parms.enable_bestcruisetrack && (stat.solution_remaining.vector.distance>fixed_1000)) {
       bearing = bct;
     }
 

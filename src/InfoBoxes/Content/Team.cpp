@@ -102,7 +102,7 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 
   if (teamcode_info.teammate_available) {
     // Set Value
-    infobox.SetValue(teamcode_info.teammate_vector.Bearing, _T("T"));
+    infobox.SetValue(teamcode_info.teammate_vector.bearing, _T("T"));
   }
   else
     infobox.SetValueInvalid();
@@ -131,7 +131,7 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
 
   if (teamcode_info.teammate_available && basic.track_available) {
     // Set Value
-    Angle Value = teamcode_info.teammate_vector.Bearing - basic.track;
+    Angle Value = teamcode_info.teammate_vector.bearing - basic.track;
     SetValueBearingDifference(infobox, Value);
   } else
     infobox.SetValueInvalid();
@@ -159,7 +159,7 @@ InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
   // Set Value
   if (teamcode_info.teammate_available) {
     TCHAR tmp[32];
-    Units::FormatUserDistance(teamcode_info.teammate_vector.Distance,
+    Units::FormatUserDistance(teamcode_info.teammate_vector.distance,
                               tmp, 32, false);
     infobox.SetValue(tmp);
 

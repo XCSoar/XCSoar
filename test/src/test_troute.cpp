@@ -72,7 +72,7 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
 
   unsigned i=0;
   for (fixed ang=fixed_zero; ang< fixed_two_pi; ang+= fixed_quarter_pi*fixed_half) {
-    GeoPoint dest = GeoVector(fixed(40000.0), Angle::radians(ang)).end_point(origin);
+    GeoPoint dest = GeoVector(fixed(40000.0), Angle::radians(ang)).EndPoint(origin);
 
     short hdest = map.GetHeight(dest)+100;
 

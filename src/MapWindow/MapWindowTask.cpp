@@ -155,12 +155,12 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   GeoPoint target = tp->GetLocationRemaining();
   GeoVector vec(Basic().location, target);
 
-  if ((Basic().track - vec.Bearing).as_delta().magnitude_degrees() < fixed(10))
+  if ((Basic().track - vec.bearing).as_delta().magnitude_degrees() < fixed(10))
     // insignificant error
     return;
 
   fixed distance_max =
-    min(vec.Distance, render_projection.GetScreenDistanceMeters() * fixed(0.7));
+    min(vec.distance, render_projection.GetScreenDistanceMeters() * fixed(0.7));
 
   // too short to bother
   if (distance_max < fixed(5000))
@@ -179,7 +179,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
     
     fixed distance0 = start.Distance(dloc);
     fixed distance1 = target.Distance(dloc);
-    fixed distance = fixed(distance0 + distance1) / vec.Distance;
+    fixed distance = fixed(distance0 + distance1) / vec.distance;
     int idist = iround((distance - fixed_one) * 100);
     
     if ((idist != ilast) && (idist > 0) && (idist < 1000)) {

@@ -251,7 +251,7 @@ CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc)
   Chart chart(chart_look, canvas, rc);
   chart.ResetScale();
   chart.ScaleXFromValue(fixed_zero);
-  chart.ScaleXFromValue(vec.Distance);
+  chart.ScaleXFromValue(vec.distance);
   chart.ScaleYFromValue(hmin);
   chart.ScaleYFromValue(hmax);
 
@@ -287,13 +287,13 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, Chart &chart)
   if (terrain == NULL)
     return;
 
-  const GeoPoint p_diff = vec.end_point(start) - start;
+  const GeoPoint p_diff = vec.EndPoint(start) - start;
 
   RasterTerrain::Lease map(*terrain);
 
   RasterPoint points[2 + AIRSPACE_SCANSIZE_X];
 
-  points[0].x = chart.screenX(vec.Distance);
+  points[0].x = chart.screenX(vec.distance);
   points[0].y = chart.screenY(fixed_zero);
   points[1].x = chart.screenX(fixed_zero);
   points[1].y = chart.screenY(fixed_zero);
@@ -314,7 +314,7 @@ CrossSectionWindow::PaintTerrain(Canvas &canvas, Chart &chart)
         continue;
     }
 
-    points[i].x = chart.screenX(t_this * vec.Distance);
+    points[i].x = chart.screenX(t_this * vec.distance);
     points[i].y = chart.screenY(fixed(h));
     i++;
   }
@@ -330,8 +330,8 @@ void
 CrossSectionWindow::PaintGlide(Chart &chart)
 {
   if (gps_info.ground_speed > fixed(10)) {
-    fixed t = vec.Distance / gps_info.ground_speed;
-    chart.DrawLine(fixed_zero, gps_info.NavAltitude, vec.Distance,
+    fixed t = vec.distance / gps_info.ground_speed;
+    chart.DrawLine(fixed_zero, gps_info.NavAltitude, vec.distance,
                    gps_info.NavAltitude + calculated_info.average * t,
                    ChartLook::STYLE_BLUETHIN);
   }

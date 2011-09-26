@@ -60,7 +60,7 @@ BestCruiseArrowRenderer::Draw(Canvas &canvas, const TaskLook &look,
       calculated.task_stats.current_leg.solution_remaining;
 
   if (!solution.IsOk() ||
-      solution.vector.Distance < fixed(0.010))
+      solution.vector.distance < fixed(0.010))
     return;
 
   BestCruiseArrowRenderer::Draw(canvas, look, screen_angle,

@@ -60,9 +60,9 @@ AircraftSim::Start(const GeoPoint& location_start,
 GeoPoint
 AircraftSim::endpoint(const Angle &heading, const fixed timestep) const
 {
-  GeoPoint ref = GeoVector(state.true_airspeed*timestep, heading).end_point(state.location);
+  GeoPoint ref = GeoVector(state.true_airspeed*timestep, heading).EndPoint(state.location);
   return GeoVector(state.wind.norm*timestep,
-                   state.wind.bearing+ Angle::degrees(fixed_180)).end_point(ref);
+                   state.wind.bearing+ Angle::degrees(fixed_180)).EndPoint(ref);
 }
 
 void
