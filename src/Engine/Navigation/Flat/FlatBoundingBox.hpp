@@ -134,13 +134,7 @@ public:
      * @return Distance on axis
      */
     distance_type operator()(const int a, const int b, const size_t dim) const {
-      int val = 0;
-      if (dim < 2)
-        val = max(b - a, 0);
-      else
-        val = max(a - b, 0);
-
-      return BBDist(dim, val);
+      return BBDist(dim, max((dim < 2) ? (b - a) : (a - b), 0));
     }
   };
 
