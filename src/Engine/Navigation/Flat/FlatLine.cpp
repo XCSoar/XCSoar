@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "FlatLine.hpp"
 
 #define sgn(x,y) (negative(x) ? -y : y)
@@ -108,13 +109,12 @@ FlatLine::intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const
 
   det = sqrt(det);
   const fixed inv_dr = fixed_one / dr;
-  i1.x = (D * _dy + sgn(_dy,_dx) * det) * inv_dr;
-  i2.x = (D * _dy - sgn(_dy,_dx) * det) * inv_dr;
+  i1.x = (D * _dy + sgn(_dy, _dx) * det) * inv_dr;
+  i2.x = (D * _dy - sgn(_dy, _dx) * det) * inv_dr;
   i1.y = (-D * _dx + fabs(_dy) * det) * inv_dr;
   i2.y = (-D * _dx - fabs(_dy) * det) * inv_dr;
   return true;
 }
-
 
 bool
 FlatLine::intersect_circle(const fixed r, const FlatPoint c,

@@ -19,6 +19,7 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef FLATLINE_HPP
 #define FLATLINE_HPP
 
@@ -43,15 +44,14 @@ public:
    *
    * @return Initialised object
    */
-  FlatLine(const FlatPoint _p1,
-           const FlatPoint _p2):p1(_p1),p2(_p2) {};
+  FlatLine(const FlatPoint _p1, const FlatPoint _p2):p1(_p1),p2(_p2) {}
 
   /**
    * Constructor default
    *
    * @return Initialised object at origin
    */
-  FlatLine() {};
+  FlatLine() {}
 
   /** 
    * Calculate intersections between this line
@@ -63,8 +63,7 @@ public:
    * 
    * @return True if more than one intersection is found
    */
-  bool intersect_czero(const fixed r,
-                       FlatPoint &i1, FlatPoint &i2) const;
+  bool intersect_czero(const fixed r, FlatPoint &i1, FlatPoint &i2) const;
 
   /** 
    * Calculate intersections between this line
