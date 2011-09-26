@@ -258,7 +258,7 @@ GlueMapWindow::on_key_down(unsigned key_code)
 {
   if (map_item_timer) {
     kill_timer(map_item_timer);
-    map_item_timer = NULL;
+    map_item_timer = 0;
   }
 
   if (is_altair() && key_code == 0xF5) {
@@ -319,7 +319,7 @@ GlueMapWindow::on_timer(timer_t id)
     return false;
 
   kill_timer(map_item_timer);
-  map_item_timer = NULL;
+  map_item_timer = 0;
   ShowMapItems(drag_start_geopoint);
   return true;
 }
