@@ -10,6 +10,6 @@ install: all mo manual
 	for i in $(LINGUAS); do \
 		install -m 0644 output/po/$$i.mo $(prefix)/share/locale/$$i/LC_MESSAGES/xcsoar.mo; \
 	done
-	install -m 0644 output/all/manual/XCSoar-manual.pdf output/all/manual/XCSoar-developer-manual.pdf $(prefix)/share/doc/xcsoar
+	install -m 0644 output/manual/XCSoar-manual.pdf output/manual/XCSoar-developer-manual.pdf $(prefix)/share/doc/xcsoar
 
 endif
