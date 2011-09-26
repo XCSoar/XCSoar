@@ -219,8 +219,10 @@ const unsigned long FAR * ZEXPORT get_crc_table()
 
 /* ========================================================================= */
 
+#ifdef ZLIB_DISABLED
 #if defined(__MINGW32__)
 typedef int ptrdiff_t;
+#endif
 #endif
 
 unsigned long ZEXPORT crc32(crc, buf, len)
