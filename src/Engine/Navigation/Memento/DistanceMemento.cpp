@@ -19,16 +19,18 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "DistanceMemento.hpp"
 
 fixed 
 DistanceMemento::Distance(const GeoPoint& _origin,
                           const GeoPoint& _destination) const
 {
-  if (negative(value) || (_origin != origin)||(_destination != destination)) {
+  if (negative(value) || _origin != origin || _destination != destination) {
     origin = _origin;
     destination = _destination;
     value = origin.Distance(destination);
-  };
+  }
+
   return value;
 }
