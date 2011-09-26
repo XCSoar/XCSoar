@@ -67,7 +67,7 @@ int main(int argc, char **argv)
 
   do {
     rtc.UpdateTiles(jp2_path, rtc.GetWidth() / 2, rtc.GetHeight() / 2,
-                    fixed(50000));
+                    50000);
   } while (rtc.IsDirty());
 
   return EXIT_SUCCESS;

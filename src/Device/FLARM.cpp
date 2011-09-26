@@ -105,31 +105,33 @@ FlarmDeclareInternal(Port *port, const Declaration &declaration,
 
   for (unsigned i = 0; i < size; ++i) {
     int DegLat, DegLon;
-    double tmp, MinLat, MinLon;
+    fixed tmp, MinLat, MinLon;
     char NoS, EoW;
 
     tmp = declaration.GetLocation(i).latitude.Degrees();
-    if (tmp < 0) {
+    if (negative(tmp)) {
       NoS = 'S';
       tmp = -tmp;
     } else {
       NoS = 'N';
     }
     DegLat = (int)tmp;
-    MinLat = (tmp - DegLat) * 60 * 1000;
+    MinLat = (tmp - fixed(DegLat)) * 60 * 1000;
 
     tmp = declaration.GetLocation(i).longitude.Degrees();
-    if (tmp < 0) {
+    if (negative(tmp)) {
       EoW = 'W';
       tmp = -tmp;
     } else {
       EoW = 'E';
     }
     DegLon = (int)tmp;
-    MinLon = (tmp - DegLon) * 60 * 1000;
+    MinLon = (tmp - fixed(DegLon)) * 60 * 1000;
 
-    _stprintf(Buffer, _T("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"), DegLat,
-              MinLat, NoS, DegLon, MinLon, EoW, declaration.GetName(i));
+    _stprintf(Buffer, _T("PFLAC,S,ADDWP,%02d%05.0f%c,%03d%05.0f%c,%s"),
+              DegLat, (double)MinLat, NoS,
+              DegLon, (double)MinLon, EoW,
+              declaration.GetName(i));
 
     if (!FlarmDeclareSetGet(port, Buffer))
       return false;

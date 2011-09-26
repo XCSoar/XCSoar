@@ -187,7 +187,8 @@ RouteLink::calc_speedups(const TaskProjection& proj)
   }
   mag_rmag(dx, dy, d, inv_d);
   const fixed fact = inv_d*(1<< (NORMALISE_BITS-3));
-  polar_index = RoutePolar::dxdy_to_index_norm(dx*fact, dy*fact);
+  polar_index = RoutePolar::dxdy_to_index_norm(int(dx * fact),
+                                               int(dy * fact));
   d*= scale;
   inv_d/= scale;
 }

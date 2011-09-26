@@ -93,10 +93,10 @@ static rectObj
 ConvertRect(const GeoBounds &br)
 {
   rectObj dest;
-  dest.minx = br.west.Degrees();
-  dest.maxx = br.east.Degrees();
-  dest.miny = br.south.Degrees();
-  dest.maxy = br.north.Degrees();
+  dest.minx = (double)br.west.Degrees();
+  dest.maxx = (double)br.east.Degrees();
+  dest.miny = (double)br.south.Degrees();
+  dest.maxy = (double)br.north.Degrees();
   return dest;
 }
 

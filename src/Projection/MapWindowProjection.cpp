@@ -81,8 +81,8 @@ MapWindowProjection::StepMapScale(const fixed scale, int Step) const
 unsigned
 MapWindowProjection::FindMapScale(const fixed Value) const
 {
-  unsigned DesiredScale = Value *
-                       Layout::Scale(GetScreenWidth()) / GetMapResolutionFactor();
+  unsigned DesiredScale(Value * Layout::Scale(GetScreenWidth())
+                        / GetMapResolutionFactor());
 
   unsigned i;
   for (i = 0; i < ScaleListCount; i++) {

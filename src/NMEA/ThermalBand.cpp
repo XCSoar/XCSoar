@@ -48,7 +48,7 @@ ThermalBandInfo::BucketForHeight(fixed height) const
   if (height >= max_thermal_height)
     return NUMTHERMALBUCKETS - 1;
 
-  int bucket = NUMTHERMALBUCKETS * height / max_thermal_height;
+  int bucket(NUMTHERMALBUCKETS * height / max_thermal_height);
   if (bucket < 0)
     return 0;
 

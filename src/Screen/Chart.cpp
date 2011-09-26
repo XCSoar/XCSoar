@@ -318,13 +318,13 @@ Chart::DrawBarChart(const LeastSquares &lsdata)
   canvas.select(green_brush);
   canvas.null_pen();
 
-  PixelScalar xmin, ymin, xmax, ymax;
-
   for (int i = 0; i < lsdata.sum_n; i++) {
-    xmin = (fixed(i) + fixed(1.2)) * xscale + fixed(rc.left + PaddingLeft);
-    ymin = (y_max - y_min) * yscale + fixed(rc.top);
-    xmax = (fixed(i) + fixed(1.8)) * xscale + fixed(rc.left + PaddingLeft);
-    ymax = (y_max - lsdata.ystore[i]) * yscale + fixed(rc.top);
+    PixelScalar xmin((fixed(i) + fixed(1.2)) * xscale
+                     + fixed(rc.left + PaddingLeft));
+    PixelScalar ymin((y_max - y_min) * yscale + fixed(rc.top));
+    PixelScalar xmax((fixed(i) + fixed(1.8)) * xscale
+                     + fixed(rc.left + PaddingLeft));
+    PixelScalar ymax((y_max - lsdata.ystore[i]) * yscale + fixed(rc.top));
     canvas.rectangle(xmin, ymin, xmax, ymax);
   }
 }

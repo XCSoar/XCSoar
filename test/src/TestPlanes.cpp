@@ -71,7 +71,7 @@ TestWriter()
   plane.reference_mass = fixed(318);
   plane.dry_mass = fixed(302);
   plane.max_ballast = fixed(100);
-  plane.dump_time = fixed(90);
+  plane.dump_time = 90;
   plane.max_speed = fixed(41.666);
   plane.wing_area = fixed(9.8);
 

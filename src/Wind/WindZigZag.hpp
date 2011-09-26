@@ -147,7 +147,7 @@ public:
    */
   gcc_pure
   double operator()(int n, double* x) const {
-    return fmin(ZZBeta((fixed)x[0], (fixed)x[1]));
+    return (double)fmin(ZZBeta((fixed)x[0], (fixed)x[1]));
   }
 
 protected:

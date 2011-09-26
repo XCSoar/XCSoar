@@ -59,8 +59,8 @@ static void
 CopyWaypoint(VLAPI_DATA::WPT &dest, const Waypoint &src)
 {
   CopyToNarrowBuffer(dest.name, sizeof(dest.name), src.name.c_str());
-  dest.lon = src.location.longitude.Degrees();
-  dest.lat = src.location.latitude.Degrees();
+  dest.lon = (double)src.location.longitude.Degrees();
+  dest.lat = (double)src.location.latitude.Degrees();
 }
 
 static void

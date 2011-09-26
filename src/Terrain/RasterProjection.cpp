@@ -31,11 +31,11 @@ RasterProjection::set(const GeoBounds &bounds,
 {
   x_scale = fixed(width) /
     (bounds.east - bounds.west).AsBearing().Native();
-  left = bounds.west.Native() * x_scale;
+  left = int(bounds.west.Native() * x_scale);
 
   y_scale = fixed(height) /
     (bounds.north - bounds.south).AsBearing().Native();
-  top = bounds.north.Native() * y_scale;
+  top = int(bounds.north.Native() * y_scale);
 }
 
 fixed

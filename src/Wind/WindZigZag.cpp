@@ -84,7 +84,7 @@ WindZigZagGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   }
 
   // ensure system is reset if time retreats
-  if (back_in_time(basic.time)) {
+  if (back_in_time((unsigned)basic.time)) {
     reset();
     return Result(0);
   }
@@ -93,16 +93,16 @@ WindZigZagGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   if ((fabs(derived.turn_rate) > fixed(20)) ||
       (fabs(basic.acceleration.g_load - fixed_one) > fixed(0.3))) {
 
-    blackout(basic.time);
+    blackout((unsigned)basic.time);
     return Result(0);
   }
 
   // is this point able to be added?
-  if (!do_append(basic.time, basic.track))
+  if (!do_append((unsigned)basic.time, basic.track))
     return Result(0);
 
   // ok to add a point
-  append(ZZObs(basic.time,
+  append(ZZObs((unsigned)basic.time,
                basic.ground_speed, basic.track,
                basic.true_airspeed));
 
@@ -127,8 +127,8 @@ WindZigZag::optimise(int &res_quality, const SpeedVector start,
   start.bearing.SinCos(sin, cos);
 
   double x[] = {
-      sin * start.norm,
-      cos * start.norm
+    double(sin * start.norm),
+    double(cos * start.norm)
   };
   min_newuoa<double, WindZigZag>(2, x, *this, 100.0, 0.0001, 100);
 
@@ -237,7 +237,7 @@ int
 WindZigZag::quality(const ZZBeta& beta, const bool circling) const
 {
   const fixed v = sqrt(relative_error_squared(beta));
-  const int quality = min(fixed(5.0), max(fixed(1.0), -log(v)));
+  const int quality = (int)min(fixed(5.0), max(fixed(1.0), -log(v)));
   if (circling)
     return max(1, quality / 2); // de-value updates in circling mode
   else

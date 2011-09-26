@@ -154,7 +154,7 @@ void VegaVoiceMessage::Initialise(int the_id) {
   last_messageText[0]=0;
   id_active = -1;
 
-  lastTime = 0.0;
+  lastTime = fixed_zero;
   id = the_id;
   active = false;
   alarmlevel = 0;
@@ -237,7 +237,9 @@ void VegaVoiceMessage::SendNullMessage() {
 // Called when the Vega Ack button is pressed
 // TODO enhancement: prevent the message coming up again unless it
 // becomes inactive for a while and then active again
-void VegaVoiceMessage::Acknowledge(double time) {
+void
+VegaVoiceMessage::Acknowledge(fixed time)
+{
   if (active) {
     active = false;
   }
@@ -251,13 +253,16 @@ void VegaVoiceMessage::Acknowledge(double time) {
 
 
 // called when Vega reports that the message was spoken
-void VegaVoiceMessage::MessageSpoken(double time) {
+void
+VegaVoiceMessage::MessageSpoken(fixed time)
+{
   lastTime = time;
 }
 
-
-bool VegaVoiceMessage::TimeReady(double time) {
-  if (time-lastTime>repeatInterval) {
+bool
+VegaVoiceMessage::TimeReady(fixed time)
+{
+  if (int(time - lastTime) > repeatInterval) {
     return true;
   } else {
     return false;
@@ -266,7 +271,7 @@ bool VegaVoiceMessage::TimeReady(double time) {
 
 
 void
-VegaVoiceMessage::DoSend(gcc_unused double time, TCHAR *text)
+VegaVoiceMessage::DoSend(gcc_unused fixed time, TCHAR *text)
 {
   /*
 
@@ -549,7 +554,9 @@ VegaVoice::Update(const NMEAInfo &basic, const DerivedInfo &calculated,
 
 
 // called when notified by Altair that the message has been spoken
-void VegaVoice::MessageSpoken(int id_this, double time) {
+void
+VegaVoice::MessageSpoken(int id_this, fixed time)
+{
   ScopeLock protect(mutexVoice);
 
   if ((id_this>=0)&&(id_this<VV_MESSAGE_COUNT)) {

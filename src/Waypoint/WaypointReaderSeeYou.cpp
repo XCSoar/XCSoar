@@ -121,7 +121,7 @@ WaypointReaderSeeYou::ParseLine(const TCHAR* line, const unsigned linenum,
     fixed rwlen = fixed_minus_one;
     if (iRWLen < n_params && parseDistance(params[iRWLen], rwlen) &&
         positive(rwlen))
-      new_waypoint.runway.SetLength(rwlen);
+      new_waypoint.runway.SetLength(uround(rwlen));
 
     if (iRWDir < n_params && *params[iRWDir]) {
       TCHAR *end;

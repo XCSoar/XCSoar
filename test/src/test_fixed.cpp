@@ -32,7 +32,7 @@ static void test_mag_rmag(double mag) {
   fixed px(7.07106*mag);
   fixed py(-7.07106*mag);
 
-  double msq = px*px+py*py;
+  double msq(px * px + py * py);
   printf("# testing mag i %g %g\n", mag, msq);
 
   fixed d; fixed inv_d;

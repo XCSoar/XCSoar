@@ -41,7 +41,7 @@ public:
   RoughDistance(fixed _value):value(_value) {}
 
   RoughDistance &operator=(fixed other) {
-    value = other;
+    value = (uint32_t)other;
     return *this;
   }
 

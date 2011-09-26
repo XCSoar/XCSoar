@@ -54,7 +54,7 @@ public:
 
   gcc_pure
   unsigned angle_to_height(Angle angle) const {
-    return angle.Native() * y_scale;
+    return (unsigned)(angle.Native() * y_scale);
   }
 
   gcc_pure RasterLocation

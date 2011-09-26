@@ -269,7 +269,7 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
 
   TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.all_off();
-  task_behaviour.auto_mc = fixed(auto_mc);
+  task_behaviour.auto_mc = auto_mc;
   task_behaviour.enable_trace = false;
   task_manager.SetTaskBehaviour(task_behaviour);
 

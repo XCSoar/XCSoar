@@ -124,8 +124,8 @@ TrailRenderer::Draw(Canvas &canvas, const GlideComputer &glide_computer,
 
     if (last_valid) {
       if (settings.SnailType == stAltitude) {
-        int index = (it->GetAltitude() - value_min) / (value_max - value_min) *
-                    (NUMSNAILCOLORS - 1);
+        int index((it->GetAltitude() - value_min) / (value_max - value_min)
+                  * (NUMSNAILCOLORS - 1));
         index = max(0, min(NUMSNAILCOLORS - 1, index));
         canvas.select(Graphics::hpSnail[index]);
       } else {

@@ -61,7 +61,7 @@ public:
   }
 
   RoughAltitude &operator=(fixed other) {
-    value = other;
+    value = (short)other;
     return *this;
   }
 

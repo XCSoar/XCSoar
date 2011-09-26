@@ -227,10 +227,10 @@ bool run_flight(TaskManager &task_manager,
 
     if ((task_manager.GetActiveTaskPointIndex() == 1) &&
         first && (task_manager.GetStats().total.time_elapsed > fixed_10)) {
-      time_remaining = task_manager.GetStats().total.time_remaining;
+      time_remaining = (double)task_manager.GetStats().total.time_remaining;
       first = false;
 
-      time_planned = task_manager.GetStats().total.time_planned;
+      time_planned = (double)task_manager.GetStats().total.time_planned;
 
       if (verbose > 1) {
         printf("# time remaining %g\n", time_remaining);
@@ -310,10 +310,10 @@ bool run_flight(TaskManager &task_manager,
   }
   wait_prompt();
 
-  time_elapsed = task_manager.GetStats().total.time_elapsed;
-  time_planned = task_manager.GetStats().total.time_planned;
-  calc_cruise_efficiency = task_manager.GetStats().cruise_efficiency;
-  calc_effective_mc = task_manager.GetStats().effective_mc;
+  time_elapsed = (double)task_manager.GetStats().total.time_elapsed;
+  time_planned = (double)task_manager.GetStats().total.time_planned;
+  calc_cruise_efficiency = (double)task_manager.GetStats().cruise_efficiency;
+  calc_effective_mc = (double)task_manager.GetStats().effective_mc;
 
   if (verbose)
     distance_counts();

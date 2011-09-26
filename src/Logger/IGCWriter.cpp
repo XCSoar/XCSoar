@@ -344,7 +344,7 @@ IGCWriter::LogPoint(const NMEAInfo& gps_info)
   sprintf(q, "%c%05d%05d%03d%02d",
           IsValidFix,
           normalize_igc_altitude(gps_info.baro_altitude_available
-                                 ? gps_info.baro_altitude
+                                 ? (int)gps_info.baro_altitude
                                  /* fall back to GPS altitude */
                                  : p.GPSAltitude),
           normalize_igc_altitude(p.GPSAltitude),

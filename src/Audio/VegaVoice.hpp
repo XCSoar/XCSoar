@@ -72,7 +72,7 @@ class VegaVoiceMessage {
   // message id of the message we want Vega to speak next
 
   // time the message was spoken as reported by Vega
-  double lastTime;
+  fixed lastTime;
 
   static TCHAR last_messageText[80];
   // buffer for message
@@ -87,9 +87,9 @@ private:
 
   void SendMessage();
 
-  bool TimeReady(double time);
+  bool TimeReady(fixed time);
 
-  void DoSend(double time, TCHAR *text);
+  void DoSend(fixed time, TCHAR *text);
 
   static void TextToDigitsSmall(TCHAR *text, fixed number);
 
@@ -104,10 +104,10 @@ public:
   void SendNullMessage();
 
   // Called when the Vega Ack button is pressed
-  void Acknowledge(double time);
+  void Acknowledge(fixed time);
 
   // called when Vega reports that the message was spoken
-  void MessageSpoken(double time);
+  void MessageSpoken(fixed time);
 
 
 public:
@@ -133,7 +133,7 @@ public:
 	      const SETTINGS_COMPUTER &settings);
 
   // called when notified by Altair that the message has been spoken
-  void MessageSpoken(int id_this, double time);
+  void MessageSpoken(int id_this, fixed time);
 };
 
 #endif

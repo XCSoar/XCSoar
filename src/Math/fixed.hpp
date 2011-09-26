@@ -200,42 +200,42 @@ public:
     return lhs.m_nVal>=rhs.m_nVal;
   }
 
-  gcc_pure
+  gcc_pure gcc_explicit
   operator bool() const {
     return m_nVal != 0;
   }
 
-  gcc_pure
+  gcc_pure gcc_explicit
   inline operator double() const {
     return as_double();
   }
 
-  gcc_pure
+  gcc_pure gcc_explicit
   inline operator float() const {
     return as_float();
   }
 
-  gcc_pure
+  gcc_pure gcc_explicit
   inline operator short() const {
     return as_short();
   }
 
-  gcc_pure
+  gcc_pure gcc_explicit
   inline operator int() const {
     return as_int();
   }
 
-  gcc_pure
+  gcc_pure gcc_explicit
   inline operator unsigned() const {
     return (unsigned)as_int();
   }
 
-  gcc_pure
+  gcc_pure gcc_explicit
   inline operator unsigned short() const {
     return as_unsigned_short();
   }
 
-  gcc_pure
+  gcc_pure gcc_explicit
   inline operator long() const {
     return as_long();
   }

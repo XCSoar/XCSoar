@@ -289,8 +289,8 @@ GlueMapWindow::UpdateProjection()
                       .vector.bearing.Reciprocal().SinCos(x, y);
       }
       fixed gspFactor = (fixed) (50 - settings_map.GliderScreenPosition) / 100;
-      offset.x = x * (rc.right - rc.left) * gspFactor;
-      offset.y = y * (rc.top - rc.bottom) * gspFactor;
+      offset.x = PixelScalar(x * (rc.right - rc.left) * gspFactor);
+      offset.y = PixelScalar(y * (rc.top - rc.bottom) * gspFactor);
       offsetHistory.add(offset);
       offset = offsetHistory.average();
     }

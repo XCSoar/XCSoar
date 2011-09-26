@@ -63,12 +63,12 @@ void FillInfoBoxWaypointName(InfoBoxWindow& infobox, const Waypoint* way_point,
 void
 InfoBoxContent::SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta)
 {
-  double delta_degrees = delta.AsDelta().Degrees();
+  fixed delta_degrees = delta.AsDelta().Degrees();
   TCHAR tmp[32];
-  if (delta_degrees > 1)
-    _stprintf(tmp, _T("%2.0f°»"), delta_degrees);
-  else if (delta_degrees < -1)
-    _stprintf(tmp, _T("«%2.0f°"), -delta_degrees);
+  if (delta_degrees > fixed_one)
+    _stprintf(tmp, _T("%2.0f°»"), (double)delta_degrees);
+  else if (delta_degrees < fixed_minus_one)
+    _stprintf(tmp, _T("«%2.0f°"), (double)-delta_degrees);
   else
     _tcscpy(tmp, _T("«»"));
 
@@ -78,12 +78,12 @@ InfoBoxContent::SetValueBearingDifference(InfoBoxWindow &infobox, Angle delta)
 void
 InfoBoxContent::SetCommentBearingDifference(InfoBoxWindow &infobox, Angle delta)
 {
-  double delta_degrees = delta.AsDelta().Degrees();
+  fixed delta_degrees = delta.AsDelta().Degrees();
   TCHAR tmp[32];
-  if (delta_degrees > 1)
-    _stprintf(tmp, _T("%2.0f°»"), delta_degrees);
-  else if (delta_degrees < -1)
-    _stprintf(tmp, _T("«%2.0f°"), -delta_degrees);
+  if (delta_degrees > fixed_one)
+    _stprintf(tmp, _T("%2.0f°»"), (double)delta_degrees);
+  else if (delta_degrees < fixed_minus_one)
+    _stprintf(tmp, _T("«%2.0f°"), (double)-delta_degrees);
   else
     _tcscpy(tmp, _T("«»"));
 

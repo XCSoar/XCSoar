@@ -50,13 +50,13 @@ Update()
   TCHAR Text[100];
 
   if (teamcode_info.teammate_available && basic.track_available) {
-    double Value = (teamcode_info.teammate_vector.bearing - basic.track)
+    fixed Value = (teamcode_info.teammate_vector.bearing - basic.track)
       .AsDelta().Degrees();
 
-    if (Value > 1)
-      _stprintf(Text, _T("%2.0f")_T(DEG)_T(">"), Value);
-    else if (Value < -1)
-      _stprintf(Text, _T("<%2.0f")_T(DEG), -Value);
+    if (Value > fixed_one)
+      _stprintf(Text, _T("%2.0f")_T(DEG)_T(">"), (double)Value);
+    else if (Value < fixed_minus_one)
+      _stprintf(Text, _T("<%2.0f")_T(DEG), (double)-Value);
     else
       _tcscpy(Text, _T("<>"));
   } else {

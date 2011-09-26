@@ -153,8 +153,8 @@ SetLocalTime(int utc_offset)
 {
   WndProperty* wp;
   TCHAR temp[20];
-  Units::TimeToTextHHMMSigned(temp,
-      TimeLocal(XCSoarInterface::Basic().time, utc_offset));
+  int time(XCSoarInterface::Basic().time);
+  Units::TimeToTextHHMMSigned(temp, TimeLocal(time, utc_offset));
 
   wp = (WndProperty*)wf->FindByName(_T("prpLocalTime"));
   assert(wp != NULL);

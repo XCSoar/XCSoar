@@ -178,13 +178,13 @@ UpdateValuesTimes(void)
 
   WndProperty *wp;
   TCHAR Temp[1000];
-  double sunsettime;
+  fixed sunsettime;
   int sunsethours;
   int sunsetmins;
 
   sunsettime = XCSoarInterface::Calculated().sunset_time;
   sunsethours = (int)sunsettime;
-  sunsetmins = (int)((sunsettime - sunsethours) * 60);
+  sunsetmins = (int)((sunsettime - fixed(sunsethours)) * 60);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSunset"));
   assert(wp != NULL);
@@ -333,7 +333,7 @@ UpdateValuesRules(void)
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   assert(wp != NULL);
   if (common_stats.task_started) {
-    Units::TimeToTextHHMMSigned(Temp, (int)TimeLocal(start_state.time));
+    Units::TimeToTextHHMMSigned(Temp, (int)TimeLocal((int)start_state.time));
     wp->SetText(Temp);
   } else {
     wp->SetText(_T(""));
@@ -400,7 +400,7 @@ UpdateValuesTask(void)
   TCHAR Temp[80];
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskTime"));
-  Units::TimeToTextHHMMSigned(Temp, protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
+  Units::TimeToTextHHMMSigned(Temp, (int)protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
   assert(wp != NULL);
   if (task_stats.has_targets)
     wp->SetText(Temp);
@@ -409,14 +409,14 @@ UpdateValuesTask(void)
 
   wp = (WndProperty*)wf->FindByName(_T("prpETETime"));
   assert(wp != NULL);
-  Units::TimeToTextHHMMSigned(Temp,
-                    task_stats.total.time_elapsed +
-                    task_stats.total.time_remaining);
+  int ete_time(task_stats.total.time_elapsed +
+               task_stats.total.time_remaining);
+  Units::TimeToTextHHMMSigned(Temp, ete_time);
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpRemainingTime"));
   assert(wp != NULL);
-  Units::TimeToTextHHMMSigned(Temp, task_stats.total.time_remaining);
+  Units::TimeToTextHHMMSigned(Temp, (int)task_stats.total.time_remaining);
   wp->SetText(Temp);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskDistance"));

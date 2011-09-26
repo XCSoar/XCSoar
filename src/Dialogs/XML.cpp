@@ -544,11 +544,11 @@ LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
 
   if (_tcsicmp(DataType, _T("double")) == 0)
     return new DataFieldFloat(EditFormat, DisplayFmt, Min, Max,
-                              fixed_zero, fixed(Step), fixed(Fine),
+                              fixed_zero, fixed(Step), Fine,
                               callback);
 
   if (_tcsicmp(DataType, _T("integer")) == 0)
-    return new DataFieldInteger(EditFormat, DisplayFmt, Min, Max,
+    return new DataFieldInteger(EditFormat, DisplayFmt, (int)Min, (int)Max,
                                 0, (int)Step, callback);
 
   if (_tcsicmp(DataType, _T("string")) == 0)

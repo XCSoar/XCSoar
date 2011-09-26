@@ -162,7 +162,7 @@ TaskManager::UpdateCommonStatsTimes(const AircraftState &state)
     const fixed start_max_height =
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height) +
         fixed(task_ordered.get_ordered_task_behaviour().start_max_height_ref
-              == hrMSL ? 0 : task_ordered.get_tp(0)->GetElevation());
+              == hrMSL ? fixed_zero : task_ordered.get_tp(0)->GetElevation());
     if (positive(start_max_height) && state.flying) {
       if (!positive(common_stats.TimeUnderStartMaxHeight) &&
           state.altitude < start_max_height) {

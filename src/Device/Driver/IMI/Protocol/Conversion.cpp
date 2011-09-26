@@ -53,7 +53,7 @@ IMI::ConvertToChar(const TCHAR* unicode, char* ascii, int outSize)
 IMI::AngleConverter::AngleConverter(Angle angle)
 {
   sign = (angle.Sign() == -1) ? 1 : 0;
-  double mag = angle.AbsoluteDegrees();
+  double mag(angle.AbsoluteDegrees());
   degrees = static_cast<IMIDWORD> (mag);
   milliminutes = static_cast<IMIDWORD> ((mag - degrees) * 60 * 1000);
 }

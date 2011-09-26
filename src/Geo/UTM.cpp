@@ -117,9 +117,9 @@ UTM::GetCentralMeridian(unsigned char zone_number)
 
 UTM
 UTM::FromGeoPoint(const GeoPoint &p) {
-  double lat = p.latitude.Radians();
-  double _sin = p.latitude.sin();
-  double _cos = p.latitude.cos();
+  double lat = (double)p.latitude.Radians();
+  double _sin = (double)p.latitude.sin();
+  double _cos = (double)p.latitude.cos();
   double _tan = _sin / _cos;
   double tan2 = _tan * _tan;
   double tan4 = tan2 * tan2;
@@ -179,9 +179,9 @@ UTM::ToGeoPoint() const
       (21 * _e3 / 16 - 55 * _e4 / 32) * sin(4 * mu) +
       (151 * _e3 / 96) * sin(6 * mu)));
 
-  double _sin = phi1rad.sin();
+  double _sin = (double)phi1rad.sin();
   double sin2 = _sin * _sin;
-  double _cos = phi1rad.cos();
+  double _cos = (double)phi1rad.cos();
   double _tan = _sin / _cos;
   double tan2 = _tan * _tan;
   double tan4 = tan2 * tan2;

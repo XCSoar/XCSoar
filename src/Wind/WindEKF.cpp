@@ -271,14 +271,15 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   }
 
   // temporary manoeuvering, dont append this point
+  unsigned time(basic.time);
   if ((fabs(derived.turn_rate) > fixed(20)) ||
       (fabs(basic.acceleration.g_load - fixed_one) > fixed(0.3))) {
 
-    blackout(basic.time);
+    blackout(time);
     return Result(0);
   }
 
-  if (in_blackout(basic.time))
+  if (in_blackout(time))
     return Result(0);
 
   // clear blackout
