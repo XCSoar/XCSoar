@@ -41,8 +41,20 @@ bool
 TopWindow::find(const TCHAR *cls, const TCHAR *text)
 {
   HWND h = FindWindow(cls, text);
-  if (h != NULL)
-      SetForegroundWindow((HWND)((ULONG) h | 0x00000001));
+  if (h != NULL) {
+#ifdef _WIN32_WCE
+    /* restore and reactivate the last active child window */
+    /* On MSDN, this flag is only documented on Windows CE, and not in
+       all versions of the SetForegroundWindow() documentation.  The
+       cast below is copied from MSDN example code, but it's wrong:
+       casting a pointer to ULONG doesn't work on 64 bit platforms.
+       There is no 64 bit flavour of Windows CE, so that's good enough
+       for us. */
+    h = (HWND)((ULONG) h | 0x00000001);
+#endif
+
+    SetForegroundWindow(h);
+  }
 
   return h != NULL;
 }

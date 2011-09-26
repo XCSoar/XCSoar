@@ -77,10 +77,10 @@ endif
 
 ifeq ($(TARGET),PC)
   ifeq ($(X64),y)
-    TCPATH := amd64-mingw32msvc-
+    TCPATH := x86_64-w64-mingw32-
     TARGET_ARCH += -m64
   else
-    TCPATH := i586-mingw32msvc-
+    TCPATH := i686-w64-mingw32-
     TARGET_ARCH += -march=i586
   endif
 

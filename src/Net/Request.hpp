@@ -61,6 +61,8 @@ namespace Net {
     Trigger opened_event, completed_event;
     /** The last error code that was retrieved by the Callback() function */
     DWORD last_error;
+#elif defined(ANDROID)
+    static const unsigned long INFINITE = 0;
 #else
     static const unsigned long INFINITE = (unsigned long)-1;
 #endif
@@ -77,9 +79,9 @@ namespace Net {
 #ifdef HAVE_JAVA_NET
     JNIEnv *env;
 
-    jobject input_stream;
+    jobject connection, input_stream;
 
-    jmethodID read_method, close_method;
+    jmethodID set_timeout_method, read_method, close_method;
 #endif
 
   public:

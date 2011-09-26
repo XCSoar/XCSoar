@@ -1,22 +1,16 @@
-\usepackage{pslatex}
 \usepackage{color}
-\usepackage{fancybox}
 \usepackage{times}
 \usepackage{booktabs}
 \usepackage{longtable}
-\usepackage[pdftex,final]{graphicx}
-\usepackage{fancyvrb}
-\usepackage{listings}
-\usepackage{setspace}
 \usepackage{rotating}
 \usepackage{todonotes}
 \makeatletter
 \def\trdvvs{Vega}
-\usepackage{fancyhdr,calc}
+\usepackage{fancyhdr}
 \pagestyle{fancy}
 
 % Define command to insert XCSoar website
-\newcommand{\xcsoarwebsite}[0]{\url{http://www.xcsoar.org}}
+\newcommand{\xcsoarwebsite}[0]{\url{www.xcsoar.org}}
 
 % Define command to insert tip image
 \newcommand{\tip}[0]{\marginlabel{\parbox{1.1cm}{\includegraphics[width=1.2cm]{figures/dialog-information.pdf}}}}
@@ -42,10 +36,11 @@
 \maxipagerulefalse
 
 % Include XCSoar header and footer settings
-\input{../xcsoar-headers.sty}
-\input{../buttons.sty}
+\input{xcsoar-headers.sty}
+\input{buttons.sty}
 \usepackage{hyperref}
 \widowpenalty=1000
 \clubpenalty=1000
 
-\graphicspath{{../../../output/all/tex/}{../shared/figures/}}
+% the command \version prints the XCSoar version number
+\newcommand{\version}{\input{VERSION.txt}}

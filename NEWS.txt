@@ -4,12 +4,20 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.3 - not yet released
 
-Version 6.2.1 - not yet released
+Version 6.2.1 - 2011/09/26
 * faster METAR and TAF download
+* devices
+  - FLARM: clear old barometric altitude as soon as FLARM is detected
+* user interface
+  - show validation errors before task declaration
+* Windows / Altair
+  - restore the "Enter" key in dialogs (knob click on Altair)
 * Android
   - fix hang on quit
   - fix screen corruption when rotating the progress screen
   - fix startup crash with manual display orientation
+  - fix memory leak in network code
+  - implement timeout in network code
 * Mac OS X
   - fix clock query
   - store data in ~/XCSoarData

@@ -683,14 +683,22 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEAInfo &info)
   fixed value;
   if (ReadAltitude(line, value)) {
     // JMW no in-built baro sources, so use this generic one
-    if (info.flarm.IsDetected())
+    if (info.flarm.IsDetected()) {
       /* FLARM emulates the Garmin $PGRMZ sentence, but emits the
          altitude above 1013.25 hPa - since the don't have a "FLARM"
          device driver, we use the auto-detected "isFlarm" flag
          here */
       info.ProvideWeakPressureAltitude(value);
-    else
-      info.ProvideBaroAltitudeTrue(value);
+
+      /* when a FLARM gets detected too late, the previous call to
+         this function may have filled the PGRMZ value into
+         "barometric altitude"; that was a misapprehension, and the
+         following line attempts to correct it as early as possible */
+      info.ClearWeakBaroAltitude();
+    } else {
+      info.ProvideWeakBaroAltitude(value);
+      info.ClearWeakPressureAltitude();
+    }
   }
 
   return true;

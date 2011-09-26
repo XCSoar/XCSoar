@@ -2,17 +2,11 @@
 %\usepackage[ansinew]{inputenc}
 \usepackage[utf8]{inputenc}
 \usepackage[german]{babel}
-\usepackage[off]{flippdf}%Spiegelverkehrte Ausgabe ganzer Seiten (sogar Bilder ..) -> Default OFF ..
-\usepackage{supertabular}
-\usepackage{array}
-\usepackage{hhline}
 \usepackage{makeidx}
-\usepackage{framed,color}               % Farbunterstützung
 \usepackage{graphicx}                      % Anleitung hierzu  in c:\Program Files\MiKTeX 2.7\doc\latex\graphics\grfguide.pdf
 \usepackage{wrapfig}
 %\usepackage[T1]{fontenc}
 \usepackage{fancyhdr}
-\usepackage{fancybox}
 \usepackage[colorlinks]{hyperref}    % Bietet hyperlinks und Zugriffe auf Dateien in Farbe
 \newcommand{\fspec}[1]{\protect\nolinkurl{#1}}
 \makeindex
@@ -37,19 +31,23 @@
 \def\smallblitz{ \includegraphics[width=0.66em]{Bilder/blitz1.png}}
 \rightmargin=0.55\rightmargin
 \leftmargin=0.55\leftmargin
-%----------------------------------------------------------------------------------------------
-%----------------------------------------------------------------------------------------------
-%----------------------------------------------------------------------------------------------
-%### Suchpfad fuer Bilder
-\graphicspath{{../shared/figures/}}
+
 %----------------------------------------------------------------------------------------------
 %----------------------------------------------------------------------------------------------
 \begin{document}
 \input{buttons.sty}                      %Lädt buttons, Menüs etc. von XCSoar - leicht variiert von OH.
 \shorthandoff{"}                          %Anführungszeichen erscheinen wie auf Tastatur und nicht als Tastatursteuerzeichen.
-\vspace*{5cm}
+\vspace*{2cm}
+
 \begin{center}
-\includegraphics[width=10cm]{xcsoar-title.png}\\[2em]
+  \includegraphics[angle=0,width=0.5\textwidth,keepaspectratio='true']{graphics/xcsoarswiftsplash.pdf}
+  \vskip 0.5cm
+  \includegraphics[angle=0,width=0.66\textwidth,keepaspectratio='true']{graphics/title.pdf}
+\end{center}
+
+\vspace*{2cm}
+
+\begin{center}
 {\Large\textbf{\textsf{Flash\raisebox{-\baselineskip}[\ht\strutbox]{\bbblitz}Manual made by Hotte (OH)}}}\\
 \end{center}
 % \reflectbox{Spiegelverkehrt ?}? Ja, geht auch ... 
@@ -84,4 +82,4 @@
 %\end{small}
 \tableofcontents
 \printindex
-\end{document} 
+\end{document}

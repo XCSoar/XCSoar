@@ -50,7 +50,7 @@ WndButton::on_clicked()
     return true;
   }
 
-  return false;
+  return ButtonWindow::on_clicked();
 }
 
 bool
@@ -86,7 +86,7 @@ WndButton::on_key_check(unsigned key_code) const
     return mOnRightNotify != NULL;
 
   default:
-    return false;
+    return ButtonWindow::on_key_check(key_code);
   }
 }
 
@@ -100,9 +100,6 @@ WndButton::on_key_down(unsigned key_code)
   case VK_RIGHT:
     return on_right();
   }
-
-  if (is_altair() && key_code == VK_RETURN)
-    key_code = VK_F4;
 
   return ButtonWindow::on_key_down(key_code);
 }

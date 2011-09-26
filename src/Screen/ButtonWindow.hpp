@@ -156,10 +156,21 @@ public:
         left, top, width, height, style);
   }
 
+  gcc_pure
+  unsigned GetID() const {
+    return ::GetWindowLong(hWnd, GWL_ID);
+  }
+
   /**
    * The button was clicked, and its action shall be triggered.
    */
   virtual bool on_clicked();
+
+protected:
+  /**
+   * Synthesise a click.
+   */
+  void Click();
 };
 
 /**
@@ -189,6 +200,10 @@ public:
   void set_text(const TCHAR *text);
 
   const tstring get_text() const;
+
+protected:
+  virtual bool on_key_check(unsigned key_code) const;
+  virtual bool on_key_down(unsigned key_code);
 };
 
 #endif /* USE_GDI */

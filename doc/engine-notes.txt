@@ -1,9 +1,0 @@
-
-To do:
-- Class for detecting takeoff, landing, launch release (winch and aerotow?)
-
-- Abstract class for simulators:
-  - replay
-  - task simulator
-  - drag simulator
-

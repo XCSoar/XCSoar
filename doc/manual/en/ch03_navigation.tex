@@ -89,7 +89,7 @@ in and out if desired, zoom will be switch to manual control automatically.
 
 To turn auto zoom on or off, select from the menu
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Zoom Auto} 
+\bmenu{Display}\blink\bmenu{Zoom Auto} 
 \end{quote}
 
 When a waypoint changes (automatically, via the task selector, or by
@@ -140,9 +140,9 @@ landable waypoints. \config{waypointicons}
 \begin{tabular}{c|c|cc|cc|}
 Icon set &\begin{sideways}Simple waypoint\end{sideways}
 &\begin{sideways}Landable field\end{sideways}
-&\begin{sideways}reachable\end{sideways}
-&\begin{sideways}Aerfield\end{sideways}
-&\begin{sideways}reachable\end{sideways}\\
+&\begin{sideways}Reachable\end{sideways}
+&\begin{sideways}Airfield\end{sideways}
+&\begin{sideways}Reachable\end{sideways}\\
 \hline
 Purple Circle &
 \includegraphics[width=0.5cm]{icons/map_turnpoint.pdf} &
@@ -169,7 +169,7 @@ Orange Icon &
 
 
 Waypoints are optionally labelled according to one of several
-abbreviation schemes\config{labels} and visibility \config{labelvisibility}.
+abbreviation schemes \config{labels} and visibility \config{labelvisibility}.
 
 XCSoar continually calculates which landing points are within gliding
 range using the current wind estimate.  The estimated arrival altitude
@@ -229,7 +229,7 @@ Both terrain and topology display can be switched on or off from the
 menu:
 \begin{quote}
 \bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Terrain On} \\
-\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Topology On}
+\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Topo. On}
 \end{quote}
 
 \begin{center}
@@ -249,8 +249,16 @@ terrain region, the background colour will be white.
 The screen can be de-cluttered, turning off the display of topology
 labels and non-task waypoint labels by toggling:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Labels Off}
+\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Labels None}
 \end{quote}
+
+Other options for display decluttering include:
+
+\jindent{\bmenut{Labels}{Task \& Landables}}{  Shows labels for the waypoints in  the active task and any landable fields (based on the waypoint attributes in the waypoints file).  Other waypoints are shown bu not labeled. }
+\jindent{\bmenut{Labels}{Task}}{ Shows labels only for waypoints in the active task}
+\jindent{\bmenut{Labels}{All}}{ Shows labels for all waypoints. }
+
+Note that in all cases, the label format is configurable in the "Waypoint Display" configuration menu.  \config{labels}
 
 
 \section{Trail}\label{sec:trail}
@@ -274,7 +282,7 @@ which displays the entire flight.  This can be performed permanently
 through the configuration \config{snailtrail} settings or temporarily by the
 menu:
 \begin{quote}
-\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Snail trail}
+\bmenu{Display}\blink\bmenu{Display}\blink\bmenu{Trail}
 \end{quote}
 
 Note that for all of these modes, the snail trail is short in
@@ -307,13 +315,13 @@ This can also be performed from the wind settings dialog:
 The trail drift display is useful also to show more clearly when thermals
 are cranked due to wind shear.
 
-The trail width can be adjusted in the configuration settings \config{trailwidth}.
+The trail width can optionally be scaled according to the variometer display\config{trailscaled}.
 
 \section{Markers}
 
 \begin{tabular}{c}%{c}
-\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/map_flag.pdf}\\
-(a)
+%\includegraphics[angle=0,width=0.75cm,keepaspectratio='true']{icons/map_flag.pdf}\\
+%(a)
 \end{tabular}
 
 

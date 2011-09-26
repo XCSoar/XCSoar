@@ -7,7 +7,7 @@
 \hspace*{-4cm} \em XCSoar Developer Manual \vspace*{2pt}
 \end{tabular}}
 
-\input{../xcsoar.sty}
+\input{xcsoar.sty}
 \input{title-xcsoar.sty}
 
 \usepackage{tikz}
@@ -224,49 +224,6 @@ Following the guidline should prevent the GUI from mixtures of "ON" and "On" tex
         refer to.
 \end{description}
 
-
-\chapter{Topology and Terrain}\label{cha:topology}
-\section{Topology layer description file}
-Each line of the topology layer description file (topology.tpl) contains
-a comma seperated list (CSV) of information needed for rendering of an
-individual topology layer. Lines starting with '*' are ignored.
-\begin{table}[ht]
-\centering
-\sffamily
-\begin{tabular}{@{}lll@{}}
-\toprule
-\addlinespace
-Column name&Data type&Valid range\\
-%\midrule
-\cmidrule(r){1-1}\cmidrule(lr){2-2}\cmidrule(l){3-3}
-filename&string&\\
-range&double&-\\
-icon&-&-\\
-label index&-&-\\
-color (red component)&int&0-255\\
-color (green component)&int&0-255\\
-color (blue component)&int&0-255\\
-pen width&int&0-31\\
-label range&double&-\\
-important label range&double&-\\
-%\addlinespace
-\bottomrule
-\end{tabular}
-\caption{Topology file format}
-\label{tab:topology-file-format}
-\end{table}
-
-\begin{description}
-\item[filename] The filename of the topology layer within the container file.
-\item[range] A threshold zoom level. All layer elements will not be drawn
-below this threshold.
-\item[pen width] Lines containded within this layer are drawn with pen width.
-\item[label range] A threshold zoom level. Labels contained in the layer file
-will not be rendered below this threshold.
-will not be drawn.
-\item[important label range] A threshold zoom level. Labels contained
-in the layer file will be rendered in standard style below this threshold.
-\end{description}
 
 \chapter{Architecture}
 
@@ -486,10 +443,17 @@ It is important to keep this area clear so the aircraft symbol can be easily fou
 Elements that may be rendered over each other should be organised in order of
 priority, particularly with alert warning items above caution items above non-alert items.
 
+
+\chapter{File formats}\label{cha:file_formats}
+
+\input{input_events.tex}
+\input{tpl_format.tex}
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \appendix
 
 \chapter{GNU General Public License}\label{cha:gnu-general-public}
-\input{../shared/gpl.tex}
+\input{gpl.tex}
 
 \end{document}

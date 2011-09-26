@@ -138,54 +138,6 @@ inspection tests or before takeoff.
 \includegraphics[angle=0,width=0.7\linewidth,keepaspectratio='true']{figures/dialog-switches.png}
 \end{center}
 
-\section{Aircraft radio transceiver}
-
-Monitoring and setting the active and standby frequencies of aircraft
-transceivers with serial connections are currently in development.
-The goal is to provide the functionality whereby the radio frequency
-can be set with one button press (requiring confirmation by the pilot)
-when the aircraft flies into controlled airspace or enters an
-airfield's advisory/mandatory broadcast traffic zone.
-
-\section{Mobile telephones}
-
-The capability for XCSoar to send and receive position updates and
-other data (such as weather/task updates) in flight via SMS messages
-on the GSM mobile phone network has been demonstrated in July 2005.
-This used a standard consumer mobile telephone over a Bluetooth
-connection; the same code can be used for similar communications via a
-serial connection to a GSM or CDMA modem.  This code requires further
-development before being integrated into public releases of the
-software.
-
-Applications of this technology include:
-\begin{itemize}
-\item Tracking of gliders from the home base for spectator displays
-\item Automatic broadcast of last known position when outlanding
-  to home base and retrieve crews
-\item Team flying, and to assist lead and follow training
-\end{itemize}
-
-\section{Supported variometers}\label{sec:supported-varios}
-
-Currently XCSoar supports inputs from a very long list of intelligent
-variometers. To catch up with the growing number of devices and their supported 
-features please consult the XCSoar homepage at 
-\url{http://www.xcsoar.org/discover/features.html#supported_devices}.
-
-Note that the level of support for each device varies, and not all manufacturers
-release their protocols to allow the XCSoar developers to provide full support. 
-
-\section{Other avionics devices}
-
-Support for other instruments, such as a magnetic compass or Attitude
-Heading Reference System (artificial horizon), may be implemented in
-the future.  Make a request to the XCSoar developers if you are
-interested in support for other instruments.
-
-Support for the Honeywell Digital Compass HMR3000 is under
-development.
-
 \section{Slave mode}
 
 A device type in the configuration settings, ``NMEA Out'' is defined
@@ -198,45 +150,6 @@ As an example where two Altairs are being connected together, in the
 slave, the first com device can then be set to ``Vega'' or ``Altair
 Pro'' and this system receives all data as if it came from the
 Master's GPS and connected instruments (Vega, FLARM etc).
-
-\section{Interface to external loggers}
-
-XCSoar has support for declaration and handling special sentences used
-by commercial flight loggers.  Devices that are supported but do not
-include declaration support include Posigraph and Colibri.  These will
-be improved in the future.
-
-\subsection*{Volkslogger}
-
-Uploading of the current task to the Volkslogger is supported.  The
-device type in the system settings must be set to `Volkslogger'.
-
-When the \button{Declare} button is pressed in the task editor, the
-current task, and pilot name, aircraft type and competition ID will be
-uploaded to the Volkslogger.
-
-Note that uploading the task erases the Volkslogger's database of
-waypoints!
-
-The support for synchronising the waypoint database between XCSoar and
-the Volkslogger will be improved in the future. 
-
-\subsection*{EW logger}
-
-Uploading of the current task to EW loggers is supported.  The
-device type in the system settings must be set to `EW'.
-
-When the \button{Declare} button is pressed in the task editor, the
-current task, will be uploaded to the Volkslogger.
-
-\subsection*{CAI 302}
-
-Uploading of the current task to the CAI 302 is supported.  The device
-type in the system settings must be set to `CAI 302.
-
-When the \button{Declare} button is pressed in the task editor, the
-current task, and pilot name, aircraft type and competition ID will be
-uploaded to the CAI 302.
 
 
 \section{System status dialog}\label{sec:system-status-dialog}
@@ -253,3 +166,45 @@ and then selecting the page `System'.
 
 All dynamic values (e.g.\ battery voltage, number of satellites in
 view) are updated continuously.
+
+
+\section{Multiple devices}
+
+You can configure up to two external devices, connected at the same
+time (few PDAs have two serial ports, but Bluetooth can handle any
+number of concurrent connections).
+
+When both provide a valid GPS fix, the first one is chosen by XCSoar,
+and the second GPS fix is ignored.  As soon as the first device fails,
+XCSoar switches to the second one automatically, until the first one
+recovers.
+
+The same is true for all values (barometric altitude, vario, airspeed,
+traffic, ...): XCSoar prefers the first device, and uses the second
+device only for values that are not received from the first one.
+
+Example: first device is a CAI 302, and the second device is a FLARM.
+That gives you the best of both: XCSoar has airspeed, vario and
+traffic data.
+
+
+\section{Managing external devices}
+
+The device management dialog can be accessed from the configuration
+menu (third page).  It shows a list of configured external devices,
+and it lists what information they provide.
+
+The button ``Reconnect'' attempts to reconnect to the selected
+device.  XCSoar reconnects to a failed device periodically, but
+sometimes, it might be desirable to trigger that manually.
+
+The button ``Flight download'' is only available with supported IGC
+loggers (see \label{sec:supported-varios} for a list).  Upon clicking,
+XCSoar retrieves a list of flights, and asks you to select one.  The
+IGC file will be downloaded to the ``\texttt{logs}'' directory inside
+\texttt{XCSoarData}.
+
+The button ``Manage'' is enabled when a Vega or a CAI 302 is
+connected.  It provides access to special features of these devices,
+such as clearing the CAI 302 flight memory, which is needed sometimes
+to work around a Cambridge firmware bug.
