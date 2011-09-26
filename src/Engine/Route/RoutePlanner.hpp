@@ -130,12 +130,12 @@ protected:
 
 private:
   /** A* search algorithm */
-  AStar<RoutePoint> m_planner;
+  AStar<RoutePoint> planner;
   /**
    * Convex hull of search to date, used by terrain node
    * generator to prevent backtracking
    */
-  SearchPointVector m_search_hull;
+  SearchPointVector search_hull;
 
 #ifdef PLANNER_SET
   typedef std::set< RouteLinkBase> RouteLinkSet;
@@ -143,10 +143,10 @@ private:
   typedef std::tr1::unordered_set< RouteLinkBase > RouteLinkSet;
 #endif
   /** Links that have been visited during solution */
-  RouteLinkSet m_unique;
+  RouteLinkSet unique_links;
   typedef std::queue< RouteLink> RouteLinkQueue;
   /** Link candidates to be processed for intersection tests */
-  RouteLinkQueue m_links;
+  RouteLinkQueue links;
 
   /** Result route found by solve() method */
   Route solution_route;
@@ -158,14 +158,14 @@ private:
 
   ReachFan reach;
 
-  RoutePlannerConfig::PolarMode m_reach_polar_mode;
+  RoutePlannerConfig::PolarMode reach_polar_mode;
 
   mutable unsigned long count_dij;
   mutable unsigned long count_unique;
   mutable unsigned long count_supressed;
 
 protected:
-  RoutePoint m_astar_goal;
+  RoutePoint astar_goal;
   mutable unsigned long count_airspace;
   mutable unsigned long count_terrain;
 
@@ -183,7 +183,7 @@ public:
    * Set terrain database
    * @param terrain RasterMap to be used for terrain intersection tests
    */
-  void set_terrain(const RasterMap *_terrain) {
+  void SetTerrain(const RasterMap *_terrain) {
     terrain = _terrain;
   }
 
@@ -199,8 +199,7 @@ public:
    *
    * @return True if new solution was found
    */
-  bool solve(const AGeoPoint &origin,
-             const AGeoPoint &destination,
+  bool Solve(const AGeoPoint &origin, const AGeoPoint &destination,
              const RoutePlannerConfig &config,
              const short h_ceiling = SHRT_MAX);
 
@@ -212,11 +211,11 @@ public:
    *
    * @return True if reach was scanned
    */
-  bool solve_reach(const AGeoPoint &origin, const bool do_solve = true);
+  bool SolveReach(const AGeoPoint &origin, const bool do_solve = true);
 
   /** Visit reach */
-  void accept_in_range(const GeoBounds &bounds,
-                       TriangleFanVisitor &visitor) const {
+  void AcceptInRange(const GeoBounds &bounds,
+                     TriangleFanVisitor &visitor) const {
     reach.accept_in_range(bounds, visitor);
   }
 
@@ -226,7 +225,7 @@ public:
    *
    * @param route Vector to store result (output)
    */
-  void get_solution(Route& route) const;
+  void GetSolution(Route& route) const;
 
   /**
    * Update aircraft performance model used for path planning.
@@ -235,11 +234,11 @@ public:
    * @param polar Glide performance model used for reach planning
    * @param wind Wind estimate
    */
-  void update_polar(const GlidePolar &polar, const GlidePolar &safety_polar,
-                    const SpeedVector &wind);
+  void UpdatePolar(const GlidePolar &polar, const GlidePolar &safety_polar,
+                   const SpeedVector &wind);
 
   /** Reset the optimiser as if never flown and clear temporary buffers. */
-  virtual void reset();
+  virtual void Reset();
 
   /**
    * Determine if intersection with terrain occurs in forwards direction from
@@ -251,7 +250,7 @@ public:
    *
    * @return true if terrain intersects
    */
-  bool intersection(const AGeoPoint& origin, const AGeoPoint& destination,
+  bool Intersection(const AGeoPoint& origin, const AGeoPoint& destination,
                     GeoPoint& intx) const;
 
   /**
@@ -265,13 +264,13 @@ public:
    *
    * @return true if check was successful
    */
-  bool find_positive_arrival(const AGeoPoint &dest, short &arrival_height_reach,
-                             short &arrival_height_direct) const {
+  bool FindPositiveArrival(const AGeoPoint &dest, short &arrival_height_reach,
+                           short &arrival_height_direct) const {
     return reach.find_positive_arrival(dest, rpolars_reach, arrival_height_reach,
                                        arrival_height_direct);
   }
 
-  short get_terrain_base() const {
+  short GetTerrainBase() const {
     return reach.get_terrain_base();
   }
 
@@ -282,7 +281,7 @@ protected:
    *
    * @return True if solution is trivial
    */
-  virtual bool is_trivial() const {
+  virtual bool IsTrivial() const {
     return !dirty;
   }
 
@@ -291,7 +290,7 @@ protected:
    *
    * @param e Link to add to candidates
    */
-  void add_candidate(const RouteLink &e);
+  void AddCandidate(const RouteLink &e);
 
   /**
    * Add a link to candidates for search
@@ -299,7 +298,7 @@ protected:
    *
    * @param e Link to add to candidates
    */
-  void add_candidate(const RouteLinkBase &e);
+  void AddCandidate(const RouteLinkBase &e);
 
   /**
    * Attempt to add a candidate link skipping the previous
@@ -307,7 +306,7 @@ protected:
    *
    * @param p Point to find shortcut to
    */
-  void add_shortcut(const RoutePoint &p);
+  void AddShortcut(const RoutePoint &p);
 
   /**
    * If this link is truly achievable, add or update
@@ -317,7 +316,7 @@ protected:
    *
    * @return True if link was achievable
    */
-  bool link_cleared(const RouteLink &e);
+  bool LinkCleared(const RouteLink &e);
 
   /**
    * Test whether a proposed link is unique (has not been proposed for search),
@@ -330,7 +329,7 @@ protected:
    *
    * @return True if this link has not been suggested yet
    */
-  bool set_unique(const RouteLinkBase &e);
+  bool IsSetUnique(const RouteLinkBase &e);
 
   /**
    * Given a desired path e, and a clearance point, generate candidates directly
@@ -341,7 +340,7 @@ protected:
    * @param inx Clearance point from last check
    * @param e Link that was attempted
    */
-  void add_nearby_terrain(const RoutePoint &inx, const RouteLink& e);
+  void AddNearbyTerrain(const RoutePoint &inx, const RouteLink& e);
 
   /**
    * Check whether a desired link may be flown without intersecting with
@@ -353,7 +352,7 @@ protected:
    *
    * @return True if path is clear
    */
-  bool check_clearance_terrain(const RouteLink &e, RoutePoint& inp) const;
+  bool CheckClearanceTerrain(const RouteLink &e, RoutePoint& inp) const;
 
 private:
   /**
@@ -364,7 +363,9 @@ private:
    *
    * @return True if path is clear
    */
-  virtual bool check_secondary(const RouteLink &e) { return true; };
+  virtual bool CheckSecondary(const RouteLink &e) {
+    return true;
+  }
 
   /**
    * Check whether a desired link may be flown without intersecting with
@@ -377,7 +378,7 @@ private:
    * @return True if path is clear
    */
 
-  virtual bool check_clearance(const RouteLink &e, RoutePoint& inx) const = 0;
+  virtual bool CheckClearance(const RouteLink &e, RoutePoint& inx) const = 0;
 
   /**
    * Given a desired path e, and a clearance point, generate candidates directly
@@ -386,7 +387,7 @@ private:
    * @param inx Clearance point from last check
    * @param e Link that was attempted
    */
-  virtual void add_nearby(const RouteLink &e) = 0;
+  virtual void AddNearby(const RouteLink &e) = 0;
 
   /**
    * Hook to allow subclasses to update internal data at start of solve() call
@@ -394,8 +395,7 @@ private:
    * @param origin origin of search
    * @param destination destination of search
    */
-  virtual void on_solve(const AGeoPoint& origin,
-                        const AGeoPoint& destination);
+  virtual void OnSolve(const AGeoPoint& origin, const AGeoPoint& destination);
 
   /**
    * Generate a candidate to left or right of the clearance point, unless:
@@ -407,7 +407,7 @@ private:
    * @param c_link Attempted path
    * @param sign +1 for left, -1 for right
    */
-  void add_nearby_terrain_sweep(const RoutePoint& p, const RouteLink &c_link, const int sign);
+  void AddNearbyTerrainSweep(const RoutePoint& p, const RouteLink &c_link, const int sign);
 
   /**
    * For a link known to not clear obstacles, generate whatever candidate edges
@@ -415,7 +415,7 @@ private:
    *
    * @param e Link to check
    */
-  void add_edges(const RouteLink &e);
+  void AddEdges(const RouteLink &e);
 
   /**
    * Test whether a candidate destination is inside the area already searched
@@ -425,7 +425,7 @@ private:
    *
    * @return True if the candidate is outside the hull
    */
-  bool hull_extended(const RoutePoint& p);
+  bool IsHullExtended(const RoutePoint& p);
 
   /**
    * Backtrack solution from A* internal structure to construct a
@@ -436,7 +436,7 @@ private:
    *
    * @return Destination score (s)
    */
-  unsigned find_solution(const RoutePoint &final, Route& this_route) const;
+  unsigned FindSolution(const RoutePoint &final, Route& this_route) const;
 };
 
 #endif

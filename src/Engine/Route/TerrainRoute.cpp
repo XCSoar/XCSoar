@@ -28,17 +28,17 @@ TerrainRoute::TerrainRoute():
 }
 
 bool
-TerrainRoute::check_clearance(const RouteLink &e, RoutePoint& inp) const
+TerrainRoute::CheckClearance(const RouteLink &e, RoutePoint& inp) const
 {
-  if (check_clearance_terrain(e, inp))
+  if (CheckClearanceTerrain(e, inp))
     return true;
   m_inx_terrain = inp;
   return false;
 }
 
 void
-TerrainRoute::add_nearby(const RouteLink& e)
+TerrainRoute::AddNearby(const RouteLink& e)
 {
-  add_nearby_terrain(m_inx_terrain, e);
+  AddNearbyTerrain(m_inx_terrain, e);
 }
 

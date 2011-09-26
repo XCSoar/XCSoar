@@ -118,8 +118,8 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
     GlidePolar polar(fixed_one);
 
     AirspaceRoute route(*airspaces);
-    route.update_polar(polar, polar, wind);
-    route.set_terrain(&map);
+    route.UpdatePolar(polar, polar, wind);
+    route.SetTerrain(&map);
     RoutePlannerConfig config;
     config.mode = RoutePlannerConfig::rpBoth;
 
@@ -128,7 +128,7 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
       loc_end.Latitude+= Angle::degrees(fixed(0.1));
       loc_end.altitude = map.GetHeight(loc_end)+100;
       route.synchronise(*airspaces, loc_start, loc_end);
-      if (route.solve(loc_start, loc_end, config)) {
+      if (route.Solve(loc_start, loc_end, config)) {
         sol = true;
         if (verbose) {
           PrintHelper::print_route(route);

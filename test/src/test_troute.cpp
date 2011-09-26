@@ -39,8 +39,8 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
   GlidePolar polar(mc);
   SpeedVector wind(Angle::degrees(fixed(0)), mwind);
   TerrainRoute route;
-  route.update_polar(polar, polar, wind);
-  route.set_terrain(&map);
+  route.UpdatePolar(polar, polar, wind);
+  route.SetTerrain(&map);
 
   GeoPoint origin(map.GetMapCenter());
 
@@ -76,7 +76,7 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
 
     short hdest = map.GetHeight(dest)+100;
 
-    retval = route.solve(AGeoPoint(origin, map.GetHeight(origin)+100),
+    retval = route.Solve(AGeoPoint(origin, map.GetHeight(origin)+100),
                          AGeoPoint(dest, positive(mc)? hdest: std::max(hdest, (short)3200)),
                          config, ceiling);
     char buffer[80];

@@ -39,11 +39,11 @@ RoutePlannerGlue::set_terrain(const RasterTerrain *_terrain)
   terrain = _terrain;
   if (terrain) {
     RasterTerrain::Lease lease(*terrain);
-    m_planner.reset();
-    m_planner.set_terrain(&terrain->map);
+    m_planner.Reset();
+    m_planner.SetTerrain(&terrain->map);
   } else {
-    m_planner.reset();
-    m_planner.set_terrain(NULL);
+    m_planner.Reset();
+    m_planner.SetTerrain(NULL);
   }
 }
 
@@ -54,7 +54,7 @@ RoutePlannerGlue::solve(const AGeoPoint& origin,
                         const short h_ceiling)
 {
   RasterTerrain::Lease lease(*terrain);
-  return m_planner.solve(origin, destination, config, h_ceiling);
+  return m_planner.Solve(origin, destination, config, h_ceiling);
 }
 
 void
@@ -62,9 +62,9 @@ RoutePlannerGlue::solve_reach(const AGeoPoint& origin, const bool do_solve)
 {
   if (terrain) {
     RasterTerrain::Lease lease(*terrain);
-    m_planner.solve_reach(origin, do_solve);
+    m_planner.SolveReach(origin, do_solve);
   } else {
-    m_planner.solve_reach(origin, do_solve);
+    m_planner.SolveReach(origin, do_solve);
   }
 }
 
@@ -73,14 +73,14 @@ RoutePlannerGlue::find_positive_arrival(const AGeoPoint& dest,
                                         short& arrival_height_reach,
                                         short& arrival_height_direct) const
 {
-  return m_planner.find_positive_arrival(dest, arrival_height_reach, arrival_height_direct);
+  return m_planner.FindPositiveArrival(dest, arrival_height_reach, arrival_height_direct);
 }
 
 void
 RoutePlannerGlue::accept_in_range(const GeoBounds& bounds,
                                   TriangleFanVisitor& visitor) const
 {
-  m_planner.accept_in_range(bounds, visitor);
+  m_planner.AcceptInRange(bounds, visitor);
 }
 
 bool
@@ -89,11 +89,11 @@ RoutePlannerGlue::intersection(const AGeoPoint& origin,
                                GeoPoint& intx) const
 {
   RasterTerrain::Lease lease(*terrain);
-  return m_planner.intersection(origin, destination, intx);
+  return m_planner.Intersection(origin, destination, intx);
 }
 
 short
 RoutePlannerGlue::get_terrain_base() const
 {
-  return m_planner.get_terrain_base();
+  return m_planner.GetTerrainBase();
 }

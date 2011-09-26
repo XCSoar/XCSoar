@@ -226,7 +226,7 @@ AirspaceRoute::airspace_size() const
 AirspaceRoute::AirspaceRoute(const Airspaces& master):
   m_airspaces(master, false)
 {
-  reset();
+  Reset();
 }
 
 AirspaceRoute::~AirspaceRoute()
@@ -236,9 +236,9 @@ AirspaceRoute::~AirspaceRoute()
 }
 
 void
-AirspaceRoute::reset()
+AirspaceRoute::Reset()
 {
-  RoutePlanner::reset();
+  RoutePlanner::Reset();
   m_airspaces.clear_clearances();
   m_airspaces.clear();
 }
@@ -271,31 +271,31 @@ AirspaceRoute::add_nearby_airspace(const RouteAirspaceIntersection &inx,
   const ClearingPair pb = get_backup_pairs(fat, e.first, inx.second);
 
   // process all options
-  add_candidate(RouteLinkBase(e.first, p.first));
-  add_candidate(RouteLinkBase(e.first, p.second));
-  add_candidate(RouteLinkBase(e.first, pb.first));
-  add_candidate(RouteLinkBase(e.first, pb.second));
+  AddCandidate(RouteLinkBase(e.first, p.first));
+  AddCandidate(RouteLinkBase(e.first, p.second));
+  AddCandidate(RouteLinkBase(e.first, pb.first));
+  AddCandidate(RouteLinkBase(e.first, pb.second));
 }
 
 void
-AirspaceRoute::add_nearby(const RouteLink &e)
+AirspaceRoute::AddNearby(const RouteLink &e)
 {
   RoutePoint ptmp = m_inx.second;
   if (m_inx.first == NULL)
-    add_nearby_terrain(ptmp, e);
+    AddNearbyTerrain(ptmp, e);
   else
     add_nearby_airspace(m_inx, e);
 }
 
 bool
-AirspaceRoute::check_secondary(const RouteLink &e)
+AirspaceRoute::CheckSecondary(const RouteLink &e)
 {
   if (!rpolars_route.airspace_enabled())
     return true; // trivial
 
   m_inx = first_intersecting(e);
   if (m_inx.first!=NULL)  {
-    add_candidate(e);
+    AddCandidate(e);
     return false;
   };
   return true;
@@ -303,11 +303,11 @@ AirspaceRoute::check_secondary(const RouteLink &e)
 
 
 bool
-AirspaceRoute::check_clearance(const RouteLink &e, RoutePoint& inp) const
+AirspaceRoute::CheckClearance(const RouteLink &e, RoutePoint& inp) const
 {
   // attempt terrain clearance first
 
-  if (!check_clearance_terrain(e, inp)) {
+  if (!CheckClearanceTerrain(e, inp)) {
     m_inx.first = NULL;
     m_inx.second = inp;
     return false;
@@ -330,7 +330,7 @@ AirspaceRoute::check_clearance(const RouteLink &e, RoutePoint& inp) const
 
 
 void
-AirspaceRoute::on_solve(const AGeoPoint& origin,
+AirspaceRoute::OnSolve(const AGeoPoint& origin,
                         const AGeoPoint& destination)
 {
   if (m_airspaces.empty()) {

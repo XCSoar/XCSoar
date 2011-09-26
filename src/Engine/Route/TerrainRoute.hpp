@@ -36,8 +36,8 @@ protected:
 
 private:
 
-  bool check_clearance(const RouteLink &e, RoutePoint& inp) const;
-  void add_nearby(const RouteLink& e);
+  bool CheckClearance(const RouteLink &e, RoutePoint& inp) const;
+  void AddNearby(const RouteLink& e);
 
   mutable RoutePoint m_inx_terrain;
 };

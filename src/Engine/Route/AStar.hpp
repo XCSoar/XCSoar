@@ -55,7 +55,7 @@ struct AStarPriorityValue
   AStarPriorityValue(const unsigned _g, const unsigned _h):g(_g), h(_h) {}
 
   gcc_pure
-  AStarPriorityValue adjust(const bool is_min) const {
+  AStarPriorityValue Adjust(const bool is_min) const {
     return is_min ? *this : AStarPriorityValue(ASTAR_MINMAX_OFFSET - g,
                                                ASTAR_MINMAX_OFFSET - h);
   }
@@ -142,7 +142,7 @@ public:
    */
   AStar(unsigned reserve_default = ASTAR_QUEUE_SIZE)
   {
-    reserve(reserve_default);
+    Reserve(reserve_default);
   }
 
   /**
@@ -153,8 +153,8 @@ public:
    */
   AStar(const Node &node, unsigned reserve_default = ASTAR_QUEUE_SIZE)
   {
-    push(node, node, AStarPriorityValue(0));
-    reserve(reserve_default);
+    Push(node, node, AStarPriorityValue(0));
+    Reserve(reserve_default);
   }
 
   /**
@@ -162,13 +162,13 @@ public:
    *
    * @param n Node to start
    */
-  void restart(const Node &node) {
-    clear();
-    push(node, node, AStarPriorityValue(0));
+  void Restart(const Node &node) {
+    Clear();
+    Push(node, node, AStarPriorityValue(0));
   }
 
   /** Clears the queues */
-  void clear() {
+  void Clear() {
     // Clear the search queue
     while (!q.empty())
       q.pop();
@@ -185,7 +185,7 @@ public:
    * @return True if no more nodes to search
    */
   gcc_pure
-  bool empty() const {
+  bool IsEmpty() const {
     return q.empty();
   }
 
@@ -195,7 +195,7 @@ public:
    * @return Queue size in elements
    */
   gcc_pure
-  unsigned queue_size() const {
+  unsigned QueueSize() const {
     return q.size();
   }
 
@@ -204,7 +204,7 @@ public:
    *
    * @return Node for processing
    */
-  const Node &pop() {
+  const Node &Pop() {
     cur = q.top().second;
 
     do // remove this item
@@ -222,12 +222,12 @@ public:
    * @param pn Predecessor of destination node
    * @param e Edge distance
    */
-  void link(const Node &node, const Node &parent,
+  void Link(const Node &node, const Node &parent,
             const AStarPriorityValue &edge_value) {
 #ifdef INSTRUMENT_TASK
     count_astar_links++;
 #endif
-    push(node, parent, get_node_value(parent) + edge_value.adjust(m_min));
+    Push(node, parent, GetNodeValue(parent) + edge_value.Adjust(m_min));
     // note order of + here is important!
   }
 
@@ -239,7 +239,7 @@ public:
    * @return Predecessor node
    */
   gcc_pure
-  Node get_predecessor(const Node &node) const {
+  Node GetPredecessor(const Node &node) const {
     // Try to find the given node in the node_parent_map
     node_parent_const_iterator it = node_parents.find(node);
     if (it == node_parents.end())
@@ -254,7 +254,7 @@ public:
   }
 
   /** Reserve queue size (if available) */
-  void reserve(unsigned size) {
+  void Reserve(unsigned size) {
     q.reserve(size);
   }
 
@@ -263,7 +263,7 @@ public:
    * Returns 0 on failure to find the node.
    */
   gcc_pure
-  AStarPriorityValue get_node_value(const Node &node) const {
+  AStarPriorityValue GetNodeValue(const Node &node) const {
     node_value_const_iterator it = node_values.find(node);
     if (cur->first == node)
       return cur->second;
@@ -282,7 +282,7 @@ private:
    * @param pn Previous node
    * @param e Edge distance (previous to this)
    */
-  void push(const Node &node, const Node &parent,
+  void Push(const Node &node, const Node &parent,
             const AStarPriorityValue &edge_value) {
     // Try to find the given node n in the node_value_map
     node_value_iterator it = node_values.find(node);
@@ -293,7 +293,7 @@ private:
       it = node_values.insert(std::make_pair(node, edge_value)).first;
 
       // Remember the parent node
-      set_predecessor(node, parent);
+      SetPredecessor(node, parent);
     } else if (it->second > edge_value) {
       // If the node was found and the new value is smaller
       // -> Replace the value with the new one
@@ -301,7 +301,7 @@ private:
       // replace, it's bigger
 
       // Remember the new parent node
-      set_predecessor(node, parent);
+      SetPredecessor(node, parent);
     } else
       // If the node was found but the value is higher or equal
       // -> Don't use this new leg
@@ -310,7 +310,7 @@ private:
     q.push(std::make_pair(edge_value, it));
   }
 
-  void set_predecessor(const Node &node, const Node &parent) {
+  void SetPredecessor(const Node &node, const Node &parent) {
     // Try to find the given node in the node_parent_map
     node_parent_iterator it = node_parents.find(node);
     if (it == node_parents.end())

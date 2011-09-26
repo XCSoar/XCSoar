@@ -36,17 +36,17 @@ public:
                    const AGeoPoint& origin,
                    const AGeoPoint& destination);
 
-  virtual void reset();
+  virtual void Reset();
 
   unsigned airspace_size() const;
 
 protected:
 
-  virtual void on_solve(const AGeoPoint& origin,
+  virtual void OnSolve(const AGeoPoint& origin,
                         const AGeoPoint& destination);
 
-  virtual bool is_trivial() const {
-    return m_airspaces.empty() && RoutePlanner::is_trivial();
+  virtual bool IsTrivial() const {
+    return m_airspaces.empty() && RoutePlanner::IsTrivial();
   }
 
 private:
@@ -55,9 +55,9 @@ private:
 
   typedef std::pair< const AbstractAirspace*, RoutePoint > RouteAirspaceIntersection;
 
-  virtual bool check_clearance(const RouteLink &e, RoutePoint& inp) const;
-  virtual void add_nearby(const RouteLink& e);
-  virtual bool check_secondary(const RouteLink &e);
+  virtual bool CheckClearance(const RouteLink &e, RoutePoint& inp) const;
+  virtual void AddNearby(const RouteLink& e);
+  virtual bool CheckSecondary(const RouteLink &e);
 
   void add_nearby_airspace(const RouteAirspaceIntersection &inx, const RouteLink& e);
 

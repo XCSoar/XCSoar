@@ -39,8 +39,8 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
   GlidePolar polar(mc);
   SpeedVector wind(Angle::degrees(fixed(0)), mwind);
   TerrainRoute route;
-  route.update_polar(polar, polar, wind);
-  route.set_terrain(&map);
+  route.UpdatePolar(polar, polar, wind);
+  route.SetTerrain(&map);
 
   GeoPoint origin(map.GetMapCenter());
 
@@ -52,7 +52,7 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
   short horigin = map.GetHeight(origin)+1000;
   AGeoPoint aorigin(origin, horigin);
 
-  retval = route.solve_reach(aorigin);
+  retval = route.SolveReach(aorigin);
 
   ok(retval, "reach solve", 0);
 
@@ -74,10 +74,10 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
         short h = map.GetInterpolatedHeight(x);
         AGeoPoint adest(x, h);
         short ha, hd;
-        route.find_positive_arrival(adest, ha, hd);
+        route.FindPositiveArrival(adest, ha, hd);
         if ((i % 5 == 0) && (j % 5 == 0)) {
           AGeoPoint ao2(x, h+1000);
-          route.solve_reach(ao2);
+          route.SolveReach(ao2);
         }
         fout << x.Longitude.value_degrees() << " " << x.Latitude.value_degrees() << " " << h << " " << ha << "\n";
       }

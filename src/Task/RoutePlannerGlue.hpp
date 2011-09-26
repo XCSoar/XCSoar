@@ -38,7 +38,7 @@ public:
   void update_polar(const GlidePolar& polar,
                     const GlidePolar& safety_polar,
                     const SpeedVector& wind) {
-    m_planner.update_polar(polar, safety_polar, wind);
+    m_planner.UpdatePolar(polar, safety_polar, wind);
   }
 
   void synchronise(const Airspaces& master,
@@ -47,7 +47,7 @@ public:
     m_planner.synchronise(master, origin, destination);
   }
   void reset() {
-    m_planner.reset();
+    m_planner.Reset();
   }
   bool solve(const AGeoPoint& origin,
              const AGeoPoint& destination,
@@ -55,7 +55,7 @@ public:
              const short h_ceiling);
 
   void get_solution(Route& route) const {
-    m_planner.get_solution(route);
+    m_planner.GetSolution(route);
   }
 
   void solve_reach(const AGeoPoint& origin, const bool do_solve);
