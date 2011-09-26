@@ -132,5 +132,6 @@ FlatBoundingBox::is_inside(const FlatGeoPoint& loc) const
     return false;
   if (loc.Latitude > bb_ur.Latitude)
     return false;
+
   return true;
 }

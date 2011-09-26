@@ -33,16 +33,15 @@
  * a lower left and upper right bounding box.
  * For use in kd-tree storage of 2-d objects.
  */
-class FlatBoundingBox {
+class FlatBoundingBox
+{
   FlatGeoPoint bb_ll;
   FlatGeoPoint bb_ur;
 
 public:
   friend class TaskProjection;
 
-  /**
-   * Non-initialising constructor.
-   */
+  /** Non-initialising constructor. */
   FlatBoundingBox() {}
 
   /**
@@ -51,10 +50,9 @@ public:
    * @param ll Lower left location
    * @param ur Upper right location
    */
-  FlatBoundingBox(const FlatGeoPoint &ll,
-                  const FlatGeoPoint &ur):
-    bb_ll(ll.Longitude,ll.Latitude),
-    bb_ur(ur.Longitude,ur.Latitude) {};
+  FlatBoundingBox(const FlatGeoPoint &ll, const FlatGeoPoint &ur)
+    :bb_ll(ll.Longitude,ll.Latitude),
+     bb_ur(ur.Longitude,ur.Latitude) {}
 
   /**
    * Constructor given center point and radius
@@ -63,13 +61,9 @@ public:
    * @param loc Location of center point
    * @param range Radius in projected units
    */
-  FlatBoundingBox(const FlatGeoPoint &loc,
-                  const unsigned range=0):
-    bb_ll(loc.Longitude-range,loc.Latitude-range),
-    bb_ur(loc.Longitude+range,loc.Latitude+range) 
-  {
-
-  }
+  FlatBoundingBox(const FlatGeoPoint &loc, const unsigned range = 0)
+    :bb_ll(loc.Longitude - range, loc.Latitude - range),
+     bb_ur(loc.Longitude + range, loc.Latitude + range) {}
 
   /**
    * Calculate non-overlapping distance from one box to another.
@@ -91,10 +85,9 @@ public:
   gcc_pure
   bool is_inside(const FlatGeoPoint& loc) const;
 
-  /** 
-   * Function object used by kd-tree to index coordinates 
-   */
-  struct kd_get_bounds {
+  /** Function object used by kd-tree to index coordinates */
+  struct kd_get_bounds
+  {
     /** Used by kd-tree */
     typedef int result_type;
 
@@ -126,29 +119,29 @@ public:
    * allows for overlap; distance is zero with overlap, otherwise the minimum
    * distance between two regions.
    */
-  struct kd_distance {
-    typedef BBDist distance_type; /**< Distance operator for overlap functionality */
+  struct kd_distance
+  {
+    /** Distance operator for overlap functionality */
+    typedef BBDist distance_type;
 
-  /**
-   * \todo document this!
-   *
-   * @param a
-   * @param b
-   * @param dim
-   *
-   * @return Distance on axis
-   */
-    distance_type operator() (const int a, const int b,
-                              const size_t dim) const 
-      {
-        int val = 0;
-        if (dim<2) {
-          val= max(b-a,0);
-        } else {
-          val= max(a-b,0);
-        }
-        return BBDist(dim,val);
-      }
+    /**
+     * \todo document this!
+     *
+     * @param a
+     * @param b
+     * @param dim
+     *
+     * @return Distance on axis
+     */
+    distance_type operator()(const int a, const int b, const size_t dim) const {
+      int val = 0;
+      if (dim < 2)
+        val = max(b - a, 0);
+      else
+        val = max(a - b, 0);
+
+      return BBDist(dim, val);
+    }
   };
 
   /**
@@ -199,8 +192,8 @@ public:
    * Shift the bounding box by an offset p
    */
   void shift(const FlatGeoPoint& p) {
-    bb_ll = bb_ll+p;
-    bb_ur = bb_ur+p;
+    bb_ll = bb_ll + p;
+    bb_ur = bb_ur + p;
   }
 
   /**
