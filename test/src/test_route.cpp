@@ -83,32 +83,32 @@ bool test_route(const unsigned n_airspaces, const RasterMap& map)
 
       // real one, see if items changed
       as_route.synchronise_in_range(*airspaces, vec.mid_point(loc_start), range);
-      if (verbose)
-        printf("# route airspace size %d\n", as_route.size());
       int size_1 = as_route.size();
+      if (verbose)
+        printf("# route airspace size %d\n", size_1);
 
       as_route.synchronise_in_range(*airspaces, vec.mid_point(loc_start), fixed_one);
-      if (verbose)
-        printf("# route airspace size %d\n", as_route.size());
       int size_2 = as_route.size();
+      if (verbose)
+        printf("# route airspace size %d\n", size_2);
 
-      ok(size_2<size_1,"shrink as",0);
+      ok(size_2 < size_1,"shrink as",0);
 
       // go back
       as_route.synchronise_in_range(*airspaces, vec.mid_point(loc_end), range);
-      if (verbose)
-        printf("# route airspace size %d\n", as_route.size());
       int size_3 = as_route.size();
+      if (verbose)
+        printf("# route airspace size %d\n", size_3);
 
       ok(size_3>=size_2,"grow as",0);
 
       // and again
       as_route.synchronise_in_range(*airspaces, vec.mid_point(loc_start), range);
-      if (verbose)
-        printf("# route airspace size %d\n", as_route.size());
       int size_4 = as_route.size();
+      if (verbose)
+        printf("# route airspace size %d\n", size_4);
 
-      ok(size_4>=size_3,"grow as",0);
+      ok(size_4 >= size_3,"grow as",0);
 
       scan_airspaces(state, as_route, perf, true, loc_end);
     }
