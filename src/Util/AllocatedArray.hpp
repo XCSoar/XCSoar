@@ -61,6 +61,12 @@ public:
     std::copy(other.data, other.data + the_size, data);
   }
 
+  explicit AllocatedArray(AllocatedArray &&other):
+    the_size(other.the_size), data(other.data) {
+    other.the_size = 0;
+    other.data = NULL;
+  }
+
   ~AllocatedArray() {
     delete[] data;
   }
@@ -75,6 +81,14 @@ public:
     resize_discard(other.size());
     std::copy(other.begin(), other.end(), data);
     return *this;
+  }
+
+  AllocatedArray &operator=(AllocatedArray &&other) {
+    delete[] data;
+    the_size = other.the_size;
+    data = other.data;
+    other.the_size = 0;
+    other.data = NULL;
   }
 
   /**
