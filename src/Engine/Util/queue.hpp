@@ -27,17 +27,26 @@
 
 #ifndef RESERVABLE_PRIORITY_QUEUE_HPP
 #define RESERVABLE_PRIORITY_QUEUE_HPP
+
 #include <queue>
 
-template <class T, class Container, class Compare>
-class reservable_priority_queue: public std::priority_queue<T, Container, Compare>
+template<class T, class Container, class Compare>
+class reservable_priority_queue:
+  public std::priority_queue<T, Container, Compare>
 {
 public:
   typedef typename std::priority_queue<T, Container, Compare>::size_type size_type;
-  reservable_priority_queue(size_type capacity = 0) { reserve(capacity); };
-  void reserve(size_type capacity) { this->c.reserve(capacity); } 
-  size_type capacity() const { return this->c.capacity(); } 
-};
+  reservable_priority_queue(size_type capacity = 0) {
+    reserve(capacity);
+  }
 
+  void reserve(size_type capacity) {
+    this->c.reserve(capacity);
+  }
+
+  size_type capacity() const {
+    return this->c.capacity();
+  }
+};
 
 #endif
