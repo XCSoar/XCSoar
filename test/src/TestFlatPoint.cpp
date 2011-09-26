@@ -33,59 +33,59 @@ int main(int argc, char **argv)
   FlatPoint p3(fixed(3), fixed_ten);
 
   // test cross()
-  ok1(equals(p1.cross(p2), 1));
-  ok1(equals(p2.cross(p1), -1));
-  ok1(equals(p1.cross(p3), 7));
-  ok1(equals(p3.cross(p1), -7));
-  ok1(equals(p2.cross(p3), 4));
-  ok1(equals(p3.cross(p2), -4));
+  ok1(equals(p1.CrossProduct(p2), 1));
+  ok1(equals(p2.CrossProduct(p1), -1));
+  ok1(equals(p1.CrossProduct(p3), 7));
+  ok1(equals(p3.CrossProduct(p1), -7));
+  ok1(equals(p2.CrossProduct(p3), 4));
+  ok1(equals(p3.CrossProduct(p2), -4));
 
   // test mul_y()
-  p2.mul_y(fixed_two);
+  p2.MultiplyY(fixed_two);
   ok1(equals(p2.x, 1));
   ok1(equals(p2.y, 4));
 
   // test sub()
-  p2.sub(p1);
+  p2.Subtract(p1);
   ok1(equals(p2.x, 0));
   ok1(equals(p2.y, 3));
 
   // test add()
-  p2.add(p3);
+  p2.Add(p3);
   ok1(equals(p2.x, 3));
   ok1(equals(p2.y, 13));
 
   // test rotate()
-  p2.rotate(Angle::degrees(fixed(-90)));
+  p2.Rotate(Angle::degrees(fixed(-90)));
   ok1(equals(p2.x, 13));
   ok1(equals(p2.y, -3));
 
-  p2.rotate(Angle::degrees(fixed(45)));
-  p2.rotate(Angle::degrees(fixed(45)));
+  p2.Rotate(Angle::degrees(fixed(45)));
+  p2.Rotate(Angle::degrees(fixed(45)));
   ok1(equals(p2.x, 3));
   ok1(equals(p2.y, 13));
 
   // test d()
-  ok1(equals(p2.d(p3), 3));
-  ok1(equals(p3.d(p2), 3));
+  ok1(equals(p2.Distance(p3), 3));
+  ok1(equals(p3.Distance(p2), 3));
 
   // test mag_sq()
-  ok1(equals(p1.mag_sq(), 2));
-  ok1(equals(p2.mag_sq(), 178));
-  ok1(equals(p3.mag_sq(), 109));
+  ok1(equals(p1.MagnitudeSquared(), 2));
+  ok1(equals(p2.MagnitudeSquared(), 178));
+  ok1(equals(p3.MagnitudeSquared(), 109));
 
   // test mag()
-  ok1(equals(p1.mag(), 1.4142135623730950488016887242097));
-  ok1(equals(p2.mag(), 13.341664064126333712489436272508));
-  ok1(equals(p3.mag(), 10.440306508910550179757754022548));
+  ok1(equals(p1.Magnitude(), 1.4142135623730950488016887242097));
+  ok1(equals(p2.Magnitude(), 13.341664064126333712489436272508));
+  ok1(equals(p3.Magnitude(), 10.440306508910550179757754022548));
 
   // test dot()
-  ok1(equals(p1.dot(p2), 16));
-  ok1(equals(p2.dot(p1), 16));
-  ok1(equals(p1.dot(p3), 13));
-  ok1(equals(p3.dot(p1), 13));
-  ok1(equals(p2.dot(p3), 139));
-  ok1(equals(p3.dot(p2), 139));
+  ok1(equals(p1.DotProduct(p2), 16));
+  ok1(equals(p2.DotProduct(p1), 16));
+  ok1(equals(p1.DotProduct(p3), 13));
+  ok1(equals(p3.DotProduct(p1), 13));
+  ok1(equals(p2.DotProduct(p3), 139));
+  ok1(equals(p3.DotProduct(p2), 139));
 
   // test ==
   ok1(p1 == p1);

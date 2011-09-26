@@ -27,7 +27,7 @@
 FlatPoint
 FlatLine::ave() const
 {
-  return (p1 + p2).half();
+  return (p1 + p2).Half();
 }
 
 fixed
@@ -45,14 +45,14 @@ FlatLine::dy() const
 fixed
 FlatLine::cross() const
 {
-  return p1.cross(p2);
+  return p1.CrossProduct(p2);
 }
 
 void
 FlatLine::mul_y(const fixed a)
 {
-  p1.mul_y(a);
-  p2.mul_y(a);
+  p1.MultiplyY(a);
+  p2.MultiplyY(a);
 }
 
 fixed
@@ -70,15 +70,15 @@ FlatLine::dsq() const
 void
 FlatLine::sub(const FlatPoint&p)
 {
-  p1.sub(p);
-  p2.sub(p);
+  p1.Subtract(p);
+  p2.Subtract(p);
 }
 
 void
 FlatLine::add(const FlatPoint&p)
 {
-  p1.add(p);
-  p2.add(p);
+  p1.Add(p);
+  p2.Add(p);
 }
 
 Angle
@@ -90,8 +90,8 @@ FlatLine::angle() const
 void
 FlatLine::rotate(const Angle theta)
 {
-  p1.rotate(theta);
-  p2.rotate(theta);
+  p1.Rotate(theta);
+  p2.Rotate(theta);
 }
 
 bool
@@ -134,5 +134,5 @@ FlatLine::intersect_circle(const fixed r, const FlatPoint c,
 fixed
 FlatLine::dot(const FlatLine& that) const
 {
-  return (p2 - p1).dot(that.p2 - that.p1);
+  return (p2 - p1).DotProduct(that.p2 - that.p1);
 }

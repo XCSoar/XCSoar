@@ -61,35 +61,35 @@ struct FlatPoint
    * @return Cross product
    */
   gcc_pure
-  fixed cross(const FlatPoint &p2) const;
+  fixed CrossProduct(const FlatPoint &p2) const;
 
   /**
    * Multiply Y value of point
    *
    * @param a Value to multiply
    */
-  void mul_y(const fixed a);
+  void MultiplyY(const fixed a);
 
   /**
    * Subtract delta from this point
    *
    * @param p2 Point to subtract
    */
-  void sub(const FlatPoint &p2);
+  void Subtract(const FlatPoint &p2);
 
   /**
    * Add delta to this point
    *
    * @param p2 Point to add
    */
-  void add(const FlatPoint &p2);
+  void Add(const FlatPoint &p2);
 
   /**
    * Rotate point counter-clockwise around origin
    *
    * @param angle Angle (deg) to rotate point counter-clockwise
    */
-  void rotate(const Angle angle);
+  void Rotate(const Angle angle);
 
   /**
    * Calculate distance between two points
@@ -99,21 +99,21 @@ struct FlatPoint
    * @return Distance
    */
   gcc_pure
-  fixed d(const FlatPoint &p) const;
+  fixed Distance(const FlatPoint &p) const;
 
   /**
    * Find dx * dx + dy * dy
    * @return Magnitude squared
    */
   gcc_pure
-  fixed mag_sq() const;
+  fixed MagnitudeSquared() const;
 
   /**
    * Find sqrt(dx * dx + dy * dy)
    * @return Magnitude
    */
   gcc_pure
-  fixed mag() const;
+  fixed Magnitude() const;
 
   /**
    * Test whether two points are co-located
@@ -133,7 +133,7 @@ struct FlatPoint
    *
    * @return Dot product
    */
-  fixed dot(const FlatPoint &other) const {
+  fixed DotProduct(const FlatPoint &other) const {
     return x*other.x+y*other.y;
   }
 
@@ -204,7 +204,7 @@ struct FlatPoint
   }
 
   gcc_pure
-  FlatPoint half() const {
+  FlatPoint Half() const {
     return FlatPoint(::half(x), ::half(y));
   }
 };

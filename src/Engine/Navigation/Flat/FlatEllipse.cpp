@@ -37,7 +37,7 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
   p = f12.ave();
   theta = f12.angle();
   const fixed csq = f12.dsq();
-  a = (f1.d(ap) + f2.d(ap));
+  a = (f1.Distance(ap) + f2.Distance(ap));
   b = half(sqrt(a * a - csq));
   a = half(a);
 
@@ -45,8 +45,8 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
   // b.cos(t) = ap.y
 
   FlatPoint op = ap;
-  op.sub(p);
-  op.rotate(-theta);
+  op.Subtract(p);
+  op.Rotate(-theta);
   theta_initial = Angle::radians(atan2(op.y * a, op.x * b)).as_delta();
 }
 
@@ -71,8 +71,8 @@ FlatEllipse::Parametric(const fixed t) const
   at.sin_cos(sat, cat);
 
   FlatPoint res(a * cat, b * sat);
-  res.rotate(theta);
-  res.add(p);
+  res.Rotate(theta);
+  res.Add(p);
   return res;
 }
 
@@ -89,13 +89,13 @@ FlatEllipse::Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const
   s_line.mul_y(er);
 
   if (s_line.intersect_czero(a, i1, i2)) {
-    i1.mul_y(ier);
-    i1.rotate(theta);
-    i1.add(p);
+    i1.MultiplyY(ier);
+    i1.Rotate(theta);
+    i1.Add(p);
     
-    i2.mul_y(ier);
-    i2.rotate(theta);
-    i2.add(p);
+    i2.MultiplyY(ier);
+    i2.Rotate(theta);
+    i2.Add(p);
     
     return true;
   }

@@ -24,33 +24,33 @@
 #include <math.h>
 
 fixed
-FlatPoint::cross(const FlatPoint &p2) const
+FlatPoint::CrossProduct(const FlatPoint &p2) const
 {
   return x * p2.y - p2.x * y;
 }
 
 void
-FlatPoint::mul_y(const fixed a)
+FlatPoint::MultiplyY(const fixed a)
 {
   y *= a;
 }
 
 void
-FlatPoint::sub(const FlatPoint &p2)
+FlatPoint::Subtract(const FlatPoint &p2)
 {
   x -= p2.x;
   y -= p2.y;
 }
 
 void
-FlatPoint::add(const FlatPoint &p2)
+FlatPoint::Add(const FlatPoint &p2)
 {
   x += p2.x;
   y += p2.y;
 }
 
 void
-FlatPoint::rotate(const Angle angle)
+FlatPoint::Rotate(const Angle angle)
 {
   const fixed _x = x;
   const fixed _y = y;
@@ -61,18 +61,18 @@ FlatPoint::rotate(const Angle angle)
 }
 
 fixed
-FlatPoint::d(const FlatPoint &p) const
+FlatPoint::Distance(const FlatPoint &p) const
 {
   return hypot(p.x - x, p.y - y);
 }
 
 fixed
-FlatPoint::mag_sq() const {
+FlatPoint::MagnitudeSquared() const {
   return sqr(x)+sqr(y);
 }
 
 fixed
-FlatPoint::mag() const
+FlatPoint::Magnitude() const
 {
   return hypot(x, y);
 }
