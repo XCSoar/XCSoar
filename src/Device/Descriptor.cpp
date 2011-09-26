@@ -126,7 +126,7 @@ DeviceDescriptor::OpenInternalGPS()
 bool
 DeviceDescriptor::Open(OperationEnvironment &env)
 {
-  if (config.port_type == DeviceConfig::INTERNAL)
+  if (config.port_type == DeviceConfig::PortType::INTERNAL)
     return OpenInternalGPS();
 
   const struct DeviceRegister *driver = FindDriverByName(config.driver_name);

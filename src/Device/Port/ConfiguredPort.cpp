@@ -78,17 +78,17 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
   TCHAR buffer[MAX_PATH];
 
   switch (config.port_type) {
-  case DeviceConfig::DISABLED:
+  case DeviceConfig::PortType::DISABLED:
     return NULL;
 
-  case DeviceConfig::SERIAL:
+  case DeviceConfig::PortType::SERIAL:
     if (config.path.empty())
       return NULL;
 
     path = config.path.c_str();
     break;
 
-  case DeviceConfig::RFCOMM:
+  case DeviceConfig::PortType::RFCOMM:
 #ifdef ANDROID
     if (config.bluetooth_mac.empty()) {
       LogStartUp(_T("No Bluetooth MAC configured"));
@@ -110,7 +110,7 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     return NULL;
 #endif
 
-  case DeviceConfig::IOIOUART:
+  case DeviceConfig::PortType::IOIOUART:
 #if defined(ANDROID) && defined(IOIOLIB)
     {
       if (config.ioio_uart_id >= AndroidIOIOUartPort::getNumberUarts()) {
@@ -135,7 +135,7 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     return NULL;
 #endif
 
-  case DeviceConfig::AUTO:
+  case DeviceConfig::PortType::AUTO:
     if (!detect_gps(buffer, sizeof(buffer))) {
       LogStartUp(_T("no GPS detected"));
       return NULL;
@@ -146,10 +146,10 @@ OpenPort(const DeviceConfig &config, Port::Handler &handler)
     path = buffer;
     break;
 
-  case DeviceConfig::INTERNAL:
+  case DeviceConfig::PortType::INTERNAL:
     break;
 
-  case DeviceConfig::TCP_LISTENER: {
+  case DeviceConfig::PortType::TCP_LISTENER: {
     TCPPort *port = new TCPPort(4353, handler);
     if (!port->Open()) {
       delete port;

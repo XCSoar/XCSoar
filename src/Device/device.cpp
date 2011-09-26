@@ -67,22 +67,22 @@ static bool
 DeviceConfigOverlaps(const DeviceConfig &a, const DeviceConfig &b)
 {
   switch (a.port_type) {
-  case DeviceConfig::SERIAL:
-    return b.port_type == DeviceConfig::SERIAL &&
+  case DeviceConfig::PortType::SERIAL:
+    return b.port_type == DeviceConfig::PortType::SERIAL &&
       a.path.equals(b.path);
 
-  case DeviceConfig::RFCOMM:
-    return b.port_type == DeviceConfig::RFCOMM &&
+  case DeviceConfig::PortType::RFCOMM:
+    return b.port_type == DeviceConfig::PortType::RFCOMM &&
       a.bluetooth_mac.equals(b.bluetooth_mac);
 
-  case DeviceConfig::IOIOUART:
-    return (b.port_type == DeviceConfig::IOIOUART) &&
+  case DeviceConfig::PortType::IOIOUART:
+    return (b.port_type == DeviceConfig::PortType::IOIOUART) &&
       a.ioio_uart_id == b.ioio_uart_id;
 
-  case DeviceConfig::DISABLED:
-  case DeviceConfig::AUTO:
-  case DeviceConfig::INTERNAL:
-  case DeviceConfig::TCP_LISTENER:
+  case DeviceConfig::PortType::DISABLED:
+  case DeviceConfig::PortType::AUTO:
+  case DeviceConfig::PortType::INTERNAL:
+  case DeviceConfig::PortType::TCP_LISTENER:
     break;
   }
 
@@ -132,7 +132,7 @@ devStartup()
 
     DeviceConfig &config = DeviceList[0].SetConfig();
     config.Clear();
-    config.port_type = DeviceConfig::INTERNAL;
+    config.port_type = DeviceConfig::PortType::INTERNAL;
     devInitOne(DeviceList[0], pDevNmeaOut);
 #endif
   }

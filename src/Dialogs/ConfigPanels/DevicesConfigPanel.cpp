@@ -57,22 +57,22 @@ static WndForm* wf = NULL;
 static bool changed = false;
 
 static const struct {
-  enum DeviceConfig::port_type type;
+  DeviceConfig::PortType type;
   const TCHAR *label;
 } port_types[] = {
-  { DeviceConfig::DISABLED, N_("Disabled") },
+  { DeviceConfig::PortType::DISABLED, N_("Disabled") },
 #ifdef _WIN32_WCE
-  { DeviceConfig::AUTO, N_("GPS Intermediate Driver") },
+  { DeviceConfig::PortType::AUTO, N_("GPS Intermediate Driver") },
 #endif
 #ifdef ANDROID
-  { DeviceConfig::INTERNAL, N_("Built-in GPS") },
+  { DeviceConfig::PortType::INTERNAL, N_("Built-in GPS") },
 #endif
 
   /* label not translated for now, until we have a TCP port
      selection UI */
-  { DeviceConfig::TCP_LISTENER, _T("TCP port 4353") },
+  { DeviceConfig::PortType::TCP_LISTENER, _T("TCP port 4353") },
 
-  { DeviceConfig::SERIAL, NULL } /* sentinel */
+  { DeviceConfig::PortType::SERIAL, NULL } /* sentinel */
 };
 
 /** the number of fixed port types (excludes Serial, Bluetooth and IOIOUart) */
@@ -96,7 +96,7 @@ SupportsBulkBaudRate(const DataField &df)
 }
 
 gcc_pure
-static enum DeviceConfig::port_type
+static DeviceConfig::PortType
 GetPortType(WndProperty &port_field)
 {
   unsigned port = port_field.GetDataField()->GetAsInteger();
@@ -104,7 +104,7 @@ GetPortType(WndProperty &port_field)
   if (port < num_port_types)
     return port_types[port].type;
 
-  return (enum DeviceConfig::port_type)(port >> 16);
+  return (DeviceConfig::PortType)(port >> 16);
 }
 
 static void
@@ -113,7 +113,7 @@ UpdateDeviceControlVisibility(WndProperty &port_field,
                               WndProperty &bulk_baud_rate_field,
                               WndProperty &driver_field)
 {
-  const enum DeviceConfig::port_type type = GetPortType(port_field);
+  const DeviceConfig::PortType type = GetPortType(port_field);
 
   speed_field.set_visible(DeviceConfig::UsesSpeed(type));
   bulk_baud_rate_field.set_visible(DeviceConfig::UsesSpeed(type) &&
@@ -176,7 +176,7 @@ DevicesConfigPanel::OnDeviceBData(DataField *Sender, DataField::DataAccessKind_t
 }
 
 static unsigned
-AddPort(DataFieldEnum &df, enum DeviceConfig::port_type type,
+AddPort(DataFieldEnum &df, DeviceConfig::PortType type,
         const TCHAR *text, const TCHAR *display_string=NULL,
         const TCHAR *help=NULL)
 {
@@ -218,7 +218,7 @@ DetectSerialPorts(DataFieldEnum &dfe)
     char path[64];
     snprintf(path, sizeof(path), "/dev/%s", ent->d_name);
     if (access(path, R_OK|W_OK) == 0 && access(path, X_OK) < 0) {
-      AddPort(dfe, DeviceConfig::SERIAL, path);
+      AddPort(dfe, DeviceConfig::PortType::SERIAL, path);
       found = true;
     }
   }
@@ -238,9 +238,9 @@ DetectSerialPorts(DataFieldEnum &dfe)
 static bool
 DetectSerialPorts(DataFieldEnum &dfe)
 {
-  AddPort(dfe, DeviceConfig::SERIAL, _T("COM1:"), _T("Vario (COM1)"));
-  AddPort(dfe, DeviceConfig::SERIAL, _T("COM2:"), _T("Radio (COM2)"));
-  AddPort(dfe, DeviceConfig::SERIAL, _T("COM3:"), _T("Internal (COM3)"));
+  AddPort(dfe, DeviceConfig::PortType::SERIAL, _T("COM1:"), _T("Vario (COM1)"));
+  AddPort(dfe, DeviceConfig::PortType::SERIAL, _T("COM2:"), _T("Radio (COM2)"));
+  AddPort(dfe, DeviceConfig::PortType::SERIAL, _T("COM3:"), _T("Internal (COM3)"));
   return true;
 }
 
@@ -257,7 +257,7 @@ DetectSerialPorts(DataFieldEnum &dfe)
 
   bool found = false;
   while (enumerator.Next()) {
-    AddPort(dfe, DeviceConfig::SERIAL, enumerator.GetName(),
+    AddPort(dfe, DeviceConfig::PortType::SERIAL, enumerator.GetName(),
             enumerator.GetDisplayName());
     found = true;
   }
@@ -286,7 +286,7 @@ FillPorts(DataFieldEnum &dfe)
   for (unsigned i = 1; i <= 10; ++i) {
     TCHAR buffer[64];
     _stprintf(buffer, _T("COM%u:"), i);
-    AddPort(dfe, DeviceConfig::SERIAL, buffer);
+    AddPort(dfe, DeviceConfig::PortType::SERIAL, buffer);
   }
 #endif
 }
@@ -345,7 +345,7 @@ SetupDeviceFields(const DeviceConfig &config,
           ? env->GetStringUTFChars(name, NULL)
           : NULL;
 
-        AddPort(*dfe, DeviceConfig::RFCOMM, address2, name2);
+        AddPort(*dfe, DeviceConfig::PortType::RFCOMM, address2, name2);
 
         env->ReleaseStringUTFChars(address, address2);
         if (name2 != NULL)
@@ -354,10 +354,10 @@ SetupDeviceFields(const DeviceConfig &config,
 
       env->DeleteLocalRef(bonded);
 
-      if (config.port_type == DeviceConfig::RFCOMM &&
+      if (config.port_type == DeviceConfig::PortType::RFCOMM &&
           !config.bluetooth_mac.empty()) {
         if (!dfe->Exists(config.bluetooth_mac))
-          AddPort(*dfe, DeviceConfig::RFCOMM, config.bluetooth_mac);
+          AddPort(*dfe, DeviceConfig::PortType::RFCOMM, config.bluetooth_mac);
 
         dfe->SetAsString(config.bluetooth_mac);
       }
@@ -369,11 +369,11 @@ SetupDeviceFields(const DeviceConfig &config,
     for (unsigned i = 0; i < AndroidIOIOUartPort::getNumberUarts(); i++) {
       _sntprintf(tempID, sizeof(tempID), _T("%d"), i);
       _sntprintf(tempName, sizeof(tempName), _T("IOIO Uart %d"), i);
-      AddPort(*dfe, DeviceConfig::IOIOUART, tempID, tempName,
+      AddPort(*dfe, DeviceConfig::PortType::IOIOUART, tempID, tempName,
               AndroidIOIOUartPort::getPortHelp(i));
     }
 
-    if (config.port_type == DeviceConfig::IOIOUART &&
+    if (config.port_type == DeviceConfig::PortType::IOIOUART &&
         config.ioio_uart_id < AndroidIOIOUartPort::getNumberUarts()) {
       _sntprintf(tempID,  sizeof(tempID), _T("%d"), config.ioio_uart_id);
       dfe->SetAsString(tempID);
@@ -382,19 +382,19 @@ SetupDeviceFields(const DeviceConfig &config,
 #endif /* Android */
 
     switch (config.port_type) {
-    case DeviceConfig::SERIAL:
+    case DeviceConfig::PortType::SERIAL:
       if (!dfe->Exists(config.path))
         AddPort(*dfe, config.port_type, config.path);
 
       dfe->SetAsString(config.path);
       break;
 
-    case DeviceConfig::DISABLED:
-    case DeviceConfig::RFCOMM:
-    case DeviceConfig::IOIOUART:
-    case DeviceConfig::AUTO:
-    case DeviceConfig::INTERNAL:
-    case DeviceConfig::TCP_LISTENER:
+    case DeviceConfig::PortType::DISABLED:
+    case DeviceConfig::PortType::RFCOMM:
+    case DeviceConfig::PortType::IOIOUART:
+    case DeviceConfig::PortType::AUTO:
+    case DeviceConfig::PortType::INTERNAL:
+    case DeviceConfig::PortType::TCP_LISTENER:
       break;
     }
 
@@ -445,20 +445,20 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
   /* decode the port type from the upper 16 bits of the id; we don't
      need the rest, because that's just some serial we don't care
      about */
-  const enum DeviceConfig::port_type new_type =
-    (enum DeviceConfig::port_type)(value >> 16);
+  const DeviceConfig::PortType new_type =
+    (DeviceConfig::PortType)(value >> 16);
   switch (new_type) {
-  case DeviceConfig::DISABLED:
-  case DeviceConfig::AUTO:
-  case DeviceConfig::INTERNAL:
-  case DeviceConfig::TCP_LISTENER:
+  case DeviceConfig::PortType::DISABLED:
+  case DeviceConfig::PortType::AUTO:
+  case DeviceConfig::PortType::INTERNAL:
+  case DeviceConfig::PortType::TCP_LISTENER:
     if (new_type == config.port_type)
       return false;
 
     config.port_type = new_type;
     return true;
 
-  case DeviceConfig::SERIAL:
+  case DeviceConfig::PortType::SERIAL:
     /* Bluetooth */
     if (new_type == config.port_type &&
         _tcscmp(config.path, df.GetAsString()) == 0)
@@ -468,7 +468,7 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
     config.path = df.GetAsString();
     return true;
 
-  case DeviceConfig::RFCOMM:
+  case DeviceConfig::PortType::RFCOMM:
     /* Bluetooth */
     if (new_type == config.port_type &&
         _tcscmp(config.bluetooth_mac, df.GetAsString()) == 0)
@@ -478,7 +478,7 @@ FinishPortField(DeviceConfig &config, WndProperty &port_field)
     config.bluetooth_mac = df.GetAsString();
     return true;
 
-  case DeviceConfig::IOIOUART:
+  case DeviceConfig::PortType::IOIOUART:
     /* IOIO UART */
     if (new_type == config.port_type &&
         config.ioio_uart_id == (unsigned)_ttoi(df.GetAsString()))

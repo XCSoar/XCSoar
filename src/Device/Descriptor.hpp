@@ -124,7 +124,7 @@ public:
   }
 
   bool IsConfigured() const {
-    return config.port_type != DeviceConfig::DISABLED;
+    return config.port_type != DeviceConfig::PortType::DISABLED;
   }
 
   bool IsOpen() const {

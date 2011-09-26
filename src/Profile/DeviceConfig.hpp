@@ -27,12 +27,13 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 
 #include <tchar.h>
+#include <stdint.h>
 
 /**
  * Configuration structure for serial devices
  */
 struct DeviceConfig {
-  enum port_type {
+  enum class PortType : uint8_t {
     /**
      * This device is disabled.
      */
@@ -72,7 +73,7 @@ struct DeviceConfig {
     TCP_LISTENER,
   };
 
-  port_type port_type;          /**< Type of the port */
+  PortType port_type;          /**< Type of the port */
 
   /**
    * The baud rate of the device in NMEA mode.
@@ -111,8 +112,9 @@ struct DeviceConfig {
   /**
    * Does this port type use a baud rate?
    */
-  static bool UsesSpeed(enum port_type port_type) {
-    return port_type == SERIAL || port_type == AUTO || port_type == IOIOUART;
+  static bool UsesSpeed(PortType port_type) {
+    return port_type == PortType::SERIAL || port_type == PortType::AUTO ||
+      port_type == PortType::IOIOUART;
   }
 
   /**
@@ -129,9 +131,10 @@ struct DeviceConfig {
   /**
    * Does this port type use a driver?
    */
-  static bool UsesDriver(enum port_type port_type) {
-    return port_type == SERIAL || port_type == RFCOMM || port_type == AUTO ||
-      port_type == TCP_LISTENER || port_type == IOIOUART;
+  static bool UsesDriver(PortType port_type) {
+    return port_type == PortType::SERIAL || port_type == PortType::RFCOMM ||
+      port_type == PortType::AUTO || port_type == PortType::TCP_LISTENER ||
+      port_type == PortType::IOIOUART;
   }
 
   bool UsesDriver() const {
@@ -147,7 +150,7 @@ struct DeviceConfig {
   }
 
   void Clear() {
-    port_type = DISABLED;
+    port_type = PortType::DISABLED;
     baud_rate = 4800u;
     path.clear();
     bluetooth_mac.clear();

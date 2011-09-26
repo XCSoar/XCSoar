@@ -33,25 +33,25 @@ bool
 DeviceConfig::IsAvailable() const
 {
   switch (port_type) {
-  case DISABLED:
+  case PortType::DISABLED:
     return false;
 
-  case SERIAL:
+  case PortType::SERIAL:
     return true;
 
-  case RFCOMM:
+  case PortType::RFCOMM:
     return is_android();
 
-  case IOIOUART:
+  case PortType::IOIOUART:
     return is_android() && is_ioiolib();
 
-  case AUTO:
+  case PortType::AUTO:
     return is_windows_ce();
 
-  case INTERNAL:
+  case PortType::INTERNAL:
     return is_android();
 
-  case TCP_LISTENER:
+  case PortType::TCP_LISTENER:
     return true;
   }
 
@@ -63,29 +63,29 @@ const TCHAR *
 DeviceConfig::GetPortName(TCHAR *buffer, size_t max_size) const
 {
   switch (port_type) {
-  case DeviceConfig::DISABLED:
+  case PortType::DISABLED:
     return _("Disabled");
 
-  case DeviceConfig::SERIAL:
+  case PortType::SERIAL:
     return path.c_str();
 
-  case DeviceConfig::RFCOMM:
+  case PortType::RFCOMM:
     _sntprintf(buffer, max_size, _T("Bluetooth %s"),
                bluetooth_mac.c_str());
     return buffer;
 
-  case DeviceConfig::IOIOUART:
+  case PortType::IOIOUART:
     _sntprintf(buffer, max_size, _T("IOIO UArt %d"),
                ioio_uart_id);
     return buffer;
 
-  case DeviceConfig::AUTO:
+  case PortType::AUTO:
     return _("GPS Intermediate Driver");
 
-  case DeviceConfig::INTERNAL:
+  case PortType::INTERNAL:
     return _("Built-in GPS");
 
-  case DeviceConfig::TCP_LISTENER:
+  case PortType::TCP_LISTENER:
     return _T("TCP port 4353");
   }
 
@@ -108,37 +108,37 @@ MakeDeviceSettingName(TCHAR *buffer, const TCHAR *prefix, unsigned n,
   return buffer;
 }
 
-static enum DeviceConfig::port_type
+static DeviceConfig::PortType
 StringToPortType(const TCHAR *value)
 {
   if (_tcscmp(value, _T("disabled")) == 0)
-    return DeviceConfig::DISABLED;
+    return DeviceConfig::PortType::DISABLED;
 
   if (_tcscmp(value, _T("serial")) == 0)
-    return DeviceConfig::SERIAL;
+    return DeviceConfig::PortType::SERIAL;
 
   if (_tcscmp(value, _T("rfcomm")) == 0)
-    return DeviceConfig::RFCOMM;
+    return DeviceConfig::PortType::RFCOMM;
 
   if (_tcscmp(value, _T("ioio_uart")) == 0)
-    return DeviceConfig::IOIOUART;
+    return DeviceConfig::PortType::IOIOUART;
 
   if (_tcscmp(value, _T("auto")) == 0)
-    return DeviceConfig::AUTO;
+    return DeviceConfig::PortType::AUTO;
 
   if (_tcscmp(value, _T("internal")) == 0)
-    return DeviceConfig::INTERNAL;
+    return DeviceConfig::PortType::INTERNAL;
 
   if (_tcscmp(value, _T("tcp_listener")) == 0)
-    return DeviceConfig::TCP_LISTENER;
+    return DeviceConfig::PortType::TCP_LISTENER;
 
   if (is_android())
-    return DeviceConfig::INTERNAL;
+    return DeviceConfig::PortType::INTERNAL;
 
-  return DeviceConfig::SERIAL;
+  return DeviceConfig::PortType::SERIAL;
 }
 
-static enum DeviceConfig::port_type
+static DeviceConfig::PortType
 ReadPortType(unsigned n)
 {
   TCHAR name[64], value[64];
@@ -147,9 +147,9 @@ ReadPortType(unsigned n)
   if (!Profile::Get(name, value, ARRAY_SIZE(value)))
     return n == 0
       ? (is_android()
-         ? DeviceConfig::INTERNAL
-         : DeviceConfig::SERIAL)
-      : DeviceConfig::DISABLED;
+         ? DeviceConfig::PortType::INTERNAL
+         : DeviceConfig::PortType::SERIAL)
+      : DeviceConfig::PortType::DISABLED;
 
   return StringToPortType(value);
 }
@@ -197,7 +197,7 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
   Get(buffer, config.ioio_uart_id);
 
   config.path.clear();
-  if (config.port_type == DeviceConfig::SERIAL &&
+  if (config.port_type == DeviceConfig::PortType::SERIAL &&
       !LoadPath(config, n) && !LoadPortIndex(config, n)) {
     if (is_altair() && n == 0)
       config.path = _T("COM3:");
@@ -251,28 +251,28 @@ Profile::GetDeviceConfig(unsigned n, DeviceConfig &config)
 }
 
 static const TCHAR *
-PortTypeToString(enum DeviceConfig::port_type type)
+PortTypeToString(DeviceConfig::PortType type)
 {
   switch (type) {
-  case DeviceConfig::DISABLED:
+  case DeviceConfig::PortType::DISABLED:
     return _T("disabled");
 
-  case DeviceConfig::SERIAL:
+  case DeviceConfig::PortType::SERIAL:
     return _T("serial");
 
-  case DeviceConfig::RFCOMM:
+  case DeviceConfig::PortType::RFCOMM:
     return _T("rfcomm");
 
-  case DeviceConfig::IOIOUART:
+  case DeviceConfig::PortType::IOIOUART:
     return _T("ioio_uart");
 
-  case DeviceConfig::AUTO:
+  case DeviceConfig::PortType::AUTO:
     return _T("auto");
 
-  case DeviceConfig::INTERNAL:
+  case DeviceConfig::PortType::INTERNAL:
     return _T("internal");
 
-  case DeviceConfig::TCP_LISTENER:
+  case DeviceConfig::PortType::TCP_LISTENER:
     return _T("tcp_listener");
   }
 
@@ -280,7 +280,7 @@ PortTypeToString(enum DeviceConfig::port_type type)
 }
 
 static bool
-WritePortType(unsigned n, enum DeviceConfig::port_type type)
+WritePortType(unsigned n, DeviceConfig::PortType type)
 {
   const TCHAR *value = PortTypeToString(type);
   if (value == NULL)
