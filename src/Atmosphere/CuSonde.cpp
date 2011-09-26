@@ -45,7 +45,7 @@ Copyright_License {
 
 using std::max;
 
-unsigned short CuSonde::last_level=fixed_zero;
+unsigned short CuSonde::last_level = 0;
 fixed CuSonde::thermalHeight = fixed_zero;
 fixed CuSonde::cloudBase = fixed_zero;
 fixed CuSonde::hGround = fixed_zero;

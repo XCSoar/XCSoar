@@ -160,7 +160,7 @@ PlaneGlue::Read(Plane &plane, KeyValueFileReader &reader)
   if (!has_max_ballast)
     plane.max_ballast = fixed_zero;
   if (!has_dump_time)
-    plane.dump_time = fixed_zero;
+    plane.dump_time = 0;
   if (!has_max_speed)
     plane.max_speed = fixed(55.555);
   if (!has_wing_area)
