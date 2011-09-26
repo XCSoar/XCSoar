@@ -28,7 +28,6 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Engine/Math/Earth.hpp"
 #include "Units/Units.hpp"
 #include "Operation.hpp"
 
@@ -131,7 +130,7 @@ MapWindow::UpdateTerrain()
   GeoPoint location = visible_projection.GetGeoScreenCenter();
   fixed radius = visible_projection.GetScreenWidthMeters() / 2;
   if (terrain_radius >= radius &&
-      Distance(terrain_center, location) < fixed(1000))
+      terrain_center.distance(location) < fixed(1000))
     return false;
 
   // always service terrain even if it's not used by the map,

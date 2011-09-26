@@ -1094,6 +1094,7 @@ LOAD_TERRAIN_SOURCES = \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
+	$(SRC)/Engine/Navigation/GeoPoint.cpp \
 	$(SRC)/Operation.cpp \
 	$(SRC)/Util/UTF8.cpp \
 	$(TEST_SRC_DIR)/LoadTerrain.cpp

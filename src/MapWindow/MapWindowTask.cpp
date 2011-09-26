@@ -177,8 +177,8 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   for (fixed d = fixed_one / 4; d <= fixed_one; d += fixed_one / 4) {
     dloc = FindLatitudeLongitude(start, Basic().track, distance_max * d);
     
-    fixed distance0 = Distance(start, dloc);
-    fixed distance1 = Distance(dloc, target);
+    fixed distance0 = start.distance(dloc);
+    fixed distance1 = target.distance(dloc);
     fixed distance = fixed(distance0 + distance1) / vec.Distance;
     int idist = iround((distance - fixed_one) * 100);
     

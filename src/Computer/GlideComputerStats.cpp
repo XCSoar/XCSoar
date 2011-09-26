@@ -27,7 +27,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "NMEA/Derived.hpp"
 #include "Logger/Logger.hpp"
-#include "Math/Earth.hpp"
 #include "GPSClock.hpp"
 
 GlideComputerStats::GlideComputerStats() :
@@ -57,7 +56,7 @@ bool
 GlideComputerStats::DoLogging()
 {
   /// @todo consider putting this sanity check inside Parser
-  if (Distance(Basic().location, LastBasic().location) > fixed(200))
+  if (Basic().location.distance(LastBasic().location) > fixed(200))
     // prevent bad fixes from being logged or added to OLC store
     return false;
 

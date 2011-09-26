@@ -26,7 +26,6 @@ Copyright_License {
 #include "GlideComputer.hpp"
 #include "SettingsComputer.hpp"
 #include "Math/LowPassFilter.hpp"
-#include "Math/Earth.hpp"
 #include "Terrain/RasterTerrain.hpp"
 #include "LocalTime.hpp"
 #include "Atmosphere/CuSonde.hpp"
@@ -352,7 +351,7 @@ GlideComputerAirData::LD()
   }
 
   if (time_advanced()) {
-    fixed DistanceFlown = Distance(Basic().location, LastBasic().location);
+    fixed DistanceFlown = Basic().location.distance(LastBasic().location);
 
     calculated.ld =
       UpdateLD(calculated.ld, DistanceFlown,
@@ -384,8 +383,9 @@ GlideComputerAirData::CruiseLD()
       calculated.cruise_start_altitude = Basic().NavAltitude;
       calculated.cruise_start_time = Basic().time;
     } else {
-      fixed DistanceFlown = Distance(Basic().location,
-                                     calculated.cruise_start_location);
+      fixed DistanceFlown =
+          Basic().location.distance(calculated.cruise_start_location);
+
       calculated.cruise_ld =
           UpdateLD(calculated.cruise_ld, DistanceFlown,
                    calculated.cruise_start_altitude - Basic().NavAltitude,

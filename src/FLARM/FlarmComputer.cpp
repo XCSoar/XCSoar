@@ -24,7 +24,6 @@ Copyright_License {
 #include "FLARM/FlarmComputer.hpp"
 #include "FLARM/FlarmDetails.hpp"
 #include "NMEA/Info.hpp"
-#include "Engine/Math/Earth.hpp"
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
 
 void
@@ -49,8 +48,8 @@ FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
     GeoPoint plon = basic.location;
     plon.Longitude += delta_lon;
 
-    fixed dlat = Distance(basic.location, plat);
-    fixed dlon = Distance(basic.location, plon);
+    fixed dlat = basic.location.distance(plat);
+    fixed dlon = basic.location.distance(plon);
 
     if (positive(fabs(dlat)) && positive(fabs(dlon))) {
       FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;

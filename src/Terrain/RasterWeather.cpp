@@ -31,7 +31,6 @@ Copyright_License {
 #include "OS/FileUtil.hpp"
 #include "Operation.hpp"
 #include "zzip/zzip.h"
-#include "Engine/Math/Earth.hpp"
 
 #include <assert.h>
 #include <tchar.h>
@@ -323,7 +322,7 @@ RasterWeather::SetViewCenter(const GeoPoint &location, fixed radius)
   Poco::ScopedRWLock protect(lock, true);
 
   /* only update the RasterMap if the center was moved far enough */
-  if (Distance(center, location) < fixed(1000))
+  if (center.distance(location) < fixed(1000))
     return;
 
   weather_map->SetViewCenter(location, radius);
