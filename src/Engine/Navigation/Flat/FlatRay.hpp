@@ -27,15 +27,17 @@
 #include <utility>
 #include "Compiler.h"
 
-/**
- * Projected ray (a point and vector) in 2-d cartesian integer coordinates
- */
+/** Projected ray (a point and vector) in 2-d cartesian integer coordinates */
 class FlatRay {
 public:
-  const FlatGeoPoint point; /**< Origin of ray */
-  const FlatGeoPoint vector; /**< Vector representing ray direction and length */
-  const fixed fx; /**< speedups for box intersection test */
-  const fixed fy; /**< speedups for box intersection test */
+  /** Origin of ray */
+  const FlatGeoPoint point;
+  /** Vector representing ray direction and length */
+  const FlatGeoPoint vector;
+  /** speedups for box intersection test */
+  const fixed fx;
+  /** speedups for box intersection test */
+  const fixed fy;
 
   /**
    * Constructor given start/end locations
@@ -43,11 +45,10 @@ public:
    * @param from Origin of ray
    * @param to End point of ray
    */
-  FlatRay(const FlatGeoPoint& from,
-          const FlatGeoPoint& to):
-    point(from),vector(to-from),
-    fx(vector.Longitude!=0? 1.0/vector.Longitude:0),
-    fy(vector.Latitude!=0? 1.0/vector.Latitude:0) {};
+  FlatRay(const FlatGeoPoint& from, const FlatGeoPoint& to)
+    :point(from), vector(to - from),
+     fx(vector.Longitude != 0 ? 1.0 / vector.Longitude : 0),
+     fy(vector.Latitude != 0 ? 1.0 / vector.Latitude : 0) {}
 
   /**
    * Test whether two rays intersect
@@ -59,7 +60,7 @@ public:
   gcc_pure
   fixed intersects(const FlatRay &that) const;
 
-/** 
+  /**
    * Parametric form of ray
    *
    * @param t Parameter [0,1] of ray
