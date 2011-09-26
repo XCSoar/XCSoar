@@ -120,10 +120,12 @@ typedef int32_t         ms_int32;
 typedef uint32_t        ms_uint32;
 #endif
 
+#ifdef SHAPELIB_DISABLED
 #if defined(_WIN32) && !defined(__CYGWIN__)
 /* Need to use _vsnprintf() with VS2003 */
 #define vsnprintf _vsnprintf
 #endif 
+#endif
 
 /*forward declaration of rendering object*/
 typedef struct rendererVTableObj rendererVTableObj;
@@ -194,8 +196,10 @@ typedef const ms_uint32 *ms_const_bitarray;
 #endif
 
 
+#ifdef SHAPELIB_DISABLED
 #if defined(_WIN32) && !defined(__CYGWIN__)
 #define snprintf _snprintf
+#endif
 #endif
 
 #ifdef __cplusplus
