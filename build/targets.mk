@@ -69,7 +69,7 @@ ifeq ($(TARGET),PPC2003)
 endif
 
 ifeq ($(TARGET),PC)
-  TCPATH := i586-mingw32msvc-
+  TCPATH := i686-w64-mingw32-
   ifeq ($(WINHOST),y)
     TCPATH :=
   endif
