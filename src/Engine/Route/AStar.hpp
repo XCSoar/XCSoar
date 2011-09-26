@@ -44,14 +44,16 @@ extern long count_astar_links;
 
 #define ASTAR_QUEUE_SIZE 1024
 
-struct AStarPriorityValue {
-  unsigned g; /** Actual edge value */
-  unsigned h; /** Heuristic cost to goal */
+struct AStarPriorityValue
+{
+  /** Actual edge value */
+  unsigned g;
+  /** Heuristic cost to goal */
+  unsigned h;
 
-  AStarPriorityValue(unsigned _g=0):g(_g),h(0) {
-  }
-  AStarPriorityValue(const unsigned _g, const unsigned _h):g(_g),h(_h) {
-  }
+  AStarPriorityValue(unsigned _g = 0):g(_g), h(0) {}
+  AStarPriorityValue(const unsigned _g, const unsigned _h):g(_g), h(_h) {}
+
   gcc_pure
   AStarPriorityValue adjust(const bool is_min) const {
     return is_min ? *this : AStarPriorityValue(ASTAR_MINMAX_OFFSET - g,
@@ -60,18 +62,20 @@ struct AStarPriorityValue {
 
   gcc_pure
   unsigned f() const {
-    return g+h;
+    return g + h;
   }
+
   gcc_pure
   AStarPriorityValue operator+(const AStarPriorityValue& other) const {
     AStarPriorityValue n(*this);
-    n.g+= other.g;
+    n.g += other.g;
     n.h = other.h;
     return n;
   }
+
   gcc_pure
   bool operator>(const AStarPriorityValue& other) const {
-    return g>other.g;
+    return g > other.g;
   }
 };
 
@@ -81,7 +85,8 @@ struct AStarPriorityValue {
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
 template <class Node, bool m_min=true>
-class AStar {
+class AStar
+{
 #ifdef ASTAR_TR1
   typedef std::tr1::unordered_map<Node, AStarPriorityValue> node_value_map;
 #else
@@ -102,9 +107,10 @@ class AStar {
 
   typedef std::pair<AStarPriorityValue, node_value_iterator> NodeValue;
 
-  struct Rank : public std::binary_function<NodeValue, NodeValue, bool> {
+  struct Rank: public std::binary_function<NodeValue, NodeValue, bool>
+  {
     gcc_pure
-    bool operator()(const NodeValue& x, const NodeValue& y) const {
+    bool operator()(const NodeValue &x, const NodeValue &y) const {
       return x.first.f() > y.first.f();
     }
   };
@@ -129,13 +135,12 @@ class AStar {
   node_value_iterator cur;
 
 public:
-
   /**
    * Default constructor
    *
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  AStar(unsigned reserve_default=ASTAR_QUEUE_SIZE)
+  AStar(unsigned reserve_default = ASTAR_QUEUE_SIZE)
   {
     reserve(reserve_default);
   }
@@ -146,7 +151,7 @@ public:
    * @param n Node to start
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  AStar(const Node &node, unsigned reserve_default=ASTAR_QUEUE_SIZE)
+  AStar(const Node &node, unsigned reserve_default = ASTAR_QUEUE_SIZE)
   {
     push(node, node, AStarPriorityValue(0));
     reserve(reserve_default);
@@ -162,9 +167,7 @@ public:
     push(node, node, AStarPriorityValue(0));
   }
 
-  /**
-   * Clears the queues
-   */
+  /** Clears the queues */
   void clear() {
     // Clear the search queue
     while (!q.empty())
@@ -219,7 +222,8 @@ public:
    * @param pn Predecessor of destination node
    * @param e Edge distance
    */
-  void link(const Node &node, const Node &parent, const AStarPriorityValue &edge_value) {
+  void link(const Node &node, const Node &parent,
+            const AStarPriorityValue &edge_value) {
 #ifdef INSTRUMENT_TASK
     count_astar_links++;
 #endif
@@ -243,15 +247,13 @@ public:
       // If the node wasn't found
       // -> Return the given node itself
       return node;
-    else
-      // If the node was found
-      // -> Return the parent node
-      return (it->second);
+
+    // If the node was found
+    // -> Return the parent node
+    return it->second;
   }
 
-  /**
-   * Reserve queue size (if available)
-   */
+  /** Reserve queue size (if available) */
   void reserve(unsigned size) {
     q.reserve(size);
   }
@@ -265,15 +267,14 @@ public:
     node_value_const_iterator it = node_values.find(node);
     if (cur->first == node)
       return cur->second;
-    if (it == node_values.end()) {
+
+    if (it == node_values.end())
       return AStarPriorityValue(0);
-    } else {
-      return it->second;
-    }
+
+    return it->second;
   }
 
 private:
-
   /**
    * Add node to search queue
    *
