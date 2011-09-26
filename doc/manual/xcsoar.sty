@@ -43,4 +43,4 @@
 \clubpenalty=1000
 
 % the command \version prints the XCSoar version number
-\newcommand{\version}{\input{VERSION.txt}}
+\newcommand{\version}{\begingroup\catcode`\_=\active\input{VERSION.txt}\endgroup}
