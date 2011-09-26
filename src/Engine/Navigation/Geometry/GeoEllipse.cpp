@@ -31,15 +31,15 @@ GeoEllipse::GeoEllipse(const GeoPoint &f1, const GeoPoint &f2,
 }
 
 GeoPoint 
-GeoEllipse::parametric(const fixed t) const
+GeoEllipse::Parametric(const fixed t) const
 {
   const FlatPoint fp = ell.parametric(t);
   return task_projection.funproject(fp);
 }
 
 bool 
-GeoEllipse::intersect_extended(const GeoPoint &p, GeoPoint &i1,
-                               GeoPoint &i2) const 
+GeoEllipse::IntersectExtended(const GeoPoint &p, GeoPoint &i1,
+                              GeoPoint &i2) const
 {
   const FlatPoint pf = task_projection.fproject(p);
   FlatPoint i1f, i2f;

@@ -57,7 +57,7 @@ public:
    * @return Location of point on ellipse
    */
   gcc_pure
-  GeoPoint parametric(const fixed t) const;
+  GeoPoint Parametric(const fixed t) const;
 
   /**
    * Calculate where a line from the first focus through a point p
@@ -69,7 +69,7 @@ public:
    *
    * @return True if line intersects
    */
-  bool intersect_extended(const GeoPoint &p, GeoPoint &i1, GeoPoint &i2) const;
+  bool IntersectExtended(const GeoPoint &p, GeoPoint &i1, GeoPoint &i2) const;
 };
 
 

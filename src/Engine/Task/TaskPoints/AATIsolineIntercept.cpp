@@ -34,7 +34,7 @@ AATIsolineIntercept::intercept(const AATPoint &ap,
                                GeoPoint& ip) const
 {
   AircraftState s1, s2;
-  if (ell.intersect_extended(state.location,
+  if (ell.IntersectExtended(state.location,
                              s1.location, s2.location)) 
   {
     if (ap.IsInSector(s1)) {
