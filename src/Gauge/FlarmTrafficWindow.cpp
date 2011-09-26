@@ -377,7 +377,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       return;
 
     const short relalt =
-        iround(Units::ToUserAltitude(traffic.relative_altitude / 100));
+        iround(Units::ToUserAltitude(traffic.relative_altitude) / 100);
 
     // if (relative altitude is other than zero)
     if (relalt == 0)
