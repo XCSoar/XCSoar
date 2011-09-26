@@ -29,7 +29,6 @@ Copyright_License {
 #include "Simulator.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Math/Earth.hpp"
 #include "Protection.hpp"
 #include "Dialogs/Waypoint.hpp"
 #include "Dialogs/Task.hpp"
@@ -194,7 +193,7 @@ GlueMapWindow::on_mouse_up(int x, int y)
       const Angle oldbearing = Basic().track;
       const fixed minspeed = fixed(1.1) *
         SettingsComputer().glide_polar_task.GetVMin();
-      const Angle newbearing = Bearing(drag_start_geopoint, G);
+      const Angle newbearing = drag_start_geopoint.bearing(G);
       if (((newbearing - oldbearing).as_delta().magnitude_degrees() < fixed(30)) ||
           (Basic().ground_speed < minspeed))
         device_blackboard.SetSpeed(min(fixed(100.0),

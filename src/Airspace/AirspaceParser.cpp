@@ -185,7 +185,7 @@ struct TempAirspaceType
     const fixed Radius = v.Distance;
 
     // Determine end bearing
-    Angle EndBearing = Bearing(Center, End);
+    Angle EndBearing = Center.bearing(End);
 
     // Add first polygon point
     points.push_back(Start);
