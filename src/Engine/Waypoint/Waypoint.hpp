@@ -217,7 +217,7 @@ struct Waypoint {
   unsigned FlatDistanceTo(const FlatGeoPoint &f) const {
     assert(flat_location_initialised);
 
-    return flat_location.distance_to(f);
+    return flat_location.Distance(f);
   }
 
   /**

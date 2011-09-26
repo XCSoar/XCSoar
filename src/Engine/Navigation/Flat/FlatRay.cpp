@@ -35,20 +35,20 @@ std::pair<int, int>
 FlatRay::intersects_ratio(const FlatRay &that) const
 {
   std::pair<int, int> r;
-  r.second = vector.cross(that.vector);
+  r.second = vector.CrossProduct(that.vector);
   if (r.second == 0)
     // lines are parallel
     return r;
 
   const FlatGeoPoint delta = that.point - point;
-  r.first = delta.cross(that.vector);
+  r.first = delta.CrossProduct(that.vector);
   if ((sgn(r.first) * sgn(r.second) < 0) || (abs(r.first) > abs(r.second))) {
     // outside first line
     r.second = 0;
     return r;
   }
 
-  const int ub = delta.cross(vector);
+  const int ub = delta.CrossProduct(vector);
   if ((sgn(ub) * sgn(r.second) < 0) || (abs(ub) > abs(r.second))) {
     // outside second line
     r.second = 0;

@@ -24,15 +24,15 @@
 #include "Math/FastMath.h"
 
 unsigned
-FlatGeoPoint::distance_to(const FlatGeoPoint &sp) const
+FlatGeoPoint::Distance(const FlatGeoPoint &sp) const
 {
   const FlatGeoPoint delta = *this - sp;
   return lhypot(delta.Longitude, delta.Latitude);
 }
 
 unsigned
-FlatGeoPoint::distance_sq_to(const FlatGeoPoint &sp) const
+FlatGeoPoint::DistanceSquared(const FlatGeoPoint &sp) const
 {
   const FlatGeoPoint delta = *this - sp;
-  return delta.dot(delta);
+  return delta.DotProduct(delta);
 }

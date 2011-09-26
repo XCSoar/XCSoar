@@ -87,7 +87,7 @@ struct RouteLinkBase {
    */
   gcc_pure
   unsigned distance() const {
-    return first.distance_to(second);
+    return first.Distance(second);
   }
 
   /**
@@ -110,7 +110,7 @@ struct RouteLinkBase {
    */
   gcc_pure
   int dot(const RouteLinkBase& o) const {
-    return (o.second-o.first).dot(second-first);
+    return (o.second-o.first).DotProduct(second-first);
   }
 
   /**
@@ -123,7 +123,7 @@ struct RouteLinkBase {
    */
   gcc_pure
   int cross(const RouteLinkBase& o) const {
-    return (o.second-o.first).cross(second-first);
+    return (o.second-o.first).CrossProduct(second-first);
   }
 
 };

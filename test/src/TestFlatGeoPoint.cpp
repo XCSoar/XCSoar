@@ -32,20 +32,20 @@ int main(int argc, char **argv)
   FlatGeoPoint p3(3, 10);
 
   // test cross()
-  ok1(p1.cross(p2) == 1);
-  ok1(p2.cross(p1) == -1);
-  ok1(p1.cross(p3) == 7);
-  ok1(p3.cross(p1) == -7);
-  ok1(p2.cross(p3) == 4);
-  ok1(p3.cross(p2) == -4);
+  ok1(p1.CrossProduct(p2) == 1);
+  ok1(p2.CrossProduct(p1) == -1);
+  ok1(p1.CrossProduct(p3) == 7);
+  ok1(p3.CrossProduct(p1) == -7);
+  ok1(p2.CrossProduct(p3) == 4);
+  ok1(p3.CrossProduct(p2) == -4);
 
   // test dot()
-  ok1(p1.dot(p2) == 3);
-  ok1(p2.dot(p1) == 3);
-  ok1(p1.dot(p3) == 13);
-  ok1(p3.dot(p1) == 13);
-  ok1(p2.dot(p3) == 23);
-  ok1(p3.dot(p2) == 23);
+  ok1(p1.DotProduct(p2) == 3);
+  ok1(p2.DotProduct(p1) == 3);
+  ok1(p1.DotProduct(p3) == 13);
+  ok1(p3.DotProduct(p1) == 13);
+  ok1(p2.DotProduct(p3) == 23);
+  ok1(p3.DotProduct(p2) == 23);
 
   // test ==
   ok1(p1 == FlatGeoPoint(1, 1));
@@ -73,20 +73,20 @@ int main(int argc, char **argv)
   ok1(p2.Latitude == 2);
 
   // test distance_sq_to()
-  ok1(p1.distance_sq_to(p2) == 1);
-  ok1(p2.distance_sq_to(p1) == 1);
-  ok1(p1.distance_sq_to(p3) == 85);
-  ok1(p3.distance_sq_to(p1) == 85);
-  ok1(p2.distance_sq_to(p3) == 68);
-  ok1(p3.distance_sq_to(p2) == 68);
+  ok1(p1.DistanceSquared(p2) == 1);
+  ok1(p2.DistanceSquared(p1) == 1);
+  ok1(p1.DistanceSquared(p3) == 85);
+  ok1(p3.DistanceSquared(p1) == 85);
+  ok1(p2.DistanceSquared(p3) == 68);
+  ok1(p3.DistanceSquared(p2) == 68);
 
   // test distance_to()
-  ok1(p1.distance_to(p2) == 1);
-  ok1(p2.distance_to(p1) == 1);
-  ok1(p1.distance_to(p3) == 9);
-  ok1(p3.distance_to(p1) == 9);
-  ok1(p2.distance_to(p3) == 8);
-  ok1(p3.distance_to(p2) == 8);
+  ok1(p1.Distance(p2) == 1);
+  ok1(p2.Distance(p1) == 1);
+  ok1(p1.Distance(p3) == 9);
+  ok1(p3.Distance(p1) == 9);
+  ok1(p2.Distance(p3) == 8);
+  ok1(p3.Distance(p2) == 8);
 
   return exit_status();
 }

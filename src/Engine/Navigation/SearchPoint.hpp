@@ -122,7 +122,7 @@ public:
    */
   gcc_pure
   unsigned flat_distance(const SearchPoint& sp) const {
-    return flatLocation.distance_to(sp.flatLocation);
+    return flatLocation.Distance(sp.flatLocation);
   }
 
   /**
@@ -132,7 +132,7 @@ public:
    */
   gcc_pure
   unsigned FlatSquareDistance(const SearchPoint& sp) const {
-    return flatLocation.distance_sq_to(sp.flatLocation);
+    return flatLocation.DistanceSquared(sp.flatLocation);
   }
 
   /**

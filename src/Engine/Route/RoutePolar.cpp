@@ -309,7 +309,7 @@ RoutePolars::neighbour_link(const RoutePoint &start,
                   (d.Longitude * sina[index] * sign + d.Latitude * cosa[index])>>8);
   RoutePoint pd(start+dr,
                 start.altitude);
-  pd.round_location();
+  pd.RoundLocation();
   return generate_intermediate(start, pd, proj);
 }
 

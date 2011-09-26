@@ -60,7 +60,7 @@ struct FlatGeoPoint {
    * @return Distance in projected units
    */
   gcc_pure
-  unsigned distance_to(const FlatGeoPoint &sp) const;
+  unsigned Distance(const FlatGeoPoint &sp) const;
 
   /**
    * Find squared distance from one point to another
@@ -70,7 +70,7 @@ struct FlatGeoPoint {
    * @return Squared distance in projected units
    */
   gcc_pure
-  unsigned distance_sq_to(const FlatGeoPoint &sp) const;
+  unsigned DistanceSquared(const FlatGeoPoint &sp) const;
 
   /**
    * Add one point to another
@@ -125,7 +125,7 @@ struct FlatGeoPoint {
    * @return Cross product
    */
   gcc_pure
-  int cross(const FlatGeoPoint &other) const {
+  int CrossProduct(const FlatGeoPoint &other) const {
     return Longitude * other.Latitude - Latitude * other.Longitude;
   }
 
@@ -137,7 +137,7 @@ struct FlatGeoPoint {
    * @return Dot product
    */
   gcc_pure
-  int dot(const FlatGeoPoint &other) const {
+  int DotProduct(const FlatGeoPoint &other) const {
     return Longitude * other.Longitude + Latitude * other.Latitude;
   }
 
@@ -150,7 +150,7 @@ struct FlatGeoPoint {
    */
   gcc_pure
   bool operator== (const FlatGeoPoint &other) const {
-    return FlatGeoPoint::equals(other);
+    return FlatGeoPoint::Equals(other);
   };
 
   /**
@@ -158,16 +158,16 @@ struct FlatGeoPoint {
    */
   gcc_pure
   bool operator< (const FlatGeoPoint &sp) const {
-    return sort(sp);
+    return Sort(sp);
   }
 
   gcc_pure
-  bool equals(const FlatGeoPoint& sp) const {
+  bool Equals(const FlatGeoPoint& sp) const {
     return (Longitude == sp.Longitude) && (Latitude == sp.Latitude);
   }
 
   gcc_pure
-  bool sort(const FlatGeoPoint& sp) const {
+  bool Sort(const FlatGeoPoint& sp) const {
     if (Longitude < sp.Longitude)
       return false;
     else if (Longitude == sp.Longitude)
@@ -190,10 +190,8 @@ struct AFlatGeoPoint : public FlatGeoPoint {
   AFlatGeoPoint(const FlatGeoPoint &p, const short alt):FlatGeoPoint(p),altitude(alt) {};
   AFlatGeoPoint():FlatGeoPoint(0,0),altitude(0) {};
 
-  /**
-   * Rounds location to reduce state space
-   */
-  void round_location() {
+  /** Rounds location to reduce state space */
+  void RoundLocation() {
     // round point to correspond roughly with terrain step size
     Longitude = (Longitude>>2)<<2;
     Latitude = (Latitude>>2)<<2;
@@ -208,7 +206,7 @@ struct AFlatGeoPoint : public FlatGeoPoint {
    */
   gcc_pure
   bool operator== (const AFlatGeoPoint &other) const {
-    return FlatGeoPoint::equals(other) && (altitude == other.altitude);
+    return FlatGeoPoint::Equals(other) && (altitude == other.altitude);
   };
 
   /**
@@ -220,9 +218,9 @@ struct AFlatGeoPoint : public FlatGeoPoint {
    */
   gcc_pure
   bool operator< (const AFlatGeoPoint &sp) const {
-    if (!sort(sp))
+    if (!Sort(sp))
       return false;
-    else if (FlatGeoPoint::equals(sp))
+    else if (FlatGeoPoint::Equals(sp))
       return altitude > sp.altitude;
     else
       return true;

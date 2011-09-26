@@ -69,12 +69,12 @@ NearestPoint(const FlatGeoPoint &p1, const FlatGeoPoint &p2,
               const FlatGeoPoint &p3)
 {
   const FlatGeoPoint p12 = p2-p1;
-  const fixed rsq(p12.dot(p12));
+  const fixed rsq(p12.DotProduct(p12));
   if (!positive(rsq)) {
     return p1;
   }
   const FlatGeoPoint p13 = p3-p1;
-  const fixed numerator(p13.dot(p12));
+  const fixed numerator(p13.DotProduct(p12));
   
   if (!positive(numerator)) {
     return p1;
@@ -111,7 +111,7 @@ NearestPointNonConvex(const SearchPointVector& spv, const FlatGeoPoint &p3)
        i!= spv.end(); ++i) {
 
     FlatGeoPoint pa = SegmentNearestPoint(spv,i,p3);
-    unsigned d_this = p3.distance_sq_to(pa);
+    unsigned d_this = p3.DistanceSquared(pa);
     if (d_this<distance_min) {
       distance_min = d_this;
       point_best = pa;
@@ -129,7 +129,7 @@ SearchPointVector::NearestIndexConvex(const FlatGeoPoint &p3) const
 
   // find nearest point in vector
   for (const_iterator i = begin(); i != end(); ++i) {
-    unsigned d_this = p3.distance_sq_to(i->get_flatLocation());
+    unsigned d_this = p3.DistanceSquared(i->get_flatLocation());
     if (d_this < distance_min) {
       distance_min = d_this;
       i_best = i;
