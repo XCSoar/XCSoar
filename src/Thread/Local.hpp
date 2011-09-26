@@ -32,6 +32,8 @@ Copyright_License {
 #include <windows.h>
 #endif
 
+#include <stddef.h>
+
 /**
  * This class provides an interface to Thread Local Storage (TLS).
  */
@@ -92,11 +94,11 @@ template<class T>
 class ThreadLocalObject : private ThreadLocal {
 public:
   const T Get() const {
-    return (T)(long)ThreadLocal::Get();
+    return (T)(size_t)ThreadLocal::Get();
   }
 
   void Set(const T value) {
-    ThreadLocal::Set((void *)(long)value);
+    ThreadLocal::Set((void *)(size_t)value);
   }
 
   operator T() const {
