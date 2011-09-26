@@ -33,6 +33,8 @@
 #
 #   LLVM        "y" to compile LLVM bitcode with clang
 #
+#   LIBCXX      The absolute path of the libc++ svn/git working directory.
+#
 
 .DEFAULT_GOAL := all
 

@@ -10,6 +10,13 @@ ifeq ($(TARGET_IS_DARWIN),y)
   LIBSTDCXX_LDADD = $(shell $(CXX) -print-file-name=libstdc++.a)
 endif
 
+ifneq ($(LIBCXX),)
+  include $(topdir)/build/libcxx.mk
+  LIBSTDCXX_CPPFLAGS = $(LIBCXX_CPPFLAGS)
+  LIBSTDCXX_LDADD = $(LIBCXX_LDADD)
+  LIBSTDCXX_LDFLAGS = $(LIBCXX_LDFLAGS)
+endif
+
 # Add the C++ standard library to every library and every program
 TARGET_CPPFLAGS += $(LIBSTDCXX_CPPFLAGS)
 TARGET_LDADD := $(LIBSTDCXX_LDADD) $(TARGET_LDADD)

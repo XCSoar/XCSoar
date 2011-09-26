@@ -24,6 +24,13 @@ Copyright_License {
 #ifndef TCHAR_H
 #define TCHAR_H
 
+#ifdef LIBCXX
+/* libc++ uses "_T" as template argument names; this conflicts with
+   the macro "_T()" defined below.  To work around that problem,
+   include all relevant libc++ headers before defining _T() */
+#include <iterator>
+#endif
+
 #include <string.h>
 #include <stdarg.h>
 
