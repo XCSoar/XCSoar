@@ -75,7 +75,7 @@ public:
    * @return Location on ellipse
    */
   gcc_pure
-  FlatPoint parametric(const fixed t) const;
+  FlatPoint Parametric(const fixed t) const;
 
   /**
    * Find intersection of line from focus 1 to p, through the ellipse
@@ -86,7 +86,7 @@ public:
    *
    * @return True if line intersects
    */
-  bool intersect_extended(const FlatPoint &p, FlatPoint &i1, FlatPoint &i2) const;
+  bool IntersectExtended(const FlatPoint &p, FlatPoint &i1, FlatPoint &i2) const;
 
 private:
   gcc_pure
@@ -95,7 +95,7 @@ private:
   gcc_pure
   fixed ba() const;
 
-  bool intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const;
+  bool Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const;
 };
 
 #endif

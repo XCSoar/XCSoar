@@ -63,7 +63,7 @@ FlatEllipse::ba() const
 }
 
 FlatPoint
-FlatEllipse::parametric(const fixed t) const
+FlatEllipse::Parametric(const fixed t) const
 {
   const Angle at = (Angle::radians(fixed_two_pi * t) + theta_initial).as_delta();
 
@@ -78,7 +78,7 @@ FlatEllipse::parametric(const fixed t) const
 
 bool 
 
-FlatEllipse::intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const
+FlatEllipse::Intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const
 {
   const fixed er = ab();
   const fixed ier = ba();
@@ -104,7 +104,7 @@ FlatEllipse::intersect(const FlatLine &line, FlatPoint &i1, FlatPoint &i2) const
 }
 
 bool
-FlatEllipse::intersect_extended(const FlatPoint &pe, FlatPoint &i1,
+FlatEllipse::IntersectExtended(const FlatPoint &pe, FlatPoint &i1,
                                 FlatPoint &i2) const
 {
   const FlatLine l_f1p(f1, pe);
@@ -119,7 +119,7 @@ FlatEllipse::intersect_extended(const FlatPoint &pe, FlatPoint &i1,
   FlatLine e_l(pe, FlatPoint(pe.x + d * can, pe.y + d * san));
   // e_l is the line extended from p in direction of f1-p 
   
-  return intersect(e_l, i1, i2);
+  return Intersect(e_l, i1, i2);
 }
 
 // define an ellipse by three points,
