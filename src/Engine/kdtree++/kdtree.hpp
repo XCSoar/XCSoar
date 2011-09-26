@@ -67,6 +67,7 @@
 #  include <map>
 #endif
 #include <algorithm>
+#include <functional>
 
 #ifdef KDTREE_DEFINE_OSTREAM_OPERATORS
 #  include <ostream>
