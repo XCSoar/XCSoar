@@ -28,9 +28,9 @@
 #include <algorithm>
 
 unsigned
-FlatBoundingBox::distance(const FlatBoundingBox &f) const
+FlatBoundingBox::Distance(const FlatBoundingBox &f) const
 {
-  if (overlaps(f))
+  if (Overlaps(f))
     return 0;
 
   long dx = max(0, min(f.bb_ll.Longitude - bb_ur.Longitude,
@@ -42,7 +42,7 @@ FlatBoundingBox::distance(const FlatBoundingBox &f) const
 }
 
 bool
-FlatBoundingBox::intersects(const FlatRay& ray) const
+FlatBoundingBox::Intersects(const FlatRay& ray) const
 {
   fixed tmin = fixed_zero;
   fixed tmax = fixed_one;
@@ -93,7 +93,7 @@ FlatBoundingBox::intersects(const FlatRay& ray) const
 }
 
 FlatGeoPoint
-FlatBoundingBox::get_center() const
+FlatBoundingBox::GetCenter() const
 {
   /// @todo This will break if overlaps 360/0
   return FlatGeoPoint((bb_ll.Longitude + bb_ur.Longitude) / 2,
@@ -101,7 +101,7 @@ FlatBoundingBox::get_center() const
 }
 
 bool
-FlatBoundingBox::overlaps(const FlatBoundingBox& other) const
+FlatBoundingBox::Overlaps(const FlatBoundingBox& other) const
 {
   if (bb_ll.Longitude > other.bb_ur.Longitude)
     return false;
@@ -116,7 +116,7 @@ FlatBoundingBox::overlaps(const FlatBoundingBox& other) const
 }
 
 bool
-FlatBoundingBox::is_inside(const FlatGeoPoint& loc) const
+FlatBoundingBox::IsInside(const FlatGeoPoint& loc) const
 {
   if (loc.Longitude < bb_ll.Longitude)
     return false;

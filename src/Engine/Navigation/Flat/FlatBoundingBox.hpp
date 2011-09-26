@@ -73,7 +73,7 @@ public:
    * @return Distance in projected units (or zero if overlapping)
    */
   gcc_pure
-  unsigned distance(const FlatBoundingBox &f) const;
+  unsigned Distance(const FlatBoundingBox &f) const;
 
   /**
    * Test whether a point is inside the bounding box
@@ -83,7 +83,7 @@ public:
    * @return true if loc is inside the bounding box
    */
   gcc_pure
-  bool is_inside(const FlatGeoPoint& loc) const;
+  bool IsInside(const FlatGeoPoint& loc) const;
 
   /** Function object used by kd-tree to index coordinates */
   struct kd_get_bounds
@@ -146,7 +146,7 @@ public:
    * @return True if ray intersects with this bounding box
    */
   gcc_pure
-  bool intersects(const FlatRay& ray) const;
+  bool Intersects(const FlatRay& ray) const;
 
   /**
    * Get center of bounding box
@@ -154,18 +154,18 @@ public:
    * @return Center in flat coordinates
    */
   gcc_pure
-  FlatGeoPoint get_center() const;
+  FlatGeoPoint GetCenter() const;
 
   /**
    * Determine whether these bounding boxes overlap
    */
   gcc_pure
-  bool overlaps(const FlatBoundingBox& other) const;
+  bool Overlaps(const FlatBoundingBox& other) const;
 
   /**
    * Expand the bounding box to include this point
    */
-  void expand(const FlatGeoPoint& p) {
+  void Expand(const FlatGeoPoint& p) {
     bb_ll.Longitude = std::min(bb_ll.Longitude, p.Longitude);
     bb_ur.Longitude = std::max(bb_ur.Longitude, p.Longitude);
     bb_ll.Latitude = std::min(bb_ll.Latitude, p.Latitude);
@@ -175,7 +175,7 @@ public:
   /**
    * Expand the bounding box to include this bounding box
    */
-  void expand(const FlatBoundingBox& p) {
+  void Merge(const FlatBoundingBox& p) {
     bb_ll.Longitude = std::min(bb_ll.Longitude, p.bb_ll.Longitude);
     bb_ur.Longitude = std::max(bb_ur.Longitude, p.bb_ur.Longitude);
     bb_ll.Latitude = std::min(bb_ll.Latitude, p.bb_ll.Latitude);
@@ -185,15 +185,15 @@ public:
   /**
    * Shift the bounding box by an offset p
    */
-  void shift(const FlatGeoPoint& p) {
-    bb_ll = bb_ll + p;
-    bb_ur = bb_ur + p;
+  void Shift(const FlatGeoPoint &offset) {
+    bb_ll = bb_ll + offset;
+    bb_ur = bb_ur + offset;
   }
 
   /**
    * Expand the border by x amount
    */
-  void expand() {
+  void ExpandByOne() {
     bb_ll.Longitude--;
     bb_ur.Longitude++;
     bb_ll.Latitude--;

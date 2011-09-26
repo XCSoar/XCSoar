@@ -168,7 +168,7 @@ TaskProjection::project(const GeoBounds& bb) const
 
   FlatBoundingBox fb(project(GeoPoint(bb.west, bb.south)),
                      project(GeoPoint(bb.east, bb.north)));
-  fb.expand(); // prevent rounding
+  fb.ExpandByOne(); // prevent rounding
   return fb;
 }
 

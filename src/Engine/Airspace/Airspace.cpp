@@ -62,7 +62,7 @@ Airspace::inside(const GeoPoint &loc) const
 bool 
 Airspace::intersects(const FlatRay& ray) const
 {
-  return FlatBoundingBox::intersects(ray);
+  return FlatBoundingBox::Intersects(ray);
 }
 
 

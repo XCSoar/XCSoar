@@ -177,13 +177,13 @@ OrderedTaskPoint::update_boundingbox(const TaskProjection &task_projection)
   flat_bb = FlatBoundingBox(task_projection.project(GetLocation()));
 
   for (fixed t = fixed_zero; t <= fixed_one; t += fixed_steps)
-    flat_bb.expand(task_projection.project(GetBoundaryParametric(t)));
+    flat_bb.Expand(task_projection.project(GetBoundaryParametric(t)));
 
-  flat_bb.expand(); // add 1 to fix rounding
+  flat_bb.ExpandByOne(); // add 1 to fix rounding
 }
 
 bool
 OrderedTaskPoint::boundingbox_overlaps(const FlatBoundingBox &that) const
 {
-  return flat_bb.overlaps(that);
+  return flat_bb.Overlaps(that);
 }

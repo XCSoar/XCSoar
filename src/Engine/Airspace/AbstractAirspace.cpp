@@ -276,7 +276,7 @@ AbstractAirspace::GetClearance() const
     m_clearance.PruneInterior();
 
   FlatBoundingBox bb = m_clearance.CalculateBoundingbox();
-  FlatGeoPoint center = bb.get_center();
+  FlatGeoPoint center = bb.GetCenter();
 
   for (SearchPointVector::iterator i= m_clearance.begin();
        i != m_clearance.end(); ++i) {

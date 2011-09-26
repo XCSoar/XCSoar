@@ -30,7 +30,7 @@ FlatTriangleFan::calc_bb()
   VertexVector::const_iterator it = vs.begin(), end = vs.end();
   bb_self = FlatBoundingBox(*it);
   for (++it; it != end; ++it)
-    bb_self.expand(*it);
+    bb_self.Expand(*it);
 }
 
 void
@@ -46,7 +46,7 @@ FlatTriangleFan::add_point(const FlatGeoPoint &p)
 bool
 FlatTriangleFan::is_inside(const FlatGeoPoint &p) const
 {
-  if (!bb_self.is_inside(p))
+  if (!bb_self.IsInside(p))
     return false;
 
   bool inside = false;

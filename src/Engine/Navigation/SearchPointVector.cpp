@@ -171,8 +171,8 @@ SearchPointVector::CalculateBoundingbox() const
 
   FlatBoundingBox bb((*this)[0].get_flatLocation());
   for (const_iterator v = begin(); v != end(); ++v)
-    bb.expand(v->get_flatLocation());
-  bb.expand(); // add 1 to fix rounding
+    bb.Expand(v->get_flatLocation());
+  bb.ExpandByOne(); // add 1 to fix rounding
   return bb;
 }
 

@@ -190,7 +190,7 @@ Airspaces::scan_range(const GeoPoint &location,
     if (!condition(*v->get_airspace()))
       continue;
 
-    if (fixed((*v).distance(bb_target)) > range)
+    if (fixed((*v).Distance(bb_target)) > range)
       continue;
 
     if ((*v).inside(location) || positive(range))

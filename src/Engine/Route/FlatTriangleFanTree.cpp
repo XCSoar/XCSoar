@@ -57,7 +57,7 @@ FlatTriangleFanTree::CalcBB()
   for (LeafVector::iterator it = children.begin(), end = children.end();
       it != end; ++it) {
     it->CalcBB();
-    bb_children.expand(it->bb_children);
+    bb_children.Merge(it->bb_children);
   }
 }
 
@@ -66,10 +66,10 @@ FlatTriangleFanTree::IsInsideTree(const FlatGeoPoint &p,
                                   const bool include_children) const
 {
   if (include_children) {
-    if (!bb_children.is_inside(p))
+    if (!bb_children.IsInside(p))
       return false;
   } else {
-    if (!bb_self.is_inside(p))
+    if (!bb_self.IsInside(p))
       return false;
   }
 
@@ -291,7 +291,7 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint &n,
   if (height < arrival_height)
     return false; // can't possibly improve
 
-  if (!bb_children.is_inside(n))
+  if (!bb_children.IsInside(n))
     return false; // not in scope
 
   if (is_inside(n)) { // found in this segment
@@ -317,10 +317,10 @@ FlatTriangleFanTree::AcceptInRange(const FlatBoundingBox &bb,
                                    const TaskProjection &task_proj,
                                    TriangleFanVisitor &visitor) const
 {
-  if (!bb.overlaps(bb_children))
+  if (!bb.Overlaps(bb_children))
     return;
 
-  if (bb.overlaps(bb_self)) {
+  if (bb.Overlaps(bb_self)) {
     visitor.StartFan();
     for (VertexVector::const_iterator it = vs.begin(), end = vs.end();
          it != end; ++it)

@@ -28,7 +28,7 @@ Airspaces::set_ground_levels(const RasterTerrain &terrain)
 {
   for (AirspaceTree::iterator v = airspace_tree.begin();
        v != airspace_tree.end(); ++v) {
-    FlatGeoPoint c_flat = v->get_center();
+    FlatGeoPoint c_flat = v->GetCenter();
     GeoPoint g = task_projection.unproject(c_flat);
     short h = terrain.GetTerrainHeight(g);
     if (!RasterBuffer::is_special(h))
