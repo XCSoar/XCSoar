@@ -538,7 +538,7 @@ InfoBoxContentOLC::Update(InfoBoxWindow &infobox)
   }
 
   const ContestResult& result_olc = 
-    XCSoarInterface::Calculated().contest_stats.get_contest_result();
+    XCSoarInterface::Calculated().contest_stats.GetResult();
 
   if (result_olc.score < fixed_one) {
     infobox.SetInvalid();

@@ -19,16 +19,18 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #ifndef CONTEST_STATISTICS_HPP
 #define CONTEST_STATISTICS_HPP
 
 #include "ContestResult.hpp"
 
-struct ContestStatistics {
+struct ContestStatistics
+{
   ContestResult result[3];
   ContestTraceVector solution[3];
 
-  void reset() {
+  void Reset() {
     for (unsigned i = 0; i < 3; ++i) {
       solution[i].clear();
       result[i].Reset();
@@ -43,18 +45,16 @@ struct ContestStatistics {
    * @return Vector of trace points selected for Contest
    */
   gcc_pure
-  const ContestTraceVector& get_contest_solution(const int solution_index=-1) const {
-    return solution[get_index_best(solution_index)];
+  const ContestTraceVector &GetSolution(const int solution_index = -1) const {
+    return solution[GetBestIndex(solution_index)];
   }
 
   gcc_pure
-  const ContestResult& get_contest_result(const int solution_index=-1) const {
-    return result[get_index_best(solution_index)];
+  const ContestResult &GetResult(const int solution_index = -1) const {
+    return result[GetBestIndex(solution_index)];
   }
 
-  int
-  get_index_best(const int solution_index) const
-  {
+  int GetBestIndex(const int solution_index) const {
     if (solution_index >= 0)
       return solution_index;
 

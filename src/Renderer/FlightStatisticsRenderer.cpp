@@ -382,9 +382,9 @@ FlightStatisticsRenderer::RenderOLC(Canvas &canvas, const PixelRect rc,
   canvas.select(Graphics::TracePen);
   DrawTrace(canvas, proj, trace);
   for (unsigned i=0; i< 3; ++i) {
-    if (contest.get_contest_result(i).IsDefined()) {
+    if (contest.GetResult(i).IsDefined()) {
       canvas.select(Graphics::ContestPen[i]);
-      DrawTrace(canvas, proj, contest.get_contest_solution(i));
+      DrawTrace(canvas, proj, contest.GetSolution(i));
     }
   }
 }
@@ -396,13 +396,13 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
 {
   if (task_behaviour.contest == OLC_Plus) {
     const ContestResult& result =
-        derived.contest_stats.get_contest_result(2);
+        derived.contest_stats.GetResult(2);
 
     const ContestResult& result_classic =
-        derived.contest_stats.get_contest_result(0);
+        derived.contest_stats.GetResult(0);
 
     const ContestResult& result_fai =
-        derived.contest_stats.get_contest_result(1);
+        derived.contest_stats.GetResult(1);
 
     TCHAR timetext1[100];
     Units::TimeToTextHHMMSigned(timetext1, (int)result.time);
@@ -422,10 +422,10 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
   } else if (task_behaviour.contest == OLC_DHVXC ||
              task_behaviour.contest == OLC_XContest) {
     const ContestResult& result_free =
-        derived.contest_stats.get_contest_result(0);
+        derived.contest_stats.GetResult(0);
 
     const ContestResult& result_triangle =
-        derived.contest_stats.get_contest_result(1);
+        derived.contest_stats.GetResult(1);
 
     TCHAR timetext1[100];
     Units::TimeToTextHHMMSigned(timetext1, (int)result_free.time);
@@ -454,7 +454,7 @@ FlightStatisticsRenderer::CaptionOLC(TCHAR *sTmp,
     }
 
     const ContestResult& result_olc =
-        derived.contest_stats.get_contest_result(result_index);
+        derived.contest_stats.GetResult(result_index);
 
     TCHAR timetext1[100];
     Units::TimeToTextHHMMSigned(timetext1, (int)result_olc.time);

@@ -159,7 +159,7 @@ ContestManager::UpdateIdle(bool exhaustive)
 void
 ContestManager::Reset()
 {
-  stats.reset();
+  stats.Reset();
   olc_sprint.Reset();
   olc_fai.Reset();
   olc_classic.Reset();
