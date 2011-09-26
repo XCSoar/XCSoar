@@ -30,8 +30,16 @@
  * Memento object to store results of previous distance calculations. 
  */
 class DistanceMemento {
-public:
+  /** Origin point of saved query */
+  mutable GeoPoint origin;
 
+  /** Destination point of previous query */
+  mutable GeoPoint destination;
+
+  /** Distance in meters saved from previous query */
+  mutable fixed value;
+
+public:
   /**
    * Constructor, initialises to trigger update on first call. 
    */
@@ -44,22 +52,6 @@ public:
   gcc_pure
   fixed Distance(const GeoPoint& _origin,
                  const GeoPoint& _destination) const;
-private:
-
-  /**
-   * Origin point of saved query 
-   */
-  mutable GeoPoint origin;
-
-  /**
-   * Destination point of previous query 
-   */
-  mutable GeoPoint destination;
-
-  /**
-   * Distance in meters saved from previous query 
-   */
-  mutable fixed value;
 };
 
 
