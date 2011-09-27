@@ -35,7 +35,6 @@ class OZRenderer;
 class TaskPoint;
 class OrderedTaskPoint;
 class AATPoint;
-struct SETTINGS_MAP;
 struct TaskLook;
 
 enum RenderTaskLayer {
@@ -51,7 +50,6 @@ protected:
   Canvas &canvas, *buffer;
   const WindowProjection &m_proj;
   MapCanvas map_canvas;
-  const SETTINGS_MAP &settings_map;
   const TaskLook &task_look;
   const TaskProjection &task_projection;
 
@@ -69,7 +67,6 @@ protected:
 public:
   RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                   const WindowProjection &_projection,
-                  const SETTINGS_MAP &_settings_map,
                   const TaskLook &task_look,
                   const TaskProjection &_task_projection,
                   OZRenderer &_ozv,

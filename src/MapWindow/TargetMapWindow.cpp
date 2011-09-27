@@ -149,7 +149,6 @@ class RenderTaskPointMap : public RenderTaskPoint {
 public:
   RenderTaskPointMap(Canvas &_canvas, Canvas *_buffer,
                      const WindowProjection &_projection,
-                     const SETTINGS_MAP &_settings_map,
                      const TaskLook &task_look,
                      const TaskProjection &_task_projection,
                      OZRenderer &_ozv,
@@ -157,7 +156,7 @@ public:
                      bool draw_all,
                      const GeoPoint &location):
     RenderTaskPoint(_canvas, _buffer, _projection,
-                    _settings_map, task_look, _task_projection,
+                    task_look, _task_projection,
                     _ozv, draw_bearing, draw_all, location)
     {};
 
@@ -195,7 +194,6 @@ TargetMapWindow::DrawTask(Canvas &canvas)
                            &buffer_canvas,
 #endif
                            projection,
-                           SettingsMap(),
                            task_look,
                            /* we're accessing the OrderedTask here,
                               which may be invalid at this point, but it

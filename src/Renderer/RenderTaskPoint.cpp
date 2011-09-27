@@ -35,12 +35,10 @@ Copyright_License {
 #include "Math/Screen.hpp"
 #include "OZRenderer.hpp"
 #include "NMEA/Info.hpp"
-#include "SettingsMap.hpp"
 #include "Asset.hpp"
 
 RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                                  const WindowProjection &_projection,
-                                 const SETTINGS_MAP &_settings_map,
                                  const TaskLook &_task_look,
                                  const TaskProjection &_task_projection,
                                  OZRenderer &_ozv,
@@ -50,7 +48,6 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
   :canvas(_canvas), buffer(_buffer), m_proj(_projection),
    map_canvas(_canvas, _projection,
               _projection.GetScreenBounds().scale(fixed(1.1))),
-   settings_map(_settings_map),
    task_look(_task_look),
    task_projection(_task_projection),
    draw_bearing(_draw_bearing),

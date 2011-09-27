@@ -497,7 +497,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     proj.Set(rc, task, nmea_info.location);
 
     OZRenderer ozv(task_look, airspace_look, settings_map.airspace);
-    RenderTaskPoint tpv(canvas, NULL, proj, settings_map, task_look,
+    RenderTaskPoint tpv(canvas, NULL, proj, task_look,
                         task.get_task_projection(),
                         ozv, false, true, nmea_info.location);
     ::TaskRenderer dv(tpv, proj.GetScreenBounds());
