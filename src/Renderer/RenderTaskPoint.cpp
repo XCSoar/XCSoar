@@ -89,7 +89,7 @@ RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 }
 
 bool 
-RenderTaskPoint::DoDrawTarget(const TaskPoint &tp) const
+RenderTaskPoint::IsTargetVisible(const TaskPoint &tp) const
 {
   if (!tp.HasTarget() || target_visibility == NONE)
     return false;
@@ -113,7 +113,7 @@ RenderTaskPoint::DrawBearing(const TaskPoint &tp)
 void 
 RenderTaskPoint::DrawTarget(const TaskPoint &tp) 
 {
-  if (!DoDrawTarget(tp))
+  if (!IsTargetVisible(tp))
     return;
 
   RasterPoint sc;

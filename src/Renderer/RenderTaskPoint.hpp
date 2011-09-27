@@ -115,10 +115,10 @@ protected:
   }
 
   gcc_pure
-  bool DoDrawTarget(const TaskPoint &tp) const;
+  bool IsTargetVisible(const TaskPoint &tp) const;
 
   bool DoDrawIsoline(const TaskPoint &tp) const {
-    return DoDrawTarget(tp);
+    return IsTargetVisible(tp);
   }
 
   void DrawBearing(const TaskPoint &tp);
