@@ -95,4 +95,12 @@ Copyright_License {
 #define gcc_restrict
 #endif
 
+/* C++11 features */
+#if defined(__cplusplus) && (GCC_VERSION >= 40500 || defined(__clang__))
+/* explicit conversion operators are supported since gcc 4.5 */
+#define gcc_explicit explicit
+#else
+#define gcc_explicit
+#endif
+
 #endif
