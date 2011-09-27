@@ -31,6 +31,7 @@ Copyright_License {
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"
 #include "WindowProjection.hpp"
+#include "Asset.hpp"
 
 void
 OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
@@ -39,16 +40,36 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
                         const AirspaceRendererSettings &airspace_settings,
                         const AirspaceLook &airspace_look)
 {
-  OZRenderer ozv(look, airspace_look, airspace_settings);
+  fixed scale;
+  GeoPoint center;
+
+  if (is_ancient_hardware()) {
+    scale = fixed(radius) / ((const CylinderZone &)oz).getRadius();
+    center = oz.get_location();
+  } else {
+    GeoBounds bounds(oz.GetBoundaryParametric(fixed_one));
+    for (fixed i = fixed_zero; i < fixed_one; i += fixed_one / 10)
+      bounds.extend(oz.GetBoundaryParametric(i));
+
+    center = bounds.center();
+
+    fixed geo_heigth = GeoPoint(center.longitude, bounds.north).Distance(
+                       GeoPoint(center.longitude, bounds.south));
+    fixed geo_width = GeoPoint(bounds.west, center.latitude).Distance(
+                      GeoPoint(bounds.east, center.latitude));
+
+    scale = fixed(radius * 2) / std::max(geo_heigth, geo_width);
+  }
 
   WindowProjection projection;
   projection.SetScreenSize(radius * 2, radius * 2);
   projection.SetScreenOrigin(pt.x, pt.y);
-  projection.SetGeoLocation(oz.get_location());
-  projection.SetScale(fixed(radius) / ((const CylinderZone &)oz).getRadius());
+  projection.SetGeoLocation(center);
+  projection.SetScale(scale);
   projection.SetScreenAngle(Angle::zero());
   projection.UpdateScreenBounds();
 
+  OZRenderer ozv(look, airspace_look, airspace_settings);
   ozv.Draw(canvas, OZRenderer::LAYER_SHADE, projection, oz, 1);
   ozv.Draw(canvas, OZRenderer::LAYER_INACTIVE, projection, oz, 1);
   ozv.Draw(canvas, OZRenderer::LAYER_ACTIVE, projection, oz, 1);
