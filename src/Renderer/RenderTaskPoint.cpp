@@ -152,7 +152,7 @@ RenderTaskPoint::DrawTaskLine(const GeoPoint &start, const GeoPoint &end)
 void 
 RenderTaskPoint::DrawIsoline(const AATPoint &tp)
 {
-  if (!tp.valid() || !DoDrawIsoline(tp))
+  if (!tp.valid() || !IsTargetVisible(tp))
     return;
 
   AATIsolineSegment seg(tp, task_projection);

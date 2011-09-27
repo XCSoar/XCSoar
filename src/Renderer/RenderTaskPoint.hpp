@@ -117,10 +117,6 @@ protected:
   gcc_pure
   bool IsTargetVisible(const TaskPoint &tp) const;
 
-  bool DoDrawIsoline(const TaskPoint &tp) const {
-    return IsTargetVisible(tp);
-  }
-
   void DrawBearing(const TaskPoint &tp);
   void DrawTarget(const TaskPoint &tp);
   void DrawTaskLine(const GeoPoint &start, const GeoPoint &end);
