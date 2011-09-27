@@ -153,11 +153,11 @@ public:
                      const TaskProjection &_task_projection,
                      OZRenderer &_ozv,
                      const bool draw_bearing,
-                     bool draw_all,
+                     TargetVisibility _target_visibility,
                      const GeoPoint &location):
     RenderTaskPoint(_canvas, _projection,
                     task_look, _task_projection,
-                    _ozv, draw_bearing, draw_all, location)
+                    _ozv, draw_bearing, _target_visibility, location)
     {};
 
 protected:
@@ -192,7 +192,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
                               which may be invalid at this point, but it
                               will be used only if active, so it's ok */
                            task_manager->get_ordered_task().get_task_projection(),
-                           ozv, false, true,
+                           ozv, false, RenderTaskPoint::ALL,
                            Basic().location);
     TaskRenderer dv(tpv, projection.GetScreenBounds());
     dv.Draw(*task);

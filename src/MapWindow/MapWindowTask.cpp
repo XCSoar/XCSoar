@@ -45,11 +45,11 @@ public:
                      const TaskProjection &_task_projection,
                      OZRenderer &_ozv,
                      const bool draw_bearing,
-                     bool draw_all,
+                     TargetVisibility _target_visibility,
                      const GeoPoint &location):
     RenderTaskPoint(_canvas, _projection,
                     task_look, _task_projection,
-                    _ozv, draw_bearing, draw_all, location)
+                    _ozv, draw_bearing, _target_visibility, location)
     {};
 
 protected:
@@ -88,6 +88,8 @@ MapWindow::DrawTask(Canvas &canvas)
   ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *task = task_manager->get_active_task();
   if (task && task->check_task()) {
+    RenderTaskPoint::TargetVisibility target_visibility =
+        IsNearSelf() ? RenderTaskPoint::ACTIVE : RenderTaskPoint::ALL;
 
     OZRenderer ozv(task_look, airspace_renderer.GetLook(),
                               SettingsMap().airspace);
@@ -99,7 +101,7 @@ MapWindow::DrawTask(Canvas &canvas)
                               will be used only if active, so it's ok */
                            task_manager->get_ordered_task().get_task_projection(),
                            ozv, draw_bearing,
-                           !IsNearSelf(),
+                           target_visibility,
                            Basic().location);
     TaskRenderer dv(tpv, render_projection.GetScreenBounds());
     dv.Draw(*task);

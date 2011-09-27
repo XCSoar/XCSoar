@@ -39,6 +39,13 @@ struct TaskLook;
 
 class RenderTaskPoint
 {
+public:
+  enum TargetVisibility {
+    ALL,
+    ACTIVE,
+    NONE,
+  };
+
 protected:
   Canvas &canvas;
   const WindowProjection &m_proj;
@@ -47,7 +54,7 @@ protected:
   const TaskProjection &task_projection;
 
   const bool draw_bearing;
-  const bool draw_all;
+  TargetVisibility target_visibility;
 
   GeoPoint last_point;
   unsigned index;
@@ -71,7 +78,7 @@ public:
                   const TaskProjection &_task_projection,
                   OZRenderer &_ozv,
                   bool _draw_bearing,
-                  bool _draw_all,
+                  TargetVisibility _target_visibility,
                   const GeoPoint &_location);
 
   void ResetIndex() {

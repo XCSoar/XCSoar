@@ -41,7 +41,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
                                  const TaskProjection &_task_projection,
                                  OZRenderer &_ozv,
                                  bool _draw_bearing,
-                                 bool _draw_all,
+                                 TargetVisibility _target_visibility,
                                  const GeoPoint &_location)
   :canvas(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection,
@@ -49,7 +49,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
    task_look(_task_look),
    task_projection(_task_projection),
    draw_bearing(_draw_bearing),
-   draw_all(_draw_all),
+   target_visibility(_target_visibility),
    index(0),
    ozv(_ozv),
    active_index(0),
@@ -91,10 +91,13 @@ RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 bool 
 RenderTaskPoint::DoDrawTarget(const TaskPoint &tp) const
 {
-  if (!tp.HasTarget())
+  if (!tp.HasTarget() || target_visibility == NONE)
     return false;
 
-  return draw_all || PointCurrent();
+  if (target_visibility == ALL)
+    return true;
+
+  return PointCurrent();
 }
 
 void 
