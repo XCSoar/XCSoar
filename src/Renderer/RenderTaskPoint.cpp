@@ -59,22 +59,22 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
 }
 
 void 
-RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp, RenderTaskLayer layer)
+RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 {
   const bool visible = tp.boundingbox_overlaps(bb_screen);
 
-  if (visible && (layer == RENDER_TASK_OZ_SHADE))
+  if (visible && (layer == LAYER_OZ_SHADE))
     // draw shaded part of observation zone
     DrawOZBackground(canvas, tp);
   
-  if (layer == RENDER_TASK_LEG) {
+  if (layer == LAYER_LEG) {
     if (index > 0)
       DrawTaskLine(last_point, tp.GetLocationRemaining());
 
     last_point = tp.GetLocationRemaining();
   }
   
-  if (visible && (layer == RENDER_TASK_OZ_OUTLINE))
+  if (visible && (layer == LAYER_OZ_OUTLINE))
     DrawOZForeground(tp);
 }
 
@@ -179,17 +179,17 @@ RenderTaskPoint::DrawOZForeground(const OrderedTaskPoint &tp)
 }
 
 void
-RenderTaskPoint::Draw(const TaskPoint &tp, RenderTaskLayer layer)
+RenderTaskPoint::Draw(const TaskPoint &tp, Layer layer)
 {
   const OrderedTaskPoint &otp = (const OrderedTaskPoint &)tp;
   const AATPoint &atp = (const AATPoint &)tp;
 
   switch (tp.GetType()) {
   case TaskPoint::UNORDERED:
-    if (layer == RENDER_TASK_LEG)
+    if (layer == LAYER_LEG)
       DrawTaskLine(location, tp.GetLocationRemaining());
 
-    if (layer == RENDER_TASK_SYMBOLS)
+    if (layer == LAYER_SYMBOLS)
       DrawBearing(tp);
 
     index++;
@@ -199,7 +199,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp, RenderTaskLayer layer)
     index = 0;
 
     DrawOrdered(otp, layer);
-    if (layer == RENDER_TASK_SYMBOLS) {
+    if (layer == LAYER_SYMBOLS) {
       DrawBearing(tp);
       DrawTarget(tp);
     }
@@ -210,7 +210,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp, RenderTaskLayer layer)
     index++;
 
     DrawOrdered(otp, layer);
-    if (layer == RENDER_TASK_SYMBOLS) {
+    if (layer == LAYER_SYMBOLS) {
       DrawBearing(tp);
       DrawTarget(tp);
     }
@@ -220,7 +220,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp, RenderTaskLayer layer)
     index++;
 
     DrawOrdered(otp, layer);
-    if (layer == RENDER_TASK_SYMBOLS) {
+    if (layer == LAYER_SYMBOLS) {
       DrawIsoline(atp);
       DrawBearing(tp);
       DrawTarget(tp);
@@ -231,7 +231,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp, RenderTaskLayer layer)
     index++;
 
     DrawOrdered(otp, layer);
-    if (layer == RENDER_TASK_SYMBOLS) {
+    if (layer == LAYER_SYMBOLS) {
       DrawBearing(tp);
       DrawTarget(tp);
     }

@@ -37,13 +37,6 @@ class OrderedTaskPoint;
 class AATPoint;
 struct TaskLook;
 
-enum RenderTaskLayer {
-  RENDER_TASK_OZ_SHADE,
-  RENDER_TASK_LEG,
-  RENDER_TASK_OZ_OUTLINE,
-  RENDER_TASK_SYMBOLS,
-};
-
 class RenderTaskPoint
 {
 protected:
@@ -65,6 +58,13 @@ protected:
   bool mode_optional_start;
 
 public:
+  enum Layer {
+    LAYER_OZ_SHADE,
+    LAYER_LEG,
+    LAYER_OZ_OUTLINE,
+    LAYER_SYMBOLS,
+  };
+
   RenderTaskPoint(Canvas &_canvas,
                   const WindowProjection &_projection,
                   const TaskLook &task_look,
@@ -90,10 +90,10 @@ public:
     mode_optional_start = mode;
   }
 
-  void Draw(const TaskPoint &tp, RenderTaskLayer layer);
+  void Draw(const TaskPoint &tp, Layer layer);
 
 protected:
-  void DrawOrdered(const OrderedTaskPoint &tp, RenderTaskLayer layer);
+  void DrawOrdered(const OrderedTaskPoint &tp, Layer layer);
 
   bool LegActive() const {
     return index >= active_index;
