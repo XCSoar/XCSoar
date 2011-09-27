@@ -69,13 +69,13 @@ private:
    * means it is a "past" task point
    * @return false if nothing is to be drawn in this layer
    */
-  void draw_style(Canvas &canvas, Layer layer, int offset) const;
+  void Prepare(Canvas &canvas, Layer layer, int offset) const;
 
   /**
    * Cleans up the settings after drawing has been finished.  This
    * method must be invoked if draw_style() has returned true.
    */
-  void un_draw_style(Canvas &canvas, Layer layer) const;
+  void Finish(Canvas &canvas, Layer layer) const;
 };
 
 #endif

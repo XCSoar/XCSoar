@@ -44,7 +44,7 @@ OZRenderer::OZRenderer(
 }
 
 void
-OZRenderer::draw_style(Canvas &canvas, Layer layer, int offset) const
+OZRenderer::Prepare(Canvas &canvas, Layer layer, int offset) const
 {
   if (layer == LAYER_SHADE) {
     Color color = airspace_look.colors[settings.colours[AATASK]];
@@ -81,7 +81,7 @@ OZRenderer::draw_style(Canvas &canvas, Layer layer, int offset) const
 }
 
 void
-OZRenderer::un_draw_style(Canvas &canvas, Layer layer) const
+OZRenderer::Finish(Canvas &canvas, Layer layer) const
 {
   if (layer == LAYER_SHADE) {
 #ifdef ENABLE_OPENGL
@@ -100,7 +100,7 @@ OZRenderer::Draw(Canvas &canvas, Layer layer,
   if (layer == LAYER_SHADE && offset < 0)
     return;
 
-  draw_style(canvas, layer, offset);
+  Prepare(canvas, layer, offset);
 
   switch (_oz.shape) {
   case ObservationZonePoint::LINE:
@@ -181,5 +181,5 @@ OZRenderer::Draw(Canvas &canvas, Layer layer,
 
   }
 
-  un_draw_style(canvas, layer);
+  Finish(canvas, layer);
 }
