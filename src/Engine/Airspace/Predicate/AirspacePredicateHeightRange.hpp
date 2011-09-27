@@ -32,8 +32,8 @@ class AbstractAirspace;
  */
 class AirspacePredicateHeightRange: public AirspacePredicate
 {
-  const short h_min;
-  const short h_max;
+  const RoughAltitude h_min;
+  const RoughAltitude h_max;
 
 public:
   /**
@@ -44,7 +44,8 @@ public:
    *
    * @return Initialised object
    */
-  AirspacePredicateHeightRange(const short _h_min, const short _h_max)
+  AirspacePredicateHeightRange(const RoughAltitude _h_min,
+                               const RoughAltitude _h_max)
     :h_min(_h_min), h_max(_h_max) {}
 
   bool condition(const AbstractAirspace &t) const {
@@ -73,7 +74,8 @@ public:
    *
    * @return Initialised object
    */
-  AirspacePredicateHeightRangeExcludeTwo(const short _h_min, const short _h_max,
+  AirspacePredicateHeightRangeExcludeTwo(const RoughAltitude _h_min,
+                                         const RoughAltitude _h_max,
                                          const AGeoPoint& _p1,
                                          const AGeoPoint& _p2)
     :AirspacePredicateHeightRange(_h_min, _h_max), p1(_p1), p2(_p2) {}

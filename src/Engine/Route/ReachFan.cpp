@@ -43,9 +43,9 @@ bool ReachFan::solve(const AGeoPoint origin,
   const short h = terrain
     ? terrain->GetHeight(origin)
     : RasterBuffer::TERRAIN_INVALID;
-  const short h2 = RasterBuffer::is_special(h) ? 0 : h;
+  const RoughAltitude h2(RasterBuffer::is_special(h) ? 0 : h);
 
-  ReachFanParms parms(rpolars, task_proj, terrain_base, terrain);
+  ReachFanParms parms(rpolars, task_proj, (int)terrain_base, terrain);
   const AFlatGeoPoint ao(task_proj.project(origin), origin.altitude);
 
   if (!RasterBuffer::is_invalid(h) &&
@@ -62,7 +62,7 @@ bool ReachFan::solve(const AGeoPoint origin,
   }
 
   if (!RasterBuffer::is_invalid(h)) {
-    parms.terrain_base = h2;
+    parms.terrain_base = (int)h2;
     parms.terrain_counter = 1;
   } else {
     parms.terrain_base = 0;
@@ -88,8 +88,8 @@ ReachFan::is_inside(const GeoPoint origin, const bool turning) const
 bool
 ReachFan::find_positive_arrival(const AGeoPoint dest,
                                 const RoutePolars &rpolars,
-                                short& arrival_height_reach,
-                                short& arrival_height_direct) const
+                                RoughAltitude &arrival_height_reach,
+                                RoughAltitude &arrival_height_direct) const
 {
   arrival_height_reach = -1;
   arrival_height_direct = -1;
@@ -98,7 +98,7 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
     return true;
 
   const FlatGeoPoint d (task_proj.project(dest));
-  const ReachFanParms parms(rpolars, task_proj, terrain_base);
+  const ReachFanParms parms(rpolars, task_proj, (int)terrain_base);
 
   // first calculate direct (terrain-independent height)
 
@@ -113,7 +113,7 @@ ReachFan::find_positive_arrival(const AGeoPoint dest,
 
   // now calculate turning solution
 
-  arrival_height_reach = dest.altitude-1;
+  arrival_height_reach = dest.altitude - RoughAltitude(1);
   root.FindPositiveArrival(d, parms, arrival_height_reach);
 
   return true;

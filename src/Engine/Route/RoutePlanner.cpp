@@ -37,14 +37,14 @@ RoutePlanner::RoutePlanner()
 void
 RoutePlanner::Reset()
 {
-  origin_last = AFlatGeoPoint(0, 0, 0);
-  destination_last = AFlatGeoPoint(0, 0, 0);
+  origin_last = AFlatGeoPoint(0, 0, RoughAltitude(0));
+  destination_last = AFlatGeoPoint(0, 0, RoughAltitude(0));
   dirty = true;
   solution_route.clear();
   planner.Clear();
   unique_links.clear();
-  h_min = (short)-1;
-  h_max = 0;
+  h_min = RoughAltitude(-1);
+  h_max = RoughAltitude(0);
   search_hull.clear();
   reach.reset();
 }
@@ -63,7 +63,7 @@ RoutePlanner::SolveReach(const AGeoPoint &origin, const bool do_solve)
 
 bool
 RoutePlanner::Solve(const AGeoPoint &origin, const AGeoPoint &destination,
-                    const RoutePlannerConfig &config, const short h_ceiling)
+                    const RoutePlannerConfig &config, const RoughAltitude h_ceiling)
 {
   OnSolve(origin, destination);
   rpolars_route.set_config(config, std::max(destination.altitude, origin.altitude),
@@ -213,10 +213,10 @@ RoutePlanner::FindSolution(const RoutePoint &final, Route &this_route) const
       // create intermediate point for part cruise, part glide
 
       const RouteLink l(p, p_last, task_projection);
-      const short vh = rpolars_route.calc_vheight(l);
-      assert(vh>0);
+      const RoughAltitude vh = rpolars_route.calc_vheight(l);
+      assert(vh.IsPositive());
       if (vh > p_last.altitude - p.altitude) { // climb was cut off
-        const fixed f = (fixed)(p_last.altitude - p.altitude) / vh;
+        const fixed f = (p_last.altitude - p.altitude) / vh;
         const GeoPoint gp(task_projection.unproject(p));
         const GeoPoint gp_last(task_projection.unproject(p_last));
         const AGeoPoint gp_int(gp.Interpolate(gp_last, f), p_last.altitude);
@@ -334,7 +334,7 @@ RoutePlanner::AddShortcut(const RoutePoint &node)
   assert(pre.altitude <= node.altitude);
 
   RoutePoint inx;
-  const short vh = rpolars_route.calc_vheight(r_shortcut);
+  const RoughAltitude vh = rpolars_route.calc_vheight(r_shortcut);
   if (!rpolars_route.can_climb())
     r_shortcut.second.altitude = r_shortcut.first.altitude + vh;
 

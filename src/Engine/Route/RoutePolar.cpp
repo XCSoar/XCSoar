@@ -203,12 +203,12 @@ RoutePolars::round_time(const unsigned val)
 unsigned
 RoutePolars::calc_time(const RouteLink& link) const
 {
-  const int dh = link.second.altitude-link.first.altitude;
-  if ((dh<0) && !positive(inv_M))
+  const RoughAltitude dh = link.second.altitude - link.first.altitude;
+  if (dh.IsNegative() && !positive(inv_M))
     return UINT_MAX; // impossible, can't climb
 
   // dh/d = gradient
-  const fixed rho = (dh>0)?
+  const fixed rho = dh.IsPositive() ?
     std::min(fixed_one, (dh*link.inv_d*polar_glide.get_point(link.polar_index).inv_gradient))
     : fixed_zero;
 
@@ -222,17 +222,19 @@ RoutePolars::calc_time(const RouteLink& link) const
 
   if (link.second.altitude > cruise_altitude) {
     // penalise any climbs required above cruise altitude
-    const int h_penalty = std::max(0, link.second.altitude-std::max(cruise_altitude, link.first.altitude));
+    const RoughAltitude h_penalty =
+      std::max(RoughAltitude(0),
+               link.second.altitude - std::max(cruise_altitude, link.first.altitude));
     return t_cruise+(int)(h_penalty*inv_M);
   } else {
     return t_cruise;
   }
 }
 
-short
+RoughAltitude
 RoutePolars::calc_vheight(const RouteLink &link) const
 {
-  return iround(polar_glide.get_point(link.polar_index).gradient * link.d);
+  return RoughAltitude(polar_glide.get_point(link.polar_index).gradient * link.d);
 }
 
 bool
@@ -250,14 +252,14 @@ RoutePolars::check_clearance(const RouteLink &e, const RasterMap* map,
 
   assert(map);
 
-  if (!map->FirstIntersection(start, e.first.altitude,
-                              dest, e.second.altitude,
-                              calc_vheight(e), climb_ceiling,
-                              safety_height(),
+  if (!map->FirstIntersection(start, (short)e.first.altitude,
+                              dest, (short)e.second.altitude,
+                              (short)calc_vheight(e), (short)climb_ceiling,
+                              (short)safety_height(),
                               int_x, int_h))
     return true;
 
-  inp = RoutePoint(proj.project(int_x), int_h);
+  inp = RoutePoint(proj.project(int_x), RoughAltitude(int_h));
   return false;
 }
 
@@ -270,7 +272,7 @@ RoutePolars::generate_intermediate (const RoutePoint& _dest,
                                     const TaskProjection& proj) const
 {
   RouteLink link(_dest, _origin, proj);
-  const short vh = calc_vheight(link)+_dest.altitude;
+  const RoughAltitude vh = calc_vheight(link)+_dest.altitude;
   if (can_climb())
     link.second.altitude = std::max(_dest.altitude, std::min(vh, cruise_altitude));
   else
@@ -345,8 +347,8 @@ RouteLinkBase::is_short() const
 
 void
 RoutePolars::set_config(const RoutePlannerConfig& _config,
-                        const short _cruise_alt,
-                        const short _ceiling_alt)
+                        const RoughAltitude _cruise_alt,
+                        const RoughAltitude _ceiling_alt)
 {
   config = _config;
 
@@ -377,52 +379,52 @@ RoutePolars::intersection(const AGeoPoint& origin,
               RoutePoint(proj.project(origin), origin.altitude), proj);
   if (!positive(e.d)) return false;
 
-  const short h_diff = origin.altitude-destination.altitude;
+  const RoughAltitude h_diff = origin.altitude - destination.altitude;
 
-  if (h_diff <= 0) {
+  if (!h_diff.IsPositive()) {
     // assume gradual climb to destination
-    intx = map->Intersection(origin, origin.altitude-safety_height(),
-                            h_diff, destination);
+    intx = map->Intersection(origin, (short)(origin.altitude - safety_height()),
+                             (short)h_diff, destination);
     return !(intx == destination);
   }
 
-  const short vh = calc_vheight(e);
+  const RoughAltitude vh = calc_vheight(e);
 
   if (h_diff > vh) {
     // have excess height to glide, scan pure glide, will arrive at destination high
 
     intx = map->Intersection(origin,
-                             origin.altitude-safety_height(),
-                             vh, destination);
+                             (short)(origin.altitude - safety_height()),
+                             (short)vh, destination);
     return !(intx == destination);
   }
 
   // mixed cruise-climb then glide segments, do separate searches for each
 
   // proportion of flight as glide
-  const fixed p = fixed(h_diff)/fixed(vh);
+  const fixed p = h_diff / vh;
 
   // location of start of glide
   const GeoPoint p_glide = destination.Interpolate(origin, p);
 
   // intersects during cruise-climb?
-  intx = map->Intersection(origin, origin.altitude-safety_height(),
+  intx = map->Intersection(origin, (short)(origin.altitude - safety_height()),
                            0, destination);
   if (!(intx == destination))
     return true;
 
   // intersects during glide?
-  intx = map->Intersection(p_glide, origin.altitude-safety_height(),
-                           h_diff, destination);
+  intx = map->Intersection(p_glide, (short)(origin.altitude - safety_height()),
+                           (short)h_diff, destination);
   return !(intx == destination);
 }
 
-short
+RoughAltitude
 RoutePolars::calc_glide_arrival(const AFlatGeoPoint& origin,
                                 const FlatGeoPoint& dest,
                                 const TaskProjection& proj) const
 {
-  const RouteLink e(RoutePoint(dest, 0),
+  const RouteLink e(RoutePoint(dest, RoughAltitude(0)),
                     origin, proj);
   return origin.altitude-calc_vheight(e);
 }
@@ -434,9 +436,11 @@ RoutePolars::reach_intercept(const int index,
                              const TaskProjection& proj) const
 {
   const bool valid = map && map->isMapLoaded();
-  const short altitude = origin.altitude-safety_height();
+  const RoughAltitude altitude = origin.altitude - safety_height();
   const AGeoPoint m_origin((GeoPoint)origin, altitude);
   const GeoPoint dest = msl_intercept(index, m_origin, proj);
-  const GeoPoint p = valid? map->Intersection(m_origin, altitude, altitude, dest): dest;
+  const GeoPoint p = valid
+    ? map->Intersection(m_origin, (short)altitude, (short)altitude, dest)
+    : dest;
   return proj.project(p);
 }

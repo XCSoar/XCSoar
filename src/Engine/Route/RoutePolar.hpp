@@ -27,6 +27,8 @@
 #include "Math/fixed.hpp"
 #include "Math/Angle.hpp"
 #include "Navigation/SearchPoint.hpp"
+#include "Rough/RoughAltitude.hpp"
+
 #include <utility>
 
 class GlidePolar;
@@ -337,8 +339,8 @@ public:
                            const TaskProjection &proj,
                            const int sign) const;
 
-  short cruise_altitude; /**< Altitude (m) above which climbs become slow */
-  short climb_ceiling; /**< Altitude (m) above which the aircraft cannot climb */
+  RoughAltitude cruise_altitude; /**< Altitude (m) above which climbs become slow */
+  RoughAltitude climb_ceiling; /**< Altitude (m) above which the aircraft cannot climb */
 
   bool can_climb() const; /**< Whether climbs are possible/allowed */
 
@@ -350,7 +352,7 @@ public:
    *
    * @return Height of glide (m)
    */
-  short calc_vheight(const RouteLink& link) const;
+  RoughAltitude calc_vheight(const RouteLink& link) const;
 
   /**
    * Generate a link from the destination imposing constraints on the origin
@@ -389,8 +391,8 @@ public:
    * @param _ceiling_alt Ceiling altitude (m)
    */
   void set_config(const RoutePlannerConfig& _config,
-                  const short _cruise_alt = SHRT_MAX,
-                  const short _ceiling_alt = SHRT_MAX);
+                  const RoughAltitude _cruise_alt = RoughAltitude::Max(),
+                  const RoughAltitude _ceiling_alt = RoughAltitude::Max());
 
   /**
    * Check whether the configuration requires intersection tests with airspace.
@@ -446,12 +448,12 @@ public:
   /**
    * Calculate height of arrival at destination starting from origin
    */
-  short calc_glide_arrival(const AFlatGeoPoint& origin,
-                           const FlatGeoPoint& dest,
-                           const TaskProjection& proj) const;
+  RoughAltitude calc_glide_arrival(const AFlatGeoPoint& origin,
+                                   const FlatGeoPoint& dest,
+                                   const TaskProjection& proj) const;
 
-  short safety_height() const {
-    return (short)config.safety_height_terrain;
+  RoughAltitude safety_height() const {
+    return RoughAltitude(config.safety_height_terrain);
   }
 
   FlatGeoPoint reach_intercept(const int index,

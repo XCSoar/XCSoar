@@ -123,9 +123,9 @@ protected:
   /** Terrain raster */
   const RasterMap *terrain;
   /** Minimum height scanned during solution (m) */
-  short h_min;
+  RoughAltitude h_min;
   /** Maxmimum height scanned during solution (m) */
-  short h_max;
+  RoughAltitude h_max;
   GlidePolar glide_polar_reach;
 
 private:
@@ -201,7 +201,7 @@ public:
    */
   bool Solve(const AGeoPoint &origin, const AGeoPoint &destination,
              const RoutePlannerConfig &config,
-             const short h_ceiling = SHRT_MAX);
+             const RoughAltitude h_ceiling = RoughAltitude::Max());
 
   /**
    * Solve reach footprint
@@ -264,13 +264,14 @@ public:
    *
    * @return true if check was successful
    */
-  bool FindPositiveArrival(const AGeoPoint &dest, short &arrival_height_reach,
-                           short &arrival_height_direct) const {
+  bool FindPositiveArrival(const AGeoPoint &dest,
+                           RoughAltitude &arrival_height_reach,
+                           RoughAltitude &arrival_height_direct) const {
     return reach.find_positive_arrival(dest, rpolars_reach, arrival_height_reach,
                                        arrival_height_direct);
   }
 
-  short GetTerrainBase() const {
+  RoughAltitude GetTerrainBase() const {
     return reach.get_terrain_base();
   }
 

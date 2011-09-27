@@ -25,6 +25,7 @@
 
 #include "Navigation/TaskProjection.hpp"
 #include "FlatTriangleFanTree.hpp"
+#include "Rough/RoughAltitude.hpp"
 
 class RoutePolars;
 class RasterMap;
@@ -33,7 +34,7 @@ struct GeoBounds;
 class ReachFan {
   TaskProjection task_proj;
   FlatTriangleFanTree root;
-  short terrain_base;
+  RoughAltitude terrain_base;
 
 public:
   ReachFan():terrain_base(0) {};
@@ -49,15 +50,15 @@ public:
 
   bool find_positive_arrival(const AGeoPoint dest,
                              const RoutePolars &rpolars,
-                             short& arrival_height_reach,
-                             short& arrival_height_direct) const;
+                             RoughAltitude &arrival_height_reach,
+                             RoughAltitude &arrival_height_direct) const;
 
   bool is_inside(const GeoPoint origin, const bool turning=true) const;
 
   void accept_in_range(const GeoBounds& bounds,
                        TriangleFanVisitor& visitor) const;
 
-  short get_terrain_base() const {
+  RoughAltitude get_terrain_base() const {
     return terrain_base;
   }
 };

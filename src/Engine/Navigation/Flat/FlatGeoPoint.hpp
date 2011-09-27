@@ -25,6 +25,7 @@
 
 #include "fixed.hpp"
 #include "FastMath.h"
+#include "Rough/RoughAltitude.hpp"
 #include "Compiler.h"
 
 /**
@@ -183,11 +184,12 @@ struct FlatGeoPoint {
  */
 struct AFlatGeoPoint : public FlatGeoPoint {
   /** Nav reference altitude (m) */
-  short altitude;
+  RoughAltitude altitude;
 
-  AFlatGeoPoint(const int x, const int y, const short alt):
+  AFlatGeoPoint(const int x, const int y, const RoughAltitude alt):
     FlatGeoPoint(x,y),altitude(alt) {};
-  AFlatGeoPoint(const FlatGeoPoint &p, const short alt):FlatGeoPoint(p),altitude(alt) {};
+  AFlatGeoPoint(const FlatGeoPoint &p, const RoughAltitude alt)
+    :FlatGeoPoint(p), altitude(alt) {};
   AFlatGeoPoint():FlatGeoPoint(0,0),altitude(0) {};
 
   /** Rounds location to reduce state space */

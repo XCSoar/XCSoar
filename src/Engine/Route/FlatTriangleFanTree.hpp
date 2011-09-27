@@ -91,7 +91,7 @@ public:
 
   bool FindPositiveArrival(const FlatGeoPoint &n,
                            const ReachFanParms &parms,
-                           short &arrival_height) const;
+                           RoughAltitude &arrival_height) const;
 
   void AcceptInRange(const FlatBoundingBox &bb,
                      const TaskProjection &task_proj,
@@ -100,8 +100,8 @@ public:
   void UpdateTerrainBase(const FlatGeoPoint &origin, ReachFanParms &parms);
 
   gcc_pure
-  short DirectArrival(const FlatGeoPoint &dest,
-                      const ReachFanParms &parms) const;
+  RoughAltitude DirectArrival(const FlatGeoPoint &dest,
+                              const ReachFanParms &parms) const;
 };
 
 #endif

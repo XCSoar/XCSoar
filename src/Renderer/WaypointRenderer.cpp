@@ -58,8 +58,8 @@ struct VisibleWaypoint {
 
   RasterPoint point;
 
-  short arrival_height_glide;
-  short arrival_height_terrain;
+  RoughAltitude arrival_height_glide;
+  RoughAltitude arrival_height_terrain;
 
   WaypointRenderer::Reachability reachable;
 
@@ -83,15 +83,15 @@ struct VisibleWaypoint {
     const AGeoPoint p_dest (waypoint->location, elevation);
     if (route_planner.find_positive_arrival(p_dest, arrival_height_terrain,
                                             arrival_height_glide)) {
-      const short h_base = iround(elevation);
+      const RoughAltitude h_base(elevation);
       arrival_height_terrain -= h_base;
       arrival_height_glide -= h_base;
     }
 
-    if (arrival_height_glide <= 0)
+    if (!arrival_height_glide.IsPositive())
       reachable = WaypointRenderer::Unreachable;
     else if (task_behaviour.route_planner.reach_enabled() &&
-             arrival_height_terrain <= 0)
+             !arrival_height_terrain.IsPositive())
       reachable = WaypointRenderer::ReachableStraight;
     else
       reachable = WaypointRenderer::ReachableTerrain;
@@ -218,7 +218,7 @@ protected:
 
     if (settings.arrival_height_display == WP_ARRIVAL_HEIGHT_GLIDE_AND_TERRAIN &&
         arrival_height_glide > 0 && arrival_height_terrain > 0) {
-      int altd = abs(arrival_height_glide - arrival_height_terrain);
+      int altd = abs(int(fixed(arrival_height_glide - arrival_height_terrain)));
       if (altd >= 10 && (altd * 100) / arrival_height_glide > 5) {
         _stprintf(buffer + length, _T("%d/%d%s"), uah_glide,
                   uah_terrain, sAltUnit);
@@ -276,7 +276,8 @@ protected:
 
     TCHAR Buffer[NAME_SIZE+1];
     FormatLabel(Buffer, way_point,
-                vwp.arrival_height_glide, vwp.arrival_height_terrain);
+                (int)vwp.arrival_height_glide,
+                (int)vwp.arrival_height_terrain);
 
     RasterPoint sc = vwp.point;
     if ((vwp.reachable != WaypointRenderer::Unreachable &&

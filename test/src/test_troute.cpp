@@ -34,7 +34,8 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "Operation.hpp"
 
-static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceiling)
+static void
+test_troute(const RasterMap& map, fixed mwind, fixed mc, RoughAltitude ceiling)
 {
   GlidePolar polar(mc);
   SpeedVector wind(Angle::degrees(fixed(0)), mwind);
@@ -76,12 +77,16 @@ static void test_troute(const RasterMap& map, fixed mwind, fixed mc, short ceili
 
     short hdest = map.GetHeight(dest)+100;
 
-    retval = route.Solve(AGeoPoint(origin, map.GetHeight(origin)+100),
-                         AGeoPoint(dest, positive(mc)? hdest: std::max(hdest, (short)3200)),
+    retval = route.Solve(AGeoPoint(origin,
+                                   RoughAltitude(map.GetHeight(origin) + 100)),
+                         AGeoPoint(dest,
+                                   RoughAltitude(positive(mc)
+                                                 ? hdest
+                                                 : std::max(hdest, (short)3200))),
                          config, ceiling);
     char buffer[80];
     sprintf(buffer,"terrain route solve, dir=%g, wind=%g, mc=%g ceiling=%d",
-            (double)ang, (double)mwind, (double)mc, ceiling);
+            (double)ang, (double)mwind, (double)mc, (int)ceiling);
     ok(retval, buffer, 0);
     PrintHelper::print_route(route);
     i++;
@@ -116,9 +121,9 @@ int main(int argc, char** argv) {
   } while (map.IsDirty());
 
   plan_tests(16*3);
-  test_troute(map, fixed_zero, fixed(0.1), 10000);
-  test_troute(map, fixed_zero, fixed_zero, 10000);
-  test_troute(map, fixed(5.0), fixed_one, 10000);
+  test_troute(map, fixed_zero, fixed(0.1), RoughAltitude(10000));
+  test_troute(map, fixed_zero, fixed_zero, RoughAltitude(10000));
+  test_troute(map, fixed(5.0), fixed_one, RoughAltitude(10000));
 
   return exit_status();
 }

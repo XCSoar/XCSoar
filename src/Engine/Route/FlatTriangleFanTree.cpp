@@ -169,14 +169,15 @@ FlatTriangleFanTree::FillGaps(const AFlatGeoPoint &origin, ReachFanParms &parms)
   if (vs.size() > 2 && parms.rpolars.turning_reach()) {
 
     // now check gaps
-    const RoutePoint o(origin, 0);
-    RouteLink e_last(RoutePoint(*vs.begin(), 0), o, parms.task_proj);
+    const RoutePoint o(origin, RoughAltitude(0));
+    RouteLink e_last(RoutePoint(*vs.begin(), RoughAltitude(0)),
+                     o, parms.task_proj);
     for (VertexVector::const_iterator x_last = vs.begin(), end = vs.end(),
          x = x_last + 1; x != end; x_last = x++) {
       if (too_close(*x, origin) || too_close(*x_last, origin))
         continue;
 
-      const RouteLink e(RoutePoint(*x, 0), o, parms.task_proj);
+      const RouteLink e(RoutePoint(*x, RoughAltitude(0)), o, parms.task_proj);
       // check if children need to be added
       CheckGap(origin, e_last, e, parms);
 
@@ -229,7 +230,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
   // a change
 
   const fixed f0 = e_short.d * e_long.inv_d;
-  const short h_loss =
+  const RoughAltitude h_loss =
       parms.rpolars.calc_glide_arrival(n, p_long, parms.task_proj) - n.altitude;
 
   const FlatGeoPoint dp(p_long - n);
@@ -251,7 +252,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
     // find corner point
     const FlatGeoPoint px = (dp * f + n);
     // position x is length (n to p_short) along (n to p_long)
-    const short h = n.altitude + (short)(f * h_loss);
+    const RoughAltitude h = n.altitude + RoughAltitude(f * h_loss);
 
     // altitude calculated from pure glide from n to x
     const AFlatGeoPoint x(px, h);
@@ -274,7 +275,7 @@ FlatTriangleFanTree::CheckGap(const AFlatGeoPoint &n, const RouteLink &e_1,
   return false;
 }
 
-short
+RoughAltitude
 FlatTriangleFanTree::DirectArrival(const FlatGeoPoint &dest,
                                    const ReachFanParms &parms) const
 {
@@ -286,7 +287,7 @@ FlatTriangleFanTree::DirectArrival(const FlatGeoPoint &dest,
 bool
 FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint &n,
                                          const ReachFanParms &parms,
-                                         short &arrival_height) const
+                                         RoughAltitude &arrival_height) const
 {
   if (height < arrival_height)
     return false; // can't possibly improve
@@ -296,7 +297,8 @@ FlatTriangleFanTree::FindPositiveArrival(const FlatGeoPoint &n,
 
   if (is_inside(n)) { // found in this segment
     const AFlatGeoPoint nn(vs[0], height);
-    const short h = parms.rpolars.calc_glide_arrival(nn, n, parms.task_proj);
+    const RoughAltitude h =
+      parms.rpolars.calc_glide_arrival(nn, n, parms.task_proj);
     if (h > arrival_height) {
       arrival_height = h;
       return true;

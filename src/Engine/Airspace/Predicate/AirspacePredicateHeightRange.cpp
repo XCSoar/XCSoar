@@ -26,8 +26,8 @@
 bool
 AirspacePredicateHeightRange::check_height(const AbstractAirspace& t) const
 {
-  return (int)t.GetTop().altitude >= h_min &&
-         (int)t.GetBase().altitude <= h_max;
+  return RoughAltitude(t.GetTop().altitude) >= h_min &&
+    RoughAltitude(t.GetBase().altitude) <= h_max;
 }
 
 bool

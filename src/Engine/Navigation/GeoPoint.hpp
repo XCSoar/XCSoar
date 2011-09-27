@@ -26,6 +26,7 @@ Copyright_License {
 #define XCSOAR_GeoPoint_HPP
 
 #include "Math/Angle.hpp"
+#include "Rough/RoughAltitude.hpp"
 #include "Compiler.h"
 
 struct GeoVector;
@@ -243,8 +244,11 @@ struct GeoPoint {
  * Extension of GeoPoint for altitude (3d location in spherical space)
  */
 struct AGeoPoint: public GeoPoint {
-  AGeoPoint(const GeoPoint p, const short alt):GeoPoint(p),altitude(alt) {};
-  short altitude;                                           /**< Nav reference altitude (m) */
+  /**< Nav reference altitude (m) */
+  RoughAltitude altitude;
+
+  AGeoPoint(const GeoPoint p, const RoughAltitude alt)
+    :GeoPoint(p),altitude(alt) {};
 };
 
 #endif

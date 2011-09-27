@@ -22,7 +22,7 @@
 #include "TerrainRoute.hpp"
 
 TerrainRoute::TerrainRoute():
-  m_inx_terrain(0,0,0)
+  m_inx_terrain(0, 0, RoughAltitude(0))
 {
 
 }

@@ -51,7 +51,7 @@ bool
 RoutePlannerGlue::solve(const AGeoPoint& origin,
                         const AGeoPoint& destination,
                         const RoutePlannerConfig& config,
-                        const short h_ceiling)
+                        const RoughAltitude h_ceiling)
 {
   RasterTerrain::Lease lease(*terrain);
   return m_planner.Solve(origin, destination, config, h_ceiling);
@@ -70,8 +70,8 @@ RoutePlannerGlue::solve_reach(const AGeoPoint& origin, const bool do_solve)
 
 bool
 RoutePlannerGlue::find_positive_arrival(const AGeoPoint& dest,
-                                        short& arrival_height_reach,
-                                        short& arrival_height_direct) const
+                                        RoughAltitude &arrival_height_reach,
+                                        RoughAltitude &arrival_height_direct) const
 {
   return m_planner.FindPositiveArrival(dest, arrival_height_reach, arrival_height_direct);
 }
@@ -92,7 +92,7 @@ RoutePlannerGlue::intersection(const AGeoPoint& origin,
   return m_planner.Intersection(origin, destination, intx);
 }
 
-short
+RoughAltitude
 RoutePlannerGlue::get_terrain_base() const
 {
   return m_planner.GetTerrainBase();

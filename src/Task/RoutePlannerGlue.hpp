@@ -24,6 +24,7 @@
 
 #include "Route/AirspaceRoute.hpp"
 
+struct RoughAltitude;
 class RasterTerrain;
 
 class RoutePlannerGlue {
@@ -52,7 +53,7 @@ public:
   bool solve(const AGeoPoint& origin,
              const AGeoPoint& destination,
              const RoutePlannerConfig& config,
-             const short h_ceiling);
+             const RoughAltitude h_ceiling);
 
   void get_solution(Route& route) const {
     m_planner.GetSolution(route);
@@ -61,8 +62,8 @@ public:
   void solve_reach(const AGeoPoint& origin, const bool do_solve);
 
   bool find_positive_arrival(const AGeoPoint& dest,
-                             short& arrival_height_reach,
-                             short& arrival_height_direct) const;
+                             RoughAltitude &arrival_height_reach,
+                             RoughAltitude &arrival_height_direct) const;
 
   void accept_in_range(const GeoBounds& bounds,
                        TriangleFanVisitor& visitor) const;
@@ -71,7 +72,7 @@ public:
                     const AGeoPoint& destination,
                     GeoPoint& intx) const;
 
-  short get_terrain_base() const;
+  RoughAltitude get_terrain_base() const;
 };
 
 #endif

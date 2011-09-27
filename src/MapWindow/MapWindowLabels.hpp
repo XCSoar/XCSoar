@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_MAP_WINDOW_LABELS_HPP
 #define XCSOAR_MAP_WINDOW_LABELS_HPP
 
+#include "Rough/RoughAltitude.hpp"
 #include "Screen/TextInBox.hpp"
 #include "Screen/Point.hpp"
 #include "Util/NonCopyable.hpp"
@@ -37,7 +38,7 @@ public:
     TCHAR Name[NAME_SIZE+1];
     RasterPoint Pos;
     TextInBoxMode Mode;
-    int AltArivalAGL;
+    RoughAltitude AltArivalAGL;
     bool inTask;
     bool isLandable;
     bool isAirport;
@@ -55,7 +56,8 @@ public:
     :width(_width), height(_height), num_labels(0) {}
 
   void Add(const TCHAR *Name, int X, int Y, TextInBoxMode Mode,
-           int AltArivalAGL, bool inTask, bool isLandable, bool isAirport,
+           RoughAltitude AltArivalAGL,
+           bool inTask, bool isLandable, bool isAirport,
            bool isWatchedWaypoint);
   void Sort();
 

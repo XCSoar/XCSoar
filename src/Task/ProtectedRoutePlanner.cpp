@@ -43,7 +43,7 @@ void
 ProtectedRoutePlanner::SolveRoute(const AGeoPoint &dest,
                                   const AGeoPoint &start,
                                   const RoutePlannerConfig &config,
-                                  const short h_ceiling,
+                                  const RoughAltitude h_ceiling,
                                   Route &solution)
 {
   ExclusiveLease lease(*this);

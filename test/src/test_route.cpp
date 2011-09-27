@@ -75,8 +75,8 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     GeoPoint p_dest(Angle::degrees(fixed(0.8)), Angle::degrees(fixed(-0.7)));
     p_dest += map.GetMapCenter();
 
-    AGeoPoint loc_start(p_start, map.GetHeight(p_start) + 100);
-    AGeoPoint loc_end(p_dest, map.GetHeight(p_dest) + 100);
+    AGeoPoint loc_start(p_start, RoughAltitude(map.GetHeight(p_start) + 100));
+    AGeoPoint loc_end(p_dest, RoughAltitude(map.GetHeight(p_dest) + 100));
 
     AircraftState state;
     GlidePolar glide_polar(fixed(0.1));
@@ -86,7 +86,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     fixed range = fixed(10000) + vec.distance / 2;
 
     state.location = loc_start;
-    state.altitude = fixed(loc_start.altitude);
+    state.altitude = loc_start.altitude;
 
     {
       Airspaces as_route(*airspaces, false);

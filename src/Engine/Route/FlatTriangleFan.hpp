@@ -35,7 +35,7 @@ public:
 protected:
   VertexVector vs;
   FlatBoundingBox bb_self;
-  short height;
+  RoughAltitude height;
 
 public:
   FlatTriangleFan()
@@ -58,7 +58,8 @@ public:
   bool empty() const {
     return vs.empty();
   }
-  short get_height() const {
+
+  RoughAltitude get_height() const {
     return height;
   }
 };

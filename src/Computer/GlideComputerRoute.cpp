@@ -73,8 +73,8 @@ GlideComputerRoute::TerrainWarning(const MoreData &basic,
 
   const GlideResult& sol = calculated.task_stats.current_leg.solution_remaining;
   const AGeoPoint start (as.location, as.altitude);
-  const short h_ceiling = (short)std::max((int)basic.NavAltitude+500,
-                                          (int)calculated.thermal_band.working_band_ceiling);
+  const RoughAltitude h_ceiling(std::max((int)basic.NavAltitude+500,
+                                         (int)calculated.thermal_band.working_band_ceiling));
   // allow at least 500m of climb above current altitude as ceiling, in case
   // there are no actual working band stats.
   const GeoVector &v = sol.vector;
@@ -131,7 +131,7 @@ GlideComputerRoute::Reach(const MoreData &basic, DerivedInfo &calculated,
     protected_route_planner.SolveReach(start, do_solve);
 
     if (do_solve) {
-      calculated.terrain_base = fixed(route_planner.get_terrain_base());
+      calculated.terrain_base = route_planner.get_terrain_base();
       calculated.terrain_base_valid = true;
     }
   }

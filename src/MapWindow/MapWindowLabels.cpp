@@ -73,7 +73,7 @@ MapWaypointLabelListCompare(const void *elem1, const void *elem2)
 
 void
 WaypointLabelList::Add(const TCHAR *Name, int X, int Y, TextInBoxMode Mode,
-                       int AltArivalAGL, bool inTask,
+                       RoughAltitude AltArivalAGL, bool inTask,
                        bool isLandable, bool isAirport, bool isWatchedWaypoint)
 {
   if ((X < - WPCIRCLESIZE)

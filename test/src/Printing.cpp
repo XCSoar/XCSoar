@@ -160,7 +160,7 @@ void PrintHelper::print_route(RoutePlanner& r)
     printf("%.6g %.6g %d # solution\n",
            (double)i->longitude.value_degrees(),
            (double)i->latitude.value_degrees(),
-           i->altitude);
+           (int)i->altitude);
   }
   printf("# solution\n");
   printf("# solution\n");
