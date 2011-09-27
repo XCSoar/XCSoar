@@ -135,13 +135,22 @@ Asterisks belong to the variable name, not to the type name.  Consider
 Some sample code to demonstrate our code style:
 
 \begin{verbatim}
+/**
+ * API documentation for this class.
+ */
 struct TheStruct {
   unsigned an_attribute;
   bool second_attribute;
 
   TheStruct();
 
-  void TheMethod();
+  /**
+   * API documentation for this method.
+   *
+   * @param foo documentation for this parameter
+   * @return documentation for the return value
+   */
+  bool TheMethod(int foo);
 };
 
 TheStruct::TheStruct()
