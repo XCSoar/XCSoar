@@ -126,7 +126,7 @@ protected:
   }
 
   void DrawBearing(const TaskPoint &tp);
-  virtual void DrawTarget(const TaskPoint &tp);
+  void DrawTarget(const TaskPoint &tp);
   void DrawTaskLine(const GeoPoint &start, const GeoPoint &end);
   void DrawIsoline(const AATPoint &tp);
   void DrawOZBackground(Canvas &canvas, const OrderedTaskPoint &tp);

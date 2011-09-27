@@ -113,6 +113,12 @@ RenderTaskPoint::DrawBearing(const TaskPoint &tp)
 void 
 RenderTaskPoint::DrawTarget(const TaskPoint &tp) 
 {
+  if (!DoDrawTarget(tp))
+    return;
+
+  RasterPoint sc;
+  if (m_proj.GeoToScreenIfVisible(tp.GetLocationRemaining(), sc))
+    task_look.target_icon.draw(canvas, sc.x, sc.y);
 }
 
 void 

@@ -36,36 +36,6 @@ Copyright_License {
 #include <stdio.h>
 #include <math.h>
 
-class RenderTaskPointMap: public RenderTaskPoint
-{
-public:
-  RenderTaskPointMap(Canvas &_canvas,
-                     const WindowProjection &_projection,
-                     const TaskLook &task_look,
-                     const TaskProjection &_task_projection,
-                     OZRenderer &_ozv,
-                     const bool draw_bearing,
-                     TargetVisibility _target_visibility,
-                     const GeoPoint &location):
-    RenderTaskPoint(_canvas, _projection,
-                    task_look, _task_projection,
-                    _ozv, draw_bearing, _target_visibility, location)
-    {};
-
-protected:
-  void
-  DrawTarget(const TaskPoint &tp)
-  {
-    if (!DoDrawTarget(tp))
-      return;
-
-    RasterPoint sc;
-    if (m_proj.GeoToScreenIfVisible(tp.GetLocationRemaining(), sc))
-      task_look.target_icon.draw(canvas, sc.x, sc.y);
-  }
-};
-
-
 void
 MapWindow::DrawTask(Canvas &canvas)
 {
@@ -93,16 +63,16 @@ MapWindow::DrawTask(Canvas &canvas)
 
     OZRenderer ozv(task_look, airspace_renderer.GetLook(),
                               SettingsMap().airspace);
-    RenderTaskPointMap tpv(canvas,
-                           render_projection,
-                           task_look,
-                           /* we're accessing the OrderedTask here,
-                              which may be invalid at this point, but it
-                              will be used only if active, so it's ok */
-                           task_manager->get_ordered_task().get_task_projection(),
-                           ozv, draw_bearing,
-                           target_visibility,
-                           Basic().location);
+    RenderTaskPoint tpv(canvas,
+                        render_projection,
+                        task_look,
+                        /* we're accessing the OrderedTask here,
+                           which may be invalid at this point, but it
+                           will be used only if active, so it's ok */
+                        task_manager->get_ordered_task().get_task_projection(),
+                        ozv, draw_bearing,
+                        target_visibility,
+                        Basic().location);
     TaskRenderer dv(tpv, render_projection.GetScreenBounds());
     dv.Draw(*task);
   }
