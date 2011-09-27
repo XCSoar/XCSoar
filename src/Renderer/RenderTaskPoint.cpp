@@ -61,19 +61,31 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
 void 
 RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp, Layer layer)
 {
-  if (layer == LAYER_OZ_SHADE && tp.boundingbox_overlaps(bb_screen))
-    // draw shaded part of observation zone
-    DrawOZBackground(canvas, tp);
-  
-  if (layer == LAYER_LEG) {
+  switch (layer) {
+  case LAYER_OZ_SHADE:
+    if (tp.boundingbox_overlaps(bb_screen))
+      // draw shaded part of observation zone
+      DrawOZBackground(canvas, tp);
+
+    break;
+
+  case LAYER_LEG:
     if (index > 0)
       DrawTaskLine(last_point, tp.GetLocationRemaining());
 
     last_point = tp.GetLocationRemaining();
+
+    break;
+
+  case LAYER_OZ_OUTLINE:
+    if (tp.boundingbox_overlaps(bb_screen))
+      DrawOZForeground(tp);
+
+    break;
+
+  case LAYER_SYMBOLS:
+    return;
   }
-  
-  if (layer == LAYER_OZ_OUTLINE && tp.boundingbox_overlaps(bb_screen))
-    DrawOZForeground(tp);
 }
 
 bool 
