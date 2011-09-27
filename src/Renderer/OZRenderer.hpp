@@ -34,9 +34,7 @@ class Projection;
 struct AirspaceRendererSettings;
 class ObservationZonePoint;
 
-/**
- * Utility class to render an ObzervationZonePoint to a canvas
- */
+/** Utility class to render an ObzervationZonePoint to a canvas */
 class OZRenderer {
 public:
   enum Layer {
@@ -56,9 +54,8 @@ protected:
   const AirspaceRendererSettings &settings;
 
 public:
-  OZRenderer(const TaskLook &task_look,
-                        const AirspaceLook &airspace_look,
-                        const AirspaceRendererSettings &_settings);
+  OZRenderer(const TaskLook &task_look, const AirspaceLook &airspace_look,
+             const AirspaceRendererSettings &_settings);
 
   void Draw(Canvas &canvas, Layer _layer, const Projection &projection,
             const ObservationZonePoint &oz, int offset);
