@@ -58,14 +58,13 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
    index(0),
    ozv(_ozv),
    active_index(0),
-   layer(RENDER_TASK_OZ_SHADE),
    location(_location),
    mode_optional_start(false)
 {
 }
 
 void 
-RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp)
+RenderTaskPoint::DrawOrdered(const OrderedTaskPoint &tp, RenderTaskLayer layer)
 {
   const bool visible = tp.boundingbox_overlaps(bb_screen);
 
@@ -185,7 +184,7 @@ RenderTaskPoint::DrawOZForeground(const OrderedTaskPoint &tp)
 }
 
 void
-RenderTaskPoint::Draw(const TaskPoint &tp)
+RenderTaskPoint::Draw(const TaskPoint &tp, RenderTaskLayer layer)
 {
   const OrderedTaskPoint &otp = (const OrderedTaskPoint &)tp;
   const AATPoint &atp = (const AATPoint &)tp;
@@ -204,7 +203,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
   case TaskPoint::START:
     index = 0;
 
-    DrawOrdered(otp);
+    DrawOrdered(otp, layer);
     if (layer == RENDER_TASK_SYMBOLS) {
       DrawBearing(tp);
       DrawTarget(tp);
@@ -215,7 +214,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
   case TaskPoint::AST:
     index++;
 
-    DrawOrdered(otp);
+    DrawOrdered(otp, layer);
     if (layer == RENDER_TASK_SYMBOLS) {
       DrawBearing(tp);
       DrawTarget(tp);
@@ -225,7 +224,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
   case TaskPoint::AAT:
     index++;
 
-    DrawOrdered(otp);
+    DrawOrdered(otp, layer);
     if (layer == RENDER_TASK_SYMBOLS) {
       DrawIsoline(atp);
       DrawBearing(tp);
@@ -236,7 +235,7 @@ RenderTaskPoint::Draw(const TaskPoint &tp)
   case TaskPoint::FINISH:
     index++;
 
-    DrawOrdered(otp);
+    DrawOrdered(otp, layer);
     if (layer == RENDER_TASK_SYMBOLS) {
       DrawBearing(tp);
       DrawTarget(tp);

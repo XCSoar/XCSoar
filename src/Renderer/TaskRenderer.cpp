@@ -36,11 +36,11 @@ TaskRenderer::Draw(const AbortTask &task)
 {
   tpv.SetActiveIndex(task.getActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
-    tpv.SetLayer((RenderTaskLayer)i);
+    tpv.ResetIndex();
 
     tpv.SetModeOptional(false);
     for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
-      tpv.Draw(task.GetAlternate(j));
+      tpv.Draw(task.GetAlternate(j), (RenderTaskLayer)i);
   }
 }
 
@@ -50,18 +50,18 @@ TaskRenderer::Draw(const OrderedTask &task)
   tpv.SetBoundingBox(task.get_bounding_box(screen_bounds));
   tpv.SetActiveIndex(task.getActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
-    tpv.SetLayer((RenderTaskLayer)i);
+    tpv.ResetIndex();
 
     if (i != RENDER_TASK_SYMBOLS && i != RENDER_TASK_LEG) {
       tpv.SetModeOptional(true);
 
       for (unsigned j = 0, end = task.optional_start_points_size(); j < end; ++j)
-        tpv.Draw(*task.get_optional_start(j));
+        tpv.Draw(*task.get_optional_start(j), (RenderTaskLayer)i);
     }
 
     tpv.SetModeOptional(false);
     for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
-      tpv.Draw(*task.getTaskPoint(j));
+      tpv.Draw(*task.getTaskPoint(j), (RenderTaskLayer)i);
   }
 }
 
@@ -70,10 +70,10 @@ TaskRenderer::Draw(const GotoTask &task)
 {
   tpv.SetActiveIndex(0);
   for (unsigned i = 0; i < 4; i++) {
-    tpv.SetLayer((RenderTaskLayer)i);
+    tpv.ResetIndex();
 
     tpv.SetModeOptional(false);
-    tpv.Draw(*task.GetActiveTaskPoint());
+    tpv.Draw(*task.GetActiveTaskPoint(), (RenderTaskLayer)i);
   }
 }
 

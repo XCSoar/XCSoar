@@ -62,7 +62,6 @@ protected:
   unsigned index;
   OZRenderer &ozv;
   unsigned active_index;
-  RenderTaskLayer layer;
   const GeoPoint location;
   FlatBoundingBox bb_screen;
   bool mode_optional_start;
@@ -78,8 +77,7 @@ public:
                   bool _draw_all,
                   const GeoPoint &_location);
 
-  void SetLayer(RenderTaskLayer set) {
-    layer = set;
+  void ResetIndex() {
     index = 0;
   }
 
@@ -95,10 +93,10 @@ public:
     mode_optional_start = mode;
   }
 
-  void Draw(const TaskPoint &tp);
+  void Draw(const TaskPoint &tp, RenderTaskLayer layer);
 
 protected:
-  void DrawOrdered(const OrderedTaskPoint &tp);
+  void DrawOrdered(const OrderedTaskPoint &tp, RenderTaskLayer layer);
 
   bool LegActive() const {
     return index >= active_index;
