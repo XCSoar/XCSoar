@@ -55,6 +55,16 @@ public:
     return *this;
   }
 
+  gcc_pure gcc_explicit
+  operator short() const {
+    return value;
+  }
+
+  gcc_pure gcc_explicit
+  operator int() const {
+    return value;
+  }
+
   gcc_pure
   operator fixed() const {
     return fixed(value);
