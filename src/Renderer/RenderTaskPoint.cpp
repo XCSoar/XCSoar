@@ -34,8 +34,6 @@ Copyright_License {
 #include "Look/TaskLook.hpp"
 #include "Math/Screen.hpp"
 #include "OZRenderer.hpp"
-#include "NMEA/Info.hpp"
-#include "Asset.hpp"
 
 RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
                                  const WindowProjection &_projection,
