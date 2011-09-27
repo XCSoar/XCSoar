@@ -60,6 +60,14 @@ public:
     return fixed(value);
   }
 
+  bool IsPositive() const {
+    return value > 0;
+  }
+
+  bool IsNegative() const {
+    return value < 0;
+  }
+
   bool operator ==(const RoughAltitude other) const {
     return value == other.value;
   }
