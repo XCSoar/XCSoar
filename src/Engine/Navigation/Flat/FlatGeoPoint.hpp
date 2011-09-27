@@ -181,13 +181,14 @@ struct FlatGeoPoint {
 /**
  * Extension of FlatGeoPoint for altitude (3d location in flat-earth space)
  */
-class AFlatGeoPoint: public FlatGeoPoint {
-public:
+struct AFlatGeoPoint : public FlatGeoPoint {
+  /** Nav reference altitude (m) */
+  short altitude;
+
   AFlatGeoPoint(const int x, const int y, const short alt):
     FlatGeoPoint(x,y),altitude(alt) {};
   AFlatGeoPoint(const FlatGeoPoint &p, const short alt):FlatGeoPoint(p),altitude(alt) {};
   AFlatGeoPoint():FlatGeoPoint(0,0),altitude(0) {};
-  short altitude;                                           /**< Nav reference altitude (m) */
 
   /**
    * Rounds location to reduce state space
