@@ -33,8 +33,6 @@ class Canvas;
 class Projection;
 struct AirspaceRendererSettings;
 class ObservationZonePoint;
-class CylinderZone;
-class SectorZone;
 
 /**
  * Utility class to render an ObzervationZonePoint to a canvas
