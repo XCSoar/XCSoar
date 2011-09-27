@@ -111,7 +111,7 @@ MapWindow::DrawTask(Canvas &canvas)
                            !IsNearSelf(),
                            Basic().location);
     RenderTask dv(tpv, render_projection.GetScreenBounds());
-    ((TaskVisitor &)dv).Visit(*task);
+    dv.Draw(*task);
   }
 
   if (draw_route)

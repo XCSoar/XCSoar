@@ -204,7 +204,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
                            ozv, false, true,
                            Basic().location);
     RenderTask dv(tpv, projection.GetScreenBounds());
-    ((TaskVisitor &)dv).Visit(*task);
+    dv.Draw(*task);
   }
 }
 

@@ -76,3 +76,21 @@ RenderTask::Visit(const GotoTask &task)
     tpv.Draw(*task.GetActiveTaskPoint());
   }
 }
+
+void
+RenderTask::Draw(const TaskInterface &task)
+{
+  switch (task.type) {
+  case TaskInterface::ORDERED:
+    Visit((const OrderedTask &)task);
+    break;
+
+  case TaskInterface::ABORT:
+    Visit((const AbortTask &)task);
+    break;
+
+  case TaskInterface::GOTO:
+    Visit((const GotoTask &)task);
+    break;
+  }
+}
