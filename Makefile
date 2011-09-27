@@ -378,7 +378,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/CompareProjection.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
-	$(SRC)/Renderer/RenderTask.cpp \
+	$(SRC)/Renderer/TaskRenderer.cpp \
 	$(SRC)/Renderer/AircraftRenderer.cpp \
 	$(SRC)/Renderer/AirspaceRenderer.cpp \
 	$(SRC)/Renderer/AirspacePreviewRenderer.cpp \

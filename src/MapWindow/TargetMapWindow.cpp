@@ -29,7 +29,7 @@ Copyright_License {
 #include "Terrain/RasterTerrain.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Look/TaskLook.hpp"
-#include "Renderer/RenderTask.hpp"
+#include "Renderer/TaskRenderer.hpp"
 #include "Renderer/RenderTaskPoint.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/AircraftRenderer.hpp"
@@ -203,7 +203,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
                            task_manager->get_ordered_task().get_task_projection(),
                            ozv, false, true,
                            Basic().location);
-    RenderTask dv(tpv, projection.GetScreenBounds());
+    TaskRenderer dv(tpv, projection.GetScreenBounds());
     dv.Draw(*task);
   }
 }

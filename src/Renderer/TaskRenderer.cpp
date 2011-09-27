@@ -21,18 +21,18 @@ Copyright_License {
 }
 */
 
-#include "RenderTask.hpp"
+#include "TaskRenderer.hpp"
 #include "Task/Tasks/AbstractTask.hpp"
 #include "Task/Tasks/GotoTask.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 #include "Task/Tasks/AbortTask.hpp"
 #include "RenderTaskPoint.hpp"
 
-RenderTask::RenderTask(RenderTaskPoint &_tpv, GeoBounds _screen_bounds)
+TaskRenderer::TaskRenderer(RenderTaskPoint &_tpv, GeoBounds _screen_bounds)
   :tpv(_tpv), screen_bounds(_screen_bounds) {}
 
 void 
-RenderTask::Draw(const AbortTask &task)
+TaskRenderer::Draw(const AbortTask &task)
 {
   tpv.SetActiveIndex(task.getActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
@@ -45,7 +45,7 @@ RenderTask::Draw(const AbortTask &task)
 }
 
 void 
-RenderTask::Draw(const OrderedTask &task)
+TaskRenderer::Draw(const OrderedTask &task)
 {
   tpv.SetBoundingBox(task.get_bounding_box(screen_bounds));
   tpv.SetActiveIndex(task.getActiveIndex());
@@ -66,7 +66,7 @@ RenderTask::Draw(const OrderedTask &task)
 }
 
 void 
-RenderTask::Draw(const GotoTask &task)
+TaskRenderer::Draw(const GotoTask &task)
 {
   tpv.SetActiveIndex(0);
   for (unsigned i = 0; i < 4; i++) {
@@ -78,7 +78,7 @@ RenderTask::Draw(const GotoTask &task)
 }
 
 void
-RenderTask::Draw(const TaskInterface &task)
+TaskRenderer::Draw(const TaskInterface &task)
 {
   switch (task.type) {
   case TaskInterface::ORDERED:

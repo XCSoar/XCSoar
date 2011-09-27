@@ -27,7 +27,7 @@
 #include "BackgroundDrawHelper.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/RenderTaskPoint.hpp"
-#include "Renderer/RenderTask.hpp"
+#include "Renderer/TaskRenderer.hpp"
 #include "Engine/Task/Tasks/BaseTask/OrderedTaskPoint.hpp"
 #include "Engine/Task/Tasks/OrderedTask.hpp"
 #include "SettingsMap.hpp"
@@ -48,7 +48,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
   RenderTaskPoint tpv(canvas, NULL, projection, settings_map, task_look,
                       task.get_task_projection(),
                       ozv, false, false, location);
-  RenderTask dv(tpv, projection.GetScreenBounds());
+  TaskRenderer dv(tpv, projection.GetScreenBounds());
   dv.Draw(task);
 }
 

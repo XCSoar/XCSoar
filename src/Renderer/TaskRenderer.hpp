@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_RENDER_TASK_HPP
-#define XCSOAR_RENDER_TASK_HPP
+#ifndef XCSOAR_TASK_RENDERER_HPP
+#define XCSOAR_TASK_RENDERER_HPP
 
 #include "Geo/GeoBounds.hpp"
 
@@ -33,13 +33,13 @@ class OrderedTask;
 class GotoTask;
 class TaskInterface;
 
-class RenderTask
+class TaskRenderer
 {
   RenderTaskPoint &tpv;
   GeoBounds screen_bounds;
 
 public:
-  RenderTask(RenderTaskPoint &_tpv, GeoBounds _screen_bounds);
+  TaskRenderer(RenderTaskPoint &_tpv, GeoBounds _screen_bounds);
 
   void Draw(const TaskInterface &task);
   void Draw(const AbortTask &task);

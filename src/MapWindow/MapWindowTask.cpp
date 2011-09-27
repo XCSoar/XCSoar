@@ -26,7 +26,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "Math/Earth.hpp"
 #include "Task/ProtectedTaskManager.hpp"
-#include "Renderer/RenderTask.hpp"
+#include "Renderer/TaskRenderer.hpp"
 #include "Renderer/RenderTaskPoint.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Screen/Layout.hpp"
@@ -110,7 +110,7 @@ MapWindow::DrawTask(Canvas &canvas)
                            ozv, draw_bearing,
                            !IsNearSelf(),
                            Basic().location);
-    RenderTask dv(tpv, render_projection.GetScreenBounds());
+    TaskRenderer dv(tpv, render_projection.GetScreenBounds());
     dv.Draw(*task);
   }
 
