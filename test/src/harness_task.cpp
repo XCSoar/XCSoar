@@ -28,7 +28,6 @@
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
-#include "Task/Visitors/TaskVisitor.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
 #include "Task/Visitors/ObservationZoneVisitor.hpp"
 
