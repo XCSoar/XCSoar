@@ -49,7 +49,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
                       task.get_task_projection(),
                       ozv, false, false, location);
   RenderTask dv(tpv, projection.GetScreenBounds());
-  dv.Visit(task);
+  dv.Draw(task);
 }
 
 void

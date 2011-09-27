@@ -32,7 +32,7 @@ RenderTask::RenderTask(RenderTaskPoint &_tpv, GeoBounds _screen_bounds)
   :tpv(_tpv), screen_bounds(_screen_bounds) {}
 
 void 
-RenderTask::Visit(const AbortTask &task)
+RenderTask::Draw(const AbortTask &task)
 {
   tpv.SetActiveIndex(task.getActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
@@ -45,7 +45,7 @@ RenderTask::Visit(const AbortTask &task)
 }
 
 void 
-RenderTask::Visit(const OrderedTask &task)
+RenderTask::Draw(const OrderedTask &task)
 {
   tpv.SetBoundingBox(task.get_bounding_box(screen_bounds));
   tpv.SetActiveIndex(task.getActiveIndex());
@@ -66,7 +66,7 @@ RenderTask::Visit(const OrderedTask &task)
 }
 
 void 
-RenderTask::Visit(const GotoTask &task)
+RenderTask::Draw(const GotoTask &task)
 {
   tpv.SetActiveIndex(0);
   for (unsigned i = 0; i < 4; i++) {
@@ -82,15 +82,15 @@ RenderTask::Draw(const TaskInterface &task)
 {
   switch (task.type) {
   case TaskInterface::ORDERED:
-    Visit((const OrderedTask &)task);
+    Draw((const OrderedTask &)task);
     break;
 
   case TaskInterface::ABORT:
-    Visit((const AbortTask &)task);
+    Draw((const AbortTask &)task);
     break;
 
   case TaskInterface::GOTO:
-    Visit((const GotoTask &)task);
+    Draw((const GotoTask &)task);
     break;
   }
 }

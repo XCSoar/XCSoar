@@ -42,9 +42,9 @@ public:
   RenderTask(RenderTaskPoint &_tpv, GeoBounds _screen_bounds);
 
   void Draw(const TaskInterface &task);
-  void Visit(const AbortTask &task);
-  void Visit(const OrderedTask &task);
-  void Visit(const GotoTask &task);
+  void Draw(const AbortTask &task);
+  void Draw(const OrderedTask &task);
+  void Draw(const GotoTask &task);
 };
 
 #endif

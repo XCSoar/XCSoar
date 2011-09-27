@@ -501,7 +501,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
                         task.get_task_projection(),
                         ozv, false, true, nmea_info.location);
     ::RenderTask dv(tpv, proj.GetScreenBounds());
-    dv.Visit(task);
+    dv.Draw(task);
   }
 
   if (trace_computer != NULL) {
