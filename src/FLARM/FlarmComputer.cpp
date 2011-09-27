@@ -87,7 +87,7 @@ FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
     // Calculate absolute altitude
     traffic.altitude_available = basic.gps_altitude_available;
     if (traffic.altitude_available)
-      traffic.altitude = traffic.relative_altitude + basic.gps_altitude;
+      traffic.altitude = traffic.relative_altitude + RoughAltitude(basic.gps_altitude);
 
     // Calculate average climb rate
     traffic.climb_rate_avg30s_available = traffic.altitude_available;

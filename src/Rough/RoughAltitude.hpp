@@ -49,6 +49,71 @@ public:
   operator fixed() const {
     return fixed(value);
   }
+
+  bool operator ==(const RoughAltitude other) const {
+    return value == other.value;
+  }
+
+  bool operator !=(const RoughAltitude other) const {
+    return value != other.value;
+  }
+
+  bool operator <(const RoughAltitude other) const {
+    return value < other.value;
+  }
+
+  bool operator <=(const RoughAltitude other) const {
+    return value <= other.value;
+  }
+
+  bool operator >(const RoughAltitude other) const {
+    return value > other.value;
+  }
+
+  bool operator >=(const RoughAltitude other) const {
+    return value >= other.value;
+  }
+
+  gcc_pure
+  RoughAltitude operator+(const RoughAltitude other) const {
+    return RoughAltitude(value + other.value);
+  }
+
+  gcc_pure
+  RoughAltitude operator-(const RoughAltitude other) const {
+    return RoughAltitude(value - other.value);
+  }
+
+  gcc_pure
+  fixed operator*(const fixed other) const {
+    return value * other;
+  }
+
+  gcc_pure
+  fixed operator/(const fixed other) const {
+    return fixed(value) / other;
+  }
+
+  gcc_pure
+  fixed operator/(const RoughAltitude other) const {
+    return fixed(value) / other.value;
+  }
+
+  RoughAltitude &operator+=(const RoughAltitude other) {
+    value -= other.value;
+    return *this;
+  }
+
+  RoughAltitude &operator-=(const RoughAltitude other) {
+    value -= other.value;
+    return *this;
+  }
 };
+
+gcc_pure
+static inline
+fixed operator*(const fixed a, const RoughAltitude b) {
+  return b * a;
+}
 
 #endif
