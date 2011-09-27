@@ -37,7 +37,7 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Asset.hpp"
 
-RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
+RenderTaskPoint::RenderTaskPoint(Canvas &_canvas,
                                  const WindowProjection &_projection,
                                  const TaskLook &_task_look,
                                  const TaskProjection &_task_projection,
@@ -45,7 +45,7 @@ RenderTaskPoint::RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
                                  bool _draw_bearing,
                                  bool _draw_all,
                                  const GeoPoint &_location)
-  :canvas(_canvas), buffer(_buffer), m_proj(_projection),
+  :canvas(_canvas), m_proj(_projection),
    map_canvas(_canvas, _projection,
               _projection.GetScreenBounds().scale(fixed(1.1))),
    task_look(_task_look),

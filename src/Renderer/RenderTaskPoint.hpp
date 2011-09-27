@@ -47,7 +47,7 @@ enum RenderTaskLayer {
 class RenderTaskPoint
 {
 protected:
-  Canvas &canvas, *buffer;
+  Canvas &canvas;
   const WindowProjection &m_proj;
   MapCanvas map_canvas;
   const TaskLook &task_look;
@@ -65,7 +65,7 @@ protected:
   bool mode_optional_start;
 
 public:
-  RenderTaskPoint(Canvas &_canvas, Canvas *_buffer,
+  RenderTaskPoint(Canvas &_canvas,
                   const WindowProjection &_projection,
                   const TaskLook &task_look,
                   const TaskProjection &_task_projection,

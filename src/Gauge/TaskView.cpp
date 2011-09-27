@@ -45,7 +45,7 @@ PaintTask(Canvas &canvas, const WindowProjection &projection,
   background.Draw(canvas, projection, settings_map.terrain);
 
   OZRenderer ozv(task_look, airspace_look, settings_map.airspace);
-  RenderTaskPoint tpv(canvas, NULL, projection, task_look,
+  RenderTaskPoint tpv(canvas, projection, task_look,
                       task.get_task_projection(),
                       ozv, false, false, location);
   TaskRenderer dv(tpv, projection.GetScreenBounds());

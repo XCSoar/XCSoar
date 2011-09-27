@@ -147,7 +147,7 @@ TargetMapWindow::RenderAirspace(Canvas &canvas)
 
 class RenderTaskPointMap : public RenderTaskPoint {
 public:
-  RenderTaskPointMap(Canvas &_canvas, Canvas *_buffer,
+  RenderTaskPointMap(Canvas &_canvas,
                      const WindowProjection &_projection,
                      const TaskLook &task_look,
                      const TaskProjection &_task_projection,
@@ -155,7 +155,7 @@ public:
                      const bool draw_bearing,
                      bool draw_all,
                      const GeoPoint &location):
-    RenderTaskPoint(_canvas, _buffer, _projection,
+    RenderTaskPoint(_canvas, _projection,
                     task_look, _task_projection,
                     _ozv, draw_bearing, draw_all, location)
     {};
@@ -186,13 +186,6 @@ TargetMapWindow::DrawTask(Canvas &canvas)
     OZRenderer ozv(task_look, airspace_renderer.GetLook(),
                               SettingsMap().airspace);
     RenderTaskPointMap tpv(canvas,
-#ifdef ENABLE_OPENGL
-                           /* OpenGL doesn't have the BufferCanvas
-                              class */
-                           NULL,
-#else
-                           &buffer_canvas,
-#endif
                            projection,
                            task_look,
                            /* we're accessing the OrderedTask here,
