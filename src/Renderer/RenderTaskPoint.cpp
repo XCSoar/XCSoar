@@ -103,7 +103,7 @@ RenderTaskPoint::DoDrawTarget(const TaskPoint &tp) const
 void 
 RenderTaskPoint::DrawBearing(const TaskPoint &tp) 
 {
-  if (!DoDrawBearing(tp)) 
+  if (!draw_bearing || !PointCurrent())
     return;
 
   canvas.select(task_look.bearing_pen);

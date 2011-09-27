@@ -114,10 +114,6 @@ protected:
     return index == active_index;
   }
 
-  bool DoDrawBearing(const TaskPoint &tp) const {
-    return draw_bearing && PointCurrent();
-  }
-
   gcc_pure
   bool DoDrawTarget(const TaskPoint &tp) const;
 
