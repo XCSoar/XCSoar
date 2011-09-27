@@ -26,6 +26,8 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
+#include <limits.h>
+
 /**
  * Store an rough altitude value, when the exact value is not needed.
  *
@@ -39,6 +41,14 @@ public:
   explicit RoughAltitude(short _value):value(_value) {}
   explicit RoughAltitude(int _value):value((short)_value) {}
   RoughAltitude(fixed _value):value(_value) {}
+
+  /**
+   * Create a representation of the largest possible value.
+   */
+  gcc_const
+  static RoughAltitude Max() {
+    return RoughAltitude((short)SHRT_MAX);
+  }
 
   RoughAltitude &operator=(short other) {
     value = other;
