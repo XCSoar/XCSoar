@@ -40,6 +40,16 @@ public:
   explicit RoughAltitude(int _value):value((short)_value) {}
   RoughAltitude(fixed _value):value(_value) {}
 
+  RoughAltitude &operator=(short other) {
+    value = other;
+    return *this;
+  }
+
+  RoughAltitude &operator=(int other) {
+    value = (short)other;
+    return *this;
+  }
+
   RoughAltitude &operator=(fixed other) {
     value = other;
     return *this;
