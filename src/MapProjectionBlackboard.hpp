@@ -31,10 +31,13 @@ class MapProjectionBlackboard
 {
 protected:
   MapWindowProjection map_projection;
+
 public:
   gcc_const
-  const MapWindowProjection &MapProjection() const
-  { return map_projection; };
+  const MapWindowProjection &MapProjection() const {
+    return map_projection;
+  }
+
   void ReadMapProjection(const MapWindowProjection &map);
 };
 
