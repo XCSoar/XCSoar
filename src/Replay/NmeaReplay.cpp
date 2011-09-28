@@ -46,13 +46,13 @@ NmeaReplay::Stop()
 {
   CloseFile();
 
-  Enabled = false;
+  enabled = false;
 }
 
 void
 NmeaReplay::Start()
 {
-  if (Enabled)
+  if (enabled)
     Stop();
 
   if (!OpenFile()) {
@@ -60,7 +60,7 @@ NmeaReplay::Start()
     return;
   }
 
-  Enabled = true;
+  enabled = true;
 }
 
 const TCHAR*
@@ -98,21 +98,21 @@ NmeaReplay::ReadUntilRMC(bool ignore)
 bool
 NmeaReplay::Update()
 {
-  if (!Enabled)
+  if (!enabled)
     return false;
 
-  if (!update_time())
+  if (!UpdateTime())
     return true;
 
-  for (fixed i = fixed_one; i <= TimeScale; i += fixed_one) {
-    Enabled = ReadUntilRMC(i != TimeScale);
-    if (!Enabled) {
+  for (fixed i = fixed_one; i <= time_scale; i += fixed_one) {
+    enabled = ReadUntilRMC(i != time_scale);
+    if (!enabled) {
       Stop();
       return false;
     }
   }
 
-  assert(Enabled);
+  assert(enabled);
   return true;
 }
 
@@ -142,7 +142,7 @@ NmeaReplay::CloseFile()
 }
 
 bool
-NmeaReplay::update_time()
+NmeaReplay::UpdateTime()
 {
   return true;
 }

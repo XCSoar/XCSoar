@@ -112,11 +112,11 @@ Replay::GetTimeScale()
 {
   switch (mode) {
   case MODE_IGC:
-    return Igc.TimeScale;
+    return Igc.time_scale;
   case MODE_NMEA:
-    return Nmea.TimeScale;
+    return Nmea.time_scale;
   case MODE_DEMO:
-    return Demo.TimeScale;
+    return Demo.time_scale;
   case MODE_NULL:
     break;
   };
@@ -126,7 +126,7 @@ Replay::GetTimeScale()
 void
 Replay::SetTimeScale(const fixed TimeScale)
 {
-  Igc.TimeScale = TimeScale;
-  Nmea.TimeScale = TimeScale;
-  Demo.TimeScale = TimeScale;
+  Igc.time_scale = TimeScale;
+  Nmea.time_scale = TimeScale;
+  Demo.time_scale = TimeScale;
 }

@@ -57,17 +57,17 @@ IgcReplay::ReadPoint(IGCFix &fix)
 }
 
 bool
-IgcReplay::update_time()
+IgcReplay::UpdateTime()
 {
   const fixed t_simulation_last = t_simulation;
 
-  t_simulation += fixed_one * TimeScale;
+  t_simulation += fixed_one * time_scale;
 
   return (t_simulation > t_simulation_last);
 }
 
 void
-IgcReplay::reset_time()
+IgcReplay::ResetTime()
 {
   t_simulation = fixed_zero;
 }
@@ -79,13 +79,13 @@ IgcReplay::Stop()
 
   on_stop();
 
-  Enabled = false;
+  enabled = false;
 }
 
 void
 IgcReplay::Start()
 {
-  if (Enabled)
+  if (enabled)
     Stop();
 
   if (!OpenFile()) {
@@ -94,10 +94,10 @@ IgcReplay::Start()
   }
 
   cli.Reset();
-  reset_time();
+  ResetTime();
   on_reset();
 
-  Enabled = true;
+  enabled = true;
 }
 
 const TCHAR*
@@ -119,10 +119,10 @@ IgcReplay::SetFilename(const TCHAR *name)
 bool
 IgcReplay::Update()
 {
-  if (!Enabled)
+  if (!enabled)
     return false;
 
-  if (positive(t_simulation) && !update_time())
+  if (positive(t_simulation) && !UpdateTime())
     return true;
 
   // if need a new point

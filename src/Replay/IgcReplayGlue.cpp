@@ -35,21 +35,21 @@ IgcReplayGlue::IgcReplayGlue(Logger *_logger)
 }
 
 bool
-IgcReplayGlue::update_time()
+IgcReplayGlue::UpdateTime()
 {
   // Allow for poor time slicing, we never get called more
   // than 4 times per second, so this will yield 1 second updates
   if (!clock.check(760))
     return false;
 
-  t_simulation += TimeScale * max(clock.elapsed(), 0) / 1000;
+  t_simulation += time_scale * max(clock.elapsed(), 0) / 1000;
   clock.update();
 
   return true;
 }
 
 void
-IgcReplayGlue::reset_time()
+IgcReplayGlue::ResetTime()
 {
   clock.reset();
   t_simulation = fixed_zero;

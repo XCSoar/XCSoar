@@ -48,8 +48,8 @@ public:
   virtual void Stop();
 
 protected:
-  virtual bool update_time();
-  virtual void reset_time();
+  virtual bool UpdateTime();
+  virtual void ResetTime();
   virtual void on_bad_file();
   virtual void on_sentence(const char *line);
 };

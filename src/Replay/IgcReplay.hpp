@@ -57,8 +57,8 @@ public:
   void SetFilename(const TCHAR *name);
 
 protected:
-  virtual bool update_time();
-  virtual void reset_time();
+  virtual bool UpdateTime();
+  virtual void ResetTime();
 
   virtual void on_reset() = 0;
   virtual void on_stop() = 0;

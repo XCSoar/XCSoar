@@ -48,8 +48,8 @@ public:
   void SetFilename(const TCHAR *name);
 
 protected:
-  virtual bool update_time();
-  virtual void reset_time() = 0;
+  virtual bool UpdateTime();
+  virtual void ResetTime() = 0;
   virtual void on_bad_file() = 0;
   virtual void on_sentence(const char *line) = 0;
 

@@ -103,13 +103,13 @@ NmeaReplayGlue::on_bad_file()
 }
 
 bool
-NmeaReplayGlue::update_time()
+NmeaReplayGlue::UpdateTime()
 {
   return clock.check_update(1000);
 }
 
 void
-NmeaReplayGlue::reset_time()
+NmeaReplayGlue::ResetTime()
 {
   clock.reset();
 }

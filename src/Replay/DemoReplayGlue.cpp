@@ -92,7 +92,7 @@ private:
 
 
 bool
-DemoReplayGlue::update_time()
+DemoReplayGlue::UpdateTime()
 {
   if (!clock.check(1000))
     return false;
@@ -101,7 +101,7 @@ DemoReplayGlue::update_time()
 }
 
 void
-DemoReplayGlue::reset_time()
+DemoReplayGlue::ResetTime()
 {
   clock.reset();
 }
@@ -136,10 +136,10 @@ DemoReplayGlue::on_stop()
 bool
 DemoReplayGlue::Update()
 {
-  if (!Enabled)
+  if (!enabled)
     return false;
 
-  if (!update_time())
+  if (!UpdateTime())
     return true;
 
   fixed floor_alt = fixed_300;

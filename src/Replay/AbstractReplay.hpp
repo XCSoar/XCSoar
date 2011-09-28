@@ -29,24 +29,24 @@ Copyright_License {
 class AbstractReplay 
 {
 public:
-  fixed TimeScale;
+  fixed time_scale;
 
 protected:
-  bool Enabled;
+  bool enabled;
 
 public:
-  AbstractReplay(): TimeScale(fixed_one),Enabled(false) {};
+  AbstractReplay(): time_scale(fixed_one), enabled(false) {}
   virtual bool Update() = 0;
   virtual void Stop() = 0;
   virtual void Start() = 0;
 
   bool IsEnabled() const {
-    return Enabled;
+    return enabled;
   }
 
 protected:
-  virtual bool update_time() = 0;
-  virtual void reset_time() = 0;
+  virtual bool UpdateTime() = 0;
+  virtual void ResetTime() = 0;
 };
 
 #endif
