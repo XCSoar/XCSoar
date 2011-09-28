@@ -31,11 +31,11 @@ ThermalBandInfo::Clear()
   working_band_height = working_band_ceiling = fixed_zero;
   working_band_fraction = fixed_zero;
 
-  MaxThermalHeight = fixed_zero;
+  max_thermal_height = fixed_zero;
 
   for (unsigned i = 0; i < NUMTHERMALBUCKETS; i++) {
-    ThermalProfileW[i] = fixed_zero;
-    ThermalProfileN[i] = 0;
+    thermal_profile_w[i] = fixed_zero;
+    thermal_profile_n[i] = 0;
   }
 }
 
@@ -45,10 +45,10 @@ ThermalBandInfo::BucketForHeight(fixed height) const
   if (negative(height))
     return 0;
 
-  if (height >= MaxThermalHeight)
+  if (height >= max_thermal_height)
     return NUMTHERMALBUCKETS - 1;
 
-  int bucket = NUMTHERMALBUCKETS * height / MaxThermalHeight;
+  int bucket = NUMTHERMALBUCKETS * height / max_thermal_height;
   if (bucket < 0)
     return 0;
 
@@ -63,20 +63,20 @@ ThermalBandInfo::BucketHeight(unsigned bucket) const
 {
   assert(bucket < NUMTHERMALBUCKETS);
 
-  return bucket * MaxThermalHeight / NUMTHERMALBUCKETS;
+  return bucket * max_thermal_height / NUMTHERMALBUCKETS;
 }
 
 void
 ThermalBandInfo::Add(const fixed height, const fixed total_energy_vario)
 {
-  if (height > MaxThermalHeight) {
+  if (height > max_thermal_height) {
     // moved beyond ceiling, so redistribute buckets
     Expand(height);
   }
 
   const unsigned bucket = BucketForHeight(height);
-  ThermalProfileW[bucket] += total_energy_vario;
-  ThermalProfileN[bucket]++;
+  thermal_profile_w[bucket] += total_energy_vario;
+  thermal_profile_n[bucket]++;
 }
 
 void
@@ -85,24 +85,24 @@ ThermalBandInfo::Expand(const fixed height)
   ThermalBandInfo new_tbi;
 
   // calculate new buckets so glider is below max
-  fixed hbuk = MaxThermalHeight / NUMTHERMALBUCKETS;
+  fixed hbuk = max_thermal_height / NUMTHERMALBUCKETS;
 
   new_tbi.Clear();
-  new_tbi.MaxThermalHeight = std::max(fixed_one, MaxThermalHeight);
+  new_tbi.max_thermal_height = std::max(fixed_one, max_thermal_height);
 
   // increase ceiling until reach required height
-  while (new_tbi.MaxThermalHeight < height) {
-    new_tbi.MaxThermalHeight += hbuk;
+  while (new_tbi.max_thermal_height < height) {
+    new_tbi.max_thermal_height += hbuk;
   }
 
   // shift data into new buckets
   for (unsigned i = 0; i < NUMTHERMALBUCKETS; ++i) {
     const fixed h = BucketHeight(i);
     // height of center of bucket
-    if (ThermalProfileN[i] > 0) {
+    if (thermal_profile_n[i] > 0) {
       const unsigned j = new_tbi.BucketForHeight(h);
-      new_tbi.ThermalProfileW[j] += ThermalProfileW[i];
-      new_tbi.ThermalProfileN[j] += ThermalProfileN[i];
+      new_tbi.thermal_profile_w[j] += thermal_profile_w[i];
+      new_tbi.thermal_profile_n[j] += thermal_profile_n[i];
     }
   }
 

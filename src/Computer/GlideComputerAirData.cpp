@@ -678,7 +678,7 @@ GlideComputerAirData::WorkingBand()
     return;
   }
 
-  const fixed max_height = calculated.thermal_band.MaxThermalHeight;
+  const fixed max_height = calculated.thermal_band.max_thermal_height;
   if (positive(max_height))
     tbi.working_band_fraction = tbi.working_band_height / max_height;
   else
@@ -704,8 +704,8 @@ GlideComputerAirData::ThermalBand()
   if (!positive(dheight))
     return; // nothing to do.
 
-  if (tbi.MaxThermalHeight == fixed_zero)
-    tbi.MaxThermalHeight = dheight;
+  if (tbi.max_thermal_height == fixed_zero)
+    tbi.max_thermal_height = dheight;
 
   // only do this if in thermal and have been climbing
   if ((!Calculated().circling) || negative(Calculated().average))

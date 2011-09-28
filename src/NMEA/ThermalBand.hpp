@@ -28,7 +28,6 @@ Copyright_License {
 
 /**
  * Derived thermal climb rate histogram by altitude (time averaged)
- * 
  */
 struct ThermalBandInfo
 {
@@ -44,11 +43,11 @@ struct ThermalBandInfo
   fixed working_band_fraction;
 
   /** Maximum height achieved in circling */ 
-  fixed MaxThermalHeight;
+  fixed max_thermal_height;
   /** Number of samples in each bucket */ 
-  int    ThermalProfileN[NUMTHERMALBUCKETS];
+  int thermal_profile_n[NUMTHERMALBUCKETS];
   /** Average climb rate in each bucket */ 
-  fixed ThermalProfileW[NUMTHERMALBUCKETS];
+  fixed thermal_profile_w[NUMTHERMALBUCKETS];
 
   void Clear();
 

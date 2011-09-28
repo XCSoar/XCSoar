@@ -39,7 +39,7 @@ ThermalBandRenderer::scale_chart(const DerivedInfo &calculated,
                                  Chart &chart) const
 {
   chart.ScaleYFromValue(fixed_zero);
-  chart.ScaleYFromValue(calculated.thermal_band.MaxThermalHeight);
+  chart.ScaleYFromValue(calculated.thermal_band.max_thermal_height);
 
   chart.ScaleXFromValue(fixed_zero);
   chart.ScaleXFromValue(fixed_half);
@@ -82,7 +82,7 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   }
 
   // no thermalling has been done above safety height
-  if (!positive(calculated.thermal_band.MaxThermalHeight))
+  if (!positive(calculated.thermal_band.max_thermal_height))
     return;
 
   // calculate averages
@@ -94,14 +94,14 @@ ThermalBandRenderer::_DrawThermalBand(const MoreData &basic,
   fixed ht[ThermalBandInfo::NUMTHERMALBUCKETS];
 
   for (unsigned i = 0; i < ThermalBandInfo::NUMTHERMALBUCKETS; ++i) {
-    if (thermal_band.ThermalProfileN[i] < 6) 
+    if (thermal_band.thermal_profile_n[i] < 6) 
       continue;
 
-    if (positive(thermal_band.ThermalProfileW[i])) {
+    if (positive(thermal_band.thermal_profile_w[i])) {
       // height of this thermal point [0,mth]
       // requires 5 items in bucket before displaying, to eliminate kinks
-      fixed wthis = thermal_band.ThermalProfileW[i] / thermal_band.ThermalProfileN[i];
-      ht[numtherm] = i * calculated.thermal_band.MaxThermalHeight 
+      fixed wthis = thermal_band.thermal_profile_w[i] / thermal_band.thermal_profile_n[i];
+      ht[numtherm] = i * calculated.thermal_band.max_thermal_height 
         / ThermalBandInfo::NUMTHERMALBUCKETS;
       Wt[numtherm] = wthis;
       Wmax = std::max(Wmax, wthis);
