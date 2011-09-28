@@ -71,22 +71,22 @@ GetValueFromTeamCode(const TCHAR *code, int maxCount)
 static void
 NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 {
-	int maxCif = 0;
-	int curCif = 0;
+  int maxCif = 0;
+  int curCif = 0;
 
-	if (minCiffers > 0)	{
-		maxCif = minCiffers - 1;
-		curCif = maxCif;
-	}
+  if (minCiffers > 0)	{
+    maxCif = minCiffers - 1;
+    curCif = maxCif;
+  }
 
-	double rest = value;
-	while (rest > 0 || curCif >= 0) {
-		int cifVal = (int)pow(36.0, curCif);
-		int partSize = (int)(rest / cifVal);
-		int partVal = partSize * cifVal;
-		int txtPos = maxCif - curCif;
+  double rest = value;
+  while (rest > 0 || curCif >= 0) {
+    int cifVal = (int)pow(36.0, curCif);
+    int partSize = (int)(rest / cifVal);
+    int partVal = partSize * cifVal;
+    int txtPos = maxCif - curCif;
 
-		if (partSize < 10) {
+    if (partSize < 10) {
       rest -= partVal;
       code[txtPos] = (unsigned char)('0' + partSize);
       curCif--;
@@ -99,9 +99,9 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
       maxCif = curCif;
     }
 
-		if (rest < 1)
+    if (rest < 1)
       rest = 0;
-	}
+  }
 }
 
 /**
@@ -121,18 +121,18 @@ Angle
 TeamCode::GetBearing() const
 {
   // Get the first two values from teamcode (1-2)
-	int val = GetValueFromTeamCode(code, 2);
+  int val = GetValueFromTeamCode(code, 2);
 
-	// Calculate bearing
-	return Angle::Degrees(fixed(val * 360.0 / TEAMCODE_COMBINATIONS)).AsBearing();
+  // Calculate bearing
+  return Angle::Degrees(fixed(val * 360.0 / TEAMCODE_COMBINATIONS)).AsBearing();
 }
 
 fixed
 TeamCode::GetRange() const
 {
   // Get last three values from teamcode (3-5)
-	int val = GetValueFromTeamCode(&code[2], 3);
-	return fixed(val * 100);
+  int val = GetValueFromTeamCode(&code[2], 3);
+  return fixed(val * 100);
 }
 
 void
