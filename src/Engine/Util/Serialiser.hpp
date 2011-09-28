@@ -119,7 +119,7 @@ protected:
    * @param data Item to serialise
    * @param name Type of point
    */
-  DataNode* serialise(const OrderedTaskPoint& data, const TCHAR* name);
+  void serialise(const OrderedTaskPoint& data, const TCHAR* name);
 
 private:
   TaskBehaviour::Factory_t task_factory_type() const;

@@ -42,30 +42,25 @@
 void
 Serialiser::Visit(const StartPoint& data)
 {
-  DataNode* child =
-    serialise(data, mode_optional_start ? _T("OptionalStart"): _T("Start"));
-  delete child;
+  serialise(data, mode_optional_start ? _T("OptionalStart"): _T("Start"));
 }
 
 void
 Serialiser::Visit(const ASTPoint& data)
 {
-  DataNode* child = serialise(data, _T("Turn"));
-  delete child;
+  serialise(data, _T("Turn"));
 }
 
 void
 Serialiser::Visit(const AATPoint& data)
 {
-  DataNode* child = serialise(data, _T("Area"));
-  delete child;
+  serialise(data, _T("Area"));
 }
 
 void
 Serialiser::Visit(const FinishPoint& data)
 {
-  DataNode* child = serialise(data, _T("Finish"));
-  delete child;
+  serialise(data, _T("Finish"));
 }
 
 void
@@ -73,7 +68,7 @@ Serialiser::Visit(gcc_unused const UnorderedTaskPoint& data)
 {
 }
 
-DataNode*
+void
 Serialiser::serialise(const OrderedTaskPoint& data, const TCHAR* name)
 {
   // do nothing
@@ -90,7 +85,7 @@ Serialiser::serialise(const OrderedTaskPoint& data, const TCHAR* name)
   oser.serialise(*data.get_oz());
   delete ochild;
 
-  return child;
+  delete child;
 }
 
 void 
