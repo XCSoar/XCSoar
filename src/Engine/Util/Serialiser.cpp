@@ -29,7 +29,6 @@
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Factory/AbstractTaskFactory.hpp"
 #include "DataNode.hpp"
-#include "Engine/Waypoint/Waypoints.hpp"
 
 #include "Compiler.h"
 #include <assert.h>
@@ -71,12 +70,12 @@ Serialiser::serialise(const OrderedTaskPoint& data, const TCHAR* name)
   child->set_attribute(_T("type"), name);
 
   DataNode* wchild = child->add_child(_T("Waypoint"));
-  Serialiser wser(*wchild, waypoints);
+  Serialiser wser(*wchild);
   wser.serialise(data.GetWaypoint());
   delete wchild;
 
   DataNode* ochild = child->add_child(_T("ObservationZone"));
-  Serialiser oser(*ochild, waypoints);
+  Serialiser oser(*ochild);
   oser.serialise(*data.get_oz());
   delete ochild;
 
@@ -201,7 +200,7 @@ Serialiser::serialise(const Waypoint& data)
   m_node.set_attribute(_T("altitude"), data.altitude);
 
   DataNode* child = m_node.add_child(_T("Location"));
-  Serialiser ser(*child, waypoints);
+  Serialiser ser(*child);
   ser.serialise(data.location);
   delete child;
 }
