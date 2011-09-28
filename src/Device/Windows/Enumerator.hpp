@@ -21,8 +21,8 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_SERIAL_PORT_HPP
-#define XCSOAR_DEVICE_SERIAL_PORT_HPP
+#ifndef XCSOAR_DEVICE_ENUMERATOR_HPP
+#define XCSOAR_DEVICE_ENUMERATOR_HPP
 
 #include "Config/Registry.hpp"
 #include "Util/StaticString.hpp"
