@@ -52,23 +52,4 @@ public:
   void Visit(const ObservationZonePoint &ozp);
 };
 
-/**
- * Generic visitor for observation zones (for double-dispatch)
- */
-class ObservationZoneVisitor {
-protected:
-  virtual void Visit(FAISectorZone &z) = 0;
-  virtual void Visit(SectorZone &z) = 0;
-  virtual void Visit(LineSectorZone &z) = 0;
-  virtual void Visit(CylinderZone &z) = 0;
-  virtual void Visit(KeyholeZone &z) = 0;
-  virtual void Visit(BGAFixedCourseZone &z) = 0;
-  virtual void Visit(BGAEnhancedOptionZone &z) = 0;
-  virtual void Visit(BGAStartSectorZone &z) = 0;
-  virtual void Visit(AnnularSectorZone &z) = 0;
-
-public:
-  void Visit(ObservationZonePoint &ozp);
-};
-
 #endif
