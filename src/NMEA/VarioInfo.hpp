@@ -40,7 +40,10 @@ struct VarioInfo
   fixed ld;
   /** Glide ratio while in Cruise mode */
   fixed cruise_ld;
-  /** Average glide ratio */
+
+  /**
+   * Average glide ratio.  Zero means the value is not available.
+   */
   int average_ld;
 
   fixed ld_vario;

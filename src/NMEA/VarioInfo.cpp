@@ -37,7 +37,7 @@ VarioInfo::Clear()
 {
   sink_rate = fixed_zero;
   cruise_ld = fixed(INVALID_GR);
-  average_ld = fixed(INVALID_GR);
+  average_ld = 0;
   ld = fixed(INVALID_GR);
   ld_vario = fixed(INVALID_GR);
 
