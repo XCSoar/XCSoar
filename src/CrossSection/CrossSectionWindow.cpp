@@ -245,8 +245,8 @@ CrossSectionWindow::ReadBlackboard(const MoreData &_gps_info,
 void
 CrossSectionWindow::Paint(Canvas &canvas, const PixelRect rc)
 {
-  fixed hmin = max(fixed_zero, gps_info.NavAltitude - fixed(3300));
-  fixed hmax = max(fixed(3300), gps_info.NavAltitude + fixed(1000));
+  fixed hmin = max(fixed_zero, gps_info.nav_altitude - fixed(3300));
+  fixed hmax = max(fixed(3300), gps_info.nav_altitude + fixed(1000));
 
   Chart chart(chart_look, canvas, rc);
   chart.ResetScale();
@@ -331,8 +331,8 @@ CrossSectionWindow::PaintGlide(Chart &chart)
 {
   if (gps_info.ground_speed > fixed(10)) {
     fixed t = vec.distance / gps_info.ground_speed;
-    chart.DrawLine(fixed_zero, gps_info.NavAltitude, vec.distance,
-                   gps_info.NavAltitude + calculated_info.average * t,
+    chart.DrawLine(fixed_zero, gps_info.nav_altitude, vec.distance,
+                   gps_info.nav_altitude + calculated_info.average * t,
                    ChartLook::STYLE_BLUETHIN);
   }
 }
@@ -346,7 +346,7 @@ CrossSectionWindow::PaintAircraft(Canvas &canvas, const Chart &chart,
 
   RasterPoint line[4];
   line[0].x = chart.screenX(fixed_zero);
-  line[0].y = chart.screenY(gps_info.NavAltitude);
+  line[0].y = chart.screenY(gps_info.nav_altitude);
   line[1].x = rc.left;
   line[1].y = line[0].y;
   line[2].x = line[1].x;

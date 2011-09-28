@@ -201,7 +201,7 @@ GlideComputerAirData::Average30s()
   if (!time_advanced() || calculated.circling != LastCalculated().circling) {
     vario_30s_filter.reset();
     netto_30s_filter.reset();
-    calculated.average = basic.BruttoVario;
+    calculated.average = basic.brutto_vario;
     calculated.netto_average = basic.netto_vario;
   }
 
@@ -213,7 +213,7 @@ GlideComputerAirData::Average30s()
     return;
 
   for (unsigned i = 0; i < Elapsed; ++i) {
-    vario_30s_filter.update(basic.BruttoVario);
+    vario_30s_filter.update(basic.brutto_vario);
     netto_30s_filter.update(basic.netto_vario);
   }
   calculated.average = vario_30s_filter.average();
@@ -229,7 +229,7 @@ GlideComputerAirData::CurrentThermal()
   if (positive(calculated.climb_start_time)) {
     current_thermal.start_time = calculated.climb_start_time;
     current_thermal.end_time = Basic().time;
-    current_thermal.gain = Basic().TEAltitude - calculated.climb_start_altitude;
+    current_thermal.gain = Basic().TE_altitude - calculated.climb_start_altitude;
     current_thermal.CalculateAll();
   } else
     current_thermal.Clear();
@@ -293,7 +293,7 @@ GlideComputerAirData::UpdateLiftDatabase()
        left == negative((calculated.heading - h).as_delta().value_degrees());
        h += heading_step) {
     unsigned index = heading_to_index(h);
-    calculated.lift_database[index] = Basic().BruttoVario;
+    calculated.lift_database[index] = Basic().brutto_vario;
   }
 
   // detect zero crossing
@@ -331,13 +331,13 @@ GlideComputerAirData::MaxHeightGain()
     return;
 
   if (positive(calculated.min_altitude)) {
-    fixed height_gain = basic.NavAltitude - calculated.min_altitude;
+    fixed height_gain = basic.nav_altitude - calculated.min_altitude;
     calculated.max_height_gain = max(height_gain, calculated.max_height_gain);
   } else {
-    calculated.min_altitude = basic.NavAltitude;
+    calculated.min_altitude = basic.nav_altitude;
   }
 
-  calculated.min_altitude = min(basic.NavAltitude, calculated.min_altitude);
+  calculated.min_altitude = min(basic.nav_altitude, calculated.min_altitude);
 }
 
 void
@@ -355,10 +355,10 @@ GlideComputerAirData::LD()
 
     calculated.ld =
       UpdateLD(calculated.ld, DistanceFlown,
-               LastBasic().NavAltitude - Basic().NavAltitude, fixed(0.1));
+               LastBasic().nav_altitude - Basic().nav_altitude, fixed(0.1));
 
     if (calculated.flight.flying && !calculated.circling)
-      rotaryLD.add((int)DistanceFlown, (int)Basic().NavAltitude);
+      rotaryLD.add((int)DistanceFlown, (int)Basic().nav_altitude);
   }
 
   // LD instantaneous from vario, updated every reading..
@@ -380,7 +380,7 @@ GlideComputerAirData::CruiseLD()
   if (!calculated.circling) {
     if (negative(calculated.cruise_start_time)) {
       calculated.cruise_start_location = Basic().location;
-      calculated.cruise_start_altitude = Basic().NavAltitude;
+      calculated.cruise_start_altitude = Basic().nav_altitude;
       calculated.cruise_start_time = Basic().time;
     } else {
       fixed DistanceFlown =
@@ -388,7 +388,7 @@ GlideComputerAirData::CruiseLD()
 
       calculated.cruise_ld =
           UpdateLD(calculated.cruise_ld, DistanceFlown,
-                   calculated.cruise_start_altitude - Basic().NavAltitude,
+                   calculated.cruise_start_altitude - Basic().nav_altitude,
                    fixed_half);
     }
   }
@@ -427,7 +427,7 @@ GlideComputerAirData::TerrainHeight()
 
   calculated.terrain_valid = true;
   calculated.terrain_altitude = fixed(Alt);
-  calculated.altitude_agl = basic.NavAltitude - calculated.terrain_altitude;
+  calculated.altitude_agl = basic.nav_altitude - calculated.terrain_altitude;
   calculated.altitude_agl_valid = true;
 }
 
@@ -528,7 +528,7 @@ GlideComputerAirData::PercentCircling()
     calculated.time_climb += fixed_one;
 
     // Add the Vario signal to the total climb height
-    calculated.total_height_gain += Basic().GPSVario;
+    calculated.total_height_gain += Basic().gps_vario;
 
     // call ThermalBand function here because it is then explicitly
     // tied to same condition as %circling calculations
@@ -601,7 +601,7 @@ GlideComputerAirData::ThermalSources()
   GeoPoint ground_location;
   fixed ground_altitude = fixed_minus_one;
   EstimateThermalBase(thermal_locator.estimate_location,
-                      Basic().NavAltitude,
+                      Basic().nav_altitude,
                       calculated.last_thermal.lift_rate,
                       calculated.wind,
                       ground_location,
@@ -633,7 +633,7 @@ GlideComputerAirData::LastThermalStats()
     return;
 
   fixed ThermalGain = calculated.cruise_start_altitude
-    + Basic().EnergyHeight - calculated.climb_start_altitude;
+    + Basic().energy_height - calculated.climb_start_altitude;
   if (!positive(ThermalGain))
     return;
 
@@ -672,7 +672,7 @@ GlideComputerAirData::WorkingBand()
     SettingsComputer().task.route_planner.safety_height_terrain +
     Calculated().GetTerrainBaseFallback();
 
-  tbi.working_band_height = Basic().TEAltitude - h_safety;
+  tbi.working_band_height = Basic().TE_altitude - h_safety;
   if (negative(tbi.working_band_height)) {
     tbi.working_band_fraction = fixed_zero;
     return;
@@ -685,7 +685,7 @@ GlideComputerAirData::WorkingBand()
     tbi.working_band_fraction = fixed_one;
 
   tbi.working_band_ceiling = std::max(max_height + h_safety,
-                                      Basic().TEAltitude);
+                                      Basic().TE_altitude);
 }
 
 void
@@ -711,7 +711,7 @@ GlideComputerAirData::ThermalBand()
   if ((!Calculated().circling) || negative(Calculated().average))
     return;
 
-  tbi.Add(dheight, Basic().BruttoVario);
+  tbi.Add(dheight, Basic().brutto_vario);
 }
 
 void

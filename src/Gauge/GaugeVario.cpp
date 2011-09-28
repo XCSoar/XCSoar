@@ -144,7 +144,7 @@ GaugeVario::on_paint_buffer(Canvas &canvas)
   static int sval_last = 0;
   static int ival_last = 0;
 
-  fixed vval = Basic().BruttoVario;
+  fixed vval = Basic().brutto_vario;
   ival = ValueToNeedlePos(fixed(vval));
   sval = ValueToNeedlePos(Calculated().sink_rate);
   if (ShowAveNeedle) {

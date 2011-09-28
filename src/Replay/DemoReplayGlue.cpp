@@ -120,7 +120,7 @@ DemoReplayGlue::Start()
   ProtectedTaskManager::ExclusiveLease task_manager(*m_task_manager);
   ProtectedTaskAccessor ta(task_manager, fixed_zero);
   parms.realistic();
-  parms.start_alt = device_blackboard.Basic().NavAltitude;
+  parms.start_alt = device_blackboard.Basic().nav_altitude;
   DemoReplay::Start(ta, device_blackboard.Basic().location);
 
   // get wind from aircraft

@@ -39,13 +39,13 @@ static void
 FillVario(MoreData &data)
 {
   if (data.total_energy_vario_available) {
-    data.BruttoVario = data.total_energy_vario;
+    data.brutto_vario = data.total_energy_vario;
 
     if (!data.netto_vario_available)
       /* copy the NettoVario value from BruttoVario; it will be
          overwritten by ComputeNettoVario() if the GliderSinkRate is
          known */
-      data.netto_vario = data.BruttoVario;
+      data.netto_vario = data.brutto_vario;
   }
 }
 
@@ -105,7 +105,7 @@ static void
 ComputeNavAltitude(MoreData &basic,
                    const SETTINGS_COMPUTER &settings_computer)
 {
-  basic.NavAltitude = settings_computer.EnableNavBaroAltitude &&
+  basic.nav_altitude = settings_computer.EnableNavBaroAltitude &&
     basic.baro_altitude_available
     ? basic.baro_altitude
     : basic.gps_altitude;
@@ -188,13 +188,13 @@ static void
 ComputeEnergyHeight(MoreData &basic)
 {
   if (basic.airspeed_available)
-    basic.EnergyHeight = sqr(basic.true_airspeed) * fixed_inv_2g;
+    basic.energy_height = sqr(basic.true_airspeed) * fixed_inv_2g;
   else
     /* setting EnergyHeight to zero is the safe approach, as we don't know the kinetic energy
        of the glider for sure. */
-    basic.EnergyHeight = fixed_zero;
+    basic.energy_height = fixed_zero;
 
-  basic.TEAltitude = basic.NavAltitude + basic.EnergyHeight;
+  basic.TE_altitude = basic.nav_altitude + basic.energy_height;
 }
 
 /**
@@ -211,20 +211,20 @@ ComputeGPSVario(MoreData &basic, const MoreData &last)
   // Calculate time passed since last calculation
   const fixed dT = basic.time - last.time;
 
-  const fixed Gain = basic.NavAltitude - last.NavAltitude;
-  const fixed GainTE = basic.TEAltitude - last.TEAltitude;
+  const fixed Gain = basic.nav_altitude - last.nav_altitude;
+  const fixed GainTE = basic.TE_altitude - last.TE_altitude;
 
   // estimate value from GPS
-  basic.GPSVario = Gain / dT;
-  basic.GPSVarioTE = GainTE / dT;
+  basic.gps_vario = Gain / dT;
+  basic.gps_vario_TE = GainTE / dT;
 }
 
 static void
 ComputeBruttoVario(MoreData &basic)
 {
-  basic.BruttoVario = basic.total_energy_vario_available
+  basic.brutto_vario = basic.total_energy_vario_available
     ? basic.total_energy_vario
-    : basic.GPSVario;
+    : basic.gps_vario;
 }
 
 /**
@@ -237,7 +237,7 @@ ComputeNettoVario(MoreData &basic, const VarioInfo &vario)
     /* got it already */
     return;
 
-  basic.netto_vario = basic.BruttoVario - vario.sink_rate;
+  basic.netto_vario = basic.brutto_vario - vario.sink_rate;
 }
 
 /**
@@ -267,7 +267,7 @@ ComputeDynamics(MoreData &basic, const DerivedInfo &calculated)
 
     // estimate pitch angle (assuming balanced turn)
     if (basic.airspeed_available && basic.total_energy_vario_available)
-      basic.acceleration.pitch_angle = Angle::radians(atan2(basic.GPSVario - basic.total_energy_vario,
+      basic.acceleration.pitch_angle = Angle::radians(atan2(basic.gps_vario - basic.total_energy_vario,
                                                            basic.true_airspeed));
     else
       basic.acceleration.pitch_angle = Angle::zero();

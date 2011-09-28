@@ -51,7 +51,7 @@ void
 GlideComputerBlackboard::StartTask()
 {
   calculated_info.cruise_start_location = gps_info.location;
-  calculated_info.cruise_start_altitude = gps_info.NavAltitude;
+  calculated_info.cruise_start_altitude = gps_info.nav_altitude;
   calculated_info.cruise_start_time = gps_info.time;
 
   // JMW reset time cruising/time circling stats on task start

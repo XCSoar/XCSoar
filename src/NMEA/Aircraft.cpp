@@ -36,12 +36,12 @@ ToAircraftState(const MoreData &info, const DerivedInfo &calculated)
   aircraft.indicated_airspeed = info.indicated_airspeed;
 
   /* ALTITUDE_STATE */
-  aircraft.altitude = info.NavAltitude;
+  aircraft.altitude = info.nav_altitude;
   aircraft.working_band_fraction = calculated.thermal_band.working_band_fraction;
   aircraft.altitude_agl = calculated.altitude_agl;
 
   /* VARIO_INFO */
-  aircraft.vario = info.BruttoVario;
+  aircraft.vario = info.brutto_vario;
   aircraft.netto_vario = info.netto_vario;
 
   /* FLYING_STATE */

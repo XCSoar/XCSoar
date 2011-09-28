@@ -367,7 +367,7 @@ OnAirspaceListItemPaint(Canvas &canvas, const PixelRect paint_rc, unsigned i)
          distance */
       _tcscat(sTmp, _T(" vertical "));
 
-      fixed delta = solution.altitude - CommonInterface::Basic().NavAltitude;
+      fixed delta = solution.altitude - CommonInterface::Basic().nav_altitude;
       Units::FormatUserArrival(delta,
                                sTmp + _tcslen(sTmp), 128 - _tcslen(sTmp),
                                true);

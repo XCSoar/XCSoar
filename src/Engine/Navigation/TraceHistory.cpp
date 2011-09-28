@@ -27,7 +27,7 @@ Copyright_License {
 void
 TraceHistory::append(const MoreData &basic)
 {
-  BruttoVario.push(basic.BruttoVario);
+  BruttoVario.push(basic.brutto_vario);
   NettoVario.push(basic.netto_vario);
 }
 

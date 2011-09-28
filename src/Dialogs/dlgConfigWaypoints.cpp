@@ -51,7 +51,7 @@ OnWaypointNewClicked(gcc_unused WndButton &Sender)
   Waypoint edit_waypoint = way_points.create(XCSoarInterface::Basic().location);
   edit_waypoint.altitude = XCSoarInterface::Calculated().terrain_valid
     ? XCSoarInterface::Calculated().terrain_altitude
-    : XCSoarInterface::Basic().NavAltitude;
+    : XCSoarInterface::Basic().nav_altitude;
 
   if (dlgWaypointEditShowModal(edit_waypoint) &&
       edit_waypoint.name.size()) {

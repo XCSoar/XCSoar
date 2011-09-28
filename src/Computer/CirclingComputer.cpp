@@ -111,8 +111,8 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       // Remember the start values of the turn
       circling_info.turn_start_time = basic.time;
       circling_info.turn_start_location = basic.location;
-      circling_info.turn_start_altitude = basic.NavAltitude;
-      circling_info.turn_start_energy_height = basic.EnergyHeight;
+      circling_info.turn_start_altitude = basic.nav_altitude;
+      circling_info.turn_start_energy_height = basic.energy_height;
       circling_info.turn_mode = WAITCLIMB;
     }
     if (!forcecircling)
@@ -149,8 +149,8 @@ CirclingComputer::Turning(CirclingInfo &circling_info,
       // Remember the end values of the turn
       circling_info.turn_start_time = basic.time;
       circling_info.turn_start_location = basic.location;
-      circling_info.turn_start_altitude = basic.NavAltitude;
-      circling_info.turn_start_energy_height = basic.EnergyHeight;
+      circling_info.turn_start_altitude = basic.nav_altitude;
+      circling_info.turn_start_energy_height = basic.energy_height;
 
       // JMW Transition to cruise, due to not properly turning
       circling_info.turn_mode = WAITCRUISE;

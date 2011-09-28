@@ -50,18 +50,18 @@ WindStore::SlotMeasurement(const MoreData &info,
                            Vector windvector, int quality)
 {
   updated = true;
-  windlist.addMeasurement(info.time, windvector, info.NavAltitude, quality);
+  windlist.addMeasurement(info.time, windvector, info.nav_altitude, quality);
 }
 
 void
 WindStore::SlotAltitude(const MoreData &info, DerivedInfo &derived)
 {
-  if ((fabs(info.NavAltitude - _lastAltitude) > fixed(100)) || updated) {
+  if ((fabs(info.nav_altitude - _lastAltitude) > fixed(100)) || updated) {
     //only recalculate if there is a significant change
     recalculateWind(info, derived);
 
     updated = false;
-    _lastAltitude = info.NavAltitude;
+    _lastAltitude = info.nav_altitude;
   }
 }
 
@@ -75,7 +75,7 @@ void
 WindStore::recalculateWind(const MoreData &info, DerivedInfo &derived) const
 {
   bool found;
-  Vector CurWind = windlist.getWind(info.time, info.NavAltitude, found);
+  Vector CurWind = windlist.getWind(info.time, info.nav_altitude, found);
 
   if (found) {
     NewWind(info, derived, CurWind);

@@ -26,12 +26,12 @@ Copyright_License {
 void
 MoreData::Reset()
 {
-  NavAltitude = fixed_zero;
-  EnergyHeight = fixed_zero;
-  TEAltitude = fixed_zero;
+  nav_altitude = fixed_zero;
+  energy_height = fixed_zero;
+  TE_altitude = fixed_zero;
 
-  GPSVario = GPSVarioTE = fixed_zero;
-  BruttoVario = fixed_zero;
+  gps_vario = gps_vario_TE = fixed_zero;
+  brutto_vario = fixed_zero;
   netto_vario = fixed_zero;
 
   NMEAInfo::Reset();

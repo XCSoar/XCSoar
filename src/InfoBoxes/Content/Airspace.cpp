@@ -83,7 +83,7 @@ public:
                         basic.gps_altitude_available)
   {
     if (altitude_available) {
-      altitude.altitude = basic.NavAltitude;
+      altitude.altitude = basic.nav_altitude;
       altitude.altitude_agl = calculated.altitude_agl;
     }
   }
@@ -147,7 +147,7 @@ public:
     :location(basic.location),
      nearest(NULL), nearest_delta(100000) {
     assert(basic.baro_altitude_available || basic.gps_altitude_available);
-    altitude.altitude = basic.NavAltitude;
+    altitude.altitude = basic.nav_altitude;
     altitude.altitude_agl = calculated.altitude_agl;
   }
 

@@ -48,7 +48,7 @@ MapWindow::DrawThermalEstimate(Canvas &canvas) const
       continue;
 
     // find height difference
-    fixed dh = Basic().NavAltitude -
+    fixed dh = Basic().nav_altitude -
       thermal_locator.sources[i].ground_height;
     if (negative(dh))
       continue;
