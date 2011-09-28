@@ -44,23 +44,23 @@ public:
 
   gcc_pure
   Angle width_to_angle(fixed pixels) const {
-    return Angle::native(fixed(pixels) / x_scale);
+    return Angle::Native(fixed(pixels) / x_scale);
   }
 
   gcc_pure
   Angle height_to_angle(fixed pixels) const {
-    return Angle::native(fixed(pixels) / y_scale);
+    return Angle::Native(fixed(pixels) / y_scale);
   }
 
   gcc_pure
   unsigned angle_to_height(Angle angle) const {
-    return angle.value_native() * y_scale;
+    return angle.Native() * y_scale;
   }
 
   gcc_pure RasterLocation
   project(const GeoPoint &location) const {
-    const unsigned x = ((int)(location.longitude.value_native() * x_scale)) - left;
-    const unsigned y = top - ((int)(location.latitude.value_native() * y_scale));
+    const unsigned x = ((int)(location.longitude.Native() * x_scale)) - left;
+    const unsigned y = top - ((int)(location.latitude.Native() * y_scale));
 
     return RasterLocation(x, y);
   }
@@ -70,13 +70,13 @@ public:
   unproject(const RasterLocation &coords) const {
     const fixed x = fixed((int)coords.x + left) / x_scale;
     const fixed y = fixed(top - (int)coords.y) / y_scale;
-    return GeoPoint(Angle::native(x),Angle::native(y));
+    return GeoPoint(Angle::Native(x),Angle::Native(y));
   }
 
   gcc_pure RasterLocation
   project_coarse(const GeoPoint &location) const {
-    const int x = ((int)(location.longitude.value_native() * x_scale)) - left;
-    const int y = top - ((int)(location.latitude.value_native() * y_scale));
+    const int x = ((int)(location.longitude.Native() * x_scale)) - left;
+    const int y = top - ((int)(location.latitude.Native() * y_scale));
 
     return RasterLocation(x >> 8, y >> 8);
   }
@@ -86,7 +86,7 @@ public:
   unproject_coarse(const RasterLocation &coords) const {
     const fixed x = fixed(((int)coords.x << 8) + left) / x_scale;
     const fixed y = fixed(top - ((int)coords.y << 8)) / y_scale;
-    return GeoPoint(Angle::native(x),Angle::native(y));
+    return GeoPoint(Angle::Native(x),Angle::Native(y));
   }
 
   /**

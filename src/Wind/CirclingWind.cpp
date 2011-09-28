@@ -72,7 +72,7 @@ CirclingWind::reset()
   circleLeft = false;
   active = false;
   circleDeg = 0;
-  last_track = Angle::zero();
+  last_track = Angle::Zero();
   pastHalfway = false;
   curModeOK = false;
   first = true;
@@ -90,7 +90,7 @@ CirclingWind::NewSample(const MoreData &info)
   bool fullCircle = false;
 
   // Circle detection
-  int diff = (int)(info.track - last_track).as_delta().magnitude_degrees();
+  int diff = (int)(info.track - last_track).AsDelta().AbsoluteDegrees();
   circleDeg += diff;
   last_track = info.track;
 

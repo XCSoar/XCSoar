@@ -130,7 +130,7 @@ WaypointReaderZander::parseAngle(const TCHAR* src, Angle& dest, const bool lat)
     value = -value;
 
   // Save angle
-  dest = Angle::degrees(value);
+  dest = Angle::Degrees(value);
   return true;
 }
 

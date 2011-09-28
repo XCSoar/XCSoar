@@ -198,7 +198,7 @@ GaugeVario::MakePolygon(const int i)
   RasterPoint *bit = getPolygon(i);
   RasterPoint *bline = &lines[i + gmax];
 
-  const FastRotation r = FastRotation(Angle::degrees(fixed(i)));
+  const FastRotation r = FastRotation(Angle::Degrees(fixed(i)));
   FastRotation::Pair p;
 
   p = r.Rotate(fixed(-xoffset + nlength0), fixed(nwidth));

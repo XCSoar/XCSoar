@@ -209,7 +209,7 @@ GetWaypoint(const Waypoint org_wp, const Waypoints &way_points)
     return NULL;
   }
   if(!ok1(wp->location.Distance(org_wp.location) <= fixed(1000)))
-    printf("%f %f\n", (double)wp->location.latitude.value_degrees(), (double)wp->location.longitude.value_degrees());
+    printf("%f %f\n", (double)wp->location.latitude.Degrees(), (double)wp->location.longitude.Degrees());
   ok1(fabs(wp->altitude - org_wp.altitude) < fixed_half);
 
   return wp;
@@ -390,14 +390,14 @@ CreateOriginalWaypoints()
   GeoPoint loc;
 
   // Bergneustadt
-  loc.latitude = Angle::degrees(fixed(51.051944444444445));
-  loc.longitude = Angle::degrees(fixed(7.7061111111111114));
+  loc.latitude = Angle::Degrees(fixed(51.051944444444445));
+  loc.longitude = Angle::Degrees(fixed(7.7061111111111114));
 
   Waypoint wp(loc);
   wp.altitude = fixed(488);
   wp.name = _T("Bergneustadt");
   wp.comment = _T("Rabbit holes, 20\" ditch south end of rwy");
-  wp.runway.SetDirection(Angle::degrees(fixed(40)));
+  wp.runway.SetDirection(Angle::Degrees(fixed(40)));
   wp.runway.SetLength(590);
 
   wp.type = Waypoint::TYPE_AIRFIELD;
@@ -408,8 +408,8 @@ CreateOriginalWaypoints()
   org_wp.push_back(wp);
 
   // Aconcagua
-  loc.latitude = Angle::dms(fixed(32), fixed(39), fixed(12)).flipped();
-  loc.longitude = Angle::dms(fixed(70), fixed(0), fixed(42)).flipped();
+  loc.latitude = Angle::DMS(fixed(32), fixed(39), fixed(12)).Flipped();
+  loc.longitude = Angle::DMS(fixed(70), fixed(0), fixed(42)).Flipped();
 
   Waypoint wp2(loc);
   wp2.altitude = fixed(6962);
@@ -424,8 +424,8 @@ CreateOriginalWaypoints()
   org_wp.push_back(wp2);
 
   // Golden Gate Bridge
-  loc.latitude = Angle::dms(fixed(37), fixed(49), fixed(3));
-  loc.longitude = Angle::dms(fixed(122), fixed(28), fixed(42)).flipped();
+  loc.latitude = Angle::DMS(fixed(37), fixed(49), fixed(3));
+  loc.longitude = Angle::DMS(fixed(122), fixed(28), fixed(42)).Flipped();
 
   Waypoint wp3(loc);
   wp3.altitude = fixed(227);
@@ -440,13 +440,13 @@ CreateOriginalWaypoints()
   org_wp.push_back(wp3);
 
   // Red Square
-  loc.latitude = Angle::dms(fixed(55), fixed(45), fixed(15));
-  loc.longitude = Angle::dms(fixed(37), fixed(37), fixed(12));
+  loc.latitude = Angle::DMS(fixed(55), fixed(45), fixed(15));
+  loc.longitude = Angle::DMS(fixed(37), fixed(37), fixed(12));
 
   Waypoint wp4(loc);
   wp4.altitude = fixed(123);
   wp4.name = _T("Red Square");
-  wp4.runway.SetDirection(Angle::degrees(fixed(90)));
+  wp4.runway.SetDirection(Angle::Degrees(fixed(90)));
   wp4.runway.SetLength(Units::ToSysUnit(fixed(0.01), unStatuteMiles));
 
   wp4.type = Waypoint::TYPE_OUTLANDING;
@@ -457,8 +457,8 @@ CreateOriginalWaypoints()
   org_wp.push_back(wp4);
 
   // Sydney Opera
-  loc.latitude = Angle::dms(fixed(33), fixed(51), fixed(25)).flipped();
-  loc.longitude = Angle::dms(fixed(151), fixed(12), fixed(55));
+  loc.latitude = Angle::DMS(fixed(33), fixed(51), fixed(25)).Flipped();
+  loc.longitude = Angle::DMS(fixed(151), fixed(12), fixed(55));
 
   Waypoint wp5(loc);
   wp5.altitude = fixed(5);

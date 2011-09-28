@@ -89,7 +89,7 @@ NMEAInfo::Reset()
 
   location_available.Clear();
 
-  track = Angle::zero();
+  track = Angle::Zero();
   track_available.Clear();
 
   ground_speed_available.Clear();

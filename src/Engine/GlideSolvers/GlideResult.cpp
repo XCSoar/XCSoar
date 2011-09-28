@@ -63,7 +63,7 @@ GlideResult::CalcCruiseBearing()
     return;
 
   cruise_track_bearing -=
-    Angle::radians(half(asin(sintheta * effective_wind_speed / v_opt)));
+    Angle::Radians(half(asin(sintheta * effective_wind_speed / v_opt)));
 }
 
 void

@@ -29,180 +29,180 @@ int main(int argc, char **argv)
 {
   plan_tests(92);
 
-  // Test native() and value_native()
-  ok1(equals(Angle::native(fixed_zero).value_native(), fixed_zero));
-  ok1(equals(Angle::native(fixed_one).value_native(), fixed_one));
-  ok1(equals(Angle::native(fixed_two).value_native(), fixed_two));
-  ok1(equals(Angle::native(fixed_90).value_native(), fixed_90));
+  // Test Native() and Native()
+  ok1(equals(Angle::Native(fixed_zero).Native(), fixed_zero));
+  ok1(equals(Angle::Native(fixed_one).Native(), fixed_one));
+  ok1(equals(Angle::Native(fixed_two).Native(), fixed_two));
+  ok1(equals(Angle::Native(fixed_90).Native(), fixed_90));
 
   // Test zero()
-  ok1(equals(Angle::zero().value_native(), fixed_zero));
+  ok1(equals(Angle::Zero().Native(), fixed_zero));
 
   // Test degrees()
 #ifdef RADIANS
-  ok1(equals(Angle::degrees(fixed_zero).value_native(), fixed_zero));
-  ok1(equals(Angle::degrees(fixed_90).value_native(), fixed_half_pi));
-  ok1(equals(Angle::degrees(fixed_180).value_native(), fixed_pi));
-  ok1(equals(Angle::degrees(fixed_270).value_native(), fixed_pi + fixed_half_pi));
-  ok1(equals(Angle::degrees(fixed_360).value_native(), fixed_two_pi));
+  ok1(equals(Angle::Degrees(fixed_zero).Native(), fixed_zero));
+  ok1(equals(Angle::Degrees(fixed_90).Native(), fixed_half_pi));
+  ok1(equals(Angle::Degrees(fixed_180).Native(), fixed_pi));
+  ok1(equals(Angle::Degrees(fixed_270).Native(), fixed_pi + fixed_half_pi));
+  ok1(equals(Angle::Degrees(fixed_360).Native(), fixed_two_pi));
 
-  ok1(equals(Angle::radians(fixed_zero).value_native(), fixed_zero));
-  ok1(equals(Angle::radians(fixed_half_pi).value_native(), fixed_half_pi));
-  ok1(equals(Angle::radians(fixed_pi).value_native(), fixed_pi));
-  ok1(equals(Angle::radians(fixed_pi + fixed_half_pi).value_native(),
+  ok1(equals(Angle::Radians(fixed_zero).Native(), fixed_zero));
+  ok1(equals(Angle::Radians(fixed_half_pi).Native(), fixed_half_pi));
+  ok1(equals(Angle::Radians(fixed_pi).Native(), fixed_pi));
+  ok1(equals(Angle::Radians(fixed_pi + fixed_half_pi).Native(),
                             fixed_pi + fixed_half_pi));
-  ok1(equals(Angle::radians(fixed_two_pi).value_native(), fixed_two_pi));
+  ok1(equals(Angle::Radians(fixed_two_pi).Native(), fixed_two_pi));
 #else
-  ok1(equals(Angle::degrees(fixed_zero).value_native(), fixed_zero));
-  ok1(equals(Angle::degrees(fixed_90).value_native(), fixed_90));
-  ok1(equals(Angle::degrees(fixed_180).value_native(), fixed_180));
-  ok1(equals(Angle::degrees(fixed_270).value_native(), fixed_270));
-  ok1(equals(Angle::degrees(fixed_360).value_native(), fixed_360));
+  ok1(equals(Angle::Degrees(fixed_zero).Native(), fixed_zero));
+  ok1(equals(Angle::Degrees(fixed_90).Native(), fixed_90));
+  ok1(equals(Angle::Degrees(fixed_180).Native(), fixed_180));
+  ok1(equals(Angle::Degrees(fixed_270).Native(), fixed_270));
+  ok1(equals(Angle::Degrees(fixed_360).Native(), fixed_360));
 
-  ok1(equals(Angle::radians(fixed_zero).value_native(), fixed_zero));
-  ok1(equals(Angle::radians(fixed_half_pi).value_native(), fixed_90));
-  ok1(equals(Angle::radians(fixed_pi).value_native(), fixed_180));
-  ok1(equals(Angle::radians(fixed_pi + fixed_half_pi).value_native(), fixed_270));
-  ok1(equals(Angle::radians(fixed_two_pi).value_native(), fixed_360));
+  ok1(equals(Angle::Radians(fixed_zero).Native(), fixed_zero));
+  ok1(equals(Angle::Radians(fixed_half_pi).Native(), fixed_90));
+  ok1(equals(Angle::Radians(fixed_pi).Native(), fixed_180));
+  ok1(equals(Angle::Radians(fixed_pi + fixed_half_pi).Native(), fixed_270));
+  ok1(equals(Angle::Radians(fixed_two_pi).Native(), fixed_360));
 #endif
 
-  // Test value_degrees()
-  ok1(equals(Angle::degrees(fixed_90).value_degrees(), 90));
-  ok1(equals(Angle::degrees(-fixed_90).value_degrees(), -90));
+  // Test Degrees()
+  ok1(equals(Angle::Degrees(fixed_90).Degrees(), 90));
+  ok1(equals(Angle::Degrees(-fixed_90).Degrees(), -90));
 
-  // Test value_radians()
-  ok1(equals(Angle::degrees(fixed_90).value_radians(), fixed_half_pi));
-  ok1(equals(Angle::degrees(-fixed_90).value_radians(), -fixed_half_pi));
+  // Test Radians()
+  ok1(equals(Angle::Degrees(fixed_90).Radians(), fixed_half_pi));
+  ok1(equals(Angle::Degrees(-fixed_90).Radians(), -fixed_half_pi));
 
-  // Test value_hours()
-  ok1(equals(Angle::degrees(fixed_90).value_hours(), fixed(6)));
-  ok1(equals(Angle::degrees(-fixed_90).value_hours(), -fixed(6)));
+  // Test Hours()
+  ok1(equals(Angle::Degrees(fixed_90).Hours(), fixed(6)));
+  ok1(equals(Angle::Degrees(-fixed_90).Hours(), -fixed(6)));
 
-  // Test dms()
-  ok1(equals(Angle::dms(fixed_90, fixed(30), fixed(15)).value_degrees(),
+  // Test DMS()
+  ok1(equals(Angle::DMS(fixed_90, fixed(30), fixed(15)).Degrees(),
              fixed(90.504166667)));
-  ok1(equals(Angle::dms(fixed_90, -fixed(30), -fixed(15)).value_degrees(),
+  ok1(equals(Angle::DMS(fixed_90, -fixed(30), -fixed(15)).Degrees(),
              fixed(89.495833333)));
-  ok1(equals(Angle::dms(-fixed_90, -fixed(30), -fixed(15)).value_degrees(),
+  ok1(equals(Angle::DMS(-fixed_90, -fixed(30), -fixed(15)).Degrees(),
              fixed(-90.504166667)));
-  ok1(equals(Angle::dms(-fixed_90, fixed(30), fixed(15)).value_degrees(),
+  ok1(equals(Angle::DMS(-fixed_90, fixed(30), fixed(15)).Degrees(),
              fixed(-89.495833333)));
 
-  // Test magnitude_degrees()
-  ok1(equals(Angle::degrees(fixed_90).magnitude_degrees(), 90));
-  ok1(equals(Angle::degrees(-fixed_90).magnitude_degrees(), 90));
+  // Test AbsoluteDegrees()
+  ok1(equals(Angle::Degrees(fixed_90).AbsoluteDegrees(), 90));
+  ok1(equals(Angle::Degrees(-fixed_90).AbsoluteDegrees(), 90));
 
-  // Test magnitude_radians()
-  ok1(equals(Angle::degrees(fixed_90).magnitude_radians(), fixed_half_pi));
-  ok1(equals(Angle::degrees(-fixed_90).magnitude_radians(), fixed_half_pi));
+  // Test AbsoluteRadians()
+  ok1(equals(Angle::Degrees(fixed_90).AbsoluteRadians(), fixed_half_pi));
+  ok1(equals(Angle::Degrees(-fixed_90).AbsoluteRadians(), fixed_half_pi));
 
   // Test Reciprocal()
-  ok1(equals(Angle::degrees(fixed_90).Reciprocal(), 270));
-  ok1(equals(Angle::degrees(fixed_270).Reciprocal(), 90));
+  ok1(equals(Angle::Degrees(fixed_90).Reciprocal(), 270));
+  ok1(equals(Angle::Degrees(fixed_270).Reciprocal(), 90));
 
-  // Test as_bearing()
-  ok1(equals(Angle::degrees(fixed(361)).as_bearing(), 1));
-  ok1(equals(Angle::degrees(fixed(180)).as_bearing(), 180));
-  ok1(equals(Angle::degrees(fixed(-180)).as_bearing(), 180));
-  ok1(equals(Angle::degrees(fixed(-270)).as_bearing(), 90));
+  // Test AsBearing()
+  ok1(equals(Angle::Degrees(fixed(361)).AsBearing(), 1));
+  ok1(equals(Angle::Degrees(fixed(180)).AsBearing(), 180));
+  ok1(equals(Angle::Degrees(fixed(-180)).AsBearing(), 180));
+  ok1(equals(Angle::Degrees(fixed(-270)).AsBearing(), 90));
 
-  // Test as_delta()
-  ok1(equals(Angle::degrees(fixed_90).as_delta(), 90));
-  ok1(equals(Angle::degrees(fixed(179)).as_delta(), 179));
-  ok1(equals(Angle::degrees(fixed(-179)).as_delta(), -179));
-  ok1(equals(Angle::degrees(fixed_270).as_delta(), -90));
+  // Test AsDelta()
+  ok1(equals(Angle::Degrees(fixed_90).AsDelta(), 90));
+  ok1(equals(Angle::Degrees(fixed(179)).AsDelta(), 179));
+  ok1(equals(Angle::Degrees(fixed(-179)).AsDelta(), -179));
+  ok1(equals(Angle::Degrees(fixed_270).AsDelta(), -90));
 
-  // Test between()
-  ok1(Angle::degrees(fixed_90).between(Angle::degrees(fixed_zero),
-                                       Angle::degrees(fixed_180)));
+  // Test Between()
+  ok1(Angle::Degrees(fixed_90).Between(Angle::Degrees(fixed_zero),
+                                       Angle::Degrees(fixed_180)));
 
-  ok1(!Angle::degrees(fixed_90).between(Angle::degrees(fixed_180),
-                                        Angle::degrees(fixed_zero)));
+  ok1(!Angle::Degrees(fixed_90).Between(Angle::Degrees(fixed_180),
+                                        Angle::Degrees(fixed_zero)));
 
-  ok1(Angle::degrees(fixed_zero).between(Angle::degrees(fixed_270),
-                                         Angle::degrees(fixed_90)));
+  ok1(Angle::Degrees(fixed_zero).Between(Angle::Degrees(fixed_270),
+                                         Angle::Degrees(fixed_90)));
 
   // Test sin()
-  ok1(equals(Angle::degrees(fixed_zero).sin(), 0));
-  ok1(equals(Angle::degrees(fixed_90).sin(), 1));
-  ok1(equals(Angle::degrees(fixed_180).sin(), 0));
-  ok1(equals(Angle::degrees(fixed_270).sin(), -1));
-  ok1(equals(Angle::degrees(fixed_360).sin(), 0));
+  ok1(equals(Angle::Degrees(fixed_zero).sin(), 0));
+  ok1(equals(Angle::Degrees(fixed_90).sin(), 1));
+  ok1(equals(Angle::Degrees(fixed_180).sin(), 0));
+  ok1(equals(Angle::Degrees(fixed_270).sin(), -1));
+  ok1(equals(Angle::Degrees(fixed_360).sin(), 0));
 
   // Test cos()
-  ok1(equals(Angle::degrees(fixed_zero).cos(), 1));
-  ok1(equals(Angle::degrees(fixed_90).cos(), 0));
-  ok1(equals(Angle::degrees(fixed_180).cos(), -1));
-  ok1(equals(Angle::degrees(fixed_270).cos(), 0));
-  ok1(equals(Angle::degrees(fixed_360).cos(), 1));
+  ok1(equals(Angle::Degrees(fixed_zero).cos(), 1));
+  ok1(equals(Angle::Degrees(fixed_90).cos(), 0));
+  ok1(equals(Angle::Degrees(fixed_180).cos(), -1));
+  ok1(equals(Angle::Degrees(fixed_270).cos(), 0));
+  ok1(equals(Angle::Degrees(fixed_360).cos(), 1));
 
   // Test fastsine()
-  ok1(equals(Angle::degrees(fixed_zero).fastsine(), 0));
-  ok1(equals(Angle::degrees(fixed_90).fastsine(), 1));
-  ok1(equals(Angle::degrees(fixed_180).fastsine(), 0));
-  ok1(equals(Angle::degrees(fixed_270).fastsine(), -1));
-  ok1(equals(Angle::degrees(fixed_360).fastsine(), 0));
+  ok1(equals(Angle::Degrees(fixed_zero).fastsine(), 0));
+  ok1(equals(Angle::Degrees(fixed_90).fastsine(), 1));
+  ok1(equals(Angle::Degrees(fixed_180).fastsine(), 0));
+  ok1(equals(Angle::Degrees(fixed_270).fastsine(), -1));
+  ok1(equals(Angle::Degrees(fixed_360).fastsine(), 0));
 
   // Test fastcosine()
-  ok1(equals(Angle::degrees(fixed_zero).fastcosine(), 1));
-  ok1(equals(Angle::degrees(fixed_90).fastcosine(), 0));
-  ok1(equals(Angle::degrees(fixed_180).fastcosine(), -1));
-  ok1(equals(Angle::degrees(fixed_270).fastcosine(), 0));
-  ok1(equals(Angle::degrees(fixed_360).fastcosine(), 1));
+  ok1(equals(Angle::Degrees(fixed_zero).fastcosine(), 1));
+  ok1(equals(Angle::Degrees(fixed_90).fastcosine(), 0));
+  ok1(equals(Angle::Degrees(fixed_180).fastcosine(), -1));
+  ok1(equals(Angle::Degrees(fixed_270).fastcosine(), 0));
+  ok1(equals(Angle::Degrees(fixed_360).fastcosine(), 1));
 
   // Test BiSector()
-  ok1(equals(Angle::degrees(fixed_90).BiSector(Angle::degrees(fixed_180)), 45));
-  ok1(equals(Angle::degrees(fixed_270).BiSector(Angle::degrees(fixed_zero)), 225));
-  ok1(equals(Angle::degrees(fixed_270).BiSector(Angle::degrees(fixed_180)), 315));
+  ok1(equals(Angle::Degrees(fixed_90).BiSector(Angle::Degrees(fixed_180)), 45));
+  ok1(equals(Angle::Degrees(fixed_270).BiSector(Angle::Degrees(fixed_zero)), 225));
+  ok1(equals(Angle::Degrees(fixed_270).BiSector(Angle::Degrees(fixed_180)), 315));
 
   // Test Fraction()
-  ok1(equals(Angle::degrees(fixed_zero).Fraction(
-      Angle::degrees(fixed_90), fixed(0.25)), 22.5));
-  ok1(equals(Angle::degrees(fixed_zero).Fraction(
-      Angle::degrees(fixed_90), fixed(0.5)), 45));
-  ok1(equals(Angle::degrees(fixed_zero).Fraction(
-      Angle::degrees(fixed_90), fixed(0.75)), 67.5));
+  ok1(equals(Angle::Degrees(fixed_zero).Fraction(
+      Angle::Degrees(fixed_90), fixed(0.25)), 22.5));
+  ok1(equals(Angle::Degrees(fixed_zero).Fraction(
+      Angle::Degrees(fixed_90), fixed(0.5)), 45));
+  ok1(equals(Angle::Degrees(fixed_zero).Fraction(
+      Angle::Degrees(fixed_90), fixed(0.75)), 67.5));
 
-  // Test sign()
-  ok1(Angle::degrees(fixed_90).sign() == 1);
-  ok1(Angle::degrees(fixed_zero).sign() == 0);
-  ok1(Angle::degrees(-fixed_90).sign() == -1);
+  // Test Sign()
+  ok1(Angle::Degrees(fixed_90).Sign() == 1);
+  ok1(Angle::Degrees(fixed_zero).Sign() == 0);
+  ok1(Angle::Degrees(-fixed_90).Sign() == -1);
 
-  ok1(Angle::degrees(fixed_90).sign(fixed_one) == 1);
-  ok1(Angle::degrees(fixed_half).sign(fixed_one) == 0);
-  ok1(Angle::degrees(fixed_zero).sign(fixed_one) == 0);
-  ok1(Angle::degrees(-fixed_half).sign(fixed_one) == 0);
-  ok1(Angle::degrees(-fixed_90).sign(fixed_one) == -1);
+  ok1(Angle::Degrees(fixed_90).Sign(fixed_one) == 1);
+  ok1(Angle::Degrees(fixed_half).Sign(fixed_one) == 0);
+  ok1(Angle::Degrees(fixed_zero).Sign(fixed_one) == 0);
+  ok1(Angle::Degrees(-fixed_half).Sign(fixed_one) == 0);
+  ok1(Angle::Degrees(-fixed_90).Sign(fixed_one) == -1);
 
-  // Test sin_cos()
+  // Test SinCos()
   fixed sin, cos;
-  Angle::degrees(fixed(45)).sin_cos(sin, cos);
-  ok1(equals(sin, Angle::degrees(fixed(45)).sin()));
-  ok1(equals(cos, Angle::degrees(fixed(45)).cos()));
+  Angle::Degrees(fixed(45)).SinCos(sin, cos);
+  ok1(equals(sin, Angle::Degrees(fixed(45)).sin()));
+  ok1(equals(cos, Angle::Degrees(fixed(45)).cos()));
 
-  // Test flip()
-  Angle a = Angle::degrees(fixed_90);
-  a.flip();
-  ok1(equals(a.value_degrees(), -fixed_90));
+  // Test Flip()
+  Angle a = Angle::Degrees(fixed_90);
+  a.Flip();
+  ok1(equals(a.Degrees(), -fixed_90));
 
-  // Test flipped()
-  ok1(equals(Angle::degrees(fixed_zero).flipped().value_degrees(), fixed_zero));
-  ok1(equals(Angle::degrees(fixed_90).flipped().value_degrees(), -fixed_90));
-  ok1(equals(Angle::degrees(fixed_180).flipped().value_degrees(), -fixed_180));
-  ok1(equals(Angle::degrees(fixed_270).flipped().value_degrees(), -fixed_270));
+  // Test Flipped()
+  ok1(equals(Angle::Degrees(fixed_zero).Flipped().Degrees(), fixed_zero));
+  ok1(equals(Angle::Degrees(fixed_90).Flipped().Degrees(), -fixed_90));
+  ok1(equals(Angle::Degrees(fixed_180).Flipped().Degrees(), -fixed_180));
+  ok1(equals(Angle::Degrees(fixed_270).Flipped().Degrees(), -fixed_270));
 
-  // Test half()
-  ok1(equals(Angle::degrees(fixed_90).half().value_degrees(), fixed(45)));
-  ok1(equals(Angle::degrees(fixed_180).half().value_degrees(), fixed_90));
+  // Test Half()
+  ok1(equals(Angle::Degrees(fixed_90).Half().Degrees(), fixed(45)));
+  ok1(equals(Angle::Degrees(fixed_180).Half().Degrees(), fixed_90));
 
-  // Test from_xy()
-  ok1(equals(Angle::from_xy(fixed_one, fixed_zero), 0));
-  ok1(equals(Angle::from_xy(fixed_one, fixed_one), 45));
-  ok1(equals(Angle::from_xy(fixed_zero, fixed_one), 90));
-  ok1(equals(Angle::from_xy(-fixed_one, fixed_one), 135));
-  ok1(equals(Angle::from_xy(-fixed_one, fixed_zero), 180));
-  ok1(equals(Angle::from_xy(fixed_zero, -fixed_one), -90));
-  ok1(equals(Angle::from_xy(fixed_one, -fixed_one), -45));
+  // Test FromXY()
+  ok1(equals(Angle::FromXY(fixed_one, fixed_zero), 0));
+  ok1(equals(Angle::FromXY(fixed_one, fixed_one), 45));
+  ok1(equals(Angle::FromXY(fixed_zero, fixed_one), 90));
+  ok1(equals(Angle::FromXY(-fixed_one, fixed_one), 135));
+  ok1(equals(Angle::FromXY(-fixed_one, fixed_zero), 180));
+  ok1(equals(Angle::FromXY(fixed_zero, -fixed_one), -90));
+  ok1(equals(Angle::FromXY(fixed_one, -fixed_one), -45));
 
   return exit_status();
 }

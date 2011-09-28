@@ -94,7 +94,7 @@ TaskAutoPilot::Start(const TaskAccessor& task)
   awp= 0;
 
   // reset the heading
-  heading = Angle::zero();
+  heading = Angle::Zero();
   heading_filt.reset(fixed_zero);
 
   acstate = Cruise;
@@ -139,7 +139,7 @@ TaskAutoPilot::heading_deviation()
     : parms.bearing_noise;
   fixed r = (fixed_two * rand() / RAND_MAX)-fixed_one;
   fixed deviation = fixed(heading_filt.update(noise_mag*r));
-  return Angle::degrees(deviation).as_delta();
+  return Angle::Degrees(deviation).AsDelta();
 }
 
 fixed
@@ -209,17 +209,17 @@ TaskAutoPilot::update_cruise_bearing(const TaskAccessor& task,
     const fixed sintheta = (state.wind.bearing-bearing).sin();
     if (fabs(sintheta)>fixed(0.0001)) {
       bearing +=
-        Angle::radians(asin(sintheta * state.wind.norm / state.true_airspeed));
+        Angle::Radians(asin(sintheta * state.wind.norm / state.true_airspeed));
     }
   }
-  Angle diff = (bearing-heading).as_delta();
-  fixed d = diff.value_degrees();
+  Angle diff = (bearing-heading).AsDelta();
+  fixed d = diff.Degrees();
   fixed max_turn = parms.turn_speed*timestep;
-  heading += Angle::degrees(max(-max_turn, min(max_turn, d)));
+  heading += Angle::Degrees(max(-max_turn, min(max_turn, d)));
   if (positive(parms.bearing_noise)) {
     heading += heading_deviation()*timestep;
   }
-  heading = heading.as_bearing();
+  heading = heading.AsBearing();
 }
 
 
@@ -249,12 +249,12 @@ TaskAutoPilot::update_state(const TaskAccessor& task,
     state.true_airspeed = glide_polar.GetVMin();
     fixed d = parms.turn_speed*timestep;
     if (d< fixed_360) {
-      heading += Angle::degrees(d);
+      heading += Angle::Degrees(d);
     }
     if (positive(parms.bearing_noise)) {
       heading += heading_deviation()*timestep;
     }
-    heading = heading.as_bearing();
+    heading = heading.AsBearing();
     state.vario = climb_rate*parms.climb_factor;
   }
     break;

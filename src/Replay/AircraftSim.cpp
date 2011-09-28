@@ -51,7 +51,7 @@ AircraftSim::GetEndPoint(const Angle &heading, const fixed timestep) const
 {
   GeoPoint ref = GeoVector(state.true_airspeed*timestep, heading).EndPoint(state.location);
   return GeoVector(state.wind.norm*timestep,
-                   state.wind.bearing+ Angle::degrees(fixed_180)).EndPoint(ref);
+                   state.wind.bearing+ Angle::Degrees(fixed_180)).EndPoint(ref);
 }
 
 void

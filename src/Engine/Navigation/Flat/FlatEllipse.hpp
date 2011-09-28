@@ -64,8 +64,8 @@ public:
      ap(fixed_zero, fixed_zero),
      p(fixed_zero, fixed_zero),
      a(fixed_one), b(fixed_one),
-     theta(Angle::zero()),
-     theta_initial(Angle::zero()) {}
+     theta(Angle::Zero()),
+     theta_initial(Angle::Zero()) {}
 
   /**
    * Parametric representation of ellipse

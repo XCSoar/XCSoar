@@ -31,12 +31,12 @@ std::ostream& operator<< (std::ostream& f,
 {
   f << "# circle\n";
   for (double t=0; t<=360; t+= 30) {
-    GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius);
+    GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::Degrees(fixed(t)), as.m_radius);
     f << l.longitude << " " << l.latitude << " " << as.GetBase().altitude << "\n";
   }
   f << "\n";
   for (double t=0; t<=360; t+= 30) {
-    GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::degrees(fixed(t)), as.m_radius);
+    GeoPoint l = FindLatitudeLongitude(as.m_center, Angle::Degrees(fixed(t)), as.m_radius);
     f << l.longitude << " " << l.latitude << " " << as.GetTop().altitude << "\n";
   }
   f << "\n";

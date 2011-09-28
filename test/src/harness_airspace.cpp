@@ -67,8 +67,8 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
     AbstractAirspace* as;
     if (rand()%4!=0) {
       GeoPoint c;
-      c.longitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
-      c.latitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
+      c.longitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
+      c.latitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
       fixed radius(10000.0*(0.2+(rand()%12)/12.0));
       as = new AirspaceCircle(c,radius);
     } else {
@@ -77,14 +77,14 @@ void setup_airspaces(Airspaces& airspaces, const GeoPoint& center, const unsigne
       // random points
       const unsigned num = rand()%10+5;
       GeoPoint c;
-      c.longitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
-      c.latitude = Angle::degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
+      c.longitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.longitude;
+      c.latitude = Angle::Degrees(fixed((rand()%1200-600)/1000.0))+center.latitude;
       
       std::vector<GeoPoint> pts;
       for (unsigned j=0; j<num; j++) {
         GeoPoint p=c;
-        p.longitude += Angle::degrees(fixed((rand()%200)/1000.0));
-        p.latitude += Angle::degrees(fixed((rand()%200)/1000.0));
+        p.longitude += Angle::Degrees(fixed((rand()%200)/1000.0));
+        p.latitude += Angle::Degrees(fixed((rand()%200)/1000.0));
         pts.push_back(p);
       }
       as = new AirspacePolygon(pts,true);

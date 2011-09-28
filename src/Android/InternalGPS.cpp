@@ -130,8 +130,8 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
   basic.gps.satellites_used = n_satellites;
   basic.gps.real = true;
   basic.gps.android_internal_gps = true;
-  basic.location = GeoPoint(Angle::degrees(fixed(longitude)),
-                            Angle::degrees(fixed(latitude)));
+  basic.location = GeoPoint(Angle::Degrees(fixed(longitude)),
+                            Angle::Degrees(fixed(latitude)));
   basic.location_available.Update(basic.clock);
 
   if (hasAltitude) {
@@ -142,7 +142,7 @@ Java_org_xcsoar_InternalGPS_setLocation(JNIEnv *env, jobject obj,
     basic.gps_altitude_available.Clear();
 
   if (hasBearing) {
-    basic.track = Angle::degrees(fixed(bearing));
+    basic.track = Angle::Degrees(fixed(bearing));
     basic.track_available.Update(basic.clock);
   } else
     basic.track_available.Clear();

@@ -131,8 +131,8 @@ IGCParseFix(const char *buffer, IGCFix &fix)
   if (EoW == 'W')
     Longitude = -Longitude;
 
-  fix.location.latitude = Angle::degrees(Latitude);
-  fix.location.longitude = Angle::degrees(Longitude);
+  fix.location.latitude = Angle::Degrees(Latitude);
+  fix.location.longitude = Angle::Degrees(Longitude);
 
   fix.gps_altitude = fixed(iAltitude);
   fix.pressure_altitude = fixed(iPressureAltitude);

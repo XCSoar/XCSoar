@@ -89,10 +89,10 @@ int main(int argc, char **argv)
   const TCHAR *path = _T("output/test/test.igc");
   File::Delete(path);
 
-  static const GeoPoint home(Angle::degrees(fixed(7.7061111111111114)),
-                             Angle::degrees(fixed(51.051944444444445)));
-  static const GeoPoint tp(Angle::degrees(fixed(10.726111111111111)),
-                           Angle::degrees(fixed(50.6322)));
+  static const GeoPoint home(Angle::Degrees(fixed(7.7061111111111114)),
+                             Angle::Degrees(fixed(51.051944444444445)));
+  static const GeoPoint tp(Angle::Degrees(fixed(10.726111111111111)),
+                           Angle::Degrees(fixed(50.6322)));
 
   static NMEAInfo i;
   i.clock = fixed_one;
@@ -128,8 +128,8 @@ int main(int argc, char **argv)
   writer.LoggerNote(_T("my_note"));
 
   i.date_time_utc.second += 5;
-  i.location = GeoPoint(Angle::degrees(fixed(-7.7061111111111114)),
-                        Angle::degrees(fixed(-51.051944444444445)));
+  i.location = GeoPoint(Angle::Degrees(fixed(-7.7061111111111114)),
+                        Angle::Degrees(fixed(-51.051944444444445)));
   writer.LogPoint(i);
 
   writer.finish(i);

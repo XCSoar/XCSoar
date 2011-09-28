@@ -39,10 +39,10 @@ SymmetricSectorZone::set_legs(const GeoPoint *previous, const GeoPoint *current,
     biSector = next->Bearing(*current);
   else
     // single point
-    biSector = Angle::zero();
+    biSector = Angle::Zero();
 
-  setStartRadial((biSector - SectorAngle.half()).as_bearing());
-  setEndRadial((biSector + SectorAngle.half()).as_bearing());
+  setStartRadial((biSector - SectorAngle.Half()).AsBearing());
+  setEndRadial((biSector + SectorAngle.Half()).AsBearing());
 }
 
 bool

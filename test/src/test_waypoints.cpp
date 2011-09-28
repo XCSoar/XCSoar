@@ -47,9 +47,9 @@ public:
 static unsigned
 test_location(const Waypoints& waypoints, bool good)
 {
-  GeoPoint loc(Angle::zero(), Angle::zero());
+  GeoPoint loc(Angle::Zero(), Angle::Zero());
   if (!good) {
-    loc.longitude = Angle::degrees(fixed(-23.4));
+    loc.longitude = Angle::Degrees(fixed(-23.4));
   }
   const Waypoint *r = waypoints.lookup_location(loc);
   if (r) {
@@ -92,8 +92,8 @@ test_nearest(const Waypoints& waypoints)
 static bool
 test_nearest_landable(const Waypoints& waypoints)
 {
-  const Waypoint *r = waypoints.get_nearest_landable(GeoPoint(Angle::degrees(fixed(0.99)),
-                                                              Angle::degrees(fixed(1.1))),
+  const Waypoint *r = waypoints.get_nearest_landable(GeoPoint(Angle::Degrees(fixed(0.99)),
+                                                              Angle::Degrees(fixed(1.1))),
                                                      fixed(50000));
   if (!r)
     return false;

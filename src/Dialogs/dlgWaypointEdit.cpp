@@ -287,7 +287,7 @@ GetValues()
   if (!sign)
     num = -num;
 
-  global_wpt->location.longitude = Angle::degrees(fixed(num));
+  global_wpt->location.longitude = Angle::Degrees(fixed(num));
 
   sign = GetFormValueInteger(*wf, _T("prpLatitudeSign")) == 1;
   dd = GetFormValueInteger(*wf, _T("prpLatitudeD"));
@@ -313,7 +313,7 @@ GetValues()
   if (!sign)
     num = -num;
 
-  global_wpt->location.latitude = Angle::degrees(fixed(num));
+  global_wpt->location.latitude = Angle::Degrees(fixed(num));
 
   ss = GetFormValueInteger(*wf, _T("prpAltitude"));
   global_wpt->altitude = (ss == 0 && terrain != NULL)

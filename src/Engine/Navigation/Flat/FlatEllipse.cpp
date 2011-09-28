@@ -47,7 +47,7 @@ FlatEllipse::FlatEllipse(const FlatPoint &_f1, const FlatPoint &_f2,
   FlatPoint op = ap;
   op.Subtract(p);
   op.Rotate(-theta);
-  theta_initial = Angle::radians(atan2(op.y * a, op.x * b)).as_delta();
+  theta_initial = Angle::Radians(atan2(op.y * a, op.x * b)).AsDelta();
 }
 
 fixed
@@ -65,10 +65,10 @@ FlatEllipse::ba() const
 FlatPoint
 FlatEllipse::Parametric(const fixed t) const
 {
-  const Angle at = (Angle::radians(fixed_two_pi * t) + theta_initial).as_delta();
+  const Angle at = (Angle::Radians(fixed_two_pi * t) + theta_initial).AsDelta();
 
   fixed cat, sat;
-  at.sin_cos(sat, cat);
+  at.SinCos(sat, cat);
 
   FlatPoint res(a * cat, b * sat);
   res.Rotate(theta);
@@ -114,7 +114,7 @@ FlatEllipse::IntersectExtended(const FlatPoint &pe, FlatPoint &i1,
   const fixed d = l_pf2.d() + max(a, b); // max line length
 
   fixed can, san;
-  ang.sin_cos(san, can);
+  ang.SinCos(san, can);
 
   FlatLine e_l(pe, FlatPoint(pe.x + d * can, pe.y + d * san));
   // e_l is the line extended from p in direction of f1-p 

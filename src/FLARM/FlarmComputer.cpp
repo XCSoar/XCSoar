@@ -40,8 +40,8 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
   if (basic.location_available) {
     // Precalculate relative east and north projection to lat/lon
     // for Location calculations of each target
-    Angle delta_lat = Angle::degrees(fixed(0.01));
-    Angle delta_lon = Angle::degrees(fixed(0.01));
+    Angle delta_lat = Angle::Degrees(fixed(0.01));
+    Angle delta_lon = Angle::Degrees(fixed(0.01));
 
     GeoPoint plat = basic.location;
     plat.latitude += delta_lat;
@@ -52,8 +52,8 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
     fixed dlon = basic.location.Distance(plon);
 
     if (positive(fabs(dlat)) && positive(fabs(dlon))) {
-      north_to_latitude = delta_lat.value_degrees() / dlat;
-      east_to_longitude = delta_lon.value_degrees() / dlon;
+      north_to_latitude = delta_lat.Degrees() / dlat;
+      east_to_longitude = delta_lon.Degrees() / dlon;
     }
   }
 
@@ -76,11 +76,11 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
     traffic.location_available = basic.location_available;
     if (traffic.location_available) {
       traffic.location.latitude =
-          Angle::degrees(traffic.relative_north * north_to_latitude) +
+          Angle::Degrees(traffic.relative_north * north_to_latitude) +
           basic.location.latitude;
 
       traffic.location.longitude =
-          Angle::degrees(traffic.relative_east * east_to_longitude) +
+          Angle::Degrees(traffic.relative_east * east_to_longitude) +
           basic.location.longitude;
     }
 
@@ -133,7 +133,7 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
       if (!traffic.turn_rate_received) {
         Angle turn_rate = traffic.track - last_traffic->track;
         traffic.turn_rate =
-          turn_rate.as_delta().value_degrees() / dt;
+          turn_rate.AsDelta().Degrees() / dt;
       }
 
       // Calculate the speed [m/s]

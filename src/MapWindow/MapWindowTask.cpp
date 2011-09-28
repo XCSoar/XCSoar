@@ -118,7 +118,7 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
   GeoPoint target = tp->GetLocationRemaining();
   GeoVector vec(Basic().location, target);
 
-  if ((Basic().track - vec.bearing).as_delta().magnitude_degrees() < fixed(10))
+  if ((Basic().track - vec.bearing).AsDelta().AbsoluteDegrees() < fixed(10))
     // insignificant error
     return;
 

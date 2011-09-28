@@ -60,10 +60,10 @@ static Waypoint
 MakeWaypoint(const TCHAR *name, int altitude,
              double longitude, double latitude)
 {
-  const GeoPoint gp(Angle::degrees(fixed(7.7061111111111114)),
-                    Angle::degrees(fixed(51.051944444444445)));
-  Waypoint wp(GeoPoint(Angle::degrees(fixed(longitude)),
-                       Angle::degrees(fixed(latitude))));
+  const GeoPoint gp(Angle::Degrees(fixed(7.7061111111111114)),
+                    Angle::Degrees(fixed(51.051944444444445)));
+  Waypoint wp(GeoPoint(Angle::Degrees(fixed(longitude)),
+                       Angle::Degrees(fixed(latitude))));
   wp.name = name;
   wp.altitude = fixed(altitude);
   return wp;

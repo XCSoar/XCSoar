@@ -50,7 +50,7 @@ InfoBoxContentTrack::HandleKey(const InfoBoxKeyCodes keycode)
   if (!XCSoarInterface::Basic().gps.simulator)
     return false;
 
-  const Angle a5 = Angle::degrees(fixed(5));
+  const Angle a5 = Angle::Degrees(fixed(5));
   switch (keycode) {
   case ibkUp:
     device_blackboard.SetTrack(

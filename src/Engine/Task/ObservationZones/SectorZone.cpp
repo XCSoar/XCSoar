@@ -26,9 +26,9 @@
 GeoPoint
 SectorZone::GetBoundaryParametric(fixed t) const
 {
-  const Angle sweep = (EndRadial - StartRadial).as_bearing();
+  const Angle sweep = (EndRadial - StartRadial).AsBearing();
   const fixed l = Radius;
-  const fixed c1 = sweep.value_radians() * Radius;
+  const fixed c1 = sweep.Radians() * Radius;
   const fixed tt = t * (c1 + 2 * l);
   Angle a;
   fixed d;
@@ -37,7 +37,7 @@ SectorZone::GetBoundaryParametric(fixed t) const
     a = StartRadial;
   } else if (tt < l + c1) {
     d = Radius;
-    a = StartRadial + Angle::radians(((tt - l) / c1) * sweep.value_radians());
+    a = StartRadial + Angle::Radians(((tt - l) / c1) * sweep.Radians());
   } else {
     d = Radius - (tt - l - c1) / l * Radius;
     a = EndRadial;
@@ -83,7 +83,7 @@ SectorZone::setEndRadial(const Angle x)
 bool
 SectorZone::angleInSector(const Angle b) const
 {
-  return b.between(StartRadial, EndRadial);
+  return b.Between(StartRadial, EndRadial);
 }
 
 bool

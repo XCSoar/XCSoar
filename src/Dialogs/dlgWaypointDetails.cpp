@@ -508,7 +508,7 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
     Units::FormatUserDistance(gv.distance, DistanceText, 10);
 
     _sntprintf(sTmp, 128, _T("%d")_T(DEG)_T(" %s"),
-               iround(gv.bearing.value_degrees()),
+               iround(gv.bearing.Degrees()),
                DistanceText);
     ((WndProperty *)wf->FindByName(_T("BearingDistance")))->SetText(sTmp);
   }

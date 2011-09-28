@@ -103,14 +103,14 @@ Canvas::segment(PixelScalar x, PixelScalar y, UPixelScalar radius,
 
   if (!brush.is_hollow())
     ::filledPieColor(surface, x, y, radius, 
-                     (int)start.value_degrees() - 90,
-                     (int)end.value_degrees() - 90,
+                     (int)start.Degrees() - 90,
+                     (int)end.Degrees() - 90,
                      brush.get_color().gfx_color());
 
   if (pen_over_brush())
     ::pieColor(surface, x, y, radius, 
-               (int)start.value_degrees() - 90,
-               (int)end.value_degrees() - 90,
+               (int)start.Degrees() - 90,
+               (int)end.Degrees() - 90,
                pen.get_color().gfx_color());
 }
 

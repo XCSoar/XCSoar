@@ -46,15 +46,15 @@ IGCWriter::LogPoint_GPSPosition::operator=(const NMEAInfo &gps_info)
 static char *
 igc_format_location(char *buffer, const GeoPoint &location)
 {
-  char latitude_suffix = negative(location.latitude.value_native())
+  char latitude_suffix = negative(location.latitude.Native())
     ? 'S' : 'N';
   unsigned latitude =
-    (unsigned)uround(fabs(location.latitude.value_degrees() * 60000));
+    (unsigned)uround(fabs(location.latitude.Degrees() * 60000));
 
-  char longitude_suffix = negative(location.longitude.value_native())
+  char longitude_suffix = negative(location.longitude.Native())
     ? 'W' : 'E';
   unsigned longitude =
-    (unsigned)uround(fabs(location.longitude.value_degrees() * 60000));
+    (unsigned)uround(fabs(location.longitude.Degrees() * 60000));
 
   sprintf(buffer, "%02u%05u%c%03u%05u%c",
           latitude / 60000, latitude % 60000, latitude_suffix,

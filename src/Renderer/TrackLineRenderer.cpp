@@ -34,7 +34,7 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
                         const Angle track_angle, const RasterPoint pos)
 {
   fixed x, y;
-  (track_angle - screen_angle).sin_cos(x, y);
+  (track_angle - screen_angle).SinCos(x, y);
 
   RasterPoint end;
   end.x = pos.x + iround(x * fixed_int_constant(400));
@@ -55,7 +55,7 @@ TrackLineRenderer::Draw(Canvas &canvas, const Angle screen_angle,
     return;
 
   if (settings.DisplayTrackBearing == dtbAuto &&
-      (basic.track - calculated.heading).as_delta().magnitude_degrees() < fixed(5))
+      (basic.track - calculated.heading).AsDelta().AbsoluteDegrees() < fixed(5))
     return;
 
   TrackLineRenderer::Draw(canvas, screen_angle, basic.track, pos);

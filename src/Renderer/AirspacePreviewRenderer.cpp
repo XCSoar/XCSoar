@@ -58,7 +58,7 @@ DrawPolygon(Canvas &canvas, const AirspacePolygon &airspace,
   projection.SetScreenOrigin(pt.x, pt.y);
   projection.SetGeoLocation(center);
   projection.SetScale(fixed(radius * 2) / geo_size);
-  projection.SetScreenAngle(Angle::zero());
+  projection.SetScreenAngle(Angle::Zero());
   projection.UpdateScreenBounds();
 
   const SearchPointVector &border = airspace.GetPoints();

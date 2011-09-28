@@ -60,7 +60,7 @@ struct GeoPoint {
    * vs 359 degrees).  This modification is in-place.
    */
   GeoPoint &Normalize() {
-    longitude = longitude.as_delta();
+    longitude = longitude.AsDelta();
     return *this;
   }
 

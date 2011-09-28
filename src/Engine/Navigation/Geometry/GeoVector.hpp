@@ -53,7 +53,7 @@ struct GeoVector {
    * used to allow GeoVector x=0 calls. 
    */
   GeoVector(const fixed _distance)
-    :distance(_distance), bearing(Angle::zero()) {}
+    :distance(_distance), bearing(Angle::Zero()) {}
 
   /**
    * Constructor given start and end location.  

@@ -54,10 +54,10 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
       for (unsigned j = 0; j < ny; ++j) {
         fixed fx = (fixed)i / (nx - 1) * fixed(2.0) - fixed_one;
         fixed fy = (fixed)j / (ny - 1) * fixed(2.0) - fixed_one;
-        GeoPoint x(origin.longitude + Angle::degrees(fixed(0.2) + fixed(0.7) * fx),
-                   origin.latitude + Angle::degrees(fixed(0.9) * fy));
+        GeoPoint x(origin.longitude + Angle::Degrees(fixed(0.2) + fixed(0.7) * fx),
+                   origin.latitude + Angle::Degrees(fixed(0.9) * fy));
         short h = map.GetInterpolatedHeight(x);
-        fout << x.longitude.value_degrees() << " " << x.latitude.value_degrees()
+        fout << x.longitude.Degrees() << " " << x.latitude.Degrees()
              << " " << h << "\n";
       }
 
@@ -69,10 +69,10 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
   {
     // local scope, see what happens when we go out of scope
-    GeoPoint p_start(Angle::degrees(fixed(-0.3)), Angle::degrees(fixed(0.0)));
+    GeoPoint p_start(Angle::Degrees(fixed(-0.3)), Angle::Degrees(fixed(0.0)));
     p_start += map.GetMapCenter();
 
-    GeoPoint p_dest(Angle::degrees(fixed(0.8)), Angle::degrees(fixed(-0.7)));
+    GeoPoint p_dest(Angle::Degrees(fixed(0.8)), Angle::Degrees(fixed(-0.7)));
     p_dest += map.GetMapCenter();
 
     AGeoPoint loc_start(p_start, RoughAltitude(map.GetHeight(p_start) + 100));
@@ -125,7 +125,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
     }
 
     // try the solver
-    SpeedVector wind(Angle::degrees(fixed(0)), fixed(0.0));
+    SpeedVector wind(Angle::Degrees(fixed(0)), fixed(0.0));
     GlidePolar polar(fixed_one);
 
     AirspaceRoute route(*airspaces);
@@ -136,7 +136,7 @@ test_route(const unsigned n_airspaces, const RasterMap& map)
 
     bool sol = false;
     for (int i = 0; i < NUM_SOL; i++) {
-      loc_end.latitude += Angle::degrees(fixed(0.1));
+      loc_end.latitude += Angle::Degrees(fixed(0.1));
       loc_end.altitude = map.GetHeight(loc_end) + 100;
       route.synchronise(*airspaces, loc_start, loc_end);
       if (route.Solve(loc_start, loc_end, config)) {

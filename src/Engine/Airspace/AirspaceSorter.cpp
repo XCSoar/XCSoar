@@ -100,7 +100,7 @@ AirspaceSorter::FilterNamePrefix(AirspaceSelectInfoVector &v,
 static bool
 AirspaceDirectionFilter(const AirspaceSelectInfo& elem1)
 {
-  fixed DirectionErr = (elem1.Direction - Direction).as_delta().magnitude_degrees();
+  fixed DirectionErr = (elem1.Direction - Direction).AsDelta().AbsoluteDegrees();
   return DirectionErr > fixed_int_constant(18);
 }
 

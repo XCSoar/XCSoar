@@ -20,6 +20,7 @@ Copyright_License {
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
 */
+
 #include "Angle.hpp"
 #include <assert.h>
 
@@ -32,72 +33,78 @@ Copyright_License {
 #endif
 
 int
-Angle::sign(const fixed& tolerance) const
+Angle::Sign(const fixed& tolerance) const
 {
-  if ((m_value> tolerance)) return 1;
-  if ((m_value< -tolerance)) return -1;
+  if ((value > tolerance))
+    return 1;
+  if ((value < -tolerance))
+    return -1;
+
   return 0;
 }
 
 int
-Angle::sign() const
+Angle::Sign() const
 {
-  if (positive(m_value)) return 1;
-  if (negative(m_value)) return -1;
+  if (positive(value))
+    return 1;
+  if (negative(value))
+    return -1;
+
   return 0;
 }
 
 void
-Angle::flip()
+Angle::Flip()
 {
-  m_value = -m_value;
+  value = -value;
 }
 
 fixed
-Angle::magnitude_degrees() const 
+Angle::AbsoluteDegrees() const 
 {
-  return fabs(value_degrees());
+  return fabs(Degrees());
 }
 
 fixed
-Angle::magnitude_radians() const 
+Angle::AbsoluteRadians() const 
 {
-  return fabs(value_radians());
+  return fabs(Radians());
 }
 
 Angle
-Angle::flipped() const
+Angle::Flipped() const
 {
-  Angle retval(m_value);
-  retval.flip();
+  Angle retval(value);
+  retval.Flip();
   return retval;
 }
 
 Angle
-Angle::as_bearing() const
+Angle::AsBearing() const
 {
-  assert(fabs(m_value)< fixed(100)*fixed_circle);
-  Angle retval(m_value);
+  assert(fabs(value) < fixed(100) * fixed_circle);
+  Angle retval(value);
 
-  while (retval.m_value < fixed_zero)
-    retval.m_value += fixed_circle;
+  while (retval.value < fixed_zero)
+    retval.value += fixed_circle;
 
-  while (retval.m_value >= fixed_circle)
-    retval.m_value -= fixed_circle;
+  while (retval.value >= fixed_circle)
+    retval.value -= fixed_circle;
 
   return retval;
 }
 
 Angle
-Angle::as_delta() const
+Angle::AsDelta() const
 {
-  assert(fabs(m_value)< fixed(100)*fixed_circle);
-  Angle retval(m_value);
-  while (retval.m_value <= -fixed_half_circle)
-    retval.m_value += fixed_circle;
+  assert(fabs(value) < fixed(100) * fixed_circle);
+  Angle retval(value);
+  while (retval.value <= -fixed_half_circle)
+    retval.value += fixed_circle;
 
-  while (retval.m_value > fixed_half_circle)
-    retval.m_value -= fixed_circle;
+  while (retval.value > fixed_half_circle)
+    retval.value -= fixed_circle;
 
   return retval;
 }
@@ -105,54 +112,54 @@ Angle::as_delta() const
 Angle
 Angle::Reciprocal() const
 {
-  Angle retval(m_value+ fixed_half_circle);
-  return retval.as_bearing();
+  Angle retval(value + fixed_half_circle);
+  return retval.AsBearing();
 }
 
 Angle
-Angle::BiSector(const Angle &OutBound) const
+Angle::BiSector(const Angle &out_bound) const
 {
-  return Reciprocal().HalfAngle(OutBound);
+  return Reciprocal().HalfAngle(out_bound);
 }
 
 Angle
-Angle::HalfAngle(const Angle &End) const
+Angle::HalfAngle(const Angle &end) const
 {
-  if (m_value == End.m_value) {
+  if (value == end.value) {
     return Reciprocal();
-  } else if (m_value > End.m_value) {
-    if ((m_value - End.m_value) < fixed_half_circle)
-      return (*this + End).half().Reciprocal();
+  } else if (value > end.value) {
+    if ((value - end.value) < fixed_half_circle)
+      return (*this + end).Half().Reciprocal();
     else
-      return (*this + End).half();
+      return (*this + end).Half();
   } else {
-    if ((End.m_value - m_value) < fixed_half_circle)
-      return (*this + End).half().Reciprocal();
+    if ((end.value - value) < fixed_half_circle)
+      return (*this + end).Half().Reciprocal();
     else
-      return (*this + End).half();
+      return (*this + end).Half();
   }
 }
 
 Angle
-Angle::Fraction(const Angle &End, const fixed fraction) const
+Angle::Fraction(const Angle &end, const fixed fraction) const
 {
-  if (m_value == End.m_value)
-    return Angle(m_value);
+  if (value == end.value)
+    return Angle(value);
 
-  const Angle diff = Angle(End.m_value - m_value).as_delta();
+  const Angle diff = Angle(end.value - value).AsDelta();
 
-  // Note: do not return with as_bearing() since this will produce incorrect
+  // Note: do not return with AsBearing() since this will produce incorrect
   // results for latitude values!
 
-  return Angle(m_value + diff.m_value * fraction);
+  return Angle(value + diff.value * fraction);
 }
 
 gcc_pure
 bool
-Angle::between(const Angle &start, const Angle &end) const
+Angle::Between(const Angle &start, const Angle &end) const
 {
-  Angle width = (end - start).as_bearing();
-  Angle delta = (*this - start).as_bearing();
+  Angle width = (end - start).AsBearing();
+  Angle delta = (*this - start).AsBearing();
 
   return delta <= width;
 }

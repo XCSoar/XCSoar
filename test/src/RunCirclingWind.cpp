@@ -65,13 +65,13 @@ int main(int argc, char **argv)
 
       Angle bearing;
       if (result.wind.y == fixed_zero && result.wind.x == fixed_zero)
-        bearing = Angle::zero();
+        bearing = Angle::Zero();
       else
-        bearing = Angle::radians(atan2(result.wind.y, result.wind.x)).as_bearing();
+        bearing = Angle::Radians(atan2(result.wind.y, result.wind.x)).AsBearing();
 
       printf("%d %d %d %g\n",
              (int)replay->Basic().time,
-             result.quality, (int)bearing.value_degrees(), (double)mag);
+             result.quality, (int)bearing.Degrees(), (double)mag);
     }
   }
 

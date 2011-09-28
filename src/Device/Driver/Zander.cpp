@@ -87,7 +87,7 @@ PZAN3(NMEAInputLine &line, NMEAInfo &info)
   }
 
   if (okay == 'A') {
-    SpeedVector wind(Angle::degrees(fixed(direction)),
+    SpeedVector wind(Angle::Degrees(fixed(direction)),
                      Units::ToSysUnit(fixed(speed), unKiloMeterPerHour));
     info.ProvideExternalWind(wind);
   }

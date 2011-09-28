@@ -26,23 +26,23 @@
 GeoPoint
 AnnularSectorZone::GetBoundaryParametric(fixed t) const
 {
-  const Angle sweep = (EndRadial - StartRadial).as_bearing();
-  const fixed c0 = sweep.value_radians() * InnerRadius;
+  const Angle sweep = (EndRadial - StartRadial).AsBearing();
+  const fixed c0 = sweep.Radians() * InnerRadius;
   const fixed l = Radius - InnerRadius;
-  const fixed c1 = sweep.value_radians() * Radius;
+  const fixed c1 = sweep.Radians() * Radius;
   const fixed tt = t * (c0 + c1 + 2 * l);
   Angle a;
   fixed d;
   if (tt < c0) {
     d = InnerRadius;
-    a = Angle::radians((tt / c0) * sweep.value_radians()) + StartRadial;
+    a = Angle::Radians((tt / c0) * sweep.Radians()) + StartRadial;
   } else if (positive(l) && (tt < c0 + l)) {
     d = (tt - c0) / l * (Radius - InnerRadius) + InnerRadius;
     a = EndRadial;
   } else if (tt < c0 + l + c1) {
     d = Radius;
     a = EndRadial
-        - Angle::radians(((tt - c0 - l) / c1) * sweep.value_radians());
+        - Angle::Radians(((tt - c0 - l) / c1) * sweep.Radians());
   } else if (positive(l)) {
     d = (tt - c0 - l - c1) / l * (InnerRadius - Radius) + Radius;
     a = StartRadial;

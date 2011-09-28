@@ -85,7 +85,7 @@ TestTrace(const char *filename, unsigned ntrace, bool output=false)
       continue;
 
     on_advance(trace,
-               fix.location, fixed(30), Angle::zero(),
+               fix.location, fixed(30), Angle::Zero(),
                fix.gps_altitude, fix.pressure_altitude,
                fixed(fix.time.GetSecondOfDay()));
   }

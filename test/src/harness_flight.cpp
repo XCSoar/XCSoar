@@ -63,9 +63,9 @@ static Angle
 wind_to_dir(int n_wind)
 {
   if (n_wind)
-    return Angle::degrees(fixed(90 * ((n_wind - 1) % 4))).as_bearing();
+    return Angle::Degrees(fixed(90 * ((n_wind - 1) % 4))).AsBearing();
 
-  return Angle::zero();
+  return Angle::Zero();
 }
 
 const char*
@@ -73,7 +73,7 @@ wind_name(int n_wind)
 {
   static char buffer[80];
   sprintf(buffer,"%d m/s @ %d", (int)wind_to_mag(n_wind),
-          (int)wind_to_dir(n_wind).value_degrees());
+          (int)wind_to_dir(n_wind).Degrees());
   return buffer;
 }
 
@@ -186,7 +186,7 @@ bool run_flight(TaskManager &task_manager,
   PrintTaskAutoPilot autopilot(parms);
   AircraftSim aircraft;
 
-  autopilot.set_default_location(GeoPoint(Angle::degrees(fixed(1.0)), Angle::degrees(fixed(0.0))));
+  autopilot.set_default_location(GeoPoint(Angle::Degrees(fixed(1.0)), Angle::Degrees(fixed(0.0))));
 
   unsigned print_counter=0;
   if (n_wind)

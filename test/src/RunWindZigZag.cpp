@@ -47,11 +47,11 @@ int main(int argc, char **argv)
       wind_zig_zag.Update(data, replay->Calculated());
     if (result.quality > 0)
       printf("%d %d %d %g %g %g %d\n", (int)data.time, result.quality,
-             (int)result.wind.bearing.value_degrees(),
+             (int)result.wind.bearing.Degrees(),
              (double)result.wind.norm,
              (double)data.ground_speed,
              (double)data.true_airspeed,
-             (int)data.track.value_degrees());
+             (int)data.track.Degrees());
   }
 
   delete replay;

@@ -56,12 +56,12 @@ int main(int argc, char **argv)
   ok1(equals(p2.y, 13));
 
   // test rotate()
-  p2.Rotate(Angle::degrees(fixed(-90)));
+  p2.Rotate(Angle::Degrees(fixed(-90)));
   ok1(equals(p2.x, 13));
   ok1(equals(p2.y, -3));
 
-  p2.Rotate(Angle::degrees(fixed(45)));
-  p2.Rotate(Angle::degrees(fixed(45)));
+  p2.Rotate(Angle::Degrees(fixed(45)));
+  p2.Rotate(Angle::Degrees(fixed(45)));
   ok1(equals(p2.x, 3));
   ok1(equals(p2.y, 13));
 

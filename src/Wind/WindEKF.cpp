@@ -288,7 +288,7 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   float dynamic_pressure = V*V;
   float gps_vel[2];
   fixed gps_east, gps_north;
-  basic.track.sin_cos(gps_east, gps_north);
+  basic.track.SinCos(gps_east, gps_north);
   gps_vel[0] = (float)(gps_east * basic.ground_speed);
   gps_vel[1] = (float)(gps_north * basic.ground_speed);
 

@@ -43,7 +43,7 @@ FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
    padding(_padding),
    small(_small),
    enable_north_up(false),
-   heading(Angle::radians(fixed_zero)),
+   heading(Angle::Radians(fixed_zero)),
    side_display_type(1)
 {
   data.Clear();
@@ -367,7 +367,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   // Rotate and shift the arrow
   PolygonRotateShift(Arrow, 5, sc[i].x, sc[i].y,
                      traffic.track - (enable_north_up ?
-                                             Angle::zero() : heading));
+                                             Angle::Zero() : heading));
 
   // Draw the polygon
   canvas.polygon(Arrow, 5);

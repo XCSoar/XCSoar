@@ -81,7 +81,7 @@ dlgWindSettingsShowModal(void)
   if (wp) {
     wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.Set(CommonInterface::Calculated().wind.bearing.value_degrees());
+    df.Set(CommonInterface::Calculated().wind.bearing.Degrees());
     wp->RefreshDisplay();
   }
 
@@ -129,7 +129,7 @@ dlgWindSettingsShowModal(void)
     if (wp != NULL) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       XCSoarInterface::SetSettingsComputer().ManualWind.bearing =
-        Angle::degrees(df.GetAsFixed());
+        Angle::Degrees(df.GetAsFixed());
       XCSoarInterface::SetSettingsComputer().ManualWindAvailable.Update(XCSoarInterface::Basic().clock);
     }
 

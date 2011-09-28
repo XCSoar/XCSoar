@@ -46,8 +46,8 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   if (summary.p_remaining < fixed(0.99)) {
     canvas.select(Graphics::hbWind);
     canvas.null_pen();
-    canvas.segment(center.x, center.y, radius, Angle::radians(fixed_zero),
-                   Angle::radians(sweep * (fixed_one -  summary.p_remaining)));
+    canvas.segment(center.x, center.y, radius, Angle::Radians(fixed_zero),
+                   Angle::Radians(sweep * (fixed_one -  summary.p_remaining)));
   }
 
   canvas.select(pen_f);
@@ -58,7 +58,7 @@ TaskProgressRenderer::Draw(const TaskSummary& summary, Canvas &canvas,
   canvas.select(pen_f);
   for (TaskSummary::TaskSummaryPointVector::const_iterator it = summary.pts.begin();
        it != summary.pts.end(); ++it, ++i) {
-    Angle a = Angle::radians(it->p * sweep);
+    Angle a = Angle::Radians(it->p * sweep);
     int x = center.x + (int)(radius * a.fastsine());
     int y = center.y - (int)(radius * a.fastcosine());
     int w;

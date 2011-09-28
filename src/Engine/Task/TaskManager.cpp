@@ -381,7 +381,7 @@ TaskManager::random_point_in_task(const unsigned index, const fixed mag) const
   if (index <= task_size())
     return active_task->GetActiveTaskPoint()->GetLocation();
 
-  GeoPoint null_location(Angle::zero(), Angle::zero());
+  GeoPoint null_location(Angle::Zero(), Angle::Zero());
   return null_location;
 }
 

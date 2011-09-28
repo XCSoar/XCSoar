@@ -49,7 +49,7 @@ public:
    */
   FAISectorZone(const GeoPoint loc, const bool is_turnpoint = true)
     :SymmetricSectorZone(FAI_SECTOR, loc, fixed(1000.0 * (is_turnpoint ? 10 : 1)),
-                         Angle::radians(fixed_half_pi)),
+                         Angle::Radians(fixed_half_pi)),
      m_is_turnpoint(is_turnpoint)
   {
     updateSector();

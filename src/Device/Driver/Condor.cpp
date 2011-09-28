@@ -49,7 +49,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
     // _not_ the direction it is coming from !!
     //
     // This seems to differ from the output that the LX devices are giving !!
-    value_r.bearing = Angle::degrees(bearing).Reciprocal();
+    value_r.bearing = Angle::Degrees(bearing).Reciprocal();
     value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
     return true;
   } else

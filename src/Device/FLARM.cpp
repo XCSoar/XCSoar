@@ -108,7 +108,7 @@ FlarmDeclareInternal(Port *port, const Declaration &declaration,
     double tmp, MinLat, MinLon;
     char NoS, EoW;
 
-    tmp = declaration.GetLocation(i).latitude.value_degrees();
+    tmp = declaration.GetLocation(i).latitude.Degrees();
     if (tmp < 0) {
       NoS = 'S';
       tmp = -tmp;
@@ -118,7 +118,7 @@ FlarmDeclareInternal(Port *port, const Declaration &declaration,
     DegLat = (int)tmp;
     MinLat = (tmp - DegLat) * 60 * 1000;
 
-    tmp = declaration.GetLocation(i).longitude.value_degrees();
+    tmp = declaration.GetLocation(i).longitude.Degrees();
     if (tmp < 0) {
       EoW = 'W';
       tmp = -tmp;

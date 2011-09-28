@@ -142,7 +142,7 @@ InfoBoxContentWind::PnlEditOnTabPreShow(TabBarControl::EventType EventType)
   if (wp) {
     wp->set_enabled(!external_wind);
     DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
-    df.Set(CommonInterface::Calculated().wind.bearing.value_degrees());
+    df.Set(CommonInterface::Calculated().wind.bearing.Degrees());
     wp->RefreshDisplay();
   }
 
@@ -175,7 +175,7 @@ InfoBoxContentWind::PnlEditOnWindDirection(gcc_unused DataFieldFloat &Sender)
     settings_computer.ExternalWind;
 
   if (!external_wind) {
-    settings_computer.ManualWind.bearing = Angle::degrees(Sender.GetAsFixed());
+    settings_computer.ManualWind.bearing = Angle::Degrees(Sender.GetAsFixed());
     settings_computer.ManualWindAvailable.Update(basic.clock);
   }
 }

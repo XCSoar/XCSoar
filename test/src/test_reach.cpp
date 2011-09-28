@@ -37,7 +37,7 @@
 static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
 {
   GlidePolar polar(mc);
-  SpeedVector wind(Angle::degrees(fixed(0)), mwind);
+  SpeedVector wind(Angle::Degrees(fixed(0)), mwind);
   TerrainRoute route;
   route.UpdatePolar(polar, polar, wind);
   route.SetTerrain(&map);
@@ -58,8 +58,8 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
 
   PrintHelper::print_reach_tree(route);
 
-  GeoPoint dest(origin.longitude-Angle::degrees(fixed(0.02)),
-                origin.latitude-Angle::degrees(fixed(0.02)));
+  GeoPoint dest(origin.longitude-Angle::Degrees(fixed(0.02)),
+                origin.latitude-Angle::Degrees(fixed(0.02)));
 
   {
     std::ofstream fout ("results/terrain.txt");
@@ -69,8 +69,8 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
       for (unsigned j=0; j< ny; ++j) {
         fixed fx = (fixed)i/(nx-1)*fixed_two-fixed_one;
         fixed fy = (fixed)j/(ny-1)*fixed_two-fixed_one;
-        GeoPoint x(origin.longitude+Angle::degrees(fixed(0.6)*fx),
-                   origin.latitude+Angle::degrees(fixed(0.6)*fy));
+        GeoPoint x(origin.longitude+Angle::Degrees(fixed(0.6)*fx),
+                   origin.latitude+Angle::Degrees(fixed(0.6)*fy));
         short h = map.GetInterpolatedHeight(x);
         AGeoPoint adest(x, RoughAltitude(h));
         RoughAltitude ha, hd;
@@ -79,8 +79,8 @@ static void test_reach(const RasterMap& map, fixed mwind, fixed mc)
           AGeoPoint ao2(x, RoughAltitude(h + 1000));
           route.SolveReach(ao2);
         }
-        fout << x.longitude.value_degrees() << " "
-             << x.latitude.value_degrees() << " "
+        fout << x.longitude.Degrees() << " "
+             << x.latitude.Degrees() << " "
              << h << " " << (int)ha << "\n";
       }
       fout << "\n";

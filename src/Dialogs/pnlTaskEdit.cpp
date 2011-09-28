@@ -158,7 +158,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                 (name_font.get_height() - small_font.get_height()) / 2, buffer);
 
     // Draw leg bearing
-    _stprintf(buffer, _T("%.0f" DEG " T"), (double)leg.bearing.value_degrees());
+    _stprintf(buffer, _T("%.0f" DEG " T"), (double)leg.bearing.Degrees());
     width = canvas.text_width(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
 

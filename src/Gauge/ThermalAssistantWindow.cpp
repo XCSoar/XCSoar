@@ -43,7 +43,7 @@ ThermalAssistantWindow::ThermalAssistantWindow(unsigned _padding, bool _small)
   :max_lift(fixed_one),
    padding(_padding),
    small(_small),
-   direction(Angle::radians(fixed_zero))
+   direction(Angle::Radians(fixed_zero))
 {
   for (unsigned i = 0; i <= 36; i++) {
     lift_points[i].x = 0;
@@ -140,7 +140,7 @@ ThermalAssistantWindow::UpdateLiftPoints()
   lift_point_avg.y = 0;
 
   for (unsigned i = 0; i < 36; i++) {
-    Angle d = Angle::degrees(fixed(i * 10));
+    Angle d = Angle::Degrees(fixed(i * 10));
 
     lift_points[i].x = (int)((d - direction).cos() *
                        RangeScale(derived.lift_database[i]));

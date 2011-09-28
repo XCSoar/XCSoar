@@ -36,7 +36,7 @@ struct Vector {
   Vector(fixed _x, fixed _y):x(_x), y(_y) {}
 
   Vector(const SpeedVector speed) {
-    speed.bearing.sin_cos(y, x);
+    speed.bearing.SinCos(y, x);
     x *= speed.norm;
     y *= speed.norm;
   }

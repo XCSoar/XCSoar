@@ -41,8 +41,8 @@ test_simple()
 {
   Projection prj;
 
-  TestGeoScreenCouple(prj, GeoPoint(Angle::degrees(fixed_zero),
-                                    Angle::degrees(fixed_zero)), 0, 0);
+  TestGeoScreenCouple(prj, GeoPoint(Angle::Degrees(fixed_zero),
+                                    Angle::Degrees(fixed_zero)), 0, 0);
 }
 
 int

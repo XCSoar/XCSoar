@@ -90,7 +90,7 @@ AircraftStateFilter::GetSpeed() const
 Angle
 AircraftStateFilter::GetBearing() const
 {
-  return Angle::from_xy(v_y, v_x).as_bearing();
+  return Angle::FromXY(v_y, v_x).AsBearing();
 }
 
 bool

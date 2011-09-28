@@ -44,7 +44,7 @@ public:
    * @return Initialised object
    */
   BGAStartSectorZone(const GeoPoint loc)
-    :SymmetricSectorZone(BGA_START, loc, fixed(5000.0), Angle::radians(fixed_pi))
+    :SymmetricSectorZone(BGA_START, loc, fixed(5000.0), Angle::Radians(fixed_pi))
   {
     updateSector();
   }

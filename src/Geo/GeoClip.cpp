@@ -34,7 +34,7 @@ clip_longitude(const GeoPoint origin, const GeoPoint pt, Angle at)
   Angle dy = pt.latitude - origin.latitude;
 
   Angle ex = at - origin.longitude;
-  Angle ey = ex * (dy.value_native() / dx.value_native());
+  Angle ey = ex * (dy.Native() / dx.Native());
 
   return GeoPoint(at, origin.latitude + ey);
 }
@@ -47,7 +47,7 @@ clip_latitude(const GeoPoint origin, const GeoPoint pt, Angle at)
   Angle dy = pt.latitude - origin.latitude;
 
   Angle ey = at - origin.latitude;
-  Angle ex = ey * (dx.value_native() / dy.value_native());
+  Angle ex = ey * (dx.Native() / dy.Native());
 
   return GeoPoint(origin.longitude + ex, at);
 }
@@ -55,7 +55,7 @@ clip_latitude(const GeoPoint origin, const GeoPoint pt, Angle at)
 bool
 GeoClip::clip_point(const GeoPoint &origin, GeoPoint &pt) const
 {
-  const Angle zero = Angle::zero();
+  const Angle zero = Angle::Zero();
 
   if (pt.longitude < zero) {
     if (origin.longitude <= zero)
@@ -308,7 +308,7 @@ GeoClip::clip_polygon(GeoPoint *dest,
     imported[i] = import_point(src[i]);
 
   GeoPoint *first_stage = dest + src_length;
-  unsigned n = clip_polygon_longitude(Angle::zero(), width,
+  unsigned n = clip_polygon_longitude(Angle::Zero(), width,
                                       first_stage, imported, src_length);
   if (n < 3)
     return 0;

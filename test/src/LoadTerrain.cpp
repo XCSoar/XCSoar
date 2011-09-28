@@ -60,10 +60,10 @@ int main(int argc, char **argv)
 
   GeoBounds bounds = rtc.GetBounds();
   printf("bounds = %f|%f - %f|%f\n",
-         (double)bounds.west.value_degrees(),
-         (double)bounds.north.value_degrees(),
-         (double)bounds.east.value_degrees(),
-         (double)bounds.south.value_degrees());
+         (double)bounds.west.Degrees(),
+         (double)bounds.north.Degrees(),
+         (double)bounds.east.Degrees(),
+         (double)bounds.south.Degrees());
 
   do {
     rtc.UpdateTiles(jp2_path, rtc.GetWidth() / 2, rtc.GetHeight() / 2,

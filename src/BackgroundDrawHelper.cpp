@@ -37,7 +37,7 @@ BackgroundDrawHelper::BackgroundDrawHelper():
   terrain(NULL),
   weather(NULL),
   renderer(NULL),
-  sun_azimuth(Angle::degrees(fixed(45)))
+  sun_azimuth(Angle::Degrees(fixed(45)))
 {
 }
 
@@ -106,7 +106,7 @@ BackgroundDrawHelper::sun_from_wind(const WindowProjection& projection,
 {
   // draw sun from constant angle if very low wind speed
   if (wind.norm < fixed_half)
-    set_sun_angle(projection, Angle::degrees(fixed(-45.0)));
+    set_sun_angle(projection, Angle::Degrees(fixed(-45.0)));
   else
     set_sun_angle(projection, wind.bearing);
 }

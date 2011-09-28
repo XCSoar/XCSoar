@@ -31,19 +31,19 @@ int main(int argc, char **argv)
 {
   plan_tests(3);
 
-  GeoPoint location(Angle::degrees(fixed(7)), Angle::degrees(fixed(45)));
+  GeoPoint location(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(45)));
   fixed altitude(1300);
   fixed average(2.5);
-  SpeedVector wind(Angle::degrees(fixed(60)), fixed(20));
+  SpeedVector wind(Angle::Degrees(fixed(60)), fixed(20));
 
-  GeoPoint ground_location(Angle::zero(), Angle::zero());
+  GeoPoint ground_location(Angle::Zero(), Angle::Zero());
   fixed ground_alt;
 
   EstimateThermalBase(location, altitude, average, wind,
                       ground_location, ground_alt);
 
-  ok1(equals(ground_location.longitude.value_degrees(), 7.114186));
-  ok1(equals(ground_location.latitude.value_degrees(), 45.046563));
+  ok1(equals(ground_location.longitude.Degrees(), 7.114186));
+  ok1(equals(ground_location.latitude.Degrees(), 45.046563));
   ok1(equals(ground_alt, 0));
 
   return exit_status();

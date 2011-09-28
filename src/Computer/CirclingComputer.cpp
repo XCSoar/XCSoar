@@ -57,9 +57,9 @@ CirclingComputer::TurnRate(CirclingInfo &circling_info,
   assert(positive(dT));
 
   circling_info.turn_rate =
-    (basic.track - last_basic.track).as_delta().value_degrees() / dT;
+    (basic.track - last_basic.track).AsDelta().Degrees() / dT;
   circling_info.turn_rate_heading =
-    (calculated.heading - last_calculated.heading).as_delta().value_degrees() / dT;
+    (calculated.heading - last_calculated.heading).AsDelta().Degrees() / dT;
 }
 
 void

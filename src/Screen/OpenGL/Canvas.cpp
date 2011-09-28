@@ -327,7 +327,7 @@ gcc_const
 static unsigned
 AngleToDonutVertex(Angle angle)
 {
-  return (NATIVE_TO_INT(angle.value_native()) * 64 / 4096 + 48) & 0x3e;
+  return (NATIVE_TO_INT(angle.Native()) * 64 / 4096 + 48) & 0x3e;
 }
 
 void

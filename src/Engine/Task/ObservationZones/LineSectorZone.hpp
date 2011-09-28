@@ -48,7 +48,7 @@ public:
    * @return Initialised object
    */
   LineSectorZone(const GeoPoint loc, const fixed length = fixed(1000.0))
-    :SymmetricSectorZone(LINE, loc, half(length), Angle::radians(fixed_pi))
+    :SymmetricSectorZone(LINE, loc, half(length), Angle::Radians(fixed_pi))
   {
     updateSector();
   }

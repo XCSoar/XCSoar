@@ -36,7 +36,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
   bool norm_valid = line.read_checked(norm);
 
   if (bearing_valid && norm_valid) {
-    value_r.bearing = Angle::degrees(bearing);
+    value_r.bearing = Angle::Degrees(bearing);
     value_r.norm = norm / 10;
     return true;
   }

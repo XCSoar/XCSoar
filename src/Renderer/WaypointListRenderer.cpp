@@ -117,7 +117,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
     // Draw leg bearing
     _stprintf(buffer, _T(" %.0f" DEG " T"),
-              (double)vector->bearing.value_degrees());
+              (double)vector->bearing.Degrees());
     width = canvas.text_width(buffer);
     canvas.text(rc.right - Layout::FastScale(2) - width, top2, buffer);
 

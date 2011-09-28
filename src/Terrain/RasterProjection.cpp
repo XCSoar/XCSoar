@@ -30,12 +30,12 @@ RasterProjection::set(const GeoBounds &bounds,
                       unsigned width, unsigned height)
 {
   x_scale = fixed(width) /
-    (bounds.east - bounds.west).as_bearing().value_native();
-  left = bounds.west.value_native() * x_scale;
+    (bounds.east - bounds.west).AsBearing().Native();
+  left = bounds.west.Native() * x_scale;
 
   y_scale = fixed(height) /
-    (bounds.north - bounds.south).as_bearing().value_native();
-  top = bounds.north.value_native() * y_scale;
+    (bounds.north - bounds.south).AsBearing().Native();
+  top = bounds.north.Native() * y_scale;
 }
 
 fixed
@@ -64,6 +64,6 @@ RasterProjection::pixel_distance(const GeoPoint &location, unsigned pixels) cons
 unsigned
 RasterProjection::distance_pixels(fixed distance) const
 {
-  Angle angle = Angle::radians(distance / REARTH);
+  Angle angle = Angle::Radians(distance / REARTH);
   return angle_to_height(angle);
 }

@@ -60,7 +60,7 @@ TopographyFile::TopographyFile(struct zzip_dir *_dir, const char *filename,
     ++dir->refcount;
 
   cache_bounds.west = cache_bounds.east =
-    cache_bounds.south = cache_bounds.north = Angle::zero();
+    cache_bounds.south = cache_bounds.north = Angle::Zero();
 }
 
 TopographyFile::~TopographyFile()
@@ -93,10 +93,10 @@ static rectObj
 ConvertRect(const GeoBounds &br)
 {
   rectObj dest;
-  dest.minx = br.west.value_degrees();
-  dest.maxx = br.east.value_degrees();
-  dest.miny = br.south.value_degrees();
-  dest.maxy = br.north.value_degrees();
+  dest.minx = br.west.Degrees();
+  dest.maxx = br.east.Degrees();
+  dest.miny = br.south.Degrees();
+  dest.maxy = br.north.Degrees();
   return dest;
 }
 

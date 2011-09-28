@@ -73,7 +73,7 @@ RasterMap::~RasterMap() {
 static unsigned
 angle_to_pixel(Angle value, Angle start, Angle end, unsigned width)
 {
-  return (value - start).value_native() * width / (end - start).value_native();
+  return (value - start).Native() * width / (end - start).Native();
 }
 
 void

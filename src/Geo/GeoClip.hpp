@@ -39,7 +39,7 @@ class GeoClip : protected GeoBounds {
 public:
   GeoClip() {}
   GeoClip(const GeoBounds &other)
-    :GeoBounds(other), width((east - west).as_bearing()) {}
+    :GeoBounds(other), width((east - west).AsBearing()) {}
 
 protected:
   /**
@@ -49,7 +49,7 @@ protected:
    */
   gcc_pure
   Angle import_longitude(Angle l) const {
-    return (l - west).as_delta();
+    return (l - west).AsDelta();
   }
 
   gcc_pure

@@ -36,7 +36,7 @@ static const double r = 6378137;
 char
 UTM::CalculateZoneLetter(const Angle latitude)
 {
-  fixed degrees = latitude.value_degrees();
+  fixed degrees = latitude.Degrees();
 
   if (degrees >= fixed(84))
     return '\0';
@@ -87,37 +87,37 @@ UTM::CalculateZoneLetter(const Angle latitude)
 unsigned char
 UTM::CalculateZoneNumber(const GeoPoint &p)
 {
-  if (p.latitude.value_degrees() <= fixed(64) &&
-      p.latitude.value_degrees() >= fixed(56) &&
-      p.longitude.value_degrees() <= fixed(12) &&
-      p.longitude.value_degrees() >= fixed(3))
+  if (p.latitude.Degrees() <= fixed(64) &&
+      p.latitude.Degrees() >= fixed(56) &&
+      p.longitude.Degrees() <= fixed(12) &&
+      p.longitude.Degrees() >= fixed(3))
     return 32;
 
-  if (p.latitude.value_degrees() <= fixed(84) &&
-      p.latitude.value_degrees() >= fixed(72) &&
-      p.longitude.value_degrees() >= fixed_zero) {
-    if (p.longitude.value_degrees() <= fixed(9))
+  if (p.latitude.Degrees() <= fixed(84) &&
+      p.latitude.Degrees() >= fixed(72) &&
+      p.longitude.Degrees() >= fixed_zero) {
+    if (p.longitude.Degrees() <= fixed(9))
       return 31;
-    if (p.longitude.value_degrees() <= fixed(21))
+    if (p.longitude.Degrees() <= fixed(21))
       return 33;
-    if (p.longitude.value_degrees() <= fixed(33))
+    if (p.longitude.Degrees() <= fixed(33))
       return 35;
-    if (p.longitude.value_degrees() <= fixed(42))
+    if (p.longitude.Degrees() <= fixed(42))
       return 37;
   }
 
-  return (int)floor((p.longitude.value_degrees() + fixed_180) / 6) + 1;
+  return (int)floor((p.longitude.Degrees() + fixed_180) / 6) + 1;
 }
 
 Angle
 UTM::GetCentralMeridian(unsigned char zone_number)
 {
-  return Angle::degrees(fixed((zone_number - 1) * 6 - 180 + 3));
+  return Angle::Degrees(fixed((zone_number - 1) * 6 - 180 + 3));
 }
 
 UTM
 UTM::FromGeoPoint(const GeoPoint &p) {
-  double lat = p.latitude.value_radians();
+  double lat = p.latitude.Radians();
   double _sin = p.latitude.sin();
   double _cos = p.latitude.cos();
   double _tan = _sin / _cos;
@@ -131,8 +131,8 @@ UTM::FromGeoPoint(const GeoPoint &p) {
   double n = r / sqrt(1 - e * _sin * _sin);
   double c = e_p2 * _cos * _cos;
 
-  double a = _cos * (double)(p.longitude.value_radians() -
-                             GetCentralMeridian(utm.zone_number).value_radians());
+  double a = _cos * (double)(p.longitude.Radians() -
+                             GetCentralMeridian(utm.zone_number).Radians());
   double a2 = a * a;
   double a3 = a * a2;
   double a4 = a * a3;
@@ -150,7 +150,7 @@ UTM::FromGeoPoint(const GeoPoint &p) {
   utm.northing = fixed(k0 * (m + n * _tan *
       (a2 / 2 +  a4 / 24 * (5 - tan2 + 9 * c + 4 * c * c) +
        a6 / 720 * (61 - 58 * tan2 + tan4 + 600 * c - 330 * e_p2))));
-  if (negative(p.latitude.value_native()))
+  if (negative(p.latitude.Native()))
     utm.northing += fixed(10000000);
 
   return utm;
@@ -174,7 +174,7 @@ UTM::ToGeoPoint() const
   double _e3 = _e * _e2;
   double _e4 = _e * _e3;
 
-  Angle phi1rad = Angle::radians(fixed(mu +
+  Angle phi1rad = Angle::Radians(fixed(mu +
       (3 * _e / 2 - 27 * _e3 / 32) * sin(2 * mu) +
       (21 * _e3 / 16 - 55 * _e4 / 32) * sin(4 * mu) +
       (151 * _e3 / 96) * sin(6 * mu)));
@@ -198,7 +198,7 @@ UTM::ToGeoPoint() const
   double d5 = d * d4;
   double d6 = d * d5;
 
-  double latitude = (double)phi1rad.value_radians() -
+  double latitude = (double)phi1rad.Radians() -
       (n * _tan / _r) * (d2 / 2 -
        d4 / 24 * (5 + 3 * tan2 + 10 * c - 4 * c2 - 9 * e_p2) +
        d6 / 720 * (61 + 90 * tan2 + 298 * c + 45 * tan4 - 252 * e_p2 - 3 * c2));
@@ -206,6 +206,6 @@ UTM::ToGeoPoint() const
   double longitude = (d - d3 / 6 * (1 + 2 * tan2 + c) +
                       d5 / 120 * (5 - 2 * c + 28 * tan2 - 3 * c2 + 8 * e_p2 + 24 * tan4)) / _cos;
 
-  return GeoPoint(Angle::radians(fixed(longitude)) + GetCentralMeridian(zone_number),
-                  Angle::radians(fixed(latitude)));
+  return GeoPoint(Angle::Radians(fixed(longitude)) + GetCentralMeridian(zone_number),
+                  Angle::Radians(fixed(latitude)));
 }

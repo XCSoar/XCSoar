@@ -34,8 +34,8 @@ class AnnularSectorZone:
 protected:
   AnnularSectorZone(Shape _shape, const GeoPoint &loc,
                     const fixed _radiusOuter = fixed(10000.0),
-                    const Angle _startRadial = Angle::zero(),
-                    const Angle _endRadial = Angle::radians(fixed_two_pi),
+                    const Angle _startRadial = Angle::Zero(),
+                    const Angle _endRadial = Angle::Radians(fixed_two_pi),
                     const fixed _InnerRadius = fixed(0.0))
     :SectorZone(_shape, loc, _radiusOuter, _startRadial, _endRadial),
      InnerRadius(_InnerRadius) {}
@@ -57,8 +57,8 @@ public:
    */
   AnnularSectorZone(const GeoPoint &loc,
                     const fixed _radiusOuter=fixed(10000.0),
-                    const Angle _startRadial = Angle::zero(),
-                    const Angle _endRadial = Angle::radians(fixed_two_pi),
+                    const Angle _startRadial = Angle::Zero(),
+                    const Angle _endRadial = Angle::Radians(fixed_two_pi),
                     const fixed _InnerRadius = fixed(0.0))
     :SectorZone(ANNULAR_SECTOR, loc, _radiusOuter, _startRadial, _endRadial),
      InnerRadius(_InnerRadius)

@@ -55,7 +55,7 @@ FlatPoint::Rotate(const Angle angle)
   const fixed _x = x;
   const fixed _y = y;
   fixed sa, ca;
-  angle.sin_cos(sa, ca);
+  angle.SinCos(sa, ca);
   x = _x * ca - _y * sa;
   y = _x * sa + _y * ca;
 }

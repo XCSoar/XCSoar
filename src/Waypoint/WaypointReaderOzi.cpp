@@ -37,7 +37,7 @@ ParseAngle(const TCHAR *src, Angle &angle)
   if (endptr == src)
     return false;
 
-  angle = Angle::degrees(fixed(deg));
+  angle = Angle::Degrees(fixed(deg));
   return true;
 }
 

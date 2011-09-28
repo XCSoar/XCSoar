@@ -71,11 +71,11 @@ UpdateChanging()
   ((WndProperty *)wf->FindByName(_T("prpDistance")))->SetText(tmp);
 
   // Fill horizontal direction field
-  Angle bearing = (target->Bearing() - XCSoarInterface::Basic().track).as_delta();
-  if (bearing.value_degrees() > fixed_one)
-    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)bearing.value_degrees());
-  else if (bearing.value_degrees() < fixed_minus_one)
-    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-bearing.value_degrees());
+  Angle bearing = (target->Bearing() - XCSoarInterface::Basic().track).AsDelta();
+  if (bearing.Degrees() > fixed_one)
+    _stprintf(tmp, _T("%2.0f")_T(DEG)_T(" »"), (double)bearing.Degrees());
+  else if (bearing.Degrees() < fixed_minus_one)
+    _stprintf(tmp, _T("« ")_T("%2.0f")_T(DEG), (double)-bearing.Degrees());
   else
     _tcscpy(tmp, _T("«»"));
   ((WndProperty *)wf->FindByName(_T("prpDirectionH")))->SetText(tmp);
@@ -88,10 +88,10 @@ UpdateChanging()
   ((WndProperty *)wf->FindByName(_T("prpAltitude")))->SetText(tmp);
 
   // Fill vertical direction field
-  Angle dir = Angle::radians((fixed)atan2(target->relative_altitude,
-                                          target->distance)).as_delta();
-  if (dir.magnitude_degrees() > fixed_one)
-    _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.value_degrees());
+  Angle dir = Angle::Radians((fixed)atan2(target->relative_altitude,
+                                          target->distance)).AsDelta();
+  if (dir.AbsoluteDegrees() > fixed_one)
+    _stprintf(tmp, _T("%+2.0f")_T(DEG), (double)dir.Degrees());
   else
     _tcscpy(tmp, _T("--"));
   ((WndProperty *)wf->FindByName(_T("prpDirectionV")))->SetText(tmp);

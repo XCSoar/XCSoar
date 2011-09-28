@@ -409,8 +409,8 @@ VegaDevice::OnSysTicker(const DerivedInfo &calculated)
   char tbuf[100];
   sprintf(tbuf, "PTLOC,%d,%3.5f,%3.5f,%g,%g",
           (int)(t.estimate_valid),
-          (double)t.estimate_location.Longitude.value_degrees(),
-          (double)t.estimate_location.Latitude.value_degrees(),
+          (double)t.estimate_location.Longitude.Degrees(),
+          (double)t.estimate_location.Latitude.Degrees(),
           (double)fixed_zero,
           (double)fixed_zero);
 

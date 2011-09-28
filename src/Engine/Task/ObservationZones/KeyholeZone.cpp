@@ -26,7 +26,7 @@
 GeoPoint
 KeyholeZone::GetBoundaryParametric(fixed t) const
 {
-  const fixed sweep = (getEndRadial() - getStartRadial()).as_bearing().value_radians();
+  const fixed sweep = (getEndRadial() - getStartRadial()).AsBearing().Radians();
   const fixed small_sweep = fixed_two_pi - sweep;
   const fixed SmallRadius = fixed(500);
   // length of sector element
@@ -47,7 +47,7 @@ KeyholeZone::GetBoundaryParametric(fixed t) const
   } else if (tt < l + c1) {
     // sector element
     d = Radius;
-    a = getStartRadial() + Angle::radians((tt - l) / c1 * sweep);
+    a = getStartRadial() + Angle::Radians((tt - l) / c1 * sweep);
   } else if (tt < l + l + c1) {
     // second straight element
     d = (fixed_one - (tt - l - c1) / l) * (Radius - SmallRadius) + SmallRadius;
@@ -55,7 +55,7 @@ KeyholeZone::GetBoundaryParametric(fixed t) const
   } else {
     // cylinder element
     d = SmallRadius;
-    a = getEndRadial() + Angle::radians((tt - l - l - c1) / c2 * small_sweep);
+    a = getEndRadial() + Angle::Radians((tt - l - l - c1) / c2 * small_sweep);
   }
   return GeoVector(d, a).EndPoint(get_location());
 }

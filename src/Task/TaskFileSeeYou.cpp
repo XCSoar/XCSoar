@@ -70,9 +70,9 @@ struct SeeYouTurnpointInformation {
     Valid(false), Style(Symmetrical), Line(false), Reduce(false),
     Radius1(fixed(500)), Radius2(fixed(500)),
     MaxAlt(fixed_zero),
-    Angle1(Angle::degrees(fixed_zero)),
-    Angle2(Angle::degrees(fixed_zero)),
-    Angle12(Angle::degrees(fixed_zero)) {}
+    Angle1(Angle::Degrees(fixed_zero)),
+    Angle2(Angle::Degrees(fixed_zero)),
+    Angle12(Angle::Degrees(fixed_zero)) {}
 };
 
 static fixed
@@ -110,7 +110,7 @@ ParseAngle(const TCHAR* str)
   if (str == end)
     angle = 0;
 
-  return Angle::degrees(fixed(angle));
+  return Angle::Degrees(fixed(angle));
 }
 
 static fixed
@@ -259,9 +259,9 @@ ParseCUTaskDetails(FileLineReader &reader, SeeYouTaskInformation *task_info,
 
 static bool isKeyhole(const SeeYouTurnpointInformation &turnpoint_infos)
 {
-  if (fabs(turnpoint_infos.Angle1.value_degrees() - fixed(45)) < fixed(2) &&
+  if (fabs(turnpoint_infos.Angle1.Degrees() - fixed(45)) < fixed(2) &&
       fabs(turnpoint_infos.Radius1 - fixed(10000)) < fixed(2) &&
-      fabs(turnpoint_infos.Angle2.value_degrees() - fixed(180)) < fixed(2) &&
+      fabs(turnpoint_infos.Angle2.Degrees() - fixed(180)) < fixed(2) &&
       fabs(turnpoint_infos.Radius2 - fixed(500)) < fixed(2))
 
     return true;
@@ -271,9 +271,9 @@ static bool isKeyhole(const SeeYouTurnpointInformation &turnpoint_infos)
 
 static bool isBGAFixedCourseZone(const SeeYouTurnpointInformation &turnpoint_infos)
 {
-  if (fabs(turnpoint_infos.Angle1.value_degrees() - fixed(45)) < fixed(2) &&
+  if (fabs(turnpoint_infos.Angle1.Degrees() - fixed(45)) < fixed(2) &&
       fabs(turnpoint_infos.Radius1 - fixed(20000)) < fixed(2) &&
-      fabs(turnpoint_infos.Angle2.value_degrees() - fixed(180)) < fixed(2) &&
+      fabs(turnpoint_infos.Angle2.Degrees() - fixed(180)) < fixed(2) &&
       fabs(turnpoint_infos.Radius2 - fixed(500)) < fixed(2))
 
     return true;
@@ -284,9 +284,9 @@ static bool isBGAFixedCourseZone(const SeeYouTurnpointInformation &turnpoint_inf
 static bool isBGAEnhancedOptionZone(const SeeYouTurnpointInformation
                                     &turnpoint_infos)
 {
-  if (fabs(turnpoint_infos.Angle1.value_degrees() - fixed(90)) < fixed(2) &&
+  if (fabs(turnpoint_infos.Angle1.Degrees() - fixed(90)) < fixed(2) &&
       fabs(turnpoint_infos.Radius1 - fixed(10000)) < fixed(2) &&
-      fabs(turnpoint_infos.Angle2.value_degrees() - fixed(180)) < fixed(2) &&
+      fabs(turnpoint_infos.Angle2.Degrees() - fixed(180)) < fixed(2) &&
       fabs(turnpoint_infos.Radius2 - fixed(500)) < fixed(2))
 
     return true;
@@ -334,7 +334,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     oz = new LineSectorZone(wp->location, turnpoint_infos.Radius1);
 
   // special case "Cylinder"
-  else if (fabs(turnpoint_infos.Angle1.value_degrees() - fixed(180)) < fixed(1) )
+  else if (fabs(turnpoint_infos.Angle1.Degrees() - fixed(180)) < fixed(1) )
     oz = new CylinderZone(wp->location, turnpoint_infos.Radius1);
 
   else if (factType == TaskBehaviour::FACTORY_RT) {
@@ -377,12 +377,12 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
     }
 
     const Angle RadialStart = (A12adj
-        - turnpoint_infos.Angle1).as_bearing();
+        - turnpoint_infos.Angle1).AsBearing();
     const Angle RadialEnd = (A12adj
-        + turnpoint_infos.Angle1).as_bearing();
+        + turnpoint_infos.Angle1).AsBearing();
 
     if (turnpoint_infos.Radius2 > fixed_zero &&
-        (turnpoint_infos.Angle2.as_bearing().value_degrees()) < fixed_one) {
+        (turnpoint_infos.Angle2.AsBearing().Degrees()) < fixed_one) {
       oz = new AnnularSectorZone(wp->location, turnpoint_infos.Radius1,
           RadialStart, RadialEnd, turnpoint_infos.Radius2);
     } else {

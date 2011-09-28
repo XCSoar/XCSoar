@@ -65,7 +65,7 @@ gcc_const
 static int32_t
 AngleToLX(Angle value)
 {
-  return ToBE32((int32_t)(value.value_degrees() * 60000));
+  return ToBE32((int32_t)(value.Degrees() * 60000));
 }
 
 /**

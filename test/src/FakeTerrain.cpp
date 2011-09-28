@@ -35,7 +35,7 @@ RasterMap::Intersection(const GeoPoint& origin,
                         const short h_glide,
                         const GeoPoint& destination) const
 {
-  return GeoPoint(Angle::zero(), Angle::zero());
+  return GeoPoint(Angle::Zero(), Angle::Zero());
 }
 
 bool

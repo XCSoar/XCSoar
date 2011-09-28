@@ -68,7 +68,7 @@ public:
 void
 TaskWaypointTest::Run()
 {
-  GeoPoint gp(Angle::degrees(fixed(20)), Angle::degrees(fixed(50)));
+  GeoPoint gp(Angle::Degrees(fixed(20)), Angle::Degrees(fixed(50)));
   Waypoint wp(gp);
   wp.name = _T("Test");
   wp.altitude = fixed(42);

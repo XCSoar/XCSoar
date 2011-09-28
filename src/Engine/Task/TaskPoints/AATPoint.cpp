@@ -181,7 +181,7 @@ AATPoint::set_target(const fixed range, const fixed radial,
   const FlatPoint floc = proj.fproject(GetLocation());
   const FlatLine flb (fprev,floc);
   const FlatLine fradius (floc,proj.fproject(GetLocationMin()));
-  const fixed bearing = fixed_minus_one * flb.angle().value_degrees();
+  const fixed bearing = fixed_minus_one * flb.angle().Degrees();
   const fixed radius = fradius.d();
 
   fixed swapquadrants = fixed_zero;
@@ -208,13 +208,13 @@ AATPoint::get_target_range_radial(fixed &range, fixed &radial) const
   const GeoPoint fprev = get_previous()->GetLocationRemaining();
   const GeoPoint floc = GetLocation();
   const Angle radialraw = (floc.Bearing(get_location_target()) -
-      fprev.Bearing(floc)).as_bearing();
+      fprev.Bearing(floc)).AsBearing();
 
   const fixed d = floc.Distance(get_location_target());
   const fixed radius = floc.Distance(GetLocationMin());
   const fixed rangeraw = min(fixed_one, d / radius);
 
-  radial = radialraw.as_delta().value_degrees();
+  radial = radialraw.AsDelta().Degrees();
   const fixed rangesign = (fabs(radial) > fixed(90)) ?
       fixed_minus_one : fixed_one;
   range = rangeraw * rangesign;

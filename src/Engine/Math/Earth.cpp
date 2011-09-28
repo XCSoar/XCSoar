@@ -69,14 +69,14 @@ IntermediatePoint(const GeoPoint loc1, const GeoPoint loc2, fixed dthis, fixed d
   const fixed B = sin(dthis);// * inv_sind;
 
   fixed sinLoc1Latitude, cosLoc1Latitude;
-  loc1.latitude.sin_cos(sinLoc1Latitude, cosLoc1Latitude);
+  loc1.latitude.SinCos(sinLoc1Latitude, cosLoc1Latitude);
   fixed sinLoc2Latitude, cosLoc2Latitude;
-  loc2.latitude.sin_cos(sinLoc2Latitude, cosLoc2Latitude);
+  loc2.latitude.SinCos(sinLoc2Latitude, cosLoc2Latitude);
 
   fixed sinLoc1Longitude, cosLoc1Longitude;
-  loc1.longitude.sin_cos(sinLoc1Longitude, cosLoc1Longitude);
+  loc1.longitude.SinCos(sinLoc1Longitude, cosLoc1Longitude);
   fixed sinLoc2Longitude, cosLoc2Longitude;
-  loc2.longitude.sin_cos(sinLoc2Longitude, cosLoc2Longitude);
+  loc2.longitude.SinCos(sinLoc2Longitude, cosLoc2Longitude);
 
   const fixed x = A * cosLoc1Latitude * cosLoc1Longitude
       + B * cosLoc2Latitude * cosLoc2Longitude;
@@ -85,8 +85,8 @@ IntermediatePoint(const GeoPoint loc1, const GeoPoint loc2, fixed dthis, fixed d
   const fixed z = A * sinLoc1Latitude + B * sinLoc2Latitude;
 
   GeoPoint loc3;
-  loc3.latitude = Angle::radians(atan2(z, hypot(x, y)));
-  loc3.longitude = Angle::radians(atan2(y, x));
+  loc3.latitude = Angle::Radians(atan2(z, hypot(x, y)));
+  loc3.longitude = Angle::Radians(atan2(y, x));
   loc3.Normalize(); // ensure longitude is within -180:180
 
 #ifdef INSTRUMENT_TASK
@@ -122,11 +122,11 @@ DistanceBearingS(const GeoPoint loc1, const GeoPoint loc2,
                  Angle *Distance, Angle *Bearing)
 {
   fixed cos_lat1, sin_lat1;
-  loc1.latitude.sin_cos(sin_lat1, cos_lat1);
+  loc1.latitude.SinCos(sin_lat1, cos_lat1);
   fixed cos_lat2, sin_lat2;
-  loc2.latitude.sin_cos(sin_lat2, cos_lat2);
+  loc2.latitude.SinCos(sin_lat2, cos_lat2);
 
-  const fixed dlon = (loc2.longitude - loc1.longitude).value_radians();
+  const fixed dlon = (loc2.longitude - loc1.longitude).Radians();
 
   if (Distance) {
     const fixed s1 = (loc2.latitude - loc1.latitude).accurate_half_sin();
@@ -135,7 +135,7 @@ DistanceBearingS(const GeoPoint loc1, const GeoPoint loc2,
 
     fixed distance2 = earth_distance_function(a);
     assert(!negative(distance2));
-    *Distance = Angle::radians(distance2);
+    *Distance = Angle::Radians(distance2);
   }
 
   if (Bearing) {
@@ -148,8 +148,8 @@ DistanceBearingS(const GeoPoint loc1, const GeoPoint loc2,
     const fixed x = cos_lat1 * sin_lat2 - sin_lat1 * cos_lat2 * cos_dlon;
 
     *Bearing = (x == fixed_zero && y == fixed_zero)
-      ? Angle::zero()
-      : Angle::radians(atan2(y, x)).as_bearing();
+      ? Angle::Zero()
+      : Angle::Radians(atan2(y, x)).AsBearing();
   }
 
 #ifdef INSTRUMENT_TASK
@@ -165,7 +165,7 @@ DistanceBearing(const GeoPoint loc1, const GeoPoint loc2,
   if (Distance != NULL) {
     Angle distance_angle;
     DistanceBearingS(loc1, loc2, &distance_angle, Bearing);
-    *Distance = distance_angle.value_radians() * fixed_earth_r;
+    *Distance = distance_angle.Radians() * fixed_earth_r;
   } else
     DistanceBearingS(loc1, loc2, NULL, Bearing);
 }
@@ -195,7 +195,7 @@ CrossTrackError(const GeoPoint loc1, const GeoPoint loc2,
     const fixed ATD(earth_asin(sqrt(sindist_AD * sindist_AD - sinXTD * sinXTD)
                          / cosXTD));
 
-    *loc4 = IntermediatePoint(loc1, loc2, ATD, dist_AB.value_radians());
+    *loc4 = IntermediatePoint(loc1, loc2, ATD, dist_AB.Radians());
   }
 
 #ifdef INSTRUMENT_TASK
@@ -211,14 +211,14 @@ ProjectedDistance(const GeoPoint loc1, const GeoPoint loc2, const GeoPoint loc3)
 {
   Angle dist_AD; Angle crs_AD;
   DistanceBearingS(loc1, loc3, &dist_AD, &crs_AD);
-  if (!positive(dist_AD.value_native()))
+  if (!positive(dist_AD.Native()))
     /* workaround: new sine implementation may return small non-zero
        values for sin(0) */
     return fixed_zero;
 
   Angle dist_AB; Angle crs_AB;
   DistanceBearingS(loc1, loc2, &dist_AB, &crs_AB);
-  if (!positive(dist_AB.value_native()))
+  if (!positive(dist_AB.Native()))
     /* workaround: new sine implementation may return small non-zero
        values for sin(0) */
     return fixed_zero;
@@ -290,24 +290,24 @@ FindLatitudeLongitude(const GeoPoint loc, const Angle Bearing,
   sin_cos(Distance, &sinDistance, &cosDistance);
 
   fixed sinBearing, cosBearing;
-  Bearing.sin_cos(sinBearing, cosBearing);
+  Bearing.SinCos(sinBearing, cosBearing);
 
   fixed sinLatitude, cosLatitude;
-  loc.latitude.sin_cos(sinLatitude, cosLatitude);
+  loc.latitude.SinCos(sinLatitude, cosLatitude);
 
-  loc_out.latitude = Angle::radians(earth_asin(sinLatitude * cosDistance + cosLatitude
+  loc_out.latitude = Angle::Radians(earth_asin(sinLatitude * cosDistance + cosLatitude
                                          * sinDistance * cosBearing));
 
   fixed result;
 
   if (cosLatitude == fixed_zero)
-    result = loc.longitude.value_radians();
+    result = loc.longitude.Radians();
   else {
-    result = loc.longitude.value_radians() + 
+    result = loc.longitude.Radians() + 
       earth_asin(sinBearing * sinDistance / cosLatitude);
   }
 
-  loc_out.longitude = Angle::radians(result);
+  loc_out.longitude = Angle::Radians(result);
   loc_out.Normalize(); // ensure longitude is within -180:180
 
 #ifdef INSTRUMENT_TASK

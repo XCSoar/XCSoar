@@ -163,7 +163,7 @@ ReadPositiveAngle(NMEAInputLine &line, Angle &a)
   if (y < 0 || endptr == buffer || *endptr != 0)
     return false;
 
-  a = Angle::degrees(fixed(y) + fixed(x) / 60);
+  a = Angle::Degrees(fixed(y) + fixed(x) / 60);
   return true;
 }
 
@@ -529,7 +529,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
 
   if (track_available && info.MovementDetected()) {
     // JMW don't update bearing unless we're moving
-    info.track = Angle::degrees(track).as_bearing();
+    info.track = Angle::Degrees(track).AsBearing();
     info.track_available.Update(info.clock);
   }
 
@@ -825,9 +825,9 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
   if (!traffic.track_received) {
     // Field is empty in stealth mode
     stealth = true;
-    traffic.track = Angle::zero();
+    traffic.track = Angle::Zero();
   } else
-    traffic.track = Angle::degrees(value);
+    traffic.track = Angle::Degrees(value);
 
   traffic.turn_rate_received = line.read_checked(value);
   if (!traffic.turn_rate_received) {

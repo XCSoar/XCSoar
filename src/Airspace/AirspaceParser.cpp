@@ -147,8 +147,8 @@ struct TempAirspaceType
     Radio = _T("");
     Type = OTHER;
     points.clear();
-    Center.longitude = Angle::zero();
-    Center.latitude = Angle::zero();
+    Center.longitude = Angle::Zero();
+    Center.latitude = Angle::Zero();
     Rotation = 1;
     Radius = fixed_zero;
   }
@@ -177,7 +177,7 @@ struct TempAirspaceType
   AppendArc(const GeoPoint Start, const GeoPoint End)
   {
     // 5 or -5, depending on direction
-    const Angle BearingStep = Angle::degrees(Rotation * fixed(5));
+    const Angle BearingStep = Angle::Degrees(Rotation * fixed(5));
 
     // Determine start bearing and radius
     const GeoVector v = Center.DistanceBearing(Start);
@@ -191,8 +191,8 @@ struct TempAirspaceType
     points.push_back(Start);
 
     // Add intermediate polygon points
-    while ((EndBearing - StartBearing).magnitude_degrees() > fixed_7_5) {
-      StartBearing = (StartBearing + BearingStep).as_bearing();
+    while ((EndBearing - StartBearing).AbsoluteDegrees() > fixed_7_5) {
+      StartBearing = (StartBearing + BearingStep).AsBearing();
       points.push_back(FindLatitudeLongitude(Center, StartBearing, Radius));
     }
 
@@ -204,14 +204,14 @@ struct TempAirspaceType
   AppendArc(Angle Start, Angle End)
   {
     // 5 or -5, depending on direction
-    const Angle BearingStep = Angle::degrees(Rotation * fixed(5));
+    const Angle BearingStep = Angle::Degrees(Rotation * fixed(5));
 
     // Add first polygon point
     points.push_back(FindLatitudeLongitude(Center, Start, Radius));
 
     // Add intermediate polygon points
-    while ((End - Start).magnitude_degrees() > fixed_7_5) {
-      Start = (Start + BearingStep).as_bearing();
+    while ((End - Start).AbsoluteDegrees() > fixed_7_5) {
+      Start = (Start + BearingStep).AsBearing();
       points.push_back(FindLatitudeLongitude(Center, Start, Radius));
     }
 
@@ -354,7 +354,7 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
     }
   }
 
-  point.latitude = Angle::degrees(fixed(deg));
+  point.latitude = Angle::Degrees(fixed(deg));
 
   if (*Stop == ' ')
     Stop++;
@@ -363,7 +363,7 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
     return false;
 
   if ((*Stop == 'S') || (*Stop == 's'))
-    point.latitude.flip();
+    point.latitude.Flip();
 
   Stop++;
   if (*Stop == '\0')
@@ -393,7 +393,7 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
     }
   }
 
-  point.longitude = Angle::degrees(fixed(deg));
+  point.longitude = Angle::Degrees(fixed(deg));
 
   if (*Stop == ' ')
     Stop++;
@@ -402,7 +402,7 @@ ReadCoords(const TCHAR *Text, GeoPoint &point)
     return false;
 
   if ((*Stop == 'W') || (*Stop == 'w'))
-    point.longitude.flip();
+    point.longitude.Flip();
 
   point.Normalize(); // ensure longitude is within -180:180
   return true;
@@ -414,8 +414,8 @@ ParseArcBearings(const TCHAR *Text, TempAirspaceType &temp_area)
   // Determine radius and start/end bearing
   TCHAR *Stop;
   temp_area.Radius = Units::ToSysUnit(fixed(_tcstod(&Text[2], &Stop)), unNauticalMiles);
-  Angle StartBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop))).as_bearing();
-  Angle EndBearing = Angle::degrees(fixed(_tcstod(&Stop[1], &Stop))).as_bearing();
+  Angle StartBearing = Angle::Degrees(fixed(_tcstod(&Stop[1], &Stop))).AsBearing();
+  Angle EndBearing = Angle::Degrees(fixed(_tcstod(&Stop[1], &Stop))).AsBearing();
 
   temp_area.AppendArc(StartBearing, EndBearing);
 }
@@ -641,9 +641,9 @@ ParseCoordsTNP(const TCHAR *Text, GeoPoint &point)
   min = labs((sec - deg * 10000) / 100);
   sec = sec - min * 100 - deg * 10000;
 
-  point.latitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
+  point.latitude = Angle::DMS(fixed(deg), fixed(min), fixed(sec));
   if (negative)
-    point.latitude.flip();
+    point.latitude.Flip();
 
   negative = false;
 
@@ -658,9 +658,9 @@ ParseCoordsTNP(const TCHAR *Text, GeoPoint &point)
   min = labs((sec - deg * 10000) / 100);
   sec = sec - min * 100 - deg * 10000;
 
-  point.longitude = Angle::dms(fixed(deg), fixed(min), fixed(sec));
+  point.longitude = Angle::DMS(fixed(deg), fixed(min), fixed(sec));
   if (negative)
-    point.longitude.flip();
+    point.longitude.Flip();
 
   point.Normalize(); // ensure longitude is within -180:180
 

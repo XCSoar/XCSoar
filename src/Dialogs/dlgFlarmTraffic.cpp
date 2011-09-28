@@ -63,7 +63,7 @@ public:
     :FlarmTrafficWindow(look, Layout::Scale(10)),
      enable_auto_zoom(true),
      zoom(2),
-     task_direction(Angle::degrees(fixed_minus_one)) {}
+     task_direction(Angle::Degrees(fixed_minus_one)) {}
 
 protected:
   void CalcAutoZoom();
@@ -194,9 +194,9 @@ void
 FlarmTrafficControl::UpdateTaskDirection(bool show_task_direction, Angle bearing)
 {
   if (!show_task_direction)
-    task_direction = Angle::degrees(fixed_minus_one);
+    task_direction = Angle::Degrees(fixed_minus_one);
   else
-    task_direction = bearing.as_bearing();
+    task_direction = bearing.AsBearing();
 }
 
 /**
@@ -236,7 +236,7 @@ FlarmTrafficControl::ZoomIn()
 void
 FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 {
-  if (negative(task_direction.value_degrees()))
+  if (negative(task_direction.Degrees()))
     return;
 
   canvas.select(look.hpRadar);
@@ -254,7 +254,7 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
 
   PolygonRotateShift(triangle, 4, radar_mid.x, radar_mid.y,
                      task_direction - (enable_north_up ?
-                                       Angle::zero() : heading));
+                                       Angle::Zero() : heading));
 
   // Draw the arrow
   canvas.polygon(triangle, 4);

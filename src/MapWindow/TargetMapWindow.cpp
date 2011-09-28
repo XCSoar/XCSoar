@@ -112,7 +112,7 @@ TargetMapWindow::RenderTerrain(Canvas &canvas)
                              (Basic().location_available &&
                               SettingsMap().terrain.slope_shading == sstSun) ?
                              Calculated().sun_azimuth :
-                             Angle::degrees(fixed(-45.0)));
+                             Angle::Degrees(fixed(-45.0)));
 
   background.Draw(canvas, projection, SettingsMap().terrain);
 }
@@ -301,7 +301,7 @@ TargetMapWindow::SetTarget(unsigned index)
 
   projection.SetGeoLocation(location);
   projection.SetScale(fixed(projection.GetScreenDistance()) / (radius * 2));
-  projection.SetScreenAngle(Angle::zero());
+  projection.SetScreenAngle(Angle::Zero());
   projection.UpdateScreenBounds();
 
   target_index = index;

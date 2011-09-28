@@ -278,7 +278,7 @@ UpdateValuesFlight(void)
 
     wp = (WndProperty*)wf->FindByName(_T("prpBearing"));
     assert(wp != NULL);
-    _stprintf(Temp, _T("%d")_T(DEG), (int)vec.bearing.value_degrees());
+    _stprintf(Temp, _T("%d")_T(DEG), (int)vec.bearing.Degrees());
     wp->SetText(Temp);
 
     wp = (WndProperty*)wf->FindByName(_T("prpDistance"));

@@ -124,7 +124,7 @@ private:
     case 0:
       canvas.segment(hmiddle, vmiddle,
                      min(width, height) / 3,
-                     Angle::degrees(fixed_zero), Angle::degrees(fixed(90)),
+                     Angle::Degrees(fixed_zero), Angle::Degrees(fixed(90)),
                      false);
       label = _T("segment 0-90 horizon=false");
       break;
@@ -132,7 +132,7 @@ private:
     case 1:
       canvas.segment(hmiddle, vmiddle,
                      min(width, height) / 3,
-                     Angle::degrees(fixed(45)), Angle::degrees(fixed_180),
+                     Angle::Degrees(fixed(45)), Angle::Degrees(fixed_180),
                      true);
       label = _T("segment 45-180 horizon=true");
       break;

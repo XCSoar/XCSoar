@@ -72,9 +72,9 @@ void
 Units::LongitudeToDMS(Angle Longitude, int *dd, int *mm, int *ss, bool *east)
 {
   // if (Longitude is negative) -> Longitude is West otherwise East
-  *east = (Longitude.sign() >= 0);
+  *east = (Longitude.Sign() >= 0);
 
-  unsigned value = (unsigned)(Longitude.magnitude_degrees() * 3600 +
+  unsigned value = (unsigned)(Longitude.AbsoluteDegrees() * 3600 +
                               fixed_half);
 
   *ss = value % 60;
@@ -90,9 +90,9 @@ void
 Units::LatitudeToDMS(Angle Latitude, int *dd, int *mm, int *ss, bool *north)
 {
   // if (Latitude is negative) -> Latitude is South otherwise North
-  *north = (Latitude.sign() >= 0);
+  *north = (Latitude.Sign() >= 0);
 
-  unsigned value = (unsigned)(Latitude.magnitude_degrees() * 3600 +
+  unsigned value = (unsigned)(Latitude.AbsoluteDegrees() * 3600 +
                               fixed_half);
 
   *ss = value % 60;

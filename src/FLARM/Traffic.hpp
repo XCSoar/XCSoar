@@ -160,7 +160,7 @@ struct FlarmTraffic {
   }
 
   Angle Bearing() const {
-    return Angle::from_xy(relative_north, relative_east);
+    return Angle::FromXY(relative_north, relative_east);
   }
 
   bool IsPowered() const {

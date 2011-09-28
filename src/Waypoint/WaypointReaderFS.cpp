@@ -63,7 +63,7 @@ ParseAngle(const TCHAR *src, Angle &angle)
   if (!is_positive)
     value = -value;
 
-  angle = Angle::degrees(value);
+  angle = Angle::Degrees(value);
   return true;
 }
 

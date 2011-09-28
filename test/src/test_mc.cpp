@@ -89,9 +89,9 @@ test_glide_alt(const fixed h, const fixed W, const fixed Wangle,
   AircraftState ac;
   ac.wind.norm = fabs(W);
   if (negative(W)) {
-    ac.wind.bearing = Angle::degrees(fixed(180)+Wangle);
+    ac.wind.bearing = Angle::Degrees(fixed(180)+Wangle);
   } else {
-    ac.wind.bearing = Angle::degrees(Wangle);
+    ac.wind.bearing = Angle::Degrees(Wangle);
   }
   ac.altitude = h;
 
@@ -117,9 +117,9 @@ test_glide_stf(const fixed h, const fixed W, const fixed Wangle, const fixed S,
   AircraftState ac;
   ac.wind.norm = fabs(W);
   if (negative(W)) {
-    ac.wind.bearing = Angle::degrees(fixed(180)+Wangle);
+    ac.wind.bearing = Angle::Degrees(fixed(180)+Wangle);
   } else {
-    ac.wind.bearing = Angle::degrees(Wangle);
+    ac.wind.bearing = Angle::Degrees(Wangle);
   }
   ac.altitude = h;
   ac.netto_vario = S;
@@ -223,9 +223,9 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
   AircraftState ac;
   ac.wind.norm = fabs(W);
   if (negative(W)) {
-    ac.wind.bearing = Angle::degrees(fixed(180)+Wangle);
+    ac.wind.bearing = Angle::Degrees(fixed(180)+Wangle);
   } else {
-    ac.wind.bearing = Angle::degrees(Wangle);
+    ac.wind.bearing = Angle::Degrees(Wangle);
   }
   ac.altitude = h;
 
@@ -237,8 +237,8 @@ test_glide_cb(const fixed h, const fixed W, const fixed Wangle,
 
   hfile << (double)W << " "
         << (double)Wangle << " "
-        << (double)gr.vector.bearing.value_degrees() << " "
-        << (double)gr.cruise_track_bearing.value_degrees() << " "
+        << (double)gr.vector.bearing.Degrees() << " "
+        << (double)gr.cruise_track_bearing.Degrees() << " "
         << "\n";
 }
 

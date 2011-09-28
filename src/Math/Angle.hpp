@@ -31,9 +31,11 @@ Copyright_License {
 #include <iostream>
 #endif
 
-class Angle {
-private:
-  explicit Angle(const fixed& init_value): m_value(init_value) {};
+class Angle
+{
+  fixed value;
+
+  explicit Angle(const fixed &_value): value(_value) {};
 
 public:
   /**
@@ -43,153 +45,153 @@ public:
   Angle() {}
 
   gcc_const
-  static Angle native(const fixed value) {
-    return Angle(value);
+  static Angle Native(const fixed _value) {
+    return Angle(_value);
   }
 
-  fixed value_native() const {
-    return m_value;
+  fixed Native() const {
+    return value;
   }
 
   gcc_const
-  static Angle zero() {
-    return native(fixed_zero);
+  static Angle Zero() {
+    return Native(fixed_zero);
   }
 
 #ifdef RADIANS
   gcc_const
-  static Angle degrees(const fixed value) {
-    return Angle(value*fixed_deg_to_rad);
+  static Angle Degrees(const fixed _value) {
+    return Angle(_value * fixed_deg_to_rad);
   }
 
   gcc_const
-  static Angle radians(const fixed value) {
-    return Angle(value);
+  static Angle Radians(const fixed _value) {
+    return Angle(_value);
   }
 
-  fixed value_degrees() const {
-    return m_value*fixed_rad_to_deg;
+  fixed Degrees() const {
+    return value * fixed_rad_to_deg;
   }
-  fixed value_radians() const {
-    return m_value;
+  fixed Radians() const {
+    return value;
   }
-  fixed value_hours() const {
-    return m_value * fixed(24) / fixed_two_pi;
+  fixed Hours() const {
+    return value * fixed(24) / fixed_two_pi;
   }
 #else
   gcc_const
-  static Angle degrees(const fixed value) {
-    return Angle(value);
+  static Angle Degrees(const fixed _value) {
+    return Angle(_value);
   }
 
   gcc_const
-  static Angle radians(const fixed value) {
-    return Angle(value*fixed_rad_to_deg);
+  static Angle Radians(const fixed _value) {
+    return Angle(_value * fixed_rad_to_deg);
   }
 
-  fixed value_degrees() const {
-    return m_value;
+  fixed Degrees() const {
+    return value;
   }
-  fixed value_radians() const {
-    return m_value*fixed_deg_to_rad;
+  fixed Radians() const {
+    return value * fixed_deg_to_rad;
   }
-  fixed value_hours() const {
-    return m_value * fixed(24. / 360.);
+  fixed Hours() const {
+    return value * fixed(24. / 360.);
   }
 #endif
 
   gcc_const
-  static Angle dms(const fixed d, const fixed m, const fixed s) {
-    return Angle::degrees(d + m / 60 + s / 3600);
+  static Angle DMS(const fixed d, const fixed m, const fixed s) {
+    return Angle::Degrees(d + m / 60 + s / 3600);
   }
 
   gcc_pure
   inline fixed tan() const {
-    return ::tan(value_radians());
+    return ::tan(Radians());
   }
 
   gcc_pure
   inline fixed sin() const {
-    return ::sin(value_radians());
+    return ::sin(Radians());
   }
 
   gcc_pure
   inline fixed accurate_half_sin() const {
-    return ::accurate_half_sin(value_radians());
+    return ::accurate_half_sin(Radians());
   }
 
   gcc_pure
   inline fixed cos() const {
-    return ::cos(value_radians());
+    return ::cos(Radians());
   }
 
   gcc_pure
   inline fixed fastsine() const {
-    return (::fastsine(value_native()));
+    return (::fastsine(Native()));
   }
 
   gcc_pure
   inline fixed fastcosine() const {
-    return (::fastcosine(value_native()));
+    return (::fastcosine(Native()));
   }
 
   gcc_pure
   inline fixed invfastcosine() const {
-    return (::invfastcosine(value_native()));
+    return (::invfastcosine(Native()));
   }
 
   gcc_pure
   inline int ifastsine() const {
-    return (::ifastsine(value_native()));
+    return (::ifastsine(Native()));
   }
 
   gcc_pure
   inline int ifastcosine() const {
-    return (::ifastcosine(value_native()));
+    return (::ifastcosine(Native()));
   }
 
   gcc_pure
-  int sign() const;
+  int Sign() const;
 
   gcc_pure
-  int sign(const fixed &tolerance) const;
+  int Sign(const fixed &tolerance) const;
 
-  inline void sin_cos(fixed& s, fixed& c) const {
-    ::sin_cos(value_radians(), &s, &c);
+  inline void SinCos(fixed& s, fixed& c) const {
+    ::sin_cos(Radians(), &s, &c);
   }
   
 
   gcc_pure
-  fixed magnitude_degrees() const;
+  fixed AbsoluteDegrees() const;
 
   gcc_pure
-  fixed magnitude_radians() const;
+  fixed AbsoluteRadians() const;
 
-  void flip();
+  void Flip();
 
-  Angle flipped() const;
+  Angle Flipped() const;
 
   /**
    * Limits the angle (theta) to -180 - +180 degrees
    * @return Output angle (-180 - +180 degrees)
    */
   gcc_pure
-  Angle as_delta() const;
+  Angle AsDelta() const;
 
   /**
    * Limits the angle (theta) to 0 - 360 degrees
    * @return Output angle (0-360 degrees)
    */
   gcc_pure
-  Angle as_bearing() const;
+  Angle AsBearing() const;
 
   /**
    * Returns half of this angle.  This is only useful (and valid) when
-   * the angle has been normalized with as_delta().
+   * the angle has been normalized with AsDelta().
    */
   gcc_pure
-  Angle half() const {
-    return Angle(::half(m_value));
+  Angle Half() const {
+    return Angle(::half(value));
   }
 
   /**
@@ -200,111 +202,111 @@ public:
   Angle Reciprocal() const;
 
   gcc_pure
-  Angle BiSector(const Angle &OutBound) const;
+  Angle BiSector(const Angle &out_bound) const;
 
   gcc_pure
-  Angle HalfAngle(const Angle &End) const;
+  Angle HalfAngle(const Angle &end) const;
 
   gcc_pure
-  Angle Fraction(const Angle &End, const fixed fraction) const;
+  Angle Fraction(const Angle &end, const fixed fraction) const;
 
   gcc_pure
   Angle
   operator*(const Angle x) const
   {
-    return Angle(m_value * x.m_value);
+    return Angle(value * x.value);
   }
 
   gcc_pure
   Angle
   operator*(const fixed x) const
   {
-    return Angle(m_value * x);
+    return Angle(value * x);
   }
 
   gcc_pure
   Angle
   operator/(const fixed x) const
   {
-    return Angle(m_value / x);
+    return Angle(value / x);
   }
 
   gcc_pure
   Angle
   operator+(const Angle &x) const
   {
-    return Angle(m_value + x.m_value);
+    return Angle(value + x.value);
   }
 
   gcc_pure
   Angle
   operator-(const Angle &x) const
   {
-    return Angle(m_value - x.m_value);
+    return Angle(value - x.value);
   }
 
   gcc_pure
   Angle
   operator-() const
   {
-    return Angle(-m_value);
+    return Angle(-value);
   }
 
   const Angle&
   operator*=(const fixed x)
   {
-    m_value *= x;
+    value *= x;
     return *this;
   }
 
   const Angle&
   operator+=(const Angle& x)
   {
-    m_value += x.m_value;
+    value += x.value;
     return *this;
   }
 
   const Angle&
   operator-=(const Angle& x)
   {
-    m_value -= x.m_value;
+    value -= x.value;
     return *this;
   }
 
   bool
   operator==(const Angle&x) const
   {
-    return m_value == x.m_value;
+    return value == x.value;
   }
 
   bool
   operator!=(const Angle&x) const
   {
-    return m_value != x.m_value;
+    return value != x.value;
   }
 
   bool
   operator<(const Angle&x) const
   {
-    return m_value < x.m_value;
+    return value < x.value;
   }
 
   bool
   operator>(const Angle&x) const
   {
-    return m_value > x.m_value;
+    return value > x.value;
   }
 
   bool
   operator<=(const Angle&x) const
   {
-    return m_value <= x.m_value;
+    return value <= x.value;
   }
 
   bool
   operator>=(const Angle&x) const
   {
-    return m_value >= x.m_value;
+    return value >= x.value;
   }
 
   /**
@@ -312,18 +314,15 @@ public:
    * than "start", then wraparound is calculated correctly.
    */
   gcc_pure
-  bool between(const Angle &start, const Angle &end) const;
+  bool Between(const Angle &start, const Angle &end) const;
 
 #ifdef DO_PRINT
   friend std::ostream& operator<< (std::ostream& o, const Angle& a);
 #endif
 
-  static Angle from_xy(const fixed& x, const fixed& y) {
-    return Angle::radians(atan2(y,x));
+  static Angle FromXY(const fixed& x, const fixed& y) {
+    return Angle::Radians(atan2(y,x));
   }
-
-private:
-  fixed m_value;
 };
 
 #endif

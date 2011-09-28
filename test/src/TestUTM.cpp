@@ -31,7 +31,7 @@ int main(int argc, char **argv)
 {
   plan_tests(5);
 
-  GeoPoint p(Angle::degrees(fixed(7)), Angle::degrees(fixed(50)));
+  GeoPoint p(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(50)));
   UTM u = UTM::FromGeoPoint(p);
 
   ok1(u.zone_number == 32);
@@ -46,8 +46,8 @@ int main(int argc, char **argv)
 
   ok1(equals(p, 50, 7));
 
-  printf("lon: %f - lat: %f\n", (double)p.longitude.value_degrees(),
-         (double)p.latitude.value_degrees());
+  printf("lon: %f - lat: %f\n", (double)p.longitude.Degrees(),
+         (double)p.latitude.Degrees());
 
   return exit_status();
 }

@@ -90,7 +90,7 @@ public:
     assert(Ready());
 
     if (!positive(p[2].t-p[1].t)) {
-      return GeoVector(fixed_zero, Angle::zero());
+      return GeoVector(fixed_zero, Angle::Zero());
     }
 
     const Record r0 = Interpolate(time - fixed(0.05));

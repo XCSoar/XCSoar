@@ -54,7 +54,7 @@ public:
   }
 
   void SetDirection(Angle _direction) {
-    direction = iround(_direction.as_bearing().value_degrees());
+    direction = iround(_direction.AsBearing().Degrees());
   }
 
   void SetDirectionDegrees(unsigned degrees) {
@@ -67,7 +67,7 @@ public:
   Angle GetDirection() const {
     assert(IsDirectionDefined());
 
-    return Angle::degrees(fixed(direction));
+    return Angle::Degrees(fixed(direction));
   }
 
   gcc_pure

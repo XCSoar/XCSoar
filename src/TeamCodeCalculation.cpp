@@ -112,7 +112,7 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 static void
 ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
 {
-  const double bamValue = bearing.as_bearing().value_degrees() / 360
+  const double bamValue = bearing.AsBearing().Degrees() / 360
                           * TEAMCODE_COMBINATIONS;
   NumberToTeamCode(bamValue, code, 2);
 }
@@ -124,7 +124,7 @@ TeamCode::GetBearing() const
 	int val = GetValueFromTeamCode(code, 2);
 
 	// Calculate bearing
-	return Angle::degrees(fixed(val * 360.0 / TEAMCODE_COMBINATIONS)).as_bearing();
+	return Angle::Degrees(fixed(val * 360.0 / TEAMCODE_COMBINATIONS)).AsBearing();
 }
 
 fixed

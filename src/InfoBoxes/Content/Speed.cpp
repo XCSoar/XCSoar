@@ -63,7 +63,7 @@ InfoBoxContentSpeedGround::HandleKey(const InfoBoxKeyCodes keycode)
     return false;
 
   fixed fixed_step = (fixed)Units::ToSysSpeed(fixed_ten);
-  const Angle a5 = Angle::degrees(fixed(5));
+  const Angle a5 = Angle::Degrees(fixed(5));
 
   switch (keycode) {
   case ibkUp:

@@ -38,7 +38,7 @@ MapWindow::RenderTerrain(Canvas &canvas)
                                (Basic().location_available &&
                                 SettingsMap().terrain.slope_shading == sstSun) ?
                                Calculated().sun_azimuth :
-                               Angle::degrees(fixed(-45.0)));
+                               Angle::Degrees(fixed(-45.0)));
 
   m_background.Draw(canvas, render_projection, SettingsMap().terrain);
 }

@@ -38,8 +38,8 @@ Units::LongitudeToString(Angle Longitude, TCHAR *Buffer, gcc_unused size_t size)
   int dd, mm, ss;
 
   // Calculate Longitude sign
-  int sign = Longitude.sign()+1;
-  double mlong = Longitude.magnitude_degrees();
+  int sign = Longitude.Sign()+1;
+  double mlong = Longitude.AbsoluteDegrees();
 
   switch (CoordinateFormat) {
   case cfDDMMSS:
@@ -105,8 +105,8 @@ Units::LatitudeToString(Angle Latitude, TCHAR *Buffer, gcc_unused size_t size)
   int dd, mm, ss;
 
   // Calculate Latitude sign
-  int sign = Latitude.sign()+1;
-  double mlat = Latitude.magnitude_degrees();
+  int sign = Latitude.Sign()+1;
+  double mlat = Latitude.AbsoluteDegrees();
 
   switch (CoordinateFormat) {
   case cfDDMMSS:

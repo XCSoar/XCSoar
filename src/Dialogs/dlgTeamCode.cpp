@@ -51,7 +51,7 @@ Update()
 
   if (teamcode_info.teammate_available && basic.track_available) {
     double Value = (teamcode_info.teammate_vector.bearing - basic.track)
-      .as_delta().value_degrees();
+      .AsDelta().Degrees();
 
     if (Value > 1)
       _stprintf(Text, _T("%2.0f")_T(DEG)_T(">"), Value);
@@ -67,7 +67,7 @@ Update()
 
   if (teamcode_info.teammate_available) {
     LoadFormProperty(*wf, _T("prpBearing"),
-                     teamcode_info.teammate_vector.bearing.value_degrees());
+                     teamcode_info.teammate_vector.bearing.Degrees());
     LoadFormProperty(*wf, _T("prpRange"), ugDistance,
                      teamcode_info.teammate_vector.distance);
   }

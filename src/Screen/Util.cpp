@@ -82,8 +82,8 @@ Segment(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   if (!IntersectRect(&bounds, &bounds, &rc))
     return false;
 
-  const int istart = NATIVE_TO_INT(start.value_native());
-  const int iend = NATIVE_TO_INT(end.value_native());
+  const int istart = NATIVE_TO_INT(start.Native());
+  const int iend = NATIVE_TO_INT(end.Native());
 
   int npoly = 0;
   RasterPoint pt[66];
@@ -117,8 +117,8 @@ Annulus(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   if (!IntersectRect(&bounds, &bounds, &rc))
     return false;
 
-  const int istart = NATIVE_TO_INT(start.value_native());
-  const int iend = NATIVE_TO_INT(end.value_native());
+  const int istart = NATIVE_TO_INT(start.Native());
+  const int iend = NATIVE_TO_INT(end.Native());
 
   int npoly = 0;
   RasterPoint pt[66*2];
@@ -145,8 +145,8 @@ KeyHole(Canvas &canvas, PixelScalar x, PixelScalar y, UPixelScalar radius,
   if (!IntersectRect(&bounds, &bounds, &rc))
     return false;
 
-  const int istart = NATIVE_TO_INT(start.value_native());
-  const int iend = NATIVE_TO_INT(end.value_native());
+  const int istart = NATIVE_TO_INT(start.Native());
+  const int iend = NATIVE_TO_INT(end.Native());
 
   int npoly = 0;
   RasterPoint pt[66*2];

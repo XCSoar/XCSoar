@@ -96,7 +96,7 @@ public:
    */
   gcc_pure
   Angle PixelsToAngle(int pixels) const {
-    return Angle::radians(pixels * inv_draw_scale);
+    return Angle::Radians(pixels * inv_draw_scale);
   }
 
   /**
@@ -104,7 +104,7 @@ public:
    */
   gcc_pure
   fixed AngleToPixels(Angle angle) const {
-    return fast_mult(angle.value_radians(), draw_scale, 12);
+    return fast_mult(angle.Radians(), draw_scale, 12);
   }
 
   /**

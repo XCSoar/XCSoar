@@ -102,9 +102,9 @@ RefreshView()
     LoadFormProperty(*wf, _T("prpOZSectorRadius"),
                      ugDistance, ((const SectorZone &)oz).getRadius());
     LoadFormProperty(*wf, _T("prpOZSectorStartRadial"),
-                     ((const SectorZone &)oz).getStartRadial().value_degrees());
+                     ((const SectorZone &)oz).getStartRadial().Degrees());
     LoadFormProperty(*wf, _T("prpOZSectorFinishRadial"),
-                     ((const SectorZone &)oz).getEndRadial().value_degrees());
+                     ((const SectorZone &)oz).getEndRadial().Degrees());
 
     if (oz.shape == ObservationZonePoint::ANNULAR_SECTOR) {
       LoadFormProperty(*wf, _T("prpOZSectorInnerRadius"),
@@ -226,14 +226,14 @@ ReadValues()
     }
 
     fixed start_radial = GetFormValueFixed(*wf, _T("prpOZSectorStartRadial"));
-    if (start_radial != ((SectorZone &)oz).getStartRadial().value_degrees()) {
-      ((SectorZone &)oz).setStartRadial(Angle::degrees(start_radial));
+    if (start_radial != ((SectorZone &)oz).getStartRadial().Degrees()) {
+      ((SectorZone &)oz).setStartRadial(Angle::Degrees(start_radial));
       task_modified = true;
     }
 
     fixed finish_radial = GetFormValueFixed(*wf, _T("prpOZSectorFinishRadial"));
-    if (finish_radial != ((SectorZone &)oz).getEndRadial().value_degrees()) {
-      ((SectorZone &)oz).setEndRadial(Angle::degrees(finish_radial));
+    if (finish_radial != ((SectorZone &)oz).getEndRadial().Degrees()) {
+      ((SectorZone &)oz).setEndRadial(Angle::Degrees(finish_radial));
       task_modified = true;
     }
     break;

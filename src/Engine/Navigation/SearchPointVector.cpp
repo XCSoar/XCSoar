@@ -180,7 +180,7 @@ GeoBounds
 SearchPointVector::CalculateGeoBounds() const
 {
   if (empty())
-    return GeoBounds(GeoPoint(Angle::zero(), Angle::zero()));
+    return GeoBounds(GeoPoint(Angle::Zero(), Angle::Zero()));
 
   GeoBounds bb((*this)[0].get_location());
   for (const_iterator v = begin(); v != end(); ++v)

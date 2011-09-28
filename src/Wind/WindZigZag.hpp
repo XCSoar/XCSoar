@@ -73,7 +73,7 @@ class WindZigZag {
 public:
   struct ZZX {
     ZZX(const fixed mag, const Angle ang) {
-      ang.sin_cos(gps_east, gps_north);
+      ang.SinCos(gps_east, gps_north);
       gps_north *= mag;
       gps_east *= mag;
     }

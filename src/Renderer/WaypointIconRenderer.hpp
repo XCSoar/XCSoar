@@ -52,7 +52,7 @@ public:
   WaypointIconRenderer(const WaypointRendererSettings &_settings,
                        const WaypointLook &_look,
                        Canvas &_canvas, bool _small_icons = false,
-                       Angle _screen_rotation = Angle::degrees(fixed_zero))
+                       Angle _screen_rotation = Angle::Degrees(fixed_zero))
     :settings(_settings), look(_look),
      canvas(_canvas), small_icons(_small_icons),
      screen_rotation(_screen_rotation) {}

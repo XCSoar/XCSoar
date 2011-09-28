@@ -43,7 +43,7 @@ protected:
    */
   SymmetricSectorZone(Shape _shape, const GeoPoint &loc,
                       const fixed radius=fixed(10000.0),
-                      const Angle angle=Angle::radians(fixed_half_pi))
+                      const Angle angle=Angle::Radians(fixed_half_pi))
     :SectorZone(_shape, loc, radius), SectorAngle(angle) {}
 
   SymmetricSectorZone(const SymmetricSectorZone &other,

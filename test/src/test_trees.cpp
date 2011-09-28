@@ -51,8 +51,8 @@ test_wp(const unsigned n, std::ostream &fo)
   for (unsigned i=0; i<n_test; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
-    state.location.longitude = Angle::degrees(fixed(x/1000.0));
-    state.location.latitude = Angle::degrees(fixed(y/1000.0));
+    state.location.longitude = Angle::Degrees(fixed(x/1000.0));
+    state.location.latitude = Angle::Degrees(fixed(y/1000.0));
 
     WaypointVisitorPrint wvp;
     waypoints.visit_within_range(state.location, fixed(50000.0), wvp);
@@ -68,15 +68,15 @@ test_as(const unsigned n, std::ostream &fo)
   AircraftState state;
 
   Airspaces airspaces;
-  setup_airspaces(airspaces,GeoPoint(Angle::zero(), Angle::zero()), n);
+  setup_airspaces(airspaces,GeoPoint(Angle::Zero(), Angle::Zero()), n);
 
   print_queries(0, fo);
 
   for (unsigned i=0; i<n_test; i++) {
     int x = rand()%1200-100;
     int y = rand()%1200-100;
-    state.location.longitude = Angle::degrees(fixed(x/1000.0));
-    state.location.latitude = Angle::degrees(fixed(y/1000.0));
+    state.location.longitude = Angle::Degrees(fixed(x/1000.0));
+    state.location.latitude = Angle::Degrees(fixed(y/1000.0));
     const AirspacesInterface::AirspaceVector vc = airspaces.find_inside(state);
   }
   print_queries(n, fo);

@@ -38,12 +38,12 @@ class RoughAngle {
 
   gcc_const
   static int16_t Import(Angle x) {
-    return (int16_t)(x.value_radians() * 4096);
+    return (int16_t)(x.Radians() * 4096);
   }
 
   gcc_const
   static Angle Export(int16_t x) {
-    return Angle::radians(fixed(x) / 4096);
+    return Angle::Radians(fixed(x) / 4096);
   }
 
   RoughAngle(int16_t _value):value(_value) {}

@@ -113,7 +113,7 @@ static void UpdateList(void)
     sort_distance = true;
     Angle a = direction_filter == 0
       ? CommonInterface::Calculated().heading
-      : Angle::degrees(fixed(direction_filter));
+      : Angle::Degrees(fixed(direction_filter));
     airspace_sorter->filter_direction(AirspaceSelectInfo, a);
   }
   if (sort_distance) {
@@ -256,7 +256,7 @@ OnPaintListItem(Canvas &canvas, const PixelRect rc, unsigned i)
     
   // right justified after distance
   _stprintf(sTmp, _T("%d")_T(DEG),  
-            (int)AirspaceSelectInfo[i].Direction.value_degrees());
+            (int)AirspaceSelectInfo[i].Direction.Degrees());
   x3 = w0 - canvas.text_width(sTmp);
   canvas.text(rc.left + x3, rc.top + Layout::FastScale(2), sTmp);
 }
@@ -273,7 +273,7 @@ static const TCHAR *
 GetHeadingString(TCHAR *buffer)
 {
   _stprintf(buffer, _T("%s (%u")_T(DEG)_T(")"), _("Heading"),
-            uround(CommonInterface::Calculated().heading.as_bearing().value_degrees()));
+            uround(CommonInterface::Calculated().heading.AsBearing().Degrees()));
   return buffer;
 }
 
@@ -282,7 +282,7 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 {
   if (direction_filter == 0 && !CommonInterface::Calculated().circling) {
     Angle a = last_heading - CommonInterface::Calculated().heading;
-    if (a.as_delta().magnitude_degrees() >= fixed(10)) {
+    if (a.AsDelta().AbsoluteDegrees() >= fixed(10)) {
       last_heading = CommonInterface::Calculated().heading;
 
       UpdateList();

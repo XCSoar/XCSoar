@@ -124,7 +124,7 @@ WindZigZag::optimise(int &res_quality, const SpeedVector start,
 {
 
   fixed sin, cos;
-  start.bearing.sin_cos(sin, cos);
+  start.bearing.SinCos(sin, cos);
 
   double x[] = {
       sin * start.norm,
@@ -288,7 +288,7 @@ WindZigZag::do_append(const unsigned time, const Angle &ang) const
     return false;
 
   // don't add if no angle spread
-  if ((ang - obs.back().track).as_delta().magnitude_degrees() < fixed(10))
+  if ((ang - obs.back().track).AsDelta().AbsoluteDegrees() < fixed(10))
     return false;
 
   // okay to add

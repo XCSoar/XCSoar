@@ -31,8 +31,8 @@ public:
   TestProjection() {
     SetScreenOrigin(0, 0);
     SetScale(fixed(640) / (fixed(100) * 2));
-    SetGeoLocation(GeoPoint(Angle::degrees(fixed(7.7061111111111114)),
-                            Angle::degrees(fixed(51.051944444444445))));
+    SetGeoLocation(GeoPoint(Angle::Degrees(fixed(7.7061111111111114)),
+                            Angle::Degrees(fixed(51.051944444444445))));
   }
 };
 
@@ -40,8 +40,8 @@ int main(int argc, char **argv)
 {
   TestProjection projection;
 
-  GeoPoint gp = GeoPoint(Angle::degrees(fixed(7.7061111111111114)),
-                         Angle::degrees(fixed(51.051944444444445)));
+  GeoPoint gp = GeoPoint(Angle::Degrees(fixed(7.7061111111111114)),
+                         Angle::Degrees(fixed(51.051944444444445)));
   long x = 0, y = 0;
   for (unsigned i = 64 * 1024 * 1024; i-- > 0;) {
     RasterPoint rp = projection.GeoToScreen(gp);

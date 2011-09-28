@@ -66,7 +66,7 @@ OZPreviewRenderer::Draw(Canvas &canvas, const ObservationZonePoint &oz,
   projection.SetScreenOrigin(pt.x, pt.y);
   projection.SetGeoLocation(center);
   projection.SetScale(scale);
-  projection.SetScreenAngle(Angle::zero());
+  projection.SetScreenAngle(Angle::Zero());
   projection.UpdateScreenBounds();
 
   OZRenderer ozv(look, airspace_look, airspace_settings);

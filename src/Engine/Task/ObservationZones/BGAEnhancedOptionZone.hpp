@@ -47,7 +47,7 @@ public:
    */
   BGAEnhancedOptionZone(const GeoPoint loc)
     :KeyholeZone(BGAENHANCEDOPTION, loc, fixed(10000.0),
-                 Angle::radians(fixed_pi))
+                 Angle::Radians(fixed_pi))
   {
     updateSector();
   }

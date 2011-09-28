@@ -80,10 +80,10 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   glPushMatrix();
 #ifdef HAVE_GLES
 #ifdef FIXED_MATH
-  GLfixed angle = projection.GetScreenAngle().value_degrees().as_glfixed();
+  GLfixed angle = projection.GetScreenAngle().Degrees().as_glfixed();
   GLfixed scale = projection.GetScale().as_glfixed_scale();
 #else
-  GLfixed angle = projection.GetScreenAngle().value_degrees() * (1<<16);
+  GLfixed angle = projection.GetScreenAngle().Degrees() * (1<<16);
   GLfixed scale = projection.GetScale() * (1LL<<32);
 #endif
   glTranslatex((int)projection.GetScreenOrigin().x << 16,
@@ -92,7 +92,7 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   glScalex(scale, scale, 1<<16);
 #else
   glTranslatef(projection.GetScreenOrigin().x, projection.GetScreenOrigin().y, 0.);
-  glRotatef(projection.GetScreenAngle().value_degrees(), 0., 0., -1.);
+  glRotatef(projection.GetScreenAngle().Degrees(), 0., 0., -1.);
   glScalef(projection.GetScale(), projection.GetScale(), 1.);
 #endif
 #else // !ENABLE_OPENGL

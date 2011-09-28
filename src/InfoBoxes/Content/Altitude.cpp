@@ -330,7 +330,7 @@ InfoBoxContentAltitudeGPS::HandleKey(const InfoBoxKeyCodes keycode)
   if (!basic.gps.simulator)
     return false;
 
-  const Angle a5 = Angle::degrees(fixed(5));
+  const Angle a5 = Angle::Degrees(fixed(5));
 
   switch (keycode) {
   case ibkUp:

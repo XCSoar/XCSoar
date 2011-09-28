@@ -704,8 +704,8 @@ TestDeclare(const struct DeviceRegister &driver)
   declaration.aircraft_type = _T("Cirrus");
   declaration.aircraft_registration = _T("D-3003");
   declaration.competition_id = _T("33");
-  const GeoPoint gp(Angle::degrees(fixed(7.7061111111111114)),
-                    Angle::degrees(fixed(51.051944444444445)));
+  const GeoPoint gp(Angle::Degrees(fixed(7.7061111111111114)),
+                    Angle::Degrees(fixed(51.051944444444445)));
   Waypoint wp(gp);
   wp.name = _T("Foo");
   wp.altitude = fixed(123);

@@ -117,7 +117,7 @@ PrintHelper::trace_print(const Trace& trace, const GeoPoint &loc)
 
 std::ostream& operator<< (std::ostream& o, const Angle& a)
 {
-  o << a.value_degrees();
+  o << a.Degrees();
   return o;
 } 
 
@@ -125,8 +125,8 @@ std::ostream& operator<< (std::ostream& o, const Angle& a)
 void write_point(const SearchPoint& sp, const FlatGeoPoint& p, const char* name)
 {
   printf("%g %g %d %d # %s\n",
-         (double)sp.get_location().longitude.value_degrees(),
-         (double)sp.get_location().latitude.value_degrees(),
+         (double)sp.get_location().longitude.Degrees(),
+         (double)sp.get_location().latitude.Degrees(),
          p.Longitude,
          p.Latitude,
          name);
@@ -150,16 +150,16 @@ void PrintHelper::print_route(RoutePlanner& r)
   for (Route::const_iterator i = r.solution_route.begin();
        i!= r.solution_route.end(); ++i) {
     printf("%.6g %.6g %d # solution\n",
-           (double)i->longitude.value_degrees(),
-           (double)i->latitude.value_degrees(),
+           (double)i->longitude.Degrees(),
+           (double)i->latitude.Degrees(),
            0);
   }
   printf("# solution\n");
   for (Route::const_iterator i = r.solution_route.begin();
        i!= r.solution_route.end(); ++i) {
     printf("%.6g %.6g %d # solution\n",
-           (double)i->longitude.value_degrees(),
-           (double)i->latitude.value_degrees(),
+           (double)i->longitude.Degrees(),
+           (double)i->latitude.Degrees(),
            (int)i->altitude);
   }
   printf("# solution\n");

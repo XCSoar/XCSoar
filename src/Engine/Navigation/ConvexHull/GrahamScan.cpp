@@ -186,7 +186,7 @@ int GrahamScan::direction( const GeoPoint& p0,
                            const fixed& tolerance)
 {
   return (( (p0.longitude - p1.longitude ) * (p2.latitude - p1.latitude ) )
-          - ( (p2.longitude - p1.longitude ) * (p0.latitude - p1.latitude ) )).sign(tolerance);
+          - ( (p2.longitude - p1.longitude ) * (p0.latitude - p1.latitude ) )).Sign(tolerance);
 }
 
 

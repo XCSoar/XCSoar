@@ -35,7 +35,7 @@ int main(int argc, char **argv)
   plan_tests(46);
 
   // test constructor
-  GeoPoint p1(Angle::degrees(fixed(345.32)), Angle::degrees(fixed(-6.332)));
+  GeoPoint p1(Angle::Degrees(fixed(345.32)), Angle::Degrees(fixed(-6.332)));
   ok1(equals(p1, -6.332, 345.32));
 
   // test normalize()
@@ -43,7 +43,7 @@ int main(int argc, char **argv)
   ok1(equals(p1, -6.332, -14.68));
 
   // test parametric()
-  GeoPoint p2(Angle::degrees(fixed_two), Angle::degrees(fixed_one));
+  GeoPoint p2(Angle::Degrees(fixed_two), Angle::Degrees(fixed_one));
   GeoPoint p3 = p1.Parametric(p2, fixed(5));
   ok1(equals(p3, -1.332, -4.68));
 
@@ -119,7 +119,7 @@ int main(int argc, char **argv)
   ok1(equals(v.bearing, 63.272424));
 
   // test intermediate_point()
-  GeoPoint p7(Angle::degrees(fixed_zero), Angle::degrees(fixed_zero));
+  GeoPoint p7(Angle::Degrees(fixed_zero), Angle::Degrees(fixed_zero));
   GeoPoint p8 = p7.IntermediatePoint(p2, fixed(100000));
   ok1(equals(p8, 0.402274, 0.804342));
   ok1(equals(p8.Distance(p7), 100000));
@@ -132,24 +132,24 @@ int main(int argc, char **argv)
   ok1(equals((p2 * fixed_two).ProjectedDistance(p2, p6), 248567.832772));
 
   // Tests moved here from test_fixed.cpp
-  GeoPoint l1(Angle::zero(), Angle::zero());
-  GeoPoint l2(Angle::degrees(fixed(-0.3)), Angle::degrees(fixed(1.0)));
-  GeoPoint l3(Angle::degrees(fixed(0.00001)), Angle::degrees(fixed_zero));
-  GeoPoint l4(Angle::degrees(fixed(10)), Angle::degrees(fixed_zero));
+  GeoPoint l1(Angle::Zero(), Angle::Zero());
+  GeoPoint l2(Angle::Degrees(fixed(-0.3)), Angle::Degrees(fixed(1.0)));
+  GeoPoint l3(Angle::Degrees(fixed(0.00001)), Angle::Degrees(fixed_zero));
+  GeoPoint l4(Angle::Degrees(fixed(10)), Angle::Degrees(fixed_zero));
 
   v = l1.DistanceBearing(l2);
   printf("Dist %g bearing %d\n",
-         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.value_degrees()));
+         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.Degrees()));
   // 116090 @ 343
 
   v = l1.DistanceBearing(l3);
   printf("Dist %g bearing %d\n",
-         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.value_degrees()));
+         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.Degrees()));
   ok(positive(v.distance) && v.distance < fixed_two, "earth distance short", 0);
 
   v = l1.DistanceBearing(l4);
   printf("Dist %g bearing %d\n",
-         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.value_degrees()));
+         FIXED_DOUBLE(v.distance), FIXED_INT(v.bearing.Degrees()));
 
   return exit_status();
 }

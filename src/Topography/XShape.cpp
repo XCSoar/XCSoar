@@ -115,10 +115,10 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
   msInitShape(&shape);
   msSHPReadShape(shpfile->hSHP, i, &shape);
 
-  bounds.west = Angle::degrees(fixed(shape.bounds.minx));
-  bounds.south = Angle::degrees(fixed(shape.bounds.miny));
-  bounds.east = Angle::degrees(fixed(shape.bounds.maxx));
-  bounds.north = Angle::degrees(fixed(shape.bounds.maxy));
+  bounds.west = Angle::Degrees(fixed(shape.bounds.minx));
+  bounds.south = Angle::Degrees(fixed(shape.bounds.miny));
+  bounds.east = Angle::Degrees(fixed(shape.bounds.maxx));
+  bounds.north = Angle::Degrees(fixed(shape.bounds.maxy));
 #ifdef ENABLE_OPENGL
   center = bounds.center();
 #endif
@@ -173,11 +173,11 @@ XShape::XShape(shapefileObj *shpfile, int i, int label_field)
     num_points = lines[l];
     for (unsigned j = 0; j < num_points; ++j, ++src)
 #ifdef ENABLE_OPENGL
-      *p++ = geo_to_shape(GeoPoint(Angle::degrees(fixed(src->x)),
-                                   Angle::degrees(fixed(src->y))));
+      *p++ = geo_to_shape(GeoPoint(Angle::Degrees(fixed(src->x)),
+                                   Angle::Degrees(fixed(src->y))));
 #else
-      *p++ = GeoPoint(Angle::degrees(fixed(src->x)),
-                      Angle::degrees(fixed(src->y)));
+      *p++ = GeoPoint(Angle::Degrees(fixed(src->x)),
+                      Angle::Degrees(fixed(src->y)));
 #endif
   }
 
@@ -294,9 +294,9 @@ XShape::geo_to_shape(const GeoPoint &origin, const GeoPoint &point) const
 
   ShapePoint pt;
   pt.x = fast_mult(point.latitude.fastcosine(),
-                   fast_mult(d.longitude.value_radians(), fixed_earth_r, 12),
+                   fast_mult(d.longitude.Radians(), fixed_earth_r, 12),
                    16);
-  pt.y = -fast_mult(d.latitude.value_radians(), fixed_earth_r, 12);
+  pt.y = -fast_mult(d.latitude.Radians(), fixed_earth_r, 12);
   return pt;
 }
 

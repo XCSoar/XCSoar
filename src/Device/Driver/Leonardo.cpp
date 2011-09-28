@@ -52,7 +52,7 @@ ReadSpeedVector(NMEAInputLine &line, SpeedVector &value_r)
 
   if (bearing_valid && norm_valid) {
     value_r.norm = Units::ToSysUnit(norm, unKiloMeterPerHour);
-    value_r.bearing = Angle::degrees(bearing);
+    value_r.bearing = Angle::Degrees(bearing);
     return true;
   } else
     return false;

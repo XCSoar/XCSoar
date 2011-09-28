@@ -322,7 +322,7 @@ public:
   bool negative() const;
 
   gcc_pure
-  fixed half() const {
+  fixed Half() const {
     return fixed(internal(), m_nVal >> 1);
   }
 
@@ -999,7 +999,7 @@ gcc_const
 static inline fixed
 half(fixed a)
 {
-  return a.half();
+  return a.Half();
 }
 
 #endif

@@ -95,8 +95,8 @@ public:
 
   void print(std::ostream &f) {
     f << (double)state.time << " " 
-      <<  (double)state.location.longitude.value_degrees() << " " 
-      <<  (double)state.location.latitude.value_degrees() << " "
+      <<  (double)state.location.longitude.Degrees() << " " 
+      <<  (double)state.location.latitude.Degrees() << " "
       <<  (double)state.altitude << "\n";
   }
   bool started;

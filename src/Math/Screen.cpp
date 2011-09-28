@@ -89,10 +89,10 @@ void
 PolygonRotateShift(RasterPoint *poly, const int n, const int xs, const int ys,
                    Angle angle, const bool scale)
 {
-  static Angle lastangle = Angle::native(-fixed_one);
+  static Angle lastangle = Angle::Native(-fixed_one);
   static int cost = 1024, sint = 0;
   static bool last_scale = false;
-  angle = angle.as_bearing();
+  angle = angle.AsBearing();
 
   if ((angle != lastangle) || (last_scale != scale)) {
     lastangle = angle;

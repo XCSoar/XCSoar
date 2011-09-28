@@ -112,7 +112,7 @@ InfoBoxWindow::SetValue(Angle value, const TCHAR *suffix)
 
   TCHAR tmp[32];
   _stprintf(tmp, _T("%d")_T(DEG)_T("%s"),
-            iround(value.value_degrees()), suffix);
+            iround(value.Degrees()), suffix);
   SetValue(tmp);
 }
 
@@ -162,7 +162,7 @@ InfoBoxWindow::SetComment(Angle value, const TCHAR *suffix)
 
   TCHAR tmp[32];
   _stprintf(tmp, _T("%d")_T(DEG)_T("%s"),
-            iround(value.value_degrees()), suffix);
+            iround(value.Degrees()), suffix);
   SetComment(tmp);
 }
 

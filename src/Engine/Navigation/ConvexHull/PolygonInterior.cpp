@@ -41,7 +41,7 @@ inline static int
 isLeft( const GeoPoint &P0, const GeoPoint &P1, const GeoPoint &P2 )
 {
     return ( (P1.longitude - P0.longitude) * (P2.latitude - P0.latitude)
-             - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude) ).sign();
+             - (P2.longitude - P0.longitude) * (P1.latitude - P0.latitude) ).Sign();
 }
 
 inline static int

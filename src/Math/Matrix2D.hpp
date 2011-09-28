@@ -86,7 +86,7 @@ public:
 
   void Rotate(const Angle &alpha) {
     fixed sin, cos;
-    alpha.sin_cos(sin, cos);
+    alpha.SinCos(sin, cos);
 #ifdef FIXED_MATH
     long s = sin.as_glfixed();
     long c = cos.as_glfixed();

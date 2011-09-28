@@ -51,14 +51,14 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
   if (i > 80)
     return;
 
-  const Angle angle = Angle::degrees(fixed((i * 360) / 255)).as_bearing();
-  Angle dangle = (angle + Angle::degrees(fixed(120))).as_bearing();
-  Angle hangle = dangle.flipped().as_bearing();
+  const Angle angle = Angle::Degrees(fixed((i * 360) / 255)).AsBearing();
+  Angle dangle = (angle + Angle::Degrees(fixed(120))).AsBearing();
+  Angle hangle = dangle.Flipped().AsBearing();
 
   int alt = (angle.ifastsine()) / 7;
   int north = (angle.ifastsine()) / 2 - 200;
   int east = (angle.ifastcosine()) / 1.5;
-  int track = -angle.as_bearing().value_degrees();
+  int track = -angle.AsBearing().Degrees();
   unsigned alarm_level = (i % 30 > 13 ? 0 : (i % 30 > 5 ? 2 : 1));
 
   NMEAParser parser;
@@ -74,7 +74,7 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
   alt = (angle.ifastcosine()) / 10;
   north = (dangle.ifastsine()) / 1.20 + 300;
   east = (dangle.ifastcosine()) + 500;
-  track = hangle.value_degrees();
+  track = hangle.Degrees();
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>

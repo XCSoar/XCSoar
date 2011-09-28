@@ -57,11 +57,11 @@ InputEvents::processNmea(unsigned key)
 static void
 Dump(GeoPoint location)
 {
-  int latitude = (int)(location.latitude.value_degrees() * 3600);
+  int latitude = (int)(location.latitude.Degrees() * 3600);
   char north_or_south = latitude < 0 ? 'S' : 'N';
   latitude = abs(latitude);
 
-  int longitude = (int)(location.longitude.value_degrees() * 3600);
+  int longitude = (int)(location.longitude.Degrees() * 3600);
   char east_or_west = latitude < 0 ? 'W' : 'E';
   longitude = abs(longitude);
 
@@ -106,7 +106,7 @@ Dump(const NMEAInfo &basic)
   }
 
   if (basic.track_available)
-    printf("TrackBearing=%d\n", (int)basic.track.value_degrees());
+    printf("TrackBearing=%d\n", (int)basic.track.Degrees());
 
   if (basic.ground_speed_available)
     printf("GroundSpeed=%d\n", (int)basic.ground_speed);
@@ -137,7 +137,7 @@ Dump(const NMEAInfo &basic)
 
   if (basic.external_wind_available)
     printf("Wind=%d/%d\n",
-           (int)basic.external_wind.bearing.value_degrees(),
+           (int)basic.external_wind.bearing.Degrees(),
            (int)basic.external_wind.norm);
 
   if (basic.temperature_available)

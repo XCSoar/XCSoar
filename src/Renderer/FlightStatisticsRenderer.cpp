@@ -664,7 +664,7 @@ FlightStatisticsRenderer::RenderWind(Canvas &canvas, const PixelRect rc,
     if (negative(mag))
       continue;
 
-    Angle angle = Angle::radians(atan2(-wind.x, wind.y));
+    Angle angle = Angle::Radians(atan2(-wind.x, wind.y));
 
     chart.DrawArrow((chart.getXmin() + chart.getXmax()) / 2, h,
                     mag * WINDVECTORMAG, angle, ChartLook::STYLE_MEDIUMBLACK);

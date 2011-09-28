@@ -66,14 +66,14 @@ static const TCHAR *const oz_type_names[NUM_OZ_TYPES] = {
   _T("Annular sector"),
 };
 
-static GeoPoint location(Angle::degrees(fixed(7.7061111111111114)),
-                         Angle::degrees(fixed(51.051944444444445)));
+static GeoPoint location(Angle::Degrees(fixed(7.7061111111111114)),
+                         Angle::Degrees(fixed(51.051944444444445)));
 
-static GeoPoint previous(Angle::degrees(fixed(10.6)),
-                         Angle::degrees(fixed(49)));
+static GeoPoint previous(Angle::Degrees(fixed(10.6)),
+                         Angle::Degrees(fixed(49)));
 
-static GeoPoint next(Angle::degrees(fixed(10.2)),
-                     Angle::degrees(fixed(51.4)));
+static GeoPoint next(Angle::Degrees(fixed(10.2)),
+                     Angle::Degrees(fixed(51.4)));
 
 static AirspaceRendererSettings airspace_renderer_settings;
 
@@ -113,14 +113,14 @@ public:
 
     case ObservationZonePoint::SECTOR:
       oz = new SectorZone(location, radius,
-                          Angle::degrees(fixed(0)),
-                          Angle::degrees(fixed(70)));
+                          Angle::Degrees(fixed(0)),
+                          Angle::Degrees(fixed(70)));
       break;
 
     case ObservationZonePoint::ANNULAR_SECTOR:
       oz = new AnnularSectorZone(location, radius,
-                                 Angle::degrees(fixed(0)),
-                                 Angle::degrees(fixed(70)),
+                                 Angle::Degrees(fixed(0)),
+                                 Angle::Degrees(fixed(70)),
                                  radius*fixed_half);
       break;
 

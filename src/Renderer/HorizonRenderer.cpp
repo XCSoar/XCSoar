@@ -56,12 +56,12 @@ HorizonRenderer::Draw(Canvas &canvas, const PixelRect &rc, const NMEAInfo &Basic
 #define fixed_89 fixed_int_constant(89)
 
   fixed phi = max(-fixed_89,
-                  min(fixed_89, Basic.acceleration.bank_angle.value_degrees()));
+                  min(fixed_89, Basic.acceleration.bank_angle.Degrees()));
   fixed alpha = fixed_rad_to_deg * acos(max(-fixed_one,min(fixed_one,
-                  Basic.acceleration.pitch_angle.value_degrees() * fixed_div)));
+                  Basic.acceleration.pitch_angle.Degrees() * fixed_div)));
   fixed sphi = fixed_180 - phi;
-  Angle alpha1 = Angle::degrees(sphi - alpha);
-  Angle alpha2 = Angle::degrees(sphi + alpha);
+  Angle alpha1 = Angle::Degrees(sphi - alpha);
+  Angle alpha2 = Angle::Degrees(sphi + alpha);
 
   // draw sky part
   canvas.select(hpHorizonSky);

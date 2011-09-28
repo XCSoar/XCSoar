@@ -59,7 +59,7 @@ DerivedInfo::Reset()
   TerrainInfo::Clear();
   TeamInfo::Clear();
 
-  heading = Angle::zero();
+  heading = Angle::Zero();
   pressure_available.Clear();
 
   climb_history.Clear();

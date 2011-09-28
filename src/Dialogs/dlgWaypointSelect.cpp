@@ -75,7 +75,7 @@ static int DirectionFilter[] = {
   0, DirHDG, 360, 30, 60, 90, 120, 150, 180, 210, 240, 270, 300, 330
 };
 
-static Angle last_heading = Angle::zero();
+static Angle last_heading = Angle::Zero();
 
 /**
  * used for single-letter name search with Left/Right keys
@@ -170,7 +170,7 @@ GetDirectionData(int DirectionFilterIdx)
     _stprintf(sTmp, _T("%c"), '*');
   else if (DirectionFilterIdx == 1)
     _stprintf(sTmp, _T("HDG(%u")_T(DEG)_T(")"),
-              uround(last_heading.as_bearing().value_degrees()));
+              uround(last_heading.AsBearing().Degrees()));
   else
     _stprintf(sTmp, _T("%d")_T(DEG), DirectionFilter[DirectionFilterIdx]);
 
@@ -291,7 +291,7 @@ public:
   {
     const Angle a01 = p0.Bearing(p1);
     const Angle a21 = p2.Bearing(p1);
-    const fixed diff = (a01 - a21).as_delta().value_degrees();
+    const fixed diff = (a01 - a21).AsDelta().Degrees();
 
     if (positive(right))
       return (diff > minFAIAngle) && (diff < maxFAIAngle);
@@ -509,10 +509,10 @@ private:
       return true;
 
     int a = DirectionFilter[filter_data.direction_index];
-    Angle angle = (a == DirHDG) ? heading : Angle::degrees(fixed(a));
+    Angle angle = (a == DirHDG) ? heading : Angle::Degrees(fixed(a));
 
     const GeoVector vec(location, wp.location);
-    fixed DirectionErr = (vec.bearing - angle).as_delta().magnitude_degrees();
+    fixed DirectionErr = (vec.bearing - angle).AsDelta().AbsoluteDegrees();
 
     return DirectionErr < fixed(18);
   }
@@ -772,7 +772,7 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 {
   if (filter_data.direction_index == 1 && !XCSoarInterface::Calculated().circling) {
     Angle a = last_heading - CommonInterface::Calculated().heading;
-    if (a.as_delta().magnitude_degrees() >= fixed(60)) {
+    if (a.AsDelta().AbsoluteDegrees() >= fixed(60)) {
       last_heading = CommonInterface::Calculated().heading;
       UpdateList();
       InitializeDirection(true);

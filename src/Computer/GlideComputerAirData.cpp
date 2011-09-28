@@ -150,7 +150,7 @@ GlideComputerAirData::Heading()
     x0 += wind.bearing.fastsine() * wind.norm;
     y0 += wind.bearing.fastcosine() * wind.norm;
 
-    calculated.heading = Angle::radians(atan2(x0, y0)).as_bearing();
+    calculated.heading = Angle::Radians(atan2(x0, y0)).AsBearing();
   } else {
     calculated.heading = basic.track;
   }
@@ -252,10 +252,10 @@ GlideComputerAirData::CurrentThermal()
 static unsigned
 heading_to_index(Angle &heading)
 {
-  static const Angle afive = Angle::degrees(fixed(5));
+  static const Angle afive = Angle::Degrees(fixed(5));
 
   unsigned index =
-      floor((heading + afive).as_bearing().value_degrees() / 10);
+      floor((heading + afive).AsBearing().Degrees() / 10);
 
   return std::max(0u, std::min(35u, index));
 }
@@ -275,7 +275,7 @@ GlideComputerAirData::UpdateLiftDatabase()
 
   // Depending on the direction set the step size sign for the
   // following loop
-  Angle heading_step = Angle::degrees(fixed(left ? -10 : 10));
+  Angle heading_step = Angle::Degrees(fixed(left ? -10 : 10));
 
   // Start at the last heading and add heading_step until the current heading
   // is reached. For each heading save the current lift value into the
@@ -290,17 +290,17 @@ GlideComputerAirData::UpdateLiftDatabase()
   // smaller or bigger then the last one, because of that negative() is
   // tested against the left variable.
   for (Angle h = LastCalculated().heading;
-       left == negative((calculated.heading - h).as_delta().value_degrees());
+       left == negative((calculated.heading - h).AsDelta().Degrees());
        h += heading_step) {
     unsigned index = heading_to_index(h);
     calculated.lift_database[index] = Basic().brutto_vario;
   }
 
   // detect zero crossing
-  if (((calculated.heading.value_degrees()< fixed_90) && 
-       (LastCalculated().heading.value_degrees()> fixed_270)) ||
-      ((LastCalculated().heading.value_degrees()< fixed_90) && 
-       (calculated.heading.value_degrees()> fixed_270))) {
+  if (((calculated.heading.Degrees()< fixed_90) && 
+       (LastCalculated().heading.Degrees()> fixed_270)) ||
+      ((LastCalculated().heading.Degrees()< fixed_90) && 
+       (calculated.heading.Degrees()> fixed_270))) {
 
     fixed h_av = fixed_zero;
     for (unsigned i=0; i<36; ++i) {

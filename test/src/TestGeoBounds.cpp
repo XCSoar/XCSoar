@@ -29,7 +29,7 @@ int main(int argc, char **argv)
 {
   plan_tests(24);
 
-  GeoPoint g(Angle::degrees(fixed(2)), Angle::degrees(fixed(4)));
+  GeoPoint g(Angle::Degrees(fixed(2)), Angle::Degrees(fixed(4)));
 
   GeoBounds b(g);
 
@@ -40,8 +40,8 @@ int main(int argc, char **argv)
 
   ok1(b.empty());
 
-  g.latitude = Angle::degrees(fixed(6));
-  g.longitude = Angle::degrees(fixed(8));
+  g.latitude = Angle::Degrees(fixed(6));
+  g.longitude = Angle::Degrees(fixed(8));
   b.extend(g);
 
   ok1(equals(b.east, 8));
@@ -55,10 +55,10 @@ int main(int argc, char **argv)
   ok1(equals(g.latitude, 5));
   ok1(equals(g.longitude, 5));
 
-  ok1(b.inside(Angle::degrees(fixed(7)), Angle::degrees(fixed(4.5))));
-  ok1(!b.inside(Angle::degrees(fixed(9)), Angle::degrees(fixed(4.5))));
-  ok1(!b.inside(Angle::degrees(fixed(7)), Angle::degrees(fixed(1))));
-  ok1(!b.inside(Angle::degrees(fixed(9)), Angle::degrees(fixed(1))));
+  ok1(b.inside(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(4.5))));
+  ok1(!b.inside(Angle::Degrees(fixed(9)), Angle::Degrees(fixed(4.5))));
+  ok1(!b.inside(Angle::Degrees(fixed(7)), Angle::Degrees(fixed(1))));
+  ok1(!b.inside(Angle::Degrees(fixed(9)), Angle::Degrees(fixed(1))));
 
   b = b.scale(fixed(2));
 

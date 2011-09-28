@@ -189,7 +189,7 @@ void
 DeviceBlackboard::SetTrack(Angle val)
 {
   ScopeLock protect(mutex);
-  simulator_data.track = val.as_bearing();
+  simulator_data.track = val.AsBearing();
 
   ScheduleMerge();
 }

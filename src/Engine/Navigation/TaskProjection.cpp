@@ -85,9 +85,9 @@ TaskProjection::fproject(const GeoPoint& tp) const
   assert(initialised);
 
   return FlatPoint((tp.longitude - location_mid.longitude)
-                   .as_delta().value_native() * cos_midloc,
+                   .AsDelta().Native() * cos_midloc,
                    (tp.latitude - location_mid.latitude)
-                   .as_delta().value_native() * fixed_scale);
+                   .AsDelta().Native() * fixed_scale);
 }
 
 GeoPoint 
@@ -96,8 +96,8 @@ TaskProjection::funproject(const FlatPoint& fp) const
   assert(initialised);
 
   GeoPoint tp;
-  tp.longitude = (Angle::native(fp.x*r_cos_midloc)+location_mid.longitude).as_delta();
-  tp.latitude = (Angle::native(fp.y*inv_scale)+location_mid.latitude).as_delta();
+  tp.longitude = (Angle::Native(fp.x*r_cos_midloc)+location_mid.longitude).AsDelta();
+  tp.latitude = (Angle::Native(fp.y*inv_scale)+location_mid.latitude).AsDelta();
   return tp;
 }
 
@@ -119,8 +119,8 @@ TaskProjection::unproject(const FlatGeoPoint& fp) const
   assert(initialised);
 
   GeoPoint tp;
-  tp.longitude = Angle::native(fixed(fp.Longitude)*r_cos_midloc) + location_mid.longitude;
-  tp.latitude = Angle::native(fixed(fp.Latitude)*inv_scale) + location_mid.latitude;
+  tp.longitude = Angle::Native(fixed(fp.Longitude)*r_cos_midloc) + location_mid.longitude;
+  tp.latitude = Angle::Native(fixed(fp.Latitude)*inv_scale) + location_mid.latitude;
   return tp;
 }
 
@@ -129,7 +129,7 @@ TaskProjection::fproject_range(const GeoPoint &tp, const fixed range) const
 {
   assert(initialised);
 
-  GeoPoint fr = ::FindLatitudeLongitude(tp, Angle::zero(), range);
+  GeoPoint fr = ::FindLatitudeLongitude(tp, Angle::Zero(), range);
   FlatPoint f = fproject(fr);
   FlatPoint p = fproject(tp);
   return fabs(f.y - p.y);

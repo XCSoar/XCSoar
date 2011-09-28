@@ -69,8 +69,8 @@ Marks::MarkLocation(const GeoPoint &loc,
   sprintf(message, "%02u.%02u.%04u\t%02u:%02u:%02u\tLon:%f\tLat:%f",
           time.day, time.month, time.year,
           time.hour, time.minute, time.second,
-          (double)(loc.longitude.value_degrees()), 
-          (double)(loc.latitude.value_degrees()));
+          (double)(loc.longitude.Degrees()), 
+          (double)(loc.latitude.Degrees()));
 
   TextWriter *writer = CreateDataTextFile(_T("xcsoar-marks.txt"), true);
   if (writer != NULL) {

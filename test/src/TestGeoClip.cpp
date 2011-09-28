@@ -28,8 +28,8 @@
 static inline GeoPoint
 make_geo_point(int longitude, int latitude)
 {
-  return GeoPoint(Angle::degrees(fixed(longitude)),
-                  Angle::degrees(fixed(latitude)));
+  return GeoPoint(Angle::Degrees(fixed(longitude)),
+                  Angle::Degrees(fixed(latitude)));
 }
 
 static void

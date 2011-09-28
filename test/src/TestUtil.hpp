@@ -84,19 +84,19 @@ between(fixed x, double a, double b)
 static inline bool
 equals(const Angle a, int b)
 {
-  return equals(a.value_degrees(), fixed(b));
+  return equals(a.Degrees(), fixed(b));
 }
 
 static inline bool
 equals(const Angle a, double b)
 {
-  return equals(a.value_degrees(), fixed(b));
+  return equals(a.Degrees(), fixed(b));
 }
 
 static inline bool
 equals(const Angle a, const Angle b)
 {
-  return equals(a.value_degrees(), b.value_degrees());
+  return equals(a.Degrees(), b.Degrees());
 }
 
 static inline bool

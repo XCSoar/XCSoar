@@ -60,7 +60,7 @@ struct GeoBounds {
   }
 
   bool inside(Angle longitude, Angle latitude) const {
-    return longitude.between(west, east) && latitude.between(south, north);
+    return longitude.Between(west, east) && latitude.Between(south, north);
   }
 
   bool inside(const GeoPoint pt) const {
@@ -78,7 +78,7 @@ protected:
    */
   gcc_const
   static bool overlaps(Angle a1, Angle a2, Angle b1, Angle b2) {
-    return a1.between(b1, b2) || b1.between(a1, a2);
+    return a1.Between(b1, b2) || b1.Between(a1, a2);
   }
 
 public:
@@ -104,9 +104,9 @@ public:
    */
   GeoBounds scale(fixed factor) const {
     Angle diff_lat_half =
-        (north - south).as_bearing() / fixed_two * (factor - fixed_one);
+        (north - south).AsBearing() / fixed_two * (factor - fixed_one);
     Angle diff_lon_half =
-        (east - west).as_bearing() / fixed_two * (factor - fixed_one);
+        (east - west).AsBearing() / fixed_two * (factor - fixed_one);
 
     GeoBounds br = *this;
     br.east += diff_lon_half;
