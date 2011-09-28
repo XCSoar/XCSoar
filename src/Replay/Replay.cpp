@@ -31,13 +31,13 @@ Replay::Stop()
 {
   switch (mode) {
   case MODE_IGC:
-    Igc.Stop();
+    igc_replay.Stop();
     break;
   case MODE_NMEA:
-    Nmea.Stop();
+    nmea_replay.Stop();
     break;
   case MODE_DEMO:
-    Demo.Stop();
+    demo_replay.Stop();
     mode = MODE_NULL;
     break;
   case MODE_NULL:
@@ -50,16 +50,16 @@ Replay::Start()
 {
   switch (mode) {
   case MODE_IGC:
-    Igc.Start();
+    igc_replay.Start();
     break;
   case MODE_NMEA:
-    Nmea.Start();
+    nmea_replay.Start();
     break;
   case MODE_DEMO:
-    Demo.Start();
+    demo_replay.Start();
     break;
   case MODE_NULL:
-    Demo.Start();
+    demo_replay.Start();
     mode = MODE_DEMO;
     break;
   };
@@ -68,7 +68,7 @@ Replay::Start()
 const TCHAR*
 Replay::GetFilename()
 {
-  return (mode== MODE_IGC ? Igc.GetFilename() : Nmea.GetFilename());
+  return (mode== MODE_IGC ? igc_replay.GetFilename() : nmea_replay.GetFilename());
 }
 
 void
@@ -83,10 +83,10 @@ Replay::SetFilename(const TCHAR *name)
 
   if (MatchesExtension(name, _T(".igc"))) {
     mode = MODE_IGC;
-    Igc.SetFilename(name);
+    igc_replay.SetFilename(name);
   } else {
     mode = MODE_NMEA;
-    Nmea.SetFilename(name);
+    nmea_replay.SetFilename(name);
   }
 }
 
@@ -96,11 +96,11 @@ Replay::Update()
 {
   switch (mode) {
   case MODE_IGC:
-    return Igc.Update();
+    return igc_replay.Update();
   case MODE_NMEA:
-    return Nmea.Update();
+    return nmea_replay.Update();
   case MODE_DEMO:
-    return Demo.Update();
+    return demo_replay.Update();
   case MODE_NULL:
     break;
   };
@@ -112,11 +112,11 @@ Replay::GetTimeScale()
 {
   switch (mode) {
   case MODE_IGC:
-    return Igc.time_scale;
+    return igc_replay.time_scale;
   case MODE_NMEA:
-    return Nmea.time_scale;
+    return nmea_replay.time_scale;
   case MODE_DEMO:
-    return Demo.time_scale;
+    return demo_replay.time_scale;
   case MODE_NULL:
     break;
   };
@@ -124,9 +124,9 @@ Replay::GetTimeScale()
 }
 
 void
-Replay::SetTimeScale(const fixed TimeScale)
+Replay::SetTimeScale(const fixed time_scale)
 {
-  Igc.time_scale = TimeScale;
-  Nmea.time_scale = TimeScale;
-  Demo.time_scale = TimeScale;
+  igc_replay.time_scale = time_scale;
+  nmea_replay.time_scale = time_scale;
+  demo_replay.time_scale = time_scale;
 }

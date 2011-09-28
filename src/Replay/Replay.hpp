@@ -44,15 +44,15 @@ class Replay
   };
 
   ReplayMode mode;
-  IgcReplayGlue Igc;
-  NmeaReplayGlue Nmea;
-  DemoReplayGlue Demo;
+  IgcReplayGlue igc_replay;
+  NmeaReplayGlue nmea_replay;
+  DemoReplayGlue demo_replay;
 
 public:
   Replay(Logger *_logger, ProtectedTaskManager& task_manager):
     mode(MODE_NULL),
-    Igc(_logger),
-    Demo(task_manager) {}
+    igc_replay(_logger),
+    demo_replay(task_manager) {}
 
   bool Update();
   void Stop();
@@ -61,7 +61,7 @@ public:
   void SetFilename(const TCHAR *name);
 
   fixed GetTimeScale();
-  void SetTimeScale(const fixed TimeScale);
+  void SetTimeScale(const fixed time_scale);
 };
 
 #endif
