@@ -24,7 +24,7 @@ Copyright_License {
 #include "Device/Driver/LX.hpp"
 #include "Device/Driver/LX/Internal.hpp"
 #include "Device/Driver/LX/Protocol.hpp"
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Operation.hpp"
 

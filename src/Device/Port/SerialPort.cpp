@@ -21,12 +21,12 @@ Copyright_License {
 }
 */
 
-#include "Device/SerialPort.hpp"
+#include "SerialPort.hpp"
 #include "Asset.hpp"
 #include "OS/Sleep.h"
 
 #ifdef _WIN32_WCE
-#include "Device/Widcomm.hpp"
+#include "Widcomm.hpp"
 #else
 #include "OS/OverlappedEvent.hpp"
 #endif

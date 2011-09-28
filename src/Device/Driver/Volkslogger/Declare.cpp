@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Internal.hpp"
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 #include "Operation.hpp"
 #include "vlapi2.h"
 #include "Components.hpp"

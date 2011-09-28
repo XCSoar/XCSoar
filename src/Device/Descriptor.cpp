@@ -28,7 +28,7 @@ Copyright_License {
 #include "Device/Internal.hpp"
 #include "Device/Register.hpp"
 #include "DeviceBlackboard.hpp"
-#include "Device/ConfiguredPort.hpp"
+#include "Port/ConfiguredPort.hpp"
 #include "NMEA/Info.hpp"
 #include "Thread/Mutex.hpp"
 #include "StringUtil.hpp"

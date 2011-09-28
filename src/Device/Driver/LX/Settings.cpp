@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Device/Driver/LX/Internal.hpp"
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 #include "NMEA/Checksum.hpp"
 
 #include <cstdio>

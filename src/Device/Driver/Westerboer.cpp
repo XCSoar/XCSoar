@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Device/Driver/Westerboer.hpp"
 #include "Device/Driver.hpp"
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 #include "Units/Units.hpp"
 #include "NMEA/Info.hpp"
 #include "NMEA/InputLine.hpp"

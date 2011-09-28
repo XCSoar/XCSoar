@@ -21,30 +21,75 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_NULL_PORT_HPP
-#define XCSOAR_DEVICE_NULL_PORT_HPP
+#ifndef XCSOAR_DEVICE_TTY_PORT_HPP
+#define XCSOAR_DEVICE_TTY_PORT_HPP
 
-#include "Device/Port.hpp"
+#include "FifoBuffer.hpp"
+#include "Thread/StoppableThread.hpp"
+#include "Port.hpp"
 
 /**
- * Generic NullPort thread handler class
+ * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
  */
-class NullPort : public Port, private Port::Handler {
+class TTYPort : public Port, protected StoppableThread
+{
+  typedef FifoBuffer<char, 256u> Buffer;
+
+  /** Name of the serial port */
+  TCHAR sPortName[64];
+
+  unsigned rx_timeout;
+
+  unsigned baud_rate;
+
+  int fd;
+
+  Buffer buffer;
+
 public:
-  NullPort();
-  NullPort(Port::Handler &_handler);
+  /**
+   * Creates a new TTYPort object, but does not open it yet.
+   *
+   * @param path the path of the virtual file to open, e.g. "/dev/ttyS0"
+   * @param _baud_rate the speed of the port
+   * @param _handler the callback object for input received on the
+   * port
+   */
+  TTYPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler);
+
+  /**
+   * Closes the serial port (Destructor)
+   */
+  virtual ~TTYPort();
 
   virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
+
+  /**
+   * Opens the serial port
+   * @return True on success, False on failure
+   */
+  bool Open();
+  /**
+   * Closes the serial port
+   * @return True on success, False on failure
+   */
+  bool Close();
+
   virtual bool SetRxTimeout(unsigned Timeout);
   virtual unsigned GetBaudrate() const;
   virtual unsigned SetBaudrate(unsigned BaudRate);
   virtual bool StopRxThread();
   virtual bool StartRxThread();
+  void ProcessChar(char c);
+
   virtual int Read(void *Buffer, size_t Size);
 
-private:
-  virtual void LineReceived(const char *line);
+protected:
+  /**
+   * Entry point for the receive thread
+   */
+  virtual void Run();
 };
 
 #endif

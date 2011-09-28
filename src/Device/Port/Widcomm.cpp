@@ -21,68 +21,40 @@ Copyright_License {
 }
 */
 
-#include "Device/NullPort.hpp"
+#include "Widcomm.hpp"
+#include "Config/Registry.hpp"
 
-#include <stdio.h>
-
-NullPort::NullPort()
-  :Port(*(Port::Handler *)this)
+static bool
+FindDevice(const TCHAR *name, TCHAR *result, size_t result_size)
 {
-}
+  RegistryKey drivers_active(HKEY_LOCAL_MACHINE, _T("Drivers\\Active"), true);
+  if (drivers_active.error())
+    return false;
 
-NullPort::NullPort(Port::Handler &_handler)
-  :Port(_handler)
-{
-}
+  TCHAR key_name[64], value[64];
+  for (unsigned i = 0; drivers_active.enum_key(i, key_name, 64); ++i) {
+    RegistryKey device(drivers_active, key_name, true);
+    if (!device.error() && device.get_value(_T("Name"), value, 64) &&
+        _tcscmp(name, value) == 0)
+      return device.get_value(_T("Key"), result, result_size);
+  }
 
-void
-NullPort::Flush(void)
-{
-}
-
-size_t
-NullPort::Write(const void *data, size_t length)
-{
-  return length;
+  return false;
 }
 
 bool
-NullPort::StopRxThread()
+IsWidcommDevice(const TCHAR *name)
 {
-  return true;
+  TCHAR key[64];
+  if (!FindDevice(name, key, 64))
+    return false;
+
+  RegistryKey registry(HKEY_LOCAL_MACHINE, key, true);
+  if (registry.error())
+    return false;
+
+  TCHAR dll[64];
+  return registry.get_value(_T("Dll"), dll, 64) &&
+    _tcscmp(dll, _T("btcedrivers.dll"));
 }
 
-bool
-NullPort::StartRxThread(void)
-{
-  return true;
-}
-
-bool
-NullPort::SetRxTimeout(unsigned Timeout)
-{
-  return true;
-}
-
-unsigned
-NullPort::GetBaudrate() const
-{
-  return 0;
-}
-
-unsigned
-NullPort::SetBaudrate(unsigned BaudRate)
-{
-  return BaudRate;
-}
-
-int
-NullPort::Read(void *Buffer, size_t Size)
-{
-  return -1;
-}
-
-void
-NullPort::LineReceived(const char *line)
-{
-}

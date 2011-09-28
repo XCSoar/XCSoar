@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Device/TTYPort.hpp"
+#include "TTYPort.hpp"
 #include "Asset.hpp"
 #include "OS/Sleep.h"
 

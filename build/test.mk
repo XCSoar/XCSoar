@@ -588,7 +588,7 @@ $(TARGET_BIN_DIR)/TestLogger$(TARGET_EXEEXT): $(TEST_LOGGER_OBJS) $(TEST_LOGGER_
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_DRIVER_SOURCES = \
-	$(SRC)/Device/NullPort.cpp \
+	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(SRC)/Device/Driver.cpp \
@@ -768,8 +768,8 @@ endif
 DEBUG_PROGRAMS = $(patsubst %,$(TARGET_BIN_DIR)/%$(TARGET_EXEEXT),$(DEBUG_PROGRAM_NAMES))
 
 DEBUG_REPLAY_SOURCES = \
-	$(SRC)/Device/Port.cpp \
-	$(SRC)/Device/NullPort.cpp \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
@@ -1209,7 +1209,7 @@ $(TARGET_BIN_DIR)/RunAirspaceParser$(TARGET_EXEEXT): $(RUN_AIRSPACE_PARSER_OBJS)
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 READ_PORT_SOURCES = \
-	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
@@ -1217,14 +1217,14 @@ READ_PORT_SOURCES = \
 	$(TEST_SRC_DIR)/ReadPort.cpp
 ifeq ($(HAVE_POSIX),y)
 READ_PORT_SOURCES += \
-	$(SRC)/Device/TTYPort.cpp
+	$(SRC)/Device/Port/TTYPort.cpp
 else
 READ_PORT_SOURCES += \
-	$(SRC)/Device/SerialPort.cpp
+	$(SRC)/Device/Port/SerialPort.cpp
 endif
 ifeq ($(HAVE_CE),y)
 READ_PORT_SOURCES += \
-	$(SRC)/Device/Widcomm.cpp
+	$(SRC)/Device/Port/Widcomm.cpp
 endif
 READ_PORT_OBJS = $(call SRC_TO_OBJ,$(READ_PORT_SOURCES))
 READ_PORT_LDADD =
@@ -1234,7 +1234,7 @@ $(TARGET_BIN_DIR)/ReadPort$(TARGET_EXEEXT): $(READ_PORT_OBJS) $(READ_PORT_LDADD)
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 RUN_PORT_HANDLER_SOURCES = \
-	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Thread/Thread.cpp \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/OS/Clock.cpp \
@@ -1242,14 +1242,14 @@ RUN_PORT_HANDLER_SOURCES = \
 	$(TEST_SRC_DIR)/RunPortHandler.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_PORT_HANDLER_SOURCES += \
-	$(SRC)/Device/TTYPort.cpp
+	$(SRC)/Device/Port/TTYPort.cpp
 else
 RUN_PORT_HANDLER_SOURCES += \
-	$(SRC)/Device/SerialPort.cpp
+	$(SRC)/Device/Port/SerialPort.cpp
 endif
 ifeq ($(HAVE_CE),y)
 RUN_PORT_HANDLER_SOURCES += \
-	$(SRC)/Device/Widcomm.cpp
+	$(SRC)/Device/Port/Widcomm.cpp
 endif
 RUN_PORT_HANDLER_OBJS = $(call SRC_TO_OBJ,$(RUN_PORT_HANDLER_SOURCES))
 RUN_PORT_HANDLER_LDADD =
@@ -1262,8 +1262,8 @@ RUN_DEVICE_DRIVER_SOURCES = \
 	$(SRC)/FLARM/FlarmId.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/Units/Units.cpp \
-	$(SRC)/Device/Port.cpp \
-	$(SRC)/Device/NullPort.cpp \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Parser.cpp \
@@ -1299,7 +1299,7 @@ $(TARGET_BIN_DIR)/RunDeviceDriver$(TARGET_EXEEXT): $(RUN_DEVICE_DRIVER_OBJS) $(R
 
 RUN_DECLARE_SOURCES = \
 	$(SRC)/Units/Units.cpp \
-	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Internal.cpp \
@@ -1322,14 +1322,14 @@ RUN_DECLARE_SOURCES = \
 	$(TEST_SRC_DIR)/RunDeclare.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_DECLARE_SOURCES += \
-	$(SRC)/Device/TTYPort.cpp
+	$(SRC)/Device/Port/TTYPort.cpp
 else
 RUN_DECLARE_SOURCES += \
-	$(SRC)/Device/SerialPort.cpp
+	$(SRC)/Device/Port/SerialPort.cpp
 endif
 ifeq ($(HAVE_CE),y)
 RUN_DECLARE_SOURCES += \
-	$(SRC)/Device/Widcomm.cpp
+	$(SRC)/Device/Port/Widcomm.cpp
 endif
 RUN_DECLARE_OBJS = $(call SRC_TO_OBJ,$(RUN_DECLARE_SOURCES))
 RUN_DECLARE_LDADD = \
@@ -1346,7 +1346,7 @@ $(TARGET_BIN_DIR)/RunDeclare$(TARGET_EXEEXT): $(RUN_DECLARE_OBJS) $(RUN_DECLARE_
 
 RUN_FLIGHT_LIST_SOURCES = \
 	$(SRC)/Units/Units.cpp \
-	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Internal.cpp \
@@ -1368,14 +1368,14 @@ RUN_FLIGHT_LIST_SOURCES = \
 	$(TEST_SRC_DIR)/RunFlightList.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_FLIGHT_LIST_SOURCES += \
-	$(SRC)/Device/TTYPort.cpp
+	$(SRC)/Device/Port/TTYPort.cpp
 else
 RUN_FLIGHT_LIST_SOURCES += \
-	$(SRC)/Device/SerialPort.cpp
+	$(SRC)/Device/Port/SerialPort.cpp
 endif
 ifeq ($(HAVE_CE),y)
 RUN_FLIGHT_LIST_SOURCES += \
-	$(SRC)/Device/Widcomm.cpp
+	$(SRC)/Device/Port/Widcomm.cpp
 endif
 RUN_FLIGHT_LIST_OBJS = $(call SRC_TO_OBJ,$(RUN_FLIGHT_LIST_SOURCES))
 RUN_FLIGHT_LIST_LDADD = \
@@ -1392,7 +1392,7 @@ $(TARGET_BIN_DIR)/RunFlightList$(TARGET_EXEEXT): $(RUN_FLIGHT_LIST_OBJS) $(RUN_F
 
 RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(SRC)/Units/Units.cpp \
-	$(SRC)/Device/Port.cpp \
+	$(SRC)/Device/Port/Port.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Internal.cpp \
@@ -1414,14 +1414,14 @@ RUN_DOWNLOAD_FLIGHT_SOURCES = \
 	$(TEST_SRC_DIR)/RunDownloadFlight.cpp
 ifeq ($(HAVE_POSIX),y)
 RUN_DOWNLOAD_FLIGHT_SOURCES += \
-	$(SRC)/Device/TTYPort.cpp
+	$(SRC)/Device/Port/TTYPort.cpp
 else
 RUN_DOWNLOAD_FLIGHT_SOURCES += \
-	$(SRC)/Device/SerialPort.cpp
+	$(SRC)/Device/Port/SerialPort.cpp
 endif
 ifeq ($(HAVE_CE),y)
 RUN_DOWNLOAD_FLIGHT_SOURCES += \
-	$(SRC)/Device/Widcomm.cpp
+	$(SRC)/Device/Port/Widcomm.cpp
 endif
 RUN_DOWNLOAD_FLIGHT_OBJS = $(call SRC_TO_OBJ,$(RUN_DOWNLOAD_FLIGHT_SOURCES))
 RUN_DOWNLOAD_FLIGHT_LDADD = \
@@ -2015,8 +2015,8 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Compatibility/string.c \
 	$(SRC)/IO/ConfiguredFile.cpp \
 	$(SRC)/Operation.cpp \
-	$(SRC)/Device/Port.cpp \
-	$(SRC)/Device/NullPort.cpp \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Device/Port/NullPort.cpp \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/Driver.cpp \
 	$(SRC)/Device/Internal.cpp \

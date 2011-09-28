@@ -21,88 +21,43 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_SERIAL_PORT_HPP
-#define XCSOAR_DEVICE_SERIAL_PORT_HPP
+#ifndef XCSOAR_DEVICE_TCP_PORT_HPP
+#define XCSOAR_DEVICE_TCP_PORT_HPP
 
 #include "FifoBuffer.hpp"
 #include "Thread/StoppableThread.hpp"
-#include "Device/Port.hpp"
-
-#include <windef.h>
-
-#ifndef _WIN32_WCE
-class OverlappedEvent;
-#endif
+#include "Port.hpp"
 
 /**
- * Generic SerialPort thread handler class
+ * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
  */
-class SerialPort : public Port, protected StoppableThread
+class TCPPort : public Port, protected StoppableThread
 {
   typedef FifoBuffer<char, 256u> Buffer;
 
-  /** Name of the serial port */
-  TCHAR sPortName[64];
+  unsigned port;
 
-  unsigned baud_rate;
+  unsigned rx_timeout;
 
-  HANDLE hPort;
+  int listener_fd, connection_fd;
 
   Buffer buffer;
 
-#ifdef _WIN32_WCE
-  /**
-   * @see IsWidcommDevice()
-   */
-  bool is_widcomm;
-#else
-  static const bool is_widcomm = false;
-
-  unsigned rx_timeout;
-#endif
-
 public:
   /**
-   * Creates a new serial port (RS-232) object, but does not open it yet.
+   * Creates a new TCPPort object, but does not open it yet.
    *
-   * @param path the path of the virtual file to open, e.g. "COM1:"
-   * @param _baud_rate the speed of the port
-   * @param _handler the callback object for input received on the
+   * @param port the port number (1..32767)
+   * @param handler the callback object for input received on the
    * port
    */
-  SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler);
+  TCPPort(unsigned port, Handler &handler);
 
   /**
    * Closes the serial port (Destructor)
    */
-  virtual ~SerialPort();
+  virtual ~TCPPort();
 
-protected:
-  bool IsDataPending() const {
-    COMSTAT com_stat;
-    DWORD errors;
-
-    return ::ClearCommError(hPort, &errors, &com_stat) &&
-      com_stat.cbInQue > 0;
-  }
-
-  /**
-   * Determine the number of bytes in the driver's receive buffer.
-   *
-   * @return the number of bytes, or -1 on error
-   */
-  int GetDataPending() const;
-
-#ifndef _WIN32_WCE
-  /**
-   * Wait until there is data in the driver's receive buffer.
-   *
-   * @return the number of bytes, or -1 on error
-   */
-  int WaitDataPending(OverlappedEvent &overlapped, unsigned timeout_ms) const;
-#endif
-
-public:
   virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
 
@@ -117,7 +72,6 @@ public:
    */
   bool Close();
 
-  unsigned GetRxTimeout();
   virtual bool SetRxTimeout(unsigned Timeout);
   virtual unsigned GetBaudrate() const;
   virtual unsigned SetBaudrate(unsigned BaudRate);
@@ -125,7 +79,7 @@ public:
   virtual bool StartRxThread();
   void ProcessChar(char c);
 
-  virtual int Read(void *Buffer, size_t Size);
+  virtual int Read(void *buffer, size_t length);
 
 protected:
   /**

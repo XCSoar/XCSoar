@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef XCSOAR_DEVICE_DESCRIPTOR_HPP
 #define XCSOAR_DEVICE_DESCRIPTOR_HPP
 
-#include "Device/Port.hpp"
+#include "Port/Port.hpp"
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "RadioFrequency.hpp"

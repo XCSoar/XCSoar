@@ -21,28 +21,68 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_DUMP_PORT_HPP
-#define XCSOAR_DEVICE_DUMP_PORT_HPP
+#include "NullPort.hpp"
 
-#include "Device/Port.hpp"
+#include <stdio.h>
 
-/**
- * A port wrapper that dumps everything into the log file.
- */
-class DumpPort : public Port {
-  Port &other;
+NullPort::NullPort()
+  :Port(*(Port::Handler *)this)
+{
+}
 
-public:
-  DumpPort(Port &_other):Port(*(Handler *)NULL), other(_other) {}
+NullPort::NullPort(Port::Handler &_handler)
+  :Port(_handler)
+{
+}
 
-  virtual size_t Write(const void *data, size_t length);
-  virtual void Flush();
-  virtual bool SetRxTimeout(unsigned timeout_ms);
-  virtual unsigned GetBaudrate() const;
-  virtual unsigned SetBaudrate(unsigned baud_rate);
-  virtual bool StopRxThread();
-  virtual bool StartRxThread();
-  virtual int Read(void *buffer, size_t size);
-};
+void
+NullPort::Flush(void)
+{
+}
 
-#endif
+size_t
+NullPort::Write(const void *data, size_t length)
+{
+  return length;
+}
+
+bool
+NullPort::StopRxThread()
+{
+  return true;
+}
+
+bool
+NullPort::StartRxThread(void)
+{
+  return true;
+}
+
+bool
+NullPort::SetRxTimeout(unsigned Timeout)
+{
+  return true;
+}
+
+unsigned
+NullPort::GetBaudrate() const
+{
+  return 0;
+}
+
+unsigned
+NullPort::SetBaudrate(unsigned BaudRate)
+{
+  return BaudRate;
+}
+
+int
+NullPort::Read(void *Buffer, size_t Size)
+{
+  return -1;
+}
+
+void
+NullPort::LineReceived(const char *line)
+{
+}

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Device/Declaration.hpp"
 #include "Device/Driver.hpp"
 #include "MessageParser.hpp"
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 #include "OS/Clock.hpp"
 
 namespace IMI

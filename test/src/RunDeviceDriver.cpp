@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "NMEA/Info.hpp"
-#include "Device/NullPort.hpp"
+#include "Device/Port/NullPort.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
 #include "Device/Parser.hpp"

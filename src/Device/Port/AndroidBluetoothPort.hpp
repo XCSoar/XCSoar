@@ -21,42 +21,38 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_TCP_PORT_HPP
-#define XCSOAR_DEVICE_TCP_PORT_HPP
+#ifndef XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
+#define XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
 
-#include "FifoBuffer.hpp"
+#include "Util/StaticString.hpp"
+#include "Util/FifoBuffer.hpp"
 #include "Thread/StoppableThread.hpp"
-#include "Device/Port.hpp"
+#include "Thread/Trigger.hpp"
+#include "Port.hpp"
+#include "Java/Object.hpp"
+
+#include <windows.h>
+
+class BluetoothHelper;
 
 /**
- * A serial port class for POSIX (/dev/ttyS*, /dev/ttyUSB*).
+ * A #Port implementation which transmits data over a Bluetooth RFCOMM
+ * socket.
  */
-class TCPPort : public Port, protected StoppableThread
+class AndroidBluetoothPort : public Port, protected StoppableThread
 {
   typedef FifoBuffer<char, 256u> Buffer;
 
-  unsigned port;
+  /** the peer's Bluetooth address */
+  StaticString<32> address;
 
-  unsigned rx_timeout;
-
-  int listener_fd, connection_fd;
+  BluetoothHelper *helper;
 
   Buffer buffer;
 
 public:
-  /**
-   * Creates a new TCPPort object, but does not open it yet.
-   *
-   * @param port the port number (1..32767)
-   * @param handler the callback object for input received on the
-   * port
-   */
-  TCPPort(unsigned port, Handler &handler);
-
-  /**
-   * Closes the serial port (Destructor)
-   */
-  virtual ~TCPPort();
+  AndroidBluetoothPort(const TCHAR *address, Handler &_handler);
+  virtual ~AndroidBluetoothPort();
 
   virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
@@ -79,7 +75,7 @@ public:
   virtual bool StartRxThread();
   void ProcessChar(char c);
 
-  virtual int Read(void *buffer, size_t length);
+  virtual int Read(void *Buffer, size_t Size);
 
 protected:
   /**

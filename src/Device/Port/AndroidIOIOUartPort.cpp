@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Device/AndroidIOIOUartPort.hpp"
+#include "AndroidIOIOUartPort.hpp"
 #include "Android/IOIOHelper.hpp"
 #include "OS/Sleep.h"
 

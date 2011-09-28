@@ -24,7 +24,7 @@
 #include "Internal.hpp"
 #include "Protocol.hpp"
 #include "Convert.hpp"
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 #include "Operation.hpp"
 #include "OS/ByteOrder.hpp"
 

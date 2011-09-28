@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Internal.hpp"
 #include "Protocol.hpp"
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 #include "Operation.hpp"
 #include "OS/ByteOrder.hpp"
 #include "IO/BinaryWriter.hpp"

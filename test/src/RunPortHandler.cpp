@@ -25,9 +25,9 @@ Copyright_License {
 #include "OS/Sleep.h"
 
 #ifdef HAVE_POSIX
-#include "Device/TTYPort.hpp"
+#include "Device/Port/TTYPort.hpp"
 #else
-#include "Device/SerialPort.hpp"
+#include "Device/Port/SerialPort.hpp"
 #endif
 
 #include <stdio.h>

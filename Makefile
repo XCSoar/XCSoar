@@ -563,14 +563,14 @@ XCSOAR_SOURCES := \
 	$(SRC)/Device/Register.cpp \
 	$(SRC)/Device/List.cpp \
 	$(SRC)/Device/device.cpp \
-	$(SRC)/Device/ConfiguredPort.cpp \
+	$(SRC)/Device/Port/ConfiguredPort.cpp \
 	$(SRC)/Device/Descriptor.cpp \
 	$(SRC)/Device/All.cpp \
 	$(SRC)/Device/Parser.cpp \
 	$(SRC)/Device/Simulator.cpp \
-	$(SRC)/Device/Port.cpp \
-	$(SRC)/Device/NullPort.cpp \
-	$(SRC)/Device/TCPPort.cpp \
+	$(SRC)/Device/Port/Port.cpp \
+	$(SRC)/Device/Port/NullPort.cpp \
+	$(SRC)/Device/Port/TCPPort.cpp \
 	$(SRC)/Device/FLARM.cpp \
 	$(SRC)/Device/Internal.cpp \
 	$(DIALOG_SOURCES)
@@ -581,34 +581,34 @@ XCSOAR_SOURCES := \
 
 ifeq ($(TARGET),ANDROID)
 # broken Android headers
-$(call SRC_TO_OBJ,$(SRC)/Device/TCPPort.cpp): CXXFLAGS += -Wno-cast-align
+$(call SRC_TO_OBJ,$(SRC)/Device/Port/TCPPort.cpp): CXXFLAGS += -Wno-cast-align
 endif
 
 ifeq ($(HAVE_POSIX),n)
 # broken mingw32 4.4 headers
-$(call SRC_TO_OBJ,$(SRC)/Device/TCPPort.cpp): CXXFLAGS += -Wno-sign-compare
+$(call SRC_TO_OBJ,$(SRC)/Device/Port/TCPPort.cpp): CXXFLAGS += -Wno-sign-compare
 endif
 
 ifeq ($(HAVE_POSIX),y)
 XCSOAR_SOURCES += \
-	$(SRC)/Device/TTYPort.cpp
+	$(SRC)/Device/Port/TTYPort.cpp
 else
 XCSOAR_SOURCES += \
-	$(SRC)/Device/SerialPort.cpp
+	$(SRC)/Device/Port/SerialPort.cpp
 endif
 
 ifeq ($(HAVE_CE),y)
 XCSOAR_SOURCES += \
 	$(SRC)/OS/MemInfo.cpp \
 	$(SRC)/Device/Windows/Enumerator.cpp \
-	$(SRC)/Device/Widcomm.cpp
+	$(SRC)/Device/Port/Widcomm.cpp
 endif
 
 ifeq ($(TARGET),ANDROID)
 XCSOAR_SOURCES += \
 	$(SRC)/Java/Global.cpp \
 	$(SRC)/Java/String.cpp \
-	$(SRC)/Device/AndroidBluetoothPort.cpp \
+	$(SRC)/Device/Port/AndroidBluetoothPort.cpp \
 	$(SRC)/Android/Environment.cpp \
 	$(SRC)/Android/InternalGPS.cpp \
 	$(SRC)/Android/SoundUtil.cpp \
@@ -620,7 +620,7 @@ XCSOAR_SOURCES += \
 	$(SRC)/Android/Main.cpp
 ifneq ($(IOIOLIB_DIR),)
 XCSOAR_SOURCES += \
-	$(SRC)/Device/AndroidIOIOUartPort.cpp \
+	$(SRC)/Device/Port/AndroidIOIOUartPort.cpp \
 	$(SRC)/Android/IOIOHelper.cpp
 endif
 

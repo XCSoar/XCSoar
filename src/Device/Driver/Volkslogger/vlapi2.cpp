@@ -20,7 +20,7 @@
 #include "grecord.h"
 #include "utils.h"
 #include "Database.hpp"
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 #include "Util.hpp"
 #include "Protocol.hpp"
 #include "PeriodClock.hpp"
@@ -430,11 +430,11 @@ void VLAPI_DATA::WPT::get(const void *p) {
 //
 void VLAPI_DATA::WPT::put(void *p) {
   Volkslogger::Waypoint *dest = (Volkslogger::Waypoint *)p;
-  // String, evtl. mit Blanks aufgefüllt, zurückschreiben
+  // String, evtl. mit Blanks aufgefï¿½llt, zurï¿½ckschreiben
   strupr(name);
   copy_padded(dest->name, sizeof(dest->name), name);
 
-  // Koordinaten zurückschreiben
+  // Koordinaten zurï¿½ckschreiben
   uint32_t llat = labs((long)(lat * 60000.0));
   uint32_t llon = labs((long)(lon * 60000.0));
 

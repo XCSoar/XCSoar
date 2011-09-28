@@ -21,37 +21,28 @@ Copyright_License {
 }
 */
 
-#ifndef NMEA_REPLAY_GLUE_HPP
-#define NMEA_REPLAY_GLUE_HPP
+#ifndef XCSOAR_DEVICE_DUMP_PORT_HPP
+#define XCSOAR_DEVICE_DUMP_PORT_HPP
 
-#include "Replay/NmeaReplay.hpp"
-#include "PeriodClock.hpp"
-#include "Device/Port/NullPort.hpp"
+#include "Port.hpp"
 
-class Device;
-class NMEAParser;
-
-class NmeaReplayGlue:
-  public NmeaReplay
-{
-  NullPort port;
-  NMEAParser *parser;
-  Device *device;
-
-  PeriodClock clock;
+/**
+ * A port wrapper that dumps everything into the log file.
+ */
+class DumpPort : public Port {
+  Port &other;
 
 public:
-  NmeaReplayGlue();
-  virtual ~NmeaReplayGlue();
+  DumpPort(Port &_other):Port(*(Handler *)NULL), other(_other) {}
 
-  virtual void Start();
-  virtual void Stop();
-
-protected:
-  virtual bool update_time();
-  virtual void reset_time();
-  virtual void on_bad_file();
-  virtual void on_sentence(const char *line);
+  virtual size_t Write(const void *data, size_t length);
+  virtual void Flush();
+  virtual bool SetRxTimeout(unsigned timeout_ms);
+  virtual unsigned GetBaudrate() const;
+  virtual unsigned SetBaudrate(unsigned baud_rate);
+  virtual bool StopRxThread();
+  virtual bool StartRxThread();
+  virtual int Read(void *buffer, size_t size);
 };
 
 #endif

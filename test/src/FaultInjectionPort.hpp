@@ -20,7 +20,7 @@
 }
 */
 
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 
 #include <algorithm>
 #include <assert.h>

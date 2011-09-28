@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Protocol.hpp"
 #include "CRC16.hpp"
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 #include "Operation.hpp"
 #include "PeriodClock.hpp"
 

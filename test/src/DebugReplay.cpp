@@ -26,7 +26,7 @@ Copyright_License {
 #include "IO/FileLineReader.hpp"
 #include "Device/Driver.hpp"
 #include "Device/Register.hpp"
-#include "Device/NullPort.hpp"
+#include "Device/Port/NullPort.hpp"
 #include "Device/Parser.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Replay/IGCParser.hpp"

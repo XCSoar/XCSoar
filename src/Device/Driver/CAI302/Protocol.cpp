@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "Protocol.hpp"
-#include "Device/Port.hpp"
+#include "Device/Port/Port.hpp"
 #include "OS/ByteOrder.hpp"
 #include "Engine/Navigation/GeoPoint.hpp"
 

@@ -49,7 +49,7 @@ Copyright_License {
 #ifdef ANDROID
 #include "Android/BluetoothHelper.hpp"
 #ifdef IOIOLIB
-#include "Device/AndroidIOIOUartPort.hpp"
+#include "Device/Port/AndroidIOIOUartPort.hpp"
 #endif
 #endif
 

@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Device/TCPPort.hpp"
+#include "TCPPort.hpp"
 
 #include <unistd.h>
 #include <assert.h>

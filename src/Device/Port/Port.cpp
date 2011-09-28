@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Device/Port.hpp"
+#include "Port.hpp"
 #include "PeriodClock.hpp"
 
 #include <assert.h>

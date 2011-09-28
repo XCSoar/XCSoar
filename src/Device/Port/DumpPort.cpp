@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Device/DumpPort.hpp"
+#include "DumpPort.hpp"
 #include "HexDump.hpp"
 
 #include <stdint.h>

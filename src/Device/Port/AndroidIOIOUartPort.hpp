@@ -31,7 +31,7 @@ Copyright_License {
 #include "Util/FifoBuffer.hpp"
 #include "Thread/StoppableThread.hpp"
 #include "Thread/Trigger.hpp"
-#include "Device/Port.hpp"
+#include "Port.hpp"
 #include "Java/Object.hpp"
 
 #include <windows.h>

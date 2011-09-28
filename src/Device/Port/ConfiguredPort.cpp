@@ -21,11 +21,11 @@ Copyright_License {
 }
 */
 
-#include "Device/ConfiguredPort.hpp"
-#include "Device/NullPort.hpp"
-#include "Device/TCPPort.hpp"
+#include "ConfiguredPort.hpp"
+#include "NullPort.hpp"
+#include "TCPPort.hpp"
 #include "Profile/DeviceConfig.hpp"
-#include "../Simulator.hpp"
+#include "Simulator.hpp"
 #include "LogFile.hpp"
 
 #ifdef _WIN32_WCE
@@ -33,16 +33,16 @@ Copyright_License {
 #endif
 
 #ifdef ANDROID
-#include "Device/AndroidBluetoothPort.hpp"
+#include "AndroidBluetoothPort.hpp"
 #ifdef IOIOLIB
-#include "Device/AndroidIOIOUartPort.hpp"
+#include "AndroidIOIOUartPort.hpp"
 #endif
 #endif
 
 #if defined(HAVE_POSIX)
-#include "Device/TTYPort.hpp"
+#include "TTYPort.hpp"
 #else
-#include "Device/SerialPort.hpp"
+#include "SerialPort.hpp"
 #endif
 
 #include <windef.h> /* for MAX_PATH */

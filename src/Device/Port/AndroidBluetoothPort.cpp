@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Device/AndroidBluetoothPort.hpp"
+#include "AndroidBluetoothPort.hpp"
 #include "Android/BluetoothHelper.hpp"
 #include "OS/Sleep.h"
 

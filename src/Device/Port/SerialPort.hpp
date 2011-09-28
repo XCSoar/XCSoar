@@ -21,39 +21,88 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
-#define XCSOAR_DEVICE_ANDROID_BLUETOOTH_PORT_HPP
+#ifndef XCSOAR_DEVICE_SERIAL_PORT_HPP
+#define XCSOAR_DEVICE_SERIAL_PORT_HPP
 
-#include "Util/StaticString.hpp"
-#include "Util/FifoBuffer.hpp"
+#include "FifoBuffer.hpp"
 #include "Thread/StoppableThread.hpp"
-#include "Thread/Trigger.hpp"
-#include "Device/Port.hpp"
-#include "Java/Object.hpp"
+#include "Port.hpp"
 
-#include <windows.h>
+#include <windef.h>
 
-class BluetoothHelper;
+#ifndef _WIN32_WCE
+class OverlappedEvent;
+#endif
 
 /**
- * A #Port implementation which transmits data over a Bluetooth RFCOMM
- * socket.
+ * Generic SerialPort thread handler class
  */
-class AndroidBluetoothPort : public Port, protected StoppableThread
+class SerialPort : public Port, protected StoppableThread
 {
   typedef FifoBuffer<char, 256u> Buffer;
 
-  /** the peer's Bluetooth address */
-  StaticString<32> address;
+  /** Name of the serial port */
+  TCHAR sPortName[64];
 
-  BluetoothHelper *helper;
+  unsigned baud_rate;
+
+  HANDLE hPort;
 
   Buffer buffer;
 
-public:
-  AndroidBluetoothPort(const TCHAR *address, Handler &_handler);
-  virtual ~AndroidBluetoothPort();
+#ifdef _WIN32_WCE
+  /**
+   * @see IsWidcommDevice()
+   */
+  bool is_widcomm;
+#else
+  static const bool is_widcomm = false;
 
+  unsigned rx_timeout;
+#endif
+
+public:
+  /**
+   * Creates a new serial port (RS-232) object, but does not open it yet.
+   *
+   * @param path the path of the virtual file to open, e.g. "COM1:"
+   * @param _baud_rate the speed of the port
+   * @param _handler the callback object for input received on the
+   * port
+   */
+  SerialPort(const TCHAR *path, unsigned _baud_rate, Handler &_handler);
+
+  /**
+   * Closes the serial port (Destructor)
+   */
+  virtual ~SerialPort();
+
+protected:
+  bool IsDataPending() const {
+    COMSTAT com_stat;
+    DWORD errors;
+
+    return ::ClearCommError(hPort, &errors, &com_stat) &&
+      com_stat.cbInQue > 0;
+  }
+
+  /**
+   * Determine the number of bytes in the driver's receive buffer.
+   *
+   * @return the number of bytes, or -1 on error
+   */
+  int GetDataPending() const;
+
+#ifndef _WIN32_WCE
+  /**
+   * Wait until there is data in the driver's receive buffer.
+   *
+   * @return the number of bytes, or -1 on error
+   */
+  int WaitDataPending(OverlappedEvent &overlapped, unsigned timeout_ms) const;
+#endif
+
+public:
   virtual size_t Write(const void *data, size_t length);
   virtual void Flush();
 
@@ -68,6 +117,7 @@ public:
    */
   bool Close();
 
+  unsigned GetRxTimeout();
   virtual bool SetRxTimeout(unsigned Timeout);
   virtual unsigned GetBaudrate() const;
   virtual unsigned SetBaudrate(unsigned BaudRate);
