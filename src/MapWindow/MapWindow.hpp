@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_MAP_WINDOW_HPP
 
 #include "Util/StaticArray.hpp"
-#include "MapWindowProjection.hpp"
+#include "Projection/MapWindowProjection.hpp"
 #include "MapWindowTimer.hpp"
 #include "Renderer/AirspaceRenderer.hpp"
 #include "Screen/DoubleBufferWindow.hpp"

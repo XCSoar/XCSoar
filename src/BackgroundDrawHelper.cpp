@@ -27,7 +27,7 @@ Copyright_License {
 #include "Terrain/WeatherTerrainRenderer.hpp"
 #include "SettingsMap.hpp"
 #include "Navigation/SpeedVector.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/LabelBlock.hpp"
 #include "Screen/Fonts.hpp"

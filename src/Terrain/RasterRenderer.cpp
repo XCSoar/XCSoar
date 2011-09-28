@@ -27,7 +27,7 @@ Copyright_License {
 #include "Math/FastMath.h"
 #include "Screen/Ramp.hpp"
 #include "Screen/Layout.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Asset.hpp"
 
 #include <assert.h>

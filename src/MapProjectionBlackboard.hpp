@@ -24,7 +24,7 @@ Copyright_License {
 #ifndef MAP_PROJECTION_BLACKBOARD_H
 #define MAP_PROJECTION_BLACKBOARD_H
 
-#include "MapWindow/MapWindowProjection.hpp"
+#include "Projection/MapWindowProjection.hpp"
 #include "Compiler.h"
 
 class MapProjectionBlackboard

@@ -46,7 +46,7 @@ Copyright_License {
 #include "Engine/Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Engine/Task/ObservationZones/BGAStartSectorZone.hpp"
 #include "Engine/Task/ObservationZones/AnnularSectorZone.hpp"
-#include "Projection.hpp"
+#include "Projection/Projection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "ResourceLoader.hpp"
 

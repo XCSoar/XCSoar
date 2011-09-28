@@ -24,7 +24,7 @@ Copyright_License {
 #include "AirspaceRenderer.hpp"
 #include "SettingsComputer.hpp"
 #include "SettingsMap.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Screen/Canvas.hpp"
 #include "MapWindow/MapCanvas.hpp"
 #include "Look/AirspaceLook.hpp"

@@ -24,7 +24,7 @@ Copyright_License {
 #include "WaypointRenderer.hpp"
 #include "WaypointRendererSettings.hpp"
 #include "WaypointIconRenderer.hpp"
-#include "MapWindow/MapWindowProjection.hpp"
+#include "Projection/MapWindowProjection.hpp"
 #include "MapWindow/MapWindowLabels.hpp"
 #include "SettingsComputer.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"

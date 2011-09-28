@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Terrain/RasterMap.hpp"
 #include "Terrain/HeightMatrix.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Screen/Layout.hpp"
 #include "OS/PathName.hpp"
 #include "Compatibility/path.h"

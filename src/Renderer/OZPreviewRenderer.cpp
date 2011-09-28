@@ -30,7 +30,7 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Look/TaskLook.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Asset.hpp"
 
 void

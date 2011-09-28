@@ -24,7 +24,7 @@ Copyright_License {
 #include "Terrain/WeatherTerrainRenderer.hpp"
 #include "Terrain/RasterWeather.hpp"
 #include "Screen/Ramp.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 
 const ColorRamp weather_colors[6][NUM_COLOR_RAMP_LEVELS] = {
   { // Blue to red       // vertical speed

@@ -25,7 +25,7 @@ Copyright_License {
 
 #include "MapDrawHelper.hpp"
 #include "Screen/Canvas.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "MapCanvas.hpp"
 #include "Navigation/SearchPointVector.hpp"

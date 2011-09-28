@@ -26,7 +26,7 @@ Copyright_License {
 #include "Units/Units.hpp"
 #include "shapelib/mapserver.h"
 #ifdef ENABLE_OPENGL
-#include "Projection.hpp"
+#include "Projection/Projection.hpp"
 #include "Math/Earth.hpp"
 #include "Screen/OpenGL/Triangulate.hpp"
 #endif

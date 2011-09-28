@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "MapCanvas.hpp"
 #include "Screen/Canvas.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Asset.hpp"
 #include "Screen/Layout.hpp"
 #include "Math/Screen.hpp"

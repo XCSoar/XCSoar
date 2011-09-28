@@ -44,7 +44,7 @@ Copyright_License {
 #include "Task/TaskPoints/AATPoint.hpp"
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
-#include "ChartProjection.hpp"
+#include "Projection/ChartProjection.hpp"
 #include "Renderer/TaskRenderer.hpp"
 #include "Renderer/RenderTaskPoint.hpp"
 #include "Renderer/OZRenderer.hpp"

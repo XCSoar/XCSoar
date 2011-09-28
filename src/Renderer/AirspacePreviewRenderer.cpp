@@ -28,7 +28,7 @@ Copyright_License {
 #include "Renderer/AirspaceRendererSettings.hpp"
 #include "Look/AirspaceLook.hpp"
 #include "Geo/GeoBounds.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Asset.hpp"
 
 #include <vector>

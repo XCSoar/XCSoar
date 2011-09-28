@@ -23,7 +23,7 @@ Copyright_License {
 
 #include "Topography/TopographyFile.hpp"
 #include "Topography/XShape.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Screen/Layout.hpp"
 
 #include <zzip/lib.h>

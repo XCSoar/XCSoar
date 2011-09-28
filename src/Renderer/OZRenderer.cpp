@@ -29,7 +29,7 @@ Copyright_License {
 #include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/ObservationZones/AnnularSectorZone.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "SettingsMap.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"

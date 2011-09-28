@@ -28,7 +28,7 @@ Copyright_License {
 #include "NMEA/Derived.hpp"
 #include "SettingsMap.hpp"
 #include "Computer/GlideComputer.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Engine/Math/Earth.hpp"
 #include "Util/AllocatedArray.hpp"
 

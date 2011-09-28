@@ -373,7 +373,7 @@ $(TARGET_BIN_DIR)/TestClimbAvCalc$(TARGET_EXEEXT): $(TEST_CLIMB_AV_CALC_OBJS) $(
 	$(Q)$(LINK) $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
 
 TEST_PROJECTION_SOURCES = \
-	$(SRC)/Projection.cpp \
+	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(TEST_SRC_DIR)/tap.c \
 	$(TEST_SRC_DIR)/TestProjection.cpp
@@ -830,7 +830,7 @@ DEBUG_REPLAY_LDADD = \
 	$(IO_LIBS)
 
 BENCHMARK_PROJECTION_SOURCES = \
-	$(SRC)/Projection.cpp \
+	$(SRC)/Projection/Projection.cpp \
 	$(TEST_SRC_DIR)/BenchmarkProjection.cpp
 BENCHMARK_PROJECTION_OBJS = $(call SRC_TO_OBJ,$(BENCHMARK_PROJECTION_SOURCES))
 BENCHMARK_PROJECTION_LDADD = \
@@ -1065,8 +1065,8 @@ LOAD_TOPOGRAPHY_SOURCES = \
 	$(SRC)/Topography/TopographyStore.cpp \
 	$(SRC)/Topography/TopographyFile.cpp \
 	$(SRC)/Topography/XShape.cpp \
-	$(SRC)/Projection.cpp \
-	$(SRC)/WindowProjection.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
@@ -1118,8 +1118,8 @@ RUN_HEIGHT_MATRIX_SOURCES = \
 	$(SRC)/Terrain/RasterMap.cpp \
 	$(SRC)/Terrain/HeightMatrix.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
-	$(SRC)/Projection.cpp \
-	$(SRC)/WindowProjection.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
 	$(SRC)/Engine/Math/Earth.cpp \
@@ -1599,9 +1599,9 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/LocalPath.cpp \
 	$(SRC)/OS/FileUtil.cpp \
 	$(SRC)/OS/PathName.cpp \
-	$(SRC)/Projection.cpp \
-	$(SRC)/WindowProjection.cpp \
-	$(SRC)/CompareProjection.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/Projection/CompareProjection.cpp \
 	$(SRC)/Geo/GeoClip.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
@@ -1609,7 +1609,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
 	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
 	$(SRC)/MapWindow/MapWindowLabels.cpp \
-	$(SRC)/MapWindow/MapWindowProjection.cpp \
+	$(SRC)/Projection/MapWindowProjection.cpp \
 	$(SRC)/MapWindow/MapWindowRender.cpp \
 	$(SRC)/MapWindow/MapWindowSymbols.cpp \
 	$(SRC)/MapWindow/MapWindowTask.cpp \
@@ -1806,7 +1806,7 @@ RUN_RENDER_OZ_SOURCES = \
 	$(SRC)/Look/AirspaceLook.cpp \
 	$(SRC)/Screen/Layout.cpp \
 	$(SRC)/Look/TaskLook.cpp \
-	$(SRC)/Projection.cpp \
+	$(SRC)/Projection/Projection.cpp \
 	$(SRC)/Util/StringUtil.cpp \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/OS/Clock.cpp \
@@ -1924,10 +1924,10 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Wind/WindStore.cpp \
 	$(SRC)/Wind/WindMeasurementList.cpp \
 	$(SRC)/Wind/WindEKF.cpp \
-	$(SRC)/Projection.cpp \
-	$(SRC)/WindowProjection.cpp \
-	$(SRC)/MapWindow/MapWindowProjection.cpp \
-	$(SRC)/ChartProjection.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/Projection/MapWindowProjection.cpp \
+	$(SRC)/Projection/ChartProjection.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \

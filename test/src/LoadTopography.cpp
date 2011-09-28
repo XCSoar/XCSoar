@@ -29,7 +29,7 @@ Copyright_License {
 #include "Topography/TopographyStore.hpp"
 #include "OS/PathName.hpp"
 #include "IO/ZipLineReader.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Operation.hpp"
 
 #include <zzip/zzip.h>

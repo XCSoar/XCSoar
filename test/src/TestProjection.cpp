@@ -20,7 +20,7 @@
 }
 */
 
-#include "Projection.hpp"
+#include "Projection/Projection.hpp"
 #include "TestUtil.hpp"
 
 static void

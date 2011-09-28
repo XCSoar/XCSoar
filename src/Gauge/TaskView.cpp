@@ -23,7 +23,7 @@
 
 #include "Gauge/TaskView.hpp"
 #include "Screen/Canvas.hpp"
-#include "ChartProjection.hpp"
+#include "Projection/ChartProjection.hpp"
 #include "BackgroundDrawHelper.hpp"
 #include "Renderer/OZRenderer.hpp"
 #include "Renderer/RenderTaskPoint.hpp"

@@ -373,9 +373,9 @@ XCSOAR_SOURCES := \
 	$(SRC)/MapWindow/MapCanvas.cpp \
 	$(SRC)/MapWindow/MapDrawHelper.cpp \
 	$(SRC)/BackgroundDrawHelper.cpp \
-	$(SRC)/Projection.cpp \
-	$(SRC)/WindowProjection.cpp \
-	$(SRC)/CompareProjection.cpp \
+	$(SRC)/Projection/Projection.cpp \
+	$(SRC)/Projection/WindowProjection.cpp \
+	$(SRC)/Projection/CompareProjection.cpp \
 	$(SRC)/Renderer/OZRenderer.cpp \
 	$(SRC)/Renderer/RenderTaskPoint.cpp \
 	$(SRC)/Renderer/TaskRenderer.cpp \
@@ -394,14 +394,14 @@ XCSOAR_SOURCES := \
 	$(SRC)/Renderer/WaypointRenderer.cpp \
 	$(SRC)/Renderer/WaypointRendererSettings.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
-	$(SRC)/ChartProjection.cpp \
+	$(SRC)/Projection/ChartProjection.cpp \
 	$(SRC)/MapWindow/MapItemList.cpp \
 	$(SRC)/MapWindow/MapItemListBuilder.cpp \
 	$(SRC)/MapWindow/MapWindow.cpp \
 	$(SRC)/MapWindow/MapWindowEvents.cpp \
 	$(SRC)/MapWindow/MapWindowGlideRange.cpp \
 	$(SRC)/MapWindow/MapWindowLabels.cpp \
-	$(SRC)/MapWindow/MapWindowProjection.cpp \
+	$(SRC)/Projection/MapWindowProjection.cpp \
 	$(SRC)/MapWindow/MapWindowRender.cpp \
 	$(SRC)/MapWindow/MapWindowSymbols.cpp \
 	$(SRC)/MapWindow/MapWindowTask.cpp \

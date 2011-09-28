@@ -27,7 +27,7 @@ Copyright_License {
 #include "RasterRenderer.hpp"
 #include "Util/NonCopyable.hpp"
 #include "Terrain/TerrainSettings.hpp"
-#include "CompareProjection.hpp"
+#include "Projection/CompareProjection.hpp"
 
 class Canvas;
 class WindowProjection;

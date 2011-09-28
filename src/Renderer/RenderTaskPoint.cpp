@@ -24,7 +24,7 @@ Copyright_License {
 #include "RenderTaskPoint.hpp"
 #include "Screen/Canvas.hpp"
 #include "Screen/Layout.hpp"
-#include "WindowProjection.hpp"
+#include "Projection/WindowProjection.hpp"
 #include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
 #include "Task/TaskPoints/AATIsolineSegment.hpp"
 #include "Task/TaskPoints/StartPoint.hpp"
