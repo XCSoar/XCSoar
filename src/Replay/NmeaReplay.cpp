@@ -33,7 +33,7 @@ NmeaReplay::NmeaReplay() :
   AbstractReplay(),
   reader(NULL)
 {
-  FileName[0] = _T('\0');
+  file_name[0] = _T('\0');
 }
 
 NmeaReplay::~NmeaReplay()
@@ -66,7 +66,7 @@ NmeaReplay::Start()
 const TCHAR*
 NmeaReplay::GetFilename()
 {
-  return FileName;
+  return file_name;
 }
 
 void
@@ -75,8 +75,8 @@ NmeaReplay::SetFilename(const TCHAR *name)
   if (!name || string_is_empty(name))
     return;
 
-  if (_tcscmp(FileName, name) != 0)
-    _tcscpy(FileName, name);
+  if (_tcscmp(file_name, name) != 0)
+    _tcscpy(file_name, name);
 }
 
 bool
@@ -122,10 +122,10 @@ NmeaReplay::OpenFile()
   if (reader)
     return true;
 
-  if (string_is_empty(FileName))
+  if (string_is_empty(file_name))
     return false;
 
-  reader = new FileLineReaderA(FileName);
+  reader = new FileLineReaderA(file_name);
   if (reader->error()) {
     CloseFile();
     return false;

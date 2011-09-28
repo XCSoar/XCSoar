@@ -41,7 +41,7 @@ class IgcReplay: public AbstractReplay
 {
   CatmullRomInterpolator cli;
 
-  TCHAR FileName[MAX_PATH];
+  TCHAR file_name[MAX_PATH];
   FileLineReaderA *reader;
 
 protected:

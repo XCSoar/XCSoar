@@ -34,7 +34,7 @@ IgcReplay::IgcReplay() :
   cli(fixed(0.98)),
   reader(NULL)
 {
-  FileName[0] = _T('\0');
+  file_name[0] = _T('\0');
 }
 
 bool
@@ -103,7 +103,7 @@ IgcReplay::Start()
 const TCHAR*
 IgcReplay::GetFilename()
 {
-  return FileName;
+  return file_name;
 }
 
 void
@@ -112,8 +112,8 @@ IgcReplay::SetFilename(const TCHAR *name)
   if (!name || string_is_empty(name))
     return;
 
-  if (_tcscmp(FileName, name) != 0)
-    _tcscpy(FileName, name);
+  if (_tcscmp(file_name, name) != 0)
+    _tcscpy(file_name, name);
 }
 
 bool
@@ -159,10 +159,10 @@ IgcReplay::OpenFile()
   if (reader)
     return true;
 
-  if (string_is_empty(FileName))
+  if (string_is_empty(file_name))
     return false;
 
-  reader = new FileLineReaderA(FileName);
+  reader = new FileLineReaderA(file_name);
   if (!reader->error())
     return true;
 
