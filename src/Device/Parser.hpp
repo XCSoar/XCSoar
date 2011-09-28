@@ -97,10 +97,6 @@ private:
   static bool RMB(NMEAInputLine &line, NMEAInfo &info);
   bool RMZ(NMEAInputLine &line, NMEAInfo &info);
 
-  static bool WP0(NMEAInputLine &line, NMEAInfo &info);
-  static bool WP1(NMEAInputLine &line, NMEAInfo &info);
-  static bool WP2(NMEAInputLine &line, NMEAInfo &info);
-
   // Additional sentences
   static bool PTAS1(NMEAInputLine &line, NMEAInfo &info); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
