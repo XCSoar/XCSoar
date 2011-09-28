@@ -21,15 +21,6 @@
  */
 
 #include "ObservationZoneVisitor.hpp"
-#include "Task/ObservationZones/LineSectorZone.hpp"
-#include "Task/ObservationZones/SectorZone.hpp"
-#include "Task/ObservationZones/FAISectorZone.hpp"
-#include "Task/ObservationZones/CylinderZone.hpp"
-#include "Task/ObservationZones/KeyholeZone.hpp"
-#include "Task/ObservationZones/BGAFixedCourseZone.hpp"
-#include "Task/ObservationZones/BGAEnhancedOptionZone.hpp"
-#include "Task/ObservationZones/BGAStartSectorZone.hpp"
-#include "Task/ObservationZones/AnnularSectorZone.hpp"
 #include "Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 
 void
