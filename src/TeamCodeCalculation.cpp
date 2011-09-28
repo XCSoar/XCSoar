@@ -69,7 +69,7 @@ GetValueFromTeamCode(const TCHAR *code, int maxCount)
  * @param minCiffers Number of chars for the teamcode
  */
 static void
-NumberToTeamCode(double value, TCHAR *code, int minCiffers)
+NumberToTeamCode(fixed value, TCHAR *code, int minCiffers)
 {
   int maxCif = 0;
   int curCif = 0;
@@ -79,11 +79,11 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
     curCif = maxCif;
   }
 
-  double rest = value;
-  while (rest > 0 || curCif >= 0) {
+  fixed rest = value;
+  while (positive(rest) || curCif >= 0) {
     int cifVal = (int)pow(36.0, curCif);
     int partSize = (int)(rest / cifVal);
-    int partVal = partSize * cifVal;
+    fixed partVal(partSize * cifVal);
     int txtPos = maxCif - curCif;
 
     if (partSize < 10) {
@@ -99,8 +99,8 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
       maxCif = curCif;
     }
 
-    if (rest < 1)
-      rest = 0;
+    if (rest < fixed_one)
+      rest = fixed_zero;
   }
 }
 
@@ -112,7 +112,7 @@ NumberToTeamCode(double value, TCHAR *code, int minCiffers)
 static void
 ConvertBearingToTeamCode(const Angle bearing, TCHAR *code)
 {
-  const double bamValue = bearing.AsBearing().Degrees() / 360
+  const fixed bamValue = bearing.AsBearing().Degrees() / 360
                           * TEAMCODE_COMBINATIONS;
   NumberToTeamCode(bamValue, code, 2);
 }
