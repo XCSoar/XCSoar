@@ -24,8 +24,10 @@ Copyright_License {
 #include "Math/Earth.hpp"
 #include <assert.h>
 
+#ifdef INSTRUMENT_TASK
 // global, used for test harness
 unsigned count_distbearing = 0;
+#endif
 
 #define fixed_double_earth_r fixed(REARTH * 2)
 
