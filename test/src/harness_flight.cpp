@@ -294,7 +294,6 @@ bool run_flight(TaskManager &task_manager,
 
   } while (autopilot.update_autopilot(ta, aircraft.GetState(), aircraft.GetLastState()));
 
-  aircraft.Stop();
   autopilot.Stop();
 
   if (verbose) {

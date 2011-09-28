@@ -23,17 +23,6 @@
 #include "AircraftSim.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 
-AircraftSim::AircraftSim()
-{
-}
-
-void
-AircraftSim::Stop()
-{
-  // nothing to do
-}
-
-
 void
 AircraftSim::Start(const GeoPoint& location_start,
                    const GeoPoint& location_last,

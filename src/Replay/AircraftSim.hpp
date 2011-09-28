@@ -30,8 +30,6 @@ class AircraftSim {
   fixed random_mag;
 
 public:
-  AircraftSim();
-
   const AircraftState& GetState() const {
     return state;
   }
@@ -47,8 +45,6 @@ public:
   void Start(const GeoPoint& location_start,
              const GeoPoint& location_last,
              const fixed& altitude);
-
-  void Stop();
 
   bool Update(const Angle &heading, const fixed timestep=fixed_one);
 

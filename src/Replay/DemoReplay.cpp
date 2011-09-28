@@ -55,7 +55,6 @@ DemoReplay::Update(TaskAccessor& task)
 void
 DemoReplay::Stop()
 {
-  aircraft.Stop();
   autopilot.Stop();
   Enabled = false;
   on_stop();
