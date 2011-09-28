@@ -21,11 +21,7 @@
  */
 
 #include "TaskPointVisitor.hpp"
-#include "Task/Tasks/BaseTask/UnorderedTaskPoint.hpp"
-#include "Task/TaskPoints/StartPoint.hpp"
-#include "Task/TaskPoints/FinishPoint.hpp"
-#include "Task/TaskPoints/ASTPoint.hpp"
-#include "Task/TaskPoints/AATPoint.hpp"
+#include "Engine/Task/Tasks/BaseTask/TaskPoint.hpp"
 #include <assert.h>
 
 void
