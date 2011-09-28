@@ -24,7 +24,6 @@ Copyright_License {
 #ifndef NMEA_REPLAY_HPP
 #define NMEA_REPLAY_HPP
 
-#include "Math/fixed.hpp"
 #include "AbstractReplay.hpp"
 
 #include <tchar.h>
