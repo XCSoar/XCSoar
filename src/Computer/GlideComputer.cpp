@@ -193,7 +193,7 @@ GlideComputer::CalculateOwnTeamCode()
 
 static void
 ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
-                 const FLARM_STATE &flarm, const FlarmId target_id,
+                 const FlarmState &flarm, const FlarmId target_id,
                  TeamInfo &teamcode_info)
 {
   if (!flarm.available) {
@@ -326,7 +326,7 @@ GlideComputer::FLARM_ScanTraffic()
     // traffic has disappeared..
     InputEvents::processGlideComputer(GCE_FLARM_NOTRAFFIC);
 
-  if (basic.flarm.NewTraffic)
+  if (basic.flarm.new_traffic)
     // new traffic has appeared
     InputEvents::processGlideComputer(GCE_FLARM_NEWTRAFFIC);
 }

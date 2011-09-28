@@ -127,11 +127,11 @@ TestFLARM()
   ok1(nmea_info.flarm.gps == 1);
   ok1(nmea_info.flarm.alarm_level == 0);
   ok1(nmea_info.flarm.GetActiveTrafficCount() == 0);
-  ok1(!nmea_info.flarm.NewTraffic);
+  ok1(!nmea_info.flarm.new_traffic);
 
   ok1(parser.ParseNMEAString_Internal("$PFLAA,0,100,-150,10,2,DDA85C,123,13,24,1.4,2*7f",
                                       nmea_info));
-  ok1(nmea_info.flarm.NewTraffic);
+  ok1(nmea_info.flarm.new_traffic);
   ok1(nmea_info.flarm.GetActiveTrafficCount() == 1);
 
   FlarmId id;

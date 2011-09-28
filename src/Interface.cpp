@@ -214,7 +214,7 @@ ActionInterface::DisplayModes()
                                    !GetUIState().screen_blanked);
   }
 
-  if (Basic().flarm.NewTraffic) {
+  if (Basic().flarm.new_traffic) {
     GaugeFLARM *gauge_flarm = main_window.flarm;
     if (gauge_flarm != NULL)
       gauge_flarm->Suppress = false;

@@ -69,7 +69,7 @@ protected:
   void CalcAutoZoom();
 
 public:
-  void Update(Angle new_direction, const FLARM_STATE &new_data,
+  void Update(Angle new_direction, const FlarmState &new_data,
               const SETTINGS_TEAMCODE &new_settings);
   void UpdateTaskDirection(bool show_task_direction, Angle bearing);
 
@@ -181,7 +181,7 @@ FlarmTrafficControl::CalcAutoZoom()
 }
 
 void
-FlarmTrafficControl::Update(Angle new_direction, const FLARM_STATE &new_data,
+FlarmTrafficControl::Update(Angle new_direction, const FlarmState &new_data,
                             const SETTINGS_TEAMCODE &new_settings)
 {
   FlarmTrafficWindow::Update(new_direction, new_data, new_settings);

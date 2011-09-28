@@ -59,13 +59,13 @@ protected:
 
   bool small;
 
-  RasterPoint sc[FLARM_STATE::FLARM_MAX_TRAFFIC];
+  RasterPoint sc[FlarmState::FLARM_MAX_TRAFFIC];
 
   bool enable_north_up;
   Angle heading;
   FastRotation fr;
   FastIntegerRotation fir;
-  FLARM_STATE data;
+  FlarmState data;
   SETTINGS_TEAMCODE settings;
 
 public:
@@ -110,7 +110,7 @@ protected:
 
   void UpdateSelector(const FlarmId id, const RasterPoint pt);
   void UpdateWarnings();
-  void Update(Angle new_direction, const FLARM_STATE &new_data,
+  void Update(Angle new_direction, const FlarmState &new_data,
               const SETTINGS_TEAMCODE &new_settings);
   void PaintRadarNoTraffic(Canvas &canvas) const;
   void PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic,

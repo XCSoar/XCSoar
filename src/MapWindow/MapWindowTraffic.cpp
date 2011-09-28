@@ -48,7 +48,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
     return;
 
   // Return if FLARM data is not available
-  const FLARM_STATE &flarm = Basic().flarm;
+  const FlarmState &flarm = Basic().flarm;
   if (!flarm.available)
     return;
 

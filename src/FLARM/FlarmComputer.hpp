@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "FLARM/FlarmCalculations.hpp"
 
-struct FLARM_STATE;
+struct FlarmState;
 struct NMEAInfo;
 
 class FlarmComputer {
@@ -37,7 +37,7 @@ public:
    * Calculates location, altitude, average climb speed and
    * looks up the callsign of each target
    */
-  void Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
+  void Process(FlarmState &flarm, const FlarmState &last_flarm,
                const NMEAInfo &basic);
 };
 

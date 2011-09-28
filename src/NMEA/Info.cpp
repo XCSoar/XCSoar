@@ -134,7 +134,7 @@ NMEAInfo::Reset()
 
   // XXX StallRatio
 
-  flarm.clear();
+  flarm.Clear();
 }
 
 void
@@ -155,7 +155,7 @@ NMEAInfo::ExpireWallClock()
   if (!connected) {
     time_available.Clear();
     gps.Reset();
-    flarm.clear();
+    flarm.Clear();
   } else {
     time_available.Expire(clock, fixed(10));
   }
@@ -264,5 +264,5 @@ NMEAInfo::Complement(const NMEAInfo &add)
   if (!stall_ratio_available && add.stall_ratio_available)
     stall_ratio = add.stall_ratio;
 
-  flarm.complement(add.flarm);
+  flarm.Complement(add.flarm);
 }

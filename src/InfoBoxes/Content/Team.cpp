@@ -61,7 +61,7 @@ bool
 InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 {
   SETTINGS_TEAMCODE &settings = CommonInterface::SetSettingsComputer();
-  const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
+  const FlarmState &flarm = XCSoarInterface::Basic().flarm;
   const FLARM_TRAFFIC *traffic =
     settings.TeamFlarmIdTarget.defined()
     ? flarm.FindTraffic(settings.TeamFlarmIdTarget)
@@ -97,7 +97,7 @@ void
 InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
-  const FLARM_STATE &flarm = XCSoarInterface::Basic().flarm;
+  const FlarmState &flarm = XCSoarInterface::Basic().flarm;
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
 
   if (teamcode_info.teammate_available) {
@@ -126,7 +126,7 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
 {
   const SETTINGS_TEAMCODE &settings = CommonInterface::SettingsComputer();
   const NMEAInfo &basic = XCSoarInterface::Basic();
-  const FLARM_STATE &flarm = basic.flarm;
+  const FlarmState &flarm = basic.flarm;
   const TeamInfo &teamcode_info = CommonInterface::Calculated();
 
   if (teamcode_info.teammate_available && basic.track_available) {

@@ -27,7 +27,7 @@ Copyright_License {
 #include "Engine/Navigation/Geometry/GeoVector.hpp"
 
 void
-FlarmComputer::Process(FLARM_STATE &flarm, const FLARM_STATE &last_flarm,
+FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
                        const NMEAInfo &basic)
 {
   // if (FLARM data is available)

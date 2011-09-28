@@ -26,7 +26,7 @@ Copyright_License {
 
 #include "Math/fixed.hpp"
 
-struct FLARM_STATE;
+struct FlarmState;
 struct NMEAInfo;
 struct BrokenDateTime;
 class NMEAInputLine;
@@ -105,7 +105,7 @@ private:
   static bool PTAS1(NMEAInputLine &line, NMEAInfo &info); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentences
-  bool PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed Time);
+  bool PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed Time);
   bool PFLAA(NMEAInputLine &line, NMEAInfo &info);
 };
 

@@ -24,15 +24,15 @@ Copyright_License {
 #include "FLARM/State.hpp"
 
 void
-FLARM_STATE::clear()
+FlarmState::Clear()
 {
   available.Clear();
   traffic.clear();
-  NewTraffic = false;
+  new_traffic = false;
 }
 
 const FLARM_TRAFFIC *
-FLARM_STATE::FindMaximumAlert() const
+FlarmState::FindMaximumAlert() const
 {
   const FLARM_TRAFFIC *alert = NULL;
 

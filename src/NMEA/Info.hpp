@@ -364,7 +364,7 @@ struct NMEAInfo {
   fixed stall_ratio;
   Validity stall_ratio_available;
 
-  FLARM_STATE flarm;
+  FlarmState flarm;
 
   void UpdateClock();
 

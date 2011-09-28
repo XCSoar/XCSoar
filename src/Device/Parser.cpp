@@ -759,7 +759,7 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 bool
-NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed clock)
+NMEAParser::PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed clock)
 {
   flarm.available.Update(clock);
 
@@ -767,7 +767,7 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed clock)
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
   flarm.rx = line.read(0);
   flarm.tx = line.read(false);
-  flarm.gps = (FLARM_STATE::GPSStatus)line.read(FLARM_STATE::GPS_NONE);
+  flarm.gps = (FlarmState::GPSStatus)line.read(FlarmState::GPS_NONE);
   line.skip();
   flarm.alarm_level = (FLARM_TRAFFIC::AlarmType)
     line.read(FLARM_TRAFFIC::ALARM_NONE);
@@ -788,7 +788,7 @@ NMEAParser::PFLAU(NMEAInputLine &line, FLARM_STATE &flarm, fixed clock)
 bool
 NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
 {
-  FLARM_STATE &flarm = info.flarm;
+  FlarmState &flarm = info.flarm;
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
@@ -866,7 +866,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
     flarm_slot->Clear();
     flarm_slot->id = traffic.id;
 
-    flarm.NewTraffic = true;
+    flarm.new_traffic = true;
   }
 
   // set time of fix to current time

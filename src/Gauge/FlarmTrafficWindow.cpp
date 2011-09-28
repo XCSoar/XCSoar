@@ -46,7 +46,7 @@ FlarmTrafficWindow::FlarmTrafficWindow(const FlarmTrafficLook &_look,
    heading(Angle::radians(fixed_zero)),
    side_display_type(1)
 {
-  data.clear();
+  data.Clear();
 }
 
 bool
@@ -172,7 +172,7 @@ FlarmTrafficWindow::UpdateWarnings()
  * This should be called when the radar needs to be repainted
  */
 void
-FlarmTrafficWindow::Update(Angle new_direction, const FLARM_STATE &new_data,
+FlarmTrafficWindow::Update(Angle new_direction, const FlarmState &new_data,
                            const SETTINGS_TEAMCODE &new_settings)
 {
   FlarmId selection_id;

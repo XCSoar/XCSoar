@@ -32,7 +32,7 @@ Copyright_License {
 /**
  * Received FLARM data, cached
  */
-struct FLARM_STATE
+struct FlarmState
 {
   enum {
     FLARM_MAX_TRAFFIC = 15,
@@ -53,7 +53,7 @@ struct FLARM_STATE
    * Is there new FLARM traffic present?
    * @see traffic
    */
-  bool NewTraffic;
+  bool new_traffic;
 
   /** GPS status */
   TinyEnum<GPSStatus> gps;
@@ -67,7 +67,7 @@ struct FLARM_STATE
   StaticArray<FLARM_TRAFFIC, FLARM_MAX_TRAFFIC> traffic;
 
 public:
-  void clear();
+  void Clear();
 
   bool IsDetected() const {
     return available || !traffic.empty();
@@ -77,7 +77,7 @@ public:
    * Adds data from the specified object, unless already present in
    * this one.
    */
-  void complement(const FLARM_STATE &add) {
+  void Complement(const FlarmState &add) {
     if (!available && add.available)
       *this = add;
   }
@@ -204,7 +204,7 @@ public:
       if (!traffic[i].Refresh(Time))
         traffic.quick_remove(i);
 
-    NewTraffic = false;
+    new_traffic = false;
   }
 };
 
