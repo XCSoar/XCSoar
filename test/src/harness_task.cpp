@@ -29,44 +29,88 @@
 #include "Task/TaskPoints/ASTPoint.hpp"
 #include "Task/ObservationZones/CylinderZone.hpp"
 #include "Task/Visitors/TaskPointVisitor.hpp"
-#include "Task/Visitors/ObservationZoneVisitor.hpp"
 
 #include "harness_waypoints.hpp"
 #include <string.h>
 
-class ObservationZoneVisitorPrint: public ObservationZoneConstVisitor
+class FAISectorZone;
+class SectorZone;
+class LineSectorZone;
+class KeyholeZone;
+class BGAFixedCourseZone;
+class BGAEnhancedOptionZone;
+class BGAStartSectorZone;
+class AnnularSectorZone;
+
+class ObservationZoneVisitorPrint
 {
 public:
-  virtual void Visit(const KeyholeZone& oz) {
+  void Visit(const KeyholeZone& oz) {
     printf("# kehole zone\n");
   }
-  virtual void Visit(const FAISectorZone& oz) {
+  void Visit(const FAISectorZone& oz) {
     printf("# fai sect zone\n");
   }
-  virtual void Visit(const SectorZone& oz) {
+  void Visit(const SectorZone& oz) {
     printf("# sector zone\n");
   }
-  virtual void Visit(const AnnularSectorZone& oz) {
+  void Visit(const AnnularSectorZone& oz) {
     printf("# annular sector zone\n");
   }
-  virtual void Visit(const LineSectorZone& oz) {
+  void Visit(const LineSectorZone& oz) {
     printf("# line zone\n");
   }
-  virtual void Visit(const CylinderZone& oz) {
+  void Visit(const CylinderZone& oz) {
     printf("# cylinder zone\n");
   }
-  virtual void Visit(const BGAFixedCourseZone &oz) {
+  void Visit(const BGAFixedCourseZone &oz) {
     printf("# bga fixed course zone\n");
   }
-  virtual void Visit(const BGAEnhancedOptionZone &oz) {
+  void Visit(const BGAEnhancedOptionZone &oz) {
     printf("# bga enhanded option zone\n");
   }
-  virtual void Visit(const BGAStartSectorZone &oz) {
+  void Visit(const BGAStartSectorZone &oz) {
     printf("# bga start sector zone\n");
   }
 
   void Visit(const ObservationZonePoint &oz) {
-    ObservationZoneConstVisitor::Visit(oz);
+    switch (oz.shape) {
+    case ObservationZonePoint::FAI_SECTOR:
+      Visit((const FAISectorZone &)oz);
+      break;
+
+    case ObservationZonePoint::SECTOR:
+      Visit((const SectorZone &)oz);
+      break;
+
+    case ObservationZonePoint::LINE:
+      Visit((const LineSectorZone &)oz);
+      break;
+
+    case ObservationZonePoint::CYLINDER:
+      Visit((const CylinderZone &)oz);
+      break;
+
+    case ObservationZonePoint::KEYHOLE:
+      Visit((const KeyholeZone &)oz);
+      break;
+
+    case ObservationZonePoint::BGAFIXEDCOURSE:
+      Visit((const BGAFixedCourseZone &)oz);
+      break;
+
+    case ObservationZonePoint::BGAENHANCEDOPTION:
+      Visit((const BGAEnhancedOptionZone &)oz);
+      break;
+
+    case ObservationZonePoint::BGA_START:
+      Visit((const BGAStartSectorZone &)oz);
+      break;
+
+    case ObservationZonePoint::ANNULAR_SECTOR:
+      Visit((const AnnularSectorZone &)oz);
+      break;
+    }
   }
 };
 
