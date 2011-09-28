@@ -190,7 +190,7 @@ bool run_flight(TaskManager &task_manager,
 
   unsigned print_counter=0;
   if (n_wind)
-    aircraft.set_wind(wind_to_mag(n_wind), wind_to_dir(n_wind));
+    aircraft.SetWind(wind_to_mag(n_wind), wind_to_dir(n_wind));
 
   autopilot.set_speed_factor(fixed(speed_factor));
 
@@ -211,7 +211,7 @@ bool run_flight(TaskManager &task_manager,
   AirspaceAircraftPerformanceGlide perf(task_manager.get_glide_polar());
 
   if (aircraft_filter)
-    aircraft_filter->Reset(aircraft.get_state());
+    aircraft_filter->Reset(aircraft.GetState());
 
   autopilot.Start(ta);
   aircraft.Start(autopilot.location_start, autopilot.location_previous,
@@ -220,7 +220,7 @@ bool run_flight(TaskManager &task_manager,
   if (airspaces) {
     airspace_warnings =
         new AirspaceWarningManager(*airspaces, task_manager);
-    airspace_warnings->reset(aircraft.get_state());
+    airspace_warnings->reset(aircraft.GetState());
   }
 
   do {
@@ -239,9 +239,9 @@ bool run_flight(TaskManager &task_manager,
     }
 
     if (do_print) {
-      PrintHelper::taskmanager_print(task_manager, aircraft.get_state());
+      PrintHelper::taskmanager_print(task_manager, aircraft.GetState());
 
-      const AircraftState state = aircraft.get_state();
+      const AircraftState state = aircraft.GetState();
       f4 << state.time << " "
          <<  state.location.longitude << " "
          <<  state.location.latitude << " "
@@ -257,13 +257,13 @@ bool run_flight(TaskManager &task_manager,
     }
 
     if (airspaces) {
-      scan_airspaces(aircraft.get_state(), *airspaces, perf,
+      scan_airspaces(aircraft.GetState(), *airspaces, perf,
                      do_print, 
                      autopilot.target(ta));
     }
     if (airspace_warnings) {
       if (verbose > 1) {
-        bool warnings_updated = airspace_warnings->update(aircraft.get_state(),
+        bool warnings_updated = airspace_warnings->update(aircraft.GetState(),
                                                           false, 1);
         if (warnings_updated) {
           printf("# airspace warnings updated, size %d\n",
@@ -279,28 +279,28 @@ bool run_flight(TaskManager &task_manager,
     do_print = (++print_counter % output_skip == 0) && verbose;
 
     if (aircraft_filter)
-      aircraft_filter->Update(aircraft.get_state());
+      aircraft_filter->Update(aircraft.GetState());
 
-    autopilot.update_state(ta, aircraft.get_state());
+    autopilot.update_state(ta, aircraft.GetState());
     aircraft.Update(autopilot.heading);
 
     {
-      const AircraftState state = aircraft.get_state();
-      const AircraftState state_last = aircraft.get_state_last();
+      const AircraftState state = aircraft.GetState();
+      const AircraftState state_last = aircraft.GetLastState();
       task_manager.update(state, state_last);
       task_manager.update_idle(state);
       task_manager.update_auto_mc(state, fixed_zero);
     }
 
-  } while (autopilot.update_autopilot(ta, aircraft.get_state(), aircraft.get_state_last()));
+  } while (autopilot.update_autopilot(ta, aircraft.GetState(), aircraft.GetLastState()));
 
   aircraft.Stop();
   autopilot.Stop();
 
   if (verbose) {
-    PrintHelper::taskmanager_print(task_manager, aircraft.get_state());
+    PrintHelper::taskmanager_print(task_manager, aircraft.GetState());
 
-    const AircraftState state = aircraft.get_state();
+    const AircraftState state = aircraft.GetState();
     f4 << state.time << " "
        <<  state.location.longitude << " "
        <<  state.location.latitude << " "

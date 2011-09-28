@@ -124,7 +124,7 @@ DemoReplayGlue::Start()
   DemoReplay::Start(ta, device_blackboard.Basic().location);
 
   // get wind from aircraft
-  aircraft.get_state().wind = device_blackboard.Calculated().wind;
+  aircraft.GetState().wind = device_blackboard.Calculated().wind;
 }
 
 void
@@ -151,7 +151,7 @@ DemoReplayGlue::Update()
   ProtectedTaskAccessor ta(task_manager, floor_alt);
   bool retval = DemoReplay::Update(ta);
 
-  const AircraftState s = aircraft.get_state();
+  const AircraftState s = aircraft.GetState();
   on_advance(s.location, s.ground_speed, s.track, s.altitude,
              s.altitude, s.time);
 

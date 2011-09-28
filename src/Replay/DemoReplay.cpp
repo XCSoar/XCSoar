@@ -43,9 +43,9 @@ DemoReplay::Start(const TaskAccessor& task, const GeoPoint& default_location)
 bool
 DemoReplay::Update(TaskAccessor& task)
 {
-  autopilot.update_state(task, aircraft.get_state(), TimeScale);
+  autopilot.update_state(task, aircraft.GetState(), TimeScale);
   aircraft.Update(autopilot.heading, TimeScale);
-  if (!autopilot.update_autopilot(task, aircraft.get_state(), aircraft.get_state_last())) {
+  if (!autopilot.update_autopilot(task, aircraft.GetState(), aircraft.GetLastState())) {
     Enabled = false;
     return false;
   }

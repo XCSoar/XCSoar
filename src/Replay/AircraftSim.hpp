@@ -32,17 +32,17 @@ class AircraftSim {
 public:
   AircraftSim();
 
-  const AircraftState& get_state() const {
+  const AircraftState& GetState() const {
     return state;
   }
-  const AircraftState& get_state_last() const {
+  const AircraftState& GetLastState() const {
     return state_last;
   }
-  AircraftState& get_state() {
+  AircraftState& GetState() {
     return state;
   }
 
-  void set_wind(const fixed speed, const Angle direction);
+  void SetWind(const fixed speed, const Angle direction);
 
   void Start(const GeoPoint& location_start,
              const GeoPoint& location_last,
@@ -52,14 +52,14 @@ public:
 
   bool Update(const Angle &heading, const fixed timestep=fixed_one);
 
-  fixed time() const {
+  fixed GetTime() const {
     return state.time;
   }
 
 private:
-  void integrate(const Angle& heading, const fixed timestep);
+  void Integrate(const Angle& heading, const fixed timestep);
 
-  GeoPoint endpoint(const Angle& heading, const fixed timestep) const;
+  GeoPoint GetEndPoint(const Angle& heading, const fixed timestep) const;
 };
 
 #endif
