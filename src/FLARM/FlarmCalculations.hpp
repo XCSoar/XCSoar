@@ -28,9 +28,6 @@ Copyright_License {
 #include "ClimbAverageCalculator.hpp"
 
 #include <map>
-#include <tchar.h>
-
-struct FLARM_STATE;
 
 class FlarmCalculations
 {
