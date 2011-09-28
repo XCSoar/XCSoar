@@ -107,7 +107,7 @@ DebugReplayNMEA::Next()
     if (basic.time_available)
       basic.clock = basic.time;
     if (device == NULL || !device->ParseNMEA(line, basic))
-      parser.ParseNMEAString_Internal(line, basic);
+      parser.ParseLine(line, basic);
 
     if (basic.location_available != last_basic.location_available) {
       Compute();

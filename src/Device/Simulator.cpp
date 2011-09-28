@@ -69,7 +69,7 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
   sprintf(buffer, "$PFLAA,%d,%d,%d,%d,2,DDA85C,%d,0,35,0,1",
           alarm_level, north, east, alt, track);
   AppendNMEAChecksum(buffer);
-  parser.ParseNMEAString_Internal(buffer, basic);
+  parser.ParseLine(buffer, basic);
 
   alt = (angle.ifastcosine()) / 10;
   north = (dangle.ifastsine()) / 1.20 + 300;
@@ -81,13 +81,13 @@ Simulator::GenerateFLARMTraffic(NMEAInfo &basic)
   sprintf(buffer, "$PFLAA,0,%d,%d,%d,2,AA9146,,,,,1",
           north, east, alt);
   AppendNMEAChecksum(buffer);
-  parser.ParseNMEAString_Internal(buffer, basic);
+  parser.ParseLine(buffer, basic);
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)
   sprintf(buffer, "$PFLAU,2,1,2,1,%d", alarm_level);
   AppendNMEAChecksum(buffer);
-  parser.ParseNMEAString_Internal(buffer, basic);
+  parser.ParseLine(buffer, basic);
 }
 
 void

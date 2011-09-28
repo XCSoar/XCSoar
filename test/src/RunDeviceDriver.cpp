@@ -199,7 +199,7 @@ int main(int argc, char **argv)
     TrimRight(buffer);
 
     if (device == NULL || !device->ParseNMEA(buffer, data))
-      parser.ParseNMEAString_Internal(buffer, data);
+      parser.ParseLine(buffer, data);
   }
 
   Dump(data);

@@ -82,7 +82,7 @@ TestGeneric()
   nmea_info.connected.Update(nmea_info.clock);
 
   /* no GPS reception */
-  ok1(parser.ParseNMEAString_Internal("$GPRMC,082310,V,,,,,230610*3f",
+  ok1(parser.ParseLine("$GPRMC,082310,V,,,,,230610*3f",
                                       nmea_info));
   ok1(nmea_info.connected);
   ok1(!nmea_info.location_available);
@@ -94,7 +94,7 @@ TestGeneric()
   ok1(nmea_info.date_time_utc.second == 10);
 
   /* got a GPS fix */
-  ok1(parser.ParseNMEAString_Internal("$GPRMC,082311,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*6C",
+  ok1(parser.ParseLine("$GPRMC,082311,A,5103.5403,N,00741.5742,E,055.3,022.4,230610,000.3,W*6C",
                                       nmea_info));
   ok1(nmea_info.connected);
   ok1(nmea_info.location_available);
@@ -106,7 +106,7 @@ TestGeneric()
   ok1(!nmea_info.baro_altitude_available);
 
   /* baro altitude (proprietary Garmin sentence) */
-  ok1(parser.ParseNMEAString_Internal("$PGRMZ,100,m,3*11", nmea_info));
+  ok1(parser.ParseLine("$PGRMZ,100,m,3*11", nmea_info));
   ok1(nmea_info.baro_altitude_available);
   ok1(equals(nmea_info.baro_altitude, 100));
 }
@@ -120,7 +120,7 @@ TestFLARM()
   nmea_info.Reset();
   nmea_info.clock = fixed_one;
 
-  ok1(parser.ParseNMEAString_Internal("$PFLAU,3,1,1,1,0*50",
+  ok1(parser.ParseLine("$PFLAU,3,1,1,1,0*50",
                                       nmea_info));
   ok1(nmea_info.flarm.rx == 3);
   ok1(nmea_info.flarm.tx);
@@ -129,7 +129,7 @@ TestFLARM()
   ok1(nmea_info.flarm.GetActiveTrafficCount() == 0);
   ok1(!nmea_info.flarm.new_traffic);
 
-  ok1(parser.ParseNMEAString_Internal("$PFLAA,0,100,-150,10,2,DDA85C,123,13,24,1.4,2*7f",
+  ok1(parser.ParseLine("$PFLAA,0,100,-150,10,2,DDA85C,123,13,24,1.4,2*7f",
                                       nmea_info));
   ok1(nmea_info.flarm.new_traffic);
   ok1(nmea_info.flarm.GetActiveTrafficCount() == 1);
@@ -158,7 +158,7 @@ TestFLARM()
     skip(16, 0, "traffic == NULL");
   }
 
-  ok1(parser.ParseNMEAString_Internal("$PFLAA,2,20,10,24,2,DEADFF,,,,,1*46",
+  ok1(parser.ParseLine("$PFLAA,2,20,10,24,2,DEADFF,,,,,1*46",
                                       nmea_info));
   ok1(nmea_info.flarm.GetActiveTrafficCount() == 2);
 
@@ -525,8 +525,8 @@ TestVega()
   /* enable FLARM mode (switches the $PGRMZ parser to pressure
      altitude) */
   NMEAParser parser;
-  ok1(parser.ParseNMEAString_Internal("$PFLAU,0,0,0,1,0,,0,,*63", nmea_info));
-  ok1(parser.ParseNMEAString_Internal("$PGRMZ,2447,F,2*0F", nmea_info));
+  ok1(parser.ParseLine("$PFLAU,0,0,0,1,0,,0,,*63", nmea_info));
+  ok1(parser.ParseLine("$PGRMZ,2447,F,2*0F", nmea_info));
   ok1(nmea_info.pressure_altitude_available);
   ok1(equals(nmea_info.pressure_altitude, 745.845));
 
@@ -549,7 +549,7 @@ TestVega()
   ok1(equals(nmea_info.pressure_altitude, 762));
 
   /* parse $PGRMZ again, it should be ignored */
-  ok1(parser.ParseNMEAString_Internal("$PGRMZ,2447,F,2*0F", nmea_info));
+  ok1(parser.ParseLine("$PGRMZ,2447,F,2*0F", nmea_info));
   ok1(nmea_info.pressure_altitude_available);
   ok1(equals(nmea_info.pressure_altitude, 762));
 

@@ -280,7 +280,7 @@ DeviceDescriptor::ParseNMEA(const char *line, NMEAInfo &info)
   info.settings = old_settings;
 
   // Additional "if" to find GPS strings
-  if (parser.ParseNMEAString_Internal(line, info)) {
+  if (parser.ParseLine(line, info)) {
     info.connected.Update(fixed(MonotonicClockMS()) / 1000);
     return true;
   }

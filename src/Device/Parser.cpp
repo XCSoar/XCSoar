@@ -47,7 +47,7 @@ using std::max;
 
 bool NMEAParser::ignore_checksum;
 
-int NMEAParser::StartDay = -1;
+int NMEAParser::start_day = -1;
 
 /**
  * Constructor of the NMEAParser class
@@ -65,8 +65,8 @@ NMEAParser::Reset(void)
 {
   real = true;
   use_geoid = true;
-  GGAAvailable = false;
-  LastTime = fixed_zero;
+  gga_available = false;
+  last_time = fixed_zero;
 }
 
 /**
@@ -76,17 +76,17 @@ NMEAParser::Reset(void)
  * @return Parsing success
  */
 bool
-NMEAParser::ParseNMEAString_Internal(const char *String, NMEAInfo &info)
+NMEAParser::ParseLine(const char *string, NMEAInfo &info)
 {
   assert(positive(info.clock));
 
-  if (String[0] != '$')
+  if (string[0] != '$')
     return false;
 
-  if (!NMEAChecksum(String))
+  if (!NMEAChecksum(string))
     return false;
 
-  NMEAInputLine line(String);
+  NMEAInputLine line(string);
 
   char type[16];
   line.read(type, 16);
@@ -240,7 +240,7 @@ NMEAParser::ReadAltitude(NMEAInputLine &line, fixed &value_r)
  * @return Seconds-based FixTime
  */
 fixed
-NMEAParser::TimeModify(fixed FixTime, BrokenDateTime &date_time,
+NMEAParser::TimeModify(fixed fix_time, BrokenDateTime &date_time,
                        bool date_available)
 {
   assert(!date_available || BrokenDate(date_time).Plausible());
@@ -248,38 +248,38 @@ NMEAParser::TimeModify(fixed FixTime, BrokenDateTime &date_time,
   fixed hours, mins, secs;
 
   // Calculate Hour
-  hours = FixTime / 10000;
+  hours = fix_time / 10000;
   date_time.hour = (int)hours;
 
   // Calculate Minute
-  mins = FixTime / 100;
+  mins = fix_time / 100;
   mins = mins - fixed(date_time.hour) * 100;
   date_time.minute = (int)mins;
 
   // Calculate Second
-  secs = FixTime - fixed(date_time.hour * 10000 + date_time.minute * 100);
+  secs = fix_time - fixed(date_time.hour * 10000 + date_time.minute * 100);
   date_time.second = (int)secs;
 
   // FixTime is now seconds-based instead of mixed format
-  FixTime = secs + fixed(date_time.minute * 60 + date_time.hour * 3600);
+  fix_time = secs + fixed(date_time.minute * 60 + date_time.hour * 3600);
 
   // If (StartDay not yet set and available) set StartDate;
-  if (StartDay == -1 && date_available)
-    StartDay = date_time.day;
+  if (start_day == -1 && date_available)
+    start_day = date_time.day;
 
-  if (StartDay != -1) {
-    if (date_time.day < StartDay)
+  if (start_day != -1) {
+    if (date_time.day < start_day)
       // detect change of month (e.g. day=1, startday=31)
-      StartDay = date_time.day - 1;
+      start_day = date_time.day - 1;
 
-    int day_difference = date_time.day - StartDay;
+    int day_difference = date_time.day - start_day;
     if (day_difference > 0)
       // Add seconds to fix time so time doesn't wrap around when
       // going past midnight in UTC
-      FixTime += fixed(day_difference * 86400);
+      fix_time += fixed(day_difference * 86400);
   }
 
-  return FixTime;
+  return fix_time;
 }
 
 fixed
@@ -287,8 +287,8 @@ NMEAParser::TimeAdvanceTolerance(fixed time) const
 {
   /* tolerance is two seconds: fast-forward if the new time stamp is
      less than two seconds behind the previous one */
-  return time < LastTime && time > LastTime - fixed_two
-    ? LastTime
+  return time < last_time && time > last_time - fixed_two
+    ? last_time
     : time;
 }
 
@@ -300,16 +300,16 @@ NMEAParser::TimeAdvanceTolerance(fixed time) const
  * @return True if time has advanced since last call
  */
 bool
-NMEAParser::TimeHasAdvanced(fixed ThisTime, NMEAInfo &info)
+NMEAParser::TimeHasAdvanced(fixed this_time, NMEAInfo &info)
 {
-  if (ThisTime < LastTime) {
-    LastTime = ThisTime;
-    StartDay = -1; // reset search for the first day
+  if (this_time < last_time) {
+    last_time = this_time;
+    start_day = -1; // reset search for the first day
     return false;
   } else {
-    info.time = ThisTime;
+    info.time = this_time;
     info.time_available.Update(fixed(MonotonicClockMS()) / 1000);
-    LastTime = ThisTime;
+    last_time = this_time;
     return true;
   }
 }
@@ -379,16 +379,16 @@ NMEAParser::GLL(NMEAInputLine &line, NMEAInfo &info)
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
 
-  fixed ThisTime = TimeModify(line.read(fixed_zero), info.date_time_utc,
-                              info.date_available);
-  ThisTime = TimeAdvanceTolerance(ThisTime);
+  fixed this_time = TimeModify(line.read(fixed_zero), info.date_time_utc,
+                               info.date_available);
+  this_time = TimeAdvanceTolerance(this_time);
 
-  bool gpsValid = !NAVWarn(line.read_first_char());
+  bool gps_valid = !NAVWarn(line.read_first_char());
 
-  if (!TimeHasAdvanced(ThisTime, info))
+  if (!TimeHasAdvanced(this_time, info))
     return true;
 
-  if (!gpsValid)
+  if (!gps_valid)
     info.location_available.Clear();
   else if (valid_location)
     info.location_available.Update(info.clock);
@@ -489,9 +489,9 @@ ReadDate(NMEAInputLine &line, BrokenDate &date)
 bool
 NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
 {
-  fixed ThisTime = line.read(fixed_zero);
+  fixed this_time = line.read(fixed_zero);
 
-  bool gpsValid = !NAVWarn(line.read_first_char());
+  bool gps_valid = !NAVWarn(line.read_first_char());
 
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
@@ -499,7 +499,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   GPSState &gps = info.gps;
 
   fixed speed;
-  bool GroundSpeedAvailable = line.read_checked(speed);
+  bool ground_speed_available = line.read_checked(speed);
 
   fixed track;
   bool track_available = line.read_checked(track);
@@ -508,13 +508,13 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   if (ReadDate(line, info.date_time_utc))
     info.date_available = true;
 
-  ThisTime = TimeModify(ThisTime, info.date_time_utc, info.date_available);
-  ThisTime = TimeAdvanceTolerance(ThisTime);
+  this_time = TimeModify(this_time, info.date_time_utc, info.date_available);
+  this_time = TimeAdvanceTolerance(this_time);
 
-  if (!TimeHasAdvanced(ThisTime, info))
+  if (!TimeHasAdvanced(this_time, info))
     return true;
 
-  if (!gpsValid)
+  if (!gps_valid)
     info.location_available.Clear();
   else if (valid_location)
     info.location_available.Update(info.clock);
@@ -522,7 +522,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
   if (valid_location)
     info.location = location;
 
-  if (GroundSpeedAvailable) {
+  if (ground_speed_available) {
     info.ground_speed = Units::ToSysUnit(speed, unKnots);
     info.ground_speed_available.Update(info.clock);
   }
@@ -533,7 +533,7 @@ NMEAParser::RMC(NMEAInputLine &line, NMEAInfo &info)
     info.track_available.Update(info.clock);
   }
 
-  if (!GGAAvailable) {
+  if (!gga_available) {
     // update SatInUse, some GPS receiver don't emit GGA sentence
     gps.satellites_used = -1;
   }
@@ -591,11 +591,11 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
 {
   GPSState &gps = info.gps;
 
-  GGAAvailable = true;
+  gga_available = true;
 
-  fixed ThisTime = TimeModify(line.read(fixed_zero), info.date_time_utc,
-                              info.date_available);
-  ThisTime = TimeAdvanceTolerance(ThisTime);
+  fixed this_time = TimeModify(line.read(fixed_zero), info.date_time_utc,
+                               info.date_available);
+  this_time = TimeAdvanceTolerance(this_time);
 
   GeoPoint location;
   bool valid_location = ReadGeoPoint(line, location);
@@ -603,7 +603,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
   gps.fix_quality = line.read(0);
   gps.satellites_used = min(16, line.read(-1));
 
-  if (!TimeHasAdvanced(ThisTime, info))
+  if (!TimeHasAdvanced(this_time, info))
     return true;
 
   (void)valid_location;
@@ -635,8 +635,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
     info.gps_altitude_available.Clear();
   }
 
-  fixed GeoidSeparation;
-  if (ReadAltitude(line, GeoidSeparation)) {
+  fixed geoid_separation;
+  if (ReadAltitude(line, geoid_separation)) {
     // No real need to parse this value,
     // but we do assume that no correction is required in this case
 
@@ -644,7 +644,7 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
       /* Some devices, such as the "LG Incite Cellphone" seem to be
          severely bugged, and report the GPS altitude in the Geoid
          column.  That sucks! */
-      info.gps_altitude = GeoidSeparation;
+      info.gps_altitude = geoid_separation;
       info.gps_altitude_available.Update(info.clock);
     }
   } else {
@@ -658,8 +658,8 @@ NMEAParser::GGA(NMEAInputLine &line, NMEAInfo &info)
     //
     if (use_geoid) {
       // JMW TODO really need to know the actual device..
-      GeoidSeparation = LookupGeoidSeparation(info.location);
-      info.gps_altitude -= GeoidSeparation;
+      geoid_separation = LookupGeoidSeparation(info.location);
+      info.gps_altitude -= geoid_separation;
     }
   }
 
@@ -711,9 +711,9 @@ NMEAParser::RMZ(NMEAInputLine &line, NMEAInfo &info)
  * @return True if checksum correct
  */
 bool
-NMEAParser::NMEAChecksum(const char *String)
+NMEAParser::NMEAChecksum(const char *string)
 {
-  return ignore_checksum || VerifyNMEAChecksum(String);
+  return ignore_checksum || VerifyNMEAChecksum(string);
 }
 
 /**
@@ -759,9 +759,9 @@ NMEAParser::PTAS1(NMEAInputLine &line, NMEAInfo &info)
  * @see http://flarm.com/support/manual/FLARM_DataportManual_v5.00E.pdf
  */
 bool
-NMEAParser::PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed clock)
+NMEAParser::PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed time)
 {
-  flarm.available.Update(clock);
+  flarm.available.Update(time);
 
   // PFLAU,<RX>,<TX>,<GPS>,<Power>,<AlarmLevel>,<RelativeBearing>,<AlarmType>,
   //   <RelativeVertical>,<RelativeDistance>(,<ID>)

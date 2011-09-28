@@ -37,10 +37,10 @@ public:
   static bool ignore_checksum;
 
 private:
-  static int StartDay;
+  static int start_day;
 
-  bool GGAAvailable;
-  fixed LastTime;
+  bool gga_available;
+  fixed last_time;
 
 public:
   bool real;
@@ -59,7 +59,7 @@ public:
     use_geoid = true;
   }
 
-  bool ParseNMEAString_Internal(const char *line, NMEAInfo &info);
+  bool ParseLine(const char *line, NMEAInfo &info);
 
 public:
   // these routines can be used by other parsers.
@@ -69,7 +69,7 @@ public:
    */
   static bool ReadAltitude(NMEAInputLine &line, fixed &value_r);
 
-  static bool NMEAChecksum(const char *String);
+  static bool NMEAChecksum(const char *string);
 
 private:
 
@@ -86,8 +86,8 @@ private:
   gcc_pure
   fixed TimeAdvanceTolerance(fixed time) const;
 
-  bool TimeHasAdvanced(fixed ThisTime, NMEAInfo &info);
-  static fixed TimeModify(fixed FixTime, BrokenDateTime &date_time,
+  bool TimeHasAdvanced(fixed this_time, NMEAInfo &info);
+  static fixed TimeModify(fixed fix_time, BrokenDateTime &date_time,
                           bool date_available);
 
   bool GLL(NMEAInputLine &line, NMEAInfo &info);
@@ -101,7 +101,7 @@ private:
   static bool PTAS1(NMEAInputLine &line, NMEAInfo &info); // RMN: Tasman instruments.  TAS, Vario, QNE-altitude
 
   // FLARM sentences
-  bool PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed Time);
+  bool PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed time);
   bool PFLAA(NMEAInputLine &line, NMEAInfo &info);
 };
 
