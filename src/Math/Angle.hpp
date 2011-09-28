@@ -155,7 +155,7 @@ public:
   int sign(const fixed &tolerance) const;
 
   inline void sin_cos(fixed& s, fixed& c) const {
-    return ::sin_cos(value_radians(), &s, &c);
+    ::sin_cos(value_radians(), &s, &c);
   }
   
 
