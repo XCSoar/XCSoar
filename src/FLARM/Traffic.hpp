@@ -36,7 +36,7 @@ Copyright_License {
 
 #include <tchar.h>
 
-struct FLARM_TRAFFIC {
+struct FlarmTraffic {
   enum AlarmType {
     ALARM_NONE = 0,
     ALARM_LOW = 1,
@@ -183,7 +183,7 @@ struct FLARM_TRAFFIC {
 
   static const TCHAR* GetTypeString(AircraftType type);
 
-  void Update(const FLARM_TRAFFIC &other);
+  void Update(const FlarmTraffic &other);
 };
 
 #endif

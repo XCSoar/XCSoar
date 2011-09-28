@@ -31,13 +31,13 @@ FlarmState::Clear()
   new_traffic = false;
 }
 
-const FLARM_TRAFFIC *
+const FlarmTraffic *
 FlarmState::FindMaximumAlert() const
 {
-  const FLARM_TRAFFIC *alert = NULL;
+  const FlarmTraffic *alert = NULL;
 
   for (unsigned i = 0; i < traffic.size(); ++i) {
-    const FLARM_TRAFFIC &traffic = this->traffic[i];
+    const FlarmTraffic &traffic = this->traffic[i];
 
     if (traffic.HasAlarm() &&
         (alert == NULL ||

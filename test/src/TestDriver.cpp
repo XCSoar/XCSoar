@@ -137,7 +137,7 @@ TestFLARM()
   FlarmId id;
   id.parse("DDA85C", NULL);
 
-  FLARM_TRAFFIC *traffic = nmea_info.flarm.FindTraffic(id);
+  FlarmTraffic *traffic = nmea_info.flarm.FindTraffic(id);
   if (ok1(traffic != NULL)) {
     ok1(traffic->valid);
     ok1(traffic->alarm_level == 0);
@@ -152,7 +152,7 @@ TestFLARM()
     ok1(traffic->speed_received);
     ok1(equals(traffic->climb_rate, 1.4));
     ok1(traffic->climb_rate_received);
-    ok1(traffic->type == FLARM_TRAFFIC::acTowPlane);
+    ok1(traffic->type == FlarmTraffic::acTowPlane);
     ok1(!traffic->stealth);
   } else {
     skip(16, 0, "traffic == NULL");
@@ -174,7 +174,7 @@ TestFLARM()
     ok1(!traffic->turn_rate_received);
     ok1(!traffic->speed_received);
     ok1(!traffic->climb_rate_received);
-    ok1(traffic->type == FLARM_TRAFFIC::acGlider);
+    ok1(traffic->type == FlarmTraffic::acGlider);
     ok1(traffic->stealth);
   } else {
     skip(12, 0, "traffic == NULL");

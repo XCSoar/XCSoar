@@ -59,12 +59,12 @@ struct FlarmState
   TinyEnum<GPSStatus> gps;
 
   /** Alarm level of FLARM (0-3) */
-  TinyEnum<FLARM_TRAFFIC::AlarmType> alarm_level;
+  TinyEnum<FlarmTraffic::AlarmType> alarm_level;
 
   /** Is FLARM information available? */
   Validity available;
   /** Flarm traffic information */
-  StaticArray<FLARM_TRAFFIC, FLARM_MAX_TRAFFIC> traffic;
+  StaticArray<FlarmTraffic, FLARM_MAX_TRAFFIC> traffic;
 
 public:
   void Clear();
@@ -92,7 +92,7 @@ public:
    * @param id FLARM id
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  FLARM_TRAFFIC *FindTraffic(FlarmId id) {
+  FlarmTraffic *FindTraffic(FlarmId id) {
     for (unsigned i = 0; i < traffic.size(); i++)
       if (traffic[i].id == id)
         return &traffic[i];
@@ -106,7 +106,7 @@ public:
    * @param id FLARM id
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  const FLARM_TRAFFIC *FindTraffic(FlarmId id) const {
+  const FlarmTraffic *FindTraffic(FlarmId id) const {
     for (unsigned i = 0; i < traffic.size(); i++)
       if (traffic[i].id == id)
         return &traffic[i];
@@ -120,7 +120,7 @@ public:
    * @param name the name or call sign
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  FLARM_TRAFFIC *FindTraffic(const TCHAR *name) {
+  FlarmTraffic *FindTraffic(const TCHAR *name) {
     for (unsigned i = 0; i < traffic.size(); i++)
       if (traffic[i].name.equals(name))
         return &traffic[i];
@@ -134,7 +134,7 @@ public:
    * @param name the name or call sign
    * @return the FLARM_TRAFFIC pointer, NULL if not found
    */
-  const FLARM_TRAFFIC *FindTraffic(const TCHAR *name) const {
+  const FlarmTraffic *FindTraffic(const TCHAR *name) const {
     for (unsigned i = 0; i < traffic.size(); i++)
       if (traffic[i].name.equals(name))
         return &traffic[i];
@@ -147,7 +147,7 @@ public:
    *
    * @return the FLARM_TRAFFIC pointer, NULL if the array is full
    */
-  FLARM_TRAFFIC *AllocateTraffic() {
+  FlarmTraffic *AllocateTraffic() {
     return traffic.full()
       ? NULL
       : &traffic.append();
@@ -156,7 +156,7 @@ public:
   /**
    * Search for the previous traffic in the ordered list.
    */
-  const FLARM_TRAFFIC *PreviousTraffic(const FLARM_TRAFFIC *t) const {
+  const FlarmTraffic *PreviousTraffic(const FlarmTraffic *t) const {
     return t > traffic.begin()
       ? t - 1
       : NULL;
@@ -165,7 +165,7 @@ public:
   /**
    * Search for the next traffic in the ordered list.
    */
-  const FLARM_TRAFFIC *NextTraffic(const FLARM_TRAFFIC *t) const {
+  const FlarmTraffic *NextTraffic(const FlarmTraffic *t) const {
     return t + 1 < traffic.end()
       ? t + 1
       : NULL;
@@ -174,14 +174,14 @@ public:
   /**
    * Search for the first traffic in the ordered list.
    */
-  const FLARM_TRAFFIC *FirstTraffic() const {
+  const FlarmTraffic *FirstTraffic() const {
     return traffic.empty() ? NULL : traffic.begin();
   }
 
   /**
    * Search for the last traffic in the ordered list.
    */
-  const FLARM_TRAFFIC *LastTraffic() const {
+  const FlarmTraffic *LastTraffic() const {
     return traffic.empty() ? NULL : traffic.end() - 1;
   }
 
@@ -189,9 +189,9 @@ public:
    * Finds the most critical alert.  Returns NULL if there is no
    * alert.
    */
-  const FLARM_TRAFFIC *FindMaximumAlert() const;
+  const FlarmTraffic *FindMaximumAlert() const;
 
-  unsigned TrafficIndex(const FLARM_TRAFFIC *t) const {
+  unsigned TrafficIndex(const FlarmTraffic *t) const {
     return t - traffic.begin();
   }
 

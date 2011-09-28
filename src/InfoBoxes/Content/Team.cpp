@@ -62,7 +62,7 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
 {
   SETTINGS_TEAMCODE &settings = CommonInterface::SetSettingsComputer();
   const FlarmState &flarm = XCSoarInterface::Basic().flarm;
-  const FLARM_TRAFFIC *traffic =
+  const FlarmTraffic *traffic =
     settings.TeamFlarmIdTarget.defined()
     ? flarm.FindTraffic(settings.TeamFlarmIdTarget)
     : NULL;

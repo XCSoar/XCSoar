@@ -59,7 +59,7 @@ static void
 UpdateChanging()
 {
   TCHAR tmp[20];
-  const FLARM_TRAFFIC* target =
+  const FlarmTraffic* target =
       XCSoarInterface::Basic().flarm.FindTraffic(target_id);
 
   // If target moved out of range -> return
@@ -149,12 +149,12 @@ Update()
     ((WndProperty *)wf->FindByName(_T("prpAirport")))->SetText(_T("--"));
 
     // Fill the plane type field
-    const FLARM_TRAFFIC* target =
+    const FlarmTraffic* target =
         XCSoarInterface::Basic().flarm.FindTraffic(target_id);
 
     const TCHAR* actype;
     if (target == NULL ||
-        (actype = FLARM_TRAFFIC::GetTypeString(target->type)) == NULL)
+        (actype = FlarmTraffic::GetTypeString(target->type)) == NULL)
       actype = _T("--");
 
     ((WndProperty *)wf->FindByName(_T("prpPlaneType")))->SetText(actype);

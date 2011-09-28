@@ -59,7 +59,7 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
 
   // for each item in traffic
   for (unsigned i = 0; i < flarm.traffic.size(); i++) {
-    FLARM_TRAFFIC &traffic = flarm.traffic[i];
+    FlarmTraffic &traffic = flarm.traffic[i];
 
     // if we don't know the target's name yet
     if (!traffic.HasName()) {
@@ -102,7 +102,7 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
       continue;
 
     // Check if the target has been seen before in the last seconds
-    const FLARM_TRAFFIC *last_traffic = last_flarm.FindTraffic(traffic.id);
+    const FlarmTraffic *last_traffic = last_flarm.FindTraffic(traffic.id);
     if (last_traffic == NULL || !last_traffic->valid)
       continue;
 

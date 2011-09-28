@@ -769,8 +769,8 @@ NMEAParser::PFLAU(NMEAInputLine &line, FlarmState &flarm, fixed clock)
   flarm.tx = line.read(false);
   flarm.gps = (FlarmState::GPSStatus)line.read(FlarmState::GPS_NONE);
   line.skip();
-  flarm.alarm_level = (FLARM_TRAFFIC::AlarmType)
-    line.read(FLARM_TRAFFIC::ALARM_NONE);
+  flarm.alarm_level = (FlarmTraffic::AlarmType)
+    line.read(FlarmTraffic::ALARM_NONE);
 
   return true;
 }
@@ -792,9 +792,9 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
 
   // PFLAA,<AlarmLevel>,<RelativeNorth>,<RelativeEast>,<RelativeVertical>,
   //   <IDType>,<ID>,<Track>,<TurnRate>,<GroundSpeed>,<ClimbRate>,<AcftType>
-  FLARM_TRAFFIC traffic;
-  traffic.alarm_level = (FLARM_TRAFFIC::AlarmType)
-    line.read(FLARM_TRAFFIC::ALARM_NONE);
+  FlarmTraffic traffic;
+  traffic.alarm_level = (FlarmTraffic::AlarmType)
+    line.read(FlarmTraffic::ALARM_NONE);
 
   fixed value;
   bool stealth = false;
@@ -854,9 +854,9 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
 
   traffic.stealth = stealth;
 
-  traffic.type = (FLARM_TRAFFIC::AircraftType)line.read(0);
+  traffic.type = (FlarmTraffic::AircraftType)line.read(0);
 
-  FLARM_TRAFFIC *flarm_slot = flarm.FindTraffic(traffic.id);
+  FlarmTraffic *flarm_slot = flarm.FindTraffic(traffic.id);
   if (flarm_slot == NULL) {
     flarm_slot = flarm.AllocateTraffic();
     if (flarm_slot == NULL)

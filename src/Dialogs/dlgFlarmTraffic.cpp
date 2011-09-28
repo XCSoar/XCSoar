@@ -272,7 +272,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     return;
 
   // Shortcut to the selected traffic
-  FLARM_TRAFFIC traffic = data.traffic[WarningMode() ? warning : selection];
+  FlarmTraffic traffic = data.traffic[WarningMode() ? warning : selection];
   assert(traffic.IsDefined());
 
   // Temporary string
@@ -288,14 +288,14 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
 
   // Set the text color and background
   switch (traffic.alarm_level) {
-  case FLARM_TRAFFIC::ALARM_LOW:
+  case FlarmTraffic::ALARM_LOW:
     canvas.set_text_color(look.hcWarning);
     break;
-  case FLARM_TRAFFIC::ALARM_IMPORTANT:
-  case FLARM_TRAFFIC::ALARM_URGENT:
+  case FlarmTraffic::ALARM_IMPORTANT:
+  case FlarmTraffic::ALARM_URGENT:
     canvas.set_text_color(look.hcAlarm);
     break;
-  case FLARM_TRAFFIC::ALARM_NONE:
+  case FlarmTraffic::ALARM_NONE:
     canvas.set_text_color(look.hcStandard);
     break;
   }
@@ -410,7 +410,7 @@ OpenDetails()
     return;
 
   // Don't open the details dialog if no plane selected
-  const FLARM_TRAFFIC *traffic = wdf->GetTarget();
+  const FlarmTraffic *traffic = wdf->GetTarget();
   if (traffic == NULL)
     return;
 

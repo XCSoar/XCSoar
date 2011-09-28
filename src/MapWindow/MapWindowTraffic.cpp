@@ -65,7 +65,7 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
   // Circle through the FLARM targets
   for (unsigned i = 0; i < flarm.traffic.size(); i++) {
-    const FLARM_TRAFFIC &traffic = flarm.traffic[i];
+    const FlarmTraffic &traffic = flarm.traffic[i];
 
     if (!traffic.location_available)
       continue;
@@ -125,14 +125,14 @@ MapWindow::DrawFLARMTraffic(Canvas &canvas,
 
     // Select brush depending on AlarmLevel
     switch (traffic.alarm_level) {
-    case FLARM_TRAFFIC::ALARM_LOW:
+    case FlarmTraffic::ALARM_LOW:
       canvas.select(traffic_look.warning_brush);
       break;
-    case FLARM_TRAFFIC::ALARM_IMPORTANT:
-    case FLARM_TRAFFIC::ALARM_URGENT:
+    case FlarmTraffic::ALARM_IMPORTANT:
+    case FlarmTraffic::ALARM_URGENT:
       canvas.select(traffic_look.alarm_brush);
       break;
-    case FLARM_TRAFFIC::ALARM_NONE:
+    case FlarmTraffic::ALARM_NONE:
       canvas.select(traffic_look.safe_brush);
       break;
     }

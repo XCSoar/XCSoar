@@ -97,7 +97,7 @@ FlarmTrafficWindow::NextTarget()
 
   assert(selection < (int)data.traffic.size());
 
-  const FLARM_TRAFFIC *traffic;
+  const FlarmTraffic *traffic;
   if (selection >= 0)
     traffic = data.NextTraffic(&data.traffic[selection]);
   else
@@ -121,7 +121,7 @@ FlarmTrafficWindow::PrevTarget()
 
   assert(selection < (int)data.traffic.size());
 
-  const FLARM_TRAFFIC *traffic;
+  const FlarmTraffic *traffic;
   if (selection >= 0)
     traffic = data.PreviousTraffic(&data.traffic[selection]);
   else
@@ -162,7 +162,7 @@ FlarmTrafficWindow::UpdateSelector(const FlarmId id, const RasterPoint pt)
 void
 FlarmTrafficWindow::UpdateWarnings()
 {
-  const FLARM_TRAFFIC *alert = data.FindMaximumAlert();
+  const FlarmTraffic *alert = data.FindMaximumAlert();
   warning = alert != NULL
     ? (int)data.TrafficIndex(alert)
     : - 1;
@@ -232,7 +232,7 @@ FlarmTrafficWindow::PaintRadarNoTraffic(Canvas &canvas) const
  */
 void
 FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
-                                     const FLARM_TRAFFIC &traffic,
+                                     const FlarmTraffic &traffic,
                                      unsigned i)
 {
   // Save relative East/North
@@ -272,21 +272,21 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
 
   // Set the arrow color depending on alarm level
   switch (traffic.alarm_level) {
-  case FLARM_TRAFFIC::ALARM_LOW:
+  case FlarmTraffic::ALARM_LOW:
     canvas.hollow_brush();
     canvas.select(look.hpWarning);
     canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
     canvas.select(look.hbWarning);
     break;
-  case FLARM_TRAFFIC::ALARM_IMPORTANT:
-  case FLARM_TRAFFIC::ALARM_URGENT:
+  case FlarmTraffic::ALARM_IMPORTANT:
+  case FlarmTraffic::ALARM_URGENT:
     canvas.hollow_brush();
     canvas.select(look.hpAlarm);
     canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
     canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 10 : 19));
     canvas.select(look.hbAlarm);
     break;
-  case FLARM_TRAFFIC::ALARM_NONE:
+  case FlarmTraffic::ALARM_NONE:
     if (WarningMode()) {
       canvas.hollow_brush();
       canvas.select(look.hpPassive);
@@ -445,9 +445,9 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   if (side_display_type == 1 &&
       (!traffic.climb_rate_avg30s_available ||
        traffic.climb_rate_avg30s < fixed(0.5) ||
-       (traffic.type != FLARM_TRAFFIC::acGlider &&
-        traffic.type != FLARM_TRAFFIC::acHangGlider &&
-        traffic.type != FLARM_TRAFFIC::acParaGlider)))
+       (traffic.type != FlarmTraffic::acGlider &&
+        traffic.type != FlarmTraffic::acHangGlider &&
+        traffic.type != FlarmTraffic::acParaGlider)))
       return;
 
   // Select font
@@ -495,7 +495,7 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
 
   // Iterate through the traffic (normal traffic)
   for (unsigned i = 0; i < data.traffic.size(); ++i) {
-    const FLARM_TRAFFIC &traffic = data.traffic[i];
+    const FlarmTraffic &traffic = data.traffic[i];
 
     if (!traffic.HasAlarm() &&
         static_cast<unsigned> (selection) != i)
@@ -503,7 +503,7 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
   }
 
   if (selection >= 0) {
-    const FLARM_TRAFFIC &traffic = data.traffic[selection];
+    const FlarmTraffic &traffic = data.traffic[selection];
 
     if (!traffic.HasAlarm())
       PaintRadarTarget(canvas, traffic, selection);
@@ -514,7 +514,7 @@ FlarmTrafficWindow::PaintRadarTraffic(Canvas &canvas)
 
   // Iterate through the traffic (alarm traffic)
   for (unsigned i = 0; i < data.traffic.size(); ++i) {
-    const FLARM_TRAFFIC &traffic = data.traffic[i];
+    const FlarmTraffic &traffic = data.traffic[i];
 
     if (traffic.HasAlarm())
       PaintRadarTarget(canvas, traffic, i);

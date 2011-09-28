@@ -201,7 +201,7 @@ ComputeFlarmTeam(const GeoPoint &location, const GeoPoint &reference_location,
     return;
   }
 
-  const FLARM_TRAFFIC *traffic = flarm.FindTraffic(target_id);
+  const FlarmTraffic *traffic = flarm.FindTraffic(target_id);
   if (traffic == NULL || !traffic->location_available) {
     teamcode_info.flarm_teammate_code_current = false;
     return;

@@ -78,7 +78,7 @@ public:
 public:
   bool WarningMode() const;
 
-  const FLARM_TRAFFIC *GetTarget() const {
+  const FlarmTraffic *GetTarget() const {
     return selection >= 0
       ? &data.traffic[selection]
       : NULL;
@@ -86,7 +86,7 @@ public:
 
   void SetTarget(int i);
 
-  void SetTarget(const FLARM_TRAFFIC *traffic) {
+  void SetTarget(const FlarmTraffic *traffic) {
     SetTarget(traffic != NULL ? (int)data.TrafficIndex(traffic) : -1);
   }
 
@@ -113,7 +113,7 @@ protected:
   void Update(Angle new_direction, const FlarmState &new_data,
               const SETTINGS_TEAMCODE &new_settings);
   void PaintRadarNoTraffic(Canvas &canvas) const;
-  void PaintRadarTarget(Canvas &canvas, const FLARM_TRAFFIC &traffic,
+  void PaintRadarTarget(Canvas &canvas, const FlarmTraffic &traffic,
                         unsigned i);
   void PaintRadarTraffic(Canvas &canvas);
   void PaintRadarPlane(Canvas &canvas) const;
