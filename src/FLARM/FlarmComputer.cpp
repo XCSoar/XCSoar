@@ -34,8 +34,8 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
   if (!flarm.available || flarm.traffic.empty())
     return;
 
-  fixed FLARM_NorthingToLatitude(0);
-  fixed FLARM_EastingToLongitude(0);
+  fixed north_to_latitude(0);
+  fixed east_to_longitude(0);
 
   if (basic.location_available) {
     // Precalculate relative east and north projection to lat/lon
@@ -52,8 +52,8 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
     fixed dlon = basic.location.Distance(plon);
 
     if (positive(fabs(dlat)) && positive(fabs(dlon))) {
-      FLARM_NorthingToLatitude = delta_lat.value_degrees() / dlat;
-      FLARM_EastingToLongitude = delta_lon.value_degrees() / dlon;
+      north_to_latitude = delta_lat.value_degrees() / dlat;
+      east_to_longitude = delta_lon.value_degrees() / dlon;
     }
   }
 
@@ -76,11 +76,11 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
     traffic.location_available = basic.location_available;
     if (traffic.location_available) {
       traffic.location.latitude =
-          Angle::degrees(traffic.relative_north * FLARM_NorthingToLatitude) +
+          Angle::degrees(traffic.relative_north * north_to_latitude) +
           basic.location.latitude;
 
       traffic.location.longitude =
-          Angle::degrees(traffic.relative_east * FLARM_EastingToLongitude) +
+          Angle::degrees(traffic.relative_east * east_to_longitude) +
           basic.location.longitude;
     }
 
@@ -93,7 +93,7 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
     traffic.climb_rate_avg30s_available = traffic.altitude_available;
     if (traffic.climb_rate_avg30s_available)
       traffic.climb_rate_avg30s =
-        flarmCalculations.Average30s(traffic.id, basic.time, traffic.altitude);
+        flarm_calculations.Average30s(traffic.id, basic.time, traffic.altitude);
 
     // The following calculations are only relevant for targets
     // where information is missing

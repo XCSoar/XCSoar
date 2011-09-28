@@ -30,7 +30,7 @@ struct FlarmState;
 struct NMEAInfo;
 
 class FlarmComputer {
-  FlarmCalculations flarmCalculations;
+  FlarmCalculations flarm_calculations;
 
 public:
   /**
