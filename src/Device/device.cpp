@@ -23,13 +23,10 @@ Copyright_License {
 
 // 20070413:sgi add NmeaOut support, allow nmea chaining an double port platforms
 
-#include "Device/device.hpp"
+#include "device.hpp"
 #include "Device/List.hpp"
 #include "Device/Descriptor.hpp"
-#include "Device/Parser.hpp"
 #include "LogFile.hpp"
-#include "DeviceBlackboard.hpp"
-#include "Asset.hpp"
 #include "Profile/Profile.hpp"
 #include "Profile/DeviceConfig.hpp"
 #include "Operation.hpp"
