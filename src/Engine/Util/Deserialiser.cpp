@@ -247,12 +247,11 @@ Deserialiser::deserialise(OrderedTask &task)
   task.set_ordered_task_behaviour(beh);
 
   DataNode* point_node;
-  unsigned i=0;
-  while ((point_node = m_node.get_child_by_name(_T("Point"),i)) != NULL) {
+  for (unsigned i = 0;
+       (point_node = m_node.get_child_by_name(_T("Point"), i)) != NULL; ++i) {
     Deserialiser pser(*point_node, waypoints);
     pser.deserialise_point(task);
     delete point_node;
-    i++;
   }
 }
 
