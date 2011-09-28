@@ -96,7 +96,43 @@ Serialiser::serialise(const OrderedTaskPoint& data, const TCHAR* name)
 void 
 Serialiser::serialise(const ObservationZonePoint& data) 
 {
-  ObservationZoneConstVisitor::Visit(data);
+  switch (data.shape) {
+  case ObservationZonePoint::FAI_SECTOR:
+    Visit((const FAISectorZone &)data);
+    break;
+
+  case ObservationZonePoint::SECTOR:
+    Visit((const SectorZone &)data);
+    break;
+
+  case ObservationZonePoint::LINE:
+    Visit((const LineSectorZone &)data);
+    break;
+
+  case ObservationZonePoint::CYLINDER:
+    Visit((const CylinderZone &)data);
+    break;
+
+  case ObservationZonePoint::KEYHOLE:
+    Visit((const KeyholeZone &)data);
+    break;
+
+  case ObservationZonePoint::BGAFIXEDCOURSE:
+    Visit((const BGAFixedCourseZone &)data);
+    break;
+
+  case ObservationZonePoint::BGAENHANCEDOPTION:
+    Visit((const BGAEnhancedOptionZone &)data);
+    break;
+
+  case ObservationZonePoint::BGA_START:
+    Visit((const BGAStartSectorZone &)data);
+    break;
+
+  case ObservationZonePoint::ANNULAR_SECTOR:
+    Visit((const AnnularSectorZone &)data);
+    break;
+  }
 } 
 
 void 

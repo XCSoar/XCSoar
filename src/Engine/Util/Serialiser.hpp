@@ -23,19 +23,27 @@
 #define SERIALISER_HPP
 
 #include "Task/Visitors/TaskPointVisitor.hpp"
-#include "Task/Visitors/ObservationZoneVisitor.hpp"
 #include "Task/Tasks/OrderedTask.hpp"
 
 class DataNode;
 struct Waypoint;
 class Waypoints;
+class ObservationZonePoint;
+class FAISectorZone;
+class SectorZone;
+class LineSectorZone;
+class CylinderZone;
+class KeyholeZone;
+class BGAFixedCourseZone;
+class BGAEnhancedOptionZone;
+class BGAStartSectorZone;
+class AnnularSectorZone;
 
 /**
  * Class to serialise and de-serialise tasks to/from a #DataNode structure
  */
 class Serialiser:
-  public TaskPointConstVisitor,
-  public ObservationZoneConstVisitor
+  public TaskPointConstVisitor
 {
   DataNode &m_node;
 
