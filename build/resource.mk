@@ -101,6 +101,38 @@ $(BMP_TITLE_320): %.bmp: %.png
 	@$(NQ)echo "  BMP     $@"
 	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
 
+####### dialog title
+
+SVG_DIALOG_TITLE = Data/graphics/dialog_title.svg
+PNG_DIALOG_TITLE = $(patsubst Data/graphics/%.svg,output/data/graphics/%.png,$(SVG_DIALOG_TITLE))
+BMP_DIALOG_TITLE = $(PNG_DIALOG_TITLE:.png=.bmp)
+
+# render from SVG to PNG
+$(PNG_DIALOG_TITLE): output/data/graphics/%.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+	@$(NQ)echo "  SVG     $@"
+	$(Q)rsvg-convert $< -o $@
+
+# convert to uncompressed 8-bit BMP
+$(BMP_DIALOG_TITLE): %.bmp: %.png
+	@$(NQ)echo "  BMP     $@"
+	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
+
+####### progress bar border
+
+SVG_PROGRESS_BORDER = Data/graphics/progress_border.svg
+PNG_PROGRESS_BORDER = $(patsubst Data/graphics/%.svg,output/data/graphics/%.png,$(SVG_PROGRESS_BORDER))
+BMP_PROGRESS_BORDER = $(PNG_PROGRESS_BORDER:.png=.bmp)
+
+# render from SVG to PNG
+$(PNG_PROGRESS_BORDER): output/data/graphics/%.png: Data/graphics/%.svg | output/data/graphics/dirstamp
+	@$(NQ)echo "  SVG     $@"
+	$(Q)rsvg-convert $< -o $@
+
+# convert to uncompressed 8-bit BMP
+$(BMP_PROGRESS_BORDER): %.bmp: %.png
+	@$(NQ)echo "  BMP     $@"
+	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
+
 ####### launcher graphics
 
 SVG_LAUNCH = Data/graphics/launcher.svg
@@ -134,6 +166,7 @@ else
 RESOURCE_FILES += $(wildcard Data/bitmaps/*.bmp)
 RESOURCE_FILES += $(BMP_ICONS) $(BMP_ICONS_160) 
 RESOURCE_FILES += $(BMP_SPLASH_160) $(BMP_SPLASH_80)
+RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
 RESOURCE_FILES += $(BMP_TITLE_320) $(BMP_TITLE_110)
 RESOURCE_FILES += $(BMP_LAUNCH_FLY_224) $(BMP_LAUNCH_SIM_224)
 endif

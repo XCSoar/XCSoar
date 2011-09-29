@@ -70,7 +70,7 @@ IDB_CLOCK               BITMAP  DISCARDABLE     "../output/data/icons/clock.bmp"
 IDB_CLOCK_HD            BITMAP  DISCARDABLE     "../output/data/icons/clock_160.bmp"
 
 #ifdef EYE_CANDY
-IDB_DIALOGTITLE         BITMAP  DISCARDABLE     "bitmaps/dialog_title.bmp"
+IDB_DIALOGTITLE         BITMAP  DISCARDABLE     "../output/data/graphics/dialog_title.bmp"
 #endif
 IDB_DLGBUTTONLEFT32     BITMAP  DISCARDABLE     "bitmaps/dialog_button_left_32x32.bmp"
 IDB_DLGBUTTONRIGHT32    BITMAP  DISCARDABLE     "bitmaps/dialog_button_right_32x32.bmp"
@@ -114,7 +114,7 @@ IDB_OUTFIELD_UNREACHABLE2 BITMAP DISCARDABLE    "../output/data/icons/alt2_landa
 IDB_OUTFIELD_UNREACHABLE2_HD BITMAP DISCARDABLE "../output/data/icons/alt2_landable_field_160.bmp"
 IDB_MOUNTAIN_PASS       BITMAP  DISCARDABLE     "../output/data/icons/map_pass.bmp"
 IDB_MOUNTAIN_PASS_HD    BITMAP  DISCARDABLE     "../output/data/icons/map_pass_160.bmp"
-IDB_PROGRESSBORDER      BITMAP  DISCARDABLE     "bitmaps/progress_border.bmp"
+IDB_PROGRESSBORDER      BITMAP  DISCARDABLE     "../output/data/graphics/progress_border.bmp"
 IDB_REACHABLE           BITMAP  DISCARDABLE     "../output/data/icons/winpilot_reachable.bmp"
 IDB_REACHABLE_HD        BITMAP  DISCARDABLE     "../output/data/icons/winpilot_reachable_160.bmp"
 IDB_MARGINAL            BITMAP  DISCARDABLE     "../output/data/icons/winpilot_marginal.bmp"
