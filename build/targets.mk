@@ -197,9 +197,7 @@ endif
 
 ######## target definitions
 
-TARGET_CPPFLAGS =
 TARGET_INCLUDES =
-
 TARGET_CPPFLAGS = -I$(TARGET_OUTPUT_DIR)/include
 
 ifneq ($(WINVER),)
