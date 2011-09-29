@@ -70,7 +70,11 @@ IDB_CLOCK               BITMAP  DISCARDABLE     "../output/data/icons/clock.bmp"
 IDB_CLOCK_HD            BITMAP  DISCARDABLE     "../output/data/icons/clock_160.bmp"
 
 #ifdef EYE_CANDY
+#ifdef TESTING
+IDB_DIALOGTITLE         BITMAP  DISCARDABLE     "../output/data/graphics/dialog_title_red.bmp"
+#else
 IDB_DIALOGTITLE         BITMAP  DISCARDABLE     "../output/data/graphics/dialog_title.bmp"
+#endif
 #endif
 IDB_DLGBUTTONLEFT32     BITMAP  DISCARDABLE     "bitmaps/dialog_button_left_32x32.bmp"
 IDB_DLGBUTTONRIGHT32    BITMAP  DISCARDABLE     "bitmaps/dialog_button_right_32x32.bmp"
@@ -114,15 +118,24 @@ IDB_OUTFIELD_UNREACHABLE2 BITMAP DISCARDABLE    "../output/data/icons/alt2_landa
 IDB_OUTFIELD_UNREACHABLE2_HD BITMAP DISCARDABLE "../output/data/icons/alt2_landable_field_160.bmp"
 IDB_MOUNTAIN_PASS       BITMAP  DISCARDABLE     "../output/data/icons/map_pass.bmp"
 IDB_MOUNTAIN_PASS_HD    BITMAP  DISCARDABLE     "../output/data/icons/map_pass_160.bmp"
+#ifdef TESTING
+IDB_PROGRESSBORDER      BITMAP  DISCARDABLE     "../output/data/graphics/progress_border_red.bmp"
+#else
 IDB_PROGRESSBORDER      BITMAP  DISCARDABLE     "../output/data/graphics/progress_border.bmp"
+#endif
 IDB_REACHABLE           BITMAP  DISCARDABLE     "../output/data/icons/winpilot_reachable.bmp"
 IDB_REACHABLE_HD        BITMAP  DISCARDABLE     "../output/data/icons/winpilot_reachable_160.bmp"
 IDB_MARGINAL            BITMAP  DISCARDABLE     "../output/data/icons/winpilot_marginal.bmp"
 IDB_MARGINAL_HD         BITMAP  DISCARDABLE     "../output/data/icons/winpilot_marginal_160.bmp"
 IDB_SMALL               BITMAP  DISCARDABLE     "../output/data/icons/map_small.bmp"
 IDB_SMALL_HD            BITMAP  DISCARDABLE     "../output/data/icons/map_small_160.bmp"
+#ifdef TESTING
+IDB_SWIFT_HD            BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_red_160.bmp"
+IDB_SWIFT               BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_red_80.bmp"
+#else
 IDB_SWIFT_HD            BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_160.bmp"
 IDB_SWIFT               BITMAP  DISCARDABLE     "../output/data/graphics/xcsoarswiftsplash_80.bmp"
+#endif
 IDB_TARGET              BITMAP  DISCARDABLE     "../output/data/icons/map_target.bmp"
 IDB_TARGET_HD           BITMAP  DISCARDABLE     "../output/data/icons/map_target_160.bmp"
 IDB_TEAMMATE_POS        BITMAP  DISCARDABLE     "../output/data/icons/map_teammate.bmp"
@@ -163,8 +176,13 @@ IDB_UNIT_KMH            BITMAP  DISCARDABLE     "bitmaps/unit_kmh.bmp"
 IDB_UNIT_MPH            BITMAP  DISCARDABLE     "bitmaps/unit_mph.bmp"
 IDB_VARIOSCALEA         BITMAP  DISCARDABLE     "bitmaps/vario_scale_b.bmp"
 IDB_VARIOSCALEC         BITMAP  DISCARDABLE     "bitmaps/vario_scale_c.bmp"
+#ifdef TESTING
+IDB_TITLE             BITMAP  DISCARDABLE     "../output/data/graphics/title_red_110.bmp"
+IDB_TITLE_HD          BITMAP  DISCARDABLE     "../output/data/graphics/title_red_320.bmp"
+#else
 IDB_TITLE             BITMAP  DISCARDABLE     "../output/data/graphics/title_110.bmp"
 IDB_TITLE_HD          BITMAP  DISCARDABLE     "../output/data/graphics/title_320.bmp"
+#endif
 // --- Audio ---
 
 IDR_FAIL                WAVE    DISCARDABLE     "sound/fail.wav"

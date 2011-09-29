@@ -75,7 +75,7 @@ $(BMP_SPLASH_80): %.bmp: %.png
 
 ####### version
 
-SVG_TITLE = Data/graphics/title.svg
+SVG_TITLE = Data/graphics/title.svg Data/graphics/title_red.svg
 PNG_TITLE_110 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_110.png,$(SVG_TITLE))
 BMP_TITLE_110 = $(PNG_TITLE_110:.png=.bmp)
 PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_320.png,$(SVG_TITLE))
@@ -103,7 +103,7 @@ $(BMP_TITLE_320): %.bmp: %.png
 
 ####### dialog title
 
-SVG_DIALOG_TITLE = Data/graphics/dialog_title.svg
+SVG_DIALOG_TITLE = Data/graphics/dialog_title.svg Data/graphics/dialog_title_red.svg
 PNG_DIALOG_TITLE = $(patsubst Data/graphics/%.svg,output/data/graphics/%.png,$(SVG_DIALOG_TITLE))
 BMP_DIALOG_TITLE = $(PNG_DIALOG_TITLE:.png=.bmp)
 
@@ -119,7 +119,7 @@ $(BMP_DIALOG_TITLE): %.bmp: %.png
 
 ####### progress bar border
 
-SVG_PROGRESS_BORDER = Data/graphics/progress_border.svg
+SVG_PROGRESS_BORDER = Data/graphics/progress_border.svg Data/graphics/progress_border_red.svg
 PNG_PROGRESS_BORDER = $(patsubst Data/graphics/%.svg,output/data/graphics/%.png,$(SVG_PROGRESS_BORDER))
 BMP_PROGRESS_BORDER = $(PNG_PROGRESS_BORDER:.png=.bmp)
 
