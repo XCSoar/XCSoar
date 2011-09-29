@@ -81,7 +81,11 @@ PNG4 := $(patsubst output/data/icons/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_ICONS) $(
 $(PNG4): $(DRAWABLE_DIR)/%.png: output/data/icons/%.bmp | $(DRAWABLE_DIR)/dirstamp
 	$(Q)$(IM_PREFIX)convert $< $@
 
-PNG_FILES = $(DRAWABLE_DIR)/icon.png $(PNG1) $(PNG2) $(PNG3) $(PNG4)
+PNG5 := $(patsubst output/data/graphics/%.bmp,$(DRAWABLE_DIR)/%.png,$(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER))
+$(PNG5): $(DRAWABLE_DIR)/%.png: output/data/graphics/%.bmp | $(DRAWABLE_DIR)/dirstamp
+	$(Q)$(IM_PREFIX)convert $< $@
+
+PNG_FILES = $(DRAWABLE_DIR)/icon.png $(PNG1) $(PNG2) $(PNG3) $(PNG4) $(PNG5)
 
 ifeq ($(TESTING),y)
 MANIFEST = android/testing/AndroidManifest.xml
