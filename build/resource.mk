@@ -1,23 +1,3 @@
-SVG_ICONS = $(wildcard Data/icons/*.svg)
-SVG_NOALIAS_ICONS = $(patsubst Data/icons/%.svg,output/data/icons/%.svg,$(SVG_ICONS))
-PNG_ICONS = $(patsubst Data/icons/%.svg,output/data/icons/%.png,$(SVG_ICONS))
-BMP_ICONS = $(PNG_ICONS:.png=.bmp)
-PNG_ICONS_160 = $(patsubst Data/icons/%.svg,output/data/icons/%_160.png,$(SVG_ICONS))
-BMP_ICONS_160 = $(PNG_ICONS_160:.png=.bmp)
-
-SVG_SPLASH = Data/graphics/xcsoarswiftsplash.svg Data/graphics/xcsoarswiftsplash_red.svg
-PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_160.png,$(SVG_SPLASH))
-BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
-PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_80.png,$(SVG_SPLASH))
-BMP_SPLASH_80 = $(PNG_SPLASH_80:.png=.bmp)
-
-SVG_TITLE = Data/graphics/title.svg
-PNG_TITLE_110 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_110.png,$(SVG_TITLE))
-BMP_TITLE_110 = $(PNG_TITLE_110:.png=.bmp)
-PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_320.png,$(SVG_TITLE))
-BMP_TITLE_320 = $(PNG_TITLE_320:.png=.bmp)
-
-
 ifeq ($(WINHOST),y)
   IM_PREFIX := im-
 else
@@ -25,6 +5,13 @@ else
 endif
 
 ####### icons
+
+SVG_ICONS = $(wildcard Data/icons/*.svg)
+SVG_NOALIAS_ICONS = $(patsubst Data/icons/%.svg,output/data/icons/%.svg,$(SVG_ICONS))
+PNG_ICONS = $(patsubst Data/icons/%.svg,output/data/icons/%.png,$(SVG_ICONS))
+BMP_ICONS = $(PNG_ICONS:.png=.bmp)
+PNG_ICONS_160 = $(patsubst Data/icons/%.svg,output/data/icons/%_160.png,$(SVG_ICONS))
+BMP_ICONS_160 = $(PNG_ICONS_160:.png=.bmp)
 
 # modify working copy of SVG to improve rendering
 $(SVG_NOALIAS_ICONS): output/data/icons/%.svg: build/svg_preprocess.xsl Data/icons/%.svg | output/data/icons/dirstamp
@@ -64,6 +51,12 @@ $(BMP_ICONS_160): %.bmp: %_tile.png
 
 ####### splash logo
 
+SVG_SPLASH = Data/graphics/xcsoarswiftsplash.svg Data/graphics/xcsoarswiftsplash_red.svg
+PNG_SPLASH_160 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_160.png,$(SVG_SPLASH))
+BMP_SPLASH_160 = $(PNG_SPLASH_160:.png=.bmp)
+PNG_SPLASH_80 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_80.png,$(SVG_SPLASH))
+BMP_SPLASH_80 = $(PNG_SPLASH_80:.png=.bmp)
+
 # render from SVG to PNG
 $(PNG_SPLASH_160): output/data/graphics/%_160.png: Data/graphics/%.svg | output/data/graphics/dirstamp
 	@$(NQ)echo "  SVG     $@"
@@ -81,6 +74,12 @@ $(BMP_SPLASH_80): %.bmp: %.png
 	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
 
 ####### version
+
+SVG_TITLE = Data/graphics/title.svg
+PNG_TITLE_110 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_110.png,$(SVG_TITLE))
+BMP_TITLE_110 = $(PNG_TITLE_110:.png=.bmp)
+PNG_TITLE_320 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_320.png,$(SVG_TITLE))
+BMP_TITLE_320 = $(PNG_TITLE_320:.png=.bmp)
 
 # render from SVG to PNG
 $(PNG_TITLE_110): output/data/graphics/%_110.png: Data/graphics/%.svg | output/data/graphics/dirstamp
@@ -101,7 +100,6 @@ $(PNG_TITLE_320): output/data/graphics/%_320.png: Data/graphics/%.svg | output/d
 $(BMP_TITLE_320): %.bmp: %.png
 	@$(NQ)echo "  BMP     $@"
 	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 $@
-
 
 ####### launcher graphics
 
@@ -124,6 +122,8 @@ $(BMP_LAUNCH_SIM_224): %_2.bmp: %.png
 	@$(NQ)echo "  BMP     $@"
 	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
 	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
+
+#######
 
 RESOURCE_FILES = $(wildcard Data/Dialogs/*.xml)
 RESOURCE_FILES += $(wildcard Data/Dialogs/Infobox/*.xml)
