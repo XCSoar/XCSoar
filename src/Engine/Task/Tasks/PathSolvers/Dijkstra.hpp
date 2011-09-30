@@ -44,8 +44,11 @@ extern long count_dijkstra_links;
  * Modifications by John Wharington to track optimal solution
  * @see http://en.giswiki.net/wiki/Dijkstra%27s_algorithm
  */
-template <class Node> class Dijkstra {
-  struct Edge {
+template <class Node>
+class Dijkstra
+{
+  struct Edge
+  {
     Node parent;
 
     unsigned value;
@@ -58,7 +61,8 @@ template <class Node> class Dijkstra {
   typedef typename edge_map::iterator edge_iterator;
   typedef typename edge_map::const_iterator edge_const_iterator;
 
-  struct Value {
+  struct Value
+  {
     unsigned edge_value;
 
     edge_iterator iterator;
@@ -94,8 +98,9 @@ public:
    *
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const bool is_min = true, unsigned reserve_default=DIJKSTRA_QUEUE_SIZE) :
-    m_min(is_min) {
+  Dijkstra(const bool is_min = true,
+           unsigned reserve_default = DIJKSTRA_QUEUE_SIZE)
+    :m_min(is_min) {
     reserve(reserve_default);
   }
 
@@ -105,8 +110,9 @@ public:
    * @param n Node to start
    * @param is_min Whether this algorithm will search for min or max distance
    */
-  Dijkstra(const Node &node, const bool is_min = true, unsigned reserve_default=DIJKSTRA_QUEUE_SIZE) :
-    m_min(is_min) { 
+  Dijkstra(const Node &node, const bool is_min = true,
+           unsigned reserve_default = DIJKSTRA_QUEUE_SIZE)
+    :m_min(is_min) {
     push(node, node, 0);
     reserve(reserve_default);
   }
@@ -228,20 +234,19 @@ private:
    * @param pn Previous node
    * @param e Edge distance (previous to this)
    */
-  void push(const Node &node, const Node &parent, unsigned edge_value=0) {
+  void push(const Node &node, const Node &parent, unsigned edge_value = 0) {
     // Try to find the given node n in the edge_map
     edge_iterator it = edges.find(node);
-    if (it == edges.end()) {
+    if (it == edges.end())
       // first entry
       // If the node wasn't found
       // -> Insert a new node
-      it = edges.insert(std::make_pair(node, Edge(parent,
-                                                        edge_value))).first;
-    } else if (it->second.value > edge_value) {
+      it = edges.insert(std::make_pair(node, Edge(parent, edge_value))).first;
+    else if (it->second.value > edge_value)
       // If the node was found and the new value is smaller
       // -> Replace the value with the new one
       it->second = Edge(parent, edge_value);
-    } else
+    else
       // If the node was found but the new value is higher or equal
       // -> Don't use this new leg
       return;
