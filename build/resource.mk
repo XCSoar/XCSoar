@@ -135,7 +135,7 @@ $(BMP_PROGRESS_BORDER): %.bmp: %.png
 
 ####### launcher graphics
 
-SVG_LAUNCH = Data/graphics/launcher.svg
+SVG_LAUNCH = Data/graphics/launcher.svg Data/graphics/launcher_red.svg
 PNG_LAUNCH_224 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_224.png,$(SVG_LAUNCH))
 BMP_LAUNCH_FLY_224 = $(PNG_LAUNCH_224:.png=_1.bmp)
 BMP_LAUNCH_SIM_224 = $(PNG_LAUNCH_224:.png=_2.bmp)

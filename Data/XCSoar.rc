@@ -92,8 +92,13 @@ IDB_GPSSTATUS2          BITMAP  DISCARDABLE     "../output/data/icons/gps_discon
 IDB_GPSSTATUS2_HD       BITMAP  DISCARDABLE     "../output/data/icons/gps_disconnected_160.bmp"
 IDB_LANDABLE            BITMAP  DISCARDABLE     "../output/data/icons/winpilot_landable.bmp"
 IDB_LANDABLE_HD         BITMAP  DISCARDABLE     "../output/data/icons/winpilot_landable_160.bmp"
+#ifdef TESTING
+IDB_LAUNCHER1           BITMAP  DISCARDABLE     "../output/data/graphics/launcher_red_224_1.bmp"
+IDB_LAUNCHER2           BITMAP  DISCARDABLE     "../output/data/graphics/launcher_red_224_2.bmp"
+#else
 IDB_LAUNCHER1           BITMAP  DISCARDABLE     "../output/data/graphics/launcher_224_1.bmp"
 IDB_LAUNCHER2           BITMAP  DISCARDABLE     "../output/data/graphics/launcher_224_2.bmp"
+#endif
 IDB_LOGGER              BITMAP  DISCARDABLE     "../output/data/icons/icon_logging.bmp"
 IDB_LOGGER_HD           BITMAP  DISCARDABLE     "../output/data/icons/icon_logging_160.bmp"
 IDB_LOGGEROFF           BITMAP  DISCARDABLE     "../output/data/icons/icon_logging_off.bmp"
