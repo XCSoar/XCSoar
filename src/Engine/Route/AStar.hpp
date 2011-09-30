@@ -153,8 +153,8 @@ public:
    */
   AStar(const Node &node, unsigned reserve_default = ASTAR_QUEUE_SIZE)
   {
-    Push(node, node, AStarPriorityValue(0));
     Reserve(reserve_default);
+    Push(node, node, AStarPriorityValue(0));
   }
 
   /**
