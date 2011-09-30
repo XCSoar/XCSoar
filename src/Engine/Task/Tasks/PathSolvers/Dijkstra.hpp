@@ -113,8 +113,8 @@ public:
   Dijkstra(const Node &node, const bool is_min = true,
            unsigned reserve_default = DIJKSTRA_QUEUE_SIZE)
     :m_min(is_min) {
-    push(node, node, 0);
     reserve(reserve_default);
+    push(node, node, 0);
   }
 
   /**
