@@ -29,9 +29,11 @@ Copyright_License {
 #include <assert.h>
 #include <limits.h>
 
+#ifdef INSTRUMENT_TASK
 unsigned long ContestDijkstra::count_olc_solve = 0;
 unsigned long ContestDijkstra::count_olc_trace = 0;
 unsigned ContestDijkstra::count_olc_size = 0;
+#endif
 
 // set size of reserved queue elements (may differ from Dijkstra default)
 #define CONTEST_QUEUE_SIZE DIJKSTRA_QUEUE_SIZE
@@ -111,7 +113,9 @@ ContestDijkstra::update_trace()
   n_points = trace.size();
   trace_dirty = true;
 
+#ifdef INSTRUMENT_TASK
   count_olc_trace++;
+#endif
 
   if (n_points<2) return;
 }
@@ -157,8 +161,10 @@ ContestDijkstra::Solve(bool exhaustive)
     }
   }
 
+#ifdef INSTRUMENT_TASK
   count_olc_solve++;
   count_olc_size = max(count_olc_size, dijkstra.queue_size());
+#endif
 
   if (distance_general(exhaustive ? 0 - 1 : 25)) {
     SaveSolution();
@@ -179,9 +185,11 @@ ContestDijkstra::Reset()
 
   AbstractContest::Reset();
 
+#ifdef INSTRUMENT_TASK
   count_olc_solve = 0;
   count_olc_trace = 0;
   count_olc_size = 0;
+#endif
 }
 
 

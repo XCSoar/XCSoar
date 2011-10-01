@@ -65,10 +65,11 @@ void distance_counts() {
     if (count_dijkstra_queries>0) {
       printf("#     dijkstra links/q %d\n", (unsigned)(count_dijkstra_links/count_dijkstra_queries));
     }
-#endif
+
     printf("#     count_olc_solve %d\n", (int)ContestDijkstra::count_olc_solve);
     printf("#     count_olc_trace %d\n", (int)ContestDijkstra::count_olc_trace);
     printf("#     count_olc_size %d\n",ContestDijkstra::count_olc_size);
+#endif
     printf("#    (total cycles %d)\n#\n",n_samples);
 #ifdef INSTRUMENT_ZERO
     if (zero_total) {
