@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_WAYPOINT_LIST_RENDERER_HPP
 
 #include "Screen/Point.hpp"
+#include "Math/fixed.hpp"
 
 class Canvas;
 struct Waypoint;
@@ -41,6 +42,10 @@ namespace WaypointListRenderer
 
   void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
             const GeoVector &vector, const WaypointLook &look,
+            const WaypointRendererSettings &settings);
+
+  void Draw(Canvas &canvas, const PixelRect rc, const Waypoint &waypoint,
+            fixed distance, fixed arrival_altitude, const WaypointLook &look,
             const WaypointRendererSettings &settings);
 }
 

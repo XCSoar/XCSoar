@@ -82,6 +82,49 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                           const Waypoint &waypoint, fixed distance,
+                           fixed arrival_altitude, const WaypointLook &look,
+                           const WaypointRendererSettings &settings)
+{
+  const PixelScalar line_height = rc.bottom - rc.top;
+
+  const Font &name_font = Fonts::MapBold;
+  const Font &small_font = Fonts::MapLabel;
+
+  // Draw icon
+  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
+                     PixelScalar(rc.top + line_height / 2) };
+
+  WaypointIconRenderer::Reachability reachable =
+      positive(arrival_altitude) ?
+      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
+
+  WaypointIconRenderer wir(settings, look, canvas);
+  wir.Draw(waypoint, pt, reachable);
+
+  // Y-Coordinate of the second row
+  PixelScalar top2 = rc.top + name_font.get_height() + Layout::FastScale(4);
+
+  // Use small font for details
+  canvas.select(small_font);
+
+  // Draw distance and arrival altitude
+  TCHAR buffer[255], dist[20], alt[20];
+  Units::FormatUserDistance(distance, dist, 20, true);
+  Units::FormatUserArrival(arrival_altitude, alt, 20, true);
+  _stprintf(buffer, _T("Distance: %s - Arrival Alt: %s"), dist, alt);
+
+  unsigned left = rc.left + line_height + Layout::FastScale(2);
+  canvas.text_clipped(left, top2, rc, buffer);
+
+  // Draw waypoint name
+  canvas.select(name_font);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc,
+                      waypoint.name.c_str());
+}
+
+void
+WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                            const Waypoint &waypoint, const GeoVector *vector,
                            const WaypointLook &look,
                            const WaypointRendererSettings &settings)

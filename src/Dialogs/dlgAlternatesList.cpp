@@ -26,17 +26,13 @@ Copyright_License {
 #include "Dialogs/ListPicker.hpp"
 #include "Screen/Layout.hpp"
 #include "Screen/Fonts.hpp"
-#include "Screen/Icon.hpp"
-#include "Units/UnitsFormatter.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Components.hpp"
 #include "MainWindow.hpp"
 #include "Interface.hpp"
 #include "Look/Look.hpp"
-#include "Renderer/WaypointIconRenderer.hpp"
+#include "Renderer/WaypointListRenderer.hpp"
 #include "Language/Language.hpp"
-
-#include <stdio.h>
 
 static AbortTask::AlternateVector alternates;
 
@@ -52,43 +48,13 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
   assert(index < alternates.size());
 
-  const PixelScalar line_height = rc.bottom - rc.top;
-
-  const Waypoint &way_point = alternates[index].waypoint;
+  const Waypoint &waypoint = alternates[index].waypoint;
   const GlideResult& solution = alternates[index].solution;
 
-  // Draw icon
-  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
-                     PixelScalar(rc.top + line_height / 2) };
-
-  WaypointIconRenderer::Reachability reachable =
-      positive(solution.altitude_difference) ?
-      WaypointIconRenderer::ReachableTerrain : WaypointIconRenderer::Unreachable;
-
-  WaypointIconRenderer wir(CommonInterface::SettingsMap().waypoint,
-                           CommonInterface::main_window.look->waypoint,
-                           canvas);
-  wir.Draw(way_point, pt, reachable);
-
-  const Font &name_font = Fonts::MapBold;
-  const Font &small_font = Fonts::MapLabel;
-
-  // Draw waypoint name
-  canvas.select(name_font);
-  canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
-                      rc.top + Layout::FastScale(2), rc,
-                      way_point.name.c_str());
-
-  // Draw distance and arrival altitude
-  TCHAR tmp[255], dist[20], alt[20];
-  Units::FormatUserDistance(solution.vector.distance, dist, 20, true);
-  Units::FormatUserArrival(solution.altitude_difference, alt, 20, true);
-  _stprintf(tmp, _T("Distance: %s - Arrival Alt: %s"), dist, alt);
-
-  canvas.select(small_font);
-  canvas.text_clipped(rc.left + line_height + Layout::FastScale(2),
-                      rc.top + name_font.get_height() + Layout::FastScale(4),
-                      rc, tmp);
+  WaypointListRenderer::Draw(canvas, rc, waypoint, solution.vector.distance,
+                             solution.altitude_difference,
+                             CommonInterface::main_window.look->waypoint,
+                             CommonInterface::SettingsMap().waypoint);
 }
 
 void
