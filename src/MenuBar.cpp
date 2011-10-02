@@ -41,7 +41,6 @@ GetButtonPosition(unsigned i, PixelRect rc, int *x, int *y, int *sizex, int *siz
 
     hheight /= 6;
 
-    *sizex = hwidth - margin * 2;
     *sizey = hheight - margin * 2;
 
     if (i == 0) {
@@ -53,15 +52,12 @@ GetButtonPosition(unsigned i, PixelRect rc, int *x, int *y, int *sizex, int *siz
       hwidth /= 4;
 
       *sizex = hwidth - margin * 2;
-      *sizey = hheight - margin * 2;
       *x = rc.left + margin + hwidth * (i - 1);
       *y = rc.bottom - hheight + margin;
     } else {
       hwidth /= 3;
 
       *sizex = hwidth - margin * 2;
-      *sizey = hheight - margin * 2;
-
       *x = rc.right - hwidth + margin;
       int k = rc.bottom - rc.top - Layout::Scale(46);
 
