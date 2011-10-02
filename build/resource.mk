@@ -139,6 +139,8 @@ SVG_LAUNCH = Data/graphics/launcher.svg Data/graphics/launcher_red.svg
 PNG_LAUNCH_224 = $(patsubst Data/graphics/%.svg,output/data/graphics/%_224.png,$(SVG_LAUNCH))
 BMP_LAUNCH_FLY_224 = $(PNG_LAUNCH_224:.png=_1.bmp)
 BMP_LAUNCH_SIM_224 = $(PNG_LAUNCH_224:.png=_2.bmp)
+BMP_LAUNCH_DLL_FLY_224 = $(PNG_LAUNCH_224:.png=_dll_1.bmp)
+BMP_LAUNCH_DLL_SIM_224 = $(PNG_LAUNCH_224:.png=_dll_2.bmp)
 
 # render from SVG to PNG
 $(PNG_LAUNCH_224): output/data/graphics/%_224.png: Data/graphics/%.svg | output/data/graphics/dirstamp
@@ -149,8 +151,18 @@ $(PNG_LAUNCH_224): output/data/graphics/%_224.png: Data/graphics/%.svg | output/
 $(BMP_LAUNCH_FLY_224): %_1.bmp: %.png
 	@$(NQ)echo "  BMP     $@"
 	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
-	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
+	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
 $(BMP_LAUNCH_SIM_224): %_2.bmp: %.png
+	@$(NQ)echo "  BMP     $@"
+	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
+	$(Q)$(IM_PREFIX)convert $< -background white -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
+
+# split into two uncompressed 8-bit BMPs (single 'convert' operation)
+$(BMP_LAUNCH_DLL_FLY_224): %_dll_1.bmp: %.png
+	@$(NQ)echo "  BMP     $@"
+	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
+	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
+$(BMP_LAUNCH_DLL_SIM_224): %_dll_2.bmp: %.png
 	@$(NQ)echo "  BMP     $@"
 	@$(NQ)echo "  BMP     $(@:1.bmp=2.bmp)"
 	$(Q)$(IM_PREFIX)convert $< -background blue -layers flatten +matte +dither -compress none -type optimize -colors 256 -crop '50%x100%' -scene 1 $(@:1.bmp=%d.bmp)
@@ -169,6 +181,7 @@ RESOURCE_FILES += $(BMP_SPLASH_160) $(BMP_SPLASH_80)
 RESOURCE_FILES += $(BMP_DIALOG_TITLE) $(BMP_PROGRESS_BORDER)
 RESOURCE_FILES += $(BMP_TITLE_320) $(BMP_TITLE_110)
 RESOURCE_FILES += $(BMP_LAUNCH_FLY_224) $(BMP_LAUNCH_SIM_224)
+RESOURCE_FILES += $(BMP_LAUNCH_DLL_FLY_224) $(BMP_LAUNCH_DLL_SIM_224)
 endif
 
 ifeq ($(HAVE_WIN32),y)
