@@ -112,7 +112,8 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
   TCHAR buffer[255], dist[20], alt[20];
   Units::FormatUserDistance(distance, dist, 20, true);
   Units::FormatUserArrival(arrival_altitude, alt, 20, true);
-  _stprintf(buffer, _T("Distance: %s - Arrival Alt: %s"), dist, alt);
+  _stprintf(buffer, _T("%s: %s - %s: %s"), _("Distance"), dist,
+            _("Arrival Alt"), alt);
 
   unsigned left = rc.left + line_height + Layout::FastScale(2);
   canvas.text_clipped(left, top2, rc, buffer);
