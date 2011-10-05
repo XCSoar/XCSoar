@@ -342,9 +342,9 @@ endif
 
 ifeq ($(TARGET),UNIX)
   ifeq ($(shell uname -s),Darwin)
-  TARGET_LDLIBS := $(shell $(CXX) -print-file-name=libstdc++.a)
+  TARGET_LDLIBS += $(shell $(CXX) -print-file-name=libstdc++.a)
   else
-  TARGET_LDLIBS := -lstdc++ -lm
+  TARGET_LDLIBS += -lstdc++ -lm
   endif
 endif
 
