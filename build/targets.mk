@@ -303,9 +303,9 @@ endif
 
 ifeq ($(HAVE_POSIX),y)
 ifneq ($(TARGET),ANDROID)
-  TARGET_LDFLAGS += -lpthread
+  TARGET_LDLIBS += -lpthread
   ifeq ($(shell uname -s),Linux)
-  TARGET_LDFLAGS += -lrt # for clock_gettime()
+  TARGET_LDLIBS += -lrt # for clock_gettime()
   endif
 endif
   ifeq ($(shell uname -s),Darwin)
