@@ -7,6 +7,9 @@ reading for competition pilots as well as pilots engaging in casual
 cross-country touring.
 
 \section{Flight modes} 
+XCSoar performs different calculations and may dispay different
+InfoBoxes depending on the flight mode, for example Circling
+(thermalling), Cruise, or Final Glide (cruise to the Finish waypoint).
 XCSoar automatically detects the difference between thermal (circling)
 flight and cruising flight. After about 30 seconds of circling flight
 the software will switch from cruise to climb mode. After about 30
@@ -60,14 +63,16 @@ computer is in.  This is accessed from the menu
 which toggles between the normal mode-specific InfoBoxes and
 the auxiliary set of InfoBoxes.
 
-Final glide mode replaces the Cruise mode as soon as the glider is above the
-final glide path. The required hight depends most important on the adjusted MC
-value, but also the ground clearance is respected. On entering a thermal while
-in Final mode XCSoar will switch to the Circling display and back to the Final
-display once the thermal is left again and the final glide condition is still
-met. The potential of having the Final glide mode is obvious when
-flying short tasks in which the aircraft may well be above final glide turning the penultimate
-waypoint.
+Final glide mode replaces the Cruise mode as soon as the glider is
+above the final glide path. The required height depends most
+importantly on the adjusted MC value, but also the ground clearance is
+considered. On entering a thermal while in Final glide mode XCSoar
+will switch to the Circling display and back to the Final glide
+display once the thermal is left again and the final glide condition
+is still met (i.e. the glider is still above the final glide path,
+considering MC setting and terrain). The potential of having the Final
+glide mode is obvious when flying short tasks in which the aircraft
+may well be above final glide turning the penultimate waypoint.
 
 \section{MacCready setting}
 
@@ -112,9 +117,7 @@ sink rate is doubled when compared to a clean glider.
 \includegraphics[angle=0,width=\linewidth,keepaspectratio='true']{figures/cut-clean-dirty-polar.png}
 \end{center}
 Knowing all this, a meaningful setting for a worst-case bug polluted wing could
-scale down the polar by 30\% to 70\%. Last not least this setting is a bit of 
-trial and error, because gliders performance suffer not the same way from type
-to type.
+scale down the polar by 30\% to 70\%. Some experimentation may be required to determine appropriate settings for bugs, because the performance degradation experienced by different glider types may be different.
 
 The ballast value is expressed as a percentage of the glider's total
 ballast capacity.  Depending on the specific construction of the glide
@@ -148,8 +151,10 @@ will cause the software to use the clean polar. A 'clean' setting of
 rate for a given airspeed.
 
 The ballast setting is used to modify the polar to account for any
-water ballast carried during the flight. A ballast setting of 100\%
-modifies the polar to account for a full load of water ballast.  
+water ballast carried during the flight. Ballast is shown in liters,
+and should be set to correspond to the correct water ballast added
+before flight.  The ballast setting modifies the polar to account for
+the indicated load of water ballast.
 
 Use this dialog both before and during the flight to record the mean
 sea level atmospheric pressure, also known as QNH pressure.  The
@@ -244,9 +249,13 @@ this optimum speed value.
   risk MC value is calculated.  The $\gamma$ factor determines the
   fraction of the current MacCready setting as a function of the
   height fraction.  The height fraction used in this calculation is
-  the ratio of the height above the break-off height above terrain
-  ($h$) to the height of the maximum climb above the break-off height
-  above terrain ($h_{top}$).
+  the ratio of the height above terrain ($h$) to the height of the
+  maximum climb (this will usually be close to cloudbase) above the
+  terrain ($h_{top}$).  The $\gamma$ setting thus represents the
+  fraction of the total available climb (cloudbase minus terrain) at
+  which you would wish to abandon the task and begin to prepare for a
+  landout.  Thus, low $\gamma$ values indicate a higher tolerance for
+  landout risk than higher values of $\gamma$.
 
   For the default value, $\gamma=0.0$, there is no compensation ---
   the risk MC is the same as the MC setting.  For $\gamma=1.0$, the
@@ -309,9 +318,11 @@ XCSoar determines the height above sea level of any turn point or
 landing point either from the waypoint file, of if no height is
 specified in the waypoint file, from the terrain file.
 
-The estimated arrival altitude displayed next to landable waypoints is
-calculated for best glide angle at zero MacCready ring setting
-(MC$=0$), adjusted for wind.
+\textbf{The estimated arrival altitude displayed next to landable
+  waypoints is by default calculated for best glide angle at zero
+  MacCready ring setting (MC$=0$), adjusted for wind.  However, a
+  safety MacCready setting may be configured to modify the MacCready
+  setting used in this calculation, as described below.}
 
 Landable fields are only marked as reachable if the estimated arrival
 elevation above ground is above the arrival altitude safety height,
