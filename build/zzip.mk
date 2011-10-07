@@ -14,5 +14,5 @@ $(ZZIP_LIBS): $(call SRC_TO_OBJ,$(ZZIP))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
 
-ZZIP_LIBS += $(ZLIB_LIBS)
+ZZIP_LIBS += $(ZLIB_LDADD)
 ZZIP_LDLIBS += $(ZLIB_LDFLAGS)
