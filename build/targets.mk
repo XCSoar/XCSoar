@@ -289,7 +289,7 @@ endif
 
 ifeq ($(HAVE_WIN32),y)
   ifeq ($(HAVE_CE),y)
-    TARGET_LDFLAGS := -Wl,--major-subsystem-version=$(CE_MAJOR)
+    TARGET_LDFLAGS += -Wl,--major-subsystem-version=$(CE_MAJOR)
     TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
   endif
 
@@ -322,16 +322,16 @@ ifeq ($(TARGET),ANDROID)
 endif
 
 ifneq ($(filter PC WINE,$(TARGET)),)
-  TARGET_LDLIBS := -lwinmm -lstdc++
+  TARGET_LDLIBS += -lwinmm -lstdc++
 endif
 
 ifeq ($(TARGET),CYGWIN)
-  TARGET_LDLIBS := -lwinmm -lstdc++
+  TARGET_LDLIBS += -lwinmm -lstdc++
   TARGET_LDLIBS += -lintl
 endif
 
 ifeq ($(HAVE_CE),y)
-  TARGET_LDLIBS := -lstdc++
+  TARGET_LDLIBS += -lstdc++
 
   ifneq ($(TARGET),ALTAIR)
     TARGET_CPPFLAGS += -DHAVE_NOTE_PRJ_DLL
@@ -349,7 +349,7 @@ ifeq ($(TARGET),UNIX)
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDLIBS := $(ANDROID_TARGET_ROOT)/usr/lib/libstdc++.so
+  TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libstdc++.so
   TARGET_LDLIBS += $(ANDROID_NDK)/sources/cxx-stl/stlport/libs/$(ANDROID_ABI3)/libstlport_static.a
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libGLESv1_CM.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libc.so $(ANDROID_TARGET_ROOT)/usr/lib/libm.so
