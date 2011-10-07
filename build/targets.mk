@@ -293,7 +293,9 @@ ifeq ($(HAVE_WIN32),y)
     TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
   endif
 
-  ifneq ($(TARGET),WINE)
+  ifeq ($(TARGET),WINE)
+    TARGET_LDLIBS += -lpthread
+  else
   ifneq ($(TARGET),CYGWIN)
     # link libstdc++-6.dll statically, so we don't have to distribute it
     TARGET_LDFLAGS += -static
