@@ -19,7 +19,7 @@ $(TARGET_OUTPUT_DIR)/XCSoarLaunch.rsc: Data/XCSoarLaunch.rc $(LAUNCH_RESOURCE_FI
 
 $(XCSOARLAUNCH_DLL): TARGET_LDLIBS = -laygshell
 $(XCSOARLAUNCH_DLL): $(TARGET_OUTPUT_DIR)/XCSoarLaunch.e $(XCSOARLAUNCH_OBJS) $(TARGET_OUTPUT_DIR)/XCSoarLaunch.rsc | $(TARGET_BIN_DIR)/dirstamp
-	$(Q)$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+	$(Q)$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
 else
 

@@ -13,7 +13,7 @@ $(TARGET_OUTPUT_DIR)/XCSoarSetup.e: $(SRC)/XcSoarSetup.def $(XCSOARSETUP_OBJS) |
 $(XCSOARSETUP_DLL): TARGET_LDLIBS =
 $(XCSOARSETUP_DLL): $(TARGET_OUTPUT_DIR)/XCSoarSetup.e $(XCSOARSETUP_OBJS) | $(TARGET_BIN_DIR)/dirstamp
 	@$(NQ)echo "  DLL     $@"
-	$(Q)$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LOADLIBES) $(LDLIBS) -o $@
+	$(Q)$(CC) -shared $(LDFLAGS) $(TARGET_ARCH) $^ $(LDLIBS) -o $@
 
 else
 
