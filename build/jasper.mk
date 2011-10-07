@@ -24,6 +24,7 @@ endif
 
 JASPER_LIBS = $(TARGET_OUTPUT_DIR)/jasper.a
 
+$(JASPER_LIBS): CFLAGS += -Wno-type-limits
 $(JASPER_LIBS): $(call SRC_TO_OBJ,$(JASPER))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^

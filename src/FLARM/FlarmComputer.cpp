@@ -97,8 +97,8 @@ FlarmComputer::Process(FlarmState &flarm, const FlarmState &last_flarm,
 
     // The following calculations are only relevant for targets
     // where information is missing
-    if (traffic.track_received || traffic.turn_rate_received ||
-        traffic.speed_received || traffic.climb_rate_received)
+    if (traffic.track_received && traffic.turn_rate_received &&
+        traffic.speed_received && traffic.climb_rate_received)
       continue;
 
     // Check if the target has been seen before in the last seconds

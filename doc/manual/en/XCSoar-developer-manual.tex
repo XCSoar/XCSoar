@@ -353,6 +353,29 @@ There are objects which are too expensive to copy.  Normal locking
 applies to them.  We have a template class called \texttt{Guard} to
 enforce proper read/write locking.  Example: the task.
 
+
+\chapter{The build system}
+
+A big plain \texttt{Makefile} is used to control the XCSoar build.
+GNU extensions are allowed.
+
+\section{Linker parameters}
+
+The following variables (or variable suffixes) appear in the
+\texttt{Makefile} (conforming to \texttt{automake} conventions):
+
+\begin{description}
+\item[\texttt{LDFLAGS}] Linker flags, such as \texttt{-static} or
+  \texttt{-Wl,...}, but not \texttt{-l}.
+\item[\texttt{LDLIBS}] All \texttt{-l} flags, e.g. \texttt{-lGL}.
+\item[\texttt{LDADD}] Path names of static libraries,
+  e.g. \texttt{/usr/lib/libz.a}.
+\end{description}
+
+Search directories (\texttt{-L}) are technically linker ``flags'', but
+they are allowed in \texttt{LDLIBS}, too.
+
+
 %%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
 \chapter{User interface guidelines}
 

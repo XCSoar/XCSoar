@@ -4,6 +4,8 @@ SUMMARY OF NEW FEATURES AND BUG FIXES SINCE V4.0
 
 Version 6.3 - not yet released
 
+Version 6.2.2 - not yet released
+
 Version 6.2.1 - 2011/09/26
 * faster METAR and TAF download
 * devices

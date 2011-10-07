@@ -303,11 +303,13 @@ endif
 
 ifeq ($(HAVE_WIN32),y)
   ifeq ($(HAVE_CE),y)
-    TARGET_LDFLAGS := -Wl,--major-subsystem-version=$(CE_MAJOR)
+    TARGET_LDFLAGS += -Wl,--major-subsystem-version=$(CE_MAJOR)
     TARGET_LDFLAGS += -Wl,--minor-subsystem-version=$(CE_MINOR)
   endif
 
-  ifneq ($(TARGET),WINE)
+  ifeq ($(TARGET),WINE)
+    TARGET_LDLIBS += -lpthread
+  else
   ifneq ($(TARGET),CYGWIN)
     # link libstdc++-6.dll statically, so we don't have to distribute it
     TARGET_LDFLAGS += -static
@@ -317,9 +319,9 @@ endif
 
 ifeq ($(HAVE_POSIX),y)
 ifneq ($(TARGET),ANDROID)
-  TARGET_LDFLAGS += -lpthread
+  TARGET_LDLIBS += -lpthread
   ifeq ($(shell uname -s),Linux)
-  TARGET_LDFLAGS += -lrt # for clock_gettime()
+  TARGET_LDLIBS += -lrt # for clock_gettime()
   endif
 endif
   ifeq ($(shell uname -s),Darwin)
@@ -336,16 +338,16 @@ ifeq ($(TARGET),ANDROID)
 endif
 
 ifneq ($(filter PC WINE,$(TARGET)),)
-  TARGET_LDLIBS := -lwinmm -lstdc++
+  TARGET_LDLIBS += -lwinmm -lstdc++
 endif
 
 ifeq ($(TARGET),CYGWIN)
-  TARGET_LDLIBS := -lwinmm -lstdc++
+  TARGET_LDLIBS += -lwinmm -lstdc++
   TARGET_LDLIBS += -lintl
 endif
 
 ifeq ($(HAVE_CE),y)
-  TARGET_LDLIBS := -lstdc++
+  TARGET_LDLIBS += -lstdc++
 
   ifneq ($(TARGET),ALTAIR)
     TARGET_CPPFLAGS += -DHAVE_NOTE_PRJ_DLL
@@ -356,14 +358,14 @@ endif
 
 ifeq ($(TARGET),UNIX)
   ifeq ($(shell uname -s),Darwin)
-  TARGET_LDLIBS := $(shell $(CXX) -print-file-name=libstdc++.a)
+  TARGET_LDLIBS += $(shell $(CXX) -print-file-name=libstdc++.a)
   else
-  TARGET_LDLIBS := -lstdc++ -lm
+  TARGET_LDLIBS += -lstdc++ -lm
   endif
 endif
 
 ifeq ($(TARGET),ANDROID)
-  TARGET_LDLIBS := $(ANDROID_TARGET_ROOT)/usr/lib/libstdc++.so
+  TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libstdc++.so
   TARGET_LDLIBS += $(ANDROID_NDK)/sources/cxx-stl/stlport/libs/$(ANDROID_ABI3)/libstlport_static.a
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libGLESv1_CM.so
   TARGET_LDLIBS += $(ANDROID_TARGET_ROOT)/usr/lib/libc.so $(ANDROID_TARGET_ROOT)/usr/lib/libm.so

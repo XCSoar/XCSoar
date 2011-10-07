@@ -1,13 +1,16 @@
 ifeq ($(TARGET),UNIX)
 
 # use the native zlib on UNIX
-ZLIB_LIBS =
-ZLIB_LDFLAGS = -lz
-ZLIB_INCLUDES =
 
 ifeq ($(shell uname -s),Darwin)
-ZLIB_LDFLAGS = /opt/local/lib/libz.a
+ZLIB_LDADD = /opt/local/lib/libz.a
+ZLIB_LDLIBS =
+else
+ZLIB_LDADD =
+ZLIB_LDLIBS = -lz
 endif
+
+ZLIB_INCLUDES =
 
 else
 
@@ -25,12 +28,12 @@ ZLIB_SOURCES = \
 	$(ZLIB_SRC_DIR)/uncompr.c \
 	$(ZLIB_SRC_DIR)/zutil.c
 
-ZLIB_LIBS = $(TARGET_OUTPUT_DIR)/zlib.a
-ZLIB_LDFLAGS =
+ZLIB_LDADD = $(TARGET_OUTPUT_DIR)/zlib.a
+ZLIB_LDLIBS =
 ZLIB_INCLUDES = -I$(ZLIB_SRC_DIR)
 
-$(ZLIB_LIBS): CPPFLAGS += -DNO_VIZ -DHAVE_UNISTD_H
-$(ZLIB_LIBS): $(call SRC_TO_OBJ,$(ZLIB_SOURCES))
+$(ZLIB_LDADD): CPPFLAGS += -DNO_VIZ -DHAVE_UNISTD_H
+$(ZLIB_LDADD): $(call SRC_TO_OBJ,$(ZLIB_SOURCES))
 	@$(NQ)echo "  AR      $@"
 	$(Q)$(AR) $(ARFLAGS) $@ $^
 

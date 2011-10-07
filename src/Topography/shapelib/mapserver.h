@@ -45,8 +45,10 @@
 
 #define MS_VERSION_NUM (MS_VERSION_MAJOR*10000+MS_VERSION_MINOR*100+MS_VERSION_REV)
 
+#ifndef __APPLE__
 #define NEED_STRLCAT
 #define NEED_STRLCPY
+#endif
 
 /* 
 ** Main includes. If a particular header was needed by several .c files then
