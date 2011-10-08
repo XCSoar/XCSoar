@@ -139,6 +139,10 @@ AddClicked(gcc_unused WndButton &button)
   NOAAStore::AddStation(code);
   NOAAStore::SaveToProfile();
 
+  DialogJobRunner runner(wf->GetMainWindow(), wf->GetLook(),
+                         _("Download"), true);
+  NOAAStore::UpdateStation(code, runner);
+
   UpdateList();
 }
 
