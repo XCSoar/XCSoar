@@ -31,14 +31,16 @@ class GlidePolar;
 class RoutePlannerGlue;
 
 class ReachIntersectionTest: public AbortIntersectionTest {
+  const RoutePlannerGlue *route;
+
 public:
   ReachIntersectionTest(): route(NULL) {};
+
   void SetRoute(const RoutePlannerGlue *_route) {
     route = _route;
   }
+
   virtual bool Intersects(const AGeoPoint& destination);
-private:
-  const RoutePlannerGlue *route;
 };
 
 /**
