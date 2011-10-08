@@ -41,7 +41,7 @@ Profile::Use()
 
   LoadUnits();
 
-  Get(szProfileDebounceTimeout, XCSoarInterface::debounceTimeout);
+  Get(szProfileDebounceTimeout, XCSoarInterface::debounce_timeout);
 
   /* JMW broken
   if (Get(szProfileAccelerometerZero, Temp))
@@ -56,7 +56,7 @@ Profile::Use()
   GetEnum(szProfileAppDialogStyle, DialogStyleSetting);
 
   Get(szProfileMenuTimeout,
-      XCSoarInterface::MenuTimeoutMax);
+      XCSoarInterface::menu_timeout_max);
 }
 
 void

@@ -147,10 +147,10 @@ InterfaceConfigPanel::Init(WndForm *_wf)
   InitFileField(*wf, _T("prpStatusFile"), szProfileStatusFile, _T("*.xcs\0"));
 
   LoadFormProperty(*wf, _T("prpMenuTimeout"),
-                   XCSoarInterface::MenuTimeoutMax / 2);
+                   XCSoarInterface::menu_timeout_max / 2);
 
   LoadFormProperty(*wf, _T("prpDebounceTimeout"),
-                   XCSoarInterface::debounceTimeout);
+                   XCSoarInterface::debounce_timeout);
 
   wp = (WndProperty*)wf->FindByName(_T("prpTextInput"));
   assert(wp != NULL);
@@ -238,16 +238,16 @@ InterfaceConfigPanel::Save(bool &requirerestart)
 
   wp = (WndProperty*)wf->FindByName(_T("prpMenuTimeout"));
   if (wp) {
-    if ((int)XCSoarInterface::MenuTimeoutMax != wp->GetDataField()->GetAsInteger()*2) {
-      XCSoarInterface::MenuTimeoutMax = wp->GetDataField()->GetAsInteger()*2;
-      Profile::Set(szProfileMenuTimeout,XCSoarInterface::MenuTimeoutMax);
+    if ((int)XCSoarInterface::menu_timeout_max != wp->GetDataField()->GetAsInteger()*2) {
+      XCSoarInterface::menu_timeout_max = wp->GetDataField()->GetAsInteger()*2;
+      Profile::Set(szProfileMenuTimeout,XCSoarInterface::menu_timeout_max);
       changed = true;
     }
   }
 
   changed |= SaveFormProperty(*wf, _T("prpDebounceTimeout"),
                               szProfileDebounceTimeout,
-                              XCSoarInterface::debounceTimeout);
+                              XCSoarInterface::debounce_timeout);
 
 
   DialogSettings &dialog_settings = CommonInterface::SetUISettings().dialog;

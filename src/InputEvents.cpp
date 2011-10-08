@@ -670,7 +670,7 @@ InputEvents::processGo(unsigned eventid)
 void
 InputEvents::HideMenu()
 {
-  MenuTimeOut = XCSoarInterface::MenuTimeoutMax;
+  MenuTimeOut = XCSoarInterface::menu_timeout_max;
   ProcessMenuTimer();
   ResetDisplayTimeOut();
 }
@@ -709,7 +709,7 @@ InputEvents::ProcessMenuTimer()
     /* no menu updates while a dialog is visible */
     return;
 
-  if (MenuTimeOut == XCSoarInterface::MenuTimeoutMax) {
+  if (MenuTimeOut == XCSoarInterface::menu_timeout_max) {
     if (CommonInterface::IsPanning()) {
       setMode(MODE_PAN);
     } else {

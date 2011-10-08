@@ -48,15 +48,15 @@ UIState CommonInterface::ui_state;
 
 bool CommonInterface::movement_detected = false;
 
-bool ActionInterface::doForceShutdown = false;
+bool ActionInterface::force_shutdown = false;
 
 InterfaceBlackboard CommonInterface::blackboard;
 StatusMessageList CommonInterface::status_messages;
 MainWindow CommonInterface::main_window(status_messages);
 
 // settings used only by interface thread scope
-unsigned XCSoarInterface::debounceTimeout = 250;
-unsigned ActionInterface::MenuTimeoutMax = 8 * 4;
+unsigned XCSoarInterface::debounce_timeout = 250;
+unsigned ActionInterface::menu_timeout_max = 8 * 4;
 
 bool
 CommonInterface::IsPanning()
@@ -151,14 +151,14 @@ ActionInterface::SendSettingsMap(const bool trigger_draw)
 void
 ActionInterface::SignalShutdown(bool force)
 {
-  doForceShutdown = force;
+  force_shutdown = force;
   main_window.close(); // signals close
 }
 
 bool
 XCSoarInterface::CheckShutdown()
 {
-  if (doForceShutdown)
+  if (force_shutdown)
     return true;
 
   return MessageBoxX(_("Quit program?"), _T("XCSoar"),
@@ -181,7 +181,7 @@ XCSoarInterface::Debounce(void)
     // so a key press just triggers turning the display on again
     return false;
 
-  return fps_last.check_update(debounceTimeout);
+  return fps_last.check_update(debounce_timeout);
 #endif
 }
 

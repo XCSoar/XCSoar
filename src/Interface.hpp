@@ -145,7 +145,7 @@ class ActionInterface: public CommonInterface {
 
 public:
   /** timeout in quarter seconds of menu button */
-  static unsigned MenuTimeoutMax;
+  static unsigned menu_timeout_max;
 
 protected:
   /**
@@ -154,7 +154,7 @@ protected:
   static void DisplayModes();
   static void SendSettingsComputer();
 
-  static bool doForceShutdown;
+  static bool force_shutdown;
 
 public:
   /**
@@ -185,7 +185,7 @@ public:
 class XCSoarInterface: public ActionInterface {
 public:
   // settings
-  static unsigned debounceTimeout;
+  static unsigned debounce_timeout;
 
 public:
   static bool Debounce();
