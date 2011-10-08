@@ -384,8 +384,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       return;
 
     // Write the relativ altitude devided by 100 to the Buffer
-    TCHAR Buffer[10];
-    _stprintf(Buffer, _T("%d"), abs(relalt));
+    TCHAR buffer[10];
+    _stprintf(buffer, _T("%d"), abs(relalt));
 
     // Select font
     canvas.background_transparent();
@@ -393,14 +393,12 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     canvas.set_text_color(look.hcStandard);
 
     // Calculate size of the output string
-    PixelSize tsize = canvas.text_size(Buffer);
+    PixelSize tsize = canvas.text_size(buffer);
 
     int dist = Layout::FastScale(traffic.HasAlarm() ? 12 : 8);
 
     // Draw string
-    canvas.text(sc[i].x + dist,
-                sc[i].y - tsize.cy / 2,
-                Buffer);
+    canvas.text(sc[i].x + dist, sc[i].y - tsize.cy / 2, buffer);
 
     // Set black brush for the up/down arrow
     canvas.black_brush();
