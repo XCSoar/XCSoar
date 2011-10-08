@@ -148,6 +148,9 @@ public:
   static unsigned MenuTimeoutMax;
 
 protected:
+  /**
+   * Determine whether vario gauge, FLARM radar and infoboxes should be drawn
+   */
   static void DisplayModes();
   static void SendSettingsComputer();
 
@@ -166,6 +169,7 @@ public:
    * Call this after SETTINGS_MAP has been modified with
    * SetSettingsMap().  It sends the new values to all sub systems,
    * and optionally forces a redraw.
+   * @param trigger_draw Triggers the draw event after sending if true
    */
   static void SendSettingsMap(const bool trigger_draw = false);
 

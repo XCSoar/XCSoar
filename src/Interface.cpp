@@ -127,10 +127,6 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
     device_blackboard.SetMC(mc);
 }
 
-/**
- * Send the own SettingsMap to the DeviceBlackboard
- * @param trigger_draw Triggers the draw event after sending if true
- */
 void
 ActionInterface::SendSettingsMap(const bool trigger_draw)
 {
@@ -189,9 +185,6 @@ XCSoarInterface::Debounce(void)
 #endif
 }
 
-/**
- * Determine whether vario gauge, FLARM radar and infoboxes should be drawn
- */
 void
 ActionInterface::DisplayModes()
 {
