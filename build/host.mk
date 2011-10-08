@@ -14,7 +14,7 @@ HOST_CFLAGS = $(OPTIMIZE) $(C_FEATURES) $(CFLAGS)
 
 host-cc-flags = $(DEPFLAGS) $(HOST_CFLAGS) $(HOST_CPPFLAGS)
 host-cxx-flags = $(DEPFLAGS) $(HOST_CXXFLAGS) $(HOST_CPPFLAGS)
-host-ld-flags = -lm -lstdc++
+host-ld-libs = -lm -lstdc++
 
 $(HOST_OUTPUT_DIR)/%.o: %.c | $(HOST_OUTPUT_DIR)/%/../dirstamp
 	@$(NQ)echo "  HOSTCC  $@"
@@ -26,4 +26,4 @@ $(HOST_OUTPUT_DIR)/%.o: %.cpp | $(HOST_OUTPUT_DIR)/%/../dirstamp
 
 $(HOST_OUTPUT_DIR)/%$(HOST_EXEEXT): $(HOST_OUTPUT_DIR)/%.o
 	@$(NQ)echo "  HOSTLD  $@"
-	$(Q)$(HOSTCC) $(host-ld-flags) -o $@ $^
+	$(Q)$(HOSTCC) $^ $(host-ld-libs) -o $@
