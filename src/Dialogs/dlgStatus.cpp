@@ -375,8 +375,8 @@ UpdateValuesRules(void)
   TCHAR name[64];
   {
     ProtectedTaskManager::Lease task_manager(*protected_task_manager);
-    const TCHAR *name2 = task_manager->get_mode() == TaskManager::MODE_ORDERED
-      ? task_manager->get_ordered_taskpoint_name(0)
+    const TCHAR *name2 = task_manager->GetMode() == TaskManager::MODE_ORDERED
+      ? task_manager->GetOrderedTaskpointName(0)
       : NULL;
     if (name2 != NULL) {
       CopyString(name, name2, 64);

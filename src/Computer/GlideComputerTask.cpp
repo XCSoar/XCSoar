@@ -68,28 +68,28 @@ GlideComputerTask::ProcessBasicTask()
 
   ProtectedTaskManager::ExclusiveLease task(m_task);
 
-  task->set_task_behaviour(SettingsComputer().task);
+  task->SetTaskBehaviour(SettingsComputer().task);
 
   if (time_advanced() && basic.location_available) {
     const AircraftState current_as = ToAircraftState(basic, Calculated());
     const AircraftState last_as = ToAircraftState(LastBasic(),
                                                    LastCalculated());
 
-    task->update(current_as, last_as);
+    task->Update(current_as, last_as);
 
     if (Calculated().last_thermal.IsDefined()) {
-      if (task->update_auto_mc(current_as, std::max(fixed_zero, 
-                                                    Calculated().last_thermal_average_smooth))) {
-        derived.auto_mac_cready = task->get_glide_polar().GetMC();
+      if (task->UpdateAutoMC(current_as, std::max(fixed_zero,
+                                                  Calculated().last_thermal_average_smooth))) {
+        derived.auto_mac_cready = task->GetGlidePolar().GetMC();
         derived.auto_mac_cready_available.Update(basic.clock);
       }
     }
   }
 
-  SetCalculated().task_stats = task->get_stats();
-  SetCalculated().common_stats = task->get_common_stats();
+  SetCalculated().task_stats = task->GetStats();
+  SetCalculated().common_stats = task->GetCommonStats();
 
-  SetCalculated().glide_polar_safety = task->get_safety_polar();
+  SetCalculated().glide_polar_safety = task->GetSafetyPolar();
 }
 
 void
@@ -99,8 +99,8 @@ GlideComputerTask::ProcessMoreTask()
 
   {
     ProtectedTaskManager::Lease task(m_task);
-    glide_polar = task->get_glide_polar();
-    safety_polar = task->get_safety_polar();
+    glide_polar = task->GetGlidePolar();
+    safety_polar = task->GetSafetyPolar();
   }
 
   route.ProcessRoute(Basic(), SetCalculated(), LastCalculated(),
@@ -133,7 +133,7 @@ GlideComputerTask::ProcessIdle(bool exhaustive)
   trace.Idle(SettingsComputer(), as);
 
   ProtectedTaskManager::ExclusiveLease task(m_task);
-  task->update_idle(as);
+  task->UpdateIdle(as);
 }
 
 void 
@@ -144,7 +144,7 @@ GlideComputerTask::OnTakeoff()
     return;
 
   ProtectedTaskManager::ExclusiveLease task(m_task);
-  task->takeoff_autotask(Basic().location, Calculated().terrain_altitude);
+  task->TakeoffAutotask(Basic().location, Calculated().terrain_altitude);
 }
 
 void 

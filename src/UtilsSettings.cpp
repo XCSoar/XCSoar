@@ -140,8 +140,8 @@ SettingsLeave()
   if (WaypointFileChanged && protected_task_manager != NULL) {
     ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
     TaskEvents task_events;
-    GlidePolar glide_polar(lease->get_glide_polar());
-    OrderedTask *task = lease->clone(task_events,
+    GlidePolar glide_polar(lease->GetGlidePolar());
+    OrderedTask *task = lease->Clone(task_events,
                                      XCSoarInterface::SettingsComputer().task,
                                      glide_polar);
     if (task) {

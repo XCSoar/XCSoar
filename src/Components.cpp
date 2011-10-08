@@ -210,7 +210,7 @@ XCSoarInterface::AfterStartup()
     delete defaultTask;
   }
 
-  task_manager->resume();
+  task_manager->Resume();
 
   main_window.full_screen();
   InfoBoxManager::SetDirty();
@@ -332,7 +332,7 @@ XCSoarInterface::Startup()
 
   // Initialize main blackboard data
   task_manager = new TaskManager(task_events, way_points);
-  task_manager->reset();
+  task_manager->Reset();
 
   protected_task_manager =
     new ProtectedTaskManager(*task_manager,
@@ -367,7 +367,7 @@ XCSoarInterface::Startup()
   gp.SetMC(SettingsComputer().task.safety_mc);
   PlaneGlue::FromProfile(SetSettingsComputer().plane);
   PlaneGlue::Synchronize(SettingsComputer().plane, SetSettingsComputer(), gp);
-  task_manager->set_glide_polar(gp);
+  task_manager->SetGlidePolar(gp);
 
   // Read the topography file(s)
   topography = new TopographyStore();

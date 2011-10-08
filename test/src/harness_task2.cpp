@@ -32,8 +32,8 @@ bool test_task_bad(TaskManager& task_manager,
 {
   test_task_random(task_manager,waypoints,2);
 
-  task_manager.set_factory(TaskBehaviour::FACTORY_RT);
-  AbstractTaskFactory& fact = task_manager.get_factory();
+  task_manager.SetFactory(TaskBehaviour::FACTORY_RT);
+  AbstractTaskFactory& fact = task_manager.GetFactory();
 
   const Waypoint* wp = random_waypoint(waypoints);
 
@@ -48,9 +48,9 @@ bool test_task_bad(TaskManager& task_manager,
 
   // test it is bad for AAT
 
-  task_manager.set_factory(TaskBehaviour::FACTORY_AAT);
+  task_manager.SetFactory(TaskBehaviour::FACTORY_AAT);
 
-  AbstractTaskFactory& bfact = task_manager.get_factory();
+  AbstractTaskFactory& bfact = task_manager.GetFactory();
 
   ok (!bfact.createIntermediate(s,*wp),"bad intermediate type (after task change)",0);
 
@@ -60,7 +60,7 @@ bool test_task_bad(TaskManager& task_manager,
   bfact.remove(1);
   ok (bfact.validate(),"ok with zero tps (just start and finish)",0);
 
-  ok (bfact.remove(task_manager.task_size()-1,false),"remove finish manually",0);
+  ok (bfact.remove(task_manager.TaskSize()-1,false),"remove finish manually",0);
   ok (!bfact.validate(),"aat is invalid (no finish)",0);
 
   return true;

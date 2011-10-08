@@ -152,7 +152,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
     return;
 
   ProtectedTaskManager::Lease task_manager(*task);
-  const AbstractTask *task = task_manager->get_active_task();
+  const AbstractTask *task = task_manager->GetActiveTask();
   if (task && task->check_task()) {
 
     OZRenderer ozv(task_look, airspace_renderer.GetLook(),
@@ -163,7 +163,7 @@ TargetMapWindow::DrawTask(Canvas &canvas)
                         /* we're accessing the OrderedTask here,
                            which may be invalid at this point, but it
                            will be used only if active, so it's ok */
-                        task_manager->get_ordered_task().get_task_projection(),
+                        task_manager->GetOrderedTask().get_task_projection(),
                         ozv, false, RenderTaskPoint::ALL,
                         Basic().location);
     TaskRenderer dv(tpv, projection.GetScreenBounds());
@@ -290,7 +290,7 @@ TargetMapWindow::SetTarget(unsigned index)
 
   {
     ProtectedTaskManager::Lease lease(*task);
-    const OrderedTask &o_task = lease->get_ordered_task();
+    const OrderedTask &o_task = lease->GetOrderedTask();
     const OrderedTaskPoint *tp = o_task.getTaskPoint(index);
     if (tp == NULL)
       return;

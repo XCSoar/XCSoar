@@ -92,7 +92,7 @@ CreateDefaultTask(TaskManager &task_manager, const Waypoints &way_points)
   const TCHAR start_name[] = _T("Bergneustadt");
 
   task_manager.set_factory(OrderedTask::FACTORY_MIXED);
-  AbstractTaskFactory &factory = task_manager.get_factory();
+  AbstractTaskFactory &factory = task_manager.GetFactory();
 
   const Waypoint *wp;
   OrderedTaskPoint *tp;

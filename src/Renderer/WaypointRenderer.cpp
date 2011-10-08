@@ -399,11 +399,11 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
     // task items come first, this is the only way we know that an item is in task,
     // and we won't add it if it is already there
-    if (task_manager->stats_valid()) {
+    if (task_manager->StatsValid()) {
       v.set_task_valid();
     }
 
-    const AbstractTask *atask = task_manager->get_active_task();
+    const AbstractTask *atask = task_manager->GetActiveTask();
     if (atask != NULL)
       atask->tp_CAccept(v);
   }

@@ -69,7 +69,7 @@ public:
   void SetGlidePolar(const GlidePolar &glide_polar);
 
   gcc_pure
-  TaskManager::TaskMode_t GetMode() const;
+  TaskManager::TaskMode GetMode() const;
 
   gcc_pure
   const OrderedTaskBehaviour GetOrderedTaskBehaviour() const;

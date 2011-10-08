@@ -33,35 +33,35 @@ Copyright_License {
 
 ProtectedTaskManager::~ProtectedTaskManager() {
   ExclusiveLease lease(*this);
-  lease->set_intersection_test(NULL); // de-register
+  lease->SetIntersectionTest(NULL); // de-register
 }
 
 void 
 ProtectedTaskManager::SetGlidePolar(const GlidePolar &glide_polar)
 {
   ExclusiveLease lease(*this);
-  lease->set_glide_polar(glide_polar);
+  lease->SetGlidePolar(glide_polar);
 }
 
-TaskManager::TaskMode_t 
+TaskManager::TaskMode 
 ProtectedTaskManager::GetMode() const
 {
   Lease lease(*this);
-  return lease->get_mode();
+  return lease->GetMode();
 }
 
 const OrderedTaskBehaviour 
 ProtectedTaskManager::GetOrderedTaskBehaviour() const
 {
   Lease lease(*this);
-  return lease->get_ordered_task_behaviour();
+  return lease->GetOrderedTaskBehaviour();
 }
 
 const Waypoint* 
 ProtectedTaskManager::GetActiveWaypoint() const
 {
   Lease lease(*this);
-  const TaskWaypoint *tp = lease->getActiveTaskPoint();
+  const TaskWaypoint *tp = lease->GetActiveTaskPoint();
   if (tp)
     return &tp->GetWaypoint();
 
@@ -73,7 +73,7 @@ ProtectedTaskManager::IsInSector (const unsigned index,
                                   const AircraftState &ref) const
 {
   Lease lease(*this);
-  return lease->isInSector(index, ref);
+  return lease->IsInSector(index, ref);
 }
 
 bool
@@ -81,28 +81,28 @@ ProtectedTaskManager::SetTarget(const unsigned index, const fixed range,
    const fixed radial)
 {
   ExclusiveLease lease(*this);
-  return lease->set_target(index, range, radial);
+  return lease->SetTarget(index, range, radial);
 }
 
 bool
 ProtectedTaskManager::TargetLock(const unsigned index, bool do_lock)
 {
   ExclusiveLease lease(*this);
-  return lease->target_lock(index, do_lock);
+  return lease->TargetLock(index, do_lock);
 }
 
 const TCHAR*
 ProtectedTaskManager::GetOrderedTaskpointName(const unsigned index) const
 {
  Lease lease(*this);
- return lease->get_ordered_taskpoint_name(index);
+ return lease->GetOrderedTaskpointName(index);
 }
 
 void 
 ProtectedTaskManager::IncrementActiveTaskPoint(int offset)
 {
   ExclusiveLease lease(*this);
-  lease->incrementActiveTaskPoint(offset);
+  lease->IncrementActiveTaskPoint(offset);
 }
 
 void 
@@ -110,25 +110,25 @@ ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
 {
   ExclusiveLease lease(*this);
 
-  switch (lease->get_task_advance().get_advance_state()) {
+  switch (lease->GetTaskAdvance().get_advance_state()) {
   case TaskAdvance::MANUAL:
   case TaskAdvance::AUTO:
-    lease->incrementActiveTaskPoint(offset);
+    lease->IncrementActiveTaskPoint(offset);
     break;
   case TaskAdvance::START_DISARMED:
   case TaskAdvance::TURN_DISARMED:
     if (offset>0) {
-      lease->get_task_advance().set_armed(true);
+      lease->GetTaskAdvance().set_armed(true);
     } else {
-      lease->incrementActiveTaskPoint(offset);
+      lease->IncrementActiveTaskPoint(offset);
     }
     break;
   case TaskAdvance::START_ARMED:
   case TaskAdvance::TURN_ARMED:
     if (offset>0) {
-      lease->incrementActiveTaskPoint(offset);
+      lease->IncrementActiveTaskPoint(offset);
     } else {
-      lease->get_task_advance().set_armed(false);
+      lease->GetTaskAdvance().set_armed(false);
     }
     break;
   default:
@@ -140,50 +140,50 @@ bool
 ProtectedTaskManager::DoGoto(const Waypoint &wp)
 {
   ExclusiveLease lease(*this);
-  return lease->do_goto(wp);
+  return lease->DoGoto(wp);
 }
 
 AircraftState 
 ProtectedTaskManager::GetStartState() const
 {
   Lease lease(*this);
-  return lease->get_start_state();
+  return lease->GetStartState();
 }
 
 fixed 
 ProtectedTaskManager::GetFinishHeight() const
 {
   Lease lease(*this);
-  return lease->get_finish_height();
+  return lease->GetFinishHeight();
 }
 
 OrderedTask*
 ProtectedTaskManager::TaskClone() const
 {
   Lease lease(*this);
-  return lease->clone(task_events, task_behaviour,
-                      lease->get_glide_polar());
+  return lease->Clone(task_events, task_behaviour,
+                      lease->GetGlidePolar());
 }
 
 OrderedTask* 
 ProtectedTaskManager::TaskCopy(const OrderedTask &that) const
 {
   Lease lease(*this);
-  return that.clone(task_events, task_behaviour, lease->get_glide_polar());
+  return that.clone(task_events, task_behaviour, lease->GetGlidePolar());
 }
 
 OrderedTask* 
 ProtectedTaskManager::TaskBlank() const
 {
   Lease lease(*this);
-  return new OrderedTask(task_events, task_behaviour, lease->get_glide_polar());
+  return new OrderedTask(task_events, task_behaviour, lease->GetGlidePolar());
 }
 
 bool
 ProtectedTaskManager::TaskCommit(const OrderedTask& that)
 {
   ExclusiveLease lease(*this);
-  return lease->commit(that);
+  return lease->Commit(that);
 }
 
 bool 
@@ -250,7 +250,7 @@ void
 ProtectedTaskManager::Reset()
 {
   ExclusiveLease lease(*this);
-  lease->reset();
+  lease->Reset();
 }
 
 void
@@ -258,7 +258,7 @@ ProtectedTaskManager::SetRoutePlanner(const RoutePlannerGlue *_route) {
   intersection_test.SetRoute(_route);
 
   ExclusiveLease lease(*this);
-  lease->set_intersection_test(&intersection_test);
+  lease->SetIntersectionTest(&intersection_test);
 }
 
 bool

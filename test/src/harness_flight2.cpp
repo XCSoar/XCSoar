@@ -234,16 +234,16 @@ bool test_abort(int n_wind)
   TaskManager task_manager(default_events,
                            waypoints);
 
-  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.all_off();
   task_behaviour.enable_trace = false;
-  task_manager.set_task_behaviour(task_behaviour);
+  task_manager.SetTaskBehaviour(task_behaviour);
 
-  task_manager.set_glide_polar(glide_polar);
+  task_manager.SetGlidePolar(glide_polar);
 
   test_task(task_manager, waypoints, 1);
 
-  task_manager.abort();
+  task_manager.Abort();
   task_report(task_manager, "abort");
 
   autopilot_parms.goto_target = true;
@@ -267,17 +267,17 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
                            waypoints);
 
 
-  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.all_off();
   task_behaviour.auto_mc = fixed(auto_mc);
   task_behaviour.enable_trace = false;
-  task_manager.set_task_behaviour(task_behaviour);
+  task_manager.SetTaskBehaviour(task_behaviour);
 
-  task_manager.set_glide_polar(glide_polar);
+  task_manager.SetGlidePolar(glide_polar);
 
   test_task(task_manager, waypoints, 1);
 
-  task_manager.do_goto(*waypoints.lookup_id(id));
+  task_manager.DoGoto(*waypoints.lookup_id(id));
   task_report(task_manager, "goto");
 
   waypoints.clear(); // clear waypoints so abort wont do anything
@@ -302,12 +302,12 @@ bool test_null()
   TaskManager task_manager(default_events,
                            waypoints);
 
-  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.all_off();
   task_behaviour.enable_trace = false;
-  task_manager.set_task_behaviour(task_behaviour);
+  task_manager.SetTaskBehaviour(task_behaviour);
 
-  task_manager.set_glide_polar(glide_polar);
+  task_manager.SetGlidePolar(glide_polar);
 
   task_report(task_manager, "null");
 
@@ -433,14 +433,14 @@ bool test_olc(int n_wind, Contests olc_type)
   TaskManager task_manager(default_events,
                            waypoints);
 
-  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.all_off();
   task_behaviour.enable_olc = true;
   if (!verbose)
     task_behaviour.enable_trace = false;
-  task_manager.set_task_behaviour(task_behaviour);
+  task_manager.SetTaskBehaviour(task_behaviour);
 
-  task_manager.set_glide_polar(glide_polar);
+  task_manager.SetGlidePolar(glide_polar);
   test_task(task_manager, waypoints, 1);
 
   waypoints.clear(); // clear waypoints so abort wont do anything

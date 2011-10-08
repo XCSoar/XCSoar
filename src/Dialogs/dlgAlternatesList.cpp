@@ -40,7 +40,7 @@ static void
 UpdateAlternates()
 {
   ProtectedTaskManager::Lease lease(*protected_task_manager);
-  alternates = lease->getAlternates();
+  alternates = lease->GetAlternates();
 }
 
 static void

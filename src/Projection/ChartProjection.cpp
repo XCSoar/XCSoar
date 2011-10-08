@@ -37,8 +37,8 @@ ChartProjection::Set(const PixelRect &rc,
                      const TaskManager &task,
                      const GeoPoint &fallback_loc)
 {
-  const GeoPoint center = task.get_task_center(fallback_loc);
-  const fixed radius = max(fixed(10000), task.get_task_radius(fallback_loc));
+  const GeoPoint center = task.GetTaskCenter(fallback_loc);
+  const fixed radius = max(fixed(10000), task.GetTaskRadius(fallback_loc));
   set_projection(rc, center, radius);
 }
 

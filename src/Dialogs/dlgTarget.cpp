@@ -231,17 +231,17 @@ RefreshCalculator()
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
-    bAAT = lease->has_target(target_point);
+    bAAT = lease->HasTarget(target_point);
 
     if (!bAAT) {
       nodisplay = true;
       IsLocked = false;
     } else {
-      lease->get_target_range_radial(target_point, Range, Radial);
-      IsLocked = lease->target_is_locked(target_point);
+      lease->GetTargetRangeRadial(target_point, Range, Radial);
+      IsLocked = lease->TargetIsLocked(target_point);
     }
 
-    aatTime = lease->get_ordered_task_behaviour().aat_min_time;
+    aatTime = lease->GetOrderedTaskBehaviour().aat_min_time;
   }
 
   if (chkbOptimized) {
@@ -330,8 +330,8 @@ OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
       const fixed RangeNew = df.GetAsFixed() / fixed(100);
       if (RangeNew != Range) {
         ProtectedTaskManager::ExclusiveLease lease(*protected_task_manager);
-        lease->set_target(target_point, RangeNew, Radial);
-        lease->get_target_range_radial(target_point, Range, Radial);
+        lease->SetTarget(target_point, RangeNew, Radial);
+        lease->GetTargetRangeRadial(target_point, Range, Radial);
       }
     }
     break;
@@ -432,9 +432,9 @@ static void
 GetTaskData()
 {
   ProtectedTaskManager::Lease task_manager(*protected_task_manager);
-  const AbstractTask *at = task_manager->get_active_task();
+  const AbstractTask *at = task_manager->GetActiveTask();
 
-  ActiveTaskPointOnEntry = task_manager->getActiveTaskPointIndex();
+  ActiveTaskPointOnEntry = task_manager->GetActiveTaskPointIndex();
   TaskSize = at->TaskSize();
 }
 

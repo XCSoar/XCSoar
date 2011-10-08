@@ -250,9 +250,9 @@ AirspaceAircraftPerformanceTask::AirspaceAircraftPerformanceTask(const AircraftS
                                                                  const GlidePolar &polar,
                                                                  const TaskManager &task)
 {
-  assert(task.getActiveTaskPoint());
+  assert(task.GetActiveTaskPoint());
 
-  const GlideResult &solution = task.get_stats().current_leg.solution_remaining;
+  const GlideResult &solution = task.GetStats().current_leg.solution_remaining;
   const fixed leg_distance = solution.vector.distance;
   const fixed time_remaining = solution.time_elapsed;
 

@@ -41,10 +41,10 @@ TargetMapWindow::TargetDragged(const int x, const int y)
 
   GeoPoint gp = projection.ScreenToGeo(x, y);
   ProtectedTaskManager::ExclusiveLease task_manager(*task);
-  if (!task_manager->target_is_locked(target_index))
-    task_manager->target_lock(target_index, true);
+  if (!task_manager->TargetIsLocked(target_index))
+    task_manager->TargetLock(target_index, true);
 
-  task_manager->set_target(target_index, gp, true);
+  task_manager->SetTarget(target_index, gp, true);
   return true;
 }
 
@@ -55,11 +55,11 @@ TargetMapWindow::isClickOnTarget(const RasterPoint pc)
     return false;
 
   ProtectedTaskManager::Lease task_manager(*task);
-  if (!task_manager->has_target(target_index))
+  if (!task_manager->HasTarget(target_index))
     return false;
 
   const GeoPoint gnull(Angle::Zero(), Angle::Zero());
-  const GeoPoint& t = task_manager->get_location_target(target_index, gnull);
+  const GeoPoint& t = task_manager->GetLocationTarget(target_index, gnull);
 
   if (t == gnull)
     return false;

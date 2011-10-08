@@ -51,7 +51,7 @@ public:
   /**
    * Enumeration of task modes
    */
-  enum TaskMode_t {
+  enum TaskMode {
     MODE_NULL = 0,
     MODE_ORDERED,
     MODE_ABORT,
@@ -59,14 +59,14 @@ public:
   };
 
 private:
-  GlidePolar m_glide_polar;
+  GlidePolar glide_polar;
 
   TaskBehaviour task_behaviour;
   OrderedTask task_ordered;
   GotoTask task_goto;
   AlternateTask task_abort;
 
-  TaskMode_t mode;
+  TaskMode mode;
   AbstractTask* active_task;
 
   TaskStats null_stats;
@@ -85,14 +85,13 @@ public:
    *
    * @return Initialised object
    */
-  TaskManager(TaskEvents &te,
-              const Waypoints &wps);
+  TaskManager(TaskEvents &te, const Waypoints &wps);
 
   /**
    * Returns a reference to the OrderedTask instance, even if it is
    * invalid or inactive.
    */
-  const OrderedTask &get_ordered_task() const {
+  const OrderedTask &GetOrderedTask() const {
     return task_ordered;
   }
 
@@ -101,14 +100,14 @@ public:
    *
    * @param offset Offset value
    */
-  void incrementActiveTaskPoint(int offset);
+  void IncrementActiveTaskPoint(int offset);
 
   /**
    * Sets active taskpoint sequence for active task
    *
    * @param index Sequence number of task point
    */
-  void setActiveTaskPoint(unsigned index);
+  void SetActiveTaskPoint(unsigned index);
 
   /**
    * Accessor for active taskpoint sequence for active task
@@ -116,7 +115,7 @@ public:
    * @return Sequence number of task point
    */
   gcc_pure
-  unsigned getActiveTaskPointIndex() const;
+  unsigned GetActiveTaskPointIndex() const;
 
   /**
    * Accessor of current task point of active task
@@ -124,7 +123,7 @@ public:
    * @return TaskPoint of active task point, and 0 if no active task
    */
   gcc_pure
-  TaskWaypoint* getActiveTaskPoint() const;
+  TaskWaypoint* GetActiveTaskPoint() const;
 
   /**
    * Get a random point in the task OZ (for testing simulation route)
@@ -134,8 +133,8 @@ public:
    *
    * @return Location of point
    */
-  GeoPoint random_point_in_task(const unsigned index,
-                                const fixed mag=fixed_one) const;
+  GeoPoint RandomPointInTask(const unsigned index,
+                             const fixed mag = fixed_one) const;
 
   /**
    * Retrieve a copy of the task alternates
@@ -144,24 +143,24 @@ public:
    *
    * @return Vector of alternates
    */
-  const AbortTask::AlternateVector &getAlternates() const {
+  const AbortTask::AlternateVector &GetAlternates() const {
     return task_abort.getAlternates();
   }
 
   /** Reset the tasks (as if never flown) */
-  void reset();
+  void Reset();
 
   /** Set active task to abort mode. */
-  void abort() {
-    set_mode(MODE_ABORT);
+  void Abort() {
+    SetMode(MODE_ABORT);
   }
 
   /**
    * Sets active task to ordered task (or goto if none exists) after
    * goto or aborting.
    */
-  void resume() {
-    set_mode(MODE_ORDERED);
+  void Resume() {
+    SetMode(MODE_ORDERED);
   }
 
   /**
@@ -170,7 +169,7 @@ public:
    * @param wp Waypoint to go to
    * @return True if successful
    */
-  bool do_goto(const Waypoint & wp);
+  bool DoGoto(const Waypoint & wp);
 
   /**
    * Updates internal state of task given new aircraft.
@@ -182,7 +181,7 @@ public:
    * @param state_last Aircraft state at last update
    * @return True if internal state changed
    */
-  bool update(const AircraftState &state_now, 
+  bool Update(const AircraftState &state_now, 
               const AircraftState &state_last);
 
   /**
@@ -194,7 +193,7 @@ public:
    *
    * @return True if internal state changed
    */
-  bool update_idle(const AircraftState &state);
+  bool UpdateIdle(const AircraftState &state);
 
   /** 
    * Update auto MC.  Internally uses TaskBehaviour to determine settings
@@ -204,8 +203,7 @@ public:
    * 
    * @return True if MC updated
    */
-  bool update_auto_mc(const AircraftState& state_now,
-                      const fixed fallback_mc);
+  bool UpdateAutoMC(const AircraftState& state_now, const fixed fallback_mc);
 
   /**
    * Accessor for statistics of active task
@@ -213,7 +211,7 @@ public:
    * @return Statistics of active task
    */
   gcc_pure
-  const TaskStats& get_stats() const;
+  const TaskStats& GetStats() const;
 
   /**
    * Accessor for common statistics
@@ -221,7 +219,7 @@ public:
    * @return Statistics
    */
   gcc_pure
-  const CommonStats& get_common_stats() const {
+  const CommonStats& GetCommonStats() const {
     return common_stats;
   }
 
@@ -231,12 +229,12 @@ public:
    * @return True if stats valid
    */
   gcc_pure
-  bool stats_valid() const {
-    return get_stats().task_valid;
+  bool StatsValid() const {
+    return GetStats().task_valid;
   }
 
   gcc_pure
-  const AbstractTask *get_active_task() const {
+  const AbstractTask *GetActiveTask() const {
     return active_task;
   }
 
@@ -246,7 +244,7 @@ public:
    * @return Number of taskpoints in active task
    */
   gcc_pure
-  unsigned task_size() const;
+  unsigned TaskSize() const;
 
   /**
    * Check whether ordered task is valid
@@ -254,7 +252,7 @@ public:
    * @return True if task is valid
    */
   gcc_pure
-  bool check_ordered_task() const {
+  bool CheckOrderedTask() const {
     return task_ordered.check_task();
   }
 
@@ -264,7 +262,7 @@ public:
    * @return True if task is valid
    */
   gcc_pure
-  bool check_task() const;
+  bool CheckTask() const;
 
   /**
    * Accessor for factory system for constructing tasks
@@ -272,7 +270,7 @@ public:
    * @return Factory
    */
   gcc_pure
-  AbstractTaskFactory& get_factory() const {
+  AbstractTaskFactory& GetFactory() const {
     return task_ordered.get_factory();
   }
 
@@ -283,7 +281,7 @@ public:
    *
    * @return Type of task
    */
-  TaskBehaviour::Factory_t set_factory(const TaskBehaviour::Factory_t _factory) {
+  TaskBehaviour::Factory_t SetFactory(const TaskBehaviour::Factory_t _factory) {
     return task_ordered.set_factory(_factory);
   }
 
@@ -298,7 +296,7 @@ public:
    * @return Initialised object
    */
   gcc_malloc gcc_pure
-  OrderedTask* clone(TaskEvents &te, const TaskBehaviour &tb,
+  OrderedTask* Clone(TaskEvents &te, const TaskBehaviour &tb,
                      const GlidePolar &gp) const;
 
   /**
@@ -307,14 +305,14 @@ public:
    * @param that OrderedTask to copy
    * @return True if this task changed
    */
-  bool commit(const OrderedTask& that);
+  bool Commit(const OrderedTask& that);
 
   /**
    * Accessor for task advance system
    *
    * @return Task advance mechanism
    */
-  const TaskAdvance &get_task_advance() const {
+  const TaskAdvance &GetTaskAdvance() const {
     return task_ordered.get_task_advance();
   }
 
@@ -323,7 +321,7 @@ public:
    *
    * @return Task advance mechanism
    */
-  TaskAdvance& get_task_advance() {
+  TaskAdvance& GetTaskAdvance() {
     return task_ordered.get_task_advance();
   }
 
@@ -333,7 +331,7 @@ public:
    * @return Active task mode
    */
   gcc_pure
-  TaskMode_t get_mode() const {
+  TaskMode GetMode() const {
     return mode;
   }
 
@@ -345,8 +343,8 @@ public:
    * @return True if modes match
    */
   gcc_pure
-  bool is_mode(const TaskMode_t the_mode) const {
-    return mode == the_mode;
+  bool IsMode(const TaskMode _mode) const {
+    return mode == _mode;
   }
 
   /**
@@ -355,8 +353,8 @@ public:
    * @return Reference to glide polar
    */
   gcc_pure
-  const GlidePolar& get_glide_polar() const {
-    return m_glide_polar;
+  const GlidePolar &GetGlidePolar() const {
+    return glide_polar;
   }
 
   /**
@@ -364,7 +362,7 @@ public:
    *
    * @param glide_polar The polar to set to
    */
-  void set_glide_polar(const GlidePolar& glide_polar);
+  void SetGlidePolar(const GlidePolar& glide_polar);
 
   /**
    * Retrieve copy of safety glide polar used by task system
@@ -372,7 +370,7 @@ public:
    * @return Copy of glide polar
    */
   gcc_pure
-  GlidePolar get_safety_polar() const {
+  GlidePolar GetSafetyPolar() const {
     return task_abort.get_safety_polar();
   }
 
@@ -381,7 +379,7 @@ public:
    *
    * @return State at task start (or null state if not started)
    */
-  AircraftState get_start_state() const {
+  AircraftState GetStartState() const {
     return task_ordered.get_start_state();
   }
 
@@ -390,14 +388,14 @@ public:
    *
    * @return State at task finish (or null state if not finished)
    */
-  AircraftState get_finish_state() const {
+  AircraftState GetFinishState() const {
     return task_ordered.get_finish_state();
   }
 
   /**
    * Return required arrival height of final point in task
    */
-  fixed get_finish_height() const;
+  fixed GetFinishHeight() const;
 
   /** 
    * Find location of center of task (for rendering purposes)
@@ -406,7 +404,7 @@ public:
    * 
    * @return Location of center of task
    */
-  GeoPoint get_task_center(const GeoPoint& fallback_location) const;
+  GeoPoint GetTaskCenter(const GeoPoint& fallback_location) const;
 
   /** 
    * Find approximate radius of task from center to edge (for rendering purposes)
@@ -415,7 +413,7 @@ public:
    * 
    * @return Radius (m) from center to edge of task
    */
-  fixed get_task_radius(const GeoPoint& fallback_location) const;
+  fixed GetTaskRadius(const GeoPoint& fallback_location) const;
 
   /**
    * returns taskpoint name
@@ -424,7 +422,7 @@ public:
    *
    * @return pointer to buffer with taskpoint name
    */
- const TCHAR* get_ordered_taskpoint_name(unsigned TPindex) const;
+ const TCHAR* GetOrderedTaskpointName(unsigned index) const;
 
   /**
    * Check whether observer is within OZ of specified tp
@@ -435,8 +433,8 @@ public:
    *
    * @return True if reference point is inside sector
    */
- bool isInSector (const unsigned TPindex, const AircraftState &ref,
-     const bool AATOnly = true) const;
+ bool IsInSector(const unsigned index, const AircraftState &ref,
+                 const bool AATOnly = true) const;
 
   /**
    * Accessor to get target location of specified tp
@@ -446,8 +444,8 @@ public:
    * @return Target location or fallback_location if TPindex is
    *    invalid or has no target
    */
- const GeoPoint& get_location_target(const unsigned TPindex,
-    const GeoPoint& fallback_location) const;
+ const GeoPoint& GetLocationTarget(const unsigned index,
+                                   const GeoPoint& fallback_location) const;
 
   /**
    * Accessor for locked state of target of specified tp
@@ -456,7 +454,7 @@ public:
    *
    * @return True if target is locked or tp location if has no target
    */
- bool target_is_locked(const unsigned TPindex) const;
+ bool TargetIsLocked(const unsigned index) const;
 
   /**
    * Capability of specified TaskPoint to have adjustable range (true for AAT)
@@ -465,7 +463,7 @@ public:
    *
    * @return True if task point has a target (can have range set)
    */
- bool has_target(const unsigned TPindex) const;
+ bool HasTarget(const unsigned index) const;
 
   /**
    * Set target location explicitly of specified tp
@@ -474,8 +472,8 @@ public:
    * @param loc Location of new target
    * @param override_lock If false, won't set the target if it is locked
    */
- bool set_target(const unsigned TPindex, const GeoPoint &loc,
-    const bool override_lock);
+ bool SetTarget(const unsigned index, const GeoPoint &loc,
+                const bool override_lock);
 
   /**
    * Set target location from a range and radial
@@ -487,8 +485,7 @@ public:
    *
    * @param radial the angle in degrees of the target
    */
- bool set_target(const unsigned TPindex, const fixed range,
-    const fixed radial);
+ bool SetTarget(const unsigned index, const fixed range, const fixed radial);
 
   /**
    * returns position of the target in range / radial format
@@ -501,8 +498,8 @@ public:
    * @param &radial returns the angle in degrees of
    * the target in the sector in polar coordinates
    */
- bool get_target_range_radial(const unsigned TPindex, fixed &range,
-    fixed &radial) const;
+ bool GetTargetRangeRadial(const unsigned index, fixed &range,
+                           fixed &radial) const;
 
   /**
    * Lock/unlock the target from automatic shifts of specified tp
@@ -510,14 +507,14 @@ public:
    * @param TPindex index of tp in task
    * @param do_lock Whether to lock the target
    */
- bool target_lock(const unsigned TPindex, bool do_lock);
+ bool TargetLock(const unsigned index, bool do_lock);
 
   /** 
    * Retrieve (const) the OrderedTaskBehaviour used by the OrderedTask
    * 
    * @return Read-only OrderedTaskBehaviour
    */
-  const OrderedTaskBehaviour& get_ordered_task_behaviour() const {
+  const OrderedTaskBehaviour &GetOrderedTaskBehaviour() const {
     return task_ordered.get_ordered_task_behaviour();
   }
 
@@ -526,7 +523,7 @@ public:
    * 
    * @return OrderedTaskBehaviour reference
    */
-  OrderedTaskBehaviour& get_ordered_task_behaviour() {
+  OrderedTaskBehaviour &GetOrderedTaskBehaviour() {
     return task_ordered.get_ordered_task_behaviour();
   }
 
@@ -535,22 +532,22 @@ public:
    * 
    * @param behaviour Value to set
    */
-  void set_task_behaviour(const TaskBehaviour& behaviour);
+  void SetTaskBehaviour(const TaskBehaviour& behaviour);
   
   /** 
    * Retrieve task behaviour
    * 
    * @return Reference to task behaviour
    */
-  const TaskBehaviour &get_task_behaviour() const {
+  const TaskBehaviour &GetTaskBehaviour() const {
     return task_behaviour;
   }
 
   /**
    * Set external test function to be used for additional intersection tests
    */
-  void set_intersection_test(AbortIntersectionTest* _test) {
-    task_abort.set_intersection_test(_test);
+  void SetIntersectionTest(AbortIntersectionTest *test) {
+    task_abort.set_intersection_test(test);
   }
 
   /**
@@ -559,16 +556,16 @@ public:
    * Caller is responsible for ensuring the waypoint database already has an
    * appropriate waypoint within 1000m of the takeoff location.
    */
-  void takeoff_autotask(const GeoPoint &ref, const fixed terrain_alt);
+  void TakeoffAutotask(const GeoPoint &ref, const fixed terrain_alt);
 
 private:
-  TaskMode_t set_mode(const TaskMode_t mode);
+  TaskMode SetMode(const TaskMode mode);
 
-  void update_common_stats(const AircraftState &state);
-  void update_common_stats_times(const AircraftState &state);
-  void update_common_stats_task(const AircraftState &state);
-  void update_common_stats_waypoints(const AircraftState &state);
-  void update_common_stats_polar(const AircraftState &state);
+  void UpdateCommonStats(const AircraftState &state);
+  void UpdateCommonStatsTimes(const AircraftState &state);
+  void UpdateCommonStatsTask(const AircraftState &state);
+  void UpdateCommonStatsWaypoints(const AircraftState &state);
+  void UpdateCommonStatsPolar(const AircraftState &state);
 };
 
 #endif

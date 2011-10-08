@@ -38,13 +38,13 @@ AirspaceWarningManager::AirspaceWarningManager(const Airspaces& airspaces,
   m_airspaces(airspaces),
   m_prediction_time_glide(prediction_time_glide),
   m_prediction_time_filter(prediction_time_filter),
-  m_perf_glide(task_manager.get_glide_polar()),
+  m_perf_glide(task_manager.GetGlidePolar()),
   m_cruise_filter(prediction_time_filter*CRUISE_FILTER_FACT),
   m_circling_filter(prediction_time_filter),
   m_perf_cruise(m_cruise_filter),
   m_perf_circling(m_circling_filter),
   m_task(task_manager),
-  m_glide_polar(task_manager.get_glide_polar())
+  m_glide_polar(task_manager.GetGlidePolar())
 {
 }
 
@@ -301,14 +301,14 @@ AirspaceWarningManager::update_predicted(const AircraftState& state,
 bool 
 AirspaceWarningManager::update_task(const AircraftState& state)
 {
-  if (!m_task.getActiveTaskPoint()) {
+  if (!m_task.GetActiveTaskPoint()) {
     // empty task, nothing to do
     return false;
   }
 
   AirspaceAircraftPerformanceTask perf_task(state, m_glide_polar, m_task);
-  const GeoPoint location_tp = m_task.getActiveTaskPoint()->GetLocationRemaining();
-  const fixed time_remaining = m_task.get_stats().current_leg.solution_remaining.time_elapsed; 
+  const GeoPoint location_tp = m_task.GetActiveTaskPoint()->GetLocationRemaining();
+  const fixed time_remaining = m_task.GetStats().current_leg.solution_remaining.time_elapsed; 
 
   return update_predicted(state, location_tp, perf_task,
                           AirspaceWarning::WARNING_TASK, time_remaining);

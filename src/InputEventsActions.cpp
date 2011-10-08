@@ -551,14 +551,14 @@ InputEvents::eventArmAdvance(const TCHAR *misc)
 
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   const TaskAdvance::TaskAdvanceState_t mode =
-    task_manager->get_task_advance().get_advance_state();
+    task_manager->GetTaskAdvance().get_advance_state();
   
   if (_tcscmp(misc, _T("on")) == 0) {
-    task_manager->get_task_advance().set_armed(true);
+    task_manager->GetTaskAdvance().set_armed(true);
   } else if (_tcscmp(misc, _T("off")) == 0) {
-    task_manager->get_task_advance().set_armed(false);
+    task_manager->GetTaskAdvance().set_armed(false);
   } else if (_tcscmp(misc, _T("toggle")) == 0) {
-    task_manager->get_task_advance().toggle_armed();
+    task_manager->GetTaskAdvance().toggle_armed();
   } else if (_tcscmp(misc, _T("show")) == 0) {
     switch (mode) {
     case TaskAdvance::MANUAL:
@@ -1009,11 +1009,11 @@ InputEvents::eventAbortTask(const TCHAR *misc)
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
 
   if (_tcscmp(misc, _T("abort")) == 0)
-    task_manager->abort();
+    task_manager->Abort();
   else if (_tcscmp(misc, _T("resume")) == 0)
-    task_manager->resume();
+    task_manager->Resume();
   else if (_tcscmp(misc, _T("show")) == 0) {
-    switch (task_manager->get_mode()) {
+    switch (task_manager->GetMode()) {
     case TaskManager::MODE_ABORT:
       Message::AddMessage(_("Task aborted"));
       break;
@@ -1028,20 +1028,20 @@ InputEvents::eventAbortTask(const TCHAR *misc)
     }
   } else {
     // toggle
-    switch (task_manager->get_mode()) {
+    switch (task_manager->GetMode()) {
     case TaskManager::MODE_NULL:
     case TaskManager::MODE_ORDERED:
-      task_manager->abort();
+      task_manager->Abort();
       break;
     case TaskManager::MODE_GOTO:
-      if (task_manager->check_ordered_task()) {
-        task_manager->resume();
+      if (task_manager->CheckOrderedTask()) {
+        task_manager->Resume();
       } else {
-        task_manager->abort();
+        task_manager->Abort();
       }
       break;
     case TaskManager::MODE_ABORT:
-      task_manager->resume();
+      task_manager->Resume();
       break;
     default:
       break;

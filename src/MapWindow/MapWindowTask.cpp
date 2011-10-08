@@ -56,7 +56,7 @@ MapWindow::DrawTask(Canvas &canvas)
   }
 
   ProtectedTaskManager::Lease task_manager(*task);
-  const AbstractTask *task = task_manager->get_active_task();
+  const AbstractTask *task = task_manager->GetActiveTask();
   if (task && task->check_task()) {
     RenderTaskPoint::TargetVisibility target_visibility =
         IsNearSelf() ? RenderTaskPoint::ACTIVE : RenderTaskPoint::ALL;
@@ -69,7 +69,7 @@ MapWindow::DrawTask(Canvas &canvas)
                         /* we're accessing the OrderedTask here,
                            which may be invalid at this point, but it
                            will be used only if active, so it's ok */
-                        task_manager->get_ordered_task().get_task_projection(),
+                        task_manager->GetOrderedTask().get_task_projection(),
                         ozv, draw_bearing,
                         target_visibility,
                         Basic().location);
@@ -108,10 +108,10 @@ MapWindow::DrawTaskOffTrackIndicator(Canvas &canvas)
     return;
 
   ProtectedTaskManager::Lease task_manager(*task);
-  if (!task_manager->check_task())
+  if (!task_manager->CheckTask())
     return;
 
-  const TaskPoint* tp = task_manager->getActiveTaskPoint();
+  const TaskPoint* tp = task_manager->GetActiveTaskPoint();
   if (!tp) 
     return;
 

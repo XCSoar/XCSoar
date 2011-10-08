@@ -45,7 +45,7 @@ InfoBoxContentAlternateName::Update(InfoBoxWindow &infobox)
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
-    const AbortTask::AlternateVector &alternates = lease->getAlternates();
+    const AbortTask::AlternateVector &alternates = lease->GetAlternates();
 
     if (!alternates.empty()) {
       if (index >= alternates.size())
@@ -111,7 +111,7 @@ InfoBoxContentAlternateGR::Update(InfoBoxWindow &infobox)
 
   {
     ProtectedTaskManager::Lease lease(*protected_task_manager);
-    const AbortTask::AlternateVector &alternates = lease->getAlternates();
+    const AbortTask::AlternateVector &alternates = lease->GetAlternates();
 
     if (!alternates.empty()) {
       if (index >= alternates.size())

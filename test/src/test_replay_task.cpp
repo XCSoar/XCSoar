@@ -81,21 +81,21 @@ test_replay()
 
   glide_polar.SetBallast(fixed(1.0));
 
-  task_manager.set_glide_polar(glide_polar);
+  task_manager.SetGlidePolar(glide_polar);
 
-  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.auto_mc = true;
   task_behaviour.enable_trace = false;
-  task_manager.set_task_behaviour(task_behaviour);
+  task_manager.SetTaskBehaviour(task_behaviour);
 
   OrderedTask* blank = 
-    new OrderedTask(default_events, task_manager.get_task_behaviour(),
+    new OrderedTask(default_events, task_manager.GetTaskBehaviour(),
                     glide_polar);
 
   OrderedTask* t = task_load(blank);
   if (t) {
-    task_manager.commit(*t);
-    task_manager.resume();
+    task_manager.Commit(*t);
+    task_manager.Resume();
   } else {
     return false;
   }
@@ -136,10 +136,10 @@ test_replay()
 
       flying_computer.Compute(glide_polar.GetVTakeoff(), sim.state, sim.state);
 
-      task_manager.update(sim.state, state_last);
-      task_manager.update_idle(sim.state);
-      task_manager.update_auto_mc(sim.state, fixed_zero);
-      task_manager.get_task_advance().set_armed(true);
+      task_manager.Update(sim.state, state_last);
+      task_manager.UpdateIdle(sim.state);
+      task_manager.UpdateAutoMC(sim.state, fixed_zero);
+      task_manager.GetTaskAdvance().set_armed(true);
 
       state_last = sim.state;
 
@@ -158,15 +158,15 @@ test_replay()
 
   if (verbose) {
     distance_counts();
-    printf("# task elapsed %d (s)\n", (int)task_manager.get_stats().total.time_elapsed);
-    printf("# task speed %3.1f (kph)\n", (int)task_manager.get_stats().total.travelled.get_speed()*3.6);
+    printf("# task elapsed %d (s)\n", (int)task_manager.GetStats().total.time_elapsed);
+    printf("# task speed %3.1f (kph)\n", (int)task_manager.GetStats().total.travelled.get_speed()*3.6);
     printf("# travelled distance %4.1f (km)\n", 
-           (double)task_manager.get_stats().total.travelled.get_distance()/1000.0);
+           (double)task_manager.GetStats().total.travelled.get_distance()/1000.0);
     printf("# scored distance %4.1f (km)\n", 
-           (double)task_manager.get_stats().distance_scored/1000.0);
-    if (task_manager.get_stats().total.time_elapsed) {
+           (double)task_manager.GetStats().distance_scored/1000.0);
+    if (task_manager.GetStats().total.time_elapsed) {
       printf("# scored speed %3.1f (kph)\n", 
-             (double)task_manager.get_stats().distance_scored/(double)task_manager.get_stats().total.time_elapsed*3.6);
+             (double)task_manager.GetStats().distance_scored/(double)task_manager.GetStats().total.time_elapsed*3.6);
     }
   }
   return true;

@@ -94,7 +94,7 @@ static void DrawLegs(Chart& chart,
     ? basic.time - calculated.common_stats.task_time_elapsed
     : calculated.flight.takeoff_time;
 
-  const OrderedTask &task = task_manager.get_ordered_task();
+  const OrderedTask &task = task_manager.GetOrderedTask();
   for (unsigned i = 0, n = task.TaskSize(); i < n; ++i) {
     const OrderedTaskPoint &tp = *task.getTaskPoint(i);
     if (!IsTaskLegVisible(tp))
@@ -196,7 +196,7 @@ FlightStatisticsRenderer::RenderSpeed(Canvas &canvas, const PixelRect rc,
 {
   Chart chart(chart_look, canvas, rc);
 
-  if ((fs.Task_Speed.sum_n < 2) || !task.check_ordered_task()) {
+  if ((fs.Task_Speed.sum_n < 2) || !task.CheckOrderedTask()) {
     chart.DrawNoData();
     return;
   }
@@ -487,7 +487,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
   {
     ProtectedTaskManager::Lease task_manager(_task_manager);
-    const OrderedTask &task = task_manager->get_ordered_task();
+    const OrderedTask &task = task_manager->GetOrderedTask();
 
     if (!task.check_task()) {
       chart.DrawNoData();

@@ -36,54 +36,54 @@ public:
     task(_task), floor_alt(_floor_alt) {};
 
   bool is_ordered() const {
-    return task->task_size()>1;
+    return task->TaskSize()>1;
   }
   bool is_empty() const {
-    return task->task_size()==0;
+    return task->TaskSize()==0;
   }
   bool is_finished() const {
-    return task->get_common_stats().task_finished;
+    return task->GetCommonStats().task_finished;
   }
   bool is_started() const {
-    return task->get_common_stats().task_started;
+    return task->GetCommonStats().task_started;
   }
   GeoPoint random_oz_point(unsigned index, const fixed noise) const {
-    return task->random_point_in_task(index, noise);
+    return task->RandomPointInTask(index, noise);
   }
   unsigned size() const {
-    return task->task_size();
+    return task->TaskSize();
   }
   GeoPoint getActiveTaskPointLocation() const {
-    return task->getActiveTaskPoint()->GetLocation();
+    return task->GetActiveTaskPoint()->GetLocation();
   }
   bool has_entered(unsigned index) const {
-    AbstractTaskFactory &fact = task->get_factory();
+    AbstractTaskFactory &fact = task->GetFactory();
     return fact.has_entered(index);
   }
   const ElementStat leg_stats() const {
-    return task->get_stats().current_leg;
+    return task->GetStats().current_leg;
   }
   fixed target_height() const {
-    if (task->getActiveTaskPoint()) {
-      return max(floor_alt, task->getActiveTaskPoint()->GetElevation());
+    if (task->GetActiveTaskPoint()) {
+      return max(floor_alt, task->GetActiveTaskPoint()->GetElevation());
     } else {
       return floor_alt;
     }
   }
   fixed distance_to_final() const {
-    return task->get_stats().total.solution_remaining.distance_to_final;
+    return task->GetStats().total.solution_remaining.distance_to_final;
   }
   fixed remaining_alt_difference() const {
-    return task->get_stats().total.solution_remaining.altitude_difference;
+    return task->GetStats().total.solution_remaining.altitude_difference;
   }
   GlidePolar get_glide_polar() const {
-    return task->get_glide_polar();
+    return task->GetGlidePolar();
   }
   void setActiveTaskPoint(unsigned index) {
-    task->setActiveTaskPoint(index);
+    task->SetActiveTaskPoint(index);
   }
   unsigned getActiveTaskPointIndex() const {
-    return task->getActiveTaskPointIndex();
+    return task->GetActiveTaskPointIndex();
   }
 private:
   ProtectedTaskManager::ExclusiveLease& task;

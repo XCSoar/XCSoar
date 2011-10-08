@@ -88,54 +88,54 @@ public:
     task_manager(_task_manager) {};
 
   bool is_ordered() const {
-    return task_manager.task_size()>1;
+    return task_manager.TaskSize()>1;
   }
   bool is_empty() const {
-    return task_manager.task_size()==0;
+    return task_manager.TaskSize()==0;
   }
   bool is_finished() const {
-    return task_manager.get_common_stats().task_finished;
+    return task_manager.GetCommonStats().task_finished;
   }
   bool is_started() const {
-    return task_manager.get_common_stats().task_started;
+    return task_manager.GetCommonStats().task_started;
   }
   GeoPoint random_oz_point(unsigned index, const fixed noise) const {
-    return task_manager.random_point_in_task(index, noise);
+    return task_manager.RandomPointInTask(index, noise);
   }
   unsigned size() const {
-    return task_manager.task_size();
+    return task_manager.TaskSize();
   }
   GeoPoint getActiveTaskPointLocation() const {
-    return task_manager.getActiveTaskPoint()->GetLocation();
+    return task_manager.GetActiveTaskPoint()->GetLocation();
   }
   bool has_entered(unsigned index) const {
-    AbstractTaskFactory &fact = task_manager.get_factory();
+    AbstractTaskFactory &fact = task_manager.GetFactory();
     return fact.has_entered(index);
   }
   const ElementStat leg_stats() const {
-    return task_manager.get_stats().current_leg;
+    return task_manager.GetStats().current_leg;
   }
   fixed target_height() const {
-    if (task_manager.getActiveTaskPoint()) {
-      return max(fixed_300, task_manager.getActiveTaskPoint()->GetElevation());
+    if (task_manager.GetActiveTaskPoint()) {
+      return max(fixed_300, task_manager.GetActiveTaskPoint()->GetElevation());
     } else {
       return fixed_300;
     }
   }
   fixed distance_to_final() const {
-    return task_manager.get_stats().total.solution_remaining.distance_to_final;
+    return task_manager.GetStats().total.solution_remaining.distance_to_final;
   }
   fixed remaining_alt_difference() const {
-    return task_manager.get_stats().total.solution_remaining.altitude_difference;
+    return task_manager.GetStats().total.solution_remaining.altitude_difference;
   }
   GlidePolar get_glide_polar() const {
-    return task_manager.get_glide_polar();
+    return task_manager.GetGlidePolar();
   }
   void setActiveTaskPoint(unsigned index) {
-    task_manager.setActiveTaskPoint(index);
+    task_manager.SetActiveTaskPoint(index);
   }
   unsigned getActiveTaskPointIndex() const {
-    return task_manager.getActiveTaskPointIndex();
+    return task_manager.GetActiveTaskPointIndex();
   }
 private:
   TaskManager& task_manager;
@@ -208,7 +208,7 @@ bool run_flight(TaskManager &task_manager,
 
   static const fixed fixed_10(10);
 
-  AirspaceAircraftPerformanceGlide perf(task_manager.get_glide_polar());
+  AirspaceAircraftPerformanceGlide perf(task_manager.GetGlidePolar());
 
   if (aircraft_filter)
     aircraft_filter->Reset(aircraft.GetState());
@@ -225,12 +225,12 @@ bool run_flight(TaskManager &task_manager,
 
   do {
 
-    if ((task_manager.getActiveTaskPointIndex() == 1) &&
-        first && (task_manager.get_stats().total.time_elapsed > fixed_10)) {
-      time_remaining = task_manager.get_stats().total.time_remaining;
+    if ((task_manager.GetActiveTaskPointIndex() == 1) &&
+        first && (task_manager.GetStats().total.time_elapsed > fixed_10)) {
+      time_remaining = task_manager.GetStats().total.time_remaining;
       first = false;
 
-      time_planned = task_manager.get_stats().total.time_planned;
+      time_planned = task_manager.GetStats().total.time_planned;
 
       if (verbose > 1) {
         printf("# time remaining %g\n", time_remaining);
@@ -287,9 +287,9 @@ bool run_flight(TaskManager &task_manager,
     {
       const AircraftState state = aircraft.GetState();
       const AircraftState state_last = aircraft.GetLastState();
-      task_manager.update(state, state_last);
-      task_manager.update_idle(state);
-      task_manager.update_auto_mc(state, fixed_zero);
+      task_manager.Update(state, state_last);
+      task_manager.UpdateIdle(state);
+      task_manager.UpdateAutoMC(state, fixed_zero);
     }
 
   } while (autopilot.update_autopilot(ta, aircraft.GetState(), aircraft.GetLastState()));
@@ -310,10 +310,10 @@ bool run_flight(TaskManager &task_manager,
   }
   wait_prompt();
 
-  time_elapsed = task_manager.get_stats().total.time_elapsed;
-  time_planned = task_manager.get_stats().total.time_planned;
-  calc_cruise_efficiency = task_manager.get_stats().cruise_efficiency;
-  calc_effective_mc = task_manager.get_stats().effective_mc;
+  time_elapsed = task_manager.GetStats().total.time_elapsed;
+  time_planned = task_manager.GetStats().total.time_planned;
+  calc_cruise_efficiency = task_manager.GetStats().cruise_efficiency;
+  calc_effective_mc = task_manager.GetStats().effective_mc;
 
   if (verbose)
     distance_counts();
@@ -340,17 +340,17 @@ test_flight(int test_num, int n_wind, const double speed_factor,
 
   TaskEventsPrint default_events(verbose);
   TaskManager task_manager(default_events, waypoints);
-  task_manager.set_glide_polar(glide_polar);
+  task_manager.SetGlidePolar(glide_polar);
 
-  task_manager.get_ordered_task_behaviour().aat_min_time = aat_min_time(test_num);
+  task_manager.GetOrderedTaskBehaviour().aat_min_time = aat_min_time(test_num);
 
-  TaskBehaviour task_behaviour = task_manager.get_task_behaviour();
+  TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
   task_behaviour.enable_trace = false;
   task_behaviour.auto_mc = auto_mc;
   task_behaviour.calc_glide_required = false;
   if ((test_num == 0) || (test_num == 2))
     task_behaviour.optimise_targets_bearing = false;
-  task_manager.set_task_behaviour(task_behaviour);
+  task_manager.SetTaskBehaviour(task_behaviour);
 
   bool goto_target = false;
 

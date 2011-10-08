@@ -157,7 +157,7 @@ void task_report(TaskManager& task_manager, const char* text)
   if (verbose) {
     printf("%s",text);
 
-    const AbstractTask *task = task_manager.get_active_task();
+    const AbstractTask *task = task_manager.GetActiveTask();
     if (task != NULL) {
       switch (task->type) {
       case TaskInterface::ORDERED:
@@ -199,7 +199,7 @@ bool test_task_manip(TaskManager& task_manager,
   if (!test_task_mixed(task_manager, waypoints)) {
     return false;
   }
-  AbstractTaskFactory &fact = task_manager.get_factory();
+  AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# removing tp 2\n");
   if (!fact.remove(2)) {
@@ -260,12 +260,12 @@ bool test_task_manip(TaskManager& task_manager,
   wp = waypoints.lookup_id(14);
   if (wp) {
     tp = fact.createIntermediate(AbstractTaskFactory::AST_CYLINDER,*wp);
-    if (!fact.replace(*tp,task_manager.task_size()-1)) return false;
+    if (!fact.replace(*tp,task_manager.TaskSize()-1)) return false;
     delete tp;
   }
 
   task_report(task_manager, "# removing finish point\n");
-  if (!fact.remove(task_manager.task_size()-1)) {
+  if (!fact.remove(task_manager.TaskSize()-1)) {
     return false;
   }
 
@@ -303,10 +303,10 @@ bool test_task_manip(TaskManager& task_manager,
 
   task_report(task_manager, "# checking task\n");
 
-  if (task_manager.check_ordered_task()) {
-    task_manager.reset();
-    task_manager.setActiveTaskPoint(0);
-    task_manager.resume();
+  if (task_manager.CheckOrderedTask()) {
+    task_manager.Reset();
+    task_manager.SetActiveTaskPoint(0);
+    task_manager.Resume();
   } else {
     return false;
   }
@@ -319,19 +319,19 @@ bool test_task_type_manip(TaskManager& task_manager,
   if (!test_task_random_RT_AAT_FAI(task_manager, waypoints, n_points))
     return false;
 
-  AbstractTaskFactory &fact = task_manager.get_factory();
+  AbstractTaskFactory &fact = task_manager.GetFactory();
 
   switch (rand() %3) {
   case 0:
-    task_manager.set_factory(TaskBehaviour::FACTORY_AAT);
+    task_manager.SetFactory(TaskBehaviour::FACTORY_AAT);
     test_note("# switched FACTORY TYPE to AAT\n");
     break;
   case 1:
-    task_manager.set_factory(TaskBehaviour::FACTORY_RT);
+    task_manager.SetFactory(TaskBehaviour::FACTORY_RT);
     test_note("# switched FACTORY TYPE to RT\n");
     break;
   case 2:
-    task_manager.set_factory(TaskBehaviour::FACTORY_FAI_GENERAL);
+    task_manager.SetFactory(TaskBehaviour::FACTORY_FAI_GENERAL);
     test_note("# switched FACTORY TYPE to FAI GENERAL\n");
     break;
   default:
@@ -342,27 +342,27 @@ bool test_task_type_manip(TaskManager& task_manager,
 
   test_note("# checking mutated start..\n");
   if (!fact.validStartType(
-      fact.getType(*task_manager.get_ordered_task().getTaskPoint(0))))
+      fact.getType(*task_manager.GetOrderedTask().getTaskPoint(0))))
     return false;
 
 
   char tmp[255];
   sprintf(tmp, "# checking mutated intermediates.  task_size():%d..\n",
-      task_manager.task_size());
+      task_manager.TaskSize());
   test_note(tmp);
 
-  for (unsigned i = 1; i < (task_manager.task_size() - 1); i++) {
+  for (unsigned i = 1; i < (task_manager.TaskSize() - 1); i++) {
     sprintf(tmp, "# checking mutated intermediate point %d..\n", i);
     test_note(tmp);
     if (!fact.validIntermediateType(
-        fact.getType(*task_manager.get_ordered_task().getTaskPoint(i))))
+        fact.getType(*task_manager.GetOrderedTask().getTaskPoint(i))))
       return false;
   }
 
   test_note("# checking mutated finish..\n");
   if (!fact.validFinishType(
-      fact.getType(*task_manager.get_ordered_task().getTaskPoint(
-          task_manager.task_size() - 1))))
+      fact.getType(*task_manager.GetOrderedTask().getTaskPoint(
+          task_manager.TaskSize() - 1))))
     return false;
 
   test_note("# validating task..\n");
@@ -370,11 +370,11 @@ bool test_task_type_manip(TaskManager& task_manager,
     return false;
   }
   test_note("# checking task..\n");
-  if (!task_manager.check_ordered_task()) {
+  if (!task_manager.CheckOrderedTask()) {
     return false;
   }
 
-  if (task_manager.get_ordered_task().get_factory_type() ==
+  if (task_manager.GetOrderedTask().get_factory_type() ==
                                       TaskBehaviour::FACTORY_FAI_GENERAL) {
     test_note("# checking OZs for FAI task..\n");
     if (!fact.validateFAIOZs())
@@ -388,13 +388,13 @@ bool test_task_mixed(TaskManager& task_manager,
                      const Waypoints &waypoints)
 {
   const TaskProjection &projection =
-    task_manager.get_ordered_task().get_task_projection();
+    task_manager.GetOrderedTask().get_task_projection();
 
   OrderedTaskPoint *tp;
   const Waypoint *wp;
 
-  task_manager.set_factory(TaskBehaviour::FACTORY_MIXED);
-  AbstractTaskFactory &fact = task_manager.get_factory();
+  task_manager.SetFactory(TaskBehaviour::FACTORY_MIXED);
+  AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
@@ -411,8 +411,8 @@ bool test_task_mixed(TaskManager& task_manager,
     return false;
   }
 
-  task_manager.setActiveTaskPoint(0);
-  task_manager.resume();
+  task_manager.SetActiveTaskPoint(0);
+  task_manager.Resume();
 
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.lookup_id(2);
@@ -479,7 +479,7 @@ bool test_task_mixed(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_ordered_task()) {
+  if (!task_manager.CheckOrderedTask()) {
     return false;
   }
   return true;
@@ -489,8 +489,8 @@ bool test_task_mixed(TaskManager& task_manager,
 bool test_task_fai(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
-  task_manager.set_factory(TaskBehaviour::FACTORY_FAI_GENERAL);
-  AbstractTaskFactory &fact = task_manager.get_factory();
+  task_manager.SetFactory(TaskBehaviour::FACTORY_FAI_GENERAL);
+  AbstractTaskFactory &fact = task_manager.GetFactory();
   const Waypoint *wp;
 
   task_report(task_manager, "# adding start\n");
@@ -503,8 +503,8 @@ bool test_task_fai(TaskManager& task_manager,
     delete tp;
   }
 
-  task_manager.setActiveTaskPoint(0);
-  task_manager.resume();
+  task_manager.SetActiveTaskPoint(0);
+  task_manager.Resume();
 
   task_report(task_manager, "# adding intermdiate\n");
   wp = waypoints.lookup_id(2);
@@ -541,7 +541,7 @@ bool test_task_fai(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_ordered_task()) {
+  if (!task_manager.CheckOrderedTask()) {
     return false;
   }
   return true;
@@ -552,10 +552,10 @@ bool test_task_aat(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
   const TaskProjection &projection =
-    task_manager.get_ordered_task().get_task_projection();
+    task_manager.GetOrderedTask().get_task_projection();
 
-  task_manager.set_factory(TaskBehaviour::FACTORY_AAT);
-  AbstractTaskFactory &fact = task_manager.get_factory();
+  task_manager.SetFactory(TaskBehaviour::FACTORY_AAT);
+  AbstractTaskFactory &fact = task_manager.GetFactory();
   const Waypoint *wp;
 
   task_report(task_manager, "# adding start\n");
@@ -568,8 +568,8 @@ bool test_task_aat(TaskManager& task_manager,
     delete tp;
   }
 
-  task_manager.setActiveTaskPoint(0);
-  task_manager.resume();
+  task_manager.SetActiveTaskPoint(0);
+  task_manager.Resume();
 
   task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.lookup_id(2);
@@ -616,7 +616,7 @@ bool test_task_aat(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_ordered_task()) {
+  if (!task_manager.CheckOrderedTask()) {
     return false;
   }
   return true;
@@ -628,8 +628,8 @@ bool test_task_or(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.set_factory(TaskBehaviour::FACTORY_FAI_OR);
-  AbstractTaskFactory &fact = task_manager.get_factory();
+  task_manager.SetFactory(TaskBehaviour::FACTORY_FAI_OR);
+  AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
@@ -641,8 +641,8 @@ bool test_task_or(TaskManager& task_manager,
     delete tp;
   }
 
-  task_manager.setActiveTaskPoint(0);
-  task_manager.resume();
+  task_manager.SetActiveTaskPoint(0);
+  task_manager.Resume();
 
   task_report(task_manager, "# adding intermediate\n");
   wp = waypoints.lookup_id(2);
@@ -669,7 +669,7 @@ bool test_task_or(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_ordered_task()) {
+  if (!task_manager.CheckOrderedTask()) {
     return false;
   }
   return true;
@@ -682,8 +682,8 @@ bool test_task_dash(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.set_factory(TaskBehaviour::FACTORY_TOURING);
-  AbstractTaskFactory &fact = task_manager.get_factory();
+  task_manager.SetFactory(TaskBehaviour::FACTORY_TOURING);
+  AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
@@ -695,8 +695,8 @@ bool test_task_dash(TaskManager& task_manager,
     delete tp;
   }
 
-  task_manager.setActiveTaskPoint(0);
-  task_manager.resume();
+  task_manager.SetActiveTaskPoint(0);
+  task_manager.Resume();
 
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.lookup_id(3);
@@ -713,7 +713,7 @@ bool test_task_dash(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_ordered_task()) {
+  if (!task_manager.CheckOrderedTask()) {
     return false;
   }
   return true;
@@ -726,8 +726,8 @@ bool test_task_fg(TaskManager& task_manager,
 {
   const Waypoint *wp;
 
-  task_manager.set_factory(TaskBehaviour::FACTORY_FAI_GOAL);
-  AbstractTaskFactory &fact = task_manager.get_factory();
+  task_manager.SetFactory(TaskBehaviour::FACTORY_FAI_GOAL);
+  AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# adding start\n");
   wp = waypoints.lookup_id(1);
@@ -739,8 +739,8 @@ bool test_task_fg(TaskManager& task_manager,
     delete tp;
   }
 
-  task_manager.setActiveTaskPoint(0);
-  task_manager.resume();
+  task_manager.SetActiveTaskPoint(0);
+  task_manager.Resume();
 
   task_report(task_manager, "# adding finish\n");
   wp = waypoints.lookup_id(6);
@@ -757,7 +757,7 @@ bool test_task_fg(TaskManager& task_manager,
     return false;
   }
 
-  if (!task_manager.check_ordered_task()) {
+  if (!task_manager.CheckOrderedTask()) {
     return false;
   }
   return true;
@@ -782,8 +782,8 @@ bool test_task_random(TaskManager& task_manager,
 
   OrderedTaskPoint *tp;
 
-  task_manager.set_factory(TaskBehaviour::FACTORY_MIXED);
-  AbstractTaskFactory &fact = task_manager.get_factory();
+  task_manager.SetFactory(TaskBehaviour::FACTORY_MIXED);
+  AbstractTaskFactory &fact = task_manager.GetFactory();
 
   task_report(task_manager, "# adding start\n");
   wp = random_waypoint(waypoints);
@@ -798,8 +798,8 @@ bool test_task_random(TaskManager& task_manager,
     delete tp;
   }
 
-  task_manager.setActiveTaskPoint(0);
-  task_manager.resume();
+  task_manager.SetActiveTaskPoint(0);
+  task_manager.Resume();
 
   for (unsigned i=0; i<num_points; i++) {
     task_report(task_manager, "# adding intermediate\n");
@@ -834,7 +834,7 @@ bool test_task_random(TaskManager& task_manager,
     return false;
   }
   task_report(task_manager, "# checking task..\n");
-  if (!task_manager.check_ordered_task()) {
+  if (!task_manager.CheckOrderedTask()) {
     return false;
   }
   return true;
@@ -847,7 +847,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   const Waypoint *wp;
 
   OrderedTaskPoint *tp;
-  AbstractTaskFactory &fact = task_manager.get_factory();
+  AbstractTaskFactory &fact = task_manager.GetFactory();
   char tmp[255];
   char tskType[20];
   tskType[0] = '\0';
@@ -855,17 +855,17 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
 
   switch (rand() %3) {
   case 0:
-    task_manager.set_factory(TaskBehaviour::FACTORY_AAT);
+    task_manager.SetFactory(TaskBehaviour::FACTORY_AAT);
     strcpy(tskType,"AAT");
     test_note("# creating random AAT task\n");
     break;
   case 1:
-    task_manager.set_factory(TaskBehaviour::FACTORY_RT);
+    task_manager.SetFactory(TaskBehaviour::FACTORY_RT);
     strcpy(tskType,"RT");
     test_note("# creating random RT task\n");
     break;
   case 2:
-    task_manager.set_factory(TaskBehaviour::FACTORY_FAI_GENERAL);
+    task_manager.SetFactory(TaskBehaviour::FACTORY_FAI_GENERAL);
     strcpy(tskType,"FAI");
     test_note("# creating random FAI GENERAL\n");
     break;
@@ -873,8 +873,8 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
 
   //max points includes start & finish
   const unsigned num_points_total = (
-    max(task_manager.get_ordered_task_behaviour().min_points,
-        (_num_points % task_manager.get_ordered_task_behaviour().max_points) + 1));
+    max(task_manager.GetOrderedTaskBehaviour().min_points,
+        (_num_points % task_manager.GetOrderedTaskBehaviour().max_points) + 1));
   const unsigned num_int_points = num_points_total - 2;
 
   test_note("# adding start\n");
@@ -922,7 +922,7 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
   if (!fact.validate()) {
     return false;
   }
-  if (task_manager.get_ordered_task().get_factory_type()
+  if (task_manager.GetOrderedTask().get_factory_type()
       == TaskBehaviour::FACTORY_FAI_GENERAL)
   {
     test_note("# checking OZs for FAI General..\n");
@@ -930,10 +930,10 @@ bool test_task_random_RT_AAT_FAI(TaskManager& task_manager,
       return false;
   }
 
-  task_manager.resume();
+  task_manager.Resume();
   sprintf(tmp, "# SUCCESS CREATING %s task! task_size():%d..\n",
       tskType,
-      task_manager.task_size());
+      task_manager.TaskSize());
   test_note(tmp);
   return true;
 }

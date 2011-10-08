@@ -99,8 +99,8 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
   if (_tcsstr(OutBuffer, _T("$(CheckTaskResumed)"))) {
     // TODO code: check, does this need to be set with temporary task?
-    if (task_manager->is_mode(TaskManager::MODE_ABORT) ||
-        task_manager->is_mode(TaskManager::MODE_GOTO))
+    if (task_manager->IsMode(TaskManager::MODE_ABORT) ||
+        task_manager->IsMode(TaskManager::MODE_GOTO))
       invalid = true;
     ReplaceInString(OutBuffer, _T("$(CheckTaskResumed)"), _T(""), Size);
   }
@@ -112,9 +112,9 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     ReplaceInString(OutBuffer, _T("$(CheckTask)"), _T(""), Size);
   }
 
-  const AbstractTask *task = task_manager->get_active_task();
+  const AbstractTask *task = task_manager->GetActiveTask();
   if (task == NULL || !task->check_task() ||
-      task_manager->is_mode(TaskManager::MODE_GOTO)) {
+      task_manager->IsMode(TaskManager::MODE_GOTO)) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       invalid = true;
@@ -137,7 +137,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
           _("Previous Turnpoint"), Size);
     }
 
-  } else if (task_manager->is_mode(TaskManager::MODE_ABORT)) {
+  } else if (task_manager->IsMode(TaskManager::MODE_ABORT)) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
       if (!task->IsValidTaskPoint(1))
@@ -216,7 +216,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
     } else if (_tcsstr(OutBuffer, _T("$(WaypointNextArm)"))) {
       // Waypoint\nNext
 
-      switch (task_manager->get_task_advance().get_advance_state()) {
+      switch (task_manager->GetTaskAdvance().get_advance_state()) {
       case TaskAdvance::MANUAL:
       case TaskAdvance::AUTO:
       case TaskAdvance::START_ARMED:
@@ -239,7 +239,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
     } else if (_tcsstr(OutBuffer, _T("$(WaypointPreviousArm)"))) {
 
-      switch (task_manager->get_task_advance().get_advance_state()) {
+      switch (task_manager->GetTaskAdvance().get_advance_state()) {
       case TaskAdvance::MANUAL:
       case TaskAdvance::AUTO:
       case TaskAdvance::START_DISARMED:
@@ -271,7 +271,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   if (_tcsstr(OutBuffer, _T("$(AdvanceArmed)"))) {
-    switch (task_manager->get_task_advance().get_advance_state()) {
+    switch (task_manager->GetTaskAdvance().get_advance_state()) {
     case TaskAdvance::MANUAL:
       ReplaceInString(OutBuffer, _T("$(AdvanceArmed)"), 
                       _("Advance\n(manual)"), Size);
@@ -315,12 +315,12 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   if (_tcsstr(OutBuffer, _T("$(TaskAbortToggleActionName)"))) {
-    if (task_manager->is_mode(TaskManager::MODE_GOTO)) {
-      CondReplaceInString(task_manager->get_ordered_task().check_task(),
+    if (task_manager->IsMode(TaskManager::MODE_GOTO)) {
+      CondReplaceInString(task_manager->GetOrderedTask().check_task(),
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _("Resume"), _("Abort"), Size);
     } else 
-      CondReplaceInString(task_manager->is_mode(TaskManager::MODE_ABORT),
+      CondReplaceInString(task_manager->IsMode(TaskManager::MODE_ABORT),
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _("Resume"), _("Abort"), Size);
   }

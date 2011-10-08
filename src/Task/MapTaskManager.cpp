@@ -105,35 +105,35 @@ MapTaskManager::append_to_task(const Waypoint &wp)
   TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   task_edit_result result = MapTaskManager::UNMODIFIED;
-  if (task_manager->get_ordered_task().check_task()) {
-    OrderedTask *task = task_manager->clone(task_events,
+  if (task_manager->GetOrderedTask().check_task()) {
+    OrderedTask *task = task_manager->Clone(task_events,
                                             GetTaskBehaviour(),
-                                            task_manager->get_glide_polar());
+                                            task_manager->GetGlidePolar());
     result = append_to_task(task, wp);
     if (result == SUCCESS)
-      task_manager->commit(*task);
+      task_manager->Commit(*task);
     delete task;
   } else { // ordered task invalid
-    switch (task_manager->get_mode()) {
+    switch (task_manager->GetMode()) {
     case TaskManager::MODE_NULL:
     case TaskManager::MODE_ABORT:
     case TaskManager::MODE_ORDERED:
-      result = task_manager->do_goto(wp) ? MapTaskManager::MUTATED_TO_GOTO :
+      result = task_manager->DoGoto(wp) ? MapTaskManager::MUTATED_TO_GOTO :
                               MapTaskManager::UNMODIFIED;
       break;
     case TaskManager::MODE_GOTO:
     {
-      OrderedTask *task = task_manager->clone(task_events,
+      OrderedTask *task = task_manager->Clone(task_events,
                                               GetTaskBehaviour(),
-                                              task_manager->get_glide_polar());
-      const TaskWaypoint *OldGotoTWP = task_manager->getActiveTaskPoint();
+                                              task_manager->GetGlidePolar());
+      const TaskWaypoint *OldGotoTWP = task_manager->GetActiveTaskPoint();
       if (!OldGotoTWP)
         break;
 
       const Waypoint &OldGotoWp = OldGotoTWP->GetWaypoint();
       result = mutate_from_goto(task, wp, OldGotoWp);
       if (result == MUTATED_FROM_GOTO)
-        task_manager->commit(*task);
+        task_manager->Commit(*task);
 
       delete task;
       break;
@@ -185,35 +185,35 @@ MapTaskManager::insert_in_task(const Waypoint &wp)
   TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   task_edit_result result = MapTaskManager::UNMODIFIED;
-  if (task_manager->get_ordered_task().check_task()) {
-    OrderedTask *task = task_manager->clone(task_events,
+  if (task_manager->GetOrderedTask().check_task()) {
+    OrderedTask *task = task_manager->Clone(task_events,
                                             GetTaskBehaviour(),
-                                            task_manager->get_glide_polar());
+                                            task_manager->GetGlidePolar());
 
     result = insert_in_task(task, wp);
     if (result == SUCCESS)
-      task_manager->commit(*task);
+      task_manager->Commit(*task);
     delete task;
   } else { // ordered task invalid
-    switch (task_manager->get_mode()) {
+    switch (task_manager->GetMode()) {
     case TaskManager::MODE_NULL:
     case TaskManager::MODE_ABORT:
     case TaskManager::MODE_ORDERED:
-      result = task_manager->do_goto(wp) ? MapTaskManager::MUTATED_TO_GOTO :
+      result = task_manager->DoGoto(wp) ? MapTaskManager::MUTATED_TO_GOTO :
                               MapTaskManager::UNMODIFIED;
       break;
     case TaskManager::MODE_GOTO:
     {
-      OrderedTask *task = task_manager->clone(task_events,
+      OrderedTask *task = task_manager->Clone(task_events,
                                               GetTaskBehaviour(),
-                                              task_manager->get_glide_polar());
-      const TaskWaypoint *OldGotoTWP = task_manager->getActiveTaskPoint();
+                                              task_manager->GetGlidePolar());
+      const TaskWaypoint *OldGotoTWP = task_manager->GetActiveTaskPoint();
       if (!OldGotoTWP)
         break;
       const Waypoint &OldGotoWp = OldGotoTWP->GetWaypoint();
       result = mutate_from_goto(task, OldGotoWp, wp);
       if (result == MUTATED_FROM_GOTO)
-        task_manager->commit(*task);
+        task_manager->Commit(*task);
       delete task;
       break;
     }
@@ -248,13 +248,13 @@ MapTaskManager::replace_in_task(const Waypoint &wp)
   assert(protected_task_manager != NULL);
   TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  OrderedTask *task = task_manager->clone(task_events,
+  OrderedTask *task = task_manager->Clone(task_events,
                                           GetTaskBehaviour(),
-                                          task_manager->get_glide_polar());
+                                          task_manager->GetGlidePolar());
 
   task_edit_result result = replace_in_task(task, wp);
   if (result == SUCCESS)
-    task_manager->commit(*task);
+    task_manager->Commit(*task);
 
   delete task;
   return result;
@@ -289,10 +289,10 @@ MapTaskManager::index_of_point_in_task(const Waypoint &wp)
   assert(protected_task_manager != NULL);
   TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  if (task_manager->get_mode() == TaskManager::MODE_ORDERED) {
-    OrderedTask *task = task_manager->clone(task_events,
+  if (task_manager->GetMode() == TaskManager::MODE_ORDERED) {
+    OrderedTask *task = task_manager->Clone(task_events,
                                             GetTaskBehaviour(),
-                                            task_manager->get_glide_polar());
+                                            task_manager->GetGlidePolar());
     return index_of_point_in_task(task, wp);
   }
   return -1;
@@ -327,13 +327,13 @@ MapTaskManager::remove_from_task(const Waypoint &wp)
   assert(protected_task_manager != NULL);
   TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
-  OrderedTask *task = task_manager->clone(task_events,
+  OrderedTask *task = task_manager->Clone(task_events,
                                           GetTaskBehaviour(),
-                                          task_manager->get_glide_polar());
+                                          task_manager->GetGlidePolar());
 
   task_edit_result result = remove_from_task(task, wp);
   if (result == SUCCESS)
-    task_manager->commit(*task);
+    task_manager->Commit(*task);
 
   delete task;
   return result;
