@@ -190,17 +190,6 @@ XCSoarInterface::Debounce(void)
 }
 
 /**
- * Determine whether the vario gauge should be drawn depending on the
- * display orientation and the infobox layout
- * @return True if vario gauge should be drawn, False otherwise
- */
-static bool
-vario_visible()
-{
-  return InfoBoxLayout::has_vario();
-}
-
-/**
  * Determine whether vario gauge, FLARM radar and infoboxes should be drawn
  */
 void
@@ -210,7 +199,8 @@ ActionInterface::DisplayModes()
 
   if (main_window.vario) {
     // Determine whether the vario gauge should be drawn
-    main_window.vario->set_visible(!full_screen && vario_visible() &&
+    main_window.vario->set_visible(!full_screen &&
+                                   InfoBoxLayout::has_vario() &&
                                    !GetUIState().screen_blanked);
   }
 
