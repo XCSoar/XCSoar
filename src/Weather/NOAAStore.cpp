@@ -255,6 +255,19 @@ NOAAStore::UpdateStation(const char *code, JobRunner &runner)
   return UpdateStation(index, runner);
 }
 
+#ifdef _UNICODE
+bool
+NOAAStore::UpdateStation(const TCHAR *code, JobRunner &runner)
+{
+  size_t len = _tcslen(code);
+  char code2[len * 4 + 1];
+  ::WideCharToMultiByte(CP_UTF8, 0, code, len, code2, sizeof(code2), NULL, NULL);
+  code2[4] = 0;
+
+  return UpdateStation(code2, runner);
+}
+#endif
+
 bool
 NOAAStore::Update(JobRunner &runner)
 {

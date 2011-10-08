@@ -112,6 +112,9 @@ namespace NOAAStore
    * @return True if the data was downloaded successfully
    */
   bool UpdateStation(const char *code, JobRunner &runner);
+#ifdef _UNICODE
+  bool UpdateStation(const TCHAR *code, JobRunner &runner);
+#endif
 
   /**
    * Attempts to download new data for all stations
