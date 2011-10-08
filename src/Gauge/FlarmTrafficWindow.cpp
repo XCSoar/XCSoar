@@ -236,9 +236,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                                      unsigned i)
 {
   // Save relative East/North
-  fixed x, y;
-  x = traffic.relative_east;
-  y = -traffic.relative_north;
+  fixed x = traffic.relative_east;
+  fixed y = -traffic.relative_north;
 
   // Calculate the distance in meters
   fixed d = traffic.distance;
