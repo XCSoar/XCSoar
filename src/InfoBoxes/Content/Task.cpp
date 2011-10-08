@@ -79,7 +79,7 @@ InfoBoxContentNextWaypoint::Update(InfoBoxWindow &infobox)
   // use proper non-terminal next task stats
 
   const Waypoint* way_point = protected_task_manager != NULL
-    ? protected_task_manager->getActiveWaypoint()
+    ? protected_task_manager->GetActiveWaypoint()
     : NULL;
 
   if (!way_point) {
@@ -129,16 +129,16 @@ InfoBoxContentNextWaypoint::HandleKey(const InfoBoxKeyCodes keycode)
   switch (keycode) {
   case ibkRight:
   case ibkUp:
-    protected_task_manager->incrementActiveTaskPoint(1);
+    protected_task_manager->IncrementActiveTaskPoint(1);
     return true;
 
   case ibkLeft:
   case ibkDown:
-    protected_task_manager->incrementActiveTaskPoint(-1);
+    protected_task_manager->IncrementActiveTaskPoint(-1);
     return true;
 
   case ibkEnter:
-    const Waypoint *wp = protected_task_manager->getActiveWaypoint();
+    const Waypoint *wp = protected_task_manager->GetActiveWaypoint();
     if (wp) {
       dlgWaypointDetailsShowModal(XCSoarInterface::main_window, *wp);
       return true;
@@ -742,7 +742,7 @@ InfoBoxContentTaskTimeUnderMaxHeight::Update(InfoBoxWindow &infobox)
   const CommonStats &common_stats = XCSoarInterface::Calculated().common_stats;
   const TaskStats &task_stats = XCSoarInterface::Calculated().task_stats;
   const fixed maxheight = fixed(protected_task_manager->
-                                get_ordered_task_behaviour().start_max_height);
+                                GetOrderedTaskBehaviour().start_max_height);
 
   if (!task_stats.task_valid || !positive(maxheight)
       || !protected_task_manager

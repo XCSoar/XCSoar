@@ -71,7 +71,7 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
   WndProperty *wp;
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
   const TaskBehaviour &task_behaviour = settings_computer.task;
-  OrderedTask* temptask = protected_task_manager->task_blank();
+  OrderedTask* temptask = protected_task_manager->TaskBlank();
   temptask->set_factory(TaskBehaviour::FACTORY_RT);
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartType"));

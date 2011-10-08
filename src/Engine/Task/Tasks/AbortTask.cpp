@@ -179,7 +179,7 @@ AbortTask::fill_reachable(const AircraftState &state,
       const bool is_reachable_final = is_reachable(result, true);
 
       if (intersection_test && final_glide && is_reachable_final)
-        intersects = intersection_test->intersects(
+        intersects = intersection_test->Intersects(
             AGeoPoint(v->waypoint.location, result.min_height));
 
       if (!intersects) {

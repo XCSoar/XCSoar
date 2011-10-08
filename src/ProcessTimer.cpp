@@ -244,7 +244,7 @@ BallastDumpProcessTimer()
   glide_polar.SetBallast(ballast);
 
   if (protected_task_manager != NULL)
-    protected_task_manager->set_glide_polar(glide_polar);
+    protected_task_manager->SetGlidePolar(glide_polar);
 }
 
 static void

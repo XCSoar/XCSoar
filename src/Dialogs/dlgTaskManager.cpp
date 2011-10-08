@@ -156,8 +156,8 @@ dlgTaskManager::CommitTaskChanges()
       way_points.optimise();
     }
 
-    protected_task_manager->task_commit(*active_task);
-    protected_task_manager->task_save_default();
+    protected_task_manager->TaskCommit(*active_task);
+    protected_task_manager->TaskSaveDefault();
 
     task_modified = false;
     return true;
@@ -230,7 +230,7 @@ void
 dlgTaskManager::RevertTask()
 {
   // create new task first to guarantee pointers are different
-  OrderedTask* temptask = protected_task_manager->task_clone();
+  OrderedTask* temptask = protected_task_manager->TaskClone();
   delete active_task;
   active_task = temptask;
   task_modified = false;
@@ -248,7 +248,7 @@ dlgTaskManager::dlgTaskManagerShowModal(SingleWindow &parent)
 
   assert(wf != NULL);
 
-  active_task = protected_task_manager->task_clone();
+  active_task = protected_task_manager->TaskClone();
   task_modified = false;
 
   // Load tabs

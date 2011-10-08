@@ -366,7 +366,7 @@ OrderedTaskSave(SingleWindow &parent, const OrderedTask& task, bool noask)
   TCHAR path[MAX_PATH];
   _tcscat(fname, _T(".tsk"));
   LocalPath(path, fname);
-  protected_task_manager->task_save(path, task);
+  protected_task_manager->TaskSave(path, task);
   return true;
 }
 

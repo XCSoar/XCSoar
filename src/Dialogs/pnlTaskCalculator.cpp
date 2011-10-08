@@ -79,7 +79,7 @@ RefreshCalculator(void)
     if (XCSoarInterface::Calculated().task_stats.has_targets) {
       DataFieldFloat &df = *(DataFieldFloat *)wp->GetDataField();
       df.SetAsFloat(
-          protected_task_manager->get_ordered_task_behaviour().aat_min_time / 60);
+          protected_task_manager->GetOrderedTaskBehaviour().aat_min_time / 60);
       wp->RefreshDisplay();
     } else {
       wp->hide();

@@ -43,7 +43,7 @@ TaskFileXCSoar::GetTask(const Waypoints *waypoints, unsigned index) const
     return NULL;
 
   if (_tcscmp(root->get_name().c_str(),_T("Task")) == 0) {
-    OrderedTask* task = protected_task_manager->task_blank();
+    OrderedTask* task = protected_task_manager->TaskBlank();
     Deserialiser des(*root, waypoints);
     des.deserialise(*task);
     if (task->check_task()) {

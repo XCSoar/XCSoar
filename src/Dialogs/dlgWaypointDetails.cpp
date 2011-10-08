@@ -181,7 +181,7 @@ OnGotoClicked(gcc_unused WndButton &button)
 
   assert(selected_waypoint != NULL);
 
-  protected_task_manager->do_goto(*selected_waypoint);
+  protected_task_manager->DoGoto(*selected_waypoint);
   wf->SetModalResult(mrOK);
 
   CommonInterface::main_window.full_redraw();
@@ -195,7 +195,7 @@ OnReplaceClicked(gcc_unused WndButton &button)
 
   switch (MapTaskManager::replace_in_task(*selected_waypoint)) {
   case MapTaskManager::SUCCESS:
-    protected_task_manager->task_save_default();
+    protected_task_manager->TaskSaveDefault();
     wf->SetModalResult(mrOK);
     break;
   case MapTaskManager::NOTASK:
@@ -245,7 +245,7 @@ OnInsertInTaskClicked(gcc_unused WndButton &button)
 
   switch (MapTaskManager::insert_in_task(*selected_waypoint)) {
   case MapTaskManager::SUCCESS:
-    protected_task_manager->task_save_default();
+    protected_task_manager->TaskSaveDefault();
     wf->SetModalResult(mrOK);
     break;
 
@@ -279,7 +279,7 @@ OnAppendInTaskClicked(gcc_unused WndButton &button)
 
   switch (MapTaskManager::append_to_task(*selected_waypoint)) {
   case MapTaskManager::SUCCESS:
-    protected_task_manager->task_save_default();
+    protected_task_manager->TaskSaveDefault();
     wf->SetModalResult(mrOK);
     break;
   case MapTaskManager::NOTASK:
@@ -312,7 +312,7 @@ goto_and_clear_task(const Waypoint &wp)
   if (protected_task_manager == NULL)
     return INVALID;
 
-  protected_task_manager->do_goto(wp);
+  protected_task_manager->DoGoto(wp);
   TaskEvents task_events;
   const OrderedTask blank(task_events,
                           XCSoarInterface::SettingsComputer(),
@@ -346,7 +346,7 @@ OnGotoAndClearTaskClicked(gcc_unused WndButton &button)
 
   switch (goto_and_clear_task(*selected_waypoint)) {
   case SUCCESS:
-    protected_task_manager->task_save_default();
+    protected_task_manager->TaskSaveDefault();
     wf->SetModalResult(mrOK);
     break;
   case NOTASK:
@@ -367,7 +367,7 @@ OnRemoveFromTaskClicked(gcc_unused WndButton &button)
 
   switch (MapTaskManager::remove_from_task(*selected_waypoint)) {
   case MapTaskManager::SUCCESS:
-    protected_task_manager->task_save_default();
+    protected_task_manager->TaskSaveDefault();
     wf->SetModalResult(mrOK);
     break;
   case MapTaskManager::NOTASK:

@@ -34,7 +34,7 @@
 
 class AbortIntersectionTest {
 public:
-  virtual bool intersects(const AGeoPoint& destination) = 0;
+  virtual bool Intersects(const AGeoPoint& destination) = 0;
 };
 
 /**

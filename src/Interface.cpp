@@ -114,7 +114,7 @@ ActionInterface::SetMacCready(fixed mc, bool to_devices)
   /* send to calculation thread and trigger recalculation */
 
   if (protected_task_manager != NULL)
-    protected_task_manager->set_glide_polar(polar);
+    protected_task_manager->SetGlidePolar(polar);
 
   if (calculation_thread != NULL) {
     calculation_thread->SetSettingsComputer(SettingsComputer());

@@ -33,10 +33,10 @@ class RoutePlannerGlue;
 class ReachIntersectionTest: public AbortIntersectionTest {
 public:
   ReachIntersectionTest(): route(NULL) {};
-  void set_route(const RoutePlannerGlue *_route) {
+  void SetRoute(const RoutePlannerGlue *_route) {
     route = _route;
   }
-  virtual bool intersects(const AGeoPoint& destination);
+  virtual bool Intersects(const AGeoPoint& destination);
 private:
   const RoutePlannerGlue *route;
 };
@@ -55,8 +55,8 @@ protected:
   static const TCHAR default_task_path[];
 
 public:
-  ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour& tb,
-                       TaskEvents& te)
+  ProtectedTaskManager(TaskManager &_task_manager, const TaskBehaviour &tb,
+                       TaskEvents &te)
     :Guard<TaskManager>(_task_manager),
      task_behaviour(tb), task_events(te)
     {}
@@ -64,33 +64,33 @@ public:
   ~ProtectedTaskManager();
 
   // common accessors for ui and calc clients
-  void set_glide_polar(const GlidePolar& glide_polar);
+  void SetGlidePolar(const GlidePolar &glide_polar);
 
   gcc_pure
-  TaskManager::TaskMode_t get_mode() const;
+  TaskManager::TaskMode_t GetMode() const;
 
   gcc_pure
-  const OrderedTaskBehaviour get_ordered_task_behaviour() const;
+  const OrderedTaskBehaviour GetOrderedTaskBehaviour() const;
 
   gcc_pure
-  const Waypoint* getActiveWaypoint() const;
+  const Waypoint* GetActiveWaypoint() const;
 
-  void incrementActiveTaskPoint(int offset);
-  void incrementActiveTaskPointArm(int offset);
+  void IncrementActiveTaskPoint(int offset);
+  void IncrementActiveTaskPointArm(int offset);
 
-  bool do_goto(const Waypoint & wp);
-
-  gcc_pure
-  AircraftState get_start_state() const;
+  bool DoGoto(const Waypoint &wp);
 
   gcc_pure
-  fixed get_finish_height() const;
+  AircraftState GetStartState() const;
+
+  gcc_pure
+  fixed GetFinishHeight() const;
 
   gcc_malloc
-  OrderedTask* task_clone() const;
+  OrderedTask* TaskClone() const;
 
   gcc_malloc
-  OrderedTask* task_blank() const;
+  OrderedTask* TaskBlank() const;
 
   /**
    * Copy task into this task
@@ -98,11 +98,11 @@ public:
    * @param other OrderedTask to copy
    * @return True if this task changed
    */
-  bool task_commit(const OrderedTask& that);
+  bool TaskCommit(const OrderedTask& that);
 
-  bool task_save(const TCHAR* path);
+  bool TaskSave(const TCHAR *path);
 
-  bool task_save_default();
+  bool TaskSaveDefault();
 
   /**
    * Creates an ordered task based on the Default.tsk file
@@ -115,30 +115,30 @@ public:
    * config task defaults
    */
   gcc_malloc
-  OrderedTask* task_create_default(const Waypoints *waypoints,
-                                   TaskBehaviour::Factory_t factory);
+  OrderedTask* TaskCreateDefault(const Waypoints *waypoints,
+                                 TaskBehaviour::Factory_t factory);
 
   gcc_malloc
-  OrderedTask* task_copy(const OrderedTask& that) const;
+  OrderedTask* TaskCopy(const OrderedTask& that) const;
 
   gcc_malloc
-  OrderedTask *task_create(const TCHAR *path, const Waypoints *waypoints,
-                           unsigned index = 0) const;
-  bool task_save(const TCHAR* path, const OrderedTask& task);
+  OrderedTask *TaskCreate(const TCHAR *path, const Waypoints *waypoints,
+                          unsigned index = 0) const;
+  bool TaskSave(const TCHAR* path, const OrderedTask& task);
 
   /** Reset the tasks (as if never flown) */
-  void reset();
+  void Reset();
 
   /**
    * Check whether observer is within OZ of specified tp
    *
-   * @param TPindex index of tp in task
+   * @param index index of tp in task
    * @param ref state of aircraft to be checked
    *
    * @return True if reference point is inside sector
    */
   gcc_pure
-  bool isInSector (const unsigned TPindex, const AircraftState &ref) const;
+  bool IsInSector(const unsigned index, const AircraftState &ref) const;
 
   /**
    * Set target location from a range and radial
@@ -150,28 +150,27 @@ public:
    *
    * @param radial the angle in degrees of the target
    */
-  bool set_target(const unsigned TPindex, const fixed range,
-     const fixed radial);
+  bool SetTarget(const unsigned index, const fixed range, const fixed radial);
 
   /**
    * Lock/unlock the target from automatic shifts of specified tp
    *
-   * @param TPindex index of tp in task
+   * @param index index of tp in task
    * @param do_lock Whether to lock the target
    */
-  bool target_lock(const unsigned TPindex, bool do_lock);
+  bool TargetLock(const unsigned index, bool do_lock);
 
   /**
    * returns copy of name of specified ordered tp
    *
-   * @param TPindex index of ordered tp in task
+   * @param index index of ordered tp in task
    */
   gcc_pure
-  const TCHAR* get_ordered_taskpoint_name(const unsigned TPindex) const;
+  const TCHAR* GetOrderedTaskpointName(const unsigned index) const;
 
   void SetRoutePlanner(const RoutePlannerGlue *_route);
 
-  short get_terrain_base() const;
+  short GetTerrainBase() const;
 };
 
 #endif

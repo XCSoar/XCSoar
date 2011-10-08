@@ -37,28 +37,28 @@ ProtectedTaskManager::~ProtectedTaskManager() {
 }
 
 void 
-ProtectedTaskManager::set_glide_polar(const GlidePolar& glide_polar)
+ProtectedTaskManager::SetGlidePolar(const GlidePolar &glide_polar)
 {
   ExclusiveLease lease(*this);
   lease->set_glide_polar(glide_polar);
 }
 
 TaskManager::TaskMode_t 
-ProtectedTaskManager::get_mode() const
+ProtectedTaskManager::GetMode() const
 {
   Lease lease(*this);
   return lease->get_mode();
 }
 
 const OrderedTaskBehaviour 
-ProtectedTaskManager::get_ordered_task_behaviour() const
+ProtectedTaskManager::GetOrderedTaskBehaviour() const
 {
   Lease lease(*this);
   return lease->get_ordered_task_behaviour();
 }
 
 const Waypoint* 
-ProtectedTaskManager::getActiveWaypoint() const
+ProtectedTaskManager::GetActiveWaypoint() const
 {
   Lease lease(*this);
   const TaskWaypoint *tp = lease->getActiveTaskPoint();
@@ -69,43 +69,44 @@ ProtectedTaskManager::getActiveWaypoint() const
 }
 
 bool
-ProtectedTaskManager::isInSector (const unsigned TPindex, const AircraftState &ref) const
+ProtectedTaskManager::IsInSector (const unsigned index,
+                                  const AircraftState &ref) const
 {
   Lease lease(*this);
-  return lease->isInSector(TPindex, ref);
+  return lease->isInSector(index, ref);
 }
 
 bool
-ProtectedTaskManager::set_target(const unsigned TPindex, const fixed range,
+ProtectedTaskManager::SetTarget(const unsigned index, const fixed range,
    const fixed radial)
 {
   ExclusiveLease lease(*this);
-  return lease->set_target(TPindex, range, radial);
+  return lease->set_target(index, range, radial);
 }
 
 bool
-ProtectedTaskManager::target_lock(const unsigned TPindex, bool do_lock)
+ProtectedTaskManager::TargetLock(const unsigned index, bool do_lock)
 {
   ExclusiveLease lease(*this);
-  return lease->target_lock(TPindex, do_lock);
+  return lease->target_lock(index, do_lock);
 }
 
 const TCHAR*
-ProtectedTaskManager::get_ordered_taskpoint_name(const unsigned TPindex) const
+ProtectedTaskManager::GetOrderedTaskpointName(const unsigned index) const
 {
  Lease lease(*this);
- return lease->get_ordered_taskpoint_name(TPindex);
+ return lease->get_ordered_taskpoint_name(index);
 }
 
 void 
-ProtectedTaskManager::incrementActiveTaskPoint(int offset)
+ProtectedTaskManager::IncrementActiveTaskPoint(int offset)
 {
   ExclusiveLease lease(*this);
   lease->incrementActiveTaskPoint(offset);
 }
 
 void 
-ProtectedTaskManager::incrementActiveTaskPointArm(int offset)
+ProtectedTaskManager::IncrementActiveTaskPointArm(int offset)
 {
   ExclusiveLease lease(*this);
 
@@ -136,28 +137,28 @@ ProtectedTaskManager::incrementActiveTaskPointArm(int offset)
 }
 
 bool 
-ProtectedTaskManager::do_goto(const Waypoint & wp)
+ProtectedTaskManager::DoGoto(const Waypoint &wp)
 {
   ExclusiveLease lease(*this);
   return lease->do_goto(wp);
 }
 
 AircraftState 
-ProtectedTaskManager::get_start_state() const
+ProtectedTaskManager::GetStartState() const
 {
   Lease lease(*this);
   return lease->get_start_state();
 }
 
 fixed 
-ProtectedTaskManager::get_finish_height() const
+ProtectedTaskManager::GetFinishHeight() const
 {
   Lease lease(*this);
   return lease->get_finish_height();
 }
 
 OrderedTask*
-ProtectedTaskManager::task_clone() const
+ProtectedTaskManager::TaskClone() const
 {
   Lease lease(*this);
   return lease->clone(task_events, task_behaviour,
@@ -165,28 +166,28 @@ ProtectedTaskManager::task_clone() const
 }
 
 OrderedTask* 
-ProtectedTaskManager::task_copy(const OrderedTask& that) const
+ProtectedTaskManager::TaskCopy(const OrderedTask &that) const
 {
   Lease lease(*this);
   return that.clone(task_events, task_behaviour, lease->get_glide_polar());
 }
 
 OrderedTask* 
-ProtectedTaskManager::task_blank() const
+ProtectedTaskManager::TaskBlank() const
 {
   Lease lease(*this);
   return new OrderedTask(task_events, task_behaviour, lease->get_glide_polar());
 }
 
 bool
-ProtectedTaskManager::task_commit(const OrderedTask& that)
+ProtectedTaskManager::TaskCommit(const OrderedTask& that)
 {
   ExclusiveLease lease(*this);
   return lease->commit(that);
 }
 
 bool 
-ProtectedTaskManager::task_save(const TCHAR* path, const OrderedTask& task)
+ProtectedTaskManager::TaskSave(const TCHAR* path, const OrderedTask& task)
 {
   DataNodeXML* root = DataNodeXML::createRoot(_T("Task"));
   Serialiser tser(*root);
@@ -198,16 +199,16 @@ ProtectedTaskManager::task_save(const TCHAR* path, const OrderedTask& task)
 }
 
 bool 
-ProtectedTaskManager::task_save(const TCHAR* path)
+ProtectedTaskManager::TaskSave(const TCHAR* path)
 {
-  OrderedTask* task = task_clone();
-  bool retval = task_save(path, *task);
+  OrderedTask* task = TaskClone();
+  bool retval = TaskSave(path, *task);
   delete task;
   return retval;
 }
 
 OrderedTask* 
-ProtectedTaskManager::task_create(const TCHAR* path, const Waypoints *waypoints,
+ProtectedTaskManager::TaskCreate(const TCHAR* path, const Waypoints *waypoints,
                                   unsigned index) const
 {
   TaskFile* task_file = TaskFile::Create(path);
@@ -223,14 +224,14 @@ const TCHAR ProtectedTaskManager::default_task_path[] = _T("Default.tsk");
 
 
 OrderedTask*
-ProtectedTaskManager::task_create_default(const Waypoints *waypoints,
+ProtectedTaskManager::TaskCreateDefault(const Waypoints *waypoints,
                                           TaskBehaviour::Factory_t factoryfail)
 {
   TCHAR path[MAX_PATH];
   LocalPath(path, default_task_path);
-  OrderedTask *task = task_create(path, waypoints);
+  OrderedTask *task = TaskCreate(path, waypoints);
   if (!task) {
-    task = task_blank();
+    task = TaskBlank();
     assert(task);
     task->set_factory(factoryfail);
   }
@@ -238,15 +239,15 @@ ProtectedTaskManager::task_create_default(const Waypoints *waypoints,
 }
 
 bool 
-ProtectedTaskManager::task_save_default()
+ProtectedTaskManager::TaskSaveDefault()
 {
   TCHAR path[MAX_PATH];
   LocalPath(path, default_task_path);
-  return task_save(path);
+  return TaskSave(path);
 }
 
 void 
-ProtectedTaskManager::reset()
+ProtectedTaskManager::Reset()
 {
   ExclusiveLease lease(*this);
   lease->reset();
@@ -254,14 +255,14 @@ ProtectedTaskManager::reset()
 
 void
 ProtectedTaskManager::SetRoutePlanner(const RoutePlannerGlue *_route) {
-  intersection_test.set_route(_route);
+  intersection_test.SetRoute(_route);
 
   ExclusiveLease lease(*this);
   lease->set_intersection_test(&intersection_test);
 }
 
 bool
-ReachIntersectionTest::intersects(const AGeoPoint& destination)
+ReachIntersectionTest::Intersects(const AGeoPoint& destination)
 {
   if (!route)
     return false;

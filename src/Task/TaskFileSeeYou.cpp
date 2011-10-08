@@ -485,7 +485,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
 
   ParseCUTaskDetails(reader, &task_info, turnpoint_infos);
 
-  OrderedTask* task = protected_task_manager->task_blank();
+  OrderedTask* task = protected_task_manager->TaskBlank();
   if (task == NULL)
     return NULL;
 

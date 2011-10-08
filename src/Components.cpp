@@ -198,7 +198,7 @@ XCSoarInterface::AfterStartup()
     InputEvents::processGlideComputer(GCE_STARTUP_REAL);
   }
 
-  OrderedTask *defaultTask = protected_task_manager->task_create_default(
+  OrderedTask *defaultTask = protected_task_manager->TaskCreateDefault(
       &way_points, SettingsComputer().task.task_type_default);
   if (defaultTask) {
     {
@@ -206,7 +206,7 @@ XCSoarInterface::AfterStartup()
       defaultTask->check_duplicate_waypoints(way_points);
       way_points.optimise();
     }
-    protected_task_manager->task_commit(*defaultTask);
+    protected_task_manager->TaskCommit(*defaultTask);
     delete defaultTask;
   }
 
@@ -559,7 +559,7 @@ XCSoarInterface::Shutdown(void)
   operation.SetText(_("Shutdown, saving task..."));
 
   LogStartUp(_T("Save default task"));
-  protected_task_manager->task_save_default();
+  protected_task_manager->TaskSaveDefault();
 
   // Clear waypoint database
   LogStartUp(_T("Close waypoints"));

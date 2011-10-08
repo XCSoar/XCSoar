@@ -137,7 +137,7 @@ Load(unsigned i)
   Profile::SetPath(_T("PlanePath"), list[i].path);
   PlaneGlue::Synchronize(settings.plane, settings, settings.glide_polar_task);
   if (protected_task_manager != NULL)
-    protected_task_manager->set_glide_polar(settings.glide_polar_task);
+    protected_task_manager->SetGlidePolar(settings.glide_polar_task);
 
   TCHAR tmp[256];
   _stprintf(tmp, _("Plane profile \"%s\" activated."),

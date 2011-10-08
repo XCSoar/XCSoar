@@ -75,7 +75,7 @@ SetBallastTimer(bool active)
   if (active && changed) {
     /* apply the new ballast settings before starting the timer */
     CommonInterface::SetSettingsComputer().glide_polar_task = glide_polar;
-    protected_task_manager->set_glide_polar(glide_polar);
+    protected_task_manager->SetGlidePolar(glide_polar);
     changed = false;
   }
 
@@ -295,7 +295,7 @@ dlgBasicSettingsShowModal()
     CommonInterface::SetSettingsComputer().glide_polar_task = glide_polar;
 
     if (protected_task_manager != NULL)
-      protected_task_manager->set_glide_polar(glide_polar);
+      protected_task_manager->SetGlidePolar(glide_polar);
   }
 
   delete wf;

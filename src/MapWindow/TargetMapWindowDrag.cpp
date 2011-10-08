@@ -80,5 +80,5 @@ TargetMapWindow::isInSector(const int x, const int y)
   GeoPoint gp = projection.ScreenToGeo(x, y);
   AircraftState a;
   a.location = gp;
-  return task->isInSector(target_index, a);
+  return task->IsInSector(target_index, a);
 }

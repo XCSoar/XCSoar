@@ -113,7 +113,7 @@ Logger::guiStartLogger(const NMEAInfo& gps_info,
   if (isLoggerActive() || gps_info.gps.replay)
     return;
 
-  OrderedTask* task = protected_task_manager.task_clone();
+  OrderedTask* task = protected_task_manager.TaskClone();
   Declaration decl(task);
   Profile::GetDeclarationConfig(decl, settings.plane);
 

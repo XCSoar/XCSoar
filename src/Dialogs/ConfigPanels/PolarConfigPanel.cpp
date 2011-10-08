@@ -389,7 +389,7 @@ PolarConfigPanel::Save()
                            settings_computer.glide_polar_task);
 
     if (protected_task_manager != NULL)
-      protected_task_manager->set_glide_polar(settings_computer.glide_polar_task);
+      protected_task_manager->SetGlidePolar(settings_computer.glide_polar_task);
   }
 
   return changed;

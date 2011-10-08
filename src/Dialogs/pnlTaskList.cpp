@@ -195,7 +195,7 @@ LoadTask()
     return;
 
   // create new task first to guarantee pointers are different
-  OrderedTask* temptask = protected_task_manager->task_copy(*orig);
+  OrderedTask* temptask = protected_task_manager->TaskCopy(*orig);
   delete *active_task;
   *active_task = temptask;
   RefreshView();

@@ -301,7 +301,7 @@ static void
 OnOptimized(CheckBoxControl &control)
 {
   IsLocked = !control.get_checked();
-  protected_task_manager->target_lock(target_point, IsLocked);
+  protected_task_manager->TargetLock(target_point, IsLocked);
   RefreshCalculator();
 }
 
@@ -364,7 +364,7 @@ OnRadialData(DataField *Sender, DataField::DataAccessKind_t Mode)
         RadialNew = rTemp;
       }
       if (Radial != RadialNew) {
-        protected_task_manager->set_target(target_point, Range, RadialNew);
+        protected_task_manager->SetTarget(target_point, Range, RadialNew);
         Radial = RadialNew;
       }
     }
@@ -461,7 +461,7 @@ InitTargetPoints()
 
   target_point = max(0, min((int)target_point, (int)TaskSize - 1));
   for (unsigned i = ActiveTaskPointOnEntry; i < TaskSize; i++) {
-    CopyString(tp_short, protected_task_manager->get_ordered_taskpoint_name(i),
+    CopyString(tp_short, protected_task_manager->GetOrderedTaskpointName(i),
                20);
     _stprintf(tp_label, _T("%d %s"), i, tp_short);
     dfe->addEnumText(tp_label);
@@ -502,7 +502,7 @@ void
 dlgTargetShowModal(int TargetPoint)
 {
   if (protected_task_manager == NULL ||
-      protected_task_manager->get_mode() != TaskManager::MODE_ORDERED)
+      protected_task_manager->GetMode() != TaskManager::MODE_ORDERED)
     return;
 
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,

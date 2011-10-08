@@ -726,7 +726,7 @@ InputEvents::eventWaypointDetails(const TCHAR *misc)
     if (protected_task_manager == NULL)
       return;
 
-    wp = protected_task_manager->getActiveWaypoint();
+    wp = protected_task_manager->GetActiveWaypoint();
     if (!wp) {
       Message::AddMessage(_("No active waypoint!"));
       return;
@@ -749,7 +749,7 @@ InputEvents::eventGotoLookup(gcc_unused const TCHAR *misc)
   const Waypoint* wp = dlgWaypointSelect(XCSoarInterface::main_window,
                                          basic.location);
   if (wp != NULL) {
-    protected_task_manager->do_goto(*wp);
+    protected_task_manager->DoGoto(*wp);
     trigger_redraw();
   }
 }
@@ -979,17 +979,17 @@ InputEvents::eventAdjustWaypoint(const TCHAR *misc)
     return;
 
   if (_tcscmp(misc, _T("next")) == 0)
-    protected_task_manager->incrementActiveTaskPoint(1); // next
+    protected_task_manager->IncrementActiveTaskPoint(1); // next
   else if (_tcscmp(misc, _T("nextwrap")) == 0)
-    protected_task_manager->incrementActiveTaskPoint(1); // next - with wrap
+    protected_task_manager->IncrementActiveTaskPoint(1); // next - with wrap
   else if (_tcscmp(misc, _T("previous")) == 0)
-    protected_task_manager->incrementActiveTaskPoint(-1); // previous
+    protected_task_manager->IncrementActiveTaskPoint(-1); // previous
   else if (_tcscmp(misc, _T("previouswrap")) == 0)
-    protected_task_manager->incrementActiveTaskPoint(-1); // previous with wrap
+    protected_task_manager->IncrementActiveTaskPoint(-1); // previous with wrap
   else if (_tcscmp(misc, _T("nextarm")) == 0)
-    protected_task_manager->incrementActiveTaskPointArm(1); // arm sensitive next
+    protected_task_manager->IncrementActiveTaskPointArm(1); // arm sensitive next
   else if (_tcscmp(misc, _T("previousarm")) == 0)
-    protected_task_manager->incrementActiveTaskPointArm(-1); // arm sensitive previous
+    protected_task_manager->IncrementActiveTaskPointArm(-1); // arm sensitive previous
 
   trigger_redraw();
 }
@@ -1088,7 +1088,7 @@ InputEvents::eventBugs(const TCHAR *misc)
 
   if (BUGS != oldBugs) {
     polar.SetBugs(fixed(BUGS));
-    protected_task_manager->set_glide_polar(polar);
+    protected_task_manager->SetGlidePolar(polar);
   }
 }
 
@@ -1129,7 +1129,7 @@ InputEvents::eventBallast(const TCHAR *misc)
 
   if (BALLAST != oldBallast) {
     polar.SetBallast(fixed(BALLAST));
-    protected_task_manager->set_glide_polar(polar);
+    protected_task_manager->SetGlidePolar(polar);
   }
 }
 
@@ -1301,14 +1301,14 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
     TCHAR buffer[MAX_PATH];
     LocalPath(buffer, misc);
 
-    OrderedTask *task = protected_task_manager->task_create(buffer, &way_points);
+    OrderedTask *task = protected_task_manager->TaskCreate(buffer, &way_points);
     if (task) {
       {
         ScopeSuspendAllThreads suspend;
         task->check_duplicate_waypoints(way_points);
         way_points.optimise();
       }
-      protected_task_manager->task_commit(*task);
+      protected_task_manager->TaskCommit(*task);
       delete task;
     }
   }
@@ -1327,7 +1327,7 @@ InputEvents::eventTaskSave(const TCHAR *misc)
   if (!string_is_empty(misc)) {
     TCHAR buffer[MAX_PATH];
     LocalPath(buffer, misc);
-    protected_task_manager->task_save(buffer);
+    protected_task_manager->TaskSave(buffer);
   }
 }
 
@@ -1857,7 +1857,7 @@ InputEvents::eventTaskTransition(const TCHAR *misc)
     return;
 
   if (_tcscmp(misc, _T("start")) == 0) {
-    AircraftState start_state = protected_task_manager->get_start_state();
+    AircraftState start_state = protected_task_manager->GetStartState();
 
     TCHAR TempTime[40];
     TCHAR TempAlt[40];

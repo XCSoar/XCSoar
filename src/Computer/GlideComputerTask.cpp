@@ -51,7 +51,7 @@ GlideComputerTask::Initialise()
 void
 GlideComputerTask::ResetFlight(const bool full)
 {
-  m_task.reset();
+  m_task.Reset();
   route.ResetFlight();
   trace.Reset();
   contest.Reset();

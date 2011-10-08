@@ -190,7 +190,7 @@ ChartControl::on_paint(Canvas &canvas)
   {
     OrderedTaskBehaviour otb;
     if (protected_task_manager != NULL) {
-      otb = protected_task_manager->get_ordered_task_behaviour();
+      otb = protected_task_manager->GetOrderedTaskBehaviour();
     }
 
     ThermalBandRenderer renderer(thermal_band_look, chart_look);

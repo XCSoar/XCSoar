@@ -328,7 +328,7 @@ UpdateValuesRules(void)
   else
     wp->SetText(_("No"));
 
-  AircraftState start_state = protected_task_manager->get_start_state();
+  AircraftState start_state = protected_task_manager->GetStartState();
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartTime"));
   assert(wp != NULL);
@@ -365,7 +365,7 @@ UpdateValuesRules(void)
   wp = (WndProperty*)wf->FindByName(_T("prpFinishAlt"));
   assert(wp != NULL);
   _stprintf(Temp, _T("%.0f %s"),
-            (double)Units::ToUserAltitude(protected_task_manager->get_finish_height()),
+            (double)Units::ToUserAltitude(protected_task_manager->GetFinishHeight()),
             Units::GetAltitudeName());
   wp->SetText(Temp);
 
@@ -400,7 +400,7 @@ UpdateValuesTask(void)
   TCHAR Temp[80];
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskTime"));
-  Units::TimeToTextHHMMSigned(Temp, protected_task_manager->get_ordered_task_behaviour().aat_min_time);
+  Units::TimeToTextHHMMSigned(Temp, protected_task_manager->GetOrderedTaskBehaviour().aat_min_time);
   assert(wp != NULL);
   if (task_stats.has_targets)
     wp->SetText(Temp);
