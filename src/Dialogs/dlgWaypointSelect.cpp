@@ -414,11 +414,11 @@ private:
 
     if (ordered_task) {
       t_size = task->TaskSize();
-      leg1 = (t_size > 1) ? task->getTaskPoint(1)->
+      leg1 = (t_size > 1) ? task->GetTaskPoint(1)->
               GetVectorPlanned().distance : fixed_zero;
-      leg2 = (t_size > 2) ? task->getTaskPoint(2)->
+      leg2 = (t_size > 2) ? task->GetTaskPoint(2)->
               GetVectorPlanned().distance : fixed_zero;
-      leg3 = (t_size > 3) ? task->getTaskPoint(3)->
+      leg3 = (t_size > 3) ? task->GetTaskPoint(3)->
               GetVectorPlanned().distance : fixed_zero;
     } else {
       leg1 = leg2 = leg3 = fixed_zero;

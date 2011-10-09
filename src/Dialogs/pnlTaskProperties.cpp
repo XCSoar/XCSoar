@@ -65,7 +65,7 @@ InitView()
   wp = (WndProperty*)wf->FindByName(_T("prpTaskType"));
   if (wp) {
     const std::vector<TaskBehaviour::Factory_t> factory_types =
-        ordered_task->get_factory_types();
+        ordered_task->GetFactoryTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -188,7 +188,7 @@ pnlTaskProperties::OnTabPreHide()
 {
   ReadValues();
   if (orig_taskType != ordered_task->get_factory_type())
-    ordered_task->get_factory().mutate_tps_to_task_type();
+    ordered_task->GetFactory().mutate_tps_to_task_type();
 
   return true;
 }
@@ -223,7 +223,7 @@ pnlTaskProperties::OnTaskTypeData(DataField *Sender, DataField::DataAccessKind_t
        (TaskBehaviour::Factory_t)df.GetAsInteger();
     if (newtype != ordered_task->get_factory_type()) {
       ReadValues();
-      ordered_task->set_factory(newtype);
+      ordered_task->SetFactory(newtype);
       *task_changed =true;
       RefreshView();
     }

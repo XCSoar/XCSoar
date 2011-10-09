@@ -169,7 +169,7 @@ OrderedTask*
 ProtectedTaskManager::TaskCopy(const OrderedTask &that) const
 {
   Lease lease(*this);
-  return that.clone(task_events, task_behaviour, lease->GetGlidePolar());
+  return that.Clone(task_events, task_behaviour, lease->GetGlidePolar());
 }
 
 OrderedTask* 
@@ -233,7 +233,7 @@ ProtectedTaskManager::TaskCreateDefault(const Waypoints *waypoints,
   if (!task) {
     task = TaskBlank();
     assert(task);
-    task->set_factory(factoryfail);
+    task->SetFactory(factoryfail);
   }
   return task;
 }

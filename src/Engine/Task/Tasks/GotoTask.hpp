@@ -95,12 +95,12 @@ public:
  * @param wp Waypoint to Go To
  * @return True if successful
  */
-  bool do_goto(const Waypoint& wp);
+  bool DoGoto(const Waypoint& wp);
 
 /** 
  * Resets (clears) the goto task
  */
-  void reset();
+  void Reset();
 
 /** 
  * Update internal states when aircraft state advances.
@@ -110,7 +110,7 @@ public:
  *
  * @return True if internal state changes
  */
-  bool update_sample(const AircraftState &state_now, 
+  bool UpdateSample(const AircraftState &state_now, 
                      const bool full_update);
 
   /**
@@ -121,7 +121,7 @@ public:
    *
    * @return True if default task was created
    */
-  bool takeoff_autotask(const GeoPoint& loc, const fixed terrain_alt);
+  bool TakeoffAutotask(const GeoPoint& loc, const fixed terrain_alt);
 
 protected:
 /** 
@@ -133,7 +133,7 @@ protected:
  * 
  * @return True if transition occurred
  */
-  bool check_transitions(const AircraftState& state_now, 
+  bool CheckTransitions(const AircraftState& state_now, 
                          const AircraftState& state_last);
 
 public:
@@ -145,7 +145,7 @@ public:
  * @param reverse Visit task points in reverse order 
  *
  */
-  void tp_CAccept(TaskPointConstVisitor& visitor,
+  void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor,
                   const bool reverse = false) const;
 
 };

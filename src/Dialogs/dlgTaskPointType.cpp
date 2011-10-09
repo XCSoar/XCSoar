@@ -52,7 +52,7 @@ static void OnCloseClicked(gcc_unused WndButton &Sender)
 static AbstractTaskFactory::LegalPointType_t
 get_point_type() 
 {
-  return ordered_task->get_factory().getType(*point);
+  return ordered_task->GetFactory().getType(*point);
 }
 
 
@@ -111,7 +111,7 @@ SetPointType(AbstractTaskFactory::LegalPointType_t type)
   }
 
   if (apply) {
-    AbstractTaskFactory &factory = ordered_task->get_factory();
+    AbstractTaskFactory &factory = ordered_task->GetFactory();
 
     if (point) {
       point = factory.createMutatedPoint(*point, type);
@@ -217,7 +217,7 @@ dlgTaskPointType(SingleWindow &parent, OrderedTask** task, const unsigned index)
   wPointTypes = (WndListFrame*)wf->FindByName(_T("frmPointTypes"));
   assert(wPointTypes != NULL);
 
-  point_types = ordered_task->get_factory().getValidTypes(index);
+  point_types = ordered_task->GetFactory().getValidTypes(index);
   if (point_types.empty()) {
     assert(1);
     return false;

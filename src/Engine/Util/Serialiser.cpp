@@ -230,9 +230,9 @@ Serialiser::serialise(const OrderedTask &task)
   m_node.set_attribute(_T("type"), task_factory_type(task.get_factory_type()));
   serialise(task.get_ordered_task_behaviour());
   mode_optional_start = false;
-  task.tp_CAccept(*this);
+  task.AcceptTaskPointVisitor(*this);
   mode_optional_start = true;
-  task.sp_CAccept(*this);
+  task.AcceptStartPointVisitor(*this);
 }
 
 const TCHAR*

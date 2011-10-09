@@ -118,7 +118,7 @@ TaskSummaryShape(OrderedTask* task, TCHAR* text)
     break;
 
   case 3:
-    if (task->get_factory().is_closed()) {
+    if (task->GetFactory().is_closed()) {
       _tcscpy(text, _("Out and return"));
       FAIShape = true;
     }
@@ -127,9 +127,9 @@ TaskSummaryShape(OrderedTask* task, TCHAR* text)
     break;
 
   case 4:
-    if (!task->get_factory().is_unique() ||!task->get_factory().is_closed())
+    if (!task->GetFactory().is_unique() ||!task->GetFactory().is_closed())
       _tcscpy(text, _("Three legs"));
-    else if (task->get_factory().TestFAITriangle()) {
+    else if (task->GetFactory().TestFAITriangle()) {
       _tcscpy(text, _("FAI triangle"));
       FAIShape = true;
     }
@@ -150,10 +150,10 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
   TCHAR summary_shape[100];
   bool FAIShape = TaskSummaryShape(task, summary_shape);
   if (FAIShape || task->get_factory_type() == TaskBehaviour::FACTORY_FAI_GENERAL) {
-    if (!task->get_factory().validateFAIOZs()) {
+    if (!task->GetFactory().validateFAIOZs()) {
       _tcscat(summary_shape, _T("/ "));
       _tcscat(summary_shape, getTaskValidationErrors(
-          task->get_factory().getValidationErrors()));
+          task->GetFactory().getValidationErrors()));
     }
   }
 
@@ -172,7 +172,7 @@ OrderedTaskSummary(OrderedTask* task, TCHAR* text, bool linebreaks)
     _stprintf(text, _("Task is empty (%s)"),
              OrderedTaskFactoryName(task->get_factory_type()));
   } else {
-    if (task->has_targets())
+    if (task->HasTargets())
       _stprintf(text, _T("%s%s%.0f %s%s%s %.0f %s%s%s %.0f %s (%s)"),
                 summary_shape,
                 linebreak,

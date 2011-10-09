@@ -177,7 +177,7 @@ PrintHelper::abstracttask_print(AbstractTask& task, const AircraftState &state)
 
   if (positive(task.stats.Time)) {
     f6 << task.stats.Time
-       << " " << task.activeTaskPoint
+       << " " << task.active_task_point
        << " " << task.stats.mc_best
        << " " << task.stats.total.remaining_effective.get_distance()
        << " " << task.stats.total.remaining.get_distance() 
@@ -221,7 +221,7 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AircraftState &state)
     fi << "## point " << i << "\n";
     if (task.task_points[i]->type == TaskPoint::AAT) {
       aatpoint_print(fi, (AATPoint&)*task.task_points[i], state,
-                     task.get_task_projection(), 1);
+                     task.GetTaskProjection(), 1);
     } else {
       orderedtaskpoint_print(fi,*task.task_points[i],state,1);
     }
@@ -235,7 +235,7 @@ PrintHelper::orderedtask_print(OrderedTask& task, const AircraftState &state)
     f1 << "## point " << i << " ###################\n";
     if (task.task_points[i]->type == TaskPoint::AAT) {
       aatpoint_print(f1, (AATPoint&)*task.task_points[i], state,
-                     task.get_task_projection(), 0);
+                     task.GetTaskProjection(), 0);
     } else {
       orderedtaskpoint_print(f1,*task.task_points[i],state,0);
     }
@@ -285,7 +285,7 @@ void PrintHelper::aborttask_print(AbortTask& task, const AircraftState &state)
   for (unsigned i=0; i<task.task_points.size(); i++) {
     GeoPoint l = task.task_points[i].GetLocation();
     f1 << "## point " << i << " ###################\n";
-    if (i==task.activeTaskPoint) {
+    if (i==task.active_task_point) {
       f1 << state.location.longitude << " " << state.location.latitude << "\n";
     }
     f1 << l.longitude << " " << l.latitude << "\n";

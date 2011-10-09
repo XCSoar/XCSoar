@@ -48,7 +48,7 @@ void
 TaskRenderer::Draw(const OrderedTask &task)
 {
   tpv.SetBoundingBox(task.get_bounding_box(screen_bounds));
-  tpv.SetActiveIndex(task.getActiveIndex());
+  tpv.SetActiveIndex(task.GetActiveIndex());
   for (unsigned i = 0; i < 4; i++) {
     tpv.ResetIndex();
 
@@ -61,7 +61,7 @@ TaskRenderer::Draw(const OrderedTask &task)
 
     tpv.SetModeOptional(false);
     for (unsigned j = 0, end = task.TaskSize(); j < end; ++j)
-      tpv.Draw(*task.getTaskPoint(j), (RenderTaskPoint::Layer)i);
+      tpv.Draw(*task.GetTaskPoint(j), (RenderTaskPoint::Layer)i);
   }
 }
 

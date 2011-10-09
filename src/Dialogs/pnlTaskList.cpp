@@ -79,7 +79,7 @@ get_cursor_task()
   if (!ordered_task)
     return NULL;
 
-  if (!ordered_task->check_task()) {
+  if (!ordered_task->CheckTask()) {
     delete ordered_task;
     ordered_task = NULL;
   }
@@ -163,9 +163,9 @@ RefreshView()
 static void
 SaveTask()
 {
-  (*active_task)->get_factory().CheckAddFinish();
+  (*active_task)->GetFactory().CheckAddFinish();
 
-  if ((*active_task)->check_task()) {
+  if ((*active_task)->CheckTask()) {
     if (!OrderedTaskSave(*(SingleWindow *)wf->get_root_owner(), **active_task))
       return;
 
@@ -173,7 +173,7 @@ SaveTask()
     RefreshView();
   } else {
     MessageBoxX(getTaskValidationErrors(
-        (*active_task)->get_factory().getValidationErrors()), _("Task not saved"),
+        (*active_task)->GetFactory().getValidationErrors()), _("Task not saved"),
         MB_ICONEXCLAMATION);
   }
 }
@@ -311,8 +311,8 @@ pnlTaskList::OnNewTaskClicked(gcc_unused WndButton &Sender)
   if (((*active_task)->TaskSize() < 2) ||
       (MessageBoxX(_("Create new task?"), _("Task New"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
-    (*active_task)->clear();
-    (*active_task)->set_factory(XCSoarInterface::SettingsComputer().task.task_type_default);
+    (*active_task)->Clear();
+    (*active_task)->SetFactory(XCSoarInterface::SettingsComputer().task.task_type_default);
     *task_modified = true;
     wTabBar->SetCurrentPage(dlgTaskManager::GetPropertiesTab());
     wTabBar->set_focus();
@@ -358,9 +358,9 @@ pnlTaskList::OnTaskCursorCallback(gcc_unused unsigned i)
 bool
 pnlTaskList::OnDeclareClicked(gcc_unused WndButton &Sender)
 {
-  if (!(*active_task)->check_task()) {
+  if (!(*active_task)->CheckTask()) {
     const AbstractTaskFactory::TaskValidationErrorVector errors =
-      (*active_task)->get_factory().getValidationErrors();
+      (*active_task)->GetFactory().getValidationErrors();
     MessageBoxX(getTaskValidationErrors(errors), _("Declare task"),
                 MB_ICONEXCLAMATION);
     return false;

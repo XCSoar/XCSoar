@@ -20,7 +20,7 @@ static OrderedTask* task_load(OrderedTask* task) {
 
   Deserialiser des(*root);
   des.deserialise(*task);
-  if (task->check_task()) {
+  if (task->CheckTask()) {
     delete root;
     return task;
   }

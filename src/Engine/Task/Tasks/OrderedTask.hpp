@@ -111,7 +111,7 @@ public:
    * @return Factory
    */
   gcc_pure
-  AbstractTaskFactory& get_factory() const {
+  AbstractTaskFactory& GetFactory() const {
     return *active_factory;
   }
 
@@ -122,7 +122,7 @@ public:
    *
    * @return Type of task
    */
-  TaskBehaviour::Factory_t set_factory(const TaskBehaviour::Factory_t _factory);
+  TaskBehaviour::Factory_t SetFactory(const TaskBehaviour::Factory_t _factory);
 
   /** 
    * Return list of factory types
@@ -132,19 +132,19 @@ public:
    * @return Vector of factory types
    */
   gcc_pure
-  std::vector<TaskBehaviour::Factory_t> get_factory_types(bool all=true) const;
+  std::vector<TaskBehaviour::Factory_t> GetFactoryTypes(bool all = true) const;
 
   /** 
    * Reset the task (as if never flown)
    * 
    */
-  void reset();
+  void Reset();
 
   /** 
    * Clear all points and restore default ordered task behaviour
    * 
    */
-  void clear();
+  void Clear();
 
   /**
    * Create a clone of the task. 
@@ -157,8 +157,7 @@ public:
    * @return Initialised object
    */
   gcc_malloc gcc_pure
-  OrderedTask* clone(TaskEvents &te, 
-                     const TaskBehaviour &tb,
+  OrderedTask* Clone(TaskEvents &te, const TaskBehaviour &tb,
                      const GlidePolar &gp) const;
 
   /**
@@ -167,7 +166,7 @@ public:
    * @param other OrderedTask to copy
    * @return True if this task changed
    */
-  bool commit(const OrderedTask& other);
+  bool Commit(const OrderedTask& other);
 
   /**
    * Retrieves the active task point sequence.
@@ -183,7 +182,7 @@ public:
    * @return Index of active task point sequence
    */
   gcc_pure
-  unsigned getActiveIndex() const;
+  unsigned GetActiveIndex() const;
 
   /**
    * Retrieve task point by sequence index
@@ -193,7 +192,7 @@ public:
    * @return OrderedTaskPoint at index (or NULL if out of range)
    */
   gcc_pure
-  const OrderedTaskPoint* getTaskPoint(const unsigned index) const;
+  const OrderedTaskPoint* GetTaskPoint(const unsigned index) const;
 
   /**
    * Determine whether active task point optionally shifted points to
@@ -210,7 +209,7 @@ public:
    * @return True if task has start
    */
   gcc_pure
-  bool has_start() const {
+  bool HasStart() const {
     return taskpoint_start != NULL;
   }
 
@@ -220,7 +219,7 @@ public:
    * @return True if task has finish
    */
   gcc_pure
-  bool has_finish() const {
+  bool HasFinish() const {
     return taskpoint_finish != NULL;
   }
 
@@ -235,12 +234,12 @@ public:
    * Cycle through optional start points, replacing actual task start point
    * with top item in optional starts.
    */
-  void rotateOptionalStarts();
+  void RotateOptionalStarts();
 
   /**
    * Return number of optional start points
    */
-  unsigned optional_starts_size() const;
+  unsigned OptionalStartsSize() const;
 
   /**
    * Insert taskpoint before specified index in task.  May fail if the candidate
@@ -253,7 +252,7 @@ public:
    *
    * @return True on success
    */
-  bool insert(const OrderedTaskPoint &tp, const unsigned position);
+  bool Insert(const OrderedTaskPoint &tp, const unsigned position);
 
   /**
    * Replace taskpoint.
@@ -266,7 +265,7 @@ public:
    *
    * @return True on success
    */
-  bool replace(const OrderedTaskPoint &tp, const unsigned position);
+  bool Replace(const OrderedTaskPoint &tp, const unsigned position);
 
   /**
    * Replace optional start point.
@@ -279,7 +278,7 @@ public:
    *
    * @return True on success
    */
-  bool replace_optional_start(const OrderedTaskPoint &tp, const unsigned position);
+  bool ReplaceOptionalStart(const OrderedTaskPoint &tp, const unsigned position);
 
   /**
    * Append taskpoint to end of task.  May fail if the candidate
@@ -291,7 +290,7 @@ public:
    *
    * @return True on success
    */
-  bool append(const OrderedTaskPoint &tp);
+  bool Append(const OrderedTaskPoint &tp);
 
   /**
    * Append optional start point.  May fail if the candidate
@@ -302,7 +301,7 @@ public:
    *
    * @return True on success
    */
-  bool append_optional_start(const OrderedTaskPoint &tp);
+  bool AppendOptionalStart(const OrderedTaskPoint &tp);
 
   /**
    * Remove task point at specified position.  Note that
@@ -312,7 +311,7 @@ public:
    *
    * @return True on success
    */
-  bool remove(const unsigned position);
+  bool Remove(const unsigned position);
 
   /**
    * Remove optional start point at specified position.
@@ -321,7 +320,7 @@ public:
    *
    * @return True on success
    */
-  bool remove_optional_start(const unsigned position);
+  bool RemoveOptionalStart(const unsigned position);
 
   /**
    * Change the waypoint of an optional start point
@@ -329,7 +328,8 @@ public:
    * @param waypoint
    * @return true if succeeded
    */
-  bool relocate_optional_start(const unsigned position, const Waypoint& waypoint);
+  bool RelocateOptionalStart(const unsigned position, const Waypoint& waypoint);
+
   /**
    * Relocate a task point to a new location
    *
@@ -338,14 +338,14 @@ public:
    *
    * @return True on success
    */
-  bool relocate(const unsigned position, const Waypoint& waypoint);
+  bool Relocate(const unsigned position, const Waypoint& waypoint);
 
   /**
    * Check if task is valid.  Calls task_event methods on failure.
    *
    * @return True if task is valid
    */
-  bool check_task() const;
+  bool CheckTask() const;
 
  /**
   * returns pointer to AATPoint accessed via TPIndex if exist
@@ -354,7 +354,7 @@ public:
   *
   * @return pointer to tp if valid, else NULL
   */
- AATPoint* get_AAT_task_point(unsigned TPindex) const;
+ AATPoint* GetAATTaskPoint(unsigned index) const;
 
   
   /**
@@ -363,7 +363,7 @@ public:
    *
    * @return True if task is finished
    */
-  bool task_finished() const;
+  bool TaskFinished() const;
 
   /**
    * Test if task has started.  Used to determine whether
@@ -373,7 +373,7 @@ public:
    *
    * @return True if task has started
    */
-  virtual bool task_started(bool soft=false) const;
+  virtual bool TaskStarted(bool soft=false) const;
 
   /**
    * Update internal states when aircraft state advances.
@@ -383,7 +383,7 @@ public:
    *
    * @return True if internal state changes
    */
-  bool update_sample(const AircraftState &state_now, 
+  bool UpdateSample(const AircraftState &state_now, 
                      const bool full_update);
 
 
@@ -420,7 +420,7 @@ public:
    */
   gcc_pure
   const TaskProjection&
-  get_task_projection() const {
+  GetTaskProjection() const {
     return task_projection;
   }
 
@@ -430,7 +430,7 @@ public:
    * @return State at task start (or null state if not started)
    */
   gcc_pure
-  AircraftState get_start_state() const;
+  AircraftState GetStartState() const;
 
   /**
    * Accesses task finish state
@@ -438,16 +438,16 @@ public:
    * @return State at task finish (or null state if not finished)
    */
   gcc_pure
-  AircraftState get_finish_state() const;
+  AircraftState GetFinishState() const;
 
-  fixed get_finish_height() const;
+  fixed GetFinishHeight() const;
 
-  GeoPoint get_task_center(const GeoPoint& fallback_location) const;
-  fixed get_task_radius(const GeoPoint& fallback_location) const;
+  GeoPoint GetTaskCenter(const GeoPoint& fallback_location) const;
+  fixed GetTaskRadius(const GeoPoint& fallback_location) const;
 
-  bool has_targets() const;
+  bool HasTargets() const;
 
-  void check_duplicate_waypoints(Waypoints& waypoints);
+  void CheckDuplicateWaypoints(Waypoints& waypoints);
 
   /**
    * Update internal geometric state of task points.
@@ -477,7 +477,7 @@ public:
   void update_summary(TaskSummary& summary) const;
 
 protected:
-  bool is_scored() const;
+  bool IsScored() const;
 
   /**
    * Retrieve vector of search points to be used in max/min distance
@@ -529,7 +529,7 @@ protected:
    *
    * @return True if transition occurred
    */
-  bool check_transitions(const AircraftState &state_now, 
+  bool CheckTransitions(const AircraftState &state_now, 
                          const AircraftState &state_last);
 
   /**
@@ -538,7 +538,7 @@ protected:
    *
    * @return Distance (m) of nominal task
    */
-  fixed scan_distance_nominal();
+  fixed ScanDistanceNominal();
 
   /**
    * Calculate distance of planned task (sum of distances from each leg's
@@ -547,7 +547,7 @@ protected:
    *
    * @return Distance (m) of planned task
    */
-  fixed scan_distance_planned();
+  fixed ScanDistancePlanned();
 
   /**
    * Calculate distance of planned task (sum of distances from aircraft to
@@ -558,7 +558,7 @@ protected:
    *
    * @return Distance (m) remaining in the planned task
    */
-  fixed scan_distance_remaining(const GeoPoint &ref);
+  fixed ScanDistanceRemaining(const GeoPoint &ref);
 
   /**
    * Calculate scored distance of achieved part of task.
@@ -567,7 +567,7 @@ protected:
    *
    * @return Distance (m) achieved adjusted for scoring
    */
-  fixed scan_distance_scored(const GeoPoint &ref);
+  fixed ScanDistanceScored(const GeoPoint &ref);
 
   /**
    * Calculate distance of achieved part of task.
@@ -579,7 +579,7 @@ protected:
    *
    * @return Distance (m) achieved
    */
-  fixed scan_distance_travelled(const GeoPoint &ref);
+  fixed ScanDistanceTravelled(const GeoPoint &ref);
 
   /**
    * Calculate maximum and minimum distances for task, achievable
@@ -590,7 +590,7 @@ protected:
    * @param dmin Minimum distance (m) achievable of task
    * @param dmax Maximum distance (m) achievable of task
    */
-  void scan_distance_minmax(const GeoPoint &ref, 
+  void ScanDistanceMinMax(const GeoPoint &ref, 
                             bool full,
                             fixed *dmin, fixed *dmax);
 
@@ -601,7 +601,7 @@ protected:
    *
    * @return Time (s) of start of task
    */
-  fixed scan_total_start_time(const AircraftState &state_now);
+  fixed ScanTotalStartTime(const AircraftState &state_now);
 
   /**
    * Calculate leg start time.
@@ -610,7 +610,7 @@ protected:
    *
    * @return Time (s) of start of leg
    */
-  fixed scan_leg_start_time(const AircraftState &state_now);
+  fixed ScanLegStartTime(const AircraftState &state_now);
 
 
   /**
@@ -621,7 +621,7 @@ protected:
    * @param total Glide result accumulated for total remaining task
    * @param leg Glide result for current leg of task
    */
-  void glide_solution_remaining(const AircraftState &state_now, 
+  void GlideSolutionRemaining(const AircraftState &state_now, 
                                 const GlidePolar &polar,
                                 GlideResult &total,
                                 GlideResult &leg);
@@ -633,7 +633,7 @@ protected:
    * @param total Glide result accumulated for total travelled task
    * @param leg Glide result for current leg of task
    */
-  void glide_solution_travelled(const AircraftState &state_now, 
+  void GlideSolutionTravelled(const AircraftState &state_now, 
                                 GlideResult &total,
                                 GlideResult &leg);
 
@@ -651,7 +651,7 @@ protected:
    * @param total_t_elapsed Total planned task time (s)
    * @param leg_t_elapsed Leg planned task time (s)
    */
-  void glide_solution_planned(const AircraftState &state_now, 
+  void GlideSolutionPlanned(const AircraftState &state_now, 
                               GlideResult &total,
                               GlideResult &leg,
                               DistanceStat &total_remaining_effective,
@@ -668,7 +668,7 @@ protected:
    *
    * @return true if solution is valid
    */
-  bool calc_mc_best(const AircraftState &state_now, fixed& best) const;
+  bool CalcBestMC(const AircraftState &state_now, fixed& best) const;
 
   /**
    * Calculate virtual sink rate of aircraft that allows a pure glide solution
@@ -679,7 +679,7 @@ protected:
    *
    * @return Sink rate of aircraft (m/s)
    */
-  fixed calc_glide_required(const AircraftState &state_now) const;
+  fixed CalcRequiredGlide(const AircraftState &state_now) const;
 
   /**
    * Calculate cruise efficiency for the travelled part of the task.
@@ -691,9 +691,9 @@ protected:
    *
    * @return True if cruise efficiency is updated
    */
-  bool calc_cruise_efficiency(const AircraftState &state_now, fixed& value) const;
+  bool CalcCruiseEfficiency(const AircraftState &state_now, fixed& value) const;
 
-  bool calc_effective_mc(const AircraftState &state_now, fixed& value) const;
+  bool CalcEffectiveMC(const AircraftState &state_now, fixed& value) const;
 
   /**
    * Optimise target ranges (for adjustable tasks) to produce an estimated
@@ -705,7 +705,7 @@ protected:
    *
    * @return Target range parameter (0-1)
    */
-  fixed calc_min_target(const AircraftState &state_now, 
+  fixed CalcMinTarget(const AircraftState &state_now, 
                         const fixed t_target);
 
   /**
@@ -716,7 +716,7 @@ protected:
    *
    * @return Minimum gradient angle of remainder of task
    */
-  fixed calc_gradient(const AircraftState &state_now) const;
+  fixed CalcGradient(const AircraftState &state_now) const;
 
 private:
 
@@ -776,9 +776,9 @@ private:
    * @param points Vector of points to confirm in active waypoint database
    * @param is_task True if task point.  False if optional start point
    */
-  void check_duplicate_waypoints(Waypoints& waypoints,
-                                 OrderedTaskPointVector& points,
-                                 const bool is_task);
+  void CheckDuplicateWaypoints(Waypoints& waypoints,
+                               OrderedTaskPointVector& points,
+                               const bool is_task);
 
   void select_optional_start(unsigned pos);
 
@@ -870,7 +870,7 @@ public:
    * @param visitor Visitor to accept
    * @param reverse Visit task points in reverse order
    */
-  void tp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor, const bool reverse=false) const;
 
   /**
    * Accept a (const) task point visitor; makes the visitor visit
@@ -879,7 +879,7 @@ public:
    * @param visitor Visitor to accept
    * @param reverse Visit task points in reverse order
    */
-  void sp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  void AcceptStartPointVisitor(TaskPointConstVisitor& visitor, const bool reverse=false) const;
 
 };
 

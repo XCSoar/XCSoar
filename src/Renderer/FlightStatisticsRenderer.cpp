@@ -96,7 +96,7 @@ static void DrawLegs(Chart& chart,
 
   const OrderedTask &task = task_manager.GetOrderedTask();
   for (unsigned i = 0, n = task.TaskSize(); i < n; ++i) {
-    const OrderedTaskPoint &tp = *task.getTaskPoint(i);
+    const OrderedTaskPoint &tp = *task.GetTaskPoint(i);
     if (!IsTaskLegVisible(tp))
       continue;
 
@@ -489,7 +489,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
     ProtectedTaskManager::Lease task_manager(_task_manager);
     const OrderedTask &task = task_manager->GetOrderedTask();
 
-    if (!task.check_task()) {
+    if (!task.CheckTask()) {
       chart.DrawNoData();
       return;
     }
@@ -498,7 +498,7 @@ FlightStatisticsRenderer::RenderTask(Canvas &canvas, const PixelRect rc,
 
     OZRenderer ozv(task_look, airspace_look, settings_map.airspace);
     RenderTaskPoint tpv(canvas, proj, task_look,
-                        task.get_task_projection(),
+                        task.GetTaskProjection(),
                         ozv, false, RenderTaskPoint::ALL, nmea_info.location);
     ::TaskRenderer dv(tpv, proj.GetScreenBounds());
     dv.Draw(task);

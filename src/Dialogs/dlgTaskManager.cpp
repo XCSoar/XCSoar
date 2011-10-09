@@ -145,14 +145,14 @@ dlgTaskManager::CommitTaskChanges()
   if (!task_modified)
     return true;
 
-  task_modified |= active_task->get_factory().CheckAddFinish();
+  task_modified |= active_task->GetFactory().CheckAddFinish();
 
-  if (!active_task->TaskSize() || active_task->check_task()) {
+  if (!active_task->TaskSize() || active_task->CheckTask()) {
 
     { // this must be done in thread lock because it potentially changes the
       // waypoints database
       ScopeSuspendAllThreads suspend;
-      active_task->check_duplicate_waypoints(way_points);
+      active_task->CheckDuplicateWaypoints(way_points);
       way_points.optimise();
     }
 
@@ -164,7 +164,7 @@ dlgTaskManager::CommitTaskChanges()
   }
 
   MessageBoxX(getTaskValidationErrors(
-    active_task->get_factory().getValidationErrors()),
+    active_task->GetFactory().getValidationErrors()),
     _("Validation Errors"), MB_ICONEXCLAMATION);
 
   return (MessageBoxX(_("Task not valid. Changes will be lost.\nContinue?"),

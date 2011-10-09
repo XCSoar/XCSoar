@@ -489,9 +489,9 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   if (task == NULL)
     return NULL;
 
-  task->set_factory(task_info.WpDis ?
+  task->SetFactory(task_info.WpDis ?
                     TaskBehaviour::FACTORY_RT : TaskBehaviour::FACTORY_AAT);
-  AbstractTaskFactory& fact = task->get_factory();
+  AbstractTaskFactory& fact = task->GetFactory();
   const TaskBehaviour::Factory_t factType = task->get_factory_type();
 
   OrderedTaskBehaviour beh = task->get_ordered_task_behaviour();

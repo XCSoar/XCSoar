@@ -386,11 +386,11 @@ AbstractTaskFactory::append(const OrderedTaskPoint &new_tp,
       // empty task, so add as a start point
       if (validType(new_tp, m_task.TaskSize())) {
         // candidate is ok, so add it
-        return m_task.append(new_tp);
+        return m_task.Append(new_tp);
       } else {
         // candidate must be transformed into a startpoint
         StartPoint* sp = createStart(new_tp.GetWaypoint());
-        bool success = m_task.append(*sp);
+        bool success = m_task.Append(*sp);
         delete sp;
         return success;
       }
@@ -398,27 +398,27 @@ AbstractTaskFactory::append(const OrderedTaskPoint &new_tp,
 
     // non-empty task
 
-    if (m_task.has_finish()) {
+    if (m_task.HasFinish()) {
       // old finish must be mutated into an intermediate point
-      IntermediateTaskPoint* sp = createIntermediate(m_task.getTaskPoint(
+      IntermediateTaskPoint* sp = createIntermediate(m_task.GetTaskPoint(
           m_task.TaskSize() - 1)->GetWaypoint());
 
-      m_task.replace(*sp, m_task.TaskSize()-1);
+      m_task.Replace(*sp, m_task.TaskSize()-1);
       delete sp;
     }
 
     if (validType(new_tp, m_task.TaskSize()))
       // ok to append directly
-      return m_task.append(new_tp);
+      return m_task.Append(new_tp);
 
     // this point must be mutated into a finish
     FinishPoint* sp = createFinish(new_tp.GetWaypoint());
-    bool success = m_task.append(*sp);
+    bool success = m_task.Append(*sp);
     delete sp;
     return success;
   }
 
-  return m_task.append(new_tp);
+  return m_task.Append(new_tp);
 }
 
 bool 
@@ -429,7 +429,7 @@ AbstractTaskFactory::replace(const OrderedTaskPoint &new_tp,
   if (auto_mutate) {
     if (validType(new_tp, position))
       // ok to replace directly
-      return m_task.replace(new_tp, position);
+      return m_task.Replace(new_tp, position);
 
     // will need to convert type of candidate
     OrderedTaskPoint *tp;
@@ -445,12 +445,12 @@ AbstractTaskFactory::replace(const OrderedTaskPoint &new_tp,
       tp = createIntermediate(new_tp.GetWaypoint());
     }
 
-    bool success = m_task.replace(*tp, position);
+    bool success = m_task.Replace(*tp, position);
     delete tp;
     return success;
   }
 
-  return m_task.replace(new_tp, position);
+  return m_task.Replace(new_tp, position);
 }
 
 bool 
@@ -463,38 +463,38 @@ AbstractTaskFactory::insert(const OrderedTaskPoint &new_tp,
 
   if (auto_mutate) {
     if (position == 0) {
-      if (m_task.has_start()) {
+      if (m_task.HasStart()) {
         // old start must be mutated into an intermediate point
         IntermediateTaskPoint* sp =
-            createIntermediate(m_task.getTaskPoint(0)->GetWaypoint());
-        m_task.replace(*sp, 0);
+            createIntermediate(m_task.GetTaskPoint(0)->GetWaypoint());
+        m_task.Replace(*sp, 0);
         delete sp;
       }
 
       if (validType(new_tp, 0)) {
-        return m_task.insert(new_tp, 0);
+        return m_task.Insert(new_tp, 0);
       } else {
         // candidate must be transformed into a startpoint
         StartPoint* sp = createStart(new_tp.GetWaypoint());
-        bool success = m_task.insert(*sp, 0);
+        bool success = m_task.Insert(*sp, 0);
         delete sp;
         return success;
       }
     } else {
       if (new_tp.IsIntermediatePoint()) {
         // candidate ok for direct insertion
-        return m_task.insert(new_tp, position);
+        return m_task.Insert(new_tp, position);
       } else {
         // candidate must be transformed into a intermediatepoint
         IntermediateTaskPoint* sp = createIntermediate(new_tp.GetWaypoint());
-        bool success = m_task.insert(*sp, position);
+        bool success = m_task.Insert(*sp, position);
         delete sp;
         return success;
       }
     }
   }
 
-  return m_task.insert(new_tp, position);
+  return m_task.Insert(new_tp, position);
 }
 
 bool 
@@ -508,36 +508,36 @@ AbstractTaskFactory::remove(const unsigned position,
     if (position == 0) {
       // special case, remove start point..
       if (m_task.TaskSize() == 1) {
-        return m_task.remove(0);
+        return m_task.Remove(0);
       } else {
         // create new start point from next point
-        StartPoint* sp = createStart(m_task.getTaskPoint(1)->GetWaypoint());
-        bool success = m_task.remove(0) && m_task.replace(*sp, 0);
+        StartPoint* sp = createStart(m_task.GetTaskPoint(1)->GetWaypoint());
+        bool success = m_task.Remove(0) && m_task.Replace(*sp, 0);
         delete sp;
         return success;
       }
     } else if (is_position_finish(position - 1) && (position + 1 == m_task.TaskSize())) {
       // create new finish from previous point
       FinishPoint* sp = createFinish(
-          m_task.getTaskPoint(position - 1)->GetWaypoint());
-      bool success = m_task.remove(position) &&
-        m_task.replace(*sp, position - 1);
+          m_task.GetTaskPoint(position - 1)->GetWaypoint());
+      bool success = m_task.Remove(position) &&
+        m_task.Replace(*sp, position - 1);
       delete sp;
       return success;
     } else {
       // intermediate point deleted, nothing special to do
-      return m_task.remove(position);
+      return m_task.Remove(position);
     }
   }
 
-  return m_task.remove(position);
+  return m_task.Remove(position);
 }
 
 bool 
 AbstractTaskFactory::has_entered(unsigned position) const
 {
-  if (m_task.getTaskPoint(position))
-    return m_task.getTaskPoint(position)->HasEntered();
+  if (m_task.GetTaskPoint(position))
+    return m_task.GetTaskPoint(position)->HasEntered();
 
   return true;
 }
@@ -550,7 +550,7 @@ AbstractTaskFactory::swap(const unsigned position, const bool auto_mutate)
   if (position >= m_task.TaskSize() - 1)
     return false;
 
-  const OrderedTaskPoint* orig = m_task.getTaskPoint(position+1);
+  const OrderedTaskPoint* orig = m_task.GetTaskPoint(position+1);
   if (!insert(*orig, position, auto_mutate))
     return false;
 
@@ -561,8 +561,8 @@ const OrderedTaskPoint&
 AbstractTaskFactory::relocate(const unsigned position, 
                               const Waypoint& waypoint)
 {
-  m_task.relocate(position, waypoint);  
-  return *m_task.getTaskPoint(position);
+  m_task.Relocate(position, waypoint);
+  return *m_task.GetTaskPoint(position);
 }
 
 const OrderedTaskBehaviour& 
@@ -734,7 +734,7 @@ AbstractTaskFactory::CheckAddFinish()
  if (m_task.TaskSize() < 2)
    return false;
 
- if (m_task.has_finish())
+ if (m_task.HasFinish())
    return false;
 
  FinishPoint *fp = createFinish(m_task.get_tp(m_task.TaskSize() - 1)->GetWaypoint());
@@ -818,11 +818,11 @@ AbstractTaskFactory::validate()
 
   bool valid = true;
 
-  if (!m_task.has_start()) {
+  if (!m_task.HasStart()) {
     addValidationError(NO_VALID_START);
     valid = false;
   }
-  if (!m_task.has_finish()) {
+  if (!m_task.HasFinish()) {
     addValidationError(NO_VALID_FINISH);
     valid = false;
   }
@@ -1072,7 +1072,7 @@ AbstractTaskFactory::append_optional_start(const Waypoint& wp)
   if (!tp)
     return false; // should never happen
 
-  bool success = m_task.append_optional_start(*tp);
+  bool success = m_task.AppendOptionalStart(*tp);
   delete tp;
   return success;
 }
@@ -1084,12 +1084,12 @@ AbstractTaskFactory::append_optional_start(const OrderedTaskPoint &new_tp,
   if (auto_mutate && !validType(new_tp, 0)) {
     // candidate must be transformed into a startpoint of appropriate type
     StartPoint* sp = createStart(new_tp.GetWaypoint());
-    bool success = m_task.append_optional_start(*sp);
+    bool success = m_task.AppendOptionalStart(*sp);
     delete sp;
     return success;
   }
   // ok to add directly
-  return m_task.append_optional_start(new_tp);
+  return m_task.AppendOptionalStart(new_tp);
 }
 
 bool
@@ -1132,9 +1132,9 @@ AbstractTaskFactory::TestFAITriangle()
   if (m_task.TaskSize() != 4)
     return false;
 
-  const fixed d1 = m_task.getTaskPoint(1)->GetVectorPlanned().distance;
-  const fixed d2 = m_task.getTaskPoint(2)->GetVectorPlanned().distance;
-  const fixed d3 = m_task.getTaskPoint(3)->GetVectorPlanned().distance;
+  const fixed d1 = m_task.GetTaskPoint(1)->GetVectorPlanned().distance;
+  const fixed d2 = m_task.GetTaskPoint(2)->GetVectorPlanned().distance;
+  const fixed d3 = m_task.GetTaskPoint(3)->GetVectorPlanned().distance;
 
   return TestFAITriangle(d1, d2, d3);
 }

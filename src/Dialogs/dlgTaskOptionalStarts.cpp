@@ -110,12 +110,12 @@ OnOptionalStartListEnter(unsigned ItemIndex)
     if (!way_point)
       return;
 
-    if (ordered_task->relocate_optional_start(index_optional_starts, *way_point))
+    if (ordered_task->RelocateOptionalStart(index_optional_starts, *way_point))
       task_modified = true;
 
   } else if (!ordered_task->is_max_size()) {
 
-    AbstractTaskFactory &factory = ordered_task->get_factory();
+    AbstractTaskFactory &factory = ordered_task->GetFactory();
     const Waypoint* way_point =
         dlgWaypointSelect(wf->GetMainWindow(),
                           ordered_task->TaskSize() > 0 ?
@@ -143,7 +143,7 @@ OnRemoveClicked(gcc_unused WndButton &Sender)
 {
   const unsigned index_optional_starts = wOptionalStartPoints->GetCursorIndex()
       - (RealStartExists ? 1 : 0);
-  if (ordered_task->remove_optional_start(index_optional_starts)) {
+  if (ordered_task->RemoveOptionalStart(index_optional_starts)) {
     RefreshView();
     task_modified = true;
   }

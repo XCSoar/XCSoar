@@ -46,7 +46,7 @@ TaskFileXCSoar::GetTask(const Waypoints *waypoints, unsigned index) const
     OrderedTask* task = protected_task_manager->TaskBlank();
     Deserialiser des(*root, waypoints);
     des.deserialise(*task);
-    if (task->check_task()) {
+    if (task->CheckTask()) {
       delete root;
       return task;
     }

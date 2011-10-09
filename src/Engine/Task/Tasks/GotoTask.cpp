@@ -70,7 +70,7 @@ GotoTask::SetActiveTaskPoint(unsigned index)
 
 
 bool 
-GotoTask::update_sample(gcc_unused const AircraftState &state,
+GotoTask::UpdateSample(gcc_unused const AircraftState &state,
                         gcc_unused const bool full_update)
 {
   return false; // nothing to do
@@ -78,14 +78,14 @@ GotoTask::update_sample(gcc_unused const AircraftState &state,
 
 
 bool 
-GotoTask::check_transitions(gcc_unused const AircraftState &,
+GotoTask::CheckTransitions(gcc_unused const AircraftState &,
                             gcc_unused const AircraftState &)
 {
   return false; // nothing to do
 }
 
 bool 
-GotoTask::do_goto(const Waypoint & wp)
+GotoTask::DoGoto(const Waypoint & wp)
 {
   if (task_behaviour.goto_nonlandable || wp.IsLandable()) {
     delete tp;
@@ -97,7 +97,7 @@ GotoTask::do_goto(const Waypoint & wp)
 }
 
 void 
-GotoTask::tp_CAccept(TaskPointConstVisitor& visitor,
+GotoTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor,
                      gcc_unused const bool reverse) const
 {
   if (tp)
@@ -111,22 +111,22 @@ GotoTask::TaskSize() const
 }
 
 void
-GotoTask::reset()
+GotoTask::Reset()
 {
   delete tp;
-  UnorderedTask::reset();
+  UnorderedTask::Reset();
 }
 
 
 bool 
-GotoTask::takeoff_autotask(const GeoPoint& location, const fixed terrain_alt)
+GotoTask::TakeoffAutotask(const GeoPoint& location, const fixed terrain_alt)
 {
   if (tp)
     return false;
 
   const Waypoint* wp = waypoints.get_nearest_landable(location, fixed(5000));
   if (wp)
-    return do_goto(*wp);
+    return DoGoto(*wp);
 
-  return do_goto(waypoints.generate_takeoff_point(location, terrain_alt));
+  return DoGoto(waypoints.generate_takeoff_point(location, terrain_alt));
 }

@@ -40,9 +40,9 @@ AlternateTask::AlternateTask(TaskEvents &te, const TaskBehaviour &tb,
 }
 
 void
-AlternateTask::reset()
+AlternateTask::Reset()
 {
-  AbortTask::reset();
+  AbortTask::Reset();
   destination = GeoPoint(Angle::Zero(), Angle::Zero());
   best_alternate_id = UINT_MAX;
 }

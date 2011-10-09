@@ -61,7 +61,7 @@ UpdateButtons()
   ShowFormControl(*wf, _T("cmdMakeFinish"),
                   index > 0 &&
                   (index == ordered_task->TaskSize() - 1) &&
-                  !ordered_task->has_finish());
+                  !ordered_task->HasFinish());
 
   ShowFormControl(*wf, _T("cmdDown"),
                   (int)index < ((int)(ordered_task->TaskSize()) - 1));
@@ -100,7 +100,7 @@ pnlTaskEdit::OnClearAllClicked(gcc_unused WndButton &Sender)
       (MessageBoxX(_("Clear all points?"), _("Task edit"),
                    MB_YESNO|MB_ICONQUESTION) == IDYES)) {
     while (ordered_task->TaskSize())
-      ordered_task->remove(0);
+      ordered_task->Remove(0);
 
     *task_modified = true;
     RefreshView();
@@ -129,7 +129,7 @@ pnlTaskEdit::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
     return;
   }
 
-  const OrderedTaskPoint &tp = *ordered_task->getTaskPoint(DrawListIndex);
+  const OrderedTaskPoint &tp = *ordered_task->GetTaskPoint(DrawListIndex);
   GeoVector leg = tp.leg_vector_nominal();
   bool show_leg_info = leg.distance > fixed(0.01);
 
@@ -199,7 +199,7 @@ pnlTaskEdit::OnTaskListEnter(unsigned ItemIndex)
   } else if (!ordered_task->is_max_size()) {
 
     OrderedTaskPoint* point = NULL;
-    AbstractTaskFactory &factory = ordered_task->get_factory();
+    AbstractTaskFactory &factory = ordered_task->GetFactory();
     const Waypoint* way_point =
       dlgWaypointSelect(wf->GetMainWindow(),
                         ordered_task->TaskSize() > 0 ?
@@ -235,7 +235,7 @@ pnlTaskEdit::OnTaskCursorCallback(gcc_unused unsigned i)
 void
 pnlTaskEdit::OnMakeFinish(gcc_unused WndButton &Sender)
 {
-  ordered_task->get_factory().CheckAddFinish();
+  ordered_task->GetFactory().CheckAddFinish();
   RefreshView();
 }
 
@@ -249,7 +249,7 @@ MoveUp()
   if (index == 0)
     return;
 
-  if (!ordered_task->get_factory().swap(index - 1, true))
+  if (!ordered_task->GetFactory().swap(index - 1, true))
     return;
 
   wTaskPoints->SetCursorIndex(index - 1);
@@ -273,7 +273,7 @@ MoveDown()
   if (index >= ordered_task->TaskSize())
     return;
 
-  if (!ordered_task->get_factory().swap(index, true))
+  if (!ordered_task->GetFactory().swap(index, true))
     return;
 
   wTaskPoints->SetCursorIndex(index + 1);

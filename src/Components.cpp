@@ -203,7 +203,7 @@ XCSoarInterface::AfterStartup()
   if (defaultTask) {
     {
       ScopeSuspendAllThreads suspend;
-      defaultTask->check_duplicate_waypoints(way_points);
+      defaultTask->CheckDuplicateWaypoints(way_points);
       way_points.optimise();
     }
     protected_task_manager->TaskCommit(*defaultTask);

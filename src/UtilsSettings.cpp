@@ -147,7 +147,7 @@ SettingsLeave()
     if (task) {
       // this must be done in thread lock because it potentially changes the
       // waypoints database
-      task->check_duplicate_waypoints(way_points);
+      task->CheckDuplicateWaypoints(way_points);
       way_points.optimise();
     }
   }

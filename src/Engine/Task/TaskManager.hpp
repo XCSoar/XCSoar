@@ -253,7 +253,7 @@ public:
    */
   gcc_pure
   bool CheckOrderedTask() const {
-    return task_ordered.check_task();
+    return task_ordered.CheckTask();
   }
 
   /**
@@ -271,7 +271,7 @@ public:
    */
   gcc_pure
   AbstractTaskFactory& GetFactory() const {
-    return task_ordered.get_factory();
+    return task_ordered.GetFactory();
   }
 
   /**
@@ -282,7 +282,7 @@ public:
    * @return Type of task
    */
   TaskBehaviour::Factory_t SetFactory(const TaskBehaviour::Factory_t _factory) {
-    return task_ordered.set_factory(_factory);
+    return task_ordered.SetFactory(_factory);
   }
 
   /**
@@ -380,7 +380,7 @@ public:
    * @return State at task start (or null state if not started)
    */
   AircraftState GetStartState() const {
-    return task_ordered.get_start_state();
+    return task_ordered.GetStartState();
   }
 
   /**
@@ -389,7 +389,7 @@ public:
    * @return State at task finish (or null state if not finished)
    */
   AircraftState GetFinishState() const {
-    return task_ordered.get_finish_state();
+    return task_ordered.GetFinishState();
   }
 
   /**

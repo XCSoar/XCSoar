@@ -110,7 +110,7 @@ ExternalLogger::Declare(const OrderedTask& task)
   bool found_logger = false;
 
   // don't do anything if task is not valid
-  assert(task.check_task());
+  assert(task.CheckTask());
 
   Declaration decl(&task);
   Profile::GetDeclarationConfig(decl, CommonInterface::SettingsComputer().plane);

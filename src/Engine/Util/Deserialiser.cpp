@@ -67,7 +67,7 @@ Deserialiser::deserialise_point(OrderedTask& data)
 
   Deserialiser oser(*oz_node, waypoints);
 
-  AbstractTaskFactory& fact = data.get_factory();
+  AbstractTaskFactory& fact = data.GetFactory();
 
   ObservationZonePoint* oz = NULL;
   OrderedTaskPoint *pt = NULL;
@@ -238,9 +238,9 @@ Deserialiser::deserialise(OrderedTaskBehaviour& data)
 void 
 Deserialiser::deserialise(OrderedTask &task)
 {
-  task.clear();
-  task.set_factory(task_factory_type());
-  task.reset();
+  task.Clear();
+  task.SetFactory(task_factory_type());
+  task.Reset();
 
   OrderedTaskBehaviour beh = task.get_ordered_task_behaviour();
   deserialise(beh);

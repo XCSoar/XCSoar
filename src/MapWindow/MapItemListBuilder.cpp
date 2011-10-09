@@ -192,7 +192,7 @@ MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
   a.location = location;
 
   for (unsigned i = 0, size = ordered_task.TaskSize(); i < size; i++) {
-    const OrderedTaskPoint *task_point = ordered_task.getTaskPoint(i);
+    const OrderedTaskPoint *task_point = ordered_task.GetTaskPoint(i);
     if (!task_point || !task_point->IsInSector(a))
       continue;
 

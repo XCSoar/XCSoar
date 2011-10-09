@@ -54,18 +54,18 @@ append_to_task(OrderedTask *task, const Waypoint &wp)
     --i;
   }
 
-  const AbstractTaskFactory &factory = task->get_factory();
+  const AbstractTaskFactory &factory = task->GetFactory();
   OrderedTaskPoint *tp = (OrderedTaskPoint *)factory.createIntermediate(wp);
   if (tp == NULL)
     return MapTaskManager::UNMODIFIED;
 
-  bool success = i >= 0 ? task->insert(*tp, i) : task->append(*tp);
+  bool success = i >= 0 ? task->Insert(*tp, i) : task->Append(*tp);
   delete tp;
 
   if (!success)
     return MapTaskManager::UNMODIFIED;
 
-  if (!task->check_task())
+  if (!task->CheckTask())
     return MapTaskManager::INVALID;
 
   return MapTaskManager::SUCCESS;
@@ -75,12 +75,12 @@ static MapTaskManager::task_edit_result
 mutate_from_goto(OrderedTask *task, const Waypoint &WPFinish,
                                  const Waypoint &WPStart)
 {
-  const AbstractTaskFactory &factory = task->get_factory();
+  const AbstractTaskFactory &factory = task->GetFactory();
   OrderedTaskPoint *sp = (OrderedTaskPoint *)factory.createStart(WPStart);
   if (sp == NULL)
     return MapTaskManager::UNMODIFIED;
 
-  bool success = task->append(*sp);
+  bool success = task->Append(*sp);
   delete sp;
   if (!success)
     return MapTaskManager::UNMODIFIED;
@@ -89,7 +89,7 @@ mutate_from_goto(OrderedTask *task, const Waypoint &WPFinish,
   if (fp == NULL)
     return MapTaskManager::UNMODIFIED;
 
-  success = task->append(*fp);
+  success = task->Append(*fp);
   delete fp;
 
   if (!success)
@@ -105,7 +105,7 @@ MapTaskManager::append_to_task(const Waypoint &wp)
   TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   task_edit_result result = MapTaskManager::UNMODIFIED;
-  if (task_manager->GetOrderedTask().check_task()) {
+  if (task_manager->GetOrderedTask().CheckTask()) {
     OrderedTask *task = task_manager->Clone(task_events,
                                             GetTaskBehaviour(),
                                             task_manager->GetGlidePolar());
@@ -151,7 +151,7 @@ insert_in_task(OrderedTask *task, const Waypoint &wp)
   if (task->TaskSize()==0)
     return MapTaskManager::NOTASK;
 
-  int i = task->getActiveIndex();
+  int i = task->GetActiveIndex();
   /* skip all start points */
   while (true) {
     if (i >= (int)task->TaskSize())
@@ -164,16 +164,16 @@ insert_in_task(OrderedTask *task, const Waypoint &wp)
     ++i;
   }
 
-  const AbstractTaskFactory &factory = task->get_factory();
+  const AbstractTaskFactory &factory = task->GetFactory();
   OrderedTaskPoint *tp = (OrderedTaskPoint *)factory.createIntermediate(wp);
   if (tp == NULL)
     return MapTaskManager::UNMODIFIED;
 
-  bool success = task->insert(*tp, i);
+  bool success = task->Insert(*tp, i);
   delete tp;
   if (!success)
     return MapTaskManager::UNMODIFIED;
-  if (!task->check_task())
+  if (!task->CheckTask())
     return MapTaskManager::INVALID;
   return MapTaskManager::SUCCESS;
 }
@@ -185,7 +185,7 @@ MapTaskManager::insert_in_task(const Waypoint &wp)
   TaskEvents task_events;
   ProtectedTaskManager::ExclusiveLease task_manager(*protected_task_manager);
   task_edit_result result = MapTaskManager::UNMODIFIED;
-  if (task_manager->GetOrderedTask().check_task()) {
+  if (task_manager->GetOrderedTask().CheckTask()) {
     OrderedTask *task = task_manager->Clone(task_events,
                                             GetTaskBehaviour(),
                                             task_manager->GetGlidePolar());
@@ -230,13 +230,13 @@ replace_in_task(OrderedTask *task, const Waypoint &wp)
   if (task->TaskSize()==0)
     return MapTaskManager::NOTASK;
 
-  unsigned i = task->getActiveIndex();
+  unsigned i = task->GetActiveIndex();
   if (i >= task->TaskSize())
     return MapTaskManager::UNMODIFIED;
 
-  task->relocate(i, wp);
+  task->Relocate(i, wp);
 
-  if (!task->check_task())
+  if (!task->CheckTask())
     return MapTaskManager::INVALID;
 
   return MapTaskManager::SUCCESS;
@@ -266,7 +266,7 @@ index_of_point_in_task(OrderedTask *task, const Waypoint &wp)
   if (task->TaskSize() == 0)
     return -1;
 
-  unsigned i = task->getActiveIndex();
+  unsigned i = task->GetActiveIndex();
   if (i >= task->TaskSize())
     return -1;
 
@@ -306,16 +306,16 @@ remove_from_task(OrderedTask *task, const Waypoint &wp)
 
   int TPIndex = index_of_point_in_task(task, wp);
   if (TPIndex >= 0)
-    task->get_factory().remove(TPIndex);
+    task->GetFactory().remove(TPIndex);
 
   // if finish was removed
   if (TPIndex == (int)task->TaskSize())
-    task->get_factory().CheckAddFinish();
+    task->GetFactory().CheckAddFinish();
 
   if (TPIndex == -1)
     return MapTaskManager::UNMODIFIED;
 
-  if (!task->check_task())
+  if (!task->CheckTask())
     return MapTaskManager::INVALID;
 
   return MapTaskManager::SUCCESS;

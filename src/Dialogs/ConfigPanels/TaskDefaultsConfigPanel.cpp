@@ -72,12 +72,12 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
   const SETTINGS_COMPUTER &settings_computer = XCSoarInterface::SettingsComputer();
   const TaskBehaviour &task_behaviour = settings_computer.task;
   OrderedTask* temptask = protected_task_manager->TaskBlank();
-  temptask->set_factory(TaskBehaviour::FACTORY_RT);
+  temptask->SetFactory(TaskBehaviour::FACTORY_RT);
 
   wp = (WndProperty*)wf->FindByName(_T("prpStartType"));
   if (wp) {
     const AbstractTaskFactory::LegalPointVector point_types =
-        temptask->get_factory().getValidStartTypes();
+        temptask->GetFactory().getValidStartTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -96,7 +96,7 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
   wp = (WndProperty*)wf->FindByName(_T("prpFinishType"));
   if (wp) {
     const AbstractTaskFactory::LegalPointVector point_types =
-        temptask->get_factory().getValidFinishTypes();
+        temptask->GetFactory().getValidFinishTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -115,7 +115,7 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
   wp = (WndProperty*)wf->FindByName(_T("prpTurnpointType"));
   if (wp) {
     const AbstractTaskFactory::LegalPointVector point_types =
-        temptask->get_factory().getValidIntermediateTypes();
+        temptask->GetFactory().getValidIntermediateTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 
@@ -136,7 +136,7 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
   wp = (WndProperty*)wf->FindByName(_T("prpTaskType"));
   if (wp) {
     const std::vector<TaskBehaviour::Factory_t> factory_types =
-        temptask->get_factory_types();
+        temptask->GetFactoryTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);
 

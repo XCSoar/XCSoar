@@ -40,13 +40,12 @@ public:
    * 
    */
   UnorderedTask(const enum Type _type, TaskEvents &te,
-                const TaskBehaviour &tb,
-                const GlidePolar &gp);
+                const TaskBehaviour &tb, const GlidePolar &gp);
 
-  fixed get_finish_height() const;
+  fixed GetFinishHeight() const;
 
-  virtual GeoPoint get_task_center(const GeoPoint& fallback_location) const;
-  virtual fixed get_task_radius(const GeoPoint& fallback_location) const;
+  virtual GeoPoint GetTaskCenter(const GeoPoint& fallback_location) const;
+  virtual fixed GetTaskRadius(const GeoPoint& fallback_location) const;
 
   /**
    * Accept a (const) task point visitor; makes the visitor visit
@@ -55,26 +54,27 @@ public:
    * @param visitor Visitor to accept
    * @param reverse Visit task points in reverse order
    */
-  virtual void sp_CAccept(TaskPointConstVisitor& visitor, const bool reverse=false) const;
+  virtual void AcceptStartPointVisitor(TaskPointConstVisitor& visitor,
+                                       const bool reverse = false) const;
 
 protected:
 
-  bool check_task() const;
+  bool CheckTask() const;
 
-  bool calc_mc_best(const AircraftState &state_now, fixed& best) const;
+  bool CalcBestMC(const AircraftState &state_now, fixed& best) const;
 
-  fixed calc_glide_required(const AircraftState &state_now) const;
+  fixed CalcRequiredGlide(const AircraftState &state_now) const;
 
-  void glide_solution_remaining(const AircraftState &state_now, 
+  void GlideSolutionRemaining(const AircraftState &state_now, 
                                 const GlidePolar &polar,
                                 GlideResult &total,
                                 GlideResult &leg);
 
-  void glide_solution_travelled(const AircraftState &state_now, 
+  void GlideSolutionTravelled(const AircraftState &state_now, 
                                         GlideResult &total,
                                         GlideResult &leg);
 
-  void glide_solution_planned(const AircraftState &state_now,
+  void GlideSolutionPlanned(const AircraftState &state_now,
                                       GlideResult &total,
                                       GlideResult &leg,
                               DistanceStat &total_remaining_effective,
@@ -82,29 +82,29 @@ protected:
                                       const fixed total_t_elapsed,
                                       const fixed leg_t_elapsed);
 
-  fixed scan_total_start_time(const AircraftState &state_now);
+  fixed ScanTotalStartTime(const AircraftState &state_now);
 
-  fixed scan_leg_start_time(const AircraftState &state_now);
+  fixed ScanLegStartTime(const AircraftState &state_now);
 
-  fixed scan_distance_nominal();
+  fixed ScanDistanceNominal();
   
-  fixed scan_distance_planned();
+  fixed ScanDistancePlanned();
 
-  fixed scan_distance_remaining(const GeoPoint &ref);
+  fixed ScanDistanceRemaining(const GeoPoint &ref);
 
-  fixed scan_distance_scored(const GeoPoint &ref);
+  fixed ScanDistanceScored(const GeoPoint &ref);
 
-  fixed scan_distance_travelled(const GeoPoint &ref);
+  fixed ScanDistanceTravelled(const GeoPoint &ref);
 
-  void scan_distance_minmax(const GeoPoint &ref, 
+  void ScanDistanceMinMax(const GeoPoint &ref, 
                             bool full,
                             fixed *dmin, fixed *dmax);
 
-  fixed calc_gradient(const AircraftState &state_now) const;
+  fixed CalcGradient(const AircraftState &state_now) const;
 
-  bool has_targets() const { return false; }
+  bool HasTargets() const { return false; }
 
-  bool is_scored() const { return false; }
+  bool IsScored() const { return false; }
 
 }; 
 

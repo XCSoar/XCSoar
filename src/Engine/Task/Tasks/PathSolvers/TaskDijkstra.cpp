@@ -36,7 +36,7 @@ TaskDijkstra::refresh_task()
   if (num_stages < 2)
     return false;
 
-  active_stage = task.getActiveTaskPointIndex();
+  active_stage = task.GetActiveTaskPointIndex();
   calculate_sizes();
   return true;
 }

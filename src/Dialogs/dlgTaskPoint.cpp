@@ -137,7 +137,7 @@ RefreshView()
   WndFrame* wfrm = NULL;
   wfrm = ((WndFrame*)wf->FindByName(_T("lblType")));
   if (wfrm)
-    wfrm->SetCaption(OrderedTaskPointName(ordered_task->get_factory().getType(*tp)));
+    wfrm->SetCaption(OrderedTaskPointName(ordered_task->GetFactory().getType(*tp)));
 
   SetFormControlEnabled(*wf, _T("butPrevious"), active_index > 0);
   SetFormControlEnabled(*wf, _T("butNext"),
@@ -297,7 +297,7 @@ OnRemoveClicked(gcc_unused WndButton &Sender)
                         _("Task Point"), MB_YESNO | MB_ICONQUESTION) != IDYES)
     return;
 
-  if (!ordered_task->get_factory().remove(active_index))
+  if (!ordered_task->GetFactory().remove(active_index))
     return;
 
   task_modified = true;
@@ -325,7 +325,7 @@ OnRelocateClicked(gcc_unused WndButton &Sender)
   if (wp == NULL)
     return;
 
-  ordered_task->get_factory().relocate(active_index, *wp);
+  ordered_task->GetFactory().relocate(active_index, *wp);
   task_modified = true;
   RefreshView();
 }

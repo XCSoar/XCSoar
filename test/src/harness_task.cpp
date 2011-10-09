@@ -174,7 +174,7 @@ void task_report(TaskManager& task_manager, const char* text)
       }
 
       TaskPointVisitorPrint tpv;
-      task->tp_CAccept(tpv);
+      task->AcceptTaskPointVisitor(tpv);
       printf("# - dist nominal %g\n",
              (double)task->GetStats().distance_nominal);
 
@@ -342,7 +342,7 @@ bool test_task_type_manip(TaskManager& task_manager,
 
   test_note("# checking mutated start..\n");
   if (!fact.validStartType(
-      fact.getType(*task_manager.GetOrderedTask().getTaskPoint(0))))
+      fact.getType(*task_manager.GetOrderedTask().GetTaskPoint(0))))
     return false;
 
 
@@ -355,13 +355,13 @@ bool test_task_type_manip(TaskManager& task_manager,
     sprintf(tmp, "# checking mutated intermediate point %d..\n", i);
     test_note(tmp);
     if (!fact.validIntermediateType(
-        fact.getType(*task_manager.GetOrderedTask().getTaskPoint(i))))
+        fact.getType(*task_manager.GetOrderedTask().GetTaskPoint(i))))
       return false;
   }
 
   test_note("# checking mutated finish..\n");
   if (!fact.validFinishType(
-      fact.getType(*task_manager.GetOrderedTask().getTaskPoint(
+      fact.getType(*task_manager.GetOrderedTask().GetTaskPoint(
           task_manager.TaskSize() - 1))))
     return false;
 
@@ -388,7 +388,7 @@ bool test_task_mixed(TaskManager& task_manager,
                      const Waypoints &waypoints)
 {
   const TaskProjection &projection =
-    task_manager.GetOrderedTask().get_task_projection();
+    task_manager.GetOrderedTask().GetTaskProjection();
 
   OrderedTaskPoint *tp;
   const Waypoint *wp;
@@ -552,7 +552,7 @@ bool test_task_aat(TaskManager& task_manager,
                    const Waypoints &waypoints)
 {
   const TaskProjection &projection =
-    task_manager.GetOrderedTask().get_task_projection();
+    task_manager.GetOrderedTask().GetTaskProjection();
 
   task_manager.SetFactory(TaskBehaviour::FACTORY_AAT);
   AbstractTaskFactory &fact = task_manager.GetFactory();

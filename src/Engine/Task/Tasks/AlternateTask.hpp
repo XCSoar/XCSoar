@@ -66,7 +66,7 @@ public:
   AlternateTask(TaskEvents &te, const TaskBehaviour &tb,
                 const GlidePolar &gp, const Waypoints &wps);
 
-  void reset();
+  void Reset();
 
   /**
    * Sets the target of the task (if any) or fallback to aircraft location.  

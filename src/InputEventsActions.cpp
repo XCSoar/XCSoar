@@ -1305,7 +1305,7 @@ InputEvents::eventTaskLoad(const TCHAR *misc)
     if (task) {
       {
         ScopeSuspendAllThreads suspend;
-        task->check_duplicate_waypoints(way_points);
+        task->CheckDuplicateWaypoints(way_points);
         way_points.optimise();
       }
       protected_task_manager->TaskCommit(*task);

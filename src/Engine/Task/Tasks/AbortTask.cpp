@@ -64,7 +64,7 @@ void
 AbortTask::SetActiveTaskPoint(unsigned index)
 {
   if (index < task_points.size()) {
-    activeTaskPoint = index;
+    active_task_point = index;
     active_waypoint = task_points[index].GetWaypoint().id;
   }
 }
@@ -72,9 +72,9 @@ AbortTask::SetActiveTaskPoint(unsigned index)
 TaskWaypoint*
 AbortTask::GetActiveTaskPoint() const
 {
-  if (activeTaskPoint < task_points.size())
+  if (active_task_point < task_points.size())
     // XXX eliminate this deconst hack
-    return const_cast<AlternateTaskPoint *>(&task_points[activeTaskPoint]);
+    return const_cast<AlternateTaskPoint *>(&task_points[active_task_point]);
 
   return NULL;
 }
@@ -82,7 +82,7 @@ AbortTask::GetActiveTaskPoint() const
 bool
 AbortTask::IsValidTaskPoint(int index_offset) const
 {
-  unsigned index = activeTaskPoint + index_offset;
+  unsigned index = active_task_point + index_offset;
   return (index < task_points.size());
 }
 
@@ -204,7 +204,7 @@ AbortTask::fill_reachable(const AircraftState &state,
 
     const int i = task_points.size() - 1;
     if (task_points[i].GetWaypoint().id == active_waypoint)
-      activeTaskPoint = i;
+      active_task_point = i;
 
     q.pop();
   }
@@ -249,7 +249,7 @@ AbortTask::client_update(const AircraftState &state_now, bool reachable)
 }
 
 bool 
-AbortTask::update_sample(const AircraftState &state, bool full_update)
+AbortTask::UpdateSample(const AircraftState &state, bool full_update)
 {
   update_polar(state.wind);
   clear();
@@ -257,7 +257,7 @@ AbortTask::update_sample(const AircraftState &state, bool full_update)
   const unsigned active_waypoint_on_entry =
       is_active ? active_waypoint : (unsigned)-1;
 
-  activeTaskPoint = 0; // default to best result if can't find user-set one 
+  active_task_point = 0; // default to best result if can't find user-set one 
 
   AlternateVector approx_waypoints; 
   approx_waypoints.reserve(128);
@@ -303,7 +303,7 @@ AbortTask::update_sample(const AircraftState &state, bool full_update)
   client_update(state, false);
 
   if (task_points.size()) {
-    const TaskWaypoint &task_point = task_points[activeTaskPoint];
+    const TaskWaypoint &task_point = task_points[active_task_point];
     active_waypoint = task_point.GetWaypoint().id;
     if (is_active && (active_waypoint_on_entry != active_waypoint))
       task_events.active_changed(task_point);
@@ -313,14 +313,14 @@ AbortTask::update_sample(const AircraftState &state, bool full_update)
 }
 
 bool 
-AbortTask::check_transitions(const AircraftState &, const AircraftState&)
+AbortTask::CheckTransitions(const AircraftState &, const AircraftState&)
 {
   // nothing to do
   return false;
 }
 
 void 
-AbortTask::tp_CAccept(TaskPointConstVisitor& visitor, bool reverse) const
+AbortTask::AcceptTaskPointVisitor(TaskPointConstVisitor& visitor, bool reverse) const
 {
   if (!reverse) {
     const AlternateTaskVector::const_iterator end = task_points.end();
@@ -336,10 +336,10 @@ AbortTask::tp_CAccept(TaskPointConstVisitor& visitor, bool reverse) const
 }
 
 void
-AbortTask::reset()
+AbortTask::Reset()
 {
   clear();
-  UnorderedTask::reset();
+  UnorderedTask::Reset();
 }
 
 GeoVector 
@@ -353,7 +353,7 @@ AbortTask::get_vector_home(const AircraftState &state) const
 }
 
 GeoPoint 
-AbortTask::get_task_center(const GeoPoint& fallback_location) const
+AbortTask::GetTaskCenter(const GeoPoint& fallback_location) const
 {
   if (task_points.empty())
     return fallback_location;
@@ -371,7 +371,7 @@ AbortTask::get_task_center(const GeoPoint& fallback_location) const
 }
 
 fixed 
-AbortTask::get_task_radius(const GeoPoint& fallback_location) const
+AbortTask::GetTaskRadius(const GeoPoint& fallback_location) const
 { 
   if (task_points.empty())
     return fixed_zero;

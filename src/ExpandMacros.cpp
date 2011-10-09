@@ -113,7 +113,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
   }
 
   const AbstractTask *task = task_manager->GetActiveTask();
-  if (task == NULL || !task->check_task() ||
+  if (task == NULL || !task->CheckTask() ||
       task_manager->IsMode(TaskManager::MODE_GOTO)) {
 
     if (_tcsstr(OutBuffer, _T("$(WaypointNext)"))) {
@@ -316,7 +316,7 @@ ExpandTaskMacros(TCHAR *OutBuffer, size_t Size,
 
   if (_tcsstr(OutBuffer, _T("$(TaskAbortToggleActionName)"))) {
     if (task_manager->IsMode(TaskManager::MODE_GOTO)) {
-      CondReplaceInString(task_manager->GetOrderedTask().check_task(),
+      CondReplaceInString(task_manager->GetOrderedTask().CheckTask(),
                           OutBuffer, _T("$(TaskAbortToggleActionName)"),
                           _("Resume"), _("Abort"), Size);
     } else 

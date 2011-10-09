@@ -405,7 +405,7 @@ WaypointRenderer::render(Canvas &canvas, LabelBlock &label_block,
 
     const AbstractTask *atask = task_manager->GetActiveTask();
     if (atask != NULL)
-      atask->tp_CAccept(v);
+      atask->AcceptTaskPointVisitor(v);
   }
 
   way_points->visit_within_range(projection.GetGeoScreenCenter(),

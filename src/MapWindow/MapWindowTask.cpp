@@ -57,7 +57,7 @@ MapWindow::DrawTask(Canvas &canvas)
 
   ProtectedTaskManager::Lease task_manager(*task);
   const AbstractTask *task = task_manager->GetActiveTask();
-  if (task && task->check_task()) {
+  if (task && task->CheckTask()) {
     RenderTaskPoint::TargetVisibility target_visibility =
         IsNearSelf() ? RenderTaskPoint::ACTIVE : RenderTaskPoint::ALL;
 
@@ -69,7 +69,7 @@ MapWindow::DrawTask(Canvas &canvas)
                         /* we're accessing the OrderedTask here,
                            which may be invalid at this point, but it
                            will be used only if active, so it's ok */
-                        task_manager->GetOrderedTask().get_task_projection(),
+                        task_manager->GetOrderedTask().GetTaskProjection(),
                         ozv, draw_bearing,
                         target_visibility,
                         Basic().location);

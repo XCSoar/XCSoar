@@ -152,7 +152,7 @@ public:
    * @return Index of active task point sequence
    */
   unsigned getActiveIndex() const {
-    return activeTaskPoint;
+    return active_task_point;
   }
 
   /**
@@ -182,7 +182,7 @@ public:
    *
    * @return True if internal state changes
    */
-  bool update_sample(const AircraftState &state_now, 
+  bool UpdateSample(const AircraftState &state_now, 
                      bool full_update);
 
   /**
@@ -195,7 +195,7 @@ public:
     return m_landable_reachable;
   }
 
-  virtual void reset();
+  virtual void Reset();
 
   /**
    * Calculate vector to home waypoint
@@ -212,8 +212,8 @@ public:
    */
   GlidePolar get_safety_polar() const;
 
-  GeoPoint get_task_center(const GeoPoint& fallback_location) const;
-  fixed get_task_radius(const GeoPoint& fallback_location) const;
+  GeoPoint GetTaskCenter(const GeoPoint& fallback_location) const;
+  fixed GetTaskRadius(const GeoPoint& fallback_location) const;
 
 protected:
   gcc_pure
@@ -228,7 +228,7 @@ protected:
    *
    * @return True if transition occurred
    */
-  bool check_transitions(const AircraftState& state_now, 
+  bool CheckTransitions(const AircraftState& state_now, 
                          const AircraftState& state_last);
 
   /**
@@ -315,7 +315,7 @@ public:
    * @param reverse Visit task points in reverse order
    *
    */
-  void tp_CAccept(TaskPointConstVisitor& visitor, bool reverse = false) const;
+  void AcceptTaskPointVisitor(TaskPointConstVisitor& visitor, bool reverse = false) const;
 };
 
 #endif
