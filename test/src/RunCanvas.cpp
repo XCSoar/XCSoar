@@ -108,13 +108,13 @@ private:
     const UPixelScalar vmiddle = (rc.top + rc.bottom) / 2;
 
     RasterPoint p1[3] = {
-      { -100, vmiddle },
+      { -100, PixelScalar(vmiddle) },
       { PixelScalar((width * 2) / 3), -100 },
-      { hmiddle, PixelScalar(height * 2) },
+      { PixelScalar(hmiddle), PixelScalar(height * 2) },
     };
 
     RasterPoint p2[3] = {
-      { -2000, vmiddle },
+      { -2000, PixelScalar(vmiddle) },
       { PixelScalar(width * 10), -3000 },
       { PixelScalar(width * 5), 3000 },
     };
