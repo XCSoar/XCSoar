@@ -26,6 +26,12 @@
 #include "Airspace/Airspaces.hpp"
 
 class AirspaceRoute: public RoutePlanner {
+  Airspaces m_airspaces;
+
+  typedef std::pair<const AbstractAirspace*,
+                    RoutePoint> RouteAirspaceIntersection;
+  mutable RouteAirspaceIntersection m_inx;
+
 public:
   friend class PrintHelper;
 
@@ -50,11 +56,6 @@ protected:
   }
 
 private:
-
-  Airspaces m_airspaces;
-
-  typedef std::pair< const AbstractAirspace*, RoutePoint > RouteAirspaceIntersection;
-
   virtual bool check_clearance(const RouteLink &e, RoutePoint& inp) const;
   virtual void add_nearby(const RouteLink& e);
   virtual bool check_secondary(const RouteLink &e);
@@ -79,8 +80,6 @@ private:
   ClearingPair get_backup_pairs(const SearchPointVector& spv,
                                 const RoutePoint& start,
                                 const RoutePoint& intc) const;
-
-  mutable RouteAirspaceIntersection m_inx;
 };
 
 #endif

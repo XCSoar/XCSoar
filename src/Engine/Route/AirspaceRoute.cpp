@@ -37,6 +37,15 @@ class AIV: public AirspaceIntersectionVisitor
 public:
   typedef std::pair<const AbstractAirspace*, RoutePoint> AIVResult;
 
+private:
+  const RouteLink& link;
+  fixed min_distance;
+  const TaskProjection& proj;
+  const RoutePolars& rpolar;
+  const GeoPoint& origin;
+  AIVResult nearest;
+
+public:
   AIV(const RouteLink& _e,
       const TaskProjection& _proj,
       const RoutePolars& _rpolar):
@@ -77,17 +86,12 @@ public:
   AIVResult get_nearest() const {
     return nearest;
   }
-private:
-  const RouteLink& link;
-  fixed min_distance;
-  const TaskProjection& proj;
-  const RoutePolars& rpolar;
-  const GeoPoint& origin;
-  AIVResult nearest;
 };
 
 
 class AirspaceInsideOtherVisitor: public AirspaceVisitor {
+  const AbstractAirspace* m_found;
+
 public:
   AirspaceInsideOtherVisitor():
     m_found(NULL) {};
@@ -106,8 +110,6 @@ protected:
   virtual void visit_abstract(const AbstractAirspace &as) {
     m_found = &as;
   }
-private:
-  const AbstractAirspace* m_found;
 };
 
 
