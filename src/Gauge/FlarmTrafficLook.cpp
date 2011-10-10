@@ -29,77 +29,77 @@
 void
 FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
 {
-  hcPassive = Color(0x99, 0x99, 0x99);
-  hcWarning = other.warning_color;
-  hcAlarm = other.alarm_color;
-  hcStandard = COLOR_BLACK;
-  hcSelection = COLOR_BLUE;
-  hcBackground = COLOR_WHITE;
-  hcRadar = COLOR_LIGHT_GRAY;
+  passive_color = Color(0x99, 0x99, 0x99);
+  warning_color = other.warning_color;
+  alarm_color = other.alarm_color;
+  default_color = COLOR_BLACK;
+  selection_color = COLOR_BLUE;
+  background_color = COLOR_WHITE;
+  radar_color = COLOR_LIGHT_GRAY;
 
-  hbWarning.set(hcWarning);
-  hbAlarm.set(hcAlarm);
-  hbSelection.set(hcSelection);
-  hbRadar.set(hcRadar);
-  hbTeamGreen.set(Color(0x74, 0xFF, 0));
-  hbTeamBlue.set(Color(0, 0x90, 0xFF));
-  hbTeamYellow.set(Color(0xFF, 0xE8, 0));
-  hbTeamMagenta.set(Color(0xFF, 0, 0xCB));
+  warning_brush.set(warning_color);
+  alarm_brush.set(alarm_color);
+  selection_brush.set(selection_color);
+  radar_brush.set(radar_color);
+  team_brush_green.set(Color(0x74, 0xFF, 0));
+  team_brush_blue.set(Color(0, 0x90, 0xFF));
+  team_brush_yellow.set(Color(0xFF, 0xE8, 0));
+  team_brush_magenta.set(Color(0xFF, 0, 0xCB));
 
   int width = Layout::FastScale(small ? 1 : 2);
-  hpWarning.set(width, hcWarning);
-  hpAlarm.set(width, hcAlarm);
-  hpStandard.set(width, hcStandard);
-  hpPassive.set(width, hcPassive);
-  hpSelection.set(width, hcSelection);
-  hpTeamGreen.set(width, Color(0x74, 0xFF, 0));
-  hpTeamBlue.set(width, Color(0, 0x90, 0xFF));
-  hpTeamYellow.set(width, Color(0xFF, 0xE8, 0));
-  hpTeamMagenta.set(width, Color(0xFF, 0, 0xCB));
+  warning_pen.set(width, warning_color);
+  alarm_pen.set(width, alarm_color);
+  default_pen.set(width, default_color);
+  passive_pen.set(width, passive_color);
+  selection_pen.set(width, selection_color);
+  team_pen_green.set(width, Color(0x74, 0xFF, 0));
+  team_pen_blue.set(width, Color(0, 0x90, 0xFF));
+  team_pen_yellow.set(width, Color(0xFF, 0xE8, 0));
+  team_pen_magenta.set(width, Color(0xFF, 0, 0xCB));
 
-  hpPlane.set(width, hcRadar);
-  hpRadar.set(1, hcRadar);
+  plane_pen.set(width, radar_color);
+  radar_pen.set(1, radar_color);
 
-  hfNoTraffic.set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
-  hfLabels.set(Fonts::GetStandardFontFace(), Layout::FastScale(14));
-  hfSideInfo.set(Fonts::GetStandardFontFace(),
+  no_traffic_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(24));
+  label_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(14));
+  side_info_font.set(Fonts::GetStandardFontFace(),
                  Layout::FastScale(small ? 12 : 18), true);
 
-  hfInfoLabels.set(Fonts::GetStandardFontFace(), Layout::FastScale(10), true);
-  hfInfoValues.set(Fonts::GetStandardFontFace(), Layout::FastScale(20));
-  hfCallSign.set(Fonts::GetStandardFontFace(), Layout::FastScale(28), true);
+  info_labels_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(10), true);
+  info_values_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(20));
+  call_sign_font.set(Fonts::GetStandardFontFace(), Layout::FastScale(28), true);
 }
 
 void
 FlarmTrafficLook::Deinitialise()
 {
-  hbWarning.reset();
-  hbAlarm.reset();
-  hbSelection.reset();
-  hbRadar.reset();
-  hbTeamGreen.reset();
-  hbTeamBlue.reset();
-  hbTeamYellow.reset();
-  hbTeamMagenta.reset();
+  warning_brush.reset();
+  alarm_brush.reset();
+  selection_brush.reset();
+  radar_brush.reset();
+  team_brush_green.reset();
+  team_brush_blue.reset();
+  team_brush_yellow.reset();
+  team_brush_magenta.reset();
 
-  hpWarning.reset();
-  hpAlarm.reset();
-  hpStandard.reset();
-  hpPassive.reset();
-  hpSelection.reset();
-  hpTeamGreen.reset();
-  hpTeamBlue.reset();
-  hpTeamYellow.reset();
-  hpTeamMagenta.reset();
+  warning_pen.reset();
+  alarm_pen.reset();
+  default_pen.reset();
+  passive_pen.reset();
+  selection_pen.reset();
+  team_pen_green.reset();
+  team_pen_blue.reset();
+  team_pen_yellow.reset();
+  team_pen_magenta.reset();
 
-  hpPlane.reset();
-  hpRadar.reset();
+  plane_pen.reset();
+  radar_pen.reset();
 
-  hfNoTraffic.reset();
-  hfLabels.reset();
-  hfSideInfo.reset();
+  no_traffic_font.reset();
+  label_font.reset();
+  side_info_font.reset();
 
-  hfInfoLabels.reset();
-  hfInfoValues.reset();
-  hfCallSign.reset();
+  info_labels_font.reset();
+  info_values_font.reset();
+  call_sign_font.reset();
 }

@@ -239,7 +239,7 @@ FlarmTrafficControl::PaintTaskDirection(Canvas &canvas) const
   if (negative(task_direction.Degrees()))
     return;
 
-  canvas.select(look.hpRadar);
+  canvas.select(look.radar_pen);
   canvas.hollow_brush();
 
   RasterPoint triangle[4];
@@ -289,14 +289,14 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   // Set the text color and background
   switch (traffic.alarm_level) {
   case FlarmTraffic::ALARM_LOW:
-    canvas.set_text_color(look.hcWarning);
+    canvas.set_text_color(look.warning_color);
     break;
   case FlarmTraffic::ALARM_IMPORTANT:
   case FlarmTraffic::ALARM_URGENT:
-    canvas.set_text_color(look.hcAlarm);
+    canvas.set_text_color(look.alarm_color);
     break;
   case FlarmTraffic::ALARM_NONE:
-    canvas.set_text_color(look.hcStandard);
+    canvas.set_text_color(look.default_color);
     break;
   }
   canvas.background_transparent();
@@ -304,50 +304,50 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
   // Climb Rate
   if (!WarningMode() && traffic.climb_rate_avg30s_available) {
     Units::FormatUserVSpeed(traffic.climb_rate_avg30s, tmp, 20);
-    canvas.select(look.hfInfoValues);
+    canvas.select(look.info_values_font);
     sz = canvas.text_size(tmp);
-    canvas.text(rc.right - sz.cx, rc.top + look.hfInfoLabels.get_height(), tmp);
+    canvas.text(rc.right - sz.cx, rc.top + look.info_labels_font.get_height(), tmp);
 
-    canvas.select(look.hfInfoLabels);
+    canvas.select(look.info_labels_font);
     sz = canvas.text_size(_("Vario"));
     canvas.text(rc.right - sz.cx, rc.top, _("Vario"));
   }
 
   // Distance
   Units::FormatUserDistance(traffic.distance, tmp, 20);
-  canvas.select(look.hfInfoValues);
+  canvas.select(look.info_values_font);
   sz = canvas.text_size(tmp);
   canvas.text(rc.left, rc.bottom - sz.cy, tmp);
 
-  canvas.select(look.hfInfoLabels);
+  canvas.select(look.info_labels_font);
   canvas.text(rc.left,
-              rc.bottom - look.hfInfoValues.get_height() - look.hfInfoLabels.get_height(),
+              rc.bottom - look.info_values_font.get_height() - look.info_labels_font.get_height(),
               _("Distance"));
 
   // Relative Height
   Units::FormatUserArrival(traffic.relative_altitude, tmp, 20);
-  canvas.select(look.hfInfoValues);
+  canvas.select(look.info_values_font);
   sz = canvas.text_size(tmp);
   canvas.text(rc.right - sz.cx, rc.bottom - sz.cy, tmp);
 
-  canvas.select(look.hfInfoLabels);
+  canvas.select(look.info_labels_font);
   sz = canvas.text_size(_("Rel. Alt."));
   canvas.text(rc.right - sz.cx,
-              rc.bottom - look.hfInfoValues.get_height() - look.hfInfoLabels.get_height(),
+              rc.bottom - look.info_values_font.get_height() - look.info_labels_font.get_height(),
               _("Rel. Alt."));
 
   // ID / Name
   unsigned font_size;
   if (traffic.HasName()) {
-    canvas.select(look.hfCallSign);
-    font_size = look.hfCallSign.get_height();
+    canvas.select(look.call_sign_font);
+    font_size = look.call_sign_font.get_height();
 
     if (!traffic.HasAlarm())
-      canvas.set_text_color(look.hcSelection);
+      canvas.set_text_color(look.selection_color);
 
     _tcscpy(tmp, traffic.name);
   } else {
-    font_size = look.hfInfoLabels.get_height();
+    font_size = look.info_labels_font.get_height();
     traffic.id.format(tmp);
   }
 
@@ -366,16 +366,16 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     if (team_color != FlarmFriends::NONE) {
       switch (team_color) {
       case FlarmFriends::GREEN:
-        canvas.select(look.hbTeamGreen);
+        canvas.select(look.team_brush_green);
         break;
       case FlarmFriends::BLUE:
-        canvas.select(look.hbTeamBlue);
+        canvas.select(look.team_brush_blue);
         break;
       case FlarmFriends::YELLOW:
-        canvas.select(look.hbTeamYellow);
+        canvas.select(look.team_brush_green);
         break;
       case FlarmFriends::MAGENTA:
-        canvas.select(look.hbTeamMagenta);
+        canvas.select(look.team_brush_magenta);
         break;
       default:
         break;

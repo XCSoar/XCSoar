@@ -32,37 +32,37 @@
 struct TrafficLook;
 
 struct FlarmTrafficLook {
-  Color hcWarning;
-  Color hcAlarm;
-  Color hcStandard;
-  Color hcPassive;
-  Color hcSelection;
-  Color hcBackground;
-  Color hcRadar;
+  Color warning_color;
+  Color alarm_color;
+  Color default_color;
+  Color passive_color;
+  Color selection_color;
+  Color background_color;
+  Color radar_color;
 
-  Brush hbWarning;
-  Brush hbAlarm;
-  Brush hbSelection;
-  Brush hbRadar;
-  Brush hbTeamGreen;
-  Brush hbTeamBlue;
-  Brush hbTeamYellow;
-  Brush hbTeamMagenta;
+  Brush warning_brush;
+  Brush alarm_brush;
+  Brush selection_brush;
+  Brush radar_brush;
+  Brush team_brush_green;
+  Brush team_brush_blue;
+  Brush team_brush_yellow;
+  Brush team_brush_magenta;
 
-  Pen hpWarning;
-  Pen hpAlarm;
-  Pen hpStandard;
-  Pen hpPassive;
-  Pen hpSelection;
-  Pen hpTeamGreen;
-  Pen hpTeamBlue;
-  Pen hpTeamYellow;
-  Pen hpTeamMagenta;
+  Pen warning_pen;
+  Pen alarm_pen;
+  Pen default_pen;
+  Pen passive_pen;
+  Pen selection_pen;
+  Pen team_pen_green;
+  Pen team_pen_blue;
+  Pen team_pen_yellow;
+  Pen team_pen_magenta;
 
-  Pen hpPlane, hpRadar;
+  Pen plane_pen, radar_pen;
 
-  Font hfLabels, hfSideInfo, hfNoTraffic;
-  Font hfInfoValues, hfInfoLabels, hfCallSign;
+  Font label_font, side_info_font, no_traffic_font;
+  Font info_values_font, info_labels_font, call_sign_font;
 
   void Initialise(const TrafficLook &other, bool small);
   void Deinitialise();
