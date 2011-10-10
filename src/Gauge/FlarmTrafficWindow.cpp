@@ -266,26 +266,35 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   sc[i].x = radar_mid.x + iround(x * scale);
   sc[i].y = radar_mid.y + iround(y * scale);
 
+  const Color *text_color;
+  const Pen *target_pen, *circle_pen;
+  const Brush *target_brush, *arrow_brush;
+  bool hollow_brush = false;
+  unsigned circles = 0;
+
   // Set the arrow color depending on alarm level
   switch (traffic.alarm_level) {
   case FlarmTraffic::ALARM_LOW:
-    canvas.hollow_brush();
-    canvas.select(look.warning_pen);
-    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
-    canvas.select(look.warning_brush);
+    text_color = &look.default_color;
+    target_pen = circle_pen = &look.warning_pen;
+    target_brush = &look.warning_brush;
+    arrow_brush = &look.default_brush;
+    circles = 1;
     break;
   case FlarmTraffic::ALARM_IMPORTANT:
   case FlarmTraffic::ALARM_URGENT:
-    canvas.hollow_brush();
-    canvas.select(look.alarm_pen);
-    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
-    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 10 : 19));
-    canvas.select(look.alarm_brush);
+    text_color = &look.default_color;
+    target_pen = circle_pen = &look.alarm_pen;
+    target_brush = &look.alarm_brush;
+    arrow_brush = &look.default_brush;
+    circles = 2;
     break;
   case FlarmTraffic::ALARM_NONE:
     if (WarningMode()) {
-      canvas.hollow_brush();
-      canvas.select(look.passive_pen);
+      text_color = &look.passive_color;
+      target_pen = &look.passive_pen;
+      arrow_brush = &look.passive_brush;
+      hollow_brush = true;
     } else {
       // Search for team color
       FlarmFriends::Color team_color = FlarmFriends::GetFriendColor(traffic.id);
@@ -301,37 +310,50 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
       if (team_color != FlarmFriends::NONE) {
         switch (team_color) {
         case FlarmFriends::GREEN:
-          canvas.select(look.team_pen_green);
+          circle_pen = &look.team_pen_green;
           break;
         case FlarmFriends::BLUE:
-          canvas.select(look.team_pen_blue);
+          circle_pen = &look.team_pen_blue;
           break;
         case FlarmFriends::YELLOW:
-          canvas.select(look.team_pen_yellow);
+          circle_pen = &look.team_pen_yellow;
           break;
         case FlarmFriends::MAGENTA:
-          canvas.select(look.team_pen_magenta);
+          circle_pen = &look.team_pen_magenta;
           break;
         default:
           break;
         }
 
-        canvas.hollow_brush();
-        canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
+        circles = 1;
       }
 
       if (!small && static_cast<unsigned> (selection) == i) {
-        canvas.select(look.selection_pen);
-        canvas.select(look.selection_brush);
+        text_color = &look.selection_color;
+        target_brush = arrow_brush = &look.selection_brush;
+        target_pen = &look.selection_pen;
       } else {
-        canvas.hollow_brush();
-        if (traffic.IsPassive())
-          canvas.select(look.passive_pen);
-        else
-          canvas.select(look.default_pen);
+        hollow_brush = true;
+        if (traffic.IsPassive()) {
+          text_color = &look.passive_color;
+          target_pen = &look.passive_pen;
+          arrow_brush = &look.passive_brush;
+        } else {
+          text_color = &look.default_color;
+          target_pen = &look.default_pen;
+          arrow_brush = &look.default_brush;
+        }
       }
     }
     break;
+  }
+
+  if (circles > 0) {
+    canvas.hollow_brush();
+    canvas.select(*circle_pen);
+    canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 8 : 16));
+    if (circles == 2)
+      canvas.circle(sc[i].x, sc[i].y, Layout::FastScale(small ? 10 : 19));
   }
 
   // Create an arrow polygon
@@ -365,6 +387,13 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
                      traffic.track - (enable_north_up ?
                                              Angle::Zero() : heading));
 
+  // Select pen and brush
+  canvas.select(*target_pen);
+  if (hollow_brush)
+    canvas.hollow_brush();
+  else
+    canvas.select(*target_brush);
+
   // Draw the polygon
   canvas.polygon(Arrow, 5);
 
@@ -386,7 +415,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     // Select font
     canvas.background_transparent();
     canvas.select(look.side_info_font);
-    canvas.set_text_color(look.default_color);
+    canvas.set_text_color(*text_color);
 
     // Calculate size of the output string
     PixelSize tsize = canvas.text_size(buffer);
@@ -396,8 +425,8 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
     // Draw string
     canvas.text(sc[i].x + dist, sc[i].y - tsize.cy / 2, buffer);
 
-    // Set black brush for the up/down arrow
-    canvas.black_brush();
+    // Set target_brush for the up/down arrow
+    canvas.select(*arrow_brush);
     canvas.null_pen();
 
     // Prepare the triangular polygon
@@ -466,10 +495,7 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
               sc[i].y - sz.cy / 2 - 1, tmp);
 
   // Select color
-  if (static_cast<unsigned> (selection) == i)
-    canvas.set_text_color(look.selection_color);
-  else
-    canvas.set_text_color(look.default_color);
+  canvas.set_text_color(*text_color);
 
   // Draw vertical speed
   canvas.text(sc[i].x + Layout::FastScale(11), sc[i].y - sz.cy / 2, tmp);

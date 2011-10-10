@@ -42,6 +42,8 @@ struct FlarmTrafficLook {
 
   Brush warning_brush;
   Brush alarm_brush;
+  Brush default_brush;
+  Brush passive_brush;
   Brush selection_brush;
   Brush radar_brush;
   Brush team_brush_green;

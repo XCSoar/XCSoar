@@ -39,6 +39,8 @@ FlarmTrafficLook::Initialise(const TrafficLook &other, bool small)
 
   warning_brush.set(warning_color);
   alarm_brush.set(alarm_color);
+  default_brush.set(default_color);
+  passive_brush.set(passive_color);
   selection_brush.set(selection_color);
   radar_brush.set(radar_color);
   team_brush_green.set(Color(0x74, 0xFF, 0));
@@ -75,6 +77,8 @@ FlarmTrafficLook::Deinitialise()
 {
   warning_brush.reset();
   alarm_brush.reset();
+  default_brush.reset();
+  passive_brush.reset();
   selection_brush.reset();
   radar_brush.reset();
   team_brush_green.reset();
