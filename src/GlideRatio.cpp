@@ -159,7 +159,7 @@ UpdateLD(fixed LD, fixed leg_distance, fixed height_above_leg,
     return LD;
 
   fixed glideangle;
-  if (LD != fixed_zero)
+  if (LD != fixed(INVALID_GR))
     glideangle = fixed_one / LD;
   else
     glideangle = fixed_one;
