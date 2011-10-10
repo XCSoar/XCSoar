@@ -56,15 +56,15 @@ enum {
 };
 
 
-void VegaVoiceMessage::TextToDigitsSmall(TCHAR *text, double number) {
-  TCHAR tdigit[80];
-  int ntens;
-  int nones;
-  int ndecimals;
+void
+VegaVoiceMessage::TextToDigitsSmall(TCHAR *text, fixed number)
+{
+  const int i = iround(number * 10);
+  const int ntens = i / 100;
+  const int nones = (i / 10) % 10;
+  const int ndecimals = i % 10;
 
-  ntens = (int)(number/10);
-  nones = (int)(number-ntens*10);
-  ndecimals = (int)((number-ntens*10-nones)*10);
+  TCHAR tdigit[80];
 
   if (ntens>0) {
     _stprintf(tdigit, _T(",%d"), LookupDigit(ntens));
@@ -79,18 +79,15 @@ void VegaVoiceMessage::TextToDigitsSmall(TCHAR *text, double number) {
 
 }
 
+void
+VegaVoiceMessage::TextToDigitsLarge(TCHAR *text, fixed number)
+{
+  const int i = iround(number);
+  const int nhundreds = i / 100;
+  const int ntens = (i / 10) % 10;
+  const int nones = i % 10;
 
-void VegaVoiceMessage::TextToDigitsLarge(TCHAR *text, double number) {
   TCHAR tdigit[80];
-  int nhundreds;
-  int ntens;
-  int nones;
-
-  number = lround(number);
-
-  nhundreds = (int)(number/100);
-  ntens = (int)((number-nhundreds*10)/10);
-  nones = (int)(number-ntens*10-nhundreds*100);
 
   if (nhundreds>0) {
     _stprintf(tdigit, _T(",%d"), LookupDigit(nhundreds));
@@ -105,16 +102,14 @@ void VegaVoiceMessage::TextToDigitsLarge(TCHAR *text, double number) {
 
 }
 
+void
+VegaVoiceMessage::TextToDigitsHuge(TCHAR *text, fixed number)
+{
+  const int i = iround(number / 100);
+  const int nthousands = i / 10;
+  const int nhundreds = i % 10;
 
-void VegaVoiceMessage::TextToDigitsHuge(TCHAR *text, double number) {
   TCHAR tdigit[80];
-  int nthousands;
-  int nhundreds;
-
-  number = lround(number);
-
-  nthousands = (int)(number/1000);
-  nhundreds = (int)((number-nthousands*10)/100);
 
   if (nthousands>0) {
     _stprintf(tdigit, _T(",%d,%d"), LookupDigit(nthousands), VWI_THOUSANDS);

@@ -24,6 +24,7 @@ Copyright_License {
 #ifndef VEGAVOICE_HPP
 #define VEGAVOICE_HPP
 
+#include "Math/fixed.hpp"
 #include "Thread/Mutex.hpp"
 #include "Compiler.h"
 
@@ -90,11 +91,11 @@ private:
 
   void DoSend(double time, TCHAR *text);
 
-  static void TextToDigitsSmall(TCHAR *text, double number);
+  static void TextToDigitsSmall(TCHAR *text, fixed number);
 
-  static void TextToDigitsLarge(TCHAR *text, double number);
+  static void TextToDigitsLarge(TCHAR *text, fixed number);
 
-  static void TextToDigitsHuge(TCHAR *text, double number);
+  static void TextToDigitsHuge(TCHAR *text, fixed number);
 
   gcc_const
   static int LookupDigit(int number);
