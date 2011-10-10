@@ -108,7 +108,7 @@ struct Color {
    * This function must be removed as soon as we have a pure OpenGL
    * renderer (without libSDL).
    */
-  operator const SDL_Color() const {
+  operator SDL_Color() const {
     SDL_Color color;
     color.r = red();
     color.g = green();
