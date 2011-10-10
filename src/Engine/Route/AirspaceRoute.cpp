@@ -42,7 +42,7 @@ private:
   fixed min_distance;
   const TaskProjection& proj;
   const RoutePolars& rpolar;
-  const GeoPoint& origin;
+  const GeoPoint origin;
   AIVResult nearest;
 
 public:
