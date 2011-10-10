@@ -24,7 +24,7 @@
 
 #include "Route/AirspaceRoute.hpp"
 
-struct RoughAltitude;
+class RoughAltitude;
 class RasterTerrain;
 
 class RoutePlannerGlue {

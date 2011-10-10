@@ -31,7 +31,7 @@
 
 class TaskProjection;
 struct RouteLink;
-class AFlatGeoPoint;
+struct AFlatGeoPoint;
 struct ReachFanParms;
 
 class TriangleFanVisitor
