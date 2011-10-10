@@ -49,7 +49,7 @@ public:
   }
   void Init();
   void StatePrediction(float gps_vel[2], float dT);
-  void Correction(float dynamic_pressure, float gps_vel[2]);
+  void Correction(fixed dynamic_pressure, float gps_vel[2]);
   void CovariancePrediction(float dT);
   const float* get_state() const { return X; };
 

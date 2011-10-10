@@ -45,11 +45,11 @@ void WindEKF::StatePrediction(float gps_vel[2], float dT)
   RungeKutta(U, dT);
 }
 
-void WindEKF::Correction(float dynamic_pressure, float gps_vel[2])
+void WindEKF::Correction(fixed dynamic_pressure, float gps_vel[2])
 {
   float Z[1], Y[1];
 
-  Z[0] = dynamic_pressure;
+  Z[0] = (float)dynamic_pressure;
 
   // EKF correction step
   LinearizeH(gps_vel);
@@ -284,8 +284,8 @@ WindEKFGlue::Update(const NMEAInfo &basic, const DerivedInfo &derived)
   // clear blackout
   blackout((unsigned)-1);
 
-  float V = basic.true_airspeed;
-  float dynamic_pressure = V*V;
+  fixed V = basic.true_airspeed;
+  fixed dynamic_pressure = sqr(V);
   float gps_vel[2];
   fixed gps_east, gps_north;
   basic.track.SinCos(gps_east, gps_north);
