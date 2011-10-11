@@ -324,17 +324,15 @@ ifeq ($(TARGET),ANDROID)
 endif
 
 ifneq ($(filter PC WINE,$(TARGET)),)
-  TARGET_LDLIBS += -lwinmm -lstdc++
+  TARGET_LDLIBS += -lwinmm
 endif
 
 ifeq ($(TARGET),CYGWIN)
-  TARGET_LDLIBS += -lwinmm -lstdc++
+  TARGET_LDLIBS += -lwinmm
   TARGET_LDLIBS += -lintl
 endif
 
 ifeq ($(HAVE_CE),y)
-  TARGET_LDLIBS += -lstdc++
-
   ifneq ($(TARGET),ALTAIR)
     TARGET_CPPFLAGS += -DHAVE_NOTE_PRJ_DLL
     TARGET_CPPFLAGS += -DHAVE_AYGSHELL_DLL
@@ -346,7 +344,7 @@ ifeq ($(TARGET),UNIX)
   ifeq ($(shell uname -s),Darwin)
   TARGET_LDLIBS += $(shell $(CXX) -print-file-name=libstdc++.a)
   else
-  TARGET_LDLIBS += -lstdc++ -lm
+  TARGET_LDLIBS += -lm
   endif
 endif
 
