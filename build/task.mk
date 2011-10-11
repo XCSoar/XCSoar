@@ -53,7 +53,6 @@ TASK_SRC	:=\
 	$(ENGINE_SRC_DIR)/Task/TaskAdvanceSmart.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskBehaviour.cpp \
 	$(ENGINE_SRC_DIR)/Task/OrderedTaskBehaviour.cpp \
-	$(ENGINE_SRC_DIR)/Task/TaskEvents.cpp \
 	$(ENGINE_SRC_DIR)/Task/TaskManager.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/AbstractTaskFactory.cpp \
 	$(ENGINE_SRC_DIR)/Task/Factory/RTTaskFactory.cpp \
