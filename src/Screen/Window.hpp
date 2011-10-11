@@ -754,15 +754,6 @@ public:
   }
 
   gcc_pure
-  bool in_client_rect(int x, int y) const {
-    if (x < 0 || y < 0)
-      return false;
-
-    PixelRect rc = get_client_rect();
-    return x < rc.right && y < rc.bottom;
-  }
-
-  gcc_pure
   const PixelSize get_size() const
   {
     PixelRect rc = get_client_rect();
