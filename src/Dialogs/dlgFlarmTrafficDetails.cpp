@@ -43,6 +43,7 @@
 #include "Components.hpp"
 #include "Units/UnitsFormatter.hpp"
 #include "Util/StringUtil.hpp"
+#include "Language/Language.hpp"
 #include "Compiler.h"
 
 #include <math.h>
@@ -115,7 +116,8 @@ Update()
   TCHAR tmp[200], tmp_id[7];
 
   // Set the dialog caption
-  _stprintf(tmp, _T("FLARM Traffic Details (%s)"), target_id.Format(tmp_id));
+  _stprintf(tmp, _T("%s (%s)"),
+            _("FLARM Traffic Details"), target_id.Format(tmp_id));
   wf->SetCaption(tmp);
 
   // Try to find the target in the FLARMnet database
@@ -205,8 +207,8 @@ static void
 OnTeamClicked(gcc_unused WndButton &Sender)
 {
   // Ask for confirmation
-  if (MessageBoxX(_T("Do you want to set this FLARM contact as your ")
-      _T("new teammate?"), _T("New Teammate"), MB_YESNO) != IDYES)
+  if (MessageBoxX(_("Do you want to set this FLARM contact as your new teammate?"),
+                  _("New Teammate"), MB_YESNO) != IDYES)
     return;
 
   SETTINGS_TEAMCODE &settings = CommonInterface::SetSettingsComputer();
