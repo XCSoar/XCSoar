@@ -204,6 +204,6 @@ FlarmId
 FlarmNet::Record::GetId() const
 {
   FlarmId id;
-  id.parse(this->id, NULL);
+  id.Parse(this->id, NULL);
   return id;
 };

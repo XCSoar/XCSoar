@@ -141,7 +141,7 @@ void
 FlarmTrafficWindow::UpdateSelector(const FlarmId id, const RasterPoint pt)
 {
   // Update #selection
-  if (!id.defined())
+  if (!id.IsDefined())
     SetTarget(-1);
   else
     SetTarget(id);
@@ -181,7 +181,7 @@ FlarmTrafficWindow::Update(Angle new_direction, const FlarmState &new_data,
     selection_id = data.traffic[selection].id;
     pt = sc[selection];
   } else {
-    selection_id.clear();
+    selection_id.Clear();
     pt.x = -100;
     pt.y = -100;
   }

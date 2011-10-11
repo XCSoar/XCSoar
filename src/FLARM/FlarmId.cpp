@@ -27,21 +27,21 @@ Copyright_License {
 #include <stdio.h>
 
 void
-FlarmId::parse(const char *input, char **endptr_r)
+FlarmId::Parse(const char *input, char **endptr_r)
 {
   value = strtol(input, endptr_r, 16);
 }
 
 #ifdef _UNICODE
 void
-FlarmId::parse(const TCHAR *input, TCHAR **endptr_r)
+FlarmId::Parse(const TCHAR *input, TCHAR **endptr_r)
 {
   value = _tcstol(input, endptr_r, 16);
 }
 #endif
 
 const TCHAR *
-FlarmId::format(TCHAR *buffer) const
+FlarmId::Format(TCHAR *buffer) const
 {
   _stprintf(buffer, _T("%lX"), (unsigned long)value);
   return buffer;

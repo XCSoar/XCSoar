@@ -135,7 +135,7 @@ TestFLARM()
   ok1(nmea_info.flarm.GetActiveTrafficCount() == 1);
 
   FlarmId id;
-  id.parse("DDA85C", NULL);
+  id.Parse("DDA85C", NULL);
 
   FlarmTraffic *traffic = nmea_info.flarm.FindTraffic(id);
   if (ok1(traffic != NULL)) {
@@ -162,7 +162,7 @@ TestFLARM()
                                       nmea_info));
   ok1(nmea_info.flarm.GetActiveTrafficCount() == 2);
 
-  id.parse("DEADFF", NULL);
+  id.Parse("DEADFF", NULL);
   traffic = nmea_info.flarm.FindTraffic(id);
   if (ok1(traffic != NULL)) {
     ok1(traffic->valid);

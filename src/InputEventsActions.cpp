@@ -660,7 +660,7 @@ InputEvents::eventFlarmDetails(gcc_unused const TCHAR *misc)
     const FlarmId *id = dlgFlarmDetailsListShowModal(
         XCSoarInterface::main_window, _("Show details:"), ids, count);
 
-    if (id != NULL && id->defined())
+    if (id != NULL && id->IsDefined())
       dlgFlarmTrafficDetailsShowModal(*id);
   } else {
     MessageBoxX(_("Unknown competition number"),

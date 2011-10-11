@@ -32,7 +32,7 @@ int main(int argc, char **argv)
   ok1(count == 6);
 
   FlarmId id, id2;
-  id.parse("DDA85C", NULL);
+  id.Parse("DDA85C", NULL);
 
   const FlarmNet::Record *record = FlarmNet::FindRecordById(id);
   ok1(record != NULL);
@@ -62,8 +62,8 @@ int main(int argc, char **argv)
   const FlarmId *ids[3];
   ok1(FlarmNet::FindIdsByCallSign(_T("TH"), ids, 3) == 2);
 
-  id.parse("DDA85C", NULL);
-  id2.parse("DDA896", NULL);
+  id.Parse("DDA85C", NULL);
+  id2.Parse("DDA896", NULL);
   bool foundDDA85C = false, foundDDA896 = false;
   for (unsigned i = 0; i < 2; i++) {
     if (*ids[i] == id)

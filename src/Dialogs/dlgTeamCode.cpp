@@ -134,7 +134,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
 
   if (string_is_empty(XCSoarInterface::SettingsComputer().TeamFlarmCNTarget)) {
     settings.TeamFlarmTracking = false;
-    settings.TeamFlarmIdTarget.clear();
+    settings.TeamFlarmIdTarget.Clear();
     return;
   }
 
@@ -146,7 +146,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
     const FlarmId *id = dlgFlarmDetailsListShowModal(
         XCSoarInterface::main_window, _("Set new teammate:"), ids, count);
 
-    if (id != NULL && id->defined()) {
+    if (id != NULL && id->IsDefined()) {
       settings.TeamFlarmIdTarget = *id;
       settings.TeamFlarmTracking = true;
       return;
@@ -157,7 +157,7 @@ OnFlarmLockClicked(gcc_unused WndButton &button)
   }
 
   settings.TeamFlarmTracking = false;
-  settings.TeamFlarmIdTarget.clear();
+  settings.TeamFlarmIdTarget.Clear();
   settings.TeamFlarmCNTarget.clear();
 }
 

@@ -66,7 +66,7 @@ SETTINGS_TEAMCODE::SetDefaults()
   TeamFlarmTracking = false;
   TeammateCodeValid = false;
   TeamFlarmCNTarget.clear();
-  TeamFlarmIdTarget.clear();
+  TeamFlarmIdTarget.Clear();
 }
 
 void

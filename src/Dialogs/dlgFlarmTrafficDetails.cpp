@@ -115,7 +115,7 @@ Update()
   TCHAR tmp[200], tmp_id[7];
 
   // Set the dialog caption
-  _stprintf(tmp, _T("FLARM Traffic Details (%s)"), target_id.format(tmp_id));
+  _stprintf(tmp, _T("FLARM Traffic Details (%s)"), target_id.Format(tmp_id));
   wf->SetCaption(tmp);
 
   // Try to find the target in the FLARMnet database

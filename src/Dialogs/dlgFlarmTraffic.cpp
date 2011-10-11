@@ -348,7 +348,7 @@ FlarmTrafficControl::PaintTrafficInfo(Canvas &canvas) const
     _tcscpy(tmp, traffic.name);
   } else {
     font_size = look.info_labels_font.get_height();
-    traffic.id.format(tmp);
+    traffic.id.Format(tmp);
   }
 
   if (!WarningMode()) {

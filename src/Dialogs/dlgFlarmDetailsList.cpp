@@ -41,7 +41,7 @@ static void
 PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
 {
   assert(array[index] != NULL);
-  assert(array[index]->defined());
+  assert(array[index]->IsDefined());
 
   const FlarmId &id = *array[index];
 
@@ -49,7 +49,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned index)
   const Font &small_font = Fonts::MapLabel;
 
   TCHAR tmp[255], tmp_id[10];
-  id.format(tmp_id);
+  id.Format(tmp_id);
 
   const FlarmNet::Record *record = FlarmNet::FindRecordById(id);
   const TCHAR *callsign = FlarmDetails::LookupCallsign(id);

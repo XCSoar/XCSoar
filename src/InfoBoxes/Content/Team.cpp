@@ -63,7 +63,7 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
   SETTINGS_TEAMCODE &settings = CommonInterface::SetSettingsComputer();
   const FlarmState &flarm = XCSoarInterface::Basic().flarm;
   const FlarmTraffic *traffic =
-    settings.TeamFlarmIdTarget.defined()
+    settings.TeamFlarmIdTarget.IsDefined()
     ? flarm.FindTraffic(settings.TeamFlarmIdTarget)
     : NULL;
 
@@ -87,7 +87,7 @@ InfoBoxContentTeamCode::HandleKey(const InfoBoxKeyCodes keycode)
     }
   } else {
     // no flarm traffic to select!
-    settings.TeamFlarmIdTarget.clear();
+    settings.TeamFlarmIdTarget.Clear();
     settings.TeamFlarmCNTarget.clear();
   }
   return true;
@@ -108,7 +108,7 @@ InfoBoxContentTeamBearing::Update(InfoBoxWindow &infobox)
     infobox.SetValueInvalid();
 
   // Set Comment
-  if (!settings.TeamFlarmIdTarget.defined())
+  if (!settings.TeamFlarmIdTarget.IsDefined())
     infobox.SetCommentInvalid();
   else if (!settings.TeamFlarmCNTarget.empty())
     infobox.SetComment(settings.TeamFlarmCNTarget.c_str());
@@ -137,7 +137,7 @@ InfoBoxContentTeamBearingDiff::Update(InfoBoxWindow &infobox)
     infobox.SetValueInvalid();
 
   // Set Comment
-  if (!settings.TeamFlarmIdTarget.defined())
+  if (!settings.TeamFlarmIdTarget.IsDefined())
     infobox.SetCommentInvalid();
   else if (!string_is_empty(settings.TeamFlarmCNTarget))
     infobox.SetComment(settings.TeamFlarmCNTarget);
@@ -169,7 +169,7 @@ InfoBoxContentTeamDistance::Update(InfoBoxWindow &infobox)
     infobox.SetValueInvalid();
 
   // Set Comment
-  if (!settings.TeamFlarmIdTarget.defined())
+  if (!settings.TeamFlarmIdTarget.IsDefined())
     infobox.SetCommentInvalid();
   else if (!string_is_empty(settings.TeamFlarmCNTarget))
     infobox.SetComment(settings.TeamFlarmCNTarget);

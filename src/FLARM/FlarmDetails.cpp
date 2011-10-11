@@ -71,7 +71,7 @@ LoadSecondaryFile(TLineReader &reader)
   while ((line = reader.read()) != NULL) {
     TCHAR *endptr;
     FlarmId id;
-    id.parse(line, &endptr);
+    id.Parse(line, &endptr);
     if (endptr > line && endptr[0] == _T('=') && endptr[1] != _T('\0')) {
       TCHAR *Name = endptr + 1;
       TrimRight(Name);
@@ -108,7 +108,7 @@ FlarmDetails::SaveSecondary()
 
   for (unsigned i = 0; i < FLARM_Names.size(); i++)
     writer->printfln(_T("%s=%s"),
-                     FLARM_Names[i].ID.format(id),
+                     FLARM_Names[i].ID.Format(id),
                      FLARM_Names[i].Name.c_str());
 
   delete writer;
@@ -171,7 +171,7 @@ FlarmDetails::LookupId(const TCHAR *cn)
     return record->GetId();
 
   FlarmId id;
-  id.clear();
+  id.Clear();
   return id;
 }
 

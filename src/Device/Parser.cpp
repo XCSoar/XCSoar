@@ -819,7 +819,7 @@ NMEAParser::PFLAA(NMEAInputLine &line, NMEAInfo &info)
   // 5 id, 6 digit hex
   char id_string[16];
   line.read(id_string, 16);
-  traffic.id.parse(id_string, NULL);
+  traffic.id.Parse(id_string, NULL);
 
   traffic.track_received = line.read_checked(value);
   if (!traffic.track_received) {
