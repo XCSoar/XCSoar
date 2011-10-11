@@ -59,6 +59,10 @@ public:
   bool operator >(const RoughDistance other) const {
     return value > other.value;
   }
+
+  bool IsZero() const {
+    return value == 0;
+  }
 };
 
 #endif
