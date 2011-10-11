@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_COMPATIBILITY_STRING_H
 #define XCSOAR_COMPATIBILITY_STRING_H
 
+#include "Compiler.h"
+
 #ifndef HAVE_MSVCRT
 
 #include <ctype.h>
@@ -50,17 +52,30 @@ _strupr(char *p)
 
 #ifdef _WIN32_WCE
 
+#include <wchar.h>
+
+#if GCC_VERSION >= 40500
+
+gcc_pure
+static inline int
+_wtoi(const wchar_t *s)
+{
+  return (int)wcstol(s, NULL, 10);
+}
+
+#else /* mingw32ce < 4.5 */
+
 #ifdef __cplusplus
 extern "C" {
 #endif
-
-#include <wchar.h>
 
 _CRTIMP int __cdecl     _wtoi (const wchar_t *);
 
 #ifdef __cplusplus
 }
 #endif
+
+#endif /* mingw32ce < 4.5 */
 
 #endif /* _WIN32_WCE */
 
