@@ -202,11 +202,11 @@ TopographyFile::GetMinimumPointDistance(unsigned level) const
 {
   switch (level) {
     case 1:
-      return fixed(4) * scale_threshold / Layout::Scale(30);
+      return (unsigned)(fixed(4) * scale_threshold / Layout::Scale(30));
     case 2:
-      return fixed(6) * scale_threshold / Layout::Scale(30);
+      return (unsigned)(fixed(6) * scale_threshold / Layout::Scale(30));
     case 3:
-      return fixed(9) * scale_threshold / Layout::Scale(30);
+      return (unsigned)(fixed(9) * scale_threshold / Layout::Scale(30));
   }
   return 1;
 }

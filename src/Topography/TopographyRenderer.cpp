@@ -92,8 +92,8 @@ TopographyFileRenderer::Paint(Canvas &canvas,
   glScalex(scale, scale, 1<<16);
 #else
   glTranslatef(projection.GetScreenOrigin().x, projection.GetScreenOrigin().y, 0.);
-  glRotatef(projection.GetScreenAngle().Degrees(), 0., 0., -1.);
-  glScalef(projection.GetScale(), projection.GetScale(), 1.);
+  glRotatef((GLfloat)projection.GetScreenAngle().Degrees(), 0., 0., -1.);
+  glScalef((GLfloat)projection.GetScale(), (GLfloat)projection.GetScale(), 1.);
 #endif
 #else // !ENABLE_OPENGL
   const GeoClip clip(projection.GetScreenBounds().scale(fixed(1.1)));
