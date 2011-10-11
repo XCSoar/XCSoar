@@ -76,7 +76,7 @@ private:
 
   GeoPoint m_location_min_last;
 
-  TaskBehaviour::Factory_t factory_mode;
+  TaskBehaviour::FactoryType factory_mode;
   AbstractTaskFactory* active_factory;
   OrderedTaskBehaviour m_ordered_behaviour;
   TaskAdvanceSmart task_advance;
@@ -122,7 +122,7 @@ public:
    *
    * @return Type of task
    */
-  TaskBehaviour::Factory_t SetFactory(const TaskBehaviour::Factory_t _factory);
+  TaskBehaviour::FactoryType SetFactory(const TaskBehaviour::FactoryType _factory);
 
   /** 
    * Return list of factory types
@@ -132,7 +132,7 @@ public:
    * @return Vector of factory types
    */
   gcc_pure
-  std::vector<TaskBehaviour::Factory_t> GetFactoryTypes(bool all = true) const;
+  std::vector<TaskBehaviour::FactoryType> GetFactoryTypes(bool all = true) const;
 
   /** 
    * Reset the task (as if never flown)
@@ -806,7 +806,7 @@ public:
    * 
    * @return Factory type
    */
-  TaskBehaviour::Factory_t get_factory_type() const {
+  TaskBehaviour::FactoryType get_factory_type() const {
     return factory_mode;
   }
 

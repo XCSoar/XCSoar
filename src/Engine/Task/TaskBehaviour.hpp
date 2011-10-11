@@ -76,7 +76,7 @@ struct TaskBehaviour : public TaskStartMargins {
    * Enumeration of factory types.  This is the set of
    * types of ordered task that can be created.
    */
-  enum Factory_t {
+  enum FactoryType {
     FACTORY_FAI_GENERAL = 0,
     FACTORY_FAI_TRIANGLE,
     FACTORY_FAI_OR,
@@ -100,7 +100,7 @@ struct TaskBehaviour : public TaskStartMargins {
   bool auto_mc;
 
   /** Enumeration of auto MC modes */
-  enum AutoMCMode_t {
+  enum AutoMCMode {
     /** Final glide only */
     AUTOMC_FINALGLIDE = 0,
     /** Climb average */
@@ -110,7 +110,7 @@ struct TaskBehaviour : public TaskStartMargins {
   };
 
   /** Options for auto MC calculations */
-  AutoMCMode_t auto_mc_mode;
+  AutoMCMode auto_mc_mode;
   
   /** Option to enable calculation of cruise efficiency */
   bool calc_cruise_efficiency;
@@ -139,7 +139,7 @@ struct TaskBehaviour : public TaskStartMargins {
   fixed safety_height_arrival;
 
   /** Default task type to use for new tasks */
-  Factory_t task_type_default;
+  FactoryType task_type_default;
 
   /** Default sector info for new ordered task */
   SectorDefaults sector_defaults;
@@ -167,8 +167,7 @@ struct TaskBehaviour : public TaskStartMargins {
    * Convenience function (used primarily for testing) to disable
    * all expensive task behaviour functions.
    */
-  void all_off();
-
+  void DisableAll();
 };
 
 #endif

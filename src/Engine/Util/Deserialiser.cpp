@@ -269,7 +269,7 @@ Deserialiser::height_ref(const TCHAR *nodename) const
   return hrMSL;
 }
 
-TaskBehaviour::Factory_t
+TaskBehaviour::FactoryType
 Deserialiser::task_factory_type() const
 {
   tstring type;

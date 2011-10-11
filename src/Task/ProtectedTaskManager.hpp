@@ -118,7 +118,7 @@ public:
    */
   gcc_malloc
   OrderedTask* TaskCreateDefault(const Waypoints *waypoints,
-                                 TaskBehaviour::Factory_t factory);
+                                 TaskBehaviour::FactoryType factory);
 
   gcc_malloc
   OrderedTask* TaskCopy(const OrderedTask& that) const;

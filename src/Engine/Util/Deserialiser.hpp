@@ -97,7 +97,7 @@ protected:
 
 private:
   HeightReferenceType height_ref(const TCHAR *nodename) const;
-  TaskBehaviour::Factory_t task_factory_type() const;
+  TaskBehaviour::FactoryType task_factory_type() const;
 };
 
 #endif

@@ -235,7 +235,7 @@ bool test_abort(int n_wind)
                            waypoints);
 
   TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
-  task_behaviour.all_off();
+  task_behaviour.DisableAll();
   task_behaviour.enable_trace = false;
   task_manager.SetTaskBehaviour(task_behaviour);
 
@@ -268,7 +268,7 @@ bool test_goto(int n_wind, unsigned id, bool auto_mc)
 
 
   TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
-  task_behaviour.all_off();
+  task_behaviour.DisableAll();
   task_behaviour.auto_mc = auto_mc;
   task_behaviour.enable_trace = false;
   task_manager.SetTaskBehaviour(task_behaviour);
@@ -303,7 +303,7 @@ bool test_null()
                            waypoints);
 
   TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
-  task_behaviour.all_off();
+  task_behaviour.DisableAll();
   task_behaviour.enable_trace = false;
   task_manager.SetTaskBehaviour(task_behaviour);
 
@@ -434,7 +434,7 @@ bool test_olc(int n_wind, Contests olc_type)
                            waypoints);
 
   TaskBehaviour task_behaviour = task_manager.GetTaskBehaviour();
-  task_behaviour.all_off();
+  task_behaviour.DisableAll();
   task_behaviour.enable_olc = true;
   if (!verbose)
     task_behaviour.enable_trace = false;

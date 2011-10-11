@@ -281,7 +281,7 @@ public:
    *
    * @return Type of task
    */
-  TaskBehaviour::Factory_t SetFactory(const TaskBehaviour::Factory_t _factory) {
+  TaskBehaviour::FactoryType SetFactory(const TaskBehaviour::FactoryType _factory) {
     return task_ordered.SetFactory(_factory);
   }
 

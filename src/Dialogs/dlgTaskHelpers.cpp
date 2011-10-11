@@ -41,7 +41,7 @@ Copyright_License {
 #include <windef.h> /* for MAX_PATH */
 
 const TCHAR*
-OrderedTaskFactoryName(TaskBehaviour::Factory_t type)
+OrderedTaskFactoryName(TaskBehaviour::FactoryType type)
 {
   switch(type) {
   case TaskBehaviour::FACTORY_RT:
@@ -67,7 +67,7 @@ OrderedTaskFactoryName(TaskBehaviour::Factory_t type)
 }
 
 const TCHAR*
-OrderedTaskFactoryDescription(TaskBehaviour::Factory_t type)
+OrderedTaskFactoryDescription(TaskBehaviour::FactoryType type)
 {
   switch(type) {
   case TaskBehaviour::FACTORY_RT:

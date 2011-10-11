@@ -248,7 +248,7 @@ Serialiser::height_ref(HeightReferenceType the_height_ref) const
 }
 
 const TCHAR* 
-Serialiser::task_factory_type(TaskBehaviour::Factory_t the_type) const
+Serialiser::task_factory_type(TaskBehaviour::FactoryType the_type) const
 {
   switch(the_type) {
   case TaskBehaviour::FACTORY_FAI_GENERAL:

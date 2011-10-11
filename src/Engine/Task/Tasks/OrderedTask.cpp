@@ -1218,8 +1218,8 @@ OrderedTask::Relocate(const unsigned position, const Waypoint& waypoint)
   return success;
 }
 
-TaskBehaviour::Factory_t
-OrderedTask::SetFactory(const TaskBehaviour::Factory_t the_factory)
+TaskBehaviour::FactoryType
+OrderedTask::SetFactory(const TaskBehaviour::FactoryType the_factory)
 {
   // detect no change
   if (factory_mode == the_factory)
@@ -1279,11 +1279,11 @@ OrderedTask::IsScored() const
   return m_ordered_behaviour.task_scored;
 }
 
-std::vector<TaskBehaviour::Factory_t>
+std::vector<TaskBehaviour::FactoryType>
 OrderedTask::GetFactoryTypes(bool all) const
 {
   /// @todo: check transform types if all=false
-  std::vector<TaskBehaviour::Factory_t> f_list;
+  std::vector<TaskBehaviour::FactoryType> f_list;
   f_list.push_back(TaskBehaviour::FACTORY_RT);
   f_list.push_back(TaskBehaviour::FACTORY_AAT);
   f_list.push_back(TaskBehaviour::FACTORY_FAI_GENERAL);

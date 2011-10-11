@@ -120,8 +120,8 @@ protected:
   void serialise(const OrderedTaskPoint& data, const TCHAR* name);
 
 private:
-  TaskBehaviour::Factory_t task_factory_type() const;
-  const TCHAR* task_factory_type(TaskBehaviour::Factory_t the_type) const;
+  TaskBehaviour::FactoryType task_factory_type() const;
+  const TCHAR* task_factory_type(TaskBehaviour::FactoryType the_type) const;
   const TCHAR* height_ref(HeightReferenceType the_height_ref) const;
 };
 

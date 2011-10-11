@@ -135,7 +135,7 @@ TaskDefaultsConfigPanel::Init(WndForm *_wf)
 
   wp = (WndProperty*)wf->FindByName(_T("prpTaskType"));
   if (wp) {
-    const std::vector<TaskBehaviour::Factory_t> factory_types =
+    const std::vector<TaskBehaviour::FactoryType> factory_types =
         temptask->GetFactoryTypes();
     DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
     dfe->EnableItemHelp(true);

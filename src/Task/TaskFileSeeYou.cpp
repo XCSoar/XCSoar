@@ -309,7 +309,7 @@ static bool isBGAEnhancedOptionZone(const SeeYouTurnpointInformation
 static ObservationZonePoint*
 CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
          unsigned pos, unsigned size, const Waypoint *wps[],
-         TaskBehaviour::Factory_t factType)
+         TaskBehaviour::FactoryType factType)
 {
   ObservationZonePoint* oz = NULL;
   const bool isIntermediate = (pos > 0) && (pos < (size - 1));
@@ -410,7 +410,7 @@ CreateOZ(const SeeYouTurnpointInformation &turnpoint_infos,
 static OrderedTaskPoint*
 CreatePoint(unsigned pos, unsigned n_waypoints, const Waypoint *wp,
     AbstractTaskFactory& fact, ObservationZonePoint* oz,
-    const TaskBehaviour::Factory_t factType)
+    const TaskBehaviour::FactoryType factType)
 {
   OrderedTaskPoint *pt = NULL;
 
@@ -492,7 +492,7 @@ TaskFileSeeYou::GetTask(const Waypoints *waypoints, unsigned index) const
   task->SetFactory(task_info.WpDis ?
                     TaskBehaviour::FACTORY_RT : TaskBehaviour::FACTORY_AAT);
   AbstractTaskFactory& fact = task->GetFactory();
-  const TaskBehaviour::Factory_t factType = task->get_factory_type();
+  const TaskBehaviour::FactoryType factType = task->get_factory_type();
 
   OrderedTaskBehaviour beh = task->get_ordered_task_behaviour();
   if (factType == TaskBehaviour::FACTORY_AAT) {

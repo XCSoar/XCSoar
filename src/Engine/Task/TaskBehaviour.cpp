@@ -69,7 +69,7 @@ TaskBehaviour::SetDefaults()
 }
 
 void
-TaskBehaviour::all_off()
+TaskBehaviour::DisableAll()
 {
   optimise_targets_range = false;
   optimise_targets_bearing = false;
