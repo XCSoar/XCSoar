@@ -1,5 +1,11 @@
 CXX_FEATURES = -fno-exceptions -fno-rtti
 CXX_FEATURES += -std=gnu++0x
+CXX_FEATURES += -fno-threadsafe-statics
+CXX_FEATURES += -fmerge-all-constants
+
+ifeq ($(CLANG),n)
+CXX_FEATURES += -fconserve-space -fno-operator-names
+endif
 
 ifneq ($(TARGET),WINE)
 C_FEATURES = -std=gnu99
