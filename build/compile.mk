@@ -10,9 +10,9 @@ AR = $(TCPATH)ar$(EXE)
 CXX = $(CCACHE) $(TCPATH)g++$(EXE)
 CC = $(CCACHE) $(TCPATH)gcc$(EXE)
 ifeq ($(WINHOST),y)
-  LINK = $(TCPATH)gcc$(EXE)
+  LINK = $(TCPATH)g++$(EXE)
 else
-  LINK = $(CCACHE) $(TCPATH)gcc$(EXE)
+  LINK = $(CCACHE) $(TCPATH)g++$(EXE)
 endif
 DLLTOOL = $(TCPATH)dlltool$(EXE)
 SIZE = $(TCPATH)size$(EXE)

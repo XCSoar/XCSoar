@@ -158,14 +158,9 @@ UpdateLD(fixed LD, fixed leg_distance, fixed height_above_leg,
   if (!positive(leg_distance))
     return LD;
 
-  fixed glideangle;
-  if (LD != fixed_zero)
-    glideangle = fixed_one / LD;
-  else
-    glideangle = fixed_one;
-
-  glideangle = LowPassFilter(fixed_one / LD, height_above_leg / leg_distance,
-                             filter_factor);
+  fixed glideangle = height_above_leg / leg_distance;
+  if (LD != fixed(INVALID_GR))
+    glideangle = LowPassFilter(fixed_one / LD, glideangle, filter_factor);
 
   if (fabs(glideangle) > fixed_one / INVALID_GR)
     LD = LimitLD(fixed_one / glideangle);
