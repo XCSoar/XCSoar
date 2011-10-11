@@ -28,10 +28,6 @@ class SingleWindow;
 class OrderedTask;
 
 void
-dlgStartTaskShowModal(bool *validStart, double Time,
-                      double Speed, double Altitude);
-
-void
 dlgTaskManagerShowModal(SingleWindow &parent);
 
 bool
