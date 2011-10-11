@@ -239,20 +239,17 @@ FlarmTrafficWindow::PaintRadarTarget(Canvas &canvas,
   fixed x = traffic.relative_east;
   fixed y = -traffic.relative_north;
 
-  // Calculate the distance in meters
-  fixed d = traffic.distance;
-
   // Calculate the distance in pixels
-  fixed scale = RangeScale(d);
+  fixed scale = RangeScale(traffic.distance);
 
   // Don't display distracting, far away targets in WarningMode
   if (WarningMode() && !traffic.HasAlarm() && scale == fixed(radius))
     return;
 
   // x and y are not between 0 and 1 (distance will be handled via scale)
-  if (positive(d)) {
-    x /= d;
-    y /= d;
+  if (!traffic.distance.IsZero()) {
+    x /= traffic.distance;
+    y /= traffic.distance;
   } else {
     x = fixed_zero;
     y = fixed_zero;
