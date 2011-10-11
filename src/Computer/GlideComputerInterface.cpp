@@ -26,45 +26,44 @@ Copyright_License {
 #include "InputEvents.hpp"
 #include "GlideComputer.hpp"
 
-void 
+void
 GlideComputerTaskEvents::set_computer(GlideComputer& computer)
 {
   m_computer = &computer;
 }
 
-
-void 
+void
 GlideComputerTaskEvents::transition_enter(const TaskWaypoint &tp)
 {
   m_computer->OnTransitionEnter();
 }
 
-void 
-GlideComputerTaskEvents::transition_alternate() 
+void
+GlideComputerTaskEvents::transition_alternate()
 {
   InputEvents::processGlideComputer(GCE_ALTERNATE_CHANGED);
 }
 
-void 
+void
 GlideComputerTaskEvents::request_arm(const TaskWaypoint &tp)
 {
   InputEvents::processGlideComputer(GCE_ARM_READY);
 }
 
-void 
+void
 GlideComputerTaskEvents::active_advanced(const TaskWaypoint &tp, const int i)
 {
   InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 }
 
-void 
+void
 GlideComputerTaskEvents::task_start()
 {
   InputEvents::processGlideComputer(GCE_TASK_START);
   m_computer->OnStartTask();
 }
 
-void 
+void
 GlideComputerTaskEvents::task_finish()
 {
   InputEvents::processGlideComputer(GCE_TASK_FINISH);
@@ -74,10 +73,8 @@ GlideComputerTaskEvents::task_finish()
 void
 GlideComputerTaskEvents::transition_flight_mode(const bool is_final)
 {
-  if (is_final) {
+  if (is_final)
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE);
-  } else {
+  else
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_CRUISE);
-  }
 }
-
