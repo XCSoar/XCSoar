@@ -30,6 +30,9 @@
 class TaskEventsPrint:
   public TaskEvents
 {
+  /** Option to enable basic output on events (for testing) */
+  bool verbose;
+
 public:
   TaskEventsPrint(const bool _verbose): 
     TaskEvents(),
@@ -56,8 +59,6 @@ public:
   void task_finish();
 
   void transition_flight_mode(const bool is_final);
-
-  bool verbose; /**< Option to enable basic output on events (for testing) */
 };
 
 #endif
