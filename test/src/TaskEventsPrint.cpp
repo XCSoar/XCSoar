@@ -61,7 +61,7 @@ TaskEventsPrint::active_changed(const TaskWaypoint &tp)
 void 
 TaskEventsPrint::construction_error(const char* error) 
 {
-  if (verbose>2) {
+  if (verbose) {
     printf("#Task construction error: ");
     printf("#%s",error);
     printf("\n");
