@@ -19,104 +19,92 @@
   Foundation, Inc., 59 Temple Place - Suite 330, Boston, MA  02111-1307, USA.
 }
  */
+
 #include "TaskEventsPrint.hpp"
 #include "Task/Tasks/BaseTask/TaskWaypoint.hpp"
 
 #include <stdio.h>
 
-void 
+void
 TaskEventsPrint::transition_enter(const TaskWaypoint& tp)
 {
-  if (verbose) {
+  if (verbose)
     printf("#- entered sector\n");
-  }
 }
 
-void 
-TaskEventsPrint::transition_alternate() 
+void
+TaskEventsPrint::transition_alternate()
 {
-  if (verbose) {
+  if (verbose)
     printf("#- alternate changed\n");
-  }
 }
 
-
-void 
+void
 TaskEventsPrint::transition_exit(const TaskWaypoint &tp)
 {
-  if (verbose) {
+  if (verbose)
     printf("#- exited sector\n");
-  }
 }
 
-
-void 
+void
 TaskEventsPrint::active_changed(const TaskWaypoint &tp)
 {
-  if (verbose) {
+  if (verbose)
     printf("#- active changed to wp %d\n", tp.GetWaypoint().id);
-  }
 }
 
-void 
-TaskEventsPrint::construction_error(const char* error) 
+void
+TaskEventsPrint::construction_error(const char* error)
 {
   if (verbose) {
     printf("#Task construction error: ");
-    printf("#%s",error);
+    printf("#%s", error);
     printf("\n");
   }
 }
 
-void 
-TaskEventsPrint::warning_start_speed() 
+void
+TaskEventsPrint::warning_start_speed()
 {
-  if (verbose) {
+  if (verbose)
     printf("#- warning speed excessive\n");
-  }
 }
 
-void 
+void
 TaskEventsPrint::request_arm(const TaskWaypoint &tp)
 {
-  if (verbose) {
+  if (verbose)
     printf("#- ready to advance\n");
-  }
 }
 
-void 
-TaskEventsPrint::task_start() 
+void
+TaskEventsPrint::task_start()
 {
-  if (verbose) {
+  if (verbose)
     printf("#- task started\n");
-  }
 }
 
-void 
-TaskEventsPrint::task_finish() 
+void
+TaskEventsPrint::task_finish()
 {
-  if (verbose) {
+  if (verbose)
     printf("#- task finished\n");
-  }
 }
 
-
-void 
+void
 TaskEventsPrint::active_advanced(const TaskWaypoint &tp, const int i)
 {
-  if (verbose) {
+  if (verbose)
     printf("#- advance to sector %d\n", i);
-  }
 }
 
-void 
+void
 TaskEventsPrint::transition_flight_mode(const bool is_final)
 {
   if (verbose) {
-    if (is_final) {
+    if (is_final)
       printf("#- flight mode final glide \n");
-    } else {
+    else
       printf("#- flight mode cruise \n");
-    }
   }
 }
