@@ -66,7 +66,7 @@ SetXMLDialogLook(const DialogLook &_dialog_look)
 static int dialog_width_scale = 1024;
 
 // to full width of screen
-DialogStyle DialogStyleSetting = dsFullWidth;
+DialogStyle dialog_style_setting = dsFullWidth;
 
 // used when loading stand-alone XML file with no form control
 static DialogStyle dialog_style_last = dsFullWidth;
@@ -92,14 +92,13 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
 
 static Window *
 LoadChild(WndForm &form, ContainerWindow &parent,
-          CallBackTableEntry *LookUpTable,
-          XMLNode node, const DialogStyle eDialogStyle,
-          int bottom_most=0);
+          CallBackTableEntry *lookup_table, XMLNode node,
+          const DialogStyle dialog_style, int bottom_most = 0);
 
 static void
 LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
-                    CallBackTableEntry *LookUpTable,
-                    XMLNode *Node, const DialogStyle eDialogStyle);
+                    CallBackTableEntry *lookup_table, XMLNode *node,
+                    const DialogStyle dialog_style);
 
 /**
  * Converts a String into an Integer and returns
@@ -109,11 +108,11 @@ LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
  * @return The parsed Integer value
  */
 static long
-StringToIntDflt(const TCHAR *String, long Default)
+StringToIntDflt(const TCHAR *string, long _default)
 {
-  if (String == NULL || string_is_empty(String))
-    return Default;
-  return _tcstol(String, NULL, 0);
+  if (string == NULL || string_is_empty(string))
+    return _default;
+  return _tcstol(string, NULL, 0);
 }
 
 /**
@@ -124,11 +123,11 @@ StringToIntDflt(const TCHAR *String, long Default)
  * @return The parsed Float value
  */
 static double
-StringToFloatDflt(const TCHAR *String, double Default)
+StringToFloatDflt(const TCHAR *string, double _default)
 {
-  if (String == NULL || string_is_empty(String))
-    return Default;
-  return _tcstod(String, NULL);
+  if (string == NULL || string_is_empty(string))
+    return _default;
+  return _tcstod(string, NULL);
 }
 
 /**
@@ -138,11 +137,11 @@ StringToFloatDflt(const TCHAR *String, double Default)
  * @return The output String
  */
 static const TCHAR *
-StringToStringDflt(const TCHAR *String, const TCHAR *Default)
+StringToStringDflt(const TCHAR *string, const TCHAR *_default)
 {
-  if (String == NULL || string_is_empty(String))
-    return Default;
-  return String;
+  if (string == NULL || string_is_empty(string))
+    return _default;
+  return string;
 }
 
 /**
@@ -152,9 +151,9 @@ StringToStringDflt(const TCHAR *String, const TCHAR *Default)
  * @param color The color (output)
  */
 static bool
-StringToColor(const TCHAR *String, Color &color)
+StringToColor(const TCHAR *string, Color &color)
 {
-  long value = StringToIntDflt(String, -1);
+  long value = StringToIntDflt(string, -1);
   if (value & ~0xffffff)
     return false;
 
@@ -168,19 +167,19 @@ StringToColor(const TCHAR *String, Color &color)
  * @return Dialog style (DialogStyle_t), Default = FullWidth
  */
 static DialogStyle
-GetDialogStyle(const XMLNode &xNode)
+GetDialogStyle(const XMLNode &node)
 {
-  const TCHAR* popup = xNode.getAttribute(_T("Popup"));
+  const TCHAR* popup = node.getAttribute(_T("Popup"));
   if ((popup == NULL) || string_is_empty(popup))
-    return DialogStyleSetting;
+    return dialog_style_setting;
   else
     return (DialogStyle)StringToIntDflt(popup, 0);
 }
 
 static int 
-ScaleWidth(const int x, const DialogStyle eDialogStyle) 
+ScaleWidth(const int x, const DialogStyle dialog_style)
 {
-  if (eDialogStyle == dsFullWidth || eDialogStyle == dsScaledBottom)
+  if (dialog_style == dsFullWidth || dialog_style == dsScaledBottom)
     // stretch width to fill screen horizontally
     return x * dialog_width_scale / 1024;
   else
@@ -188,16 +187,16 @@ ScaleWidth(const int x, const DialogStyle eDialogStyle)
 }
 
 static const TCHAR*
-GetName(const XMLNode &Node)
+GetName(const XMLNode &node)
 {
-  return StringToStringDflt(Node.getAttribute(_T("Name")), _T(""));
+  return StringToStringDflt(node.getAttribute(_T("Name")), _T(""));
 }
 
 static const TCHAR*
-GetCaption(const XMLNode &Node)
+GetCaption(const XMLNode &node)
 {
   const TCHAR* tmp =
-      StringToStringDflt(Node.getAttribute(_T("Caption")), _T(""));
+      StringToStringDflt(node.getAttribute(_T("Caption")), _T(""));
 
   // don't translate empty strings, it would query gettext metadata
   if (tmp[0] == _T('\0'))
@@ -228,13 +227,13 @@ GetCaption(const XMLNode &Node)
 }
 
 static ControlPosition
-GetPosition(const XMLNode &Node, const PixelRect rc, int bottom_most=-1)
+GetPosition(const XMLNode &node, const PixelRect rc, int bottom_most = -1)
 {
   ControlPosition pt;
 
   // Calculate x- and y-Coordinate
-  pt.x = StringToIntDflt(Node.getAttribute(_T("X")), 0);
-  pt.y = StringToIntDflt(Node.getAttribute(_T("Y")), -1);
+  pt.x = StringToIntDflt(node.getAttribute(_T("X")), 0);
+  pt.y = StringToIntDflt(node.getAttribute(_T("Y")), -1);
   pt.no_scaling = false;
 
   if (Layout::ScaleSupported()) {
@@ -271,13 +270,13 @@ SetPositionCentered(const ControlPosition original, const PixelRect rc,
 }
 
 static ControlSize
-GetSize(const XMLNode &Node, const PixelRect rc, const RasterPoint &pos)
+GetSize(const XMLNode &node, const PixelRect rc, const RasterPoint &pos)
 {
   ControlSize sz;
 
   // Calculate width and height
-  sz.cx = StringToIntDflt(Node.getAttribute(_T("Width")), 0);
-  sz.cy = StringToIntDflt(Node.getAttribute(_T("Height")), 0);
+  sz.cx = StringToIntDflt(node.getAttribute(_T("Width")), 0);
+  sz.cy = StringToIntDflt(node.getAttribute(_T("Height")), 0);
   sz.no_scaling = false;
 
   if (Layout::ScaleSupported()) {
@@ -299,28 +298,28 @@ GetSize(const XMLNode &Node, const PixelRect rc, const RasterPoint &pos)
 }
 
 static void *
-CallBackLookup(CallBackTableEntry *LookUpTable, const TCHAR *Name)
+CallBackLookup(CallBackTableEntry *lookup_table, const TCHAR *name)
 {
-  if (LookUpTable != NULL && Name != NULL && !string_is_empty(Name))
-    for (unsigned i = 0; LookUpTable[i].Ptr != NULL; i++)
-      if (_tcscmp(LookUpTable[i].Name, Name) == 0)
-        return LookUpTable[i].Ptr;
+  if (lookup_table != NULL && name != NULL && !string_is_empty(name))
+    for (unsigned i = 0; lookup_table[i].callback != NULL; i++)
+      if (_tcscmp(lookup_table[i].name, name) == 0)
+        return lookup_table[i].callback;
 
   return NULL;
 }
 
 static void *
-GetCallBack(CallBackTableEntry *LookUpTable,
+GetCallBack(CallBackTableEntry *lookup_table,
             const XMLNode &node, const TCHAR* attribute)
 {
-  return CallBackLookup(LookUpTable,
+  return CallBackLookup(lookup_table,
                         StringToStringDflt(node.getAttribute(attribute), NULL));
 }
 
 static XMLNode
-xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
+LoadXMLFromResource(const TCHAR* resource, XMLResults *xml_results)
 {
-  ResourceLoader::Data data = ResourceLoader::Load(lpName, _T("XMLDialog"));
+  ResourceLoader::Data data = ResourceLoader::Load(resource, _T("XMLDialog"));
   assert(data.first != NULL);
 
   const char *buffer = (const char *)data.first;
@@ -335,7 +334,7 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
   const char *buffer2 = buffer;
 #endif
 
-  XMLNode x = XMLNode::parseString(buffer2, pResults);
+  XMLNode x = XMLNode::parseString(buffer2, xml_results);
 
 #ifdef _UNICODE
   delete[] buffer2;
@@ -350,32 +349,32 @@ xmlLoadFromResource(const TCHAR* lpName, XMLResults *pResults)
  * @return The parsed XMLNode
  */
 static XMLNode
-xmlOpenResourceHelper(const TCHAR *resource)
+LoadXMLFromResource(const TCHAR *resource)
 {
-  XMLResults pResults;
+  XMLResults xml_results;
 
   // Reset errors
-  pResults.error = eXMLErrorNone;
+  xml_results.error = eXMLErrorNone;
   XMLNode::GlobalError = false;
 
   // Load and parse the resource
-  XMLNode xnode = xmlLoadFromResource(resource, &pResults);
+  XMLNode node = LoadXMLFromResource(resource, &xml_results);
 
   // Show errors if they exist
-  assert(pResults.error == eXMLErrorNone);
+  assert(xml_results.error == eXMLErrorNone);
 
-  return xnode;
+  return node;
 }
 
 static void
 InitScaleWidth(const PixelSize size, const PixelRect rc,
-               const DialogStyle eDialogStyle)
+               const DialogStyle dialog_style)
 {
   // No need to calculate the scale factor on platforms that don't scale
   if (!Layout::ScaleSupported())
     return;
 
-  if (eDialogStyle == dsFullWidth || eDialogStyle == dsScaledBottom)
+  if (dialog_style == dsFullWidth || dialog_style == dsScaledBottom)
     dialog_width_scale = (rc.right - rc.left) * 1024 / size.cx;
   else
     dialog_width_scale = 1024;
@@ -397,22 +396,20 @@ InitScaleWidth(const PixelSize size, const PixelRect rc,
  * @return the pointer to the Window added to the form
  */
 Window *
-LoadWindow(CallBackTableEntry *LookUpTable,
-              WndForm *form, ContainerWindow &parent,
-              const TCHAR* resource)
+LoadWindow(CallBackTableEntry *lookup_table, WndForm *form,
+           ContainerWindow &parent, const TCHAR *resource)
 {
   if (!form)
     return NULL;
 
-  XMLNode node = xmlOpenResourceHelper(resource);
+  XMLNode node = LoadXMLFromResource(resource);
   assert(!node.isEmpty());
 
   // use style of last form loaded
   DialogStyle dialog_style = dialog_style_last;
 
   // load only one top-level control.
-  Window *window = LoadChild(*form, parent, LookUpTable,
-                             node, dialog_style, 0);
+  Window *window = LoadChild(*form, parent, lookup_table, node, dialog_style, 0);
 
   assert(!XMLNode::GlobalError);
 
@@ -430,13 +427,13 @@ LoadWindow(CallBackTableEntry *LookUpTable,
  * @return The WndForm object
  */
 WndForm *
-LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
-               const TCHAR* resource, const PixelRect *targetRect)
+LoadDialog(CallBackTableEntry *lookup_table, SingleWindow &parent,
+           const TCHAR *resource, const PixelRect *target_rc)
 {
   WndForm *form = NULL;
 
   // Find XML file or resource and load XML data out of it
-  XMLNode node = xmlOpenResourceHelper(resource);
+  XMLNode node = LoadXMLFromResource(resource);
 
   // TODO code: put in error checking here and get rid of exits in xmlParser
   // If XML error occurred -> Error messagebox + cancel
@@ -456,8 +453,8 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   dialog_style_last = dialog_style;
 
   // Determine the dialog size
-  const TCHAR* Caption = GetCaption(node);
-  const PixelRect rc = targetRect ? *targetRect : Parent.get_client_rect();
+  const TCHAR* caption = GetCaption(node);
+  const PixelRect rc = target_rc ? *target_rc : parent.get_client_rect();
   ControlPosition pos = GetPosition(node, rc, 0);
   ControlSize size = GetSize(node, rc, pos);
 
@@ -490,12 +487,12 @@ LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
   style.hide();
   style.control_parent();
 
-  form = new WndForm(Parent, *xml_dialog_look,
-                     pos.x, pos.y, size.cx, size.cy, Caption, style);
+  form = new WndForm(parent, *xml_dialog_look,
+                     pos.x, pos.y, size.cx, size.cy, caption, style);
 
   // Load the children controls
   LoadChildrenFromXML(*form, form->GetClientAreaWindow(),
-                      LookUpTable, &node, dialog_style);
+                      lookup_table, &node, dialog_style);
 
   // If XML error occurred -> Error messagebox + cancel
   assert(!XMLNode::GlobalError);
@@ -508,51 +505,47 @@ static DataField *
 LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
               const DialogStyle eDialogStyle)
 {
-  TCHAR DataType[32];
-  TCHAR DisplayFmt[32];
-  TCHAR EditFormat[32];
-  double Step;
-  int Fine;
+  TCHAR data_type[32];
+  TCHAR display_format[32];
+  TCHAR edit_format[32];
+  double step;
+  int fine;
 
-  _tcscpy(DataType,
-          StringToStringDflt(node.getAttribute(_T("DataType")),
-                             _T("")));
-  _tcscpy(DisplayFmt,
-          StringToStringDflt(node. getAttribute(_T("DisplayFormat")),
-                             _T("")));
-  _tcscpy(EditFormat,
-          StringToStringDflt(node.getAttribute(_T("EditFormat")),
-                             _T("")));
+  _tcscpy(data_type,
+          StringToStringDflt(node.getAttribute(_T("DataType")), _T("")));
+  _tcscpy(display_format,
+          StringToStringDflt(node. getAttribute(_T("DisplayFormat")), _T("")));
+  _tcscpy(edit_format,
+          StringToStringDflt(node.getAttribute(_T("EditFormat")), _T("")));
 
-  fixed Min = fixed(StringToFloatDflt(node.getAttribute(_T("Min")), INT_MIN));
-  fixed Max = fixed(StringToFloatDflt(node.getAttribute(_T("Max")), INT_MAX));
-  Step = StringToFloatDflt(node.getAttribute(_T("Step")), 1);
-  Fine = StringToIntDflt(node.getAttribute(_T("Fine")), 0);
+  fixed min = fixed(StringToFloatDflt(node.getAttribute(_T("Min")), INT_MIN));
+  fixed max = fixed(StringToFloatDflt(node.getAttribute(_T("Max")), INT_MAX));
+  step = StringToFloatDflt(node.getAttribute(_T("Step")), 1);
+  fine = StringToIntDflt(node.getAttribute(_T("Fine")), 0);
 
   DataField::DataAccessCallback_t callback = (DataField::DataAccessCallback_t)
     CallBackLookup(LookUpTable,
                    StringToStringDflt(node.getAttribute(_T("OnDataAccess")),
                                       NULL));
 
-  if (_tcsicmp(DataType, _T("enum")) == 0)
+  if (_tcsicmp(data_type, _T("enum")) == 0)
     return new DataFieldEnum(callback);
 
-  if (_tcsicmp(DataType, _T("filereader")) == 0)
+  if (_tcsicmp(data_type, _T("filereader")) == 0)
     return new DataFieldFileReader(callback);
 
-  if (_tcsicmp(DataType, _T("boolean")) == 0)
+  if (_tcsicmp(data_type, _T("boolean")) == 0)
     return new DataFieldBoolean(false, _("On"), _("Off"), callback);
 
-  if (_tcsicmp(DataType, _T("double")) == 0)
-    return new DataFieldFloat(EditFormat, DisplayFmt, Min, Max,
-                              fixed_zero, fixed(Step), Fine,
-                              callback);
+  if (_tcsicmp(data_type, _T("double")) == 0)
+    return new DataFieldFloat(edit_format, display_format, min, max,
+                              fixed_zero, fixed(step), fine, callback);
 
-  if (_tcsicmp(DataType, _T("integer")) == 0)
-    return new DataFieldInteger(EditFormat, DisplayFmt, (int)Min, (int)Max,
-                                0, (int)Step, callback);
+  if (_tcsicmp(data_type, _T("integer")) == 0)
+    return new DataFieldInteger(edit_format, display_format, (int)min, (int)max,
+                                0, (int)step, callback);
 
-  if (_tcsicmp(DataType, _T("string")) == 0)
+  if (_tcsicmp(data_type, _T("string")) == 0)
     return new DataFieldString(_T(""), callback);
 
   return NULL;
@@ -569,24 +562,23 @@ LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
  */
 static Window *
 LoadChild(WndForm &form, ContainerWindow &parent,
-          CallBackTableEntry *LookUpTable,
-          XMLNode node, const DialogStyle eDialogStyle,
-          int bottom_most)
+          CallBackTableEntry *lookup_table, XMLNode node,
+          const DialogStyle dialog_style, int bottom_most)
 {
   Window *window = NULL;
 
   // Determine name, coordinates, width, height
   // and caption of the control
-  const TCHAR* Name = GetName(node);
-  const TCHAR* Caption = GetCaption(node);
+  const TCHAR* name = GetName(node);
+  const TCHAR* caption = GetCaption(node);
   PixelRect rc = parent.get_client_rect();
   ControlPosition pos = GetPosition(node, rc, bottom_most);
   if (!pos.no_scaling)
-    pos.x = ScaleWidth(pos.x, eDialogStyle);
+    pos.x = ScaleWidth(pos.x, dialog_style);
 
   ControlSize size = GetSize(node, rc, pos);
   if (!size.no_scaling)
-    size.cx = ScaleWidth(size.cx, eDialogStyle);
+    size.cx = ScaleWidth(size.cx, dialog_style);
 
   WindowStyle style;
 
@@ -600,37 +592,37 @@ LoadChild(WndForm &form, ContainerWindow &parent,
 
   // PropertyControl (WndProperty)
   if (_tcscmp(node.getName(), _T("Edit")) == 0) {
-    WndProperty *W;
-    int CaptionWidth;
-    bool ReadOnly;
-    bool MultiLine;
+    WndProperty *property;
+    int caption_width;
+    bool read_only;
+    bool multi_line;
 
     // Determine the width of the caption field
-    CaptionWidth = StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0);
+    caption_width = StringToIntDflt(node.getAttribute(_T("CaptionWidth")), 0);
 
     if (Layout::ScaleSupported())
-      CaptionWidth = Layout::Scale(CaptionWidth);
+      caption_width = Layout::Scale(caption_width);
 
-    CaptionWidth = ScaleWidth(CaptionWidth, eDialogStyle);
+    caption_width = ScaleWidth(caption_width, dialog_style);
 
     // Determine whether the control is multiline or readonly
-    MultiLine = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
-    ReadOnly = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
+    multi_line = StringToIntDflt(node.getAttribute(_T("MultiLine")), 0);
+    read_only = StringToIntDflt(node.getAttribute(_T("ReadOnly")), 0);
 
     // Load the event callback properties
-    WndProperty::DataChangeCallback_t DataNotifyCallback =
+    WndProperty::DataChangeCallback_t data_notify_callback =
       (WndProperty::DataChangeCallback_t)
-      GetCallBack(LookUpTable, node, _T("OnDataNotify"));
+      GetCallBack(lookup_table, node, _T("OnDataNotify"));
 
-    WindowControl::OnHelpCallback_t OnHelpCallback =
+    WindowControl::OnHelpCallback_t help_callback =
       (WindowControl::OnHelpCallback_t)
-      GetCallBack(LookUpTable, node, _T("OnHelp"));
+      GetCallBack(lookup_table, node, _T("OnHelp"));
 
     // Create the Property Control
     style.control_parent();
 
     EditWindowStyle edit_style;
-    if (ReadOnly)
+    if (read_only)
       edit_style.read_only();
     else
       edit_style.tab_stop();
@@ -642,82 +634,80 @@ LoadChild(WndForm &form, ContainerWindow &parent,
     else
       edit_style.sunken_edge();
 
-    if (MultiLine) {
+    if (multi_line) {
       edit_style.multiline();
       edit_style.vscroll();
     }
 
-    window = W = new WndProperty(parent, *xml_dialog_look, Caption,
+    window = property = new WndProperty(parent, *xml_dialog_look, caption,
                                  pos.x, pos.y, size.cx, size.cy,
-                                 CaptionWidth,
+                                 caption_width,
                                  style, edit_style,
-                                 DataNotifyCallback);
+                                 data_notify_callback);
 
     // Set the help function event callback
-    W->SetOnHelpCallback(OnHelpCallback);
+    property->SetOnHelpCallback(help_callback);
 
     // Load the help text
-    W->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")), _T("")));
+    property->SetHelpText(StringToStringDflt(node.getAttribute(_T("Help")), _T("")));
 
     // If the control has (at least) one DataField child control
     if (node.nChildNode(_T("DataField")) > 0){
       // -> Load the first DataField control
       DataField *data_field =
         LoadDataField(node.getChildNode(_T("DataField"), 0u),
-                      LookUpTable, eDialogStyle);
+                      lookup_table, dialog_style);
 
       if (data_field != NULL)
         // Tell the Property control about the DataField control
-        W->SetDataField(data_field);
+        property->SetDataField(data_field);
     }
 
   // ButtonControl (WndButton)
   } else if (_tcscmp(node.getName(), _T("Button")) == 0) {
     // Determine ClickCallback function
-    WndButton::ClickNotifyCallback_t ClickCallback =
+    WndButton::ClickNotifyCallback_t click_callback =
       (WndButton::ClickNotifyCallback_t)
-      GetCallBack(LookUpTable, node, _T("OnClick"));
+      GetCallBack(lookup_table, node, _T("OnClick"));
 
     // Create the ButtonControl
 
-    ButtonWindowStyle bstyle(style);
-    bstyle.tab_stop();
-    bstyle.multiline();
+    ButtonWindowStyle button_style(style);
+    button_style.tab_stop();
+    button_style.multiline();
 
-    window = new WndButton(parent, *xml_dialog_look, Caption,
+    window = new WndButton(parent, *xml_dialog_look, caption,
                            pos.x, pos.y, size.cx, size.cy,
-                           bstyle, ClickCallback);
+                           button_style, click_callback);
 
   } else if (_tcscmp(node.getName(), _T("CheckBox")) == 0) {
-    // Determine ClickCallback function
-    CheckBoxControl::ClickNotifyCallback_t ClickCallback =
+    // Determine click_callback function
+    CheckBoxControl::ClickNotifyCallback_t click_callback =
       (CheckBoxControl::ClickNotifyCallback_t)
-      GetCallBack(LookUpTable, node, _T("OnClick"));
+      GetCallBack(lookup_table, node, _T("OnClick"));
 
     // Create the CheckBoxControl
 
     style.tab_stop();
 
-    window = new CheckBoxControl(parent, *xml_dialog_look, Caption,
+    window = new CheckBoxControl(parent, *xml_dialog_look, caption,
                                  pos.x, pos.y, size.cx, size.cy,
-                                 style,
-                                 ClickCallback);
+                                 style, click_callback);
 
   // SymbolButtonControl (WndSymbolButton) not used yet
   } else if (_tcscmp(node.getName(), _T("SymbolButton")) == 0) {
     // Determine ClickCallback function
-    WndButton::ClickNotifyCallback_t ClickCallback =
+    WndButton::ClickNotifyCallback_t click_callback =
       (WndButton::ClickNotifyCallback_t)
-      GetCallBack(LookUpTable, node, _T("OnClick"));
+      GetCallBack(lookup_table, node, _T("OnClick"));
 
     // Create the SymbolButtonControl
 
     style.tab_stop();
 
-    window = new WndSymbolButton(parent, *xml_dialog_look, Caption,
+    window = new WndSymbolButton(parent, *xml_dialog_look, caption,
                                  pos.x, pos.y, size.cx, size.cy,
-                                 style,
-                                 ClickCallback);
+                                 style, click_callback);
 
   // PanelControl (WndPanel)
   } else if (_tcscmp(node.getName(), _T("Panel")) == 0) {
@@ -733,33 +723,32 @@ LoadChild(WndForm &form, ContainerWindow &parent,
 
     // Load children controls from the XMLNode
     LoadChildrenFromXML(form, *frame,
-                        LookUpTable, &node, eDialogStyle);
+                        lookup_table, &node, dialog_style);
 
   // KeyboardControl
   } else if (_tcscmp(node.getName(), _T("Keyboard")) == 0) {
-    KeyboardControl::OnCharacterCallback_t CharacterCallback =
+    KeyboardControl::OnCharacterCallback_t character_callback =
       (KeyboardControl::OnCharacterCallback_t)
-      GetCallBack(LookUpTable, node, _T("OnCharacter"));
+      GetCallBack(lookup_table, node, _T("OnCharacter"));
 
     // Create the KeyboardControl
     KeyboardControl *kb =
       new KeyboardControl(parent, *xml_dialog_look,
                           pos.x, pos.y, size.cx, size.cy,
-                          CharacterCallback, style);
+                          character_callback, style);
 
     window = kb;
   // DrawControl (WndOwnerDrawFrame)
   } else if (_tcscmp(node.getName(), _T("Canvas")) == 0) {
     // Determine DrawCallback function
-    WndOwnerDrawFrame::OnPaintCallback_t PaintCallback =
+    WndOwnerDrawFrame::OnPaintCallback_t paint_callback =
       (WndOwnerDrawFrame::OnPaintCallback_t)
-      GetCallBack(LookUpTable, node, _T("OnPaint"));
+      GetCallBack(lookup_table, node, _T("OnPaint"));
 
     // Create the DrawControl
     WndOwnerDrawFrame* canvas =
-      new WndOwnerDrawFrame(parent,
-                            pos.x, pos.y, size.cx, size.cy,
-                              style, PaintCallback);
+      new WndOwnerDrawFrame(parent, pos.x, pos.y, size.cx, size.cy,
+                            style, paint_callback);
 
     window = canvas;
 
@@ -771,7 +760,7 @@ LoadChild(WndForm &form, ContainerWindow &parent,
                                    style);
 
     // Set the caption
-    frame->SetCaption(Caption);
+    frame->SetCaption(caption);
     // Set caption color
     Color color;
     if (StringToColor(node.getAttribute(_T("CaptionColor")), color))
@@ -817,8 +806,8 @@ LoadChild(WndForm &form, ContainerWindow &parent,
     for (unsigned i = 0; i < n; ++i) {
       // Load each child control from the child nodes
       Window *child = LoadChild(form, *tabbed,
-                                LookUpTable,
-                                node.getChildNode(i), eDialogStyle);
+                                lookup_table,
+                                node.getChildNode(i), dialog_style);
       if (child != NULL)
         tabbed->AddClient(child);
         continue;
@@ -827,15 +816,15 @@ LoadChild(WndForm &form, ContainerWindow &parent,
   } else if (_tcscmp(node.getName(), _T("TabBar")) == 0) {
     // Create the TabBarControl
 
-    bool flipOrientation = false;
+    bool flip_orientation = false;
     if ( (Layout::landscape && StringToIntDflt(node.getAttribute(_T("Horizontal")), 0)) ||
          (!Layout::landscape && StringToIntDflt(node.getAttribute(_T("Vertical")), 0) ) )
-      flipOrientation = true;
+      flip_orientation = true;
 
     style.control_parent();
     TabBarControl *tabbar = new TabBarControl(parent, *xml_dialog_look,
                                               pos.x, pos.y, size.cx, size.cy,
-                                              style, flipOrientation);
+                                              style, flip_orientation);
     window = tabbar;
 
     // TabMenuControl (TabMenu)
@@ -844,26 +833,25 @@ LoadChild(WndForm &form, ContainerWindow &parent,
 
       style.control_parent();
       TabMenuControl *tabmenu = new TabMenuControl(parent, form,
-                                                   LookUpTable,
-                                                   *xml_dialog_look, Caption,
+                                                   lookup_table,
+                                                   *xml_dialog_look, caption,
                                                    pos.x, pos.y, size.cx, size.cy,
                                                    style);
       window = tabmenu;
 
   } else if (_tcscmp(node.getName(), _T("Custom")) == 0) {
     // Create a custom Window object with a callback
-    CreateWindowCallback_t create =
-        (CreateWindowCallback_t)GetCallBack(LookUpTable, node, _T("OnCreate"));
-    if (create == NULL)
+    CreateWindowCallback_t create_callback =
+        (CreateWindowCallback_t)GetCallBack(lookup_table, node, _T("OnCreate"));
+    if (create_callback == NULL)
       return NULL;
 
-    window = create(parent,
-                    pos.x, pos.y, size.cx, size.cy, style);
+    window = create_callback(parent, pos.x, pos.y, size.cx, size.cy, style);
   }
 
   if (window != NULL) {
-    if (!string_is_empty(Name))
-      form.AddNamed(Name, window);
+    if (!string_is_empty(name))
+      form.AddNamed(name, window);
 
     if (expert)
       form.AddExpert(window);
@@ -885,19 +873,19 @@ LoadChild(WndForm &form, ContainerWindow &parent,
  */
 static void
 LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
-                    CallBackTableEntry *LookUpTable,
-                    XMLNode *Node, const DialogStyle eDialogStyle)
+                    CallBackTableEntry *lookup_table, XMLNode *node,
+                    const DialogStyle dialog_style)
 {
   // Get the number of childnodes
-  int Count = Node->nChildNode();
+  int count = node->nChildNode();
 
   unsigned bottom_most = 0;
 
   // Iterate through the childnodes
-  for (int i = 0; i < Count; i++) {
+  for (int i = 0; i < count; i++) {
     // Load each child control from the child nodes
-    Window *window = LoadChild(form, parent, LookUpTable,
-                               Node->getChildNode(i), eDialogStyle,
+    Window *window = LoadChild(form, parent, lookup_table,
+                               node->getChildNode(i), dialog_style,
                                bottom_most);
     if (window == NULL)
       continue;

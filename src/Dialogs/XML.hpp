@@ -39,8 +39,8 @@ class ContainerWindow;
  */
 struct CallBackTableEntry
 {
-  const TCHAR *Name;
-  void *Ptr;
+  const TCHAR *name;
+  void *callback;
 };
 
 /**
@@ -60,7 +60,7 @@ enum DialogStyle
   dsScaledBottom
 };
 
-extern DialogStyle DialogStyleSetting;
+extern DialogStyle dialog_style_setting;
 
 /**
  * Sets the global dialog look for loading XML dialogs.
@@ -69,10 +69,8 @@ void
 SetXMLDialogLook(const DialogLook &dialog_look);
 
 Window *
-LoadWindow(CallBackTableEntry *LookUpTable,
-              WndForm *form,
-              ContainerWindow &parent,
-              const TCHAR* resource);
+LoadWindow(CallBackTableEntry *LookUpTable, WndForm *form,
+           ContainerWindow &parent, const TCHAR *resource);
 
 WndForm *
 LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,

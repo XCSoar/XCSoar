@@ -122,7 +122,7 @@ LayoutConfigPanel::Init(WndForm *_wf)
     dfe->addEnumText(_("Scaled"));
     dfe->addEnumText(_("Scaled centered"));
     dfe->addEnumText(_("Fixed"));
-    dfe->Set(DialogStyleSetting);
+    dfe->Set(dialog_style_setting);
     wp->RefreshDisplay();
   }
 
@@ -205,7 +205,7 @@ LayoutConfigPanel::Save(bool &requirerestart)
 
   changed |= SaveFormPropertyEnum(*wf, _T("prpDialogStyle"),
                                   szProfileAppDialogStyle,
-                                  DialogStyleSetting);
+                                  dialog_style_setting);
 
   changed |= requirerestart |=
     SaveFormPropertyEnum(*wf, _T("prpAppInfoBoxBorder"),
