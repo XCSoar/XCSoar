@@ -79,7 +79,7 @@ AlternateTask::check_alternate_changed()
   // send notification on change
   if (best_alternate_id != id) {
     best_alternate_id = id;
-    task_events.transition_alternate();
+    task_events.AlternateTransition();
   }
 }
 

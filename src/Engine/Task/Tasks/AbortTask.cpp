@@ -306,7 +306,7 @@ AbortTask::UpdateSample(const AircraftState &state, bool full_update)
     const TaskWaypoint &task_point = task_points[active_task_point];
     active_waypoint = task_point.GetWaypoint().id;
     if (is_active && (active_waypoint_on_entry != active_waypoint))
-      task_events.active_changed(task_point);
+      task_events.ActiveChanged(task_point);
   }
 
   return false; // nothing to do

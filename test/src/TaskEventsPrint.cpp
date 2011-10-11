@@ -26,35 +26,35 @@
 #include <stdio.h>
 
 void
-TaskEventsPrint::transition_enter(const TaskWaypoint& tp)
+TaskEventsPrint::EnterTransition(const TaskWaypoint& tp)
 {
   if (verbose)
     printf("#- entered sector\n");
 }
 
 void
-TaskEventsPrint::transition_alternate()
+TaskEventsPrint::AlternateTransition()
 {
   if (verbose)
     printf("#- alternate changed\n");
 }
 
 void
-TaskEventsPrint::transition_exit(const TaskWaypoint &tp)
+TaskEventsPrint::ExitTransition(const TaskWaypoint &tp)
 {
   if (verbose)
     printf("#- exited sector\n");
 }
 
 void
-TaskEventsPrint::active_changed(const TaskWaypoint &tp)
+TaskEventsPrint::ActiveChanged(const TaskWaypoint &tp)
 {
   if (verbose)
     printf("#- active changed to wp %d\n", tp.GetWaypoint().id);
 }
 
 void
-TaskEventsPrint::construction_error(const char* error)
+TaskEventsPrint::ConstructionError(const char* error)
 {
   if (verbose) {
     printf("#Task construction error: ");
@@ -64,42 +64,42 @@ TaskEventsPrint::construction_error(const char* error)
 }
 
 void
-TaskEventsPrint::warning_start_speed()
+TaskEventsPrint::StartSpeedWarning()
 {
   if (verbose)
     printf("#- warning speed excessive\n");
 }
 
 void
-TaskEventsPrint::request_arm(const TaskWaypoint &tp)
+TaskEventsPrint::RequestArm(const TaskWaypoint &tp)
 {
   if (verbose)
     printf("#- ready to advance\n");
 }
 
 void
-TaskEventsPrint::task_start()
+TaskEventsPrint::TaskStart()
 {
   if (verbose)
     printf("#- task started\n");
 }
 
 void
-TaskEventsPrint::task_finish()
+TaskEventsPrint::TaskFinish()
 {
   if (verbose)
     printf("#- task finished\n");
 }
 
 void
-TaskEventsPrint::active_advanced(const TaskWaypoint &tp, const int i)
+TaskEventsPrint::ActiveAdvanced(const TaskWaypoint &tp, const int i)
 {
   if (verbose)
     printf("#- advance to sector %d\n", i);
 }
 
 void
-TaskEventsPrint::transition_flight_mode(const bool is_final)
+TaskEventsPrint::FlightModeTransition(const bool is_final)
 {
   if (verbose) {
     if (is_final)

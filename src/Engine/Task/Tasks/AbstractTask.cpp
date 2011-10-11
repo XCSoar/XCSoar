@@ -296,5 +296,5 @@ AbstractTask::UpdateFlightMode()
   if (!stats.calc_flight_mode())
     return;
 
-  task_events.transition_flight_mode(stats.flight_mode_final_glide);
+  task_events.FlightModeTransition(stats.flight_mode_final_glide);
 }

@@ -38,27 +38,27 @@ public:
     TaskEvents(),
     verbose(_verbose) {};
 
-  void transition_enter(const TaskWaypoint& tp);
+  void EnterTransition(const TaskWaypoint& tp);
 
-  void transition_exit(const TaskWaypoint &tp);
+  void ExitTransition(const TaskWaypoint &tp);
 
-  void transition_alternate();
+  void AlternateTransition();
 
-  void active_advanced(const TaskWaypoint &tp, const int i);
+  void ActiveAdvanced(const TaskWaypoint &tp, const int i);
 
-  void active_changed(const TaskWaypoint &tp);
+  void ActiveChanged(const TaskWaypoint &tp);
 
-  void warning_start_speed();
+  void StartSpeedWarning();
   
-  void construction_error(const char* error);
+  void ConstructionError(const char* error);
 
-  void request_arm(const TaskWaypoint &tp);
+  void RequestArm(const TaskWaypoint &tp);
 
-  void task_start();
+  void TaskStart();
 
-  void task_finish();
+  void TaskFinish();
 
-  void transition_flight_mode(const bool is_final);
+  void FlightModeTransition(const bool is_final);
 };
 
 #endif

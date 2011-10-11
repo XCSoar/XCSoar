@@ -53,7 +53,7 @@ GlideComputer::GlideComputer(const Waypoints &_way_points,
   way_points(_way_points),
   TeamCodeRefId(-1)
 {
-  events.set_computer(*this);
+  events.SetComputer(*this);
   idle_clock.update();
 }
 

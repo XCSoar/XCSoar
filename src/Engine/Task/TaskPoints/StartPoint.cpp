@@ -70,7 +70,7 @@ StartPoint::UpdateSampleNear(const AircraftState& state,
 {
   if (IsInSector(state)) {
     if (!m_ordered_task_behaviour.check_start_speed(state, margins)) {
-      task_events.warning_start_speed();
+      task_events.StartSpeedWarning();
     }
   }
   return OrderedTaskPoint::UpdateSampleNear(state, task_events, projection);

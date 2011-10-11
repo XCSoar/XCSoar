@@ -27,51 +27,51 @@ Copyright_License {
 #include "GlideComputer.hpp"
 
 void
-GlideComputerTaskEvents::set_computer(GlideComputer& computer)
+GlideComputerTaskEvents::SetComputer(GlideComputer &_computer)
 {
-  m_computer = &computer;
+  computer = &_computer;
 }
 
 void
-GlideComputerTaskEvents::transition_enter(const TaskWaypoint &tp)
+GlideComputerTaskEvents::EnterTransition(const TaskWaypoint &tp)
 {
-  m_computer->OnTransitionEnter();
+  computer->OnTransitionEnter();
 }
 
 void
-GlideComputerTaskEvents::transition_alternate()
+GlideComputerTaskEvents::AlternateTransition()
 {
   InputEvents::processGlideComputer(GCE_ALTERNATE_CHANGED);
 }
 
 void
-GlideComputerTaskEvents::request_arm(const TaskWaypoint &tp)
+GlideComputerTaskEvents::RequestArm(const TaskWaypoint &tp)
 {
   InputEvents::processGlideComputer(GCE_ARM_READY);
 }
 
 void
-GlideComputerTaskEvents::active_advanced(const TaskWaypoint &tp, const int i)
+GlideComputerTaskEvents::ActiveAdvanced(const TaskWaypoint &tp, const int i)
 {
   InputEvents::processGlideComputer(GCE_TASK_NEXTWAYPOINT);
 }
 
 void
-GlideComputerTaskEvents::task_start()
+GlideComputerTaskEvents::TaskStart()
 {
   InputEvents::processGlideComputer(GCE_TASK_START);
-  m_computer->OnStartTask();
+  computer->OnStartTask();
 }
 
 void
-GlideComputerTaskEvents::task_finish()
+GlideComputerTaskEvents::TaskFinish()
 {
   InputEvents::processGlideComputer(GCE_TASK_FINISH);
-  m_computer->OnFinishTask();
+  computer->OnFinishTask();
 }
 
 void
-GlideComputerTaskEvents::transition_flight_mode(const bool is_final)
+GlideComputerTaskEvents::FlightModeTransition(const bool is_final)
 {
   if (is_final)
     InputEvents::processGlideComputer(GCE_FLIGHTMODE_FINALGLIDE);

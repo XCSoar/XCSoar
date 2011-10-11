@@ -302,14 +302,14 @@ OrderedTask::CheckTransitions(const AircraftState &state,
           SetActiveTaskPoint(i);
           taskpoint_start->scan_active(task_points[active_task_point]);
           
-          task_events.active_advanced(*task_points[i], i);
+          task_events.ActiveAdvanced(*task_points[i], i);
 
           // on sector exit, must update samples since start sector
           // exit transition clears samples
           full_update = true;
         }
       } else if (!last_request_armed && task_advance.request_armed()) {
-        task_events.request_arm(*task_points[i]);
+        task_events.RequestArm(*task_points[i]);
       }
     }
   }
@@ -323,10 +323,10 @@ OrderedTask::CheckTransitions(const AircraftState &state,
     taskpoint_finish->set_fai_finish_height(GetStartState().altitude - fixed(1000));
 
   if (stats.task_started && !last_started)
-    task_events.task_start();
+    task_events.TaskStart();
 
   if (stats.task_finished && !last_finished)
-    task_events.task_finish();
+    task_events.TaskFinish();
 
   return full_update;
 }
@@ -377,12 +377,12 @@ OrderedTask::check_transition_point(OrderedTaskPoint& point,
 
   if (nearby && point.TransitionEnter(state, state_last)) {
     transition_enter = true;
-    task_events.transition_enter(point);
+    task_events.EnterTransition(point);
   }
   
   if (nearby && point.TransitionExit(state, state_last, task_projection)) {
     transition_exit = true;
-    task_events.transition_exit(point);
+    task_events.ExitTransition(point);
     
     // detect restart
     if (is_start && last_started)

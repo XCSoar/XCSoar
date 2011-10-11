@@ -44,19 +44,19 @@ public:
    *
    * @param tp The turnpoint entered
    */
-  virtual void transition_enter(const TaskWaypoint& tp) {}
+  virtual void EnterTransition(const TaskWaypoint& tp) {}
 
   /**
    * Called when the aircraft exits a turnpoint observation zone
    *
    * @param tp The turnpoint the aircraft has exited
    */
-  virtual void transition_exit(const TaskWaypoint &tp) {}
+  virtual void ExitTransition(const TaskWaypoint &tp) {}
 
   /**
    * Called when the aircraft alternate changes
    */
-  virtual void transition_alternate() {}
+  virtual void AlternateTransition() {}
 
   /**
    * Called when auto-advance has changed the active
@@ -65,7 +65,7 @@ public:
    * @param tp The turnpoint that is now active after auto-advance
    * @param i The task sequence number after auto-advance
    */
-  virtual void active_advanced(const TaskWaypoint &tp, const int i) {}
+  virtual void ActiveAdvanced(const TaskWaypoint &tp, const int i) {}
 
   /**
    * Called when a taskpoint was altered internally.
@@ -75,14 +75,14 @@ public:
    *
    * @param tp The new active taskpoint
    */
-  virtual void active_changed(const TaskWaypoint &tp) {}
+  virtual void ActiveChanged(const TaskWaypoint &tp) {}
 
   /**
    * Called when aircraft speed is higher than set limit
    * according to task rules
    *
    */
-  virtual void warning_start_speed() {}
+  virtual void StartSpeedWarning() {}
   
   /**
    * Called when a task is invalid due to improper construction
@@ -90,8 +90,7 @@ public:
    *
    * @param error Text of error message
    */
-  virtual void construction_error(const char* error) {}
-
+  virtual void ConstructionError(const char* error) {}
 
   /**
    * Called when a task point can be advanced but the advance needs
@@ -99,22 +98,22 @@ public:
    *
    * @param tp The taskpoint waiting to be armed
    */
-  virtual void request_arm(const TaskWaypoint &tp) {}
+  virtual void RequestArm(const TaskWaypoint &tp) {}
 
   /**
    * Called when orderd task has started
    */
-  virtual void task_start() {}
+  virtual void TaskStart() {}
 
   /**
    * Called when orderd task has finished
    */
-  virtual void task_finish() {}
+  virtual void TaskFinish() {}
 
   /**
    * Called when flight mode changes
    */
-  virtual void transition_flight_mode(const bool is_final) {}
+  virtual void FlightModeTransition(const bool is_final) {}
 };
 
 #endif
