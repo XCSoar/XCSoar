@@ -61,45 +61,39 @@ SymbolsConfigPanel::Init(WndForm *_wf)
   WndProperty *wp;
 
   wp = (WndProperty*)wf->FindByName(_T("prpWindArrowStyle"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Arrow head"));
-    dfe->addEnumText(_("Full arrow"));
-    dfe->Set(settings_map.WindArrowStyle);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->addEnumText(_("Arrow head"));
+  dfe->addEnumText(_("Full arrow"));
+  dfe->Set(settings_map.WindArrowStyle);
+  wp->RefreshDisplay();
 
   wp = (WndProperty*)wf->FindByName(_T("prpTrail"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"), TRAIL_OFF);
-    dfe->addEnumText(_("Long"), TRAIL_LONG);
-    dfe->addEnumText(_("Short"), TRAIL_SHORT);
-    dfe->addEnumText(_("Full"), TRAIL_FULL);
-    dfe->Set(settings_map.trail_length);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->addEnumText(_("Off"), TRAIL_OFF);
+  dfe->addEnumText(_("Long"), TRAIL_LONG);
+  dfe->addEnumText(_("Short"), TRAIL_SHORT);
+  dfe->addEnumText(_("Full"), TRAIL_FULL);
+  dfe->Set(settings_map.trail_length);
+  wp->RefreshDisplay();
 
   LoadFormProperty(*wf, _T("prpTrailDrift"),
                    settings_map.EnableTrailDrift);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    TCHAR tmp_text[30];
-    _tcscpy(tmp_text, _("Vario"));
-    _tcscat(tmp_text, _T(" #1"));
-    dfe->addEnumText(tmp_text);
-    _tcscpy(tmp_text, _("Vario"));
-    _tcscat(tmp_text, _T(" #2"));
-    dfe->addEnumText(tmp_text);
-    dfe->addEnumText(_("Altitude"));
-    dfe->Set((int)settings_map.SnailType);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  TCHAR tmp_text[30];
+  _tcscpy(tmp_text, _("Vario"));
+  _tcscat(tmp_text, _T(" #1"));
+  dfe->addEnumText(tmp_text);
+  _tcscpy(tmp_text, _("Vario"));
+  _tcscat(tmp_text, _T(" #2"));
+  dfe->addEnumText(tmp_text);
+  dfe->addEnumText(_("Altitude"));
+  dfe->Set((int)settings_map.SnailType);
+  wp->RefreshDisplay();
 
   LoadFormProperty(*wf, _T("prpSnailWidthScale"),
                    settings_map.SnailScaling);
@@ -108,29 +102,25 @@ SymbolsConfigPanel::Init(WndForm *_wf)
                    settings_map.EnableDetourCostMarker);
 
   wp = (WndProperty*)wf->FindByName(_T("prpDisplayTrackBearing"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Off"));
-    dfe->addEnumText(_("On"));
-    dfe->addEnumText(_("Auto"));
-    dfe->Set(settings_map.DisplayTrackBearing);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->addEnumText(_("Off"));
+  dfe->addEnumText(_("On"));
+  dfe->addEnumText(_("Auto"));
+  dfe->Set(settings_map.DisplayTrackBearing);
+  wp->RefreshDisplay();
 
   LoadFormProperty(*wf, _T("prpEnableFLARMMap"),
                    settings_map.EnableFLARMMap);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
-  if (wp) {
-    DataFieldEnum* dfe;
-    dfe = (DataFieldEnum*)wp->GetDataField();
-    dfe->addEnumText(_("Simple"), acSimple);
-    dfe->addEnumText(_("Simple (large)"), acSimpleLarge);
-    dfe->addEnumText(_("Detailed"), acDetailed);
-    dfe->Set(settings_map.aircraft_symbol);
-    wp->RefreshDisplay();
-  }
+  assert(wp != NULL);
+  dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->addEnumText(_("Simple"), acSimple);
+  dfe->addEnumText(_("Simple (large)"), acSimpleLarge);
+  dfe->addEnumText(_("Detailed"), acDetailed);
+  dfe->Set(settings_map.aircraft_symbol);
+  wp->RefreshDisplay();
 
   ShowTrailControls(settings_map.trail_length != TRAIL_OFF);
 }
@@ -156,13 +146,12 @@ SymbolsConfigPanel::Save()
                               settings_map.EnableTrailDrift);
 
   wp = (WndProperty*)wf->FindByName(_T("prpSnailType"));
-  if (wp) {
-    if (settings_map.SnailType != (SnailType_t)wp->GetDataField()->GetAsInteger()) {
-      settings_map.SnailType = (SnailType_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileSnailType, (int)settings_map.SnailType);
-      changed = true;
-      Graphics::InitSnailTrail(settings_map);
-    }
+  assert(wp != NULL);
+  if (settings_map.SnailType != (SnailType_t)wp->GetDataField()->GetAsInteger()) {
+    settings_map.SnailType = (SnailType_t)wp->GetDataField()->GetAsInteger();
+    Profile::Set(szProfileSnailType, (int)settings_map.SnailType);
+    changed = true;
+    Graphics::InitSnailTrail(settings_map);
   }
 
   bool snailscaling_changed =
@@ -186,12 +175,11 @@ SymbolsConfigPanel::Save()
                               settings_map.EnableFLARMMap);
 
   wp = (WndProperty*)wf->FindByName(_T("prpAircraftSymbol"));
-  if (wp) {
-    if (settings_map.aircraft_symbol != (AircraftSymbol_t)wp->GetDataField()->GetAsInteger()) {
-      settings_map.aircraft_symbol = (AircraftSymbol_t)wp->GetDataField()->GetAsInteger();
-      Profile::Set(szProfileAircraftSymbol, (int)settings_map.aircraft_symbol);
-      changed = true;
-    }
+  assert(wp != NULL);
+  if (settings_map.aircraft_symbol != (AircraftSymbol_t)wp->GetDataField()->GetAsInteger()) {
+    settings_map.aircraft_symbol = (AircraftSymbol_t)wp->GetDataField()->GetAsInteger();
+    Profile::Set(szProfileAircraftSymbol, (int)settings_map.aircraft_symbol);
+    changed = true;
   }
 
   return changed;
