@@ -175,7 +175,6 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
-  DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(OnFlarmLockClicked),
   DeclareCallBackEntry(NULL)
 };

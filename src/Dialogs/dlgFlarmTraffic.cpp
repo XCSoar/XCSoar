@@ -662,7 +662,6 @@ OnCreateFlarmTrafficControl(ContainerWindow &parent,
 
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateFlarmTrafficControl),
-  DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(OnAutoZoom),
   DeclareCallBackEntry(OnNorthUp),
   DeclareCallBackEntry(NULL)

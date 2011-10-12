@@ -278,7 +278,6 @@ OnFriendClearClicked(gcc_unused WndButton &Sender)
 }
 
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnTimerNotify),
   DeclareCallBackEntry(NULL)
 };
 
