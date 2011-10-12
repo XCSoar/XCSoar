@@ -6,6 +6,7 @@ TEST_SRC = \
 	$(SRC)/Replay/AircraftSim.cpp \
 	$(SRC)/UtilsText.cpp \
 	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/OS/Clock.cpp \
 	$(SRC)/Thread/Mutex.cpp \

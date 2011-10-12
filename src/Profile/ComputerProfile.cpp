@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "Profile/ComputerProfile.hpp"
 #include "Profile/TaskProfile.hpp"
+#include "Profile/TrackingProfile.hpp"
 #include "Profile/Profile.hpp"
 #include "SettingsComputer.hpp"
 
@@ -120,4 +121,5 @@ Profile::Load(SETTINGS_COMPUTER &settings)
     settings.UTCOffset -= 24 * 3600;
 
   Load(settings.task);
+  Load(settings.tracking);
 }

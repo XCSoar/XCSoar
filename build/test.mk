@@ -777,6 +777,7 @@ DEBUG_REPLAY_SOURCES = \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/Units/Units.cpp \
 	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Airspace/AirspaceComputerSettings.cpp \
 	$(SRC)/NMEA/InputLine.cpp \
 	$(SRC)/NMEA/Info.cpp \
@@ -1679,6 +1680,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/ResourceLoader.cpp \
 	$(SRC)/SettingsMap.cpp \
 	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Computer/TraceComputer.cpp \
 	$(SRC)/Task/TaskFile.cpp \
 	$(SRC)/Task/TaskFileXCSoar.cpp \
@@ -2017,6 +2019,7 @@ RUN_ANALYSIS_SOURCES = \
 	$(SRC)/Computer/GlideComputerStats.cpp \
 	$(SRC)/Computer/GlideComputerInterface.cpp \
 	$(SRC)/SettingsComputer.cpp \
+	$(SRC)/Tracking/TrackingSettings.cpp \
 	$(SRC)/Replay/IGCParser.cpp \
 	$(SRC)/SettingsMap.cpp \
 	$(SRC)/InterfaceBlackboard.cpp \

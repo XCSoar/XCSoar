@@ -491,6 +491,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Compatibility/string.c 	\
 	$(SRC)/Profile/Profile.cpp \
 	$(SRC)/Profile/Earth.cpp \
+	$(SRC)/Profile/TrackingProfile.cpp \
 	$(SRC)/Profile/ComputerProfile.cpp \
 	$(SRC)/Profile/RouteProfile.cpp \
 	$(SRC)/Profile/TaskProfile.cpp \
@@ -515,6 +516,8 @@ XCSOAR_SOURCES := \
 	$(SRC)/Thread/Notify.cpp \
 	$(SRC)/Thread/Operation.cpp \
 	$(SRC)/Thread/JobThread.cpp \
+	\
+	$(SRC)/Tracking/TrackingSettings.cpp \
 	\
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Math/SunEphemeris.cpp \

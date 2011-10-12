@@ -31,6 +31,7 @@ Copyright_License {
 #include "Engine/Route/Config.hpp"
 #include "Util/StaticString.hpp"
 #include "Task/TaskBehaviour.hpp"
+#include "Tracking/TrackingSettings.hpp"
 #include "Engine/Navigation/SpeedVector.hpp"
 #include "NMEA/Validity.hpp"
 
@@ -233,6 +234,8 @@ struct SETTINGS_COMPUTER:
   Plane plane;
 
   TaskBehaviour task;
+
+  TrackingSettings tracking;
 
   void SetDefaults();
 };

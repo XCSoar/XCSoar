@@ -226,4 +226,7 @@ extern const TCHAR szProfileAircraftSymbol[];
 
 extern const TCHAR szProfileFlarmLocation[];
 
+extern const TCHAR ProfileLiveTrack24Username[];
+extern const TCHAR ProfileLiveTrack24Password[];
+
 #endif
