@@ -511,6 +511,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Thread/StoppableThread.cpp \
 	$(SRC)/Thread/SuspensibleThread.cpp \
 	$(SRC)/Thread/WorkerThread.cpp \
+	$(SRC)/Thread/StandbyThread.cpp \
 	$(SRC)/Thread/Mutex.cpp \
 	$(SRC)/Thread/Debug.cpp \
 	$(SRC)/Thread/Notify.cpp \
