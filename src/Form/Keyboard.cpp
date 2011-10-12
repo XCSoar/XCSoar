@@ -142,7 +142,7 @@ KeyboardControl::move_buttons_to_row(const TCHAR* buttons, int row, int offset)
     return;
 
   ButtonWindow *kb;
-  for (unsigned i = 0; i < _tcslen(buttons); i++) {
+  for (unsigned i = 0; buttons[i] != _T('\0'); i++) {
     kb = get_button(buttons[i]);
     if (!kb)
       continue;
