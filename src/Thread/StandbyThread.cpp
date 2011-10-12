@@ -84,6 +84,10 @@ StandbyThread::WaitStopped()
   assert(!IsInside());
   assert(stop);
 
+  if (!IsDefined())
+    /* was never started */
+    return;
+
   /* mutex must be unlocked because Thread::Join() blocks */
   mutex.Unlock();
   Thread::Join();
