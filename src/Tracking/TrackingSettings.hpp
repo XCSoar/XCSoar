@@ -31,6 +31,11 @@ struct LiveTrack24Settings {
   StaticString<64> password;
 
   void SetDefaults();
+
+  gcc_pure
+  bool IsDefined() const {
+    return !username.empty();
+  }
 };
 
 struct TrackingSettings {
