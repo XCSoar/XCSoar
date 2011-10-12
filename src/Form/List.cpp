@@ -50,7 +50,9 @@ WndListFrame::WndListFrame(ContainerWindow &parent, const DialogLook &_look,
                            UPixelScalar _item_height)
   :look(_look),
   item_height(_item_height),
-  length(0), origin(0), items_visible(Height / item_height),
+  length(0),
+   origin(0), pixel_pan(0),
+   items_visible(Height / item_height),
   cursor(0),
   dragging(false),
   ActivateCallback(NULL),
@@ -161,7 +163,7 @@ void WndListFrame::DrawScrollBar(Canvas &canvas) {
   if (!scroll_bar.defined())
     return;
 
-  scroll_bar.set_slider(length, items_visible, origin);
+  scroll_bar.set_slider(length * item_height, get_height(), GetPixelOrigin());
   scroll_bar.paint(canvas);
 }
 
@@ -210,10 +212,15 @@ WndListFrame::EnsureVisible(unsigned i)
 {
   assert(i < length);
 
-  if (origin > i)
+  if (origin > i || (origin == i && pixel_pan > 0)) {
     SetOrigin(i);
-  else if (origin + items_visible <= i)
-    SetOrigin(i - items_visible + 1);
+    SetPixelPan(0);
+  } else if (origin + items_visible <= i) {
+    SetOrigin(i - items_visible);
+
+    if (origin > 0 || i >= items_visible)
+      SetPixelPan(((items_visible + 1) * item_height - get_height()) % item_height);
+  }
 }
 
 bool
@@ -250,6 +257,16 @@ WndListFrame::MoveCursor(int delta)
 
   SetCursorIndex(new_cursor);
 }
+
+void
+WndListFrame::SetPixelPan(UPixelScalar _pixel_pan)
+{
+    if (pixel_pan == _pixel_pan)
+      return;
+
+    pixel_pan = _pixel_pan;
+    invalidate();
+  }
 
 void
 WndListFrame::SetOrigin(int i)
@@ -412,11 +429,13 @@ WndListFrame::on_mouse_move(PixelScalar x, PixelScalar y, unsigned keys)
   // If we are currently dragging the ScrollBar slider
   if (scroll_bar.is_dragging()) {
     // -> Update ListBox origin
-    SetOrigin(scroll_bar.drag_move(length, items_visible, y));
+    unsigned value =
+      scroll_bar.drag_move(length * item_height, get_height(), y);
+    SetPixelOrigin(value);
     return true;
   } else if (dragging) {
-    int new_origin = drag_line - y / (int)item_height;
-    SetOrigin(new_origin);
+    int new_origin = drag_y - y;
+    SetPixelOrigin(new_origin);
     return true;
   }
 
@@ -476,7 +495,7 @@ WndListFrame::on_mouse_down(PixelScalar x, PixelScalar y)
       // -> select it
       SetCursorIndex(index);
 
-      drag_line = origin + y / item_height;
+      drag_y = origin + y;
       dragging = true;
       set_capture();
     }

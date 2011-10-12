@@ -54,13 +54,20 @@ protected:
   unsigned length;
   /** The index of the topmost item currently being displayed. */
   unsigned origin;
+
+  /**
+   * Which pixel row of the "origin" item is being displayed at the
+   * top of the Window?
+   */
+  UPixelScalar pixel_pan;
+
   /** The number of items visible at a time. */
   unsigned items_visible;
   /** The index of the selected item on the screen. */
   unsigned cursor;
 
   bool dragging;
-  int drag_line;
+  int drag_y;
 
   ActivateCallback_t ActivateCallback;
   CursorCallback_t CursorCallback;
@@ -133,9 +140,26 @@ public:
   void MoveCursor(int delta);
 
   /**
+   * Pan the "origin item" to the specified pixel position.
+   */
+  void SetPixelPan(UPixelScalar _pixel_pan);
+
+  /**
    * Scrolls to the specified index.
    */
   void SetOrigin(int i);
+
+  unsigned GetPixelOrigin() const {
+    return origin * item_height + pixel_pan;
+  }
+
+  void SetPixelOrigin(int pixel_origin) {
+    if (pixel_origin < 0)
+      pixel_origin = 0;
+
+    SetOrigin(pixel_origin / item_height);
+    SetPixelPan(pixel_origin % item_height);
+  }
 
   /**
    * Scrolls a number of items up (negative delta) or down (positive
@@ -159,7 +183,7 @@ protected:
    */
   gcc_pure
   int ItemIndexAt(int y) const {
-    int i = y / item_height + origin;
+    int i = (y + pixel_pan) / item_height + origin;
     return i >= 0 && (unsigned)i < length ? i : -1;
   }
 
@@ -167,7 +191,7 @@ protected:
   PixelRect item_rect(unsigned i) const {
     PixelRect rc;
     rc.left = 0;
-    rc.top = (int)(i - origin) * item_height;
+    rc.top = (int)(i - origin) * item_height - pixel_pan;
     rc.right = scroll_bar.get_left(get_size());
     rc.bottom = rc.top + item_height;
     return rc;
