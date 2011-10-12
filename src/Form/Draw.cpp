@@ -49,5 +49,5 @@ WndOwnerDrawFrame::on_mouse_down(int x, int y)
   if (mOnMouseDownCallback)
     return mOnMouseDownCallback(this, x, y);
 
-  return false;
+  return PaintWindow::on_mouse_down(x, y);
 }

@@ -59,7 +59,7 @@ WndProperty::Editor::on_mouse_down(int x, int y)
 
 #endif
 
-  return false;
+  return EditWindow::on_mouse_down(x, y);
 }
 
 bool
@@ -76,7 +76,7 @@ WndProperty::Editor::on_key_check(unsigned key_code) const
     return true;
 
   default:
-    return false;
+    return EditWindow::on_key_check(key_code);
   }
 }
 
@@ -123,7 +123,7 @@ WndProperty::Editor::on_key_up(unsigned key_code)
       return true;
   }
 
-  return false;
+  return EditWindow::on_key_up(key_code);
 }
 
 bool
