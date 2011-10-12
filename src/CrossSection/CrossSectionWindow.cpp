@@ -103,7 +103,7 @@ public:
     canvas.null_pen();
 
     // Draw thick brushed outlines
-    UPixelScalar border_width = Layout::Scale(10);
+    PixelScalar border_width = Layout::Scale(10);
     if ((rc.right - rc.left) > border_width * 2 &&
         (rc.bottom - rc.top) > border_width * 2) {
       PixelRect border = rc;
