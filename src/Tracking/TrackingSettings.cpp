@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "TrackingSettings.hpp"
 
+#ifdef HAVE_TRACKING
+
 void
 LiveTrack24Settings::SetDefaults()
 {
@@ -35,3 +37,5 @@ TrackingSettings::SetDefaults()
 {
   livetrack24.SetDefaults();
 }
+
+#endif /* HAVE_TRACKING */

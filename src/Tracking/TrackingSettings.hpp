@@ -24,6 +24,10 @@ Copyright_License {
 #ifndef XCSOAR_TRACKING_SETTINGS_HPP
 #define XCSOAR_TRACKING_SETTINGS_HPP
 
+#include "Tracking/Features.hpp"
+
+#ifdef HAVE_TRACKING
+
 #include "Util/StaticString.hpp"
 
 struct LiveTrack24Settings {
@@ -44,4 +48,5 @@ struct TrackingSettings {
   void SetDefaults();
 };
 
+#endif /* HAVE_TRACKING */
 #endif

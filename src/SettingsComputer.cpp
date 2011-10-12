@@ -126,5 +126,8 @@ SETTINGS_COMPUTER::SetDefaults()
   pressure_available.Clear();
   airspace.SetDefaults();
   task.SetDefaults();
+
+#ifdef HAVE_TRACKING
   tracking.SetDefaults();
+#endif
 }

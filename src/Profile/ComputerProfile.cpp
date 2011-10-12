@@ -121,5 +121,8 @@ Profile::Load(SETTINGS_COMPUTER &settings)
     settings.UTCOffset -= 24 * 3600;
 
   Load(settings.task);
+
+#ifdef HAVE_TRACKING
   Load(settings.tracking);
+#endif
 }

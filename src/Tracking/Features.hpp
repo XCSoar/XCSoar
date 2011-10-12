@@ -21,24 +21,14 @@ Copyright_License {
 }
 */
 
-#include "TrackingProfile.hpp"
-#include "Profile.hpp"
-#include "ProfileKeys.hpp"
-#include "Tracking/TrackingSettings.hpp"
+#ifndef XCSOAR_TRACKING_FEATURES_HPP
+#define XCSOAR_TRACKING_FEATURES_HPP
 
-#ifdef HAVE_TRACKING
+#include "Net/Features.hpp"
 
-void
-Profile::Load(LiveTrack24Settings &settings)
-{
-  Get(ProfileLiveTrack24Username, settings.username);
-  Get(ProfileLiveTrack24Password, settings.password);
-}
+/* live tracking requires networking */
+#ifdef HAVE_NET
+#define HAVE_TRACKING
+#endif
 
-void
-Profile::Load(TrackingSettings &settings)
-{
-  Load(settings.livetrack24);
-}
-
-#endif /* HAVE_TRACKING */
+#endif

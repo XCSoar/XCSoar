@@ -235,7 +235,9 @@ struct SETTINGS_COMPUTER:
 
   TaskBehaviour task;
 
+#ifdef HAVE_TRACKING
   TrackingSettings tracking;
+#endif
 
   void SetDefaults();
 };
