@@ -93,6 +93,7 @@ Copyright_License {
 #include "Plane/PlaneGlue.hpp"
 #include "UIState.hpp"
 #include "Net/Features.hpp"
+#include "Tracking/TrackingGlue.hpp"
 
 #ifndef ENABLE_OPENGL
 #include "DrawThread.hpp"
@@ -113,6 +114,10 @@ CalculationThread *calculation_thread;
 
 Logger logger;
 Replay *replay;
+
+#ifdef HAVE_TRACKING
+TrackingGlue *tracking;
+#endif
 
 Waypoints way_points;
 
@@ -477,6 +482,11 @@ XCSoarInterface::Startup()
   merge_thread->Start();
   calculation_thread->Start();
 
+#ifdef HAVE_TRACKING
+  tracking = new TrackingGlue();
+  tracking->SetSettings(SettingsComputer().tracking);
+#endif
+
   globalRunningEvent.Signal();
 
   AfterStartup();
@@ -505,6 +515,11 @@ XCSoarInterface::Shutdown(void)
 
   // Turn off all displays
   globalRunningEvent.Reset();
+
+#ifdef HAVE_TRACKING
+  if (tracking != NULL)
+    tracking->StopAsync();
+#endif
 
   // Stop logger and save igc file
   operation.SetText(_("Shutdown, saving logs..."));
@@ -592,6 +607,14 @@ XCSoarInterface::Shutdown(void)
 
   delete protected_task_manager;
   delete task_manager;
+
+
+#ifdef HAVE_TRACKING
+  if (tracking != NULL) {
+    tracking->WaitStopped();
+    delete tracking;
+  }
+#endif
 
   // Close the progress dialog
   LogStartUp(_T("Close Progress Dialog"));

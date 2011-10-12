@@ -650,6 +650,10 @@ XCSOAR_SOURCES += \
 	$(SRC)/Weather/METARParser.cpp \
 	$(SRC)/Weather/NOAADownloader.cpp \
 	$(SRC)/Weather/NOAAStore.cpp
+
+XCSOAR_SOURCES += \
+	$(SRC)/Tracking/LiveTrack24.cpp \
+	$(SRC)/Tracking/TrackingGlue.cpp
 endif
 
 XCSOAR_OBJS = $(call SRC_TO_OBJ,$(XCSOAR_SOURCES))

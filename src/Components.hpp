@@ -40,6 +40,7 @@ class ProtectedTaskManager;
 class Replay;
 class AltairControl;
 class Logger;
+class TrackingGlue;
 
 // other global objects
 extern FileCache *file_cache;
@@ -60,6 +61,8 @@ extern MergeThread *merge_thread;
 extern CalculationThread *calculation_thread;
 
 extern Logger logger;
+
+extern TrackingGlue *tracking;
 
 #ifdef GNAV
 extern AltairControl altair_control;

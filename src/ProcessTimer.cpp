@@ -41,6 +41,7 @@ Copyright_License {
 #include "Task/ProtectedTaskManager.hpp"
 #include "GPSClock.hpp"
 #include "Operation.hpp"
+#include "Tracking/TrackingGlue.hpp"
 
 #ifdef _WIN32_WCE
 void
@@ -362,4 +363,11 @@ ProcessTimer::Process(void)
       device_blackboard.ProcessSimulation();
     }
   }
+
+#ifdef HAVE_TRACKING
+  if (tracking != NULL && CommonInterface::Basic().gps.real) {
+    tracking->SetSettings(CommonInterface::SettingsComputer().tracking);
+    tracking->OnTimer(CommonInterface::Basic());
+  }
+#endif
 }
