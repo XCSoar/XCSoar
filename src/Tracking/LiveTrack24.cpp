@@ -173,7 +173,7 @@ LiveTrack24::SendRequest(const TCHAR *url)
   if (!request.Created())
     return false;
 
-  TCHAR buffer[16];
+  char buffer[16];
   unsigned size = request.Read(buffer, 16, 10000);
-  return size >= 2 && buffer[0] == _T('O') && buffer[1] == _T('K');
+  return size >= 2 && buffer[0] == 'O' && buffer[1] == 'K';
 }
