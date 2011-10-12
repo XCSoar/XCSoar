@@ -364,13 +364,11 @@ WndListFrame::on_key_down(unsigned key_code)
     }
 
   case VK_HOME:
-    SetOrigin(0);
     SetCursorIndex(0);
     return true;
 
   case VK_END:
     if (length > 0) {
-      SetOrigin(length - items_visible);
       SetCursorIndex(length - 1);
     }
     return true;
