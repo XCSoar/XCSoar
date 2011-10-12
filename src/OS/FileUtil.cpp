@@ -68,11 +68,13 @@ Directory::Exists(const TCHAR* path)
  * @param str The string to check
  * @return True if string equals "." or ".."
  */
+#ifndef HAVE_POSIX
 static bool
 IsDots(const TCHAR* str)
 {
   return !(_tcscmp(str, _T(".")) && _tcscmp(str, _T("..")));
 }
+#endif
 
 #ifndef HAVE_POSIX /* we use fnmatch() on POSIX */
 static bool
@@ -188,7 +190,8 @@ ScanDirectories(File::Visitor &visitor, bool recursive,
 
   struct dirent *ent;
   while ((ent = readdir(dir)) != NULL) {
-    if (IsDots(ent->d_name))
+    // omit '.', '..' and any other files/directories starting with '.'
+    if (*ent->d_name == _T('.'))
       continue;
 
     _tcscpy(FileName + FileNameLength, ent->d_name);
