@@ -131,6 +131,12 @@ public:
    */
   void SetOrigin(int i);
 
+  /**
+   * Scrolls a number of items up (negative delta) or down (positive
+   * delta).  The cursor is not moved.
+   */
+  void MoveOrigin(int delta);
+
 protected:
   /** Checks whether a ScrollBar is needed and shows/hides it */
   void show_or_hide_scroll_bar();

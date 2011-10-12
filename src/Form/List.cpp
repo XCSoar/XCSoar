@@ -274,6 +274,12 @@ WndListFrame::SetOrigin(int i)
   invalidate();
 }
 
+void
+WndListFrame::MoveOrigin(int delta)
+{
+  SetOrigin(origin + delta);
+}
+
 bool
 WndListFrame::on_key_check(unsigned key_code) const
 {
@@ -331,7 +337,7 @@ WndListFrame::on_key_down(unsigned key_code)
       if (origin == 0 || length <= items_visible)
         break;
       
-      SetOrigin(origin - items_visible);
+      MoveOrigin(-(int)items_visible);
       SetCursorIndex(cursor >= items_visible ? cursor - items_visible : 0);
       return true;
     } else {
@@ -350,7 +356,7 @@ WndListFrame::on_key_down(unsigned key_code)
       if (cursor >= length || length <= items_visible)
         break;
       
-      SetOrigin(origin + items_visible);
+      MoveOrigin(items_visible);
       SetCursorIndex(cursor + items_visible < length ?
                      cursor + items_visible : length - 1);
       return true;
@@ -375,14 +381,14 @@ WndListFrame::on_key_down(unsigned key_code)
 
   case VK_PRIOR:
     if (origin > 0) {
-      SetOrigin(origin - items_visible);
+      MoveOrigin(-(int)items_visible);
       SetCursorIndex(origin);
     }
     return true;
 
   case VK_NEXT:
     if (origin + items_visible < length) {
-      SetOrigin(origin + items_visible);
+      MoveOrigin(items_visible);
       SetCursorIndex(std::min(length - 1, origin + items_visible));
     }
     return true;
@@ -453,16 +459,16 @@ WndListFrame::on_mouse_down(PixelScalar x, PixelScalar y)
     // if click in scroll bar up/down/pgup/pgdn
     if (scroll_bar.in_up_arrow(Pos.y))
       // up
-      SetOrigin(origin - 1);
+      MoveOrigin(-1);
     else if (scroll_bar.in_down_arrow(Pos.y))
       // down
-      SetOrigin(origin + 1);
+      MoveOrigin(1);
     else if (scroll_bar.above_slider(Pos.y))
       // page up
-      SetOrigin(origin - items_visible);
+      MoveOrigin(-(int)items_visible);
     else if (scroll_bar.below_slider(Pos.y))
       // page down
-      SetOrigin(origin + items_visible);
+      MoveOrigin(items_visible);
   } else {
     // if click in ListBox area
     // -> select appropriate item
@@ -500,11 +506,11 @@ WndListFrame::on_mouse_wheel(PixelScalar x, PixelScalar y, int delta)
   if (delta > 0) {
     // scroll up
     if (origin > 0)
-      SetOrigin(origin - 1);
+      MoveOrigin(-1);
   } else if (delta < 0) {
     // scroll down
     if (origin + items_visible < length)
-      SetOrigin(origin + 1);
+      MoveOrigin(1);
   }
 
   return true;
