@@ -237,6 +237,21 @@ WndListFrame::SetCursorIndex(unsigned i)
 }
 
 void
+WndListFrame::MoveCursor(int delta)
+{
+  if (length == 0)
+    return;
+
+  int new_cursor = cursor + delta;
+  if (new_cursor < 0)
+    new_cursor = 0;
+  else if ((unsigned)new_cursor > length)
+    new_cursor = length - 1;
+
+  SetCursorIndex(new_cursor);
+}
+
+void
 WndListFrame::SetOrigin(int i)
 {
   if (length <= items_visible)
@@ -289,23 +304,11 @@ WndListFrame::on_key_check(unsigned key_code) const
 
   case VK_UP:
   case VK_LEFT:
-    if (!has_pointer() ^ (key_code == VK_LEFT)) {
-      if (origin == 0 || length <= items_visible)
-        return false;
-      return true;
-    } else {
-      return GetCursorIndex() > 0;
-    }
+    return GetCursorIndex() > 0;
 
   case VK_DOWN:
   case VK_RIGHT:
-    if (!has_pointer() ^ (key_code == VK_RIGHT)) {
-      if (cursor >= length || length <= items_visible)
-        return false;
-      return true;
-    } else {
-      return GetCursorIndex() + 1 < length;
-    }
+    return GetCursorIndex() + 1 < length;
 
   default:
     return false;
@@ -334,18 +337,14 @@ WndListFrame::on_key_down(unsigned key_code)
   case VK_LEFT:
     if (!has_pointer() ^ (key_code == VK_LEFT)) {
       // page up
-      if (origin == 0 || length <= items_visible)
-        break;
-      
-      MoveOrigin(-(int)items_visible);
-      SetCursorIndex(cursor >= items_visible ? cursor - items_visible : 0);
+      MoveCursor(-(int)items_visible);
       return true;
     } else {
       // previous item
       if (GetCursorIndex() <= 0)
         break;
-      
-      SetCursorIndex(GetCursorIndex() - 1);
+
+      MoveCursor(-1);
       return true;
     }
 
@@ -353,19 +352,14 @@ WndListFrame::on_key_down(unsigned key_code)
   case VK_RIGHT:
     if (!has_pointer() ^ (key_code == VK_RIGHT)) {
       // page down
-      if (cursor >= length || length <= items_visible)
-        break;
-      
-      MoveOrigin(items_visible);
-      SetCursorIndex(cursor + items_visible < length ?
-                     cursor + items_visible : length - 1);
+      MoveCursor(items_visible);
       return true;
     } else {
       // next item
       if (GetCursorIndex() +1 >= length)
         break;
-      
-      SetCursorIndex(GetCursorIndex() + 1);
+
+      MoveCursor(1);
       return true;
     }
 
@@ -380,17 +374,11 @@ WndListFrame::on_key_down(unsigned key_code)
     return true;
 
   case VK_PRIOR:
-    if (origin > 0) {
-      MoveOrigin(-(int)items_visible);
-      SetCursorIndex(origin);
-    }
+    MoveCursor(-(int)items_visible);
     return true;
 
   case VK_NEXT:
-    if (origin + items_visible < length) {
-      MoveOrigin(items_visible);
-      SetCursorIndex(std::min(length - 1, origin + items_visible));
-    }
+    MoveCursor(items_visible);
     return true;
   }
   return PaintWindow::on_key_down(key_code);

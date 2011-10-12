@@ -127,6 +127,12 @@ public:
   bool SetCursorIndex(unsigned i);
 
   /**
+   * Move the cursor this many items up (negative delta) or down
+   * (positive delta).  Scrolls if necessary.
+   */
+  void MoveCursor(int delta);
+
+  /**
    * Scrolls to the specified index.
    */
   void SetOrigin(int i);
