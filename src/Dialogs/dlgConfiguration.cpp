@@ -56,6 +56,10 @@ Copyright_License {
 #include "ConfigPanels/InfoBoxesConfigPanel.hpp"
 #include "ConfigPanels/ExperimentalConfigPanel.hpp"
 
+#ifdef HAVE_TRACKING
+#include "ConfigPanels/TrackingConfigPanel.hpp"
+#endif
+
 #include <assert.h>
 
 static unsigned current_page;
@@ -95,6 +99,9 @@ static const TabMenuControl::PageItem pages[] = {
   {N_("Polar"), 6, PolarConfigPanel::PreShow, PolarConfigPanel::PreHide, N_("IDR_XML_POLARCONFIGPANEL")},
   {N_("Logger"), 6, NULL, NULL, N_("IDR_XML_LOGGERCONFIGPANEL")},
   {N_("Units"), 6, NULL, NULL, N_("IDR_XML_UNITSCONFIGPANEL")},
+#ifdef HAVE_TRACKING
+  {N_("Tracking"), 6, NULL, NULL, N_("IDR_XML_TRACKINGCONFIGPANEL")},
+#endif
 #ifdef HAVE_MODEL_TYPE
   {N_("Experimental Features"), 6, NULL, NULL, N_("IDR_XML_EXPERIMENTALCONFIGPANEL")},
 #endif
@@ -184,6 +191,9 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(UnitsConfigPanel::OnFieldData),
   DeclareCallBackEntry(UnitsConfigPanel::OnUTCData),
   DeclareCallBackEntry(WaypointDisplayConfigPanel::OnRenderingTypeData),
+#ifdef HAVE_TRACKING
+  DeclareCallBackEntry(TrackingConfigPanel::OnLT24Enabled),
+#endif
   DeclareCallBackEntry(OnUserLevel),
   DeclareCallBackEntry(NULL)
 };
@@ -191,6 +201,9 @@ static CallBackTableEntry CallBackTable[] = {
 static void
 setVariables()
 {
+#ifdef HAVE_TRACKING
+  TrackingConfigPanel::Init(wf, CommonInterface::SettingsComputer().tracking);
+#endif
   PolarConfigPanel::Init(wf);
   UnitsConfigPanel::Init(wf);
   LoggerConfigPanel::Init(wf);
@@ -281,6 +294,9 @@ void dlgConfigurationShowModal(void)
   bool changed = false;
   bool requirerestart = false;
   changed |= PagesConfigPanel::Save();
+#ifdef HAVE_TRACKING
+  changed |= TrackingConfigPanel::Save(CommonInterface::SetSettingsComputer().tracking);
+#endif
   changed |= PolarConfigPanel::Save();
   changed |= LoggerConfigPanel::Save();
   changed |= DevicesConfigPanel::Save();

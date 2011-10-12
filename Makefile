@@ -198,9 +198,9 @@ DIALOG_SOURCES = \
 ifeq ($(HAVE_NET),y)
 DIALOG_SOURCES += \
 	$(SRC)/Dialogs/dlgNOAAList.cpp \
-	$(SRC)/Dialogs/dlgNOAADetails.cpp
+	$(SRC)/Dialogs/dlgNOAADetails.cpp \
+	$(SRC)/Dialogs/ConfigPanels/TrackingConfigPanel.cpp
 endif
-
 
 XCSOAR_SOURCES := \
 	$(IO_SRC_DIR)/ConfiguredFile.cpp \

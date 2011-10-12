@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+
+<Panel>
+
+  <Panel X="2" Y="2" Width="-2" Height="87" Border="1">    
+    <Label Caption="LiveTrack24" X="2" Y="2" Height="16" Width="-2" />
+    
+    <CheckBox Name="LT24Enabled" Caption="Enabled" X="2" Width="-2" Height="20" OnClick="TrackingConfigPanel::OnLT24Enabled"/>
+  
+    <Edit Name="LT24Username" Caption="Username" X="2" Width="-2" Height="22" CaptionWidth="70">
+      <DataField DataType="string"/>
+    </Edit>
+
+    <Edit Name="LT24Password" Caption="Password" X="2" Width="-2" Height="22" CaptionWidth="70">
+      <DataField DataType="string"/>
+    </Edit>
+  </Panel>
+
+</Panel>
