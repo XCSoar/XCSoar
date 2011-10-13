@@ -18,5 +18,5 @@
   </Edit>
   
   <Button Caption="Cancel" X="2" Y="90" Width="74" Height="35" OnClick="OnCancel"/>
-  <Button Caption="Close" X="-77" Y="90" Width="75" Height="35" OnClick="OnOkay"/>
+  <Button Caption="Okay" X="-77" Y="90" Width="75" Height="35" OnClick="OnOkay"/>
 </Form>
