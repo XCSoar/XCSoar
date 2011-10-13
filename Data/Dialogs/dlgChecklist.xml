@@ -1,10 +1,11 @@
 <?xml version="1.0"?>
 
 <Form Caption="Checklist">
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-30" Width="35" Height="28" OnClick="OnPrevClicked" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="39" Y="-30" Width="35" Height="28" OnClick="OnNextClicked" />
+  <Edit Name="frmDetails" Height="-35" ReadOnly="1" MultiLine="1" />
 
-  <Button Name="cmdClose" Caption="Close" X="-62" Y="-30" Width="60" Height="28" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="60" Y="-35" Width="60" Height="35" OnClick="OnNextClicked" />
 
-  <Edit Name="frmDetails" X="1" Y="1" Width="-1" Height="-32" ReadOnly="1" MultiLine="1" />
+  <Button Name="cmdClose" Caption="Close" X="-120" Y="-35" Height="35" />
+
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="-35" Width="60" Height="35" OnClick="OnPrevClicked" />
 </Form>
