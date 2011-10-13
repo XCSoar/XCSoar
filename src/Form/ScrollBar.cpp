@@ -71,8 +71,8 @@ ScrollBar::reset()
 }
 
 void
-ScrollBar::set_slider(UPixelScalar size, UPixelScalar view_size,
-                      UPixelScalar origin)
+ScrollBar::set_slider(unsigned size, unsigned view_size,
+                      unsigned origin)
 {
   const PixelScalar netto_height = get_netto_height();
 
@@ -85,7 +85,7 @@ ScrollBar::set_slider(UPixelScalar size, UPixelScalar view_size,
     height = get_width();
 
   // Calculate highest origin (counted in ListItems)
-  PixelScalar max_origin = size - view_size;
+  unsigned max_origin = size - view_size;
 
   // Move the slider to the appropriate position
   PixelScalar top = (max_origin > 0) ?
@@ -103,12 +103,12 @@ ScrollBar::set_slider(UPixelScalar size, UPixelScalar view_size,
   rc_slider.bottom = rc_slider.top + height;
 }
 
-UPixelScalar
-ScrollBar::to_origin(UPixelScalar size, UPixelScalar view_size,
+unsigned
+ScrollBar::to_origin(unsigned size, unsigned view_size,
                      PixelScalar y) const
 {
   // Calculate highest origin (counted in ListItems)
-  PixelScalar max_origin = size - view_size;
+  unsigned max_origin = size - view_size;
   if (max_origin <= 0)
     return 0;
 
@@ -116,8 +116,8 @@ ScrollBar::to_origin(UPixelScalar size, UPixelScalar view_size,
   if (y < 0)
     return 0;
 
-  UPixelScalar origin = y * max_origin / get_scroll_height();
-  return min(origin, (UPixelScalar)max_origin);
+  unsigned origin = y * max_origin / get_scroll_height();
+  return min(origin, max_origin);
 }
 
 void
@@ -224,9 +224,8 @@ ScrollBar::drag_end(Window *w)
   w->release_capture();
 }
 
-UPixelScalar
-ScrollBar::drag_move(UPixelScalar size, UPixelScalar view_size,
-                     PixelScalar y) const
+unsigned
+ScrollBar::drag_move(unsigned size, unsigned view_size, PixelScalar y) const
 {
   assert(dragging);
 

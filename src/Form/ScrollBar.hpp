@@ -166,11 +166,10 @@ public:
   void reset();
 
   /** Calculates the size and position of the slider */
-  void set_slider(UPixelScalar size, UPixelScalar view_size,
-                  UPixelScalar origin);
+  void set_slider(unsigned size, unsigned view_size, unsigned origin);
   /** Calculates the new origin out of the given y-Coordinate of the drag */
-  UPixelScalar to_origin(UPixelScalar size, UPixelScalar view_size,
-                         PixelScalar y) const;
+  unsigned to_origin(unsigned size, unsigned view_size,
+                     PixelScalar y) const;
 
   /** Paints the ScollBar */
   void paint(Canvas &canvas) const;
@@ -200,8 +199,7 @@ public:
    * @param y y-Coordinate
    * @return "Value" of the ScrollBar
    */
-  UPixelScalar drag_move(UPixelScalar size, UPixelScalar view_size,
-                         PixelScalar y) const;
+  unsigned drag_move(unsigned  size, unsigned view_size, PixelScalar y) const;
 };
 
 #endif
