@@ -416,6 +416,14 @@ OnImagePaint(gcc_unused WndOwnerDrawFrame *Sender, Canvas &canvas)
 static CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnNextClicked),
     DeclareCallBackEntry(OnPrevClicked),
+    DeclareCallBackEntry(OnGotoClicked),
+    DeclareCallBackEntry(OnCloseClicked),
+    DeclareCallBackEntry(OnReplaceClicked),
+    DeclareCallBackEntry(OnInsertInTaskClicked),
+    DeclareCallBackEntry(OnAppendInTaskClicked),
+    DeclareCallBackEntry(OnRemoveFromTaskClicked),
+    DeclareCallBackEntry(OnNewHomeClicked),
+    DeclareCallBackEntry(OnActivatePanClicked),
     DeclareCallBackEntry(NULL)
 };
 
@@ -558,8 +566,6 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
   wf->SetKeyDownNotify(FormKeyDown);
 
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
-
   wInfo = ((WndFrame *)wf->FindByName(_T("frmInfos")));
   wCommand = ((WndFrame *)wf->FindByName(_T("frmCommands")));
   wImage = ((WndOwnerDrawFrame *)wf->FindByName(_T("frmImage")));
@@ -588,42 +594,6 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
   }
 
   ShowTaskCommands();
-
-  WndButton *wb;
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdGoto")));
-  if (wb)
-    wb->SetOnClickNotify(OnGotoClicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdReplace")));
-  if (wb)
-    wb->SetOnClickNotify(OnReplaceClicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdNewHome")));
-  if (wb)
-    wb->SetOnClickNotify(OnNewHomeClicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdInserInTask")));
-  if (wb)
-    wb->SetOnClickNotify(OnInsertInTaskClicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdAppendInTask")));
-  if (wb)
-    wb->SetOnClickNotify(OnAppendInTaskClicked);
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdRemoveFromTask")));
-  if (wb)
-    wb->SetOnClickNotify(OnRemoveFromTaskClicked);
-
-  /* JMW disabled until 6.2 work, see #996
-  wb = ((WndButton *)wf->FindByName(_T("cmdGotoAndClearTask")));
-  if (wb)
-    wb->SetOnClickNotify(OnGotoAndClearTaskClicked);
-  */
-
-  wb = ((WndButton *)wf->FindByName(_T("cmdActivatePan")));
-  if (wb)
-    wb->SetOnClickNotify(OnActivatePanClicked);
 
   _stprintf(path, _T("%s" DIR_SEPARATOR_S "modis-%03d.jpg"),
             Directory, selected_waypoint->original_id);
