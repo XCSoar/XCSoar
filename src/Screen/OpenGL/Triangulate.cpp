@@ -114,13 +114,13 @@ normalize(RasterPoint *v, float length)
  * Optionally removes all points from a polygon that are too close together.
  *
  * @param points polygon coordinates
- * @param num_points numer of polygon vertices
+ * @param num_points number of polygon vertices
  * @param triangles triangle indices, size: 3*(num_points-2)
  * @param min_distance minimum distance a point should have from its neighbours
  *
  * @return Returns the number of triangle indices. Possible values:
  *         0: failure,
- *         3 to 3*(num_points-3): success
+ *         3 to 3*(num_points-2): success
  */
 #if RASTER_POINT_SIZE == SHAPE_POINT_SIZE
 unsigned
