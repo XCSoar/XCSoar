@@ -1,20 +1,21 @@
 <Form Caption="Select Waypoint">
-  <Label X="3" Y="0" Width="61" Height="16" Caption="Name" />
-  <Button Name="cmdFltName" Caption="*" X="2" Y="18" Width="63"  Height="22" />
+  <Label X="2" Y="0" Width="61" Height="14" Caption="Name" />
+  <Button Name="cmdFltName" Caption="*" X="3" Y="14" Width="60"  Height="18" />
 
-  <Edit Name="prpFltDistance" Caption="Distance" X="2" Width="63" Height="36" CaptionWidth="-1">
+  <Edit Name="prpFltDistance" Caption="Distance" X="0" Width="65" Height="36" CaptionWidth="-1">
     <DataField DataType="enum" OnDataAccess="OnFilterDistance"/>
   </Edit>
-  <Edit Name="prpFltDirection" Caption="Direction" X="2" Width="63" Height="36" CaptionWidth="-1">
+
+  <Edit Name="prpFltDirection" Caption="Direction" X="0" Width="65" Height="36" CaptionWidth="-1">
     <DataField DataType="enum" OnDataAccess="OnFilterDirection"/>
   </Edit>
 
-  <Edit Name="prpFltType" Caption="Type" X="2" Width="63" Height="36" CaptionWidth="-1">
+  <Edit Name="prpFltType" Caption="Type" X="0" Width="65" Height="36" CaptionWidth="-1">
     <DataField DataType="enum" OnDataAccess="OnFilterType"/>
   </Edit>
 
-  <Button Name="cmdSelect" Caption="Select" X="2" Width="63"  Height="35" />
-  <Button Name="cmdClose" Caption="Cancel" X="2" Width="63"  Height="35" />
+  <Button Name="cmdSelect" Caption="Select" X="0" Y="-70" Width="65" Height="35" />
+  <Button Name="cmdClose" Caption="Cancel" X="0" Y="-35" Width="65" Height="35" />
 
-  <List Name="frmWaypointList" X="65" Y="1" Width="-1" Height="-1" ItemHeight="18"/>
+  <List Name="frmWaypointList" X="65" Y="0" Width="-1" Height="-1" />
 </Form>
