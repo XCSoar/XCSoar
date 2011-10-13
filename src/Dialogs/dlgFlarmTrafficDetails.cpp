@@ -278,6 +278,14 @@ OnFriendClearClicked(gcc_unused WndButton &Sender)
 }
 
 static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnTeamClicked),
+  DeclareCallBackEntry(OnCallsignClicked),
+  DeclareCallBackEntry(OnFriendGreenClicked),
+  DeclareCallBackEntry(OnFriendBlueClicked),
+  DeclareCallBackEntry(OnFriendYellowClicked),
+  DeclareCallBackEntry(OnFriendMagentaClicked),
+  DeclareCallBackEntry(OnFriendClearClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -302,23 +310,6 @@ dlgFlarmTrafficDetailsShowModal(FlarmId id)
 
   // Set dialog events
   wf->SetTimerNotify(OnTimerNotify);
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->
-      SetOnClickNotify(OnCloseClicked);
-  ((WndButton *)wf->FindByName(_T("cmdSetAsTeamMate")))->
-      SetOnClickNotify(OnTeamClicked);
-  ((WndButton *)wf->FindByName(_T("cmdCallsign")))->
-      SetOnClickNotify(OnCallsignClicked);
-
-  ((WndSymbolButton*)wf->FindByName(_T("cmdFriendGreen")))->
-      SetOnClickNotify(OnFriendGreenClicked);
-  ((WndSymbolButton*)wf->FindByName(_T("cmdFriendBlue")))->
-      SetOnClickNotify(OnFriendBlueClicked);
-  ((WndSymbolButton*)wf->FindByName(_T("cmdFriendYellow")))->
-      SetOnClickNotify(OnFriendYellowClicked);
-  ((WndSymbolButton*)wf->FindByName(_T("cmdFriendMagenta")))->
-      SetOnClickNotify(OnFriendMagentaClicked);
-  ((WndButton*)wf->FindByName(_T("cmdFriendClear")))->
-      SetOnClickNotify(OnFriendClearClicked);
 
   // Update fields for the first time
   Update();

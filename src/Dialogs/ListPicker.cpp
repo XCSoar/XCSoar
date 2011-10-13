@@ -84,6 +84,7 @@ OnPointCursorCallback(unsigned i)
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnCancelClicked),
+  DeclareCallBackEntry(OnHelpClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -132,13 +133,6 @@ ListPicker(SingleWindow &parent, const TCHAR *caption,
   }
   else
     wItemHelp = NULL;
-
-  WndButton *help_button = (WndButton *)wf->FindByName(_T("cmdHelp"));
-  assert(help_button != NULL);
-  if (help_callback != NULL)
-    help_button->SetOnClickNotify(OnHelpClicked);
-  else
-    help_button->hide();
 
   if (update)
     wf->SetTimerNotify(OnTimerNotify);

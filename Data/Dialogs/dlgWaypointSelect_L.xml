@@ -1,6 +1,6 @@
 <Form Caption="Select Waypoint">
   <Label X="2" Y="0" Width="61" Height="14" Caption="Name" />
-  <Button Name="cmdFltName" Caption="*" X="3" Y="14" Width="60"  Height="18" />
+  <Button Name="cmdFltName" Caption="*" X="3" Y="14" Width="60"  Height="18" OnClick="OnFilterNameButton" />
 
   <Edit Name="prpFltDistance" Caption="Distance" X="0" Width="65" Height="36" CaptionWidth="-1">
     <DataField DataType="enum" OnDataAccess="OnFilterDistance"/>
@@ -14,8 +14,8 @@
     <DataField DataType="enum" OnDataAccess="OnFilterType"/>
   </Edit>
 
-  <Button Name="cmdSelect" Caption="Select" X="0" Y="-70" Width="65" Height="35" />
-  <Button Name="cmdClose" Caption="Cancel" X="0" Y="-35" Width="65" Height="35" />
+  <Button Name="cmdSelect" Caption="Select" X="0" Y="-70" Width="65" Height="35" OnClick="OnSelectClicked" />
+  <Button Name="cmdClose" Caption="Cancel" X="0" Y="-35" Width="65" Height="35" OnClick="OnCloseClicked" />
 
   <List Name="frmWaypointList" X="65" Y="0" Width="-1" Height="-1" />
 </Form>

@@ -52,15 +52,10 @@ OnCloseClicked(gcc_unused WndButton &button)
 }
 
 static void
-OnQuit(gcc_unused WndButton &button)
+OnQuitClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrCancel);
 }
-
-static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnLogoPaint),
-  DeclareCallBackEntry(NULL)
-};
 
 static void
 SelectProfile(const TCHAR *path)
@@ -75,6 +70,13 @@ SelectProfile(const TCHAR *path)
   TCHAR temp[MAX_PATH];
   SetPrimaryDataPath(DirName(path, temp));
 }
+
+static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnLogoPaint),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnQuitClicked),
+  DeclareCallBackEntry(NULL)
+};
 
 bool
 dlgStartupShowModal()
@@ -93,11 +95,6 @@ dlgStartupShowModal()
 
   DataFieldFileReader* dfe = (DataFieldFileReader*)wp->GetDataField();
   assert(dfe != NULL);
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))
-    ->SetOnClickNotify(OnCloseClicked);
-
-  ((WndButton *)wf->FindByName(_T("cmdQuit")))->SetOnClickNotify(OnQuit);
 
   dfe->SetNotNullable();
   dfe->ScanDirectoryTop(_T("*.prf"));

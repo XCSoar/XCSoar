@@ -70,6 +70,7 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateThermalAssistantControl),
+  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -86,10 +87,6 @@ dlgThermalAssistantShowModal()
     return;
 
   wf->SetTimerNotify(OnTimerNotify);
-
-  // Set button events
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->
-      SetOnClickNotify(OnCloseClicked);
 
   Update();
 

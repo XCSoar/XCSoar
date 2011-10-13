@@ -701,18 +701,6 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   }
 }
 
-static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnNextClicked),
-  DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(OnDemoClicked),
-  DeclareCallBackEntry(OnSaveClicked),
-  DeclareCallBackEntry(OnSchemeVegaClicked),
-  DeclareCallBackEntry(OnSchemeBorgeltClicked),
-  DeclareCallBackEntry(OnSchemeCambridgeClicked),
-  DeclareCallBackEntry(OnSchemeZanderClicked),
-  DeclareCallBackEntry(NULL)
-};
-
 static void
 FillAudioEnums(const TCHAR* name)
 {
@@ -937,6 +925,19 @@ FillEnums(void)
   FillAllAudioEnums();
 }
 
+static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(OnDemoClicked),
+  DeclareCallBackEntry(OnSaveClicked),
+  DeclareCallBackEntry(OnSchemeVegaClicked),
+  DeclareCallBackEntry(OnSchemeBorgeltClicked),
+  DeclareCallBackEntry(OnSchemeCambridgeClicked),
+  DeclareCallBackEntry(OnSchemeZanderClicked),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(NULL)
+};
+
 bool
 dlgConfigurationVarioShowModal(void)
 {
@@ -953,8 +954,6 @@ dlgConfigurationVarioShowModal(void)
     return false;
 
   wf->SetKeyDownNotify(FormKeyDown);
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   tabbed = ((TabbedControl *)wf->FindByName(_T("tabbed")));
   assert(tabbed != NULL);

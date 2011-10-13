@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Caption="Thermal Assistant" Popup="4">
-  <Button Name="cmdClose" Caption="Close" X="-61" Y="-31" Width="58" Height="28"/>
+  <Button Name="cmdClose" Caption="Close" X="-61" Y="-31" Width="58" Height="28" OnClick="OnCloseClicked"/>
   <Custom Name="frmCanvas" X="1" Y="1" Width="-1" Height="-1" Border="1"
           OnCreate="OnCreateThermalAssistantControl"/>
 </Form>

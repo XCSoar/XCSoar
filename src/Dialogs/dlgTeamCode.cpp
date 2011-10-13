@@ -176,29 +176,20 @@ OnTimerNotify(gcc_unused WndForm &Sender)
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnFlarmLockClicked),
+  DeclareCallBackEntry(OnCodeClicked),
+  DeclareCallBackEntry(OnSetWaypointClicked),
   DeclareCallBackEntry(NULL)
 };
 
 void
 dlgTeamCodeShowModal(void)
 {
-  WndButton *buttonCode = NULL;
-
   wf = LoadDialog(CallBackTable, XCSoarInterface::main_window,
                   Layout::landscape ? _T("IDR_XML_TEAMCODE_L") :
                                       _T("IDR_XML_TEAMCODE"));
 
   if (!wf)
     return;
-
-  // set event for buttons
-  buttonCode = ((WndButton *)wf->FindByName(_T("cmdSetCode")));
-  if (buttonCode)
-    buttonCode->SetOnClickNotify(OnCodeClicked);
-
-  WndButton* cmdSetWaypoint = ((WndButton *)wf->FindByName(_T("cmdSetWaypoint")));
-  assert(cmdSetWaypoint != NULL);
-  cmdSetWaypoint->SetOnClickNotify(OnSetWaypointClicked);
 
   Update();
 

@@ -1,14 +1,14 @@
 <?xml version="1.0"?>
 
 <Form Caption="FLARM Traffic">
-  <Button Name="cmdDetails" Caption="Details" X="3" Y="242" Width="58" Height="28" />
-  <SymbolButton Name="cmdZoomIn" Caption="+" X="63" Y="242" Width="28" Height="28" />
-  <SymbolButton Name="cmdZoomOut" Caption="-" X="93" Y="242" Width="28" Height="28" />
-  <Button Name="cmdSwitchData" Caption="AVG/ALT" X="173" Y="242" Width="58" Height="28" />
+  <Button Name="cmdDetails" Caption="Details" X="3" Y="242" Width="58" Height="28" OnClick="OnDetailsClicked" />
+  <SymbolButton Name="cmdZoomIn" Caption="+" X="63" Y="242" Width="28" Height="28" OnClick="OnZoomInClicked" />
+  <SymbolButton Name="cmdZoomOut" Caption="-" X="93" Y="242" Width="28" Height="28" OnClick="OnZoomOutClicked" />
+  <Button Name="cmdSwitchData" Caption="AVG/ALT" X="173" Y="242" Width="58" Height="28" OnClick="OnSwitchDataClicked" />
 
-  <Button Name="cmdClose" Caption="Close" X="3" Y="272" Width="58" Height="28" />
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="63" Y="272" Width="28" Height="28" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="93" Y="272" Width="28" Height="28" />
+  <Button Name="cmdClose" Caption="Close" X="3" Y="272" Width="58" Height="28" OnClick="OnCloseClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="63" Y="272" Width="28" Height="28" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="93" Y="272" Width="28" Height="28" OnClick="OnNextClicked" />
 
   <CheckBox Name="NorthUp" Caption="North up" X="123" Y="272" Width="48" Height="28" OnClick="OnNorthUp"/>
   <CheckBox Name="AutoZoom" Caption="Auto. zoom" X="173" Y="272" Width="58" Height="28" OnClick="OnAutoZoom"/>

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Caption="Waypoints Editor">
-  <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="80" Height="35" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="80" Height="35" OnClick="OnCloseClicked" />
 
   <Button Name="cmdWaypointNew" Caption="New" X="50" Y="10" Width="150" Height="28" OnClick="OnWaypointNewClicked" />
   <Button Name="cmdWaypointEdit" Caption="Edit" X="50" Width="150" Height="28" OnClick="OnWaypointEditClicked" />

@@ -424,6 +424,7 @@ static CallBackTableEntry CallBackTable[] = {
     DeclareCallBackEntry(OnRemoveFromTaskClicked),
     DeclareCallBackEntry(OnNewHomeClicked),
     DeclareCallBackEntry(OnActivatePanClicked),
+    DeclareCallBackEntry(OnImagePaint),
     DeclareCallBackEntry(NULL)
 };
 
@@ -578,7 +579,6 @@ dlgWaypointDetailsShowModal(SingleWindow &parent, const Waypoint& way_point,
 
   wDetails->SetText(selected_waypoint->details.c_str(), true);
   wCommand->hide();
-  wImage->SetOnPaintNotify(OnImagePaint);
 
   if (!allow_navigation) {
     WndButton* butnav = NULL;

@@ -69,6 +69,9 @@ OnQuitClicked(gcc_unused WndButton &button)
 
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnLogoPaint),
+  DeclareCallBackEntry(OnFlyClicked),
+  DeclareCallBackEntry(OnSimulatorClicked),
+  DeclareCallBackEntry(OnQuitClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -86,19 +89,6 @@ dlgSimulatorPromptShowModal()
                     Layout::landscape ? _T("IDR_XML_SIMULATORPROMPT_L") :
                                         _T("IDR_XML_SIMULATORPROMPT"));
     assert(wf != NULL);
-
-    WndButton* wb;
-    wb = ((WndButton *)wf->FindByName(_T("cmdSimulator")));
-    assert(wb != NULL);
-    wb->SetOnClickNotify(OnSimulatorClicked);
-
-    wb = ((WndButton *)wf->FindByName(_T("cmdFly")));
-    assert(wb != NULL);
-    wb->SetOnClickNotify(OnFlyClicked);
-
-    wb = ((WndButton *)wf->FindByName(_T("cmdQuit")));
-    assert(wb != NULL);
-    wb->SetOnClickNotify(OnQuitClicked);
 
     result = wf->ShowModal();
 

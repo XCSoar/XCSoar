@@ -3,7 +3,7 @@
 <Form Caption="Checklist">
   <SymbolButton Name="cmdNext" Caption="&gt;" X="0" Y="-70" Width="60" Height="35" OnClick="OnNextClicked" />
 
-  <Button Name="cmdClose" Caption="Close" X="0" Y="-35" Width="60" Height="35" />
+  <Button Name="cmdClose" Caption="Close" X="0" Y="-35" Width="60" Height="35" OnClick="OnCloseClicked" />
 
   <Edit Name="frmDetails" X="60" Y="0" ReadOnly="1" MultiLine="1" />
 

@@ -756,13 +756,13 @@ OnWaypointListEnter(gcc_unused unsigned i)
 }
 
 static void
-OnWPSSelectClicked(gcc_unused WndButton &button)
+OnSelectClicked(gcc_unused WndButton &button)
 {
   OnWaypointListEnter(0);
 }
 
 static void
-OnWPSCloseClicked(gcc_unused WndButton &button)
+OnCloseClicked(gcc_unused WndButton &button)
 {
   wf->SetModalResult(mrCancel);
 }
@@ -817,19 +817,22 @@ FormKeyDown(WndForm &Sender, unsigned key_code)
 
 #endif /* GNAV */
 
-static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnFilterDistance),
-  DeclareCallBackEntry(OnFilterDirection),
-  DeclareCallBackEntry(OnFilterType),
-  DeclareCallBackEntry(NULL)
-};
-
 void
 dlgWaypointSelectAddToLastUsed(const Waypoint &wp)
 {
   LastUsedWaypointNames.remove(wp.id);
   LastUsedWaypointNames.push_back(wp.id);
 }
+
+static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnFilterDistance),
+  DeclareCallBackEntry(OnFilterDirection),
+  DeclareCallBackEntry(OnFilterType),
+  DeclareCallBackEntry(OnFilterNameButton),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnSelectClicked),
+  DeclareCallBackEntry(NULL)
+};
 
 const Waypoint*
 dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
@@ -838,30 +841,11 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
 {
   wf = LoadDialog(CallBackTable, parent, Layout::landscape ?
       _T("IDR_XML_WAYPOINTSELECT_L") : _T("IDR_XML_WAYPOINTSELECT"));
-
-  if (!wf)
-    return NULL;
-
   assert(wf != NULL);
 
 #ifdef GNAV
   wf->SetKeyDownNotify(FormKeyDown);
 #endif
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->
-      SetOnClickNotify(OnWPSCloseClicked);
-
-  ((WndButton *)wf->FindByName(_T("cmdSelect")))->
-      SetOnClickNotify(OnWPSSelectClicked);
-
-  ((WndButton *)wf->FindByName(_T("cmdFltName")))->
-      SetOnClickNotify(OnFilterNameButton);
-
-  ((WndButton *)wf->FindByName(_T("cmdFltName")))->
-      SetOnLeftNotify(OnFilterNameButtonLeft);
-
-  ((WndButton *)wf->FindByName(_T("cmdFltName")))->
-      SetOnRightNotify(OnFilterNameButtonRight);
 
   wWaypointList = (WndListFrame*)wf->FindByName(_T("frmWaypointList"));
   assert(wWaypointList != NULL);
@@ -872,6 +856,9 @@ dlgWaypointSelect(SingleWindow &parent, const GeoPoint &location,
   wWaypointList->SetItemHeight(line_height);
 
   wbName = (WndButton*)wf->FindByName(_T("cmdFltName"));
+  wbName->SetOnLeftNotify(OnFilterNameButtonLeft);
+  wbName->SetOnRightNotify(OnFilterNameButtonRight);
+
   wpDistance = (WndProperty*)wf->FindByName(_T("prpFltDistance"));
   wpDirection = (WndProperty*)wf->FindByName(_T("prpFltDirection"));
   wpType = (WndProperty *)wf->FindByName(_T("prpFltType"));

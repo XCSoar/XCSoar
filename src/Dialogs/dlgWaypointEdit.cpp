@@ -50,12 +50,10 @@ UpdateButtons()
 {
   TCHAR text[MAX_PATH];
 
-  assert(buttonName != NULL);
   _stprintf(text, _T("%s: %s"), _("Name"),
             global_wpt->name.empty() ? _("(blank)") : global_wpt->name.c_str());
   buttonName->SetCaption(text);
 
-  assert(buttonComment != NULL);
   _stprintf(text, _T("%s: %s"), _("Comment"),
             global_wpt->comment.empty() ?
             _("(blank)") : global_wpt->comment.c_str());
@@ -65,8 +63,6 @@ UpdateButtons()
 static void
 OnNameClicked(gcc_unused WndButton &button)
 {
-  assert(buttonName != NULL);
-
   StaticString<NAME_SIZE + 1> buff(global_wpt->name.c_str());
   if (!TextEntryDialog(*(SingleWindow *)button.get_root_owner(), buff))
     return;
@@ -79,8 +75,6 @@ OnNameClicked(gcc_unused WndButton &button)
 static void
 OnCommentClicked(gcc_unused WndButton &button)
 {
-  assert(buttonComment != NULL);
-
   StaticString<COMMENT_SIZE + 1> buff(global_wpt->comment.c_str());
   if (!TextEntryDialog(*(SingleWindow *)button.get_root_owner(), buff))
     return;
@@ -344,6 +338,8 @@ OnCloseClicked(gcc_unused WndButton &Sender)
 
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnNameClicked),
+  DeclareCallBackEntry(OnCommentClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -358,12 +354,9 @@ dlgWaypointEditShowModal(Waypoint &way_point)
   assert(wf != NULL);
 
   buttonName = ((WndButton *)wf->FindByName(_T("cmdName")));
-  assert(buttonName != NULL);
-  buttonName->SetOnClickNotify(OnNameClicked);
-
   buttonComment = ((WndButton *)wf->FindByName(_T("cmdComment")));
+  assert(buttonName != NULL);
   assert(buttonComment != NULL);
-  buttonComment->SetOnClickNotify(OnCommentClicked);
 
   UpdateButtons();
 

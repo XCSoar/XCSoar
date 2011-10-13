@@ -122,6 +122,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnWaypointDeleteClicked),
   DeclareCallBackEntry(OnWaypointEditClicked),
   DeclareCallBackEntry(OnWaypointSaveClicked),
+  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -132,8 +133,6 @@ dlgConfigWaypointsShowModal()
                   Layout::landscape ? _T("IDR_XML_CONFIG_WAYPOINTS_L") :
                                       _T("IDR_XML_CONFIG_WAYPOINTS"));
   assert(wf != NULL);
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   WaypointsNeedSave = false;
 

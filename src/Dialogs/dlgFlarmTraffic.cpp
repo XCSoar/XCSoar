@@ -662,6 +662,13 @@ OnCreateFlarmTrafficControl(ContainerWindow &parent,
 
 static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateFlarmTrafficControl),
+  DeclareCallBackEntry(OnDetailsClicked),
+  DeclareCallBackEntry(OnZoomInClicked),
+  DeclareCallBackEntry(OnZoomOutClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(OnSwitchDataClicked),
   DeclareCallBackEntry(OnAutoZoom),
   DeclareCallBackEntry(OnNorthUp),
   DeclareCallBackEntry(NULL)
@@ -686,22 +693,6 @@ dlgFlarmTrafficShowModal()
   // Set dialog events
   wf->SetKeyDownNotify(FormKeyDown);
   wf->SetTimerNotify(OnTimerNotify);
-
-  // Set button events
-  ((WndButton *)wf->FindByName(_T("cmdDetails")))->
-      SetOnClickNotify(OnDetailsClicked);
-  ((WndButton *)wf->FindByName(_T("cmdZoomIn")))->
-      SetOnClickNotify(OnZoomInClicked);
-  ((WndButton *)wf->FindByName(_T("cmdZoomOut")))->
-      SetOnClickNotify(OnZoomOutClicked);
-  ((WndButton *)wf->FindByName(_T("cmdPrev")))->
-      SetOnClickNotify(OnPrevClicked);
-  ((WndButton *)wf->FindByName(_T("cmdNext")))->
-      SetOnClickNotify(OnNextClicked);
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->
-      SetOnClickNotify(OnCloseClicked);
-  ((WndButton *)wf->FindByName(_T("cmdSwitchData")))->
-      SetOnClickNotify(OnSwitchDataClicked);
 
   // Update Radar and Selection for the first time
   Update();

@@ -12,7 +12,7 @@
 
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-72" Width="70" Height="35" OnClick="OnPrevClicked" />
   <SymbolButton Name="cmdNext" Caption="&gt;" X="5" Y="-107" Width="70" Height="35" OnClick="OnNextClicked" />
-  <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="70" Height="35"/>
+  <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="70" Height="35" OnClick="OnCloseClicked"/>
   <TabMenu Name="TabMenu" Caption="Configuration Menu" X="75" Y="0">
   </TabMenu>
 </Form>

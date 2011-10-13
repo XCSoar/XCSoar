@@ -259,6 +259,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnEditCDIWindowFontClicked),
   DeclareCallBackEntry(OnEditMapLabelFontClicked),
   DeclareCallBackEntry(OnEditMapLabelImportantFontClicked),
+  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -270,8 +271,6 @@ void dlgConfigFontsShowModal()
 
   if (wf == NULL)
     return;
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   UISettings &ui_settings = CommonInterface::SetUISettings();
 

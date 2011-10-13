@@ -583,6 +583,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnNextClicked),
   DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(OnCalcClicked),
+  DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -612,9 +613,6 @@ dlgAnalysisShowModal(SingleWindow &parent, const Look &_look,
   wGrid = (ChartControl*)wf->FindByName(_T("frmGrid"));
   wInfo = (WndFrame *)wf->FindByName(_T("frmInfo"));
   wCalc = (WndButton *)wf->FindByName(_T("cmdCalc"));
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->
-      SetOnClickNotify(OnCloseClicked);
 
   if (_page >= 0)
     page = (analysis_page)_page;

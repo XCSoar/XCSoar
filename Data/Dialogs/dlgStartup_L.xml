@@ -1,13 +1,13 @@
 <?xml version="1.0"?>
 
 <Form Caption="">
-  <Button Name="cmdClose" Caption="Continue" X="2" Y="-60" Width="-2" Height="30"/>
+  <Button Name="cmdClose" Caption="Continue" X="2" Y="-60" Width="-2" Height="30" OnClick="OnCloseClicked"/>
 
   <Edit Name="prpProfile" Caption="Profile" X="2" Width="-2" Height="25" CaptionWidth="60">
     <DataField DataType="filereader"/>
   </Edit>
 
-  <Button Name="cmdQuit" Caption="Quit" X="-75" Y="1" Width="-1" Height="30"/>
+  <Button Name="cmdQuit" Caption="Quit" X="-75" Y="1" Width="-1" Height="30" OnClick="OnQuitClicked"/>
 
   <Canvas Name="frmLogo" X="0" Y="0" Height="-60" OnPaint="OnLogoPaint" />
 </Form>

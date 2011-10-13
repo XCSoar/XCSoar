@@ -3,7 +3,7 @@
 <Form Caption="Configuration">
   <SymbolButton Name="cmdNext" Caption="&gt;" X="45" Y="-72" Width="40" Height="35" OnClick="OnNextClicked" />
   <SymbolButton Name="cmdPrev" Caption="&lt;" X="5" Y="-72" Width="40" Height="35" OnClick="OnPrevClicked" />
-  <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="80" Height="35" />
+  <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="80" Height="35" OnClick="OnCloseClicked" />
 
   <CheckBox Name="Expert" Caption="Expert" X="95" Y="-30" Width="65" Height="20" OnClick="OnUserLevel"/>
 

@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Caption="Font Configuration">
-  <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="60" Height="35"/>
+  <Button Name="cmdClose" Caption="Close" X="5" Y="-37" Width="60" Height="35" OnClick="OnCloseClicked"/>
 
   <Edit Name="prpUseCustomFonts" Caption="Customize fonts" X="70" Y="1" Width="-2" Height="22" CaptionWidth="150">
     <DataField DataType="boolean" OnDataAccess="OnUseCustomFontData" />

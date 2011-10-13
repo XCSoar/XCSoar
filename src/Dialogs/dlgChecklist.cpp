@@ -117,12 +117,6 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   }
 }
 
-static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnNextClicked),
-  DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(NULL)
-};
-
 static void
 addChecklist(const TCHAR *name, const TCHAR *details)
 {
@@ -194,6 +188,13 @@ LoadChecklist(void)
   }
 }
 
+static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(NULL)
+};
+
 void
 dlgChecklistShowModal(void)
 {
@@ -212,8 +213,6 @@ dlgChecklistShowModal(void)
   nTextLines = 0;
 
   wf->SetKeyDownNotify(FormKeyDown);
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   wDetails = (WndProperty*)wf->FindByName(_T("frmDetails"));
   assert(wDetails != NULL);

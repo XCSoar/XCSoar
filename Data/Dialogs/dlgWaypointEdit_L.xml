@@ -3,9 +3,9 @@
 <Form Caption="Waypoint Editor">
   <Button Caption="Close" X="5" Y="-37" Width="70" Height="35" OnClick="OnCloseClicked"/>
 
-  <Button Name="cmdName" Caption="Name" X="85" Y="0" Height="28" />
+  <Button Name="cmdName" Caption="Name" X="85" Y="0" Height="28" OnClick="OnNameClicked"/>
 
-  <Button Name="cmdComment" Caption="Comment" X="85" Height="28" />
+  <Button Name="cmdComment" Caption="Comment" X="85" Height="28" OnClick="OnCommentClicked"/>
 
   <Edit Name="prpLongitudeSign" Caption="Longitude" Y="70" Width="110" Height="28" CaptionWidth="75">
     <DataField DataType="enum"/>

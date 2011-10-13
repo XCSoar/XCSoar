@@ -66,10 +66,6 @@ OnCloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(NULL)
-};
-
 static void
 UpdateValuesSystem()
 {
@@ -466,6 +462,11 @@ OnTabUpdate(TabBarControl::EventType EventType)
   return true;
 }
 
+static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(NULL)
+};
+
 void
 dlgStatusShowModal(int start_page)
 {
@@ -473,8 +474,6 @@ dlgStatusShowModal(int start_page)
                   Layout::landscape ?
                   _T("IDR_XML_STATUS_L") : _T("IDR_XML_STATUS"));
   assert(wf);
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   wTabBar = ((TabBarControl *)wf->FindByName(_T("TabBar")));
   assert(wTabBar != NULL);
@@ -498,19 +497,19 @@ dlgStatusShowModal(int start_page)
   const Bitmap *TimesIcon = ((IconsStyle == dtIcon) ?
                              &Graphics::hBmpTabTimes : NULL);
 
-  Window* wFlight = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_FLIGHT"));
+  Window* wFlight = LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_STATUS_FLIGHT"));
   assert(wFlight);
 
-  Window* wSystem = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_SYSTEM"));
+  Window* wSystem = LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_STATUS_SYSTEM"));
   assert(wSystem);
 
-  Window* wTask = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_TASK"));
+  Window* wTask = LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_STATUS_TASK"));
   assert(wTask);
 
-  Window* wRules = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_RULES"));
+  Window* wRules = LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_STATUS_RULES"));
   assert(wRules);
 
-  Window* wTimes = LoadWindow(CallBackTable, wf, *wTabBar, _T("IDR_XML_STATUS_TIMES"));
+  Window* wTimes = LoadWindow(NULL, wf, *wTabBar, _T("IDR_XML_STATUS_TIMES"));
   assert(wTimes);
 
   wTabBar->AddClient(wFlight, _T("Flight"), false, FlightIcon, NULL,

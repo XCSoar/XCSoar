@@ -165,39 +165,6 @@ FormKeyDown(gcc_unused WndForm &Sender, unsigned key_code)
   }
 }
 
-static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceColoursClicked),
-  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceModeClicked),
-  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceDisplay),
-  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceWarning),
-  DeclareCallBackEntry(OnNextClicked),
-  DeclareCallBackEntry(OnPrevClicked),
-  DeclareCallBackEntry(SymbolsConfigPanel::OnTrailLength),
-  DeclareCallBackEntry(TerrainDisplayConfigPanel::OnEnableTerrain),
-  DeclareCallBackEntry(RouteConfigPanel::OnRouteMode),
-  DeclareCallBackEntry(RouteConfigPanel::OnReachMode),
-  DeclareCallBackEntry(TaskDefaultsConfigPanel::OnStartType),
-  DeclareCallBackEntry(TaskDefaultsConfigPanel::OnFinishType),
-  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAPort),
-  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBPort),
-  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAData),
-  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBData),
-  DeclareCallBackEntry(MapDisplayConfigPanel::OnShiftTypeData),
-  DeclareCallBackEntry(PolarConfigPanel::OnLoadInternal),
-  DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
-  DeclareCallBackEntry(PolarConfigPanel::OnExport),
-  DeclareCallBackEntry(PolarConfigPanel::OnFieldData),
-  DeclareCallBackEntry(UnitsConfigPanel::OnLoadPreset),
-  DeclareCallBackEntry(UnitsConfigPanel::OnFieldData),
-  DeclareCallBackEntry(UnitsConfigPanel::OnUTCData),
-  DeclareCallBackEntry(WaypointDisplayConfigPanel::OnRenderingTypeData),
-#ifdef HAVE_TRACKING
-  DeclareCallBackEntry(TrackingConfigPanel::OnLT24Enabled),
-#endif
-  DeclareCallBackEntry(OnUserLevel),
-  DeclareCallBackEntry(NULL)
-};
-
 static void
 setVariables()
 {
@@ -242,6 +209,40 @@ PrepareConfigurationMenu()
                      ARRAY_SIZE(main_menu_captions));
 }
 
+static CallBackTableEntry CallBackTable[] = {
+  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceColoursClicked),
+  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceModeClicked),
+  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceDisplay),
+  DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceWarning),
+  DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
+  DeclareCallBackEntry(SymbolsConfigPanel::OnTrailLength),
+  DeclareCallBackEntry(TerrainDisplayConfigPanel::OnEnableTerrain),
+  DeclareCallBackEntry(RouteConfigPanel::OnRouteMode),
+  DeclareCallBackEntry(RouteConfigPanel::OnReachMode),
+  DeclareCallBackEntry(TaskDefaultsConfigPanel::OnStartType),
+  DeclareCallBackEntry(TaskDefaultsConfigPanel::OnFinishType),
+  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAPort),
+  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBPort),
+  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceAData),
+  DeclareCallBackEntry(DevicesConfigPanel::OnDeviceBData),
+  DeclareCallBackEntry(MapDisplayConfigPanel::OnShiftTypeData),
+  DeclareCallBackEntry(PolarConfigPanel::OnLoadInternal),
+  DeclareCallBackEntry(PolarConfigPanel::OnLoadFromFile),
+  DeclareCallBackEntry(PolarConfigPanel::OnExport),
+  DeclareCallBackEntry(PolarConfigPanel::OnFieldData),
+  DeclareCallBackEntry(UnitsConfigPanel::OnLoadPreset),
+  DeclareCallBackEntry(UnitsConfigPanel::OnFieldData),
+  DeclareCallBackEntry(UnitsConfigPanel::OnUTCData),
+  DeclareCallBackEntry(WaypointDisplayConfigPanel::OnRenderingTypeData),
+#ifdef HAVE_TRACKING
+  DeclareCallBackEntry(TrackingConfigPanel::OnLT24Enabled),
+#endif
+  DeclareCallBackEntry(OnUserLevel),
+  DeclareCallBackEntry(OnCloseClicked),
+  DeclareCallBackEntry(NULL)
+};
+
 static void
 PrepareConfigurationDialog()
 {
@@ -261,8 +262,6 @@ PrepareConfigurationDialog()
   CheckBox *cb = (CheckBox *)wf->FindByName(_T("Expert"));
   cb->set_checked(expert_mode);
   wf->FilterAdvanced(expert_mode);
-
-  ((WndButton *)wf->FindByName(_T("cmdClose")))->SetOnClickNotify(OnCloseClicked);
 
   PrepareConfigurationMenu(); // this will change when we break out the XML into panels
 

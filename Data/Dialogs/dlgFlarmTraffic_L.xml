@@ -1,17 +1,17 @@
 <?xml version="1.0"?>
 
 <Form Caption="FLARM Traffic">
-  <Button Name="cmdDetails" Caption="Details" X="3" Y="103" Width="58" Height="28" />
-  <SymbolButton Name="cmdZoomIn" Caption="+" X="3" Y="133" Width="28" Height="28" />
-  <SymbolButton Name="cmdZoomOut" Caption="-" X="33" Y="133" Width="28" Height="28" />
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="3" Y="163" Width="28" Height="28" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="33" Y="163" Width="28" Height="28" />
-  <Button Name="cmdClose" Caption="Close" X="3" Y="193" Width="58" Height="28" />
+  <Button Name="cmdDetails" Caption="Details" X="3" Y="103" Width="58" Height="28" OnClick="OnDetailsClicked" />
+  <SymbolButton Name="cmdZoomIn" Caption="+" X="3" Y="133" Width="28" Height="28" OnClick="OnZoomInClicked" />
+  <SymbolButton Name="cmdZoomOut" Caption="-" X="33" Y="133" Width="28" Height="28" OnClick="OnZoomOutClicked" />
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="3" Y="163" Width="28" Height="28" OnClick="OnPrevClicked" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="33" Y="163" Width="28" Height="28" OnClick="OnNextClicked" />
+  <Button Name="cmdClose" Caption="Close" X="3" Y="193" Width="58" Height="28" OnClick="OnCloseClicked" />
   <Custom Name="frmRadar" X="65" Y="1" Width="-1" Height="-1" Border="1"
           OnCreate="OnCreateFlarmTrafficControl"/>
 
   <CheckBox Name="NorthUp" Caption="North up" X="3" Y="3" Width="58" Height="28" OnClick="OnNorthUp"/>
   <CheckBox Name="AutoZoom" Caption="Auto. zoom" X="3" Y="33" Width="58" Height="28" OnClick="OnAutoZoom"/>
 
-  <Button Name="cmdSwitchData" Caption="AVG/ALT" X="3" Y="63" Width="58" Height="28" />
+  <Button Name="cmdSwitchData" Caption="AVG/ALT" X="3" Y="63" Width="58" Height="28" OnClick="OnSwitchDataClicked" />
 </Form>
