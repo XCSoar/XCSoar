@@ -7,7 +7,8 @@
     Help="This sets the task point for review.">
     <DataField DataType="enum" OnDataAccess="OnTaskPointData"/>
   </Edit>
-  <SymbolButton Name="btnNext" Caption="&gt;" X="-120" Height="27" OnClick="OnNextClicked" />
+  <SymbolButton Name="btnPrev" Caption="&lt;" X="-120" Y="27" Width="-60" Height="27" OnClick="OnPrevClicked" />
+  <SymbolButton Name="btnNext" Caption="&gt;" X="-60" Y="27" Height="27" OnClick="OnNextClicked" />
 
   <Edit Name="prpRange" Caption="Range" X="-120" Y="-167" Height="22" CaptionWidth="50"
     Help="For AAT tasks, this setting can be used to adjust the target points within the AAT sectors.  Larger values move the target points to produce larger task distances, smaller values move the target points to produce smaller task distances.">

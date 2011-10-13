@@ -49,7 +49,7 @@ using std::max;
 static WndForm *wf = NULL;
 static TargetMapWindow *map;
 static CheckBoxControl *chkbOptimized = NULL;
-static WndSymbolButton *btnNext = NULL;
+static WndSymbolButton *btnNext = NULL, *btnPrev = NULL;
 static unsigned ActiveTaskPointOnEntry = 0;
 static unsigned TaskSize = 0;
 
@@ -320,6 +320,21 @@ OnNextClicked(gcc_unused WndButton &Sender)
 }
 
 static void
+OnPrevClicked(gcc_unused WndButton &Sender)
+{
+  if (target_point > 0)
+    target_point--;
+  else
+    target_point = TaskSize - 1;
+
+  WndProperty *wp = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
+  DataFieldEnum* dfe = (DataFieldEnum*)wp->GetDataField();
+  dfe->Set(target_point);
+  RefreshTargetPoint();
+  wp->RefreshDisplay();
+}
+
+static void
 OnRangeData(DataField *Sender, DataField::DataAccessKind_t Mode)
 {
   DataFieldFloat &df = *(DataFieldFloat *)Sender;
@@ -425,6 +440,7 @@ static CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnOKClicked),
   DeclareCallBackEntry(OnOptimized),
   DeclareCallBackEntry(OnNextClicked),
+  DeclareCallBackEntry(OnPrevClicked),
   DeclareCallBackEntry(NULL)
 };
 
@@ -484,6 +500,13 @@ drawBtnNext()
   if (is_altair())
     // altair already has < and > buttons on WndProperty
     btnNext->set_visible(false);
+
+  btnPrev = (WndSymbolButton*)wf->FindByName(_T("btnNext"));
+  assert(btnPrev != NULL);
+
+  if (is_altair())
+    // altair already has < and > buttons on WndProperty
+    btnPrev->set_visible(false);
 }
 
 void

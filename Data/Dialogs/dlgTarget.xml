@@ -1,7 +1,7 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Caption="Target">
-  <Edit Name="prpTaskPoint" Caption="" Width="-27" Height="27"
+  <Edit Name="prpTaskPoint" Caption="" X="27" Y="0" Width="-27" Height="27"
   Help="This sets the task point for review.">
     <DataField DataType="enum" OnDataAccess="OnTaskPointData"/>
   </Edit>
@@ -32,4 +32,6 @@
   <CheckBox Name="chkbOptimized" Caption="Optimized" X="5" Y="-35" Width="110" Height="35" OnClick="OnOptimized" />
 
   <Button Name="btnOK" Caption="Close" X="-120" Y="-35" Height="35" OnClick="OnOKClicked" />
+
+  <SymbolButton Name="btnPrev" Caption="&lt;" X="0" Y="0" Width="27" Height="27" OnClick="OnPrevClicked" />
 </Form>
