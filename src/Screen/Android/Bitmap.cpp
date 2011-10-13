@@ -53,13 +53,25 @@ LoadResourceTexture(unsigned id)
   return new GLTexture(result[0], result[1], result[2]);
 }
 
+gcc_malloc
+static GLTexture *
+LoadFileTexture(const TCHAR *path)
+{
+  jint result[3];
+  if (!native_view->loadFileTexture(path, result))
+    return NULL;
+
+  return new GLTexture(result[0], result[1], result[2]);
+}
+
 bool
 Bitmap::Reload()
 {
-  assert(id != 0);
+  assert(id != 0 || !pathName.empty());
   assert(texture == NULL);
 
-  texture = LoadResourceTexture(id);
+  texture = (id != 0) ? LoadResourceTexture(id) :
+                        LoadFileTexture(pathName.c_str());
   if (texture == NULL)
     return false;
 
@@ -96,20 +108,27 @@ Bitmap::load_stretch(unsigned id, unsigned zoom)
 bool
 Bitmap::load_file(const TCHAR *path)
 {
-  // XXX
-  return false;
+  assert(path != NULL && *path != _T('\0'));
+
+  reset();
+
+  pathName = path;
+  AddSurfaceListener(*this);
+
+  if (!surface_valid)
+    return true;
+
+  return Reload();
 }
 
 void
 Bitmap::reset()
 {
-  if (id == 0) {
-    assert(texture == NULL);
-    return;
+  if (id != 0 || !pathName.empty()) {
+    RemoveSurfaceListener(*this);
+    id = 0;
+    pathName.clear();
   }
-
-  RemoveSurfaceListener(*this);
-  id = 0;
 
   delete texture;
   texture = NULL;

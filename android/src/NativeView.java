@@ -371,27 +371,13 @@ class NativeView extends SurfaceView
   }
 
   /**
-   * Loads the specified bitmap resource as OpenGL texture.
+   * Loads an Android Bitmap as OpenGL texture.
    *
    * @param result an array of 3 integers: texture id, width, height
    * (all output)
    * @return true on success
    */
-  private boolean loadResourceTexture(String name, int[] result) {
-    /* find the resource */
-    int resourceId = resources.getIdentifier(name, "drawable", "org.xcsoar");
-    if (resourceId == 0) {
-      resourceId = resources.getIdentifier(name, "drawable",
-                                           "org.xcsoar.testing");
-      if (resourceId == 0)
-        return false;
-    }
-
-    /* load the Bitmap from the resource */
-    BitmapFactory.Options opts = new BitmapFactory.Options();
-    opts.inScaled = false;
-
-    Bitmap bmp = BitmapFactory.decodeResource(resources, resourceId, opts);
+  private boolean bitmapToOpenGL(Bitmap bmp, int[] result) {
     if (bmp == null)
       return false;
 
@@ -434,6 +420,49 @@ class NativeView extends SurfaceView
     /* done */
 
     return true;
+  }
+
+  /**
+   * Loads the specified bitmap resource as OpenGL texture.
+   *
+   * @param result an array of 3 integers: texture id, width, height
+   * (all output)
+   * @return true on success
+   */
+  private boolean loadResourceTexture(String name, int[] result) {
+    /* find the resource */
+    int resourceId = resources.getIdentifier(name, "drawable", "org.xcsoar");
+    if (resourceId == 0) {
+      resourceId = resources.getIdentifier(name, "drawable",
+                                           "org.xcsoar.testing");
+      if (resourceId == 0)
+        return false;
+    }
+
+    /* load the Bitmap from the resource */
+    BitmapFactory.Options opts = new BitmapFactory.Options();
+    opts.inScaled = false;
+
+    Bitmap bmp = BitmapFactory.decodeResource(resources, resourceId, opts);
+
+    return bitmapToOpenGL(bmp, result);
+  }
+
+  /**
+   * Loads an image from filesystem as OpenGL texture.
+   *
+   * @param result an array of 3 integers: texture id, width, height
+   * (all output)
+   * @return true on success
+   */
+  private boolean loadFileTexture(String pathName, int[] result) {
+    /* load the Bitmap from filesystem */
+    BitmapFactory.Options opts = new BitmapFactory.Options();
+    opts.inScaled = false;
+
+    Bitmap bmp = BitmapFactory.decodeFile(pathName, opts);
+
+    return bitmapToOpenGL(bmp, result);
   }
 
   private void swap() {

@@ -28,6 +28,7 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 
 #ifdef ENABLE_OPENGL
+#include "Util/tstring.hpp"
 #include "Screen/OpenGL/Surface.hpp"
 #endif
 
@@ -55,7 +56,10 @@ class Bitmap : private NonCopyable
 {
 protected:
 #ifdef ENABLE_OPENGL
+  /** resource id */
   unsigned id;
+  /** filename for external images (id=0) */
+  tstring pathName;
   GLTexture *texture;
   UPixelScalar width, height;
 #elif defined(ENABLE_SDL)

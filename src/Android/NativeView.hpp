@@ -39,6 +39,7 @@ class NativeView {
   jmethodID init_surface_method, deinit_surface_method;
   jmethodID setRequestedOrientationID;
   jmethodID swap_method, load_resource_texture_method;
+  jmethodID load_file_texture_method;
 
 public:
   /**
@@ -68,6 +69,8 @@ public:
     swap_method = env->GetMethodID(cls, "swap", "()V");
     load_resource_texture_method = env->GetMethodID(cls, "loadResourceTexture",
                                                     "(Ljava/lang/String;[I)Z");
+    load_file_texture_method = env->GetMethodID(cls, "loadFileTexture",
+                                                "(Ljava/lang/String;[I)Z");
   }
 
   unsigned get_width() const { return width; }
@@ -100,6 +103,20 @@ public:
 
     bool success = env->CallBooleanMethod(obj, load_resource_texture_method,
                                           name2.get(), result2);
+    if (success)
+      env->GetIntArrayRegion(result2, 0, 3, result);
+
+    env->DeleteLocalRef(result2);
+
+    return success;
+  }
+
+  bool loadFileTexture(const char *pathName, jint *result) {
+    Java::String pathName2(env, pathName);
+    jintArray result2 = env->NewIntArray(3);
+
+    bool success = env->CallBooleanMethod(obj, load_file_texture_method,
+                                          pathName2.get(), result2);
     if (success)
       env->GetIntArrayRegion(result2, 0, 3, result);
 
