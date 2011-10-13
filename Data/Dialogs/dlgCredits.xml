@@ -1,11 +1,10 @@
 <?xml version="1.0"?>
 
 <Form Caption="Configuration">
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="37" Y="-30" Width="35" Height="28" OnClick="OnNext" />
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-30" Width="35" Height="28" OnClick="OnPrev" />
-  <Button Name="cmdClose" Caption="Close" X="-62" Y="-30" Width="60" Height="28" OnClick="OnClose" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="60" Y="-35" Width="60" Height="35" OnClick="OnNext" />
+  <Button Name="cmdClose" Caption="Close" X="-120" Y="-35" Height="35" OnClick="OnClose" />
 
-  <Tabbed Name="tab" X="0" Y="0" Height="-32">
+  <Tabbed Name="tab" X="0" Y="0" Height="-35">
     <Panel Name="frmInfo">
       <Canvas OnPaint="OnLogoPaint" />
     </Panel>
@@ -18,4 +17,6 @@
       <Edit Name="prpLicense" ReadOnly="1" MultiLine="1" />
     </Panel>
   </Tabbed>
+
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="-35" Width="60" Height="35" OnClick="OnPrev" />
 </Form>

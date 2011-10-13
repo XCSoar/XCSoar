@@ -1,9 +1,9 @@
 <?xml version="1.0"?>
 
 <Form Caption="XCSoar">
-  <SymbolButton Name="cmdPrev" Caption="&lt;" X="2" Y="-60" Width="29" Height="28" OnClick="OnPrev" />
-  <SymbolButton Name="cmdNext" Caption="&gt;" X="33" Y="-60" Width="29" Height="28" OnClick="OnNext" />
-  <Button Name="cmdClose" Caption="Close" X="2" Y="-30" Width="60" Height="28" OnClick="OnClose" />
+  <SymbolButton Name="cmdNext" Caption="&gt;" X="0" Y="-70" Width="60" Height="35" OnClick="OnNext" />
+
+  <Button Name="cmdClose" Caption="Close" X="0" Y="-35" Width="60" Height="35" OnClick="OnClose" />
 
   <Tabbed Name="tab" X="64" Y="2" Width="-2" Height="-2">
     <Panel Name="frmInfo">
@@ -18,4 +18,6 @@
       <Edit Name="prpLicense" ReadOnly="1" MultiLine="1" />
     </Panel>
   </Tabbed>
+
+  <SymbolButton Name="cmdPrev" Caption="&lt;" X="0" Y="-105" Width="60" Height="35" OnClick="OnPrev" />
 </Form>
