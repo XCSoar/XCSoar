@@ -327,6 +327,12 @@ ContainerWindow::on_paint(Canvas &canvas)
   }
 
   assert(full == NULL);
+
+  if (HasBorder()) {
+    canvas.black_pen();
+    canvas.hollow_brush();
+    canvas.rectangle(0, 0, get_width() - 1, get_height() - 1);
+  }
 }
 
 void

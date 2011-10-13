@@ -54,13 +54,14 @@ protected:
   bool enabled;
   bool m_tab_stop, m_control_parent;
   bool double_clicks;
+  bool has_border;
   int text_style;
 
 public:
   WindowStyle()
     :visible(true), enabled(true),
      m_tab_stop(false), m_control_parent(false),
-     double_clicks(false),
+     double_clicks(false), has_border(false),
      text_style(0) {}
 
 #else /* USE_GDI */
@@ -131,6 +132,8 @@ public:
   void border() {
 #ifdef USE_GDI
     style |= WS_BORDER;
+#else
+    has_border = true;
 #endif
   }
 
@@ -205,6 +208,7 @@ private:
   bool enabled;
   bool focused;
   bool capture;
+  bool has_border;
 #else
   HWND hWnd;
 
@@ -221,7 +225,7 @@ public:
   Window()
     :parent(NULL), width(0), height(0),
      font(NULL),
-     visible(true), focused(false), capture(false),
+     visible(true), focused(false), capture(false), has_border(false),
      double_clicks(false) {}
 #else
   Window():hWnd(NULL), prev_wndproc(NULL),
@@ -281,6 +285,12 @@ protected:
 #ifdef USE_GDI
   bool get_custom_painting() const {
     return custom_painting;
+  }
+#endif
+
+#ifndef USE_GDI
+  bool HasBorder() const {
+    return has_border;
   }
 #endif
 

@@ -54,6 +54,7 @@ Window::set(ContainerWindow *parent,
   control_parent = window_style.m_control_parent;
   visible = window_style.visible;
   enabled = window_style.enabled;
+  has_border = window_style.has_border;
   text_style = window_style.text_style;
 
   if (parent != NULL)
