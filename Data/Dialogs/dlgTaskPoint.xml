@@ -2,8 +2,8 @@
 
 <Form Caption="Waypoint">
 
-  <Button Name="butPrevious" Caption="Previous" X="3" Y="2" Width="75" Height="35" OnClick="OnPreviousClicked"/>
-  <Button Name="butNext" Caption="Next" X="80" Y="2" Width="76" Height="35" OnClick="OnNextClicked"/>
+  <SymbolButton Name="butPrevious" Caption="&lt;" X="3" Y="2" Width="75" Height="35" OnClick="OnPreviousClicked"/>
+  <SymbolButton Name="butNext" Caption="&gt;" X="80" Y="2" Width="76" Height="35" OnClick="OnNextClicked"/>
   <Button Caption="Close" X="158" Y="2" Width="79" Height="35" OnClick="OnCloseClicked"/>
 
   <Panel Name="frmPortrait" X="2" Y="55" Width="238" Height="251">

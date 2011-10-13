@@ -1,8 +1,8 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Caption="Waypoint">
-  <Button Name="butPrevious" Caption="Previous" X="2" Y="-111" Width="75" Height="35" OnClick="OnPreviousClicked"/>
-  <Button Name="butNext" Caption="Next" X="2" Y="-74" Width="75" Height="35" OnClick="OnNextClicked"/>
+  <SymbolButton Name="butPrevious" Caption="&lt;" X="2" Y="-111" Width="75" Height="35" OnClick="OnPreviousClicked"/>
+  <SymbolButton Name="butNext" Caption="&gt;" X="2" Y="-74" Width="75" Height="35" OnClick="OnNextClicked"/>
   <Button Caption="Close" X="2" Y="-37" Width="75" Height="35" OnClick="OnCloseClicked"/>
 
   <Panel Name="frmLandscape" X="80" Y="2" Width="238" Height="251">
