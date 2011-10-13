@@ -130,4 +130,7 @@ PlaneGlue::Synchronize(const Plane &plane, SETTINGS_COMPUTER &settings,
   gp.SetWingArea(plane.wing_area);
 
   gp.Update();
+  settings.plane.competition_id = plane.competition_id;
+  settings.plane.registration = plane.registration;
+  settings.plane.type = plane.type;
 }
