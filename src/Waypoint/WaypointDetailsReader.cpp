@@ -100,7 +100,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
 
   TCHAR *TempString;
   while ((TempString = reader.read()) != NULL) {
-    if (TempString[0] == '[') { // Look for start
+    if (TempString[0] == _T('[')) { // Look for start
       if (inDetails)
         SetAirfieldDetails(way_points, Name, Details);
 
@@ -108,7 +108,7 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
 
       // extract name
       for (i = 1; i < 201; i++) {
-        if (TempString[i] == ']')
+        if (TempString[i] == _T(']'))
           break;
 
         Name[i - 1] = TempString[i];
