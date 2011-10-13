@@ -3,17 +3,17 @@
 <Form Caption="Team Code">
   <Button Name="cmdClose" Caption="Close" X="172" Y="270" Width="60" Height="28" OnClick="OnCloseClicked" />
   <Button Caption="Flarm Lock" X="8" Y="240" Width="110" Height="28" OnClick="OnFlarmLockClicked" />
-  <Button Name="cmdSetCode" Caption="Set Code" X="8" Y="270" Width="110"  Height="28" />
+  <Button Name="cmdSetCode" Caption="Set Code" X="8" Y="270" Width="110" Height="28" />
   <Button Name="cmdSetWaypoint" Caption="Set WP" X="172" Y="240" Width="60" Height="28" />
 
   <Edit Name="prpOwnCode" Caption="Own code" X="2" Y="15" Width="200" Height="22" CaptionWidth="115" ReadOnly="1" />
-  <Edit Name="prpMateCode" Caption="Mate code" X="2"  Width="200" Height="22" CaptionWidth="115" ReadOnly="1" />
-  <Edit Name="prpRange" Caption="Range" X="2"  Width="200" Height="22" CaptionWidth="115" ReadOnly="1">
+  <Edit Name="prpMateCode" Caption="Mate code" X="2" Width="200" Height="22" CaptionWidth="115" ReadOnly="1" />
+  <Edit Name="prpRange" Caption="Range" X="2" Width="200" Height="22" CaptionWidth="115" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" ReadOnly="1" />
   </Edit>
-  <Edit Name="prpBearing" Caption="Bearing" X="2"  Width="200" Height="22" CaptionWidth="115" ReadOnly="1">
+  <Edit Name="prpBearing" Caption="Bearing" X="2" Width="200" Height="22" CaptionWidth="115" ReadOnly="1">
     <DataField DataType="double" DisplayFormat="%.0f°" EditFormat="%.0f" ReadOnly="1" />
   </Edit>
-  <Edit Name="prpRelBearing" Caption="Rel. bearing" X="2"  Width="200" Height="22" CaptionWidth="115" ReadOnly="1" />
-  <Edit Name="prpFlarmLock" Caption="Flarm lock" X="2"  Width="200" Height="22" CaptionWidth="115" ReadOnly="1" />
+  <Edit Name="prpRelBearing" Caption="Rel. bearing" X="2" Width="200" Height="22" CaptionWidth="115" ReadOnly="1" />
+  <Edit Name="prpFlarmLock" Caption="Flarm lock" X="2" Width="200" Height="22" CaptionWidth="115" ReadOnly="1" />
 </Form>

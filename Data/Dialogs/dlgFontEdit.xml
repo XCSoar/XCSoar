@@ -14,7 +14,7 @@
   </Edit>
 
   <Edit Name="prpFontItalic" Caption="Italic" X="2" Width="235" Height="22" CaptionWidth="78" Help="Italic font">
-    <DataField DataType="boolean"  OnDataAccess="OnData"/>
+    <DataField DataType="boolean" OnDataAccess="OnData"/>
   </Edit>
 
   <Label Name="prpFontSample" Caption="My Sample" X="2" Width="-2" Height="-40"/>

@@ -5,7 +5,7 @@
 
   <Button Name="cmdAcknowledge" Caption="Ack Day" X="167" Y="2" Width="70" Height="28" OnClick="OnAcknowledgeClicked" />
 
-  <Edit Name="prpName" Caption="Name" X="2" Y="40" Width="238" Height="34" CaptionWidth="50" ReadOnly="1"  MultiLine="1" />
+  <Edit Name="prpName" Caption="Name" X="2" Y="40" Width="238" Height="34" CaptionWidth="50" ReadOnly="1" MultiLine="1" />
 
   <Edit Name="prpRadio" Caption="Radio" X="2" Width="238" Height="22" CaptionWidth="50" ReadOnly="1" />
 

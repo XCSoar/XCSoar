@@ -41,12 +41,12 @@
         </Edit>
 
         <Edit Name="prpOZSectorInnerRadius" Caption="Inner radius" Height="25" CaptionWidth="80" Help="Inner radius of the OZ sector.">
-          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.0" Max="100" Step="0.5" Fine="1" 
+          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.0" Max="100" Step="0.5" Fine="1"
            OnDataAccess="OnOZData"/>
         </Edit>
 
       </Panel>
-        <Button Name="cmdOptionalStarts" Caption="Details" X="2" Y="139" Width="180" Height="25" 
+        <Button Name="cmdOptionalStarts" Caption="Details" X="2" Y="139" Width="180" Height="25"
   	     OnClick="OnOptionalStartsClicked"/>
       
     </Panel>

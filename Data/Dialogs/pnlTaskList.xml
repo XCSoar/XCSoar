@@ -3,10 +3,10 @@
 <Panel Name="frmBrowse" Border="0">
   <Tabbed Name="tabbedManage" X="0" Y="76">
     <Panel Name="frmManageSub">
-      <Button Name="cmdNewTask" Caption="New Task" X="31" Y="12" Width="84" Height="60"  OnClick="pnlTaskList::OnNewTaskClicked"/>
-      <Button Name="cmdDeclare" Caption="Declare" X="125" Y="12" Width="84" Height="60"  OnClick="pnlTaskList::OnDeclareClicked"/>
-      <Button Name="cmdBrowse" Caption="Browse" X="31" Y="81" Width="84" Height="60"  OnClick="pnlTaskList::OnBrowseClicked"/>
-      <Button Name="cmdSave" Caption="Save" X="125" Y="81" Width="84" Height="60"  OnClick="pnlTaskList::OnSaveClicked"/>
+      <Button Name="cmdNewTask" Caption="New Task" X="31" Y="12" Width="84" Height="60" OnClick="pnlTaskList::OnNewTaskClicked"/>
+      <Button Name="cmdDeclare" Caption="Declare" X="125" Y="12" Width="84" Height="60" OnClick="pnlTaskList::OnDeclareClicked"/>
+      <Button Name="cmdBrowse" Caption="Browse" X="31" Y="81" Width="84" Height="60" OnClick="pnlTaskList::OnBrowseClicked"/>
+      <Button Name="cmdSave" Caption="Save" X="125" Y="81" Width="84" Height="60" OnClick="pnlTaskList::OnSaveClicked"/>
     </Panel>
 
     <Panel Name="frmBrowseSub">

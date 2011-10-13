@@ -8,7 +8,7 @@
   <Panel Name="frmLandscape" X="80" Y="2" Width="238" Height="251">
 
     <Panel Name="frmLocation" X="0" Y="0" Width="242" Height="68" Border="1">
-  	  <Label Name="lblLocation" Caption="Location" X="2" Y="2" Width="230" Height="25"/>
+    <Label Name="lblLocation" Caption="Location" X="2" Y="2" Width="230" Height="25"/>
       <Button Name="butDetails" Caption="Details" X="2" Y="28" Width="73" Height="35" OnClick="OnDetailsClicked"/>
       <Button Name="butRemove" Caption="Remove" X="77" Y="28" Width="73" Height="35" OnClick="OnRemoveClicked"/>
       <Button Name="butRelocate" Caption="Relocate" X="152" Y="28" Width="81" Height="35" OnClick="OnRelocateClicked"/>
@@ -45,11 +45,11 @@
         </Edit>
 
         <Edit Name="prpOZSectorInnerRadius" Caption="Inner radius" Height="25" CaptionWidth="80" Help="Inner radius of the OZ sector.">
-          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.0" Max="100" Step="0.5" Fine="1" 
+          <DataField DataType="double" DisplayFormat="%.1f %s" EditFormat="%.1f" Min="0.0" Max="100" Step="0.5" Fine="1"
            OnDataAccess="OnOZData"/>
         </Edit>
       </Panel>
-        <Button Name="cmdOptionalStarts" Caption="Details" X="2" Y="125" Width="180" Height="25" 
+        <Button Name="cmdOptionalStarts" Caption="Details" X="2" Y="125" Width="180" Height="25"
   	OnClick="OnOptionalStartsClicked"/>
       
     </Panel>
