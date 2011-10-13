@@ -36,11 +36,6 @@
     <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
   </Edit>
 
-  <aEdit Name="prpSpeedAchieved" Caption="V ach." X="-120" Height="22" CaptionWidth="50" ReadOnly="1" min="0" max="2000" step="10"
-    Help="AA Speed - Assigned Area Task average speed achievable around target points remaining in minimum AAT time.">
-    <DataField DataType="double" DisplayFormat="%.0f %s" EditFormat="%.1f" readonly="1"/>
-  </aEdit>
-
   <Button Name="btnOK" Caption="Close" X="-118" Y="-34" Width="-2" Height="32" OnClick="OnOKClicked" />
 
 </Form>
