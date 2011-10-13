@@ -481,21 +481,9 @@ drawBtnNext()
   btnNext = (WndSymbolButton*)wf->FindByName(_T("btnNext"));
   assert(btnNext != NULL);
 
-  WndProperty * wpTaskPoint = (WndProperty*)wf->FindByName(_T("prpTaskPoint"));
-  assert(wpTaskPoint != NULL);
-
-  if (is_altair()) { // altair already has < and > buttons on WndProperty
+  if (is_altair())
+    // altair already has < and > buttons on WndProperty
     btnNext->set_visible(false);
-  } else {
-    PixelRect rcP = wpTaskPoint->get_position();
-    rcP.right -= btnNext->get_width() + 1;
-
-    wpTaskPoint->move(rcP.left, rcP.top,
-                      rcP.right - rcP.left,
-                      rcP.bottom - rcP.top);
-    const PixelRect rcB = btnNext->get_position();
-    btnNext->move(rcP.right + 1, rcB.top);
-  }
 }
 
 void
