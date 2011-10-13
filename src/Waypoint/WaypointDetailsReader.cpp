@@ -127,10 +127,8 @@ ParseAirfieldDetails(Waypoints &way_points, TLineReader &reader,
     }
   }
 
-  if (inDetails) {
+  if (inDetails)
     SetAirfieldDetails(way_points, Name, Details);
-    Details.clear();
-  }
 }
 
 /**
