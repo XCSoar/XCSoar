@@ -1,21 +1,16 @@
 <?xml version="1.0" encoding="ISO-8859-1"?>
 
 <Form Caption="Waypoint">
+  <Panel Name="frmPortrait" X="2" Y="2" Width="-2" Height="-37">
 
-  <SymbolButton Name="butPrevious" Caption="&lt;" X="3" Y="2" Width="75" Height="35" OnClick="OnPreviousClicked"/>
-  <SymbolButton Name="butNext" Caption="&gt;" X="80" Y="2" Width="76" Height="35" OnClick="OnNextClicked"/>
-  <Button Caption="Close" X="158" Y="2" Width="79" Height="35" OnClick="OnCloseClicked"/>
-
-  <Panel Name="frmPortrait" X="2" Y="55" Width="238" Height="251">
-
-    <Panel Name="frmLocation" X="0" Y="0" Width="242" Height="68" Border="1">
+    <Panel Name="frmLocation" Height="68" Border="1">
   	  <Label Name="lblLocation" Caption="Location" X="2" Y="2" Width="230" Height="25"/>
       <Button Name="butDetails" Caption="Details" X="2" Y="28" Width="73" Height="35" OnClick="OnDetailsClicked"/>
       <Button Name="butRemove" Caption="Remove" X="77" Y="28" Width="77" Height="35" OnClick="OnRemoveClicked"/>
       <Button Name="butRelocate" Caption="Relocate" X="156" Y="28" Width="78" Height="35" OnClick="OnRelocateClicked"/>
     </Panel>
 
-    <Panel Name="frmType" X="0" Y="67" Width="242" Height="200" Border="1">
+    <Panel Name="frmType" Y="67" Border="1">
       <Label Name="lblType" Caption="Type" X="2" Y="3" Width="144" Height="38"/>
       <Button Name="butType" Caption="Change Type" X="153" Y="3" Width="81" Height="35" OnClick="OnTypeClicked"/>
       <Canvas Name="frmTaskView" X="2" Y="42" Width="90" Height="92" Border="1" OnPaint="OnTaskPaint" />
@@ -58,4 +53,7 @@
 
   </Panel>
 
+  <SymbolButton Name="butPrevious" Caption="&lt;" X="0" Y="-35" Width="60" Height="35" OnClick="OnPreviousClicked"/>
+  <SymbolButton Name="butNext" Caption="&gt;" X="60" Y="-35" Width="60" Height="35" OnClick="OnNextClicked"/>
+  <Button Caption="Close" X="120" Y="-35" Height="35" OnClick="OnCloseClicked"/>
 </Form>
