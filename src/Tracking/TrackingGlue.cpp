@@ -117,9 +117,9 @@ TrackingGlue::Tick()
 
     state.session_id = LiveTrack24::GenerateSessionID(state.user_id);
 
-    if (!StartTracking(state.session_id, copy.username, copy.password,
-                       tracking_interval,
-                       LiveTrack24::VT_GLIDER, _T("XCSoar"))) {
+    if (!LiveTrack24::StartTracking(state.session_id, copy.username,
+                                    copy.password, tracking_interval,
+                                    LiveTrack24::VT_GLIDER, _T("XCSoar"))) {
       state.user_id = 0;
       mutex.Lock();
       return;
