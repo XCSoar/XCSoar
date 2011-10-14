@@ -46,17 +46,17 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 {
   ScopeLock protect(mutex);
 
-  if (_settings.livetrack24.username != settings.username ||
-      _settings.livetrack24.password != settings.password)
+  if (_settings.livetrack24.username != settings.livetrack24.username ||
+      _settings.livetrack24.password != settings.livetrack24.password)
     state.user_id = 0;
 
-  settings = _settings.livetrack24;
+  settings = _settings;
 }
 
 void
 TrackingGlue::OnTimer(const NMEAInfo &basic)
 {
-  if (!settings.enabled)
+  if (!settings.livetrack24.enabled)
     /* disabled by configuration */
     /* note that we are allowed to read "settings" without locking the
        mutex, because the background thread never writes to this
@@ -99,11 +99,11 @@ TrackingGlue::OnTimer(const NMEAInfo &basic)
 void
 TrackingGlue::Tick()
 {
-  if (!settings.enabled)
+  if (!settings.livetrack24.enabled)
     /* settings have been cleared meanwhile, bail out */
     return;
 
-  const LiveTrack24Settings copy = this->settings;
+  const LiveTrack24Settings copy = this->settings.livetrack24;
 
   mutex.Unlock();
 

@@ -47,7 +47,7 @@ struct LiveTrack24State
 class TrackingGlue : protected StandbyThread {
   PeriodClock clock;
 
-  LiveTrack24Settings settings;
+  TrackingSettings settings;
   LiveTrack24State state;
 
   BrokenDateTime date_time;
