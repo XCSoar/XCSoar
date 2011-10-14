@@ -30,6 +30,7 @@ Copyright_License {
 #include "Plane/PlaneFileGlue.hpp"
 #include "OS/FileUtil.hpp"
 #include "OS/PathName.hpp"
+#include "Compatibility/path.h"
 #include "LocalPath.hpp"
 #include "MainWindow.hpp"
 #include "Components.hpp"
@@ -209,7 +210,7 @@ EditClicked(gcc_unused WndButton &button)
     if (filename != old_filename) {
       StaticString<MAX_PATH> path;
       DirName(old_path, path.buffer());
-      path += _T("/");
+      path += _T(DIR_SEPARATOR_S);
       path += filename;
 
       if (File::Exists(path)) {
