@@ -57,7 +57,7 @@
   </Panel>
   
   <Panel Y="-30">
-    <Button Caption="Okay" Y="0" Width="120" OnClick="OkayClicked" />
+    <Button Caption="OK" Y="0" Width="120" OnClick="OKClicked" />
     <Button Caption="Cancel" X="-120" Y="0" OnClick="CancelClicked" />
   </Panel>
 </Form>

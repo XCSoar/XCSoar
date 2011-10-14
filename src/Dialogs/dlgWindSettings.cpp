@@ -43,13 +43,13 @@ OnCancel(gcc_unused WndButton &Sender)
 }
 
 static void
-OnOkay(gcc_unused WndButton &Sender)
+OnOK(gcc_unused WndButton &Sender)
 {
   wf->SetModalResult(mrOK);
 }
 
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OnOkay),
+  DeclareCallBackEntry(OnOK),
   DeclareCallBackEntry(OnCancel),
   DeclareCallBackEntry(NULL)
 };

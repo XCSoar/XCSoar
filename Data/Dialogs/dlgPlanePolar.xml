@@ -63,8 +63,7 @@
   <Panel Y="-30">
     <Button Caption="List" X="0" Y="0" Width="55" OnClick="ListClicked" />
     <Button Caption="Import" X="55" Y="0" Width="55" OnClick="ImportClicked" />
-    
-    <Button Caption="Okay" X="-110" Y="0" Width="-55" OnClick="OkayClicked" />
+    <Button Caption="OK" X="-110" Y="0" Width="-55" OnClick="OKClicked" />
     <Button Caption="Cancel" X="-55" Y="0" OnClick="CancelClicked" />
   </Panel>
 </Form>

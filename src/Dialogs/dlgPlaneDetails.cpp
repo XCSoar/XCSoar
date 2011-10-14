@@ -79,7 +79,7 @@ UpdatePlane()
 }
 
 static void
-OkayClicked(gcc_unused WndButton &button)
+OKClicked(gcc_unused WndButton &button)
 {
   dialog->SetModalResult(mrOK);
 }
@@ -132,7 +132,7 @@ PolarClicked(gcc_unused WndButton &button)
 }
 
 static CallBackTableEntry CallBackTable[] = {
-  DeclareCallBackEntry(OkayClicked),
+  DeclareCallBackEntry(OKClicked),
   DeclareCallBackEntry(CancelClicked),
   DeclareCallBackEntry(RegistrationClicked),
   DeclareCallBackEntry(CompetitionIDClicked),
