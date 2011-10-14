@@ -28,6 +28,7 @@ Copyright_License {
 void
 LiveTrack24Settings::SetDefaults()
 {
+  enabled = false;
   username.clear();
   password.clear();
 }

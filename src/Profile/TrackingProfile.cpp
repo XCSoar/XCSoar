@@ -31,6 +31,7 @@ Copyright_License {
 void
 Profile::Load(LiveTrack24Settings &settings)
 {
+  Get(ProfileLiveTrack24Enabled, settings.enabled);
   Get(ProfileLiveTrack24Username, settings.username);
   Get(ProfileLiveTrack24Password, settings.password);
 }

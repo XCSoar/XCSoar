@@ -31,15 +31,11 @@ Copyright_License {
 #include "Util/StaticString.hpp"
 
 struct LiveTrack24Settings {
+  bool enabled;
   StaticString<64> username;
   StaticString<64> password;
 
   void SetDefaults();
-
-  gcc_pure
-  bool IsDefined() const {
-    return !username.empty();
-  }
 };
 
 struct TrackingSettings {

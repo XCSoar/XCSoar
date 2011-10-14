@@ -283,5 +283,6 @@ const TCHAR szProfileAircraftSymbol[] = _T("AircraftSymbol");
 
 const TCHAR szProfileFlarmLocation[] = _T("FlarmLocation");
 
+extern const TCHAR ProfileLiveTrack24Enabled[] = _T("LiveTrack24Enabled");
 extern const TCHAR ProfileLiveTrack24Username[] = _T("LiveTrack24Username");
 extern const TCHAR ProfileLiveTrack24Password[] = _T("LiveTrack24Password");

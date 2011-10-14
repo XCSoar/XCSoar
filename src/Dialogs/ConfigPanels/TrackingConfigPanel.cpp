@@ -54,8 +54,8 @@ TrackingConfigPanel::Init(WndForm *_form, const TrackingSettings &settings)
   form = _form;
 
   CheckBox *cb = (CheckBox *)form->FindByName(_T("LT24Enabled"));
-  cb->set_checked(settings.livetrack24.IsDefined());
-  SetEnabled(cb->get_checked());
+  cb->set_checked(settings.livetrack24.enabled);
+  SetEnabled(settings.livetrack24.enabled);
 
   LoadFormProperty(*form, _T("LT24Username"), settings.livetrack24.username);
   LoadFormProperty(*form, _T("LT24Password"), settings.livetrack24.password);
@@ -64,21 +64,18 @@ TrackingConfigPanel::Init(WndForm *_form, const TrackingSettings &settings)
 bool
 TrackingConfigPanel::Save(TrackingSettings &settings)
 {
-  bool changed = false;
-
   CheckBox *cb = (CheckBox *)form->FindByName(_T("LT24Enabled"));
-  if (cb->get_checked()) {
-    changed |= SaveFormProperty(*form, _T("LT24Username"),
-                                settings.livetrack24.username);
-    changed |= SaveFormProperty(*form, _T("LT24Password"),
-                                settings.livetrack24.password);
-  } else {
-    changed = settings.livetrack24.IsDefined();
-    settings.livetrack24.username.clear();
-    settings.livetrack24.password.clear();
-  }
+
+  bool changed = (cb->get_checked() != settings.livetrack24.enabled);
+  settings.livetrack24.enabled = cb->get_checked();
+
+  changed |= SaveFormProperty(*form, _T("LT24Username"),
+                              settings.livetrack24.username);
+  changed |= SaveFormProperty(*form, _T("LT24Password"),
+                              settings.livetrack24.password);
 
   if (changed) {
+    Profile::Set(ProfileLiveTrack24Enabled, settings.livetrack24.enabled);
     Profile::Set(ProfileLiveTrack24Username, settings.livetrack24.username);
     Profile::Set(ProfileLiveTrack24Password, settings.livetrack24.password);
   }
