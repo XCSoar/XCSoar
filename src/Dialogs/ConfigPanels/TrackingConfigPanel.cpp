@@ -53,6 +53,8 @@ TrackingConfigPanel::Init(WndForm *_form, const TrackingSettings &settings)
   assert(_form != NULL);
   form = _form;
 
+  LoadFormProperty(*form, _T("TrackingInterval"), settings.interval);
+
   CheckBox *cb = (CheckBox *)form->FindByName(_T("LT24Enabled"));
   cb->set_checked(settings.livetrack24.enabled);
   SetEnabled(settings.livetrack24.enabled);
@@ -74,7 +76,11 @@ TrackingConfigPanel::Save(TrackingSettings &settings)
   changed |= SaveFormProperty(*form, _T("LT24Password"),
                               settings.livetrack24.password);
 
+  changed |= SaveFormProperty(*form, _T("TrackingInterval"), settings.interval);
+
   if (changed) {
+    Profile::Set(ProfileTrackingInterval, settings.interval);
+
     Profile::Set(ProfileLiveTrack24Enabled, settings.livetrack24.enabled);
     Profile::Set(ProfileLiveTrack24Username, settings.livetrack24.username);
     Profile::Set(ProfileLiveTrack24Password, settings.livetrack24.password);
