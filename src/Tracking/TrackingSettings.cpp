@@ -36,6 +36,8 @@ LiveTrack24Settings::SetDefaults()
 void
 TrackingSettings::SetDefaults()
 {
+  interval = 60;
+
   livetrack24.SetDefaults();
 }
 

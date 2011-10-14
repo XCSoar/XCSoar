@@ -25,8 +25,6 @@ Copyright_License {
 #include "NMEA/Info.hpp"
 #include "Units/Units.hpp"
 
-static const unsigned tracking_interval_s = 60;
-
 void
 TrackingGlue::StopAsync()
 {
@@ -67,7 +65,7 @@ TrackingGlue::OnTimer(const NMEAInfo &basic)
     /* can't track without a valid GPS fix */
     return;
 
-  if (!clock.check_update(tracking_interval_s * 1000))
+  if (!clock.check_update(settings.interval * 1000))
     /* later */
     return;
 
@@ -103,6 +101,7 @@ TrackingGlue::Tick()
     /* settings have been cleared meanwhile, bail out */
     return;
 
+  unsigned tracking_interval = settings.interval;
   const LiveTrack24Settings copy = this->settings.livetrack24;
 
   mutex.Unlock();
@@ -119,7 +118,7 @@ TrackingGlue::Tick()
     state.session_id = LiveTrack24::GenerateSessionID(state.user_id);
 
     if (!StartTracking(state.session_id, copy.username, copy.password,
-                       tracking_interval_s,
+                       tracking_interval,
                        LiveTrack24::VT_GLIDER, _T("XCSoar"))) {
       state.user_id = 0;
       mutex.Lock();

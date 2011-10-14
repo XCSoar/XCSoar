@@ -39,6 +39,9 @@ struct LiveTrack24Settings {
 };
 
 struct TrackingSettings {
+  /** Minimum time between two position updates (in seconds) */
+  unsigned interval;
+
   LiveTrack24Settings livetrack24;
 
   void SetDefaults();
