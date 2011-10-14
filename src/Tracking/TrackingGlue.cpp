@@ -27,8 +27,6 @@ Copyright_License {
 
 static const unsigned tracking_interval_s = 60;
 
-struct NMEAInfo;
-
 void
 TrackingGlue::StopAsync()
 {

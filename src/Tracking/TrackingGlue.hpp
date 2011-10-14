@@ -24,10 +24,11 @@ Copyright_License {
 #ifndef XCSOAR_TRACK_THREAD_HPP
 #define XCSOAR_TRACK_THREAD_HPP
 
-#include "Tracking/TrackingSettings.hpp"
+#include "Tracking/Features.hpp"
 
 #ifdef HAVE_TRACKING
 
+#include "Tracking/TrackingSettings.hpp"
 #include "Thread/StandbyThread.hpp"
 #include "Tracking/LiveTrack24.hpp"
 #include "PeriodClock.hpp"
