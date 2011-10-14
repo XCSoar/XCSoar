@@ -39,7 +39,6 @@ struct NMEAInfo;
 
 struct LiveTrack24State
 {
-  LiveTrack24::UserID user_id;
   LiveTrack24::SessionID session_id;
   unsigned packet_id;
 };
