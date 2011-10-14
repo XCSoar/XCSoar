@@ -367,7 +367,7 @@ ProcessTimer::Process(void)
 #ifdef HAVE_TRACKING
   if (tracking != NULL && CommonInterface::Basic().gps.real) {
     tracking->SetSettings(CommonInterface::SettingsComputer().tracking);
-    tracking->OnTimer(CommonInterface::Basic());
+    tracking->OnTimer(CommonInterface::Basic(), CommonInterface::Calculated());
   }
 #endif
 }

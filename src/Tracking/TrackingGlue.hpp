@@ -36,6 +36,7 @@ Copyright_License {
 #include "DateTime.hpp"
 
 struct NMEAInfo;
+struct DerivedInfo;
 
 struct LiveTrack24State
 {
@@ -54,13 +55,14 @@ class TrackingGlue : protected StandbyThread {
   unsigned altitude;
   unsigned ground_speed;
   Angle track;
+  bool flying;
 
 public:
   void StopAsync();
   void WaitStopped();
 
   void SetSettings(const TrackingSettings &_settings);
-  void OnTimer(const NMEAInfo &basic);
+  void OnTimer(const NMEAInfo &basic, const DerivedInfo &calculated);
 
 protected:
   virtual void Tick();

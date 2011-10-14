@@ -23,6 +23,7 @@ Copyright_License {
 
 #include "TrackingGlue.hpp"
 #include "NMEA/Info.hpp"
+#include "NMEA/Derived.hpp"
 #include "Units/Units.hpp"
 
 void
@@ -52,7 +53,7 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 }
 
 void
-TrackingGlue::OnTimer(const NMEAInfo &basic)
+TrackingGlue::OnTimer(const NMEAInfo &basic, const DerivedInfo &calculated)
 {
   if (!settings.livetrack24.enabled)
     /* disabled by configuration */
@@ -90,6 +91,8 @@ TrackingGlue::OnTimer(const NMEAInfo &basic)
   track = basic.track_available
     ? basic.track
     : Angle::Zero();
+
+  flying = calculated.flight.flying;
 
   Trigger();
 }
