@@ -48,7 +48,7 @@ TrackingGlue::SetSettings(const TrackingSettings &_settings)
 
   if (_settings.livetrack24.username != settings.username ||
       _settings.livetrack24.password != settings.password)
-    user_id = 0;
+    state.user_id = 0;
 
   settings = _settings.livetrack24;
 }
@@ -107,29 +107,29 @@ TrackingGlue::Tick()
 
   mutex.Unlock();
 
-  if (user_id == 0) {
+  if (state.user_id == 0) {
     if (!copy.username.empty() && !copy.password.empty())
-      user_id = LiveTrack24::GetUserID(copy.username, copy.password);
+      state.user_id = LiveTrack24::GetUserID(copy.username, copy.password);
 
-    if (user_id == 0) {
+    if (state.user_id == 0) {
       mutex.Lock();
       return;
     }
 
-    session_id = LiveTrack24::GenerateSessionID(user_id);
+    state.session_id = LiveTrack24::GenerateSessionID(state.user_id);
 
-    if (!StartTracking(session_id, copy.username, copy.password,
+    if (!StartTracking(state.session_id, copy.username, copy.password,
                        tracking_interval_s,
                        LiveTrack24::VT_GLIDER, _T("XCSoar"))) {
-      user_id = 0;
+      state.user_id = 0;
       mutex.Lock();
       return;
     }
 
-    packet_id = 2;
+    state.packet_id = 2;
   }
 
-  LiveTrack24::SendPosition(session_id, packet_id++,
+  LiveTrack24::SendPosition(state.session_id, state.packet_id++,
                             location, altitude, ground_speed, track,
                             date_time.ToUnixTimeUTC());
 

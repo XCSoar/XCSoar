@@ -37,20 +37,24 @@ Copyright_License {
 
 struct NMEAInfo;
 
+struct LiveTrack24State
+{
+  LiveTrack24::UserID user_id;
+  LiveTrack24::SessionID session_id;
+  unsigned packet_id;
+};
+
 class TrackingGlue : protected StandbyThread {
   PeriodClock clock;
 
   LiveTrack24Settings settings;
+  LiveTrack24State state;
 
   BrokenDateTime date_time;
   GeoPoint location;
   unsigned altitude;
   unsigned ground_speed;
   Angle track;
-
-  LiveTrack24::UserID user_id;
-  LiveTrack24::SessionID session_id;
-  unsigned packet_id;
 
 public:
   void StopAsync();
