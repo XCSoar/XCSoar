@@ -39,6 +39,7 @@ Profile::Load(LiveTrack24Settings &settings)
 void
 Profile::Load(TrackingSettings &settings)
 {
+  Get(ProfileTrackingInterval, settings.interval);
   Load(settings.livetrack24);
 }
 
