@@ -272,6 +272,76 @@ private:
   }
 };
 
+class AirspaceFillRenderer : public AirspaceVisitor, protected MapCanvas
+{
+  const AirspaceLook &airspace_look;
+  const AirspaceWarningCopy& m_warnings;
+  const AirspaceRendererSettings &settings;
+
+public:
+  AirspaceFillRenderer(Canvas &_canvas, const WindowProjection &_projection,
+                       const AirspaceLook &_airspace_look,
+                       const AirspaceWarningCopy& warnings,
+                       const AirspaceRendererSettings &_settings)
+    :MapCanvas(_canvas, _projection,
+               _projection.GetScreenBounds().scale(fixed(1.1))),
+     airspace_look(_airspace_look),
+     m_warnings(warnings),
+     settings(_settings)
+  {
+    glBlendFunc(GL_SRC_ALPHA, GL_ONE_MINUS_SRC_ALPHA);
+  }
+
+public:
+  void Visit(const AirspaceCircle& airspace) {
+    RasterPoint screen_center = projection.GeoToScreen(airspace.GetCenter());
+    unsigned screen_radius = projection.GeoToScreenDistance(airspace.GetRadius());
+
+    {
+      GLEnable blend(GL_BLEND);
+      setup_interior(airspace);
+      canvas.circle(screen_center.x, screen_center.y, screen_radius);
+    }
+
+    // draw outline
+    setup_outline(airspace);
+    canvas.circle(screen_center.x, screen_center.y, screen_radius);
+  }
+
+  void Visit(const AirspacePolygon& airspace) {
+    if (!prepare_polygon(airspace.GetPoints()))
+      return;
+
+    if (!m_warnings.is_acked(airspace)) {
+      // fill interior without overpainting any previous outlines
+      {
+        setup_interior(airspace);
+        GLEnable blend(GL_BLEND);
+        draw_prepared();
+      }
+    }
+
+    // draw outline
+    setup_outline(airspace);
+    draw_prepared();
+  }
+
+private:
+  void setup_outline(const AbstractAirspace &airspace) {
+    if (settings.black_outline)
+      canvas.black_pen();
+    else
+      canvas.select(airspace_look.pens[airspace.GetType()]);
+    canvas.hollow_brush();
+  }
+
+  void setup_interior(const AbstractAirspace &airspace) {
+    Color color = airspace_look.colors[settings.colours[airspace.GetType()]];
+    canvas.select(Brush(color.with_alpha(90)));
+    canvas.null_pen();
+  }
+};
+
 #else // !ENABLE_OPENGL
 
 /**
@@ -460,11 +530,19 @@ AirspaceRenderer::Draw(Canvas &canvas,
                                    ToAircraftState(basic, calculated), awc);
 
 #ifdef ENABLE_OPENGL
-  AirspaceVisitorRenderer renderer(canvas, projection, airspace_look, awc,
-                                   settings_map.airspace);
-  airspace_database->visit_within_range(projection.GetGeoScreenCenter(),
-                                        projection.GetScreenDistanceMeters(),
-                                        renderer, visible);
+  if (settings_map.airspace.fill_mode == AirspaceRendererSettings::AS_FILL_ALL) {
+    AirspaceFillRenderer renderer(canvas, projection, airspace_look, awc,
+                                  settings_map.airspace);
+    airspace_database->visit_within_range(projection.GetGeoScreenCenter(),
+                                          projection.GetScreenDistanceMeters(),
+                                          renderer, visible);
+  } else {
+    AirspaceVisitorRenderer renderer(canvas, projection, airspace_look, awc,
+                                     settings_map.airspace);
+    airspace_database->visit_within_range(projection.GetGeoScreenCenter(),
+                                          projection.GetScreenDistanceMeters(),
+                                          renderer, visible);
+  }
 #else
   MapDrawHelper helper(canvas, buffer_canvas, stencil_canvas, projection,
                        settings_map.airspace);

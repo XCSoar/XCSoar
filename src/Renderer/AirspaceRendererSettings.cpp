@@ -38,8 +38,9 @@ AirspaceRendererSettings::SetDefaults()
 
 #ifndef ENABLE_OPENGL
   transparency = false;
-  fill_mode = AS_FILL_DEFAULT;
 #endif
+
+  fill_mode = AS_FILL_DEFAULT;
 
   std::fill(brushes, brushes + AIRSPACECLASSCOUNT, 0);
   std::fill(colours, colours + AIRSPACECLASSCOUNT, 0);

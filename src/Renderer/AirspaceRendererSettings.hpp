@@ -64,6 +64,7 @@ struct AirspaceRendererSettings {
    * of a pattern brush?
    */
   bool transparency;
+#endif
 
   /**
    * What portion of the airspace area should be filled with the
@@ -79,7 +80,6 @@ struct AirspaceRendererSettings {
     /** fill only a thick padding (like on ICAO maps) */
     AS_FILL_PADDING,
   } fill_mode;
-#endif
 
   uint8_t brushes[AIRSPACECLASSCOUNT];
   uint8_t colours[AIRSPACECLASSCOUNT];

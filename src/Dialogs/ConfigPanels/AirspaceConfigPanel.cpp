@@ -118,10 +118,6 @@ AirspaceConfigPanel::Init(WndForm *_wf,
 
   wp = (WndProperty *)wf->FindByName(_T("prpAirspaceFillMode"));
   {
-#ifdef ENABLE_OPENGL
-    wp->hide();
-    wf->RemoveExpert(wp);  // prevent unhiding with expert-switch
-#else
     DataFieldEnum &dfe = *(DataFieldEnum *)wp->GetDataField();
     dfe.addEnumText(_("Default"), AirspaceRendererSettings::AS_FILL_DEFAULT);
     dfe.addEnumText(_("Fill all"), AirspaceRendererSettings::AS_FILL_ALL);
@@ -129,7 +125,6 @@ AirspaceConfigPanel::Init(WndForm *_wf,
                     AirspaceRendererSettings::AS_FILL_PADDING);
     dfe.Set(renderer.fill_mode);
     wp->RefreshDisplay();
-#endif
   }
 
 #if !defined(ENABLE_OPENGL) && defined(HAVE_ALPHA_BLEND)
@@ -191,12 +186,12 @@ AirspaceConfigPanel::Save(bool &requirerestart,
                               szProfileAirspaceBlackOutline,
                               renderer.black_outline);
 
-#ifndef ENABLE_OPENGL
   tmp = renderer.fill_mode;
   changed |= SaveFormProperty(*wf, _T("prpAirspaceFillMode"),
                               szProfileAirspaceFillMode, tmp);
   renderer.fill_mode = (enum AirspaceRendererSettings::AirspaceFillMode)tmp;
 
+#ifndef ENABLE_OPENGL
 #ifdef HAVE_ALPHA_BLEND
   if (AlphaBlendAvailable())
     changed |= SaveFormProperty(*wf, _T("prpAirspaceTransparency"),
