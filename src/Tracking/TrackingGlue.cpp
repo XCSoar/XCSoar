@@ -102,7 +102,7 @@ TrackingGlue::Tick()
     return;
 
   unsigned tracking_interval = settings.interval;
-  const LiveTrack24Settings copy = this->settings.livetrack24;
+  LiveTrack24Settings copy = this->settings.livetrack24;
 
   mutex.Unlock();
 
@@ -112,11 +112,12 @@ TrackingGlue::Tick()
       user_id = LiveTrack24::GetUserID(copy.username, copy.password);
 
     if (user_id == 0) {
-      mutex.Lock();
-      return;
+      copy.username.clear();
+      copy.password.clear();
+      state.session_id = LiveTrack24::GenerateSessionID();
+    } else {
+      state.session_id = LiveTrack24::GenerateSessionID(user_id);
     }
-
-    state.session_id = LiveTrack24::GenerateSessionID(user_id);
 
     if (!LiveTrack24::StartTracking(state.session_id, copy.username,
                                     copy.password, tracking_interval,
