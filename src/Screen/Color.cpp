@@ -23,24 +23,6 @@ Copyright_License {
 
 #include "Screen/Color.hpp"
 
-static unsigned char light_color(unsigned char c) {
-  return ((c ^ 0xff) >> 1) ^ 0xff;
-}
-
-Color light_color(Color c) {
-  return Color(light_color(c.red()), light_color(c.green()),
-               light_color(c.blue()));
-}
-
-static unsigned char dark_color(unsigned char c) {
-  return (c >> 1);
-}
-
-Color dark_color(Color c) {
-  return Color(dark_color(c.red()), dark_color(c.green()),
-               dark_color(c.blue()));
-}
-
 Color desaturate(Color c) {
   int a = (c.red()+c.green()+c.blue())/3;
   return Color((c.red()+a)/2,

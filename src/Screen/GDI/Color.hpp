@@ -44,20 +44,20 @@ struct Color {
    * Constructor (creates a Color object based on the given COLORREF)
    * @param c COLORREF (e.g. 0xFF6677)
    */
-  explicit Color(COLORREF c) : value(c) {}
+  explicit gcc_constexpr_ctor Color(COLORREF c) : value(c) {}
   /**
    * Constructor (creates a Color object based on the given color parts)
    * @param r Red part
    * @param g Green part
    * @param b Blue part
    */
-  Color(uint8_t r, uint8_t g, uint8_t b) : value(RGB(r, g, b)) {}
+  gcc_constexpr_ctor Color(uint8_t r, uint8_t g, uint8_t b) : value(RGB(r, g, b)) {}
 
   /**
    * Returns the red part of the color
    * @return The red part of the color (0-255)
    */
-  gcc_pure
+  gcc_constexpr_method
   uint8_t red() const
   {
     return GetRValue(value);
@@ -67,7 +67,7 @@ struct Color {
    * Returns the green part of the color
    * @return The green part of the color (0-255)
    */
-  gcc_pure
+  gcc_constexpr_method
   uint8_t green() const
   {
     return GetGValue(value);
@@ -77,7 +77,7 @@ struct Color {
    * Returns the blue part of the color
    * @return The blue part of the color (0-255)
    */
-  gcc_pure
+  gcc_constexpr_method
   uint8_t blue() const
   {
     return GetBValue(value);
@@ -90,12 +90,13 @@ struct Color {
     return *this;
   }
 
+  gcc_constexpr_method
   operator COLORREF() const { return value; }
 
   /**
    * Returns the highlighted version of this color.
    */
-  gcc_pure
+  gcc_constexpr_method
   Color
   highlight() const
   {
@@ -109,7 +110,7 @@ struct Color {
  * @param b Color 2
  * @return True if colors match, False otherwise
  */
-static inline bool
+static inline gcc_constexpr_function bool
 operator ==(const Color a, const Color b)
 {
   return a.value == b.value;
@@ -121,7 +122,7 @@ operator ==(const Color a, const Color b)
  * @param b Color 2
  * @return True if color do not match, False otherwise
  */
-static inline bool
+static inline gcc_constexpr_function bool
 operator !=(const Color a, const Color b)
 {
   return !(a == b);
@@ -136,10 +137,10 @@ operator !=(const Color a, const Color b)
 struct HWColor {
   COLORREF value;
 
-  HWColor():value(0) {}
-  explicit HWColor(COLORREF c):value(c) {}
+  gcc_constexpr_ctor HWColor():value(0) {}
+  explicit gcc_constexpr_ctor HWColor(COLORREF c):value(c) {}
 
-  operator COLORREF() const { return value; }
+  gcc_constexpr_method operator COLORREF() const { return value; }
 };
 
 #endif

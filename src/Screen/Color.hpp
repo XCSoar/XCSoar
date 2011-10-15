@@ -46,16 +46,38 @@ Copyright_License {
 #define COLOR_ORANGE Color(0xff, 0xa2, 0x00)
 #define COLOR_BROWN Color(0xb7,0x64,0x1e)
 
+static inline gcc_constexpr_function uint8_t
+light_color(uint8_t c)
+{
+  return ((c ^ 0xff) >> 1) ^ 0xff;
+}
+
 /**
  * Returns a lighter version of the specified color, adequate for
  * SRCAND filtering.
  */
-Color light_color(Color c);
+static inline gcc_constexpr_function Color
+light_color(Color c)
+{
+  return Color(light_color(c.red()), light_color(c.green()),
+               light_color(c.blue()));
+}
+
+static inline gcc_constexpr_function uint8_t
+dark_color(uint8_t c)
+{
+  return (c >> 1);
+}
 
 /**
  * Returns a darker version of the specified color.
  */
-Color dark_color(Color c);
+static inline gcc_constexpr_function Color
+dark_color(Color c)
+{
+  return Color(dark_color(c.red()), dark_color(c.green()),
+               dark_color(c.blue()));
+}
 
 Color desaturate(Color c);
 
