@@ -207,6 +207,33 @@ C++11.  The following C++11 features are safe to use:
 \item Rvalue references
 \item Explicit conversion operators (with macro \verb|gcc_explicit|)
 \item Strongly-typed enums
+\item Generalized constant expressions (\verb|constexpr|): see below
+\end{itemize}
+
+\subsubsection{Generalized constant expressions}
+
+The keyword \verb|constexpr| is supported by GCC since version 4.6.
+It can be applied to functions, methods, constructors and variables.
+
+On functions, it replaces our macro \verb|gcc_const|.  Methods are
+never \verb|gcc_const|, because they usually dereference the
+\verb|this| pointer.  Attributes marked with \verb|constexpr| are
+implicitly \verb|const|, and you may not use the latter keyword then.
+
+Until we drop support for GCC versions older than 4.6, we need to have
+a fallback for older compilers.  To solve the different requirements
+for different ways to use \verb|constexpr|, we have created three new
+macros in \verb|Compiler.h|:
+
+\begin{itemize}
+\item \verb|gcc_constexpr_function| for functions. Falls back to
+  \verb|gcc_const|.
+\item \verb|gcc_constexpr_method| for methods. Falls back to
+  \verb|gcc_pure|.
+\item \verb|gcc_constexpr_ctor| for constructors. Falls back to
+  nothing.
+\item \verb|gcc_constexpr_data| For variables. Falls back to
+  \verb|const|.
 \end{itemize}
 
 \subsection{Other rules}
