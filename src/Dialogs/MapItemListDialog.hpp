@@ -27,6 +27,7 @@ Copyright_License {
 class SingleWindow;
 struct MapItem;
 class MapItemList;
+struct GeoVector;
 struct AircraftLook;
 struct AirspaceLook;
 struct WaypointLook;
@@ -36,6 +37,7 @@ struct SETTINGS_MAP;
 void ShowMapItemDialog(const MapItem &item, SingleWindow &parent);
 
 void ShowMapItemListDialog(SingleWindow &parent,
+                           const GeoVector &_vector,
                            const MapItemList &_list,
                            const AircraftLook &_aircraft_look,
                            const AirspaceLook &_airspace_look,

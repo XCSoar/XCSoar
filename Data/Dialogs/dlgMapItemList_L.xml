@@ -1,6 +1,7 @@
 <?xml version="1.0"?>
 
 <Form Caption="Map elements at this location">
+  <Label Name="lblInfo" X="65" Height="20"/>
   <List Name="frmComboPopupList" X="65"/>
 
   <Button Caption="Select" Y="-70" Width="65" Height="35" OnClick="OnCloseClicked"/>

@@ -57,7 +57,13 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
   list.Sort();
 
   // Show the list dialog
-  ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), list,
+  GeoVector vector;
+  if (Basic().location_available)
+    vector = Basic().location.DistanceBearing(location);
+  else
+    vector.distance = fixed_minus_one;
+
+  ShowMapItemListDialog(*(SingleWindow *)get_root_owner(), vector, list,
                         aircraft_look,
                         airspace_renderer.GetLook(),
                         way_point_renderer.GetLook(),
