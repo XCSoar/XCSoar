@@ -51,7 +51,8 @@ struct GeoPoint {
    *
    * @return Initialised object
    */
-  GeoPoint(const Angle &_longitude, const Angle &_latitude) :
+  gcc_constexpr_ctor
+  GeoPoint(const Angle _longitude, const Angle _latitude) :
     longitude(_longitude), latitude(_latitude) {}
 
   /**
@@ -202,8 +203,10 @@ struct GeoPoint {
    *
    * @return True if coincident
    */
-  gcc_pure
-  bool Equals(const GeoPoint &other) const;
+  gcc_constexpr_method
+  bool Equals(const GeoPoint other) const {
+    return longitude == other.longitude && latitude == other.latitude;
+  }
 
   /**
    * Test whether two points are co-located
@@ -212,8 +215,8 @@ struct GeoPoint {
    *
    * @return True if coincident
    */
-  gcc_pure
-  bool operator== (const GeoPoint &other) const {
+  gcc_constexpr_method
+  bool operator== (const GeoPoint other) const {
     return Equals(other);
   }
 
@@ -224,7 +227,7 @@ struct GeoPoint {
    *
    * @return True if coincident
    */
-  gcc_pure
+  gcc_constexpr_method
   bool operator !=(const GeoPoint &other) const {
     return !Equals(other);
   }
@@ -247,6 +250,7 @@ struct AGeoPoint: public GeoPoint {
   /**< Nav reference altitude (m) */
   RoughAltitude altitude;
 
+  gcc_constexpr_ctor
   AGeoPoint(const GeoPoint p, const RoughAltitude alt)
     :GeoPoint(p),altitude(alt) {};
 };

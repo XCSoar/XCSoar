@@ -64,12 +64,6 @@ GeoPoint::ProjectedDistance(const GeoPoint &from,
 }
 
 bool 
-GeoPoint::Equals(const GeoPoint &other) const
-{
-  return (longitude == other.longitude) && (latitude == other.latitude);
-}
-
-bool 
 GeoPoint::Sort(const GeoPoint &sp) const
 {
   if (longitude < sp.longitude)
