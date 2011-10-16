@@ -162,7 +162,6 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
-  canvas.select(name_font);
 
   TCHAR buffer[256];
 
