@@ -456,7 +456,8 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
   return 0;
 }
 
-static HWND InitInstance(HWND pWnd, TODAYLISTITEM *ptli)
+static HWND
+InitInstance(HWND pWnd, TODAYLISTITEM *ptli)
 {
   hInst = ptli->hinstDLL;
 
@@ -484,7 +485,8 @@ static HWND InitInstance(HWND pWnd, TODAYLISTITEM *ptli)
 }
 
 gcc_unused
-HWND APIENTRY InitializeCustomItem(TODAYLISTITEM *ptli, HWND pWnd)
+HWND APIENTRY
+InitializeCustomItem(TODAYLISTITEM *ptli, HWND pWnd)
 {
   if (ptli->fEnabled == 0)
     return NULL;
