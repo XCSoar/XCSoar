@@ -90,6 +90,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
+  canvas.set_text_color(COLOR_BLACK);
 
   // Draw icon
   RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
@@ -134,6 +135,7 @@ WaypointListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
+  canvas.set_text_color(COLOR_BLACK);
 
   TCHAR buffer[256];
 

@@ -74,6 +74,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
+  canvas.set_text_color(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.select(name_font);
@@ -109,6 +110,7 @@ MapItemListRenderer::Draw(
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
+  canvas.set_text_color(COLOR_BLACK);
 
   PixelScalar left = rc.left + line_height + Layout::FastScale(2);
   canvas.select(name_font);
@@ -162,6 +164,7 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
   const Font &name_font = Fonts::MapBold;
   const Font &small_font = Fonts::MapLabel;
+  canvas.set_text_color(COLOR_BLACK);
 
   TCHAR buffer[256];
 
