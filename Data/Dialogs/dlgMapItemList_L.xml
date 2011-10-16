@@ -1,0 +1,8 @@
+<?xml version="1.0"?>
+
+<Form Caption="Map elements at this location">
+  <List Name="frmComboPopupList" X="65"/>
+
+  <Button Caption="Select" Y="-70" Width="65" Height="35" OnClick="OnCloseClicked"/>
+  <Button Caption="Cancel" Y="-35" Width="65" Height="35" OnClick="OnCancelClicked"/>
+</Form>
