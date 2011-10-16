@@ -57,14 +57,17 @@ struct BrokenDate {
    */
   BrokenDate() {}
 
+  gcc_constexpr_ctor
   BrokenDate(unsigned _year, unsigned _month, unsigned _day)
-    :year(_year), month(_month), day(_day) {}
+    :year(_year), month(_month), day(_day), day_of_week(-1) {}
 
-  bool operator==(const BrokenDate &other) const {
+  gcc_constexpr_method
+  bool operator==(const BrokenDate other) const {
     return year == other.year && month == other.month && day == other.day;
   }
 
-  bool operator>(const BrokenDate &other) const {
+  gcc_constexpr_method
+  bool operator>(const BrokenDate other) const {
     return year > other.year ||
       (year == other.year && (month > other.month ||
                               (month == other.month && day > other.day)));
@@ -73,6 +76,7 @@ struct BrokenDate {
   /**
    * Does this object contain plausible values?
    */
+  gcc_constexpr_method
   bool Plausible() const {
     return year >= 1800 && year <= 2500 &&
       month >= 1 && month <= 12 &&
@@ -104,15 +108,18 @@ struct BrokenTime {
    */
   BrokenTime() {}
 
+  gcc_constexpr_ctor
   BrokenTime(unsigned _hour, unsigned _minute, unsigned _second=0)
     :hour(_hour), minute(_minute), second(_second) {}
 
-  bool operator==(const BrokenTime &other) const {
+  gcc_constexpr_method
+  bool operator==(const BrokenTime other) const {
     return hour == other.hour && minute == other.minute &&
       second == other.second;
   }
 
-  bool operator>(const BrokenTime &other) const {
+  gcc_constexpr_method
+  bool operator>(const BrokenTime other) const {
     return hour > other.hour ||
       (hour == other.hour && (minute > other.minute ||
                               (minute == other.minute && second > other.second)));
@@ -121,6 +128,7 @@ struct BrokenTime {
   /**
    * Does this object contain plausible values?
    */
+  gcc_constexpr_method
   bool Plausible() const {
     return hour < 24 && minute < 60 && second < 60;
   }
@@ -128,6 +136,7 @@ struct BrokenTime {
   /**
    * Returns the number of seconds which have passed on this day.
    */
+  gcc_constexpr_method
   unsigned GetSecondOfDay() const {
     return hour * 3600u + minute * 60u + second;
   }
@@ -158,14 +167,17 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
    */
   BrokenDateTime() {}
 
+  gcc_constexpr_ctor
   BrokenDateTime(unsigned _year, unsigned _month, unsigned _day,
                  unsigned _hour, unsigned _minute, unsigned _second=0)
     :BrokenDate(_year, _month, _day), BrokenTime(_hour, _minute, _second) {}
 
+  gcc_constexpr_ctor
   BrokenDateTime(unsigned _year, unsigned _month, unsigned _day)
     :BrokenDate(_year, _month, _day), BrokenTime(0, 0) {}
 
-  bool operator==(const BrokenDateTime &other) const {
+  gcc_constexpr_method
+  bool operator==(const BrokenDateTime other) const {
     return (const BrokenDate &)*this == (const BrokenDate &)other &&
       (const BrokenTime &)*this == (const BrokenTime &)other;
   }
@@ -173,6 +185,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   /**
    * Does this object contain plausible values?
    */
+  gcc_constexpr_method
   bool Plausible() const {
     return BrokenDate::Plausible() && BrokenTime::Plausible();
   }
