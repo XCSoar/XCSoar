@@ -1,12 +1,10 @@
 <?xml version="1.0"?>
 
 <Form Caption="Picker">
-  <Button Name="cmdClose" Caption="Select" X="5" Y="-37" Width="70" Height="35" OnClick="OnCloseClicked"/>
+  <List Name="frmComboPopupList" Height="-35"/>
+  <Label Name="lblItemHelp" Y="-100" Height="-35" Visible="0" Border="1"/>
 
-  <Button Name="cmdCancel" Caption="Cancel" X="82" Y="-37" Width="70" Height="35" OnClick="OnCancelClicked"/>
-
-  <Button Name="cmdHelp" Caption="Help" X="160" Y="-37" Width="70" Height="35" OnClick="OnHelpClicked"/>
-
-  <List Name="frmComboPopupList" X="1" Y="1" Width="-1" Height="-41" ItemHeight="18"/>
-  <Label Name="lblItemHelp" X="1" Y="-100" Height="60" Width="-1" Visible="0" Border="1"/>
+  <Button Caption="Select" Y="-35" Width="-160" Height="35" OnClick="OnCloseClicked"/>
+  <Button Name="cmdHelp" Caption="Help" X="-160" Y="-35" Width="80" Height="35" OnClick="OnHelpClicked"/>
+  <Button Caption="Cancel" X="-80" Y="-35" Height="35" OnClick="OnCancelClicked"/>
 </Form>
