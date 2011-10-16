@@ -41,7 +41,7 @@ struct GeoPoint {
   /**
    * Non-initialising constructor.
    */
-  GeoPoint() {}
+  GeoPoint() = default;
 
   /**
    * Constructor (supplied location)

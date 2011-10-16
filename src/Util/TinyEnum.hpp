@@ -49,7 +49,7 @@ public:
   /**
    * Non-initialising constructor.
    */
-  TinyEnum() {}
+  TinyEnum() = default;
 
   gcc_constexpr_ctor
   TinyEnum(E _value):value((uint8_t)_value) {}

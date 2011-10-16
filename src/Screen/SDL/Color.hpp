@@ -37,7 +37,7 @@ Copyright_License {
 struct Color {
   SDL_Color value;
 
-  Color() {}
+  Color() = default;
 
   gcc_constexpr_ctor
   Color(uint8_t r, uint8_t g, uint8_t b)

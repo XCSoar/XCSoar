@@ -47,7 +47,7 @@ class RoughSpeed {
   }
 
 public:
-  RoughSpeed() {}
+  RoughSpeed() = default;
   RoughSpeed(fixed _value):value(Import(_value)) {}
 
   RoughSpeed &operator=(fixed other) {

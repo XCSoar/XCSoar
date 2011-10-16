@@ -47,7 +47,7 @@ public:
   /**
    * Uninitialized.
    */
-  RadioFrequency() {}
+  RadioFrequency() = default;
 
   bool IsDefined() const {
     return value != 0;

@@ -55,7 +55,7 @@ struct BrokenDate {
   /**
    * Non-initializing default constructor.
    */
-  BrokenDate() {}
+  BrokenDate() = default;
 
   gcc_constexpr_ctor
   BrokenDate(unsigned _year, unsigned _month, unsigned _day)
@@ -106,7 +106,7 @@ struct BrokenTime {
   /**
    * Non-initializing default constructor.
    */
-  BrokenTime() {}
+  BrokenTime() = default;
 
   gcc_constexpr_ctor
   BrokenTime(unsigned _hour, unsigned _minute, unsigned _second=0)
@@ -165,7 +165,7 @@ struct BrokenDateTime : public BrokenDate, public BrokenTime {
   /**
    * Non-initializing default constructor.
    */
-  BrokenDateTime() {}
+  BrokenDateTime() = default;
 
   gcc_constexpr_ctor
   BrokenDateTime(unsigned _year, unsigned _month, unsigned _day,

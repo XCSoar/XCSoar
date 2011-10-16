@@ -52,7 +52,7 @@ protected:
   TCHAR data[max];
 
 public:
-  StaticString() {}
+  StaticString() = default;
   explicit StaticString(const TCHAR *value) {
     set(value);
   }

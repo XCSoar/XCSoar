@@ -40,7 +40,7 @@ struct FlatGeoPoint {
   /**
    * Non-initialising constructor.
    */
-  FlatGeoPoint() {};
+  FlatGeoPoint() = default;
 
   /**
    * Constructor at specified location (x,y)

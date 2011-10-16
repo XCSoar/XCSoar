@@ -58,7 +58,7 @@ struct Color {
     :r(_r), g(_g), b(_b), a(_a) {}
 #endif
 
-  Color() {}
+  Color() = default;
 
   /**
    * Returns the red part of the color

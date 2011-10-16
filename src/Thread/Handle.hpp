@@ -48,7 +48,7 @@ public:
   /**
    * No initialisation.
    */
-  ThreadHandle() {}
+  ThreadHandle() = default;
 
 #ifdef HAVE_POSIX
   ThreadHandle(pthread_t _handle):handle(_handle) {}

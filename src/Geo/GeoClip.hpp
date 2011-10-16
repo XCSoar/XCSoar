@@ -37,7 +37,7 @@ class GeoClip : protected GeoBounds {
   Angle width;
 
 public:
-  GeoClip() {}
+  GeoClip() = default;
   GeoClip(const GeoBounds &other)
     :GeoBounds(other), width((east - west).AsBearing()) {}
 

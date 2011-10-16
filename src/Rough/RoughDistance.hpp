@@ -37,7 +37,7 @@ class RoughDistance {
   uint32_t value;
 
 public:
-  RoughDistance() {}
+  RoughDistance() = default;
 
   gcc_constexpr_ctor
   RoughDistance(fixed _value):value(_value) {}

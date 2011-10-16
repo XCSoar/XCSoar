@@ -42,7 +42,7 @@ public:
   friend class TaskProjection;
 
   /** Non-initialising constructor. */
-  FlatBoundingBox() {}
+  FlatBoundingBox() = default;
 
   /**
    * Constructor given bounds

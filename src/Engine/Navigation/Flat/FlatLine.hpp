@@ -52,7 +52,7 @@ public:
    *
    * @return Initialised object at origin
    */
-  FlatLine() {}
+  FlatLine() = default;
 
   /** 
    * Calculate intersections between this line

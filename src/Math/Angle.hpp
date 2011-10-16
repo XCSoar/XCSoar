@@ -43,7 +43,7 @@ public:
    * The default constructor does not initialize the value.  It must
    * not be used until it is assigned.
    */
-  Angle() {}
+  Angle() = default;
 
   gcc_constexpr_function
   static Angle Native(const fixed _value) {

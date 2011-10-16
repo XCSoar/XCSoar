@@ -51,7 +51,7 @@ class RoughAngle {
   RoughAngle(int16_t _value):value(_value) {}
 
 public:
-  RoughAngle() {}
+  RoughAngle() = default;
   RoughAngle(Angle _value):value(Import(_value)) {}
 
   RoughAngle &operator=(Angle other) {

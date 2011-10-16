@@ -27,7 +27,7 @@
  */
 struct BGRColor
 {
-  BGRColor() {}
+  BGRColor() = default;
 
 #ifdef HAVE_GLES
   /**

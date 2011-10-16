@@ -38,7 +38,7 @@ class RoughAltitude {
   short value;
 
 public:
-  RoughAltitude() {}
+  RoughAltitude() = default;
 
   explicit gcc_constexpr_ctor
   RoughAltitude(short _value):value(_value) {}

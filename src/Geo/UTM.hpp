@@ -36,7 +36,7 @@ struct UTM
 
   fixed easting, northing;
 
-  UTM() {}
+  UTM() = default;
   UTM(unsigned char _zone_number, char _zone_letter,
       fixed _easting, fixed _northing)
     :zone_number(_zone_number), zone_letter(_zone_letter),

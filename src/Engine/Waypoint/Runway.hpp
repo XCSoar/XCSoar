@@ -38,7 +38,7 @@ public:
   /**
    * No initialisation.
    */
-  Runway() {}
+  Runway() = default;
 
   bool IsDirectionDefined() const {
     return direction >= 0;

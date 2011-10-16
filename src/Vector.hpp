@@ -31,7 +31,7 @@ struct Vector {
   fixed x;
   fixed y;
 
-  Vector() {}
+  Vector() = default;
 
   Vector(fixed _x, fixed _y):x(_x), y(_y) {}
 

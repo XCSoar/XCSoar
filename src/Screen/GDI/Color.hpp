@@ -38,7 +38,7 @@ struct Color {
   COLORREF value;
 
   /** Base Constructor (creates an undefined Color object) */
-  Color() {}
+  Color() = default;
 
   /**
    * Constructor (creates a Color object based on the given COLORREF)

@@ -121,7 +121,11 @@ test_clip_polygon()
   GeoClip clip(GeoBounds(make_geo_point(2, 5), make_geo_point(6, 1)));
 
   /* invalid polygon */
-  const GeoPoint src1[2];
+  const GeoPoint src1[2] = {
+    make_geo_point(0, 0),
+    make_geo_point(1, 1),
+  };
+
   test_clip_polygon(clip, src1, 0, NULL, 0);
   test_clip_polygon(clip, src1, 1, NULL, 0);
   test_clip_polygon(clip, src1, 2, NULL, 0);

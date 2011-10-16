@@ -136,7 +136,7 @@ public:
 
   struct internal {};
 
-  fixed() {}
+  fixed() = default;
 
   gcc_constexpr_ctor
   fixed(internal, value_t nVal)

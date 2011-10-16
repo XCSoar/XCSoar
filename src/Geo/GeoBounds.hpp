@@ -36,7 +36,7 @@ Copyright_License {
 struct GeoBounds {
   Angle west, north, east, south;
 
-  GeoBounds() {}
+  GeoBounds() = default;
   GeoBounds(const GeoPoint pt)
     :west(pt.longitude), north(pt.latitude),
      east(pt.longitude), south(pt.latitude) {}
