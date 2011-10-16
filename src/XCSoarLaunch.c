@@ -155,9 +155,6 @@ CreateFileList(void)
     FileList[1].bitmap = LoadBitmap(hInst, MAKEINTRESOURCE(IDB_XCSOARLSWIFTSIM));
 }
 
-/* ****************************************************************************
-   DllMain
-******************************************************************************/
 BOOL WINAPI
 DllMain(HINSTANCE hModule, gcc_unused DWORD fdwReason,
         gcc_unused PVOID pvReserved)
@@ -165,10 +162,6 @@ DllMain(HINSTANCE hModule, gcc_unused DWORD fdwReason,
   hInst = hModule;
   return TRUE;
 }
-
-/* *****************************************************************************
-	ToolTipProc
-******************************************************************************/
 
 #ifdef ENABLE_TOOLTIPS
 
@@ -222,9 +215,6 @@ ToolTipProc(HWND hDlg, UINT uMsg, gcc_unused WPARAM wParam, LPARAM lParam)
 
 #endif /* ENABLE_TOOLTIPS */
 
-/* ****************************************************************************
-   OnPaint
-******************************************************************************/
 static void
 OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
 {
@@ -288,9 +278,6 @@ OnPaint(HWND hWnd, HDC hdc, PAINTSTRUCT *ps)
   DeleteDC(tempdc);
 }
 
-/* ****************************************************************************
-   Point2Item
-******************************************************************************/
 static int
 Point2Item(int px, int py)
 {
@@ -305,9 +292,6 @@ Point2Item(int px, int py)
   return -1;
 }
 
-/* ****************************************************************************
-	ShellOpen
-******************************************************************************/
 static BOOL
 LaunchXCSoar(HWND hWnd, const TCHAR *CommandLine)
 {
@@ -333,9 +317,6 @@ LaunchXCSoar(HWND hWnd, const TCHAR *CommandLine)
   return true;
 }
 
-/* ****************************************************************************
-	WndProc
-******************************************************************************/
 static LRESULT CALLBACK
 WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
 {
@@ -475,9 +456,6 @@ WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
   return 0;
 }
 
-/* ****************************************************************************
-   InitInstance
-******************************************************************************/
 static HWND InitInstance(HWND pWnd, TODAYLISTITEM *ptli)
 {
   hInst = ptli->hinstDLL;
@@ -505,9 +483,6 @@ static HWND InitInstance(HWND pWnd, TODAYLISTITEM *ptli)
                       ptli->hinstDLL, NULL);
 }
 
-/* ****************************************************************************
-   InitializeCustomItem
-******************************************************************************/
 gcc_unused
 HWND APIENTRY InitializeCustomItem(TODAYLISTITEM *ptli, HWND pWnd)
 {
@@ -517,9 +492,6 @@ HWND APIENTRY InitializeCustomItem(TODAYLISTITEM *ptli, HWND pWnd)
   return InitInstance(pWnd, ptli);
 }
 
-/* ****************************************************************************
-   CustomItemOptionsDlgProc
-******************************************************************************/
 gcc_unused
 BOOL APIENTRY
 CustomItemOptionsDlgProc(HWND hDlg, UINT uMsg, UINT wParam,
