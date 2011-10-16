@@ -44,6 +44,7 @@ public:
            const WindowStyle style=WindowStyle());
 
   void SetAlignCenter();
+  void SetVAlignCenter();
 
   void SetFont(const Font &_font) {
     font = &_font;

@@ -47,6 +47,13 @@ WndFrame::SetAlignCenter()
 }
 
 void
+WndFrame::SetVAlignCenter()
+{
+  mCaptionStyle |= DT_VCENTER;
+  invalidate();
+}
+
+void
 WndFrame::SetText(const TCHAR *_text)
 {
   text = _text;
