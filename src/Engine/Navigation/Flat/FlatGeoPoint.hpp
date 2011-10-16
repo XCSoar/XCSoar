@@ -50,6 +50,7 @@ struct FlatGeoPoint {
    *
    * @return Initialised object at origin
    */
+  gcc_constexpr_ctor
   FlatGeoPoint(const int x, const int y):
     Longitude(x),Latitude(y) {};
 
@@ -80,12 +81,10 @@ struct FlatGeoPoint {
    *
    * @return Added value
    */
-  gcc_pure
-  FlatGeoPoint operator+ (const FlatGeoPoint &p2) const {
-    FlatGeoPoint res= *this;
-    res.Longitude += p2.Longitude;
-    res.Latitude += p2.Latitude;
-    return res;
+  gcc_constexpr_method
+  FlatGeoPoint operator+(const FlatGeoPoint other) const {
+    return FlatGeoPoint(Longitude + other.Longitude,
+                        Latitude + other.Latitude);
   }
 
   /**
@@ -95,12 +94,10 @@ struct FlatGeoPoint {
    *
    * @return Subtracted value
    */
-  gcc_pure
-  FlatGeoPoint operator- (const FlatGeoPoint &p2) const {
-    FlatGeoPoint res= *this;
-    res.Longitude -= p2.Longitude;
-    res.Latitude -= p2.Latitude;
-    return res;
+  gcc_constexpr_method
+  FlatGeoPoint operator-(const FlatGeoPoint other) const {
+    return FlatGeoPoint(Longitude - other.Longitude,
+                        Latitude - other.Latitude);
   }
 
   /**
@@ -149,8 +146,8 @@ struct FlatGeoPoint {
    *
    * @return True if coincident
    */
-  gcc_pure
-  bool operator== (const FlatGeoPoint &other) const {
+  gcc_constexpr_method
+  bool operator==(const FlatGeoPoint other) const {
     return FlatGeoPoint::Equals(other);
   };
 
@@ -162,8 +159,8 @@ struct FlatGeoPoint {
     return Sort(sp);
   }
 
-  gcc_pure
-  bool Equals(const FlatGeoPoint& sp) const {
+  gcc_constexpr_method
+  bool Equals(const FlatGeoPoint sp) const {
     return (Longitude == sp.Longitude) && (Latitude == sp.Latitude);
   }
 
@@ -186,10 +183,15 @@ struct AFlatGeoPoint : public FlatGeoPoint {
   /** Nav reference altitude (m) */
   RoughAltitude altitude;
 
+  gcc_constexpr_ctor
   AFlatGeoPoint(const int x, const int y, const RoughAltitude alt):
     FlatGeoPoint(x,y),altitude(alt) {};
-  AFlatGeoPoint(const FlatGeoPoint &p, const RoughAltitude alt)
+
+  gcc_constexpr_ctor
+  AFlatGeoPoint(const FlatGeoPoint p, const RoughAltitude alt)
     :FlatGeoPoint(p), altitude(alt) {};
+
+  gcc_constexpr_ctor
   AFlatGeoPoint():FlatGeoPoint(0,0),altitude(0) {};
 
   /** Rounds location to reduce state space */
@@ -206,8 +208,8 @@ struct AFlatGeoPoint : public FlatGeoPoint {
    *
    * @return true if location and altitude are equal
    */
-  gcc_pure
-  bool operator== (const AFlatGeoPoint &other) const {
+  gcc_constexpr_method
+  bool operator==(const AFlatGeoPoint other) const {
     return FlatGeoPoint::Equals(other) && (altitude == other.altitude);
   };
 

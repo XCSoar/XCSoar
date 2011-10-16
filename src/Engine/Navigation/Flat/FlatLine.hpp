@@ -44,6 +44,7 @@ public:
    *
    * @return Initialised object
    */
+  gcc_constexpr_ctor
   FlatLine(const FlatPoint _p1, const FlatPoint _p2):p1(_p1),p2(_p2) {}
 
   /**

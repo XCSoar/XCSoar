@@ -50,7 +50,8 @@ public:
    * @param ll Lower left location
    * @param ur Upper right location
    */
-  FlatBoundingBox(const FlatGeoPoint &ll, const FlatGeoPoint &ur)
+  gcc_constexpr_ctor
+  FlatBoundingBox(const FlatGeoPoint ll, const FlatGeoPoint ur)
     :bb_ll(ll.Longitude,ll.Latitude),
      bb_ur(ur.Longitude,ur.Latitude) {}
 
@@ -61,7 +62,8 @@ public:
    * @param loc Location of center point
    * @param range Radius in projected units
    */
-  FlatBoundingBox(const FlatGeoPoint &loc, const unsigned range = 0)
+  gcc_constexpr_ctor
+  FlatBoundingBox(const FlatGeoPoint loc, const unsigned range = 0)
     :bb_ll(loc.Longitude - range, loc.Latitude - range),
      bb_ur(loc.Longitude + range, loc.Latitude + range) {}
 

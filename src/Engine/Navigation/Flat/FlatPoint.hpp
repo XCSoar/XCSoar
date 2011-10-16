@@ -44,6 +44,7 @@ struct FlatPoint
    *
    * @return Initialised object
    */
+  gcc_constexpr_ctor
   FlatPoint(const fixed _x, const fixed _y): x(_x), y(_y) {}
 
   /**
@@ -51,6 +52,7 @@ struct FlatPoint
    *
    * @return Initialised object
    */
+  gcc_constexpr_ctor
   FlatPoint(): x(fixed_zero), y(fixed_zero) {}
 
   /**
@@ -122,7 +124,8 @@ struct FlatPoint
    *
    * @return True if coincident
    */
-  bool operator== (const FlatPoint &other) const {
+  gcc_constexpr_method
+  bool operator== (const FlatPoint other) const {
     return (x == other.x) && (y == other.y);
   }
 
@@ -203,7 +206,7 @@ struct FlatPoint
     return res;
   }
 
-  gcc_pure
+  gcc_constexpr_method
   FlatPoint Half() const {
     return FlatPoint(::half(x), ::half(y));
   }
