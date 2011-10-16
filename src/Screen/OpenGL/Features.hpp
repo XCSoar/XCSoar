@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_SCREEN_OPENGL_FEATURES_HPP
 #define XCSOAR_SCREEN_OPENGL_FEATURES_HPP
 
+#include "Compiler.h"
+
 #ifndef ENABLE_OPENGL
 #error No OpenGL
 #endif
@@ -45,6 +47,7 @@ Copyright_License {
 /**
  * Running on OpenGL/ES?
  */
+gcc_constexpr_function
 static inline bool
 have_gles()
 {

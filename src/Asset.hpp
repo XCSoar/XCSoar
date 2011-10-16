@@ -23,6 +23,8 @@ Copyright_License {
 #ifndef ASSET_H
 #define ASSET_H
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 // asset/registration data
@@ -52,6 +54,7 @@ extern ModelType GlobalModelType;
 
 #endif
 
+gcc_constexpr_function
 static inline bool
 have_model_type()
 {
@@ -65,6 +68,7 @@ have_model_type()
 /**
  * Returns whether this is a debug build.
  */
+gcc_constexpr_function
 static inline bool
 is_debug()
 {
@@ -79,6 +83,7 @@ is_debug()
  * Returns whether the application is running on an embedded platform.
  * @return True if host hardware is an embedded platform, False otherwise
  */
+gcc_constexpr_function
 static inline bool
 is_embedded()
 {
@@ -93,6 +98,7 @@ is_embedded()
  * Returns whether the application is running on Pocket PC / Windows
  * CE / Windows Mobile.
  */
+gcc_constexpr_function
 static inline bool
 is_windows_ce()
 {
@@ -108,6 +114,7 @@ is_windows_ce()
  * Windows CE (pre 5.0).  Starting with version 5.0, several bug
  * workarounds are disabled at compile time.
  */
+gcc_constexpr_function
 static inline bool
 is_old_ce()
 {
@@ -122,6 +129,7 @@ is_old_ce()
  * Is XCSoar running on ancient and slow hardware?  If yes, then some
  * expensive UI features are disabled.
  */
+gcc_constexpr_function
 static inline bool
 is_ancient_hardware()
 {
@@ -158,6 +166,7 @@ model_is_medion_p5()
  * Returns whether the application is running on an Altair
  * @return True if host hardware is an Altair, False otherwise
  */
+gcc_constexpr_function
 static inline bool
 is_altair()
 {
@@ -171,6 +180,7 @@ is_altair()
 /**
  * Returns whether the application is running on Android
  */
+gcc_constexpr_function
 static inline bool
 is_android()
 {
@@ -185,6 +195,7 @@ is_android()
  * Does this device have little main memory?  On those, some expensive
  * features are disabled.
  */
+gcc_constexpr_function
 static inline bool
 HasLittleMemory()
 {
@@ -194,6 +205,7 @@ HasLittleMemory()
 /**
  * Returns whether the application is compiled with IOIOLib
  */
+gcc_constexpr_function
 static inline bool
 is_ioiolib()
 {
@@ -209,6 +221,7 @@ is_ioiolib()
  * @return True if a touch screen or mouse is assumed for the hardware
  * that XCSoar is running on, False if the hardware has only buttons
  */
+gcc_constexpr_function
 static inline bool
 has_pointer()
 {
@@ -220,6 +233,7 @@ has_pointer()
  * @return True if a keyboard is assumed for the hardware
  * that XCSoar is running on, False if the hardware has no keyboard
  */
+gcc_constexpr_function
 static inline bool
 has_keyboard()
 {
@@ -231,6 +245,7 @@ has_keyboard()
  *
  * XXX not yet implemented!
  */
+gcc_constexpr_function
 static inline bool
 has_colors()
 {
