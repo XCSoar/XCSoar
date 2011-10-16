@@ -51,6 +51,7 @@ public:
    */
   TinyEnum() {}
 
+  gcc_constexpr_ctor
   TinyEnum(E _value):value((uint8_t)_value) {}
 
   TinyEnum<E> &operator =(E _value) {
@@ -58,17 +59,17 @@ public:
     return *this;
   }
 
-  gcc_pure
+  gcc_constexpr_method
   operator E() const {
     return (E)value;
   }
 
-  gcc_pure
+  gcc_constexpr_method
   bool operator ==(E other) const {
     return value == (uint8_t)other;
   }
 
-  gcc_pure
+  gcc_constexpr_method
   bool operator !=(E other) const {
     return value != (uint8_t)other;
   }
