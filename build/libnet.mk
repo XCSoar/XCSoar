@@ -3,7 +3,7 @@
 LIBNET_SOURCES =
 HAVE_NET := n
 
-ifneq ($(findstring $(TARGET),PC WINE),)
+ifneq ($(findstring $(TARGET),PC WINE CYGWIN),)
 HAVE_NET := y
 LIBNET_SOURCES += \
 	$(SRC)/Net/WinINet/Session.cpp \
