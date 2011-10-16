@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_ROUGH_ALTITUDE_HPP
 
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <limits.h>
 
@@ -38,14 +39,20 @@ class RoughAltitude {
 
 public:
   RoughAltitude() {}
-  explicit RoughAltitude(short _value):value(_value) {}
-  explicit RoughAltitude(int _value):value((short)_value) {}
+
+  explicit gcc_constexpr_ctor
+  RoughAltitude(short _value):value(_value) {}
+
+  explicit gcc_constexpr_ctor
+  RoughAltitude(int _value):value((short)_value) {}
+
+  gcc_constexpr_ctor
   RoughAltitude(fixed _value):value(_value) {}
 
   /**
    * Create a representation of the largest possible value.
    */
-  gcc_const
+  gcc_constexpr_function
   static RoughAltitude Max() {
     return RoughAltitude((short)SHRT_MAX);
   }
@@ -65,59 +72,67 @@ public:
     return *this;
   }
 
-  gcc_pure gcc_explicit
+  gcc_explicit gcc_constexpr_method
   operator short() const {
     return value;
   }
 
-  gcc_pure gcc_explicit
+  gcc_explicit gcc_constexpr_method
   operator int() const {
     return value;
   }
 
-  gcc_pure
+  gcc_constexpr_method
   operator fixed() const {
     return fixed(value);
   }
 
+  gcc_constexpr_method
   bool IsPositive() const {
     return value > 0;
   }
 
+  gcc_constexpr_method
   bool IsNegative() const {
     return value < 0;
   }
 
+  gcc_constexpr_method
   bool operator ==(const RoughAltitude other) const {
     return value == other.value;
   }
 
+  gcc_constexpr_method
   bool operator !=(const RoughAltitude other) const {
     return value != other.value;
   }
 
+  gcc_constexpr_method
   bool operator <(const RoughAltitude other) const {
     return value < other.value;
   }
 
+  gcc_constexpr_method
   bool operator <=(const RoughAltitude other) const {
     return value <= other.value;
   }
 
+  gcc_constexpr_method
   bool operator >(const RoughAltitude other) const {
     return value > other.value;
   }
 
+  gcc_constexpr_method
   bool operator >=(const RoughAltitude other) const {
     return value >= other.value;
   }
 
-  gcc_pure
+  gcc_constexpr_method
   RoughAltitude operator+(const RoughAltitude other) const {
     return RoughAltitude(value + other.value);
   }
 
-  gcc_pure
+  gcc_constexpr_method
   RoughAltitude operator-(const RoughAltitude other) const {
     return RoughAltitude(value - other.value);
   }

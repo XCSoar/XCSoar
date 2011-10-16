@@ -25,6 +25,7 @@ Copyright_License {
 #define XCSOAR_ROUGH_ANGLE_HPP
 
 #include "Math/fixed.hpp"
+#include "Compiler.h"
 
 #include <stdint.h>
 
@@ -46,6 +47,7 @@ class RoughAngle {
     return Angle::Radians(fixed(x) / 4096);
   }
 
+  gcc_constexpr_ctor
   RoughAngle(int16_t _value):value(_value) {}
 
 public:
@@ -57,12 +59,11 @@ public:
     return *this;
   }
 
-  gcc_pure
   operator Angle() const {
     return Export(value);
   }
 
-  gcc_pure
+  gcc_constexpr_method
   RoughAngle operator-(RoughAngle other) const {
     return RoughAngle(value - other.value);
   }
