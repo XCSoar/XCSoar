@@ -43,6 +43,14 @@ class TrackingGlue : protected StandbyThread {
   {
     LiveTrack24::SessionID session_id;
     unsigned packet_id;
+
+    void ResetSession() {
+      session_id = 0;
+    }
+
+    bool HasSession() {
+      return session_id != 0;
+    }
   };
 
   PeriodClock clock;
