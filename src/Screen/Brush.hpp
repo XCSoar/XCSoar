@@ -27,6 +27,7 @@ Copyright_License {
 #include "Util/NonCopyable.hpp"
 #include "Screen/Color.hpp"
 #include "Screen/Features.hpp"
+#include "Compiler.h"
 
 #ifdef USE_GDI
 class Bitmap;
@@ -51,6 +52,8 @@ protected:
 public:
 #ifndef USE_GDI
   Brush():hollow(true) {}
+
+  gcc_constexpr_ctor
   explicit Brush(const Color _color):hollow(false), color(_color)  {}
 #else
   /** Base Constructor of the Brush class */
