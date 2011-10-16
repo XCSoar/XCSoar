@@ -38,13 +38,13 @@ Copyright_License {
 struct NMEAInfo;
 struct DerivedInfo;
 
-struct LiveTrack24State
-{
-  LiveTrack24::SessionID session_id;
-  unsigned packet_id;
-};
-
 class TrackingGlue : protected StandbyThread {
+  struct LiveTrack24State
+  {
+    LiveTrack24::SessionID session_id;
+    unsigned packet_id;
+  };
+
   PeriodClock clock;
 
   TrackingSettings settings;
