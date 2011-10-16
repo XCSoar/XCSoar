@@ -35,6 +35,7 @@ class Angle
 {
   fixed value;
 
+  gcc_constexpr_ctor
   explicit Angle(const fixed &_value): value(_value) {};
 
 public:
@@ -44,16 +45,17 @@ public:
    */
   Angle() {}
 
-  gcc_const
+  gcc_constexpr_function
   static Angle Native(const fixed _value) {
     return Angle(_value);
   }
 
+  gcc_constexpr_method
   fixed Native() const {
     return value;
   }
 
-  gcc_const
+  gcc_constexpr_method
   static Angle Zero() {
     return Native(fixed_zero);
   }
@@ -64,22 +66,27 @@ public:
     return Angle(_value * fixed_deg_to_rad);
   }
 
-  gcc_const
+  gcc_constexpr_function
   static Angle Radians(const fixed _value) {
     return Angle(_value);
   }
 
+  gcc_pure
   fixed Degrees() const {
     return value * fixed_rad_to_deg;
   }
+
+  gcc_constexpr_method
   fixed Radians() const {
     return value;
   }
+
+  gcc_pure
   fixed Hours() const {
     return value * fixed(24) / fixed_two_pi;
   }
 #else
-  gcc_const
+  gcc_constexpr_function
   static Angle Degrees(const fixed _value) {
     return Angle(_value);
   }
@@ -89,12 +96,17 @@ public:
     return Angle(_value * fixed_rad_to_deg);
   }
 
+  gcc_constexpr_method
   fixed Degrees() const {
     return value;
   }
+
+  gcc_pure
   fixed Radians() const {
     return value * fixed_deg_to_rad;
   }
+
+  gcc_pure
   fixed Hours() const {
     return value * fixed(24. / 360.);
   }
@@ -189,7 +201,7 @@ public:
    * Returns half of this angle.  This is only useful (and valid) when
    * the angle has been normalized with AsDelta().
    */
-  gcc_pure
+  gcc_constexpr_method
   Angle Half() const {
     return Angle(::half(value));
   }
@@ -273,38 +285,38 @@ public:
     return *this;
   }
 
-  bool
-  operator==(const Angle&x) const
+  gcc_constexpr_method bool
+  operator==(const Angle x) const
   {
     return value == x.value;
   }
 
-  bool
-  operator!=(const Angle&x) const
+  gcc_constexpr_method bool
+  operator!=(const Angle x) const
   {
     return value != x.value;
   }
 
-  bool
-  operator<(const Angle&x) const
+  gcc_constexpr_method bool
+  operator<(const Angle x) const
   {
     return value < x.value;
   }
 
-  bool
-  operator>(const Angle&x) const
+  gcc_constexpr_method bool
+  operator>(const Angle x) const
   {
     return value > x.value;
   }
 
-  bool
-  operator<=(const Angle&x) const
+  gcc_constexpr_method bool
+  operator<=(const Angle x) const
   {
     return value <= x.value;
   }
 
-  bool
-  operator>=(const Angle&x) const
+  gcc_constexpr_method bool
+  operator>=(const Angle x) const
   {
     return value >= x.value;
   }
