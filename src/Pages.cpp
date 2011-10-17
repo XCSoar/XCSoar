@@ -122,24 +122,26 @@ Pages::OpenLayout(const PageLayout &layout)
   UIState &ui_state = CommonInterface::SetUIState();
 
   switch (layout.topLayout) {
-    case PageLayout::tlMap:
-      XCSoarInterface::main_window.SetFullScreen(true);
+  case PageLayout::tlMap:
+    XCSoarInterface::main_window.SetFullScreen(true);
+    ui_state.auxiliary_enabled = false;
+    break;
+
+  case PageLayout::tlMapAndInfoBoxes:
+    if (!layout.infoBoxConfig.autoSwitch &&
+        layout.infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
+      XCSoarInterface::main_window.SetFullScreen(false);
+      ui_state.auxiliary_enabled = true;
+      ui_state.auxiliary_index = layout.infoBoxConfig.panel;
+    }
+    else {
+      XCSoarInterface::main_window.SetFullScreen(false);
       ui_state.auxiliary_enabled = false;
-      break;
-    case PageLayout::tlMapAndInfoBoxes:
-      if (!layout.infoBoxConfig.autoSwitch &&
-          layout.infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
-        XCSoarInterface::main_window.SetFullScreen(false);
-        ui_state.auxiliary_enabled = true;
-        ui_state.auxiliary_index = layout.infoBoxConfig.panel;
-      }
-      else {
-        XCSoarInterface::main_window.SetFullScreen(false);
-        ui_state.auxiliary_enabled = false;
-      }
-      break;
-    case PageLayout::tlEmpty:
-      return;
+    }
+    break;
+
+  case PageLayout::tlEmpty:
+    return;
   }
 
   InfoBoxManager::SetDirty();
@@ -177,34 +179,36 @@ void
 Pages::PageLayout::MakeTitle(TCHAR* buffer, const bool concise) const
 {
   switch (topLayout) {
-    case PageLayout::tlMap:
-      if (concise)
-        _tcscpy(buffer, _("Info Hide"));
-      else 
-        _tcscpy(buffer, _("Map (Full screen)"));
-      break;
-    case PageLayout::tlMapAndInfoBoxes:
-      if (!infoBoxConfig.autoSwitch &&
-          infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
-        if (concise) {
-          _tcscpy(buffer, _("Info "));
-          _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
-        } else {
-          _tcscpy(buffer, _("Map and InfoBoxes "));
-          _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
-        }
+  case PageLayout::tlMap:
+    if (concise)
+      _tcscpy(buffer, _("Info Hide"));
+    else
+      _tcscpy(buffer, _("Map (Full screen)"));
+    break;
+
+  case PageLayout::tlMapAndInfoBoxes:
+    if (!infoBoxConfig.autoSwitch &&
+        infoBoxConfig.panel < InfoBoxSettings::MAX_PANELS) {
+      if (concise) {
+        _tcscpy(buffer, _("Info "));
+        _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
+      } else {
+        _tcscpy(buffer, _("Map and InfoBoxes "));
+        _tcscat(buffer, InfoBoxManager::GetPanelName(infoBoxConfig.panel));
       }
-      else {
-        if (concise) {
-          _tcscpy(buffer, _("Info Auto"));
-        } else {
-          _tcscpy(buffer, _("Map and InfoBoxes (Auto)"));
-        }
+    }
+    else {
+      if (concise) {
+        _tcscpy(buffer, _("Info Auto"));
+      } else {
+        _tcscpy(buffer, _("Map and InfoBoxes (Auto)"));
       }
-      break;
-    default:
-      _tcscpy(buffer, _T("---"));
-      break;
+    }
+    break;
+
+  default:
+    _tcscpy(buffer, _T("---"));
+    break;
   }
 }
 
