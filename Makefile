@@ -455,6 +455,7 @@ XCSOAR_SOURCES := \
 	$(SRC)/Terrain/WeatherTerrainRenderer.cpp \
 	$(SRC)/Terrain/TerrainSettings.cpp \
 	$(SRC)/Markers.cpp \
+	$(SRC)/ProtectedMarkers.cpp \
 	\
 	$(SRC)/FlightStatistics.cpp \
 	$(SRC)/Renderer/FlightStatisticsRenderer.cpp \

@@ -50,7 +50,7 @@ class TopographyStore;
 class TopographyRenderer;
 class RasterTerrain;
 class RasterWeather;
-class Markers;
+class ProtectedMarkers;
 class Waypoints;
 struct Waypoint;
 class Airspaces;
@@ -139,7 +139,7 @@ protected:
   const ProtectedRoutePlanner *route_planner;
   const GlideComputer *glide_computer;
 
-  Markers *marks;
+  ProtectedMarkers *marks;
 
   bool compass_visible;
 
@@ -215,7 +215,7 @@ public:
   void set_terrain(RasterTerrain *_terrain);
   void set_weather(RasterWeather *_weather);
 
-  void set_marks(Markers *_marks) {
+  void set_marks(ProtectedMarkers *_marks) {
     marks = _marks;
   }
 

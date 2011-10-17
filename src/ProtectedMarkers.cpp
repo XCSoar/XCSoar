@@ -21,35 +21,27 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MARKS_HPP
-#define XCSOAR_MARKS_HPP
+#include "ProtectedMarkers.hpp"
+#include "Markers.hpp"
 
-#include "Navigation/GeoPoint.hpp"
-#include "DateTime.hpp"
-
-#include <vector>
-
-class WindowProjection;
-class Canvas;
-struct MarkerLook;
-
-class Markers
+void
+ProtectedMarkers::Reset()
 {
-  struct Marker {
-    GeoPoint location;
-    BrokenDateTime time;
-  };
+  ExclusiveLease lease(*this);
+  lease->Reset();
+}
 
-  std::vector<Marker> marker_store;
+void
+ProtectedMarkers::MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
+{
+  ExclusiveLease lease(*this);
+  lease->MarkLocation(loc, time);
+}
 
-public:
-  Markers();
-  ~Markers();
-
-  void Reset();
-  void Draw(Canvas &canvas, const WindowProjection &projection,
-            const MarkerLook &look) const;
-  void MarkLocation(const GeoPoint &loc, const BrokenDateTime &time);
-};
-
-#endif
+void
+ProtectedMarkers::Draw(Canvas &canvas, const WindowProjection &projection,
+                       const MarkerLook &look) const
+{
+  Lease lease(*this);
+  lease->Draw(canvas, projection, look);
+}

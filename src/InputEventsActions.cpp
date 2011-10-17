@@ -67,7 +67,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Message.hpp"
-#include "Markers.hpp"
+#include "ProtectedMarkers.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Units/UnitsFormatter.hpp"
@@ -133,9 +133,9 @@ InputEvents::eventMarkLocation(const TCHAR *misc)
   const NMEAInfo &basic = CommonInterface::Basic();
 
   if (_tcscmp(misc, _T("reset")) == 0) {
-    marks->Reset();
+    protected_marks->Reset();
   } else {
-    marks->MarkLocation(basic.location, basic.date_time_utc);
+    protected_marks->MarkLocation(basic.location, basic.date_time_utc);
 
     if (XCSoarInterface::SettingsComputer().EnableSoundModes)
       PlayResource(_T("IDR_WAV_CLEAR"));

@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Markers.hpp"
+#include "ProtectedMarkers.hpp"
 #include "Topography/TopographyRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Units/Units.hpp"

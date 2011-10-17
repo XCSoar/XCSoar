@@ -21,30 +21,23 @@ Copyright_License {
 }
 */
 
-#ifndef XCSOAR_MARKS_HPP
-#define XCSOAR_MARKS_HPP
+#ifndef XCSOAR_PROTECTED_MARKS_HPP
+#define XCSOAR_PROTECTED_MARKS_HPP
 
-#include "Navigation/GeoPoint.hpp"
-#include "DateTime.hpp"
+#include "Thread/Guard.hpp"
 
-#include <vector>
-
+class Markers;
 class WindowProjection;
 class Canvas;
 struct MarkerLook;
+struct GeoPoint;
+struct BrokenDateTime;
 
-class Markers
+class ProtectedMarkers: public Guard<Markers>
 {
-  struct Marker {
-    GeoPoint location;
-    BrokenDateTime time;
-  };
-
-  std::vector<Marker> marker_store;
-
 public:
-  Markers();
-  ~Markers();
+  ProtectedMarkers(Markers &markers):
+    Guard<Markers>(markers) {}
 
   void Reset();
   void Draw(Canvas &canvas, const WindowProjection &projection,

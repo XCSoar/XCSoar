@@ -40,26 +40,19 @@ Markers::Markers()
 void
 Markers::Reset()
 {
-  Poco::ScopedRWLock protect(lock, true);
-
   marker_store.clear();
 }
 
 Markers::~Markers()
 {
-  Poco::ScopedRWLock protect(lock, true);
-
   LogStartUp(_T("CloseMarks"));
   marker_store.clear();
 }
 
 void
-Markers::MarkLocation(const GeoPoint &loc,
-                    const BrokenDateTime &time)
+Markers::MarkLocation(const GeoPoint &loc, const BrokenDateTime &time)
 {
   assert(time.Plausible());
-
-  Poco::ScopedRWLock protect(lock, true);
 
   Marker marker = { loc, time };
   marker_store.push_back(marker);
@@ -79,10 +72,8 @@ Markers::MarkLocation(const GeoPoint &loc,
 }
 
 void Markers::Draw(Canvas &canvas, const WindowProjection &projection,
-                 const MarkerLook &look)
+                 const MarkerLook &look) const
 {
-  Poco::ScopedRWLock protect(lock, false); // read only
-
   for (unsigned i = 0; i < marker_store.size(); i++) {
     RasterPoint sc;
     if (projection.GeoToScreenIfVisible(marker_store[i].location, sc))

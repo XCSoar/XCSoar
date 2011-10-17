@@ -53,6 +53,7 @@ Copyright_License {
 #include "DeviceBlackboard.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
 #include "Markers.hpp"
+#include "ProtectedMarkers.hpp"
 #include "Device/device.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
@@ -100,7 +101,8 @@ Copyright_License {
 #endif
 
 FileCache *file_cache;
-Markers *marks;
+static Markers *marks;
+ProtectedMarkers *protected_marks;
 TopographyStore *topography;
 RasterTerrain *terrain;
 RasterWeather RASP;
@@ -315,6 +317,7 @@ XCSoarInterface::Startup()
 
   // Initialize Markers
   marks = new Markers();
+  protected_marks = new ProtectedMarkers(*marks);
 
   // Show the main and map windows
   LogStartUp(_T("Create map window"));
@@ -447,7 +450,7 @@ XCSoarInterface::Startup()
     map_window->set_topography(topography);
     map_window->set_terrain(terrain);
     map_window->set_weather(&RASP);
-    map_window->set_marks(marks);
+    map_window->set_marks(protected_marks);
     map_window->SetLogger(&logger);
   }
 
@@ -594,6 +597,7 @@ XCSoarInterface::Shutdown(void)
   LogStartUp(_T("CloseTopography"));
   delete topography;
 
+  delete protected_marks;
   delete marks;
 
   // Close any device connections
