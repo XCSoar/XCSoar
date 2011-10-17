@@ -43,6 +43,7 @@ Copyright_License {
 #include "DateTime.hpp"
 #include "Engine/GlideSolvers/GlidePolar.hpp"
 #include "Engine/Atmosphere/Pressure.hpp"
+#include "Engine/Route/Route.hpp"
 
 /** Derived terrain altitude information, including glide range */
 struct TerrainInfo

@@ -25,7 +25,6 @@
 #include "Math/fixed.hpp"
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlideResult.hpp"
-#include "Route/RoutePlanner.hpp"
 #include "TaskSummary.hpp"
 
 #ifdef DO_PRINT

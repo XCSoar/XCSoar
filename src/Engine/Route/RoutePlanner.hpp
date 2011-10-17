@@ -26,6 +26,7 @@
 #include "Navigation/Geometry/GeoVector.hpp"
 #include "GlideSolvers/GlidePolar.hpp"
 #include "RoutePolar.hpp"
+#include "Route.hpp"
 #include "AStar.hpp"
 #include <utility>
 #include <algorithm>
@@ -59,11 +60,6 @@ namespace std
 }
 
 #endif
-
-/**
- * A Route is a vector of AGeoPoints.
- */
-typedef std::vector<AGeoPoint> Route;
 
 /**
  * RoutePlanner is an abstract class for planning paths (routes) through
