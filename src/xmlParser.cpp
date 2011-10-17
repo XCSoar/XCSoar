@@ -1254,32 +1254,6 @@ XMLNode::openFileHelper(const char *lpszXML)
   return xnode;
 }
 
-XMLNodeContents
-XMLNode::enumContents(unsigned i) const
-{
-  XMLNodeContents c;
-  if (!d) {
-    c.type = eNodeNULL;
-    return c;
-  }
-  c.type = (XMLElementType)(d->pOrder[i] & 3);
-  i = (d->pOrder[i]) >> 2;
-  switch (c.type) {
-  case eNodeChild:
-    c.child = d->pChild[i];
-    break;
-  case eNodeAttribute:
-    c.attrib = d->pAttribute[i];
-    break;
-  case eNodeText:
-    c.text = d->pText[i];
-    break;
-  default:
-    break;
-  }
-  return c;
-}
-
 const void *
 XMLNode::enumContent(const XMLNodeData *pEntry, unsigned i,
                      XMLElementType *nodeType)

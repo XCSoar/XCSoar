@@ -50,7 +50,7 @@ enum XMLError {
   eXMLErrorFileNotFound
 };
 
-/** Enumeration used to manage type of data. Use in conjonction with structure XMLNodeContents */
+/** Enumeration used to manage type of data. */
 enum XMLElementType {
   eNodeChild = 0,
   eNodeAttribute = 1,
@@ -71,7 +71,6 @@ struct XMLAttribute {
 };
 
 struct XML;
-struct XMLNodeContents;
 
 struct XMLNode {
 //  friend class XMLNode;
@@ -227,13 +226,6 @@ public:
   void serialise(TextWriter &writer, int nFormat) const;
 
   /**
-   * Enumerate all the different contents (child, text, clear,
-   * attribute) of the current XMLNode. The order is reflecting the
-   * order of the original file/string.
-   */
-  XMLNodeContents enumContents(unsigned i) const;
-
-  /**
    * nbr of different contents for current node
    */
   gcc_pure
@@ -317,17 +309,6 @@ private:
    */
   static void removeOrderElement(XMLNodeData *d, XMLElementType t,
                                  unsigned index);
-};
-
-// This structure is given by the function "enumContents".
-struct XMLNodeContents {
-  // This dictates what's the content of the XMLNodeContent
-  enum XMLElementType type;
-  // should be an union to access the appropriate data.
-  // compiler does not allow union of object with constructor... too bad.
-  XMLNode child;
-  XMLAttribute attrib;
-  const TCHAR *text;
 };
 
 #endif
