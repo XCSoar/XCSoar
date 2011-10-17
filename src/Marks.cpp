@@ -28,9 +28,7 @@ Copyright_License {
 #include "resource.h"
 #include "IO/TextWriter.hpp"
 #include "IO/DataFile.hpp"
-#include "Navigation/GeoPoint.hpp"
 #include "Projection/WindowProjection.hpp"
-#include "DateTime.hpp"
 
 Marks::Marks()
 {
@@ -63,7 +61,8 @@ Marks::MarkLocation(const GeoPoint &loc,
 
   Poco::ScopedRWLock protect(lock, true);
 
-  marker_store.push_back(loc);
+  Marker marker = { loc, time };
+  marker_store.push_back(marker);
 
   char message[160];
   sprintf(message, "%02u.%02u.%04u\t%02u:%02u:%02u\tLon:%f\tLat:%f",
@@ -85,7 +84,7 @@ void Marks::Draw(Canvas &canvas, const WindowProjection &projection)
 
   for (unsigned i = 0; i < marker_store.size(); i++) {
     RasterPoint sc;
-    if (projection.GeoToScreenIfVisible(marker_store[i], sc))
+    if (projection.GeoToScreenIfVisible(marker_store[i].location, sc))
       icon.draw(canvas, sc);
   }
 }

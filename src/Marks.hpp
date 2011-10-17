@@ -26,18 +26,23 @@ Copyright_License {
 
 #include "Poco/RWLock.h"
 #include "Screen/Icon.hpp"
+#include "Navigation/GeoPoint.hpp"
+#include "DateTime.hpp"
 
 #include <vector>
 
 class WindowProjection;
 class Canvas;
-struct GeoPoint;
-struct BrokenDateTime;
 
 class Marks
 {
+  struct Marker {
+    GeoPoint location;
+    BrokenDateTime time;
+  };
+
   MaskedIcon icon;
-  std::vector<GeoPoint> marker_store;
+  std::vector<Marker> marker_store;
 
   Poco::RWLock lock;
 
