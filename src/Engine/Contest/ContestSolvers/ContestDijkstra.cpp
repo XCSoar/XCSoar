@@ -24,6 +24,7 @@ Copyright_License {
 #include "ContestDijkstra.hpp"
 #include "../ContestResult.hpp"
 #include "Trace/Trace.hpp"
+#include "Util/GlobalSliceAllocator.hpp"
 
 #include <algorithm>
 #include <assert.h>

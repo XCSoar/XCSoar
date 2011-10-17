@@ -23,6 +23,7 @@
 #include "FlatTriangleFanTree.hpp"
 #include "Terrain/RasterMap.hpp"
 #include "ReachFanParms.hpp"
+#include "Util/GlobalSliceAllocator.hpp"
 
 #define REACH_BUFFER 1
 #define REACH_SWEEP (ROUTEPOLAR_Q1-REACH_BUFFER)

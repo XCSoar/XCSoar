@@ -23,6 +23,8 @@ Copyright_License {
 
 #include "Trace.hpp"
 #include "Navigation/Aircraft.hpp"
+#include "Util/GlobalSliceAllocator.hpp"
+
 #include <algorithm>
 
 Trace::Trace(const unsigned _no_thin_time, const unsigned max_time,
