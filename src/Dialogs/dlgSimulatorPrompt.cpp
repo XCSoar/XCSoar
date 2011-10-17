@@ -67,7 +67,7 @@ OnQuitClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrCancel);
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnLogoPaint),
   DeclareCallBackEntry(OnFlyClicked),
   DeclareCallBackEntry(OnSimulatorClicked),

@@ -37,7 +37,7 @@ Copyright_License {
 
 TabMenuControl::TabMenuControl(ContainerWindow &_parent,
                                WndForm &_form,
-                               CallBackTableEntry *_look_up_table,
+                               const CallBackTableEntry *_look_up_table,
                                const DialogLook &look, const TCHAR * _caption,
                                PixelScalar x, PixelScalar y,
                                UPixelScalar _width, UPixelScalar _height,

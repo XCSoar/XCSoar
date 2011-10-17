@@ -143,7 +143,7 @@ LoadTextFromResource(const TCHAR* name, const TCHAR* control)
   ((WndProperty *)wf->FindByName(control))->SetText(buffer2, true);
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnClose),
   DeclareCallBackEntry(OnNext),
   DeclareCallBackEntry(OnPrev),

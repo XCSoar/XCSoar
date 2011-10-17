@@ -48,7 +48,7 @@ OnOK(gcc_unused WndButton &Sender)
   wf->SetModalResult(mrOK);
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnOK),
   DeclareCallBackEntry(OnCancel),
   DeclareCallBackEntry(NULL)

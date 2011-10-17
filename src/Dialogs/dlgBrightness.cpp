@@ -89,7 +89,7 @@ static void OnBrightnessData(DataField *Sender,
 }
 
 
-static CallBackTableEntry CallBackTable[]={
+static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnAutoData),
   DeclareCallBackEntry(OnBrightnessData),
   DeclareCallBackEntry(OnCloseClicked),

@@ -172,7 +172,7 @@ InfoBoxContentMacCready::PanelContent InfoBoxContentMacCready::Panels[] = {
     (*InfoBoxContentMacCready::PnlSetupPreShow))
 };
 
-CallBackTableEntry InfoBoxContentMacCready::CallBackTable[] = {
+const CallBackTableEntry InfoBoxContentMacCready::CallBackTable[] = {
   DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnPlusSmall),
   DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnPlusBig),
   DeclareCallBackEntry(InfoBoxContentMacCready::PnlEditOnMinusSmall),

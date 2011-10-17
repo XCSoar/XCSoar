@@ -159,7 +159,7 @@ OnLookupClicked(gcc_unused WndButton &Sender)
   dlgAirspaceSelect();
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnLookupClicked),
   DeclareCallBackEntry(NULL)

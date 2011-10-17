@@ -241,7 +241,7 @@ PolarChanged(gcc_unused DataField *Sender, DataField::DataAccessKind_t Mode)
   }
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OKClicked),
   DeclareCallBackEntry(CancelClicked),
   DeclareCallBackEntry(ListClicked),

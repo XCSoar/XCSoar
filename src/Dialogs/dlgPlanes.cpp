@@ -266,7 +266,7 @@ ListItemSelected(unsigned i)
     Load(i);
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
    DeclareCallBackEntry(LoadClicked),
    DeclareCallBackEntry(CloseClicked),
    DeclareCallBackEntry(NewClicked),

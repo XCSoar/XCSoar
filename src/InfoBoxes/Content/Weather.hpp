@@ -61,7 +61,7 @@ public:
   static void PnlEditOnWindSpeed(DataFieldFloat &Sender);
   static void PnlEditOnWindDirection(DataFieldFloat &Sender);
 
-  static CallBackTableEntry CallBackTable[];
+  static const CallBackTableEntry CallBackTable[];
   static PanelContent Panels[];
 
   static DialogContent dlgContent;

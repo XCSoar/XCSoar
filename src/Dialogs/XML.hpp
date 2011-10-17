@@ -69,11 +69,11 @@ void
 SetXMLDialogLook(const DialogLook &dialog_look);
 
 Window *
-LoadWindow(CallBackTableEntry *LookUpTable, WndForm *form,
+LoadWindow(const CallBackTableEntry *LookUpTable, WndForm *form,
            ContainerWindow &parent, const TCHAR *resource);
 
 WndForm *
-LoadDialog(CallBackTableEntry *LookUpTable, SingleWindow &Parent,
+LoadDialog(const CallBackTableEntry *LookUpTable, SingleWindow &Parent,
                const TCHAR *resource, const PixelRect *targetRect = NULL);
 
 #endif

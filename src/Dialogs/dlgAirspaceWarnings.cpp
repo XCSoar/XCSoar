@@ -478,7 +478,7 @@ dlgAirspaceWarningVisible()
   return (wf != NULL);
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnAckClicked),
   DeclareCallBackEntry(OnAck1Clicked),
   DeclareCallBackEntry(OnAck2Clicked),

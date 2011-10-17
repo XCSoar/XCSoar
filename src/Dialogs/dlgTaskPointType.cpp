@@ -179,7 +179,7 @@ OnPointCursorCallback(gcc_unused unsigned i)
   RefreshView();
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnSelectClicked),
   DeclareCallBackEntry(NULL)

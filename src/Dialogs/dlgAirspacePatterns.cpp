@@ -63,7 +63,7 @@ OnCloseClicked(gcc_unused WndButton &Sender)
 }
 
 
-static CallBackTableEntry CallBackTable[]={
+static gcc_constexpr_data CallBackTableEntry CallBackTable[]={
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)
 };

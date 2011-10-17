@@ -144,7 +144,8 @@ dlgInfoBoxAccess::pnlCloseOnTabPreShow(TabBarControl::EventType EventType)
 
 Window*
 dlgInfoBoxAccess::pnlCloseLoad(gcc_unused SingleWindow &parent, TabBarControl* wTabBar,
-                            WndForm* _wf, CallBackTableEntry* CallBackTable)
+                               WndForm* _wf,
+                               const CallBackTableEntry *CallBackTable)
 {
   assert(wTabBar);
 

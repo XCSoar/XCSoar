@@ -42,7 +42,7 @@ public:
   static bool PnlInfoOnTabPreShow(TabBarControl::EventType EventType);
   static bool PnlInfoUpdate();
 
-  static CallBackTableEntry CallBackTable[];
+  static const CallBackTableEntry CallBackTable[];
   static PanelContent Panels[];
 
   static DialogContent dlgContent;

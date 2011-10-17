@@ -117,7 +117,7 @@ OnWaypointDeleteClicked(gcc_unused WndButton &Sender)
 #endif
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnWaypointNewClicked),
   DeclareCallBackEntry(OnWaypointDeleteClicked),
   DeclareCallBackEntry(OnWaypointEditClicked),

@@ -379,7 +379,7 @@ OnOZData(gcc_unused DataField *Sender,
   wTaskView->invalidate();
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnRemoveClicked),
   DeclareCallBackEntry(OnRelocateClicked),

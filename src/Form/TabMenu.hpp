@@ -93,7 +93,7 @@ public:
    * @return
    */
   TabMenuControl(ContainerWindow &parent,
-                 WndForm &_form, CallBackTableEntry *_look_up_table,
+                 WndForm &_form, const CallBackTableEntry *_look_up_table,
                  const DialogLook &look, const TCHAR * Caption,
                  PixelScalar x, PixelScalar y,
                  UPixelScalar width, UPixelScalar height,
@@ -235,7 +235,7 @@ protected:
   void SetIsVisible(bool visible);
 
   WndForm &form;
-  CallBackTableEntry *LookUpTable;
+  const CallBackTableEntry *LookUpTable;
 
   TabMenuDisplay *GetTabMenuDisplay() {return (TabMenuDisplay*)theTabDisplay; }
   /**

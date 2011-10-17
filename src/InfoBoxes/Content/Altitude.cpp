@@ -273,7 +273,7 @@ InfoBoxContentAltitude::PanelContent InfoBoxContentAltitude::Panels[] = {
     (*InfoBoxContentAltitude::PnlSetupLoad))
 };
 
-CallBackTableEntry InfoBoxContentAltitude::CallBackTable[] = {
+const CallBackTableEntry InfoBoxContentAltitude::CallBackTable[] = {
   DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlusBig),
   DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnPlusSmall),
   DeclareCallBackEntry(InfoBoxContentAltitude::PnlSimulatorOnMinusSmall),

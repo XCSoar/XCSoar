@@ -330,7 +330,7 @@ FormKeyDown(WndForm &Sender, unsigned key_code){
 
 #endif /* GNAV */
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnFilterName),
   DeclareCallBackEntry(OnFilterDistance),
   DeclareCallBackEntry(OnFilterDirection),

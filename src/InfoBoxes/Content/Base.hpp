@@ -90,7 +90,7 @@ public:
   struct DialogContent {
     const int PANELSIZE;
     PanelContent* Panels;
-    CallBackTableEntry* CallBackTable;
+    const CallBackTableEntry *CallBackTable;
   };
 
   virtual DialogContent* GetDialogContent() {

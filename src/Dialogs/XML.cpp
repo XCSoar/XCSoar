@@ -92,12 +92,12 @@ typedef Window *(*CreateWindowCallback_t)(ContainerWindow &parent,
 
 static Window *
 LoadChild(WndForm &form, ContainerWindow &parent,
-          CallBackTableEntry *lookup_table, XMLNode node,
+          const CallBackTableEntry *lookup_table, XMLNode node,
           const DialogStyle dialog_style, int bottom_most = 0);
 
 static void
 LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
-                    CallBackTableEntry *lookup_table, XMLNode *node,
+                    const CallBackTableEntry *lookup_table, XMLNode *node,
                     const DialogStyle dialog_style);
 
 /**
@@ -298,7 +298,7 @@ GetSize(const XMLNode &node, const PixelRect rc, const RasterPoint &pos)
 }
 
 static void *
-CallBackLookup(CallBackTableEntry *lookup_table, const TCHAR *name)
+CallBackLookup(const CallBackTableEntry *lookup_table, const TCHAR *name)
 {
   if (lookup_table != NULL && name != NULL && !string_is_empty(name))
     for (unsigned i = 0; lookup_table[i].callback != NULL; i++)
@@ -309,7 +309,7 @@ CallBackLookup(CallBackTableEntry *lookup_table, const TCHAR *name)
 }
 
 static void *
-GetCallBack(CallBackTableEntry *lookup_table,
+GetCallBack(const CallBackTableEntry *lookup_table,
             const XMLNode &node, const TCHAR* attribute)
 {
   return CallBackLookup(lookup_table,
@@ -396,7 +396,7 @@ InitScaleWidth(const PixelSize size, const PixelRect rc,
  * @return the pointer to the Window added to the form
  */
 Window *
-LoadWindow(CallBackTableEntry *lookup_table, WndForm *form,
+LoadWindow(const CallBackTableEntry *lookup_table, WndForm *form,
            ContainerWindow &parent, const TCHAR *resource)
 {
   if (!form)
@@ -427,7 +427,7 @@ LoadWindow(CallBackTableEntry *lookup_table, WndForm *form,
  * @return The WndForm object
  */
 WndForm *
-LoadDialog(CallBackTableEntry *lookup_table, SingleWindow &parent,
+LoadDialog(const CallBackTableEntry *lookup_table, SingleWindow &parent,
            const TCHAR *resource, const PixelRect *target_rc)
 {
   WndForm *form = NULL;
@@ -502,7 +502,7 @@ LoadDialog(CallBackTableEntry *lookup_table, SingleWindow &parent,
 }
 
 static DataField *
-LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
+LoadDataField(const XMLNode &node, const CallBackTableEntry *LookUpTable,
               const DialogStyle eDialogStyle)
 {
   TCHAR data_type[32];
@@ -562,7 +562,7 @@ LoadDataField(const XMLNode &node, CallBackTableEntry *LookUpTable,
  */
 static Window *
 LoadChild(WndForm &form, ContainerWindow &parent,
-          CallBackTableEntry *lookup_table, XMLNode node,
+          const CallBackTableEntry *lookup_table, XMLNode node,
           const DialogStyle dialog_style, int bottom_most)
 {
   Window *window = NULL;
@@ -873,7 +873,7 @@ LoadChild(WndForm &form, ContainerWindow &parent,
  */
 static void
 LoadChildrenFromXML(WndForm &form, ContainerWindow &parent,
-                    CallBackTableEntry *lookup_table, XMLNode *node,
+                    const CallBackTableEntry *lookup_table, XMLNode *node,
                     const DialogStyle dialog_style)
 {
   // Get the number of childnodes

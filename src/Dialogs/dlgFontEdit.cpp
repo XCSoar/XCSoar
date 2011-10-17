@@ -98,7 +98,7 @@ OnData(gcc_unused DataField *Sender, DataField::DataAccessKind_t Mode)
     RedrawSampleFont();
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnData),
   DeclareCallBackEntry(OnResetClicked),
   DeclareCallBackEntry(OnCancelClicked),

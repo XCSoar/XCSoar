@@ -209,7 +209,7 @@ PrepareConfigurationMenu()
                      ARRAY_SIZE(main_menu_captions));
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceColoursClicked),
   DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceModeClicked),
   DeclareCallBackEntry(AirspaceConfigPanel::OnAirspaceDisplay),

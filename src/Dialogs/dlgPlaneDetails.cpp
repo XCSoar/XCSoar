@@ -131,7 +131,7 @@ PolarClicked(gcc_unused WndButton &button)
   Update();
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OKClicked),
   DeclareCallBackEntry(CancelClicked),
   DeclareCallBackEntry(RegistrationClicked),

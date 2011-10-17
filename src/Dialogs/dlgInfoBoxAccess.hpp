@@ -49,7 +49,8 @@ public:
    * @return Window* that points to the control created
    */
   static Window* pnlCloseLoad(SingleWindow &parent, TabBarControl* wTabBar,
-                      WndForm* wf, CallBackTableEntry* CallBackTable);
+                              WndForm* wf,
+                              const CallBackTableEntry *CallBackTable);
 
   static void pnlCloseOnCloseClicked(WndButton &Sender);
   /**

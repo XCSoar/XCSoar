@@ -62,7 +62,7 @@ OnWeatherHelp(WindowControl * Sender)
   dlgHelpShowModal(XCSoarInterface::main_window, caption, help);
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnWeatherHelp),
   DeclareCallBackEntry(NULL)

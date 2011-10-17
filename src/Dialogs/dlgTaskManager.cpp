@@ -189,7 +189,7 @@ dlgTaskManagerShowModal(SingleWindow &parent)
   dlgTaskManager::dlgTaskManagerShowModal(parent);
 }
 
-CallBackTableEntry dlgTaskManager::CallBackTable[] = {
+const CallBackTableEntry dlgTaskManager::CallBackTable[] = {
   DeclareCallBackEntry(dlgTaskManager::OnTaskPaint),
   DeclareCallBackEntry(dlgTaskManager::OnBlackBarPaint),
 

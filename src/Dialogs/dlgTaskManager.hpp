@@ -53,7 +53,7 @@ public:
   static bool OnClose();
   static void dlgTaskManagerShowModal(SingleWindow &parent);
   static void RevertTask();
-  static CallBackTableEntry CallBackTable[];
+  static const CallBackTableEntry CallBackTable[];
 
   /**
    * restores task view rect

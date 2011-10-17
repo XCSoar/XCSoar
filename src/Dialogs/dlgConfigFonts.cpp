@@ -249,7 +249,7 @@ OnCloseClicked(gcc_unused WndButton &button)
   wf->SetModalResult(mrOK);
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnUseCustomFontData),
   DeclareCallBackEntry(OnEditInfoWindowFontClicked),
   DeclareCallBackEntry(OnEditTitleWindowFontClicked),

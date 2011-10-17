@@ -68,7 +68,7 @@ OnTimerNotify(gcc_unused WndForm &Sender)
   Update();
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCreateThermalAssistantControl),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(NULL)

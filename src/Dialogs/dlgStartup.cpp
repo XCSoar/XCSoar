@@ -71,7 +71,7 @@ SelectProfile(const TCHAR *path)
   SetPrimaryDataPath(DirName(path, temp));
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnLogoPaint),
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnQuitClicked),

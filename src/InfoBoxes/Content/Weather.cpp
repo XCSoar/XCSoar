@@ -282,7 +282,7 @@ InfoBoxContentWind::PanelContent (
   (*InfoBoxContentWind::PnlSetupOnTabPreHide))
 };
 
-CallBackTableEntry InfoBoxContentWind::CallBackTable[] = {
+const CallBackTableEntry InfoBoxContentWind::CallBackTable[] = {
   DeclareCallBackEntry(InfoBoxContentWind::PnlEditOnWindSpeed),
   DeclareCallBackEntry(InfoBoxContentWind::PnlEditOnWindDirection),
 

@@ -277,7 +277,7 @@ OnFriendClearClicked(gcc_unused WndButton &Sender)
   FlarmFriends::SetFriendColor(target_id, FlarmFriends::NONE);
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnCloseClicked),
   DeclareCallBackEntry(OnTeamClicked),
   DeclareCallBackEntry(OnCallsignClicked),

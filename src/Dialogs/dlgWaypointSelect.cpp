@@ -824,7 +824,7 @@ dlgWaypointSelectAddToLastUsed(const Waypoint &wp)
   LastUsedWaypointNames.push_back(wp.id);
 }
 
-static CallBackTableEntry CallBackTable[] = {
+static gcc_constexpr_data CallBackTableEntry CallBackTable[] = {
   DeclareCallBackEntry(OnFilterDistance),
   DeclareCallBackEntry(OnFilterDirection),
   DeclareCallBackEntry(OnFilterType),
