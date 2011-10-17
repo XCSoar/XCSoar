@@ -41,8 +41,6 @@ namespace CuSonde
   static const unsigned NUM_LEVELS = 100;
 
   struct Level {
-    Level():nmeasurements(0), thermalHeight(-1), cloudBase(-1) {}
-
     /** Environmental temperature in degrees C */
     fixed airTemp;
     /** DewPoint in degrees C */
