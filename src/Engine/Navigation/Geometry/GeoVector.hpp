@@ -45,6 +45,7 @@ struct GeoVector {
   GeoVector() {}
 
   /** Constructor given supplied distance/bearing */
+  gcc_constexpr_ctor
   GeoVector(const fixed _distance, const Angle &_bearing)
     :distance(_distance), bearing(_bearing) {}
 
@@ -104,6 +105,7 @@ struct GeoVector {
   gcc_pure
   fixed MinimumDistance(const GeoPoint &source, const GeoPoint &ref) const;
 
+  gcc_constexpr_method
   inline bool IsValid() const {
     return !negative(distance);
   }
