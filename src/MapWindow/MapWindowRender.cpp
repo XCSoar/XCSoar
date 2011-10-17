@@ -22,7 +22,7 @@ Copyright_License {
 */
 
 #include "MapWindow.hpp"
-#include "Marks.hpp"
+#include "Markers.hpp"
 #include "Topography/TopographyRenderer.hpp"
 #include "Task/ProtectedTaskManager.hpp"
 #include "Units/Units.hpp"
@@ -80,7 +80,7 @@ MapWindow::RenderAirspace(Canvas &canvas)
 }
 
 void
-MapWindow::RenderMarks(Canvas &canvas)
+MapWindow::RenderMarkers(Canvas &canvas)
 {
   if (marks != NULL &&
       render_projection.GetMapScale() <= fixed_int_constant(30000))
@@ -140,7 +140,7 @@ MapWindow::Render(Canvas &canvas, const PixelRect &rc)
   // Render the snail trail
   RenderTrail(canvas, aircraft_pos);
 
-  RenderMarks(canvas);
+  RenderMarkers(canvas);
 
   // Render estimate of thermal location
   DrawThermalEstimate(canvas);

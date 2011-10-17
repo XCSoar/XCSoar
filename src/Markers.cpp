@@ -21,7 +21,7 @@ Copyright_License {
 }
 */
 
-#include "Marks.hpp"
+#include "Markers.hpp"
 #include "Compatibility/string.h"
 #include "LocalPath.hpp"
 #include "LogFile.hpp"
@@ -31,21 +31,21 @@ Copyright_License {
 #include "Projection/WindowProjection.hpp"
 #include "Look/MarkerLook.hpp"
 
-Marks::Marks()
+Markers::Markers()
 {
   LogStartUp(_T("Initialise marks"));
   Reset();
 }
 
 void
-Marks::Reset()
+Markers::Reset()
 {
   Poco::ScopedRWLock protect(lock, true);
 
   marker_store.clear();
 }
 
-Marks::~Marks()
+Markers::~Markers()
 {
   Poco::ScopedRWLock protect(lock, true);
 
@@ -54,7 +54,7 @@ Marks::~Marks()
 }
 
 void
-Marks::MarkLocation(const GeoPoint &loc,
+Markers::MarkLocation(const GeoPoint &loc,
                     const BrokenDateTime &time)
 {
   assert(time.Plausible());
@@ -78,7 +78,7 @@ Marks::MarkLocation(const GeoPoint &loc,
   }
 }
 
-void Marks::Draw(Canvas &canvas, const WindowProjection &projection,
+void Markers::Draw(Canvas &canvas, const WindowProjection &projection,
                  const MarkerLook &look)
 {
   Poco::ScopedRWLock protect(lock, false); // read only

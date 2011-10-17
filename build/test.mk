@@ -1652,7 +1652,7 @@ RUN_MAP_WINDOW_SOURCES = \
 	$(SRC)/Renderer/WaypointIconRenderer.cpp \
 	$(SRC)/Renderer/WaypointRenderer.cpp \
 	$(SRC)/Renderer/WindArrowRenderer.cpp \
-	$(SRC)/Marks.cpp \
+	$(SRC)/Markers.cpp \
 	$(SRC)/Math/Screen.cpp \
 	$(SRC)/Terrain/RasterBuffer.cpp \
 	$(SRC)/Terrain/RasterProjection.cpp \

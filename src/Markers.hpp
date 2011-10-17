@@ -35,7 +35,7 @@ class WindowProjection;
 class Canvas;
 struct MarkerLook;
 
-class Marks
+class Markers
 {
   struct Marker {
     GeoPoint location;
@@ -47,8 +47,8 @@ class Marks
   Poco::RWLock lock;
 
 public:
-  Marks();
-  ~Marks();
+  Markers();
+  ~Markers();
 
   void Reset();
   void Draw(Canvas &canvas, const WindowProjection &projection,

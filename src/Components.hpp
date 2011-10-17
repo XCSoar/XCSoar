@@ -25,7 +25,7 @@ Copyright_License {
 #define XCSOAR_COMPONENTS_HPP
 
 class FileCache;
-class Marks;
+class Markers;
 class TopographyStore;
 class RasterTerrain;
 class RasterWeather;
@@ -49,7 +49,7 @@ extern ProtectedAirspaceWarningManager *airspace_warnings;
 extern Waypoints way_points;
 extern ProtectedTaskManager *protected_task_manager;
 extern Replay *replay;
-extern Marks *marks;
+extern Markers *marks;
 extern TopographyStore *topography;
 extern RasterTerrain *terrain;
 extern RasterWeather RASP;

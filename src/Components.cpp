@@ -52,7 +52,7 @@ Copyright_License {
 #include "Screen/Fonts.hpp"
 #include "DeviceBlackboard.hpp"
 #include "MapWindow/GlueMapWindow.hpp"
-#include "Marks.hpp"
+#include "Markers.hpp"
 #include "Device/device.hpp"
 #include "Topography/TopographyStore.hpp"
 #include "Topography/TopographyGlue.hpp"
@@ -100,7 +100,7 @@ Copyright_License {
 #endif
 
 FileCache *file_cache;
-Marks *marks;
+Markers *marks;
 TopographyStore *topography;
 RasterTerrain *terrain;
 RasterWeather RASP;
@@ -313,8 +313,8 @@ XCSoarInterface::Startup()
   // Initialize DeviceBlackboard
   device_blackboard.Initialise();
 
-  // Initialize Marks
-  marks = new Marks();
+  // Initialize Markers
+  marks = new Markers();
 
   // Show the main and map windows
   LogStartUp(_T("Create map window"));

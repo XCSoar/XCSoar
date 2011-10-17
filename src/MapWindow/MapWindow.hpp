@@ -50,7 +50,7 @@ class TopographyStore;
 class TopographyRenderer;
 class RasterTerrain;
 class RasterWeather;
-class Marks;
+class Markers;
 class Waypoints;
 struct Waypoint;
 class Airspaces;
@@ -139,7 +139,7 @@ protected:
   const ProtectedRoutePlanner *route_planner;
   const GlideComputer *glide_computer;
 
-  Marks *marks;
+  Markers *marks;
 
   bool compass_visible;
 
@@ -215,7 +215,7 @@ public:
   void set_terrain(RasterTerrain *_terrain);
   void set_weather(RasterWeather *_weather);
 
-  void set_marks(Marks *_marks) {
+  void set_marks(Markers *_marks) {
     marks = _marks;
   }
 
@@ -328,7 +328,7 @@ private:
    * Renders the markers
    * @param canvas The drawing canvas
    */
-  void RenderMarks(Canvas &canvas);
+  void RenderMarkers(Canvas &canvas);
   /**
    * Render final glide through terrain marker
    * @param canvas The drawing canvas

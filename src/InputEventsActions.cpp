@@ -67,7 +67,7 @@ doc/html/advanced/input/ALL		http://xcsoar.sourceforge.net/advanced/input/
 #include "Dialogs/dlgAnalysis.hpp"
 #include "Dialogs/AirspaceWarningDialog.hpp"
 #include "Message.hpp"
-#include "Marks.hpp"
+#include "Markers.hpp"
 #include "InfoBoxes/InfoBoxLayout.hpp"
 #include "InfoBoxes/InfoBoxManager.hpp"
 #include "Units/UnitsFormatter.hpp"
