@@ -36,6 +36,11 @@ struct BrokenDateTime;
 
 class Marks
 {
+  MaskedIcon icon;
+  std::vector<GeoPoint> marker_store;
+
+  Poco::RWLock lock;
+
 public:
   Marks();
   ~Marks();
@@ -44,12 +49,6 @@ public:
   void Draw(Canvas &canvas, const WindowProjection &projection);
   void MarkLocation(const GeoPoint &loc,
                     const BrokenDateTime &time);
-
-private:
-  MaskedIcon icon;
-  std::vector<GeoPoint> marker_store;
-
-  Poco::RWLock lock;
 };
 
 #endif
