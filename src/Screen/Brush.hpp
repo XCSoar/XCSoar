@@ -61,10 +61,10 @@ public:
    * @param c Color of the Brush
    */
   explicit Brush(const Color c) : brush(NULL) { set(c); }
-  #endif
 
   /** Destructor */
   ~Brush() { reset(); }
+  #endif
 
 public:
   /**

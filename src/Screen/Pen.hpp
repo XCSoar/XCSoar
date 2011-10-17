@@ -86,10 +86,10 @@ public:
   Pen(unsigned width, Color c):pen(NULL) {
     set(width, c);
   }
-#endif /* USE_GDI */
 
   /** Destructor */
   ~Pen() { reset(); }
+#endif /* USE_GDI */
 
 public:
   /**
