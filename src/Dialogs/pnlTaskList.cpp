@@ -49,7 +49,7 @@ static TabBarControl* wTabBar;
 static WndListFrame* wTasks = NULL;
 static WndOwnerDrawFrame* wTaskView = NULL;
 static TabbedControl *browse_tabbed = NULL;
-static TaskStore task_store;
+static TaskStore *task_store;
 static PixelRect TaskViewRect;
 static bool fullscreen;
 
@@ -71,10 +71,10 @@ get_cursor_index()
 static OrderedTask*
 get_cursor_task()
 {
-  if (get_cursor_index() >= task_store.size())
+  if (get_cursor_index() >= task_store->size())
     return NULL;
 
-  OrderedTask * ordered_task = task_store.get_task(get_cursor_index());
+  OrderedTask * ordered_task = task_store->get_task(get_cursor_index());
 
   if (!ordered_task)
     return NULL;
@@ -90,10 +90,10 @@ get_cursor_task()
 static const TCHAR *
 get_cursor_name()
 {
-  if (get_cursor_index() >= task_store.size())
+  if (get_cursor_index() >= task_store->size())
     return _T("");
 
-  return task_store.get_name(get_cursor_index());
+  return task_store->get_name(get_cursor_index());
 }
 
 static OrderedTask*
@@ -131,9 +131,9 @@ void
 pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
                                  unsigned DrawListIndex)
 {
-  assert(DrawListIndex <= task_store.size());
+  assert(DrawListIndex <= task_store->size());
 
-  const TCHAR *name = task_store.get_name(DrawListIndex);
+  const TCHAR *name = task_store->get_name(DrawListIndex);
 
   canvas.text(rc.left + Layout::FastScale(2),
               rc.top + Layout::FastScale(2), name);
@@ -142,7 +142,7 @@ pnlTaskList::OnTaskPaintListItem(Canvas &canvas, const PixelRect rc,
 static void
 RefreshView()
 {
-  wTasks->SetLength(task_store.size());
+  wTasks->SetLength(task_store->size());
   wTaskView->invalidate();
 
   WndFrame* wSummary = (WndFrame*)wf->FindByName(_T("frmSummary1"));
@@ -169,7 +169,7 @@ SaveTask()
     if (!OrderedTaskSave(*(SingleWindow *)wf->get_root_owner(), **active_task))
       return;
 
-    task_store.scan();
+    task_store->scan();
     RefreshView();
   } else {
     MessageBoxX(getTaskValidationErrors(
@@ -233,7 +233,7 @@ DeleteTask()
   LocalPath(path, fname);
   File::Delete(path);
 
-  task_store.scan();
+  task_store->scan();
   RefreshView();
 }
 
@@ -279,7 +279,7 @@ RenameTask()
 
   File::Rename(oldpath, newpath);
 
-  task_store.scan();
+  task_store->scan();
   RefreshView();
 }
 
@@ -297,7 +297,7 @@ pnlTaskList::OnBrowseClicked(gcc_unused WndButton &Sender)
   if (!lazy_loaded) {
     lazy_loaded = true;
     // Scan XCSoarData for available tasks
-    task_store.scan();
+    task_store->scan();
   }
 
   dlgTaskManager::TaskViewRestore(wTaskView);
@@ -417,7 +417,7 @@ pnlTaskList::OnTabReClick()
 void
 pnlTaskList::DestroyTab()
 {
-  task_store.clear();
+  delete task_store;
 }
 
 Window*
@@ -437,6 +437,7 @@ pnlTaskList::Load(SingleWindow &parent, TabBarControl* _wTabBar, WndForm* _wf,
   assert(_task_modified);
   task_modified = _task_modified;
 
+  task_store = new TaskStore();
   lazy_loaded = false;
 
   // Load the dialog
