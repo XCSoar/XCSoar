@@ -37,6 +37,8 @@ Copyright_License {
 #include "Engine/Waypoint/Waypoints.hpp"
 #include "NMEA/Aircraft.hpp"
 #include "Task/ProtectedTaskManager.hpp"
+#include "ProtectedMarkers.hpp"
+#include "Markers.hpp"
 #include "MapItem.hpp"
 #include "MapItemList.hpp"
 
@@ -200,5 +202,19 @@ MapItemListBuilder::AddTaskOZs(const ProtectedTaskManager &task)
     if (oz)
       list.checked_append(new TaskOZMapItem(i, *oz, task_point->GetType(),
                                             task_point->GetWaypoint()));
+  }
+}
+
+void
+MapItemListBuilder::AddMarkers(const ProtectedMarkers &marks, fixed range)
+{
+  ProtectedMarkers::Lease lease(marks);
+  unsigned i = 0;
+  for (Markers::const_iterator it = lease->begin(), it_end = lease->end();
+       it != it_end; ++it) {
+    if (location.Distance(it->location) < range)
+      list.checked_append(new MarkerMapItem(i, *it));
+
+    i++;
   }
 }

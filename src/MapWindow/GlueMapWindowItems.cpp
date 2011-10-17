@@ -50,6 +50,9 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
                                SettingsMap().airspace, Basic(),
                                Calculated());
 
+  if (marks)
+    builder.AddMarkers(*marks, range);
+
   if (way_points)
     builder.AddWaypoints(*way_points, range);
 
@@ -67,7 +70,7 @@ GlueMapWindow::ShowMapItems(const GeoPoint &location)
                         aircraft_look,
                         airspace_renderer.GetLook(),
                         way_point_renderer.GetLook(),
-                        task_look, SettingsMap());
+                        task_look, marker_look, SettingsMap());
 
   // Save function result for later
   return !list.empty();

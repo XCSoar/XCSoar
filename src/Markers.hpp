@@ -35,16 +35,18 @@ struct MarkerLook;
 
 class Markers
 {
+public:
   struct Marker {
     GeoPoint location;
     BrokenDateTime time;
   };
 
+  typedef std::vector<Marker>::const_iterator const_iterator;
+
+private:
   std::vector<Marker> marker_store;
 
 public:
-  typedef std::vector<Marker>::const_iterator const_iterator;
-
   Markers();
   ~Markers();
 

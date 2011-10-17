@@ -28,6 +28,7 @@ Copyright_License {
 #include "Engine/Navigation/GeoPoint.hpp"
 #include "Engine/Task/Tasks/BaseTask/ObservationZonePoint.hpp"
 #include "Engine/Task/Tasks/BaseTask/TaskPoint.hpp"
+#include "Markers.hpp"
 
 class AbstractAirspace;
 struct Waypoint;
@@ -38,6 +39,7 @@ struct MapItem
     SELF,
     TASK_OZ,
     AIRSPACE,
+    MARKER,
     WAYPOINT,
   } type;
 
@@ -85,6 +87,15 @@ struct WaypointMapItem: public MapItem
 
   WaypointMapItem(const Waypoint &_waypoint)
     :MapItem(WAYPOINT), waypoint(_waypoint) {}
+};
+
+struct MarkerMapItem: public MapItem
+{
+  unsigned id;
+  Markers::Marker marker;
+
+  MarkerMapItem(unsigned _id, const Markers::Marker &_marker)
+    :MapItem(MARKER), id(_id), marker(_marker) {}
 };
 
 #endif

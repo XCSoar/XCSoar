@@ -46,6 +46,7 @@ static const AircraftLook *aircraft_look;
 static const AirspaceLook *airspace_look;
 static const WaypointLook *waypoint_look;
 static const TaskLook *task_look;
+static const MarkerLook *marker_look;
 static const SETTINGS_MAP *settings;
 static GeoVector vector;
 static const MapItemList *list;
@@ -56,7 +57,7 @@ PaintListItem(Canvas &canvas, const PixelRect rc, unsigned idx)
 {
   const MapItem &item = *(*list)[idx];
   MapItemListRenderer::Draw(canvas, rc, item, *aircraft_look, *airspace_look,
-                            *waypoint_look, *task_look, *settings);
+                            *waypoint_look, *task_look, *marker_look, *settings);
 }
 
 static void
@@ -138,6 +139,7 @@ ShowMapItemDialog(const MapItem &item, SingleWindow &parent)
 {
   switch (item.type) {
   case MapItem::SELF:
+  case MapItem::MARKER:
     break;
 
   case MapItem::AIRSPACE:
@@ -161,6 +163,7 @@ ShowMapItemListDialog(SingleWindow &parent,
                       const AirspaceLook &_airspace_look,
                       const WaypointLook &_waypoint_look,
                       const TaskLook &_task_look,
+                      const MarkerLook &_marker_look,
                       const SETTINGS_MAP &_settings)
 {
   switch (_list.size()) {
@@ -182,6 +185,7 @@ ShowMapItemListDialog(SingleWindow &parent,
     airspace_look = &_airspace_look;
     waypoint_look = &_waypoint_look;
     task_look = &_task_look;
+    marker_look = &_marker_look;
     settings = &_settings;
 
     int i = ShowMapItemListDialog(parent);

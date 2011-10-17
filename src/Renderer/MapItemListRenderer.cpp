@@ -37,9 +37,11 @@ Copyright_License {
 #include "Dialogs/dlgTaskHelpers.hpp"
 #include "Renderer/OZPreviewRenderer.hpp"
 #include "Look/TaskLook.hpp"
+#include "Look/MarkerLook.hpp"
 #include "Language/Language.hpp"
 #include "Util/StringUtil.hpp"
 #include "SettingsMap.hpp"
+#include "LocalTime.hpp"
 
 #include <cstdio>
 
@@ -55,6 +57,9 @@ namespace MapItemListRenderer
   void Draw(Canvas &canvas, const PixelRect rc, const WaypointMapItem &item,
             const WaypointLook &look,
             const WaypointRendererSettings &renderer_settings);
+
+  void Draw(Canvas &canvas, const PixelRect rc, const MarkerMapItem &item,
+            const MarkerLook &look);
 
   void Draw(Canvas &canvas, const PixelRect rc, const TaskOZMapItem &item,
             const TaskLook &look, const AirspaceLook &airspace_look,
@@ -145,6 +150,39 @@ MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
 
 void
 MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
+                          const MarkerMapItem &item, const MarkerLook &look)
+{
+  const PixelScalar line_height = rc.bottom - rc.top;
+
+  const Markers::Marker &marker = item.marker;
+
+  RasterPoint pt = { PixelScalar(rc.left + line_height / 2),
+                     PixelScalar(rc.top + line_height / 2) };
+
+  look.icon.draw(canvas, pt);
+
+  const Font &name_font = Fonts::MapBold;
+  const Font &small_font = Fonts::MapLabel;
+  canvas.set_text_color(COLOR_BLACK);
+
+  PixelScalar left = rc.left + line_height + Layout::FastScale(2);
+
+  TCHAR buffer[256];
+  _stprintf(buffer, _T("%s #%d"), _("Marker"), item.id + 1);
+  canvas.select(name_font);
+  canvas.text_clipped(left, rc.top + Layout::FastScale(2), rc, buffer);
+
+  TCHAR time_buffer[32];
+  Units::TimeToTextHHMMSigned(time_buffer, TimeLocal(marker.time.GetSecondOfDay()));
+  _stprintf(buffer, _("dropped at %s"), time_buffer);
+  canvas.select(small_font);
+  canvas.text_clipped(left,
+                      rc.top + name_font.get_height() + Layout::FastScale(4),
+                      rc, buffer);
+}
+
+void
+MapItemListRenderer::Draw(Canvas &canvas, const PixelRect rc,
                           const TaskOZMapItem &item,
                           const TaskLook &look, const AirspaceLook &airspace_look,
                           const AirspaceRendererSettings &airspace_settings)
@@ -195,6 +233,7 @@ MapItemListRenderer::Draw(
     const AirspaceLook &airspace_look,
     const WaypointLook &waypoint_look,
     const TaskLook &task_look,
+    const MarkerLook &marker_look,
     const SETTINGS_MAP &settings)
 {
   switch (item.type) {
@@ -212,6 +251,9 @@ MapItemListRenderer::Draw(
   case MapItem::TASK_OZ:
     Draw(canvas, rc, (const TaskOZMapItem &)item, task_look, airspace_look,
          settings.airspace);
+    break;
+  case MapItem::MARKER:
+    Draw(canvas, rc, (const MarkerMapItem &)item, marker_look);
     break;
   }
 }
