@@ -117,7 +117,7 @@ Pages::Open(unsigned page)
 
 
 void
-Pages::OpenLayout(PageLayout &layout)
+Pages::OpenLayout(const PageLayout &layout)
 {
   UIState &ui_state = CommonInterface::SetUIState();
 

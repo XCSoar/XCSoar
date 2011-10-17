@@ -103,7 +103,7 @@ namespace Pages
    * Attention! Internally the previous page is still selected.
    * @param layout The layout to open
    */
-  void OpenLayout(PageLayout &layout);
+  void OpenLayout(const PageLayout &layout);
 
   /**
    * Assigns a new layout to the given page
