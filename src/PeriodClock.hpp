@@ -44,6 +44,7 @@ public:
    * default behaviour, call update() immediately after creating the
    * object.
    */
+  gcc_constexpr_ctor
   PeriodClock():last(0) {}
 
 protected:

@@ -84,6 +84,7 @@ class RadixTree {
   struct LeafList {
     Leaf *head;
 
+    gcc_constexpr_ctor
     LeafList():head(NULL) {}
 
     ~LeafList() {
@@ -190,6 +191,7 @@ class RadixTree {
     Node *next_sibling, *children;
     LeafList leaves;
 
+    gcc_constexpr_ctor
     Node(const TCHAR *_label)
       :label(_label),
        next_sibling(NULL), children(NULL) {}
@@ -713,6 +715,7 @@ class RadixTree {
   Node root;
 
 public:
+  gcc_constexpr_ctor
   RadixTree():root(_T("")) {}
 
   /**

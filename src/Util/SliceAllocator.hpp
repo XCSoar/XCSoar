@@ -30,6 +30,8 @@
 #ifndef XCSOAR_SLICE_ALLOCATOR_HPP
 #define XCSOAR_SLICE_ALLOCATOR_HPP
 
+#include "Compiler.h"
+
 #include <cstddef>
 #include <assert.h>
 
@@ -139,7 +141,10 @@ protected:
   Area *head;
 
 public:
+  gcc_constexpr_ctor
   SliceAllocator():head(NULL) {}
+
+  gcc_constexpr_ctor
   SliceAllocator(const SliceAllocator &other):head(NULL) {}
 
   ~SliceAllocator() {
@@ -229,9 +234,10 @@ public:
   };
 
 public:
-  GlobalSliceAllocator() {}
+  GlobalSliceAllocator() = default;
 
   template<typename U>
+  gcc_constexpr_ctor
   GlobalSliceAllocator(const GlobalSliceAllocator<U, size> &_other) {}
 
   T *allocate(const size_type n) {

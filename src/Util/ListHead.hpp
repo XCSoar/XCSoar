@@ -57,11 +57,12 @@ public:
   /**
    * Cheap non-initializing constructor.
    */
-  ListHead()
 #ifndef NDEBUG
-    :type(UNKNOWN)
+  ListHead()
+    :type(UNKNOWN) {}
+#else
+  ListHead() = default;
 #endif
-  {}
 
   struct empty {};
 
@@ -288,6 +289,7 @@ public:
 
     const ListHead *current;
 
+    gcc_constexpr_ctor
     const_iterator(const ListHead *_current):current(_current) {}
 
   public:
@@ -297,7 +299,7 @@ public:
     typedef const ListHead *pointer;
     typedef const ListHead &reference;
 
-    const_iterator() {}
+    const_iterator() = default;
 
     reference operator*() const {
       return *current;
@@ -343,6 +345,7 @@ public:
 
     const ListHead *current;
 
+    gcc_constexpr_ctor
     const_reverse_iterator(const ListHead *_current):current(_current) {}
 
   public:
@@ -352,7 +355,7 @@ public:
     typedef const ListHead *pointer;
     typedef const ListHead &reference;
 
-    const_reverse_iterator() {}
+    const_reverse_iterator() = default;
 
     reference operator*() const {
       return *current;

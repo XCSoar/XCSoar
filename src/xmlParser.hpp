@@ -263,9 +263,8 @@ public:
 
   static void destroyCurrentBuffer(XMLNodeData *d);
 
+  gcc_constexpr_ctor
   XMLNode(): d(NULL) {}
-  static XMLNode emptyXMLNode;
-  static XMLAttribute emptyXMLAttribute;
 
   // The strings given as parameters for these 4 methods will be free'd by the XMLNode class:
 

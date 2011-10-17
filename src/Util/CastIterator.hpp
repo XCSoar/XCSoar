@@ -45,7 +45,9 @@ public:
   typedef VT *pointer;
   typedef VT &reference;
 
-  CastIterator() {}
+  CastIterator() = default;
+
+  gcc_constexpr_ctor
   CastIterator(const IT _iterator):iterator(_iterator) {}
 
   reference operator*() const {

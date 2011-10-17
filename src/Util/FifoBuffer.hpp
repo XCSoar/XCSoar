@@ -31,6 +31,7 @@
 #define XCSOAR_FIFO_BUFFER_HPP
 
 #include "Util/NonCopyable.hpp"
+#include "Compiler.h"
 
 #include <utility>
 #include <algorithm>
@@ -52,6 +53,7 @@ protected:
   T data[size];
 
 public:
+  gcc_constexpr_ctor
   FifoBuffer():head(0), tail(0) {}
 
 protected:

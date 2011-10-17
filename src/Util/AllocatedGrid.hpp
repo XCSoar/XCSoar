@@ -45,7 +45,7 @@ protected:
   unsigned width, height;
 
 public:
-  AllocatedGrid():width(0), height(0) {}
+  gcc_constexpr_ctor AllocatedGrid():width(0), height(0) {}
   AllocatedGrid(unsigned _width, unsigned _height)
     :array(_width * _height), width(_width), height(_height) {}
 

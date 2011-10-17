@@ -64,8 +64,8 @@
 
 bool XMLNode::GlobalError = false;
 
-XMLNode XMLNode::emptyXMLNode;
-XMLAttribute XMLNode::emptyXMLAttribute = { NULL, NULL };
+static const XMLNode emptyXMLNode = {};
+static gcc_constexpr_data XMLAttribute emptyXMLAttribute = { NULL, NULL };
 
 /** Enumeration used to decipher what type a token is. */
 enum TokenTypeTag {

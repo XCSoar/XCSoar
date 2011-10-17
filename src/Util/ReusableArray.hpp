@@ -39,7 +39,9 @@ protected:
   AllocatedArray<T> array;
 
 public:
-  ReusableArray() {}
+  ReusableArray() = default;
+
+  gcc_constexpr_ctor
   ReusableArray(unsigned _length):array(_length) {}
 
   /**

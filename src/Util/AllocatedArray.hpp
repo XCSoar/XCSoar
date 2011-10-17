@@ -49,7 +49,7 @@ public:
   typedef const T *const_iterator;
 
 public:
-  AllocatedArray():the_size(0), data(NULL) {}
+  gcc_constexpr_ctor AllocatedArray():the_size(0), data(NULL) {}
   explicit AllocatedArray(unsigned _size):the_size(_size), data(new T[the_size]) {
     assert(size() == 0 || data != NULL);
   }

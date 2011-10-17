@@ -30,6 +30,8 @@
 #ifndef XCSOAR_STATIC_ARRAY_HPP
 #define XCSOAR_STATIC_ARRAY_HPP
 
+#include "Compiler.h"
+
 #include <assert.h>
 #include <algorithm>
 
@@ -50,13 +52,16 @@ protected:
   T data[max];
 
 public:
+  gcc_constexpr_ctor
   StaticArray():the_size(0) {}
 
+  gcc_constexpr_method
   size_type capacity() const { return max; }
 
   /**
    * Returns the number of allocated elements.
    */
+  gcc_constexpr_method
   size_type size() const {
     return the_size;
   }
@@ -67,10 +72,12 @@ public:
     the_size = _size;
   }
 
+  gcc_constexpr_method
   bool empty() const {
     return the_size == 0;
   }
 
+  gcc_constexpr_method
   bool full() const {
     return the_size == max;
   }

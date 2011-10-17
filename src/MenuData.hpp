@@ -24,6 +24,8 @@ Copyright_License {
 #ifndef XCSOAR_MENU_DATA_HPP
 #define XCSOAR_MENU_DATA_HPP
 
+#include "Compiler.h"
+
 #include <tchar.h>
 
 /**
@@ -34,8 +36,10 @@ public:
   const TCHAR *label;
   int event;
 
+  gcc_constexpr_ctor
   MenuItem():label(NULL), event(-1) {}
 
+  gcc_constexpr_method
   bool defined() const {
     return event > 0;
   }
